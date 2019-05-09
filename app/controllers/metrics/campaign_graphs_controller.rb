@@ -18,8 +18,7 @@ class Metrics::CampaignGraphsController < ApplicationController
       }
       format.csv {
         CampaignContributionsDownloadJob.perform_later(current_user.id, @campaign.id, c_t(:erg))
-        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
-        redirect_to :back
+        render json: { notice: "Please check your Secure Downloads section in a couple of minutes" }
       }
     end
   end
@@ -34,8 +33,7 @@ class Metrics::CampaignGraphsController < ApplicationController
       }
       format.csv {
         CampaignTopPerformersDownloadJob.perform_later(current_user.id, @campaign.id)
-        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
-        redirect_to :back
+        render json: { notice: "Please check your Secure Downloads section in a couple of minutes" }
       }
     end
   end

@@ -177,17 +177,12 @@ RSpec.describe Metrics::GraphsController, type: :controller do
       context "metrics graph" do
         before {
           allow(GraphDownloadJob).to receive(:perform_later)
-          request.env['HTTP_REFERER'] = "back"
 
           get :export_csv, :metrics_dashboard_id => metrics_dashboard.id, :id => metrics_graph.id
         }
 
-        it "returns to previous page" do
-          expect(response).to redirect_to "back"
-        end
-
-        it "flashes" do
-          expect(flash[:notice]).to eq "Please check your Secure Downloads section in a couple of minutes"
+        it "returns flash data" do
+          expect(JSON.parse(response.body)["notice"]).to eq "Please check your Secure Downloads section in a couple of minutes"
         end
 
         it "calls job" do
