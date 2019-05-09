@@ -55,6 +55,7 @@ class Initiative < BaseClass
     joins("LEFT JOIN initiative_segments ON initiative_segments.initiative_id = initiatives.id")
       .where(initiative_conditions.join(" OR "))
   }
+  scope :order_recent, -> { order(start: :desc) }
 
   # we don't want to run this callback when finish_expenses! is triggered in initiatives_controller.rb, finish_expense action
   before_save { allocate_budget_funds unless skip_allocate_budget_funds }
