@@ -61,7 +61,7 @@ RSpec.configure do |config|
   # to individual examples or groups you care about by tagging them with
   # `:focus` metadata. When nothing is tagged with `:focus`, all examples
   # get run.
-  config.filter_run focus: true unless ENV['CI']
+  config.filter_run :focus => true unless ENV['CI']
   config.run_all_when_everything_filtered = true
 
   # Allows RSpec to persist some state between runs in order to support
@@ -107,30 +107,30 @@ RSpec.configure do |config|
 
   # https://stackoverflow.com/questions/3175591/rails3-warning-toplevel-constant-applicationcontroller-referenced-by?rq=1
   config.before(:each) do
-    Dir[File.expand_path('app/controllers/user/*.rb')].each do |file|
+    Dir[File.expand_path("app/controllers/user/*.rb")].each do |file|
       require file
     end
   end
 
   config.before(:each) do
     formatter = OpenStruct.new({
-      title: true,
-      parser: OpenStruct.new({ extractors: true,
-                               date_range: true, get_elements: true }),
-      add_elements: true
+      :title => true,
+      :parser => OpenStruct.new({:extractors => true,
+        :date_range => true, :get_elements => true }),
+      :add_elements => true
     })
 
     query = OpenStruct.new({
-      terms_agg: true,
-      bool_filter_agg: true,
-      add_filter_clause: true })
+      :terms_agg => true,
+      :bool_filter_agg => true,
+      :add_filter_clause => true})
 
-    graph = double('Graph',
-                   search: true,
-                   query: query,
-                   build: true,
-                   set_enterprise_filter: true,
-                   formatter: formatter)
+    graph = double("Graph",
+      :search => true,
+      :query => query,
+      :build => true,
+      :set_enterprise_filter => true,
+      :formatter => formatter)
 
     allow(UserGroup).to receive(:get_graph_builder).and_return(graph)
     allow(UsersSegment).to receive(:get_graph_builder).and_return(graph)
@@ -148,7 +148,7 @@ RSpec.configure do |config|
 
     allow(graph).to receive(:drilldown_graph)
     allow(graph).to receive(:search)
-    allow(graph).to receive(:build).and_return({ title: "#{c_t(:erg).capitalize} Population" })
+    allow(graph).to receive(:build).and_return({:title => "#{c_t(:erg)} Population"})
 
     allow(query).to receive(:terms_agg)
     allow(query).to receive(:add_filter_clause)
