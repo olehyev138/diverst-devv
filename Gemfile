@@ -68,7 +68,7 @@ gem 'rollbar', '~> 2.14.1'
 gem 'ruby-oembed', '~> 0.12', git: 'https://github.com/TeamDiverst/ruby-oembed.git'
 gem 'julia_builder', '~> 0.2.0'
 gem 'date_validator', '~> 0.9.0'
-gem 'thor', '0.19.1'# Expected string default value for '--decorator'; got true (boolean) - setting version removes this message
+gem 'thor', '0.20.0'# Expected string default value for '--decorator'; got true (boolean) - setting version removes this message
 gem 'sanitize_email', '~> 1.2.2'
 gem 'rack-timeout', '~> 0.4.2'
 gem 'jquery-ui-rails', '~> 6.0.1'
@@ -95,6 +95,10 @@ group :development, :test do
   gem 'capistrano-yarn', '~> 2.0.2'
   gem 'capistrano-nvm', '~> 0.0.7'
   gem 'slackistrano', '~> 3.8.3'
+  gem 'rubocop', '~> 0.68.1'
+  gem 'rubocop-performance', '~> 1.2.0'
+  gem 'pronto', '~> 0.10.0'
+  gem 'pronto-rubocop', '~> 0.10.0'
 end
 
 group :test do
@@ -132,8 +136,6 @@ group :development do
   gem 'tty-spinner'
   gem 'rufo', '~> 0.1.0'
   gem 'bundler-audit', '~> 0.6.0'
-  gem 'rubocop', '~> 0.68.1'
-  gem 'rubocop-performance', '~> 1.2.0'
 end
 
 group :staging, :production do
