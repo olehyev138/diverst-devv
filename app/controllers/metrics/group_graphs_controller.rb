@@ -41,7 +41,7 @@ class Metrics::GroupGraphsController < ApplicationController
           metrics_params[:scoped_by_models]
         )
         track_activity(current_user.enterprise, :export_generic_graphs_group_population)
-        render json: { notice: "Please check your Secure Downloads section in a couple of minutes" }
+        render json: { notice: 'Please check your Secure Downloads section in a couple of minutes' }
       }
     end
   end
@@ -64,7 +64,7 @@ class Metrics::GroupGraphsController < ApplicationController
           metrics_params[:scoped_by_models]
         )
         track_activity(current_user.enterprise, :export_generic_graphs_top_groups_by_views)
-        render json: { notice: "Please check your Secure Downloads section in a couple of minutes" }
+        render json: { notice: 'Please check your Secure Downloads section in a couple of minutes' }
       }
     end
   end
@@ -85,7 +85,7 @@ class Metrics::GroupGraphsController < ApplicationController
           metrics_params[:scoped_by_models]
         )
         track_activity(current_user.enterprise, :export_generic_graphs_group_growth)
-        render json: { notice: "Please check your Secure Downloads section in a couple of minutes" }
+        render json: { notice: 'Please check your Secure Downloads section in a couple of minutes' }
       }
     end
   end
@@ -110,7 +110,7 @@ class Metrics::GroupGraphsController < ApplicationController
           metrics_params[:scoped_by_models]
         )
         track_activity(current_user.enterprise, :export_generic_graphs_events_created)
-        render json: { notice: "Please check your Secure Downloads section in a couple of minutes" }
+        render json: { notice: 'Please check your Secure Downloads section in a couple of minutes' }
       }
     end
   end
@@ -135,7 +135,7 @@ class Metrics::GroupGraphsController < ApplicationController
           metrics_params[:scoped_by_models]
         )
         track_activity(current_user.enterprise, :export_generic_graphs_messages_sent)
-        render json: { notice: "Please check your Secure Downloads section in a couple of minutes" }
+        render json: { notice: 'Please check your Secure Downloads section in a couple of minutes' }
       }
     end
   end
@@ -157,7 +157,7 @@ class Metrics::GroupGraphsController < ApplicationController
           metrics_params[:scoped_by_models]
         )
         track_activity(current_user.enterprise, :export_generic_graphs_top_news_by_views)
-        render json: { notice: "Please check your Secure Downloads section in a couple of minutes" }
+        render json: { notice: 'Please check your Secure Downloads section in a couple of minutes' }
       }
     end
   end
@@ -181,7 +181,7 @@ class Metrics::GroupGraphsController < ApplicationController
           metrics_params[:scoped_by_models]
         )
         track_activity(current_user.enterprise, :export_generic_graphs_top_folders_by_views)
-        render json: { notice: "Please check your Secure Downloads section in a couple of minutes" }
+        render json: { notice: 'Please check your Secure Downloads section in a couple of minutes' }
       }
     end
   end
@@ -203,7 +203,7 @@ class Metrics::GroupGraphsController < ApplicationController
           metrics_params[:scoped_by_models]
         )
         track_activity(current_user.enterprise, :export_generic_graphs_top_resources_by_views)
-        render json: { notice: "Please check your Secure Downloads section in a couple of minutes" }
+        render json: { notice: 'Please check your Secure Downloads section in a couple of minutes' }
       }
     end
   end
