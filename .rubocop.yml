@@ -19,7 +19,6 @@ AllCops:
 Performance:
   Exclude:
     - '**/test/**/*'
-
 Rails:
   Enabled: true
 
@@ -43,7 +42,7 @@ Rails/FindEach:
   Enabled: true
 
 Metrics/LineLength:
-  Max: 150
+  Max: 200
 
 # Prefer &&/|| over and/or.
 Style/AndOr:
