@@ -79,7 +79,7 @@
                     <h2 class="no-margin"><%= pillar.name %></h2>
                     <p class="muted"><%= pillar.value_proposition %></p>
                   </div>
-                  <% initiatives = pillar.initiatives.where(archived_at: nil).starts_between(@filter_from, @filter_to) %>
+                  <% initiatives = pillar.initiatives.where(archived_at: nil).starts_between(@filter_from, @filter_to).order_recent %>
                   <% if initiatives.empty? %>
                     <div class="card__section card__section--border">
                       There are no active events in this <%= c_t(:program)  %> with this filter.
