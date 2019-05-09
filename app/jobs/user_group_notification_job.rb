@@ -3,7 +3,7 @@ class UserGroupNotificationJob < ActiveJob::Base
 
   def perform(args)
     # check if parameters exist and are valid
-    raise BadRequestException.new 'Params missing' if args.nil? || args.empty? || args.class != Hash
+    raise BadRequestException.new 'Params missing' if args.blank? || args.class != Hash
     raise BadRequestException.new 'Notifications Frequency missing' if args[:notifications_frequency].nil?
     raise BadRequestException.new 'Enterprise ID missing' if args[:enterprise_id].nil?
 

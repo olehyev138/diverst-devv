@@ -219,6 +219,117 @@
 
 - [rspec style guide](https://github.com/rubocop-hq/rspec-style-guide)
   This guide pretty much covers everything
+  
+# Rails
+
+ - Use `presence` over `present`/`blank` when applicable
+
+       # bad
+       a.present? ? a : nil
+
+       # bad
+       !a.present? ? nil : a
+
+       # bad
+       a.blank? ? nil : a
+
+       # bad
+       !a.blank? ? a : nil
+
+       # good
+       a.presence
+
+ - Use `present?` to keep conditions simpler when applicable
+
+       # bad
+       !foo.nil? && !foo.empty?
+
+       # bad
+       foo != nil && !foo.empty?
+
+       # bad
+       !foo.blank?
+
+       # bad
+       not foo.blank?
+
+       # bad
+       something unless foo.blank?
+
+       # good
+       foo.present?
+
+       # good
+       foo.present?
+
+       # good
+       something if foo.present?
+
+ - Use `blank?` to keep conditions simpler when applicable
+
+       # bad
+       foo.nil? || foo.empty?
+       foo == nil || foo.empty?
+
+       # bad
+       something unless foo.present?
+
+       # good
+       something if foo.blank?
+
+        # bad
+       unless foo.present?
+         something
+        end
+
+       # good
+       foo.blank?
+
+       # good
+       if foo.blank?
+         something
+       end
+
+       # good
+       def blank?
+         !present?
+       end
+
+ - Use the safe navigation (`&.`) operator over `try` when applicable
+
+       # bad
+       foo.try!(:bar)
+       foo.try!(:bar, baz)
+       foo.try!(:bar) { |e| e.baz }
+       foo.try(:bar)
+       foo.try(:bar, baz)
+       foo.try(:bar) { |e| e.baz }
+
+       # good
+       foo&.bar
+       foo&.bar(baz)
+       foo&.bar { |e| e.baz }
+
+ - Use `User.find_by(name: 'Bruce')` over `User.where(name: 'Bruce').first`
+
+       # bad
+       User.where(name: 'Bruce').first
+       User.where(name: 'Bruce').take
+
+       # good
+       User.find_by(name: 'Bruce')
+
+ - Use `User.all.find_each` over `User.all.each`. 
+  The later has [performance issues](https://stackoverflow.com/questions/30010091/in-rails-whats-the-difference-between-find-each-and-where)
+
+       # bad
+       # loads the entire result of User.all into memory
+       User.all.each
+
+       # good
+       # loads in batches
+       User.all.find_each
+
 
 # Javascript
 

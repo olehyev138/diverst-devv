@@ -3,7 +3,7 @@ class ImportCSVJob < ActiveJob::Base
 
   def perform(file_id)
     file = CsvFile.find_by_id(file_id)
-    return false unless file.present?
+    return false if file.blank?
 
     @importer = Importers::Users.new(file.path_for_csv, file.user)
     @importer.import

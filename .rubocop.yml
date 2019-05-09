@@ -23,6 +23,25 @@ Performance:
 Rails:
   Enabled: true
 
+Rails/Presence:
+  Enabled: true
+
+Rails/Present:
+  Enabled: true
+
+Rails/Blank:
+  Enabled: true
+
+# Use `User.find_by(name: 'Bruce')` over `User.where(name: 'Bruce').first`
+Rails/FindBy:
+  Enabled: true
+
+# Use `User.all.find_each` over `User.all.each`
+# The later has performance issues:
+#   - https://stackoverflow.com/questions/30010091/in-rails-whats-the-difference-between-find-each-and-where
+Rails/FindEach:
+  Enabled: true
+
 Metrics/LineLength:
   Max: 150
 

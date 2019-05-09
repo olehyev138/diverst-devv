@@ -6,7 +6,7 @@ class CsvUploadMailer < ApplicationMailer
 
     s = 'User import result'
     email = ENV['CSV_UPLOAD_REPORT_EMAIL']
-    email = 'tech@diverst.com' if !email.present?
+    email = 'tech@diverst.com' if email.blank?
 
     mail(to: email, subject: s)
   end

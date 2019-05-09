@@ -94,7 +94,7 @@ class Api::V1::ApiController < ActionController::Base
   end
 
   def error(e = nil, status = nil)
-    render status: status.present? ? status : 400, json: { message: e.present? ? e : bad_request }
+    render status: status.presence || 400, json: { message: e.presence || bad_request }
   end
 
   def bad_request

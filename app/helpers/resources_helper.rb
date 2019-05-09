@@ -1,6 +1,6 @@
 module ResourcesHelper
   def thumbnail_for_resource(resource)
-    return image_url('icons/filetypes/other.png') if !resource.file.present?
+    return image_url('icons/filetypes/other.png') if resource.file.blank?
 
     return resource.file.expiring_url(3600) if resource.file_content_type.start_with?('image')
 

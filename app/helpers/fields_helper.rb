@@ -4,7 +4,7 @@ module FieldsHelper
   end
 
   def field_error_class(resource, field)
-    !field_errors(resource, field).blank? ? 'field_with_errors' : ''
+    field_errors(resource, field).present? ? 'field_with_errors' : ''
   end
 
   def field_errors(resource, field)

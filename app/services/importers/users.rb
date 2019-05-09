@@ -42,7 +42,7 @@ class Importers::Users
     user = update_user(row) || initialize_user(row)
     (0..row.length - 1).each do |i|
       field = @enterprise.fields.where('LOWER(title) = ?', row.headers[i]).first
-      user.info[field] = field.process_field_value row[i] if field && !row[i].blank?
+      user.info[field] = field.process_field_value row[i] if field && row[i].present?
     end
     user
   end
@@ -80,10 +80,6 @@ class Importers::Users
 
   def get_delimiter
     custom_delimiter = ENV['CSV_COLUMN_SEPARATOR']
-    if custom_delimiter.present?
-      custom_delimiter
-    else
-      DEFAULT_COLUMN_DELIMITER
-    end
+    custom_delimiter.presence || DEFAULT_COLUMN_DELIMITER
   end
 end

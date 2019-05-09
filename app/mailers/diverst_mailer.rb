@@ -52,7 +52,7 @@ class DiverstMailer < Devise::Mailer
 
     enterprise = record.enterprise
 
-    if enterprise.redirect_all_emails? && !enterprise.redirect_email_contact.blank?
+    if enterprise.redirect_all_emails? && enterprise.redirect_email_contact.present?
       record.email = enterprise.redirect_email_contact
     elsif enterprise.redirect_all_emails? && enterprise.redirect_email_contact.blank?
       # fallback

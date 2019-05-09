@@ -109,7 +109,7 @@ module BaseSearch
     end
 
     def build
-      if !@root_aggs[:aggs].blank?
+      if @root_aggs[:aggs].present?
         @query.merge! @root_aggs
       end
 

@@ -10,7 +10,7 @@ module PollsHelper
   def poll_others_visibility_class(poll, params)
     if params[:initiative_id].blank? && poll.initiative
       'hidden'
-    elsif !params[:initiative_id].blank? || poll.initiative
+    elsif params[:initiative_id].present? || poll.initiative
       'hidden'
     end
   end

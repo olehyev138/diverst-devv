@@ -13,7 +13,7 @@ class Groups::QuestionsController < ApplicationController
   end
 
   def survey
-    unless @user_group.present?
+    if @user_group.blank?
       flash[:notice] = "Your have to join group before taking it's survey"
       redirect_to @group
     end

@@ -99,7 +99,7 @@ class SegmentsController < ApplicationController
   protected
 
   def members
-    if !params[:group_id].blank?
+    if params[:group_id].present?
       @group = current_user.enterprise.groups.find_by_id(params[:group_id])
       @members = policy_scope(User).joins(:segments, :groups).where(segments: { id: @segment.id }, groups: { id: params[:group_id] }).limit(params[:limit] || 25).distinct
 

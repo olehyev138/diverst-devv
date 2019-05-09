@@ -62,7 +62,7 @@ module NumericOptionnable
 
     # Filter the query by segments if there are any specified
     terms = []
-    if !segments.nil? && !segments.empty?
+    if segments.present?
       terms << {
         terms: {
           'combined_info.segments' => segments.ids
@@ -70,7 +70,7 @@ module NumericOptionnable
       }
     end
 
-    if !groups.nil? && !groups.empty?
+    if groups.present?
       terms << {
         terms: {
           'combined_info.groups' => groups.ids

@@ -168,7 +168,7 @@ class Enterprise < BaseClass
   end
 
   def update_match_scores
-    enterprise.users.where.not(id: id).each do |other_user|
+    enterprise.users.where.not(id: id).find_each do |other_user|
       CalculateMatchScoreJob.perform_later(self, other_user, skip_existing: false)
     end
   end

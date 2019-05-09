@@ -22,7 +22,7 @@ class SegmentRule < BaseClass
   end
 
   def values
-    self[:values].blank? ? '[]' : self[:values]
+    self[:values].presence || '[]'
   end
 
   def self.operator_text(id)

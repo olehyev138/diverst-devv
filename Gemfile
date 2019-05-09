@@ -85,7 +85,6 @@ group :development, :test do
   gem 'factory_bot_rails', '~> 4.8.0' # Create mock objects for testing
   gem 'capybara', '~> 2.15.1' # Helpers for feature specs
   gem 'poltergeist', '~> 1.16.0' # Allows support for JS in feature specs
-  gem 'selenium-webdriver'
   gem 'database_cleaner', '~> 1.6.1' # Necessary to clean the DB between tests
   gem 'pry-rails', '~> 0.3.6' # Better Rails console
   gem 'pry-theme', '~> 1.2.0' # Themes for pry

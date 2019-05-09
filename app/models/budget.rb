@@ -83,7 +83,7 @@ class Budget < BaseClass
   end
 
   def send_approval_request
-    return unless approver.present?
+    return if approver.blank?
 
     BudgetMailer.approve_request(self, approver).deliver_later
   end

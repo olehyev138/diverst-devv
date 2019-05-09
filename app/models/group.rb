@@ -272,7 +272,7 @@ class Group < BaseClass
   end
 
   def logo_expiring_thumb
-    return nil unless logo.present?
+    return nil if logo.blank?
 
     logo.expiring_url(30, :thumb)
   end

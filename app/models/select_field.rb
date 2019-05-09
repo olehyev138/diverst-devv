@@ -2,13 +2,13 @@ class SelectField < Field
   include Optionnable
 
   def string_value(value)
-    return '-' if value.nil? || value.empty?
+    return '-' if value.blank?
 
     value[0]
   end
 
   def csv_value(value)
-    return '' if value.nil? || value.empty?
+    return '' if value.blank?
 
     value[0]
   end

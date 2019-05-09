@@ -3,7 +3,7 @@ class GroupMemberImportCSVJob < ActiveJob::Base
 
   def perform(file_id)
     file = CsvFile.find_by_id(file_id)
-    return false unless file.present?
+    return false if file.blank?
 
     group = file.group
     return if group.nil?

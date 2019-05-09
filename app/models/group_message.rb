@@ -92,7 +92,7 @@ class GroupMessage < BaseClass
   end
 
   def owner_name
-    return 'Unknown' unless owner.present?
+    return 'Unknown' if owner.blank?
 
     owner.first_name + owner.last_name
   end

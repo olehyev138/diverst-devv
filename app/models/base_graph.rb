@@ -357,7 +357,7 @@ module BaseGraph
 
     # parse a es response to return a list of elements
     def get_elements(response, extractor: nil, **args)
-      return response unless extractor.present?
+      return response if extractor.blank?
 
       extractor.call(response, args)
     end
