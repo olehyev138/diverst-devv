@@ -132,12 +132,13 @@ jobs:
       - image: circleci/build-image:ubuntu-14.04-XXL-upstart-1189-5614f37
         command: /sbin/init
     steps:
+      - checkout
       - run:
           command: |
             export GITHUB_ACCESS_TOKEN=3cd1877ebeceb4a82d791e69e2312c68f9edb827
             export PULL_REQUEST_ID=$(git ls-remote -q origin pull\*\head | grep $ch | sed 's/.*refs\/pull\/\([0-9]*\)\/head/\1/g')
             git fetch origin development:refs/remotes/origin/development
-            pronto run -f github_status github_pr -c origin/development
+            bundle exec pronto run -f github_status github_pr -c origin/development
 
   #  build and test jobs go here
   deploy-testing:
