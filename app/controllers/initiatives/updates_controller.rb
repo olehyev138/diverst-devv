@@ -5,7 +5,7 @@ class Initiatives::UpdatesController < ApplicationController
   before_action :set_update, only: [:edit, :update, :destroy, :show, :export_csv]
   after_action :verify_authorized
 
-  layout 'plan'
+  layout 'erg'
 
   def index
     authorize InitiativeUpdate

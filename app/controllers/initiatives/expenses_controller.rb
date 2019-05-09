@@ -5,7 +5,7 @@ class Initiatives::ExpensesController < ApplicationController
   before_action :set_expense, only: [:edit, :update, :destroy, :show]
   after_action :verify_authorized
 
-  layout 'plan'
+  layout 'erg'
 
   def index
     authorize InitiativeExpense
