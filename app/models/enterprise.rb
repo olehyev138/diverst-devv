@@ -177,7 +177,7 @@ class Enterprise < BaseClass
         return User.to_csv(users: users, fields: fields, nb_rows: nb_rows) if export_csv_params == "all_users" || export_csv_params.nil?
         return User.to_csv(users: users.active, fields: fields, nb_rows: nb_rows) if export_csv_params == "active_users"
         return User.to_csv(users: users.inactive, fields: fields, nb_rows: nb_rows) if export_csv_params == "inactive_users"
-        return User.to_csv(users: users.includes(:user_role).where(user_roles: {role_name: "Group Leader"}), fields: fields, nb_rows: nb_rows) if export_csv_params == "group_leaders"
+        return User.to_csv(users: users.includes(:user_role).where(user_roles: {role_name: export_csv_params}), fields: fields, nb_rows: nb_rows)
     end
 
     def close_budgets_csv
