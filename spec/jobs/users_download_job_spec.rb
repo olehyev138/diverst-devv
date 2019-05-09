@@ -45,15 +45,17 @@ RSpec.describe UsersDownloadJob, type: :job do
         	end
         end
 
-        context "for all group leaders" do 
-	        it "creates a downloadable csv file for group leaders" do
-	            expect{ subject.perform(user.id,  "group_leaders") }
+        context "for users by role" do 
+	        let(:role_name) { user.user_role.role_name }
+
+            it "creates a downloadable csv file for users by role" do
+	            expect{ subject.perform(user.id,  "#{role_name}") }
 	              .to change(CsvFile, :count).by(1)
 	        end
 
-	        it "file name is group_leaders.csv" do 
-        		subject.perform(user.id, "group_leaders")
-        		expect(CsvFile.last.download_file_file_name).to eq "group_leaders.csv"
+	        it "file name is user_role_name.csv" do 
+        		subject.perform(user.id, "#{role_name}")
+        		expect(CsvFile.last.download_file_file_name).to eq "#{role_name.split(' ').join('_')}.csv"
         	end
 	    end
     end
