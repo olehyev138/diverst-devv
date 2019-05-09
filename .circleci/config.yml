@@ -109,6 +109,7 @@ jobs:
         environment:
           RAILS_ENV: test
           RACK_ENV: test
+    - run:
     # Deployment
     # Your existing circle.yml file contains deployment steps.
     # The config translation tool does not support translating deployment steps
@@ -124,6 +125,19 @@ jobs:
         path: /tmp/circleci-artifacts
     - store_artifacts:
         path: /tmp/circleci-test-results
+  lint:
+    working_directory: ~/TeamDiverst/diverst-development
+    shell: /bin/bash --login
+    docker:
+      - image: circleci/build-image:ubuntu-14.04-XXL-upstart-1189-5614f37
+        command: /sbin/init
+    steps:
+      - run:
+          command: |
+            export GITHUB_ACCESS_TOKEN=3cd1877ebeceb4a82d791e69e2312c68f9edb827
+            export PULL_REQUEST_URL=${CI_PULL_REQUEST}
+            export PULL_REQUEST_ID=`echo $PULL_REQUEST_URL | grep -o -E ‘[0–9]+$’ | head -1 | sed -e ‘s/^0\+//’`
+            ((bin/bundle exec pronto run -f github_pr_review -c origin/development)) || true
 
   #  build and test jobs go here
   deploy-testing:
@@ -197,7 +211,13 @@ workflows:
   version: 2
   build-deploy:
     jobs:
-      - build
+      - lint
+      - build:
+          requires:
+            - lint
+#      - lint:
+#          requires:
+#            - build
       - deploy-testing:
           requires:
             - build
