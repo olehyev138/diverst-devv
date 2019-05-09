@@ -148,7 +148,7 @@ RSpec.configure do |config|
 
     allow(graph).to receive(:drilldown_graph)
     allow(graph).to receive(:search)
-    allow(graph).to receive(:build).and_return({:title => "#{c_t(:erg).capitalize} Population"})
+    allow(graph).to receive(:build).and_return({:title => "#{c_t(:erg)} Population"})
 
     allow(query).to receive(:terms_agg)
     allow(query).to receive(:add_filter_clause)
