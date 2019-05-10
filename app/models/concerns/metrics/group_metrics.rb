@@ -8,7 +8,7 @@ module Metrics
 
       graph = UserGroup.get_graph_builder
       graph.set_enterprise_filter(field: 'group.enterprise_id', value: enterprise_id)
-      graph.formatter.title = "#{c_t(:erg).capitalize} Population"
+      graph.formatter.title = "#{c_t(:erg)} Population"
 
       graph.query = graph.query.terms_agg(field: 'group.name') { |q|
         q.date_range_agg(field: 'created_at', range: date_range)
@@ -67,7 +67,7 @@ module Metrics
 
       graph = View.get_graph_builder
       graph.set_enterprise_filter(value: enterprise_id)
-      graph.formatter.title = "# Views per #{c_t(:erg).capitalize}"
+      graph.formatter.title = "# Views per #{c_t(:erg)}"
 
       graph.query = graph.query.terms_agg(field: 'group.name') { |q|
         q.date_range_agg(field: 'created_at', range: date_range)

@@ -31,7 +31,7 @@
     <div class="flex-row__cell flex-row__cell--grow">
       <div class="card">
         <div class="card__section">
-          <strong><%= c_t(:erg).pluralize.capitalize %> included:</strong> <%= @metrics_dashboard.groups.pluck(:name).join(", ") %> <%= "None" if @metrics_dashboard.groups.empty? %>
+          <strong><%= c_t(:erg).pluralize %> included:</strong> <%= @metrics_dashboard.groups.pluck(:name).join(", ") %> <%= "None" if @metrics_dashboard.groups.empty? %>
         </div>
       </div>
     </div>
