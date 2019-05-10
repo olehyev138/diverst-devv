@@ -186,7 +186,9 @@
             <%= f.input :password_confirmation, required: true %>
 
             <% resource.enterprise.fields.where(private: false).each do |cf| %>
-              <%= render "shared/fields/display/custom_field", cf: cf, f: f, resource: resource %>
+              <% if !cf.private %>
+                <%= render "shared/fields/display/custom_field", cf: cf, f: f, resource: resource %>
+              <% end %>
             <% end %>
 
             <%= f.button :submit, "Create my account", class: "btn--secondary btn--large btn--full" %>

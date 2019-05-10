@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :tag do
     association :resource, factory: :resource
-    name "label"
+    name 'label'
   end
 end

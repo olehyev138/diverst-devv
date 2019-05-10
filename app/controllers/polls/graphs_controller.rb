@@ -13,10 +13,10 @@ class Polls::GraphsController < ApplicationController
     @graph = @poll.graphs.new(graph_params)
 
     if @graph.save
-      flash[:notice] = "Your graph was created"
+      flash[:notice] = 'Your graph was created'
       redirect_to @poll
     else
-      flash[:alert] = "Your graph was not created. Please fix the errors"
+      flash[:alert] = 'Your graph was not created. Please fix the errors'
       render :new
     end
   end

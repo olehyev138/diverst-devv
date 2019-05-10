@@ -14,7 +14,7 @@ class UserRewardAction < BaseClass
   belongs_to :answer_upvote
   belongs_to :answer
   belongs_to :poll_response
-    
+
   validates :user, presence: true
   validates :reward_action, presence: true
   validates :operation, presence: true

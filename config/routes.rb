@@ -3,11 +3,11 @@ Rails.application.routes.draw do
   require 'sidekiq/web'
 
   Sidekiq::Web.use Rack::Auth::Basic do |username, password|
-    username == ENV["SIDEKIQ_DASHBOARD_USERNAME"] && password == ENV["SIDEKIQ_DASHBOARD_PASSWORD"]
+    username == ENV['SIDEKIQ_DASHBOARD_USERNAME'] && password == ENV['SIDEKIQ_DASHBOARD_PASSWORD']
   end if Rails.env.production?
   mount Sidekiq::Web => '/sidekiq'
 
-  mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
+  mount LetterOpenerWeb::Engine, at: '/letter_opener' if Rails.env.development?
 
   devise_for :users, controllers: {
     invitations: 'users/invitations',
@@ -24,9 +24,9 @@ Rails.application.routes.draw do
       resources :users
       resources :groups
       resources :join_me
-      resources :enterprises, :only => [:update] do
+      resources :enterprises, only: [:update] do
         member do
-          get "events"
+          get 'events'
         end
       end
     end
@@ -82,8 +82,8 @@ Rails.application.routes.draw do
     member { patch 'restore' }
   end
 
-  resources :archived_initiatives, only: [:index, :destroy] do 
-    collection do 
+  resources :archived_initiatives, only: [:index, :destroy] do
+    collection do
       post 'delete_all'
       post 'restore_all'
     end
@@ -168,10 +168,10 @@ Rails.application.routes.draw do
       get 'view_all'
     end
   end
-  
+
   post 'group_categories/update_all_sub_groups', to: 'group_categories#update_all_sub_groups', as: :update_all_sub_groups
   patch '/groups/:id/auto_archive_switch', to: 'groups#auto_archive_switch', as: :auto_archive_switch
-  patch '/groups/:group_id/initiatives/:id/archive', to: 'initiatives#archive', as: :archive_group_initiative 
+  patch '/groups/:group_id/initiatives/:id/archive', to: 'initiatives#archive', as: :archive_group_initiative
   patch '/groups/:group_id/initiatives/:id/restore', to: 'initiatives#restore', as: :restore_group_initiative
   patch 'initiatives/:initiative_id/resources/:id/restore', to: 'initiatives/resources#restore', as: :restore_initiative_resource
   delete 'initiatives/:initiative_id/resources/:id/', to: 'initiatives/resources#destroy', as: :remove_initiative_resource
@@ -266,7 +266,7 @@ Rails.application.routes.draw do
         end
         resources :news_link_comment
       end
-      resources :posts, :only => [:index] do
+      resources :posts, only: [:index] do
         collection do
           get 'pending'
           post 'approve'
@@ -317,7 +317,7 @@ Rails.application.routes.draw do
             get 'time_series'
           end
         end
-        resources :resources do 
+        resources :resources do
           member { patch 'archive' }
         end
       end
@@ -389,8 +389,8 @@ Rails.application.routes.draw do
 
   resources :graphs do
     member do
-      get "data"
-      get "export_csv"
+      get 'data'
+      get 'export_csv'
     end
   end
 
@@ -402,7 +402,7 @@ Rails.application.routes.draw do
 
   resources :rewards, except: [:show] do
     collection do
-      put "enable"
+      put 'enable'
     end
   end
   resources :badges, except: [:index, :show]
@@ -447,7 +447,7 @@ Rails.application.routes.draw do
       end
 
       scope module: :questions do
-        resource :roi, controller: "roi"
+        resource :roi, controller: 'roi'
       end
 
       member do
@@ -493,11 +493,11 @@ Rails.application.routes.draw do
       resources :resources
       resources :mentorship do
         collection do
-          get "mentors"
-          get "mentees"
-          get "requests"
-          get "sessions"
-          get "ratings"
+          get 'mentors'
+          get 'mentees'
+          get 'requests'
+          get 'sessions'
+          get 'ratings'
         end
       end
       resources :user_campaigns, shallow: true do
@@ -557,7 +557,6 @@ Rails.application.routes.draw do
       get 'join'
       get 'export_ics'
     end
-
   end
 
   resources :mentoring_sessions do
@@ -672,7 +671,7 @@ Rails.application.routes.draw do
     post 'track'
   end
 
-  match "*a", :to => "application#routing_error", :via => [:get, :post]
+  match '*a', to: 'application#routing_error', via: [:get, :post]
 
   root to: 'metrics/overview_graphs#index'
 end

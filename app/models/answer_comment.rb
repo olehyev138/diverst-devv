@@ -10,5 +10,5 @@ class AnswerComment < BaseClass
   validates :answer, presence: true
   validates :content, presence: true
 
-  scope :unapproved, -> {where(:approved => false)}
+  scope :unapproved, -> { where(approved: false) }
 end

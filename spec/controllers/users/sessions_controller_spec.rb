@@ -3,8 +3,8 @@ require 'rails_helper'
 RSpec.describe Users::SessionsController, type: :controller do
   include ActiveJob::TestHelper
 
-  let(:enterprise) { create(:enterprise, :has_enabled_saml => true)}
-  let(:user){ create(:user, :password => 'password', :enterprise => enterprise) }
+  let(:enterprise) { create(:enterprise, has_enabled_saml: true) }
+  let(:user) { create(:user, password: 'password', enterprise: enterprise) }
 
   before :each do
     session[:saml_for_enterprise] = user.enterprise.id

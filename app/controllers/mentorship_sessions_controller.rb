@@ -9,7 +9,7 @@ class MentorshipSessionsController < ApplicationController
     @mentorship_session.accept
     @mentorship_session.save
 
-    flash[:notice] = "Session invitation accepted"
+    flash[:notice] = 'Session invitation accepted'
     redirect_to :back
   end
 
@@ -21,7 +21,7 @@ class MentorshipSessionsController < ApplicationController
 
     MentorMailer.session_declined(@mentoring_session.creator.id, @mentoring_session.id, current_user.id).deliver_later
 
-    flash[:notice] = "Session invitation declined"
+    flash[:notice] = 'Session invitation declined'
     redirect_to :back
   end
 
