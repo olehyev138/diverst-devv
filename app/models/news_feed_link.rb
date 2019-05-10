@@ -19,8 +19,17 @@ class NewsFeedLink < BaseClass
 
   scope :approved,        -> { where(approved: true).order(created_at: :desc) }
   scope :not_approved,    -> { where(approved: false).order(created_at: :desc) }
-  scope :combined_news_links, -> (news_feed_id) { joins('LEFT OUTER JOIN shared_news_feed_links ON shared_news_feed_links.news_feed_link_id = news_feed_links.id').where("shared_news_feed_links.news_feed_id = #{news_feed_id} OR news_feed_links.news_feed_id = #{news_feed_id} AND news_feed_links.approved = 1").distinct }
-  scope :combined_news_links_with_segments, -> (news_feed_id, segment_ids) { includes(:social_link, :news_link, :group_message).joins("LEFT OUTER JOIN news_feed_link_segments ON news_feed_link_segments.news_feed_link_id = news_feed_links.id LEFT OUTER JOIN shared_news_feed_links ON shared_news_feed_links.news_feed_link_id = news_feed_links.id WHERE shared_news_feed_links.news_feed_id = #{news_feed_id} OR news_feed_links.news_feed_id = #{news_feed_id} AND approved = 1 OR news_feed_link_segments.segment_id IS NULL OR news_feed_link_segments.segment_id IN (#{ segment_ids.join(",") })").distinct }
+  scope :combined_news_links, -> (news_feed_id) {
+    joins('LEFT OUTER JOIN shared_news_feed_links ON shared_news_feed_links.news_feed_link_id = news_feed_links.id')
+      .where("shared_news_feed_links.news_feed_id = #{news_feed_id} OR news_feed_links.news_feed_id = #{news_feed_id} AND news_feed_links.approved = 1").distinct }
+  scope :combined_news_links_with_segments, -> (news_feed_id, segment_ids) {
+    includes(:social_link, :news_link, :group_message)
+      .joins("LEFT OUTER JOIN news_feed_link_segments ON news_feed_link_segments.news_feed_link_id = news_feed_links.id
+              LEFT OUTER JOIN shared_news_feed_links ON shared_news_feed_links.news_feed_link_id = news_feed_links.id
+              WHERE shared_news_feed_links.news_feed_id = #{news_feed_id}
+                OR news_feed_links.news_feed_id = #{news_feed_id} AND approved = 1
+                OR news_feed_link_segments.segment_id IS NULL
+                OR news_feed_link_segments.segment_id IN (#{ segment_ids.join(",") })").distinct }
 
   validates :news_feed_id, presence: true
 
