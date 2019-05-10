@@ -1,5 +1,4 @@
 class Integrations::YammerController < ApplicationController
-
   layout 'global_settings'
 
   def login

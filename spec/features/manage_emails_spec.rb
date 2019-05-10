@@ -5,7 +5,7 @@ RSpec.feature 'Email management' do
   let!(:email) { create(:email, name: 'Sweet email', enterprise: user.enterprise) }
 
   before do
-    login_as(user, scope: :user, :run_callbacks => false)
+    login_as(user, scope: :user, run_callbacks: false)
   end
 
   scenario 'users can see emails' do

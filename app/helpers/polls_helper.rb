@@ -1,17 +1,17 @@
 module PollsHelper
   def poll_initiative_visibility_class(poll, params)
     if poll.initiative
-      ""
+      ''
     elsif params[:initiative_id].blank? || !(poll.groups + poll.segments).empty?
-      "hidden"
+      'hidden'
     end
   end
 
   def poll_others_visibility_class(poll, params)
     if params[:initiative_id].blank? && poll.initiative
-      "hidden"
-    elsif !params[:initiative_id].blank? || poll.initiative
-      "hidden"
+      'hidden'
+    elsif params[:initiative_id].present? || poll.initiative
+      'hidden'
     end
   end
 
@@ -20,7 +20,7 @@ module PollsHelper
   end
 
   def respondent_name(response)
-    return "Anonymous User" if response.anonymous?
+    return 'Anonymous User' if response.anonymous?
 
     if response.user.present?
       response.user.name_with_status

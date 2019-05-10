@@ -3,10 +3,10 @@ require 'rails_helper'
 RSpec.describe GenericGraphsGroupGrowthDownloadJob, type: :job do
   include ActiveJob::TestHelper
 
-  describe "#perform" do
-    it "creates a downloadable csv file" do
+  describe '#perform' do
+    it 'creates a downloadable csv file' do
       enterprise = create(:enterprise)
-      user = create(:user, :enterprise => enterprise)
+      user = create(:user, enterprise: enterprise)
 
       expect {
         subject

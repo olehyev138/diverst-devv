@@ -3,7 +3,7 @@ FactoryBot.define do
     association :user
     association :reward_action
     association :initiative, factory: :initiative
-    operation "add"
+    operation 'add'
     points 0
   end
 end

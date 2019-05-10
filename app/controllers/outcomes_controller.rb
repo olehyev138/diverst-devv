@@ -21,16 +21,16 @@ class OutcomesController < ApplicationController
     @outcome = Outcome.new(outcome_params)
 
     # don't think this belongs here
-    #@outcome.enterprise = current_user.enterprise
-    #@outcome.estimated_funding *= 100
-    #@outcome.owner = current_user
+    # @outcome.enterprise = current_user.enterprise
+    # @outcome.estimated_funding *= 100
+    # @outcome.owner = current_user
 
     if @outcome.save
       flash[:notice] = "Your #{ c_t(:outcome) } was created"
       redirect_to action: :index
     else
       flash[:alert] = "Your #{ c_t(:outcome) } was not created. Please fix the errors"
-      render :new #new template does not exist
+      render :new # new template does not exist
     end
   end
 
@@ -45,7 +45,7 @@ class OutcomesController < ApplicationController
       redirect_to action: :index
     else
       flash[:alert] = "Your #{ c_t(:outcome) } was not updated. Please fix the errors"
-      render :edit #edit template exist. however, form partial does not
+      render :edit # edit template exist. however, form partial does not
     end
   end
 

@@ -28,7 +28,7 @@ class Groups::FieldsController < ApplicationController
       }
       format.csv {
         GroupFieldTimeSeriesDownloadJob.perform_later(current_user.id, @group.id, @field.id)
-        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+        flash[:notice] = 'Please check your Secure Downloads section in a couple of minutes'
         redirect_to :back
       }
     end

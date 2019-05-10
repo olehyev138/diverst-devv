@@ -8,8 +8,8 @@
 # server 'db.example.com', user: 'deploy', roles: %w{db}
 server '18.214.203.45', user: 'newdeploy', roles: %w(web app db)
 
-#52.39.50.54 new one
-#52.90.48.218 sandbox3
+# 52.39.50.54 new one
+# 52.90.48.218 sandbox3
 
 # role-based syntax
 # ==================
@@ -34,7 +34,7 @@ server '18.214.203.45', user: 'newdeploy', roles: %w(web app db)
 set :branch, 'master'
 set :rails_env, :production
 
-set :rollbar_env, "rsg"
+set :rollbar_env, 'rsg'
 
 
 # Custom SSH Options

@@ -41,8 +41,8 @@ RSpec.describe LogsController, type: :controller do
           expect(response).to be_success
         end
 
-        it "return html format" do
-          expect(response.content_type).to eq "text/html"
+        it 'return html format' do
+          expect(response.content_type).to eq 'text/html'
         end
 
         describe 'enterprise' do
@@ -57,21 +57,21 @@ RSpec.describe LogsController, type: :controller do
 
       context 'csv output' do
         before {
-            allow(LogsDownloadJob).to receive(:perform_later)
-            request.env['HTTP_REFERER'] = "back"
-            get :index, :format => :csv
+          allow(LogsDownloadJob).to receive(:perform_later)
+          request.env['HTTP_REFERER'] = 'back'
+          get :index, format: :csv
         }
 
-        it "returns to previous page" do
-            expect(response).to redirect_to "back"
+        it 'returns to previous page' do
+          expect(response).to redirect_to 'back'
         end
 
-        it "flashes" do
-            expect(flash[:notice]).to eq "Please check your Secure Downloads section in a couple of minutes"
+        it 'flashes' do
+          expect(flash[:notice]).to eq 'Please check your Secure Downloads section in a couple of minutes'
         end
 
-        it "calls job" do
-            expect(LogsDownloadJob).to have_received(:perform_later)
+        it 'calls job' do
+          expect(LogsDownloadJob).to have_received(:perform_later)
         end
 
         describe 'public activity' do
@@ -80,7 +80,7 @@ RSpec.describe LogsController, type: :controller do
           it 'creates public activity record' do
             perform_enqueued_jobs do
               allow(LogsDownloadJob).to receive(:perform_later)
-              expect{ get :index, :format => :csv  }
+              expect { get :index, format: :csv }
               .to change(PublicActivity::Activity, :count).by(1)
             end
           end
@@ -90,7 +90,7 @@ RSpec.describe LogsController, type: :controller do
 
     context 'without logged user' do
       before { get_index }
-      it_behaves_like "redirect user to users/sign_in path"
+      it_behaves_like 'redirect user to users/sign_in path'
     end
   end
 end
