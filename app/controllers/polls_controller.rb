@@ -22,7 +22,7 @@ class PollsController < ApplicationController
 
     if @poll.save
       track_activity(@poll, :create)
-      flash[:notice] = "Your survey was created"
+      flash[:notice] = 'Your survey was created'
       redirect_to action: :index
     else
       flash[:alert] = "#{@poll.errors.full_messages.first}"
@@ -47,10 +47,10 @@ class PollsController < ApplicationController
     authorize @poll
     if @poll.update(poll_params)
       track_activity(@poll, :update)
-      flash[:notice] = "Your survey was updated"
+      flash[:notice] = 'Your survey was updated'
       redirect_to @poll
     else
-      flash[:alert] = "Your survey was not updated. Please fix the errors"
+      flash[:alert] = 'Your survey was not updated. Please fix the errors'
       render :edit
     end
   end
@@ -66,7 +66,7 @@ class PollsController < ApplicationController
   def export_csv
     authorize @poll, :show?
     PollDownloadJob.perform_later(current_user.id, @poll.id)
-    flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+    flash[:notice] = 'Please check your Secure Downloads section in a couple of minutes'
     redirect_to :back
   end
 

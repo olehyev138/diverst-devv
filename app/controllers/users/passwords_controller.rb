@@ -20,7 +20,6 @@ class Users::PasswordsController < Devise::PasswordsController
     end
   end
 
-
   def create
     self.resource = resource_class.find_by(email: resource_params[:email])
     message = ''

@@ -11,7 +11,7 @@ class SyncYammerUsersJob < ActiveJob::Base
 
       response.body.each do |yammer_user|
         primary_email = yammer_user['contact']['email_addresses'][0]['address']
-        
+
         # next if primary_email.blank? # If user has an email
         # Check if user doesn't already exist
         existing_emails = enterprise.users.all.map(&:email)

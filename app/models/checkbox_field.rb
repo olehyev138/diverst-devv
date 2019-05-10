@@ -3,11 +3,13 @@ class CheckboxField < Field
 
   def string_value(values)
     return '-' unless values
+
     values.join(', ')
   end
 
   def csv_value(values)
     return '' unless values
+
     values.join(',')
   end
 
@@ -31,7 +33,7 @@ class CheckboxField < Field
     values = user.info[self]
 
     # If the user didn't select any option, the popularity will be set to the popularity of choosing no option
-    if values.nil? || values.empty?
+    if values.blank?
       avg_popularity = popularity_for_no_option(users)
     else
       # Get an array of all the checked options' popularities

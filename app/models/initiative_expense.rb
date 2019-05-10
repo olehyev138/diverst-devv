@@ -1,6 +1,6 @@
 class InitiativeExpense < BaseClass
   belongs_to :initiative
-  belongs_to :owner, class_name: "User"
+  belongs_to :owner, class_name: 'User'
 
   validates :initiative, presence: true
   validates :owner, presence: true

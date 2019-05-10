@@ -1,6 +1,5 @@
 # Use this setup block to configure all options available in SimpleForm.
 SimpleForm.setup do |config|
-  
   config.wrappers :inline_form, tag: 'div', class: 'form-group full-width', error_class: 'has-error' do |b|
     b.use :html5
     b.use :placeholder

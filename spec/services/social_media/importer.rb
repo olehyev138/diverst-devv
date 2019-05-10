@@ -5,11 +5,11 @@ RSpec.describe SocialMedia::Importer do
     subject { SocialMedia::Importer.url_to_embed(url) }
 
     context 'with correct url' do
-      shared_examples "does fetch oembed" do |url|
+      shared_examples 'does fetch oembed' do |url|
         it 'returns resourse html' do
           expect(subject).to_not be_empty
 
-          #TODO check that this is valid html
+          # TODO check that this is valid html
         end
       end
 
@@ -45,7 +45,7 @@ RSpec.describe SocialMedia::Importer do
     end
 
     context 'with incorrect url' do
-      shared_examples "does not fetch oembed" do |url|
+      shared_examples 'does not fetch oembed' do |url|
         it 'returns nil' do
           expect(subject).to eq nil
         end
@@ -75,7 +75,7 @@ RSpec.describe SocialMedia::Importer do
     subject { SocialMedia::Importer.valid_url?(url) }
 
     context 'with valid url' do
-      shared_examples "valid url" do |url|
+      shared_examples 'valid url' do |url|
         it 'returns true' do
           expect(subject).to eq true
         end
@@ -113,7 +113,7 @@ RSpec.describe SocialMedia::Importer do
     end
 
     context 'with invalid url' do
-     shared_examples "invalid url" do |url|
+      shared_examples 'invalid url' do |url|
         it 'returns fals' do
           expect(subject).to eq false
         end

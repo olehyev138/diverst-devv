@@ -13,16 +13,16 @@ RSpec.describe GroupMessageComment, type: :model do
 
 
   describe 'test scopes' do
-    context "#unapproved" do
-      it "returns the group_message_comments that have not been approved" do
-        create_list(:group_message_comment, 2, :approved => false)
+    context '#unapproved' do
+      it 'returns the group_message_comments that have not been approved' do
+        create_list(:group_message_comment, 2, approved: false)
         expect(GroupMessageComment.unapproved.count).to eq(2)
       end
     end
 
     context '#approved' do
       it 'returns approved group message comments' do
-        create_list(:group_message_comment, 3, :approved => true)
+        create_list(:group_message_comment, 3, approved: true)
         expect(GroupMessageComment.approved.count).to eq 3
       end
     end
