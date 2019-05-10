@@ -95,8 +95,8 @@ class Segment < BaseClass
   end
 
   def apply_group_rules(users)
-    self.group_rules.reduce(users) do |users, rule|
-      rule.apply(users)
+    self.group_rules.reduce(users) do |filtered_users, rule|
+      rule.apply(filtered_users)
     end
   end
 
@@ -113,7 +113,7 @@ class Segment < BaseClass
     users = enterprise.users.where('id in (?)', users.pluck(:id))
 
     # Apply each order rule to the users list
-    self.order_rules.reduce(users) { |users, rule| users.order(rule.field_name => rule.operator_name) }
+    self.order_rules.reduce(users) { |ordered_users, rule| ordered_users.order(rule.field_name => rule.operator_name) }
   end
 
   def update_members

@@ -61,7 +61,7 @@ class GroupsController < ApplicationController
     respond_to do |format|
       format.json {
         @groups = @groups
-                    .where("name like ?", "%#{search_params[:term]}%")
+                    .where('name like ?', "%#{search_params[:term]}%")
                     .where(id: [search_params[:ids]]) unless search_params[:ids].nil?
 
         render json: @groups

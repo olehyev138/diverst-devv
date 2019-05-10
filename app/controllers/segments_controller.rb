@@ -101,7 +101,7 @@ class SegmentsController < ApplicationController
     authorize @segment, :show?
     SegmentMembersDownloadJob.perform_later(current_user.id, @segment.id, params[:group_id])
 
-    flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+    flash[:notice] = 'Please check your Secure Downloads section in a couple of minutes'
     redirect_to :back
   end
 

@@ -10,6 +10,7 @@ module Optionnable
   # Remove all whitespace except for new lines from options text
   def trim_options_whitespace
     return if options_text.nil?
+
     options_text.delete!(" \t\r")
   end
 
