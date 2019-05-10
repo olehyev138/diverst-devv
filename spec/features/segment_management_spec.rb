@@ -17,7 +17,7 @@ RSpec.feature 'Segment management' do
     visit new_segment_path
     fill_in 'segment_name', with: segment[:name]
 
-    click_link "add_field_rule"
+    click_link 'add_field_rule'
 
     select user.enterprise.fields.last.title, from: page.find('.custom-field select')[:id]
     select 'equals', from: page.find('.operator select')[:id]

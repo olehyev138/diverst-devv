@@ -281,6 +281,7 @@ module Optionnable
 
   def highcharts_timeseries(segments: [], groups: [])
     data = elastic_timeseries(segments: segments, groups: groups)
+
     series = data['aggregations']['terms']['buckets'].map do |term_bucket|
       time_buckets = term_bucket['date_histogram']['buckets']
 

@@ -5,8 +5,8 @@ FactoryBot.define do
 
     after(:build) do |segment_group_scope_rule|
       segment_group_scope_rule.segment_group_scope_rule_groups = build_list(:segment_group_scope_rule_group,
-                                                                             rand(1..3),
-                                                                             segment_group_scope_rule: segment_group_scope_rule)
+                                                                            rand(1..3),
+                                                                            segment_group_scope_rule: segment_group_scope_rule)
     end
   end
 end

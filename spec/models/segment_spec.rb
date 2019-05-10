@@ -2,21 +2,21 @@ require 'rails_helper'
 
 RSpec.describe Segment, type: :model do
   describe 'when validating' do
-    let(:segment){ build_stubbed(:segment) }
+    let(:segment) { build_stubbed(:segment) }
 
     it { expect(segment).to belong_to(:parent).class_name('Segment') }
     it { expect(segment).to have_many(:children).class_name('Segment') }
 
     it { expect(segment).to belong_to(:enterprise) }
-    it { expect(segment).to belong_to(:owner).class_name("User") }
+    it { expect(segment).to belong_to(:owner).class_name('User') }
 
     # Rules
-    it { expect(segment).to have_many(:field_rules).class_name("SegmentRule") }
-    it { expect(segment).to have_many(:order_rules).class_name("SegmentOrderRule") }
-    it { expect(segment).to have_many(:group_rules).class_name("SegmentGroupScopeRule") }
+    it { expect(segment).to have_many(:field_rules).class_name('SegmentRule') }
+    it { expect(segment).to have_many(:order_rules).class_name('SegmentOrderRule') }
+    it { expect(segment).to have_many(:group_rules).class_name('SegmentGroupScopeRule') }
 
     it { expect(segment).to have_many(:users_segments) }
-    it { expect(segment).to have_many(:members).through(:users_segments).class_name("User").source(:user).dependent(:destroy) }
+    it { expect(segment).to have_many(:members).through(:users_segments).class_name('User').source(:user).dependent(:destroy) }
     it { expect(segment).to have_many(:polls_segments) }
     it { expect(segment).to have_many(:polls).through(:polls_segments) }
     it { expect(segment).to have_many(:group_messages_segments) }
@@ -26,7 +26,7 @@ RSpec.describe Segment, type: :model do
     it { expect(segment).to have_many(:initiative_segments) }
     it { expect(segment).to have_many(:initiatives).through(:initiative_segments) }
 
-    it { expect(segment).to validate_presence_of(:name)}
+    it { expect(segment).to validate_presence_of(:name) }
     it { expect(segment).to validate_presence_of(:enterprise) }
     it { expect(segment).to validate_presence_of(:active_users_filter) }
 
@@ -39,17 +39,17 @@ RSpec.describe Segment, type: :model do
   describe 'test validation' do
     let!(:enterprise) { create(:enterprise) }
     let!(:segment) { create(:segment, name: 'Females', enterprise: enterprise) }
-    it{ expect(segment).to validate_uniqueness_of(:name).scoped_to(:enterprise_id) }
+    it { expect(segment).to validate_uniqueness_of(:name).scoped_to(:enterprise_id) }
 
     context 'raise error' do
       it 'when segment with the same name is created' do
-        expect{ create(:segment, name: 'Females', enterprise: enterprise) }.to raise_error ActiveRecord::RecordInvalid
+        expect { create(:segment, name: 'Females', enterprise: enterprise) }.to raise_error ActiveRecord::RecordInvalid
       end
     end
   end
 
-  describe "associations" do
-    it "creates parent segment and children" do
+  describe 'associations' do
+    it 'creates parent segment and children' do
       parent = create(:segment)
 
       3.times do
@@ -67,7 +67,7 @@ RSpec.describe Segment, type: :model do
   end
 
   describe 'when describing callbacks' do
-    it "should reindex users on elasticsearch after create", skip: true do
+    it 'should reindex users on elasticsearch after create', skip: true do
       segment = build(:segment)
       TestAfterCommit.with_commits(true) do
         expect(RebuildElasticsearchIndexJob).to receive(:perform_later).with(
@@ -78,7 +78,7 @@ RSpec.describe Segment, type: :model do
       end
     end
 
-    it "should reindex users on elasticsearch after update", skip: true do
+    it 'should reindex users on elasticsearch after update', skip: true do
       segment = create(:segment)
       TestAfterCommit.with_commits(true) do
         expect(RebuildElasticsearchIndexJob).to receive(:perform_later).with(
@@ -89,7 +89,7 @@ RSpec.describe Segment, type: :model do
       end
     end
 
-    it "should reindex users on elasticsearch after destroy", skip: true do
+    it 'should reindex users on elasticsearch after destroy', skip: true do
       segment = create(:segment)
       TestAfterCommit.with_commits(true) do
         expect(RebuildElasticsearchIndexJob).to receive(:perform_later).with(
@@ -101,41 +101,41 @@ RSpec.describe Segment, type: :model do
     end
   end
 
-  describe "#general_rules_followed_by" do
-    context "when only_active" do
-      it "returns true" do
-        user = create(:user, :active => true)
-        segment = create(:segment, :active_users_filter => "only_active")
+  describe '#general_rules_followed_by' do
+    context 'when only_active' do
+      it 'returns true' do
+        user = create(:user, active: true)
+        segment = create(:segment, active_users_filter: 'only_active')
 
         expect(segment.general_rules_followed_by?(user)).to be(true)
       end
 
-      it "returns false" do
-        user = create(:user, :active => true)
-        segment = create(:segment, :active_users_filter => "only_active")
+      it 'returns false' do
+        user = create(:user, active: true)
+        segment = create(:segment, active_users_filter: 'only_active')
 
         expect(segment.general_rules_followed_by?(user)).to be(true)
       end
     end
-    context "when only_inactive" do
-      it "returns false" do
-        user = create(:user, :active => true)
-        segment = create(:segment, :active_users_filter => "only_inactive")
+    context 'when only_inactive' do
+      it 'returns false' do
+        user = create(:user, active: true)
+        segment = create(:segment, active_users_filter: 'only_inactive')
 
         expect(segment.general_rules_followed_by?(user)).to be(false)
       end
 
-      it "returns true" do
-        user = create(:user, :active => false)
-        segment = create(:segment, :active_users_filter => "only_inactive")
+      it 'returns true' do
+        user = create(:user, active: false)
+        segment = create(:segment, active_users_filter: 'only_inactive')
 
         expect(segment.general_rules_followed_by?(user)).to be(true)
       end
     end
   end
 
-  describe "#update_all_members" do
-    it "calls CacheSegmentMembersJob" do
+  describe '#update_all_members' do
+    it 'calls CacheSegmentMembersJob' do
       expect(CacheSegmentMembersJob).to receive(:perform_later).at_least(:once)
       create(:segment)
 
