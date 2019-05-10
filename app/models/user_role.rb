@@ -30,7 +30,7 @@ class UserRole < BaseClass
   scope :user_type,   ->  { where(role_type: 'user') }
   scope :group_type,  ->  { where(role_type: 'group') }
   scope :priorities,  ->  { pluck(:priority) }
-  scope :default,     ->  { where(default: true).first }
+  scope :default,     ->  { find_by(default: true) }
 
   # before the user role is created we need to create a template that
   # is tied to this role

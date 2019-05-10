@@ -568,7 +568,7 @@ class User < BaseClass
   def generate_uid
     loop do
       uid = SecureRandom.uuid
-      break uid unless User.where(uid: uid).first
+      break uid unless User.find_by(uid: uid)
     end
   end
 
