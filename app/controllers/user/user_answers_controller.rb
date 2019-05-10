@@ -18,10 +18,10 @@ class User::UserAnswersController < ApplicationController
       @vote.destroy if @vote
     end
 
-    user_rewarder("campaign_vote").add_points(@vote) if @vote
+    user_rewarder('campaign_vote').add_points(@vote) if @vote
 
     flash_reward "Now you have #{current_user.credits} points"
-    render "partials/flash_messages.js"
+    render 'partials/flash_messages.js'
   end
 
   def create
@@ -29,11 +29,11 @@ class User::UserAnswersController < ApplicationController
     @answer.author = current_user
 
     if @answer.save
-      user_rewarder("campaign_answer").add_points(@answer)
+      user_rewarder('campaign_answer').add_points(@answer)
       track_activity(@answer, :create)
       flash_reward "Your answer was created. Now you have #{current_user.credits} points"
     else
-      flash[:alert] = "Your answer was not created. Please fix the errors"
+      flash[:alert] = 'Your answer was not created. Please fix the errors'
     end
 
     redirect_to [:user, @campaign, @question]
@@ -54,8 +54,8 @@ class User::UserAnswersController < ApplicationController
     params
       .require(:answer)
       .permit(
-      :upvoted
-    )
+        :upvoted
+      )
   end
 
   def answer_params
@@ -64,6 +64,6 @@ class User::UserAnswersController < ApplicationController
       .permit(
         :content,
         :contributing_group_id
-    )
+      )
   end
 end

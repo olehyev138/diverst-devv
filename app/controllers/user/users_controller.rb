@@ -20,14 +20,14 @@ class User::UsersController < ApplicationController
     @user.info.merge(fields: @user.enterprise.fields, form_data: params['custom-fields'])
 
     if @user.save
-      flash[:notice] = "Your user was updated"
+      flash[:notice] = 'Your user was updated'
       redirect_to user_user_path(@user)
     else
-      flash[:alert] = "Your user was not updated. Please fix the errors"
+      flash[:alert] = 'Your user was not updated. Please fix the errors'
       render :edit
     end
   end
-  
+
   def mentorship
   end
 

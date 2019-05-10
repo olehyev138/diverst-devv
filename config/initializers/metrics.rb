@@ -28,7 +28,6 @@
 
   Sidekiq.configure_server do |config|
     config.server_middleware do |chain|
-
       chain.add Sidekiq::Middleware::Server::InfluxDB,
                 influxdb_client: InfluxDB::Rails.client,
                 series_name: 'sidekiq_jobs',

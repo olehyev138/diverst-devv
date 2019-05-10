@@ -99,10 +99,13 @@ module Metrics
 
       parser = graph.formatter.parser
       parser.extractors[:y] = parser.date_range(key: :doc_count)
-      parser.extractors[:x] = parser.date_range { |p| p.top_hits { |pp| pp.custom( -> (e, _) {
-            return if e.blank? || e == 0
-            (e.dig(:folder, :group, :name) || 'Shared') + ' ' + e.dig(:folder, :name)
-          }) } }
+      parser.extractors[:x] = parser.date_range { |p| p.top_hits { |pp| pp.custom(-> (e, _) {
+                                                                                    return if e.blank? || e == 0
+
+                                                                                    (e.dig(:folder, :group, :name) || 'Shared') + ' ' + e.dig(:folder, :name)
+                                                                                  })
+                                                      }
+      }
 
       graph.formatter.add_elements(graph.search)
 
@@ -126,10 +129,13 @@ module Metrics
 
       parser = graph.formatter.parser
       parser.extractors[:y] = parser.date_range(key: :doc_count)
-      parser.extractors[:x] = parser.date_range { |p| p.top_hits { |pp| pp.custom( -> (e, _) {
-            return if e.blank? || e == 0
-            (e.dig(:resource, :group, :name) || 'Shared') + ' ' + e.dig(:resource, :title)
-          } ) } }
+      parser.extractors[:x] = parser.date_range { |p| p.top_hits { |pp| pp.custom(-> (e, _) {
+                                                                                    return if e.blank? || e == 0
+
+                                                                                    (e.dig(:resource, :group, :name) || 'Shared') + ' ' + e.dig(:resource, :title)
+                                                                                  })
+                                                      }
+      }
 
       graph.formatter.add_elements(graph.search)
 
@@ -153,11 +159,14 @@ module Metrics
 
       parser = graph.formatter.parser
       parser.extractors[:y] = parser.date_range(key: :doc_count)
-      parser.extractors[:x] = parser.date_range { |p| p.top_hits { |pp| pp.custom( -> (e, _) {
-            return if e.blank? || e == 0
-            (e.dig(:news_feed_link, :group, :name) || 'Shared') +
-              ' ' + e.dig(:news_feed_link, :news_link, :title)
-          } ) } }
+      parser.extractors[:x] = parser.date_range { |p| p.top_hits { |pp| pp.custom(-> (e, _) {
+                                                                                    return if e.blank? || e == 0
+
+                                                                                    (e.dig(:news_feed_link, :group, :name) || 'Shared') +
+                                                                                      ' ' + e.dig(:news_feed_link, :news_link, :title)
+                                                                                  })
+                                                      }
+      }
 
       graph.formatter.add_elements(graph.search)
 

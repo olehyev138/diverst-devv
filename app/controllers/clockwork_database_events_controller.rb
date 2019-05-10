@@ -17,11 +17,11 @@ class ClockworkDatabaseEventsController < ApplicationController
   def update
     authorize current_user.enterprise, :enterprise_manage?
     if @clockwork_database_event.update(clockwork_database_event_params)
-      flash[:notice] = "Your email event was updated"
+      flash[:notice] = 'Your email event was updated'
       track_activity(@clockwork_database_event, :update)
       redirect_to action: :index
     else
-      flash[:alert] = "Your email event was not updated. Please fix the errors"
+      flash[:alert] = 'Your email event was not updated. Please fix the errors'
       render :edit
     end
   end
@@ -29,7 +29,7 @@ class ClockworkDatabaseEventsController < ApplicationController
   protected
 
   def set_clockwork_database_event
-   @clockwork_database_event = current_user.enterprise.clockwork_database_events.find(params[:id])
+    @clockwork_database_event = current_user.enterprise.clockwork_database_events.find(params[:id])
   end
 
   def clockwork_database_event_params

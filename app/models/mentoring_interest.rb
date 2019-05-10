@@ -1,7 +1,7 @@
 class MentoringInterest < BaseClass
   # associations
   has_many :mentorship_interests
-  has_many :users, :through => :mentorship_interests
+  has_many :users, through: :mentorship_interests
 
   # validations
   validates :name,  presence: true

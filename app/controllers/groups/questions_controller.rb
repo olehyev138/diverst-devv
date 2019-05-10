@@ -13,7 +13,7 @@ class Groups::QuestionsController < ApplicationController
   end
 
   def survey
-    unless @user_group.present?
+    if @user_group.blank?
       flash[:notice] = "Your have to join group before taking it's survey"
       redirect_to @group
     end
@@ -21,13 +21,13 @@ class Groups::QuestionsController < ApplicationController
 
   def submit_survey
     if @user_group.present?
-      #set flash message
+      # set flash message
       @user_group.info.merge(fields: @group.survey_fields, form_data: params['custom-fields'])
 
       if @user_group.save
-        flash[:notice] = "Your response was saved"
+        flash[:notice] = 'Your response was saved'
       else
-        flash[:alert] = "Your response was not saved"
+        flash[:alert] = 'Your response was not saved'
       end
     end
 
@@ -38,7 +38,7 @@ class Groups::QuestionsController < ApplicationController
     authorize @group, :insights?
     GroupQuestionsDownloadJob.perform_later(current_user.id, @group.id)
     track_activity(@group, :export_questions)
-    flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+    flash[:notice] = 'Please check your Secure Downloads section in a couple of minutes'
     redirect_to :back
   end
 

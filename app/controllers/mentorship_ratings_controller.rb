@@ -1,10 +1,10 @@
 class MentorshipRatingsController < ApplicationController
   before_action :set_mentorship_rating, only: [:show]
 
-  layout "user"
+  layout 'user'
 
   def new
-    @mentorship_rating = current_user.mentorship_ratings.new(:mentoring_session_id => params[:mentoring_session_id])
+    @mentorship_rating = current_user.mentorship_ratings.new(mentoring_session_id: params[:mentoring_session_id])
     render 'user/mentorship/ratings/new'
   end
 
@@ -18,7 +18,7 @@ class MentorshipRatingsController < ApplicationController
     if @mentorship_rating.save
       redirect_to sessions_user_mentorship_index_path
     else
-      flash[:alert] = "Your feedback was not saved"
+      flash[:alert] = 'Your feedback was not saved'
       render 'user/mentorship/ratings/new'
     end
   end
@@ -38,5 +38,4 @@ class MentorshipRatingsController < ApplicationController
   def set_mentorship_rating
     @mentorship_rating = current_user.mentorship_ratings.find(params[:id])
   end
-
 end

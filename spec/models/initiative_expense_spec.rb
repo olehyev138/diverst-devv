@@ -5,7 +5,7 @@ RSpec.describe InitiativeExpense, type: :model do
     let(:initiative_expense) { build_stubbed(:initiative_expense) }
 
     it { expect(initiative_expense).to belong_to(:initiative) }
-    it { expect(initiative_expense).to belong_to(:owner).class_name("User") }
+    it { expect(initiative_expense).to belong_to(:owner).class_name('User') }
     it { expect(initiative_expense).to validate_presence_of(:initiative) }
     it { expect(initiative_expense).to validate_presence_of(:owner) }
     it { expect(initiative_expense).to validate_presence_of(:amount) }

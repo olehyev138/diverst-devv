@@ -30,6 +30,7 @@ class YammerClient
     }
 
     return response[0] unless response.nil?
+
     response
   end
 
@@ -39,6 +40,7 @@ class YammerClient
     }
 
     return response[0] unless response.nil?
+
     response
   end
 

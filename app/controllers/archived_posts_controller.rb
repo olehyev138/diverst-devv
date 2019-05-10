@@ -6,12 +6,12 @@ class ArchivedPostsController < ApplicationController
 
   def index
     # get all news feed for current enterprise
-  	@posts = NewsFeed.archived_posts(current_user.enterprise).order(created_at: :desc)
-    authorize current_user.enterprise, :manage_posts?, :policy_class => EnterprisePolicy
+    @posts = NewsFeed.archived_posts(current_user.enterprise).order(created_at: :desc)
+    authorize current_user.enterprise, :manage_posts?, policy_class: EnterprisePolicy
   end
 
   def destroy
-    authorize current_user.enterprise, :manage_posts?, :policy_class => EnterprisePolicy
+    authorize current_user.enterprise, :manage_posts?, policy_class: EnterprisePolicy
     track_activity(@post.group_message || @post.news_link || @post.social_link, :destroy)
     @post.destroy
 
@@ -23,7 +23,7 @@ class ArchivedPostsController < ApplicationController
 
   def delete_all
     @posts = NewsFeed.archived_posts(current_user.enterprise)
-    authorize current_user.enterprise, :manage_posts?, :policy_class => EnterprisePolicy
+    authorize current_user.enterprise, :manage_posts?, policy_class: EnterprisePolicy
     @posts.destroy_all
 
     respond_to do |format|
@@ -34,9 +34,9 @@ class ArchivedPostsController < ApplicationController
 
   def restore_all
     @posts = NewsFeed.archived_posts(current_user.enterprise)
-    authorize current_user.enterprise, :manage_posts?, :policy_class => EnterprisePolicy
+    authorize current_user.enterprise, :manage_posts?, policy_class: EnterprisePolicy
     @posts.update_all(archived_at: nil)
-    
+
     respond_to do |format|
       format.html { redirect_to :back, notice: 'all archived posts restored' }
       format.js
@@ -46,7 +46,7 @@ class ArchivedPostsController < ApplicationController
   def restore
     @post.update(archived_at: nil)
     track_activity(@post.group_message || @post.news_link || @post.social_link, :restore)
-    authorize current_user.enterprise, :manage_posts?, :policy_class => EnterprisePolicy
+    authorize current_user.enterprise, :manage_posts?, policy_class: EnterprisePolicy
 
     respond_to do |format|
       format.html { redirect_to :back }
