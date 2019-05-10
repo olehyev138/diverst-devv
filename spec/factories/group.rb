@@ -4,6 +4,9 @@ FactoryBot.define do
       no_outcomes { false }
     end
 
+    # specs wont pass without this - specifically line 133 - group_spec.rb
+    id { Faker::Number.between(1, 10000) }
+
     name { Faker::Lorem.sentence(3) }
     enterprise
 
