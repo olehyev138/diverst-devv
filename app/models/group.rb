@@ -90,6 +90,7 @@ class Group < BaseClass
   has_many :initiatives, through: :pillars
   has_many :updates, class_name: "GroupUpdate", dependent: :destroy
   has_many :views, dependent: :destroy
+  has_many :twitter_accounts, class_name: 'TwitterAccount', dependent: :destroy
 
   has_many :fields, -> { where field_type: "regular"},
     dependent: :delete_all

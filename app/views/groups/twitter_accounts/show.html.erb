@@ -1,0 +1,8 @@
+<h1>Tweet show</h1>
+<h2>Name: <%= @account.name %></h2>
+<h3>Account: @<%= @account.account %></h3>
+<h3>Latest Tweets:</h3>
+<% @client.user_timeline(@account.account).find_all do |twt| %>
+  <% twt_embedded = @client.oembeds(twt.id).first %>
+  <%= raw(twt_embedded.html) %>
+<% end %>

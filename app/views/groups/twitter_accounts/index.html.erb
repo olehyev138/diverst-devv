@@ -1,0 +1,46 @@
+<h1>Twitter Accounts Following</h1>
+
+<div class="flex-row flex-row--middle">
+  <div class="flex-row__cell">
+    <%= link_to "+ Add Account",
+                new_group_twitter_account_path,
+                class: "btn btn-primary"
+    %>
+    <%= link_to "Un-follow All", delete_all_group_twitter_accounts_path,
+                :method => :get,
+                data: {confirm: 'Are you sure'},
+                class: "btn btn-danger" %>
+    <%= link_to "Back To News Feed", group_posts_path,
+                class: "btn btn-secondary" %>
+  </div>
+</div>
+
+<% @accounts.find_all do |account| %>
+  <div class='well'>
+    <h2><%= account.name %></h2>
+    <h3>@<%= account.account %></h3>
+
+      <% twt = @client.user_timeline(account.account).first %>
+      <% twt_embedded = @client.oembeds(twt.id).first %>
+      <%= raw(twt_embedded.html) %>
+
+
+    <%= link_to 'See More Tweets',
+                group_twitter_account_path(@group, account),
+                class: "btn btn-sm btn-primary"
+    %>
+
+    <%= link_to 'Edit Account Information',
+                edit_group_twitter_account_path(@group, account),
+                class: "btn btn-sm btn-primary"
+    %>
+
+    <%= link_to 'Un-follow Account',
+                group_twitter_account_path(@group, account),
+                method: :delete,
+                data: {confirm: 'Are you sure'},
+                class: "btn btn-sm btn-danger"
+    %>
+  </div>
+
+<% end %>
