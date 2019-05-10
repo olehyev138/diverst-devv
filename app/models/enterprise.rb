@@ -116,7 +116,7 @@ class Enterprise < BaseClass
   end
 
   def default_user_role
-    user_roles.where(default: true).first.id
+    user_roles.find_by(default: true).id
   end
 
   def iframe_calendar_token
@@ -667,7 +667,10 @@ class Enterprise < BaseClass
 
   def generic_graphs_demo_top_news_by_views_csv
     news_feed_link_ids = NewsFeedLink.where(news_feed_id: NewsFeed.where(group_id: self.groups.ids).ids).ids
-    news_links = NewsLink.select('news_links.title, SUM(views.id) view_count').joins(:news_feed_link, news_feed_link: :views).where(news_feed_links: { id: news_feed_link_ids }).order('view_count DESC')
+    news_links = NewsLink.select('news_links.title, SUM(views.id) view_count')
+                   .joins(:news_feed_link, news_feed_link: :views)
+                   .where(news_feed_links: { id: news_feed_link_ids })
+                   .order('view_count DESC')
 
     values = [9, 2, 5, 1, 11, 10, 9, 5, 11, 4, 1, 8]
     i = 0
@@ -693,11 +696,12 @@ class Enterprise < BaseClass
       field: 'created_at',
       interval: 'month'
     )
+
     data = g.query_elasticsearch
 
     strategy = Reports::GraphTimeseriesGeneric.new(
       title: 'Number of employees',
-      data: data['aggregations']['my_date_histogram']['buckets'].collect { |data| [data['key'], data['doc_count']] }
+      data: data['aggregations']['my_date_histogram']['buckets'].collect { |d| [d['key'], d['doc_count']] }
     )
     report = Reports::Generator.new(strategy)
 

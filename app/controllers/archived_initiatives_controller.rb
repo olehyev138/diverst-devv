@@ -53,7 +53,7 @@ class ArchivedInitiativesController < ApplicationController
       format.html { redirect_to :back }
       format.js
     end
-    end
+  end
 
   private
 

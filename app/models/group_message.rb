@@ -99,7 +99,7 @@ class GroupMessage < BaseClass
 
   # call back to delete news link segment associations
   def remove_segment_association(segment)
-    group_messages_segment = self.group_messages_segments.where(segment_id: segment.id).first
+    group_messages_segment = self.group_messages_segments.find_by(segment_id: segment.id)
     group_messages_segment.news_feed_link_segment.destroy
   end
 

@@ -10,7 +10,10 @@ class UserGroupNotificationJob < ActiveJob::Base
     notifications_frequency = args[:notifications_frequency]
     enterprise_id = args[:enterprise_id]
 
-    User.joins(:groups).where(enterprise_id: enterprise_id, groups_notifications_frequency: User.groups_notifications_frequencies[notifications_frequency.to_sym]).find_in_batches(batch_size: 200) do |users|
+    User.joins(:groups)
+      .where(enterprise_id: enterprise_id,
+             groups_notifications_frequency: User.groups_notifications_frequencies[notifications_frequency.to_sym])
+      .find_in_batches(batch_size: 200) do |users|
       users.each do |user|
         groups = []
         next unless can_send_email?(notifications_frequency, user)

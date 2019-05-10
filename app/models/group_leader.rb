@@ -21,7 +21,7 @@ class GroupLeader < BaseClass
 
   def set_admin_permissions
     # get the template that corresponds to the group_leader role
-    template = PolicyGroupTemplate.joins(:user_role).where(user_roles: { id: user_role_id }).first
+    template = PolicyGroupTemplate.joins(:user_role).find_by(user_roles: { id: user_role_id })
 
     # update the permissions for this group_leader
 
