@@ -45,7 +45,7 @@ class NewsLink < BaseClass
 
   # call back to delete news link segment associations
   def remove_segment_association(segment)
-    news_link_segment = self.news_link_segments.where(segment_id: segment.id).first
+    news_link_segment = self.news_link_segments.find_by(segment_id: segment.id)
     news_link_segment.news_feed_link_segment.destroy
   end
 

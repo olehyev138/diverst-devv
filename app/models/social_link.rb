@@ -35,7 +35,7 @@ class SocialLink < BaseClass
 
   # call back to delete news link segment associations
   def remove_segment_association(segment)
-    social_link_segment = self.social_link_segments.where(segment_id: segment.id).first
+    social_link_segment = self.social_link_segments.find_by(segment_id: segment.id)
     social_link_segment.news_feed_link_segment.destroy
   end
 

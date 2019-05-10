@@ -11,7 +11,7 @@ class RebuildElasticsearchJob < ActiveJob::Base
     end
 
     import
-  rescue => e
+  rescue
   end
 
   def import
@@ -31,7 +31,7 @@ class RebuildElasticsearchJob < ActiveJob::Base
       # import
       model.import
     end
-  rescue => e
+  rescue
   end
 
   def host

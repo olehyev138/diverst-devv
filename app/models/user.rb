@@ -166,7 +166,7 @@ class User < BaseClass
   end
 
   def set_default_policy_group
-    template = enterprise.policy_group_templates.joins(:user_role).where(user_roles: { id: user_role_id }).first
+    template = enterprise.policy_group_templates.joins(:user_role).find_by(user_roles: { id: user_role_id })
     attributes = template.create_new_policy
     if policy_group.nil?
       create_policy_group(attributes)
@@ -399,7 +399,7 @@ class User < BaseClass
   end
 
   def group_member?(group_id)
-    user_group = user_groups.where(group_id: group_id).first
+    user_group = user_groups.find_by(group_id: group_id)
     user_group.present?
   end
 
@@ -568,7 +568,7 @@ class User < BaseClass
   def generate_uid
     loop do
       uid = SecureRandom.uuid
-      break uid unless User.where(uid: uid).first
+      break uid unless User.find_by(uid: uid)
     end
   end
 

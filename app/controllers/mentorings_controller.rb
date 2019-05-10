@@ -8,7 +8,11 @@ class MentoringsController < ApplicationController
 
     if params.dig(:search, :value)
       search = params.dig(:search, :value)
-      @users = @users.ransack({ mentoring_interests_name_cont: search, first_name_cont: search, last_name_cont: search, email_cont: search, m: 'or' }).result(distinct: true).includes(:mentoring_interests)
+      @users = @users.ransack({ mentoring_interests_name_cont: search,
+                                first_name_cont: search, last_name_cont: search,
+                                email_cont: search,
+                                m: 'or' })
+                 .result(distinct: true).includes(:mentoring_interests)
     end
 
     respond_to do |format|

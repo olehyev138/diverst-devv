@@ -11,7 +11,7 @@ class SegmentMemberDatatable < AjaxDatatablesRails::Base
 
   def sortable_columns
     @sortable_columns ||= ['User.first_name', 'User.last_name', 'User.email']
- end
+  end
 
   def searchable_columns
     @searchable_columns ||= ['User.first_name', 'User.last_name', 'User.email']

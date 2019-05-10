@@ -89,7 +89,8 @@ RSpec.describe SelectField, type: :model do
       create(:poll_response, poll: poll, user: user, data: "{\"#{select_field.id}\":[\"4\"]}")
 
       answer_popularities = select_field.answer_popularities(entries: poll.responses)
-      expect(answer_popularities).to eq([{ answer: '1', count: 0 }, { answer: '2', count: 0 }, { answer: '3', count: 0 }, { answer: '4', count: 1 }, { answer: '5', count: 0 }, { answer: '6', count: 0 }, { answer: '7', count: 0 }])
+      expect(answer_popularities).to eq([{ answer: '1', count: 0 }, { answer: '2', count: 0 }, { answer: '3', count: 0 },
+                                         { answer: '4', count: 1 }, { answer: '5', count: 0 }, { answer: '6', count: 0 }, { answer: '7', count: 0 }])
     end
   end
 end

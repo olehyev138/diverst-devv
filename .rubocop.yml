@@ -15,11 +15,11 @@ AllCops:
     - 'bin/*'
     - 'db/**/*'
     - 'db/*'
+    - 'spec/mailers/*'
 
 Performance:
   Exclude:
     - '**/test/**/*'
-
 Rails:
   Enabled: true
 
@@ -43,7 +43,7 @@ Rails/FindEach:
   Enabled: true
 
 Metrics/LineLength:
-  Max: 150
+  Max: 200
 
 # Prefer &&/|| over and/or.
 Style/AndOr:
@@ -235,8 +235,8 @@ Lint/StringConversionInInterpolation:
 Lint/UriEscapeUnescape:
   Enabled: true
 
-Lint/UselessAssignment:
-  Enabled: true
+#Lint/UselessAssignment:
+#  Enabled: true
 
 Lint/DeprecatedClassMethods:
   Enabled: true

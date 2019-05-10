@@ -57,7 +57,7 @@ class Email < BaseClass
 
     #
     strings.each do |string|
-      variable = variables.joins(:enterprise_email_variable).where(enterprise_email_variables: { key: string }).first
+      variable = variables.joins(:enterprise_email_variable).find_by(enterprise_email_variables: { key: string })
       next if variable.nil?
 
       replace.merge!({ "#{string}": variable.enterprise_email_variable.example })
