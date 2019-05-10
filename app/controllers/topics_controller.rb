@@ -3,7 +3,7 @@ class TopicsController < ApplicationController
   before_action :set_topic, only: [:edit, :update, :destroy, :show]
 
   layout 'handshake'
-  #NOTE: this layout does not exist in views/layout. This controller does not have a corresponding spec file
+  # NOTE: this layout does not exist in views/layout. This controller does not have a corresponding spec file
 
   def index
     @topics = current_user.enterprise.topics

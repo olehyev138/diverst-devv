@@ -13,11 +13,11 @@ class Segment < BaseClass
     active: 1
   }
 
-  belongs_to :parent, class_name: "Segment", foreign_key: :parent_id
-  has_many :children, class_name: "Segment", foreign_key: :parent_id, dependent: :destroy
+  belongs_to :parent, class_name: 'Segment', foreign_key: :parent_id
+  has_many :children, class_name: 'Segment', foreign_key: :parent_id, dependent: :destroy
 
   belongs_to :enterprise
-  belongs_to :owner, class_name: "User"
+  belongs_to :owner, class_name: 'User'
 
   # Rules
   has_many :field_rules, class_name: 'SegmentRule', dependent: :destroy
@@ -50,8 +50,8 @@ class Segment < BaseClass
   accepts_nested_attributes_for :order_rules, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :group_rules, reject_if: :all_blank, allow_destroy: true
 
-  scope :all_parents,     -> {where(:parent_id => nil)}
-  scope :all_children,    -> {where.not(:parent_id => nil)}
+  scope :all_parents,     -> { where(parent_id: nil) }
+  scope :all_children,    -> { where.not(parent_id: nil) }
 
   def ordered_members
     order_rules.reduce(members) { |members, rule| members.order(rule.field_name => rule.operator_name) }
@@ -68,11 +68,11 @@ class Segment < BaseClass
   def general_rules_followed_by?(user)
     case active_users_filter
     when 'only_active'
-      return user.active?
+      user.active?
     when 'only_inactive'
-      return !user.active?
+      !user.active?
     else
-      return true
+      true
     end
   end
 
@@ -107,7 +107,7 @@ class Segment < BaseClass
     #   2) Order here to change the dataset which will only happen with a limit
     #      - ie ordering on sign_in_count and limiting by 50, effects the segments total member population
 
-    return users unless self.limit.present?
+    return users if self.limit.blank?
 
     # Ordering requires an ActiveRecord collection, users is passed as an array of User objects
     users = enterprise.users.where('id in (?)', users.pluck(:id))
@@ -141,8 +141,8 @@ class Segment < BaseClass
 
     # Finally add new members
     members_to_add.each do |member|
-      self.members << member if !self.members.where(:id => member.id).exists?
-      begin-9
+      self.members << member if !self.members.where(id: member.id).exists?
+      begin
         member.__elasticsearch__.update_document # Update user in Elasticsearch to reflect their new segment
       rescue
         next

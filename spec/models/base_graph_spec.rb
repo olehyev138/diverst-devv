@@ -52,7 +52,7 @@ RSpec.describe BaseGraph do
       end
 
       it 'removes 0 values' do
-        formatter.add_elements([{key: 0, doc_count: 0 }])
+        formatter.add_elements([{ key: 0, doc_count: 0 }])
 
         expect(formatter.format[:series][0][:values].length).to eq 0
       end
@@ -95,7 +95,7 @@ RSpec.describe BaseGraph do
     end
 
     describe 'add_element' do
-      let(:default_es_element) { { key: 'element01', doc_count: 9  } }
+      let(:default_es_element) { { key: 'element01', doc_count: 9 } }
       let(:children) { [ { key: 'child01', doc_count: 3 }, { key: 'child02', doc_count: 7 } ] }
 
       it 'adds a default elasticsearch element' do
@@ -154,7 +154,7 @@ RSpec.describe BaseGraph do
     let(:parser) { BaseGraph::ElasticsearchParser.new }
 
     it 'parses with defaults' do
-      expect(parser.parse({key: :value})[:x]).to eq :value
+      expect(parser.parse({ key: :value })[:x]).to eq :value
     end
 
     describe 'extractors' do
@@ -170,7 +170,7 @@ RSpec.describe BaseGraph do
 
         it 'yields to block & runs returned lambda' do
           expect(
-            (parser.date_range() { |_| -> (e, _) { 'dummy' }  }).call(element, {})
+            (parser.date_range() { |_| -> (e, _) { 'dummy' } }).call(element, {})
           ).to eq 'dummy'
         end
 
@@ -184,7 +184,7 @@ RSpec.describe BaseGraph do
         let(:element) { double('element') }
 
         it 'parses a top hits agg response' do
-          allow(element).to receive_message_chain(:agg, :hits, :hits) { [{'_source' => {key: 'key'}}] }
+          allow(element).to receive_message_chain(:agg, :hits, :hits) { [{ '_source' => { key: 'key' } }] }
 
           expect(top_hits_proc.call(element, {})).to eq('key')
         end

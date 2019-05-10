@@ -2,7 +2,7 @@ class ApplicationPolicy
   attr_reader :user, :record, :group_leader_role_ids
 
   def initialize(user, record)
-    raise Pundit::NotAuthorizedError, "must be logged in" unless user
+    raise Pundit::NotAuthorizedError, 'must be logged in' unless user
 
     @user = user
     @record = record
@@ -15,7 +15,7 @@ class ApplicationPolicy
   end
 
   def show?
-    scope.where(:id => record.id).exists?
+    scope.where(id: record.id).exists?
   end
 
   def create?
@@ -27,7 +27,7 @@ class ApplicationPolicy
   end
 
   def update?
-    scope.where(:id => record.id).exists?
+    scope.where(id: record.id).exists?
   end
 
   def edit?
@@ -35,15 +35,15 @@ class ApplicationPolicy
   end
 
   def destroy?
-    scope.where(:id => record.id).exists?
+    scope.where(id: record.id).exists?
   end
-  
+
   def manage_all?
     @policy_group.manage_all?
   end
-  
+
   def basic_group_leader_permission?(permission)
-    PolicyGroupTemplate.where(:user_role_id => @group_leader_role_ids).where("#{permission} = true").exists?
+    PolicyGroupTemplate.where(user_role_id: @group_leader_role_ids).where("#{permission} = true").exists?
   end
 
   def scope

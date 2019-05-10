@@ -25,37 +25,35 @@ module Metrics
   end
 
   def parse_csv_date_range
-    begin
-      @from_date = metrics_params.dig(:date_range, :from_date)
-      @to_date = metrics_params.dig(:date_range, :to_date)
+    @from_date = metrics_params.dig(:date_range, :from_date)
+    @to_date = metrics_params.dig(:date_range, :to_date)
 
-      case @from_date
-      when '1m'
-        @from_date = (DateTime.now - 1.month).to_s
-        @to_date = DateTime.now.to_s
-      when '3m'
-        @from_date = (DateTime.now - 3.months).to_s
-        @to_date = DateTime.now.to_s
-      when '6m'
-        @from_date = (DateTime.now - 6.months).to_s
-        @to_date = DateTime.now.to_s
-      when 'ytd'
-        @from_date = (DateTime.now.beginning_of_year).to_s
-        @to_date = DateTime.now.to_s
-      when '1y'
-        @from_date = (DateTime.now - 1.year).to_s
-        @to_date = DateTime.now.to_s
-      when 'all'
-        @from_date = nil
-        @to_date = nil
-      else
-        @from_date = DateTime.parse(@from_date).to_s
-        @to_date = DateTime.parse(@to_date).to_s
-      end
-    rescue
+    case @from_date
+    when '1m'
+      @from_date = (DateTime.now - 1.month).to_s
+      @to_date = DateTime.now.to_s
+    when '3m'
+      @from_date = (DateTime.now - 3.months).to_s
+      @to_date = DateTime.now.to_s
+    when '6m'
+      @from_date = (DateTime.now - 6.months).to_s
+      @to_date = DateTime.now.to_s
+    when 'ytd'
+      @from_date = (DateTime.now.beginning_of_year).to_s
+      @to_date = DateTime.now.to_s
+    when '1y'
+      @from_date = (DateTime.now - 1.year).to_s
+      @to_date = DateTime.now.to_s
+    when 'all'
       @from_date = nil
       @to_date = nil
+    else
+      @from_date = DateTime.parse(@from_date).to_s
+      @to_date = DateTime.parse(@to_date).to_s
     end
+  rescue
+    @from_date = nil
+    @to_date = nil
   end
 
   def metrics_params

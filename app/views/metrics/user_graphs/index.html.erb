@@ -96,7 +96,7 @@
       </div>
 
       <div class="card__action">
-        <a href="#" id="users_intersection_csv", data-url="<%= user_groups_intersection_metrics_users_path(format: :csv) %>">Export CSV</a>
+        <a href="#" id="users_intersection_csv" data-url="<%= user_groups_intersection_metrics_users_path(format: :csv) %>">Export CSV</a>
       </div>
 
       <table class="table--has-border" data-source="<%= user_groups_intersection_metrics_users_path(format: :json) %>" id="users-table">
@@ -148,7 +148,9 @@
     });
 
     $('#users_intersection_csv').click(function () {
-      $.get($('#users_intersection_csv').data('url'), { scoped_by_models: scoped_by_models });
+      $.get($('#users_intersection_csv').data('url'), { scoped_by_models: scoped_by_models }, function(data) {
+        Utility.displayFlash(data);
+      }, "JSON");
     });
   });
 </script>

@@ -11,8 +11,8 @@ RSpec.describe Badge, type: :model do
     it { expect(badge).to have_attached_file(:image) }
     it { expect(badge).to validate_attachment_presence(:image) }
     it {
-      expect(badge).to validate_attachment_content_type(:image).
-        allowing('image/png', 'image/gif').rejecting('text/plain', 'text/xml')
+      expect(badge).to validate_attachment_content_type(:image)
+        .allowing('image/png', 'image/gif').rejecting('text/plain', 'text/xml')
     }
     it { expect(badge).to belong_to(:enterprise) }
 
@@ -29,7 +29,7 @@ RSpec.describe Badge, type: :model do
     it 'requires a points' do
       badge.points = nil
       expect(badge).to_not be_valid
-      expect(badge.errors.full_messages.first).to eq("Points is not a number")
+      expect(badge.errors.full_messages.first).to eq('Points is not a number')
     end
 
     it 'requires an Enterprise' do

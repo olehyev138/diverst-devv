@@ -14,12 +14,14 @@ class Notifiers::PollNotifier
   end
 
   private
+
   def should_notify?
     (!@poll.email_sent) && @poll.published? && initiative_ended_up?
   end
 
   def initiative_ended_up?
     return true unless @initiative
+
     @initiative.end <= Date.today
   end
 
@@ -30,6 +32,6 @@ class Notifiers::PollNotifier
   end
 
   def filter_by_initiative(users)
-    users.select{ |u| u.initiatives.where(id: @initiative.id).any? }
+    users.select { |u| u.initiatives.where(id: @initiative.id).any? }
   end
 end

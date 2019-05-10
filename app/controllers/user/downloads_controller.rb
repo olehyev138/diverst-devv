@@ -14,13 +14,13 @@ class User::DownloadsController < ApplicationController
 
   protected
 
-    def set_csv_file
-      @csv_file = current_user.csv_files.find(params[:download_id])
-    end
+  def set_csv_file
+    @csv_file = current_user.csv_files.find(params[:download_id])
+  end
 
-    def download_params
-      params.require(:download).permit(
-        :download_id,
-      )
-    end
+  def download_params
+    params.require(:download).permit(
+      :download_id,
+    )
+  end
 end

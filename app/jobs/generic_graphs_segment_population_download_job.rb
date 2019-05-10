@@ -9,11 +9,11 @@ class GenericGraphsSegmentPopulationDownloadJob < ActiveJob::Base
     return if enterprise.nil?
 
     csv = enterprise.generic_graphs_segment_population_csv(erg_text)
-    file = CsvFile.new(user_id: user.id, download_file_name: "graph_segment_population")
+    file = CsvFile.new(user_id: user.id, download_file_name: 'graph_segment_population')
 
     file.download_file = StringIO.new(csv)
     file.download_file.instance_write(:content_type, 'text/csv')
-    file.download_file.instance_write(:file_name, "graph_segment_population.csv")
+    file.download_file.instance_write(:file_name, 'graph_segment_population.csv')
 
     file.save!
   end

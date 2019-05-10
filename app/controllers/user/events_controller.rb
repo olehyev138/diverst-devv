@@ -1,6 +1,6 @@
 class User::EventsController < ApplicationController
   before_action :authenticate_user!, except: [:onboarding_calendar_data]
-  
+
   layout 'user'
 
   def index
@@ -20,8 +20,8 @@ class User::EventsController < ApplicationController
     render 'shared/calendar/calendar_view'
   end
 
-  #Return calendar data for onboarding screen
-  #No current user, use token for authentication
+  # Return calendar data for onboarding screen
+  # No current user, use token for authentication
   def onboarding_calendar_data
     user = User.find_by_invitation_token(params[:invitation_token], true)
 

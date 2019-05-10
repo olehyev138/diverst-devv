@@ -9,7 +9,7 @@ class SegmentMemberDatatable < AjaxDatatablesRails::Base
     @users = users
   end
 
-   def sortable_columns
+  def sortable_columns
     @sortable_columns ||= ['User.first_name', 'User.last_name', 'User.email']
   end
 
@@ -22,7 +22,7 @@ class SegmentMemberDatatable < AjaxDatatablesRails::Base
   def data
     records.map do |record|
       [
-        html_escape(record.first_name + " " + record.last_name),
+        html_escape(record.first_name + ' ' + record.last_name),
         html_escape(record.email),
         "#{link_to('Details', user_path(record))}"
       ]

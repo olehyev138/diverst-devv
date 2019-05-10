@@ -13,7 +13,7 @@ require 'capistrano/rails/migrations' # for running migrations
 
 require 'capistrano/puma'
 require 'capistrano/puma/workers'
-install_plugin Capistrano::Puma  # Default puma tasks
+install_plugin Capistrano::Puma # Default puma tasks
 
 require 'capistrano/rails/console'
 require 'capistrano/sidekiq'

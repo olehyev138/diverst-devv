@@ -21,11 +21,11 @@ class RewardsController < ApplicationController
     authorize Reward
     @reward = @enterprise.rewards.new(reward_params)
     if @reward.save
-      flash[:notice] = "Your prize was created"
+      flash[:notice] = 'Your prize was created'
       track_activity(@reward, :create)
       redirect_to action: :index
     else
-      flash[:alert] = "Your prize was not created. Please fix the errors"
+      flash[:alert] = 'Your prize was not created. Please fix the errors'
       render :new
     end
   end
@@ -38,10 +38,10 @@ class RewardsController < ApplicationController
   def update
     authorize Reward
     if @reward.update(reward_params)
-      flash[:notice] = "Your prize was updated"
+      flash[:notice] = 'Your prize was updated'
       redirect_to action: :index
     else
-      flash[:alert] = "Your prize was not updated. Please fix the errors"
+      flash[:alert] = 'Your prize was not updated. Please fix the errors'
       render :edit
     end
   end
@@ -49,13 +49,13 @@ class RewardsController < ApplicationController
   def destroy
     authorize Reward
     @reward.destroy
-    flash[:notice] = "Your prize was deleted"
+    flash[:notice] = 'Your prize was deleted'
     redirect_to action: :index
   end
 
   def enable
     authorize Reward, :manage?
-    @enterprise.update_attributes(:enable_rewards => params[:enterprise][:enable_rewards])
+    @enterprise.update_attributes(enable_rewards: params[:enterprise][:enable_rewards])
     track_activity(@enterprise, :update_rewards)
     redirect_to :back
   end

@@ -2,7 +2,7 @@ class Users::SessionsController < Devise::SessionsController
   include PublicActivity::StoreController
   include Onboard
 
-  after_filter :after_login, :only => :create
+  after_filter :after_login, only: :create
 
   def new
     if session[:saml_for_enterprise].present?

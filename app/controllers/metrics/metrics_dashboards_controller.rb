@@ -1,5 +1,4 @@
 class Metrics::MetricsDashboardsController < ApplicationController
-
   before_action :authenticate_user!, except: [:shared_dashboard]
   after_action :verify_authorized, except: [:shared_dashboard]
   before_action :set_metrics_dashboard, except: [:index, :new, :create, :shared_dashboard]
@@ -25,10 +24,10 @@ class Metrics::MetricsDashboardsController < ApplicationController
 
     if @metrics_dashboard.save
       track_activity(@metrics_dashboard, :create)
-      flash[:notice] = "Your dashboard was created"
+      flash[:notice] = 'Your dashboard was created'
       redirect_to new_metrics_metrics_dashboard_graph_path(@metrics_dashboard)
     else
-      flash[:alert] = "Your dashboard was not created. Please fix the errors"
+      flash[:alert] = 'Your dashboard was not created. Please fix the errors'
       render :new
     end
   end
@@ -63,10 +62,10 @@ class Metrics::MetricsDashboardsController < ApplicationController
 
     if @metrics_dashboard.update(metrics_dashboard_params.except(:shared_user_ids))
       track_activity(@metrics_dashboard, :update)
-      flash[:notice] = "Your dashboard was updated"
+      flash[:notice] = 'Your dashboard was updated'
       redirect_to action: :index
     else
-      flash[:alert] = "Your dashboard was not updated. Please fix the errors"
+      flash[:alert] = 'Your dashboard was not updated. Please fix the errors'
       render :edit
     end
   end
@@ -101,7 +100,7 @@ class Metrics::MetricsDashboardsController < ApplicationController
 
       # Only add association if user exists and belongs to the same enterprise
       next if (!user) || (user.enterprise != @metrics_dashboard.enterprise)
-      next if SharedMetricsDashboard.where(:user_id => user_id, :metrics_dashboard_id => @metrics_dashboard.id).exists?
+      next if SharedMetricsDashboard.where(user_id: user_id, metrics_dashboard_id: @metrics_dashboard.id).exists?
 
       SharedMetricsDashboard.create!(metrics_dashboard_id: @metrics_dashboard.id, user_id: user.id)
     end

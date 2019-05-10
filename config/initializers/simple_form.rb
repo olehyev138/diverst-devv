@@ -107,8 +107,8 @@ SimpleForm.setup do |config|
       ba.wrapper tag: 'span', class: 'control__indicator control__indicator--toggle' do end
       ba.use :label, class: 'control__label'
     end
-    
-    b.use :hint,  wrap_with: { tag: :span, class: :hint }
+
+    b.use :hint, wrap_with: { tag: :span, class: :hint }
   end
 
   config.wrappers :boolean_checkbox, class: :field, hint_class: :field_with_hint, error_class: :field_with_errors do |b|

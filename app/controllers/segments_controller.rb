@@ -19,7 +19,7 @@ class SegmentsController < ApplicationController
     authorize Segment, :index?
 
     respond_to do |format|
-      format.json { render json: @segments.map { |s| {id: s.id, text: s.name} }.as_json }
+      format.json { render json: @segments.map { |s| { id: s.id, text: s.name } }.as_json }
     end
   end
 
@@ -100,6 +100,7 @@ class SegmentsController < ApplicationController
   def export_csv
     authorize @segment, :show?
     SegmentMembersDownloadJob.perform_later(current_user.id, @segment.id, params[:group_id])
+
     flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
     redirect_to :back
   end
