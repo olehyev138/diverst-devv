@@ -72,6 +72,7 @@ gem 'thor', '0.20.0'# Expected string default value for '--decorator'; got true 
 gem 'sanitize_email', '~> 1.2.2'
 gem 'rack-timeout', '~> 0.4.2'
 gem 'jquery-ui-rails', '~> 6.0.1'
+gem 'tty-spinner'
 
 group :development, :test do
   gem 'spring', '~> 1.6.2' # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
@@ -133,9 +134,10 @@ group :development do
   # gem 'stackprof'
   gem 'letter_opener', '~> 1.4.1'
   gem 'letter_opener_web', '~> 1.3', '>= 1.3.1'
-  gem 'tty-spinner'
   gem 'rufo', '~> 0.1.0'
   gem 'bundler-audit', '~> 0.6.0'
+  gem 'ed25519', '~> 1.2.4'
+  gem 'bcrypt_pbkdf', '~> 1.0.1'
 end
 
 group :staging, :production do
