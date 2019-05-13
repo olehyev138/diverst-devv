@@ -3,8 +3,8 @@ class Groups::PostsController < ApplicationController
   before_action :set_group
   before_action :set_client
   before_action :set_twitter_accounts
-  before_action :set_page,    :only => [:index, :pending]
-  before_action :set_link,    :only => [:approve, :pin, :unpin]
+  before_action :set_page,    only: [:index, :pending]
+  before_action :set_link,    only: [:approve, :pin, :unpin]
 
   layout 'erg'
 
@@ -90,6 +90,7 @@ class Groups::PostsController < ApplicationController
     segment_ids = current_user.segment_ids
 
     if segment_ids.empty?
+
       return without_segments
     end
     @posts = NewsFeed.all_links(@group.news_feed.id, segment_ids, @group.enterprise)
