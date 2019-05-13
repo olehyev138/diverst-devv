@@ -52,11 +52,11 @@ gem 'omniauth-linkedin-oauth2', '~> 0.1.5' # OAuth for LinkedIn
 gem 'omniauth-oauth2', '1.3.1' # Temporary fix to address: https://github.com/decioferreira/omniauth-linkedin-oauth2/issues/28
 gem 'activerecord-import', '~> 0.12.0' # Adds a faster way to INSERT multiple rows in the DB
 gem 'inline_svg', '~> 0.6.2' # Extract SVG files' content into the HTML
-gem 'pundit', "~> 2.0.0"# Authorization
+gem 'pundit', '~> 2.0.0'# Authorization
 gem 'draper', '~> 2.1'# Decorators for views
 gem 'daemons', '~> 1.2', '>= 1.2.3' # For capistrano-clockwork
 gem 'icalendar', '~> 2.3' # For exporting events to your calendar
-gem 'simple_form_fancy_uploads', git: "https://github.com/TeamDiverst/simple_form_fancy_uploads.git", branch: "paperclip_version"
+gem 'simple_form_fancy_uploads', git: 'https://github.com/TeamDiverst/simple_form_fancy_uploads.git', branch: 'paperclip_version'
 gem 'ransack', '~> 1.8', '>= 1.8.2' # For search forms
 gem 'ckeditor', '~> 4.2', '>= 4.2.3'
 gem 'twilio-ruby', '~> 5.10.0'
@@ -68,9 +68,9 @@ gem 'rollbar', '~> 2.14.1'
 gem 'ruby-oembed', '~> 0.12', git: 'https://github.com/TeamDiverst/ruby-oembed.git'
 gem 'julia_builder', '~> 0.2.0'
 gem 'date_validator', '~> 0.9.0'
-gem "thor", "0.19.1"# Expected string default value for '--decorator'; got true (boolean) - setting version removes this message
+gem 'thor', '0.20.0'# Expected string default value for '--decorator'; got true (boolean) - setting version removes this message
 gem 'sanitize_email', '~> 1.2.2'
-gem "rack-timeout", '~> 0.4.2'
+gem 'rack-timeout', '~> 0.4.2'
 gem 'jquery-ui-rails', '~> 6.0.1'
 gem 'twitter' #twitter implementation
 
@@ -92,10 +92,14 @@ group :development, :test do
   gem 'shoulda-matchers', '~> 3.1', '>= 3.1.1'
   gem 'timecop', '~> 0.8.1'
   gem 'byebug', '~> 9.1.0' # Debugger
-  gem 'pundit-matchers', "~> 1.6.0"
-  gem 'capistrano-yarn', "~> 2.0.2"
-  gem 'capistrano-nvm', "~> 0.0.7"
-  gem 'slackistrano', "~> 3.8.3"
+  gem 'pundit-matchers', '~> 1.6.0'
+  gem 'capistrano-yarn', '~> 2.0.2'
+  gem 'capistrano-nvm', '~> 0.0.7'
+  gem 'slackistrano', '~> 3.8.3'
+  gem 'rubocop', '~> 0.68.1'
+  gem 'rubocop-performance', '~> 1.2.0'
+  gem 'pronto', '~> 0.10.0'
+  gem 'pronto-rubocop', '~> 0.10.0'
 end
 
 group :test do

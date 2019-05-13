@@ -1,9 +1,9 @@
 class GroupLeaderDecorator < Draper::Decorator
   def enabled_status(status)
     if status === true
-      "On"
+      'On'
     else
-      "Off"
+      'Off'
     end
   end
 end

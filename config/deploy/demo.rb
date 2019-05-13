@@ -8,8 +8,8 @@
 # server 'db.example.com', user: 'deploy', roles: %w{db}
 server '34.194.94.241', user: 'newdeploy', roles: %w(web app db)
 
-#52.39.50.54 new one
-#52.90.48.218 sandbox3https://www.yammer.com/diverst.com/#/threads/inGroup?type=in_group&feedId=6830281
+# 52.39.50.54 new one
+# 52.90.48.218 sandbox3https://www.yammer.com/diverst.com/#/threads/inGroup?type=in_group&feedId=6830281
 
 # role-based syntax
 # ==================
@@ -34,7 +34,7 @@ server '34.194.94.241', user: 'newdeploy', roles: %w(web app db)
 set :branch, 'master'
 set :rails_env, :production
 
-set :rollbar_env, "demo"
+set :rollbar_env, 'demo'
 
 
 # Custom SSH Options

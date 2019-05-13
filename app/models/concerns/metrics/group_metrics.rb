@@ -8,7 +8,7 @@ module Metrics
 
       graph = UserGroup.get_graph_builder
       graph.set_enterprise_filter(field: 'group.enterprise_id', value: enterprise_id)
-      graph.formatter.title = "#{c_t(:erg).capitalize} Population"
+      graph.formatter.title = "#{c_t(:erg)} Population"
 
       graph.query = graph.query.terms_agg(field: 'group.name') { |q|
         q.date_range_agg(field: 'created_at', range: date_range)
@@ -67,7 +67,7 @@ module Metrics
 
       graph = View.get_graph_builder
       graph.set_enterprise_filter(value: enterprise_id)
-      graph.formatter.title = "# Views per #{c_t(:erg).capitalize}"
+      graph.formatter.title = "# Views per #{c_t(:erg)}"
 
       graph.query = graph.query.terms_agg(field: 'group.name') { |q|
         q.date_range_agg(field: 'created_at', range: date_range)
@@ -99,10 +99,13 @@ module Metrics
 
       parser = graph.formatter.parser
       parser.extractors[:y] = parser.date_range(key: :doc_count)
-      parser.extractors[:x] = parser.date_range { |p| p.top_hits { |pp| pp.custom( -> (e, _) {
-            return if e.blank? || e == 0
-            (e.dig(:folder, :group, :name) || 'Shared') + ' ' + e.dig(:folder, :name)
-          }) } }
+      parser.extractors[:x] = parser.date_range { |p| p.top_hits { |pp| pp.custom(-> (e, _) {
+                                                                                    return if e.blank? || e == 0
+
+                                                                                    (e.dig(:folder, :group, :name) || 'Shared') + ' ' + e.dig(:folder, :name)
+                                                                                  })
+                                                      }
+      }
 
       graph.formatter.add_elements(graph.search)
 
@@ -126,10 +129,13 @@ module Metrics
 
       parser = graph.formatter.parser
       parser.extractors[:y] = parser.date_range(key: :doc_count)
-      parser.extractors[:x] = parser.date_range { |p| p.top_hits { |pp| pp.custom( -> (e, _) {
-            return if e.blank? || e == 0
-            (e.dig(:resource, :group, :name) || 'Shared') + ' ' + e.dig(:resource, :title)
-          } ) } }
+      parser.extractors[:x] = parser.date_range { |p| p.top_hits { |pp| pp.custom(-> (e, _) {
+                                                                                    return if e.blank? || e == 0
+
+                                                                                    (e.dig(:resource, :group, :name) || 'Shared') + ' ' + e.dig(:resource, :title)
+                                                                                  })
+                                                      }
+      }
 
       graph.formatter.add_elements(graph.search)
 
@@ -153,11 +159,14 @@ module Metrics
 
       parser = graph.formatter.parser
       parser.extractors[:y] = parser.date_range(key: :doc_count)
-      parser.extractors[:x] = parser.date_range { |p| p.top_hits { |pp| pp.custom( -> (e, _) {
-            return if e.blank? || e == 0
-            (e.dig(:news_feed_link, :group, :name) || 'Shared') +
-              ' ' + e.dig(:news_feed_link, :news_link, :title)
-          } ) } }
+      parser.extractors[:x] = parser.date_range { |p| p.top_hits { |pp| pp.custom(-> (e, _) {
+                                                                                    return if e.blank? || e == 0
+
+                                                                                    (e.dig(:news_feed_link, :group, :name) || 'Shared') +
+                                                                                      ' ' + e.dig(:news_feed_link, :news_link, :title)
+                                                                                  })
+                                                      }
+      }
 
       graph.formatter.add_elements(graph.search)
 

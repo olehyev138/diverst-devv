@@ -4,7 +4,7 @@ class MentoringDatatable < AjaxDatatablesRails::Base
   def_delegator :@view, :link_to
   def_delegator :@view, :new_mentoring_request_path
   def_delegator :@view, :user_mentorship_path
-  
+
   def initialize(view_context, users, current_user, mentors = true)
     super(view_context)
     @user = current_user
@@ -24,20 +24,19 @@ class MentoringDatatable < AjaxDatatablesRails::Base
 
   def data
     records.map do |record|
-      
       if @mentors
         [
-          "#{link_to record.name, user_mentorship_path(:id => record.id) }",
+          "#{link_to record.name, user_mentorship_path(id: record.id) }",
           html_escape(record.email),
-          record.mentoring_interests.pluck(:name).join(", "),
-          "#{link_to('Request', new_mentoring_request_path(:sender_id => @user.id, :receiver_id => record.id, :mentoring_type => "mentor") )}",
+          record.mentoring_interests.pluck(:name).join(', '),
+          "#{link_to('Request', new_mentoring_request_path(sender_id: @user.id, receiver_id: record.id, mentoring_type: "mentor"))}",
         ]
       else
         [
-          "#{link_to record.name, user_mentorship_path(:id => record.id) }",
+          "#{link_to record.name, user_mentorship_path(id: record.id) }",
           html_escape(record.email),
-          record.mentoring_interests.pluck(:name).join(", "),
-          "#{link_to('Request', new_mentoring_request_path(:sender_id => @user.id, :receiver_id => record.id, :mentoring_type => "mentee") )}"
+          record.mentoring_interests.pluck(:name).join(', '),
+          "#{link_to('Request', new_mentoring_request_path(sender_id: @user.id, receiver_id: record.id, mentoring_type: "mentee"))}"
         ]
       end
     end

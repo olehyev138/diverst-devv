@@ -5,11 +5,12 @@ class BudgetMailer < ApplicationMailer
     @group = budget.group
     @enterprise = @group.enterprise
     return if @enterprise.disable_emails?
+
     @custom_text = @enterprise.custom_text rescue CustomText.new
     @email = @user.email
-    
+
     set_defaults(@enterprise, method_name)
-    
+
     mail(from: @from_address, to: @email, subject: @subject)
   end
 
@@ -19,9 +20,10 @@ class BudgetMailer < ApplicationMailer
     @user = budget.requester
     @enterprise = @group.enterprise
     return if @enterprise.disable_emails?
+
     @custom_text = @enterprise.custom_text rescue CustomText.new
     @email = @user.email
-    
+
     set_defaults(@enterprise, method_name)
 
     mail(to: @email, subject: @subject)
@@ -33,9 +35,10 @@ class BudgetMailer < ApplicationMailer
     @user = budget.requester
     @enterprise = @group.enterprise
     return if @enterprise.disable_emails?
+
     @custom_text = @enterprise.custom_text rescue CustomText.new
     @email = @user.email
-    
+
     set_defaults(@enterprise, method_name)
 
     mail(to: @email, subject: @subject)
@@ -43,12 +46,12 @@ class BudgetMailer < ApplicationMailer
 
   def variables
     {
-      :user => @user,
-      :group => @group,
-      :enterprise => @enterprise,
-      :budget => @budget,
-      :custom_text => @custom_text,
-      :click_here => "<a saml_for_enterprise=\"#{@enterprise.id}\" href=\"#{url}\" target=\"_blank\">Click here</a>",
+      user: @user,
+      group: @group,
+      enterprise: @enterprise,
+      budget: @budget,
+      custom_text: @custom_text,
+      click_here: "<a saml_for_enterprise=\"#{@enterprise.id}\" href=\"#{url}\" target=\"_blank\">Click here</a>",
     }
   end
 

@@ -22,10 +22,10 @@ class Initiatives::ExpensesController < ApplicationController
     @expense = @initiative.expenses.new(expense_params)
     @expense.owner = current_user
     if @expense.save
-      flash[:notice] = "Your expense was created"
+      flash[:notice] = 'Your expense was created'
       redirect_to action: :index
     else
-      flash[:alert] = "Your expense was not created. Please fix the errors"
+      flash[:alert] = 'Your expense was not created. Please fix the errors'
       render :new
     end
   end
@@ -42,14 +42,14 @@ class Initiatives::ExpensesController < ApplicationController
 
         render json: {
           highcharts: [{
-            name: "Expenses",
+            name: 'Expenses',
             data: data
           }]
         }
       }
       format.csv {
         InitiativeExpensesTimeSeriesDownloadJob.perform_later(current_user.id, @initiative.id, params[:from], params[:to])
-        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+        flash[:notice] = 'Please check your Secure Downloads section in a couple of minutes'
         redirect_to :back
       }
     end
@@ -67,10 +67,10 @@ class Initiatives::ExpensesController < ApplicationController
   def update
     authorize @expense
     if @expense.update(expense_params)
-      flash[:notice] = "Your expense was updated"
+      flash[:notice] = 'Your expense was updated'
       redirect_to action: :index
     else
-      flash[:alert] = "Your expense was not updated. Please fix the errors"
+      flash[:alert] = 'Your expense was not updated. Please fix the errors'
       render :edit
     end
   end

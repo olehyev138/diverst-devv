@@ -5,9 +5,9 @@
     <div class="flex-row flex-row--middle"  id="archive_buttons">
       <div class="flex-row__cell">
         <%= link_to "Restore All", restore_all_archived_posts_path, remote: true, method: :post, data: { confirm: "Are you sure?" }, class: 'btn btn--primary' %>
-      </div>	
+      </div>
       <div class="flex-row__cell">
-	    <%= link_to "Delete All", delete_all_archived_posts_path, remote: true, method: :post, data: { confirm: "Are you sure?" }, class: 'btn btn--danger' %>
+      <%= link_to "Delete All", delete_all_archived_posts_path, remote: true, method: :post, data: { confirm: "Are you sure?" }, class: 'btn btn--danger' %>
       </div>
     </div>
     <% end %>
