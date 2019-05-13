@@ -37,7 +37,7 @@ jobs:
             - ./node_modules
       - run:
           command: |
-            export PRONTO_GITHUB_ACCESS_TOKEN=4a618a099bf8b585ef71df59a592964738dc233f
+            export PRONTO_GITHUB_ACCESS_TOKEN=60fc301a32c3a0450eeec2985a1c1a09cefba857
             export PRONTO_PULL_REQUEST_ID=$(git ls-remote -q origin pull\*\head | grep $CIRCLE_SHA1 | sed 's/.*refs\/pull\/\([0-9]*\)\/head/\1/g')
             git fetch origin development:refs/remotes/origin/development
             bundle exec pronto run -f github_status github_pr -c origin/development --exit-code
