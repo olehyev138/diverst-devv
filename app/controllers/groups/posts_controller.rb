@@ -90,9 +90,9 @@ class Groups::PostsController < ApplicationController
     segment_ids = current_user.segment_ids
 
     if segment_ids.empty?
-
       return without_segments
     end
+
     @posts = NewsFeed.all_links(@group.news_feed.id, segment_ids, @group.enterprise)
     @count = @posts.count
     @posts = @posts.order(is_pinned: :desc, created_at: :desc)
@@ -100,7 +100,7 @@ class Groups::PostsController < ApplicationController
   end
 
   def filter_posts(posts)
-    @posts = posts.select{ |news|
+    @posts = posts.select { |news|
       news.news_link || news.group_message || news.social_link
     }
   end
