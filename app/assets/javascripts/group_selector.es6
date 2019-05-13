@@ -30,24 +30,24 @@ const CLASSES = {
     SEARCH_INPUT: 'search-input',
     SEARCH_BUTTON: 'search-btn',
     CLEAR_SEARCH_BUTTON: 'clear-search-btn'
-}
+};
 
 const EXPAND_BUTTON_TEXT = {
     EXPAND: "+",
     COLLAPSE: "&ndash;"
-}
+};
 
 const PAGINATION_TEXT = {
     PREVIOUS: "&lsaquo;",
     NEXT: "&rsaquo;",
     FIRST: "&laquo;",
     LAST: "&raquo;"
-}
+};
 
 const DEFAULT_GROUP_TEXT = {
     SINGULAR: "group",
     PLURALIZED: "groups"
-}
+};
 
 // ----- Group Selector -----
 // Reads from 2..3 data attributes on the group selector element itself
@@ -68,7 +68,8 @@ class GroupSelector {
         this.allDataUrl = this.$element.data('all-url');
         // groupsElement is the jQuery object where group data will be inserted
         this.groupsElement = $("." + CLASSES.CONTENT, this.$element);
-
+        // preselectedGroups is an optional array of group IDs to pre-select
+        this.preselectedGroups = this.$element.data('preselected-groups') || [];
 
         // Store the data on the object so we can use it when expanding, etc.
         this.data = {};
@@ -117,6 +118,7 @@ class GroupSelector {
             }
         });
 
+        this.preselectGroups();
         this.updateData();
     }
 
@@ -612,6 +614,26 @@ class GroupSelector {
         let self = this;
     
         $("." + CLASSES.CURRENT_PAGE_INPUT).val(self.currentPage);
+    }
+
+    // Selects and triggers a save on preselected groups
+    preselectGroups() {
+      let self = this;
+
+      if (!self.preselectedGroups || self.preselectedGroups.length <= 0)
+        return;
+
+      self.selectedGroups = [];
+
+      $.get(self.allDataUrl, { ids: self.preselectedGroups }, (data) => {
+        $.each(data, function(index, group) {
+          self.addToSelectedGroups(group.id, group.text);
+        });
+
+        self.checkSelectedGroups();
+
+        self.$element.trigger("saveGroups", [self.selectedGroups]);
+      });
     }
 
     // element is an element that contains a data field 'group-id'
