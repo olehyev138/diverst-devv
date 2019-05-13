@@ -8,33 +8,27 @@ class Groups::PostsController < ApplicationController
 
     layout 'erg'
 
+
+
     def index
       @tweets = five_recent_tweets
       if GroupPolicy.new(current_user, @group).manage?
         without_segments
+      elsif GroupPostsPolicy.new(current_user, [@group]).view_latest_news?
+        with_segments
       else
-        if GroupPostsPolicy.new(current_user, [@group]).view_latest_news?
-          segment_ids = current_user.segment_ids
-
-          if segment_ids.empty?
-            return without_segments
-          end
-          @posts = NewsFeed.all_links(@group.news_feed.id, segment_ids, @group.enterprise)
-          @count = @posts.count
-          @posts = @posts.order(is_pinned: :desc, created_at: :desc)
-                     .limit(@limit)
-
-        else
-          @count = 0
-          @posts = []
-        end
+        @count = 0
+        @posts = []
       end
+
+      filter_posts(@posts)
     end
+
 
     def five_recent_tweets
       all_tweets = []
       @accounts.find_each do |account|
-        all_tweets += @client.user_timeline(account.account)
+        all_tweets += TwitterClient.get_tweets(account.account)
       end
 
       all_tweets = all_tweets.sort do |a, b|
@@ -97,7 +91,29 @@ class Groups::PostsController < ApplicationController
     end
 
     def with_segments
+      segment_ids = current_user.segment_ids
+
+      if segment_ids.empty?
+        return without_segments
+      end
+      @posts = NewsFeed.all_links(@group.news_feed.id, segment_ids, @group.enterprise)
+      @count = @posts.count
+      @posts = @posts.order(is_pinned: :desc, created_at: :desc)
+                 .limit(@limit)
     end
+
+    def filter_posts(posts)
+        @posts = posts.select{ |news|
+            news.news_link || news.group_message || news.social_link
+        }
+    end
+
+    # <%= news.news_link or 'nil'%>
+    # <br>
+    # <%= news.group_message or 'nil' %>
+    # <br>
+    # <%= news.social_link or 'nil' %>
+
 
     def set_group
         @group = current_user.enterprise.groups.find(params[:group_id])
@@ -108,7 +124,7 @@ class Groups::PostsController < ApplicationController
     end
 
     def set_client
-      @client = (TwitterClient.new).client
+      @client = TwitterClient.client
     end
 
     def set_page

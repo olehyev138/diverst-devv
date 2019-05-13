@@ -4,7 +4,6 @@ class Groups::TwitterAccountsController < ApplicationController
   before_action :set_group
   before_action :set_client
 
-
   layout 'erg'
 
   def index
@@ -48,7 +47,6 @@ class Groups::TwitterAccountsController < ApplicationController
   def destroy
     @account = @group.twitter_accounts.find(params[:id])
     @account.destroy
-    render 'index'
     redirect_to group_twitter_accounts_path(@group)
   end
 
@@ -73,7 +71,7 @@ class Groups::TwitterAccountsController < ApplicationController
   end
 
   def set_client
-    @client = (TwitterClient.new).client
+    @client = TwitterClient.client
   end
 
   def twitter_params

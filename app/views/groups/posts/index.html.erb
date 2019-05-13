@@ -52,9 +52,6 @@
     <div class="flex-row__cell">
       <%= link_to "+ Create News", new_group_news_link_path, class: "btn btn--primary" if GroupNewsLinkPolicy.new(current_user, [@group]).new? %>
     </div>
-<!--    <div class="flex-row__cell">-->
-      <%#= link_to @tweets.inspect, new_group_news_link_path, class: "btn btn--primary" if GroupNewsLinkPolicy.new(current_user, [@group]).new? %>
-<!--    </div>-->
     <div class="flex-row__cell">
       <%= link_to "+ Create Message", new_group_group_message_path, class: "btn btn--primary"  if GroupMessagePolicy.new(current_user, [@group]).new? %>
     </div>
@@ -68,6 +65,7 @@
     </div>
   </div>
 </div>
+
 
 <% if @posts.empty? && @tweets.empty? %>
   <div class="content__main">
@@ -97,8 +95,8 @@
   <div class="content__main">
     <div class="card">
   <% @tweets.find_all do |twt| %>
-    <% twt_embedded = @client.oembeds(twt.id).first %>
-    <%= raw(twt_embedded.html) %>
+    <% twt_embedded = TwitterClient.get_html(twt.id) %>
+    <%= raw(twt_embedded) %>
   <% end %>
 <% elsif @posts.present? && @tweets.present? %>
   <div class="container">
@@ -106,27 +104,28 @@
       <div class="col-lg-6 col-sm-12">
         <div class="content__main">
           <div class="card">
-        <% @posts.each do |news| %>
-          <% if news.news_link && GroupNewsLinkPolicy.new(current_user, [@group]).index? %>
-            <%= render partial: "groups/shared/news_links", locals: {news_link: NewsLink.includes(:group, :author).find(news.link.id) } %>
-          <% elsif news.group_message && GroupMessagePolicy.new(current_user, [@group]).index? %>
-            <%= render partial: "groups/shared/messages", locals: {message: GroupMessage.includes(:owner, :group).find(news.link.id) } %>
-          <% elsif news.social_link && GroupSocialLinkPolicy.new(current_user, [@group]).index? %>
-            <% if @group.enterprise.enable_social_media? %>
-              <%= render partial: "groups/shared/social_links", locals: {social_link: SocialLink.includes(:group).find(news.link.id) } %>
+            <%= @posts.empty? %>
+            <% @posts.each do |news| %>
+              <% if news.news_link && GroupNewsLinkPolicy.new(current_user, [@group]).index? %>
+                <%= render partial: "groups/shared/news_links", locals: {news_link: NewsLink.includes(:group, :author).find(news.link.id) } %>
+              <% elsif news.group_message && GroupMessagePolicy.new(current_user, [@group]).index? %>
+                <%= render partial: "groups/shared/messages", locals: {message: GroupMessage.includes(:owner, :group).find(news.link.id) } %>
+              <% elsif news.social_link && GroupSocialLinkPolicy.new(current_user, [@group]).index? %>
+                <% if @group.enterprise.enable_social_media? %>
+                  <%= render partial: "groups/shared/social_links", locals: {social_link: SocialLink.includes(:group).find(news.link.id) } %>
+                <% end %>
+              <% end %>
             <% end %>
-          <% end %>
-        <% end %>
           </div>
         </div>
       </div>
       <div class="col-lg-6 col-sm-12">
         <div class="content__main">
           <div class="card">
-        <% @tweets.find_all do |twt| %>
-          <% twt_embedded = @client.oembeds(twt.id).first %>
-          <%= raw(twt_embedded.html) %>
-        <% end %>
+            <% @tweets.find_all do |twt| %>
+              <% twt_embedded = TwitterClient.get_html(twt.id) %>
+              <%= raw(twt_embedded) %>
+            <% end %>
           </div>
         </div>
       </div>
@@ -134,57 +133,6 @@
   </div>
 <% end %>
 
-
-<!--<div class="content__main">-->
-<!--  <div class="card">-->
-    <%# if @posts.empty? && @tweets.empty? %>
-<!--      <div class="card__section" id="empty_posts">-->
-<!--        <p>No posts have been published yet.</p>-->
-<!--      </div>-->
-    <%# elsif @posts.present? && @tweets.empty? %>
-      <%# @posts.each do |news| %>
-        <%# if news.news_link && GroupNewsLinkPolicy.new(current_user, [@group]).index? %>
-          <%#= render partial: "groups/shared/news_links", locals: {news_link: NewsLink.includes(:group, :author).find(news.link.id) } %>
-        <%# elsif news.group_message && GroupMessagePolicy.new(current_user, [@group]).index? %>
-          <%#= render partial: "groups/shared/messages", locals: {message: GroupMessage.includes(:owner, :group).find(news.link.id) } %>
-        <%# elsif news.social_link && GroupSocialLinkPolicy.new(current_user, [@group]).index? %>
-          <%# if @group.enterprise.enable_social_media? %>
-            <%#= render partial: "groups/shared/social_links", locals: {social_link: SocialLink.includes(:group).find(news.link.id) } %>
-          <%# end %>
-        <%# end %>
-      <%# end %>
-    <%# elsif @posts.empty? && @tweets.present? %>
-      <%# @tweets.find_all do |twt| %>
-        <%# twt_embedded = @client.oembeds(twt.id).first %>
-        <%#= raw(twt_embedded.html) %>
-      <%# end %>
-    <%# elsif @posts.present? && @tweets.present? %>
-<!--      <div class="container">-->
-<!--        <div class="row">-->
-<!--          <div class="col-lg-6 col-sm-12">-->
-            <%# @posts.each do |news| %>
-              <%# if news.news_link && GroupNewsLinkPolicy.new(current_user, [@group]).index? %>
-                <%#= render partial: "groups/shared/news_links", locals: {news_link: NewsLink.includes(:group, :author).find(news.link.id) } %>
-              <%# elsif news.group_message && GroupMessagePolicy.new(current_user, [@group]).index? %>
-                <%#= render partial: "groups/shared/messages", locals: {message: GroupMessage.includes(:owner, :group).find(news.link.id) } %>
-              <%# elsif news.social_link && GroupSocialLinkPolicy.new(current_user, [@group]).index? %>
-                <%# if @group.enterprise.enable_social_media? %>
-                  <%#= render partial: "groups/shared/social_links", locals: {social_link: SocialLink.includes(:group).find(news.link.id) } %>
-                <%# end %>
-              <%# end %>
-            <%# end %>
-<!--          </div>-->
-<!--          <div class="col-lg-6 col-sm-12">-->
-            <%# @tweets.find_all do |twt| %>
-              <%# twt_embedded = @client.oembeds(twt.id).first %>
-              <%#= raw(twt_embedded.html) %>
-            <%# end %>
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
-    <%# end %>
-<!--  </div>-->
-<!--</div>-->
 
 <% unless @posts.count === @count%>
   <div class="flex-row__cell text-center">

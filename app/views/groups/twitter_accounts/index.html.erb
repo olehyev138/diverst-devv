@@ -15,32 +15,47 @@
   </div>
 </div>
 
-<% @accounts.find_all do |account| %>
-  <div class='well'>
-    <h2><%= account.name %></h2>
-    <h3>@<%= account.account %></h3>
+<div class="container">
+  <% account_lists = @accounts.in_groups_of(2) %>
+  <% account_lists.find_all do |account_list| %>
+    <div class="row">
+      <% account_list.find_all do |account| %>
+        <div class="col-lg-6 col-sm-12">
+          <div class="content__main">
+            <% if account %>
+              <div class='well'>
 
-      <% twt = @client.user_timeline(account.account).first %>
-      <% twt_embedded = @client.oembeds(twt.id).first %>
-      <%= raw(twt_embedded.html) %>
+                <h2><%= account.name %></h2>
+                <h3>@<%= account.account %></h3>
 
+                <% twt = TwitterClient.get_tweets(account.account).first %>
+                <% twt_embedded = TwitterClient.get_html(twt.id) %>
+                <%= raw(twt_embedded) %>
 
-    <%= link_to 'See More Tweets',
-                group_twitter_account_path(@group, account),
-                class: "btn btn-sm btn-primary"
-    %>
+                <%= link_to 'See More Tweets',
+                            group_twitter_account_path(@group, account),
+                            class: "btn btn-sm btn-primary",
+                            style: 'width:49%'
+                %>
 
-    <%= link_to 'Edit Account Information',
-                edit_group_twitter_account_path(@group, account),
-                class: "btn btn-sm btn-primary"
-    %>
+                <%= link_to 'Edit Account Information',
+                            edit_group_twitter_account_path(@group, account),
+                            class: "btn btn-sm btn-primary",
+                            style: 'width:50%'
+                %>
+                <br>
+                <%= link_to 'Un-follow Account',
+                            group_twitter_account_path(@group, account),
+                            method: :delete,
+                            data: {confirm: 'Are you sure'},
+                            class: "btn btn-sm btn-danger btn-block"
+                %>
+                </div>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>
 
-    <%= link_to 'Un-follow Account',
-                group_twitter_account_path(@group, account),
-                method: :delete,
-                data: {confirm: 'Are you sure'},
-                class: "btn btn-sm btn-danger"
-    %>
-  </div>
-
-<% end %>
