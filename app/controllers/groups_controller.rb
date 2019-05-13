@@ -26,13 +26,13 @@ class GroupsController < ApplicationController
     respond_to do |format|
       format.json {
         groups = current_user.enterprise.groups.all_parents
-            .order(:position)
-            .joins('LEFT JOIN groups as children ON groups.id = children.parent_id')
-            .uniq
-            .where('LOWER(groups.name) like ? OR LOWER(children.name) like ?', "%#{search_params[:term]}%", "%#{search_params[:term]}%")
-            .page(search_params[:page])
-            .per(search_params[:limit])
-            .includes(:children)
+                   .order(:position)
+                   .joins('LEFT JOIN groups as children ON groups.id = children.parent_id')
+                   .uniq
+                   .where('LOWER(groups.name) like ? OR LOWER(children.name) like ?', "%#{search_params[:term]}%", "%#{search_params[:term]}%")
+                   .page(search_params[:page])
+                   .per(search_params[:limit])
+                   .includes(:children)
 
         groups_hash = groups.as_json(
           only: [:id, :name, :parent_id, :position],
@@ -46,10 +46,10 @@ class GroupsController < ApplicationController
         )
 
         render json: {
-            total_pages: groups.total_pages,
-            group_text: c_t(:erg),
-            group_text_pluralized: c_t(:erg).pluralize,
-            groups: groups_hash
+          total_pages: groups.total_pages,
+          group_text: c_t(:erg),
+          group_text_pluralized: c_t(:erg).pluralize,
+          groups: groups_hash
         }
       }
     end
@@ -60,8 +60,11 @@ class GroupsController < ApplicationController
 
     respond_to do |format|
       format.json {
+        @groups = @groups
+                    .where('name like ?', "%#{search_params[:term]}%")
+                    .where(id: [search_params[:ids]]) unless search_params[:ids].nil?
+
         render json: @groups
-                       .where('name like ?', "%#{search_params[:term]}%")
                        .map { |g| { id: g.id, text: g.name } }
                        .as_json
       }
@@ -427,7 +430,7 @@ class GroupsController < ApplicationController
   end
 
   def search_params
-    params.permit(:page, :limit, :term)
+    params.permit(:page, :limit, :term, ids: [])
   end
 
   def group_params

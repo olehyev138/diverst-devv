@@ -4,16 +4,17 @@ RSpec.describe Segment, type: :model do
   describe 'when validating' do
     let(:segment) { build_stubbed(:segment) }
 
-    it { expect(segment).to have_one(:parent_segment).class_name('Segmentation').with_foreign_key(:child_id) }
-    it { expect(segment).to have_one(:parent).class_name('Segment').through(:parent_segment).source(:parent) }
-
-    it { expect(segment).to have_many(:children).class_name('Segmentation').with_foreign_key(:parent_id) }
-    it { expect(segment).to have_many(:sub_segments).class_name('Segment').through(:children).source(:child).dependent(:destroy) }
+    it { expect(segment).to belong_to(:parent).class_name('Segment') }
+    it { expect(segment).to have_many(:children).class_name('Segment') }
 
     it { expect(segment).to belong_to(:enterprise) }
     it { expect(segment).to belong_to(:owner).class_name('User') }
 
-    it { expect(segment).to have_many(:rules).class_name('SegmentRule') }
+    # Rules
+    it { expect(segment).to have_many(:field_rules).class_name('SegmentRule') }
+    it { expect(segment).to have_many(:order_rules).class_name('SegmentOrderRule') }
+    it { expect(segment).to have_many(:group_rules).class_name('SegmentGroupScopeRule') }
+
     it { expect(segment).to have_many(:users_segments) }
     it { expect(segment).to have_many(:members).through(:users_segments).class_name('User').source(:user).dependent(:destroy) }
     it { expect(segment).to have_many(:polls_segments) }
@@ -27,7 +28,12 @@ RSpec.describe Segment, type: :model do
 
     it { expect(segment).to validate_presence_of(:name) }
     it { expect(segment).to validate_presence_of(:enterprise) }
-    it { expect(segment).to accept_nested_attributes_for(:rules).allow_destroy(true) }
+    it { expect(segment).to validate_presence_of(:active_users_filter) }
+
+    # Nested rule attributes
+    it { expect(segment).to accept_nested_attributes_for(:field_rules).allow_destroy(true) }
+    it { expect(segment).to accept_nested_attributes_for(:order_rules).allow_destroy(true) }
+    it { expect(segment).to accept_nested_attributes_for(:group_rules).allow_destroy(true) }
   end
 
   describe 'test validation' do
@@ -41,16 +47,6 @@ RSpec.describe Segment, type: :model do
       end
     end
   end
-  describe 'test callbacks' do
-    let!(:segment) { create(:segment) }
-
-    context 'before_destroy' do
-      it 'callback runs before segment object is destroyed' do
-        expect(segment).to receive(:remove_parent_segment)
-        segment.destroy
-      end
-    end
-  end
 
   describe 'associations' do
     it 'creates parent segment and children' do
@@ -58,13 +54,14 @@ RSpec.describe Segment, type: :model do
 
       3.times do
         child = create(:segment)
-        parent.sub_segments << child
+        parent.children << child
         parent.save
       end
 
-      expect(parent.sub_segments.count).to eq(3)
-      parent.sub_segments.each do |sub_segment|
-        expect(sub_segment.parent.id).to eq(parent.id)
+      expect(parent.children.count).to eq(3)
+
+      parent.children.each do |sub_segment|
+        expect(sub_segment.parent_id).to eq(parent.id)
       end
     end
   end
@@ -135,14 +132,6 @@ RSpec.describe Segment, type: :model do
         expect(segment.general_rules_followed_by?(user)).to be(true)
       end
     end
-    context 'when nil' do
-      it 'returns true' do
-        user = create(:user, active: true)
-        segment = create(:segment, active_users_filter: nil)
-
-        expect(segment.general_rules_followed_by?(user)).to be(true)
-      end
-    end
   end
 
   describe '#update_all_members' do
@@ -151,23 +140,6 @@ RSpec.describe Segment, type: :model do
       create(:segment)
 
       Segment.update_all_members
-    end
-  end
-
-  describe '#remove_parent_segment' do
-    it 'removes the parent segmentation' do
-      parent = create(:segment)
-      child = create(:segment)
-      segmentation = create(:segmentation, child: child, parent: parent)
-
-      # make sure parent segment exists
-      expect(child.parent_segment.present?).to be(true)
-
-      # delete the child
-      child.destroy
-
-      expect(parent.present?).to be(true)
-      expect { segmentation.reload }.to raise_error ActiveRecord::RecordNotFound
     end
   end
 end
