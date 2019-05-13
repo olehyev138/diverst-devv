@@ -32,6 +32,8 @@ class GroupEventsPolicy < GroupBasePolicy
       return true if is_a_manager?('initiatives_create')
 
       is_a_manager?('initiatives_index')
+    when 'non_member'
+      user.policy_group.initiatives_index?
     else
       return false
     end
