@@ -90,7 +90,7 @@ class Groups::PostsController < ApplicationController
     segment_ids = current_user.segment_ids
 
     return without_segments if segment_ids.empty?
-    
+
     @posts = NewsFeed.all_links(@group.news_feed.id, segment_ids, @group.enterprise)
     @count = @posts.count
     @posts = @posts.order(is_pinned: :desc, created_at: :desc)
