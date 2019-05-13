@@ -3,7 +3,15 @@ module Optionnable
 
   included do
     after_initialize :set_options_array
+    before_save :trim_options_whitespace
     attr_accessor :options
+  end
+
+  # Remove all whitespace except for new lines from options text
+  def trim_options_whitespace
+    return if options_text.nil?
+
+    options_text.delete!(" \t\r")
   end
 
   def serialize_value(value)
@@ -273,6 +281,7 @@ module Optionnable
 
   def highcharts_timeseries(segments: [], groups: [])
     data = elastic_timeseries(segments: segments, groups: groups)
+
     series = data['aggregations']['terms']['buckets'].map do |term_bucket|
       time_buckets = term_bucket['date_histogram']['buckets']
 
