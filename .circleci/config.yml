@@ -76,9 +76,10 @@ jobs:
         # These cache paths were specified in the 1.0 config
         - public/assets
         - ./node_modules
-    - run:
+    # Run as deploy step in order to not be run multiple times in parallel
+    - deploy:
         command: |
-          export PRONTO_GITHUB_ACCESS_TOKEN=fe0e52b6e1d312d746983bd68dc619c58fa42946
+          export PRONTO_GITHUB_ACCESS_TOKEN=4a618a099bf8b585ef71df59a592964738dc233f
           export PRONTO_PULL_REQUEST_ID=$(git ls-remote -q origin pull\*\head | grep $CIRCLE_SHA1 | sed 's/.*refs\/pull\/\([0-9]*\)\/head/\1/g')
           git fetch origin development:refs/remotes/origin/development
           bundle exec pronto run -f github_status github_pr -c origin/development --exit-code
