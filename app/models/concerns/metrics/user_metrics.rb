@@ -37,18 +37,6 @@ module Metrics
                .count
     end
 
-    def users_per_group
-      graph = UserGroup.get_graph_builder
-      graph.set_enterprise_filter(field: 'group.enterprise_id', value: enterprise_id)
-      graph.formatter.type = 'bar'
-      graph.formatter.title = 'User population per group'
-
-      graph.query = graph.query.terms_agg(field: 'group.name')
-      graph.drilldown_graph(parent_field: 'group.parent.name')
-
-      graph.build
-    end
-
     def users_per_segment
       graph = UsersSegment.get_graph_builder
       graph.set_enterprise_filter(field: 'segment.enterprise_id', value: enterprise_id)
