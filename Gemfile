@@ -72,6 +72,8 @@ gem 'thor', '0.20.0'# Expected string default value for '--decorator'; got true 
 gem 'sanitize_email', '~> 1.2.2'
 gem 'rack-timeout', '~> 0.4.2'
 gem 'jquery-ui-rails', '~> 6.0.1'
+
+gem 'factory_bot_rails', '~> 4.8.0' # Create mock objects for testing
 gem 'tty-spinner'
 
 group :development, :test do
@@ -83,7 +85,6 @@ group :development, :test do
   gem 'quiet_assets', '~> 1.1.0' # Silences asset logs
   gem 'active_record_query_trace', '~> 1.5.4' # View which line is making each SQL query in the logs
   gem 'rspec-rails', '~> 3.0' # Testing framework
-  gem 'factory_bot_rails', '~> 4.8.0' # Create mock objects for testing
   gem 'capybara', '~> 2.15.1' # Helpers for feature specs
   gem 'poltergeist', '~> 1.16.0' # Allows support for JS in feature specs
   gem 'database_cleaner', '~> 1.6.1' # Necessary to clean the DB between tests
