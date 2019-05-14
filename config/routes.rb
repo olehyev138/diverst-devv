@@ -425,8 +425,10 @@ Rails.application.routes.draw do
       get 'get_all_segments'
     end
     resources :sub_segments
+
     member do
       get 'export_csv'
+      get 'segment_status'
     end
   end
 
