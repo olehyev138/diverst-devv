@@ -8,9 +8,9 @@ class GroupLeader < BaseClass
   validates_presence_of :user
   validates_presence_of :user_role
   validates :user_id, uniqueness: { message: 'already exists as a group leader', scope: :group_id }
-  
-  scope :visible,   ->{ where(visible: true) }
-  scope :role_ids,  ->{ distinct.pluck(:user_role_id) }
+
+  scope :visible,   -> { where(visible: true) }
+  scope :role_ids,  -> { distinct.pluck(:user_role_id) }
 
   after_validation  :set_admin_permissions
   validate :validate_group_membership_of_group_leader
@@ -21,7 +21,7 @@ class GroupLeader < BaseClass
 
   def set_admin_permissions
     # get the template that corresponds to the group_leader role
-    template = PolicyGroupTemplate.joins(:user_role).where(:user_roles => {:id => user_role_id}).first
+    template = PolicyGroupTemplate.joins(:user_role).find_by(user_roles: { id: user_role_id })
 
     # update the permissions for this group_leader
 
@@ -30,7 +30,7 @@ class GroupLeader < BaseClass
     self.groups_budgets_request = template.groups_budgets_request
     self.budget_approval = template.budget_approval
     self.groups_budgets_manage = template.groups_budgets_manage
-    
+
     # events
     self.initiatives_index = template.initiatives_index
     self.initiatives_manage = template.initiatives_manage
@@ -75,7 +75,7 @@ class GroupLeader < BaseClass
     self.group_resources_manage = template.group_resources_manage
     self.group_resources_index = template.group_resources_index
     self.group_resources_create = template.group_resources_create
-    
+
     # posts
     self.group_posts_index = template.group_posts_index
     self.manage_posts = template.manage_posts
@@ -84,6 +84,6 @@ class GroupLeader < BaseClass
   private
 
   def validate_group_membership_of_group_leader
-    errors.add(:user, "Selected user is not a member of this group") unless UserGroup.where(user_id: user_id, group_id: group_id, accepted_member: true).exists?
+    errors.add(:user, 'Selected user is not a member of this group') unless UserGroup.where(user_id: user_id, group_id: group_id, accepted_member: true).exists?
   end
 end

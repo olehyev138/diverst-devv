@@ -1,22 +1,21 @@
 require 'rails_helper'
 
 RSpec.feature 'Campaign management' do
-
   let(:user) { create(:user) }
 
   before do
-    login_as(user, scope: :user, :run_callbacks => false)
+    login_as(user, scope: :user, run_callbacks: false)
   end
 
   scenario 'user creates a new campaign', :js do
-    create(:group, :enterprise => user.enterprise, :name => "Group #1")
-    
+    create(:group, enterprise: user.enterprise, name: 'Group #1')
+
     policy_group = user.policy_group
     policy_group.campaigns_index = true
     policy_group.campaigns_create = true
     policy_group.campaigns_manage = true
     policy_group.save!
-    
+
     campaign = {
       title: 'My Campaign',
       description: 'Look at that sweet campaign!',

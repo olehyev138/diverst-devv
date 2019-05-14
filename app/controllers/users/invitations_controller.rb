@@ -33,7 +33,7 @@ class Users::InvitationsController < Devise::InvitationsController
   end
 
   def after_invite_path_for(resource)
-    flash[:notice] = "Invitation has been sent"
+    flash[:notice] = 'Invitation has been sent'
     users_path
   end
 

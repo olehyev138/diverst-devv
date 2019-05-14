@@ -25,7 +25,7 @@ class IntegrationsController < ApplicationController
 
   def set_enterprise_from_token
     token = params[:token]
-    not_found! if token.nil? || token.empty?
+    not_found! if token.blank?
 
     @enterprise = Enterprise.find_by_iframe_calendar_token(token)
 

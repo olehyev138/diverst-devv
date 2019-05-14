@@ -22,12 +22,13 @@ class Rewards::Points::Manager
   end
 
   private
+
   def add_points_to_user(entity)
     entity.user_reward_actions.create(
       user: @user,
       reward_action: @reward_action,
       points: @reward_action.points.to_i,
-      operation: "add"
+      operation: 'add'
     )
   end
 
@@ -44,7 +45,7 @@ class Rewards::Points::Manager
       user: @user,
       reward_action: @reward_action,
       points: points.to_i,
-      operation: "del"
+      operation: 'del'
     )
   end
 

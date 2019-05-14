@@ -1,7 +1,7 @@
 <div class="content__main">
   <div class="card">
     <div class="card__section">
-      <% if @segments.any? %>
+      <% if @sub_segments&.any? %>
         <table class="table--has-border" id="segments-table">
           <thead>
             <th>ID</th>
@@ -11,7 +11,7 @@
             <th>Options</th>
           </thead>
           <tbody>
-            <% @segments.each do |segment| %>
+            <% @sub_segments.each do |segment| %>
               <tr>
                 <td><%= segment.id %></td>
                 <td><%= link_to segment.name, segment_path(segment), class: "accent" %></td>

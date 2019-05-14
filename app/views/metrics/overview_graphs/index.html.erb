@@ -59,7 +59,7 @@
 
         <div class="col md-4 sm-12">
           <div class="panel panel--primary text-center margin-bottom-0">
-            <div class="panel-headline"><p><strong><%= c_t(:erg).capitalize %> Memberships (6 months)</strong></p></div>
+            <div class="panel-headline"><p><strong><%= c_t(:erg) %> Memberships (6 months)</strong></p></div>
             <div class="panel-data"><p><b class="accent"><%= @user_metrics[:group_memberships] %></b></p></div>
           </div>
         </div>
@@ -70,14 +70,14 @@
   <div class="card">
     <div class="card__section">
       <div class="card-title flex-row" style="margin-bottom: 10px;">
-        <div class="flex-row__cell flex-row__cell--grow"><h1 style="display: inline-block;"><%= c_t(:erg).capitalize.pluralize %></h1></div>
+        <div class="flex-row__cell flex-row__cell--grow"><h1 style="display: inline-block;"><%= c_t(:erg).pluralize %></h1></div>
         <div class="flex-row__cell"><span><%= link_to('See more...', metrics_groups_path) %></span></div>
       </div>
 
       <div class="row">
         <div class="col md-6 sm-12">
           <div class="panel panel--primary text-center margin-bottom-0">
-            <div class="panel-headline"><p><strong>Total <%= c_t(:erg).capitalize.pluralize %></strong></p></div>
+            <div class="panel-headline"><p><strong>Total <%= c_t(:erg).pluralize %></strong></p></div>
             <div class="panel-data"><p><b class="accent"><%= @general_metrics[:nb_ergs] %></b></p></div>
           </div>
         </div>

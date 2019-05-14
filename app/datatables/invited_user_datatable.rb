@@ -31,7 +31,7 @@ class InvitedUserDatatable < AjaxDatatablesRails::Base
         ]
       else
         [
-          html_escape(record.email), "", ""
+          html_escape(record.email), '', ''
         ]
       end
     end

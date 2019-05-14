@@ -1,8 +1,8 @@
 class InitiativePolicy < ApplicationPolicy
-
   def index?
     return true if create?
-    return true if basic_group_leader_permission?("initiatives_index")
+    return true if basic_group_leader_permission?('initiatives_index')
+
     @policy_group.initiatives_index?
   end
 
@@ -12,18 +12,21 @@ class InitiativePolicy < ApplicationPolicy
 
   def create?
     return true if manage?
-    return true if basic_group_leader_permission?("initiatives_create")
+    return true if basic_group_leader_permission?('initiatives_create')
+
     @policy_group.initiatives_create?
   end
 
   def manage?
     return true if manage_all?
-    return true if basic_group_leader_permission?("initiatives_manage")
+    return true if basic_group_leader_permission?('initiatives_manage')
+
     @policy_group.initiatives_manage?
   end
 
   def update?
     return true if manage?
+
     @record.owner == @user
   end
 
@@ -35,17 +38,18 @@ class InitiativePolicy < ApplicationPolicy
   def show_calendar?
     return true if @record.segments.empty?
     return false if (@user.segments & @record.segments).empty?
+
     true
   end
 
   def is_a_pending_member?
     @group = @record.group
-    UserGroup.where(:accepted_member => false, :user_id => @user.id, :group_id => @group.id).exists?
+    UserGroup.where(accepted_member: false, user_id: @user.id, group_id: @group.id).exists?
   end
 
   def is_a_member?
     @group = @record.group
-    UserGroup.where(:user_id => @user.id, :group_id => @group.id).exists?
+    UserGroup.where(user_id: @user.id, group_id: @group.id).exists?
   end
 
   def is_a_guest?

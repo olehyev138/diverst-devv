@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Finders::Logs do
-  context "when filtering by groups" do
+  context 'when filtering by groups' do
     before(:each) do
       PublicActivity.enabled = true
     end
@@ -16,10 +16,10 @@ RSpec.describe Finders::Logs do
     let!(:group_log) { group.create_activity(:create) }
     let!(:another_log) { create(:user).create_activity(:create) }
 
-    it "return only logs of the groups" do
+    it 'return only logs of the groups' do
       finder = Finders::Logs.new(PublicActivity::Activity.all)
-      expect(finder.filter_by_groups([group.id]).logs).
-        to match_array([initiative_log, initiative_group_log, poll_log, group_log])
+      expect(finder.filter_by_groups([group.id]).logs)
+        .to match_array([initiative_log, initiative_group_log, poll_log, group_log])
     end
   end
 end

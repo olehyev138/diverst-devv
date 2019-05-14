@@ -15,22 +15,22 @@ RSpec.describe BudgetItem, type: :model do
     end
 
     it 'requires a title' do
-      budget_item.title = "o"
+      budget_item.title = 'o'
       expect(budget_item).to_not be_valid
-      expect(budget_item.errors.full_messages.first).to eq("Title is too short (minimum is 2 characters)")
+      expect(budget_item.errors.full_messages.first).to eq('Title is too short (minimum is 2 characters)')
     end
 
     it 'requires estimated_amount to be a number' do
-      budget_item.estimated_amount = "o"
+      budget_item.estimated_amount = 'o'
       expect(budget_item).to_not be_valid
-      expect(budget_item.errors.full_messages.first).to eq("Estimated amount number of digits must not exceed 6")
+      expect(budget_item.errors.full_messages.first).to eq('Estimated amount number of digits must not exceed 6')
     end
 
     it 'requires available_amount to be less_than_or_equal_to estimated_amount' do
       budget_item.estimated_amount = 1
       budget_item.available_amount = 2
       expect(budget_item).to_not be_valid
-      expect(budget_item.errors.full_messages.first).to eq("Available amount must be less than or equal to 1.0")
+      expect(budget_item.errors.full_messages.first).to eq('Available amount must be less than or equal to 1.0')
     end
 
     describe 'when validating' do

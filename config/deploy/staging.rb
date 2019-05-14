@@ -31,7 +31,7 @@ server '54.157.210.113', user: 'newdeploy', roles: %w(web app db)
 set :branch, 'staging'
 set :rails_env, :production
 
-set :rollbar_env, "staging"
+set :rollbar_env, 'staging'
 
 
 # Custom SSH Options
@@ -42,11 +42,11 @@ set :rollbar_env, "staging"
 #
 # Global options
 # --------------
- set :ssh_options, {
-#    keys: %w(/home/rlisowski/.ssh/id_rsa),
-   forward_agent: true,
-#    auth_methods: %w(password)
- }
+set :ssh_options, {
+  #    keys: %w(/home/rlisowski/.ssh/id_rsa),
+  forward_agent: true,
+  #    auth_methods: %w(password)
+}
 #
 # The server-based syntax can be used to override options:
 # ------------------------------------

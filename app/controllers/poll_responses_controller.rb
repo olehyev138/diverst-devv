@@ -28,7 +28,7 @@ class PollResponsesController < ApplicationController
     @response.user = current_user
 
     if @response.save
-      user_rewarder("survey_response").add_points(@response)
+      user_rewarder('survey_response').add_points(@response)
       flash_reward "Now you have #{ current_user.credits } points"
       redirect_to action: :thank_you, poll_id: @poll.id, id: @response.id
     else
@@ -40,7 +40,7 @@ class PollResponsesController < ApplicationController
     if @response.update(poll_response_params)
       redirect_to @poll
     else
-      render :edit #edit template does not exist
+      render :edit # edit template does not exist
     end
   end
 

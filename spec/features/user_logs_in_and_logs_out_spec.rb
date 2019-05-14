@@ -17,7 +17,7 @@ RSpec.feature 'User logs in/out ' do
     end
 
     scenario 'non-admin users do not see dashboard link' do
-      # users are automatically created 
+      # users are automatically created
       non_admin_user = create(:user)
       non_admin_user.policy_group.update_all_permissions
       user_logs_in_with_correct_credentials(non_admin_user)
