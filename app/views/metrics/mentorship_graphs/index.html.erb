@@ -1,0 +1,72 @@
+<div class="content__header">
+  <h1>Mentorship</h1>
+</div>
+
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      <div class="row">
+        <div class="col md-6 sm-12">
+          <div class="panel panel--primary text-center margin-bottom-0">
+            <div class="panel-headline"><p><strong>Mentorship Sessions (Past Month)</strong></p></div>
+            <div class="panel-data"><p><b class="accent"><%= @data[:mentoring_sessions] %></b></p></div>
+          </div>
+        </div>
+
+        <div class="col md-6 sm-12">
+          <div class="panel panel--primary text-center margin-bottom-0">
+            <div class="panel-headline"><p><strong>Active Mentorships</strong></p></div>
+            <div class="panel-data"><p><b class="accent"><%= @data[:active_mentorships] %></b></p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card__section">
+      <div class="flex-row flex-row--middle">
+        <div class="flex-row__cell flex-row__cell--grow">
+          <h4>User mentorship interest per <%= c_t(:erg) %></h4>
+          <div class="card__action">
+            <%= link_to "Export CSV", user_mentorship_interest_per_group_metrics_mentorships_path(format: :csv) %>
+          </div>
+          <div id="user_mentorship_interest" class="graph" data-url="<%= user_mentorship_interest_per_group_metrics_mentorships_path %>">
+            <svg></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card__section">
+      <div class="flex-row flex-row--middle">
+        <div class="flex-row__cell flex-row__cell--grow">
+          <h4>Mentoring Sessions per creator</h4>
+          <%= render 'components/range_selector' %>
+          <div class="card__action">
+            <a href="#" class="csv-export-link hidden-xs" data-url="<%= mentoring_sessions_per_creator_metrics_mentorships_path %>">Export CSV</a>
+          </div>
+          <div id="mentoring_sessions_per_creator" class="graph" data-url="<%= mentoring_sessions_per_creator_metrics_mentorships_path %>">
+            <svg></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card__section">
+      <div class="flex-row flex-row--middle">
+        <div class="flex-row__cell flex-row__cell--grow">
+          <h4>Mentoring Interests</h4>
+          <div class="card__action">
+            <%= link_to "Export CSV", mentoring_interests_metrics_mentorships_path(format: :csv), class: "hidden-xs" %>
+          </div>
+          <div id="mentoring_interests" class="graph" data-url="<%= mentoring_interests_metrics_mentorships_path %>">
+            <svg></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

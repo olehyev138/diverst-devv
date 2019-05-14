@@ -5,7 +5,7 @@ RSpec.feature 'An ERG dashboard' do
   let(:group) { create(:group_with_users, users_count: 5, enterprise: user.enterprise) }
 
   before do
-    login_as(user, scope: :user, :run_callbacks => false)
+    login_as(user, scope: :user, run_callbacks: false)
   end
 
   scenario 'shows the upcoming events' do
@@ -38,13 +38,13 @@ RSpec.feature 'An ERG dashboard' do
   end
 
   context 'in sub-erg section' do
-    let!(:category_type) { create(:group_category_type, name: "Color Code") }
-    let!(:red_label) { create(:group_category, name: "Red", group_category_type_id: category_type.id) }
+    let!(:category_type) { create(:group_category_type, name: 'Color Code') }
+    let!(:red_label) { create(:group_category, name: 'Red', group_category_type_id: category_type.id) }
 
     scenario 'show categorized sub-ergs', js: true do
       group.update(group_category_type_id: category_type.id)
       red_sub_groups = create_list(:group, 2, parent_id: group.id, group_category_type_id: category_type.id,
-       group_category_id: red_label.id, enterprise_id: user.enterprise.id)
+                                              group_category_id: red_label.id, enterprise_id: user.enterprise.id)
 
       visit group_path(group)
       expect(page).to have_content red_label.name
@@ -54,11 +54,11 @@ RSpec.feature 'An ERG dashboard' do
     end
 
     scenario 'show uncategorized sub-ergs as normal list' do
-      sub_group = create(:group, parent_id: group.id, :enterprise => user.enterprise)
+      sub_group = create(:group, parent_id: group.id, enterprise: user.enterprise)
 
       visit group_path(group)
 
-      expect(page).not_to have_content "Red"
+      expect(page).not_to have_content 'Red'
       expect(page).to have_content sub_group.name
     end
 

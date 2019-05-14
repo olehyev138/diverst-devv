@@ -1,7 +1,7 @@
 class InitiativesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_group
-  before_action :set_initiative, only: [:edit, :update, :destroy, :show, :todo, :finish_expenses, :attendees]
+  before_action :set_initiative, only: [:edit, :update, :destroy, :show, :todo, :finish_expenses, :export_attendees_csv, :archive]
   before_action :set_segments, only: [:new, :create, :edit, :update]
   after_action :verify_authorized
 
@@ -25,14 +25,14 @@ class InitiativesController < ApplicationController
     @initiative = Initiative.new(initiative_params)
     @initiative.owner = current_user
     @initiative.owner_group = @group
-    #bTODO add event to @group.own_initiatives
+    # bTODO add event to @group.own_initiatives
 
     if @initiative.save
-      flash[:notice] = "Your event was created"
+      flash[:notice] = 'Your event was created'
       track_activity(@initiative, :create)
       redirect_to action: :index
     else
-      flash[:alert] = "Your event was not created. Please fix the errors"
+      flash[:alert] = 'Your event was not created. Please fix the errors'
       render :new
     end
   end
@@ -49,11 +49,11 @@ class InitiativesController < ApplicationController
   def update
     authorize @initiative
     if @initiative.update(initiative_params)
-      flash[:notice] = "Your event was updated"
+      flash[:notice] = 'Your event was updated'
       track_activity(@initiative, :update)
       redirect_to [@group, :initiatives]
     else
-      flash[:alert] = "Your event was not updated. Please fix the errors"
+      flash[:alert] = 'Your event was not updated. Please fix the errors'
       render :edit
     end
   end
@@ -74,10 +74,10 @@ class InitiativesController < ApplicationController
 
     track_activity(@initiative, :destroy)
     if @initiative.destroy
-      flash[:notice] = "Your event was deleted"
+      flash[:notice] = 'Your event was deleted'
       redirect_to action: :index
     else
-      flash[:alert] = "Your event was not deleted. Please fix the errors"
+      flash[:alert] = 'Your event was not deleted. Please fix the errors'
       redirect_to :back
     end
   end
@@ -86,11 +86,13 @@ class InitiativesController < ApplicationController
     authorize @initiative, :update?
   end
 
-  def attendees
+  def export_attendees_csv
     authorize @initiative, :update?
 
-    send_data User.basic_info_to_csv(users: @initiative.attendees),
-      filename: "attendees.csv"
+    EventAttendeeDownloadJob.perform_later(current_user.id, @initiative)
+    track_activity(@initiative, :export_attendees)
+    flash[:notice] = 'Please check your Secure Downloads section in a couple of minutes'
+    redirect_to :back
   end
 
   def export_csv
@@ -103,16 +105,30 @@ class InitiativesController < ApplicationController
     # Gets and filters the initiatives from outcomes on date
     initiative_ids = Outcome.get_initiatives(@outcomes).select { |i| i.start >= @filter_from && i.start <= @filter_to }.map { |i| i.id }
 
-    if Initiative.where(id: initiative_ids).any? {|initiative| initiative.unfinished_expenses? }
-      flash[:notice] = 'Please close expenses of past initiatives'
+    if Initiative.where(id: initiative_ids).any? { |initiative| initiative.unfinished_expenses? }
+      flash[:notice] = 'Please close expenses of past events'
       redirect_to :back
     else
       InitiativesDownloadJob.perform_later(current_user.id, @group.id, initiative_ids)
       track_activity(@group, :export_initiatives)
-      flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+      flash[:notice] = 'Please check your Secure Downloads section in a couple of minutes'
       redirect_to :back
     end
   end
+
+  def archive
+    authorize @initiative, :update?
+
+    @initiatives = @group.initiatives.where(archived_at: nil).all
+    @initiative.update(archived_at: DateTime.now)
+    track_activity(@initiative, :archive)
+
+    respond_to do |format|
+      format.html { redirect_to :back }
+      format.js
+    end
+  end
+
 
   protected
 
@@ -157,6 +173,7 @@ class InitiativesController < ApplicationController
         :picture,
         :budget_item_id,
         :estimated_funding,
+        :archived_at,
         :from, # For filtering
         :to, # For filtering
         participating_group_ids: [],

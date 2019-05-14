@@ -4,9 +4,9 @@ class RewardMailer < ApplicationMailer
     @reward = reward
     @email = responsible.email
     return if @user.enterprise.disable_emails?
-    
+
     set_defaults(@user.enterprise, method_name)
 
-    mail(from: @from_address, to: @email, subject: "A reward was redeemed")
+    mail(from: @from_address, to: @email, subject: 'A reward was redeemed')
   end
 end

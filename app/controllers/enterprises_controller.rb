@@ -14,16 +14,16 @@ class EnterprisesController < ApplicationController
     authorize @enterprise
     update_enterprise
   end
-  
+
   def update_posts
     authorize @enterprise, :manage_posts?
 
     if @enterprise.update_attributes(enterprise_params)
-      flash[:notice] = "Your enterprise was updated"
+      flash[:notice] = 'Your enterprise was updated'
       track_activity(@enterprise, :update)
       redirect_to :back
     else
-      flash[:alert] = "Your enterprise was not updated. Please fix the errors"
+      flash[:alert] = 'Your enterprise was not updated. Please fix the errors'
       redirect_to :back
     end
   end
@@ -31,23 +31,23 @@ class EnterprisesController < ApplicationController
   def edit_fields
     authorize @enterprise
   end
-  
+
   def update_enterprise
     if @enterprise.update_attributes(enterprise_params)
-      flash[:notice] = "Your enterprise was updated"
+      flash[:notice] = 'Your enterprise was updated'
       track_activity(@enterprise, :update)
       redirect_to :back
     else
-      flash[:alert] = "Your enterprise was not updated. Please fix the errors"
+      flash[:alert] = 'Your enterprise was not updated. Please fix the errors'
       redirect_to :back
     end
   end
-  
+
   def update_mapping
     authorize @enterprise, :edit_fields?
     update_enterprise
   end
-  
+
   def update_fields
     authorize @enterprise, :edit_fields?
     update_enterprise
@@ -71,7 +71,13 @@ class EnterprisesController < ApplicationController
   def edit_auth
     authorize @enterprise
   end
-  
+
+  def auto_archive_switch
+    authorize @enterprise, :auto_archive_settings_manage?
+    @enterprise.archive_switch
+    render nothing: true
+  end
+
   def update_auth
     authorize @enterprise, :edit_auth?
     update_enterprise
@@ -97,16 +103,16 @@ class EnterprisesController < ApplicationController
 
       @enterprise.theme.compile
 
-      flash[:notice] = "Enterprise branding was updated"
+      flash[:notice] = 'Enterprise branding was updated'
       track_activity(@enterprise, :update_branding)
       redirect_to action: :edit_branding
 
     else
-      flash[:alert] = "Enterprise branding was not updated. Please fix the errors"
+      flash[:alert] = 'Enterprise branding was not updated. Please fix the errors'
       render :edit_branding
     end
   end
-  
+
   def update_branding_info
     authorize @enterprise, :manage_branding?
     update_enterprise
@@ -115,15 +121,15 @@ class EnterprisesController < ApplicationController
   def delete_attachment
     authorize @enterprise, :update?
 
-    if ["xml_sso_config", "banner"].include?(params[:attachment])
+    if ['xml_sso_config', 'banner'].include?(params[:attachment])
       @enterprise.send("#{ params[:attachment] }=", nil)
     end
 
     if @enterprise.save
-      flash[:notice] = "Enterprise attachment was removed"
+      flash[:notice] = 'Enterprise attachment was removed'
       redirect_to :back
     else
-      flash[:alert] = "Enterprise attachment was not removed. Please fix the errors"
+      flash[:alert] = 'Enterprise attachment was not removed. Please fix the errors'
       redirect_to :back
     end
   end
@@ -143,8 +149,8 @@ class EnterprisesController < ApplicationController
 
   def resolve_layout
     case action_name
-    when "edit_algo"
-      "mentorship"
+    when 'edit_algo'
+      'mentorship'
     when 'edit_algo', 'edit_mobile_fields'
       'handshake'
     else
@@ -200,6 +206,9 @@ class EnterprisesController < ApplicationController
         :plan_module_enabled,
         :name,
         :scope_module_enabled,
+        :auto_archive,
+        :expiry_age_for_resources,
+        :unit_of_expiry_age,
         theme: [
           :id,
           :primary_color,

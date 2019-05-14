@@ -1,16 +1,13 @@
 require 'rails_helper'
 
-RSpec.describe EnterpriseResourcePolicy, :type => :policy do
+RSpec.describe EnterpriseResourcePolicy, type: :policy do
+  let(:enterprise) { create(:enterprise) }
+  let(:no_access) { create(:user, enterprise: enterprise) }
+  let(:user) { no_access }
 
-  let(:user){ create(:user) }
-  let(:no_access) { create(:user) }
-
-  subject { described_class }
+  subject { EnterpriseResourcePolicy.new(user, nil) }
 
   before {
-    user.policy_group.manage_all = false
-    user.policy_group.save!
-
     no_access.policy_group.manage_all = false
     no_access.policy_group.enterprise_resources_index = false
     no_access.policy_group.enterprise_resources_create = false
@@ -18,30 +15,67 @@ RSpec.describe EnterpriseResourcePolicy, :type => :policy do
     no_access.policy_group.save!
   }
 
-  permissions :index?, :create?, :update?, :destroy? do
-    it 'allows access to user with correct permissions' do
-      expect(subject).to permit(user, nil)
+  describe 'for users with access' do
+    context 'when manage_all is false' do
+      context 'when enterprise_resources_index is true' do
+        before { user.policy_group.update enterprise_resources_index: true }
+        it { is_expected.to permit_action(:index) }
+      end
+
+      context 'user has basic group leader permission for enterprise_resources_index' do
+        before do
+          user_role = create(:user_role, enterprise: enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
+          user_role.policy_group_template.update enterprise_resources_index: true
+          group = create(:group, enterprise: enterprise)
+          create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
+                                user_role_id: user_role.id)
+        end
+
+        it { is_expected.to permit_action(:index) }
+      end
+
+      context 'when enterprise_resources_create is true' do
+        before { user.policy_group.update enterprise_resources_create: true }
+        it { is_expected.to permit_actions([:index, :create]) }
+      end
+
+      context 'user has basic group leader permission for enterprise_resources_create' do
+        before do
+          user_role = create(:user_role, enterprise: enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
+          user_role.policy_group_template.update enterprise_resources_create: true
+          group = create(:group, enterprise: enterprise)
+          create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
+                                user_role_id: user_role.id)
+        end
+
+        it { is_expected.to permit_actions([:index, :create]) }
+      end
+
+      context 'when enterprise_resources_manage is true' do
+        before { user.policy_group.update enterprise_resources_manage: true }
+        it { is_expected.to permit_actions([:index, :create, :edit, :update, :destroy]) }
+      end
+
+      context 'user has basic group leader permission for enterprise_resources_manage' do
+        before do
+          user_role = create(:user_role, enterprise: enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
+          user_role.policy_group_template.update enterprise_resources_manage: true
+          group = create(:group, enterprise: enterprise)
+          create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
+                                user_role_id: user_role.id)
+        end
+
+        it { is_expected.to permit_actions([:index, :create, :edit, :update, :destroy]) }
+      end
     end
 
-    it 'denies access to user with incorrect permissions' do
-      expect(subject).to_not permit(no_access, nil)
+    context 'when manage_all is true' do
+      before { user.policy_group.update manage_all: true }
+      it { is_expected.to permit_actions([:index, :create, :edit, :update, :destroy]) }
     end
   end
 
-  permissions :index?, :create? do
-    it 'allows access to user with create permissions' do
-      user.policy_group.enterprise_resources_manage = false
-
-      expect(subject).to permit(user, nil)
-    end
-  end
-
-  permissions :index? do
-    it 'allows access to user with index permissions' do
-      user.policy_group.enterprise_resources_manage = false
-      user.policy_group.enterprise_resources_create = false
-
-      expect(subject).to permit(user, nil)
-    end
+  describe 'for users with no access' do
+    it { is_expected.to forbid_actions([:index, :create, :edit, :update, :destroy]) }
   end
 end

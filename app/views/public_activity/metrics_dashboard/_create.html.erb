@@ -2,7 +2,7 @@
   <%= render 'public_activity/shared/owner', activity: activity %>
   created metrics dashboard
   <% if activity.trackable %>
-    <%= link_to activity.trackable.name, metrics_dashboard_path(activity.trackable) %>
+    <%= link_to activity.trackable.name, metrics_metrics_dashboard_path(activity.trackable) %>
   <% else %>
     which has since been removed
   <% end %>

@@ -4,10 +4,11 @@ class UserDatatable < AjaxDatatablesRails::Base
   def_delegator :@view, :link_to
   def_delegator :@view, :user_path
 
-  def initialize(view_context, users)
+  def initialize(view_context, users, read_only: false)
     super(view_context)
     @users = users
     @user = view_context.current_user
+    @read_only = read_only
   end
 
   def sortable_columns
@@ -22,7 +23,7 @@ class UserDatatable < AjaxDatatablesRails::Base
 
   def data
     records.map do |record|
-      if UserPolicy.new(@user, record).update?
+      if UserPolicy.new(@user, record).update? && !@read_only
         [
           record.id,
           html_escape(record.first_name),

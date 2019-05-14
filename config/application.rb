@@ -16,7 +16,7 @@ module Diverst
     # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
     config.time_zone = 'Eastern Time (US & Canada)'
     config.active_record.default_timezone = :local
-    
+
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
@@ -38,8 +38,8 @@ module Diverst
     config.active_job.queue_adapter = :sidekiq
 
     Rails.application.routes.default_url_options[:host] = ENV['DOMAIN'] || 'localhost:3000'
-    
-    config.action_dispatch.rescue_responses["Pundit::NotAuthorizedError"] = :forbidden
+
+    config.action_dispatch.rescue_responses['Pundit::NotAuthorizedError'] = :forbidden
 
     ActionMailer::Base.delivery_method = :smtp
   end

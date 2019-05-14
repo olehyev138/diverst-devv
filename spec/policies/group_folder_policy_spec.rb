@@ -1,319 +1,117 @@
 require 'rails_helper'
 
-RSpec.describe GroupFolderPolicy, :type => :policy do
+RSpec.describe GroupFolderPolicy, type: :policy do
+  let(:enterprise) { create(:enterprise) }
+  let(:group) { create(:group, enterprise: enterprise) }
+  let(:no_access) { create(:user, enterprise: enterprise) }
+  let(:user) { no_access }
+  let(:folder) { create(:folder, enterprise: enterprise) }
 
-  let(:enterprise) {create(:enterprise)}
-  let(:user){ create(:user, :enterprise => enterprise) }
-  let(:group){ create(:group, :enterprise => enterprise) }
-  let(:no_access) { create(:user) }
-  let(:folder){ create(:folder, :enterprise => enterprise)}
-
-  subject { described_class }
+  subject { GroupFolderPolicy.new(user, [group]) }
 
   before {
-    user.policy_group.manage_all = false
-    user.policy_group.save!
-
     no_access.policy_group.manage_all = false
+    no_access.policy_group.groups_manage = false
     no_access.policy_group.group_resources_index = false
     no_access.policy_group.group_resources_create = false
     no_access.policy_group.group_resources_manage = false
     no_access.policy_group.save!
   }
 
-  context "when manage_all is false" do
-    it "ensure manage_all is false" do
-      expect(user.policy_group.manage_all).to be(false)
-    end
-
-    context "user has groups_manage true" do
-      permissions :index? do
-        it "allows access" do
-          expect(subject).to permit(user, [group, nil])
-        end
-
-        it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, [group])
-        end
+  describe 'for users with access' do
+    context 'when manage_all is false' do
+      context 'when groups_manage and group_resources_manage are true' do
+        before { user.policy_group.update groups_manage: true, group_resources_manage: true }
+        it { is_expected.to permit_actions([:index, :show, :new, :create, :edit, :update, :destroy]) }
       end
 
-      permissions :create? do
-        it "allows access" do
-          expect(subject).to permit(user, [group])
+      context 'user has group leader permission for group_resources_manage' do
+        before do
+          user_role = create(:user_role, enterprise: enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
+          user_role.policy_group_template.update group_resources_manage: true
+          create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
+                                user_role_id: user_role.id)
         end
 
-        it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, [group])
-        end
+        it { is_expected.to permit_actions([:index, :show, :new, :create, :edit, :update, :destroy]) }
       end
 
-      permissions :edit? do
-        it "allows access" do
-          expect(subject).to permit(user, [group])
+      context 'user is group member and group_resources_manage is true' do
+        before do
+          create(:user_group, user_id: user.id, group_id: group.id, accepted_member: true)
+          user.policy_group.update group_resources_manage: true
         end
 
-        it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, [group])
-        end
+        it { is_expected.to permit_actions([:index, :show, :new, :create, :edit, :update, :destroy]) }
       end
 
-      permissions :update? do
-        it "allows access" do
-          expect(subject).to permit(user, [group])
-        end
-
-        it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, [group])
-        end
+      context 'when groups_manage and group_resources_create are true' do
+        before { user.policy_group.update groups_manage: true, group_resources_create: true }
+        it { is_expected.to permit_actions([:index, :show, :new, :create]) }
       end
 
-      permissions :destroy? do
-        it "allows access" do
-          expect(subject).to permit(user, [group])
+      context 'user has group leader permission for group_resources_create' do
+        before do
+          user_role = create(:user_role, enterprise: enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
+          user_role.policy_group_template.update group_resources_create: true
+          create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
+                                user_role_id: user_role.id)
         end
 
-        it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, [group])
-        end
-      end
-    end
-
-    context "user has groups_manage false and is a group leader" do
-      before {
-        create(:user_group, :user => user, :group => group)
-        create(:group_leader, :group => group, :user => user, :user_role => enterprise.user_roles.where(:role_type => "group").first)
-        user.policy_group.groups_manage = false
-        user.policy_group.save!
-      }
-
-      permissions :index? do
-        it "allows access" do
-          expect(subject).to permit(user, [group])
-        end
-
-        it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, [group])
-        end
+        it { is_expected.to permit_actions([:index, :show, :new, :create]) }
       end
 
-      permissions :create? do
-        it "allows access" do
-          expect(subject).to permit(user, [group])
+      context 'user is group member and group_resources_create is true' do
+        before do
+          create(:user_group, user_id: user.id, group_id: group.id, accepted_member: true)
+          user.policy_group.update group_resources_create: true
         end
 
-        it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, [group])
-        end
+        it { is_expected.to permit_actions([:index, :show, :new, :create]) }
       end
 
-      permissions :edit? do
-        it "allows access" do
-          expect(subject).to permit(user, [group])
+      context 'user is group member and group_resources_manage is true' do
+        before do
+          create(:user_group, user_id: user.id, group_id: group.id, accepted_member: true)
+          user.policy_group.update group_resources_manage: true
         end
 
-        it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, [group])
-        end
+        it { is_expected.to permit_actions([:index, :show, :new, :create, :edit, :update, :destroy]) }
       end
 
-      permissions :update? do
-        it "allows access" do
-          expect(subject).to permit(user, [group])
-        end
-
-        it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, [group])
-        end
+      context 'when groups_manage and group_resources_index are true' do
+        before { user.policy_group.update groups_manage: true, group_resources_index: true }
+        it { is_expected.to permit_actions([:index, :show]) }
       end
 
-      permissions :destroy? do
-        it "allows access" do
-          expect(subject).to permit(user, [group])
+      context 'user has group leader permission for group_resources_index' do
+        before do
+          user_role = create(:user_role, enterprise: enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
+          user_role.policy_group_template.update group_resources_index: true
+          create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
+                                user_role_id: user_role.id)
         end
 
-        it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, [group])
+        it { is_expected.to permit_actions([:index, :show]) }
+      end
+
+      context 'user is group member and group_resources_index is true' do
+        before do
+          create(:user_group, user_id: user.id, group_id: group.id, accepted_member: true)
+          user.policy_group.update group_resources_index: true
         end
+
+        it { is_expected.to permit_actions([:index, :show]) }
       end
     end
 
-    context "user has groups_manage false and is a group member" do
-      before {
-        create(:user_group, :user => user, :group => group)
-        user.policy_group.groups_manage = false
-        user.policy_group.save!
-      }
-
-      permissions :index? do
-        it "allows access" do
-          expect(subject).to permit(user, [group])
-        end
-
-        it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, [group])
-        end
-      end
-
-      permissions :create? do
-        it "allows access" do
-          expect(subject).to permit(user, [group])
-        end
-
-        it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, [group])
-        end
-      end
-
-      permissions :edit? do
-        it "allows access" do
-          expect(subject).to permit(user, [group])
-        end
-
-        it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, [group])
-        end
-      end
-
-      permissions :update? do
-        it "allows access" do
-          expect(subject).to permit(user, [group])
-        end
-
-        it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, [group])
-        end
-      end
-
-      permissions :destroy? do
-        it "allows access" do
-          expect(subject).to permit(user, [group])
-        end
-
-        it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, [group])
-        end
-      end
-    end
-
-    context "user has groups_manage false and is not an admin or group leader or member" do
-      before {
-        user.policy_group.groups_manage = false
-        user.policy_group.save!
-      }
-
-      permissions :index? do
-        it "doesn't allow access" do
-          expect(subject).to_not permit(user, [group])
-        end
-
-        it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, [group])
-        end
-      end
-
-      permissions :create? do
-        it "doesn't allow access" do
-          expect(subject).to_not permit(user, [group])
-        end
-
-        it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, [group])
-        end
-      end
-
-      permissions :edit? do
-        it "doesn't allow access" do
-          expect(subject).to_not permit(user, [group])
-        end
-
-        it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, [group])
-        end
-      end
-
-      permissions :update? do
-        it "doesn't allow access" do
-          expect(subject).to_not permit(user, [group])
-        end
-
-        it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, [group])
-        end
-      end
-
-      permissions :destroy? do
-        it "doesn't allow access" do
-          expect(subject).to_not permit(user, [group])
-        end
-
-        it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, [group])
-        end
-      end
+    context 'when manage_all is true' do
+      before { user.policy_group.update manage_all: true }
+      it { is_expected.to permit_actions([:index, :show, :new, :create, :edit, :update, :destroy]) }
     end
   end
 
-  context "when manage_all is true" do
-    before {
-      user.policy_group.manage_all = true
-      user.policy_group.group_resources_index = false
-      user.policy_group.group_resources_create = false
-      user.policy_group.group_resources_manage = false
-      user.policy_group.save!
-    }
-
-    it "ensure manage_all is true" do
-      expect(user.policy_group.manage_all).to be(true)
-    end
-
-    permissions :index? do
-      it "allows access" do
-        expect(subject).to permit(user, [group])
-      end
-
-      it "doesn't allow access" do
-        expect(subject).to_not permit(no_access, [group])
-      end
-    end
-
-    permissions :create? do
-      it "allows access" do
-        expect(subject).to permit(user, [group])
-      end
-
-      it "doesn't allow access" do
-        expect(subject).to_not permit(no_access, [group])
-      end
-    end
-
-    permissions :edit? do
-      it "allows access" do
-        expect(subject).to permit(user, [group])
-      end
-
-      it "doesn't allow access" do
-        expect(subject).to_not permit(no_access, [group])
-      end
-    end
-
-    permissions :update? do
-      it "allows access" do
-        expect(subject).to permit(user, [group])
-      end
-
-      it "doesn't allow access" do
-        expect(subject).to_not permit(no_access, [group])
-      end
-    end
-
-    permissions :destroy? do
-      it "allows access" do
-        expect(subject).to permit(user, [group])
-      end
-
-      it "doesn't allow access" do
-        expect(subject).to_not permit(no_access, [group])
-      end
-    end
+  context 'for users with no access' do
+    it { is_expected.to forbid_actions([:index, :show, :new, :create, :edit, :update, :destroy]) }
   end
 end

@@ -14,7 +14,7 @@ class SamlController < ApplicationController
       return
     end
     request = OneLogin::RubySaml::Authrequest.new
-    #TODO validate that relay state is url within diverst
+    # TODO validate that relay state is url within diverst
     redirect_to(request.create(settings, RelayState: params['RelayState']))
   end
 
@@ -26,7 +26,7 @@ class SamlController < ApplicationController
       nameid = response.nameid
       attrs = response.attributes
 
-      #Todo search only @enterprise for users
+      # Todo search only @enterprise for users
       unless user = User.find_by_email(nameid)
         user = User.new(auth_source: 'saml', enterprise: @enterprise)
 
@@ -59,13 +59,13 @@ class SamlController < ApplicationController
   def logout
     # If we're given a logout request, handle it in the IdP logout initiated method
     if params[:SAMLRequest]
-      return idp_logout_request
+      idp_logout_request
 
     # We've been given a response back from the IdP
     elsif params[:SAMLResponse]
-      return process_logout_response
+      process_logout_response
     elsif params[:slo]
-      return sp_logout_request
+      sp_logout_request
     else
       reset_session
     end

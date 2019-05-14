@@ -10,45 +10,50 @@ class Group < BaseClass
     :layout_2
   ]
 
-  enumerize :pending_users, default: :disabled,  in: [
+  enumerize :pending_users, default: :disabled, in: [
     :disabled,
     :enabled
   ]
 
-  enumerize :members_visibility, default: :managers_only, in:[
+  enumerize :members_visibility, default: :managers_only, in: [
     :global,
     :group,
     :managers_only
   ]
 
-  enumerize :messages_visibility, default: :managers_only, in:[
+  enumerize :messages_visibility, default: :managers_only, in: [
     :global,
     :group,
     :managers_only
   ]
 
-  enumerize :latest_news_visibility, default: :leaders_only, in:[
+  enumerize :latest_news_visibility, default: :leaders_only, in: [
     :public,
     :group,
     :leaders_only
   ]
 
   # :public and :non_member have their values defined in locales/en.yml
-  enumerize :upcoming_events_visibility, default: :leaders_only, in:[
+  enumerize :upcoming_events_visibility, default: :leaders_only, in: [
                                     :public,
                                     :group,
                                     :leaders_only,
                                     :non_member
                                   ]
+  enumerize :unit_of_expiry_age, default: :months, in: [
+    :weeks,
+    :months,
+    :years
+  ]
 
   belongs_to :enterprise
-  belongs_to :lead_manager, class_name: "User"
-  belongs_to :owner, class_name: "User"
+  belongs_to :lead_manager, class_name: 'User'
+  belongs_to :owner, class_name: 'User'
 
   has_one :news_feed, dependent: :destroy
 
-  delegate :news_feed_links,        :to => :news_feed
-  delegate :shared_news_feed_links, :to => :news_feed
+  delegate :news_feed_links,        to: :news_feed
+  delegate :shared_news_feed_links, to: :news_feed
 
   has_many :user_groups, dependent: :destroy
   has_many :members, through: :user_groups, class_name: 'User', source: :user
@@ -78,26 +83,26 @@ class Group < BaseClass
   has_many :answers, through: :questions
   has_many :answer_upvotes, through: :answers, source: :votes
   has_many :answer_comments, through: :answers, class_name: 'AnswerComment', source: :comments
-  belongs_to :lead_manager, class_name: "User"
-  belongs_to :owner, class_name: "User"
+  belongs_to :lead_manager, class_name: 'User'
+  belongs_to :owner, class_name: 'User'
   has_many :outcomes, dependent: :destroy
   has_many :pillars, through: :outcomes
   has_many :initiatives, through: :pillars
-  has_many :updates, class_name: "GroupUpdate", dependent: :destroy
+  has_many :updates, class_name: 'GroupUpdate', dependent: :destroy
   has_many :views, dependent: :destroy
 
-  has_many :fields, -> { where field_type: "regular"},
-    dependent: :delete_all
-  has_many :survey_fields, -> { where field_type: "group_survey"},
-    class_name: 'Field',
-    dependent: :delete_all
+  has_many :fields, -> { where field_type: 'regular' },
+           dependent: :delete_all
+  has_many :survey_fields, -> { where field_type: 'group_survey' },
+           class_name: 'Field',
+           dependent: :delete_all
 
   has_many :group_leaders, -> { order(position: :asc) }, dependent: :destroy
   has_many :leaders, through: :group_leaders, source: :user
   has_many :sponsors, as: :sponsorable, dependent: :destroy
 
-  has_many :children, class_name: "Group", foreign_key: :parent_id, dependent: :destroy
-  belongs_to :parent, class_name: "Group", foreign_key: :parent_id
+  has_many :children, class_name: 'Group', foreign_key: :parent_id, dependent: :destroy
+  belongs_to :parent, class_name: 'Group', foreign_key: :parent_id
   belongs_to :group_category
   belongs_to :group_category_type
 
@@ -111,7 +116,7 @@ class Group < BaseClass
   has_attached_file :banner
   validates_attachment_content_type :banner, content_type: /\Aimage\/.*\Z/
 
-  validates :name, presence: true, uniqueness: {scope: :enterprise_id }
+  validates :name, presence: true, uniqueness: { scope: :enterprise_id }
 
   validates_format_of :contact_email, with: Devise.email_regexp, allow_blank: true
 
@@ -129,6 +134,7 @@ class Group < BaseClass
   before_validation :smart_add_url_protocol
   after_create :create_news_feed
   after_update :accept_pending_members, unless: :pending_members_enabled?
+  after_update :resolve_auto_archive_state, if: :no_expiry_age_set_and_auto_archive_true?
 
   attr_accessor :skip_label_consistency_check
   validate :perform_check_for_consistency_in_category, on: [:create, :update], unless: :skip_label_consistency_check
@@ -137,17 +143,33 @@ class Group < BaseClass
   scope :by_enterprise, -> (e) { where(enterprise_id: e) }
   scope :top_participants,  -> (n) { order(total_weekly_points: :desc).limit(n) }
   # Active Record already has a defined a class method with the name private so we use is_private.
-  scope :is_private,        -> {where(:private => true)}
-  scope :non_private,       -> {where(:private => false)}
+  scope :is_private,        -> { where(private: true) }
+  scope :non_private,       -> { where(private: false) }
   # parents/children
-  scope :all_parents,     -> {where(:parent_id => nil)}
-  scope :all_children,    -> {where.not(:parent_id => nil)}
+  scope :all_parents,     -> { where(parent_id: nil) }
+  scope :all_children,    -> { where.not(parent_id: nil) }
 
   accepts_nested_attributes_for :outcomes, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :survey_fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :group_leaders, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :sponsors, reject_if: :all_blank, allow_destroy: true
+
+  def resolve_auto_archive_state
+    update(auto_archive: false)
+  end
+
+  def no_expiry_age_set_and_auto_archive_true?
+    return true if auto_archive? && (expiry_age_for_news == 0) && (expiry_age_for_events == 0) && (expiry_age_for_resources == 0)
+  end
+
+  def archive_switch
+    if auto_archive?
+      update(auto_archive: false)
+    else
+      update(auto_archive: true)
+    end
+  end
 
   def layout_values
     {
@@ -192,15 +214,16 @@ class Group < BaseClass
       return false
     end
 
-    return true
+    true
   end
 
   def yammer_group_id
     return nil if yammer_group_link.nil?
+
     eq_sign_position = yammer_group_link.rindex('=')
     return nil if eq_sign_position.nil?
 
-    group_id = yammer_group_link[(eq_sign_position+1)..yammer_group_link.length]
+    group_id = yammer_group_link[(eq_sign_position + 1)..yammer_group_link.length]
 
     group_id.to_i
   end
@@ -210,16 +233,17 @@ class Group < BaseClass
   end
 
   def approved_budget
-    (budgets.approved.map{ |b| b.requested_amount || 0 }).reduce(0, :+)
+    (budgets.approved.map { |b| b.requested_amount || 0 }).reduce(0, :+)
   end
 
   def available_budget
     return 0 unless annual_budget
+
     annual_budget - (approved_budget + spent_budget)
   end
 
   def spent_budget
-    (initiatives.map{ |i| i.current_expences_sum || 0 } ).reduce(0, :+)
+    (initiatives.map { |i| i.current_expences_sum || 0 }).reduce(0, :+)
   end
 
   def active_members
@@ -245,6 +269,12 @@ class Group < BaseClass
 
   def file_safe_name
     name.gsub(/[^0-9A-Za-z.\-]/, '_')
+  end
+
+  def logo_expiring_thumb
+    return nil if logo.blank?
+
+    logo.expiring_url(30, :thumb)
   end
 
   def possible_participating_groups
@@ -286,8 +316,8 @@ class Group < BaseClass
     end
   end
 
-  #Users who enters group have accepted flag set to false
-  #This sets flag to true
+  # Users who enters group have accepted flag set to false
+  # This sets flag to true
   def accept_user_to_group(user_id)
     user_group = user_groups.where(user_id: user_id).first
     return false if user_group.blank?
@@ -316,12 +346,12 @@ class Group < BaseClass
     end
   end
 
-  def membership_list_csv
-    total_nb_of_members = active_members.count
+  def membership_list_csv(group_members)
+    total_nb_of_members = group_members.count
     CSV.generate do |csv|
-      csv << ["first_name", "last_name", "email_address"]
+      csv << ['first_name', 'last_name', 'email_address']
 
-      active_members.each do |member|
+      group_members.each do |member|
         membership_list_row = [ member.first_name,
                                 member.last_name,
                                 member.email
@@ -329,14 +359,14 @@ class Group < BaseClass
         csv << membership_list_row
       end
 
-      csv << ["total", nil, "#{total_nb_of_members}"]
+      csv << ['total', nil, "#{total_nb_of_members}"]
     end
   end
 
   def budgets_csv
     CSV.generate do |csv|
       csv << ['Requested amount', 'Available amount', 'Status', 'Requested at', '# of events', 'Description']
-       self.budgets.order(created_at: :desc).each do |budget|
+      self.budgets.order(created_at: :desc).each do |budget|
         csv << [budget.requested_amount, budget.available_amount, budget.status_title, budget.created_at, budget.budget_items.count, budget.description]
       end
     end
@@ -379,6 +409,7 @@ class Group < BaseClass
 
   def smart_add_url_protocol
     return nil if company_video_url.blank?
+
     self.company_video_url = "http://#{company_video_url}" unless have_protocol?
   end
 
@@ -420,7 +451,7 @@ class Group < BaseClass
   def ensure_label_consistency_between_parent_and_sub_groups
     unless group_category.nil?
       if if_any_sub_group_category_type_not_equal_to_parent_category_type?
-        errors.add(:group_category_id, "chosen label inconsistent with labels of sub groups")
+        errors.add(:group_category_id, 'chosen label inconsistent with labels of sub groups')
       end
     end
   end
@@ -466,7 +497,7 @@ class Group < BaseClass
   def self.avg_members_per_group(enterprise:)
     group_sizes = UserGroup.where(group: enterprise.groups).group(:group).count.values
     return nil if group_sizes.length == 0
+
     group_sizes.sum / group_sizes.length
   end
-
 end

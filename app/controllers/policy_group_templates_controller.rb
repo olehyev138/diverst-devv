@@ -17,11 +17,11 @@ class PolicyGroupTemplatesController < ApplicationController
     authorize PolicyGroupTemplate
 
     if @policy_group_template.update(policy_group_template_params)
-      flash[:notice] = "Your policy group template was updated"
+      flash[:notice] = 'Your policy group template was updated'
       track_activity(@policy_group_template, :update)
       redirect_to action: :index
     else
-      flash[:alert] = "Your policy group template was not updated. Please fix the errors"
+      flash[:alert] = 'Your policy group template was not updated. Please fix the errors'
       render :edit
     end
   end
@@ -95,7 +95,8 @@ class PolicyGroupTemplatesController < ApplicationController
         :social_links_manage,
         :group_settings_manage,
         :group_posts_index,
-        :mentorship_manage
+        :mentorship_manage,
+        :auto_archive_manage
       )
   end
 end

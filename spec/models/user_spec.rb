@@ -3,40 +3,40 @@ require 'rails_helper'
 RSpec.describe User do
   include ActiveJob::TestHelper
 
-  describe "when validating" do
+  describe 'when validating' do
     let(:user) { build(:user) }
 
     it { expect(user).to define_enum_for(:groups_notifications_frequency).with([:hourly, :daily, :weekly, :disabled]) }
     it { expect(user).to define_enum_for(:groups_notifications_date).with([:sunday, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday]) }
 
-    describe "#notifications_date" do
-      it "returns sunday" do
-        user = create(:user, :groups_notifications_date => 0)
-        expect(user.groups_notifications_date).to eq("sunday")
+    describe '#notifications_date' do
+      it 'returns sunday' do
+        user = create(:user, groups_notifications_date: 0)
+        expect(user.groups_notifications_date).to eq('sunday')
       end
-      it "returns default monday" do
-        user = create(:user, :groups_notifications_date => 1)
-        expect(user.groups_notifications_date).to eq("monday")
+      it 'returns default monday' do
+        user = create(:user, groups_notifications_date: 1)
+        expect(user.groups_notifications_date).to eq('monday')
       end
-      it "returns tuesday" do
-        user = create(:user, :groups_notifications_date => 2)
-        expect(user.groups_notifications_date).to eq("tuesday")
+      it 'returns tuesday' do
+        user = create(:user, groups_notifications_date: 2)
+        expect(user.groups_notifications_date).to eq('tuesday')
       end
-      it "returns wednesday" do
-        user = create(:user, :groups_notifications_date => 3)
-        expect(user.groups_notifications_date).to eq("wednesday")
+      it 'returns wednesday' do
+        user = create(:user, groups_notifications_date: 3)
+        expect(user.groups_notifications_date).to eq('wednesday')
       end
-      it "returns thursday" do
-        user = create(:user, :groups_notifications_date => 4)
-        expect(user.groups_notifications_date).to eq("thursday")
+      it 'returns thursday' do
+        user = create(:user, groups_notifications_date: 4)
+        expect(user.groups_notifications_date).to eq('thursday')
       end
-      it "returns default friday" do
+      it 'returns default friday' do
         user = create(:user)
-        expect(user.groups_notifications_date).to eq("friday")
+        expect(user.groups_notifications_date).to eq('friday')
       end
-      it "returns saturday" do
-        user = create(:user, :groups_notifications_date => 6)
-        expect(user.groups_notifications_date).to eq("saturday")
+      it 'returns saturday' do
+        user = create(:user, groups_notifications_date: 6)
+        expect(user.groups_notifications_date).to eq('saturday')
       end
     end
 
@@ -63,10 +63,10 @@ RSpec.describe User do
         it { expect(user).to have_many(:poll_responses) }
         it { expect(user).to have_many(:answers).inverse_of(:author).with_foreign_key(:author_id) }
         it { expect(user).to have_many(:answer_upvotes).with_foreign_key(:author_id) }
-        it { expect(user).to have_many(:answer_comments).with_foreign_key(:author_id)}
+        it { expect(user).to have_many(:answer_comments).with_foreign_key(:author_id) }
         it { expect(user).to have_many(:invitations).class_name('CampaignInvitation') }
         it { expect(user).to have_many(:campaigns).through(:invitations) }
-        it { expect(user).to have_many(:news_links).through(:groups)}
+        it { expect(user).to have_many(:news_links).through(:groups) }
         it { expect(user).to have_many(:own_news_links).class_name('NewsLink').with_foreign_key(:author_id) }
         it { expect(user).to have_many(:messages).through(:groups) }
         it { expect(user).to have_many(:message_comments).class_name('GroupMessageComment').with_foreign_key(:author_id) }
@@ -86,7 +86,7 @@ RSpec.describe User do
 
       context 'validate paperclip' do
         it { expect(user).to have_attached_file(:avatar) }
-        it { expect(user).to validate_attachment_content_type(:avatar).allowing('image/png', 'image/gif').rejecting('text/plain', 'text/xml' ) }
+        it { expect(user).to validate_attachment_content_type(:avatar).allowing('image/png', 'image/gif').rejecting('text/plain', 'text/xml') }
       end
     end
 
@@ -147,24 +147,24 @@ RSpec.describe User do
         let!(:user2) { create :user, created_at: 20.days.ago, updated_at: 20.days.ago }
 
         it 'deletes user younger than 14 days' do
-          expect{ user1.destroy }.to change(User, :count).by(-1)
+          expect { user1.destroy }.to change(User, :count).by(-1)
         end
 
         it 'does not deletes user older than 14 days' do
-          expect{ user2.destroy }.to change(User, :count).by(0)
+          expect { user2.destroy }.to change(User, :count).by(0)
         end
       end
     end
 
     context 'presence of fields' do
-      let(:user){ build(:user, enterprise: enterprise) }
-      let!(:mandatory_field){ build(:field, title: "Test", required: true) }
+      let(:user) { build(:user, enterprise: enterprise) }
+      let!(:mandatory_field) { build(:field, title: 'Test', required: true) }
 
       context 'with mandatory fields not filled' do
-        let!(:enterprise){ create(:enterprise, fields: [mandatory_field]) }
+        let!(:enterprise) { create(:enterprise, fields: [mandatory_field]) }
 
-        it "should have an error on user" do
-          user.info[mandatory_field] = ""
+        it 'should have an error on user' do
+          user.info[mandatory_field] = ''
           user.valid?
 
           expect(user.errors.messages).to eq({ test: ["can't be blank"] })
@@ -172,9 +172,9 @@ RSpec.describe User do
       end
 
       context 'with mandatory fields filled' do
-        let!(:enterprise){ create(:enterprise, fields: [mandatory_field]) }
+        let!(:enterprise) { create(:enterprise, fields: [mandatory_field]) }
 
-        it "should be valid" do
+        it 'should be valid' do
           user.info[mandatory_field] = Faker::Lorem.paragraph(2)
 
           expect(user).to be_valid
@@ -184,9 +184,9 @@ RSpec.describe User do
   end
 
   describe 'when describing callbacks' do
-    let!(:user){ create(:user) }
+    let!(:user) { create(:user) }
 
-    it "should index user on elasticsearch after create", skip: true do
+    it 'should index user on elasticsearch after create', skip: true do
       user = build(:user)
       TestAfterCommit.with_commits(true) do
         expect(IndexElasticsearchJob).to receive(:perform_later).with(
@@ -199,7 +199,7 @@ RSpec.describe User do
       end
     end
 
-    it "should reindex user on elasticsearch after update", skip: true do
+    it 'should reindex user on elasticsearch after update', skip: true do
       TestAfterCommit.with_commits(true) do
         expect(IndexElasticsearchJob).to receive(:perform_later).with(
           model_name: 'User',
@@ -211,7 +211,7 @@ RSpec.describe User do
       end
     end
 
-    it "should remove user from elasticsearch after destroy", skip: true do
+    it 'should remove user from elasticsearch after destroy', skip: true do
       TestAfterCommit.with_commits(true) do
         expect(IndexElasticsearchJob).to receive(:perform_later).with(
           model_name: 'User',
@@ -284,9 +284,9 @@ RSpec.describe User do
     subject { user.erg_leader? }
 
     context 'when user is a leader of an erg' do
-      before  do
-        create(:user_group, :user => user, :group => group, :accepted_member => true)
-        group.group_leaders << GroupLeader.new(group: group, user: user, position_name: 'blah', user_role: user.enterprise.user_roles.where(:role_name => "group_leader").first)
+      before do
+        create(:user_group, user: user, group: group, accepted_member: true)
+        group.group_leaders << GroupLeader.new(group: group, user: user, position_name: 'blah', user_role: user.enterprise.user_roles.where(role_name: 'group_leader').first)
       end
 
       it 'returns true' do
@@ -302,9 +302,9 @@ RSpec.describe User do
   end
 
   describe '#badges' do
-    let(:user){ build_stubbed(:user, points: 100) }
-    let(:badge_one){ create(:badge, points: 100) }
-    let(:badge_two){ create(:badge, points: 101) }
+    let(:user) { build_stubbed(:user, points: 100) }
+    let(:badge_one) { create(:badge, points: 100) }
+    let(:badge_two) { create(:badge, points: 101) }
 
     it 'returns the badges based on how much points a user has' do
       expect(user.badges).to eq [badge_one]
@@ -312,7 +312,7 @@ RSpec.describe User do
   end
 
   describe '#active_group_member?' do
-    let!(:enterprise) { create(:enterprise)}
+    let!(:enterprise) { create(:enterprise) }
     let!(:user) { create(:user, enterprise: enterprise) }
     let!(:group) { create(:group, enterprise: enterprise, pending_users: 'enabled') }
 
@@ -346,28 +346,28 @@ RSpec.describe User do
     end
   end
 
-  describe "#name" do
-    let(:user){ build_stubbed(:user, first_name: "John", last_name: "Doe") }
+  describe '#name' do
+    let(:user) { build_stubbed(:user, first_name: 'John', last_name: 'Doe') }
 
-    it "return the full name of user" do
-      expect(user.name).to eq "John Doe"
+    it 'return the full name of user' do
+      expect(user.name).to eq 'John Doe'
     end
   end
 
-  describe "#name_with_status" do
-    context "of an active user" do
-      let(:user){ build_stubbed(:user, first_name: "John", last_name: "Doe", active: true) }
+  describe '#name_with_status' do
+    context 'of an active user' do
+      let(:user) { build_stubbed(:user, first_name: 'John', last_name: 'Doe', active: true) }
 
-      it "return the full name of user" do
-        expect(user.name_with_status).to eq "John Doe"
+      it 'return the full name of user' do
+        expect(user.name_with_status).to eq 'John Doe'
       end
     end
 
-    context "of an inactive user" do
-      let(:user){ build_stubbed(:user, first_name: "John", last_name: "Doe", active: false) }
+    context 'of an inactive user' do
+      let(:user) { build_stubbed(:user, first_name: 'John', last_name: 'Doe', active: false) }
 
-      it "return the full name of user with status" do
-        expect(user.name_with_status).to eq "John Doe (inactive)"
+      it 'return the full name of user with status' do
+        expect(user.name_with_status).to eq 'John Doe (inactive)'
       end
     end
   end
@@ -417,7 +417,7 @@ RSpec.describe User do
 
   describe 'elasticsearch methods', skip: true do
     it '.es_index_name' do
-      expect(User.index_name).to eq "users"
+      expect(User.index_name).to eq 'users'
     end
 
     context '#as_indexed_json' do
@@ -429,7 +429,7 @@ RSpec.describe User do
 
       let!(:user) do
         user = build(:user, enterprise: enterprise)
-        user.info.merge(fields: user.enterprise.fields, form_data: { user.enterprise.fields.first.id => "No" })
+        user.info.merge(fields: user.enterprise.fields, form_data: { user.enterprise.fields.first.id => 'No' })
         user
       end
 
@@ -437,7 +437,7 @@ RSpec.describe User do
 
       let!(:poll_response) do
         poll_response = build(:poll_response, user: user, poll: poll)
-        poll_response.info.merge(fields: poll.fields, form_data: { poll.fields.first.id => "Yes" })
+        poll_response.info.merge(fields: poll.fields, form_data: { poll.fields.first.id => 'Yes' })
         poll_response.save
         poll_response
       end
@@ -447,8 +447,8 @@ RSpec.describe User do
 
       it 'return data of user to be indexed by elasticsearch' do
         data = {
-          "#{ user.enterprise.fields.first.id }" => "No",
-          poll.fields.first.id => ["Yes"],
+          "#{ user.enterprise.fields.first.id }" => 'No',
+          poll.fields.first.id => ['Yes'],
         }
 
         expect(user.as_indexed_json['combined_info']).to eq(data.merge(user.info_hash))
@@ -462,75 +462,75 @@ RSpec.describe User do
     end
   end
 
-  describe "#group_leader_role" do
-    it "raises an User is not a group leader error" do
+  describe '#group_leader_role' do
+    it 'raises an User is not a group leader error' do
       user = create(:user)
-      user.user_role = user.enterprise.user_roles.where(:role_name => "group_leader").first
+      user.user_role = user.enterprise.user_roles.where(role_name: 'group_leader').first
       user.save
 
-      expect(user.errors.full_messages.first).to eq("User role Cannot set user role to a group role")
+      expect(user.errors.full_messages.first).to eq('User role Cannot set user role to a group role')
     end
   end
 
-  describe "#is_admin?" do
-    it "returns true" do
+  describe '#is_admin?' do
+    it 'returns true' do
       user = create(:user)
       expect(user.is_admin?).to be(true)
     end
   end
 
-  describe "#destroy_callbacks" do
-    it "removes the child objects" do
+  describe '#destroy_callbacks' do
+    it 'removes the child objects' do
       user = create(:user)
-      users_segment = create(:users_segment, :user => user)
-      user_group = create(:user_group, :user => user, :accepted_member => true)
-      topic_feedback = create(:topic_feedback, :user => user)
-      #poll_response = create(:poll_response, :user => user)
-      answer = create(:answer, :author => user)
-      answer_upvote = create(:answer_upvote, :author_id => user.id)
-      answer_comment = create(:answer_comment, :author_id => user.id)
-      campaign_invitation = create(:campaign_invitation, :user => user)
-      news_link = create(:news_link, :author_id => user.id)
-      group_message_comment = create(:group_message_comment, :author_id => user.id)
-      social_link = create(:social_link, :author_id => user.id)
-      initiative_user = create(:initiative_user, :user => user)
-      initiative_invitee = create(:initiative_invitee, :user => user)
-      #sample = create(:sample, :user => user)
-      group_leader = create(:group_leader, :user => user, group: user_group.group)
-      user_reward_action = create(:user_reward_action, :user => user)
-      #reward = create(:reward, :responsible_id => user.id)
+      users_segment = create(:users_segment, user: user)
+      user_group = create(:user_group, user: user, accepted_member: true)
+      topic_feedback = create(:topic_feedback, user: user)
+      # poll_response = create(:poll_response, :user => user)
+      answer = create(:answer, author: user)
+      answer_upvote = create(:answer_upvote, author_id: user.id)
+      answer_comment = create(:answer_comment, author_id: user.id)
+      campaign_invitation = create(:campaign_invitation, user: user)
+      news_link = create(:news_link, author_id: user.id)
+      group_message_comment = create(:group_message_comment, author_id: user.id)
+      social_link = create(:social_link, author_id: user.id)
+      initiative_user = create(:initiative_user, user: user)
+      initiative_invitee = create(:initiative_invitee, user: user)
+      # sample = create(:sample, :user => user)
+      group_leader = create(:group_leader, user: user, group: user_group.group)
+      user_reward_action = create(:user_reward_action, user: user)
+      # reward = create(:reward, :responsible_id => user.id)
 
       policy_group = user.policy_group
 
       user.destroy
 
-      expect{User.find(user.id)}.to raise_error(ActiveRecord::RecordNotFound)
-      expect{PolicyGroup.find(policy_group.id)}.to raise_error(ActiveRecord::RecordNotFound)
-      expect{UsersSegment.find(users_segment.id)}.to raise_error(ActiveRecord::RecordNotFound)
-      expect{UserGroup.find(user_group.id)}.to raise_error(ActiveRecord::RecordNotFound)
-      expect{TopicFeedback.find(topic_feedback.id)}.to raise_error(ActiveRecord::RecordNotFound)
-      expect{UsersSegment.find(users_segment.id)}.to raise_error(ActiveRecord::RecordNotFound)
-      #expect{PollResponse.find(poll_response.id)}.to raise_error(ActiveRecord::RecordNotFound)
-      expect{Answer.find(answer.id)}.to raise_error(ActiveRecord::RecordNotFound)
-      expect{AnswerUpvote.find(answer_upvote.id)}.to raise_error(ActiveRecord::RecordNotFound)
-      expect{AnswerComment.find(answer_comment.id)}.to raise_error(ActiveRecord::RecordNotFound)
-      expect{CampaignInvitation.find(campaign_invitation.id)}.to raise_error(ActiveRecord::RecordNotFound)
-      expect{NewsLink.find(news_link.id)}.to raise_error(ActiveRecord::RecordNotFound)
-      expect{GroupMessageComment.find(group_message_comment.id)}.to raise_error(ActiveRecord::RecordNotFound)
-      expect{SocialLink.find(social_link.id)}.to raise_error(ActiveRecord::RecordNotFound)
-      expect{InitiativeUser.find(initiative_user.id)}.to raise_error(ActiveRecord::RecordNotFound)
-      expect{InitiativeInvitee.find(initiative_invitee.id)}.to raise_error(ActiveRecord::RecordNotFound)
-      #expect{Sample.find(sample.id)}.to raise_error(ActiveRecord::RecordNotFound)
-      expect{GroupLeader.find(group_leader.id)}.to raise_error(ActiveRecord::RecordNotFound)
-      expect{UserRewardAction.find(user_reward_action.id)}.to raise_error(ActiveRecord::RecordNotFound)
-      #expect{Reward.find(reward.id)}.to raise_error(ActiveRecord::RecordNotFound)
+      expect { User.find(user.id) }.to raise_error(ActiveRecord::RecordNotFound)
+      expect { PolicyGroup.find(policy_group.id) }.to raise_error(ActiveRecord::RecordNotFound)
+      expect { UsersSegment.find(users_segment.id) }.to raise_error(ActiveRecord::RecordNotFound)
+      expect { UserGroup.find(user_group.id) }.to raise_error(ActiveRecord::RecordNotFound)
+      expect { TopicFeedback.find(topic_feedback.id) }.to raise_error(ActiveRecord::RecordNotFound)
+      expect { UsersSegment.find(users_segment.id) }.to raise_error(ActiveRecord::RecordNotFound)
+      # expect{PollResponse.find(poll_response.id)}.to raise_error(ActiveRecord::RecordNotFound)
+      expect { Answer.find(answer.id) }.to raise_error(ActiveRecord::RecordNotFound)
+      expect { AnswerUpvote.find(answer_upvote.id) }.to raise_error(ActiveRecord::RecordNotFound)
+      expect { AnswerComment.find(answer_comment.id) }.to raise_error(ActiveRecord::RecordNotFound)
+      expect { CampaignInvitation.find(campaign_invitation.id) }.to raise_error(ActiveRecord::RecordNotFound)
+      expect { NewsLink.find(news_link.id) }.to raise_error(ActiveRecord::RecordNotFound)
+      expect { GroupMessageComment.find(group_message_comment.id) }.to raise_error(ActiveRecord::RecordNotFound)
+      expect { SocialLink.find(social_link.id) }.to raise_error(ActiveRecord::RecordNotFound)
+      expect { InitiativeUser.find(initiative_user.id) }.to raise_error(ActiveRecord::RecordNotFound)
+      expect { InitiativeInvitee.find(initiative_invitee.id) }.to raise_error(ActiveRecord::RecordNotFound)
+      # expect{Sample.find(sample.id)}.to raise_error(ActiveRecord::RecordNotFound)
+      expect { GroupLeader.find(group_leader.id) }.to raise_error(ActiveRecord::RecordNotFound)
+      expect { UserRewardAction.find(user_reward_action.id) }.to raise_error(ActiveRecord::RecordNotFound)
+      # expect{Reward.find(reward.id)}.to raise_error(ActiveRecord::RecordNotFound)
     end
   end
 
-  describe "mentorship" do
-    it "goes through whole workflow" do
+  describe 'mentorship' do
+    it 'goes through whole workflow' do
       # create a user interested in being mentored
-      mentee = create(:user, :mentee => true)
+      mentee = create(:user, mentee: true)
 
       # the mentorship doesn't have any mentors/mentees/availability/
       # mentorship_types/mentoring_interests
@@ -547,8 +547,8 @@ RSpec.describe User do
       expect(mentee.mentorship_ratings.count).to eq(0)
 
       # sending a request for mentorship to a mentor
-      mentor = create(:user, :mentor => true)
-      mentorship_request = create(:mentoring_request, :sender => mentee, :receiver => mentor)
+      mentor = create(:user, mentor: true)
+      mentorship_request = create(:mentoring_request, sender: mentee, receiver: mentor)
 
       # check the request
       expect(mentorship_request.valid?).to be(true)
@@ -562,19 +562,19 @@ RSpec.describe User do
       expect(mentor.mentorship_proposals.count).to eq(0)
 
       # schedule a session
-      mentoring_session = create(:mentoring_session, :mentorship_sessions_attributes => [{:user_id => mentor.id, :role => "presenter"}, {:user_id => mentee.id, :role => "attendee" }])
+      mentoring_session = create(:mentoring_session, mentorship_sessions_attributes: [{ user_id: mentor.id, role: 'presenter' }, { user_id: mentee.id, role: 'attendee' }])
 
       # check the session
       expect(mentoring_session.valid?).to be(true)
-      expect(mentoring_session.status).to eq("scheduled")
+      expect(mentoring_session.status).to eq('scheduled')
       expect(mentoring_session.users.count).to eq(2)
 
       # leave some ratings
-      mentor_rating = build(:mentorship_rating, :user => mentor, :mentoring_session => mentoring_session)
-      mentee_rating = build(:mentorship_rating, :user => mentee, :mentoring_session => mentoring_session)
+      mentor_rating = build(:mentorship_rating, user: mentor, mentoring_session: mentoring_session)
+      mentee_rating = build(:mentorship_rating, user: mentee, mentoring_session: mentoring_session)
 
-      mentor_rating.comments = "This is the best mentor ever"
-      mentee_rating.comments = "Mentee was a great listener"
+      mentor_rating.comments = 'This is the best mentor ever'
+      mentee_rating.comments = 'Mentee was a great listener'
 
       mentor_rating.save!
       mentee_rating.save!
@@ -584,12 +584,12 @@ RSpec.describe User do
     end
   end
 
-  describe "#add_to_default_mentor_group" do
-    it "adds the user to the default_mentor_group then removes the user" do
+  describe '#add_to_default_mentor_group' do
+    it 'adds the user to the default_mentor_group then removes the user' do
       perform_enqueued_jobs do
         enterprise = create(:enterprise)
-        user = create(:user, :enterprise => enterprise)
-        group = create(:group, :enterprise => enterprise, :default_mentor_group => true)
+        user = create(:user, enterprise: enterprise)
+        group = create(:group, enterprise: enterprise, default_mentor_group: true)
 
         expect(user.mentor).to be(false)
         expect(user.mentee).to be(false)

@@ -5,7 +5,7 @@ module BaseGraph
 
   module ClassMethods
     # Returns an instance of GraphBuilder
-    def get_graph
+    def get_graph_builder
       GraphBuilder.new(self)
     end
   end
@@ -51,7 +51,7 @@ module BaseGraph
     end
 
     def set_enterprise_filter(field: 'enterprise_id', value:)
-      @enterprise_filter = { field: field, value: value  }
+      @enterprise_filter = { field: field, value: value }
     end
 
     # Query elasticsearch with the current query object and enterprise filter
@@ -72,6 +72,14 @@ module BaseGraph
       @instance.get_query
     end
 
+    def get_new_parser
+      ElasticsearchParser.new
+    end
+
+    def get_new_formatter
+      Nvd3Formatter.new
+    end
+
     # Helpers
     #  - Helpers are methods for building common 'types' of graphs
     #  - Generally a helper should take care of all searching and formatting
@@ -84,8 +92,8 @@ module BaseGraph
       parents_query = @instance.get_query
         .agg(type: 'missing', field: parent_field) { |_| @query }
 
-      parents = @formatter.list_parser
-        .parse_list(@instance.search(parents_query, @enterprise_filter))
+      parents = @formatter.parser
+        .get_elements(@instance.search(parents_query, @enterprise_filter))
 
       # For each parent, run current set query on all children
       parents.each do |parent|
@@ -97,37 +105,45 @@ module BaseGraph
         children_query = @instance.get_query
           .filter_agg(field: parent_field, value: parent_key) { |_| @query }
 
-        children = @instance.search(children_query, @enterprise_filter)
+        children = @formatter.parser
+          .get_elements(@instance.search(children_query, @enterprise_filter))
 
         # Add current parent with all its children
         @formatter.add_element(parent, children: children, element_key: parent_key)
       end
-
-      self
     end
 
     def stacked_nested_terms(elements)
-      formatter.list_parser.parse_chain = formatter.list_parser.nested_terms_list
-      formatter.y_parser.parse_chain = formatter.y_parser.date_range
+      # Reformats an es nested terms response to a nvd3 stacked/grouped bar chart
+      # ES has all child buckets logically nested inside parent bucket
+      # Nvd3 represents each child element/'stack' as a seperate *series*
+      #  ex: Ergs aggregated on certifications would have each certification name as
+      #      a seperate series. Ie all elements for cert-01 would be in the cert-01 series
+      #      Each elements key in a series is set to the parents element name.
+      #      This ties elements to a parent and sets the y axis label
+      #  structure: [ { series: 'cert-01', values: [ { key: 'group-01', value: 5 } ] },
+      #               { series: 'cert-02', values: [ { key: 'group-01', values: 9} ] } ]
+
+      parser = formatter.parser
+      custom_parser = get_new_parser
+      child_element_extractor = parser.nested_terms_list
 
       elements.each do |element|
-        key = formatter.general_parser.parse(element)
+        parent_name = custom_parser.parse(element)[:x]
 
-        formatter.list_parser.parse_list(element).each do |sub_element|
-          series_name = formatter.general_parser.parse(sub_element)
+        parser.get_elements(element, extractor: child_element_extractor).each do |child_element|
+          child_name = custom_parser.parse(child_element)[:x]
 
-          formatter.add_series(series_name: series_name)
-          formatter.x_parser.extractor = -> (_, args) { args[:key] }
-          formatter.add_element(sub_element, series_key: series_name, key: key)
+          formatter.add_series(series_name: child_name)
+          parser.extractors[:x] = -> (_, args) { args[:parent_name] }
+          parser.extractors[:y] = parser.date_range(key: :doc_count)
+          formatter.add_element(child_element, series_key: child_name, parent_name: parent_name)
         end
       end
 
       self
     end
   end
-
-  # Define formatting interface here - TODO
-
 
   # Formats & Parses elasticsearch responses to a Nvd3 Format
   # General Nvd3 data structure:
@@ -152,21 +168,15 @@ module BaseGraph
   #    - A children hash is a hash with key identifying parent and a list of data points
   #        - Children data points may not have children of there own. This limits the Nvd3 structure to ONE sublevel of datapoints
   class Nvd3Formatter
-    attr_accessor :title, :x_label, :y_label, :type,
-      :x_parser, :y_parser, :list_parser, :key_parser, :general_parser,
-      :filter_zeros
+    attr_accessor :title, :x_label, :y_label, :type, :filter_zeros, :parser
 
     def initialize
-      @x_parser = ElasticsearchParser.new(key: ElasticsearchParser::ELASTICSEARCH_KEY)
-      @y_parser = ElasticsearchParser.new(key: ElasticsearchParser::ELASTICSEARCH_DOC_COUNT)
-      @list_parser = ElasticsearchParser.new
-      @key_parser = @x_parser
-      @general_parser = ElasticsearchParser.new
-
       @filter_zeros = true
 
       @title = 'Default Graph'
       @type = 'bar'
+
+      @parser = ElasticsearchParser.new
 
       @series_index = -1
       @data = {
@@ -210,8 +220,8 @@ module BaseGraph
     # Key is the thing that uniquely identifes the item
     # Usually this is the same as the x value, but not always
     # @element - the element to parse
-    def get_element_key(element)
-      @key_parser.parse(element)
+    def get_element_key(element, key: :x)
+      @parser.parse(element)[key]
     end
 
     # Add a new series
@@ -236,6 +246,7 @@ module BaseGraph
         @data[:series].each_with_index do |series, i|
           @data[:series][i][:values] = series[:values].select { |e| e[:x] != 0 && e[:y] != 0 }
         end
+
       end
 
       @data
@@ -250,84 +261,116 @@ module BaseGraph
     end
 
     def format_element(element, **args)
-      {
-        x: @x_parser.parse(element, args),
-        y: @y_parser.parse(element, args),
-        children: {}
-      }
+      values = @parser.parse(element, args)
+      values[:children] = {}
+      values
     end
   end
 
-  # Parse a elasticsearch response
-  # Pulls a single value out of an elasticsearch response
+  # Parse an elasticsearch response
+  # - ElasticsearchParser works in the same fashion as ElasticsearchQuery
+  # - Contains a list of small methods which return lambdas that parse a
+  #   specific aggregation type. Not all aggregations change the response format,
+  #   so these are not included
+  # - These lambdas can be nested to any level to match a nested aggregation query
+  # - Ex: If you ran a date range with a sum nested inside, you would call the
+  #   date_range method and then nest sum inside
+  #     - like so: parser.date_range { |p| p.sum(key: :doc_count) }
+  #   - We call these lambdas extractors. An extractor when run, extracts or parses
+  #     one value from the elasticsearch response.
+  # - ElasticsearchParser has public hash called 'extractors' to store a list of these
+  #   lambdas. The key for each lambda is the name or label you want to call the value it extracts
+  # - The workflow is something like this:
+  #  -  1) You build up the extractors hash to any degree
+  #         ex: parser.extractors[:x] = parser.date_range { |p| p.sum(key: :doc_count) }
+  #  -  2) You run parse, passing a single elasticsearch element,
+  #        parse runs through the extractors hash building a 'values' hash,
+  #        each key,value pair is the key of the extractor and the return value of the extractor
+  #        ex: a extractos hash like: { x: <lambda_x>  } maps to: { x: <lambda_x_return_value> }
+  #
+  #  ElasticsearchParser also has a method: 'get_elements'
+  #  'get_elements' takes a type of extractor that returns a list of elements, which can then
+  #  be iterated over, each being passed to 'parse'
   class ElasticsearchParser
-    ELASTICSEARCH_KEY = :key
-    ELASTICSEARCH_DOC_COUNT = :doc_count
-
-    attr_accessor :parse_chain, :key, :extractor
+    attr_accessor :extractors
 
     def initialize(key: :key)
-      @key = key
-      @parse_chain = -> (e) { e }
+      @extractors = {
+        x: -> (e, _) { e[:key] },
+        y: -> (e, _) { e[:doc_count] }
+      }
     end
 
-    def date_range(&block)
+    def date_range(key: nil, &block)
       inner = yield self if block_given?
 
-      -> (e) {
+      -> (e, args) {
         e = e.try(:agg).try(:buckets).try(:dig, 0) || 0
-        (inner) ? inner.call(e) : e
+        (inner) ? inner.call(e, args) : (e.try(:dig, key) || 0)
       }
     end
 
-    def agg(&block)
+    def agg(key: nil, &block)
       inner = yield self if block_given?
 
-      -> (e) {
+      -> (e, args) {
         e = e.try(:agg) || 0
-        (inner) ? inner.call(e) : e
+        (inner) ? inner.call(e, args) : (e.try(:dig, key) || 0)
       }
     end
 
-    def sum(&block)
+    def sum(key: nil, &block)
       inner = yield self if block_given?
 
-      -> (e) {
+      -> (e, args) {
         e = e.try(:agg).dig(:value) || 0
+        (inner) ? inner.call(e, args) : (e.try(:dig, key) || 0)
+      }
+    end
+
+    def top_hits(key: nil, &block)
+      inner = yield self if block_given?
+
+      -> (e, args) {
+        e = e.try(:agg).try(:hits).try(:hits).try(:dig, 0, '_source') || 0
+        (inner) ? inner.call(e, args) : (e.try(:dig, key) || 0)
+      }
+    end
+
+    def custom(custom_extractor, &block)
+      inner = yield self if block_given?
+
+      -> (e, args) {
+        e = custom_extractor.call(e, args)
         (inner) ? inner.call(e) : e
       }
     end
-
-    # Parse a top hits aggregation
-    # Must be run last, can not nest anything inside except custom parser
-    def top_hits
-      -> (e) {
-        e.try(:agg).try(:hits).try(:hits).try(:dig, 0, '_source') || 0
-      }
-    end
-
-    # list parsers
 
     def nested_terms_list(&block)
       inner = yield self if block_given?
 
-      -> (e) {
+      -> (e, args) {
         e = e.try(:agg).try(:buckets) || []
-        (inner) ? inner.call(e) : e
+        (inner) ? inner.call(e, args) : e
       }
     end
 
-    # Run the parser on an elasticsearch response
-    def parse(element, **args)
-      if @extractor.present?
-        @extractor.call(@parse_chain.call(element), args)
-      else
-        @parse_chain.call(element)[@key]
-      end
+    # parse a es response to return a list of elements
+    def get_elements(response, extractor: nil, **args)
+      return response if extractor.blank?
+
+      extractor.call(response, args)
     end
 
-    def parse_list(element)
-      @parse_chain.call(element)
+    # Run the parser on an elasticsearch element
+    def parse(element, **args)
+      values = {}
+
+      @extractors.each do |label, extractor|
+        values[label] = extractor.call(element, args)
+      end
+
+      values
     end
   end
 end

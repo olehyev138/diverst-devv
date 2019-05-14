@@ -1,221 +1,214 @@
 require 'rails_helper'
 
-RSpec.describe InitiativePolicy, :type => :policy do
-
-  let(:enterprise) {create(:enterprise)}
-  let(:user){ create(:user, :enterprise => enterprise) }
-  let(:no_access) { create(:user) }
-  let(:group) { create :group, enterprise: user.enterprise }
-  let(:outcome) {create :outcome, group_id: group.id}
-  let(:pillar) { create :pillar, outcome_id: outcome.id}
-  let(:initiative) { create :initiative, pillar: pillar, owner_group: group, owner: user}
+RSpec.describe InitiativePolicy, type: :policy do
+  let(:enterprise) { create(:enterprise) }
+  let(:no_access) { create(:user, enterprise: enterprise) }
+  let(:user) { no_access }
+  let(:group) { create :group, enterprise: enterprise }
+  let(:outcome) { create :outcome, group_id: group.id }
+  let(:pillar) { create :pillar, outcome_id: outcome.id }
+  let(:initiative) { create :initiative, pillar: pillar, owner_group: group, owner: user }
   let(:policy_scope) { InitiativePolicy::Scope.new(user, Initiative).resolve }
 
-  subject { described_class }
+  subject { described_class.new(user, initiative) }
 
   before {
-    user.policy_group.manage_all = false
-    user.policy_group.save!
-
     no_access.policy_group.manage_all = false
     no_access.policy_group.initiatives_manage = false
     no_access.policy_group.initiatives_index = false
     no_access.policy_group.initiatives_create = false
     no_access.policy_group.save!
 
-    initiative.group.enterprise_id = user.enterprise.id
+    initiative.group.enterprise_id = enterprise.id
   }
 
-  permissions :index?, :show?, :create?, :manage?, :update?, :destroy? do
+  permissions '.scope' do
+    context 'when manage_all is true' do
+      before { user.policy_group.update manage_all: true }
 
-    it "allows access" do
-      expect(subject).to permit(user, initiative)
-    end
-
-    it "doesn't allow access" do
-      expect(subject).to_not permit(no_access, initiative)
-    end
-  end
-
-  permissions :index?, :show?, :create?, :update?, :destroy? do
-    it "allows access when user is not a manager" do
-      user.policy_group.initiatives_manage = false
-
-      expect(subject).to permit(user, initiative)
+      it 'shows only initiatives belonging to enterprise' do
+        expect(policy_scope).to eq [initiative]
+      end
     end
   end
 
-  permissions :index? do
-    it 'allows access when only initiatives_index is true' do
-      user.policy_group.initiatives_manage = false
-      user.policy_group.initiatives_create = false
+  describe 'for users with access' do
+    context 'when manage_all is false' do
+      context 'when current user IS NOT owner' do
+        before { initiative.owner = create(:user) }
 
-      expect(subject).to permit(user, initiative)
+        context 'when initiatives_index is true' do
+          before { user.policy_group.update initiatives_index: true }
+          it { is_expected.to permit_actions([:index, :show]) }
+        end
+
+        context 'user has basic group leader permission for initiatives_index' do
+          before do
+            user_role = create(:user_role, enterprise: enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
+            user_role.policy_group_template.update initiatives_index: true
+            group = create(:group, enterprise: enterprise)
+            create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
+                                  user_role_id: user_role.id)
+          end
+
+          it { is_expected.to permit_actions([:index, :show]) }
+        end
+
+        context 'when initiatives_create is true' do
+          before { user.policy_group.update initiatives_create: true }
+          it { is_expected.to permit_actions([:index, :show, :create]) }
+        end
+
+        context 'user has basic group leader permission for initiatives_create' do
+          before do
+            user_role = create(:user_role, enterprise: enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
+            user_role.policy_group_template.update initiatives_create: true
+            group = create(:group, enterprise: enterprise)
+            create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
+                                  user_role_id: user_role.id)
+          end
+
+          it { is_expected.to permit_actions([:index, :show, :create]) }
+        end
+
+        context 'when initiatives_manage is true' do
+          before { user.policy_group.update initiatives_manage: true }
+          it { is_expected.to permit_actions([:index, :show, :create, :update, :destroy]) }
+        end
+
+        context 'user has basic group leader permission for initiatives_manage' do
+          before do
+            user_role = create(:user_role, enterprise: enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
+            user_role.policy_group_template.update initiatives_manage: true
+            group = create(:group, enterprise: enterprise)
+            create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
+                                  user_role_id: user_role.id)
+          end
+
+          it { is_expected.to permit_actions([:index, :show, :create, :update, :destroy]) }
+        end
+      end
+
+      context 'when current user IS owner' do
+        it { is_expected.to permit_actions([:update, :destroy]) }
+      end
+    end
+
+    context 'when manage_all is true' do
+      before do
+        initiative.owner = create(:user)
+        user.policy_group.update manage_all: true
+      end
+
+      it { is_expected.to permit_actions([:index, :show, :create, :update, :destroy]) }
     end
   end
 
-
-  permissions :show? do
-    let!(:user_2){ create(:user) }
-
-    it "allows access when user is member of group" do
-      group = initiative.group
-      create(:user_group, :user => user_2, :group => group)
-
-      expect(subject).to permit(user_2, initiative)
-    end
-
-    it "allows access when user is member of participating group" do
-      participating_group = create(:group, :enterprise => user_2.enterprise)
-      create(:user_group, :user => user_2, :group => participating_group)
-      initiative.participating_groups << participating_group
-
-      expect(subject).to permit(user_2, initiative)
-    end
-
-    it "allows access when initiatives_manage is true" do
-      user_2.policy_group.initiatives_manage = true
-      user_2.policy_group.save!
-
-      expect(subject).to permit(user_2, initiative)
-    end
-
-    it "allows access when user is erg leader" do
-      allow(user_2).to receive(:erg_leader?).and_return(true)
-
-      expect(subject).to permit(user_2, initiative)
-    end
+  describe 'for users with no access' do
+    before { initiative.owner = create(:user) }
+    it { is_expected.to forbid_actions([:index, :show, :create, :update, :destroy]) }
   end
 
+  describe 'test custom policies' do
+    context '#show_calendar?' do
+      it 'when initiative has no segments' do
+        expect(subject.show_calendar?).to eq true
+      end
 
-  permissions :is_a_pending_member? do
+      it 'when initiative has segments' do
+        initiative.segments << create(:segment, enterprise: enterprise)
+        expect(subject.show_calendar?).to eq false
+      end
 
-    it "doesnt allow access when user isnt a member at all" do
-      expect(subject).to_not permit(user, initiative)
+      it 'when initiative shares segments with user' do
+        initiative.segments << segment = create(:segment, enterprise: enterprise)
+        user.segments << segment
+        expect(subject.show_calendar?).to eq true
+      end
     end
 
-    it "doesn't allow access when user is a member but has been accepted" do
-      create(:user_group, :user => user, :group => group, :accepted_member => true)
-
-      expect(subject).to_not permit(user, initiative)
+    context '#is_a_pending_member?' do
+      it 'returns true if user is pending member' do
+        expect(subject.is_a_pending_member?)
+      end
     end
 
-    it "allows access" do
-      create(:user_group, :user => user, :group => group, :accepted_member => false)
-
-      expect(subject).to permit(user, initiative)
-    end
-  end
-
-  permissions :is_a_member? do
-
-    it "doesnt allow access" do
-      expect(subject).to_not permit(user, initiative)
+    context '#is_a_member?' do
+      it 'returns true if user is member' do
+        create(:user_group, user_id: user.id, group_id: group.id)
+        expect(subject.is_a_member?).to eq true
+      end
     end
 
-    it "allows access" do
-      create(:user_group, :user => user, :group => group)
-
-      expect(subject).to permit(user, initiative)
-    end
-  end
-
-  permissions :is_a_guest? do
-
-    it 'allows access for pending members' do
-      create(:user_group, :user => user, :group => group, :accepted_member => false)
-
-      expect(subject).to permit(user, initiative)
+    context '#is_a_guest?' do
+      it 'returns true if user is guest' do
+        expect(subject.is_a_guest?).to eq true
+      end
     end
 
-    it 'allows access for non members' do
-      expect(subject).to permit(user, initiative)
+    context '#user_is_guest_and_event_is_upcoming?' do
+      before { initiative.update start: DateTime.now.tomorrow, end: DateTime.now.tomorrow >> 2 }
+
+      it 'returns true if user is a guest and event is upcoming' do
+        expect(subject.user_is_guest_and_event_is_upcoming?).to eq true
+      end
     end
 
-    it 'doesnt allow access to members' do
-      create(:user_group, :user => user, :group => group)
+    context '#user_is_guest_and_event_is_ongoing?' do
+      before { initiative.update start: DateTime.now.weeks_ago(1), end: DateTime.now.tomorrow >> 2 }
 
-      expect(subject).to_not permit(user, initiative)
+      it 'returns if user is guest and event is ongoing' do
+        expect(subject.user_is_guest_and_event_is_ongoing?).to eq true
+      end
     end
 
-  end
+    context '#join_leave_button_visibility?' do
+      it 'return false if event is past' do
+        initiative.update start: DateTime.now.weeks_ago(3), end: DateTime.now.weeks_ago(1)
+        expect(subject.join_leave_button_visibility?).to eq false
+      end
 
-  permissions :user_is_guest_and_event_is_upcoming? do
+      it 'return true if user is guest and event is ongoing' do
+        initiative.update start: DateTime.now.weeks_ago(1), end: DateTime.now.tomorrow >> 2
+        expect(subject.join_leave_button_visibility?).to eq true
+      end
 
-    it 'doesnt allow access for non guests' do
-      create(:user_group, :user => user, :group => group)
-
-      expect(subject).to_not permit(user, initiative)
+      it 'returns true if event is upcoming' do
+        initiative.update start: DateTime.now.tomorrow, end: DateTime.now.tomorrow >> 2
+        expect(subject.join_leave_button_visibility?).to eq true
+      end
     end
 
-    it 'doesnt allow access when initiative isnt upcoming' do
-      initiative.start = Date.yesterday
-      initiative.save!
+    describe '#manage?' do
+      context 'when manage_all is true' do
+        before { user.policy_group.update manage_all: true }
 
-      expect(subject).to_not permit(user, initiative)
-    end
+        it 'returns true' do
+          expect(subject.manage?).to be(true)
+        end
+      end
 
-    it 'allows access when initiative is upcoming' do
-      initiative.start = Date.tomorrow
-      initiative.save!
+      context 'user has basic group leader permission for initiatives_manage' do
+        before do
+          user_role = create(:user_role, enterprise: enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
+          user_role.policy_group_template.update initiatives_manage: true
+          group = create(:group, enterprise: enterprise)
+          create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
+                                user_role_id: user_role.id)
+        end
 
-      expect(subject).to permit(user, initiative)
-    end
-  end
+        it 'returns true' do
+          expect(subject.manage?).to be(true)
+        end
+      end
 
-  permissions :user_is_guest_and_event_is_ongoing? do
+      context 'when initiatives_manage is true' do
+        before { user.policy_group.update initiatives_manage: true }
 
-    it 'doesnt allow access for non guests' do
-      create(:user_group, :user => user, :group => group)
-
-      expect(subject).to_not permit(user, initiative)
-    end
-
-    it 'doesnt allow access when initiative isnt ongoing' do
-      initiative.start = Date.yesterday
-      initiative.end = Date.current
-      initiative.save!
-
-      expect(subject).to_not permit(user, initiative)
-    end
-
-    it 'allows access when initiative is ongoing' do
-      initiative.start = Date.yesterday
-      initiative.end = Date.tomorrow
-      initiative.save!
-
-      expect(subject).to permit(user, initiative)
-    end
-  end
-
-  permissions :user_is_guest_and_event_is_ongoing? do
-
-    it 'doesnt allow access for non guests' do
-      create(:user_group, :user => user, :group => group)
-
-      expect(subject).to_not permit(user, initiative)
-    end
-
-    it 'doesnt allow access when initiative isnt ongoing' do
-      initiative.start = Date.yesterday
-      initiative.end = Date.current
-      initiative.save!
-
-      expect(subject).to_not permit(user, initiative)
-    end
-
-    it 'allows access when initiative is ongoing' do
-      initiative.start = Date.yesterday
-      initiative.end = Date.tomorrow
-      initiative.save!
-
-      expect(subject).to permit(user, initiative)
-    end
-  end
-
-  permissions ".scope" do
-    it "shows only initiatives belonging to enterprise" do
-      expect(policy_scope).to eq [initiative]
+        it 'returns true' do
+          expect(subject.manage?).to be(true)
+        end
+      end
     end
   end
 end

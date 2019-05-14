@@ -25,9 +25,9 @@ class EnterpriseSegmentDatatable < AjaxDatatablesRails::Base
 
   def data
     records.map do |record|
-      [ 
+      [
         record.id,
-        html_escape(record.name)     
+        ActionController::Base.helpers.sanitize(record.name).gsub('&amp;', '&')
       ]
     end
   end

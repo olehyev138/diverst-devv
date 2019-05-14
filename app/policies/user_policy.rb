@@ -1,12 +1,14 @@
 class UserPolicy < ApplicationPolicy
   def index?
     return true if create?
-    return true if basic_group_leader_permission?("users_index")
+    return true if basic_group_leader_permission?('users_index')
+
     @policy_group.users_index?
   end
 
   def show?
     return true if index?
+
     @record === @user
   end
 
@@ -16,17 +18,20 @@ class UserPolicy < ApplicationPolicy
 
   def manage?
     return true if manage_all?
-    return true if basic_group_leader_permission?("users_manage")
+    return true if basic_group_leader_permission?('users_manage')
+
     @policy_group.users_manage?
   end
 
   def update?
     return true if create?
+
     @record === @user
   end
 
   def destroy?
     return false if @user === @record
+
     update?
   end
 
@@ -42,7 +47,8 @@ class UserPolicy < ApplicationPolicy
 
   def join_or_leave_groups?
     return true if @record == @user
-    return true if GroupPolicy.new(@record, @user).manage_members?
+    return true if GroupMemberPolicy.new(@user, [@record]).update?
+
     false
   end
 

@@ -1,9 +1,8 @@
-require "rails_helper"
+require 'rails_helper'
 
-RSpec.describe SponsorPolicy, :type => :policy do
-
-  let(:user){ create(:user) }
-  let(:sponsor){ create(:sponsor) }
+RSpec.describe SponsorPolicy, type: :policy do
+  let(:user) { create(:user) }
+  let(:sponsor) { create(:sponsor) }
 
   subject { described_class }
 

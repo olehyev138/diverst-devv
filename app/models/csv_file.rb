@@ -4,14 +4,14 @@ class CsvFile < BaseClass
   belongs_to :user
   belongs_to :group
 
-  has_attached_file :import_file, s3_permissions: "private"
-  has_attached_file :download_file, s3_permissions: "private",
-    s3_headers: lambda { |attachment|
-        {
-            'Content-Type' => 'text/csv',
-            'Content-Disposition' => "attachment",
-        }
-    }
+  has_attached_file :import_file, s3_permissions: 'private'
+  has_attached_file :download_file, s3_permissions: 'private',
+                                    s3_headers: lambda { |attachment|
+                                                  {
+                                                      'Content-Type' => 'text/csv',
+                                                      'Content-Disposition' => 'attachment',
+                                                  }
+                                                }
   do_not_validate_attachment_file_type :import_file
   do_not_validate_attachment_file_type :download_file
 
@@ -20,7 +20,7 @@ class CsvFile < BaseClass
   scope :download_files, -> { where("download_file_file_name <> ''") }
 
   def path_for_csv
-    if File.exists?(self.import_file.path)
+    if File.exist?(self.import_file.path)
       self.import_file.path
     else
       Paperclip.io_adapters.for(self.import_file).path

@@ -1,0 +1,41 @@
+<div tabindex="-1" role="dialog"
+     class="modal group-selector <%= classes if local_assigns[:classes].present? %>"
+     id="<%= id if local_assigns[:id].present? %>"
+     data-url="<%= get_paginated_groups_groups_path %>"
+     data-all-url="<%= get_all_groups_groups_path %>"
+     data-multiselect="<%= multiselect %>"
+     data-preselected-groups="<%= preselected_groups if local_assigns[:preselected_groups].present? %>"
+>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content card">
+            <div class="modal-header">
+              <div class="title-container">
+              </div>
+            </div>
+            <div class="search-container card__section--border">
+              <div class="row">
+                <div class="col">
+                  <input type="text" class="field__input string search-input" placeholder="Search term...">
+                </div>
+                <div class="col">
+                  <button type="button" class="btn btn--secondary btn--extra--small search-btn">Search</button>
+                  <button type="button" class="btn btn--secondary btn--extra--small clear-search-btn"><span aria-hidden="true">&times;</span></button>
+                </div>
+              </div>
+            </div>
+            <div class="modal-body">
+              <div class="groups-content">
+              </div>
+            </div>
+            <div class="modal-footer">
+                <div class="row pagination-row card__section--border">
+                </div>
+                <div class="row helper-row">
+                    <div class="col pull-right">
+                        <button type="button" class="btn btn--primary btn--small save-groups-btn">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

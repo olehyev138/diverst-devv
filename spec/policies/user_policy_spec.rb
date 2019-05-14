@@ -1,165 +1,192 @@
 require 'rails_helper'
 
-RSpec.describe UserPolicy, :type => :policy do
-
-  let(:enterprise) {create(:enterprise)}
-  let(:user){ create(:user, :enterprise => enterprise) }
-  let(:enterprise_2) {create(:enterprise)}
-  let(:no_access) { create(:user, :enterprise => enterprise_2) }
+RSpec.describe UserPolicy, type: :policy do
+  let(:enterprise) { create(:enterprise) }
+  let(:user) { create(:user, enterprise: enterprise) }
+  let(:other_user) { create(:user, enterprise: enterprise) }
   let(:policy_scope) { UserPolicy::Scope.new(user, User).resolve }
 
-  subject { described_class }
+  subject { UserPolicy.new(user, other_user) }
 
   before {
-    no_access.policy_group.manage_all = false
-    no_access.policy_group.save!
-
     user.policy_group.manage_all = false
+    user.policy_group.users_manage = false
+    user.policy_group.users_index = false
     user.policy_group.save!
   }
 
-  permissions ".scope" do
-    it "shows only users belonging to enterprise" do
+  permissions '.scope' do
+    before { user.policy_group.update users_index: true }
+
+    it 'shows only users belonging to enterprise' do
       expect(policy_scope).to eq [user]
     end
   end
 
-  permissions :index? do
-    it "allows access when users_index is true" do
-      user.policy_group.users_index = true
-      user.policy_group.users_manage = false
-      user.policy_group.save!
+  describe 'for users with access' do
+    context 'when manage_all is false' do
+      context 'when users_index is true but users_manage is false' do
+        before { user.policy_group.update(users_index: true) }
 
-      expect(subject).to permit(user)
+        it { is_expected.to permit_actions([:index, :show]) }
+      end
+
+      context 'user has basic group leader permission and users_index is true' do
+        before do
+          user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
+          user_role.policy_group_template.update users_index: true
+          group = create(:group, enterprise: enterprise)
+          create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
+                                user_role_id: user_role.id)
+        end
+
+        it { is_expected.to permit_actions([:index, :show]) }
+      end
+
+      context 'when users_index is false but users_manage is true' do
+        before { user.policy_group.update(users_manage: true) }
+
+        it { is_expected.to permit_actions([:index, :create, :show, :update, :destroy, :resend_invitation]) }
+      end
+
+      context 'user has basic group leader permission and users_manage is true' do
+        before do
+          user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
+          user_role.policy_group_template.update users_manage: true
+          group = create(:group, enterprise: enterprise)
+          create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
+                                user_role_id: user_role.id)
+        end
+
+        it { is_expected.to permit_actions([:index, :create, :show, :update, :destroy, :resend_invitation]) }
+      end
+
+      context 'when users_index, users_manage, manage_all are false but record IS the same as current user' do
+        let(:other_user) { user }
+
+        it { is_expected.to permit_action(:update) }
+        it { is_expected.to forbid_action(:destroy) }
+      end
+
+      context 'when users_index, users_manage, manage_all are false but record IS NOT the same as curret user' do
+        let(:other_user) { create(:user) }
+
+        it { is_expected.to forbid_actions([:index, :show, :create, :update, :destroy, :resend_invitation ]) }
+      end
     end
 
-    it "allows access when users_manage is true but users_index is false" do
-      user.policy_group.users_index = false
-      user.policy_group.users_manage = true
-      user.policy_group.save!
+    context 'when manage_all is true' do
+      before { user.policy_group.update manage_all: true }
 
-      expect(subject).to permit(user)
-    end
+      context 'when record IS current user' do
+        let(:other_user) { user }
+        it { is_expected.to permit_actions([:index, :show, :create, :update, :resend_invitation]) }
+      end
 
-    it "doesn't allow access when users_index/manage is false" do
-      user.policy_group.users_index = false
-      user.policy_group.users_manage = false
-      user.policy_group.save!
-
-      expect(subject).to_not permit(user)
-    end
-  end
-
-  permissions :create? do
-    it "doesn't allow access when users_manage is false" do
-      user.policy_group.users_index = false
-      user.policy_group.users_manage = false
-      user.policy_group.save!
-
-      expect(subject).to_not permit(user)
-    end
-
-    it "doesn't allow access when users_manage is false but users_index is true" do
-      user.policy_group.users_index = true
-      user.policy_group.users_manage = false
-      user.policy_group.save!
-
-      expect(subject).to_not permit(user)
-    end
-
-    it "allows access when users_manage is true but users_index is false" do
-      user.policy_group.users_index = false
-      user.policy_group.users_manage = true
-      user.policy_group.save!
-
-      expect(subject).to permit(user)
-    end
-  end
-
-  permissions :update? do
-    it "doesn't allow access when users_manage is false" do
-      user.policy_group.users_index = false
-      user.policy_group.users_manage = false
-      user.policy_group.save!
-
-      expect(subject).to_not permit(user)
-    end
-
-    it "doesn't allow access when users_manage is false but users_index is true" do
-      user.policy_group.users_index = true
-      user.policy_group.users_manage = false
-      user.policy_group.save!
-
-      expect(subject).to_not permit(user)
-    end
-
-    it "allows access when users_manage is true but users_index is false" do
-      user.policy_group.users_index = false
-      user.policy_group.users_manage = true
-      user.policy_group.save!
-
-      expect(subject).to permit(user)
+      context 'when record IS NOT current user' do
+        it { is_expected.to permit_actions([:index, :show, :create, :update, :destroy, :resend_invitation]) }
+      end
     end
   end
 
-  permissions :destroy? do
-    it "doesn't allow access when users_manage is false" do
-      user.policy_group.users_index = false
-      user.policy_group.users_manage = false
-      user.policy_group.save!
+  describe 'for users with no access' do
+    before { user.policy_group = create(:policy_group, :no_permissions) }
 
-      expect(subject).to_not permit(user)
-    end
-
-    it "doesn't allow access when users_manage is false but users_index is true" do
-      user.policy_group.users_index = true
-      user.policy_group.users_manage = false
-      user.policy_group.save!
-
-      expect(subject).to_not permit(user)
-    end
-
-    it "allows access when users_manage is true but users_index is false" do
-      user.policy_group.users_index = false
-      user.policy_group.users_manage = true
-      user.policy_group.save!
-
-      expect(subject).to permit(user)
-    end
-
-    it 'allows access user to be deleted if not current user' do
-      other_user = create(:user)
-      user.policy_group.users_index = false
-      user.policy_group.users_manage = true
-      user.policy_group.save!
-
-      expect(subject).to permit(user, other_user)
-    end
+    it { is_expected.to forbid_actions([:index, :new, :create, :update, :destroy, :resend_invitation]) }
   end
 
-  permissions :resend_invitation? do
-    it "doesn't allow access when users_manage is false" do
-      user.policy_group.users_index = false
-      user.policy_group.users_manage = false
-      user.policy_group.save!
+  describe 'custom policies' do
+    describe '#access_hidden_info?' do
+      context 'when current user IS record' do
+        let(:other_user) { user }
 
-      expect(subject).to_not permit(user)
+        it 'returns true' do
+          expect(subject.access_hidden_info?).to eq true
+        end
+      end
+
+      context 'when current user IS NOT record' do
+        let(:other_user) { create(:user) }
+
+        it 'returns false' do
+          expect(subject.access_hidden_info?).to eq false
+        end
+      end
+
+      context 'when manage_all is true' do
+        before { user.policy_group.update manage_all: true }
+
+        it 'returns true' do
+          expect(subject.access_hidden_info?).to eq true
+        end
+      end
+
+      context 'user has basic group leader permission' do
+        before do
+          user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
+          user_role.policy_group_template.update users_manage: true
+          group = create(:group, enterprise: enterprise)
+          create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
+                                user_role_id: user_role.id)
+        end
+
+        it 'returns true' do
+          expect(subject.access_hidden_info?).to eq true
+        end
+      end
+
+      context 'users_manage is true' do
+        before { user.policy_group.update users_manage: true }
+
+        it 'returns true' do
+          expect(subject.access_hidden_info?).to eq true
+        end
+      end
     end
 
-    it "doesn't allow access when users_manage is false but users_index is true" do
-      user.policy_group.users_index = true
-      user.policy_group.users_manage = false
-      user.policy_group.save!
+    describe '#join_or_leave_groups?' do
+      context 'when current user IS record' do
+        let(:other_user) { user }
 
-      expect(subject).to_not permit(user)
+        it 'returns true' do
+          expect(subject.join_or_leave_groups?).to eq true
+        end
+      end
+
+      context 'when current user IS NOT record' do
+        let(:other_user) { create(:user) }
+
+        it 'returns false' do
+          expect(subject.join_or_leave_groups?).to eq true
+        end
+      end
+
+      context 'when current user IS NOT record and has update permissions for GroupMemberPolicy' do
+        let(:other_user) { create(:user) }
+        before { user.policy_group.update groups_members_manage: false }
+
+        it 'returns false' do
+          expect(subject.join_or_leave_groups?).to eq false
+        end
+      end
     end
 
-    it "allows access when users_manage is true but users_index is false" do
-      user.policy_group.users_index = false
-      user.policy_group.users_manage = true
-      user.policy_group.save!
+    describe '#user_not_current_user?' do
+      context 'when current user IS NOT record' do
+        let(:other_user) { create(:user) }
 
-      expect(subject).to permit(user)
+        it 'returns true' do
+          expect(subject.user_not_current_user?).to eq true
+        end
+      end
+
+      context 'when current user IS record' do
+        let(:other_user) { user }
+
+        it 'returns false' do
+          expect(subject.user_not_current_user?).to eq false
+        end
+      end
     end
   end
 end

@@ -1,13 +1,12 @@
 require 'rails_helper'
 
-RSpec.describe ExpensePolicy, :type => :policy do
+RSpec.describe ExpensePolicy, type: :policy do
+  let(:enterprise) { create(:enterprise) }
+  let(:no_access) { create(:user, enterprise: enterprise) }
+  let(:user) { no_access }
+  let(:expense) { create(:expense, enterprise: enterprise) }
 
-  let(:enterprise) {create(:enterprise)}
-  let(:user){ create(:user, :enterprise => enterprise) }
-  let(:no_access) { create(:user) }
-  let(:expense){ create(:expense, :enterprise => enterprise)}
-
-  subject { described_class }
+  subject { ExpensePolicy.new(user, expense) }
 
   before {
     no_access.policy_group.manage_all = false
@@ -15,230 +14,40 @@ RSpec.describe ExpensePolicy, :type => :policy do
     no_access.policy_group.campaigns_create = false
     no_access.policy_group.campaigns_manage = false
     no_access.policy_group.save!
-
-    user.policy_group.manage_all = false
-    user.policy_group.save!
   }
 
-  context "when manage_all is false" do
-    it "ensure manage_all is false" do
-      expect(user.policy_group.manage_all).to be(false)
-      expect(no_access.policy_group.manage_all).to be(false)
-    end
-
-    permissions :index? do
-      context "when subject campaigns_index is true for user and false for no_access" do
-        it "allows access" do
-          expect(subject).to permit(user, expense)
-        end
-
-        it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, expense)
-        end
+  describe 'for users with access' do
+    context 'when manage_all is false' do
+      context 'when campaigns_manage is true' do
+        before { user.policy_group.update campaigns_manage: true }
+        it { is_expected.to permit_actions([:index, :new, :create, :update, :destroy]) }
       end
 
-      context "when subject campaigns_index is false but campaigns_manage is true for user and false for no_access" do
-        it "allows access" do
-
-          user.policy_group.campaigns_index = false
-          user.policy_group.save!
-
-          expect(subject).to permit(user, expense)
+      context 'user has group leader permission for campaigns_manage' do
+        before do
+          group = create(:group, enterprise: enterprise)
+          user_role = create(:user_role, enterprise: enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
+          user_role.policy_group_template.update campaigns_manage: true
+          create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
+                                user_role_id: user_role.id)
         end
 
-        it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, expense)
-        end
+        it { is_expected.to permit_actions([:index, :new, :create, :update, :destroy]) }
+      end
+
+      context 'when enterprise.collaborate_module_enabled is true' do
+        before { enterprise.update collaborate_module_enabled: true }
+        it { is_expected.to forbid_actions([:index, :new, :create, :update, :destroy]) }
       end
     end
 
-    permissions :new? do
-      context "when subject campaigns_create is true for user and false for no_access" do
-        it "allows access" do
-          expect(subject).to permit(user, expense)
-        end
-
-        it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, expense)
-        end
-      end
-
-      context "when subject campaigns_create is false but campaigns_manage is true for user and false for no_access" do
-        it "allows access" do
-
-          user.policy_group.campaigns_create = false
-          user.policy_group.save!
-
-          expect(subject).to permit(user, expense)
-        end
-
-        it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, expense)
-        end
-      end
-    end
-
-    permissions :create? do
-      context "when subject campaigns_create is true for user and false for no_access" do
-        it "allows access" do
-          expect(subject).to permit(user, expense)
-        end
-
-        it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, expense)
-        end
-      end
-
-      context "when subject campaigns_create is false but campaigns_manage is true for user and false for no_access" do
-        it "allows access" do
-
-          user.policy_group.campaigns_create = false
-          user.policy_group.save!
-
-          expect(subject).to permit(user, expense)
-        end
-
-        it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, expense)
-        end
-      end
-    end
-
-    permissions :update? do
-      context "when subject campaigns_manage is true for user and false for no_access" do
-        it "allows access" do
-          expect(subject).to permit(user, expense)
-        end
-
-        it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, expense)
-        end
-      end
-    end
-
-    permissions :destroy? do
-      context "when subject campaigns_manage is true for user and false for no_access" do
-        it "allows access" do
-          expect(subject).to permit(user, expense)
-        end
-
-        it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, expense)
-        end
-      end
+    context 'when manage_all is true' do
+      before { user.policy_group.update manage_all: true }
+      it { is_expected.to permit_actions([:index, :new, :create, :update, :destroy]) }
     end
   end
 
-  context "when manage_all is true" do
-    before {
-      user.policy_group.manage_all = true
-      user.policy_group.campaigns_manage = false
-      user.policy_group.save!
-    }
-    it "ensure manage_all is true" do
-      expect(user.policy_group.manage_all).to be(true)
-    end
-
-    permissions :index? do
-      context "when subject campaigns_index is true for user and false for no_access" do
-        it "allows access" do
-          expect(subject).to permit(user, expense)
-        end
-
-        it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, expense)
-        end
-      end
-
-      context "when subject campaigns_index is false but campaigns_manage is true for user and false for no_access" do
-        it "allows access" do
-
-          user.policy_group.campaigns_index = false
-          user.policy_group.save!
-
-          expect(subject).to permit(user, expense)
-        end
-
-        it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, expense)
-        end
-      end
-    end
-
-    permissions :new? do
-      context "when subject campaigns_create is true for user and false for no_access" do
-        it "allows access" do
-          expect(subject).to permit(user, expense)
-        end
-
-        it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, expense)
-        end
-      end
-
-      context "when subject campaigns_create is false but campaigns_manage is true for user and false for no_access" do
-        it "allows access" do
-
-          user.policy_group.campaigns_create = false
-          user.policy_group.save!
-
-          expect(subject).to permit(user, expense)
-        end
-
-        it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, expense)
-        end
-      end
-    end
-
-    permissions :create? do
-      context "when subject campaigns_create is true for user and false for no_access" do
-        it "allows access" do
-          expect(subject).to permit(user, expense)
-        end
-
-        it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, expense)
-        end
-      end
-
-      context "when subject campaigns_create is false but campaigns_manage is true for user and false for no_access" do
-        it "allows access" do
-
-          user.policy_group.campaigns_create = false
-          user.policy_group.save!
-
-          expect(subject).to permit(user, expense)
-        end
-
-        it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, expense)
-        end
-      end
-    end
-
-    permissions :update? do
-      context "when subject campaigns_manage is true for user and false for no_access" do
-        it "allows access" do
-          expect(subject).to permit(user, expense)
-        end
-
-        it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, expense)
-        end
-      end
-    end
-
-    permissions :destroy? do
-      context "when subject campaigns_manage is true for user and false for no_access" do
-        it "allows access" do
-          expect(subject).to permit(user, expense)
-        end
-
-        it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, expense)
-        end
-      end
-    end
+  describe 'for users with no access' do
+    it { is_expected.to forbid_actions([:index, :new, :create, :update, :destroy]) }
   end
 end

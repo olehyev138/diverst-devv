@@ -10,9 +10,6 @@
     <nav id="navigation" class="jq-dropdown jq-dropdown-tip">
       <ul class="jq-dropdown-menu">
         <li>
-          <%= active_link_to "Metrics", metrics_dashboards_path if MetricsDashboardPolicy.new(current_user, MetricsDashboard).index? %>
-        </li>
-        <li>
           <%= active_link_to c_t(:erg).pluralize, groups_path, :active => :exact if GroupPolicy.new(current_user, Group).create? %>
         </li>
         <li>
@@ -22,10 +19,13 @@
           <%= active_link_to "Resources", enterprise_folders_path(current_user.enterprise) if EnterpriseFolderPolicy.new(current_user).index? %>
         </li>
         <li>
-          <%= active_link_to "Archived Posts", archived_posts_path if EnterprisePolicy.new(current_user, current_user.enterprise).manage_posts? %>
+          <%= active_link_to "Archived Posts", archived_posts_path if EnterprisePolicy.new(current_user, current_user.enterprise).auto_archive_settings_manage? %>
         </li>
         <li>
-          <%= active_link_to "Archived Resources", archived_enterprise_resources_path(current_user.enterprise) if EnterpriseFolderPolicy.new(current_user).index? %>
+          <%= active_link_to "Archived Resources", archived_enterprise_resources_path(current_user.enterprise) if EnterprisePolicy.new(current_user, current_user.enterprise).auto_archive_settings_manage? %>
+        </li>
+        <li>
+          <%= active_link_to 'Archived Events', archived_initiatives_path if EnterprisePolicy.new(current_user, current_user.enterprise).auto_archive_settings_manage? %>
         </li>
         <li>
           <%= active_link_to "Calendar", calendar_groups_path if GroupPolicy.new(current_user, Group).calendar? %>
@@ -50,19 +50,21 @@
   </div>
 
   <div class="menu menu--desktop">
-    <%= active_link_to "Metrics", metrics_dashboards_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: [['metrics_dashboards'], []] if MetricsDashboardPolicy.new(current_user, MetricsDashboard).index? %>
     <%= active_link_to c_t(:erg).pluralize, groups_path, :active => :exact, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if GroupPolicy.new(current_user, Group).create? %>
     <%= active_link_to c_t(:segment).pluralize, segments_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if SegmentPolicy.new(current_user, Segment).index? %>
     <%= active_link_to "Resources", enterprise_folders_path(current_user.enterprise), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if EnterpriseFolderPolicy.new(current_user).index? %>
 
-    <%= active_link_to 'Archive&nbsp;<span class="caret"></span>'.html_safe, "", "aria-label":"Archive", "aria-control": "navigation", "data-jq-dropdown": "#archive", class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: :exclusive if EnterpriseFolderPolicy.new(current_user).index? %>
+    <%= active_link_to 'Archive&nbsp;<span class="caret"></span>'.html_safe, "", "aria-label":"Archive", "aria-control": "navigation", "data-jq-dropdown": "#archive", class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: :exclusive if EnterprisePolicy.new(current_user, current_user.enterprise).auto_archive_settings_manage? %>
     <nav id="archive" class="jq-dropdown jq-dropdown-tip">
       <ul class="jq-dropdown-menu">
         <li>
-          <%= active_link_to "Archived Posts", archived_posts_path, class: "secondary-header__tab" if EnterprisePolicy.new(current_user, current_user.enterprise).manage_posts? %>     
+          <%= active_link_to "Archived Posts", archived_posts_path, class: "secondary-header__tab" if EnterprisePolicy.new(current_user, current_user.enterprise).auto_archive_settings_manage? %>     
         </li>
         <li>
-          <%= active_link_to "Archived Resources", archived_enterprise_resources_path(current_user.enterprise), class: "secondary-header__tab" if EnterpriseFolderPolicy.new(current_user).index? %>
+          <%= active_link_to "Archived Resources", archived_enterprise_resources_path(current_user.enterprise), class: "secondary-header__tab" if EnterprisePolicy.new(current_user, current_user.enterprise).auto_archive_settings_manage? %>
+        </li>
+        <li>
+          <%= active_link_to 'Archived Events', archived_initiatives_path, class: 'secondary-header__tab' if EnterprisePolicy.new(current_user, current_user.enterprise).auto_archive_settings_manage? %>
         </li>
       </ul>
     </nav>

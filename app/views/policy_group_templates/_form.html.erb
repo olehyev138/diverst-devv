@@ -81,6 +81,15 @@
             <%= f.hidden_field :mentorship_manage, value: 0 %>
             <%= f.input :mentorship_manage, wrapper: :boolean_checkbox, label: "Manage" %>
           </div>
+
+          <div class="col md-3">
+            <h4>Settings</h4>
+            <%= f.hidden_field :auto_archive_manage, value: 0 %>
+            <%= f.input :auto_archive_manage, wrapper: :boolean_checkbox, label: 'Manage Auto Archive Settings' %>
+
+            <%= f.hidden_field :enterprise_manage, value: 0 %>
+            <%= f.input :enterprise_manage, wrapper: :boolean_checkbox, label: 'Manage Enterprise' %>
+          </div>
         </div>
       </div>
       

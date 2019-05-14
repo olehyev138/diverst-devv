@@ -3,31 +3,20 @@
 class CacheSegmentMembersJob < ActiveJob::Base
   queue_as :low
 
+  after_perform :set_status
+
+  @segment = nil
+
   def perform(segment_id)
-    segment = Segment.find_by_id(segment_id)
-    return if segment.nil?
+    @segment = Segment.find_by_id(segment_id)
+    return if @segment.nil?
 
-    users = segment.enterprise.users.all
-    old_members = segment.members.all
+    @segment.update_members
+  end
 
-    new_members = users.select do |user|
-      user.is_part_of_segment?(segment)
-    end
+  private
 
-    members_to_remove = old_members - new_members
-    members_to_add = new_members - old_members
-
-    members_to_remove.each do |member|
-      segment.members.delete(member)
-    end
-
-    members_to_add.each do |member|
-      segment.members << member if !segment.members.where(:id => member.id).exists?
-      begin
-        member.__elasticsearch__.update_document # Update user in Elasticsearch to reflect their new segment
-      rescue
-        next
-      end
-    end
+  def set_status
+    @segment.update_column(:job_status, 0)
   end
 end

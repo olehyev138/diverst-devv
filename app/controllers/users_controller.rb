@@ -13,6 +13,11 @@ class UsersController < ApplicationController
       @users = @users.where.not(id: current_user.id)
     end
 
+    if extra_params[:can_metrics_dashboard_create]
+      user_ids_with_perms = @users.select { |u| MetricsDashboardPolicy.new(u, nil).create? }.map(&:id)
+      @users = @users.where(id: user_ids_with_perms)
+    end
+
     respond_to do |format|
       format.html
       format.json { render json: UserDatatable.new(view_context, @users) }
@@ -32,7 +37,7 @@ class UsersController < ApplicationController
 
   def saml_logins
     authorize User, :index?
-    @users = policy_scope(User).where(auth_source: "saml").where(search_params)
+    @users = policy_scope(User).where(auth_source: 'saml').where(search_params)
 
     respond_to do |format|
       format.json { render json: UserDatatable.new(view_context, @users) }
@@ -49,14 +54,14 @@ class UsersController < ApplicationController
   end
 
   def group_surveys
-    manageable_groups = current_user.groups.select {|group| 
+    manageable_groups = current_user.groups.select { |group|
       GroupMemberPolicy.new(current_user, [group]).update?
     }
 
     @user_groups = @user.user_groups.where(group: manageable_groups).where.not(data: nil)
   end
 
-  #For admins. Dedicated to editing any user's info
+  # For admins. Dedicated to editing any user's info
   def edit
     authorize @user
     @is_admin_view = true
@@ -69,10 +74,10 @@ class UsersController < ApplicationController
     @user.info.merge(fields: @user.enterprise.fields, form_data: params['custom-fields'])
 
     if @user.save
-      flash[:notice] = "Your user was updated"
+      flash[:notice] = 'Your user was updated'
       redirect_to :back
     else
-      flash[:alert] = "Your user was not updated. Please fix the errors"
+      flash[:alert] = 'Your user was not updated. Please fix the errors'
       render :edit
     end
   end
@@ -86,7 +91,7 @@ class UsersController < ApplicationController
   def resend_invitation
     authorize @user
     @user.invite! # => reset invitation status and send invitation again
-    flash[:notice] = "Invitation Re-Sent!"
+    flash[:notice] = 'Invitation Re-Sent!'
     redirect_to :back
   end
 
@@ -103,12 +108,12 @@ class UsersController < ApplicationController
     authorize User, :new?
 
     if params[:file].nil?
-      flash[:alert] = "CSV file is required"
+      flash[:alert] = 'CSV file is required'
       redirect_to :back
       return
     end
 
-    file = CsvFile.new( import_file: params[:file].tempfile, user: current_user)
+    file = CsvFile.new(import_file: params[:file].tempfile, user: current_user)
 
     @message = ''
     @success = false
@@ -127,9 +132,10 @@ class UsersController < ApplicationController
 
   def export_csv
     authorize User, :index?
-    UsersDownloadJob.perform_later(current_user.id)
+    export_csv_params = params[:export_csv_params]
+    UsersDownloadJob.perform_later(current_user.id, export_csv_params)
     track_activity(current_user, :export_csv)
-    flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+    flash[:notice] = 'Please check your Secure Downloads section in a couple of minutes'
     redirect_to :back
   end
 
@@ -139,7 +145,7 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.json {
         g = DateHistogramGraph.new(
-          #index: User.es_index_name(enterprise: current_user.enterprise),
+          # index: User.es_index_name(enterprise: current_user.enterprise),
           field: 'created_at',
           interval: 'month'
         )
@@ -149,7 +155,7 @@ class UsersController < ApplicationController
       }
       format.csv {
         UsersDateHistogramDownloadJob.perform_later(current_user.id, current_user.enterprise.id)
-        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+        flash[:notice] = 'Please check your Secure Downloads section in a couple of minutes'
         redirect_to :back
       }
     end
@@ -260,6 +266,6 @@ class UsersController < ApplicationController
   end
 
   def extra_params
-    params.permit(:not_current_user)
+    params.permit(:not_current_user, :can_metrics_dashboard_create)
   end
 end

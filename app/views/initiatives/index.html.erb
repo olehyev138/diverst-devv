@@ -79,7 +79,7 @@
                     <h2 class="no-margin"><%= pillar.name %></h2>
                     <p class="muted"><%= pillar.value_proposition %></p>
                   </div>
-                  <% initiatives = pillar.initiatives.starts_between(@filter_from, @filter_to) %>
+                  <% initiatives = pillar.initiatives.where(archived_at: nil).starts_between(@filter_from, @filter_to).order_recent %>
                   <% if initiatives.empty? %>
                     <div class="card__section card__section--border">
                       There are no active events in this <%= c_t(:program)  %> with this filter.
@@ -87,7 +87,7 @@
                   <% else %>
                     <% initiatives.each do |initiative| %>
                       <%# next if initiative.start < @initiative.from || initiative.start > @initiative.to %>
-                      <div class="card__section card__section--border">
+                      <div class="card__section card__section--border" id="restored_initiative_<%= initiative.id %>">
                         <div class="row">
                           <div class="col-xs-4">
                             <h3><%= link_to initiative.name, group_event_path(@group, initiative) %></h3>
@@ -101,6 +101,7 @@
                               <%= link_to "KPI", group_initiative_path(@group, initiative) %> |
                               <%= link_to "Edit", edit_group_initiative_path(@group, initiative) %> -
                               <%= link_to "Survey", new_poll_path(initiative_id: initiative.id) %> -
+                              <%= link_to 'Archive', archive_group_initiative_path(@group, initiative), remote: true, method: :patch %> -
                               <%= link_to "Delete", group_initiative_path(@group, initiative), method: :delete, data: { confirm: "Are you sure?" }, class: "error" if GroupEventsPolicy.new(current_user, [@group]).destroy? %>
                             </p>
                           </div>

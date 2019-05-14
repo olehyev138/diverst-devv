@@ -5,7 +5,7 @@ FactoryBot.define do
     association :user
 
     trait :approved do
-    	approved false
+      approved false
     end
   end
 end
