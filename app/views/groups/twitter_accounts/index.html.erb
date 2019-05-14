@@ -29,8 +29,11 @@
                 <h3>@<%= account.account %></h3>
 
                 <% twt = TwitterClient.get_tweets(account.account).first %>
-                <% twt_embedded = TwitterClient.get_html(twt.id) %>
-                <%= raw(twt_embedded) %>
+
+                <% if twt %>
+                  <% twt_embedded = TwitterClient.get_html(twt.id) %>
+                  <%= raw(twt_embedded) %>
+                <% end %>
 
                 <%= link_to 'See More Tweets',
                             group_twitter_account_path(@group, account),

@@ -11,7 +11,7 @@ class TwitterAccount < ActiveRecord::Base
       client.user(account)
       return nil
     rescue Twitter::Error::NotFound
-      errors.add(:account, 'User doesn\'t exists')
+      errors.add(:account, 'User doesn\'t exist')
     end
   end
 end

@@ -21,28 +21,6 @@ class Groups::PostsController < ApplicationController
     filter_posts(@posts)
   end
 
-  def five_recent_tweets
-    all_tweets = []
-    @accounts.find_each do |account|
-      all_tweets += TwitterClient.get_tweets(account.account)
-    end
-
-    all_tweets = all_tweets.sort do |a, b|
-      case
-      when a.created_at < b.created_at
-        1
-      when a.created_at > b.created_at
-        -1
-      end
-    end
-
-    if all_tweets.size >= 5
-      return all_tweets[0 ... 5]
-    else
-      return all_tweets
-    end
-  end
-
   def pending
     if @group.enterprise.enable_social_media?
       @posts = @group.news_feed_links.includes(:news_link, :group_message, :social_link).not_approved.where(archived_at: nil).order(created_at: :desc)
@@ -78,6 +56,28 @@ class Groups::PostsController < ApplicationController
   end
 
   protected
+
+  def five_recent_tweets
+    all_tweets = []
+    @accounts.find_each do |account|
+      all_tweets += TwitterClient.get_tweets(account.account)[0 ... 5]
+    end
+
+    all_tweets = all_tweets.sort do |a, b|
+      case
+      when a.created_at < b.created_at
+        1
+      when a.created_at > b.created_at
+        -1
+      end
+    end
+
+    if all_tweets.size >= 5
+      return all_tweets[0 ... 5]
+    else
+      return all_tweets
+    end
+  end
 
   def without_segments
     @posts = NewsFeed.all_links_without_segments(@group.news_feed.id, @group.enterprise)
