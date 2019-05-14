@@ -21,7 +21,7 @@ module Metrics
                   when 'all'    then 'now-200y'
                   else
                     DateTime.parse(from_date).strftime('%F')
-                  end
+      end
 
       { from: from_date, to: to_date }
     end
@@ -37,11 +37,11 @@ module Metrics
     end
 
     def get_change_percentage(from_date_total, to_date_total)
-      if from_date_total == 0 and to_date_total > 0
+      if (from_date_total == 0) && (to_date_total > 0)
         change_percentage = 100
-      elsif to_date_total == 0 and from_date_total > 0
+      elsif (to_date_total == 0) && (from_date_total > 0)
         change_percentage = -100
-      elsif from_date_total == 0 and to_date_total == 0
+      elsif (from_date_total == 0) && (to_date_total == 0)
         change_percentage = 0
       else
         change_percentage =
@@ -53,7 +53,6 @@ module Metrics
       else
         change_percentage.to_s + '%'
       end
-
     end
 
     def c_t(key)

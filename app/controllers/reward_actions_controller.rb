@@ -11,15 +11,16 @@ class RewardActionsController < ApplicationController
     @badges = @enterprise.badges
 
     if @enterprise.update(reward_actions_params)
-      flash[:notice] = "Your reward actions were updated"
+      flash[:notice] = 'Your reward actions were updated'
       redirect_to rewards_path
     else
-      flash[:alert] = "Your reward actions were not updated. Please fix the errors"
-      render "rewards/index"
+      flash[:alert] = 'Your reward actions were not updated. Please fix the errors'
+      render 'rewards/index'
     end
   end
 
   private
+
   def set_enterprise
     @enterprise = current_user.enterprise
   end

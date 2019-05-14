@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe PollResponse do
-
   describe 'test associations' do
     let!(:poll_response) { build_stubbed(:poll_response) }
 
@@ -10,7 +9,7 @@ RSpec.describe PollResponse do
   end
 
   describe 'when describing callbacks' do
-    it "should index user on elasticsearch after create", skip: true do
+    it 'should index user on elasticsearch after create', skip: true do
       poll_response = build(:poll_response)
       TestAfterCommit.with_commits(true) do
         expect(IndexElasticsearchJob).to receive(:perform_later).with(
@@ -23,7 +22,7 @@ RSpec.describe PollResponse do
       end
     end
 
-    it "should reindex user on elasticsearch after update", skip: true do
+    it 'should reindex user on elasticsearch after update', skip: true do
       poll_response = create(:poll_response)
       TestAfterCommit.with_commits(true) do
         expect(IndexElasticsearchJob).to receive(:perform_later).with(
@@ -36,7 +35,7 @@ RSpec.describe PollResponse do
       end
     end
 
-    it "should remove user from elasticsearch after destroy", skip: true do
+    it 'should remove user from elasticsearch after destroy', skip: true do
       poll_response = create(:poll_response)
       TestAfterCommit.with_commits(true) do
         expect(IndexElasticsearchJob).to receive(:perform_later).with(

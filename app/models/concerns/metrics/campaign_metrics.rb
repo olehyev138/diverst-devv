@@ -21,7 +21,7 @@ module Metrics
       # Total votes for all answers per user
 
       graph = Answer.get_graph_builder
-      graph.set_enterprise_filter(field: 'author.enterprise_id', value: campaign.enterprise_id )
+      graph.set_enterprise_filter(field: 'author.enterprise_id', value: campaign.enterprise_id)
       graph.formatter.title = 'Total votes per user'
 
       graph.query = graph.query.filter_agg(field: 'question.campaign_id', value: campaign.id) { |q|
@@ -37,5 +37,3 @@ module Metrics
     end
   end
 end
-
-

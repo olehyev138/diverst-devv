@@ -24,7 +24,7 @@
 
         <div class="col md-4 sm-12">
           <div class="panel panel--primary text-center margin-bottom-0">
-            <div class="panel-headline"><p><strong>New <%= c_t(:erg).capitalize %> Memberships (6 months)</strong></p></div>
+            <div class="panel-headline"><p><strong>New <%= c_t(:erg) %> Memberships (6 months)</strong></p></div>
             <div class="panel-data"><p><b class="accent"><%= @user_metrics[:group_memberships] %></b></p></div>
           </div>
         </div>
@@ -81,22 +81,22 @@
   </div>
   <div class="card">
     <div class="card__section">
-      <h2><%= c_t(:erg).capitalize %> Membership Cross Section</h2>
+      <h2><%= c_t(:erg) %> Membership Cross Section</h2>
       <button type="button" class="btn btn--primary btn--small" data-toggle="modal"
-              data-target="#group-scope-selector">Intersect <%= c_t(:erg).pluralize.capitalize %></button>
+              data-target="#group-scope-selector">Intersect <%= c_t(:erg).pluralize %></button>
       <button type="button" class="btn btn--secondary btn--small" data-toggle="collapse" data-target="#groups-list-container"
               aria-expanded="false" aria-controls="groups-list-container">Show Intersections</button>
 
       <br><br>
       <div id="groups-list-container" class="collapse">
         <div class="card__section--border">
-          <h4><b>Intersected <%= c_t(:erg).pluralize.capitalize %></b></h4>
+          <h4><b>Intersected <%= c_t(:erg).pluralize %></b></h4>
           <div class="groups-list"><h4>No filter</h4></div><br>
         </div>
       </div>
 
       <div class="card__action">
-        <a href="#" id="users_intersection_csv", data-url="<%= user_groups_intersection_metrics_users_path(format: :csv) %>">Export CSV</a>
+        <a href="#" id="users_intersection_csv" data-url="<%= user_groups_intersection_metrics_users_path(format: :csv) %>">Export CSV</a>
       </div>
 
       <table class="table--has-border" data-source="<%= user_groups_intersection_metrics_users_path(format: :json) %>" id="users-table">
@@ -148,7 +148,9 @@
     });
 
     $('#users_intersection_csv').click(function () {
-      $.get($('#users_intersection_csv').data('url'), { scoped_by_models: scoped_by_models });
+      $.get($('#users_intersection_csv').data('url'), { scoped_by_models: scoped_by_models }, function(data) {
+        Utility.displayFlash(data);
+      }, "JSON");
     });
   });
 </script>

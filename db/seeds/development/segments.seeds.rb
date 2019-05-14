@@ -6,7 +6,7 @@ after 'development:enterprise' do
         {
           field: -> (enterprise) { enterprise.fields.where(title: 'Gender').first },
           operator: SegmentRule.operators[:contains_any_of],
-          values: ['Male']
+          values: ['Male'].to_json
         }
       ]
     },
@@ -16,7 +16,7 @@ after 'development:enterprise' do
         {
           field: -> (enterprise) { enterprise.fields.where(title: 'Gender').first },
           operator: SegmentRule.operators[:contains_any_of],
-          values: ['Female']
+          values: ['Female'].to_json
         }
       ]
     },
@@ -26,7 +26,7 @@ after 'development:enterprise' do
         {
           field: -> (enterprise) { enterprise.fields.where(title: 'Chapter').first },
           operator: SegmentRule.operators[:contains_any_of],
-          values: ['Boston', 'Montreal', 'New York']
+          values: ['Boston', 'Montreal', 'New York'].to_json
         }
       ]
     },
@@ -36,7 +36,7 @@ after 'development:enterprise' do
         {
           field: -> (enterprise) { enterprise.fields.where(title: 'Veteran?').first },
           operator: SegmentRule.operators[:contains_any_of],
-          values: ['Yes']
+          values: ['Yes'].to_json
         }
       ]
     },
@@ -46,7 +46,7 @@ after 'development:enterprise' do
         {
           field: -> (enterprise) { enterprise.fields.where(title: 'Status').first },
           operator: SegmentRule.operators[:contains_any_of],
-          values: ['Married']
+          values: ['Married'].to_json
         }
       ]
     },
@@ -56,13 +56,13 @@ after 'development:enterprise' do
         {
           field: -> (enterprise) { enterprise.fields.where(title: 'LGBT?').first },
           operator: SegmentRule.operators[:contains_any_of],
-          values: ['Yes']
+          values: ['Yes'].to_json
         }
       ]
     }
   ]
 
-  spinner = TTY::Spinner.new(":spinner Populating groups with segments...", format: :spin_2)
+  spinner = TTY::Spinner.new(":spinner Populating enterprises with segments...", format: :spin_2)
   spinner.run do |spinner|
     Enterprise.all.each do |enterprise|
       segments.each do |segment|
@@ -72,7 +72,7 @@ after 'development:enterprise' do
         )
 
         segment[:rules].each do |rule|
-          s.rules.new(
+          s.field_rules.new(
             field: rule[:field].call(enterprise),
             operator: rule[:operator],
             values: rule[:values]

@@ -4,7 +4,7 @@ FactoryBot.define do
     subject { Faker::Lorem.sentence }
     content { Faker::Lorem.sentence }
     description { Faker::Lorem.sentence }
-    mailer_name {"test_mailer"}
-    mailer_method {"notification"}
+    mailer_name { 'test_mailer' }
+    mailer_method { 'notification' }
   end
 end

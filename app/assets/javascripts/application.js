@@ -44,9 +44,29 @@
 
 var Utility = (function() {
 
+  var flashTimeout;
+
   // Autohides alert after a certain amount of time
   var autoHideAlerts = function() {
-    $('p.notice, p.alert, p.reward').fadeOut(300, function() { $(this).remove(); });
+    $('p.notice, p.alert, p.reward').fadeOut(300, function() { $(this).remove() });
+  };
+
+  // Accepts a message object in the form of { "<alertType>":"<message>" }
+  var displayFlash = function(messageObj) {
+    clearTimeout(flashTimeout);
+    clearTimeout(initialTimeout);
+
+    var type = Object.keys(messageObj)[0];
+
+    $('.flash_container').html(`
+        <p class="${type}">${messageObj[type]}</p>
+    `);
+    $('p.' + type).hide();
+    $('p.' + type).fadeIn(300);
+
+    flashTimeout = setTimeout(function() {
+      Utility.autoHideAlerts();
+    }, 4500);
   };
 
   // Submits the passed input's form when pressing return while the input is focused
@@ -74,6 +94,7 @@ var Utility = (function() {
 
   return {
     autoHideAlerts: autoHideAlerts,
+    displayFlash: displayFlash,
     submitOnReturn: submitOnReturn,
     mergeWithDTDefaults: mergeWithDTDefaults,
     defaultDatatablesOptions: defaultDatatablesOptions
@@ -81,6 +102,6 @@ var Utility = (function() {
 
 })();
 
-setTimeout(function() {
+var initialTimeout = setTimeout(function() {
   Utility.autoHideAlerts();
 }, 4500);

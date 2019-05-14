@@ -10,8 +10,9 @@ class GroupLeaderCommentNotificationsJob < ActiveJob::Base
 
     # check if group has pending comments
     return if count < 1
+
     # get the leaders
-    leaders = group.leaders.joins(:group_leaders).where(:group_leaders => {:pending_comments_notifications_enabled => true}).distinct
+    leaders = group.leaders.joins(:group_leaders).where(group_leaders: { pending_comments_notifications_enabled: true }).distinct
     # send an email to group leaders with notifications enabled
     leaders.each do |leader|
       GroupLeaderCommentNotificationMailer.notification(group, leader, count).deliver_now

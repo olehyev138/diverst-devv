@@ -1,11 +1,10 @@
 require 'rails_helper'
 
-RSpec.describe GroupMemberPolicy, :type => :policy do
-
-  let(:enterprise) {create(:enterprise)}
-  let(:group){ create(:group, :enterprise => enterprise) }
-  let(:no_access) { create(:user, :enterprise => enterprise) }
-  let(:member){ create(:user, :enterprise => enterprise) }
+RSpec.describe GroupMemberPolicy, type: :policy do
+  let(:enterprise) { create(:enterprise) }
+  let(:group) { create(:group, enterprise: enterprise) }
+  let(:no_access) { create(:user, enterprise: enterprise) }
+  let(:member) { create(:user, enterprise: enterprise) }
   let(:user) { no_access }
 
   subject { described_class.new(user, [group, member]) }
@@ -18,167 +17,166 @@ RSpec.describe GroupMemberPolicy, :type => :policy do
     no_access.policy_group.save!
   }
 
-  describe 'for users with access' do 
-
-    context 'when manage_all is false' do 
-      context 'when group.members_visibility is set to global' do 
+  describe 'for users with access' do
+    context 'when manage_all is false' do
+      context 'when group.members_visibility is set to global' do
         before { group.members_visibility = 'global' }
 
-        context 'when ONLY groups_members_manage is true' do 
+        context 'when ONLY groups_members_manage is true' do
           before { user.policy_group.update groups_members_manage: true }
 
-          it 'returns true' do 
+          it 'returns true' do
             expect(subject.view_members?).to eq true
           end
         end
 
-        context 'when ONLY groups_members_index is true' do 
+        context 'when ONLY groups_members_index is true' do
           before { user.policy_group.update groups_members_index: true }
 
-          it 'returns true' do 
+          it 'returns true' do
             expect(subject.view_members?).to eq true
           end
         end
 
-        context 'user has basic leader permissions and groups_members_manage is true' do 
-          before do 
+        context 'user has basic leader permissions and groups_members_manage is true' do
+          before do
             user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
             user_role.policy_group_template.update groups_members_manage: true
             create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-                  user_role_id: user_role.id)
+                                  user_role_id: user_role.id)
           end
 
-          it 'returns true' do 
+          it 'returns true' do
             expect(subject.view_members?).to eq true
           end
         end
 
-        context 'user has basic leader permissions and groups_members_index is true' do 
-          before do 
+        context 'user has basic leader permissions and groups_members_index is true' do
+          before do
             user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
             user_role.policy_group_template.update groups_members_index: true
             create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-                  user_role_id: user_role.id)
+                                  user_role_id: user_role.id)
           end
 
-          it 'returns true' do 
+          it 'returns true' do
             expect(subject.view_members?).to eq true
           end
         end
       end
 
-      context 'when group.members_visibility is set to group' do 
+      context 'when group.members_visibility is set to group' do
         before { group.members_visibility = 'group' }
 
-        context 'when groups_manage and groups_members_manage are true' do 
+        context 'when groups_manage and groups_members_manage are true' do
           before { user.policy_group.update groups_manage: true, groups_members_manage: true }
-          
-          it 'returns true' do 
+
+          it 'returns true' do
             expect(subject.view_members?).to eq true
           end
         end
 
-        context 'user has group leader permissions' do 
-          before do 
+        context 'user has group leader permissions' do
+          before do
             user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
             user_role.policy_group_template.update groups_members_manage: true
             create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-                  user_role_id: user_role.id)
+                                  user_role_id: user_role.id)
           end
 
-          it 'returns true' do 
+          it 'returns true' do
             expect(subject.view_members?).to eq true
           end
         end
 
         context 'user is member and groups_members_manage is true' do
-          before do 
+          before do
             create(:user_group, user_id: user.id, group_id: group.id)
             user.policy_group.update groups_members_manage: true
-          end 
+          end
 
-          it 'returns true' do 
+          it 'returns true' do
             expect(subject.view_members?).to eq true
           end
         end
       end
 
-      context 'when group.members_visibility is set to managers_only' do 
+      context 'when group.members_visibility is set to managers_only' do
         before { group.members_visibility = 'managers_only' }
 
-        context 'when user is a manager' do 
-          context 'when groups_manage and groups_members_manage are true' do 
+        context 'when user is a manager' do
+          context 'when groups_manage and groups_members_manage are true' do
             before { user.policy_group.update groups_manage: true, groups_members_manage: true }
 
-            it 'returns true' do 
+            it 'returns true' do
               expect(subject.view_members?).to eq true
             end
           end
 
-          context 'has group leader permissions' do 
-            before do 
+          context 'has group leader permissions' do
+            before do
               user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
               user_role.policy_group_template.update groups_members_manage: true
               create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-                    user_role_id: user_role.id)
+                                    user_role_id: user_role.id)
             end
 
-            it 'returns true' do 
+            it 'returns true' do
               expect(subject.view_members?).to eq true
             end
           end
 
-          context 'when groups_manage and groups_members_index are true' do 
+          context 'when groups_manage and groups_members_index are true' do
             before { user.policy_group.update groups_manage: true, groups_members_index: true }
 
-            it 'returns true' do 
+            it 'returns true' do
               expect(subject.view_members?).to eq true
             end
           end
 
-          context 'has group leader permissions' do 
-            before do 
+          context 'has group leader permissions' do
+            before do
               user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
               user_role.policy_group_template.update groups_members_index: true
               create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-                    user_role_id: user_role.id)
+                                    user_role_id: user_role.id)
             end
 
-            it 'returns true' do 
+            it 'returns true' do
               expect(subject.view_members?).to eq true
             end
           end
         end
       end
 
-      context 'when group.members_visibility is set to nil' do 
+      context 'when group.members_visibility is set to nil' do
         before { group.members_visibility = nil }
 
-        it 'returns true' do 
+        it 'returns true' do
           expect(subject.view_members?).to eq false
         end
       end
-      
-      context 'when current user IS same as record' do 
+
+      context 'when current user IS same as record' do
         let!(:member) { user }
-        it { is_expected.to permit_actions([:create, :destroy]) }  
+        it { is_expected.to permit_actions([:create, :destroy]) }
       end
 
-      context 'when groups_manage and groups_members_manage are true and current user IS NOT same as record' do 
+      context 'when groups_manage and groups_members_manage are true and current user IS NOT same as record' do
         let!(:member) { create(:user) }
         before { user.policy_group.update groups_manage: true, groups_members_manage: true }
         it { is_expected.to permit_actions([:create, :destroy]) }
       end
     end
 
-    context 'when manage_all is true' do 
+    context 'when manage_all is true' do
       before { user.policy_group.update manage_all: true }
 
       context 'when groups_members_manage, groups_manage and groups_members_index are false' do
         before { user.policy_group.update groups_members_manage: false, groups_manage: false, groups_members_index: false }
         it { is_expected.to permit_actions([:create, :destroy]) }
 
-        it 'returns true for #view_members?' do 
+        it 'returns true for #view_members?' do
           group.members_visibility = 'global'
           expect(subject.view_members?).to eq true
         end
@@ -186,7 +184,7 @@ RSpec.describe GroupMemberPolicy, :type => :policy do
     end
   end
 
-  describe 'for users with no access' do 
+  describe 'for users with no access' do
     it { is_expected.to forbid_actions([:create, :destroy]) }
   end
 end

@@ -31,7 +31,7 @@ server '34.200.27.56', user: 'newdeploy', roles: %w(web app db)
 set :branch, 'master'
 set :rails_env, :production
 
-set :rollbar_env, "pwc"
+set :rollbar_env, 'pwc'
 
 
 # Custom SSH Options
