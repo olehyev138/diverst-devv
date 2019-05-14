@@ -4,7 +4,7 @@ module Metrics
     include MetricsUtil
 
     def user_change_percentage
-      # Growth of user population over last year
+      # Growth of user population
 
       from_date = 6.months.ago
       to_date = Time.now

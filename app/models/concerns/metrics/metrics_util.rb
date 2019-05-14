@@ -45,7 +45,7 @@ module Metrics
         change_percentage = 0
       else
         change_percentage =
-          (((to_date_total - from_date_total) / from_date_total)).round(2)
+          ((((to_date_total - from_date_total) / from_date_total)).round(2) * 100)
       end
 
       if change_percentage.positive?
