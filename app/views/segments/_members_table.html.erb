@@ -1,17 +1,9 @@
-<div class="card">
-    <div class="card__section">
-      <% if @members.any? %>
-        <table id="segment-members-table" class="table--has-border data-table" data-source="<%= source %>">
-          <thead>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Options</th>
-          </thead>
-          <tbody>
-          </tbody>
-        </table>
-      <% else %>
-        <p>No user match search criteria.</p>
-      <% end %>
-    </div>
-  </div>
+<table id="segment-members-table" class="table--has-border" data-source="<%= source %>">
+  <thead>
+  <th>Name</th>
+  <th>Email</th>
+  <th>Options</th>
+  </thead>
+  <tbody>
+  </tbody>
+</table>

@@ -25,7 +25,7 @@ class SegmentsController < ApplicationController
 
   def enterprise_segments
     authorize Segment
-    @segments = policy_scope(Segment).includes(:parent_segment).where(segmentations: { id: nil }).distinct
+    @segments = policy_scope(Segment).all_parents
     respond_to do |format|
       format.html
       format.json { render json: EnterpriseSegmentDatatable.new(view_context, @segments) }
@@ -35,30 +35,33 @@ class SegmentsController < ApplicationController
   def new
     authorize Segment
     @segment = current_user.enterprise.segments.new
+    @segment.id = -1
+
+    @segment.parent = Segment.find(params[:parent_id]) if params[:parent_id].present?
+
+    render :show
   end
 
   def create
     authorize Segment
+
     @segment = current_user.enterprise.segments.new(segment_params)
 
     if @segment.save
       flash[:notice] = "Your #{c_t(:segment)} was created"
       track_activity(@segment, :create)
-      redirect_to action: :index
+      redirect_to @segment
     else
       flash[:alert] = "Your #{c_t(:segment)} was not created. Please fix the errors"
-      render :edit
+      render :show
     end
   end
 
   def show
     authorize @segment
 
-    @groups = current_user.enterprise.groups
-
-    @segments = @segment.sub_segments.includes(:members)
-
-    members
+    @sub_segments = @segment.children
+    @members = @segment.ordered_members
 
     respond_to do |format|
       format.html
@@ -68,6 +71,11 @@ class SegmentsController < ApplicationController
 
   def edit
     authorize @segment
+
+    @sub_segments = @segment.children
+    @members = @segment.ordered_members
+
+    render :show
   end
 
   def update
@@ -78,7 +86,7 @@ class SegmentsController < ApplicationController
       redirect_to @segment
     else
       flash[:alert] = "Your #{c_t(:segment)} was not updated. Please fix the errors"
-      render :edit
+      render :show
     end
   end
 
@@ -92,43 +100,59 @@ class SegmentsController < ApplicationController
   def export_csv
     authorize @segment, :show?
     SegmentMembersDownloadJob.perform_later(current_user.id, @segment.id, params[:group_id])
+
     flash[:notice] = 'Please check your Secure Downloads section in a couple of minutes'
     redirect_to :back
   end
 
-  protected
+  def segment_status
+    @segment = current_user.enterprise.segments.find(params[:id])
+    authorize @segment, :show?
 
-  def members
-    if params[:group_id].present?
-      @group = current_user.enterprise.groups.find_by_id(params[:group_id])
-      @members = policy_scope(User).joins(:segments, :groups).where(segments: { id: @segment.id }, groups: { id: params[:group_id] }).limit(params[:limit] || 25).distinct
-
-    else
-      @members = policy_scope(User).joins(:segments).where(segments: { id: @segment.id }).limit(params[:limit] || 25).distinct
+    respond_to do |format|
+      format.json {
+        render json: { status: @segment.job_status }
+      }
     end
   end
+
+  protected
 
   def set_segment
     @segment = current_user.enterprise.segments.find(params[:id])
   end
 
   def set_segments
-    @segments = policy_scope(Segment).includes(:parent_segment).where(segmentations: { id: nil }).distinct
+    @segments = policy_scope(Segment).all_parents
   end
 
   def segment_params
     params
-        .require(:segment)
-        .permit(
-          :name,
-          :active_users_filter,
-          rules_attributes: [
-              :id,
-              :_destroy,
-              :field_id,
-              :operator,
-              values: []
-          ]
-        )
+      .require(:segment)
+      .permit(
+        :name,
+        :active_users_filter,
+        :limit,
+        :parent_id,
+        field_rules_attributes: [
+          :id,
+          :field_id,
+          :operator,
+          :_destroy,
+          values: []
+        ],
+        order_rules_attributes: [
+          :id,
+          :field,
+          :operator,
+          :_destroy,
+        ],
+        group_rules_attributes: [
+          :id,
+          :operator,
+          :_destroy,
+          group_ids: []
+        ]
+      )
   end
 end

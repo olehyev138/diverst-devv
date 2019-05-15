@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190502155032) do
+ActiveRecord::Schema.define(version: 20190502185618) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -1135,6 +1135,35 @@ ActiveRecord::Schema.define(version: 20190502155032) do
 
   add_index "samples", ["user_id"], name: "index_samples_on_user_id", using: :btree
 
+  create_table "segment_group_scope_rule_groups", force: :cascade do |t|
+    t.integer  "segment_group_scope_rule_id", limit: 4
+    t.integer  "group_id",                    limit: 4
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
+  end
+
+  add_index "segment_group_scope_rule_groups", ["group_id"], name: "index_segment_group_scope_rule_groups_on_group_id", using: :btree
+  add_index "segment_group_scope_rule_groups", ["segment_group_scope_rule_id"], name: "segment_group_rule_group_index", using: :btree
+
+  create_table "segment_group_scope_rules", force: :cascade do |t|
+    t.integer  "segment_id", limit: 4
+    t.integer  "operator",   limit: 4, null: false
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+  end
+
+  add_index "segment_group_scope_rules", ["segment_id"], name: "index_segment_group_scope_rules_on_segment_id", using: :btree
+
+  create_table "segment_order_rules", force: :cascade do |t|
+    t.integer  "segment_id", limit: 4
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+    t.integer  "operator",   limit: 4, null: false
+    t.integer  "field",      limit: 4, null: false
+  end
+
+  add_index "segment_order_rules", ["segment_id"], name: "index_segment_order_rules_on_segment_id", using: :btree
+
   create_table "segment_rules", force: :cascade do |t|
     t.integer  "segment_id", limit: 4
     t.integer  "field_id",   limit: 4
@@ -1144,24 +1173,19 @@ ActiveRecord::Schema.define(version: 20190502155032) do
     t.datetime "updated_at",               null: false
   end
 
-  create_table "segmentations", force: :cascade do |t|
-    t.integer  "parent_id",  limit: 4
-    t.integer  "child_id",   limit: 4
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
-  end
-
-  add_index "segmentations", ["child_id"], name: "fk_rails_9a097e6024", using: :btree
-  add_index "segmentations", ["parent_id", "child_id"], name: "index_segmentations_on_parent_id_and_child_id", unique: true, using: :btree
-
   create_table "segments", force: :cascade do |t|
     t.integer  "enterprise_id",       limit: 4
     t.string   "name",                limit: 191
-    t.datetime "created_at",                      null: false
-    t.datetime "updated_at",                      null: false
+    t.datetime "created_at",                                  null: false
+    t.datetime "updated_at",                                  null: false
     t.integer  "owner_id",            limit: 4
     t.string   "active_users_filter", limit: 191
+    t.integer  "limit",               limit: 4
+    t.integer  "job_status",          limit: 4,   default: 0, null: false
+    t.integer  "parent_id",           limit: 4
   end
+
+  add_index "segments", ["parent_id"], name: "index_segments_on_parent_id", using: :btree
 
   create_table "shared_metrics_dashboards", force: :cascade do |t|
     t.integer "user_id",              limit: 4
@@ -1395,7 +1419,6 @@ ActiveRecord::Schema.define(version: 20190502155032) do
     t.integer  "group_id",          limit: 4
     t.integer  "folder_id",         limit: 4
     t.integer  "resource_id",       limit: 4
-    t.integer  "view_count",        limit: 4
   end
 
   create_table "yammer_field_mappings", force: :cascade do |t|
@@ -1421,7 +1444,6 @@ ActiveRecord::Schema.define(version: 20190502155032) do
   add_foreign_key "reward_actions", "enterprises"
   add_foreign_key "rewards", "enterprises"
   add_foreign_key "rewards", "users", column: "responsible_id"
-  add_foreign_key "segmentations", "segments", column: "child_id"
   add_foreign_key "shared_metrics_dashboards", "metrics_dashboards"
   add_foreign_key "shared_metrics_dashboards", "users"
   add_foreign_key "user_reward_actions", "reward_actions"
