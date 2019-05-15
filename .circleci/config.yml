@@ -232,7 +232,7 @@ jobs:
 
 workflows:
   version: 2
-  build-deploy:
+  lint-test-deploy:
     jobs:
       - lint
       - test:
