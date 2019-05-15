@@ -1,13 +1,18 @@
-<%= link_to 'Edit Account Information',
+<%= link_to "Edit #{@account.name}'s Information",
             edit_group_twitter_account_path(@group, @account),
             class: "btn btn-sm btn-primary"
 %>
-<%= link_to 'Un-follow Account',
+<%= link_to 'Back To Account List',
+            group_twitter_accounts_path(@group),
+            class: "btn btn-sm btn-secondary"
+%>
+<%= link_to "Un-follow #{@account.name}",
             group_twitter_account_path(@group, @account),
             method: :delete,
             data: {confirm: 'Are you sure'},
             class: "btn btn-sm btn-danger"
 %>
+
 
 <h1><%= @account.name %>'s Tweets</h1>
 <h3>@<%= @account.account %></h3>

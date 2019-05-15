@@ -7,7 +7,7 @@ class Groups::TwitterAccountsController < ApplicationController
   layout 'erg'
 
   def index
-    @accounts = @group.twitter_accounts.all.reverse
+    @accounts = sorted_accounts
   end
 
   def new
@@ -77,4 +77,19 @@ class Groups::TwitterAccountsController < ApplicationController
   def twitter_params
     params.require(:twitter_account).permit(:name, :account)
   end
+
+  def sorted_accounts
+    @group.twitter_accounts.all.sort do |a, b|
+      case
+        when a.updated_at < b.updated_at
+          1
+        when a.updated_at > b.updated_at
+          -1
+        else
+          0
+      end
+    end
+  end
+
+
 end

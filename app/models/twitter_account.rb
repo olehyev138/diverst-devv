@@ -1,7 +1,10 @@
 class TwitterAccount < ActiveRecord::Base
+  belongs_to :group
+
   validates :name, presence: true, uniqueness: { scope: :group_id, case_sensitive: false }
   validates :account, presence: true, uniqueness: { scope: :group_id, case_sensitive: false }
   validate :user_exists, if: -> { account.present? }
+  validates :group_id, presence: true
 
   private
 

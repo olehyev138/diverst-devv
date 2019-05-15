@@ -14,7 +14,7 @@ RSpec.feature 'Twitter Account Management' do
     create(:twitter_account, name: 'Alex Oxorn2', account: 'AOxorn', group_id: group.id)
   end
 
-  def create_single_csutom_account
+  def create_single_custom_account
     create(:twitter_account, name: 'Alex Oxorn', account: 'ADiverst', group_id: group.id)
   end
 
@@ -35,9 +35,7 @@ RSpec.feature 'Twitter Account Management' do
     end
 
     describe 'Adding Accounts' do
-
       scenario 'Add New Account' do
-
         click_link('+ Add Account')
         expect(current_path).to eql("/groups/#{group.id}/twitter_accounts/new")
 
@@ -50,6 +48,7 @@ RSpec.feature 'Twitter Account Management' do
 
         expect(page).to have_content('Alex Oxorn')
         expect(page).to have_content('@ADIVERST')
+        expect(page).to_not have_content('@@ADIVERST')
       end
 
       scenario 'Adding Account, then canceling before submitting' do
@@ -89,12 +88,11 @@ RSpec.feature 'Twitter Account Management' do
         expect(page).to have_content('Name can\'t be blank')
         expect(page).to have_content('Account can\'t be blank')
       end
-
     end
   end
 
   context 'Accounts Exist' do
-    before do
+    before(:each) do
       create_custom_accounts
       visit(group_twitter_accounts_path(group))
     end
@@ -106,22 +104,25 @@ RSpec.feature 'Twitter Account Management' do
     it 'should show the accounts which are being followed' do
       expect(page).to have_content('Alex Oxorn')
       expect(page).to have_content('@ADiverst')
+      expect(page).to_not have_content('@@ADiverst')
       expect(page).to have_content('Jack Douglas')
       expect(page).to have_content('@jacksfilms')
+      expect(page).to_not have_content('@@jacksfilms')
       expect(page).to have_content('Sonic')
       expect(page).to have_content('@sonic_hedgehog')
+      expect(page).to_not have_content('@@sonic_hedgehog')
       expect(page).to have_content('Alex Oxorn2')
       expect(page).to have_content('@AOxorn')
+      expect(page).to_not have_content('@@AOxorn')
     end
 
     describe 'Adding Accounts' do
-
       scenario 'Add New Account' do
         click_link('+ Add Account')
         expect(current_path).to eql("/groups/#{group.id}/twitter_accounts/new")
 
         fill_in '* Name', with: 'ESPN'
-        fill_in '* Account', with: 'espn'
+        fill_in '* Account', with: '@@@espn'
 
         click_button('Follow User')
 
@@ -129,6 +130,7 @@ RSpec.feature 'Twitter Account Management' do
 
         expect(page).to have_content('ESPN')
         expect(page).to have_content('@espn')
+        expect(page).to_not have_content('@@espn')
       end
 
       scenario 'Adding Account, then canceling before submitting' do
@@ -195,25 +197,26 @@ RSpec.feature 'Twitter Account Management' do
         expect(page).to have_content('Name can\'t be blank')
         expect(page).to have_content('Account can\'t be blank')
       end
-
     end
 
     describe 'Deleting Accounts' do
-
-      scenario 'Delete a particular account' do
-        first(:link, 'Un-follow Account').click
+      scenario 'Delete a particular account from Index' do
+        first(:link, 'Un-follow Alex Oxorn2').click
 
         expect(page).to have_content('Alex Oxorn')
         expect(page).to have_content('@ADiverst')
+        expect(page).to_not have_content('@@ADiverst')
         expect(page).to have_content('Jack Douglas')
         expect(page).to have_content('@jacksfilms')
+        expect(page).to_not have_content('@@jacksfilms')
         expect(page).to have_content('Sonic')
         expect(page).to have_content('@sonic_hedgehog')
+        expect(page).to_not have_content('@@sonic_hedgehog')
         expect(page).to_not have_content('Alex Oxorn2')
         expect(page).to_not have_content('@AOxorn')
       end
 
-      scenario 'Dekete All Accounts' do
+      scenario 'Delete All Accounts' do
         click_link('Un-follow All')
 
         expect(page).to_not have_content('Alex Oxorn')
@@ -226,12 +229,216 @@ RSpec.feature 'Twitter Account Management' do
         expect(page).to_not have_content('@AOxorn')
       end
 
+      scenario 'Delete a particular account from show' do
+        first(:link, 'See More Tweets From Alex Oxorn2').click
+        first(:link, 'Un-follow Alex Oxorn2').click
+
+        expect(page).to have_content('Alex Oxorn')
+        expect(page).to have_content('@ADiverst')
+        expect(page).to_not have_content('@@ADiverst')
+        expect(page).to have_content('Jack Douglas')
+        expect(page).to have_content('@jacksfilms')
+        expect(page).to_not have_content('@@jacksfilms')
+        expect(page).to have_content('Sonic')
+        expect(page).to have_content('@sonic_hedgehog')
+        expect(page).to_not have_content('@@sonic_hedgehog')
+        expect(page).to_not have_content('Alex Oxorn2')
+        expect(page).to_not have_content('@AOxorn')
+      end
     end
 
     describe 'Editing Account' do
+      context 'From Index' do
+        before do
+          first(:link, 'Edit Alex Oxorn2\'s Information').click
+          @to_edit_account = find_field('* Account').value
+          @to_edit_name = find_field('* Name').value
+        end
 
+        scenario 'Edit Account with existing account' do
+          fill_in '* Account', with: '@jacksfilms'
+
+          click_button('Follow User')
+
+          expect(page).to have_content('Account has already been taken')
+        end
+
+        scenario 'Edit Account with existing name' do
+          fill_in '* Name', with: 'jACK dOUGLAS'
+
+          click_button('Follow User')
+
+          expect(page).to have_content('Name has already been taken')
+        end
+
+        scenario 'Edit Account adding extra @s' do
+          fill_in '* Account', with: "@@@@@@#{@to_edit_account}"
+
+          click_button('Follow User')
+          expect(page).to have_content("#{@to_edit_name}")
+          expect(page).to have_content("@#{@to_edit_account}")
+          expect(page).to_not have_content("@@#{@to_edit_account}")
+        end
+
+        scenario 'Edit Account' do
+          fill_in '* Name', with: 'ESPN'
+          fill_in '* Account', with: '@@@espn'
+
+          click_button('Follow User')
+
+          expect(current_path).to eql("/groups/#{group.id}/twitter_accounts")
+
+          expect(page).to have_content('ESPN')
+          expect(page).to have_content('@espn')
+          expect(page).to_not have_content('@@espn')
+        end
+
+        scenario 'Edit Account, then canceling before submitting' do
+          fill_in '* Name', with: 'ESPN'
+          fill_in '* Account', with: '@@espn'
+
+          click_link('Cancel')
+
+          expect(current_path).to eql("/groups/#{group.id}/twitter_accounts")
+
+          expect(page).to_not have_content('ESPN')
+          expect(page).to_not have_content('@espn')
+        end
+
+        scenario 'Edit Account (Invalid account name)' do
+          fill_in '* Account', with: 'uewbfvajksdbvlhksadbjcvhabdsfjkvnkjdasfvn'
+
+          click_button('Follow User')
+
+          expect(page).to have_content('User doesn\'t exist')
+        end
+
+        scenario 'Edit Account (Empty Fields)' do
+          fill_in '* Account', with: ''
+          fill_in '* Name', with: ''
+
+          click_button('Follow User')
+
+          expect(page).to have_content('Name can\'t be blank')
+          expect(page).to have_content('Account can\'t be blank')
+        end
+
+        scenario 'Edit Account (Changing Cases)' do
+          fill_in '* Name', with: "#{@to_edit_name.upcase}"
+          fill_in '* Account', with: "@#{@to_edit_account.upcase}"
+
+          click_button('Follow User')
+
+          expect(page).to have_content("#{@to_edit_name.upcase}")
+          expect(page).to have_content("@#{@to_edit_account.upcase}")
+          expect(page).to_not have_content("@@#{@to_edit_account.upcase}")
+        end
+      end
+
+      context 'From Show' do
+        before do
+          first(:link, 'See More Tweets From Alex Oxorn2').click
+          first(:link, 'Edit Alex Oxorn2\'s Information').click
+          @to_edit_account = find_field('* Account').value
+          @to_edit_name = find_field('* Name').value
+        end
+
+        scenario 'Edit Account with existing account' do
+          fill_in '* Account', with: '@jacksfilms'
+
+          click_button('Follow User')
+
+          expect(page).to have_content('Account has already been taken')
+        end
+
+        scenario 'Edit Account with existing name' do
+          fill_in '* Name', with: 'jACK dOUGLAS'
+
+          click_button('Follow User')
+
+          expect(page).to have_content('Name has already been taken')
+        end
+
+        scenario 'Edit Account adding extra @s' do
+          fill_in '* Account', with: "@@@@@@#{@to_edit_account}"
+
+          click_button('Follow User')
+          expect(page).to have_content("#{@to_edit_name}")
+          expect(page).to have_content("@#{@to_edit_account}")
+          expect(page).to_not have_content("@@#{@to_edit_account}")
+        end
+
+        scenario 'Edit Account' do
+          fill_in '* Name', with: 'ESPN'
+          fill_in '* Account', with: '@@@espn'
+
+          click_button('Follow User')
+
+          expect(current_path).to eql("/groups/#{group.id}/twitter_accounts")
+
+          expect(page).to have_content('ESPN')
+          expect(page).to have_content('@espn')
+          expect(page).to_not have_content('@@espn')
+        end
+
+        scenario 'Edit Account, then canceling before submitting' do
+          fill_in '* Name', with: 'ESPN'
+          fill_in '* Account', with: '@@espn'
+
+          click_link('Cancel')
+
+          expect(current_path).to eql("/groups/#{group.id}/twitter_accounts")
+
+          expect(page).to_not have_content('ESPN')
+          expect(page).to_not have_content('@espn')
+        end
+
+        scenario 'Edit Account (Invalid account name)' do
+          fill_in '* Account', with: 'uewbfvajksdbvlhksadbjcvhabdsfjkvnkjdasfvn'
+
+          click_button('Follow User')
+
+          expect(page).to have_content('User doesn\'t exist')
+        end
+
+        scenario 'Edit Account (Empty Fields)' do
+          fill_in '* Account', with: ''
+          fill_in '* Name', with: ''
+
+          click_button('Follow User')
+
+          expect(page).to have_content('Name can\'t be blank')
+          expect(page).to have_content('Account can\'t be blank')
+        end
+
+        scenario 'Edit Account (Changing Cases)' do
+          fill_in '* Name', with: "#{@to_edit_name.upcase}"
+          fill_in '* Account', with: "@#{@to_edit_account.upcase}"
+
+          click_button('Follow User')
+
+          expect(page).to have_content("#{@to_edit_name.upcase}")
+          expect(page).to have_content("@#{@to_edit_account.upcase}")
+          expect(page).to_not have_content("@@#{@to_edit_account.upcase}")
+        end
+      end
     end
 
-  end
+    describe 'Viewing Account' do
+      describe 'Seeing Full Timeline' do
+        it 'Should have the correct titles' do
+          first(:link, 'See More Tweets From Alex Oxorn2').click
+          expect(page).to have_content('Alex Oxorn2\'s Tweets')
+          expect(page).to have_content('@AOxorn')
+          expect(page).to_not have_content('@@AOxorn')
+        end
 
+        it 'Should have a button that returns to index' do
+          first(:link, 'See More Tweets From Alex Oxorn2').click
+          click_link('Back To Account List')
+          expect(current_path).to eql("/groups/#{group.id}/twitter_accounts")
+        end
+      end
+    end
+  end
 end

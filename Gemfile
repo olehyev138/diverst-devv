@@ -72,7 +72,7 @@ gem 'thor', '0.20.0'# Expected string default value for '--decorator'; got true 
 gem 'sanitize_email', '~> 1.2.2'
 gem 'rack-timeout', '~> 0.4.2'
 gem 'jquery-ui-rails', '~> 6.0.1'
-gem 'twitter' #twitter implementation
+gem 'twitter' # twitter implementation
 
 group :development, :test do
   gem 'spring', '~> 1.6.2' # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring

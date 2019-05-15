@@ -35,19 +35,17 @@
                   <%= raw(twt_embedded) %>
                 <% end %>
 
-                <%= link_to 'See More Tweets',
+                <%= link_to "See More Tweets From #{account.name}",
                             group_twitter_account_path(@group, account),
-                            class: "btn btn-sm btn-primary",
-                            style: 'width:49%'
+                            class: "btn btn-sm btn-primary btn-block"
                 %>
 
-                <%= link_to 'Edit Account Information',
+                <%= link_to "Edit #{account.name}'s Information",
                             edit_group_twitter_account_path(@group, account),
-                            class: "btn btn-sm btn-primary",
-                            style: 'width:50%'
+                            class: "btn btn-sm btn-primary btn-block"
                 %>
-                <br>
-                <%= link_to 'Un-follow Account',
+
+                <%= link_to "Un-follow #{account.name}",
                             group_twitter_account_path(@group, account),
                             method: :delete,
                             data: {confirm: 'Are you sure'},
