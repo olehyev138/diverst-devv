@@ -32,6 +32,7 @@ class NewsLink < BaseClass
   validates_attachment_content_type :picture, content_type: %r{\Aimage\/.*\Z}
 
   after_create :build_default_link
+  after_destroy :remove_news_feed_link
 
   scope :of_segments, ->(segment_ids) {
     nl_condtions = ['news_link_segments.segment_id IS NULL']
@@ -73,5 +74,9 @@ class NewsLink < BaseClass
     return if news_feed_link.present?
 
     create_news_feed_link(news_feed_id: group.news_feed.id)
+  end
+
+  def remove_news_feed_link
+    news_feed_link.destroy
   end
 end

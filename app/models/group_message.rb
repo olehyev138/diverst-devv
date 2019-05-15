@@ -27,6 +27,8 @@ class GroupMessage < BaseClass
 
   after_create :build_default_link
 
+  after_destroy :remove_news_feed_link
+
   scope :of_segments, ->(segment_ids) {
     gm_condtions = ['group_messages_segments.segment_id IS NULL']
     gm_condtions << "group_messages_segments.segment_id IN (#{ segment_ids.join(",") })" unless segment_ids.empty?
@@ -109,5 +111,9 @@ class GroupMessage < BaseClass
     return if news_feed_link.present?
 
     create_news_feed_link(news_feed_id: group.news_feed.id)
+  end
+
+  def remove_news_feed_link
+    news_feed_link.destroy
   end
 end
