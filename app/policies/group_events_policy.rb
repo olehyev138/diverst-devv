@@ -16,7 +16,7 @@ class GroupEventsPolicy < GroupBasePolicy
 
     # Ability to upcoming events depends on settings level
     case group.upcoming_events_visibility
-    when 'public'
+    when 'public', 'non_member'
       return true if user.policy_group.initiatives_manage?
       return true if user.policy_group.initiatives_create?
       return true if basic_group_leader_permission?('initiatives_manage')

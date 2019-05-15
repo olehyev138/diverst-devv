@@ -62,8 +62,8 @@ RSpec.describe SegmentsController, type: :controller do
       login_user_from_let
       before { get :new }
 
-      it 'render new template' do
-        expect(response).to render_template :new
+      it 'render show template' do
+        expect(response).to render_template :show
       end
 
       it 'returns new segement object' do
@@ -84,9 +84,9 @@ RSpec.describe SegmentsController, type: :controller do
       context 'successfully create' do
         let!(:segment_attributes) { attributes_for(:segment) }
 
-        it 'redirects' do
+        xit 'redirects' do
           post :create, segment: segment_attributes
-          expect(response).to redirect_to action: :index
+          expect(response).to render_template: :show
         end
 
         it 'creates segment' do
@@ -104,7 +104,7 @@ RSpec.describe SegmentsController, type: :controller do
           it 'creates public activity record' do
             perform_enqueued_jobs do
               expect { post :create, segment: segment_attributes }
-              .to change(PublicActivity::Activity, :count).by(1)
+                .to change(PublicActivity::Activity, :count).by(1)
             end
           end
 
@@ -132,8 +132,8 @@ RSpec.describe SegmentsController, type: :controller do
           expect(flash[:alert]).to eq "Your #{c_t(:segment)} was not created. Please fix the errors"
         end
 
-        it 'renders edit template' do
-          expect(response).to render_template :edit
+        it 'renders show template' do
+          expect(response).to render_template :show
         end
       end
     end
@@ -147,55 +147,13 @@ RSpec.describe SegmentsController, type: :controller do
 
   describe 'GET#show' do
     describe 'when user is logged in' do
-      let!(:groups) { create_list(:group, 2, enterprise: enterprise) }
       let!(:user1) { create(:user, enterprise: enterprise) }
       let!(:user2) { create(:user, enterprise: enterprise) }
       let!(:user3) { create(:user, enterprise: enterprise) }
       let!(:users_segment1) { create(:users_segment, segment: segment, user: user1) }
       let!(:users_segment2) { create(:users_segment, segment: segment, user: user2) }
       let!(:users_segment3) { create(:users_segment, segment: segment, user: user3) }
-      let!(:user_group1) { create(:user_group, group: groups.last, user: user1) }
-      let!(:user_group2) { create(:user_group, group: groups.last, user: user2) }
       login_user_from_let
-
-      context 'when group is present' do
-        before do
-          segment.sub_segments << create_list(:segment, 2, enterprise: enterprise, owner: user)
-          get :show, id: segment.id, group_id: groups.last.id
-        end
-
-        it 'render show template' do
-          expect(response).to render_template :show
-        end
-
-        it 'return group from group_id' do
-          expect(assigns[:group]).to eq groups.last
-        end
-
-        it 'returns 2 segment_members_of_group' do
-          expect(assigns[:members].count).to eq 2
-        end
-
-        xit 'return groups that belong to user.enterprise' do
-          expect(assigns[:groups]).to eq groups
-        end
-
-        it 'return 2 sub_segments of segment' do
-          expect(assigns[:segments]).to eq segment.sub_segments
-        end
-
-        it 'return members ids in numerical order' do
-          expect(assigns[:members].map(&:id).each_cons(2).all? { |a, b| a <= b }).to eq true
-        end
-      end
-
-      context 'when group is not present' do
-        before { get :show, id: segment.id }
-
-        it 'returns 3 uniq members of a segment' do
-          expect(assigns[:members].count).to eq 3
-        end
-      end
     end
 
     describe 'when user is not logged in' do
@@ -209,8 +167,8 @@ RSpec.describe SegmentsController, type: :controller do
       login_user_from_let
       before { get :edit, id: segment.id }
 
-      it 'render edit template' do
-        expect(response).to render_template :edit
+      it 'render show template' do
+        expect(response).to render_template :show
       end
 
       it 'returns a valid segment' do
@@ -250,7 +208,7 @@ RSpec.describe SegmentsController, type: :controller do
           it 'creates public activity record' do
             perform_enqueued_jobs do
               expect { patch :update, id: segment.id, segment: { name: 'updated' } }
-              .to change(PublicActivity::Activity, :count).by(1)
+                .to change(PublicActivity::Activity, :count).by(1)
             end
           end
 
@@ -277,8 +235,8 @@ RSpec.describe SegmentsController, type: :controller do
           expect(flash[:alert]).to eq "Your #{c_t(:segment)} was not updated. Please fix the errors"
         end
 
-        it 'render edit template' do
-          expect(response).to render_template :edit
+        it 'render show template' do
+          expect(response).to render_template :show
         end
       end
     end
@@ -308,7 +266,7 @@ RSpec.describe SegmentsController, type: :controller do
         it 'creates public activity record' do
           perform_enqueued_jobs do
             expect { delete :destroy, id: segment.id }
-            .to change(PublicActivity::Activity, :count).by(1)
+              .to change(PublicActivity::Activity, :count).by(1)
           end
         end
 
