@@ -81,15 +81,13 @@ class Groups::TwitterAccountsController < ApplicationController
   def sorted_accounts
     @group.twitter_accounts.all.sort do |a, b|
       case
-        when a.updated_at < b.updated_at
-          1
-        when a.updated_at > b.updated_at
-          -1
-        else
-          0
+      when a.updated_at < b.updated_at
+        1
+      when a.updated_at > b.updated_at
+        -1
+      else
+        0
       end
     end
   end
-
-
 end

@@ -51,7 +51,7 @@ class TwitterClient
   def self.post_test_tweet
     number = Random.rand(1000)
     client.update("Test Tweet #{number}")
-    return number
+    number
   end
 
   def self.delete_tweets
@@ -66,5 +66,4 @@ class TwitterClient
     @account_cache = {}
     @tweet_cache = {}
   end
-
 end
