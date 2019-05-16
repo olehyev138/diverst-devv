@@ -19,7 +19,7 @@ class TwitterClient
         timeline = client.user_timeline(user, exclude_replies: true)
         account_cache[user.downcase] = Account.new(timeline, Time.now)
       rescue
-        return []
+        account_cache[user.downcase] = Account.new([], Time.now)
       end
     end
     account_cache.fetch(user.downcase).timeline
@@ -72,7 +72,8 @@ class TwitterClient
       begin
         timeline = client.user_timeline(user_name, exclude_replies: true)
         account_cache[user_name.downcase] = Account.new(timeline, Time.now)
-      rescue
+      rescue Twitter::Error::Unauthorized, Twitter::Error::NotFound
+        account_cache[user_name.downcase] = Account.new([], Time.now)
       end
     end
     account_cache.key?(user_name.downcase)
