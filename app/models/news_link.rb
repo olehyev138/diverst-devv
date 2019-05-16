@@ -77,6 +77,6 @@ class NewsLink < BaseClass
   end
 
   def remove_news_feed_link
-    news_feed_link.destroy
+    news_feed_link.delete
   end
 end
