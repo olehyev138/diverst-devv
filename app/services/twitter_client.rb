@@ -1,5 +1,5 @@
 class TwitterClient
-  Account = Struct.new(:timeline, :time_created)
+  Account = Struct.new(:timeline, :time_created, :exists)
 
   def self.account_cache
     @account_cache ||= {}
@@ -17,9 +17,9 @@ class TwitterClient
     unless account_cache.key?(user.downcase) && (Time.now - account_cache.fetch(user.downcase).time_created) / 30.minutes < 1.0
       begin
         timeline = client.user_timeline(user, exclude_replies: true)
-        account_cache[user.downcase] = Account.new(timeline, Time.now)
+        account_cache[user.downcase] = Account.new(timeline, Time.now, true)
       rescue
-        account_cache[user.downcase] = Account.new([], Time.now)
+        account_cache[user.downcase] = Account.new([], Time.now, false)
       end
     end
     account_cache.fetch(user.downcase).timeline
@@ -71,11 +71,11 @@ class TwitterClient
     unless account_cache.key?(user_name.downcase)
       begin
         timeline = client.user_timeline(user_name, exclude_replies: true)
-        account_cache[user_name.downcase] = Account.new(timeline, Time.now)
+        account_cache[user_name.downcase] = Account.new(timeline, Time.now, true)
       rescue Twitter::Error::Unauthorized, Twitter::Error::NotFound
-        account_cache[user_name.downcase] = Account.new([], Time.now)
+        account_cache[user_name.downcase] = Account.new([], Time.now, false)
       end
     end
-    account_cache.key?(user_name.downcase)
+    account_cache.fetch(user_name.downcase).exists
   end
 end
