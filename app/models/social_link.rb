@@ -67,6 +67,6 @@ class SocialLink < BaseClass
   end
 
   def remove_news_feed_link
-    news_feed_link.delete
+    news_feed_link.destroy if news_feed_link.present?
   end
 end
