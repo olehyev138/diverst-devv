@@ -1,42 +1,25 @@
 source 'https://rubygems.org'
 
-ruby '2.3.0'
+ruby '2.6.0'
 
-gem 'rails', '~> 4.2.7.1'
-gem 'mysql2', '~> 0.4.3'
-gem 'sass-rails', '~> 5.0'
-gem 'uglifier', '>= 1.3.0'
-gem 'jquery-rails', '~> 4.1', '>= 4.1.1'
-gem 'turbolinks', '~> 2.5', '>= 2.5.3'
-gem 'sdoc', '~> 0.4.0', group: :doc # bundle exec rake doc:rails generates the API under doc/api.
-gem 'nokogiri', '~> 1.8.2' # need to specify this explicitly, old version has exploit
-gem 'puma', '~> 3.1' # Better web server than WEBRick
+gem 'rails', '~> 5.0'
+gem 'railties', '~> 5.0'
+gem 'activerecord', '~> 5.0'
+gem 'actionpack', '~> 5.0'
+gem 'actionmailer', '~> 5.0'
+gem 'mysql2', '~> 0.5.2'
+gem 'puma', '~> 3.4.0' # Better web server than WEBRick
 gem 'figaro', '~> 1.1', '>= 1.1.1' # Inject ENV from application.yml
-gem 'devise', '~> 3.5', '>= 3.5.6' # Authentication
-gem 'devise_invitable', '~> 1.5', '>= 1.5.5' # Invite system (admins invite normal users)
-gem 'simple_form', '~> 3.2', '>= 3.2.1' # Better forms
 gem 'cocoon', '~> 1.2', '>= 1.2.8' # Nested forms (deals with the JS for you)
 gem 'ruby-saml', '>= 1.7.0'
-gem 'sidekiq', '< 5' # Background jobs
-gem 'devise-async', '~> 0.10.1' # Performs many devise tasks in the background using Sidekiq
-gem 'sinatra', '~> 1.4', '>= 1.4.7', require: nil # Required for sidekiq's dashboard
-gem 'seedbank', '~> 0.3.0' # Support for multiple seed files and their ordering
-gem 'oj', '~> 2.14', '>= 2.14.6' # Faster JSON implementation
-gem 'faker', '~> 1.6', '>= 1.6.3' # Fake seed data easily
-gem 'active_model_serializers', '~> 0.9.6' # Serializes your models in a string a format
-gem 'devise_token_auth', '~> 0.1.37' # JWT tokens for auth
-gem 'firebase_token_generator', '~> 2.0' # Generate auth tokens
-gem 'firebase', '~> 0.2.6' # Used for realtime messaging in mobile app
-gem 'houston', '~> 2.2', '>= 2.2.3' # Apple push notifications
-gem 'gcm', '~> 0.1.1' # Android push notifications
+gem 'sidekiq', '~> 5.0.5' # Background jobs
+gem 'active_model_serializers'
+
 gem 'clockwork', '~> 1.2' # Schedule recurring jobs
 gem 'pismo', '~> 0.7.4' # Extracts metadata from an URL
 gem 'active_link_to', '~> 1.0', '>= 1.0.3' # Automatically add an active class to current nav link
-gem 'paperclip', '~> 4.3'# Handle attachments for models and forms
 gem 'aws-sdk', '< 2.0'# The official AWS SDK
 gem 'kaminari', '~> 0.16.3' # Pagination
-gem 'jquery-datatables-rails', '~> 3.3' # Datatables
-gem 'ajax-datatables-rails', '~> 0.3.1' # Adds AJAX routes for datatables queries
 gem 'elasticsearch-model', '~> 6.0.0'
 gem 'elasticsearch-rails', '~> 6.0.0'
 gem 'sprockets', '>= 3.0.0'
@@ -48,27 +31,33 @@ gem 'liquid', '~> 3.0', '>= 3.0.6' # Templating engine used for email templates
 gem 'autoprefixer-rails', '~> 6.3', '>= 6.3.3.1' # Automatically adds vendor prefixes to CSS declarations
 gem 'fog', '~> 1.37' # AWS SDK
 gem 'validate_url', '~> 1.0', '>= 1.0.2' # Active Model validation for URLs
-gem 'omniauth-linkedin-oauth2', '~> 0.1.5' # OAuth for LinkedIn
-gem 'omniauth-oauth2', '1.3.1' # Temporary fix to address: https://github.com/decioferreira/omniauth-linkedin-oauth2/issues/28
-gem 'activerecord-import', '~> 0.12.0' # Adds a faster way to INSERT multiple rows in the DB
+#gem 'omniauth-linkedin-oauth2', '~> 0.1.5' # OAuth for LinkedIn
+#gem 'omniauth-oauth2', '1.3.1' # Temporary fix to address: https://github.com/decioferreira/omniauth-linkedin-oauth2/issues/28
 gem 'inline_svg', '~> 0.6.2' # Extract SVG files' content into the HTML
 gem 'pundit', '~> 2.0.0'# Authorization
 gem 'draper', '~> 2.1'# Decorators for views
 gem 'daemons', '~> 1.2', '>= 1.2.3' # For capistrano-clockwork
 gem 'icalendar', '~> 2.3' # For exporting events to your calendar
 gem 'simple_form_fancy_uploads', git: 'https://github.com/TeamDiverst/simple_form_fancy_uploads.git', branch: 'paperclip_version'
-gem 'ransack', '~> 1.8', '>= 1.8.2' # For search forms
 gem 'ckeditor', '~> 4.2', '>= 4.2.3'
 gem 'twilio-ruby', '~> 5.10.0'
 gem 'mailgun_rails', '~> 0.8.0'
 gem 'enumerize', '~> 2.0'
 gem 'jbuilder', '~> 2.6'
-gem 'public_activity', '~> 1.5'
+gem 'public_activity'
 gem 'rollbar', '~> 2.14.1'
 gem 'ruby-oembed', '~> 0.12', git: 'https://github.com/TeamDiverst/ruby-oembed.git'
 gem 'julia_builder', '~> 0.2.0'
 gem 'date_validator', '~> 0.9.0'
-gem 'thor', '0.20.0'# Expected string default value for '--decorator'; got true (boolean) - setting version removes this message
+gem 'thor', '0.20.0' # Expected string default value for '--decorator'; got true (boolean) - setting version removes this message
+
+gem 'rack-rewrite', '~> 1.5'
+gem 'rack-cors', '~> 0.4.0', require: 'rack/cors' # will be used to support mobile
+gem 'bcrypt'
+gem 'bootsnap', require: false
+gem 'jwt', '~> 2.1.0', require: false
+#gem 'activerecord-import', '~> 0.14.0' # Adds a faster way to INSERT multiple rows in the DB
+
 gem 'sanitize_email', '~> 1.2.2'
 gem 'rack-timeout', '~> 0.4.2'
 gem 'jquery-ui-rails', '~> 6.0.1'
@@ -81,12 +70,11 @@ group :development, :test do
   gem 'guard-livereload', '~> 2.4', require: false
   gem 'rb-readline', '~> 0.5.5'
   gem 'rack-livereload', '~> 0.3.16'
+
   # The 3 gems above are for livereloading your code
   gem 'quiet_assets', '~> 1.1.0' # Silences asset logs
   gem 'active_record_query_trace', '~> 1.5.4' # View which line is making each SQL query in the logs
-  gem 'rspec-rails', '~> 3.0' # Testing framework
-  gem 'capybara', '~> 2.15.1' # Helpers for feature specs
-  gem 'poltergeist', '~> 1.16.0' # Allows support for JS in feature specs
+  gem 'rspec-rails' # Testing framework
   gem 'database_cleaner', '~> 1.6.1' # Necessary to clean the DB between tests
   gem 'pry-rails', '~> 0.3.6' # Better Rails console
   gem 'pry-theme', '~> 1.2.0' # Themes for pry
@@ -106,7 +94,6 @@ end
 group :test do
   gem 'rspec_junit_formatter', '~> 0.2.3'
   gem 'simplecov', '~> 0.13.0'
-  gem 'test_after_commit', '~> 1.1'
   gem 'elasticsearch-extensions', '~> 0.0.30'
   gem 'clockwork-test', '~> 0.2.0'
   gem 'webmock', '~> 3.1.1'
@@ -122,14 +109,14 @@ group :development do
   gem 'capistrano-rvm', '~> 0.1.2'
   gem 'capistrano-bower', '~> 1.1.0'
   gem 'capistrano-rails-console', '~> 2.2.1'
-  gem 'capistrano-sidekiq', '~> 0.20.0'
+  gem 'capistrano-sidekiq', '~> 0.5.4'
   gem 'capistrano-clockwork', '~> 1.0.1'
+  gem 'capistrano-locally', '~> 0.2.6', require: false
   gem 'spring-commands-rspec', '~> 1.0.4'
   gem 'better_errors', '~> 2.3.0' # Different error page
   gem 'binding_of_caller', '~> 0.7.2'
   gem 'bullet', '~> 5.6.1' # Detects N+1 queries
   gem 'parallel_tests', '~> 2.16.0'
-  gem 'meta_request', '~> 0.4.3' # Necessary for rails_panel Chrome extension
   # gem 'flamegraph'
   # gem 'rack-mini-profiler'
   # gem 'stackprof'

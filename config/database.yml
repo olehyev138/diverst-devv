@@ -10,7 +10,8 @@ default: &default
 development:
   <<: *default
   database: diverst_development
-
+  username: <%=ENV['C9_USER']%>
+  host: <%=ENV['IP']%>
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -18,6 +19,8 @@ development:
 test:
   <<: *default
   database: diverst_test
+  username: <%=ENV['C9_USER']%>
+  host: <%=ENV['IP']%>
 
 production:
   <<: *default

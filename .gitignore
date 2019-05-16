@@ -52,3 +52,6 @@ cookbooks/
 
 #RubyMine files
 /.idea
+
+config/application.yml 
+

@@ -10,6 +10,8 @@ require 'capistrano/bundler'
 require 'capistrano/rvm'
 require 'capistrano/rails/assets' # for asset handling add
 require 'capistrano/rails/migrations' # for running migrations
+require 'capistrano/npm'
+require 'capistrano/locally'
 
 require 'capistrano/puma'
 require 'capistrano/puma/workers'

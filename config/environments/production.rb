@@ -1,4 +1,4 @@
-Rails.application.configure do
+Diverst::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
   # Code is not reloaded between requests.
@@ -25,7 +25,7 @@ Rails.application.configure do
   config.serve_static_files = true
 
   # Compress JavaScripts and CSS.
-  config.assets.js_compressor = Uglifier.new(harmony: true)
+  config.assets.js_compressor = :uglifier
   # config.assets.css_compressor = :sass
 
   # Do not fallback to assets pipeline if a precompiled asset is missed.
@@ -103,4 +103,6 @@ Rails.application.configure do
   config.logger = ActiveSupport::TaggedLogging.new(Syslogger.new('Diverst', Syslog::LOG_PID, Syslog::LOG_LOCAL7))
   config.lograge.enabled = true
   config.lograge.formatter = Lograge::Formatters::Json.new
+  
+  config.read_encrypted_secrets = true
 end

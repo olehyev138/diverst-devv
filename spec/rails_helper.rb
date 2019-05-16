@@ -1,42 +1,22 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV['RAILS_ENV'] ||= 'test'
-ENV['TEST_CLUSTER_NODES'] = '1'
+ENV["TEST_CLUSTER_NODES"] = "1"
 
 require File.expand_path('../../config/environment', __FILE__)
 # Prevent database truncation if the environment is production
 abort('The Rails environment is running in production mode!') if Rails.env.production?
 require 'spec_helper'
 require 'rspec/rails'
-require 'devise.rb'
-require 'capybara/rails'
-require 'capybara/poltergeist'
 require 'sidekiq/testing'
-
-require 'support/controller_macros.rb'
-require 'support/referrer_helpers.rb'
 
 require 'public_activity/testing'
 PublicActivity.enabled = false
-require 'webmock/rspec'
 WebMock.allow_net_connect!
 
 require 'simplecov'
 SimpleCov.start do
-  add_filter 'spec'
+  add_filter "spec"
 end
-
-Capybara.javascript_driver = :poltergeist
-# https://stackoverflow.com/questions/25673890/poltergeist-throws-js-errors-when-js-errors-false
-# https://stackoverflow.com/questions/42766660/capybarapoltergeistmouseeventfailed-poltergeist-detected-another-element
-Capybara.register_driver :poltergeist do |app|
-  Capybara::Poltergeist::Driver.new(app, { js_errors: false, window_size: [1600, 1200] })
-end
-
-Capybara.asset_host = 'http://localhost:3000'
-
-# Devise test helpers
-include Warden::Test::Helpers
-Warden.test_mode!
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -59,21 +39,7 @@ ActiveRecord::Migration.maintain_test_schema!
 
 RSpec.configure do |config|
   config.include(Shoulda::Matchers::ActiveRecord, type: :model)
-  config.include Devise::TestHelpers, type: :controller
-  config.extend ControllerMacros, type: :controller
-  config.include ReferrerHelpers, type: :controller
-  config.include CsvHelpers
-  config.include ModelHelpers
-  config.include FeatureSpecRefactors::FormHelpers
-  config.include FeatureSpecRefactors::CustomHelpers
-  config.include FeatureSpecRefactors::CustomMatchers
-
-  # Reset PhantomJS after each test - no noticeable performance impact
-  # https://github.com/teampoltergeist/poltergeist/issues/232#issuecomment-219450682
-  config.after :each do |example|
-    page.driver.restart if defined?(page.driver.restart)
-  end
-
+  
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
 
@@ -101,7 +67,7 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
-
+  
   # Faker - clear random generator before each test, otherwise it will
   # reach its max and throw an error
   config.before(:each) do
@@ -125,7 +91,6 @@ RSpec.configure do |config|
   end
 
   config.after(:each) do
-    Capybara.reset_sessions!
     DatabaseCleaner.clean
   end
 

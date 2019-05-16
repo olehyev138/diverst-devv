@@ -1,4 +1,4 @@
-Rails.application.configure do
+Diverst::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
   # In the development environment your application's code is reloaded on
@@ -18,33 +18,15 @@ Rails.application.configure do
   config.action_mailer.delivery_method = :letter_opener
 
   config.action_mailer.raise_delivery_errors = true
-  config.action_mailer.default_url_options = { host: 'localhost:3000' }
+  config.action_mailer.default_url_options = { host: "localhost:3000" }
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
 
-  # Raise an error on page load if there are pending migrations.
-  config.active_record.migration_error = :page_load
-
-  # Debug mode disables concatenation and preprocessing of assets.
-  # This option may cause significant delays in view rendering with a large
-  # number of complex assets.
-  config.assets.debug = true
-
-  # Asset digests allow you to set far-future HTTP expiration dates on all assets,
-  # yet still be able to expire them through the digest params.
-  config.assets.digest = true
-
-  # Adds additional error checking when serving assets at runtime.
-  # Checks for improperly declared sprockets dependencies.
-  # Raises helpful error messages.
-  config.assets.raise_runtime_errors = true
+  config.assets.enabled = false
 
   # Raises error for missing translations
   config.action_view.raise_on_missing_translations = true
-
-  # Traces the source of SQL queries when set to true
-  ActiveRecordQueryTrace.enabled = false
 
   # Don't generate assets and helpers when using `rails generate`
   config.generators.assets = false
@@ -55,8 +37,13 @@ Rails.application.configure do
 
   # Enable Bullet to track redundant DB queries
   config.after_initialize do
-    Bullet.enable = true
-    Bullet.rails_logger = true
-    Bullet.add_footer = true
+    #Bullet.enable = true
+    #Bullet.rails_logger = true
+    #Bullet.add_footer = true
   end
+  
+  # make the public directory work
+  config.public_file_server.enabled = true
+
+  config.eager_load = false
 end

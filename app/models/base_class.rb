@@ -1,4 +1,4 @@
-class BaseClass < ActiveRecord::Base
+class BaseClass < ApplicationRecord
   self.abstract_class = true
 
   include ::BaseSearch

@@ -59,8 +59,3 @@ en:
     attributes:
       mentoring_request:
         sender: ""
-  enumerize:
-    group:
-        upcoming_events_visibility:
-            public: "Public - View Only (non group members cannot join events)"
-            non_member: "Public - Allow Non Members to Join (non group members can join events)"

@@ -1,4 +1,4 @@
-Rails.application.configure do
+Diverst::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
   # The test environment is used exclusively to run your application's
@@ -30,7 +30,7 @@ Rails.application.configure do
   # The :test delivery method accumulates sent emails in the
   # ActionMailer::Base.deliveries array.
   config.action_mailer.delivery_method = :test
-  config.action_mailer.default_url_options = { host: 'localhost:3000' }
+  config.action_mailer.default_url_options = { host: "localhost:3000" }
 
   # Randomize the order test cases are executed.
   config.active_support.test_order = :random
@@ -57,7 +57,7 @@ Rails.application.configure do
 
   # Disable on-disk logging to accelerate tests
   config.logger = ActiveSupport::Logger.new(nil)
-
+  
   # remove deprecation warnings when tests run
   ActiveSupport::Deprecation.silenced = true
 end
