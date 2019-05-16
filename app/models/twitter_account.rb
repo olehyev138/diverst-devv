@@ -9,11 +9,7 @@ class TwitterAccount < ActiveRecord::Base
   private
 
   def user_exists
-    client = TwitterClient.client
-    begin
-      client.user(account)
-      return nil
-    rescue Twitter::Error::NotFound
+    unless TwitterClient.user_exists?(account)
       errors.add(:account, 'User doesn\'t exist')
     end
   end

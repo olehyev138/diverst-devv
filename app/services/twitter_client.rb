@@ -66,4 +66,15 @@ class TwitterClient
     @account_cache = {}
     @tweet_cache = {}
   end
+
+  def self.user_exists?(user_name)
+    unless account_cache.key?(user_name.downcase)
+      begin
+        timeline = client.user_timeline(user_name, exclude_replies: true)
+        account_cache[user_name.downcase] = Account.new(timeline, Time.now)
+      rescue
+      end
+    end
+    account_cache.key?(user_name.downcase)
+  end
 end
