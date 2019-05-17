@@ -20,11 +20,11 @@ import saga from "./saga";
 
 import { handleLogOut, setCurrentUser } from "containers/App/actions";
 import {
-    makeSelectToken,
-    makeSelectUser,
-    makeSelectEnterprise
+  makeSelectToken,
+  makeSelectUser,
+  makeSelectEnterprise
 }
-from "./selectors";
+  from "./selectors";
 
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
@@ -42,136 +42,136 @@ import News from "components/News";
 import Sponsors from "components/Sponsors";
 
 const styles = theme => ({
-    root: {
-        width: "100%",
-        flexGrow: 1,
-    },
-    paper: {
-        padding: theme.spacing.unit * 2,
-        textAlign: 'center',
-        color: theme.palette.text.secondary,
-    },
-    grow: {
-        flexGrow: 1
-    },
-    title: {
-        fontSize: 14,
-        display: "none",
-        [theme.breakpoints.up("sm")]: {
-            display: "block"
-        }
-    },
-    card: {
-        minWidth: 275
-    },
-    bullet: {
-        display: "inline-block",
-        margin: "0 2px",
-        transform: "scale(0.8)"
-    },
-    pos: {
-        marginBottom: 12
+  root: {
+    width: "100%",
+    flexGrow: 1,
+  },
+  paper: {
+    padding: theme.spacing.unit * 2,
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
+  },
+  grow: {
+    flexGrow: 1
+  },
+  title: {
+    fontSize: 14,
+    display: "none",
+    [theme.breakpoints.up("sm")]: {
+      display: "block"
     }
+  },
+  card: {
+    minWidth: 275
+  },
+  bullet: {
+    display: "inline-block",
+    margin: "0 2px",
+    transform: "scale(0.8)"
+  },
+  pos: {
+    marginBottom: 12
+  }
 });
 
 /* eslint-disable react/prefer-stateless-function */
 export class HomePage extends React.PureComponent {
-    constructor(props) {
-        super(props);
-        this.handleLogOut = this.handleLogOut.bind(this);
-        this.handleVisitAdmin = this.handleVisitAdmin.bind(this);
-    }
+  constructor(props) {
+    super(props);
+    this.handleLogOut = this.handleLogOut.bind(this);
+    this.handleVisitAdmin = this.handleVisitAdmin.bind(this);
+  }
 
-    handleLogOut() {
-        this.props.handleLogOut(this.props.currentUser);
-    }
+  handleLogOut() {
+    this.props.handleLogOut(this.props.currentUser);
+  }
 
-    handleVisitAdmin() {
-        this.props.handleVisitAdmin();
-    }
+  handleVisitAdmin() {
+    this.props.handleVisitAdmin();
+  }
 
-    state = {
-        anchorEl: null,
-        mobileMoreAnchorEl: null
-    };
+  state = {
+    anchorEl: null,
+    mobileMoreAnchorEl: null
+  };
 
-    handleProfileMenuOpen = event => {
-        this.setState({ anchorEl: event.currentTarget });
-    };
+  handleProfileMenuOpen = event => {
+    this.setState({ anchorEl: event.currentTarget });
+  };
 
-    handleMenuClose = () => {
-        this.setState({ anchorEl: null });
-        this.handleMobileMenuClose();
-    };
+  handleMenuClose = () => {
+    this.setState({ anchorEl: null });
+    this.handleMobileMenuClose();
+  };
 
-    handleMobileMenuOpen = event => {
-        this.setState({ mobileMoreAnchorEl: event.currentTarget });
-    };
+  handleMobileMenuOpen = event => {
+    this.setState({ mobileMoreAnchorEl: event.currentTarget });
+  };
 
-    handleMobileMenuClose = () => {
-        this.setState({ mobileMoreAnchorEl: null });
-    };
+  handleMobileMenuClose = () => {
+    this.setState({ mobileMoreAnchorEl: null });
+  };
 
-    componentWillMount() {}
+  componentWillMount() {}
 
-    componentDidMount() {}
+  componentDidMount() {}
 
-    render() {
-        const { classes } = this.props;
-        const bull = <span className={classes.bullet}>•</span>;
+  render() {
+    const { classes } = this.props;
+    const bull = <span className={classes.bullet}>•</span>;
 
-        return (
-            <div className={classes.root}>
-                <ApplicationHeader position="static"/>
-                <HomePageLinks/>
+    return (
+      <div className={classes.root}>
+        <ApplicationHeader position="static"/>
+        <HomePageLinks/>
 
-                <Grid container spacing={24} style={{padding: 10, margin: 0, width: '100%'}}>
-                    <Events />
-                    <News />
-                </Grid>
-                
-                <Grid container spacing={24} style={{padding: 10, margin: 0, width: '100%'}}>
-                    <Sponsors />
-                </Grid>
-            </div>
-        );
-    }
+        <Grid container spacing={24} style={{padding: 10, margin: 0, width: '100%'}}>
+          <Events />
+          <News />
+        </Grid>
+
+        <Grid container spacing={24} style={{padding: 10, margin: 0, width: '100%'}}>
+          <Sponsors />
+        </Grid>
+      </div>
+    );
+  }
 }
 
 HomePage.propTypes = {
-    handleLogOut: PropTypes.func,
-    currentUser: PropTypes.object,
-    classes: PropTypes.object
+  handleLogOut: PropTypes.func,
+  currentUser: PropTypes.object,
+  classes: PropTypes.object
 };
 
 export function mapDispatchToProps(dispatch, ownProps) {
-    return {
-        handleLogOut: function(token) {
-            dispatch(handleLogOut(token));
-            dispatch(setCurrentUser(null));
-        },
-        handleVisitAdmin: function() {
-            dispatch(push("/admins/analytics"));
-        }
-    };
+  return {
+    handleLogOut: function(token) {
+      dispatch(handleLogOut(token));
+      dispatch(setCurrentUser(null));
+    },
+    handleVisitAdmin: function() {
+      dispatch(push("/admins/analytics"));
+    }
+  };
 }
 
 const mapStateToProps = createStructuredSelector({
-    token: makeSelectToken(),
-    currentUser: makeSelectUser(),
-    enterprise: makeSelectEnterprise()
+  token: makeSelectToken(),
+  currentUser: makeSelectUser(),
+  enterprise: makeSelectEnterprise()
 });
 
 const withConnect = connect(
-    mapStateToProps,
-    mapDispatchToProps
+  mapStateToProps,
+  mapDispatchToProps
 );
 
 const withReducer = injectReducer({ key: "home", reducer });
 const withSaga = injectSaga({ key: "home", saga });
 
 export default compose(
-    withReducer,
-    withSaga,
-    withConnect
+  withReducer,
+  withSaga,
+  withConnect
 )(withStyles(styles)(HomePage));

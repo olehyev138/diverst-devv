@@ -14,13 +14,13 @@ import ErrorBoundary from "containers/ErrorBoundary";
 import GlobalStyle from "../../global-styles";
 
 export default function App() {
-    return (
-        <div>
-            <ErrorBoundary>
-                <Routes/>
-                <ToastContainer />
-                <GlobalStyle />
-            </ErrorBoundary>
-        </div>
-    );
+  return (
+    <div>
+      <ErrorBoundary>
+        <Routes/>
+        <ToastContainer />
+        <GlobalStyle />
+      </ErrorBoundary>
+    </div>
+  );
 }

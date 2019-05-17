@@ -216,46 +216,46 @@ export class AdminPage extends React.PureComponent {
 
     return (
       <div className={classes.root}>
-      
+
         <ApplicationHeader position="fixed" showAdmin={true}/>
-          
-      <Drawer
-        className={classes.drawer}
-        variant="permanent"
-        classes={{
-          paper: classes.drawerPaper,
-        }}
-      >
-        <div className={classes.toolbar} />
-        <List>
-          <ListItem button onClick={this.handleClick}>
-          <ListItemIcon>
-            <InboxIcon />
-          </ListItemIcon>
-          <ListItemText inset primary="Analyze" />
-          {this.state.open ? <ExpandLess /> : <ExpandMore />}
-        </ListItem>
-        
-                  <Collapse in={this.state.open} timeout="auto" unmountOnExit>
-          <List component="div" disablePadding>
-            <ListItem button className={classes.nested}>
+
+        <Drawer
+          className={classes.drawer}
+          variant="permanent"
+          classes={{
+            paper: classes.drawerPaper,
+          }}
+        >
+          <div className={classes.toolbar} />
+          <List>
+            <ListItem button onClick={this.handleClick}>
               <ListItemIcon>
-                <StarBorder />
+                <InboxIcon />
               </ListItemIcon>
-              <ListItemText inset primary="Users" />
+              <ListItemText inset primary="Analyze" />
+              {this.state.open ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
+
+            <Collapse in={this.state.open} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding>
+                <ListItem button className={classes.nested}>
+                  <ListItemIcon>
+                    <StarBorder />
+                  </ListItemIcon>
+                  <ListItemText inset primary="Users" />
+                </ListItem>
+              </List>
+            </Collapse>
+            {["Manage", "Plan", "Innovate", "Include", "Global Settings", "Mentorship"].map((text, index) => (
+              <ListItem button key={text}>
+                <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+                <ListItemText primary={text} />
+              </ListItem>
+            ))}
+
           </List>
-        </Collapse>
-                  {["Manage", "Plan", "Innovate", "Include", "Global Settings", "Mentorship"].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-          
-        </List>
-      </Drawer>
-          
+        </Drawer>
+
       </div>
 
     );

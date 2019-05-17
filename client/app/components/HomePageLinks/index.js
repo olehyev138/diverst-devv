@@ -43,11 +43,11 @@ export class HomePageLinks extends React.PureComponent {
                 }}
             >
                 
-                <Button component={NavLink} to="/users/home" activeStyle={{ color: activeColor }}>Home</Button>
-                <Button component={NavLink} to="/users/campaigns" activeStyle={{ color: activeColor }}>Innovate</Button>
-                <Button component={NavLink} to="/users/news" activeStyle={{ color: activeColor }}>News</Button>
-                <Button component={NavLink} to="/users/events" activeStyle={{ color: activeColor }}>Events</Button>
-                <Button component={NavLink} to="/users/groups" activeStyle={{ color: activeColor }}>Inclusions Networks</Button>
+                <Button component={NavLink} to="/home" activeStyle={{ color: activeColor }}>Home</Button>
+                <Button component={NavLink} to="/campaigns" activeStyle={{ color: activeColor }}>Innovate</Button>
+                <Button component={NavLink} to="/news" activeStyle={{ color: activeColor }}>News</Button>
+                <Button component={NavLink} to="/events" activeStyle={{ color: activeColor }}>Events</Button>
+                <Button component={NavLink} to="/groups" activeStyle={{ color: activeColor }}>Inclusions Networks</Button>
                 <Button>Mentorship</Button>
             </Toolbar>
         );
