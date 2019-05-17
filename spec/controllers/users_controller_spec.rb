@@ -167,7 +167,7 @@ RSpec.describe UsersController, type: :controller do
       login_user_from_let
 
       it 'returns success' do
-        get :group_surveys, id: user.id
+        get :group_surveys, id: user.id, group_id: groups.first.id
         expect(response).to be_success
       end
 
@@ -178,14 +178,13 @@ RSpec.describe UsersController, type: :controller do
       end
 
       it 'returns user groups with data attribute not set to nil' do
-        manageable_group_ids = [groups.first.id, groups.last.id]
-        get :group_surveys, id: user.id
-        expect(assigns[:user_groups].count).to eq 2
+        get :group_surveys, id: user.id, group_id: user_group2.group.id
+        expect(assigns[:user_groups].count).to eq 1
       end
     end
 
     context 'when user is not logged in' do
-      before { get :group_surveys, id: user.id }
+      before { get :group_surveys, id: user.id, group_id: groups.first.id }
       it_behaves_like 'redirect user to users/sign_in path'
     end
   end
