@@ -89,6 +89,10 @@ class Initiative < BaseClass
     end
   end
 
+  def archived?
+    archived_at.nil? ? false : true
+  end
+
   def as_indexed_json(options = {})
     self.as_json(
       options.merge(

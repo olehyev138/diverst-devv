@@ -3,22 +3,23 @@
     <%= link_to "Events", group_events_path(@group) %> /
     <%= @event.name %>
   </h1>
-  <div class="flex-row hidden-xs">
-    <div class="flex-row__cell">
-      <%= link_to "Delete event", group_initiative_path(@group, @event), method: :delete, class: "btn btn--secondary",  data: { confirm: "Are you sure?" } if InitiativePolicy.new(current_user, @event).destroy? %>
+  <% unless @event.archived? %>
+    <div class="flex-row hidden-xs">
+      <div class="flex-row__cell">
+        <%= link_to "Delete event", group_initiative_path(@group, @event), method: :delete, class: "btn btn--secondary",  data: { confirm: "Are you sure?" } if InitiativePolicy.new(current_user, @event).destroy? %>
+      </div>
+      <div class="flex-row__cell">
+        <%= link_to "Edit event", edit_group_initiative_path(@group, @event), class: "btn btn--primary" if InitiativePolicy.new(current_user, @event).edit? %>
+      </div>
+      <div class="flex-row__cell hidden-sm hidden-xs">
+        <%= link_to "Export attendees", export_attendees_csv_group_initiative_path(@group, @event), class: "btn btn--primary hidden-xs" if InitiativePolicy.new(current_user, @event).edit? %>
+      </div>
+      <% if !@event.full? || current_user.initiatives.where(:id => @event.id).exists? %>
+      <div class="flex-row__cell">
+        <a href="#" class="btn btn--primary js-join-event" data-joined="<%= current_user.initiatives.where(:id => @event.id).exists? %>"><%= current_user.initiatives.where(:id => @event.id).exists? ? "Leave event" : "Join event" %></a>
+      </div>
+      <% end %>
     </div>
-    <div class="flex-row__cell">
-      <%= link_to "Edit event", edit_group_initiative_path(@group, @event), class: "btn btn--primary" if InitiativePolicy.new(current_user, @event).edit? %>
-    </div>
-    <div class="flex-row__cell hidden-sm hidden-xs">
-      <%= link_to "Export attendees", export_attendees_csv_group_initiative_path(@group, @event), class: "btn btn--primary hidden-xs" if InitiativePolicy.new(current_user, @event).edit? %>
-    </div>
-    <% if !@event.full? || current_user.initiatives.where(:id => @event.id).exists? %>
-    <div class="flex-row__cell">
-      <a href="#" class="btn btn--primary js-join-event" data-joined="<%= current_user.initiatives.where(:id => @event.id).exists? %>"><%= current_user.initiatives.where(:id => @event.id).exists? ? "Leave event" : "Join event" %></a>
-    </div>
-    <% end %>
-  </div>
   <div class="container-fluid visible-xs">
     <div class="row">
       <div class="col-xs-12 text-center">
@@ -30,6 +31,7 @@
       </div>
     </div>
   </div>
+  <% end %>  
 </div>
 
 <div class="content__main">
@@ -54,20 +56,25 @@
         </div>
         <div class="col-sm-4 col-xs-12">
           <h4>Attendees (<span id="attendees_count"><%= @event.attendees.count %><% if @event.max_attendees? %>/<%= @event.max_attendees %><% end %></span>)<% if @event.full? %> <b>Full</b><% end %></h4>
+          
           <p>
             <% @event.attendees.limit(10).each do |attendee| %>
               <%= attendee.name_with_status %><br>
             <% end %>
-            <%= link_to "View #{@event.attendees.count - 10} more...", group_event_attendance_path(@group, @event) if @event.attendees.count > 10 %>
+            <% unless @event.archived? %>
+              <%= link_to "View #{@event.attendees.count - 10} more...", group_event_attendance_path(@group, @event) if @event.attendees.count > 10 %>
+            <% end %>
           </p>
-          <% if current_user.initiatives.where(:id => @event.id).exists? %>
-            <%= link_to "Add to Google Calendar", GoogleCalendar.build_link(@event), target: :_blank, class: "hidden-xs member", id: 'calendar_link1' %>
-            <br>
-            <%= link_to "Add to calendar", export_ics_group_event_path(@group, @event), class: "hidden-xs member", id: 'calendar_link2' %>
-          <% else %>
-            <%= link_to "Add to Google Calendar", '#', data: {confirm: "Please join this event before adding it to you calendar."}, class: "hidden-xs non_member", id: 'calendar_link1' %>
-            <br>
-            <%= link_to "Add to calendar", '#', data: {confirm: "Please join this event before adding it to you calendar."}, class: "hidden-xs non_member", id: 'calendar_link2' %>
+          <% unless @event.archived? %>
+            <% if current_user.initiatives.where(:id => @event.id).exists? %>
+              <%= link_to "Add to Google Calendar", GoogleCalendar.build_link(@event), target: :_blank, class: "hidden-xs member", id: 'calendar_link1' %>
+              <br>
+              <%= link_to "Add to calendar", export_ics_group_event_path(@group, @event), class: "hidden-xs member", id: 'calendar_link2' %>
+            <% else %>
+              <%= link_to "Add to Google Calendar", '#', data: {confirm: "Please join this event before adding it to you calendar."}, class: "hidden-xs non_member", id: 'calendar_link1' %>
+              <br>
+              <%= link_to "Add to calendar", '#', data: {confirm: "Please join this event before adding it to you calendar."}, class: "hidden-xs non_member", id: 'calendar_link2' %>
+            <% end %>
           <% end %>
         </div>
       </div>
@@ -90,6 +97,7 @@
     </div>
   </div>
 <% else %>
+<% unless @event.archived? %>
   <div class="content__section">
     <div class="card">
       <div class="card__section">
@@ -101,6 +109,7 @@
       </div>
     </div>
   </div>
+<% end %>  
 <% end %>
 
 <script>
