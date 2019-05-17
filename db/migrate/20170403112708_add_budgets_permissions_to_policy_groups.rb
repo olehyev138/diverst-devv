@@ -1,4 +1,4 @@
-class AddBudgetsPermissionsToPolicyGroups < ActiveRecord::Migration
+class AddBudgetsPermissionsToPolicyGroups < ActiveRecord::Migration[5.1]
   def change
     change_table :policy_groups do |t|
       t.boolean :groups_budgets_index, default: false, after: :groups_members_manage

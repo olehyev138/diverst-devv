@@ -1,4 +1,4 @@
-class AddExpiryAgeAttributesToGroupsAndEnterprises < ActiveRecord::Migration
+class AddExpiryAgeAttributesToGroupsAndEnterprises < ActiveRecord::Migration[5.1]
   def change
   	add_column :groups, :expiry_age_for_news, :integer, default: 0
   	add_column :groups, :expiry_age_for_resources, :integer, default: 0

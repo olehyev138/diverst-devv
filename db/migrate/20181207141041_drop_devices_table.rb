@@ -1,4 +1,4 @@
-class DropDevicesTable < ActiveRecord::Migration
+class DropDevicesTable < ActiveRecord::Migration[5.1]
   def change
   	drop_table :devices
   end

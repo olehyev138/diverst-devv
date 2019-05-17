@@ -1,4 +1,4 @@
-class MigrateFromPolymorphicAssociations < ActiveRecord::Migration
+class MigrateFromPolymorphicAssociations < ActiveRecord::Migration[5.1]
   def up
     # list of polymorphic associations
     # tags, budget, checklist, checklist_item, field, folder, folder_share, graph

@@ -1,4 +1,4 @@
-class CreateCampaignInvitations < ActiveRecord::Migration
+class CreateCampaignInvitations < ActiveRecord::Migration[5.1]
   def change
     create_table :campaign_invitations do |t|
       t.belongs_to :campaign

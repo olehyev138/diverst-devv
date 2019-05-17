@@ -1,4 +1,4 @@
-class ChangeEncodingForAllTables < ActiveRecord::Migration
+class ChangeEncodingForAllTables < ActiveRecord::Migration[5.1]
     # https://gist.github.com/tjh/1711329
     def db
         ActiveRecord::Base.connection

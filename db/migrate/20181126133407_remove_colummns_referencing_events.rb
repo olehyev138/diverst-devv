@@ -1,4 +1,4 @@
-class RemoveColummnsReferencingEvents < ActiveRecord::Migration
+class RemoveColummnsReferencingEvents < ActiveRecord::Migration[5.1]
   def change
   	remove_column :policy_groups, :events_index, :boolean
   	remove_column :policy_groups, :events_create, :boolean

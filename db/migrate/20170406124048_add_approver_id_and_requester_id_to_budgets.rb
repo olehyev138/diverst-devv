@@ -1,4 +1,4 @@
-class AddApproverIdAndRequesterIdToBudgets < ActiveRecord::Migration
+class AddApproverIdAndRequesterIdToBudgets < ActiveRecord::Migration[5.1]
   def change
     add_column :budgets, :approver_id, :integer, index: true
     add_foreign_key :budgets, :users, column: :approver_id

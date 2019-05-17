@@ -1,4 +1,4 @@
-class CreateEventsSegments < ActiveRecord::Migration
+class CreateEventsSegments < ActiveRecord::Migration[5.1]
   def change
     create_table :events_segments do |t|
       t.belongs_to :event

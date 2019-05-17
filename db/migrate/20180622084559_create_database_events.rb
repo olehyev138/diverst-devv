@@ -1,4 +1,4 @@
-class CreateDatabaseEvents < ActiveRecord::Migration
+class CreateDatabaseEvents < ActiveRecord::Migration[5.1]
   def change
     create_table :frequency_periods do |t|
       t.string :name,   :null => false, :default => "daily"

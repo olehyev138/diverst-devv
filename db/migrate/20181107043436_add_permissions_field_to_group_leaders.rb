@@ -1,4 +1,4 @@
-class AddPermissionsFieldToGroupLeaders < ActiveRecord::Migration
+class AddPermissionsFieldToGroupLeaders < ActiveRecord::Migration[5.1]
   def change
     add_column  :group_leaders, :budget_approval,       :boolean, :default => false
     add_column  :group_leaders, :groups_budgets_manage, :boolean, :default => false

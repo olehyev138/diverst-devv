@@ -1,4 +1,4 @@
-class AddPlanPolicies < ActiveRecord::Migration
+class AddPlanPolicies < ActiveRecord::Migration[5.1]
   def change
     change_table :policy_groups do |t|
       t.boolean :initiatives_index, default: false

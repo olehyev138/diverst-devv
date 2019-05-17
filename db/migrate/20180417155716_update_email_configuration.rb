@@ -1,4 +1,4 @@
-class UpdateEmailConfiguration < ActiveRecord::Migration
+class UpdateEmailConfiguration < ActiveRecord::Migration[5.1]
   def change
     # remove any existing emails, email variables
     Email.destroy_all

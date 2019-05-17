@@ -1,4 +1,4 @@
-class CreateGroupMessagesSegments < ActiveRecord::Migration
+class CreateGroupMessagesSegments < ActiveRecord::Migration[5.1]
   def change
     create_table :group_messages_segments do |t|
       t.belongs_to :group_message

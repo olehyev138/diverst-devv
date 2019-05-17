@@ -1,4 +1,4 @@
-class CreateGroupLeaders < ActiveRecord::Migration
+class CreateGroupLeaders < ActiveRecord::Migration[5.1]
   def change
     create_table :group_leaders do |t|
       t.integer :group_id

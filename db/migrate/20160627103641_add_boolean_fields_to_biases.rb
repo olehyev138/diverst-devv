@@ -1,4 +1,4 @@
-class AddBooleanFieldsToBiases < ActiveRecord::Migration
+class AddBooleanFieldsToBiases < ActiveRecord::Migration[5.1]
   def change
     change_table :biases do |t|
       t.boolean :spoken_words,              default: false

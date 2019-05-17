@@ -1,4 +1,4 @@
-class CreateGroupsMetricsDashboards < ActiveRecord::Migration
+class CreateGroupsMetricsDashboards < ActiveRecord::Migration[5.1]
   def change
     create_table :groups_metrics_dashboards do |t|
       t.belongs_to :groups

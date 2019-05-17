@@ -1,4 +1,4 @@
-class MoveJobTitleFromUsersToFields < ActiveRecord::Migration
+class MoveJobTitleFromUsersToFields < ActiveRecord::Migration[5.1]
   def up
     User.find_in_batches(batch_size: 200) do |users|
       users.each do |user|

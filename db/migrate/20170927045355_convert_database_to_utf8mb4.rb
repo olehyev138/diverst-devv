@@ -1,4 +1,4 @@
-class ConvertDatabaseToUtf8mb4 < ActiveRecord::Migration
+class ConvertDatabaseToUtf8mb4 < ActiveRecord::Migration[5.1]
     #http://blog.arkency.com/2015/05/how-to-store-emoji-in-a-rails-app-with-a-mysql-database/
     def change
         # for each table that will store unicode execute:

@@ -1,4 +1,4 @@
-class AddGroupsToInitiatives < ActiveRecord::Migration
+class AddGroupsToInitiatives < ActiveRecord::Migration[5.1]
   def change
     change_table :initiatives do |t|
       t.integer :owner_group_id

@@ -1,4 +1,4 @@
-class GroupMessagesSegments < ActiveRecord::Migration
+class GroupMessagesSegments < ActiveRecord::Migration[5.1]
   def change
   end
 end

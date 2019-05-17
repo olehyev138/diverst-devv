@@ -1,4 +1,4 @@
-class CreateRewards < ActiveRecord::Migration
+class CreateRewards < ActiveRecord::Migration[5.1]
   def change
     create_table :rewards do |t|
       t.references :enterprise, index: true, foreign_key: true, null: false

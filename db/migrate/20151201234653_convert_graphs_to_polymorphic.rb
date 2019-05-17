@@ -1,4 +1,4 @@
-class ConvertGraphsToPolymorphic < ActiveRecord::Migration
+class ConvertGraphsToPolymorphic < ActiveRecord::Migration[5.1]
   def change
     change_table :graphs do |t|
       t.belongs_to :collection, polymorphic: true, index: true

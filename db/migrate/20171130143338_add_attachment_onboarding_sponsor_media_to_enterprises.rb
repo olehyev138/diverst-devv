@@ -1,4 +1,4 @@
-class AddAttachmentOnboardingSponsorMediaToEnterprises < ActiveRecord::Migration
+class AddAttachmentOnboardingSponsorMediaToEnterprises < ActiveRecord::Migration[5.1]
   def self.up
     change_table :enterprises do |t|
       t.attachment :onboarding_sponsor_media

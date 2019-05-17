@@ -1,4 +1,4 @@
-class AddPositionToGroupLeader < ActiveRecord::Migration
+class AddPositionToGroupLeader < ActiveRecord::Migration[5.1]
   def up
     add_column :group_leaders, :position, :integer
 

@@ -1,4 +1,4 @@
-class CreateBiasesCitiesConnection < ActiveRecord::Migration
+class CreateBiasesCitiesConnection < ActiveRecord::Migration[5.1]
   def change
     create_table :biases_from_cities do |t|
       t.integer :bias_id

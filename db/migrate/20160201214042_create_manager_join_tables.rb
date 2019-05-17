@@ -1,4 +1,4 @@
-class CreateManagerJoinTables < ActiveRecord::Migration
+class CreateManagerJoinTables < ActiveRecord::Migration[5.1]
   def change
     create_table :groups_managers do |t|
       t.belongs_to :group

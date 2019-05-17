@@ -1,4 +1,4 @@
-class UpdateMentorshipAvailabilityFields < ActiveRecord::Migration
+class UpdateMentorshipAvailabilityFields < ActiveRecord::Migration[5.1]
   def up
     # we delete existing availabilities because the model is storing data differently
     MentorshipAvailability.destroy_all

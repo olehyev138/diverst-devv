@@ -1,4 +1,4 @@
-class AddAttachmentXmlSsoConfigToEnterprises < ActiveRecord::Migration
+class AddAttachmentXmlSsoConfigToEnterprises < ActiveRecord::Migration[5.1]
   def self.up
     change_table :enterprises do |t|
       t.attachment :xml_sso_config

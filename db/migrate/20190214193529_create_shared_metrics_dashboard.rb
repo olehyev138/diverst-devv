@@ -1,4 +1,4 @@
-class CreateSharedMetricsDashboard < ActiveRecord::Migration
+class CreateSharedMetricsDashboard < ActiveRecord::Migration[5.1]
   def change
     create_table :shared_metrics_dashboards do |t|
       t.references :user, index: true, foreign_key: true

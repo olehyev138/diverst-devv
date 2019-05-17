@@ -1,4 +1,4 @@
-class CreateGroupCategoryTypes < ActiveRecord::Migration
+class CreateGroupCategoryTypes < ActiveRecord::Migration[5.1]
   def change
     create_table :group_category_types do |t|
       t.string :name

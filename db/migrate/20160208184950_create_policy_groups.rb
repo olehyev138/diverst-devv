@@ -1,4 +1,4 @@
-class CreatePolicyGroups < ActiveRecord::Migration
+class CreatePolicyGroups < ActiveRecord::Migration[5.1]
   def change
     create_table :policy_groups do |t|
       t.string :name

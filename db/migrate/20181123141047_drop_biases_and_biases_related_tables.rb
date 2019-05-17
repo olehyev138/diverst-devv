@@ -1,4 +1,4 @@
-class DropBiasesAndBiasesRelatedTables < ActiveRecord::Migration
+class DropBiasesAndBiasesRelatedTables < ActiveRecord::Migration[5.1]
   def change
   	drop_table :biases 
   	drop_table :biases_from_cities

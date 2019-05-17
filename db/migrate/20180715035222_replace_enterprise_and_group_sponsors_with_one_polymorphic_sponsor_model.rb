@@ -1,4 +1,4 @@
-class ReplaceEnterpriseAndGroupSponsorsWithOnePolymorphicSponsorModel < ActiveRecord::Migration
+class ReplaceEnterpriseAndGroupSponsorsWithOnePolymorphicSponsorModel < ActiveRecord::Migration[5.1]
   def up
     Enterprise.all.each do |enterprise|
       if enterprise.cdo_name.present? || (enterprise.cdo_name.present? && enterprise.cdo_title.present?)

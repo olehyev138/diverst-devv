@@ -1,4 +1,4 @@
-class UpdateIndexes < ActiveRecord::Migration
+class UpdateIndexes < ActiveRecord::Migration[5.1]
     def change
         change_column :users, :email,                :string, :limit => 191
         change_column :users, :invitation_token,     :string, :limit => 191

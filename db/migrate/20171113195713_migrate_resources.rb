@@ -1,4 +1,4 @@
-class MigrateResources < ActiveRecord::Migration
+class MigrateResources < ActiveRecord::Migration[5.1]
   def change
     # find all resources currently not belonging to a folder or an initiative
     Resource.where.not(:container_type => "Folder").where.not(:container_type => "Initiative").find_each do |resource|

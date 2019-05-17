@@ -1,4 +1,4 @@
-class UpdatePermissionsWorkflow < ActiveRecord::Migration
+class UpdatePermissionsWorkflow < ActiveRecord::Migration[5.1]
   def up
     # add role to users
     add_column :users, :custom_policy_group,  :boolean, :null => false, :default => false

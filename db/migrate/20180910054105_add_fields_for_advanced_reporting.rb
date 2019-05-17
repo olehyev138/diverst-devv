@@ -1,4 +1,4 @@
-class AddFieldsForAdvancedReporting < ActiveRecord::Migration
+class AddFieldsForAdvancedReporting < ActiveRecord::Migration[5.1]
   def change
     add_column :views, :group_id, :integer
     add_column :views, :folder_id, :integer

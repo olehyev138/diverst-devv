@@ -1,4 +1,4 @@
-class CreateSegments < ActiveRecord::Migration
+class CreateSegments < ActiveRecord::Migration[5.1]
   def change
     create_table :segments do |t|
       t.belongs_to :enterprise

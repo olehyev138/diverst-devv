@@ -1,4 +1,4 @@
-class CreateYammerFieldMappings < ActiveRecord::Migration
+class CreateYammerFieldMappings < ActiveRecord::Migration[5.1]
   def change
     create_table :yammer_field_mappings do |t|
       t.belongs_to :enterprise

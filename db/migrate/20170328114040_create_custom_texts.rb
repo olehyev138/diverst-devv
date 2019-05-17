@@ -1,4 +1,4 @@
-class CreateCustomTexts < ActiveRecord::Migration
+class CreateCustomTexts < ActiveRecord::Migration[5.1]
   def change
     create_table :custom_texts do |t|
       t.text :erg

@@ -1,4 +1,4 @@
-class CreateMentorshipModule < ActiveRecord::Migration
+class CreateMentorshipModule < ActiveRecord::Migration[5.1]
   def change
     # type determines whether user is interesting in mentorship and the type
     add_column :users, :mentee,                 :boolean, :default => false

@@ -1,4 +1,4 @@
-class CreateInitiativeExpenses < ActiveRecord::Migration
+class CreateInitiativeExpenses < ActiveRecord::Migration[5.1]
   def change
     create_table :initiative_expenses do |t|
       t.string :description

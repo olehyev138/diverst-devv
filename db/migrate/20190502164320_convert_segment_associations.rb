@@ -1,4 +1,4 @@
-class ConvertSegmentAssociations < ActiveRecord::Migration
+class ConvertSegmentAssociations < ActiveRecord::Migration[5.1]
   def up
     # Add parent_id column
     add_reference :segments, :parent, index: true

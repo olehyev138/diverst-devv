@@ -1,4 +1,4 @@
-class CreateSegmentations < ActiveRecord::Migration
+class CreateSegmentations < ActiveRecord::Migration[5.1]
     def up
         create_table :segmentations do |t|
             t.references :parent

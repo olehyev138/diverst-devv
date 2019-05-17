@@ -1,4 +1,4 @@
-class AddEmailFieldsToEnterprises < ActiveRecord::Migration
+class AddEmailFieldsToEnterprises < ActiveRecord::Migration[5.1]
   def change
     # cannot set default value for blob/text fields in MYSQL
     add_column :enterprises, :user_group_mailer_notification_text, :text

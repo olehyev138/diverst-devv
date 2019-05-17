@@ -1,4 +1,4 @@
-class ChangeBiasAnonDefault < ActiveRecord::Migration
+class ChangeBiasAnonDefault < ActiveRecord::Migration[5.1]
   def up
     change_column :biases, :anonymous, :boolean, :default => true
   end

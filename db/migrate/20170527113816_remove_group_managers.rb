@@ -1,4 +1,4 @@
-class RemoveGroupManagers < ActiveRecord::Migration
+class RemoveGroupManagers < ActiveRecord::Migration[5.1]
   def up
     drop_table :groups_managers
   end

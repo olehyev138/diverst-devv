@@ -1,4 +1,4 @@
-class AddFieldsToEnterprises < ActiveRecord::Migration
+class AddFieldsToEnterprises < ActiveRecord::Migration[5.1]
   def change
     add_column :enterprises, :redirect_all_emails,    :boolean, :default => false
     add_column :enterprises, :redirect_email_contact, :string

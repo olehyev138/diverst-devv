@@ -1,4 +1,4 @@
-class AddJobStatusToSegment < ActiveRecord::Migration
+class AddJobStatusToSegment < ActiveRecord::Migration[5.1]
   def up
     add_column :segments, :job_status, :integer, default: 0, null: false
 

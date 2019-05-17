@@ -1,4 +1,4 @@
-class CreateChecklistItems < ActiveRecord::Migration
+class CreateChecklistItems < ActiveRecord::Migration[5.1]
   def change
     create_table :checklist_items do |t|
       t.integer :checklist_id

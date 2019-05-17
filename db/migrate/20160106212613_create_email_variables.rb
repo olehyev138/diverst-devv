@@ -1,4 +1,4 @@
-class CreateEmailVariables < ActiveRecord::Migration
+class CreateEmailVariables < ActiveRecord::Migration[5.1]
   def change
     create_table :email_variables do |t|
       t.belongs_to :email

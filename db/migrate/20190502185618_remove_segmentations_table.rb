@@ -1,4 +1,4 @@
-class RemoveSegmentationsTable < ActiveRecord::Migration
+class RemoveSegmentationsTable < ActiveRecord::Migration[5.1]
   def change
     drop_table :segmentations do |t|
       t.integer :parent_id, index: true, limit: 4

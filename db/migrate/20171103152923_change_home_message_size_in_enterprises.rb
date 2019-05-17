@@ -1,4 +1,4 @@
-class ChangeHomeMessageSizeInEnterprises < ActiveRecord::Migration
+class ChangeHomeMessageSizeInEnterprises < ActiveRecord::Migration[5.1]
   def up
       change_column :enterprises, :home_message, :text
   end

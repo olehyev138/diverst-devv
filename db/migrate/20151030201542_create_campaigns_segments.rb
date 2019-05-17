@@ -1,4 +1,4 @@
-class CreateCampaignsSegments < ActiveRecord::Migration
+class CreateCampaignsSegments < ActiveRecord::Migration[5.1]
   def change
     create_table :campaigns_segments do |t|
       t.belongs_to :campaign

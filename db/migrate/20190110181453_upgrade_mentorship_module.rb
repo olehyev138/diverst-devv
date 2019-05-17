@@ -1,4 +1,4 @@
-class UpgradeMentorshipModule < ActiveRecord::Migration
+class UpgradeMentorshipModule < ActiveRecord::Migration[5.1]
   def change
     create_table :mentoring_session_comments do |t|
       t.text :content

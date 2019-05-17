@@ -1,4 +1,4 @@
-class CreateNewsFeedLikes < ActiveRecord::Migration
+class CreateNewsFeedLikes < ActiveRecord::Migration[5.1]
   def change
     create_table :news_feed_likes do |t|
       t.references :news_feed_link, index: true, foreign_key: true

@@ -1,4 +1,4 @@
-class AddResponsibleForBudget < ActiveRecord::Migration
+class AddResponsibleForBudget < ActiveRecord::Migration[5.1]
   def change
     change_table :groups do |t|
       t.string :budget_manager_email

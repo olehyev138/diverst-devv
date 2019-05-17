@@ -1,4 +1,4 @@
-class AddFieldsToBias < ActiveRecord::Migration
+class AddFieldsToBias < ActiveRecord::Migration[5.1]
   def change
     change_table :biases do |t|
       t.boolean :sexual_harassment,   default: false

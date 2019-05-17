@@ -1,4 +1,4 @@
-class AddNewPermissions < ActiveRecord::Migration
+class AddNewPermissions < ActiveRecord::Migration[5.1]
   def up
     add_column :policy_groups,          :manage_all, :boolean, :default => false
     add_column :policy_group_templates, :manage_all, :boolean, :default => false

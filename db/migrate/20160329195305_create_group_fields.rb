@@ -1,4 +1,4 @@
-class CreateGroupFields < ActiveRecord::Migration
+class CreateGroupFields < ActiveRecord::Migration[5.1]
   def change
     create_table :group_fields do |t|
       t.belongs_to :group

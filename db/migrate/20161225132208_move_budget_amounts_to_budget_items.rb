@@ -1,4 +1,4 @@
-class MoveBudgetAmountsToBudgetItems < ActiveRecord::Migration
+class MoveBudgetAmountsToBudgetItems < ActiveRecord::Migration[5.1]
   def change
     remove_column :budgets, :requested_amount, :decimal, precision: 8, scale: 2
     remove_column :budgets, :agreed_amount, :decimal, precision: 8, scale: 2

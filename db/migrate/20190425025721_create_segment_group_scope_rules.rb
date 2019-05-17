@@ -1,4 +1,4 @@
-class CreateSegmentGroupScopeRules < ActiveRecord::Migration
+class CreateSegmentGroupScopeRules < ActiveRecord::Migration[5.1]
   def change
     create_table :segment_group_scope_rules do |t|
       t.belongs_to :segment, index: true

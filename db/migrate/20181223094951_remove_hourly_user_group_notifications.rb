@@ -1,4 +1,4 @@
-class RemoveHourlyUserGroupNotifications < ActiveRecord::Migration
+class RemoveHourlyUserGroupNotifications < ActiveRecord::Migration[5.1]
   def change
   	ClockworkDatabaseEvent.where(:job_name => "UserGroupNotificationJob", :method_name => "perform_later", :method_args => "{\"notifications_frequency\":\"hourly\"}").delete_all
   end

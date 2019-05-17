@@ -1,4 +1,4 @@
-class AddSharedNewsFeedLinks < ActiveRecord::Migration
+class AddSharedNewsFeedLinks < ActiveRecord::Migration[5.1]
   def change
     create_table :shared_news_feed_links do |t|
       t.references    :news_feed_link,    :null => false

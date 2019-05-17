@@ -1,4 +1,4 @@
-class CreateMobileFields < ActiveRecord::Migration
+class CreateMobileFields < ActiveRecord::Migration[5.1]
   def change
     create_table :mobile_fields do |t|
       t.belongs_to :enterprise

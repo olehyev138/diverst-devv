@@ -1,4 +1,4 @@
-class ChangeInitiativeEstimatedFundingToDecimal < ActiveRecord::Migration
+class ChangeInitiativeEstimatedFundingToDecimal < ActiveRecord::Migration[5.1]
   def up
     change_column :initiatives, :estimated_funding, :decimal, default: 0, precision: 8, scale: 2
   end

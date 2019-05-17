@@ -1,4 +1,4 @@
-class CreateTopicFeedbacks < ActiveRecord::Migration
+class CreateTopicFeedbacks < ActiveRecord::Migration[5.1]
   def change
     create_table :topic_feedbacks do |t|
       t.belongs_to :topic

@@ -1,4 +1,4 @@
-class CreateGroupUpdates < ActiveRecord::Migration
+class CreateGroupUpdates < ActiveRecord::Migration[5.1]
   def change
     create_table :group_updates do |t|
       t.text :data

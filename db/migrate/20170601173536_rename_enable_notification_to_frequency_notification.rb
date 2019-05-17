@@ -1,4 +1,4 @@
-class RenameEnableNotificationToFrequencyNotification < ActiveRecord::Migration
+class RenameEnableNotificationToFrequencyNotification < ActiveRecord::Migration[5.1]
   class MigrationUserGroup < ActiveRecord::Base
     self.table_name = :user_groups
 

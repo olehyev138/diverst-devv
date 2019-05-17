@@ -1,4 +1,4 @@
-class RemovedAllOrphanedPosts < ActiveRecord::Migration
+class RemovedAllOrphanedPosts < ActiveRecord::Migration[5.1]
   def change
     # If this is not reset then it tries to access non-existant columns when joining the models below
     NewsFeedLink.reset_column_information

@@ -1,4 +1,4 @@
-class CreateNewsCommentsTable < ActiveRecord::Migration
+class CreateNewsCommentsTable < ActiveRecord::Migration[5.1]
   def change
     create_table :news_link_comments do |t|
       t.text :content

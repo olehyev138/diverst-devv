@@ -1,4 +1,4 @@
-class AddEnablePendingCommentsToEnterprises < ActiveRecord::Migration
+class AddEnablePendingCommentsToEnterprises < ActiveRecord::Migration[5.1]
   def change
     # allow admins to set a toggle for comments
     add_column :enterprises, :enable_pending_comments, :boolean, :default => false

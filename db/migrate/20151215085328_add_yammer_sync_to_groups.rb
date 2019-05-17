@@ -1,4 +1,4 @@
-class AddYammerSyncToGroups < ActiveRecord::Migration
+class AddYammerSyncToGroups < ActiveRecord::Migration[5.1]
   def change
     change_table :groups do |t|
       t.boolean :yammer_create_group

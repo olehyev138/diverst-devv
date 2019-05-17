@@ -1,4 +1,4 @@
-class CreateViews < ActiveRecord::Migration
+class CreateViews < ActiveRecord::Migration[5.1]
   def change
     create_table :views do |t|
       t.integer :user_id, null: false

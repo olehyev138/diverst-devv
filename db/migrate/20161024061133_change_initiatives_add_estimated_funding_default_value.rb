@@ -1,4 +1,4 @@
-class ChangeInitiativesAddEstimatedFundingDefaultValue < ActiveRecord::Migration
+class ChangeInitiativesAddEstimatedFundingDefaultValue < ActiveRecord::Migration[5.1]
   def up
     change_column_default :initiatives, :estimated_funding, from: nil, to: 0
     change_column_null :initiatives, :estimated_funding, false

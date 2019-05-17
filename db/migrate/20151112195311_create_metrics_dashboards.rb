@@ -1,4 +1,4 @@
-class CreateMetricsDashboards < ActiveRecord::Migration
+class CreateMetricsDashboards < ActiveRecord::Migration[5.1]
   def change
     create_table :metrics_dashboards do |t|
       t.belongs_to :enterprise

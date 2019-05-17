@@ -1,4 +1,4 @@
-class UpdateElasticsearch < ActiveRecord::Migration
+class UpdateElasticsearch < ActiveRecord::Migration[5.1]
   def change
     # delete all current indexes/data
     # reimport all models

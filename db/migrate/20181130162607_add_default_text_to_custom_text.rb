@@ -1,4 +1,4 @@
-class AddDefaultTextToCustomText < ActiveRecord::Migration
+class AddDefaultTextToCustomText < ActiveRecord::Migration[5.1]
   def change
   	change_column :custom_texts, :erg, :string, default: 'Group'
   	change_column :custom_texts, :program, :string, default: 'Goal'

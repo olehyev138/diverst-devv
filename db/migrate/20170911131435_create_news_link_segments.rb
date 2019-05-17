@@ -1,4 +1,4 @@
-class CreateNewsLinkSegments < ActiveRecord::Migration
+class CreateNewsLinkSegments < ActiveRecord::Migration[5.1]
   def change
     create_table :news_link_segments do |t|
       t.references    :news_link

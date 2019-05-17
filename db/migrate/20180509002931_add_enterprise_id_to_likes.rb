@@ -1,4 +1,4 @@
-class AddEnterpriseIdToLikes < ActiveRecord::Migration
+class AddEnterpriseIdToLikes < ActiveRecord::Migration[5.1]
   def change
     add_reference :likes, :enterprise, index: true, foreign_key: true
   end

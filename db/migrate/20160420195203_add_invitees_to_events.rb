@@ -1,4 +1,4 @@
-class AddInviteesToEvents < ActiveRecord::Migration
+class AddInviteesToEvents < ActiveRecord::Migration[5.1]
   def change
     create_table :event_invitees do |t|
       t.belongs_to :event

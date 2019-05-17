@@ -1,4 +1,4 @@
-class CreateNewsLinkPhotos < ActiveRecord::Migration
+class CreateNewsLinkPhotos < ActiveRecord::Migration[5.1]
   def change
     # create photos
     if !ActiveRecord::Base.connection.table_exists?('news_link_photos')

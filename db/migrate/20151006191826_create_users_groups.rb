@@ -1,4 +1,4 @@
-class CreateUsersGroups < ActiveRecord::Migration
+class CreateUsersGroups < ActiveRecord::Migration[5.1]
   def change
     create_table :user_groups do |t|
       t.belongs_to :user

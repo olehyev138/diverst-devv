@@ -1,4 +1,4 @@
-class AddContributingGroupIdToAnswer < ActiveRecord::Migration
+class AddContributingGroupIdToAnswer < ActiveRecord::Migration[5.1]
   def change
     add_column :answers, :contributing_group_id, :integer
     add_index 'answers', ['contributing_group_id'], name: 'index_answers_on_contributing_group_id'

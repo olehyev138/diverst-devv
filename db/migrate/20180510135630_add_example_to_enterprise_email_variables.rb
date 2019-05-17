@@ -1,4 +1,4 @@
-class AddExampleToEnterpriseEmailVariables < ActiveRecord::Migration
+class AddExampleToEnterpriseEmailVariables < ActiveRecord::Migration[5.1]
   def change
     add_column :enterprise_email_variables, :example, :text
     

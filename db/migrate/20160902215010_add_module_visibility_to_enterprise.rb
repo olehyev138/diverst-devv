@@ -1,4 +1,4 @@
-class AddModuleVisibilityToEnterprise < ActiveRecord::Migration
+class AddModuleVisibilityToEnterprise < ActiveRecord::Migration[5.1]
   def change
     change_table :enterprises do |t|
       t.boolean :collaborate_module_enabled,  default: 1, null: false

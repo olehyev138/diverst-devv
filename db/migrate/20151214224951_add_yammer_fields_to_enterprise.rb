@@ -1,4 +1,4 @@
-class AddYammerFieldsToEnterprise < ActiveRecord::Migration
+class AddYammerFieldsToEnterprise < ActiveRecord::Migration[5.1]
   def change
     change_table :enterprises do |t|
       t.boolean :yammer_import, default: false

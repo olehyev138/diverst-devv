@@ -1,4 +1,4 @@
-class AddNewFieldsToCustomTexts < ActiveRecord::Migration
+class AddNewFieldsToCustomTexts < ActiveRecord::Migration[5.1]
   def change
     add_column :custom_texts, :segment, :text
     add_column :custom_texts, :dci_full_title, :text

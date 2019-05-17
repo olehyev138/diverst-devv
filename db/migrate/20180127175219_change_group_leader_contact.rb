@@ -1,4 +1,4 @@
-class ChangeGroupLeaderContact < ActiveRecord::Migration
+class ChangeGroupLeaderContact < ActiveRecord::Migration[5.1]
   def change
     rename_column :group_leaders, :set_email_as_group_contact, :default_group_contact
   end

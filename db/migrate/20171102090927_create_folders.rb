@@ -1,4 +1,4 @@
-class CreateFolders < ActiveRecord::Migration
+class CreateFolders < ActiveRecord::Migration[5.1]
   def up
     create_table :folders do |t|
       t.belongs_to  :container, polymorphic: true, index: true

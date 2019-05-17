@@ -1,4 +1,4 @@
-class AddFieldsToEvents < ActiveRecord::Migration
+class AddFieldsToEvents < ActiveRecord::Migration[5.1]
   def change
     create_table :event_fields do |t|
       t.belongs_to :field

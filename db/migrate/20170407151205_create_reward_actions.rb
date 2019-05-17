@@ -1,4 +1,4 @@
-class CreateRewardActions < ActiveRecord::Migration
+class CreateRewardActions < ActiveRecord::Migration[5.1]
   def change
     create_table :reward_actions do |t|
       t.string :label, null: false

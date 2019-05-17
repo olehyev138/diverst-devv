@@ -1,4 +1,4 @@
-class CreateSegmentRules < ActiveRecord::Migration
+class CreateSegmentRules < ActiveRecord::Migration[5.1]
   def change
     create_table :segment_rules do |t|
       t.belongs_to :segment

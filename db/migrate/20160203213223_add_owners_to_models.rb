@@ -1,4 +1,4 @@
-class AddOwnersToModels < ActiveRecord::Migration
+class AddOwnersToModels < ActiveRecord::Migration[5.1]
   def change
     change_table :campaigns do |t|
       t.belongs_to :owner

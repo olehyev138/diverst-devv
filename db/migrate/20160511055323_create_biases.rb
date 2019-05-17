@@ -1,4 +1,4 @@
-class CreateBiases < ActiveRecord::Migration
+class CreateBiases < ActiveRecord::Migration[5.1]
   def change
     create_table :biases do |t|
       t.belongs_to :user

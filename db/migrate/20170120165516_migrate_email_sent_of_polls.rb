@@ -1,4 +1,4 @@
-class MigrateEmailSentOfPolls < ActiveRecord::Migration
+class MigrateEmailSentOfPolls < ActiveRecord::Migration[5.1]
   class MigrationPolls < ActiveRecord::Base
     self.table_name = :polls
   end

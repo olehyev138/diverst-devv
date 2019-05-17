@@ -1,4 +1,4 @@
-class CreateBiasesDepartmentsConnection < ActiveRecord::Migration
+class CreateBiasesDepartmentsConnection < ActiveRecord::Migration[5.1]
   def change
     create_table :biases_from_departments do |t|
       t.integer :bias_id
