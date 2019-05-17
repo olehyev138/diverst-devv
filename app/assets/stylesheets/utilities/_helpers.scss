@@ -1,11 +1,11 @@
 // Colors
 
 .title_bar {
-  color: white;
+  color: $inverted-primary;
 }
 
 .title_bar:hover{
-  color:#000000!important;
+  color: $inverted-primary-hover!important;
 }
 
 .accent {
