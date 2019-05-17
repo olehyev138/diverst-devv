@@ -7,11 +7,8 @@ import AuthService from "utils/authService";
 import { history } from "../../configureRedux";
 
 const AuthenticatedRoute = ({ component: ReactComponent, ...rest }) => (
-  <Route {...rest} render={(props) => (
-    AuthService.isAuthenticated() === true
-      ? <ReactComponent {...props} />: <Redirect to='/login' />
-  )
-  }
+  <Route {...rest} render={(props) =>
+    (AuthService.isAuthenticated() === true ? <ReactComponent {...props} /> : <Redirect to='/login' />)}
   />
 );
 
@@ -30,8 +27,8 @@ export default function Routes() {
   return (
     <Router history={history}>
       <Switch>
-        <Route exact path="/" component={LandingPage}/>
         <Login path='/login' component={LoginPage}/>
+        <AuthenticatedRoute exact path="/" component={HomePage}/>
         <AuthenticatedRoute path='/home' component={HomePage} />
         <AuthenticatedRoute path='/campaigns' component={CampaignsPage} />
         <AuthenticatedRoute path='/news' component={NewsPage} />

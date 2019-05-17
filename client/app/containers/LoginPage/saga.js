@@ -25,7 +25,7 @@ export function* login(action) {
         axios.defaults.headers.common['Diverst-UserToken'] = response.data.token;
         const user = JSON.parse(window.atob(response.data.token.split('.')[1]));
         yield put(setCurrentUser(user));
-        yield put(push("/users/home"));
+        yield put(push("/home"));
     }
     catch (err) {
         yield put(loggingInError(err));

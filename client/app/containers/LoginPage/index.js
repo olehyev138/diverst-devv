@@ -38,179 +38,179 @@ import "./index.css"; // Tell Webpack that Button.js uses these styles
 /* eslint-disable react/prefer-stateless-function */
 export class LoginPage extends React.PureComponent {
 
-    constructor(props) {
-        super(props);
-        this.handleChange = this.handleChange.bind(this);
-        this.onSubmit = this.onSubmit.bind(this);
-        this.onFindCompany = this.onFindCompany.bind(this);
-        this.state = {
-            email: "",
-            password: ""
-        };
-    }
+  constructor(props) {
+    super(props);
+    this.handleChange = this.handleChange.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
+    this.onFindCompany = this.onFindCompany.bind(this);
+    this.state = {
+      email: "",
+      password: ""
+    };
+  }
 
-    handleChange(e) {
-        const { name, value } = e.target;
-        this.setState({
-            [name]: value
-        });
-    }
-    
-    onFindCompany(){
-        const {email} = this.state;
-        this.props.handleFindCompany({email});
-    }
+  handleChange(e) {
+    const { name, value } = e.target;
+    this.setState({
+      [name]: value
+    });
+  }
 
-    onSubmit() {
-        const { email, password } = this.state;
-        this.props.handleSubmit({ email, password });
-    }
+  onFindCompany(){
+    const {email} = this.state;
+    this.props.handleFindCompany({email});
+  }
 
-    /**
-     * when initial state email is not null, submit the form to load repos
-     */
-    componentDidMount() {
-    }
+  onSubmit() {
+    const { email, password } = this.state;
+    this.props.handleSubmit({ email, password });
+  }
 
-    componentWillUnmount() {
-    }
+  /**
+   * when initial state email is not null, submit the form to load repos
+   */
+  componentDidMount() {
+  }
 
-    render() {
-        return (
-            <Grid container className="total-center" justify="center">
-                <Grid item lg={4} md={6} sm={8} xs={12}>
-                    <Card>
-                        <Container>
-                            <Row className="justify-content-md-center padded logo">
-                                <Col xs={{ span: 6, offset: 3 }}>
-                                    <Logo/>
-                                </Col>
-                            </Row>
-                        </Container>
-                        <form>
-                            <CardContent>
-                                <TextField
-                                    autoFocus
-                                    fullWidth
-                                    disabled={false}
-                                    id="email"
-                                    name="email"
-                                    defaultValue={this.state.email}
-                                    onChange={this.handleChange}
-                                    label={<FormattedMessage {...messages.email} />}
-                                    margin="normal"
-                                    type="email"
-                                    autoComplete="off"
-                                />
-                                { this.props.enterprise ?
-                                    <TextField
-                                        fullWidth
-                                        disabled={false}
-                                        id="password"
-                                        name="password"
-    									defaultValue={this.state.password}
-                                        onChange={this.handleChange}
-                                        label={<FormattedMessage {...messages.password} />}
-                                        margin="normal"
-                                        type="password"
-                                        autoComplete="off"
-                                    />
-                                    : <div/>
-                                }
-                            </CardContent>
-                            { this.props.enterprise ?
-                                <CardActions>
-                                    <Grid container>
-                                        <Grid item align="left" xs={4}>
-                                            <Button
-                                                className="submit-button"
-                                                color="primary"
-                                                disabled={!this.state.email || !this.state.password}
-                                                size="small"
-                                                onClick={this.onSubmit}
-    										>
-    											{<FormattedMessage {...messages.login} />}
-                                            </Button>
-                                        </Grid>
-                                        <Grid item align="right" xs={4}>
-                                            <Button
-                                                className="submit-button"
-                                                color="primary"
-                                                disabled={!!this.state.email || !!this.state.password}
-                                                size="small"
-    										>
-    											{<FormattedMessage {...messages.forgotPassword} />}
-                                            </Button>
-                                        </Grid>
-                                        <Grid item align="right" xs={4}>
-                                            <Button
-                                                className="submit-button"
-                                                color="primary"
-                                                disabled={!!this.state.email || !!this.state.password}
-                                                size="small"
-    										>
-    											{<FormattedMessage {...messages.signup} />}
-                                            </Button>
-                                        </Grid>
-                                    </Grid>
-                                </CardActions>
-                                : <CardActions>
-                                    <Grid container>
-                                        <Grid item align="center" xs={12}>
-                                            <Button
-                                                className="submit-button"
-                                                color="primary"
-                                                disabled={!this.state.email}
-                                                size="small"
-                                                onClick={this.onFindCompany}
-    										>
-    											{<FormattedMessage {...messages.findCompany} />}
-                                            </Button>
-                                        </Grid>
-                                    </Grid>
-                                </CardActions>
-                            }
-                        </form>
-                        <LocaleToggle />
-                    </Card>
-                </Grid>
-            </Grid>
-        );
-    }
+  componentWillUnmount() {
+  }
+
+  render() {
+    return (
+      <Grid container className="total-center" justify="center">
+        <Grid item lg={4} md={6} sm={8} xs={12}>
+          <Card>
+            <Container>
+              <Row className="justify-content-md-center padded logo">
+                <Col xs={{ span: 6, offset: 3 }}>
+                  <Logo/>
+                </Col>
+              </Row>
+            </Container>
+            <form>
+              <CardContent>
+                <TextField
+                  autoFocus
+                  fullWidth
+                  disabled={false}
+                  id="email"
+                  name="email"
+                  defaultValue={this.state.email}
+                  onChange={this.handleChange}
+                  label={<FormattedMessage {...messages.email} />}
+                  margin="normal"
+                  type="email"
+                  autoComplete="off"
+                />
+                { this.props.enterprise ?
+                  <TextField
+                    fullWidth
+                    disabled={false}
+                    id="password"
+                    name="password"
+                    defaultValue={this.state.password}
+                    onChange={this.handleChange}
+                    label={<FormattedMessage {...messages.password} />}
+                    margin="normal"
+                    type="password"
+                    autoComplete="off"
+                  />
+                  : <div/>
+                }
+              </CardContent>
+              { this.props.enterprise ?
+                <CardActions>
+                  <Grid container>
+                    <Grid item align="left" xs={4}>
+                      <Button
+                        className="submit-button"
+                        color="primary"
+                        disabled={!this.state.email || !this.state.password}
+                        size="small"
+                        onClick={this.onSubmit}
+                      >
+                        {<FormattedMessage {...messages.login} />}
+                      </Button>
+                    </Grid>
+                    <Grid item align="right" xs={4}>
+                      <Button
+                        className="submit-button"
+                        color="primary"
+                        disabled={!!this.state.email || !!this.state.password}
+                        size="small"
+                      >
+                        {<FormattedMessage {...messages.forgotPassword} />}
+                      </Button>
+                    </Grid>
+                    <Grid item align="right" xs={4}>
+                      <Button
+                        className="submit-button"
+                        color="primary"
+                        disabled={!!this.state.email || !!this.state.password}
+                        size="small"
+                      >
+                        {<FormattedMessage {...messages.signup} />}
+                      </Button>
+                    </Grid>
+                  </Grid>
+                </CardActions>
+                : <CardActions>
+                  <Grid container>
+                    <Grid item align="center" xs={12}>
+                      <Button
+                        className="submit-button"
+                        color="primary"
+                        disabled={!this.state.email}
+                        size="small"
+                        onClick={this.onFindCompany}
+                      >
+                        {<FormattedMessage {...messages.findCompany} />}
+                      </Button>
+                    </Grid>
+                  </Grid>
+                </CardActions>
+              }
+            </form>
+            <LocaleToggle />
+          </Card>
+        </Grid>
+      </Grid>
+    );
+  }
 }
 
 LoginPage.propTypes = {
-    handleSubmit: PropTypes.func,
-    email: PropTypes.string,
-    password: PropTypes.string,
+  handleSubmit: PropTypes.func,
+  email: PropTypes.string,
+  password: PropTypes.string,
 };
 
 export function mapDispatchToProps(dispatch, ownProps) {
-    return {
-        handleSubmit: function(payload) {
-            dispatch(handleSubmit(payload));
-        },
-        handleFindCompany: function(payload){
-            dispatch(handleFindCompany(payload));
-        }
-    };
+  return {
+    handleSubmit: function(payload) {
+      dispatch(handleSubmit(payload));
+    },
+    handleFindCompany: function(payload){
+      dispatch(handleFindCompany(payload));
+    }
+  };
 }
 
 const mapStateToProps = createStructuredSelector({
-    enterprise: makeSelectEnterprise(),
-    primaryColor: makeSelectPrimary()
+  enterprise: makeSelectEnterprise(),
+  primaryColor: makeSelectPrimary()
 });
 
 const withConnect = connect(
-    mapStateToProps,
-    mapDispatchToProps,
+  mapStateToProps,
+  mapDispatchToProps,
 );
 
 const withReducer = injectReducer({ key: "login", reducer });
 const withSaga = injectSaga({ key: "login", saga });
 
 export default compose(
-    withReducer,
-    withSaga,
-    withConnect,
+  withReducer,
+  withSaga,
+  withConnect,
 )(LoginPage);
