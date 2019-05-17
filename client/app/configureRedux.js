@@ -31,7 +31,7 @@ function configureStore(initialState = {}) {
 	/* eslint-enable */
 
     const store = createStore(
-        createReducer(history),
+        createReducer(),
         fromJS(initialState),
         composeEnhancers(...enhancers),
     );

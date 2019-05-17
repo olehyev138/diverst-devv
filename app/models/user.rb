@@ -1,12 +1,8 @@
 class User < ApplicationRecord
-  devise :database_authenticatable, :invitable, :lockable,
-         :recoverable, :rememberable, :trackable, :validatable, :async, :timeoutable
+  has_secure_password
 
   include PublicActivity::Common
-  include DeviseTokenAuth::Concerns::User
   include ContainsFields
-
-  @@fb_token_generator = Firebase::FirebaseTokenGenerator.new(ENV['FIREBASE_SECRET'].to_s)
 
   enum groups_notifications_frequency: [:hourly, :daily, :weekly, :disabled]
   enum groups_notifications_date: [:sunday, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday]
@@ -75,8 +71,8 @@ class User < ApplicationRecord
   has_many :metrics_dashboards, foreign_key: :owner_id
   has_many :shared_metrics_dashboards
 
-  has_attached_file :avatar, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing_user.png'), s3_permissions: 'private'
-  validates_attachment_content_type :avatar, content_type: /\Aimage\/.*\Z/
+  #has_attached_file :avatar, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing_user.png'), s3_permissions: 'private'
+  #validates_attachment_content_type :avatar, content_type: /\Aimage\/.*\Z/
 
   validates :first_name, presence: true
   validates :last_name, presence: true
