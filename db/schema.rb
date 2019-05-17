@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_02_185618) do
+ActiveRecord::Schema.define(version: 2019_05_17_052828) do
 
   create_table "activities", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.integer "trackable_id"
@@ -1367,6 +1367,7 @@ ActiveRecord::Schema.define(version: 2019_05_02_185618) do
     t.boolean "accepting_mentor_requests", default: true
     t.boolean "accepting_mentee_requests", default: true
     t.datetime "last_group_notification_date"
+    t.string "password_digest"
     t.index ["active"], name: "index_users_on_active"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["invitation_token"], name: "index_users_on_invitation_token", unique: true

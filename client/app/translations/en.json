@@ -1,1 +1,12 @@
-[]
+{
+  "diverst.containers.Login.button.login": "Login",
+  "diverst.containers.Login.button.signup": "Sign Up",
+  "diverst.containers.Login.input.email": "Email",
+  "diverst.containers.Login.input.password": "Password",
+  "diverst.containers.Login.links.forgotPassword": "Forgot Password",
+  "diverst.containers.Login.links.findCompany": "Find my Community",
+  "diverst.containers.NotFound.headers.header": "This Page does not exist!",
+  "diverst.containers.LocaleToggle.en": "en",
+  "diverst.containers.LocaleToggle.fr": "fr",
+  "diverst.containers.LocaleToggle.es": "es"
+}

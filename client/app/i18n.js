@@ -8,36 +8,46 @@
  *   You CANNOT use import/export in this file.
  */
 const addLocaleData = require('react-intl').addLocaleData; //eslint-disable-line
-const enLocaleData = require('react-intl/locale-data/en');
+const enLocaleData = require("react-intl/locale-data/en");
+const frLocaleData = require("react-intl/locale-data/fr");
+const esLocaleData = require("react-intl/locale-data/es");
 
-const enTranslationMessages = require('./translations/en.json');
+const enTranslationMessages = require("./translations/en.json");
+const frTranslationMessages = require("./translations/fr.json");
+const esTranslationMessages = require("./translations/es.json");
 
 addLocaleData(enLocaleData);
+addLocaleData(frLocaleData);
+addLocaleData(esLocaleData);
 
-const DEFAULT_LOCALE = 'en';
+const DEFAULT_LOCALE = "en";
 
 // prettier-ignore
 const appLocales = [
-  'en',
+    "en",
+    "fr",
+    "es",
 ];
 
 const formatTranslationMessages = (locale, messages) => {
-  const defaultFormattedMessages =
-    locale !== DEFAULT_LOCALE
-      ? formatTranslationMessages(DEFAULT_LOCALE, enTranslationMessages)
-      : {};
-  const flattenFormattedMessages = (formattedMessages, key) => {
-    const formattedMessage =
-      !messages[key] && locale !== DEFAULT_LOCALE
-        ? defaultFormattedMessages[key]
-        : messages[key];
-    return Object.assign(formattedMessages, { [key]: formattedMessage });
-  };
-  return Object.keys(messages).reduce(flattenFormattedMessages, {});
+    const defaultFormattedMessages =
+		locale !== DEFAULT_LOCALE
+		    ? formatTranslationMessages(DEFAULT_LOCALE, enTranslationMessages)
+		    : {};
+    const flattenFormattedMessages = (formattedMessages, key) => {
+        const formattedMessage =
+			!messages[key] && locale !== DEFAULT_LOCALE
+			    ? defaultFormattedMessages[key]
+			    : messages[key];
+        return Object.assign(formattedMessages, { [key]: formattedMessage });
+    };
+    return Object.keys(messages).reduce(flattenFormattedMessages, {});
 };
 
 const translationMessages = {
-  en: formatTranslationMessages('en', enTranslationMessages),
+    en: formatTranslationMessages("en", enTranslationMessages),
+    fr: formatTranslationMessages("fr", frTranslationMessages),
+	es: formatTranslationMessages("es", esTranslationMessages),
 };
 
 exports.appLocales = appLocales;

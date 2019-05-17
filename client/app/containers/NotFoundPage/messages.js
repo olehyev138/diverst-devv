@@ -1,15 +1,14 @@
 /*
- * NotFoundPage Messages
+ * LoginPage Messages
  *
- * This contains all the text for the NotFoundPage container.
+ * This contains all the text for the LoginPage component.
  */
-import { defineMessages } from 'react-intl';
+import { defineMessages } from "react-intl";
 
-export const scope = 'app.containers.NotFoundPage';
+export const scope = "diverst.containers.NotFound";
 
 export default defineMessages({
-  header: {
-    id: `${scope}.header`,
-    defaultMessage: 'This is the NotFoundPage container!',
-  },
+    header: {
+		id: `${scope}.headers.header`,
+    },
 });
