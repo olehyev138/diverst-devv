@@ -54,11 +54,8 @@ class UsersController < ApplicationController
   end
 
   def group_surveys
-    manageable_groups = current_user.groups.select { |group|
-      GroupMemberPolicy.new(current_user, [group]).update?
-    }
-
-    @user_groups = @user.user_groups.where(group: manageable_groups).where.not(data: nil)
+    group = Group.find(params[:group_id])
+    @user_groups = @user.user_groups.where(group: group).where.not(data: nil)
   end
 
   # For admins. Dedicated to editing any user's info
