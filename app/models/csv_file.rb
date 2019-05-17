@@ -1,4 +1,4 @@
-class CsvFile < BaseClass
+class CsvFile < ApplicationRecord
   self.table_name = 'csvfiles'
 
   belongs_to :user

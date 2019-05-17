@@ -1,4 +1,4 @@
-class Folder < BaseClass
+class Folder < ApplicationRecord
   include PublicActivity::Common
 
   has_secure_password(validations: false)

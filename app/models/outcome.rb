@@ -1,4 +1,4 @@
-class Outcome < BaseClass
+class Outcome < ApplicationRecord
   belongs_to :group
   has_many :pillars, dependent: :destroy
 

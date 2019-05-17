@@ -1,4 +1,4 @@
-class Like < BaseClass
+class Like < ApplicationRecord
   belongs_to :enterprise
   belongs_to :user
 

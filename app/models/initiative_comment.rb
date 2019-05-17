@@ -1,4 +1,4 @@
-class InitiativeComment < BaseClass
+class InitiativeComment < ApplicationRecord
   belongs_to :user
   belongs_to :initiative
 

@@ -1,4 +1,4 @@
-class MentorshipAvailability < BaseClass
+class MentorshipAvailability < ApplicationRecord
   # associations
   belongs_to :user
 

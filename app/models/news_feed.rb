@@ -1,4 +1,4 @@
-class NewsFeed < BaseClass
+class NewsFeed < ApplicationRecord
   belongs_to :group
 
   has_many :news_feed_links, dependent: :destroy

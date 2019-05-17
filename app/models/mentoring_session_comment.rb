@@ -1,4 +1,4 @@
-class MentoringSessionComment < BaseClass
+class MentoringSessionComment < ApplicationRecord
   belongs_to :user
   belongs_to :mentoring_session
 

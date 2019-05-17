@@ -1,4 +1,4 @@
-class GroupLeader < BaseClass
+class GroupLeader < ApplicationRecord
   belongs_to :group
   belongs_to :user
   belongs_to :user_role

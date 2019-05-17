@@ -1,4 +1,4 @@
-class EmailVariable < BaseClass
+class EmailVariable < ApplicationRecord
   # associations
   belongs_to :email
   belongs_to :enterprise_email_variable

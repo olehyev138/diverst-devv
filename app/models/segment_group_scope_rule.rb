@@ -1,4 +1,4 @@
-class SegmentGroupScopeRule < BaseClass
+class SegmentGroupScopeRule < ApplicationRecord
   belongs_to :segment
   has_many :segment_group_scope_rule_groups
   has_many :groups, through: :segment_group_scope_rule_groups

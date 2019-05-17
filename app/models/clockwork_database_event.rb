@@ -1,4 +1,4 @@
-class ClockworkDatabaseEvent < ActiveRecord::Base
+class ClockworkDatabaseEvent < ApplicationRecord
   include PublicActivity::Common
 
   # associations

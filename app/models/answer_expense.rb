@@ -1,4 +1,4 @@
-class AnswerExpense < BaseClass
+class AnswerExpense < ApplicationRecord
   belongs_to :answer
   belongs_to :expense
 

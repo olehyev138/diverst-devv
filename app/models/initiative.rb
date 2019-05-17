@@ -1,4 +1,4 @@
-class Initiative < BaseClass
+class Initiative < ApplicationRecord
   include PublicActivity::Common
 
   attr_accessor :associated_budget_id, :skip_allocate_budget_funds, :from, :to

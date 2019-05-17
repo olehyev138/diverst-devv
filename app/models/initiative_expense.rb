@@ -1,4 +1,4 @@
-class InitiativeExpense < BaseClass
+class InitiativeExpense < ApplicationRecord
   belongs_to :initiative
   belongs_to :owner, class_name: 'User'
 

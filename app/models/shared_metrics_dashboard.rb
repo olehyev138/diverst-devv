@@ -1,4 +1,4 @@
-class SharedMetricsDashboard < BaseClass
+class SharedMetricsDashboard < ApplicationRecord
   belongs_to :user
   belongs_to :metrics_dashboard
 

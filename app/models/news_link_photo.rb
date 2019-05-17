@@ -1,4 +1,4 @@
-class NewsLinkPhoto < BaseClass
+class NewsLinkPhoto < ApplicationRecord
   belongs_to :news_link
 
   validates :news_link, presence: true, on: :update

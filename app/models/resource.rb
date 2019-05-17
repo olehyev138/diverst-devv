@@ -1,4 +1,4 @@
-class Resource < BaseClass
+class Resource < ApplicationRecord
   include PublicActivity::Common
 
   EXPIRATION_TIME = 6.months.to_i

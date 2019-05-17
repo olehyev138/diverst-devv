@@ -1,4 +1,4 @@
-class MetricsDashboard < BaseClass
+class MetricsDashboard < ApplicationRecord
   include PublicActivity::Common
 
   belongs_to :enterprise, inverse_of: :metrics_dashboards

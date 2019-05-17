@@ -1,4 +1,4 @@
-class FolderShare < BaseClass
+class FolderShare < ApplicationRecord
   # associations
   belongs_to  :group
   belongs_to  :enterprise

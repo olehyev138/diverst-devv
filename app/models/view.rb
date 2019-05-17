@@ -1,4 +1,4 @@
-class View < BaseClass
+class View < ApplicationRecord
   include PublicActivity::Common
 
   belongs_to :news_feed_link

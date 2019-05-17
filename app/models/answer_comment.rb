@@ -1,4 +1,4 @@
-class AnswerComment < BaseClass
+class AnswerComment < ApplicationRecord
   include PublicActivity::Common
 
   belongs_to :author, class_name: 'User', inverse_of: :answers

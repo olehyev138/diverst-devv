@@ -1,4 +1,4 @@
-class NewsLinkComment < BaseClass
+class NewsLinkComment < ApplicationRecord
   belongs_to :author, class_name: 'User'
   belongs_to :news_link
 

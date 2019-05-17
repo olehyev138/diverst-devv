@@ -1,4 +1,4 @@
-class PolicyGroupTemplate < BaseClass
+class PolicyGroupTemplate < ApplicationRecord
   include PublicActivity::Common
 
   # associations

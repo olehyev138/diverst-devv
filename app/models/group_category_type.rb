@@ -1,4 +1,4 @@
-class GroupCategoryType < BaseClass
+class GroupCategoryType < ApplicationRecord
   # NOTE: on user-interface, this entity is referenced as category
   has_many :group_categories, dependent: :delete_all
   has_many :groups, dependent: :nullify

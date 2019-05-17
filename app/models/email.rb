@@ -1,4 +1,4 @@
-class Email < BaseClass
+class Email < ApplicationRecord
   include PublicActivity::Common
 
   # associations

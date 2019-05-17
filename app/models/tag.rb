@@ -1,4 +1,4 @@
-class Tag < BaseClass
+class Tag < ApplicationRecord
   belongs_to :resource
 
   validates :name, presence: true

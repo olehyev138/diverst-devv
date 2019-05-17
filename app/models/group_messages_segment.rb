@@ -1,4 +1,4 @@
-class GroupMessagesSegment < BaseClass
+class GroupMessagesSegment < ApplicationRecord
   belongs_to :group_message
   belongs_to :segment
 

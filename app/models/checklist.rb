@@ -1,4 +1,4 @@
-class Checklist < BaseClass
+class Checklist < ApplicationRecord
   belongs_to :budget
   belongs_to :initiative
   belongs_to :author, class_name: 'User'

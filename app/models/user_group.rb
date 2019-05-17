@@ -1,4 +1,4 @@
-class UserGroup < BaseClass
+class UserGroup < ApplicationRecord
   include ContainsFields
 
   # associations

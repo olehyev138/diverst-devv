@@ -1,4 +1,4 @@
-class MentoringRequest < BaseClass
+class MentoringRequest < ApplicationRecord
   # associations
   has_many :mentoring_request_interests
   has_many :mentoring_interests, through: :mentoring_request_interests

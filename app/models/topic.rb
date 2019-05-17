@@ -1,4 +1,4 @@
-class Topic < BaseClass
+class Topic < ApplicationRecord
   belongs_to :enterprise
   belongs_to :admin # <== i thought there was no entity called admin??
   has_many :feedbacks, class_name: 'TopicFeedback', dependent: :destroy

@@ -1,4 +1,4 @@
-class Field < BaseClass
+class Field < ApplicationRecord
   belongs_to :enterprise
   belongs_to :group
   belongs_to :poll

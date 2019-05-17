@@ -1,4 +1,4 @@
-class User < BaseClass
+class User < ApplicationRecord
   devise :database_authenticatable, :invitable, :lockable,
          :recoverable, :rememberable, :trackable, :validatable, :async, :timeoutable
 

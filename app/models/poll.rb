@@ -1,4 +1,4 @@
-class Poll < BaseClass
+class Poll < ApplicationRecord
   include PublicActivity::Common
 
   enum status: [:published, :draft]

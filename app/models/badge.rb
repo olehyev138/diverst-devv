@@ -1,4 +1,4 @@
-class Badge < BaseClass
+class Badge < ApplicationRecord
   include PublicActivity::Common
 
   belongs_to :enterprise

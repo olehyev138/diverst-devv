@@ -1,4 +1,4 @@
-class Budget < BaseClass
+class Budget < ApplicationRecord
   include PublicActivity::Common
 
   belongs_to :group

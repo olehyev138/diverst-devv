@@ -1,4 +1,4 @@
-class Answer < BaseClass
+class Answer < ApplicationRecord
   include PublicActivity::Common
 
   belongs_to :question, inverse_of: :answers

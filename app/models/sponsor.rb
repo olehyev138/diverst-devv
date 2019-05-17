@@ -1,4 +1,4 @@
-class Sponsor < BaseClass
+class Sponsor < ApplicationRecord
   belongs_to :sponsorable, polymorphic: true
 
   has_attached_file :sponsor_media, s3_permissions: :private

@@ -1,4 +1,4 @@
-class PollResponse < BaseClass
+class PollResponse < ApplicationRecord
   include ContainsFields
 
   belongs_to :poll

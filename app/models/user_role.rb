@@ -3,7 +3,7 @@
 # policy_group_template for that role will be used to create the policy_group
 # for that user
 
-class UserRole < BaseClass
+class UserRole < ApplicationRecord
   include PublicActivity::Common
 
   # associations

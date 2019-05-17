@@ -1,4 +1,4 @@
-class RewardAction < BaseClass
+class RewardAction < ApplicationRecord
   belongs_to :enterprise
 
   validates :label, presence: true

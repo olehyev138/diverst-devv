@@ -1,4 +1,4 @@
-class SocialLinkSegment < BaseClass
+class SocialLinkSegment < ApplicationRecord
   belongs_to :social_link
   belongs_to :segment
 

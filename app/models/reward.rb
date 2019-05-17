@@ -1,4 +1,4 @@
-class Reward < BaseClass
+class Reward < ApplicationRecord
   include PublicActivity::Common
 
   belongs_to :enterprise

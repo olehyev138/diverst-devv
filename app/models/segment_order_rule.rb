@@ -1,4 +1,4 @@
-class SegmentOrderRule < BaseClass
+class SegmentOrderRule < ApplicationRecord
   belongs_to :segment
 
   validates_presence_of :field

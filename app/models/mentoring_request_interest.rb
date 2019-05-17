@@ -1,4 +1,4 @@
-class MentoringRequestInterest < BaseClass
+class MentoringRequestInterest < ApplicationRecord
   # associations
   belongs_to  :mentoring_request
   belongs_to  :mentoring_interest

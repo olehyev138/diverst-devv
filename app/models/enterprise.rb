@@ -1,4 +1,4 @@
-class Enterprise < BaseClass
+class Enterprise < ApplicationRecord
   include ContainsResources
   include PublicActivity::Common
 

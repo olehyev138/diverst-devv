@@ -1,4 +1,4 @@
-class Segment < BaseClass
+class Segment < ApplicationRecord
   extend Enumerize
   include PublicActivity::Common
 

@@ -1,4 +1,4 @@
-class Pillar < BaseClass
+class Pillar < ApplicationRecord
   belongs_to :outcome
   has_many :initiatives, dependent: :destroy
 

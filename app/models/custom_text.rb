@@ -1,4 +1,4 @@
-class CustomText < BaseClass
+class CustomText < ApplicationRecord
   include PublicActivity::Common
 
   belongs_to :enterprise

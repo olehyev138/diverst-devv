@@ -1,4 +1,4 @@
-class AnswerUpvote < BaseClass
+class AnswerUpvote < ApplicationRecord
   belongs_to :answer, counter_cache: :upvote_count
   belongs_to :user, foreign_key: 'author_id'
 

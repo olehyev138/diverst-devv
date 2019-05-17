@@ -1,4 +1,4 @@
-class Campaign < BaseClass
+class Campaign < ApplicationRecord
   include PublicActivity::Common
 
   enum status: [:published, :draft]

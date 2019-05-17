@@ -1,4 +1,4 @@
-class Graph < BaseClass
+class Graph < ApplicationRecord
   include Metrics::OverviewMetrics
   include Metrics::GroupMetrics
   include Metrics::UserMetrics

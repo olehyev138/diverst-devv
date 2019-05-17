@@ -1,4 +1,4 @@
-class NewsLink < BaseClass
+class NewsLink < ApplicationRecord
   include PublicActivity::Common
 
   belongs_to :group

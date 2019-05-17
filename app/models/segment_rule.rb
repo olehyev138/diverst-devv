@@ -1,4 +1,4 @@
-class SegmentRule < BaseClass
+class SegmentRule < ApplicationRecord
   belongs_to :segment
   belongs_to :field
 

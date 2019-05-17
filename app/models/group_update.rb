@@ -1,4 +1,4 @@
-class GroupUpdate < BaseClass
+class GroupUpdate < ApplicationRecord
   include PublicActivity::Common
   include ContainsFields
 

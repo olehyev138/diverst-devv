@@ -1,4 +1,4 @@
-class ExpenseCategory < BaseClass
+class ExpenseCategory < ApplicationRecord
   include PublicActivity::Common
 
   belongs_to :enterprise

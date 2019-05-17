@@ -1,4 +1,4 @@
-class MentorshipType < BaseClass
+class MentorshipType < ApplicationRecord
   # associations
   belongs_to  :user
   belongs_to  :mentoring_type

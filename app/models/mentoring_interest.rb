@@ -1,4 +1,4 @@
-class MentoringInterest < BaseClass
+class MentoringInterest < ApplicationRecord
   # associations
   has_many :mentorship_interests
   has_many :users, through: :mentorship_interests

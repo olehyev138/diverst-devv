@@ -1,4 +1,4 @@
-class Theme < BaseClass
+class Theme < ApplicationRecord
   has_one :enterprise
 
   has_attached_file :logo, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: 'private'
@@ -6,8 +6,6 @@ class Theme < BaseClass
 
   validates :primary_color, presence: true, format: { with: %r{\A#(?:[0-9a-fA-F]{3}){1,2}\z}, message: 'should be a valid hex color' }
   validates :secondary_color, format: { with: %r{\A#(?:[0-9a-fA-F]{3}){1,2}\z}, allow_blank: true, message: 'should be a valid hex color' }
-
-  before_validation :append_hash_to_colors
 
   def branding_color
     primary_color
@@ -53,16 +51,5 @@ class Theme < BaseClass
 
     ThemeCompilerJob.perform_later(id, enterprise_id)
   end
-
-  private
-
-  def append_hash_to_colors
-    if primary_color.present?
-      primary_color.insert(0, '#') unless primary_color[0] == '#'
-    end
-
-    if secondary_color.present?
-      secondary_color.insert(0, '#') unless secondary_color[0] == '#'
-    end
-  end
 end
+

@@ -1,4 +1,4 @@
-class NewsLinkSegment < BaseClass
+class NewsLinkSegment < ApplicationRecord
   belongs_to :news_link
   belongs_to :segment
 

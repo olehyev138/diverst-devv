@@ -1,4 +1,4 @@
-class Group < BaseClass
+class Group < ApplicationRecord
   include PublicActivity::Common
   include CustomTextHelpers
 

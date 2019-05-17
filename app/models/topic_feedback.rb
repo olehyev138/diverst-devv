@@ -1,4 +1,4 @@
-class TopicFeedback < BaseClass
+class TopicFeedback < ApplicationRecord
   belongs_to :topic
   belongs_to :user
 end
