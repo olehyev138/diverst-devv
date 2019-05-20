@@ -1,14 +1,17 @@
 class ColorCode
-  def self.theme
-    @theme ||= Theme.find(1)
+  DEFAULT_COLOR = '#7B77C9'
+
+  def self.branding_color
+    theme = Theme.last
+    theme ? @theme.branding_color : DEFAULT_COLOR
   end
 
   def self.inverted_primary
-    @inverted_primary ||= invert_color_text(theme.branding_color)
+    invert_color_text(branding_color)
   end
 
   def self.inverted_darken
-    @inverted_darken ||= darken(inverted_primary)
+    darken(inverted_primary)
   end
 
   def self.invert_hex_color(rgb)
@@ -52,6 +55,8 @@ class ColorCode
                                 end
 
     hsl[:h] = case max
+              when min
+                0
               when rgb[:r]
                 (rgb[:g] - rgb[:b]) / (max - min)
               when rgb[:g]
@@ -63,39 +68,36 @@ class ColorCode
   end
 
   def self.hsl_to_rgb(hsl)
-    if (sat = hsl.fetch(:s)) == 0
-      { r: (sat * 255).round, b: (sat * 255).round, g: (sat * 255).round }
-    else
-      lum = hsl.fetch(:l)
-      hue = hsl.fetch(:h)
+    sat = hsl.fetch(:s)
+    lum = hsl.fetch(:l)
+    hue = hsl.fetch(:h)
 
-      c = (1 - (2 * lum - 1).abs) * sat
-      x = c * (1 - (hue / 60 % 2 - 1).abs)
-      m = lum - c / 2
+    c = (1 - (2 * lum - 1).abs) * sat
+    x = c * (1 - (hue / 60 % 2 - 1).abs)
+    m = lum - c / 2
 
-      def self.get_color(hue, c, x)
-        case hue
-        when 0...60
-          return c, x, 0
-        when 60 ... 120
-          return x, c, 0
-        when 120 ... 180
-          return 0, c, x
-        when 180 ... 240
-          return 0, x, c
-        when 240 ... 300
-          return x, 0, c
-        when 300 .. 360
-          return c, 0, x
-        else
-          return 0, 0, 0
-        end
+    def self.get_color(hue, c, x)
+      case hue
+      when 0...60
+        return c, x, 0
+      when 60 ... 120
+        return x, c, 0
+      when 120 ... 180
+        return 0, c, x
+      when 180 ... 240
+        return 0, x, c
+      when 240 ... 300
+        return x, 0, c
+      when 300 .. 360
+        return c, 0, x
+      else
+        return 0, 0, 0
       end
-
-      red, green, blue = get_color(hue, c, x)
-
-      { r: ((red + m) * 255).round, g: ((green + m) * 255).round, b: ((blue + m) * 255).round }
     end
+
+    red, green, blue = get_color(hue, c, x)
+
+    { r: ((red + m) * 255).round, g: ((green + m) * 255).round, b: ((blue + m) * 255).round }
   end
 
   def self.contrast(text_rgb, background_rgb)
