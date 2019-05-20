@@ -115,7 +115,7 @@ class BudgetsController < ApplicationController
   def update_annual_budget
     authorize [@group], :update?, policy_class: GroupBudgetPolicy
 
-    if @group.update(annual_budget_params)
+    if AnnualBudgetManager.new(@group).edit(annual_budget_params)
       track_activity(@group, :annual_budget_update)
       flash[:notice] = 'Your budget was updated'
       redirect_to :back
