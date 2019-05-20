@@ -3,7 +3,7 @@ class ColorCode
 
   def self.branding_color
     theme = Theme.last
-    theme ? @theme.branding_color : DEFAULT_COLOR
+    theme ? theme.branding_color : DEFAULT_COLOR
   end
 
   def self.inverted_primary
@@ -11,8 +11,10 @@ class ColorCode
   end
 
   def self.inverted_darken
-    darken(inverted_primary)
+    darken_text(inverted_primary)
   end
+
+  # RGB INPUT
 
   def self.invert_hex_color(rgb)
     inv_rgb = {
@@ -22,19 +24,6 @@ class ColorCode
     }
 
     rgb_to_text(inv_rgb)
-  end
-
-  def self.invert_hsl_color(hsl, rgb)
-    hue = hsl.fetch(:h)
-    hsl_inv = [
-      { h: (hue + 180) % 360, l: 0.1, s: 0.3 },
-      { h: (hue + 180) % 360, l: 0.1, s: 0.9 },
-      { h: (hue + 180) % 360, l: 0.9, s: 0.3 },
-      { h: (hue + 180) % 360, l: 0.9, s: 0.9 },
-    ]
-
-    rgb_inv = hsl_inv.map { |color| hsl_to_rgb(color) }
-    rgb_inv.max_by { |color| contrast(color, rgb) }
   end
 
   def self.rgb_to_hsl(rgb)
@@ -65,6 +54,44 @@ class ColorCode
                 4.0 + (rgb[:r] - rgb[:g]) / (max - min)
     end * 60 % 360
     hsl
+  end
+
+  def self.rgb_i_to_f(rgb)
+    { r: rgb.fetch(:r).to_f / 255, g: rgb.fetch(:g).to_f / 255, b: rgb.fetch(:b).to_f / 255 }
+  end
+
+  def self.rgb_to_text(rgb)
+    integet = (rgb.fetch(:r) << 16) + (rgb.fetch(:g) << 8) + rgb.fetch(:b)
+    to_return = "##{integet.to_s(16)}"
+    while to_return.length < 7
+      to_return = "#0#{to_return[1..-1]}"
+    end
+    to_return
+  end
+
+  def self.darken_rgb(rgb)
+    hsl = rgb_to_hsl(rgb)
+    if hsl[:l] > 0.5
+      hsl[:l] -= 0.2
+    else
+      hsl[:l] += 0.2
+    end
+    hsl_to_rgb(hsl)
+  end
+
+  # HSL INPUT
+
+  def self.invert_hsl_color(hsl, rgb)
+    hue = hsl.fetch(:h)
+    hsl_inv = [
+      { h: (hue + 180) % 360, l: 0.1, s: 0.3 },
+      { h: (hue + 180) % 360, l: 0.1, s: 0.9 },
+      { h: (hue + 180) % 360, l: 0.9, s: 0.3 },
+      { h: (hue + 180) % 360, l: 0.9, s: 0.9 },
+    ]
+
+    rgb_inv = hsl_inv.map { |color| hsl_to_rgb(color) }
+    rgb_inv.max_by { |color| contrast(color, rgb) }
   end
 
   def self.hsl_to_rgb(hsl)
@@ -100,6 +127,21 @@ class ColorCode
     { r: ((red + m) * 255).round, g: ((green + m) * 255).round, b: ((blue + m) * 255).round }
   end
 
+  # TEXT INPUT
+
+  def self.text_to_rgb(hex_text)
+    if hex_text[0] == '#'
+      hex_text = hex_text[1 .. -1]
+    end
+
+    hex_text = hex_text.upcase
+
+    integer_color = hex_text.to_i(16)
+    rgb = {}
+    %w(b g r).inject(integer_color) { |a, i| rest, rgb[i] = a.divmod 256; rest }
+    { r: rgb.fetch('r'), g: rgb.fetch('g'), b: rgb.fetch('b') }
+  end
+
   def self.contrast(text_rgb, background_rgb)
     text_rgb = rgb_i_to_f(text_rgb)
     text_rgb_prime = {
@@ -124,44 +166,6 @@ class ColorCode
     [contrast, 1 / contrast].max
   end
 
-  def self.text_to_rgb(hex_text)
-    if hex_text[0] == '#'
-      hex_text = hex_text[1 .. -1]
-    end
-
-
-    integer_color = hex_text.to_i(16)
-    rgb = {}
-    %w(b g r).inject(integer_color) { |a, i| rest, rgb[i] = a.divmod 256; rest }
-    { r: rgb.fetch('r'), g: rgb.fetch('g'), b: rgb.fetch('b') }
-  end
-
-  def self.rgb_i_to_f(rgb)
-    { r: rgb.fetch(:r).to_f / 255, g: rgb.fetch(:g).to_f / 255, b: rgb.fetch(:b).to_f / 255 }
-  end
-
-  def self.test_inverter
-    for i in 1..50 do
-      background = "##{rand(256**3).to_s(16)}"
-      rgbT = invert_color(background)
-      rgbB = text_to_rgb(background)
-
-      print("\e[38;2;#{rgbT[:r]};#{rgbT[:g]};#{rgbT[:b]}m")
-      print("\e[48;2;#{rgbB[:r]};#{rgbB[:g]};#{rgbB[:b]}mHELLO WORLD")
-      print("\e[0m\n")
-    end
-    print("\e[0mHELLO WORLD\n")
-  end
-
-  def self.rgb_to_text(rgb)
-    integet = (rgb.fetch(:r) << 16) + (rgb.fetch(:g) << 8) + rgb.fetch(:b)
-    to_return = "##{integet.to_s(16)}"
-    while to_return.length < 7
-      to_return = "#0#{to_return[1..-1]}"
-    end
-    to_return
-  end
-
   def self.invert_color_text(color, type = 'hsl')
     rgb = invert_color(color, type)
     rgb_to_text(rgb)
@@ -179,15 +183,26 @@ class ColorCode
     end
   end
 
-  def self.darken(color)
+  def self.darken_text(color)
     rgb = text_to_rgb(color)
-    hsl = rgb_to_hsl(rgb)
-    if hsl[:l] > 0.5
-      hsl[:l] -= 0.2
-    else
-      hsl[:l] += 0.2
-    end
-    rgb = hsl_to_rgb(hsl)
+    rgb = darken_rgb(rgb)
     rgb_to_text(rgb)
+  end
+
+  # TESTING
+
+  def self.test_inverter
+    for i in 1..50 do
+      background = "##{rand(256**3).to_s(16)}"
+      rgbT = invert_color(background)
+      rgbD = darken_rgb(rgbT)
+      rgbB = text_to_rgb(background)
+
+      print("\e[48;2;#{rgbB[:r]};#{rgbB[:g]};#{rgbB[:b]}m")
+      print("\e[38;2;#{rgbT[:r]};#{rgbT[:g]};#{rgbT[:b]}mHELLO WORLD ")
+      print("\e[38;2;#{rgbD[:r]};#{rgbD[:g]};#{rgbD[:b]}mGOODBYE WORLD")
+      print("\e[0m\n")
+    end
+    print("\e[0mHELLO WORLD\n")
   end
 end
