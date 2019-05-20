@@ -63,7 +63,7 @@ class Groups::PostsController < ApplicationController
       all_tweets += TwitterClient.get_tweets(account.account).first(nb)
     end
 
-    all_tweets.sort_by!(&:x.created_at)
+    all_tweets.sort_by!(&:created_at)
 
     all_tweets.first(nb)
   end

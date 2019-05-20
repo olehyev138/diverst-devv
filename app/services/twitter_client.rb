@@ -24,7 +24,7 @@ class TwitterClient
     update_account_cache(user)
     account_cache.fetch(user.downcase).exists
   end
-  
+
   def self.update_account_cache(user)
     if !account_cache.key?(user.downcase) || outdated?(user)
       begin
@@ -51,8 +51,8 @@ class TwitterClient
   end
 
   def self.client
+    # KEYS ARE FOR TESTING ACCOUNT. MOVE TO application.yml
     @client ||= Twitter::REST::Client.new do |config|
-      # KEYS ARE FOR TESTING ACCOUNT. MOVE TO application.yml
       config.consumer_key        = ENV['TWITTER_CONSUMER_KEY'] || 'pL0LFoicmzqhb1OH5pyHTx2jB'
       config.consumer_secret     = ENV['TWITTER_CONSUMER_SECRET'] || 'ocN6m4LuELmtgw9kISvUZ4365RDdfz0HVBRdEid74VHa40PTWz'
       config.access_token        = ENV['TWITTER_ACCESS_TOKEN'] || '1126509815176495104-33357yN0yeoCbw2sSUJI08QcC2VqFT'
@@ -67,11 +67,14 @@ class TwitterClient
   end
 
   def self.delete_tweets
+    i = 0
     client.user_timeline(this_account, exclude_replies: false).each do |twt|
       client.destroy_tweet(twt.id)
       tweet_cache.delete(twt.id)
+      i += 1
     end
     account_cache.delete(this_account.downcase)
+    i
   end
 
   def self.clear_cache
@@ -82,7 +85,6 @@ class TwitterClient
   protected
 
   def self.outdated?(user)
-    (Time.now - account_cache.fetch(user.downcase).time_created) < 30.minutes
+    (Time.now - account_cache.fetch(user.downcase).time_created) > 30.minutes
   end
-
 end

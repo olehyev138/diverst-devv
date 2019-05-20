@@ -16,9 +16,9 @@ class Groups::TwitterAccountsController < ApplicationController
   end
 
   def create
-    while @account.account.chars.first .eql? '@'
-      @account.account = @account.account[1..-1]
-    end
+    @account = @group.twitter_accounts.new(twitter_params)
+
+    @account.account = strip_at_symbols(@account.account)
 
     if @account.save
       redirect_to action: 'index'
@@ -67,7 +67,11 @@ class Groups::TwitterAccountsController < ApplicationController
   end
 
   def set_account
-    @group.twitter_accounts.find(params[:id])
+    if params[:id]
+      @account = @group.twitter_accounts.find(params[:id])
+    else
+
+    end
   end
 
   def twitter_params
@@ -76,15 +80,16 @@ class Groups::TwitterAccountsController < ApplicationController
 
   def sorted_accounts(n = nil)
     if n
-      @group.twitter_accounts.order_by(:updated_at).limit(n)
+      @group.twitter_accounts.order(updated_at: :desc).limit(n)
     else
-      @group.twitter_accounts.order_by(:updated_at)
+      @group.twitter_accounts.order(updated_at: :desc)
     end
   end
 
   def strip_at_symbols(account_name)
-    while params[:account].chars.first .eql? '@'
-      params[:account] = params[:account][1..-1]
+    while account_name.chars.first .eql? '@'
+      account_name = account_name[1..-1]
     end
+    account_name
   end
 end
