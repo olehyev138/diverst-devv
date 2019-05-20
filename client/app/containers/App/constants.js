@@ -8,9 +8,3 @@
  * Follow this format:
  * export const YOUR_ACTION_CONSTANT = 'yourproject/YourContainer/YOUR_ACTION_CONSTANT';
  */
-
-export const LOGGED_IN = "LOGGED_IN";
-export const LOG_OUT = "LOG_OUT";
-export const LOG_OUT_ERROR = "LOG_OUT_ERROR";
-export const SET_CURRENT_USER = "SET_CURRENT_USER";
-export const SET_ENTERPRISE = "SET_ENTERPRISE";

@@ -1,5 +1,5 @@
 /**
- * Asynchronously loads the component for NotFoundPage
+ * Asynchronously loads the component for HomePage
  */
 
 import loadable from 'utils/loadable';
