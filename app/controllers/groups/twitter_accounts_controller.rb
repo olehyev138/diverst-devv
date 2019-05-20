@@ -3,6 +3,7 @@ class Groups::TwitterAccountsController < ApplicationController
 
   before_action :set_group
   before_action :set_client
+  before_action :set_account
 
   layout 'erg'
 
@@ -15,8 +16,6 @@ class Groups::TwitterAccountsController < ApplicationController
   end
 
   def create
-    @account = @group.twitter_accounts.new(twitter_params)
-
     while @account.account.chars.first .eql? '@'
       @account.account = @account.account[1..-1]
     end
@@ -29,13 +28,9 @@ class Groups::TwitterAccountsController < ApplicationController
   end
 
   def update
-    @account = @group.twitter_accounts.find(params[:id])
-
     params = twitter_params
 
-    while params[:account].chars.first .eql? '@'
-      params[:account] = params[:account][1..-1]
-    end
+    params[:account] = strip_at_symbols(params[:account])
 
     if @account.update(params)
       redirect_to action: 'index'
@@ -45,7 +40,6 @@ class Groups::TwitterAccountsController < ApplicationController
   end
 
   def destroy
-    @account = @group.twitter_accounts.find(params[:id])
     @account.destroy
     redirect_to group_twitter_accounts_path(@group)
   end
@@ -57,11 +51,9 @@ class Groups::TwitterAccountsController < ApplicationController
   end
 
   def show
-    @account = @group.twitter_accounts.find(params[:id])
   end
 
   def edit
-    @account = @group.twitter_accounts.find(params[:id])
   end
 
   protected
@@ -74,20 +66,25 @@ class Groups::TwitterAccountsController < ApplicationController
     @client = TwitterClient.client
   end
 
+  def set_account
+    @group.twitter_accounts.find(params[:id])
+  end
+
   def twitter_params
     params.require(:twitter_account).permit(:name, :account)
   end
 
-  def sorted_accounts
-    @group.twitter_accounts.all.sort do |a, b|
-      case
-      when a.updated_at < b.updated_at
-        1
-      when a.updated_at > b.updated_at
-        -1
-      else
-        0
-      end
+  def sorted_accounts(n = nil)
+    if n
+      @group.twitter_accounts.order_by(:updated_at).limit(n)
+    else
+      @group.twitter_accounts.order_by(:updated_at)
+    end
+  end
+
+  def strip_at_symbols(account_name)
+    while params[:account].chars.first .eql? '@'
+      params[:account] = params[:account][1..-1]
     end
   end
 end

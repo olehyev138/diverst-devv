@@ -9,7 +9,7 @@ class Groups::PostsController < ApplicationController
   layout 'erg'
 
   def index
-    @tweets = five_recent_tweets
+    @tweets = recent_tweets
     if GroupPolicy.new(current_user, @group).manage?
       without_segments
     elsif GroupPostsPolicy.new(current_user, [@group]).view_latest_news?
@@ -57,26 +57,15 @@ class Groups::PostsController < ApplicationController
 
   protected
 
-  def five_recent_tweets
+  def recent_tweets(nb = 5)
     all_tweets = []
     @accounts.find_each do |account|
-      all_tweets += TwitterClient.get_tweets(account.account)[0 ... 5]
+      all_tweets += TwitterClient.get_tweets(account.account).first(nb)
     end
 
-    all_tweets = all_tweets.sort do |a, b|
-      case
-      when a.created_at < b.created_at
-        1
-      when a.created_at > b.created_at
-        -1
-      end
-    end
+    all_tweets.sort_by!(&:x.created_at)
 
-    if all_tweets.size >= 5
-      return all_tweets[0 ... 5]
-    else
-      return all_tweets
-    end
+    all_tweets.first(nb)
   end
 
   def without_segments

@@ -1,5 +1,6 @@
 class TwitterClient
   Account = Struct.new(:timeline, :time_created, :exists)
+  MY_ACCOUNT_NAME = 'ADiverst'
 
   def self.account_cache
     @account_cache ||= {}
@@ -10,11 +11,11 @@ class TwitterClient
   end
 
   def self.this_account
-    @this_name || 'ADiverst'
+    @this_name || MY_ACCOUNT_NAME
   end
 
   def self.get_tweets(user)
-    unless account_cache.key?(user.downcase) && (Time.now - account_cache.fetch(user.downcase).time_created) / 30.minutes < 1.0
+    if !account_cache.key?(user.downcase) || (Time.now - account_cache.fetch(user.downcase).time_created) < 30.minutes
       begin
         timeline = client.user_timeline(user, exclude_replies: true)
         account_cache[user.downcase] = Account.new(timeline, Time.now, true)
@@ -33,7 +34,7 @@ class TwitterClient
         html.sub! 'twitter-tweet', 'twitter-tweet tw-align-center'
         tweet_cache[id] = html
       rescue
-        return '<h1>TWEET DOESN\'T EXISTS</h1>'
+        return '<h1>**S</h1>'
       end
     end
     tweet_cache.fetch(id)
