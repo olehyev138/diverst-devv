@@ -18,7 +18,7 @@ RSpec.describe TwitterClient, type: :service do
   end
 
   it 'Should return error message when getting a bad tweet ID' do
-    expect(described_class.get_html(-1)).to eql '<h1>**S</h1>'
+    expect(described_class.get_html(-1)).to eql '<h1>Tweet Doesn\'t Exist</h1>'
   end
 
   context 'Personal Filled Account' do

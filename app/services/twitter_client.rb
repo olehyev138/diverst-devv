@@ -1,5 +1,6 @@
 class TwitterClient
   Account = Struct.new(:timeline, :time_created, :exists)
+  # This should also be an environment variable
   MY_ACCOUNT_NAME = 'ADiverst'
 
   def self.account_cache
@@ -15,7 +16,17 @@ class TwitterClient
   end
 
   def self.get_tweets(user)
-    if !account_cache.key?(user.downcase) || (Time.now - account_cache.fetch(user.downcase).time_created) < 30.minutes
+    update_account_cache(user)
+    account_cache.fetch(user.downcase).timeline
+  end
+
+  def self.user_exists?(user)
+    update_account_cache(user)
+    account_cache.fetch(user.downcase).exists
+  end
+  
+  def self.update_account_cache(user)
+    if !account_cache.key?(user.downcase) || outdated?(user)
       begin
         timeline = client.user_timeline(user, exclude_replies: true)
         account_cache[user.downcase] = Account.new(timeline, Time.now, true)
@@ -23,7 +34,6 @@ class TwitterClient
         account_cache[user.downcase] = Account.new([], Time.now, false)
       end
     end
-    account_cache.fetch(user.downcase).timeline
   end
 
   def self.get_html(id)
@@ -34,7 +44,7 @@ class TwitterClient
         html.sub! 'twitter-tweet', 'twitter-tweet tw-align-center'
         tweet_cache[id] = html
       rescue
-        return '<h1>**S</h1>'
+        return '<h1>Tweet Doesn\'t Exist</h1>'
       end
     end
     tweet_cache.fetch(id)
@@ -42,6 +52,7 @@ class TwitterClient
 
   def self.client
     @client ||= Twitter::REST::Client.new do |config|
+      # KEYS ARE FOR TESTING ACCOUNT. MOVE TO application.yml
       config.consumer_key        = ENV['TWITTER_CONSUMER_KEY'] || 'pL0LFoicmzqhb1OH5pyHTx2jB'
       config.consumer_secret     = ENV['TWITTER_CONSUMER_SECRET'] || 'ocN6m4LuELmtgw9kISvUZ4365RDdfz0HVBRdEid74VHa40PTWz'
       config.access_token        = ENV['TWITTER_ACCESS_TOKEN'] || '1126509815176495104-33357yN0yeoCbw2sSUJI08QcC2VqFT'
@@ -68,15 +79,10 @@ class TwitterClient
     @tweet_cache = {}
   end
 
-  def self.user_exists?(user_name)
-    unless account_cache.key?(user_name.downcase)
-      begin
-        timeline = client.user_timeline(user_name, exclude_replies: true)
-        account_cache[user_name.downcase] = Account.new(timeline, Time.now, true)
-      rescue Twitter::Error::Unauthorized, Twitter::Error::NotFound
-        account_cache[user_name.downcase] = Account.new([], Time.now, false)
-      end
-    end
-    account_cache.fetch(user_name.downcase).exists
+  protected
+
+  def self.outdated?(user)
+    (Time.now - account_cache.fetch(user.downcase).time_created) < 30.minutes
   end
+
 end
