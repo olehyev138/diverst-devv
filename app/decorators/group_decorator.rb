@@ -1,10 +1,7 @@
-class GroupDecorator < Draper::Decorator
+class AnnualBudgetDecorator < Draper::Decorator
   def spendings_percentage
-    return 0 if group.spent_budget == 0
+    return 0 if  annual_budget.amount == 0
 
-    return 100 if group.annual_budget.blank?
-    return 100 if group.annual_budget == 0
-
-    (group.spent_budget || 0) / group.annual_budget * 100
+    (annual_budget.expenses.to_f / annual_budget.amount.to_f) * 100
   end
-end
+end 
