@@ -66,9 +66,9 @@
           <% end %>
           <tr class="highlight">
             <td>Total for <%= @group.name %></td>
-            <td><%= number_to_currency annual_budget.initiatives.sum(:estimated_funding), precision: 0 %></td>
+            <td></td>
             <td><%= number_to_currency(annual_budget.expenses) %></td>
-            <td><%= number_to_currency annual_budget.initiatives.map{ |i| i.leftover }.inject(0, :+) %></td>
+            <td><%= number_to_currency(annual_budget.approved_budget_leftover) %></td>
             <td></td>
           </tr>
         </tbody>
