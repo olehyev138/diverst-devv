@@ -196,7 +196,7 @@ class User < BaseClass
     if group
       group.has_survey?
     else
-      groups.any? { |group| group.has_survey? }
+      groups.any? { |grp| grp.has_survey? }
     end
   end
 
