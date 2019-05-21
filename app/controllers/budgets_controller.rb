@@ -7,16 +7,20 @@ class BudgetsController < ApplicationController
 
   def index
     authorize [@group], :index?, policy_class: GroupBudgetPolicy
-    @budgets = @group.budgets.order('id DESC')
+
+    annual_budget = AnnualBudget.find_by(id: params[:annual_budget_id])
+    @budgets = annual_budget&.budgets&.order('id DESC') || Budget.none
   end
 
   def show
     authorize [@group], :show?, policy_class: GroupBudgetPolicy
+    @annual_budget_id = params[:annual_budget_id]
   end
 
   def new
     authorize [@group], :create?, policy_class: GroupBudgetPolicy
 
+    @annual_budget_id = params[:annual_budget_id]
     @budget = Budget.new
   end
 
@@ -26,10 +30,13 @@ class BudgetsController < ApplicationController
     @budget = Budget.new(budget_params.merge({ requester_id: current_user.id }))
     @group.budgets << @budget
 
+    annual_budget = AnnualBudget.find_or_create_by(closed: false, group_id: @group.id)
+    annual_budget.budgets << @budget
+
     if @group.save
       flash[:notice] = 'Your budget was created'
       track_activity(@budget, :create)
-      redirect_to action: :index
+      redirect_to(action: :index, annual_budget_id: params[:budget][:annual_budget_id])
     else
       flash[:alert] = 'Your budget was not created. Please fix the errors'
       render :new
@@ -41,7 +48,7 @@ class BudgetsController < ApplicationController
     if @budget.update(budget_params)
       BudgetManager.new(@budget).approve(current_user)
       track_activity(@budget, :approve)
-      redirect_to action: :index
+      redirect_to(action: :index, annual_budget_id: params[:budget][:annual_budget_id])
     else
       redirect_to :back
     end

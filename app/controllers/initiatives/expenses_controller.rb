@@ -21,6 +21,10 @@ class Initiatives::ExpensesController < ApplicationController
     authorize InitiativeExpense
     @expense = @initiative.expenses.new(expense_params)
     @expense.owner = current_user
+
+    annual_budget = AnnualBudget.find_or_create_by(closed: false, group_id: @group.id)
+    annual_budget.initiative_expenses << @expense
+
     if @expense.save
       flash[:notice] = 'Your expense was created'
       redirect_to action: :index
