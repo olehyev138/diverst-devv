@@ -6,12 +6,11 @@ const selectTheme = state => state['theme'] || initialState;
 const makeSelectPrimary = () =>
   createSelector(
     selectTheme,
-    themeState => themeState.get("primary"));
+    themeState => themeState['primary']);
 
 const makeSelectSecondary = () =>
   createSelector(
     selectTheme,
-    themeState => themeState.get("secondary"));
+    themeState => themeState['secondary']);
 
-export default makeSelectThemeProvider;
 export { selectTheme, makeSelectPrimary, makeSelectSecondary };

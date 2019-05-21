@@ -8,10 +8,10 @@ import produce from 'immer';
 import { CHANGE_PRIMARY, CHANGE_SECONDARY } from "./constants";
 
 // TODO: move primary, secondary defaults
-export const initialState = fromJS({
+export const initialState = {
   primary: "#3f51b5",
   secondary: "#f50057"
-});
+};
 
 function themeProviderReducer(state = initialState, action) {
   return produce(state, draft => {

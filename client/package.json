@@ -65,8 +65,8 @@
   },
   "dependencies": {
     "@babel/polyfill": "7.4.3",
-    "@material-ui/core": "^4.0.0-rc.0",
-    "@material-ui/icons": "^4.0.0-rc.0",
+    "@material-ui/core": "^3.9.3",
+    "@material-ui/icons": "^3.0.2",
     "axios": "^0.18.0",
     "chalk": "2.4.2",
     "compression": "1.7.4",
@@ -95,7 +95,8 @@
     "redux-saga": "1.0.2",
     "reselect": "4.0.0",
     "sanitize.css": "8.0.0",
-    "styled-components": "4.2.0"
+    "styled-components": "4.2.0",
+    "warning": "^4.0.3"
   },
   "devDependencies": {
     "@babel/cli": "7.4.3",

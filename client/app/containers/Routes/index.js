@@ -3,9 +3,21 @@ import { Router, Route, Switch } from 'react-router';
 import { Redirect } from 'react-router-dom';
 
 import AuthService from "utils/authService";
-import { history } from "../../configureRedux";
+import { history } from "../../configureStore";
 
 //import { LandingPage, LoginPage, NotFoundPage, HomePage, AdminPage, CampaignsPage, NewsPage, EventsPage, GroupsPage } from './templates';
+import { LoginPage, NotFoundPage, HomePage } from './templates';
+
+
+  /*
+    <AuthenticatedRoute exact path="/" component={HomePage}/>
+    <AuthenticatedRoute path='/home' component={HomePage} />
+    <AuthenticatedRoute path='/campaigns' component={CampaignsPage} />
+    <AuthenticatedRoute path='/news' component={NewsPage} />
+    <AuthenticatedRoute path='/events' component={EventsPage} />
+    <AuthenticatedRoute path='/groups' component={GroupsPage} />
+    <AuthenticatedRoute path='/admin/analytics' component={AdminPage} />
+   */
 
 const AuthenticatedRoute = ({ component: ReactComponent, ...rest }) => (
   <Route {...rest} render={(props) =>
@@ -27,17 +39,8 @@ export default function Routes() {
     <Router history={history}>
       <Switch>
         <Login path='/login' component={LoginPage}/>
-        {
-          /*
-            <AuthenticatedRoute exact path="/" component={HomePage}/>
-            <AuthenticatedRoute path='/home' component={HomePage} />
-            <AuthenticatedRoute path='/campaigns' component={CampaignsPage} />
-            <AuthenticatedRoute path='/news' component={NewsPage} />
-            <AuthenticatedRoute path='/events' component={EventsPage} />
-            <AuthenticatedRoute path='/groups' component={GroupsPage} />
-            <AuthenticatedRoute path='/admin/analytics' component={AdminPage} />
-           */
-        }
+        <AuthenticatedRoute exact path="/" component={HomePage}/>
+        <AuthenticatedRoute path='/home' component={HomePage} />
         <Route path='' component={NotFoundPage} />
       </Switch>
     </Router>

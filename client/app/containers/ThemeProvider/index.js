@@ -10,28 +10,29 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 
-import { useInjectReducer } from 'utils/injectReducer';
-import makeSelectThemeProvider from './selectors';
-import reducer from './reducer';
+import  injectReducer  from 'utils/injectReducer';
 
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import { makeSelectPrimary, makeSelectSecondary } from "./selectors";
-import { loggedIn, setCurrentUser, setEnterprise } from "containers/App/actions";
-import { changePrimary, changeSecondary } from "./actions";
 
+import { makeSelectPrimary, makeSelectSecondary } from "./selectors";
+import { changePrimary, changeSecondary } from "./actions";
+import reducer from './reducer';
+
+import App from "containers/App/Loadable";
+import { loggedIn, setUser, setEnterprise } from "containers/App/actions";
 import AuthService from "utils/authService";
 
+const axios = require("axios");
 
-export function ThemeProvider() {
-  useInjectReducer({ key: 'themeProvider', reducer });
-
-  return <div />;
-}
 
 export class ThemeProvider extends React.PureComponent {
   componentDidMount() {
     // Try and get the JWT token from storage. If it doesn"t exist
     // we"re done. The user must login again.
+
+    // TODO:
+    //    - why is this done here? what does it do?
+    //    - why is theme provider around app and not app around theme provider (material ui suggests the latter)
 
     var jwt = AuthService.getJwt();
     var enterprise = AuthService.getEnterprise();
@@ -81,7 +82,7 @@ function mapDispatchToProps(dispatch, ownProps) {
   return {
     loggedIn: function(token, user, enterprise) {
       dispatch(loggedIn(token));
-      dispatch(setCurrentUser(user));
+      dispatch(setUser(user));
       dispatch(setEnterprise(enterprise));
 
       if (user.enterprise.theme) {

@@ -8,23 +8,22 @@
  */
 
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
 
-import LoginPage from 'containers/LoginPage';
-import NotFoundPage from 'containers/NotFoundPage/Loadable';
+import { ToastContainer } from "react-toastify";
 
+import Routes from "containers/Routes/Loadable";
+import ErrorBoundary from "containers/ErrorBoundary";
 import GlobalStyle from '../../global-styles';
-import {ToastContainer} from "react-toastify";
+
 
 export default function App() {
   return (
     <div>
-      <Switch>
-        <Route exact path="/" component={LoginPage} />
-        <Route component={NotFoundPage} />
+      <ErrorBoundary>
+        <Routes/>
         <ToastContainer/>
-      </Switch>
-      <GlobalStyle />
+        <GlobalStyle/>
+      </ErrorBoundary>
     </div>
   );
 }
