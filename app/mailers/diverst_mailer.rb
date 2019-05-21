@@ -51,7 +51,6 @@ class DiverstMailer < Devise::Mailer
     return if record.try(:enterprise).nil?
 
     enterprise = record.enterprise
-    
     from_address = Mail::Address.new enterprise.default_from_email_address.presence || 'info@diverst.com'
     from_address.display_name = enterprise.default_from_email_display_name.presence || 'Diverst'
     opts[:from] = from_address
