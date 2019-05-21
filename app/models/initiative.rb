@@ -169,8 +169,7 @@ class Initiative < BaseClass
   def finish_expenses!
     return false if finished_expenses?
 
-    leftover = estimated_funding - current_expences_sum
-    group.leftover_money += leftover
+    group.leftover_money = annual_budget.approved_budget_leftover
     group.save
     self.update(finished_expenses: true)
   end
@@ -180,7 +179,8 @@ class Initiative < BaseClass
   end
 
   def current_expences_sum
-    expenses.sum(:amount) || 0
+    annual_budget = self.annual_budget
+    expenses.where(annual_budget_id: annual_budget.id).sum(:amount) || 0
   end
 
   def leftover
