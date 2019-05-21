@@ -61,9 +61,7 @@
             <% @event.attendees.limit(10).each do |attendee| %>
               <%= attendee.name_with_status %><br>
             <% end %>
-            <% unless @event.archived? %>
-              <%= link_to "View #{@event.attendees.count - 10} more...", group_event_attendance_path(@group, @event) if @event.attendees.count > 10 %>
-            <% end %>
+            <%= link_to "View #{@event.attendees.count - 10} more...", group_event_attendance_path(@group, @event) if @event.attendees.count > 10 %>
           </p>
           <% unless @event.archived? %>
             <% if current_user.initiatives.where(:id => @event.id).exists? %>
