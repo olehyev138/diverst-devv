@@ -250,7 +250,7 @@ class Group < BaseClass
   def available_budget
     return 0 unless annual_budget
 
-    annual_budget - (approved_budget + spent_budget)
+    annual_budget - approved_budget
   end
 
   def spent_budget
