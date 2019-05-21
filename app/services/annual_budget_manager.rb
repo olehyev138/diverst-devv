@@ -10,6 +10,10 @@ class AnnualBudgetManager
 	  find_or_create_annual_budget 
 	end
 
+	def approve
+		find_or_create_annual_budget
+	end
+
 	
 	private
 

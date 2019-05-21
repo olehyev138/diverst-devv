@@ -39,6 +39,7 @@ class BudgetsController < ApplicationController
       redirect_to(action: :index, annual_budget_id: params[:budget][:annual_budget_id])
     else
       flash[:alert] = 'Your budget was not created. Please fix the errors'
+      @annual_budget_id = params[:budget][:annual_budget_id]
       render :new
     end
   end
@@ -71,7 +72,7 @@ class BudgetsController < ApplicationController
     track_activity(@budget, :destroy)
     if @budget.destroy
       flash[:notice] = 'Your budget was deleted'
-      redirect_to action: :index
+      redirect_to(action: :index, annual_budget_id: params[:annual_budget_id])
     else
       flash[:alert] = 'Your budget was not deleted. Please fix the errors'
       redirect_to :back
