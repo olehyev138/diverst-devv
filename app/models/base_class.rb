@@ -15,7 +15,7 @@ class BaseClass < ActiveRecord::Base
     end
   end
 
-  after_commit on: [:create] {update_elasticsearch_index("index")}
-  after_commit on: [:update] {update_elasticsearch_index("update")}
-  after_commit on: [:destroy] {update_elasticsearch_index("delete")}
+  after_commit on: [:create] { update_elasticsearch_index('index') }
+  after_commit on: [:update] { update_elasticsearch_index('update') }
+  after_commit on: [:destroy] { update_elasticsearch_index('delete') }
 end

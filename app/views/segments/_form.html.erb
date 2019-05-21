@@ -1,3 +1,4 @@
+
 <div class="content__main">
   <div class="card">
     <%= simple_form_for @segment do |f| %>
@@ -8,15 +9,30 @@
       </div>
 
       <div class="card__section card__section--border">
-        <p class="field__hint">To be a part of this <%= c_t(:segment) %>, a user must meet <strong>all</strong> the following criteria</p>
+        <p class="field__hint">to be a part of this <%= c_t(:segment) %>, a user must meet <strong>all</strong> the following criteria</p>
         <%= f.input :active_users_filter %>
+        <%= f.input :limit %>
         <div id="rules">
-          <%= f.simple_fields_for :rules do |field| %>
-            <%= render 'rule_fields', f: field %>
-          <% end %>
           <div class="link">
-            <%= link_to_add_association "Add a criterion", f, :rules %>
+            <%= link_to_add_association "add a criterion", f, :field_rules, partial: 'field_rule' %>
           </div>
+          <%= f.simple_fields_for :field_rules, partial: 'field_rule' do |field| %>
+            <%= render 'field_rule', f: field %>
+          <% end %>
+
+          <div class="link">
+            <%= link_to_add_association "set an order", f, :order_rules, partial: 'order_rule' %>
+          </div>
+          <%= f.simple_fields_for :order_rules, partial: 'order_rule' do |field| %>
+            <%= render 'order_rule', f: field %>
+          <% end %>
+
+          <div class="link">
+            <%= link_to_add_association "scope on groups", f, :group_rules, partial: 'group_rule' %>
+          </div>
+          <%= f.simple_fields_for :group_rules, partial: 'group_rule' do |field| %>
+            <%= render 'group_rule', f: field %>
+          <% end %>
 
           <%= f.button :submit %>
         </div>
@@ -24,3 +40,60 @@
     <% end %>
   </div>
 </div>
+<script>
+  let group_rule_count = 0;
+
+  $(document).on('ready page:change', function() {
+    $('.segment-group-rule').each(function (i) {
+      setup_group_rule($(this));
+    });
+  });
+
+  $(document).on('cocoon:after-insert', function() {
+    setup_group_rule($('.segment-group-rule').last());
+  });
+
+  function setup_group_rule($group_rule) {
+    // Set id for this new rule
+    $($group_rule).attr('id', 'group-rule' + group_rule_count);
+
+    // Load group selector
+    $('body').prepend("<%= escape_javascript render partial: 'components/group_selector', locals: { id: 'group-scope-selector', multiselect: true } %>");
+    group_selector = new GroupSelector($('#group-scope-selector'));
+
+    let group_selector_id = "group-scope-selector" + group_rule_count;
+    $('#group-scope-selector').attr("id", group_selector_id);
+
+    $('#choose-groups-btn', $group_rule).attr("data-target", "#" + group_selector_id);
+    $('#choose-groups-btn', $group_rule).attr("id", "choose-groups-btn" + group_rule_count);
+
+    let $group_input = $('.group-input', $group_rule);
+    $($group_input).select2();
+
+    $('#' + group_selector_id).on('saveGroups', function(e, selectedGroups) {
+      $($group_input).val(null);
+
+      $.map(selectedGroups, function(group, key) {
+        if ($($group_input).find("option[value='" + group.id + "']").length)
+        {
+          // If the list of selected items is an array, select it with the other options
+          if ($.isArray($($group_input).val()))
+            $($group_input).val($($group_input).val().concat(group.id));
+          // If the list of the selected items is a single item, create an array with the old item and new item
+          else if ($($group_input).val() != undefined && $($group_input).val() != null)
+            $($group_input).val([$($group_input).val(), group.id]);
+          // If the list of selected items is empty, create an array with the new item
+          else
+            $($group_input).val([group.id]);
+        }
+        // If the option doesn't exist, create it and start selected
+        else
+          $($group_input).append(new Option(group.text, group.id, false, true));
+      });
+
+      $($group_input).trigger('change');
+    });
+
+    group_rule_count += 1;
+  }
+</script>

@@ -5,7 +5,7 @@ FactoryBot.define do
     factory :approved_budget do
       after(:create) do |budget|
         budget.is_approved = true
-        budget.budget_items.each{ |bi| bi.approve! }
+        budget.budget_items.each { |bi| bi.approve! }
         budget.save
       end
     end

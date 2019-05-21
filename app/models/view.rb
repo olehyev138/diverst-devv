@@ -65,10 +65,10 @@ class View < BaseClass
         }, news_feed_link: {
           only: [],
           include: { news_link: { only: [:id, :title] },
-            group: { only: [:id, :name] } }
+                     group: { only: [:id, :name] } }
         },
        }
       )
-    ).merge({ "created_at" => self.created_at.beginning_of_hour })
+    ).merge({ 'created_at' => self.created_at.beginning_of_hour })
   end
 end

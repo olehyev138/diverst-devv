@@ -2,7 +2,7 @@ class MetricsDashboard < BaseClass
   include PublicActivity::Common
 
   belongs_to :enterprise, inverse_of: :metrics_dashboards
-  belongs_to :owner, class_name: "User"
+  belongs_to :owner, class_name: 'User'
   has_many :graphs, dependent: :destroy
   has_many :metrics_dashboards_segments, dependent: :destroy
   has_many :segments, through: :metrics_dashboards_segments
@@ -11,8 +11,8 @@ class MetricsDashboard < BaseClass
   has_many :shared_metrics_dashboards, dependent: :destroy, validate: false
   has_many :shared_users, through: :shared_metrics_dashboards, source: :user
 
-  validates_presence_of :name, :message => "Metrics Dashboard name is required"
-  validates_presence_of :groups, :message => "Please select a group"
+  validates_presence_of :name, message: 'Metrics Dashboard name is required'
+  validates_presence_of :groups, message: 'Please select a group'
 
   scope :with_shared_dashboards, -> (user_id) {
     joins('LEFT JOIN shared_metrics_dashboards ON metrics_dashboards.id = shared_metrics_dashboards.metrics_dashboard_id')
@@ -26,9 +26,9 @@ class MetricsDashboard < BaseClass
   def update_shareable_token
     if shareable_token.nil?
       self.shareable_token = SecureRandom.urlsafe_base64
-      return self.save
+      self.save
     else
-      return shareable_token
+      shareable_token
     end
   end
 
@@ -44,6 +44,7 @@ class MetricsDashboard < BaseClass
   def percentage_of_total
     return 0 if enterprise.users.count == 0
     return 100 if target.count > enterprise.users.count
+
     (target.count.to_f / enterprise.users.count * 100).round
   end
 

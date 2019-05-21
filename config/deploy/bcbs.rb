@@ -31,7 +31,7 @@ server '35.170.153.62', user: 'newdeploy', roles: %w(web app db)
 set :branch, 'master'
 set :rails_env, :production
 
-set :rollbar_env, "bcbs"
+set :rollbar_env, 'bcbs'
 
 
 # Custom SSH Options

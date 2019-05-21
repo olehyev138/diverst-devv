@@ -14,7 +14,7 @@ class SegmentDatatable < AjaxDatatablesRails::Base
 
   def sortable_columns
     # Declare strings in this format: ModelName.column_name
-    @sortable_columns ||= ['Segment.name', 'Segment.rules.count', 'Segment.created_at.to_s']
+    @sortable_columns ||= ['Segment.name', 'Segment.all_rules_count', 'Segment.created_at.to_s']
   end
 
   def searchable_columns
@@ -26,14 +26,14 @@ class SegmentDatatable < AjaxDatatablesRails::Base
 
   def generate_edit_link(record)
     if SegmentPolicy.new(@user, record).edit?
-      link_to "Edit", edit_segment_path(record)
+      link_to 'Edit', edit_segment_path(record)
     end
   end
 
   def generate_destroy_link(record)
     if SegmentPolicy.new(@user, record).destroy?
-      link_to "Delete", segment_path(record), method: :delete, 
-      class: "error", data: { confirm: "Are you sure?" }
+      link_to 'Delete', segment_path(record), method: :delete,
+                                              class: 'error', data: { confirm: 'Are you sure?' }
     end
   end
 
@@ -43,9 +43,9 @@ class SegmentDatatable < AjaxDatatablesRails::Base
       destroy_link = generate_destroy_link(record)
       [
         "#{link_to(ActionController::Base.helpers.sanitize(record.name).gsub('&amp;', '&'), segment_path(record))}",
-        html_escape(record.rules.count),
-        html_escape(record.created_at.to_s :reversed_slashes), 
-        "#{edit_link} - #{destroy_link}"
+        html_escape(record.all_rules_count),
+        html_escape(record.created_at.to_s :reversed_slashes),
+        "#{destroy_link}"
       ]
     end
   end

@@ -12,30 +12,30 @@ RSpec.describe InitiativeComment, type: :model do
   end
 
   describe 'test instance and class methods' do
-  	context '#group' do
-  	  let!(:group) { create(:group) }
-  	  let!(:initiative) { create(:initiative, owner_group_id: group.id) }
-  	  let!(:initiative_comment) { create(:initiative_comment, initiative_id: initiative.id) }
+    context '#group' do
+      let!(:group) { create(:group) }
+      let!(:initiative) { create(:initiative, owner_group_id: group.id) }
+      let!(:initiative_comment) { create(:initiative_comment, initiative_id: initiative.id) }
 
-  	  it 'returns group belonging to initiative' do
-  		expect(initiative_comment.group).to eq group
-  	  end
-  	end
+      it 'returns group belonging to initiative' do
+        expect(initiative_comment.group).to eq group
+      end
+    end
 
-  	context '#disapproved?' do
-  		let!(:initiative_comment) { build(:initiative_comment, approved: false) }
+    context '#disapproved?' do
+      let!(:initiative_comment) { build(:initiative_comment, approved: false) }
 
-  		it 'returns approved initiative comment' do
-  			expect(initiative_comment.disapproved?).to eq true
-  		end
-  	end
+      it 'returns approved initiative comment' do
+        expect(initiative_comment.disapproved?).to eq true
+      end
+    end
 
-  	context '.approved' do
-  		let!(:initiative_comments) { build_list(:initiative_comment, 3, approved: true) }
+    context '.approved' do
+      let!(:initiative_comments) { build_list(:initiative_comment, 3, approved: true) }
 
-  		it 'returns 3 approved initiative_comments' do
-  			expect(initiative_comments.count).to eq 3
-  		end
-  	end
+      it 'returns 3 approved initiative_comments' do
+        expect(initiative_comments.count).to eq 3
+      end
+    end
   end
 end

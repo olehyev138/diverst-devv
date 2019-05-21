@@ -52,11 +52,11 @@ gem 'omniauth-linkedin-oauth2', '~> 0.1.5' # OAuth for LinkedIn
 gem 'omniauth-oauth2', '1.3.1' # Temporary fix to address: https://github.com/decioferreira/omniauth-linkedin-oauth2/issues/28
 gem 'activerecord-import', '~> 0.12.0' # Adds a faster way to INSERT multiple rows in the DB
 gem 'inline_svg', '~> 0.6.2' # Extract SVG files' content into the HTML
-gem 'pundit', "~> 2.0.0"# Authorization
+gem 'pundit', '~> 2.0.0'# Authorization
 gem 'draper', '~> 2.1'# Decorators for views
 gem 'daemons', '~> 1.2', '>= 1.2.3' # For capistrano-clockwork
 gem 'icalendar', '~> 2.3' # For exporting events to your calendar
-gem 'simple_form_fancy_uploads', git: "https://github.com/TeamDiverst/simple_form_fancy_uploads.git", branch: "paperclip_version"
+gem 'simple_form_fancy_uploads', git: 'https://github.com/TeamDiverst/simple_form_fancy_uploads.git', branch: 'paperclip_version'
 gem 'ransack', '~> 1.8', '>= 1.8.2' # For search forms
 gem 'ckeditor', '~> 4.2', '>= 4.2.3'
 gem 'twilio-ruby', '~> 5.10.0'
@@ -68,10 +68,13 @@ gem 'rollbar', '~> 2.14.1'
 gem 'ruby-oembed', '~> 0.12', git: 'https://github.com/TeamDiverst/ruby-oembed.git'
 gem 'julia_builder', '~> 0.2.0'
 gem 'date_validator', '~> 0.9.0'
-gem "thor", "0.19.1"# Expected string default value for '--decorator'; got true (boolean) - setting version removes this message
+gem 'thor', '0.20.0'# Expected string default value for '--decorator'; got true (boolean) - setting version removes this message
 gem 'sanitize_email', '~> 1.2.2'
-gem "rack-timeout", '~> 0.4.2'
+gem 'rack-timeout', '~> 0.4.2'
 gem 'jquery-ui-rails', '~> 6.0.1'
+
+gem 'factory_bot_rails', '~> 4.8.0' # Create mock objects for testing
+gem 'tty-spinner'
 
 group :development, :test do
   gem 'spring', '~> 1.6.2' # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
@@ -82,7 +85,6 @@ group :development, :test do
   gem 'quiet_assets', '~> 1.1.0' # Silences asset logs
   gem 'active_record_query_trace', '~> 1.5.4' # View which line is making each SQL query in the logs
   gem 'rspec-rails', '~> 3.0' # Testing framework
-  gem 'factory_bot_rails', '~> 4.8.0' # Create mock objects for testing
   gem 'capybara', '~> 2.15.1' # Helpers for feature specs
   gem 'poltergeist', '~> 1.16.0' # Allows support for JS in feature specs
   gem 'database_cleaner', '~> 1.6.1' # Necessary to clean the DB between tests
@@ -91,10 +93,14 @@ group :development, :test do
   gem 'shoulda-matchers', '~> 3.1', '>= 3.1.1'
   gem 'timecop', '~> 0.8.1'
   gem 'byebug', '~> 9.1.0' # Debugger
-  gem 'pundit-matchers', "~> 1.6.0"
-  gem 'capistrano-yarn', "~> 2.0.2"
-  gem 'capistrano-nvm', "~> 0.0.7"
-  gem 'slackistrano', "~> 3.8.3"
+  gem 'pundit-matchers', '~> 1.6.0'
+  gem 'capistrano-yarn', '~> 2.0.2'
+  gem 'capistrano-nvm', '~> 0.0.7'
+  gem 'slackistrano', '~> 3.8.3'
+  gem 'rubocop', '~> 0.68.1'
+  gem 'rubocop-performance', '~> 1.2.0'
+  gem 'pronto', '~> 0.10.0'
+  gem 'pronto-rubocop', '~> 0.10.0'
 end
 
 group :test do
@@ -129,9 +135,10 @@ group :development do
   # gem 'stackprof'
   gem 'letter_opener', '~> 1.4.1'
   gem 'letter_opener_web', '~> 1.3', '>= 1.3.1'
-  gem 'tty-spinner'
   gem 'rufo', '~> 0.1.0'
   gem 'bundler-audit', '~> 0.6.0'
+  gem 'ed25519', '~> 1.2.4'
+  gem 'bcrypt_pbkdf', '~> 1.0.1'
 end
 
 group :staging, :production do

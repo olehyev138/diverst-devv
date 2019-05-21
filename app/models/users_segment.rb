@@ -3,11 +3,11 @@ class UsersSegment < BaseClass
   belongs_to :segment
 
   # validations
-  validates_uniqueness_of :user, scope: [:segment], :message => "is already a member of this segment"
+  validates_uniqueness_of :user, scope: [:segment], message: 'is already a member of this segment'
 
   settings do
     # dynamic template for combined_info fields, maps them to keyword
-    mappings  dynamic_templates: [
+    mappings dynamic_templates: [
       {
         string_template: {
           match_mapping_type: 'string',
@@ -17,8 +17,8 @@ class UsersSegment < BaseClass
           }
         }
       }
-    ]  do
-      indexes :segment  do
+    ] do
+      indexes :segment do
         indexes :enterprise_id, type: :integer
         indexes :name, type: :keyword
         indexes :parent do
@@ -42,7 +42,7 @@ class UsersSegment < BaseClass
         methods: [:user_combined_info]
       )
     )
-    .deep_merge({ "user" => { 'created_at' => user.created_at.beginning_of_hour } })
+    .deep_merge({ 'user' => { 'created_at' => user.created_at.beginning_of_hour } })
   end
 
   def user_combined_info

@@ -1,4 +1,4 @@
 require 'spec_helper'
 
-#describe ViewDecorator do
-#end
+# describe ViewDecorator do
+# end

@@ -6,7 +6,7 @@ class UserGroup < BaseClass
   belongs_to :group
 
   # validations
-  validates_uniqueness_of :user, scope: [:group], :message => "is already a member of this group"
+  validates_uniqueness_of :user, scope: [:group], message: 'is already a member of this group'
 
   scope :top_participants, ->(n) { order(total_weekly_points: :desc).limit(n) }
   scope :active, -> { joins(:user).where(users: { active: true }) }
@@ -21,7 +21,7 @@ class UserGroup < BaseClass
 
   settings do
     # dynamic template for combined_info fields, maps them to keyword
-    mappings  dynamic_templates: [
+    mappings dynamic_templates: [
       {
         string_template: {
           match_mapping_type: 'string',
@@ -31,11 +31,11 @@ class UserGroup < BaseClass
           }
         }
       }
-    ]  do
+    ] do
       indexes :user_id, type: :integer
       indexes :group_id, type: :integer
       indexes :created_at, type: :date
-      indexes :group  do
+      indexes :group do
         indexes :enterprise_id, type: :integer
         indexes :parent_id, type: :integer
         indexes :name, type: :keyword
@@ -60,7 +60,7 @@ class UserGroup < BaseClass
         include: { group: {
           only: [:enterprise_id, :parent_id, :name],
           include: { parent: { only: [:name] } },
-        }, user: { only: [:enterprise_id, :created_at, :mentor, :mentee, :active] }},
+        }, user: { only: [:enterprise_id, :created_at, :mentor, :mentee, :active] } },
         methods: [:user_combined_info]
       )
     )

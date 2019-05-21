@@ -1,5 +1,4 @@
 class Field < BaseClass
-
   belongs_to :enterprise
   belongs_to :group
   belongs_to :poll
@@ -9,7 +8,7 @@ class Field < BaseClass
 
   validates :title, presence: true
   validates :title, uniqueness: { scope: :enterprise_id },
-  unless: Proc.new { |object| (object.type == "SegmentsField" || object.type == "GroupsField") }, if: :container_type_is_enterprise?
+                    unless: Proc.new { |object| (object.type == 'SegmentsField' || object.type == 'GroupsField') }, if: :container_type_is_enterprise?
 
   def container_type_is_enterprise?
     enterprise_id.present?
@@ -55,7 +54,7 @@ class Field < BaseClass
   end
 
   def numeric?
-    type == "NumericField" || type == "DateField"
+    type == 'NumericField' || type == 'DateField'
   end
 
   def format_value_name(value)
