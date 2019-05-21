@@ -21,7 +21,7 @@ RSpec.describe ColorCode, type: :service do
     color_values_int.each do |r|
       color_values_int.each do |g|
         color_values_int.each do |b|
-          @colors_rgb += [{r: r, g: g, b: b}]
+          @colors_rgb += [{ r: r, g: g, b: b }]
         end
       end
     end
@@ -65,13 +65,13 @@ RSpec.describe ColorCode, type: :service do
 
     context 'Inverted' do
       before do
-        @inverted_rgb = (@colors_hsl.zip(@colors_rgb)).map { |x,y| ColorCode.invert_hsl_color(x, y) }
+        @inverted_rgb = (@colors_hsl.zip(@colors_rgb)).map { |x, y| ColorCode.invert_hsl_color(x, y) }
         @inverted_hsl = @inverted_rgb.map { |x| ColorCode.rgb_to_hsl(x) }
       end
 
       scenario 'Inverting hsl' do
         for i in 0...@colors_rgb.length
-          expect((@inverted_hsl[i][:h] - @colors_hsl[i][:h])%360).to be_within(2.0).of(180.0)
+          expect((@inverted_hsl[i][:h] - @colors_hsl[i][:h]) % 360).to be_within(2.0).of(180.0)
         end
       end
 
