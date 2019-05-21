@@ -85,6 +85,6 @@ class TwitterClient
   protected
 
   def self.outdated?(user)
-    (Time.now - account_cache.fetch(user.downcase).time_created) > 30.minutes
+    account_cache.fetch(user.downcase).time_created < 30.minutes.ago
   end
 end
