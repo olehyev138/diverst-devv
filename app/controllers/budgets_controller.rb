@@ -150,6 +150,7 @@ class BudgetsController < ApplicationController
         :description,
         :comments,
         :approver_id,
+        :annual_budget_id,
         budget_items_attributes: [
           :id,
           :title,
