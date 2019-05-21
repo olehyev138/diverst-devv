@@ -1,0 +1,5 @@
+/*
+ *
+ * LandingPage constants
+ *
+ */

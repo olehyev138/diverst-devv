@@ -7,6 +7,8 @@ import { routerMiddleware } from 'connected-react-router';
 import createSagaMiddleware from 'redux-saga';
 import createReducer from './reducers';
 
+import history from 'utils/history';
+
 export default function configureStore(initialState = {}, history) {
   let composeEnhancers = compose;
   const reduxSagaMonitorOptions = {};
@@ -57,3 +59,8 @@ export default function configureStore(initialState = {}, history) {
 
   return store;
 }
+
+// Do this so util scripts can access store & history
+// We import it in app.js instead of creating it
+const store = configureStore({}, history);
+export {store, history}

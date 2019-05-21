@@ -13,7 +13,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router';
-import history from 'utils/history';
 import 'sanitize.css/sanitize.css';
 
 // Import root app
@@ -28,15 +27,14 @@ import '!file-loader?name=[name].[ext]!./images/favicon.ico';
 import 'file-loader?name=.htaccess!./.htaccess';
 /* eslint-enable import/no-unresolved, import/extensions */
 
-import configureStore from './configureStore';
+import configureAxios from 'utils/axios';
+configureAxios();
 
 // Import i18n messages
 import { translationMessages } from './i18n';
 
-// Create redux store with history
-const initialState = {};
-const store = configureStore(initialState, history);
 const MOUNT_NODE = document.getElementById('app');
+import {store, history} from './configureStore';
 
 const render = messages => {
   ReactDOM.render(
