@@ -90,7 +90,7 @@ class Initiative < BaseClass
   end
 
   def archived?
-    archived_at.nil? ? false : true
+    archived_at.present?
   end
 
   def as_indexed_json(options = {})
