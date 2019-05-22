@@ -9,7 +9,11 @@ class Groups::AttendancesController < ApplicationController
   layout 'erg'
 
   def show
-    @attendances = @event.attendees.active
+    if GroupEventsPolicy.new(current_user, [@group]).view_event_attendees?
+      @attendances = @event.attendees.active
+    else
+      @attendances = []
+    end
   end
 
   def create

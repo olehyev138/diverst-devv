@@ -21,6 +21,12 @@ class Group < BaseClass
     :managers_only
   ]
 
+  enumerize :event_attendance_visibility, default: :managers_only, in: [
+    :global,
+    :group,
+    :managers_only
+  ]
+
   enumerize :messages_visibility, default: :managers_only, in: [
     :global,
     :group,

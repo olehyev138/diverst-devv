@@ -37,6 +37,25 @@ class GroupEventsPolicy < GroupBasePolicy
     end
   end
 
+  def view_event_attendees?
+    return true if user.policy_group.manage_all?
+
+    case group.event_attendance_visibility
+    when 'global'
+      return true if user.policy_group.initiatives_manage?
+      return true if basic_group_leader_permission?('initiatives_manage')
+
+      # Everyone can see users
+      user.policy_group.initiatives_index? && user.policy_group.groups_members_index?
+    when 'group'
+      is_a_accepted_member?
+    when 'managers_only'
+      is_a_manager?('initiatives_manage')
+    else
+      false
+    end
+  end
+
   def view_upcoming_and_ongoing_events?
     view_upcoming_events?
   end

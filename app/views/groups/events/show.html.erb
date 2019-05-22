@@ -10,9 +10,11 @@
     <div class="flex-row__cell">
       <%= link_to "Edit event", edit_group_initiative_path(@group, @event), class: "btn btn--primary" if InitiativePolicy.new(current_user, @event).edit? %>
     </div>
-    <div class="flex-row__cell hidden-sm hidden-xs">
-      <%= link_to "Export attendees", export_attendees_csv_group_initiative_path(@group, @event), class: "btn btn--primary hidden-xs" if InitiativePolicy.new(current_user, @event).edit? %>
-    </div>
+    <% if GroupEventsPolicy.new(current_user, [@group]).view_event_attendees? %>
+      <div class="flex-row__cell hidden-sm hidden-xs">
+        <%= link_to "Export attendees", export_attendees_csv_group_initiative_path(@group, @event), class: "btn btn--primary hidden-xs" if InitiativePolicy.new(current_user, @event).edit? %>
+      </div>
+    <% end %>
     <% if !@event.full? || current_user.initiatives.where(:id => @event.id).exists? %>
     <div class="flex-row__cell">
       <a href="#" class="btn btn--primary js-join-event" data-joined="<%= current_user.initiatives.where(:id => @event.id).exists? %>"><%= current_user.initiatives.where(:id => @event.id).exists? ? "Leave event" : "Join event" %></a>
@@ -53,13 +55,15 @@
           <p><%= @event.participating_groups.map(&:name).join(", ") %></p>
         </div>
         <div class="col-sm-4 col-xs-12">
-          <h4>Attendees (<span id="attendees_count"><%= @event.attendees.count %><% if @event.max_attendees? %>/<%= @event.max_attendees %><% end %></span>)<% if @event.full? %> <b>Full</b><% end %></h4>
-          <p>
-            <% @event.attendees.limit(10).each do |attendee| %>
-              <%= attendee.name_with_status %><br>
-            <% end %>
-            <%= link_to "View #{@event.attendees.count - 10} more...", group_event_attendance_path(@group, @event) if @event.attendees.count > 10 %>
-          </p>
+          <% if GroupEventsPolicy.new(current_user, [@group]).view_event_attendees? %>
+            <h4>Attendees (<span id="attendees_count"><%= @event.attendees.count %><% if @event.max_attendees? %>/<%= @event.max_attendees %><% end %></span>)<% if @event.full? %> <b>Full</b><% end %></h4>
+            <p>
+              <% @event.attendees.limit(10).each do |attendee| %>
+                <%= attendee.name_with_status %><br>
+              <% end %>
+              <%= link_to "View #{@event.attendees.count - 10} more...", group_event_attendance_path(@group, @event) if @event.attendees.count > 10 %>
+            </p>
+          <% end %>
           <% if current_user.initiatives.where(:id => @event.id).exists? %>
             <%= link_to "Add to Google Calendar", GoogleCalendar.build_link(@event), target: :_blank, class: "hidden-xs member", id: 'calendar_link1' %>
             <br>

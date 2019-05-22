@@ -450,6 +450,7 @@ class GroupsController < ApplicationController
           :pending_users,
           :members_visibility,
           :messages_visibility,
+          :event_attendance_visibility,
           :latest_news_visibility,
           :upcoming_events_visibility,
           :calendar_color,
