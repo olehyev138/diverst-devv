@@ -12,6 +12,7 @@ This is generally the list of major libraries we are using. There are also
 many smaller packages not listed To get a full list of dependencies refer
 to `package.json`
 
+#### Core
 - react-boilerplate
 - react
 - redux
@@ -22,23 +23,55 @@ to `package.json`
 - reselect
 - axios
 - formik
+- yup
 
-### React Boilerplate
+#### Unit Testing
+- Jest
+- react-testing-library
 
-### React
+#### Linting
+- ESLint
+- Prettier
+- styelint
 
-### Redux
+###[React Boilerplate](https://github.com/react-boilerplate/react-boilerplate)
 
-### Material UI
+Provides the initial setup and scaffolding for the overall project.
 
-### React Router
+###[React](https://github.com/facebook/react/)
 
-### Saga
+###[Material UI](https://next.material-ui.com/getting-started/installation/)
 
-### Immer
+The CSS/UI library. Has better support for apps then Bootstrap.
 
-### Reselect
+###[React Router](https://reacttraining.com/react-router/web/guides/quick-start)
 
-### Axios
+Used in conjunction with connected-react-router, which connects it to Redux.
 
-### Formik
+Handles all the client side routing.
+
+###[Redux Saga](https://github.com/redux-saga/redux-saga)
+
+Handles asynchronous state changes, ie api querying.
+
+###[Immer](https://github.com/immerjs/immer)
+
+Provides functionality to easily keep the redux state immutable.
+
+###[Reselect](https://github.com/reduxjs/reselect)
+
+Provides functionality to create selectors for redux.
+
+###[Axios](https://github.com/axios/axios)
+
+An HTTP library/client for making API requests.
+
+###[Formik](https://jaredpalmer.com/formik/docs/overview)
+
+React form library. Manages local form state for us.
+
+See docs as to why this is used over something like redux-forms
+
+###[Yup](https://github.com/jquense/yup/blob/master/package.json)
+
+Used in conjunction with Formik to handle form validation.
