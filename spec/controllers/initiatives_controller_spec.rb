@@ -7,8 +7,9 @@ RSpec.describe InitiativesController, type: :controller do
   let!(:group) { create :group, :without_outcomes, enterprise: user.enterprise }
   let(:outcome) { create :outcome, group_id: group.id }
   let(:pillar) { create :pillar, outcome_id: outcome.id }
-  let!(:initiative) { create :initiative, pillar: pillar, owner_group: group, start: Date.yesterday, end: Date.tomorrow }
-  let!(:initiative2) { create :initiative, pillar: pillar, owner_group: group, start: 2.years.ago, end: 2.years.ago + 1.week }
+  let!(:annual_budget) { create(:annual_budget, group: group) }
+  let!(:initiative) { create :initiative, pillar: pillar, owner_group: group, start: Date.yesterday, end: Date.tomorrow, annual_budget_id: annual_budget.id }
+  let!(:initiative2) { create :initiative, pillar: pillar, owner_group: group, start: 2.years.ago, end: 2.years.ago + 1.week, annual_budget_id: annual_budget.id }
 
   describe 'GET #index' do
     def get_index(group_id = -1)
@@ -535,15 +536,18 @@ RSpec.describe InitiativesController, type: :controller do
         post :finish_expenses, group_id: group_id, id: id
       end
 
-      let(:budget) { create :approved_budget, group: group }
-      let(:budget_item) { budget.budget_items.first }
-      let!(:initiative) { create :initiative, budget_item: budget_item, owner_group: group }
+      let!(:group1) { create(:group, enterprise: user.enterprise, annual_budget: 2000) }
+      let!(:annual_budget1) { create(:annual_budget, group_id: group1.id, amount: group.annual_budget, closed: false) }
+      let!(:budget1) { create(:budget, group_id: group1.id, annual_budget_id: annual_budget1.id) }
+      let!(:initiative) { create(:initiative, owner_group: group1, finished_expenses: false, annual_budget_id: annual_budget1.id) }
+      let!(:expense) { create(:initiative_expense, amount: 600, annual_budget_id: annual_budget1.id) }
+
 
       context 'with logged in user' do
         login_user_from_let
 
         context 'with correct params' do
-          before { post_finish_expenses(group.id, initiative.id) }
+          before { post_finish_expenses(group1.id, initiative.id) }
 
           it 'marks initiative as finished' do
             expect(initiative.reload).to be_finished_expenses

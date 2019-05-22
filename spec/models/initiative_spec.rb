@@ -244,7 +244,7 @@ RSpec.describe Initiative, type: :model do
 
   describe '#leftover' do
     it 'returns 0' do
-      initiative = build(:initiative)
+      initiative = build(:initiative, annual_budget: build(:annual_budget))
       expect(initiative.leftover).to eq(0)
     end
   end

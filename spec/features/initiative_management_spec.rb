@@ -85,25 +85,32 @@ RSpec.feature 'Initiative management' do
     end
   end
 
-  context 'disable budget item field when budget for the event is closed' do
-    let!(:initiative1) { create(:initiative, owner_group: group) }
-    let!(:budget1) { create(:approved_budget, group: group) }
+  context 'make links of initiative inactive except archive and delete links when budget for the event is closed' do
+    let!(:annual_budget) { create(:annual_budget, group: group) }
+    let!(:initiative1) { create(:initiative, owner_group: group, annual_budget_id: annual_budget.id) }
+    let!(:budget1) { create(:approved_budget, group: group, annual_budget_id: annual_budget.id) }
 
     before do
       budget_item1 = budget1.budget_items.first
       initiative1.update(budget_item_id: budget_item1.id)
-      create(:initiative_expense, description: 'new expense', initiative_id: initiative1.id)
+      create(:initiative_expense, description: 'new expense', initiative_id: initiative1.id, annual_budget_id: annual_budget.id)
     end
 
-    scenario 'on event edit form' do
+    scenario 'on group initiatives index page' do
       visit group_initiative_expenses_path(group, initiative1)
 
       click_on 'Finish Expenses'
 
-      visit edit_group_initiative_path(group, initiative1)
+      visit group_initiatives_path(group)
 
-      expect(page).to have_field 'budget for this event is closed', disabled: true
-      expect(page).not_to have_field 'Specify amount to deduct from budget'
+      expect(page).to have_link 'Archive', href: archive_group_initiative_path(group, initiative1)
+      expect(page).to have_link 'Delete', href: group_initiative_path(group, initiative1)
+      expect(page).to have_no_link 'Expenses', href: group_initiative_expenses_path(group, initiative1)
+      expect(page).to have_no_link 'To Do', href: todo_group_initiative_path(group, initiative1)
+      expect(page).to have_no_link 'Updates', href: group_initiative_updates_path(group, initiative1)
+      expect(page).to have_no_link 'KPI', href: group_initiative_path(group, initiative1)
+      expect(page).to have_no_link 'Edit', href: edit_group_initiative_path(group, initiative1)
+      expect(page).to have_no_link 'Survey', href: new_poll_path(group, initiative1)
     end
   end
 
