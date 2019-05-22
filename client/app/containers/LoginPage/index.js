@@ -12,15 +12,14 @@ import { selectEnterprise } from 'containers/App/selectors';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 
-import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 
 import reducer from './reducer';
-import saga from './saga';
 
 import LoginForm from '../../components/LoginForm';
 import EnterpriseForm from '../../components/EnterpriseForm';
-import { handleLogin, handleFindEnterprise } from './actions';
+
+import { handleLogin, handleFindEnterprise } from 'containers/App/actions';
 
 import "./index.css";
 
@@ -80,11 +79,9 @@ const withConnect = connect(
 );
 
 const withReducer = injectReducer({ key: 'loginPage', reducer });
-const withSaga = injectSaga({ key: 'loginPage', saga });
 
 export default compose(
   withReducer,
-  withSaga,
   withConnect,
   memo,
 )(LoginPage);

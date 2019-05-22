@@ -1,16 +1,22 @@
-import { call, put, takeLatest } from "redux-saga/effects";
+import { call, put, takeLatest } from "redux-saga/dist/redux-saga-effects-npm-proxy.esm";
 import api from 'api/api';
 import { toast } from 'react-toastify';
 import { push } from 'connected-react-router';
 
-import {HANDLE_LOGIN, LOGIN_ERROR, HANDLE_FIND_ENTERPRISE, FIND_ENTERPRISE_ERROR} from './constants';
-import {findEnterpriseError, loginError} from './actions';
-import { loggedIn, setUser, setEnterprise } from 'containers/App/actions';
+import {
+  HANDLE_LOGIN, LOGIN_ERROR,
+  HANDLE_FIND_ENTERPRISE, FIND_ENTERPRISE_ERROR
+} from './constants';
+
+import {
+  loggedIn, setUser, setEnterprise,
+  findEnterpriseError, loginError
+} from './actions';
 
 import AuthService from 'utils/authService'
-//import { changePrimary, changeSecondary } from "containers/ThemeProvider/actions";
+import { changePrimary, changeSecondary } from 'containers/ThemeProvider/actions';
 
-const axios = require("axios");
+const axios = require('axios');
 
 export function* login(action) {
   try {
@@ -28,7 +34,7 @@ export function* login(action) {
 
     // TODO: find better way to do this
     //       - we need to reload to render the parent layout component
-    yield put(push('/'));
+    yield put(push('/home'));
     location.reload();
   }
   catch (err) {
@@ -48,8 +54,8 @@ export function* findEnterprise(action) {
 
     // If enterprise has a theme, dispatch theme provider actions
     if(response.data.enterprise.theme){
-      //yield put(changePrimary(enterprise.theme.primary_color));
-      //yield put(changeSecondary(enterprise.theme.secondary_color));
+      yield put(changePrimary(enterprise.theme.primary_color));
+      yield put(changeSecondary(enterprise.theme.secondary_color));
     }
   }
   catch (err) {

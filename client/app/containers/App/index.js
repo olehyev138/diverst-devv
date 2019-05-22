@@ -15,8 +15,12 @@ import Routes from "containers/Routes/Loadable";
 import ErrorBoundary from "containers/ErrorBoundary";
 import GlobalStyle from '../../global-styles';
 
+import { useInjectSaga } from 'utils/injectSaga';
+import saga from './saga';
 
 export default function App() {
+  useInjectSaga({ key: 'app', saga });
+
   return (
     <div>
       <ErrorBoundary>

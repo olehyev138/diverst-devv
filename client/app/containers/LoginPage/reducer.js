@@ -5,7 +5,7 @@
  */
 import produce from 'immer';
 
-import { HANDLE_LOGIN, LOGIN_ERROR } from './constants';
+import { HANDLE_LOGIN, LOGIN_ERROR } from 'containers/App/constants';
 
 export const initialState = {};
 

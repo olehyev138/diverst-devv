@@ -39,7 +39,7 @@ const Login = ({ component: ReactComponent, ...rest }) => (
 export default function Routes() {
   return (
     <Router history={history}>
-      <ApplicationLayout path='/' route={AuthenticatedRoute} />
+      <ApplicationLayout path='/' route={AuthenticatedRoute}/>
       <Switch>
         <Login path='/login' component={LoginPage}/>
         <AuthenticatedRoute exact path="/" component={HomePage}/>
