@@ -99,7 +99,7 @@ class BudgetsController < ApplicationController
       flash[:notice] = 'Your budget was updated'
       redirect_to :back
     else
-      flash[:alert] = 'Your budget was not updated. Please fix the errors'
+      flash[:alert] = 'Your budget was not updated.'
       redirect_to :back
     end
   end

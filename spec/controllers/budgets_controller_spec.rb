@@ -428,7 +428,7 @@ RSpec.describe BudgetsController, type: :controller do
     end
   end
 
-  describe 'put#reset_annual_budget', skip: 'skip temporarily' do
+  describe 'put#reset_annual_budget' do
     context 'with logged user' do
       login_user_from_let
       context 'with valid update' do

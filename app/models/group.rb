@@ -244,7 +244,8 @@ class Group < BaseClass
   def approved_budget
     annual_budget = annual_budgets.find_by(closed: false)
     return 0 if annual_budget.nil?
-    (budgets.where(annual_budget_id: annual_budget.id).approved.map{ |b| b.requested_amount || 0 }).reduce(0, :+)
+
+    (budgets.where(annual_budget_id: annual_budget.id).approved.map { |b| b.requested_amount || 0 }).reduce(0, :+)
   end
 
   def available_budget
@@ -256,7 +257,8 @@ class Group < BaseClass
   def spent_budget
     annual_budget = annual_budgets.find_by(closed: false)
     return 0 if annual_budget.nil?
-     (initiatives.where(annual_budget_id: annual_budget.id).map{ |i| i.current_expences_sum || 0 } ).reduce(0, :+)
+
+    (initiatives.where(annual_budget_id: annual_budget.id).map { |i| i.current_expences_sum || 0 }).reduce(0, :+)
   end
 
   def active_members

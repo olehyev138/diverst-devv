@@ -392,25 +392,25 @@ RSpec.describe Group, type: :model do
       group = create(:group, annual_budget: 10000)
       budget = create(:budget, group: group, is_approved: true)
       create(:budget_item, budget: budget, estimated_amount: 1000)
-    
+
       expect(group.available_budget).to eq(group.approved_budget - group.spent_budget)
     end
   end
 
 
-  describe '#spent_budget' do 
+  describe '#spent_budget' do
     it 'returns 0' do
       group = build(:group)
       expect(group.spent_budget).to eq(0)
     end
 
-    it 'returns spent budget' do 
+    it 'returns spent budget' do
       group = create(:group)
       annual_budget = create(:annual_budget, group: group, closed: false)
       initiative = create(:initiative, annual_budget_id: annual_budget.id, owner_group: group)
       expense = create(:initiative_expense, initiative_id: initiative.id, amount: 900, annual_budget_id: annual_budget.id)
       initiative.finish_expenses!
-  
+
       expect(group.spent_budget).to eq 900
     end
   end

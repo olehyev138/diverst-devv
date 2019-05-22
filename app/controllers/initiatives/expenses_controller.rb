@@ -104,7 +104,7 @@ class Initiatives::ExpensesController < ApplicationController
       .require(:initiative_expense)
       .permit(
         :description,
-        :amount, 
+        :amount,
         :annual_budget_id
       )
   end
