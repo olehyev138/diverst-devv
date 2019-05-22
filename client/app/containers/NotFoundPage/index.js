@@ -11,6 +11,7 @@ import { FormattedMessage } from 'react-intl';
 import { Grid, Button } from '@material-ui/core';
 import { NavLink } from 'react-router-dom';
 
+import messages from "./messages";
 import logo from 'images/diverst.png';
 
 export class NotFoundPage extends React.PureComponent {
@@ -21,9 +22,8 @@ export class NotFoundPage extends React.PureComponent {
               justify="center" style={{minHeight: '100vh', textAlign: "center"}}>
           <Grid item xs={6}>
             <img src={logo} alt="Diverst Logo" height="150" width="150"/>
-            <h1>TEMP</h1>
-            { /* TODO: implement */ }
-            <Button>Home</Button>
+            <h1><FormattedMessage {...messages.header} /></h1>
+            <Button component={NavLink} to='/home'>Home</Button>
           </Grid>
         </Grid>
       </div>

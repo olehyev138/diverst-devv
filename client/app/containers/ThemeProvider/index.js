@@ -57,6 +57,9 @@ export class ThemeProvider extends React.PureComponent {
           main: secondary,
         },
       },
+      typography: {
+        useNextVariants: true
+      }
     });
 
     return (

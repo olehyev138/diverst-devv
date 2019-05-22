@@ -26,7 +26,8 @@ import "./index.css";
 
 export class LoginPage extends React.PureComponent {
 
-  // TODO: use formik actions
+  // TODO: - use formik actions
+  //       - locale toggle
 
   constructor(props) {
     super(props);

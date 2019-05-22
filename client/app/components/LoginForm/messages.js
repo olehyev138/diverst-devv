@@ -6,11 +6,22 @@
 
 import { defineMessages } from 'react-intl';
 
-export const scope = 'app.components.LoginForm';
+export const scope = "diverst.containers.Login";
 
 export default defineMessages({
-  header: {
-    id: `${scope}.header`,
-    defaultMessage: 'This is the LoginForm component!',
+  login: {
+    id: `${scope}.button.login`,
+  },
+  signup: {
+    id: `${scope}.button.signup`,
+  },
+  email: {
+    id: `${scope}.input.email`,
+  },
+  password: {
+    id: `${scope}.input.password`,
+  },
+  forgotPassword: {
+    id: `${scope}.links.forgotPassword`,
   },
 });

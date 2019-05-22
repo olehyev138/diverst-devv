@@ -13,6 +13,8 @@ import messages from './messages';
 import {Button, Card, CardActions, CardContent, Grid, TextField} from "@material-ui/core";
 import {Formik} from "formik";
 
+import Logo from 'components/Logo'
+
 function EnterpriseForm(props) {
   return (
     <Formik
@@ -22,6 +24,11 @@ function EnterpriseForm(props) {
         <Grid container className="total-center" justify="center">
           <Grid item lg={4} md={6} sm={8} xs={12}>
             <Card>
+              <Grid container spacing={0} direction='column' alignItems='center' justify='center'>
+                <Grid item xs={3}>
+                  <Logo/>
+                </Grid>
+              </Grid>
               <form onSubmit={props.handleSubmit}>
                 <CardContent>
                   <TextField
@@ -31,20 +38,21 @@ function EnterpriseForm(props) {
                     disabled={false}
                     id="email"
                     name="email"
+                    label={<FormattedMessage {...messages.email} />}
                     margin="normal"
                     type="email"
                     autoComplete="off"
                   />
                 </CardContent>
                 <CardActions>
-                  <Grid container>
-                    <Grid item align="left" xs={4}>
+                  <Grid container alignItems="center" justify="center">
+                    <Grid item align="center" xs={4}>
                       <Button
                         type="submit"
                         color="primary"
                         size="small"
                       >
-                        Find Company
+                        {<FormattedMessage {...messages.findCompany }/>}
                       </Button>
                     </Grid>
                   </Grid>

@@ -16,6 +16,8 @@ import messages from './messages';
 import { Formik } from 'formik';
 import { Button, Card, CardActions, CardContent, Grid, TextField } from "@material-ui/core";
 
+import Logo from 'components/Logo'
+
 function LoginForm(props) {
   // TODO: load email field
   //const email = props.email;
@@ -28,6 +30,11 @@ function LoginForm(props) {
         <Grid container className="total-center" justify="center">
           <Grid item lg={4} md={6} sm={8} xs={12}>
             <Card>
+              <Grid container spacing={0} direction='column' alignItems='center' justify='center'>
+                <Grid item xs={3}>
+                  <Logo/>
+                </Grid>
+              </Grid>
               <form onSubmit={props.handleSubmit}>
                 <CardContent>
                   <TextField
@@ -37,8 +44,9 @@ function LoginForm(props) {
                     disabled={false}
                     id="email"
                     name="email"
-                    margin="normal"
                     type="email"
+                    label={<FormattedMessage {...messages.email}/>}
+                    margin="normal"
                     autoComplete="off"
                   />
                   <TextField
@@ -49,8 +57,9 @@ function LoginForm(props) {
                     disabled={false}
                     id="password"
                     name="password"
-                    margin="normal"
                     type="password"
+                    label={<FormattedMessage {...messages.password} />}
+                    margin="normal"
                     autoComplete="off"
                   />
                 </CardContent>
@@ -62,7 +71,7 @@ function LoginForm(props) {
                         color="primary"
                         size="small"
                       >
-                        Login
+                        {<FormattedMessage {...messages.login} />}
                       </Button>
                     </Grid>
                     <Grid item align="right" xs={4}>
@@ -70,7 +79,7 @@ function LoginForm(props) {
                         color="primary"
                         size="small"
                       >
-                        Forgot Password
+                        {<FormattedMessage {...messages.forgotPassword} />}
                       </Button>
                     </Grid>
                   </Grid>
