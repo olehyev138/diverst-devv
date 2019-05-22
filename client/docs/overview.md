@@ -34,44 +34,44 @@ to `package.json`
 - Prettier
 - styelint
 
-###[React Boilerplate](https://github.com/react-boilerplate/react-boilerplate)
+### [React Boilerplate](https://github.com/react-boilerplate/react-boilerplate)
 
 Provides the initial setup and scaffolding for the overall project.
 
-###[React](https://github.com/facebook/react/)
+### [React](https://github.com/facebook/react/)
 
-###[Material UI](https://next.material-ui.com/getting-started/installation/)
+### [Material UI](https://next.material-ui.com/getting-started/installation/)
 
 The CSS/UI library. Has better support for apps then Bootstrap.
 
-###[React Router](https://reacttraining.com/react-router/web/guides/quick-start)
+### [React Router](https://reacttraining.com/react-router/web/guides/quick-start)
 
 Used in conjunction with connected-react-router, which connects it to Redux.
 
 Handles all the client side routing.
 
-###[Redux Saga](https://github.com/redux-saga/redux-saga)
+### [Redux Saga](https://github.com/redux-saga/redux-saga)
 
 Handles asynchronous state changes, ie api querying.
 
-###[Immer](https://github.com/immerjs/immer)
+### [Immer](https://github.com/immerjs/immer)
 
 Provides functionality to easily keep the redux state immutable.
 
-###[Reselect](https://github.com/reduxjs/reselect)
+### [Reselect](https://github.com/reduxjs/reselect)
 
 Provides functionality to create selectors for redux.
 
-###[Axios](https://github.com/axios/axios)
+### [Axios](https://github.com/axios/axios)
 
 An HTTP library/client for making API requests.
 
-###[Formik](https://jaredpalmer.com/formik/docs/overview)
+### [Formik](https://jaredpalmer.com/formik/docs/overview)
 
 React form library. Manages local form state for us.
 
 See docs as to why this is used over something like redux-forms
 
-###[Yup](https://github.com/jquense/yup/blob/master/package.json)
+### [Yup](https://github.com/jquense/yup/blob/master/package.json)
 
 Used in conjunction with Formik to handle form validation.
