@@ -58,7 +58,7 @@ class UsersController < ApplicationController
       GroupMemberPolicy.new(current_user, [group]).update?
     }
 
-    @same = current_user == @user
+    @is_own_survey = current_user == @user
     @user_groups = @user.user_groups.where(group: manageable_groups)
   end
 

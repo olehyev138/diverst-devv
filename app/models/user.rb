@@ -183,7 +183,7 @@ class User < BaseClass
   end
 
   def has_answered_group_survey?(group: nil)
-    if group
+    if group.present?
       user_group = user_groups.find_by_group_id(group.id)
       user_group.present? && user_group.data.present?
     else
@@ -193,7 +193,7 @@ class User < BaseClass
   end
 
   def belongs_to_group_with_survey?(group: nil)
-    if group
+    if group.present?
       group.has_survey?
     else
       groups.any? { |grp| grp.has_survey? }

@@ -11,13 +11,9 @@
               </div>
             <% end %>
           <% else %>
-            <% if @same  %>
-              <h3>You didn't complete this survey</h3>
-            <% else %>
-              <h3>User didn't complete this survey</h3>
-            <% end %>
+            <h3><%= @is_own_survey?'You':'User'%> didn't complete this survey</h3>
           <% end %>
-          <% if @same  %>
+          <% if @is_own_survey  %>
             <%= link_to "Edit Answers", survey_group_questions_path(user_group.group), class: "btn btn--primary" %>
           <% end %>
         </div>
