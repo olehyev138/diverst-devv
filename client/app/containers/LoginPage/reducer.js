@@ -5,7 +5,7 @@
  */
 import produce from 'immer';
 
-import { HANDLE_LOGIN, LOGIN_ERROR } from 'containers/App/constants';
+import { LOGIN_BEGIN, LOGIN_ERROR } from 'containers/App/constants';
 
 export const initialState = {};
 
@@ -15,7 +15,7 @@ function loginPageReducer(state = initialState, action) {
   return produce(state, draft => {
     // TODO: what do these do?
     switch (action.type) {
-      case HANDLE_LOGIN:
+      case LOGIN_BEGIN:
         draft['loggingIn'] = action.loggingIn;
         break;
       case LOGIN_ERROR:

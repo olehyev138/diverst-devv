@@ -6,7 +6,6 @@
 
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
-// import styled from 'styled-components';
 
 /* TODO: input labels, validation with yup, disabled logic, logo, locale toggle  */
 
@@ -25,7 +24,7 @@ function LoginForm(props) {
   return (
     <Formik
       initialValues={{ email: '', password: ''}}
-      onSubmit={props.onLogin}
+      onSubmit={props.loginBegin}
       render={props => (
         <Grid container className="total-center" justify="center">
           <Grid item lg={4} md={6} sm={8} xs={12}>
@@ -94,7 +93,7 @@ function LoginForm(props) {
 }
 
 LoginForm.propTypes = {
-  onLogin: PropTypes.func,
+  loginBegin: PropTypes.func,
   email: PropTypes.string
 };
 

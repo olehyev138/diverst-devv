@@ -1,13 +1,22 @@
 import {
-  HANDLE_LOGIN, LOGIN_ERROR, HANDLE_FIND_ENTERPRISE,
-  FIND_ENTERPRISE_ERROR, LOGGED_IN, LOG_OUT, LOG_OUT_ERROR,
-  SET_USER, SET_ENTERPRISE
+  LOGIN_BEGIN, LOGIN_SUCCESS, LOGIN_ERROR,
+  LOGOUT_BEGIN, LOGOUT_SUCCESS, LOGOUT_ERROR,
+  FIND_ENTERPRISE_BEGIN, SET_ENTERPRISE, FIND_ENTERPRISE_ERROR,
+  SET_USER
 } from './constants';
 
-export function handleLogin(payload) {
+export function loginBegin(payload) {
   return {
-    type: HANDLE_LOGIN,
+    type: LOGIN_BEGIN,
     payload: payload,
+  };
+}
+
+// Action for *after* user has been authenticated
+export function loginSuccess(token) {
+  return {
+    type: LOGIN_SUCCESS,
+    token: token,
   };
 }
 
@@ -18,34 +27,30 @@ export function loginError(error) {
   };
 }
 
-export function handleFindEnterprise(payload) {
+export function logoutBegin(user) {
   return {
-    type: HANDLE_FIND_ENTERPRISE,
+    type: LOGOUT_BEGIN,
+    token: user.user_token
+  };
+}
+
+export function logoutSuccess() {
+  return {
+    type: LOGOUT_SUCCESS,
+  };
+}
+
+export function logoutError(error) {
+  return {
+    type: LOGOUT_ERROR,
+    error: error,
+  };
+}
+
+export function findEnterpriseBegin(payload) {
+  return {
+    type: FIND_ENTERPRISE_BEGIN,
     payload: payload
-  };
-}
-
-export function findEnterpriseError(error) {
-  return {
-    type: FIND_ENTERPRISE_ERROR,
-    error: error
-  };
-}
-
-
-
-// Action for *after* user has been authenticated
-export function loggedIn(token) {
-  return {
-    type: LOGGED_IN,
-    token: token,
-  };
-}
-
-export function setUser(user) {
-  return {
-    type: SET_USER,
-    user: user,
   };
 }
 
@@ -56,17 +61,16 @@ export function setEnterprise(enterprise) {
   };
 }
 
-export function handleLogOut(token) {
-  console.log(token);
-  return {
-    type: LOG_OUT,
-    token: token
+export function findEnterpriseError(error) {
+ return {
+    type: FIND_ENTERPRISE_ERROR,
+    error: error
   };
 }
 
-export function loggingOutError(error) {
+export function setUser(user) {
   return {
-    type: LOG_OUT_ERROR,
-    error: error,
+    type: SET_USER,
+    user: user,
   };
 }

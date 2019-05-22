@@ -10,7 +10,7 @@ import { withStyles } from "@material-ui/core/styles";
 import { fade } from "@material-ui/core/styles/colorManipulator";
 
 import Logo from 'components/Logo';
-import { handleLogOut, setUser } from "containers/App/actions";
+import { logoutBegin, setUser } from "containers/App/actions";
 import { createStructuredSelector } from "reselect";
 import defaultLogo from "images/diverst.png";
 
@@ -132,13 +132,13 @@ export class ApplicationHeader extends React.PureComponent {
       anchorEl: null
     };
 
-    this.handleLogOut = this.handleLogOut.bind(this);
+    this.logoutBegin = this.logoutBegin.bind(this);
     this.handleVisitAdmin = this.handleVisitAdmin.bind(this);
     this.handleVisitHome = this.handleVisitHome.bind(this);
   }
 
-  handleLogOut() {
-    this.props.handleLogOut(this.props.currentUser);
+  logoutBegin() {
+    this.props.logoutBegin(this.props.user);
   }
 
   handleVisitAdmin() {
@@ -180,7 +180,7 @@ export class ApplicationHeader extends React.PureComponent {
         onClose={this.handleMenuClose}
       >
         <MenuItem onClick={this.handleMenuClose}>Profile</MenuItem>
-        <MenuItem onClick={this.handleLogOut}>Log Out</MenuItem>
+        <MenuItem onClick={this.logoutBegin}>Log Out</MenuItem>
       </Menu>
     );
 
@@ -254,8 +254,8 @@ export class ApplicationHeader extends React.PureComponent {
 
 export function mapDispatchToProps(dispatch, ownProps) {
   return {
-    handleLogOut: function(token) {
-      dispatch(handleLogOut(token));
+    logoutBegin: function(user) {
+      dispatch(logoutBegin(user));
       dispatch(setUser(null));
     },
     handleVisitAdmin: function() {
@@ -269,7 +269,7 @@ export function mapDispatchToProps(dispatch, ownProps) {
 
 const mapStateToProps = createStructuredSelector({
   token: selectToken(),
-  currentUser: selectUser(),
+  user: selectUser(),
   enterprise: selectEnterprise()
 });
 

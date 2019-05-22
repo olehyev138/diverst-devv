@@ -11,14 +11,9 @@ import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 
-import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import reducer from './reducer';
-import saga from './saga';
 import messages from './messages';
-
-import { handleLogOut, setUser } from 'containers/App/actions';
-import { selectToken, selectUser, selectEnterprise } from 'containers/App/selectors';
 
 import { Typography, Button, Grid, Card, CardActions, CardContent, Paper } from "@material-ui/core";
 import { fade } from '@material-ui/core/styles/colorManipulator';
@@ -65,16 +60,6 @@ const styles = theme => ({
 export class HomePage extends React.PureComponent {
   constructor(props) {
     super(props);
-    this.handleLogOut = this.handleLogOut.bind(this);
-    this.handleVisitAdmin = this.handleVisitAdmin.bind(this);
-  }
-
-  handleLogOut() {
-    this.props.handleLogOut(this.props.currentUser);
-  }
-
-  handleVisitAdmin() {
-    this.props.handleVisitAdmin();
   }
 
   state = {
@@ -116,27 +101,16 @@ export class HomePage extends React.PureComponent {
 }
 
 HomePage.propTypes = {
-  handleLogOut: PropTypes.func,
   currentUser: PropTypes.object,
   classes: PropTypes.object
 };
 
 const mapStateToProps = createStructuredSelector({
-  token: selectToken(),
-  currentUser: selectUser(),
-  enterprise: selectEnterprise()
 });
 
 export function mapDispatchToProps(dispatch, ownProps) {
   return {
-//    handleLogOut: function(token) {
-//      console.log('me too??');
-//      dispatch(handleLogOut(token));
-//      dispatch(setUser(null));
-//    },
-//    handleVisitAdmin: function() {
-//      dispatch(push("/admins/analytics"));
-//    }
+    dispatch
   };
 }
 
@@ -146,11 +120,9 @@ const withConnect = connect(
 );
 
 const withReducer = injectReducer({ key: "home", reducer });
-const withSaga = injectSaga({ key: "home", saga });
 
 export default compose(
   withReducer,
-  withSaga,
   withConnect,
   memo,
 )(withStyles(styles)(HomePage));

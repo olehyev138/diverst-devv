@@ -19,7 +19,7 @@ function EnterpriseForm(props) {
   return (
     <Formik
       initialValues={{ email: '' }}
-      onSubmit={props.onFindEnterprise}
+      onSubmit={props.findEnterpriseBegin}
       render={props => (
         <Grid container className="total-center" justify="center">
           <Grid item lg={4} md={6} sm={8} xs={12}>
@@ -67,7 +67,7 @@ function EnterpriseForm(props) {
 }
 
 EnterpriseForm.propTypes = {
-  onFindEnterprise: PropTypes.func,
+  findEnterpriseBegin: PropTypes.func,
 };
 
 export default memo(EnterpriseForm);

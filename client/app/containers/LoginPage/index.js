@@ -19,7 +19,7 @@ import reducer from './reducer';
 import LoginForm from '../../components/LoginForm';
 import EnterpriseForm from '../../components/EnterpriseForm';
 
-import { handleLogin, handleFindEnterprise } from 'containers/App/actions';
+import { loginBegin, findEnterpriseBegin } from 'containers/App/actions';
 
 import "./index.css";
 
@@ -35,11 +35,11 @@ export class LoginPage extends React.PureComponent {
 
   authForm() {
     if (this.props.enterprise) {
-      return <LoginForm email={this.state.email} onLogin={(values, actions) => this.props.handleLogin(values)}/>
+      return <LoginForm email={this.state.email} loginBegin={(values, actions) => this.props.loginBegin(values)}/>
     }
     else {
-      return <EnterpriseForm onFindEnterprise={(values, actions) => {
-        this.props.handleFindEnterprise(values);
+      return <EnterpriseForm findEnterpriseBegin={(values, actions) => {
+        this.props.findEnterpriseBegin(values);
         this.setState({ email: values.email });
       }}
       />;
@@ -58,8 +58,8 @@ LoginPage.propTypes = {
     id: PropTypes.number,
     name: PropTypes.string
   }),
-  handleLogin: PropTypes.func,
-  handleFind: PropTypes.func
+  loginBegin: PropTypes.func,
+  findEnterpriseBegin: PropTypes.func
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -68,8 +68,8 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    handleLogin: (payload) => dispatch(handleLogin(payload)),
-    handleFindEnterprise: (payload) => dispatch(handleFindEnterprise(payload))
+    loginBegin: (payload) => dispatch(loginBegin(payload)),
+    findEnterpriseBegin: (payload) => dispatch(findEnterpriseBegin(payload))
   };
 }
 

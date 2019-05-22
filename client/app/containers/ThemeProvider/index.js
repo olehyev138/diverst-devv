@@ -19,7 +19,7 @@ import { changePrimary, changeSecondary } from "./actions";
 import reducer from './reducer';
 
 import App from "containers/App/Loadable";
-import { loggedIn, setUser, setEnterprise } from "containers/App/actions";
+import { loginSuccess, setUser, setEnterprise } from "containers/App/actions";
 import AuthService from "utils/authService";
 
 const axios = require("axios");
@@ -42,7 +42,7 @@ export class ThemeProvider extends React.PureComponent {
       axios.defaults.headers.common['Diverst-UserToken'] = jwt;
 
       const user = JSON.parse(window.atob(jwt.split('.')[1]));
-      this.props.loggedIn(jwt, user, enterprise || user.enterprise);
+      this.props.loginSuccess(jwt, user, enterprise || user.enterprise);
     }
   }
 
@@ -83,8 +83,8 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch, ownProps) {
   return {
-    loggedIn: function(token, user, enterprise) {
-      dispatch(loggedIn(token));
+    loginSuccess: function(token, user, enterprise) {
+      dispatch(loginSuccess(token));
       dispatch(setUser(user));
       dispatch(setEnterprise(enterprise));
 
