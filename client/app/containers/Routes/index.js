@@ -5,8 +5,11 @@ import { Redirect } from 'react-router-dom';
 import AuthService from "utils/authService";
 import { history } from "../../configureStore";
 
+import 'containers/Layouts/ApplicationLayout/Loadable';
+
 //import { LandingPage, LoginPage, NotFoundPage, HomePage, AdminPage, CampaignsPage, NewsPage, EventsPage, GroupsPage } from './templates';
 import { LoginPage, NotFoundPage, HomePage } from './templates';
+import ApplicationLayout from "../Layouts/ApplicationLayout";
 
 
   /*
@@ -33,10 +36,10 @@ const Login = ({ component: ReactComponent, ...rest }) => (
   />
 );
 
-// TODO: how does this scale?
 export default function Routes() {
   return (
     <Router history={history}>
+      <ApplicationLayout path='/' route={AuthenticatedRoute} />
       <Switch>
         <Login path='/login' component={LoginPage}/>
         <AuthenticatedRoute exact path="/" component={HomePage}/>

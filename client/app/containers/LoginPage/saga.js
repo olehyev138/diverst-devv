@@ -25,7 +25,11 @@ export function* login(action) {
     const user = JSON.parse(window.atob(response.data.token.split('.')[1]));
 
     yield put(setUser(user));
-    //yield put(push('/home'))
+
+    // TODO: find better way to do this
+    //       - we need to reload to render the parent layout component
+    yield put(push('/'));
+    location.reload();
   }
   catch (err) {
     yield put(loginError(err));

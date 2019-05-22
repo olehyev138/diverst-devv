@@ -13,7 +13,7 @@ import AuthService from "utils/authService";
 export function* logout(action) {
   AuthService.clear();
 
-  // Destroy sesssion and redirect to login
+  // Destroy session and redirect to login
   try {
     yield call(api.sessions.destroy.bind(api.sessions), action.token);
     yield put(push("/login"));

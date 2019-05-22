@@ -18,7 +18,6 @@ function getValue(key) {
 const AuthService = {
   isAuthenticated() {
     const state = store.getState();
-    console.log(state);
     if (state['global']['token'])
       return true;
 

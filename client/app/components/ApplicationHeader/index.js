@@ -126,7 +126,6 @@ const styles = theme => ({
 
 // TODO: rewrite as stateless component if possible
 export class ApplicationHeader extends React.PureComponent {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -257,7 +256,7 @@ export function mapDispatchToProps(dispatch, ownProps) {
   return {
     handleLogOut: function(token) {
       dispatch(handleLogOut(token));
-      dispatch(setCurrentUser(null));
+      dispatch(setUser(null));
     },
     handleVisitAdmin: function() {
       dispatch(push("/admin/analytics"));

@@ -1,5 +1,6 @@
 import { LOGGED_IN, LOG_OUT, LOG_OUT_ERROR, SET_USER, SET_ENTERPRISE } from './constants';
 
+// Action for *after* user has been authenticated
 export function loggedIn(token) {
   return {
     type: LOGGED_IN,
@@ -21,10 +22,11 @@ export function setEnterprise(enterprise) {
   };
 }
 
-export function handleLogOut(user) {
+export function handleLogOut(token) {
+  console.log(token);
   return {
     type: LOG_OUT,
-    token: user.user_token
+    token: token
   };
 }
 
