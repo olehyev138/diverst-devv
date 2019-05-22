@@ -12,6 +12,7 @@ import { LoginPage, NotFoundPage, HomePage } from './templates';
 import ApplicationLayout from "../Layouts/ApplicationLayout";
 import UserLayout from "../Layouts/UserLayout";
 import GroupLayout from "../Layouts/GroupLayout";
+import AdminLayout from "../Layouts/AdminLayout";
 
 
   /*
@@ -41,8 +42,8 @@ const Login = ({ component: ReactComponent, ...rest }) => (
 export default function Routes() {
   return (
     <Router history={history}>
-      <ApplicationLayout path='/'/>
       <Switch>
+        <AdminLayout path='/admin'/>
         <GroupLayout path='/groups'/>
         <UserLayout path='/'/>
       </Switch>
@@ -51,6 +52,7 @@ export default function Routes() {
         <Login path='/login' component={LoginPage}/>
         <AuthenticatedRoute exact path="/" component={HomePage}/>
         <AuthenticatedRoute path='/home' component={HomePage} />
+        <AuthenticatedRoute path='/admin/analytics' component={LoginPage} />
         <Route path='' component={NotFoundPage} />
       </Switch>
     </Router>

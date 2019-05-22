@@ -4,11 +4,14 @@ import AuthService from "utils/authService";
 
 import ApplicationHeader from 'components/ApplicationHeader';
 
-const ApplicationLayout = ({component: Component, ...rest}) => {
+const ApplicationLayout = ({position: position, component: Component, ...rest}) => {
   return (
     AuthService.isAuthenticated() === true ?
       <Route {...rest} render={matchProps => (
-        <ApplicationHeader position='static' {...matchProps}/>
+        <div>
+          <ApplicationHeader position={position} {...matchProps}/>
+          <Component {...matchProps} />
+        </div>
       )} />
       : <div/>
   )
