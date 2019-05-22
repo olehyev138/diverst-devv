@@ -5,11 +5,13 @@ import { Redirect } from 'react-router-dom';
 import AuthService from "utils/authService";
 import { history } from "../../configureStore";
 
-import 'containers/Layouts/ApplicationLayout/Loadable';
-
 //import { LandingPage, LoginPage, NotFoundPage, HomePage, AdminPage, CampaignsPage, NewsPage, EventsPage, GroupsPage } from './templates';
 import { LoginPage, NotFoundPage, HomePage } from './templates';
+
+// Layouts
 import ApplicationLayout from "../Layouts/ApplicationLayout";
+import UserLayout from "../Layouts/UserLayout";
+import GroupLayout from "../Layouts/GroupLayout";
 
 
   /*
@@ -39,7 +41,12 @@ const Login = ({ component: ReactComponent, ...rest }) => (
 export default function Routes() {
   return (
     <Router history={history}>
-      <ApplicationLayout path='/' route={AuthenticatedRoute}/>
+      <ApplicationLayout path='/'/>
+      <Switch>
+        <GroupLayout path='/groups'/>
+        <UserLayout path='/'/>
+      </Switch>
+
       <Switch>
         <Login path='/login' component={LoginPage}/>
         <AuthenticatedRoute exact path="/" component={HomePage}/>

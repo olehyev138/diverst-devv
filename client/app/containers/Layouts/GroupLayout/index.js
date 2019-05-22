@@ -2,16 +2,16 @@ import React, { memo } from 'react';
 import { Route } from 'react-router';
 import AuthService from "utils/authService";
 
-import UserLinks from 'components/UserLinks';
+import GroupLinks from 'components/GroupLinks';
 
-const UserLayout = ({component: Component, ...rest}) => {
+const GroupLayout = ({component: Component, ...rest}) => {
   return (
     AuthService.isAuthenticated() === true ?
       <Route {...rest} render={matchProps => (
-        <UserLinks {...matchProps}/>
+        <GroupLinks {...matchProps}/>
       )} />
       : <div/>
   )
 };
 
-export default UserLayout;
+export default GroupLayout;

@@ -94,7 +94,6 @@ export class HomePage extends React.PureComponent {
 
     return (
       <div className={classes.root}>
-        <UserLinks/>
       </div>
     );
   }
