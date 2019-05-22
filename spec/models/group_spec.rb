@@ -393,7 +393,7 @@ RSpec.describe Group, type: :model do
       budget = create(:budget, group: group, is_approved: true)
       create(:budget_item, budget: budget, estimated_amount: 1000)
     
-      expect(group.available_budget).to eq(group.annual_budget - group.approved_budget)
+      expect(group.available_budget).to eq(group.approved_budget - group.spent_budget)
     end
   end
 
