@@ -12,13 +12,18 @@ This is generally the list of major libraries we are using. There are also
 many smaller packages not listed To get a full list of dependencies refer
 to `package.json`
 
-- React
-- Redux
-- Material-UI
-- React Router (& Connected React Router)
-- Saga
-- Immer
-- Reselect
+- react-boilerplate
+- react
+- redux
+- material-ui
+- react-router (& connected-react router)
+- redux-saga
+- immer
+- reselect
+- axios
+- formik
+
+### React Boilerplate
 
 ### React
 
@@ -34,4 +39,6 @@ to `package.json`
 
 ### Reselect
 
+### Axios
 
+### Formik
