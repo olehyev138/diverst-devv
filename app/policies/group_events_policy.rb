@@ -50,7 +50,7 @@ class GroupEventsPolicy < GroupBasePolicy
     when 'group'
       return true if user.policy_group.initiatives_manage?
       return true if basic_group_leader_permission?('initiatives_manage')
-      
+
       is_a_accepted_member?
     when 'managers_only'
       is_a_manager?('initiatives_manage')
