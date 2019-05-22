@@ -18,7 +18,7 @@ import {
   selectToken,
   selectUser,
   selectEnterprise
-} from "containers/User/HomePage/selectors";
+} from 'containers/App/selectors';
 
 
 import styled from 'styled-components';

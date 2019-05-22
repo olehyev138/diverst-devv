@@ -8,7 +8,7 @@ import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import { selectEnterprise } from './selectors';
+import { selectEnterprise } from 'containers/App/selectors';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 

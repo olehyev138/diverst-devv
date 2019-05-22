@@ -18,7 +18,7 @@ import saga from './saga';
 import messages from './messages';
 
 import { handleLogOut, setUser } from 'containers/App/actions';
-import { selectToken, selectUser, selectEnterprise } from './selectors';
+import { selectToken, selectUser, selectEnterprise } from 'containers/App/selectors';
 
 import { Typography, Button, Grid, Card, CardActions, CardContent, Paper } from "@material-ui/core";
 import { fade } from '@material-ui/core/styles/colorManipulator';
@@ -27,7 +27,6 @@ import { withStyles } from '@material-ui/core/styles';
 import ApplicationHeader from 'components/ApplicationHeader';
 import UserLinks from 'components/UserLinks';
 
-// TODO: put this somewhere
 const styles = theme => ({
   root: {
     width: "100%",
@@ -110,7 +109,6 @@ export class HomePage extends React.PureComponent {
 
     return (
       <div className={classes.root}>
-        <ApplicationHeader position="static"/>
         <UserLinks/>
       </div>
     );
@@ -131,13 +129,14 @@ const mapStateToProps = createStructuredSelector({
 
 export function mapDispatchToProps(dispatch, ownProps) {
   return {
-    handleLogOut: function(token) {
-      dispatch(handleLogOut(token));
-      dispatch(setCurrentUser(null));
-    },
-    handleVisitAdmin: function() {
-      dispatch(push("/admins/analytics"));
-    }
+//    handleLogOut: function(token) {
+//      console.log('me too??');
+//      dispatch(handleLogOut(token));
+//      dispatch(setUser(null));
+//    },
+//    handleVisitAdmin: function() {
+//      dispatch(push("/admins/analytics"));
+//    }
   };
 }
 
