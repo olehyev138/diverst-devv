@@ -8,8 +8,7 @@ followed to keep our frontend code base clean and organized.
 
 ## Tech Stack
 
-This is generally the list of major libraries we are using. There are also
-many smaller packages not listed To get a full list of dependencies refer
+This is generally the list of major libraries we are using. There are also smaller packages not listed To get a full list of dependencies refer
 to `package.json`
 
 #### Core
