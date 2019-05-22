@@ -114,21 +114,30 @@
 
       <div class="card">
         <div class="card__section">
-          <h2><%= resource.enterprise.custom_text.erg %> Events Calendar</h2>
-          <a
-            class="toggle_calendar btn btn--primary"
-            onclick="toggle_calendar();"
-            style="cursor: pointer; margin-bottom: 20px;"
-          >Show/Hide Calendar</a>
-          <div id="calendar" data-calendar-data-url="<%= onboarding_calendar_data_user_events_path(invitation_token: params[:invitation_token]) %>"></div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card__section">
           <%= simple_form_for resource, :as => resource_name, :url => invitation_path(resource_name), :html => { :method => :put } do |f| %>
             <%= devise_error_messages! %>
             <%= f.hidden_field :invitation_token %>
+            
+            <%= f.input :first_name, required: true %>
+            <%= f.input :last_name, required: true %>
+
+            <%= f.input :password, required: true %>
+            <%= f.input :password_confirmation, required: true %>
+
+            <% resource.enterprise.fields.where(private: false).each do |cf| %>
+              <% if !cf.private %>
+                <%= render "shared/fields/display/custom_field", cf: cf, f: f, resource: resource %>
+              <% end %>
+            <% end %>
+            
+            <h2><%= resource.enterprise.custom_text.erg %> Events Calendar</h2>
+            <a
+              class="toggle_calendar btn btn--primary"
+              onclick="toggle_calendar();"
+              style="cursor: pointer; margin-bottom: 20px;"
+            >Show/Hide Calendar</a>
+            <div id="calendar" data-calendar-data-url="<%= onboarding_calendar_data_user_events_path(invitation_token: params[:invitation_token]) %>"></div>
+              
 
             <h2>Choose your <%= resource.enterprise.custom_text.erg %></h2>
 
@@ -177,18 +186,6 @@
                 </div>
                <% end %>
 
-            <% end %>
-
-            <%= f.input :first_name, required: true %>
-            <%= f.input :last_name, required: true %>
-
-            <%= f.input :password, required: true %>
-            <%= f.input :password_confirmation, required: true %>
-
-            <% resource.enterprise.fields.where(private: false).each do |cf| %>
-              <% if !cf.private %>
-                <%= render "shared/fields/display/custom_field", cf: cf, f: f, resource: resource %>
-              <% end %>
             <% end %>
 
             <%= f.button :submit, "Create my account", class: "btn--secondary btn--large btn--full" %>

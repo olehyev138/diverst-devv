@@ -1,6 +1,49 @@
-version: 2
+version: 2.1
+executors:
+  primary-image:
+    docker:
+      - image: circleci/build-image:ubuntu-14.04-XXL-upstart-1189-5614f37
+        command: /sbin/init
 jobs:
-  build:
+  lint:
+    working_directory: ~/TeamDiverst/diverst-development
+    shell: /bin/bash --login
+    environment:
+      CIRCLE_ARTIFACTS: /tmp/circleci-artifacts
+      CIRCLE_TEST_REPORTS: /tmp/circleci-test-results
+    executor: primary-image
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dep-{{ .Branch }}-
+            - v1-dep-staging-
+            - v1-dep-
+      - run: gem install bundler
+      - run: 'bundle check --path=vendor/bundle || bundle install --path=vendor/bundle
+          --jobs=4 --retry=3'
+      - save_cache:
+          key: v1-dep-{{ .Branch }}-{{ epoch }}
+          paths:
+            - vendor/bundle
+            - ~/virtualenvs
+            - ~/.m2
+            - ~/.ivy2
+            - ~/.bundle
+            - ~/.go_workspace
+            - ~/.gradle
+            - ~/.cache/bower
+            - public/assets
+            - ./node_modules
+      - run:
+          command: |
+            export PRONTO_GITHUB_ACCESS_TOKEN=60fc301a32c3a0450eeec2985a1c1a09cefba857
+            export PRONTO_PULL_REQUEST_ID=$(git ls-remote -q origin pull\*\head | grep $CIRCLE_SHA1 | sed 's/.*refs\/pull\/\([0-9]*\)\/head/\1/g')
+            git fetch origin development:refs/remotes/origin/development
+            bundle exec pronto run -f github_status github_pr -c origin/development --exit-code
+      - store_artifacts:
+          path: /tmp/circleci-artifacts
+  test:
     working_directory: ~/TeamDiverst/diverst-development
     parallelism: 2
     shell: /bin/bash --login
@@ -18,9 +61,7 @@ jobs:
     # VM instead of a container) see https://circleci.com/docs/2.0/executor-types/
     # To see the list of pre-built images that CircleCI provides for most common languages see
     # https://circleci.com/docs/2.0/circleci-images/
-    docker:
-      - image: circleci/build-image:ubuntu-14.04-XXL-upstart-1189-5614f37
-        command: /sbin/init
+    executor: primary-image
     steps:
     # Machine Setup
     #   If you break your build into multiple jobs with workflows, you will probably want to do the parts of this that are relevant in each
@@ -76,12 +117,6 @@ jobs:
         # These cache paths were specified in the 1.0 config
         - public/assets
         - ./node_modules
-    - run:
-        command: |
-          export PRONTO_GITHUB_ACCESS_TOKEN=3cd1877ebeceb4a82d791e69e2312c68f9edb827
-          export PRONTO_PULL_REQUEST_ID=$(git ls-remote -q origin pull\*\head | grep $CIRCLE_SHA1 | sed 's/.*refs\/pull\/\([0-9]*\)\/head/\1/g')
-          git fetch origin development:refs/remotes/origin/development
-          bundle exec pronto run -f github_status github_pr -c origin/development --exit-code
     # The following line was run implicitly in your 1.0 builds based on what CircleCI inferred about the structure of your project. In 2.0 you need to be explicit about which commands should be run. In some cases you can discard inferred commands if they are not relevant to your project.
     - run: |-
         mkdir -p config && echo 'test:
@@ -135,9 +170,7 @@ jobs:
   deploy-testing:
     working_directory: ~/TeamDiverst/diverst-development
     shell: /bin/bash --login
-    docker:
-      - image: circleci/build-image:ubuntu-14.04-XXL-upstart-1189-5614f37
-        command: /sbin/init
+    executor: primary-image
     steps:
       - add_ssh_keys:
           fingerprints:
@@ -169,9 +202,7 @@ jobs:
   deploy-staging:
     working_directory: ~/TeamDiverst/diverst-development
     shell: /bin/bash --login
-    docker:
-      - image: circleci/build-image:ubuntu-14.04-XXL-upstart-1189-5614f37
-        command: /sbin/init
+    executor: primary-image
     steps:
       - add_ssh_keys:
           fingerprints:
@@ -201,18 +232,21 @@ jobs:
 
 workflows:
   version: 2
-  build-deploy:
+  lint-test-deploy:
     jobs:
-      - build
+      - lint
+      - test:
+          requires:
+            - lint
       - deploy-testing:
           requires:
-            - build
+            - test
           filters:
             branches:
               only: development
       - deploy-staging:
           requires:
-            - build
+            - test
           filters:
             branches:
               only: staging
