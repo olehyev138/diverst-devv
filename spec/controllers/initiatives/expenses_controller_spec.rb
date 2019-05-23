@@ -11,7 +11,11 @@ RSpec.describe Initiatives::ExpensesController, type: :controller do
   describe 'GET#index' do
     describe 'with user logged in' do
       login_user_from_let
-      before { get :index, group_id: group.id, initiative_id: initiative.id }
+      before do
+        annual_budget = create(:annual_budget, group_id: group.id)
+        budget = create(:budget, is_approved: true, approver_id: user.id, group_id: group.id, annual_budget_id: annual_budget.id)
+        get :index, group_id: group.id, initiative_id: initiative.id
+      end
 
       it 'set valid group object' do
         expect(assigns[:group]).to be_valid
@@ -70,6 +74,11 @@ RSpec.describe Initiatives::ExpensesController, type: :controller do
     login_user_from_let
 
     context 'with valid attributes' do
+      before do
+        annual_budget = create(:annual_budget, group_id: group.id)
+        budget = create(:budget, is_approved: true, approver_id: user.id, group_id: group.id, annual_budget_id: annual_budget.id)
+      end
+
       it 'creates the initiative_expense object' do
         expect { post :create, group_id: group.id, initiative_id: initiative.id, initiative_expense: { amount: 10, description: 'description' } }
         .to change(InitiativeExpense, :count).by(1)
@@ -91,7 +100,29 @@ RSpec.describe Initiatives::ExpensesController, type: :controller do
       end
     end
 
+    context 'when user attempts to create an expense with no budget approval' do
+      it 'does not create the initiative expense object' do
+        expect { post :create, group_id: group.id, initiative_id: initiative.id, initiative_expense: { amount: 10, description: 'description' } }
+        .to change(InitiativeExpense, :count).by(0)
+      end
+
+      it 'displays a flash alert' do
+        post :create, group_id: group.id, initiative_id: initiative.id, initiative_expense: { amount: 10, description: 'description' }
+        expect(flash[:alert]).to eq 'you can not create any expense with no budget approval'
+      end
+
+      it 'renders new template' do
+        post :create, group_id: group.id, initiative_id: initiative.id, initiative_expense: { amount: 10, description: 'description' }
+        expect(response).to render_template(:new)
+      end
+    end
+
     context 'with invalid attributes' do
+      before do
+        annual_budget = create(:annual_budget, group_id: group.id)
+        budget = create(:budget, is_approved: true, approver_id: user.id, group_id: group.id, annual_budget_id: annual_budget.id)
+      end
+
       it 'does not create initiative_expense object' do
         expect { post :create, group_id: group.id, initiative_id: initiative.id, initiative_expense: { amount: nil, description: 'description' } }
         .to change(InitiativeExpense, :count).by(0)

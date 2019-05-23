@@ -105,6 +105,13 @@ module ApplicationHelper
     false
   end
 
+  def group_initiative_expenses_link(text, group, initiative)
+    return link_to text, group_initiative_expenses_path(group, initiative) if group.approved_budget != 0
+
+    return link_to text, group_initiative_expenses_path(group, initiative),
+                   data: { confirm: 'you can not make any expenses because no budget has been approved' } if group.approved_budget == 0
+  end
+
   def default_path
     return root_admin_path if root_admin_path
 
