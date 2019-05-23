@@ -14,9 +14,8 @@
       <div class="card">
         <div class="card__section">
           <h4>Attendance by <%= c_t(:erg) %></h4>
-          <div
-            data-url="<%= erg_graph_group_event_attendance_path(@group, @event) %>"
-            class="graph">
+          <div id="attendees_per_group" class="graph" data-url="<%= erg_graph_group_event_attendance_path(@group, @event) %>">
+            <svg></svg>
           </div>
         </div>
       </div>
@@ -26,9 +25,8 @@
       <div class="card">
         <div class="card__section">
           <h4>Attendance by <%= c_t(:segment) %></h4>
-          <div
-            data-url="<%= segment_graph_group_event_attendance_path(@group, @event) %>"
-            class="graph">
+          <div id="attendees_per_segments" class="graph" data-url="<%= segment_graph_group_event_attendance_path(@group, @event) %>">
+            <svg></svg>
           </div>
         </div>
       </div>
