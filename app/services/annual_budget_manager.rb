@@ -4,19 +4,23 @@ class AnnualBudgetManager
   end
 
   def reset
+    # no need to reset annual budget because it is already set to 0
     return if @group.annual_budget == 0 || @group.annual_budget.nil?
 
+    # at this point, group.annual_budget != 0 so we either find or create annual budget and update with group annual budget values
+    # i.e annual budget, spent_budget, approved_budget and leftover_money
     find_or_create_annual_budget_and_update
     annual_budget = @group.annual_budgets.where(closed: false).where.not(amount: 0).last
 
-    return if annual_budget.nil?
-
+    # if no initiatives are present, then set annual budget values to 0
     if no_initiatives_present?
       @group.update({ annual_budget: 0, leftover_money: 0 })
       annual_budget.update(amount: 0, expenses: 0, available_budget: 0, approved_budget: 0, leftover_money: 0)
       return true
     end
 
+    # close annual_budget and create a new one for which new budget-related calculations can be made. New annual budget
+    # has values set to 0
     annual_budget.update(closed: true) && create_new_annual_budget
     return true if @group.update({ annual_budget: 0, leftover_money: 0 })
   end
