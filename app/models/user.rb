@@ -2,6 +2,7 @@ class User < ApplicationRecord
   has_secure_password
 
   include PublicActivity::Common
+  include User::Actions
   include ContainsFields
 
   enum groups_notifications_frequency: [:hourly, :daily, :weekly, :disabled]

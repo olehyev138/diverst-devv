@@ -43,7 +43,6 @@ gem 'bcrypt'
 gem 'bootsnap', require: false
 gem 'jwt', '~> 2.1.0', require: false
 
-gem 'rack-timeout', '~> 0.4.2'
 
 gem 'factory_bot_rails', '~> 4.8.0' # Create mock objects for testing
 gem 'tty-spinner'
@@ -97,4 +96,5 @@ group :staging, :production do
   gem 'influxdb-rails', git: 'https://github.com/Kukunin/influxdb-rails.git',
                         branch: 'tags_middleware' # Rails metrics to InfluxDB
   gem 'sidekiq-influxdb', '~> 1.1.0' # Sidekiq metrics to InfluxDB
+  gem 'rack-timeout', '~> 0.4.2'
 end
