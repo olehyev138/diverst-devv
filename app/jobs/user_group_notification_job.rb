@@ -10,14 +10,14 @@ class UserGroupNotificationJob < ActiveJob::Base
     notifications_frequency = args[:notifications_frequency]
     enterprise_id = args[:enterprise_id]
 
-    User.joins(:groups)
-      .where(enterprise_id: enterprise_id,
-             groups_notifications_frequency: User.groups_notifications_frequencies[notifications_frequency.to_sym])
-      .find_in_batches(batch_size: 200) do |users|
+    users_to_mail = get_users_to_mail(enterprise_id, notifications_frequency)
+    return if users_to_mail.blank?
+
+    users_to_mail.find_in_batches(batch_size: 200) do |users|
       users.each do |user|
-        groups = []
         next unless can_send_email?(notifications_frequency, user)
 
+        groups = []
         frequency_range = get_frequency_range(user.groups_notifications_frequency)
         user.groups.each do |group|
           groups << {
@@ -30,11 +30,22 @@ class UserGroupNotificationJob < ActiveJob::Base
           }
         end
 
-        if have_updates?(groups) && notify_user(user)
+        if have_updates?(groups) && notify_user?(user)
           UserGroupMailer.notification(user, groups).deliver_now
         end
       end
     end
+  end
+
+  # Gets the activerecord collection of users to email
+  def get_users_to_mail(enterprise_id, notifications_frequency)
+    # Make sure notification frequency is valid
+    return unless User.groups_notifications_frequencies.include?(notifications_frequency.try(:to_sym))
+
+    User.joins(:groups)
+        .where(enterprise_id: enterprise_id,
+               groups_notifications_frequency: User.groups_notifications_frequencies[notifications_frequency.to_sym])
+        .uniq
   end
 
   # checks if frequency is weekly and
@@ -52,8 +63,8 @@ class UserGroupNotificationJob < ActiveJob::Base
     end
   end
 
-  def notify_user(user)
-    return true unless user.last_notified_date == DateTime.now.to_date
+  def notify_user?(user)
+    user.last_notified_date != DateTime.now.to_date
   end
 
   private
