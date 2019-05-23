@@ -11,7 +11,7 @@ class Initiatives::ExpensesController < ApplicationController
     authorize InitiativeExpense
     @expenses = @initiative.expenses
 
-    redirect_to :back if @group.approved_budget == 0
+    redirect_to :back if @group.available_budget <= 0
   end
 
   def new
@@ -24,7 +24,7 @@ class Initiatives::ExpensesController < ApplicationController
     @expense = @initiative.expenses.new(expense_params)
     @expense.owner = current_user
 
-    if @group.approved_budget != 0
+    if @group.available_budget != 0
       annual_budget = AnnualBudget.find_or_create_by(closed: false, group_id: @group.id)
       annual_budget.initiative_expenses << @expense
 

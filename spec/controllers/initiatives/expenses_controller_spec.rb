@@ -3,8 +3,9 @@ require 'rails_helper'
 RSpec.describe Initiatives::ExpensesController, type: :controller do
   let(:user) { create :user }
   let(:group) { create(:group, enterprise: user.enterprise) }
+  let(:annual_budget) { create(:annual_budget, group_id: group.id) }
   let(:initiative) { initiative_of_group(group) }
-  let(:initiative_expense) { create(:initiative_expense, initiative: initiative) }
+  let(:initiative_expense) { create(:initiative_expense, initiative: initiative, annual_budget_id: annual_budget.id) }
 
 
 
@@ -12,8 +13,9 @@ RSpec.describe Initiatives::ExpensesController, type: :controller do
     describe 'with user logged in' do
       login_user_from_let
       before do
-        annual_budget = create(:annual_budget, group_id: group.id)
         budget = create(:budget, is_approved: true, approver_id: user.id, group_id: group.id, annual_budget_id: annual_budget.id)
+        annual_budget.update(approved_budget: group.approved_budget, available_budget: group.available_budget)
+        request.env['HTTP_REFERER'] = 'back'
         get :index, group_id: group.id, initiative_id: initiative.id
       end
 
