@@ -8,14 +8,46 @@ RSpec.describe UserGroupNotificationJob, type: :job do
   let!(:group) { create(:group, pending_users: 'disabled', enterprise: enterprise) }
   let!(:second_group) { create(:group, pending_users: 'disabled') }
 
-  context '#notify_user(user)' do
-    it 'returns true unless last_group_notification_date is set' do
-      expect(subject.notify_user(user)).to eq true
+  context '#get_users_to_mail' do
+    before(:all) do
+      @enterprise = create(:enterprise, enable_social_media: true)
+
+      users = create_list(:user, 500, enterprise: @enterprise, groups_notifications_frequency: 'weekly')
+      groups = create_list(:group, 25, enterprise: @enterprise)
+
+      users.each do |user|
+        groups_to_be_a_member_of = groups.sample(rand(0..5))
+        groups_to_be_a_member_of.each do |group|
+          create(:user_group, user: user, group: group)
+        end
+      end
     end
 
-    it 'returns nil when last_group_notification_date is set' do
+    before do
+      @users = subject.get_users_to_mail(@enterprise.id, 'weekly')
+    end
+
+    it 'returns a collection of unique users to email' do
+      expect(@users.uniq.count).to eq @users.count
+    end
+
+    it 'all the users are in a group' do
+      all_users_in_groups = true
+      @users.find_each do |user|
+        all_users_in_groups = false if UserGroup.find_by(user_id: user.id).nil?
+      end
+      expect(all_users_in_groups).to eq true
+    end
+  end
+
+  context '#notify_user?(user)' do
+    it 'returns true unless last_group_notification_date is set' do
+      expect(subject.notify_user?(user)).to eq true
+    end
+
+    it 'returns false when last_group_notification_date is set' do
       user.last_group_notification_date = DateTime.now
-      expect(subject.notify_user(user)).to eq nil
+      expect(subject.notify_user?(user)).to eq false
     end
   end
 
