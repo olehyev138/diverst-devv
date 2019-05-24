@@ -60,8 +60,9 @@ class Initiative < ApplicationRecord
   # we don't want to run this callback when finish_expenses! is triggered in initiatives_controller.rb, finish_expense action
   before_save { allocate_budget_funds unless skip_allocate_budget_funds }
 
-  has_attached_file :picture, styles: { medium: '1000x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: 'private'
-  validates_attachment_content_type :picture, content_type: %r{\Aimage\/.*\Z}
+  # Paperclip
+#  has_attached_file :picture, styles: { medium: '1000x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: 'private'
+#  validates_attachment_content_type :picture, content_type: %r{\Aimage\/.*\Z}
   validates :start, presence: true
   validates :end, presence: true
   validates :max_attendees, numericality: { greater_than: 0, allow_nil: true }
