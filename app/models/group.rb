@@ -106,15 +106,16 @@ class Group < ApplicationRecord
   belongs_to :group_category
   belongs_to :group_category_type
 
+  # Paperclip
   # re-add to allow migration file to run
-  has_attached_file :sponsor_media, s3_permissions: :private
-  do_not_validate_attachment_file_type :sponsor_media
+  # has_attached_file :sponsor_media, s3_permissions: :private
+  # do_not_validate_attachment_file_type :sponsor_media
 
-  has_attached_file :logo, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: :private
-  validates_attachment_content_type :logo, content_type: %r{\Aimage\/.*\Z}
+  # has_attached_file :logo, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: :private
+  # validates_attachment_content_type :logo, content_type: %r{\Aimage\/.*\Z}
 
-  has_attached_file :banner
-  validates_attachment_content_type :banner, content_type: /\Aimage\/.*\Z/
+  # has_attached_file :banner
+  # validates_attachment_content_type :banner, content_type: /\Aimage\/.*\Z/
 
   validates :name, presence: true, uniqueness: { scope: :enterprise_id }
 

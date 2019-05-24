@@ -85,6 +85,6 @@ module Diverst
     # password reset timeframe (in hours)
     config.password_reset_time_frame = ENV["PASSWORD_RESET_TIME_FRAME"] || 6
     
-    config.middleware.insert_before Rack::Runtime, Rack::Timeout, service_timeout: 20, wait_timeout: 30, wait_overtime: 60, service_past_wait: false
+    #config.middleware.insert_before Rack::Runtime, Rack::Timeout, service_timeout: 20, wait_timeout: 30, wait_overtime: 60, service_past_wait: false
   end
 end

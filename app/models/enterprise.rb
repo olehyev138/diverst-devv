@@ -69,23 +69,26 @@ class Enterprise < ApplicationRecord
   before_validation :smart_add_url_protocol
   after_update :resolve_auto_archive_state, if: :no_expiry_age_set_and_auto_archive_true?
 
-  validates :idp_sso_target_url, url: { allow_blank: true }
+  # validates :idp_sso_target_url, url: { allow_blank: true }
+  #
 
-  has_attached_file :cdo_picture, styles: { medium: '1000x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: :private
-  validates_attachment_content_type :cdo_picture, content_type: %r{\Aimage\/.*\Z}
+  # Paperclip has been removed
 
-  has_attached_file :banner
-  validates_attachment_content_type :banner, content_type: /\Aimage\/.*\Z/
+  # has_attached_file :cdo_picture, styles: { medium: '1000x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: :private
+  # validates_attachment_content_type :cdo_picture, content_type: %r{\Aimage\/.*\Z}
 
-  has_attached_file :xml_sso_config
-  validates_attachment_content_type :xml_sso_config, content_type: 'text/xml'
+  # has_attached_file :banner
+  # validates_attachment_content_type :banner, content_type: /\Aimage\/.*\Z/
+
+  # has_attached_file :xml_sso_config
+  # validates_attachment_content_type :xml_sso_config, content_type: 'text/xml'
 
   # re-add to allow migration file to run
-  has_attached_file :sponsor_media, s3_permissions: :private
-  do_not_validate_attachment_file_type :sponsor_media
+  # has_attached_file :sponsor_media, s3_permissions: :private
+  # do_not_validate_attachment_file_type :sponsor_media
 
-  has_attached_file :onboarding_sponsor_media, s3_permissions: :private
-  do_not_validate_attachment_file_type :onboarding_sponsor_media
+  # has_attached_file :onboarding_sponsor_media, s3_permissions: :private
+  # do_not_validate_attachment_file_type :onboarding_sponsor_media
 
   validates_format_of :redirect_email_contact, with: /\A[^@\s]+@[^@\s]+\z/, allow_blank: true
 
