@@ -1,5 +1,6 @@
 class UserSerializer < ActiveModel::Serializer
-  attributes :id, :first_name, :last_name, :fields, :created_at, :updated_at, :enterprise_id, :sign_in_count, :enterprise
+  attributes :id, :first_name, :last_name, :fields, :created_at,
+             :updated_at, :enterprise_id, :sign_in_count, :enterprise
 
   def enterprise
     EnterpriseSerializer.new(object.enterprise).attributes
@@ -8,13 +9,6 @@ class UserSerializer < ActiveModel::Serializer
   def fields
     fields = object.enterprise.mobile_fields.map(&:field)
     fields_hash = []
-
-    if scope.is_a? Match
-      fields_hash << {
-        title: 'Topic of conversation',
-        value: scope.topic.statement
-      }
-    end
 
     fields.each do |field|
       fields_hash << {

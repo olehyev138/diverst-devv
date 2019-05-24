@@ -19,6 +19,9 @@ class User < ApplicationRecord
   belongs_to  :user_role
   has_one :policy_group, dependent: :destroy, inverse_of: :user
 
+  # sessions
+  has_many :sessions, dependent: :destroy
+
   # mentorship
   has_many :mentorships, class_name: 'Mentoring', foreign_key: 'mentor_id'
   has_many :mentees, through: :mentorships, class_name: 'User', source: :mentee
@@ -72,8 +75,8 @@ class User < ApplicationRecord
   has_many :metrics_dashboards, foreign_key: :owner_id
   has_many :shared_metrics_dashboards
 
-  #has_attached_file :avatar, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing_user.png'), s3_permissions: 'private'
-  #validates_attachment_content_type :avatar, content_type: /\Aimage\/.*\Z/
+  # has_attached_file :avatar, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing_user.png'), s3_permissions: 'private'
+  # validates_attachment_content_type :avatar, content_type: /\Aimage\/.*\Z/
 
   validates :first_name, presence: true
   validates :last_name, presence: true
@@ -107,6 +110,18 @@ class User < ApplicationRecord
   scope :mentees, -> { where(mentee: true) }
 
   accepts_nested_attributes_for :availabilities, allow_destroy: true
+
+  def generate_authentication_token(length = 20)
+    loop do
+      rlength = (length * 3) / 4
+      token = SecureRandom.urlsafe_base64(rlength).tr('lIO0', 'sxyz')
+      break token unless Session.where(token: token).first
+    end
+  end
+
+  def valid_password?(password)
+    return authenticate(password)
+  end
 
   def last_notified_date
     last_group_notification_date&.to_date
