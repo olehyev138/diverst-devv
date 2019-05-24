@@ -9,7 +9,7 @@ default: &default
 
 development:
   <<: *default
-  database: diverst_development_react
+  database: diverst_development
   username: root
 
 # Warning: The database defined as "test" will be erased and
