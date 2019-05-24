@@ -34,11 +34,11 @@ export class ThemeProvider extends React.PureComponent {
     //    - why is this done here? what does it do?
     //    - why is theme provider around app and not app around theme provider (material ui suggests the latter)
 
-    var jwt = AuthService.getJwt();
-    var enterprise = AuthService.getEnterprise();
+    const jwt = AuthService.getJwt();
+    const enterprise = AuthService.getEnterprise();
 
     if (jwt) {
-      AuthService.setValue(jwt, "_diverst.twj");
+      AuthService.setValue(jwt, '_diverst.twj');
       axios.defaults.headers.common['Diverst-UserToken'] = jwt;
 
       const user = JSON.parse(window.atob(jwt.split('.')[1]));
@@ -58,14 +58,13 @@ export class ThemeProvider extends React.PureComponent {
         },
       },
       typography: {
-        useNextVariants: true
-      }
+        useNextVariants: true,
+      },
     });
 
     return (
       <MuiThemeProvider theme={theme}>
-        <App>
-        </App>
+        <App />
       </MuiThemeProvider>
     );
   }

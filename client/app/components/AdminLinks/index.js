@@ -31,6 +31,9 @@ import StarBorder from '@material-ui/icons/StarBorder';
 
 import Logo from "components/Logo";
 
+import { NavLink } from 'react-router-dom';
+import { withTheme } from "@material-ui/core/styles";
+
 const drawerWidth = 240;
 const styles = theme => ({
   root: {
@@ -66,16 +69,13 @@ const styles = theme => ({
   },
   content: {
     flexGrow: 1,
-    padding: theme.spacing.unit * 3,
+    padding: theme.spacing(3),
   },
   nested: {
-    paddingLeft: theme.spacing.unit * 4,
+    paddingLeft: theme.spacing(4),
   },
+  toolbar: theme.mixins.toolbar,
 });
-
-
-import { NavLink } from 'react-router-dom';
-import { withTheme } from "@material-ui/core/styles";
 
 export class AdminLinks extends React.PureComponent {
 
@@ -95,7 +95,7 @@ export class AdminLinks extends React.PureComponent {
     const classes = this.props;
 
     return (
-      <div className={classes.root}>
+      <div>
         <Drawer
           className={classes.drawer}
           variant="permanent"
@@ -103,7 +103,6 @@ export class AdminLinks extends React.PureComponent {
             paper: classes.drawerPaper,
           }}
         >
-          <div className={classes.toolbar} />
           <List>
             <ListItem button onClick={this.handleClick}>
               <ListItemIcon>
@@ -155,4 +154,4 @@ const withConnect = connect(
 
 export default compose(
   withConnect,
-)(withTheme()(AdminLinks));
+)(withTheme(AdminLinks));

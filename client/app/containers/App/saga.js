@@ -38,7 +38,6 @@ export function* login(action) {
     // TODO: find better way to do this
     //       - we need to reload to render the parent layout component
     yield put(push('/home'));
-    location.reload();
   }
   catch (err) {
     yield put(loginError(err));
@@ -54,7 +53,6 @@ export function* logout(action) {
     yield put(logoutSuccess());
 
     yield put(push("/login"));
-    location.reload();
   }
   catch (err) {
     yield put(logoutError(err));

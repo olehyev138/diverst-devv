@@ -27,14 +27,29 @@ const GlobalStyle = createGlobalStyle`
     line-height: 1.5em;
   }
   
+  .extra-large-img {
+    width: 200px;
+    height: auto;
+  }
+  
+  .large-img {
+    width: 175px;
+    height: auto;
+  }
+  
+  .medium-img {
+    width: 150px;
+    height: auto;
+  }
+  
   .small-img {
-    height: 100px;
-    width: 100px;
+    width: 125px;
+    height: auto;
   }
   
   .tiny-img {
-    height: 75px;
-    width: 75px;
+    width: 100px;
+    height: auto;
   }
 `;
 

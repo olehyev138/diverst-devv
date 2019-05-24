@@ -10,6 +10,8 @@ import { withTheme } from "@material-ui/core/styles";
 export function UserLinks(props) {
   const { theme } = props;
   const activeColor = theme.palette.primary.main;
+  // Wrap NavLink to fix ref issue temporarily until react-router-dom is updated to fix this
+  const WrappedNavLink = React.forwardRef((props, ref) => <NavLink innerRef={ref} {...props} />);
 
   const NavLinks = () => (
     <Toolbar
@@ -19,11 +21,11 @@ export function UserLinks(props) {
         marginRight: "auto"
       }}
     >
-      <Button component={NavLink} to="/home" activeStyle={{ color: activeColor }}>Home</Button>
-      <Button component={NavLink} to="/user/campaigns" activeStyle={{color: activeColor}}>Innovate</Button>
-      <Button component={NavLink} to="/user/news" activeStyle={{color: activeColor}}>News</Button>
-      <Button component={NavLink} to="/user/events" activeStyle={{color: activeColor}}>Events</Button>
-      <Button component={NavLink} to="/user/groups" activeStyle={{color: activeColor}}>Inclusions Networks</Button>
+      <Button component={WrappedNavLink} to="/home" activeStyle={{ color: activeColor }}>Home</Button>
+      <Button component={WrappedNavLink} to="/user/campaigns" activeStyle={{color: activeColor}}>Innovate</Button>
+      <Button component={WrappedNavLink} to="/user/news" activeStyle={{color: activeColor}}>News</Button>
+      <Button component={WrappedNavLink} to="/user/events" activeStyle={{color: activeColor}}>Events</Button>
+      <Button component={WrappedNavLink} to="/user/groups" activeStyle={{color: activeColor}}>Inclusions Networks</Button>
       <Button>Mentorship</Button>
     </Toolbar>
   );
@@ -52,4 +54,4 @@ const withConnect = connect(
 
 export default compose(
   withConnect,
-)(withTheme()(UserLinks));
+)(withTheme(UserLinks));

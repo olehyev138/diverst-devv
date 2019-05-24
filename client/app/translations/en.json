@@ -5,7 +5,7 @@
   "diverst.containers.Login.input.password": "Password",
   "diverst.containers.Login.links.forgotPassword": "Forgot Password",
   "diverst.containers.Login.links.findCompany": "Find my Community",
-  "diverst.containers.NotFoundPage.headers.header": "This Page does not exist!",
+  "diverst.containers.NotFoundPage.headers.header": "This page does not exist",
   "diverst.containers.LocaleToggle.en": "en",
   "diverst.containers.LocaleToggle.fr": "fr",
   "diverst.containers.LocaleToggle.es": "es"

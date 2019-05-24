@@ -3,16 +3,19 @@ import { connect } from "react-redux";
 import { compose } from "redux";
 import { push } from "connected-react-router";
 
-import { Grid, MenuItem, Menu, AppBar,
-  Toolbar, IconButton, Typography } from "@material-ui/core";
+import { MenuItem, Menu, AppBar, Button,
+  Toolbar, IconButton, Typography, ListItemIcon } from "@material-ui/core";
 import AccountCircle from "@material-ui/icons/AccountCircle";
+import PermIdentity from "@material-ui/icons/PermIdentity";
+import ExitToApp from "@material-ui/icons/ExitToApp";
+import Build from "@material-ui/icons/Build";
+import SupervisorAccount from "@material-ui/icons/SupervisorAccount";
 import { withStyles } from "@material-ui/core/styles";
 import { fade } from "@material-ui/core/styles/colorManipulator";
 
 import Logo from 'components/Logo';
 import { logoutBegin, setUser } from "containers/App/actions";
 import { createStructuredSelector } from "reselect";
-import defaultLogo from "images/diverst.png";
 
 import {
   selectToken,
@@ -26,10 +29,10 @@ const drawerWidth = 240;
 
 const styles = theme => ({
   root: {
-    width: "100%"
+    width: "100%",
   },
   grow: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   menuButton: {
     marginLeft: -12,
@@ -37,6 +40,7 @@ const styles = theme => ({
   },
   title: {
     fontSize: 14,
+    flexGrow: 1,
     display: "none",
     [theme.breakpoints.up("sm")]: {
       display: "block"
@@ -49,16 +53,16 @@ const styles = theme => ({
     "&:hover": {
       backgroundColor: fade(theme.palette.common.white, 0.25)
     },
-    marginRight: theme.spacing.unit * 2,
+    marginRight: theme.spacing(2),
     marginLeft: 0,
     width: "100%",
     [theme.breakpoints.up("sm")]: {
-      marginLeft: theme.spacing.unit * 3,
+      marginLeft: theme.spacing(3),
       width: "auto"
     }
   },
   searchIcon: {
-    width: theme.spacing.unit * 9,
+    width: theme.spacing(9),
     height: "100%",
     position: "absolute",
     pointerEvents: "none",
@@ -71,10 +75,10 @@ const styles = theme => ({
     width: "100%"
   },
   inputInput: {
-    paddingTop: theme.spacing.unit,
-    paddingRight: theme.spacing.unit,
-    paddingBottom: theme.spacing.unit,
-    paddingLeft: theme.spacing.unit * 10,
+    paddingTop: theme.spacing(1),
+    paddingRight: theme.spacing(1),
+    paddingBottom: theme.spacing(1),
+    paddingLeft: theme.spacing(10),
     transition: theme.transitions.create("width"),
     width: "100%",
     [theme.breakpoints.up("md")]: {
@@ -82,10 +86,11 @@ const styles = theme => ({
     }
   },
   sectionDesktop: {
-    display: "none",
-    [theme.breakpoints.up("md")]: {
-      display: "flex"
-    }
+    display: "flex",
+    // display: "none",
+    // [theme.breakpoints.up("md")]: {
+    //   display: "flex"
+    // }
   },
   sectionMobile: {
     display: "flex",
@@ -99,7 +104,7 @@ const styles = theme => ({
   bullet: {
     display: "inline-block",
     margin: "0 2px",
-    transform: "scale(0.8)"
+    transform: "scale(0.8)",
   },
   pos: {
     marginBottom: 12
@@ -116,11 +121,24 @@ const styles = theme => ({
   },
   content: {
     flexGrow: 1,
-    padding: theme.spacing.unit * 3,
+    padding: theme.spacing(3),
   },
   toolbar: theme.mixins.toolbar,
   nested: {
-    paddingLeft: theme.spacing.unit * 4,
+    paddingLeft: theme.spacing(4),
+  },
+  paper: {
+    border: '1px solid #a7a8a9',
+  },
+  buttonSection: {
+    display: 'flex',
+  },
+  adminButton: {
+    padding: '0px 8px',
+  },
+  adminIcon: {
+    marginRight: 2,
+    fontSize: 18,
   },
 });
 
@@ -129,7 +147,7 @@ export class ApplicationHeader extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      anchorEl: null
+      anchorEl: null,
     };
 
     this.logoutBegin = this.logoutBegin.bind(this);
@@ -168,19 +186,35 @@ export class ApplicationHeader extends React.PureComponent {
 
   render() {
     const { anchorEl } = this.state;
-    const { classes, enterprise, showAdmin, position } = this.props;
+    const { classes, enterprise, position, isAdmin } = this.props;
     const isMenuOpen = Boolean(anchorEl);
 
     const renderMenu = (
       <Menu
+        classes={{
+          paper: classes.paper,
+        }}
+        disableAutoFocusItem
         anchorEl={anchorEl}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-        transformOrigin={{ vertical: "top", horizontal: "right" }}
+        getContentAnchorEl={null}
+        elevation={0}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        transformOrigin={{ vertical: "top", horizontal: "center" }}
         open={isMenuOpen}
         onClose={this.handleMenuClose}
       >
-        <MenuItem onClick={this.handleMenuClose}>Profile</MenuItem>
-        <MenuItem onClick={this.logoutBegin}>Log Out</MenuItem>
+        <MenuItem onClick={this.handleMenuClose}>
+          <ListItemIcon>
+            <PermIdentity />
+          </ListItemIcon>
+          Profile
+        </MenuItem>
+        <MenuItem onClick={this.logoutBegin}>
+          <ListItemIcon>
+            <ExitToApp />
+          </ListItemIcon>
+          Log Out
+        </MenuItem>
       </Menu>
     );
 
@@ -188,61 +222,43 @@ export class ApplicationHeader extends React.PureComponent {
       <div>
         <AppBar position={position} className={classes.appBar}>
           <Toolbar>
-            <Logo imgClass="tiny-img" margin={20} />
-            <Typography
-              className={classes.title}
-              variant="h6"
-              color="inherit"
-              noWrap
-            >
-              {enterprise.name}
-            </Typography>
+            <Logo imgClass="large-img" verticalPadding={20} />
             <div className={classes.grow} />
-            <div>
-              <Grid container direction="row" alignItems="center">
-                { showAdmin ?
-                  <div>
-                    <Grid item onClick={this.handleVisitHome}>
-                      Home
-                    </Grid>
-                    <Grid item>
-                      <IconButton
-                        aria-owns={
-                          isMenuOpen
-                            ? "material-appbar"
-                            : undefined
-                        }
-                        aria-haspopup="true"
-                        onClick={this.handleProfileMenuOpen}
-                        color="inherit"
-                      >
-                        <AccountCircle />
-                      </IconButton>
-                    </Grid>
-                  </div>
-                  :
-
-                  <div>
-                    <Grid item onClick={this.handleVisitAdmin}>
+            <div className={classes.sectionDesktop}>
+              <div className={classes.buttonSection}>
+                <Button
+                  className={classes.adminButton}
+                  variant="outlined"
+                  color="inherit"
+                  onClick={isAdmin ? this.handleVisitHome : this.handleVisitAdmin}
+                >
+                  {isAdmin ?
+                    <span>
+                      <SupervisorAccount />
+                      Dashboard
+                    </span>
+                    :
+                    <span>
+                      <Build className={classes.adminIcon} />
                       Admin
-                    </Grid>
-                    <Grid item>
-                      <IconButton
-                        aria-owns={
-                          isMenuOpen
-                            ? "material-appbar"
-                            : undefined
-                        }
-                        aria-haspopup="true"
-                        onClick={this.handleProfileMenuOpen}
-                        color="inherit"
-                      >
-                        <AccountCircle />
-                      </IconButton>
-                    </Grid>
-                  </div>
-                }
-              </Grid>
+                    </span>
+                  }
+                </Button>
+                <div>
+                  <IconButton
+                    aria-owns={
+                      isMenuOpen
+                        ? "material-appbar"
+                        : undefined
+                    }
+                    aria-haspopup="true"
+                    onClick={this.handleProfileMenuOpen}
+                    color="inherit"
+                  >
+                    <AccountCircle />
+                  </IconButton>
+                </div>
+              </div>
             </div>
           </Toolbar>
         </AppBar>
