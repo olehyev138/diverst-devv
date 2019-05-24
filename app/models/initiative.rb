@@ -230,18 +230,42 @@ class Initiative < BaseClass
 
   # ENDOF port from Event
 
+  def all_updates_fields
+    updates_fields = self.updates.map { |update| update.info.keys }
+    updates_fields.inject([], :|)
+  end
 
   def highcharts_history(field:, from: 1.year.ago, to: Time.current)
     self.updates
-    .where('report_date >= ?', from)
-    .where('report_date <= ?', to)
-    .order(created_at: :asc)
+      .where('report_date >= ?', from)
+      .where('report_date <= ?', to)
+      .order(created_at: :asc)
     .map do |update|
       [
         update.reported_for_date.to_i * 1000, # We multiply by 1000 to get milliseconds for highcharts
         update.info[field]
       ]
     end
+  end
+
+  def highcharts_history_all_fields(fields: [], from: 1.year.ago, to: Time.current)
+    series = []
+    fields.each do |field|
+      values = self.updates.where('report_date >= ?', from).where('report_date <= ?', to).order(created_at: :asc).map do |update|
+        {
+          x: update.reported_for_date.to_i * 1000, # We multiply by 1000 to get milliseconds for highcharts
+          y: update.info[field],
+          children: {}
+        }
+      end
+      values.select! { |pair| pair[:y].present? }
+      values.sort_by! { |pair| pair[:x] }
+      series += [{
+        key: Field.find(field).title,
+        values: values
+      }]
+    end
+    series
   end
 
   def expenses_highcharts_history(from: 1.year.ago, to: Time.current)
