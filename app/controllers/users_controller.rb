@@ -54,8 +54,8 @@ class UsersController < ApplicationController
   end
 
   def group_surveys
-    group = Group.find(params[:group_id])
-    @user_groups = @user.user_groups.where(group: group).where.not(data: nil)
+    group = Group.find_by_id(params[:group_id])
+    @user_groups = @user.user_groups.where(group_id: group).where.not(data: nil) unless group.nil?
   end
 
   # For admins. Dedicated to editing any user's info

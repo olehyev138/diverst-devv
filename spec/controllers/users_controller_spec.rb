@@ -171,15 +171,23 @@ RSpec.describe UsersController, type: :controller do
         expect(response).to be_success
       end
 
-      xit 'returns manageable group ids' do
-        manageable_group_ids = [groups.first.id, groups.last.id]
-        get :group_surveys, id: user.id
-        expect(assigns[:user].enterprise.group_ids).to eq manageable_group_ids
-      end
-
       it 'returns user groups with data attribute not set to nil' do
         get :group_surveys, id: user.id, group_id: user_group2.group.id
         expect(assigns[:user_groups].count).to eq 1
+      end
+
+      context 'with incorrect group' do
+        it 'returns an empty user groups' do
+          get :group_surveys, id: user.id, group_id: create(:group).id
+          expect(assigns[:user_groups]).to be_empty
+        end
+      end
+
+      context 'with no group found' do 
+        it 'returns nil for users groups' do 
+          get :group_surveys, id: user.id, group_id: nil
+          expect(assigns[:user_groups]).to eq nil
+        end
       end
     end
 
