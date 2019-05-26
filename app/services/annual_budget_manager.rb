@@ -36,6 +36,24 @@ class AnnualBudgetManager
     find_or_create_annual_budget_and_update
   end
 
+  def carry_over
+    # no point in carrying over zero amount in leftover money
+    return if @group.leftover_money == 0 || @group.leftover_money.nil?
+
+    # find an opened annual budget with a non-zero leftover money
+    annual_budget = @group.annual_budgets.where(closed: false).where.not(leftover_money: 0).last
+
+    return if annual_budget.nil?
+
+    annual_budget.update(closed: true)
+
+    # update new annual budget with leftover money
+    new_annual_budget = AnnualBudget.find_or_create_by(closed: false, group_id: @group.id)
+    new_annual_budget.update(amount: annual_budget.leftover_money)
+
+    return true if @group.update({ annual_budget: @group.leftover_money, leftover_money: 0 })
+  end
+
 
   private
 

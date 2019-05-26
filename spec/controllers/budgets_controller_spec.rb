@@ -436,7 +436,8 @@ RSpec.describe BudgetsController, type: :controller do
         let!(:annual_budget1) { create(:annual_budget, group_id: group1.id, amount: group.annual_budget, closed: false) }
         let!(:budget1) { create(:budget, group_id: group1.id, annual_budget_id: annual_budget1.id) }
         let!(:initiative) { create(:initiative, owner_group: group1, finished_expenses: false, annual_budget_id: annual_budget1.id) }
-        let!(:expense) { create(:initiative_expense, amount: 600, annual_budget_id: annual_budget1.id) }
+        let!(:expense) { create(:initiative_expense, amount: 600, annual_budget_id: annual_budget1.id, initiative_id: initiative.id) }
+
 
         before do
           request.env['HTTP_REFERER'] = 'back'
@@ -548,7 +549,8 @@ RSpec.describe BudgetsController, type: :controller do
         let!(:annual_budget1) { create(:annual_budget, group_id: group1.id, amount: group.annual_budget, closed: false) }
         let!(:budget1) { create(:budget, group_id: group1.id, annual_budget_id: annual_budget1.id) }
         let!(:initiative) { create(:initiative, owner_group: group1, finished_expenses: true, annual_budget_id: annual_budget1.id) }
-        let!(:expense) { create(:initiative_expense, amount: 600, annual_budget_id: annual_budget1.id) }
+        let!(:expense) { create(:initiative_expense, amount: 600, annual_budget_id: annual_budget1.id, initiative_id: initiative.id) }
+
 
         before do
           allow_any_instance_of(Group).to receive(:update).and_return(false)
@@ -567,55 +569,80 @@ RSpec.describe BudgetsController, type: :controller do
     end
   end
 
-  describe 'put#carry_over_annual_budget', skip: 'temporarily' do
+  describe 'put#carry_over_annual_budget' do
     context 'with logged user' do
+      let!(:group1) { create(:group, enterprise: user.enterprise, annual_budget: 2000) }
+      let!(:annual_budget1) { create(:annual_budget, group_id: group1.id, amount: group.annual_budget, closed: false) }
+      let!(:budget1) { create(:budget, group_id: group1.id, is_approved: true, approver_id: user.id, requester_id: user.id,
+                                       annual_budget_id: annual_budget1.id)
+      }
+      let!(:initiative) { initiative_of_group(group1) }
+      let!(:expense) do
+        BudgetManager.new(budget1).approve(user)
+        create(:initiative_expense, amount: 600, annual_budget_id: annual_budget1.id, initiative_id: initiative.id, owner_id: user.id)
+        initiative.update estimated_funding: budget1.budget_items.last.estimated_amount, budget_item_id: budget1.budget_items.last.id
+      end
+
       login_user_from_let
+
       context 'with valid update' do
-        before {
-          request.env['HTTP_REFERER'] = 'back'
-          put :carry_over_annual_budget, group_id: budget.group.id, id: budget.id
-        }
+        context 'when leftover_money is zero' do
+          let!(:another_group) { create(:group, enterprise: user.enterprise) }
 
-        it 'set leftover_money to and zero annual_budget to 100000' do
-          expect(assigns[:group].annual_budget).to eq 100000
-          expect(assigns[:group].leftover_money).to eq 0
+          before do
+            request.env['HTTP_REFERER'] = 'back'
+            put :carry_over_annual_budget, group_id: another_group.id
+          end
+
+          it 'displays a flash alert message' do
+            expect(flash[:alert]).to eq 'Your budget was not updated.'
+          end
+
+          it 'redirects to previous page' do
+            expect(response).to redirect_to 'back'
+          end
         end
 
-        it "sets 'is_approved' attribute to false for all budgets belonging to group" do
-          expect(assigns[:group].budgets).to all(have_attributes(is_approved: false))
-        end
+        context 'with leftover_money' do
+          before do
+            initiative.finish_expenses!
+            request.env['HTTP_REFERER'] = 'back'
+          end
 
-        describe 'public activity' do
-          enable_public_activity
+          describe 'public activity' do
+            enable_public_activity
 
-          it 'creates public activity record' do
-            perform_enqueued_jobs do
-              expect { put :carry_over_annual_budget, group_id: budget.group.id, id: budget.id }
-              .to change(PublicActivity::Activity, :count).by(1)
+            it 'creates public activity record' do
+              perform_enqueued_jobs do
+                expect { put :carry_over_annual_budget, group_id: group1.id }
+                .to change(PublicActivity::Activity, :count).by(1)
+              end
+            end
+
+            describe 'activity record' do
+              let(:model) { group1 }
+              let(:owner) { user }
+              let(:key) { 'group.annual_budget_update' }
+
+              before do
+                perform_enqueued_jobs do
+                  put :carry_over_annual_budget, group_id: group1.id
+                end
+              end
+
+              include_examples 'correct public activity'
             end
           end
 
-          describe 'activity record' do
-            let(:model) { group }
-            let(:owner) { user }
-            let(:key) { 'group.annual_budget_update' }
-
-            before {
-              perform_enqueued_jobs do
-                put :carry_over_annual_budget, group_id: budget.group.id, id: budget.id
-              end
-            }
-
-            include_examples 'correct public activity'
+          it 'flashes a notice message' do
+            put :carry_over_annual_budget, group_id: group1.id
+            expect(flash[:notice]).to eq 'Your budget was updated'
           end
-        end
 
-        it 'flashes a notice message' do
-          expect(flash[:notice]).to eq 'Your budget was updated'
-        end
-
-        it 'redirects to back' do
-          expect(response).to redirect_to 'back'
+          it 'redirects to back' do
+            put :carry_over_annual_budget, group_id: group1.id
+            expect(response).to redirect_to 'back'
+          end
         end
       end
 
@@ -623,11 +650,11 @@ RSpec.describe BudgetsController, type: :controller do
         before {
           allow_any_instance_of(Group).to receive(:update).and_return(false)
           request.env['HTTP_REFERER'] = 'back'
-          put :carry_over_annual_budget, group_id: budget.group.id, id: budget.id
+          put :carry_over_annual_budget, group_id: group1.id
         }
 
         it 'flashes an alert message' do
-          expect(flash[:alert]).to eq 'Your budget was not updated. Please fix the errors'
+          expect(flash[:alert]).to eq 'Your budget was not updated.'
         end
 
         it 'redirects to back' do

@@ -106,16 +106,13 @@ class BudgetsController < ApplicationController
 
   def carry_over_annual_budget
     authorize [@group], :update?, policy_class: GroupBudgetPolicy
-
-    leftover = @group.leftover_money + @group.annual_budget
-
-    if @group.update({ annual_budget: leftover, leftover_money: 0 })
-      @group.budgets.update_all(is_approved: false)
+    
+    if AnnualBudgetManager.new(@group).carry_over
       track_activity(@group, :annual_budget_update)
       flash[:notice] = 'Your budget was updated'
       redirect_to :back
     else
-      flash[:alert] = 'Your budget was not updated. Please fix the errors'
+      flash[:alert] = 'Your budget was not updated.'
       redirect_to :back
     end
   end
