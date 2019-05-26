@@ -183,8 +183,8 @@ RSpec.describe UsersController, type: :controller do
         end
       end
 
-      context 'with no group found' do 
-        it 'returns nil for users groups' do 
+      context 'with no group found' do
+        it 'returns nil for users groups' do
           get :group_surveys, id: user.id, group_id: nil
           expect(assigns[:user_groups]).to eq nil
         end
