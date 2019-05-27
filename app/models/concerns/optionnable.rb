@@ -11,7 +11,8 @@ module Optionnable
   def trim_options_whitespace
     return if options_text.nil?
 
-    options_text.strip!
+    options_array = options_text.split(/\n+/)
+    self.options_text = options_array.reduce(""){ |options, s| options + "#{s.strip}\n"}
     options_text.delete!("\t\r")
   end
 
