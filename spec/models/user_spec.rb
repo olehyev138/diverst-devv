@@ -378,8 +378,8 @@ RSpec.describe User do
     let(:sample_data) { '{\"96\":\"save me 2\",\"98\":\"I am borisano and this is survey\",\"100\":[\"two\"],\"101\":[\"one\",\"two\"],\"102\":40,\"103\":null}' }
     let!(:user_group) { create :user_group, user: user, group: group, data: sample_data }
 
-    describe '#has_answered_group_surveys?' do
-      subject { user.has_answered_group_surveys? }
+    describe '#has_answered_group_survey?' do
+      subject { user.has_answered_group_survey? }
 
       context 'with group survey answered' do
         it 'return true' do
@@ -397,7 +397,7 @@ RSpec.describe User do
     end
 
     describe '#has_answered_group_survey?' do
-      subject { user.has_answered_group_survey? group }
+      subject { user.has_answered_group_survey?(group: group) }
 
       context 'with group survey answered' do
         it 'return true' do
