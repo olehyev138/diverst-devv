@@ -7,11 +7,12 @@ module Optionnable
     attr_accessor :options
   end
 
-  # Remove all whitespace except for new lines from options text
+  # Remove all spaces from beginning and end option and remove tabs and carriage returns from options text
   def trim_options_whitespace
     return if options_text.nil?
 
-    options_text.delete!(" \t\r")
+    options_text.strip!
+    options_text.delete!("\t\r")
   end
 
   def serialize_value(value)
