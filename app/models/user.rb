@@ -182,23 +182,21 @@ class User < BaseClass
     enterprise.user_roles.where(id: user_role_id).where("LOWER(role_type) = 'admin'").count > 0
   end
 
-  def has_answered_group_surveys?
-    groups_with_answered_surveys = user_groups.where.not(data: nil)
-
-    if groups_with_answered_surveys.count > 0
-      return true
+  def has_answered_group_survey?(group: nil)
+    if group.present?
+      user_group = user_groups.find_by_group_id(group.id)
+      user_group.present? && user_group.data.present?
     else
-      return false
+      groups_with_answered_surveys = user_groups.where.not(data: nil)
+      groups_with_answered_surveys.count > 0
     end
   end
 
-  def has_answered_group_survey?(group)
-    user_group = user_groups.find_by_group_id(group.id)
-
-    if user_group.present? && user_group.data.present?
-      return true
+  def belongs_to_group_with_survey?(group: nil)
+    if group.present?
+      group.has_survey?
     else
-      return false
+      groups.any? { |grp| grp.has_survey? }
     end
   end
 
