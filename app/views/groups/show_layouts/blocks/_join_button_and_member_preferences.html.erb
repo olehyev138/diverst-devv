@@ -5,7 +5,7 @@
     </p>
   <% end %>
   <% if @group.survey_fields.any? %>
-    <% if !current_user.has_answered_group_survey? @group %>
+    <% if !current_user.has_answered_group_survey?(group: @group) %>
       Take our survey.
        <%= link_to c_t(:member_preference), survey_group_questions_path(@group), class: "btn btn--primary" %>
     <% else %>
