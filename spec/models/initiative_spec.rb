@@ -177,8 +177,7 @@ RSpec.describe Initiative, type: :model do
           end
 
           it 'substracts estimated funding from budget item' do
-            leftover = available_amount - estimated_funding
-            expect(initiative.budget_item.available_amount).to eq leftover
+            expect(initiative.budget_item.available_amount).to eq 0
           end
 
           it 'marks budget item as done' do
