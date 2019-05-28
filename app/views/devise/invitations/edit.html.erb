@@ -101,10 +101,10 @@
           <% if resource.enterprise.privacy_statement.present? %>
             <% if resource.enterprise.privacy_statement.length > 500 %>
             <div id="privacy_statement" class="scrollable_box">
-              <%= resource.enterprise.privacy_statement %>
+              <%= raw resource.enterprise.privacy_statement %>
             </div>
             <% else %>
-            <%= resource.enterprise.privacy_statement %>
+            <%= raw resource.enterprise.privacy_statement %>
             <% end %>
           <% else %>
             Diverst regards your data as highly confidential. Only authorized administrators can view this data.. Your data will never be shared with anyone or anything other than these select individuals.
@@ -139,7 +139,7 @@
             <div id="calendar" data-calendar-data-url="<%= onboarding_calendar_data_user_events_path(invitation_token: params[:invitation_token]) %>"></div>
               
 
-            <h2>Choose your <%= resource.enterprise.custom_text.erg %></h2>
+            <h2>Explore your <%= resource.enterprise.custom_text.erg %></h2>
 
             <% resource.enterprise.groups.all_parents.each do |group| %>
               <div class="media-object" data-group-id="<%= group.id %>">
