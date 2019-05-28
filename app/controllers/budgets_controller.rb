@@ -106,7 +106,7 @@ class BudgetsController < ApplicationController
 
   def carry_over_annual_budget
     authorize [@group], :update?, policy_class: GroupBudgetPolicy
-    
+
     if AnnualBudgetManager.new(@group).carry_over
       track_activity(@group, :annual_budget_update)
       flash[:notice] = 'Your budget was updated'
