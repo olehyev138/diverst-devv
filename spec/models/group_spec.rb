@@ -61,13 +61,14 @@ RSpec.describe Group, type: :model do
     it { expect(group).to belong_to(:group_category) }
     it { expect(group).to belong_to(:group_category_type) }
 
-    [:logo, :banner].each do |attribute|
-      it { expect(group).to have_attached_file(attribute) }
-    end
+    # Paperclip
+#    [:logo, :banner].each do |attribute|
+#      it { expect(group).to have_attached_file(attribute) }
+#    end
 
-    [:logo, :banner].each do |attribute|
-      it { expect(group).to validate_attachment_content_type(attribute).allowing('image/png', 'image/gif').rejecting('text/plain', 'text/xml') }
-    end
+#    [:logo, :banner].each do |attribute|
+#      it { expect(group).to validate_attachment_content_type(attribute).allowing('image/png', 'image/gif').rejecting('text/plain', 'text/xml') }
+#    end
 
     [:outcomes, :fields, :survey_fields, :group_leaders, :sponsors].each do |attribute|
       it { expect(group).to accept_nested_attributes_for(attribute).allow_destroy(true) }

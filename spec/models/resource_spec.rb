@@ -17,11 +17,12 @@ RSpec.describe Resource, type: :model do
   describe 'when validating' do
     let(:resource) { build_stubbed(:resource) }
 
-    it { expect(resource).to validate_presence_of(:title) }
-    it { expect(resource).to have_attached_file(:file) }
+    # Paperclip
+#    it { expect(resource).to validate_presence_of(:title) }
+#    it { expect(resource).to have_attached_file(:file) }
 
     # do we want to validate presence of file in resource model? if so then i will uncomment this code
-    # it{ expect(resource).to validate_attachment_presence(:file)}
+    # it { expect(resource).to validate_attachment_presence(:file)}
   end
 
   describe 'test callbacks' do

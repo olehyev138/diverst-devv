@@ -84,10 +84,11 @@ RSpec.describe User do
         it { expect(user).to have_many(:shared_metrics_dashboards) }
       end
 
-      context 'validate paperclip' do
-        it { expect(user).to have_attached_file(:avatar) }
-        it { expect(user).to validate_attachment_content_type(:avatar).allowing('image/png', 'image/gif').rejecting('text/plain', 'text/xml') }
-      end
+      # Paperclip
+#      context 'validate paperclip' do
+#        it { expect(user).to have_attached_file(:avatar) }
+#        it { expect(user).to validate_attachment_content_type(:avatar).allowing('image/png', 'image/gif').rejecting('text/plain', 'text/xml') }
+#      end
     end
 
     describe 'test callbacks' do
