@@ -17,7 +17,7 @@
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 
-require 'paperclip/matchers'
+#require 'paperclip/matchers'
 require 'pundit/rspec'
 
 RSpec.configure do |config|
@@ -90,12 +90,13 @@ RSpec.configure do |config|
   # as the one that triggered the failure.
   Kernel.srand config.seed
 
-  config.include Paperclip::Shoulda::Matchers
+  #config.include Paperclip::Shoulda::Matchers
 
   # https://stackoverflow.com/questions/3175591/rails3-warning-toplevel-constant-applicationcontroller-referenced-by?rq=1
-  config.before(:each) do
-    Dir[File.expand_path("app/controllers/user/*.rb")].each do |file|
-      require file
-    end
-  end
+  
+#  config.before(:each) do
+#    Dir[File.expand_path("app/controllers/user/*.rb")].each do |file|
+#      require file
+#    end
+#  end
 end

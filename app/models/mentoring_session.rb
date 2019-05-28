@@ -35,7 +35,7 @@ class MentoringSession < ApplicationRecord
 
   before_create :set_room_name
 
-  after_commit on: [:create] { notify_users_on_create }
+  after_create_commit { notify_users_on_create }
 
   after_update    :notify_users_on_update
   after_destroy   :notify_users_on_destroy

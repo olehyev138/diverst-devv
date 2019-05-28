@@ -51,7 +51,7 @@ group :development, :test do
   # The 3 gems above are for livereloading your code
   gem 'rspec-rails' # Testing framework
   gem 'database_cleaner', '~> 1.6.1' # Necessary to clean the DB between tests
-  gem 'shoulda-matchers', '~> 3.1', '>= 3.1.1'
+  gem 'shoulda-matchers', '4.0.1'
   gem 'timecop', '~> 0.8.1'
   gem 'byebug', '~> 9.1.0' # Debugger
   gem 'pundit-matchers', '~> 1.6.0'

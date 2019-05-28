@@ -22,7 +22,11 @@ class Resource < ApplicationRecord
 #  do_not_validate_attachment_file_type :file
 
   validates_presence_of   :title
-  validates_presence_of   :url, if: Proc.new { |r| r.file.nil? && r.url.blank? }
+
+  # Paperclip
+  #validates_presence_of   :url, if: Proc.new { |r| r.file.nil? && r.url.blank? }
+  
+  validates_presence_of   :url
   validates_length_of     :url, maximum: 255
 
   scope :unarchived_resources, ->(folder_ids, initiative_ids) { where('resources.initiative_id IN (?) OR resources.folder_id IN (?)', initiative_ids, folder_ids).where.not(archived_at: nil) }
@@ -63,11 +67,11 @@ class Resource < ApplicationRecord
     self.tag_ids = Tag.ids_from_tokens(tokens)
   end
 
-  def file_extension
-    File.extname(file_file_name)[1..-1].downcase
-  rescue
-    ''
-  end
+#  def file_extension
+#    File.extname(file_file_name)[1..-1].downcase
+#  rescue
+#    ''
+#  end
 
   def expiration_time
     EXPIRATION_TIME

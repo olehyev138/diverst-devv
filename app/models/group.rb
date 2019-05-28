@@ -119,7 +119,7 @@ class Group < ApplicationRecord
 
   validates :name, presence: true, uniqueness: { scope: :enterprise_id }
 
-  validates_format_of :contact_email, with: Devise.email_regexp, allow_blank: true
+  #validates_format_of :contact_email, with: Devise.email_regexp, allow_blank: true
 
   # only allow one default_mentor_group per enterprise
   validates_uniqueness_of :default_mentor_group, scope: [:enterprise_id], conditions: -> { where(default_mentor_group: true) }
@@ -433,7 +433,7 @@ class Group < ApplicationRecord
   end
 
   def ensure_not_own_child
-    if children.exists?(self)
+    if children.exists?(self.id)
       errors.add(:child_ids, 'Group cant be its own child')
     end
   end
