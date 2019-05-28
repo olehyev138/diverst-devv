@@ -405,6 +405,10 @@ class Group < BaseClass
     self.user_groups.update_all(accepted_member: true)
   end
 
+  def has_survey?
+    survey_fields.count > 0
+  end
+
   protected
 
   def smart_add_url_protocol
