@@ -120,7 +120,7 @@ class User < ApplicationRecord
   end
 
   def valid_password?(password)
-    return authenticate(password)
+    return authenticate(password) == self
   end
 
   def last_notified_date

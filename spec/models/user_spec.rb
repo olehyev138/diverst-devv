@@ -133,12 +133,12 @@ RSpec.describe User do
       end
 
       describe 'before_save callbacks' do
-        context '#assign_firebase_token' do
-          it 'should be called after user object is created' do
-            new_user.run_callbacks :create
-            expect(new_user.firebase_token.present?).to eq true
-          end
-        end
+#        context '#assign_firebase_token' do
+#          it 'should be called after user object is created' do
+#            new_user.run_callbacks :create
+#            expect(new_user.firebase_token.present?).to eq true
+#          end
+#        end
       end
     end
 
