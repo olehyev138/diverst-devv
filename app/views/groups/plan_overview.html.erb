@@ -9,8 +9,11 @@
       </h2>
       <h3 style="margin-left: 10px; margin-botton: -10px;">
         <%= c_t(:erg) %> Budget |
-        <%= link_to "View Budget Requests", group_budgets_path(@group, annual_budget_id: annual_budget.id) %> |
-        <%= link_to "Create Budget Request", new_group_budget_path(@group, annual_budget_id: annual_budget.id) if GroupBudgetPolicy.new(current_user, [@group]).create? %>
+        <%= link_to "View Budget Requests", group_budgets_path(@group, annual_budget_id: annual_budget.id) %> 
+        <% unless annual_budget.closed? %>
+        |
+          <%= link_to "Create Budget Request", new_group_budget_path(@group, annual_budget_id: annual_budget.id) if GroupBudgetPolicy.new(current_user, [@group]).create? %>
+        <% end %>  
       </h3>
 
       <div class="flex-row flex-row--middle flex-row--spacing-bottom">
