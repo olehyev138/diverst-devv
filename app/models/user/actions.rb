@@ -43,7 +43,7 @@ module User::Actions
       raise BadRequestException.new 'Email and password required' unless email.present? && password.present?
 
       # find the user
-      user = User.where(email: email.downcase).first
+      user = User.find_by(email: email.downcase)
       raise BadRequestException.new 'Invalid Credentials' if user.nil?
 
       # verify the password
