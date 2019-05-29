@@ -18,7 +18,8 @@ class InitiativeExpense < BaseClass
     annual_budget = AnnualBudget.find_or_create_by(closed: false, group_id: group.id)
     return if annual_budget.nil?
 
-    group.update(leftover_money: annual_budget.approved_budget_leftover)
+    leftover_of_annual_budget = (annual_budget.amount - annual_budget.approved_budget) + annual_budget.available_budget
+    group.update(leftover_money: leftover_of_annual_budget)
     annual_budget.update(amount: group.annual_budget, available_budget: group.available_budget,
                          leftover_money: group.leftover_money, expenses: group.spent_budget,
                          approved_budget: group.approved_budget)

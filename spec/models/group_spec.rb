@@ -405,8 +405,8 @@ RSpec.describe Group, type: :model do
     end
 
     it 'returns spent budget' do
-      group = create(:group)
-      annual_budget = create(:annual_budget, group: group, closed: false)
+      group = create(:group, annual_budget: 10000)
+      annual_budget = create(:annual_budget, group: group, closed: false, amount: group.annual_budget)
       initiative = create(:initiative, annual_budget_id: annual_budget.id, owner_group: group)
       expense = create(:initiative_expense, initiative_id: initiative.id, amount: 900, annual_budget_id: annual_budget.id)
       initiative.finish_expenses!

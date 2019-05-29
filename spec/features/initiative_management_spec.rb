@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.feature 'Initiative management' do
   let(:user) { create(:user) }
-  let!(:group) { create :group, enterprise: user.enterprise }
+  let!(:group) { create :group, enterprise: user.enterprise, annual_budget: 10000 }
 
   let!(:initiative_params) {
     {
@@ -79,14 +79,12 @@ RSpec.feature 'Initiative management' do
 
       click_on 'Submit'
 
-      expect(page).to have_current_path group_initiatives_path(group)
-
       expect(page).to have_content "$#{initiative.estimated_funding.to_f}"
     end
   end
 
   context 'display closed status' do
-    let!(:annual_budget) { create(:annual_budget, group: group) }
+    let!(:annual_budget) { create(:annual_budget, group: group, amount: group.annual_budget) }
     let!(:initiative1) { create(:initiative, owner_group: group, annual_budget_id: annual_budget.id) }
     let!(:budget1) { create(:approved_budget, group: group, annual_budget_id: annual_budget.id) }
 
@@ -96,12 +94,10 @@ RSpec.feature 'Initiative management' do
       create(:initiative_expense, description: 'new expense', initiative_id: initiative1.id, annual_budget_id: annual_budget.id)
     end
 
-    scenario 'on group initiatives index page' do
+    scenario 'on group initiatives index page', js: true do
       visit group_initiative_expenses_path(group, initiative1)
 
       click_on 'Finish Expenses'
-
-      visit group_initiatives_path(group)
 
       expect(page).to have_content '(closed)'
     end

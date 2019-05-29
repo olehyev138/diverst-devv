@@ -11,7 +11,7 @@ class Initiatives::ExpensesController < ApplicationController
     authorize InitiativeExpense
     @expenses = @initiative.expenses
 
-    redirect_to :back if @group.available_budget <= 0
+    redirect_to :back if @initiative.annual_budget.available_budget <= 0
   end
 
   def new

@@ -169,7 +169,8 @@ class Initiative < BaseClass
   def finish_expenses!
     return false if finished_expenses?
 
-    group.leftover_money = annual_budget.approved_budget_leftover
+    leftover_of_annual_budget = (annual_budget.amount - annual_budget.approved_budget) + annual_budget.available_budget
+    group.leftover_money = leftover_of_annual_budget
     group.save
     self.update(finished_expenses: true)
   end

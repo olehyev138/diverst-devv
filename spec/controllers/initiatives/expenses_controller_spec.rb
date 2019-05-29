@@ -2,8 +2,9 @@ require 'rails_helper'
 
 RSpec.describe Initiatives::ExpensesController, type: :controller do
   let(:user) { create :user }
-  let(:group) { create(:group, enterprise: user.enterprise) }
-  let(:annual_budget) { create(:annual_budget, group_id: group.id) }
+  let(:group) { create(:group, enterprise: user.enterprise, annual_budget: 10000) }
+  let(:annual_budget) { create(:annual_budget, group_id: group.id, amount: group.annual_budget) }
+  let(:budget) { create(:budget, group_id: group.id, requester_id: user.id, approver_id: user.id) }
   let(:initiative) { initiative_of_group(group) }
   let(:initiative_expense) { create(:initiative_expense, initiative: initiative, annual_budget_id: annual_budget.id) }
 
@@ -76,10 +77,7 @@ RSpec.describe Initiatives::ExpensesController, type: :controller do
     login_user_from_let
 
     context 'with valid attributes' do
-      before do
-        annual_budget = create(:annual_budget, group_id: group.id)
-        budget = create(:budget, is_approved: true, approver_id: user.id, group_id: group.id, annual_budget_id: annual_budget.id)
-      end
+      before { budget = create(:budget, is_approved: true, approver_id: user.id, group_id: group.id, annual_budget_id: annual_budget.id) }
 
       it 'creates the initiative_expense object' do
         expect { post :create, group_id: group.id, initiative_id: initiative.id, initiative_expense: { amount: 10, description: 'description' } }

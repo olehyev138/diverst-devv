@@ -269,8 +269,10 @@ RSpec.describe Initiative, type: :model do
 
   describe '#expenses_highcharts_history' do
     it 'returns data' do
-      initiative = build(:initiative, start: Date.today, end: Date.today + 1.hour)
-      create_list(:initiative_expense, 5, initiative: initiative)
+      group = create(:group, annual_budget: 10000)
+      annual_budget = create(:annual_budget, amount: group.annual_budget)
+      initiative = create(:initiative, owner_group: group, annual_budget_id: annual_budget.id, start: Date.today, end: Date.today + 1.hour)
+      create_list(:initiative_expense, 5, initiative: initiative, annual_budget_id: annual_budget.id)
 
       data = initiative.expenses_highcharts_history
       expect(data.empty?).to be(false)
@@ -303,10 +305,12 @@ RSpec.describe Initiative, type: :model do
 
   describe '#destroy_callbacks' do
     it 'removes the child objects' do
-      initiative = create(:initiative)
+      group = create(:group, annual_budget: 10000)
+      annual_budget = create(:annual_budget, amount: group.annual_budget)
+      initiative = create(:initiative, owner_group_id: group.id, annual_budget_id: annual_budget.id)
       initiative_update = create(:initiative_update, initiative: initiative)
       field = create(:field, initiative: initiative)
-      initiative_expense = create(:initiative_expense, initiative: initiative)
+      initiative_expense = create(:initiative_expense, initiative: initiative, annual_budget_id: annual_budget.id)
       checklist = create(:checklist, initiative: initiative)
       resource = create(:resource, initiative: initiative)
       checklist_item = create(:checklist_item, initiative: initiative)
