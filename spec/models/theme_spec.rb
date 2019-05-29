@@ -52,7 +52,7 @@ RSpec.describe Theme, type: :model do
 
   describe 'color' do
     describe 'hash appending' do
-      it 'triggers if hash is not present' do
+      xit 'triggers if hash is not present' do
         theme.primary_color = 'ffffff'
         theme.secondary_color = '000000'
         theme.valid?
