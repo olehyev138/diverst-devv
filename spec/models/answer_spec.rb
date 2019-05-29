@@ -42,12 +42,12 @@ RSpec.describe Answer, type: :model do
     end
   end
 
-#  describe '#supporting_document_extension' do
-#    it "returns '' " do
-#      answer = create :answer
-#      expect(answer.supporting_document_extension).to eq('')
-#    end
-#  end
+  #  describe '#supporting_document_extension' do
+  #    it "returns '' " do
+  #      answer = create :answer
+  #      expect(answer.supporting_document_extension).to eq('')
+  #    end
+  #  end
 
   describe '#destroy_callbacks' do
     it 'removes the child objects' do

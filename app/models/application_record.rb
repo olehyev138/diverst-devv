@@ -1,9 +1,9 @@
 class ApplicationRecord < ActiveRecord::Base
   self.abstract_class = true
 
-#  include BaseBuilder
-#  include BasePager
-#  include BaseSearcher
+  #  include BaseBuilder
+  #  include BasePager
+  #  include BaseSearcher
 
   include ::BaseSearch
   include ::BaseElasticsearch

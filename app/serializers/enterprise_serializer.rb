@@ -3,6 +3,7 @@ class EnterpriseSerializer < ActiveModel::Serializer
 
   def theme
     return nil if object.theme.nil?
-    return ThemeSerializer.new(object.theme).attributes
+
+    ThemeSerializer.new(object.theme).attributes
   end
 end

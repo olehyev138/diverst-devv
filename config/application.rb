@@ -7,8 +7,8 @@ require 'active_model/railtie'
 require 'sprockets/railtie'
 
 if defined?(Bundler)
- # If you precompile assets before deploying to production, use this line
-  Bundler.require(*Rails.groups(:assets => %w(development test)))
+  # If you precompile assets before deploying to production, use this line
+  Bundler.require(*Rails.groups(assets: %w(development test)))
   # If you want your assets lazily compiled in production, use this line
   # Bundler.require(:default, :assets, Rails.env)
 end
@@ -23,7 +23,7 @@ module Diverst
     # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
     config.time_zone = 'Eastern Time (US & Canada)'
     config.active_record.default_timezone = :local
-    
+
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
@@ -35,23 +35,23 @@ module Diverst
     config.active_job.queue_adapter = :sidekiq
 
     Rails.application.routes.default_url_options[:host] = ENV['DOMAIN'] || 'localhost:3000'
-    
-    config.action_dispatch.rescue_responses["Pundit::NotAuthorizedError"] = :forbidden
+
+    config.action_dispatch.rescue_responses['Pundit::NotAuthorizedError'] = :forbidden
 
     ActionMailer::Base.delivery_method = :smtp
-    
+
     config.middleware.insert_before ActionDispatch::Static, Rack::Rewrite do
-      rewrite %r{^(?!/system|\/api/).*}, '/', :not => %r{(.*\..*)}
+      rewrite %r{^(?!/system|\/api/).*}, '/', not: %r{(.*\..*)}
     end
 
     # rails api
     config.api_only = true
-    
+
     # enable garbage collection instrumentation for NewRelic
     GC::Profiler.enable
 
     # Configure the default encoding used in templates for Ruby 1.9.
-    config.encoding = "utf-8"
+    config.encoding = 'utf-8'
 
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password]
@@ -66,8 +66,8 @@ module Diverst
     config.middleware.insert_before ActionDispatch::Static, Rack::Cors do
       allow do
         origins '*'
-        resource '*', :headers => :any, :methods => [:get, :post, :put, :delete, :options]
-        #resource '/assets/*', headers: :any, methods: [:get]
+        resource '*', headers: :any, methods: [:get, :post, :put, :delete, :options]
+        # resource '/assets/*', headers: :any, methods: [:get]
         resource '/system/*', headers: :any, methods: [:get]
       end
     end
@@ -75,16 +75,16 @@ module Diverst
     # access token
     config.access_tokens = {
       # defines how long an aws url is good for
-      :token_refresh_interval => 2.hours,
+      token_refresh_interval: 2.hours,
       # 7 day token
-      :week_long_token_refresh_interval => 7.days,
+      week_long_token_refresh_interval: 7.days,
       # gives longer access to an aws url for emails
-      :long_token_refresh_interval => 90.days
+      long_token_refresh_interval: 90.days
     }
 
     # password reset timeframe (in hours)
-    config.password_reset_time_frame = ENV["PASSWORD_RESET_TIME_FRAME"] || 6
-    
-    #config.middleware.insert_before Rack::Runtime, Rack::Timeout, service_timeout: 20, wait_timeout: 30, wait_overtime: 60, service_past_wait: false
+    config.password_reset_time_frame = ENV['PASSWORD_RESET_TIME_FRAME'] || 6
+
+    # config.middleware.insert_before Rack::Runtime, Rack::Timeout, service_timeout: 20, wait_timeout: 30, wait_overtime: 60, service_past_wait: false
   end
 end

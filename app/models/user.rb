@@ -92,7 +92,7 @@ class User < ApplicationRecord
   before_validation :set_uid
   before_destroy :check_lifespan_of_user
 
-  #after_create :assign_firebase_token
+  # after_create :assign_firebase_token
   after_create :set_default_policy_group
   after_save :set_default_policy_group, if: :user_role_id_changed?
   accepts_nested_attributes_for :policy_group
@@ -120,7 +120,7 @@ class User < ApplicationRecord
   end
 
   def valid_password?(password)
-    return authenticate(password) == self
+    authenticate(password) == self
   end
 
   def last_notified_date
@@ -334,13 +334,13 @@ class User < ApplicationRecord
   end
 
   # Generate a Firebase token for the user and update the user with it
-#  def assign_firebase_token
-#    payload = { uid: id.to_s }
-#    options = { expires: 1.week.from_now }
-#    self.firebase_token = @@fb_token_generator.create_token(payload, options)
-#    self.firebase_token_generated_at = Time.current
-#    save
-#  end
+  #  def assign_firebase_token
+  #    payload = { uid: id.to_s }
+  #    options = { expires: 1.week.from_now }
+  #    self.firebase_token = @@fb_token_generator.create_token(payload, options)
+  #    self.firebase_token_generated_at = Time.current
+  #    save
+  #  end
 
   # Updates this user's match scores with all other enterprise users
   def update_match_scores

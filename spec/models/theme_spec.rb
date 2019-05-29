@@ -7,8 +7,8 @@ RSpec.describe Theme, type: :model do
     it { expect(theme).to have_one(:enterprise) }
 
     # Paperclip
-   # it { expect(theme).to have_attached_file(:logo) }
-   # it { expect(theme).to validate_attachment_content_type(:logo) }
+    # it { expect(theme).to have_attached_file(:logo) }
+    # it { expect(theme).to validate_attachment_content_type(:logo) }
 
     it { expect(theme).to validate_presence_of(:primary_color).with_message('should be a valid hex color') }
     [:primary_color, :secondary_color].each do |color|
