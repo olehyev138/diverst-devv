@@ -51,7 +51,8 @@ RSpec.describe User do
 
     context 'test' do
       context 'belongs_to associations' do
-        it { expect(user).to belong_to(:enterprise) }
+        # we dont validate presence of enterprise on user - TODO
+        it { expect(user).to belong_to(:enterprise).without_validating_presence }
       end
 
       context 'has_many associations' do
@@ -85,10 +86,10 @@ RSpec.describe User do
       end
 
       # Paperclip
-#      context 'validate paperclip' do
-#        it { expect(user).to have_attached_file(:avatar) }
-#        it { expect(user).to validate_attachment_content_type(:avatar).allowing('image/png', 'image/gif').rejecting('text/plain', 'text/xml') }
-#      end
+      #      context 'validate paperclip' do
+      #        it { expect(user).to have_attached_file(:avatar) }
+      #        it { expect(user).to validate_attachment_content_type(:avatar).allowing('image/png', 'image/gif').rejecting('text/plain', 'text/xml') }
+      #      end
     end
 
     describe 'test callbacks' do
@@ -151,7 +152,7 @@ RSpec.describe User do
           expect { user1.destroy }.to change(User, :count).by(-1)
         end
 
-        it 'does not deletes user older than 14 days' do
+        it 'does not delete user older than 14 days' do
           expect { user2.destroy }.to change(User, :count).by(0)
         end
       end

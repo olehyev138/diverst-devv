@@ -564,8 +564,11 @@ class User < ApplicationRecord
   private
 
   def check_lifespan_of_user
-    # deletes users 13 days or younger
-    DateTime.now.days_ago(14) < self.created_at
+    # deletes users 14 days or younger
+    return true if DateTime.now.days_ago(14) < self.created_at
+
+    errors.add(:base, 'Users older then 14 days cannot be destroyed')
+    throw(:abort)
   end
 
   def validate_presence_fields
