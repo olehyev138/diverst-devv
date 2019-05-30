@@ -46,12 +46,18 @@ class BudgetsController < ApplicationController
 
   def approve
     authorize [@group], :approve?, policy_class: GroupBudgetPolicy
-    if @budget.update(budget_params)
-      BudgetManager.new(@budget).approve(current_user)
-      track_activity(@budget, :approve)
-      redirect_to(action: :index, annual_budget_id: params[:budget][:annual_budget_id])
-    else
+
+    if @group.annual_budget == 0 || @group.annual_budget.nil?
+      flash[:alert] = 'please set an annual budget for this group'
       redirect_to :back
+    else
+      if @budget.update(budget_params)
+        BudgetManager.new(@budget).approve(current_user)
+        track_activity(@budget, :approve)
+        redirect_to(action: :index, annual_budget_id: params[:budget][:annual_budget_id])
+      else
+        redirect_to :back
+      end
     end
   end
 

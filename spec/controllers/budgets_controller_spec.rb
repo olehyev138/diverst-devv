@@ -237,6 +237,23 @@ RSpec.describe BudgetsController, type: :controller do
         expect(budget.comments).to eq 'here is a comment'
       end
 
+      context 'when user tries to approve budget request when annual budget is not set' do
+        before do
+          group.update(annual_budget: 0)
+          annual_budget.update(amount: 0)
+          request.env['HTTP_REFERER'] = 'back'
+          approve
+        end
+
+        it 'displays flash alert message' do
+          expect(flash[:alert]).to eq 'please set an annual budget for this group'
+        end
+
+        it 'redirect to previous page' do
+          expect(response).to redirect_to 'back'
+        end
+      end
+
       describe 'public activity' do
         enable_public_activity
 
