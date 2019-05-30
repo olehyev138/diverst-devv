@@ -1,26 +1,27 @@
 require 'securerandom'
 
 module User::Actions
-
   def self.included(klass)
     klass.extend ClassMethods
   end
 
   def send_reset_password_instructions
-    raise BadRequestException.new "Your password has already been reset. Please check your email for a link to update your password." if self.reset_password_token.present?
+    raise BadRequestException.new 'Your password has already been reset. Please check your email for a link to update your password.' if self.reset_password_token.present?
+
     token = SecureRandom.urlsafe_base64(nil, false)
-    self.reset_password_token = BCrypt::Password.create(token, :cost => 11)
+    self.reset_password_token = BCrypt::Password.create(token, cost: 11)
     self.reset_password_sent_at = Time.now
     self.save!
-    #UserMailer.delay(:queue => "critical").send_reset_password_instructions(self, token)
-    return token
+    # UserMailer.delay(:queue => "critical").send_reset_password_instructions(self, token)
+    token
   end
 
   def valid_reset_password_token?(token)
     return false if token.blank?
     return false if reset_password_sent_at.blank?
     return false if Time.now - reset_password_sent_at > Rails.configuration.password_reset_time_frame.hours
-    return BCrypt::Password.new(reset_password_token) == token
+
+    BCrypt::Password.new(reset_password_token) == token
   end
 
   def reset_password_by_token(user)
@@ -28,27 +29,26 @@ module User::Actions
     self.password_confirmation = user[:password_confirmation]
     self.reset_password_token = nil
     self.reset_password_sent_at = nil
-    return self
+    self
   end
 
   def invite!
     regenerate_access_token
-    UserMailer.delay(:queue => "mailers").send_invitation(self)
+    UserMailer.delay(queue: 'mailers').send_invitation(self)
   end
 
   module ClassMethods
-
     def signin(email, password)
       # check for an email and password
-      raise BadRequestException.new "Email and password required" unless email.present? and password.present?
+      raise BadRequestException.new 'Email and password required' unless email.present? && password.present?
 
       # find the user
-      user = User.where(:email => email.downcase).first
-      raise BadRequestException.new "Invalid Credentials" if user.nil?
+      user = User.find_by(email: email.downcase)
+      raise BadRequestException.new 'Invalid Credentials' if user.nil?
 
       # verify the password
       if not user.valid_password?(password)
-        raise BadRequestException.new "Invalid Credentials"
+        raise BadRequestException.new 'Invalid Credentials'
       end
 
       # auditing
@@ -58,7 +58,7 @@ module User::Actions
       user.reset_password_sent_at = nil
       user.save!
 
-      return user
+      user
     end
 
     def find_user_by_email(diverst_request, params)
@@ -73,8 +73,7 @@ module User::Actions
       end
 
       # return the user
-      return user
+      user
     end
   end
-
 end

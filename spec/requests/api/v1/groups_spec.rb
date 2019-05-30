@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe 'Group', type: :request do
+  before { pending }
+
   let(:enterprise) { create(:enterprise) }
   let(:user) { create(:user, password: 'password', enterprise: enterprise) }
   let(:group) { create(:group, enterprise: enterprise) }

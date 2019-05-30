@@ -14,7 +14,7 @@ RSpec.describe Answer, type: :model do
       it { expect(answer).to have_many(:expenses).class_name('AnswerExpense') }
       it { expect(answer).to accept_nested_attributes_for(:expenses).allow_destroy(true) }
 
-      it { expect(answer).to have_attached_file(:supporting_document) }
+      # it { expect(answer).to have_attached_file(:supporting_document) }
       it { expect(answer).to validate_presence_of(:question) }
       it { expect(answer).to validate_presence_of(:author) }
       it { expect(answer).to validate_presence_of(:content) }
@@ -42,12 +42,12 @@ RSpec.describe Answer, type: :model do
     end
   end
 
-  describe '#supporting_document_extension' do
-    it "returns '' " do
-      answer = create :answer
-      expect(answer.supporting_document_extension).to eq('')
-    end
-  end
+  #  describe '#supporting_document_extension' do
+  #    it "returns '' " do
+  #      answer = create :answer
+  #      expect(answer.supporting_document_extension).to eq('')
+  #    end
+  #  end
 
   describe '#destroy_callbacks' do
     it 'removes the child objects' do

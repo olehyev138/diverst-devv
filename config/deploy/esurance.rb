@@ -31,7 +31,7 @@ server '34.199.194.93', user: 'newdeploy', roles: %w(web app db)
 set :branch, 'master'
 set :rails_env, :production
 
-set :rollbar_env, "esurance"
+set :rollbar_env, 'esurance'
 
 
 # Custom SSH Options

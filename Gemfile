@@ -23,8 +23,8 @@ gem 'elasticsearch-model', '~> 6.0.0'
 gem 'elasticsearch-rails', '~> 6.0.0'
 gem 'yam', '~> 2.5' # Yammer ruby SDK
 gem 'httparty', '~> 0.13' # HTTP request library
-#gem 'omniauth-linkedin-oauth2', '~> 0.1.5' # OAuth for LinkedIn
-#gem 'omniauth-oauth2', '1.3.1' # Temporary fix to address: https://github.com/decioferreira/omniauth-linkedin-oauth2/issues/28
+# gem 'omniauth-linkedin-oauth2', '~> 0.1.5' # OAuth for LinkedIn
+# gem 'omniauth-oauth2', '1.3.1' # Temporary fix to address: https://github.com/decioferreira/omniauth-linkedin-oauth2/issues/28
 gem 'pundit', '~> 2.0.0'# Authorization
 gem 'daemons', '~> 1.2', '>= 1.2.3' # For capistrano-clockwork
 gem 'twilio-ruby', '~> 5.10.0'
@@ -37,7 +37,7 @@ gem 'julia_builder', '~> 0.2.0'
 gem 'date_validator', '~> 0.9.0'
 gem 'thor', '0.20.0' # Expected string default value for '--decorator'; got true (boolean) - setting version removes this message
 
-gem 'rack-rewrite', "~> 1.5" # A rack middleware for enforcing rewrite rules. In many cases you can get away with rack-rewrite instead of writing Apache mod_rewrite rules.
+gem 'rack-rewrite', '~> 1.5' # A rack middleware for enforcing rewrite rules. In many cases you can get away with rack-rewrite instead of writing Apache mod_rewrite rules.
 gem 'rack-cors', '~> 0.4.0', require: 'rack/cors' # will be used to support mobile
 gem 'bcrypt'
 gem 'bootsnap', require: false

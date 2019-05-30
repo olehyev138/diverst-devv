@@ -103,6 +103,6 @@ Diverst::Application.configure do
   config.logger = ActiveSupport::TaggedLogging.new(Syslogger.new('Diverst', Syslog::LOG_PID, Syslog::LOG_LOCAL7))
   config.lograge.enabled = true
   config.lograge.formatter = Lograge::Formatters::Json.new
-  
+
   config.read_encrypted_secrets = true
 end

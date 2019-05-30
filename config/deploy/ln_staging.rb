@@ -8,8 +8,8 @@
 # server 'db.example.com', user: 'deploy', roles: %w{db}
 server '174.129.81.235', user: 'newdeploy', roles: %w(web app db)
 
-#52.39.50.54 new one
-#52.90.48.218 sandbox3
+# 52.39.50.54 new one
+# 52.90.48.218 sandbox3
 
 # role-based syntax
 # ==================
@@ -34,7 +34,7 @@ server '174.129.81.235', user: 'newdeploy', roles: %w(web app db)
 set :branch, 'development'
 set :rails_env, :production
 
-set :rollbar_env, "ln_staging"
+set :rollbar_env, 'ln_staging'
 
 
 # Custom SSH Options

@@ -2,18 +2,18 @@ require 'rails_helper'
 
 RSpec.describe SocialLink, type: :model do
   describe 'validation' do
-    let(:social_link) { build_stubbed(:social_link) }
+    let(:social_link) { create(:social_link) }
 
     it 'has valid factory' do
       expect(social_link).to be_valid
     end
 
+    it { expect(social_link).to belong_to(:author).class_name('User') }
     it { expect(social_link).to validate_presence_of(:author_id) }
 
     it { expect(social_link).to have_many(:segments).through(:social_link_segments) }
     it { expect(social_link).to have_many(:social_link_segments) }
     it { expect(social_link).to have_one(:news_feed_link) }
-    it { expect(social_link).to belong_to(:author).class_name('User') }
     it { expect(social_link).to belong_to(:group) }
 
 

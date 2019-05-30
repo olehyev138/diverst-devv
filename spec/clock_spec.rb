@@ -13,28 +13,28 @@ RSpec.describe Clockwork, type: :clock do
     expect(Clockwork::Test.block_for(job).call).to eq Segment.update_all_members
   end
 
-#  xit 'runs the job SyncYammerUsersJob' do
-#    job = 'Sync Yammer users with Diverst users'
-#    perform = SyncYammerUsersJob.perform_later
-#
-#    allow(SyncYammerUsersJob).to receive(:perform_later).and_return(perform)
-#
-#    expect(Clockwork::Test.ran_job?(job)).to be_truthy
-#    expect(Clockwork::Test.times_run(job)).to eq 1
-#    expect(Clockwork::Test.block_for(job).call).to eq perform
-#  end
-#
-#  xit 'runs the job SyncYammerGroupJob' do
-#    job = 'Sync Yammer members'
-#    perform = SyncYammerGroupJob.perform_later
-#
-#    allow(SyncYammerGroupJob).to receive(:perform_later).and_return(perform)
-#
-#    expect(Clockwork::Test.ran_job?(job)).to be_truthy
-#    expect(Clockwork::Test.times_run(job)).to eq 1
-#    expect(Clockwork::Test.block_for(job).call).to eq Group.all.each { |group| SyncYammerGroupJob.perform_later(group.id) }
-#  end
-#
+  #  xit 'runs the job SyncYammerUsersJob' do
+  #    job = 'Sync Yammer users with Diverst users'
+  #    perform = SyncYammerUsersJob.perform_later
+  #
+  #    allow(SyncYammerUsersJob).to receive(:perform_later).and_return(perform)
+  #
+  #    expect(Clockwork::Test.ran_job?(job)).to be_truthy
+  #    expect(Clockwork::Test.times_run(job)).to eq 1
+  #    expect(Clockwork::Test.block_for(job).call).to eq perform
+  #  end
+  #
+  #  xit 'runs the job SyncYammerGroupJob' do
+  #    job = 'Sync Yammer members'
+  #    perform = SyncYammerGroupJob.perform_later
+  #
+  #    allow(SyncYammerGroupJob).to receive(:perform_later).and_return(perform)
+  #
+  #    expect(Clockwork::Test.ran_job?(job)).to be_truthy
+  #    expect(Clockwork::Test.times_run(job)).to eq 1
+  #    expect(Clockwork::Test.block_for(job).call).to eq Group.all.each { |group| SyncYammerGroupJob.perform_later(group.id) }
+  #  end
+  #
   it 'runs the job GroupLeaderMemberNotificationsJob' do
     job = 'Send daily notifications of pending users to group leaders'
     perform = GroupLeaderMemberNotificationsJob.perform_later

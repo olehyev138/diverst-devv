@@ -16,16 +16,16 @@ class Resource < ApplicationRecord
 
   accepts_nested_attributes_for :tags
 
-# Paperclip
-#  has_attached_file :file, s3_permissions: 'private'
-#  validates_with AttachmentPresenceValidator, attributes: :file, if: Proc.new { |r| r.url.blank? }
-#  do_not_validate_attachment_file_type :file
+  # Paperclip
+  #  has_attached_file :file, s3_permissions: 'private'
+  #  validates_with AttachmentPresenceValidator, attributes: :file, if: Proc.new { |r| r.url.blank? }
+  #  do_not_validate_attachment_file_type :file
 
   validates_presence_of   :title
 
   # Paperclip
-  #validates_presence_of   :url, if: Proc.new { |r| r.file.nil? && r.url.blank? }
-  
+  # validates_presence_of   :url, if: Proc.new { |r| r.file.nil? && r.url.blank? }
+
   validates_presence_of   :url
   validates_length_of     :url, maximum: 255
 
@@ -67,11 +67,11 @@ class Resource < ApplicationRecord
     self.tag_ids = Tag.ids_from_tokens(tokens)
   end
 
-#  def file_extension
-#    File.extname(file_file_name)[1..-1].downcase
-#  rescue
-#    ''
-#  end
+  #  def file_extension
+  #    File.extname(file_file_name)[1..-1].downcase
+  #  rescue
+  #    ''
+  #  end
 
   def expiration_time
     EXPIRATION_TIME

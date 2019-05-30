@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe 'Enterprise', type: :request do
+  before { pending }
+
   let(:enterprise) { create(:enterprise) }
   let(:user) { create(:user, password: 'password', enterprise: enterprise) }
   let(:basic_authentication) { ActionController::HttpAuthentication::Basic.encode_credentials(user.email, 'password') }

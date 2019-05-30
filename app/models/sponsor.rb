@@ -2,6 +2,6 @@ class Sponsor < ApplicationRecord
   belongs_to :sponsorable, polymorphic: true
 
   # Paperclip
-#  has_attached_file :sponsor_media, s3_permissions: :private
-#  do_not_validate_attachment_file_type :sponsor_media
+  #  has_attached_file :sponsor_media, s3_permissions: :private
+  #  do_not_validate_attachment_file_type :sponsor_media
 end
