@@ -7,9 +7,12 @@ import ApplicationLayout from "../ApplicationLayout";
 
 const GroupLayout = ({component: Component, ...rest}) => {
   return (
-    <ApplicationLayout {...rest} position='static' component={matchProps => (
-      <GroupLinks {...matchProps}/>
-    )}/>
+    <div>
+      <ApplicationLayout {...rest} position='static' component={matchProps => (
+        <GroupLinks {...matchProps}/>
+      )}/>
+      <Component {...rest} />
+    </div>
   );
 };
 

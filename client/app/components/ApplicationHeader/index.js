@@ -3,15 +3,16 @@ import { connect } from "react-redux";
 import { compose } from "redux";
 import { push } from "connected-react-router";
 
-import { MenuItem, Menu, AppBar, Button,
-  Toolbar, IconButton, Typography, ListItemIcon } from "@material-ui/core";
-import AccountCircle from "@material-ui/icons/AccountCircle";
-import PermIdentity from "@material-ui/icons/PermIdentity";
-import ExitToApp from "@material-ui/icons/ExitToApp";
-import Build from "@material-ui/icons/Build";
-import SupervisorAccount from "@material-ui/icons/SupervisorAccount";
 import { withStyles } from "@material-ui/core/styles";
 import { fade } from "@material-ui/core/styles/colorManipulator";
+
+import { MenuItem, Menu, AppBar, Button,
+  Toolbar, IconButton, Typography, ListItemIcon } from "@material-ui/core";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import PermIdentityIcon from "@material-ui/icons/PermIdentity";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import BuildIcon from "@material-ui/icons/Build";
+import DvrIcon from "@material-ui/icons/Dvr";
 
 import Logo from 'components/Logo';
 import { logoutBegin, setUser } from "containers/App/actions";
@@ -128,13 +129,22 @@ const styles = theme => ({
     paddingLeft: theme.spacing(4),
   },
   paper: {
-    border: '1px solid #a7a8a9',
+    borderWidth: 1,
+    borderStyle: 'solid',
+    borderColor: theme.custom.colors.grey,
   },
   buttonSection: {
     display: 'flex',
+    alignItems: 'center',
   },
-  adminButton: {
+  dashboardSwitchButton: {
+    height: '40px',
     padding: '0px 8px',
+    marginRight: '8px',
+  },
+  dashboardIcon: {
+    marginRight: 4,
+    fontSize: 20,
   },
   adminIcon: {
     marginRight: 2,
@@ -205,13 +215,13 @@ export class ApplicationHeader extends React.PureComponent {
       >
         <MenuItem onClick={this.handleMenuClose}>
           <ListItemIcon>
-            <PermIdentity />
+            <PermIdentityIcon />
           </ListItemIcon>
           Profile
         </MenuItem>
         <MenuItem onClick={this.logoutBegin}>
           <ListItemIcon>
-            <ExitToApp />
+            <ExitToAppIcon />
           </ListItemIcon>
           Log Out
         </MenuItem>
@@ -219,27 +229,32 @@ export class ApplicationHeader extends React.PureComponent {
     );
 
     return (
-      <div>
+      <div className={classes.root}>
         <AppBar position={position} className={classes.appBar}>
-          <Toolbar>
-            <Logo imgClass="large-img" verticalPadding={20} />
+          <Toolbar className={classes.toolbar}>
+            <Button
+              size="small"
+              onClick={this.handleVisitHome}
+            >
+              <Logo imgClass="large-img" verticalPadding={20} />
+            </Button>
             <div className={classes.grow} />
             <div className={classes.sectionDesktop}>
               <div className={classes.buttonSection}>
                 <Button
-                  className={classes.adminButton}
+                  className={classes.dashboardSwitchButton}
                   variant="outlined"
                   color="inherit"
                   onClick={isAdmin ? this.handleVisitHome : this.handleVisitAdmin}
                 >
                   {isAdmin ?
                     <span>
-                      <SupervisorAccount />
+                      <DvrIcon className={classes.dashboardIcon} />
                       Dashboard
                     </span>
                     :
                     <span>
-                      <Build className={classes.adminIcon} />
+                      <BuildIcon className={classes.adminIcon} />
                       Admin
                     </span>
                   }
@@ -255,7 +270,7 @@ export class ApplicationHeader extends React.PureComponent {
                     onClick={this.handleProfileMenuOpen}
                     color="inherit"
                   >
-                    <AccountCircle />
+                    <AccountCircleIcon />
                   </IconButton>
                 </div>
               </div>
@@ -278,7 +293,7 @@ export function mapDispatchToProps(dispatch, ownProps) {
       dispatch(push("/admin/analytics"));
     },
     handleVisitHome: function() {
-      dispatch(push("/user/home"));
+      dispatch(push("/"));
     }
   };
 }
@@ -286,7 +301,7 @@ export function mapDispatchToProps(dispatch, ownProps) {
 const mapStateToProps = createStructuredSelector({
   token: selectToken(),
   user: selectUser(),
-  enterprise: selectEnterprise()
+  enterprise: selectEnterprise(),
 });
 
 const withConnect = connect(

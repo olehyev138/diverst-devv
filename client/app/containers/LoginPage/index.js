@@ -11,6 +11,7 @@ import { FormattedMessage } from 'react-intl';
 import { selectEnterprise } from 'containers/App/selectors';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
+import { withStyles } from "@material-ui/core/styles";
 
 import injectReducer from 'utils/injectReducer';
 
@@ -21,7 +22,7 @@ import EnterpriseForm from '../../components/EnterpriseForm';
 
 import { loginBegin, findEnterpriseBegin } from 'containers/App/actions';
 
-import "./index.css";
+const styles = theme => ({});
 
 export class LoginPage extends React.PureComponent {
 
@@ -35,13 +36,17 @@ export class LoginPage extends React.PureComponent {
 
   authForm() {
     if (this.props.enterprise) {
-      return <LoginForm email={this.state.email} loginBegin={(values, actions) => this.props.loginBegin(values)}/>
+      return <LoginForm
+        email={this.state.email}
+        loginBegin={(values, actions) => this.props.loginBegin(values)}
+      />
     }
     else {
-      return <EnterpriseForm findEnterpriseBegin={(values, actions) => {
-        this.props.findEnterpriseBegin(values);
-        this.setState({ email: values.email });
-      }}
+      return <EnterpriseForm
+        findEnterpriseBegin={(values, actions) => {
+          this.props.findEnterpriseBegin(values);
+          this.setState({ email: values.email });
+        }}
       />;
     }
   };
@@ -84,4 +89,4 @@ export default compose(
   withReducer,
   withConnect,
   memo,
-)(LoginPage);
+)(withStyles(styles)(LoginPage));
