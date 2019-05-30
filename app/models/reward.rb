@@ -5,8 +5,8 @@ class Reward < ApplicationRecord
   belongs_to :responsible, class_name: 'User', foreign_key: 'responsible_id'
   # Paperclip
   # has_attached_file :picture,
-#                    styles: { thumb: '120x120>' },
-#                    default_url: ActionController::Base.helpers.image_path('/assets/missing.png')
+  #                    styles: { thumb: '120x120>' },
+  #                    default_url: ActionController::Base.helpers.image_path('/assets/missing.png')
 
   # validates_attachment_content_type :picture, content_type: %r{\Aimage\/.*\Z}
   validates :enterprise, presence: true

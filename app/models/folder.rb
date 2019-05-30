@@ -17,8 +17,8 @@ class Folder < ApplicationRecord
 
   # validations
   validates :name, presence: true
-  validates_uniqueness_of :name, scope: [:enterprise_id], if: 'enterprise_id.present?'
-  validates_uniqueness_of :name, scope: [:group_id], if: 'group_id.present?'
+  validates_uniqueness_of :name, scope: [:enterprise_id], if: -> { enterprise_id.present? }
+  validates_uniqueness_of :name, scope: [:group_id], if: -> { group_id.present? }
   validates :password, presence: true, if: Proc.new { |folder| folder.password_protected? && !folder.password_digest }
   validates :password, length: { minimum: 6 }, if: Proc.new { |folder| folder.password_protected? && folder.password.present? }
 

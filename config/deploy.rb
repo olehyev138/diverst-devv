@@ -29,19 +29,19 @@ set :sidekiq_config, 'config/sidekiq.yml'
 set :sidekiq_log, '/dev/null'
 set :sidekiq_processes, 1
 
-set :clockwork_file, "clock.rb"
-set :rollbar_token, ENV["ROLLBAR_ACCESS_TOKEN"]
-set :rollbar_env, ENV["ROLLBAR_ENV"]
+set :clockwork_file, 'clock.rb'
+set :rollbar_token, ENV['ROLLBAR_ACCESS_TOKEN']
+set :rollbar_env, ENV['ROLLBAR_ENV']
 set :rollbar_role, Proc.new { :app }
 
 namespace :deploy do
-    before :finishing, "deploy:client"
-    
-    task :client do
-        on primary(:app) do
-            within release_path do
-                execute "cd '#{release_path}/client' && npm run deploy"
-            end
-        end
+  before :finishing, 'deploy:client'
+
+  task :client do
+    on primary(:app) do
+      within release_path do
+        execute "cd '#{release_path}/client' && npm run deploy"
+      end
     end
+  end
 end

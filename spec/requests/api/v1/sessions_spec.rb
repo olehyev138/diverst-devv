@@ -1,40 +1,40 @@
-require "rails_helper"
+require 'rails_helper'
 
-RSpec.describe "Sessions", :type => :request do
-    let(:api_key) { FactoryGirl.create(:api_key) }
-    let(:jwt) { UserTokenService.create_jwt(user) }
+RSpec.describe 'Sessions', type: :request do
+  let(:api_key) { FactoryBot.create(:api_key) }
+  let(:jwt) { UserTokenService.create_jwt(user) }
 
-    let(:headers) { {"HTTP_DIVERST_APIKEY" => api_key.key} }
+  let(:headers) { { 'HTTP_DIVERST_APIKEY' => api_key.key } }
 
-    it "signin" do
-        create(:user, email: "signin@diverst.com", password: "password", password_confirmation: "password")
+  it 'signin' do
+    create(:user, email: 'signin@diverst.com', password: 'password', password_confirmation: 'password')
 
-        user = {
-            email: "signin@diverst.com",
-            password: "password",
-        }
+    user = {
+      email: 'signin@diverst.com',
+      password: 'password',
+    }
 
-        post "/api/v1/sessions", params: user, headers: headers
-        
-        expect(response).to have_http_status(:ok)
-    end
+    post '/api/v1/sessions', params: user, headers: headers
 
-    it "destroy" do
-        user = create(:user, email: "signin@diverst.com", password: "password", password_confirmation: "password")
+    expect(response).to have_http_status(:ok)
+  end
 
-        signin = {
-            email: "signin@diverst.com",
-            password: "password",
-        }
-        post "/api/v1/sessions", params: signin, headers: headers
-        expect(response).to have_http_status(:ok)
-        test_response = JSON.parse(response.body)
+  it 'destroy' do
+    user = create(:user, email: 'signin@diverst.com', password: 'password', password_confirmation: 'password')
 
-        headers["Diverst-UserToken"] = test_response["token"]
-        user = User.find(user.id)
+    signin = {
+      email: 'signin@diverst.com',
+      password: 'password',
+    }
+    post '/api/v1/sessions', params: signin, headers: headers
+    expect(response).to have_http_status(:ok)
+    test_response = JSON.parse(response.body)
 
-        delete "/api/v1/sessions/#{user.sessions.last.token}", params: nil, headers: headers
+    headers['Diverst-UserToken'] = test_response['token']
+    user = User.find(user.id)
 
-        expect(response).to have_http_status(:ok)
-    end
+    delete "/api/v1/sessions/#{user.sessions.last.token}", params: nil, headers: headers
+
+    expect(response).to have_http_status(:ok)
+  end
 end

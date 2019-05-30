@@ -18,8 +18,7 @@ development:
 test:
   <<: *default
   database: diverst_test
-  username: <%=ENV['C9_USER']%>
-  host: <%=ENV['IP']%>
+  username: root
 
 production:
   <<: *default

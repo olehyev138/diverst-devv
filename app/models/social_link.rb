@@ -13,12 +13,13 @@ class SocialLink < ApplicationRecord
 
   validate :correct_url?
 
-  validates :author_id, presence: true
-
   before_create :populate_embed_code, :build_default_link, :add_trailing_slash
 
-  belongs_to :author, class_name: 'User', required: true
+  belongs_to :author, class_name: 'User'
   belongs_to :group
+
+  validates :author_id, presence: true
+  validates :author, presence: true
 
   scope :of_segments, ->(segment_ids) {
     gm_condtions = ['social_link_segments.segment_id IS NULL']

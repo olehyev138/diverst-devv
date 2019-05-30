@@ -18,7 +18,7 @@ Diverst::Application.configure do
   config.action_mailer.delivery_method = :letter_opener
 
   config.action_mailer.raise_delivery_errors = true
-  config.action_mailer.default_url_options = { host: "localhost:3000" }
+  config.action_mailer.default_url_options = { host: 'localhost:3000' }
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
@@ -37,11 +37,11 @@ Diverst::Application.configure do
 
   # Enable Bullet to track redundant DB queries
   config.after_initialize do
-    #Bullet.enable = true
-    #Bullet.rails_logger = true
-    #Bullet.add_footer = true
+    # Bullet.enable = true
+    # Bullet.rails_logger = true
+    # Bullet.add_footer = true
   end
-  
+
   # make the public directory work
   config.public_file_server.enabled = true
 
