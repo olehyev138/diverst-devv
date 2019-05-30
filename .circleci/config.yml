@@ -197,7 +197,7 @@ jobs:
       - run: bundle install
       - run:
           name: Deploy to AWS if tests pass
-          command: eval "$(ssh-agent -s)" && ssh-add ~/.ssh/id_rsa* && cap testing deploy
+          command: eval "$(ssh-agent -s)" && ssh-add ~/.ssh/id_rsa* && cap react deploy
 
 workflows:
   version: 2
