@@ -17,6 +17,7 @@ const GlobalStyle = createGlobalStyle`
 
   #app {
     background-color: #fafafa;
+    height: 100%;
     min-height: 100%;
     min-width: 100%;
   }
@@ -28,7 +29,7 @@ const GlobalStyle = createGlobalStyle`
   }
   
   .extra-large-img {
-    width: 200px;
+    width: 250px;
     height: auto;
   }
   

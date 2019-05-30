@@ -23,10 +23,6 @@ import ApplicationHeader from 'components/ApplicationHeader';
 import UserLinks from 'components/UserLinks';
 
 const styles = theme => ({
-  root: {
-    width: "100%",
-    flexGrow: 1,
-  },
   paper: {
     padding: theme.spacing(2),
     textAlign: 'center',
@@ -52,7 +48,8 @@ const styles = theme => ({
   },
   pos: {
     marginBottom: 12
-  }
+  },
+  toolbar: theme.mixins.toolbar,
 });
 
 /* eslint-disable react/prefer-stateless-function */
@@ -90,11 +87,68 @@ export class HomePage extends React.PureComponent {
 
   render() {
     const { classes } = this.props;
-    const bull = <span className={classes.bullet}>•</span>;
 
     return (
-      <div className={classes.root}>
-      </div>
+      <React.Fragment>
+        <Grid container spacing={6}>
+          <Grid item xs>
+            <Card>
+              <CardContent>
+                <Typography variant="h5">
+                  Example Content
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid item xs>
+            <Card>
+              <CardContent>
+                <Typography variant="h5">
+                  Example Content
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid item xs>
+            <Card>
+              <CardContent>
+                <Typography variant="h5">
+                  Example Content
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+        </Grid>
+        <Grid container spacing={6}>
+          <Grid item xs>
+            <Card>
+              <CardContent>
+                <Typography variant="h5">
+                  Example Content
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid item xs={6}>
+            <Card>
+              <CardContent>
+                <Typography variant="h5">
+                  Example Content
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid item xs>
+            <Card>
+              <CardContent>
+                <Typography variant="h5">
+                  Example Content
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+        </Grid>
+      </React.Fragment>
     );
   }
 }
