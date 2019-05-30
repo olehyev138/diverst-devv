@@ -1,6 +1,6 @@
 server '18.204.176.20', user: 'newdeploy', roles: %w(web app db)
 
-set :branch, 'react'
+set :branch, 'react_update'
 set :rails_env, :development
 
 set :rollbar_env, 'react'

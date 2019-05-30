@@ -168,7 +168,7 @@ jobs:
         path: /tmp/circleci-test-results
 
   #  build and test jobs go here
-  deploy-testing:
+  deploy-react:
     working_directory: ~/TeamDiverst/diverst-development
     shell: /bin/bash --login
     executor: primary-image
@@ -196,40 +196,8 @@ jobs:
       - run: gem install bundler
       - run: bundle install
       - run:
-          name: Deploy to AWS if tests pass and branch is Development
+          name: Deploy to AWS if tests pass
           command: eval "$(ssh-agent -s)" && ssh-add ~/.ssh/id_rsa* && cap testing deploy
-          
-  #  build and test jobs go here
-  deploy-staging:
-    working_directory: ~/TeamDiverst/diverst-development
-    shell: /bin/bash --login
-    executor: primary-image
-    steps:
-      - add_ssh_keys:
-          fingerprints:
-            - "7a:55:cb:5c:8e:f2:a4:cc:a8:d0:23:6b:ec:96:dd:70"
-      - checkout
-      # Log the current branch
-      - run:
-          name: Show current branch
-          command: echo ${CIRCLE_BRANCH}
-      # Restore cache from the build job which contains the
-      # dist folder that needs to be deployed
-      # Restore the dependency cache
-      - restore_cache:
-          keys:
-          # This branch if available
-          - v1-dep-{{ .Branch }}-
-          # Default branch if not
-          - v1-dep-staging-
-          # Any branch if there are none on the default branch - this should be unnecessary if you have your default branch configured correctly
-          - v1-dep-
-      # This is based on your 1.0 configuration file or project settings
-      - run: gem install bundler
-      - run: bundle install
-      - run:
-          name: Deploy to AWS if tests pass and branch is Staging
-          command: eval "$(ssh-agent -s)" && ssh-add ~/.ssh/id_rsa* && cap staging deploy
 
 workflows:
   version: 2
@@ -239,16 +207,9 @@ workflows:
       - test:
           requires:
             - lint
-      - deploy-testing:
+      - deploy-react:
           requires:
             - test
           filters:
             branches:
-              # TEMP
               only: react_update
-      - deploy-staging:
-          requires:
-            - test
-          filters:
-            branches:
-              only: staging
