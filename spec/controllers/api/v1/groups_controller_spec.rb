@@ -1,10 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe Api::V1::GroupsController, type: :controller do
-  let(:api_key) { FactoryGirl.create(:api_key) }
-  let(:enterprise) { FactoryGirl.create(:enterprise) }
-  let(:user) { FactoryGirl.create(:user, enterprise: enterprise) }
-  let(:group) { FactoryGirl.create(:group, enterprise: enterprise) }
+  let(:api_key) { FactoryBot.create(:api_key) }
+  let(:enterprise) { FactoryBot.create(:enterprise) }
+  let(:user) { FactoryBot.create(:user, enterprise: enterprise) }
+  let(:group) { FactoryBot.create(:group, enterprise: enterprise) }
   let(:jwt) { UserTokenService.create_jwt(user) }
   let(:valid_session) { { 'Diverst-APIKey' => api_key.key, 'Diverst-UserToken' => jwt } }
 

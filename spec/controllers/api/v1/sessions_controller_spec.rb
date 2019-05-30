@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Api::V1::SessionsController, type: :controller do
-  let(:api_key) { FactoryGirl.create(:api_key) }
-  let(:user) { FactoryGirl.create(:user) }
+  let(:api_key) { FactoryBot.create(:api_key) }
+  let(:user) { FactoryBot.create(:user) }
   let(:jwt) { UserTokenService.create_jwt(user) }
 
   let(:valid_session) { { 'Diverst-APIKey' => api_key.key } }

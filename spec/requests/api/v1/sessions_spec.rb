@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Sessions', type: :request do
-  let(:api_key) { FactoryGirl.create(:api_key) }
+  let(:api_key) { FactoryBot.create(:api_key) }
   let(:jwt) { UserTokenService.create_jwt(user) }
 
   let(:headers) { { 'HTTP_DIVERST_APIKEY' => api_key.key } }

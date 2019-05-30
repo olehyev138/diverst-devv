@@ -1,12 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe Api::V1::GroupLeadersController, type: :controller do
-  let(:api_key) { FactoryGirl.create(:api_key) }
-  let(:enterprise) { FactoryGirl.create(:enterprise) }
-  let(:user) { FactoryGirl.create(:user, enterprise: enterprise) }
-  let(:group) { FactoryGirl.create(:group, enterprise: enterprise) }
+  let(:api_key) { FactoryBot.create(:api_key) }
+  let(:enterprise) { FactoryBot.create(:enterprise) }
+  let(:user) { FactoryBot.create(:user, enterprise: enterprise) }
+  let(:group) { FactoryBot.create(:group, enterprise: enterprise) }
   let(:group_leader_role) { enterprise.user_roles.where(role_type: 'group').first }
-  let(:group_leader) { FactoryGirl.create(:group_leader, user: user, group: group, user_role_id: group_leader_role.id) }
+  let(:group_leader) { FactoryBot.create(:group_leader, user: user, group: group, user_role_id: group_leader_role.id) }
   let(:jwt) { UserTokenService.create_jwt(user) }
   let(:valid_session) { { 'Diverst-APIKey' => api_key.key, 'Diverst-UserToken' => jwt } }
 

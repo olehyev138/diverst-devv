@@ -1,10 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe Api::V1::SegmentsController, type: :controller do
-  let(:api_key) { FactoryGirl.create(:api_key) }
-  let(:enterprise) { FactoryGirl.create(:enterprise) }
-  let(:user) { FactoryGirl.create(:user, enterprise: enterprise) }
-  let(:segment) { FactoryGirl.create(:segment, enterprise: enterprise) }
+  let(:api_key) { FactoryBot.create(:api_key) }
+  let(:enterprise) { FactoryBot.create(:enterprise) }
+  let(:user) { FactoryBot.create(:user, enterprise: enterprise) }
+  let(:segment) { FactoryBot.create(:segment, enterprise: enterprise) }
   let(:jwt) { UserTokenService.create_jwt(user) }
   let(:valid_session) { { 'Diverst-APIKey' => api_key.key, 'Diverst-UserToken' => jwt } }
 
