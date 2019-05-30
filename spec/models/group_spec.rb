@@ -624,7 +624,8 @@ RSpec.describe Group, type: :model do
   end
 
   describe '#update_all_elasticsearch_members' do
-    it 'updates the users in elasticsearch' do
+    before { pending }
+    xit 'updates the users in elasticsearch' do
       group = create(:group)
       user = create(:user)
       create(:user_group, group: group, user: user)
