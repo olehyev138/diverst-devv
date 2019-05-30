@@ -106,10 +106,10 @@ module ApplicationHelper
   end
 
   def group_initiative_expenses_link(text, group, initiative)
-    return link_to text, group_initiative_expenses_path(group, initiative) if initiative.annual_budget.available_budget != 0
+    return link_to text, group_initiative_expenses_path(group, initiative) if initiative.estimated_funding != 0
 
     return link_to text, group_initiative_expenses_path(group, initiative),
-                   data: { confirm: 'you can not make any expenses because no budget has been approved' } if initiative.annual_budget.available_budget <= 0
+                   data: { confirm: 'you are not allowed to make a negative expense' } if initiative.estimated_funding == 0
   end
 
   def default_path

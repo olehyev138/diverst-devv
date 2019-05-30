@@ -32,8 +32,17 @@ RSpec.describe Initiatives::ExpensesController, type: :controller do
         expect(assigns[:expenses]).to eq [initiative_expense]
       end
 
-      it 'renders index template' do
-        expect(response).to render_template :index
+      it 'redirect to previous page' do
+        expect(response).to redirect_to 'back'
+      end
+
+      context 'when estimated_funding is set' do
+        before { initiative.update(estimated_funding: budget.budget_items.first.available_amount, budget_item_id: budget.budget_items.first.id) }
+
+        it 'renders index template' do
+          get :index, group_id: group.id, initiative_id: initiative.id
+          expect(response).to render_template :index
+        end
       end
     end
 
@@ -77,43 +86,50 @@ RSpec.describe Initiatives::ExpensesController, type: :controller do
     login_user_from_let
 
     context 'with valid attributes' do
-      before { budget = create(:budget, is_approved: true, approver_id: user.id, group_id: group.id, annual_budget_id: annual_budget.id) }
+      context 'when estimated_funding is set for initiative' do
+        before do
+          initiative.update(estimated_funding: budget.budget_items.first.available_amount, budget_item_id: budget.budget_items.first.id)
+          create(:budget, is_approved: true, approver_id: user.id, group_id: group.id, annual_budget_id: annual_budget.id)
+        end
 
-      it 'creates the initiative_expense object' do
-        expect { post :create, group_id: group.id, initiative_id: initiative.id, initiative_expense: { amount: 10, description: 'description' } }
-        .to change(InitiativeExpense, :count).by(1)
+        it 'creates the initiative_expense object' do
+          expect { post :create, group_id: group.id, initiative_id: initiative.id, initiative_expense: { amount: 10, description: 'description' } }
+          .to change(InitiativeExpense, :count).by(1)
+        end
+
+        it 'flashes a notice message' do
+          post :create, group_id: group.id, initiative_id: initiative.id, initiative_expense: { amount: 10, description: 'description' }
+          expect(flash[:notice]).to eq 'Your expense was created'
+        end
+
+        it 'redirects to action index' do
+          post :create, group_id: group.id, initiative_id: initiative.id, initiative_expense: { amount: 10, description: 'description' }
+          expect(response).to redirect_to action: :index
+        end
+
+        it 'redirects to new' do
+          post :create, group_id: group.id, initiative_id: initiative.id, initiative_expense: { amount: nil, description: nil }
+          expect(response).to render_template :new
+        end
       end
 
-      it 'flashes a notice message' do
-        post :create, group_id: group.id, initiative_id: initiative.id, initiative_expense: { amount: 10, description: 'description' }
-        expect(flash[:notice]).to eq 'Your expense was created'
-      end
+      context 'no estimated_funding is set for initiative' do
+        before { create(:budget, is_approved: true, approver_id: user.id, group_id: group.id, annual_budget_id: annual_budget.id) }
 
-      it 'redirects to action index' do
-        post :create, group_id: group.id, initiative_id: initiative.id, initiative_expense: { amount: 10, description: 'description' }
-        expect(response).to redirect_to action: :index
-      end
+        it 'creates the initiative_expense object' do
+          expect { post :create, group_id: group.id, initiative_id: initiative.id, initiative_expense: { amount: 10, description: 'description' } }
+          .to change(InitiativeExpense, :count).by(0)
+        end
 
-      it 'redirects to new' do
-        post :create, group_id: group.id, initiative_id: initiative.id, initiative_expense: { amount: nil, description: nil }
-        expect(response).to render_template :new
-      end
-    end
+        it 'flashes a notice message' do
+          post :create, group_id: group.id, initiative_id: initiative.id, initiative_expense: { amount: 10, description: 'description' }
+          expect(flash[:alert]).to eq 'you are not allowed to create a negative expense'
+        end
 
-    context 'when user attempts to create an expense with no budget approval' do
-      it 'does not create the initiative expense object' do
-        expect { post :create, group_id: group.id, initiative_id: initiative.id, initiative_expense: { amount: 10, description: 'description' } }
-        .to change(InitiativeExpense, :count).by(0)
-      end
-
-      it 'displays a flash alert' do
-        post :create, group_id: group.id, initiative_id: initiative.id, initiative_expense: { amount: 10, description: 'description' }
-        expect(flash[:alert]).to eq 'you can not create any expense with no budget approval'
-      end
-
-      it 'renders new template' do
-        post :create, group_id: group.id, initiative_id: initiative.id, initiative_expense: { amount: 10, description: 'description' }
-        expect(response).to render_template(:new)
+        it 'redirects to action index' do
+          post :create, group_id: group.id, initiative_id: initiative.id, initiative_expense: { amount: 10, description: 'description' }
+          expect(response).to render_template :new
+        end
       end
     end
 
@@ -121,6 +137,7 @@ RSpec.describe Initiatives::ExpensesController, type: :controller do
       before do
         annual_budget = create(:annual_budget, group_id: group.id)
         budget = create(:budget, is_approved: true, approver_id: user.id, group_id: group.id, annual_budget_id: annual_budget.id)
+        initiative.update(estimated_funding: budget.budget_items.first.available_amount, budget_item_id: budget.budget_items.first.id)
       end
 
       it 'does not create initiative_expense object' do

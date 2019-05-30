@@ -11,7 +11,7 @@ class Initiatives::ExpensesController < ApplicationController
     authorize InitiativeExpense
     @expenses = @initiative.expenses
 
-    redirect_to :back if @initiative.annual_budget.available_budget <= 0
+    redirect_to :back if @initiative.estimated_funding == 0
   end
 
   def new
@@ -24,7 +24,7 @@ class Initiatives::ExpensesController < ApplicationController
     @expense = @initiative.expenses.new(expense_params)
     @expense.owner = current_user
 
-    if @group.available_budget != 0
+    if @initiative.estimated_funding != 0
       annual_budget = AnnualBudget.find_or_create_by(closed: false, group_id: @group.id)
       annual_budget.initiative_expenses << @expense
 
@@ -36,7 +36,7 @@ class Initiatives::ExpensesController < ApplicationController
         render :new
       end
     else
-      flash[:alert] = 'you can not create any expense with no budget approval'
+      flash[:alert] = 'you are not allowed to create a negative expense'
       render :new
     end
   end
