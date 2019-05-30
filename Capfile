@@ -22,7 +22,6 @@ require 'capistrano/sidekiq'
 require 'capistrano/clockwork'
 
 require 'capistrano/nvm'
-require 'slackistrano/capistrano'
 
 require 'capistrano/scm/git'
 install_plugin Capistrano::SCM::Git
