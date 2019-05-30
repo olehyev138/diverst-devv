@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Api::V1::SegmentsController, type: :controller do
+  before { pending }
+
   let(:api_key) { FactoryBot.create(:api_key) }
   let(:enterprise) { FactoryBot.create(:enterprise) }
   let(:user) { FactoryBot.create(:user, enterprise: enterprise) }
