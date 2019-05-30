@@ -11,9 +11,5 @@ set :npm_flags, '' # default
 set :npm_roles, :all                                     # default
 set :npm_env_variables, {}                               # default
 
-# nvm
-set :nvm_node, 'v10.13.0'
-set :nvm_type, :user
-
 set :ci, 'install' # default
 set :bundle_without, %w{test}.join(' ') # this is default
