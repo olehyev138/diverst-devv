@@ -9,9 +9,9 @@ RSpec.describe NewsFeedLink, type: :model do
     it { expect(news_feed_link).to validate_presence_of(:news_feed_id) }
 
     it { expect(news_feed_link).to belong_to(:news_feed) }
-    it { expect(news_feed_link).to belong_to(:news_link).dependent(:destroy) }
-    it { expect(news_feed_link).to belong_to(:group_message).dependent(:destroy) }
-    it { expect(news_feed_link).to belong_to(:social_link).dependent(:destroy) }
+    it { expect(news_feed_link).to belong_to(:news_link).dependent(:delete) }
+    it { expect(news_feed_link).to belong_to(:group_message).dependent(:delete) }
+    it { expect(news_feed_link).to belong_to(:social_link).dependent(:delete) }
 
     it { expect(news_feed_link).to have_many(:news_feed_link_segments) }
     it { expect(news_feed_link).to delegate_method(:group).to(:news_feed) }
