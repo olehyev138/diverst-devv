@@ -8,7 +8,6 @@ require 'capistrano/deploy'
 require 'capistrano/rake'
 require 'capistrano/bundler'
 require 'capistrano/rvm'
-require 'capistrano/rails/assets' # for asset handling add
 require 'capistrano/rails/migrations' # for running migrations
 require 'capistrano/npm'
 require 'capistrano/locally'
@@ -20,8 +19,6 @@ install_plugin Capistrano::Puma # Default puma tasks
 require 'capistrano/rails/console'
 require 'capistrano/sidekiq'
 require 'capistrano/clockwork'
-
-require 'capistrano/nvm'
 
 require 'capistrano/scm/git'
 install_plugin Capistrano::SCM::Git
