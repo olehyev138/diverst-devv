@@ -15,6 +15,7 @@ Diverst::Application.routes.draw do
       resources :folders
       resources :news_feeds
       resources :group_leaders
+      resources :resources
       resources :segments
       resources :users do
         collection do
