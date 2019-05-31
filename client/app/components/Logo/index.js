@@ -3,6 +3,8 @@ import { connect } from "react-redux";
 import { compose } from "redux";
 import { createStructuredSelector } from "reselect";
 import dig from "object-dig";
+import classNames from "classnames";
+import { withStyles } from "@material-ui/core/styles";
 
 
 // TODO: put this in App/
@@ -10,11 +12,19 @@ import { selectEnterprise } from "./selectors";
 
 import defaultLogo from "images/diverst-logo.svg";
 import defaultLogoPrimary from "images/diverst-logo-purple.svg";
-import styled from 'styled-components';
+
+const styles = theme => ({
+  spacing: {
+    marginRight: 0,
+    paddingTop: 0,
+    paddingBottom: 0,
+  },
+});
 
 export class Logo extends React.PureComponent {
-
   render() {
+    const { classes } = this.props;
+
     let logo = null;
     const logoLocation = dig(this.props.enterprise, 'theme', 'logo_location');
 
@@ -26,11 +36,14 @@ export class Logo extends React.PureComponent {
       logo = defaultLogo;
 
     let className = this.props.imgClass || 'tiny-img';
-    let margin = this.props.margin || 0;
-    let verticalPadding = this.props.verticalPadding || 0;
+    let alt = this.props.alt || 'Diverst Logo';
 
     return (
-      <img className={className} src={logo} alt='diverst Logo' style={{marginRight: margin, paddingTop: verticalPadding, paddingBottom: verticalPadding}}/>
+      <img
+        className={ classNames(this.props.className, className, classes.spacing) }
+        src={logo}
+        alt={alt}
+      />
     );
   }
 }
@@ -51,4 +64,5 @@ const withConnect = connect(
 
 export default compose(
   withConnect,
+  withStyles(styles),
 )(Logo);

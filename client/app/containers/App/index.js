@@ -22,12 +22,10 @@ export default function App() {
   useInjectSaga({ key: 'app', saga });
 
   return (
-    <div>
-      <ErrorBoundary>
-        <Routes/>
-        <ToastContainer/>
-        <GlobalStyle/>
-      </ErrorBoundary>
-    </div>
+    <ErrorBoundary>
+      <Routes/>
+      <ToastContainer/>
+      <GlobalStyle/>
+    </ErrorBoundary>
   );
 }

@@ -21,10 +21,6 @@ require 'capistrano/rails/console'
 require 'capistrano/sidekiq'
 require 'capistrano/clockwork'
 
-require 'capistrano/nvm'
-require 'capistrano/yarn'
-require 'slackistrano/capistrano'
-
 require 'capistrano/scm/git'
 install_plugin Capistrano::SCM::Git
 

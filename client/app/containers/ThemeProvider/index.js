@@ -47,6 +47,8 @@ export class ThemeProvider extends React.PureComponent {
   }
 
   render() {
+    const defaultTheme = createMuiTheme();
+
     const { primary, secondary } = this.props;
     const theme = createMuiTheme({
       palette: {
@@ -59,6 +61,27 @@ export class ThemeProvider extends React.PureComponent {
       },
       typography: {
         useNextVariants: true,
+      },
+      mixins: {
+        toolbar: {
+          minHeight: 90,
+          maxHeight: 90,
+          [`${defaultTheme.breakpoints.up('xs')} and (orientation: landscape)`]: {
+            minHeight: 56,
+            maxHeight: 56,
+          },
+          [defaultTheme.breakpoints.up('sm')]: {
+            minHeight: 90,
+            maxHeight: 90,
+          },
+        },
+      },
+      // Custom theme additions & global styles should be placed here
+      custom: {
+        colors: {
+          grey: '#a7a8a9',
+          lightGrey: '#dedfe0',
+        },
       },
     });
 

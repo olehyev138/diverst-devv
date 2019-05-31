@@ -7,32 +7,56 @@
 
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-
-import { Grid, Button } from '@material-ui/core';
 import { NavLink } from 'react-router-dom';
+import classNames from "classnames";
+
+import { Grid, Button, CardContent, Typography, Divider, Hidden } from '@material-ui/core';
+import HomeIcon from "@material-ui/icons/Home";
 
 import messages from "./messages";
 import Logo from 'components/Logo';
+
+import { withStyles } from "@material-ui/core/styles";
+
+const styles = theme => ({
+  textCenter: {
+    textAlign: 'center',
+  },
+  verticalMargins: {
+    marginTop: 24,
+    marginBottom: 24,
+  },
+});
 
 export class NotFoundPage extends React.PureComponent {
   render() {
     // Wrap NavLink to fix ref issue temporarily until react-router-dom is updated to fix this
     const WrappedNavLink = React.forwardRef((props, ref) => <NavLink innerRef={ref} {...props} />);
 
+    const { classes } = this.props;
+
     return (
-      <div>
-        <Grid
-          container spacing={0} direction="column" alignItems="center"
-          justify="center" style={{minHeight: '50vh', textAlign: "center"}}>
-          <Grid item xs={6}>
-            <Logo coloredDefault imgClass="extra-large-img" />
-            <h3><FormattedMessage {...messages.header} /></h3>
-            <Button component={WrappedNavLink} to='/home'>Home</Button>
-          </Grid>
-        </Grid>
+      <div className={classes.textCenter}>
+        <Logo coloredDefault imgClass="extra-large-img" />
+        <Typography variant='h6' className={classes.verticalMargins}>
+          <FormattedMessage {...messages.header} />
+        </Typography>
+        <Divider />
+        <Button
+          variant="contained"
+          color="primary"
+          component={WrappedNavLink}
+          to='/'
+          className={classes.verticalMargins}
+        >
+          <Hidden xsDown>
+            <HomeIcon />
+          </Hidden>
+          Return To Home
+        </Button>
       </div>
     );
   }
 }
 
-export default NotFoundPage;
+export default withStyles(styles)(NotFoundPage);
