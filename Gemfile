@@ -59,6 +59,7 @@ group :development, :test do
   gem 'rubocop-performance', '~> 1.2.0'
   gem 'pronto', '~> 0.10.0'
   gem 'pronto-rubocop', '~> 0.10.0'
+  gem 'pronto-eslint_npm', git: 'https://github.com/doits/pronto-eslint_npm.git'
   gem 'faker', '~> 1.6'
 end
 

@@ -1,0 +1,5 @@
+/build/**
+/docs/**
+/internals/**
+/server/**
+/node_modules/**

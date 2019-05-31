@@ -13,6 +13,13 @@ GIT
   specs:
     ruby-oembed (0.12.0)
 
+GIT
+  remote: https://github.com/doits/pronto-eslint_npm.git
+  revision: 022293227820fac09080817c375d43bb3145fa1a
+  specs:
+    pronto-eslint_npm (0.10.1)
+      pronto (~> 0.10.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -465,6 +472,7 @@ DEPENDENCIES
   newrelic_rpm (~> 4.5.0)
   pismo (~> 0.7.4)
   pronto (~> 0.10.0)
+  pronto-eslint_npm!
   pronto-rubocop (~> 0.10.0)
   public_activity
   puma (~> 3.1)
