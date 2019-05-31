@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Api::V1::CampaignsController, type: :controller, :focus => true do
+RSpec.describe Api::V1::CampaignsController, type: :controller do
 
   let(:api_key) { FactoryBot.create(:api_key) }
   let(:enterprise) { FactoryBot.create(:enterprise) }
