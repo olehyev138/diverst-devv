@@ -8,5 +8,5 @@ class ApiKey < ApplicationRecord
   validates_uniqueness_of :key
 
   # one unique partner
-  validates_uniqueness_of :enterprise_id, message: 'Already has an API key'
+  validates_uniqueness_of :enterprise_id, message: 'Already has an API key', :if => :enterprise_id?
 end
