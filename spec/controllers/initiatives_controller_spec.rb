@@ -4,10 +4,10 @@ RSpec.describe InitiativesController, type: :controller do
   include ActiveJob::TestHelper
 
   let(:user) { create :user }
-  let!(:group) { create :group, :without_outcomes, enterprise: user.enterprise }
+  let!(:group) { create :group, :without_outcomes, enterprise: user.enterprise, annual_budget: 10000 }
   let(:outcome) { create :outcome, group_id: group.id }
   let(:pillar) { create :pillar, outcome_id: outcome.id }
-  let!(:annual_budget) { create(:annual_budget, group: group) }
+  let!(:annual_budget) { create(:annual_budget, group: group, amount: group.annual_budget) }
   let!(:initiative) { create :initiative, pillar: pillar, owner_group: group, start: Date.yesterday, end: Date.tomorrow, annual_budget_id: annual_budget.id }
   let!(:initiative2) { create :initiative, pillar: pillar, owner_group: group, start: 2.years.ago, end: 2.years.ago + 1.week, annual_budget_id: annual_budget.id }
 
@@ -540,7 +540,7 @@ RSpec.describe InitiativesController, type: :controller do
       let!(:annual_budget1) { create(:annual_budget, group_id: group1.id, amount: group.annual_budget, closed: false) }
       let!(:budget1) { create(:budget, group_id: group1.id, annual_budget_id: annual_budget1.id) }
       let!(:initiative) { create(:initiative, owner_group: group1, finished_expenses: false, annual_budget_id: annual_budget1.id) }
-      let!(:expense) { create(:initiative_expense, amount: 600, annual_budget_id: annual_budget1.id) }
+      let!(:expense) { create(:initiative_expense, amount: 600, annual_budget_id: annual_budget1.id, initiative_id: initiative.id) }
 
 
       context 'with logged in user' do
