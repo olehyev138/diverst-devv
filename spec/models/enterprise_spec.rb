@@ -271,5 +271,32 @@ RSpec.describe Enterprise, type: :model do
         enterprise.run_callbacks(:update)
       end
     end
+
+    describe '#users_csv' do
+      let!(:enterprise) { create(:enterprise) }
+
+      context 'return csv for group roles' do
+        it 'return csv for group leader role' do
+          gl_role = enterprise.user_roles.find_by(role_name: 'group_leader', role_type: 'group')
+          user = create(:user, enterprise: enterprise)
+          user.update(user_role: gl_role)
+          group_leader = create(:group_leader, user: user, user_role: gl_role).user
+
+          expect(enterprise.users_csv(2, 'group_leader'))
+          .to include "#{group_leader.first_name},#{group_leader.last_name},#{group_leader.email},#{group_leader.biography},#{group_leader.active},#{group_leader.groups.map(&:name).join(',')}"
+        end
+      end
+
+      context 'return csv for non group roles' do
+        it 'return csv for user role' do
+          user_role = enterprise.user_roles.find_by(role_name: 'user', role_type: 'user')
+          user = create(:user, enterprise: enterprise)
+          user.update(user_role: user_role)
+
+          expect(enterprise.users_csv(2, 'user'))
+            .to include "#{user.first_name},#{user.last_name},#{user.email},#{user.biography},#{user.active},#{user.groups.map(&:name).join(',')}"
+        end
+      end
+    end
   end
 end
