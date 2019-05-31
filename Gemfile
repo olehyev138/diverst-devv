@@ -77,7 +77,6 @@ group :development do
   gem 'capistrano-rails', '~> 1.3.0', require: false
   gem 'capistrano-bundler', '~> 1.3.0', require: false
   gem 'capistrano-npm', '~> 1.0.3'
-  gem 'capistrano-nvm', '~> 0.0.7', require: false
   gem 'capistrano-rvm', '~> 0.1.2'
   gem 'capistrano-bower', '~> 1.1.0'
   gem 'capistrano-rails-console', '~> 2.2.1'
