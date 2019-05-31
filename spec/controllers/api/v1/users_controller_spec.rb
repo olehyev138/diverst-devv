@@ -12,7 +12,6 @@ RSpec.describe Api::V1::UsersController, type: :controller do
   end
 
   describe 'GET #index' do
-    before { pending }
 
     context 'gets the users' do
       before do
@@ -25,7 +24,6 @@ RSpec.describe Api::V1::UsersController, type: :controller do
   end
 
   describe 'POST #create' do
-    before { pending }
 
     context 'creates a user' do
       before do
@@ -47,7 +45,6 @@ RSpec.describe Api::V1::UsersController, type: :controller do
   end
 
   describe 'PUT #update' do
-    before { pending }
 
     context 'updates a user' do
       before do
@@ -60,7 +57,6 @@ RSpec.describe Api::V1::UsersController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    before { pending }
 
     context 'deletes a user' do
       before do

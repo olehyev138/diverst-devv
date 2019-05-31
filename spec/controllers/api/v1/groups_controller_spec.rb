@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe Api::V1::GroupsController, type: :controller do
-  before { pending }
 
   let(:api_key) { FactoryBot.create(:api_key) }
   let(:enterprise) { FactoryBot.create(:enterprise) }
