@@ -96,7 +96,7 @@ class EnterprisesController < ApplicationController
 
   def update_branding
     authorize @enterprise
-
+    @enterprise.theme.try(:destroy)
     set_theme
 
     if @enterprise.update_attributes(theme_attributes: enterprise_params[:theme])
