@@ -1,31 +1,24 @@
 class Groups::PostsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_group
+  before_action :set_client
+  before_action :set_twitter_accounts
   before_action :set_page,    only: [:index, :pending]
   before_action :set_link,    only: [:approve, :pin, :unpin]
 
   layout 'erg'
 
   def index
+    @tweets = recent_tweets
     if GroupPolicy.new(current_user, @group).manage?
       without_segments
+    elsif GroupPostsPolicy.new(current_user, [@group]).view_latest_news?
+      with_segments
     else
-      if GroupPostsPolicy.new(current_user, [@group]).view_latest_news?
-        segment_ids = current_user.segment_ids
-
-        if segment_ids.empty?
-          return without_segments
-        end
-
-        @posts = NewsFeed.all_links(@group.news_feed.id, segment_ids, @group.enterprise)
-        @count = @posts.count
-        @posts = @posts.order(is_pinned: :desc, created_at: :desc)
-                   .limit(@limit)
-      else
-        @count = 0
-        @posts = []
-      end
+      @count = 0
+      @posts = []
     end
+    filter_posts(@posts)
   end
 
   def pending
@@ -64,6 +57,17 @@ class Groups::PostsController < ApplicationController
 
   protected
 
+  def recent_tweets(nb = 5)
+    all_tweets = []
+    @accounts.find_each do |account|
+      all_tweets += TwitterClient.get_tweets(account.account).first(nb)
+    end
+
+    all_tweets.sort_by!(&:created_at)
+
+    all_tweets.first(nb)
+  end
+
   def without_segments
     @posts = NewsFeed.all_links_without_segments(@group.news_feed.id, @group.enterprise)
     @count = @posts.count
@@ -72,10 +76,32 @@ class Groups::PostsController < ApplicationController
   end
 
   def with_segments
+    segment_ids = current_user.segment_ids
+
+    return without_segments if segment_ids.empty?
+
+    @posts = NewsFeed.all_links(@group.news_feed.id, segment_ids, @group.enterprise)
+    @count = @posts.count
+    @posts = @posts.order(is_pinned: :desc, created_at: :desc)
+               .limit(@limit)
+  end
+
+  def filter_posts(posts)
+    @posts = posts.select { |news|
+      news.news_link || news.group_message || news.social_link
+    }
   end
 
   def set_group
     @group = current_user.enterprise.groups.find(params[:group_id])
+  end
+
+  def set_twitter_accounts
+    @accounts = @group.twitter_accounts.all
+  end
+
+  def set_client
+    @client = TwitterClient.client
   end
 
   def set_page
