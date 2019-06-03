@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190502185618) do
+ActiveRecord::Schema.define(version: 20190509185932) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -1279,6 +1279,14 @@ ActiveRecord::Schema.define(version: 20190502185618) do
     t.datetime "updated_at",                  null: false
   end
 
+  create_table "twitter_accounts", force: :cascade do |t|
+    t.integer  "group_id",   limit: 4
+    t.string   "name",       limit: 191
+    t.string   "account",    limit: 191
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
   create_table "user_groups", force: :cascade do |t|
     t.integer  "user_id",             limit: 4
     t.integer  "group_id",            limit: 4
@@ -1419,6 +1427,7 @@ ActiveRecord::Schema.define(version: 20190502185618) do
     t.integer  "group_id",          limit: 4
     t.integer  "folder_id",         limit: 4
     t.integer  "resource_id",       limit: 4
+    t.integer  "view_count",        limit: 4
   end
 
   create_table "yammer_field_mappings", force: :cascade do |t|
