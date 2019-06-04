@@ -14,7 +14,12 @@ RSpec.describe ArchivedInitiativesController, type: :controller do
       before { get :index }
 
       it 'returns archived initiatives' do
-        expect(assigns[:initiatives]).to eq archived_initiatives
+        expected = archived_initiatives.sort_by { |initiative| -1 * initiative.created_at.to_i }
+        expect(assigns[:initiatives]).to eq expected
+      end
+
+      it 'returns http_status :ok' do
+        expect(response).to have_http_status(:ok)
       end
 
       it 'renders index template' do

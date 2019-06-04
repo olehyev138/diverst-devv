@@ -90,6 +90,7 @@ class Group < BaseClass
   has_many :initiatives, through: :pillars
   has_many :updates, class_name: 'GroupUpdate', dependent: :destroy
   has_many :views, dependent: :destroy
+  has_many :twitter_accounts, class_name: 'TwitterAccount', dependent: :destroy
 
   has_many :fields, -> { where field_type: 'regular' },
            dependent: :delete_all
@@ -403,6 +404,10 @@ class Group < BaseClass
 
   def accept_pending_members
     self.user_groups.update_all(accepted_member: true)
+  end
+
+  def has_survey?
+    survey_fields.count > 0
   end
 
   protected
