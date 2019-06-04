@@ -8,6 +8,13 @@
           <% end %>
         <% end %>
         <%= f.input :linkedin_profile_url %>
+        <p>
+          Due to new privacy policies by LinkedIn, we are unable to automatically get your profile URL at the moment.
+          <br>
+          We are working to fix this issue as soon as possible.
+          <br>
+          In the meantime, please input your profile link manually.
+        </p>
         <%= f.button :submit, 'Set LinkedIn URL' %>
         <%= link_to "Cancel", user_user_path, {:class=>"btn btn-secondary"} %>
       <% end %>

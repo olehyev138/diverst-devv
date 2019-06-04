@@ -3,19 +3,19 @@ class LinkedInClient
     @oauth ||= LinkedIn::OAuth2.new
   end
 
-  def self.get_url()
+  def self.get_url
     oauth.auth_code_url
   end
 
-  def self.get_access_token(code: )
+  def self.get_access_token(code:)
     oauth.get_access_token(code)
   end
 
-  def self.get_api(token: )
+  def self.get_api(token:)
     LinkedIn::API.new(token)
   end
 
-  def self.get_profile(token: )
+  def self.get_profile(token:)
     api = LinkedIn::API.new(token)
     api.profile
   end
