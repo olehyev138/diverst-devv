@@ -1,5 +1,5 @@
-/build/**
-/docs/**
-/internals/**
-/server/**
-/node_modules/**
+build/**
+docs/**
+internals/**
+server/**
+node_modules/**
