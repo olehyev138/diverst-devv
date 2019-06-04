@@ -22,6 +22,7 @@ jobs:
       - run: gem install bundler
       - run: 'bundle check --path=vendor/bundle || bundle install --path=vendor/bundle
           --jobs=4 --retry=3'
+      - run: cd client/ && nvm install 10 && nvm use 10.16.0 && npm install
       - save_cache:
           key: v1-dep-{{ .Branch }}-{{ epoch }}
           paths:
@@ -34,7 +35,7 @@ jobs:
             - ~/.gradle
             - ~/.cache/bower
             - public/assets
-            - ./node_modules
+            - ./client/node_modules
       - run:
           command: |
             # TEMP
@@ -117,7 +118,7 @@ jobs:
         - ~/.cache/bower
         # These cache paths were specified in the 1.0 config
         - public/assets
-        - ./node_modules
+        - ./client/node_modules
     # The following line was run implicitly in your 1.0 builds based on what CircleCI inferred about the structure of your project. In 2.0 you need to be explicit about which commands should be run. In some cases you can discard inferred commands if they are not relevant to your project.
     - run: |-
         mkdir -p config && echo 'test:
