@@ -1,9 +1,6 @@
-import { defaultAction } from '../actions';
-import { DEFAULT_ACTION } from '../constants';
-
-describe('LandingPage actions', () => {
-  describe('Default Action', () => {
-    it('has a type of DEFAULT_ACTION', () => {
+xdescribe('Landing actions', () => {
+  xdescribe('Default Action', () => {
+    xit('has a type of DEFAULT_ACTION', () => {
       const expected = {
         type: DEFAULT_ACTION,
       };
