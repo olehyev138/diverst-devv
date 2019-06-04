@@ -105,15 +105,10 @@ class InitiativesController < ApplicationController
     # Gets and filters the initiatives from outcomes on date
     initiative_ids = Outcome.get_initiatives(@outcomes).select { |i| i.start >= @filter_from && i.start <= @filter_to }.map { |i| i.id }
 
-    if Initiative.where(id: initiative_ids).any? { |initiative| initiative.unfinished_expenses? }
-      flash[:notice] = 'Please close expenses of past events'
-      redirect_to :back
-    else
-      InitiativesDownloadJob.perform_later(current_user.id, @group.id, initiative_ids)
-      track_activity(@group, :export_initiatives)
-      flash[:notice] = 'Please check your Secure Downloads section in a couple of minutes'
-      redirect_to :back
-    end
+    InitiativesDownloadJob.perform_later(current_user.id, @group.id, initiative_ids)
+    track_activity(@group, :export_initiatives)
+    flash[:notice] = 'Please check your Secure Downloads section in a couple of minutes'
+    redirect_to :back
   end
 
   def archive
