@@ -13,7 +13,7 @@ module BasePager
       self.count = 10
     end
 
-    def pager(diverst_request, params = {}, search_method = :search)
+    def pager(diverst_request, params = {}, search_method = :lookup)
       return elasticsearch(diverst_request, params) if params[:search]
 
       set_defaults
@@ -21,7 +21,7 @@ module BasePager
       raise Exception.new if default_order_by.blank?
       raise Exception.new if default_order.blank?
 
-      # diverst_request.ability.authorize! :search, self.class, :message => "You are not authorized to search for #{self.name.pluralize}."
+      # diverst_request.ability.authorize! :lookup, self.class, :message => "You are not authorized to search for #{self.name.pluralize}."
 
       # set the parameters
       item_page = params[:page].present? ? params[:page].to_i : page
@@ -31,7 +31,7 @@ module BasePager
       order = params[:order].presence || default_order
 
       # get the search method
-      search_method_obj = self.method(search_method)
+      search_method_obj = self.method(:lookup)
 
       # search
       total = search_method_obj.call(params, diverst_request).count
