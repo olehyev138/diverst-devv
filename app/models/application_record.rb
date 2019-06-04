@@ -8,7 +8,6 @@ class ApplicationRecord < ActiveRecord::Base
   include BaseElasticsearch
   include BaseGraph
 
-
   def self.inherited(child)
     super
 
@@ -20,7 +19,6 @@ class ApplicationRecord < ActiveRecord::Base
       document_type "#{table_name.singularize}"
     end
   end
-  
   after_commit on: [:create] do update_elasticsearch_index('index') end
   after_commit on: [:update] do update_elasticsearch_index('update') end
   after_commit on: [:destroy] do update_elasticsearch_index('delete') end

@@ -2,7 +2,7 @@ class UserSerializer < ActiveModel::Serializer
   attributes :id, :first_name, :last_name, :fields, :created_at,
              :updated_at, :enterprise_id, :sign_in_count, :enterprise,
              :last_sign_in_at, :linkedin_profile_url, :active, :biography, :points, :credits,
-             :time_zone, :total_weekly_points, :user_role, :mentor,  :mentee, :mentorship_description,
+             :time_zone, :total_weekly_points, :user_role, :mentor, :mentee, :mentorship_description,
              :groups_notifications_frequency, :groups_notifications_date, :accepting_mentor_requests,
              :accepting_mentee_requests, :last_group_notification_date
 

@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe Api::V1::ResourcesController, type: :controller do
-
   let(:api_key) { FactoryBot.create(:api_key) }
   let(:enterprise) { FactoryBot.create(:enterprise) }
   let(:user) { FactoryBot.create(:user, enterprise: enterprise) }
@@ -30,8 +29,8 @@ RSpec.describe Api::V1::ResourcesController, type: :controller do
       before do
         folder = create(:folder)
         payload = {
-            url: "www.apple.com",
-            title: "Link to Apple",
+            url: 'www.apple.com',
+            title: 'Link to Apple',
             folder_id: folder.id
         }
         post :create, params: { resource: payload }
@@ -45,7 +44,7 @@ RSpec.describe Api::V1::ResourcesController, type: :controller do
   describe 'PUT #update' do
     context 'updates an item' do
       before do
-        put :update, params: { id: item.id, resource: { url: "www.apple.com" } }
+        put :update, params: { id: item.id, resource: { url: 'www.apple.com' } }
       end
       it 'responds with success' do
         expect(response).to have_http_status(:success)

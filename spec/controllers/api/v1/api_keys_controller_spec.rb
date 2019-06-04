@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe Api::V1::ApiKeysController, type: :controller do
-
   let(:api_key) { FactoryBot.create(:api_key) }
   let(:enterprise) { FactoryBot.create(:enterprise) }
   let(:user) { FactoryBot.create(:user, enterprise: enterprise) }
@@ -27,8 +26,8 @@ RSpec.describe Api::V1::ApiKeysController, type: :controller do
     context 'creates the item' do
       before do
         payload = {
-          application_name: "Test",
-          key: "test"
+          application_name: 'Test',
+          key: 'test'
         }
         post :create, params: { api_key: payload }
       end

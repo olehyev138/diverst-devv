@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe Api::V1::AnswersController, type: :controller do
-
   let(:api_key) { FactoryBot.create(:api_key) }
   let(:enterprise) { FactoryBot.create(:enterprise) }
   let(:user) { FactoryBot.create(:user, enterprise: enterprise) }
@@ -32,7 +31,7 @@ RSpec.describe Api::V1::AnswersController, type: :controller do
         payload = {
           author_id: user.id,
           question_id: question.id,
-          content: "test",
+          content: 'test',
           contributing_group_id: group.id
         }
         post :create, params: { answer: payload }

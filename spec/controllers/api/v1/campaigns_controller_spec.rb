@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe Api::V1::CampaignsController, type: :controller do
-
   let(:api_key) { FactoryBot.create(:api_key) }
   let(:enterprise) { FactoryBot.create(:enterprise) }
   let(:user) { FactoryBot.create(:user, enterprise: enterprise) }
@@ -30,10 +29,10 @@ RSpec.describe Api::V1::CampaignsController, type: :controller do
       before do
         group = create(:group)
         payload = {
-            description: "The best campaign",
+            description: 'The best campaign',
             start: Date.today,
             end: Date.tomorrow,
-            title: "Link to Apple",
+            title: 'Link to Apple',
             enterprise_id: enterprise.id,
             group_ids: [group.id]
         }
@@ -48,7 +47,7 @@ RSpec.describe Api::V1::CampaignsController, type: :controller do
   describe 'PUT #update' do
     context 'updates an item' do
       before do
-        put :update, params: { id: item.id, campaign: { title: "updated" } }
+        put :update, params: { id: item.id, campaign: { title: 'updated' } }
       end
       it 'responds with success' do
         expect(response).to have_http_status(:success)

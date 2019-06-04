@@ -32,7 +32,7 @@ module BasePager
 
       # get the search method
       search_method_obj = self.method(:lookup)
-      
+
       # search
       total = search_method_obj.call(params, diverst_request).count
       items = search_method_obj.call(params, diverst_request)
