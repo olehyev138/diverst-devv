@@ -1,9 +1,11 @@
 require 'rails_helper'
 
-RSpec.describe Api::V1::UsersController, type: :controller do
+RSpec.describe Api::V1::CampaignsController, type: :controller do
   let(:api_key) { FactoryBot.create(:api_key) }
   let(:enterprise) { FactoryBot.create(:enterprise) }
   let(:user) { FactoryBot.create(:user, enterprise: enterprise) }
+  let(:group) { FactoryBot.create(:group, enterprise: enterprise) }
+  let(:item) { FactoryBot.create(:campaign) }
   let(:jwt) { UserTokenService.create_jwt(user) }
   let(:valid_session) { { 'Diverst-APIKey' => api_key.key, 'Diverst-UserToken' => jwt } }
 
@@ -12,8 +14,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
   end
 
   describe 'GET #index' do
-
-    context 'gets the users' do
+    context 'gets the items' do
       before do
         get :index, params: {}
       end
@@ -24,19 +25,18 @@ RSpec.describe Api::V1::UsersController, type: :controller do
   end
 
   describe 'POST #create' do
-
-    context 'creates a user' do
+    context 'creates an item' do
       before do
-        password = Faker::Internet.password
+        group = create(:group)
         payload = {
-            first_name: 'Bob',
-            last_name: 'Smith',
-            email: Faker::Internet.email,
-            password: password,
-            password_confirmation: password,
-            enterprise_id: enterprise.id
+            description: 'The best campaign',
+            start: Date.today,
+            end: Date.tomorrow,
+            title: 'Link to Apple',
+            enterprise_id: enterprise.id,
+            group_ids: [group.id]
         }
-        post :create, params: { user: payload }
+        post :create, params: { campaign: payload }
       end
       it 'responds with success' do
         expect(response).to have_http_status(:success)
@@ -45,10 +45,9 @@ RSpec.describe Api::V1::UsersController, type: :controller do
   end
 
   describe 'PUT #update' do
-
-    context 'updates a user' do
+    context 'updates an item' do
       before do
-        put :update, params: { id: user.id, user: { last_name: 'last_name' } }
+        put :update, params: { id: item.id, campaign: { title: 'updated' } }
       end
       it 'responds with success' do
         expect(response).to have_http_status(:success)
@@ -57,10 +56,9 @@ RSpec.describe Api::V1::UsersController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-
-    context 'deletes a user' do
+    context 'deletes an item' do
       before do
-        delete :destroy, params: { id: user.id }
+        delete :destroy, params: { id: item.id }
       end
       it 'responds with success' do
         expect(response).to have_http_status(:success)
