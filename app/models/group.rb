@@ -320,7 +320,7 @@ class Group < BaseClass
   # Users who enters group have accepted flag set to false
   # This sets flag to true
   def accept_user_to_group(user_id)
-    user_group = user_groups.where(user_id: user_id).first
+    user_group = user_groups.find_by(user_id: user_id)
     return false if user_group.blank?
 
     user_group.update(accepted_member: true)
