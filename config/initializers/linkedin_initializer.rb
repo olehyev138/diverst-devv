@@ -1,6 +1,10 @@
 LinkedIn.configure do |config|
-  config.client_id = ENV['LINKEDIN_ID']
-  config.client_secret = ENV['LINKEDIN_SECRET']
+  # ADD TO APPLICATION.YML
+  LINKEDIN_ID = '86i5wy0c9w6pix'
+  LINKEDIN_SECRET = 'ZOApM00DtGp3urbo'
+
+  config.client_id = LINKEDIN_ID || ENV['LINKEDIN_ID']
+  config.client_secret = LINKEDIN_SECRET || ENV['LINKEDIN_SECRET']
   config.scope = 'r_liteprofile'
   config.redirect_uri = 'http://localhost:3001/omniauth/linkedin/callback'
 end
