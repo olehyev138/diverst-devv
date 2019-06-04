@@ -1,9 +1,9 @@
 //apiKey: "2L37gzea25EWhrUfYHJPUiwc", - server api key
 
 const config = {
-    apiKey: 'HoVxW4YbVvOiFn5c0aSKlgtt',
-    apiUrl: 'http://localhost:3000',
-    environment: 'development'
+    apiKey: '3B7CZ9t1hrLNslbbXrQWEQtt',
+    apiUrl: 'https://react.diverst.com',
+    environment: 'production'
 };
 
 export default config;
