@@ -8,17 +8,17 @@ GIT
       railties (> 3)
 
 GIT
+  remote: https://github.com/TeamDiverst/pronto-eslint_npm.git
+  revision: ba4e6bc34cba267e47271008952b17d845eb6dba
+  specs:
+    pronto-eslint_npm (0.10.1)
+      pronto (~> 0.10.0)
+
+GIT
   remote: https://github.com/TeamDiverst/ruby-oembed.git
   revision: 2fddf3f9190746e1aaba6cb3fa04dec6139e589f
   specs:
     ruby-oembed (0.12.0)
-
-GIT
-  remote: https://github.com/doits/pronto-eslint_npm.git
-  revision: 022293227820fac09080817c375d43bb3145fa1a
-  specs:
-    pronto-eslint_npm (0.10.1)
-      pronto (~> 0.10.0)
 
 GEM
   remote: https://rubygems.org/
