@@ -534,7 +534,13 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :users
+      resources :users do
+        member do
+          get :edit_linkedin
+          patch :linkedin, action: :update_linkedin
+          delete :linkedin, action: :delete_linkedin
+        end
+      end
     end
 
     resources :matches do
