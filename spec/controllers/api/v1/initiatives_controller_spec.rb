@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe Api::V1::InitiativesController, type: :controller do
-
   let(:api_key) { FactoryBot.create(:api_key) }
   let(:enterprise) { FactoryBot.create(:enterprise) }
   let(:user) { FactoryBot.create(:user, enterprise: enterprise) }
