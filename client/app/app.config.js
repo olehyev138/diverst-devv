@@ -2,8 +2,8 @@
 
 const config = {
     apiKey: '3B7CZ9t1hrLNslbbXrQWEQtt',
-    apiUrl: 'http://localhost:3000',
-    environment: 'development'
+    apiUrl: 'https://react.diverst.com',
+    environment: 'production'
 };
 
 export default config;
