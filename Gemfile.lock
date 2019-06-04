@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: https://github.com/TeamDiverst/pronto-eslint_npm.git
-  revision: ba4e6bc34cba267e47271008952b17d845eb6dba
+  revision: 8ae1858c629feec60b0f7499395a0a6e5b37b4d0
   specs:
     pronto-eslint_npm (0.10.1)
       pronto (~> 0.10.0)
@@ -87,7 +87,7 @@ GEM
     aws-sdk-v1 (1.67.0)
       json (~> 1.4)
       nokogiri (~> 1)
-    bcrypt (3.1.12)
+    bcrypt (3.1.13)
     bcrypt-ruby (3.1.5)
       bcrypt (>= 3.1.3)
     bcrypt_pbkdf (1.0.1)
@@ -196,7 +196,7 @@ GEM
       terminal-table (~> 1.5, >= 1.5.1)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
-    hashdiff (0.3.9)
+    hashdiff (0.4.0)
     hashie (3.6.0)
     http-cookie (1.0.3)
       domain_name (~> 0.5)
@@ -277,7 +277,7 @@ GEM
       activerecord (>= 3.0)
       i18n (>= 0.5.0)
       railties (>= 3.0.0)
-    public_suffix (3.0.3)
+    public_suffix (3.1.0)
     puma (3.12.1)
     pundit (2.0.1)
       activesupport (>= 3.0.0)
@@ -317,7 +317,7 @@ GEM
       thor (>= 0.19.0, < 2.0)
     rainbow (3.0.0)
     rake (12.3.2)
-    redis (4.1.1)
+    redis (4.1.2)
     request_store (1.4.1)
       rack (>= 1.4)
     rest-client (1.8.0)
@@ -355,7 +355,7 @@ GEM
       unicode-display_width (>= 1.4.0, < 1.6)
     rubocop-performance (1.2.0)
       rubocop (>= 0.68.0)
-    ruby-progressbar (1.10.0)
+    ruby-progressbar (1.10.1)
     ruby-saml (1.10.2)
       nokogiri (>= 1.5.10)
     rufo (0.1.0)
@@ -402,9 +402,9 @@ GEM
     thor (0.20.0)
     thread_safe (0.3.6)
     timecop (0.8.1)
-    tty-cursor (0.6.1)
-    tty-spinner (0.9.0)
-      tty-cursor (~> 0.6.0)
+    tty-cursor (0.7.0)
+    tty-spinner (0.9.1)
+      tty-cursor (~> 0.7)
     twilio-ruby (5.10.7)
       faraday (~> 0.9)
       jwt (>= 1.5, <= 2.5)
