@@ -155,6 +155,7 @@ class GroupsController < ApplicationController
   def show
     authorize @group
     @group_sponsors = @group.sponsors
+    @show_events = should_show_event?(@group)
 
     if GroupPolicy.new(current_user, @group).manage?
       base_show
@@ -374,6 +375,13 @@ class GroupsController < ApplicationController
   end
 
   protected
+
+  def should_show_event?(group)
+    group.upcoming_events_visibility == 'public' ||
+      group.upcoming_events_visibility == 'non_member' ||
+      (group.upcoming_events_visibility == 'group' && current_user.is_member_of?(group)) ||
+      (group.upcoming_events_visibility == 'leaders_only' && current_user.is_group_leader_of?(group))
+  end
 
   def base_show
     @upcoming_events = @group.initiatives.upcoming.limit(3) + @group.participating_initiatives.upcoming.limit(3)
