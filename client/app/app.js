@@ -51,7 +51,7 @@ const render = (messages) => {
   );
 };
 
-if (module.hot) {
+if (module.hot)
   // Hot reloadable React components and translation json files
   // modules.hot.accept does not accept dynamic dependencies,
   // have to be constants at compile-time
@@ -59,10 +59,10 @@ if (module.hot) {
     ReactDOM.unmountComponentAtNode(MOUNT_NODE);
     render(translationMessages);
   });
-}
+
 
 // Chunked polyfill for browsers without Intl support
-if (!window.Intl) {
+if (!window.Intl)
   new Promise((resolve) => {
     resolve(import('intl'));
   })
@@ -71,13 +71,12 @@ if (!window.Intl) {
     .catch((err) => {
       throw err;
     });
-} else {
+else
   render(translationMessages);
-}
+
 
 // Install ServiceWorker and AppCache in the end since
 // it's not most important operation and if main code fails,
 // we do not want it installed
-if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV === 'production')
   require('offline-plugin/runtime').install(); // eslint-disable-line global-require
-}

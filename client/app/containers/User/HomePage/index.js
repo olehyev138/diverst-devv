@@ -57,10 +57,6 @@ const styles = theme => ({
 /* eslint-disable react/prefer-stateless-function */
 // TODO: can this be written with a stateless componenet?
 export class HomePage extends React.PureComponent {
-  constructor(props) {
-    super(props);
-  }
-
   state = {
     anchorEl: null,
     mobileMoreAnchorEl: null

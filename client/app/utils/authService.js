@@ -2,14 +2,13 @@ import { store } from 'configureStore';
 
 function getValue(key) {
   let value = window.sessionStorage.getItem(key);
-  if (typeof value !== 'undefined' && value !== 'undefined') {
+  if (typeof value !== 'undefined' && value !== 'undefined')
     return JSON.parse(value);
-  }
+
   value = window.localStorage.getItem(key);
 
-  if (typeof value !== 'undefined' && value !== 'undefined') {
+  if (typeof value !== 'undefined' && value !== 'undefined')
     return JSON.parse(value);
-  }
 
   return undefined;
 }

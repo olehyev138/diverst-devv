@@ -56,7 +56,7 @@ module.exports = {
     'newline-per-chained-call': 0,
     'no-confusing-arrow': 0,
     'no-console': 1,
-    'no-unused-vars': 1,
+    'no-unused-vars': 0,
     'no-use-before-define': 0,
     'prefer-template': 2,
     'react/destructuring-assignment': 0,
@@ -72,12 +72,17 @@ module.exports = {
     'react/self-closing-comp': 0,
     'react/sort-comp': 0,
     'react/jsx-tag-spacing': 1,
-    'jsx-quotes': [1, 'prefer-single'],
+    'react/no-unused-prop-types': 0,
     'redux-saga/no-yield-in-race': 2,
     'redux-saga/yield-effects': 2,
     'require-yield': 0,
+    'jsx-quotes': [1, 'prefer-single'],
     'quotes': 1,
-    'comma-dangle': 0
+    'comma-dangle': 0,
+    'curly': [1, 'multi'],
+    'no-restricted-syntax': ['error', 'ForInStatement', 'LabeledStatement', 'WithStatement'],
+    'nonblock-statement-body-position': [0, 'bottom']
+
   },
   settings: {
     'import/resolver': {

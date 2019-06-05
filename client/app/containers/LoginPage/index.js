@@ -34,14 +34,13 @@ export class LoginPage extends React.PureComponent {
   }
 
   authForm() {
-    if (this.props.enterprise) {
+    if (this.props.enterprise)
       return (
         <LoginForm
           email={this.state.email}
           loginBegin={(values, actions) => this.props.loginBegin(values)}
         />
       );
-    }
 
     return (
       <EnterpriseForm

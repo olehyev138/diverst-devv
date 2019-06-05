@@ -14,16 +14,18 @@ class API {
 
   all(opts) {
     let { url } = this;
+
     // append query arguments
     if (opts) {
       url += '?';
-      for (const arg in opts) {
-        if (url.indexOf('?') !== url.length - 1) {
+      for (const arg of opts) {
+        if (url.indexOf('?') !== url.length - 1)
           url += '&';
-        }
+
         url += `${arg}=${opts[arg]}`;
       }
     }
+
     return axios.get(url);
   }
 

@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import invariant from 'invariant';
 import {
   isEmpty, isFunction, isString, conformsTo
