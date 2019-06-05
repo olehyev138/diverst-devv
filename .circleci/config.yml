@@ -22,7 +22,6 @@ jobs:
       - run: gem install bundler
       - run: 'bundle install --path=vendor/bundle --jobs=4 --retry=3'
       - run: nvm install 10.16.0 && nvm alias default 10.16.0 
-      - run: node -v
       - run: cd client/ && npm install
         #      - save_cache:
         #          key: v1-dep-{{ .Branch }}-{{ epoch }}

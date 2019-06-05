@@ -1,2 +1,0 @@
-eslint_executable: 'node_modules/.bin/eslint'
-cmd_line_opts:  '--config .eslintrc.js --ignore-path .eslintignore'
