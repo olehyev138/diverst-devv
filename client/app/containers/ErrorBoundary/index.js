@@ -22,10 +22,16 @@ class ErrorBoundary extends React.Component {
       // You can render any custom fallback UI
       return (
         <div>
-          <Grid container spacing={0} direction="column" alignItems="center"
-                justify="center" style={{minHeight: '100vh', textAlign: "center"}}>
+          <Grid
+            container
+            spacing={0}
+            direction='column'
+            alignItems='center'
+            justify='center'
+            style={{ minHeight: '100vh', textAlign: 'center' }}
+          >
             <Grid item xs={6}>
-              <img src={robot} alt="Oops!" height="150" width="150"/>
+              <img src={robot} alt='Oops!' height='150' width='150' />
 
               { /* TODO: translation strings */ }
               <h4>Oops! Something went wrong here. We're working on it and we'll get it fixed as soon as possible. You can go back or use our Help Center.</h4>

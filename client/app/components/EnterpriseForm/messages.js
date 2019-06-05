@@ -4,9 +4,9 @@
  * This contains all the text for the EnterpriseForm component.
  */
 
-import { defineMessages } from "react-intl";
+import { defineMessages } from 'react-intl';
 
-export const scope = "diverst.containers.Login";
+export const scope = 'diverst.containers.Login';
 
 export default defineMessages({
   email: {

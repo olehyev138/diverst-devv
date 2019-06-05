@@ -1,10 +1,10 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 
 import { Grid } from '@material-ui/core';
 
-import ToggleOption from "../ToggleOption";
-import Select from "./Select";
+import ToggleOption from '../ToggleOption';
+import Select from './Select';
 
 function Toggle(props) {
   let content = <option>--</option>;
@@ -18,11 +18,11 @@ function Toggle(props) {
 
   return (
     <Grid container>
-        <Grid item xs={6}>
-          <Select value={props.value} onChange={props.onToggle}>
-            {content}
-          </Select>
-        </Grid>
+      <Grid item xs={6}>
+        <Select value={props.value} onChange={props.onToggle}>
+          {content}
+        </Select>
+      </Grid>
     </Grid>
   );
 }

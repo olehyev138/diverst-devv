@@ -1,18 +1,18 @@
-import React from "react";
-import { connect } from "react-redux";
-import { compose } from "redux";
-import { createStructuredSelector } from "reselect";
+import React from 'react';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { createStructuredSelector } from 'reselect';
 
-import { AppBar, Toolbar, Button } from "@material-ui/core";
+import { AppBar, Toolbar, Button } from '@material-ui/core';
 import { NavLink } from 'react-router-dom';
-import { withStyles } from "@material-ui/core/styles";
+import { withStyles } from '@material-ui/core/styles';
 
-import HomeIcon from "@material-ui/icons/HomeOutlined";
-import LightbulbIcon from "@material-ui/icons/WbIncandescentOutlined";
-import QuestionAnswerIcon from "@material-ui/icons/QuestionAnswerOutlined";
-import EventIcon from "@material-ui/icons/EventOutlined";
-import GroupIcon from "@material-ui/icons/GroupOutlined";
-import UsersCircleIcon from "@material-ui/icons/GroupWorkOutlined";
+import HomeIcon from '@material-ui/icons/HomeOutlined';
+import LightbulbIcon from '@material-ui/icons/WbIncandescentOutlined';
+import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswerOutlined';
+import EventIcon from '@material-ui/icons/EventOutlined';
+import GroupIcon from '@material-ui/icons/GroupOutlined';
+import UsersCircleIcon from '@material-ui/icons/GroupWorkOutlined';
 
 const styles = theme => ({
   toolbar: {
@@ -32,8 +32,8 @@ const styles = theme => ({
     borderBottomStyle: 'solid',
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0,
-    marginBottom: "0 !important",
-    paddingBottom: "7px !important", // To account for the border size
+    marginBottom: '0 !important',
+    paddingBottom: '7px !important', // To account for the border size
   },
   navLink: {
     fontSize: '0.9rem',
@@ -63,12 +63,36 @@ export function UserLinks(props) {
 
   const NavLinks = () => (
     <Toolbar className={classes.toolbar}>
-      <Button component={WrappedNavLink} to="/" className={classes.navLink} activeClassName={classes.navLinkActive}><HomeIcon className={classes.navIcon} /> Home</Button>
-      <Button component={WrappedNavLink} to="/user/campaigns" className={classes.navLink} activeClassName={classes.navLinkActive}><LightbulbIcon className={classes.lightbulbIcon} /> Innovate</Button>
-      <Button component={WrappedNavLink} to="/user/news" className={classes.navLink} activeClassName={classes.navLinkActive}><QuestionAnswerIcon className={classes.navIcon} /> News</Button>
-      <Button component={WrappedNavLink} to="/user/events" className={classes.navLink} activeClassName={classes.navLinkActive}><EventIcon className={classes.navIcon} /> Events</Button>
-      <Button component={WrappedNavLink} to="/user/groups" className={classes.navLink} activeClassName={classes.navLinkActive}><GroupIcon className={classes.navIcon} /> Inclusion Networks</Button>
-      <Button component={WrappedNavLink} to="/user/groups" className={classes.navLink} activeClassName={classes.navLinkActive}><UsersCircleIcon className={classes.navIcon} /> Mentorship</Button>
+      <Button component={WrappedNavLink} to='/' className={classes.navLink} activeClassName={classes.navLinkActive}>
+        <HomeIcon className={classes.navIcon} />
+        {' '}
+Home
+      </Button>
+      <Button component={WrappedNavLink} to='/user/campaigns' className={classes.navLink} activeClassName={classes.navLinkActive}>
+        <LightbulbIcon className={classes.lightbulbIcon} />
+        {' '}
+Innovate
+      </Button>
+      <Button component={WrappedNavLink} to='/user/news' className={classes.navLink} activeClassName={classes.navLinkActive}>
+        <QuestionAnswerIcon className={classes.navIcon} />
+        {' '}
+News
+      </Button>
+      <Button component={WrappedNavLink} to='/user/events' className={classes.navLink} activeClassName={classes.navLinkActive}>
+        <EventIcon className={classes.navIcon} />
+        {' '}
+Events
+      </Button>
+      <Button component={WrappedNavLink} to='/user/groups' className={classes.navLink} activeClassName={classes.navLinkActive}>
+        <GroupIcon className={classes.navIcon} />
+        {' '}
+Inclusion Networks
+      </Button>
+      <Button component={WrappedNavLink} to='/user/groups' className={classes.navLink} activeClassName={classes.navLinkActive}>
+        <UsersCircleIcon className={classes.navIcon} />
+        {' '}
+Mentorship
+      </Button>
     </Toolbar>
   );
 
@@ -80,7 +104,7 @@ export function UserLinks(props) {
 export function mapDispatchToProps(dispatch) {
   return {
     dispatch
-  }
+  };
 }
 
 const mapStateToProps = createStructuredSelector({});

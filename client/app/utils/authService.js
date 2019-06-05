@@ -1,25 +1,23 @@
-import { store } from 'configureStore'
+import { store } from 'configureStore';
 
 function getValue(key) {
-  var value = window.sessionStorage.getItem(key);
-  if (typeof value !== "undefined" && value !== "undefined") {
+  let value = window.sessionStorage.getItem(key);
+  if (typeof value !== 'undefined' && value !== 'undefined') {
     return JSON.parse(value);
   }
   value = window.localStorage.getItem(key);
 
-  if (typeof value !== "undefined" && value !== "undefined") {
+  if (typeof value !== 'undefined' && value !== 'undefined') {
     return JSON.parse(value);
   }
-  else {
-    return undefined;
-  }
+
+  return undefined;
 }
 
 const AuthService = {
   isAuthenticated() {
     const state = store.getState();
-    if (state['global']['token'])
-      return true;
+    if (state.global.token) return true;
 
     return false;
   },
@@ -29,12 +27,12 @@ const AuthService = {
   },
   getJwt() {
     const state = store.getState();
-    let jwt = state['global']['token']|| getValue("_diverst.twj");
+    const jwt = state.global.token || getValue('_diverst.twj');
     return jwt;
   },
   getEnterprise() {
     const state = store.getState();
-    return state['global']['enterprise'] || getValue("_diverst.seirpretne");
+    return state.global.enterprise || getValue('_diverst.seirpretne');
   },
   clear() {
     window.sessionStorage.clear();

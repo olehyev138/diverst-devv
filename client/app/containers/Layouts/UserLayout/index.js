@@ -1,12 +1,12 @@
 import React, { memo } from 'react';
 import { Route } from 'react-router';
-import AuthService from "utils/authService";
-import classNames from "classnames";
+import AuthService from 'utils/authService';
+import classNames from 'classnames';
 
-import Container from "@material-ui/core/Container";
+import Container from '@material-ui/core/Container';
 import UserLinks from 'components/UserLinks';
-import { withStyles } from "@material-ui/core/styles";
-import AuthenticatedLayout from "../AuthenticatedLayout";
+import { withStyles } from '@material-ui/core/styles';
+import AuthenticatedLayout from '../AuthenticatedLayout';
 
 const styles = theme => ({
   fullWidth: {
@@ -19,23 +19,26 @@ const styles = theme => ({
   },
 });
 
-const UserLayout = ({component: Component, ...rest}) => {
+const UserLayout = ({ component: Component, ...rest }) => {
   const { classes, ...other } = rest;
 
   return (
     <div className={classes.fullWidth}>
-      <AuthenticatedLayout position='fixed' component={matchProps => (
-        <div>
-          <div className={classes.toolbar} />
-          <UserLinks {...matchProps} />
+      <AuthenticatedLayout
+        position='fixed'
+        component={matchProps => (
+          <div>
+            <div className={classes.toolbar} />
+            <UserLinks {...matchProps} />
 
-          <Container>
-            <div className={classes.content}>
-              <Component {...other} />
-            </div>
-          </Container>
-        </div>
-      )}/>
+            <Container>
+              <div className={classes.content}>
+                <Component {...other} />
+              </div>
+            </Container>
+          </div>
+        )}
+      />
     </div>
   );
 };
