@@ -31,7 +31,7 @@ RSpec.describe OmniAuthController, type: :controller do
     #   it 'temporarily redirect to linkedin url form' do
     #     expect(response).to redirect_to edit_linkedin_user_user_path(user)
     #   end
-    end
+    # end
 
     context 'without logged user' do
       before do
