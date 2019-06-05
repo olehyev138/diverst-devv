@@ -10,16 +10,16 @@ import { LOGIN_BEGIN, LOGIN_ERROR } from 'containers/App/constants';
 export const initialState = {};
 
 /* eslint-disable default-case, no-param-reassign */
-//const loginPageReducer = (state = initialState, action) =>
+// const loginPageReducer = (state = initialState, action) =>
 function loginPageReducer(state = initialState, action) {
-  return produce(state, draft => {
+  return produce(state, (draft) => {
     // TODO: what do these do?
     switch (action.type) {
       case LOGIN_BEGIN:
-        draft['loggingIn'] = action.loggingIn;
+        draft.loggingIn = action.loggingIn;
         break;
       case LOGIN_ERROR:
-        draft['error'] = action.error;
+        draft.error = action.error;
         break;
     }
   });

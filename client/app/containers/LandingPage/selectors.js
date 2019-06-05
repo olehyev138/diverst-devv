@@ -15,11 +15,10 @@ const selectLandingPageDomain = state => state.landingPage || initialState;
  * Default selector used by LandingPage
  */
 
-const makeSelectLandingPage = () =>
-  createSelector(
-    selectLandingPageDomain,
-    substate => substate,
-  );
+const makeSelectLandingPage = () => createSelector(
+  selectLandingPageDomain,
+  substate => substate,
+);
 
 export default makeSelectLandingPage;
 export { selectLandingPageDomain };

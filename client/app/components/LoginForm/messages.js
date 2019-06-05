@@ -6,7 +6,7 @@
 
 import { defineMessages } from 'react-intl';
 
-export const scope = "diverst.containers.Login";
+export const scope = 'diverst.containers.Login';
 
 export default defineMessages({
   login: {

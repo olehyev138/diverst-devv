@@ -1,11 +1,11 @@
 import React, { memo } from 'react';
 import { Route } from 'react-router';
-import { compose } from "redux";
+import { compose } from 'redux';
 
-import Container from "@material-ui/core/Container";
+import Container from '@material-ui/core/Container';
 import AdminLinks from 'components/AdminLinks';
-import { withStyles } from "@material-ui/core/styles";
-import AuthenticatedLayout from "../AuthenticatedLayout";
+import { withStyles } from '@material-ui/core/styles';
+import AuthenticatedLayout from '../AuthenticatedLayout';
 
 const styles = theme => ({
   flex: {
@@ -18,22 +18,26 @@ const styles = theme => ({
   },
 });
 
-const AdminLayout = ({component: Component, ...rest}) => {
+const AdminLayout = ({ component: Component, ...rest }) => {
   const { classes, ...other } = rest;
 
   return (
-    <AuthenticatedLayout position='fixed' isAdmin component={matchProps => (
-      <div className={classes.flex}>
-        <AdminLinks {...matchProps} />
+    <AuthenticatedLayout
+      position='fixed'
+      isAdmin
+      component={matchProps => (
+        <div className={classes.flex}>
+          <AdminLinks {...matchProps} />
 
-        <Container maxWidth='xl'>
-          <div className={classes.content}>
-            <div className={classes.toolbar} />
-            <Component {...other} />
-          </div>
-        </Container>
-      </div>
-    )}/>
+          <Container maxWidth='xl'>
+            <div className={classes.content}>
+              <div className={classes.toolbar} />
+              <Component {...other} />
+            </div>
+          </Container>
+        </div>
+      )}
+    />
   );
 };
 

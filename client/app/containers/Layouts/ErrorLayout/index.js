@@ -1,9 +1,9 @@
 import React, { memo } from 'react';
 import { Route } from 'react-router';
 
-import Container from "@material-ui/core/Container";
-import ApplicationLayout from "../ApplicationLayout";
-import { withStyles } from "@material-ui/core/styles";
+import Container from '@material-ui/core/Container';
+import ApplicationLayout from '../ApplicationLayout';
+import { withStyles } from '@material-ui/core/styles';
 
 const styles = theme => ({
   container: {
@@ -17,17 +17,19 @@ const styles = theme => ({
   },
 });
 
-const ErrorLayout = ({component: Component, ...rest}) => {
+const ErrorLayout = ({ component: Component, ...rest }) => {
   const { classes, ...other } = rest;
 
   return (
-    <ApplicationLayout component={matchProps => (
-      <Container maxWidth="sm" className={classes.container}>
-        <div className={classes.content}>
-          <Component {...other} />
-        </div>
-      </Container>
-    )}/>
+    <ApplicationLayout
+      component={matchProps => (
+        <Container maxWidth='sm' className={classes.container}>
+          <div className={classes.content}>
+            <Component {...other} />
+          </div>
+        </Container>
+      )}
+    />
   );
 };
 
