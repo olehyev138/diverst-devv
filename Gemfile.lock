@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: https://github.com/TeamDiverst/pronto-eslint_npm.git
-  revision: 653670c56ead130c41be73e07f50f8c1a4edbfb6
+  revision: c96163fa362e935202ba0d66936436386d3cfcee
   specs:
     pronto-eslint_npm (0.10.2)
       pronto (~> 0.10.0)
