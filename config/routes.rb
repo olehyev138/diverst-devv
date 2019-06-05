@@ -255,6 +255,12 @@ Rails.application.routes.draw do
         end
       end
 
+      resources :twitter_accounts do
+        collection do
+          get 'delete_all'
+        end
+      end
+
       resources :user_groups, only: :update
 
       resources :news_links, except: [:show] do

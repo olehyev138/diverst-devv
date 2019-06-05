@@ -25,7 +25,7 @@
     <div class="card__section card__section--border" id="archived_initiative_<%= initiative.id %>">
       <div class="row">
         <div class="col-xs-4">
-          <h3><%= initiative.name %></h3>
+          <h3><%= link_to initiative.name, group_event_path(initiative.owner_group, initiative) %></h3>
         </div>
         <div class="col-xs-8">
           <p>
