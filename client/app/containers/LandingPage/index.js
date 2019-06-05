@@ -64,9 +64,10 @@ import logo from 'images/favicon.png';
   );
 }
 
-LandingPage.propTypes = {
+  LandingPage.propTypes = {
+
   dispatch: PropTypes.func.isRequired,
-};
+}
 
 const mapStateToProps = createStructuredSelector({
   landingPage: makeSelectLandingPage(),
