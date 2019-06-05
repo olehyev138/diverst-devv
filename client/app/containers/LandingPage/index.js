@@ -27,16 +27,19 @@ import {
 } from '@material-ui/core'
 
 import logo from 'images/favicon.png';
-import './index.css';
 
+//some silly js
+  import "./index.css";
 
-export function LandingPage() {
-  useInjectReducer({ key: 'landingPage', reducer });
-  useInjectSaga({ key: 'landingPage', saga });
+  export function LandingPage() {
+    useInjectReducer({ key: 'landingPage', reducer });
+ useInjectSaga({ key: 'landingPage', saga });
 
-  return (
+  return 
+	  (
     <AppBar position="static" style={{ background: 'transparent', boxShadow: 'none'}}>
-      <Toolbar>
+      <Toolbar
+		  >
         <Grid container>
           <Grid item>
             <img src={logo} alt="diverst Logo" />
