@@ -1,3 +1,2 @@
 eslint_executable: 'node_modules/.bin/eslint'
-files_to_lint: 'app/'
 cmd_line_opts:  '--config .eslintrc.js --ignore-path .eslintignore'
