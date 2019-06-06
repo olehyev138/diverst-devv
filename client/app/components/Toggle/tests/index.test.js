@@ -1,13 +1,11 @@
 import React from 'react';
-// TODO: Commented out because 'enzyme' not found
-// import { shallow } from 'enzyme';
+ import { shallow } from 'enzyme';
 import { IntlProvider, defineMessages } from 'react-intl';
 
 import Toggle from '../index';
 
-describe('<Toggle />', () => {
-  /*
-  it('should contain default text', () => {
+xdescribe('<Toggle />', () => {
+  xit('should contain default text', () => {
     const defaultEnMessage = 'someContent';
     const defaultDeMessage = 'someOtherContent';
     const messages = defineMessages({
@@ -30,10 +28,10 @@ describe('<Toggle />', () => {
     ).toBe(true);
     expect(renderedComponent.find('option')).toHaveLength(0);
   });
-  it('should not have ToggleOptions if props.values is not defined', () => {
+
+  xit('should not have ToggleOptions if props.values is not defined', () => {
     const renderedComponent = shallow(<Toggle />);
     expect(renderedComponent.contains(<option>--</option>)).toBe(true);
     expect(renderedComponent.find('option')).toHaveLength(1);
   });
-  */
 });

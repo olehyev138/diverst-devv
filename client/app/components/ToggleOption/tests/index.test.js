@@ -1,13 +1,11 @@
 import React from 'react';
-// TODO: Commented out because 'enzyme' not found
-// import { shallow, mount } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 import { IntlProvider, defineMessages } from 'react-intl';
 
 import ToggleOption from '../index';
 
-describe('<ToggleOption />', () => {
-  /*
-  it('should render default language messages', () => {
+xdescribe('<ToggleOption />', () => {
+  xit('should render default language messages', () => {
     const defaultEnMessage = 'someContent';
     const message = defineMessages({
       enMessage: {
@@ -25,7 +23,7 @@ describe('<ToggleOption />', () => {
     ).toBe(true);
   });
 
-  it('should display `value`(two letter language code) when `message` is absent', () => {
+  xit('should display `value`(two letter language code) when `message` is absent', () => {
     const renderedComponent = mount(
       <IntlProvider locale='de'>
         <ToggleOption value='de' />
@@ -33,5 +31,4 @@ describe('<ToggleOption />', () => {
     );
     expect(renderedComponent.text()).toBe('de');
   });
-  */
 });
