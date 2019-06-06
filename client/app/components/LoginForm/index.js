@@ -4,40 +4,74 @@
  *
  */
 
-import React, { memo } from 'react';
+import React, { memo, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
-
-/* TODO: input labels, validation with yup, disabled logic, logo, locale toggle  */
-
 import { FormattedMessage } from 'react-intl';
-import messages from './messages';
+
+import { Field, Formik, Form } from 'formik';
+import * as Yup from 'yup';
+
 import { withStyles } from '@material-ui/core/styles';
 import withWidth from '@material-ui/core/withWidth';
-import { Formik } from 'formik';
 import {
   Button, Card, CardActions, CardContent, Grid, TextField, Hidden
 } from '@material-ui/core';
 import LockOpen from '@material-ui/icons/LockOpen';
 
+/* TODO: input labels, validation with yup, disabled logic, logo, locale toggle  */
+
+import messages from 'containers/LoginPage/messages';
+
 import Logo from 'components/Logo';
 
 const styles = theme => ({
-  form: {
+  card: {
     width: '100%',
   },
 });
 
-function LoginForm(props) {
+function LoginForm(props, context) {
   const { classes, width } = props;
+  const { intl } = context;
+
+  const LoginFormSchema = Yup.object().shape({
+    email: Yup
+      .string()
+      .email(intl.formatMessage(messages.invalidEmail)),
+    password: Yup
+      .string()
+      .required(intl.formatMessage(messages.invalidPassword))
+  });
+
+  const form = useRef();
+
+  useEffect(() => {
+    if (form.current)
+      form.current.setFieldError('password', props.passwordError);
+  });
 
   return (
     <Formik
-      initialValues={{ email: props.email, password: '' }}
-      onSubmit={props.loginBegin}
-      render={props => (
-        <Card raised className={classes.form}>
-          <form onSubmit={props.handleSubmit}>
+      ref={form}
+      initialValues={{
+        email: props.email,
+        password: ''
+      }}
+      validateOnBlur={false}
+      validateOnChange={false}
+      validationSchema={LoginFormSchema}
+      onSubmit={(values, actions) => {
+        actions.setFieldError('password', props.passwordError);
+        props.loginBegin(values);
+      }}
+      render={({
+        handleSubmit, handleChange, handleBlur, errors, touched, values
+      }) => (
+        <Card raised className={classes.card}>
+          <Form
+            noValidate
+          >
             <CardContent>
               <Grid container spacing={0} direction='column' alignItems='center' justify='center'>
                 <Grid item xs={12}>
@@ -45,10 +79,12 @@ function LoginForm(props) {
                 </Grid>
               </Grid>
               <br />
-              <TextField
-                onChange={props.handleChange}
-                value={props.values.email}
-                autoFocus={!props.values.email}
+              <Field
+                component={TextField}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.email}
+                autoFocus={!values.email}
                 fullWidth
                 disabled={false}
                 variant='outlined'
@@ -58,12 +94,15 @@ function LoginForm(props) {
                 label={<FormattedMessage {...messages.email} />}
                 margin='normal'
                 autoComplete='off'
+                error={errors.email && touched.email}
+                helperText={errors.email && touched.email ? errors.email : null}
               />
-              <TextField
-                onChange={props.handleChange}
-                onBlur={props.handleBlur}
-                value={props.values.password}
-                autoFocus={!!props.values.email}
+              <Field
+                component={TextField}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.password}
+                autoFocus={!!values.email}
                 fullWidth
                 disabled={false}
                 variant='outlined'
@@ -73,6 +112,8 @@ function LoginForm(props) {
                 label={<FormattedMessage {...messages.password} />}
                 margin='normal'
                 autoComplete='off'
+                error={errors.password && touched.password}
+                helperText={errors.password && touched.password ? errors.password : null}
               />
             </CardContent>
             <CardActions>
@@ -83,7 +124,7 @@ function LoginForm(props) {
                     type='submit'
                     color='primary'
                     size='large'
-                    disabled={!props.values.email || !props.values.password}
+                    disabled={!values.email || !values.password}
                     variant='contained'
                   >
                     <Hidden xsDown>
@@ -103,7 +144,7 @@ function LoginForm(props) {
                 </Grid>
               </Grid>
             </CardActions>
-          </form>
+          </Form>
         </Card>
       )}
     />
@@ -111,8 +152,15 @@ function LoginForm(props) {
 }
 
 LoginForm.propTypes = {
+  classes: PropTypes.object,
   loginBegin: PropTypes.func,
-  email: PropTypes.string
+  email: PropTypes.string,
+  passwordError: PropTypes.string,
+  width: PropTypes.string,
+};
+
+LoginForm.contextTypes = {
+  intl: PropTypes.object.isRequired,
 };
 
 export default compose(

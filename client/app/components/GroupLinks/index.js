@@ -6,11 +6,13 @@ import { createStructuredSelector } from 'reselect';
 import { AppBar, Toolbar, Button } from '@material-ui/core';
 import { NavLink } from 'react-router-dom';
 import { withTheme } from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
 
 export function GroupLinks(props) {
   const { theme } = props;
   const activeColor = theme.palette.primary.main;
   // Wrap NavLink to fix ref issue temporarily until react-router-dom is updated to fix this
+  /* eslint-disable-next-line no-shadow */
   const WrappedNavLink = React.forwardRef((props, ref) => <NavLink innerRef={ref} {...props} />);
 
   const NavLinks = () => (
@@ -21,7 +23,7 @@ export function GroupLinks(props) {
         marginRight: 'auto'
       }}
     >
-      <Button component={WrappedNavLink} to='/home' activeStyle={{ color: activeColor }}>Home</Button>
+      <Button component={WrappedNavLink} to='/' activeStyle={{ color: activeColor }}>Home</Button>
       <Button component={WrappedNavLink} to='/user/campaigns' activeStyle={{ color: activeColor }}>Members</Button>
       <Button component={WrappedNavLink} to='/user/news' activeStyle={{ color: activeColor }}>Events</Button>
       <Button component={WrappedNavLink} to='/user/events' activeStyle={{ color: activeColor }}>Resources</Button>
@@ -39,6 +41,10 @@ export function GroupLinks(props) {
     </div>
   );
 }
+
+GroupLinks.propTypes = {
+  theme: PropTypes.object,
+};
 
 export function mapDispatchToProps(dispatch) {
   return {

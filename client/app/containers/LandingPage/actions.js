@@ -5,5 +5,3 @@
  */
 
 import { } from './constants';
-
-}
