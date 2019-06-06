@@ -8,6 +8,8 @@ import Container from '@material-ui/core/Container';
 import ApplicationLayout from '../ApplicationLayout';
 import { withStyles } from '@material-ui/core/styles';
 
+import { HOME_PATH } from 'containers/Routes/constants';
+
 const styles = theme => ({
   container: {
     height: '100%',
@@ -37,7 +39,7 @@ const SessionLayout = ({ component: Component, ...rest }) => {
           )}
         />
       )
-      : <Redirect to='/' />
+      : <Redirect to={HOME_PATH} />
   );
 };
 

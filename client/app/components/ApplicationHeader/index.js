@@ -21,6 +21,8 @@ import { logoutBegin, setUser } from 'containers/App/actions';
 
 import { selectEnterprise, selectToken, selectUser } from 'containers/App/selectors';
 
+import { HOME_PATH, ADMIN_ANALYTICS_PATH } from 'containers/Routes/constants';
+
 const styles = theme => ({
   root: {
     width: '100%',
@@ -273,10 +275,10 @@ export function mapDispatchToProps(dispatch, ownProps) {
       dispatch(setUser(null));
     },
     handleVisitAdmin() {
-      dispatch(push('/admin/analytics'));
+      dispatch(push(ADMIN_ANALYTICS_PATH));
     },
     handleVisitHome() {
-      dispatch(push('/'));
+      dispatch(push(HOME_PATH));
     }
   };
 }

@@ -21,6 +21,8 @@ import UsersCircleIcon from '@material-ui/icons/GroupWorkOutlined';
 import DvrIcon from '@material-ui/core/SvgIcon/SvgIcon';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 
+import { HOME_PATH } from 'containers/Routes/constants';
+
 const styles = theme => ({
   toolbar: {
     overflowX: 'auto',
@@ -140,7 +142,7 @@ export class UserLinks extends React.PureComponent {
         open={isMobileNavOpen}
         onClose={this.handleMobileNavClose}
       >
-        <MenuItem component={WrappedNavLink} to='/' activeClassName={classes.mobileNavLinkActive}>
+        <MenuItem component={WrappedNavLink} to={HOME_PATH} activeClassName={classes.mobileNavLinkActive}>
           <ListItemIcon>
             <HomeIcon />
           </ListItemIcon>
@@ -181,7 +183,7 @@ export class UserLinks extends React.PureComponent {
 
     const NavLinks = () => (
       <Toolbar className={classes.toolbar}>
-        <Button component={WrappedNavLink} to='/' className={classes.navLink} activeClassName={classes.navLinkActive}>
+        <Button component={WrappedNavLink} to={HOME_PATH} className={classes.navLink} activeClassName={classes.navLinkActive}>
           <Hidden smDown>
             <HomeIcon className={classes.navIcon} />
           </Hidden>

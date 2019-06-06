@@ -8,6 +8,8 @@ import {
   FIND_ENTERPRISE_BEGIN, FIND_ENTERPRISE_ERROR
 } from './constants';
 
+import { HOME_PATH, LOGIN_PATH } from 'containers/Routes/constants';
+
 import {
   loginSuccess, loginError,
   logoutSuccess, logoutError,
@@ -38,7 +40,7 @@ export function* login(action) {
 
     // TODO: find better way to do this
     //       - we need to reload to render the parent layout component
-    yield put(push('/home'));
+    yield put(push(HOME_PATH));
   } catch (err) {
     yield put(loginError(err));
   }
@@ -52,11 +54,11 @@ export function* logout(action) {
     yield call(api.sessions.destroy.bind(api.sessions), action.token);
     yield put(logoutSuccess());
 
-    yield put(push('/login'));
+    yield put(push(LOGIN_PATH));
     yield put(showSnackbar({ message: 'You have been logged out' }));
   } catch (err) {
     yield put(logoutError(err));
-    yield put(push('/login'));
+    yield put(push(LOGIN_PATH));
   }
 }
 

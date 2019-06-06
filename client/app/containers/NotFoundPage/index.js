@@ -14,12 +14,13 @@ import PropTypes from 'prop-types';
 import {
   Grid, Button, CardContent, Typography, Divider, Hidden
 } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
 import HomeIcon from '@material-ui/icons/Home';
+
+import { HOME_PATH } from 'containers/Routes/constants';
 
 import messages from './messages';
 import Logo from 'components/Logo';
-
-import { withStyles } from '@material-ui/core/styles';
 
 const styles = theme => ({
   textCenter: {
@@ -50,7 +51,7 @@ export class NotFoundPage extends React.PureComponent {
           variant='contained'
           color='primary'
           component={WrappedNavLink}
-          to='/'
+          to={HOME_PATH}
           className={classes.verticalMargins}
         >
           <Hidden xsDown>
