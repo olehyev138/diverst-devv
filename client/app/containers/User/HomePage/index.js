@@ -65,11 +65,11 @@ export class HomePage extends React.PureComponent {
   };
 
   handleProfileMenuOpen = event => {
-    this.setState({ anchorEl: event.currentTarget });
+    this.setState({ menuAnchor: event.currentTarget });
   };
 
   handleMenuClose = () => {
-    this.setState({ anchorEl: null });
+    this.setState({ menuAnchor: null });
     this.handleMobileMenuClose();
   };
 

@@ -3,7 +3,6 @@ import { Router, Route, Switch } from 'react-router';
 import { Redirect } from 'react-router-dom';
 
 import AuthService from "utils/authService";
-import { history } from "../../configureStore";
 
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { LoginPage, NotFoundPage, HomePage } from './templates';
@@ -19,20 +18,17 @@ import Logo from "components/Logo";
 
 export default function Routes() {
   return (
-    <Router history={history}>
-      <Switch>
-        <SessionLayout path='/login' component={LoginPage} />
+    <Switch>
+      <SessionLayout path='/login' component={LoginPage} />
 
-        <AdminLayout path='/admin' component={HomePage} />
-        <AdminLayout path='/admin/analytics' component={HomePage} />
+      <AdminLayout path='/admin' component={HomePage} />
+      <AdminLayout path='/admin/analytics' component={HomePage} />
 
-        <GroupLayout path='/groups' />
+      <GroupLayout path='/groups' />
 
-        <UserLayout exact path='/' component={HomePage} />
-        <UserLayout path='/home' component={HomePage} />
+      <UserLayout exact path='/' pageTitle='Home' component={HomePage} />
 
-        <ErrorLayout path='' component={NotFoundPage} />
-      </Switch>
-    </Router>
+      <ErrorLayout path='' component={NotFoundPage} />
+    </Switch>
   );
 }

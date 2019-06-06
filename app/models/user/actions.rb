@@ -44,11 +44,11 @@ module User::Actions
 
       # find the user
       user = User.find_by(email: email.downcase)
-      raise BadRequestException.new 'Invalid Credentials' if user.nil?
+      raise BadRequestException.new 'User does not exist' if user.nil?
 
       # verify the password
       if not user.valid_password?(password)
-        raise BadRequestException.new 'Invalid Credentials'
+        raise BadRequestException.new 'Incorrect password'
       end
 
       # auditing
@@ -62,17 +62,10 @@ module User::Actions
     end
 
     def find_user_by_email(diverst_request, params)
-      return nil if params[:email].nil?
+      user = User.find_by_email(params[:email]&.downcase)
 
-      # get the user
-      user = User.find_by_email(params[:email].downcase)
+      raise BadRequestException.new 'User does not exist' if user.nil?
 
-      # check if user exists
-      if user.nil?
-        return
-      end
-
-      # return the user
       user
     end
   end

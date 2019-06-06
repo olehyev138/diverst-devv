@@ -10,18 +10,18 @@ import ApplicationHeader from 'components/ApplicationHeader';
 
 const styles = theme => ({});
 
-const AuthenticatedLayout = ({renderAppBar: renderAppBar, position: position, isAdmin: isAdmin, component: Component, ...rest}) => {
-  const { classes } = rest;
+const AuthenticatedLayout = ({renderAppBar: renderAppBar, drawerToggleCallback: drawerToggleCallback, drawerOpen: drawerOpen, position: position, isAdmin: isAdmin, component: Component, ...rest}) => {
+  const { classes, ...other } = rest;
 
   return (
     AuthService.isAuthenticated() === true ?
-      <ApplicationLayout component={matchProps => (
+      <ApplicationLayout {...other} component={matchProps => (
         <div>
           {
             renderAppBar === false ?
               <React.Fragment/>
             :
-              <ApplicationHeader position={position} isAdmin={isAdmin} {...matchProps} />
+              <ApplicationHeader drawerToggleCallback={drawerToggleCallback} drawerOpen={drawerOpen} position={position} isAdmin={isAdmin} {...matchProps} />
           }
           <Component {...matchProps} />
         </div>

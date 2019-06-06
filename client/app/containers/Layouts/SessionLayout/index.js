@@ -24,7 +24,7 @@ const SessionLayout = ({component: Component, ...rest}) => {
 
   return (
     AuthService.isAuthenticated() === false ?
-      <ApplicationLayout component={matchProps => (
+      <ApplicationLayout {...other} component={matchProps => (
         <Container maxWidth="sm" className={classes.container}>
           <div className={classes.content}>
             <Component {...other} />

@@ -9,9 +9,6 @@ import { withStyles } from "@material-ui/core/styles";
 import AuthenticatedLayout from "../AuthenticatedLayout";
 
 const styles = theme => ({
-  fullWidth: {
-    width: '100%',
-  },
   toolbar: theme.mixins.toolbar,
   content: {
     flexGrow: 1,
@@ -19,24 +16,22 @@ const styles = theme => ({
   },
 });
 
-const UserLayout = ({component: Component, ...rest}) => {
+const UserLayout = ({component: Component, pageTitle: pageTitle, ...rest}) => {
   const { classes, ...other } = rest;
 
   return (
-    <div className={classes.fullWidth}>
-      <AuthenticatedLayout position='fixed' component={matchProps => (
-        <div>
-          <div className={classes.toolbar} />
-          <UserLinks {...matchProps} />
+    <AuthenticatedLayout position='absolute' {...other} component={matchProps => (
+      <React.Fragment>
+        <div className={classes.toolbar} />
+        <UserLinks pageTitle={pageTitle} {...matchProps} />
 
-          <Container>
-            <div className={classes.content}>
-              <Component {...other} />
-            </div>
-          </Container>
-        </div>
-      )}/>
-    </div>
+        <Container>
+          <div className={classes.content}>
+            <Component {...other} />
+          </div>
+        </Container>
+      </React.Fragment>
+    )}/>
   );
 };
 

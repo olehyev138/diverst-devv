@@ -6,13 +6,6 @@
 
 import { defineMessages } from "react-intl";
 
-export const scope = "diverst.containers.Login";
+export const scope = "diverst.containers.EnterpriseForm";
 
-export default defineMessages({
-  email: {
-    id: `${scope}.input.email`,
-  },
-  findCompany: {
-    id: `${scope}.links.findCompany`
-  }
-});
+export default defineMessages({});

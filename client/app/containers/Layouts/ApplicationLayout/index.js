@@ -7,13 +7,13 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 const styles = theme => ({});
 
 const ApplicationLayout = ({ component: Component, ...rest}) => {
-  const { classes } = rest;
+  const { classes, ...other } = rest;
 
   return (
-    <React.Fragment>
+    <Route {...other}>
       <CssBaseline />
       <Component {...rest} />
-    </React.Fragment>
+    </Route>
   )
 };
 

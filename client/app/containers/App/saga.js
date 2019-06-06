@@ -1,6 +1,5 @@
 import { call, put, takeLatest } from "redux-saga/dist/redux-saga-effects-npm-proxy.esm";
 import api from 'api/api';
-import { toast } from 'react-toastify';
 import { push } from 'connected-react-router';
 
 import {
@@ -14,6 +13,8 @@ import {
   logoutSuccess, logoutError,
   setEnterprise, findEnterpriseError, setUser
 } from './actions';
+
+import { showSnackbar } from "containers/Notifier/actions";
 
 import AuthService from 'utils/authService'
 import { changePrimary, changeSecondary } from 'containers/ThemeProvider/actions';
@@ -53,6 +54,7 @@ export function* logout(action) {
     yield put(logoutSuccess());
 
     yield put(push("/login"));
+    yield put(showSnackbar({ message: 'You have been logged out' }))
   }
   catch (err) {
     yield put(logoutError(err));
@@ -77,21 +79,14 @@ export function* findEnterprise(action) {
     }
   }
   catch (err) {
-    yield put(findEnterpriseError());
+    yield put(findEnterpriseError(err));
   }
-}
-
-export function* displayError(action) {
-  toast(action.error.response.data, { hideProgressBar: true, type: 'error' });
 }
 
 export default function* handleLogin() {
   yield takeLatest(LOGIN_BEGIN, login);
-  yield takeLatest(LOGIN_ERROR, displayError);
 
   yield takeLatest(LOGOUT_BEGIN, logout);
-  yield takeLatest(LOGOUT_ERROR, displayError);
 
   yield takeLatest(FIND_ENTERPRISE_BEGIN, findEnterprise);
-  yield takeLatest(FIND_ENTERPRISE_ERROR, displayError);
 }

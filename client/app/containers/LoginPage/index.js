@@ -8,14 +8,15 @@ import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import { selectEnterprise } from 'containers/App/selectors';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import { withStyles } from "@material-ui/core/styles";
 
-import injectReducer from 'utils/injectReducer';
+import { selectEnterprise } from 'containers/App/selectors';
+import { selectEmailError, selectPasswordError } from "./selectors";
 
 import reducer from './reducer';
+import injectReducer from 'utils/injectReducer';
 
 import LoginForm from '../../components/LoginForm';
 import EnterpriseForm from '../../components/EnterpriseForm';
@@ -38,11 +39,13 @@ export class LoginPage extends React.PureComponent {
     if (this.props.enterprise) {
       return <LoginForm
         email={this.state.email}
+        passwordError={this.props.passwordError}
         loginBegin={(values, actions) => this.props.loginBegin(values)}
       />
     }
     else {
       return <EnterpriseForm
+        emailError={this.props.emailError}
         findEnterpriseBegin={(values, actions) => {
           this.props.findEnterpriseBegin(values);
           this.setState({ email: values.email });
@@ -68,13 +71,15 @@ LoginPage.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
-  enterprise: selectEnterprise()
+  enterprise: selectEnterprise(),
+  emailError: selectEmailError(),
+  passwordError: selectPasswordError(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
     loginBegin: (payload) => dispatch(loginBegin(payload)),
-    findEnterpriseBegin: (payload) => dispatch(findEnterpriseBegin(payload))
+    findEnterpriseBegin: (payload) => dispatch(findEnterpriseBegin(payload)),
   };
 }
 
@@ -89,4 +94,5 @@ export default compose(
   withReducer,
   withConnect,
   memo,
-)(withStyles(styles)(LoginPage));
+  withStyles(styles),
+)(LoginPage);

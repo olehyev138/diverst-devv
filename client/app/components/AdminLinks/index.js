@@ -11,7 +11,7 @@ import {
   AppBar, Toolbar, Drawer, Icon,
   Typography, InputBase, Button, Badge, MenuItem,
   Menu, List, Divider, ListItem, ListItemIcon,
-  ListItemText, Grid, Collapse
+  ListItemText, Grid, Collapse, Hidden
 } from '@material-ui/core';
 
 import AssignmentIcon from '@material-ui/icons/Assignment';
@@ -63,8 +63,10 @@ const styles = theme => ({
     },
   },
   drawer: {
-    width: drawerWidth,
-    flexShrink: 0,
+    [theme.breakpoints.up('md')]: {
+      width: drawerWidth,
+      flexShrink: 0,
+    },
   },
   drawerPaper: {
     width: drawerWidth,
@@ -85,35 +87,38 @@ export class AdminLinks extends React.PureComponent {
     super(props);
 
     this.state = {
-      open: false,
+      drawerOpen: props.drawerOpen,
+      analyze: {
+        open: false,
+      },
     };
   }
 
-  handleClick = () => {
-    this.setState(state => ({ open: !state.open }));
+  handleDrawerToggle = () => {
+    this.setState(
+      (state) => ({ drawerOpen: !state.drawerOpen }),
+      () => (this.props.drawerToggleCallback(this.state.drawerOpen))
+    );
   };
 
-  render() {
-    const { classes } = this.props;
+  handleAnalyzeClick = () => {
+    this.setState(state => ({ analyze: { open: !state.analyze.open } }));
+  };
 
+  drawer(classes) {
     return (
-      <Drawer
-        className={classes.drawer}
-        variant="permanent"
-        classes={{
-          paper: classes.drawerPaper,
-        }}
-      >
+      <React.Fragment>
         <div className={classes.toolbar} />
+        <Divider/>
         <List>
-          <ListItem button onClick={this.handleClick}>
+          <ListItem button onClick={this.handleAnalyzeClick}>
             <ListItemIcon>
               <EqualizerIcon />
             </ListItemIcon>
             <ListItemText primary="Analyze" />
-            {this.state.open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+            {this.state.analyze.open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
           </ListItem>
-          <Collapse in={this.state.open} timeout="auto" unmountOnExit>
+          <Collapse in={this.state.analyze.open} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
               <ListItem button className={classes.nested}>
                 <ListItemIcon>
@@ -172,7 +177,42 @@ export class AdminLinks extends React.PureComponent {
 
           <Divider />
         </List>
-      </Drawer>
+      </React.Fragment>
+    );
+  }
+
+  render() {
+    const { classes } = this.props;
+
+    return (
+      <nav className={classes.drawer}>
+        <Hidden mdUp>
+          <Drawer
+            variant="temporary"
+            open={this.state.drawerOpen}
+            onClose={this.handleDrawerToggle}
+            classes={{
+              paper: classes.drawerPaper,
+            }}
+            ModalProps={{
+              keepMounted: true, // Better open performance on mobile.
+            }}
+          >
+            {this.drawer(classes)}
+          </Drawer>
+        </Hidden>
+        <Hidden smDown>
+          <Drawer
+            classes={{
+              paper: classes.drawerPaper,
+            }}
+            variant="permanent"
+            open
+          >
+            {this.drawer(classes)}
+          </Drawer>
+        </Hidden>
+      </nav>
     );
   }
 }
