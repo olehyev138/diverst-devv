@@ -68,6 +68,8 @@ LoginPage.propTypes = {
     id: PropTypes.number,
     name: PropTypes.string
   }),
+  passwordError: PropTypes.string,
+  emailError: PropTypes.string,
   loginBegin: PropTypes.func,
   findEnterpriseBegin: PropTypes.func
 };

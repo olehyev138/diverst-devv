@@ -15,7 +15,7 @@ import GlobalStyle from '../../global-styles';
 import Notifier from 'containers/Notifier/Loadable';
 
 import { useInjectSaga } from 'utils/injectSaga';
-import saga from './saga'; '';
+import saga from './saga';
 
 export default function App() {
   useInjectSaga({ key: 'app', saga });

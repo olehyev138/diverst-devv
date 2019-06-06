@@ -24,69 +24,11 @@ import { withStyles } from '@material-ui/core/styles';
 import ApplicationHeader from 'components/ApplicationHeader';
 import UserLinks from 'components/UserLinks';
 
-const styles = theme => ({
-  paper: {
-    padding: theme.spacing(2),
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-  },
-  grow: {
-    flexGrow: 1
-  },
-  title: {
-    fontSize: 14,
-    display: 'none',
-    [theme.breakpoints.up('sm')]: {
-      display: 'block'
-    }
-  },
-  card: {
-    minWidth: 275
-  },
-  bullet: {
-    display: 'inline-block',
-    margin: '0 2px',
-    transform: 'scale(0.8)'
-  },
-  pos: {
-    marginBottom: 12
-  },
-  toolbar: theme.mixins.toolbar,
-});
+const styles = theme => ({});
 
 /* eslint-disable react/prefer-stateless-function */
 // TODO: can this be written with a stateless componenet?
 export class HomePage extends React.PureComponent {
-  constructor(props) {
-    super(props);
-  }
-
-  state = {
-    anchorEl: null,
-    mobileMoreAnchorEl: null
-  };
-
-  handleProfileMenuOpen = (event) => {
-    this.setState({ menuAnchor: event.currentTarget });
-  };
-
-  handleMenuClose = () => {
-    this.setState({ menuAnchor: null });
-    this.handleMobileMenuClose();
-  };
-
-  handleMobileMenuOpen = (event) => {
-    this.setState({ mobileMoreAnchorEl: event.currentTarget });
-  };
-
-  handleMobileMenuClose = () => {
-    this.setState({ mobileMoreAnchorEl: null });
-  };
-
-  componentWillMount() {}
-
-  componentDidMount() {}
-
   render() {
     const { classes } = this.props;
 
@@ -156,7 +98,6 @@ export class HomePage extends React.PureComponent {
 }
 
 HomePage.propTypes = {
-  currentUser: PropTypes.object,
   classes: PropTypes.object
 };
 
@@ -180,4 +121,5 @@ export default compose(
   withReducer,
   withConnect,
   memo,
-)(withStyles(styles)(HomePage));
+  withStyles(styles),
+)(HomePage);

@@ -2,11 +2,12 @@ import React, { memo } from 'react';
 import { Route } from 'react-router';
 import { Redirect } from 'react-router-dom';
 import AuthService from 'utils/authService';
+import PropTypes from 'prop-types';
 
 import { withStyles } from '@material-ui/core/styles';
 
-import ApplicationLayout from '../ApplicationLayout';
 import ApplicationHeader from 'components/ApplicationHeader';
+import ApplicationLayout from 'containers/Layouts/ApplicationLayout';
 
 const styles = theme => ({});
 
@@ -34,6 +35,15 @@ const AuthenticatedLayout = ({
       )
       : <Redirect to='/login' />
   );
+};
+
+AuthenticatedLayout.propTypes = {
+  renderAppBar: PropTypes.bool,
+  drawerOpen: PropTypes.bool,
+  drawerToggleCallback: PropTypes.func,
+  position: PropTypes.string,
+  isAdmin: PropTypes.bool,
+  component: PropTypes.elementType,
 };
 
 export default withStyles(styles)(AuthenticatedLayout);

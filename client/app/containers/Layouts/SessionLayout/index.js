@@ -2,6 +2,7 @@ import React, { memo } from 'react';
 import { Route } from 'react-router';
 import { Redirect } from 'react-router-dom';
 import AuthService from 'utils/authService';
+import PropTypes from 'prop-types';
 
 import Container from '@material-ui/core/Container';
 import ApplicationLayout from '../ApplicationLayout';
@@ -36,8 +37,13 @@ const SessionLayout = ({ component: Component, ...rest }) => {
           )}
         />
       )
-      : <Redirect to='/home' />
+      : <Redirect to='/' />
   );
+};
+
+SessionLayout.propTypes = {
+  classes: PropTypes.object,
+  component: PropTypes.elementType,
 };
 
 export default withStyles(styles)(SessionLayout);

@@ -34,6 +34,7 @@ class Notifier extends Component {
         this.props.removeSnackbar(newSnack.key);
       }
 
+      /* eslint-disable-next-line no-continue */
       if (notExists) continue;
       notExists = notExists || !currentSnacks.filter(({ key }) => newSnack.key === key).length;
     }
@@ -49,6 +50,7 @@ class Notifier extends Component {
       // Display snackbar using notistack
       this.props.enqueueSnackbar(message, {
         ...options,
+        /* eslint-disable-next-line no-shadow */
         onClose: (event, reason, key) => {
           if (options.onClose)
             options.onClose(event, reason, key);

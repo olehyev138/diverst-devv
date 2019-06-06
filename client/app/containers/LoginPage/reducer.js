@@ -18,8 +18,6 @@ export const initialState = {
   }
 };
 
-/* eslint-disable default-case, no-param-reassign */
-// const loginPageReducer = (state = initialState, action) =>
 function loginPageReducer(state = initialState, action) {
   return produce(state, (draft) => {
     // TODO: what do these do?

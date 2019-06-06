@@ -1,6 +1,7 @@
 import React from 'react';
 import { Grid, Button } from '@material-ui/core';
 import robot from 'images/robot.svg';
+import PropTypes from 'prop-types';
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -14,6 +15,8 @@ class ErrorBoundary extends React.Component {
   }
 
   componentDidCatch(error, info) {
+    // TODO: Handle the error
+    /* eslint-disable-next-line no-console */
     console.log(error);
   }
 
@@ -34,7 +37,7 @@ class ErrorBoundary extends React.Component {
               <img src={robot} alt='Oops!' height='150' width='150' />
 
               { /* TODO: translation strings */ }
-              <h4>Oops! Something went wrong here. We're working on it and we'll get it fixed as soon as possible. You can go back or use our Help Center.</h4>
+              <h4>Oops! Something went wrong here. We&apos;re working on it and we&apos;ll get it fixed as soon as possible. You can go back or use our Help Center.</h4>
               <Button>Home</Button>
             </Grid>
           </Grid>
@@ -45,5 +48,9 @@ class ErrorBoundary extends React.Component {
     return this.props.children;
   }
 }
+
+ErrorBoundary.propTypes = {
+  children: PropTypes.node,
+};
 
 export default ErrorBoundary;

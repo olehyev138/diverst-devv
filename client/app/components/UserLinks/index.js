@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import classNames from 'classnames';
+import PropTypes from 'prop-types';
 
 import {
   AppBar, Toolbar, Button, Hidden, Menu, MenuItem, ListItemIcon, IconButton
@@ -18,7 +19,6 @@ import EventIcon from '@material-ui/icons/EventOutlined';
 import GroupIcon from '@material-ui/icons/GroupOutlined';
 import UsersCircleIcon from '@material-ui/icons/GroupWorkOutlined';
 import DvrIcon from '@material-ui/core/SvgIcon/SvgIcon';
-
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 
 const styles = theme => ({
@@ -114,6 +114,7 @@ export class UserLinks extends React.PureComponent {
     const isMobileNavOpen = Boolean(mobileNavAnchor);
 
     // Wrap NavLink to fix ref issue temporarily until react-router-dom is updated to fix this
+    /* eslint-disable-next-line react/no-multi-comp */
     const WrappedNavLink = React.forwardRef((props, ref) => <NavLink innerRef={ref} {...props} />);
 
     const MobileNavMenu = () => (
@@ -263,6 +264,11 @@ export class UserLinks extends React.PureComponent {
     );
   }
 }
+
+UserLinks.propTypes = {
+  classes: PropTypes.object,
+  pageTitle: PropTypes.string,
+};
 
 export function mapDispatchToProps(dispatch) {
   return {

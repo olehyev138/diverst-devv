@@ -2,13 +2,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { push } from 'connected-react-router';
+import PropTypes from 'prop-types';
+import { createStructuredSelector } from 'reselect';
 
 import { withStyles } from '@material-ui/core/styles';
-import { fade } from '@material-ui/core/styles/colorManipulator';
-
 import {
-  MenuItem, Menu, AppBar, Button,
-  Toolbar, IconButton, Typography, ListItemIcon, Hidden
+  AppBar, Button, Hidden, IconButton, ListItemIcon, Menu, MenuItem, Toolbar
 } from '@material-ui/core';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import PermIdentityIcon from '@material-ui/icons/PermIdentity';
@@ -19,13 +18,8 @@ import MenuIcon from '@material-ui/icons/Menu';
 
 import Logo from 'components/Logo';
 import { logoutBegin, setUser } from 'containers/App/actions';
-import { createStructuredSelector } from 'reselect';
 
-import {
-  selectToken,
-  selectUser,
-  selectEnterprise
-} from 'containers/App/selectors';
+import { selectEnterprise, selectToken, selectUser } from 'containers/App/selectors';
 
 const styles = theme => ({
   root: {
@@ -183,7 +177,7 @@ export class ApplicationHeader extends React.PureComponent {
 
     return (
       <div className={classes.root}>
-        <AppBar position={position || 'absolute'} className={classes.appBar}>
+        <AppBar position={position} className={classes.appBar}>
           <Toolbar className={classes.toolbar}>
             { isAdmin
               ? (
@@ -254,6 +248,23 @@ export class ApplicationHeader extends React.PureComponent {
     );
   }
 }
+
+ApplicationHeader.propTypes = {
+  classes: PropTypes.object,
+  user: PropTypes.object,
+  drawerOpen: PropTypes.bool,
+  drawerToggleCallback: PropTypes.func,
+  enterprise: PropTypes.object,
+  position: PropTypes.string,
+  isAdmin: PropTypes.bool,
+  logoutBegin: PropTypes.func,
+  handleVisitAdmin: PropTypes.func,
+  handleVisitHome: PropTypes.func,
+};
+
+ApplicationHeader.defaultProps = {
+  position: 'absolute'
+};
 
 export function mapDispatchToProps(dispatch, ownProps) {
   return {

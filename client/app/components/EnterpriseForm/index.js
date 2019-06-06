@@ -115,8 +115,10 @@ function EnterpriseForm(props, context) {
 }
 
 EnterpriseForm.propTypes = {
+  classes: PropTypes.object,
   findEnterpriseBegin: PropTypes.func,
   enterpriseError: PropTypes.string,
+  emailError: PropTypes.string,
 };
 
 EnterpriseForm.contextTypes = {

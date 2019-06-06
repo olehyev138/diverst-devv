@@ -59,4 +59,9 @@ export class AdminLayout extends React.PureComponent {
   }
 }
 
+AdminLayout.propTypes = {
+  classes: PropTypes.object,
+  component: PropTypes.elementType,
+};
+
 export default withStyles(styles)(AdminLayout);

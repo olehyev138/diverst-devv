@@ -9,7 +9,6 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { FormattedMessage } from 'react-intl';
 
-
 import { Field, Formik, Form } from 'formik';
 import * as Yup from 'yup';
 
@@ -153,8 +152,11 @@ function LoginForm(props, context) {
 }
 
 LoginForm.propTypes = {
+  classes: PropTypes.object,
   loginBegin: PropTypes.func,
-  email: PropTypes.string
+  email: PropTypes.string,
+  passwordError: PropTypes.string,
+  width: PropTypes.string,
 };
 
 LoginForm.contextTypes = {
