@@ -17,9 +17,11 @@ function themeProviderReducer(state = initialState, action) {
   return produce(state, draft => {
     switch (action.type) {
       case CHANGE_PRIMARY:
-        return draft['primary'] = action.color;
+        draft['primary'] = action.color;
+        break;
       case CHANGE_SECONDARY:
-        return draft['secondary'] = action.color;
+        draft['secondary'] = action.color;
+        break;
     }
   });
 }

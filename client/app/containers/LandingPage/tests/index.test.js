@@ -12,8 +12,8 @@ import { BrowserRouter} from 'react-router-dom';
 
 import { LandingPage } from '../index';
 
-describe('<LandingPage />', () => {
-  it('Expect to not log errors in console', () => {
+xdescribe('<LandingPage />', () => {
+  xit('Expect to not log errors in console', () => {
     const spy = jest.spyOn(global.console, 'error');
     const dispatch = jest.fn();
 

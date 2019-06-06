@@ -25,6 +25,7 @@ describe('<LanguageProvider />', () => {
         {children}
       </LanguageProvider>,
     );
+
     expect(container.firstChild).not.toBeNull();
   });
 });

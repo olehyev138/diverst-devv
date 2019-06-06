@@ -12,8 +12,8 @@ import { render } from 'react-testing-library';
 
 import { ThemeProvider } from '../index';
 
-describe('<ThemeProvider />', () => {
-  it('Expect to not log errors in console', () => {
+xdescribe('<ThemeProvider />', () => {
+  xit('Expect to not log errors in console', () => {
     const spy = jest.spyOn(global.console, 'error');
     const dispatch = jest.fn();
     render(<ThemeProvider dispatch={dispatch} />);
@@ -29,7 +29,7 @@ describe('<ThemeProvider />', () => {
    *
    * @see {@link https://jestjs.io/docs/en/api#testskipname-fn}
    */
-  it.skip('Should render and match the snapshot', () => {
+  xit.skip('Should render and match the snapshot', () => {
     const {
       container: { firstChild },
     } = render(<ThemeProvider />);
