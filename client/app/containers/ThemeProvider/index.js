@@ -9,6 +9,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
+import { SnackbarProvider } from 'notistack';
 
 import injectReducer from 'utils/injectReducer';
 
@@ -27,8 +28,8 @@ const axios = require('axios');
 
 export class ThemeProvider extends React.PureComponent {
   componentDidMount() {
-    // Try and get the JWT token from storage. If it doesn"t exist
-    // we"re done. The user must login again.
+    // Try and get the JWT token from storage. If it doesn't exist
+    // we're done. The user must login again.
 
     // TODO:
     //    - why is this done here? what does it do?
@@ -87,7 +88,14 @@ export class ThemeProvider extends React.PureComponent {
 
     return (
       <MuiThemeProvider theme={theme}>
-        <App />
+        <SnackbarProvider
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'right',
+          }}
+        >
+          <App />
+        </SnackbarProvider>
       </MuiThemeProvider>
     );
   }
@@ -95,7 +103,8 @@ export class ThemeProvider extends React.PureComponent {
 
 ThemeProvider.propTypes = {
   primary: PropTypes.string,
-  secondary: PropTypes.string
+  secondary: PropTypes.string,
+  loginSuccess: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({

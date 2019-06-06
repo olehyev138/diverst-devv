@@ -1,6 +1,5 @@
 import { call, put, takeLatest } from 'redux-saga/dist/redux-saga-effects-npm-proxy.esm';
 import api from 'api/api';
-import { toast } from 'react-toastify';
 import { push } from 'connected-react-router';
 
 import {
@@ -9,11 +8,15 @@ import {
   FIND_ENTERPRISE_BEGIN, FIND_ENTERPRISE_ERROR
 } from './constants';
 
+import { HOME_PATH, LOGIN_PATH } from 'containers/Routes/constants';
+
 import {
   loginSuccess, loginError,
   logoutSuccess, logoutError,
   setEnterprise, findEnterpriseError, setUser
 } from './actions';
+
+import { showSnackbar } from 'containers/Notifier/actions';
 
 import AuthService from 'utils/authService';
 import { changePrimary, changeSecondary } from 'containers/ThemeProvider/actions';
@@ -37,7 +40,7 @@ export function* login(action) {
 
     // TODO: find better way to do this
     //       - we need to reload to render the parent layout component
-    yield put(push('/home'));
+    yield put(push(HOME_PATH));
   } catch (err) {
     yield put(loginError(err));
   }
@@ -51,10 +54,11 @@ export function* logout(action) {
     yield call(api.sessions.destroy.bind(api.sessions), action.token);
     yield put(logoutSuccess());
 
-    yield put(push('/login'));
+    yield put(push(LOGIN_PATH));
+    yield put(showSnackbar({ message: 'You have been logged out' }));
   } catch (err) {
     yield put(logoutError(err));
-    yield put(push('/login'));
+    yield put(push(LOGIN_PATH));
   }
 }
 
@@ -74,21 +78,14 @@ export function* findEnterprise(action) {
       yield put(changeSecondary(enterprise.theme.secondary_color));
     }
   } catch (err) {
-    yield put(findEnterpriseError());
+    yield put(findEnterpriseError(err));
   }
-}
-
-export function* displayError(action) {
-  toast(action.error.response.data, { hideProgressBar: true, type: 'error' });
 }
 
 export default function* handleLogin() {
   yield takeLatest(LOGIN_BEGIN, login);
-  yield takeLatest(LOGIN_ERROR, displayError);
 
   yield takeLatest(LOGOUT_BEGIN, logout);
-  yield takeLatest(LOGOUT_ERROR, displayError);
 
   yield takeLatest(FIND_ENTERPRISE_BEGIN, findEnterprise);
-  yield takeLatest(FIND_ENTERPRISE_ERROR, displayError);
 }

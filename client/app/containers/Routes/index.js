@@ -1,38 +1,34 @@
 import React from 'react';
-import { Router, Route, Switch } from 'react-router';
-import { Redirect } from 'react-router-dom';
-
-import AuthService from 'utils/authService';
-import { history } from '../../configureStore';
-
-import CssBaseline from '@material-ui/core/CssBaseline';
-import { LoginPage, NotFoundPage, HomePage } from './templates';
+import { Switch } from 'react-router';
 
 // Layouts
-import ApplicationLayout from '../Layouts/ApplicationLayout';
 import UserLayout from '../Layouts/UserLayout';
 import GroupLayout from '../Layouts/GroupLayout';
 import AdminLayout from '../Layouts/AdminLayout';
 import SessionLayout from '../Layouts/SessionLayout';
 import ErrorLayout from '../Layouts/ErrorLayout';
-import Logo from 'components/Logo';
+
+// Pages
+import { HomePage, LoginPage, NotFoundPage } from './templates';
+
+// Paths
+import {
+  ADMIN_ANALYTICS_PATH, ADMIN_PATH, GROUP_PATH, HOME_PATH, LOGIN_PATH
+} from './constants';
 
 export default function Routes() {
   return (
-    <Router history={history}>
-      <Switch>
-        <SessionLayout path='/login' component={LoginPage} />
+    <Switch>
+      <SessionLayout path={LOGIN_PATH} component={LoginPage} />
 
-        <AdminLayout path='/admin' component={HomePage} />
-        <AdminLayout path='/admin/analytics' component={HomePage} />
+      <AdminLayout path={ADMIN_PATH} component={HomePage} />
+      <AdminLayout path={ADMIN_ANALYTICS_PATH} component={HomePage} />
 
-        <GroupLayout path='/groups' />
+      <GroupLayout path={GROUP_PATH} />
 
-        <UserLayout exact path='/' component={HomePage} />
-        <UserLayout path='/home' component={HomePage} />
+      <UserLayout exact path={HOME_PATH} pageTitle='Home' component={HomePage} />
 
-        <ErrorLayout path='' component={NotFoundPage} />
-      </Switch>
-    </Router>
+      <ErrorLayout path='' component={NotFoundPage} />
+    </Switch>
   );
 }

@@ -2,33 +2,26 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { push } from 'connected-react-router';
+import PropTypes from 'prop-types';
+import { createStructuredSelector } from 'reselect';
 
 import { withStyles } from '@material-ui/core/styles';
-import { fade } from '@material-ui/core/styles/colorManipulator';
-
 import {
-  MenuItem, Menu, AppBar, Button,
-  Toolbar, IconButton, Typography, ListItemIcon
+  AppBar, Button, Hidden, IconButton, ListItemIcon, Menu, MenuItem, Toolbar
 } from '@material-ui/core';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import PermIdentityIcon from '@material-ui/icons/PermIdentity';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import BuildIcon from '@material-ui/icons/Build';
 import DvrIcon from '@material-ui/icons/Dvr';
+import MenuIcon from '@material-ui/icons/Menu';
 
 import Logo from 'components/Logo';
 import { logoutBegin, setUser } from 'containers/App/actions';
-import { createStructuredSelector } from 'reselect';
 
-import {
-  selectToken,
-  selectUser,
-  selectEnterprise
-} from 'containers/App/selectors';
+import { selectEnterprise, selectToken, selectUser } from 'containers/App/selectors';
 
-
-import styled from 'styled-components';
-const drawerWidth = 240;
+import { HOME_PATH, ADMIN_ANALYTICS_PATH } from 'containers/Routes/constants';
 
 const styles = theme => ({
   root: {
@@ -37,99 +30,17 @@ const styles = theme => ({
   grow: {
     flexGrow: 1,
   },
-  menuButton: {
-    marginLeft: -12,
-    marginRight: 20
-  },
-  title: {
-    fontSize: 14,
-    flexGrow: 1,
-    display: 'none',
-    [theme.breakpoints.up('sm')]: {
-      display: 'block'
-    }
-  },
-  search: {
-    position: 'relative',
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: fade(theme.palette.common.white, 0.15),
-    '&:hover': {
-      backgroundColor: fade(theme.palette.common.white, 0.25)
-    },
-    marginRight: theme.spacing(2),
-    marginLeft: 0,
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
-      marginLeft: theme.spacing(3),
-      width: 'auto'
-    }
-  },
-  searchIcon: {
-    width: theme.spacing(9),
-    height: '100%',
-    position: 'absolute',
-    pointerEvents: 'none',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  inputRoot: {
-    color: 'inherit',
-    width: '100%'
-  },
-  inputInput: {
-    paddingTop: theme.spacing(1),
-    paddingRight: theme.spacing(1),
-    paddingBottom: theme.spacing(1),
-    paddingLeft: theme.spacing(10),
-    transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('md')]: {
-      width: 200
-    }
-  },
   sectionDesktop: {
     display: 'flex',
-    // display: "none",
-    // [theme.breakpoints.up("md")]: {
-    //   display: "flex"
-    // }
-  },
-  sectionMobile: {
-    display: 'flex',
-    [theme.breakpoints.up('md')]: {
-      display: 'none'
-    }
-  },
-  card: {
-    minWidth: 275
-  },
-  bullet: {
-    display: 'inline-block',
-    margin: '0 2px',
-    transform: 'scale(0.8)',
-  },
-  pos: {
-    marginBottom: 12
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
-  },
-  drawer: {
-    width: drawerWidth,
-    flexShrink: 0,
-  },
-  drawerPaper: {
-    width: drawerWidth,
   },
   content: {
     flexGrow: 1,
     padding: theme.spacing(3),
   },
   toolbar: theme.mixins.toolbar,
-  nested: {
-    paddingLeft: theme.spacing(4),
-  },
   paper: {
     borderWidth: 1,
     borderStyle: 'solid',
@@ -144,6 +55,11 @@ const styles = theme => ({
     padding: '0px 8px',
     marginRight: '8px',
   },
+  dashboardSwitchMenuItem: {
+    [theme.breakpoints.up('sm')]: {
+      display: 'none',
+    },
+  },
   dashboardIcon: {
     marginRight: 4,
     fontSize: 20,
@@ -152,6 +68,12 @@ const styles = theme => ({
     marginRight: 2,
     fontSize: 18,
   },
+  drawerToggle: {
+    marginRight: theme.spacing(2),
+    [theme.breakpoints.up('md')]: {
+      display: 'none',
+    },
+  },
 });
 
 // TODO: rewrite as stateless component if possible
@@ -159,7 +81,8 @@ export class ApplicationHeader extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      anchorEl: null,
+      drawerOpen: props.drawerOpen,
+      menuAnchor: null,
     };
 
     this.logoutBegin = this.logoutBegin.bind(this);
@@ -180,44 +103,66 @@ export class ApplicationHeader extends React.PureComponent {
   }
 
   handleProfileMenuOpen = (event) => {
-    this.setState({ anchorEl: event.currentTarget });
+    this.setState({ menuAnchor: event.currentTarget });
   };
 
-  handleMenuClose = () => {
-    this.setState({ anchorEl: null });
-    this.handleMobileMenuClose();
+  handleProfileMenuClose = () => {
+    this.setState({ menuAnchor: null });
   };
 
-  handleMobileMenuOpen = (event) => {
-    this.setState({ mobileMoreAnchorEl: event.currentTarget });
-  };
-
-  handleMobileMenuClose = () => {
-    this.setState({ mobileMoreAnchorEl: null });
+  handleDrawerToggle = () => {
+    this.setState(
+      state => ({ drawerOpen: !state.drawerOpen }),
+      () => (this.props.drawerToggleCallback(this.state.drawerOpen))
+    );
   };
 
   render() {
-    const { anchorEl } = this.state;
+    const { menuAnchor } = this.state;
     const {
       classes, enterprise, position, isAdmin
     } = this.props;
-    const isMenuOpen = Boolean(anchorEl);
+    const isMenuOpen = Boolean(menuAnchor);
 
     const renderMenu = (
       <Menu
         classes={{
           paper: classes.paper,
         }}
+        id='userMenu'
         disableAutoFocusItem
-        anchorEl={anchorEl}
+        anchorEl={menuAnchor}
         getContentAnchorEl={null}
         elevation={0}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
         transformOrigin={{ vertical: 'top', horizontal: 'center' }}
         open={isMenuOpen}
-        onClose={this.handleMenuClose}
+        onClose={this.handleProfileMenuClose}
       >
-        <MenuItem onClick={this.handleMenuClose}>
+        <MenuItem
+          className={classes.dashboardSwitchMenuItem}
+          onClick={isAdmin ? this.handleVisitHome : this.handleVisitAdmin}
+        >
+          { isAdmin
+            ? (
+              <React.Fragment>
+                <ListItemIcon>
+                  <DvrIcon />
+                </ListItemIcon>
+              Dashboard
+              </React.Fragment>
+            )
+            : (
+              <React.Fragment>
+                <ListItemIcon>
+                  <BuildIcon />
+                </ListItemIcon>
+              Admin
+              </React.Fragment>
+            )
+          }
+        </MenuItem>
+        <MenuItem onClick={this.handleProfileMenuClose}>
           <ListItemIcon>
             <PermIdentityIcon />
           </ListItemIcon>
@@ -236,6 +181,20 @@ export class ApplicationHeader extends React.PureComponent {
       <div className={classes.root}>
         <AppBar position={position} className={classes.appBar}>
           <Toolbar className={classes.toolbar}>
+            { isAdmin
+              ? (
+                <IconButton
+                  color='inherit'
+                  aria-label='Open drawer'
+                  edge='start'
+                  onClick={this.handleDrawerToggle}
+                  className={classes.drawerToggle}
+                >
+                  <MenuIcon />
+                </IconButton>
+              )
+              : <React.Fragment />
+            }
             <Button
               size='small'
               onClick={this.handleVisitHome}
@@ -245,32 +204,34 @@ export class ApplicationHeader extends React.PureComponent {
             <div className={classes.grow} />
             <div className={classes.sectionDesktop}>
               <div className={classes.buttonSection}>
-                <Button
-                  className={classes.dashboardSwitchButton}
-                  variant='outlined'
-                  color='inherit'
-                  onClick={isAdmin ? this.handleVisitHome : this.handleVisitAdmin}
-                >
-                  {isAdmin
-                    ? (
-                      <span>
-                        <DvrIcon className={classes.dashboardIcon} />
-                      Dashboard
-                      </span>
-                    )
-                    : (
-                      <span>
-                        <BuildIcon className={classes.adminIcon} />
-                      Admin
-                      </span>
-                    )
-                  }
-                </Button>
+                <Hidden xsDown>
+                  <Button
+                    className={classes.dashboardSwitchButton}
+                    variant='outlined'
+                    color='inherit'
+                    onClick={isAdmin ? this.handleVisitHome : this.handleVisitAdmin}
+                  >
+                    { isAdmin
+                      ? (
+                        <span>
+                          <DvrIcon className={classes.dashboardIcon} />
+                        Dashboard
+                        </span>
+                      )
+                      : (
+                        <span>
+                          <BuildIcon className={classes.adminIcon} />
+                        Admin
+                        </span>
+                      )
+                    }
+                  </Button>
+                </Hidden>
                 <div>
                   <IconButton
-                    aria-owns={
+                    aria-controls={
                       isMenuOpen
-                        ? 'material-appbar'
+                        ? 'userMenu'
                         : undefined
                     }
                     aria-haspopup='true'
@@ -290,6 +251,23 @@ export class ApplicationHeader extends React.PureComponent {
   }
 }
 
+ApplicationHeader.propTypes = {
+  classes: PropTypes.object,
+  user: PropTypes.object,
+  drawerOpen: PropTypes.bool,
+  drawerToggleCallback: PropTypes.func,
+  enterprise: PropTypes.object,
+  position: PropTypes.string,
+  isAdmin: PropTypes.bool,
+  logoutBegin: PropTypes.func,
+  handleVisitAdmin: PropTypes.func,
+  handleVisitHome: PropTypes.func,
+};
+
+ApplicationHeader.defaultProps = {
+  position: 'absolute'
+};
+
 export function mapDispatchToProps(dispatch, ownProps) {
   return {
     logoutBegin(user) {
@@ -297,10 +275,10 @@ export function mapDispatchToProps(dispatch, ownProps) {
       dispatch(setUser(null));
     },
     handleVisitAdmin() {
-      dispatch(push('/admin/analytics'));
+      dispatch(push(ADMIN_ANALYTICS_PATH));
     },
     handleVisitHome() {
-      dispatch(push('/'));
+      dispatch(push(HOME_PATH));
     }
   };
 }
@@ -318,4 +296,5 @@ const withConnect = connect(
 
 export default compose(
   withConnect,
-)(withStyles(styles)(ApplicationHeader));
+  withStyles(styles),
+)(ApplicationHeader);

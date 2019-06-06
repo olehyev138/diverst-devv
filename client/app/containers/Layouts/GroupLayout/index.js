@@ -1,9 +1,9 @@
 import React, { memo } from 'react';
 import { Route } from 'react-router';
+import PropTypes from 'prop-types';
 
 import GroupLinks from 'components/GroupLinks';
 import ApplicationLayout from '../ApplicationLayout';
-
 
 const GroupLayout = ({ component: Component, ...rest }) => (
   <div>
@@ -17,5 +17,9 @@ const GroupLayout = ({ component: Component, ...rest }) => (
     <Component {...rest} />
   </div>
 );
+
+GroupLayout.propTypes = {
+  component: PropTypes.elementType,
+};
 
 export default GroupLayout;

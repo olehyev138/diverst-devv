@@ -5,10 +5,9 @@ import { createStructuredSelector } from 'reselect';
 import dig from 'object-dig';
 import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
 
-
-// TODO: put this in App/
-import { selectEnterprise } from './selectors';
+import { selectEnterprise } from 'containers/App/selectors';
 
 import defaultLogo from 'images/diverst-logo.svg';
 import defaultLogoPrimary from 'images/diverst-logo-purple.svg';
@@ -44,6 +43,15 @@ export class Logo extends React.PureComponent {
     );
   }
 }
+
+Logo.propTypes = {
+  classes: PropTypes.object,
+  className: PropTypes.string,
+  enterprise: PropTypes.object,
+  coloredDefault: PropTypes.bool,
+  imgClass: PropTypes.string,
+  alt: PropTypes.string,
+};
 
 export function mapDispatchToProps(dispatch, ownProps) {
   return {

@@ -9,16 +9,18 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { NavLink } from 'react-router-dom';
 import classNames from 'classnames';
+import PropTypes from 'prop-types';
 
 import {
   Grid, Button, CardContent, Typography, Divider, Hidden
 } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
 import HomeIcon from '@material-ui/icons/Home';
+
+import { HOME_PATH } from 'containers/Routes/constants';
 
 import messages from './messages';
 import Logo from 'components/Logo';
-
-import { withStyles } from '@material-ui/core/styles';
 
 const styles = theme => ({
   textCenter: {
@@ -33,6 +35,7 @@ const styles = theme => ({
 export class NotFoundPage extends React.PureComponent {
   render() {
     // Wrap NavLink to fix ref issue temporarily until react-router-dom is updated to fix this
+    /* eslint-disable-next-line react/no-multi-comp */
     const WrappedNavLink = React.forwardRef((props, ref) => <NavLink innerRef={ref} {...props} />);
 
     const { classes } = this.props;
@@ -48,7 +51,7 @@ export class NotFoundPage extends React.PureComponent {
           variant='contained'
           color='primary'
           component={WrappedNavLink}
-          to='/'
+          to={HOME_PATH}
           className={classes.verticalMargins}
         >
           <Hidden xsDown>
@@ -60,5 +63,9 @@ export class NotFoundPage extends React.PureComponent {
     );
   }
 }
+
+NotFoundPage.propTypes = {
+  classes: PropTypes.object,
+};
 
 export default withStyles(styles)(NotFoundPage);
