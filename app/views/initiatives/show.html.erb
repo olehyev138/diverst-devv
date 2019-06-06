@@ -74,10 +74,10 @@
             <%= link_to "Export CSV", time_series_group_initiative_field_path(@group, @initiative, field, format: :csv), class: "hidden-xs" %>
           </div>
           <div
+            id="metrics"
             class="graph"
-            data-url="<%= time_series_group_initiative_field_path(@group, @initiative, field) %>"
-            data-title="<%= field.title %>"
-            data-time-series="true">
+            data-url="<%= time_series_group_initiative_field_path(@group, @initiative, field) %>">
+            <svg></svg>
           </div>
         </div>
       <% end %>
