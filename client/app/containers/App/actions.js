@@ -8,7 +8,7 @@ import {
 export function loginBegin(payload) {
   return {
     type: LOGIN_BEGIN,
-    payload: payload,
+    payload,
   };
 }
 
@@ -16,14 +16,14 @@ export function loginBegin(payload) {
 export function loginSuccess(token) {
   return {
     type: LOGIN_SUCCESS,
-    token: token,
+    token,
   };
 }
 
 export function loginError(error) {
   return {
     type: LOGIN_ERROR,
-    error: error
+    error
   };
 }
 
@@ -43,34 +43,34 @@ export function logoutSuccess() {
 export function logoutError(error) {
   return {
     type: LOGOUT_ERROR,
-    error: error,
+    error,
   };
 }
 
 export function findEnterpriseBegin(payload) {
   return {
     type: FIND_ENTERPRISE_BEGIN,
-    payload: payload
+    payload
   };
 }
 
 export function setEnterprise(enterprise) {
   return {
     type: SET_ENTERPRISE,
-    enterprise: enterprise,
+    enterprise,
   };
 }
 
 export function findEnterpriseError(error) {
- return {
+  return {
     type: FIND_ENTERPRISE_ERROR,
-    error: error
+    error
   };
 }
 
 export function setUser(user) {
   return {
     type: SET_USER,
-    user: user,
+    user,
   };
 }

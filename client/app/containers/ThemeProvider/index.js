@@ -11,19 +11,19 @@ import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import { SnackbarProvider } from 'notistack';
 
-import  injectReducer  from 'utils/injectReducer';
+import injectReducer from 'utils/injectReducer';
 
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
-import { makeSelectPrimary, makeSelectSecondary } from "./selectors";
-import { changePrimary, changeSecondary } from "./actions";
+import { makeSelectPrimary, makeSelectSecondary } from './selectors';
+import { changePrimary, changeSecondary } from './actions';
 import reducer from './reducer';
 
-import App from "containers/App/Loadable";
-import { loginSuccess, setUser, setEnterprise } from "containers/App/actions";
-import AuthService from "utils/authService";
+import App from 'containers/App/Loadable';
+import { loginSuccess, setUser, setEnterprise } from 'containers/App/actions';
+import AuthService from 'utils/authService';
 
-const axios = require("axios");
+const axios = require('axios');
 
 
 export class ThemeProvider extends React.PureComponent {
@@ -113,7 +113,7 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch, ownProps) {
   return {
-    loginSuccess: function(token, user, enterprise) {
+    loginSuccess(token, user, enterprise) {
       dispatch(loginSuccess(token));
       dispatch(setUser(user));
       dispatch(setEnterprise(enterprise));

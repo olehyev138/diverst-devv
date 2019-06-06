@@ -1,9 +1,9 @@
-import users from "./users/users";
-import sessions from "./sessions/sessions";
+import users from './users/users';
+import sessions from './sessions/sessions';
 
 const Api = {
-    users,
-    sessions,
+  users,
+  sessions,
 };
 
 export default Api;

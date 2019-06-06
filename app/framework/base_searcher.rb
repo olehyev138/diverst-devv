@@ -8,7 +8,7 @@ module BaseSearcher
       "CAST(#{self.table_name}.id as varchar(25)) LIKE :search"
     end
 
-    def search(params = {}, diverst_request = nil)
+    def lookup(params = {}, diverst_request = nil)
       # get the search value
       searchValue = params[:search]
 

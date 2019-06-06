@@ -43,9 +43,12 @@ gem 'bcrypt'
 gem 'bootsnap', require: false
 gem 'jwt', '~> 2.1.0', require: false
 
+gem 'draper', '~> 3.1.0'
+
 
 gem 'factory_bot_rails', '~> 4.8.0' # Create mock objects for testing
 gem 'tty-spinner'
+gem 'faker', '~> 1.6'
 
 group :development, :test do
   # The 3 gems above are for livereloading your code
@@ -59,6 +62,7 @@ group :development, :test do
   gem 'rubocop-performance', '~> 1.2.0'
   gem 'pronto', '~> 0.10.0'
   gem 'pronto-rubocop', '~> 0.10.0'
+  gem 'pronto-eslint_npm', git: 'https://github.com/doits/pronto-eslint_npm.git'
   gem 'faker', '~> 1.6'
 end
 
