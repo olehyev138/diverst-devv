@@ -5,7 +5,7 @@ RSpec.describe BudgetsController, type: :controller do
 
   let!(:user) { create(:user) }
   let!(:group) { create(:group, enterprise: user.enterprise, annual_budget: 100000) }
-  let!(:annual_budget) { create(:annual_budget, group_id: group.id, amount: group.annual_budget) }
+  let!(:annual_budget) { create(:annual_budget, group_id: group.id, amount: group.annual_budget, enterprise_id: user.enterprise_id) }
   let!(:budget) { create(:approved_budget, group: group, annual_budget_id: annual_budget.id) }
 
   describe 'GET#index' do
@@ -450,45 +450,17 @@ RSpec.describe BudgetsController, type: :controller do
       login_user_from_let
       context 'with valid update' do
         let!(:group1) { create(:group, enterprise: user.enterprise, annual_budget: 2000) }
-        let!(:annual_budget1) { create(:annual_budget, group_id: group1.id, amount: group.annual_budget, closed: false) }
-        let!(:budget1) { create(:budget, group_id: group1.id, annual_budget_id: annual_budget1.id) }
-        let!(:initiative) { create(:initiative, owner_group: group1, finished_expenses: false, annual_budget_id: annual_budget1.id) }
-        let!(:expense) { create(:initiative_expense, amount: 600, annual_budget_id: annual_budget1.id, initiative_id: initiative.id) }
-
-
-        before do
-          request.env['HTTP_REFERER'] = 'back'
-          put :reset_annual_budget, group_id: group.id
-        end
-
-        it 'set annual_budget and leftover_money to zero' do
-          expect(assigns[:group].annual_budget).to eq 0
-          expect(assigns[:group].leftover_money).to eq 0
-        end
-
-
-        context 'when no initiatives and no budgets are present' do
-          let!(:group2) { create(:group, enterprise: user.enterprise, annual_budget: 2000) }
-          before do
-            create(:annual_budget, group_id: group2.id, amount: group.annual_budget)
-            request.env['HTTP_REFERER'] = 'back'
-            put :reset_annual_budget, group_id: group2.id
-          end
-
-          it 'resets existing annual_budget values to 0' do
-            annual_budget = assigns[:group].annual_budgets.last
-            expect(annual_budget.amount).to eq 0
-            expect(annual_budget.leftover_money).to eq 0
-            expect(annual_budget.available_budget).to eq 0
-            expect(annual_budget.expenses).to eq 0
-          end
-        end
+        let!(:annual_budget1) { create(:annual_budget, group_id: group1.id, amount: group1.annual_budget, closed: false, enterprise_id: user.enterprise_id) }
+        let!(:budget1) { create(:approved_budget, group_id: group1.id, annual_budget_id: annual_budget1.id, requester_id: user.id, approver_id: user.id) }
+        let!(:budget_item) { budget1.budget_items.first }
+        let!(:approved_budget) { budget_item.available_amount }
+        let!(:initiative) { create(:initiative, owner_group: group1, finished_expenses: false, annual_budget_id: annual_budget1.id,
+                                                estimated_funding: approved_budget, budget_item_id: budget_item.id)
+        }
+        let!(:expense) { create(:initiative_expense, amount: approved_budget / 2, annual_budget_id: annual_budget1.id, initiative_id: initiative.id) }
 
         context 'when initiatives and budgets are present' do
           before do
-            initiative.update(finished_expenses: true)
-            budget1.update(is_approved: true, approver_id: user.id)
-            budget1.budget_items.update_all(is_done: true)
             request.env['HTTP_REFERER'] = 'back'
             put :reset_annual_budget, group_id: group1.id
           end
@@ -501,23 +473,28 @@ RSpec.describe BudgetsController, type: :controller do
           it 'creates another opened annual budget' do
             annual_budget = assigns[:group].annual_budgets.last
             expect(annual_budget.closed).to eq false
+            expect(annual_budget.amount).to eq 0.0
           end
         end
 
-        context 'when you have unfinished expenses' do
+        context 'when no initiatives and no budgets are present' do
+          let!(:group2) { create(:group, enterprise: user.enterprise, annual_budget: 2000) }
           before do
-            budget1.update(is_approved: true, approver_id: user.id)
-            budget1.budget_items.update_all(is_done: true)
+            create(:annual_budget, group_id: group2.id, amount: group2.annual_budget, enterprise_id: user.enterprise_id)
             request.env['HTTP_REFERER'] = 'back'
-            put :reset_annual_budget, group_id: group1.id
+            put :reset_annual_budget, group_id: group2.id
           end
 
-          it 'does not reset annual budget' do
-            expect(group1.annual_budget).not_to eq 0
+          it 'resets existing annual_budget values to 0' do
+            annual_budget = assigns[:group].annual_budgets.last
+            expect(annual_budget.amount).to eq 0
+            expect(annual_budget.leftover_money).to eq 0
+            expect(annual_budget.available_budget).to eq 0
+            expect(annual_budget.expenses).to eq 0
           end
 
-          it 'produces flash message' do
-            expect(flash[:notice]).to eq "Please close expenses of events belonging to #{group1.name}"
+          it 'flashes a notice message' do
+            expect(flash[:notice]).to eq 'Your budget was updated'
           end
 
           it 'redirects to back' do
@@ -525,48 +502,47 @@ RSpec.describe BudgetsController, type: :controller do
           end
         end
 
-
         describe 'public activity' do
-          before { initiative.update(finished_expenses: true) }
+          let!(:group2) { create(:group, enterprise: user.enterprise, annual_budget: 2000) }
+          before do
+            create(:annual_budget, group_id: group2.id, amount: group2.annual_budget, enterprise_id: user.enterprise_id)
+            request.env['HTTP_REFERER'] = 'back'
+          end
           enable_public_activity
 
           it 'creates public activity record' do
             perform_enqueued_jobs do
-              expect { put :reset_annual_budget, group_id: group1.id }
+              expect { put :reset_annual_budget, group_id: group2.id }
               .to change(PublicActivity::Activity, :count).by(1)
             end
           end
 
           describe 'activity record' do
-            let(:model) { group1 }
+            let(:model) { group2 }
             let(:owner) { user }
             let(:key) { 'group.annual_budget_update' }
 
             before {
               perform_enqueued_jobs do
-                put :reset_annual_budget, group_id: group1.id
+                put :reset_annual_budget, group_id: group2.id
               end
             }
 
             include_examples 'correct public activity'
           end
         end
-
-        it 'flashes a notice message' do
-          expect(flash[:notice]).to eq 'Your budget was updated'
-        end
-
-        it 'redirects to back' do
-          expect(response).to redirect_to 'back'
-        end
       end
 
       context 'with invalid update' do
         let!(:group1) { create(:group, enterprise: user.enterprise, annual_budget: 2000) }
-        let!(:annual_budget1) { create(:annual_budget, group_id: group1.id, amount: group.annual_budget, closed: false) }
-        let!(:budget1) { create(:budget, group_id: group1.id, annual_budget_id: annual_budget1.id) }
-        let!(:initiative) { create(:initiative, owner_group: group1, finished_expenses: true, annual_budget_id: annual_budget1.id) }
-        let!(:expense) { create(:initiative_expense, amount: 600, annual_budget_id: annual_budget1.id, initiative_id: initiative.id) }
+        let!(:annual_budget1) { create(:annual_budget, group_id: group1.id, amount: group1.annual_budget, closed: false, enterprise_id: user.enterprise_id) }
+        let!(:budget1) { create(:approved_budget, group_id: group1.id, annual_budget_id: annual_budget1.id, requester_id: user.id, approver_id: user.id) }
+        let!(:budget_item) { budget1.budget_items.first }
+        let!(:approved_budget) { budget_item.available_amount }
+        let!(:initiative) { create(:initiative, owner_group: group1, finished_expenses: false, annual_budget_id: annual_budget1.id,
+                                                estimated_funding: approved_budget, budget_item_id: budget_item.id)
+        }
+        let!(:expense) { create(:initiative_expense, amount: approved_budget / 2, annual_budget_id: annual_budget1.id, initiative_id: initiative.id) }
 
 
         before do
@@ -589,14 +565,18 @@ RSpec.describe BudgetsController, type: :controller do
   describe 'put#carry_over_annual_budget' do
     context 'with logged user' do
       let!(:group1) { create(:group, enterprise: user.enterprise, annual_budget: 2000) }
-      let!(:annual_budget1) { create(:annual_budget, group_id: group1.id, amount: group.annual_budget, closed: false) }
+      let!(:annual_budget1) { create(:annual_budget, group_id: group1.id, amount: group.annual_budget, closed: false, enterprise_id: user.enterprise_id) }
       let!(:budget1) { create(:budget, group_id: group1.id, is_approved: true, approver_id: user.id, requester_id: user.id,
                                        annual_budget_id: annual_budget1.id)
       }
-      let!(:initiative) { initiative_of_group(group1) }
+      let!(:budget_item) { budget1.budget_items.first }
+      let!(:approved_budget) { budget_item.available_amount }
+      let!(:initiative) { create(:initiative, owner_group: group1, finished_expenses: false, annual_budget_id: annual_budget1.id,
+                                              estimated_funding: approved_budget, budget_item_id: budget_item.id)
+      }
       let!(:expense) do
         BudgetManager.new(budget1).approve(user)
-        create(:initiative_expense, amount: 600, annual_budget_id: annual_budget1.id, initiative_id: initiative.id, owner_id: user.id)
+        create(:initiative_expense, amount: approved_budget / 2, annual_budget_id: annual_budget1.id, initiative_id: initiative.id, owner_id: user.id)
         initiative.update estimated_funding: budget1.budget_items.last.estimated_amount, budget_item_id: budget1.budget_items.last.id
       end
 

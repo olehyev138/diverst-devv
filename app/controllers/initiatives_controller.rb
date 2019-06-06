@@ -27,7 +27,7 @@ class InitiativesController < ApplicationController
     @initiative.owner_group = @group
     # bTODO add event to @group.own_initiatives
 
-    annual_budget = AnnualBudget.find_or_create_by(closed: false, group_id: @group.id)
+    annual_budget = current_user.enterprise.annual_budgets.find_or_create_by(closed: false, group_id: @group.id)
     @initiative.annual_budget_id = annual_budget.id
 
     if @initiative.save

@@ -4,7 +4,7 @@
     <div class="flex-row__cell">
       <%= link_to "Export CSV", export_csv_group_budgets_path, class: "btn btn--secondary hidden-xs", role: "button", 'aria-label': "Export CSV"  if GroupBudgetPolicy.new(current_user, [@group]).create? %>
     </div>
-    <% @annual_budget = AnnualBudget.find_by(id: params[:annual_budget_id]) %>
+    <% @annual_budget = current_user.enterprise.annual_budgets.find_by(id: params[:annual_budget_id]) %>
     <% unless @annual_budget.closed? %>
       <div class="flex-row__cell">
         <%= link_to "New Budget Request", new_group_budget_path(@group, annual_budget_id: params[:annual_budget_id]), class: "btn btn--primary" if GroupBudgetPolicy.new(current_user, [@group]).create? %>

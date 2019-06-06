@@ -10,12 +10,12 @@ class AnnualBudgetManager
     # at this point, group.annual_budget != 0 so we either find or create annual budget and update with group annual budget values
     # i.e annual budget, spent_budget, approved_budget and leftover_money
     find_or_create_annual_budget_and_update
-    annual_budget = @group.annual_budgets.where(closed: false).where.not(amount: 0).last
+    annual_budget = @group.annual_budgets.where(closed: false, enterprise_id: @group.enterprise_id).where.not(amount: 0).last
 
     # if no initiatives are present, then set annual budget values to 0
     if no_initiatives_present?
       @group.update({ annual_budget: 0, leftover_money: 0 })
-      annual_budget.update(amount: 0, expenses: 0, available_budget: 0, approved_budget: 0, leftover_money: 0)
+      annual_budget.update(amount: 0, expenses: 0, available_budget: 0, approved_budget: 0, leftover_money: 0, enterprise_id: @group.enterprise_id)
       return true
     end
 
@@ -41,14 +41,14 @@ class AnnualBudgetManager
     return if @group.leftover_money == 0 || @group.leftover_money.nil?
 
     # find an opened annual budget with a non-zero leftover money
-    annual_budget = @group.annual_budgets.where(closed: false).where.not(leftover_money: 0).last
+    annual_budget = @group.annual_budgets.where(closed: false, enterprise_id: @group.enterprise_id).where.not(leftover_money: 0).last
 
     return if annual_budget.nil?
 
     annual_budget.update(closed: true)
 
     # update new annual budget with leftover money
-    new_annual_budget = AnnualBudget.find_or_create_by(closed: false, group_id: @group.id)
+    new_annual_budget = AnnualBudget.find_or_create_by(closed: false, group_id: @group.id, enterprise_id: @group.enterprise_id)
     new_annual_budget.update(amount: annual_budget.leftover_money)
 
     return true if @group.update({ annual_budget: @group.leftover_money, leftover_money: 0 })
@@ -62,13 +62,13 @@ class AnnualBudgetManager
   end
 
   def find_or_create_annual_budget_and_update
-    annual_budget = AnnualBudget.find_or_create_by(closed: false, group_id: @group.id)
+    annual_budget = AnnualBudget.find_or_create_by(closed: false, group_id: @group.id, enterprise_id: @group.enterprise_id)
     annual_budget.update(amount: @group.annual_budget, available_budget: @group.available_budget,
                          leftover_money: @group.leftover_money, expenses: @group.spent_budget,
-                         approved_budget: @group.approved_budget)
+                         approved_budget: @group.approved_budget, enterprise_id: @group.enterprise_id)
   end
 
   def create_new_annual_budget
-    annual_budget = AnnualBudget.find_or_create_by(closed: false, group_id: @group.id)
+    annual_budget = AnnualBudget.find_or_create_by(closed: false, group_id: @group.id, enterprise_id: @group.enterprise_id)
   end
 end

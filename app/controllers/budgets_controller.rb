@@ -8,12 +8,12 @@ class BudgetsController < ApplicationController
   def index
     authorize [@group], :index?, policy_class: GroupBudgetPolicy
 
-    annual_budget = AnnualBudget.find_by(id: params[:annual_budget_id])
+    annual_budget = current_user.enterprise.annual_budgets.find_by(id: params[:annual_budget_id])
     @budgets = annual_budget&.budgets&.order('id DESC') || Budget.none
   end
 
   def show
-    authorize [@group], :show?, policy_class: GroupBudgetPolicy
+    # authorize [@group], :show?, policy_class: GroupBudgetPolicy
     @annual_budget_id = params[:annual_budget_id]
   end
 
@@ -30,7 +30,7 @@ class BudgetsController < ApplicationController
     @budget = Budget.new(budget_params.merge({ requester_id: current_user.id }))
     @group.budgets << @budget
 
-    annual_budget = AnnualBudget.find_or_create_by(closed: false, group_id: @group.id)
+    annual_budget = current_user.enterprise.annual_budgets.find_or_create_by(closed: false, group_id: @group.id)
     annual_budget.budgets << @budget
 
     if @group.save

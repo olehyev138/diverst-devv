@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe AnnualBudgetManager, type: :service do
   let!(:enterprise) { create(:enterprise) }
   let!(:group) { create(:group, enterprise: enterprise, annual_budget: 10000) }
-  let!(:annual_budget) { create(:annual_budget, group: group, amount: group.annual_budget) }
+  let!(:annual_budget) { create(:annual_budget, group: group, amount: group.annual_budget, enterprise_id: enterprise.id) }
 
 
   describe '#reset' do

@@ -184,6 +184,10 @@ class Initiative < BaseClass
     expenses.where(annual_budget_id: annual_budget.id).sum(:amount) || 0
   end
 
+  def has_no_estimated_funding?
+    estimated_funding == 0
+  end
+
   def leftover
     estimated_funding - current_expences_sum
   end

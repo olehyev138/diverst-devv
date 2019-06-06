@@ -91,7 +91,7 @@ RSpec.feature 'Initiative management' do
     before do
       budget_item1 = budget1.budget_items.first
       initiative1.update(budget_item_id: budget_item1.id)
-      create(:initiative_expense, description: 'new expense', initiative_id: initiative1.id, annual_budget_id: annual_budget.id)
+      create(:initiative_expense, description: 'new expense', amount: 10, initiative_id: initiative1.id, annual_budget_id: annual_budget.id)
     end
 
     scenario 'on group initiatives index page', js: true do
