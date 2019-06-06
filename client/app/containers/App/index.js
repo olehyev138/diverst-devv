@@ -9,10 +9,10 @@
 
 import React from 'react';
 
-import { ToastContainer } from "react-toastify";
+import { ToastContainer } from 'react-toastify';
 
-import Routes from "containers/Routes/Loadable";
-import ErrorBoundary from "containers/ErrorBoundary";
+import Routes from 'containers/Routes/Loadable';
+import ErrorBoundary from 'containers/ErrorBoundary';
 import GlobalStyle from '../../global-styles';
 
 import { useInjectSaga } from 'utils/injectSaga';
@@ -23,9 +23,9 @@ export default function App() {
 
   return (
     <ErrorBoundary>
-      <Routes/>
-      <ToastContainer/>
-      <GlobalStyle/>
+      <Routes />
+      <ToastContainer />
+      <GlobalStyle />
     </ErrorBoundary>
   );
 }

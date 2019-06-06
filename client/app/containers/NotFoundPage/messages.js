@@ -5,7 +5,7 @@
  */
 import { defineMessages } from 'react-intl';
 
-export const scope = "diverst.containers.NotFoundPage";
+export const scope = 'diverst.containers.NotFoundPage';
 
 export default defineMessages({
   header: {

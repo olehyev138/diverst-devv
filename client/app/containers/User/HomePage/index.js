@@ -15,7 +15,9 @@ import injectReducer from 'utils/injectReducer';
 import reducer from './reducer';
 import messages from './messages';
 
-import { Typography, Button, Grid, Card, CardActions, CardContent, Paper } from "@material-ui/core";
+import {
+  Typography, Button, Grid, Card, CardActions, CardContent, Paper
+} from '@material-ui/core';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -33,18 +35,18 @@ const styles = theme => ({
   },
   title: {
     fontSize: 14,
-    display: "none",
-    [theme.breakpoints.up("sm")]: {
-      display: "block"
+    display: 'none',
+    [theme.breakpoints.up('sm')]: {
+      display: 'block'
     }
   },
   card: {
     minWidth: 275
   },
   bullet: {
-    display: "inline-block",
-    margin: "0 2px",
-    transform: "scale(0.8)"
+    display: 'inline-block',
+    margin: '0 2px',
+    transform: 'scale(0.8)'
   },
   pos: {
     marginBottom: 12
@@ -55,16 +57,12 @@ const styles = theme => ({
 /* eslint-disable react/prefer-stateless-function */
 // TODO: can this be written with a stateless componenet?
 export class HomePage extends React.PureComponent {
-  constructor(props) {
-    super(props);
-  }
-
   state = {
     anchorEl: null,
     mobileMoreAnchorEl: null
   };
 
-  handleProfileMenuOpen = event => {
+  handleProfileMenuOpen = (event) => {
     this.setState({ anchorEl: event.currentTarget });
   };
 
@@ -73,7 +71,7 @@ export class HomePage extends React.PureComponent {
     this.handleMobileMenuClose();
   };
 
-  handleMobileMenuOpen = event => {
+  handleMobileMenuOpen = (event) => {
     this.setState({ mobileMoreAnchorEl: event.currentTarget });
   };
 
@@ -94,7 +92,7 @@ export class HomePage extends React.PureComponent {
           <Grid item xs>
             <Card>
               <CardContent>
-                <Typography variant="h5">
+                <Typography variant='h5'>
                   Example Content
                 </Typography>
               </CardContent>
@@ -103,7 +101,7 @@ export class HomePage extends React.PureComponent {
           <Grid item xs>
             <Card>
               <CardContent>
-                <Typography variant="h5">
+                <Typography variant='h5'>
                   Example Content
                 </Typography>
               </CardContent>
@@ -112,7 +110,7 @@ export class HomePage extends React.PureComponent {
           <Grid item xs>
             <Card>
               <CardContent>
-                <Typography variant="h5">
+                <Typography variant='h5'>
                   Example Content
                 </Typography>
               </CardContent>
@@ -123,7 +121,7 @@ export class HomePage extends React.PureComponent {
           <Grid item xs>
             <Card>
               <CardContent>
-                <Typography variant="h5">
+                <Typography variant='h5'>
                   Example Content
                 </Typography>
               </CardContent>
@@ -132,7 +130,7 @@ export class HomePage extends React.PureComponent {
           <Grid item xs={6}>
             <Card>
               <CardContent>
-                <Typography variant="h5">
+                <Typography variant='h5'>
                   Example Content
                 </Typography>
               </CardContent>
@@ -141,7 +139,7 @@ export class HomePage extends React.PureComponent {
           <Grid item xs>
             <Card>
               <CardContent>
-                <Typography variant="h5">
+                <Typography variant='h5'>
                   Example Content
                 </Typography>
               </CardContent>
@@ -172,7 +170,7 @@ const withConnect = connect(
   mapDispatchToProps,
 );
 
-const withReducer = injectReducer({ key: "home", reducer });
+const withReducer = injectReducer({ key: 'home', reducer });
 
 export default compose(
   withReducer,

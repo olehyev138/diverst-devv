@@ -8,15 +8,17 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { NavLink } from 'react-router-dom';
-import classNames from "classnames";
+import classNames from 'classnames';
 
-import { Grid, Button, CardContent, Typography, Divider, Hidden } from '@material-ui/core';
-import HomeIcon from "@material-ui/icons/Home";
+import {
+  Grid, Button, CardContent, Typography, Divider, Hidden
+} from '@material-ui/core';
+import HomeIcon from '@material-ui/icons/Home';
 
-import messages from "./messages";
+import messages from './messages';
 import Logo from 'components/Logo';
 
-import { withStyles } from "@material-ui/core/styles";
+import { withStyles } from '@material-ui/core/styles';
 
 const styles = theme => ({
   textCenter: {
@@ -37,14 +39,14 @@ export class NotFoundPage extends React.PureComponent {
 
     return (
       <div className={classes.textCenter}>
-        <Logo coloredDefault imgClass="extra-large-img" />
+        <Logo coloredDefault imgClass='extra-large-img' />
         <Typography variant='h6' className={classes.verticalMargins}>
           <FormattedMessage {...messages.header} />
         </Typography>
         <Divider />
         <Button
-          variant="contained"
-          color="primary"
+          variant='contained'
+          color='primary'
           component={WrappedNavLink}
           to='/'
           className={classes.verticalMargins}

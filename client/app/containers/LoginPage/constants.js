@@ -3,5 +3,3 @@
  * LoginPage constants
  *
  */
-
-

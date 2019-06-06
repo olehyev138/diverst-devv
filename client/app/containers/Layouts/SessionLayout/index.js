@@ -1,11 +1,11 @@
 import React, { memo } from 'react';
 import { Route } from 'react-router';
 import { Redirect } from 'react-router-dom';
-import AuthService from "utils/authService";
+import AuthService from 'utils/authService';
 
-import Container from "@material-ui/core/Container";
-import ApplicationLayout from "../ApplicationLayout";
-import { withStyles } from "@material-ui/core/styles";
+import Container from '@material-ui/core/Container';
+import ApplicationLayout from '../ApplicationLayout';
+import { withStyles } from '@material-ui/core/styles';
 
 const styles = theme => ({
   container: {
@@ -19,20 +19,23 @@ const styles = theme => ({
   },
 });
 
-const SessionLayout = ({component: Component, ...rest}) => {
+const SessionLayout = ({ component: Component, ...rest }) => {
   const { classes, ...other } = rest;
 
   return (
-    AuthService.isAuthenticated() === false ?
-      <ApplicationLayout component={matchProps => (
-        <Container maxWidth="sm" className={classes.container}>
-          <div className={classes.content}>
-            <Component {...other} />
-          </div>
-        </Container>
-      )}/>
-    :
-      <Redirect to='/home' />
+    AuthService.isAuthenticated() === false
+      ? (
+        <ApplicationLayout
+          component={matchProps => (
+            <Container maxWidth='sm' className={classes.container}>
+              <div className={classes.content}>
+                <Component {...other} />
+              </div>
+            </Container>
+          )}
+        />
+      )
+      : <Redirect to='/home' />
   );
 };
 

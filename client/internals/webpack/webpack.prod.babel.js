@@ -6,6 +6,7 @@ const OfflinePlugin = require('offline-plugin');
 const { HashedModuleIdsPlugin } = require('webpack');
 const TerserPlugin = require('terser-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
+const webpack = require('webpack');
 
 module.exports = require('./webpack.base.babel')({
   mode: 'production',
@@ -66,6 +67,10 @@ module.exports = require('./webpack.base.babel')({
   },
 
   plugins: [
+    new webpack.EnvironmentPlugin({
+      API_URL: 'https://react.diverst.com',
+      API_KEY: '3B7CZ9t1hrLNslbbXrQWEQtt'
+    }),
     // Minify and optimize the index.html
     new HtmlWebpackPlugin({
       template: 'app/index.html',
@@ -123,8 +128,7 @@ module.exports = require('./webpack.base.babel')({
       theme_color: '#b1624d',
       inject: true,
       ios: true,
-      icons: [
-        {
+      icons: [{
           src: path.resolve('app/images/icon-512x512.png'),
           sizes: [72, 96, 128, 144, 192, 384, 512],
         },

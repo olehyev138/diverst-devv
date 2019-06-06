@@ -1,11 +1,11 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import { compose } from "redux";
-import { createStructuredSelector } from "reselect";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { createStructuredSelector } from 'reselect';
 
-import { FormattedMessage } from "react-intl";
-//import messages from "./messages";
+import { FormattedMessage } from 'react-intl';
+// import messages from "./messages";
 
 import {
   AppBar, Toolbar, Drawer, Icon,
@@ -20,7 +20,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
-import MoreIcon from '@material-ui/icons/MoreVert'
+import MoreIcon from '@material-ui/icons/MoreVert';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
@@ -33,14 +33,14 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import ListIcon from '@material-ui/icons/List';
 import DeviceHubIcon from '@material-ui/icons/DeviceHub';
 import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
-import LightbulbIcon from "@material-ui/icons/WbIncandescent";
-import HowToVoteIcon from "@material-ui/icons/HowToVote";
-import UsersCircleIcon from "@material-ui/icons/GroupWork";
+import LightbulbIcon from '@material-ui/icons/WbIncandescent';
+import HowToVoteIcon from '@material-ui/icons/HowToVote';
+import UsersCircleIcon from '@material-ui/icons/GroupWork';
 
-import Logo from "components/Logo";
+import Logo from 'components/Logo';
 
 import { NavLink } from 'react-router-dom';
-import { withStyles } from "@material-ui/core/styles";
+import { withStyles } from '@material-ui/core/styles';
 
 const drawerWidth = 240;
 const styles = theme => ({
@@ -80,7 +80,6 @@ const styles = theme => ({
 });
 
 export class AdminLinks extends React.PureComponent {
-
   constructor(props) {
     super(props);
 
@@ -99,7 +98,7 @@ export class AdminLinks extends React.PureComponent {
     return (
       <Drawer
         className={classes.drawer}
-        variant="permanent"
+        variant='permanent'
         classes={{
           paper: classes.drawerPaper,
         }}
@@ -110,16 +109,16 @@ export class AdminLinks extends React.PureComponent {
             <ListItemIcon>
               <EqualizerIcon />
             </ListItemIcon>
-            <ListItemText primary="Analyze" />
+            <ListItemText primary='Analyze' />
             {this.state.open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
           </ListItem>
-          <Collapse in={this.state.open} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
+          <Collapse in={this.state.open} timeout='auto' unmountOnExit>
+            <List component='div' disablePadding>
               <ListItem button className={classes.nested}>
                 <ListItemIcon>
                   <ListIcon />
                 </ListItemIcon>
-                <ListItemText primary="Users" />
+                <ListItemText primary='Users' />
               </ListItem>
             </List>
           </Collapse>
@@ -128,35 +127,35 @@ export class AdminLinks extends React.PureComponent {
             <ListItemIcon>
               <DeviceHubIcon />
             </ListItemIcon>
-            <ListItemText primary="Manage" />
+            <ListItemText primary='Manage' />
           </ListItem>
 
           <ListItem button>
             <ListItemIcon>
               <AssignmentTurnedInIcon />
             </ListItemIcon>
-            <ListItemText primary="Plan" />
+            <ListItemText primary='Plan' />
           </ListItem>
 
           <ListItem button>
             <ListItemIcon>
               <LightbulbIcon className={classes.lightbulbIcon} />
             </ListItemIcon>
-            <ListItemText primary="Innovate" />
+            <ListItemText primary='Innovate' />
           </ListItem>
 
           <ListItem button>
             <ListItemIcon>
               <HowToVoteIcon />
             </ListItemIcon>
-            <ListItemText primary="Include" />
+            <ListItemText primary='Include' />
           </ListItem>
 
           <ListItem button>
             <ListItemIcon>
               <UsersCircleIcon />
             </ListItemIcon>
-            <ListItemText primary="Mentorship" />
+            <ListItemText primary='Mentorship' />
           </ListItem>
 
           <Divider />
@@ -166,7 +165,7 @@ export class AdminLinks extends React.PureComponent {
               <SettingsIcon />
             </ListItemIcon>
             <ListItemText
-              primary="Global Settings"
+              primary='Global Settings'
             />
           </ListItem>
 
@@ -184,7 +183,7 @@ AdminLinks.propTypes = {
 export function mapDispatchToProps(dispatch) {
   return {
     dispatch
-  }
+  };
 }
 
 const mapStateToProps = createStructuredSelector({});

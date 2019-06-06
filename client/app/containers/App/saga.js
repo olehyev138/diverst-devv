@@ -1,4 +1,4 @@
-import { call, put, takeLatest } from "redux-saga/dist/redux-saga-effects-npm-proxy.esm";
+import { call, put, takeLatest } from 'redux-saga/dist/redux-saga-effects-npm-proxy.esm';
 import api from 'api/api';
 import { toast } from 'react-toastify';
 import { push } from 'connected-react-router';
@@ -15,7 +15,7 @@ import {
   setEnterprise, findEnterpriseError, setUser
 } from './actions';
 
-import AuthService from 'utils/authService'
+import AuthService from 'utils/authService';
 import { changePrimary, changeSecondary } from 'containers/ThemeProvider/actions';
 
 const axios = require('axios');
@@ -38,8 +38,7 @@ export function* login(action) {
     // TODO: find better way to do this
     //       - we need to reload to render the parent layout component
     yield put(push('/home'));
-  }
-  catch (err) {
+  } catch (err) {
     yield put(loginError(err));
   }
 }
@@ -52,11 +51,10 @@ export function* logout(action) {
     yield call(api.sessions.destroy.bind(api.sessions), action.token);
     yield put(logoutSuccess());
 
-    yield put(push("/login"));
-  }
-  catch (err) {
+    yield put(push('/login'));
+  } catch (err) {
     yield put(logoutError(err));
-    yield put(push("/login"));
+    yield put(push('/login'));
   }
 }
 
@@ -64,19 +62,18 @@ export function* findEnterprise(action) {
   try {
     // Find enterprise and dispatch setEnterprise action
     const response = yield call(api.users.findCompany.bind(api.users), action.payload);
-    const enterprise = response.data.enterprise;
+    const { enterprise } = response.data;
 
     yield put(setEnterprise(enterprise));
 
     AuthService.setValue('_diverst.seirpretne', enterprise);
 
     // If enterprise has a theme, dispatch theme provider actions
-    if(response.data.enterprise.theme){
+    if (response.data.enterprise.theme) {
       yield put(changePrimary(enterprise.theme.primary_color));
       yield put(changeSecondary(enterprise.theme.secondary_color));
     }
-  }
-  catch (err) {
+  } catch (err) {
     yield put(findEnterpriseError());
   }
 }

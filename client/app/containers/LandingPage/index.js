@@ -24,34 +24,34 @@ import { Link } from 'react-router-dom';
 
 import {
   Typography, AppBar, Toolbar, Grid, Button
-} from '@material-ui/core'
+} from '@material-ui/core';
 
 import logo from 'images/favicon.png';
-import './index.css';
 
+import './index.css';
 
 export function LandingPage() {
   useInjectReducer({ key: 'landingPage', reducer });
   useInjectSaga({ key: 'landingPage', saga });
 
   return (
-    <AppBar position="static" style={{ background: 'transparent', boxShadow: 'none'}}>
+    <AppBar position='static' style={{ background: 'transparent', boxShadow: 'none' }}>
       <Toolbar>
         <Grid container>
           <Grid item>
-            <img src={logo} alt="diverst Logo" />
+            <img src={logo} alt='diverst Logo' />
           </Grid>
 
-          <Grid item style={{marginTop: 15, marginLeft: 15, flex: 1}} >
-            <Typography variant="h4" color="primary">
+          <Grid item style={{ marginTop: 15, marginLeft: 15, flex: 1 }}>
+            <Typography variant='h4' color='primary'>
               Diverst
             </Typography>
           </Grid>
 
           <Grid item>
             <div>
-              <Button color="primary">
-                <Link to="/login">Login</Link>
+              <Button color='primary'>
+                <Link to='/login'>Login</Link>
               </Button>
             </div>
           </Grid>

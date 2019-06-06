@@ -8,7 +8,7 @@ import produce from 'immer';
 import {
   LOGIN_SUCCESS, LOGOUT_SUCCESS, LOGOUT_ERROR,
   SET_USER, SET_ENTERPRISE
-} from "./constants";
+} from './constants';
 
 // The initial state of the App
 export const initialState = {
@@ -17,27 +17,27 @@ export const initialState = {
   enterprise: null,
   domain: null,
   token: null,
-  primary: "#3f51b5",
-  secondary: "#f50057"
+  primary: '#3f51b5',
+  secondary: '#f50057'
 };
 
 function appReducer(state = initialState, action) {
-  return produce(state, draft => {
+  return produce(state, (draft) => {
     switch (action.type) {
       case LOGIN_SUCCESS:
-        draft['token'] = action.token;
+        draft.token = action.token;
         break;
       case LOGOUT_SUCCESS:
-        draft['token'] = null;
+        draft.token = null;
         break;
       case LOGOUT_ERROR:
-        draft['error'] = action.error;
+        draft.error = action.error;
         break;
       case SET_ENTERPRISE:
-        draft['enterprise'] = action.enterprise;
+        draft.enterprise = action.enterprise;
         break;
       case SET_USER:
-        draft['user'] = action.user;
+        draft.user = action.user;
         break;
     }
   });
