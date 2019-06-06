@@ -85,6 +85,14 @@ const styles = theme => ({
     '-webkit-transform': 'rotate(180deg)',
     transform: 'rotate(180deg)',
   },
+  arrowDropDownIcon: {
+    '-webkit-transition': 'all 0.20s ease-in-out 0s',
+    transition: 'all 0.20s ease-in-out 0s',
+  },
+  arrowDropDownIconRotated: {
+    '-webkit-transform': 'rotate(180deg)',
+    transform: 'rotate(180deg)',
+  },
   paper: {
     borderWidth: 1,
     borderStyle: 'solid',
@@ -251,7 +259,7 @@ export class UserLinks extends React.PureComponent {
               aria-haspopup='true'
               onClick={this.handleMobileNavOpen}
             >
-              <ArrowDropDownIcon />
+              <ArrowDropDownIcon className={classNames(classes.arrowDropDownIcon, isMobileNavOpen ? classes.arrowDropDownIconRotated : null)} />
               {pageTitle}
             </Button>
           </Toolbar>
