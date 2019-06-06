@@ -9,7 +9,11 @@ class Groups::AttendancesController < ApplicationController
   layout 'erg'
 
   def show
-    @attendances = @event.attendees.active
+    if GroupEventsPolicy.new(current_user, [@group]).view_event_attendees?
+      @attendances = @event.attendees.active
+    else
+      @attendances = []
+    end
   end
 
   def create
@@ -32,40 +36,36 @@ class Groups::AttendancesController < ApplicationController
   end
 
   def erg_graph
-    erg_population = @event.owner_group.enterprise.groups.map do |group|
-      @event.attendees.joins(:user_groups).where('user_groups.group_id': group.id).count
+    groups = @event.owner_group.enterprise.groups
+
+    values = groups.map do |group|
+      { x: group.name, y: @event.attendees.joins(:user_groups).where('user_groups.group_id': group.id).count }
     end
 
     render json: {
+      title: 'Number of attendees',
       type: 'bar',
-      highcharts: {
-        series: [{
-          title: 'Number of attendees',
-          data: erg_population
-        }],
-        categories: @event.owner_group.enterprise.groups.map(&:name),
-        xAxisTitle: "#{ c_t(:erg) }"
-      },
-      hasAggregation: false
+      series: [{
+                 key: "Attendees per #{ c_t(:erg) }",
+                 values: values
+               }]
     }
   end
 
   def segment_graph
-    segment_population = @event.owner_group.enterprise.segments.map do |segment|
-      @event.attendees.joins(:users_segments).where('users_segments.segment_id': segment.id).count
+    segments = @event.owner_group.enterprise.segments
+
+    values = segments.map do |segment|
+      { x: segment.name, y: @event.attendees.joins(:users_segments).where('users_segments.segment_id': segment.id).count }
     end
 
     render json: {
+      title: 'Number of attendees',
       type: 'bar',
-      highcharts: {
-        series: [{
-          title: 'Number of attendees',
-          data: segment_population
-        }],
-        categories: @event.group.enterprise.segments.map(&:name),
-        xAxisTitle: c_t(:segment)
-      },
-      hasAggregation: false
+      series: [{
+                 key: "Attendees per #{ c_t(:segment) }",
+                 values: values
+               }]
     }
   end
 

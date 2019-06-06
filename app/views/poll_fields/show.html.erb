@@ -12,7 +12,11 @@
         <tbody>
           <% @responses.order(created_at: :desc).each do |response| %>
             <tr>
-              <td><%= response.info[@field] %> - <em><%= response.user.name_with_status %>, <%= time_ago_in_words(response.created_at) %> ago</em></td>
+              <% if response.user.present? %>
+                <td><%= response.info[@field] %> - <em><%= response.user.name_with_status %>, <%= time_ago_in_words(response.created_at) %> ago</em></td>
+              <% else %>
+                <td>Deleted User</td>
+              <% end %>
             </tr>
           <% end %>
         </tbody>

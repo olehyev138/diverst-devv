@@ -173,17 +173,17 @@ RSpec.describe Groups::AttendancesController, type: :controller do
 
       it 'returns data in json' do
         json_response = JSON.parse(response.body, symbolize_names: true)
-        expect(json_response[:highcharts][:series][0][:data]).to eq [1, 1]
+        expect(json_response[:series][0][:values].map { |data| data[:y] }).to eq [1, 1]
       end
 
       it "returns name of title as 'Number of attendees' in json" do
         json_response = JSON.parse(response.body, symbolize_names: true)
-        expect(json_response[:highcharts][:series][0][:title]).to eq 'Number of attendees'
+        expect(json_response[:title]).to eq 'Number of attendees'
       end
 
       it 'json data should include group names' do
         json_response = JSON.parse(response.body, symbolize_names: true)
-        expect(json_response[:highcharts][:categories]).to eq assigns[:event].owner_group.enterprise.groups.map(&:name)
+        expect(json_response[:series][0][:values].map { |data| data[:x] }).to eq assigns[:event].owner_group.enterprise.groups.map(&:name)
       end
     end
 
@@ -211,17 +211,17 @@ RSpec.describe Groups::AttendancesController, type: :controller do
 
       it 'returns data in json' do
         json_response = JSON.parse(response.body, symbolize_names: true)
-        expect(json_response[:highcharts][:series][0][:data]).to eq [0, 1, 1]
+        expect(json_response[:series][0][:values].map { |data| data[:y] }).to eq [0, 1, 1]
       end
 
       it "returns name of title as 'Number of attendees' in json" do
         json_response = JSON.parse(response.body, symbolize_names: true)
-        expect(json_response[:highcharts][:series][0][:title]).to eq 'Number of attendees'
+        expect(json_response[:title]).to eq 'Number of attendees'
       end
 
       it 'json data have categories to include segment names' do
         json_response = JSON.parse(response.body, symbolize_names: true)
-        expect(json_response[:highcharts][:categories]).to eq assigns[:event].owner_group.enterprise.segments.map(&:name)
+        expect(json_response[:series][0][:values].map { |data| data[:x] }).to eq assigns[:event].owner_group.enterprise.segments.map(&:name)
       end
     end
 
