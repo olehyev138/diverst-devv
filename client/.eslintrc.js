@@ -84,6 +84,15 @@ module.exports = {
     'nonblock-statement-body-position': [0, 'bottom']
 
   },
+  overrides: [
+    {
+      files: ["reducer.js"],
+      rules: {
+        'default-case': 'off',
+        'no-param-reassign': 'off',
+      },
+    },
+  ],
   settings: {
     'import/resolver': {
       webpack: {
