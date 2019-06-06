@@ -5,7 +5,9 @@
  */
 import produce from 'immer';
 
-import { SET_ENTERPRISE, FIND_ENTERPRISE_ERROR, LOGIN_BEGIN, LOGIN_ERROR } from 'containers/App/constants';
+import {
+  SET_ENTERPRISE, FIND_ENTERPRISE_ERROR, LOGIN_BEGIN, LOGIN_ERROR
+} from 'containers/App/constants';
 
 export const initialState = {
   email: {
@@ -17,9 +19,9 @@ export const initialState = {
 };
 
 /* eslint-disable default-case, no-param-reassign */
-//const loginPageReducer = (state = initialState, action) =>
+// const loginPageReducer = (state = initialState, action) =>
 function loginPageReducer(state = initialState, action) {
-  return produce(state, draft => {
+  return produce(state, (draft) => {
     // TODO: what do these do?
     switch (action.type) {
       case SET_ENTERPRISE:

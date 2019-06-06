@@ -4,19 +4,21 @@
  *
  */
 
-import React, { memo } from 'react';
+import React, { memo, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { FormattedMessage } from 'react-intl';
-import { useRef, useEffect } from 'react';
 
-import { Field, Formik, Form} from 'formik';
-import * as Yup from "yup";
 
-import { withStyles } from "@material-ui/core/styles";
+import { Field, Formik, Form } from 'formik';
+import * as Yup from 'yup';
+
+import { withStyles } from '@material-ui/core/styles';
 import withWidth from '@material-ui/core/withWidth';
-import { Button, Card, CardActions, CardContent, Grid, TextField, Hidden } from "@material-ui/core";
-import LockOpen from "@material-ui/icons/LockOpen";
+import {
+  Button, Card, CardActions, CardContent, Grid, TextField, Hidden
+} from '@material-ui/core';
+import LockOpen from '@material-ui/icons/LockOpen';
 
 /* TODO: input labels, validation with yup, disabled logic, logo, locale toggle  */
 
@@ -46,9 +48,8 @@ function LoginForm(props, context) {
   const form = useRef();
 
   useEffect(() => {
-    if (form.current) {
+    if (form.current)
       form.current.setFieldError('password', props.passwordError);
-    }
   });
 
   return (
@@ -65,7 +66,9 @@ function LoginForm(props, context) {
         actions.setFieldError('password', props.passwordError);
         props.loginBegin(values);
       }}
-      render={ ({ handleSubmit, handleChange, handleBlur, errors, touched, values }) => (
+      render={({
+        handleSubmit, handleChange, handleBlur, errors, touched, values
+      }) => (
         <Card raised className={classes.card}>
           <Form
             noValidate
@@ -73,7 +76,7 @@ function LoginForm(props, context) {
             <CardContent>
               <Grid container spacing={0} direction='column' alignItems='center' justify='center'>
                 <Grid item xs={12}>
-                  <Logo coloredDefault imgClass="large-img" />
+                  <Logo coloredDefault imgClass='large-img' />
                 </Grid>
               </Grid>
               <br />
@@ -85,15 +88,15 @@ function LoginForm(props, context) {
                 autoFocus={!values.email}
                 fullWidth
                 disabled={false}
-                variant="outlined"
-                id="email"
-                name="email"
-                type="email"
-                label={<FormattedMessage {...messages.email}/>}
-                margin="normal"
-                autoComplete="off"
-                error={ errors.email && touched.email }
-                helperText={ errors.email && touched.email ? errors.email : null }
+                variant='outlined'
+                id='email'
+                name='email'
+                type='email'
+                label={<FormattedMessage {...messages.email} />}
+                margin='normal'
+                autoComplete='off'
+                error={errors.email && touched.email}
+                helperText={errors.email && touched.email ? errors.email : null}
               />
               <Field
                 component={TextField}
@@ -103,27 +106,27 @@ function LoginForm(props, context) {
                 autoFocus={!!values.email}
                 fullWidth
                 disabled={false}
-                variant="outlined"
-                id="password"
-                name="password"
-                type="password"
+                variant='outlined'
+                id='password'
+                name='password'
+                type='password'
                 label={<FormattedMessage {...messages.password} />}
-                margin="normal"
-                autoComplete="off"
-                error={ errors.password && touched.password }
-                helperText={ errors.password && touched.password ? errors.password : null }
+                margin='normal'
+                autoComplete='off'
+                error={errors.password && touched.password}
+                helperText={errors.password && touched.password ? errors.password : null}
               />
             </CardContent>
             <CardActions>
               <Grid container alignItems='center'>
                 <Grid item xs={false} sm={4} />
-                <Grid item align={ width === 'xs' ? "left" : "center" } xs={6} sm={4}>
+                <Grid item align={width === 'xs' ? 'left' : 'center'} xs={6} sm={4}>
                   <Button
-                    type="submit"
-                    color="primary"
-                    size="large"
+                    type='submit'
+                    color='primary'
+                    size='large'
                     disabled={!values.email || !values.password}
-                    variant="contained"
+                    variant='contained'
                   >
                     <Hidden xsDown>
                       <LockOpen />
@@ -131,11 +134,11 @@ function LoginForm(props, context) {
                     {<FormattedMessage {...messages.login} />}
                   </Button>
                 </Grid>
-                <Grid item align="right" xs={6} sm={4}>
+                <Grid item align='right' xs={6} sm={4}>
                   <Button
-                    color="primary"
-                    size="small"
-                    variant="text"
+                    color='primary'
+                    size='small'
+                    variant='text'
                   >
                     {<FormattedMessage {...messages.forgotPassword} />}
                   </Button>
@@ -154,9 +157,9 @@ LoginForm.propTypes = {
   email: PropTypes.string
 };
 
-LoginForm.contextTypes ={
+LoginForm.contextTypes = {
   intl: PropTypes.object.isRequired,
-}
+};
 
 export default compose(
   memo,

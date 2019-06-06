@@ -2,16 +2,14 @@ import { createSelector } from 'reselect';
 
 const selectLoginPage = state => state.loginPage;
 
-const selectEmailError = () =>
-  createSelector(
-    selectLoginPage,
-    loginPageState => loginPageState.email.error,
-  );
+const selectEmailError = () => createSelector(
+  selectLoginPage,
+  loginPageState => loginPageState.email.error,
+);
 
-const selectPasswordError = () =>
-  createSelector(
-    selectLoginPage,
-    loginPageState => loginPageState.password.error,
-  );
+const selectPasswordError = () => createSelector(
+  selectLoginPage,
+  loginPageState => loginPageState.password.error,
+);
 
 export { selectEmailError, selectPasswordError };

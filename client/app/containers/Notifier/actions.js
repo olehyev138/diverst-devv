@@ -17,12 +17,12 @@ export function closeSnackbar(key) {
     type: CLOSE_SNACKBAR,
     dismissAll: !key, // dismiss all if no key has been defined
     key,
-  }
+  };
 }
 
 export function removeSnackbar(key) {
   return {
     type: REMOVE_SNACKBAR,
     key,
-  }
+  };
 }

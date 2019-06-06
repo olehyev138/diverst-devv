@@ -1,23 +1,25 @@
-import React from "react";
-import { connect } from "react-redux";
-import { compose } from "redux";
-import { push } from "connected-react-router";
+import React from 'react';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { push } from 'connected-react-router';
 
-import { withStyles } from "@material-ui/core/styles";
-import { fade } from "@material-ui/core/styles/colorManipulator";
+import { withStyles } from '@material-ui/core/styles';
+import { fade } from '@material-ui/core/styles/colorManipulator';
 
-import { MenuItem, Menu, AppBar, Button,
-  Toolbar, IconButton, Typography, ListItemIcon, Hidden } from "@material-ui/core";
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import PermIdentityIcon from "@material-ui/icons/PermIdentity";
-import ExitToAppIcon from "@material-ui/icons/ExitToApp";
-import BuildIcon from "@material-ui/icons/Build";
-import DvrIcon from "@material-ui/icons/Dvr";
+import {
+  MenuItem, Menu, AppBar, Button,
+  Toolbar, IconButton, Typography, ListItemIcon, Hidden
+} from '@material-ui/core';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import PermIdentityIcon from '@material-ui/icons/PermIdentity';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import BuildIcon from '@material-ui/icons/Build';
+import DvrIcon from '@material-ui/icons/Dvr';
 import MenuIcon from '@material-ui/icons/Menu';
 
 import Logo from 'components/Logo';
-import { logoutBegin, setUser } from "containers/App/actions";
-import { createStructuredSelector } from "reselect";
+import { logoutBegin, setUser } from 'containers/App/actions';
+import { createStructuredSelector } from 'reselect';
 
 import {
   selectToken,
@@ -27,13 +29,13 @@ import {
 
 const styles = theme => ({
   root: {
-    width: "100%",
+    width: '100%',
   },
   grow: {
     flexGrow: 1,
   },
   sectionDesktop: {
-    display: "flex",
+    display: 'flex',
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
@@ -104,7 +106,7 @@ export class ApplicationHeader extends React.PureComponent {
     this.props.handleVisitHome();
   }
 
-  handleProfileMenuOpen = event => {
+  handleProfileMenuOpen = (event) => {
     this.setState({ menuAnchor: event.currentTarget });
   };
 
@@ -114,14 +116,16 @@ export class ApplicationHeader extends React.PureComponent {
 
   handleDrawerToggle = () => {
     this.setState(
-      (state) => ({ drawerOpen: !state.drawerOpen }),
+      state => ({ drawerOpen: !state.drawerOpen }),
       () => (this.props.drawerToggleCallback(this.state.drawerOpen))
     );
   };
 
   render() {
     const { menuAnchor } = this.state;
-    const { classes, enterprise, position, isAdmin } = this.props;
+    const {
+      classes, enterprise, position, isAdmin
+    } = this.props;
     const isMenuOpen = Boolean(menuAnchor);
 
     const renderMenu = (
@@ -134,8 +138,8 @@ export class ApplicationHeader extends React.PureComponent {
         anchorEl={menuAnchor}
         getContentAnchorEl={null}
         elevation={0}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-        transformOrigin={{ vertical: "top", horizontal: "center" }}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'center' }}
         open={isMenuOpen}
         onClose={this.handleProfileMenuClose}
       >
@@ -143,20 +147,23 @@ export class ApplicationHeader extends React.PureComponent {
           className={classes.dashboardSwitchMenuItem}
           onClick={isAdmin ? this.handleVisitHome : this.handleVisitAdmin}
         >
-          { isAdmin ?
-            <React.Fragment>
-              <ListItemIcon>
-                <DvrIcon />
-              </ListItemIcon>
+          { isAdmin
+            ? (
+              <React.Fragment>
+                <ListItemIcon>
+                  <DvrIcon />
+                </ListItemIcon>
               Dashboard
-            </React.Fragment>
-            :
-            <React.Fragment>
-              <ListItemIcon>
-                <BuildIcon />
-              </ListItemIcon>
+              </React.Fragment>
+            )
+            : (
+              <React.Fragment>
+                <ListItemIcon>
+                  <BuildIcon />
+                </ListItemIcon>
               Admin
-            </React.Fragment>
+              </React.Fragment>
+            )
           }
         </MenuItem>
         <MenuItem onClick={this.handleProfileMenuClose}>
@@ -178,24 +185,25 @@ export class ApplicationHeader extends React.PureComponent {
       <div className={classes.root}>
         <AppBar position={position || 'absolute'} className={classes.appBar}>
           <Toolbar className={classes.toolbar}>
-            { isAdmin ?
+            { isAdmin
+              ? (
                 <IconButton
-                  color="inherit"
-                  aria-label="Open drawer"
-                  edge="start"
+                  color='inherit'
+                  aria-label='Open drawer'
+                  edge='start'
                   onClick={this.handleDrawerToggle}
                   className={classes.drawerToggle}
                 >
                   <MenuIcon />
                 </IconButton>
-              :
-                <React.Fragment/>
+              )
+              : <React.Fragment />
             }
             <Button
-              size="small"
+              size='small'
               onClick={this.handleVisitHome}
             >
-              <Logo imgClass="large-img" verticalPadding={20} />
+              <Logo imgClass='large-img' verticalPadding={20} />
             </Button>
             <div className={classes.grow} />
             <div className={classes.sectionDesktop}>
@@ -203,20 +211,23 @@ export class ApplicationHeader extends React.PureComponent {
                 <Hidden xsDown>
                   <Button
                     className={classes.dashboardSwitchButton}
-                    variant="outlined"
-                    color="inherit"
+                    variant='outlined'
+                    color='inherit'
                     onClick={isAdmin ? this.handleVisitHome : this.handleVisitAdmin}
                   >
-                    { isAdmin ?
-                      <span>
-                        <DvrIcon className={classes.dashboardIcon} />
+                    { isAdmin
+                      ? (
+                        <span>
+                          <DvrIcon className={classes.dashboardIcon} />
                         Dashboard
-                      </span>
-                      :
-                      <span>
-                        <BuildIcon className={classes.adminIcon} />
+                        </span>
+                      )
+                      : (
+                        <span>
+                          <BuildIcon className={classes.adminIcon} />
                         Admin
-                      </span>
+                        </span>
+                      )
                     }
                   </Button>
                 </Hidden>
@@ -224,12 +235,12 @@ export class ApplicationHeader extends React.PureComponent {
                   <IconButton
                     aria-controls={
                       isMenuOpen
-                        ? "userMenu"
+                        ? 'userMenu'
                         : undefined
                     }
-                    aria-haspopup="true"
+                    aria-haspopup='true'
                     onClick={this.handleProfileMenuOpen}
-                    color="inherit"
+                    color='inherit'
                   >
                     <AccountCircleIcon />
                   </IconButton>
@@ -246,15 +257,15 @@ export class ApplicationHeader extends React.PureComponent {
 
 export function mapDispatchToProps(dispatch, ownProps) {
   return {
-    logoutBegin: function(user) {
+    logoutBegin(user) {
       dispatch(logoutBegin(user));
       dispatch(setUser(null));
     },
-    handleVisitAdmin: function() {
-      dispatch(push("/admin/analytics"));
+    handleVisitAdmin() {
+      dispatch(push('/admin/analytics'));
     },
-    handleVisitHome: function() {
-      dispatch(push("/"));
+    handleVisitHome() {
+      dispatch(push('/'));
     }
   };
 }

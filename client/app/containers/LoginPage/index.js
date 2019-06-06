@@ -10,10 +10,10 @@ import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-import { withStyles } from "@material-ui/core/styles";
+import { withStyles } from '@material-ui/core/styles';
 
 import { selectEnterprise } from 'containers/App/selectors';
-import { selectEmailError, selectPasswordError } from "./selectors";
+import { selectEmailError, selectPasswordError } from './selectors';
 
 import reducer from './reducer';
 import injectReducer from 'utils/injectReducer';
@@ -26,33 +26,35 @@ import { loginBegin, findEnterpriseBegin } from 'containers/App/actions';
 const styles = theme => ({});
 
 export class LoginPage extends React.PureComponent {
-
   // TODO: - use formik actions
   //       - locale toggle
 
   constructor(props) {
     super(props);
-    this.state = { email: '' }
+    this.state = { email: '' };
   }
 
   authForm() {
-    if (this.props.enterprise) {
-      return <LoginForm
-        email={this.state.email}
-        passwordError={this.props.passwordError}
-        loginBegin={(values, actions) => this.props.loginBegin(values)}
-      />
-    }
-    else {
-      return <EnterpriseForm
+    if (this.props.enterprise)
+      return (
+        <LoginForm
+          email={this.state.email}
+          passwordError={this.props.passwordError}
+          loginBegin={(values, actions) => this.props.loginBegin(values)}
+        />
+      );
+
+
+    return (
+      <EnterpriseForm
         emailError={this.props.emailError}
         findEnterpriseBegin={(values, actions) => {
           this.props.findEnterpriseBegin(values);
           this.setState({ email: values.email });
         }}
-      />;
-    }
-  };
+      />
+    );
+  }
 
   render() {
     return (
@@ -78,8 +80,8 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    loginBegin: (payload) => dispatch(loginBegin(payload)),
-    findEnterpriseBegin: (payload) => dispatch(findEnterpriseBegin(payload)),
+    loginBegin: payload => dispatch(loginBegin(payload)),
+    findEnterpriseBegin: payload => dispatch(findEnterpriseBegin(payload)),
   };
 }
 

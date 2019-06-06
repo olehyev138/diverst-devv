@@ -1,23 +1,25 @@
-import React from "react";
-import { connect } from "react-redux";
-import { compose } from "redux";
-import { createStructuredSelector } from "reselect";
-import classNames from "classnames";
+import React from 'react';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { createStructuredSelector } from 'reselect';
+import classNames from 'classnames';
 
-import {AppBar, Toolbar, Button, Hidden, Menu, MenuItem, ListItemIcon, IconButton} from "@material-ui/core";
+import {
+  AppBar, Toolbar, Button, Hidden, Menu, MenuItem, ListItemIcon, IconButton
+} from '@material-ui/core';
 import { NavLink } from 'react-router-dom';
 import { matchPath } from 'react-router';
-import { withStyles } from "@material-ui/core/styles";
+import { withStyles } from '@material-ui/core/styles';
 
-import HomeIcon from "@material-ui/icons/HomeOutlined";
-import LightbulbIcon from "@material-ui/icons/WbIncandescentOutlined";
-import QuestionAnswerIcon from "@material-ui/icons/QuestionAnswerOutlined";
-import EventIcon from "@material-ui/icons/EventOutlined";
-import GroupIcon from "@material-ui/icons/GroupOutlined";
-import UsersCircleIcon from "@material-ui/icons/GroupWorkOutlined";
-import DvrIcon from "@material-ui/core/SvgIcon/SvgIcon";
+import HomeIcon from '@material-ui/icons/HomeOutlined';
+import LightbulbIcon from '@material-ui/icons/WbIncandescentOutlined';
+import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswerOutlined';
+import EventIcon from '@material-ui/icons/EventOutlined';
+import GroupIcon from '@material-ui/icons/GroupOutlined';
+import UsersCircleIcon from '@material-ui/icons/GroupWorkOutlined';
+import DvrIcon from '@material-ui/core/SvgIcon/SvgIcon';
 
-import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 
 const styles = theme => ({
   toolbar: {
@@ -51,8 +53,8 @@ const styles = theme => ({
     borderBottomStyle: 'solid',
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0,
-    marginBottom: "0 !important",
-    paddingBottom: "7px !important", // To account for the border size
+    marginBottom: '0 !important',
+    paddingBottom: '7px !important', // To account for the border size
   },
   navLink: {
     textAlign: 'center',
@@ -98,7 +100,7 @@ export class UserLinks extends React.PureComponent {
     };
   }
 
-  handleMobileNavOpen = event => {
+  handleMobileNavOpen = (event) => {
     this.setState({ mobileNavAnchor: event.currentTarget });
   };
 
@@ -124,18 +126,18 @@ export class UserLinks extends React.PureComponent {
         anchorEl={mobileNavAnchor}
         getContentAnchorEl={null}
         elevation={0}
-        anchorOrigin={{vertical: "bottom", horizontal: "center"}}
-        transformOrigin={{vertical: "top", horizontal: "center"}}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'center' }}
         open={isMobileNavOpen}
         onClose={this.handleMobileNavClose}
       >
-        <MenuItem component={WrappedNavLink} to="/" activeClassName={classes.mobileNavLinkActive}>
+        <MenuItem component={WrappedNavLink} to='/' activeClassName={classes.mobileNavLinkActive}>
           <ListItemIcon>
-            <HomeIcon/>
+            <HomeIcon />
           </ListItemIcon>
           Home
         </MenuItem>
-        <MenuItem component={WrappedNavLink} to="/user/campaigns" activeClassName={classes.mobileNavLinkActive}>
+        <MenuItem component={WrappedNavLink} to='/user/campaigns' activeClassName={classes.mobileNavLinkActive}>
           <ListItemIcon>
             <LightbulbIcon className={classes.lightbulbIcon} />
           </ListItemIcon>
@@ -143,25 +145,25 @@ export class UserLinks extends React.PureComponent {
         </MenuItem>
         <MenuItem>
           <ListItemIcon>
-            <QuestionAnswerIcon/>
+            <QuestionAnswerIcon />
           </ListItemIcon>
           News
         </MenuItem>
         <MenuItem>
           <ListItemIcon>
-            <EventIcon/>
+            <EventIcon />
           </ListItemIcon>
           Events
         </MenuItem>
         <MenuItem>
           <ListItemIcon>
-            <GroupIcon/>
+            <GroupIcon />
           </ListItemIcon>
           Inclusion Networks
         </MenuItem>
         <MenuItem>
           <ListItemIcon>
-            <UsersCircleIcon/>
+            <UsersCircleIcon />
           </ListItemIcon>
           Mentorship
         </MenuItem>
@@ -170,44 +172,64 @@ export class UserLinks extends React.PureComponent {
 
     const NavLinks = () => (
       <Toolbar className={classes.toolbar}>
-        <Button component={WrappedNavLink} to="/" className={classes.navLink} activeClassName={classes.navLinkActive}>
+        <Button component={WrappedNavLink} to='/' className={classes.navLink} activeClassName={classes.navLinkActive}>
           <Hidden smDown>
-            <HomeIcon className={classes.navIcon}/>
+            <HomeIcon className={classes.navIcon} />
           </Hidden>
           Home
         </Button>
-        <Button component={WrappedNavLink} to="/user/campaigns" className={classes.navLink}
-                activeClassName={classes.navLinkActive}>
+        <Button
+          component={WrappedNavLink}
+          to='/user/campaigns'
+          className={classes.navLink}
+          activeClassName={classes.navLinkActive}
+        >
           <Hidden smDown>
-            <LightbulbIcon className={classes.lightbulbIcon}/>
+            <LightbulbIcon className={classes.lightbulbIcon} />
           </Hidden>
           Innovate
         </Button>
-        <Button component={WrappedNavLink} to="/user/news" className={classes.navLink}
-                activeClassName={classes.navLinkActive}>
+        <Button
+          component={WrappedNavLink}
+          to='/user/news'
+          className={classes.navLink}
+          activeClassName={classes.navLinkActive}
+        >
           <Hidden smDown>
-            <QuestionAnswerIcon className={classes.navIcon}/>
+            <QuestionAnswerIcon className={classes.navIcon} />
           </Hidden>
           News
         </Button>
-        <Button component={WrappedNavLink} to="/user/events" className={classes.navLink}
-                activeClassName={classes.navLinkActive}>
+        <Button
+          component={WrappedNavLink}
+          to='/user/events'
+          className={classes.navLink}
+          activeClassName={classes.navLinkActive}
+        >
           <Hidden smDown>
-            <EventIcon className={classes.navIcon}/>
+            <EventIcon className={classes.navIcon} />
           </Hidden>
           Events
         </Button>
-        <Button component={WrappedNavLink} to="/user/groups" className={classes.navLink}
-                activeClassName={classes.navLinkActive}>
+        <Button
+          component={WrappedNavLink}
+          to='/user/groups'
+          className={classes.navLink}
+          activeClassName={classes.navLinkActive}
+        >
           <Hidden smDown>
-            <GroupIcon className={classes.navIcon}/>
+            <GroupIcon className={classes.navIcon} />
           </Hidden>
           Inclusion Networks
         </Button>
-        <Button component={WrappedNavLink} to="/user/groups" className={classes.navLink}
-                activeClassName={classes.navLinkActive}>
+        <Button
+          component={WrappedNavLink}
+          to='/user/groups'
+          className={classes.navLink}
+          activeClassName={classes.navLinkActive}
+        >
           <Hidden smDown>
-            <UsersCircleIcon className={classes.navIcon}/>
+            <UsersCircleIcon className={classes.navIcon} />
           </Hidden>
           Mentorship
         </Button>
@@ -222,10 +244,10 @@ export class UserLinks extends React.PureComponent {
               className={classes.mobileNavToggleLink}
               aria-controls={
                 isMobileNavOpen
-                  ? "mobileNav"
+                  ? 'mobileNav'
                   : undefined
               }
-              aria-haspopup="true"
+              aria-haspopup='true'
               onClick={this.handleMobileNavOpen}
             >
               <ArrowDropDownIcon />
@@ -245,7 +267,7 @@ export class UserLinks extends React.PureComponent {
 export function mapDispatchToProps(dispatch) {
   return {
     dispatch
-  }
+  };
 }
 
 const mapStateToProps = createStructuredSelector({});

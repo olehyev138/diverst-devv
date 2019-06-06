@@ -6,6 +6,6 @@
 
 import { defineMessages } from 'react-intl';
 
-export const scope = "diverst.containers.LoginForm";
+export const scope = 'diverst.containers.LoginForm';
 
 export default defineMessages({});

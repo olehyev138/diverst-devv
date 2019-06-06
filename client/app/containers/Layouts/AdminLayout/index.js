@@ -1,13 +1,13 @@
 import React, { memo } from 'react';
 import { Route } from 'react-router';
-import { compose } from "redux";
+import { compose } from 'redux';
 
-import Container from "@material-ui/core/Container";
+import Container from '@material-ui/core/Container';
 import AdminLinks from 'components/AdminLinks';
-import { withStyles } from "@material-ui/core/styles";
-import AuthenticatedLayout from "../AuthenticatedLayout";
-import {createStructuredSelector} from "reselect";
-import PropTypes from "prop-types";
+import { withStyles } from '@material-ui/core/styles';
+import AuthenticatedLayout from '../AuthenticatedLayout';
+import { createStructuredSelector } from 'reselect';
+import PropTypes from 'prop-types';
 
 const styles = theme => ({
   flex: {
@@ -37,20 +37,26 @@ export class AdminLayout extends React.PureComponent {
     const Component = this.props.component;
 
     return (
-      <AuthenticatedLayout drawerToggleCallback={this.drawerToggleCallback} drawerOpen={this.state.drawerOpen} position='absolute' isAdmin component={matchProps => (
-        <div className={classes.flex}>
-          <AdminLinks drawerToggleCallback={this.drawerToggleCallback} drawerOpen={this.state.drawerOpen} {...matchProps} />
+      <AuthenticatedLayout
+        drawerToggleCallback={this.drawerToggleCallback}
+        drawerOpen={this.state.drawerOpen}
+        position='absolute'
+        isAdmin
+        component={matchProps => (
+          <div className={classes.flex}>
+            <AdminLinks drawerToggleCallback={this.drawerToggleCallback} drawerOpen={this.state.drawerOpen} {...matchProps} />
 
-          <Container maxWidth='xl'>
-            <div className={classes.content}>
-              <div className={classes.toolbar} />
-              <Component {...other} />
-            </div>
-          </Container>
-        </div>
-      )}/>
+            <Container maxWidth='xl'>
+              <div className={classes.content}>
+                <div className={classes.toolbar} />
+                <Component {...other} />
+              </div>
+            </Container>
+          </div>
+        )}
+      />
     );
   }
-};
+}
 
 export default withStyles(styles)(AdminLayout);

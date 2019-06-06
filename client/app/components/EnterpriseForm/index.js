@@ -4,16 +4,18 @@
  *
  */
 
-import React, { memo } from 'react';
+import React, { memo, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { useRef, useEffect } from 'react';
+
 
 import { FormattedMessage } from 'react-intl';
-import { Button, Card, CardActions, CardContent, Grid, TextField, Hidden } from "@material-ui/core";
-import Search from "@material-ui/icons/Search";
-import { Formik, Form, Field } from "formik";
+import {
+  Button, Card, CardActions, CardContent, Grid, TextField, Hidden
+} from '@material-ui/core';
+import Search from '@material-ui/icons/Search';
+import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
-import { withStyles } from "@material-ui/core/styles";
+import { withStyles } from '@material-ui/core/styles';
 
 import Logo from 'components/Logo';
 
@@ -38,9 +40,8 @@ function EnterpriseForm(props, context) {
   const form = useRef();
 
   useEffect(() => {
-    if (form.current) {
+    if (form.current)
       form.current.setFieldError('email', props.emailError);
-    }
   });
 
   return (
@@ -56,7 +57,9 @@ function EnterpriseForm(props, context) {
         actions.setFieldError('email', props.emailError);
         props.findEnterpriseBegin(values);
       }}
-      render={ ({ handleSubmit, handleChange, handleBlur, errors, touched, values }) => (
+      render={({
+        handleSubmit, handleChange, handleBlur, errors, touched, values
+      }) => (
         <Card raised className={classes.card}>
           <Form
             noValidate
@@ -64,7 +67,7 @@ function EnterpriseForm(props, context) {
             <CardContent>
               <Grid container spacing={0} direction='column' alignItems='center' justify='center'>
                 <Grid item xs={12}>
-                  <Logo coloredDefault imgClass="large-img" />
+                  <Logo coloredDefault imgClass='large-img' />
                 </Grid>
               </Grid>
               <br />
@@ -74,31 +77,31 @@ function EnterpriseForm(props, context) {
                 onBlur={handleBlur}
                 autoFocus
                 fullWidth
-                id="email"
-                name="email"
+                id='email'
+                name='email'
                 label={<FormattedMessage {...messages.email} />}
-                margin="normal"
-                type="email"
-                variant="outlined"
-                error={ errors.email && touched.email }
-                helperText={ errors.email && touched.email ? errors.email : null }
+                margin='normal'
+                type='email'
+                variant='outlined'
+                error={errors.email && touched.email}
+                helperText={errors.email && touched.email ? errors.email : null}
               />
             </CardContent>
             <CardActions>
-              <Grid container alignItems="center" justify="center">
-                <Grid item align="center" xs={6}>
+              <Grid container alignItems='center' justify='center'>
+                <Grid item align='center' xs={6}>
                   <Button
-                    type="submit"
-                    color="primary"
-                    size="large"
-                    variant="contained"
-                    aria-hidden={true}
+                    type='submit'
+                    color='primary'
+                    size='large'
+                    variant='contained'
+                    aria-hidden
                     disabled={!values.email}
                   >
                     <Hidden xsDown>
                       <Search />
                     </Hidden>
-                    {<FormattedMessage {...messages.findEnterprise }/>}
+                    {<FormattedMessage {...messages.findEnterprise} />}
                   </Button>
                 </Grid>
               </Grid>
@@ -116,8 +119,8 @@ EnterpriseForm.propTypes = {
   enterpriseError: PropTypes.string,
 };
 
-EnterpriseForm.contextTypes ={
+EnterpriseForm.contextTypes = {
   intl: PropTypes.object.isRequired,
-}
+};
 
 export default memo(withStyles(styles)(EnterpriseForm));

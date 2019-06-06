@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { createStructuredSelector } from "reselect";
+import { createStructuredSelector } from 'reselect';
 import { withSnackbar } from 'notistack';
 
 import { removeSnackbar } from './actions';
@@ -50,9 +50,9 @@ class Notifier extends Component {
       this.props.enqueueSnackbar(message, {
         ...options,
         onClose: (event, reason, key) => {
-          if (options.onClose) {
+          if (options.onClose)
             options.onClose(event, reason, key);
-          }
+
           // Dispatch action to remove snackbar from redux store
           this.props.removeSnackbar(key);
         }
@@ -73,7 +73,7 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    removeSnackbar: (payload) => dispatch(removeSnackbar(payload)),
+    removeSnackbar: payload => dispatch(removeSnackbar(payload)),
   };
 }
 

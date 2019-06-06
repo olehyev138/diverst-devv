@@ -1,12 +1,12 @@
 import { SHOW_SNACKBAR, CLOSE_SNACKBAR, REMOVE_SNACKBAR } from './constants';
-import produce from "immer";
+import produce from 'immer';
 
 export const initialState = {
   notifications: [],
 };
 
 function notifierReducer(state = initialState, action) {
-  return produce(state, draft => {
+  return produce(state, (draft) => {
     switch (action.type) {
       case SHOW_SNACKBAR:
         draft.notifications.push({
@@ -18,8 +18,8 @@ function notifierReducer(state = initialState, action) {
       case CLOSE_SNACKBAR:
         draft.notifications.map(notification => (
           (action.dismissAll || notification.key === action.key)
-            ? {...notification, dismissed: true}
-            : {...notification}
+            ? { ...notification, dismissed: true }
+            : { ...notification }
         ));
         break;
 
