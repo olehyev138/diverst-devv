@@ -1,9 +1,6 @@
 <% if GroupEventsPolicy.new(current_user, [@group]).view_upcoming_events? %>
   <%= link_to "View all", group_events_path(@group), class: "card__action" %>
-  <% if @group.upcoming_events_visibility == 'public' ||
-    (@group.upcoming_events_visibility == 'group' && current_user.is_member_of?(@group)) ||
-    (@group.upcoming_events_visibility == 'leaders_only' && current_user.is_group_leader_of?(@group))
-  %>
+  <% if @show_events  %>
     <% if !@upcoming_events.empty? %>
       <div class="mtlarge text-center">
         <% @upcoming_events.each do |event| %>
