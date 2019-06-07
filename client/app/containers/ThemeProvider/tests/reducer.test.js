@@ -14,7 +14,7 @@ describe('themeProviderReducer', () => {
   });
 
   it('handles CHANGE_PRIMARY', () => {
-    const action = { type: CHANGE_PRIMARY, color: 'primary' }
+    const action = { type: CHANGE_PRIMARY, color: 'primary' };
 
     expect(themeProviderReducer(undefined, action)).toEqual({
       primary: 'primary',
@@ -23,7 +23,7 @@ describe('themeProviderReducer', () => {
   });
 
   it('handles CHANGE_SECONDARY', () => {
-    const action = { type: CHANGE_SECONDARY, color: 'secondary' }
+    const action = { type: CHANGE_SECONDARY, color: 'secondary' };
 
     expect(themeProviderReducer(undefined, action)).toEqual({
       primary: '#7B77C9',

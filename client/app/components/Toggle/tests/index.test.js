@@ -1,5 +1,5 @@
 import React from 'react';
- import { shallow } from 'enzyme';
+import { shallow } from 'enzyme';
 import { IntlProvider, defineMessages } from 'react-intl';
 
 import Toggle from '../index';
@@ -23,14 +23,17 @@ xdescribe('<Toggle />', () => {
         <Toggle values={['en', 'de']} messages={messages} />
       </IntlProvider>,
     );
+
     expect(
       renderedComponent.contains(<Toggle values={['en', 'de']} messages={messages} />),
     ).toBe(true);
+
     expect(renderedComponent.find('option')).toHaveLength(0);
   });
 
   xit('should not have ToggleOptions if props.values is not defined', () => {
     const renderedComponent = shallow(<Toggle />);
+
     expect(renderedComponent.contains(<option>--</option>)).toBe(true);
     expect(renderedComponent.find('option')).toHaveLength(1);
   });
