@@ -86,18 +86,13 @@ class BudgetsController < ApplicationController
   def reset_annual_budget
     authorize [@group], :update?, policy_class: GroupBudgetPolicy
 
-    if @group.initiatives.any? { |initiative| initiative.unfinished_expenses? }
-      flash[:notice] = "Please close expenses of past events belonging to #{@group.name}"
+    if AnnualBudgetManager.new(@group).reset
+      track_activity(@group, :annual_budget_update)
+      flash[:notice] = 'Your budget was updated'
       redirect_to :back
     else
-      if AnnualBudgetManager.new(@group).reset
-        track_activity(@group, :annual_budget_update)
-        flash[:notice] = 'Your budget was updated'
-        redirect_to :back
-      else
-        flash[:alert] = 'Your budget was not updated. Please fix the errors'
-        redirect_to :back
-      end
+      flash[:alert] = 'Your budget was not updated. Please fix the errors'
+      redirect_to :back
     end
   end
 
