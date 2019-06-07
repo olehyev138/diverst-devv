@@ -322,6 +322,10 @@ Rails.application.routes.draw do
           member do
             get 'time_series'
           end
+
+          collection do
+            get 'joined_time_series'
+          end
         end
         resources :resources do
           member { patch 'archive' }
