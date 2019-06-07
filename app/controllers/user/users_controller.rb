@@ -1,10 +1,14 @@
 class User::UsersController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_user, only: [:show, :edit, :update]
+  before_action :set_user, only: [:show, :edit, :update, :update_linkedin, :edit_linkedin, :delete_linkedin]
 
   layout 'user'
 
   def show
+    unless @user.linkedin_profile_url
+      @linkedin_url = LinkedInClient.get_url
+    end
+
     authorize @user
   end
 
@@ -31,6 +35,26 @@ class User::UsersController < ApplicationController
   def mentorship
   end
 
+  def edit_linkedin
+    authorize @user, :edit?
+  end
+
+  def update_linkedin
+    @user.assign_attributes(user_linkedin)
+
+    if @user.save
+      flash[:notice] = 'LinkedIn has be integrated'
+      redirect_to user_user_path(@user)
+    else
+      render :edit_linkedin
+    end
+  end
+
+  def delete_linkedin
+    @user.delete_linkedin_info
+    redirect_to user_user_path(@user)
+  end
+
   protected
 
   def set_user
@@ -50,6 +74,12 @@ class User::UsersController < ApplicationController
       :mentor,
       :mentee,
       mentoring_interest_ids: []
+    )
+  end
+
+  def user_linkedin
+    params.require(:user).permit(
+      :linkedin_profile_url
     )
   end
 end
