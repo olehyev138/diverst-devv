@@ -3,7 +3,7 @@ import landingPageReducer from '../reducer';
 // import { someAction } from '../actions';
 
 /* eslint-disable default-case, no-param-reassign */
-describe('landingPageReducer', () => {
+xdescribe('landingPageReducer', () => {
   let state;
   beforeEach(() => {
     state = {
@@ -11,7 +11,7 @@ describe('landingPageReducer', () => {
     };
   });
 
-  it('returns the initial state', () => {
+  xit('returns the initial state', () => {
     const expectedResult = state;
     expect(landingPageReducer(undefined, {})).toEqual(expectedResult);
   });

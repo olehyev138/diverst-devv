@@ -1,15 +1,16 @@
 import languageProviderReducer from '../reducer';
 import { CHANGE_LOCALE } from '../constants';
+import { DEFAULT_LOCALE } from '../../../i18n';
 
 /* eslint-disable default-case, no-param-reassign */
 describe('languageProviderReducer', () => {
-  it('returns the initial state', () => {
+  it('returns the initial state with default locale', () => {
     expect(languageProviderReducer(undefined, {})).toEqual({
-      locale: 'en',
+      locale: DEFAULT_LOCALE
     });
   });
 
-  it('changes the locale', () => {
+  it('handles CHANGE_LOCALE', () => {
     expect(
       languageProviderReducer(undefined, {
         type: CHANGE_LOCALE,
