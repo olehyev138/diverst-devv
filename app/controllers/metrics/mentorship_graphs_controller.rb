@@ -8,8 +8,83 @@ class Metrics::MentorshipGraphsController < ApplicationController
 
     @data = {
       mentoring_sessions: current_user.enterprise.mentoring_sessions.where('start <= ?', 1.month.ago).count,
-      active_mentorships: Mentoring.active_mentorships(current_user.enterprise).count
+      active_mentorships: Mentoring.active_mentorships(current_user.enterprise).count,
+      total_mentors: current_user.enterprise.users.joins('JOIN mentorings ON users.id = mentorings.mentor_id').select(:id).distinct.count(:id),
+      total_mentees: current_user.enterprise.users.joins('JOIN mentorings ON users.id = mentorings.mentee_id').select(:id).distinct.count(:id)
     }
+  end
+
+  def top_mentors
+    authorize MetricsDashboard, :index?
+
+    number = params[:number].to_i rescue 10
+    type = params[:type] || 'mentor'
+    other = type == 'mentor' ? 'mentee' : 'mentor'
+
+    top_users = User.all.joins("JOIN mentorings ON users.id = mentorings.#{type}_id").
+      select("users.id as id, first_name, last_name, count(mentorings.id) as number_of_#{other}s").group(:id).
+      order("number_of_#{other}s DESC").limit(number)
+
+    values = top_users.map do |user|
+      {
+        x: "#{user.first_name} #{user.last_name}",
+        y: user.send("number_of_#{other}s".to_sym),
+        children: {}
+      }
+    end
+
+    render json: {
+      title: "User with most number of #{other}s",
+      type: 'bar',
+      series: [{
+                 key: "#{other.capitalize}s Per User",
+                 values: values
+               }]
+    }
+  end
+
+  def mentors_per_group
+    authorize MetricsDashboard, :index?
+    respond_to do |format|
+      format.json {
+        groups = current_user.enterprise.groups
+
+        values_mentees = groups.map do |group|
+          {
+            x: group.name,
+            y: group.members.joins('JOIN mentorings ON users.id = mentorings.mentee_id').select(:id).distinct.count(:id),
+            children: {}
+          }
+        end
+
+        values_mentors = groups.map do |group|
+          {
+            x: group.name,
+            y: group.members.joins('JOIN mentorings ON users.id = mentorings.mentor_id').select(:id).distinct.count(:id),
+            children: {}
+          }
+        end
+
+        render json: {
+          title: 'Mentors and Mentees per Group',
+          type: 'bar',
+          series:
+            [
+              {
+                key: "Number of Mentors Per Group",
+                values: values_mentors.sort_by { |group| -group[:y] }
+              },
+              {
+                key: "Number of Mentees Per Group",
+                values: values_mentees
+              }
+            ]
+        }
+      }
+      format.csv {
+        # TODO Later
+      }
+    end
   end
 
   def user_mentorship_interest_per_group

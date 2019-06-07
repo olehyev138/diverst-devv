@@ -21,6 +21,63 @@
         </div>
       </div>
     </div>
+
+    <div class="card__section">
+      <div class="row">
+        <div class="col md-6 sm-12">
+          <div class="panel panel--primary text-center margin-bottom-0">
+            <div class="panel-headline"><p><strong>Number of Mentors</strong></p></div>
+            <div class="panel-data"><p><b class="accent"><%= @data[:total_mentors] %></b></p></div>
+          </div>
+        </div>
+
+        <div class="col md-6 sm-12">
+          <div class="panel panel--primary text-center margin-bottom-0">
+            <div class="panel-headline"><p><strong>Number of Mentees</strong></p></div>
+            <div class="panel-data"><p><b class="accent"><%= @data[:total_mentees] %></b></p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card__section">
+      <div class="flex-row flex-row--middle">
+        <div class="flex-row__cell flex-row__cell--grow">
+          <h4>Number of mentors and mentees per <%= c_t(:erg) %></h4>
+          <div
+            id="user_mentorship_and_menteeship"
+            class="graph"
+            data-url="<%= mentors_per_group_metrics_mentorships_path %>">
+            <svg></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col md-6 sm-12">
+      <div class="card">
+        <div class="card__section">
+          <h4>Top Mentors</h4>
+          <div id="top_mentors" class="graph" data-url="<%= top_mentors_metrics_mentorships_path(number: 10, type: 'mentor') %>">
+            <svg></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col md-6 sm-12">
+      <div class="card">
+        <div class="card__section">
+          <h4>Top Mentees</h4>
+          <div id="top_mentees" class="graph" data-url="<%= top_mentors_metrics_mentorships_path(number: 10, type: 'mentee') %>">
+            <svg></svg>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="card">
@@ -31,7 +88,10 @@
           <div class="card__action">
             <%= link_to "Export CSV", user_mentorship_interest_per_group_metrics_mentorships_path(format: :csv) %>
           </div>
-          <div id="user_mentorship_interest" class="graph" data-url="<%= user_mentorship_interest_per_group_metrics_mentorships_path %>">
+          <div
+            id="user_mentorship_interest"
+            class="graph"
+            data-url="<%= user_mentorship_interest_per_group_metrics_mentorships_path %>">
             <svg></svg>
           </div>
         </div>
