@@ -11,6 +11,7 @@ Diverst::Application.routes.draw do
       resources :api_keys
       resources :answers
       resources :answer_comments
+      resources :answer_expenses
       resources :enterprises
       resources :groups
       resources :folders
