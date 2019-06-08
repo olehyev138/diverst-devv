@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe 'AnswerComments', type: :request do
-
   let(:enterprise) { create(:enterprise) }
   let(:api_key) { create(:api_key) }
   let(:user) { create(:user, password: 'password', enterprise: enterprise) }
