@@ -29,6 +29,7 @@ Diverst::Application.routes.draw do
       end
       resources :initiatives
       resources :campaigns
+      resources :campaigns_groups
       resources :campaign_invitations
       resources :badges
       resources :rewards
