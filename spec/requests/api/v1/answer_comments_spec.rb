@@ -5,9 +5,9 @@ RSpec.describe 'AnswerComments', type: :request do
   let(:api_key) { create(:api_key) }
   let(:user) { create(:user, password: 'password', enterprise: enterprise) }
   let(:item) { create(:answer_comment) }
-  let(:route) { "answer_comments" }
+  let(:route) { 'answer_comments' }
   let(:jwt) { UserTokenService.create_jwt(user) }
-  let(:headers) {{ 'HTTP_DIVERST_APIKEY' => api_key.key, 'Diverst-UserToken' => jwt }}
+  let(:headers) { { 'HTTP_DIVERST_APIKEY' => api_key.key, 'Diverst-UserToken' => jwt } }
 
   it 'gets all items' do
     get "/api/v1/#{route}", headers: headers

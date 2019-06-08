@@ -4,9 +4,9 @@ RSpec.describe 'Enterprises', type: :request do
   let(:item) { create(:enterprise) }
   let(:api_key) { create(:api_key) }
   let(:user) { create(:user, password: 'password', enterprise: item) }
-  let(:route) { "enterprises" }
+  let(:route) { 'enterprises' }
   let(:jwt) { UserTokenService.create_jwt(user) }
-  let(:headers) {{ 'HTTP_DIVERST_APIKEY' => api_key.key, 'Diverst-UserToken' => jwt }}
+  let(:headers) { { 'HTTP_DIVERST_APIKEY' => api_key.key, 'Diverst-UserToken' => jwt } }
 
   it 'gets all items' do
     get "/api/v1/#{route}", headers: headers
