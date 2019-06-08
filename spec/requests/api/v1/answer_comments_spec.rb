@@ -21,13 +21,7 @@ RSpec.describe 'AnswerComments', type: :request do
   end
 
   it 'creates an item' do
-    answer = create(:answer)
-    payload = {
-      author_id: user.id,
-      answer_id: answer.id,
-      content: 'test'
-    }
-    post "/api/v1/#{route}", params: { answer_comment: payload }, headers: headers
+    post "/api/v1/#{route}", params: { answer_comment: build(route.singularize.to_sym).attributes }, headers: headers
     expect(response).to have_http_status(201)
   end
 
