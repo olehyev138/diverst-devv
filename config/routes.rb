@@ -29,6 +29,7 @@ Diverst::Application.routes.draw do
       end
       resources :initiatives
       resources :campaigns
+      resources :campaign_invitations
       resources :badges
       resources :rewards
       resources :sessions, only: [:create, :destroy]
