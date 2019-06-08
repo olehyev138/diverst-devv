@@ -5,6 +5,7 @@ RSpec.describe Api::V1::AnswerCommentsController, type: :controller do
   let(:enterprise) { FactoryBot.create(:enterprise) }
   let(:user) { FactoryBot.create(:user, enterprise: enterprise) }
   let(:item) { FactoryBot.create(:answer_comment) }
+  let(:klass) {item.class.table_name.singularize}
   let(:jwt) { UserTokenService.create_jwt(user) }
   let(:valid_session) { { 'Diverst-APIKey' => api_key.key, 'Diverst-UserToken' => jwt } }
 
@@ -37,13 +38,7 @@ RSpec.describe Api::V1::AnswerCommentsController, type: :controller do
   describe 'POST #create' do
     context 'creates the item' do
       before do
-        answer = create(:answer)
-        payload = {
-          author_id: user.id,
-          answer_id: answer.id,
-          content: 'test'
-        }
-        post :create, params: { answer_comment: payload }
+        post :create, params: { "#{klass}": build(klass.singularize.to_sym).attributes }
       end
       it 'responds with success' do
         expect(response).to have_http_status(:success)
@@ -54,9 +49,10 @@ RSpec.describe Api::V1::AnswerCommentsController, type: :controller do
   describe 'PUT #update' do
     context 'updates the item' do
       before do
-        put :update, params: { id: item.id, answer_comment: { content: 'updated' } }
+        put :update, params: { id: item.id, "#{klass}": item.attributes }
       end
       it 'responds with success' do
+        puts JSON.parse(response.body).inspect
         expect(response).to have_http_status(:success)
       end
     end

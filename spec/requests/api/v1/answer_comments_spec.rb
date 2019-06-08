@@ -21,12 +21,12 @@ RSpec.describe 'AnswerComments', type: :request do
   end
 
   it 'creates an item' do
-    post "/api/v1/#{route}", params: { answer_comment: build(route.singularize.to_sym).attributes }, headers: headers
+    post "/api/v1/#{route}", params: { "#{route.singularize}": build(route.singularize.to_sym).attributes }, headers: headers
     expect(response).to have_http_status(201)
   end
 
   it 'updates an item' do
-    patch "/api/v1/#{route}/#{item.id}", params: { answer_comment: { content: 'updated' } }, headers: headers
+    patch "/api/v1/#{route}/#{item.id}", params: { "#{route.singularize}": item.attributes }, headers: headers
     expect(response).to have_http_status(:ok)
   end
 
