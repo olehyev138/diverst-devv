@@ -1,12 +1,12 @@
 module BaseController
   def index
-    render json: klass.index(self.diverst_request, params.permit!)
+    render :status => 200, json: klass.index(self.diverst_request, params.permit!)
   rescue => e
     raise BadRequestException.new(e.message)
   end
 
   def create
-    render json: klass.build(self.diverst_request, params)
+    render :status => 201, json: klass.build(self.diverst_request, params)
   rescue => e
     case e
     when UnprocessableException
@@ -17,13 +17,13 @@ module BaseController
   end
 
   def show
-    render json: klass.show(self.diverst_request, params)
+    render :status => 200, json: klass.show(self.diverst_request, params)
   rescue => e
     raise BadRequestException.new(e.message)
   end
 
   def update
-    render json: klass.update(self.diverst_request, params)
+    render :status => 200, json: klass.update(self.diverst_request, params)
   rescue => e
     case e
     when UnprocessableException
