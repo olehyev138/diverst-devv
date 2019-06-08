@@ -31,6 +31,7 @@ Diverst::Application.routes.draw do
       resources :campaigns
       resources :campaigns_groups
       resources :campaigns_managers
+      resources :campaigns_segments
       resources :campaign_invitations
       resources :badges
       resources :rewards
