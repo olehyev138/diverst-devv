@@ -30,7 +30,7 @@ RSpec.describe Api::V1::InitiativesController, type: :controller do
         payload = {
             name: 'Test',
             start: Date.today,
-            end: Date.tomorrow,
+            end: Date.tomorrow + 2.days,
             pillar_id: pillar.id
         }
         post :create, params: { initiative: payload }

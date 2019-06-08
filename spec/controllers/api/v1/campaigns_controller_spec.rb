@@ -31,7 +31,7 @@ RSpec.describe Api::V1::CampaignsController, type: :controller do
         payload = {
             description: 'The best campaign',
             start: Date.today,
-            end: Date.tomorrow,
+            end: Date.today + 2.days,
             title: 'Link to Apple',
             enterprise_id: enterprise.id,
             group_ids: [group.id]
