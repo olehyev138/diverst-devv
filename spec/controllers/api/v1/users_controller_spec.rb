@@ -12,7 +12,6 @@ RSpec.describe Api::V1::UsersController, type: :controller do
   end
 
   describe 'GET #index' do
-
     context 'gets the users' do
       before do
         get :index, params: {}
@@ -24,7 +23,6 @@ RSpec.describe Api::V1::UsersController, type: :controller do
   end
 
   describe 'POST #create' do
-
     context 'creates a user' do
       before do
         password = Faker::Internet.password
@@ -45,7 +43,6 @@ RSpec.describe Api::V1::UsersController, type: :controller do
   end
 
   describe 'PUT #update' do
-
     context 'updates a user' do
       before do
         put :update, params: { id: user.id, user: { last_name: 'last_name' } }
@@ -57,7 +54,6 @@ RSpec.describe Api::V1::UsersController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-
     context 'deletes a user' do
       before do
         delete :destroy, params: { id: user.id }

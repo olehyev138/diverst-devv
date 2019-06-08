@@ -1,20 +1,35 @@
 require 'rails_helper'
 
-RSpec.describe 'Enterprise', type: :request do
-  before { pending }
+RSpec.describe 'Enterprises', type: :request do
+  let(:item) { create(:enterprise) }
+  let(:api_key) { create(:api_key) }
+  let(:user) { create(:user, password: 'password', enterprise: item) }
+  let(:route) { "enterprises" }
+  let(:jwt) { UserTokenService.create_jwt(user) }
+  let(:headers) {{ 'HTTP_DIVERST_APIKEY' => api_key.key, 'Diverst-UserToken' => jwt }}
 
-  let(:enterprise) { create(:enterprise) }
-  let(:user) { create(:user, password: 'password', enterprise: enterprise) }
-  let(:basic_authentication) { ActionController::HttpAuthentication::Basic.encode_credentials(user.email, 'password') }
-  let(:headers) { { 'HTTP_AUTHORIZATION' => basic_authentication } }
-
-  it 'updates a enterprise' do
-    patch "/api/v1/enterprises/#{enterprise.id}", enterprise: { name: 'updated' }, headers: headers
+  it 'gets all items' do
+    get "/api/v1/#{route}", headers: headers
     expect(response).to have_http_status(:ok)
   end
 
-  it 'gets the events for an enterprise' do
-    get "/api/v1/enterprises/#{enterprise.id}/events", headers: headers
+  it 'gets a item' do
+    get "/api/v1/#{route}/#{item.id}", headers: headers
     expect(response).to have_http_status(:ok)
+  end
+
+  it 'creates an item' do
+    post "/api/v1/#{route}", params: { "#{route.singularize}": build(route.singularize.to_sym).attributes }, headers: headers
+    expect(response).to have_http_status(201)
+  end
+
+  it 'updates an item' do
+    patch "/api/v1/#{route}/#{item.id}", params: { "#{route.singularize}": item.attributes }, headers: headers
+    expect(response).to have_http_status(:ok)
+  end
+
+  it 'deletes an item' do
+    delete "/api/v1/#{route}/#{item.id}", headers: headers
+    expect(response).to have_http_status(:no_content)
   end
 end

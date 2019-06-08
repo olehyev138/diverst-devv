@@ -5,7 +5,7 @@ RSpec.describe Api::V1::AnswerCommentsController, type: :controller do
   let(:enterprise) { FactoryBot.create(:enterprise) }
   let(:user) { FactoryBot.create(:user, enterprise: enterprise) }
   let(:item) { FactoryBot.create(:answer_comment) }
-  let(:klass) {item.class.table_name.singularize}
+  let(:klass) { item.class.table_name.singularize }
   let(:jwt) { UserTokenService.create_jwt(user) }
   let(:valid_session) { { 'Diverst-APIKey' => api_key.key, 'Diverst-UserToken' => jwt } }
 
@@ -23,11 +23,11 @@ RSpec.describe Api::V1::AnswerCommentsController, type: :controller do
       end
     end
   end
-  
+
   describe 'GET #show' do
     context 'gets the items' do
       before do
-        get :show, params: {:id => item.id}
+        get :show, params: { id: item.id }
       end
       it 'responds with success' do
         expect(response).to have_http_status(:success)
