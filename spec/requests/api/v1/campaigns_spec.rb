@@ -22,7 +22,7 @@ RSpec.describe 'Campaigns', type: :request do
 
   it 'creates an item' do
     attributes = build(route.singularize.to_sym).attributes
-    attributes["group_ids"] = [group.id]
+    attributes['group_ids'] = [group.id]
     post "/api/v1/#{route}", params: { "#{route.singularize}": attributes }, headers: headers
     expect(response).to have_http_status(201)
   end
