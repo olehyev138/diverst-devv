@@ -13,6 +13,7 @@ Diverst::Application.routes.draw do
       resources :answer_comments
       resources :answer_expenses
       resources :answer_upvotes
+      resources :budgets
       resources :enterprises
       resources :groups
       resources :folders
