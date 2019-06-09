@@ -37,6 +37,7 @@ Diverst::Application.routes.draw do
       resources :frequency_periods
       resources :graphs
       resources :groups
+      resources :group_categories
       resources :group_leaders
       resources :initiatives
       resources :news_feeds
