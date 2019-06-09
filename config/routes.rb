@@ -39,6 +39,7 @@ Diverst::Application.routes.draw do
       resources :emails
       resources :email_variables
       resources :enterprise_email_variables
+      resources :expenses
       resources :campaign_invitations
       resources :badges
       resources :rewards
