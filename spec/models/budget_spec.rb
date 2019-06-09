@@ -144,6 +144,7 @@ RSpec.describe Budget, type: :model do
   describe '#destroy_callbacks' do
     it 'removes the child objects' do
       budget = create(:budget)
+      budget.group.annual_budget = 10000
       checklist = create(:checklist, budget: budget)
       budget_item = create(:budget_item, budget: budget)
 

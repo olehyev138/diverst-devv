@@ -704,7 +704,7 @@ RSpec.describe Group, type: :model do
 
   describe '#destroy_callbacks' do
     it 'removes the child objects' do
-      group = create(:group)
+      group = create(:group, annual_budget: 10000)
       news_feed = create(:news_feed, group: group)
       user_group = create(:user_group, group: group)
       groups_poll = create(:groups_poll, group: group)
