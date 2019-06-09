@@ -38,6 +38,7 @@ Diverst::Application.routes.draw do
       resources :graphs
       resources :groups
       resources :group_categories
+      resources :group_category_types
       resources :group_leaders
       resources :initiatives
       resources :news_feeds
