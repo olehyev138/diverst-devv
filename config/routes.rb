@@ -37,6 +37,7 @@ Diverst::Application.routes.draw do
       resources :clockwork_database_events
       resources :custom_texts
       resources :emails
+      resources :email_variables
       resources :campaign_invitations
       resources :badges
       resources :rewards
