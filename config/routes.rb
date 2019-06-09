@@ -43,6 +43,7 @@ Diverst::Application.routes.draw do
       resources :expense_categories
       resources :fields
       resources :folder_shares
+      resources :frequency_periods
       resources :campaign_invitations
       resources :badges
       resources :rewards
