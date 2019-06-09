@@ -50,6 +50,7 @@ Diverst::Application.routes.draw do
       resources :initiative_comments
       resources :initiative_fields
       resources :initiative_expenses
+      resources :initiative_groups
       resources :news_feeds
       resources :resources
       resources :rewards
