@@ -54,6 +54,17 @@ class AnnualBudgetManager
     return true if @group.update({ annual_budget: @group.leftover_money, leftover_money: 0 })
   end
 
+  # this method to resolve inconsistencies where the annual budget of an initiative is not equal to annual budget of selected budget item
+  def re_assign_annual_budget(budget_item_id, initiative_id)
+    return if budget_item_id.nil? || budget_item_id.blank?
+
+    budget_item_annual_budget = BudgetItem.find(budget_item_id).budget.annual_budget
+    initiative = Initiative.find(initiative_id)
+    if budget_item_annual_budget != initiative.annual_budget
+      initiative.update(annual_budget_id: budget_item_annual_budget.id)
+    end
+  end
+
 
   private
 

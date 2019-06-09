@@ -430,6 +430,40 @@ RSpec.describe InitiativesController, type: :controller do
 
               include_examples 'correct public activity'
             end
+
+            context 'when initiative annual_budget is not equal to annual_budget of selected budget_item' do
+              let!(:group) { create :group, :without_outcomes, enterprise: user.enterprise, annual_budget: 10000 }
+              let!(:annual_budget) { create(:annual_budget, group: group, amount: group.annual_budget, enterprise_id: user.enterprise_id) }
+              let!(:budget) { create(:approved_budget, group_id: group.id, annual_budget_id: annual_budget.id) }
+              let!(:outcome) { create :outcome, group_id: group.id }
+              let!(:pillar) { create :pillar, outcome_id: outcome.id }
+              let!(:initiative) { create(:initiative, pillar: pillar, owner_group: group, annual_budget_id: annual_budget.id, estimated_funding: budget.budget_items.first.available_amount,
+                                                      budget_item_id: budget.budget_items.first.id)
+              }
+              let!(:expense) { create(:initiative_expense, initiative_id: initiative.id, annual_budget_id: annual_budget.id, amount: 50) }
+
+              before do
+                initiative.finish_expenses!
+                AnnualBudgetManager.new(group).carry_over
+              end
+
+              # the second annual_budget is gotten from calling carry_over on AnnualBudgetManager
+              let!(:annual_budget1) { group.annual_budgets.find_by(closed: false) }
+              let!(:budget1) { create(:approved_budget, group_id: group.id, annual_budget_id: annual_budget1.id) }
+              let!(:initiative1) { create(:initiative, pillar: pillar, owner_group: group, annual_budget_id: annual_budget.id, estimated_funding: budget1.budget_items.first.available_amount,
+                                                       budget_item_id: budget1.budget_items.first.id)
+              }
+
+
+              it 're-assign annual budget for initiative' do
+                expect(initiative1.annual_budget).not_to eq budget1.annual_budget
+
+                patch_update(group.id, initiative1.id, initiative1.attributes)
+                initiative1.reload
+
+                expect(initiative1.annual_budget).to eq budget1.annual_budget
+              end
+            end
           end
 
           it 'redirects to correct page' do

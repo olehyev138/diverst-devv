@@ -51,6 +51,9 @@ class InitiativesController < ApplicationController
 
   def update
     authorize @initiative
+
+    AnnualBudgetManager.new(@group).re_assign_annual_budget(initiative_params['budget_item_id'], @initiative.id)
+
     if @initiative.update(initiative_params)
       flash[:notice] = 'Your event was updated'
       track_activity(@initiative, :update)
