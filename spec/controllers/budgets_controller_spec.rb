@@ -254,6 +254,28 @@ RSpec.describe BudgetsController, type: :controller do
         end
       end
 
+      context 'when user tries to approve budget greater than annual budget' do
+        let!(:budget) { create(:budget, group_id: group.id, annual_budget_id: annual_budget.id) }
+        before do
+          group.update(annual_budget: 10)
+          annual_budget.update(amount: 10)
+          request.env['HTTP_REFERER'] = 'back'
+          approve
+        end
+
+        it 'does not approve budget' do
+          expect(budget.is_approved?).to eq false
+        end
+
+        it 'displays flash alert message' do
+          expect(flash[:alert]).to eq "This budget exceeds the annual budget of #{ActionController::Base.helpers.number_to_currency(budget.annual_budget.amount)} and therefore cannot be approved"
+        end
+
+        it 'redirect to previous page' do
+          expect(response).to redirect_to 'back'
+        end
+      end
+
       describe 'public activity' do
         enable_public_activity
 

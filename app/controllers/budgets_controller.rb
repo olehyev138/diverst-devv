@@ -51,12 +51,17 @@ class BudgetsController < ApplicationController
       flash[:alert] = 'please set an annual budget for this group'
       redirect_to :back
     else
-      if @budget.update(budget_params)
-        BudgetManager.new(@budget).approve(current_user)
-        track_activity(@budget, :approve)
-        redirect_to(action: :index, annual_budget_id: params[:budget][:annual_budget_id])
-      else
+      if @budget.budget_items.sum(:estimated_amount) > @budget.annual_budget.amount
+        flash[:alert] = "This budget exceeds the annual budget of #{ActionController::Base.helpers.number_to_currency(@budget.annual_budget.amount)} and therefore cannot be approved"
         redirect_to :back
+      else
+        if @budget.update(budget_params)
+          BudgetManager.new(@budget).approve(current_user)
+          track_activity(@budget, :approve)
+          redirect_to(action: :index, annual_budget_id: params[:budget][:annual_budget_id])
+        else
+          redirect_to :back
+        end
       end
     end
   end
