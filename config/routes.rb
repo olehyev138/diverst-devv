@@ -47,6 +47,7 @@ Diverst::Application.routes.draw do
       resources :groups_metrics_dashboards
       resources :groups_polls
       resources :initiatives
+      resources :initiative_comments
       resources :news_feeds
       resources :resources
       resources :rewards
