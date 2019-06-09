@@ -42,6 +42,7 @@ Diverst::Application.routes.draw do
       resources :group_leaders
       resources :group_messages
       resources :group_message_comments
+      resources :group_messages_segments
       resources :initiatives
       resources :news_feeds
       resources :resources
