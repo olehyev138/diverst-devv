@@ -17,6 +17,7 @@ class Budget < BaseClass
   # scope :with_available_funds, -> { where('available_amount > 0')}
 
   after_save :send_email_notification
+  after_destroy :update_annual_budget
 
   def requested_amount
     budget_items.sum(:estimated_amount)
@@ -71,6 +72,17 @@ class Budget < BaseClass
   end
 
   private
+
+  def update_annual_budget
+    annual_budget = AnnualBudget.find_or_create_by(closed: false, group_id: group.id)
+    return if annual_budget.nil?
+
+    leftover_of_annual_budget = (group.annual_budget - group.approved_budget) + group.available_budget
+    group.update(leftover_money: leftover_of_annual_budget)
+    annual_budget.update(amount: group.annual_budget, available_budget: group.available_budget,
+                         leftover_money: group.leftover_money, expenses: group.spent_budget,
+                         approved_budget: group.approved_budget)
+  end
 
   def send_email_notification
     case is_approved
