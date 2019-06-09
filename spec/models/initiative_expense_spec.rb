@@ -6,6 +6,7 @@ RSpec.describe InitiativeExpense, type: :model do
 
     it { expect(initiative_expense).to belong_to(:initiative) }
     it { expect(initiative_expense).to belong_to(:owner).class_name('User') }
+    it { expect(initiative_expense).to belong_to(:annual_budget) }
     it { expect(initiative_expense).to validate_presence_of(:initiative) }
     it { expect(initiative_expense).to validate_presence_of(:owner) }
     it { expect(initiative_expense).to validate_presence_of(:amount) }
@@ -27,11 +28,16 @@ RSpec.describe InitiativeExpense, type: :model do
   end
 
   describe 'test after_save and after_destroy callbacks' do
-    let(:enterprise) { create(:enterprise) }
-    let(:group) { create(:group, enterprise_id: enterprise.id, annual_budget: 10000) }
-    let(:annual_budget) { create(:annual_budget, amount: group.annual_budget) }
-    let(:initiative) { create(:initiative, owner_group_id: group.id, annual_budget_id: annual_budget.id) }
-    let(:expense) { build(:initiative_expense, initiative_id: initiative.id, amount: initiative.estimated_funding + 200, annual_budget_id: annual_budget.id) }
+    let!(:enterprise) { create(:enterprise) }
+    let!(:group1) { create(:group, enterprise_id: enterprise.id, annual_budget: 10000) }
+    let!(:annual_budget1) { create(:annual_budget, amount: group1.annual_budget, group_id: group1.id, enterprise_id: enterprise.id) }
+    let!(:budget) { create(:approved_budget, group: group1, annual_budget_id: annual_budget1.id) }
+    let!(:outcome) { create :outcome, group_id: group1.id }
+    let!(:pillar) { create :pillar, outcome_id: outcome.id }
+    let!(:initiative) { create(:initiative, owner_group_id: group1.id, annual_budget_id: annual_budget1.id, pillar: pillar,
+                                            estimated_funding: budget.budget_items.first.available_amount, budget_item_id: budget.budget_items.first.id)
+    }
+    let!(:expense) { create(:initiative_expense, initiative_id: initiative.id, amount: 10, annual_budget_id: annual_budget1.id) }
 
     it 'after_save, #update_annual_budget' do
       expect(expense).to receive(:update_annual_budget)
@@ -39,9 +45,18 @@ RSpec.describe InitiativeExpense, type: :model do
     end
 
     it 'after_destroy, #update_annual_budget' do
-      expense.save
       expect(expense).to receive(:update_annual_budget)
       expense.run_callbacks(:destroy)
+    end
+
+    it 'sets expenses on annual_budget to 0 when expense is destroyed' do
+      expense.reload
+      annual_budget1.reload
+      expect(annual_budget1.expenses).to eq expense.amount
+
+      expense.destroy
+
+      expect(annual_budget1.reload.expenses).to eq 0
     end
   end
 end

@@ -142,17 +142,35 @@ RSpec.describe Budget, type: :model do
   end
 
   describe '#destroy_callbacks' do
-    it 'removes the child objects' do
-      budget = create(:budget)
-      budget.group.annual_budget = 10000
-      checklist = create(:checklist, budget: budget)
-      budget_item = create(:budget_item, budget: budget)
+    let!(:group) { create(:group, annual_budget: 10000) }
+    let!(:budget) { create(:budget, group: group) }
+    let!(:checklist) { create(:checklist, budget: budget) }
+    let!(:budget_item) { create(:budget_item, budget: budget) }
 
+    it 'after_destroy, #update_annual_budget' do
+      expect(budget).to receive(:update_annual_budget)
+      budget.run_callbacks(:destroy)
+    end
+
+    it 'removes the child objects' do
       budget.destroy
 
       expect { Budget.find(budget.id) }.to raise_error(ActiveRecord::RecordNotFound)
       expect { Checklist.find(checklist.id) }.to raise_error(ActiveRecord::RecordNotFound)
       expect { BudgetItem.find(budget_item.id) }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+
+    it 'deducts approved budget from annual budget when budget is destroyed' do
+      annual_budget = create(:annual_budget, group: group, amount: group.annual_budget)
+      budget.update(is_approved: true, annual_budget: annual_budget)
+      annual_budget.update(approved_budget: group.approved_budget, available_budget: group.available_budget)
+
+      expect(annual_budget.approved_budget).to eq group.approved_budget
+
+      budget.destroy
+
+      expect(group.approved_budget).to eq 0
+      expect(annual_budget.reload.approved_budget).to eq 0
     end
   end
 end
