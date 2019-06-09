@@ -36,6 +36,7 @@ Diverst::Application.routes.draw do
       resources :checklist_items
       resources :clockwork_database_events
       resources :custom_texts
+      resources :emails
       resources :campaign_invitations
       resources :badges
       resources :rewards
