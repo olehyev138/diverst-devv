@@ -13,23 +13,12 @@ Diverst::Application.routes.draw do
       resources :answer_comments
       resources :answer_expenses
       resources :answer_upvotes
+      resources :badges
       resources :budgets
       resources :budget_items
-      resources :enterprises
-      resources :groups
-      resources :folders
-      resources :news_feeds
-      resources :group_leaders
-      resources :resources
-      resources :segments
-      resources :users do
-        collection do
-          post '/email', to: 'users#find_user_by_email'
-        end
-      end
-      resources :initiatives
       resources :campaigns
       resources :campaigns_groups
+      resources :campaign_invitations
       resources :campaigns_managers
       resources :campaigns_segments
       resources :checklists
@@ -38,16 +27,28 @@ Diverst::Application.routes.draw do
       resources :custom_texts
       resources :emails
       resources :email_variables
+      resources :enterprises
       resources :enterprise_email_variables
       resources :expenses
       resources :expense_categories
       resources :fields
+      resources :folders
       resources :folder_shares
       resources :frequency_periods
-      resources :campaign_invitations
-      resources :badges
+      resources :graphs
+      resources :groups
+      resources :group_leaders
+      resources :initiatives
+      resources :news_feeds
+      resources :resources
       resources :rewards
+      resources :segments
       resources :sessions, only: [:create, :destroy]
+      resources :users do
+        collection do
+          post '/email', to: 'users#find_user_by_email'
+        end
+      end
     end
   end
 
