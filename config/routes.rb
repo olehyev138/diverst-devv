@@ -75,6 +75,7 @@ Diverst::Application.routes.draw do
       resources :metrics_dashboards_segments
       resources :mobile_fields
       resources :news_feeds
+      resources :news_feed_links
       resources :resources
       resources :rewards
       resources :segments
