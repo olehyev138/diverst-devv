@@ -64,6 +64,7 @@ Diverst::Application.routes.draw do
       resources :mentoring_request_interests
       resources :mentoring_sessions
       resources :mentoring_session_comments
+      resources :mentoring_session_topics
       resources :news_feeds
       resources :resources
       resources :rewards
