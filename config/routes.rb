@@ -76,6 +76,7 @@ Diverst::Application.routes.draw do
       resources :mobile_fields
       resources :news_feeds
       resources :news_feed_links
+      resources :news_feed_link_segments
       resources :resources
       resources :rewards
       resources :segments
