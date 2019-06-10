@@ -3,10 +3,10 @@ module Metrics
     extend ActiveSupport::Concern
     include MetricsUtil
 
-    def top_mentors(type, partner,  size)
-      return {title: 'TEMP', type: 'bar', series: [{ key: 'temp', values: []}]} if type != 'mentor' && type != 'mentee'
-      return {title: 'TEMP', type: 'bar', series: [{ key: 'temp', values: []}]} if partner != 'mentor' && partner != 'mentee'
-      return {title: 'TEMP', type: 'bar', series: [{ key: 'temp', values: []}]} if type == partner
+    def top_mentors(type, partner, size)
+      return if type != 'mentor' && type != 'mentee'
+      return if partner != 'mentor' && partner != 'mentee'
+      return if type == partner
 
       graph = Mentoring.get_graph_builder
       graph.set_enterprise_filter(field: "#{type}.enterprise_id", value: enterprise_id)
@@ -42,8 +42,6 @@ module Metrics
 
       graph.build
       # end
-
-
     end
 
     def user_mentorship_interest_per_group

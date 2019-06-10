@@ -60,7 +60,7 @@ class UserGroup < BaseClass
         include: {
           group: {
             only: [:enterprise_id, :parent_id, :name],
-            include: { parent: { only: [:name] }},
+            include: { parent: { only: [:name] } },
           },
           user: {
             only: [:enterprise_id, :created_at, :mentor, :mentee, :active]
