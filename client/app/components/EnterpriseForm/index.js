@@ -25,6 +25,9 @@ const styles = theme => ({
   card: {
     width: '100%',
   },
+  submitButtonLabel: {
+    minWidth: 'max-content',
+  },
 });
 
 function EnterpriseForm(props, context) {
@@ -89,8 +92,11 @@ function EnterpriseForm(props, context) {
             </CardContent>
             <CardActions>
               <Grid container alignItems='center' justify='center'>
-                <Grid item align='center' xs={6}>
+                <Grid item align='center' sm={6} xs={12}>
                   <Button
+                    classes={{
+                      label: classes.submitButtonLabel
+                    }}
                     type='submit'
                     color='primary'
                     size='large'

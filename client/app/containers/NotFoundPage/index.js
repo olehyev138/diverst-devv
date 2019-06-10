@@ -17,7 +17,7 @@ import {
 import { withStyles } from '@material-ui/core/styles';
 import HomeIcon from '@material-ui/icons/Home';
 
-import { HOME_PATH } from 'containers/Routes/constants';
+import { ROUTES } from 'containers/Routes/constants';
 
 import messages from './messages';
 import Logo from 'components/Logo';
@@ -51,7 +51,7 @@ export class NotFoundPage extends React.PureComponent {
           variant='contained'
           color='primary'
           component={WrappedNavLink}
-          to={HOME_PATH}
+          to={ROUTES.user.home.path}
           className={classes.verticalMargins}
         >
           <Hidden xsDown>

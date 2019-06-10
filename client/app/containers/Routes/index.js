@@ -1,32 +1,39 @@
 import React from 'react';
 import { Switch } from 'react-router';
+import PropTypes from 'prop-types';
 
 // Layouts
-import UserLayout from '../Layouts/UserLayout';
-import GroupLayout from '../Layouts/GroupLayout';
-import AdminLayout from '../Layouts/AdminLayout';
-import SessionLayout from '../Layouts/SessionLayout';
-import ErrorLayout from '../Layouts/ErrorLayout';
+import UserLayout from 'containers/Layouts/UserLayout';
+import GroupLayout from 'containers/Layouts/GroupLayout';
+import AdminLayout from 'containers/Layouts/AdminLayout';
+import SessionLayout from 'containers/Layouts/SessionLayout';
+import ErrorLayout from 'containers/Layouts/ErrorLayout';
 
 // Pages
-import { HomePage, LoginPage, NotFoundPage } from './templates';
+import {
+  HomePage, LoginPage, NotFoundPage, PlaceholderPage
+} from './templates';
 
 // Paths
-import {
-  ADMIN_ANALYTICS_PATH, ADMIN_PATH, GROUP_PATH, HOME_PATH, LOGIN_PATH
-} from './constants';
+import { ROUTES } from './constants';
 
-export default function Routes() {
+export default function Routes(props) {
   return (
     <Switch>
-      <SessionLayout path={LOGIN_PATH} component={LoginPage} />
+      <SessionLayout path={ROUTES.session.login.path} component={LoginPage} />
 
-      <AdminLayout path={ADMIN_PATH} component={HomePage} />
-      <AdminLayout path={ADMIN_ANALYTICS_PATH} component={HomePage} />
+      <AdminLayout path={ROUTES.admin.analytics.overview.path} component={PlaceholderPage} />
+      <AdminLayout path={ROUTES.admin.analytics.users.path} component={PlaceholderPage} />
 
-      <GroupLayout path={GROUP_PATH} />
+      <GroupLayout path={ROUTES.group.home.path} />
 
-      <UserLayout exact path={HOME_PATH} pageTitle='Home' component={HomePage} />
+      <UserLayout exact path={ROUTES.user.home.path} pageTitle={ROUTES.user.home.titleMessage} component={PlaceholderPage} />
+      <UserLayout path={ROUTES.user.innovate.path} pageTitle={ROUTES.user.innovate.titleMessage} component={PlaceholderPage} />
+      <UserLayout path={ROUTES.user.news.path} pageTitle={ROUTES.user.news.titleMessage} component={PlaceholderPage} />
+      <UserLayout path={ROUTES.user.events.path} pageTitle={ROUTES.user.events.titleMessage} component={PlaceholderPage} />
+      <UserLayout path={ROUTES.user.groups.path} pageTitle={ROUTES.user.groups.titleMessage} component={PlaceholderPage} />
+      <UserLayout path={ROUTES.user.downloads.path} pageTitle={ROUTES.user.downloads.titleMessage} component={PlaceholderPage} />
+      <UserLayout path={ROUTES.user.mentorship.path} pageTitle={ROUTES.user.mentorship.titleMessage} component={PlaceholderPage} />
 
       <ErrorLayout path='' component={NotFoundPage} />
     </Switch>

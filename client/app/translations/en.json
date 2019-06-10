@@ -10,5 +10,12 @@
   "diverst.containers.NotFoundPage.headers.header": "This page does not exist",
   "diverst.containers.LocaleToggle.en": "en",
   "diverst.containers.LocaleToggle.fr": "fr",
-  "diverst.containers.LocaleToggle.es": "es"
+  "diverst.containers.LocaleToggle.es": "es",
+  "diverst.containers.Routes.user.home": "Home",
+  "diverst.containers.Routes.user.innovate": "Innovate",
+  "diverst.containers.Routes.user.news": "News",
+  "diverst.containers.Routes.user.events": "Events",
+  "diverst.containers.Routes.user.groups": "Groups",
+  "diverst.containers.Routes.user.downloads": "Downloads",
+  "diverst.containers.Routes.user.mentorship": "Mentorship"
 }
