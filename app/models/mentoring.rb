@@ -14,4 +14,39 @@ class Mentoring < BaseClass
     mentorship_user_ids = enterprise.users.ids
     where('mentor_id IN (?) OR mentee_id IN (?)', mentorship_user_ids, mentorship_user_ids)
   end
+
+  settings do
+    mappings dynamic: false do
+      indexes :mentor do
+        indexes :enterprise_id, type: :integer
+        indexes :active, type: :boolean
+        indexes :first_name, type: :keyword
+        indexes :last_name, type: :keyword
+        indexes :id, type: :integer
+      end
+      indexes :mentee do
+        indexes :enterprise_id, type: :integer
+        indexes :active, type: :boolean
+        indexes :first_name, type: :keyword
+        indexes :last_name, type: :keyword
+        indexes :id, type: :integer
+      end
+    end
+  end
+
+  def as_indexed_json(options = {})
+    self.as_json(
+      options.merge(
+        only: [],
+        include: {
+          mentor: {
+            only: [:enterprise_id, :active, :first_name, :last_name, :id]
+          },
+          mentee: {
+            only: [:enterprise_id, :active, :first_name, :last_name, :id]
+          }
+        }
+      )
+    )
+  end
 end

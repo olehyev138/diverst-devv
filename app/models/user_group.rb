@@ -57,10 +57,15 @@ class UserGroup < BaseClass
     self.as_json(
       options.merge(
         only: [:user_id, :group_id, :created_at],
-        include: { group: {
-          only: [:enterprise_id, :parent_id, :name],
-          include: { parent: { only: [:name] } },
-        }, user: { only: [:enterprise_id, :created_at, :mentor, :mentee, :active] } },
+        include: {
+          group: {
+            only: [:enterprise_id, :parent_id, :name],
+            include: { parent: { only: [:name] }},
+          },
+          user: {
+            only: [:enterprise_id, :created_at, :mentor, :mentee, :active]
+          }
+        },
         methods: [:user_combined_info]
       )
     )

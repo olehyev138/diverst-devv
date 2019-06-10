@@ -52,7 +52,8 @@
   <% if PollPolicy.new(current_user, Poll).create? %>
     <%= active_link_to 'Polls', polls_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
   <% end %>
-  <% if current_user.enterprise.mentorship_module_enabled && MentoringInterestPolicy.new(current_user, MentoringInterest).index? %>
+  <%# if current_user.enterprise.mentorship_module_enabled && MentoringInterestPolicy.new(current_user, MentoringInterest).index? %>
+  <% if true %>
     <%= active_link_to 'Mentorship', metrics_mentorships_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
   <% end %>
   <%= active_link_to 'Custom', metrics_metrics_dashboards_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
