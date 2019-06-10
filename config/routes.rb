@@ -72,6 +72,7 @@ Diverst::Application.routes.draw do
       resources :mentorship_sessions
       resources :mentorship_types
       resources :metrics_dashboards
+      resources :metrics_dashboards_segments
       resources :news_feeds
       resources :resources
       resources :rewards
