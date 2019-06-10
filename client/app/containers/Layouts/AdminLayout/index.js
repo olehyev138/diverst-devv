@@ -32,6 +32,13 @@ export class AdminLayout extends React.PureComponent {
     this.setState({ drawerOpen: drawerStatus });
   };
 
+  componentDidUpdate(prevProps) {
+    // Navigated
+    if (this.props.location !== prevProps.location)
+      /* eslint-disable-next-line react/no-did-update-set-state */
+      this.setState({ drawerOpen: false });
+  }
+
   render() {
     const { classes, ...other } = this.props;
     const Component = this.props.component;
@@ -44,7 +51,7 @@ export class AdminLayout extends React.PureComponent {
         isAdmin
         component={matchProps => (
           <div className={classes.flex}>
-            <AdminLinks drawerToggleCallback={this.drawerToggleCallback} drawerOpen={this.state.drawerOpen} {...matchProps} />
+            <AdminLinks drawerToggleCallback={this.drawerToggleCallback} drawerOpen={this.state.drawerOpen} location={other.location} {...matchProps} />
 
             <Container maxWidth='xl'>
               <div className={classes.content}>
@@ -62,6 +69,7 @@ export class AdminLayout extends React.PureComponent {
 AdminLayout.propTypes = {
   classes: PropTypes.object,
   component: PropTypes.elementType,
+  location: PropTypes.object,
 };
 
 export default withStyles(styles)(AdminLayout);

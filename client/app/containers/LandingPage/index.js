@@ -17,7 +17,7 @@ import makeSelectLandingPage from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 
-import { LOGIN_PATH } from 'containers/Routes/constants';
+import { ROUTES } from 'containers/Routes/constants';
 
 // TODO
 import messages from './messages';
@@ -53,7 +53,7 @@ export function LandingPage() {
           <Grid item>
             <div>
               <Button color='primary'>
-                <Link to={LOGIN_PATH}>Login</Link>
+                <Link to={ROUTES.session.login.path}>Login</Link>
               </Button>
             </div>
           </Grid>

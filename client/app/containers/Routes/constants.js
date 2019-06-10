@@ -1,12 +1,67 @@
-// Session
-export const LOGIN_PATH = '/login';
+import messages from './messages';
 
-// User
-export const HOME_PATH = '/';
+// Routes structure (WIP)
+export const ROUTES = {
+  // Session
+  session: {
+    login: {
+      path: '/login',
+    },
+  },
 
-// Group
-export const GROUP_PATH = '/groups';
+  // User
+  user: {
+    get root() { return this.home; },
+    home: {
+      path: '/',
+      titleMessage: messages.user.home,
+    },
+    innovate: {
+      path: '/user/campaigns',
+      titleMessage: messages.user.innovate,
+    },
+    news: {
+      path: '/user/news',
+      titleMessage: messages.user.news,
+    },
+    events: {
+      path: '/user/events',
+      titleMessage: messages.user.events,
+    },
+    groups: {
+      path: '/user/groups',
+      titleMessage: messages.user.groups,
+    },
+    downloads: {
+      path: '/user/downloads',
+      titleMessage: messages.user.downloads,
+    },
+    mentorship: {
+      path: '/user/mentorship',
+      titleMessage: messages.user.mentorship,
+    },
+  },
 
-// Admin
-export const ADMIN_PATH = '/admin';
-export const ADMIN_ANALYTICS_PATH = '/admin/analytics';
+  // Group
+  group: {
+    get root() { return this.home; },
+    home: {
+      path: '/group',
+    },
+  },
+
+  // Admin
+  admin: {
+    get root() { return this.analytics.overview; },
+    pathPrefix: '/admin',
+    analytics: {
+      pathPrefix: '/admin/analytics',
+      overview: {
+        path: '/admin/analytics',
+      },
+      users: {
+        path: '/admin/analytics/users',
+      },
+    },
+  },
+};
