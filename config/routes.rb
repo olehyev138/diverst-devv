@@ -68,6 +68,7 @@ Diverst::Application.routes.draw do
       resources :mentoring_types
       resources :mentorship_availabilities
       resources :mentorship_interests
+      resources :mentorship_ratings
       resources :news_feeds
       resources :resources
       resources :rewards
