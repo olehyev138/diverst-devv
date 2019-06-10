@@ -59,6 +59,7 @@ Diverst::Application.routes.draw do
       resources :invitation_segments_groups
       resources :likes
       resources :mentorings
+      resources :mentoring_interests
       resources :news_feeds
       resources :resources
       resources :rewards
