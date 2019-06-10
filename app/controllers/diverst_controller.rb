@@ -22,35 +22,27 @@ class DiverstController < ApplicationController
   end
 
   rescue_from Pundit::NotAuthorizedError do |e|
-    render status: :forbidden, json: { message: e.message }
+    render status: :bad_request, json: { message: e.message }
   end
 
   rescue_from ActionController::UnknownFormat do |e|
     render status: :forbidden, json: { message: e.message }
   end
 
-  rescue_from ActionView::MissingTemplate do |e|
-    render status: :forbidden, json: { message: e.message }
-  end
-
-  rescue_from ActionView::Template::Error do |e|
-    render status: :forbidden, json: { message: e.message }
-  end
-
   rescue_from Pundit::AuthorizationNotPerformedError do |e|
-    render status: :forbidden, json: { message: e.message }
+    render status: :bad_request, json: { message: e.message }
   end
 
   rescue_from ActionController::BadRequest do |e|
-    render status: :forbidden, json: { message: e.message }
+    render status: :bad_request, json: { message: e.message }
   end
 
   rescue_from ActiveRecord::RecordInvalid do |e|
-    render status: :forbidden, json: { message: e.message }
+    render status: :bad_request, json: { message: e.message }
   end
 
   rescue_from BadRequestException do |e|
-    render status: :forbidden, json: { message: e.message }
+    render status: :bad_request, json: { message: e.message }
   end
 
   rescue_from Pundit::NotDefinedError do |e|
@@ -62,16 +54,16 @@ class DiverstController < ApplicationController
   end
 
   rescue_from ActiveRecord::RecordNotFound do |e|
-    render status: :forbidden, json: { message: 'Sorry, the resource you are looking for does not exist.' }
+    render status: :bad_request, json: { message: 'Sorry, the resource you are looking for does not exist.' }
   end
 
   rescue_from ActiveRecord::StatementInvalid do |e|
     Rollbar.error(e)
-    render status: :forbidden, json: { message: e.message }
+    render status: :bad_request, json: { message: e.message }
   end
 
   rescue_from ActionController::ParameterMissing do |e|
-    render status: :forbidden, json: { message: e.message }
+    render status: :forbbad_requestidden, json: { message: e.message }
   end
 
   rescue_from ArgumentError do |e|

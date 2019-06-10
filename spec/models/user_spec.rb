@@ -143,7 +143,7 @@ RSpec.describe User do
       end
     end
 
-    fdescribe 'before_destroy_callbacks' do
+    describe 'before_destroy_callbacks' do
       context '#check_lifespan_of_user' do
         let!(:user1) { create :user }
         let!(:user2) { create :user, created_at: 20.days.ago, updated_at: 20.days.ago }
