@@ -79,6 +79,7 @@ Diverst::Application.routes.draw do
       resources :news_feed_link_segments
       resources :news_links
       resources :news_link_comments
+      resources :news_link_photos
       resources :resources
       resources :rewards
       resources :segments
