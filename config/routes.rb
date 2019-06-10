@@ -92,6 +92,7 @@ Diverst::Application.routes.draw do
         end
       end
       resources :user_groups
+      resources :user_roles
     end
   end
 
