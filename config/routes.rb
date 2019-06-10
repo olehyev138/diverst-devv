@@ -91,6 +91,7 @@ Diverst::Application.routes.draw do
           post '/email', to: 'users#find_user_by_email'
         end
       end
+      resources :user_groups
     end
   end
 
