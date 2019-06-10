@@ -1,7 +1,7 @@
 // import { selectHomePageDomain } from '../selectors';
 
-describe('selectHomePageDomain', () => {
-  it('Expect to have unit tests specified', () => {
+xdescribe('selectHomePageDomain', () => {
+  xit('Expect to have unit tests specified', () => {
     expect(true).toEqual(false);
   });
 });

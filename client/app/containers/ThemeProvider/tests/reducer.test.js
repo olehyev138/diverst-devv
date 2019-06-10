@@ -1,32 +1,33 @@
 // import produce from 'immer';
 import themeProviderReducer from '../reducer';
-// import { someAction } from '../actions';
+import { CHANGE_PRIMARY, CHANGE_SECONDARY } from '../constants';
 
 /* eslint-disable default-case, no-param-reassign */
 describe('themeProviderReducer', () => {
-  let state;
-  beforeEach(() => {
-    state = {
-      // default state params here
-    };
-  });
-
   it('returns the initial state', () => {
-    const expectedResult = state;
+    const expectedResult = {
+      primary: '#7B77C9',
+      secondary: '#8A8A8A'
+    };
+
     expect(themeProviderReducer(undefined, {})).toEqual(expectedResult);
   });
 
-  /**
-   * Example state change comparison
-   *
-   * it('should handle the someAction action correctly', () => {
-   *   const expectedResult = produce(state, draft => {
-   *     draft.loading = true;
-   *     draft.error = false;
-   *     draft.userData.nested = false;
-   *   });
-   *
-   *   expect(appReducer(state, someAction())).toEqual(expectedResult);
-   * });
-   */
+  it('handles CHANGE_PRIMARY', () => {
+    const action = { type: CHANGE_PRIMARY, color: 'primary' };
+
+    expect(themeProviderReducer(undefined, action)).toEqual({
+      primary: 'primary',
+      secondary: '#8A8A8A'
+    });
+  });
+
+  it('handles CHANGE_SECONDARY', () => {
+    const action = { type: CHANGE_SECONDARY, color: 'secondary' };
+
+    expect(themeProviderReducer(undefined, action)).toEqual({
+      primary: '#7B77C9',
+      secondary: 'secondary'
+    });
+  });
 });
