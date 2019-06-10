@@ -17,8 +17,6 @@ export const initialState = {
   enterprise: null,
   domain: null,
   token: null,
-  primary: '#3f51b5',
-  secondary: '#f50057'
 };
 
 function appReducer(state = initialState, action) {

@@ -1,8 +1,8 @@
 import { createSelector } from 'reselect';
 import { initialState } from './reducer';
 
-const selectRouter = state => state.router;
 const selectGlobal = state => state.global || initialState;
+const selectRouter = state => state.router;
 
 const selectLocation = () => createSelector(
   selectRouter,
@@ -23,5 +23,6 @@ const selectUser = () => createSelector(
 );
 
 export {
-  selectRouter, selectLocation, selectEnterprise, selectToken, selectUser
+  selectGlobal, selectRouter, selectLocation,
+  selectEnterprise, selectToken, selectUser
 };
