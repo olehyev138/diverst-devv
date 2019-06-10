@@ -80,6 +80,7 @@ Diverst::Application.routes.draw do
       resources :news_links
       resources :news_link_comments
       resources :news_link_photos
+      resources :news_link_segments
       resources :resources
       resources :rewards
       resources :segments
