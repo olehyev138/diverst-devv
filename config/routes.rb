@@ -71,6 +71,7 @@ Diverst::Application.routes.draw do
       resources :mentorship_ratings
       resources :mentorship_sessions
       resources :mentorship_types
+      resources :metrics_dashboards
       resources :news_feeds
       resources :resources
       resources :rewards
