@@ -88,6 +88,7 @@ Diverst::Application.routes.draw do
       resources :polls
       resources :poll_responses
       resources :polls_segments
+      resources :questions
       resources :resources
       resources :rewards
       resources :segments
