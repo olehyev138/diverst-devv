@@ -1,23 +1,19 @@
 import React from 'react';
-import { render } from 'react-testing-library';
-import { IntlProvider } from 'react-intl';
+import { shallow } from 'enzyme';
+import { unwrap } from '@material-ui/core/test-utils';
 
-import ConnectedNotFoundPage, { NotFoundPage } from '../index';
+import NotFoundPage from '../index';
+const NotFoundPageNaked = unwrap(NotFoundPage);
 
 describe('<NotFoundPage />', () => {
-  it('Expect to not log errors in console', () => {
+  it('should not log errors in console', () => {
     const spy = jest.spyOn(global.console, 'error');
     const dispatch = jest.fn();
 
-    render(
-      <IntlProvider locale='en'>
-        <NotFoundPage />
-      </IntlProvider>
-    );
+    const wrapper = shallow(<NotFoundPageNaked classes={{}} />);
 
     expect(spy).not.toHaveBeenCalled();
   });
-
 
   xit('should render and match the snapshot', () => {
     const {

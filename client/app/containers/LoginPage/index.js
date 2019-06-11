@@ -26,9 +26,6 @@ import { loginBegin, findEnterpriseBegin } from 'containers/App/actions';
 const styles = theme => ({});
 
 export class LoginPage extends React.PureComponent {
-  // TODO: - use formik actions
-  //       - locale toggle
-
   constructor(props) {
     super(props);
     this.state = { email: '' };
@@ -43,7 +40,6 @@ export class LoginPage extends React.PureComponent {
           loginBegin={(values, actions) => this.props.loginBegin(values)}
         />
       );
-
 
     return (
       <EnterpriseForm
