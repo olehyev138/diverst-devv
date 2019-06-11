@@ -9,7 +9,7 @@ import { withStyles } from '@material-ui/core/styles';
 import ApplicationHeader from 'components/ApplicationHeader';
 import ApplicationLayout from 'containers/Layouts/ApplicationLayout';
 
-import { LOGIN_PATH } from 'containers/Routes/constants';
+import { ROUTES } from 'containers/Routes/constants';
 
 const styles = theme => ({});
 
@@ -35,7 +35,7 @@ const AuthenticatedLayout = ({
           )}
         />
       )
-      : <Redirect to={LOGIN_PATH} />
+      : <Redirect to={ROUTES.session.login.path} />
   );
 };
 

@@ -21,7 +21,7 @@ import { logoutBegin, setUser } from 'containers/App/actions';
 
 import { selectEnterprise, selectToken, selectUser } from 'containers/App/selectors';
 
-import { HOME_PATH, ADMIN_ANALYTICS_PATH } from 'containers/Routes/constants';
+import { ROUTES } from 'containers/Routes/constants';
 
 const styles = theme => ({
   root: {
@@ -275,10 +275,10 @@ export function mapDispatchToProps(dispatch, ownProps) {
       dispatch(setUser(null));
     },
     handleVisitAdmin() {
-      dispatch(push(ADMIN_ANALYTICS_PATH));
+      dispatch(push(ROUTES.admin.root.path));
     },
     handleVisitHome() {
-      dispatch(push(HOME_PATH));
+      dispatch(push(ROUTES.user.root.path));
     }
   };
 }

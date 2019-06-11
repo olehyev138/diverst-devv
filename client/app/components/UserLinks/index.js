@@ -4,6 +4,7 @@ import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
 
 import {
   AppBar, Toolbar, Button, Hidden, Menu, MenuItem, ListItemIcon, IconButton
@@ -17,11 +18,13 @@ import LightbulbIcon from '@material-ui/icons/WbIncandescentOutlined';
 import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswerOutlined';
 import EventIcon from '@material-ui/icons/EventOutlined';
 import GroupIcon from '@material-ui/icons/GroupOutlined';
+import CloudDownloadIcon from '@material-ui/icons/CloudDownloadOutlined';
 import UsersCircleIcon from '@material-ui/icons/GroupWorkOutlined';
 import DvrIcon from '@material-ui/core/SvgIcon/SvgIcon';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 
-import { HOME_PATH } from 'containers/Routes/constants';
+import { ROUTES } from 'containers/Routes/constants';
+import messages from 'containers/LoginPage/messages';
 
 const styles = theme => ({
   toolbar: {
@@ -142,107 +145,130 @@ export class UserLinks extends React.PureComponent {
         open={isMobileNavOpen}
         onClose={this.handleMobileNavClose}
       >
-        <MenuItem component={WrappedNavLink} to={HOME_PATH} activeClassName={classes.mobileNavLinkActive}>
+        <MenuItem component={WrappedNavLink} exact to={ROUTES.user.home.path} activeClassName={classes.mobileNavLinkActive}>
           <ListItemIcon>
             <HomeIcon />
           </ListItemIcon>
-          Home
+          <FormattedMessage {...ROUTES.user.home.titleMessage} />
         </MenuItem>
-        <MenuItem component={WrappedNavLink} to='/user/campaigns' activeClassName={classes.mobileNavLinkActive}>
+        <MenuItem component={WrappedNavLink} to={ROUTES.user.innovate.path} activeClassName={classes.mobileNavLinkActive}>
           <ListItemIcon>
             <LightbulbIcon className={classes.lightbulbIcon} />
           </ListItemIcon>
-          Innovate
+          <FormattedMessage {...ROUTES.user.innovate.titleMessage} />
         </MenuItem>
-        <MenuItem>
+        <MenuItem component={WrappedNavLink} to={ROUTES.user.news.path} activeClassName={classes.mobileNavLinkActive}>
           <ListItemIcon>
             <QuestionAnswerIcon />
           </ListItemIcon>
-          News
+          <FormattedMessage {...ROUTES.user.news.titleMessage} />
         </MenuItem>
-        <MenuItem>
+        <MenuItem component={WrappedNavLink} to={ROUTES.user.events.path} activeClassName={classes.mobileNavLinkActive}>
           <ListItemIcon>
             <EventIcon />
           </ListItemIcon>
-          Events
+          <FormattedMessage {...ROUTES.user.events.titleMessage} />
         </MenuItem>
-        <MenuItem>
+        <MenuItem component={WrappedNavLink} to={ROUTES.user.groups.path} activeClassName={classes.mobileNavLinkActive}>
           <ListItemIcon>
             <GroupIcon />
           </ListItemIcon>
-          Inclusion Networks
+          <FormattedMessage {...ROUTES.user.groups.titleMessage} />
         </MenuItem>
-        <MenuItem>
+        <MenuItem component={WrappedNavLink} to={ROUTES.user.downloads.path} activeClassName={classes.mobileNavLinkActive}>
+          <ListItemIcon>
+            <CloudDownloadIcon />
+          </ListItemIcon>
+          <FormattedMessage {...ROUTES.user.downloads.titleMessage} />
+        </MenuItem>
+        <MenuItem component={WrappedNavLink} to={ROUTES.user.mentorship.path} activeClassName={classes.mobileNavLinkActive}>
           <ListItemIcon>
             <UsersCircleIcon />
           </ListItemIcon>
-          Mentorship
+          <FormattedMessage {...ROUTES.user.mentorship.titleMessage} />
         </MenuItem>
       </Menu>
     );
 
     const NavLinks = () => (
       <Toolbar className={classes.toolbar}>
-        <Button component={WrappedNavLink} to={HOME_PATH} className={classes.navLink} activeClassName={classes.navLinkActive}>
+        <Button
+          component={WrappedNavLink}
+          exact
+          to={ROUTES.user.home.path}
+          className={classes.navLink}
+          activeClassName={classes.navLinkActive}
+        >
           <Hidden smDown>
             <HomeIcon className={classes.navIcon} />
           </Hidden>
-          Home
+          <FormattedMessage {...ROUTES.user.home.titleMessage} />
         </Button>
         <Button
           component={WrappedNavLink}
-          to='/user/campaigns'
+          to={ROUTES.user.innovate.path}
           className={classes.navLink}
           activeClassName={classes.navLinkActive}
         >
           <Hidden smDown>
             <LightbulbIcon className={classes.lightbulbIcon} />
           </Hidden>
-          Innovate
+          <FormattedMessage {...ROUTES.user.innovate.titleMessage} />
         </Button>
         <Button
           component={WrappedNavLink}
-          to='/user/news'
+          to={ROUTES.user.news.path}
           className={classes.navLink}
           activeClassName={classes.navLinkActive}
         >
           <Hidden smDown>
             <QuestionAnswerIcon className={classes.navIcon} />
           </Hidden>
-          News
+          <FormattedMessage {...ROUTES.user.news.titleMessage} />
         </Button>
         <Button
           component={WrappedNavLink}
-          to='/user/events'
+          to={ROUTES.user.events.path}
           className={classes.navLink}
           activeClassName={classes.navLinkActive}
         >
           <Hidden smDown>
             <EventIcon className={classes.navIcon} />
           </Hidden>
-          Events
+          <FormattedMessage {...ROUTES.user.events.titleMessage} />
         </Button>
         <Button
           component={WrappedNavLink}
-          to='/user/groups'
+          to={ROUTES.user.groups.path}
           className={classes.navLink}
           activeClassName={classes.navLinkActive}
         >
           <Hidden smDown>
             <GroupIcon className={classes.navIcon} />
           </Hidden>
-          Inclusion Networks
+          <FormattedMessage {...ROUTES.user.groups.titleMessage} />
         </Button>
         <Button
           component={WrappedNavLink}
-          to='/user/groups'
+          to={ROUTES.user.downloads.path}
+          className={classes.navLink}
+          activeClassName={classes.navLinkActive}
+        >
+          <Hidden smDown>
+            <CloudDownloadIcon className={classes.navIcon} />
+          </Hidden>
+          <FormattedMessage {...ROUTES.user.downloads.titleMessage} />
+        </Button>
+        <Button
+          component={WrappedNavLink}
+          to={ROUTES.user.mentorship.path}
           className={classes.navLink}
           activeClassName={classes.navLinkActive}
         >
           <Hidden smDown>
             <UsersCircleIcon className={classes.navIcon} />
           </Hidden>
-          Mentorship
+          <FormattedMessage {...ROUTES.user.mentorship.titleMessage} />
         </Button>
       </Toolbar>
     );
@@ -262,7 +288,7 @@ export class UserLinks extends React.PureComponent {
               onClick={this.handleMobileNavOpen}
             >
               <ArrowDropDownIcon className={classNames(classes.arrowDropDownIcon, isMobileNavOpen ? classes.arrowDropDownIconRotated : null)} />
-              {pageTitle}
+              <FormattedMessage {...pageTitle} />
             </Button>
           </Toolbar>
           <MobileNavMenu />
@@ -277,7 +303,7 @@ export class UserLinks extends React.PureComponent {
 
 UserLinks.propTypes = {
   classes: PropTypes.object,
-  pageTitle: PropTypes.string,
+  pageTitle: PropTypes.object,
 };
 
 export function mapDispatchToProps(dispatch) {

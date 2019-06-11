@@ -18,11 +18,7 @@ import messages from './messages';
 import {
   Typography, Button, Grid, Card, CardActions, CardContent, Paper
 } from '@material-ui/core';
-import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withStyles } from '@material-ui/core/styles';
-
-import ApplicationHeader from 'components/ApplicationHeader';
-import UserLinks from 'components/UserLinks';
 
 const styles = theme => ({});
 
@@ -34,64 +30,6 @@ export class HomePage extends React.PureComponent {
 
     return (
       <React.Fragment>
-        <Grid container spacing={6}>
-          <Grid item xs>
-            <Card>
-              <CardContent>
-                <Typography variant='h5'>
-                  Example Content
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-          <Grid item xs>
-            <Card>
-              <CardContent>
-                <Typography variant='h5'>
-                  Example Content
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-          <Grid item xs>
-            <Card>
-              <CardContent>
-                <Typography variant='h5'>
-                  Example Content
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-        </Grid>
-        <Grid container spacing={6}>
-          <Grid item xs>
-            <Card>
-              <CardContent>
-                <Typography variant='h5'>
-                  Example Content
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-          <Grid item xs={6}>
-            <Card>
-              <CardContent>
-                <Typography variant='h5'>
-                  Example Content
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-          <Grid item xs>
-            <Card>
-              <CardContent>
-                <Typography variant='h5'>
-                  Example Content
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-        </Grid>
       </React.Fragment>
     );
   }
