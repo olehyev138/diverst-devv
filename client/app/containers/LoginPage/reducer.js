@@ -15,12 +15,11 @@ export const initialState = {
   },
   password: {
     error: null,
-  }
+  },
 };
 
 function loginPageReducer(state = initialState, action) {
   return produce(state, (draft) => {
-    // TODO: what do these do?
     switch (action.type) {
       case SET_ENTERPRISE:
         draft.email.error = null;
