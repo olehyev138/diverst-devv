@@ -83,6 +83,7 @@ Diverst::Application.routes.draw do
       resources :news_link_segments
       resources :outcomes
       resources :pillars
+      resources :policy_groups
       resources :policy_group_templates
       resources :resources
       resources :rewards
