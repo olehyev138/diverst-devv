@@ -103,6 +103,7 @@ Diverst::Application.routes.draw do
       resources :sponsors
       resources :tags
       resources :topics
+      resources :topic_feedbacks
       resources :users do
         collection do
           post '/email', to: 'users#find_user_by_email'
