@@ -12,10 +12,8 @@ import {
 
 // The initial state of the App
 export const initialState = {
-  loading: false,
   user: null,
   enterprise: null,
-  domain: null,
   token: null,
 };
 
