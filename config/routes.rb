@@ -85,6 +85,7 @@ Diverst::Application.routes.draw do
       resources :pillars
       resources :policy_groups
       resources :policy_group_templates
+      resources :polls
       resources :resources
       resources :rewards
       resources :segments
