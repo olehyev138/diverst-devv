@@ -21,8 +21,6 @@ module BasePager
       raise Exception.new if default_order_by.blank?
       raise Exception.new if default_order.blank?
 
-      # diverst_request.ability.authorize! :lookup, self.class, :message => "You are not authorized to search for #{self.name.pluralize}."
-
       # set the parameters
       item_page = params[:page].present? ? params[:page].to_i : page
       item_count = params[:count].present? ? params[:count].to_i : count
