@@ -115,6 +115,7 @@ Diverst::Application.routes.draw do
       resources :user_roles
       resources :users_segments
       resources :views
+      resources :yammer_field_mappings
     end
   end
 
