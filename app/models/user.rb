@@ -86,6 +86,7 @@ class User < BaseClass
   validate :validate_presence_fields
   validate :group_leader_role
   validate :policy_group
+  validate :valid_linkedin_url, if: -> { !linkedin_profile_url.nil? }
 
   before_validation :generate_password_if_saml
   before_validation :set_provider
@@ -182,23 +183,21 @@ class User < BaseClass
     enterprise.user_roles.where(id: user_role_id).where("LOWER(role_type) = 'admin'").count > 0
   end
 
-  def has_answered_group_surveys?
-    groups_with_answered_surveys = user_groups.where.not(data: nil)
-
-    if groups_with_answered_surveys.count > 0
-      return true
+  def has_answered_group_survey?(group: nil)
+    if group.present?
+      user_group = user_groups.find_by_group_id(group.id)
+      user_group.present? && user_group.data.present?
     else
-      return false
+      groups_with_answered_surveys = user_groups.where.not(data: nil)
+      groups_with_answered_surveys.count > 0
     end
   end
 
-  def has_answered_group_survey?(group)
-    user_group = user_groups.find_by_group_id(group.id)
-
-    if user_group.present? && user_group.data.present?
-      return true
+  def belongs_to_group_with_survey?(group: nil)
+    if group.present?
+      group.has_survey?
     else
-      return false
+      groups.any? { |grp| grp.has_survey? }
     end
   end
 
@@ -549,6 +548,13 @@ class User < BaseClass
     ).merge({ 'created_at' => self.created_at.beginning_of_hour })
   end
 
+  def delete_linkedin_info
+    self.update(
+      linkedin_profile_url: nil,
+      avatar_file_name: nil
+    )
+  end
+
   private
 
   def check_lifespan_of_user
@@ -575,5 +581,28 @@ class User < BaseClass
   # Generate a random password if the user is using SAML
   def generate_password_if_saml
     self.password = self.password_confirmation = SecureRandom.urlsafe_base64 if auth_source == 'saml' && new_record?
+  end
+
+  def valid_linkedin_url
+    unless linkedin_profile_url.downcase.start_with? 'https://'
+      self.linkedin_profile_url = "https://#{linkedin_profile_url}"
+    end
+
+    uri = URI.parse(linkedin_profile_url) rescue nil
+
+    if uri == nil
+      errors.add(:user, 'Not a valid URL')
+      return
+    end
+
+    unless uri.host.include?('linkedin.com')
+      errors.add(:user, 'Not a valid LinkedIn URL')
+      return
+    end
+
+    unless uri.path.start_with?('/in/')
+      errors.add(:user, 'Not a valid LinkedIn Profile URL')
+      return
+    end
   end
 end

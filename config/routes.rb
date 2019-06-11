@@ -255,6 +255,12 @@ Rails.application.routes.draw do
         end
       end
 
+      resources :twitter_accounts do
+        collection do
+          get 'delete_all'
+        end
+      end
+
       resources :user_groups, only: :update
 
       resources :news_links, except: [:show] do
@@ -315,6 +321,10 @@ Rails.application.routes.draw do
         resources :fields do
           member do
             get 'time_series'
+          end
+
+          collection do
+            get 'joined_time_series'
           end
         end
         resources :resources do
@@ -528,7 +538,13 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :users
+      resources :users do
+        member do
+          get :edit_linkedin
+          patch :linkedin, action: :update_linkedin
+          delete :linkedin, action: :delete_linkedin
+        end
+      end
     end
 
     resources :matches do

@@ -174,11 +174,21 @@ class Enterprise < BaseClass
   end
 
   def users_csv(nb_rows, export_csv_params = nil)
+    group_roles = enterprise.user_roles.where(role_type: 'group').pluck(:role_name)
+    non_group_roles = enterprise.user_roles.where.not(role_type: 'group').pluck(:role_name)
+
     return User.to_csv(users: users, fields: fields, nb_rows: nb_rows) if export_csv_params == 'all_users' || export_csv_params.nil?
     return User.to_csv(users: users.active, fields: fields, nb_rows: nb_rows) if export_csv_params == 'active_users'
     return User.to_csv(users: users.inactive, fields: fields, nb_rows: nb_rows) if export_csv_params == 'inactive_users'
 
-    User.to_csv(users: users.includes(:user_role).where(user_roles: { role_name: export_csv_params }), fields: fields, nb_rows: nb_rows)
+
+    if group_roles.include?(export_csv_params)
+      return User.to_csv(users: users.joins(group_leaders: :user_role).where(user_roles: { role_name: export_csv_params }).distinct, fields: fields, nb_rows: nb_rows)
+    elsif non_group_roles.include?(export_csv_params)
+      return User.to_csv(users: users.joins(:user_role).where(user_roles: { role_name: export_csv_params }).distinct, fields: fields, nb_rows: nb_rows)
+    end
+
+    User.to_csv(users: [], fields: fields, nb_rows: nb_rows)
   end
 
   def close_budgets_csv

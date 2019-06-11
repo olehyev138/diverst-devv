@@ -5,7 +5,9 @@ RSpec.describe GroupsController, type: :controller do
 
   let(:enterprise) { create(:enterprise) }
   let(:user) { create(:user, enterprise: enterprise, email: 'test@gmail.com') }
-  let!(:group) { create(:group, enterprise: enterprise, position: 0, auto_archive: false) }
+
+  let!(:group) { create(:group, enterprise: enterprise, position: 0, auto_archive: false, upcoming_events_visibility: 'public') }
+
   let!(:different_group) { create(:group, enterprise: create(:enterprise)) }
 
   describe 'GET #index' do
@@ -257,7 +259,8 @@ RSpec.describe GroupsController, type: :controller do
 
   describe 'GET #calendar_data' do
     def get_calendar_data(initiative_participating_groups_id_in, initiative_segments_segement_id_in, params = {})
-      get :calendar_data, params, q: { initiative_participating_groups_group_id_in: initiative_participating_groups_id_in, initiative_segments_segement_id_in: initiative_segments_segement_id_in }, format: :json
+      get :calendar_data, params, q: { initiative_participating_groups_group_id_in: initiative_participating_groups_id_in,
+                                       initiative_segments_segement_id_in: initiative_segments_segement_id_in }, format: :json
     end
 
     let(:initiative) { create :initiative }
@@ -410,7 +413,6 @@ RSpec.describe GroupsController, type: :controller do
         expect(response).to render_template :show
       end
 
-
       context 'when group has erg_leader_permissions' do
         let!(:group_leader) { create(:group_leader, user: user, group: group) }
         let!(:news_feed) { group.news_feed }
@@ -480,6 +482,107 @@ RSpec.describe GroupsController, type: :controller do
     context 'without logged user' do
       before { get :show, id: group.id }
       it_behaves_like 'redirect user to users/sign_in path'
+    end
+
+    describe 'viewing upcoming events' do
+      let!(:group_event_non_member) { create(:group, enterprise: enterprise, position: 0, auto_archive: false, upcoming_events_visibility: 'non_member') }
+      let!(:group_event_group) { create(:group, enterprise: enterprise, position: 0, auto_archive: false, upcoming_events_visibility: 'group') }
+      let!(:group_event_leaders_only) { create(:group, enterprise: enterprise, position: 0, auto_archive: false, upcoming_events_visibility: 'leaders_only') }
+
+      context 'user is not a member' do
+        let(:user) { create(:user, enterprise: enterprise) }
+        login_user_from_let
+
+        describe 'events can be viewed by public' do
+          before { get :show, id: group.id }
+          it 'should let users see upcoming events' do
+            expect(assigns[:show_events]).to eq true
+          end
+        end
+        describe 'events can be viewed by non_members' do
+          before { get :show, id: group_event_non_member.id }
+          it 'should let users see upcoming events' do
+            expect(assigns[:show_events]).to eq true
+          end
+        end
+        describe 'events can be viewed by group' do
+          before { get :show, id: group_event_group.id }
+          it 'should not let users see upcoming events' do
+            expect(assigns[:show_events]).to eq false
+          end
+        end
+        describe 'events can be viewed by leaders only' do
+          before { get :show, id: group_event_leaders_only.id }
+          it 'should not let users see upcoming events' do
+            expect(assigns[:show_events]).to eq false
+          end
+        end
+
+        context 'user is a member' do
+          let!(:user_group) { create(:user_group, group: group, user: user, accepted_member: true) }
+          let!(:user_group_non_member) { create(:user_group, group: group_event_non_member, user: user, accepted_member: true) }
+          let!(:user_group_group) { create(:user_group, group: group_event_group, user: user, accepted_member: true) }
+          let!(:user_group_leaders) { create(:user_group, group: group_event_leaders_only, user: user, accepted_member: true) }
+
+          describe 'events can be viewed by public' do
+            before { get :show, id: group.id }
+            it 'should let users see upcoming events' do
+              expect(assigns[:show_events]).to eq true
+            end
+          end
+          describe 'events can be viewed by non_members' do
+            before { get :show, id: group_event_non_member.id }
+            it 'should let users see upcoming events' do
+              expect(assigns[:show_events]).to eq true
+            end
+          end
+          describe 'events can be viewed by group' do
+            before { get :show, id: group_event_group.id }
+            it 'should let users see upcoming events' do
+              expect(assigns[:show_events]).to eq true
+            end
+          end
+          describe 'events can be viewed by leaders only' do
+            before { get :show, id: group_event_leaders_only.id }
+            it 'should not let users see upcoming events' do
+              expect(assigns[:show_events]).to eq false
+            end
+          end
+
+
+          context 'user is a leader' do
+            let!(:group_leader) { create(:group_leader, user: user, group: group) }
+            let!(:group_leader_non_member) { create(:group_leader, user: user, group: group_event_non_member) }
+            let!(:group_leader_group) { create(:group_leader, user: user, group: group_event_group) }
+            let!(:group_leader_leaders) { create(:group_leader, user: user, group: group_event_leaders_only) }
+
+            describe 'events can be viewed by public' do
+              before { get :show, id: group.id }
+              it 'should let users see upcoming events' do
+                expect(assigns[:show_events]).to eq true
+              end
+            end
+            describe 'events can be viewed by non_members' do
+              before { get :show, id: group_event_non_member.id }
+              it 'should let users see upcoming events' do
+                expect(assigns[:show_events]).to eq true
+              end
+            end
+            describe 'events can be viewed by group' do
+              before { get :show, id: group_event_group.id }
+              it 'should let users see upcoming events' do
+                expect(assigns[:show_events]).to eq true
+              end
+            end
+            describe 'events can be viewed by leaders only' do
+              before { get :show, id: group_event_leaders_only.id }
+              it 'should let users see upcoming events' do
+                expect(assigns[:show_events]).to eq true
+              end
+            end
+          end
+        end
+      end
     end
   end
 
