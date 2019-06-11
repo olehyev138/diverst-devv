@@ -15,14 +15,9 @@ describe('<NotFoundPage />', () => {
     expect(spy).not.toHaveBeenCalled();
   });
 
-  xit('should render and match the snapshot', () => {
-    const {
-      container: { firstChild },
-    } = render(
-      <IntlProvider locale='en'>
-        <NotFoundPage />
-      </IntlProvider>,
-    );
-    expect(firstChild).toMatchSnapshot();
+  it('should render and match the snapshot', () => {
+    const wrapper = shallow(<NotFoundPageNaked classes={{}} />);
+
+    expect(wrapper).toMatchSnapshot();
   });
 });
