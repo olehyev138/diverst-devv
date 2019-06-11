@@ -105,6 +105,7 @@ Diverst::Application.routes.draw do
       resources :topics
       resources :topic_feedbacks
       resources :user_rewards
+      resources :user_reward_actions
       resources :users do
         collection do
           post '/email', to: 'users#find_user_by_email'
