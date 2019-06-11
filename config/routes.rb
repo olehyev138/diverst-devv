@@ -96,10 +96,10 @@ Diverst::Application.routes.draw do
       resources :segment_group_scope_rule_groups
       resources :segment_order_rules
       resources :segments
+      resources :sessions, only: [:create, :destroy]
       resources :shared_metrics_dashboards
       resources :shared_news_feed_links
       resources :social_link_segments
-      resources :sessions, only: [:create, :destroy]
       resources :users do
         collection do
           post '/email', to: 'users#find_user_by_email'
