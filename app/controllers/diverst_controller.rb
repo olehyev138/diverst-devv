@@ -63,7 +63,7 @@ class DiverstController < ApplicationController
   end
 
   rescue_from ActionController::ParameterMissing do |e|
-    render status: :forbbad_requestidden, json: { message: e.message }
+    render status: :bad_request, json: { message: e.message }
   end
 
   rescue_from ArgumentError do |e|
@@ -145,7 +145,7 @@ class DiverstController < ApplicationController
 
   def init_response
     self.diverst_request = Request.new
-    self.diverst_request.controller = controller_name,
-                                      self.diverst_request.action = action_name
+    self.diverst_request.controller = controller_name
+    self.diverst_request.action = action_name
   end
 end
