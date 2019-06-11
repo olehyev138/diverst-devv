@@ -92,6 +92,7 @@ Diverst::Application.routes.draw do
       resources :resources
       resources :rewards
       resources :reward_actions
+      resources :segment_group_scope_rules
       resources :segments
       resources :sessions, only: [:create, :destroy]
       resources :users do
