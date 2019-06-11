@@ -29,6 +29,15 @@ const styles = theme => ({
   card: {
     width: '100%',
   },
+  cardActions: {
+    paddingTop: 4,
+    paddingLeft: 16,
+    paddingRight: 16,
+    paddingBottom: 16,
+  },
+  submitButtonLabel: {
+    minWidth: 'max-content',
+  },
 });
 
 function LoginForm(props, context) {
@@ -116,11 +125,14 @@ function LoginForm(props, context) {
                 helperText={errors.password && touched.password ? errors.password : null}
               />
             </CardContent>
-            <CardActions>
+            <CardActions className={classes.cardActions}>
               <Grid container alignItems='center'>
                 <Grid item xs={false} sm={4} />
-                <Grid item align={width === 'xs' ? 'left' : 'center'} xs={6} sm={4}>
+                <Grid item align={width === 'xs' ? 'left' : 'center'} xs={4} sm={4}>
                   <Button
+                    classes={{
+                      label: classes.submitButtonLabel
+                    }}
                     type='submit'
                     color='primary'
                     size='large'
@@ -133,7 +145,7 @@ function LoginForm(props, context) {
                     {<FormattedMessage {...messages.login} />}
                   </Button>
                 </Grid>
-                <Grid item align='right' xs={6} sm={4}>
+                <Grid item align='right' xs={8} sm={4}>
                   <Button
                     color='primary'
                     size='small'

@@ -3,9 +3,11 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
+import { NavLink } from 'react-router-dom';
+import { matchPath } from 'react-router';
 
 import {
-  Collapse, Divider, Drawer, Hidden, List, ListItem, ListItemIcon, ListItemText
+  Collapse, Divider, Drawer, Hidden, List, ListItem, ListItemIcon, ListItemText, MenuItem,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -19,6 +21,7 @@ import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
 import LightbulbIcon from '@material-ui/icons/WbIncandescent';
 import HowToVoteIcon from '@material-ui/icons/HowToVote';
 import UsersCircleIcon from '@material-ui/icons/GroupWork';
+import { ROUTES } from 'containers/Routes/constants';
 
 const drawerWidth = 240;
 const styles = theme => ({
@@ -56,7 +59,10 @@ const styles = theme => ({
   lightbulbIcon: {
     '-webkit-transform': 'rotate(180deg)',
     transform: 'rotate(180deg)',
-  }
+  },
+  navLinkActive: {
+    backgroundColor: 'rgba(0, 0, 0, 0.14)',
+  },
 });
 
 export class AdminLinks extends React.PureComponent {
@@ -66,7 +72,11 @@ export class AdminLinks extends React.PureComponent {
     this.state = {
       drawerOpen: props.drawerOpen,
       analyze: {
-        open: false,
+        open: !!matchPath(props.location.pathname, {
+          path: ROUTES.admin.analytics.pathPrefix,
+          exact: false,
+          strict: false
+        }),
       },
     };
   }
@@ -83,6 +93,10 @@ export class AdminLinks extends React.PureComponent {
   };
 
   drawer(classes) {
+    // Wrap NavLink to fix ref issue temporarily until react-router-dom is updated to fix this
+    /* eslint-disable-next-line react/no-multi-comp */
+    const WrappedNavLink = React.forwardRef((props, ref) => <NavLink innerRef={ref} {...props} />);
+
     return (
       <React.Fragment>
         <div className={classes.toolbar} />
@@ -96,13 +110,31 @@ export class AdminLinks extends React.PureComponent {
             {this.state.analyze.open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
           </ListItem>
           <Collapse in={this.state.analyze.open} timeout='auto' unmountOnExit>
-            <List component='div' disablePadding>
-              <ListItem button className={classes.nested}>
+            <List disablePadding>
+              <MenuItem
+                component={WrappedNavLink}
+                exact
+                to={ROUTES.admin.analytics.overview.path}
+                className={classes.nested}
+                activeClassName={classes.navLinkActive}
+              >
+                <ListItemIcon>
+                  <ListIcon />
+                </ListItemIcon>
+                <ListItemText primary='Overview' />
+              </MenuItem>
+              <MenuItem
+                component={WrappedNavLink}
+                exact
+                to={ROUTES.admin.analytics.users.path}
+                className={classes.nested}
+                activeClassName={classes.navLinkActive}
+              >
                 <ListItemIcon>
                   <ListIcon />
                 </ListItemIcon>
                 <ListItemText primary='Users' />
-              </ListItem>
+              </MenuItem>
             </List>
           </Collapse>
 
@@ -198,6 +230,7 @@ AdminLinks.propTypes = {
   classes: PropTypes.object,
   drawerOpen: PropTypes.bool,
   drawerToggleCallback: PropTypes.func,
+  location: PropTypes.object,
 };
 
 export function mapDispatchToProps(dispatch) {

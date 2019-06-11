@@ -14,6 +14,7 @@ import { SnackbarProvider } from 'notistack';
 import injectReducer from 'utils/injectReducer';
 
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import Slide from '@material-ui/core/Slide';
 
 import { makeSelectPrimary, makeSelectSecondary } from './selectors';
 import { changePrimary, changeSecondary } from './actions';
@@ -24,7 +25,6 @@ import { loginSuccess, setUser, setEnterprise } from 'containers/App/actions';
 import AuthService from 'utils/authService';
 
 const axios = require('axios');
-
 
 export class ThemeProvider extends React.PureComponent {
   componentDidMount() {
@@ -45,6 +45,10 @@ export class ThemeProvider extends React.PureComponent {
       const user = JSON.parse(window.atob(jwt.split('.')[1]));
       this.props.loginSuccess(jwt, user, enterprise || user.enterprise);
     }
+  }
+
+  SlideTransition(props) {
+    return <Slide {...props} direction='up' />;
   }
 
   render() {
@@ -93,6 +97,7 @@ export class ThemeProvider extends React.PureComponent {
             vertical: 'bottom',
             horizontal: 'right',
           }}
+          TransitionComponent={this.SlideTransition}
         >
           <App />
         </SnackbarProvider>
