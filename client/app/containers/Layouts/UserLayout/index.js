@@ -31,7 +31,7 @@ const UserLayout = ({ component: Component, pageTitle, ...rest }) => {
 
           <Container>
             <div className={classes.content}>
-              <Component {...other} />
+              <Component pageTitle={pageTitle} {...other} />
             </div>
           </Container>
         </React.Fragment>
@@ -43,7 +43,7 @@ const UserLayout = ({ component: Component, pageTitle, ...rest }) => {
 UserLayout.propTypes = {
   classes: PropTypes.object,
   component: PropTypes.elementType,
-  pageTitle: PropTypes.string,
+  pageTitle: PropTypes.object,
 };
 
 export default withStyles(styles)(UserLayout);
