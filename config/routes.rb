@@ -98,6 +98,7 @@ Diverst::Application.routes.draw do
       resources :segments
       resources :shared_metrics_dashboards
       resources :shared_news_feed_links
+      resources :social_link_segments
       resources :sessions, only: [:create, :destroy]
       resources :users do
         collection do
