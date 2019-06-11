@@ -81,11 +81,31 @@ Diverst::Application.routes.draw do
       resources :news_link_comments
       resources :news_link_photos
       resources :news_link_segments
+      resources :outcomes
+      resources :pillars
+      resources :policy_groups
       resources :policy_group_templates
+      resources :polls
+      resources :poll_responses
+      resources :polls_segments
+      resources :questions
       resources :resources
       resources :rewards
+      resources :reward_actions
+      resources :segment_group_scope_rules
+      resources :segment_group_scope_rule_groups
+      resources :segment_order_rules
       resources :segments
       resources :sessions, only: [:create, :destroy]
+      resources :shared_metrics_dashboards
+      resources :shared_news_feed_links
+      resources :social_link_segments
+      resources :sponsors
+      resources :tags
+      resources :topics
+      resources :topic_feedbacks
+      resources :user_rewards
+      resources :user_reward_actions
       resources :users do
         collection do
           post '/email', to: 'users#find_user_by_email'
@@ -95,6 +115,7 @@ Diverst::Application.routes.draw do
       resources :user_roles
       resources :users_segments
       resources :views
+      resources :yammer_field_mappings
     end
   end
 

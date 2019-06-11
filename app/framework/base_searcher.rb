@@ -64,10 +64,20 @@ module BaseSearcher
       self.base_joins
     end
 
-    def add_custom_args(where, where_not, params, includes, joins)
-      # check if the query_arguments method is defined
-      return if not self.respond_to? :query_arguments
+    def query_arguments
+      attribute_names
+    end
 
+    def query_arguments_hash(query, value)
+      case query
+      when *query_arguments
+        { query.to_sym => value }
+      else
+        {}
+      end
+    end
+
+    def add_custom_args(where, where_not, params, includes, joins)
       # check if the argument is defined in the class as a query argument
       params.each do |arg|
         if query_arguments.include?(arg.first.to_s)
