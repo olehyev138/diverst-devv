@@ -20,15 +20,11 @@ class Mentoring < BaseClass
       indexes :mentor do
         indexes :enterprise_id, type: :integer
         indexes :active, type: :boolean
-        indexes :first_name, type: :keyword
-        indexes :last_name, type: :keyword
         indexes :id, type: :integer
       end
       indexes :mentee do
         indexes :enterprise_id, type: :integer
         indexes :active, type: :boolean
-        indexes :first_name, type: :keyword
-        indexes :last_name, type: :keyword
         indexes :id, type: :integer
       end
     end
@@ -40,10 +36,10 @@ class Mentoring < BaseClass
         only: [],
         include: {
           mentor: {
-            only: [:enterprise_id, :active, :first_name, :last_name, :id]
+            only: [:enterprise_id, :active, :id]
           },
           mentee: {
-            only: [:enterprise_id, :active, :first_name, :last_name, :id]
+            only: [:enterprise_id, :active, :id]
           }
         }
       )

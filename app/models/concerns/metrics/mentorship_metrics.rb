@@ -25,9 +25,6 @@ module Metrics
     end
 
     def mentors_per_group(tp)
-      # type = %w('mentor mentee')
-
-      # graphs = type.map do |tp|
       graph = UserGroup.get_graph_builder
       graph.set_enterprise_filter(field: 'group.enterprise_id', value: enterprise_id)
       graph.formatter.type = 'bar'
@@ -41,7 +38,6 @@ module Metrics
       graph.drilldown_graph(parent_field: 'group.parent.name')
 
       graph.build
-      # end
     end
 
     def user_mentorship_interest_per_group

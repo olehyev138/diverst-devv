@@ -38,40 +38,6 @@ class Metrics::MentorshipGraphsController < ApplicationController
     respond_to do |format|
       format.json {
         render json: @graph.mentors_per_group('mentor')
-
-        # groups = current_user.enterprise.groups
-        #
-        # values_mentees = groups.map do |group|
-        #   {
-        #     x: group.name,
-        #     y: group.members.joins('JOIN mentorings ON users.id = mentorings.mentee_id').select(:id).distinct.count(:id),
-        #     children: {}
-        #   }
-        # end
-        #
-        # values_mentors = groups.map do |group|
-        #   {
-        #     x: group.name,
-        #     y: group.members.joins('JOIN mentorings ON users.id = mentorings.mentor_id').select(:id).distinct.count(:id),
-        #     children: {}
-        #   }
-        # end
-        #
-        # render json: {
-        #   title: 'Mentors and Mentees per Group',
-        #   type: 'bar',
-        #   series:
-        #     [
-        #       {
-        #         key: "Number of Mentors Per Group",
-        #         values: values_mentors.sort_by { |group| -group[:y] }
-        #       },
-        #       {
-        #         key: "Number of Mentees Per Group",
-        #         values: values_mentees
-        #       }
-        #     ]
-        # }
       }
       format.csv {
         # TODO Later
