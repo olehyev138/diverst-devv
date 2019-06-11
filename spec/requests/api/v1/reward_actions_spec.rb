@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-model = 'Reward'
+model = 'RewardAction'
 RSpec.describe "#{model.pluralize}", type: :request do
   let(:enterprise) { create(:enterprise) }
   let(:api_key) { create(:api_key) }
@@ -39,9 +39,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
 
   describe '#create' do
     it 'creates an item' do
-      attributes = build(route.singularize.to_sym, enterprise_id: enterprise.id).attributes
-      attributes['responsible_id'] = user.id
-      post "/api/v1/#{route}", params: { "#{route.singularize}" => attributes }, headers: headers
+      post "/api/v1/#{route}", params: { "#{route.singularize}" => build(route.singularize.to_sym).attributes }, headers: headers
       expect(response).to have_http_status(201)
     end
 

@@ -91,6 +91,7 @@ Diverst::Application.routes.draw do
       resources :questions
       resources :resources
       resources :rewards
+      resources :reward_actions
       resources :segments
       resources :sessions, only: [:create, :destroy]
       resources :users do
