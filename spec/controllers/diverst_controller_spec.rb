@@ -28,7 +28,7 @@ RSpec.describe DiverstController, type: :controller do
       { name: ActiveRecord::RecordInvalid, status: 400 },
       { name: ActiveRecord::RecordNotFound, status: 404 },
       { name: BadRequestException, status: 400 },
-      { name: InvalidInputException.new('password'), status: 422, message: 'Invalid Password' },
+      { name: InvalidInputException.new('Invalid Password', 'password'), status: 422, message: 'Invalid Password' },
       { name: UnprocessableException, status: 422, message: OpenStruct.new(resource) },
       { name: ActionController::ParameterMissing, status: 400, message: 'Test' },
       { name: ActionController::UnpermittedParameters, status: 400, message: [] },
