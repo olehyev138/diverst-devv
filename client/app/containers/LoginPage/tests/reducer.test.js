@@ -1,7 +1,7 @@
 import produce from 'immer';
 
 import loginPageReducer from '../reducer';
-import { setEnterprise, findEnterpriseError, loginBegin, loginError } from 'containers/App/actions';
+import { setEnterprise, findEnterpriseError, loginError } from 'containers/App/actions';
 
 /* eslint-disable default-case, no-param-reassign */
 describe('loginPageReducer', () => {
