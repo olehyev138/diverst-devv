@@ -12,4 +12,4 @@ const selectPasswordError = () => createSelector(
   loginPageState => loginPageState.password.error,
 );
 
-export { selectEmailError, selectPasswordError };
+export { selectLoginPage, selectEmailError, selectPasswordError };
