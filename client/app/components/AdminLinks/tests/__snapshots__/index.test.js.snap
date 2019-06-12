@@ -1,0 +1,304 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<AdminLinks /> should render and match the snapshot 1`] = `
+<nav>
+  <Hidden
+    implementation="js"
+    lgDown={false}
+    lgUp={false}
+    mdDown={false}
+    mdUp={true}
+    smDown={false}
+    smUp={false}
+    xlDown={false}
+    xlUp={false}
+    xsDown={false}
+    xsUp={false}
+  >
+    <WithStyles(ForwardRef(Drawer))
+      ModalProps={
+        Object {
+          "keepMounted": true,
+        }
+      }
+      classes={
+        Object {
+          "paper": undefined,
+        }
+      }
+      onClose={[Function]}
+      open={true}
+      variant="temporary"
+    >
+      <div />
+      <WithStyles(ForwardRef(Divider)) />
+      <WithStyles(ForwardRef(List))>
+        <WithStyles(ForwardRef(ListItem))
+          button={true}
+          onClick={[Function]}
+        >
+          <WithStyles(ForwardRef(ListItemIcon))>
+            <EqualizerIcon />
+          </WithStyles(ForwardRef(ListItemIcon))>
+          <WithStyles(ForwardRef(ListItemText))
+            primary="Analyze"
+          />
+          <ExpandMoreIcon />
+        </WithStyles(ForwardRef(ListItem))>
+        <WithStyles(ForwardRef(Collapse))
+          in={false}
+          timeout="auto"
+          unmountOnExit={true}
+        >
+          <WithStyles(ForwardRef(List))
+            disablePadding={true}
+          >
+            <WithStyles(ForwardRef(MenuItem))
+              component={
+                Object {
+                  "$$typeof": Symbol(react.forward_ref),
+                  "render": [Function],
+                }
+              }
+              exact={true}
+              to="/admin/analytics"
+            >
+              <WithStyles(ForwardRef(ListItemIcon))>
+                <ListIcon />
+              </WithStyles(ForwardRef(ListItemIcon))>
+              <WithStyles(ForwardRef(ListItemText))
+                primary="Overview"
+              />
+            </WithStyles(ForwardRef(MenuItem))>
+            <WithStyles(ForwardRef(MenuItem))
+              component={
+                Object {
+                  "$$typeof": Symbol(react.forward_ref),
+                  "render": [Function],
+                }
+              }
+              exact={true}
+              to="/admin/analytics/users"
+            >
+              <WithStyles(ForwardRef(ListItemIcon))>
+                <ListIcon />
+              </WithStyles(ForwardRef(ListItemIcon))>
+              <WithStyles(ForwardRef(ListItemText))
+                primary="Users"
+              />
+            </WithStyles(ForwardRef(MenuItem))>
+          </WithStyles(ForwardRef(List))>
+        </WithStyles(ForwardRef(Collapse))>
+        <WithStyles(ForwardRef(ListItem))
+          button={true}
+        >
+          <WithStyles(ForwardRef(ListItemIcon))>
+            <DeviceHubIcon />
+          </WithStyles(ForwardRef(ListItemIcon))>
+          <WithStyles(ForwardRef(ListItemText))
+            primary="Manage"
+          />
+        </WithStyles(ForwardRef(ListItem))>
+        <WithStyles(ForwardRef(ListItem))
+          button={true}
+        >
+          <WithStyles(ForwardRef(ListItemIcon))>
+            <AssignmentTurnedInIcon />
+          </WithStyles(ForwardRef(ListItemIcon))>
+          <WithStyles(ForwardRef(ListItemText))
+            primary="Plan"
+          />
+        </WithStyles(ForwardRef(ListItem))>
+        <WithStyles(ForwardRef(ListItem))
+          button={true}
+        >
+          <WithStyles(ForwardRef(ListItemIcon))>
+            <WbIncandescentIcon />
+          </WithStyles(ForwardRef(ListItemIcon))>
+          <WithStyles(ForwardRef(ListItemText))
+            primary="Innovate"
+          />
+        </WithStyles(ForwardRef(ListItem))>
+        <WithStyles(ForwardRef(ListItem))
+          button={true}
+        >
+          <WithStyles(ForwardRef(ListItemIcon))>
+            <HowToVoteIcon />
+          </WithStyles(ForwardRef(ListItemIcon))>
+          <WithStyles(ForwardRef(ListItemText))
+            primary="Include"
+          />
+        </WithStyles(ForwardRef(ListItem))>
+        <WithStyles(ForwardRef(ListItem))
+          button={true}
+        >
+          <WithStyles(ForwardRef(ListItemIcon))>
+            <GroupWorkIcon />
+          </WithStyles(ForwardRef(ListItemIcon))>
+          <WithStyles(ForwardRef(ListItemText))
+            primary="Mentorship"
+          />
+        </WithStyles(ForwardRef(ListItem))>
+        <WithStyles(ForwardRef(Divider)) />
+        <WithStyles(ForwardRef(ListItem))
+          button={true}
+        >
+          <WithStyles(ForwardRef(ListItemIcon))>
+            <SettingsIcon />
+          </WithStyles(ForwardRef(ListItemIcon))>
+          <WithStyles(ForwardRef(ListItemText))
+            primary="Global Settings"
+          />
+        </WithStyles(ForwardRef(ListItem))>
+        <WithStyles(ForwardRef(Divider)) />
+      </WithStyles(ForwardRef(List))>
+    </WithStyles(ForwardRef(Drawer))>
+  </Hidden>
+  <Hidden
+    implementation="js"
+    lgDown={false}
+    lgUp={false}
+    mdDown={false}
+    mdUp={false}
+    smDown={true}
+    smUp={false}
+    xlDown={false}
+    xlUp={false}
+    xsDown={false}
+    xsUp={false}
+  >
+    <WithStyles(ForwardRef(Drawer))
+      classes={
+        Object {
+          "paper": undefined,
+        }
+      }
+      open={true}
+      variant="permanent"
+    >
+      <div />
+      <WithStyles(ForwardRef(Divider)) />
+      <WithStyles(ForwardRef(List))>
+        <WithStyles(ForwardRef(ListItem))
+          button={true}
+          onClick={[Function]}
+        >
+          <WithStyles(ForwardRef(ListItemIcon))>
+            <EqualizerIcon />
+          </WithStyles(ForwardRef(ListItemIcon))>
+          <WithStyles(ForwardRef(ListItemText))
+            primary="Analyze"
+          />
+          <ExpandMoreIcon />
+        </WithStyles(ForwardRef(ListItem))>
+        <WithStyles(ForwardRef(Collapse))
+          in={false}
+          timeout="auto"
+          unmountOnExit={true}
+        >
+          <WithStyles(ForwardRef(List))
+            disablePadding={true}
+          >
+            <WithStyles(ForwardRef(MenuItem))
+              component={
+                Object {
+                  "$$typeof": Symbol(react.forward_ref),
+                  "render": [Function],
+                }
+              }
+              exact={true}
+              to="/admin/analytics"
+            >
+              <WithStyles(ForwardRef(ListItemIcon))>
+                <ListIcon />
+              </WithStyles(ForwardRef(ListItemIcon))>
+              <WithStyles(ForwardRef(ListItemText))
+                primary="Overview"
+              />
+            </WithStyles(ForwardRef(MenuItem))>
+            <WithStyles(ForwardRef(MenuItem))
+              component={
+                Object {
+                  "$$typeof": Symbol(react.forward_ref),
+                  "render": [Function],
+                }
+              }
+              exact={true}
+              to="/admin/analytics/users"
+            >
+              <WithStyles(ForwardRef(ListItemIcon))>
+                <ListIcon />
+              </WithStyles(ForwardRef(ListItemIcon))>
+              <WithStyles(ForwardRef(ListItemText))
+                primary="Users"
+              />
+            </WithStyles(ForwardRef(MenuItem))>
+          </WithStyles(ForwardRef(List))>
+        </WithStyles(ForwardRef(Collapse))>
+        <WithStyles(ForwardRef(ListItem))
+          button={true}
+        >
+          <WithStyles(ForwardRef(ListItemIcon))>
+            <DeviceHubIcon />
+          </WithStyles(ForwardRef(ListItemIcon))>
+          <WithStyles(ForwardRef(ListItemText))
+            primary="Manage"
+          />
+        </WithStyles(ForwardRef(ListItem))>
+        <WithStyles(ForwardRef(ListItem))
+          button={true}
+        >
+          <WithStyles(ForwardRef(ListItemIcon))>
+            <AssignmentTurnedInIcon />
+          </WithStyles(ForwardRef(ListItemIcon))>
+          <WithStyles(ForwardRef(ListItemText))
+            primary="Plan"
+          />
+        </WithStyles(ForwardRef(ListItem))>
+        <WithStyles(ForwardRef(ListItem))
+          button={true}
+        >
+          <WithStyles(ForwardRef(ListItemIcon))>
+            <WbIncandescentIcon />
+          </WithStyles(ForwardRef(ListItemIcon))>
+          <WithStyles(ForwardRef(ListItemText))
+            primary="Innovate"
+          />
+        </WithStyles(ForwardRef(ListItem))>
+        <WithStyles(ForwardRef(ListItem))
+          button={true}
+        >
+          <WithStyles(ForwardRef(ListItemIcon))>
+            <HowToVoteIcon />
+          </WithStyles(ForwardRef(ListItemIcon))>
+          <WithStyles(ForwardRef(ListItemText))
+            primary="Include"
+          />
+        </WithStyles(ForwardRef(ListItem))>
+        <WithStyles(ForwardRef(ListItem))
+          button={true}
+        >
+          <WithStyles(ForwardRef(ListItemIcon))>
+            <GroupWorkIcon />
+          </WithStyles(ForwardRef(ListItemIcon))>
+          <WithStyles(ForwardRef(ListItemText))
+            primary="Mentorship"
+          />
+        </WithStyles(ForwardRef(ListItem))>
+        <WithStyles(ForwardRef(Divider)) />
+        <WithStyles(ForwardRef(ListItem))
+          button={true}
+        >
+          <WithStyles(ForwardRef(ListItemIcon))>
+            <SettingsIcon />
+          </WithStyles(ForwardRef(ListItemIcon))>
+          <WithStyles(ForwardRef(ListItemText))
+            primary="Global Settings"
+          />
+        </WithStyles(ForwardRef(ListItem))>
+        <WithStyles(ForwardRef(Divider)) />
+      </WithStyles(ForwardRef(List))>
+    </WithStyles(ForwardRef(Drawer))>
+  </Hidden>
+</nav>
+`;

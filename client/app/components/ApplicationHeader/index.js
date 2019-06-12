@@ -76,7 +76,6 @@ const styles = theme => ({
   },
 });
 
-// TODO: rewrite as stateless component if possible
 export class ApplicationHeader extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -293,6 +292,8 @@ const withConnect = connect(
   mapStateToProps,
   mapDispatchToProps,
 );
+
+export const StyledApplicationHeader = withStyles(styles)(ApplicationHeader);
 
 export default compose(
   withConnect,

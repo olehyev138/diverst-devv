@@ -131,4 +131,7 @@ EnterpriseForm.contextTypes = {
   intl: PropTypes.object.isRequired,
 };
 
+// without memo
+export const StyledEnterpriseForm = withStyles(styles)(EnterpriseForm);
+
 export default memo(withStyles(styles)(EnterpriseForm));

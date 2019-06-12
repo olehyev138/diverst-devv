@@ -175,6 +175,12 @@ LoginForm.contextTypes = {
   intl: PropTypes.object.isRequired,
 };
 
+// without memo
+export const StyledLoginForm = compose(
+  withWidth(),
+  withStyles(styles),
+)(LoginForm);
+
 export default compose(
   memo,
   withWidth(),

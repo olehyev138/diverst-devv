@@ -319,6 +319,8 @@ const withConnect = connect(
   mapDispatchToProps
 );
 
+export const StyledUserLinks = withStyles(styles)(UserLinks);
+
 export default compose(
   withConnect,
   withStyles(styles),
