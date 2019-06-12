@@ -18,7 +18,7 @@ import { shallow } from 'enzyme';
 import { ThemeProvider } from '../index';
 
 describe('<ThemeProvider />', () => {
- it('Expect to not log errors in console', () => {
+  it('Expect to not log errors in console', () => {
     const spy = jest.spyOn(global.console, 'error');
     const wrapper = shallow(
       <ThemeProvider primary='#7B77C9' secondary='#8A8A8A' />

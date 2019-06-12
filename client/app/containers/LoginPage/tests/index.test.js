@@ -26,4 +26,3 @@ describe('<LoginPage />', () => {
     expect(spy).not.toHaveBeenCalled();
   });
 });
-
