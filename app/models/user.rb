@@ -86,6 +86,7 @@ class User < BaseClass
   validate :validate_presence_fields
   validate :group_leader_role
   validate :policy_group
+  validate :valid_linkedin_url, if: -> { !linkedin_profile_url.nil? }
 
   before_validation :generate_password_if_saml
   before_validation :set_provider
@@ -547,6 +548,13 @@ class User < BaseClass
     ).merge({ 'created_at' => self.created_at.beginning_of_hour })
   end
 
+  def delete_linkedin_info
+    self.update(
+      linkedin_profile_url: nil,
+      avatar_file_name: nil
+    )
+  end
+
   private
 
   def check_lifespan_of_user
@@ -573,5 +581,28 @@ class User < BaseClass
   # Generate a random password if the user is using SAML
   def generate_password_if_saml
     self.password = self.password_confirmation = SecureRandom.urlsafe_base64 if auth_source == 'saml' && new_record?
+  end
+
+  def valid_linkedin_url
+    unless linkedin_profile_url.downcase.start_with? 'https://'
+      self.linkedin_profile_url = "https://#{linkedin_profile_url}"
+    end
+
+    uri = URI.parse(linkedin_profile_url) rescue nil
+
+    if uri == nil
+      errors.add(:user, 'Not a valid URL')
+      return
+    end
+
+    unless uri.host.include?('linkedin.com')
+      errors.add(:user, 'Not a valid LinkedIn URL')
+      return
+    end
+
+    unless uri.path.start_with?('/in/')
+      errors.add(:user, 'Not a valid LinkedIn Profile URL')
+      return
+    end
   end
 end

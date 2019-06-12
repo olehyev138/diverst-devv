@@ -48,8 +48,8 @@ gem 'liquid', '~> 3.0', '>= 3.0.6' # Templating engine used for email templates
 gem 'autoprefixer-rails', '~> 6.3', '>= 6.3.3.1' # Automatically adds vendor prefixes to CSS declarations
 gem 'fog', '~> 1.37' # AWS SDK
 gem 'validate_url', '~> 1.0', '>= 1.0.2' # Active Model validation for URLs
-gem 'omniauth-linkedin-oauth2', '~> 0.1.5' # OAuth for LinkedIn
-gem 'omniauth-oauth2', '1.3.1' # Temporary fix to address: https://github.com/decioferreira/omniauth-linkedin-oauth2/issues/28
+gem 'linkedin-oauth2', '~> 1.0' # OAuth for LinkedIn
+# gem 'omniauth-oauth2', '1.3.1' # Temporary fix to address: https://github.com/decioferreira/omniauth-linkedin-oauth2/issues/28
 gem 'activerecord-import', '~> 0.12.0' # Adds a faster way to INSERT multiple rows in the DB
 gem 'inline_svg', '~> 0.6.2' # Extract SVG files' content into the HTML
 gem 'pundit', '~> 2.0.0'# Authorization
@@ -72,6 +72,8 @@ gem 'thor', '0.20.0'# Expected string default value for '--decorator'; got true 
 gem 'sanitize_email', '~> 1.2.2'
 gem 'rack-timeout', '~> 0.4.2'
 gem 'jquery-ui-rails', '~> 6.0.1'
+gem 'twitter' # twitter implementation
+gem 'http'
 
 gem 'factory_bot_rails', '~> 4.8.0' # Create mock objects for testing
 gem 'tty-spinner'

@@ -116,18 +116,22 @@
                                     <div class="flex-row__cell flex-row__cell--grow metric">
                                       <span class="metric__title"><%= field.title %></span>
                                       <h4 class="metric__value"><%= last_update.info[field] || "N/A" %></h4>
-                                      <div
-                                        class="metric__sparkline graph"
-                                        data-url="<%= time_series_group_initiative_field_path(@group, initiative, field) %>"
-                                        data-title="<%= field.title %>"
-                                        data-spark="true"
-                                        data-time-series="true"
-                                        >
-                                      </div>
+<!--                                      <div-->
+<!--                                        id="metrics"-->
+<!--                                        class="graph"-->
+<!--                                        data-url="<%#= time_series_group_initiative_field_path(@group, initiative, field) %>">-->
+<!--                                        <svg></svg>-->
+<!--                                      </div>-->
                                     </div>
                                   <% end %>
                                 </div>
                               <% end %>
+                              <div
+                                id="metrics"
+                                class="graph"
+                                data-url="<%= joined_time_series_group_initiative_fields_path(@group, initiative) %>">
+                                <svg></svg>
+                              </div>
                             <% else %>
                               <p class="text-center">Publish an update to see data on this event</p>
                             <% end %>

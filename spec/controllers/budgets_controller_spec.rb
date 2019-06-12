@@ -484,29 +484,6 @@ RSpec.describe BudgetsController, type: :controller do
           end
         end
 
-        context 'when you have unfinished expenses' do
-          let!(:initiative_with_unclosed_expenses) { create(:initiative, start: DateTime.now.days_ago(3), end: DateTime.now.days_ago(1),
-                                                                         finished_expenses: false, owner_group: budget.group)
-          }
-          before do
-            request.env['HTTP_REFERER'] = 'back'
-            put :reset_annual_budget, group_id: budget.group.id, id: budget.id
-          end
-
-          it 'does not reset annual budget' do
-            expect(group.annual_budget).not_to eq 0
-          end
-
-          it 'produces flash message' do
-            expect(flash[:notice]).to eq "Please close expenses of past events belonging to #{budget.group.name}"
-          end
-
-          it 'redirects to back' do
-            expect(response).to redirect_to 'back'
-          end
-        end
-
-
         describe 'public activity' do
           enable_public_activity
 
