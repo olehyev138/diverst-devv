@@ -7,7 +7,7 @@ class UsersController < ApplicationController
   def index
     authorize User
 
-    if params[:type].downcase == 'budget_permission'
+    if params[:type].present? && params[:type].downcase == 'budget_permission'
 
       users_leaders = policy_scope(User).joins(:user_groups).joins(:group_leaders).where(leader_budget_policy_params)
       users_users = policy_scope(User).joins(:policy_group).joins(:user_groups).joins(:group_leaders).where(user_budget_policy_params)
