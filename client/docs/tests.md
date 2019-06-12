@@ -1,7 +1,6 @@
 ### Resources
 
 - https://redux.js.org/recipes/writing-tests
-- https://github.com/react-boilerplate/react-boilerplate/blob/master/app/containers/App/tests/reducer.test.js
 
 ### Libraries
 
@@ -11,7 +10,9 @@ Additionally, we use [Enzyme](https://github.com/airbnb/enzyme) to provide addit
 
 ### General
 
-- The entire frontend test suite can be run with `npm test`. To run a specific file run `node_modules/.bin/jest <file_name>`
+- The entire frontend test suite can be run with `npm test`
+
+- To run a specific file run `npm test <file>`
 
 - Tests for a component `x` should be stored alongside the component in a directory `test`. 
 
@@ -111,12 +112,29 @@ describe('appReducer', () => {
 
 ### Components
 
-- produces no console errors
-- behavior
-- ui is as expected
-- uses proptypes
+##### Things to test
 
-#### Connected vs unconnected
+- That it produces no console errors
+- That it renders correctly (snapshot)
+- Renders the correct children
+- Lifecycle hooks (mounting, unmounting) behave as expected
+- Behavior (responds to user input as expected, dispatches the correct actions)
 
-#### Snapshot testing
-- Snapshot testing _is_ useful and can be applied to much more then just UI. It is important however to use it _properly_. It is most useful as a general regression test. To quickly run after changing things to see if anything has broke. It is also important to not get into a habit of _automatically_ updating the snapshot. This defeats the entire purpose of course.
+##### Connected vs unconnected
+
+- TODO
+
+
+##### Testing styled Material-UI components
+
+- TODO
+
+##### Snapshot testing
+
+- Snapshot testing is most useful as a form of regression testing. To quickly see if anything has broken after adding new code. 
+
+- Snapshots should not be used with a component that is constantly changing, still in active development, etc.
+
+- Do not get in a habit of 'automatically' updating a snapshot. If a snapshot test fails, ensure that it _should_ fail, understand why its failing and only then update it.
+
+- Snapshot testing is most often used as a way to ensure UI consistency, however it can be used with almost any sort of output that you want to test for consistency. 
