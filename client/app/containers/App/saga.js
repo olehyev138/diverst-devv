@@ -2,18 +2,15 @@ import { call, put, takeLatest } from 'redux-saga/dist/redux-saga-effects-npm-pr
 import api from 'api/api';
 import { push } from 'connected-react-router';
 
-import {
-  LOGIN_BEGIN, LOGIN_ERROR,
-  LOGOUT_BEGIN, LOGOUT_ERROR,
-  FIND_ENTERPRISE_BEGIN, FIND_ENTERPRISE_ERROR
-} from './constants';
+import { LOGIN_BEGIN, LOGOUT_BEGIN, FIND_ENTERPRISE_BEGIN } from './constants';
 
 import { ROUTES } from 'containers/Routes/constants';
 
 import {
   loginSuccess, loginError,
   logoutSuccess, logoutError,
-  setEnterprise, findEnterpriseError, setUser
+  findEnterpriseSuccess, findEnterpriseError,
+  setEnterprise, setUser
 } from './actions';
 
 import { showSnackbar } from 'containers/Notifier/actions';
@@ -66,8 +63,9 @@ export function* findEnterprise(action) {
   try {
     // Find enterprise and dispatch setEnterprise action
     const response = yield call(api.users.findCompany.bind(api.users), action.payload);
-    const { enterprise } = response.data;
+    yield put(findEnterpriseSuccess());
 
+    const { enterprise } = response.data;
     yield put(setEnterprise(enterprise));
 
     AuthService.setValue('_diverst.seirpretne', enterprise);

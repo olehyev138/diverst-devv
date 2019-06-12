@@ -13,7 +13,7 @@ import { compose } from 'redux';
 import { withStyles } from '@material-ui/core/styles';
 
 import { selectEnterprise } from 'containers/App/selectors';
-import { selectEmailError, selectPasswordError } from './selectors';
+import { selectFormErrors } from './selectors';
 
 import reducer from './reducer';
 import injectReducer from 'utils/injectReducer';
@@ -26,8 +26,7 @@ import { loginBegin, findEnterpriseBegin } from 'containers/App/actions';
 const styles = theme => ({});
 
 export class LoginPage extends React.PureComponent {
-  // TODO: - use formik actions
-  //       - locale toggle
+  // TODO: - locale toggle
 
   constructor(props) {
     super(props);
@@ -39,7 +38,7 @@ export class LoginPage extends React.PureComponent {
       return (
         <LoginForm
           email={this.state.email}
-          passwordError={this.props.passwordError}
+          formErrors={this.props.formErrors}
           loginBegin={(values, actions) => this.props.loginBegin(values)}
         />
       );
@@ -47,7 +46,7 @@ export class LoginPage extends React.PureComponent {
 
     return (
       <EnterpriseForm
-        emailError={this.props.emailError}
+        formErrors={this.props.formErrors}
         findEnterpriseBegin={(values, actions) => {
           this.props.findEnterpriseBegin(values);
           this.setState({ email: values.email });
@@ -68,16 +67,17 @@ LoginPage.propTypes = {
     id: PropTypes.number,
     name: PropTypes.string
   }),
-  passwordError: PropTypes.string,
-  emailError: PropTypes.string,
+  formErrors: PropTypes.shape({
+    email: PropTypes.string,
+    password: PropTypes.string,
+  }),
   loginBegin: PropTypes.func,
   findEnterpriseBegin: PropTypes.func
 };
 
 const mapStateToProps = createStructuredSelector({
   enterprise: selectEnterprise(),
-  emailError: selectEmailError(),
-  passwordError: selectPasswordError(),
+  formErrors: selectFormErrors(),
 });
 
 function mapDispatchToProps(dispatch) {

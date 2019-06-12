@@ -8,7 +8,8 @@ export const LOGOUT_SUCCESS = 'app/App/LOGOUT_SUCCESS';
 export const LOGOUT_ERROR = 'app/App/LOGOUT_ERROR';
 
 export const FIND_ENTERPRISE_BEGIN = 'app/App/FIND_ENTERPRISE_BEGIN';
-export const SET_ENTERPRISE = 'app/App/SET_ENTERPRISE';
+export const FIND_ENTERPRISE_SUCCESS = 'app/App/FIND_ENTERPRISE_SUCCESS';
 export const FIND_ENTERPRISE_ERROR = 'app/App/FIND_ENTERPRISE_ERROR';
 
 export const SET_USER = 'app/App/SET_USER';
+export const SET_ENTERPRISE = 'app/App/SET_ENTERPRISE';

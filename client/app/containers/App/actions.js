@@ -1,8 +1,8 @@
 import {
   LOGIN_BEGIN, LOGIN_SUCCESS, LOGIN_ERROR,
   LOGOUT_BEGIN, LOGOUT_SUCCESS, LOGOUT_ERROR,
-  FIND_ENTERPRISE_BEGIN, SET_ENTERPRISE, FIND_ENTERPRISE_ERROR,
-  SET_USER
+  FIND_ENTERPRISE_BEGIN, FIND_ENTERPRISE_SUCCESS, FIND_ENTERPRISE_ERROR,
+  SET_ENTERPRISE, SET_USER
 } from './constants';
 
 export function loginBegin(payload) {
@@ -54,10 +54,9 @@ export function findEnterpriseBegin(payload) {
   };
 }
 
-export function setEnterprise(enterprise) {
+export function findEnterpriseSuccess(enterprise) {
   return {
-    type: SET_ENTERPRISE,
-    enterprise,
+    type: FIND_ENTERPRISE_SUCCESS,
   };
 }
 
@@ -65,6 +64,14 @@ export function findEnterpriseError(error) {
   return {
     type: FIND_ENTERPRISE_ERROR,
     error
+  };
+}
+
+
+export function setEnterprise(enterprise) {
+  return {
+    type: SET_ENTERPRISE,
+    enterprise,
   };
 }
 

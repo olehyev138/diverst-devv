@@ -55,9 +55,10 @@ function LoginForm(props, context) {
 
   const form = useRef();
 
+  // Use React hook (as this is a functional component) to merge local validation errors with API validation errors
   useEffect(() => {
     if (form.current)
-      form.current.setFieldError('password', props.passwordError);
+      form.current.setErrors({ ...form.current.state.errors, ...props.formErrors });
   });
 
   return (
@@ -65,13 +66,12 @@ function LoginForm(props, context) {
       ref={form}
       initialValues={{
         email: props.email,
-        password: ''
+        password: '',
       }}
       validateOnBlur={false}
       validateOnChange={false}
       validationSchema={LoginFormSchema}
       onSubmit={(values, actions) => {
-        actions.setFieldError('password', props.passwordError);
         props.loginBegin(values);
       }}
       render={({
@@ -165,10 +165,13 @@ function LoginForm(props, context) {
 
 LoginForm.propTypes = {
   classes: PropTypes.object,
+  width: PropTypes.string,
   loginBegin: PropTypes.func,
   email: PropTypes.string,
-  passwordError: PropTypes.string,
-  width: PropTypes.string,
+  formErrors: PropTypes.shape({
+    email: PropTypes.string,
+    password: PropTypes.string,
+  }),
 };
 
 LoginForm.contextTypes = {

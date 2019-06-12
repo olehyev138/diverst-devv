@@ -42,26 +42,26 @@ function EnterpriseForm(props, context) {
 
   const form = useRef();
 
+  // Use React hook (as this is a functional component) to merge local validation errors with API validation errors
   useEffect(() => {
     if (form.current)
-      form.current.setFieldError('email', props.emailError);
+      form.current.setErrors({ ...form.current.state.errors, ...props.formErrors });
   });
 
   return (
     <Formik
       ref={form}
       initialValues={{
-        email: ''
+        email: '',
       }}
       validateOnBlur={false}
       validateOnChange={false}
       validationSchema={EnterpriseFormSchema}
       onSubmit={(values, actions) => {
-        actions.setFieldError('email', props.emailError);
         props.findEnterpriseBegin(values);
       }}
       render={({
-        handleSubmit, handleChange, handleBlur, errors, touched, values
+        handleSubmit, handleChange, handleBlur, setErrors, errors, touched, values
       }) => (
         <Card raised className={classes.card}>
           <Form
@@ -124,7 +124,9 @@ EnterpriseForm.propTypes = {
   classes: PropTypes.object,
   findEnterpriseBegin: PropTypes.func,
   enterpriseError: PropTypes.string,
-  emailError: PropTypes.string,
+  formErrors: PropTypes.shape({
+    email: PropTypes.string,
+  }),
 };
 
 EnterpriseForm.contextTypes = {
