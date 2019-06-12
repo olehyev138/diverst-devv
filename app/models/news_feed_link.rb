@@ -2,9 +2,9 @@ class NewsFeedLink < BaseClass
   include PublicActivity::Common
 
   belongs_to :news_feed
-  belongs_to :group_message, dependent: :destroy
-  belongs_to :news_link, dependent: :destroy
-  belongs_to :social_link, dependent: :destroy
+  belongs_to :group_message, dependent: :delete
+  belongs_to :news_link, dependent: :delete
+  belongs_to :social_link, dependent: :delete
 
   has_many :news_feed_link_segments, dependent: :destroy
   has_many :segments, through: :news_feed_link_segments

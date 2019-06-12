@@ -21,6 +21,12 @@ class Group < BaseClass
     :managers_only
   ]
 
+  enumerize :event_attendance_visibility, default: :managers_only, in: [
+    :global,
+    :group,
+    :managers_only
+  ]
+
   enumerize :messages_visibility, default: :managers_only, in: [
     :global,
     :group,
@@ -90,6 +96,7 @@ class Group < BaseClass
   has_many :initiatives, through: :pillars
   has_many :updates, class_name: 'GroupUpdate', dependent: :destroy
   has_many :views, dependent: :destroy
+  has_many :twitter_accounts, class_name: 'TwitterAccount', dependent: :destroy
 
   has_many :fields, -> { where field_type: 'regular' },
            dependent: :delete_all
@@ -319,7 +326,7 @@ class Group < BaseClass
   # Users who enters group have accepted flag set to false
   # This sets flag to true
   def accept_user_to_group(user_id)
-    user_group = user_groups.where(user_id: user_id).first
+    user_group = user_groups.find_by(user_id: user_id)
     return false if user_group.blank?
 
     user_group.update(accepted_member: true)
@@ -403,6 +410,10 @@ class Group < BaseClass
 
   def accept_pending_members
     self.user_groups.update_all(accepted_member: true)
+  end
+
+  def has_survey?
+    survey_fields.count > 0
   end
 
   protected
