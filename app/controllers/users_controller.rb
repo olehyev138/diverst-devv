@@ -262,10 +262,6 @@ class UsersController < ApplicationController
     params.permit(:active, :mentor, :mentee, policy_groups: [:budget_approval], user_groups: [:accepted_member, :group_id], group_leaders: [:budget_approval, :group_id])
   end
 
-  def budget_approver_params
-    params.permit(:amp, :limit, group_leaders: [:budget_approval, :group_id])
-  end
-
   def extra_params
     params.permit(:not_current_user, :can_metrics_dashboard_create)
   end
