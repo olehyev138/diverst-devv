@@ -42,4 +42,3 @@ describe('<EnterpriseForm />', () => {
     expect(wrapper).toMatchSnapshot();
   });
 });
-

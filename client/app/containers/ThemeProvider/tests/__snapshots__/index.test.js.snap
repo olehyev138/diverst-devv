@@ -287,7 +287,49 @@ exports[`<ThemeProvider /> should render and match the snapshot 1`] = `
         "vertical": "bottom",
       }
     }
+    autoHideDuration={5000}
     dense={false}
+    hideIconVariant={false}
+    iconVariant={
+      Object {
+        "error": <ErrorIcon
+          style={
+            Object {
+              "fontSize": 20,
+              "marginRight": 8,
+              "opacity": 0.9,
+            }
+          }
+        />,
+        "info": <InfoIcon
+          style={
+            Object {
+              "fontSize": 20,
+              "marginRight": 8,
+              "opacity": 0.9,
+            }
+          }
+        />,
+        "success": <CheckIcon
+          style={
+            Object {
+              "fontSize": 20,
+              "marginRight": 8,
+              "opacity": 0.9,
+            }
+          }
+        />,
+        "warning": <WarningIcon
+          style={
+            Object {
+              "fontSize": 20,
+              "marginRight": 8,
+              "opacity": 0.9,
+            }
+          }
+        />,
+      }
+    }
     maxSnack={3}
     preventDuplicate={false}
   >
