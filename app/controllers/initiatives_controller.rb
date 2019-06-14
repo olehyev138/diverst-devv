@@ -177,6 +177,7 @@ class InitiativesController < ApplicationController
         :archived_at,
         :from, # For filtering
         :to, # For filtering
+        :annual_budget_id,
         participating_group_ids: [],
         segment_ids: [],
         fields_attributes: [
