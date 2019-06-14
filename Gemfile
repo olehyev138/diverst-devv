@@ -74,6 +74,7 @@ gem 'rack-timeout', '~> 0.4.2'
 gem 'jquery-ui-rails', '~> 6.0.1'
 gem 'twitter' # twitter implementation
 gem 'http'
+gem 'active_record_union'
 
 gem 'factory_bot_rails', '~> 4.8.0' # Create mock objects for testing
 gem 'tty-spinner'

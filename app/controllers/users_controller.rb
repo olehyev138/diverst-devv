@@ -7,7 +7,16 @@ class UsersController < ApplicationController
   def index
     authorize User
 
-    @users = policy_scope(User).includes(:policy_group, :user_groups, :group_leaders).where(search_params).limit(params[:limit] || 25)
+    if params[:type].present? && params[:type].downcase == 'budget_permission'
+
+      users_leaders = policy_scope(User).joins(:user_groups).joins(:group_leaders).where(leader_budget_policy_params)
+      users_users = policy_scope(User).joins(:policy_group).joins(:user_groups).joins(:group_leaders).where(user_budget_policy_params)
+      users_super = policy_scope(User).joins(:policy_group).joins(:group_leaders).where(super_user_params)
+
+      @users = users_leaders.union(users_users).union(users_super).limit(params[:limit] || 25)
+    else
+      @users = policy_scope(User).includes(:policy_group, :user_groups, :group_leaders).where(search_params).limit(params[:limit] || 25)
+    end
 
     if extra_params[:not_current_user]
       @users = @users.where.not(id: current_user.id)
@@ -259,7 +268,19 @@ class UsersController < ApplicationController
   end
 
   def search_params
-    params.permit(:active, :mentor, :mentee, policy_groups: [:budget_approval], user_groups: [:accepted_member, :group_id], group_leaders: [:budget_approval])
+    params.permit(:active, :mentor, :mentee, policy_groups: [:budget_approval], user_groups: [:accepted_member, :group_id], group_leaders: [:budget_approval, :group_id])
+  end
+
+  def leader_budget_policy_params
+    params.permit(group_leaders: [:budget_approval, :group_id])
+  end
+
+  def user_budget_policy_params
+    params.permit(policy_groups: [:budget_approval], group_leaders: [:group_id])
+  end
+
+  def super_user_params
+    params.permit(policy_groups: [:manage_all])
   end
 
   def extra_params
