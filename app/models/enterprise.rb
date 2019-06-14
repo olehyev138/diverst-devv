@@ -69,6 +69,33 @@ class Enterprise < BaseClass
   before_validation :smart_add_url_protocol
   after_update :resolve_auto_archive_state, if: :no_expiry_age_set_and_auto_archive_true?
 
+  validates_length_of :unit_of_expiry_age, maximum: 191
+  validates_length_of :redirect_email_contact, maximum: 191
+  validates_length_of :default_from_email_display_name, maximum: 191
+  validates_length_of :default_from_email_address, maximum: 191
+  validates_length_of :onboarding_sponsor_media_content_type, maximum: 191
+  validates_length_of :onboarding_sponsor_media_file_name, maximum: 191
+  validates_length_of :company_video_url, maximum: 191
+  validates_length_of :time_zone, maximum: 191
+  validates_length_of :iframe_calendar_token, maximum: 191
+  validates_length_of :xml_sso_config_content_type, maximum: 191
+  validates_length_of :xml_sso_config_file_name, maximum: 191
+  validates_length_of :privacy_statement, maximum: 65535
+  validates_length_of :home_message, maximum: 65535
+  validates_length_of :banner_content_type, maximum: 191
+  validates_length_of :banner_file_name, maximum: 191
+  validates_length_of :cdo_message, maximum: 65535
+  validates_length_of :cdo_picture_content_type, maximum: 191
+  validates_length_of :cdo_picture_file_name, maximum: 191
+  validates_length_of :yammer_token, maximum: 191
+  validates_length_of :saml_last_name_mapping, maximum: 191
+  validates_length_of :saml_first_name_mapping, maximum: 191
+  validates_length_of :idp_cert, maximum: 65535
+  validates_length_of :idp_slo_target_url, maximum: 191
+  validates_length_of :idp_sso_target_url, maximum: 191
+  validates_length_of :idp_entity_id, maximum: 191
+  validates_length_of :sp_entity_id, maximum: 191
+  validates_length_of :name, maximum: 191
   validates :idp_sso_target_url, url: { allow_blank: true }
 
   has_attached_file :cdo_picture, styles: { medium: '1000x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: :private
