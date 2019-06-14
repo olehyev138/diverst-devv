@@ -2,7 +2,9 @@ import React from 'react';
 import { shallowWithIntl, loadTranslation } from 'enzyme-react-intl';
 import { unwrap } from '@material-ui/core/test-utils';
 
-import { StyledUserLinks } from '../index';
+import { ROUTES } from 'containers/Routes/constants';
+
+import {MobileNavMenu, NavLinks, StyledUserLinks} from '../index';
 const UserLinksNaked = unwrap(StyledUserLinks);
 
 /**
@@ -12,20 +14,61 @@ const UserLinksNaked = unwrap(StyledUserLinks);
 
 loadTranslation('./app/translations/en.json');
 
+const mobileProps = {
+  classes: {},
+  mobileNavAnchor: {},
+  isMobileNavOpen: true,
+  handleMobileNavClose: jest.fn()
+};
+
+const navProps = {
+  classes: {}
+};
+
 const props = {
   classes: {},
-  pageTitle: {}
+  pageTitle: ROUTES.user.home.titleMessage
 };
 
 describe('<UserLinks />', () => {
-  xit('Expect to not log errors in console', () => {
+  describe('<MobileNavMenu />', () => {
+    it('Expect to not log errors in console', () => {
+      const spy = jest.spyOn(global.console, 'error');
+      const wrapper = shallowWithIntl(<MobileNavMenu {...mobileProps} />);
+
+      expect(spy).not.toHaveBeenCalled();
+    });
+
+    it('Should render and match the snapshot', () => {
+      const wrapper = shallowWithIntl(<MobileNavMenu {...mobileProps} />);
+
+      expect(wrapper).toMatchSnapshot();
+    });
+  });
+
+  describe('<NavMenu />', () => {
+    it('Expect to not log errors in console', () => {
+      const spy = jest.spyOn(global.console, 'error');
+      const wrapper = shallowWithIntl(<NavLinks {...navProps} />);
+
+      expect(spy).not.toHaveBeenCalled();
+    });
+
+    it('Should render and match the snapshot', () => {
+      const wrapper = shallowWithIntl(<NavLinks {...navProps} />);
+
+      expect(wrapper).toMatchSnapshot();
+    });
+  });
+
+  it('Expect to not log errors in console', () => {
     const spy = jest.spyOn(global.console, 'error');
     const wrapper = shallowWithIntl(<UserLinksNaked {...props} />);
 
     expect(spy).not.toHaveBeenCalled();
   });
 
-  xit('Should render and match the snapshot', () => {
+  it('Should render and match the snapshot', () => {
     const wrapper = shallowWithIntl(<UserLinksNaked {...props} />);
 
     expect(wrapper).toMatchSnapshot();

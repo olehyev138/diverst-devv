@@ -15,6 +15,7 @@ const LoginFormNaked = unwrap(StyledLoginForm);
 /**
  * TODO:
  *  - test correct actions are dispatched
+ *  - test validations
  */
 
 

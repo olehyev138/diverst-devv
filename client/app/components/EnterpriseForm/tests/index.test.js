@@ -14,6 +14,7 @@ const EnterpriseFormNaked = unwrap(StyledEnterpriseForm);
 /**
  * TODO:
  *  - test correct actions are dispatched
+ *  - test validations
  */
 
 loadTranslation('./app/translations/en.json');
