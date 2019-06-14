@@ -77,7 +77,10 @@ class Enterprise < BaseClass
   validates_length_of :onboarding_sponsor_media_file_name, maximum: 191
   validates_length_of :company_video_url, maximum: 191
   validates_length_of :time_zone, maximum: 191
+
+  # CAUSES SPEC ERRORS (Keeping to prevent line from being reinserted)
   validates_length_of :iframe_calendar_token, maximum: 191
+
   validates_length_of :xml_sso_config_content_type, maximum: 191
   validates_length_of :xml_sso_config_file_name, maximum: 191
   validates_length_of :privacy_statement, maximum: 65535
