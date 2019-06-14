@@ -9,7 +9,7 @@ import React from 'react';
 import { shallowWithIntl, loadTranslation } from 'enzyme-react-intl';
 import { unwrap } from '@material-ui/core/test-utils';
 
-import { StyledLoginForm } from '../index';
+import { LoginFormInner, StyledLoginForm } from '../index';
 const LoginFormNaked = unwrap(StyledLoginForm);
 
 /**
@@ -20,6 +20,15 @@ const LoginFormNaked = unwrap(StyledLoginForm);
 
 loadTranslation('./app/translations/en.json');
 
+const innerProps = {
+  classes: {},
+  handleChange: jest.fn,
+  handleBlur: jest.fn,
+  errors: { email: '', password: '' },
+  touched: true,
+  values: { email: '', password: '' }
+}
+
 const props = {
   classes: {},
   loginBegin: jest.fn(),
@@ -29,16 +38,33 @@ const props = {
 };
 
 describe('<EnterpriseForm />', () => {
-  it('Expect to not log errors in console', () => {
-    const spy = jest.spyOn(global.console, 'error');
-    const wrapper = shallowWithIntl(<LoginFormNaked {...props} />);
+  describe('<EnterpriseFormInner />', () => {
+    it('Expect to not log errors in console', () => {
+      const spy = jest.spyOn(global.console, 'error');
+      const wrapper = shallowWithIntl(<LoginFormInner {...innerProps} />);
 
-    expect(spy).not.toHaveBeenCalled();
+      expect(spy).not.toHaveBeenCalled();
+    });
+
+    it('Should render and match the snapshot', () => {
+      const wrapper = shallowWithIntl(<LoginFormInner {...innerProps} />);
+
+      expect(wrapper).toMatchSnapshot();
+    });
   });
 
-  it('Should render and match the snapshot', () => {
-    const wrapper = shallowWithIntl(<LoginFormNaked {...props} />);
+  describe('Formik', () => {
+    it('Expect to not log errors in console', () => {
+      const spy = jest.spyOn(global.console, 'error');
+      const wrapper = shallowWithIntl(<LoginFormNaked {...props} />);
 
-    expect(wrapper).toMatchSnapshot();
+      expect(spy).not.toHaveBeenCalled();
+    });
+
+    it('Should render and match the snapshot', () => {
+      const wrapper = shallowWithIntl(<LoginFormNaked {...props} />);
+
+      expect(wrapper).toMatchSnapshot();
+    });
   });
 });

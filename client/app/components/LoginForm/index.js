@@ -40,6 +40,94 @@ const styles = theme => ({
   },
 });
 
+/* eslint-disable indent, object-curly-newline */
+export function LoginFormInner({ handleChange, handleBlur, errors,
+                               touched, values, classes, width }) {
+  return (
+    <Card raised className={classes.card}>
+      <Form
+        noValidate
+      >
+        <CardContent>
+          <Grid container spacing={0} direction='column' alignItems='center' justify='center'>
+            <Grid item xs={12}>
+              <Logo coloredDefault imgClass='large-img' />
+            </Grid>
+          </Grid>
+          <br />
+          <Field
+            component={TextField}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            value={values.email}
+            autoFocus={!values.email}
+            fullWidth
+            disabled={false}
+            variant='outlined'
+            id='email'
+            name='email'
+            type='email'
+            label={<FormattedMessage {...messages.email} />}
+            margin='normal'
+            autoComplete='off'
+            error={errors.email && touched.email}
+            helperText={errors.email && touched.email ? errors.email : null}
+          />
+          <Field
+            component={TextField}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            value={values.password}
+            autoFocus={!!values.email}
+            fullWidth
+            disabled={false}
+            variant='outlined'
+            id='password'
+            name='password'
+            type='password'
+            label={<FormattedMessage {...messages.password} />}
+            margin='normal'
+            autoComplete='off'
+            error={errors.password && touched.password}
+            helperText={errors.password && touched.password ? errors.password : null}
+          />
+        </CardContent>
+        <CardActions className={classes.cardActions}>
+          <Grid container alignItems='center'>
+            <Grid item xs={false} sm={4} />
+            <Grid item align={width === 'xs' ? 'left' : 'center'} xs={4} sm={4}>
+              <Button
+                classes={{
+                  label: classes.submitButtonLabel
+                }}
+                type='submit'
+                color='primary'
+                size='large'
+                disabled={!values.email || !values.password}
+                variant='contained'
+              >
+                <Hidden xsDown>
+                  <LockOpen />
+                </Hidden>
+                {<FormattedMessage {...messages.login} />}
+              </Button>
+            </Grid>
+            <Grid item align='right' xs={8} sm={4}>
+              <Button
+                color='primary'
+                size='small'
+                variant='text'
+              >
+                {<FormattedMessage {...messages.forgotPassword} />}
+              </Button>
+            </Grid>
+          </Grid>
+        </CardActions>
+      </Form>
+    </Card>
+  );
+}
+
 function LoginForm(props, context) {
   const { classes, width } = props;
   const { intl } = context;
@@ -74,94 +162,20 @@ function LoginForm(props, context) {
         actions.setFieldError('password', props.passwordError);
         props.loginBegin(values);
       }}
-      render={({
-        handleSubmit, handleChange, handleBlur, errors, touched, values
-      }) => (
-        <Card raised className={classes.card}>
-          <Form
-            noValidate
-          >
-            <CardContent>
-              <Grid container spacing={0} direction='column' alignItems='center' justify='center'>
-                <Grid item xs={12}>
-                  <Logo coloredDefault imgClass='large-img' />
-                </Grid>
-              </Grid>
-              <br />
-              <Field
-                component={TextField}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.email}
-                autoFocus={!values.email}
-                fullWidth
-                disabled={false}
-                variant='outlined'
-                id='email'
-                name='email'
-                type='email'
-                label={<FormattedMessage {...messages.email} />}
-                margin='normal'
-                autoComplete='off'
-                error={errors.email && touched.email}
-                helperText={errors.email && touched.email ? errors.email : null}
-              />
-              <Field
-                component={TextField}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.password}
-                autoFocus={!!values.email}
-                fullWidth
-                disabled={false}
-                variant='outlined'
-                id='password'
-                name='password'
-                type='password'
-                label={<FormattedMessage {...messages.password} />}
-                margin='normal'
-                autoComplete='off'
-                error={errors.password && touched.password}
-                helperText={errors.password && touched.password ? errors.password : null}
-              />
-            </CardContent>
-            <CardActions className={classes.cardActions}>
-              <Grid container alignItems='center'>
-                <Grid item xs={false} sm={4} />
-                <Grid item align={width === 'xs' ? 'left' : 'center'} xs={4} sm={4}>
-                  <Button
-                    classes={{
-                      label: classes.submitButtonLabel
-                    }}
-                    type='submit'
-                    color='primary'
-                    size='large'
-                    disabled={!values.email || !values.password}
-                    variant='contained'
-                  >
-                    <Hidden xsDown>
-                      <LockOpen />
-                    </Hidden>
-                    {<FormattedMessage {...messages.login} />}
-                  </Button>
-                </Grid>
-                <Grid item align='right' xs={8} sm={4}>
-                  <Button
-                    color='primary'
-                    size='small'
-                    variant='text'
-                  >
-                    {<FormattedMessage {...messages.forgotPassword} />}
-                  </Button>
-                </Grid>
-              </Grid>
-            </CardActions>
-          </Form>
-        </Card>
-      )}
+      render={props => <LoginFormInner {...props} classes={classes} width={width} />}
     />
   );
 }
+
+LoginFormInner.propTypes = {
+  classes: PropTypes.object,
+  width: PropTypes.string,
+  handleChange: PropTypes.func,
+  handleBlur: PropTypes.func,
+  errors: PropTypes.object,
+  touched: PropTypes.bool,
+  values: PropTypes.object
+};
 
 LoginForm.propTypes = {
   classes: PropTypes.object,

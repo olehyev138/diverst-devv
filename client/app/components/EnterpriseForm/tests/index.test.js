@@ -8,7 +8,7 @@ import React from 'react';
 import { shallowWithIntl, loadTranslation } from 'enzyme-react-intl';
 import { unwrap } from '@material-ui/core/test-utils';
 
-import { StyledEnterpriseForm } from '../index';
+import { EnterpriseFormInner, StyledEnterpriseForm } from '../index';
 const EnterpriseFormNaked = unwrap(StyledEnterpriseForm);
 
 /**
@@ -18,6 +18,15 @@ const EnterpriseFormNaked = unwrap(StyledEnterpriseForm);
 
 loadTranslation('./app/translations/en.json');
 
+const innerProps = {
+  classes: {},
+  handleChange: jest.fn,
+  handleBlur: jest.fn,
+  errors: { email: '' },
+  touched: true,
+  values: { email: '' }
+};
+
 const props = {
   classes: {},
   findEnterpriseBegin: jest.fn(),
@@ -25,17 +34,35 @@ const props = {
   emailError: ''
 };
 
-describe('<EnterpriseForm />', () => {
-  it('Expect to not log errors in console', () => {
-    const spy = jest.spyOn(global.console, 'error');
-    const wrapper = shallowWithIntl(<EnterpriseFormNaked {...props} />);
 
-    expect(spy).not.toHaveBeenCalled();
+describe('<EnterpriseForm />', () => {
+  describe('<EnterpriseFormInner />', () => {
+    it('Expect to not log errors in console', () => {
+      const spy = jest.spyOn(global.console, 'error');
+      const wrapper = shallowWithIntl(<EnterpriseFormInner {...innerProps} />);
+
+      expect(spy).not.toHaveBeenCalled();
+    });
+
+    it('Should render and match the snapshot', () => {
+      const wrapper = shallowWithIntl(<EnterpriseFormInner {...innerProps} />);
+
+      expect(wrapper).toMatchSnapshot();
+    });
   });
 
-  it('Should render and match the snapshot', () => {
-    const wrapper = shallowWithIntl(<EnterpriseFormNaked {...props} />);
+  describe('Formik', () => {
+    it('Expect to not log errors in console', () => {
+      const spy = jest.spyOn(global.console, 'error');
+      const wrapper = shallowWithIntl(<EnterpriseFormNaked {...props} />);
 
-    expect(wrapper).toMatchSnapshot();
+      expect(spy).not.toHaveBeenCalled();
+    });
+
+    it('Should render and match the snapshot', () => {
+      const wrapper = shallowWithIntl(<EnterpriseFormNaked {...props} />);
+
+      expect(wrapper).toMatchSnapshot();
+    });
   });
 });
