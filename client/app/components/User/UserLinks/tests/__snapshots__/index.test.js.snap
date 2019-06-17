@@ -1,0 +1,416 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<UserLinks /> <MobileNavMenu /> Should render and match the snapshot 1`] = `
+<WithStyles(ForwardRef(Menu))
+  anchorEl={Object {}}
+  anchorOrigin={
+    Object {
+      "horizontal": "center",
+      "vertical": "bottom",
+    }
+  }
+  classes={
+    Object {
+      "paper": undefined,
+    }
+  }
+  disableAutoFocusItem={true}
+  elevation={0}
+  getContentAnchorEl={null}
+  id="mobileNav"
+  onClose={[MockFunction]}
+  open={true}
+  transformOrigin={
+    Object {
+      "horizontal": "center",
+      "vertical": "top",
+    }
+  }
+>
+  <WithStyles(ForwardRef(MenuItem))
+    component={
+      Object {
+        "$$typeof": Symbol(react.forward_ref),
+        "render": [Function],
+      }
+    }
+    exact={true}
+    to="/"
+  >
+    <WithStyles(ForwardRef(ListItemIcon))>
+      <HomeOutlinedIcon />
+    </WithStyles(ForwardRef(ListItemIcon))>
+    <FormattedMessage
+      id="diverst.containers.Routes.user.home"
+      values={Object {}}
+    />
+  </WithStyles(ForwardRef(MenuItem))>
+  <WithStyles(ForwardRef(MenuItem))
+    component={
+      Object {
+        "$$typeof": Symbol(react.forward_ref),
+        "render": [Function],
+      }
+    }
+    to="/user/campaigns"
+  >
+    <WithStyles(ForwardRef(ListItemIcon))>
+      <WbIncandescentOutlinedIcon />
+    </WithStyles(ForwardRef(ListItemIcon))>
+    <FormattedMessage
+      id="diverst.containers.Routes.user.innovate"
+      values={Object {}}
+    />
+  </WithStyles(ForwardRef(MenuItem))>
+  <WithStyles(ForwardRef(MenuItem))
+    component={
+      Object {
+        "$$typeof": Symbol(react.forward_ref),
+        "render": [Function],
+      }
+    }
+    to="/user/news"
+  >
+    <WithStyles(ForwardRef(ListItemIcon))>
+      <QuestionAnswerOutlinedIcon />
+    </WithStyles(ForwardRef(ListItemIcon))>
+    <FormattedMessage
+      id="diverst.containers.Routes.user.news"
+      values={Object {}}
+    />
+  </WithStyles(ForwardRef(MenuItem))>
+  <WithStyles(ForwardRef(MenuItem))
+    component={
+      Object {
+        "$$typeof": Symbol(react.forward_ref),
+        "render": [Function],
+      }
+    }
+    to="/user/events"
+  >
+    <WithStyles(ForwardRef(ListItemIcon))>
+      <EventOutlinedIcon />
+    </WithStyles(ForwardRef(ListItemIcon))>
+    <FormattedMessage
+      id="diverst.containers.Routes.user.events"
+      values={Object {}}
+    />
+  </WithStyles(ForwardRef(MenuItem))>
+  <WithStyles(ForwardRef(MenuItem))
+    component={
+      Object {
+        "$$typeof": Symbol(react.forward_ref),
+        "render": [Function],
+      }
+    }
+    to="/user/groups"
+  >
+    <WithStyles(ForwardRef(ListItemIcon))>
+      <GroupOutlinedIcon />
+    </WithStyles(ForwardRef(ListItemIcon))>
+    <FormattedMessage
+      id="diverst.containers.Routes.user.groups"
+      values={Object {}}
+    />
+  </WithStyles(ForwardRef(MenuItem))>
+  <WithStyles(ForwardRef(MenuItem))
+    component={
+      Object {
+        "$$typeof": Symbol(react.forward_ref),
+        "render": [Function],
+      }
+    }
+    to="/user/downloads"
+  >
+    <WithStyles(ForwardRef(ListItemIcon))>
+      <CloudDownloadOutlinedIcon />
+    </WithStyles(ForwardRef(ListItemIcon))>
+    <FormattedMessage
+      id="diverst.containers.Routes.user.downloads"
+      values={Object {}}
+    />
+  </WithStyles(ForwardRef(MenuItem))>
+  <WithStyles(ForwardRef(MenuItem))
+    component={
+      Object {
+        "$$typeof": Symbol(react.forward_ref),
+        "render": [Function],
+      }
+    }
+    to="/user/mentorship"
+  >
+    <WithStyles(ForwardRef(ListItemIcon))>
+      <GroupWorkOutlinedIcon />
+    </WithStyles(ForwardRef(ListItemIcon))>
+    <FormattedMessage
+      id="diverst.containers.Routes.user.mentorship"
+      values={Object {}}
+    />
+  </WithStyles(ForwardRef(MenuItem))>
+</WithStyles(ForwardRef(Menu))>
+`;
+
+exports[`<UserLinks /> <NavMenu /> Should render and match the snapshot 1`] = `
+<WithStyles(ForwardRef(Toolbar))>
+  <WithStyles(ForwardRef(Button))
+    component={
+      Object {
+        "$$typeof": Symbol(react.forward_ref),
+        "render": [Function],
+      }
+    }
+    exact={true}
+    to="/"
+  >
+    <Hidden
+      implementation="js"
+      lgDown={false}
+      lgUp={false}
+      mdDown={false}
+      mdUp={false}
+      smDown={true}
+      smUp={false}
+      xlDown={false}
+      xlUp={false}
+      xsDown={false}
+      xsUp={false}
+    >
+      <HomeOutlinedIcon />
+    </Hidden>
+    <FormattedMessage
+      id="diverst.containers.Routes.user.home"
+      values={Object {}}
+    />
+  </WithStyles(ForwardRef(Button))>
+  <WithStyles(ForwardRef(Button))
+    component={
+      Object {
+        "$$typeof": Symbol(react.forward_ref),
+        "render": [Function],
+      }
+    }
+    to="/user/campaigns"
+  >
+    <Hidden
+      implementation="js"
+      lgDown={false}
+      lgUp={false}
+      mdDown={false}
+      mdUp={false}
+      smDown={true}
+      smUp={false}
+      xlDown={false}
+      xlUp={false}
+      xsDown={false}
+      xsUp={false}
+    >
+      <WbIncandescentOutlinedIcon />
+    </Hidden>
+    <FormattedMessage
+      id="diverst.containers.Routes.user.innovate"
+      values={Object {}}
+    />
+  </WithStyles(ForwardRef(Button))>
+  <WithStyles(ForwardRef(Button))
+    component={
+      Object {
+        "$$typeof": Symbol(react.forward_ref),
+        "render": [Function],
+      }
+    }
+    to="/user/news"
+  >
+    <Hidden
+      implementation="js"
+      lgDown={false}
+      lgUp={false}
+      mdDown={false}
+      mdUp={false}
+      smDown={true}
+      smUp={false}
+      xlDown={false}
+      xlUp={false}
+      xsDown={false}
+      xsUp={false}
+    >
+      <QuestionAnswerOutlinedIcon />
+    </Hidden>
+    <FormattedMessage
+      id="diverst.containers.Routes.user.news"
+      values={Object {}}
+    />
+  </WithStyles(ForwardRef(Button))>
+  <WithStyles(ForwardRef(Button))
+    component={
+      Object {
+        "$$typeof": Symbol(react.forward_ref),
+        "render": [Function],
+      }
+    }
+    to="/user/events"
+  >
+    <Hidden
+      implementation="js"
+      lgDown={false}
+      lgUp={false}
+      mdDown={false}
+      mdUp={false}
+      smDown={true}
+      smUp={false}
+      xlDown={false}
+      xlUp={false}
+      xsDown={false}
+      xsUp={false}
+    >
+      <EventOutlinedIcon />
+    </Hidden>
+    <FormattedMessage
+      id="diverst.containers.Routes.user.events"
+      values={Object {}}
+    />
+  </WithStyles(ForwardRef(Button))>
+  <WithStyles(ForwardRef(Button))
+    component={
+      Object {
+        "$$typeof": Symbol(react.forward_ref),
+        "render": [Function],
+      }
+    }
+    to="/user/groups"
+  >
+    <Hidden
+      implementation="js"
+      lgDown={false}
+      lgUp={false}
+      mdDown={false}
+      mdUp={false}
+      smDown={true}
+      smUp={false}
+      xlDown={false}
+      xlUp={false}
+      xsDown={false}
+      xsUp={false}
+    >
+      <GroupOutlinedIcon />
+    </Hidden>
+    <FormattedMessage
+      id="diverst.containers.Routes.user.groups"
+      values={Object {}}
+    />
+  </WithStyles(ForwardRef(Button))>
+  <WithStyles(ForwardRef(Button))
+    component={
+      Object {
+        "$$typeof": Symbol(react.forward_ref),
+        "render": [Function],
+      }
+    }
+    to="/user/downloads"
+  >
+    <Hidden
+      implementation="js"
+      lgDown={false}
+      lgUp={false}
+      mdDown={false}
+      mdUp={false}
+      smDown={true}
+      smUp={false}
+      xlDown={false}
+      xlUp={false}
+      xsDown={false}
+      xsUp={false}
+    >
+      <CloudDownloadOutlinedIcon />
+    </Hidden>
+    <FormattedMessage
+      id="diverst.containers.Routes.user.downloads"
+      values={Object {}}
+    />
+  </WithStyles(ForwardRef(Button))>
+  <WithStyles(ForwardRef(Button))
+    component={
+      Object {
+        "$$typeof": Symbol(react.forward_ref),
+        "render": [Function],
+      }
+    }
+    to="/user/mentorship"
+  >
+    <Hidden
+      implementation="js"
+      lgDown={false}
+      lgUp={false}
+      mdDown={false}
+      mdUp={false}
+      smDown={true}
+      smUp={false}
+      xlDown={false}
+      xlUp={false}
+      xsDown={false}
+      xsUp={false}
+    >
+      <GroupWorkOutlinedIcon />
+    </Hidden>
+    <FormattedMessage
+      id="diverst.containers.Routes.user.mentorship"
+      values={Object {}}
+    />
+  </WithStyles(ForwardRef(Button))>
+</WithStyles(ForwardRef(Toolbar))>
+`;
+
+exports[`<UserLinks /> Should render and match the snapshot 1`] = `
+<Fragment>
+  <Hidden
+    implementation="js"
+    lgDown={false}
+    lgUp={false}
+    mdDown={false}
+    mdUp={false}
+    smDown={false}
+    smUp={true}
+    xlDown={false}
+    xlUp={false}
+    xsDown={false}
+    xsUp={false}
+  >
+    <WithStyles(ForwardRef(Toolbar))>
+      <WithStyles(ForwardRef(Button))
+        aria-haspopup="true"
+        onClick={[Function]}
+      >
+        <ArrowDropDownIcon
+          className=""
+        />
+        <FormattedMessage
+          id="diverst.containers.Routes.user.home"
+          values={Object {}}
+        />
+      </WithStyles(ForwardRef(Button))>
+    </WithStyles(ForwardRef(Toolbar))>
+    <MobileNavMenu
+      classes={Object {}}
+      handleMobileNavClose={[Function]}
+      isMobileNavOpen={false}
+      mobileNavAnchor={null}
+    />
+  </Hidden>
+  <Hidden
+    implementation="js"
+    lgDown={false}
+    lgUp={false}
+    mdDown={false}
+    mdUp={false}
+    smDown={false}
+    smUp={false}
+    xlDown={false}
+    xlUp={false}
+    xsDown={true}
+    xsUp={false}
+  >
+    <NavLinks
+      classes={Object {}}
+    />
+  </Hidden>
+</Fragment>
+`;

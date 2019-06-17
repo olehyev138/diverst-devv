@@ -23,7 +23,6 @@ import { withStyles } from '@material-ui/core/styles';
 const styles = theme => ({});
 
 /* eslint-disable react/prefer-stateless-function */
-// TODO: can this be written with a stateless componenet?
 export class HomePage extends React.PureComponent {
   render() {
     const { classes } = this.props;

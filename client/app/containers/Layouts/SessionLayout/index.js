@@ -8,7 +8,7 @@ import Container from '@material-ui/core/Container';
 import ApplicationLayout from '../ApplicationLayout';
 import { withStyles } from '@material-ui/core/styles';
 
-import { ROUTES } from 'containers/Routes/constants';
+import { ROUTES } from 'containers/Shared/Routes/constants';
 
 const styles = theme => ({
   container: {

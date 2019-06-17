@@ -1,0 +1,47 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<NotFoundPage /> should render and match the snapshot 1`] = `
+<div>
+  <Connect(WithStyles(Logo))
+    coloredDefault={true}
+    imgClass="extra-large-img"
+  />
+  <WithStyles(ForwardRef(Typography))
+    variant="h6"
+  >
+    <FormattedMessage
+      id="diverst.containers.NotFoundPage.headers.header"
+      values={Object {}}
+    />
+  </WithStyles(ForwardRef(Typography))>
+  <WithStyles(ForwardRef(Divider)) />
+  <WithStyles(ForwardRef(Button))
+    color="primary"
+    component={
+      Object {
+        "$$typeof": Symbol(react.forward_ref),
+        "render": [Function],
+      }
+    }
+    to="/"
+    variant="contained"
+  >
+    <Hidden
+      implementation="js"
+      lgDown={false}
+      lgUp={false}
+      mdDown={false}
+      mdUp={false}
+      smDown={false}
+      smUp={false}
+      xlDown={false}
+      xlUp={false}
+      xsDown={true}
+      xsUp={false}
+    >
+      <HomeIcon />
+    </Hidden>
+    Return To Home
+  </WithStyles(ForwardRef(Button))>
+</div>
+`;
