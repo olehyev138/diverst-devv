@@ -10,7 +10,6 @@ import React, { memo } from 'react';
 import React from 'react';
 {{/if}}
 // import PropTypes from 'prop-types';
-// import styled from 'styled-components';
 
 {{#if wantMessages}}
 import { FormattedMessage } from 'react-intl';
@@ -21,7 +20,7 @@ function {{ properCase name }}() {
   return (
     <div>
     {{#if wantMessages}}
-      <FormattedMessage {...messages.header} />
+      <FormattedMessage {...messages.default} />
     {{/if}}
     </div>
   );

@@ -11,9 +11,6 @@ import React from 'react';
 {{/if}}
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-{{#if wantHeaders}}
-import { Helmet } from 'react-helmet';
-{{/if}}
 {{#if wantMessages}}
 import { FormattedMessage } from 'react-intl';
 {{/if}}
@@ -47,14 +44,8 @@ export function {{ properCase name }}() {
 
   return (
     <div>
-    {{#if wantHeaders}}
-      <Helmet>
-        <title>{{properCase name}}</title>
-        <meta name="description" content="Description of {{properCase name}}" />
-      </Helmet>
-    {{/if}}
     {{#if wantMessages}}
-      <FormattedMessage {...messages.header} />
+      <FormattedMessage {...messages.default} />
     {{/if}}
     </div>
   );
