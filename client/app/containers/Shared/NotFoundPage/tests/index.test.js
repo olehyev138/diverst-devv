@@ -1,6 +1,6 @@
 import React from 'react';
-import { shallow } from 'enzyme/build';
-import { unwrap } from '@material-ui/core/test-utils/index';
+import { shallow } from 'enzyme';
+import { unwrap } from '@material-ui/core/test-utils';
 
 import NotFoundPage from 'containers/Shared/NotFoundPage/index';
 const NotFoundPageNaked = unwrap(NotFoundPage);

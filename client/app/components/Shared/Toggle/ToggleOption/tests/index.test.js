@@ -1,5 +1,5 @@
 import React from 'react';
-import { shallow, mount } from 'enzyme/build';
+import { shallow, mount } from 'enzyme';
 import { IntlProvider, defineMessages } from 'react-intl';
 
 import ToggleOption from 'components/Shared/Toggle/ToggleOption/index';

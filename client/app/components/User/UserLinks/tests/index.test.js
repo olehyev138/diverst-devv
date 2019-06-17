@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallowWithIntl, loadTranslation } from 'enzyme-react-intl';
-import { unwrap } from '@material-ui/core/test-utils/index';
+import { unwrap } from '@material-ui/core/test-utils';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
 

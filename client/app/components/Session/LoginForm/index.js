@@ -9,11 +9,11 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { FormattedMessage } from 'react-intl';
 
-import { Field, Formik, Form } from 'formik/dist/index';
+import { Field, Formik, Form } from 'formik';
 import * as Yup from 'yup';
 
 import { withStyles } from '@material-ui/core/styles';
-import withWidth from '@material-ui/core/withWidth/index';
+import withWidth from '@material-ui/core/withWidth';
 import {
   Button, Card, CardActions, CardContent, Grid, TextField, Hidden
 } from '@material-ui/core';

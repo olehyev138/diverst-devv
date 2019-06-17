@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { shallowWithIntl, loadTranslation } from 'enzyme-react-intl';
-import { unwrap } from '@material-ui/core/test-utils/index';
+import { unwrap } from '@material-ui/core/test-utils';
 
 import { EnterpriseFormInner, StyledEnterpriseForm } from 'components/Session/EnterpriseForm/index';
 const EnterpriseFormNaked = unwrap(StyledEnterpriseForm);

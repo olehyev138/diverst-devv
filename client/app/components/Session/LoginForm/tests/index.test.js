@@ -7,7 +7,7 @@
 
 import React from 'react';
 import { shallowWithIntl, loadTranslation } from 'enzyme-react-intl';
-import { unwrap } from '@material-ui/core/test-utils/index';
+import { unwrap } from '@material-ui/core/test-utils';
 
 import { LoginFormInner, StyledLoginForm } from 'components/Session/LoginForm/index';
 const LoginFormNaked = unwrap(StyledLoginForm);
