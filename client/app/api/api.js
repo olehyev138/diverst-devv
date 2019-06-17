@@ -5,6 +5,7 @@ import groups from 'api/groups/groups';
 const Api = {
   users,
   sessions,
+  groups,
 };
 
 export default Api;
