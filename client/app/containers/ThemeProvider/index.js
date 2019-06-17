@@ -9,7 +9,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-import { SnackbarProvider } from 'notistack';
 
 import injectReducer from 'utils/injectReducer';
 
@@ -19,6 +18,8 @@ import Slide from '@material-ui/core/Slide';
 import { makeSelectPrimary, makeSelectSecondary } from './selectors';
 import { changePrimary, changeSecondary } from './actions';
 import reducer from './reducer';
+
+import SnackbarProviderWrapper from 'components/SnackbarProviderWrapper';
 
 import App from 'containers/App/Loadable';
 import { loginSuccess, setUser, setEnterprise } from 'containers/App/actions';
@@ -47,10 +48,6 @@ export class ThemeProvider extends React.PureComponent {
     }
   }
 
-  SlideTransition(props) {
-    return <Slide {...props} direction='up' />;
-  }
-
   render() {
     const defaultTheme = createMuiTheme();
 
@@ -62,6 +59,15 @@ export class ThemeProvider extends React.PureComponent {
         },
         secondary: {
           main: secondary,
+        },
+        error: {
+          main: '#d32f2f',
+        },
+        warning: {
+          main: '#ffa000',
+        },
+        success: {
+          main: '#43a047',
         },
       },
       typography: {
@@ -92,15 +98,9 @@ export class ThemeProvider extends React.PureComponent {
 
     return (
       <MuiThemeProvider theme={theme}>
-        <SnackbarProvider
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'right',
-          }}
-          TransitionComponent={this.SlideTransition}
-        >
+        <SnackbarProviderWrapper>
           <App />
-        </SnackbarProvider>
+        </SnackbarProviderWrapper>
       </MuiThemeProvider>
     );
   }
