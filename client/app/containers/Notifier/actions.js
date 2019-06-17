@@ -7,7 +7,7 @@ export function showSnackbar(notification) {
     type: SHOW_SNACKBAR,
     notification: {
       ...notification,
-      key: key || new Date().getTime() + Math.random(),
+      key: key || new Date().getTime() + Math.floor(Math.random() * 20)
     },
   };
 }

@@ -107,7 +107,8 @@ const styles = theme => ({
 
 const WrappedNavLink = React.forwardRef((props, ref) => <NavLink innerRef={ref} {...props} />);
 
-export function MobileNavMenu({classes, mobileNavAnchor, isMobileNavOpen, handleMobileNavClose}) {
+/* eslint-disable object-curly-newline */
+export function MobileNavMenu({ classes, mobileNavAnchor, isMobileNavOpen, handleMobileNavClose }) {
   return (
     <Menu
       classes={{

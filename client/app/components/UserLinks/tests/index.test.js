@@ -4,7 +4,7 @@ import { unwrap } from '@material-ui/core/test-utils';
 
 import { ROUTES } from 'containers/Routes/constants';
 
-import {MobileNavMenu, NavLinks, StyledUserLinks} from '../index';
+import { MobileNavMenu, NavLinks, StyledUserLinks } from '../index';
 const UserLinksNaked = unwrap(StyledUserLinks);
 
 /**

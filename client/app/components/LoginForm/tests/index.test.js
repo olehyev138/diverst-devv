@@ -28,7 +28,7 @@ const innerProps = {
   errors: { email: '', password: '' },
   touched: true,
   values: { email: '', password: '' }
-}
+};
 
 const props = {
   classes: {},

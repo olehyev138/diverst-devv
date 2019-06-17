@@ -74,14 +74,14 @@ export function EnterpriseFormInner({ handleChange, handleBlur, errors, touched,
                 disabled={!values.email}
               >
                 <Hidden xsDown>
-                  <Search/>
+                  <Search />
                 </Hidden>
                 {<FormattedMessage {...messages.findEnterprise} />}
               </Button>
             </Grid>
           </Grid>
         </CardActions>
-        <br/>
+        <br />
       </Form>
     </Card>
   );
