@@ -2,7 +2,7 @@ import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 
 import Container from '@material-ui/core/Container';
-import UserLinks from 'components/UserLinks';
+import UserLinks from 'components/User/UserLinks';
 import { withStyles } from '@material-ui/core/styles';
 import AuthenticatedLayout from '../AuthenticatedLayout';
 

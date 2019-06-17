@@ -6,10 +6,10 @@ import PropTypes from 'prop-types';
 
 import { withStyles } from '@material-ui/core/styles';
 
-import ApplicationHeader from 'components/ApplicationHeader';
+import ApplicationHeader from 'components/Shared/ApplicationHeader';
 import ApplicationLayout from 'containers/Layouts/ApplicationLayout';
 
-import { ROUTES } from 'containers/Routes/constants';
+import { ROUTES } from 'containers/Shared/Routes/constants';
 
 const styles = theme => ({});
 
