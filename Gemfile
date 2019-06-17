@@ -8,6 +8,7 @@ gem 'activerecord', '~> 5.0'
 gem 'actionpack', '~> 5.0'
 gem 'actionmailer', '~> 5.0'
 gem 'activerecord-import', '~> 0.14.0' # Adds a faster way to INSERT multiple rows in the DB
+gem 'rack-timeout', '~> 0.4.2'
 
 gem 'mysql2', '~> 0.5.2'
 gem 'puma', '~> 3.1' # Better web server than WEBRick
@@ -100,5 +101,4 @@ group :staging, :production do
   gem 'influxdb-rails', git: 'https://github.com/Kukunin/influxdb-rails.git',
                         branch: 'tags_middleware' # Rails metrics to InfluxDB
   gem 'sidekiq-influxdb', '~> 1.1.0' # Sidekiq metrics to InfluxDB
-  gem 'rack-timeout', '~> 0.4.2'
 end

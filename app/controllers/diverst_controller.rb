@@ -21,6 +21,10 @@ class DiverstController < ApplicationController
     render status: :unprocessable_entity, json: [e.resource.errors.full_messages.first]
   end
 
+  rescue_from InvalidInputException do |e|
+    render status: :unprocessable_entity, json: { message: e.message, attribute: e.attribute }
+  end
+
   rescue_from Pundit::NotAuthorizedError do |e|
     render status: :bad_request, json: { message: e.message }
   end
@@ -54,7 +58,7 @@ class DiverstController < ApplicationController
   end
 
   rescue_from ActiveRecord::RecordNotFound do |e|
-    render status: :bad_request, json: { message: 'Sorry, the resource you are looking for does not exist.' }
+    render status: :not_found, json: { message: 'Sorry, the resource you are looking for does not exist.' }
   end
 
   rescue_from ActiveRecord::StatementInvalid do |e|
@@ -66,12 +70,28 @@ class DiverstController < ApplicationController
     render status: :bad_request, json: { message: e.message }
   end
 
+  rescue_from ActionController::UnpermittedParameters do |e|
+    render status: :bad_request, json: { message: e.message }
+  end
+
   rescue_from ArgumentError do |e|
     render status: :bad_request, json: { message: e.message }
   end
 
   rescue_from NoMethodError do |e|
     render status: :bad_request, json: { message: e.message }
+  end
+
+  rescue_from Rack::Timeout::RequestTimeoutException do |e|
+    render status: :request_timeout, json: { message: 'Your request timed out. Please try again later.' }
+  end
+
+  rescue_from Rack::Timeout::RequestExpiryError do |e|
+    render status: :request_timeout, json: { message: 'Your request timed out. Please try again later.' }
+  end
+
+  rescue_from Rack::Timeout::RequestTimeoutError do |e|
+    render status: :request_timeout, json: { message: 'Your request timed out. Please try again later.' }
   end
 
   def routing_error
@@ -86,9 +106,9 @@ class DiverstController < ApplicationController
   def get_serialization_scope
     if self.current_user.nil?
       return {
-        controller: self.diverst_request.controller,
-        action: self.diverst_request.action
-      }
+               controller: self.diverst_request.controller,
+               action: self.diverst_request.action
+             }
     end
 
     {
