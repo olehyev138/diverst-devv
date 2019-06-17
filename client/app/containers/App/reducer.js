@@ -12,13 +12,9 @@ import {
 
 // The initial state of the App
 export const initialState = {
-  loading: false,
   user: null,
   enterprise: null,
-  domain: null,
   token: null,
-  primary: '#3f51b5',
-  secondary: '#f50057'
 };
 
 function appReducer(state = initialState, action) {

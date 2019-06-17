@@ -1,5 +1,4 @@
 import React, { memo } from 'react';
-import { Route } from 'react-router';
 import PropTypes from 'prop-types';
 
 import Container from '@material-ui/core/Container';

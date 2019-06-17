@@ -1,33 +1,36 @@
-// import produce from 'immer';
+import produce from 'immer';
 import themeProviderReducer from '../reducer';
-import { CHANGE_PRIMARY, CHANGE_SECONDARY } from '../constants';
+import { changePrimary, changeSecondary } from '../actions';
 
 /* eslint-disable default-case, no-param-reassign */
 describe('themeProviderReducer', () => {
-  it('returns the initial state', () => {
-    const expectedResult = {
+  let state;
+
+  beforeEach(() => {
+    state = {
       primary: '#7B77C9',
       secondary: '#8A8A8A'
     };
+  });
 
-    expect(themeProviderReducer(undefined, {})).toEqual(expectedResult);
+  it('returns the initial state', () => {
+    const expected = state;
+    expect(themeProviderReducer(undefined, {})).toEqual(expected);
   });
 
   it('handles CHANGE_PRIMARY', () => {
-    const action = { type: CHANGE_PRIMARY, color: 'primary' };
-
-    expect(themeProviderReducer(undefined, action)).toEqual({
-      primary: 'primary',
-      secondary: '#8A8A8A'
+    const expected = produce(state, (draft) => {
+      draft.primary = 'color';
     });
+
+    expect(themeProviderReducer(state, changePrimary('color'))).toEqual(expected);
   });
 
   it('handles CHANGE_SECONDARY', () => {
-    const action = { type: CHANGE_SECONDARY, color: 'secondary' };
-
-    expect(themeProviderReducer(undefined, action)).toEqual({
-      primary: '#7B77C9',
-      secondary: 'secondary'
+    const expected = produce(state, (draft) => {
+      draft.secondary = 'color';
     });
+
+    expect(themeProviderReducer(state, changeSecondary('color'))).toEqual(expected);
   });
 });

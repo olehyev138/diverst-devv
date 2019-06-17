@@ -8,11 +8,10 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { NavLink } from 'react-router-dom';
-import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
 import {
-  Grid, Button, CardContent, Typography, Divider, Hidden
+  Button, Typography, Divider, Hidden
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import HomeIcon from '@material-ui/icons/Home';
