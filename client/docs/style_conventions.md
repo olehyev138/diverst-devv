@@ -17,7 +17,7 @@ We follow the [**React Boilerplate** structure](https://github.com/react-boilerp
 - `api/`
 - #### `components/`
   - This is where we store **presentational** components that focus on how things _look_. [(?)](#componentRef)
-  - <a id="componentFolderStructureRef"></a>Folder structure is based on logical module separation. Ex:
+  - <a id="componentFolderStructureRef"></a>Folder structure is based on organizational module separation. Ex:
     - `Shared/` for components that are shared across the entire app [(?)](#sharedStructureRef)
     - `Session/` for session components (`LoginForm`, etc.)
     - `User/` for user components
@@ -161,20 +161,22 @@ Ex:
   selectUser();
   ```
   
-- Should always have a selector for the scope within the store and then compose your specific selectors using it
+- Should always have a selector for the scope (named `select<Container>Domain`) within the store and then compose your specific selectors using it
+- Always import the initial state from the local reducer and `||` it with the assignment of domain selector value (like below)
   
   ```javascript
   // Example
   import { createSelector } from 'reselect';
+  import { initialState } from './reducer';
   
-  const selectLoginPage = state => state.loginPage;
+  const selectLoginPageDomain = state => state.loginPage || initialState;
   
-  const selectFormErrors = () => createSelector(
-    selectLoginPage,
-    loginPageState => loginPageState.formErrors,
+  const selectLoginFormErrors = () => createSelector(
+    selectLoginPageDomain,
+    loginPageState => loginPageState.loginFormErrors,
   );
   
-  export { selectFormErrors };
+  export { selectLoginFormErrors };
   ```
 
 ## Reducers
