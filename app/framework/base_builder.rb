@@ -22,7 +22,7 @@ module BaseBuilder
 
       # save the item
       if not item.save
-        raise UnprocessableException.new(item)
+        raise InvalidInputException.new(item.errors.messages.first.first), item.errors.full_messages.first
       end
 
       item
@@ -52,7 +52,7 @@ module BaseBuilder
       if item.update_attributes(params[symbol].permit!)
         return item
       else
-        raise UnprocessableException.new(item)
+        raise InvalidInputException.new(item.errors.messages.first.first), item.errors.full_messages.first
       end
     end
 
