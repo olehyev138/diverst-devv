@@ -1,5 +1,6 @@
-import users from './users/users';
-import sessions from './sessions/sessions';
+import users from 'api/users/users';
+import sessions from 'api/sessions/sessions';
+import groups from 'api/groups/groups';
 
 const Api = {
   users,

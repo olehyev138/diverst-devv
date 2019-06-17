@@ -27,9 +27,16 @@ module BaseSearcher
 
       add_custom_args(where, where_not, params, includes, joins)
 
+      begin
+        # Apply the associated policy scope for the model to filter based on authorization
+        @items = (self.name + 'Policy::Scope').constantize.new(diverst_request.user, self).resolve
+      rescue NameError
+        raise PolicyScopeNotFoundException
+      end
+
       # search the system
       if searchValue.present?
-        self.joins(joins)
+        @items.joins(joins)
             .includes(includes)
             .where(query, search: "%#{searchValue}%".downcase)
             .where(where)
@@ -37,7 +44,7 @@ module BaseSearcher
             .references(includes)
             .distinct
       else
-        self.joins(joins)
+        @items.joins(joins)
             .includes(includes)
             .where(where)
             .where.not(where_not)

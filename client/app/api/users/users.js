@@ -1,10 +1,10 @@
-import API from '../base/base';
+import API from 'api/base/base';
 const axios = require('axios');
 
 const Users = new API({ controller: 'users' });
 
 Object.assign(Users, {
-  findCompany(payload) {
+  findEnterprise(payload) {
     return axios.post(`${this.url}/email`, payload);
   }
 });

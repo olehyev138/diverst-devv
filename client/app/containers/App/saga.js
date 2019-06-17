@@ -65,15 +65,15 @@ export function* logout(action) {
 export function* findEnterprise(action) {
   try {
     // Find enterprise and dispatch setEnterprise action
-    const response = yield call(api.users.findCompany.bind(api.users), action.payload);
-    const { enterprise } = response.data;
+    const response = yield call(api.users.findEnterprise.bind(api.users), action.payload);
+    const { enterprise } = response.data.user;
 
     yield put(setEnterprise(enterprise));
 
     AuthService.setValue('_diverst.seirpretne', enterprise);
 
     // If enterprise has a theme, dispatch theme provider actions
-    if (response.data.enterprise.theme) {
+    if (enterprise.theme) {
       yield put(changePrimary(enterprise.theme.primary_color));
       yield put(changeSecondary(enterprise.theme.secondary_color));
     }
