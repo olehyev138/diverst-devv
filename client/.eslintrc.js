@@ -81,8 +81,8 @@ module.exports = {
     'comma-dangle': 0,
     'curly': [1, 'multi'],
     'no-restricted-syntax': ['error', 'ForInStatement', 'LabeledStatement', 'WithStatement'],
-    'nonblock-statement-body-position': [0, 'bottom']
-
+    'nonblock-statement-body-position': [0, 'bottom'],
+    'no-shadow': 0
   },
   overrides: [
     {

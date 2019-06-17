@@ -18,7 +18,6 @@ import Slide from '@material-ui/core/Slide';
 
 import { makeSelectPrimary, makeSelectSecondary } from './selectors';
 import { changePrimary, changeSecondary } from './actions';
-import reducer from './reducer';
 
 import App from 'containers/App/Loadable';
 import { loginSuccess, setUser, setEnterprise } from 'containers/App/actions';
@@ -30,11 +29,6 @@ export class ThemeProvider extends React.PureComponent {
   componentDidMount() {
     // Try and get the JWT token from storage. If it doesn't exist
     // we're done. The user must login again.
-
-    // TODO:
-    //    - why is this done here? what does it do?
-    //    - why is theme provider around app and not app around theme provider (material ui suggests the latter)
-
     const jwt = AuthService.getJwt();
     const enterprise = AuthService.getEnterprise();
 

@@ -1,18 +1,21 @@
 import React from 'react';
-import { render } from 'react-testing-library';
-import { IntlProvider } from 'react-intl';
+import { shallow } from 'enzyme';
+import { unwrap } from '@material-ui/core/test-utils';
 
 import NotFoundPage from '../index';
+const NotFoundPageNaked = unwrap(NotFoundPage);
 
-xdescribe('<NotFoundPage />', () => {
-  xit('should render and match the snapshot', () => {
-    const {
-      container: { firstChild },
-    } = render(
-      <IntlProvider locale='en'>
-        <NotFoundPage />
-      </IntlProvider>,
-    );
-    expect(firstChild).toMatchSnapshot();
+describe('<NotFoundPage />', () => {
+  it('should not log errors in console', () => {
+    const spy = jest.spyOn(global.console, 'error');
+    const wrapper = shallow(<NotFoundPageNaked classes={{}} />);
+
+    expect(spy).not.toHaveBeenCalled();
+  });
+
+  it('should render and match the snapshot', () => {
+    const wrapper = shallow(<NotFoundPageNaked classes={{}} />);
+
+    expect(wrapper).toMatchSnapshot();
   });
 });

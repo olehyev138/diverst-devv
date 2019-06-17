@@ -65,7 +65,7 @@ const styles = theme => ({
   },
 });
 
-export class AdminLinks extends React.PureComponent {
+class AdminLinks extends React.PureComponent {
   constructor(props) {
     super(props);
 
@@ -246,6 +246,10 @@ const withConnect = connect(
   mapDispatchToProps
 );
 
+// styled & unconnected
+export const StyledAdminLinks = withStyles(styles)(AdminLinks);
+
+// styled & connected
 export default compose(
   withConnect,
   withStyles(styles)

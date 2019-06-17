@@ -1,32 +1,60 @@
-// import produce from 'immer';
+import produce from 'immer';
+
 import loginPageReducer from '../reducer';
-// import { someAction } from '../actions';
+import { setEnterprise, findEnterpriseError, loginError } from 'containers/App/actions';
 
 /* eslint-disable default-case, no-param-reassign */
-xdescribe('loginPageReducer', () => {
+describe('loginPageReducer', () => {
   let state;
   beforeEach(() => {
     state = {
-      // default state params here
+      email: {
+        error: null,
+      },
+      password: {
+        error: null,
+      }
     };
   });
 
-  xit('returns the initial state', () => {
-    const expectedResult = state;
-    expect(loginPageReducer(undefined, {})).toEqual(expectedResult);
+  it('returns the initial state', () => {
+    const expected = state;
+    expect(loginPageReducer(undefined, {})).toEqual(expected);
   });
 
-  /**
-   * Example state change comparison
-   *
-   * it('should handle the someAction action correctly', () => {
-   *   const expectedResult = produce(state, draft => {
-   *     draft.loading = true;
-   *     draft.error = false;
-   *     draft.userData.nested = false;
-   *   });
-   *
-   *   expect(appReducer(state, someAction())).toEqual(expectedResult);
-   * });
-   */
+  it('handles the setEnterprise action', () => {
+    const errorState = produce(state, (draft) => {
+      draft.email.error = 'error';
+    });
+
+    expect(loginPageReducer(state, setEnterprise).email.error).toBeNull();
+  });
+
+  it('handles the findEnterpriseError action', () => {
+    const expected = produce(state, (draft) => {
+      draft.email.error = 'error';
+    });
+
+    expect(loginPageReducer(state, findEnterpriseError({ response: { data: 'error' } })))
+      .toEqual(expected);
+  });
+
+  // TODO
+  xit('handles the loginBegin action', () => {
+    const expected = produce(state, (draft) => {
+      draft.email.error = 'error';
+    });
+
+    expect(loginPageReducer(state, findEnterpriseError({ response: { data: 'error' } })))
+      .toEqual(expected);
+  });
+
+  it('handles the loginError action', () => {
+    const expected = produce(state, (draft) => {
+      draft.password.error = 'error';
+    });
+
+    expect(loginPageReducer(state, loginError({ response: { data: 'error' } })))
+      .toEqual(expected);
+  });
 });

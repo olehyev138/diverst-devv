@@ -4,8 +4,8 @@ import { IntlProvider, defineMessages } from 'react-intl';
 
 import Toggle from '../index';
 
-xdescribe('<Toggle />', () => {
-  xit('should contain default text', () => {
+describe('<Toggle />', () => {
+  it('should contain default text', () => {
     const defaultEnMessage = 'someContent';
     const defaultDeMessage = 'someOtherContent';
     const messages = defineMessages({
@@ -18,6 +18,7 @@ xdescribe('<Toggle />', () => {
         defaultMessage: defaultDeMessage,
       },
     });
+
     const renderedComponent = shallow(
       <IntlProvider locale='en'>
         <Toggle values={['en', 'de']} messages={messages} />
@@ -31,7 +32,7 @@ xdescribe('<Toggle />', () => {
     expect(renderedComponent.find('option')).toHaveLength(0);
   });
 
-  xit('should not have ToggleOptions if props.values is not defined', () => {
+  it('should not have ToggleOptions if props.values is not defined', () => {
     const renderedComponent = shallow(<Toggle />);
 
     expect(renderedComponent.contains(<option>--</option>)).toBe(true);

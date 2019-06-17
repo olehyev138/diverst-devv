@@ -18,7 +18,6 @@ import * as Yup from 'yup';
 import { withStyles } from '@material-ui/core/styles';
 
 import Logo from 'components/Logo';
-
 import messages from 'containers/LoginPage/messages';
 
 const styles = theme => ({
@@ -29,6 +28,65 @@ const styles = theme => ({
     minWidth: 'max-content',
   },
 });
+
+/* eslint-disable object-curly-newline */
+export function EnterpriseFormInner({ handleChange, handleBlur, errors, touched, values, classes }) {
+  return (
+    <Card raised className={classes.card}>
+      <Form
+        noValidate
+      >
+        <CardContent>
+          <Grid container spacing={0} direction='column' alignItems='center' justify='center'>
+            <Grid item xs={12}>
+              <Logo coloredDefault imgClass='large-img' />
+            </Grid>
+          </Grid>
+          <br />
+          <Field
+            component={TextField}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            autoFocus
+            fullWidth
+            id='email'
+            name='email'
+            label={<FormattedMessage {...messages.email} />}
+            margin='normal'
+            type='email'
+            variant='outlined'
+            error={errors.email && touched.email}
+            helperText={errors.email && touched.email ? errors.email : null}
+          />
+        </CardContent>
+        <CardActions>
+          <Grid container alignItems='center' justify='center'>
+            <Grid item align='center' sm={6} xs={12}>
+              <Button
+                classes={{
+                  label: classes.submitButtonLabel
+                }}
+                type='submit'
+                color='primary'
+                size='large'
+                variant='contained'
+                aria-hidden
+                disabled={!values.email}
+              >
+                <Hidden xsDown>
+                  <Search />
+                </Hidden>
+                {<FormattedMessage {...messages.findEnterprise} />}
+              </Button>
+            </Grid>
+          </Grid>
+        </CardActions>
+        <br />
+      </Form>
+    </Card>
+  );
+}
+
 
 function EnterpriseForm(props, context) {
   const { classes } = props;
@@ -60,65 +118,19 @@ function EnterpriseForm(props, context) {
         actions.setFieldError('email', props.emailError);
         props.findEnterpriseBegin(values);
       }}
-      render={({
-        handleSubmit, handleChange, handleBlur, errors, touched, values
-      }) => (
-        <Card raised className={classes.card}>
-          <Form
-            noValidate
-          >
-            <CardContent>
-              <Grid container spacing={0} direction='column' alignItems='center' justify='center'>
-                <Grid item xs={12}>
-                  <Logo coloredDefault imgClass='large-img' />
-                </Grid>
-              </Grid>
-              <br />
-              <Field
-                component={TextField}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                autoFocus
-                fullWidth
-                id='email'
-                name='email'
-                label={<FormattedMessage {...messages.email} />}
-                margin='normal'
-                type='email'
-                variant='outlined'
-                error={errors.email && touched.email}
-                helperText={errors.email && touched.email ? errors.email : null}
-              />
-            </CardContent>
-            <CardActions>
-              <Grid container alignItems='center' justify='center'>
-                <Grid item align='center' sm={6} xs={12}>
-                  <Button
-                    classes={{
-                      label: classes.submitButtonLabel
-                    }}
-                    type='submit'
-                    color='primary'
-                    size='large'
-                    variant='contained'
-                    aria-hidden
-                    disabled={!values.email}
-                  >
-                    <Hidden xsDown>
-                      <Search />
-                    </Hidden>
-                    {<FormattedMessage {...messages.findEnterprise} />}
-                  </Button>
-                </Grid>
-              </Grid>
-            </CardActions>
-            <br />
-          </Form>
-        </Card>
-      )}
+      render={props => <EnterpriseFormInner {...props} classes={classes} />}
     />
   );
 }
+
+EnterpriseFormInner.propTypes = {
+  classes: PropTypes.object,
+  handleChange: PropTypes.func,
+  handleBlur: PropTypes.func,
+  errors: PropTypes.object,
+  touched: PropTypes.bool,
+  values: PropTypes.object
+};
 
 EnterpriseForm.propTypes = {
   classes: PropTypes.object,
@@ -130,5 +142,8 @@ EnterpriseForm.propTypes = {
 EnterpriseForm.contextTypes = {
   intl: PropTypes.object.isRequired,
 };
+
+// without memo
+export const StyledEnterpriseForm = withStyles(styles)(EnterpriseForm);
 
 export default memo(withStyles(styles)(EnterpriseForm));

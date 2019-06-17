@@ -1,5 +1,6 @@
-import { SHOW_SNACKBAR, CLOSE_SNACKBAR, REMOVE_SNACKBAR } from './constants';
 import produce from 'immer';
+
+import { SHOW_SNACKBAR, CLOSE_SNACKBAR, REMOVE_SNACKBAR } from './constants';
 
 export const initialState = {
   notifications: [],

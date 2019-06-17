@@ -5,13 +5,12 @@ import { enzymeFind } from 'styled-components/test-utils';
 import Wrapper from '../Wrapper';
 
 describe('<Wrapper />', () => {
-  xit('should render an <div> tag', () => {
+  it('should render an <div> tag', () => {
     const wrapper = mount(<Wrapper />);
     const renderedComponent = enzymeFind(wrapper, Wrapper);
     expect(renderedComponent.type()).toEqual('div');
   });
 
-  /*
   it('should have a className attribute', () => {
     const wrapper = mount(<Wrapper />);
     const renderedComponent = enzymeFind(wrapper, Wrapper);
@@ -30,5 +29,4 @@ describe('<Wrapper />', () => {
     const renderedComponent = enzymeFind(wrapper, Wrapper);
     expect(renderedComponent.prop('attribute')).toBeUndefined();
   });
-  */
 });
