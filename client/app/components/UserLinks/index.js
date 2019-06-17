@@ -255,6 +255,7 @@ export function NavLinks({ classes }) {
   );
 }
 
+/* eslint-disable react/no-multi-comp */
 export class UserLinks extends React.PureComponent {
   constructor(props) {
     super(props);
