@@ -9,7 +9,9 @@ import React from 'react';
 import { shallowWithIntl, loadTranslation } from 'enzyme-react-intl';
 import { unwrap } from '@material-ui/core/test-utils';
 
-import { LoginFormInner, StyledLoginForm } from 'components/Session/LoginForm/index';
+import { LoginFormInner, StyledLoginForm } from '../index';
+import PropTypes from 'prop-types';
+
 const LoginFormNaked = unwrap(StyledLoginForm);
 
 /**
@@ -23,23 +25,36 @@ loadTranslation('./app/translations/en.json');
 
 const innerProps = {
   classes: {},
+  handleSubmit: jest.fn,
   handleChange: jest.fn,
   handleBlur: jest.fn,
-  errors: { email: '', password: '' },
-  touched: true,
-  values: { email: '', password: '' }
+  errors: {
+    email: '',
+    password: ''
+  },
+  touched: {
+    email: false,
+    password: false,
+  },
+  values: {
+    email: '',
+    password: ''
+  }
 };
 
 const props = {
   classes: {},
+  width: '',
   loginBegin: jest.fn(),
   email: 'email@email.com',
-  passwordError: '',
-  width: ''
+  formErrors: {
+    email: null,
+    password: null,
+  },
 };
 
-describe('<EnterpriseForm />', () => {
-  describe('<EnterpriseFormInner />', () => {
+describe('<LoginForm />', () => {
+  describe('<LoginFormInner />', () => {
     it('Expect to not log errors in console', () => {
       const spy = jest.spyOn(global.console, 'error');
       const wrapper = shallowWithIntl(<LoginFormInner {...innerProps} />);

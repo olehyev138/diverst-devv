@@ -8,7 +8,9 @@ import React from 'react';
 import { shallowWithIntl, loadTranslation } from 'enzyme-react-intl';
 import { unwrap } from '@material-ui/core/test-utils';
 
-import { EnterpriseFormInner, StyledEnterpriseForm } from 'components/Session/EnterpriseForm/index';
+import { EnterpriseFormInner, StyledEnterpriseForm } from '../index';
+import PropTypes from 'prop-types';
+
 const EnterpriseFormNaked = unwrap(StyledEnterpriseForm);
 
 /**
@@ -21,18 +23,21 @@ loadTranslation('./app/translations/en.json');
 
 const innerProps = {
   classes: {},
+  handleSubmit: jest.fn,
   handleChange: jest.fn,
   handleBlur: jest.fn,
   errors: { email: '' },
-  touched: true,
+  touched: { email: false },
   values: { email: '' }
 };
 
 const props = {
   classes: {},
   findEnterpriseBegin: jest.fn(),
-  enterpriseError: '',
-  emailError: ''
+  enterpriseError: null,
+  formErrors: {
+    email: null,
+  },
 };
 
 

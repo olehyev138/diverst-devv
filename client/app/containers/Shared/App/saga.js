@@ -6,15 +6,15 @@ import {
   LOGIN_BEGIN, LOGIN_ERROR,
   LOGOUT_BEGIN, LOGOUT_ERROR,
   FIND_ENTERPRISE_BEGIN, FIND_ENTERPRISE_ERROR
-} from 'containers/Shared/App/constants';
+} from './constants';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import {
   loginSuccess, loginError,
   logoutSuccess, logoutError,
-  setEnterprise, findEnterpriseError, setUser
-} from 'containers/Shared/App/actions';
+  setEnterprise, findEnterpriseError, setUser, findEnterpriseSuccess,
+} from './actions';
 
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
 
@@ -65,8 +65,9 @@ export function* logout(action) {
 export function* findEnterprise(action) {
   try {
     // Find enterprise and dispatch setEnterprise action
-    const response = yield call(api.users.findEnterprise.bind(api.users), action.payload);
-    const { enterprise } = response.data.user;
+    const response = yield call(api.users.findCompany.bind(api.users), action.payload);
+    const { enterprise } = response.data;
+    yield put(findEnterpriseSuccess());
 
     yield put(setEnterprise(enterprise));
 
