@@ -30,8 +30,15 @@ module BaseSearcher
       current_user = diverst_request.user
 
       begin
+        policy_name = self.name + 'Policy'
+        policy_scope = (policy_name + '::Scope').constantize
+
+        # Raise error if Policy exists but Scope doesn't
+        # When scope is not defined it defers to ApplicationPolicy::Scope which has logic we don't necessarily want
+        raise NameError if policy_scope.parent != policy_name.constantize
+
         # Apply the associated policy scope for the model to filter based on authorization
-        @items = (self.name + 'Policy::Scope').constantize.new(current_user, self).resolve
+        @items = policy_scope.new(current_user, self).resolve
       rescue NameError
         # TODO: Uncomment this when we have more policies defined. Commenting now to pass tests early.
         # raise PolicyScopeNotFoundException
