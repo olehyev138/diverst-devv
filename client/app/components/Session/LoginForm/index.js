@@ -23,7 +23,7 @@ import LockOpen from '@material-ui/icons/LockOpen';
 
 import messages from 'containers/Session/LoginPage/messages';
 
-import Logo from 'components/Shared/Logo/index';
+import Logo from 'components/Shared/Logo';
 
 const styles = theme => ({
   card: {
@@ -41,8 +41,10 @@ const styles = theme => ({
 });
 
 /* eslint-disable indent, object-curly-newline */
-export function LoginFormInner({ handleChange, handleBlur, errors,
-                               touched, values, classes, width }) {
+export function LoginFormInner({
+                                 handleSubmit, handleChange, handleBlur, errors,
+                                 touched, values, classes, width
+                               }) {
   return (
     <Card raised className={classes.card}>
       <Form
@@ -143,9 +145,10 @@ function LoginForm(props, context) {
 
   const form = useRef();
 
+  // Use React hook (as this is a functional component) to merge local validation errors with API validation errors
   useEffect(() => {
     if (form.current)
-      form.current.setFieldError('password', props.passwordError);
+      form.current.setErrors({ ...form.current.state.errors, ...props.formErrors });
   });
 
   return (
@@ -159,7 +162,6 @@ function LoginForm(props, context) {
       validateOnChange={false}
       validationSchema={LoginFormSchema}
       onSubmit={(values, actions) => {
-        actions.setFieldError('password', props.passwordError);
         props.loginBegin(values);
       }}
       render={props => <LoginFormInner {...props} classes={classes} width={width} />}
@@ -170,19 +172,23 @@ function LoginForm(props, context) {
 LoginFormInner.propTypes = {
   classes: PropTypes.object,
   width: PropTypes.string,
+  handleSubmit: PropTypes.func,
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
   errors: PropTypes.object,
-  touched: PropTypes.bool,
+  touched: PropTypes.object,
   values: PropTypes.object
 };
 
 LoginForm.propTypes = {
   classes: PropTypes.object,
+  width: PropTypes.string,
   loginBegin: PropTypes.func,
   email: PropTypes.string,
-  passwordError: PropTypes.string,
-  width: PropTypes.string,
+  formErrors: PropTypes.shape({
+    email: PropTypes.string,
+    password: PropTypes.string,
+  }),
 };
 
 LoginForm.contextTypes = {

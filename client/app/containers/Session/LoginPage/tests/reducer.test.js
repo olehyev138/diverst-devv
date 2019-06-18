@@ -8,12 +8,11 @@ describe('loginPageReducer', () => {
   let state;
   beforeEach(() => {
     state = {
-      email: {
-        error: null,
+      globalError: null,
+      formErrors: {
+        email: null,
+        password: null,
       },
-      password: {
-        error: null,
-      }
     };
   });
 
@@ -24,15 +23,15 @@ describe('loginPageReducer', () => {
 
   it('handles the setEnterprise action', () => {
     const errorState = produce(state, (draft) => {
-      draft.email.error = 'error';
+      draft.formErrors.email = 'error';
     });
 
-    expect(loginPageReducer(state, setEnterprise).email.error).toBeNull();
+    expect(loginPageReducer(state, setEnterprise).formErrors.email).toBeNull();
   });
 
   it('handles the findEnterpriseError action', () => {
     const expected = produce(state, (draft) => {
-      draft.email.error = 'error';
+      draft.formErrors.email = 'error';
     });
 
     expect(loginPageReducer(state, findEnterpriseError({ response: { data: 'error' } })))
@@ -42,7 +41,7 @@ describe('loginPageReducer', () => {
   // TODO
   xit('handles the loginBegin action', () => {
     const expected = produce(state, (draft) => {
-      draft.email.error = 'error';
+      draft.formErrors.email = 'error';
     });
 
     expect(loginPageReducer(state, findEnterpriseError({ response: { data: 'error' } })))
@@ -51,7 +50,7 @@ describe('loginPageReducer', () => {
 
   it('handles the loginError action', () => {
     const expected = produce(state, (draft) => {
-      draft.password.error = 'error';
+      draft.formErrors.password = 'error';
     });
 
     expect(loginPageReducer(state, loginError({ response: { data: 'error' } })))

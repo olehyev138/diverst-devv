@@ -7,7 +7,6 @@
 import React, { memo, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
-
 import { FormattedMessage } from 'react-intl';
 import {
   Button, Card, CardActions, CardContent, Grid, TextField, Hidden
@@ -30,7 +29,7 @@ const styles = theme => ({
 });
 
 /* eslint-disable object-curly-newline */
-export function EnterpriseFormInner({ handleChange, handleBlur, errors, touched, values, classes }) {
+export function EnterpriseFormInner({ handleSubmit, handleChange, handleBlur, errors, touched, values, classes }) {
   return (
     <Card raised className={classes.card}>
       <Form
@@ -100,9 +99,10 @@ function EnterpriseForm(props, context) {
 
   const form = useRef();
 
+  // Use React hook (as this is a functional component) to merge local validation errors with API validation errors
   useEffect(() => {
     if (form.current)
-      form.current.setFieldError('email', props.emailError);
+      form.current.setErrors({ ...form.current.state.errors, ...props.formErrors });
   });
 
   return (
@@ -115,7 +115,6 @@ function EnterpriseForm(props, context) {
       validateOnChange={false}
       validationSchema={EnterpriseFormSchema}
       onSubmit={(values, actions) => {
-        actions.setFieldError('email', props.emailError);
         props.findEnterpriseBegin(values);
       }}
       render={props => <EnterpriseFormInner {...props} classes={classes} />}
@@ -125,10 +124,11 @@ function EnterpriseForm(props, context) {
 
 EnterpriseFormInner.propTypes = {
   classes: PropTypes.object,
+  handleSubmit: PropTypes.func,
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
   errors: PropTypes.object,
-  touched: PropTypes.bool,
+  touched: PropTypes.object,
   values: PropTypes.object
 };
 
@@ -136,7 +136,9 @@ EnterpriseForm.propTypes = {
   classes: PropTypes.object,
   findEnterpriseBegin: PropTypes.func,
   enterpriseError: PropTypes.string,
-  emailError: PropTypes.string,
+  formErrors: PropTypes.shape({
+    email: PropTypes.string,
+  }),
 };
 
 EnterpriseForm.contextTypes = {
