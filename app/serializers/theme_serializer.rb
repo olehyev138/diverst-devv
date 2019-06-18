@@ -1,4 +1,4 @@
-class ThemeSerializer < ActiveModel::Serializer
+class ThemeSerializer < ApplicationRecordSerializer
   attributes :id, :logo, :primary_color, :secondary_color, :logo_location
 
   def logo_location

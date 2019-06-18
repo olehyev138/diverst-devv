@@ -8,4 +8,11 @@ class Page
     @items = items
     @total = total
   end
+
+  def attributes
+    {
+      'items' => items,
+      'total' => total
+    }
+  end
 end

@@ -1,4 +1,4 @@
-class PageSerializer < ActiveModel::Serializer
+class PageSerializer < ApplicationRecordSerializer
   attributes :total
 
   has_many :items

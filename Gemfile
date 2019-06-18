@@ -15,7 +15,7 @@ gem 'puma', '~> 3.1' # Better web server than WEBRick
 gem 'figaro', '~> 1.1', '>= 1.1.1' # Inject ENV from application.yml
 gem 'ruby-saml', '>= 1.7.0'
 gem 'sidekiq', '~> 5.0.5' # Background jobs
-gem 'active_model_serializers'
+gem 'active_model_serializers', '~> 0.9.5'
 
 gem 'clockwork', '~> 1.2' # Schedule recurring jobs
 gem 'pismo', '~> 0.7.4' # Extracts metadata from an URL

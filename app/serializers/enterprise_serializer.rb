@@ -1,4 +1,4 @@
-class EnterpriseSerializer < ActiveModel::Serializer
+class EnterpriseSerializer < ApplicationRecordSerializer
   attributes :id, :name, :sp_entity_id, :idp_entity_id, :idp_sso_target_url, :idp_slo_target_url,
              :idp_cert, :saml_first_name_mapping, :saml_last_name_mapping, :has_enabled_saml, :created_at,
              :updated_at, :yammer_token, :yammer_import, :yammer_group_sync, :theme_id, :cdo_picture_file_name,
