@@ -1,6 +1,6 @@
 // import { selectGroupsDomain } from '../selectors';
 
-describe('selectGroupsDomain', () => {
+xdescribe('selectGroupsDomain', () => {
   it('Expect to have unit tests specified', () => {
     expect(true).toEqual(false);
   });

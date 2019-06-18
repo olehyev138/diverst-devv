@@ -19,10 +19,10 @@ import { makeSelectPrimary, makeSelectSecondary } from './selectors';
 import { changePrimary, changeSecondary } from './actions';
 import reducer from './reducer';
 
-import SnackbarProviderWrapper from 'components/SnackbarProviderWrapper';
+import SnackbarProviderWrapper from 'components/Shared/SnackbarProviderWrapper';
 
-import App from 'containers/App/Loadable';
-import { loginSuccess, setUser, setEnterprise } from 'containers/App/actions';
+import App from 'containers/Shared/App/Loadable';
+import { loginSuccess, setUser, setEnterprise } from 'containers/Shared/App/actions';
 import AuthService from 'utils/authService';
 
 const axios = require('axios');

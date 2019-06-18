@@ -82,7 +82,8 @@ module.exports = {
     'curly': [1, 'multi'],
     'no-restricted-syntax': ['error', 'ForInStatement', 'LabeledStatement', 'WithStatement'],
     'nonblock-statement-body-position': [0, 'bottom'],
-    'no-trailing-spaces': [1, { 'skipBlankLines': true }]
+    'no-trailing-spaces': [1, { 'skipBlankLines': true }],
+    'no-shadow': 0,
   },
   overrides: [
     {

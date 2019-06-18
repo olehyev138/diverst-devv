@@ -11,16 +11,18 @@ import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 
-import { Button, Card, CardContent, CardActions, Typography, Grid, Link } from '@material-ui/core';
+import {
+  Button, Card, CardContent, CardActions, Typography, Grid, Link
+} from '@material-ui/core/index';
 import { withStyles } from '@material-ui/core/styles';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
-import { selectPaginatedGroups, selectGroupTotal } from './selectors';
-import reducer from './reducer';
-import saga from './saga';
-import messages from './messages';
-import { getGroupsBegin } from './actions';
+import { selectPaginatedGroups, selectGroupTotal } from 'containers/Group/Groups/selectors';
+import reducer from 'containers/Group/Groups/reducer';
+import saga from 'containers/Group/Groups/saga';
+import messages from 'containers/Group/Groups/messages';
+import { getGroupsBegin } from 'containers/Group/Groups/actions';
 
 const styles = theme => ({
   groupListItem: {
@@ -52,9 +54,8 @@ export function Groups(props) {
           <Grid item key={group.id} className={classes.groupListItem}>
             <Card>
               <CardContent>
-                <Link
-                  href='#'
-                >
+                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                <Link href='#'>
                   <Typography variant='h5' component='h2' display='inline'>
                     {group.name}
                   </Typography>

@@ -1,9 +1,9 @@
 // import produce from 'immer';
-import groupsReducer from '../reducer';
+import groupsReducer from 'containers/Group/Groups/reducer';
 // import { someAction } from '../actions';
 
 /* eslint-disable default-case, no-param-reassign */
-describe('groupsReducer', () => {
+xdescribe('groupsReducer', () => {
   let state;
   beforeEach(() => {
     state = {

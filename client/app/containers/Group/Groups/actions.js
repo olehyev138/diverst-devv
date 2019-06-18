@@ -4,7 +4,7 @@
  *
  */
 
-import { GET_GROUPS_BEGIN, GET_GROUPS_SUCCESS, GET_GROUPS_ERROR } from 'containers/Groups/constants';
+import { GET_GROUPS_BEGIN, GET_GROUPS_SUCCESS, GET_GROUPS_ERROR } from 'containers/Group/Groups/constants';
 
 export function getGroupsBegin(payload) {
   return {

@@ -1,6 +1,6 @@
-import produce from 'immer/dist/immer';
-import themeProviderReducer from 'containers/Shared/ThemeProvider/reducer';
-import { changePrimary, changeSecondary } from 'containers/Shared/ThemeProvider/actions';
+import produce from 'immer';
+import themeProviderReducer from '../reducer';
+import { changePrimary, changeSecondary } from '../actions';
 
 /* eslint-disable default-case, no-param-reassign */
 describe('themeProviderReducer', () => {
