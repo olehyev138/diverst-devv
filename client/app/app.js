@@ -16,11 +16,11 @@ import { ConnectedRouter } from 'connected-react-router';
 import 'sanitize.css/sanitize.css';
 
 // Import root app
-import App from 'containers/App';
+import App from 'containers/Shared/App';
 
 // Import Language Provider
-import LanguageProvider from 'containers/LanguageProvider';
-import ThemeProvider from 'containers/ThemeProvider/Loadable';
+import LanguageProvider from 'containers/Shared/LanguageProvider';
+import ThemeProvider from 'containers/Shared/ThemeProvider/Loadable';
 
 
 // Load the favicon and the .htaccess file
@@ -55,7 +55,7 @@ if (module.hot)
   // Hot reloadable React components and translation json files
   // modules.hot.accept does not accept dynamic dependencies,
   // have to be constants at compile-time
-  module.hot.accept(['./i18n', 'containers/App'], () => {
+  module.hot.accept(['./i18n', 'containers/Shared/App'], () => {
     ReactDOM.unmountComponentAtNode(MOUNT_NODE);
     render(translationMessages);
   });

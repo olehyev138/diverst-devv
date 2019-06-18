@@ -1,0 +1,118 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ApplicationHeader /> should render and match the snapshot 1`] = `
+<div>
+  <WithStyles(ForwardRef(AppBar))
+    position="position"
+  >
+    <WithStyles(ForwardRef(Toolbar))>
+      <WithStyles(ForwardRef(IconButton))
+        aria-label="Open drawer"
+        color="inherit"
+        edge="start"
+        onClick={[Function]}
+      >
+        <MenuIcon />
+      </WithStyles(ForwardRef(IconButton))>
+      <WithStyles(ForwardRef(Button))
+        onClick={[Function]}
+        size="small"
+      >
+        <Connect(WithStyles(Logo))
+          imgClass="large-img"
+          verticalPadding={20}
+        />
+      </WithStyles(ForwardRef(Button))>
+      <div />
+      <div>
+        <div>
+          <Hidden
+            implementation="js"
+            lgDown={false}
+            lgUp={false}
+            mdDown={false}
+            mdUp={false}
+            smDown={false}
+            smUp={false}
+            xlDown={false}
+            xlUp={false}
+            xsDown={true}
+            xsUp={false}
+          >
+            <WithStyles(ForwardRef(Button))
+              color="inherit"
+              onClick={[Function]}
+              variant="outlined"
+            >
+              <span>
+                <DvrIcon />
+                Dashboard
+              </span>
+            </WithStyles(ForwardRef(Button))>
+          </Hidden>
+          <div>
+            <WithStyles(ForwardRef(IconButton))
+              aria-haspopup="true"
+              color="inherit"
+              onClick={[Function]}
+            >
+              <AccountCircleIcon />
+            </WithStyles(ForwardRef(IconButton))>
+          </div>
+        </div>
+      </div>
+    </WithStyles(ForwardRef(Toolbar))>
+  </WithStyles(ForwardRef(AppBar))>
+  <WithStyles(ForwardRef(Menu))
+    anchorEl={null}
+    anchorOrigin={
+      Object {
+        "horizontal": "center",
+        "vertical": "bottom",
+      }
+    }
+    classes={
+      Object {
+        "paper": undefined,
+      }
+    }
+    disableAutoFocusItem={true}
+    elevation={0}
+    getContentAnchorEl={null}
+    id="userMenu"
+    onClose={[Function]}
+    open={false}
+    transformOrigin={
+      Object {
+        "horizontal": "center",
+        "vertical": "top",
+      }
+    }
+  >
+    <WithStyles(ForwardRef(MenuItem))
+      onClick={[Function]}
+    >
+      <WithStyles(ForwardRef(ListItemIcon))>
+        <DvrIcon />
+      </WithStyles(ForwardRef(ListItemIcon))>
+      Dashboard
+    </WithStyles(ForwardRef(MenuItem))>
+    <WithStyles(ForwardRef(MenuItem))
+      onClick={[Function]}
+    >
+      <WithStyles(ForwardRef(ListItemIcon))>
+        <PermIdentityIcon />
+      </WithStyles(ForwardRef(ListItemIcon))>
+      Profile
+    </WithStyles(ForwardRef(MenuItem))>
+    <WithStyles(ForwardRef(MenuItem))
+      onClick={[Function]}
+    >
+      <WithStyles(ForwardRef(ListItemIcon))>
+        <ExitToAppIcon />
+      </WithStyles(ForwardRef(ListItemIcon))>
+      Log Out
+    </WithStyles(ForwardRef(MenuItem))>
+  </WithStyles(ForwardRef(Menu))>
+</div>
+`;
