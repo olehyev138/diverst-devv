@@ -63,8 +63,20 @@ class UsersController < ApplicationController
   end
 
   def group_surveys
-    group = Group.find_by_id(params[:group_id])
-    @user_groups = @user.user_groups.where(group_id: group).where.not(data: nil) unless group.nil?
+    manageable_groups = current_user.groups.select { |group|
+      GroupMemberPolicy.new(current_user, [group]).update?
+    }
+
+    @is_own_survey = current_user == @user
+
+    if params[:group_id].present?
+      @individual = true
+      group = Group.find_by_id(params[:group_id])
+      @user_groups = @user.user_groups.where(group: group)
+    else
+      @individual = false
+      @user_groups = @user.user_groups.where(group: manageable_groups)
+    end
   end
 
   # For admins. Dedicated to editing any user's info
