@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<EnterpriseForm /> <EnterpriseFormInner /> Should render and match the snapshot 1`] = `
+exports[`<LoginForm /> <LoginFormInner /> Should render and match the snapshot 1`] = `
 <WithStyles(ForwardRef(Card))
   raised={true}
 >
@@ -777,7 +777,7 @@ exports[`<EnterpriseForm /> <EnterpriseFormInner /> Should render and match the 
 </WithStyles(ForwardRef(Card))>
 `;
 
-exports[`<EnterpriseForm /> Formik Should render and match the snapshot 1`] = `
+exports[`<LoginForm /> Formik Should render and match the snapshot 1`] = `
 <Formik
   enableReinitialize={false}
   initialValues={

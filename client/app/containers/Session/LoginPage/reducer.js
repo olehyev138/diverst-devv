@@ -7,10 +7,10 @@ import produce from 'immer';
 
 import {
   FIND_ENTERPRISE_BEGIN, FIND_ENTERPRISE_SUCCESS, FIND_ENTERPRISE_ERROR, LOGIN_BEGIN, LOGIN_SUCCESS, LOGIN_ERROR
-} from 'containers/App/constants';
+} from 'containers/Shared/App/constants';
 
 export const initialState = {
-  globalError: '',
+  globalError: null,
   formErrors: {
     email: null,
     password: null,

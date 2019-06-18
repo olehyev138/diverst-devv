@@ -1,4 +1,4 @@
-import { call, put, takeLatest } from 'redux-saga/dist/redux-saga-effects-npm-proxy.esm';
+import { call, put, takeLatest } from 'redux-saga/effects';
 import api from 'api/api';
 import { push } from 'connected-react-router';
 
@@ -6,15 +6,15 @@ import {
   LOGIN_BEGIN, LOGIN_ERROR,
   LOGOUT_BEGIN, LOGOUT_ERROR,
   FIND_ENTERPRISE_BEGIN, FIND_ENTERPRISE_ERROR
-} from 'containers/Shared/App/constants';
+} from './constants';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import {
   loginSuccess, loginError,
   logoutSuccess, logoutError,
-  setEnterprise, findEnterpriseError, setUser
-} from 'containers/Shared/App/actions';
+  setEnterprise, findEnterpriseError, setUser, findEnterpriseSuccess,
+} from './actions';
 
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
 
@@ -67,13 +67,14 @@ export function* findEnterprise(action) {
     // Find enterprise and dispatch setEnterprise action
     const response = yield call(api.users.findCompany.bind(api.users), action.payload);
     const { enterprise } = response.data;
+    yield put(findEnterpriseSuccess());
 
     yield put(setEnterprise(enterprise));
 
     AuthService.setValue('_diverst.seirpretne', enterprise);
 
     // If enterprise has a theme, dispatch theme provider actions
-    if (response.data.enterprise.theme) {
+    if (enterprise.theme) {
       yield put(changePrimary(enterprise.theme.primary_color));
       yield put(changeSecondary(enterprise.theme.secondary_color));
     }

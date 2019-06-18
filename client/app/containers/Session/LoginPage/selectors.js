@@ -1,20 +1,23 @@
 import { createSelector } from 'reselect';
+import { initialState } from './reducer';
 
-const selectLoginPage = state => state.loginPage;
+const selectLoginPageDomain = state => state.loginPage || initialState;
 
 const selectFormErrors = () => createSelector(
-  selectLoginPage,
+  selectLoginPageDomain,
   loginPageState => loginPageState.formErrors,
 );
 
 const selectEmailError = () => createSelector(
-  selectLoginPage,
+  selectLoginPageDomain,
   loginPageState => loginPageState.formErrors.email,
 );
 
 const selectPasswordError = () => createSelector(
-  selectLoginPage,
+  selectLoginPageDomain,
   loginPageState => loginPageState.formErrors.password,
 );
 
-export { selectFormErrors, selectEmailError, selectPasswordError };
+export {
+  selectLoginPageDomain, selectFormErrors, selectEmailError, selectPasswordError
+};

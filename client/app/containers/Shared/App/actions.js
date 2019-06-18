@@ -54,7 +54,7 @@ export function findEnterpriseBegin(payload) {
   };
 }
 
-export function findEnterpriseSuccess(enterprise) {
+export function findEnterpriseSuccess() {
   return {
     type: FIND_ENTERPRISE_SUCCESS,
   };

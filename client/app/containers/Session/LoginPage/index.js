@@ -12,16 +12,16 @@ import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import { withStyles } from '@material-ui/core/styles';
 
-import { selectEnterprise } from 'containers/App/selectors';
+import { selectEnterprise } from 'containers/Shared/App/selectors';
 import { selectFormErrors } from './selectors';
 
 import reducer from './reducer';
 import injectReducer from 'utils/injectReducer';
 
-import LoginForm from '../../components/LoginForm';
-import EnterpriseForm from '../../components/EnterpriseForm';
+import LoginForm from 'components/Session/LoginForm';
+import EnterpriseForm from 'components/Session/EnterpriseForm';
 
-import { loginBegin, findEnterpriseBegin } from 'containers/App/actions';
+import { loginBegin, findEnterpriseBegin } from 'containers/Shared/App/actions';
 
 const styles = theme => ({});
 
