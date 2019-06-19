@@ -9,7 +9,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-import { SnackbarProvider } from 'notistack';
 
 import injectReducer from 'utils/injectReducer';
 
@@ -18,17 +17,25 @@ import Slide from '@material-ui/core/Slide';
 
 import { makeSelectPrimary, makeSelectSecondary } from './selectors';
 import { changePrimary, changeSecondary } from './actions';
+import reducer from './reducer';
+
+import SnackbarProviderWrapper from 'components/Shared/SnackbarProviderWrapper';
 
 import App from 'containers/Shared/App/Loadable';
 import { loginSuccess, setUser, setEnterprise } from 'containers/Shared/App/actions';
 import AuthService from 'utils/authService';
 
-const axios = require('axios/index');
+const axios = require('axios');
 
 export class ThemeProvider extends React.PureComponent {
   componentDidMount() {
     // Try and get the JWT token from storage. If it doesn't exist
     // we're done. The user must login again.
+
+    // TODO:
+    //    - why is this done here? what does it do?
+    //    - why is theme provider around app and not app around theme provider (material ui suggests the latter)
+
     const jwt = AuthService.getJwt();
     const enterprise = AuthService.getEnterprise();
 
@@ -39,10 +46,6 @@ export class ThemeProvider extends React.PureComponent {
       const user = JSON.parse(window.atob(jwt.split('.')[1]));
       this.props.loginSuccess(jwt, user, enterprise || user.enterprise);
     }
-  }
-
-  SlideTransition(props) {
-    return <Slide {...props} direction='up' />;
   }
 
   render() {
@@ -56,6 +59,15 @@ export class ThemeProvider extends React.PureComponent {
         },
         secondary: {
           main: secondary,
+        },
+        error: {
+          main: '#d32f2f',
+        },
+        warning: {
+          main: '#ffa000',
+        },
+        success: {
+          main: '#43a047',
         },
       },
       typography: {
@@ -86,15 +98,9 @@ export class ThemeProvider extends React.PureComponent {
 
     return (
       <MuiThemeProvider theme={theme}>
-        <SnackbarProvider
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'right',
-          }}
-          TransitionComponent={this.SlideTransition}
-        >
+        <SnackbarProviderWrapper>
           <App />
-        </SnackbarProvider>
+        </SnackbarProviderWrapper>
       </MuiThemeProvider>
     );
   }

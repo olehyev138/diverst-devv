@@ -3,7 +3,7 @@ const path = require('path');
 
 module.exports = {
   parser: 'babel-eslint',
-  extends: ['airbnb' ],
+  extends: ['airbnb'],
   plugins: ['redux-saga', 'react', 'react-hooks', 'jsx-a11y'],
   env: {
     jest: true,
@@ -82,7 +82,8 @@ module.exports = {
     'curly': [1, 'multi'],
     'no-restricted-syntax': ['error', 'ForInStatement', 'LabeledStatement', 'WithStatement'],
     'nonblock-statement-body-position': [0, 'bottom'],
-    'no-shadow': 0
+    'no-trailing-spaces': [1, { 'skipBlankLines': true }],
+    'no-shadow': 0,
   },
   overrides: [
     {

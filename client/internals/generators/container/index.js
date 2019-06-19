@@ -30,12 +30,6 @@ module.exports = {
     },
     {
       type: 'confirm',
-      name: 'wantHeaders',
-      default: false,
-      message: 'Do you want headers?',
-    },
-    {
-      type: 'confirm',
       name: 'wantActionsAndReducer',
       default: true,
       message:

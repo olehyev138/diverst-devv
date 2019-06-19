@@ -42,11 +42,13 @@ export const ROUTES = {
     },
   },
 
-  // Group
-  group: {
+  // Groups
+  groups: {
     get root() { return this.home; },
+    // TODO: Temporary
     home: {
-      path: '/group',
+      path: '/groups',
+      titleMessage: messages.user.home,
     },
   },
 

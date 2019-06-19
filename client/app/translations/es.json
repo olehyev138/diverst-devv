@@ -4,7 +4,7 @@
   "diverst.containers.Login.input.email": "Correo electrónic",
   "diverst.containers.Login.input.password": "contraseña",
   "diverst.containers.Login.links.forgotPassword": "Olvidé mi contraseña",
-  "diverst.containers.Login.links.findCompany": "Encontrar mi comunidad",
+  "diverst.containers.Login.links.findEnterprise": "Encontrar mi comunidad",
   "diverst.containers.NotFoundPage.headers.header": "<not_implemented>",
   "diverst.containers.LocaleToggle.en": "en",
   "diverst.containers.LocaleToggle.fr": "fr",

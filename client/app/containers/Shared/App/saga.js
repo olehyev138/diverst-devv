@@ -65,7 +65,7 @@ export function* logout(action) {
 export function* findEnterprise(action) {
   try {
     // Find enterprise and dispatch setEnterprise action
-    const response = yield call(api.users.findCompany.bind(api.users), action.payload);
+    const response = yield call(api.users.findEnterprise.bind(api.users), action.payload);
     const { enterprise } = response.data;
     yield put(findEnterpriseSuccess());
 

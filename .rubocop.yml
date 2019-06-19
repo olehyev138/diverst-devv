@@ -62,6 +62,12 @@ Layout/AlignArray:
 Layout/AlignHash:
   Enabled: true
 
+Layout/MultilineHashBraceLayout:
+  Enabled: true
+
+Layout/MultilineHashKeyLineBreaks:
+  Enabled: true
+
 Layout/AlignParameters:
   Enabled: true
 
@@ -226,9 +232,6 @@ Lint/ErbNewArguments:
 Lint/RequireParentheses:
   Enabled: true
 
-Lint/ShadowingOuterLocalVariable:
-  Enabled: true
-
 Lint/StringConversionInInterpolation:
   Enabled: true
 
@@ -250,6 +253,12 @@ Style/RedundantBegin:
 Style/RedundantReturn:
   Enabled: true
   AllowMultipleReturnValues: true
+
+Style/UnneededCondition:
+  Enabled: true
+
+Style/RedundantConditional:
+  Enabled: true
 
 Style/Semicolon:
   Enabled: true
