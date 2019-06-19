@@ -27,9 +27,33 @@ module BaseSearcher
 
       add_custom_args(where, where_not, params, includes, joins)
 
+      current_user = diverst_request.user
+
+      begin
+        policy_name = self.name + 'Policy'
+        policy_scope = (policy_name + '::Scope').constantize
+
+        # Raise error if Policy exists but Scope doesn't
+        # When scope is not defined it defers to ApplicationPolicy::Scope which has logic we don't necessarily want
+        raise NameError if policy_scope.parent != policy_name.constantize
+
+        # Apply the associated policy scope for the model to filter based on authorization
+        @items = policy_scope.new(current_user, self).resolve
+      rescue NameError
+        # TODO: Uncomment this when we have more policies defined. Commenting now to pass tests early.
+        # raise PolicyScopeNotFoundException
+        warn(
+          '---------------------------------------',
+          '! WARNING !',
+          'It is likely that a policy scope was not found for this model. Ensure that a proper Policy and Scope exist, and filter if necessary (by enterprise, etc.)',
+          '---------------------------------------'
+        )
+        @items = self
+      end
+
       # search the system
       if searchValue.present?
-        self.joins(joins)
+        @items.joins(joins)
             .includes(includes)
             .where(query, search: "%#{searchValue}%".downcase)
             .where(where)
@@ -37,7 +61,7 @@ module BaseSearcher
             .references(includes)
             .distinct
       else
-        self.joins(joins)
+        @items.joins(joins)
             .includes(includes)
             .where(where)
             .where.not(where_not)

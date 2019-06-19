@@ -1,4 +1,4 @@
-import { selectTheme, makeSelectPrimary, makeSelectSecondary } from 'containers/Shared/ThemeProvider/selectors';
+import { selectTheme, makeSelectPrimary, makeSelectSecondary } from '../selectors';
 
 describe('ThemeProvider selectors', () => {
   describe('selectTheme', () => {

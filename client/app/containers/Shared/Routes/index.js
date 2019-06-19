@@ -14,6 +14,8 @@ import {
   HomePage, LoginPage, NotFoundPage, PlaceholderPage
 } from 'containers/Shared/Routes/templates';
 
+import Groups from 'containers/Group/Groups';
+
 // Paths
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
@@ -25,7 +27,7 @@ export default function Routes(props) {
       <AdminLayout path={ROUTES.admin.analytics.overview.path} component={PlaceholderPage} />
       <AdminLayout path={ROUTES.admin.analytics.users.path} component={PlaceholderPage} />
 
-      <GroupLayout path={ROUTES.group.home.path} />
+      { /* <GroupLayout path={ROUTES.group.home.path} /> */ }
 
       <UserLayout exact path={ROUTES.user.home.path} pageTitle={ROUTES.user.home.titleMessage} component={PlaceholderPage} />
       <UserLayout path={ROUTES.user.innovate.path} pageTitle={ROUTES.user.innovate.titleMessage} component={PlaceholderPage} />
@@ -34,6 +36,8 @@ export default function Routes(props) {
       <UserLayout path={ROUTES.user.groups.path} pageTitle={ROUTES.user.groups.titleMessage} component={PlaceholderPage} />
       <UserLayout path={ROUTES.user.downloads.path} pageTitle={ROUTES.user.downloads.titleMessage} component={PlaceholderPage} />
       <UserLayout path={ROUTES.user.mentorship.path} pageTitle={ROUTES.user.mentorship.titleMessage} component={PlaceholderPage} />
+
+      <UserLayout path={ROUTES.groups.home.path} pageTitle={ROUTES.groups.home.titleMessage} component={Groups} />
 
       <ErrorLayout path='' component={NotFoundPage} />
     </Switch>
