@@ -14,7 +14,10 @@ import {
   HomePage, LoginPage, NotFoundPage, PlaceholderPage
 } from 'containers/Shared/Routes/templates';
 
-import Groups from 'containers/Group/Groups';
+// DEBUG
+// import Groups from 'containers/Group/Groups';
+
+import Groups from 'containers/Group/Groups/Admin';
 
 // Paths
 import { ROUTES } from 'containers/Shared/Routes/constants';
