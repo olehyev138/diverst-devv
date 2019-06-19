@@ -1,2 +1,2 @@
 import { createSelector } from 'reselect';
-import { initialState } from 'containers/App/reducer';
+import { initialState } from 'containers/Shared/App/reducer';

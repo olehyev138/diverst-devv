@@ -3,7 +3,7 @@ import { Route } from 'react-router';
 import { compose } from 'redux';
 
 import Container from '@material-ui/core/Container';
-import AdminLinks from 'components/AdminLinks';
+import AdminLinks from 'components/Admin/AdminLinks';
 import { withStyles } from '@material-ui/core/styles';
 import AuthenticatedLayout from '../AuthenticatedLayout';
 import { createStructuredSelector } from 'reselect';
