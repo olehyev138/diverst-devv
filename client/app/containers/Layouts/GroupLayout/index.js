@@ -2,7 +2,7 @@ import React, { memo } from 'react';
 import { Route } from 'react-router';
 import PropTypes from 'prop-types';
 
-import GroupLinks from 'components/GroupLinks';
+import GroupLinks from 'components/Group/GroupLinks';
 import ApplicationLayout from '../ApplicationLayout';
 
 const GroupLayout = ({ component: Component, ...rest }) => (
