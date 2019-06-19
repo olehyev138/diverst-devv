@@ -39,7 +39,7 @@ class UserTokenService
     begin
       jwt = JWT.decode(token, JWT_SECRET)
     rescue JWT::DecodeError
-      raise InvalidUserTokenException
+      raise BadRequestException.new 'Invalid User Token'
     end
     token = jwt[0]['user_token']
     user = User.joins(:sessions).where(sessions: { token: token, status: 0 }).first
