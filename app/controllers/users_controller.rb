@@ -63,10 +63,6 @@ class UsersController < ApplicationController
   end
 
   def group_surveys
-    manageable_groups = current_user.groups.select { |group|
-      GroupMemberPolicy.new(current_user, [group]).update?
-    }
-
     @is_own_survey = current_user == @user
 
     if params[:group_id].present?
@@ -75,7 +71,7 @@ class UsersController < ApplicationController
       @user_groups = @user.user_groups.where(group: group)
     else
       @individual = false
-      @user_groups = @user.user_groups.where(group: manageable_groups)
+      @user_groups = @user.user_groups
     end
   end
 
