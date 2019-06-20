@@ -1,3 +1,3 @@
-class EventSerializer < ActiveModel::Serializer
+class EventSerializer < ApplicationRecordSerializer
   attributes :id
 end

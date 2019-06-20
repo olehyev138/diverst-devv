@@ -15,7 +15,7 @@ gem 'puma', '~> 3.1' # Better web server than WEBRick
 gem 'figaro', '~> 1.1', '>= 1.1.1' # Inject ENV from application.yml
 gem 'ruby-saml', '>= 1.7.0'
 gem 'sidekiq', '~> 5.0.5' # Background jobs
-gem 'active_model_serializers'
+gem 'active_model_serializers', '~> 0.9.5'
 
 gem 'clockwork', '~> 1.2' # Schedule recurring jobs
 gem 'pismo', '~> 0.7.4' # Extracts metadata from an URL
@@ -64,7 +64,6 @@ group :development, :test do
   gem 'pronto', '~> 0.10.0'
   gem 'pronto-rubocop', '~> 0.10.0'
   gem 'pronto-eslint_npm', git: 'https://github.com/doits/pronto-eslint_npm.git'
-  gem 'faker', '~> 1.6'
 end
 
 group :test do
@@ -72,6 +71,7 @@ group :test do
   gem 'simplecov', '~> 0.13.0'
   gem 'clockwork-test', '~> 0.2.0'
   gem 'webmock', '~> 3.1.1'
+  gem 'hashdiff', '0.3.7'
 end
 
 group :development do

@@ -43,7 +43,7 @@ module BaseController
   private
 
   # returns model name for controller
-  # ex: partners_controller will return Partner
+  # ex: users_controller will return User
   # custom controllers will need to define klass
   # or override controller methods
 

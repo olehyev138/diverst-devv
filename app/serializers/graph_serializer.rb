@@ -1,3 +1,2 @@
-class GraphSerializer < ActiveModel::Serializer
-  attributes :id
+class GraphSerializer < ApplicationRecordSerializer
 end
