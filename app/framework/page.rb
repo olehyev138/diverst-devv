@@ -5,8 +5,7 @@ class Page
   attr_reader :total
 
   def initialize(items, total)
-    # Serialize the collection of models
-    @items = ActiveModelSerializers::SerializableResource.new(items)
+    @items = items
     @total = total
   end
 
