@@ -64,7 +64,6 @@ group :development, :test do
   gem 'pronto', '~> 0.10.0'
   gem 'pronto-rubocop', '~> 0.10.0'
   gem 'pronto-eslint_npm', git: 'https://github.com/doits/pronto-eslint_npm.git'
-  gem 'faker', '~> 1.6'
 end
 
 group :test do
@@ -72,6 +71,7 @@ group :test do
   gem 'simplecov', '~> 0.13.0'
   gem 'clockwork-test', '~> 0.2.0'
   gem 'webmock', '~> 3.1.1'
+  gem 'hashdiff', '0.3.7'
 end
 
 group :development do
