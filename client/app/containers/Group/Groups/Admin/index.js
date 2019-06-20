@@ -14,8 +14,9 @@ import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import { selectPaginatedGroups, selectGroupTotal } from 'containers/Group/Groups/selectors';
 import reducer from 'containers/Group/Groups/reducer';
-import saga from 'containers/Group/Groups/saga';
 import { getGroupsBegin } from 'containers/Group/Groups/actions';
+
+import saga from 'containers/Group/Groups/saga';
 
 import GroupsList from 'components/Admin/Manage/Groups/';
 
