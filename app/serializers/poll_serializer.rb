@@ -1,3 +1,2 @@
-class PollSerializer < ActiveModel::Serializer
-  attributes :id
+class PollSerializer < ApplicationRecordSerializer
 end

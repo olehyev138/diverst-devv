@@ -1,4 +1,4 @@
-class ExceptionSerializer < ActiveModel::Serializer
+class ExceptionSerializer < ApplicationRecordSerializer
   attributes :id,
              :message
 end

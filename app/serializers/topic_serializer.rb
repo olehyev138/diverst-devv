@@ -1,4 +1,2 @@
-class TopicSerializer < ActiveModel::Serializer
-  attributes :id,
-             :statement
+class TopicSerializer < ApplicationRecordSerializer
 end

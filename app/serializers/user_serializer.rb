@@ -1,11 +1,4 @@
-class UserSerializer < ActiveModel::Serializer
-  attributes :id, :first_name, :last_name, :fields, :created_at,
-             :updated_at, :enterprise_id, :sign_in_count, :enterprise,
-             :last_sign_in_at, :linkedin_profile_url, :active, :biography, :points, :credits,
-             :time_zone, :total_weekly_points, :user_role, :mentor, :mentee, :mentorship_description,
-             :groups_notifications_frequency, :groups_notifications_date, :accepting_mentor_requests,
-             :accepting_mentee_requests, :last_group_notification_date
-
+class UserSerializer < ApplicationRecordSerializer
   def enterprise
     EnterpriseSerializer.new(object.enterprise).attributes
   end
@@ -26,5 +19,17 @@ class UserSerializer < ActiveModel::Serializer
 
   def last_name
     "#{(object.last_name || '')[0].capitalize}."
+  end
+
+  def excluded_keys
+    [:password_digest]
+  end
+
+  def attributes
+    hash = super
+    hash[:last_name] = last_name
+    hash[:fields] = fields
+    hash[:enterprise] = enterprise
+    hash
   end
 end
