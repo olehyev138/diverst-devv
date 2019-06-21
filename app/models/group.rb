@@ -340,7 +340,7 @@ class Group < BaseClass
 
   def survey_answers_csv
     CSV.generate do |csv|
-      csv << ['user_id', 'user_email', 'user_first_name', 'user_last_name'].concat(survey_fields.map(&:title))
+      csv << %w(user_id user_email user_first_name user_last_name).concat(survey_fields.map(&:title))
 
       user_groups.with_answered_survey.includes(:user).order(created_at: :desc).each do |user_group|
         user_group_row = [
@@ -362,12 +362,14 @@ class Group < BaseClass
   def membership_list_csv(group_members)
     total_nb_of_members = group_members.count
     CSV.generate do |csv|
-      csv << ['first_name', 'last_name', 'email_address']
+      csv << %w(first_name last_name email_address mentor mentee)
 
       group_members.each do |member|
         membership_list_row = [ member.first_name,
                                 member.last_name,
-                                member.email
+                                member.email,
+                                member.mentor,
+                                member.mentee
                               ]
         csv << membership_list_row
       end
