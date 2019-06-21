@@ -369,4 +369,25 @@ RSpec.describe Initiative, type: :model do
       expect { Initiative.archive_expired_events(group) }.to change(Initiative.where.not(archived_at: nil), :count).by(2)
     end
   end
+
+  describe 'Initiative.to_csv' do
+    let!(:enterprise) { create(:enterprise) }
+    let!(:group) { create(:group, enterprise: enterprise) }
+    let!(:initiative_with_metrics) { create(:initiative, owner_group: group) }
+    let!(:expense) { create(:initiative_expense, amount: 600, initiative_id: initiative_with_metrics.id) }
+    let!(:field) { create(:field, initiative_id: initiative_with_metrics.id, title: 'Attendance') }
+    let!(:update) { create(:initiative_update, initiative_id: initiative_with_metrics.id, data: "{\"#{field.id}\":105}") }
+
+
+    it 'returns csv for initiative export' do
+      expect(described_class.to_csv(initiatives: group.initiatives, enterprise: enterprise))
+      .to include "#{enterprise.custom_text.send('erg_text')},#{enterprise.custom_text.send('outcome_text')},#{enterprise
+                     .custom_text.send('program_text')},Event Name,Start Date,End Date,Expenses,Budget,Metrics"
+    end
+
+    it 'returns csv to include metrics' do
+      expect(described_class.to_csv(initiatives: group.initiatives, enterprise: enterprise))
+      .to include 'Attendance(105)'
+    end
+  end
 end
