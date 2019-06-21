@@ -631,6 +631,8 @@ Rails.application.routes.draw do
         get 'user_mentorship_interest_per_group'
         get 'mentoring_sessions_per_creator'
         get 'mentoring_interests'
+        get 'mentors_per_group'
+        get 'top_mentors'
       end
     end
 
