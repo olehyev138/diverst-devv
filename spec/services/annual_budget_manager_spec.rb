@@ -6,12 +6,12 @@ RSpec.describe AnnualBudgetManager, type: :service do
   let!(:annual_budget) { create(:annual_budget, group: group, amount: group.annual_budget, enterprise_id: enterprise.id) }
 
 
-  describe '#reset' do
+  describe '#reset!' do
     context 'when there are no initiatives for group' do
       it 'resets values of existing annual budget and group.annual_budget to 0' do
         expect(group.annual_budget).to eq 10000
 
-        AnnualBudgetManager.new(group).reset
+        AnnualBudgetManager.new(group).reset!
 
         expect(group.annual_budget).to eq 0
         expect(annual_budget.reload.amount).to eq 0
@@ -29,7 +29,7 @@ RSpec.describe AnnualBudgetManager, type: :service do
         expect(group.annual_budgets.count).to eq 1
         expect(group.annual_budgets.last.closed).to eq false
 
-        AnnualBudgetManager.new(group).reset
+        AnnualBudgetManager.new(group).reset!
 
         expect(group.annual_budgets.count).to eq 2
         expect(group.annual_budgets.first.closed).to eq true
@@ -41,7 +41,7 @@ RSpec.describe AnnualBudgetManager, type: :service do
       let!(:group1) { create(:group, enterprise: enterprise) }
 
       it 'returns nil on reset' do
-        expect(AnnualBudgetManager.new(group1).reset).to eq nil
+        expect(AnnualBudgetManager.new(group1).reset!).to eq nil
       end
     end
   end
@@ -103,12 +103,12 @@ RSpec.describe AnnualBudgetManager, type: :service do
     end
   end
 
-  describe '#carry_over' do
+  describe '#carry_over!' do
     context 'when group.annual_budget is either 0 or nil' do
       let!(:group1) { create(:group, enterprise: enterprise) }
 
       it 'returns nil on reset' do
-        expect(AnnualBudgetManager.new(group1).carry_over).to eq nil
+        expect(AnnualBudgetManager.new(group1).carry_over!).to eq nil
       end
     end
 
@@ -127,7 +127,7 @@ RSpec.describe AnnualBudgetManager, type: :service do
         expect(group.annual_budgets.count).to eq 1
         expect(annual_budget.leftover_money).to eq group.leftover_money
 
-        AnnualBudgetManager.new(group).carry_over
+        AnnualBudgetManager.new(group).carry_over!
 
         annual_budget.reload
         expect(group.annual_budgets.count).to eq 2
@@ -145,7 +145,7 @@ RSpec.describe AnnualBudgetManager, type: :service do
 
     before do
       initiative.finish_expenses!
-      AnnualBudgetManager.new(group).carry_over
+      AnnualBudgetManager.new(group).carry_over!
     end
 
     context 'when initiative annual_budget is not equal to annual_budget of selected budget_item' do

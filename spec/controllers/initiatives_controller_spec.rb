@@ -444,7 +444,7 @@ RSpec.describe InitiativesController, type: :controller do
 
               before do
                 initiative.finish_expenses!
-                AnnualBudgetManager.new(group).carry_over
+                AnnualBudgetManager.new(group).carry_over!
               end
 
               # the second annual_budget is gotten from calling carry_over on AnnualBudgetManager

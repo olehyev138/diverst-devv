@@ -13,7 +13,7 @@ class BudgetsController < ApplicationController
   end
 
   def show
-    # authorize [@group], :show?, policy_class: GroupBudgetPolicy
+    authorize [@group], :show?, policy_class: GroupBudgetPolicy
     @annual_budget_id = params[:annual_budget_id]
   end
 
@@ -105,7 +105,7 @@ class BudgetsController < ApplicationController
   def reset_annual_budget
     authorize [@group], :update?, policy_class: GroupBudgetPolicy
 
-    if AnnualBudgetManager.new(@group).reset
+    if AnnualBudgetManager.new(@group).reset!
       track_activity(@group, :annual_budget_update)
       flash[:notice] = 'Your budget was updated'
       redirect_to :back
@@ -118,7 +118,7 @@ class BudgetsController < ApplicationController
   def carry_over_annual_budget
     authorize [@group], :update?, policy_class: GroupBudgetPolicy
 
-    if AnnualBudgetManager.new(@group).carry_over
+    if AnnualBudgetManager.new(@group).carry_over!
       track_activity(@group, :annual_budget_update)
       flash[:notice] = 'Your budget was updated'
       redirect_to :back

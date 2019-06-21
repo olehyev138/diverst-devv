@@ -3,7 +3,7 @@ class AnnualBudgetManager
     @group = group
   end
 
-  def reset
+  def reset!
     # no need to reset annual budget because it is already set to 0
     return if @group.annual_budget == 0 || @group.annual_budget.nil?
 
@@ -36,7 +36,7 @@ class AnnualBudgetManager
     find_or_create_annual_budget_and_update
   end
 
-  def carry_over
+  def carry_over!
     # no point in carrying over zero amount in leftover money
     return if @group.leftover_money == 0 || @group.leftover_money.nil?
 
