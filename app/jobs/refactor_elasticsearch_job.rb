@@ -13,8 +13,9 @@ class RefactorElasticsearchJob < ActiveJob::Base
      'Group',
      'UserGroup',
      'User',
-     'Answer'].each { |g|
-      g = g.constantize
+     'Mentoring',
+     'Answer'].each { |f|
+      g = f.constantize
       g.__elasticsearch__.delete_index! if g.__elasticsearch__.index_exists?
       g.__elasticsearch__.create_index!
       g.__elasticsearch__.import batch_size: 100
