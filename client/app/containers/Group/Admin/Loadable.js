@@ -6,4 +6,4 @@
 
 import loadable from 'utils/loadable';
 
-export default loadable(() => import('containers/Group/Groups/index'));
+export default loadable(() => import('containers/Group/Admin/index'));

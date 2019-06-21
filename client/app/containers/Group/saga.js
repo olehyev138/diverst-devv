@@ -6,11 +6,12 @@ import { showSnackbar } from 'containers/Shared/Notifier/actions';
 
 import {
   GET_GROUPS_BEGIN, CREATE_GROUP_BEGIN, UPDATE_GROUP_BEGIN, DELETE_GROUP_BEGIN
-} from 'containers/Group/Groups/constants';
+} from 'containers/Group/constants';
+
 import {
   getGroupsSuccess, getGroupsError,
   createGroupSuccess, createGroupError
-} from 'containers/Group/Groups/actions';
+} from 'containers/Group/actions';
 
 export function* getGroups(action) {
   try {

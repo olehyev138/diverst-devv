@@ -22,6 +22,7 @@ import LightbulbIcon from '@material-ui/icons/WbIncandescent';
 import HowToVoteIcon from '@material-ui/icons/HowToVote';
 import UsersCircleIcon from '@material-ui/icons/GroupWork';
 import { ROUTES } from 'containers/Shared/Routes/constants';
+import { FormattedMessage } from 'react-intl';
 
 const drawerWidth = 240;
 const styles = theme => ({
@@ -73,11 +74,18 @@ class AdminLinks extends React.PureComponent {
       drawerOpen: props.drawerOpen,
       analyze: {
         open: !!matchPath(props.location.pathname, {
-          path: ROUTES.admin.analytics.pathPrefix,
+          path: ROUTES.admin.analyze.pathPrefix,
           exact: false,
           strict: false
         }),
       },
+      manage: {
+        open: !!matchPath(props.location.pathname, {
+          path: ROUTES.admin.manage.pathPrefix,
+          exact: false,
+          strict: false
+        }),
+      }
     };
   }
 
@@ -90,6 +98,10 @@ class AdminLinks extends React.PureComponent {
 
   handleAnalyzeClick = () => {
     this.setState(state => ({ analyze: { open: !state.analyze.open } }));
+  };
+
+  handleManageClick = () => {
+    this.setState(state => ({ manage: { open: !state.manage.open } }));
   };
 
   drawer(classes) {
@@ -114,36 +126,59 @@ class AdminLinks extends React.PureComponent {
               <MenuItem
                 component={WrappedNavLink}
                 exact
-                to={ROUTES.admin.analytics.overview.path}
+                to={ROUTES.admin.analyze.overview.path}
                 className={classes.nested}
                 activeClassName={classes.navLinkActive}
               >
                 <ListItemIcon>
                   <ListIcon />
                 </ListItemIcon>
-                <ListItemText primary='Overview' />
+                <ListItemText>
+                  <FormattedMessage {...ROUTES.admin.analyze.overview.titleMessage} />
+                </ListItemText>
               </MenuItem>
               <MenuItem
                 component={WrappedNavLink}
                 exact
-                to={ROUTES.admin.analytics.users.path}
+                to={ROUTES.admin.analyze.users.path}
                 className={classes.nested}
                 activeClassName={classes.navLinkActive}
               >
                 <ListItemIcon>
                   <ListIcon />
                 </ListItemIcon>
-                <ListItemText primary='Users' />
+                <ListItemText>
+                  <FormattedMessage {...ROUTES.admin.analyze.users.titleMessage} />
+                </ListItemText>
               </MenuItem>
             </List>
           </Collapse>
 
-          <ListItem button>
+          <ListItem button onClick={this.handleManageClick}>
             <ListItemIcon>
               <DeviceHubIcon />
             </ListItemIcon>
             <ListItemText primary='Manage' />
+            {this.state.manage.open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
           </ListItem>
+          <Collapse in={this.state.manage.open} timeout='auto' unmountOnExit>
+            <List disablePadding>
+              <MenuItem
+                component={WrappedNavLink}
+                exact
+                to={ROUTES.admin.manage.groups.index.path}
+                className={classes.nested}
+                activeClassName={classes.navLinkActive}
+              >
+                <ListItemIcon>
+                  <ListIcon />
+                </ListItemIcon>
+                <ListItemText>
+                  <FormattedMessage {...ROUTES.admin.manage.groups.index.titleMessage} />
+                </ListItemText>
+              </MenuItem>
+            </List>
+          </Collapse>
 
           <ListItem button>
             <ListItemIcon>

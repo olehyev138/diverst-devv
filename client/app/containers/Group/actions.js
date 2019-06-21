@@ -11,7 +11,7 @@ import {
   UPDATE_GROUP_BEGIN, UPDATE_GROUP_SUCCESS, UPDATE_GROUP_ERROR,
   DELETE_GROUP_BEGIN, DELETE_GROUP_SUCCESS, DELETE_GROUP_ERROR,
 
-} from 'containers/Group/Groups/constants';
+} from 'containers/Group/constants';
 
 /* Group listing */
 

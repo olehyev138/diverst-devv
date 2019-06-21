@@ -1,24 +1,24 @@
 /**
  *
- * Groups
+ * Groups - Admin
  *
  */
 
 import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
-import { compose } from 'redux';
+import { createStructuredSelector } from 'reselect/lib/';
+import { compose } from 'redux/';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
-import { selectPaginatedGroups, selectGroupTotal } from 'containers/Group/Groups/selectors';
-import reducer from 'containers/Group/Groups/reducer';
-import { getGroupsBegin } from 'containers/Group/Groups/actions';
+import { selectPaginatedGroups, selectGroupTotal } from 'containers/Group/selectors';
+import reducer from 'containers/Group/reducer';
+import { getGroupsBegin } from 'containers/Group/actions';
 
-import saga from 'containers/Group/Groups/saga';
+import saga from 'containers/Group/saga';
 
-import GroupsList from 'components/Admin/Manage/Groups/';
+import GroupsList from 'components/Admin/Manage/Groups';
 
 export function Groups(props) {
   useInjectReducer({ key: 'groups', reducer });

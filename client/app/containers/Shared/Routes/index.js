@@ -14,10 +14,9 @@ import {
   HomePage, LoginPage, NotFoundPage, PlaceholderPage
 } from 'containers/Shared/Routes/templates';
 
-// DEBUG
-// import Groups from 'containers/Group/Groups';
-
-import Groups from 'containers/Group/Groups/Admin';
+import GroupsUser from 'containers/Group/User';
+import GroupsAdmin from 'containers/Group/Admin';
+import GroupForm from 'containers/Group/Admin/form';
 
 // Paths
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -27,20 +26,26 @@ export default function Routes(props) {
     <Switch>
       <SessionLayout path={ROUTES.session.login.path} component={LoginPage} />
 
-      <AdminLayout path={ROUTES.admin.analytics.overview.path} component={PlaceholderPage} />
-      <AdminLayout path={ROUTES.admin.analytics.users.path} component={PlaceholderPage} />
+      { /* Admin */ }
+      { /* Admin - Analyze */ }
+      <AdminLayout path={ROUTES.admin.analyze.overview.path} component={PlaceholderPage} />
+      <AdminLayout path={ROUTES.admin.analyze.users.path} component={PlaceholderPage} />
 
-      { /* <GroupLayout path={ROUTES.group.home.path} /> */ }
+      { /* Admin - Manage */ }
+      { /* Admin - Manage - Groups */ }
+      <AdminLayout exact path={ROUTES.admin.manage.groups.index.path} component={GroupsAdmin} />
+      <AdminLayout path={ROUTES.admin.manage.groups.new.path} component={GroupForm} />
+      <AdminLayout path={ROUTES.admin.manage.groups.edit.path} component={GroupsAdmin} />
+      <AdminLayout path={ROUTES.admin.manage.groups.delete.path} component={GroupsAdmin} />
 
+      { /* User */ }
       <UserLayout exact path={ROUTES.user.home.path} pageTitle={ROUTES.user.home.titleMessage} component={PlaceholderPage} />
       <UserLayout path={ROUTES.user.innovate.path} pageTitle={ROUTES.user.innovate.titleMessage} component={PlaceholderPage} />
       <UserLayout path={ROUTES.user.news.path} pageTitle={ROUTES.user.news.titleMessage} component={PlaceholderPage} />
       <UserLayout path={ROUTES.user.events.path} pageTitle={ROUTES.user.events.titleMessage} component={PlaceholderPage} />
-      <UserLayout path={ROUTES.user.groups.path} pageTitle={ROUTES.user.groups.titleMessage} component={PlaceholderPage} />
+      <UserLayout path={ROUTES.user.groups.path} pageTitle={ROUTES.user.groups.titleMessage} component={GroupsUser} />
       <UserLayout path={ROUTES.user.downloads.path} pageTitle={ROUTES.user.downloads.titleMessage} component={PlaceholderPage} />
       <UserLayout path={ROUTES.user.mentorship.path} pageTitle={ROUTES.user.mentorship.titleMessage} component={PlaceholderPage} />
-
-      <UserLayout path={ROUTES.groups.home.path} pageTitle={ROUTES.groups.home.titleMessage} component={Groups} />
 
       <ErrorLayout path='' component={NotFoundPage} />
     </Switch>

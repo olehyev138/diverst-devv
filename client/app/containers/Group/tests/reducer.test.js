@@ -1,5 +1,5 @@
 // import produce from 'immer';
-import groupsReducer from 'containers/Group/Groups/reducer';
+import groupsReducer from 'containers/Group/reducer';
 // import { someAction } from '../actions';
 
 /* eslint-disable default-case, no-param-reassign */

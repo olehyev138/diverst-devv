@@ -17,53 +17,63 @@ export const ROUTES = {
       titleMessage: messages.user.home,
     },
     innovate: {
-      path: '/user/campaigns',
+      path: '/campaigns',
       titleMessage: messages.user.innovate,
     },
     news: {
-      path: '/user/news',
+      path: '/news',
       titleMessage: messages.user.news,
     },
     events: {
-      path: '/user/events',
+      path: '/events',
       titleMessage: messages.user.events,
     },
     groups: {
-      path: '/user/groups',
+      path: '/groups',
       titleMessage: messages.user.groups,
     },
     downloads: {
-      path: '/user/downloads',
+      path: '/downloads',
       titleMessage: messages.user.downloads,
     },
     mentorship: {
-      path: '/user/mentorship',
+      path: '/mentorship',
       titleMessage: messages.user.mentorship,
-    },
-  },
-
-  // Groups
-  groups: {
-    get root() { return this.home; },
-    // TODO: Temporary
-    home: {
-      path: '/groups',
-      titleMessage: messages.user.home,
     },
   },
 
   // Admin
   admin: {
-    get root() { return this.analytics.overview; },
+    get root() { return this.analyze.overview; },
     pathPrefix: '/admin',
-    analytics: {
-      pathPrefix: '/admin/analytics',
+    analyze: {
+      pathPrefix: '/admin/analyze',
       overview: {
-        path: '/admin/analytics',
+        path: '/admin/analyze',
+        titleMessage: messages.admin.analyze.overview,
       },
       users: {
-        path: '/admin/analytics/users',
+        path: '/admin/analyze/users',
+        titleMessage: messages.admin.analyze.users,
       },
+    },
+    manage: {
+      pathPrefix: '/admin/manage',
+      groups: {
+        index: {
+          path: '/admin/manage/groups',
+          titleMessage: messages.admin.manage.groups,
+        },
+        new: {
+          path: '/admin/manage/groups/new',
+        },
+        edit: {
+          path: '/admin/manage/groups/edit',
+        },
+        delete: {
+          path: '/admin/manage/groups/delete',
+        },
+      }
     },
   },
 };

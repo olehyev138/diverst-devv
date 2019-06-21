@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect/lib/index';
-import { initialState } from 'containers/Group/Groups/reducer';
+import { initialState } from 'containers/Group/reducer';
 
 const selectGroupsDomain = state => state.groups || initialState;
 

@@ -1,6 +1,6 @@
 /**
  *
- * Admin Groups List
+ * User Groups List
  *
  */
 
@@ -10,7 +10,7 @@ import { compose } from 'redux';
 
 import {
   Button, Card, CardContent, CardActions, Typography, Grid, Link
-} from '@material-ui/core';
+} from '@material-ui/core/index';
 import { withStyles } from '@material-ui/core/styles';
 
 const styles = theme => ({
@@ -47,10 +47,6 @@ export function Groups(props) {
                   </Typography>
                 )}
               </CardContent>
-              <CardActions>
-                <Button size='small' color='primary'>Edit</Button>
-                <Button size='small' className={classes.errorButton}>Delete</Button>
-              </CardActions>
             </Card>
           </Grid>
         ))}

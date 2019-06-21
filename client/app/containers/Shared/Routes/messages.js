@@ -31,4 +31,19 @@ export default defineMessages({
       id: `${scope}.user.mentorship`,
     },
   },
+  admin: {
+    analyze: {
+      overview: {
+        id: `${scope}.admin.analyze.overview`,
+      },
+      users: {
+        id: `${scope}.admin.analyze.users`,
+      }
+    },
+    manage: {
+      groups: {
+        id: `${scope}.admin.manage.groups`,
+      },
+    }
+  }
 });
