@@ -8,8 +8,42 @@ class Metrics::MentorshipGraphsController < ApplicationController
 
     @data = {
       mentoring_sessions: current_user.enterprise.mentoring_sessions.where('start <= ?', 1.month.ago).count,
-      active_mentorships: Mentoring.active_mentorships(current_user.enterprise).count
+      active_mentorships: Mentoring.active_mentorships(current_user.enterprise).count,
+      total_mentors: current_user.enterprise.users.joins('JOIN mentorings ON users.id = mentorings.mentor_id').select(:id).distinct.count(:id),
+      total_mentees: current_user.enterprise.users.joins('JOIN mentorings ON users.id = mentorings.mentee_id').select(:id).distinct.count(:id)
     }
+  end
+
+  def top_mentors
+    authorize MetricsDashboard, :index?
+
+    number = params[:number].to_i
+    type = params[:type] || 'mentor'
+    other = type == 'mentor' ? 'mentee' : 'mentor'
+
+    respond_to do |format|
+      format.json {
+        render json: @graph.top_mentors(type, other, number)
+      }
+      format.csv {
+        # TODO
+        render json: { notice: 'TODO' }
+      }
+    end
+  end
+
+  def mentors_per_group
+    authorize MetricsDashboard, :index?
+
+    respond_to do |format|
+      format.json {
+        render json: @graph.mentors_per_group('mentor')
+      }
+      format.csv {
+        # TODO Later
+        render json: { notice: 'TODO' }
+      }
+    end
   end
 
   def user_mentorship_interest_per_group
