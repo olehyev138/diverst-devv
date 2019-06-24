@@ -164,6 +164,8 @@ RSpec.describe UsersController, type: :controller do
       let!(:groups) { create_list(:group, 2, enterprise: enterprise) }
       let!(:user_group1) { create(:user_group, user: user, group_id: groups.first.id, data: 'some text') }
       let!(:user_group2) { create(:user_group, user: user, group_id: groups.last.id, data: 'some text') }
+      let!(:user2) { create(:user, enterprise: enterprise) }
+
       login_user_from_let
 
       it 'returns success' do
@@ -183,10 +185,12 @@ RSpec.describe UsersController, type: :controller do
         end
       end
 
-      context 'with no group found' do
-        it 'returns nil for users groups' do
-          get :group_surveys, id: user.id, group_id: nil
-          expect(assigns[:user_groups]).to eq nil
+      context 'with no group specified' do
+        context 'user belongs to group with survey' do
+          it 'returns groups with surveys for users groups' do
+            get :group_surveys, id: user.id, group_id: nil
+            expect(assigns[:user_groups]).to eq user.user_groups
+          end
         end
       end
     end
