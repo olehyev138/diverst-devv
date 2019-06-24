@@ -375,11 +375,21 @@ RSpec.describe Initiative, type: :model do
 
   describe 'Initiative.to_csv' do
     let!(:enterprise) { create(:enterprise) }
-    let!(:group) { create(:group, enterprise: enterprise) }
-    let!(:initiative_with_metrics) { create(:initiative, owner_group: group) }
-    let!(:expense) { create(:initiative_expense, amount: 600, initiative_id: initiative_with_metrics.id) }
-    let!(:field) { create(:field, initiative_id: initiative_with_metrics.id, title: 'Attendance') }
-    let!(:update) { create(:initiative_update, initiative_id: initiative_with_metrics.id, data: "{\"#{field.id}\":105}") }
+    let!(:group) { create :group, :without_outcomes, enterprise: enterprise, annual_budget: 10000 }
+    let!(:annual_budget) { create(:annual_budget, group: group, amount: group.annual_budget, enterprise_id: enterprise.id) }
+    let!(:budget) { create(:approved_budget, group_id: group.id, annual_budget_id: annual_budget.id) }
+    let!(:outcome) { create :outcome, group_id: group.id }
+    let!(:pillar) { create :pillar, outcome_id: outcome.id }
+    let!(:initiative) { create(:initiative, pillar: pillar,
+                                            owner_group: group,
+                                            annual_budget_id: annual_budget.id,
+                                            estimated_funding: budget.budget_items.first.available_amount,
+                                            budget_item_id: budget.budget_items.first.id)
+    }
+    let!(:expense) { create(:initiative_expense, initiative_id: initiative.id, annual_budget_id: annual_budget.id, amount: 50) }
+
+    let!(:field) { create(:field, initiative_id: initiative.id, title: 'Attendance') }
+    let!(:update) { create(:initiative_update, initiative_id: initiative.id, data: "{\"#{field.id}\":105}") }
 
 
     it 'returns csv for initiative export' do
