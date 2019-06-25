@@ -1,7 +1,7 @@
-// import { defaultAction } from 'containers/Group/Groups/actions';
-// import { DEFAULT_ACTION } from 'containers/Group/Groups/constants';
+// import { defaultAction } from 'containers/Group/AdminGroupList/actions';
+// import { DEFAULT_ACTION } from 'containers/Group/AdminGroupList/constants';
 
-describe('Groups actions', () => {
+describe('AdminGroupList actions', () => {
   describe('Default Action', () => {
     xit('has a type of DEFAULT_ACTION', () => {
       // const expected = {

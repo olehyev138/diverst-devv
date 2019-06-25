@@ -14,9 +14,9 @@ import {
   HomePage, LoginPage, NotFoundPage, PlaceholderPage
 } from 'containers/Shared/Routes/templates';
 
-import GroupsUser from 'containers/Group/User';
-import GroupsAdmin from 'containers/Group/Admin';
-import GroupForm from 'containers/Group/Admin/form';
+import UserGroupListPage from 'containers/Group/UserGroupListPage';
+import AdminGroupListPage from 'containers/Group/AdminGroupListPage';
+import GroupFormPage from 'containers/Group/GroupFormPage';
 
 // Paths
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -33,17 +33,17 @@ export default function Routes(props) {
 
       { /* Admin - Manage */ }
       { /* Admin - Manage - Groups */ }
-      <AdminLayout exact path={ROUTES.admin.manage.groups.index.path} component={GroupsAdmin} />
-      <AdminLayout path={ROUTES.admin.manage.groups.new.path} component={GroupForm} />
-      <AdminLayout path={ROUTES.admin.manage.groups.edit.path} component={GroupsAdmin} />
-      <AdminLayout path={ROUTES.admin.manage.groups.delete.path} component={GroupsAdmin} />
+      <AdminLayout exact path={ROUTES.admin.manage.groups.index.path} component={AdminGroupListPage} />
+      <AdminLayout path={ROUTES.admin.manage.groups.new.path} component={GroupFormPage} />
+      <AdminLayout path={ROUTES.admin.manage.groups.edit.path} component={GroupFormPage} />
+      <AdminLayout path={ROUTES.admin.manage.groups.delete.path} component={PlaceholderPage} />
 
       { /* User */ }
       <UserLayout exact path={ROUTES.user.home.path} pageTitle={ROUTES.user.home.titleMessage} component={PlaceholderPage} />
       <UserLayout path={ROUTES.user.innovate.path} pageTitle={ROUTES.user.innovate.titleMessage} component={PlaceholderPage} />
       <UserLayout path={ROUTES.user.news.path} pageTitle={ROUTES.user.news.titleMessage} component={PlaceholderPage} />
       <UserLayout path={ROUTES.user.events.path} pageTitle={ROUTES.user.events.titleMessage} component={PlaceholderPage} />
-      <UserLayout path={ROUTES.user.groups.path} pageTitle={ROUTES.user.groups.titleMessage} component={GroupsUser} />
+      <UserLayout path={ROUTES.user.groups.path} pageTitle={ROUTES.user.groups.titleMessage} component={UserGroupListPage} />
       <UserLayout path={ROUTES.user.downloads.path} pageTitle={ROUTES.user.downloads.titleMessage} component={PlaceholderPage} />
       <UserLayout path={ROUTES.user.mentorship.path} pageTitle={ROUTES.user.mentorship.titleMessage} component={PlaceholderPage} />
 

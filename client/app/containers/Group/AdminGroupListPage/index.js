@@ -1,14 +1,14 @@
 /**
  *
- * Groups - Admin
+ * AdminGroupListPage
  *
  */
 
 import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect/lib/';
-import { compose } from 'redux/';
+import { createStructuredSelector } from 'reselect/lib';
+import { compose } from 'redux';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
@@ -18,9 +18,9 @@ import { getGroupsBegin } from 'containers/Group/actions';
 
 import saga from 'containers/Group/saga';
 
-import GroupsList from 'components/Admin/Manage/Groups';
+import GroupList from 'components/Group/AdminGroupList';
 
-export function Groups(props) {
+export function AdminGroupListPage(props) {
   useInjectReducer({ key: 'groups', reducer });
   useInjectSaga({ key: 'groups', saga });
 
@@ -30,12 +30,12 @@ export function Groups(props) {
 
   return (
     <React.Fragment>
-      <GroupsList groups={props.groups} groupTotal={props.groupTotal} />
+      <GroupList groups={props.groups} groupTotal={props.groupTotal} />
     </React.Fragment>
   );
 }
 
-Groups.propTypes = {
+AdminGroupListPage.propTypes = {
   getGroupsBegin: PropTypes.func.isRequired,
   groups: PropTypes.array,
   groupTotal: PropTypes.number,
@@ -60,4 +60,4 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(Groups);
+)(AdminGroupListPage);

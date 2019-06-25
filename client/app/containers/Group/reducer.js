@@ -1,8 +1,9 @@
 /*
  *
- * Groups reducer
+ * Group reducer
  *
  */
+
 import produce from 'immer/dist/immer';
 import { GET_GROUPS_BEGIN, GET_GROUPS_SUCCESS, GET_GROUPS_ERROR } from 'containers/Group/constants';
 

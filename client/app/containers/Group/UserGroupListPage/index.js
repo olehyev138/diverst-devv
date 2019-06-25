@@ -1,6 +1,6 @@
 /**
  *
- * User Groups
+ * User AdminGroupList
  *
  */
 
@@ -18,9 +18,9 @@ import { getGroupsBegin } from 'containers/Group/actions';
 
 import saga from 'containers/Group/saga';
 
-import GroupsList from 'components/User/Groups';
+import GroupList from 'components/Group/UserGroupList';
 
-export function Groups(props) {
+export function UserGroupListPage(props) {
   useInjectReducer({ key: 'groups', reducer });
   useInjectSaga({ key: 'groups', saga });
 
@@ -30,12 +30,12 @@ export function Groups(props) {
 
   return (
     <React.Fragment>
-      <GroupsList groups={props.groups} groupTotal={props.groupTotal} />
+      <GroupList groups={props.groups} groupTotal={props.groupTotal} />
     </React.Fragment>
   );
 }
 
-Groups.propTypes = {
+UserGroupListPage.propTypes = {
   getGroupsBegin: PropTypes.func.isRequired,
   groups: PropTypes.array,
   groupTotal: PropTypes.number,
@@ -60,4 +60,4 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(Groups);
+)(UserGroupListPage);

@@ -1,11 +1,11 @@
 /*
- * Groups Messages
+ * Group Messages
  *
- * This contains all the text for the Groups container.
+ * This contains all the text for the AdminGroupList container.
  */
 
 import { defineMessages } from 'react-intl';
 
-export const scope = 'app.containers.Groups';
+export const scope = 'app.containers.AdminGroupList';
 
 export default defineMessages({});

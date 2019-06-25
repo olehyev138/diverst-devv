@@ -1,8 +1,8 @@
 import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect/lib/';
-import { compose } from 'redux/';
+import { createStructuredSelector } from 'reselect/lib';
+import { compose } from 'redux';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
@@ -12,11 +12,11 @@ import { getGroupsBegin } from 'containers/Group/actions';
 
 import saga from 'containers/Group/saga';
 
-import GroupFormComponent from 'components/Admin/Manage/Groups/form';
+import GroupForm from 'components/Group/GroupForm';
 
-export function GroupForm(props) {
+export function GroupFormPage(props) {
   return (
-    <GroupFormComponent />
+    <GroupForm />
   );
 }
 
@@ -36,4 +36,4 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(GroupForm);
+)(GroupFormPage);
