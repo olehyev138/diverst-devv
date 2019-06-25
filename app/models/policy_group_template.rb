@@ -6,6 +6,7 @@ class PolicyGroupTemplate < BaseClass
   belongs_to :enterprise
 
   # validations
+  validates_length_of :name, maximum: 191
   validates :name,        presence: true
   validates :user_role,   presence: true
   validates :enterprise,  presence: true
