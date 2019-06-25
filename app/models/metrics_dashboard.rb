@@ -11,6 +11,8 @@ class MetricsDashboard < BaseClass
   has_many :shared_metrics_dashboards, dependent: :destroy, validate: false
   has_many :shared_users, through: :shared_metrics_dashboards, source: :user
 
+  validates_length_of :shareable_token, maximum: 191
+  validates_length_of :name, maximum: 191
   validates_presence_of :name, message: 'Metrics Dashboard name is required'
   validates_presence_of :groups, message: 'Please select a group'
 

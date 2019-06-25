@@ -12,6 +12,11 @@ class Initiative < BaseClass
 
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
 
+  validates_length_of :location, maximum: 191
+  validates_length_of :picture_content_type, maximum: 191
+  validates_length_of :picture_file_name, maximum: 191
+  validates_length_of :description, maximum: 65535
+  validates_length_of :name, maximum: 191
   validates :end, date: { after: :start, message: 'must be after start' }, on: [:create, :update]
 
   # Ported from Event

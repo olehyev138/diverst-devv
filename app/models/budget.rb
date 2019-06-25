@@ -17,6 +17,9 @@ class Budget < BaseClass
 
   after_save :send_email_notification
 
+  validates_length_of :decline_reason, maximum: 191
+  validates_length_of :comments, maximum: 65535
+  validates_length_of :description, maximum: 65535
   def requested_amount
     budget_items.sum(:estimated_amount)
   end

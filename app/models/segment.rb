@@ -36,6 +36,8 @@ class Segment < BaseClass
 
   has_many :members, class_name: 'User', through: :users_segments, source: :user, dependent: :destroy
 
+  validates_length_of :active_users_filter, maximum: 191
+  validates_length_of :name, maximum: 191
   validates_presence_of :name
   validates_presence_of :active_users_filter
   validates :name, uniqueness: { scope: :enterprise_id }

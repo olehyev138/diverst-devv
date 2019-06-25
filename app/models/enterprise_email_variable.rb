@@ -6,5 +6,8 @@ class EnterpriseEmailVariable < BaseClass
   has_many :emails, through: :email_variables
 
   # validations
+  validates_length_of :example, maximum: 65535
+  validates_length_of :description, maximum: 191
+  validates_length_of :key, maximum: 191
   validates :key, :description, presence: true
 end

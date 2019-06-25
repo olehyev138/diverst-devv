@@ -14,6 +14,8 @@ class Graph < BaseClass
 
   delegate :title, to: :field
 
+  validates_length_of :custom_aggregation, maximum: 191
+  validates_length_of :custom_field, maximum: 191
   validates :field, presence: true
 
   after_initialize :set_graph_builder
