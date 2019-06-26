@@ -1,4 +1,17 @@
 class UserSerializer < ApplicationRecordSerializer
+  attributes :enterprise, :last_name, :fields
+
+  # Serialize all user fields, including the custom attributes listed above, and excluding the `excluded_keys`
+  def serialize_all_fields
+    true
+  end
+
+  def excluded_keys
+    [:password_digest]
+  end
+
+  # Custom attributes
+
   def enterprise
     EnterpriseSerializer.new(object.enterprise).attributes
   end
@@ -19,17 +32,5 @@ class UserSerializer < ApplicationRecordSerializer
 
   def last_name
     "#{(object.last_name || '')[0].capitalize}."
-  end
-
-  def excluded_keys
-    [:password_digest]
-  end
-
-  def attributes
-    hash = super
-    hash[:last_name] = last_name
-    hash[:fields] = fields
-    hash[:enterprise] = enterprise
-    hash
   end
 end

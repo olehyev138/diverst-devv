@@ -7,7 +7,9 @@ RSpec.describe BasePager, type: :model do
   describe '#pager' do
     it 'returns the users as items and the total' do
       create_list(:user, 10, enterprise: enterprise)
-      expect(User.index(Request.create_request(user), {}).total).to eq(11) # One more because of the initial user
+      response = User.index(Request.create_request(user), {})
+      expect(response.total).to eq(11) # One more because of the initial user
+      expect(response.type).to eq('user')
     end
 
     it 'returns the groups as items and the total for the correct enterprise' do

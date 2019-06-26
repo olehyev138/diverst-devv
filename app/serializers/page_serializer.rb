@@ -1,9 +1,5 @@
 class PageSerializer < ApplicationRecordSerializer
-  attributes :total
+  attributes :total, :type
 
   has_many :items
-
-  def total
-    object.total
-  end
 end

@@ -16,7 +16,7 @@ function groupsReducer(state = initialState, action) {
   return produce(state, (draft) => {
     switch (action.type) {
       case GET_GROUPS_SUCCESS:
-        draft.groups = action.payload.items.groups;
+        draft.groups = action.payload.items;
         draft.groupTotal = action.payload.total;
         break;
     }

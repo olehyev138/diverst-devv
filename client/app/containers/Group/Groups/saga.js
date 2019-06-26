@@ -10,7 +10,7 @@ import { showSnackbar } from 'containers/Shared/Notifier/actions';
 export function* getGroups(action) {
   try {
     const response = yield call(api.groups.all.bind(api.groups), action.payload);
-    yield put(getGroupsSuccess(response.data));
+    yield put(getGroupsSuccess(response.data.page));
   } catch (err) {
     yield put(getGroupsError(err));
     yield put(showSnackbar({ message: 'Failed to load groups', options: { variant: 'warning' } }));
