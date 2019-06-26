@@ -8,15 +8,18 @@ import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import { selectPaginatedGroups, selectGroupTotal } from 'containers/Group/selectors';
 import reducer from 'containers/Group/reducer';
-import { getGroupsBegin } from 'containers/Group/actions';
+
+import { createGroupBegin } from 'containers/Group/actions';
 
 import saga from 'containers/Group/saga';
 
 import GroupForm from 'components/Group/GroupForm';
 
 export function GroupFormPage(props) {
+  useInjectSaga({ key: 'groups', saga });
+
   return (
-    <GroupForm />
+    <GroupForm createGroupBegin={props.createGroupBegin} />
   );
 }
 
@@ -25,6 +28,7 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
+    createGroupBegin: payload => dispatch(createGroupBegin(payload)),
   };
 }
 

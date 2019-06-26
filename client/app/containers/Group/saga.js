@@ -25,9 +25,14 @@ export function* getGroups(action) {
   }
 }
 
-export function* createGroups(action) {
+export function* createGroup(action) {
   try {
-    // const response = yield call(api.groups.all.bind(api.groups), action.payload);
+    const payload = { group: action.payload };
+    console.log(payload);
+
+    // TODO: use bind here or no?
+    const response = yield call(api.groups.create(payload));
+
     yield put(createGroupSuccess(response.data));
   } catch (err) {
     yield put(createGroupError(err));
@@ -39,5 +44,5 @@ export function* createGroups(action) {
 
 export default function* groupsSaga() {
   yield takeLatest(GET_GROUPS_BEGIN, getGroups);
-  yield takeLatest(CREATE_GROUP_BEGIN, createGroups);
+  yield takeLatest(CREATE_GROUP_BEGIN, createGroup);
 }

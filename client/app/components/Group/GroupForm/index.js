@@ -4,7 +4,7 @@
  *
  */
 
-import React, { memo } from 'react';
+import React, { memo, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
@@ -14,38 +14,62 @@ import {
 
 import { Field, Formik, Form } from 'formik';
 
-export function GroupFormInner(props) {
+export function GroupFormInner({ handleSubmit, handleChange, values }) {
   return (
     <Card>
-      <CardContent>
-        <Field
-          component={TextField}
-          fullWidth
-          label={'Name'}
-        />
-        <Field
-          component={TextField}
-          fullWidth
-          label={'Summary'}
-        />
-        <Field
-          component={TextField}
-          fullWidth
-          label={'Description'}
-        />
-      </CardContent>
-      <CardActions>
-        <Button type='submit'>Create</Button>
-        <Button type='submit'>Cancel</Button>
-      </CardActions>
+      <Form>
+        <CardContent>
+          <Field
+            component={TextField}
+            onChange={handleChange}
+            fullWidth
+            id='name'
+            name='name'
+            label='Name'
+          />
+          <Field
+            component={TextField}
+            onChange={handleChange}
+            fullWidth
+            id='short_description'
+            name='short_description'
+            label={'Short Description'}
+          />
+          <Field
+            component={TextField}
+            onChange={handleChange}
+            fullWidth
+            id='description'
+            name='description'
+            label={'Description'}
+          />
+        </CardContent>
+        <CardActions>
+          <Button type='submit'>Create</Button>
+          <Button>Cancel</Button>
+        </CardActions>
+      </Form>
     </Card>
   );
 }
 
 export function GroupForm(props) {
-  return (<Formik
-    render={props => <GroupFormInner {...props} /> }
-  />);
+  const form = useRef();
+
+  return (
+    <Formik
+      ref={form}
+      initialValues={{
+        name: '',
+        short_description: '',
+        description: ''
+      }}
+      onSubmit={(values, actions) => {
+        props.createGroupBegin(values);
+      }}
+      render={props => <GroupFormInner {...props} />}
+    />
+  );
 }
 
 export default compose(
