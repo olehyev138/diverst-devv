@@ -6,6 +6,13 @@ class ClockworkDatabaseEvent < ActiveRecord::Base
   belongs_to :enterprise
 
   # validations
+  validates_length_of :tz, maximum: 191
+  validates_length_of :method_args, maximum: 191
+  validates_length_of :method_name, maximum: 191
+  validates_length_of :job_name, maximum: 191
+  validates_length_of :at, maximum: 191
+  validates_length_of :day, maximum: 191
+  validates_length_of :name, maximum: 191
   validates_presence_of :name
   validates_presence_of :frequency_quantity
   validates_presence_of :frequency_period

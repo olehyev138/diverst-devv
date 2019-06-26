@@ -8,6 +8,9 @@ class MentoringRequest < BaseClass
   belongs_to :receiver,   class_name: 'User'
 
   # validations
+  validates_length_of :mentoring_type, maximum: 191
+  validates_length_of :notes, maximum: 65535
+  validates_length_of :status, maximum: 191
   validates :status,      presence: true
   validates :sender,      presence: true
   validates :receiver,    presence: true

@@ -1,18 +1,16 @@
 <div class="block block-section <%= "flippable" if event.picture.present? %>" style="margin-bottom: 20px;">
     <div class="front">
       <%= image_tag event.picture.expiring_url(3600), width: '100%' if event.picture.present? %>
-    <p><%= link_to event.title, group_event_path(event.group, event) if event.picture.present? %></p>  
+      <p>
+        <%= link_to event.title, group_event_path(event.group, event) if event.picture.present? %>
+      </p>
     </div>
     <div class="back">
-      <div class="flex-row flex-row--middle">
-        <div class="flex-row__cell flex-row__cell--grow">
-          <span class="highlight"><%= link_to truncate(event.title, length: 75), group_event_path(event.group, event) %></span><br>
-          <small style="padding-left: 12px;"><%= sanitize event.description.truncate(90) %></small><br>
-          <small class="muted"><%= event.start.to_s :slashes %></small>
-        </div>
-        <div class="flex-row__cell">
-          <span class="icon icon--chevron-right"></span>
-        </div>
+      <span class="highlight"><%= link_to truncate(event.title, length: 75), group_event_path(event.group, event) %></span><br>
+      <small style="padding-left: 12px;"><%= sanitize HtmlHelper.strip_truncate(event.description, 90) %></small><br>
+      <small class="muted"><%= event.start.to_s :slashes %></small>
+      <div class="flex-row__cell">
+        <span class="icon icon--chevron-right"></span>
       </div>
     </div>
 </div>
