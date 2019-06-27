@@ -19,7 +19,10 @@ export function GroupCreatePage(props) {
   useInjectSaga({ key: 'groups', saga });
 
   return (
-    <GroupForm createGroupBegin={props.createGroupBegin} />
+    <GroupForm
+      createGroupBegin={props.createGroupBegin}
+      buttonText='Create'
+    />
   );
 }
 

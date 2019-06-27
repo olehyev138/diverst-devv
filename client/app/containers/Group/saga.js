@@ -6,13 +6,14 @@ import { showSnackbar } from 'containers/Shared/Notifier/actions';
 
 import {
   GET_GROUPS_BEGIN, CREATE_GROUP_BEGIN,
-  FETCH_GROUP_BEGIN, UPDATE_GROUP_BEGIN, DELETE_GROUP_BEGIN
+  GET_GROUP_BEGIN, UPDATE_GROUP_BEGIN, DELETE_GROUP_BEGIN
 } from 'containers/Group/constants';
 
 import {
   getGroupsSuccess, getGroupsError,
   createGroupSuccess, createGroupError,
-  fetchGroupSuccess, fetchGroupError
+  getGroupSuccess, getGroupError,
+  updateGroupSuccess, updateGroupError
 } from 'containers/Group/actions';
 
 export function* getGroups(action) {
@@ -26,6 +27,18 @@ export function* getGroups(action) {
     yield put(showSnackbar({ message: 'Failed to load groups', options: { variant: 'warning' } }));
   }
 }
+
+export function* getGroup(action) {
+  try {
+    const response = yield call(api.groups.get.bind(api.groups), action.payload.id);
+    yield put(getGroupSuccess(response.data));
+  } catch (err) {
+    // TODO: intl message
+    yield put(getGroupError(err));
+    yield put(showSnackbar({ message: 'Failed to edit group', options: { variant: 'warning' } }));
+  }
+}
+
 
 export function* createGroup(action) {
   try {
@@ -43,22 +56,24 @@ export function* createGroup(action) {
   }
 }
 
-export function* fetchGroup(action) {
+export function* updateGroup(action) {
   try {
-    const response = yield call(api.groups.get(action.payload.id));
-    yield put(fetchGroupSuccess(response.data));
+    const payload = { group: action.payload };
+    const response = yield call(api.groups.update(payload.group.id, payload));
+
+    console.log(response.data);
+    yield put(updateGroupSuccess(response.data));
   } catch (err) {
+    yield put(updateGroupError(err));
+
     // TODO: intl message
-    console.log(err);
-    yield put(fetchGroupError(err));
-    yield put(showSnackbar({ message: 'Failed to edit group', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: 'Failed to update group', options: { variant: 'warning' } }));
   }
 }
 
 export default function* groupsSaga() {
   yield takeLatest(GET_GROUPS_BEGIN, getGroups);
+  yield takeLatest(GET_GROUP_BEGIN, getGroup);
   yield takeLatest(CREATE_GROUP_BEGIN, createGroup);
-  yield takeLatest(FETCH_GROUP_BEGIN, fetchGroup);
-
-  // yield takeLatest(UPDATE_GROUP_BEGIN, createGroup);
+  yield takeLatest(UPDATE_GROUP_BEGIN, updateGroup);
 }

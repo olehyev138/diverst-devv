@@ -9,7 +9,7 @@ import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/Group/reducer';
 import { selectGroup } from 'containers/Group/selectors';
 
-import { fetchGroupBegin, updateGroupBegin } from 'containers/Group/actions';
+import { getGroupBegin, updateGroupBegin } from 'containers/Group/actions';
 
 import saga from 'containers/Group/saga';
 
@@ -19,11 +19,15 @@ export function GroupEditPage(props) {
   useInjectSaga({ key: 'groups', saga });
 
   useEffect(() => {
-    props.fetchGroupBegin({ id: props.location.state.id });
+    props.getGroupBegin({ id: props.location.state.id });
   }, []);
 
   return (
-    <GroupForm groupAction={props.updateGroupBegin} />
+    <GroupForm
+      groupAction={props.updateGroupBegin}
+      group={props.group}
+      buttonText='Edit'
+    />
   );
 }
 
@@ -32,18 +36,22 @@ GroupEditPage.propTypes = {
     state: PropTypes.shape({
       id: PropTypes.number
     })
-  })
+  }),
+  group: PropTypes.object,
+  fetchGroupBegin: PropTypes.func,
+  updateGroupBegin: PropTypes.func
 };
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    group: selectGroup(ownProps.location.state.id)
+    group: selectGroup(ownProps.location.state.id)(state)
   };
 };
 
+
 function mapDispatchToProps(dispatch) {
   return {
-    fetchGroupBegin: payload => dispatch(fetchGroupBegin(payload)),
+    getGroupBegin: payload => dispatch(getGroupBegin(payload)),
     updateGroupBegin: payload => dispatch(updateGroupBegin(payload)),
   };
 }

@@ -17,5 +17,8 @@
   "diverst.containers.Routes.user.events": "Events",
   "diverst.containers.Routes.user.groups": "Groups",
   "diverst.containers.Routes.user.downloads": "Downloads",
-  "diverst.containers.Routes.user.mentorship": "Mentorship"
+  "diverst.containers.Routes.user.mentorship": "Mentorship",
+  "diverst.containers.Routes.admin.analyze.overview": "Overview",
+  "diverst.containers.Routes.admin.analyze.users": "Users",
+  "diverst.containers.Routes.admin.manage.groups": "Groups"
 }

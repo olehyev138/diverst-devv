@@ -37,8 +37,8 @@ class API {
     return axios.post(this.url, payload);
   }
 
-  update(payload) {
-    return axios.put(this.url, payload);
+  update(id, payload) {
+    return axios.put(`${this.url}/${id}`, payload);
   }
 
   destroy(id) {
