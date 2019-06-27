@@ -6,6 +6,7 @@ class Expense < BaseClass
 
   has_many :answer_expenses, dependent: :destroy
 
+  validates_length_of :name, maximum: 191
   validates :name,        presence: true
   validates :enterprise,  presence: true
   validates :category,    presence: true

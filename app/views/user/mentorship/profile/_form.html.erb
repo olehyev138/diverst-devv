@@ -64,7 +64,7 @@
             <div class="col md-12">
               <p class="field__hint">In what areas are you interested in providing mentorship or being mentored in?</p>
               <%= f.association :mentoring_interests,
-                  collection: @user.enterprise.mentoring_interests,
+                  collection: @user.enterprise.mentoring_interests.map { |int| int.name.capitalize! ; int}.sort_by { |int| int.name },
                   input_html: { class: "select2" },
                   label: false %>
             </div>

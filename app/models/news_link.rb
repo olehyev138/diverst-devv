@@ -22,6 +22,10 @@ class NewsLink < BaseClass
   accepts_nested_attributes_for :photos, allow_destroy: true
   accepts_nested_attributes_for :news_feed_link, allow_destroy: true
 
+  validates_length_of :picture_content_type, maximum: 191
+  validates_length_of :picture_file_name, maximum: 191
+  validates_length_of :description, maximum: 65535
+  validates_length_of :title, maximum: 191
   validates :group_id,        presence: true
   validates :title,           presence: true
   validates :description,     presence: true

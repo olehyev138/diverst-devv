@@ -4,6 +4,7 @@ class MentoringInterest < BaseClass
   has_many :users, through: :mentorship_interests
 
   # validations
+  validates_length_of :name, maximum: 191
   validates :name,  presence: true
 
   # we downcase the name in order to allow for searching
