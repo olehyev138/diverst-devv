@@ -57,7 +57,10 @@ RSpec.describe "#{model.pluralize}", type: :request do
 
   describe '#update' do
     it 'updates an item' do
-      patch "/api/v1/#{route}/#{item.id}", params: { "#{route.singularize}": item.attributes }, headers: headers
+      patch "/api/v1/#{route}/#{item.id}", params: { "#{route.singularize}": { attended: true, check_in_time: Time.now } }, headers: headers
+      initiative_user = JSON.parse(response.body)
+      expect(initiative_user['attended']).to eq(true)
+      expect(initiative_user['attended']).to_not be nil
       expect(response).to have_http_status(:ok)
     end
 
