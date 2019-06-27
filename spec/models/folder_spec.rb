@@ -117,4 +117,17 @@ RSpec.describe Folder, type: :model do
       expect { Folder.find(folder_child.id) }.to raise_error(ActiveRecord::RecordNotFound)
     end
   end
+  
+  describe '#validate_password' do
+    it 'returns the correct folder when id and password are present' do
+      folder = create(:folder, password_protected: true, password: 'password')
+      valid_folder = Folder.validate_password({}, {id: folder.id, password: 'password'})
+      expect(valid_folder.id).to eq(folder.id)
+    end
+    
+    it 'raises an error when password is invalid' do
+      folder = create(:folder, password_protected: true, password: 'password')
+      expect{Folder.validate_password({}, {id: folder.id, password: 'fake'})}.to raise_error(BadRequestException, 'Incorrect password')
+    end
+  end
 end
