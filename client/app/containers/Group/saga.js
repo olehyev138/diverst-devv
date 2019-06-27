@@ -5,12 +5,14 @@ import { push } from 'connected-react-router';
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
 
 import {
-  GET_GROUPS_BEGIN, CREATE_GROUP_BEGIN, UPDATE_GROUP_BEGIN, DELETE_GROUP_BEGIN
+  GET_GROUPS_BEGIN, CREATE_GROUP_BEGIN,
+  FETCH_GROUP_BEGIN, UPDATE_GROUP_BEGIN, DELETE_GROUP_BEGIN
 } from 'containers/Group/constants';
 
 import {
   getGroupsSuccess, getGroupsError,
-  createGroupSuccess, createGroupError
+  createGroupSuccess, createGroupError,
+  fetchGroupSuccess, fetchGroupError
 } from 'containers/Group/actions';
 
 export function* getGroups(action) {
@@ -28,7 +30,6 @@ export function* getGroups(action) {
 export function* createGroup(action) {
   try {
     const payload = { group: action.payload };
-    console.log(payload);
 
     // TODO: use bind here or no?
     const response = yield call(api.groups.create(payload));
@@ -38,11 +39,26 @@ export function* createGroup(action) {
     yield put(createGroupError(err));
 
     // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to create groups', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: 'Failed to create group', options: { variant: 'warning' } }));
+  }
+}
+
+export function* fetchGroup(action) {
+  try {
+    const response = yield call(api.groups.get(action.payload.id));
+    yield put(fetchGroupSuccess(response.data));
+  } catch (err) {
+    // TODO: intl message
+    console.log(err);
+    yield put(fetchGroupError(err));
+    yield put(showSnackbar({ message: 'Failed to edit group', options: { variant: 'warning' } }));
   }
 }
 
 export default function* groupsSaga() {
   yield takeLatest(GET_GROUPS_BEGIN, getGroups);
   yield takeLatest(CREATE_GROUP_BEGIN, createGroup);
+  yield takeLatest(FETCH_GROUP_BEGIN, fetchGroup);
+
+  // yield takeLatest(UPDATE_GROUP_BEGIN, createGroup);
 }

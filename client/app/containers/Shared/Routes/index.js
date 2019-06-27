@@ -16,7 +16,8 @@ import {
 
 import UserGroupListPage from 'containers/Group/UserGroupListPage';
 import AdminGroupListPage from 'containers/Group/AdminGroupListPage';
-import GroupFormPage from 'containers/Group/GroupFormPage';
+import GroupCreatePage from 'containers/Group/GroupCreatePage';
+import GroupEditPage from 'containers/Group/GroupEditPage';
 
 // Paths
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -34,8 +35,8 @@ export default function Routes(props) {
       { /* Admin - Manage */ }
       { /* Admin - Manage - Groups */ }
       <AdminLayout exact path={ROUTES.admin.manage.groups.index.path} component={AdminGroupListPage} />
-      <AdminLayout path={ROUTES.admin.manage.groups.new.path} component={GroupFormPage} />
-      <AdminLayout path={ROUTES.admin.manage.groups.edit.path} component={GroupFormPage} />
+      <AdminLayout path={ROUTES.admin.manage.groups.new.path} component={GroupCreatePage} />
+      <AdminLayout path={ROUTES.admin.manage.groups.edit.path} component={GroupEditPage} />
       <AdminLayout path={ROUTES.admin.manage.groups.delete.path} component={PlaceholderPage} />
 
       { /* User */ }

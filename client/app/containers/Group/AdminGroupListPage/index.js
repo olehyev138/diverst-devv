@@ -12,7 +12,7 @@ import { compose } from 'redux';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
-import { selectPaginatedGroups, selectGroupTotal } from 'containers/Group/selectors';
+import { selectPaginatedGroups, selectGroupTotal, selectGroup } from 'containers/Group/selectors';
 import reducer from 'containers/Group/reducer';
 import { getGroupsBegin } from 'containers/Group/actions';
 
@@ -28,16 +28,17 @@ export function AdminGroupListPage(props) {
     props.getGroupsBegin();
   }, []);
 
+
   return (
     <React.Fragment>
-      <GroupList groups={props.groups} groupTotal={props.groupTotal} />
+      <GroupList groups={props.groups} groupTotal={props.groupTotal} selectGroup={props.selectGroup} />
     </React.Fragment>
   );
 }
 
 AdminGroupListPage.propTypes = {
   getGroupsBegin: PropTypes.func.isRequired,
-  groups: PropTypes.array,
+  groups: PropTypes.object,
   groupTotal: PropTypes.number,
 };
 

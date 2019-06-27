@@ -6,4 +6,4 @@
 
 import loadable from 'utils/loadable';
 
-export default loadable(() => import('containers/Group/Admin/GroupFormPage/index'));
+export default loadable(() => import('containers/Group/Admin/GroupEditPage/index'));

@@ -8,6 +8,7 @@ import {
   GET_GROUPS_BEGIN, GET_GROUPS_SUCCESS, GET_GROUPS_ERROR,
   GET_GROUP_BEGIN, GET_GROUP_SUCCESS, GET_GROUP_ERROR,
   CREATE_GROUP_BEGIN, CREATE_GROUP_SUCCESS, CREATE_GROUP_ERROR,
+  FETCH_GROUP_BEGIN, FETCH_GROUP_SUCCESS, FETCH_GROUP_ERROR,
   UPDATE_GROUP_BEGIN, UPDATE_GROUP_SUCCESS, UPDATE_GROUP_ERROR,
   DELETE_GROUP_BEGIN, DELETE_GROUP_SUCCESS, DELETE_GROUP_ERROR,
 
@@ -81,6 +82,30 @@ export function createGroupError(error) {
     error,
   };
 }
+
+/* Group fetching */
+
+export function fetchGroupBegin(payload) {
+  return {
+    type: FETCH_GROUP_BEGIN,
+    payload,
+  };
+}
+
+export function fetchGroupSuccess(payload) {
+  return {
+    type: FETCH_GROUP_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchGroupError(error) {
+  return {
+    type: FETCH_GROUP_ERROR,
+    error,
+  };
+}
+
 
 /* Group updating */
 

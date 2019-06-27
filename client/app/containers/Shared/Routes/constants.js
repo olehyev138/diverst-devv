@@ -60,15 +60,19 @@ export const ROUTES = {
     manage: {
       pathPrefix: '/admin/manage',
       groups: {
+        pathPrefix: '/admin/manage/groups',
         index: {
           path: '/admin/manage/groups',
           titleMessage: messages.admin.manage.groups,
+        },
+        show: {
+          path: '/admin/manage/groups/:id',
         },
         new: {
           path: '/admin/manage/groups/new',
         },
         edit: {
-          path: '/admin/manage/groups/edit',
+          path: '/admin/manage/groups/:id/edit',
         },
         delete: {
           path: '/admin/manage/groups/delete',

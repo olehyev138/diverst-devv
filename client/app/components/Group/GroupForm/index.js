@@ -53,7 +53,7 @@ export function GroupFormInner({ handleSubmit, handleChange, values }) {
   );
 }
 
-export function GroupForm(props) {
+export function GroupForm({ groupAction }) {
   const form = useRef();
 
   return (

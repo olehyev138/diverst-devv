@@ -8,6 +8,9 @@ import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
+import { NavLink } from 'react-router-dom';
+import { ROUTES } from 'containers/Shared/Routes/constants';
+
 import {
   Button, Card, CardContent, CardActions, Typography, Grid, Link
 } from '@material-ui/core';
@@ -28,10 +31,12 @@ const styles = theme => ({
 export function AdminGroupList(props) {
   const { classes } = props;
 
+  const WrappedNavLink = React.forwardRef((props, ref) => <NavLink innerRef={ref} {...props} />);
+
   return (
     <React.Fragment>
       <Grid container spacing={3}>
-        {props.groups && props.groups.map((group, i) => (
+        {props.groups && Object.values(props.groups).map((group, i) => (
           <Grid item key={group.id} className={classes.groupListItem}>
             <Card>
               <CardContent>
@@ -48,7 +53,16 @@ export function AdminGroupList(props) {
                 )}
               </CardContent>
               <CardActions>
-                <Button size='small' color='primary'>Edit</Button>
+                <Button
+                  size='small'
+                  to={{
+                    pathname: ROUTES.admin.manage.groups.pathPrefix + '/' + group.id + '/edit',
+                    state: { id: group.id }
+                  }}
+                  component={WrappedNavLink}
+                >
+                  Edit
+                </Button>
                 <Button size='small' className={classes.errorButton}>Delete</Button>
               </CardActions>
             </Card>
@@ -61,7 +75,7 @@ export function AdminGroupList(props) {
 
 AdminGroupList.propTypes = {
   classes: PropTypes.object,
-  groups: PropTypes.array,
+  groups: PropTypes.object,
   groupTotal: PropTypes.number,
 };
 

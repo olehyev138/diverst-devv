@@ -15,7 +15,7 @@ import saga from 'containers/Group/saga';
 
 import GroupForm from 'components/Group/GroupForm';
 
-export function GroupFormPage(props) {
+export function GroupCreatePage(props) {
   useInjectSaga({ key: 'groups', saga });
 
   return (
@@ -40,4 +40,4 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(GroupFormPage);
+)(GroupCreatePage);

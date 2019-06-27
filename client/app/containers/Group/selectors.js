@@ -5,12 +5,17 @@ const selectGroupsDomain = state => state.groups || initialState;
 
 const selectPaginatedGroups = () => createSelector(
   selectGroupsDomain,
-  groupsState => groupsState.groups,
+  groupsState => groupsState.groups
 );
 
 const selectGroupTotal = () => createSelector(
   selectGroupsDomain,
-  groupsState => groupsState.groupTotal,
+  groupsState => groupsState.groupTotal
 );
 
-export { selectPaginatedGroups, selectGroupTotal };
+const selectGroup = id => createSelector(
+  selectGroupsDomain,
+  groupsState => groupsState.groups[id]
+);
+
+export { selectPaginatedGroups, selectGroupTotal, selectGroup };
