@@ -109,6 +109,8 @@ class Group < BaseClass
   has_many :sponsors, as: :sponsorable, dependent: :destroy
 
   has_many :children, class_name: 'Group', foreign_key: :parent_id, dependent: :destroy
+  has_many :annual_budgets, dependent: :destroy
+
   belongs_to :parent, class_name: 'Group', foreign_key: :parent_id
   belongs_to :group_category
   belongs_to :group_category_type
@@ -262,17 +264,21 @@ class Group < BaseClass
   end
 
   def approved_budget
-    (budgets.approved.map { |b| b.requested_amount || 0 }).reduce(0, :+)
+    annual_budget = annual_budgets.find_by(closed: false)
+    return 0 if annual_budget.nil?
+
+    (budgets.where(annual_budget_id: annual_budget.id).approved.map { |b| b.requested_amount || 0 }).reduce(0, :+)
   end
 
   def available_budget
-    return 0 unless annual_budget
-
-    annual_budget - (approved_budget + spent_budget)
+    approved_budget - spent_budget
   end
 
   def spent_budget
-    (initiatives.map { |i| i.current_expences_sum || 0 }).reduce(0, :+)
+    annual_budget = annual_budgets.find_by(closed: false)
+    return 0 if annual_budget.nil?
+
+    (initiatives.where(annual_budget_id: annual_budget.id).map { |i| i.current_expences_sum || 0 }).reduce(0, :+)
   end
 
   def active_members
@@ -356,7 +362,7 @@ class Group < BaseClass
 
   def survey_answers_csv
     CSV.generate do |csv|
-      csv << ['user_id', 'user_email', 'user_first_name', 'user_last_name'].concat(survey_fields.map(&:title))
+      csv << %w(user_id user_email user_first_name user_last_name).concat(survey_fields.map(&:title))
 
       user_groups.with_answered_survey.includes(:user).order(created_at: :desc).each do |user_group|
         user_group_row = [
@@ -378,12 +384,14 @@ class Group < BaseClass
   def membership_list_csv(group_members)
     total_nb_of_members = group_members.count
     CSV.generate do |csv|
-      csv << ['first_name', 'last_name', 'email_address']
+      csv << %w(first_name last_name email_address mentor mentee)
 
       group_members.each do |member|
         membership_list_row = [ member.first_name,
                                 member.last_name,
-                                member.email
+                                member.email,
+                                member.mentor,
+                                member.mentee
                               ]
         csv << membership_list_row
       end
@@ -419,7 +427,7 @@ class Group < BaseClass
   end
 
   def title_with_leftover_amount
-    "Create event from #{name} leftover ($#{leftover_money})"
+    "Create event from #{name} leftover ($#{leftover_money == 0 ? 0.0 : available_budget})"
   end
 
   def pending_comments_count

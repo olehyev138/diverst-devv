@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190522162006) do
+ActiveRecord::Schema.define(version: 20190612222712) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -29,6 +29,22 @@ ActiveRecord::Schema.define(version: 20190522162006) do
   add_index "activities", ["owner_id", "owner_type"], name: "index_activities_on_owner_id_and_owner_type", using: :btree
   add_index "activities", ["recipient_id", "recipient_type"], name: "index_activities_on_recipient_id_and_recipient_type", using: :btree
   add_index "activities", ["trackable_id", "trackable_type"], name: "index_activities_on_trackable_id_and_trackable_type", using: :btree
+
+  create_table "annual_budgets", force: :cascade do |t|
+    t.integer  "group_id",         limit: 4
+    t.integer  "enterprise_id",    limit: 4
+    t.decimal  "amount",                     precision: 10, default: 0
+    t.boolean  "closed",                                    default: false
+    t.decimal  "available_budget",           precision: 10, default: 0
+    t.decimal  "approved_budget",            precision: 10, default: 0
+    t.decimal  "expenses",                   precision: 10, default: 0
+    t.decimal  "leftover_money",             precision: 10, default: 0
+    t.datetime "created_at",                                                null: false
+    t.datetime "updated_at",                                                null: false
+  end
+
+  add_index "annual_budgets", ["enterprise_id"], name: "index_annual_budgets_on_enterprise_id", using: :btree
+  add_index "annual_budgets", ["group_id"], name: "index_annual_budgets_on_group_id", using: :btree
 
   create_table "answer_comments", force: :cascade do |t|
     t.text     "content",    limit: 65535
@@ -99,15 +115,16 @@ ActiveRecord::Schema.define(version: 20190522162006) do
   end
 
   create_table "budgets", force: :cascade do |t|
-    t.text     "description",    limit: 65535
+    t.text     "description",      limit: 65535
     t.boolean  "is_approved"
-    t.datetime "created_at",                   null: false
-    t.datetime "updated_at",                   null: false
-    t.integer  "approver_id",    limit: 4
-    t.integer  "requester_id",   limit: 4
-    t.integer  "group_id",       limit: 4
-    t.text     "comments",       limit: 65535
-    t.string   "decline_reason", limit: 191
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+    t.integer  "approver_id",      limit: 4
+    t.integer  "requester_id",     limit: 4
+    t.integer  "group_id",         limit: 4
+    t.text     "comments",         limit: 65535
+    t.string   "decline_reason",   limit: 191
+    t.integer  "annual_budget_id", limit: 4
   end
 
   add_index "budgets", ["approver_id"], name: "fk_rails_a057b1443a", using: :btree
@@ -590,12 +607,13 @@ ActiveRecord::Schema.define(version: 20190522162006) do
   end
 
   create_table "initiative_expenses", force: :cascade do |t|
-    t.string   "description",   limit: 191
-    t.integer  "amount",        limit: 4
-    t.integer  "owner_id",      limit: 4
-    t.integer  "initiative_id", limit: 4
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.string   "description",      limit: 191
+    t.integer  "amount",           limit: 4
+    t.integer  "owner_id",         limit: 4
+    t.integer  "initiative_id",    limit: 4
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+    t.integer  "annual_budget_id", limit: 4
   end
 
   create_table "initiative_fields", force: :cascade do |t|
@@ -661,6 +679,7 @@ ActiveRecord::Schema.define(version: 20190522162006) do
     t.integer  "budget_item_id",       limit: 4
     t.boolean  "finished_expenses",                                          default: false
     t.datetime "archived_at"
+    t.integer  "annual_budget_id",     limit: 4
   end
 
   create_table "invitation_segments_groups", force: :cascade do |t|
@@ -1282,8 +1301,8 @@ ActiveRecord::Schema.define(version: 20190522162006) do
 
   create_table "twitter_accounts", force: :cascade do |t|
     t.integer  "group_id",   limit: 4
-    t.string   "name",       limit: 191
-    t.string   "account",    limit: 191
+    t.string   "name",       limit: 191, null: false
+    t.string   "account",    limit: 191, null: false
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
   end
@@ -1439,6 +1458,8 @@ ActiveRecord::Schema.define(version: 20190522162006) do
     t.datetime "updated_at",                    null: false
   end
 
+  add_foreign_key "annual_budgets", "enterprises"
+  add_foreign_key "annual_budgets", "groups"
   add_foreign_key "badges", "enterprises"
   add_foreign_key "budgets", "users", column: "approver_id"
   add_foreign_key "budgets", "users", column: "requester_id"

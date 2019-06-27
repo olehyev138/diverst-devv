@@ -34,6 +34,7 @@ class Initiative < BaseClass
   accepts_nested_attributes_for :checklist_items, reject_if: :all_blank, allow_destroy: true
 
   belongs_to :owner_group, class_name: 'Group'
+  belongs_to :annual_budget
 
   has_many :initiative_segments, dependent: :destroy
   has_many :segments, through: :initiative_segments
@@ -58,7 +59,7 @@ class Initiative < BaseClass
     initiative_conditions = ['initiative_segments.segment_id IS NULL']
     initiative_conditions << "initiative_segments.segment_id IN (#{ segment_ids.join(",") })" unless segment_ids.empty?
     joins('LEFT JOIN initiative_segments ON initiative_segments.initiative_id = initiatives.id')
-      .where(initiative_conditions.join(' OR '))
+    .where(initiative_conditions.join(' OR '))
   }
   scope :order_recent, -> { order(start: :desc) }
 
@@ -173,8 +174,8 @@ class Initiative < BaseClass
   def finish_expenses!
     return false if finished_expenses?
 
-    leftover = estimated_funding - current_expences_sum
-    group.leftover_money += leftover
+    leftover_of_annual_budget = (owner_group.annual_budget - owner_group.approved_budget) + owner_group.available_budget
+    group.leftover_money = leftover_of_annual_budget
     group.save
     self.update(finished_expenses: true)
   end
@@ -184,7 +185,12 @@ class Initiative < BaseClass
   end
 
   def current_expences_sum
-    expenses.sum(:amount) || 0
+    annual_budget = self.annual_budget
+    expenses.where(annual_budget_id: annual_budget.id).sum(:amount) || 0
+  end
+
+  def has_no_estimated_funding?
+    estimated_funding == 0
   end
 
   def leftover
@@ -205,14 +211,14 @@ class Initiative < BaseClass
 
   def self.to_csv(initiatives:, enterprise: nil)
     # initiative column titles
-    CSV.generate do |csv|
+    CSV.generate(headers: true) do |csv|
       # These names dont correspond to the UI. Pillar = Outcome, Initiative/Program = Pillar, Event = Initiative
       csv << [
         enterprise.custom_text.send('erg_text'),
         enterprise.custom_text.send('outcome_text'),
         enterprise.custom_text.send('program_text'),
         'Event Name', 'Start Date', 'End Date',
-        'Expenses', 'Budget', 'Metrics 1', 'Metrics 2'
+        'Expenses', 'Budget', 'Metrics'
       ]
 
       initiatives.order(:start).each do |initiative|
@@ -227,10 +233,17 @@ class Initiative < BaseClass
           ActionController::Base.helpers.number_to_currency(initiative.estimated_funding)
         ]
 
-        # Add first two metric titles
-        fields = initiative.fields
-        columns << (fields.first.nil? ? nil : fields.first.title)
-        columns << (fields.second.nil? ? nil : fields.first.title)
+        if initiative.updates.any?
+          update_data = initiative.updates.last.data
+          data_set = update_data.gsub!(/[^0-9]/, ' ').strip.split(' ')
+          data_set_hash = Hash[*data_set]
+
+          metrics_data = []
+          data_set_hash.each do |x|
+            metrics_data << "#{Field.find([*x][0]).title}(#{[*x][1]})"
+          end
+          columns << metrics_data.to_s.gsub!(/[^A-Za-z0-9()]/, ' ').strip
+        end
 
         csv << columns
       end
@@ -246,9 +259,9 @@ class Initiative < BaseClass
 
   def highcharts_history(field:, from: 1.year.ago, to: Time.current)
     self.updates
-      .where('report_date >= ?', from)
-      .where('report_date <= ?', to)
-      .order(created_at: :asc)
+    .where('report_date >= ?', from)
+    .where('report_date <= ?', to)
+    .order(created_at: :asc)
     .map do |update|
       [
         update.reported_for_date.to_i * 1000, # We multiply by 1000 to get milliseconds for highcharts

@@ -7,16 +7,20 @@ class BudgetsController < ApplicationController
 
   def index
     authorize [@group], :index?, policy_class: GroupBudgetPolicy
-    @budgets = @group.budgets.order('id DESC')
+
+    annual_budget = current_user.enterprise.annual_budgets.find_by(id: params[:annual_budget_id])
+    @budgets = annual_budget&.budgets&.order('id DESC') || Budget.none
   end
 
   def show
     authorize [@group], :show?, policy_class: GroupBudgetPolicy
+    @annual_budget_id = params[:annual_budget_id]
   end
 
   def new
     authorize [@group], :create?, policy_class: GroupBudgetPolicy
 
+    @annual_budget_id = params[:annual_budget_id]
     @budget = Budget.new
   end
 
@@ -26,24 +30,39 @@ class BudgetsController < ApplicationController
     @budget = Budget.new(budget_params.merge({ requester_id: current_user.id }))
     @group.budgets << @budget
 
+    annual_budget = current_user.enterprise.annual_budgets.find_or_create_by(closed: false, group_id: @group.id)
+    annual_budget.budgets << @budget
+
     if @group.save
       flash[:notice] = 'Your budget was created'
       track_activity(@budget, :create)
-      redirect_to action: :index
+      redirect_to(action: :index, annual_budget_id: params[:budget][:annual_budget_id])
     else
       flash[:alert] = 'Your budget was not created. Please fix the errors'
+      @annual_budget_id = params[:budget][:annual_budget_id]
       render :new
     end
   end
 
   def approve
     authorize [@group], :approve?, policy_class: GroupBudgetPolicy
-    if @budget.update(budget_params)
-      BudgetManager.new(@budget).approve(current_user)
-      track_activity(@budget, :approve)
-      redirect_to action: :index
-    else
+
+    if @group.annual_budget == 0 || @group.annual_budget.nil?
+      flash[:alert] = 'please set an annual budget for this group'
       redirect_to :back
+    else
+      if @budget.budget_items.sum(:estimated_amount) > @budget.annual_budget.amount
+        flash[:alert] = "This budget exceeds the annual budget of #{ActionController::Base.helpers.number_to_currency(@budget.annual_budget.amount)} and therefore cannot be approved"
+        redirect_to :back
+      else
+        if @budget.update(budget_params)
+          BudgetManager.new(@budget).approve(current_user)
+          track_activity(@budget, :approve)
+          redirect_to(action: :index, annual_budget_id: params[:budget][:annual_budget_id])
+        else
+          redirect_to :back
+        end
+      end
     end
   end
 
@@ -64,7 +83,7 @@ class BudgetsController < ApplicationController
     track_activity(@budget, :destroy)
     if @budget.destroy
       flash[:notice] = 'Your budget was deleted'
-      redirect_to action: :index
+      redirect_to(action: :index, annual_budget_id: params[:annual_budget_id])
     else
       flash[:alert] = 'Your budget was not deleted. Please fix the errors'
       redirect_to :back
@@ -86,12 +105,12 @@ class BudgetsController < ApplicationController
   def reset_annual_budget
     authorize [@group], :update?, policy_class: GroupBudgetPolicy
 
-    if AnnualBudgetManager.new(@group).reset
+    if AnnualBudgetManager.new(@group).reset!
       track_activity(@group, :annual_budget_update)
       flash[:notice] = 'Your budget was updated'
       redirect_to :back
     else
-      flash[:alert] = 'Your budget was not updated. Please fix the errors'
+      flash[:alert] = 'Your budget was not updated.'
       redirect_to :back
     end
   end
@@ -99,15 +118,12 @@ class BudgetsController < ApplicationController
   def carry_over_annual_budget
     authorize [@group], :update?, policy_class: GroupBudgetPolicy
 
-    leftover = @group.leftover_money + @group.annual_budget
-
-    if @group.update({ annual_budget: leftover, leftover_money: 0 })
-      @group.budgets.update_all(is_approved: false)
+    if AnnualBudgetManager.new(@group).carry_over!
       track_activity(@group, :annual_budget_update)
       flash[:notice] = 'Your budget was updated'
       redirect_to :back
     else
-      flash[:alert] = 'Your budget was not updated. Please fix the errors'
+      flash[:alert] = 'Your budget was not updated.'
       redirect_to :back
     end
   end
@@ -115,12 +131,12 @@ class BudgetsController < ApplicationController
   def update_annual_budget
     authorize [@group], :update?, policy_class: GroupBudgetPolicy
 
-    if @group.update(annual_budget_params)
+    if AnnualBudgetManager.new(@group).edit(annual_budget_params)
       track_activity(@group, :annual_budget_update)
       flash[:notice] = 'Your budget was updated'
       redirect_to :back
     else
-      flash[:alert] = 'Your budget was not updated. Please fix the errors'
+      flash[:alert] = 'Your budget was not updated.'
       redirect_to :back
     end
   end
@@ -142,6 +158,7 @@ class BudgetsController < ApplicationController
         :description,
         :comments,
         :approver_id,
+        :annual_budget_id,
         budget_items_attributes: [
           :id,
           :title,

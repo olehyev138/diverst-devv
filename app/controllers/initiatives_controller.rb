@@ -27,6 +27,9 @@ class InitiativesController < ApplicationController
     @initiative.owner_group = @group
     # bTODO add event to @group.own_initiatives
 
+    annual_budget = current_user.enterprise.annual_budgets.find_or_create_by(closed: false, group_id: @group.id)
+    @initiative.annual_budget_id = annual_budget.id
+
     if @initiative.save
       flash[:notice] = 'Your event was created'
       track_activity(@initiative, :create)
@@ -48,6 +51,9 @@ class InitiativesController < ApplicationController
 
   def update
     authorize @initiative
+
+    AnnualBudgetManager.new(@group).re_assign_annual_budget(initiative_params['budget_item_id'], @initiative.id)
+
     if @initiative.update(initiative_params)
       flash[:notice] = 'Your event was updated'
       track_activity(@initiative, :update)
@@ -171,6 +177,7 @@ class InitiativesController < ApplicationController
         :archived_at,
         :from, # For filtering
         :to, # For filtering
+        :annual_budget_id,
         participating_group_ids: [],
         segment_ids: [],
         fields_attributes: [
