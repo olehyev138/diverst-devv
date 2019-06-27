@@ -13,7 +13,7 @@ RSpec.describe IntegrationsController, type: :controller do
   describe 'GET #calendar' do
     login_user_from_let
 
-    before { get :calendar, token: enterprise.iframe_calendar_token }
+    before { get :calendar, token: enterprise.get_iframe_calendar_token }
 
     it 'returns valid enterprise groups' do
       expect(assigns[:groups].count).to eq groups
