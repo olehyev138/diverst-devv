@@ -1,7 +1,7 @@
 class Folder < ApplicationRecord
   include PublicActivity::Common
   include Folder::Actions
-  
+
   has_secure_password(validations: false)
 
   # associations

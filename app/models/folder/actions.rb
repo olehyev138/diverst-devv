@@ -7,10 +7,10 @@ module Folder::Actions
     def validate_password(diverst_request, params)
       # check for an id and password
       raise BadRequestException.new 'Folder ID and password required' unless params[:id].present? && params[:password].present?
-      
+
       id = params[:id]
       password = params[:password]
-      
+
       # find the folder
       folder = find_by(id: id)
       raise BadRequestException.new 'Folder does not exist' if folder.nil?
