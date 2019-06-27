@@ -82,6 +82,7 @@
       <div class="row">
         <% if GroupBudgetPolicy.new(current_user, [@group, @budget]).approve? %>
           <div class="col">
+            <%= f.hidden_field :annual_budget_id, value: @annual_budget_id %>
             <%= f.button :submit, 'Approve Budget' %>
           </div>
           <% #bTODO check if vulnerabilities %>

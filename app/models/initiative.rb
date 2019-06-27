@@ -34,6 +34,7 @@ class Initiative < BaseClass
   accepts_nested_attributes_for :checklist_items, reject_if: :all_blank, allow_destroy: true
 
   belongs_to :owner_group, class_name: 'Group'
+  belongs_to :annual_budget
 
   has_many :initiative_segments, dependent: :destroy
   has_many :segments, through: :initiative_segments
@@ -173,8 +174,8 @@ class Initiative < BaseClass
   def finish_expenses!
     return false if finished_expenses?
 
-    leftover = estimated_funding - current_expences_sum
-    group.leftover_money += leftover
+    leftover_of_annual_budget = (owner_group.annual_budget - owner_group.approved_budget) + owner_group.available_budget
+    group.leftover_money = leftover_of_annual_budget
     group.save
     self.update(finished_expenses: true)
   end
@@ -184,7 +185,12 @@ class Initiative < BaseClass
   end
 
   def current_expences_sum
-    expenses.sum(:amount) || 0
+    annual_budget = self.annual_budget
+    expenses.where(annual_budget_id: annual_budget.id).sum(:amount) || 0
+  end
+
+  def has_no_estimated_funding?
+    estimated_funding == 0
   end
 
   def leftover
