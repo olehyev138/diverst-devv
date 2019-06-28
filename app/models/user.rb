@@ -584,8 +584,8 @@ class User < BaseClass
   end
 
   def valid_linkedin_url
-    unless linkedin_profile_url.downcase.start_with? 'https://'
-      self.linkedin_profile_url = "https://#{linkedin_profile_url}"
+    unless linkedin_profile_url.downcase.start_with? 'http'
+      self.linkedin_profile_url = "http://#{linkedin_profile_url}"
     end
 
     uri = URI.parse(linkedin_profile_url) rescue nil
