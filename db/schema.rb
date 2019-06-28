@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190612222712) do
+ActiveRecord::Schema.define(version: 20190628155650) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -29,6 +29,39 @@ ActiveRecord::Schema.define(version: 20190612222712) do
   add_index "activities", ["owner_id", "owner_type"], name: "index_activities_on_owner_id_and_owner_type", using: :btree
   add_index "activities", ["recipient_id", "recipient_type"], name: "index_activities_on_recipient_id_and_recipient_type", using: :btree
   add_index "activities", ["trackable_id", "trackable_type"], name: "index_activities_on_trackable_id_and_trackable_type", using: :btree
+
+# Could not dump table "ahoy_events" because of following StandardError
+#   Unknown type 'json' for column 'properties'
+
+  create_table "ahoy_visits", force: :cascade do |t|
+    t.string   "visit_token",      limit: 191
+    t.string   "visitor_token",    limit: 191
+    t.integer  "user_id",          limit: 4
+    t.string   "ip",               limit: 191
+    t.text     "user_agent",       limit: 65535
+    t.text     "referrer",         limit: 65535
+    t.string   "referring_domain", limit: 191
+    t.text     "landing_page",     limit: 65535
+    t.string   "browser",          limit: 191
+    t.string   "os",               limit: 191
+    t.string   "device_type",      limit: 191
+    t.string   "country",          limit: 191
+    t.string   "region",           limit: 191
+    t.string   "city",             limit: 191
+    t.decimal  "latitude",                       precision: 10, scale: 8
+    t.decimal  "longitude",                      precision: 11, scale: 8
+    t.string   "utm_source",       limit: 191
+    t.string   "utm_medium",       limit: 191
+    t.string   "utm_term",         limit: 191
+    t.string   "utm_content",      limit: 191
+    t.string   "utm_campaign",     limit: 191
+    t.string   "app_version",      limit: 191
+    t.string   "os_version",       limit: 191
+    t.string   "platform",         limit: 191
+    t.datetime "started_at"
+  end
+
+  add_index "ahoy_visits", ["visit_token"], name: "index_ahoy_visits_on_visit_token", unique: true, using: :btree
 
   create_table "annual_budgets", force: :cascade do |t|
     t.integer  "group_id",         limit: 4
@@ -101,6 +134,53 @@ ActiveRecord::Schema.define(version: 20190612222712) do
   end
 
   add_index "badges", ["enterprise_id"], name: "index_badges_on_enterprise_id", using: :btree
+
+  create_table "blazer_audits", force: :cascade do |t|
+    t.integer  "user_id",     limit: 4
+    t.integer  "query_id",    limit: 4
+    t.text     "statement",   limit: 65535
+    t.string   "data_source", limit: 191
+    t.datetime "created_at"
+  end
+
+  create_table "blazer_checks", force: :cascade do |t|
+    t.integer  "creator_id",     limit: 4
+    t.integer  "query_id",       limit: 4
+    t.string   "state",          limit: 191
+    t.string   "schedule",       limit: 191
+    t.text     "emails",         limit: 65535
+    t.text     "slack_channels", limit: 65535
+    t.string   "check_type",     limit: 191
+    t.text     "message",        limit: 65535
+    t.datetime "last_run_at"
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+  end
+
+  create_table "blazer_dashboard_queries", force: :cascade do |t|
+    t.integer  "dashboard_id", limit: 4
+    t.integer  "query_id",     limit: 4
+    t.integer  "position",     limit: 4
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
+  create_table "blazer_dashboards", force: :cascade do |t|
+    t.integer  "creator_id", limit: 4
+    t.text     "name",       limit: 65535
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+  end
+
+  create_table "blazer_queries", force: :cascade do |t|
+    t.integer  "creator_id",  limit: 4
+    t.string   "name",        limit: 191
+    t.text     "description", limit: 65535
+    t.text     "statement",   limit: 65535
+    t.string   "data_source", limit: 191
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
 
   create_table "budget_items", force: :cascade do |t|
     t.integer  "budget_id",        limit: 4
@@ -347,7 +427,25 @@ ActiveRecord::Schema.define(version: 20190612222712) do
     t.integer  "expiry_age_for_resources",              limit: 4,     default: 0
     t.string   "unit_of_expiry_age",                    limit: 191
     t.boolean  "auto_archive",                                        default: false
+    t.string   "sp_mode",                               limit: 191
+    t.string   "sp_host",                               limit: 191
+    t.string   "sp_site",                               limit: 191
+    t.string   "sp_username",                           limit: 191
+    t.string   "sp_password",                           limit: 191
+    t.integer  "share_point_files_id",                  limit: 4
+    t.integer  "share_point_pages_id",                  limit: 4
+    t.integer  "share_point_lists_id",                  limit: 4
+    t.string   "sp_import_lists",                       limit: 191,   default: "No"
+    t.string   "sp_import_files",                       limit: 191,   default: "No"
+    t.string   "sp_import_news",                        limit: 191,   default: "No"
+    t.boolean  "sp_group_integration",                                default: false
+    t.boolean  "sp_group_settings_same",                              default: true
+    t.string   "sp_import_pages",                       limit: 191,   default: "No"
   end
+
+  add_index "enterprises", ["share_point_files_id"], name: "fk_rails_6315f961bd", using: :btree
+  add_index "enterprises", ["share_point_lists_id"], name: "fk_rails_9079d32818", using: :btree
+  add_index "enterprises", ["share_point_pages_id"], name: "fk_rails_a7e31215f7", using: :btree
 
   create_table "expense_categories", force: :cascade do |t|
     t.integer  "enterprise_id",     limit: 4
@@ -585,7 +683,23 @@ ActiveRecord::Schema.define(version: 20190612222712) do
     t.string   "unit_of_expiry_age",          limit: 191
     t.boolean  "auto_archive",                                                      default: false
     t.string   "event_attendance_visibility", limit: 191
+    t.string   "sp_mode",                     limit: 191
+    t.string   "sp_host",                     limit: 191
+    t.string   "sp_site",                     limit: 191
+    t.string   "sp_username",                 limit: 191
+    t.string   "sp_password",                 limit: 191
+    t.integer  "share_point_files_id",        limit: 4
+    t.integer  "share_point_pages_id",        limit: 4
+    t.integer  "share_point_lists_id",        limit: 4
+    t.string   "sp_import_lists",             limit: 191,                           default: "No"
+    t.string   "sp_import_files",             limit: 191,                           default: "No"
+    t.string   "sp_import_news",              limit: 191,                           default: "No"
+    t.string   "sp_import_pages",             limit: 191,                           default: "No"
   end
+
+  add_index "groups", ["share_point_files_id"], name: "index_groups_on_share_point_files_id", using: :btree
+  add_index "groups", ["share_point_lists_id"], name: "index_groups_on_share_point_lists_id", using: :btree
+  add_index "groups", ["share_point_pages_id"], name: "index_groups_on_share_point_pages_id", using: :btree
 
   create_table "groups_metrics_dashboards", force: :cascade do |t|
     t.integer "group_id",             limit: 4
@@ -917,6 +1031,17 @@ ActiveRecord::Schema.define(version: 20190612222712) do
     t.datetime "updated_at",             null: false
   end
 
+  create_table "page_visitation_data", force: :cascade do |t|
+    t.integer  "user_id",       limit: 4
+    t.string   "page",          limit: 191
+    t.integer  "times_visited", limit: 4
+    t.integer  "time_on_page",  limit: 4
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
+
+  add_index "page_visitation_data", ["user_id"], name: "fk_rails_525ec0a51c", using: :btree
+
   create_table "pillars", force: :cascade do |t|
     t.string   "name",              limit: 191
     t.string   "value_proposition", limit: 191
@@ -1222,6 +1347,13 @@ ActiveRecord::Schema.define(version: 20190612222712) do
     t.datetime "updated_at"
   end
 
+  create_table "sharepoint_data", force: :cascade do |t|
+    t.string   "data_type",  limit: 191
+    t.text     "data",       limit: 4294967295
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+  end
+
   create_table "social_link_segments", force: :cascade do |t|
     t.integer  "social_link_id", limit: 4
     t.integer  "segment_id",     limit: 4
@@ -1301,8 +1433,8 @@ ActiveRecord::Schema.define(version: 20190612222712) do
 
   create_table "twitter_accounts", force: :cascade do |t|
     t.integer  "group_id",   limit: 4
-    t.string   "name",       limit: 191, null: false
-    t.string   "account",    limit: 191, null: false
+    t.string   "name",       limit: 191
+    t.string   "account",    limit: 191
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
   end
@@ -1464,6 +1596,12 @@ ActiveRecord::Schema.define(version: 20190612222712) do
   add_foreign_key "budgets", "users", column: "approver_id"
   add_foreign_key "budgets", "users", column: "requester_id"
   add_foreign_key "custom_texts", "enterprises"
+  add_foreign_key "enterprises", "sharepoint_data", column: "share_point_files_id"
+  add_foreign_key "enterprises", "sharepoint_data", column: "share_point_lists_id"
+  add_foreign_key "enterprises", "sharepoint_data", column: "share_point_pages_id"
+  add_foreign_key "groups", "sharepoint_data", column: "share_point_files_id"
+  add_foreign_key "groups", "sharepoint_data", column: "share_point_lists_id"
+  add_foreign_key "groups", "sharepoint_data", column: "share_point_pages_id"
   add_foreign_key "likes", "answers"
   add_foreign_key "likes", "enterprises"
   add_foreign_key "likes", "news_feed_links"
@@ -1471,6 +1609,7 @@ ActiveRecord::Schema.define(version: 20190612222712) do
   add_foreign_key "mentoring_session_comments", "mentoring_sessions"
   add_foreign_key "mentoring_session_comments", "users"
   add_foreign_key "mentorship_availabilities", "users"
+  add_foreign_key "page_visitation_data", "users"
   add_foreign_key "polls", "initiatives"
   add_foreign_key "reward_actions", "enterprises"
   add_foreign_key "rewards", "enterprises"

@@ -19,6 +19,10 @@ Rails.application.routes.draw do
 
   get 'omniauth/:provider/callback', to: 'omni_auth#callback'
 
+  # authenticate :user, -> (user) { user. } do
+  mount Blazer::Engine, at: 'balzer'
+  # end
+
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
       resources :users
