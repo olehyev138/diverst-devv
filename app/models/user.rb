@@ -580,6 +580,21 @@ class User < BaseClass
     )
   end
 
+  def collect_visitation_data
+    page_visits = visits.group(:landing_page).count
+    page_visits.each do |page, count|
+      visitation = page_visitation_data.find_by(page: page)
+      if visitation.present?
+        visitation.times_visited += count
+        visitation.save
+      else
+        visitation = page_visitation_data.new(page: page, times_visited: count)
+        visitation.save
+      end
+    end
+    visits.find_each { |visit| visit.destroy }
+  end
+
   private
 
   def check_lifespan_of_user
