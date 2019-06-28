@@ -9,7 +9,7 @@ import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/Group/reducer';
 import { selectGroup } from 'containers/Group/selectors';
 
-import { getGroupBegin, updateGroupBegin } from 'containers/Group/actions';
+import { getGroupBegin, updateGroupBegin, groupFormUnmount } from 'containers/Group/actions';
 
 import saga from 'containers/Group/saga';
 
@@ -21,6 +21,10 @@ export function GroupEditPage(props) {
 
   useEffect(() => {
     props.getGroupBegin({ id: props.location.state.id });
+
+    return () => {
+      props.groupFormUnmount();
+    };
   }, []);
 
   return (
@@ -41,8 +45,9 @@ GroupEditPage.propTypes = {
     })
   }),
   group: PropTypes.object,
-  fetchGroupBegin: PropTypes.func,
-  updateGroupBegin: PropTypes.func
+  getGroupBegin: PropTypes.func,
+  updateGroupBegin: PropTypes.func,
+  groupFormUnmount: PropTypes.func
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -55,6 +60,7 @@ function mapDispatchToProps(dispatch) {
   return {
     getGroupBegin: payload => dispatch(getGroupBegin(payload)),
     updateGroupBegin: payload => dispatch(updateGroupBegin(payload)),
+    groupFormUnmount: () => dispatch(groupFormUnmount())
   };
 }
 

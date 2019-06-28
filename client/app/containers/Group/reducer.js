@@ -5,7 +5,10 @@
  */
 
 import produce from 'immer/dist/immer';
-import { GET_GROUPS_SUCCESS, GET_GROUP_SUCCESS, GET_GROUPS_ERROR } from 'containers/Group/constants';
+import {
+  GET_GROUPS_SUCCESS, GET_GROUP_SUCCESS,
+  GET_GROUPS_ERROR, GROUP_LIST_UNMOUNT, GROUP_FORM_UNMOUNT
+} from 'containers/Group/constants';
 
 export const initialState = {
   groupList: {},
@@ -23,6 +26,10 @@ function groupsReducer(state = initialState, action) {
       case GET_GROUP_SUCCESS:
         draft.groupList[`${action.payload.group.id}`] = action.payload.group;
         break;
+      case GROUP_LIST_UNMOUNT:
+        return initialState;
+      case GROUP_FORM_UNMOUNT:
+        return initialState;
     }
   });
 }

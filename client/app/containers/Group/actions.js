@@ -10,7 +10,7 @@ import {
   CREATE_GROUP_BEGIN, CREATE_GROUP_SUCCESS, CREATE_GROUP_ERROR,
   UPDATE_GROUP_BEGIN, UPDATE_GROUP_SUCCESS, UPDATE_GROUP_ERROR,
   DELETE_GROUP_BEGIN, DELETE_GROUP_SUCCESS, DELETE_GROUP_ERROR,
-
+  GROUP_LIST_UNMOUNT, GROUP_FORM_UNMOUNT
 } from 'containers/Group/constants';
 
 /* Group listing */
@@ -125,5 +125,17 @@ export function deleteGroupError(error) {
   return {
     type: DELETE_GROUP_ERROR,
     error,
+  };
+}
+
+export function groupListUnmount() {
+  return {
+    type: GROUP_LIST_UNMOUNT
+  };
+}
+
+export function groupFormUnmount() {
+  return {
+    type: GROUP_FORM_UNMOUNT
   };
 }

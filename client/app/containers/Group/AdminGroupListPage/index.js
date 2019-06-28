@@ -14,7 +14,7 @@ import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import { selectPaginatedGroups, selectGroupTotal, selectGroup } from 'containers/Group/selectors';
 import reducer from 'containers/Group/reducer';
-import { getGroupsBegin } from 'containers/Group/actions';
+import { getGroupsBegin, groupListUnmount } from 'containers/Group/actions';
 
 import saga from 'containers/Group/saga';
 
@@ -26,6 +26,10 @@ export function AdminGroupListPage(props) {
 
   useEffect(() => {
     props.getGroupsBegin();
+
+    return () => {
+      props.groupListUnmount();
+    };
   }, []);
 
   return (
@@ -40,6 +44,7 @@ export function AdminGroupListPage(props) {
 
 AdminGroupListPage.propTypes = {
   getGroupsBegin: PropTypes.func.isRequired,
+  groupListUnmount: PropTypes.func.isRequired,
   groups: PropTypes.object,
   groupTotal: PropTypes.number,
 };
@@ -52,6 +57,7 @@ const mapStateToProps = createStructuredSelector({
 function mapDispatchToProps(dispatch) {
   return {
     getGroupsBegin: payload => dispatch(getGroupsBegin(payload)),
+    groupListUnmount: () => dispatch(groupListUnmount())
   };
 }
 
