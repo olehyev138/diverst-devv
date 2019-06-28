@@ -9,6 +9,7 @@ FactoryBot.define do
     f.owner_group { FactoryBot.create(:group) }
     f.pillar { owner_group.try(:pillars).try(:first) }
     f.owner { FactoryBot.create(:user) }
+    f.annual_budget { FactoryBot.create(:annual_budget) }
     trait :with_budget_item do
       budget_item { FactoryBot.create(:budget_item) }
       owner_group { budget_item.budget.group }

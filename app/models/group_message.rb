@@ -18,6 +18,8 @@ class GroupMessage < BaseClass
   delegate :total_views, to: :news_feed_link
   delegate :unique_views, to: :news_feed_link
 
+  validates_length_of :content, maximum: 65535
+  validates_length_of :subject, maximum: 191
   validates :group_id,    presence: true
   validates :subject,     presence: true
   validates :content,     presence: true

@@ -4,12 +4,13 @@ RSpec.feature 'Initiative filtering' do
   let(:enterprise) { create(:enterprise) }
   let(:user) { create(:user, enterprise: enterprise) }
   let(:group) { create(:group, enterprise: enterprise) }
+  let(:annual_budget) { create(:annual_budget, group_id: group.id) }
   let(:outcome) { create :outcome, group_id: group.id }
   let(:pillar) { create :pillar, outcome_id: outcome.id }
-  let!(:initiative) { create :initiative, pillar: pillar, owner_group: group, start: Date.yesterday, end: Date.tomorrow }
-  let!(:initiative2) { create :initiative, pillar: pillar, owner_group: group, start: Date.tomorrow, end: Date.tomorrow + 5.days }
-  let!(:initiative3) { create :initiative, pillar: pillar, owner_group: group, start: 2.years.ago, end: 2.years.ago + 1.week }
-  let!(:initiative4) { create :initiative, pillar: pillar, owner_group: group, start: 1.year.from_now, end: 1.year.from_now + 3.days }
+  let!(:initiative) { create :initiative, pillar: pillar, owner_group: group, start: Date.yesterday, end: Date.tomorrow, annual_budget_id: annual_budget.id }
+  let!(:initiative2) { create :initiative, pillar: pillar, owner_group: group, start: Date.tomorrow, end: Date.tomorrow + 5.days, annual_budget_id: annual_budget.id }
+  let!(:initiative3) { create :initiative, pillar: pillar, owner_group: group, start: 2.years.ago, end: 2.years.ago + 1.week, annual_budget_id: annual_budget.id }
+  let!(:initiative4) { create :initiative, pillar: pillar, owner_group: group, start: 1.year.from_now, end: 1.year.from_now + 3.days, annual_budget_id: annual_budget.id }
 
   before(:each) do
     login_as(user, scope: :user, run_callbacks: false)

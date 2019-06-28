@@ -2,6 +2,7 @@ class SegmentRule < BaseClass
   belongs_to :segment
   belongs_to :field
 
+  validates_length_of :values, maximum: 65535
   validates :field, presence: true
   validates :field_id, presence: true
 
