@@ -105,6 +105,13 @@ module ApplicationHelper
     false
   end
 
+  def group_initiative_expenses_link(text, group, initiative)
+    return link_to text, group_initiative_expenses_path(group, initiative) if initiative.estimated_funding != 0
+
+    return link_to text, group_initiative_expenses_path(group, initiative),
+                   data: { confirm: 'you are not allowed to make a negative expense' } if initiative.estimated_funding == 0
+  end
+
   def default_path
     return root_admin_path if root_admin_path
 

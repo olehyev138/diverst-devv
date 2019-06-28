@@ -16,6 +16,8 @@ class Folder < BaseClass
   has_many    :children, class_name: 'Folder', foreign_key: :parent_id, dependent: :destroy
 
   # validations
+  validates_length_of :password_digest, maximum: 191
+  validates_length_of :name, maximum: 191
   validates :name, presence: true
   validates_uniqueness_of :name, scope: [:enterprise_id], if: 'enterprise_id.present?'
   validates_uniqueness_of :name, scope: [:group_id], if: 'group_id.present?'

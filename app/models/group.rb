@@ -109,6 +109,8 @@ class Group < BaseClass
   has_many :sponsors, as: :sponsorable, dependent: :destroy
 
   has_many :children, class_name: 'Group', foreign_key: :parent_id, dependent: :destroy
+  has_many :annual_budgets, dependent: :destroy
+
   belongs_to :parent, class_name: 'Group', foreign_key: :parent_id
   belongs_to :group_category
   belongs_to :group_category_type
@@ -118,6 +120,28 @@ class Group < BaseClass
   do_not_validate_attachment_file_type :sponsor_media
 
   has_attached_file :logo, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: :private
+  validates_length_of :event_attendance_visibility, maximum: 191
+  validates_length_of :unit_of_expiry_age, maximum: 191
+  validates_length_of :home_message, maximum: 65535
+  validates_length_of :layout, maximum: 191
+  validates_length_of :short_description, maximum: 65535
+  validates_length_of :upcoming_events_visibility, maximum: 191
+  validates_length_of :latest_news_visibility, maximum: 191
+  validates_length_of :company_video_url, maximum: 191
+  validates_length_of :sponsor_image_content_type, maximum: 191
+  validates_length_of :sponsor_image_file_name, maximum: 191
+  validates_length_of :calendar_color, maximum: 191
+  validates_length_of :banner_content_type, maximum: 191
+  validates_length_of :banner_file_name, maximum: 191
+  validates_length_of :messages_visibility, maximum: 191
+  validates_length_of :members_visibility, maximum: 191
+  validates_length_of :pending_users, maximum: 191
+  validates_length_of :yammer_group_link, maximum: 191
+  validates_length_of :yammer_group_name, maximum: 191
+  validates_length_of :logo_content_type, maximum: 191
+  validates_length_of :logo_file_name, maximum: 191
+  validates_length_of :description, maximum: 65535
+  validates_length_of :name, maximum: 191
   validates_attachment_content_type :logo, content_type: %r{\Aimage\/.*\Z}
 
   has_attached_file :banner
@@ -240,17 +264,21 @@ class Group < BaseClass
   end
 
   def approved_budget
-    (budgets.approved.map { |b| b.requested_amount || 0 }).reduce(0, :+)
+    annual_budget = annual_budgets.find_by(closed: false)
+    return 0 if annual_budget.nil?
+
+    (budgets.where(annual_budget_id: annual_budget.id).approved.map { |b| b.requested_amount || 0 }).reduce(0, :+)
   end
 
   def available_budget
-    return 0 unless annual_budget
-
-    annual_budget - (approved_budget + spent_budget)
+    approved_budget - spent_budget
   end
 
   def spent_budget
-    (initiatives.map { |i| i.current_expences_sum || 0 }).reduce(0, :+)
+    annual_budget = annual_budgets.find_by(closed: false)
+    return 0 if annual_budget.nil?
+
+    (initiatives.where(annual_budget_id: annual_budget.id).map { |i| i.current_expences_sum || 0 }).reduce(0, :+)
   end
 
   def active_members
@@ -399,7 +427,7 @@ class Group < BaseClass
   end
 
   def title_with_leftover_amount
-    "Create event from #{name} leftover ($#{leftover_money})"
+    "Create event from #{name} leftover ($#{leftover_money == 0 ? 0.0 : available_budget})"
   end
 
   def pending_comments_count

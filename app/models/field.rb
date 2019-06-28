@@ -6,6 +6,11 @@ class Field < BaseClass
 
   has_many :yammer_field_mappings, foreign_key: :diverst_field_id, dependent: :delete_all
 
+  validates_length_of :field_type, maximum: 191
+  validates_length_of :options_text, maximum: 65535
+  validates_length_of :saml_attribute, maximum: 191
+  validates_length_of :title, maximum: 191
+  validates_length_of :type, maximum: 191
   validates :title, presence: true
   validates :title, uniqueness: { scope: :enterprise_id },
                     unless: Proc.new { |object| (object.type == 'SegmentsField' || object.type == 'GroupsField') }, if: :container_type_is_enterprise?

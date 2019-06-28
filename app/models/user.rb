@@ -76,6 +76,29 @@ class User < BaseClass
   has_many :shared_metrics_dashboards
 
   has_attached_file :avatar, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing_user.png'), s3_permissions: 'private'
+  validates_length_of :mentorship_description, maximum: 65535
+  validates_length_of :unlock_token, maximum: 191
+  validates_length_of :time_zone, maximum: 191
+  validates_length_of :biography, maximum: 65535
+  validates_length_of :avatar_content_type, maximum: 191
+  validates_length_of :avatar_file_name, maximum: 191
+  validates_length_of :linkedin_profile_url, maximum: 191
+  validates_length_of :yammer_token, maximum: 191
+  validates_length_of :firebase_token, maximum: 191
+  validates_length_of :tokens, maximum: 65535
+  validates_length_of :uid, maximum: 191
+  validates_length_of :provider, maximum: 191
+  validates_length_of :invited_by_type, maximum: 191
+  validates_length_of :invitation_token, maximum: 191
+  validates_length_of :last_sign_in_ip, maximum: 191
+  validates_length_of :current_sign_in_ip, maximum: 191
+  validates_length_of :reset_password_token, maximum: 191
+  validates_length_of :encrypted_password, maximum: 191
+  validates_length_of :email, maximum: 191
+  validates_length_of :auth_source, maximum: 191
+  validates_length_of :data, maximum: 65535
+  validates_length_of :last_name, maximum: 191
+  validates_length_of :first_name, maximum: 191
   validates_attachment_content_type :avatar, content_type: /\Aimage\/.*\Z/
 
   validates :first_name, presence: true

@@ -4,11 +4,12 @@ RSpec.describe InitiativesController, type: :controller do
   include ActiveJob::TestHelper
 
   let(:user) { create :user }
-  let!(:group) { create :group, :without_outcomes, enterprise: user.enterprise }
+  let!(:group) { create :group, :without_outcomes, enterprise: user.enterprise, annual_budget: 10000 }
   let(:outcome) { create :outcome, group_id: group.id }
   let(:pillar) { create :pillar, outcome_id: outcome.id }
-  let!(:initiative) { create :initiative, pillar: pillar, owner_group: group, start: Date.yesterday, end: Date.tomorrow }
-  let!(:initiative2) { create :initiative, pillar: pillar, owner_group: group, start: 2.years.ago, end: 2.years.ago + 1.week }
+  let!(:annual_budget) { create(:annual_budget, group: group, amount: group.annual_budget, enterprise_id: user.enterprise_id) }
+  let!(:initiative) { create :initiative, pillar: pillar, owner_group: group, start: Date.yesterday, end: Date.tomorrow, annual_budget_id: annual_budget.id }
+  let!(:initiative2) { create :initiative, pillar: pillar, owner_group: group, start: 2.years.ago, end: 2.years.ago + 1.week, annual_budget_id: annual_budget.id }
 
   describe 'GET #index' do
     def get_index(group_id = -1)
@@ -429,6 +430,40 @@ RSpec.describe InitiativesController, type: :controller do
 
               include_examples 'correct public activity'
             end
+
+            context 'when initiative annual_budget is not equal to annual_budget of selected budget_item' do
+              let!(:group) { create :group, :without_outcomes, enterprise: user.enterprise, annual_budget: 10000 }
+              let!(:annual_budget) { create(:annual_budget, group: group, amount: group.annual_budget, enterprise_id: user.enterprise_id) }
+              let!(:budget) { create(:approved_budget, group_id: group.id, annual_budget_id: annual_budget.id) }
+              let!(:outcome) { create :outcome, group_id: group.id }
+              let!(:pillar) { create :pillar, outcome_id: outcome.id }
+              let!(:initiative) { create(:initiative, pillar: pillar, owner_group: group, annual_budget_id: annual_budget.id, estimated_funding: budget.budget_items.first.available_amount,
+                                                      budget_item_id: budget.budget_items.first.id)
+              }
+              let!(:expense) { create(:initiative_expense, initiative_id: initiative.id, annual_budget_id: annual_budget.id, amount: 50) }
+
+              before do
+                initiative.finish_expenses!
+                AnnualBudgetManager.new(group).carry_over!
+              end
+
+              # the second annual_budget is gotten from calling carry_over on AnnualBudgetManager
+              let!(:annual_budget1) { group.annual_budgets.find_by(closed: false) }
+              let!(:budget1) { create(:approved_budget, group_id: group.id, annual_budget_id: annual_budget1.id) }
+              let!(:initiative1) { create(:initiative, pillar: pillar, owner_group: group, annual_budget_id: annual_budget.id, estimated_funding: budget1.budget_items.first.available_amount,
+                                                       budget_item_id: budget1.budget_items.first.id)
+              }
+
+
+              it 're-assign annual budget for initiative' do
+                expect(initiative1.annual_budget).not_to eq budget1.annual_budget
+
+                patch_update(group.id, initiative1.id, initiative1.attributes)
+                initiative1.reload
+
+                expect(initiative1.annual_budget).to eq budget1.annual_budget
+              end
+            end
           end
 
           it 'redirects to correct page' do
@@ -535,15 +570,18 @@ RSpec.describe InitiativesController, type: :controller do
         post :finish_expenses, group_id: group_id, id: id
       end
 
-      let(:budget) { create :approved_budget, group: group }
-      let(:budget_item) { budget.budget_items.first }
-      let!(:initiative) { create :initiative, budget_item: budget_item, owner_group: group }
+      let!(:group1) { create(:group, enterprise: user.enterprise, annual_budget: 2000) }
+      let!(:annual_budget1) { create(:annual_budget, group_id: group1.id, amount: group.annual_budget, closed: false) }
+      let!(:budget1) { create(:budget, group_id: group1.id, annual_budget_id: annual_budget1.id) }
+      let!(:initiative) { create(:initiative, owner_group: group1, finished_expenses: false, annual_budget_id: annual_budget1.id) }
+      let!(:expense) { create(:initiative_expense, amount: 0, annual_budget_id: annual_budget1.id, initiative_id: initiative.id) }
+
 
       context 'with logged in user' do
         login_user_from_let
 
         context 'with correct params' do
-          before { post_finish_expenses(group.id, initiative.id) }
+          before { post_finish_expenses(group1.id, initiative.id) }
 
           it 'marks initiative as finished' do
             expect(initiative.reload).to be_finished_expenses

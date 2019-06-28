@@ -38,6 +38,8 @@ RSpec.describe InitiativeDecorator do
     end
 
     it 'returns 50' do
+      initiative.group.update(annual_budget: 10000)
+      create(:annual_budget, amount: initiative.group.annual_budget)
       initiative.estimated_funding = 1000
       # create expenses
       4.times do

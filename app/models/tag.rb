@@ -1,6 +1,7 @@
 class Tag < BaseClass
   belongs_to :resource
 
+  validates_length_of :name, maximum: 191
   validates :name, presence: true
 
   def self.ids_from_tokens(list)
