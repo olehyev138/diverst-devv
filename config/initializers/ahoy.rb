@@ -9,3 +9,6 @@ Ahoy.user_agent_parser = :device_detector
 
 # better bot detection
 Ahoy.bot_detection_version = 2
+
+# visit_duration
+Ahoy.visit_duration = 5.seconds

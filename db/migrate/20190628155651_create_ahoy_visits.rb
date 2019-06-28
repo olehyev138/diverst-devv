@@ -1,4 +1,4 @@
-class CreateAhoyVisitsAndEvents < ActiveRecord::Migration
+class CreateAhoyVisits < ActiveRecord::Migration
   def change
     create_table :ahoy_visits do |t|
       t.string :visit_token
@@ -45,17 +45,5 @@ class CreateAhoyVisitsAndEvents < ActiveRecord::Migration
     end
 
     add_index :ahoy_visits, [:visit_token], unique: true
-
-    create_table :ahoy_events do |t|
-      t.references :visit
-      t.references :user
-
-      t.string :name
-      t.timestamp :time
-    end
-
-    add_column :ahoy_events, :properties, :json
-
-    add_index :ahoy_events, [:name, :time]
   end
 end

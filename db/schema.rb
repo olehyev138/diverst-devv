@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190628155650) do
+ActiveRecord::Schema.define(version: 20190628155652) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -30,8 +30,15 @@ ActiveRecord::Schema.define(version: 20190628155650) do
   add_index "activities", ["recipient_id", "recipient_type"], name: "index_activities_on_recipient_id_and_recipient_type", using: :btree
   add_index "activities", ["trackable_id", "trackable_type"], name: "index_activities_on_trackable_id_and_trackable_type", using: :btree
 
-# Could not dump table "ahoy_events" because of following StandardError
-#   Unknown type 'json' for column 'properties'
+  create_table "ahoy_events", force: :cascade do |t|
+    t.integer  "visit_id",   limit: 4
+    t.integer  "user_id",    limit: 4
+    t.string   "name",       limit: 191
+    t.json     "properties"
+    t.datetime "time"
+  end
+
+  add_index "ahoy_events", ["name", "time"], name: "index_ahoy_events_on_name_and_time", using: :btree
 
   create_table "ahoy_visits", force: :cascade do |t|
     t.string   "visit_token",      limit: 191
