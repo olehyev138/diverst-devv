@@ -8,7 +8,7 @@ import produce from 'immer/dist/immer';
 import { GET_GROUPS_SUCCESS, GET_GROUP_SUCCESS, GET_GROUPS_ERROR } from 'containers/Group/constants';
 
 export const initialState = {
-  groups: null,
+  groupList: {},
   groupTotal: null,
 };
 
@@ -17,13 +17,11 @@ function groupsReducer(state = initialState, action) {
   return produce(state, (draft) => {
     switch (action.type) {
       case GET_GROUPS_SUCCESS:
-        draft.groups = formatGroups(action.payload.items.groups);
+        draft.groupList = formatGroups(action.payload.items.groups);
         draft.groupTotal = action.payload.total;
         break;
       case GET_GROUP_SUCCESS:
-        draft.groups = draft.groups || {};
-        draft.groups[action.payload.group.id] = { view: action.payload.group };
-        draft.groups[action.payload.group.id].edit = action.payload.group;
+        draft.groupList[`${action.payload.group.id}`] = action.payload.group;
         break;
     }
   });

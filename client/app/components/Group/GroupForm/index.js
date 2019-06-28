@@ -4,7 +4,7 @@
  *
  */
 
-import React, { memo, useRef } from 'react';
+import React, { memo, useRef, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
@@ -15,8 +15,6 @@ import {
 import { Field, Formik, Form } from 'formik';
 
 export function GroupFormInner({ handleSubmit, handleChange, handleBlur, values }) {
-  console.log(values);
-
   return (
     <Card>
       <Form>
@@ -45,6 +43,7 @@ export function GroupFormInner({ handleSubmit, handleChange, handleBlur, values 
             id='description'
             name='description'
             label={'Description'}
+            value={values.description}
           />
         </CardContent>
         <CardActions>
@@ -56,29 +55,23 @@ export function GroupFormInner({ handleSubmit, handleChange, handleBlur, values 
   );
 }
 
-export class GroupForm extends React.PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      group_edit: Object.assign({}, props.group)
-    };
-  }
+export function GroupForm(props) {
+  const initialValues = {
+    name: '',
+    short_description: '',
+    description: ''
+  };
 
-  render() {
-    // const form = useRef();
-
-    const initialValues = this.state.group_edit || {};
-
-    return (
-      <Formik
-        initialValues={initialValues}
-        onSubmit={(values, actions) => {
-          this.props.groupAction(values);
-        }}
-        render={props => <GroupFormInner {...props} />}
-      />
-    );
-  }
+  return (
+    <Formik
+      initialValues={props.group || initialValues}
+      enableReinitialize
+      onSubmit={(values, actions) => {
+        props.groupAction(values);
+      }}
+      render={props => <GroupFormInner {...props} />}
+    />
+  );
 }
 
 GroupForm.propTypes = {

@@ -16,6 +16,7 @@ import saga from 'containers/Group/saga';
 import GroupForm from 'components/Group/GroupForm';
 
 export function GroupEditPage(props) {
+  useInjectReducer({ key: 'groups', reducer });
   useInjectSaga({ key: 'groups', saga });
 
   useEffect(() => {
@@ -23,11 +24,13 @@ export function GroupEditPage(props) {
   }, []);
 
   return (
-    <GroupForm
-      groupAction={props.updateGroupBegin}
-      group={props.group}
-      buttonText='Edit'
-    />
+    <React.Fragment>
+      <GroupForm
+        groupAction={props.updateGroupBegin}
+        group={props.group}
+        buttonText='Edit'
+      />
+    </React.Fragment>
   );
 }
 
@@ -47,7 +50,6 @@ const mapStateToProps = (state, ownProps) => {
     group: selectGroup(ownProps.location.state.id)(state)
   };
 };
-
 
 function mapDispatchToProps(dispatch) {
   return {

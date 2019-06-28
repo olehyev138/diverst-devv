@@ -5,7 +5,7 @@ const selectGroupsDomain = state => state.groups || initialState;
 
 const selectPaginatedGroups = () => createSelector(
   selectGroupsDomain,
-  groupsState => groupsState.groups
+  groupsState => groupsState.groupList
 );
 
 const selectGroupTotal = () => createSelector(
@@ -15,7 +15,14 @@ const selectGroupTotal = () => createSelector(
 
 const selectGroup = id => createSelector(
   selectGroupsDomain,
-  groupsState => groupsState.groups[id]
+  groupsState => {
+    // (groupsState.groups ? groupsState.groups[`${id}`] : null)
+
+    if (groupsState.groupList.hasOwnProperty(`${id}`))
+      return groupsState.groupList[`${id}`];
+
+    return null;
+  }
 );
 
 export { selectPaginatedGroups, selectGroupTotal, selectGroup };

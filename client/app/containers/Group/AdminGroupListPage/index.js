@@ -28,10 +28,12 @@ export function AdminGroupListPage(props) {
     props.getGroupsBegin();
   }, []);
 
-
   return (
     <React.Fragment>
-      <GroupList groups={props.groups} groupTotal={props.groupTotal} selectGroup={props.selectGroup} />
+      <GroupList
+        groups={props.groups}
+        groupTotal={props.groupTotal}
+      />
     </React.Fragment>
   );
 }
