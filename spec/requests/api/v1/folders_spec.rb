@@ -4,7 +4,8 @@ RSpec.describe 'Folders', type: :request do
   let(:enterprise) { create(:enterprise) }
   let(:api_key) { create(:api_key) }
   let(:user) { create(:user, password: 'password', enterprise: enterprise) }
-  let(:item) { create(:folder) }
+  let(:password) { SecureRandom.hex(8) }
+  let(:item) { create(:folder, password: password, password_protected: true) }
   let(:route) { 'folders' }
   let(:jwt) { UserTokenService.create_jwt(user) }
   let(:headers) { { 'HTTP_DIVERST_APIKEY' => api_key.key, 'Diverst-UserToken' => jwt } }
@@ -17,6 +18,17 @@ RSpec.describe 'Folders', type: :request do
   it 'gets a item' do
     get "/api/v1/#{route}/#{item.id}", headers: headers
     expect(response).to have_http_status(:ok)
+  end
+
+  it 'verifies a password' do
+    get "/api/v1/#{route}/#{item.id}/password", params: { password: password }, headers: headers
+    expect(response).to have_http_status(:ok)
+  end
+
+  it 'raises an error with invalid password' do
+    folder = create(:folder)
+    get "/api/v1/#{route}/#{folder.id}/password", params: { password: 'fake' }, headers: headers
+    expect(response).to have_http_status(:bad_request)
   end
 
   it 'creates an item' do
