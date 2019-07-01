@@ -109,8 +109,8 @@ class User < BaseClass
   validate :validate_presence_fields
   validate :group_leader_role
   validate :policy_group
-  before_validation :add_linkedin_http, if: -> { !linkedin_profile_url.nil? }
-  validate :valid_linkedin_url, if: -> { !linkedin_profile_url.nil? }
+  before_validation :add_linkedin_http, unless: -> { linkedin_profile_url.nil? }
+  validate :valid_linkedin_url, unless: -> { linkedin_profile_url.nil? }
 
   before_validation :generate_password_if_saml
   before_validation :set_provider
