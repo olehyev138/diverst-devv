@@ -19,9 +19,7 @@ Rails.application.routes.draw do
 
   get 'omniauth/:provider/callback', to: 'omni_auth#callback'
 
-  # authenticate :user, -> (user) { user. } do
-  mount Blazer::Engine, at: 'balzer'
-  # end
+  # mount Blazer::Engine, at: 'balzer'
 
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
@@ -489,6 +487,12 @@ Rails.application.routes.draw do
       get 'privacy_statement', to: 'dashboard#privacy_statement'
       get 'preferences/edit', to: 'user_groups#edit'
       patch 'preferences/update', to: 'user_groups#update'
+
+      resources :usage, only: [:index] do
+        collection do
+          get 'url_data'
+        end
+      end
 
       resources :social_links
       resources :news_links

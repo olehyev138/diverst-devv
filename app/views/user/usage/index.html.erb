@@ -1,0 +1,60 @@
+<div class="content__header">
+  <h1><%= "#{@user.first_name} #{@user.last_name}'s Usage Stats" %></h1>
+</div>
+
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      <div class="row">
+        <div class="col md-12 sm-12">
+          <div class="panel panel--primary text-center margin-bottom-0">
+            <div class="panel-headline"><p><strong>Number of Logins</strong></p></div>
+            <div class="panel-data"><p><b class="accent"><%= @user_metrics[:logins] %></b></p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card__section">
+      <div class="row">
+        <div class="col md-6 sm-12">
+          <div class="panel panel--primary text-center margin-bottom-0">
+            <div class="panel-headline"><p><strong>Number of Posts</strong></p></div>
+            <div class="panel-data"><p><b class="accent"><%= @user_metrics[:posts] %></b></p></div>
+          </div>
+        </div>
+
+        <div class="col md-6 sm-12">
+          <div class="panel panel--primary text-center margin-bottom-0">
+            <div class="panel-headline"><p><strong>Number of Comments</strong></p></div>
+            <div class="panel-data"><p><b class="accent"><%= @user_metrics[:comments] %></b></p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card__section">
+      <div class="row">
+        <div class="col md-12 sm-12">
+          <div class="panel panel--primary text-center margin-bottom-0">
+            <div class="panel-headline"><p><strong>Number of Events Attended</strong></p></div>
+            <div class="panel-data"><p><b class="accent"><%= @user_metrics[:events] %></b></p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h3>Most Visited Pages</h3>
+<%= render 'url_table', source: url_data_user_usage_index_path(format: :json) %>
+
+<script>
+  $(document).ready(function(){
+    $('.dropdown-submenu a.user_roles').on("click", function(e){
+      $(this).next('ul').toggle();
+      e.stopPropagation();
+      e.preventDefault();
+    });
+  });
+
+
+</script>

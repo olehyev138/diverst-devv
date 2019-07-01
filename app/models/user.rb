@@ -58,6 +58,7 @@ class User < BaseClass
   has_many :news_links, through: :groups
   has_many :own_news_links, class_name: 'NewsLink', foreign_key: :author_id, dependent: :destroy
   has_many :messages, through: :groups
+  has_many :own_messages, class_name: 'GroupMessage', foreign_key: :owner_id
   has_many :message_comments, class_name: 'GroupMessageComment', foreign_key: :author_id, dependent: :destroy
   has_many :social_links, foreign_key: :author_id, dependent: :destroy
   has_many :initiative_users, dependent: :destroy
@@ -76,6 +77,7 @@ class User < BaseClass
   has_many :shared_metrics_dashboards
   has_many :page_visitation_data, dependent: :destroy
   has_many :visits, class_name: "Ahoy::Visit"
+  has_many :answer_comments, foreign_key: :author_id
 
   has_attached_file :avatar, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing_user.png'), s3_permissions: 'private'
   validates_length_of :mentorship_description, maximum: 65535
@@ -593,6 +595,56 @@ class User < BaseClass
       end
     end
     visits.find_each { |visit| visit.destroy }
+  end
+
+  def get_login_count
+    self.sign_in_count
+  end
+
+  def number_of_posts(from: nil)
+    if from.present?
+      social_links.where(created_at: from..Time.now).count +
+        own_messages.where(created_at: from..Time.now).count +
+        own_news_links.where(created_at: from..Time.now).count
+    else
+      social_links.count +
+        own_messages.count +
+        own_news_links.count
+    end
+  end
+
+  def number_of_comments(from: nil)
+    if from.present?
+      answer_comments.where(created_at: from..Time.now).count +
+        message_comments.where(created_at: from..Time.now).count +
+        answer_comments.where(created_at: from..Time.now).count
+    else
+      answer_comments.count +
+        message_comments.count +
+        answer_comments.count
+    end
+  end
+
+  def number_of_events(from: nil)
+    if from.present?
+      initiatives.where(start: from..Time.now).count
+    else
+      initiatives.count
+    end
+  end
+
+  def most_viewed_pages(limit: nil)
+    page_visitation_data.select(:page, :times_visited).order(times_visited: :desc).limit(limit).to_a
+  end
+
+  def most_viewed_pages_json(limit: nil)
+    data = most_viewed_pages(limit: limit)
+    {
+      'draw' => 0,
+      'recordsTotal' => data.count,
+      'recordsFiltered' => data.count,
+      'data' => data.map {|pg| [pg.page, pg.times_visited] }
+    }
   end
 
   private

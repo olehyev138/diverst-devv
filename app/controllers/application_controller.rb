@@ -203,7 +203,12 @@ class ApplicationController < ActionController::Base
   end
 
   def track_action
-    ahoy.track "Action Name", {title: 'Some awesome information'}
+    respond_to do |format|
+      format.html { ahoy.track "Action Name", { title: 'Some awesome information' } }
+      format.js {}
+      format.xml {}
+      format.json {}
+    end
   end
 
   private
