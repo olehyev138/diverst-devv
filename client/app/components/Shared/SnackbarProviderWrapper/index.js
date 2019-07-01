@@ -16,7 +16,7 @@ const styles = theme => ({
     backgroundColor: theme.palette.success.main,
   },
   snackbarInfo: {
-    backgroundColor: theme.palette.primary.main,
+    backgroundColor: theme.palette.info.main,
   },
   snackbarWarning: {
     backgroundColor: theme.palette.warning.main,

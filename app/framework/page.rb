@@ -1,18 +1,7 @@
-class Page
-  include ActiveModel::Serialization
-
-  attr_reader :items
-  attr_reader :total
+class Page < ActiveModelSerializers::Model
+  attributes :items, :total, :type
 
   def initialize(items, total)
-    @items = items
-    @total = total
-  end
-
-  def attributes
-    {
-      'items' => items,
-      'total' => total
-    }
+    super({ items: items, total: total, type: items.klass.name.downcase })
   end
 end
