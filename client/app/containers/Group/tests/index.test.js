@@ -7,11 +7,8 @@
  */
 
 import React from 'react';
-import { render } from 'react-testing-library/typings';
 import { IntlProvider } from 'react-intl';
-// import 'jest-dom/extend-expect'; // add some helpful assertions
 
-import { Groups } from 'containers/Group/AdminGroupList/index';
 import { DEFAULT_LOCALE } from 'i18n';
 
 describe('<AdminGroupList />', () => {

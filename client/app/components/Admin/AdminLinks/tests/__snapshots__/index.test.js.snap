@@ -66,9 +66,12 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
               <WithStyles(ForwardRef(ListItemIcon))>
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
-              <WithStyles(ForwardRef(ListItemText))
-                primary="Overview"
-              />
+              <WithStyles(ForwardRef(ListItemText))>
+                <FormattedMessage
+                  id="diverst.containers.Routes.admin.analyze.overview"
+                  values={Object {}}
+                />
+              </WithStyles(ForwardRef(ListItemText))>
             </WithStyles(ForwardRef(MenuItem))>
             <WithStyles(ForwardRef(MenuItem))
               component={
@@ -83,14 +86,18 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
               <WithStyles(ForwardRef(ListItemIcon))>
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
-              <WithStyles(ForwardRef(ListItemText))
-                primary="Users"
-              />
+              <WithStyles(ForwardRef(ListItemText))>
+                <FormattedMessage
+                  id="diverst.containers.Routes.admin.analyze.users"
+                  values={Object {}}
+                />
+              </WithStyles(ForwardRef(ListItemText))>
             </WithStyles(ForwardRef(MenuItem))>
           </WithStyles(ForwardRef(List))>
         </WithStyles(ForwardRef(Collapse))>
         <WithStyles(ForwardRef(ListItem))
           button={true}
+          onClick={[Function]}
         >
           <WithStyles(ForwardRef(ListItemIcon))>
             <DeviceHubIcon />
@@ -98,7 +105,38 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
           <WithStyles(ForwardRef(ListItemText))
             primary="Manage"
           />
+          <ExpandMoreIcon />
         </WithStyles(ForwardRef(ListItem))>
+        <WithStyles(ForwardRef(Collapse))
+          in={false}
+          timeout="auto"
+          unmountOnExit={true}
+        >
+          <WithStyles(ForwardRef(List))
+            disablePadding={true}
+          >
+            <WithStyles(ForwardRef(MenuItem))
+              component={
+                Object {
+                  "$$typeof": Symbol(react.forward_ref),
+                  "render": [Function],
+                }
+              }
+              exact={true}
+              to="/admin/manage/groups"
+            >
+              <WithStyles(ForwardRef(ListItemIcon))>
+                <ListIcon />
+              </WithStyles(ForwardRef(ListItemIcon))>
+              <WithStyles(ForwardRef(ListItemText))>
+                <FormattedMessage
+                  id="diverst.containers.Routes.admin.manage.groups"
+                  values={Object {}}
+                />
+              </WithStyles(ForwardRef(ListItemText))>
+            </WithStyles(ForwardRef(MenuItem))>
+          </WithStyles(ForwardRef(List))>
+        </WithStyles(ForwardRef(Collapse))>
         <WithStyles(ForwardRef(ListItem))
           button={true}
         >
@@ -212,9 +250,12 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
               <WithStyles(ForwardRef(ListItemIcon))>
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
-              <WithStyles(ForwardRef(ListItemText))
-                primary="Overview"
-              />
+              <WithStyles(ForwardRef(ListItemText))>
+                <FormattedMessage
+                  id="diverst.containers.Routes.admin.analyze.overview"
+                  values={Object {}}
+                />
+              </WithStyles(ForwardRef(ListItemText))>
             </WithStyles(ForwardRef(MenuItem))>
             <WithStyles(ForwardRef(MenuItem))
               component={
@@ -229,14 +270,18 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
               <WithStyles(ForwardRef(ListItemIcon))>
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
-              <WithStyles(ForwardRef(ListItemText))
-                primary="Users"
-              />
+              <WithStyles(ForwardRef(ListItemText))>
+                <FormattedMessage
+                  id="diverst.containers.Routes.admin.analyze.users"
+                  values={Object {}}
+                />
+              </WithStyles(ForwardRef(ListItemText))>
             </WithStyles(ForwardRef(MenuItem))>
           </WithStyles(ForwardRef(List))>
         </WithStyles(ForwardRef(Collapse))>
         <WithStyles(ForwardRef(ListItem))
           button={true}
+          onClick={[Function]}
         >
           <WithStyles(ForwardRef(ListItemIcon))>
             <DeviceHubIcon />
@@ -244,7 +289,38 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
           <WithStyles(ForwardRef(ListItemText))
             primary="Manage"
           />
+          <ExpandMoreIcon />
         </WithStyles(ForwardRef(ListItem))>
+        <WithStyles(ForwardRef(Collapse))
+          in={false}
+          timeout="auto"
+          unmountOnExit={true}
+        >
+          <WithStyles(ForwardRef(List))
+            disablePadding={true}
+          >
+            <WithStyles(ForwardRef(MenuItem))
+              component={
+                Object {
+                  "$$typeof": Symbol(react.forward_ref),
+                  "render": [Function],
+                }
+              }
+              exact={true}
+              to="/admin/manage/groups"
+            >
+              <WithStyles(ForwardRef(ListItemIcon))>
+                <ListIcon />
+              </WithStyles(ForwardRef(ListItemIcon))>
+              <WithStyles(ForwardRef(ListItemText))>
+                <FormattedMessage
+                  id="diverst.containers.Routes.admin.manage.groups"
+                  values={Object {}}
+                />
+              </WithStyles(ForwardRef(ListItemText))>
+            </WithStyles(ForwardRef(MenuItem))>
+          </WithStyles(ForwardRef(List))>
+        </WithStyles(ForwardRef(Collapse))>
         <WithStyles(ForwardRef(ListItem))
           button={true}
         >
