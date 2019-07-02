@@ -32,7 +32,11 @@ Diverst::Application.routes.draw do
       resources :expenses
       resources :expense_categories
       resources :fields
-      resources :folders
+      resources :folders do
+        member do
+          get '/password', to: 'folders#validate_password'
+        end
+      end
       resources :folder_shares
       resources :frequency_periods
       resources :graphs

@@ -80,6 +80,14 @@ class User < ApplicationRecord
 
   validates :first_name, presence: true
   validates :last_name, presence: true
+
+  validates_presence_of   :email
+  validates_uniqueness_of :email, allow_blank: false, if: :email_changed?
+  validates_format_of     :email, with: /\A[^@\s]+@[^@\s]+\z/, allow_blank: false, if: :email_changed?
+
+  validates_presence_of   :password, on: create
+  validates_length_of     :password, within: 8..128, allow_blank: true
+
   validate :user_role_presence
   validates :points, numericality: { only_integer: true }, presence: true
   validates :credits, numericality: { only_integer: true }, presence: true

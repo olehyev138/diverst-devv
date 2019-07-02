@@ -9,6 +9,31 @@ RSpec.describe User do
     it { expect(user).to define_enum_for(:groups_notifications_frequency).with([:hourly, :daily, :weekly, :disabled]) }
     it { expect(user).to define_enum_for(:groups_notifications_date).with([:sunday, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday]) }
 
+    it 'validates password presence' do
+      user = build(:user, password: nil)
+      expect(user.valid?).to be(false)
+      expect(user.errors.full_messages.first).to eq("Password can't be blank")
+    end
+
+    it 'validates password length' do
+      user = build(:user, password: 'imshort')
+      expect(user.valid?).to be(false)
+      expect(user.errors.full_messages.first).to eq('Password is too short (minimum is 8 characters)')
+    end
+
+    it 'validates email presence' do
+      user = build(:user, email: nil)
+      expect(user.valid?).to be(false)
+      expect(user.errors.full_messages.first).to eq("Email can't be blank")
+    end
+
+    it 'validates email format' do
+      user = build(:user, email: 'test')
+
+      expect(user.valid?).to be(false)
+      expect(user.errors.full_messages.first).to eq('Email is invalid')
+    end
+
     describe '#notifications_date' do
       it 'returns sunday' do
         user = create(:user, groups_notifications_date: 0)
@@ -452,7 +477,7 @@ RSpec.describe User do
 
       it 'return data of user to be indexed by elasticsearch' do
         data = {
-          "#{ user.enterprise.fields.first.id }" => 'No',
+          "#{user.enterprise.fields.first.id}" => 'No',
           poll.fields.first.id => ['Yes'],
         }
 

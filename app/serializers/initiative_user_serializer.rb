@@ -1,0 +1,2 @@
+class InitiativeUserSerializer < ApplicationRecordSerializer
+end

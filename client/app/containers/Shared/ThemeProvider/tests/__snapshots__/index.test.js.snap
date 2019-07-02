@@ -91,6 +91,9 @@ exports[`<ThemeProvider /> should render and match the snapshot 1`] = `
           "A400": "#303030",
           "A700": "#616161",
         },
+        "info": Object {
+          "main": "#7B77C9",
+        },
         "primary": Object {
           "contrastText": "#fff",
           "dark": "rgb(86, 83, 140)",

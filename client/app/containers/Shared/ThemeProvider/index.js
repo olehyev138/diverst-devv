@@ -66,6 +66,9 @@ export class ThemeProvider extends React.PureComponent {
         warning: {
           main: '#ffa000',
         },
+        info: {
+          main: primary,
+        },
         success: {
           main: '#43a047',
         },
