@@ -4,7 +4,9 @@
  *
  */
 
-import React, { memo, useRef, useState, useEffect } from 'react';
+import React, {
+  memo, useRef, useState, useEffect
+} from 'react';
 import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
@@ -16,6 +18,7 @@ import {
 import { Field, Formik, Form } from 'formik';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
+/* eslint-disable object-curly-newline */
 export function GroupFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText }) {
   const WrappedNavLink = React.forwardRef((props, ref) => <NavLink innerRef={ref} {...props} />);
 
@@ -38,7 +41,7 @@ export function GroupFormInner({ handleSubmit, handleChange, handleBlur, values,
             fullWidth
             id='short_description'
             name='short_description'
-            label={'Short Description'}
+            label='Short Description'
           />
           <Field
             component={TextField}
@@ -46,14 +49,15 @@ export function GroupFormInner({ handleSubmit, handleChange, handleBlur, values,
             fullWidth
             id='description'
             name='description'
-            label={'Description'}
+            label='Description'
             value={values.description}
           />
         </CardContent>
         <CardActions>
           <Button
             color='primary'
-            type='submit'>
+            type='submit'
+          >
             {buttonText}
           </Button>
           <Button
@@ -90,6 +94,14 @@ export function GroupForm(props) {
 GroupForm.propTypes = {
   groupAction: PropTypes.func,
   group: PropTypes.object
+};
+
+GroupFormInner.propTypes = {
+  handleSubmit: PropTypes.func,
+  handleChange: PropTypes.func,
+  handleBlur: PropTypes.func,
+  values: PropTypes.object,
+  buttonText: PropTypes.string,
 };
 
 export default compose(

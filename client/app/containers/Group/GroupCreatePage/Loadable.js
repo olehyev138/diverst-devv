@@ -6,4 +6,4 @@
 
 import loadable from 'utils/loadable';
 
-export default loadable(() => import('containers/Group/Admin/GroupCreatePage/index'));
+export default loadable(() => import('containers/Group/GroupCreatePage/index'));

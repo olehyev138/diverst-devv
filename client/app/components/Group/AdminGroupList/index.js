@@ -67,7 +67,7 @@ export function AdminGroupList(props) {
                 <Button
                   size='small'
                   to={{
-                    pathname: ROUTES.admin.manage.groups.pathPrefix + '/' + group.id + '/edit',
+                    pathname: `${ROUTES.admin.manage.groups.pathPrefix}/${group.id}/edit`,
                     state: { id: group.id }
                   }}
                   component={WrappedNavLink}
@@ -78,6 +78,7 @@ export function AdminGroupList(props) {
                   size='small'
                   className={classes.errorButton}
                   onClick={() => {
+                    /* eslint-disable no-alert, no-restricted-globals */
                     if (confirm('Delete group?'))
                       props.deleteGroupBegin(group.id);
                   }}

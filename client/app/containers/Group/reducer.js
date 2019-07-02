@@ -17,6 +17,7 @@ export const initialState = {
 
 /* eslint-disable default-case, no-param-reassign */
 function groupsReducer(state = initialState, action) {
+  /* eslint-disable consistent-return */
   return produce(state, (draft) => {
     switch (action.type) {
       case GET_GROUPS_SUCCESS:

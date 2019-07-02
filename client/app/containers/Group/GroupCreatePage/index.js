@@ -26,6 +26,10 @@ export function GroupCreatePage(props) {
   );
 }
 
+GroupCreatePage.propTypes = {
+  createGroupBegin: PropTypes.func
+};
+
 const mapStateToProps = createStructuredSelector({
 });
 

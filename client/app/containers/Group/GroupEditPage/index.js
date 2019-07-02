@@ -50,11 +50,9 @@ GroupEditPage.propTypes = {
   groupFormUnmount: PropTypes.func
 };
 
-const mapStateToProps = (state, ownProps) => {
-  return {
-    group: selectGroup(ownProps.location.state.id)(state)
-  };
-};
+const mapStateToProps = (state, ownProps) => ({
+  group: selectGroup(ownProps.location.state.id)(state)
+});
 
 function mapDispatchToProps(dispatch) {
   return {
