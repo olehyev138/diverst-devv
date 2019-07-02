@@ -38,8 +38,6 @@ export function* login(action) {
 
     yield put(setUser(user));
 
-    // TODO: find better way to do this
-    //       - we need to reload to render the parent layout component
     yield put(push(ROUTES.user.home.path));
   } catch (err) {
     yield put(loginError(err));

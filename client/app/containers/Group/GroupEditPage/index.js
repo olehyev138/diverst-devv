@@ -32,7 +32,7 @@ export function GroupEditPage(props) {
       <GroupForm
         groupAction={props.updateGroupBegin}
         group={props.group}
-        buttonText='Edit'
+        buttonText='Update'
       />
     </React.Fragment>
   );

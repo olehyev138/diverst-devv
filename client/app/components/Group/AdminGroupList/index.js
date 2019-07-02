@@ -36,6 +36,17 @@ export function AdminGroupList(props) {
   return (
     <React.Fragment>
       <Grid container spacing={3}>
+        <Grid item>
+          <Button
+            variant='contained'
+            to={ROUTES.admin.manage.groups.new.path}
+            color='primary'
+            size='large'
+            component={WrappedNavLink}
+          >
+            Create
+          </Button>
+        </Grid>
         {props.groups && Object.values(props.groups).map((group, i) => (
           <Grid item key={group.id} className={classes.groupListItem}>
             <Card>
@@ -63,7 +74,16 @@ export function AdminGroupList(props) {
                 >
                   Edit
                 </Button>
-                <Button size='small' className={classes.errorButton}>Delete</Button>
+                <Button
+                  size='small'
+                  className={classes.errorButton}
+                  onClick={() => {
+                    if (confirm('Delete group?'))
+                      props.deleteGroupBegin(group.id);
+                  }}
+                >
+                  Delete
+                </Button>
               </CardActions>
             </Card>
           </Grid>
@@ -77,6 +97,7 @@ AdminGroupList.propTypes = {
   classes: PropTypes.object,
   groups: PropTypes.object,
   groupTotal: PropTypes.number,
+  deleteGroupBegin: PropTypes.func
 };
 
 export default compose(

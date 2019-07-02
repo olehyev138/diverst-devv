@@ -20,9 +20,9 @@ export const UPDATE_GROUP_BEGIN = 'app/Group/UPDATE_GROUP_BEGIN';
 export const UPDATE_GROUP_SUCCESS = 'app/Group/UPDATE_GROUP_SUCCESS';
 export const UPDATE_GROUP_ERROR = 'app/Group/UPDATE_GROUP_ERROR';
 
-export const DELETE_GROUP_BEGIN = 'app/Group/UPDATE_GROUP_BEGIN';
-export const DELETE_GROUP_SUCCESS = 'app/Group/UPDATE_GROUP_SUCCESS';
-export const DELETE_GROUP_ERROR = 'app/Group/UPDATE_GROUP_ERROR';
+export const DELETE_GROUP_BEGIN = 'app/Group/DELETE_GROUP_BEGIN';
+export const DELETE_GROUP_SUCCESS = 'app/Group/DELETE_GROUP_SUCCESS';
+export const DELETE_GROUP_ERROR = 'app/Group/DELETE_GROUP_ERROR';
 
 export const GROUP_LIST_UNMOUNT = 'app/Group/GROUP_LIST_UNMOUNT';
 export const GROUP_FORM_UNMOUNT = 'app/Group/GROUP_FORM_UNMOUNT';

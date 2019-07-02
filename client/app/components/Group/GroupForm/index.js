@@ -5,6 +5,7 @@
  */
 
 import React, { memo, useRef, useState, useEffect } from 'react';
+import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
@@ -13,8 +14,11 @@ import {
 } from '@material-ui/core';
 
 import { Field, Formik, Form } from 'formik';
+import { ROUTES } from 'containers/Shared/Routes/constants';
 
-export function GroupFormInner({ handleSubmit, handleChange, handleBlur, values }) {
+export function GroupFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText }) {
+  const WrappedNavLink = React.forwardRef((props, ref) => <NavLink innerRef={ref} {...props} />);
+
   return (
     <Card>
       <Form>
@@ -47,8 +51,17 @@ export function GroupFormInner({ handleSubmit, handleChange, handleBlur, values 
           />
         </CardContent>
         <CardActions>
-          <Button type='submit'>Create</Button>
-          <Button>Cancel</Button>
+          <Button
+            color='primary'
+            type='submit'>
+            {buttonText}
+          </Button>
+          <Button
+            to={ROUTES.admin.manage.groups.index.path}
+            component={WrappedNavLink}
+          >
+            Cancel
+          </Button>
         </CardActions>
       </Form>
     </Card>
@@ -69,13 +82,14 @@ export function GroupForm(props) {
       onSubmit={(values, actions) => {
         props.groupAction(values);
       }}
-      render={props => <GroupFormInner {...props} />}
+      render={formikProps => <GroupFormInner {...props} {...formikProps} />}
     />
   );
 }
 
 GroupForm.propTypes = {
-  groupAction: PropTypes.func
+  groupAction: PropTypes.func,
+  group: PropTypes.object
 };
 
 export default compose(

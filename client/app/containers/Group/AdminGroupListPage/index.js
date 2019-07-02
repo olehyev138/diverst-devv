@@ -13,8 +13,8 @@ import { compose } from 'redux';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import { selectPaginatedGroups, selectGroupTotal, selectGroup } from 'containers/Group/selectors';
+import { getGroupsBegin, groupListUnmount, deleteGroupBegin } from 'containers/Group/actions';
 import reducer from 'containers/Group/reducer';
-import { getGroupsBegin, groupListUnmount } from 'containers/Group/actions';
 
 import saga from 'containers/Group/saga';
 
@@ -37,6 +37,7 @@ export function AdminGroupListPage(props) {
       <GroupList
         groups={props.groups}
         groupTotal={props.groupTotal}
+        deleteGroupBegin={props.deleteGroupBegin}
       />
     </React.Fragment>
   );
@@ -47,6 +48,7 @@ AdminGroupListPage.propTypes = {
   groupListUnmount: PropTypes.func.isRequired,
   groups: PropTypes.object,
   groupTotal: PropTypes.number,
+  deleteGroupBegin: PropTypes.func
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -57,7 +59,8 @@ const mapStateToProps = createStructuredSelector({
 function mapDispatchToProps(dispatch) {
   return {
     getGroupsBegin: payload => dispatch(getGroupsBegin(payload)),
-    groupListUnmount: () => dispatch(groupListUnmount())
+    groupListUnmount: () => dispatch(groupListUnmount()),
+    deleteGroupBegin: payload => dispatch(deleteGroupBegin(payload))
   };
 }
 

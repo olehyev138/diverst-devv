@@ -20,7 +20,7 @@ function groupsReducer(state = initialState, action) {
   return produce(state, (draft) => {
     switch (action.type) {
       case GET_GROUPS_SUCCESS:
-        draft.groupList = formatGroups(action.payload.items.groups);
+        draft.groupList = formatGroups(action.payload.items);
         draft.groupTotal = action.payload.total;
         break;
       case GET_GROUP_SUCCESS:

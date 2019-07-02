@@ -20,7 +20,7 @@ export function GroupCreatePage(props) {
 
   return (
     <GroupForm
-      createGroupBegin={props.createGroupBegin}
+      groupAction={props.createGroupBegin}
       buttonText='Create'
     />
   );
