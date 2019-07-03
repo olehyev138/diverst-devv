@@ -382,7 +382,7 @@ class Group < BaseClass
   end
 
   def membership_list_csv(group_members)
-    total_nb_of_members = group_members.count
+    total_nb_of_members = group_members.size
     CSV.generate do |csv|
       csv << %w(first_name last_name email_address mentor mentee)
 

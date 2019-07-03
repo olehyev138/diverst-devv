@@ -47,7 +47,7 @@
             <div class="card__section">
 
               <h4>Latest News</h4>
-              <%= link_to "View all", user_news_links_path, class: "card__action" unless @posts.count < 1 || !NewsLinkPolicy.new(current_user, nil).index? %>
+              <%= link_to "View all", user_news_links_path, class: "card__action" unless @posts.size < 1 || !NewsLinkPolicy.new(current_user, nil).index? %>
 
               <% if @posts.empty? || !NewsLinkPolicy.new(current_user, nil).index? %>
                 <div class="mtlarge text-center">

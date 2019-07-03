@@ -293,7 +293,7 @@ class Enterprise < BaseClass
       members = members.where('user_groups.created_at <= ?', to_date) if to_date.present?
 
       {
-          y: members.count,
+          y: members.size,
           name: g.name,
           drilldown: g.name
       }
@@ -340,11 +340,11 @@ class Enterprise < BaseClass
       groups.each do |group|
         from_date_total = group.user_groups
         from_date_total = from_date_total.where('created_at <= ?', from_date) if from_date.present?
-        from_date_total = from_date_total.count.to_f
+        from_date_total = from_date_total.size.to_f
 
         to_date_total = group.user_groups
         to_date_total = to_date_total.where('created_at <= ?', to_date) if to_date.present?
-        to_date_total = to_date_total.count.to_f
+        to_date_total = to_date_total.size.to_f
 
         change_percentage = 0
         if (from_date_total == 0) && (to_date_total > 0)
@@ -414,7 +414,7 @@ class Enterprise < BaseClass
       mentoring_sessions = mentoring_sessions.where('mentoring_sessions.created_at <= ?', to_date) if to_date.present?
 
       {
-          y: mentoring_sessions.count,
+          y: mentoring_sessions.size,
           name: g.name,
           drilldown: g.name
       }
@@ -458,7 +458,7 @@ class Enterprise < BaseClass
       events = events.where('initiatives.created_at <= ?', to_date) if to_date.present?
 
       {
-          y: events.count,
+          y: events.size,
           name: g.name,
           drilldown: g.name
       }
@@ -486,7 +486,7 @@ class Enterprise < BaseClass
       messages = messages.where('group_messages.created_at <= ?', to_date) if to_date.present?
 
       {
-        y: messages.count,
+        y: messages.size,
         name: g.name,
         drilldown: g.name
       }
@@ -513,7 +513,7 @@ class Enterprise < BaseClass
       views = views.where('views.created_at <= ?', to_date) if to_date.present?
 
       {
-          y: views.count,
+          y: views.size,
           name: g.name,
           drilldown: g.name
       }
@@ -540,7 +540,7 @@ class Enterprise < BaseClass
       views = views.where('views.created_at <= ?', to_date) if to_date.present?
 
       {
-        y: views.count,
+        y: views.size,
         name: !f.group.nil? ? f.group.name + ': ' + f.name : 'Shared folder: ' + f.name,
         drilldown: f.name
       }
@@ -569,7 +569,7 @@ class Enterprise < BaseClass
       views = views.where('views.created_at <= ?', to_date) if to_date.present?
 
       {
-          y: views.count,
+          y: views.size,
           name: resource.title
       }
     end
