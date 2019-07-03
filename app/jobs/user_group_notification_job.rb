@@ -19,10 +19,15 @@ class UserGroupNotificationJob < ActiveJob::Base
         user.groups.each do |group|
           groups << {
             group: group,
+            events: get_events(user, group, frequency_range),
             events_count: get_events_count(user, group, frequency_range),
+            messages: get_messages(user, group, frequency_range),
             messages_count: get_messages_count(user, group, frequency_range),
+            news: get_news(user, group, frequency_range),
             news_count: get_news_count(user, group, frequency_range),
+            social_links: get_social_count(user, group, frequency_range),
             social_links_count: get_social_count(user, group, frequency_range),
+            participating_events: get_participating_events(user, group, frequency_range),
             participating_events_count: get_participating_events_count(user, group, frequency_range)
           }
         end
@@ -81,6 +86,11 @@ class UserGroupNotificationJob < ActiveJob::Base
       .count
   end
 
+  def get_events(user, group, frequency_range)
+    Initiative.where(owner_group: group, updated_at: frequency_range)
+      .of_segments(user_segment_ids(user)).order(:updated_at)
+  end
+
   def get_messages_count(user, group, frequency_range)
     segment_ids = user_segment_ids(user)
     news_feed_link_ids = NewsFeed.all_links(group.news_feed.id, segment_ids, group.enterprise).ids
@@ -88,6 +98,14 @@ class UserGroupNotificationJob < ActiveJob::Base
           .where(news_feed_links: { id: news_feed_link_ids }, updated_at: frequency_range)
           .of_segments(user_segment_ids(user))
           .count
+  end
+
+  def get_messages(user, group, frequency_range)
+    segment_ids = user_segment_ids(user)
+    news_feed_link_ids = NewsFeed.all_links(group.news_feed.id, segment_ids, group.enterprise).ids
+    GroupMessage.joins(:news_feed_link)
+      .where(news_feed_links: { id: news_feed_link_ids }, updated_at: frequency_range)
+      .of_segments(user_segment_ids(user)).order(:updated_at)
   end
 
   def get_news_count(user, group, frequency_range)
@@ -100,6 +118,15 @@ class UserGroupNotificationJob < ActiveJob::Base
           .count
   end
 
+  def get_news(user, group, frequency_range)
+    segment_ids = user_segment_ids(user)
+
+    news_feed_link_ids = NewsFeed.all_links(group.news_feed.id, segment_ids, group.enterprise).ids
+
+    NewsLink.joins(:news_feed_link)
+      .where(news_feed_links: { id: news_feed_link_ids }, updated_at: frequency_range).order(:updated_at)
+  end
+
   def get_social_count(user, group, frequency_range)
     segment_ids = user_segment_ids(user)
 
@@ -110,10 +137,24 @@ class UserGroupNotificationJob < ActiveJob::Base
           .count
   end
 
+  def get_social(user, group, frequency_range)
+    segment_ids = user_segment_ids(user)
+
+    news_feed_link_ids = NewsFeed.all_links(group.news_feed.id, segment_ids, group.enterprise).ids
+
+    SocialLink.joins(:news_feed_link)
+      .where(news_feed_links: { id: news_feed_link_ids }, updated_at: frequency_range).order(:updated_at)
+  end
+
   def get_participating_events_count(user, group, frequency_range)
     Initiative.joins(:initiative_participating_groups).where(updated_at: frequency_range).where(initiative_participating_groups: { group: group })
     .of_segments(user_segment_ids(user))
     .count
+  end
+
+  def get_participating_events(user, group, frequency_range)
+    Initiative.joins(:initiative_participating_groups).where(updated_at: frequency_range).where(initiative_participating_groups: { group: group })
+      .of_segments(user_segment_ids(user)).order(:updated_at)
   end
 
   def have_updates?(groups)

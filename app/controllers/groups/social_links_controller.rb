@@ -9,7 +9,7 @@ class Groups::SocialLinksController < ApplicationController
   layout 'erg'
 
   def index
-    @posts = @group.social_links
+    @posts = @group.social_links.order(updated_at: :desc)
   end
 
   def new
@@ -35,7 +35,7 @@ class Groups::SocialLinksController < ApplicationController
     track_activity(@social_link, :destroy)
     @social_link.destroy
     flash[:notice] = 'Your social link was removed.'
-    redirect_to group_posts_path(@group)
+    redirect_to :back
   end
 
   def archive
