@@ -1,32 +1,64 @@
-// import produce from 'immer';
+import produce from 'immer';
 import groupsReducer from 'containers/Group/reducer';
-// import { someAction } from '../actions';
+import {
+  getGroupsSuccess, getGroupSuccess,
+  groupListUnmount, groupFormUnmount
+} from 'containers/Group/actions';
 
 /* eslint-disable default-case, no-param-reassign */
-xdescribe('groupsReducer', () => {
+describe('groupsReducer', () => {
   let state;
   beforeEach(() => {
     state = {
-      // default state params here
+      groupList: {},
+      groupTotal: null,
     };
   });
 
   it('returns the initial state', () => {
-    const expectedResult = state;
-    expect(groupsReducer(undefined, {})).toEqual(expectedResult);
+    const expected = state;
+    expect(groupsReducer(undefined, {})).toEqual(expected);
   });
 
-  /**
-   * Example state change comparison
-   *
-   * it('should handle the someAction action correctly', () => {
-   *   const expectedResult = produce(state, draft => {
-   *     draft.loading = true;
-   *     draft.error = false;
-   *     draft.userData.nested = false;
-   *   });
-   *
-   *   expect(appReducer(state, someAction())).toEqual(expectedResult);
-   * });
-   */
+  it('handles the getGroupsSuccess action correctly', () => {
+    const expected = produce(state, (draft) => {
+      draft.groupList = { 37: { id: 37, name: 'dummy' } };
+    });
+
+    expect(
+      groupsReducer(
+        state,
+        getGroupsSuccess({
+          items: [{ id: 37, name: 'dummy' }],
+        })
+      )
+    ).toEqual(expected);
+  });
+
+  it('handles the getGroupSuccess action correctly', () => {
+    const expected = produce(state, (draft) => {
+      draft.groupList = { 37: { id: 37, name: 'dummy' } };
+    });
+
+    expect(
+      groupsReducer(
+        state,
+        getGroupSuccess({
+          group: { id: 37, name: 'dummy' },
+        })
+      )
+    ).toEqual(expected);
+  });
+
+  it('handles the groupListUnmount action correctly', () => {
+    const expected = produce(state, draft => state);
+
+    expect(groupsReducer(state, groupListUnmount())).toEqual(expected);
+  });
+
+  it('handles the groupFormUnmount action correctly', () => {
+    const expected = produce(state, draft => state);
+
+    expect(groupsReducer(state, groupFormUnmount())).toEqual(expected);
+  });
 });

@@ -15,12 +15,7 @@ const selectGroupTotal = () => createSelector(
 
 const selectGroup = id => createSelector(
   selectGroupsDomain,
-  (groupsState) => {
-    if (Object.prototype.hasOwnProperty.call(groupsState.groupList, `${id}`))
-      return groupsState.groupList[`${id}`];
-
-    return null;
-  }
+  groupsState => groupsState.groupList[`${id}`] || null
 );
 
 export {
