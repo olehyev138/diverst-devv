@@ -4,7 +4,7 @@
  *
  */
 
-import React, { memo, useEffect } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
@@ -24,13 +24,22 @@ export function AdminGroupListPage(props) {
   useInjectReducer({ key: 'groups', reducer });
   useInjectSaga({ key: 'groups', saga });
 
+  const [params, setParams] = useState({ count: 5, page: 0, order: 'asc' });
+
   useEffect(() => {
-    props.getGroupsBegin();
+    props.getGroupsBegin(params);
 
     return () => {
       props.groupListUnmount();
     };
   }, []);
+
+  const handlePagination = (payload) => {
+    const newParams = { ...params, count: payload.count, page: payload.page };
+
+    props.getGroupsBegin(newParams);
+    setParams(params);
+  };
 
   return (
     <React.Fragment>
@@ -38,6 +47,7 @@ export function AdminGroupListPage(props) {
         groups={props.groups}
         groupTotal={props.groupTotal}
         deleteGroupBegin={props.deleteGroupBegin}
+        handlePagination={handlePagination}
       />
     </React.Fragment>
   );

@@ -22,7 +22,8 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 export function* getGroups(action) {
   try {
-    const response = yield call(api.groups.all.bind(api.groups));
+    const response = yield call(api.groups.all.bind(api.groups), action.payload);
+
     yield put(getGroupsSuccess(response.data.page));
   } catch (err) {
     yield put(getGroupsError(err));

@@ -15,9 +15,10 @@ import {
 
 /* Group listing */
 
-export function getGroupsBegin() {
+export function getGroupsBegin(payload) {
   return {
     type: GET_GROUPS_BEGIN,
+    payload
   };
 }
 

@@ -9,7 +9,7 @@ module BasePager
     def set_defaults
       self.default_order = :desc
       self.default_order_by = "#{self.table_name}.id"
-      self.page = 1
+      self.page = 0
       self.count = 10
     end
 
@@ -24,7 +24,7 @@ module BasePager
       # set the parameters
       item_page = params[:page].present? ? params[:page].to_i : page
       item_count = params[:count].present? ? params[:count].to_i : count
-      offset = (item_page - 1) * item_count
+      offset = item_page * item_count
       orderBy = params[:orderBy].presence || default_order_by
       order = params[:order].presence || default_order
 

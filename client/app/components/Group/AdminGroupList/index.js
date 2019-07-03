@@ -4,7 +4,7 @@
  *
  */
 
-import React, { memo } from 'react';
+import React, { memo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
@@ -12,7 +12,8 @@ import { NavLink } from 'react-router-dom';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import {
-  Button, Card, CardContent, CardActions, Typography, Grid, Link
+  Button, Card, CardContent, CardActions,
+  Typography, Grid, Link, TablePagination
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -30,8 +31,20 @@ const styles = theme => ({
 
 export function AdminGroupList(props) {
   const { classes } = props;
-
   const WrappedNavLink = React.forwardRef((props, ref) => <NavLink innerRef={ref} {...props} />);
+
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+    props.handlePagination({ count: rowsPerPage, page: newPage });
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    props.handlePagination({ count: +event.target.value, page });
+  };
 
   return (
     <React.Fragment>
@@ -90,6 +103,21 @@ export function AdminGroupList(props) {
           </Grid>
         ))}
       </Grid>
+      <TablePagination
+        component='div'
+        page={page}
+        rowsPerPageOptions={[5, 10, 25]}
+        rowsPerPage={rowsPerPage}
+        count={props.groupTotal || 0}
+        onChangePage={handleChangePage}
+        onChangeRowsPerPage={handleChangeRowsPerPage}
+        backIconButtonProps={{
+          'aria-label': 'Previous Page',
+        }}
+        nextIconButtonProps={{
+          'aria-label': 'Next Page',
+        }}
+      />
     </React.Fragment>
   );
 }
@@ -98,7 +126,8 @@ AdminGroupList.propTypes = {
   classes: PropTypes.object,
   groups: PropTypes.object,
   groupTotal: PropTypes.number,
-  deleteGroupBegin: PropTypes.func
+  deleteGroupBegin: PropTypes.func,
+  handlePagination: PropTypes.func
 };
 
 export default compose(

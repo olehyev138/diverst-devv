@@ -23,6 +23,7 @@ describe('groupsReducer', () => {
   it('handles the getGroupsSuccess action correctly', () => {
     const expected = produce(state, (draft) => {
       draft.groupList = { 37: { id: 37, name: 'dummy' } };
+      draft.groupTotal = 49;
     });
 
     expect(
@@ -30,6 +31,7 @@ describe('groupsReducer', () => {
         state,
         getGroupsSuccess({
           items: [{ id: 37, name: 'dummy' }],
+          total: 49
         })
       )
     ).toEqual(expected);
