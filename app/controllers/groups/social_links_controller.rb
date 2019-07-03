@@ -35,7 +35,7 @@ class Groups::SocialLinksController < ApplicationController
     track_activity(@social_link, :destroy)
     @social_link.destroy
     flash[:notice] = 'Your social link was removed.'
-    redirect_to :back
+    redirect_to group_posts_path(@group)
   end
 
   def archive

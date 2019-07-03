@@ -7,14 +7,14 @@
     <strong><%= group[:group].name %></strong><br>
   <% end %>
 
-  <% if group[:events_count ].to_i > 0 %>
+  <% if group[:events_count].to_i > 0 %>
     <em>Events</em>
     <% group[:events].first(2).each do |event| %>
       <p><%= link_to event.name, group_event_url(group[:group].try(:id), event.id, saml_for_enterprise: @user.enterprise.id ) %></p>
     <% end %>
 
     <% if group[:events_count ].to_i > how_many %>
-      <p><%= link_to "and #{pluralize(group[:events_count] - how_many, ' more new event') }", group_events_url(group[:group].try(:id), saml_for_enterprise: @user.enterprise.id ) %></p>
+      <p><%= link_to "and #{pluralize(group[:events_count] - how_many, 'more new event') }", group_events_url(group[:group].try(:id), saml_for_enterprise: @user.enterprise.id ) %></p>
     <% end %>
   <% end %>
 
@@ -24,7 +24,7 @@
       <p><%= link_to message.subject, group_group_message_url(group[:group].try(:id), message.id, saml_for_enterprise: @user.enterprise.id ) %></p>
     <% end %>
     <% if group[:messages_count ].to_i > how_many %>
-      <p><%= link_to "and #{ pluralize(group[:messages_count] - how_many, ' more new message') }", group_group_messages_url(group[:group].try(:id), saml_for_enterprise: @user.enterprise.id ) %></p>
+      <p><%= link_to "and #{ pluralize(group[:messages_count] - how_many, 'more new message') }", group_group_messages_url(group[:group].try(:id), saml_for_enterprise: @user.enterprise.id ) %></p>
     <% end %>
   <% end %>
 
@@ -34,7 +34,7 @@
       <p><%= link_to new.title, comments_group_news_link_url(group[:group].try(:id), new.id, saml_for_enterprise: @user.enterprise.id ) %></p>
     <% end %>
     <% if group[:news_count ].to_i > how_many %>
-      <p><%= link_to "and #{ pluralize(group[:news_count] - how_many, ' more new news link') }", group_news_links_url(group[:group].try(:id), saml_for_enterprise: @user.enterprise.id) %>.</p>
+      <p><%= link_to "and #{ pluralize(group[:news_count] - how_many, 'more new news link') }", group_news_links_url(group[:group].try(:id), saml_for_enterprise: @user.enterprise.id) %>.</p>
     <% end %>
   <% end %>
 
