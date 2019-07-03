@@ -5,7 +5,7 @@ module BaseSearcher
 
   module ClassMethods
     def base_query
-      "CAST(#{self.table_name}.id as varchar(25)) LIKE :search"
+      "#{self.table_name}.id LIKE :search"
     end
 
     def lookup(params = {}, diverst_request = nil)
