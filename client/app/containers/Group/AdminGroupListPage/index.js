@@ -12,7 +12,7 @@ import { compose } from 'redux';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
-import { selectPaginatedGroups, selectGroupTotal, selectGroup } from 'containers/Group/selectors';
+import { selectPaginatedGroups, selectGroupTotal } from 'containers/Group/selectors';
 import { getGroupsBegin, groupListUnmount, deleteGroupBegin } from 'containers/Group/actions';
 import reducer from 'containers/Group/reducer';
 

@@ -23,4 +23,7 @@ const selectGroup = id => createSelector(
   }
 );
 
-export { selectPaginatedGroups, selectGroupTotal, selectGroup };
+export {
+  selectGroupsDomain, selectPaginatedGroups,
+  selectGroupTotal, selectGroup
+};

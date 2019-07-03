@@ -1,7 +1,12 @@
-// import { selectGroupsDomain } from '../selectors';
+import { selectGroupsDomain } from 'containers/Group/selectors';
 
-xdescribe('selectGroupsDomain', () => {
-  it('Expect to have unit tests specified', () => {
-    expect(true).toEqual(false);
+describe('Group selectors', () => {
+  describe('selectGroupsDomain', () => {
+    it('should select the groups domain', () => {
+      const mockedState = { groups: { group: {} } };
+      const selected = selectGroupsDomain(mockedState);
+
+      expect(selected).toEqual({ group: {} });
+    });
   });
 });
