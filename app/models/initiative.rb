@@ -1,6 +1,7 @@
 class Initiative < ApplicationRecord
   include PublicActivity::Common
-
+  include Initiative::Actions
+  
   attr_accessor :associated_budget_id, :skip_allocate_budget_funds, :from, :to
 
   belongs_to :pillar
