@@ -18,7 +18,7 @@ class API {
     // append query arguments
     if (opts) {
       url += '?';
-      for (const arg of Array.from(opts)) {
+      for (const arg of Object.keys(opts)) {
         if (url.indexOf('?') !== url.length - 1)
           url += '&';
 
