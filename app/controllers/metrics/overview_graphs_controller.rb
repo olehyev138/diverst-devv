@@ -9,7 +9,7 @@ class Metrics::OverviewGraphsController < ApplicationController
     enterprise = current_user.enterprise
     @general_metrics = {
       nb_users: enterprise.users.active.count,
-      nb_ergs: enterprise.groups.count,
+      nb_ergs: enterprise.groups.size,
       nb_segments: enterprise.segments.count,
       nb_resources: enterprise.resources_count,
       nb_polls: enterprise.polls.count,
