@@ -43,6 +43,7 @@ gem 'rack-cors', '~> 0.4.0', require: 'rack/cors' # will be used to support mobi
 gem 'bcrypt'
 gem 'bootsnap', require: false
 gem 'jwt', '~> 2.1.0', require: false
+gem 'rqrcode', '~> 0.10.1', require: false
 
 gem 'draper', '~> 3.1.0'
 

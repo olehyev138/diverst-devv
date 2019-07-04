@@ -14,7 +14,7 @@ module BasePager
     end
 
     def pager(diverst_request, params = {}, search_method = :lookup)
-      return elasticsearch(diverst_request, params) if params[:search]
+      return elasticsearch(diverst_request, params) if params[:elasticsearch]
 
       set_defaults
 
