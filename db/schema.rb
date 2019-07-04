@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190704002112) do
+ActiveRecord::Schema.define(version: 20190704002756) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -349,6 +349,7 @@ ActiveRecord::Schema.define(version: 20190704002112) do
     t.boolean  "auto_archive",                                        default: false
     t.integer  "groups_count",                          limit: 4
     t.integer  "segments_count",                        limit: 4
+    t.integer  "polls_count",                           limit: 4
   end
 
   create_table "expense_categories", force: :cascade do |t|

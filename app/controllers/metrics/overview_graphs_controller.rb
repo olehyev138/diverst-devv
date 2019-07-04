@@ -12,7 +12,7 @@ class Metrics::OverviewGraphsController < ApplicationController
       nb_ergs: enterprise.groups.size,
       nb_segments: enterprise.segments.size,
       nb_resources: enterprise.resources_count,
-      nb_polls: enterprise.polls.count,
+      nb_polls: enterprise.polls.size,
       nb_ongoing_campaigns: enterprise.campaigns.ongoing.count,
       average_nb_members_per_group: Group.avg_members_per_group(enterprise: enterprise)
     }
