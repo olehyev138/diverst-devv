@@ -6,7 +6,7 @@ class View < BaseClass
   belongs_to :user
   belongs_to :enterprise
   belongs_to :resource
-  belongs_to :folder
+  belongs_to :folder, counter_cache: true
 
   settings do
     mappings dynamic: false do

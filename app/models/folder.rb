@@ -39,6 +39,6 @@ class Folder < BaseClass
   end
 
   def total_views
-    views.count
+    views.size
   end
 end

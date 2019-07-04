@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190704081413) do
+ActiveRecord::Schema.define(version: 20190704084258) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -415,6 +415,7 @@ ActiveRecord::Schema.define(version: 20190704081413) do
     t.integer  "parent_id",          limit: 4
     t.integer  "enterprise_id",      limit: 4
     t.integer  "group_id",           limit: 4
+    t.integer  "views_count",        limit: 4
   end
 
   create_table "frequency_periods", force: :cascade do |t|
