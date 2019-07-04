@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190704085016) do
+ActiveRecord::Schema.define(version: 20190704145438) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -869,6 +869,7 @@ ActiveRecord::Schema.define(version: 20190704085016) do
     t.integer  "social_link_id",   limit: 4
     t.boolean  "is_pinned",                  default: false
     t.datetime "archived_at"
+    t.integer  "views_count",      limit: 4
   end
 
   create_table "news_feeds", force: :cascade do |t|
