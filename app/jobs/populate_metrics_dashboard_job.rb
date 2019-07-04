@@ -18,7 +18,7 @@ class PopulateMetricsDashboardJob < ActiveJob::Base
   end
 
   def populate_initiatives(enterprise)
-    return if enterprise.users.count < 1
+    return if enterprise.users.size < 1
 
     user = enterprise.users.first
 
@@ -41,7 +41,7 @@ class PopulateMetricsDashboardJob < ActiveJob::Base
   end
 
   def populate_group_messages(enterprise)
-    return if enterprise.users.count < 1
+    return if enterprise.users.size < 1
 
     user = enterprise.users.first
 
