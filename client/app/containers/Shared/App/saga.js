@@ -13,7 +13,8 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import {
   loginSuccess, loginError,
   logoutSuccess, logoutError,
-  setEnterprise, findEnterpriseError, setUser, findEnterpriseSuccess,
+  findEnterpriseSuccess, findEnterpriseError,
+  setEnterprise, setUserPolicyGroup, setUser,
 } from './actions';
 
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
@@ -37,6 +38,8 @@ export function* login(action) {
     const user = JSON.parse(window.atob(response.data.token.split('.')[1]));
 
     yield put(setUser(user));
+
+    yield put(setUserPolicyGroup({ policy_group: response.data.policy_group }));
 
     // TODO: find better way to do this
     //       - we need to reload to render the parent layout component
