@@ -3,7 +3,7 @@ class Like < BaseClass
   belongs_to :user
 
   # Objects that can be liked
-  belongs_to :news_feed_link
+  belongs_to :news_feed_link, counter_cache: true
   belongs_to :answer
 
   validates :enterprise_id, presence: true
