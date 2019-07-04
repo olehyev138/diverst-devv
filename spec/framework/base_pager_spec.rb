@@ -12,6 +12,15 @@ RSpec.describe BasePager, type: :model do
       expect(response.type).to eq('user')
     end
 
+    it 'returns the correct by name for the current users enterprise' do
+      enterprise_2 = create(:enterprise)
+      create_list(:user, 10, enterprise: enterprise)
+      user = create(:user, first_name: 'jack', enterprise: enterprise)
+      user_2 = create(:user, first_name: 'jack', enterprise: enterprise_2)
+      response = User.index(Request.create_request(user), { search: 'jack' })
+      expect(response.total).to eq(1)
+    end
+
     it 'returns the groups as items and the total for the correct enterprise' do
       enterprise_2 = create(:enterprise)
       user_2 = create(:user, enterprise: enterprise_2)
