@@ -5,7 +5,7 @@ class View < BaseClass
   belongs_to :group, counter_cache: true
   belongs_to :user
   belongs_to :enterprise
-  belongs_to :resource
+  belongs_to :resource, counter_cache: true
   belongs_to :folder, counter_cache: true
 
   settings do
