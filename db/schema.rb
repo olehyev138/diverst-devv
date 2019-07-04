@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190704084258) do
+ActiveRecord::Schema.define(version: 20190704085016) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -591,6 +591,7 @@ ActiveRecord::Schema.define(version: 20190704084258) do
     t.string   "unit_of_expiry_age",          limit: 191
     t.boolean  "auto_archive",                                                      default: false
     t.string   "event_attendance_visibility", limit: 191
+    t.integer  "views_count",                 limit: 4
   end
 
   create_table "groups_metrics_dashboards", force: :cascade do |t|

@@ -2,7 +2,7 @@ class View < BaseClass
   include PublicActivity::Common
 
   belongs_to :news_feed_link
-  belongs_to :group
+  belongs_to :group, counter_cache: true
   belongs_to :user
   belongs_to :enterprise
   belongs_to :resource
