@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190704003323) do
+ActiveRecord::Schema.define(version: 20190704081413) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -158,6 +158,7 @@ ActiveRecord::Schema.define(version: 20190704003323) do
     t.datetime "banner_updated_at"
     t.integer  "owner_id",            limit: 4
     t.integer  "status",              limit: 4,     default: 0
+    t.integer  "questions_count",     limit: 4
   end
 
   create_table "campaigns_groups", force: :cascade do |t|
