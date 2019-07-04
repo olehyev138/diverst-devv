@@ -55,7 +55,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
       expect(response).to have_http_status(422)
     end
   end
-  
+
   describe '#generate_qr_code' do
     it 'creates a QR code for the initiative' do
       post "/api/v1/#{route}/#{item.id}/qrcode", headers: headers

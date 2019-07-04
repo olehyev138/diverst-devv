@@ -42,7 +42,7 @@ module User::Actions
       "#{self.table_name}.id LIKE :search OR LOWER(#{self.table_name}.first_name) LIKE :search OR LOWER(#{self.table_name}.last_name) LIKE :search
       OR LOWER(#{self.table_name}.email) LIKE :search"
     end
-    
+
     def signin(email, password)
       # check for an email and password
       raise BadRequestException.new 'Email and password required' unless email.present? && password.present?

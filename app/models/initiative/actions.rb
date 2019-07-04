@@ -1,11 +1,11 @@
-require "base64"
+require 'base64'
 require 'rqrcode'
 
 module Initiative::Actions
   def self.included(klass)
     klass.extend ClassMethods
   end
-  
+
   module ClassMethods
     def generate_qr_code(diverst_request, params)
       item = show(diverst_request, params)

@@ -1,7 +1,7 @@
 class Initiative < ApplicationRecord
   include PublicActivity::Common
   include Initiative::Actions
-  
+
   attr_accessor :associated_budget_id, :skip_allocate_budget_funds, :from, :to
 
   belongs_to :pillar
@@ -98,7 +98,9 @@ class Initiative < ApplicationRecord
         include: { pillar: { include: { outcome: { include: { group: {
           only: [:id, :enterprise_id, :parent_id, :name],
           include: { parent: { only: [:name] } }
-        } }, only: [] }, }, only: [] } }
+        } },
+                                                   only: [] }, },
+                             only: [] } }
       )
     ).merge({ 'created_at' => self.created_at.beginning_of_hour })
   end
