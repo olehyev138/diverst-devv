@@ -1,7 +1,5 @@
 class UserSerializer < ApplicationRecordSerializer
-  attributes :enterprise, :last_name, :fields
-
-  has_many :user_groups
+  attributes :enterprise, :last_name, :fields, :user_groups
 
   # Serialize all user fields, including the custom attributes listed above, and excluding the `excluded_keys`
   def serialize_all_fields
