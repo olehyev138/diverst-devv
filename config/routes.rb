@@ -50,7 +50,11 @@ Diverst::Application.routes.draw do
       resources :group_updates
       resources :groups_metrics_dashboards
       resources :groups_polls
-      resources :initiatives
+      resources :initiatives do
+        member do
+          post '/qrcode', to: 'initiatives#generate_qr_code'
+        end
+      end
       resources :initiative_comments
       resources :initiative_fields
       resources :initiative_expenses
