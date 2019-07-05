@@ -49,6 +49,7 @@ export class AdminLayout extends React.PureComponent {
         drawerOpen={this.state.drawerOpen}
         position='absolute'
         isAdmin
+        {...other}
         component={matchProps => (
           <div className={classes.flex}>
             <AdminLinks drawerToggleCallback={this.drawerToggleCallback} drawerOpen={this.state.drawerOpen} location={other.location} {...matchProps} />

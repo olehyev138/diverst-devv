@@ -27,7 +27,13 @@ const selectUser = () => createSelector(
   globalState => globalState.user
 );
 
+const selectIsAuthenticated = () => createSelector(
+  selectGlobal,
+  globalState => !!globalState.token
+);
+
 export {
   selectGlobal, selectRouter, selectLocation,
-  selectEnterprise, selectToken, selectUserPolicyGroup, selectUser
+  selectEnterprise, selectToken, selectUserPolicyGroup,
+  selectUser, selectIsAuthenticated,
 };
