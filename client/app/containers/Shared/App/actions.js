@@ -2,7 +2,7 @@ import {
   LOGIN_BEGIN, LOGIN_SUCCESS, LOGIN_ERROR,
   LOGOUT_BEGIN, LOGOUT_SUCCESS, LOGOUT_ERROR,
   FIND_ENTERPRISE_BEGIN, FIND_ENTERPRISE_SUCCESS, FIND_ENTERPRISE_ERROR,
-  SET_ENTERPRISE, SET_USER
+  SET_ENTERPRISE, SET_USER_POLICY_GROUP, SET_USER
 } from './constants';
 
 export function loginBegin(payload) {
@@ -72,6 +72,13 @@ export function setEnterprise(enterprise) {
   return {
     type: SET_ENTERPRISE,
     enterprise,
+  };
+}
+
+export function setUserPolicyGroup(payload) {
+  return {
+    type: SET_USER_POLICY_GROUP,
+    payload,
   };
 }
 

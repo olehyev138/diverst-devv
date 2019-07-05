@@ -24,20 +24,20 @@ export default function Routes(props) {
     <Switch>
       <SessionLayout path={ROUTES.session.login.path} component={LoginPage} />
 
-      <AdminLayout path={ROUTES.admin.analytics.overview.path} component={PlaceholderPage} />
-      <AdminLayout path={ROUTES.admin.analytics.users.path} component={PlaceholderPage} />
+      <AdminLayout path={ROUTES.admin.analytics.overview.path} route={ROUTES.admin.analytics.overview} component={PlaceholderPage} />
+      <AdminLayout path={ROUTES.admin.analytics.users.path} route={ROUTES.admin.analytics.users} component={PlaceholderPage} />
 
       { /* <GroupLayout path={ROUTES.group.home.path} /> */ }
 
-      <UserLayout exact path={ROUTES.user.home.path} pageTitle={ROUTES.user.home.titleMessage} component={PlaceholderPage} />
-      <UserLayout path={ROUTES.user.innovate.path} pageTitle={ROUTES.user.innovate.titleMessage} component={PlaceholderPage} />
-      <UserLayout path={ROUTES.user.news.path} pageTitle={ROUTES.user.news.titleMessage} component={PlaceholderPage} />
-      <UserLayout path={ROUTES.user.events.path} pageTitle={ROUTES.user.events.titleMessage} component={PlaceholderPage} />
-      <UserLayout path={ROUTES.user.groups.path} pageTitle={ROUTES.user.groups.titleMessage} component={PlaceholderPage} />
-      <UserLayout path={ROUTES.user.downloads.path} pageTitle={ROUTES.user.downloads.titleMessage} component={PlaceholderPage} />
-      <UserLayout path={ROUTES.user.mentorship.path} pageTitle={ROUTES.user.mentorship.titleMessage} component={PlaceholderPage} />
+      <UserLayout exact path={ROUTES.user.home.path} route={ROUTES.user.home} pageTitle={ROUTES.user.home.titleMessage} component={PlaceholderPage} />
+      <UserLayout path={ROUTES.user.innovate.path} route={ROUTES.user.innovate} pageTitle={ROUTES.user.innovate.titleMessage} component={PlaceholderPage} />
+      <UserLayout path={ROUTES.user.news.path} route={ROUTES.user.news} pageTitle={ROUTES.user.news.titleMessage} component={PlaceholderPage} />
+      <UserLayout path={ROUTES.user.events.path} route={ROUTES.user.events} pageTitle={ROUTES.user.events.titleMessage} component={PlaceholderPage} />
+      <UserLayout path={ROUTES.user.groups.path} route={ROUTES.user.groups} pageTitle={ROUTES.user.groups.titleMessage} component={PlaceholderPage} />
+      <UserLayout path={ROUTES.user.downloads.path} route={ROUTES.user.downloads} pageTitle={ROUTES.user.downloads.titleMessage} component={PlaceholderPage} />
+      <UserLayout path={ROUTES.user.mentorship.path} route={ROUTES.user.mentorship} pageTitle={ROUTES.user.mentorship.titleMessage} component={PlaceholderPage} />
 
-      <UserLayout path={ROUTES.groups.home.path} pageTitle={ROUTES.groups.home.titleMessage} component={Groups} />
+      <UserLayout path={ROUTES.groups.home.path} route={ROUTES.groups.home} pageTitle={ROUTES.groups.home.titleMessage} component={Groups} />
 
       <ErrorLayout path='' component={NotFoundPage} />
     </Switch>
