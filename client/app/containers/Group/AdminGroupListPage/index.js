@@ -38,7 +38,7 @@ export function AdminGroupListPage(props) {
     const newParams = { ...params, count: payload.count, page: payload.page };
 
     props.getGroupsBegin(newParams);
-    setParams(params);
+    setParams(newParams);
   };
 
   return (

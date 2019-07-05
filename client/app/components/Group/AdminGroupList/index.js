@@ -13,7 +13,7 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import {
   Button, Card, CardContent, CardActions,
-  Typography, Grid, Link, TablePagination
+  Typography, Grid, Link, TablePagination, Collapse
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -46,6 +46,16 @@ export function AdminGroupList(props) {
     props.handlePagination({ count: +event.target.value, page });
   };
 
+  const [expandedGroups, setExpandedGroups] = useState({});
+
+  if (props.groups && Object.keys(props.groups).length !== 0 && Object.keys(expandedGroups).length <= 0) {
+    const initialExpandedGroups = {};
+
+    /* eslint-disable-next-line no-return-assign */
+    Object.keys(props.groups).map((id, i) => initialExpandedGroups[id] = false);
+    setExpandedGroups(initialExpandedGroups);
+  }
+
   return (
     <React.Fragment>
       <Grid container spacing={3}>
@@ -60,48 +70,79 @@ export function AdminGroupList(props) {
             Create
           </Button>
         </Grid>
-        {props.groups && Object.values(props.groups).map((group, i) => (
-          <Grid item key={group.id} className={classes.groupListItem}>
-            <Card>
-              <CardContent>
-                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                <Link href='#'>
-                  <Typography variant='h5' component='h2' display='inline'>
-                    {group.name}
-                  </Typography>
-                </Link>
-                {group.description && (
-                  <Typography color='textSecondary' className={classes.groupListItemDescription}>
-                    {group.description}
-                  </Typography>
-                )}
-              </CardContent>
-              <CardActions>
-                <Button
-                  size='small'
-                  to={{
-                    pathname: `${ROUTES.admin.manage.groups.pathPrefix}/${group.id}/edit`,
-                    state: { id: group.id }
-                  }}
-                  component={WrappedNavLink}
-                >
-                  Edit
-                </Button>
-                <Button
-                  size='small'
-                  className={classes.errorButton}
-                  onClick={() => {
-                    /* eslint-disable no-alert, no-restricted-globals */
-                    if (confirm('Delete group?'))
-                      props.deleteGroupBegin(group.id);
-                  }}
-                >
-                  Delete
-                </Button>
-              </CardActions>
-            </Card>
-          </Grid>
-        ))}
+        {props.groups && Object.values(props.groups).map((group, i) => {
+          return (
+            <Grid item key={group.id} className={classes.groupListItem}>
+              <Card>
+                <CardContent>
+                  {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                  <Link href='#'>
+                    <Typography variant='h5' component='h2' display='inline'>
+                      {group.name}
+                    </Typography>
+                  </Link>
+                  {group.description && (
+                    <Typography color='textSecondary' className={classes.groupListItemDescription}>
+                      {group.description}
+                    </Typography>
+                  )}
+                </CardContent>
+                <CardActions>
+                  <Button
+                    size='small'
+                    to={{
+                      pathname: `${ROUTES.admin.manage.groups.pathPrefix}/${group.id}/edit`,
+                      state: { id: group.id }
+                    }}
+                    component={WrappedNavLink}
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    size='small'
+                    className={classes.errorButton}
+                    onClick={() => {
+                      /* eslint-disable-next-line no-alert, no-restricted-globals */
+                      if (confirm('Delete group?'))
+                        props.deleteGroupBegin(group.id);
+                    }}
+                  >
+                    Delete
+                  </Button>
+                  <Button
+                    size='small'
+                    onClick={() => {
+                      setExpandedGroups({ ...expandedGroups, [group.id]: !expandedGroups[group.id] });
+                    }}
+                  >
+                    Show Children
+                  </Button>
+                </CardActions>
+              </Card>
+              <Collapse in={expandedGroups[`${group.id}`]}>
+                {group.children && group.children.map((group, i) => {
+                  return (
+                    <Card key={group.id}>
+                      <CardContent>
+                        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                        <Link href='#'>
+                          <Typography variant='h5' component='h2' display='inline'>
+                            {group.name}
+                          </Typography>
+                        </Link>
+                        {group.description && (
+                          <Typography color='textSecondary' className={classes.groupListItemDescription}>
+                            {group.description}
+                          </Typography>
+                        )}
+                      </CardContent>
+                    </Card>
+                  );
+                })}
+              </Collapse>
+            </Grid>
+          );
+        })}
       </Grid>
       <TablePagination
         component='div'

@@ -14,6 +14,7 @@ import { compose } from 'redux';
 import {
   Button, Card, CardActions, CardContent, Grid, TextField, Hidden
 } from '@material-ui/core';
+import Select from 'react-select';
 
 import { Field, Formik, Form } from 'formik';
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -51,6 +52,8 @@ export function GroupFormInner({ handleSubmit, handleChange, handleBlur, values,
             name='description'
             label='Description'
             value={values.description}
+          />
+          <Select
           />
         </CardContent>
         <CardActions>
