@@ -1,6 +1,5 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 import api from 'api/api';
-import AuthService from 'utils/authService';
 import { push } from 'connected-react-router';
 import { GET_GROUPS_BEGIN, GET_GROUPS_SUCCESS, GET_GROUPS_ERROR } from 'containers/Group/Groups/constants';
 import { getGroupsBegin, getGroupsSuccess, getGroupsError } from 'containers/Group/Groups/actions';
