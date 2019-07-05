@@ -161,6 +161,28 @@ RSpec.describe Group, type: :model do
       end
     end
   end
+  
+  describe 'index' do
+    it 'gets all parents' do
+      enterprise = create(:enterprise)
+      enterprise_2 = create(:enterprise)
+      user = create(:user, :enterprise => enterprise)
+      
+      group_1 = create(:group, :enterprise => enterprise)
+      group_2 = create(:group, :enterprise => enterprise, parent_id: group_1.id)
+      group_3 = create(:group, :enterprise => enterprise_2)
+      
+      diverst_request = Request.create_request(user)
+      
+      # gets all groups for enterprise
+      page = Group.index(diverst_request, {})
+      expect(page.total).to eq(2)
+      
+      # get only parent groups for enterprise
+      page = Group.index(diverst_request, {parent_id: "null"})
+      expect(page.total).to eq(1)
+    end
+  end
 
   describe '#yammer_group_id' do
     let(:group) { build_stubbed(:group) }

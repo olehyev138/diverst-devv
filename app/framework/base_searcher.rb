@@ -93,6 +93,7 @@ module BaseSearcher
     end
 
     def query_arguments_hash(query, value)
+      value = nil if value === "null"
       case query
       when *query_arguments
         { query.to_sym => value }
