@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Badge, type: :model do
   describe 'when validating' do
     let(:badge) { build_stubbed(:badge) }
-    
+
     it { expect(badge).to validate_length_of(:image_content_type) }
     it { expect(badge).to validate_length_of(:image_file_name) }
     it { expect(badge).to validate_length_of(:label) }
