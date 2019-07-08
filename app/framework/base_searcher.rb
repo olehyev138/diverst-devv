@@ -18,9 +18,24 @@ module BaseSearcher
 
     def set_query_scopes(params)
       if params[:query_scopes].presence
-        return params[:query_scopes] if params[:query_scopes].kind_of?(Array)
+        case params[:query_scopes].class.name
+        when 'Array'
+          scopes = params[:query_scopes]
+        when 'String'
+          scopes = JSON.parse(params[:query_scopes])
+        else
+          scopes = []
+        end
 
-        JSON.parse(params[:query_scopes])
+        filtered = scopes - excluded_scopes
+
+        filtered.select { |query_scope|
+          if query_scope.kind_of?(String) || query_scope.kind_of?(Symbol)
+            valid_scopes.include?(query_scope)
+          else
+            valid_scopes.include?(query_scope.first)
+          end
+        }
       else
         [:all]
       end

@@ -1,6 +1,7 @@
 class Group < ApplicationRecord
   include PublicActivity::Common
   include CustomTextHelpers
+  include Group::Actions
 
   extend Enumerize
 
