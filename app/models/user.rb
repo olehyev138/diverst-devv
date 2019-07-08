@@ -583,7 +583,10 @@ class User < BaseClass
   end
 
   def collect_visitation_data
-    page_visits = visits.group(:landing_page).count
+    page_visits = visits
+                    .where('landing_page not like ? and landing_page not like ?', '%.json%', '%.ico%')
+                    .group(:landing_page)
+                    .count
     page_visits.each do |page, count|
       visitation = page_visitation_data.find_by(page: page)
       if visitation.present?

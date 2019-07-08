@@ -8,7 +8,7 @@ class UsageDatatable < AjaxDatatablesRails::Base
 
   def sortable_columns
     # Declare strings in this format: ModelName.column_name
-    @sortable_columns ||= ['PageVisitationDatum.times_visited']
+    @sortable_columns ||= %w(PageVisitationDatum.page PageVisitationDatum.times_visited)
   end
 
   def searchable_columns

@@ -203,12 +203,15 @@ class ApplicationController < ActionController::Base
   end
 
   def track_action
-    respond_to do |format|
-      format.html { ahoy.track 'Action Name', { title: 'Some awesome information' } }
-      format.js { }
-      format.xml { }
-      format.json { }
-    end
+    # ahoy.track 'Action Name', { controller: self.class.to_s,
+    #                             format: request.format }
+
+    # respond_to do |format|
+    #   format.html { ahoy.track 'Action Name', { title: 'Some awesome information' } }
+    #   format.js { }
+    #   format.xml { }
+    #   format.json { }
+    # end
   end
 
   private
