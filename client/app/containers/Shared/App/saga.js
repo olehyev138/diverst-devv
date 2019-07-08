@@ -13,12 +13,12 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import {
   loginSuccess, loginError,
   logoutSuccess, logoutError,
-  setEnterprise, findEnterpriseError, setUser, findEnterpriseSuccess,
+  findEnterpriseSuccess, findEnterpriseError,
+  setEnterprise, setUserPolicyGroup, setUser,
 } from './actions';
 
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
 
-import AuthService from 'utils/authService';
 import { changePrimary, changeSecondary } from 'containers/Shared/ThemeProvider/actions';
 
 const axios = require('axios');
@@ -30,14 +30,13 @@ export function* login(action) {
     const response = yield call(api.sessions.create.bind(api.sessions), action.payload);
     yield put(loginSuccess(response.data.token));
 
-    AuthService.setValue('_diverst.twj', response.data.token);
     axios.defaults.headers.common['Diverst-UserToken'] = response.data.token;
 
     // decode token to get user object
     const user = JSON.parse(window.atob(response.data.token.split('.')[1]));
 
     yield put(setUser(user));
-
+    yield put(setUserPolicyGroup({ policy_group: response.data.policy_group }));
     yield put(push(ROUTES.user.home.path));
   } catch (err) {
     yield put(loginError(err));
@@ -45,8 +44,6 @@ export function* login(action) {
 }
 
 export function* logout(action) {
-  AuthService.clear();
-
   try {
     // Destroy session and redirect to login
     yield call(api.sessions.destroy.bind(api.sessions), action.token);
@@ -68,8 +65,6 @@ export function* findEnterprise(action) {
     yield put(findEnterpriseSuccess());
 
     yield put(setEnterprise(enterprise));
-
-    AuthService.setValue('_diverst.seirpretne', enterprise);
 
     // If enterprise has a theme, dispatch theme provider actions
     if (enterprise.theme) {

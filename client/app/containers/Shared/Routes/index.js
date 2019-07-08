@@ -29,24 +29,23 @@ export default function Routes(props) {
 
       { /* Admin */ }
       { /* Admin - Analyze */ }
-      <AdminLayout path={ROUTES.admin.analyze.overview.path} component={PlaceholderPage} />
-      <AdminLayout path={ROUTES.admin.analyze.users.path} component={PlaceholderPage} />
+      <AdminLayout path={ROUTES.admin.analyze.overview.path} route={ROUTES.admin.analyze.overview} component={PlaceholderPage} />
+      <AdminLayout path={ROUTES.admin.analyze.users.path} route={ROUTES.admin.analyze.users} component={PlaceholderPage} />
 
       { /* Admin - Manage */ }
       { /* Admin - Manage - Groups */ }
-      <AdminLayout exact path={ROUTES.admin.manage.groups.index.path} component={AdminGroupListPage} />
-      <AdminLayout path={ROUTES.admin.manage.groups.new.path} component={GroupCreatePage} />
-      <AdminLayout path={ROUTES.admin.manage.groups.edit.path} component={GroupEditPage} />
-      <AdminLayout path={ROUTES.admin.manage.groups.delete.path} component={PlaceholderPage} />
+      <AdminLayout exact path={ROUTES.admin.manage.groups.index.path} route={ROUTES.admin.manage.groups.index} component={AdminGroupListPage} />
+      <AdminLayout path={ROUTES.admin.manage.groups.new.path} route={ROUTES.admin.manage.groups.new} component={GroupCreatePage} />
+      <AdminLayout path={ROUTES.admin.manage.groups.edit.path} route={ROUTES.admin.manage.groups.edit} component={GroupEditPage} />
+      <AdminLayout path={ROUTES.admin.manage.groups.delete.path} route={ROUTES.admin.manage.groups.delete} component={PlaceholderPage} />
 
-      { /* User */ }
-      <UserLayout exact path={ROUTES.user.home.path} pageTitle={ROUTES.user.home.titleMessage} component={PlaceholderPage} />
-      <UserLayout path={ROUTES.user.innovate.path} pageTitle={ROUTES.user.innovate.titleMessage} component={PlaceholderPage} />
-      <UserLayout path={ROUTES.user.news.path} pageTitle={ROUTES.user.news.titleMessage} component={PlaceholderPage} />
-      <UserLayout path={ROUTES.user.events.path} pageTitle={ROUTES.user.events.titleMessage} component={PlaceholderPage} />
-      <UserLayout path={ROUTES.user.groups.path} pageTitle={ROUTES.user.groups.titleMessage} component={UserGroupListPage} />
-      <UserLayout path={ROUTES.user.downloads.path} pageTitle={ROUTES.user.downloads.titleMessage} component={PlaceholderPage} />
-      <UserLayout path={ROUTES.user.mentorship.path} pageTitle={ROUTES.user.mentorship.titleMessage} component={PlaceholderPage} />
+      <UserLayout exact path={ROUTES.user.home.path} route={ROUTES.user.home} pageTitle={ROUTES.user.home.titleMessage} component={PlaceholderPage} />
+      <UserLayout path={ROUTES.user.innovate.path} route={ROUTES.user.innovate} pageTitle={ROUTES.user.innovate.titleMessage} component={PlaceholderPage} />
+      <UserLayout path={ROUTES.user.news.path} route={ROUTES.user.news} pageTitle={ROUTES.user.news.titleMessage} component={PlaceholderPage} />
+      <UserLayout path={ROUTES.user.events.path} route={ROUTES.user.events} pageTitle={ROUTES.user.events.titleMessage} component={PlaceholderPage} />
+      <UserLayout path={ROUTES.user.groups.path} route={ROUTES.user.groups} pageTitle={ROUTES.user.groups.titleMessage} component={PlaceholderPage} />
+      <UserLayout path={ROUTES.user.downloads.path} route={ROUTES.user.downloads} pageTitle={ROUTES.user.downloads.titleMessage} component={PlaceholderPage} />
+      <UserLayout path={ROUTES.user.mentorship.path} route={ROUTES.user.mentorship} pageTitle={ROUTES.user.mentorship.titleMessage} component={PlaceholderPage} />
 
       <ErrorLayout path='' component={NotFoundPage} />
     </Switch>
