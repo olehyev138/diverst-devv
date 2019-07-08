@@ -76,7 +76,7 @@ class User < BaseClass
   has_many :metrics_dashboards, foreign_key: :owner_id
   has_many :shared_metrics_dashboards
   has_many :page_visitation_data, dependent: :destroy
-  has_many :visits, class_name: "Ahoy::Visit"
+  has_many :visits, class_name: 'Ahoy::Visit'
   has_many :answer_comments, foreign_key: :author_id
 
   has_attached_file :avatar, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing_user.png'), s3_permissions: 'private'
@@ -643,7 +643,7 @@ class User < BaseClass
       'draw' => 0,
       'recordsTotal' => data.count,
       'recordsFiltered' => data.count,
-      'data' => data.map {|pg| [pg.page, pg.times_visited] }
+      'data' => data.map { |pg| [pg.page, pg.times_visited] }
     }
   end
 
