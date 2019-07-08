@@ -16,27 +16,43 @@ import saga from 'containers/Group/saga';
 import GroupForm from 'components/Group/GroupForm';
 
 export function GroupCreatePage(props) {
-  useInjectReducer({ key: 'groups', reducer });
-  useInjectSaga({ key: 'groups', saga });
-
-  const [params, setParams] = useState({
-    count: 10, page: 0, order: 'asc',
-    query_scopes: ['all_parents', 'no_children']
+  useInjectReducer({
+    key: 'groups',
+    reducer
+  });
+  useInjectSaga({
+    key: 'groups',
+    saga
   });
 
   useEffect(() => {
-    // get groups for assoc selects
-    props.getGroupsBegin(params);
-
     return () => {
       props.groupFormUnmount();
     };
   }, []);
 
+
+  const childrenSelectAction = (searchKey = '') => {
+    props.getGroupsBegin({
+      count: 10, page: 0, order: 'asc',
+      search: searchKey,
+      query_scopes: ['all_parents', 'no_children']
+    });
+  };
+
+  const parentSelectAction = (searchKey = '') => {
+    props.getGroupsBegin({
+      count: 10, page: 0, order: 'asc',
+      query_scopes: ['all_parents']
+    });
+  };
+
   return (
     <GroupForm
       groupAction={props.createGroupBegin}
       buttonText='Create'
+      childrenSelectAction={childrenSelectAction}
+      parentSelectAction={parentSelectAction}
       selectGroups={props.groups}
     />
   );

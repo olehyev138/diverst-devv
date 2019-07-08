@@ -12,12 +12,15 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
 import {
-  Button, Card, CardActions, CardContent, Grid, TextField, Hidden, FormControl
+  Button, Card, CardActions, CardContent, Grid,
+  TextField, Hidden, FormControl
 } from '@material-ui/core';
 import Select from 'react-select';
 
 import { Field, Formik, Form } from 'formik';
 import { ROUTES } from 'containers/Shared/Routes/constants';
+
+import { mapSelectAssociations } from 'utils/formHelpers';
 
 /* eslint-disable object-curly-newline */
 export function GroupFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
@@ -60,10 +63,25 @@ export function GroupFormInner({ handleSubmit, handleChange, handleBlur, values,
             name='children'
             label='Children'
             isMulti
-            options={props.selectGroups}
             value={values.children}
+            options={props.selectGroups}
+            onMenuOpen={props.childrenSelectAction}
             onChange={value => setFieldValue('children', value)}
+            onInputChange={value => props.childrenSelectAction(value)}
             onBlur={() => setFieldTouched('children', true)}
+          />
+          <Field
+            component={Select}
+            fullWidth
+            id='parent'
+            name='parent'
+            label='Parent '
+            value={values.parent}
+            options={props.selectGroups}
+            onMenuOpen={props.parentSelectAction}
+            onChange={value => setFieldValue('parent', value)}
+            onInputChange={value => props.parentSelectAction(value)}
+            onBlur={() => setFieldTouched('parent', true)}
           />
         </CardContent>
         <CardActions>
@@ -98,14 +116,10 @@ export function GroupForm(props) {
       initialValues={props.group || initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        const { children } = values;
-        delete values.children;
-
-        props.groupAction({
-          ...values,
-          child_ids: children.map(c => c.value),
-        });
+        props.groupAction(mapSelectAssociations(values,
+          ['children', 'parent'], ['child_ids', 'parent_id']));
       }}
+
       render={formikProps => <GroupFormInner {...props} {...formikProps} />}
     />
   );
