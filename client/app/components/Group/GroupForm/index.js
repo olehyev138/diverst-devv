@@ -12,7 +12,7 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
 import {
-  Button, Card, CardActions, CardContent, Grid, TextField, Hidden
+  Button, Card, CardActions, CardContent, Grid, TextField, Hidden, FormControl
 } from '@material-ui/core';
 import Select from 'react-select';
 
@@ -20,7 +20,7 @@ import { Field, Formik, Form } from 'formik';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 /* eslint-disable object-curly-newline */
-export function GroupFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText }) {
+export function GroupFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
   const WrappedNavLink = React.forwardRef((props, ref) => <NavLink innerRef={ref} {...props} />);
 
   return (
@@ -53,7 +53,17 @@ export function GroupFormInner({ handleSubmit, handleChange, handleBlur, values,
             label='Description'
             value={values.description}
           />
-          <Select
+          <Field
+            component={Select}
+            fullWidth
+            id='children'
+            name='children'
+            label='Children'
+            isMulti
+            options={props.selectGroups}
+            value={values.children}
+            onChange={value => setFieldValue('children', value)}
+            onBlur={() => setFieldTouched('children', true)}
           />
         </CardContent>
         <CardActions>
@@ -79,7 +89,8 @@ export function GroupForm(props) {
   const initialValues = {
     name: '',
     short_description: '',
-    description: ''
+    description: '',
+    children: [],
   };
 
   return (
@@ -87,7 +98,13 @@ export function GroupForm(props) {
       initialValues={props.group || initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        props.groupAction(values);
+        const { children } = values;
+        delete values.children;
+
+        props.groupAction({
+          ...values,
+          child_ids: children.map(c => c.value),
+        });
       }}
       render={formikProps => <GroupFormInner {...props} {...formikProps} />}
     />

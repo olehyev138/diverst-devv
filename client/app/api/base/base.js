@@ -22,7 +22,10 @@ class API {
         if (url.indexOf('?') !== url.length - 1)
           url += '&';
 
-        url += `${arg}=${opts[arg]}`;
+        if (Array.isArray(opts[arg]))
+          url += `${arg}=${JSON.stringify(opts[arg])}`;
+        else
+          url += `${arg}=${opts[arg]}`;
       }
     }
 

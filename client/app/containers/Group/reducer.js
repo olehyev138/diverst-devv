@@ -39,6 +39,10 @@ function groupsReducer(state = initialState, action) {
 
 function formatGroups(groups) {
   /* eslint-disable no-return-assign */
+
+  /* Format groups to hash by id:
+   *   { <id>: { name: group_01, ... } }
+   */
   return groups.reduce((map, group) => {
     map[group.id] = group;
     return map;

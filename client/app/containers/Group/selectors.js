@@ -8,6 +8,15 @@ const selectPaginatedGroups = () => createSelector(
   groupsState => groupsState.groupList
 );
 
+const selectPaginatedSelectGroups = () => createSelector(
+  selectGroupsDomain,
+  groupsState => (
+    Object
+      .values(groupsState.groupList)
+      .map(group => ({ value: group.id, label: group.name }))
+  )
+);
+
 const selectGroupTotal = () => createSelector(
   selectGroupsDomain,
   groupsState => groupsState.groupTotal
@@ -19,6 +28,6 @@ const selectGroup = id => createSelector(
 );
 
 export {
-  selectGroupsDomain, selectPaginatedGroups,
+  selectGroupsDomain, selectPaginatedGroups, selectPaginatedSelectGroups,
   selectGroupTotal, selectGroup
 };
