@@ -18,7 +18,7 @@ class User::UsageController < ApplicationController
     print(params)
     respond_to do |format|
       format.html
-      format.json { render json: @user.most_viewed_pages_json }
+      format.json { render json: UsageDatatable.new(view_context) }
     end
   end
 

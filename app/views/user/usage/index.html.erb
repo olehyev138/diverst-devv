@@ -1,5 +1,6 @@
 <div class="content__header">
   <h1><%= "#{@user.first_name} #{@user.last_name}'s Usage Stats" %></h1>
+  <h2><%= url_data_user_usage_index_path %></h2>
 </div>
 
 <div class="content__main">
@@ -45,16 +46,14 @@
 </div>
 
 <h3>Most Visited Pages</h3>
-<%= render 'url_table', source: url_data_user_usage_index_path(format: :json) %>
+<div class="card">
+  <div class="card__section">
+    <%= render 'url_table', source: url_data_user_usage_index_path(format: :json) %>
+  </div>
+</div>
 
 <script>
-  $(document).ready(function(){
-    $('.dropdown-submenu a.user_roles').on("click", function(e){
-      $(this).next('ul').toggle();
-      e.stopPropagation();
-      e.preventDefault();
-    });
-  });
+
 
 
 </script>
