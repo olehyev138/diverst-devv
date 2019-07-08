@@ -271,7 +271,6 @@ export function mapDispatchToProps(dispatch, ownProps) {
   return {
     logoutBegin(user) {
       dispatch(logoutBegin(user));
-      dispatch(setUser(null));
     },
     handleVisitAdmin() {
       dispatch(push(ROUTES.admin.root.path));

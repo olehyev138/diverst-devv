@@ -5,7 +5,7 @@ import {
   loginBegin, loginSuccess, loginError,
   logoutBegin, logoutSuccess, logoutError,
   findEnterpriseBegin, setEnterprise, findEnterpriseError,
-  setUser
+  setUser, setUserPolicyGroup
 } from 'containers/Shared/App/actions';
 
 /* eslint-disable default-case, no-param-reassign */
@@ -15,6 +15,7 @@ describe('appReducer', () => {
   beforeEach(() => {
     state = {
       user: null,
+      policy_group: null,
       enterprise: null,
       token: null,
     };
@@ -55,5 +56,13 @@ describe('appReducer', () => {
     });
 
     expect(appReducer(state, setUser('user'))).toEqual(expected);
+  });
+
+  it('handles the setUserPolicyGroup action correctly', () => {
+    const expected = produce(state, (draft) => {
+      draft.policy_group = { groups_index: false };
+    });
+
+    expect(appReducer(state, setUserPolicyGroup({ policy_group: { groups_index: false } }))).toEqual(expected);
   });
 });
