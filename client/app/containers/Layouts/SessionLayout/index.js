@@ -1,7 +1,9 @@
 import React, { memo } from 'react';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
 import { Route } from 'react-router';
 import { Redirect } from 'react-router-dom';
-import AuthService from 'utils/authService';
+import { createStructuredSelector } from 'reselect';
 import PropTypes from 'prop-types';
 
 import Container from '@material-ui/core/Container';
@@ -9,6 +11,7 @@ import ApplicationLayout from '../ApplicationLayout';
 import { withStyles } from '@material-ui/core/styles';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
+import { selectIsAuthenticated } from 'containers/Shared/App/selectors';
 
 const styles = theme => ({
   container: {
@@ -23,10 +26,10 @@ const styles = theme => ({
 });
 
 const SessionLayout = ({ component: Component, ...rest }) => {
-  const { classes, ...other } = rest;
+  const { classes, isAuthenticated, ...other } = rest;
 
   return (
-    AuthService.isAuthenticated() === false
+    !isAuthenticated
       ? (
         <ApplicationLayout
           {...other}
@@ -48,4 +51,15 @@ SessionLayout.propTypes = {
   component: PropTypes.elementType,
 };
 
-export default withStyles(styles)(SessionLayout);
+const mapStateToProps = createStructuredSelector({
+  isAuthenticated: selectIsAuthenticated(),
+});
+
+const withConnect = connect(
+  mapStateToProps,
+);
+
+export default compose(
+  withConnect,
+  withStyles(styles)
+)(SessionLayout);

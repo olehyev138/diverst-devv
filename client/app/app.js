@@ -22,6 +22,8 @@ import App from 'containers/Shared/App';
 import LanguageProvider from 'containers/Shared/LanguageProvider';
 import ThemeProvider from 'containers/Shared/ThemeProvider/Loadable';
 
+import { PersistGate } from 'redux-persist/integration/react';
+
 
 // Load the favicon and the .htaccess file
 /* eslint-disable import/no-unresolved, import/extensions */
@@ -33,7 +35,9 @@ import configureAxios from 'utils/axios';
 
 // Import i18n messages
 import { translationMessages } from './i18n';
-import { store, history } from './configureStore';
+
+import { store, history, persistor } from './configureStore';
+
 configureAxios();
 
 const MOUNT_NODE = document.getElementById('app');
@@ -41,11 +45,13 @@ const MOUNT_NODE = document.getElementById('app');
 const render = (messages) => {
   ReactDOM.render(
     <Provider store={store}>
-      <LanguageProvider messages={messages}>
-        <ConnectedRouter history={history}>
-          <ThemeProvider />
-        </ConnectedRouter>
-      </LanguageProvider>
+      <PersistGate loading={null} persistor={persistor}>
+        <LanguageProvider messages={messages}>
+          <ConnectedRouter history={history}>
+            <ThemeProvider />
+          </ConnectedRouter>
+        </LanguageProvider>
+      </PersistGate>
     </Provider>,
     MOUNT_NODE,
   );

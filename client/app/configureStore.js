@@ -6,8 +6,13 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import { routerMiddleware } from 'connected-react-router';
 import createSagaMiddleware from 'redux-saga';
 import createReducer from './reducers';
+import { persistStore } from 'redux-persist';
 
 import history from 'utils/history';
+
+const axios = require('axios');
+
+const dig = require('object-dig');
 
 export default function configureStore(initialState = {}, history) {
   let composeEnhancers = compose;
@@ -62,4 +67,10 @@ export default function configureStore(initialState = {}, history) {
 // Do this so util scripts can access store & history
 // We import it in app.js instead of creating it
 const store = configureStore({}, history);
-export { store, history };
+const persistor = persistStore(store, undefined, () => {
+  const userToken = dig(store.getState(), 'global', 'token');
+
+  if (userToken)
+    axios.defaults.headers.common['Diverst-UserToken'] = userToken;
+});
+export { store, history, persistor };
