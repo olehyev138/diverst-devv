@@ -8,6 +8,24 @@ module BaseSearcher
       "#{self.table_name}.id LIKE :search"
     end
 
+    def valid_scopes
+      []
+    end
+
+    def excluded_scopes
+      [:destroy_all, :delete_all, 'destroy_all', 'delete_all']
+    end
+
+    def set_query_scopes(params)
+      if params[:query_scopes].presence
+        return params[:query_scopes] if params[:query_scopes].kind_of?(Array)
+
+        JSON.parse(params[:query_scopes])
+      else
+        [:all]
+      end
+    end
+
     def lookup(params = {}, diverst_request = nil)
       # get the search value
       searchValue = params[:search]
@@ -15,6 +33,8 @@ module BaseSearcher
       # set the includes/joins arrays
       includes = []
       joins = []
+
+      query_scopes = set_query_scopes(params)
 
       # the custom args where/where_not clauses
       where = {}
@@ -53,18 +73,21 @@ module BaseSearcher
 
       # search the system
       if searchValue.present?
-        @items.joins(joins)
+        @items
+            .joins(joins)
             .includes(includes)
+            .send_chain(query_scopes)
             .where(query, search: "%#{searchValue}%".downcase)
             .where(where)
             .where.not(where_not)
             .references(includes)
             .distinct
       else
-        @items.joins(joins)
+        @items
+            .joins(joins)
             .includes(includes)
+            .send_chain(query_scopes)
             .where(where)
-            .where.not(where_not)
             .all
             .distinct
       end
