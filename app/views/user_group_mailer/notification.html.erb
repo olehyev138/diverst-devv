@@ -1,6 +1,6 @@
 <%= raw @mailer_text %>
 
-<% how_many = 2 %>
+<% number_of_named_items = 2 %>
 
 <% @groups.each do |group| %>
   <% if (group[:events_count ].to_i > 0 || group[:participating_events_count].to_i > 0 || group[:messages_count].to_i > 0) || (group[:news_count].to_i > 0) %>
@@ -13,8 +13,8 @@
       <p><%= link_to event.name, group_event_url(group[:group].try(:id), event.id, saml_for_enterprise: @user.enterprise.id ) %></p>
     <% end %>
 
-    <% if group[:events_count ].to_i > how_many %>
-      <p><%= link_to "and #{pluralize(group[:events_count] - how_many, 'more new event') }", group_events_url(group[:group].try(:id), saml_for_enterprise: @user.enterprise.id ) %></p>
+    <% if group[:events_count ].to_i > number_of_named_items %>
+      <p><%= link_to "and #{pluralize(group[:events_count] - number_of_named_items, 'more new event') }", group_events_url(group[:group].try(:id), saml_for_enterprise: @user.enterprise.id ) %></p>
     <% end %>
   <% end %>
 
@@ -23,8 +23,8 @@
     <% group[:messages].first(2).each do |message| %>
       <p><%= link_to message.subject, group_group_message_url(group[:group].try(:id), message.id, saml_for_enterprise: @user.enterprise.id ) %></p>
     <% end %>
-    <% if group[:messages_count ].to_i > how_many %>
-      <p><%= link_to "and #{ pluralize(group[:messages_count] - how_many, 'more new message') }", group_group_messages_url(group[:group].try(:id), saml_for_enterprise: @user.enterprise.id ) %></p>
+    <% if group[:messages_count ].to_i > number_of_named_items %>
+      <p><%= link_to "and #{ pluralize(group[:messages_count] - number_of_named_items, 'more new message') }", group_group_messages_url(group[:group].try(:id), saml_for_enterprise: @user.enterprise.id ) %></p>
     <% end %>
   <% end %>
 
@@ -33,8 +33,8 @@
     <% group[:news].first(2).each do |new| %>
       <p><%= link_to new.title, comments_group_news_link_url(group[:group].try(:id), new.id, saml_for_enterprise: @user.enterprise.id ) %></p>
     <% end %>
-    <% if group[:news_count ].to_i > how_many %>
-      <p><%= link_to "and #{ pluralize(group[:news_count] - how_many, 'more new news link') }", group_news_links_url(group[:group].try(:id), saml_for_enterprise: @user.enterprise.id) %>.</p>
+    <% if group[:news_count ].to_i > number_of_named_items %>
+      <p><%= link_to "and #{ pluralize(group[:news_count] - number_of_named_items, 'more new news link') }", group_news_links_url(group[:group].try(:id), saml_for_enterprise: @user.enterprise.id) %>.</p>
     <% end %>
   <% end %>
 
@@ -49,8 +49,8 @@
       <p><%= link_to p_event.name, group_event_url(p_event.group_id, p_event.id, saml_for_enterprise: @user.enterprise.id ) %></p>
     <% end %>
 
-    <% if group[:events_count ].to_i > how_many %>
-      <p><%= link_to "and #{pluralize(group[:participating_events_count] - how_many, 'more new participating event')}", group_events_url(group[:group].try(:id), saml_for_enterprise: @user.enterprise.id ) %></p>
+    <% if group[:events_count ].to_i > number_of_named_items %>
+      <p><%= link_to "and #{pluralize(group[:participating_events_count] - number_of_named_items, 'more new participating event')}", group_events_url(group[:group].try(:id), saml_for_enterprise: @user.enterprise.id ) %></p>
     <% end %>
   <% end %>
 <% end %>
