@@ -1,66 +1,40 @@
 class DiverstMailer < Devise::Mailer
+  include MailHelper
+  
   def invitation_instructions(record, token, opts = {})
-    set_email(record, opts)
-    if can_email(record)
-      super
-    end
-  end
-
-  def confirmation_instructions(record, token, opts = {})
-    set_email(record, opts)
-    if can_email(record)
-      super
-    end
+    @record = record
+    @token = token
+    return if @record.enterprise.disable_emails?
+    set_defaults(record.enterprise, method_name)
+    super
   end
 
   def reset_password_instructions(record, token, opts = {})
-    set_email(record, opts)
-    if can_email(record)
-      super
-    end
+    return if record.enterprise.disable_emails?
+    set_defaults(record.enterprise, method_name)
+    super
   end
+  
+  def headers_for(action, opts)
+    headers = {
+      subject: @subject || subject_for(action),
+      to: @email || resource.email,
+      from: @from_address || mailer_sender(devise_mapping),
+      reply_to: @from_address || mailer_reply_to(devise_mapping),
+      template_path: template_paths,
+      template_name: action
+    }.merge(opts)
 
-  def unlock_instructions(record, token, opts = {})
-    set_email(record, opts)
-    if can_email(record)
-      super
-    end
+    @email = headers[:to]
+    headers
   end
-
-  def email_changed(record, opts = {})
-    set_email(record, opts)
-    if can_email(record)
-      super
-    end
-  end
-
-  def password_change(record, opts = {})
-    set_email(record, opts)
-    if can_email(record)
-      super
-    end
-  end
-
-  def can_email(record)
-    return true if record.try(:enterprise).nil?
-
-    !record.enterprise.disable_emails?
-  end
-
-  def set_email(record, opts)
-    return if record.try(:enterprise).nil?
-
-    enterprise = record.enterprise
-    from_address = Mail::Address.new enterprise.default_from_email_address.presence || 'info@diverst.com'
-    from_address.display_name = enterprise.default_from_email_display_name.presence || 'Diverst'
-    opts[:from] = from_address
-    opts[:reply_to] = from_address
-
-    if enterprise.redirect_all_emails? && enterprise.redirect_email_contact.present?
-      record.email = enterprise.redirect_email_contact
-    elsif enterprise.redirect_all_emails? && enterprise.redirect_email_contact.blank?
-      # fallback
-      record.email = ENV['REDIRECT_ALL_EMAILS_TO'] || 'sanetiming@gmail.com'
-    end
+  
+  def variables
+    {
+      user: @record,
+      enterprise: @record.enterprise,
+      custom_text: @record.enterprise.custom_text,
+      click_here: "<a saml_for_enterprise=\"#{@record.enterprise_id}\" href=\"#{accept_user_invitation_url(@record, :invitation_token => @token)}\" target=\"_blank\">Click here</a>",
+    }
   end
 end
