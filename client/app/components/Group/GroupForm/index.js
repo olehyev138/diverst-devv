@@ -26,6 +26,21 @@ import { mapSelectAssociations } from 'utils/formHelpers';
 export function GroupFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
   const WrappedNavLink = React.forwardRef((props, ref) => <NavLink innerRef={ref} {...props} />);
 
+  const childrenSelectAction = (searchKey = '') => {
+    props.getGroupsBegin({
+      count: 10, page: 0, order: 'asc',
+      search: searchKey,
+      query_scopes: ['all_parents', 'no_children']
+    });
+  };
+
+  const parentSelectAction = (searchKey = '') => {
+    props.getGroupsBegin({
+      count: 10, page: 0, order: 'asc',
+      query_scopes: ['all_parents']
+    });
+  };
+
   return (
     <Card>
       <Form>
@@ -65,9 +80,9 @@ export function GroupFormInner({ handleSubmit, handleChange, handleBlur, values,
             isMulti
             value={values.children}
             options={props.selectGroups}
-            onMenuOpen={props.childrenSelectAction}
+            onMenuOpen={childrenSelectAction}
             onChange={value => setFieldValue('children', value)}
-            onInputChange={value => props.childrenSelectAction(value)}
+            onInputChange={value => childrenSelectAction(value)}
             onBlur={() => setFieldTouched('children', true)}
           />
           <Field
@@ -78,9 +93,9 @@ export function GroupFormInner({ handleSubmit, handleChange, handleBlur, values,
             label='Parent '
             value={values.parent}
             options={props.selectGroups}
-            onMenuOpen={props.parentSelectAction}
+            onMenuOpen={parentSelectAction}
             onChange={value => setFieldValue('parent', value)}
-            onInputChange={value => props.parentSelectAction(value)}
+            onInputChange={value => parentSelectAction(value)}
             onBlur={() => setFieldTouched('parent', true)}
           />
         </CardContent>

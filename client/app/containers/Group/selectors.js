@@ -22,12 +22,28 @@ const selectGroupTotal = () => createSelector(
   groupsState => groupsState.groupTotal
 );
 
-const selectGroup = id => createSelector(
+const selectGroup = () => createSelector(
   selectGroupsDomain,
-  groupsState => groupsState.groupList[`${id}`] || null
+  groupsState => groupsState.currentGroup
+);
+
+const selectFormGroup = () => createSelector(
+  selectGroupsDomain,
+  (groupsState) => {
+    const group = groupsState.currentGroup;
+
+    if (!group) return null;
+
+    group.children = group.children.map(child => ({
+      value: child.id,
+      label: child.name
+    }));
+
+    return group;
+  }
 );
 
 export {
   selectGroupsDomain, selectPaginatedGroups, selectPaginatedSelectGroups,
-  selectGroupTotal, selectGroup
+  selectGroupTotal, selectGroup, selectFormGroup
 };

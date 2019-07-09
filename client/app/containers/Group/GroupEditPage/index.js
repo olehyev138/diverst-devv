@@ -7,9 +7,9 @@ import { compose } from 'redux';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/Group/reducer';
-import { selectGroup } from 'containers/Group/selectors';
+import { selectGroup, selectFormGroup, selectPaginatedSelectGroups } from 'containers/Group/selectors';
 
-import { getGroupBegin, updateGroupBegin, groupFormUnmount } from 'containers/Group/actions';
+import { getGroupBegin, getGroupsBegin, updateGroupBegin, groupFormUnmount } from 'containers/Group/actions';
 
 import saga from 'containers/Group/saga';
 
@@ -31,6 +31,8 @@ export function GroupEditPage(props) {
     <React.Fragment>
       <GroupForm
         groupAction={props.updateGroupBegin}
+        getGroupsBegin={props.getGroupsBegin}
+        selectGroups={props.groups}
         group={props.group}
         buttonText='Update'
       />
@@ -50,13 +52,15 @@ GroupEditPage.propTypes = {
   groupFormUnmount: PropTypes.func
 };
 
-const mapStateToProps = (state, ownProps) => ({
-  group: selectGroup(ownProps.location.state.id)(state)
+const mapStateToProps = createStructuredSelector({
+  group: selectFormGroup(),
+  groups: selectPaginatedSelectGroups()
 });
 
 function mapDispatchToProps(dispatch) {
   return {
     getGroupBegin: payload => dispatch(getGroupBegin(payload)),
+    getGroupsBegin: payload => dispatch(getGroupsBegin(payload)),
     updateGroupBegin: payload => dispatch(updateGroupBegin(payload)),
     groupFormUnmount: () => dispatch(groupFormUnmount())
   };

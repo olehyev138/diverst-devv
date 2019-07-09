@@ -13,6 +13,7 @@ import {
 export const initialState = {
   groupList: {},
   groupTotal: null,
+  currentGroup: null,
 };
 
 /* eslint-disable default-case, no-param-reassign */
@@ -25,7 +26,9 @@ function groupsReducer(state = initialState, action) {
         draft.groupTotal = action.payload.total;
         break;
       case GET_GROUP_SUCCESS:
-        draft.groupList[`${action.payload.group.id}`] = action.payload.group;
+        //draft.groupList[`${action.payload.group.id}`] = action.payload.group;
+        console.log(action.payload.group);
+        draft.currentGroup = action.payload.group;
         break;
       case GROUP_LIST_UNMOUNT:
         return initialState;
