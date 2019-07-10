@@ -1,5 +1,4 @@
 module MailHelper
-  
   def set_defaults(enterprise, method_name)
     if enterprise.redirect_all_emails? && enterprise.redirect_email_contact.present?
       @email = enterprise.redirect_email_contact
