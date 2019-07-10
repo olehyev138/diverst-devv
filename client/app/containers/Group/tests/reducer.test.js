@@ -12,6 +12,7 @@ describe('groupsReducer', () => {
     state = {
       groupList: {},
       groupTotal: null,
+      currentGroup: null
     };
   });
 
@@ -39,27 +40,25 @@ describe('groupsReducer', () => {
 
   it('handles the getGroupSuccess action correctly', () => {
     const expected = produce(state, (draft) => {
-      draft.groupList = { 37: { id: 37, name: 'dummy' } };
+      draft.currentGroup = { id: 37, name: 'dummy' };
     });
 
     expect(
       groupsReducer(
         state,
-        getGroupSuccess({
-          group: { id: 37, name: 'dummy' },
-        })
+        getGroupSuccess({ group: { id: 37, name: 'dummy' } })
       )
     ).toEqual(expected);
   });
 
   it('handles the groupListUnmount action correctly', () => {
-    const expected = produce(state, draft => state);
+    const expected = state;
 
     expect(groupsReducer(state, groupListUnmount())).toEqual(expected);
   });
 
   it('handles the groupFormUnmount action correctly', () => {
-    const expected = produce(state, draft => state);
+    const expected = state;
 
     expect(groupsReducer(state, groupFormUnmount())).toEqual(expected);
   });

@@ -32,18 +32,11 @@ describe('Group selectors', () => {
   });
 
   describe('selectGroup', () => {
-    it('should take an id select the group', () => {
-      const mockedState = { groupList: { 43: { name: 'dummy-01' } } };
+    it('should select the current group', () => {
+      const mockedState = { currentGroup: { name: 'dummy-01' } };
       const selected = selectGroup(43).resultFunc(mockedState);
 
       expect(selected).toEqual({ name: 'dummy-01' });
-    });
-
-    it('should return null if id not found', () => {
-      const mockedState = { groupList: { 43: { name: 'dummy-01' } } };
-      const selected = selectGroup(59).resultFunc(mockedState);
-
-      expect(selected).toEqual(null);
     });
   });
 });
