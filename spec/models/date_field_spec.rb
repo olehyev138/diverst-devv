@@ -69,7 +69,7 @@ RSpec.describe DateField, type: :model do
       segment = create(:segment, name: 'Seniors', enterprise: enterprise)
       segment_rule = create(:segment_rule, segment_id: segment.id, field_id: date_field.id, operator: 1, values: '["1968-02-03"]')
       boolean = date_field.validates_rule_for_user?(rule: segment_rule, user: user_1)
-      
+
       expect(boolean).to be(true)
     end
 
