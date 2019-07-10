@@ -20,6 +20,9 @@ import Select from 'react-select';
 import { Field, Formik, Form } from 'formik';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
+import { FormattedMessage } from 'react-intl';
+import messages from 'containers/Group/messages';
+
 import { mapSelectAssociations } from 'utils/formHelpers';
 
 /* eslint-disable object-curly-newline */
@@ -51,7 +54,7 @@ export function GroupFormInner({ handleSubmit, handleChange, handleBlur, values,
             fullWidth
             id='name'
             name='name'
-            label='Name'
+            label={<FormattedMessage {...messages.name} />}
             value={values.name}
           />
           <Field
@@ -60,7 +63,8 @@ export function GroupFormInner({ handleSubmit, handleChange, handleBlur, values,
             fullWidth
             id='short_description'
             name='short_description'
-            label='Short Description'
+            value={values.short_description}
+            label={<FormattedMessage {...messages.short_description} />}
           />
           <Field
             component={TextField}
@@ -68,7 +72,7 @@ export function GroupFormInner({ handleSubmit, handleChange, handleBlur, values,
             fullWidth
             id='description'
             name='description'
-            label='Description'
+            label={<FormattedMessage {...messages.description} />}
             value={values.description}
           />
           <Field
@@ -76,7 +80,7 @@ export function GroupFormInner({ handleSubmit, handleChange, handleBlur, values,
             fullWidth
             id='children'
             name='children'
-            label='Children'
+            label={<FormattedMessage {...messages.children} />}
             isMulti
             value={values.children}
             options={props.selectGroups}
@@ -90,7 +94,7 @@ export function GroupFormInner({ handleSubmit, handleChange, handleBlur, values,
             fullWidth
             id='parent'
             name='parent'
-            label='Parent'
+            label={<FormattedMessage {...messages.parent} />}
             value={values.parent}
             options={props.selectGroups}
             onMenuOpen={parentSelectAction}
@@ -110,7 +114,7 @@ export function GroupFormInner({ handleSubmit, handleChange, handleBlur, values,
             to={ROUTES.admin.manage.groups.index.path}
             component={WrappedNavLink}
           >
-            Cancel
+            <FormattedMessage {...messages.cancel} />
           </Button>
         </CardActions>
       </Form>

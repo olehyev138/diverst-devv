@@ -17,6 +17,9 @@ import {
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
+import { FormattedMessage } from 'react-intl';
+import messages from 'containers/Group/messages';
+
 const styles = theme => ({
   groupListItem: {
     width: '100%',
@@ -29,7 +32,7 @@ const styles = theme => ({
   },
 });
 
-export function AdminGroupList(props) {
+export function AdminGroupList(props, context) {
   const { classes } = props;
   const WrappedNavLink = React.forwardRef((props, ref) => <NavLink innerRef={ref} {...props} />);
 
@@ -67,7 +70,7 @@ export function AdminGroupList(props) {
             size='large'
             component={WrappedNavLink}
           >
-            Create
+            <FormattedMessage {...messages.new} />
           </Button>
         </Grid>
         { /* eslint-disable-next-line arrow-body-style */ }
@@ -97,7 +100,7 @@ export function AdminGroupList(props) {
                     }}
                     component={WrappedNavLink}
                   >
-                    Edit
+                    <FormattedMessage {...messages.edit} />
                   </Button>
                   <Button
                     size='small'
@@ -108,7 +111,7 @@ export function AdminGroupList(props) {
                         props.deleteGroupBegin(group.id);
                     }}
                   >
-                    Delete
+                    <FormattedMessage {...messages.delete} />
                   </Button>
                   <Button
                     size='small'
@@ -116,7 +119,7 @@ export function AdminGroupList(props) {
                       setExpandedGroups({ ...expandedGroups, [group.id]: !expandedGroups[group.id] });
                     }}
                   >
-                    Show Children
+                    <FormattedMessage {...messages.children_collapse} />
                   </Button>
                 </CardActions>
               </Card>
