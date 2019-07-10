@@ -65,7 +65,7 @@
         </div>
       </div>
     </div>
-    <% if not @user.linkedin_profile_url.blank? %>
+    <% unless @user.linkedin_profile_url.blank? %>
       <div class="card__section card__section--border">
         <div class="row">
           <div class="col-sm-6 col-xs-12">
