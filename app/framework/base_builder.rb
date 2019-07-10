@@ -20,8 +20,8 @@ module BaseBuilder
       # create the new item
       item = self.new(params[symbol].permit!)
 
-      # add enterprise id if exists
-      if item.has_attribute?(:enterprise_id)
+      # add enterprise id if exists & not set
+      if item.has_attribute?(:enterprise_id) && item[:enterprise_id].blank?
         item.enterprise_id = diverst_request.user.enterprise_id
       end
 
