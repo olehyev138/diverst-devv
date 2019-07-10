@@ -157,4 +157,28 @@ RSpec.describe DateField, type: :model do
       expect(boolean).to be(false)
     end
   end
+
+  describe '#get_buckets_for_range' do
+    let(:enterprise) { create(:enterprise) }
+    let(:date_field) { DateField.new(type: 'DateField', title: 'Date of birth', enterprise: enterprise) }
+
+    it 'returns range' do
+      expect(date_field.get_buckets_for_range(nb_buckets: 1, min: 3, max: 4))
+      .to eq([{ key: '01/01/1970-01/01/1970', from: 3, to: 5 }])
+    end
+  end
+
+  describe '#set_options_array' do
+    let(:enterprise) { create(:enterprise) }
+    let(:date_field) { DateField.new(type: 'DateField', title: 'Date of birth', enterprise: enterprise) }
+
+    it 'returns empty array if options_text is nil' do
+      expect(date_field.set_options_array).to eq([])
+    end
+
+    it 'return array if options_text is not nil' do
+      date_field.options_text = 'some dummy text'
+      expect(date_field.set_options_array).to eq(['some dummy text'])
+    end
+  end
 end
