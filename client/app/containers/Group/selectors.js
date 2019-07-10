@@ -30,16 +30,18 @@ const selectGroup = () => createSelector(
 const selectFormGroup = () => createSelector(
   selectGroupsDomain,
   (groupsState) => {
-    const group = groupsState.currentGroup;
+    const { currentGroup } = groupsState;
+    if (!currentGroup) return null;
 
-    if (!group) return null;
+    // clone group before making mutations on it
+    const selectGroup = Object.assign({}, currentGroup);
 
-    group.children = group.children.map(child => ({
+    selectGroup.children = selectGroup.children.map(child => ({
       value: child.id,
       label: child.name
     }));
 
-    return group;
+    return selectGroup;
   }
 );
 

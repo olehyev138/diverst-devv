@@ -7,7 +7,7 @@ import { compose } from 'redux';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/Group/reducer';
-import { selectGroup, selectFormGroup, selectPaginatedSelectGroups } from 'containers/Group/selectors';
+import { selectFormGroup, selectPaginatedSelectGroups } from 'containers/Group/selectors';
 
 import { getGroupBegin, getGroupsBegin, updateGroupBegin, groupFormUnmount } from 'containers/Group/actions';
 

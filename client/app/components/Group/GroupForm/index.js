@@ -90,7 +90,7 @@ export function GroupFormInner({ handleSubmit, handleChange, handleBlur, values,
             fullWidth
             id='parent'
             name='parent'
-            label='Parent '
+            label='Parent'
             value={values.parent}
             options={props.selectGroups}
             onMenuOpen={parentSelectAction}
