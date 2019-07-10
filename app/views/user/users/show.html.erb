@@ -12,7 +12,7 @@
     </h1>
     <%= link_to "Edit profile", edit_user_user_path, class: "btn btn--primary" %>
     <%= link_to c_t(:member_preference).pluralize, group_surveys_user_path(@user), class: "btn btn--primary" if @user.belongs_to_group_with_survey? %>
-    <% if not @user.linkedin_profile_url.nil? %>
+    <% unless @user.linkedin_profile_url.nil? %>
       <%= link_to @user.linkedin_profile_url do %>
         <img src="/assets/linkedin-full.png" alt="LinkedIn profile link" style="height: 30px; margin-top: 12px;">
       <% end %>

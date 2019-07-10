@@ -8,6 +8,7 @@ class BudgetManager
       bi.approve!
     end
     @budget.update(approver: approver, is_approved: true)
+    AnnualBudgetManager.new(@budget.group).approve
     BudgetMailer.budget_approved(@budget).deliver_later if @budget.requester
   end
 

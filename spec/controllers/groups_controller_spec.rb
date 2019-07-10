@@ -259,8 +259,9 @@ RSpec.describe GroupsController, type: :controller do
 
   describe 'GET #calendar_data' do
     def get_calendar_data(initiative_participating_groups_id_in, initiative_segments_segement_id_in, params = {})
-      get :calendar_data, params, q: { initiative_participating_groups_group_id_in: initiative_participating_groups_id_in,
-                                       initiative_segments_segement_id_in: initiative_segments_segement_id_in }, format: :json
+      get :calendar_data, params,
+          q: { initiative_participating_groups_group_id_in: initiative_participating_groups_id_in,
+               initiative_segments_segement_id_in: initiative_segments_segement_id_in }, format: :json
     end
 
     let(:initiative) { create :initiative }
