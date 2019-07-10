@@ -10,7 +10,7 @@ const AuthService = {
   },
 
   hasPermission(route) {
-    return Object.prototype.hasOwnProperty.call(route, 'permission') === false || self.getPolicyGroup()[route.permission] === true;
+    return Object.prototype.hasOwnProperty.call(route, 'permission') === false || AuthService.getPolicyGroup()[route.permission] === true;
   },
 
   getPolicyGroup() {

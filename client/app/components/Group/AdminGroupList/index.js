@@ -70,6 +70,7 @@ export function AdminGroupList(props) {
             Create
           </Button>
         </Grid>
+        { /* eslint-disable-next-line arrow-body-style */ }
         {props.groups && Object.values(props.groups).map((group, i) => {
           return (
             <Grid item key={group.id} className={classes.groupListItem}>
@@ -120,25 +121,24 @@ export function AdminGroupList(props) {
                 </CardActions>
               </Card>
               <Collapse in={expandedGroups[`${group.id}`]}>
-                {group.children && group.children.map((group, i) => {
-                  return (
-                    <Card key={group.id}>
-                      <CardContent>
-                        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                        <Link href='#'>
-                          <Typography variant='h5' component='h2' display='inline'>
-                            {group.name}
-                          </Typography>
-                        </Link>
-                        {group.description && (
-                          <Typography color='textSecondary' className={classes.groupListItemDescription}>
-                            {group.description}
-                          </Typography>
-                        )}
-                      </CardContent>
-                    </Card>
-                  );
-                })}
+                {group.children && group.children.map((group, i) => (
+                  /* eslint-disable-next-line react/jsx-wrap-multilines */
+                  <Card key={group.id}>
+                    <CardContent>
+                      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                      <Link href='#'>
+                        <Typography variant='h5' component='h2' display='inline'>
+                          {group.name}
+                        </Typography>
+                      </Link>
+                      {group.description && (
+                        <Typography color='textSecondary' className={classes.groupListItemDescription}>
+                          {group.description}
+                        </Typography>
+                      )}
+                    </CardContent>
+                  </Card>))
+                }
               </Collapse>
             </Grid>
           );

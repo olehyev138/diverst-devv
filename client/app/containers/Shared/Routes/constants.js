@@ -64,6 +64,7 @@ export const ROUTES = {
         pathPrefix: '/admin/manage/groups',
         index: {
           path: '/admin/manage/groups',
+          permission: 'groups_index',
           titleMessage: messages.admin.manage.groups,
         },
         show: {

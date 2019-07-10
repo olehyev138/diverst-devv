@@ -142,7 +142,7 @@ export function GroupForm(props) {
 
 GroupForm.propTypes = {
   groupAction: PropTypes.func,
-  group: PropTypes.object
+  group: PropTypes.object,
 };
 
 GroupFormInner.propTypes = {
@@ -151,6 +151,10 @@ GroupFormInner.propTypes = {
   handleBlur: PropTypes.func,
   values: PropTypes.object,
   buttonText: PropTypes.string,
+  selectGroups: PropTypes.array,
+  getGroupsBegin: PropTypes.func,
+  setFieldValue: PropTypes.func,
+  setFieldTouched: PropTypes.func
 };
 
 export default compose(

@@ -7,7 +7,7 @@
 import produce from 'immer/dist/immer';
 import {
   GET_GROUPS_SUCCESS, GET_GROUP_SUCCESS,
-  GET_GROUPS_ERROR, GROUP_LIST_UNMOUNT, GROUP_FORM_UNMOUNT
+  GROUP_LIST_UNMOUNT, GROUP_FORM_UNMOUNT
 } from 'containers/Group/constants';
 
 export const initialState = {

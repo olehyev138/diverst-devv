@@ -19,11 +19,7 @@ export function GroupCreatePage(props) {
   useInjectReducer({ key: 'groups', reducer });
   useInjectSaga({ key: 'groups', saga });
 
-  useEffect(() => {
-    return () => {
-      props.groupFormUnmount();
-    };
-  }, []);
+  useEffect(() => () => props.groupFormUnmount(), []);
 
   return (
     <GroupForm
@@ -38,7 +34,8 @@ export function GroupCreatePage(props) {
 GroupCreatePage.propTypes = {
   createGroupBegin: PropTypes.func,
   getGroupsBegin: PropTypes.func,
-  groupFormUnmount: PropTypes.func
+  groupFormUnmount: PropTypes.func,
+  groups: PropTypes.array
 };
 
 const mapStateToProps = createStructuredSelector({

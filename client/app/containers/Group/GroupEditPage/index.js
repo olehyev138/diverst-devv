@@ -9,10 +9,12 @@ import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/Group/reducer';
 import { selectFormGroup, selectPaginatedSelectGroups } from 'containers/Group/selectors';
 
-import { getGroupBegin, getGroupsBegin, updateGroupBegin, groupFormUnmount } from 'containers/Group/actions';
+import {
+  getGroupBegin, getGroupsBegin,
+  updateGroupBegin, groupFormUnmount
+} from 'containers/Group/actions';
 
 import saga from 'containers/Group/saga';
-
 import GroupForm from 'components/Group/GroupForm';
 
 export function GroupEditPage(props) {
@@ -47,7 +49,9 @@ GroupEditPage.propTypes = {
     })
   }),
   group: PropTypes.object,
+  groups: PropTypes.array,
   getGroupBegin: PropTypes.func,
+  getGroupsBegin: PropTypes.func,
   updateGroupBegin: PropTypes.func,
   groupFormUnmount: PropTypes.func
 };
