@@ -1,5 +1,9 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:edit, :update, :destroy, :resend_invitation, :show, :group_surveys]
+  before_action :set_user,
+                only: [
+                  :edit, :update, :destroy, :resend_invitation,
+                  :show, :group_surveys, :usage, :url_usage_data
+                ]
   after_action :verify_authorized, except: [:edit_profile, :group_surveys]
 
   layout :resolve_layout
@@ -175,7 +179,31 @@ class UsersController < ApplicationController
     end
   end
 
+  def usage
+    authorize @user, :index?
+    get_usage_metrics
+  end
+
+  def url_usage_data
+    authorize @user, :index?
+    respond_to do |format|
+      format.html
+      format.json { render json: UsageDatatable.new(view_context, @user) }
+    end
+  end
+
   protected
+
+  def get_usage_metrics
+    @user_metrics = {
+      logins: @user.get_login_count,
+      posts: @user.number_of_posts,
+      comments: @user.number_of_comments,
+      events: @user.number_of_events
+    }
+
+    @most_visited_pages = @user.most_viewed_pages
+  end
 
   def resolve_layout
     case action_name
@@ -187,6 +215,12 @@ class UsersController < ApplicationController
       end
     when 'edit_profile', 'group_surveys'
       'user'
+    when
+      if root_admin_path
+        'metrics'
+      else
+        'user'
+      end
     else
       'global_settings'
     end

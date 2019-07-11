@@ -55,6 +55,8 @@ Rails.application.routes.draw do
   resources :user_roles
   resources :users do
     member do
+      get 'usage'
+      get 'url_usage_data'
       get 'group_surveys'
       put 'resend_invitation'
     end
@@ -487,12 +489,6 @@ Rails.application.routes.draw do
       get 'privacy_statement', to: 'dashboard#privacy_statement'
       get 'preferences/edit', to: 'user_groups#edit'
       patch 'preferences/update', to: 'user_groups#update'
-
-      resources :usage, only: [:index] do
-        collection do
-          get 'url_data'
-        end
-      end
 
       resources :social_links
       resources :news_links
