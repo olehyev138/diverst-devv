@@ -6,8 +6,11 @@ import { compose } from 'redux';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
-import reducer from 'containers/Group/reducer';
-import saga from 'containers/Group/saga';
+import reducer from 'containers/News/reducer';
+import saga from 'containers/News/saga';
+
+import { selectPaginatedNewsItems } from 'containers/News/selectors';
+import { getNewsItemsBegin, newsFeedUnmount } from 'containers/News/actions';
 
 import NewsFeed from 'components/News/NewsFeed';
 
@@ -15,20 +18,35 @@ export function NewsFeedPage(props) {
   useInjectReducer({ key: 'news', reducer });
   useInjectSaga({ key: 'news', saga });
 
-  // useEffect(() => () => props.groupFormUnmount(), []);
+  const [params, setParams] = useState({ count: 15, page: 0, order: 'asc' });
+
+  useEffect(() => {
+    props.getNewsItemsBegin(params);
+
+    return () => {
+      props.newsFeedUnmount();
+    };
+  }, []);
 
   return (
-    <NewsFeed />
+    <React.Fragment>
+      <NewsFeed />
+    </React.Fragment>
   );
 }
 
 NewsFeedPage.propTypes = {
+  getNewsItemsBegin: PropTypes.func.isRequired,
+  newsFeedUnmount: PropTypes.func.isRequired
 };
 
 const mapStateToProps = createStructuredSelector({
+  newsItems: selectPaginatedNewsItems()
 });
 
-const mapDispatchToProps = {
+const mapDispatchToProps =  {
+  getNewsItemsBegin,
+  newsFeedUnmount
 };
 
 const withConnect = connect(

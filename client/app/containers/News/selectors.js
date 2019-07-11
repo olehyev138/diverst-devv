@@ -3,11 +3,11 @@ import { initialState } from 'containers/News/reducer';
 
 const selectNewsDomain = state => state.news || initialState;
 
-const selectPaginatedNews = () => createSelector(
+const selectPaginatedNewsItems = () => createSelector(
   selectNewsDomain,
   newsState => newsState.newsList
 );
 
 export {
-  selectPaginatedNews
+  selectPaginatedNewsItems
 };

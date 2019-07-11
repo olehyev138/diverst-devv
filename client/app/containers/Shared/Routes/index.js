@@ -22,7 +22,7 @@ import GroupEditPage from 'containers/Group/GroupEditPage';
 
 /* Group */
 import GroupHomePage from 'containers/Group/GroupHomePage';
-import { NewsFeedPage } from 'containers/News/NewsFeedPage';
+import NewsFeedPage from 'containers/News/NewsFeedPage';
 
 // Paths
 import { ROUTES } from 'containers/Shared/Routes/constants';

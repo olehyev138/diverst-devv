@@ -5,28 +5,33 @@
  */
 
 import {
-  GET_NEWS_BEGIN, GET_NEWS_SUCCESS, GET_NEWS_ERROR
+  GET_NEWS_ITEMS_BEGIN, GET_NEWS_ITEMS_SUCCESS, GET_NEWS_ITEMS_ERROR,
+  NEWS_FEED_UNMOUNT
 } from 'containers/News/constants';
 
-/* Group listing */
-
-export function getNewsBegin(payload) {
+export function getNewsItemsBegin(payload) {
   return {
-    type: GET_NEWS_BEGIN,
+    type: GET_NEWS_ITEMS_BEGIN,
     payload
   };
 }
 
-export function getNewsSuccess(payload) {
+export function getNewsItemsSuccess(payload) {
   return {
-    type: GET_NEWS_SUCCESS,
+    type: GET_NEWS_ITEMS_SUCCESS,
     payload
   };
 }
 
-export function getNewsError(error) {
+export function getNewsItemsError(error) {
   return {
-    type: GET_NEWS_ERROR,
+    type: GET_NEWS_ITEMS_ERROR,
     error,
+  };
+}
+
+export function newsFeedUnmount() {
+  return {
+    type: NEWS_FEED_UNMOUNT,
   };
 }
