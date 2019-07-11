@@ -22,6 +22,7 @@ import GroupEditPage from 'containers/Group/GroupEditPage';
 
 /* Group */
 import GroupHomePage from 'containers/Group/GroupHomePage';
+import { NewsFeedPage } from 'containers/News/NewsFeedPage';
 
 // Paths
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -53,6 +54,7 @@ export default function Routes(props) {
 
       { /* Group */ }
       <GroupLayout exact path={ROUTES.group.home.path} route={ROUTES.group.home} component={GroupHomePage} />
+      <GroupLayout exact path={ROUTES.group.news.index.path} route={ROUTES.group.news.index} component={NewsFeedPage} />
 
       <ErrorLayout path='' component={NotFoundPage} />
     </Switch>

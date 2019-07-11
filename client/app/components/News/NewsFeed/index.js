@@ -1,6 +1,6 @@
 /**
  *
- * Group Home Component
+ * News Feed Component
  *
  */
 
@@ -21,18 +21,18 @@ import { Field, Formik, Form } from 'formik';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { FormattedMessage } from 'react-intl';
-import messages from 'containers/Group/messages';
+import messages from 'containers/News/messages';
 
-export function GroupHome(props) {
+export function NewsFeed(props) {
   return (
     <React.Fragment>
     </React.Fragment>
   );
 }
 
-GroupHome.propTypes = {
+NewsFeed.propTypes = {
 };
 
 export default compose(
   memo,
-)(GroupHome);
+)(NewsFeed);

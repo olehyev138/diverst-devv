@@ -47,6 +47,11 @@ export const ROUTES = {
     pathPrefix: '/group',
     home: {
       path: '/group/:id'
+    },
+    news: {
+      index: {
+        path: '/group/:id/news'
+      }
     }
   },
 
