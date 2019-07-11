@@ -11,6 +11,8 @@ import {
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
+import WrappedNavLink from 'components/Shared/WrappedNavLink';
+
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import EqualizerIcon from '@material-ui/icons/Equalizer';
@@ -105,10 +107,6 @@ class AdminLinks extends React.PureComponent {
   };
 
   drawer(classes) {
-    // Wrap NavLink to fix ref issue temporarily until react-router-dom is updated to fix this
-    /* eslint-disable-next-line react/no-multi-comp */
-    const WrappedNavLink = React.forwardRef((props, ref) => <NavLink innerRef={ref} {...props} />);
-
     return (
       <React.Fragment>
         <div className={classes.toolbar} />

@@ -17,6 +17,8 @@ import {
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
+import WrappedNavLink from 'components/Shared/WrappedNavLink';
+
 import { FormattedMessage } from 'react-intl';
 import messages from 'containers/Group/messages';
 
@@ -34,7 +36,6 @@ const styles = theme => ({
 
 export function AdminGroupList(props, context) {
   const { classes } = props;
-  const WrappedNavLink = React.forwardRef((props, ref) => <NavLink innerRef={ref} {...props} />);
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -80,7 +81,13 @@ export function AdminGroupList(props, context) {
               <Card>
                 <CardContent>
                   {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                  <Link href='#'>
+                  <Link
+                    component={WrappedNavLink}
+                    to={{
+                      pathname: `${ROUTES.group.pathPrefix}/${group.id}`,
+                      state: { id: group.id }
+                    }}
+                  >
                     <Typography variant='h5' component='h2' display='inline'>
                       {group.name}
                     </Typography>

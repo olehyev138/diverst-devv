@@ -5,6 +5,7 @@ import { createStructuredSelector } from 'reselect';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
+import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
 import {
   AppBar, Toolbar, Button, Hidden, Menu, MenuItem, ListItemIcon, IconButton
@@ -104,8 +105,6 @@ const styles = theme => ({
     borderColor: theme.custom.colors.grey,
   },
 });
-
-const WrappedNavLink = React.forwardRef((props, ref) => <NavLink innerRef={ref} {...props} />);
 
 /* eslint-disable object-curly-newline */
 export function MobileNavMenu({ classes, mobileNavAnchor, isMobileNavOpen, handleMobileNavClose }) {

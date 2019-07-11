@@ -17,6 +17,7 @@ import {
 } from '@material-ui/core';
 import Select from 'react-select';
 
+import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { Field, Formik, Form } from 'formik';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
@@ -27,8 +28,6 @@ import { mapSelectAssociations } from 'utils/formHelpers';
 
 /* eslint-disable object-curly-newline */
 export function GroupFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
-  const WrappedNavLink = React.forwardRef((props, ref) => <NavLink innerRef={ref} {...props} />);
-
   const childrenSelectAction = (searchKey = '') => {
     props.getGroupsBegin({
       count: 10, page: 0, order: 'asc',
