@@ -43,6 +43,13 @@ export const ROUTES = {
     },
   },
 
+  group: {
+    pathPrefix: '/group',
+    home: {
+      path: '/group/:id'
+    }
+  },
+
   // Admin
   admin: {
     get root() { return this.analyze.overview; },
@@ -66,9 +73,6 @@ export const ROUTES = {
           path: '/admin/manage/groups',
           permission: 'groups_index',
           titleMessage: messages.admin.manage.groups,
-        },
-        show: {
-          path: '/admin/manage/groups/:id',
         },
         new: {
           path: '/admin/manage/groups/new',

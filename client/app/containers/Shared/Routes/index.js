@@ -14,10 +14,14 @@ import {
   HomePage, LoginPage, NotFoundPage, PlaceholderPage
 } from 'containers/Shared/Routes/templates';
 
+/* Admin - Manage - Group */
 import UserGroupListPage from 'containers/Group/UserGroupListPage';
 import AdminGroupListPage from 'containers/Group/AdminGroupListPage';
 import GroupCreatePage from 'containers/Group/GroupCreatePage';
 import GroupEditPage from 'containers/Group/GroupEditPage';
+
+/* Group */
+import GroupHomePage from 'containers/Group/GroupHomePage';
 
 // Paths
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -46,6 +50,9 @@ export default function Routes(props) {
       <UserLayout path={ROUTES.user.groups.path} route={ROUTES.user.groups} pageTitle={ROUTES.user.groups.titleMessage} component={PlaceholderPage} />
       <UserLayout path={ROUTES.user.downloads.path} route={ROUTES.user.downloads} pageTitle={ROUTES.user.downloads.titleMessage} component={PlaceholderPage} />
       <UserLayout path={ROUTES.user.mentorship.path} route={ROUTES.user.mentorship} pageTitle={ROUTES.user.mentorship.titleMessage} component={PlaceholderPage} />
+
+      /* Group */
+      <GroupLayout exact path={ROUTES.group.home.path} route={ROUTES.group.home} component={GroupHomePage} />
 
       <ErrorLayout path='' component={NotFoundPage} />
     </Switch>
