@@ -68,9 +68,9 @@
 
   <div class="card">
     <div class="card__section">
-      <h2><%= c_t(:erg) %> Membership Cross Section</h2>
+      <h2><%= c_t(:erg) %> Membership Usage</h2>
 
-      <table class="table--has-border" data-source="<%= user_groups_intersection_metrics_users_path(format: :json) %>" id="users-table">
+      <table class="table--has-border" data-source="<%= user_usage_data_metrics_users_path(format: :json) %>" id="users-usage-table">
         <thead>
         <th>First name</th>
         <th>Last name</th>
@@ -120,7 +120,7 @@
         <a href="#" id="users_intersection_csv" data-url="<%= user_groups_intersection_metrics_users_path(format: :csv) %>">Export CSV</a>
       </div>
 
-      <table class="table--has-border" data-source="<%= user_groups_intersection_metrics_users_path(format: :json) %>" id="users-table">
+      <table class="table--has-border" data-source="<%= user_groups_intersection_metrics_users_path(format: :json)%>" id='users-table'>
         <thead>
         <th>ID</th>
         <th>First name</th>
@@ -147,6 +147,14 @@
       ajax: { url: "<%= user_groups_intersection_metrics_users_path(format: :json) %>", data: function(d) { d.scoped_by_models = scoped_by_models } },
       columnDefs: [
         { bSortable: false, targets: [3, 4] }
+      ]
+    }));
+
+    var table2 = $('#users-usage-table').DataTable(Utility.mergeWithDTDefaults({
+      serverSide: true,
+      ajax: { url: "<%= user_usage_data_metrics_users_path(format: :json) %>", data: function(d) { d.scoped_by_models = scoped_by_models } },
+      columnDefs: [
+        { bSortable: false, targets: [4] }
       ]
     }));
 

@@ -17,6 +17,15 @@ class Metrics::UserGraphsController < ApplicationController
     end
   end
 
+  def user_usage_data
+    @users = current_user.enterprise.users
+    respond_to do |format|
+      format.json {
+        render json: UserByUsageDatatable.new(view_context, @users)
+      }
+    end
+  end
+
   def user_groups_intersection
     @users = current_user.enterprise.users
     @users = @graph.user_groups_intersection(metrics_params[:scoped_by_models]) if metrics_params[:scoped_by_models].present?

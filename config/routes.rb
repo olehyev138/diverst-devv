@@ -603,6 +603,7 @@ Rails.application.routes.draw do
         get 'users_per_segment'
         get 'user_growth'
         get 'user_groups_intersection'
+        get 'user_usage_data'
       end
     end
 
