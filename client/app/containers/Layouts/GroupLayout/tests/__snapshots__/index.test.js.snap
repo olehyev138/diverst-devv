@@ -1,14 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<GroupLayout /> Should render and match the snapshot 1`] = `
-<div>
-  <WithStyles(ApplicationLayout)
-    classes={Object {}}
-    component={[Function]}
-    position="static"
-  />
-  <mockConstructor
-    classes={Object {}}
-  />
-</div>
+<GroupLayout
+  classes={
+    Object {
+      "content": "GroupLayout-content-2",
+      "toolbar": "GroupLayout-toolbar-1",
+    }
+  }
+  component={[MockFunction]}
+/>
 `;

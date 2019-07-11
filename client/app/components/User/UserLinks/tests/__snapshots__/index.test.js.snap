@@ -28,12 +28,7 @@ exports[`<UserLinks /> <MobileNavMenu /> Should render and match the snapshot 1`
   }
 >
   <WithStyles(ForwardRef(MenuItem))
-    component={
-      Object {
-        "$$typeof": Symbol(react.forward_ref),
-        "render": [Function],
-      }
-    }
+    component={Object {}}
     exact={true}
     to="/"
   >
@@ -46,12 +41,7 @@ exports[`<UserLinks /> <MobileNavMenu /> Should render and match the snapshot 1`
     />
   </WithStyles(ForwardRef(MenuItem))>
   <WithStyles(ForwardRef(MenuItem))
-    component={
-      Object {
-        "$$typeof": Symbol(react.forward_ref),
-        "render": [Function],
-      }
-    }
+    component={Object {}}
     to="/campaigns"
   >
     <WithStyles(ForwardRef(ListItemIcon))>
@@ -63,12 +53,7 @@ exports[`<UserLinks /> <MobileNavMenu /> Should render and match the snapshot 1`
     />
   </WithStyles(ForwardRef(MenuItem))>
   <WithStyles(ForwardRef(MenuItem))
-    component={
-      Object {
-        "$$typeof": Symbol(react.forward_ref),
-        "render": [Function],
-      }
-    }
+    component={Object {}}
     to="/news"
   >
     <WithStyles(ForwardRef(ListItemIcon))>
@@ -80,12 +65,7 @@ exports[`<UserLinks /> <MobileNavMenu /> Should render and match the snapshot 1`
     />
   </WithStyles(ForwardRef(MenuItem))>
   <WithStyles(ForwardRef(MenuItem))
-    component={
-      Object {
-        "$$typeof": Symbol(react.forward_ref),
-        "render": [Function],
-      }
-    }
+    component={Object {}}
     to="/events"
   >
     <WithStyles(ForwardRef(ListItemIcon))>
@@ -97,12 +77,7 @@ exports[`<UserLinks /> <MobileNavMenu /> Should render and match the snapshot 1`
     />
   </WithStyles(ForwardRef(MenuItem))>
   <WithStyles(ForwardRef(MenuItem))
-    component={
-      Object {
-        "$$typeof": Symbol(react.forward_ref),
-        "render": [Function],
-      }
-    }
+    component={Object {}}
     to="/groups"
   >
     <WithStyles(ForwardRef(ListItemIcon))>
@@ -114,12 +89,7 @@ exports[`<UserLinks /> <MobileNavMenu /> Should render and match the snapshot 1`
     />
   </WithStyles(ForwardRef(MenuItem))>
   <WithStyles(ForwardRef(MenuItem))
-    component={
-      Object {
-        "$$typeof": Symbol(react.forward_ref),
-        "render": [Function],
-      }
-    }
+    component={Object {}}
     to="/downloads"
   >
     <WithStyles(ForwardRef(ListItemIcon))>
@@ -131,12 +101,7 @@ exports[`<UserLinks /> <MobileNavMenu /> Should render and match the snapshot 1`
     />
   </WithStyles(ForwardRef(MenuItem))>
   <WithStyles(ForwardRef(MenuItem))
-    component={
-      Object {
-        "$$typeof": Symbol(react.forward_ref),
-        "render": [Function],
-      }
-    }
+    component={Object {}}
     to="/mentorship"
   >
     <WithStyles(ForwardRef(ListItemIcon))>
@@ -153,12 +118,7 @@ exports[`<UserLinks /> <MobileNavMenu /> Should render and match the snapshot 1`
 exports[`<UserLinks /> <NavMenu /> Should render and match the snapshot 1`] = `
 <WithStyles(ForwardRef(Toolbar))>
   <WithStyles(ForwardRef(Button))
-    component={
-      Object {
-        "$$typeof": Symbol(react.forward_ref),
-        "render": [Function],
-      }
-    }
+    component={Object {}}
     exact={true}
     to="/"
   >
@@ -183,12 +143,7 @@ exports[`<UserLinks /> <NavMenu /> Should render and match the snapshot 1`] = `
     />
   </WithStyles(ForwardRef(Button))>
   <WithStyles(ForwardRef(Button))
-    component={
-      Object {
-        "$$typeof": Symbol(react.forward_ref),
-        "render": [Function],
-      }
-    }
+    component={Object {}}
     to="/campaigns"
   >
     <Hidden
@@ -212,12 +167,7 @@ exports[`<UserLinks /> <NavMenu /> Should render and match the snapshot 1`] = `
     />
   </WithStyles(ForwardRef(Button))>
   <WithStyles(ForwardRef(Button))
-    component={
-      Object {
-        "$$typeof": Symbol(react.forward_ref),
-        "render": [Function],
-      }
-    }
+    component={Object {}}
     to="/news"
   >
     <Hidden
@@ -241,12 +191,7 @@ exports[`<UserLinks /> <NavMenu /> Should render and match the snapshot 1`] = `
     />
   </WithStyles(ForwardRef(Button))>
   <WithStyles(ForwardRef(Button))
-    component={
-      Object {
-        "$$typeof": Symbol(react.forward_ref),
-        "render": [Function],
-      }
-    }
+    component={Object {}}
     to="/events"
   >
     <Hidden
@@ -270,12 +215,7 @@ exports[`<UserLinks /> <NavMenu /> Should render and match the snapshot 1`] = `
     />
   </WithStyles(ForwardRef(Button))>
   <WithStyles(ForwardRef(Button))
-    component={
-      Object {
-        "$$typeof": Symbol(react.forward_ref),
-        "render": [Function],
-      }
-    }
+    component={Object {}}
     to="/groups"
   >
     <Hidden
@@ -299,12 +239,7 @@ exports[`<UserLinks /> <NavMenu /> Should render and match the snapshot 1`] = `
     />
   </WithStyles(ForwardRef(Button))>
   <WithStyles(ForwardRef(Button))
-    component={
-      Object {
-        "$$typeof": Symbol(react.forward_ref),
-        "render": [Function],
-      }
-    }
+    component={Object {}}
     to="/downloads"
   >
     <Hidden
@@ -328,12 +263,7 @@ exports[`<UserLinks /> <NavMenu /> Should render and match the snapshot 1`] = `
     />
   </WithStyles(ForwardRef(Button))>
   <WithStyles(ForwardRef(Button))
-    component={
-      Object {
-        "$$typeof": Symbol(react.forward_ref),
-        "render": [Function],
-      }
-    }
+    component={Object {}}
     to="/mentorship"
   >
     <Hidden

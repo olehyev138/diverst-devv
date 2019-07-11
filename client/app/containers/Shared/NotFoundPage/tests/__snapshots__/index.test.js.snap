@@ -17,12 +17,7 @@ exports[`<NotFoundPage /> should render and match the snapshot 1`] = `
   <WithStyles(ForwardRef(Divider)) />
   <WithStyles(ForwardRef(Button))
     color="primary"
-    component={
-      Object {
-        "$$typeof": Symbol(react.forward_ref),
-        "render": [Function],
-      }
-    }
+    component={Object {}}
     to="/"
     variant="contained"
   >
