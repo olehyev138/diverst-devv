@@ -1,5 +1,4 @@
 class UserByUsageDatatable < AjaxDatatablesRails::Base
-
   def_delegator :@view, :link_to
   def_delegator :@view, :usage_user_path
 
