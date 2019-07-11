@@ -51,7 +51,7 @@ export default function Routes(props) {
       <UserLayout path={ROUTES.user.downloads.path} route={ROUTES.user.downloads} pageTitle={ROUTES.user.downloads.titleMessage} component={PlaceholderPage} />
       <UserLayout path={ROUTES.user.mentorship.path} route={ROUTES.user.mentorship} pageTitle={ROUTES.user.mentorship.titleMessage} component={PlaceholderPage} />
 
-      /* Group */
+      { /* Group */ }
       <GroupLayout exact path={ROUTES.group.home.path} route={ROUTES.group.home} component={GroupHomePage} />
 
       <ErrorLayout path='' component={NotFoundPage} />
