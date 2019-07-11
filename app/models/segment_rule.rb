@@ -33,7 +33,7 @@ class SegmentRule < BaseClass
   end
 
   def values_array
-    JSON.parse self[:values]
+    JSON.parse values
   end
 
   def followed_by?(user)
