@@ -2,7 +2,9 @@ import React, { memo } from 'react';
 import { Route } from 'react-router';
 import PropTypes from 'prop-types';
 
+import Container from '@material-ui/core/Container';
 import { withStyles } from '@material-ui/core/styles';
+
 import GroupLinks from 'components/Group/GroupLinks';
 import AuthenticatedLayout from '../AuthenticatedLayout';
 
@@ -25,6 +27,12 @@ const GroupLayout = ({ component: Component, ...rest }) => {
         <React.Fragment>
           <div className={classes.toolbar} />
           <GroupLinks {...matchProps} />
+
+          <Container>
+            <div className={classes.content}>
+              <Component {...other} />
+            </div>
+          </Container>
         </React.Fragment>
       )}
     />

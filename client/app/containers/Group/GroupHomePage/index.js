@@ -6,49 +6,30 @@ import { compose } from 'redux';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
-import { selectPaginatedSelectGroups, selectGroupTotal } from 'containers/Group/selectors';
 import reducer from 'containers/Group/reducer';
-
-import { createGroupBegin, getGroupsBegin, groupFormUnmount } from 'containers/Group/actions';
-
 import saga from 'containers/Group/saga';
 
-import GroupForm from 'components/Group/GroupForm';
+import GroupHome from 'components/Group/GroupHome';
 
-export function GroupCreatePage(props) {
+export function GroupHomePage(props) {
   useInjectReducer({ key: 'groups', reducer });
   useInjectSaga({ key: 'groups', saga });
 
-  useEffect(() => () => props.groupFormUnmount(), []);
+  // useEffect(() => () => props.groupFormUnmount(), []);
 
   return (
-    <GroupForm
-      groupAction={props.createGroupBegin}
-      buttonText='Create'
-      getGroupsBegin={props.getGroupsBegin}
-      selectGroups={props.groups}
-    />
+    <GroupHome />
   );
 }
 
-GroupCreatePage.propTypes = {
-  createGroupBegin: PropTypes.func,
-  getGroupsBegin: PropTypes.func,
-  groupFormUnmount: PropTypes.func,
-  groups: PropTypes.array
+GroupHomePage.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
-  groups: selectPaginatedSelectGroups()
 });
 
-function mapDispatchToProps(dispatch) {
-  return {
-    createGroupBegin: payload => dispatch(createGroupBegin(payload)),
-    getGroupsBegin: payload => dispatch(getGroupsBegin(payload)),
-    groupFormUnmount: () => dispatch(groupFormUnmount())
-  };
-}
+const mapDispatchToProps = {
+};
 
 const withConnect = connect(
   mapStateToProps,
@@ -58,4 +39,4 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(GroupCreatePage);
+)(GroupHomePage);
