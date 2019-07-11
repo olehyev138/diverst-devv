@@ -3,8 +3,21 @@ require 'rails_helper'
 RSpec.describe Email do
   it { expect(subject).to belong_to :enterprise }
   it { expect(subject).to have_many(:variables).class_name('EmailVariable') }
+  
   it { expect(subject).to validate_presence_of(:name) }
   it { expect(subject).to validate_presence_of(:subject) }
+  it { expect(subject).to validate_presence_of(:content) }
+  it { expect(subject).to validate_presence_of(:description) }
+  it { expect(subject).to validate_presence_of(:mailer_name) }
+  it { expect(subject).to validate_presence_of(:mailer_method) }
+
+  it { expect(subject).to validate_length_of(:description).is_at_most(191) }
+  it { expect(subject).to validate_length_of(:template).is_at_most(191) }
+  it { expect(subject).to validate_length_of(:mailer_method).is_at_most(191) }
+  it { expect(subject).to validate_length_of(:mailer_name).is_at_most(191) }
+  it { expect(subject).to validate_length_of(:content).is_at_most(65535) }
+  it { expect(subject).to validate_length_of(:subject).is_at_most(191) }
+  it { expect(subject).to validate_length_of(:name).is_at_most(191) }
 
   describe '#destroy_callbacks' do
     it 'removes the child objects' do
