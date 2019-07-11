@@ -1,9 +1,9 @@
 class UsageDatatable < AjaxDatatablesRails::Base
   def_delegator :@view, :link_to
 
-  def initialize(view_context)
+  def initialize(view_context, user = nil)
     super(view_context)
-    @user = view_context.current_user
+    @user = user || view_context.current_user
   end
 
   def sortable_columns
