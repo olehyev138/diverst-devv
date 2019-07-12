@@ -18,11 +18,14 @@ class API {
     // append query arguments
     if (opts) {
       url += '?';
-      for (const arg of Array.from(opts)) {
+      for (const arg of Object.keys(opts)) {
         if (url.indexOf('?') !== url.length - 1)
           url += '&';
 
-        url += `${arg}=${opts[arg]}`;
+        if (Array.isArray(opts[arg]))
+          url += `${arg}=${JSON.stringify(opts[arg])}`;
+        else
+          url += `${arg}=${opts[arg]}`;
       }
     }
 
@@ -37,8 +40,8 @@ class API {
     return axios.post(this.url, payload);
   }
 
-  update(payload) {
-    return axios.put(this.url, payload);
+  update(id, payload) {
+    return axios.put(`${this.url}/${id}`, payload);
   }
 
   destroy(id) {

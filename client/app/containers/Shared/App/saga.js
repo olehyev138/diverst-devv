@@ -36,11 +36,7 @@ export function* login(action) {
     const user = JSON.parse(window.atob(response.data.token.split('.')[1]));
 
     yield put(setUser(user));
-
     yield put(setUserPolicyGroup({ policy_group: response.data.policy_group }));
-
-    // TODO: find better way to do this
-    //       - we need to reload to render the parent layout component
     yield put(push(ROUTES.user.home.path));
   } catch (err) {
     yield put(loginError(err));

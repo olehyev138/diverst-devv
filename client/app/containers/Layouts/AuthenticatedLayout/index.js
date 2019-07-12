@@ -1,8 +1,6 @@
 import React, { memo } from 'react';
 import { Route } from 'react-router';
 import { Redirect } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
 
@@ -12,7 +10,7 @@ import ApplicationHeader from 'components/Shared/ApplicationHeader';
 import ApplicationLayout from 'containers/Layouts/ApplicationLayout';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
-import { selectEnterprise, selectUserPolicyGroup, selectIsAuthenticated } from 'containers/Shared/App/selectors';
+import AuthService from 'utils/authService';
 
 const styles = theme => ({});
 
@@ -20,13 +18,13 @@ const AuthenticatedLayout = ({
   renderAppBar, drawerToggleCallback, drawerOpen, position, isAdmin, component: Component, ...rest
 }) => {
   const {
-    classes, route, policyGroup, isAuthenticated, ...other
+    classes, route, ...other
   } = rest;
 
-  if (isAuthenticated === true) {
+  if (AuthService.isAuthenticated() === true) {
     // Authenticated
     // TODO: Handle if policy group isn't set. Perhaps clear token (sign out) if the policy group is not found
-    if (Object.prototype.hasOwnProperty.call(route, 'permission') === false || policyGroup[route.permission] === true)
+    if (AuthService.hasPermission(route))
       // Authorized - note: if no `permission` is defined on the route object it renders the
       // page as normal (for situations where the page doesn't have a permission associated)
       return (
@@ -75,16 +73,6 @@ AuthenticatedLayout.propTypes = {
   policy_group: PropTypes.object,
 };
 
-const mapStateToProps = createStructuredSelector({
-  policyGroup: selectUserPolicyGroup(),
-  isAuthenticated: selectIsAuthenticated(),
-});
-
-const withConnect = connect(
-  mapStateToProps,
-);
-
 export default compose(
-  withConnect,
   withStyles(styles),
 )(AuthenticatedLayout);

@@ -52,7 +52,7 @@ exports[`<UserLinks /> <MobileNavMenu /> Should render and match the snapshot 1`
         "render": [Function],
       }
     }
-    to="/user/campaigns"
+    to="/campaigns"
   >
     <WithStyles(ForwardRef(ListItemIcon))>
       <WbIncandescentOutlinedIcon />
@@ -69,7 +69,7 @@ exports[`<UserLinks /> <MobileNavMenu /> Should render and match the snapshot 1`
         "render": [Function],
       }
     }
-    to="/user/news"
+    to="/news"
   >
     <WithStyles(ForwardRef(ListItemIcon))>
       <QuestionAnswerOutlinedIcon />
@@ -86,7 +86,7 @@ exports[`<UserLinks /> <MobileNavMenu /> Should render and match the snapshot 1`
         "render": [Function],
       }
     }
-    to="/user/events"
+    to="/events"
   >
     <WithStyles(ForwardRef(ListItemIcon))>
       <EventOutlinedIcon />
@@ -103,7 +103,7 @@ exports[`<UserLinks /> <MobileNavMenu /> Should render and match the snapshot 1`
         "render": [Function],
       }
     }
-    to="/user/groups"
+    to="/groups"
   >
     <WithStyles(ForwardRef(ListItemIcon))>
       <GroupOutlinedIcon />
@@ -120,7 +120,7 @@ exports[`<UserLinks /> <MobileNavMenu /> Should render and match the snapshot 1`
         "render": [Function],
       }
     }
-    to="/user/downloads"
+    to="/downloads"
   >
     <WithStyles(ForwardRef(ListItemIcon))>
       <CloudDownloadOutlinedIcon />
@@ -137,7 +137,7 @@ exports[`<UserLinks /> <MobileNavMenu /> Should render and match the snapshot 1`
         "render": [Function],
       }
     }
-    to="/user/mentorship"
+    to="/mentorship"
   >
     <WithStyles(ForwardRef(ListItemIcon))>
       <GroupWorkOutlinedIcon />
@@ -189,7 +189,7 @@ exports[`<UserLinks /> <NavMenu /> Should render and match the snapshot 1`] = `
         "render": [Function],
       }
     }
-    to="/user/campaigns"
+    to="/campaigns"
   >
     <Hidden
       implementation="js"
@@ -218,7 +218,7 @@ exports[`<UserLinks /> <NavMenu /> Should render and match the snapshot 1`] = `
         "render": [Function],
       }
     }
-    to="/user/news"
+    to="/news"
   >
     <Hidden
       implementation="js"
@@ -247,7 +247,7 @@ exports[`<UserLinks /> <NavMenu /> Should render and match the snapshot 1`] = `
         "render": [Function],
       }
     }
-    to="/user/events"
+    to="/events"
   >
     <Hidden
       implementation="js"
@@ -276,7 +276,7 @@ exports[`<UserLinks /> <NavMenu /> Should render and match the snapshot 1`] = `
         "render": [Function],
       }
     }
-    to="/user/groups"
+    to="/groups"
   >
     <Hidden
       implementation="js"
@@ -305,7 +305,7 @@ exports[`<UserLinks /> <NavMenu /> Should render and match the snapshot 1`] = `
         "render": [Function],
       }
     }
-    to="/user/downloads"
+    to="/downloads"
   >
     <Hidden
       implementation="js"
@@ -334,7 +334,7 @@ exports[`<UserLinks /> <NavMenu /> Should render and match the snapshot 1`] = `
         "render": [Function],
       }
     }
-    to="/user/mentorship"
+    to="/mentorship"
   >
     <Hidden
       implementation="js"

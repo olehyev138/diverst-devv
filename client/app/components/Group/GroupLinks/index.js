@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 
+import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { AppBar, Toolbar, Button } from '@material-ui/core';
 import { NavLink } from 'react-router-dom';
 import { withTheme } from '@material-ui/core/styles';
@@ -11,9 +12,7 @@ import PropTypes from 'prop-types';
 export function GroupLinks(props) {
   const { theme } = props;
   const activeColor = theme.palette.primary.main;
-  // Wrap NavLink to fix ref issue temporarily until react-router-dom is updated to fix this
   /* eslint-disable-next-line no-shadow */
-  const WrappedNavLink = React.forwardRef((props, ref) => <NavLink innerRef={ref} {...props} />);
 
   const NavLinks = () => (
     <Toolbar

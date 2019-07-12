@@ -84,6 +84,7 @@ module.exports = {
     'nonblock-statement-body-position': [0, 'bottom'],
     'no-trailing-spaces': [1, { 'skipBlankLines': true }],
     'no-shadow': 0,
+    'object-property-newline': 0,
   },
   overrides: [
     {
