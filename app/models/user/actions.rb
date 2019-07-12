@@ -43,6 +43,10 @@ module User::Actions
       OR LOWER(#{self.table_name}.email) LIKE :search"
     end
 
+    def valid_scopes
+      ['active', 'enterprise_mentors']
+    end
+
     def signin(email, password)
       # check for an email and password
       raise BadRequestException.new 'Email and password required' unless email.present? && password.present?

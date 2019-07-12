@@ -169,8 +169,8 @@ RSpec.describe Group, type: :model do
       user = create(:user, enterprise: enterprise)
 
       group_1 = create(:group, enterprise: enterprise)
-      group_2 = create(:group, enterprise: enterprise, parent_id: group_1.id)
-      group_3 = create(:group, enterprise: enterprise_2)
+      create(:group, enterprise: enterprise, parent_id: group_1.id)
+      create(:group, enterprise: enterprise_2)
 
       diverst_request = Request.create_request(user)
 
@@ -181,6 +181,18 @@ RSpec.describe Group, type: :model do
       # get only parent groups for enterprise
       page = Group.index(diverst_request, { parent_id: 'null' })
       expect(page.total).to eq(1)
+    end
+
+    it 'returns the correct groups by scope' do
+      enterprise_1 = create(:enterprise)
+      create_list(:group, 10, enterprise: enterprise_1)
+
+      enterprise_2 = create(:enterprise)
+      create_list(:group, 10, enterprise: enterprise_2, private: false)
+      create(:group, enterprise: enterprise_2, private: true)
+      user = create(:user, enterprise: enterprise_2)
+      response = Group.index(Request.create_request(user), { query_scopes: ['is_private'] })
+      expect(response.total).to eq(1)
     end
   end
 

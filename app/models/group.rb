@@ -1,6 +1,7 @@
 class Group < ApplicationRecord
   include PublicActivity::Common
   include CustomTextHelpers
+  include Group::Actions
 
   extend Enumerize
 
@@ -149,6 +150,7 @@ class Group < ApplicationRecord
   # parents/children
   scope :all_parents,     -> { where(parent_id: nil) }
   scope :all_children,    -> { where.not(parent_id: nil) }
+  scope :no_children, -> { includes(:children).where(children_groups: { id: nil }) }
 
   accepts_nested_attributes_for :outcomes, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true

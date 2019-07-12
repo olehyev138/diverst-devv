@@ -23,31 +23,8 @@ import SnackbarProviderWrapper from 'components/Shared/SnackbarProviderWrapper';
 
 import App from 'containers/Shared/App/Loadable';
 import { loginSuccess, setUser, setEnterprise } from 'containers/Shared/App/actions';
-import AuthService from 'utils/authService';
-
-const axios = require('axios');
 
 export class ThemeProvider extends React.PureComponent {
-  componentDidMount() {
-    // Try and get the JWT token from storage. If it doesn't exist
-    // we're done. The user must login again.
-
-    // TODO:
-    //    - why is this done here? what does it do?
-    //    - why is theme provider around app and not app around theme provider (material ui suggests the latter)
-
-    const jwt = AuthService.getJwt();
-    const enterprise = AuthService.getEnterprise();
-
-    if (jwt) {
-      AuthService.setValue(jwt, '_diverst.twj');
-      axios.defaults.headers.common['Diverst-UserToken'] = jwt;
-
-      const user = JSON.parse(window.atob(jwt.split('.')[1]));
-      this.props.loginSuccess(jwt, user, enterprise || user.enterprise);
-    }
-  }
-
   render() {
     const defaultTheme = createMuiTheme();
 
@@ -120,24 +97,8 @@ const mapStateToProps = createStructuredSelector({
   secondary: makeSelectSecondary(),
 });
 
-function mapDispatchToProps(dispatch, ownProps) {
-  return {
-    loginSuccess(token, user, enterprise) {
-      dispatch(loginSuccess(token));
-      dispatch(setUser(user));
-      dispatch(setEnterprise(enterprise));
-
-      if (user.enterprise.theme) {
-        dispatch(changePrimary(user.enterprise.theme.primary_color));
-        dispatch(changeSecondary(user.enterprise.theme.secondary_color));
-      }
-    },
-  };
-}
-
 const withConnect = connect(
   mapStateToProps,
-  mapDispatchToProps,
 );
 
 export default compose(

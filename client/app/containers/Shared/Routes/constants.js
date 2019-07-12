@@ -19,6 +19,7 @@ export const ROUTES = {
     innovate: {
       path: '/user/campaigns',
       titleMessage: messages.user.innovate,
+      permission: 'campaigns_index',
     },
     news: {
       path: '/user/news',
