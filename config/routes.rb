@@ -25,6 +25,7 @@ Diverst::Application.routes.draw do
       resources :checklist_items
       resources :clockwork_database_events
       resources :custom_texts
+      resources :devices
       resources :emails
       resources :email_variables
       resources :enterprises

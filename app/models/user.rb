@@ -17,7 +17,9 @@ class User < ApplicationRecord
 
   belongs_to  :enterprise
   belongs_to  :user_role
-  has_one :policy_group, dependent: :destroy, inverse_of: :user
+
+  has_one :policy_group,  dependent: :destroy, inverse_of: :user
+  has_one :device,        dependent: :destroy, inverse_of: :user
 
   # sessions
   has_many :sessions, dependent: :destroy
@@ -123,7 +125,7 @@ class User < ApplicationRecord
     loop do
       rlength = (length * 3) / 4
       token = SecureRandom.urlsafe_base64(rlength).tr('lIO0', 'sxyz')
-      break token unless Session.where(token: token).first
+      break token unless Session.find_by(token: token)
     end
   end
 

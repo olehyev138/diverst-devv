@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_27_112252) do
+ActiveRecord::Schema.define(version: 2019_07_12_073418) do
 
   create_table "activities", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "trackable_type", collation: "utf8mb4_unicode_ci"
@@ -267,6 +267,14 @@ ActiveRecord::Schema.define(version: 2019_06_27_112252) do
     t.string "sub_erg", default: "Sub-Group"
     t.string "privacy_statement", default: "Privacy Statement"
     t.index ["enterprise_id"], name: "index_custom_texts_on_enterprise_id"
+  end
+
+  create_table "devices", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+    t.string "token"
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_devices_on_user_id"
   end
 
   create_table "email_variables", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
