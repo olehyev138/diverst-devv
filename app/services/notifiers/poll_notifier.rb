@@ -8,6 +8,10 @@ class Notifiers::PollNotifier
     if should_notify?
       targeted_users.each do |user|
         PollMailer.invitation(@poll, user).deliver_later
+        DeviceNotificationJob.perform_later(user.id, { "notification": {
+          "title": 'New Survey from Diverst!',
+          "body": 'Did this work?'
+        } })
       end
       @poll.update(email_sent: true)
     end

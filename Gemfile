@@ -9,6 +9,7 @@ gem 'actionpack', '~> 5.0'
 gem 'actionmailer', '~> 5.0'
 gem 'activerecord-import', '~> 0.14.0' # Adds a faster way to INSERT multiple rows in the DB
 gem 'rack-timeout', '~> 0.4.2'
+gem 'fcm', '~> 0.0.6'
 
 gem 'mysql2', '~> 0.5.2'
 gem 'puma', '~> 3.1' # Better web server than WEBRick
