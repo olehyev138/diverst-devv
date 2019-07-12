@@ -40,8 +40,8 @@ export function GroupPage(props) {
 }
 
 GroupPage.propTypes = {
-  location: PropTypes.shape({
-    state: PropTypes.shape({
+  computedMatch: PropTypes.shape({
+    params: PropTypes.shape({
       id: PropTypes.number
     })
   }),

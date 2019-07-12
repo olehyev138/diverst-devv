@@ -44,6 +44,11 @@ export function GroupLinks(props) {
 
 GroupLinks.propTypes = {
   theme: PropTypes.object,
+  computedMatch: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.number
+    })
+  }),
 };
 
 export function mapDispatchToProps(dispatch) {
