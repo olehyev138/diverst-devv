@@ -70,6 +70,10 @@ class NewsFeedLink < ApplicationRecord
     views.all.count
   end
 
+  def total_likes
+    likes.count
+  end
+
   def create_view_if_none(user)
     unless views.find_by(user_id: user.id)
       view = views.create(user_id: user.id, enterprise_id: user.enterprise_id)
