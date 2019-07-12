@@ -23,20 +23,30 @@ RSpec.describe UserGroupNotificationJob, type: :job do
       end
     end
 
-    before do
-      @users = subject.get_users_to_mail(@enterprise.id, 'weekly')
+    it 'returns nil if notification frequency is invalid' do
+      expect(subject.get_users_to_mail(@enterprise.id, 'invalid')).to eq nil
+      expect(subject.get_users_to_mail(@enterprise.id, nil)).to eq nil
+      expect(subject.get_users_to_mail(@enterprise.id, 3)).to eq nil
+      expect(subject.get_users_to_mail(@enterprise.id, [])).to eq nil
+      expect(subject.get_users_to_mail(@enterprise.id, {})).to eq nil
     end
 
-    it 'returns a collection of unique users to email' do
-      expect(@users.uniq.count).to eq @users.count
-    end
-
-    it 'all the users are in a group' do
-      all_users_in_groups = true
-      @users.find_each do |user|
-        all_users_in_groups = false if UserGroup.find_by(user_id: user.id).nil?
+    context 'returns the correct users' do
+      before do
+        @users = subject.get_users_to_mail(@enterprise.id, 'weekly')
       end
-      expect(all_users_in_groups).to eq true
+
+      it 'returns a collection of unique users to email' do
+        expect(@users.uniq.count).to eq @users.count
+      end
+
+      it 'all the users are in a group' do
+        all_users_in_groups = true
+        @users.find_each do |user|
+          all_users_in_groups = false if UserGroup.find_by(user_id: user.id).nil?
+        end
+        expect(all_users_in_groups).to eq true
+      end
     end
   end
 
