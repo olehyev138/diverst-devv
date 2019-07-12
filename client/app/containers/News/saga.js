@@ -17,7 +17,8 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 export function* getNews(action) {
   try {
-    const response = yield call(api.groups.all.bind(api.newsFeedLinks));
+    const response = yield call(api.groups.all.bind(api.newsFeedLinks), action.payload);
+    yield (put(getNewsItemsSuccess(response.data.page)));
   } catch (err) {
     yield put(getNewsItemsError(err));
 

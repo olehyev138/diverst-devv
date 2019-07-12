@@ -21,6 +21,10 @@ const AuthenticatedLayout = ({
     classes, route, ...other
   } = rest;
 
+  /* Use AuthService to keep AuthenticatedLayout unconnected from store.
+   *   - Probably better to keep layouts unconnected too
+   *   - Causes problems when state updates, causing children to remount
+   */
   if (AuthService.isAuthenticated() === true) {
     // Authenticated
     // TODO: Handle if policy group isn't set. Perhaps clear token (sign out) if the policy group is not found

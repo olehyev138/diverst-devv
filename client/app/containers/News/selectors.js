@@ -5,7 +5,7 @@ const selectNewsDomain = state => state.news || initialState;
 
 const selectPaginatedNewsItems = () => createSelector(
   selectNewsDomain,
-  newsState => newsState.newsList
+  newsState => newsState.newsItems
 );
 
 export {

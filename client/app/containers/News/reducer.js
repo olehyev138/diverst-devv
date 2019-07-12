@@ -19,7 +19,7 @@ function newsReducer(state = initialState, action) {
   return produce(state, (draft) => {
     switch (action.type) {
       case GET_NEWS_ITEMS_SUCCESS:
-        draft.newsItems = action.payload.news;
+        draft.newsItems = action.payload.items;
         break;
       case NEWS_FEED_UNMOUNT:
         return initialState;

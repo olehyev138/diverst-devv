@@ -18,7 +18,7 @@ export function NewsFeedPage(props) {
   useInjectReducer({ key: 'news', reducer });
   useInjectSaga({ key: 'news', saga });
 
-  const [params, setParams] = useState({ count: 15, page: 0, order: 'asc' });
+  const [params, setParams] = useState({ count: 15, page: 0, order: 'asc', news_feed_id: 1 });
 
   useEffect(() => {
     props.getNewsItemsBegin(params);
