@@ -10,7 +10,7 @@ import {
 } from 'containers/News/constants';
 
 export const initialState = {
-  newsItems: {}
+  newsItems: []
 };
 
 /* eslint-disable default-case, no-param-reassign */

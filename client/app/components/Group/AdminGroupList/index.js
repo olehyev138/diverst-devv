@@ -36,9 +36,9 @@ const styles = theme => ({
 
 export function AdminGroupList(props, context) {
   const { classes } = props;
-
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [expandedGroups, setExpandedGroups] = useState({});
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -50,12 +50,12 @@ export function AdminGroupList(props, context) {
     props.handlePagination({ count: +event.target.value, page });
   };
 
-  const [expandedGroups, setExpandedGroups] = useState({});
-
+  /* Store a expandedGroupsHash for each group, that tracks whether or not its children are expanded */
   if (props.groups && Object.keys(props.groups).length !== 0 && Object.keys(expandedGroups).length <= 0) {
     const initialExpandedGroups = {};
 
     /* eslint-disable-next-line no-return-assign */
+    /* Setup initial hash, with each group set to false - do it like this because of how React works with state */
     Object.keys(props.groups).map((id, i) => initialExpandedGroups[id] = false);
     setExpandedGroups(initialExpandedGroups);
   }

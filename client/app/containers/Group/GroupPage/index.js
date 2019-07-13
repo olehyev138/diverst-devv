@@ -42,7 +42,7 @@ export function GroupPage(props) {
 GroupPage.propTypes = {
   computedMatch: PropTypes.shape({
     params: PropTypes.shape({
-      id: PropTypes.number
+      id: PropTypes.string
     })
   }),
   currentGroup: PropTypes.object,

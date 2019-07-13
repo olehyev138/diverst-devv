@@ -1,6 +1,6 @@
 /**
  *
- * Asynchronously loads the component for GroupForm
+ * Asynchronously loads the component for GroupHome
  *
  */
 

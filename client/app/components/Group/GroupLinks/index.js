@@ -46,7 +46,7 @@ GroupLinks.propTypes = {
   theme: PropTypes.object,
   computedMatch: PropTypes.shape({
     params: PropTypes.shape({
-      id: PropTypes.number
+      id: PropTypes.string
     })
   }),
 };
