@@ -10,7 +10,8 @@ import {
 } from 'containers/News/constants';
 
 export const initialState = {
-  newsItems: []
+  newsItems: [],
+  newsItemsTotal: null
 };
 
 /* eslint-disable default-case, no-param-reassign */
@@ -20,6 +21,7 @@ function newsReducer(state = initialState, action) {
     switch (action.type) {
       case GET_NEWS_ITEMS_SUCCESS:
         draft.newsItems = action.payload.items;
+        draft.newsItemsTotal = action.payload.total;
         break;
       case NEWS_FEED_UNMOUNT:
         return initialState;

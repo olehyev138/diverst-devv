@@ -10,7 +10,7 @@ import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/News/reducer';
 import saga from 'containers/News/saga';
 
-import { selectPaginatedNewsItems } from 'containers/News/selectors';
+import { selectPaginatedNewsItems, selectNewsItemsTotal } from 'containers/News/selectors';
 import { getNewsItemsBegin, newsFeedUnmount } from 'containers/News/actions';
 
 import NewsFeed from 'components/News/NewsFeed';
@@ -21,17 +21,17 @@ export function NewsFeedPage(props) {
 
   // TODO: might be a better way to do this - renders 4 times
 
-  const [newsFeedId, setNewsFeedId] = useState(undefined);
   const [params, setParams] = useState({
-    count: 15, page: 0, order: 'asc', news_feed_id: newsFeedId
+    count: 5, page: 0, order: 'asc', news_feed_id: -1
   });
 
   useEffect(() => {
     const id = dig(props, 'currentGroup', 'news_feed', 'id');
 
     if (id) {
-      setNewsFeedId(id);
-      props.getNewsItemsBegin({ ...params, news_feed_id: id });
+      const newParams = { ...params, news_feed_id: id };
+      props.getNewsItemsBegin(newParams);
+      setParams(newParams);
     }
 
     return () => {
@@ -39,9 +39,20 @@ export function NewsFeedPage(props) {
     };
   }, [props.currentGroup]);
 
+  const handlePagination = (payload) => {
+    const newParams = { ...params, count: payload.count, page: payload.page };
+
+    props.getNewsItemsBegin(newParams);
+    setParams(newParams);
+  };
+
   return (
     <React.Fragment>
-      <NewsFeed newsItems={props.newsItems} />
+      <NewsFeed
+        newsItems={props.newsItems}
+        newsItemsTotal={props.newsItemsTotal}
+        handlePagination={handlePagination}
+      />
     </React.Fragment>
   );
 }
@@ -50,6 +61,7 @@ NewsFeedPage.propTypes = {
   getNewsItemsBegin: PropTypes.func.isRequired,
   newsFeedUnmount: PropTypes.func.isRequired,
   newsItems: PropTypes.array,
+  newsItemsTotal: PropTypes.number,
   currentGroup: PropTypes.shape({
     news_feed: PropTypes.shape({
       id: PropTypes.number
@@ -58,7 +70,8 @@ NewsFeedPage.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
-  newsItems: selectPaginatedNewsItems()
+  newsItems: selectPaginatedNewsItems(),
+  newsItemsTotal: selectNewsItemsTotal()
 });
 
 const mapDispatchToProps = {

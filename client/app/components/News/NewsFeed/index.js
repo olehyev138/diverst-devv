@@ -43,12 +43,12 @@ export function NewsFeed(props) {
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
-    // props.handlePagination({ count: rowsPerPage, page: newPage });
+    props.handlePagination({ count: rowsPerPage, page: newPage });
   };
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
-    // props.handlePagination({ count: +event.target.value, page });
+    props.handlePagination({ count: +event.target.value, page });
   };
 
   /* Check news_feed_link type & render appropriate list item component */
@@ -91,7 +91,7 @@ export function NewsFeed(props) {
         page={page}
         rowsPerPageOptions={[5, 10, 25]}
         rowsPerPage={rowsPerPage}
-        count={0}
+        count={props.newsItemsTotal || 0}
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
         backIconButtonProps={{
@@ -107,7 +107,9 @@ export function NewsFeed(props) {
 
 NewsFeed.propTypes = {
   classes: PropTypes.object,
-  newsItems: PropTypes.array
+  newsItems: PropTypes.array,
+  newsItemsTotal: PropTypes.number,
+  handlePagination: PropTypes.func
 };
 
 export default compose(
