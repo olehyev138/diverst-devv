@@ -1,4 +1,4 @@
 require 'rails_helper'
 
-RSpec.describe EnterpriseEmailVariable do 
+RSpec.describe EnterpriseEmailVariable do
 end
