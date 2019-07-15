@@ -23,20 +23,30 @@ RSpec.describe UserGroupNotificationJob, type: :job do
       end
     end
 
-    before do
-      @users = subject.get_users_to_mail(@enterprise.id, 'weekly')
+    it 'returns nil if notification frequency is invalid' do
+      expect(subject.get_users_to_mail(@enterprise.id, 'invalid')).to eq nil
+      expect(subject.get_users_to_mail(@enterprise.id, nil)).to eq nil
+      expect(subject.get_users_to_mail(@enterprise.id, 3)).to eq nil
+      expect(subject.get_users_to_mail(@enterprise.id, [])).to eq nil
+      expect(subject.get_users_to_mail(@enterprise.id, {})).to eq nil
     end
 
-    it 'returns a collection of unique users to email' do
-      expect(@users.uniq.count).to eq @users.count
-    end
-
-    it 'all the users are in a group' do
-      all_users_in_groups = true
-      @users.find_each do |user|
-        all_users_in_groups = false if UserGroup.find_by(user_id: user.id).nil?
+    context 'returns the correct users' do
+      before do
+        @users = subject.get_users_to_mail(@enterprise.id, 'weekly')
       end
-      expect(all_users_in_groups).to eq true
+
+      it 'returns a collection of unique users to email' do
+        expect(@users.uniq.count).to eq @users.count
+      end
+
+      it 'all the users are in a group' do
+        all_users_in_groups = true
+        @users.find_each do |user|
+          all_users_in_groups = false if UserGroup.find_by(user_id: user.id).nil?
+        end
+        expect(all_users_in_groups).to eq true
+      end
     end
   end
 
@@ -84,7 +94,19 @@ RSpec.describe UserGroupNotificationJob, type: :job do
         # Timecop.freeze(Time.now + 30.minutes) do
         mailer = double('mailer')
         expect(UserGroupMailer).to receive(:notification)
-          .with(user, [{ group: group, events_count: 1, messages_count: 1, news_count: 1, social_links_count: 1, participating_events_count: 1 }]) { mailer }
+          .with(user, [{
+                         group: group,
+                         events: [group_event],
+                         events_count: 1,
+                         messages: [group_message],
+                         messages_count: 1,
+                         news: [news_link],
+                         news_count: 1,
+                         social_links: [social_link],
+                         social_links_count: 1,
+                         participating_events: [third_group_event],
+                         participating_events_count: 1
+                       }]) { mailer }
         expect(mailer).to receive(:deliver_now)
         subject.perform({ notifications_frequency: 'hourly', enterprise_id: user.enterprise_id })
         # end
@@ -115,7 +137,19 @@ RSpec.describe UserGroupNotificationJob, type: :job do
 
         mailer = double('mailer')
         expect(UserGroupMailer).to receive(:notification)
-          .with(user, [{ group: group, events_count: 1, messages_count: 1, news_count: 1, social_links_count: 1, participating_events_count: 1 }]) { mailer }
+          .with(user, [{
+                         group: group,
+                         events: [group_event],
+                         events_count: 1,
+                         messages: [group_message],
+                         messages_count: 1,
+                         news: [news_link],
+                         news_count: 1,
+                         social_links: [social_link],
+                         social_links_count: 1,
+                         participating_events: [third_group_event],
+                         participating_events_count: 1
+                       }]) { mailer }
         expect(mailer).to receive(:deliver_now)
         subject.perform({ notifications_frequency: 'hourly', enterprise_id: user.enterprise_id })
       end
@@ -134,7 +168,19 @@ RSpec.describe UserGroupNotificationJob, type: :job do
 
         mailer = double('mailer')
         expect(UserGroupMailer).to receive(:notification)
-          .with(user, [{ group: group, events_count: 1, messages_count: 1, news_count: 1, social_links_count: 1, participating_events_count: 1 }]) { mailer }
+          .with(user, [{
+                         group: group,
+                         events: [group_event],
+                         events_count: 1,
+                         messages: [group_message],
+                         messages_count: 1,
+                         news: [news_link],
+                         news_count: 1,
+                         social_links: [social_link],
+                         social_links_count: 1,
+                         participating_events: [third_group_event],
+                         participating_events_count: 1
+                       }]) { mailer }
         expect(mailer).to receive(:deliver_now)
         subject.perform({ notifications_frequency: 'hourly', enterprise_id: user.enterprise_id })
       end
@@ -151,7 +197,19 @@ RSpec.describe UserGroupNotificationJob, type: :job do
 
         mailer = double('mailer')
         expect(UserGroupMailer).to receive(:notification)
-          .with(user, [{ group: group, events_count: 1, messages_count: 0, news_count: 0, social_links_count: 0, participating_events_count: 1 }]) { mailer }
+          .with(user, [{
+                         group: group,
+                         events: [group_event],
+                         events_count: 1,
+                         messages: [],
+                         messages_count: 0,
+                         news: [],
+                         news_count: 0,
+                         social_links: [],
+                         social_links_count: 0,
+                         participating_events: [third_group_event],
+                         participating_events_count: 1
+                       }]) { mailer }
         expect(mailer).to receive(:deliver_now)
         subject.perform({ notifications_frequency: 'hourly', enterprise_id: user.enterprise_id })
       end
@@ -210,7 +268,19 @@ RSpec.describe UserGroupNotificationJob, type: :job do
         Timecop.freeze(Date.today) do
           mailer = double('mailer')
           expect(UserGroupMailer).to receive(:notification)
-            .with(user, [{ group: group, events_count: 1, messages_count: 1, news_count: 1, social_links_count: 1, participating_events_count: 1 }]) { mailer }
+            .with(user, [{
+                           group: group,
+                           events: [another_group_event],
+                           events_count: 1,
+                           messages: [another_group_message],
+                           messages_count: 1,
+                           news: [another_news_link],
+                           news_count: 1,
+                           social_links: [another_social_link],
+                           social_links_count: 1,
+                           participating_events: [fourth_group_event],
+                           participating_events_count: 1
+                         }]) { mailer }
           expect(mailer).to receive(:deliver_now)
           subject.perform({ notifications_frequency: 'daily', enterprise_id: user.enterprise_id })
         end
@@ -222,7 +292,19 @@ RSpec.describe UserGroupNotificationJob, type: :job do
 
         mailer = double('mailer')
         expect(UserGroupMailer).to receive(:notification)
-          .with(user, [{ group: group, events_count: 1, messages_count: 1, news_count: 1, social_links_count: 1, participating_events_count: 1 }]) { mailer }
+          .with(user, [{
+                         group: group,
+                         events: [another_group_event],
+                         events_count: 1,
+                         messages: [another_group_message],
+                         messages_count: 1,
+                         news: [another_news_link],
+                         news_count: 1,
+                         social_links: [another_social_link],
+                         social_links_count: 1,
+                         participating_events: [fourth_group_event],
+                         participating_events_count: 1
+                       }]) { mailer }
         expect(mailer).to receive(:deliver_now)
         subject.perform({ notifications_frequency: 'daily', enterprise_id: user.enterprise_id })
       end
@@ -231,13 +313,25 @@ RSpec.describe UserGroupNotificationJob, type: :job do
         segment = create(:segment, groups: [group, second_group])
         create(:users_segment, user: user, segment: segment)
 
-        create(:news_link_segment, news_link: news_link, segment: segment)
-        create(:social_link_segment, social_link: social_link, segment: segment)
-        create(:group_messages_segment, group_message: group_message, segment: segment)
+        nl_segment = create(:news_link_segment, news_link: another_news_link, segment: segment)
+        sl_segment = create(:social_link_segment, social_link: another_social_link, segment: segment)
+        gm_segment = create(:group_messages_segment, group_message: another_group_message, segment: segment)
 
         mailer = double('mailer')
         expect(UserGroupMailer).to receive(:notification)
-          .with(user, [{ group: group, events_count: 1, messages_count: 1, news_count: 1, social_links_count: 1, participating_events_count: 1 }]) { mailer }
+          .with(user, [{
+                        group: group,
+                        events: [another_group_event],
+                        events_count: 1,
+                        messages: [another_group_message],
+                        messages_count: 1,
+                        news: [another_news_link],
+                        news_count: 1,
+                        social_links: [another_social_link],
+                        social_links_count: 1,
+                        participating_events: [fourth_group_event],
+                        participating_events_count: 1
+                      }]) { mailer }
         expect(mailer).to receive(:deliver_now)
         subject.perform({ notifications_frequency: 'daily', enterprise_id: user.enterprise_id })
       end
@@ -253,7 +347,19 @@ RSpec.describe UserGroupNotificationJob, type: :job do
         create(:group_messages_segment, group_message: another_group_message, segment: segment)
         mailer = double('mailer')
         expect(UserGroupMailer).to receive(:notification)
-          .with(user, [{ group: group, events_count: 1, messages_count: 0, news_count: 0, social_links_count: 0, participating_events_count: 1 }]) { mailer }
+          .with(user, [{
+                         group: group,
+                         events: [another_group_event],
+                         events_count: 1,
+                         messages: [],
+                         messages_count: 0,
+                         news: [],
+                         news_count: 0,
+                         social_links: [],
+                         social_links_count: 0,
+                         participating_events: [fourth_group_event],
+                         participating_events_count: 1
+                       }]) { mailer }
         expect(mailer).to receive(:deliver_now)
         subject.perform({ notifications_frequency: 'daily', enterprise_id: user.enterprise_id })
       end
@@ -312,7 +418,19 @@ RSpec.describe UserGroupNotificationJob, type: :job do
         Timecop.freeze(Date.today) do
           mailer = double('mailer')
           expect(UserGroupMailer).to receive(:notification)
-            .with(user, [{ group: group, events_count: 0, messages_count: 0, news_count: 1, social_links_count: 0, participating_events_count: 0 }]) { mailer }
+            .with(user, [{
+                           group: group,
+                           events: [],
+                           events_count: 0,
+                           messages: [],
+                           messages_count: 0,
+                           news: [news_link],
+                           news_count: 1,
+                           social_links: [],
+                           social_links_count: 0,
+                           participating_events: [],
+                           participating_events_count: 0
+                         }]) { mailer }
           expect(mailer).to receive(:deliver_now)
           subject.perform({ notifications_frequency: 'daily', enterprise_id: user.enterprise_id })
         end
@@ -357,7 +475,19 @@ RSpec.describe UserGroupNotificationJob, type: :job do
       it 'sends an email of notification to user' do
         mailer = double('mailer')
         expect(UserGroupMailer).to receive(:notification)
-          .with(user, [{ group: group, events_count: 1, messages_count: 1, news_count: 1, social_links_count: 1, participating_events_count: 1 }]) { mailer }
+          .with(user, [{
+                         group: group,
+                         events: [another_group_event],
+                         events_count: 1,
+                         messages: [another_group_message],
+                         messages_count: 1,
+                         news: [another_news_link],
+                         news_count: 1,
+                         social_links: [another_social_link],
+                         social_links_count: 1,
+                         participating_events: [fourth_group_event],
+                         participating_events_count: 1
+                       }]) { mailer }
         expect(mailer).to receive(:deliver_now)
         subject.perform({ notifications_frequency: 'weekly', enterprise_id: user.enterprise_id })
       end
@@ -369,7 +499,19 @@ RSpec.describe UserGroupNotificationJob, type: :job do
         Timecop.freeze(Time.now + 30.minutes) do
           mailer = double('mailer')
           expect(UserGroupMailer).to receive(:notification)
-            .with(user, [{ group: group, events_count: 1, messages_count: 1, news_count: 1, social_links_count: 1, participating_events_count: 1 }]) { mailer }
+            .with(user, [{
+                           group: group,
+                           events: [another_group_event],
+                           events_count: 1,
+                           messages: [another_group_message],
+                           messages_count: 1,
+                           news: [another_news_link],
+                           news_count: 1,
+                           social_links: [another_social_link],
+                           social_links_count: 1,
+                           participating_events: [fourth_group_event],
+                           participating_events_count: 1
+                         }]) { mailer }
           expect(mailer).to receive(:deliver_now)
           subject.perform({ notifications_frequency: 'weekly', enterprise_id: user.enterprise_id })
         end
@@ -386,7 +528,19 @@ RSpec.describe UserGroupNotificationJob, type: :job do
         Timecop.freeze(Time.now + 30.minutes) do
           mailer = double('mailer')
           expect(UserGroupMailer).to receive(:notification)
-            .with(user, [{ group: group, events_count: 1, messages_count: 1, news_count: 1, social_links_count: 1, participating_events_count: 1 }]) { mailer }
+            .with(user, [{
+                           group: group,
+                           events: [another_group_event],
+                           events_count: 1,
+                           messages: [another_group_message],
+                           messages_count: 1,
+                           news: [another_news_link],
+                           news_count: 1,
+                           social_links: [another_social_link],
+                           social_links_count: 1,
+                           participating_events: [fourth_group_event],
+                           participating_events_count: 1
+                         }]) { mailer }
           expect(mailer).to receive(:deliver_now)
           subject.perform({ notifications_frequency: 'weekly', enterprise_id: user.enterprise_id })
         end
@@ -405,7 +559,19 @@ RSpec.describe UserGroupNotificationJob, type: :job do
         Timecop.freeze(Time.now + 30.minutes) do
           mailer = double('mailer')
           expect(UserGroupMailer).to receive(:notification)
-            .with(user, [{ group: group, events_count: 1, messages_count: 0, news_count: 0, social_links_count: 0, participating_events_count: 1 }]) { mailer }
+            .with(user, [{
+                           group: group,
+                           events: [another_group_event],
+                           events_count: 1,
+                           messages: [],
+                           messages_count: 0,
+                           news: [],
+                           news_count: 0,
+                           social_links: [],
+                           social_links_count: 0,
+                           participating_events: [fourth_group_event],
+                           participating_events_count: 1
+                         }]) { mailer }
           expect(mailer).to receive(:deliver_now)
           subject.perform({ notifications_frequency: 'weekly', enterprise_id: user.enterprise_id })
         end
@@ -457,7 +623,19 @@ RSpec.describe UserGroupNotificationJob, type: :job do
       it 'does not send an email of notification to user because default notifications_date is Monday' do
         mailer = double('mailer')
         expect(UserGroupMailer).to_not receive(:notification)
-          .with(user, [{ group: group, events_count: 1, messages_count: 1, news_count: 1, social_links_count: 1, participating_events_count: 1 }]) { mailer }
+          .with(user, [{
+                         group: group,
+                         events: [another_group_event],
+                         events_count: 1,
+                         messages: [another_group_message],
+                         messages_count: 1,
+                         news: [another_news_link],
+                         news_count: 1,
+                         social_links: [another_social_link],
+                         social_links_count: 1,
+                         participating_events: [fourth_group_event],
+                         participating_events_count: 1
+                       }]) { mailer }
         expect(mailer).to_not receive(:deliver_now)
         subject.perform({ notifications_frequency: 'weekly', enterprise_id: user.enterprise_id })
       end
