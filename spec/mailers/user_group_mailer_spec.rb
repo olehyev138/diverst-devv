@@ -50,14 +50,10 @@ RSpec.describe UserGroupMailer, type: :mailer do
 
     # TODO expand the scope of these test
 
-    it 'shows a message with number of remaining items in group if more than 2' do
-      expect(mail.body.encoded).to include('1 more new event')
-    end
-
-    it 'shows a the name of the first 2 items' do
+    it 'shows a the name of all items' do
       expect(mail.body.encoded).to include(groups[0][:events][0].name)
       expect(mail.body.encoded).to include(groups[0][:events][1].name)
-      expect(mail.body.encoded).not_to include(groups[0][:events][2].name)
+      expect(mail.body.encoded).to include(groups[0][:events][2].name)
 
       expect(mail.body.encoded).to include(groups[0][:messages][0].subject)
       expect(mail.body.encoded).to include(groups[0][:messages][1].subject)
