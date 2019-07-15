@@ -10,7 +10,10 @@ class UserGroupNotificationJob < ActiveJob::Base
     notifications_frequency = args[:notifications_frequency]
     enterprise_id = args[:enterprise_id]
 
-    get_users_to_mail(enterprise_id, notifications_frequency).find_in_batches(batch_size: 200) do |users|
+    users_to_mail = get_users_to_mail(enterprise_id, notifications_frequency)
+    return if users_to_mail.blank?
+
+    users_to_mail.find_in_batches(batch_size: 200) do |users|
       users.each do |user|
         next unless can_send_email?(notifications_frequency, user)
 
@@ -47,6 +50,9 @@ class UserGroupNotificationJob < ActiveJob::Base
 
   # Gets the activerecord collection of users to email
   def get_users_to_mail(enterprise_id, notifications_frequency)
+    # Make sure notification frequency is valid
+    return unless User.groups_notifications_frequencies.include?(notifications_frequency.try(:to_sym))
+
     User.joins(:groups)
         .where(enterprise_id: enterprise_id,
                groups_notifications_frequency: User.groups_notifications_frequencies[notifications_frequency.to_sym])
