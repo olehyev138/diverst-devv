@@ -77,6 +77,28 @@ export function NewsFeed(props) {
             New Group Message
           </Button>
         </Grid>
+        <Grid item>
+          <Button
+            variant='contained'
+            to={ROUTES.admin.manage.groups.new.path}
+            color='primary'
+            size='large'
+            component={WrappedNavLink}
+          >
+            New News Link
+          </Button>
+        </Grid>
+        <Grid item>
+          <Button
+            variant='contained'
+            to={ROUTES.admin.manage.groups.new.path}
+            color='primary'
+            size='large'
+            component={WrappedNavLink}
+          >
+            New Social Link
+          </Button>
+        </Grid>
         { /* eslint-disable-next-line arrow-body-style */ }
         {props.newsItems && Object.values(props.newsItems).map((item, i) => {
           return (
