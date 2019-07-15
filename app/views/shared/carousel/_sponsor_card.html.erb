@@ -1,4 +1,4 @@
-<% if sponsors.any? %>
+<% if sponsors.any? { |sps| show_sponsor?(sps) } %>
   <% random = SecureRandom.hex %>
   <div class="card card--secondary">
     <% if sponsors.count > 1 %>
@@ -23,7 +23,7 @@
 
           <% sponsors.each_with_index do |sponsor, index| %>
             <div class="item <%= 'active' if index == 0 %>">
-              <% show_sponsor?(sponsor) do %>
+              <% if show_sponsor?(sponsor) do %>
                 <% if sponsor.sponsor_media.present? %>
 
                   <% show_sponsor_media?(sponsor, "sponsor_media_content_type") do %>
