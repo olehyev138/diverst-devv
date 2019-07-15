@@ -90,4 +90,28 @@ RSpec.describe DiverstMailer, type: :mailer do
       end
     end
   end
+  
+  context 'when enterprise wants to redirect emails but redirect_email_contact is to blank' do
+    describe '#invitation_instructions' do
+      let(:enterprise) { create(:enterprise, redirect_all_emails: true, default_from_email_address: 'test@gmail.com', default_from_email_display_name: "The Best Company") }
+      let(:fallback_email) { ENV['REDIRECT_ALL_EMAILS_TO'] || 'sanetiming@gmail.com' }
+      let(:record) { create :user, enterprise: enterprise }
+      let!(:mail) { described_class.invitation_instructions(record, 'token').deliver_now }
+
+      it 'renders the default_from_email_address' do
+        expect(mail.from).to eq(["test@gmail.com"])
+      end
+    end
+    
+    describe '#invitation_instructions' do
+      let(:enterprise) { create(:enterprise, redirect_all_emails: true) }
+      let(:fallback_email) { ENV['REDIRECT_ALL_EMAILS_TO'] || 'sanetiming@gmail.com' }
+      let(:record) { create :user, enterprise: enterprise }
+      let!(:mail) { described_class.invitation_instructions(record, 'token').deliver_now }
+
+      it 'renders info@diverst.com' do
+        expect(mail.from).to eq(["info@diverst.com"])
+      end
+    end
+  end
 end

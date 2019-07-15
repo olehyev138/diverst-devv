@@ -35,7 +35,7 @@ class Metrics::UserGraphsController < ApplicationController
 
     respond_to do |format|
       format.json {
-        render json: @graph.users_per_group
+        render json: @graph.group_population(metrics_params[:date_range], nil)
       }
       format.csv {
         GenericGraphsGroupPopulationDownloadJob.perform_later(
@@ -56,7 +56,7 @@ class Metrics::UserGraphsController < ApplicationController
 
     respond_to do |format|
       format.json {
-        render json: @graph.users_per_segment
+        render json: @graph.segment_population
       }
       format.csv {
         GenericGraphsSegmentPopulationDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg))
