@@ -1,0 +1,2 @@
+class GroupCategoryTypeSerializer < ApplicationRecordSerializer
+end

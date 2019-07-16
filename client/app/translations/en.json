@@ -17,5 +17,22 @@
   "diverst.containers.Routes.user.events": "Events",
   "diverst.containers.Routes.user.groups": "Groups",
   "diverst.containers.Routes.user.downloads": "Downloads",
-  "diverst.containers.Routes.user.mentorship": "Mentorship"
+  "diverst.containers.Routes.user.mentorship": "Mentorship",
+  "diverst.containers.Routes.admin.analyze.overview": "Overview",
+  "diverst.containers.Routes.admin.analyze.users": "Users",
+  "diverst.containers.Routes.admin.manage.groups": "Groups",
+  "diverst.containers.Group.index.button.new": "New",
+  "diverst.containers.Group.index.button.edit": "Edit",
+  "diverst.containers.Group.index.button.delete": "Delete",
+  "diverst.containers.Group.index.button.children_collapse": "Show Children",
+  "diverst.containers.Group.index.button.rows": "Rows per page",
+  "diverst.containers.Group.index.button.page": "of",
+  "diverst.containers.Group.form.button.create": "Create",
+  "diverst.containers.Group.form.button.update": "Update",
+  "diverst.containers.Group.form.button.cancel": "Cancel",
+  "diverst.containers.Group.form.input.name": "Name",
+  "diverst.containers.Group.form.input.short_description": "Short Description",
+  "diverst.containers.Group.form.input.description": "Description",
+  "diverst.containers.Group.form.input.children": "Children",
+  "diverst.containers.Group.form.input.parent": "Parent"
 }

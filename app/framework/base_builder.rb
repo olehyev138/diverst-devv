@@ -20,6 +20,11 @@ module BaseBuilder
       # create the new item
       item = self.new(params[symbol].permit!)
 
+      # add enterprise id if exists & not set
+      if item.has_attribute?(:enterprise_id) && item[:enterprise_id].blank?
+        item.enterprise_id = diverst_request.user.enterprise_id
+      end
+
       # save the item
       if not item.save
         raise InvalidInputException.new(item.errors.messages.first.first), item.errors.full_messages.first

@@ -17,7 +17,9 @@ class User < ApplicationRecord
 
   belongs_to  :enterprise
   belongs_to  :user_role
-  has_one :policy_group, dependent: :destroy, inverse_of: :user
+
+  has_one :policy_group,  dependent: :destroy, inverse_of: :user
+  has_one :device,        dependent: :destroy, inverse_of: :user
 
   # sessions
   has_many :sessions, dependent: :destroy

@@ -1,20 +1,17 @@
 /**
  *
- * Tests for Groups
+ * Tests for AdminGroupList
  *
  * @see https://github.com/react-boilerplate/react-boilerplate/tree/master/docs/testing
  *
  */
 
 import React from 'react';
-import { render } from 'react-testing-library';
 import { IntlProvider } from 'react-intl';
-// import 'jest-dom/extend-expect'; // add some helpful assertions
 
-import { Groups } from 'containers/Group/Groups/index';
 import { DEFAULT_LOCALE } from 'i18n';
 
-describe('<Groups />', () => {
+xdescribe('<AdminGroupList />', () => {
   xit('Expect to not log errors in console', () => {
     const spy = jest.spyOn(global.console, 'error');
     const dispatch = jest.fn();

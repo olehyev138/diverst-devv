@@ -25,6 +25,7 @@ Diverst::Application.routes.draw do
       resources :checklist_items
       resources :clockwork_database_events
       resources :custom_texts
+      resources :devices
       resources :emails
       resources :email_variables
       resources :enterprises
@@ -107,6 +108,7 @@ Diverst::Application.routes.draw do
       resources :sessions, only: [:create, :destroy]
       resources :shared_metrics_dashboards
       resources :shared_news_feed_links
+      resources :social_links
       resources :social_link_segments
       resources :sponsors
       resources :tags
