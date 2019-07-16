@@ -190,13 +190,6 @@ RSpec.describe Enterprise, type: :model do
     end
   end
 
-  describe '#update_matches' do
-    it 'returns GenerateEnterpriseMatchesJob object' do
-      enterprise = create(:enterprise)
-      expect(enterprise.update_matches).to be_a(GenerateEnterpriseMatchesJob)
-    end
-  end
-
   describe '#close_budgets_csv' do
     it 'returns csv' do
       enterprise = create(:enterprise)
