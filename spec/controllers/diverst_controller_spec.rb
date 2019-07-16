@@ -41,7 +41,7 @@ RSpec.describe DiverstController, type: :controller do
     errors.each do |error|
       it "raises an #{error[:name]} and returns #{error[:status]}" do
         allow(controller).to receive(:index).and_raise(error[:name], error[:message])
-        get :index, params: nil
+        get :index, params: {}
         expect(response).to have_http_status(error[:status])
       end
     end
@@ -53,7 +53,7 @@ RSpec.describe DiverstController, type: :controller do
         request.headers.merge!(missing_token_session) # Add to request headers
       end
       it 'renders error' do
-        get :index, params: nil
+        get :index, params: {}
         expect(response).to have_http_status(401)
       end
     end
@@ -62,7 +62,7 @@ RSpec.describe DiverstController, type: :controller do
         request.headers.merge!(invalid_token_session) # Add to request headers
       end
       it 'renders error' do
-        get :index, params: nil
+        get :index, params: {}
         expect(response).to have_http_status(401)
       end
     end
@@ -74,7 +74,7 @@ RSpec.describe DiverstController, type: :controller do
         request.headers.merge!(missing_api_session) # Add to request headers
       end
       it 'renders error' do
-        get :index, params: nil
+        get :index, params: {}
         expect(response).to have_http_status(403)
       end
     end
@@ -83,7 +83,7 @@ RSpec.describe DiverstController, type: :controller do
         request.headers.merge!(invalid_api_session) # Add to request headers
       end
       it 'renders error' do
-        get :index, params: nil
+        get :index, params: {}
         expect(response).to have_http_status(403)
       end
     end
