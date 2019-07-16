@@ -26,6 +26,7 @@ import NewsFeedPage from 'containers/News/NewsFeedPage';
 
 /* Group - News Feed */
 import GroupMessageCreatePage from 'containers/News/GroupMessage/GroupMessageCreatePage';
+import GroupMessageEditPage from 'containers/News/GroupMessage/GroupMessageEditPage';
 
 // Paths
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -60,6 +61,7 @@ export default function Routes(props) {
 
       { /* Group News Feed */ }
       <GroupLayout path={ROUTES.group.news.messages.new.path} route={ROUTES.group.news.messages.new} component={GroupMessageCreatePage} />
+      <GroupLayout path={ROUTES.group.news.messages.edit.path} route={ROUTES.group.news.messages.edit} component={GroupMessageEditPage} />
 
       <ErrorLayout path='' component={NotFoundPage} />
     </Switch>

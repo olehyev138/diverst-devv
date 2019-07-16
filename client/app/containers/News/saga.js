@@ -7,7 +7,7 @@ import { showSnackbar } from 'containers/Shared/Notifier/actions';
 
 import {
   GET_NEWS_ITEMS_BEGIN, GET_NEWS_ITEM_BEGIN,
-  CREATE_GROUP_MESSAGE_BEGIN
+  CREATE_GROUP_MESSAGE_BEGIN, UPDATE_GROUP_MESSAGE_BEGIN
 } from 'containers/News/constants';
 
 import {
@@ -44,9 +44,6 @@ export function* getNewsItem(action) {
 export function* createGroupMessage(action) {
   try {
     const payload = { group_message: action.payload };
-
-    console.log(action);
-
     const response = yield call(api.groupMessages.create.bind(api.groupMessages), payload);
 
     yield put(push(ROUTES.group.news.index.path));
@@ -59,9 +56,26 @@ export function* createGroupMessage(action) {
   }
 }
 
+export function* updateGroupMessage(action) {
+  try {
+    const payload = { group_message: action.payload };
+    const response = yield call(api.groupMessages.update.bind(api.groupMessages), payload.group_message.id, payload);
+
+    yield put(push(ROUTES.group.news.index.path));
+    yield put(showSnackbar({ message: 'Group message updated', options: { variant: 'success' } }));
+  } catch (err) {
+    yield put(createGroupMessageError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to update group message', options: { variant: 'warning' } }));
+  }
+}
+
+
 
 export default function* newsSaga() {
   yield takeLatest(GET_NEWS_ITEMS_BEGIN, getNewsItems);
   yield takeLatest(GET_NEWS_ITEM_BEGIN, getNewsItem);
   yield takeLatest(CREATE_GROUP_MESSAGE_BEGIN, createGroupMessage);
+  yield takeLatest(UPDATE_GROUP_MESSAGE_BEGIN, updateGroupMessage);
 }

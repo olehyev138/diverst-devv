@@ -60,7 +60,7 @@ export const ROUTES = {
           path: '/group/:id/news/message/new'
         },
         edit: {
-          path: '/group/:id/news/message/:id/edit'
+          path: '/group/:id/news/message/:id1/edit'
         },
       }
     }

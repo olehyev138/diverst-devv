@@ -10,6 +10,7 @@ import React, {
 import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
+import dig from 'object-dig'
 
 import {
   Button, Card, CardActions, CardContent, Grid,
@@ -71,6 +72,7 @@ export function GroupMessageFormInner({ handleSubmit, handleChange, handleBlur, 
 }
 
 export function GroupMessageForm(props) {
+  const groupMessage = dig(props, 'newsItem', 'group_message');
   const initialValues = {
     subject: '',
     content: '',
@@ -78,7 +80,7 @@ export function GroupMessageForm(props) {
 
   return (
     <Formik
-      initialValues={props.groupMessage || initialValues}
+      initialValues={groupMessage || initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
         // TODO: have to do this here - only place these are 100% set
@@ -88,6 +90,8 @@ export function GroupMessageForm(props) {
           owner_id: props.currentUser.id,
           group_id: props.currentGroup.id
         };
+
+        console.log(finalValues);
 
         props.groupMessageAction(mapSelectAssociations(finalValues, [], []));
       }}

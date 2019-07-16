@@ -45,7 +45,7 @@ export function GroupEditPage(props) {
 GroupEditPage.propTypes = {
   location: PropTypes.shape({
     state: PropTypes.shape({
-      id: PropTypes.number
+      id: PropTypes.string
     })
   }),
   group: PropTypes.object,

@@ -8,6 +8,12 @@ const selectPaginatedNewsItems = () => createSelector(
   newsState => newsState.newsItems
 );
 
+const selectNewsItem = () => createSelector(
+  selectNewsDomain,
+  newsState => newsState.currentNewsItem
+);
+
+
 const selectNewsItemsTotal = () => createSelector(
   selectNewsDomain,
   newsState => newsState.newsItemsTotal
@@ -15,5 +21,5 @@ const selectNewsItemsTotal = () => createSelector(
 
 export {
   selectNewsDomain, selectPaginatedNewsItems,
-  selectNewsItemsTotal
+  selectNewsItem, selectNewsItemsTotal
 };
