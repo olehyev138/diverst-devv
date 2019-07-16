@@ -9,7 +9,8 @@
     <% else %>
       group folder
       <%= link_to resource.name, group_folders_path(group_id: resource.group.id) %>
-    <% end %>  <% else %>
+    <% end %>
+  <% else %>
     which has since been removed
   <% end %>
   (<%= activity.created_at.to_s :datetime %>)
