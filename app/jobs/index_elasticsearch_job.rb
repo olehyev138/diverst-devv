@@ -1,5 +1,5 @@
 class IndexElasticsearchJob < ActiveJob::Base
-  queue_as :default
+  queue_as :elasticsearch
 
   def perform(model_name:, operation:, record_id:)
     return if Rails.env.test?
