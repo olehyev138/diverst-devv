@@ -34,5 +34,10 @@
   "diverst.containers.Group.form.input.short_description": "Short Description",
   "diverst.containers.Group.form.input.description": "Description",
   "diverst.containers.Group.form.input.children": "Children",
-  "diverst.containers.Group.form.input.parent": "Parent"
+  "diverst.containers.Group.form.input.parent": "Parent",
+  "diverst.containers.News.form.button.create": "Create",
+  "diverst.containers.News.form.button.update": "Update",
+  "diverst.containers.News.form.button.cancel": "Cancel",
+  "diverst.containers.News.form.group_message.input.subject": "Subject",
+  "diverst.containers.News.form.group_message.input.content": "Content"
 }

@@ -24,6 +24,9 @@ import GroupEditPage from 'containers/Group/GroupEditPage';
 import GroupHomePage from 'containers/Group/GroupHomePage';
 import NewsFeedPage from 'containers/News/NewsFeedPage';
 
+/* Group - News Feed */
+import GroupMessageCreatePage from 'containers/News/GroupMessage/GroupMessageCreatePage';
+
 // Paths
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
@@ -42,7 +45,6 @@ export default function Routes(props) {
       <AdminLayout exact path={ROUTES.admin.manage.groups.index.path} route={ROUTES.admin.manage.groups.index} component={AdminGroupListPage} />
       <AdminLayout path={ROUTES.admin.manage.groups.new.path} route={ROUTES.admin.manage.groups.new} component={GroupCreatePage} />
       <AdminLayout path={ROUTES.admin.manage.groups.edit.path} route={ROUTES.admin.manage.groups.edit} component={GroupEditPage} />
-      <AdminLayout path={ROUTES.admin.manage.groups.delete.path} route={ROUTES.admin.manage.groups.delete} component={PlaceholderPage} />
 
       <UserLayout exact path={ROUTES.user.home.path} route={ROUTES.user.home} pageTitle={ROUTES.user.home.titleMessage} component={PlaceholderPage} />
       <UserLayout path={ROUTES.user.innovate.path} route={ROUTES.user.innovate} pageTitle={ROUTES.user.innovate.titleMessage} component={PlaceholderPage} />
@@ -55,6 +57,9 @@ export default function Routes(props) {
       { /* Group */ }
       <GroupLayout exact path={ROUTES.group.home.path} route={ROUTES.group.home} component={GroupHomePage} />
       <GroupLayout exact path={ROUTES.group.news.index.path} route={ROUTES.group.news.index} component={NewsFeedPage} />
+
+      { /* Group News Feed */ }
+      <GroupLayout path={ROUTES.group.news.messages.new.path} route={ROUTES.group.news.messages.new} component={GroupMessageCreatePage} />
 
       <ErrorLayout path='' component={NotFoundPage} />
     </Switch>

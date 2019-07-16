@@ -51,6 +51,17 @@ export const ROUTES = {
     news: {
       index: {
         path: '/group/:id/news'
+      },
+      messages: {
+        index: {
+          path: '/group/:id/news/message/:id'
+        },
+        new: {
+          path: '/group/:id/news/message/new'
+        },
+        edit: {
+          path: '/group/:id/news/message/:id/edit'
+        },
       }
     }
   },
@@ -84,9 +95,6 @@ export const ROUTES = {
         },
         edit: {
           path: '/admin/manage/groups/:id/edit',
-        },
-        delete: {
-          path: '/admin/manage/groups/delete',
         },
       }
     },
