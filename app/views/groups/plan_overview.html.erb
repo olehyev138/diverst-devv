@@ -1,84 +1,99 @@
 <div class="content__header">
   <h1>Overview</h1>
 </div>
+  <% if @group.annual_budgets.any? %>
+    <% @group.annual_budgets.each do |annual_budget| %>
+    <div class="card">
+      <div class="card__section">
+        <h2>
+          <b><%= @group.name %></b>
+        </h2>
+        <h3 style="margin-left: 10px; margin-botton: -10px;">
+          <%= c_t(:erg) %> Budget |
+          <%= link_to "View Budget Requests", group_budgets_path(@group, annual_budget_id: annual_budget.id) %> 
+          <% unless annual_budget.closed? %>
+          |
+            <%= link_to "Create Budget Request", new_group_budget_path(@group, annual_budget_id: annual_budget.id) if GroupBudgetPolicy.new(current_user, [@group]).create? %>
+          <% end %>  
+        </h3>
 
-  <div class="card">
-    <div class="card__section">
-      <h2>
-        <b><%= @group.name %></b>
-      </h2>
-      <h3 style="margin-left: 10px; margin-botton: -10px;">
-        <%= c_t(:erg) %> Budget |
-        <%= link_to "View Budget Requests", group_budgets_path(@group) %> |
-        <%= link_to "Create Budget Request", new_group_budget_path(@group) if GroupBudgetPolicy.new(current_user, [@group]).create? %>
-      </h3>
-
-      <div class="flex-row flex-row--middle flex-row--spacing-bottom">
-        <div class="flex-row__cell flex-row__cell--spaced">
-          <strong>Expenses</strong><br>
-          <%= number_to_currency( @group.spent_budget || 0) %>
-        </div>
-        <div class="flex-row__cell flex-row__cell--grow flex-row__cell--spaced" style="margin-bottom: 20px;">
-          <div class="progress-bar">
-            <div class="progress-bar__fill" style="width: <%= GroupDecorator.decorate(@group).spendings_percentage %>%;>"></div>
+        <div class="flex-row flex-row--middle flex-row--spacing-bottom">
+          <div class="flex-row__cell flex-row__cell--spaced">
+            <strong>Expenses</strong><br>
+            <%= number_to_currency(annual_budget.expenses) %>
+          </div>
+          <div class="flex-row__cell flex-row__cell--grow flex-row__cell--spaced" style="margin-bottom: 20px;">
+            <div class="progress-bar">
+              <div class="progress-bar__fill" style="width: <%= AnnualBudgetDecorator.decorate(annual_budget).spendings_percentage %>%;>"></div>
+            </div>
+          </div>
+          <div class="flex-row__cell flex-row__cell--spaced">
+            <strong>Annual Budget</strong><br>
+            <%= number_to_currency(annual_budget.amount) %>
           </div>
         </div>
-        <div class="flex-row__cell flex-row__cell--spaced">
-          <strong>Annual Budget</strong><br>
-          <%= number_to_currency( @group.annual_budget || 0) %>
-        </div>
-      </div>
 
-      <table class="table--has-border">
-        <thead>
-          <th>Annual Budget</th>
-          <th>Approved budget</th>
-          <th>Available budget</th>
-        </thead>
-        <tbody>
-          <td><%= number_to_currency( @group.annual_budget || 0) %></td>
-          <td><%= number_to_currency @group.approved_budget %></td>
-          <td>
-            <%= number_to_currency @group.available_budget %>
-          </td>
-        </tbody>
-      </table>
+        <table class="table--has-border">
+          <thead>
+            <th>Annual Budget</th>
+            <th>Approved budget</th>
+            <th>Available budget</th>
+          </thead>
+          <tbody>
+            <td><%= number_to_currency(annual_budget.amount) %></td>
+            <td><%= number_to_currency(annual_budget.approved_budget) %></td>
+            <td>
+              <%= number_to_currency(annual_budget.available_budget) %>
+            </td>
+          </tbody>
+        </table>
 
-      <%= link_to "Events Budget Info", '#', class: "detailed_info btn btn--primary"%>
+        <%= link_to "Events Budget Info", '#', class: "detailed_info btn btn--primary"%>
 
-      <table class="event_spendings table--has-border">
-        <thead>
-          <th>Event</th>
-          <th>Estimated funding</th>
-          <th>Spent so far</th>
-          <th>Unspent</th>
-          <th>Spending status</th>
-        </thead>
-        <tbody>
-          <% @group.initiatives.each do |initiative| %>
-            <tr>
-              <td><%= initiative.name %></td>
-              <td><%= number_to_currency initiative.estimated_funding, precision: 0 %></td>
-              <td><%= number_to_currency initiative.current_expences_sum, precision: 0 %></td>
-              <td><%= number_to_currency initiative.leftover %></td>
-              <td><%= initiative.expenses_status %></td>
+        <table class="event_spendings table--has-border">
+          <thead>
+            <th>Event</th>
+            <th>Estimated funding</th>
+            <th>Spent so far</th>
+            <th>Unspent</th>
+            <th>Spending status</th>
+          </thead>
+          <tbody>
+            <% annual_budget.initiatives.each do |initiative| %>
+              <tr>
+                <td><%= initiative.name %></td>
+                <td><%= number_to_currency initiative.estimated_funding, precision: 0 %></td>
+                <td><%= number_to_currency initiative.current_expences_sum, precision: 0 %></td>
+                <td><%= number_to_currency initiative.leftover %></td>
+                <td><%= initiative.expenses_status %></td>
+              </tr>
+            <% end %>
+            <tr class="highlight">
+              <td>Total for <%= @group.name %></td>
+              <td></td>
+              <td><%= number_to_currency(annual_budget.expenses) %></td>
+              <td><%= number_to_currency(annual_budget.approved_budget_leftover) %></td>
+              <td></td>
             </tr>
-          <% end %>
-          <tr class="highlight">
-            <td>Total for <%= @group.name %></td>
-            <td><%= number_to_currency @group.initiatives.sum(:estimated_funding), precision: 0 %></td>
-            <td><%= number_to_currency @group.initiatives.map{ |i| i.expenses.sum(:amount) }.sum, precision: 0 %></td>
-            <td><%= number_to_currency @group.initiatives.map{ |i| i.leftover }.inject(0, :+) %></td>
-            <td></td>
-          </tr>
-        </tbody>
-      </table>
+          </tbody>
+        </table>
+      </div>
     </div>
-  </div>
+    <% end %>
+  <% else %>
+      <div class="content__main row">
+          <div class="col-xs-12">
+              <div class="card">
+                <div class="card__section">
+                  Annual budget not created. Nothing to show here.
+                </div>
+              </div>
+            </div>
+        </div>
+  <% end %>
 
 <script>
   $('table.event_spendings').hide();
-
   $('a.detailed_info').click(function(e){
     $(this).siblings('table.event_spendings').toggle('fast');
   }); //endof click

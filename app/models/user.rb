@@ -109,7 +109,8 @@ class User < BaseClass
   validate :validate_presence_fields
   validate :group_leader_role
   validate :policy_group
-  validate :valid_linkedin_url, if: -> { !linkedin_profile_url.nil? }
+  before_validation :add_linkedin_http, unless: -> { linkedin_profile_url.nil? }
+  validate :valid_linkedin_url, unless: -> { linkedin_profile_url.nil? }
 
   before_validation :generate_password_if_saml
   before_validation :set_provider
@@ -606,11 +607,13 @@ class User < BaseClass
     self.password = self.password_confirmation = SecureRandom.urlsafe_base64 if auth_source == 'saml' && new_record?
   end
 
-  def valid_linkedin_url
-    unless linkedin_profile_url.downcase.start_with? 'https://'
-      self.linkedin_profile_url = "https://#{linkedin_profile_url}"
+  def add_linkedin_http
+    unless linkedin_profile_url.downcase.start_with? 'http'
+      self.linkedin_profile_url = "http://#{linkedin_profile_url}"
     end
+  end
 
+  def valid_linkedin_url
     uri = URI.parse(linkedin_profile_url) rescue nil
 
     if uri == nil

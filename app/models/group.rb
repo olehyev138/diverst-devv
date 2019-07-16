@@ -109,6 +109,8 @@ class Group < BaseClass
   has_many :sponsors, as: :sponsorable, dependent: :destroy
 
   has_many :children, class_name: 'Group', foreign_key: :parent_id, dependent: :destroy
+  has_many :annual_budgets, dependent: :destroy
+
   belongs_to :parent, class_name: 'Group', foreign_key: :parent_id
   belongs_to :group_category
   belongs_to :group_category_type
@@ -262,17 +264,21 @@ class Group < BaseClass
   end
 
   def approved_budget
-    (budgets.approved.map { |b| b.requested_amount || 0 }).reduce(0, :+)
+    annual_budget = annual_budgets.find_by(closed: false)
+    return 0 if annual_budget.nil?
+
+    (budgets.where(annual_budget_id: annual_budget.id).approved.map { |b| b.requested_amount || 0 }).reduce(0, :+)
   end
 
   def available_budget
-    return 0 unless annual_budget
-
-    annual_budget - (approved_budget + spent_budget)
+    approved_budget - spent_budget
   end
 
   def spent_budget
-    (initiatives.map { |i| i.current_expences_sum || 0 }).reduce(0, :+)
+    annual_budget = annual_budgets.find_by(closed: false)
+    return 0 if annual_budget.nil?
+
+    (initiatives.where(annual_budget_id: annual_budget.id).map { |i| i.current_expences_sum || 0 }).reduce(0, :+)
   end
 
   def active_members
@@ -421,7 +427,7 @@ class Group < BaseClass
   end
 
   def title_with_leftover_amount
-    "Create event from #{name} leftover ($#{leftover_money})"
+    "Create event from #{name} leftover ($#{leftover_money == 0 ? 0.0 : available_budget})"
   end
 
   def pending_comments_count
