@@ -650,8 +650,6 @@ RSpec.describe User do
   end
 
   describe '#add_to_default_mentor_group' do
-    # TODO
-    before { pending }
     it 'adds the user to the default_mentor_group then removes the user' do
       perform_enqueued_jobs do
         enterprise = create(:enterprise)
