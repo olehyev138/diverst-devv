@@ -7,7 +7,23 @@ RSpec.describe UserGroupMailer, type: :mailer do
   let!(:email) { create(:email, enterprise: user.enterprise, mailer_name: 'user_group_mailer', mailer_method: 'notification', content: "<p>Hello %{user.name},</p>\r\n\r\n<p>A new item has been posted to a Diversity and Inclusion group you are a member of. Select the link(s) below to access Diverst and review the item(s)</p>\r\n", subject: 'You have updates in your %{custom_text.erg_text}') }
   let!(:email_variable_1) { create(:email_variable, email: email, enterprise_email_variable: create(:enterprise_email_variable, key: 'user.name')) }
   let!(:email_variable_2) { create(:email_variable, email: email, enterprise_email_variable: create(:enterprise_email_variable, key: 'custom_text.erg_text'), pluralize: true) }
-  let!(:groups) { [{ group: create(:group), events_count: 2, messages_count: 2, news_count: 0 }] }
+  let!(:group_1) {create(:group)}
+  let!(:groups) {[{
+                     group: group_1,
+                     events: [create(:initiative, owner_group_id: group_1.id),
+                              create(:initiative, owner_group_id: group_1.id),
+                              create(:initiative, owner_group_id: group_1.id)],
+                     events_count: 3,
+                     messages: [create(:group_message, group_id: group_1.id, owner_id: user.id),
+                                create(:group_message, group_id: group_1.id, owner_id: user.id)],
+                     messages_count: 2,
+                     news: [],
+                     news_count: 0,
+                     social_links: [],
+                     social_links_count: 0,
+                     participating_events: [],
+                     participating_events_count: 0
+                    }] }
 
   let!(:mail) { described_class.notification(user, groups).deliver_now }
 
@@ -32,8 +48,19 @@ RSpec.describe UserGroupMailer, type: :mailer do
       expect(mail[:from].display_names).to eq(['THE BEST COMPANY IN THE WORLD!'])
     end
 
-    it 'shows a message with number of comments in group' do
-      expect(mail.body.encoded).to include('2 new messages')
+    # TODO expand the scope of these test
+
+    it 'shows a the name of all items' do
+      expect(mail.body.encoded).to include(groups[0][:events][0].name)
+      expect(mail.body.encoded).to include(groups[0][:events][1].name)
+      expect(mail.body.encoded).to include(groups[0][:events][2].name)
+
+      expect(mail.body.encoded).to include(groups[0][:messages][0].subject)
+      expect(mail.body.encoded).to include(groups[0][:messages][1].subject)
+    end
+
+    it 'doesn\'t show a message with number of remaining items in group if less than or equal to 2' do
+      expect(mail.body.encoded).not_to include('new message')
     end
 
     it 'includes the interpolated fields such as users name' do
@@ -49,7 +76,21 @@ RSpec.describe UserGroupMailer, type: :mailer do
     describe '#notification' do
       let(:enterprise) { create(:enterprise, redirect_all_emails: true, redirect_email_contact: 'test@gmail.com') }
       let!(:user) { create(:user, enterprise: enterprise) }
-      let!(:groups) { [{ group: create(:group), events_count: 2, messages_count: 2, news_count: 0 }] }
+      let!(:groups) {[{
+                        group: group_1,
+                        events: [create(:initiative, owner_group_id: group_1.id),
+                                 create(:initiative, owner_group_id: group_1.id)],
+                        events_count: 2,
+                        messages: [create(:group_message, group_id: group_1.id, owner_id: user.id),
+                                   create(:group_message, group_id: group_1.id, owner_id: user.id)],
+                        messages_count: 2,
+                        news: [],
+                        news_count: 0,
+                        social_links: [],
+                        social_links_count: 0,
+                        participating_events: [],
+                        participating_events_count: 0
+                      }] }
 
       let!(:mail) { described_class.notification(user, groups).deliver_now }
 
@@ -64,7 +105,21 @@ RSpec.describe UserGroupMailer, type: :mailer do
       let(:enterprise) { create(:enterprise, redirect_all_emails: true, redirect_email_contact: '') }
       let(:fallback_email) { ENV['REDIRECT_ALL_EMAILS_TO'] || 'sanetiming@gmail.com' }
       let!(:user) { create(:user, enterprise: enterprise) }
-      let!(:groups) { [{ group: create(:group), events_count: 2, messages_count: 2, news_count: 0 }] }
+      let!(:groups) {[{
+                        group: group_1,
+                        events: [create(:initiative, owner_group_id: group_1.id),
+                                 create(:initiative, owner_group_id: group_1.id)],
+                        events_count: 2,
+                        messages: [create(:group_message, group_id: group_1.id, owner_id: user.id),
+                                   create(:group_message, group_id: group_1.id, owner_id: user.id)],
+                        messages_count: 2,
+                        news: [],
+                        news_count: 0,
+                        social_links: [],
+                        social_links_count: 0,
+                        participating_events: [],
+                        participating_events_count: 0
+                      }] }
 
       let!(:mail) { described_class.notification(user, groups).deliver_now }
 
@@ -78,7 +133,21 @@ RSpec.describe UserGroupMailer, type: :mailer do
     describe '#notification' do
       let(:enterprise) { create(:enterprise, disable_emails: true) }
       let!(:user) { create(:user, enterprise: enterprise) }
-      let!(:groups) { [{ group: create(:group), events_count: 2, messages_count: 2, news_count: 0 }] }
+      let!(:groups) {[{
+                        group: group_1,
+                        events: [create(:initiative, owner_group_id: group_1.id),
+                                 create(:initiative, owner_group_id: group_1.id)],
+                        events_count: 2,
+                        messages: [create(:group_message, group_id: group_1.id, owner_id: user.id),
+                                   create(:group_message, group_id: group_1.id, owner_id: user.id)],
+                        messages_count: 2,
+                        news: [],
+                        news_count: 0,
+                        social_links: [],
+                        social_links_count: 0,
+                        participating_events: [],
+                        participating_events_count: 0
+                      }] }
 
       let!(:mail) { described_class.notification(user, groups).deliver_now }
 

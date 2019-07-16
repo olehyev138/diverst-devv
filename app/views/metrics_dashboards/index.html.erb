@@ -288,7 +288,7 @@
           <tbody>
             <% @dashboards.each do |dashboard| %>
               <tr>
-                <td><%= link_to dashboard.name, metrics_dashboard_path(dashboard) %></td>
+                <td><%= link_to dashboard.name, metrics_metrics_dashboard_path(dashboard) %></td>
                 <td><%= dashboard.graphs.count %></td>
                 <td><%= dashboard.target.count %></td>
                 <td><%= dashboard.created_at.to_s :dateonly %></td>
@@ -297,7 +297,7 @@
                   <% if MetricsDashboardPolicy.new(current_user, dashboard).update? && MetricsDashboardPolicy.new(current_user, dashboard).destroy? %>
                      -
                   <% end %>
-                  <%= link_to "Delete", metrics_dashboard_path(dashboard), method: :delete, class: "error", data: { confirm: "Are you sure?" } if MetricsDashboardPolicy.new(current_user, dashboard).destroy? %>
+                  <%= link_to "Delete", metrics_metrics_dashboard_path(dashboard), method: :delete, class: "error", data: { confirm: "Are you sure?" } if MetricsDashboardPolicy.new(current_user, dashboard).destroy? %>
                 </td>
               </tr>
             <% end %>
