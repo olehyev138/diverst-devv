@@ -10,6 +10,7 @@
       </div>
       <div class="card__section">
         <%= f.input :description, input_html: { autofocus: true } %>
+        <%= f.hidden_field :annual_budget_id, value: @annual_budget_id %>
       </div>
     </div>
     <div class="card">

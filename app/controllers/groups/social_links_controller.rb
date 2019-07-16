@@ -9,7 +9,7 @@ class Groups::SocialLinksController < ApplicationController
   layout 'erg'
 
   def index
-    @posts = @group.social_links
+    @posts = @group.social_links.order(updated_at: :desc)
   end
 
   def new

@@ -4,6 +4,7 @@ class Budget < BaseClass
   belongs_to :group
   belongs_to :approver, class_name: 'User', foreign_key: 'approver_id'
   belongs_to :requester, class_name: 'User', foreign_key: 'requester_id'
+  belongs_to :annual_budget
 
   has_many :checklists, dependent: :destroy
   has_many :budget_items, dependent: :destroy
@@ -16,6 +17,7 @@ class Budget < BaseClass
   # scope :with_available_funds, -> { where('available_amount > 0')}
 
   after_save :send_email_notification
+  after_destroy :update_annual_budget
 
   validates_length_of :decline_reason, maximum: 191
   validates_length_of :comments, maximum: 65535
@@ -73,6 +75,17 @@ class Budget < BaseClass
   end
 
   private
+
+  def update_annual_budget
+    annual_budget = AnnualBudget.find_or_create_by(closed: false, group_id: group.id)
+    return if annual_budget.nil?
+
+    leftover_of_annual_budget = (group.annual_budget - group.approved_budget) + group.available_budget
+    group.update(leftover_money: leftover_of_annual_budget)
+    annual_budget.update(amount: group.annual_budget, available_budget: group.available_budget,
+                         leftover_money: group.leftover_money, expenses: group.spent_budget,
+                         approved_budget: group.approved_budget)
+  end
 
   def send_email_notification
     case is_approved
