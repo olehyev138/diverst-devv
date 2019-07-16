@@ -33,6 +33,31 @@ RSpec.describe NewsLink, type: :model do
     end
   end
 
+  describe '#build' do
+    it 'sets the picture for news link and file for nested news link photo from url when creating news link' do
+      user = create(:user)
+      group = create(:group, enterprise: user.enterprise)
+      request = Request.create_request(user)
+      url = Faker::LoremPixel.image(secure: false)
+      payload = {
+        news_link: {
+          title: 'Test',
+          group_id: group.id,
+          author_id: user.id,
+          description: Faker::Lorem.sentence,
+          picture: url,
+          photos_attributes: [{ file_url: Faker::LoremPixel.image(secure: false) }]
+        }
+      }
+      params = ActionController::Parameters.new(payload)
+      created = NewsLink.build(request, params)
+
+      expect(created.picture.presence).to_not be nil
+      expect(created.photos.exists?).to_not be false
+      expect(created.photos.first.presence).to_not be nil
+    end
+  end
+
   describe 'test callbacks' do
     let!(:news_link) { build(:news_link) }
 

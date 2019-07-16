@@ -16,6 +16,7 @@ gem 'figaro', '~> 1.1', '>= 1.1.1' # Inject ENV from application.yml
 gem 'ruby-saml', '>= 1.7.0'
 gem 'sidekiq', '~> 5.0.5' # Background jobs
 gem 'active_model_serializers', '~> 0.10.9'
+gem 'paperclip', '~> 4.3'# Handle attachments for models and forms
 
 gem 'clockwork', '~> 1.2' # Schedule recurring jobs
 gem 'pismo', '~> 0.7.4' # Extracts metadata from an URL

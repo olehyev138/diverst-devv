@@ -112,15 +112,15 @@ class Group < ApplicationRecord
   # has_attached_file :sponsor_media, s3_permissions: :private
   # do_not_validate_attachment_file_type :sponsor_media
 
-  # has_attached_file :logo, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: :private
-  # validates_attachment_content_type :logo, content_type: %r{\Aimage\/.*\Z}
+  has_attached_file :logo, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: :private
+  validates_attachment_content_type :logo, content_type: %r{\Aimage\/.*\Z}
 
-  # has_attached_file :banner
-  # validates_attachment_content_type :banner, content_type: /\Aimage\/.*\Z/
+  has_attached_file :banner
+  validates_attachment_content_type :banner, content_type: /\Aimage\/.*\Z/
 
   validates :name, presence: true, uniqueness: { scope: :enterprise_id }
 
-  # validates_format_of :contact_email, with: Devise.email_regexp, allow_blank: true
+  validates_format_of :contact_email, with: /\A[^@\s]+@[^@\s]+\z/, allow_blank: true
 
   # only allow one default_mentor_group per enterprise
   validates_uniqueness_of :default_mentor_group, scope: [:enterprise_id], conditions: -> { where(default_mentor_group: true) }
@@ -157,6 +157,14 @@ class Group < ApplicationRecord
   accepts_nested_attributes_for :survey_fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :group_leaders, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :sponsors, reject_if: :all_blank, allow_destroy: true
+
+  def banner_url=(url)
+    self.banner = URI.parse(url)
+  end
+
+  def logo_url=(url)
+    self.logo = URI.parse(url)
+  end
 
   def resolve_auto_archive_state
     update(auto_archive: false)
@@ -322,7 +330,7 @@ class Group < ApplicationRecord
   # Users who enters group have accepted flag set to false
   # This sets flag to true
   def accept_user_to_group(user_id)
-    user_group = user_groups.where(user_id: user_id).first
+    user_group = user_groups.find_by(user_id: user_id)
     return false if user_group.blank?
 
     user_group.update(accepted_member: true)

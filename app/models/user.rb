@@ -75,8 +75,8 @@ class User < ApplicationRecord
   has_many :metrics_dashboards, foreign_key: :owner_id
   has_many :shared_metrics_dashboards
 
-  # has_attached_file :avatar, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing_user.png'), s3_permissions: 'private'
-  # validates_attachment_content_type :avatar, content_type: /\Aimage\/.*\Z/
+  has_attached_file :avatar, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing_user.png'), s3_permissions: 'private'
+  validates_attachment_content_type :avatar, content_type: /\Aimage\/.*\Z/
 
   validates :first_name, presence: true
   validates :last_name, presence: true
@@ -119,11 +119,15 @@ class User < ApplicationRecord
 
   accepts_nested_attributes_for :availabilities, allow_destroy: true
 
+  def avatar_url=(url)
+    self.avatar = URI.parse(url)
+  end
+
   def generate_authentication_token(length = 20)
     loop do
       rlength = (length * 3) / 4
       token = SecureRandom.urlsafe_base64(rlength).tr('lIO0', 'sxyz')
-      break token unless Session.where(token: token).first
+      break token unless Session.find_by(token: token)
     end
   end
 
