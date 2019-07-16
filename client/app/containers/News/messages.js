@@ -9,6 +9,15 @@ import { defineMessages } from 'react-intl';
 export const scope = 'diverst.containers.News';
 
 export default defineMessages({
+  new: {
+    id: `${scope}.index.button.group_message.new`,
+  },
+  edit: {
+    id: `${scope}.index.button.edit`,
+  },
+  delete: {
+    id: `${scope}.index.button.delete`,
+  },
   create: {
     id: `${scope}.form.button.create`,
   },

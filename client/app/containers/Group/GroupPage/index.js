@@ -9,6 +9,8 @@ import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/Group/reducer';
 import saga from 'containers/Group/saga';
 
+import { pathId } from 'utils/routeHelpers';
+
 import { getGroupBegin, groupFormUnmount } from 'containers/Group/actions';
 import { selectGroup } from 'containers/Group/selectors';
 
@@ -24,7 +26,7 @@ export function GroupPage(props) {
   useInjectSaga({ key: 'groups', saga });
 
   useEffect(() => {
-    props.getGroupBegin({ id: props.computedMatch.params.id });
+    props.getGroupBegin({ id: pathId(props, 'group_id') });
 
     return () => {
       props.groupFormUnmount();
@@ -34,7 +36,7 @@ export function GroupPage(props) {
   return (
     <React.Fragment>
       { /* Note: assumes a single child */ }
-      {React.cloneElement(React.Children.only(props.children), { currentGroup: props.currentGroup })}
+      {React.cloneElement(React.Children.only(props.children), { currentGroup: props.currentGroup, ...props })}
     </React.Fragment>
   );
 }

@@ -10,6 +10,7 @@ import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/News/reducer';
 import saga from 'containers/News/saga';
 
+import { pathId } from 'utils/routeHelpers';
 import { selectGroup } from 'containers/Group/selectors';
 import { selectUser } from 'containers/Shared/App/selectors';
 import { selectNewsItem } from 'containers/News/selectors';
@@ -26,14 +27,13 @@ export function GroupMessageEditPage(props) {
   useInjectSaga({ key: 'news', saga });
 
   useEffect(() => {
-    props.getNewsItemBegin({ id: props.computedMatch.params.id1 });
+    const newsItemId = pathId(props, 'item_id');
+    props.getNewsItemBegin({ id: newsItemId });
 
     return () => props.newsFeedUnmount();
   }, []);
 
   const { currentUser, currentGroup, currentNewsItem } = props;
-
-  console.log(props)
 
   return (
     <GroupMessageForm
@@ -47,16 +47,12 @@ export function GroupMessageEditPage(props) {
 }
 
 GroupMessageEditPage.propTypes = {
-  computedMatch: PropTypes.shape({
-    params: PropTypes.shape({
-      id1: PropTypes.string
-    })
-  }),
   getNewsItemBegin: PropTypes.func,
   updateGroupMessageBegin: PropTypes.func,
   newsFeedUnmount: PropTypes.func,
   currentUser: PropTypes.object,
   currentGroup: PropTypes.object,
+  currentNewsItem: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({

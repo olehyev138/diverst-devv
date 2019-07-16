@@ -71,8 +71,6 @@ export function* updateGroupMessage(action) {
   }
 }
 
-
-
 export default function* newsSaga() {
   yield takeLatest(GET_NEWS_ITEMS_BEGIN, getNewsItems);
   yield takeLatest(GET_NEWS_ITEM_BEGIN, getNewsItem);

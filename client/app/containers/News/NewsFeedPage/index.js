@@ -1,4 +1,6 @@
-import React, { memo, useEffect, useState } from 'react';
+import React, {
+  memo, useContext, useEffect, useState
+} from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
@@ -10,12 +12,14 @@ import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/News/reducer';
 import saga from 'containers/News/saga';
 
+import { RouteContext } from 'containers/Layouts/ApplicationLayout';
+
 import { selectPaginatedNewsItems, selectNewsItemsTotal } from 'containers/News/selectors';
 import { getNewsItemsBegin, newsFeedUnmount } from 'containers/News/actions';
 
 import NewsFeed from 'components/News/NewsFeed';
 
-export function NewsFeedPage(props) {
+export function NewsFeedPage(props, context) {
   useInjectReducer({ key: 'news', reducer });
   useInjectSaga({ key: 'news', saga });
 

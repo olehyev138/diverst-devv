@@ -10,7 +10,7 @@ import React, {
 import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
-import dig from 'object-dig'
+import dig from 'object-dig';
 
 import {
   Button, Card, CardActions, CardContent, Grid,
@@ -21,6 +21,7 @@ import Select from 'react-select';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { Field, Formik, Form } from 'formik';
 import { ROUTES } from 'containers/Shared/Routes/constants';
+import { fillPath } from 'utils/routeHelpers';
 
 import { FormattedMessage } from 'react-intl';
 import messages from 'containers/News/messages';
@@ -60,7 +61,7 @@ export function GroupMessageFormInner({ handleSubmit, handleChange, handleBlur, 
             {buttonText}
           </Button>
           <Button
-            to={ROUTES.group.news.index.path}
+            to={fillPath(ROUTES.group.news.index.path, { group_id: dig(props, 'currentGroup', 'id') })}
             component={WrappedNavLink}
           >
             <FormattedMessage {...messages.cancel} />
@@ -90,8 +91,6 @@ export function GroupMessageForm(props) {
           owner_id: props.currentUser.id,
           group_id: props.currentGroup.id
         };
-
-        console.log(finalValues);
 
         props.groupMessageAction(mapSelectAssociations(finalValues, [], []));
       }}

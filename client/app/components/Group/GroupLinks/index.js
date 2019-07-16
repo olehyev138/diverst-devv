@@ -9,10 +9,12 @@ import { NavLink } from 'react-router-dom';
 import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 
+import { ROUTES } from 'containers/Shared/Routes/constants';
+import { pathId, fillPath, buildPath } from 'utils/routeHelpers';
+
 export function GroupLinks(props) {
   const { theme } = props;
   const activeColor = theme.palette.primary.main;
-  const { computedMatch } = props;
 
   const NavLinks = () => (
     <Toolbar
@@ -27,7 +29,13 @@ export function GroupLinks(props) {
       <Button component={WrappedNavLink} to='events' activeStyle={{ color: activeColor }}>Events</Button>
       <Button component={WrappedNavLink} to='resources' activeStyle={{ color: activeColor }}>Resources</Button>
       { /* TODO: do this properly */ }
-      <Button component={WrappedNavLink} to={`${computedMatch.params.id}/news`} activeStyle={{ color: activeColor }}>News Feed</Button>
+      <Button
+        component={WrappedNavLink}
+        to={buildPath(ROUTES.group.news.index.path, props, ['group_id'])}
+        activeStyle={{ color: activeColor }}
+      >
+        News Feed
+      </Button>
       <Button component={WrappedNavLink} to='/user/groups' activeStyle={{ color: activeColor }}>Manage</Button>
       <Button component={WrappedNavLink} to='/user/groups' activeStyle={{ color: activeColor }}>Plan</Button>
     </Toolbar>

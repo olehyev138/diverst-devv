@@ -46,21 +46,21 @@ export const ROUTES = {
   group: {
     pathPrefix: '/group',
     home: {
-      path: '/group/:id'
+      path: '/group/:group_id'
     },
     news: {
       index: {
-        path: '/group/:id/news'
+        path: '/group/:group_id/news'
       },
       messages: {
         index: {
-          path: '/group/:id/news/message/:id'
+          path: '/group/:group_id/news/message/:item_id'
         },
         new: {
-          path: '/group/:id/news/message/new'
+          path: '/group/:group_id/news/message/new'
         },
         edit: {
-          path: '/group/:id/news/message/:id1/edit'
+          path: '/group/:group_id/news/message/:item_id/edit'
         },
       }
     }

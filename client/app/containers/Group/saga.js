@@ -40,7 +40,7 @@ export function* getGroup(action) {
   } catch (err) {
     // TODO: intl message
     yield put(getGroupError(err));
-    yield put(showSnackbar({ message: 'Failed to edit group', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: 'Failed to get group', options: { variant: 'warning' } }));
   }
 }
 
