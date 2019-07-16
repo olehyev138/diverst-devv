@@ -29,13 +29,13 @@ RSpec.describe Expense, type: :model do
     end
   end
 
-  describe '#signed_price' do 
-    it 'returns postive price when income is true' do 
+  describe '#signed_price' do
+    it 'returns postive price when income is true' do
       expense = create(:expense, income: true)
       expect(expense.signed_price).to be > 0
     end
 
-    it 'returns negative price when income is false' do 
+    it 'returns negative price when income is false' do
       expense = create(:expense, income: false)
       expect(expense.signed_price).to be < 0
     end
