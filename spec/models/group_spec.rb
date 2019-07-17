@@ -196,6 +196,33 @@ RSpec.describe Group, type: :model do
     end
   end
 
+  describe '#build' do
+    it 'sets the logo and banner for group from url when creating group' do
+      user = create(:user)
+      request = Request.create_request(user)
+      url = Faker::LoremPixel.image(secure: false)
+      payload = { group: { name: 'Save', enterprise_id: user.enterprise_id, banner_url: url, logo_url: url } }
+      params = ActionController::Parameters.new(payload)
+      created = Group.build(request, params)
+
+      expect(created.banner.presence).to_not be nil
+      expect(created.logo.presence).to_not be nil
+    end
+  end
+
+  describe '#avatar_url' do
+    it 'sets the avatar for user from url' do
+      user = create(:user)
+      expect(user.avatar_file_name).to be nil
+
+      user.avatar_url = Faker::LoremPixel.image(secure: false)
+      user.save!
+      user.reload
+
+      expect(user.avatar_file_name).to_not be nil
+    end
+  end
+
   describe '#yammer_group_id' do
     let(:group) { build_stubbed(:group) }
 
