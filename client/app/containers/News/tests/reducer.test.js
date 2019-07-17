@@ -10,6 +10,7 @@ describe('newsReducer', () => {
   beforeEach(() => {
     state = {
       newsItems: [],
+      currentNewsItem: null,
       newsItemsTotal: null
     };
   });
