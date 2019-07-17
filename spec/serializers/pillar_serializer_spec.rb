@@ -5,7 +5,7 @@ RSpec.describe PillarSerializer, type: :serializer do
     group = create(:group)
     outcome = create(:outcome, group: group)
     pillar = create(:pillar, outcome: outcome)
-    
+
     serializer = PillarSerializer.new(pillar)
 
     expect(serializer.serializable_hash[:id]).to eq(pillar.id)
