@@ -383,8 +383,7 @@ class Group < BaseClass
 
   def membership_list_csv(group_members)
     total_nb_of_members = group_members.count
-    ent = group_members.first.enterprise
-    fields = ent.fields.where(add_to_member_list: true)
+    fields = enterprise.fields.where(add_to_member_list: true)
     fields.map(&:title)
     CSV.generate do |csv|
       csv << %w(first_name last_name email_address mentor mentee) + fields.map(&:title)
