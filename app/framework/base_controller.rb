@@ -24,7 +24,8 @@ module BaseController
   end
 
   def show
-    authorize klass, :show? if Pundit.policy(current_user, klass.find(params[:id]))
+    item = klass.find(params[:id])
+    authorize item, :show? if Pundit.policy(current_user, item)
 
     render status: 200, json: klass.show(self.diverst_request, params)
   rescue => e
@@ -32,7 +33,8 @@ module BaseController
   end
 
   def update
-    authorize klass, :update? if Pundit.policy(current_user, klass.find(params[:id]))
+    item = klass.find(params[:id])
+    authorize item, :update? if Pundit.policy(current_user, item)
 
     render status: 200, json: klass.update(self.diverst_request, params)
   rescue => e
@@ -45,7 +47,8 @@ module BaseController
   end
 
   def destroy
-    authorize klass, :destroy? if Pundit.policy(current_user, klass.find(params[:id]))
+    item = klass.find(params[:id])
+    authorize item, :destroy? if Pundit.policy(current_user, item)
 
     klass.destroy(self.diverst_request, params[:id])
     head :no_content
