@@ -110,7 +110,7 @@ export function GroupFormInner({ handleSubmit, handleChange, handleBlur, values,
             {buttonText}
           </Button>
           <Button
-            to={ROUTES.admin.manage.groups.index.path}
+            to={ROUTES.admin.manage.groups.index.path()}
             component={WrappedNavLink}
           >
             <FormattedMessage {...messages.cancel} />

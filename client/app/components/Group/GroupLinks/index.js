@@ -31,7 +31,7 @@ export function GroupLinks(props) {
       { /* TODO: do this properly */ }
       <Button
         component={WrappedNavLink}
-        to={buildPath(ROUTES.group.news.index.path, props, ['group_id'])}
+        to={buildPath(ROUTES.group.news.index.path(), props, ['group_id'])}
         activeStyle={{ color: activeColor }}
       >
         News Feed

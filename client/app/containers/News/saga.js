@@ -4,6 +4,9 @@ import { push } from 'connected-react-router';
 
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
 
+import { routeContext } from 'utils/routeHelpers';
+import { RouteContext } from 'containers/Layouts/ApplicationLayout';
+import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import {
   GET_NEWS_ITEMS_BEGIN, GET_NEWS_ITEM_BEGIN,
@@ -16,7 +19,6 @@ import {
   createGroupMessageSuccess, createGroupMessageError
 } from 'containers/News/actions';
 
-import { ROUTES } from 'containers/Shared/Routes/constants';
 
 export function* getNewsItems(action) {
   try {
@@ -46,7 +48,7 @@ export function* createGroupMessage(action) {
     const payload = { group_message: action.payload };
     const response = yield call(api.groupMessages.create.bind(api.groupMessages), payload);
 
-    yield put(push(ROUTES.group.news.index.path));
+    yield put(push(ROUTES.group.news.index.path(action.payload.group_id)));
     yield put(showSnackbar({ message: 'Group message created', options: { variant: 'success' } }));
   } catch (err) {
     yield put(createGroupMessageError(err));
@@ -61,7 +63,7 @@ export function* updateGroupMessage(action) {
     const payload = { group_message: action.payload };
     const response = yield call(api.groupMessages.update.bind(api.groupMessages), payload.group_message.id, payload);
 
-    yield put(push(ROUTES.group.news.index.path));
+    yield put(push(ROUTES.group.news.index.path()));
     yield put(showSnackbar({ message: 'Group message updated', options: { variant: 'success' } }));
   } catch (err) {
     yield put(createGroupMessageError(err));

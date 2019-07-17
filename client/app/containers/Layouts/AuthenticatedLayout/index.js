@@ -18,17 +18,18 @@ const AuthenticatedLayout = ({
   renderAppBar, drawerToggleCallback, drawerOpen, position, isAdmin, component: Component, ...rest
 }) => {
   const {
-    classes, route, ...other
+    classes, data, ...other
   } = rest;
+
 
   /* Use AuthService to keep AuthenticatedLayout unconnected from store.
    *   - Probably better to keep layouts unconnected too
    *   - Causes problems when state updates, causing children to remount
    */
-  if (AuthService.isAuthenticated() === true) {
+  if (AuthService.isAuthenticated()) {
     // Authenticated
     // TODO: Handle if policy group isn't set. Perhaps clear token (sign out) if the policy group is not found
-    if (AuthService.hasPermission(route))
+    if (AuthService.hasPermission(data))
       // Authorized - note: if no `permission` is defined on the route object it renders the
       // page as normal (for situations where the page doesn't have a permission associated)
       return (
@@ -62,8 +63,9 @@ const AuthenticatedLayout = ({
   }
 
   // Not Authenticated
+
   return (
-    <Redirect to={ROUTES.session.login.path} />
+    <Redirect to={ROUTES.session.login.path()} />
   );
 };
 

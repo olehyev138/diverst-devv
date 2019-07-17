@@ -2,9 +2,18 @@
 
 exports[`<ApplicationLayout /> Should render and match the snapshot 1`] = `
 <Route>
-  <CssBaseline />
-  <mockConstructor
-    classes={Object {}}
-  />
+  <ContextProvider
+    value={
+      Object {
+        "computedMatch": undefined,
+        "location": undefined,
+      }
+    }
+  >
+    <CssBaseline />
+    <mockConstructor
+      classes={Object {}}
+    />
+  </ContextProvider>
 </Route>
 `;

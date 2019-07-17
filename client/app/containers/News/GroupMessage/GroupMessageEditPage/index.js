@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo, useEffect, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
@@ -9,6 +9,10 @@ import { useInjectReducer } from 'utils/injectReducer';
 
 import reducer from 'containers/News/reducer';
 import saga from 'containers/News/saga';
+
+import { routeContext } from 'utils/routeHelpers';
+import { RouteContext } from 'containers/Layouts/ApplicationLayout';
+import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { pathId } from 'utils/routeHelpers';
 import { selectGroup } from 'containers/Group/selectors';
@@ -26,6 +30,10 @@ export function GroupMessageEditPage(props) {
   useInjectReducer({ key: 'news', reducer });
   useInjectSaga({ key: 'news', saga });
 
+  const links = {
+    newsFeedIndex: ROUTES.group.news.index.path(routeContext(useContext, 'group_id')),
+  };
+
   useEffect(() => {
     const newsItemId = pathId(props, 'item_id');
     props.getNewsItemBegin({ id: newsItemId });
@@ -42,6 +50,7 @@ export function GroupMessageEditPage(props) {
       currentUser={currentUser}
       currentGroup={currentGroup}
       newsItem={currentNewsItem}
+      links={links}
     />
   );
 }

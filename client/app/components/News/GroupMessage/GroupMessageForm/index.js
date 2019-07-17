@@ -61,7 +61,7 @@ export function GroupMessageFormInner({ handleSubmit, handleChange, handleBlur, 
             {buttonText}
           </Button>
           <Button
-            to={fillPath(ROUTES.group.news.index.path, { group_id: dig(props, 'currentGroup', 'id') })}
+            to={props.links.newsFeedIndex}
             component={WrappedNavLink}
           >
             <FormattedMessage {...messages.cancel} />

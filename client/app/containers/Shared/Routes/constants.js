@@ -1,11 +1,11 @@
 import messages from 'containers/Shared/Routes/messages';
 
-// Routes structure (WIP)
+// Routes structure
 export const ROUTES = {
   // Session
   session: {
     login: {
-      path: '/login',
+      path: () => '/login',
     },
   },
 
@@ -13,54 +13,70 @@ export const ROUTES = {
   user: {
     get root() { return this.home; },
     home: {
-      path: '/',
-      titleMessage: messages.user.home,
+      path: () => '/',
+      data: {
+        titleMessage: messages.user.home,
+      }
     },
     innovate: {
-      path: '/campaigns',
-      titleMessage: messages.user.innovate,
-      permission: 'campaigns_index',
+      path: () => '/campaigns',
+      data: {
+        titleMessage: messages.user.innovate,
+        permission: 'campaigns_index',
+      }
     },
     news: {
-      path: '/news',
-      titleMessage: messages.user.news,
+      path: () => '/news',
+      data: {
+        titleMessage: messages.user.news,
+      }
     },
     events: {
-      path: '/events',
-      titleMessage: messages.user.events,
+      path: () => '/events',
+      data: {
+        titleMessage: messages.user.events,
+      }
     },
     groups: {
-      path: '/groups',
-      titleMessage: messages.user.groups,
+      path: () => '/groups',
+      data: {
+        titleMessage: messages.user.groups,
+      }
     },
     downloads: {
-      path: '/downloads',
-      titleMessage: messages.user.downloads,
+      path: () => '/downloads',
+      data: {
+        titleMessage: messages.user.downloads,
+      }
     },
     mentorship: {
-      path: '/mentorship',
-      titleMessage: messages.user.mentorship,
+      path: () => '/mentorship',
+      data: {
+        titleMessage: messages.user.mentorship,
+      }
     },
   },
 
   group: {
     pathPrefix: '/group',
     home: {
-      path: '/group/:group_id'
+      path: () => '/group/:group_id'
     },
     news: {
       index: {
-        path: '/group/:group_id/news'
+        path: (groupId = ':group_id') => `/group/${groupId}/news`
       },
       messages: {
         index: {
-          path: '/group/:group_id/news/message/:item_id'
+          path:
+            (groupId = ':group_id', itemId = ':item_id') => `/group/${groupId}/news/message/${itemId}`
         },
         new: {
-          path: '/group/:group_id/news/message/new'
+          path: (groupId = ':group_id') => `/group/${groupId}/news/message/new`
         },
         edit: {
-          path: '/group/:group_id/news/message/:item_id/edit'
+          path:
+            (groupId = ':group_id', itemId = ':item_id') => `/group/${groupId}/news/message/${itemId}/edit`
         },
       }
     }
@@ -73,12 +89,16 @@ export const ROUTES = {
     analyze: {
       pathPrefix: '/admin/analyze',
       overview: {
-        path: '/admin/analyze',
-        titleMessage: messages.admin.analyze.overview,
+        path: () => '/admin/analyze',
+        data: {
+          titleMessage: messages.admin.analyze.overview,
+        }
       },
       users: {
-        path: '/admin/analyze/users',
-        titleMessage: messages.admin.analyze.users,
+        path: () => '/admin/analyze/users',
+        data: {
+          titleMessage: messages.admin.analyze.users,
+        }
       },
     },
     manage: {
@@ -86,15 +106,17 @@ export const ROUTES = {
       groups: {
         pathPrefix: '/admin/manage/groups',
         index: {
-          path: '/admin/manage/groups',
-          permission: 'groups_index',
-          titleMessage: messages.admin.manage.groups,
+          path: () => '/admin/manage/groups',
+          data: {
+            permission: 'groups_index',
+            titleMessage: messages.admin.manage.groups,
+          }
         },
         new: {
-          path: '/admin/manage/groups/new',
+          path: () => '/admin/manage/groups/new',
         },
         edit: {
-          path: '/admin/manage/groups/:id/edit',
+          path: () => '/admin/manage/groups/:id/edit',
         },
       }
     },

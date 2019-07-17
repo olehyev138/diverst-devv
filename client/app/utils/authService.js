@@ -9,8 +9,11 @@ const AuthService = {
     return false;
   },
 
-  hasPermission(route) {
-    return Object.prototype.hasOwnProperty.call(route, 'permission') === false || AuthService.getPolicyGroup()[route.permission] === true;
+  hasPermission(routeData) {
+    if (!routeData)
+      return true;
+
+    return Object.prototype.hasOwnProperty.call(routeData, 'permission') === false || AuthService.getPolicyGroup()[routeData.permission] === true;
   },
 
   getPolicyGroup() {

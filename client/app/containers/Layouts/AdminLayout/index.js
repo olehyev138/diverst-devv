@@ -52,8 +52,12 @@ export class AdminLayout extends React.PureComponent {
         {...other}
         component={matchProps => (
           <div className={classes.flex}>
-            <AdminLinks drawerToggleCallback={this.drawerToggleCallback} drawerOpen={this.state.drawerOpen} location={other.location} {...matchProps} />
-
+            <AdminLinks
+              drawerToggleCallback={this.drawerToggleCallback}
+              drawerOpen={this.state.drawerOpen}
+              location={other.location}
+              {...matchProps}
+            />
             <Container maxWidth='xl'>
               <div className={classes.content}>
                 <div className={classes.toolbar} />

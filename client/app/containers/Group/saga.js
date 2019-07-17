@@ -52,7 +52,7 @@ export function* createGroup(action) {
     // TODO: use bind here or no?
     const response = yield call(api.groups.create.bind(api.groups), payload);
 
-    yield put(push(ROUTES.admin.manage.groups.index.path));
+    yield put(push(ROUTES.admin.manage.groups.index.path()));
     yield put(showSnackbar({ message: 'Group created', options: { variant: 'success' } }));
   } catch (err) {
     yield put(createGroupError(err));
@@ -67,7 +67,7 @@ export function* updateGroup(action) {
     const payload = { group: action.payload };
     const response = yield call(api.groups.update.bind(api.groups), payload.group.id, payload);
 
-    yield put(push(ROUTES.admin.manage.groups.index.path));
+    yield put(push(ROUTES.admin.manage.groups.index.path()));
     yield put(showSnackbar({ message: 'Group updated', options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateGroupError(err));
@@ -80,7 +80,7 @@ export function* updateGroup(action) {
 export function* deleteGroup(action) {
   try {
     yield call(api.groups.destroy.bind(api.groups), action.payload);
-    yield put(push(ROUTES.admin.manage.groups.index.path));
+    yield put(push(ROUTES.admin.manage.groups.index.path()));
     yield put(showSnackbar({ message: 'Group deleted', options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteGroupError(err));

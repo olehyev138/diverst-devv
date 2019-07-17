@@ -66,7 +66,7 @@ export function AdminGroupList(props, context) {
         <Grid item>
           <Button
             variant='contained'
-            to={ROUTES.admin.manage.groups.new.path}
+            to={ROUTES.admin.manage.groups.new.path()}
             color='primary'
             size='large'
             component={WrappedNavLink}

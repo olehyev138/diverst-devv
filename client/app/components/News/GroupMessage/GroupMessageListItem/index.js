@@ -19,7 +19,7 @@ import {
 import { withStyles } from '@material-ui/core/styles';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
-import { pathId, fillPath } from 'utils/routeHelpers';
+import { pathId, fillPath, routeContext } from 'utils/routeHelpers';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import { FormattedMessage } from 'react-intl';
@@ -31,7 +31,6 @@ const styles = theme => ({
 export function GroupMessageListItem(props, context) {
   const { newsItem } = props;
   const groupMessage = newsItem.group_message;
-  const groupId = pathId(useContext(RouteContext), 'group_id');
 
   return (
     <Card>
@@ -41,7 +40,7 @@ export function GroupMessageListItem(props, context) {
       <CardActions>
         <Button
           size='small'
-          to={fillPath(ROUTES.group.news.messages.edit.path, { group_id: groupId, item_id: newsItem.id })}
+          to={props.links.groupMessageEdit(newsItem.id)}
           component={WrappedNavLink}
         >
           <FormattedMessage {...messages.edit} />

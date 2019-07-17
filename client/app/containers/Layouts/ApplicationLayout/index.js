@@ -13,7 +13,9 @@ const ApplicationLayout = ({ component: Component, ...rest }) => {
   const { classes, ...other } = rest;
 
   return (
-    <Route {...other}>
+    <Route
+      {...other}
+    >
       <RouteContext.Provider
         value={{
           computedMatch: other.computedMatch,

@@ -6,18 +6,19 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
 import dig from 'object-dig';
-
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/News/reducer';
 import saga from 'containers/News/saga';
 
-import { RouteContext } from 'containers/Layouts/ApplicationLayout';
-
 import { selectPaginatedNewsItems, selectNewsItemsTotal } from 'containers/News/selectors';
 import { getNewsItemsBegin, newsFeedUnmount } from 'containers/News/actions';
 
 import NewsFeed from 'components/News/NewsFeed';
+
+import { routeContext } from 'utils/routeHelpers';
+import { RouteContext } from 'containers/Layouts/ApplicationLayout';
+import { ROUTES } from 'containers/Shared/Routes/constants';
 
 export function NewsFeedPage(props, context) {
   useInjectReducer({ key: 'news', reducer });
@@ -28,6 +29,12 @@ export function NewsFeedPage(props, context) {
   const [params, setParams] = useState({
     count: 5, page: 0, order: 'asc', news_feed_id: -1
   });
+
+  const links = {
+    newsFeedIndex: ROUTES.group.news.index.path(routeContext(useContext, 'group_id')),
+    groupMessageNew: ROUTES.group.news.messages.new.path(routeContext(useContext, 'group_id')),
+    groupMessageEdit: id => ROUTES.group.news.messages.new.path(routeContext(useContext, 'group_id'), id)
+  };
 
   useEffect(() => {
     const id = dig(props, 'currentGroup', 'news_feed', 'id');
@@ -56,6 +63,7 @@ export function NewsFeedPage(props, context) {
         newsItems={props.newsItems}
         newsItemsTotal={props.newsItemsTotal}
         handlePagination={handlePagination}
+        links={links}
       />
     </React.Fragment>
   );

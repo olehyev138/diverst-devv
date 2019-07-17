@@ -57,7 +57,7 @@ export function NewsFeed(props) {
   /* Check news_feed_link type & render appropriate list item component */
   const renderNewsItem = (item) => {
     if (item.group_message)
-      return (<GroupMessageListItem newsItem={item} props />);
+      return (<GroupMessageListItem links={props.links} newsItem={item} />);
     else if (item.news_link) // eslint-disable-line no-else-return
       return (<NewsLinkListItem newsLink={item.news_link} />);
     else if (item.social_link)
@@ -72,7 +72,7 @@ export function NewsFeed(props) {
         <Grid item>
           <Button
             variant='contained'
-            to={buildPath(ROUTES.group.news.messages.new.path, routeContext, ['group_id'])}
+            to={props.links.groupMessageNew}
             color='primary'
             size='large'
             component={WrappedNavLink}
@@ -83,7 +83,7 @@ export function NewsFeed(props) {
         <Grid item>
           <Button
             variant='contained'
-            to={ROUTES.admin.manage.groups.new.path}
+            to={ROUTES.admin.manage.groups.new.path()}
             color='primary'
             size='large'
             component={WrappedNavLink}
@@ -94,7 +94,7 @@ export function NewsFeed(props) {
         <Grid item>
           <Button
             variant='contained'
-            to={ROUTES.admin.manage.groups.new.path}
+            to={ROUTES.admin.manage.groups.new.path()}
             color='primary'
             size='large'
             component={WrappedNavLink}
