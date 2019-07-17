@@ -5,7 +5,7 @@ RSpec.describe 'Campaigns', type: :request do
   let(:api_key) { create(:api_key) }
   let(:user) { create(:user, password: 'password', enterprise: enterprise) }
   let(:group) { create(:group, enterprise: enterprise) }
-  let(:item) { create(:campaign) }
+  let(:item) { create(:campaign, enterprise: enterprise) }
   let(:route) { 'campaigns' }
   let(:jwt) { UserTokenService.create_jwt(user) }
   let(:headers) { { 'HTTP_DIVERST_APIKEY' => api_key.key, 'Diverst-UserToken' => jwt } }

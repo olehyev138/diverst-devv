@@ -11,7 +11,9 @@ class ApplicationPolicy
   end
 
   def index?
-    false
+    # TODO: Switch this back to 'false' after policies are made for each model
+    # false
+    true
   end
 
   def show?
@@ -19,7 +21,9 @@ class ApplicationPolicy
   end
 
   def create?
-    false
+    # TODO: Switch this back to 'false' after policies are made for each model
+    # false
+    true
   end
 
   def new?
@@ -47,7 +51,7 @@ class ApplicationPolicy
   end
 
   def scope
-    Pundit.policy_scope!(user, record.class)
+    Pundit.policy_scope(user, record.class)
   end
 
   class Scope
@@ -61,7 +65,9 @@ class ApplicationPolicy
     end
 
     def resolve
-      scope.where(enterprise: @user.enterprise)
+      return scope.where(enterprise: @user.enterprise) if scope.has_attribute?(:enterprise_id)
+
+      scope
     end
   end
 end
