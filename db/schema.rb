@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190709191003) do
+ActiveRecord::Schema.define(version: 20190717171016) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -391,6 +391,7 @@ ActiveRecord::Schema.define(version: 20190709191003) do
     t.integer  "group_id",           limit: 4
     t.integer  "poll_id",            limit: 4
     t.integer  "initiative_id",      limit: 4
+    t.boolean  "add_to_member_list",               default: false
   end
 
   create_table "folder_shares", force: :cascade do |t|

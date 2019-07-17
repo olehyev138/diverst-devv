@@ -71,4 +71,8 @@ class CheckboxField < Field
       (user.info[rule.field] & rule.values_array).size == 0
     end
   end
+
+  def to_string(data)
+    data.join(', ')
+  end
 end

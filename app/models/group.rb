@@ -383,8 +383,11 @@ class Group < BaseClass
 
   def membership_list_csv(group_members)
     total_nb_of_members = group_members.count
+    ent = group_members.first.enterprise
+    fields = ent.fields.where(add_to_member_list: true)
+    fields.map(&:title)
     CSV.generate do |csv|
-      csv << %w(first_name last_name email_address mentor mentee)
+      csv << %w(first_name last_name email_address mentor mentee) + fields.map(&:title)
 
       group_members.each do |member|
         membership_list_row = [ member.first_name,
@@ -393,6 +396,8 @@ class Group < BaseClass
                                 member.mentor,
                                 member.mentee
                               ]
+        member_info = member.info
+        membership_list_row += fields.map { |fld| fld.to_string(member_info.fetch(fld.id)) rescue nil }
         csv << membership_list_row
       end
 
