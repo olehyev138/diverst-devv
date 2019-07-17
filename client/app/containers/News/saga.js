@@ -63,7 +63,7 @@ export function* updateGroupMessage(action) {
     const payload = { group_message: action.payload };
     const response = yield call(api.groupMessages.update.bind(api.groupMessages), payload.group_message.id, payload);
 
-    yield put(push(ROUTES.group.news.index.path()));
+    yield put(push(ROUTES.group.news.index.path(action.payload.group_id)));
     yield put(showSnackbar({ message: 'Group message updated', options: { variant: 'success' } }));
   } catch (err) {
     yield put(createGroupMessageError(err));
