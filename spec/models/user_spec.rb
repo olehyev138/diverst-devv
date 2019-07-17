@@ -251,6 +251,15 @@ RSpec.describe User do
     end
   end
 
+  describe '#avatar_location' do
+    it 'returns the actual avatar location' do
+      user = create(:user, avatar: File.new('spec/fixtures/files/verizon_logo.png'))
+
+      expect(user.avatar_location).to_not be nil
+      expect(user.avatar_location).to_not eq '/assets/missing.png'
+    end
+  end
+
   describe 'scopes' do
     let(:enterprise) { create :enterprise }
     let!(:active_user) { create :user, enterprise: enterprise }
@@ -301,6 +310,41 @@ RSpec.describe User do
       it 'returns users with answered polls' do
         expect(enterprise.users.answered_poll(poll)).to eq [active_user]
       end
+    end
+  end
+
+  describe '#build' do
+    it 'sets the avatar for user from url when creating user' do
+      user = create(:user)
+      request = Request.create_request(user)
+      payload = {
+        user: {
+          first_name: 'Save',
+          last_name: 'My Avatar',
+          enterprise_id: user.enterprise_id,
+          email: 'avatar@gmail.com',
+          user_role_id: user.user_role_id,
+          password: SecureRandom.hex(8),
+          avatar_url: Faker::LoremPixel.image(secure: false)
+        }
+      }
+      params = ActionController::Parameters.new(payload)
+      created = User.build(request, params)
+
+      expect(created.avatar.presence).to_not be nil
+    end
+  end
+
+  describe '#avatar_url' do
+    it 'sets the avatar for user from url' do
+      user = create(:user)
+      expect(user.avatar_file_name).to be nil
+
+      user.avatar_url = Faker::LoremPixel.image(secure: false)
+      user.save!
+      user.reload
+
+      expect(user.avatar_file_name).to_not be nil
     end
   end
 
@@ -615,8 +659,6 @@ RSpec.describe User do
   end
 
   describe '#add_to_default_mentor_group' do
-    # TODO
-    before { pending }
     it 'adds the user to the default_mentor_group then removes the user' do
       perform_enqueued_jobs do
         enterprise = create(:enterprise)

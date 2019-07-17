@@ -29,8 +29,8 @@ class NewsLink < ApplicationRecord
   validates :url,             length: { maximum: 191 }
 
   # Paperclip
-  #  has_attached_file :picture, styles: { medium: '1000x300>', thumb: '100x100>' }, s3_permissions: :private
-  #  validates_attachment_content_type :picture, content_type: %r{\Aimage\/.*\Z}
+  has_attached_file :picture, styles: { medium: '1000x300>', thumb: '100x100>' }, s3_permissions: :private
+  validates_attachment_content_type :picture, content_type: %r{\Aimage\/.*\Z}
 
   after_create :build_default_link
 
@@ -43,6 +43,10 @@ class NewsLink < ApplicationRecord
 
   scope :unapproved, -> { joins(:news_feed_link).where(news_feed_links: { approved: false }) }
   scope :approved, -> { joins(:news_feed_link).where(news_feed_links: { approved: true }) }
+
+  def picture_url=(url)
+    self.picture = URI.parse(url)
+  end
 
   # call back to delete news link segment associations
   def remove_segment_association(segment)

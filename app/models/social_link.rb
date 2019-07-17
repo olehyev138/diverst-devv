@@ -30,6 +30,10 @@ class SocialLink < ApplicationRecord
 
   scope :unapproved, -> { joins(:news_feed_link).where(news_feed_links: { approved: false }) }
 
+  def self.symbol
+    :social_link
+  end
+
   def url_safe
     CGI.escape(url)
   end
