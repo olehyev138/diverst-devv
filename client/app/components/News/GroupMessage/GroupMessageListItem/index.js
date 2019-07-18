@@ -60,7 +60,8 @@ export function GroupMessageListItem(props, context) {
 GroupMessageListItem.propTypes = {
   newsItem: PropTypes.object,
   links: PropTypes.shape({
-    groupMessageEdit: PropTypes.func
+    groupMessageEdit: PropTypes.func,
+    groupMessageIndex: PropTypes.func
   })
 };
 

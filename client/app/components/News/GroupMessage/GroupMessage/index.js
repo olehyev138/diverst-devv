@@ -29,7 +29,7 @@ const styles = theme => ({
   },
 });
 
-export function GroupMessage(props, context) {
+export function GroupMessage(props) {
   const { classes } = props;
   const groupMessage = dig(props, 'newsItem', 'group_message');
 
@@ -63,6 +63,7 @@ export function GroupMessage(props, context) {
 }
 
 GroupMessage.propTypes = {
+  classes: PropTypes.object,
   newsItem: PropTypes.object,
   links: PropTypes.shape({
     groupMessageEdit: PropTypes.func
