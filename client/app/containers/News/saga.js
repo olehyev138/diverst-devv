@@ -10,13 +10,15 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import {
   GET_NEWS_ITEMS_BEGIN, GET_NEWS_ITEM_BEGIN,
-  CREATE_GROUP_MESSAGE_BEGIN, UPDATE_GROUP_MESSAGE_BEGIN
+  CREATE_GROUP_MESSAGE_BEGIN, UPDATE_GROUP_MESSAGE_BEGIN,
+  CREATE_GROUP_MESSAGE_COMMENT_BEGIN
 } from 'containers/News/constants';
 
 import {
   getNewsItemsSuccess, getNewsItemsError,
-  getNewsItemSuccess, getNewsItemError,
-  createGroupMessageSuccess, createGroupMessageError
+  getNewsItemBegin, getNewsItemSuccess, getNewsItemError,
+  createGroupMessageSuccess, createGroupMessageError,
+  createGroupMessageCommentError
 } from 'containers/News/actions';
 
 
@@ -73,9 +75,27 @@ export function* updateGroupMessage(action) {
   }
 }
 
+export function* createGroupMessageComment(action) {
+  // create comment & re-fetch news feed link from server
+
+  try {
+    const payload = { group_message_comment: action.payload.attributes };
+    const response = yield call(api.groupMessageComments.create.bind(api.groupMessageComments), payload);
+
+    yield put(getNewsItemBegin({ id: action.payload.news_feed_link_id }));
+    yield put(showSnackbar({ message: 'Group message comment created', options: { variant: 'success' } }));
+  } catch (err) {
+    yield put(createGroupMessageCommentError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to create group message', options: { variant: 'warning' } }));
+  }
+}
+
 export default function* newsSaga() {
   yield takeLatest(GET_NEWS_ITEMS_BEGIN, getNewsItems);
   yield takeLatest(GET_NEWS_ITEM_BEGIN, getNewsItem);
   yield takeLatest(CREATE_GROUP_MESSAGE_BEGIN, createGroupMessage);
   yield takeLatest(UPDATE_GROUP_MESSAGE_BEGIN, updateGroupMessage);
+  yield takeLatest(CREATE_GROUP_MESSAGE_COMMENT_BEGIN, createGroupMessageComment);
 }

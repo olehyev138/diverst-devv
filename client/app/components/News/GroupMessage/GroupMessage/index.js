@@ -22,7 +22,7 @@ import { FormattedMessage } from 'react-intl';
 import messages from 'containers/News/messages';
 
 import GroupMessageComment from 'components/News/GroupMessage/GroupMessageComment';
-import GroupMessageCommentForm from 'components/News/GroupMessage/GroupMessageCommentForm'
+import GroupMessageCommentForm from 'components/News/GroupMessage/GroupMessageCommentForm';
 
 const styles = theme => ({
   comment: {
@@ -32,7 +32,8 @@ const styles = theme => ({
 
 export function GroupMessage(props) {
   const { classes } = props;
-  const groupMessage = dig(props, 'newsItem', 'group_message');
+  const newsItem = dig(props, 'newsItem');
+  const groupMessage = dig(newsItem, 'group_message');
 
   return (
     (groupMessage) ? (
@@ -46,7 +47,11 @@ export function GroupMessage(props) {
             </Card>
           </Grid>
           <Grid item className={classes.comment}>
-            <GroupMessageCommentForm />
+            <GroupMessageCommentForm
+              currentUserId={props.currentUserId}
+              newsItem={props.newsItem}
+              commentAction={props.commentAction}
+            />
           </Grid>
           <Grid item className={classes.comment}>
             <Card>
@@ -69,6 +74,8 @@ export function GroupMessage(props) {
 GroupMessage.propTypes = {
   classes: PropTypes.object,
   newsItem: PropTypes.object,
+  currentUserId: PropTypes.number,
+  commentAction: PropTypes.func,
   links: PropTypes.shape({
     groupMessageEdit: PropTypes.func
   })

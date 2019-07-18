@@ -20,7 +20,7 @@ import { selectUser } from 'containers/Shared/App/selectors';
 import { selectNewsItem } from 'containers/News/selectors';
 
 import {
-  getNewsItemBegin, updateGroupMessageBegin,
+  getNewsItemBegin, updateGroupMessageBegin, createGroupMessageCommentBegin,
   newsFeedUnmount
 } from 'containers/News/actions';
 
@@ -33,6 +33,7 @@ export function GroupMessagePage(props) {
   const links = {
     newsFeedIndex: ROUTES.group.news.index.path(routeContext(useContext, 'group_id')),
   };
+
 
   useEffect(() => {
     const newsItemId = pathId(props, 'item_id');
@@ -47,10 +48,8 @@ export function GroupMessagePage(props) {
 
   return (
     <GroupMessage
-      groupMessageAction={props.updateGroupMessageBegin}
-      buttonText='Update'
-      currentUser={currentUser}
-      currentGroup={currentGroup}
+      commentAction={props.createGroupMessageCommentBegin}
+      currentUserId={currentUser.id}
       newsItem={currentNewsItem}
       links={links}
     />
@@ -60,6 +59,7 @@ export function GroupMessagePage(props) {
 GroupMessagePage.propTypes = {
   getNewsItemBegin: PropTypes.func,
   updateGroupMessageBegin: PropTypes.func,
+  createGroupMessageCommentBegin: PropTypes.func,
   newsFeedUnmount: PropTypes.func,
   currentUser: PropTypes.object,
   currentGroup: PropTypes.object,
@@ -74,7 +74,7 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = {
   getNewsItemBegin,
-  updateGroupMessageBegin,
+  createGroupMessageCommentBegin,
   newsFeedUnmount
 };
 

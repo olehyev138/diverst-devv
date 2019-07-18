@@ -10,6 +10,7 @@ import {
   CREATE_GROUP_MESSAGE_BEGIN, CREATE_GROUP_MESSAGE_SUCCESS, CREATE_GROUP_MESSAGE_ERROR,
   UPDATE_GROUP_MESSAGE_BEGIN, UPDATE_GROUP_MESSAGE_SUCCESS, UPDATE_GROUP_MESSAGE_ERROR,
   DELETE_GROUP_MESSAGE_BEGIN, DELETE_GROUP_MESSAGE_SUCCESS, DELETE_GROUP_MESSAGE_ERROR,
+  CREATE_GROUP_MESSAGE_COMMENT_BEGIN, CREATE_GROUP_MESSAGE_COMMENT_SUCCESS, CREATE_GROUP_MESSAGE_COMMENT_ERROR,
   NEWS_FEED_UNMOUNT
 } from 'containers/News/constants';
 
@@ -122,6 +123,29 @@ export function deleteGroupMessageSuccess(payload) {
 export function deleteGroupMessageError(error) {
   return {
     type: DELETE_GROUP_MESSAGE_ERROR,
+    error,
+  };
+}
+
+/* Group Message comments */
+
+export function createGroupMessageCommentBegin(payload) {
+  return {
+    type: CREATE_GROUP_MESSAGE_COMMENT_BEGIN,
+    payload,
+  };
+}
+
+export function createGroupMessageCommentSuccess(payload) {
+  return {
+    type: CREATE_GROUP_MESSAGE_COMMENT_SUCCESS,
+    payload,
+  };
+}
+
+export function createGroupMessageCommentError(error) {
+  return {
+    type: CREATE_GROUP_MESSAGE_COMMENT_ERROR,
     error,
   };
 }

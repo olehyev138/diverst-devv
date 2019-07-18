@@ -51,12 +51,6 @@ export function GroupMessageCommentFormInner({ handleSubmit, handleChange, handl
           >
             Submit
           </Button>
-          <Button
-            to='/temp'
-            component={WrappedNavLink}
-          >
-            <FormattedMessage {...messages.cancel} />
-          </Button>
         </CardActions>
       </Form>
     </Card>
@@ -67,8 +61,8 @@ export function GroupMessageCommentForm(props) {
   // No comment editing
 
   const initialValues = {
-//    author_id: props.user.id,
-//    message_id: props.groupMessage.id,
+    author_id: dig(props, 'currentUserId') || undefined,
+    message_id: dig(props, 'newsItem', 'group_message', 'id') || undefined,
     content: '',
   };
 
@@ -77,9 +71,9 @@ export function GroupMessageCommentForm(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-         // props.commentAction(mapSelectAssociations(values, [], []));
-
-        console.log('hey');
+        props.commentAction({
+          news_feed_link_id: dig(props, 'newsItem', 'id') || undefined,
+          attributes: mapSelectAssociations(values, [], []) });
       }}
 
       render={formikProps => <GroupMessageCommentFormInner {...props} {...formikProps} />}
@@ -89,8 +83,8 @@ export function GroupMessageCommentForm(props) {
 
 GroupMessageCommentForm.propTypes = {
   commentAction: PropTypes.func,
-  groupMessage: PropTypes.object,
-  user: PropTypes.object,
+  newsItem: PropTypes.object,
+  currentUserId: PropTypes.number,
 };
 
 GroupMessageCommentFormInner.propTypes = {
