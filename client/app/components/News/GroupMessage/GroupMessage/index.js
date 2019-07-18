@@ -22,6 +22,7 @@ import { FormattedMessage } from 'react-intl';
 import messages from 'containers/News/messages';
 
 import GroupMessageComment from 'components/News/GroupMessage/GroupMessageComment';
+import GroupMessageCommentForm from 'components/News/GroupMessage/GroupMessageCommentForm'
 
 const styles = theme => ({
   comment: {
@@ -37,14 +38,17 @@ export function GroupMessage(props) {
     (groupMessage) ? (
       <React.Fragment>
         <Grid container spacing={3}>
-          <Grid item>
+          <Grid item className={classes.comment}>
             <Card>
               <CardContent>
                 <p>{groupMessage.content}</p>
               </CardContent>
             </Card>
           </Grid>
-          <Grid item>
+          <Grid item className={classes.comment}>
+            <GroupMessageCommentForm />
+          </Grid>
+          <Grid item className={classes.comment}>
             <Card>
               { /* eslint-disable-next-line arrow-body-style */ }
               {dig(groupMessage, 'comments') && groupMessage.comments.map((comment, i) => {
