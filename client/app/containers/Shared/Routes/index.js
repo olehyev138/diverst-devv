@@ -25,6 +25,7 @@ import GroupHomePage from 'containers/Group/GroupHomePage';
 import NewsFeedPage from 'containers/News/NewsFeedPage';
 
 /* Group - News Feed */
+import GroupMessagePage from 'containers/News/GroupMessage/GroupMessagePage';
 import GroupMessageCreatePage from 'containers/News/GroupMessage/GroupMessageCreatePage';
 import GroupMessageEditPage from 'containers/News/GroupMessage/GroupMessageEditPage';
 
@@ -63,6 +64,7 @@ export default function Routes(props) {
       <GroupLayout exact {...expandRoute(ROUTES.group.news.index)} component={NewsFeedPage} />
 
       { /* Group News Feed */ }
+      <GroupLayout exact {...expandRoute(ROUTES.group.news.messages.index)} component={GroupMessagePage} />
       <GroupLayout {...expandRoute(ROUTES.group.news.messages.new)} component={GroupMessageCreatePage} />
       <GroupLayout {...expandRoute(ROUTES.group.news.messages.edit)} component={GroupMessageEditPage} />
 
