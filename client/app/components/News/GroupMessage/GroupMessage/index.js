@@ -21,19 +21,43 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import { FormattedMessage } from 'react-intl';
 import messages from 'containers/News/messages';
 
+import GroupMessageComment from 'components/News/GroupMessage/GroupMessageComment';
+
 const styles = theme => ({
+  comment: {
+    width: '100%',
+  },
 });
 
 export function GroupMessage(props, context) {
+  const { classes } = props;
   const groupMessage = dig(props, 'newsItem', 'group_message');
 
   return (
     (groupMessage) ? (
-      <Card>
-        <CardContent>
-          <p>{groupMessage.content}</p>
-        </CardContent>
-      </Card>
+      <React.Fragment>
+        <Grid container spacing={3}>
+          <Grid item>
+            <Card>
+              <CardContent>
+                <p>{groupMessage.content}</p>
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid item>
+            <Card>
+              { /* eslint-disable-next-line arrow-body-style */ }
+              {dig(groupMessage, 'comments') && groupMessage.comments.map((comment, i) => {
+                return (
+                  <Grid item key={comment.id} className={classes.comment}>
+                    <GroupMessageComment comment={comment} />
+                  </Grid>
+                );
+              })}
+            </Card>
+          </Grid>
+        </Grid>
+      </React.Fragment>
     ) : <React.Fragment />
   );
 }

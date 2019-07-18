@@ -1,6 +1,6 @@
 /**
  *
- * Group Message List Item Component
+ * Group Message Comment Component
  *
  */
 
@@ -28,43 +28,34 @@ import messages from 'containers/News/messages';
 const styles = theme => ({
 });
 
-export function GroupMessageListItem(props, context) {
-  const { newsItem } = props;
-  const groupMessage = newsItem.group_message;
+export function GroupMessageComment(props) {
+  const { comment } = props;
 
   return (
     <Card>
       <CardContent>
-        <p>{groupMessage.content}</p>
+        <p>{comment.content}</p>
       </CardContent>
       <CardActions>
         <Button
           size='small'
-          to={props.links.groupMessageEdit(newsItem.id)}
+          to='/temp'
           component={WrappedNavLink}
         >
-          <FormattedMessage {...messages.edit} />
-        </Button>
-        <Button
-          size='small'
-          to={props.links.groupMessageIndex(newsItem.id)}
-          component={WrappedNavLink}
-        >
-          Comments
+          Comment
         </Button>
       </CardActions>
     </Card>
   );
 }
 
-GroupMessageListItem.propTypes = {
-  newsItem: PropTypes.object,
+GroupMessageComment.propTypes = {
+  comment: PropTypes.object,
   links: PropTypes.shape({
-    groupMessageEdit: PropTypes.func
   })
 };
 
 export default compose(
   memo,
   withStyles(styles)
-)(GroupMessageListItem);
+)(GroupMessageComment);

@@ -32,6 +32,7 @@ export function NewsFeedPage(props, context) {
 
   const links = {
     newsFeedIndex: ROUTES.group.news.index.path(routeContext(useContext, 'group_id')),
+    groupMessageIndex: id => ROUTES.group.news.messages.index.path(routeContext(useContext, 'group_id'), id),
     groupMessageNew: ROUTES.group.news.messages.new.path(routeContext(useContext, 'group_id')),
     groupMessageEdit: id => ROUTES.group.news.messages.edit.path(routeContext(useContext, 'group_id'), id)
   };

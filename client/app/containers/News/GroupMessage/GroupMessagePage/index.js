@@ -36,6 +36,8 @@ export function GroupMessagePage(props) {
 
   useEffect(() => {
     const newsItemId = pathId(props, 'item_id');
+
+    // get group messages news item specified in path & comments for this group message
     props.getNewsItemBegin({ id: newsItemId });
 
     return () => props.newsFeedUnmount();
