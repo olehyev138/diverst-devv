@@ -68,6 +68,22 @@ RSpec.describe Initiative, type: :model do
     end
   end
 
+  describe '#build' do
+    it 'sets the picture for initiative from url when creating initiative' do
+      user = create(:user)
+      group = create(:group, enterprise: user.enterprise)
+      outcome = create(:outcome, group: group)
+      pillar = create(:pillar, outcome: outcome)
+      request = Request.create_request(user)
+      url = Faker::LoremPixel.image(secure: false)
+      payload = { initiative: { name: 'Save', pillar_id: pillar.id, picture: url, owner_group_id: group.id, owner_id: user.id, start: Date.today, end: Date.tomorrow + 1.day } }
+      params = ActionController::Parameters.new(payload)
+      created = Initiative.build(request, params)
+
+      expect(created.picture.presence).to_not be nil
+    end
+  end
+
   describe 'test callbacks' do
     let!(:new_initiative) { build(:initiative) }
 

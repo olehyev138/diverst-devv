@@ -108,6 +108,7 @@ Diverst::Application.routes.draw do
       resources :sessions, only: [:create, :destroy]
       resources :shared_metrics_dashboards
       resources :shared_news_feed_links
+      resources :social_links
       resources :social_link_segments
       resources :sponsors
       resources :tags
