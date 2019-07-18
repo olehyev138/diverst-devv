@@ -1,4 +1,6 @@
-import React, { memo, useEffect, useState, useContext } from 'react';
+import React, {
+  memo, useEffect, useState, useContext
+} from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';

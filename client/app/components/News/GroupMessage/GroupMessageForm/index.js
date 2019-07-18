@@ -114,7 +114,10 @@ GroupMessageFormInner.propTypes = {
   values: PropTypes.object,
   buttonText: PropTypes.string,
   setFieldValue: PropTypes.func,
-  setFieldTouched: PropTypes.func
+  setFieldTouched: PropTypes.func,
+  links: PropTypes.shape({
+    newsFeedIndex: PropTypes.string
+  })
 };
 
 export default compose(

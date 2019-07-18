@@ -51,7 +51,10 @@ export function GroupMessageListItem(props, context) {
 }
 
 GroupMessageListItem.propTypes = {
-  newsItem: PropTypes.object
+  newsItem: PropTypes.object,
+  links: PropTypes.shape({
+    groupMessageEdit: PropTypes.func
+  })
 };
 
 export default compose(

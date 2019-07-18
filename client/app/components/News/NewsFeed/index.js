@@ -134,7 +134,10 @@ NewsFeed.propTypes = {
   classes: PropTypes.object,
   newsItems: PropTypes.array,
   newsItemsTotal: PropTypes.number,
-  handlePagination: PropTypes.func
+  handlePagination: PropTypes.func,
+  links: PropTypes.shape({
+    groupMessageNew: PropTypes.string
+  })
 };
 
 export default compose(

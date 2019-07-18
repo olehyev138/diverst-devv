@@ -12,7 +12,7 @@ describe('newsReducer', () => {
       newsItems: [],
       currentNewsItem: null,
       newsItemsTotal: null
-  };
+    };
   });
 
   it('returns the initial state', () => {

@@ -1,4 +1,6 @@
-import React, { memo, useEffect, useState, useContext } from 'react';
+import React, {
+  memo, useEffect, useState, useContext
+} from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
@@ -10,11 +12,9 @@ import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/News/reducer';
 import saga from 'containers/News/saga';
 
-import { routeContext } from 'utils/routeHelpers';
-import { RouteContext } from 'containers/Layouts/ApplicationLayout';
+import { pathId, routeContext } from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
-import { pathId } from 'utils/routeHelpers';
 import { selectGroup } from 'containers/Group/selectors';
 import { selectUser } from 'containers/Shared/App/selectors';
 import { selectNewsItem } from 'containers/News/selectors';
