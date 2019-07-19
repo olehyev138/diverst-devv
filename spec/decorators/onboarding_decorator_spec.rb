@@ -1,4 +1,4 @@
 require 'spec_helper'
 
-describe OnboardingDecorator do
+RSpec.describe OnboardingDecorator do
 end
