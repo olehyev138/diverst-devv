@@ -3,6 +3,7 @@
 exports[`<UserLayout /> Should render and match the snapshot 1`] = `
 <WithStyles(AuthenticatedLayout)
   component={[Function]}
+  pageTitle={Object {}}
   position="absolute"
 />
 `;

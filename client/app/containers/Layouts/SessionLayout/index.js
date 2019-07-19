@@ -1,17 +1,15 @@
 import React, { memo } from 'react';
 import { compose } from 'redux';
-import { connect } from 'react-redux';
 import { Route } from 'react-router';
 import { Redirect } from 'react-router-dom';
-import { createStructuredSelector } from 'reselect';
 import PropTypes from 'prop-types';
 
 import Container from '@material-ui/core/Container';
 import ApplicationLayout from '../ApplicationLayout';
 import { withStyles } from '@material-ui/core/styles';
 
+import AuthService from 'utils/authService';
 import { ROUTES } from 'containers/Shared/Routes/constants';
-import { selectIsAuthenticated } from 'containers/Shared/App/selectors';
 
 const styles = theme => ({
   container: {
@@ -26,10 +24,10 @@ const styles = theme => ({
 });
 
 const SessionLayout = ({ component: Component, ...rest }) => {
-  const { classes, isAuthenticated, ...other } = rest;
+  const { classes, ...other } = rest;
 
   return (
-    !isAuthenticated
+    !AuthService.isAuthenticated()
       ? (
         <ApplicationLayout
           {...other}
@@ -42,7 +40,7 @@ const SessionLayout = ({ component: Component, ...rest }) => {
           )}
         />
       )
-      : <Redirect to={ROUTES.user.root.path} />
+      : <Redirect to={ROUTES.user.home.path()} />
   );
 };
 
@@ -51,15 +49,6 @@ SessionLayout.propTypes = {
   component: PropTypes.elementType,
 };
 
-const mapStateToProps = createStructuredSelector({
-  isAuthenticated: selectIsAuthenticated(),
-});
-
-const withConnect = connect(
-  mapStateToProps,
-);
-
 export default compose(
-  withConnect,
   withStyles(styles)
 )(SessionLayout);

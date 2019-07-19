@@ -37,7 +37,7 @@ export function* login(action) {
 
     yield put(setUser(user));
     yield put(setUserPolicyGroup({ policy_group: response.data.policy_group }));
-    yield put(push(ROUTES.user.home.path));
+    yield put(push(ROUTES.user.home.path()));
   } catch (err) {
     yield put(loginError(err));
   }
@@ -49,11 +49,11 @@ export function* logout(action) {
     yield call(api.sessions.destroy.bind(api.sessions), action.token);
     yield put(logoutSuccess());
 
-    yield put(push(ROUTES.session.login.path));
+    yield put(push(ROUTES.session.login.path()));
     yield put(showSnackbar({ message: 'You have been logged out' }));
   } catch (err) {
     yield put(logoutError(err));
-    yield put(push(ROUTES.session.login.path));
+    yield put(push(ROUTES.session.login.path()));
   }
 }
 

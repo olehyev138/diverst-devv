@@ -1,6 +1,6 @@
 /**
  *
- * Group Form Component
+ * Group Home Component
  *
  */
 
@@ -32,7 +32,6 @@ export function GroupHome(props) {
 
 GroupHome.propTypes = {
 };
-
 
 export default compose(
   memo,
