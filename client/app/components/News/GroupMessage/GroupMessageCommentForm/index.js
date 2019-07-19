@@ -74,6 +74,8 @@ export function GroupMessageCommentForm(props) {
         props.commentAction({
           news_feed_link_id: dig(props, 'newsItem', 'id') || undefined,
           attributes: mapSelectAssociations(values, [], []) });
+
+        actions.resetForm();
       }}
 
       render={formikProps => <GroupMessageCommentFormInner {...props} {...formikProps} />}
