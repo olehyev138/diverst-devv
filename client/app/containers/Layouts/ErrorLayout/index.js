@@ -22,6 +22,7 @@ const ErrorLayout = ({ component: Component, ...rest }) => {
 
   return (
     <ApplicationLayout
+      {...other}
       component={matchProps => (
         <Container maxWidth='sm' className={classes.container}>
           <div className={classes.content}>

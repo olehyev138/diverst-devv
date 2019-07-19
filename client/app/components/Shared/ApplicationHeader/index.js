@@ -273,10 +273,10 @@ export function mapDispatchToProps(dispatch, ownProps) {
       dispatch(logoutBegin(user));
     },
     handleVisitAdmin() {
-      dispatch(push(ROUTES.admin.root.path));
+      dispatch(push(ROUTES.admin.root.path()));
     },
     handleVisitHome() {
-      dispatch(push(ROUTES.user.root.path));
+      dispatch(push(ROUTES.user.root.path()));
     }
   };
 }

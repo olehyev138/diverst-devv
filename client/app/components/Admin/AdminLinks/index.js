@@ -124,7 +124,7 @@ class AdminLinks extends React.PureComponent {
               <MenuItem
                 component={WrappedNavLink}
                 exact
-                to={ROUTES.admin.analyze.overview.path}
+                to={ROUTES.admin.analyze.overview.path()}
                 className={classes.nested}
                 activeClassName={classes.navLinkActive}
               >
@@ -132,13 +132,13 @@ class AdminLinks extends React.PureComponent {
                   <ListIcon />
                 </ListItemIcon>
                 <ListItemText>
-                  <FormattedMessage {...ROUTES.admin.analyze.overview.titleMessage} />
+                  <FormattedMessage {...ROUTES.admin.analyze.overview.data.titleMessage} />
                 </ListItemText>
               </MenuItem>
               <MenuItem
                 component={WrappedNavLink}
                 exact
-                to={ROUTES.admin.analyze.users.path}
+                to={ROUTES.admin.analyze.users.path()}
                 className={classes.nested}
                 activeClassName={classes.navLinkActive}
               >
@@ -146,7 +146,7 @@ class AdminLinks extends React.PureComponent {
                   <ListIcon />
                 </ListItemIcon>
                 <ListItemText>
-                  <FormattedMessage {...ROUTES.admin.analyze.users.titleMessage} />
+                  <FormattedMessage {...ROUTES.admin.analyze.users.data.titleMessage} />
                 </ListItemText>
               </MenuItem>
             </List>
@@ -164,7 +164,7 @@ class AdminLinks extends React.PureComponent {
               <MenuItem
                 component={WrappedNavLink}
                 exact
-                to={ROUTES.admin.manage.groups.index.path}
+                to={ROUTES.admin.manage.groups.index.path()}
                 className={classes.nested}
                 activeClassName={classes.navLinkActive}
               >
@@ -172,7 +172,7 @@ class AdminLinks extends React.PureComponent {
                   <ListIcon />
                 </ListItemIcon>
                 <ListItemText>
-                  <FormattedMessage {...ROUTES.admin.manage.groups.index.titleMessage} />
+                  <FormattedMessage {...ROUTES.admin.manage.groups.index.data.titleMessage} />
                 </ListItemText>
               </MenuItem>
             </List>

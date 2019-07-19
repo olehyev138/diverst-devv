@@ -14,21 +14,21 @@ const styles = theme => ({
   },
 });
 
-const UserLayout = ({ component: Component, pageTitle, ...rest }) => {
-  const { classes, ...other } = rest;
+const UserLayout = ({ component: Component, ...rest }) => {
+  const { classes, data, ...other } = rest;
 
   return (
     <AuthenticatedLayout
       position='absolute'
+      data={data}
       {...other}
       component={matchProps => (
         <React.Fragment>
           <div className={classes.toolbar} />
-          <UserLinks pageTitle={pageTitle} {...matchProps} />
-
+          <UserLinks pageTitle={data.titleMessage} {...matchProps} />
           <Container>
             <div className={classes.content}>
-              <Component pageTitle={pageTitle} {...other} />
+              <Component pageTitle={data.titleMessage} {...other} />
             </div>
           </Container>
         </React.Fragment>

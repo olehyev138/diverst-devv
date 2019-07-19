@@ -47,7 +47,7 @@ export class NotFoundPage extends React.PureComponent {
           variant='contained'
           color='primary'
           component={WrappedNavLink}
-          to={ROUTES.user.home.path}
+          to={ROUTES.user.home.path()}
           className={classes.verticalMargins}
         >
           <Hidden xsDown>

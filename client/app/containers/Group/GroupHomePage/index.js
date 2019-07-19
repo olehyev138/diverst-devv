@@ -15,8 +15,6 @@ export function GroupHomePage(props) {
   useInjectReducer({ key: 'groups', reducer });
   useInjectSaga({ key: 'groups', saga });
 
-  // useEffect(() => () => props.groupFormUnmount(), []);
-
   return (
     <GroupHome />
   );
