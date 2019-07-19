@@ -124,6 +124,8 @@
             <%= f.input :password, required: true %>
             <%= f.input :password_confirmation, required: true %>
 
+            <%= f.hidden_field :seen_onboarding, value: 1%>
+
             <% resource.enterprise.fields.where(private: false).each do |cf| %>
               <% if !cf.private %>
                 <%= render "shared/fields/display/custom_field", cf: cf, f: f, resource: resource %>
