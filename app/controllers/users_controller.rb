@@ -194,12 +194,16 @@ class UsersController < ApplicationController
 
   protected
 
+  def caluclate_percentile(field)
+    Users.all.map(&field.to_sym)
+  end
+
   def get_usage_metrics
     @user_metrics = {
       logins: @user.get_login_count,
-      posts: @user.number_of_posts,
-      comments: @user.number_of_comments,
-      events: @user.number_of_events
+      posts: @user.number_of(fields: [:social_links, :own_messages, :own_news_links]),
+      comments: @user.number_of(fields: [:answer_comments, :message_comments, :answer_comments]),
+      events: @user.number_of(fields: [:initiatives])
     }
 
     @most_visited_pages = @user.most_viewed_pages

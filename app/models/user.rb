@@ -605,35 +605,17 @@ class User < BaseClass
     self.sign_in_count
   end
 
-  def number_of_posts(from: nil)
-    if from.present?
-      social_links.where(created_at: from..Time.now).count +
-        own_messages.where(created_at: from..Time.now).count +
-        own_news_links.where(created_at: from..Time.now).count
-    else
-      social_links.count +
-        own_messages.count +
-        own_news_links.count
-    end
+  def self.count_list(fields: [], from: nil)
+    self.all.map { |usr| usr.number_of fields: fields, from: from }.sort
+
+    # User.joins('LEFT JOIN initiative_users ON users.id = user_id').group(:id).order('count_initiative_users_id asc').count('initiative_users.id')
   end
 
-  def number_of_comments(from: nil)
+  def number_of(fields: [], from: nil)
     if from.present?
-      answer_comments.where(created_at: from..Time.now).count +
-        message_comments.where(created_at: from..Time.now).count +
-        answer_comments.where(created_at: from..Time.now).count
+      fields.reduce(0) { |sum, n| send(n).where(created_at: from..Time.now).count + sum }
     else
-      answer_comments.count +
-        message_comments.count +
-        answer_comments.count
-    end
-  end
-
-  def number_of_events(from: nil)
-    if from.present?
-      initiatives.where(start: from..Time.now).count
-    else
-      initiatives.count
+      fields.reduce(0) { |sum, n| send(n).count + sum }
     end
   end
 
