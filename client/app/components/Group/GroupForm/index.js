@@ -24,7 +24,7 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import { FormattedMessage } from 'react-intl';
 import messages from 'containers/Group/messages';
 
-import { mapSelectAssociations } from 'utils/formHelpers';
+import { mapSelectAssociations, exclude } from 'utils/formHelpers';
 
 /* eslint-disable object-curly-newline */
 export function GroupFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
@@ -54,7 +54,7 @@ export function GroupFormInner({ handleSubmit, handleChange, handleBlur, values,
             id='name'
             name='name'
             label={<FormattedMessage {...messages.name} />}
-            value={values.name}
+            value={values.name || ''}
           />
           <Field
             component={TextField}
@@ -62,7 +62,7 @@ export function GroupFormInner({ handleSubmit, handleChange, handleBlur, values,
             fullWidth
             id='short_description'
             name='short_description'
-            value={values.short_description}
+            value={values.short_description || ''}
             label={<FormattedMessage {...messages.short_description} />}
           />
           <Field
@@ -72,7 +72,7 @@ export function GroupFormInner({ handleSubmit, handleChange, handleBlur, values,
             id='description'
             name='description'
             label={<FormattedMessage {...messages.description} />}
-            value={values.description}
+            value={values.description || ''}
           />
           <Field
             component={Select}
@@ -81,7 +81,7 @@ export function GroupFormInner({ handleSubmit, handleChange, handleBlur, values,
             name='children'
             label={<FormattedMessage {...messages.children} />}
             isMulti
-            value={values.children}
+            value={values.children || []}
             options={props.selectGroups}
             onMenuOpen={childrenSelectAction}
             onChange={value => setFieldValue('children', value)}
@@ -94,7 +94,7 @@ export function GroupFormInner({ handleSubmit, handleChange, handleBlur, values,
             id='parent'
             name='parent'
             label={<FormattedMessage {...messages.parent} />}
-            value={values.parent}
+            value={values.parent || ''}
             options={props.selectGroups}
             onMenuOpen={parentSelectAction}
             onChange={value => setFieldValue('parent', value)}
@@ -126,6 +126,7 @@ export function GroupForm(props) {
     name: '',
     short_description: '',
     description: '',
+    parent: '',
     children: [],
   };
 
@@ -134,8 +135,10 @@ export function GroupForm(props) {
       initialValues={props.group || initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        props.groupAction(mapSelectAssociations(values,
-          ['children', 'parent'], ['child_ids', 'parent_id']));
+        let finalValues = exclude(values, 'logo_location', 'news_feed', 'banner_location');
+        finalValues = mapSelectAssociations(finalValues, ['children', 'parent'], ['child_ids', 'parent_id']);
+
+        props.groupAction(finalValues);
       }}
 
       render={formikProps => <GroupFormInner {...props} {...formikProps} />}

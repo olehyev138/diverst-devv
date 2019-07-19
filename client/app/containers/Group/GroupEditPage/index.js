@@ -1,4 +1,4 @@
-import React, { memo, useEffect } from 'react';
+import React, { memo, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
@@ -8,6 +8,8 @@ import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/Group/reducer';
 import { selectFormGroup, selectPaginatedSelectGroups } from 'containers/Group/selectors';
+
+import RouteService from 'utils/routeHelpers';
 
 import {
   getGroupBegin, getGroupsBegin,
@@ -21,8 +23,10 @@ export function GroupEditPage(props) {
   useInjectReducer({ key: 'groups', reducer });
   useInjectSaga({ key: 'groups', saga });
 
+  const rs = new RouteService(useContext);
+
   useEffect(() => {
-    props.getGroupBegin({ id: props.location.state.id });
+    props.getGroupBegin({ id: rs.params('id') });
 
     return () => {
       props.groupFormUnmount();
@@ -43,11 +47,6 @@ export function GroupEditPage(props) {
 }
 
 GroupEditPage.propTypes = {
-  location: PropTypes.shape({
-    state: PropTypes.shape({
-      id: PropTypes.string
-    })
-  }),
   group: PropTypes.object,
   groups: PropTypes.array,
   getGroupBegin: PropTypes.func,

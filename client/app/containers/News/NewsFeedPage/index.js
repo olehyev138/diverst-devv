@@ -14,10 +14,11 @@ import saga from 'containers/News/saga';
 import { selectPaginatedNewsItems, selectNewsItemsTotal } from 'containers/News/selectors';
 import { getNewsItemsBegin, newsFeedUnmount } from 'containers/News/actions';
 
-import { routeContext } from 'utils/routeHelpers';
+import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import NewsFeed from 'components/News/NewsFeed';
+
 
 export function NewsFeedPage(props, context) {
   useInjectReducer({ key: 'news', reducer });
@@ -27,11 +28,12 @@ export function NewsFeedPage(props, context) {
     count: 5, page: 0, order: 'asc', news_feed_id: -1
   });
 
+  const rs = new RouteService(useContext);
   const links = {
-    newsFeedIndex: ROUTES.group.news.index.path(routeContext(useContext, 'group_id')),
-    groupMessageIndex: id => ROUTES.group.news.messages.index.path(routeContext(useContext, 'group_id'), id),
-    groupMessageNew: ROUTES.group.news.messages.new.path(routeContext(useContext, 'group_id')),
-    groupMessageEdit: id => ROUTES.group.news.messages.edit.path(routeContext(useContext, 'group_id'), id)
+    newsFeedIndex: ROUTES.group.news.index.path(rs.params('group_id')),
+    groupMessageIndex: id => ROUTES.group.news.messages.index.path(rs.params('group_id'), id),
+    groupMessageNew: ROUTES.group.news.messages.new.path(rs.params('group_id')),
+    groupMessageEdit: id => ROUTES.group.news.messages.edit.path(rs.params('group_id'), id)
   };
 
   useEffect(() => {

@@ -19,7 +19,7 @@ import { Field, Formik, Form } from 'formik';
 import { FormattedMessage } from 'react-intl';
 import messages from 'containers/News/messages';
 
-import { mapSelectAssociations } from 'utils/formHelpers';
+import { mapSelectAssociations, exclude } from 'utils/formHelpers';
 
 /* eslint-disable object-curly-newline */
 export function GroupMessageFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
@@ -79,8 +79,9 @@ export function GroupMessageForm(props) {
       onSubmit={(values, actions) => {
         // TODO: have to do this here - only place these are 100% set
         //   - write a helper
-        const finalValues = {
-          ...values,
+        let finalValues = exclude(values, 'group', 'comments_count', 'owner', 'comments');
+        finalValues = {
+          ...finalValues,
           owner_id: props.currentUser.id,
           group_id: props.currentGroup.id
         };
