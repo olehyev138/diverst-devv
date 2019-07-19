@@ -1,6 +1,4 @@
-import React, {
-  memo, useEffect, useState, useContext
-} from 'react';
+import React, { memo, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
@@ -19,11 +17,7 @@ import { selectGroup } from 'containers/Group/selectors';
 import { selectUser } from 'containers/Shared/App/selectors';
 import { selectNewsItem } from 'containers/News/selectors';
 
-import {
-  getNewsItemBegin, updateGroupMessageBegin, createGroupMessageCommentBegin,
-  newsFeedUnmount
-} from 'containers/News/actions';
-
+import { getNewsItemBegin, newsFeedUnmount } from 'containers/News/actions';
 import GroupMessage from 'components/News/GroupMessage/GroupMessage';
 
 export function GroupMessagePage(props) {
@@ -34,17 +28,16 @@ export function GroupMessagePage(props) {
     newsFeedIndex: ROUTES.group.news.index.path(routeContext(useContext, 'group_id')),
   };
 
-
   useEffect(() => {
     const newsItemId = pathId(props, 'item_id');
 
-    // get group messages news item specified in path & comments for this group message
+    // get news item & comments specified in path
     props.getNewsItemBegin({ id: newsItemId });
 
     return () => props.newsFeedUnmount();
   }, []);
 
-  const { currentUser, currentGroup, currentNewsItem } = props;
+  const { currentUser, currentNewsItem } = props;
 
   return (
     <GroupMessage
@@ -74,7 +67,6 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = {
   getNewsItemBegin,
-  createGroupMessageCommentBegin,
   newsFeedUnmount
 };
 

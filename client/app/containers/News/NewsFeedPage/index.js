@@ -14,17 +14,14 @@ import saga from 'containers/News/saga';
 import { selectPaginatedNewsItems, selectNewsItemsTotal } from 'containers/News/selectors';
 import { getNewsItemsBegin, newsFeedUnmount } from 'containers/News/actions';
 
-import NewsFeed from 'components/News/NewsFeed';
-
 import { routeContext } from 'utils/routeHelpers';
-import { RouteContext } from 'containers/Layouts/ApplicationLayout';
 import { ROUTES } from 'containers/Shared/Routes/constants';
+
+import NewsFeed from 'components/News/NewsFeed';
 
 export function NewsFeedPage(props, context) {
   useInjectReducer({ key: 'news', reducer });
   useInjectSaga({ key: 'news', saga });
-
-  // TODO: might be a better way to do this - renders 4 times
 
   const [params, setParams] = useState({
     count: 5, page: 0, order: 'asc', news_feed_id: -1

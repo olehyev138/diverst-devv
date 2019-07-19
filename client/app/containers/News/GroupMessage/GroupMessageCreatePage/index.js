@@ -1,6 +1,4 @@
-import React, {
-  memo, useEffect, useState, useContext
-} from 'react';
+import React, { memo, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
@@ -16,13 +14,9 @@ import { selectGroup } from 'containers/Group/selectors';
 import { selectUser } from 'containers/Shared/App/selectors';
 
 import { routeContext } from 'utils/routeHelpers';
-import { RouteContext } from 'containers/Layouts/ApplicationLayout';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
-import {
-  createGroupMessageBegin, newsFeedUnmount
-} from 'containers/News/actions';
-
+import { createGroupMessageBegin, newsFeedUnmount } from 'containers/News/actions';
 import GroupMessageForm from 'components/News/GroupMessage/GroupMessageForm';
 
 export function GroupMessageCreatePage(props) {

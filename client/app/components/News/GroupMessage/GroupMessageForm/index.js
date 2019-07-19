@@ -4,24 +4,17 @@
  *
  */
 
-import React, {
-  memo, useRef, useState, useEffect
-} from 'react';
-import { NavLink } from 'react-router-dom';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import dig from 'object-dig';
 
 import {
-  Button, Card, CardActions, CardContent, Grid,
-  TextField, Hidden, FormControl
+  Button, Card, CardActions, CardContent, TextField
 } from '@material-ui/core';
-import Select from 'react-select';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { Field, Formik, Form } from 'formik';
-import { ROUTES } from 'containers/Shared/Routes/constants';
-import { fillPath } from 'utils/routeHelpers';
 
 import { FormattedMessage } from 'react-intl';
 import messages from 'containers/News/messages';

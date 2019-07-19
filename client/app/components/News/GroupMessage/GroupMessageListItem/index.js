@@ -4,31 +4,23 @@
  *
  */
 
-import React, {
-  memo, useRef, useState, useEffect, useContext
-} from 'react';
-import { NavLink } from 'react-router-dom';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux/';
-import { RouteContext } from 'containers/Layouts/ApplicationLayout';
 
 import {
-  Button, Card, CardActions, CardContent, Grid,
-  TextField, Hidden, FormControl
+  Button, Card, CardActions, CardContent
 } from '@material-ui/core/index';
 import { withStyles } from '@material-ui/core/styles';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
-import { pathId, fillPath, routeContext } from 'utils/routeHelpers';
-
-import { ROUTES } from 'containers/Shared/Routes/constants';
 import { FormattedMessage } from 'react-intl';
 import messages from 'containers/News/messages';
 
 const styles = theme => ({
 });
 
-export function GroupMessageListItem(props, context) {
+export function GroupMessageListItem(props) {
   const { newsItem } = props;
   const groupMessage = newsItem.group_message;
 

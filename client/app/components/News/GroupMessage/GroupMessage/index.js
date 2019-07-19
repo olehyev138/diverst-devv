@@ -1,25 +1,11 @@
-import React, {
-  memo, useRef, useState, useEffect, useContext
-} from 'react';
-import { NavLink } from 'react-router-dom';
-import PropTypes from 'prop-types';
-import { compose } from 'redux/';
-import { RouteContext } from 'containers/Layouts/ApplicationLayout';
+import React, { memo } from 'react';
 
+import { compose } from 'redux/';
+import PropTypes from 'prop-types';
 import dig from 'object-dig';
 
-import {
-  Button, Card, CardActions, CardContent, Grid,
-  TextField, Hidden, FormControl
-} from '@material-ui/core/index';
+import { Card, CardContent, Grid } from '@material-ui/core/index';
 import { withStyles } from '@material-ui/core/styles';
-import WrappedNavLink from 'components/Shared/WrappedNavLink';
-
-import { pathId, fillPath, routeContext } from 'utils/routeHelpers';
-
-import { ROUTES } from 'containers/Shared/Routes/constants';
-import { FormattedMessage } from 'react-intl';
-import messages from 'containers/News/messages';
 
 import GroupMessageComment from 'components/News/GroupMessage/GroupMessageComment';
 import GroupMessageCommentForm from 'components/News/GroupMessage/GroupMessageCommentForm';
@@ -31,6 +17,8 @@ const styles = theme => ({
 });
 
 export function GroupMessage(props) {
+  /* Render a GroupMessage, its comments & a comment form */
+
   const { classes } = props;
   const newsItem = dig(props, 'newsItem');
   const groupMessage = dig(newsItem, 'group_message');
