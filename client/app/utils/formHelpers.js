@@ -1,4 +1,4 @@
-
+import dig from 'object-dig';
 
 /*
   Map values object with associations to a 'postable' values object
@@ -31,4 +31,28 @@ export function exclude(values, ...excludes) {
     delete permittedValues[exclude];
 
   return permittedValues;
+}
+
+/*
+ * Build & define a initial values object for Formik
+ * @object - the object from the server, may be undefined or have null fields
+ * @valueSchemas - a object consisting of 'schemas' for each form value
+ *   - the key for each schema:
+ *      - is how the value will be retrieved from object if defined
+ *      - is how  value will be stored in returned values object as default
+ *   - ex:
+ *     {
+ *       description: { default: '' },
+ *       children: { default: [], customKey: 'child_ids' }
+ *     }
+ */
+export function buildValues(object, valueSchemas) {
+  const values = {};
+
+  for (const [key, valueSchema] of Object.entries(valueSchemas)) {
+    const storeKey = dig(valueSchema, 'customKey') ? valueSchema.customKey : key;
+    values[storeKey] = dig(object, key) ? object[key] : valueSchema.default;
+  }
+
+  return values;
 }
