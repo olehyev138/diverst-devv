@@ -12,7 +12,7 @@ import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/News/reducer';
 import saga from 'containers/News/saga';
 
-import { pathId, routeContext } from 'utils/routeHelpers';
+import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { selectGroup } from 'containers/Group/selectors';
@@ -30,12 +30,13 @@ export function GroupMessageEditPage(props) {
   useInjectReducer({ key: 'news', reducer });
   useInjectSaga({ key: 'news', saga });
 
+  const rs = new RouteService(useContext);
   const links = {
-    newsFeedIndex: ROUTES.group.news.index.path(routeContext(useContext, 'group_id')),
+    newsFeedIndex: ROUTES.group.news.index.path(rs.params('group_id')),
   };
 
   useEffect(() => {
-    const newsItemId = pathId(props, 'item_id');
+    const newsItemId = rs.params('item_id');
     props.getNewsItemBegin({ id: newsItemId });
 
     return () => props.newsFeedUnmount();
