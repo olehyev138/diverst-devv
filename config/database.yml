@@ -1,17 +1,16 @@
 default: &default
   adapter: mysql2
-  host: localhost
-  pool: 20
-  username: debian-sys-maint
-  password: rO8iTzBB09FJZ1AD
-  timeout: 15000
+  url: <%= ENV["DATABASE_URL"] %>
+  pool: <%= ENV["DB_POOL"] || ENV["MAX_THREADS"] || 20 %>
   encoding: utf8mb4
   collation: utf8mb4_bin
+  timeout: 15000
 
 
 development:
   <<: *default
   database: diverst_development
+  username: root
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -19,6 +18,7 @@ development:
 test:
   <<: *default
   database: diverst_test
+  username: root
 
 production:
   <<: *default
