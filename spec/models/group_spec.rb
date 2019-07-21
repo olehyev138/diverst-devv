@@ -162,6 +162,24 @@ RSpec.describe Group, type: :model do
     end
   end
 
+  describe '#logo_location' do
+    it 'returns the actual logo location' do
+      group = create(:group, logo: File.new('spec/fixtures/files/verizon_logo.png'))
+
+      expect(group.logo_location).to_not be nil
+      expect(group.logo_location).to_not eq '/assets/missing.png'
+    end
+  end
+
+  describe '#banner_location' do
+    it 'returns the actual banner location' do
+      group = create(:group, banner: File.new('spec/fixtures/files/verizon_logo.png'))
+
+      expect(group.banner_location).to_not be nil
+      expect(group.banner_location).to_not eq '/assets/missing.png'
+    end
+  end
+
   describe 'index' do
     it 'gets all parents' do
       enterprise = create(:enterprise)
@@ -193,6 +211,33 @@ RSpec.describe Group, type: :model do
       user = create(:user, enterprise: enterprise_2)
       response = Group.index(Request.create_request(user), { query_scopes: ['is_private'] })
       expect(response.total).to eq(1)
+    end
+  end
+
+  describe '#build' do
+    it 'sets the logo and banner for group from url when creating group' do
+      user = create(:user)
+      request = Request.create_request(user)
+      url = Faker::LoremPixel.image(secure: false)
+      payload = { group: { name: 'Save', enterprise_id: user.enterprise_id, banner_url: url, logo_url: url } }
+      params = ActionController::Parameters.new(payload)
+      created = Group.build(request, params)
+
+      expect(created.banner.presence).to_not be nil
+      expect(created.logo.presence).to_not be nil
+    end
+  end
+
+  describe '#avatar_url' do
+    it 'sets the avatar for user from url' do
+      user = create(:user)
+      expect(user.avatar_file_name).to be nil
+
+      user.avatar_url = Faker::LoremPixel.image(secure: false)
+      user.save!
+      user.reload
+
+      expect(user.avatar_file_name).to_not be nil
     end
   end
 
