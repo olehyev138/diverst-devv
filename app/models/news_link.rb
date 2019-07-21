@@ -22,6 +22,10 @@ class NewsLink < ApplicationRecord
   accepts_nested_attributes_for :photos, allow_destroy: true
   accepts_nested_attributes_for :news_feed_link, allow_destroy: true
 
+  validates_length_of :picture_content_type, maximum: 191
+  validates_length_of :picture_file_name, maximum: 191
+  validates_length_of :description, maximum: 65535
+  validates_length_of :title, maximum: 191
   validates :group_id,        presence: true
   validates :title,           presence: true
   validates :description,     presence: true
@@ -33,6 +37,7 @@ class NewsLink < ApplicationRecord
   validates_attachment_content_type :picture, content_type: %r{\Aimage\/.*\Z}
 
   after_create :build_default_link
+  after_destroy :remove_news_feed_link
 
   scope :of_segments, ->(segment_ids) {
     nl_condtions = ['news_link_segments.segment_id IS NULL']
@@ -78,5 +83,9 @@ class NewsLink < ApplicationRecord
     return if news_feed_link.present?
 
     create_news_feed_link(news_feed_id: group.news_feed.id)
+  end
+
+  def remove_news_feed_link
+    news_feed_link.destroy if news_feed_link.present?
   end
 end

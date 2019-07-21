@@ -4,6 +4,8 @@ class InitiativeUpdate < ApplicationRecord
   belongs_to :owner, class_name: 'User'
   belongs_to :initiative
 
+  validates_length_of :comments, maximum: 65535
+  validates_length_of :data, maximum: 65535
   def reported_for_date
     report_date || created_at
   end
