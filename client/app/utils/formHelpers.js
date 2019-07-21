@@ -23,3 +23,12 @@ export function mapSelectAssociations(values, inputKeys, resultKeys) {
 
   return result;
 }
+
+export function exclude(values, ...excludes) {
+  const permittedValues = Object.assign({}, values);
+
+  for (const exclude of excludes)
+    delete permittedValues[exclude];
+
+  return permittedValues;
+}
