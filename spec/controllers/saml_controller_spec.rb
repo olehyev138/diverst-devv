@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe SamlController, type: :controller do
   let(:enterprise) { create(:enterprise, idp_sso_target_url: 'http://example.com') }
-  let(:user) { create(:user, enterprise: enterprise, seen_onboarding: true) }
+  let(:user) { create(:user, enterprise: enterprise) }
 
   describe 'GET#index' do
     before { get :index, enterprise_id: enterprise.id }
