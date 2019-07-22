@@ -8,29 +8,30 @@ import dig from 'object-dig';
   inputKeys: the array of the key(s) from the form to rename
   resultKeys: the parallel array of desired key(s)
  */
-export function mapSelectAssociations(values, inputKeys, resultKeys) {
-  const result = Object.assign({}, values);
+// export function mapSelectAssociations(values, inputKeys, resultKeys) {
+//   const result = Object.assign({}, values);
+//
+//   for (const inputKey of inputKeys)
+//     delete result[inputKey];
+//
+//   resultKeys.forEach((resultKey, i) => {
+//     if (Object.hasOwnProperty.call(values, inputKeys[i]))
+//       result[resultKey] = Array.isArray(values[inputKeys[i]])
+//         ? values[inputKeys[i]].map(o => o.value)
+//         : values[inputKeys[i]].value;
+//   });
+//
+//   return result;
+// }
 
-  for (const inputKey of inputKeys)
-    delete result[inputKey];
+export function mapAssociations(values, keys) {
+  const mappedValues = Object.assign({}, values);
 
-  resultKeys.forEach((resultKey, i) => {
-    if (Object.hasOwnProperty.call(values, inputKeys[i]))
-      result[resultKey] = Array.isArray(values[inputKeys[i]])
-        ? values[inputKeys[i]].map(o => o.value)
-        : values[inputKeys[i]].value;
-  });
+  for (const key of keys)
+    if (mappedValues[key])
+      mappedValues[key] = mappedValues[key].map(o => o.value);
 
-  return result;
-}
-
-export function exclude(values, ...excludes) {
-  const permittedValues = Object.assign({}, values);
-
-  for (const exclude of excludes)
-    delete permittedValues[exclude];
-
-  return permittedValues;
+  return mappedValues;
 }
 
 /*

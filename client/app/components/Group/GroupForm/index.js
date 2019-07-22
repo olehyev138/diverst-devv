@@ -24,7 +24,7 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import { FormattedMessage } from 'react-intl';
 import messages from 'containers/Group/messages';
 
-import { mapSelectAssociations, exclude } from 'utils/formHelpers';
+import { mapAssociations, buildValues } from 'utils/formHelpers';
 
 /* eslint-disable object-curly-newline */
 export function GroupFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
@@ -77,16 +77,16 @@ export function GroupFormInner({ handleSubmit, handleChange, handleBlur, values,
           <Field
             component={Select}
             fullWidth
-            id='children'
-            name='children'
+            id='child_ids'
+            name='child_ids'
             label={<FormattedMessage {...messages.children} />}
             isMulti
-            value={values.children || []}
+            value={values.child_ids}
             options={props.selectGroups}
             onMenuOpen={childrenSelectAction}
-            onChange={value => setFieldValue('children', value)}
+            onChange={value => setFieldValue('child_ids', value)}
             onInputChange={value => childrenSelectAction(value)}
-            onBlur={() => setFieldTouched('children', true)}
+            onBlur={() => setFieldTouched('child_ids', true)}
           />
           <Field
             component={Select}
@@ -122,23 +122,23 @@ export function GroupFormInner({ handleSubmit, handleChange, handleBlur, values,
 }
 
 export function GroupForm(props) {
-  const initialValues = {
-    name: '',
-    short_description: '',
-    description: '',
-    parent: '',
-    children: [],
-  };
+  const initialValues = buildValues(props.group, {
+    name: { default: '' },
+    short_description: { default: '' },
+    description: { default: '' },
+    parent: { default: '' },
+    children: { default: [], customKey: 'child_ids' }
+  });
 
   return (
     <Formik
-      initialValues={props.group || initialValues}
+      initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        let finalValues = exclude(values, 'logo_location', 'news_feed', 'banner_location');
-        finalValues = mapSelectAssociations(finalValues, ['children', 'parent'], ['child_ids', 'parent_id']);
+        // let finalValues = exclude(values, 'logo_location', 'news_feed', 'banner_location');
+        // finalValues = mapSelectAssociations(finalValues, ['children', 'parent'], ['child_ids', 'parent_id']);
 
-        props.groupAction(finalValues);
+        props.groupAction(mapAssociations(values, ['child_ids']));
       }}
 
       render={formikProps => <GroupFormInner {...props} {...formikProps} />}
