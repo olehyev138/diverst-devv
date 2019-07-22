@@ -831,7 +831,7 @@ RSpec.describe Group, type: :model do
       group.run_callbacks(:update)
     end
   end
-  
+
   describe '#membership_list_csv' do
     it 'returns correct headers when mentorship_module_enabled is false' do
       enterprise = create(:enterprise, mentorship_module_enabled: false)
@@ -839,7 +839,7 @@ RSpec.describe Group, type: :model do
       csv = group.membership_list_csv(group.members)
       expect(csv).to eq("first_name,last_name,email_address\ntotal,,0\n")
     end
-    
+
     it 'returns correct headers when mentorship_module_enabled is true' do
       enterprise = create(:enterprise, mentorship_module_enabled: true)
       group = create(:group, enterprise: enterprise)
