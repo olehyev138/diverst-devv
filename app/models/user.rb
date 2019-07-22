@@ -150,6 +150,12 @@ class User < ApplicationRecord
     self.avatar = URI.parse(url)
   end
 
+  def avatar_location
+    return nil if !avatar.presence
+
+    avatar.expiring_url(36000)
+  end
+
   def generate_authentication_token(length = 20)
     loop do
       rlength = (length * 3) / 4

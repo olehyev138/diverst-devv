@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import Container from '@material-ui/core/Container';
 import { withStyles } from '@material-ui/core/styles';
 
+import GroupPage from 'containers/Group/GroupPage';
 import GroupLinks from 'components/Group/GroupLinks';
 import AuthenticatedLayout from '../AuthenticatedLayout';
 
@@ -19,6 +20,12 @@ const styles = theme => ({
 const GroupLayout = ({ component: Component, ...rest }) => {
   const { classes, ...other } = rest;
 
+  /* Wraps a child component in GroupPage
+   *   - GroupPage will be wrapped around every container in the group section
+   *   - Connects to store & handles general current group state, such as current group object, layout
+   *   - Doesnt cause problems like AuthenticatedLayout for whatever reason. Likely because the layouts use 'render props'
+   */
+
   return (
     <AuthenticatedLayout
       position='absolute'
@@ -30,7 +37,9 @@ const GroupLayout = ({ component: Component, ...rest }) => {
 
           <Container>
             <div className={classes.content}>
-              <Component {...other} />
+              <GroupPage {...other}>
+                <Component {...other} />
+              </GroupPage>
             </div>
           </Container>
         </React.Fragment>

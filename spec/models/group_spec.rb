@@ -162,6 +162,24 @@ RSpec.describe Group, type: :model do
     end
   end
 
+  describe '#logo_location' do
+    it 'returns the actual logo location' do
+      group = create(:group, logo: File.new('spec/fixtures/files/verizon_logo.png'))
+
+      expect(group.logo_location).to_not be nil
+      expect(group.logo_location).to_not eq '/assets/missing.png'
+    end
+  end
+
+  describe '#banner_location' do
+    it 'returns the actual banner location' do
+      group = create(:group, banner: File.new('spec/fixtures/files/verizon_logo.png'))
+
+      expect(group.banner_location).to_not be nil
+      expect(group.banner_location).to_not eq '/assets/missing.png'
+    end
+  end
+
   describe 'index' do
     it 'gets all parents' do
       enterprise = create(:enterprise)
