@@ -12,7 +12,7 @@ RSpec.describe GroupCategoryType, type: :model do
   it { expect(group_category_type).to validate_uniqueness_of(:name) }
 
 
-  context '#category_names=(names)' do
+  describe '#category_names=(names)' do
     let!(:group_category_type) { create(:group_category_type) }
 
     it 'produces 4 group categories' do
@@ -28,7 +28,19 @@ RSpec.describe GroupCategoryType, type: :model do
     end
   end
 
-  context 'test after_save callback' do
+  describe '#to_s' do
+    let(:group_category_type) { build(:group_category_type, name: 'color') }
+
+    it 'returns name of group category type' do
+      expect(group_category_type.to_s).to eq('color')
+    end
+
+    it 'allow string interpolation' do
+      expect("#{group_category_type}").to eq('color')
+    end
+  end
+
+  describe 'test after_save callback' do
     let!(:group_category_type) { build(:group_category_type) }
 
     it 'run #create_association_with_enterprise callback' do
