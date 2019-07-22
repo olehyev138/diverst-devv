@@ -48,7 +48,7 @@ class Users::InvitationsController < Devise::InvitationsController
   def configure_permitted_parameters
     # Only add some parameters
     devise_parameter_sanitizer.for(:invite).concat [:first_name, :last_name, :email, :role, group_ids: []]
-    devise_parameter_sanitizer.for(:accept_invitation).concat [:first_name, :last_name, group_ids: []]
+    devise_parameter_sanitizer.for(:accept_invitation).concat [:first_name, :last_name, :seen_onboarding, group_ids: []]
   end
 
   def ensure_policy
