@@ -197,6 +197,18 @@ class Group < ApplicationRecord
     self.logo = URI.parse(url)
   end
 
+  def logo_location
+    return nil if !logo.presence
+
+    logo.expiring_url(36000)
+  end
+
+  def banner_location
+    return nil if !banner.presence
+
+    banner.expiring_url(36000)
+  end
+
   def resolve_auto_archive_state
     update(auto_archive: false)
   end

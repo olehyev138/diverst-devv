@@ -53,7 +53,7 @@ export function LandingPage() {
           <Grid item>
             <div>
               <Button color='primary'>
-                <Link to={ROUTES.session.login.path}>Login</Link>
+                <Link to={ROUTES.session.login.path()}>Login</Link>
               </Button>
             </div>
           </Grid>

@@ -251,6 +251,15 @@ RSpec.describe User do
     end
   end
 
+  describe '#avatar_location' do
+    it 'returns the actual avatar location' do
+      user = create(:user, avatar: File.new('spec/fixtures/files/verizon_logo.png'))
+
+      expect(user.avatar_location).to_not be nil
+      expect(user.avatar_location).to_not eq '/assets/missing.png'
+    end
+  end
+
   describe 'scopes' do
     let(:enterprise) { create :enterprise }
     let!(:active_user) { create :user, enterprise: enterprise }

@@ -22,37 +22,51 @@ import GroupEditPage from 'containers/Group/GroupEditPage';
 
 /* Group */
 import GroupHomePage from 'containers/Group/GroupHomePage';
+import NewsFeedPage from 'containers/News/NewsFeedPage';
+
+/* Group - News Feed */
+import GroupMessagePage from 'containers/News/GroupMessage/GroupMessagePage';
+import GroupMessageCreatePage from 'containers/News/GroupMessage/GroupMessageCreatePage';
+import GroupMessageEditPage from 'containers/News/GroupMessage/GroupMessageEditPage';
 
 // Paths
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 export default function Routes(props) {
+  const expandRoute = route => ({ path: route.path(), data: route.data || {} });
+
   return (
     <Switch>
-      <SessionLayout path={ROUTES.session.login.path} component={LoginPage} />
+      <SessionLayout {...expandRoute(ROUTES.session.login)} component={LoginPage} />
 
       { /* Admin */ }
       { /* Admin - Analyze */ }
-      <AdminLayout path={ROUTES.admin.analyze.overview.path} route={ROUTES.admin.analyze.overview} component={PlaceholderPage} />
-      <AdminLayout path={ROUTES.admin.analyze.users.path} route={ROUTES.admin.analyze.users} component={PlaceholderPage} />
+      <AdminLayout {...expandRoute(ROUTES.admin.analyze.overview)} component={PlaceholderPage} />
+      <AdminLayout {...expandRoute(ROUTES.admin.analyze.users)} component={PlaceholderPage} />
 
       { /* Admin - Manage */ }
       { /* Admin - Manage - Groups */ }
-      <AdminLayout exact path={ROUTES.admin.manage.groups.index.path} route={ROUTES.admin.manage.groups.index} component={AdminGroupListPage} />
-      <AdminLayout path={ROUTES.admin.manage.groups.new.path} route={ROUTES.admin.manage.groups.new} component={GroupCreatePage} />
-      <AdminLayout path={ROUTES.admin.manage.groups.edit.path} route={ROUTES.admin.manage.groups.edit} component={GroupEditPage} />
-      <AdminLayout path={ROUTES.admin.manage.groups.delete.path} route={ROUTES.admin.manage.groups.delete} component={PlaceholderPage} />
+      <AdminLayout exact {...expandRoute(ROUTES.admin.manage.groups.index)} component={AdminGroupListPage} />
+      <AdminLayout {...expandRoute(ROUTES.admin.manage.groups.new)} component={GroupCreatePage} />
+      <AdminLayout {...expandRoute(ROUTES.admin.manage.groups.edit)} component={GroupEditPage} />
 
-      <UserLayout exact path={ROUTES.user.home.path} route={ROUTES.user.home} pageTitle={ROUTES.user.home.titleMessage} component={PlaceholderPage} />
-      <UserLayout path={ROUTES.user.innovate.path} route={ROUTES.user.innovate} pageTitle={ROUTES.user.innovate.titleMessage} component={PlaceholderPage} />
-      <UserLayout path={ROUTES.user.news.path} route={ROUTES.user.news} pageTitle={ROUTES.user.news.titleMessage} component={PlaceholderPage} />
-      <UserLayout path={ROUTES.user.events.path} route={ROUTES.user.events} pageTitle={ROUTES.user.events.titleMessage} component={PlaceholderPage} />
-      <UserLayout path={ROUTES.user.groups.path} route={ROUTES.user.groups} pageTitle={ROUTES.user.groups.titleMessage} component={PlaceholderPage} />
-      <UserLayout path={ROUTES.user.downloads.path} route={ROUTES.user.downloads} pageTitle={ROUTES.user.downloads.titleMessage} component={PlaceholderPage} />
-      <UserLayout path={ROUTES.user.mentorship.path} route={ROUTES.user.mentorship} pageTitle={ROUTES.user.mentorship.titleMessage} component={PlaceholderPage} />
+      <UserLayout exact {...expandRoute(ROUTES.user.home)} component={PlaceholderPage} />
+      <UserLayout {...expandRoute(ROUTES.user.innovate)} component={PlaceholderPage} />
+      <UserLayout {...expandRoute(ROUTES.user.innovate)} component={PlaceholderPage} />
+      <UserLayout {...expandRoute(ROUTES.user.news)} component={PlaceholderPage} />
+      <UserLayout {...expandRoute(ROUTES.user.events)} component={PlaceholderPage} />
+      <UserLayout {...expandRoute(ROUTES.user.groups)} component={PlaceholderPage} />
+      <UserLayout {...expandRoute(ROUTES.user.downloads)} component={PlaceholderPage} />
+      <UserLayout {...expandRoute(ROUTES.user.mentorship)} component={PlaceholderPage} />
 
       { /* Group */ }
-      <GroupLayout exact path={ROUTES.group.home.path} route={ROUTES.group.home} component={GroupHomePage} />
+      <GroupLayout exact {...expandRoute(ROUTES.group.home)} component={GroupHomePage} />
+      <GroupLayout exact {...expandRoute(ROUTES.group.news.index)} component={NewsFeedPage} />
+
+      { /* Group News Feed */ }
+      <GroupLayout {...expandRoute(ROUTES.group.news.messages.new)} component={GroupMessageCreatePage} />
+      <GroupLayout {...expandRoute(ROUTES.group.news.messages.edit)} component={GroupMessageEditPage} />
+      <GroupLayout exact {...expandRoute(ROUTES.group.news.messages.index)} component={GroupMessagePage} />
 
       <ErrorLayout path='' component={NotFoundPage} />
     </Switch>
