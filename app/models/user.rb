@@ -606,8 +606,15 @@ class User < BaseClass
   end
 
   def self.count_list(fields: [], from: nil)
-    self.all.map { |usr| usr.number_of fields: fields, from: from }.sort
-
+    fields.reduce(nil) do |sum, n|
+      hash = User.left_joins(n).group(:id).count("#{get_association_table_name(n)}.id")
+      p hash
+      if sum.present?
+        sum.merge(hash) { | _, x, y| x + y }
+      else
+        hash
+      end
+    end.values.sort
     # User.joins('LEFT JOIN initiative_users ON users.id = user_id').group(:id).order('count_initiative_users_id asc').count('initiative_users.id')
   end
 
