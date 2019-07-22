@@ -2,7 +2,14 @@
   <%= render 'public_activity/shared/owner', activity: activity %>
   updated folder
   <% if activity.trackable %>
-    <%= link_to activity.trackable.name, group_folder_resources_path(:folder_id => activity.trackable.id, :group_id => activity.trackable.group.id) %>
+    <% resource = activity.trackable %>
+    <% if resource.enterprise.present? %>
+      enterprise folder
+      <%= link_to resource.name, enterprise_folders_path(enterprise_id: resource.enterprise.id) %>
+    <% elsif resource.group.present? %>
+      group folder
+      <%= link_to resource.name, group_folders_path(group_id: resource.group.id) %>
+    <% end %>
   <% else %>
     which has since been removed
   <% end %>

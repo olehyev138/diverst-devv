@@ -112,7 +112,7 @@ class Segment < BaseClass
     return users if self.limit.blank?
 
     # Ordering requires an ActiveRecord collection, users is passed as an array of User objects
-    users = enterprise.users.where('id in (?)', users.pluck(:id))
+    users = enterprise.users.where('id in (?)', users.map(&:id))
 
     # Apply each order rule to the users list
     self.order_rules.reduce(users) { |ordered_users, rule| ordered_users.order(rule.field_name => rule.operator_name) }
