@@ -9,32 +9,22 @@
 
   <% if group[:events_count].to_i > 0 %>
     <em>Events</em>
-    <% group[:events].first(2).each do |event| %>
+    <% group[:events].each do |event| %>
       <p><%= link_to event.name, group_event_url(group[:group].try(:id), event.id, saml_for_enterprise: @user.enterprise.id ) %></p>
-    <% end %>
-
-    <% if group[:events_count ].to_i > number_of_named_items %>
-      <p><%= link_to "and #{pluralize(group[:events_count] - number_of_named_items, 'more new event') }", group_events_url(group[:group].try(:id), saml_for_enterprise: @user.enterprise.id ) %></p>
     <% end %>
   <% end %>
 
   <% if group[:messages_count].to_i > 0 %>
     <em>Messages</em>
-    <% group[:messages].first(2).each do |message| %>
+    <% group[:messages].each do |message| %>
       <p><%= link_to message.subject, group_group_message_url(group[:group].try(:id), message.id, saml_for_enterprise: @user.enterprise.id ) %></p>
-    <% end %>
-    <% if group[:messages_count ].to_i > number_of_named_items %>
-      <p><%= link_to "and #{ pluralize(group[:messages_count] - number_of_named_items, 'more new message') }", group_group_messages_url(group[:group].try(:id), saml_for_enterprise: @user.enterprise.id ) %></p>
     <% end %>
   <% end %>
 
   <% if group[:news_count].to_i > 0 %>
     <em>News Links</em>
-    <% group[:news].first(2).each do |new| %>
+    <% group[:news].each do |new| %>
       <p><%= link_to new.title, comments_group_news_link_url(group[:group].try(:id), new.id, saml_for_enterprise: @user.enterprise.id ) %></p>
-    <% end %>
-    <% if group[:news_count ].to_i > number_of_named_items %>
-      <p><%= link_to "and #{ pluralize(group[:news_count] - number_of_named_items, 'more new news link') }", group_news_links_url(group[:group].try(:id), saml_for_enterprise: @user.enterprise.id) %>.</p>
     <% end %>
   <% end %>
 
@@ -45,12 +35,8 @@
 
   <% if group[:participating_events_count].to_i > 0 %>
     <em>Participating Events</em>
-    <% group[:participating_events].first(2).each do |p_event| %>
+    <% group[:participating_events].each do |p_event| %>
       <p><%= link_to p_event.name, group_event_url(p_event.group_id, p_event.id, saml_for_enterprise: @user.enterprise.id ) %></p>
-    <% end %>
-
-    <% if group[:events_count ].to_i > number_of_named_items %>
-      <p><%= link_to "and #{pluralize(group[:participating_events_count] - number_of_named_items, 'more new participating event')}", group_events_url(group[:group].try(:id), saml_for_enterprise: @user.enterprise.id ) %></p>
     <% end %>
   <% end %>
 <% end %>

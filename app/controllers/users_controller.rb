@@ -90,6 +90,7 @@ class UsersController < ApplicationController
 
     @user.assign_attributes(user_params)
     @user.info.merge(fields: @user.enterprise.fields, form_data: params['custom-fields'])
+    @user.seen_onboarding = true
 
     if @user.save
       flash[:notice] = 'Your user was updated'

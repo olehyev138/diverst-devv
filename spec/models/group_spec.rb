@@ -397,7 +397,6 @@ RSpec.describe Group, type: :model do
     end
   end
 
-
   describe '#spent_budget' do
     it 'returns 0' do
       group = build(:group)
@@ -830,6 +829,22 @@ RSpec.describe Group, type: :model do
     it 'calls resolve_auto_archive_state as after_update callback' do
       expect(group).to receive(:resolve_auto_archive_state)
       group.run_callbacks(:update)
+    end
+  end
+
+  describe '#membership_list_csv' do
+    it 'returns correct headers when mentorship_module_enabled is false' do
+      enterprise = create(:enterprise, mentorship_module_enabled: false)
+      group = create(:group, enterprise: enterprise)
+      csv = group.membership_list_csv(group.members)
+      expect(csv).to eq("first_name,last_name,email_address\ntotal,,0\n")
+    end
+
+    it 'returns correct headers when mentorship_module_enabled is true' do
+      enterprise = create(:enterprise, mentorship_module_enabled: true)
+      group = create(:group, enterprise: enterprise)
+      csv = group.membership_list_csv(group.members)
+      expect(csv).to eq("first_name,last_name,email_address,mentor,mentee\ntotal,,0\n")
     end
   end
 end
