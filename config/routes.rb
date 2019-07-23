@@ -115,6 +115,7 @@ Diverst::Application.routes.draw do
       resources :tags
       resources :topics
       resources :topic_feedbacks
+      resources :twitter_accounts
       resources :user_rewards
       resources :user_reward_actions
       resources :users do

@@ -1,0 +1,2 @@
+class TwitterAccountSerializer < ApplicationRecordSerializer
+end

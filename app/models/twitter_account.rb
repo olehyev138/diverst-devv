@@ -1,4 +1,4 @@
-class TwitterAccount < ActiveRecord::Base
+class TwitterAccount < ApplicationRecord
   belongs_to :group
 
   validates_length_of :account, maximum: 191
