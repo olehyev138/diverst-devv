@@ -117,14 +117,13 @@
           <%= simple_form_for resource, :as => resource_name, :url => invitation_path(resource_name), :html => { :method => :put } do |f| %>
             <%= devise_error_messages! %>
             <%= f.hidden_field :invitation_token %>
+            <%= f.hidden_field :seen_onboarding, value: 1%>
             
             <%= f.input :first_name, required: true %>
             <%= f.input :last_name, required: true %>
 
             <%= f.input :password, required: true %>
             <%= f.input :password_confirmation, required: true %>
-
-            <%= f.hidden_field :seen_onboarding, value: 1%>
 
             <% resource.enterprise.fields.where(private: false).each do |cf| %>
               <% if !cf.private %>
