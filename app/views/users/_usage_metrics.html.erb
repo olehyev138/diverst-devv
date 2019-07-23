@@ -14,8 +14,8 @@
         </div>
         <div class="col md-6 sm-12">
           <div class="panel panel--primary text-center margin-bottom-0">
-            <div class="panel-headline"><p><strong>Percentile</strong></p></div>
-            <div class="panel-data"><p><b class="accent"><%= @user_metrics[:logins_p].ordinalize %> Percentile</b></p></div>
+            <div class="panel-headline"><p><strong>Ranking</strong></p></div>
+            <div class="panel-data"><p><b class="accent">Top <%= @user_metrics[:logins_p] %>%</b></p></div>
           </div>
         </div>
       </div>
@@ -30,8 +30,8 @@
         </div>
         <div class="col md-6 sm-12">
           <div class="panel panel--primary text-center margin-bottom-0">
-            <div class="panel-headline"><p><strong>Percentile</strong></p></div>
-            <div class="panel-data"><p><b class="accent"><%= @user_metrics[:posts_p].ordinalize %> Percentile</b></p></div>
+            <div class="panel-headline"><p><strong>Ranking</strong></p></div>
+            <div class="panel-data"><p><b class="accent">Top <%= @user_metrics[:posts_p] %> %</b></p></div>
           </div>
         </div>
       </div>
@@ -46,8 +46,8 @@
         </div>
         <div class="col md-6 sm-12">
           <div class="panel panel--primary text-center margin-bottom-0">
-            <div class="panel-headline"><p><strong>Percentile</strong></p></div>
-            <div class="panel-data"><p><b class="accent"><%= @user_metrics[:comments_p].ordinalize %> Percentile</b></p></div>
+            <div class="panel-headline"><p><strong>Ranking</strong></p></div>
+            <div class="panel-data"><p><b class="accent">Top <%= @user_metrics[:comments_p] %> %</b></p></div>
           </div>
         </div>
       </div>
@@ -62,8 +62,8 @@
         </div>
         <div class="col md-6 sm-12">
           <div class="panel panel--primary text-center margin-bottom-0">
-            <div class="panel-headline"><p><strong>Percentile</strong></p></div>
-            <div class="panel-data"><p><b class="accent"><%= @user_metrics[:events_p].ordinalize %> Percentile</b></p></div>
+            <div class="panel-headline"><p><strong>Ranking</strong></p></div>
+            <div class="panel-data"><p><b class="accent">Top <%= @user_metrics[:events_p] %> %</b></p></div>
           </div>
         </div>
       </div>

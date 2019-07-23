@@ -197,7 +197,7 @@ class UsersController < ApplicationController
   def calculate_percentile(number, sample)
     n = sample.count
     i = sample.rindex(number)
-    (100 * (i - 0.5) / n).round
+    101 - (100 * (i - 0.5) / n).round
   end
 
   def percentile_from_field(number, *fields)
