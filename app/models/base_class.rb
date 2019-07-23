@@ -15,8 +15,8 @@ class BaseClass < ActiveRecord::Base
     end
   end
 
-  def self.left_joins(field)
-    join_command = field_to_left_join_sql(field)
+  def self.left_joins(*field)
+    join_command = field_to_left_join_sql(*field)
     self.joins(join_command)
   end
 
@@ -30,18 +30,28 @@ class BaseClass < ActiveRecord::Base
 
   private
 
-  def self.field_to_left_join_sql(field)
-    reflection = self.reflections[field.to_s]
-    chain = reflection.chain.reverse
-    table_name = self.table_name
-    chain.reduce(['', table_name]) do |sum, n|
-      [
-        n.source_macro == :belongs_to ?
-          sum[0] + " LEFT JOIN #{n.klass.table_name} ON #{n.klass.table_name}.id = #{sum[1]}.#{n.foreign_key}" :
-          sum[0] + " LEFT JOIN #{n.klass.table_name} ON #{sum[1]}.id = #{n.klass.table_name}.#{n.foreign_key}",
-        n.klass.table_name
-      ]
-    end[0]
+  def self.field_to_left_join_sql(*fields)
+    joined = []
+    fields.reduce('') do |full_join, field|
+      reflection = self.reflections[field.to_s]
+      raise "#{field} is not a field of #{self.class}" unless reflection.present?
+
+      chain = reflection.chain.reverse
+      table_name = self.table_name
+      full_join + chain.reduce(['', table_name]) do |sum, n|
+        if joined.include?([n.klass, n.foreign_key])
+          sum
+        else
+          joined.append([n.klass, n.foreign_key])
+          [
+            n.source_macro == :belongs_to ?
+              sum[0] + " LEFT JOIN `#{n.klass.table_name}` ON `#{n.klass.table_name}`.`id` = `#{sum[1]}`.`#{n.foreign_key}`" :
+              sum[0] + " LEFT JOIN `#{n.klass.table_name}` ON `#{sum[1]}`.`id` = `#{n.klass.table_name}`.`#{n.foreign_key}`",
+            n.klass.table_name
+          ]
+        end
+      end[0]
+    end
   end
 end
 
