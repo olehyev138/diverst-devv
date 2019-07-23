@@ -383,16 +383,28 @@ class Group < BaseClass
 
   def membership_list_csv(group_members)
     total_nb_of_members = group_members.count
+    mentorship_module_enabled = enterprise.mentorship_module_enabled?
     CSV.generate do |csv|
-      csv << %w(first_name last_name email_address mentor mentee)
+      if mentorship_module_enabled
+        csv << %w(first_name last_name email_address mentor mentee)
+      else
+        csv << %w(first_name last_name email_address)
+      end
 
       group_members.each do |member|
-        membership_list_row = [ member.first_name,
-                                member.last_name,
-                                member.email,
-                                member.mentor,
-                                member.mentee
-                              ]
+        if mentorship_module_enabled
+          membership_list_row = [ member.first_name,
+                                  member.last_name,
+                                  member.email,
+                                  member.mentor,
+                                  member.mentee
+                                ]
+        else
+          membership_list_row = [ member.first_name,
+                                  member.last_name,
+                                  member.email
+                                ]
+        end
         csv << membership_list_row
       end
 
