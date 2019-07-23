@@ -9,14 +9,13 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import dig from 'object-dig';
 
+import { FormattedMessage } from 'react-intl';
+import { Field, Formik, Form } from 'formik';
 import {
   Button, Card, CardActions, CardContent, TextField
 } from '@material-ui/core';
 
-import { Field, Formik, Form } from 'formik';
 
-import { FormattedMessage } from 'react-intl';
-import { mapSelectAssociations } from 'utils/formHelpers';
 import messages from 'containers/News/messages';
 
 /* eslint-disable object-curly-newline */
@@ -62,9 +61,11 @@ export function GroupMessageCommentForm(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
+        // pass news_feed_link_id to saga to refetch news_feed_link with new comment
         props.commentAction({
           news_feed_link_id: dig(props, 'newsItem', 'id') || undefined,
-          attributes: mapSelectAssociations(values, [], []) });
+          attributes: values
+        });
 
         actions.resetForm();
       }}
