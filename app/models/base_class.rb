@@ -34,7 +34,7 @@ class BaseClass < ActiveRecord::Base
     joined = []
     fields.reduce('') do |full_join, field|
       reflection = self.reflections[field.to_s]
-      raise "#{field} is not a field of #{self.class}" unless reflection.present?
+      raise "#{field} is not a field of #{self.class}" if reflection.blank?
 
       chain = reflection.chain.reverse
       table_name = self.table_name
