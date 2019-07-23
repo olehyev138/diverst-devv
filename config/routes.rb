@@ -9,6 +9,7 @@ Diverst::Application.routes.draw do
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
       resources :api_keys
+      resources :annual_budgets
       resources :answers
       resources :answer_comments
       resources :answer_expenses

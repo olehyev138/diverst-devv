@@ -1,4 +1,4 @@
-class AnnualBudget < ActiveRecord::Base
+class AnnualBudget < ApplicationRecord
   belongs_to :group
   belongs_to :enterprise
   has_many :initiatives
