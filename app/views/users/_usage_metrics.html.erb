@@ -6,10 +6,16 @@
   <div class="card">
     <div class="card__section">
       <div class="row">
-        <div class="col md-12 sm-12">
+        <div class="col md-6 sm-12">
           <div class="panel panel--primary text-center margin-bottom-0">
             <div class="panel-headline"><p><strong>Number of Logins</strong></p></div>
             <div class="panel-data"><p><b class="accent"><%= @user_metrics[:logins] %></b></p></div>
+          </div>
+        </div>
+        <div class="col md-6 sm-12">
+          <div class="panel panel--primary text-center margin-bottom-0">
+            <div class="panel-headline"><p><strong>Percentile</strong></p></div>
+            <div class="panel-data"><p><b class="accent"><%= @user_metrics[:logins_p].ordinalize %> Percentile</b></p></div>
           </div>
         </div>
       </div>
@@ -22,21 +28,42 @@
             <div class="panel-data"><p><b class="accent"><%= @user_metrics[:posts] %></b></p></div>
           </div>
         </div>
-
         <div class="col md-6 sm-12">
           <div class="panel panel--primary text-center margin-bottom-0">
-            <div class="panel-headline"><p><strong>Number of Comments</strong></p></div>
-            <div class="panel-data"><p><b class="accent"><%= @user_metrics[:comments] %></b></p></div>
+            <div class="panel-headline"><p><strong>Percentile</strong></p></div>
+            <div class="panel-data"><p><b class="accent"><%= @user_metrics[:posts_p].ordinalize %> Percentile</b></p></div>
           </div>
         </div>
       </div>
     </div>
     <div class="card__section">
       <div class="row">
-        <div class="col md-12 sm-12">
+        <div class="col md-6 sm-12">
+          <div class="panel panel--primary text-center margin-bottom-0">
+            <div class="panel-headline"><p><strong>Number of Comments</strong></p></div>
+            <div class="panel-data"><p><b class="accent"><%= @user_metrics[:comments] %></b></p></div>
+          </div>
+        </div>
+        <div class="col md-6 sm-12">
+          <div class="panel panel--primary text-center margin-bottom-0">
+            <div class="panel-headline"><p><strong>Percentile</strong></p></div>
+            <div class="panel-data"><p><b class="accent"><%= @user_metrics[:comments_p].ordinalize %> Percentile</b></p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card__section">
+      <div class="row">
+        <div class="col md-6 sm-12">
           <div class="panel panel--primary text-center margin-bottom-0">
             <div class="panel-headline"><p><strong>Number of Events Attended</strong></p></div>
             <div class="panel-data"><p><b class="accent"><%= @user_metrics[:events] %></b></p></div>
+          </div>
+        </div>
+        <div class="col md-6 sm-12">
+          <div class="panel panel--primary text-center margin-bottom-0">
+            <div class="panel-headline"><p><strong>Percentile</strong></p></div>
+            <div class="panel-data"><p><b class="accent"><%= @user_metrics[:events_p].ordinalize %> Percentile</b></p></div>
           </div>
         </div>
       </div>

@@ -194,16 +194,32 @@ class UsersController < ApplicationController
 
   protected
 
-  def caluclate_percentile(field)
-    Users.all.map(&field.to_sym)
+  def calculate_percentile(number, sample)
+    n = sample.count
+    i = sample.rindex(number)
+    (100 * (i - 0.5) / n).round
+  end
+
+  def percentile_from_field(number, *fields)
+    list_of_values = User.count_list(*fields)
+    calculate_percentile(number, list_of_values)
   end
 
   def get_usage_metrics
+    logins = @user.sign_in_count
+    posts = @user.number_of(:social_links, :own_messages, :own_news_links)
+    comments = @user.number_of(:answer_comments, :message_comments, :answer_comments)
+    events = @user.number_of(:initiatives)
+
     @user_metrics = {
-      logins: @user.get_login_count,
-      posts: @user.number_of(fields: [:social_links, :own_messages, :own_news_links]),
-      comments: @user.number_of(fields: [:answer_comments, :message_comments, :answer_comments]),
-      events: @user.number_of(fields: [:initiatives])
+      logins: logins,
+      logins_p: calculate_percentile(logins, User.all.map(&:sign_in_count).sort),
+      posts: posts,
+      posts_p: percentile_from_field(posts, :social_links, :own_messages, :own_news_links),
+      comments: comments,
+      comments_p: percentile_from_field(comments, :answer_comments, :message_comments, :answer_comments),
+      events: events,
+      events_p: percentile_from_field(events, :initiatives)
     }
 
     @most_visited_pages = @user.most_viewed_pages

@@ -605,10 +605,10 @@ class User < BaseClass
     self.sign_in_count
   end
 
-  def self.count_list(fields: [], from: nil)
+  def self.count_list(*fields, from: nil)
+    active_record = self.left_joins(*fields).group(:id)
     fields.reduce(nil) do |sum, n|
-      hash = User.left_joins(n).group(:id).count("#{get_association_table_name(n)}.id")
-      p hash
+      hash = active_record.distinct.count("#{get_association_table_name(n)}.id")
       if sum.present?
         sum.merge(hash) { | _, x, y| x + y }
       else
@@ -618,7 +618,7 @@ class User < BaseClass
     # User.joins('LEFT JOIN initiative_users ON users.id = user_id').group(:id).order('count_initiative_users_id asc').count('initiative_users.id')
   end
 
-  def number_of(fields: [], from: nil)
+  def number_of(*fields, from: nil)
     if from.present?
       fields.reduce(0) { |sum, n| send(n).where(created_at: from..Time.now).count + sum }
     else
