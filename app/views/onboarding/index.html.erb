@@ -120,8 +120,10 @@
           <%= f.input :first_name, required: true %>
           <%= f.input :last_name, required: true %>
 
-          <%= f.input :password, required: true %>
-          <%= f.input :password_confirmation, required: true %>
+          <% unless @user.enterprise.has_enabled_saml? %>
+            <%= f.input :password, required: true %>
+            <%= f.input :password_confirmation, required: true %>
+          <% end %>
 
           <% @user.enterprise.fields.where(private: false).each do |cf| %>
             <% if !cf.private %>
