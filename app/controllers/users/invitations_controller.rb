@@ -12,7 +12,7 @@ class Users::InvitationsController < Devise::InvitationsController
   def resolve_layout
     case action_name
     when 'edit'
-      false # No layout since we have no logged in user and the themes require one in the layout
+      false # No layout since wef.hi have no logged in user and the themes require one in the layout
     else
       'global_settings'
     end
