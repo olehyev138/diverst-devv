@@ -2,14 +2,13 @@
 import dig from 'object-dig';
 import { RouteContext } from 'containers/Layouts/ApplicationLayout';
 
-
 /*
- * Provide an interface to the global routing data
+ * Provide an interface to the global routing data stored in RouteContext
  *
  *
  * routeContext looks like:
  *   {
- *     computedMatch: { params: { }}
+ *     computedMatch: { params: { ... }}
  *     location: { ... }
  *   }
  *
@@ -17,9 +16,9 @@ import { RouteContext } from 'containers/Layouts/ApplicationLayout';
 export default class RouteService {
   constructor(contextFunc) {
     this.contextFunc = contextFunc;
-    this.routeParams = this.contextFunc(RouteContext);
-    this.match = this.routeParams.computedMatch;
-    this.location = this.location;
+    this.routeData = this.contextFunc(RouteContext);
+    this.match = this.routeData.computedMatch;
+    this.location = this.routeData.location;
   }
 
   path() {
@@ -36,5 +35,6 @@ export default class RouteService {
 
   queries(...keys) {
     // todo: - return url query strings in location
+    //       - parse with querystring library
   }
 }
