@@ -4,13 +4,15 @@ RSpec.describe 'GroupMessages', type: :request do
   let(:enterprise) { create(:enterprise) }
   let(:api_key) { create(:api_key) }
   let(:user) { create(:user, password: 'password', enterprise: enterprise) }
-  let(:item) { create(:group_message) }
+  let(:group) { create(:group, enterprise: enterprise) }
+  let(:item) { create(:group_message, group: group) }
   let(:route) { 'group_messages' }
   let(:jwt) { UserTokenService.create_jwt(user) }
   let(:headers) { { 'HTTP_DIVERST_APIKEY' => api_key.key, 'Diverst-UserToken' => jwt } }
+  let(:params) { { group_id: group.id } }
 
   it 'gets all items' do
-    get "/api/v1/#{route}", headers: headers
+    get "/api/v1/#{route}", params: params, headers: headers
     expect(response).to have_http_status(:ok)
   end
 

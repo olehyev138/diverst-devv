@@ -32,6 +32,10 @@ class SocialLinkPolicy < ApplicationPolicy
     @record.author == @user
   end
 
+  def show?
+    index?
+  end
+
   class Scope < Scope
     def index?
       SocialLinkPolicy.new(user, nil).index?

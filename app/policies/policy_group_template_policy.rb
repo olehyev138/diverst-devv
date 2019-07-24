@@ -21,4 +21,8 @@ class PolicyGroupTemplatePolicy < ApplicationPolicy
   def destroy?
     index?
   end
+
+  def show?
+    index?
+  end
 end

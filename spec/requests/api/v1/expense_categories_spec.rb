@@ -4,7 +4,7 @@ RSpec.describe 'ExpenseCategories', type: :request do
   let(:enterprise) { create(:enterprise) }
   let(:api_key) { create(:api_key) }
   let(:user) { create(:user, password: 'password', enterprise: enterprise) }
-  let(:item) { create(:expense_category) }
+  let(:item) { create(:expense_category, enterprise: enterprise) }
   let(:route) { 'expense_categories' }
   let(:jwt) { UserTokenService.create_jwt(user) }
   let(:headers) { { 'HTTP_DIVERST_APIKEY' => api_key.key, 'Diverst-UserToken' => jwt } }
