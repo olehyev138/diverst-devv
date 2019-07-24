@@ -390,17 +390,17 @@ class Group < BaseClass
       first_row = %w(first_name last_name email_address)
       first_row += %w(mentor mentee) if mentorship_module_enabled
       first_row += fields.map(&:title)
-      
+
       csv << first_row
-      
+
       group_members.each do |member|
         membership_list_row = []
         membership_list_row += [ member.first_name, member.last_name, member.email ]
         membership_list_row += [ member.mentor, member.mentee ] if mentorship_module_enabled
-        
+
         member_info = member.info
         membership_list_row += fields.map { |fld| fld.to_string(member_info.fetch(fld.id)) rescue nil }
-        
+
         csv << membership_list_row
       end
 
