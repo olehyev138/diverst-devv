@@ -152,7 +152,7 @@ RSpec.feature 'Custom-field Management' do
 
     context 'remove' do
       before do
-        @field =set_custom_select_fields
+        @field = set_custom_select_fields
         visit edit_fields_enterprise_path(enterprise)
       end
 
