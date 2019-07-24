@@ -149,7 +149,7 @@
       ]
     }));
 
-    var table2 = $('#users-usage-table').DataTable(Utility.mergeWithDTDefaults({
+    var table2 = $('#users-show_usage-table').DataTable(Utility.mergeWithDTDefaults({
       serverSide: true,
       ajax: { url: "<%= user_usage_data_metrics_users_path(format: :json) %>", data: function(d) { d.scoped_by_models = scoped_by_models } },
       columnDefs: [

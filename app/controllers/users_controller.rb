@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   before_action :set_user,
                 only: [
                   :edit, :update, :destroy, :resend_invitation,
-                  :show, :group_surveys, :usage, :url_usage_data
+                  :show, :group_surveys, :show_usage, :url_usage_data
                 ]
   after_action :verify_authorized, except: [:edit_profile, :group_surveys]
 
@@ -180,9 +180,14 @@ class UsersController < ApplicationController
     end
   end
 
-  def usage
-    authorize @user, :index?
-    get_usage_metrics
+  def show_usage
+    authorize @user, :show?
+    get_user_usage_metrics
+  end
+
+  def index_usage
+    authorize User, :index?
+    get_aggregate_usage_metrics
   end
 
   def url_usage_data
@@ -195,6 +200,19 @@ class UsersController < ApplicationController
 
   protected
 
+  def calculate_sum_mean_and_sd(sample)
+    n = sample.count
+    sum = sample.sum
+    mean = sum.to_f / n
+    sd = Math.sqrt(sample.reduce(0) { |partial, element| partial + (element - mean)**2 / n })
+    return sum, mean.round(2), sd.round(2)
+  end
+
+  def sum_mean_and_sd_from_fields(*fields)
+    list_of_values = User.count_list(*fields)
+    calculate_sum_mean_and_sd(list_of_values)
+  end
+
   def calculate_percentile(number, sample)
     n = sample.count
     i = sample.rindex(number)
@@ -206,7 +224,24 @@ class UsersController < ApplicationController
     calculate_percentile(number, list_of_values)
   end
 
-  def get_usage_metrics
+  def get_aggregate_usage_metrics
+    logins_s, logins_m, logins_sd = calculate_sum_mean_and_sd(User.all.map(&:sign_in_count))
+    posts_s, posts_m, posts_sd = sum_mean_and_sd_from_fields(:social_links, :own_messages, :own_news_links)
+    comments_s, comments_m, comments_sd = sum_mean_and_sd_from_fields(:answer_comments, :message_comments, :answer_comments)
+    events_s, events_m, events_sd = sum_mean_and_sd_from_fields(:initiatives)
+
+    @aggregate_metrics = {}
+    @fields = %w(logins posts comments events)
+    @fields.each do |type|
+      @aggregate_metrics[type.to_sym] = {
+        sum: binding.local_variable_get("#{type}_s"),
+        mean: binding.local_variable_get("#{type}_m"),
+        sd: binding.local_variable_get("#{type}_sd")
+      }
+    end
+  end
+
+  def get_user_usage_metrics
     logins = @user.sign_in_count
     posts = @user.number_of(:social_links, :own_messages, :own_news_links)
     comments = @user.number_of(:answer_comments, :message_comments, :answer_comments)

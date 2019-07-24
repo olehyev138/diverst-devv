@@ -1,6 +1,6 @@
 class UserByUsageDatatable < AjaxDatatablesRails::Base
   def_delegator :@view, :link_to
-  def_delegator :@view, :usage_user_path
+  def_delegator :@view, :show_usage_user_path
 
   def initialize(view_context, users, read_only: false)
     super(view_context)
@@ -26,7 +26,7 @@ class UserByUsageDatatable < AjaxDatatablesRails::Base
         record.last_name,
         record.email,
         record.points,
-        "#{link_to('Details', usage_user_path(record))}"
+        "#{link_to('Details', show_usage_user_path(record))}"
       ]
     end
   end

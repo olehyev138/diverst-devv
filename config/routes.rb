@@ -55,13 +55,14 @@ Rails.application.routes.draw do
   resources :user_roles
   resources :users do
     member do
-      get 'usage'
+      get 'show_usage'
       get 'url_usage_data'
       get 'group_surveys'
       put 'resend_invitation'
     end
 
     collection do
+      get 'index_usage'
       get 'export_csv'
       get 'import_csv'
       get 'sample_csv'

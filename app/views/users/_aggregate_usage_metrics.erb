@@ -1,0 +1,33 @@
+<div class="content__main">
+  <div class="card">
+    <% @fields.each do |fld| %>
+      <div class="card__section">
+        <div class="row">
+          <div class="col md-12 sm-12">
+            <h2><%= fld.capitalize %></h2>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col md-4 sm-12">
+            <div class="panel panel--primary text-center margin-bottom-0">
+              <div class="panel-headline"><p><strong>Total Number</strong></p></div>
+              <div class="panel-data"><p><b class="accent"><%= @aggregate_metrics[fld.to_sym][:sum] %></b></p></div>
+            </div>
+          </div>
+          <div class="col md-4 sm-12">
+            <div class="panel panel--primary text-center margin-bottom-0">
+              <div class="panel-headline"><p><strong>Average per User</strong></p></div>
+              <div class="panel-data"><p><b class="accent"><%= @aggregate_metrics[fld.to_sym][:mean] %></b></p></div>
+            </div>
+          </div>
+          <div class="col md-4 sm-12">
+            <div class="panel panel--primary text-center margin-bottom-0">
+              <div class="panel-headline"><p><strong>Standard Deviation</strong></p></div>
+              <div class="panel-data"><p><b class="accent"><%= @aggregate_metrics[fld.to_sym][:sd]%></b></p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
