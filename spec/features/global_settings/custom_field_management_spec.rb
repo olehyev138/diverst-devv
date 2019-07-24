@@ -70,18 +70,18 @@ RSpec.feature 'Custom-field Management' do
 
     context 'edit' do
       before do
-        set_custom_text_fields
+        @field = set_custom_text_fields
         visit edit_fields_enterprise_path(enterprise)
+        click_on 'Edit'
       end
 
       scenario 'custom text field', js: true do
-        click_on 'Edit'
-
         expect(page).to have_field('* Title', with: 'BIO')
         expect(page).to have_unchecked_field('Allow multiple lines')
         expect(page).to have_unchecked_field('Hide from users')
         expect(page).to have_unchecked_field('Allow user to edit')
         expect(page).to have_unchecked_field('Set as mandatory')
+        expect(page).to have_unchecked_field('Show field in member list')
         expect(page).to have_field('Saml attribute', with: '')
 
         fill_in '* Title', with: 'Brief Self Description'
@@ -94,8 +94,6 @@ RSpec.feature 'Custom-field Management' do
       end
 
       scenario 'custom text field by hiding from user profile', js: true do
-        click_on 'Edit'
-
         page.find_field('Hide from users').trigger('click')
 
         click_on 'Save user fields'
@@ -110,8 +108,6 @@ RSpec.feature 'Custom-field Management' do
       end
 
       scenario 'custom text field by making it mandatory', js: true do
-        click_on 'Edit'
-
         page.find_field('Set as mandatory').trigger('click')
 
         click_on 'Save user fields'
@@ -119,6 +115,16 @@ RSpec.feature 'Custom-field Management' do
         visit edit_user_user_path(admin_user)
 
         expect(page).to have_content('* Bio')
+      end
+
+      scenario 'custom text field by making it part of CSV member list', js: true do
+        expect(Field.find(@field.id).add_to_member_list).to eq false
+
+        page.find_field('Show field in member list').trigger('click')
+
+        click_on 'Save user fields'
+
+        expect(Field.find(@field.id).add_to_member_list).to eq true
       end
     end
   end
@@ -146,7 +152,7 @@ RSpec.feature 'Custom-field Management' do
 
     context 'remove' do
       before do
-        set_custom_select_fields
+        @field =set_custom_select_fields
         visit edit_fields_enterprise_path(enterprise)
       end
 
@@ -163,14 +169,18 @@ RSpec.feature 'Custom-field Management' do
 
     context 'edit' do
       before do
-        set_custom_select_fields
+        @field = set_custom_select_fields
         visit edit_fields_enterprise_path(enterprise)
+        click_on 'Edit'
       end
 
       scenario 'custom select field', js: true do
         expect(page).to have_content 'Gender'
 
-        click_on 'Edit'
+        expect(page).to have_unchecked_field('Hide from users')
+        expect(page).to have_unchecked_field('Allow user to edit')
+        expect(page).to have_unchecked_field('Set as mandatory')
+        expect(page).to have_unchecked_field('Show field in member list')
 
         expect(page).to have_field('* Title', with: 'Gender', type: 'text')
         fill_in '* Title', with: 'Sex'
@@ -183,8 +193,6 @@ RSpec.feature 'Custom-field Management' do
 
       scenario 'custom select field by hiding it from user profile', js: true do
         expect(page).to have_content 'Gender'
-
-        click_on 'Edit'
 
         page.find_field('Hide from users').trigger('click')
 
@@ -200,8 +208,6 @@ RSpec.feature 'Custom-field Management' do
       end
 
       scenario 'custom select field by adding an extra option to choose from', js: true do
-        click_on 'Edit'
-
         fill_in 'Options (one per line)', with: "Male\nFemale\nOther"
 
         page.find_field('Allow user to edit').trigger('click')
@@ -215,8 +221,6 @@ RSpec.feature 'Custom-field Management' do
       end
 
       scenario 'custom select field by making it mandatory', js: true do
-        click_on 'Edit'
-
         page.find_field('Set as mandatory').trigger('click')
 
         click_on 'Save user fields'
@@ -224,6 +228,16 @@ RSpec.feature 'Custom-field Management' do
         visit edit_user_user_path(admin_user)
 
         expect(page).to have_content '* Gender'
+      end
+
+      scenario 'custom select field by making it part of CSV member list', js: true do
+        expect(Field.find(@field.id).add_to_member_list).to eq false
+
+        page.find_field('Show field in member list').trigger('click')
+
+        click_on 'Save user fields'
+
+        expect(Field.find(@field.id).add_to_member_list).to eq true
       end
     end
   end
@@ -253,7 +267,7 @@ RSpec.feature 'Custom-field Management' do
 
     context 'remove' do
       before do
-        set_custom_checkbox_fields
+        @field = set_custom_checkbox_fields
         visit edit_fields_enterprise_path(enterprise)
       end
 
@@ -270,12 +284,16 @@ RSpec.feature 'Custom-field Management' do
 
     context 'edit' do
       before do
-        set_custom_checkbox_fields
+        @field = set_custom_checkbox_fields
         visit edit_fields_enterprise_path(enterprise)
         click_on 'Edit'
       end
 
       scenario 'custom checkbox field', js: true do
+        expect(page).to have_unchecked_field('Hide from users')
+        expect(page).to have_unchecked_field('Allow user to edit')
+        expect(page).to have_unchecked_field('Set as mandatory')
+        expect(page).to have_unchecked_field('Show field in member list')
         expect(page).to have_field('* Title', with: 'Programming Language')
         expect(page).to have_field('Options (one per line)', with: "Ruby\nElixir\nC++\nJavaScript")
 
@@ -337,6 +355,16 @@ RSpec.feature 'Custom-field Management' do
 
         expect(page).to have_content ' * Programming Language'
       end
+
+      scenario 'custom checkbox field by making it part of CSV member list', js: true do
+        expect(Field.find(@field.id).add_to_member_list).to eq false
+
+        page.find_field('Show field in member list').trigger('click')
+
+        click_on 'Save user fields'
+
+        expect(Field.find(@field.id).add_to_member_list).to eq true
+      end
     end
   end
 
@@ -357,12 +385,16 @@ RSpec.feature 'Custom-field Management' do
 
     context 'edit' do
       before do
-        set_custom_numeric_fields
+        @field = set_custom_numeric_fields
         visit edit_fields_enterprise_path(enterprise)
         click_on 'Edit'
       end
 
       scenario 'custom numeric field', js: true do
+        expect(page).to have_unchecked_field('Hide from users')
+        expect(page).to have_unchecked_field('Allow user to edit')
+        expect(page).to have_unchecked_field('Set as mandatory')
+        expect(page).to have_unchecked_field('Show field in member list')
         expect(page).to have_field('* Title', with: 'Age-restrictions')
         expect(page).to have_field('Min', with: 18, type: 'number')
         expect(page).to have_field('Max', with: 98, type: 'number')
@@ -408,6 +440,16 @@ RSpec.feature 'Custom-field Management' do
 
         expect(page).to have_content '* Age-restrictions'
       end
+
+      scenario 'custom numeric field by making it part of CSV member list', js: true do
+        expect(Field.find(@field.id).add_to_member_list).to eq false
+
+        page.find_field('Show field in member list').trigger('click')
+
+        click_on 'Save user fields'
+
+        expect(Field.find(@field.id).add_to_member_list).to eq true
+      end
     end
   end
 
@@ -426,12 +468,16 @@ RSpec.feature 'Custom-field Management' do
 
     context 'edit' do
       before do
-        set_custom_date_fields
+        @field = set_custom_date_fields
         visit edit_fields_enterprise_path(enterprise)
         click_on 'Edit'
       end
 
       scenario 'custom date field', js: true do
+        expect(page).to have_unchecked_field('Hide from users')
+        expect(page).to have_unchecked_field('Allow user to edit')
+        expect(page).to have_unchecked_field('Set as mandatory')
+        expect(page).to have_unchecked_field('Show field in member list')
         expect(page).to have_field('* Title', with: 'Date of Birth')
 
         fill_in '* Title', with: 'DOB'
@@ -464,6 +510,16 @@ RSpec.feature 'Custom-field Management' do
         visit edit_user_user_path(admin_user)
 
         expect(page).to have_content '* Date of birth'
+      end
+
+      scenario 'custom date field by making it part of CSV member list', js: true do
+        expect(Field.find(@field.id).add_to_member_list).to eq false
+
+        page.find_field('Show field in member list').trigger('click')
+
+        click_on 'Save user fields'
+
+        expect(Field.find(@field.id).add_to_member_list).to eq true
       end
     end
   end
