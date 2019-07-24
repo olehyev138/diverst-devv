@@ -104,7 +104,6 @@
       <div class="col-lg-6 col-sm-12">
         <div class="content__main">
           <div class="card">
-            <%= @posts.empty? %>
             <% @posts.each do |news| %>
               <% if news.news_link && GroupNewsLinkPolicy.new(current_user, [@group]).index? %>
                 <%= render partial: "groups/shared/news_links", locals: {news_link: NewsLink.includes(:group, :author).find(news.link.id) } %>
