@@ -84,6 +84,28 @@ RSpec.describe Initiative, type: :model do
     end
   end
 
+  describe '#picture_location' do
+    it 'returns the actual picture location' do
+      initiative = create(:initiative, picture: File.new('spec/fixtures/files/verizon_logo.png'))
+
+      expect(initiative.picture_location).to_not be nil
+      expect(initiative.picture_location).to_not eq '/assets/missing.png'
+    end
+  end
+
+  describe '#picture_url' do
+    it 'sets the picture for initiative from url' do
+      initiative = create(:initiative, picture: nil)
+      expect(initiative.picture_file_name).to be nil
+
+      initiative.picture_url = Faker::LoremPixel.image(secure: false)
+      initiative.save!
+      initiative.reload
+
+      expect(initiative.picture_file_name).to_not be nil
+    end
+  end
+
   describe 'test callbacks' do
     let!(:new_initiative) { build(:initiative) }
 
