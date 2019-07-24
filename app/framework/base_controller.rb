@@ -3,7 +3,7 @@ module BaseController
     # Authorize with policy, only if policy exists
     # TODO: Don't only authorize if policy exists as every model should have a policy.
     # TODO: This is temporary to allow API calls to work properly without a policy during development.
-    authorize klass, :index? if Pundit.policy(current_user, klass)
+    base_authorize(klass)
 
     render status: 200, json: klass.index(self.diverst_request, params.permit!)
   rescue => e
@@ -11,7 +11,7 @@ module BaseController
   end
 
   def create
-    authorize klass, :create? if Pundit.policy(current_user, klass)
+    base_authorize(klass)
 
     render status: 201, json: klass.build(self.diverst_request, params)
   rescue => e
@@ -25,7 +25,7 @@ module BaseController
 
   def show
     item = klass.find(params[:id])
-    authorize item, :show? if Pundit.policy(current_user, item)
+    base_authorize(item)
 
     render status: 200, json: klass.show(self.diverst_request, params)
   rescue => e
@@ -34,7 +34,7 @@ module BaseController
 
   def update
     item = klass.find(params[:id])
-    authorize item, :update? if Pundit.policy(current_user, item)
+    base_authorize(item)
 
     render status: 200, json: klass.update(self.diverst_request, params)
   rescue => e
@@ -48,7 +48,7 @@ module BaseController
 
   def destroy
     item = klass.find(params[:id])
-    authorize item, :destroy? if Pundit.policy(current_user, item)
+    base_authorize(item)
 
     klass.destroy(self.diverst_request, params[:id])
     head :no_content
@@ -62,8 +62,17 @@ module BaseController
   # ex: users_controller will return User
   # custom controllers will need to define klass
   # or override controller methods
-
   def klass
     controller_name.classify.constantize
+  end
+
+  # Accepts a model instance or class
+  # If there is a policy it checks authorization for the current action
+  # If there is no policy it doesn't raise any errors - TODO: Done temporarily to allow models without policies to work during development
+  def base_authorize(item)
+    policy = Pundit::PolicyFinder.new(item).policy
+    unless policy.nil? || policy.new(current_user, item, params).send(action_name + '?')
+      raise Pundit::NotAuthorizedError, query: action_name, record: item, policy: policy
+    end
   end
 end
