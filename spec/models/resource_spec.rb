@@ -37,8 +37,7 @@ RSpec.describe Resource, type: :model do
   end
 
   describe '#extension' do
-    # Paperclip
-    xit "returns the file's lowercase extension without the dot" do
+    it "returns the file's lowercase extension without the dot" do
       resource = build_stubbed(:resource)
       expect(resource.file_extension).to eq 'csv'
     end
@@ -99,9 +98,21 @@ RSpec.describe Resource, type: :model do
     end
   end
 
+  describe '#file_url' do
+    it 'sets the file for resource from url' do
+      resource = create(:resource, file: nil)
+      expect(resource.file_file_name).to be nil
+
+      resource.file_url = Faker::LoremPixel.image(secure: false)
+      resource.save!
+      resource.reload
+
+      expect(resource.file_file_name).to_not be nil
+    end
+  end
+
   describe '#file_extension' do
-    # Paperclip
-    xit "returns '' " do
+    it "returns '' " do
       resource = build(:resource, file_file_name: nil, file: nil)
       expect(resource.file_extension).to eq('')
     end
