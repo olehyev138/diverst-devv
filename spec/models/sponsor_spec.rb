@@ -1,7 +1,6 @@
 require 'rails_helper'
 
-RSpec.fdescribe Sponsor, type: :model do
-
+RSpec.describe Sponsor, type: :model do
   describe '#sponsor_media_location' do
     it 'returns the actual sponsor_media location' do
       sponsor = create(:sponsor, sponsor_media: File.new('spec/fixtures/files/verizon_logo.png'))
