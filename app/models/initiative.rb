@@ -77,6 +77,7 @@ class Initiative < ApplicationRecord
   validate :check_budget
   validate :segment_enterprise
   validates_presence_of :pillar
+  validates_presence_of :owner_group
 
   settings do
     mappings dynamic: false do

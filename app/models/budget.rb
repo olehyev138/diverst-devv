@@ -1,5 +1,6 @@
 class Budget < ApplicationRecord
   include PublicActivity::Common
+  # include Budget::Actions
 
   belongs_to :group
   belongs_to :approver, class_name: 'User', foreign_key: 'approver_id'
@@ -22,6 +23,7 @@ class Budget < ApplicationRecord
   validates_length_of :decline_reason, maximum: 191
   validates_length_of :comments, maximum: 65535
   validates_length_of :description, maximum: 65535
+
   def requested_amount
     budget_items.sum(:estimated_amount)
   end

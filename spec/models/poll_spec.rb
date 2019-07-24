@@ -80,7 +80,8 @@ RSpec.describe Poll, type: :model do
       let(:poll) { build(:poll, enterprise: enterprise, initiative: initiative) }
 
       context 'when enterprise_id of initiative and poll are not the same' do
-        let!(:initiative) { create(:initiative, owner_group_id: 0) }
+        let(:group) { create(:group) }
+        let!(:initiative) { create(:initiative, owner_group_id: group.id) }
 
         it 'should be invalid' do
           poll.valid?
