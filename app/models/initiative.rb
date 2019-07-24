@@ -117,6 +117,16 @@ class Initiative < ApplicationRecord
     ).merge({ 'created_at' => self.created_at.beginning_of_hour })
   end
 
+  def picture_url=(url)
+    self.picture = URI.parse(url)
+  end
+
+  def picture_location
+    return nil if !picture.presence
+
+    picture.expiring_url(36000)
+  end
+
   def initiative_date(date_type)
     return '' unless ['start', 'end'].include?(date_type)
 

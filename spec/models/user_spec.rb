@@ -329,7 +329,7 @@ RSpec.describe User do
         }
       }
       params = ActionController::Parameters.new(payload)
-      created = User.build(request, params)
+      created = User.build(request, params.permit!)
 
       expect(created.avatar.presence).to_not be nil
     end

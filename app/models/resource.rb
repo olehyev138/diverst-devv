@@ -17,20 +17,18 @@ class Resource < ApplicationRecord
   accepts_nested_attributes_for :tags
 
   # Paperclip
-  #  has_attached_file :file, s3_permissions: 'private'
-  #  validates_with AttachmentPresenceValidator, attributes: :file, if: Proc.new { |r| r.url.blank? }
-  #  do_not_validate_attachment_file_type :file
+  has_attached_file :file, s3_permissions: 'private'
+  validates_with AttachmentPresenceValidator, attributes: :file, if: Proc.new { |r| r.url.blank? }
+  do_not_validate_attachment_file_type :file
 
   validates_length_of :resource_type, maximum: 191
   validates_length_of :file_content_type, maximum: 191
   validates_length_of :file_file_name, maximum: 191
   validates_length_of :title, maximum: 191
   validates_presence_of :title
-
-  # Paperclip
-  # validates_presence_of   :url, if: Proc.new { |r| r.file.nil? && r.url.blank? }
-  # validates_length_of     :url, maximum: 255
-
+  validates_presence_of   :url, if: Proc.new { |r| r.file.nil? && r.url.blank? }
+  validates_length_of     :url, maximum: 255
+  
   scope :unarchived_resources, ->(folder_ids, initiative_ids) { where('resources.initiative_id IN (?) OR resources.folder_id IN (?)', initiative_ids, folder_ids).where.not(archived_at: nil) }
 
   before_validation :smart_add_url_protocol
@@ -69,11 +67,21 @@ class Resource < ApplicationRecord
     self.tag_ids = Tag.ids_from_tokens(tokens)
   end
 
-  #  def file_extension
-  #    File.extname(file_file_name)[1..-1].downcase
-  #  rescue
-  #    ''
-  #  end
+  def file_url=(url)
+    self.file = URI.parse(url)
+  end
+
+  def file_location
+    return nil if !file.presence
+
+    file.expiring_url(36000)
+  end
+
+  def file_extension
+    File.extname(file_file_name)[1..-1].downcase
+  rescue
+    ''
+  end
 
   def expiration_time
     EXPIRATION_TIME
