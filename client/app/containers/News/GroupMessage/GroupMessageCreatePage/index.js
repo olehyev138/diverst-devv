@@ -13,7 +13,7 @@ import saga from 'containers/News/saga';
 import { selectGroup } from 'containers/Group/selectors';
 import { selectUser } from 'containers/Shared/App/selectors';
 
-import { routeContext } from 'utils/routeHelpers';
+import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { createGroupMessageBegin, newsFeedUnmount } from 'containers/News/actions';
@@ -24,8 +24,9 @@ export function GroupMessageCreatePage(props) {
   useInjectSaga({ key: 'news', saga });
 
   const { currentUser, currentGroup } = props;
+  const rs = new RouteService(useContext);
   const links = {
-    newsFeedIndex: ROUTES.group.news.index.path(routeContext(useContext, 'group_id')),
+    newsFeedIndex: ROUTES.group.news.index.path(rs.params('group_id')),
   };
 
   useEffect(() => () => props.newsFeedUnmount(), []);

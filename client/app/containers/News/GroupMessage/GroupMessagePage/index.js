@@ -10,26 +10,28 @@ import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/News/reducer';
 import saga from 'containers/News/saga';
 
-import { pathId, routeContext } from 'utils/routeHelpers';
+import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { selectGroup } from 'containers/Group/selectors';
 import { selectUser } from 'containers/Shared/App/selectors';
 import { selectNewsItem } from 'containers/News/selectors';
 
-import { getNewsItemBegin, newsFeedUnmount } from 'containers/News/actions';
+import { getNewsItemBegin, createGroupMessageCommentBegin, newsFeedUnmount } from 'containers/News/actions';
+
 import GroupMessage from 'components/News/GroupMessage/GroupMessage';
 
 export function GroupMessagePage(props) {
   useInjectReducer({ key: 'news', reducer });
   useInjectSaga({ key: 'news', saga });
 
+  const rs = new RouteService(useContext);
   const links = {
-    newsFeedIndex: ROUTES.group.news.index.path(routeContext(useContext, 'group_id')),
+    newsFeedIndex: ROUTES.group.news.index.path(rs.params('group_id')),
   };
 
   useEffect(() => {
-    const newsItemId = pathId(props, 'item_id');
+    const newsItemId = rs.params('item_id');
 
     // get news item & comments specified in path
     props.getNewsItemBegin({ id: newsItemId });
@@ -67,6 +69,7 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = {
   getNewsItemBegin,
+  createGroupMessageCommentBegin,
   newsFeedUnmount
 };
 

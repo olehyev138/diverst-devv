@@ -9,17 +9,15 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import dig from 'object-dig';
 
+import { FormattedMessage } from 'react-intl';
+import { Field, Formik, Form } from 'formik';
 import {
   Button, Card, CardActions, CardContent, TextField
 } from '@material-ui/core';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
-import { Field, Formik, Form } from 'formik';
-
-import { FormattedMessage } from 'react-intl';
 import messages from 'containers/News/messages';
-
-import { mapSelectAssociations } from 'utils/formHelpers';
+import { buildValues } from 'utils/formHelpers';
 
 /* eslint-disable object-curly-newline */
 export function GroupMessageFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
@@ -67,25 +65,20 @@ export function GroupMessageFormInner({ handleSubmit, handleChange, handleBlur, 
 
 export function GroupMessageForm(props) {
   const groupMessage = dig(props, 'newsItem', 'group_message');
-  const initialValues = {
-    subject: '',
-    content: '',
-  };
+
+  const initialValues = buildValues(groupMessage, {
+    subject: { default: '' },
+    content: { default: '' },
+    owner_id: { default: dig(props, 'currentUser', 'id') || '' },
+    group_id: { default: dig(props, 'currentGroup', 'id') || '' }
+  });
 
   return (
     <Formik
-      initialValues={groupMessage || initialValues}
+      initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        // TODO: have to do this here - only place these are 100% set
-        //   - write a helper
-        const finalValues = {
-          ...values,
-          owner_id: props.currentUser.id,
-          group_id: props.currentGroup.id
-        };
-
-        props.groupMessageAction(mapSelectAssociations(finalValues, [], []));
+        props.groupMessageAction(values);
       }}
 
       render={formikProps => <GroupMessageFormInner {...props} {...formikProps} />}

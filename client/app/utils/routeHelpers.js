@@ -3,59 +3,38 @@ import dig from 'object-dig';
 import { RouteContext } from 'containers/Layouts/ApplicationLayout';
 
 /*
- * Pulls out computedMatch object from props and gets the path param specified
- *  - ReactRouter fills every props object with computedMatchObject
- */
-export function pathId(props, param) {
-  return dig(props, 'computedMatch', 'params', param);
-}
-
-export function routeContext(contextFunc, ...keys) {
-  /* routeContext looks like:
-   *   {
-   *     computedMatch: { params: { }}
-   *     location: { ... }
-   *   }
-   *
-   */
-
-  const routeParams = contextFunc(RouteContext);
-
-  const ids = [];
-  for (const key of keys)
-    ids.push(dig(routeParams, 'computedMatch', 'params', key));
-
-  return ids;
-}
-
-/*
- * Fills a template path with given params
- * ex:
- *   path: 'group/:group_id
- *   params: { group_id: 5 }
- *     -> /group/5
- */
-export function fillPath(path, params) {
-  let filledPath = path;
-
-  for (const paramKey of Object.keys(params)) {
-    if (!params[paramKey]) continue; // eslint-disable-line no-continue
-    filledPath = filledPath.replace(`:${paramKey}`, params[paramKey]);
-  }
-
-  return filledPath;
-}
-
-/*
- *   path: 'group/:group_id
- *   params: [ 'group_id', 'item_id' ... ]
+ * Provide an interface to the global routing data stored in RouteContext
+ *
+ *
+ * routeContext looks like:
+ *   {
+ *     computedMatch: { params: { ... }}
+ *     location: { ... }
+ *   }
  *
  */
-export function buildPath(path, props, paramKeys) {
-  const params = {};
-  for (const paramKey of paramKeys)
-    params[paramKey] = pathId(props, paramKey);
+export default class RouteService {
+  constructor(contextFunc) {
+    this.contextFunc = contextFunc;
+    this.routeData = this.contextFunc(RouteContext);
+    this.match = this.routeData.computedMatch;
+    this.location = this.routeData.location;
+  }
 
+  path() {
+    return this.location.pathname;
+  }
 
-  return fillPath(path, params);
+  params(...keys) {
+    const params = [];
+    for (const key of keys)
+      params.push(dig(this.match, 'params', key));
+
+    return params;
+  }
+
+  queries(...keys) {
+    // todo: - return url query strings in location
+    //       - parse with querystring library
+  }
 }

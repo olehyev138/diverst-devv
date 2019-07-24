@@ -1,8 +1,8 @@
 class InvalidInputException < StandardError
-  attr_reader :attribute
+  attr_reader :message, :attribute
 
-  def initialize(message, attribute)
-    @attribute = attribute
-    super(message)
+  def initialize(exception)
+    @message = exception[:message]
+    @attribute = exception[:attribute]
   end
 end

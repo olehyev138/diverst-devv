@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
@@ -9,12 +9,15 @@ import { NavLink } from 'react-router-dom';
 import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 
+import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
-import { pathId, fillPath, buildPath } from 'utils/routeHelpers';
 
 export function GroupLinks(props) {
   const { theme } = props;
   const activeColor = theme.palette.primary.main;
+  const rs = new RouteService(useContext);
+
+  // to={buildPath(ROUTES.group.news.index.path(), props, ['group_id'])}
 
   const NavLinks = () => (
     <Toolbar
@@ -31,7 +34,7 @@ export function GroupLinks(props) {
       { /* TODO: do this properly */ }
       <Button
         component={WrappedNavLink}
-        to={buildPath(ROUTES.group.news.index.path(), props, ['group_id'])}
+        to={ROUTES.group.news.index.path(rs.params('group_id'))}
         activeStyle={{ color: activeColor }}
       >
         News Feed

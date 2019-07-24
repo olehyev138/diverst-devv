@@ -11,13 +11,14 @@ module BaseController
   end
 
   def create
+    params[klass.symbol] = payload
     base_authorize(klass)
 
     render status: 201, json: klass.build(self.diverst_request, params)
   rescue => e
     case e
-    when UnprocessableException
-      raise UnprocessableException.new(e.resource)
+    when InvalidInputException
+      raise
     else
       raise BadRequestException.new(e.message)
     end
@@ -33,14 +34,15 @@ module BaseController
   end
 
   def update
+    params[klass.symbol] = payload
     item = klass.find(params[:id])
     base_authorize(item)
 
     render status: 200, json: klass.update(self.diverst_request, params)
   rescue => e
     case e
-    when UnprocessableException
-      raise UnprocessableException.new(e.resource)
+    when InvalidInputException
+      raise
     else
       raise BadRequestException.new(e.message)
     end
@@ -54,6 +56,12 @@ module BaseController
     head :no_content
   rescue => e
     raise BadRequestException.new(e.message)
+  end
+
+  def payload
+    params.require(klass.symbol).permit(
+      klass.attribute_names
+    )
   end
 
   private

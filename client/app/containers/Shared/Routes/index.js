@@ -64,9 +64,9 @@ export default function Routes(props) {
       <GroupLayout exact {...expandRoute(ROUTES.group.news.index)} component={NewsFeedPage} />
 
       { /* Group News Feed */ }
-      <GroupLayout exact {...expandRoute(ROUTES.group.news.messages.index)} component={GroupMessagePage} />
       <GroupLayout {...expandRoute(ROUTES.group.news.messages.new)} component={GroupMessageCreatePage} />
       <GroupLayout {...expandRoute(ROUTES.group.news.messages.edit)} component={GroupMessageEditPage} />
+      <GroupLayout exact {...expandRoute(ROUTES.group.news.messages.index)} component={GroupMessagePage} />
 
       <ErrorLayout path='' component={NotFoundPage} />
     </Switch>

@@ -78,9 +78,31 @@ RSpec.describe Initiative, type: :model do
       url = Faker::LoremPixel.image(secure: false)
       payload = { initiative: { name: 'Save', pillar_id: pillar.id, picture: url, owner_group_id: group.id, owner_id: user.id, start: Date.today, end: Date.tomorrow + 1.day } }
       params = ActionController::Parameters.new(payload)
-      created = Initiative.build(request, params)
+      created = Initiative.build(request, params.permit!)
 
       expect(created.picture.presence).to_not be nil
+    end
+  end
+
+  describe '#picture_location' do
+    it 'returns the actual picture location' do
+      initiative = create(:initiative, picture: File.new('spec/fixtures/files/verizon_logo.png'))
+
+      expect(initiative.picture_location).to_not be nil
+      expect(initiative.picture_location).to_not eq '/assets/missing.png'
+    end
+  end
+
+  describe '#picture_url' do
+    it 'sets the picture for initiative from url' do
+      initiative = create(:initiative, picture: nil)
+      expect(initiative.picture_file_name).to be nil
+
+      initiative.picture_url = Faker::LoremPixel.image(secure: false)
+      initiative.save!
+      initiative.reload
+
+      expect(initiative.picture_file_name).to_not be nil
     end
   end
 
