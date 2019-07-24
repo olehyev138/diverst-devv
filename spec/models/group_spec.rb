@@ -227,16 +227,16 @@ RSpec.describe Group, type: :model do
     end
   end
 
-  describe '#avatar_url' do
-    it 'sets the avatar for user from url' do
-      user = create(:user)
-      expect(user.avatar_file_name).to be nil
+  describe '#logo_url' do
+    it 'sets the logo for group from url' do
+      group = create(:group)
+      expect(group.logo_file_name).to be nil
 
-      user.avatar_url = Faker::LoremPixel.image(secure: false)
-      user.save!
-      user.reload
+      group.logo_url = Faker::LoremPixel.image(secure: false)
+      group.save!
+      group.reload
 
-      expect(user.avatar_file_name).to_not be nil
+      expect(group.logo_file_name).to_not be nil
     end
   end
 
