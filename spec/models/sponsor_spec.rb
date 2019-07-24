@@ -1,11 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Sponsor, type: :model do
-  describe 'validations' do
-    let(:sponsor) { build_stubbed(:sponsor) }
-
-    it { expect(sponsor).to have_attached_file(:sponsor_media) }
-  end
+RSpec.fdescribe Sponsor, type: :model do
 
   describe '#sponsor_media_location' do
     it 'returns the actual sponsor_media location' do
