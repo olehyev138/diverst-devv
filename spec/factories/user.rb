@@ -14,5 +14,6 @@ FactoryBot.define do
     after(:create) do |user|
       user.policy_group = create(:policy_group)
     end
+    seen_onboarding true
   end
 end
