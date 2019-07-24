@@ -4,6 +4,7 @@ FactoryBot.define do
     created_at { Date.today }
     time_zone 'UTC'
     theme nil
+    mentorship_module_enabled false
 
     after(:create) do |enterprise|
       create(:user_role, role_name: 'admin',        role_type: 'admin', enterprise: enterprise, priority: 0)
