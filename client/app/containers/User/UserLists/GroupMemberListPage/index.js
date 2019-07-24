@@ -15,7 +15,9 @@ import { getUsersBegin, userListUnmount } from 'containers/User/UserLists/action
 import { selectPaginatedUsers } from 'containers/User/UserLists/selectors';
 import RouteService from 'utils/routeHelpers';
 
-export function GroupMemberList(props) {
+import GroupMemberList from 'components/User/UserLists/GroupMemberList';
+
+export function GroupMemberListPage(props) {
   useInjectReducer({ key: 'userList', reducer });
   useInjectSaga({ key: 'userList', saga });
 
@@ -29,11 +31,12 @@ export function GroupMemberList(props) {
 
   return (
     <React.Fragment>
+      <GroupMemberList />
     </React.Fragment>
   );
 }
 
-GroupMemberList.propTypes = {
+GroupMemberListPage.propTypes = {
   userListUnmount: PropTypes.func,
 };
 
@@ -52,4 +55,4 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(GroupMemberList);
+)(GroupMemberListPage);
