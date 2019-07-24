@@ -22,13 +22,13 @@ RSpec.describe DiverstController, type: :controller do
       request.headers.merge!(valid_session) # Add to request headers
     end
 
-    errors = OpenStruct.new({ full_messages: ['test'] })
+    errors = OpenStruct.new({ full_messages: ['test'], messages: [[]] })
     resource = OpenStruct.new({ errors: errors })
     errors = [
       { name: ActiveRecord::RecordInvalid, status: 400 },
       { name: ActiveRecord::RecordNotFound, status: 404 },
       { name: BadRequestException, status: 400 },
-      { name: InvalidInputException.new('Invalid Password', 'password'), status: 422, message: 'Invalid Password' },
+      { name: InvalidInputException.new(resource), status: 422, message: 'Invalid Password' },
       { name: UnprocessableException, status: 422, message: OpenStruct.new(resource) },
       { name: ActionController::ParameterMissing, status: 400, message: 'Test' },
       { name: ActionController::UnpermittedParameters, status: 400, message: [] },
