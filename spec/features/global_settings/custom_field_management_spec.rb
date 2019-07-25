@@ -125,6 +125,18 @@ RSpec.feature 'Custom-field Management' do
         click_on 'Save user fields'
 
         expect(Field.find(@field.id).add_to_member_list).to eq true
+
+        visit edit_fields_enterprise_path(enterprise)
+
+        click_on 'Edit'
+
+        expect(Field.find(@field.id).add_to_member_list).to eq true
+
+        page.find_field('Show field in member list').trigger('click')
+
+        click_on 'Save user fields'
+
+        expect(Field.find(@field.id).add_to_member_list).to eq false
       end
     end
   end
@@ -238,6 +250,18 @@ RSpec.feature 'Custom-field Management' do
         click_on 'Save user fields'
 
         expect(Field.find(@field.id).add_to_member_list).to eq true
+
+        visit edit_fields_enterprise_path(enterprise)
+
+        click_on 'Edit'
+
+        expect(Field.find(@field.id).add_to_member_list).to eq true
+
+        page.find_field('Show field in member list').trigger('click')
+
+        click_on 'Save user fields'
+
+        expect(Field.find(@field.id).add_to_member_list).to eq false
       end
     end
   end
@@ -364,6 +388,18 @@ RSpec.feature 'Custom-field Management' do
         click_on 'Save user fields'
 
         expect(Field.find(@field.id).add_to_member_list).to eq true
+
+        visit edit_fields_enterprise_path(enterprise)
+
+        click_on 'Edit'
+
+        expect(Field.find(@field.id).add_to_member_list).to eq true
+
+        page.find_field('Show field in member list').trigger('click')
+
+        click_on 'Save user fields'
+
+        expect(Field.find(@field.id).add_to_member_list).to eq false
       end
     end
   end
@@ -449,6 +485,18 @@ RSpec.feature 'Custom-field Management' do
         click_on 'Save user fields'
 
         expect(Field.find(@field.id).add_to_member_list).to eq true
+
+        visit edit_fields_enterprise_path(enterprise)
+
+        click_on 'Edit'
+
+        expect(Field.find(@field.id).add_to_member_list).to eq true
+
+        page.find_field('Show field in member list').trigger('click')
+
+        click_on 'Save user fields'
+
+        expect(Field.find(@field.id).add_to_member_list).to eq false
       end
     end
   end
@@ -520,6 +568,18 @@ RSpec.feature 'Custom-field Management' do
         click_on 'Save user fields'
 
         expect(Field.find(@field.id).add_to_member_list).to eq true
+
+        visit edit_fields_enterprise_path(enterprise)
+
+        click_on 'Edit'
+
+        expect(Field.find(@field.id).add_to_member_list).to eq true
+
+        page.find_field('Show field in member list').trigger('click')
+
+        click_on 'Save user fields'
+
+        expect(Field.find(@field.id).add_to_member_list).to eq false
       end
     end
   end
