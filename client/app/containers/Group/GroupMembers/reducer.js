@@ -6,8 +6,7 @@
 
 import produce from 'immer/dist/immer';
 import {
-  GET_USERS_SUCCESS,
-  USER_LIST_UNMOUNT, USER_FORM_UNMOUNT
+  GET_USERS_SUCCESS,  USER_LIST_UNMOUNT
 } from 'containers/Group/GroupMembers/constants';
 
 export const initialState = {
@@ -25,8 +24,6 @@ function usersReducer(state = initialState, action) {
         break;
       case USER_LIST_UNMOUNT:
         return initialState;
-      case USER_FORM_UNMOUNT:
-        return initialState;
     }
   });
 }
@@ -39,8 +36,8 @@ function formatUsers(users) {
   /* Format users to hash by id:
    *   { <id>: { name: user_01, ... } }
    */
-  return users.reduce((map, user) => {
-    map[user.id] = user;
+  return users.reduce((map, userGroup) => {
+    map[userGroup.id] = userGroup.user;
     return map;
   }, {});
 }

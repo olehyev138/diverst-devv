@@ -1,4 +1,5 @@
 import users from 'api/users/users';
+import userGroups from 'api/user_groups/user_groups';
 import sessions from 'api/sessions/sessions';
 import groups from 'api/groups/groups';
 import newsFeedLinks from 'api/news_feed_links/news_feed_links';
@@ -7,6 +8,7 @@ import groupMessageComments from 'api/group_message_comments/group_message_comme
 
 const Api = {
   users,
+  userGroups,
   sessions,
   groups,
   newsFeedLinks,

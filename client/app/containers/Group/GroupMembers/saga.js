@@ -20,11 +20,9 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 export function* getUsers(action) {
   try {
-    const response = yield call(api.users.all.bind(api.users), action.payload);
+    const response = yield call(api.userGroups.all.bind(api.userGroups), action.payload);
 
-    console.log(response);
-
-    // yield put(getUsersSuccess(response.data.page));
+    yield put(getUsersSuccess(response.data.page));
   } catch (err) {
     yield put(getUsersError(err));
 
