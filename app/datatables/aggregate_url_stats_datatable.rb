@@ -1,19 +1,18 @@
-class UsageDatatable < AjaxDatatablesRails::Base
+class AggregateUrlStatsDatatable < AjaxDatatablesRails::Base
   def_delegator :@view, :link_to
 
-  def initialize(view_context, user = nil)
+  def initialize(view_context)
     super(view_context)
-    @user = user || view_context.current_user
   end
 
   def sortable_columns
     # Declare strings in this format: ModelName.column_name
-    @sortable_columns ||= %w(PageVisitationDatum.page PageVisitationDatum.times_visited)
+    @sortable_columns ||= %w(TotalPageVisitation.page TotalPageVisitation.times_visited)
   end
 
   def searchable_columns
     # Declare strings in this format: ModelName.column_name
-    @searchable_columns ||= ['PageVisitationDatum.page']
+    @searchable_columns ||= ['TotalPageVisitation.page']
   end
 
   private
@@ -28,7 +27,7 @@ class UsageDatatable < AjaxDatatablesRails::Base
   end
 
   def get_raw_records
-    @user.page_visitation_data
+    TotalPageVisitation.all
   end
 
   # ==== Insert 'presenter'-like methods below if necessary

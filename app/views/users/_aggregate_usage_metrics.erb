@@ -1,26 +1,36 @@
+<div class="content__header">
+  <h1><%= "Aggregate Usage Stats" %></h1>
+</div>
+
 <div class="content__main">
   <div class="card">
     <% @fields.each do |fld| %>
       <div class="card__section">
         <div class="row">
           <div class="col md-12 sm-12">
-            <h2><%= fld.capitalize %></h2>
+            <h2><%= @aggregate_metrics[fld.to_sym][:name] %></h2>
           </div>
         </div>
         <div class="row">
-          <div class="col md-4 sm-12">
+          <div class="col md-3 sm-6 xs-12">
             <div class="panel panel--primary text-center margin-bottom-0">
               <div class="panel-headline"><p><strong>Total Number</strong></p></div>
               <div class="panel-data"><p><b class="accent"><%= @aggregate_metrics[fld.to_sym][:sum] %></b></p></div>
             </div>
           </div>
-          <div class="col md-4 sm-12">
+          <div class="col md-3 sm-6 xs-12">
+            <div class="panel panel--primary text-center margin-bottom-0">
+              <div class="panel-headline"><p><strong>Maximum by User</strong></p></div>
+              <div class="panel-data"><p><b class="accent"><%= @aggregate_metrics[fld.to_sym][:max]%></b></p></div>
+            </div>
+          </div>
+          <div class="col md-3 sm-6 xs-12">
             <div class="panel panel--primary text-center margin-bottom-0">
               <div class="panel-headline"><p><strong>Average per User</strong></p></div>
               <div class="panel-data"><p><b class="accent"><%= @aggregate_metrics[fld.to_sym][:mean] %></b></p></div>
             </div>
           </div>
-          <div class="col md-4 sm-12">
+          <div class="col md-3 sm-6 xs-12">
             <div class="panel panel--primary text-center margin-bottom-0">
               <div class="panel-headline"><p><strong>Standard Deviation</strong></p></div>
               <div class="panel-data"><p><b class="accent"><%= @aggregate_metrics[fld.to_sym][:sd]%></b></p></div>
@@ -31,3 +41,15 @@
     <% end %>
   </div>
 </div>
+
+<h3>Most Visited Pages</h3>
+<div class="card">
+  <div class="card__section">
+    <%= render 'url_table', source: url_usage_data_users_path(format: :json) %>
+  </div>
+</div>
+
+<script>
+
+
+</script>

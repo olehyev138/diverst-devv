@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   before_action :set_user,
                 only: [
                   :edit, :update, :destroy, :resend_invitation,
-                  :show, :group_surveys, :show_usage, :url_usage_data
+                  :show, :group_surveys, :show_usage, :user_url_usage_data
                 ]
   after_action :verify_authorized, except: [:edit_profile, :group_surveys]
 
@@ -190,27 +190,36 @@ class UsersController < ApplicationController
     get_aggregate_usage_metrics
   end
 
-  def url_usage_data
-    authorize @user, :index?
+  def user_url_usage_data
+    authorize @user, :show?
     respond_to do |format|
       format.html
-      format.json { render json: UsageDatatable.new(view_context, @user) }
+      format.json { render json: UserUsageDatatable.new(view_context, @user) }
+    end
+  end
+
+  def url_usage_data
+    authorize User, :index?
+    respond_to do |format|
+      format.html
+      format.json { render json: AggregateUrlStatsDatatable.new(view_context) }
     end
   end
 
   protected
 
-  def calculate_sum_mean_and_sd(sample)
+  def calculate_aggregate_data(sample)
+    max = sample.max
     n = sample.count
     sum = sample.sum
     mean = sum.to_f / n
     sd = Math.sqrt(sample.reduce(0) { |partial, element| partial + (element - mean)**2 / n })
-    return sum, mean.round(2), sd.round(2)
+    return sum, max, mean.round(2), sd.round(2)
   end
 
-  def sum_mean_and_sd_from_fields(*fields)
+  def aggregate_data_from_field(*fields)
     list_of_values = User.count_list(*fields)
-    calculate_sum_mean_and_sd(list_of_values)
+    calculate_aggregate_data(list_of_values)
   end
 
   def calculate_percentile(number, sample)
@@ -225,38 +234,57 @@ class UsersController < ApplicationController
   end
 
   def get_aggregate_usage_metrics
-    logins_s, logins_m, logins_sd = calculate_sum_mean_and_sd(User.all.map(&:sign_in_count))
-    posts_s, posts_m, posts_sd = sum_mean_and_sd_from_fields(:social_links, :own_messages, :own_news_links)
-    comments_s, comments_m, comments_sd = sum_mean_and_sd_from_fields(:answer_comments, :message_comments, :answer_comments)
-    events_s, events_m, events_sd = sum_mean_and_sd_from_fields(:initiatives)
+    logins_s, logins_m, logins_a, logins_sd = calculate_aggregate_data(User.all.map(&:sign_in_count))
+    logins_n = 'Logins'
+
+    posts_s, posts_m, posts_a, posts_sd = aggregate_data_from_field(:social_links, :own_messages, :own_news_links)
+    posts_n = 'Posts Made'
+
+    comments_s, comments_m, comments_a, comments_sd = aggregate_data_from_field(:answer_comments, :message_comments, :answer_comments)
+    comments_n = 'Comments Made'
+
+    events_s, events_m, events_a, events_sd = aggregate_data_from_field(:initiatives)
+    events_n = 'Events Attendance'
 
     @aggregate_metrics = {}
     @fields = %w(logins posts comments events)
     @fields.each do |type|
       @aggregate_metrics[type.to_sym] = {
         sum: binding.local_variable_get("#{type}_s"),
-        mean: binding.local_variable_get("#{type}_m"),
-        sd: binding.local_variable_get("#{type}_sd")
+        max: binding.local_variable_get("#{type}_m"),
+        mean: binding.local_variable_get("#{type}_a"),
+        sd: binding.local_variable_get("#{type}_sd"),
+        name: binding.local_variable_get("#{type}_n")
       }
     end
   end
 
   def get_user_usage_metrics
     logins = @user.sign_in_count
-    posts = @user.number_of(:social_links, :own_messages, :own_news_links)
-    comments = @user.number_of(:answer_comments, :message_comments, :answer_comments)
-    events = @user.number_of(:initiatives)
+    logins_p = calculate_percentile(logins, User.all.map(&:sign_in_count).sort)
+    logins_n = 'Times Logged In'
 
-    @user_metrics = {
-      logins: logins,
-      logins_p: calculate_percentile(logins, User.all.map(&:sign_in_count).sort),
-      posts: posts,
-      posts_p: percentile_from_field(posts, :social_links, :own_messages, :own_news_links),
-      comments: comments,
-      comments_p: percentile_from_field(comments, :answer_comments, :message_comments, :answer_comments),
-      events: events,
-      events_p: percentile_from_field(events, :initiatives)
-    }
+    posts = @user.number_of(:social_links, :own_messages, :own_news_links)
+    posts_p = percentile_from_field(posts, :social_links, :own_messages, :own_news_links)
+    posts_n = 'Posts Made'
+
+    comments = @user.number_of(:answer_comments, :message_comments, :answer_comments)
+    comments_p = percentile_from_field(comments, :answer_comments, :message_comments, :answer_comments)
+    comments_n = 'Comments Made'
+
+    events = @user.number_of(:initiatives)
+    events_p = percentile_from_field(events, :initiatives)
+    events_n = 'Events Attended'
+
+    @fields = %w(logins posts comments events)
+    @user_metrics = {}
+    @fields.each do |type|
+      @user_metrics[type.to_sym] = {
+        count: binding.local_variable_get("#{type}"),
+        percentile: binding.local_variable_get("#{type}_p"),
+        name: binding.local_variable_get("#{type}_n")
+      }
+    end
 
     @most_visited_pages = @user.most_viewed_pages
   end
