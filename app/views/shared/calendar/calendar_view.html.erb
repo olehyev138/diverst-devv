@@ -32,7 +32,7 @@
             <% if GroupPolicy.new(current_user, nil).index? %>
               <div class="col-xs-5">
                 <small class="form-text text-muted">
-                  ERG chapters are not included in the default view. To include all ERG and associated chapter events, click 'Select All' under Filter by ERG
+                  <%= c_t(:erg) %> chapters are not included in the default view. To include all <%= c_t(:erg) %> and associated chapter events, click 'Select All' under Filter by <%= c_t(:erg) %>
                 </small>
                 <a href="#" class="select2-select-all" data-select-id="select2-field-groups" data-select-all-path="<%= get_all_groups_groups_path %>">Select All</a> |
                 <a href="#" class="select2-clear-all" data-select-id="select2-field-groups">Clear Selection</a>
