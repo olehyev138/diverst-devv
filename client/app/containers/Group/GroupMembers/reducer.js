@@ -6,7 +6,7 @@
 
 import produce from 'immer/dist/immer';
 import {
-  GET_USERS_SUCCESS,  USER_LIST_UNMOUNT
+  GET_USERS_SUCCESS, USER_LIST_UNMOUNT
 } from 'containers/Group/GroupMembers/constants';
 
 export const initialState = {

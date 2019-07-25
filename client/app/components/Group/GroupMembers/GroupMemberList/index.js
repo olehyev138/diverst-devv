@@ -73,7 +73,7 @@ export function GroupMemberList(props) {
         page={page}
         rowsPerPageOptions={[5, 10, 25]}
         rowsPerPage={rowsPerPage}
-        count={ 0 }
+        count={0}
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
         backIconButtonProps={{
