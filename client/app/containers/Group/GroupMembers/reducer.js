@@ -8,7 +8,7 @@ import produce from 'immer/dist/immer';
 import {
   GET_USERS_SUCCESS,
   USER_LIST_UNMOUNT, USER_FORM_UNMOUNT
-} from 'containers/User/UserLists/constants';
+} from 'containers/Group/GroupMembers/constants';
 
 export const initialState = {
   userList: {},

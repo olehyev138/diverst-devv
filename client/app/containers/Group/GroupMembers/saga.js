@@ -1,4 +1,4 @@
-import { call, put, takeLatest } from 'redux-saga/effects';
+import { call, put, takeLatest } from 'redux-saga/dist/redux-saga-effects-npm-proxy.esm';
 import api from 'api/api';
 import { push } from 'connected-react-router';
 
@@ -7,14 +7,14 @@ import { showSnackbar } from 'containers/Shared/Notifier/actions';
 import {
   GET_USERS_BEGIN, CREATE_USER_BEGIN,
   UPDATE_USER_BEGIN, DELETE_USER_BEGIN
-} from 'containers/User/UserLists/constants';
+} from 'containers/Group/GroupMembers/constants';
 
 import {
   getUsersSuccess, getUsersError,
   createUserSuccess, createUserError,
   updateUserSuccess, updateUserError,
   deleteUserError
-} from 'containers/User/UserLists/actions';
+} from 'containers/Group/GroupMembers/actions';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
@@ -22,7 +22,9 @@ export function* getUsers(action) {
   try {
     const response = yield call(api.users.all.bind(api.users), action.payload);
 
-    yield put(getUsersSuccess(response.data.page));
+    console.log(response);
+
+    // yield put(getUsersSuccess(response.data.page));
   } catch (err) {
     yield put(getUsersError(err));
 

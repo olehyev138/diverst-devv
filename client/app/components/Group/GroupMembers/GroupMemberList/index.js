@@ -7,27 +7,27 @@
 import React, {
   memo, useState, useContext
 } from 'react';
+import { compose } from 'redux';
 import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { compose } from 'redux';
 import { RouteContext } from 'containers/Layouts/ApplicationLayout';
 
 import {
   Button, Card, CardActions, CardContent, Grid,
   TablePagination
-} from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
+} from '@material-ui/core/index';
+import { withStyles } from '@material-ui/core/styles/index';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
 import { FormattedMessage } from 'react-intl';
-import messages from 'containers/User/UserLists/messages';
+import messages from 'containers/Group/GroupMembers/messages';
 
 const styles = theme => ({
 });
 
-export function NewsFeed(props) {
+export function GroupMemberList(props) {
   const { classes } = props;
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -87,7 +87,7 @@ export function NewsFeed(props) {
   );
 }
 
-NewsFeed.propTypes = {
+GroupMemberList.propTypes = {
   classes: PropTypes.object,
   // handlePagination: PropTypes.func,
   links: PropTypes.shape({
@@ -97,4 +97,4 @@ NewsFeed.propTypes = {
 export default compose(
   memo,
   withStyles(styles)
-)(NewsFeed);
+)(GroupMemberList);

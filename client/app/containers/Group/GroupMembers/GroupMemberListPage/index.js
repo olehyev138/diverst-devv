@@ -8,22 +8,28 @@ import { compose } from 'redux';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
-import reducer from 'containers/User/UserLists/reducer';
-import saga from 'containers/User/UserLists/saga';
+import reducer from 'containers/Group/GroupMembers/reducer';
+import saga from 'containers/Group/GroupMembers/saga';
 
-import { getUsersBegin, userListUnmount } from 'containers/User/UserLists/actions';
-import { selectPaginatedUsers } from 'containers/User/UserLists/selectors';
+import { getUsersBegin, userListUnmount } from 'containers/Group/GroupMembers/actions';
+import { selectPaginatedUsers } from 'containers/Group/GroupMembers/selectors';
 import RouteService from 'utils/routeHelpers';
 
-import GroupMemberList from 'components/User/UserLists/GroupMemberList';
+import GroupMemberList from 'components/Group/GroupMembers/GroupMemberList';
 
 export function GroupMemberListPage(props) {
   useInjectReducer({ key: 'userList', reducer });
   useInjectSaga({ key: 'userList', saga });
 
   const rs = new RouteService(useContext);
+  const links = {
+  };
 
   useEffect(() => {
+    const params = { group_id: 1 };
+
+    props.getUsersBegin(params);
+
     return () => {
       props.userListUnmount();
     };
@@ -37,6 +43,7 @@ export function GroupMemberListPage(props) {
 }
 
 GroupMemberListPage.propTypes = {
+  getUsersBegin: PropTypes.func,
   userListUnmount: PropTypes.func,
 };
 
@@ -44,6 +51,7 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = {
+  getUsersBegin,
   userListUnmount
 };
 

@@ -30,7 +30,7 @@ import GroupMessageCreatePage from 'containers/News/GroupMessage/GroupMessageCre
 import GroupMessageEditPage from 'containers/News/GroupMessage/GroupMessageEditPage';
 
 /* Group - Members */
-import GroupMemberListPage from 'containers/User/UserLists/GroupMemberListPage';
+import GroupMemberListPage from 'containers/Group/GroupMembers/GroupMemberListPage';
 
 // Paths
 import { ROUTES } from 'containers/Shared/Routes/constants';

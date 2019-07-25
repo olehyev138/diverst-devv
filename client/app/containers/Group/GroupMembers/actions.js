@@ -10,7 +10,7 @@ import {
   UPDATE_USER_BEGIN, UPDATE_USER_SUCCESS, UPDATE_USER_ERROR,
   DELETE_USER_BEGIN, DELETE_USER_SUCCESS, DELETE_USER_ERROR,
   USER_LIST_UNMOUNT, USER_FORM_UNMOUNT
-} from 'containers/User/UserLists/constants';
+} from 'containers/Group/GroupMembers/constants';
 
 /* User listing */
 

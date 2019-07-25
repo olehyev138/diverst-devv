@@ -1,5 +1,5 @@
-import { createSelector } from 'reselect/lib/index';
-import { initialState } from 'containers/User/UserLists/reducer';
+import { createSelector } from 'reselect/lib';
+import { initialState } from 'containers/Group/GroupMembers/reducer';
 
 const selectUserListDomain = state => state.userList || initialState;
 
