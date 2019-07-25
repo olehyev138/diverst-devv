@@ -60,7 +60,7 @@ export const ROUTES = {
   group: {
     pathPrefix: '/group',
     home: {
-      path: () => '/group/:group_id'
+      path: (groupId = ':group_id') => `/group/${groupId}`
     },
     news: {
       index: {

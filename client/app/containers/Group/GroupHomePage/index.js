@@ -16,7 +16,7 @@ export function GroupHomePage(props) {
   useInjectSaga({ key: 'groups', saga });
 
   return (
-    <GroupHome />
+    <GroupHome group={props.currentGroup} />
   );
 }
 

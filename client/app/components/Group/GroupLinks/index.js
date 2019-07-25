@@ -27,7 +27,14 @@ export function GroupLinks(props) {
         marginRight: 'auto'
       }}
     >
-      <Button component={WrappedNavLink} to='/' activeStyle={{ color: activeColor }}>Home</Button>
+      <Button
+        component={WrappedNavLink}
+        exact
+        to={ROUTES.group.home.path(rs.params('group_id'))}
+        activeStyle={{ color: activeColor }}
+      >
+        Home
+      </Button>
       <Button component={WrappedNavLink} to='/user/campaigns' activeStyle={{ color: activeColor }}>Members</Button>
       <Button component={WrappedNavLink} to='events' activeStyle={{ color: activeColor }}>Events</Button>
       <Button component={WrappedNavLink} to='resources' activeStyle={{ color: activeColor }}>Resources</Button>
