@@ -62,6 +62,14 @@ export const ROUTES = {
     home: {
       path: (groupId = ':group_id') => `/group/${groupId}`
     },
+    events: {
+      index: {
+        path: (groupId = ':group_id') => `/group/${groupId}/events`
+      },
+      show: {
+        path: (groupId = ':group_id', eventId = ':event_id') => `/group/${groupId}/event/${eventId}`
+      },
+    },
     news: {
       index: {
         path: (groupId = ':group_id') => `/group/${groupId}/news`

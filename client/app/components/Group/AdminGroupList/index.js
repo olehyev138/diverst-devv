@@ -84,7 +84,7 @@ export function AdminGroupList(props, context) {
                   <Link
                     component={WrappedNavLink}
                     to={{
-                      pathname: `${ROUTES.group.pathPrefix}/${group.id}`,
+                      pathname: ROUTES.group.home.path(group.id),
                       state: { id: group.id }
                     }}
                   >

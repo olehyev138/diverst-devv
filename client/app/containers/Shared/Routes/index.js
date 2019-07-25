@@ -22,6 +22,7 @@ import GroupEditPage from 'containers/Group/GroupEditPage';
 
 /* Group */
 import GroupHomePage from 'containers/Group/GroupHomePage';
+import EventsPage from 'containers/Event/EventsPage';
 import NewsFeedPage from 'containers/News/NewsFeedPage';
 
 /* Group - News Feed */
@@ -61,6 +62,7 @@ export default function Routes(props) {
 
       { /* Group */ }
       <GroupLayout exact {...expandRoute(ROUTES.group.home)} component={GroupHomePage} />
+      <GroupLayout exact {...expandRoute(ROUTES.group.events.index)} component={EventsPage} />
       <GroupLayout exact {...expandRoute(ROUTES.group.news.index)} component={NewsFeedPage} />
 
       { /* Group News Feed */ }
