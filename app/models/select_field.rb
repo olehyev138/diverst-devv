@@ -73,4 +73,8 @@ class SelectField < Field
       !rule.values_array.include?(field_value)
     end
   end
+
+  def to_string(data)
+    data.join(', ')
+  end
 end

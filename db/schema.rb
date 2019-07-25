@@ -11,7 +11,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190709191003) do
+
+ActiveRecord::Schema.define(version: 20190719014731) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -391,6 +392,7 @@ ActiveRecord::Schema.define(version: 20190709191003) do
     t.integer  "group_id",           limit: 4
     t.integer  "poll_id",            limit: 4
     t.integer  "initiative_id",      limit: 4
+    t.boolean  "add_to_member_list",               default: false
   end
 
   create_table "folder_shares", force: :cascade do |t|
@@ -608,12 +610,12 @@ ActiveRecord::Schema.define(version: 20190709191003) do
 
   create_table "initiative_expenses", force: :cascade do |t|
     t.string   "description",      limit: 191
-    t.integer  "amount",           limit: 4
     t.integer  "owner_id",         limit: 4
     t.integer  "initiative_id",    limit: 4
-    t.datetime "created_at",                   null: false
-    t.datetime "updated_at",                   null: false
+    t.datetime "created_at",                                                         null: false
+    t.datetime "updated_at",                                                         null: false
     t.integer  "annual_budget_id", limit: 4
+    t.decimal  "amount",                       precision: 8, scale: 2, default: 0.0
   end
 
   create_table "initiative_fields", force: :cascade do |t|

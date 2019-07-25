@@ -4,13 +4,15 @@ after 'development:groups' do
     Enterprise.all.each do |enterprise|
       if enterprise.name == "Diverst Inc"
         enterprise.groups.each do |group|
+          annual_budget_id = AnnualBudget.find_by(group_id: group.id, closed: false)&.id
           requester = group.user_groups.where(accepted_member: true).first.user if group.user_groups.any?
 
           if requester
             budget = Budget.create(requester_id: requester.id,
                                    group_id: group.id,
                                    is_approved: true,
-                                   description: "Budget for #{group.name}'s events")
+                                   description: "Budget for #{group.name}'s events",
+                                   annual_budget_id: annual_budget_id)
 
             (0..rand(1..3)).each do |i|
               amount = rand(1000..5000)

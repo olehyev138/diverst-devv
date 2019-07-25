@@ -54,7 +54,7 @@ RSpec.describe SamlController, type: :controller do
       allow(OneLogin::RubySaml::Response).to receive(:new).and_return(saml)
 
       get :acs, enterprise_id: enterprise.id, SAMLResponse: 'test'
-      expect(response).to redirect_to user_root_path
+      expect(response).to redirect_to onboarding_index_path
       expect(User.last.email).to eq('test@gmail.com')
     end
 
