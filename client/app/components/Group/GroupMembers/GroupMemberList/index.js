@@ -5,7 +5,7 @@
  */
 
 import React, {
-  memo, useState, useContext
+  forwardRef, memo, useState, useContext
 } from 'react';
 import { compose } from 'redux';
 import { NavLink } from 'react-router-dom';
@@ -16,7 +16,9 @@ import {
   Button, Card, CardActions, CardContent, Grid,
   TablePagination
 } from '@material-ui/core/index';
-import { withStyles } from '@material-ui/core/styles/index';
+import { withStyles } from '@material-ui/core/styles';
+import MaterialTable from 'material-table';
+import tableIcons from 'utils/tableIcons';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
@@ -67,22 +69,25 @@ export function GroupMemberList(props) {
             Export Group Members
           </Button>
         </Grid>
+        <Grid item xs={12}>
+          <MaterialTable
+            icons={tableIcons}
+            columns={[
+              { title: 'First Name', field: 'first_name' },
+              { title: 'Last Name', field: 'last_name' }
+            ]}
+            data={query =>
+              new Promise((resolve, reject) => {
+                resolve({
+                  data: [{ first_name: 'name', last_name: 'lastname' }],
+                  page: 0,
+                  totalCount: 9
+                });
+              })
+            }
+          />
+        </Grid>
       </Grid>
-      <TablePagination
-        component='div'
-        page={page}
-        rowsPerPageOptions={[5, 10, 25]}
-        rowsPerPage={rowsPerPage}
-        count={0}
-        onChangePage={handleChangePage}
-        onChangeRowsPerPage={handleChangeRowsPerPage}
-        backIconButtonProps={{
-          'aria-label': 'Previous Page',
-        }}
-        nextIconButtonProps={{
-          'aria-label': 'Next Page',
-        }}
-      />
     </React.Fragment>
   );
 }

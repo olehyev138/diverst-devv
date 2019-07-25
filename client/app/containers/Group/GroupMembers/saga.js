@@ -20,9 +20,11 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 export function* getUsers(action) {
   try {
-    const response = yield call(api.userGroups.all.bind(api.userGroups), action.payload);
+    console.log('hey');
 
-    yield put(getUsersSuccess(response.data.page));
+    // const response = yield call(api.userGroups.all.bind(api.userGroups), action.payload);
+
+    // yield put(getUsersSuccess(response.data.page));
   } catch (err) {
     yield put(getUsersError(err));
 
@@ -77,7 +79,7 @@ export function* deleteUser(action) {
   }
 }
 
-export default function* usersSaga() {
+export default function* membersSaga() {
   yield takeLatest(GET_USERS_BEGIN, getUsers);
   yield takeLatest(CREATE_USER_BEGIN, createUser);
   yield takeLatest(UPDATE_USER_BEGIN, updateUser);

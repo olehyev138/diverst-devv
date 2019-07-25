@@ -12,21 +12,24 @@ import reducer from 'containers/Group/GroupMembers/reducer';
 import saga from 'containers/Group/GroupMembers/saga';
 
 import { getUsersBegin, userListUnmount } from 'containers/Group/GroupMembers/actions';
-import { selectPaginatedUsers } from 'containers/Group/GroupMembers/selectors';
+import { selectPaginatedUsers, selectUserTotal } from 'containers/Group/GroupMembers/selectors';
+
 import RouteService from 'utils/routeHelpers';
+import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import GroupMemberList from 'components/Group/GroupMembers/GroupMemberList';
 
 export function GroupMemberListPage(props) {
-  useInjectReducer({ key: 'userList', reducer });
-  useInjectSaga({ key: 'userList', saga });
+  useInjectReducer({ key: 'members', reducer });
+  useInjectSaga({ key: 'members', saga });
 
   const rs = new RouteService(useContext);
+  const groupId = rs.params('group_id')[0];
   const links = {
   };
 
   useEffect(() => {
-    const params = { group_id: 1 };
+    const params = { group_id: groupId };
 
     props.getUsersBegin(params);
 
@@ -37,7 +40,9 @@ export function GroupMemberListPage(props) {
 
   return (
     <React.Fragment>
-      <GroupMemberList />
+      <GroupMemberList
+        getUsersBegin={props.getUsersBegin}
+      />
     </React.Fragment>
   );
 }
@@ -48,6 +53,8 @@ GroupMemberListPage.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
+  userList: selectPaginatedUsers(),
+  userTotal: selectUserTotal()
 });
 
 const mapDispatchToProps = {

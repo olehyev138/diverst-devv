@@ -37,7 +37,7 @@ function formatUsers(users) {
    *   { <id>: { name: user_01, ... } }
    */
   return users.reduce((map, userGroup) => {
-    map[userGroup.id] = userGroup.user;
+    map[userGroup.user_id] = userGroup.user;
     return map;
   }, {});
 }

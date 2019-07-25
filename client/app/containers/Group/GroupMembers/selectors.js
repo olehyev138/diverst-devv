@@ -1,31 +1,31 @@
 import { createSelector } from 'reselect/lib';
 import { initialState } from 'containers/Group/GroupMembers/reducer';
 
-const selectUserListDomain = state => state.userList || initialState;
+const selectMembersDomain = state => state.members || initialState;
 
 const selectPaginatedUsers = () => createSelector(
-  selectUserListDomain,
-  groupsState => groupsState.groupList
+  selectMembersDomain,
+  membersState => membersState.userList
 );
 
 /* Select user list & format it for a select
  *  looks like: [ { value: <>, label: <> } ... ]
  */
 const selectPaginatedSelectUsers = () => createSelector(
-  selectUserListDomain,
-  groupsState => (
+  selectMembersDomain,
+  membersState => (
     Object
-      .values(groupsState.groupList)
-      .map(group => ({ value: group.id, label: group.name }))
+      .values(membersState.userList)
+      .map(user => ({ value: user.id, label: user.name }))
   )
 );
 
 const selectUserTotal = () => createSelector(
-  selectUserListDomain,
-  groupsState => groupsState.groupTotal
+  selectMembersDomain,
+  membersState => membersState.userTotal
 );
 
 export {
-  selectUserListDomain, selectPaginatedUsers, selectPaginatedSelectUsers,
+  selectMembersDomain, selectPaginatedUsers, selectPaginatedSelectUsers,
   selectUserTotal
 };
