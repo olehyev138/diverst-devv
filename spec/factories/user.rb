@@ -11,6 +11,7 @@ FactoryBot.define do
     provider 'email'
     time_zone 'UTC'
     user_role { enterprise.user_roles.where(role_type: 'admin').first }
+    data '{}'
     after(:create) do |user|
       user.policy_group = create(:policy_group)
     end
