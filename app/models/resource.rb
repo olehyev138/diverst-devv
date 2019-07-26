@@ -26,8 +26,6 @@ class Resource < ApplicationRecord
   validates_length_of :file_file_name, maximum: 191
   validates_length_of :title, maximum: 191
   validates_presence_of :title
-
-  # Paperclip
   validates_presence_of   :url, if: Proc.new { |r| r.file.nil? && r.url.blank? }
   validates_length_of     :url, maximum: 255
 
