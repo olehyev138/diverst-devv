@@ -6,7 +6,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
   let(:api_key) { create(:api_key) }
   let(:user) { create(:user, password: 'password', enterprise: enterprise) }
   let(:group) { create(:group, enterprise: enterprise) }
-  let(:item) { create(model.constantize.table_name.singularize.to_sym) }
+  let!(:item) { create(model.constantize.table_name.singularize.to_sym) }
   let(:route) { model.constantize.table_name }
   let(:jwt) { UserTokenService.create_jwt(user) }
   let(:headers) { { 'HTTP_DIVERST_APIKEY' => api_key.key, 'Diverst-UserToken' => jwt } }
@@ -48,12 +48,8 @@ RSpec.describe "#{model.pluralize}", type: :request do
       post "/api/v1/#{route}", params: { "#{route.singularize}" => build(route.singularize.to_sym).attributes }, headers: headers
       expect(response).to have_http_status(:bad_request)
     end
-
-    it 'captures the error when UnprocessableException' do
-      allow(model.constantize).to receive(:build).and_raise(UnprocessableException.new(user))
-      post "/api/v1/#{route}", params: { "#{route.singularize}" => build(route.singularize.to_sym).attributes }, headers: headers
-      expect(response).to have_http_status(422)
-    end
+    
+    include_examples 'InvalidInputException when creating', model
   end
 
   describe '#update' do
@@ -68,11 +64,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
       expect(response).to have_http_status(:bad_request)
     end
 
-    it 'captures the error when UnprocessableException' do
-      allow(model.constantize).to receive(:update).and_raise(UnprocessableException.new(user))
-      patch "/api/v1/#{route}/#{item.id}", params: { "#{route.singularize}" => item.attributes }, headers: headers
-      expect(response).to have_http_status(422)
-    end
+    include_examples 'InvalidInputException when updating', model
   end
 
   describe '#destroy' do
