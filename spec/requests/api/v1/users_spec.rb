@@ -39,7 +39,10 @@ RSpec.describe "#{model.pluralize}", type: :request do
 
   describe '#create' do
     it 'creates an item' do
-      post "/api/v1/#{route}", params: { "#{route.singularize}" => build(route.singularize.to_sym).attributes }, headers: headers
+      attributes = build(route.singularize.to_sym).attributes
+      attributes['user_role_id'] = user.user_role_id
+      attributes['password'] = 'password'
+      post "/api/v1/#{route}", params: { "#{route.singularize}" => attributes }, headers: headers
       expect(response).to have_http_status(201)
     end
 
