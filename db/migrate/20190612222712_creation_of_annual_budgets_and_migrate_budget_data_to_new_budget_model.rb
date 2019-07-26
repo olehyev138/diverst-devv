@@ -1,8 +1,6 @@
 class CreationOfAnnualBudgetsAndMigrateBudgetDataToNewBudgetModel < ActiveRecord::Migration[5.1]
   def up
     create_table :annual_budgets do |t|
-      t.references :group, index: true, foreign_key: true
-      t.references :enterprise, index: true, foreign_key: true
       t.decimal :amount, default: 0.0
       t.boolean :closed, default: false
       t.decimal :available_budget, default: 0.0
@@ -12,7 +10,12 @@ class CreationOfAnnualBudgetsAndMigrateBudgetDataToNewBudgetModel < ActiveRecord
 
       t.timestamps null: false
     end
-
+    
+    add_column :annual_budgets, :group_id,      :integer
+    add_column :annual_budgets, :enterprise_id, :integer
+    
+    add_index :annual_budgets, [:group_id, :enterprise_id]
+    
     add_column :initiatives, :annual_budget_id, :integer
     add_column :budgets, :annual_budget_id, :integer
     add_column :initiative_expenses, :annual_budget_id, :integer
