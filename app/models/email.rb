@@ -7,6 +7,13 @@ class Email < ApplicationRecord
   has_many :variables, class_name: 'EmailVariable', dependent: :destroy
 
   # validations
+  validates_length_of :description, maximum: 191
+  validates_length_of :template, maximum: 191
+  validates_length_of :mailer_method, maximum: 191
+  validates_length_of :mailer_name, maximum: 191
+  validates_length_of :content, maximum: 65535
+  validates_length_of :subject, maximum: 191
+  validates_length_of :name, maximum: 191
   validates :name, :subject, :content, :description, :mailer_name, :mailer_method, presence: true
 
   def process(text, objects)

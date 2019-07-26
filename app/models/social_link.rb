@@ -20,12 +20,13 @@ class SocialLink < ApplicationRecord
 
   validates :author_id, presence: true
   validates :author, presence: true
+  after_destroy :remove_news_feed_link
 
   scope :of_segments, ->(segment_ids) {
     gm_condtions = ['social_link_segments.segment_id IS NULL']
     gm_condtions << "social_link_segments.segment_id IN (#{ segment_ids.join(",") })" unless segment_ids.empty?
     joins('LEFT JOIN social_link_segments ON social_link_segments.social_link_id = social_network_posts.id')
-    .where(gm_condtions.join(' OR '))
+      .where(gm_condtions.join(' OR '))
   }
 
   scope :unapproved, -> { joins(:news_feed_link).where(news_feed_links: { approved: false }) }
@@ -67,5 +68,9 @@ class SocialLink < ApplicationRecord
 
     build_news_feed_link(news_feed_id: group.news_feed.id)
     true
+  end
+
+  def remove_news_feed_link
+    news_feed_link.destroy if news_feed_link.present?
   end
 end

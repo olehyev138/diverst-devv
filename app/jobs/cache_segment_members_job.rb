@@ -1,7 +1,7 @@
 # Calculates the members of a segment and cache them in the segment's "members" association
 
 class CacheSegmentMembersJob < ActiveJob::Base
-  queue_as :low
+  queue_as :default
 
   after_perform :set_status
 
@@ -17,6 +17,6 @@ class CacheSegmentMembersJob < ActiveJob::Base
   private
 
   def set_status
-    @segment.update_column(:job_status, 0)
+    @segment.update_column(:job_status, 0) unless @segment.nil?
   end
 end

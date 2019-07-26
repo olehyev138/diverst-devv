@@ -216,8 +216,7 @@ RSpec.describe Initiative, type: :model do
           end
 
           it 'substracts estimated funding from budget item' do
-            leftover = available_amount - estimated_funding
-            expect(initiative.budget_item.available_amount).to eq leftover
+            expect(initiative.budget_item.available_amount).to eq 0
           end
 
           it 'marks budget item as done' do
@@ -283,7 +282,7 @@ RSpec.describe Initiative, type: :model do
 
   describe '#leftover' do
     it 'returns 0' do
-      initiative = build(:initiative)
+      initiative = build(:initiative, annual_budget: build(:annual_budget))
       expect(initiative.leftover).to eq(0)
     end
   end
@@ -309,8 +308,10 @@ RSpec.describe Initiative, type: :model do
 
   describe '#expenses_highcharts_history' do
     it 'returns data' do
-      initiative = build(:initiative, start: Date.today, end: Date.today + 1.hour)
-      create_list(:initiative_expense, 5, initiative: initiative)
+      group = create(:group, annual_budget: 10000)
+      annual_budget = create(:annual_budget, amount: group.annual_budget)
+      initiative = create(:initiative, owner_group: group, annual_budget_id: annual_budget.id, start: Date.today, end: Date.today + 1.hour)
+      create_list(:initiative_expense, 5, initiative: initiative, annual_budget_id: annual_budget.id)
 
       data = initiative.expenses_highcharts_history
       expect(data.empty?).to be(false)
@@ -343,10 +344,12 @@ RSpec.describe Initiative, type: :model do
 
   describe '#destroy_callbacks' do
     it 'removes the child objects' do
-      initiative = create(:initiative)
+      group = create(:group, annual_budget: 10000)
+      annual_budget = create(:annual_budget, amount: group.annual_budget)
+      initiative = create(:initiative, owner_group_id: group.id, annual_budget_id: annual_budget.id)
       initiative_update = create(:initiative_update, initiative: initiative)
       field = create(:field, initiative: initiative)
-      initiative_expense = create(:initiative_expense, initiative: initiative)
+      initiative_expense = create(:initiative_expense, initiative: initiative, annual_budget_id: annual_budget.id)
       checklist = create(:checklist, initiative: initiative)
       resource = create(:resource, initiative: initiative)
       checklist_item = create(:checklist_item, initiative: initiative)
@@ -406,6 +409,37 @@ RSpec.describe Initiative, type: :model do
     it 'archives expired events' do
       group.update auto_archive: true, expiry_age_for_events: 2, unit_of_expiry_age: 'weeks'
       expect { Initiative.archive_expired_events(group) }.to change(Initiative.where.not(archived_at: nil), :count).by(2)
+    end
+  end
+
+  describe 'Initiative.to_csv' do
+    let!(:enterprise) { create(:enterprise) }
+    let!(:group) { create :group, :without_outcomes, enterprise: enterprise, annual_budget: 10000 }
+    let!(:annual_budget) { create(:annual_budget, group: group, amount: group.annual_budget, enterprise_id: enterprise.id) }
+    let!(:budget) { create(:approved_budget, group_id: group.id, annual_budget_id: annual_budget.id) }
+    let!(:outcome) { create :outcome, group_id: group.id }
+    let!(:pillar) { create :pillar, outcome_id: outcome.id }
+    let!(:initiative) { create(:initiative, pillar: pillar,
+                                            owner_group: group,
+                                            annual_budget_id: annual_budget.id,
+                                            estimated_funding: budget.budget_items.first.available_amount,
+                                            budget_item_id: budget.budget_items.first.id)
+    }
+    let!(:expense) { create(:initiative_expense, initiative_id: initiative.id, annual_budget_id: annual_budget.id, amount: 50) }
+
+    let!(:field) { create(:field, initiative_id: initiative.id, title: 'Attendance') }
+    let!(:update) { create(:initiative_update, initiative_id: initiative.id, data: "{\"#{field.id}\":105}") }
+
+
+    it 'returns csv for initiative export' do
+      expect(described_class.to_csv(initiatives: group.initiatives, enterprise: enterprise))
+      .to include "#{enterprise.custom_text.send('erg_text')},#{enterprise.custom_text.send('outcome_text')},#{enterprise
+                     .custom_text.send('program_text')},Event Name,Start Date,End Date,Expenses,Budget,Metrics"
+    end
+
+    it 'returns csv to include metrics' do
+      expect(described_class.to_csv(initiatives: group.initiatives, enterprise: enterprise))
+      .to include 'Attendance(105)'
     end
   end
 end
