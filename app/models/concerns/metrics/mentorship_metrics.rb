@@ -3,6 +3,43 @@ module Metrics
     extend ActiveSupport::Concern
     include MetricsUtil
 
+    def top_mentors(type, partner, size)
+      return if type != 'mentor' && type != 'mentee'
+      return if partner != 'mentor' && partner != 'mentee'
+      return if type == partner
+
+      graph = Mentoring.get_graph_builder
+      graph.set_enterprise_filter(field: "#{type}.enterprise_id", value: enterprise_id)
+      graph.formatter.type = 'bar'
+      graph.formatter.title = "Users with most number of #{partner}s"
+
+      graph.query = graph.query.terms_agg(field: "#{type}.id", size: size)
+      graph.query.add_filter_clause(field: "#{type}.active", value: true, bool_op: :must)
+
+      parser = graph.formatter.parser
+      parser.extractors[:x] = parser.custom(-> (e, _) { User.find(e[:key]).name })
+
+      graph.formatter.add_elements(graph.search)
+
+      graph.build
+    end
+
+    def mentors_per_group(tp)
+      graph = UserGroup.get_graph_builder
+      graph.set_enterprise_filter(field: 'group.enterprise_id', value: enterprise_id)
+      graph.formatter.type = 'bar'
+      graph.formatter.title = 'Mentors and Mentees per Group'
+
+      graph.query = graph.query.bool_filter_agg { |qq| qq.terms_agg(field: 'group.name') }
+
+      graph.query.add_filter_clause(field: 'user.active', value: true, bool_op: :must)
+      graph.query.add_filter_clause(field: "user.#{tp}", value: true, bool_op: :must)
+
+      graph.drilldown_graph(parent_field: 'group.parent.name')
+
+      graph.build
+    end
+
     def user_mentorship_interest_per_group
       graph = UserGroup.get_graph_builder
       graph.set_enterprise_filter(field: 'group.enterprise_id', value: enterprise_id)
