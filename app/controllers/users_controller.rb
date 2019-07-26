@@ -243,7 +243,7 @@ class UsersController < ApplicationController
     comments_s, comments_m, comments_a, comments_sd = aggregate_data_from_field(:answer_comments, :message_comments, :answer_comments)
     comments_n = 'Comments Made'
 
-    events_s, events_m, events_a, events_sd = aggregate_data_from_field(:initiatives, where: ['initiatives.start < ?', Time.now])
+    events_s, events_m, events_a, events_sd = aggregate_data_from_field(:initiatives, where: ['initiatives.start < ? OR initiatives.id IS NULL', Time.now] )
     events_n = 'Events Attendance'
 
     @aggregate_metrics = {}
@@ -272,8 +272,8 @@ class UsersController < ApplicationController
     comments_p = percentile_from_field(comments, :answer_comments, :message_comments, :answer_comments)
     comments_n = 'Comments Made'
 
-    events = @user.number_of(:initiatives, where: ['initiatives.start < ?', Time.now])
-    events_p = percentile_from_field(events, :initiatives, where: ['initiatives.start < ?', Time.now])
+    events = @user.number_of(:initiatives, where: ['initiatives.start < ? OR initiatives.id IS NULL', Time.now])
+    events_p = percentile_from_field(events, :initiatives, where: ['initiatives.start < ? OR initiatives.id IS NULL', Time.now])
     events_n = 'Events Attended'
 
     @fields = %w(logins posts comments events)
