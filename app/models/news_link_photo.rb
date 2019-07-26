@@ -11,6 +11,12 @@ class NewsLinkPhoto < ApplicationRecord
     self.file = URI.parse(url)
   end
 
+  def file_location
+    return nil if !file.presence
+
+    file.expiring_url(36000)
+  end
+
   def group
     news_link.group
   end
