@@ -35,7 +35,7 @@ RSpec.configure do |config|
     #     # => "be bigger than 2"
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true
   end
-  
+
   # show retry status in spec process
   config.verbose_retry = true
 
@@ -115,14 +115,16 @@ RSpec.configure do |config|
     formatter = OpenStruct.new({
       title: true,
       parser: OpenStruct.new({ extractors: true,
-                               date_range: true, get_elements: true }),
+                               date_range: true,
+                               get_elements: true }),
       add_elements: true
     })
 
     query = OpenStruct.new({
       terms_agg: true,
       bool_filter_agg: true,
-      add_filter_clause: true })
+      add_filter_clause: true
+})
 
     graph = double('Graph',
                    search: true,
