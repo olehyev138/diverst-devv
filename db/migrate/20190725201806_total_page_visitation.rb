@@ -3,7 +3,7 @@ class TotalPageVisitation < ActiveRecord::Migration
     reversible do |dir|
       dir.up do
         execute <<-SQL
-          CREATE OR REPLACE VIEW diverst_development.total_page_visitations AS
+          CREATE OR REPLACE VIEW total_page_visitations AS
             SELECT 
               page_visitation_data.page AS page,
               SUM(page_visitation_data.times_visited) AS times_visited 
@@ -14,7 +14,7 @@ class TotalPageVisitation < ActiveRecord::Migration
 
       dir.down do
         execute <<-SQL
-          DROP VIEW IF EXISTS diverst_development.total_page_visitations;
+          DROP VIEW IF EXISTS total_page_visitations;
         SQL
       end
     end
