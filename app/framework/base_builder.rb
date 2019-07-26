@@ -18,7 +18,7 @@ module BaseBuilder
       raise BadRequestException.new "#{self.name.titleize} required" if params[symbol].nil?
 
       # create the new item
-      item = self.new(params[symbol].permit!)
+      item = self.new(params[symbol])
 
       # add enterprise id if exists & not set
       if item.has_attribute?(:enterprise_id) && item[:enterprise_id].blank?
@@ -27,7 +27,7 @@ module BaseBuilder
 
       # save the item
       if not item.save
-        raise InvalidInputException.new(item.errors.messages.first.first), item.errors.full_messages.first
+        raise InvalidInputException.new({ message: item.errors.full_messages.first, attribute: item.errors.messages.first.first })
       end
 
       item
@@ -57,7 +57,7 @@ module BaseBuilder
       if item.update_attributes(params[symbol].permit!)
         return item
       else
-        raise InvalidInputException.new(item.errors.messages.first.first), item.errors.full_messages.first
+        raise InvalidInputException.new({ message: item.errors.full_messages.first, attribute: item.errors.messages.first.first })
       end
     end
 
@@ -70,8 +70,6 @@ module BaseBuilder
 
       item.remove
     end
-
-    private
 
     def symbol
       self.table_name.singularize.to_sym

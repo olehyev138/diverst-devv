@@ -16,7 +16,6 @@ RSpec.describe Group, type: :model do
 
     it { expect(group).to delegate_method(:news_feed_links).to(:news_feed) }
 
-
     it { expect(group).to have_many(:user_groups).dependent(:destroy) }
     it { expect(group).to have_many(:members).through(:user_groups).class_name('User').source(:user) }
     it { expect(group).to have_many(:groups_polls) }
@@ -221,23 +220,23 @@ RSpec.describe Group, type: :model do
       url = Faker::LoremPixel.image(secure: false)
       payload = { group: { name: 'Save', enterprise_id: user.enterprise_id, banner_url: url, logo_url: url } }
       params = ActionController::Parameters.new(payload)
-      created = Group.build(request, params)
+      created = Group.build(request, params.permit!)
 
       expect(created.banner.presence).to_not be nil
       expect(created.logo.presence).to_not be nil
     end
   end
 
-  describe '#avatar_url' do
-    it 'sets the avatar for user from url' do
-      user = create(:user)
-      expect(user.avatar_file_name).to be nil
+  describe '#logo_url' do
+    it 'sets the logo for group from url' do
+      group = create(:group)
+      expect(group.logo_file_name).to be nil
 
-      user.avatar_url = Faker::LoremPixel.image(secure: false)
-      user.save!
-      user.reload
+      group.logo_url = Faker::LoremPixel.image(secure: false)
+      group.save!
+      group.reload
 
-      expect(user.avatar_file_name).to_not be nil
+      expect(group.logo_file_name).to_not be nil
     end
   end
 

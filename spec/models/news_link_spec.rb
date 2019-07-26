@@ -50,7 +50,7 @@ RSpec.describe NewsLink, type: :model do
         }
       }
       params = ActionController::Parameters.new(payload)
-      created = NewsLink.build(request, params)
+      created = NewsLink.build(request, params.permit!)
 
       expect(created.picture.presence).to_not be nil
       expect(created.photos.exists?).to_not be false
