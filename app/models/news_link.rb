@@ -53,6 +53,12 @@ class NewsLink < ApplicationRecord
     self.picture = URI.parse(url)
   end
 
+  def picture_location
+    return nil if !picture.presence
+
+    picture.expiring_url(36000)
+  end
+
   # call back to delete news link segment associations
   def remove_segment_association(segment)
     news_link_segment = self.news_link_segments.find_by(segment_id: segment.id)
