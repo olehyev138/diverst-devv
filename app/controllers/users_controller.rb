@@ -217,8 +217,8 @@ class UsersController < ApplicationController
     return sum, max, mean.round(2), sd.round(2)
   end
 
-  def aggregate_data_from_field(*fields)
-    list_of_values = User.count_list(*fields)
+  def aggregate_data_from_field(*fields, where: [nil])
+    list_of_values = User.count_list(*fields, where: where)
     calculate_aggregate_data(list_of_values)
   end
 
@@ -228,8 +228,8 @@ class UsersController < ApplicationController
     101 - (100 * (i - 0.5) / n).round
   end
 
-  def percentile_from_field(number, *fields)
-    list_of_values = User.count_list(*fields)
+  def percentile_from_field(number, *fields, where: [nil])
+    list_of_values = User.count_list(*fields, where: where)
     calculate_percentile(number, list_of_values)
   end
 
@@ -243,7 +243,7 @@ class UsersController < ApplicationController
     comments_s, comments_m, comments_a, comments_sd = aggregate_data_from_field(:answer_comments, :message_comments, :answer_comments)
     comments_n = 'Comments Made'
 
-    events_s, events_m, events_a, events_sd = aggregate_data_from_field(:initiatives)
+    events_s, events_m, events_a, events_sd = aggregate_data_from_field(:initiatives, where: ['initiatives.start < ?', Time.now] )
     events_n = 'Events Attendance'
 
     @aggregate_metrics = {}
@@ -272,8 +272,8 @@ class UsersController < ApplicationController
     comments_p = percentile_from_field(comments, :answer_comments, :message_comments, :answer_comments)
     comments_n = 'Comments Made'
 
-    events = @user.number_of(:initiatives)
-    events_p = percentile_from_field(events, :initiatives)
+    events = @user.number_of(:initiatives, where: ['initiatives.start < ?', Time.now])
+    events_p = percentile_from_field(events, :initiatives, where: ['initiatives.start < ?', Time.now])
     events_n = 'Events Attended'
 
     @fields = %w(logins posts comments events)
