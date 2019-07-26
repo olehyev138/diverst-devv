@@ -13,10 +13,11 @@ import PropTypes from 'prop-types';
 import { RouteContext } from 'containers/Layouts/ApplicationLayout';
 
 import {
-  Button, Card, CardActions, CardContent, Grid,
-  TablePagination
+  Button, Card, CardActions, CardContent, Collapse, Grid, Link,
+  TablePagination, Typography
 } from '@material-ui/core/index';
 import { withStyles } from '@material-ui/core/styles';
+
 import MaterialTable from 'material-table';
 import tableIcons from 'utils/tableIcons';
 
@@ -55,7 +56,7 @@ export function GroupMemberList(props) {
             size='large'
             component={WrappedNavLink}
           >
-            New Group Message
+            Add New Member
           </Button>
         </Grid>
         <Grid item>
@@ -70,22 +71,19 @@ export function GroupMemberList(props) {
           </Button>
         </Grid>
         <Grid item xs={12}>
-          <MaterialTable
-            icons={tableIcons}
-            columns={[
-              { title: 'First Name', field: 'first_name' },
-              { title: 'Last Name', field: 'last_name' }
-            ]}
-            data={query =>
-              new Promise((resolve, reject) => {
-                resolve({
-                  data: [{ first_name: 'name', last_name: 'lastname' }],
-                  page: 0,
-                  totalCount: 9
-                });
-              })
-            }
-          />
+          {props.userList && Object.values(props.userList).map((user, i) => (
+            /* eslint-disable-next-line react/jsx-wrap-multilines */
+            <Card key={user.id}>
+              <CardContent>
+                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                <Link href='#'>
+                  <Typography variant='h5' component='h2' display='inline'>
+                    {`${user.first_name} ${user.last_name}`}
+                  </Typography>
+                </Link>
+              </CardContent>
+            </Card>))
+          }
         </Grid>
       </Grid>
     </React.Fragment>
@@ -96,7 +94,9 @@ GroupMemberList.propTypes = {
   classes: PropTypes.object,
   // handlePagination: PropTypes.func,
   links: PropTypes.shape({
-  })
+  }),
+  userList: PropTypes.object,
+  userTotal: PropTypes.number
 };
 
 export default compose(

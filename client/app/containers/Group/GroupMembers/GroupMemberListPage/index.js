@@ -41,6 +41,8 @@ export function GroupMemberListPage(props) {
   return (
     <React.Fragment>
       <GroupMemberList
+        userList={props.userList}
+        userTotal={props.userTotal}
         getUsersBegin={props.getUsersBegin}
       />
     </React.Fragment>
@@ -50,6 +52,8 @@ export function GroupMemberListPage(props) {
 GroupMemberListPage.propTypes = {
   getUsersBegin: PropTypes.func,
   userListUnmount: PropTypes.func,
+  userList: PropTypes.object,
+  userTotal: PropTypes.number
 };
 
 const mapStateToProps = createStructuredSelector({
