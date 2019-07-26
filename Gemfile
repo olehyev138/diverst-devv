@@ -78,6 +78,8 @@ gem 'active_record_union'
 gem 'ahoy_matey'
 gem 'blazer'
 gem 'json_on_rails', '~> 0.2.0'
+gem 'scenic'
+gem 'scenic-mysql_adapter'
 
 gem 'factory_bot_rails', '~> 4.8.0' # Create mock objects for testing
 gem 'tty-spinner'

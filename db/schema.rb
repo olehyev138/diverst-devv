@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190719014731) do
+ActiveRecord::Schema.define(version: 20190725201806) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -445,14 +445,15 @@ ActiveRecord::Schema.define(version: 20190719014731) do
     t.string   "sp_import_lists",                       limit: 191,   default: "No"
     t.string   "sp_import_files",                       limit: 191,   default: "No"
     t.string   "sp_import_news",                        limit: 191,   default: "No"
-    t.string   "sp_import_pages",                       limit: 191,   default: "No"
     t.boolean  "sp_group_integration",                                default: false
     t.boolean  "sp_group_settings_same",                              default: true
+    t.string   "sp_import_pages",                       limit: 191,   default: "No"
+    t.boolean  "share_point_active",                                  default: false
   end
 
-  add_index "enterprises", ["share_point_files_id"], name: "fk_rails_217b5eed0c", using: :btree
-  add_index "enterprises", ["share_point_lists_id"], name: "fk_rails_02dd0ebf31", using: :btree
-  add_index "enterprises", ["share_point_pages_id"], name: "fk_rails_95cbb44ce7", using: :btree
+  add_index "enterprises", ["share_point_files_id"], name: "fk_rails_6315f961bd", using: :btree
+  add_index "enterprises", ["share_point_lists_id"], name: "fk_rails_9079d32818", using: :btree
+  add_index "enterprises", ["share_point_pages_id"], name: "fk_rails_a7e31215f7", using: :btree
 
   create_table "expense_categories", force: :cascade do |t|
     t.integer  "enterprise_id",     limit: 4
@@ -496,6 +497,7 @@ ActiveRecord::Schema.define(version: 20190719014731) do
     t.integer  "group_id",           limit: 4
     t.integer  "poll_id",            limit: 4
     t.integer  "initiative_id",      limit: 4
+    t.boolean  "add_to_member_list",               default: false
   end
 
   create_table "folder_shares", force: :cascade do |t|
@@ -704,9 +706,9 @@ ActiveRecord::Schema.define(version: 20190719014731) do
     t.string   "sp_import_pages",             limit: 191,                           default: "No"
   end
 
-  add_index "groups", ["share_point_files_id"], name: "fk_rails_97103d38ac", using: :btree
-  add_index "groups", ["share_point_lists_id"], name: "fk_rails_c3376c61a9", using: :btree
-  add_index "groups", ["share_point_pages_id"], name: "fk_rails_6e01a6d8f1", using: :btree
+  add_index "groups", ["share_point_files_id"], name: "index_groups_on_share_point_files_id", using: :btree
+  add_index "groups", ["share_point_lists_id"], name: "index_groups_on_share_point_lists_id", using: :btree
+  add_index "groups", ["share_point_pages_id"], name: "index_groups_on_share_point_pages_id", using: :btree
 
   create_table "groups_metrics_dashboards", force: :cascade do |t|
     t.integer "group_id",             limit: 4
@@ -729,12 +731,12 @@ ActiveRecord::Schema.define(version: 20190719014731) do
 
   create_table "initiative_expenses", force: :cascade do |t|
     t.string   "description",      limit: 191
+    t.decimal  "amount",                       precision: 8, scale: 2, default: 0.0
     t.integer  "owner_id",         limit: 4
     t.integer  "initiative_id",    limit: 4
     t.datetime "created_at",                                                         null: false
     t.datetime "updated_at",                                                         null: false
     t.integer  "annual_budget_id", limit: 4
-    t.decimal  "amount",                       precision: 8, scale: 2, default: 0.0
   end
 
   create_table "initiative_fields", force: :cascade do |t|
@@ -1560,6 +1562,7 @@ ActiveRecord::Schema.define(version: 20190719014731) do
     t.boolean  "accepting_mentor_requests",                    default: true
     t.boolean  "accepting_mentee_requests",                    default: true
     t.datetime "last_group_notification_date"
+    t.boolean  "seen_onboarding",                              default: false
   end
 
   add_index "users", ["active"], name: "index_users_on_active", using: :btree
