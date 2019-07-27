@@ -71,6 +71,10 @@ class Initiative < ApplicationRecord
   has_attached_file :picture, styles: { medium: '1000x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: 'private'
   validates_attachment_content_type :picture, content_type: %r{\Aimage\/.*\Z}
 
+  # Paperclip
+  has_attached_file :qr_code, styles: { medium: '1000x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: 'private'
+  validates_attachment_content_type :qr_code, content_type: %r{\Aimage\/.*\Z}
+
   validates :start, presence: true
   validates :end, presence: true
   validates :max_attendees, numericality: { greater_than: 0, allow_nil: true }
@@ -125,6 +129,16 @@ class Initiative < ApplicationRecord
     return nil if !picture.presence
 
     picture.expiring_url(36000)
+  end
+
+  def qr_code_url=(url)
+    self.qr_code = URI.parse(url)
+  end
+
+  def qr_code_location
+    return nil if !qr_code.presence
+
+    qr_code.expiring_url(36000)
   end
 
   def initiative_date(date_type)

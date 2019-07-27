@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190712073418) do
+ActiveRecord::Schema.define(version: 20190727185249) do
 
   create_table "activities", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.string "trackable_type", collation: "utf8mb4_unicode_ci"
@@ -765,6 +765,10 @@ ActiveRecord::Schema.define(version: 20190712073418) do
     t.boolean "finished_expenses", default: false
     t.datetime "archived_at"
     t.integer "annual_budget_id"
+    t.string "qr_code_file_name"
+    t.string "qr_code_content_type"
+    t.integer "qr_code_file_size"
+    t.datetime "qr_code_updated_at"
     t.index ["owner_id"], name: "index_initiatives_on_owner_id"
     t.index ["pillar_id"], name: "index_initiatives_on_pillar_id"
   end

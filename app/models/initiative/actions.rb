@@ -19,7 +19,10 @@ module Initiative::Actions
     def generate_qr_code(diverst_request, params)
       item = show(diverst_request, params)
       enc = Base64.encode64(item.to_json)
-      { qr_code: RQRCode::QRCode.new(enc).as_png }
+      png = RQRCode::QRCode.new(enc).as_png
+      item.qr_code = StringIO.new(png.to_s)
+      item.save!
+      item
     end
   end
 end
