@@ -95,7 +95,6 @@ class User < ApplicationRecord
   validates_length_of :last_sign_in_ip, maximum: 191
   validates_length_of :current_sign_in_ip, maximum: 191
   validates_length_of :reset_password_token, maximum: 191
-  validates_length_of :encrypted_password, maximum: 191
   validates_length_of :email, maximum: 191
   validates_length_of :auth_source, maximum: 191
   validates_length_of :data, maximum: 65535
