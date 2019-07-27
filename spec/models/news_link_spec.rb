@@ -46,7 +46,7 @@ RSpec.describe NewsLink, type: :model do
           author_id: user.id,
           description: Faker::Lorem.sentence,
           picture: url,
-          photos_attributes: [{ file_url: Faker::LoremPixel.image(secure: false) }]
+          photos_attributes: [{ file: File.open('spec/fixtures/files/verizon_logo.png') }]
         }
       }
       params = ActionController::Parameters.new(payload)
