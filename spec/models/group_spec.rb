@@ -230,6 +230,7 @@ RSpec.describe Group, type: :model do
   describe '#logo_url' do
     it 'sets the logo for group from url' do
       group = create(:group)
+      allow(URI).to receive(:parse).and_return(File.open('spec/fixtures/files/verizon_logo.png'))
       expect(group.logo_file_name).to be nil
 
       group.logo_url = Faker::LoremPixel.image(secure: false)

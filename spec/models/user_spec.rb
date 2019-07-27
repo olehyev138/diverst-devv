@@ -316,6 +316,7 @@ RSpec.describe User do
   describe '#build' do
     it 'sets the avatar for user from url when creating user' do
       user = create(:user)
+      allow(URI).to receive(:parse).and_return(File.open('spec/fixtures/files/verizon_logo.png'))
       request = Request.create_request(user)
       payload = {
         user: {
@@ -338,6 +339,7 @@ RSpec.describe User do
   describe '#avatar_url' do
     it 'sets the avatar for user from url' do
       user = create(:user)
+      allow(URI).to receive(:parse).and_return(File.open('spec/fixtures/files/verizon_logo.png'))
       expect(user.avatar_file_name).to be nil
 
       user.avatar_url = Faker::LoremPixel.image(secure: false)
