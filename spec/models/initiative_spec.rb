@@ -96,6 +96,7 @@ RSpec.describe Initiative, type: :model do
   describe '#picture_url' do
     it 'sets the picture for initiative from url' do
       initiative = create(:initiative, picture: nil)
+      allow(URI).to receive(:parse).and_return(File.open('spec/fixtures/files/verizon_logo.png'))
       expect(initiative.picture_file_name).to be nil
 
       initiative.picture_url = Faker::LoremPixel.image(secure: false)
