@@ -1,6 +1,6 @@
 class PollResponseSerializer < ApplicationRecordSerializer
   attributes :poll, :user, :fields
-  
+
   def fields
     fields = object.poll.fields
     fields_hash = []
