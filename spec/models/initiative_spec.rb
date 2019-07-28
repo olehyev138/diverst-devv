@@ -443,7 +443,7 @@ RSpec.describe Initiative, type: :model do
     it 'returns csv' do
       expect(initiative.expenses_time_series_csv).to include('Expenses over time')
     end
-  end  
+  end
 
   describe '#destroy_callbacks' do
     it 'removes the child objects' do
