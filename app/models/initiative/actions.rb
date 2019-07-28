@@ -18,9 +18,13 @@ module Initiative::Actions
 
     def generate_qr_code(diverst_request, params)
       item = show(diverst_request, params)
-      enc = Base64.encode64(item.to_json)
+      hash = {
+        id: item.id,
+        name: item.name
+      }
+      enc = Base64.encode64(hash.to_json)
       png = RQRCode::QRCode.new(enc).as_png
-      item.qr_code = StringIO.new(png.to_s)
+      item.qr_code = png.to_data_url
       item.save!
       item
     end
