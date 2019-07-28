@@ -48,14 +48,18 @@ export function* createUser(action) {
   }
 }
 
-export function* updateUser(action) {
+export function* addMembers(action) {
   try {
-    const payload = { user: action.payload };
-    const response = yield call(api.users.update.bind(api.users), payload.user.id, payload);
+    console.log('hey');
+    console.log(action);
 
-    yield put(push(ROUTES.admin.manage.users.index.path()));
+    const payload = { group: action.payload.attributes };
+    const response = yield call(api.groups.update.bind(api.groups), action.payload.groupId, payload);
+
+    // yield put(push(ROUTES.admin.manage.users.index.path()));
     yield put(showSnackbar({ message: 'User updated', options: { variant: 'success' } }));
   } catch (err) {
+    console.log(err);
     yield put(updateUserError(err));
 
     // TODO: intl message
@@ -79,8 +83,9 @@ export function* deleteUser(action) {
 
 export default function* membersSaga() {
   yield takeLatest(GET_USERS_BEGIN, getUsers);
-  yield takeLatest(CREATE_USER_BEGIN, createUser);
-  yield takeLatest(UPDATE_USER_BEGIN, updateUser);
+
+  yield takeLatest(CREATE_USER_BEGIN, addMembers);
+  // yield takeLatest(UPDATE_USER_BEGIN, updateUser);
 
   yield takeLatest(DELETE_USER_BEGIN, deleteUser);
 }

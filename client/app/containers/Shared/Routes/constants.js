@@ -83,6 +83,9 @@ export const ROUTES = {
     members: {
       index: {
         path: (groupId = ':group_id') => `/group/${groupId}/members`
+      },
+      new: {
+        path: (groupId = ':group_id') => `/group/${groupId}/members/new`
       }
     }
   },

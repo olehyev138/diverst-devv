@@ -16,7 +16,10 @@ const selectPaginatedSelectUsers = () => createSelector(
   membersState => (
     Object
       .values(membersState.userList)
-      .map(user => ({ value: user.id, label: user.name }))
+      .map(user => ({
+        value: user.id,
+        label: `${user.first_name} ${user.last_name}`
+      }))
   )
 );
 

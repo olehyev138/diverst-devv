@@ -31,6 +31,7 @@ import GroupMessageEditPage from 'containers/News/GroupMessage/GroupMessageEditP
 
 /* Group - Members */
 import GroupMemberListPage from 'containers/Group/GroupMembers/GroupMemberListPage';
+import GroupMemberCreatePage from 'containers/Group/GroupMembers/GroupMemberCreatePage';
 
 // Paths
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -70,7 +71,9 @@ export default function Routes(props) {
       <GroupLayout exact {...expandRoute(ROUTES.group.news.messages.index)} component={GroupMessagePage} />
 
       { /* Group Members */ }
+      <GroupLayout {...expandRoute(ROUTES.group.members.new)} component={GroupMemberCreatePage} />
       <GroupLayout exact {...expandRoute(ROUTES.group.members.index)} component={GroupMemberListPage} />
+
       <GroupLayout exact {...expandRoute(ROUTES.group.home)} component={GroupHomePage} />
 
       <ErrorLayout path='' component={NotFoundPage} />
