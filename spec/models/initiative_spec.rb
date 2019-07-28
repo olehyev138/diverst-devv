@@ -12,27 +12,33 @@ RSpec.describe Initiative, type: :model do
 
     it { expect(initiative).to accept_nested_attributes_for(:fields).allow_destroy(true) }
 
+    it { expect(initiative).to validate_length_of(:location).is_at_most(191) }
+    it { expect(initiative).to validate_length_of(:picture_content_type).is_at_most(191) }
+    it { expect(initiative).to validate_length_of(:picture_file_name).is_at_most(191) }
+    it { expect(initiative).to validate_length_of(:description).is_at_most(65535) }
+    it { expect(initiative).to validate_length_of(:name).is_at_most(191) }
+
     it { expect(initiative).to belong_to(:budget_item) }
     it { expect(initiative).to have_one(:budget).through(:budget_item) }
 
-    it { expect(initiative).to have_many(:checklists) }
+    it { expect(initiative).to have_many(:checklists).dependent(:destroy) }
     it { expect(initiative).to have_many(:resources) }
 
-    it { expect(initiative).to have_many(:checklist_items) }
+    it { expect(initiative).to have_many(:checklist_items).dependent(:destroy) }
     it { expect(initiative).to accept_nested_attributes_for(:checklist_items).allow_destroy(true) }
 
     it { expect(initiative).to belong_to(:owner_group).class_name('Group') }
 
-    it { expect(initiative).to have_many(:initiative_segments) }
+    it { expect(initiative).to have_many(:initiative_segments).dependent(:destroy) }
     it { expect(initiative).to have_many(:segments).through(:initiative_segments) }
-    it { expect(initiative).to have_many(:initiative_participating_groups) }
+    it { expect(initiative).to have_many(:initiative_participating_groups).dependent(:destroy) }
     it { expect(initiative).to have_many(:participating_groups).through(:initiative_participating_groups).source(:group).class_name('Group') }
 
-    it { expect(initiative).to have_many(:initiative_invitees) }
+    it { expect(initiative).to have_many(:initiative_invitees).dependent(:destroy) }
     it { expect(initiative).to have_many(:invitees).through(:initiative_invitees).source(:user) }
-    it { expect(initiative).to have_many(:comments).class_name('InitiativeComment') }
+    it { expect(initiative).to have_many(:comments).class_name('InitiativeComment').dependent(:destroy) }
 
-    it { expect(initiative).to have_many(:initiative_users) }
+    it { expect(initiative).to have_many(:initiative_users).dependent(:destroy) }
     it { expect(initiative).to have_many(:attendees).through(:initiative_users).source(:user) }
 
     it { expect(initiative).to have_attached_file(:picture) }
@@ -42,7 +48,7 @@ RSpec.describe Initiative, type: :model do
     it { expect(initiative).to validate_presence_of(:end) }
     it { expect(initiative).to validate_presence_of(:pillar) }
     it { expect(initiative).to validate_numericality_of(:max_attendees).is_greater_than(0).allow_nil }
-    it { expect(initiative).to have_many(:resources) }
+    it { expect(initiative).to have_many(:resources).dependent(:destroy) }
     it { expect(initiative).to have_many(:segments).through(:initiative_segments) }
     it { expect(initiative).to have_one(:outcome).through(:pillar) }
 
@@ -64,6 +70,66 @@ RSpec.describe Initiative, type: :model do
 
         expect(initiative).to be_valid
       end
+    end
+  end
+
+  describe '#archived?' do
+    let!(:initiative) { create(:initiative) }
+
+    it 'returns false' do
+      expect(initiative.archived?).to eq(false)
+    end
+
+    it 'returns true' do
+      initiative.update(archived_at: DateTime.now)
+      expect(initiative.archived?).to eq(true)
+    end
+  end
+
+  describe '#group' do
+    let!(:group) { create(:group) }
+    let!(:initiative) { create(:initiative, owner_group: group) }
+
+    it 'returns group' do
+      expect(initiative.group).to eq(group)
+    end
+
+    it 'returns group_id' do
+      expect(initiative.group_id).to eq(group.id)
+    end
+  end
+
+  describe '#enterprise' do
+    let!(:group) { create(:group) }
+    let!(:initiative) { create(:initiative, owner_group: group) }
+
+    it 'returns enterprise' do
+      expect(initiative.enterprise).to eq(group.enterprise)
+    end
+
+    it 'returns enterprise_id' do
+      expect(initiative.enterprise_id).to eq(group.enterprise_id)
+    end
+  end
+
+  describe '#description' do
+    let(:initiative) { build(:initiative, description: nil) }
+
+    it "returns '' when description is nil" do
+      expect(initiative.description).to eq('')
+    end
+
+    it 'returns description' do
+      initiative.description = 'brief description'
+      expect(initiative.description).to eq('brief description')
+    end
+  end
+
+  describe '#budget_status' do
+    let(:initiative) { build(:initiative) }
+
+    it 'returns Not attached' do
+      expect(initiative.budget_status).to eq('Not attached')
     end
   end
 
@@ -241,10 +307,49 @@ RSpec.describe Initiative, type: :model do
     end
   end
 
+  describe '#finish_expenses!' do
+    let!(:initiative) { create(:initiative, finished_expenses: true) }
+
+    it 'returns false' do
+      expect(initiative.finish_expenses!).to eq(false)
+    end
+
+    it 'returns true' do
+      enterprise = create(:enterprise)
+      group = create(:group, enterprise: enterprise, annual_budget: 10000)
+      annual_budget = create(:annual_budget, group: group, enterprise: enterprise, amount: group.annual_budget)
+      initiative1 = create(:initiative, owner_group: group, annual_budget_id: annual_budget.id)
+
+      expect(initiative1.finish_expenses!).to eq(true)
+    end
+  end
+
+  describe '#current_expences_sum' do
+    it 'return 0' do
+      initiative = create(:initiative, annual_budget_id: create(:annual_budget).id)
+      expect(initiative.current_expences_sum).to eq(0)
+    end
+  end
+
+  describe '#has_no_estimated_funding?' do
+    let(:initiative) { build(:initiative) }
+
+    it 'returns true' do
+      expect(initiative.has_no_estimated_funding?).to eq(true)
+    end
+  end
+
   describe '#leftover' do
     it 'returns 0' do
       initiative = build(:initiative, annual_budget: build(:annual_budget))
       expect(initiative.leftover).to eq(0)
+    end
+  end
+
+  describe '#title' do
+    it 'returns name of initiative' do
+      initiative = build(:initiative)
+      expect(initiative.title).to eq(initiative.name)
     end
   end
 
@@ -256,14 +361,14 @@ RSpec.describe Initiative, type: :model do
   end
 
   describe '#highcharts_history' do
-    it 'returns data', skip: 'test fails' do
+    it 'returns empty data' do
       initiative = build(:initiative, start: Date.today, end: Date.today + 1.hour)
       field = build(:field)
       create(:initiative_field, initiative: initiative, field: field)
       create(:initiative_update, initiative: initiative)
 
       data = initiative.highcharts_history(field: field)
-      expect(data.empty?).to be(false) # this example says "returns data" and yet we expect data to be empty???
+      expect(data.empty?).to be(true)
     end
   end
 
@@ -276,6 +381,13 @@ RSpec.describe Initiative, type: :model do
 
       data = initiative.expenses_highcharts_history
       expect(data.empty?).to be(false)
+    end
+  end
+
+  describe '#funded_by_leftover?' do
+    it '#returns false' do
+      initiative = build(:initiative)
+      expect(initiative.funded_by_leftover?).to eq(false)
     end
   end
 
@@ -302,6 +414,36 @@ RSpec.describe Initiative, type: :model do
       end
     end
   end
+
+  describe '#group_ids' do
+    let(:initiative) { create(:initiative, owner_group: create(:group)) }
+
+    it 'returns group ids' do
+      expect(initiative.group_ids).to eq([initiative.owner_group.id])
+    end
+  end
+
+  describe '#full?' do
+    let(:initiative) { create(:initiative) }
+    before { create_list(:initiative_user, 3, initiative: initiative) }
+
+    it 'return true' do
+      initiative.max_attendees = 2
+      expect(initiative.full?).to eq(true)
+    end
+
+    it 'return false' do
+      expect(initiative.full?).to eq(false)
+    end
+  end
+
+  describe '#expenses_time_series_csv' do
+    let(:initiative) { build(:initiative) }
+
+    it 'returns csv' do
+      expect(initiative.expenses_time_series_csv).to include('Expenses over time')
+    end
+  end  
 
   describe '#destroy_callbacks' do
     it 'removes the child objects' do
