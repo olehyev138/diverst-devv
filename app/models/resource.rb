@@ -21,9 +21,11 @@ class Resource < ApplicationRecord
   validates_with AttachmentPresenceValidator, attributes: :file, if: Proc.new { |r| r.url.blank? }
   do_not_validate_attachment_file_type :file
 
-  validates_presence_of   :title
-
-  # Paperclip
+  validates_length_of :resource_type, maximum: 191
+  validates_length_of :file_content_type, maximum: 191
+  validates_length_of :file_file_name, maximum: 191
+  validates_length_of :title, maximum: 191
+  validates_presence_of :title
   validates_presence_of   :url, if: Proc.new { |r| r.file.nil? && r.url.blank? }
   validates_length_of     :url, maximum: 255
 

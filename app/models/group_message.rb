@@ -18,6 +18,8 @@ class GroupMessage < ApplicationRecord
   delegate :total_views, to: :news_feed_link
   delegate :unique_views, to: :news_feed_link
 
+  validates_length_of :content, maximum: 65535
+  validates_length_of :subject, maximum: 191
   validates :group_id,    presence: true
   validates :subject,     presence: true
   validates :content,     presence: true
@@ -26,6 +28,8 @@ class GroupMessage < ApplicationRecord
   alias_attribute :author, :owner
 
   after_create :build_default_link
+
+  after_destroy :remove_news_feed_link
 
   scope :of_segments, ->(segment_ids) {
     gm_condtions = ['group_messages_segments.segment_id IS NULL']
@@ -109,5 +113,9 @@ class GroupMessage < ApplicationRecord
     return if news_feed_link.present?
 
     create_news_feed_link(news_feed_id: group.news_feed.id)
+  end
+
+  def remove_news_feed_link
+    news_feed_link.destroy if news_feed_link.present?
   end
 end

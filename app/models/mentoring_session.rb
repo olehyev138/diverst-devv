@@ -19,6 +19,12 @@ class MentoringSession < ApplicationRecord
   accepts_nested_attributes_for :resources,           reject_if: :all_blank, allow_destroy: true
 
   # validations
+  validates_length_of :notes, maximum: 65535
+  validates_length_of :status, maximum: 191
+  validates_length_of :video_room_name, maximum: 191
+  validates_length_of :access_token, maximum: 65535
+  validates_length_of :link, maximum: 191
+  validates_length_of :format, maximum: 191
   validates :start,   presence: true
   validates :end,     presence: true
   validates :status,  presence: true

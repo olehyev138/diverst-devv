@@ -3,6 +3,9 @@ class Badge < ApplicationRecord
 
   belongs_to :enterprise
 
+  validates_length_of :image_content_type, maximum: 191
+  validates_length_of :image_file_name, maximum: 191
+  validates_length_of :label, maximum: 191
   validates :label, presence: true
   validates :points, numericality: { only_integer: true, greater_than_or_equal_to: 0 }, presence: true
   validates :enterprise, presence: true

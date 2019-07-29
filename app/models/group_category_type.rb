@@ -4,6 +4,7 @@ class GroupCategoryType < ApplicationRecord
   has_many :groups, dependent: :nullify
   belongs_to :enterprise
 
+  validates_length_of :name, maximum: 191
   validates :name, presence: true
   validates :name, uniqueness: true
   attr_accessor :category_names

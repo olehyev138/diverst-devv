@@ -21,6 +21,13 @@ class Campaign < ApplicationRecord
   accepts_nested_attributes_for :questions, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :sponsors, reject_if: :all_blank, allow_destroy: true
 
+  validates_length_of :banner_content_type, maximum: 191
+  validates_length_of :banner_file_name, maximum: 191
+  validates_length_of :image_content_type, maximum: 191
+  validates_length_of :image_file_name, maximum: 191
+  validates_length_of :description, maximum: 65535
+  validates_length_of :title, maximum: 191
+
   # Paperclip
   #  has_attached_file :image, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: 'private'
   #  validates_attachment_content_type :image, content_type: %r{\Aimage\/.*\Z}

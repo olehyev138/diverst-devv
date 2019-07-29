@@ -4,6 +4,7 @@ class GroupMessageComment < ApplicationRecord
 
   has_many :user_reward_actions
 
+  validates_length_of :content, maximum: 65535
   validates :author, presence: true
   validates :message, presence: true
   validates :content, presence: true

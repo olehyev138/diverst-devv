@@ -13,6 +13,11 @@ class Initiative < ApplicationRecord
 
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
 
+  validates_length_of :location, maximum: 191
+  validates_length_of :picture_content_type, maximum: 191
+  validates_length_of :picture_file_name, maximum: 191
+  validates_length_of :description, maximum: 65535
+  validates_length_of :name, maximum: 191
   validates :end, date: { after: :start, message: 'must be after start' }, on: [:create, :update]
 
   # Ported from Event
@@ -30,6 +35,7 @@ class Initiative < ApplicationRecord
   accepts_nested_attributes_for :checklist_items, reject_if: :all_blank, allow_destroy: true
 
   belongs_to :owner_group, class_name: 'Group'
+  belongs_to :annual_budget
 
   has_many :initiative_segments, dependent: :destroy
   has_many :segments, through: :initiative_segments
@@ -54,7 +60,7 @@ class Initiative < ApplicationRecord
     initiative_conditions = ['initiative_segments.segment_id IS NULL']
     initiative_conditions << "initiative_segments.segment_id IN (#{ segment_ids.join(",") })" unless segment_ids.empty?
     joins('LEFT JOIN initiative_segments ON initiative_segments.initiative_id = initiatives.id')
-      .where(initiative_conditions.join(' OR '))
+    .where(initiative_conditions.join(' OR '))
   }
   scope :order_recent, -> { order(start: :desc) }
 
@@ -65,12 +71,17 @@ class Initiative < ApplicationRecord
   has_attached_file :picture, styles: { medium: '1000x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: 'private'
   validates_attachment_content_type :picture, content_type: %r{\Aimage\/.*\Z}
 
+  # Paperclip
+  has_attached_file :qr_code, styles: { medium: '1000x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: 'private'
+  validates_attachment_content_type :qr_code, content_type: %r{\Aimage\/.*\Z}
+
   validates :start, presence: true
   validates :end, presence: true
   validates :max_attendees, numericality: { greater_than: 0, allow_nil: true }
   validate :check_budget
   validate :segment_enterprise
   validates_presence_of :pillar
+  validates_presence_of :owner_group
 
   settings do
     mappings dynamic: false do
@@ -90,6 +101,10 @@ class Initiative < ApplicationRecord
         end
       end
     end
+  end
+
+  def archived?
+    archived_at.present?
   end
 
   def as_indexed_json(options = {})
@@ -114,6 +129,16 @@ class Initiative < ApplicationRecord
     return nil if !picture.presence
 
     picture.expiring_url(36000)
+  end
+
+  def qr_code_url=(url)
+    self.qr_code = URI.parse(url)
+  end
+
+  def qr_code_location
+    return nil if !qr_code.presence
+
+    qr_code.expiring_url(36000)
   end
 
   def initiative_date(date_type)
@@ -179,8 +204,8 @@ class Initiative < ApplicationRecord
   def finish_expenses!
     return false if finished_expenses?
 
-    leftover = estimated_funding - current_expences_sum
-    group.leftover_money += leftover
+    leftover_of_annual_budget = (owner_group.annual_budget - owner_group.approved_budget) + owner_group.available_budget
+    group.leftover_money = leftover_of_annual_budget
     group.save
     self.update(finished_expenses: true)
   end
@@ -190,7 +215,12 @@ class Initiative < ApplicationRecord
   end
 
   def current_expences_sum
-    expenses.sum(:amount) || 0
+    annual_budget = self.annual_budget
+    expenses.where(annual_budget_id: annual_budget.id).sum(:amount) || 0
+  end
+
+  def has_no_estimated_funding?
+    estimated_funding == 0
   end
 
   def leftover
@@ -211,14 +241,14 @@ class Initiative < ApplicationRecord
 
   def self.to_csv(initiatives:, enterprise: nil)
     # initiative column titles
-    CSV.generate do |csv|
+    CSV.generate(headers: true) do |csv|
       # These names dont correspond to the UI. Pillar = Outcome, Initiative/Program = Pillar, Event = Initiative
       csv << [
         enterprise.custom_text.send('erg_text'),
         enterprise.custom_text.send('outcome_text'),
         enterprise.custom_text.send('program_text'),
         'Event Name', 'Start Date', 'End Date',
-        'Expenses', 'Budget', 'Metrics 1', 'Metrics 2'
+        'Expenses', 'Budget', 'Metrics'
       ]
 
       initiatives.order(:start).each do |initiative|
@@ -233,10 +263,17 @@ class Initiative < ApplicationRecord
           ActionController::Base.helpers.number_to_currency(initiative.estimated_funding)
         ]
 
-        # Add first two metric titles
-        fields = initiative.fields
-        columns << (fields.first.nil? ? nil : fields.first.title)
-        columns << (fields.second.nil? ? nil : fields.first.title)
+        if initiative.updates.any?
+          update_data = initiative.updates.last.data
+          data_set = update_data.gsub!(/[^0-9]/, ' ').strip.split(' ')
+          data_set_hash = Hash[*data_set]
+
+          metrics_data = []
+          data_set_hash.each do |x|
+            metrics_data << "#{Field.find([*x][0]).title}(#{[*x][1]})"
+          end
+          columns << metrics_data.to_s.gsub!(/[^A-Za-z0-9()]/, ' ').strip
+        end
 
         csv << columns
       end
@@ -245,6 +282,10 @@ class Initiative < ApplicationRecord
 
   # ENDOF port from Event
 
+  def all_updates_fields
+    updates_fields = self.updates.map { |update| update.info.keys }
+    updates_fields.inject([], :|)
+  end
 
   def highcharts_history(field:, from: 1.year.ago, to: Time.current)
     self.updates
@@ -257,6 +298,26 @@ class Initiative < ApplicationRecord
         update.info[field]
       ]
     end
+  end
+
+  def highcharts_history_all_fields(fields: [], from: 1.year.ago, to: Time.current)
+    series = []
+    fields.each do |field|
+      values = self.updates.where('report_date >= ?', from).where('report_date <= ?', to).order(created_at: :asc).map do |update|
+        {
+          x: update.reported_for_date.to_i * 1000, # We multiply by 1000 to get milliseconds for highcharts
+          y: update.info[field],
+          children: {}
+        }
+      end
+      values.select! { |pair| pair[:y].present? }
+      values.sort_by! { |pair| pair[:x] }
+      series += [{
+        key: Field.find(field).title,
+        values: values
+      }]
+    end
+    series
   end
 
   def expenses_highcharts_history(from: 1.year.ago, to: Time.current)

@@ -4,7 +4,8 @@ RSpec.describe 'Budgets', type: :request do
   let(:enterprise) { create(:enterprise) }
   let(:api_key) { create(:api_key) }
   let(:user) { create(:user, password: 'password', enterprise: enterprise) }
-  let(:item) { create(:budget) }
+  let(:group) { create(:group, annual_budget: 10000, enterprise: enterprise) }
+  let(:item) { create(:budget, group: group) }
   let(:route) { 'budgets' }
   let(:jwt) { UserTokenService.create_jwt(user) }
   let(:headers) { { 'HTTP_DIVERST_APIKEY' => api_key.key, 'Diverst-UserToken' => jwt } }
