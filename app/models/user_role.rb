@@ -11,6 +11,8 @@ class UserRole < ApplicationRecord
   has_one     :policy_group_template, inverse_of: :user_role, dependent: :delete
 
   # validations
+  validates_length_of :role_type, maximum: 191
+  validates_length_of :role_name, maximum: 191
   validates :role_name,               presence: true, length: { minimum: 3 }
   validates :role_type,               presence: true
   validates :enterprise,              presence: true

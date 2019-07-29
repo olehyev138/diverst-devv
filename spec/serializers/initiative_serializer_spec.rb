@@ -4,7 +4,7 @@ RSpec.describe InitiativeSerializer, type: :serializer do
   it 'returns associations' do
     budget = create(:budget)
     budget_item = create(:budget_item, budget: budget)
-    initiative = create(:initiative, budget_item_id: budget_item.id, picture: File.new('spec/fixtures/files/verizon_logo.png'))
+    initiative = create(:initiative, budget_item_id: budget_item.id, picture: File.new('spec/fixtures/files/verizon_logo.png'), qr_code: File.new('spec/fixtures/files/verizon_logo.png'))
     serializer = InitiativeSerializer.new(initiative)
 
     expect(serializer.serializable_hash[:pillar]).to_not be nil
@@ -17,6 +17,7 @@ RSpec.describe InitiativeSerializer, type: :serializer do
     expect(serializer.serializable_hash[:leftover]).to_not be nil
     expect(serializer.serializable_hash[:time_string]).to_not be nil
     expect(serializer.serializable_hash[:picture_location]).to_not be nil
+    expect(serializer.serializable_hash[:qr_code_location]).to_not be nil
     expect(serializer.serializable_hash[:full?]).to be false
   end
 end

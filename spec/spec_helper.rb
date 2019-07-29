@@ -19,6 +19,7 @@
 
 # require 'paperclip/matchers'
 require 'pundit/rspec'
+require 'rspec/retry'
 
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
@@ -33,6 +34,16 @@ RSpec.configure do |config|
     # ...rather than:
     #     # => "be bigger than 2"
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true
+  end
+
+  # show retry status in spec process
+  config.verbose_retry = true
+
+  # show exception that triggers a retry if verbose_retry is set to true
+  config.display_try_failure_messages = true
+
+  config.around(:each) do |ex|
+    ex.run_with_retry retry: 3
   end
 
   # rspec-mocks config goes here. You can use an alternate test double
@@ -104,14 +115,16 @@ RSpec.configure do |config|
     formatter = OpenStruct.new({
       title: true,
       parser: OpenStruct.new({ extractors: true,
-                               date_range: true, get_elements: true }),
+                               date_range: true,
+                               get_elements: true }),
       add_elements: true
     })
 
     query = OpenStruct.new({
       terms_agg: true,
       bool_filter_agg: true,
-      add_filter_clause: true })
+      add_filter_clause: true
+})
 
     graph = double('Graph',
                    search: true,

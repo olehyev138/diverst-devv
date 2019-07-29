@@ -3,6 +3,7 @@ class BudgetItem < ApplicationRecord
   belongs_to :budget
   has_many :initiatives
 
+  validates_length_of :title, maximum: 191
   validates :title, presence: true, length: { minimum: 2 }
   validates :estimated_amount, numericality: { less_than_or_equal_to: 999999, message: 'number of digits must not exceed 6' }
   validates :available_amount, numericality: { less_than_or_equal_to: :estimated_amount },

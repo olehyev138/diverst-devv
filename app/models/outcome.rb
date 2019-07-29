@@ -3,6 +3,7 @@ class Outcome < ApplicationRecord
   has_many :pillars, dependent: :destroy
 
   accepts_nested_attributes_for :pillars, reject_if: :all_blank, allow_destroy: true
+  validates_length_of :name, maximum: 191
   validates :name, presence: true
 
   # Gets all initiatives for outcome

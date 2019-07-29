@@ -4,6 +4,8 @@ class MentorshipSession < ApplicationRecord
   belongs_to :mentoring_session
 
   # validations
+  validates_length_of :status, maximum: 191
+  validates_length_of :role, maximum: 191
   validates :user,                presence: true
   validates :role,                presence: true
   validates :mentoring_session,   presence: true, on: :update

@@ -101,6 +101,7 @@ RSpec.describe Resource, type: :model do
   describe '#file_url' do
     it 'sets the file for resource from url' do
       resource = create(:resource, file: nil)
+      allow(URI).to receive(:parse).and_return(File.open('spec/fixtures/files/verizon_logo.png'))
       expect(resource.file_file_name).to be nil
 
       resource.file_url = Faker::LoremPixel.image(secure: false)

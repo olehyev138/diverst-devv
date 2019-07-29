@@ -12,6 +12,10 @@ class GroupBasePolicy < Struct.new(:user, :context)
     UserGroup.where(user_id: user.id, group_id: group.id).exists?
   end
 
+  def is_a_accepted_member?
+    UserGroup.where(user_id: user.id, group_id: group.id, accepted_member: true).exists?
+  end
+
   def is_a_manager?(permission)
     return true if is_admin_manager?(permission)
 

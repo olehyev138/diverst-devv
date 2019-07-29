@@ -5,6 +5,8 @@ class GroupUpdate < ApplicationRecord
   belongs_to :owner, class_name: 'User'
   belongs_to :group
 
+  validates_length_of :comments, maximum: 65535
+  validates_length_of :data, maximum: 65535
   validates :created_at, presence: true
 
   # Returns the delta with another update relative to this other update for a particular field (+23%, -12%, etc.)
