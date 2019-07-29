@@ -2,6 +2,7 @@ class SegmentRule < ApplicationRecord
   belongs_to :segment
   belongs_to :field
 
+  validates_length_of :values, maximum: 65535
   validates :field, presence: true
   validates :field_id, presence: true
 
@@ -32,7 +33,7 @@ class SegmentRule < ApplicationRecord
   end
 
   def values_array
-    JSON.parse self[:values]
+    JSON.parse values
   end
 
   def followed_by?(user)

@@ -7,10 +7,26 @@ module Initiative::Actions
   end
 
   module ClassMethods
+    def build(diverst_request, params)
+      item = super
+      annual_budget = diverst_request.user.enterprise.annual_budgets.find_or_create_by(closed: false, group_id: item.group)
+      item.annual_budget_id = annual_budget.id
+      item.save!
+
+      item
+    end
+
     def generate_qr_code(diverst_request, params)
       item = show(diverst_request, params)
-      enc = Base64.encode64(item.to_json)
-      { qr_code: RQRCode::QRCode.new(enc).as_png }
+      hash = {
+        id: item.id,
+        name: item.name
+      }
+      enc = Base64.encode64(hash.to_json)
+      png = RQRCode::QRCode.new(enc).as_png
+      item.qr_code = png.to_data_url
+      item.save!
+      item
     end
   end
 end

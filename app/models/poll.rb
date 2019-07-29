@@ -23,6 +23,8 @@ class Poll < ApplicationRecord
 
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
 
+  validates_length_of :description, maximum: 65535
+  validates_length_of :title, maximum: 191
   validates :title,       presence: true
   validates :description, presence: true
   validates :status,      presence: true

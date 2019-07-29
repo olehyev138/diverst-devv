@@ -9,6 +9,10 @@ class Reward < ApplicationRecord
   #                    default_url: ActionController::Base.helpers.image_path('/assets/missing.png')
 
   # validates_attachment_content_type :picture, content_type: %r{\Aimage\/.*\Z}
+  validates_length_of :description, maximum: 65535
+  validates_length_of :picture_content_type, maximum: 191
+  validates_length_of :picture_file_name, maximum: 191
+  validates_length_of :label, maximum: 191
   validates :enterprise, presence: true
   validates :points, numericality: { only_integer: true, greater_than_or_equal_to: 0 }, presence: true
   validates :label, presence: true

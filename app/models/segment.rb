@@ -36,6 +36,8 @@ class Segment < ApplicationRecord
 
   has_many :members, class_name: 'User', through: :users_segments, source: :user, dependent: :destroy
 
+  validates_length_of :active_users_filter, maximum: 191
+  validates_length_of :name, maximum: 191
   validates_presence_of :name
   validates_presence_of :active_users_filter
   validates :name, uniqueness: { scope: :enterprise_id }
@@ -110,7 +112,7 @@ class Segment < ApplicationRecord
     return users if self.limit.blank?
 
     # Ordering requires an ActiveRecord collection, users is passed as an array of User objects
-    users = enterprise.users.where('id in (?)', users.pluck(:id))
+    users = enterprise.users.where('id in (?)', users.map(&:id))
 
     # Apply each order rule to the users list
     self.order_rules.reduce(users) { |ordered_users, rule| ordered_users.order(rule.field_name => rule.operator_name) }

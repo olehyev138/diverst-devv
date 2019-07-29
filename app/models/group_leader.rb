@@ -3,6 +3,7 @@ class GroupLeader < ApplicationRecord
   belongs_to :user
   belongs_to :user_role
 
+  validates_length_of :position_name, maximum: 191
   validates_presence_of :position_name
   validates_presence_of :group
   validates_presence_of :user

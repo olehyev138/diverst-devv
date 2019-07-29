@@ -1,6 +1,8 @@
 class NewsLinkPhoto < ApplicationRecord
   belongs_to :news_link
 
+  validates_length_of :file_content_type, maximum: 191
+  validates_length_of :file_file_name, maximum: 191
   validates :news_link, presence: true, on: :update
 
   # Paperclip
@@ -9,6 +11,12 @@ class NewsLinkPhoto < ApplicationRecord
 
   def file_url=(url)
     self.file = URI.parse(url)
+  end
+
+  def file_location
+    return nil if !file.presence
+
+    file.expiring_url(36000)
   end
 
   def group

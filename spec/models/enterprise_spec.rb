@@ -273,5 +273,70 @@ RSpec.describe Enterprise, type: :model do
         enterprise.run_callbacks(:update)
       end
     end
+
+    describe '#users_csv' do
+      let!(:enterprise) { create(:enterprise) }
+      let!(:group_leader_role) { enterprise.user_roles.find_by(role_name: 'group_leader', role_type: 'group') }
+      let!(:group_treasurer_role) { enterprise.user_roles.find_or_create_by(role_name: 'group_treasurer', role_type: 'group', priority: 2) }
+      let!(:group_content_creator_role) { enterprise.user_roles.find_or_create_by(role_name: 'group_content_creator', role_type: 'group', priority: 3) }
+      let!(:user_role) { enterprise.user_roles.find_by(role_name: 'user', role_type: 'user') }
+      let!(:national_manager_role) { enterprise.user_roles.find_or_create_by(role_name: 'national_manager', role_type: 'user', priority: 4) }
+      let!(:diversity_manager_role) { enterprise.user_roles.find_or_create_by(role_name: 'diversity_manager', role_type: 'user', priority: 5) }
+
+      context 'return csv for group roles' do
+        it 'return csv for group leader role' do
+          user = create(:user, enterprise: enterprise)
+          user.update(user_role: group_leader_role)
+          create(:group_leader, user: user, user_role: group_leader_role)
+
+          expect(enterprise.users_csv(2, 'group_leader'))
+          .to include "#{user.first_name},#{user.last_name},#{user.email},#{user.biography},#{user.active},#{user.groups.map(&:name).join(',')}"
+        end
+
+        it 'return csv group treaurer role' do
+          user = create(:user, enterprise: enterprise)
+          user.update(user_role: group_treasurer_role)
+          create(:group_leader, user: user, user_role: group_treasurer_role)
+
+          expect(enterprise.users_csv(2, 'group_treasurer'))
+          .to include "#{user.first_name},#{user.last_name},#{user.email},#{user.biography},#{user.active},#{user.groups.map(&:name).join(',')}"
+        end
+
+        it 'return csv group content creator role' do
+          user = create(:user, enterprise: enterprise)
+          user.update(user_role: group_content_creator_role)
+          create(:group_leader, user: user, user_role: group_content_creator_role)
+
+          expect(enterprise.users_csv(2, 'group_content_creator'))
+          .to include "#{user.first_name},#{user.last_name},#{user.email},#{user.biography},#{user.active},#{user.groups.map(&:name).join(',')}"
+        end
+      end
+
+      context 'return csv for non group roles' do
+        it 'return csv for user role' do
+          user = create(:user, enterprise: enterprise)
+          user.update(user_role: user_role)
+
+          expect(enterprise.users_csv(2, 'user'))
+            .to include "#{user.first_name},#{user.last_name},#{user.email},#{user.biography},#{user.active},#{user.groups.map(&:name).join(',')}"
+        end
+
+        it 'return csv for national manager role' do
+          user = create(:user, enterprise: enterprise)
+          user.update(user_role: national_manager_role)
+
+          expect(enterprise.users_csv(2, 'national_manager'))
+            .to include "#{user.first_name},#{user.last_name},#{user.email},#{user.biography},#{user.active},#{user.groups.map(&:name).join(',')}"
+        end
+
+        it 'return csv for diversity manager role' do
+          user = create(:user, enterprise: enterprise)
+          user.update(user_role: diversity_manager_role)
+
+          expect(enterprise.users_csv(2, 'diversity_manager'))
+            .to include "#{user.first_name},#{user.last_name},#{user.email},#{user.biography},#{user.active},#{user.groups.map(&:name).join(',')}"
+        end
+      end
+    end
   end
 end
