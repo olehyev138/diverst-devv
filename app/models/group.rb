@@ -458,7 +458,7 @@ class Group < BaseClass
     segments = params['users_segments_segment_id_in'].map do |seg_id|
       Segment.find(seg_id.to_i) if seg_id.present?
     end
-    segments.select! {|seg| seg.present?}
+    segments.select! { |seg| seg.present? }
     from = params['user_groups_created_at_gteq']
     to = params['user_groups_created_at_lteq']
     users = User.joins(:user_groups)
