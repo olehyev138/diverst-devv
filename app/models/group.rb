@@ -454,6 +454,28 @@ class Group < BaseClass
     survey_fields.count > 0
   end
 
+  def filtered_member_list(params)
+    segments = params['users_segments_segment_id_in'].map do |seg_id|
+      Segment.find(seg_id.to_i) if seg_id.present?
+    end
+    segments.select! {|seg| seg.present?}
+    from = params['user_groups_created_at_gteq']
+    to = params['user_groups_created_at_lteq']
+    users = User.joins(:user_groups)
+
+    users = users.joins(:users_segments) if segments.present?
+
+    users = users
+              .where('`user_groups`.`group_id` = ?', id)
+              .where('`user_groups`.`accepted_member` = 1')
+              .where('`users`.`active` = 1')
+
+    users = users.where('`users_segments`.`segment_id` IN (?)', segments) if segments.present?
+    users = users.where('`user_groups`.`created_at` >= ?', from) if from.present?
+    users = users.where('`user_groups`.`created_at` <= ?', to)
+    users.distinct
+  end
+
   protected
 
   def smart_add_url_protocol

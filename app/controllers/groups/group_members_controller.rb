@@ -11,7 +11,7 @@ class Groups::GroupMembersController < ApplicationController
     authorize [@group], :view_members?, policy_class: GroupMemberPolicy
     @q = User.ransack(params[:q])
     @total_members = @group.active_members.count
-    @members = @group.active_members.ransack(params[:q]).result.uniq
+    @members = @group.filtered_member_list(params[:q])
     @segments = @group.enterprise.segments
     respond_to do |format|
       format.html
