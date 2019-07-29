@@ -238,7 +238,8 @@ class EnterprisesController < ApplicationController
           :options_text,
           :alternative_layout,
           :private,
-          :required
+          :required,
+          :add_to_member_list
         ],
         yammer_field_mappings_attributes: [
           :id,

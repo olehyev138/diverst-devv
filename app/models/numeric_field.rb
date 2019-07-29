@@ -77,4 +77,8 @@ class NumericField < Field
 
     ranges
   end
+
+  def to_string(data)
+    data.to_s
+  end
 end
