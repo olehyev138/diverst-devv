@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useEffect } from 'react';
 import { Route } from 'react-router';
 import PropTypes from 'prop-types';
 
@@ -30,10 +30,10 @@ const GroupLayout = ({ component: Component, ...rest }) => {
     <AuthenticatedLayout
       position='absolute'
       {...other}
-      component={matchProps => (
+      component={() => (
         <React.Fragment>
           <div className={classes.toolbar} />
-          <GroupLinks {...matchProps} />
+          <GroupLinks {...other} />
 
           <Container>
             <div className={classes.content}>

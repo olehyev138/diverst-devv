@@ -90,13 +90,15 @@ export function EventsList(props) {
                         </Typography>
                         <hr className={classes.divider} />
                         {item.description && (
-                          <Typography color='textSecondary'>
-                            {item.description}
+                          <React.Fragment>
+                            <Typography color='textSecondary'>
+                              {item.description}
+                            </Typography>
                             <Box pb={1} />
-                          </Typography>
+                          </React.Fragment>
                         )}
+                        <Box pt={1} />
                         <Typography color='textSecondary' variant='subtitle2' className={classes.dateText}>
-                          <Box pt={1} />
                           { /* TODO: Use a clientside date library for this */ }
                           {item.start.substring(0, 10).replace(/-/g, '/')}
                         </Typography>

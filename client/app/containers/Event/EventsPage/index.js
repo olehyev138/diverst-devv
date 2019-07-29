@@ -48,7 +48,7 @@ export function EventsPage(props) {
     return () => {
       props.eventsUnmount();
     };
-  }, [props.currentGroup]);
+  }, []);
 
   const handlePagination = (payload) => {
     const newParams = { ...params, count: payload.count, page: payload.page };

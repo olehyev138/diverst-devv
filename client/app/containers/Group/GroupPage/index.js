@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
-
+import dig from 'object-dig';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/Group/reducer';
@@ -30,12 +30,17 @@ export function GroupPage(props) {
   const rs = new RouteService(useContext);
 
   useEffect(() => {
-    props.getGroupBegin({ id: rs.params('group_id') });
+    const groupId = rs.params('group_id');
 
-    return () => {
+    if (dig(props.currentGroup, 'id') !== groupId)
+      props.getGroupBegin({ id: groupId });
+  }, [dig(props.currentGroup, 'id')]);
+
+  useEffect(() => (
+    () => {
       props.groupFormUnmount();
-    };
-  }, []);
+    }
+  ), []);
 
   return (
     <React.Fragment>
