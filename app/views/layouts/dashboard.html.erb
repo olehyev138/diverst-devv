@@ -20,9 +20,15 @@
         <% end %>
       </div>
       <div class="flex-row__cell">
-        <%= link_to "Employee dashboard", user_root_path, class: "title_bar" %> &nbsp;|&nbsp;
+        <%= link_to 'Personal Stats', show_usage_user_path(current_user), class: 'title_bar' %>
+        &nbsp;|&nbsp;
+        <% if root_admin_path %>
+          <%= link_to 'Aggregate Stats', index_usage_users_path, class: 'title_bar' %>
+          &nbsp;|&nbsp;
+        <% end %>
+        <%= link_to "Employee dashboard", user_root_path, class: "title_bar" %>
+        &nbsp;|&nbsp;
         <%= link_to current_user.name, user_user_path(current_user), class: 'title_bar' %>
-        <%= link_to image_tag('icons/graph.svg', width: 25), show_usage_user_path(current_user), class: 'title_bar'  %>
       </div>
     </div>
   </header>
