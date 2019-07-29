@@ -44,7 +44,7 @@ export function GroupMemberFormInner({ handleSubmit, handleChange, handleBlur, v
             fullWidth
             id='member_ids'
             name='member_ids'
-            label={'New Members'}
+            label='New Members'
             isMulti
             value={values.member_ids}
             options={props.selectUsers}
@@ -83,7 +83,6 @@ export function GroupMemberForm(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-
         props.createMembersBegin({
           groupId: props.groupId,
           attributes: mapFields(values, ['member_ids'])

@@ -50,16 +50,12 @@ export function* createUser(action) {
 
 export function* addMembers(action) {
   try {
-    console.log('hey');
-    console.log(action);
-
     const payload = { group: action.payload.attributes };
     const response = yield call(api.groups.update.bind(api.groups), action.payload.groupId, payload);
 
     // yield put(push(ROUTES.admin.manage.users.index.path()));
     yield put(showSnackbar({ message: 'User updated', options: { variant: 'success' } }));
   } catch (err) {
-    console.log(err);
     yield put(updateUserError(err));
 
     // TODO: intl message
