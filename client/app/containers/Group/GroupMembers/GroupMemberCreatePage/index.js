@@ -13,8 +13,8 @@ import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/Group/GroupMembers/reducer';
 import saga from 'containers/Group/GroupMembers/saga';
 
-import { createUserBegin, getUsersBegin, userListUnmount } from 'containers/Group/GroupMembers/actions';
-import { selectPaginatedSelectUsers, selectPaginatedUsers, selectUserTotal } from 'containers/Group/GroupMembers/selectors';
+import { createMembersBegin, getMembersBegin, groupMembersUnmount } from 'containers/Group/GroupMembers/actions';
+import { selectPaginatedSelectMembers, selectMemberTotal } from 'containers/Group/GroupMembers/selectors';
 
 import GroupMemberForm from 'components/Group/GroupMembers/GroupMemberForm';
 
@@ -25,13 +25,13 @@ export function GroupMemberCreatePage(props) {
   const rs = new RouteService(useContext);
   const groupId = rs.params('group_id')[0];
 
-  useEffect(() => () => props.userListUnmount(), []);
+  useEffect(() => () => props.groupMembersUnmount(), []);
 
   return (
     <GroupMemberForm
       groupId={groupId}
       createMembersBegin={props.createMembersBegin}
-      getUsersBegin={props.getUsersBegin}
+      getMembersBegin={props.getMembersBegin}
       selectUsers={props.users}
     />
   );
@@ -39,20 +39,20 @@ export function GroupMemberCreatePage(props) {
 
 GroupMemberCreatePage.propTypes = {
   createMembersBegin: PropTypes.func,
-  getUsersBegin: PropTypes.func,
-  userListUnmount: PropTypes.func,
+  getMembersBegin: PropTypes.func,
+  groupMembersUnmount: PropTypes.func,
   users: PropTypes.array
 };
 
 const mapStateToProps = createStructuredSelector({
-  users: selectPaginatedSelectUsers(),
-  userTotal: selectUserTotal()
+  users: selectPaginatedSelectMembers(),
+  userTotal: selectMemberTotal()
 });
 
 const mapDispatchToProps = {
-  getUsersBegin,
-  createMembersBegin: createUserBegin,
-  userListUnmount,
+  getMembersBegin,
+  createMembersBegin,
+  groupMembersUnmount,
 };
 
 const withConnect = connect(

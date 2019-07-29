@@ -3,19 +3,19 @@ import { initialState } from 'containers/Group/GroupMembers/reducer';
 
 const selectMembersDomain = state => state.members || initialState;
 
-const selectPaginatedUsers = () => createSelector(
+const selectPaginatedMembers = () => createSelector(
   selectMembersDomain,
-  membersState => membersState.userList
+  membersState => membersState.memberList
 );
 
 /* Select user list & format it for a select
  *  looks like: [ { value: <>, label: <> } ... ]
  */
-const selectPaginatedSelectUsers = () => createSelector(
+const selectPaginatedSelectMembers = () => createSelector(
   selectMembersDomain,
   membersState => (
     Object
-      .values(membersState.userList)
+      .values(membersState.memberList)
       .map(user => ({
         value: user.id,
         label: `${user.first_name} ${user.last_name}`
@@ -23,12 +23,12 @@ const selectPaginatedSelectUsers = () => createSelector(
   )
 );
 
-const selectUserTotal = () => createSelector(
+const selectMemberTotal = () => createSelector(
   selectMembersDomain,
-  membersState => membersState.userTotal
+  membersState => membersState.memberTotal
 );
 
 export {
-  selectMembersDomain, selectPaginatedUsers, selectPaginatedSelectUsers,
-  selectUserTotal
+  selectMembersDomain, selectPaginatedMembers, selectPaginatedSelectMembers,
+  selectMemberTotal
 };

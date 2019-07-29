@@ -5,113 +5,107 @@
  */
 
 import {
-  GET_USERS_BEGIN, GET_USERS_SUCCESS, GET_USERS_ERROR,
-  CREATE_USER_BEGIN, CREATE_USER_SUCCESS, CREATE_USER_ERROR,
-  UPDATE_USER_BEGIN, UPDATE_USER_SUCCESS, UPDATE_USER_ERROR,
-  DELETE_USER_BEGIN, DELETE_USER_SUCCESS, DELETE_USER_ERROR,
-  USER_LIST_UNMOUNT, USER_FORM_UNMOUNT
+  GET_MEMBERS_BEGIN, GET_MEMBERS_SUCCESS, GET_MEMBERS_ERROR,
+  CREATE_MEMBERS_BEGIN, CREATE_MEMBERS_SUCCESS, CREATE_MEMBERS_ERROR,
+  UPDATE_MEMBER_BEGIN, UPDATE_MEMBER_SUCCESS, UPDATE_MEMBER_ERROR,
+  DELETE_MEMBER_BEGIN, DELETE_MEMBER_SUCCESS, DELETE_MEMBER_ERROR,
+  GROUP_MEMBERS_UNMOUNT
 } from 'containers/Group/GroupMembers/constants';
 
-/* User listing */
+/* Member listing */
 
-export function getUsersBegin(payload) {
+export function getMembersBegin(payload) {
   return {
-    type: GET_USERS_BEGIN,
+    type: GET_MEMBERS_BEGIN,
     payload
   };
 }
 
-export function getUsersSuccess(payload) {
+export function getMembersSuccess(payload) {
   return {
-    type: GET_USERS_SUCCESS,
+    type: GET_MEMBERS_SUCCESS,
     payload
   };
 }
 
-export function getUsersError(error) {
+export function getMembersError(error) {
   return {
-    type: GET_USERS_ERROR,
+    type: GET_MEMBERS_ERROR,
     error,
   };
 }
 
 /* Group creating */
 
-export function createUserBegin(payload) {
+export function createMembersBegin(payload) {
   return {
-    type: CREATE_USER_BEGIN,
+    type: CREATE_MEMBERS_BEGIN,
     payload,
   };
 }
 
-export function createUserSuccess(payload) {
+export function createMembersSuccess(payload) {
   return {
-    type: CREATE_USER_SUCCESS,
+    type: CREATE_MEMBERS_SUCCESS,
     payload,
   };
 }
 
-export function createUserError(error) {
+export function createMembersError(error) {
   return {
-    type: CREATE_USER_ERROR,
+    type: CREATE_MEMBERS_ERROR,
     error,
   };
 }
 
-/* User updating */
+/* Member updating */
 
-export function updateUserBegin(payload) {
+export function updateMemberBegin(payload) {
   return {
-    type: UPDATE_USER_BEGIN,
+    type: UPDATE_MEMBER_BEGIN,
     payload,
   };
 }
 
-export function updateUserSuccess(payload) {
+export function updateMemberSuccess(payload) {
   return {
-    type: UPDATE_USER_SUCCESS,
+    type: UPDATE_MEMBER_SUCCESS,
     payload,
   };
 }
 
-export function updateUserError(error) {
+export function updateMemberError(error) {
   return {
-    type: UPDATE_USER_ERROR,
+    type: UPDATE_MEMBER_ERROR,
     error,
   };
 }
 
-/* User deleting */
+/* Member deleting */
 
-export function deleteUserBegin(payload) {
+export function deleteMemberBegin(payload) {
   return {
-    type: DELETE_USER_BEGIN,
+    type: DELETE_MEMBER_BEGIN,
     payload,
   };
 }
 
-export function deleteUserSuccess(payload) {
+export function deleteMemberSuccess(payload) {
   return {
-    type: DELETE_USER_SUCCESS,
+    type: DELETE_MEMBER_SUCCESS,
     payload,
   };
 }
 
-export function deleteUserError(error) {
+export function deleteMemberError(error) {
   return {
-    type: DELETE_USER_ERROR,
+    type: DELETE_MEMBER_ERROR,
     error,
   };
 }
 
-export function userListUnmount() {
+export function groupMembersUnmount() {
   return {
-    type: USER_LIST_UNMOUNT
-  };
-}
-
-export function userFormUnmount() {
-  return {
-    type: USER_FORM_UNMOUNT
+    type: GROUP_MEMBERS_UNMOUNT
   };
 }

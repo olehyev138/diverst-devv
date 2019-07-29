@@ -71,7 +71,7 @@ export function GroupMemberList(props) {
           </Button>
         </Grid>
         <Grid item xs={12}>
-          {props.userList && Object.values(props.userList).map((user, i) => (
+          {props.memberList && Object.values(props.memberList).map((user, i) => (
             /* eslint-disable-next-line react/jsx-wrap-multilines */
             <Card key={user.id}>
               <CardContent>
@@ -95,8 +95,8 @@ GroupMemberList.propTypes = {
   // handlePagination: PropTypes.func,
   links: PropTypes.shape({
   }),
-  userList: PropTypes.object,
-  userTotal: PropTypes.number
+  memberList: PropTypes.object,
+  memberTotal: PropTypes.number
 };
 
 export default compose(

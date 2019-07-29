@@ -29,7 +29,7 @@ import { buildValues, mapFields } from 'utils/formHelpers';
 /* eslint-disable object-curly-newline */
 export function GroupMemberFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
   const usersSelectAction = (searchKey = '') => {
-    props.getUsersBegin({
+    props.getMembersBegin({
       count: 10, page: 0, order: 'asc',
       search: searchKey,
     });
@@ -107,7 +107,7 @@ GroupMemberFormInner.propTypes = {
   values: PropTypes.object,
   buttonText: PropTypes.string,
   selectUsers: PropTypes.array,
-  getUsersBegin: PropTypes.func,
+  getMembersBegin: PropTypes.func,
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func
 };

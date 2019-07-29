@@ -1,28 +1,28 @@
 /*
  *
- * User reducer
+ * Members reducer
  *
  */
 
 import produce from 'immer/dist/immer';
 import {
-  GET_USERS_SUCCESS, USER_LIST_UNMOUNT
+  GET_MEMBERS_SUCCESS, GROUP_MEMBERS_UNMOUNT
 } from 'containers/Group/GroupMembers/constants';
 
 export const initialState = {
-  userList: {},
-  userTotal: null,
+  memberList: {},
+  memberTotal: null,
 };
 
 /* eslint-disable default-case, no-param-reassign, consistent-return  */
-function usersReducer(state = initialState, action) {
+function membersReducer(state = initialState, action) {
   return produce(state, (draft) => {
     switch (action.type) {
-      case GET_USERS_SUCCESS:
-        draft.userList = formatUsers(action.payload.items);
-        draft.userTotal = action.payload.total;
+      case GET_MEMBERS_SUCCESS:
+        draft.memberList = formatMembers(action.payload.items);
+        draft.memberTotal = action.payload.total;
         break;
-      case USER_LIST_UNMOUNT:
+      case GROUP_MEMBERS_UNMOUNT:
         return initialState;
     }
   });
@@ -30,16 +30,16 @@ function usersReducer(state = initialState, action) {
 
 /* Helpers */
 
-function formatUsers(users) {
+function formatMembers(members) {
   /* eslint-disable no-return-assign */
 
   /* Format users to hash by id:
    *   { <id>: { name: user_01, ... } }
    */
-  return users.reduce((map, userGroup) => {
-    map[userGroup.user_id] = userGroup.user;
+  return members.reduce((map, member) => {
+    map[member.user_id] = member.user;
     return map;
   }, {});
 }
 
-export default usersReducer;
+export default membersReducer;
