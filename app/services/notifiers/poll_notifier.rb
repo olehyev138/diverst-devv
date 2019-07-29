@@ -11,8 +11,8 @@ class Notifiers::PollNotifier
         DeviceNotificationJob.perform_later(user.id, { "notification": {
           "title": @poll.title,
           "body": @poll.description,
-          "org": "diverst",
-          "survey": ""
+          "org": 'diverst',
+          "survey": ''
         } })
       end
       @poll.update(email_sent: true)
