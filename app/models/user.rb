@@ -607,15 +607,15 @@ class User < BaseClass
 
   def self.count_list(*fields, from: Time.at(0), where: [nil])
     active_record = self.left_joins(*fields).where(*where).group(:id)
-    fields.reduce(nil) do |sum, n|
+    results = fields.reduce(nil) do |sum, n|
       hash = active_record.distinct.count("#{get_association_table_name(n)}.id")
       if sum.present?
         sum.merge(hash) { | _, x, y| x + y }
       else
         hash
       end
-    end.values.sort
-    # User.joins('LEFT JOIN initiative_users ON users.id = user_id').group(:id).order('count_initiative_users_id asc').count('initiative_users.id')
+    end
+    results.values.sort
   end
 
   def number_of(*fields, from: nil, where: [nil])
