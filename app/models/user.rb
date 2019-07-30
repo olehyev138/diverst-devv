@@ -590,6 +590,7 @@ class User < BaseClass
                     .group(:landing_page)
                     .count
     page_visits.each do |page, count|
+      page = page.split('?').first
       visitation = page_visitation_data.find_by(page: page)
       if visitation.present?
         visitation.times_visited += count

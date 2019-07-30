@@ -1635,4 +1635,8 @@ ActiveRecord::Schema.define(version: 20190730124943) do
   add_foreign_key "user_rewards", "rewards"
   add_foreign_key "user_rewards", "users"
   add_foreign_key "user_roles", "enterprises"
+
+  create_view "total_page_visitations", sql_definition: <<-SQL
+      select `page_visitation_data`.`page` AS `page`,sum(`page_visitation_data`.`times_visited`) AS `times_visited` from `page_visitation_data` group by `page_visitation_data`.`page`
+  SQL
 end
