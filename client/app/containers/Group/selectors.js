@@ -8,6 +8,9 @@ const selectPaginatedGroups = () => createSelector(
   groupsState => groupsState.groupList
 );
 
+/* Select group list & format it for a select
+ *  looks like: [ { value: <>, label: <> } ... ]
+ */
 const selectPaginatedSelectGroups = () => createSelector(
   selectGroupsDomain,
   groupsState => (
