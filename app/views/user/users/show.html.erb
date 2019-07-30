@@ -12,19 +12,14 @@
     </h1>
     <%= link_to "Edit profile", edit_user_user_path, class: "btn btn--primary" %>
     <%= link_to c_t(:member_preference).pluralize, group_surveys_user_path(@user), class: "btn btn--primary" if @user.belongs_to_group_with_survey? %>
-    <% unless @user.linkedin_profile_url.nil? %>
-      <%= link_to @user.linkedin_profile_url do %>
-        <img src="/assets/linkedin-full.png" alt="LinkedIn profile link" style="height: 30px; margin-top: 12px;">
-      <% end %>
-      <%= link_to 'Delete LinkedIn information',
-                  linkedin_user_user_path(@user),
-                  method: :delete,
-                  data: {confirm: 'Are you sure'},
-                  class: "btn btn-sm btn-danger"
-      %>
-    <% else %>
-      <%= link_to 'Connect with LinkedIn', @linkedin_url, class: "btn btn--secondary" unless @user.linkedin_profile_url %>
-    <% end %>
+    <%# unless @user.linkedin_profile_url.nil? %>
+      <%#= link_to @user.linkedin_profile_url do %>
+<!--        <img src="/assets/linkedin-full.png" alt="LinkedIn profile link" style="height: 30px; margin-top: 12px;">-->
+      <%# end %>
+      <%#= link_to 'Delete LinkedIn information', linkedin_user_user_path(@user), method: :delete, data: {confirm: 'Are you sure'}, class: "btn btn-sm btn-danger" %>
+    <%# else %>
+      <%#= link_to 'Connect with LinkedIn', @linkedin_url, class: "btn btn--secondary" unless @user.linkedin_profile_url %>
+    <%# end %>
   </div>
 </div>
 
