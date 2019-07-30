@@ -11,7 +11,10 @@ import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/Group/GroupMembers/reducer';
 import saga from 'containers/Group/GroupMembers/saga';
 
-import { getMembersBegin, groupMembersUnmount } from 'containers/Group/GroupMembers/actions';
+import {
+  getMembersBegin, deleteMemberBegin,
+  groupMembersUnmount
+} from 'containers/Group/GroupMembers/actions';
 import { selectPaginatedMembers, selectMemberTotal } from 'containers/Group/GroupMembers/selectors';
 
 import RouteService from 'utils/routeHelpers';
@@ -26,7 +29,7 @@ export function GroupMemberListPage(props) {
   const rs = new RouteService(useContext);
   const groupId = rs.params('group_id')[0];
   const links = {
-    groupMembersNew: ROUTES.group.members.new.path(groupId)
+    groupMembersNew: ROUTES.group.members.new.path(groupId),
   };
 
   useEffect(() => {
@@ -44,6 +47,8 @@ export function GroupMemberListPage(props) {
       <GroupMemberList
         memberList={props.memberList}
         memberTotal={props.memberTotal}
+        groupId={groupId}
+        deleteMemberBegin={props.deleteMemberBegin}
         links={links}
       />
     </React.Fragment>
@@ -52,6 +57,7 @@ export function GroupMemberListPage(props) {
 
 GroupMemberListPage.propTypes = {
   getMembersBegin: PropTypes.func,
+  deleteMemberBegin: PropTypes.func,
   groupMembersUnmount: PropTypes.func,
   memberList: PropTypes.object,
   memberTotal: PropTypes.number
@@ -64,6 +70,7 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = {
   getMembersBegin,
+  deleteMemberBegin,
   groupMembersUnmount
 };
 

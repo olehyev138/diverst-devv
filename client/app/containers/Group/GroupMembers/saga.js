@@ -25,7 +25,7 @@ export function* getMembers(action) {
     yield put(getMembersError(err));
 
     // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to load users', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: 'Failed to load members', options: { variant: 'warning' } }));
   }
 }
 
@@ -44,26 +44,31 @@ export function* createMembers(action) {
     yield put(createMembersError(err));
 
     // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to update user', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: 'Failed to create members', options: { variant: 'warning' } }));
   }
 }
 
-export function* deleteMember(action) {
+export function* deleteMembers(action) {
   try {
-    yield call(api.users.destroy.bind(api.users), action.payload);
+    const payload = {
+      group_id: action.payload.groupId,
+      member_ids: [action.payload.userId]
+    };
 
-    yield put(push(ROUTES.admin.manage.users.index.path()));
+    yield call(api.groupMembers.removeMembers.bind(api.groupMembers), payload);
+
+    yield put(push(ROUTES.group.members.index.path(action.payload.groupId)));
     yield put(showSnackbar({ message: 'User deleted', options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteMemberError(err));
 
     // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to update user', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: 'Failed to remove members', options: { variant: 'warning' } }));
   }
 }
 
 export default function* membersSaga() {
   yield takeLatest(GET_MEMBERS_BEGIN, getMembers);
   yield takeLatest(CREATE_MEMBERS_BEGIN, createMembers);
-  yield takeLatest(DELETE_MEMBER_BEGIN, deleteMember);
+  yield takeLatest(DELETE_MEMBER_BEGIN, deleteMembers);
 }

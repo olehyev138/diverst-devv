@@ -52,6 +52,12 @@ Diverst::Application.routes.draw do
       resources :group_updates
       resources :groups_metrics_dashboards
       resources :groups_polls
+      resources :group_members, path: 'members' do
+        collection do
+          post 'add_members'
+          post 'remove_members'
+        end
+      end
       resources :initiatives do
         member do
           post '/qrcode', to: 'initiatives#generate_qr_code'

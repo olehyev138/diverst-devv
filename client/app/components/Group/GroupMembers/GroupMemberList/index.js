@@ -28,6 +28,9 @@ import { FormattedMessage } from 'react-intl';
 import messages from 'containers/Group/GroupMembers/messages';
 
 const styles = theme => ({
+  errorButton: {
+    color: theme.palette.error.main,
+  },
 });
 
 export function GroupMemberList(props) {
@@ -82,6 +85,19 @@ export function GroupMemberList(props) {
                   </Typography>
                 </Link>
               </CardContent>
+              <CardActions>
+                <Button
+                  size='small'
+                  className={classes.errorButton}
+                  onClick={() => {
+                    /* eslint-disable-next-line no-alert, no-restricted-globals */
+                    if (confirm('Delete group?'))
+                      props.deleteMemberBegin({ userId: user.id, groupId: props.groupId });
+                  }}
+                >
+                  Delete
+                </Button>
+              </CardActions>
             </Card>))
           }
         </Grid>
@@ -92,12 +108,13 @@ export function GroupMemberList(props) {
 
 GroupMemberList.propTypes = {
   classes: PropTypes.object,
-  // handlePagination: PropTypes.func,
+  deleteMemberBegin: PropTypes.func,
   links: PropTypes.shape({
-    groupMembersNew: PropTypes.string
+    groupMembersNew: PropTypes.string,
   }),
   memberList: PropTypes.object,
-  memberTotal: PropTypes.number
+  memberTotal: PropTypes.number,
+  groupId: PropTypes.number
 };
 
 export default compose(

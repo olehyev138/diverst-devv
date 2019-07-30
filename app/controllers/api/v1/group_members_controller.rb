@@ -19,17 +19,32 @@ class Api::V1::GroupMembersController < DiverstController
         raise BadRequestException.new('User doesnt exist')
       end
 
-      # if we made it here - were good, serialize group and return status 201
-      # render status: 201, json: {}
+      # if we made it here - were good, serialize group and return status 204
+      render status: 204, json: {}
     end
   end
 
-  def remove_member
+  def remove_members
     # authorize [@group, @member], :destroy?, policy_class: GroupMemberPolicy
+    group = Group.find(payload[:group_id])
 
-    # TODO: not used
+    payload[:member_ids].each do |user_id|
+      user_group = UserGroup.find_by(user_id: user_id)
 
-    @group.members.destroy(@member)
+      if user_group && user_group.group.enterprise == diverst_request.user.enterprise
+        begin
+          group.user_groups.find_by(user_id: user_id).destroy
+        rescue => e
+          raise BadRequestException.new(e.message)
+        end
+      else
+        # TODO: done properly?
+        raise BadRequestException.new('Membership doesnt exist')
+      end
+    end
+
+    # if we made it here - were good
+    render status: 204, json: {}
   end
 
   private
