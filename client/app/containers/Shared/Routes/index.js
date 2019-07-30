@@ -8,6 +8,7 @@ import GroupLayout from 'containers/Layouts/GroupLayout/index';
 import AdminLayout from 'containers/Layouts/AdminLayout/index';
 import SessionLayout from 'containers/Layouts/SessionLayout/index';
 import ErrorLayout from 'containers/Layouts/ErrorLayout/index';
+import GlobalSettingsLayout from 'containers/Layouts/GlobalSettingsLayout';
 
 // Pages
 import {
@@ -53,6 +54,9 @@ export default function Routes(props) {
       <AdminLayout exact {...expandRoute(ROUTES.admin.manage.groups.index)} component={AdminGroupListPage} />
       <AdminLayout {...expandRoute(ROUTES.admin.manage.groups.new)} component={GroupCreatePage} />
       <AdminLayout {...expandRoute(ROUTES.admin.manage.groups.edit)} component={GroupEditPage} />
+
+      { /* Admin - System - GlobalSettings */ }
+      <GlobalSettingsLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.fields.index)} component={PlaceholderPage} />
 
       <UserLayout exact {...expandRoute(ROUTES.user.home)} component={PlaceholderPage} />
       <UserLayout {...expandRoute(ROUTES.user.innovate)} component={PlaceholderPage} />

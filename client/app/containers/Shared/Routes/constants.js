@@ -141,8 +141,15 @@ export const ROUTES = {
     system: {
       index: {
         data: {
-          pathPrefix: '/settings',
+          pathPrefix: '/system',
           titleMessage: messages.admin.system.index,
+        }
+      },
+      globalSettings: {
+        fields: {
+          index: {
+            path: () => '/admin/system/settings/fields'
+          }
         }
       }
     }
