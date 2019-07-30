@@ -16,7 +16,7 @@ class BaseClass < ActiveRecord::Base
   end
 
   def self.count_list(*fields, from: Time.at(0), where: [nil])
-    Rails.cache.fetch("#{self.class}:#{fields.to_s}:#{where.to_s}", expires_in: 2.hours) do
+    Rails.cache.fetch("#{self.class}:#{fields}:#{where}", expires_in: 2.hours) do
       active_record = self.left_joins(*fields).where(*where).group(:id)
       results = fields.reduce(nil) do |sum, n|
         hash = active_record.distinct.count("#{get_association_table_name(n)}.id")

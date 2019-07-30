@@ -27,10 +27,9 @@ class AggregateUrlStatsDatatable < AjaxDatatablesRails::Base
   end
 
   def get_raw_records
-    Rails.cache.fetch("total_page_visitations", expires_in: 1.hour) do
+    Rails.cache.fetch('total_page_visitations', expires_in: 1.hour) do
       TotalPageVisitation.all
     end
-
   end
 
   # ==== Insert 'presenter'-like methods below if necessary
