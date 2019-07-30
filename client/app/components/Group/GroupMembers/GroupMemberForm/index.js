@@ -22,7 +22,7 @@ import { Field, Formik, Form } from 'formik';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { FormattedMessage } from 'react-intl';
-import messages from 'containers/Group/messages';
+import messages from 'containers/Group/GroupMembers/messages';
 
 import { buildValues, mapFields } from 'utils/formHelpers';
 
@@ -59,7 +59,7 @@ export function GroupMemberFormInner({ handleSubmit, handleChange, handleBlur, v
             color='primary'
             type='submit'
           >
-            Add Members
+            <FormattedMessage {...messages.create} />
           </Button>
           <Button
             to={props.links.groupMembersIndex}

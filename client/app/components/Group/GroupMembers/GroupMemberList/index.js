@@ -59,7 +59,7 @@ export function GroupMemberList(props) {
             size='large'
             component={WrappedNavLink}
           >
-            Add New Members
+            <FormattedMessage {...messages.new} />
           </Button>
         </Grid>
         <Grid item>
@@ -70,7 +70,7 @@ export function GroupMemberList(props) {
             size='large'
             component={WrappedNavLink}
           >
-            Export Group Members
+            <FormattedMessage {...messages.export} />
           </Button>
         </Grid>
         <Grid item xs={12}>
@@ -95,7 +95,7 @@ export function GroupMemberList(props) {
                       props.deleteMemberBegin({ userId: user.id, groupId: props.groupId });
                   }}
                 >
-                  Delete
+                  <FormattedMessage {...messages.delete} />
                 </Button>
               </CardActions>
             </Card>))
