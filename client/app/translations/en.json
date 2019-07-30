@@ -47,5 +47,22 @@
   "diverst.containers.News.form.button.update": "Update",
   "diverst.containers.News.form.button.cancel": "Cancel",
   "diverst.containers.News.form.group_message.input.subject": "Subject",
-  "diverst.containers.News.form.group_message.input.content": "Content"
+  "diverst.containers.News.form.group_message.input.content": "Content",
+  "diverst.containers.Segment.index.button.new": "New Segment",
+  "diverst.containers.Segment.index.button.edit": "Edit",
+  "diverst.containers.Segment.index.button.delete": "Delete",
+  "diverst.containers.Segment.index.button.rows": "Rows per page",
+  "diverst.containers.Segment.index.button.page": "of",
+  "diverst.containers.Segment.form.button.create": "Create Segment",
+  "diverst.containers.Segment.form.button.update": "Update Segment",
+  "diverst.containers.Segment.form.button.cancel": "Clear",
+  "diverst.containers.Segment.form.input.name": "Name",
+  "diverst.containers.Segment.form.input.limit": "Limit",
+  "diverst.containers.Segment.form.label.active_filter": "Active users filter",
+  "diverst.containers.Segment.form.button.field_rule": "Field Rule",
+  "diverst.containers.Segment.form.button.order_rule": "Order Rule",
+  "diverst.containers.Segment.form.button.scope_rule": "Scope Rule",
+  "diverst.containers.Segment.form.label.field_rule": "Criteria",
+  "diverst.containers.Segment.form.label.order_rule": "Order",
+  "diverst.containers.Segment.form.label.scope_rule": "Scopes"
 }

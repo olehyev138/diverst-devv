@@ -1,0 +1,27 @@
+/*
+ *
+ * Segment constants
+ *
+ */
+
+export const GET_SEGMENTS_BEGIN = 'app/Group/GET_SEGMENTS_BEGIN';
+export const GET_SEGMENTS_SUCCESS = 'app/Group/GET_SEGMENTS_SUCCESS';
+export const GET_SEGMENTS_ERROR = 'app/Group/GET_SEGMENTS_ERROR';
+
+export const GET_SEGMENT_BEGIN = 'app/Group/GET_SEGMENT_BEGIN';
+export const GET_SEGMENT_SUCCESS = 'app/Group/GET_SEGMENT_SUCCESS';
+export const GET_SEGMENT_ERROR = 'app/Group/GET_SEGMENT_ERROR';
+
+export const CREATE_SEGMENT_BEGIN = 'app/Group/CREATE_SEGMENT_BEGIN';
+export const CREATE_SEGMENT_SUCCESS = 'app/Group/CREATE_SEGMENT_SUCCESS';
+export const CREATE_SEGMENT_ERROR = 'app/Group/CREATE_SEGMENT_ERROR';
+
+export const UPDATE_SEGMENT_BEGIN = 'app/Group/UPDATE_SEGMENT_BEGIN';
+export const UPDATE_SEGMENT_SUCCESS = 'app/Group/UPDATE_SEGMENT_SUCCESS';
+export const UPDATE_SEGMENT_ERROR = 'app/Group/UPDATE_SEGMENT_ERROR';
+
+export const DELETE_SEGMENT_BEGIN = 'app/Group/DELETE_SEGMENT_BEGIN';
+export const DELETE_SEGMENT_SUCCESS = 'app/Group/DELETE_SEGMENT_SUCCESS';
+export const DELETE_SEGMENT_ERROR = 'app/Group/DELETE_SEGMENT_ERROR';
+
+export const SEGMENT_UNMOUNT = 'app/Group/SEGMENT_LIST_UNMOUNT';
