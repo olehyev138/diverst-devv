@@ -41,7 +41,6 @@ export function* createMembers(action) {
     yield put(push(ROUTES.group.members.index.path(action.payload.groupId)));
     yield put(showSnackbar({ message: 'User updated', options: { variant: 'success' } }));
   } catch (err) {
-    console.log(err);
     yield put(createMembersError(err));
 
     // TODO: intl message
