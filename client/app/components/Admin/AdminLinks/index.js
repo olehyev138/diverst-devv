@@ -76,14 +76,21 @@ class AdminLinks extends React.PureComponent {
       drawerOpen: props.drawerOpen,
       analyze: {
         open: !!matchPath(props.location.pathname, {
-          path: ROUTES.admin.analyze.pathPrefix,
+          path: ROUTES.admin.analyze.index.data.pathPrefix,
           exact: false,
           strict: false
         }),
       },
       manage: {
         open: !!matchPath(props.location.pathname, {
-          path: ROUTES.admin.manage.pathPrefix,
+          path: ROUTES.admin.manage.index.data.pathPrefix,
+          exact: false,
+          strict: false
+        }),
+      },
+      system: {
+        open: !!matchPath(props.location.pathname, {
+          path: ROUTES.admin.system.index.data.pathPrefix,
           exact: false,
           strict: false
         }),
@@ -106,6 +113,10 @@ class AdminLinks extends React.PureComponent {
     this.setState(state => ({ manage: { open: !state.manage.open } }));
   };
 
+  handleSystemClick = () => {
+    this.setState(state => ({ system: { open: !state.system.open } }));
+  };
+
   drawer(classes) {
     return (
       <React.Fragment>
@@ -116,7 +127,9 @@ class AdminLinks extends React.PureComponent {
             <ListItemIcon>
               <EqualizerIcon />
             </ListItemIcon>
-            <ListItemText primary='Analyze' />
+            <ListItemText>
+              <FormattedMessage {...ROUTES.admin.analyze.index.data.titleMessage} />
+            </ListItemText>
             {this.state.analyze.open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
           </ListItem>
           <Collapse in={this.state.analyze.open} timeout='auto' unmountOnExit>
@@ -156,7 +169,9 @@ class AdminLinks extends React.PureComponent {
             <ListItemIcon>
               <DeviceHubIcon />
             </ListItemIcon>
-            <ListItemText primary='Manage' />
+            <ListItemText>
+              <FormattedMessage {...ROUTES.admin.manage.index.data.titleMessage} />
+            </ListItemText>
             {this.state.manage.open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
           </ListItem>
           <Collapse in={this.state.manage.open} timeout='auto' unmountOnExit>
@@ -208,14 +223,75 @@ class AdminLinks extends React.PureComponent {
 
           <Divider />
 
-          <ListItem button>
+          <ListItem button onClick={this.handleSystemClick}>
             <ListItemIcon>
               <SettingsIcon />
             </ListItemIcon>
-            <ListItemText
-              primary='Global Settings'
-            />
+            <ListItemText>
+              <FormattedMessage {...ROUTES.admin.system.index.data.titleMessage} />
+            </ListItemText>
+            {this.state.system.open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
           </ListItem>
+          <Collapse in={this.state.system.open} timeout='auto' unmountOnExit>
+            <List disablePadding>
+              <MenuItem
+                component={WrappedNavLink}
+                exact
+                to='#'
+                className={classes.nested}
+                activeClassName={classes.navLinkActive}
+              >
+                <ListItemIcon>
+                  <ListIcon />
+                </ListItemIcon>
+                <ListItemText>
+                  Global Settings
+                </ListItemText>
+              </MenuItem>
+              <MenuItem
+                component={WrappedNavLink}
+                exact
+                to='#'
+                className={classes.nested}
+                activeClassName={classes.navLinkActive}
+              >
+                <ListItemIcon>
+                  <ListIcon />
+                </ListItemIcon>
+                <ListItemText>
+                  Users
+                </ListItemText>
+              </MenuItem>
+              <MenuItem
+                component={WrappedNavLink}
+                exact
+                to='#'
+                className={classes.nested}
+                activeClassName={classes.navLinkActive}
+              >
+                <ListItemIcon>
+                  <ListIcon />
+                </ListItemIcon>
+                <ListItemText>
+                  Logs
+                </ListItemText>
+              </MenuItem>
+              <MenuItem
+                component={WrappedNavLink}
+                exact
+                to='#'
+                className={classes.nested}
+                activeClassName={classes.navLinkActive}
+              >
+                <ListItemIcon>
+                  <ListIcon />
+                </ListItemIcon>
+                <ListItemText>
+                  Diversity
+                </ListItemText>
+              </MenuItem>
+            </List>
+          </Collapse>
 
           <Divider />
         </List>
