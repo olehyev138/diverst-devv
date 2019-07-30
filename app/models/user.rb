@@ -78,6 +78,7 @@ class User < BaseClass
   has_many :page_visitation_data, dependent: :destroy
   has_many :visits, class_name: 'Ahoy::Visit'
   has_many :answer_comments, foreign_key: :author_id, dependent: :destroy
+  has_many :news_link_comments, foreign_key: :author_id, dependent: :destroy
 
   has_attached_file :avatar, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing_user.png'), s3_permissions: 'private'
   validates_length_of :mentorship_description, maximum: 65535
@@ -603,27 +604,6 @@ class User < BaseClass
 
   def get_login_count
     self.sign_in_count
-  end
-
-  def self.count_list(*fields, from: Time.at(0), where: [nil])
-    active_record = self.left_joins(*fields).where(*where).group(:id)
-    results = fields.reduce(nil) do |sum, n|
-      hash = active_record.distinct.count("#{get_association_table_name(n)}.id")
-      if sum.present?
-        sum.merge(hash) { | _, x, y| x + y }
-      else
-        hash
-      end
-    end
-    results.values.sort
-  end
-
-  def number_of(*fields, from: nil, where: [nil])
-    if from.present?
-      fields.reduce(0) { |sum, n| send(n).where(created_at: from..Time.now).where(*where).count + sum }
-    else
-      fields.reduce(0) { |sum, n| send(n).where(*where).count + sum }
-    end
   end
 
   def most_viewed_pages(limit: nil)

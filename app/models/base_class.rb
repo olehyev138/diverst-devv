@@ -15,6 +15,29 @@ class BaseClass < ActiveRecord::Base
     end
   end
 
+  def self.count_list(*fields, from: Time.at(0), where: [nil])
+    Rails.cache.fetch("#{self.class}:#{fields.to_s}:#{where.to_s}", expires_in: 2.hours) do
+      active_record = self.left_joins(*fields).where(*where).group(:id)
+      results = fields.reduce(nil) do |sum, n|
+        hash = active_record.distinct.count("#{get_association_table_name(n)}.id")
+        if sum.present?
+          sum.merge(hash) { | _, x, y| x + y }
+        else
+          hash
+        end
+      end
+      results.values.sort
+    end
+  end
+
+  def number_of(*fields, from: nil, where: [nil])
+    if from.present?
+      fields.reduce(0) { |sum, n| send(n).where(created_at: from..Time.now).where(*where).count + sum }
+    else
+      fields.reduce(0) { |sum, n| send(n).where(*where).count + sum }
+    end
+  end
+
   def self.left_joins(*field)
     join_command = field_to_left_join_sql(*field)
     self.joins(join_command)

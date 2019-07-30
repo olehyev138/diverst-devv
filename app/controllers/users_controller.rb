@@ -240,7 +240,7 @@ class UsersController < ApplicationController
     posts_s, posts_m, posts_a, posts_sd = aggregate_data_from_field(:social_links, :own_messages, :own_news_links)
     posts_n = 'Posts Made'
 
-    comments_s, comments_m, comments_a, comments_sd = aggregate_data_from_field(:answer_comments, :message_comments, :answer_comments)
+    comments_s, comments_m, comments_a, comments_sd = aggregate_data_from_field(:answer_comments, :message_comments, :news_link_comments)
     comments_n = 'Comments Made'
 
     events_s, events_m, events_a, events_sd = aggregate_data_from_field(:initiatives, where: ['initiatives.start < ? OR initiatives.id IS NULL', Time.now])
@@ -268,8 +268,8 @@ class UsersController < ApplicationController
     posts_p = percentile_from_field(posts, :social_links, :own_messages, :own_news_links)
     posts_n = 'Posts Made'
 
-    comments = @user.number_of(:answer_comments, :message_comments, :answer_comments)
-    comments_p = percentile_from_field(comments, :answer_comments, :message_comments, :answer_comments)
+    comments = @user.number_of(:answer_comments, :message_comments, :news_link_comments)
+    comments_p = percentile_from_field(comments, :answer_comments, :message_comments, :news_link_comments)
     comments_n = 'Comments Made'
 
     events = @user.number_of(:initiatives, where: ['initiatives.start < ? OR initiatives.id IS NULL', Time.now])
