@@ -11,8 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-
-ActiveRecord::Schema.define(version: 20190719014731) do
+ActiveRecord::Schema.define(version: 20190730124943) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -682,6 +681,10 @@ ActiveRecord::Schema.define(version: 20190719014731) do
     t.boolean  "finished_expenses",                                          default: false
     t.datetime "archived_at"
     t.integer  "annual_budget_id",     limit: 4
+    t.string   "video_file_name",      limit: 191
+    t.string   "video_content_type",   limit: 191
+    t.integer  "video_file_size",      limit: 4
+    t.datetime "video_updated_at"
   end
 
   create_table "invitation_segments_groups", force: :cascade do |t|
