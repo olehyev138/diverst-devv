@@ -26,6 +26,7 @@ export function GroupMemberListPage(props) {
   const rs = new RouteService(useContext);
   const groupId = rs.params('group_id')[0];
   const links = {
+    groupMembersNew: ROUTES.group.members.new.path(groupId)
   };
 
   useEffect(() => {
@@ -43,6 +44,7 @@ export function GroupMemberListPage(props) {
       <GroupMemberList
         memberList={props.memberList}
         memberTotal={props.memberTotal}
+        links={links}
       />
     </React.Fragment>
   );

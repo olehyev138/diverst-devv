@@ -7,6 +7,7 @@ import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
 
 import RouteService from 'utils/routeHelpers';
+import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
@@ -24,6 +25,9 @@ export function GroupMemberCreatePage(props) {
 
   const rs = new RouteService(useContext);
   const groupId = rs.params('group_id')[0];
+  const links = {
+    groupMembersIndex: ROUTES.group.members.index.path(groupId),
+  };
 
   useEffect(() => () => props.groupMembersUnmount(), []);
 
@@ -33,6 +37,7 @@ export function GroupMemberCreatePage(props) {
       createMembersBegin={props.createMembersBegin}
       getMembersBegin={props.getMembersBegin}
       selectUsers={props.users}
+      links={links}
     />
   );
 }

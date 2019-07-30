@@ -1,4 +1,4 @@
-import { call, put, takeLatest } from 'redux-saga';
+import { call, put, takeLatest } from 'redux-saga/effects';
 import api from 'api/api';
 import { push } from 'connected-react-router';
 
@@ -31,12 +31,17 @@ export function* getMembers(action) {
 
 export function* createMembers(action) {
   try {
-    const payload = { group: action.payload.attributes };
-    const response = yield call(api.groups.update.bind(api.groups), action.payload.groupId, payload);
+    const payload = {
+      group_id: action.payload.groupId,
+      member_ids: action.payload.attributes.member_ids
+    };
 
-    // yield put(push(ROUTES.admin.manage.users.index.path()));
+    const response = yield call(api.groupMembers.addMembers.bind(api.groupMembers), payload);
+
+    yield put(push(ROUTES.group.members.index.path(action.payload.groupId)));
     yield put(showSnackbar({ message: 'User updated', options: { variant: 'success' } }));
   } catch (err) {
+    console.log(err);
     yield put(createMembersError(err));
 
     // TODO: intl message

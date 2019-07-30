@@ -51,12 +51,12 @@ export function GroupMemberList(props) {
         <Grid item>
           <Button
             variant='contained'
-            to='#'
+            to={props.links.groupMembersNew}
             color='primary'
             size='large'
             component={WrappedNavLink}
           >
-            Add New Member
+            Add New Members
           </Button>
         </Grid>
         <Grid item>
@@ -94,6 +94,7 @@ GroupMemberList.propTypes = {
   classes: PropTypes.object,
   // handlePagination: PropTypes.func,
   links: PropTypes.shape({
+    groupMembersNew: PropTypes.string
   }),
   memberList: PropTypes.object,
   memberTotal: PropTypes.number

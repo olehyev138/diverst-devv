@@ -62,7 +62,7 @@ export function GroupMemberFormInner({ handleSubmit, handleChange, handleBlur, v
             Add Members
           </Button>
           <Button
-            to={ROUTES.admin.manage.groups.index.path()}
+            to={props.links.groupMembersIndex}
             component={WrappedNavLink}
           >
             <FormattedMessage {...messages.cancel} />
@@ -109,7 +109,10 @@ GroupMemberFormInner.propTypes = {
   selectUsers: PropTypes.array,
   getMembersBegin: PropTypes.func,
   setFieldValue: PropTypes.func,
-  setFieldTouched: PropTypes.func
+  setFieldTouched: PropTypes.func,
+  links: PropTypes.shape({
+    groupMembersIndex: PropTypes.string
+  }),
 };
 
 export default compose(
