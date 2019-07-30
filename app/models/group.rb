@@ -455,14 +455,15 @@ class Group < BaseClass
   end
 
   def filtered_member_list(params)
-    segments = params['users_segments_segment_id_in'].map do |seg_id|
+    segments = (params['users_segments_segment_id_in'] || []).map do |seg_id|
       Segment.find(seg_id.to_i) if seg_id.present?
     end
     segments.select! { |seg| seg.present? }
+
     from = params['user_groups_created_at_gteq']
     to = params['user_groups_created_at_lteq']
-    users = User.joins(:user_groups)
 
+    users = User.joins(:user_groups)
     users = users.joins(:users_segments) if segments.present?
 
     users = users
@@ -472,7 +473,7 @@ class Group < BaseClass
 
     users = users.where('`users_segments`.`segment_id` IN (?)', segments) if segments.present?
     users = users.where('`user_groups`.`created_at` >= ?', from) if from.present?
-    users = users.where('`user_groups`.`created_at` <= ?', to)
+    users = users.where('`user_groups`.`created_at` <= ?', to) if to.present?
     users.distinct
   end
 
