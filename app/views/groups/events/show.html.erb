@@ -61,7 +61,7 @@
         </div>
         <div class="col-sm-4 col-xs-12">
           <% if GroupEventsPolicy.new(current_user, [@group]).view_event_attendees? %>
-            <h4>Attendees (<span id="attendees_count"><%= @event.attendees.count %>
+            <h4>Attendees (<span id="attendees_count"><%= @event.attendees.size %>
               <% if @event.max_attendees? %>/<%= @event.max_attendees %><% end %></span>)
               <% if @event.full? %> <b>Full</b>
               <% end %></h4>
@@ -69,7 +69,7 @@
               <% @event.attendees.limit(10).each do |attendee| %>
                 <%= attendee.name_with_status %><br>
               <% end %>
-              <%= link_to "View #{@event.attendees.count - 10} more...", group_event_attendance_path(@group, @event) if @event.attendees.count > 10 %>
+              <%= link_to "View #{@event.attendees.size - 10} more...", group_event_attendance_path(@group, @event) if @event.attendees.size > 10 %>
             </p>
           <% end %>
           <% unless @event.archived? %>

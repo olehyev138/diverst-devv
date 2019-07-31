@@ -22,21 +22,21 @@ RSpec.describe MetricsDashboard, type: :model do
 
   describe '#percentage_of_total' do
     it 'returns 0 when there are no users' do
-      allow(subject.enterprise).to receive(:users).and_return(double(count: 0))
+      allow(subject.enterprise).to receive(:users).and_return(double(size: 0))
       allow(subject).to receive(:target).and_return(double(count: 150))
 
       expect(subject.percentage_of_total).to eq 0
     end
 
     it 'returns the rounded percentage of user population in the dashboard' do
-      allow(subject.enterprise).to receive(:users).and_return(double(count: 240))
+      allow(subject.enterprise).to receive(:users).and_return(double(size: 240))
       allow(subject).to receive(:target).and_return(double(count: 100))
 
       expect(subject.percentage_of_total).to eq 42
     end
 
     it 'returns 100 if, for some reason, there are more users in the dashboard than the company' do
-      allow(subject.enterprise).to receive(:users).and_return(double(count: 240))
+      allow(subject.enterprise).to receive(:users).and_return(double(size: 240))
       allow(subject).to receive(:target).and_return(double(count: 240))
 
       expect(subject.percentage_of_total).to eq 100

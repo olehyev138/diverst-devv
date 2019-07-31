@@ -63,7 +63,7 @@ class NewsFeedLink < BaseClass
   end
 
   def total_views
-    views.count
+    views.size
   end
 
   def unique_views

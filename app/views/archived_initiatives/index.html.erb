@@ -1,5 +1,5 @@
 <div class="content__header">
-  <h1> Archived Events(<span id="archived_initiatives_count"><%= @initiatives.count %></span>)</h1>
+  <h1> Archived Events(<span id="archived_initiatives_count"><%= @initiatives.size %></span>)</h1>
   <% unless @initiatives.empty? %>
   <% if EnterprisePolicy.new(current_user, current_user.enterprise).manage_posts? %>
   <div class="flex-row flex-row--middle"  id="archive_buttons">
