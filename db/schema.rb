@@ -700,7 +700,6 @@ ActiveRecord::Schema.define(version: 20190730124943) do
     t.string   "unit_of_expiry_age",          limit: 191
     t.boolean  "auto_archive",                                                      default: false
     t.string   "event_attendance_visibility", limit: 191
-    t.integer  "views_count",                 limit: 4
     t.string   "sp_mode",                     limit: 191
     t.string   "sp_host",                     limit: 191
     t.string   "sp_site",                     limit: 191
@@ -713,6 +712,7 @@ ActiveRecord::Schema.define(version: 20190730124943) do
     t.string   "sp_import_files",             limit: 191,                           default: "No"
     t.string   "sp_import_news",              limit: 191,                           default: "No"
     t.string   "sp_import_pages",             limit: 191,                           default: "No"
+    t.integer  "views_count",                 limit: 4
   end
 
   add_index "groups", ["share_point_files_id"], name: "index_groups_on_share_point_files_id", using: :btree
