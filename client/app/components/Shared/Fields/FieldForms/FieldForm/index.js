@@ -27,7 +27,7 @@ const FieldForm = ({ field, ...props }) => {
 };
 
 FieldForm.propTypes = {
-  field: PropTypes.object.isRequired,
+  field: PropTypes.object
 };
 
 export default FieldForm;

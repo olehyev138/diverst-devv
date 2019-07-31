@@ -54,9 +54,10 @@ export function FieldList(props, context) {
     props.handlePagination({ count: +event.target.value, page });
   };
 
-  const renderFieldForm = field => {
+  const renderFieldForm = (field, fieldAction) => {
     setFieldForm(<FieldForm
       field={field}
+      fieldAction={fieldAction}
       cancelAction={fieldFormCancel}
     />);
   };
@@ -71,12 +72,11 @@ export function FieldList(props, context) {
         <Grid item>
           <Button
             variant='contained'
-            to={'#'}
             color='primary'
             size='large'
-            component={WrappedNavLink}
+            onClick={() => renderFieldForm({ type: 'TextField' }, props.createFieldBegin)}
           >
-            <FormattedMessage {...messages.new} />
+            <FormattedMessage {...messages.newTextField} />
           </Button>
         </Grid>
         {fieldForm && <Grid item xs={12}>{fieldForm}</Grid>}
@@ -89,7 +89,7 @@ export function FieldList(props, context) {
                   <Button
                     size='small'
                     onClick={() => {
-                      renderFieldForm(field);
+                      renderFieldForm(field, props.updateFieldBegin);
                       window.scrollTo(0, 0);
                     }}
                   >
@@ -144,6 +144,8 @@ FieldList.propTypes = {
   classes: PropTypes.object,
   fields: PropTypes.object,
   fieldTotal: PropTypes.number,
+  createFieldBegin: PropTypes.func,
+  updateFieldBegin: PropTypes.func,
   deleteFieldBegin: PropTypes.func,
   handlePagination: PropTypes.func
 };

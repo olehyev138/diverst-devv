@@ -9,8 +9,8 @@ import { defineMessages } from 'react-intl';
 export const scope = 'diverst.containers.Field';
 
 export default defineMessages({
-  new: {
-    id: `${scope}.index.button.new`,
+  newTextField: {
+    id: `${scope}.index.button.textField.new`,
   },
   edit: {
     id: `${scope}.index.button.edit`,

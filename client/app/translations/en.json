@@ -51,7 +51,7 @@
   "diverst.containers.News.form.button.cancel": "Cancel",
   "diverst.containers.News.form.group_message.input.subject": "Subject",
   "diverst.containers.News.form.group_message.input.content": "Content",
-  "diverst.containers.Field.index.button.new": "New",
+  "diverst.containers.Field.index.button.textField.new":"New Text Field",
   "diverst.containers.Field.index.button.edit": "Edit",
   "diverst.containers.Field.index.button.delete": "Delete",
   "diverst.containers.Field.index.button.children_collapse": "Show Children",

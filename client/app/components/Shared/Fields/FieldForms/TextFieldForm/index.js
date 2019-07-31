@@ -18,6 +18,9 @@ import {
 
 import messages from 'containers/GlobalSettings/Field/messages';
 
+/* Important constant for each field form - tells backend which field subclass to load */
+const FIELD_TYPE = 'TextField';
+
 /* eslint-disable object-curly-newline */
 export function TextFieldFormInner({ handleSubmit, handleChange, handleBlur, values, setFieldValue, setFieldTouched, ...props }) {
   return (
@@ -55,7 +58,9 @@ export function TextFieldFormInner({ handleSubmit, handleChange, handleBlur, val
 
 export function TextFieldForm(props) {
   const initialValues = {
-    title: dig(props, 'field', 'title') || ''
+    title: dig(props, 'field', 'title') || '',
+    id: dig(props, 'field', 'id') || '',
+    type: FIELD_TYPE
   };
 
   return (
@@ -63,7 +68,9 @@ export function TextFieldForm(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
+        console.log(values);
         console.log('submitted');
+        props.fieldAction(values);
       }}
 
       render={formikProps => <TextFieldFormInner {...props} {...formikProps} />}
