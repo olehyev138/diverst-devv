@@ -209,12 +209,14 @@ class UsersController < ApplicationController
   protected
 
   def calculate_aggregate_data(sample)
-    max = sample.max
-    n = sample.count
-    sum = sample.sum
-    mean = sum.to_f / n
-    sd = Math.sqrt(sample.reduce(0) { |partial, element| partial + (element - mean)**2 / n })
-    return sum, max, mean.round(2), sd.round(2)
+    Rails.cache.fetch("calculate_aggregate_data/#{sample}") do
+      max = sample.max
+      n = sample.count
+      sum = sample.sum
+      mean = sum.to_f / n
+      sd = Math.sqrt(sample.reduce(0) { |partial, element| partial + (element - mean)**2 / n })
+      return sum, max, mean.round(2), sd.round(2)
+    end
   end
 
   def aggregate_data_from_field(*fields, where: [nil])
@@ -223,9 +225,11 @@ class UsersController < ApplicationController
   end
 
   def calculate_percentile(number, sample)
-    n = sample.count
-    i = sample.rindex(number)
-    101 - (100 * (i - 0.5) / n).round
+    Rails.cache.fetch("calculate_percentile/#{number}, #{sample}") do
+      n = sample.count
+      i = sample.rindex(number)
+      101 - (100 * (i - 0.5) / n).round
+    end
   end
 
   def percentile_from_field(number, *fields, where: [nil])
@@ -234,7 +238,11 @@ class UsersController < ApplicationController
   end
 
   def get_aggregate_usage_metrics
-    logins_s, logins_m, logins_a, logins_sd = calculate_aggregate_data(User.all.map(&:sign_in_count))
+    aggregate_sign_ins =
+    Rails.cache.fetch('aggregate_login_count', expires_in: 2.hours) do
+      User.all.map(&:sign_in_count)
+    end
+    logins_s, logins_m, logins_a, logins_sd = calculate_aggregate_data(aggregate_sign_ins)
     logins_n = 'Logins'
 
     posts_s, posts_m, posts_a, posts_sd = aggregate_data_from_field(:social_links, :own_messages, :own_news_links)
