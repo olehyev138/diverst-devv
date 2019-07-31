@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190730124943) do
+ActiveRecord::Schema.define(version: 20190731153334) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -1580,6 +1580,13 @@ ActiveRecord::Schema.define(version: 20190730124943) do
     t.boolean  "accepting_mentee_requests",                    default: true
     t.datetime "last_group_notification_date"
     t.boolean  "seen_onboarding",                              default: false
+    t.integer  "initiatives_count",              limit: 4
+    t.integer  "social_links_count",             limit: 4
+    t.integer  "own_messages_count",             limit: 4
+    t.integer  "own_news_links_count",           limit: 4
+    t.integer  "answer_comments_count",          limit: 4
+    t.integer  "message_comments_count",         limit: 4
+    t.integer  "news_link_comments_count",       limit: 4
   end
 
   add_index "users", ["active"], name: "index_users_on_active", using: :btree
