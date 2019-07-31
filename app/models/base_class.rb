@@ -17,7 +17,7 @@ class BaseClass < ActiveRecord::Base
 
   def self.count_list(*fields, from: nil, where: [nil])
     Rails.cache.fetch("count_list/#{self.model_name.name}:#{fields}:#{where}", expires_in: 2.hours) do
-      if where.nil? && from.nil?
+      if where == [nil] && from.nil?
         # WITHOUT ANY EXTRA CONDITION, CAN USE COUNTING CACHE
         results = []
         self.all.map do |record|
@@ -30,7 +30,7 @@ class BaseClass < ActiveRecord::Base
         # IF THERE IS A CONDITION, LEFT JOIN ALL THE FIELDS,
         # APPLY THE CONDITION, GROUP BY USER ID, AND COUNT DISTINCT
         active_record = self.left_joins(*fields).where(*where).group(:id)
-        results = fields.reduce(nil) do |sum, n|
+        count_hash = fields.reduce(nil) do |sum, n|
           hash = active_record.distinct.count("#{get_association_table_name(n)}.id")
           if sum.present?
             sum.merge(hash) { | _, x, y| x + y }
@@ -38,6 +38,7 @@ class BaseClass < ActiveRecord::Base
             hash
           end
         end
+        results = count_hash.values
       end
       results.sort
     end
