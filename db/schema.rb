@@ -143,53 +143,6 @@ ActiveRecord::Schema.define(version: 20190731153334) do
 
   add_index "badges", ["enterprise_id"], name: "index_badges_on_enterprise_id", using: :btree
 
-  create_table "blazer_audits", force: :cascade do |t|
-    t.integer  "user_id",     limit: 4
-    t.integer  "query_id",    limit: 4
-    t.text     "statement",   limit: 65535
-    t.string   "data_source", limit: 191
-    t.datetime "created_at"
-  end
-
-  create_table "blazer_checks", force: :cascade do |t|
-    t.integer  "creator_id",     limit: 4
-    t.integer  "query_id",       limit: 4
-    t.string   "state",          limit: 191
-    t.string   "schedule",       limit: 191
-    t.text     "emails",         limit: 65535
-    t.text     "slack_channels", limit: 65535
-    t.string   "check_type",     limit: 191
-    t.text     "message",        limit: 65535
-    t.datetime "last_run_at"
-    t.datetime "created_at",                   null: false
-    t.datetime "updated_at",                   null: false
-  end
-
-  create_table "blazer_dashboard_queries", force: :cascade do |t|
-    t.integer  "dashboard_id", limit: 4
-    t.integer  "query_id",     limit: 4
-    t.integer  "position",     limit: 4
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
-  end
-
-  create_table "blazer_dashboards", force: :cascade do |t|
-    t.integer  "creator_id", limit: 4
-    t.text     "name",       limit: 65535
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
-  end
-
-  create_table "blazer_queries", force: :cascade do |t|
-    t.integer  "creator_id",  limit: 4
-    t.string   "name",        limit: 191
-    t.text     "description", limit: 65535
-    t.text     "statement",   limit: 65535
-    t.string   "data_source", limit: 191
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
-  end
-
   create_table "budget_items", force: :cascade do |t|
     t.integer  "budget_id",        limit: 4
     t.string   "title",            limit: 191
