@@ -2,9 +2,11 @@
  *
  * Field Form
  *
- * - Renders a custom field form
+ * - Acts as the 'super' component
+ * - Given a field object and renders the appropriate field form
  *
  */
+
 
 import React from 'react';
 import PropTypes from 'prop-types';

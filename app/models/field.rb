@@ -4,7 +4,7 @@ class Field < ApplicationRecord
   belongs_to :poll
   belongs_to :initiative
 
-  has_many :field_data
+  has_many :field_data, class_name: FieldData
 
   has_many :yammer_field_mappings, foreign_key: :diverst_field_id, dependent: :delete_all
 

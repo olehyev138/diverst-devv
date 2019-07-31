@@ -1,5 +1,4 @@
 FactoryBot.define do
-  factory :field_datum, class: 'FieldData' do
-    
+  factory :field_data, class: 'FieldData' do
   end
 end

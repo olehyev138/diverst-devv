@@ -2,15 +2,14 @@
  *
  * Field
  *
- * - Renders a custom field
- *
+ * - Acts as the 'super' component
+ * - Given a field object and renders the appropriate field input
  */
 
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import TextField from 'components/Shared/Fields/TextField';
-import { render } from 'react-testing-library';
+import TextField from 'components/Shared/Fields/FieldInputs/TextField';
 
 const Field = ({ field }) => {
   const renderField = (field) => {
@@ -26,7 +25,7 @@ const Field = ({ field }) => {
 };
 
 Field.propTypes = {
-  value: PropTypes.string.isRequired,
+  field: PropTypes.object.isRequired
 };
 
 export default Field;
