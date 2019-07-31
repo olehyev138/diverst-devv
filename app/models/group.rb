@@ -382,17 +382,27 @@ class Group < BaseClass
   end
 
   def membership_list_csv(group_members)
-    total_nb_of_members = group_members.size
+
+    total_nb_of_members = group_members.count
+    mentorship_module_enabled = enterprise.mentorship_module_enabled?
+    fields = enterprise.fields.where(add_to_member_list: true)
+    fields.map(&:title)
+
     CSV.generate do |csv|
-      csv << %w(first_name last_name email_address mentor mentee)
+      first_row = %w(first_name last_name email_address)
+      first_row += %w(mentor mentee) if mentorship_module_enabled
+      first_row += fields.map(&:title)
+
+      csv << first_row
 
       group_members.each do |member|
-        membership_list_row = [ member.first_name,
-                                member.last_name,
-                                member.email,
-                                member.mentor,
-                                member.mentee
-                              ]
+        membership_list_row = []
+        membership_list_row += [ member.first_name, member.last_name, member.email ]
+        membership_list_row += [ member.mentor, member.mentee ] if mentorship_module_enabled
+
+        member_info = member.info
+        membership_list_row += fields.map { |fld| fld.to_string(member_info.fetch(fld.id)) rescue nil }
+
         csv << membership_list_row
       end
 

@@ -172,6 +172,7 @@ class InitiativesController < ApplicationController
         :pillar_id,
         :location,
         :picture,
+        :video,
         :budget_item_id,
         :estimated_funding,
         :archived_at,

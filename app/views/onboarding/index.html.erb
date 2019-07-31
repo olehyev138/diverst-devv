@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Diverst</title>
+  <%= stylesheet_link_tag (@user.enterprise.theme.nil? ? "application" : @user.enterprise.theme.asset_url), media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+</head>
+<body class="guest">
+<% if notice.present? %><p class="notice"><%= notice %></p><% end %>
+<% if alert.present? %><p class="alert"><%= alert %></p><% end %>
+
+<div class="site-wrap site-wrap--medium">
+  <div class="content__header">
+
+    <% if ENV["DOMAIN"] === "dm.diverst.com" %>
+      <img class="logo logo--large click" src="<%= logo_url(@user.enterprise) %>">
+    <% else %>
+      <img class="logo logo--large" src="<%= logo_url(@user.enterprise) %>">
+    <% end %>
+  </div>
+  <div class="content__main">
+
+    <% if ENV["DOMAIN"] === "dm.diverst.com" %>
+      <div class="card">
+        <div class="card__section">
+          <div class="row">
+
+            <div class="col-xs-12 text-center visible">
+              <%= video_tag(@user.enterprise.onboarding_sponsor_media.expiring_url(36000), controls: true, size: "400x400") %>
+            </div>
+
+            <div class="col-xs-6 invisible" style="display:none;">
+              <%= image_tag @user.enterprise.cdo_picture.expiring_url(3600), class: "block", style: "width: 100%; background-size: cover; background-position: bottom center;" %>
+            </div>
+
+            <div class="col-xs-6 invisible" style="display:none;">
+              <h3>
+                <% if @user.enterprise.sponsors.any? %>
+                  <%= @user.enterprise.sponsors.first.sponsor_name %>, <%= @user.enterprise.sponsors.first.sponsor_title %>
+                <% end %>
+              </h3>
+
+              <% if @user.enterprise.cdo_message.present? %>
+                <p> <%= simple_format @user.enterprise.cdo_message %> </p>
+              <% else %>
+                <p>Hi! This is <%= @user.enterprise.cdo_name %>. We know that diverse teams produce better results, but our diversity mission is important for another reason: we want everyone to be fairly represented and have the same opportunities.  Our new diversity platform provides just that – a place where you can collaborate on interesting problems and develop new insights together. Join us by selecting the <%= c_t(:erg).pluralize %> that best represent your interests.</p>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% else %>
+      <div class="card">
+        <div class="card__section">
+
+          <div class="row">
+            <div class="col-sm-6 col-xs-12">
+
+              <% if @user.enterprise.sponsors.any? %>
+                <% if @user.enterprise.sponsors.first.sponsor_media.present? %>
+                  <% show_sponsor_media?(@user.enterprise.sponsors.first, "sponsor_media_content_type") do %>
+                    <%= image_tag(@user.enterprise.sponsors.first.sponsor_media.expiring_url(3600), class: "block img-responsive center-block", style: "max-width: 300px; max-height: 300px;") %>
+                  <% end %>
+
+                  <% show_sponsor_video?(@user.enterprise.sponsors.first, "sponsor_media_content_type") do %>
+                    <%= video_tag(@user.enterprise.sponsors.first.sponsor_media.expiring_url(3600), controls: true, size: "200x200") %>
+                  <% end %>
+                <% else %>
+                  <%= image_tag @user.enterprise.cdo_picture.expiring_url(3600), class: "block img-responsive center-block", style: "max-width: 300px; max-height: 300px;" %>
+                <% end %>
+              <% else %>
+                <%= image_tag @user.enterprise.cdo_picture.expiring_url(3600), class: "block img-responsive center-block", style: "max-width: 300px; max-height: 300px;" %>
+              <% end %>
+
+            </div>
+            <div class="col-sm-6 col-xs-12" style="max-height: 300px; overflow: scroll;">
+              <% if @user.enterprise.sponsors.any? %>
+                <%= @user.enterprise.sponsors.first.sponsor_name %>, <%= @user.enterprise.sponsors.first.sponsor_title %>
+              <% end %>
+
+              <% if @user.enterprise.sponsors.any? %>
+                <% if @user.enterprise.sponsors.first.sponsor_message.present? %>
+                  <p> <%= simple_format @user.enterprise.sponsors.first.sponsor_message %>   </p>
+                <% else %>
+                  <p>Hi! We know that diverse teams produce better results, but our diversity mission is important for another reason: we want everyone to be fairly represented and have the same opportunities.  Our new diversity platform provides just that – a place where you can collaborate on interesting problems and develop new insights together. Join us by selecting the <%= @user.enterprise.custom_text.erg %>(s) that best represent your interests.</p>
+                <% end %>
+              <% else %>
+                <p>Hi! We know that diverse teams produce better results, but our diversity mission is important for another reason: we want everyone to be fairly represented and have the same opportunities.  Our new diversity platform provides just that – a place where you can collaborate on interesting problems and develop new insights together. Join us by selecting the <%= @user.enterprise.custom_text.erg %>(s) that best represent your interests.</p>
+              <% end %>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    <% end %>
+
+    <div class="card">
+      <div class="card__section">
+        <h2><%= @user.enterprise.custom_text.privacy_statement %>:</h2>
+        <% if @user.enterprise.privacy_statement.present? %>
+          <% if @user.enterprise.privacy_statement.length > 500 %>
+            <div id="privacy_statement" class="scrollable_box">
+              <%= raw @user.enterprise.privacy_statement %>
+            </div>
+          <% else %>
+            <%= raw @user.enterprise.privacy_statement %>
+          <% end %>
+        <% else %>
+          Diverst regards your data as highly confidential. Only authorized administrators can view this data.. Your data will never be shared with anyone or anything other than these select individuals.
+        <% end %>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card__section">
+        <%= simple_form_for @user do |f| %>
+          <%= f.hidden_field :invitation_token %>
+
+          <%= f.input :first_name, required: true %>
+          <%= f.input :last_name, required: true %>
+
+          <% unless @user.enterprise.has_enabled_saml? %>
+            <%= f.input :password, required: true %>
+            <%= f.input :password_confirmation, required: true %>
+          <% end %>
+
+          <% @user.enterprise.fields.where(private: false).each do |cf| %>
+            <% if !cf.private %>
+              <%= render "shared/fields/display/custom_field", cf: cf, f: f, resource: @user %>
+            <% end %>
+          <% end %>
+
+          <h2><%= @user.enterprise.custom_text.erg %> Events Calendar</h2>
+          <a
+            class="toggle_calendar btn btn--primary"
+            onclick="toggle_calendar();"
+            style="cursor: pointer; margin-bottom: 20px;"
+          >Show/Hide Calendar</a>
+          <div id="calendar" data-calendar-data-url="<%= onboarding_calendar_data_user_events_path(invitation_token: params[:invitation_token]) %>"></div>
+
+
+          <h2>Explore your <%= @user.enterprise.custom_text.erg %></h2>
+
+          <% @user.enterprise.groups.all_parents.each do |group| %>
+            <div class="media-object" data-group-id="<%= group.id %>">
+              <div class="flex-row">
+                <div class="flex-row__cell">
+                  <%= image_tag group.logo.expiring_url(3600, :thumb) %>
+                </div>
+                <div class="flex-row__cell flex-row__cell--grow">
+                  <h4>
+                    <%= group.name %>&nbsp;&nbsp;
+
+                    <% if group.children.count > 0 %>
+                      <a
+                        class="btn btn-sm btn--primary nested_show"
+                        style="cursor: pointer; margin-bottom: 20px;"
+                        id="<%= group.id %>">Show Sub-<%= c_t(:erg).pluralize %></a>
+
+                      <a
+                        class="btn btn-sm btn--primary nested_hide"
+                        style="cursor: pointer; margin-bottom: 20px; display:none;"
+                        id="<%= group.id %>">Hide Sub-<%= c_t(:erg).pluralize %></a>
+
+                    <% end %>
+
+                  </h4>
+                  <p><%= group.short_description %></p>
+                </div>
+              </div>
+            </div>
+
+            <% group.children.each do |child| %>
+              <div class="children_<%= group.id%>" style="display:none;">
+                <div class="media-object">
+                  <div class="flex-row">
+                    <div class="flex-row__cell">
+                      <%= image_tag child.logo.expiring_url(3600, :thumb) %>
+                    </div>
+                    <div class="flex-row__cell flex-row__cell--grow">
+                      <h4><%= child.name %> - Sub-<%= c_t(:erg) %> for <%= group.name %></h4>
+                      <p><%= child.description %></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+
+          <% end %>
+
+          <%= f.button :submit, "Create my account", class: "btn--secondary btn--large btn--full" %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function toggle_calendar() {
+      $( "#calendar" ).slideToggle( "slow", function() {
+        // Animation complete.
+      });
+    }
+
+    $(document).ready(function(){
+      applyFullCalendar();
+      $('#calendar').hide();
+    }); //endof document.ready
+
+    $('.media-object').click(function() {
+      $(this).toggleClass('media-object--selected');
+
+      $('.group-id-field').remove();
+
+      $('.media-object--selected').each(function() {
+        var $hiddenField = $('<input type="hidden" name="user[group_ids][]" class="group-id-field"/>')
+        $hiddenField.val($(this).data('group-id'));
+        $('#edit_user').append($hiddenField);
+      });
+    });
+
+    $('form#edit_user').on('submit', function(e) {
+      var $form = $(this);
+
+      //TODO don't trigger password validation if there are no password fields
+      if( !is_valid($form) ) {
+        e.preventDefault();
+      }
+    });
+
+    function is_valid($form) {
+      // If password field is present
+      if( $form.find('input#user_password').length ) {
+        //validate required fields and password
+        return  validate_empty_fields($form) && validate_password($form) && validate_password_length($form);
+      } else {
+        //validate required fields only
+        return validate_empty_fields($form);
+      }
+    }
+
+    function validate_empty_fields($form) {
+      var $incorrect_fields = $form.find('input.required').filter(function() { return this.value == ""; });
+
+      if( $incorrect_fields.length > 0 ) {
+        var message = 'Please provide values for the following fields:';
+
+        $.each($incorrect_fields, function(index, field){
+          var field_label_text = $(field).parent().siblings('label').text();
+
+          message += '\n ' + field_label_text;
+        }); //endof each
+
+        alert(message);
+
+        return false;
+      }
+
+      return true;
+    }
+
+    function validate_password($form) {
+      var $password  = $form.find('input#user_password');
+      var $confirmation = $form.find('input#user_password_confirmation');
+
+      // We don't want to try password validation if passwords are disabled
+
+      if( !($password.length && $confirmation.length )) {
+        return true;
+      }
+
+      if( $password.val() == $confirmation.val() ) {
+        return true;
+      } else {
+        var message = 'Passwords do not match!';
+        alert(message);
+
+        return false;
+      }
+    }
+
+    function validate_password_length($form) {
+      var $password  = $form.find('input#user_password');
+
+      if( $password.val().length < 8) {
+        var message = 'Passwords must be minimum 8 characters in length';
+        alert(message);
+
+        return false;
+      }
+
+      return true;
+    }
+
+    function applyFullCalendar(selector) {
+      selector = selector || '#calendar';
+
+      var $calendar = $(selector);
+      var calendarDataUrl = $calendar.data('calendar-data-url');
+
+      $calendar.fullCalendar({
+        header: {
+          left:   'title',
+          center: 'month,agendaWeek',
+          right:  'prev,today,next'
+        },
+        eventSources: [
+          {
+            url: calendarDataUrl
+          }
+        ]
+      }); //endof fullcalendar
+    }
+
+    $('a.nested_show').click(function(e){
+      var id = $(this).attr('id');
+      $('div.children_' + id).show();
+      $(this).siblings('a.nested_hide').show();
+      $(this).hide();
+    }); //endof click
+
+    $('a.nested_hide').click(function(e){
+      var id = $(this).attr('id');
+      $('div.children_' + id).hide();
+      $(this).siblings('a.nested_show').show();
+      $(this).hide();
+    }); //endof click
+
+    $('img.click').click(function(e){
+      var visible = $(".visible");
+      var invisible = $(".invisible");
+      visible.hide();
+      invisible.show();
+
+      visible.addClass("invisible")
+      visible.removeClass("visible");
+
+      invisible.addClass("visible")
+      invisible.removeClass("invisible");
+    }); //endof click
+
+  </script>
+</div>
+
+</body>
+</html>

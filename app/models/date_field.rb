@@ -93,4 +93,8 @@ class DateField < Field
 
     self.options = options_text.lines.map(&:chomp)
   end
+
+  def to_string(data)
+    Time.at(data).to_s
+  end
 end
