@@ -18,37 +18,74 @@ import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import EventsList from 'components/Event/EventsList';
+import { Paper, Tab, Tabs } from '@material-ui/core';
+
+const EventTypes = Object.freeze({
+  upcoming: 0,
+  ongoing: 1,
+  past: 2,
+});
+
+const defaultParams = Object.freeze({
+  count: 10, // TODO: Make this a constant and use it also in EventsList
+  page: 0,
+  order: 'desc',
+  orderBy: 'start',
+});
 
 export function EventsPage(props) {
   useInjectReducer({ key: 'events', reducer });
   useInjectSaga({ key: 'events', saga });
-
-  const [params, setParams] = useState({
-    count: 10, // TODO: Make this a constant and use it also in EventsList
-    page: 0,
-    order: 'desc',
-    orderBy: 'start',
-    group_id: -1
-  });
 
   const rs = new RouteService(useContext);
   const links = {
     eventsIndex: ROUTES.group.events.index.path(rs.params('group_id')),
   };
 
-  useEffect(() => {
+  const [tab, setTab] = useState(EventTypes.upcoming);
+  const [params, setParams] = useState(defaultParams);
+
+  const getEvents = (scopes, resetParams = false) => {
     const id = dig(props, 'currentGroup', 'id');
 
+    if (resetParams)
+      setParams(defaultParams);
+
     if (id) {
-      const newParams = { ...params, group_id: id };
+      const newParams = {
+        ...params,
+        group_id: id,
+        query_scopes: scopes
+      };
       props.getEventsBegin(newParams);
       setParams(newParams);
     }
+  };
+
+  useEffect(() => {
+    getEvents(['upcoming']);
 
     return () => {
       props.eventsUnmount();
     };
-  }, []);
+  }, [dig(props.currentGroup, 'id')]);
+
+  const handleChangeTab = (event, newTab) => {
+    setTab(newTab);
+    switch (newTab) {
+      case EventTypes.upcoming:
+        getEvents(['upcoming'], true);
+        break;
+      case EventTypes.ongoing:
+        getEvents(['ongoing'], true);
+        break;
+      case EventTypes.past:
+        getEvents(['past'], true);
+        break;
+      default:
+        break;
+    }
+  };
 
   const handlePagination = (payload) => {
     const newParams = { ...params, count: payload.count, page: payload.page };
@@ -58,12 +95,28 @@ export function EventsPage(props) {
   };
 
   return (
-    <EventsList
-      events={props.events}
-      eventsTotal={props.eventsTotal}
-      handlePagination={handlePagination}
-      links={links}
-    />
+    <React.Fragment>
+      <Paper>
+        <Tabs
+          value={tab}
+          onChange={handleChangeTab}
+          indicatorColor='primary'
+          textColor='primary'
+          centered
+        >
+          <Tab label='Upcoming' />
+          <Tab label='Ongoing' />
+          <Tab label='Past' />
+        </Tabs>
+      </Paper>
+      <br />
+      <EventsList
+        events={props.events}
+        eventsTotal={props.eventsTotal}
+        handlePagination={handlePagination}
+        links={links}
+      />
+    </React.Fragment>
   );
 }
 

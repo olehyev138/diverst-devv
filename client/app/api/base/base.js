@@ -1,4 +1,5 @@
 import config from '../../app.config';
+import { appendQueryArgs } from 'utils/apiHelpers';
 
 const axios = require('axios');
 
@@ -13,23 +14,7 @@ class API {
   }
 
   all(opts) {
-    let { url } = this;
-
-    // append query arguments
-    if (opts) {
-      url += '?';
-      for (const arg of Object.keys(opts)) {
-        if (url.indexOf('?') !== url.length - 1)
-          url += '&';
-
-        if (Array.isArray(opts[arg]))
-          url += `${arg}=${JSON.stringify(opts[arg])}`;
-        else
-          url += `${arg}=${opts[arg]}`;
-      }
-    }
-
-    return axios.get(url);
+    return axios.get(appendQueryArgs(this.url, opts));
   }
 
   get(id) {

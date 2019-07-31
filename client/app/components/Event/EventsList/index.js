@@ -12,7 +12,7 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import classNames from 'classnames';
 
 import {
-  Box,
+  Box, Tabs, Tab, Paper,
   Card, CardContent, Grid, Link, TablePagination, Typography,
 } from '@material-ui/core';
 
@@ -51,8 +51,10 @@ const styles = theme => ({
 
 export function EventsList(props) {
   const { classes } = props;
+
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+
   const routeContext = useContext(RouteContext);
 
   const handleChangePage = (event, newPage) => {
@@ -113,22 +115,34 @@ export function EventsList(props) {
             </Grid>
           );
         })}
+        {props.events && props.events.length <= 0 && (
+          <React.Fragment>
+            <Grid item sm>
+              <Box mt={3} />
+              <Typography variant='h6' align='center' color='textSecondary'>
+                There are no events in this section.
+              </Typography>
+            </Grid>
+          </React.Fragment>
+        )}
       </Grid>
-      <TablePagination
-        component='div'
-        page={page}
-        rowsPerPageOptions={[5, 10, 25]}
-        rowsPerPage={rowsPerPage}
-        count={props.eventsTotal || 0}
-        onChangePage={handleChangePage}
-        onChangeRowsPerPage={handleChangeRowsPerPage}
-        backIconButtonProps={{
-          'aria-label': 'Previous Page',
-        }}
-        nextIconButtonProps={{
-          'aria-label': 'Next Page',
-        }}
-      />
+      {props.events && props.events.length > 0 && (
+        <TablePagination
+          component='div'
+          page={page}
+          rowsPerPageOptions={[5, 10, 25]}
+          rowsPerPage={rowsPerPage}
+          count={props.eventsTotal || 0}
+          onChangePage={handleChangePage}
+          onChangeRowsPerPage={handleChangeRowsPerPage}
+          backIconButtonProps={{
+            'aria-label': 'Previous Page',
+          }}
+          nextIconButtonProps={{
+            'aria-label': 'Next Page',
+          }}
+        />
+      )}
     </React.Fragment>
   );
 }

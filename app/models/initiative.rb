@@ -216,7 +216,7 @@ class Initiative < ApplicationRecord
 
   def current_expences_sum
     annual_budget = self.annual_budget
-    expenses.where(annual_budget_id: annual_budget.id).sum(:amount) || 0
+    expenses.where(annual_budget_id: annual_budget&.id).sum(:amount) || 0
   end
 
   def has_no_estimated_funding?
