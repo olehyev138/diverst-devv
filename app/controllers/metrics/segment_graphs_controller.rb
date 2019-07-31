@@ -7,7 +7,7 @@ class Metrics::SegmentGraphsController < ApplicationController
     authorize MetricsDashboard, :index?
 
     @data = {
-      segment_count: current_user.enterprise.segments.count
+      segment_count: current_user.enterprise.segments.size
     }
   end
 

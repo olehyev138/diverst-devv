@@ -52,7 +52,7 @@ class Group < BaseClass
     :years
   ]
 
-  belongs_to :enterprise
+  belongs_to :enterprise, counter_cache: true
   belongs_to :lead_manager, class_name: 'User'
   belongs_to :owner, class_name: 'User'
 
@@ -219,7 +219,7 @@ class Group < BaseClass
   end
 
   def total_views
-    views.count
+    views.size
   end
 
   def is_standard_group?
@@ -382,10 +382,12 @@ class Group < BaseClass
   end
 
   def membership_list_csv(group_members)
+
     total_nb_of_members = group_members.count
     mentorship_module_enabled = enterprise.mentorship_module_enabled?
     fields = enterprise.fields.where(add_to_member_list: true)
     fields.map(&:title)
+
     CSV.generate do |csv|
       first_row = %w(first_name last_name email_address)
       first_row += %w(mentor mentee) if mentorship_module_enabled

@@ -7,7 +7,7 @@ class Metrics::GroupGraphsController < ApplicationController
     authorize MetricsDashboard
 
     @group_metrics = {
-      total_groups: current_user.enterprise.groups.count,
+      total_groups: current_user.enterprise.groups.size,
       avg_nb_members_per_group: Group.avg_members_per_group(enterprise: current_user.enterprise)
     }
   end

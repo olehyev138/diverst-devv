@@ -70,7 +70,7 @@ class Groups::PostsController < ApplicationController
 
   def without_segments
     @posts = NewsFeed.all_links_without_segments(@group.news_feed.id, @group.enterprise)
-    @count = @posts.count
+    @count = @posts.size
     @posts = @posts.order(is_pinned: :desc, created_at: :desc)
                .limit(@limit)
   end
@@ -81,7 +81,7 @@ class Groups::PostsController < ApplicationController
     return without_segments if segment_ids.empty?
 
     @posts = NewsFeed.all_links(@group.news_feed.id, segment_ids, @group.enterprise)
-    @count = @posts.count
+    @count = @posts.size
     @posts = @posts.order(is_pinned: :desc, created_at: :desc)
                .limit(@limit)
   end

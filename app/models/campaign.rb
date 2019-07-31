@@ -96,9 +96,9 @@ class Campaign < BaseClass
 
   # Returns the % of questions that have been closed
   def progression
-    return 0 if questions.count == 0
+    return 0 if questions.size == 0
 
-    (questions.solved.count.to_f / questions.count * 100).round
+    (questions.solved.count.to_f / questions.size * 100).round
   end
 
   def contributions_per_erg_csv(erg_text)

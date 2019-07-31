@@ -1,6 +1,6 @@
 $("#restored_initiative_<%= @initiative.id %>").fadeOut(500, function(){
 	$(this).remove();
-	var initiatives_count = parseInt("<%= @initiatives.count %>");
+	var initiatives_count = parseInt("<%= @initiatives.size %>");
 	displayEmptyInitiatives(initiatives_count);
 });
 

@@ -18,7 +18,7 @@ class User < BaseClass
   scope :inactive,            -> { where(active: false).distinct }
 
 
-  belongs_to  :enterprise
+  belongs_to  :enterprise, counter_cache: true
   belongs_to  :user_role
   has_one :policy_group, dependent: :destroy, inverse_of: :user
 

@@ -16,7 +16,7 @@ class Segment < BaseClass
   belongs_to :parent, class_name: 'Segment', foreign_key: :parent_id
   has_many :children, class_name: 'Segment', foreign_key: :parent_id, dependent: :destroy
 
-  belongs_to :enterprise
+  belongs_to :enterprise, counter_cache: true
   belongs_to :owner, class_name: 'User'
 
   # Rules
