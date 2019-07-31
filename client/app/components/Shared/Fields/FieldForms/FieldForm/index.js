@@ -13,13 +13,13 @@ import PropTypes from 'prop-types';
 
 import TextFieldForm from 'components/Shared/Fields/FieldForms/TextFieldForm';
 
-const FieldForm = ({ field }) => {
+const FieldForm = ({ field, ...props }) => {
   const renderField = (field) => {
     switch (field.type) {
       case 'TextField':
-        return (<TextFieldForm value={field.value} />);
+        return (<TextFieldForm {...props} field={field} />);
       default:
-        return (<React.Fragment />);
+        return (<p>{field.type}</p>);
     }
   };
 
@@ -27,7 +27,7 @@ const FieldForm = ({ field }) => {
 };
 
 FieldForm.propTypes = {
-  value: PropTypes.string.isRequired,
+  field: PropTypes.object.isRequired,
 };
 
 export default FieldForm;

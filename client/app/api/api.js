@@ -1,6 +1,7 @@
 import users from 'api/users/users';
 import userGroups from 'api/user_groups/user_groups';
 import sessions from 'api/sessions/sessions';
+import fields from 'api/fields/fields';
 import groups from 'api/groups/groups';
 import newsFeedLinks from 'api/news_feed_links/news_feed_links';
 import groupMessages from 'api/group_messages/group_messages';
@@ -11,6 +12,7 @@ const Api = {
   users,
   userGroups,
   sessions,
+  fields,
   groups,
   newsFeedLinks,
   groupMessages,

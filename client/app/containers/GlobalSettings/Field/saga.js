@@ -4,7 +4,6 @@ import { push } from 'connected-react-router';
 
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
 
-
 import {
   GET_FIELDS_BEGIN, CREATE_FIELD_BEGIN,
   GET_FIELD_BEGIN, UPDATE_FIELD_BEGIN, DELETE_FIELD_BEGIN
@@ -23,7 +22,6 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 export function* getFields(action) {
   try {
     const response = yield call(api.fields.all.bind(api.fields), action.payload);
-
     yield put(getFieldsSuccess(response.data.page));
   } catch (err) {
     yield put(getFieldsError(err));

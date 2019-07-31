@@ -39,19 +39,7 @@ export default defineMessages({
   cancel: {
     id: `${scope}.form.button.cancel`,
   },
-  name: {
-    id: `${scope}.form.input.name`,
-  },
-  short_description: {
-    id: `${scope}.form.input.short_description`,
-  },
-  description: {
-    id: `${scope}.form.input.description`,
-  },
-  children: {
-    id: `${scope}.form.input.children`,
-  },
-  parent: {
-    id: `${scope}.form.input.parent`,
+  title: {
+    id: `${scope}.form.input.title`,
   },
 });

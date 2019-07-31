@@ -1,45 +1,48 @@
 /**
  *
- * AdminFieldListPage
+ * FieldsPage
  *
+ *  - lists all enterprise custom fields
+ *  - renders forms for creating & editing custom fields
+ *
+ *  - function:
+ *    - get fields from server
+ *    - on edit - render respective form with field data
+ *    - on new - render respective empty form
+ *    - on save - create/update field
  */
 
 import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
-import { selectPaginatedFields, selectFieldTotal } from 'containers/GlobalSettings/Field/selectors';
-import { getFieldsBegin, fieldUnmount, deleteFieldBegin } from 'containers/GlobalSettings/Field/actions';
-import reducer from 'containers/GlobalSettings/Field/reducer';
 
+import { getFieldsBegin, fieldUnmount, deleteFieldBegin } from 'containers/GlobalSettings/Field/actions';
+import { selectPaginatedFields, selectFieldTotal } from 'containers/GlobalSettings/Field/selectors';
+
+import reducer from 'containers/GlobalSettings/Field/reducer';
 import saga from 'containers/GlobalSettings/Field/saga';
 
-// import FieldList from 'components/GlobalSettings/Field/AdminFieldList';
+import FieldList from 'components/GlobalSettings/Field/FieldList';
 
-export function AdminFieldListPage(props) {
+export function FieldListPage(props) {
   useInjectReducer({ key: 'fields', reducer });
   useInjectSaga({ key: 'fields', saga });
 
   const [params, setParams] = useState({ count: 5, page: 0, order: 'asc' });
 
   useEffect(() => {
-    // props.getFieldsBegin(params);
+    props.getFieldsBegin(params);
 
-//    return () => {
-//      props.fieldListUnmount();
-//    };
+    return () => {
+      props.fieldUnmount();
+    };
   }, []);
-
-  /*
-   * - get fields from server
-   * - on edit - render respective form with field data
-   * - on new - render respective empty form
-   * - on save - create/update field
-   */
 
   const handlePagination = (payload) => {
     const newParams = { ...params, count: payload.count, page: payload.page };
@@ -50,16 +53,22 @@ export function AdminFieldListPage(props) {
 
   return (
     <React.Fragment>
+      <FieldList
+        fields={props.fields}
+        fieldTotal={props.fieldTotal}
+        deleteFieldBegin={props.deleteFieldBegin}
+        handlePagination={handlePagination}
+      />
     </React.Fragment>
   );
 }
 
-AdminFieldListPage.propTypes = {
+FieldListPage.propTypes = {
   getFieldsBegin: PropTypes.func.isRequired,
-  // fieldListUnmount: PropTypes.func.isRequired,
   fields: PropTypes.object,
   fieldTotal: PropTypes.number,
-  deleteFieldBegin: PropTypes.func
+  deleteFieldBegin: PropTypes.func,
+  fieldUnmount: PropTypes.func.isRequired
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -67,13 +76,11 @@ const mapStateToProps = createStructuredSelector({
   fieldTotal: selectFieldTotal(),
 });
 
-function mapDispatchToProps(dispatch) {
-  return {
-    getFieldsBegin: payload => dispatch(getFieldsBegin(payload)),
-    // fieldListUnmount: () => dispatch(fieldListUnmount()),
-    deleteFieldBegin: payload => dispatch(deleteFieldBegin(payload))
-  };
-}
+const mapDispatchToProps = {
+  getFieldsBegin,
+  deleteFieldBegin,
+  fieldUnmount
+};
 
 const withConnect = connect(
   mapStateToProps,
@@ -83,4 +90,4 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(AdminFieldListPage);
+)(FieldListPage);
