@@ -21,6 +21,9 @@ import AdminGroupListPage from 'containers/Group/AdminGroupListPage';
 import GroupCreatePage from 'containers/Group/GroupCreatePage';
 import GroupEditPage from 'containers/Group/GroupEditPage';
 
+/* Admin - System - Global Settings */
+import FieldsPage from 'containers/GlobalSettings/Field/FieldsPage';
+
 /* Group */
 import GroupHomePage from 'containers/Group/GroupHomePage';
 import NewsFeedPage from 'containers/News/NewsFeedPage';
@@ -56,7 +59,7 @@ export default function Routes(props) {
       <AdminLayout {...expandRoute(ROUTES.admin.manage.groups.edit)} component={GroupEditPage} />
 
       { /* Admin - System - GlobalSettings */ }
-      <GlobalSettingsLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.fields.index)} component={PlaceholderPage} />
+      <GlobalSettingsLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.fields.index)} component={FieldsPage} />
 
       <UserLayout exact {...expandRoute(ROUTES.user.home)} component={PlaceholderPage} />
       <UserLayout {...expandRoute(ROUTES.user.innovate)} component={PlaceholderPage} />

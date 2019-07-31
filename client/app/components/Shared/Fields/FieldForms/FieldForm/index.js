@@ -1,22 +1,21 @@
 /**
  *
- * Field
+ * Field Form
  *
- * - Renders a custom field
+ * - Renders a custom field form
  *
  */
 
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import TextField from 'components/Shared/Fields/TextField';
-import { render } from 'react-testing-library';
+import TextFieldForm from 'components/Shared/Fields/FieldForms/TextFieldForm';
 
-const Field = ({ field }) => {
+const FieldForm = ({ field }) => {
   const renderField = (field) => {
     switch (field.type) {
       case 'TextField':
-        return (<TextField value={field.value} />);
+        return (<TextFieldForm value={field.value} />);
       default:
         return (<React.Fragment />);
     }
@@ -25,8 +24,8 @@ const Field = ({ field }) => {
   return renderField(field);
 };
 
-Field.propTypes = {
+FieldForm.propTypes = {
   value: PropTypes.string.isRequired,
 };
 
-export default Field;
+export default FieldForm;
