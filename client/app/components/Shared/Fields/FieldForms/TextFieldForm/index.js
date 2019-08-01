@@ -68,8 +68,6 @@ export function TextFieldForm(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        console.log(values);
-        console.log('submitted');
         props.fieldAction(values);
       }}
 

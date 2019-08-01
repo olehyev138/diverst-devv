@@ -40,7 +40,7 @@ export const ROUTES = {
     groups: {
       path: () => '/groups',
       data: {
-        titleMessage: messages.user.fields,
+        titleMessage: messages.user.groups,
       }
     },
     downloads: {
