@@ -12,3 +12,5 @@ Ahoy.bot_detection_version = 2
 
 # visit_duration
 Ahoy.visit_duration = 5.seconds
+
+Ahoy.job_queue = 'low'
