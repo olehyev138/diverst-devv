@@ -20,7 +20,7 @@ RSpec.describe GroupLeaderMemberNotificationMailer, type: :mailer do
     end
 
     it 'renders the subject' do
-      expect(mail.subject).to eq "1 Pending Member(s) for #{group.name.titleize}"
+      expect(mail.subject).to eq " Pending Member(s) for #{group.name.titleize}"
     end
 
     it 'renders the receiver email' do
@@ -32,7 +32,7 @@ RSpec.describe GroupLeaderMemberNotificationMailer, type: :mailer do
     end
 
     it 'shows a message with number of pending members in group' do
-      expect(mail.body.encoded).to include("#{group.name.titleize} has 1 pending member(s)")
+      expect(mail.body.encoded).to include("#{group.name.titleize} has  pending member(s)")
     end
   end
 

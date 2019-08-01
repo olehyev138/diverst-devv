@@ -1,14 +1,18 @@
 require 'rails_helper'
 
 RSpec.describe Checklist, type: :model do
-  describe 'validations' do
-    let(:checklist) { build_stubbed(:checklist) }
+  let(:checklist) { build_stubbed(:checklist) }
 
+  describe 'associations' do
     it { expect(checklist).to belong_to(:budget) }
     it { expect(checklist).to belong_to(:initiative) }
-    it { expect(checklist).to belong_to(:author) }
+    it { expect(checklist).to belong_to(:author).class_name('User') }
 
-    it { expect(checklist).to have_many(:items) }
+    it { expect(checklist).to have_many(:items).class_name('ChecklistItem').dependent(:destroy) }
+  end
+
+  describe 'validations' do
+    it { expect(checklist).to validate_length_of(:title).is_at_most(191) }
   end
 
   describe '#destroy_callbacks' do

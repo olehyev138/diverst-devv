@@ -6,18 +6,31 @@ RSpec.describe MetricsDashboard, type: :model do
   describe 'test associations' do
     it { expect(subject).to belong_to(:enterprise).inverse_of(:metrics_dashboards) }
     it { expect(subject).to belong_to(:owner).class_name('User') }
-    it { expect(subject).to have_many(:graphs) }
-    it { expect(subject).to have_many(:metrics_dashboards_segments) }
+    it { expect(subject).to have_many(:graphs).dependent(:destroy) }
+    it { expect(subject).to have_many(:metrics_dashboards_segments).dependent(:destroy) }
     it { expect(subject).to have_many(:segments).through(:metrics_dashboards_segments) }
-    it { expect(subject).to have_many(:groups_metrics_dashboards) }
+    it { expect(subject).to have_many(:groups_metrics_dashboards).dependent(:destroy) }
     it { expect(subject).to have_many(:groups).through(:groups_metrics_dashboards) }
-    it { expect(subject).to have_many(:shared_metrics_dashboards) }
+    it { expect(subject).to have_many(:shared_metrics_dashboards).dependent(:destroy) }
     it { expect(subject).to have_many(:shared_users).through(:shared_metrics_dashboards).source(:user) }
   end
 
   describe 'validations' do
     it { expect(subject).to validate_presence_of(:name).with_message('Metrics Dashboard name is required') }
     it { expect(subject).to validate_presence_of(:groups).with_message('Please select a group') }
+    it { expect(subject).to validate_length_of(:shareable_token).is_at_most(191) }
+    it { expect(subject).to validate_length_of(:name).is_at_most(191) }
+  end
+
+  describe '.with_shared_dashboards' do
+    context 'with metrics_dashboard' do
+      let(:user) { create(:user) }
+      let(:metrics_dashboard) { create(:metrics_dashboard, enterprise_id: user.enterprise.id, owner_id: user.id) }
+
+      it 'returns metrics_dashboard' do
+        expect(MetricsDashboard.with_shared_dashboards(user.id)).to eq([metrics_dashboard])
+      end
+    end
   end
 
   describe '#percentage_of_total' do
@@ -50,6 +63,15 @@ RSpec.describe MetricsDashboard, type: :model do
 
     it 'calls target' do
       expect(subject.graphs_population.all).to eq subject.enterprise.users.all
+    end
+  end
+
+  describe '#graphable_fields' do
+    let(:enterprise) { create(:enterprise) }
+    let(:admin) { create(:user, enterprise: enterprise) }
+
+    it 'returns graphable fields' do
+      expect(subject.graphable_fields(admin)).to eq(enterprise.fields)
     end
   end
 

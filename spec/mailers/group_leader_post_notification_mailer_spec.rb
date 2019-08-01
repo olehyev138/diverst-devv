@@ -20,7 +20,7 @@ RSpec.describe GroupLeaderPostNotificationMailer, type: :mailer do
     end
 
     it 'renders the subject' do
-      expect(mail.subject).to eq "1 Pending Post(s) for #{group.name.titleize}"
+      expect(mail.subject).to eq " Pending Post(s) for #{group.name.titleize}"
     end
 
     it 'renders the receiver email' do
