@@ -1439,6 +1439,7 @@ ActiveRecord::Schema.define(version: 20190730124943) do
     t.boolean  "accepting_mentor_requests",                    default: true
     t.boolean  "accepting_mentee_requests",                    default: true
     t.datetime "last_group_notification_date"
+    t.boolean  "seen_onboarding",                              default: false
   end
 
   add_index "users", ["active"], name: "index_users_on_active", using: :btree
