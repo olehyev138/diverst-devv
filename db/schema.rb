@@ -623,6 +623,7 @@ ActiveRecord::Schema.define(version: 20190730124943) do
     t.datetime "created_at",                                                         null: false
     t.datetime "updated_at",                                                         null: false
     t.integer  "annual_budget_id", limit: 4
+    t.decimal  "amount",                       precision: 8, scale: 2, default: 0.0
   end
 
   create_table "initiative_fields", force: :cascade do |t|
