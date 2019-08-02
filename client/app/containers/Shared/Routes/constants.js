@@ -145,6 +145,14 @@ export const ROUTES = {
           titleMessage: messages.admin.system.index,
         }
       },
+      users: {
+        index: {
+          path: () => '/admin/system/users',
+          data: {
+            titleMessage: messages.admin.system.index,
+          }
+        },
+      },
       globalSettings: {
         fields: {
           index: {

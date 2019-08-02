@@ -54,11 +54,19 @@
   "diverst.containers.Field.index.button.textField.new":"New Text Field",
   "diverst.containers.Field.index.button.edit": "Edit",
   "diverst.containers.Field.index.button.delete": "Delete",
-  "diverst.containers.Field.index.button.children_collapse": "Show Children",
   "diverst.containers.Field.index.button.rows": "Rows per page",
   "diverst.containers.Field.index.button.page": "of",
   "diverst.containers.Field.form.button.create": "Create",
   "diverst.containers.Field.form.button.update": "Update",
   "diverst.containers.Field.form.button.cancel": "Cancel",
-  "diverst.containers.Field.form.input.title": "Title"
+  "diverst.containers.Field.form.input.title": "Title",
+  "diverst.containers.User.index.button.new":"Add new user",
+  "diverst.containers.User.index.button.edit": "Edit",
+  "diverst.containers.User.index.button.delete": "Delete",
+  "diverst.containers.User.index.button.rows": "Rows per page",
+  "diverst.containers.User.index.button.page": "of",
+  "diverst.containers.User.form.button.create": "Create",
+  "diverst.containers.User.form.button.update": "Update",
+  "diverst.containers.User.form.button.cancel": "Cancel",
+  "diverst.containers.User.form.input.title": "Title"
 }

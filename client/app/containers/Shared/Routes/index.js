@@ -24,6 +24,9 @@ import GroupEditPage from 'containers/Group/GroupEditPage';
 /* Admin - System - Global Settings */
 import FieldsPage from 'containers/GlobalSettings/Field/FieldsPage';
 
+/* Admin - System - User */
+import UsersPage from 'containers/User/UsersPage';
+
 /* Group */
 import GroupHomePage from 'containers/Group/GroupHomePage';
 import NewsFeedPage from 'containers/News/NewsFeedPage';
@@ -60,6 +63,9 @@ export default function Routes(props) {
 
       { /* Admin - System - GlobalSettings */ }
       <GlobalSettingsLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.fields.index)} component={FieldsPage} />
+
+      { /* Admin - System - Users */ }
+      <AdminLayout exact {...expandRoute(ROUTES.admin.system.users.index)} component={UsersPage} />
 
       <UserLayout exact {...expandRoute(ROUTES.user.home)} component={PlaceholderPage} />
       <UserLayout {...expandRoute(ROUTES.user.innovate)} component={PlaceholderPage} />
