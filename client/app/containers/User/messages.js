@@ -39,7 +39,10 @@ export default defineMessages({
   cancel: {
     id: `${scope}.form.button.cancel`,
   },
-  title: {
-    id: `${scope}.form.input.title`,
+  first_name: {
+    id: `${scope}.form.input.first_name`,
+  },
+  last_name: {
+    id: `${scope}.form.input.last_name`,
   },
 });

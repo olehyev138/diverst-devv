@@ -60,14 +60,12 @@ const mapStateToProps = createStructuredSelector({
   groups: selectPaginatedSelectGroups()
 });
 
-function mapDispatchToProps(dispatch) {
-  return {
-    getGroupBegin: payload => dispatch(getGroupBegin(payload)),
-    getGroupsBegin: payload => dispatch(getGroupsBegin(payload)),
-    updateGroupBegin: payload => dispatch(updateGroupBegin(payload)),
-    groupFormUnmount: () => dispatch(groupFormUnmount())
-  };
-}
+const mapDispatchToProps = {
+  getGroupBegin,
+  getGroupsBegin,
+  updateGroupBegin,
+  groupFormUnmount
+};
 
 const withConnect = connect(
   mapStateToProps,

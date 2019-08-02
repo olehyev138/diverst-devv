@@ -49,7 +49,7 @@ export function* createUser(action) {
 
     const response = yield call(api.users.create.bind(api.users), payload);
 
-    yield put(push(ROUTES.admin.system.globalSettings.users.index.path()));
+    yield put(push(ROUTES.admin.system.users.index.path()));
     yield put(showSnackbar({ message: 'User created', options: { variant: 'success' } }));
   } catch (err) {
     yield put(createUserError(err));
@@ -64,7 +64,7 @@ export function* updateUser(action) {
     const payload = { user: action.payload };
     const response = yield call(api.users.update.bind(api.users), payload.user.id, payload);
 
-    yield put(push(ROUTES.admin.system.globalSettings.users.index.path()));
+    yield put(push(ROUTES.admin.system.users.index.path()));
     yield put(showSnackbar({ message: 'User updated', options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateUserError(err));
@@ -78,7 +78,7 @@ export function* deleteUser(action) {
   try {
     yield call(api.users.destroy.bind(api.users), action.payload);
 
-    yield put(push(ROUTES.admin.system.globalSettings.users.index.path()));
+    yield put(push(ROUTES.admin.system.users.index.path()));
     yield put(showSnackbar({ message: 'User deleted', options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteUserError(err));

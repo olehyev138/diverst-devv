@@ -26,6 +26,8 @@ import FieldsPage from 'containers/GlobalSettings/Field/FieldsPage';
 
 /* Admin - System - User */
 import UsersPage from 'containers/User/UsersPage';
+import UserCreatePage from 'containers/User/UserCreatePage';
+import UserEditPage from 'containers/User/UserEditPage';
 
 /* Group */
 import GroupHomePage from 'containers/Group/GroupHomePage';
@@ -66,6 +68,8 @@ export default function Routes(props) {
 
       { /* Admin - System - Users */ }
       <AdminLayout exact {...expandRoute(ROUTES.admin.system.users.index)} component={UsersPage} />
+      <AdminLayout exact {...expandRoute(ROUTES.admin.system.users.new)} component={UserCreatePage} />
+      <AdminLayout exact {...expandRoute(ROUTES.admin.system.users.edit)} component={UserEditPage} />
 
       <UserLayout exact {...expandRoute(ROUTES.user.home)} component={PlaceholderPage} />
       <UserLayout {...expandRoute(ROUTES.user.innovate)} component={PlaceholderPage} />

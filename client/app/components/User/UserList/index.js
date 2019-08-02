@@ -5,12 +5,11 @@
  *
  */
 
-import React, { memo, useState } from 'react';
+import React, {memo, useContext, useState} from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
 import { NavLink } from 'react-router-dom';
-import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import {
   Button, Card, CardContent, CardActions,
@@ -22,7 +21,6 @@ import { FormattedMessage } from 'react-intl';
 import messages from 'containers/User/messages';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
-// import UserForm from 'components/Users/UserForms/UserForm';
 
 const styles = theme => ({
   userListItem: {
@@ -62,6 +60,8 @@ export function UserList(props, context) {
             variant='contained'
             color='primary'
             size='large'
+            to={props.links.userNew}
+            component={WrappedNavLink}
           >
             <FormattedMessage {...messages.new} />
           </Button>
@@ -78,7 +78,7 @@ export function UserList(props, context) {
                 <CardActions>
                   <Button
                     size='small'
-                    to='#'
+                    to={props.links.userEdit(user.id)}
                     component={WrappedNavLink}
                   >
                     <FormattedMessage {...messages.edit} />
@@ -124,7 +124,11 @@ UserList.propTypes = {
   users: PropTypes.object,
   userTotal: PropTypes.number,
   deleteUserBegin: PropTypes.func,
-  handlePagination: PropTypes.func
+  handlePagination: PropTypes.func,
+  links: PropTypes.shape({
+    userNew: PropTypes.string,
+    userEdit: PropTypes.func
+  })
 };
 
 export default compose(

@@ -68,5 +68,6 @@
   "diverst.containers.User.form.button.create": "Create",
   "diverst.containers.User.form.button.update": "Update",
   "diverst.containers.User.form.button.cancel": "Cancel",
-  "diverst.containers.User.form.input.title": "Title"
+  "diverst.containers.User.form.input.first_name": "First Name",
+  "diverst.containers.User.form.input.last_name": "Last Name"
 }

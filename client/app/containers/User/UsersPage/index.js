@@ -12,7 +12,7 @@
  *    - on save - create/update user
  */
 
-import React, { memo, useEffect, useState } from 'react';
+import React, {memo, useContext, useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
@@ -24,12 +24,14 @@ import { useInjectReducer } from 'utils/injectReducer';
 
 import { selectPaginatedUsers, selectUserTotal } from 'containers/User/selectors';
 import {
-  getUsersBegin, createUserBegin, updateUserBegin,
-  userUnmount, deleteUserBegin
+  getUsersBegin, userUnmount, deleteUserBegin
 } from 'containers/User/actions';
 
 import reducer from 'containers/User/reducer';
 import saga from 'containers/User/saga';
+
+import RouteService from 'utils/routeHelpers';
+import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import UserList from 'components/User/UserList';
 
@@ -47,6 +49,12 @@ export function UserListPage(props) {
     };
   }, []);
 
+  const rs = new RouteService(useContext);
+  const links = {
+    userNew: ROUTES.admin.system.users.new.path(),
+    userEdit: id => ROUTES.admin.system.users.edit.path(id),
+  };
+
   const handlePagination = (payload) => {
     const newParams = { ...params, count: payload.count, page: payload.page };
 
@@ -59,10 +67,9 @@ export function UserListPage(props) {
       <UserList
         users={props.users}
         userTotal={props.userTotal}
-        createUserBegin={props.createUserBegin}
-        updateUserBegin={props.updateUserBegin}
         deleteUserBegin={props.deleteUserBegin}
         handlePagination={handlePagination}
+        links={links}
       />
     </React.Fragment>
   );
@@ -70,8 +77,6 @@ export function UserListPage(props) {
 
 UserListPage.propTypes = {
   getUsersBegin: PropTypes.func.isRequired,
-  createUserBegin: PropTypes.func.isRequired,
-  updateUserBegin: PropTypes.func.isRequired,
   users: PropTypes.object,
   userTotal: PropTypes.number,
   deleteUserBegin: PropTypes.func,
@@ -85,8 +90,6 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = {
   getUsersBegin,
-  createUserBegin,
-  updateUserBegin,
   deleteUserBegin,
   userUnmount
 };
