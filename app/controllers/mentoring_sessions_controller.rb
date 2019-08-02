@@ -5,6 +5,7 @@ class MentoringSessionsController < ApplicationController
   layout 'user', except: [:start, :join]
 
   def new
+    visit_page('Mentoring Session Creation')
     @mentoring_session = current_user.mentoring_sessions.new
     @mentoring_session.format = 'Video'
     @mentoring_session.mentorship_sessions.new(user_id: current_user.id)
@@ -15,12 +16,14 @@ class MentoringSessionsController < ApplicationController
 
   def edit
     authorize @mentoring_session
+    visit_page('Mentoring Session Edit')
 
     render 'user/mentorship/sessions/edit'
   end
 
   def show
     authorize @mentoring_session
+    visit_page('Mentoring Session')
 
     @comments = @mentoring_session.comments.includes(:user)
 

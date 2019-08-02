@@ -8,6 +8,7 @@ class EnterprisesController < ApplicationController
 
   def edit
     authorize @enterprise, :enterprise_manage?
+    visit_page('Enterprise Settings')
   end
 
   def update
@@ -30,6 +31,7 @@ class EnterprisesController < ApplicationController
 
   def edit_fields
     authorize @enterprise
+    visit_page('Fields Edit')
   end
 
   def update_enterprise
@@ -55,6 +57,7 @@ class EnterprisesController < ApplicationController
 
   def edit_budgeting
     authorize @enterprise, :update?
+    visit_page('Budget Settings')
     @groups = @enterprise.groups
   end
 
@@ -66,10 +69,12 @@ class EnterprisesController < ApplicationController
   # missing a template layout called handshake
   def edit_mobile_fields
     authorize @enterprise
+    visit_page('Mobile Fields Settings')
   end
 
   def edit_auth
     authorize @enterprise
+    visit_page('Authentication Settings')
   end
 
   def auto_archive_switch
@@ -85,6 +90,7 @@ class EnterprisesController < ApplicationController
 
   def edit_branding
     authorize @enterprise
+    visit_page('Branding Settings')
     @emails = @enterprise.emails
     set_theme
   end
@@ -92,6 +98,7 @@ class EnterprisesController < ApplicationController
   # missing template
   def edit_algo
     authorize @enterprise, :update?
+    visit_page('Algorithm Settings')
   end
 
   def update_branding
@@ -141,6 +148,7 @@ class EnterprisesController < ApplicationController
   end
 
   def calendar
+    visit_page('Calender')
     @enterprise = Enterprise.find(params[:id])
     render layout: false
   end

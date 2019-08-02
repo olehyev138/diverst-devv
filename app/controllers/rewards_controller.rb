@@ -8,12 +8,14 @@ class RewardsController < ApplicationController
 
   def index
     authorize Reward
+    visit_page('Rewards')
     @rewards = @enterprise.rewards
     @badges = @enterprise.badges
   end
 
   def new
     authorize Reward
+    visit_page('Reward Creation')
     @reward = Reward.new
   end
 
@@ -32,6 +34,7 @@ class RewardsController < ApplicationController
 
   def edit
     authorize Reward
+    visit_page("Reward Edit: #{@reward.label}")
     @reward = @enterprise.rewards.find(params[:id])
   end
 

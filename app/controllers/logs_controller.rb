@@ -9,6 +9,7 @@ class LogsController < ApplicationController
 
     respond_to do |format|
       format.html {
+        visit_page('Logs')
         @activities = PublicActivity::Activity.includes(:owner, :trackable).where(recipient: @enterprise).order(created_at: :desc)
         @groups = @enterprise.groups
         @q = PublicActivity::Activity.ransack(params[:q])

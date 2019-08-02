@@ -6,6 +6,7 @@ class IntegrationsController < ApplicationController
   def calendar
     @groups = @enterprise.groups
     @segments = @enterprise.segments
+    visit_page('Integrations Calender')
     @q_form_submit_path = integrations_calendar_path(params[:token])
     @q = Initiative.ransack(params[:q])
 

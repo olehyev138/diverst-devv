@@ -5,6 +5,7 @@ class ArchivedPostsController < ApplicationController
   layout 'erg_manager'
 
   def index
+    visit_page('Archived Posts')
     # get all news feed for current enterprise
     @posts = NewsFeed.archived_posts(current_user.enterprise).order(created_at: :desc)
     authorize current_user.enterprise, :manage_posts?, policy_class: EnterprisePolicy

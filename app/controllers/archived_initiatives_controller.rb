@@ -6,6 +6,7 @@ class ArchivedInitiativesController < ApplicationController
 
   def index
     authorize current_user.enterprise, :manage_posts?, policy_class: EnterprisePolicy
+    visit_page('Archived Initiatives')
     @initiatives = Initiative.archived_initiatives(current_user.enterprise).order(created_at: :desc)
   end
 

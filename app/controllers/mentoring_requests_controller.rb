@@ -4,6 +4,7 @@ class MentoringRequestsController < ApplicationController
   layout 'user'
 
   def new
+    visit_page('New Mentorship Request')
     @mentoring_request = MentoringRequest.new(sender_id: params[:sender_id], receiver_id: params[:receiver_id], mentoring_type: params[:mentoring_type])
 
     if params[:mentoring_type] === 'mentor'

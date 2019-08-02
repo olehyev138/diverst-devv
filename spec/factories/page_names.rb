@@ -1,4 +1,4 @@
 FactoryBot.define do
-  factory :page_visitation do
+  factory :page_name do
   end
 end

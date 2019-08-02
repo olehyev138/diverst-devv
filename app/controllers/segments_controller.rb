@@ -10,7 +10,7 @@ class SegmentsController < ApplicationController
     authorize Segment
 
     respond_to do |format|
-      format.html
+      format.html { visit_page('Segment List') }
       format.json { render json: SegmentDatatable.new(view_context, @segments) }
     end
   end
@@ -34,6 +34,7 @@ class SegmentsController < ApplicationController
 
   def new
     authorize Segment
+    visit_page('Segment Creation')
     @segment = current_user.enterprise.segments.new
     @segment.id = -1
 
@@ -59,6 +60,7 @@ class SegmentsController < ApplicationController
 
   def show
     authorize @segment
+    visit_page("Segment: #{@segment.name}")
 
     @sub_segments = @segment.children
     @members = @segment.ordered_members
@@ -71,6 +73,7 @@ class SegmentsController < ApplicationController
 
   def edit
     authorize @segment
+    visit_page("Segment Edit: #{@segment.name}")
 
     @sub_segments = @segment.children
     @members = @segment.ordered_members

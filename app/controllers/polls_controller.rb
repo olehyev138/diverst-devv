@@ -7,11 +7,13 @@ class PollsController < ApplicationController
 
   def index
     authorize Poll
+    visit_page('Polls')
     @polls = policy_scope(Poll)
   end
 
   def new
     authorize Poll
+    visit_page('Poll Creation')
     @poll = current_user.enterprise.polls.new
   end
 
@@ -32,6 +34,7 @@ class PollsController < ApplicationController
 
   def show
     authorize @poll
+    visit_page("Poll: #{@poll.name}")
 
     @graphs = @poll.graphs.includes(:field, :aggregation)
     @responses = @poll.responses
@@ -41,6 +44,7 @@ class PollsController < ApplicationController
 
   def edit
     authorize @poll
+    visit_page("Poll Edit: #{@poll.name}")
   end
 
   def update

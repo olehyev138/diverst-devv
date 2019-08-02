@@ -32,7 +32,7 @@ class UsersController < ApplicationController
     end
 
     respond_to do |format|
-      format.html
+      format.html { visit_page('User List') }
       format.json { render json: UserDatatable.new(view_context, @users) }
     end
   end
@@ -60,13 +60,16 @@ class UsersController < ApplicationController
   # MISSING HTML TEMPLATE
   def new
     authorize User
+    visit_page('User Creation')
   end
 
   def show
     authorize @user
+    visit_page("#{@user.name}'s Details")
   end
 
   def group_surveys
+    visit_page("#{@user.name}'s Survey Answers")
     @is_own_survey = current_user == @user
 
     if params[:group_id].present?
@@ -82,6 +85,7 @@ class UsersController < ApplicationController
   # For admins. Dedicated to editing any user's info
   def edit
     authorize @user
+    visit_page("#{@user.name}'s Edit")
     @is_admin_view = true
   end
 
@@ -182,18 +186,19 @@ class UsersController < ApplicationController
 
   def show_usage
     authorize @user, :show?
+    visit_page("#{@user.name}'s Usage Stats")
     get_user_usage_metrics
   end
 
   def index_usage
     authorize User, :index?
+    visit_page('Aggregate Usage Stats')
     get_aggregate_usage_metrics
   end
 
   def user_url_usage_data
     authorize @user, :show?
     respond_to do |format|
-      format.html
       format.json { render json: UserUsageDatatable.new(view_context, @user) }
     end
   end
@@ -201,7 +206,6 @@ class UsersController < ApplicationController
   def url_usage_data
     authorize User, :index?
     respond_to do |format|
-      format.html
       format.json { render json: AggregateUrlStatsDatatable.new(view_context) }
     end
   end

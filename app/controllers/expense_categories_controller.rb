@@ -7,11 +7,13 @@ class ExpenseCategoriesController < ApplicationController
 
   def index
     authorize ExpenseCategory
+    visit_page('Expense Categories')
     @expense_categories = policy_scope(ExpenseCategory)
   end
 
   def new
     authorize ExpenseCategory
+    visit_page('Expense Category Creation')
     @expense_category = current_user.enterprise.expense_categories.new
   end
 
@@ -31,6 +33,7 @@ class ExpenseCategoriesController < ApplicationController
 
   def edit
     authorize @expense_category
+    visit_page("Expense Category Edit: #{@expense_category.name}")
   end
 
   def update

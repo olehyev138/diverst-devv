@@ -7,6 +7,7 @@ class GroupCategoriesController < ApplicationController
 
   def index
     authorize Group, :manage_all_groups?
+    visit_page('Group Categories')
 
     @parent = Group.find(params[:parent_id].to_i)
     @categories = current_user.enterprise.group_categories
@@ -14,7 +15,8 @@ class GroupCategoriesController < ApplicationController
 
   def new
     authorize Group, :manage_all_groups?
-    @parent = Group.find(params[:parent_id].to_i) if !params[:parent_id].to_i.zero?
+    visit_page('Group Category Creation')
+    @parent = Group.find(params[:parent_id].to_i) unless params[:parent_id].to_i.zero?
     @group_category_type = current_user.enterprise.group_category_types.new
   end
 
@@ -22,7 +24,7 @@ class GroupCategoriesController < ApplicationController
     authorize Group, :manage_all_groups?
 
     @group_category_type = current_user.enterprise.group_category_types.new(category_type_params)
-    @parent = Group.find(params[:group_category_type][:parent_id].to_i) if !params[:group_category_type][:parent_id].to_i.zero?
+    @parent = Group.find(params[:group_category_type][:parent_id].to_i) unless params[:group_category_type][:parent_id].to_i.zero?
 
     if @group_category_type.save
       flash[:notice] = "You just created a category named #{@group_category_type.name}"
@@ -40,6 +42,7 @@ class GroupCategoriesController < ApplicationController
 
   def edit
     authorize Group, :manage_all_groups?
+    visit_page("Group Category Edit: #{@category.name}")
   end
 
   def update
@@ -83,6 +86,7 @@ class GroupCategoriesController < ApplicationController
 
   def view_all
     authorize Group, :manage_all_groups?
+    visit_page('View All Group Categories')
     @categories = current_user.enterprise.group_categories
     @category_types = current_user.enterprise.group_category_types
   end

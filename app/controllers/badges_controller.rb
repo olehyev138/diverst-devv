@@ -8,6 +8,7 @@ class BadgesController < ApplicationController
 
   def new
     authorize @enterprise, :update?
+    visit_page('Badge Creation')
     @badge = Badge.new
   end
 
@@ -26,6 +27,7 @@ class BadgesController < ApplicationController
 
   def edit
     authorize @enterprise, :update?
+    visit_page('Badge Editor')
     @badge = @enterprise.badges.find(params[:id])
   end
 
