@@ -372,7 +372,6 @@ class Group < BaseClass
   end
 
   def membership_list_csv(group_members)
-
     total_nb_of_members = group_members.count
     mentorship_module_enabled = enterprise.mentorship_module_enabled?
     fields = enterprise.fields.where(add_to_member_list: true)
