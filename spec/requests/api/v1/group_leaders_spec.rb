@@ -9,9 +9,10 @@ RSpec.describe 'GroupLeaders', type: :request do
   let(:route) { 'group_leaders' }
   let(:jwt) { UserTokenService.create_jwt(user) }
   let(:headers) { { 'HTTP_DIVERST_APIKEY' => api_key.key, 'Diverst-UserToken' => jwt } }
+  let(:params) { { group_id: group.id } }
 
   it 'gets all items' do
-    get "/api/v1/#{route}", headers: headers
+    get "/api/v1/#{route}", params: params, headers: headers
     expect(response).to have_http_status(:ok)
   end
 

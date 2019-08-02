@@ -28,6 +28,10 @@ class SegmentPolicy < ApplicationPolicy
     manage?
   end
 
+  def show?
+    index?
+  end
+
   def enterprise_segments?
     index?
   end
