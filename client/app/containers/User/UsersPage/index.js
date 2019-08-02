@@ -12,7 +12,9 @@
  *    - on save - create/update user
  */
 
-import React, {memo, useContext, useEffect, useState} from 'react';
+import React, {
+  memo, useContext, useEffect, useState
+} from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
