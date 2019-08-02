@@ -1,0 +1,23 @@
+/*
+ *
+ * User constants
+ *
+ */
+
+export const GET_MEMBERS_BEGIN = 'app/Group/GET_MEMBERS_BEGIN';
+export const GET_MEMBERS_SUCCESS = 'app/Group/GET_MEMBERS_SUCCESS';
+export const GET_MEMBERS_ERROR = 'app/Group/GET_MEMBERS_ERROR';
+
+export const CREATE_MEMBERS_BEGIN = 'app/Group/CREATE_MEMBERS_BEGIN';
+export const CREATE_MEMBERS_SUCCESS = 'app/Group/CREATE_MEMBERS_SUCCESS';
+export const CREATE_MEMBERS_ERROR = 'app/Group/CREATE_MEMBERS_ERROR';
+
+export const UPDATE_MEMBER_BEGIN = 'app/Group/UPDATE_MEMBER_BEGIN';
+export const UPDATE_MEMBER_SUCCESS = 'app/Group/UPDATE_MEMBER_SUCCESS';
+export const UPDATE_MEMBER_ERROR = 'app/Group/UPDATE_MEMBER_ERROR';
+
+export const DELETE_MEMBER_BEGIN = 'app/Group/DELETE_MEMBER_BEGIN';
+export const DELETE_MEMBER_SUCCESS = 'app/Group/DELETE_MEMBER_SUCCESS';
+export const DELETE_MEMBER_ERROR = 'app/Group/DELETE_MEMBER_ERROR';
+
+export const GROUP_MEMBERS_UNMOUNT = 'app/Group/GROUP_MEMBERS_UNMOUNT';

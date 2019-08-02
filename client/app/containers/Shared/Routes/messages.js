@@ -33,6 +33,9 @@ export default defineMessages({
   },
   admin: {
     analyze: {
+      index: {
+        id: `${scope}.admin.analyze.index`,
+      },
       overview: {
         id: `${scope}.admin.analyze.overview`,
       },
@@ -41,9 +44,17 @@ export default defineMessages({
       }
     },
     manage: {
+      index: {
+        id: `${scope}.admin.manage.index`,
+      },
       groups: {
         id: `${scope}.admin.manage.groups`,
       },
+    },
+    system: {
+      index: {
+        id: `${scope}.admin.system.index`,
+      }
     }
   }
 });

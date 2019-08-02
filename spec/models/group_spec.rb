@@ -216,9 +216,9 @@ RSpec.describe Group, type: :model do
   describe '#build' do
     it 'sets the logo and banner for group from url when creating group' do
       user = create(:user)
+      file = File.open('spec/fixtures/files/verizon_logo.png')
       request = Request.create_request(user)
-      url = Faker::LoremPixel.image(secure: false)
-      payload = { group: { name: 'Save', enterprise_id: user.enterprise_id, banner_url: url, logo_url: url } }
+      payload = { group: { name: 'Save', enterprise_id: user.enterprise_id, banner: file, logo: file } }
       params = ActionController::Parameters.new(payload)
       created = Group.build(request, params.permit!)
 
