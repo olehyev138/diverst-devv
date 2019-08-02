@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190731153334) do
+ActiveRecord::Schema.define(version: 20190801165340) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -1018,6 +1018,21 @@ ActiveRecord::Schema.define(version: 20190731153334) do
   end
 
   add_index "page_visitation_data", ["user_id"], name: "fk_rails_525ec0a51c", using: :btree
+
+  create_table "page_visitations", force: :cascade do |t|
+    t.string   "page_name",    limit: 191
+    t.string   "page_site",    limit: 191
+    t.string   "controller",   limit: 191
+    t.string   "action",       limit: 191
+    t.integer  "visits_day",   limit: 4,   default: 0
+    t.integer  "visits_week",  limit: 4,   default: 0
+    t.integer  "visits_month", limit: 4,   default: 0
+    t.integer  "visits_year",  limit: 4,   default: 0
+    t.integer  "visits_all",   limit: 4,   default: 0
+    t.integer  "user_id",      limit: 4
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
+  end
 
   create_table "pillars", force: :cascade do |t|
     t.string   "name",              limit: 191
