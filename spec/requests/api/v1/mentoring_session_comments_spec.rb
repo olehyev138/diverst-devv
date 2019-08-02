@@ -5,7 +5,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
   let(:enterprise) { create(:enterprise) }
   let(:api_key) { create(:api_key) }
   let(:user) { create(:user, password: 'password', enterprise: enterprise) }
-  let!(:item) { create(model.constantize.table_name.singularize.to_sym) }
+  let!(:item) { create(model.constantize.table_name.singularize.to_sym, user: user) }
   let(:route) { model.constantize.table_name }
   let(:jwt) { UserTokenService.create_jwt(user) }
   let(:headers) { { 'HTTP_DIVERST_APIKEY' => api_key.key, 'Diverst-UserToken' => jwt } }

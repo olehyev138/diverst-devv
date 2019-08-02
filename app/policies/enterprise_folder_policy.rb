@@ -1,7 +1,7 @@
 class EnterpriseFolderPolicy < Struct.new(:user, :folder)
   attr_accessor :user, :folder, :group_leader_role_ids
 
-  def initialize(user, folder = nil)
+  def initialize(user, folder = nil, params = nil)
     self.user = user
     self.folder = folder
     self.group_leader_role_ids = user.group_leaders.pluck(:user_role_id)
