@@ -358,13 +358,6 @@ class User < BaseClass
     save
   end
 
-  # Updates this user's match scores with all other enterprise users
-  def update_match_scores
-    enterprise.users.where.not(id: id).find_each do |other_user|
-      CalculateMatchScoreJob.perform_later(self, other_user, skip_existing: false)
-    end
-  end
-
   # Initializes a user from a yammer user
   def self.from_yammer(yammer_user, enterprise:)
     user = User.new(

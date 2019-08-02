@@ -149,8 +149,6 @@ class Group < BaseClass
 
   validates :name, presence: true, uniqueness: { scope: :enterprise_id }
 
-  validates_format_of :contact_email, with: Devise.email_regexp, allow_blank: true
-
   # only allow one default_mentor_group per enterprise
   validates_uniqueness_of :default_mentor_group, scope: [:enterprise_id], conditions: -> { where(default_mentor_group: true) }
 
@@ -185,14 +183,6 @@ class Group < BaseClass
   accepts_nested_attributes_for :survey_fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :group_leaders, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :sponsors, reject_if: :all_blank, allow_destroy: true
-
-  def resolve_auto_archive_state
-    update(auto_archive: false)
-  end
-
-  def no_expiry_age_set_and_auto_archive_true?
-    return true if auto_archive? && (expiry_age_for_news == 0) && (expiry_age_for_events == 0) && (expiry_age_for_resources == 0)
-  end
 
   def archive_switch
     if auto_archive?
@@ -468,6 +458,14 @@ class Group < BaseClass
   end
 
   private
+
+  def resolve_auto_archive_state
+    update(auto_archive: false)
+  end
+
+  def no_expiry_age_set_and_auto_archive_true?
+    return true if auto_archive? && (expiry_age_for_news == 0) && (expiry_age_for_events == 0) && (expiry_age_for_resources == 0)
+  end
 
   def ensure_one_level_nesting
     if parent.present? && children.present?

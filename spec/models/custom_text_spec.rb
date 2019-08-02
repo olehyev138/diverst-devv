@@ -5,6 +5,19 @@ RSpec.describe CustomText, type: :model do
     let(:custom_text) { build_stubbed(:custom_text) }
 
     it { expect(custom_text).to belong_to(:enterprise) }
+
+    it { expect(custom_text).to validate_length_of(:privacy_statement).is_at_most(191) }
+    it { expect(custom_text).to validate_length_of(:sub_erg).is_at_most(191) }
+    it { expect(custom_text).to validate_length_of(:parent).is_at_most(191) }
+    it { expect(custom_text).to validate_length_of(:member_preference).is_at_most(191) }
+    it { expect(custom_text).to validate_length_of(:dci_abbreviation).is_at_most(191) }
+    it { expect(custom_text).to validate_length_of(:dci_full_title).is_at_most(191) }
+    it { expect(custom_text).to validate_length_of(:segment).is_at_most(191) }
+    it { expect(custom_text).to validate_length_of(:badge).is_at_most(191) }
+    it { expect(custom_text).to validate_length_of(:outcome).is_at_most(191) }
+    it { expect(custom_text).to validate_length_of(:structure).is_at_most(191) }
+    it { expect(custom_text).to validate_length_of(:program).is_at_most(191) }
+    it { expect(custom_text).to validate_length_of(:erg).is_at_most(191) }
   end
 
   describe '#erg_text' do

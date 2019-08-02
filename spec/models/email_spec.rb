@@ -3,8 +3,21 @@ require 'rails_helper'
 RSpec.describe Email do
   it { expect(subject).to belong_to :enterprise }
   it { expect(subject).to have_many(:variables).class_name('EmailVariable') }
+
   it { expect(subject).to validate_presence_of(:name) }
   it { expect(subject).to validate_presence_of(:subject) }
+  it { expect(subject).to validate_presence_of(:content) }
+  it { expect(subject).to validate_presence_of(:description) }
+  it { expect(subject).to validate_presence_of(:mailer_name) }
+  it { expect(subject).to validate_presence_of(:mailer_method) }
+
+  it { expect(subject).to validate_length_of(:description).is_at_most(191) }
+  it { expect(subject).to validate_length_of(:template).is_at_most(191) }
+  it { expect(subject).to validate_length_of(:mailer_method).is_at_most(191) }
+  it { expect(subject).to validate_length_of(:mailer_name).is_at_most(191) }
+  it { expect(subject).to validate_length_of(:content).is_at_most(65535) }
+  it { expect(subject).to validate_length_of(:subject).is_at_most(191) }
+  it { expect(subject).to validate_length_of(:name).is_at_most(191) }
 
   describe '#destroy_callbacks' do
     it 'removes the child objects' do
@@ -47,6 +60,58 @@ RSpec.describe Email do
 
       # ensure the text has been processed correctly
       expect(subject_text).to include('your BRGs')
+    end
+  end
+
+  describe 'workflow' do
+    let(:email) { create(:email,
+                         content: "<p>Hello %{user.name},</p>\r\n\r\n<p>A new item has been posted to a Diversity and Inclusion group you are a member of.
+                                     Select the link(s) below to access Diverst and review the item(s)</p>\r\n",
+                         subject: 'You have updates in your %{custom_text.erg_text}'
+                        )
+    }
+    let(:email_variable1) { create(:email_variable, email: email, enterprise_email_variable: create(:enterprise_email_variable, key: 'user.name'), upcase: true, pluralize: true) }
+    let(:email_variable2) { create(:email_variable, email: email, enterprise_email_variable: create(:enterprise_email_variable, key: 'custom_text.erg_text'), pluralize: true) }
+
+    let(:user) { create(:user, first_name: 'Mike', last_name: 'Jone') }
+    let(:custom_text) { create(:custom_text, erg: 'BRG') }
+    let(:variables) { { user: user, custom_text: custom_text } }
+
+    describe '#process' do
+      it 'returns a hash' do
+        expect(email.process(email.content, variables)).to eq('user.name': "#{user.name}")
+      end
+    end
+
+    describe '#process_content' do
+      it 'processes text correctly' do
+        expect(email.process_content(variables)).to include('Hello Mike Jone')
+      end
+    end
+
+    describe '#process_subject' do
+      it 'process the variables and email subject' do
+        expect(email.process_subject(variables)).to include('your BRG')
+      end
+    end
+
+    describe '#process_variables' do
+      it 'process variables correctly' do
+        hash = email.process(email.content, variables)
+        email_variables = [email_variable1, email_variable2]
+
+        expect(email.process_variables(email_variables, hash)).to eq('user.name': "#{user.name.pluralize.upcase}")
+      end
+    end
+
+    describe '#process_example' do
+      it 'returns empty string if text is nil' do
+        expect(email.process_example(nil)).to eq('')
+      end
+
+      it 'returns processed text' do
+        expect(email.process_example('user.name')).to eq 'user.name'
+      end
     end
   end
 end

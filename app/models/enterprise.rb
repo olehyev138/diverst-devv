@@ -117,13 +117,6 @@ class Enterprise < BaseClass
 
   validates_format_of :redirect_email_contact, with: /\A[^@\s]+@[^@\s]+\z/, allow_blank: true
 
-  def resolve_auto_archive_state
-    update(auto_archive: false)
-  end
-
-  def no_expiry_age_set_and_auto_archive_true?
-    return true if auto_archive? && expiry_age_for_resources == 0
-  end
 
   def archive_switch
     if auto_archive?
@@ -193,12 +186,6 @@ class Enterprise < BaseClass
 
   def update_matches
     GenerateEnterpriseMatchesJob.perform_later self
-  end
-
-  def update_match_scores
-    enterprise.users.where.not(id: id).find_each do |other_user|
-      CalculateMatchScoreJob.perform_later(self, other_user, skip_existing: false)
-    end
   end
 
   def users_csv(nb_rows, export_csv_params = nil)
@@ -768,5 +755,13 @@ class Enterprise < BaseClass
   def create_elasticsearch_only_fields
     fields << GroupsField.create
     fields << SegmentsField.create
+  end
+
+  def resolve_auto_archive_state
+    update(auto_archive: false)
+  end
+
+  def no_expiry_age_set_and_auto_archive_true?
+    return true if auto_archive? && expiry_age_for_resources == 0
   end
 end
