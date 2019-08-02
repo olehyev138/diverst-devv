@@ -623,7 +623,6 @@ ActiveRecord::Schema.define(version: 20190730124943) do
     t.datetime "created_at",                                                         null: false
     t.datetime "updated_at",                                                         null: false
     t.integer  "annual_budget_id", limit: 4
-    t.decimal  "amount",                       precision: 8, scale: 2, default: 0.0
   end
 
   create_table "initiative_fields", force: :cascade do |t|
@@ -1439,6 +1438,7 @@ ActiveRecord::Schema.define(version: 20190730124943) do
     t.boolean  "accepting_mentor_requests",                    default: true
     t.boolean  "accepting_mentee_requests",                    default: true
     t.datetime "last_group_notification_date"
+    t.boolean  "seen_onboarding",                              default: false
   end
 
   add_index "users", ["active"], name: "index_users_on_active", using: :btree

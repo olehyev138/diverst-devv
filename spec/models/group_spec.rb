@@ -821,7 +821,7 @@ RSpec.describe Group, type: :model do
     let(:group) { create(:group) }
 
     it 'returns csv' do
-      expect(group.membership_list_csv([])).to include('first_name,last_name,email_address,mentor,mentee')
+      expect(group.membership_list_csv([])).to include('first_name,last_name,email_address')
     end
 
     it 'returns number of members in csv' do
