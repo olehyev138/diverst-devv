@@ -12,12 +12,15 @@ import dig from 'object-dig';
 import { FormattedMessage } from 'react-intl';
 import { Field, Formik, Form } from 'formik';
 import {
-  Button, Card, CardActions, CardContent, TextField
+  Button, Card, CardActions, CardContent, TextField,
+  Divider
 } from '@material-ui/core';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import messages from 'containers/User/messages';
 import { buildValues } from 'utils/formHelpers';
+
+import FieldInputForm from 'components/User/FieldInputForm/Loadable';
 
 /* eslint-disable object-curly-newline */
 export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
@@ -59,6 +62,8 @@ export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, 
           </Button>
         </CardActions>
       </Form>
+      <Divider />
+      <FieldInputForm user={props.user} />
     </Card>
   );
 }
@@ -92,6 +97,7 @@ UserForm.propTypes = {
 };
 
 UserFormInner.propTypes = {
+  user: PropTypes.object,
   handleSubmit: PropTypes.func,
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,

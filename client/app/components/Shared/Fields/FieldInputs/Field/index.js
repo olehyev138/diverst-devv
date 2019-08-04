@@ -8,24 +8,28 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import dig from 'object-dig';
 
-import TextField from 'components/Shared/Fields/FieldInputs/TextField';
+import CustomTextField from 'components/Shared/Fields/FieldInputs/TextField';
 
-const Field = ({ field }) => {
-  const renderField = (field) => {
-    switch (field.type) {
+const CustomField = (props) => {
+  const fieldData = dig(props, 'fieldData');
+
+  const renderField = (fieldData) => {
+    switch (dig(fieldData, 'field', 'type')) {
       case 'TextField':
-        return (<TextField value={field.value} />);
+        return (<CustomTextField fieldData={fieldData} />);
       default:
         return (<React.Fragment />);
     }
   };
 
-  return renderField(field);
+  return renderField(fieldData);
 };
 
-Field.propTypes = {
-  field: PropTypes.object.isRequired
+CustomField.propTypes = {
+  fieldData: PropTypes.object,
+  field: PropTypes.object
 };
 
-export default Field;
+export default CustomField;
