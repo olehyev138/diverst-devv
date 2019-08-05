@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190730124943) do
+ActiveRecord::Schema.define(version: 20190805235733) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -1261,17 +1261,16 @@ ActiveRecord::Schema.define(version: 20190730124943) do
     t.string   "sponsor_title",              limit: 191
     t.text     "sponsor_message",            limit: 65535
     t.boolean  "disable_sponsor_message"
-    t.integer  "sponsorable_id",             limit: 4
-    t.string   "sponsorable_type",           limit: 191
     t.datetime "created_at",                               null: false
     t.datetime "updated_at",                               null: false
     t.string   "sponsor_media_file_name",    limit: 191
     t.string   "sponsor_media_content_type", limit: 191
     t.integer  "sponsor_media_file_size",    limit: 4
     t.datetime "sponsor_media_updated_at"
+    t.integer  "enterprise_id",              limit: 4
+    t.integer  "group_id",                   limit: 4
+    t.integer  "campaign_id",                limit: 4
   end
-
-  add_index "sponsors", ["sponsorable_type", "sponsorable_id"], name: "index_sponsors_on_sponsorable_type_and_sponsorable_id", using: :btree
 
   create_table "survey_managers", force: :cascade do |t|
     t.integer "survey_id", limit: 4
