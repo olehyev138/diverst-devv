@@ -1,6 +1,8 @@
 class CreatePageVisitations < ActiveRecord::Migration
   def change
     create_table :page_visitations do |t|
+      t.belongs_to :user
+
       t.string :page_name
       t.string :page_site
       t.string :controller
@@ -11,8 +13,6 @@ class CreatePageVisitations < ActiveRecord::Migration
       t.integer :visits_month, default: 0
       t.integer :visits_year, default: 0
       t.integer :visits_all, default: 0
-
-      t.belongs_to :user
 
       t.timestamps null: false
     end

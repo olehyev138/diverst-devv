@@ -76,7 +76,6 @@ class User < BaseClass
   has_many :metrics_dashboards, foreign_key: :owner_id
   has_many :shared_metrics_dashboards
   has_many :page_visitation_data, dependent: :destroy
-  has_many :page_visitations, dependent: :destroy
   has_many :visits, class_name: 'Ahoy::Visit'
   has_many :answer_comments, foreign_key: :author_id, dependent: :destroy
   has_many :news_link_comments, foreign_key: :author_id, dependent: :destroy

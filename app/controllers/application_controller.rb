@@ -149,9 +149,9 @@ class ApplicationController < ActionController::Base
     action = action_name
     page = request.fullpath.split('?').first
 
-    record = PageVisitation.find_by(user: user, page_url: page)
+    record = PageVisitationData.find_by(user: user, page_url: page)
     if record.nil?
-      record = PageVisitation.new(user: user, page_url: page, controller: controller, action: action)
+      record = PageVisitationData.new(user: user, page_url: page, controller: controller, action: action)
     end
     record.name = name
     record.visits_all += 1

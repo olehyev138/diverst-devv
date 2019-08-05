@@ -9,7 +9,7 @@ class InitiativesController < ApplicationController
 
   def index
     authorize Initiative
-    visit_page("#{@group.name}'s Events")
+    visit_page("#{@group.name}'s Initiative")
     @outcomes = @group.outcomes.includes(:pillars)
 
     set_filter
@@ -17,7 +17,7 @@ class InitiativesController < ApplicationController
 
   def new
     authorize Initiative
-    visit_page("#{@group.name} Event Creation")
+    visit_page("#{@group.name} Initiative Creation")
     @initiative = Initiative.new
   end
 
@@ -49,7 +49,7 @@ class InitiativesController < ApplicationController
 
   def edit
     authorize @initiative
-    visit_page("Event Edit: #{@initiative.name}")
+    visit_page("Initiative Edit: #{@initiative.name}")
   end
 
   def update
@@ -93,7 +93,7 @@ class InitiativesController < ApplicationController
 
   def todo
     authorize @initiative, :update?
-    visit_page("Event Todo: #{@initiative.name}")
+    visit_page("Initiative Todo: #{@initiative.name}")
   end
 
   def export_attendees_csv
