@@ -4,6 +4,7 @@ class User::GroupsController < ApplicationController
   layout 'user'
 
   def index
+    visit_page('Groups List')
     @groups = current_user.enterprise.groups.order(:position).all_parents
   end
 

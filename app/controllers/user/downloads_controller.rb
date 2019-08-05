@@ -5,6 +5,7 @@ class User::DownloadsController < ApplicationController
   layout 'user'
 
   def index
+    visit_page('User\'s Downloads Page')
     @downloads = current_user.csv_files.download_files.order(created_at: :desc)
   end
 

@@ -10,10 +10,12 @@ class User::UsersController < ApplicationController
     end
 
     authorize @user
+    visit_page("#{@user.name}'s Profile")
   end
 
   def edit
     authorize @user
+    visit_page("#{@user.name}'s Profile Edit")
     @user_groups = @user.user_groups.where(accepted_member: true)
   end
 
