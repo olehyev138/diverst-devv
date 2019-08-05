@@ -18,6 +18,7 @@ class Groups::EventsController < ApplicationController
       @past_events = @group.initiatives.past + @group.participating_initiatives.past
       @ongoing_events = @group.initiatives.ongoing + @group.participating_initiatives.ongoing
     end
+    visit_page("#{@group.name}'s Events")
   end
 
   def calendar_data
@@ -50,6 +51,7 @@ class Groups::EventsController < ApplicationController
 
   def show
     authorize @event
+    visit_page("#{@event.name}")
 
     @all_comments = @event.comments
     @approved_comments = @event.comments.approved

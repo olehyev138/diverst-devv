@@ -8,10 +8,12 @@ class Groups::GroupMessagesController < ApplicationController
   layout 'erg'
 
   def index
+    visit_page("#{@group.name}'s Messages")
     @messages = @group.messages.includes(:owner).order(created_at: :desc).page(0)
   end
 
   def show
+    visit_page("#{@message.subject}")
     @comments = @message.comments.includes(:author)
 
     @new_comment = GroupMessageComment.new
@@ -20,11 +22,13 @@ class Groups::GroupMessagesController < ApplicationController
   end
 
   def new
+    visit_page('Message Creation')
     @message = @group.messages.new
     @message.build_news_feed_link(news_feed_id: @group.news_feed.id)
   end
 
   def edit
+    visit_page("Edit Message: #{@message.subject}")
     authorize [@group, @message], :update?, policy_class: GroupMessagePolicy
   end
 
