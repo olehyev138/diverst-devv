@@ -7,11 +7,13 @@ class Groups::LeadersController < ApplicationController
 
   def index
     authorize [@group], :index?, policy_class: GroupLeaderPolicy
+    visit_page("#{@group.name}'s Leaders")
     @group_leaders = @group.group_leaders
   end
 
   def new
     authorize [@group], :new?, policy_class: GroupLeaderPolicy
+    visit_page("#{@group.name} Leader Creation")
   end
 
   def create

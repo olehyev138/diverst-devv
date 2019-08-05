@@ -8,10 +8,12 @@ class Groups::TwitterAccountsController < ApplicationController
   layout 'erg'
 
   def index
+    visit_page("#{group.name}'s Twitter Accounts")
     @accounts = sorted_accounts
   end
 
   def new
+    visit_page("#{@group.name}'s Twitter Account Follow")
     @account = @group.twitter_accounts.new
   end
 
@@ -51,9 +53,11 @@ class Groups::TwitterAccountsController < ApplicationController
   end
 
   def show
+    visit_page("#{@account.name}'s Twitter Feed")
   end
 
   def edit
+    visit_page("#{@group.name}'s Twitter Account Edit")
   end
 
   protected

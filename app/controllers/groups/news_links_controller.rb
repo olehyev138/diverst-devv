@@ -10,16 +10,21 @@ class Groups::NewsLinksController < ApplicationController
 
   def index
     @news_links = @group.news_links.includes(:author).order(created_at: :desc)
+    visit_page("#{@group.name}'s News Links")
   end
 
   def new
+    visit_page("#{@group.name}'s News Link Creation")
     @news_link = @group.news_links.new
     @news_link.build_news_feed_link(news_feed_id: @group.news_feed.id)
   end
 
-  def edit; end
+  def edit
+    visit_page("#{@group.name}'s News Link Edit")
+  end
 
   def comments
+    visit_page("#{@news_link.title}'s Comments")
     @comments = @news_link.comments.includes(:author)
     @new_comment = NewsLinkComment.new
     @news_link.increment_view(current_user)
