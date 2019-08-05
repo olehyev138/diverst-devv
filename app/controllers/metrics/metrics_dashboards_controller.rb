@@ -8,11 +8,13 @@ class Metrics::MetricsDashboardsController < ApplicationController
 
   def index
     authorize MetricsDashboard
+    visit_page('Metrics Dashboards')
     @dashboards = policy_scope(MetricsDashboard).includes(:enterprise, :segments)
   end
 
   def new
     authorize MetricsDashboard
+    visit_page('Metrics Dashboard Creation')
     @metrics_dashboard = current_user.enterprise.metrics_dashboards.new
   end
 
@@ -34,9 +36,10 @@ class Metrics::MetricsDashboardsController < ApplicationController
 
   def show
     authorize @metrics_dashboard
+    visit_page('Metrics Dashboard View')
     @graphs = @metrics_dashboard.graphs.includes(:field, :aggregation)
 
-    if not @metrics_dashboard.update_shareable_token
+    unless @metrics_dashboard.update_shareable_token
       render :edit
     end
   end
@@ -55,6 +58,7 @@ class Metrics::MetricsDashboardsController < ApplicationController
 
   def edit
     authorize @metrics_dashboard
+    visit_page('Metrics Dashboard Edit')
   end
 
   def update
@@ -71,16 +75,16 @@ class Metrics::MetricsDashboardsController < ApplicationController
   end
 
   def destroy
-    unless @metrics_dashboard.is_user_shared?(current_user)
+    if @metrics_dashboard.is_user_shared?(current_user)
+      authorize @metrics_dashboard, :index?
+
+      @metrics_dashboard.shared_metrics_dashboards.destroy(SharedMetricsDashboard.find_by(user_id: current_user.id))
+      redirect_to action: :index
+    else
       authorize @metrics_dashboard
 
       track_activity(@metrics_dashboard, :destroy)
       @metrics_dashboard.destroy
-      redirect_to action: :index
-    else
-      authorize @metrics_dashboard, :index?
-
-      @metrics_dashboard.shared_metrics_dashboards.destroy(SharedMetricsDashboard.find_by(user_id: current_user.id))
       redirect_to action: :index
     end
   end

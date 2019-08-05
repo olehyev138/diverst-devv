@@ -5,6 +5,7 @@ class Metrics::UserGraphsController < ApplicationController
 
   def index
     authorize MetricsDashboard
+    visit_page('User Metrics')
 
     @user_metrics = {
       total_active_users: current_user.enterprise.users.active.count,

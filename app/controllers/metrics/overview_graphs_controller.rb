@@ -5,6 +5,7 @@ class Metrics::OverviewGraphsController < ApplicationController
 
   def index
     authorize MetricsDashboard
+    visit_page('Overview Metrics')
 
     enterprise = current_user.enterprise
     @general_metrics = {
