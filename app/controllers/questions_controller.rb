@@ -20,7 +20,7 @@ class QuestionsController < ApplicationController
 
   def show
     authorize @question.campaign
-    visit_page("#{@campaign.name} Question: #{@question.title}")
+    visit_page("#{@question.campaign.title} Question: #{@question.title}")
     @answers = @question.answers
       .includes(:author, comments: :author)
       .order(chosen: :desc)

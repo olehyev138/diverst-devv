@@ -8,13 +8,13 @@ class Groups::UpdatesController < ApplicationController
 
   def index
     authorize @group, :update?
-    visit_page("#{@group.first}'s Updates")
+    visit_page("#{@group.name}'s Updates")
     @updates = @group.updates
   end
 
   def new
     authorize Group
-    visit_page("#{@group.first}'s Update Creation")
+    visit_page("#{@group.name}'s Update Creation")
     @update = @group.updates.new
   end
 

@@ -231,7 +231,7 @@ class UsersController < ApplicationController
   def calculate_percentile(number, sample)
     Rails.cache.fetch("calculate_percentile/#{number}, #{sample}") do
       n = sample.count
-      i = sample.rindex(number)
+      i = sample.each_index.select{|r| sample[r] <= number}.last
       101 - (100 * (i - 0.5) / n).round
     end
   end

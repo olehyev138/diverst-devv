@@ -103,7 +103,7 @@ class BudgetsController < ApplicationController
 
   def edit_annual_budget
     authorize [@group], :update?, policy_class: GroupBudgetPolicy
-    visit_page("#{group.name}'s Annual Budget Editor")
+    visit_page("#{@group.name}'s Annual Budget Editor")
   end
 
   def reset_annual_budget

@@ -8,7 +8,7 @@ class Groups::TwitterAccountsController < ApplicationController
   layout 'erg'
 
   def index
-    visit_page("#{group.name}'s Twitter Accounts")
+    visit_page("#{@group.name}'s Twitter Accounts")
     @accounts = sorted_accounts
   end
 
