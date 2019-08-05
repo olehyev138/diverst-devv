@@ -75,7 +75,7 @@ class User < BaseClass
   has_many :csv_files
   has_many :metrics_dashboards, foreign_key: :owner_id
   has_many :shared_metrics_dashboards
-  has_many :page_visitation_data, dependent: :destroy
+  has_many :pages_visited, dependent: :destroy, :class_name => 'PageVisitationData'
   has_many :visits, class_name: 'Ahoy::Visit'
   has_many :answer_comments, foreign_key: :author_id, dependent: :destroy
   has_many :news_link_comments, foreign_key: :author_id, dependent: :destroy
@@ -575,25 +575,6 @@ class User < BaseClass
       linkedin_profile_url: nil,
       avatar_file_name: nil
     )
-  end
-
-  def collect_visitation_data
-    page_visits = visits
-                    .where('landing_page not like ? and landing_page not like ?', '%.json%', '%.ico%')
-                    .group(:landing_page)
-                    .count
-    page_visits.each do |page, count|
-      page = page.split('?').first
-      visitation = page_visitation_data.find_by(page: page)
-      if visitation.present?
-        visitation.times_visited += count
-        visitation.save
-      else
-        visitation = page_visitation_data.new(page: page, times_visited: count)
-        visitation.save
-      end
-    end
-    visits.find_each { |visit| visit.destroy }
   end
 
   def get_login_count
