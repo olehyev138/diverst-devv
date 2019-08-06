@@ -100,6 +100,10 @@ class Initiative < BaseClass
     end
   end
 
+  def ended?
+    self.end < DateTime.now
+  end
+
   def archived?
     archived_at.present?
   end

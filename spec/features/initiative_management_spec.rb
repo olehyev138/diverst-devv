@@ -85,7 +85,9 @@ RSpec.feature 'Initiative management' do
 
   context 'display closed status' do
     let!(:annual_budget) { create(:annual_budget, group: group, amount: group.annual_budget) }
-    let!(:initiative1) { create(:initiative, owner_group: group, annual_budget_id: annual_budget.id) }
+    let!(:initiative1) { create(:initiative, owner_group: group, annual_budget_id: annual_budget.id,
+                                             start: DateTime.now << 2, end: DateTime.now << 1)
+    }
     let!(:budget1) { create(:approved_budget, group: group, annual_budget_id: annual_budget.id) }
 
     before do
