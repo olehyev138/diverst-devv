@@ -11,14 +11,14 @@ class AggregateUrlStatsDatatable < AjaxDatatablesRails::Base
       TotalPageVisitation.page_name
       TotalPageVisitation.visits_week
       TotalPageVisitation.visits_month
-      TotalPageVisitationByName.visits_year
-      TotalPageVisitationByName.visits_all
+      TotalPageVisitation.visits_year
+      TotalPageVisitation.visits_all
     )
   end
 
   def searchable_columns
     # Declare strings in this format: ModelName.column_name
-    @searchable_columns ||= %w(TotalPageVisitationByName.page_name TotalPageVisitationByName.page_url)
+    @searchable_columns ||= %w(TotalPageVisitation.page_name TotalPageVisitation.page_url)
   end
 
   private
