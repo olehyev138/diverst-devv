@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190805200425) do
+ActiveRecord::Schema.define(version: 20190806163846) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -29,46 +29,6 @@ ActiveRecord::Schema.define(version: 20190805200425) do
   add_index "activities", ["owner_id", "owner_type"], name: "index_activities_on_owner_id_and_owner_type", using: :btree
   add_index "activities", ["recipient_id", "recipient_type"], name: "index_activities_on_recipient_id_and_recipient_type", using: :btree
   add_index "activities", ["trackable_id", "trackable_type"], name: "index_activities_on_trackable_id_and_trackable_type", using: :btree
-
-  create_table "ahoy_events", force: :cascade do |t|
-    t.integer  "visit_id",   limit: 4
-    t.integer  "user_id",    limit: 4
-    t.string   "name",       limit: 191
-    t.json     "properties"
-    t.datetime "time"
-  end
-
-  add_index "ahoy_events", ["name", "time"], name: "index_ahoy_events_on_name_and_time", using: :btree
-
-  create_table "ahoy_visits", force: :cascade do |t|
-    t.string   "visit_token",      limit: 191
-    t.string   "visitor_token",    limit: 191
-    t.integer  "user_id",          limit: 4
-    t.string   "ip",               limit: 191
-    t.text     "user_agent",       limit: 65535
-    t.text     "referrer",         limit: 65535
-    t.string   "referring_domain", limit: 191
-    t.text     "landing_page",     limit: 65535
-    t.string   "browser",          limit: 191
-    t.string   "os",               limit: 191
-    t.string   "device_type",      limit: 191
-    t.string   "country",          limit: 191
-    t.string   "region",           limit: 191
-    t.string   "city",             limit: 191
-    t.decimal  "latitude",                       precision: 10, scale: 8
-    t.decimal  "longitude",                      precision: 11, scale: 8
-    t.string   "utm_source",       limit: 191
-    t.string   "utm_medium",       limit: 191
-    t.string   "utm_term",         limit: 191
-    t.string   "utm_content",      limit: 191
-    t.string   "utm_campaign",     limit: 191
-    t.string   "app_version",      limit: 191
-    t.string   "os_version",       limit: 191
-    t.string   "platform",         limit: 191
-    t.datetime "started_at"
-  end
-
-  add_index "ahoy_visits", ["visit_token"], name: "index_ahoy_visits_on_visit_token", unique: true, using: :btree
 
   create_table "annual_budgets", force: :cascade do |t|
     t.integer  "group_id",         limit: 4
