@@ -7,12 +7,14 @@ class Metrics::GraphsController < ApplicationController
 
   def new
     authorize @collection, :update?
+    visit_page('Metric Graph Creation')
 
     @graph = @collection.graphs.new
   end
 
   def edit
     authorize @collection, :update?
+    visit_page('Metric Graph Edit')
   end
 
   def create
@@ -32,6 +34,7 @@ class Metrics::GraphsController < ApplicationController
   # missing a template
   def index
     authorize @collection
+    visit_page('Metric Graph List')
 
     @graphs = @collection.graphs
   end

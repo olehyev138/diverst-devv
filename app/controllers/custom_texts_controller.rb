@@ -7,6 +7,7 @@ class CustomTextsController < ApplicationController
 
   def edit
     authorize current_user.enterprise, :manage_branding?
+    visit_page('Custom Text Editor')
   end
 
   def update

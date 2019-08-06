@@ -7,12 +7,18 @@ class AggregateUrlStatsDatatable < AjaxDatatablesRails::Base
 
   def sortable_columns
     # Declare strings in this format: ModelName.column_name
-    @sortable_columns ||= %w(TotalPageVisitation.page TotalPageVisitation.times_visited)
+    @sortable_columns ||= %w(
+      TotalPageVisitation.page_name
+      TotalPageVisitation.visits_week
+      TotalPageVisitation.visits_month
+      TotalPageVisitation.visits_year
+      TotalPageVisitation.visits_all
+    )
   end
 
   def searchable_columns
     # Declare strings in this format: ModelName.column_name
-    @searchable_columns ||= ['TotalPageVisitation.page']
+    @searchable_columns ||= %w(TotalPageVisitation.page_name TotalPageVisitation.page_url)
   end
 
   private
@@ -20,14 +26,17 @@ class AggregateUrlStatsDatatable < AjaxDatatablesRails::Base
   def data
     records.map do |record|
       [
-        "#{link_to(record.page)}",
-        record.times_visited
+        record.page_url.present? ? link_to(record.page_name, record.page_url) : record.page_name,
+        record.visits_week,
+        record.visits_month,
+        record.visits_year,
+        record.visits_all,
       ]
     end
   end
 
   def get_raw_records
-    Rails.cache.fetch('total_page_visitations', expires_in: 1.hour) do
+    Rails.cache.fetch('total_page_visitations', expires_in: 15.minutes) do
       TotalPageVisitation.all
     end
   end

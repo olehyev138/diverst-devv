@@ -14,6 +14,7 @@ class Groups::AttendancesController < ApplicationController
     else
       @attendances = []
     end
+    visit_page("#{@event.name} Attendees")
   end
 
   def create

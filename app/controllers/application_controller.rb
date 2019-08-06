@@ -5,7 +5,6 @@ class ApplicationController < ActionController::Base
 
   before_action :set_persist_login_param
   before_action :set_previous_url, unless: :devise_controller?
-  after_action :track_action
 
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
@@ -143,6 +142,29 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def visit_page(name)
+    user = current_user
+    controller = controller_name
+    action = action_name
+    origin = URI(request.referer || '').path
+    page = URI(request.original_url).path
+
+    return if page == origin
+    return if page == '/'
+
+    record = PageVisitationData.find_by(user: user, page_url: page)
+    if record.nil?
+      record = PageVisitationData.new(user: user, page_url: page, controller: controller, action: action)
+    end
+    record.name = name
+    record.visits_all += 1
+    record.visits_day += 1
+    record.visits_week += 1
+    record.visits_month += 1
+    record.visits_year += 1
+
+    record.save
+  end
 
   protected
 
@@ -202,18 +224,6 @@ class ApplicationController < ActionController::Base
 
   def user_time_zone(&block)
     Time.use_zone(current_user.default_time_zone, &block)
-  end
-
-  def track_action
-    # ahoy.track 'Action Name', { controller: self.class.to_s,
-    #                             format: request.format }
-
-    # respond_to do |format|
-    #   format.html { ahoy.track 'Action Name', { title: 'Some awesome information' } }
-    #   format.js { }
-    #   format.xml { }
-    #   format.json { }
-    # end
   end
 
   private

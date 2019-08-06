@@ -6,12 +6,14 @@ class ClockworkDatabaseEventsController < ApplicationController
 
   def index
     authorize current_user.enterprise, :enterprise_manage?
+    visit_page('Clockwork Events')
     @enterprise = current_user.enterprise
     @clockwork_database_events = @enterprise.clockwork_database_events
   end
 
   def edit
     authorize current_user.enterprise, :enterprise_manage?
+    visit_page('Clockwork Events')
   end
 
   def update

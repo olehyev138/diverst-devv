@@ -5,11 +5,13 @@ class EmailsController < ApplicationController
   layout 'global_settings'
 
   def index
+    visit_page('Email Configurations')
     @enterprise = current_user.enterprise
     @emails = @enterprise.emails
   end
 
   def edit
+    visit_page('Email Configuration Edit')
   end
 
   def update

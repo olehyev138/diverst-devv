@@ -6,11 +6,13 @@ class PolicyGroupTemplatesController < ApplicationController
 
   def index
     authorize PolicyGroupTemplate
+    visit_page('Policy Group Templates')
     @policy_group_templates = current_user.enterprise.policy_group_templates
   end
 
   def edit
     authorize PolicyGroupTemplate
+    visit_page("Policy Group Edit: #{@policy_group_template.name}")
   end
 
   def update

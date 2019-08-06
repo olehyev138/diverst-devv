@@ -7,6 +7,7 @@ class BudgetsController < ApplicationController
 
   def index
     authorize [@group], :index?, policy_class: GroupBudgetPolicy
+    visit_page("#{@group.name}'s Budgets")
 
     annual_budget = current_user.enterprise.annual_budgets.find_by(id: params[:annual_budget_id])
     @budgets = annual_budget&.budgets&.order('id DESC') || Budget.none
@@ -14,11 +15,13 @@ class BudgetsController < ApplicationController
 
   def show
     authorize [@group], :show?, policy_class: GroupBudgetPolicy
+    visit_page(@budget.description.present? ? "Budget: #{@budget.description}" : 'Budget Info')
     @annual_budget_id = params[:annual_budget_id]
   end
 
   def new
     authorize [@group], :create?, policy_class: GroupBudgetPolicy
+    visit_page("#{@group.name}'s Budget Creation")
 
     @annual_budget_id = params[:annual_budget_id]
     @budget = Budget.new
@@ -100,6 +103,7 @@ class BudgetsController < ApplicationController
 
   def edit_annual_budget
     authorize [@group], :update?, policy_class: GroupBudgetPolicy
+    visit_page("#{@group.name}'s Annual Budget Editor")
   end
 
   def reset_annual_budget

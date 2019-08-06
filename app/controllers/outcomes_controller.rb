@@ -8,11 +8,13 @@ class OutcomesController < ApplicationController
 
   def index
     authorize Outcome
+    visit_page('Outcomes')
   end
 
   # MISSING TEMPLATE
   def new
     authorize Outcome
+    visit_page('Outcome Creation')
     @outcome = Outcome.new
   end
 
@@ -36,6 +38,7 @@ class OutcomesController < ApplicationController
 
   def edit
     authorize @outcome
+    visit_page("Outcome Edit: #{@outcome.name}")
   end
 
   def update

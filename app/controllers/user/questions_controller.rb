@@ -6,11 +6,13 @@ class User::QuestionsController < ApplicationController
   layout 'user'
 
   def index
+    visit_page('User\'s Campaigns Questions')
     @questions = @campaign.questions.order(created_at: :desc)
     @sponsors = @campaign.sponsors
   end
 
   def show
+    visit_page('User\'s Campaigns Answer')
     @answers = @question.answers
       .includes(:author, comments: :author)
       .order(chosen: :desc)

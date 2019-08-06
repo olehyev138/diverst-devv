@@ -6,6 +6,7 @@ class User::NewsLinksController < ApplicationController
 
   def index
     authorize NewsLink
+    visit_page('User\'s News Feed')
     @count = posts.size
     @posts = posts.limit(@limit)
   end

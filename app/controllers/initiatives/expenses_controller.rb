@@ -9,6 +9,7 @@ class Initiatives::ExpensesController < ApplicationController
 
   def index
     authorize InitiativeExpense
+    visit_page("#{@initiative.name}'s Expenses")
     @expenses = @initiative.expenses
 
     redirect_to :back if @initiative.has_no_estimated_funding?
@@ -16,6 +17,7 @@ class Initiatives::ExpensesController < ApplicationController
 
   def new
     authorize InitiativeExpense
+    visit_page("#{@initiative.name}'s Expense Creation")
     @expense = @initiative.expenses.new
   end
 
@@ -69,10 +71,12 @@ class Initiatives::ExpensesController < ApplicationController
   # MISSING TEMPLATE
   def show
     authorize @expense
+    visit_page("View Expense #{@expense.name}")
   end
 
   def edit
     authorize @expense
+    visit_page("Edit an Expense for #{@initiative.name}")
   end
 
   def update

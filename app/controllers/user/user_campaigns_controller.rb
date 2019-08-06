@@ -5,11 +5,13 @@ class User::UserCampaignsController < ApplicationController
   layout 'user'
 
   def index
+    visit_page('User\'s Campaigns')
     @campaigns = current_user.campaigns.published.order(created_at: :desc)
   end
 
   # MISSING TEMPLATE
   def show
+    visit_page("Campaign #{@campaign.title}")
     @questions = @campaign.questions.order(created_at: :desc).page(params[:page]).per(10)
   end
 

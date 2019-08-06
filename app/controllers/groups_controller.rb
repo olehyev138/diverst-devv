@@ -15,7 +15,7 @@ class GroupsController < ApplicationController
     @groups = @groups.includes(:children)
 
     respond_to do |format|
-      format.html
+      format.html { visit_page("#{c_t(:sub_erg)} List") }
       format.json { render json: GroupDatatable.new(view_context, @groups) }
     end
   end
@@ -73,6 +73,7 @@ class GroupsController < ApplicationController
 
   def close_budgets
     authorize Group, :manage_all_group_budgets?
+    visit_page('Close Budgets')
     @groups = policy_scope(Group).includes(:children).all_parents
   end
 
@@ -87,6 +88,7 @@ class GroupsController < ApplicationController
   # calendar for all of the groups
   def calendar
     authorize Group
+    visit_page("#{c_t(:sub_erg).pluralize} Calender")
     enterprise = current_user.enterprise
     @groups = []
     enterprise.groups.each do |group|
@@ -146,6 +148,7 @@ class GroupsController < ApplicationController
 
   def new
     authorize Group
+    visit_page("#{c_t(:sub_erg)} Creation")
     @group = current_user.enterprise.groups.new
     @categories = current_user.enterprise.group_categories
     # groups available to be parents or children
@@ -154,6 +157,7 @@ class GroupsController < ApplicationController
 
   def show
     authorize @group
+    visit_page("#{@group.name}'s Home")
     @group_sponsors = @group.sponsors
     @show_events = should_show_event?(@group)
 
@@ -204,6 +208,7 @@ class GroupsController < ApplicationController
 
   def edit
     authorize @group
+    visit_page("#{c_t(:sub_erg)} Edit: #{@group.name}")
     @categories = current_user.enterprise.group_categories
     # groups available to be parents or children
     @available_groups = @group.enterprise.groups.where.not(id: @group.id)
@@ -263,14 +268,17 @@ class GroupsController < ApplicationController
 
   def layouts
     authorize @group
+    visit_page("#{@group.name}'s Layout Setting")
   end
 
   def settings
     authorize @group
+    visit_page("#{@group.name}'s Settings")
   end
 
   def plan_overview
     authorize [@group], :index?, policy_class: GroupBudgetPolicy
+    visit_page("#{@group.name}'s Plan Overview")
   end
 
   def destroy
@@ -288,11 +296,13 @@ class GroupsController < ApplicationController
 
   def metrics
     authorize @group, :manage?
+    visit_page("#{@group.name}'s Metrics")
     @updates = @group.updates
   end
 
   def import_csv
     authorize @group, :edit?
+    visit_page("#{@group.name}'s Member CSV Import")
   end
 
   def sample_csv
@@ -345,6 +355,7 @@ class GroupsController < ApplicationController
 
   def edit_fields
     authorize @group, :edit?
+    visit_page("#{@group.name}'s Survey Question Settings")
   end
 
   def delete_attachment

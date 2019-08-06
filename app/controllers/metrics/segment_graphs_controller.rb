@@ -5,6 +5,7 @@ class Metrics::SegmentGraphsController < ApplicationController
 
   def index
     authorize MetricsDashboard, :index?
+    visit_page('Segment Metrics')
 
     @data = {
       segment_count: current_user.enterprise.segments.size

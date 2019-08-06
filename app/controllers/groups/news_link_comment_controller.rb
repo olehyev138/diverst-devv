@@ -5,6 +5,7 @@ class Groups::NewsLinkCommentController < ApplicationController
 
   def edit
     @comment = @news_link.comments.find(params[:id])
+    visit_page('News Link Comment Edit')
   end
 
   def update

@@ -6,11 +6,13 @@ class MentoringInterestsController < ApplicationController
 
   def index
     authorize MentoringInterest
+    visit_page('Mentorship Topics')
     @topics = current_user.enterprise.mentoring_interests
   end
 
   def new
     authorize MentoringInterest
+    visit_page('Mentorship Topic Creation')
     @topic = current_user.enterprise.mentoring_interests.new
   end
 
@@ -29,6 +31,7 @@ class MentoringInterestsController < ApplicationController
 
   def edit
     authorize MentoringInterest
+    visit_page("Mentorship Topic Edit: #{@topic.name}")
   end
 
   def update
@@ -48,6 +51,8 @@ class MentoringInterestsController < ApplicationController
     @topic.destroy
     redirect_to :back
   end
+
+  private
 
   def set_topic
     @topic = current_user.enterprise.mentoring_interests.find(params[:id])

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190731153334) do
+ActiveRecord::Schema.define(version: 20190806163846) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -29,46 +29,6 @@ ActiveRecord::Schema.define(version: 20190731153334) do
   add_index "activities", ["owner_id", "owner_type"], name: "index_activities_on_owner_id_and_owner_type", using: :btree
   add_index "activities", ["recipient_id", "recipient_type"], name: "index_activities_on_recipient_id_and_recipient_type", using: :btree
   add_index "activities", ["trackable_id", "trackable_type"], name: "index_activities_on_trackable_id_and_trackable_type", using: :btree
-
-  create_table "ahoy_events", force: :cascade do |t|
-    t.integer  "visit_id",   limit: 4
-    t.integer  "user_id",    limit: 4
-    t.string   "name",       limit: 191
-    t.json     "properties"
-    t.datetime "time"
-  end
-
-  add_index "ahoy_events", ["name", "time"], name: "index_ahoy_events_on_name_and_time", using: :btree
-
-  create_table "ahoy_visits", force: :cascade do |t|
-    t.string   "visit_token",      limit: 191
-    t.string   "visitor_token",    limit: 191
-    t.integer  "user_id",          limit: 4
-    t.string   "ip",               limit: 191
-    t.text     "user_agent",       limit: 65535
-    t.text     "referrer",         limit: 65535
-    t.string   "referring_domain", limit: 191
-    t.text     "landing_page",     limit: 65535
-    t.string   "browser",          limit: 191
-    t.string   "os",               limit: 191
-    t.string   "device_type",      limit: 191
-    t.string   "country",          limit: 191
-    t.string   "region",           limit: 191
-    t.string   "city",             limit: 191
-    t.decimal  "latitude",                       precision: 10, scale: 8
-    t.decimal  "longitude",                      precision: 11, scale: 8
-    t.string   "utm_source",       limit: 191
-    t.string   "utm_medium",       limit: 191
-    t.string   "utm_term",         limit: 191
-    t.string   "utm_content",      limit: 191
-    t.string   "utm_campaign",     limit: 191
-    t.string   "app_version",      limit: 191
-    t.string   "os_version",       limit: 191
-    t.string   "platform",         limit: 191
-    t.datetime "started_at"
-  end
-
-  add_index "ahoy_visits", ["visit_token"], name: "index_ahoy_visits_on_visit_token", unique: true, using: :btree
 
   create_table "annual_budgets", force: :cascade do |t|
     t.integer  "group_id",         limit: 4
@@ -1008,16 +968,24 @@ ActiveRecord::Schema.define(version: 20190731153334) do
     t.datetime "updated_at",             null: false
   end
 
-  create_table "page_visitation_data", force: :cascade do |t|
-    t.integer  "user_id",       limit: 4
-    t.string   "page",          limit: 191
-    t.integer  "times_visited", limit: 4
-    t.integer  "time_on_page",  limit: 4
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+  create_table "page_names", id: false, force: :cascade do |t|
+    t.string "page_url",  limit: 191
+    t.string "page_name", limit: 191
   end
 
-  add_index "page_visitation_data", ["user_id"], name: "fk_rails_525ec0a51c", using: :btree
+  create_table "page_visitation_data", force: :cascade do |t|
+    t.integer  "user_id",      limit: 4
+    t.string   "page_url",     limit: 191
+    t.string   "controller",   limit: 191
+    t.string   "action",       limit: 191
+    t.integer  "visits_day",   limit: 4,   default: 0
+    t.integer  "visits_week",  limit: 4,   default: 0
+    t.integer  "visits_month", limit: 4,   default: 0
+    t.integer  "visits_year",  limit: 4,   default: 0
+    t.integer  "visits_all",   limit: 4,   default: 0
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
+  end
 
   create_table "pillars", force: :cascade do |t|
     t.string   "name",              limit: 191
@@ -1596,7 +1564,6 @@ ActiveRecord::Schema.define(version: 20190731153334) do
   add_foreign_key "mentoring_session_comments", "mentoring_sessions"
   add_foreign_key "mentoring_session_comments", "users"
   add_foreign_key "mentorship_availabilities", "users"
-  add_foreign_key "page_visitation_data", "users"
   add_foreign_key "polls", "initiatives"
   add_foreign_key "reward_actions", "enterprises"
   add_foreign_key "rewards", "enterprises"
@@ -1609,7 +1576,22 @@ ActiveRecord::Schema.define(version: 20190731153334) do
   add_foreign_key "user_rewards", "users"
   add_foreign_key "user_roles", "enterprises"
 
+  create_view "duplicate_page_names", sql_definition: <<-SQL
+      select `page_names`.`page_url` AS `page_url`,`page_names`.`page_name` AS `page_name` from `page_names` where `page_names`.`page_name` in (select `page_names`.`page_name` from `page_names` group by `page_names`.`page_name` having (count(0) > 1))
+  SQL
+  create_view "unique_page_names", sql_definition: <<-SQL
+      select `page_names`.`page_url` AS `page_url`,`page_names`.`page_name` AS `page_name` from `page_names` where `page_names`.`page_name` in (select `page_names`.`page_name` from `page_names` group by `page_names`.`page_name` having (count(0) = 1))
+  SQL
+  create_view "page_visitation_by_names", sql_definition: <<-SQL
+      (select `a`.`user_id` AS `user_id`,`b`.`page_name` AS `page_name`,NULL AS `page_url`,sum(`a`.`visits_day`) AS `visits_day`,sum(`a`.`visits_week`) AS `visits_week`,sum(`a`.`visits_month`) AS `visits_month`,sum(`a`.`visits_year`) AS `visits_year`,sum(`a`.`visits_all`) AS `visits_all` from (`page_visitation_data` `a` join `duplicate_page_names` `b` on((`a`.`page_url` = `b`.`page_url`))) group by `a`.`user_id`,`b`.`page_name`) union all (select `a`.`user_id` AS `user_id`,`b`.`page_name` AS `page_name`,`a`.`page_url` AS `page_url`,sum(`a`.`visits_day`) AS `visits_day`,sum(`a`.`visits_week`) AS `visits_week`,sum(`a`.`visits_month`) AS `visits_month`,sum(`a`.`visits_year`) AS `visits_year`,sum(`a`.`visits_all`) AS `visits_all` from (`page_visitation_data` `a` join `unique_page_names` `b` on((`a`.`page_url` = `b`.`page_url`))) group by `a`.`user_id`,`b`.`page_url`,`b`.`page_name`)
+  SQL
+  create_view "page_visitations", sql_definition: <<-SQL
+      select `a`.`id` AS `id`,`a`.`user_id` AS `user_id`,`a`.`page_url` AS `page_url`,`a`.`controller` AS `controller`,`a`.`action` AS `action`,`a`.`visits_day` AS `visits_day`,`a`.`visits_week` AS `visits_week`,`a`.`visits_month` AS `visits_month`,`a`.`visits_year` AS `visits_year`,`a`.`visits_all` AS `visits_all`,`a`.`created_at` AS `created_at`,`a`.`updated_at` AS `updated_at`,`b`.`page_name` AS `page_name` from (`page_visitation_data` `a` join `page_names` `b` on((`a`.`page_url` = `b`.`page_url`)))
+  SQL
+  create_view "total_page_visitation_by_names", sql_definition: <<-SQL
+      (select `b`.`page_name` AS `page_name`,NULL AS `page_url`,sum(`a`.`visits_day`) AS `visits_day`,sum(`a`.`visits_week`) AS `visits_week`,sum(`a`.`visits_month`) AS `visits_month`,sum(`a`.`visits_year`) AS `visits_year`,sum(`a`.`visits_all`) AS `visits_all` from (`page_visitation_data` `a` join `duplicate_page_names` `b` on((`a`.`page_url` = `b`.`page_url`))) group by `b`.`page_name`) union all (select `b`.`page_name` AS `page_name`,`a`.`page_url` AS `page_url`,sum(`a`.`visits_day`) AS `visits_day`,sum(`a`.`visits_week`) AS `visits_week`,sum(`a`.`visits_month`) AS `visits_month`,sum(`a`.`visits_year`) AS `visits_year`,sum(`a`.`visits_all`) AS `visits_all` from (`page_visitation_data` `a` join `unique_page_names` `b` on((`a`.`page_url` = `b`.`page_url`))) group by `b`.`page_url`,`b`.`page_name`)
+  SQL
   create_view "total_page_visitations", sql_definition: <<-SQL
-      select `page_visitation_data`.`page` AS `page`,sum(`page_visitation_data`.`times_visited`) AS `times_visited` from `page_visitation_data` group by `page_visitation_data`.`page`
+      select `a`.`page_url` AS `page_url`,`b`.`page_name` AS `page_name`,sum(`a`.`visits_day`) AS `visits_day`,sum(`a`.`visits_week`) AS `visits_week`,sum(`a`.`visits_month`) AS `visits_month`,sum(`a`.`visits_year`) AS `visits_year`,sum(`a`.`visits_all`) AS `visits_all` from (`page_visitation_data` `a` join `page_names` `b` on((`a`.`page_url` = `b`.`page_url`))) group by `a`.`page_url`,`b`.`page_name`
   SQL
 end

@@ -9,10 +9,12 @@ class Groups::SocialLinksController < ApplicationController
   layout 'erg'
 
   def index
+    visit_page("#{@group.name}'s Social Links")
     @posts = @group.social_links.order(updated_at: :desc)
   end
 
   def new
+    visit_page("#{@group.name}'s Social Link Creation")
     @social_link = @group.social_links.new
   end
 

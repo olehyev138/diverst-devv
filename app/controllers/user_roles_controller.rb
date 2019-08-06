@@ -6,12 +6,14 @@ class UserRolesController < ApplicationController
 
   def new
     authorize UserRole
+    visit_page('User Role Creation')
     @user_role = current_user.enterprise.user_roles.new
     @user_role.role_name = ''
   end
 
   def edit
     authorize UserRole
+    visit_page("User Role Edit: #{@user_role}")
   end
 
   def create

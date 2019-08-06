@@ -5,6 +5,7 @@ class User::EventsController < ApplicationController
 
   def index
     authorize Initiative
+    visit_page('User\'s Events Page')
     @upcoming_events = current_user.initiatives.upcoming + current_user.invited_initiatives.upcoming
     @past_events =  current_user.initiatives.past + current_user.invited_initiatives.past
     @ongoing_events = current_user.initiatives.ongoing + current_user.invited_initiatives.ongoing

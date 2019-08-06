@@ -14,13 +14,14 @@ class Groups::GroupMembersController < ApplicationController
     @members = @group.active_members.ransack(params[:q]).result.uniq
     @segments = @group.enterprise.segments
     respond_to do |format|
-      format.html
+      format.html { visit_page("#{@group.name}'s Member List") }
       format.json { render json: GroupMemberDatatable.new(view_context, @group, @members) }
     end
   end
 
   def pending
     authorize [@group], :update?, policy_class: GroupMemberPolicy
+    visit_page("#{@group.name}'s Pending Member List")
 
     @pending_members = @group.pending_members.page(params[:page])
   end
@@ -79,6 +80,7 @@ class Groups::GroupMembersController < ApplicationController
 
   def show
     authorize [@group, @user], :update?, policy_class: GroupMemberPolicy
+    visit_page("#{@group.name} Member: #{@user.name}")
   end
 
   def edit

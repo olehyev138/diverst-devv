@@ -13,7 +13,7 @@ class Metrics::UserGraphsController < ApplicationController
     }
 
     respond_to do |format|
-      format.html
+      format.html { visit_page('User Metrics') }
     end
   end
 

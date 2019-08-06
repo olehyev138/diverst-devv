@@ -10,6 +10,7 @@ class PollFieldsController < ApplicationController
   end
 
   def show
+    visit_page("Poll Field: #{@field.title}")
     @responses = @poll.responses.includes(:user)
   end
 

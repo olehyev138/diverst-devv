@@ -9,11 +9,13 @@ class Initiatives::UpdatesController < ApplicationController
 
   def index
     authorize InitiativeUpdate
+    visit_page("#{@initiative.name}'s Updates")
     @updates = @initiative.updates.order(report_date: :desc)
   end
 
   def new
     authorize InitiativeUpdate
+    visit_page("#{@initiative.name} Update Creation")
     @update = @initiative.updates.new
   end
 
@@ -35,10 +37,12 @@ class Initiatives::UpdatesController < ApplicationController
 
   def show
     authorize @update
+    visit_page("View a(n) #{@initiative.name} Update")
   end
 
   def edit
     authorize @update
+    visit_page("Edit a(n) #{@initiative.name} Update")
   end
 
   def update

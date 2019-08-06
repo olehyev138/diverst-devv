@@ -10,13 +10,14 @@ class CampaignsController < ApplicationController
     @campaigns = policy_scope(Campaign)
 
     respond_to do |format|
-      format.html
+      format.html { visit_page('Campaigns') }
       format.json { render json: { data: @campaigns.limit(10).map { |c| [c.id, c.title ] } } }
     end
   end
 
   def new
     authorize Campaign
+    visit_page('Campaign Creation')
     @campaign = current_user.enterprise.campaigns.new
     @campaign.start = Date.today + 1
     @campaign.end = @campaign.start + 7.days
@@ -41,11 +42,13 @@ class CampaignsController < ApplicationController
 
   def show
     authorize @campaign
+    visit_page("Campaign: #{@campaign.name}")
     @questions = @campaign.questions.order(created_at: :desc).page(params[:page]).per(10)
   end
 
   def edit
     authorize @campaign
+    visit_page('Campaign Edit')
   end
 
   def update

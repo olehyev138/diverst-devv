@@ -8,11 +8,13 @@ class Groups::UpdatesController < ApplicationController
 
   def index
     authorize @group, :update?
+    visit_page("#{@group.name}'s Updates")
     @updates = @group.updates
   end
 
   def new
     authorize Group
+    visit_page("#{@group.name}'s Update Creation")
     @update = @group.updates.new
   end
 
@@ -33,10 +35,12 @@ class Groups::UpdatesController < ApplicationController
 
   def show
     authorize @group
+    visit_page("#{@group.name} Specific Update")
   end
 
   def edit
     authorize Group
+    visit_page("#{@group.name} Update Edit")
   end
 
   def update

@@ -5,9 +5,9 @@ class GroupCategoryTypesController < ApplicationController
 
   layout :resolve_layout
 
-
   def edit
     authorize Group, :manage_all_groups?
+    visit_page("Group Category Edit: #{@category_type.name}")
   end
 
   def update
@@ -31,6 +31,7 @@ class GroupCategoryTypesController < ApplicationController
 
   def add_category
     authorize Group, :manage_all_groups?
+    visit_page('Add Group Category')
   end
 
   def update_with_new_category

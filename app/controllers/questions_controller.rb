@@ -8,16 +8,19 @@ class QuestionsController < ApplicationController
 
   def index
     authorize @campaign
+    visit_page("#{@campaign.title} Questions")
     @questions = @campaign.questions.order(created_at: :desc)
   end
 
   def new
     authorize @campaign
+    visit_page("Create Question for #{@campaign.title}")
     @question = @campaign.questions.new
   end
 
   def show
     authorize @question.campaign
+    visit_page("#{@question.campaign.title} Question: #{@question.title}")
     @answers = @question.answers
       .includes(:author, comments: :author)
       .order(chosen: :desc)
@@ -46,6 +49,7 @@ class QuestionsController < ApplicationController
 
   def edit
     authorize @question.campaign
+    visit_page("#{@campaign.name} Question Edit: #{@question.title}")
   end
 
   def update

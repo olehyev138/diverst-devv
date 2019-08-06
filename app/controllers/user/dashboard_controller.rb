@@ -5,6 +5,7 @@ class User::DashboardController < ApplicationController
   layout 'user'
 
   def home
+    visit_page('User\'s Home Page')
     @upcoming_events = current_user.initiatives.upcoming.includes(:owner_group).limit(4) + current_user.invited_initiatives.upcoming.includes(:owner_group).limit(3)
     @posts = posts
     @messages = current_user.messages.includes(:group, :owner).limit(3)
@@ -12,12 +13,14 @@ class User::DashboardController < ApplicationController
   end
 
   def rewards
+    visit_page('User\'s Rewards Page')
     @reward_actions = @enterprise.reward_actions.order(points: :asc)
     @rewards = @enterprise.rewards.order(points: :asc)
     @badges = @enterprise.badges.order(points: :asc)
   end
 
   def privacy_statement
+    visit_page('Privacy Statement')
   end
 
   private

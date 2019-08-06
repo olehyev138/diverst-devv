@@ -5,14 +5,18 @@ class User::MentorshipController < ApplicationController
   layout 'user'
 
   def index
+    visit_page('Mentorship Home Page')
   end
 
   # allow user to edit mentorship
   def edit
+    authorize @user, :edit?
+    visit_page('Edit Personal Mentorship Setting')
   end
 
   # allow users to view profiles for other users
   def show
+    visit_page("#{@user.name}'s Mentorship Settings")
   end
 
   def update
@@ -35,14 +39,17 @@ class User::MentorshipController < ApplicationController
   end
 
   def mentors
+    visit_page('Mentor List')
     @mentorings = @user.menteeships
   end
 
   def mentees
+    visit_page('Mentee List')
     @mentorings = @user.mentorships
   end
 
   def requests
+    visit_page('Mentorship Request')
     @mentorship_proposals = @user.mentorship_proposals.mentor_requests
     @menteeship_proposals = @user.mentorship_proposals.mentee_requests
 
@@ -51,12 +58,14 @@ class User::MentorshipController < ApplicationController
   end
 
   def sessions
+    visit_page('Mentorship Sessions')
     @sessions = @user.mentoring_sessions.upcoming.select do |session|
       MentoringSessionPolicy.new(current_user, session).show?
     end
   end
 
   def ratings
+    visit_page('Mentorship Feedback List')
     @sessions = @user.mentoring_sessions.past.no_ratings
     @ratings = @user.mentorship_ratings
   end

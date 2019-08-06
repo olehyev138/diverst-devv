@@ -6,6 +6,7 @@ class TopicFeedbacksController < ApplicationController
   layout 'guest'
 
   def new
+    visit_page('Feedback Creation')
     @feedback = @topic.feedbacks.new
   end
 

@@ -4,6 +4,7 @@ class Groups::GroupMessageCommentController < ApplicationController
   layout 'erg'
 
   def edit
+    visit_page('Edit Group Message Comment')
     @comment = @group_message.comments.find(params[:id])
   end
 

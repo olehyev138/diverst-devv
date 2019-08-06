@@ -386,13 +386,13 @@ Rails.application.routes.draw do
       get 'export_csv'
     end
 
-    resources :poll_responses, path: 'responses' do
+    resources :poll_responses, except: [:index, :show, :edit], path: 'responses' do
       member do
         get 'thank_you'
       end
     end
 
-    resources :poll_fields do
+    resources :poll_fields, only: [:show] do
       member do
         get 'answer_popularities'
       end

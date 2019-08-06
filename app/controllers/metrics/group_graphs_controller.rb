@@ -5,6 +5,7 @@ class Metrics::GroupGraphsController < ApplicationController
 
   def index
     authorize MetricsDashboard
+    visit_page('Group Metrics')
 
     @group_metrics = {
       total_groups: current_user.enterprise.groups.size,
@@ -13,12 +14,15 @@ class Metrics::GroupGraphsController < ApplicationController
   end
 
   def initiatives
+    visit_page('Group Events Metrics')
   end
 
   def social_media
+    visit_page('Group Social Media Metrics')
   end
 
   def resources
+    visit_page('Group Resource Metrics')
   end
 
   # Metric actions

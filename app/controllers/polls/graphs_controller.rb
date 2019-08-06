@@ -6,6 +6,7 @@ class Polls::GraphsController < ApplicationController
   layout 'global_settings'
 
   def new
+    visit_page('Poll Creation')
     @graph = @poll.graphs.new
   end
 

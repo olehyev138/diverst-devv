@@ -15,10 +15,11 @@ class PollResponsesController < ApplicationController
 
   def new
     # Redirect to thank you page if user already answered
-    if response = current_user.poll_responses.where(poll: @poll).first
+    if (response = current_user.poll_responses.where(poll: @poll).first)
       redirect_to action: 'thank_you', id: response.id
     end
 
+    visit_page("#{@poll.name} Response")
     @response = @poll.responses.new
   end
 

@@ -8,6 +8,7 @@ class Groups::QuestionsController < ApplicationController
 
   def index
     authorize @group, :insights?
+    visit_page("#{@group.name}'s Survey Questions")
 
     @answers_count = @group.user_groups.with_answered_survey.count
   end
@@ -16,6 +17,8 @@ class Groups::QuestionsController < ApplicationController
     if @user_group.blank?
       flash[:notice] = "Your have to join group before taking it's survey"
       redirect_to @group
+    else
+      visit_page("#{@group.name}'s Survey")
     end
   end
 
