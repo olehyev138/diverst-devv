@@ -227,18 +227,6 @@ class ApplicationController < ActionController::Base
     Time.use_zone(current_user.default_time_zone, &block)
   end
 
-  def track_action
-    # ahoy.track 'Action Name', { controller: self.class.to_s,
-    #                             format: request.format }
-
-    # respond_to do |format|
-    #   format.html { ahoy.track 'Action Name', { title: 'Some awesome information' } }
-    #   format.js { }
-    #   format.xml { }
-    #   format.json { }
-    # end
-  end
-
   private
 
   def authenticate_user!(opts = {})
