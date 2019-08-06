@@ -75,6 +75,7 @@ class User < BaseClass
   has_many :csv_files
   has_many :metrics_dashboards, foreign_key: :owner_id
   has_many :shared_metrics_dashboards
+  has_many :urls_visited, dependent: :destroy, class_name: 'PageVisitationData'
   has_many :pages_visited, dependent: :destroy, class_name: 'PageVisitation'
   has_many :page_names_visited, dependent: :destroy, class_name: 'PageVisitationByName'
   has_many :visits, class_name: 'Ahoy::Visit'
