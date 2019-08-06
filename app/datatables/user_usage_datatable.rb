@@ -8,12 +8,18 @@ class UserUsageDatatable < AjaxDatatablesRails::Base
 
   def sortable_columns
     # Declare strings in this format: ModelName.column_name
-    @sortable_columns ||= %w(PageVisitationDatum.page PageVisitationDatum.times_visited)
+    @sortable_columns ||= %w(
+      PageVisitation.page_name
+      PageVisitation.visits_week
+      PageVisitation.visits_month
+      PageVisitation.visits_year
+      PageVisitation.visits_all
+    )
   end
 
   def searchable_columns
     # Declare strings in this format: ModelName.column_name
-    @searchable_columns ||= ['PageVisitationDatum.page']
+    @searchable_columns ||= %w(PageVisitation.page_name PageVisitation.page_url)
   end
 
   private
@@ -21,14 +27,19 @@ class UserUsageDatatable < AjaxDatatablesRails::Base
   def data
     records.map do |record|
       [
-        "#{link_to(record.page)}",
-        record.times_visited
+        record.page_url.present? ? link_to(record.page_name, record.page_url) : record.page_name,
+        record.visits_week,
+        record.visits_month,
+        record.visits_year,
+        record.visits_all,
       ]
     end
   end
 
   def get_raw_records
-    @user.page_visitation_data
+    Rails.cache.fetch("user/#{@user.id}/page_visitations", expires_in: 15.minutes) do
+      @user.pages_visited
+    end
   end
 
   # ==== Insert 'presenter'-like methods below if necessary

@@ -147,7 +147,11 @@ class ApplicationController < ActionController::Base
     user = current_user
     controller = controller_name
     action = action_name
-    page = request.fullpath.split('?').first
+    origin = URI(request.referer || '').path
+    page = URI(request.original_url).path
+
+    return if page == origin
+    return if page == '/'
 
     record = PageVisitationData.find_by(user: user, page_url: page)
     if record.nil?

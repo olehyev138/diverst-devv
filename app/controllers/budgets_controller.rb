@@ -15,7 +15,7 @@ class BudgetsController < ApplicationController
 
   def show
     authorize [@group], :show?, policy_class: GroupBudgetPolicy
-    visit_page(@budget.description)
+    visit_page(@budget.description.present? ? "Budget: #{@budget.description}" : 'Budget Info')
     @annual_budget_id = params[:annual_budget_id]
   end
 

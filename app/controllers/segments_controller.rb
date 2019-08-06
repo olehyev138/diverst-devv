@@ -60,13 +60,12 @@ class SegmentsController < ApplicationController
 
   def show
     authorize @segment
-    visit_page("Segment: #{@segment.name}")
 
     @sub_segments = @segment.children
     @members = @segment.ordered_members
 
     respond_to do |format|
-      format.html
+      format.html { visit_page("Segment: #{@segment.name}") }
       format.json { render json: SegmentMemberDatatable.new(view_context, @members) }
     end
   end
