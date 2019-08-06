@@ -20,6 +20,7 @@ import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import messages from 'containers/User/messages';
 import { buildValues } from 'utils/formHelpers';
 
+import renderFieldInput from 'utils/customFieldHelpers';
 import CustomField from 'components/Shared/Fields/FieldInputs/Field';
 
 const styles = theme => ({
@@ -28,7 +29,7 @@ const styles = theme => ({
   },
 });
 
-/* eslint-disable object-curly-newline */
+/* eslint-disable-next-line object-curly-newline */
 export function FieldInputFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
   return (
     <Card>
@@ -37,13 +38,13 @@ export function FieldInputFormInner({ handleSubmit, handleChange, handleBlur, va
           name='fields'
           render={arrayHelpers => (
             <CardContent>
-              {values.field_data.map((fieldData, i) => {
-                return (
-                  <Grid item key={fieldData.id} className={props.classes.fieldInput}>
-                    {Object.entries(fieldData).length !== 0 && <Field component={CustomField} fieldData={fieldData} />}
-                  </Grid>
-                );
-              })}
+              {values.fields.map((field, i) => (
+                <Grid item key={field.id} className={props.classes.fieldInput}>
+                  {Object.entries(field).length !== 0 && (
+                    renderFieldInput(field, values.field_data, { handleChange })
+                  )}
+                </Grid>
+              ))}
             </CardContent>
           )}
         />
@@ -62,9 +63,9 @@ export function FieldInputFormInner({ handleSubmit, handleChange, handleBlur, va
 
 export function FieldInputForm(props) {
   const user = dig(props, 'user');
-
   const initialValues = buildValues(user, {
-    field_data: { default: [] }
+    field_data: { default: [] },
+    fields: { default: [] }
   });
 
   return (
@@ -72,7 +73,7 @@ export function FieldInputForm(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        // props.updateFieldData(values);
+        props.updateFieldDataBegin({ field_data: values.field_data });
       }}
 
       render={formikProps => <FieldInputFormInner {...props} {...formikProps} />}
@@ -81,8 +82,7 @@ export function FieldInputForm(props) {
 }
 
 FieldInputForm.propTypes = {
-  updateFieldData: PropTypes.func,
-  field_data: PropTypes.object,
+  updateFieldDataBegin: PropTypes.func,
   currentUser: PropTypes.object,
 };
 

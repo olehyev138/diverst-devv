@@ -13,7 +13,7 @@ import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import {
-  getUserBegin, getUsersBegin,
+  getUserBegin, getUsersBegin, updateFieldDataBegin,
   updateUserBegin, userUnmount
 } from 'containers/User/actions';
 
@@ -41,6 +41,7 @@ export function UserEditPage(props) {
     <React.Fragment>
       <UserForm
         userAction={props.updateUserBegin}
+        updateFieldDataBegin={props.updateFieldDataBegin}
         getUsersBegin={props.getUsersBegin}
         selectUsers={props.users}
         links={links}
@@ -57,6 +58,7 @@ UserEditPage.propTypes = {
   getUserBegin: PropTypes.func,
   getUsersBegin: PropTypes.func,
   updateUserBegin: PropTypes.func,
+  updateFieldDataBegin: PropTypes.func,
   userUnmount: PropTypes.func
 };
 
@@ -68,6 +70,7 @@ const mapDispatchToProps = {
   getUserBegin,
   getUsersBegin,
   updateUserBegin,
+  updateFieldDataBegin,
   userUnmount
 };
 

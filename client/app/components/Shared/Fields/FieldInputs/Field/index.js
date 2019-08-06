@@ -6,6 +6,12 @@
  * - Given a field object and renders the appropriate field input
  */
 
+/*
+ ***********************************************************************************
+ * - NOT USED (See utils/customFieldHelpers)
+ ***********************************************************************************
+ */
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import dig from 'object-dig';

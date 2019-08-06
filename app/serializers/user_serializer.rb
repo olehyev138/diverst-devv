@@ -1,5 +1,5 @@
 class UserSerializer < ApplicationRecordSerializer
-  attributes :enterprise, :last_name, :fields, :user_groups, :user_role, :avatar_location
+  attributes :enterprise, :last_name, :user_groups, :user_role, :avatar_location, :fields, :fields_deprecated
 
   has_many :field_data
 
@@ -18,7 +18,7 @@ class UserSerializer < ApplicationRecordSerializer
     EnterpriseSerializer.new(object.enterprise).attributes
   end
 
-  def fields
+  def fields_deprecated
     fields = object.enterprise.mobile_fields.map(&:field)
     fields_hash = []
 

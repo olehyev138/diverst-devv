@@ -34,6 +34,11 @@ Diverst::Application.routes.draw do
       resources :expenses
       resources :expense_categories
       resources :fields
+      resources :field_data, path: 'field_data' do
+        collection do
+          post 'update_field_data'
+        end
+      end
       resources :folders do
         member do
           get '/password', to: 'folders#validate_password'

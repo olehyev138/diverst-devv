@@ -10,6 +10,7 @@ import {
   CREATE_USER_BEGIN, CREATE_USER_SUCCESS, CREATE_USER_ERROR,
   UPDATE_USER_BEGIN, UPDATE_USER_SUCCESS, UPDATE_USER_ERROR,
   DELETE_USER_BEGIN, DELETE_USER_SUCCESS, DELETE_USER_ERROR,
+  UPDATE_FIELD_DATA_BEGIN, UPDATE_FIELD_DATA_SUCCESS, UPDATE_FIELD_DATA_ERROR,
   USER_UNMOUNT
 } from 'containers/User/constants';
 
@@ -127,6 +128,30 @@ export function deleteUserError(error) {
     error,
   };
 }
+
+/* Field Data updating */
+
+export function updateFieldDataBegin(payload) {
+  return {
+    type: UPDATE_FIELD_DATA_BEGIN,
+    payload,
+  };
+}
+
+export function updateFieldDataSuccess(payload) {
+  return {
+    type: UPDATE_FIELD_DATA_SUCCESS,
+    payload,
+  };
+}
+
+export function updateFieldDataError(error) {
+  return {
+    type: UPDATE_FIELD_DATA_ERROR,
+    error,
+  };
+}
+
 
 export function userUnmount() {
   return {

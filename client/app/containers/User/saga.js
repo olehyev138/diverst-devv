@@ -6,7 +6,8 @@ import { showSnackbar } from 'containers/Shared/Notifier/actions';
 
 import {
   GET_USERS_BEGIN, CREATE_USER_BEGIN,
-  GET_USER_BEGIN, UPDATE_USER_BEGIN, DELETE_USER_BEGIN
+  GET_USER_BEGIN, UPDATE_USER_BEGIN, DELETE_USER_BEGIN,
+  UPDATE_FIELD_DATA_BEGIN
 } from 'containers/User/constants';
 
 import {
@@ -88,11 +89,28 @@ export function* deleteUser(action) {
   }
 }
 
+export function* updateFieldData(action) {
+  try {
+    const payload = { field_data: { field_data: action.payload.field_data } };
+    const response = yield call(api.fieldData.updateFieldData.bind(api.fieldData), payload);
+
+    yield put(push(ROUTES.admin.system.users.index.path()));
+    yield put(showSnackbar({ message: 'User updated', options: { variant: 'success' } }));
+  } catch (err) {
+    yield put(updateUserError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to update user', options: { variant: 'warning' } }));
+  }
+}
+
+
 export default function* usersSaga() {
   yield takeLatest(GET_USERS_BEGIN, getUsers);
   yield takeLatest(GET_USER_BEGIN, getUser);
   yield takeLatest(CREATE_USER_BEGIN, createUser);
   yield takeLatest(UPDATE_USER_BEGIN, updateUser);
-
   yield takeLatest(DELETE_USER_BEGIN, deleteUser);
+
+  yield takeLatest(UPDATE_FIELD_DATA_BEGIN, updateFieldData);
 }

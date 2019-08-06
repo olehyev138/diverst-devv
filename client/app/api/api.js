@@ -2,6 +2,7 @@ import users from 'api/users/users';
 import userGroups from 'api/user_groups/user_groups';
 import sessions from 'api/sessions/sessions';
 import fields from 'api/fields/fields';
+import fieldData from 'api/field_data/field_data';
 import groups from 'api/groups/groups';
 import newsFeedLinks from 'api/news_feed_links/news_feed_links';
 import groupMessages from 'api/group_messages/group_messages';
@@ -13,6 +14,7 @@ const Api = {
   userGroups,
   sessions,
   fields,
+  fieldData,
   groups,
   newsFeedLinks,
   groupMessages,

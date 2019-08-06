@@ -12,7 +12,10 @@ import reducer from 'containers/User/reducer';
 import saga from 'containers/User/saga';
 
 import { selectUserTotal } from 'containers/User/selectors';
-import { createUserBegin, getUsersBegin, userUnmount } from 'containers/User/actions';
+import {
+  createUserBegin, updateFieldDataBegin,
+  getUsersBegin, userUnmount
+} from 'containers/User/actions';
 
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -33,6 +36,7 @@ export function UserCreatePage(props) {
   return (
     <UserForm
       userAction={props.createUserBegin}
+      updateFieldDataBegin={props.updateFieldDataBegin}
       buttonText='Create'
       getUsersBegin={props.getUsersBegin}
       selectUsers={props.users}
@@ -43,6 +47,7 @@ export function UserCreatePage(props) {
 
 UserCreatePage.propTypes = {
   createUserBegin: PropTypes.func,
+  updateFieldDataBegin: PropTypes.func,
   getUsersBegin: PropTypes.func,
   userUnmount: PropTypes.func,
   users: PropTypes.array
@@ -53,6 +58,7 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = {
   createUserBegin,
+  updateFieldDataBegin,
   getUsersBegin,
   userUnmount
 };

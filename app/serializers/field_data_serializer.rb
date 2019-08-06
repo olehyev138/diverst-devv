@@ -1,5 +1,3 @@
 class FieldDataSerializer < ApplicationRecordSerializer
-  attributes :data, :id
-
-  belongs_to :field
+  attributes :data, :id, :field_id, :user_id
 end

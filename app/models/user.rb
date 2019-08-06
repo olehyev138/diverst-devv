@@ -147,6 +147,10 @@ class User < ApplicationRecord
 
   accepts_nested_attributes_for :availabilities, allow_destroy: true
 
+  def fields
+    self.enterprise.fields
+  end
+
   def avatar_url=(url)
     self.avatar = URI.parse(url)
   end
