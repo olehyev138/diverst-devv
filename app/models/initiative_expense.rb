@@ -9,7 +9,6 @@ class InitiativeExpense < ApplicationRecord
   validates :owner, presence: true
   validates :amount, presence: true, numericality: { greater_than_or_equal_to: 0 }
 
-  validate :prevent_creating_negative_expenses, on: :create
   after_save :update_annual_budget
   after_destroy :update_annual_budget
 
@@ -26,10 +25,5 @@ class InitiativeExpense < ApplicationRecord
     annual_budget.update(amount: group.annual_budget, available_budget: group.available_budget,
                          leftover_money: group.leftover_money, expenses: group.spent_budget,
                          approved_budget: group.approved_budget)
-  end
-
-  def prevent_creating_negative_expenses
-    current_expenses_sum = initiative.current_expences_sum + self.amount
-    errors.add(:amount, 'Expenses cannot exceed the budget set for this initiative') if current_expenses_sum > initiative.estimated_funding
   end
 end
