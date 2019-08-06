@@ -11,12 +11,11 @@ class GroupsController < ApplicationController
 
   def index
     authorize Group
-    visit_page("#{c_t(:sub_erg)} List")
 
     @groups = @groups.includes(:children)
 
     respond_to do |format|
-      format.html
+      format.html { visit_page("#{c_t(:sub_erg)} List") }
       format.json { render json: GroupDatatable.new(view_context, @groups) }
     end
   end

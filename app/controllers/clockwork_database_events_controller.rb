@@ -5,8 +5,8 @@ class ClockworkDatabaseEventsController < ApplicationController
   layout 'global_settings'
 
   def index
-    visit_page('Clockwork Events')
     authorize current_user.enterprise, :enterprise_manage?
+    visit_page('Clockwork Events')
     @enterprise = current_user.enterprise
     @clockwork_database_events = @enterprise.clockwork_database_events
   end

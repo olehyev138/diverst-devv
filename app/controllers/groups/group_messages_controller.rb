@@ -28,8 +28,8 @@ class Groups::GroupMessagesController < ApplicationController
   end
 
   def edit
-    visit_page("Edit Message: #{@message.subject}")
     authorize [@group, @message], :update?, policy_class: GroupMessagePolicy
+    visit_page("Edit Message: #{@message.subject}")
   end
 
   def create

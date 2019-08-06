@@ -5,7 +5,6 @@ class Metrics::UserGraphsController < ApplicationController
 
   def index
     authorize MetricsDashboard
-    visit_page('User Metrics')
 
     @user_metrics = {
       total_active_users: current_user.enterprise.users.active.count,
@@ -14,7 +13,7 @@ class Metrics::UserGraphsController < ApplicationController
     }
 
     respond_to do |format|
-      format.html
+      format.html { visit_page('User Metrics') }
     end
   end
 
