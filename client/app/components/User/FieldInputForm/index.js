@@ -10,7 +10,7 @@ import { compose } from 'redux';
 import dig from 'object-dig';
 
 import { FormattedMessage } from 'react-intl';
-import { Field, FieldArray, Formik, Form } from 'formik';
+import { FieldArray, Formik, Form } from 'formik';
 import {
   Button, Card, CardActions, CardContent, Grid, TextField
 } from '@material-ui/core';

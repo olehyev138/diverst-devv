@@ -26,7 +26,8 @@ function renderFieldInput(field, fieldData, formikProps) {
           value={fieldData[fieldDatumIndex].data}
           label={field.title}
           onChange={formikProps.handleChange}
-        />) : <React.Fragment /> }
+        />
+      ) : <React.Fragment /> }
     </React.Fragment>
   );
 }
@@ -34,6 +35,8 @@ function renderFieldInput(field, fieldData, formikProps) {
 function getInput(fieldType) {
   switch (fieldType) {
     case 'TextField':
+      return TextField;
+    default:
       return TextField;
   }
 }
