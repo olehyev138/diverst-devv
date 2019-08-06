@@ -18,4 +18,16 @@ class PageVisitationData < ActiveRecord::Base
     pn.page_name = new_name
     pn.save
   end
+
+  def self.end_of_day_count
+    find_each do |vst|
+      %w(week month year).each do |frame|
+        if vst.created_at < 1.send(frame).ago
+          eval "vst.visits_#{frame} -= #{vst.visits_day}"
+        end
+        vst.visits_day = 0
+        vst.save
+      end
+    end
+  end
 end
