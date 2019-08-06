@@ -5,7 +5,6 @@ class ApplicationController < ActionController::Base
 
   before_action :set_persist_login_param
   before_action :set_previous_url, unless: :devise_controller?
-  after_action :track_action
 
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
