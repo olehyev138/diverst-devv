@@ -24,4 +24,8 @@ class UserRolePolicy < ApplicationPolicy
   def destroy?
     create?
   end
+
+  def show?
+    index?
+  end
 end

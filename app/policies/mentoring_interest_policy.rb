@@ -21,4 +21,8 @@ class MentoringInterestPolicy < ApplicationPolicy
   def destroy?
     index?
   end
+
+  def show?
+    index?
+  end
 end

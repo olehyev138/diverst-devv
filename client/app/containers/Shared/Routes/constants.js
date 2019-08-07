@@ -60,7 +60,7 @@ export const ROUTES = {
   group: {
     pathPrefix: '/group',
     home: {
-      path: () => '/group/:group_id'
+      path: (groupId = ':group_id') => `/group/${groupId}/`
     },
     news: {
       index: {
@@ -79,6 +79,14 @@ export const ROUTES = {
             (groupId = ':group_id', itemId = ':item_id') => `/group/${groupId}/news/message/${itemId}/edit`
         },
       }
+    },
+    members: {
+      index: {
+        path: (groupId = ':group_id') => `/group/${groupId}/members`
+      },
+      new: {
+        path: (groupId = ':group_id') => `/group/${groupId}/members/new`
+      }
     }
   },
 
@@ -87,7 +95,12 @@ export const ROUTES = {
     get root() { return this.analyze.overview; },
     pathPrefix: '/admin',
     analyze: {
-      pathPrefix: '/admin/analyze',
+      index: {
+        data: {
+          pathPrefix: '/admin/analyze',
+          titleMessage: messages.admin.analyze.index
+        },
+      },
       overview: {
         path: () => '/admin/analyze',
         data: {
@@ -102,7 +115,12 @@ export const ROUTES = {
       },
     },
     manage: {
-      pathPrefix: '/admin/manage',
+      index: {
+        data: {
+          pathPrefix: '/admin/manage',
+          titleMessage: messages.admin.manage.index
+        }
+      },
       groups: {
         pathPrefix: '/admin/manage/groups',
         index: {
@@ -120,5 +138,13 @@ export const ROUTES = {
         },
       }
     },
+    system: {
+      index: {
+        data: {
+          pathPrefix: '/settings',
+          titleMessage: messages.admin.system.index,
+        }
+      }
+    }
   },
 };

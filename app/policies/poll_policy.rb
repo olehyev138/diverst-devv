@@ -33,6 +33,10 @@ class PollPolicy < ApplicationPolicy
     update?
   end
 
+  def show?
+    index?
+  end
+
   class Scope < Scope
     def index?
       PollPolicy.new(user, nil).index?

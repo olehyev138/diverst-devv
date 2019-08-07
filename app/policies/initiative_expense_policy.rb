@@ -22,6 +22,10 @@ class InitiativeExpensePolicy < ApplicationPolicy
     update?
   end
 
+  def show?
+    index?
+  end
+
   class Scope < Scope
     def resolve
       scope.joins(initiative: { pillar: :outcome }).where(

@@ -29,6 +29,10 @@ import GroupMessagePage from 'containers/News/GroupMessage/GroupMessagePage';
 import GroupMessageCreatePage from 'containers/News/GroupMessage/GroupMessageCreatePage';
 import GroupMessageEditPage from 'containers/News/GroupMessage/GroupMessageEditPage';
 
+/* Group - Members */
+import GroupMemberListPage from 'containers/Group/GroupMembers/GroupMemberListPage';
+import GroupMemberCreatePage from 'containers/Group/GroupMembers/GroupMemberCreatePage';
+
 // Paths
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
@@ -60,13 +64,17 @@ export default function Routes(props) {
       <UserLayout {...expandRoute(ROUTES.user.mentorship)} component={PlaceholderPage} />
 
       { /* Group */ }
-      <GroupLayout exact {...expandRoute(ROUTES.group.home)} component={GroupHomePage} />
-      <GroupLayout exact {...expandRoute(ROUTES.group.news.index)} component={NewsFeedPage} />
-
       { /* Group News Feed */ }
+      <GroupLayout exact {...expandRoute(ROUTES.group.news.index)} component={NewsFeedPage} />
       <GroupLayout {...expandRoute(ROUTES.group.news.messages.new)} component={GroupMessageCreatePage} />
       <GroupLayout {...expandRoute(ROUTES.group.news.messages.edit)} component={GroupMessageEditPage} />
       <GroupLayout exact {...expandRoute(ROUTES.group.news.messages.index)} component={GroupMessagePage} />
+
+      { /* Group Members */ }
+      <GroupLayout {...expandRoute(ROUTES.group.members.new)} component={GroupMemberCreatePage} />
+      <GroupLayout exact {...expandRoute(ROUTES.group.members.index)} component={GroupMemberListPage} />
+
+      <GroupLayout exact {...expandRoute(ROUTES.group.home)} component={GroupHomePage} />
 
       <ErrorLayout path='' component={NotFoundPage} />
     </Switch>
