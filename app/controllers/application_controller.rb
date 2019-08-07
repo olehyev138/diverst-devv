@@ -143,6 +143,7 @@ class ApplicationController < ActionController::Base
   end
 
   def visit_page(name)
+    return unless request.format == 'html'
     return if Rails.env.test?
 
     user = current_user
@@ -152,20 +153,8 @@ class ApplicationController < ActionController::Base
     page = URI(request.original_url).path
 
     return if page == origin
-    return if page == '/'
 
-    record = PageVisitationData.find_by(user: user, page_url: page)
-    if record.nil?
-      record = PageVisitationData.new(user: user, page_url: page, controller: controller, action: action)
-    end
-    record.name = name
-    record.visits_all += 1
-    record.visits_day += 1
-    record.visits_week += 1
-    record.visits_month += 1
-    record.visits_year += 1
-
-    record.save
+    IncrementViewCountJob.perform_later(user, page, name, controller, action)
   end
 
   protected
