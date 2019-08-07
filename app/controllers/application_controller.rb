@@ -143,6 +143,8 @@ class ApplicationController < ActionController::Base
   end
 
   def visit_page(name)
+    return if Rails.env.test?
+
     user = current_user
     controller = controller_name
     action = action_name

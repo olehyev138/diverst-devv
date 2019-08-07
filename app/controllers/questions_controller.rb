@@ -49,7 +49,7 @@ class QuestionsController < ApplicationController
 
   def edit
     authorize @question.campaign
-    visit_page("#{@campaign.name} Question Edit: #{@question.title}")
+    visit_page("#{@question.campaign.title} Question Edit: #{@question.title}")
   end
 
   def update

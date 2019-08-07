@@ -32,7 +32,7 @@ class ExpensesController < ApplicationController
 
   def edit
     authorize @expense
-    visit_page("Expense Edit: #{expense.name}")
+    visit_page("Expense Edit: #{@expense.name}")
   end
 
   def update

@@ -10,6 +10,7 @@ class PollResponsesController < ApplicationController
 
   # MISSING TEMPLATE
   def index
+    visit_page('Poll Responses')
     @responses = @poll.responses
   end
 
@@ -19,7 +20,7 @@ class PollResponsesController < ApplicationController
       redirect_to action: 'thank_you', id: response.id
     end
 
-    visit_page("#{@poll.name} Response")
+    visit_page('Poll Response Creation')
     @response = @poll.responses.new
   end
 

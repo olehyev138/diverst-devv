@@ -34,7 +34,7 @@ class PollsController < ApplicationController
 
   def show
     authorize @poll
-    visit_page("Poll: #{@poll.name}")
+    visit_page("Poll: #{@poll.title}")
 
     @graphs = @poll.graphs.includes(:field, :aggregation)
     @responses = @poll.responses
@@ -44,7 +44,7 @@ class PollsController < ApplicationController
 
   def edit
     authorize @poll
-    visit_page("Poll Edit: #{@poll.name}")
+    visit_page("Poll Edit: #{@poll.title}")
   end
 
   def update
