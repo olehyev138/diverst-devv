@@ -23,8 +23,6 @@
         <%= link_to 'Personal Stats', show_usage_user_path(current_user), class: 'title_bar' %>
         &nbsp;|&nbsp;
         <% if root_admin_path %>
-          <%= link_to 'Aggregate Stats', index_usage_users_path, class: 'title_bar' %>
-          &nbsp;|&nbsp;
           <%= link_to "Admin Dashboard", root_admin_path, class: 'title_bar' %>
           &nbsp;|&nbsp;
         <% end %>

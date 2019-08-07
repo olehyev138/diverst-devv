@@ -62,8 +62,6 @@ Rails.application.routes.draw do
     end
 
     collection do
-      get 'url_usage_data'
-      get 'index_usage'
       get 'export_csv'
       get 'import_csv'
       get 'sample_csv'
@@ -606,6 +604,7 @@ Rails.application.routes.draw do
         get 'users_per_segment'
         get 'user_growth'
         get 'user_groups_intersection'
+        get 'url_usage_data'
         get 'user_usage_data'
       end
     end

@@ -65,11 +65,13 @@
     </div>
   </div>
 
+  <%= render 'aggregate_usage_metrics' %>
+
   <div class="card">
     <div class="card__section">
       <h2><%= c_t(:erg) %> Membership Usage</h2>
 
-      <table class="table--has-border" data-source="<%= user_usage_data_metrics_users_path(format: :json) %>" id="users-usage-table">
+      <table class="table--has-border data-table" data-source="<%= user_usage_data_metrics_users_path(format: :json) %>" id="users-usage-table">
         <thead>
         <th>First name</th>
         <th>Last name</th>
