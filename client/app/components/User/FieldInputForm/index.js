@@ -30,18 +30,20 @@ const styles = theme => ({
 });
 
 /* eslint-disable-next-line object-curly-newline */
-export function FieldInputFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
+export function FieldInputFormInner({ formikProps, ...props }) {
+  const { values } = formikProps;
+
   return (
     <Card>
       <Form>
         <FieldArray
           name='fields'
-          render={arrayHelpers => (
+          render={_ => (
             <CardContent>
               {values.fields.map((field, i) => (
                 <Grid item key={field.id} className={props.classes.fieldInput}>
                   {Object.entries(field).length !== 0 && (
-                    renderFieldInput(field, values.field_data, { handleChange })
+                    renderFieldInput(field, values.field_data, formikProps)
                   )}
                 </Grid>
               ))}
@@ -76,7 +78,7 @@ export function FieldInputForm(props) {
         props.updateFieldDataBegin({ field_data: values.field_data });
       }}
 
-      render={formikProps => <FieldInputFormInner {...props} {...formikProps} />}
+      render={formikProps => <FieldInputFormInner formikProps={formikProps} {...props} />}
     />
   );
 }
@@ -87,15 +89,8 @@ FieldInputForm.propTypes = {
 };
 
 FieldInputFormInner.propTypes = {
-  handleSubmit: PropTypes.func,
-  handleChange: PropTypes.func,
-  handleBlur: PropTypes.func,
-  values: PropTypes.object,
-  buttonText: PropTypes.string,
-  setFieldValue: PropTypes.func,
-  setFieldTouched: PropTypes.func,
-  classes: PropTypes.object,
-  user: PropTypes.object
+  formikProps: PropTypes.object,
+  classes: PropTypes.object
 };
 
 export default compose(

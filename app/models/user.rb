@@ -21,7 +21,7 @@ class User < ApplicationRecord
   has_one :policy_group,  dependent: :destroy, inverse_of: :user
   has_one :device,        dependent: :destroy, inverse_of: :user
 
-  has_many :field_data, class_name: FieldData
+  has_many :field_data, class_name: 'FieldData'
 
   # sessions
   has_many :sessions, dependent: :destroy
@@ -147,6 +147,8 @@ class User < ApplicationRecord
 
   accepts_nested_attributes_for :availabilities, allow_destroy: true
 
+  # All user fields for the users enterprise
+  # TODO: filter on type: 'user'
   def fields
     self.enterprise.fields
   end
