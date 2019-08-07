@@ -208,50 +208,23 @@ class UsersController < ApplicationController
 
   protected
 
-  def calculate_aggregate_data(sample)
-    Rails.cache.fetch("calculate_aggregate_data/#{sample}") do
-      max = sample.max
-      n = sample.count
-      sum = sample.sum
-      mean = sum.to_f / n
-      sd = Math.sqrt(sample.reduce(0) { |partial, element| partial + (element - mean)**2 / n })
-      return sum, max, mean.round(2), sd.round(2)
-    end
-  end
-
-  def aggregate_data_from_field(*fields, where: [nil])
-    list_of_values = User.count_list(*fields, where: where)
-    calculate_aggregate_data(list_of_values)
-  end
-
-  def calculate_percentile(number, sample)
-    Rails.cache.fetch("calculate_percentile/#{number}, #{sample}") do
-      n = sample.count
-      i = sample.each_index.select { |r| sample[r] <= number }.last
-      101 - (100 * (i - 0.5) / n).round
-    end
-  end
-
-  def percentile_from_field(number, *fields, where: [nil])
-    list_of_values = User.count_list(*fields, where: where)
-    calculate_percentile(number, list_of_values)
-  end
-
-  def get_aggregate_usage_metrics
-    aggregate_sign_ins =
+  def aggregate_sign_ins
     Rails.cache.fetch('aggregate_login_count', expires_in: 2.hours) do
       User.all.map(&:sign_in_count)
     end
+  end
+
+  def get_aggregate_usage_metrics
     logins_s, logins_m, logins_a, logins_sd = calculate_aggregate_data(aggregate_sign_ins)
     logins_n = 'Logins'
 
-    posts_s, posts_m, posts_a, posts_sd = aggregate_data_from_field(:social_links, :own_messages, :own_news_links)
+    posts_s, posts_m, posts_a, posts_sd = aggregate_data_from_field(User, :social_links, :own_messages, :own_news_links)
     posts_n = 'Posts Made'
 
-    comments_s, comments_m, comments_a, comments_sd = aggregate_data_from_field(:answer_comments, :message_comments, :news_link_comments)
+    comments_s, comments_m, comments_a, comments_sd = aggregate_data_from_field(User, :answer_comments, :message_comments, :news_link_comments)
     comments_n = 'Comments Made'
 
-    events_s, events_m, events_a, events_sd = aggregate_data_from_field(:initiatives, where: ['initiatives.start < ? OR initiatives.id IS NULL', Time.now])
+    events_s, events_m, events_a, events_sd = aggregate_data_from_field(User, :initiatives, where: ['initiatives.start < ? OR initiatives.id IS NULL', Time.now])
     events_n = 'Events Attendance'
 
     @aggregate_metrics = {}
@@ -269,19 +242,19 @@ class UsersController < ApplicationController
 
   def get_user_usage_metrics
     logins = @user.sign_in_count
-    logins_p = calculate_percentile(logins, User.all.map(&:sign_in_count).sort)
+    logins_p = calculate_percentile(logins, aggregate_sign_ins.sort)
     logins_n = 'Times Logged In'
 
     posts = @user.number_of(:social_links, :own_messages, :own_news_links)
-    posts_p = percentile_from_field(posts, :social_links, :own_messages, :own_news_links)
+    posts_p = percentile_from_field(User, posts, :social_links, :own_messages, :own_news_links)
     posts_n = 'Posts Made'
 
     comments = @user.number_of(:answer_comments, :message_comments, :news_link_comments)
-    comments_p = percentile_from_field(comments, :answer_comments, :message_comments, :news_link_comments)
+    comments_p = percentile_from_field(User, comments, :answer_comments, :message_comments, :news_link_comments)
     comments_n = 'Comments Made'
 
     events = @user.number_of(:initiatives, where: ['initiatives.start < ? OR initiatives.id IS NULL', Time.now])
-    events_p = percentile_from_field(events, :initiatives, where: ['initiatives.start < ? OR initiatives.id IS NULL', Time.now])
+    events_p = percentile_from_field(User, events, :initiatives, where: ['initiatives.start < ? OR initiatives.id IS NULL', Time.now])
     events_n = 'Events Attended'
 
     @fields = %w(logins posts comments events)

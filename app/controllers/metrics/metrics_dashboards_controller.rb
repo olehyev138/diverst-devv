@@ -4,7 +4,7 @@ class Metrics::MetricsDashboardsController < ApplicationController
   before_action :set_metrics_dashboard, except: [:index, :new, :create, :shared_dashboard]
   after_action :add_shared_dashboards, only: [:create, :update]
   after_action :remove_shared_dashboards, only: [:update]
-  after_action :visit_page, only: [:index, new, show, edit]
+  after_action :visit_page, only: [:index, :new, :show, :edit]
 
   layout 'metrics'
 

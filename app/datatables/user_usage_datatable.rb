@@ -24,10 +24,16 @@ class UserUsageDatatable < AjaxDatatablesRails::Base
 
   private
 
+  def valid_path?(path)
+    path.present? && Rails.application.routes.recognize_path(path)[:action] != 'routing_error'
+  rescue ActionController::RoutingError
+    false
+  end
+
   def data
     records.map do |record|
       [
-        record.page_url.present? ? link_to(record.page_name, record.page_url) : record.page_name,
+        valid_path?(record.page_url) ? link_to(record.page_name, record.page_url) : record.page_name,
         record.visits_week,
         record.visits_month,
         record.visits_year,
