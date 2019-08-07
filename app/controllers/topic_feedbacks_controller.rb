@@ -2,11 +2,11 @@ class TopicFeedbacksController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create]
   before_action :set_topic
   before_action :set_feedback, only: [:update, :destroy, :show]
+  after_action :visit_page, only: [:new]
 
   layout 'guest'
 
   def new
-    visit_page('Feedback Creation')
     @feedback = @topic.feedbacks.new
   end
 
@@ -61,5 +61,20 @@ class TopicFeedbacksController < ApplicationController
         :content,
         :featured
       )
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'new'
+      'Feedback Creation'
+    else
+      "#{controller_name}##{action_name}"
+    end
+  rescue
+    "#{controller_name}##{action_name}"
   end
 end

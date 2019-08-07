@@ -2,6 +2,7 @@ class CampaignsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_campaign, only: [:edit, :update, :destroy, :show, :contributions_per_erg, :top_performers]
   after_action :verify_authorized
+  after_action :visit_page, only: [:index, :new, :show, :edit]
 
   layout :resolve_layout
 
@@ -10,14 +11,13 @@ class CampaignsController < ApplicationController
     @campaigns = policy_scope(Campaign)
 
     respond_to do |format|
-      format.html { visit_page('Campaigns') }
+      format.html
       format.json { render json: { data: @campaigns.limit(10).map { |c| [c.id, c.title ] } } }
     end
   end
 
   def new
     authorize Campaign
-    visit_page('Campaign Creation')
     @campaign = current_user.enterprise.campaigns.new
     @campaign.start = Date.today + 1
     @campaign.end = @campaign.start + 7.days
@@ -42,13 +42,11 @@ class CampaignsController < ApplicationController
 
   def show
     authorize @campaign
-    visit_page("Campaign: #{@campaign.name}")
     @questions = @campaign.questions.order(created_at: :desc).page(params[:page]).per(10)
   end
 
   def edit
     authorize @campaign
-    visit_page('Campaign Edit')
   end
 
   def update
@@ -152,5 +150,26 @@ class CampaignsController < ApplicationController
     return 'user' if current_user.nil?
 
     'collaborate'
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      'Campaigns'
+    when 'new'
+      'Campaign Creation'
+    when 'show'
+      "Campaign: #{@campaign.to_label}"
+    when 'edit'
+      'Campaign Edit'
+    else
+      "#{controller_name}##{action_name}"
+    end
+  rescue
+    "#{controller_name}##{action_name}"
   end
 end

@@ -1,22 +1,21 @@
 class User::MentorshipController < ApplicationController
   before_action   :authenticate_user!
   before_action   :set_user
+  after_action :visit_page, only: [:index, :edit, :show, :mentors,
+                                   :mentees, :requests, :sessions, :ratings]
 
   layout 'user'
 
   def index
-    visit_page('Mentorship Home Page')
   end
 
   # allow user to edit mentorship
   def edit
     authorize @user, :edit?
-    visit_page('Edit Personal Mentorship Setting')
   end
 
   # allow users to view profiles for other users
   def show
-    visit_page("#{@user.name}'s Mentorship Settings")
   end
 
   def update
@@ -39,17 +38,14 @@ class User::MentorshipController < ApplicationController
   end
 
   def mentors
-    visit_page('Mentor List')
     @mentorings = @user.menteeships
   end
 
   def mentees
-    visit_page('Mentee List')
     @mentorings = @user.mentorships
   end
 
   def requests
-    visit_page('Mentorship Request')
     @mentorship_proposals = @user.mentorship_proposals.mentor_requests
     @menteeship_proposals = @user.mentorship_proposals.mentee_requests
 
@@ -58,14 +54,12 @@ class User::MentorshipController < ApplicationController
   end
 
   def sessions
-    visit_page('Mentorship Sessions')
     @sessions = @user.mentoring_sessions.upcoming.select do |session|
       MentoringSessionPolicy.new(current_user, session).show?
     end
   end
 
   def ratings
-    visit_page('Mentorship Feedback List')
     @sessions = @user.mentoring_sessions.past.no_ratings
     @ratings = @user.mentorship_ratings
   end
@@ -88,5 +82,34 @@ class User::MentorshipController < ApplicationController
       mentoring_type_ids: [],
       availabilities_attributes: [:day, :start, :end, :_destroy, :id]
     )
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      'Mentorship Home Page'
+    when 'edit'
+      'Edit Personal Mentorship Setting'
+    when 'show'
+      "#{@user.to_label}'s Mentorship Settings"
+    when 'mentors'
+      'Mentor List'
+    when 'mentees'
+      'Mentee List'
+    when 'requests'
+      'Mentorship Request'
+    when 'sessions'
+      'Mentorship Sessions'
+    when 'ratings'
+      'Mentorship Feedback List'
+    else
+      "#{controller_name}##{action_name}"
+    end
+  rescue
+    "#{controller_name}##{action_name}"
   end
 end

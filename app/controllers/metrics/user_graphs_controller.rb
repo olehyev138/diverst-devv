@@ -1,6 +1,8 @@
 class Metrics::UserGraphsController < ApplicationController
   include Metrics
 
+  after_action :visit_page, only: [:index]
+
   layout 'metrics'
 
   def index
@@ -13,7 +15,7 @@ class Metrics::UserGraphsController < ApplicationController
     }
 
     respond_to do |format|
-      format.html { visit_page('User Metrics') }
+      format.html
     end
   end
 
@@ -83,5 +85,20 @@ class Metrics::UserGraphsController < ApplicationController
         render json: @graph.user_growth(metrics_params[:date_range])
       }
     end
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      'User Metrics'
+    else
+      "#{controller_name}##{action_name}"
+    end
+  rescue
+    "#{controller_name}##{action_name}"
   end
 end

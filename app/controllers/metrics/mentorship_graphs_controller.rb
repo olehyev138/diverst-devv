@@ -1,11 +1,12 @@
 class Metrics::MentorshipGraphsController < ApplicationController
   include Metrics
 
+  after_action :visit_page, only: [:index]
+
   layout 'metrics'
 
   def index
     MentoringInterestPolicy.new(current_user, MentoringInterest).index?
-    visit_page('Mentorship Metrics')
     @data = {
       mentoring_sessions: current_user.enterprise.mentoring_sessions.where('start <= ?', 1.month.ago).count,
       active_mentorships: Mentoring.active_mentorships(current_user.enterprise).count,
@@ -95,5 +96,20 @@ class Metrics::MentorshipGraphsController < ApplicationController
         render json: { notice: 'Please check your Secure Downloads section in a couple of minutes' }
       }
     end
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      'Mentorship Metrics'
+    else
+      "#{controller_name}##{action_name}"
+    end
+  rescue
+    "#{controller_name}##{action_name}"
   end
 end

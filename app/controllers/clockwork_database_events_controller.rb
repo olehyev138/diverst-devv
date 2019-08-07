@@ -1,19 +1,18 @@
 class ClockworkDatabaseEventsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_clockwork_database_event, only: [:edit, :update, :show]
+  after_action :visit_page, only: [:index, :edit]
 
   layout 'global_settings'
 
   def index
     authorize current_user.enterprise, :enterprise_manage?
-    visit_page('Clockwork Events')
     @enterprise = current_user.enterprise
     @clockwork_database_events = @enterprise.clockwork_database_events
   end
 
   def edit
     authorize current_user.enterprise, :enterprise_manage?
-    visit_page('Clockwork Events')
   end
 
   def update
@@ -46,5 +45,22 @@ class ClockworkDatabaseEventsController < ApplicationController
         :at,
         :tz
       )
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      'Clockwork Events'
+    when 'edit'
+      'Edit Clockwork Events'
+    else
+      "#{controller_name}##{action_name}"
+    end
+  rescue
+    "#{controller_name}##{action_name}"
   end
 end

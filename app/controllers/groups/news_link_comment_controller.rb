@@ -1,11 +1,11 @@
 class Groups::NewsLinkCommentController < ApplicationController
   before_action :set_group, :set_news_link
+  after_action :visit_page, only: [:edit]
 
   layout 'erg'
 
   def edit
     @comment = @news_link.comments.find(params[:id])
-    visit_page('News Link Comment Edit')
   end
 
   def update
@@ -43,5 +43,20 @@ class Groups::NewsLinkCommentController < ApplicationController
           :content,
           :approved
         )
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'edit'
+      'News Link Comment Edit'
+    else
+      "#{controller_name}##{action_name}"
+    end
+  rescue
+    "#{controller_name}##{action_name}"
   end
 end

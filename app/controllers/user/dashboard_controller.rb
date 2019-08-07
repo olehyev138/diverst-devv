@@ -1,11 +1,11 @@
 class User::DashboardController < ApplicationController
   before_action :authenticate_user!
   before_action :set_enterprise
+  after_action :visit_page, only: [:home, :rewards, :privacy_statement]
 
   layout 'user'
 
   def home
-    visit_page('User\'s Home Page')
     @upcoming_events = current_user.initiatives.upcoming.includes(:owner_group).limit(4) + current_user.invited_initiatives.upcoming.includes(:owner_group).limit(3)
     @posts = posts
     @messages = current_user.messages.includes(:group, :owner).limit(3)
@@ -13,14 +13,12 @@ class User::DashboardController < ApplicationController
   end
 
   def rewards
-    visit_page('User\'s Rewards Page')
     @reward_actions = @enterprise.reward_actions.order(points: :asc)
     @rewards = @enterprise.rewards.order(points: :asc)
     @badges = @enterprise.badges.order(points: :asc)
   end
 
   def privacy_statement
-    visit_page('Privacy Statement')
   end
 
   private
@@ -52,5 +50,24 @@ class User::DashboardController < ApplicationController
   def joins
     'LEFT OUTER JOIN news_feed_link_segments ON news_feed_link_segments.news_feed_link_id = news_feed_links.id
      LEFT OUTER JOIN shared_news_feed_links ON shared_news_feed_links.news_feed_link_id = news_feed_links.id'
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'home'
+      'User\'s Home Page'
+    when 'rewards'
+      'User\'s Rewards Page'
+    when 'privacy_statement'
+      'Privacy Statement'
+    else
+      "#{controller_name}##{action_name}"
+    end
+  rescue
+    "#{controller_name}##{action_name}"
   end
 end

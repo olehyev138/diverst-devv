@@ -4,12 +4,12 @@ class Initiatives::ExpensesController < ApplicationController
   before_action :set_initiative
   before_action :set_expense, only: [:edit, :update, :destroy, :show]
   after_action :verify_authorized
+  after_action :visit_page, only: [:index, :new, :show, :edit]
 
   layout 'erg'
 
   def index
     authorize InitiativeExpense
-    visit_page("#{@initiative.name}'s Expenses")
     @expenses = @initiative.expenses
 
     redirect_to :back if @initiative.has_no_estimated_funding?
@@ -17,7 +17,6 @@ class Initiatives::ExpensesController < ApplicationController
 
   def new
     authorize InitiativeExpense
-    visit_page("#{@initiative.name}'s Expense Creation")
     @expense = @initiative.expenses.new
   end
 
@@ -71,12 +70,10 @@ class Initiatives::ExpensesController < ApplicationController
   # MISSING TEMPLATE
   def show
     authorize @expense
-    visit_page("View Expense #{@expense.name}")
   end
 
   def edit
     authorize @expense
-    visit_page("Edit an Expense for #{@initiative.name}")
   end
 
   def update
@@ -118,5 +115,26 @@ class Initiatives::ExpensesController < ApplicationController
         :amount,
         :annual_budget_id
       )
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      "#{@initiative.to_label}'s Expenses"
+    when 'new'
+      "#{@initiative.to_label}'s Expense Creation"
+    when 'show'
+      "View Expense #{@expense.to_label}"
+    when 'edit'
+      "Edit an Expense for #{@initiative.to_label}"
+    else
+      "#{controller_name}##{action_name}"
+    end
+  rescue
+    "#{controller_name}##{action_name}"
   end
 end

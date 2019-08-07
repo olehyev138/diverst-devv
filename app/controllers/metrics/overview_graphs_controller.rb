@@ -1,11 +1,12 @@
 class Metrics::OverviewGraphsController < ApplicationController
   include Metrics
 
+  after_action :visit_page, only: [:index]
+
   layout 'metrics'
 
   def index
     authorize MetricsDashboard
-    visit_page('Overview Metrics')
 
     enterprise = current_user.enterprise
     @general_metrics = {
@@ -35,5 +36,20 @@ class Metrics::OverviewGraphsController < ApplicationController
       mentoring_sessions: enterprise.mentoring_sessions.where('start <= ?', 1.month.ago).count,
       active_mentorships: Mentoring.active_mentorships(enterprise).count
     }
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      'Overview Metrics'
+    else
+      "#{controller_name}##{action_name}"
+    end
+  rescue
+    "#{controller_name}##{action_name}"
   end
 end

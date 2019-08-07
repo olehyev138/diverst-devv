@@ -3,12 +3,12 @@ class Groups::QuestionsController < ApplicationController
   before_action :set_group
   before_action :set_user_group, only: [:survey, :submit_survey]
   after_action :verify_authorized, only: [:index]
+  after_action :visit_page, only: [:index, :survey]
 
   layout 'erg'
 
   def index
     authorize @group, :insights?
-    visit_page("#{@group.name}'s Survey Questions")
 
     @answers_count = @group.user_groups.with_answered_survey.count
   end
@@ -17,8 +17,6 @@ class Groups::QuestionsController < ApplicationController
     if @user_group.blank?
       flash[:notice] = "Your have to join group before taking it's survey"
       redirect_to @group
-    else
-      visit_page("#{@group.name}'s Survey")
     end
   end
 
@@ -57,5 +55,22 @@ class Groups::QuestionsController < ApplicationController
 
   def csv_file_name
     "#{@group.name}-membership_preferances-#{Date.today}.csv"
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      "#{@group.to_label}'s Survey Questions"
+    when 'survey'
+      "#{@group.to_label}'s Survey"
+    else
+      "#{controller_name}##{action_name}"
+    end
+  rescue
+    "#{controller_name}##{action_name}"
   end
 end

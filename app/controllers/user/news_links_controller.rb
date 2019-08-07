@@ -1,12 +1,12 @@
 class User::NewsLinksController < ApplicationController
   before_action :authenticate_user!
   before_action :set_page
+  after_action :visit_page, only: [:index]
 
   layout 'user'
 
   def index
     authorize NewsLink
-    visit_page('User\'s News Feed')
     @count = posts.size
     @posts = posts.limit(@limit)
   end
@@ -41,5 +41,20 @@ class User::NewsLinksController < ApplicationController
     @limit = 5
     @page = params[:page].present? ? params[:page].to_i : 1
     @limit *= @page
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      'User\'s News Feed'
+    else
+      "#{controller_name}##{action_name}"
+    end
+  rescue
+    "#{controller_name}##{action_name}"
   end
 end

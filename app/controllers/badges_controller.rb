@@ -3,12 +3,12 @@ class BadgesController < ApplicationController
   before_action :set_enterprise
   before_action :set_badge, only: [:edit, :update, :destroy]
   after_action :verify_authorized
+  after_action :visit_page, only: [:new, :edit]
 
   layout 'global_settings'
 
   def new
     authorize @enterprise, :update?
-    visit_page('Badge Creation')
     @badge = Badge.new
   end
 
@@ -27,7 +27,6 @@ class BadgesController < ApplicationController
 
   def edit
     authorize @enterprise, :update?
-    visit_page('Badge Editor')
     @badge = @enterprise.badges.find(params[:id])
   end
 
@@ -61,5 +60,22 @@ class BadgesController < ApplicationController
 
   def badge_params
     params.require(:badge).permit(:label, :points, :image)
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'new'
+      'Badge Creation'
+    when 'edit'
+      'Badge Editor'
+    else
+      "#{controller_name}##{action_name}"
+    end
+  rescue
+    "#{controller_name}##{action_name}"
   end
 end

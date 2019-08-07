@@ -4,17 +4,17 @@ class Metrics::MetricsDashboardsController < ApplicationController
   before_action :set_metrics_dashboard, except: [:index, :new, :create, :shared_dashboard]
   after_action :add_shared_dashboards, only: [:create, :update]
   after_action :remove_shared_dashboards, only: [:update]
+  after_action :visit_page, only: [:index, new, show, edit]
+
   layout 'metrics'
 
   def index
     authorize MetricsDashboard
-    visit_page('Metrics Dashboards')
     @dashboards = policy_scope(MetricsDashboard).includes(:enterprise, :segments)
   end
 
   def new
     authorize MetricsDashboard
-    visit_page('Metrics Dashboard Creation')
     @metrics_dashboard = current_user.enterprise.metrics_dashboards.new
   end
 
@@ -36,7 +36,6 @@ class Metrics::MetricsDashboardsController < ApplicationController
 
   def show
     authorize @metrics_dashboard
-    visit_page('Metrics Dashboard View')
     @graphs = @metrics_dashboard.graphs.includes(:field, :aggregation)
 
     unless @metrics_dashboard.update_shareable_token
@@ -58,7 +57,6 @@ class Metrics::MetricsDashboardsController < ApplicationController
 
   def edit
     authorize @metrics_dashboard
-    visit_page('Metrics Dashboard Edit')
   end
 
   def update
@@ -138,5 +136,26 @@ class Metrics::MetricsDashboardsController < ApplicationController
         group_ids: [],
         shared_user_ids: []
       )
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      'Metrics Dashboards'
+    when 'new'
+      'Metrics Dashboard Creation'
+    when 'show'
+      'Metrics Dashboard View'
+    when 'edit'
+      'Metrics Dashboard Edit'
+    else
+      "#{controller_name}##{action_name}"
+    end
+  rescue
+    "#{controller_name}##{action_name}"
   end
 end

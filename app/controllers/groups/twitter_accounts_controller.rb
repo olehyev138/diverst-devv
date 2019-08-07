@@ -4,16 +4,15 @@ class Groups::TwitterAccountsController < ApplicationController
   before_action :set_group
   before_action :set_client
   before_action :set_account
+  after_action :visit_page, only: [:index, :new, :show, :edit]
 
   layout 'erg'
 
   def index
-    visit_page("#{@group.name}'s Twitter Accounts")
     @accounts = sorted_accounts
   end
 
   def new
-    visit_page("#{@group.name}'s Twitter Account Follow")
     @account = @group.twitter_accounts.new
   end
 
@@ -53,11 +52,9 @@ class Groups::TwitterAccountsController < ApplicationController
   end
 
   def show
-    visit_page("#{@account.name}'s Twitter Feed")
   end
 
   def edit
-    visit_page("#{@group.name}'s Twitter Account Edit")
   end
 
   protected
@@ -95,5 +92,26 @@ class Groups::TwitterAccountsController < ApplicationController
       account_name = account_name[1..-1]
     end
     account_name
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      "#{@group.to_label}'s Twitter Accounts"
+    when 'new'
+      "#{@group.to_label}'s Twitter Account Follow"
+    when 'show'
+      "#{@account.to_label}'s Twitter Feed"
+    when 'edit'
+      "#{@group.to_label}'s Twitter Account Edit"
+    else
+      "#{controller_name}##{action_name}"
+    end
+  rescue
+    "#{controller_name}##{action_name}"
   end
 end

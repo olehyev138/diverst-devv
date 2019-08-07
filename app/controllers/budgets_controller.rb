@@ -2,12 +2,12 @@ class BudgetsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_group
   before_action :set_budget, only: [:show, :approve, :decline, :destroy]
+  after_action :visit_page, only: [:index, :show, :new, :edit_annual_budget]
 
   layout 'erg'
 
   def index
     authorize [@group], :index?, policy_class: GroupBudgetPolicy
-    visit_page("#{@group.name}'s Budgets")
 
     annual_budget = current_user.enterprise.annual_budgets.find_by(id: params[:annual_budget_id])
     @budgets = annual_budget&.budgets&.order('id DESC') || Budget.none
@@ -15,13 +15,11 @@ class BudgetsController < ApplicationController
 
   def show
     authorize [@group], :show?, policy_class: GroupBudgetPolicy
-    visit_page(@budget.description.present? ? "Budget: #{@budget.description}" : 'Budget Info')
     @annual_budget_id = params[:annual_budget_id]
   end
 
   def new
     authorize [@group], :create?, policy_class: GroupBudgetPolicy
-    visit_page("#{@group.name}'s Budget Creation")
 
     @annual_budget_id = params[:annual_budget_id]
     @budget = Budget.new
@@ -103,7 +101,6 @@ class BudgetsController < ApplicationController
 
   def edit_annual_budget
     authorize [@group], :update?, policy_class: GroupBudgetPolicy
-    visit_page("#{@group.name}'s Annual Budget Editor")
   end
 
   def reset_annual_budget
@@ -182,5 +179,26 @@ class BudgetsController < ApplicationController
         :annual_budget,
         :leftover_money
       )
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      "#{@group.to_label}'s Budgets"
+    when 'show'
+      @budget.to_label.present? ? "Budget: #{@budget.to_label}" : 'Budget Info'
+    when 'new'
+      "#{@group.to_label}'s Budget Creation"
+    when 'edit_annual_budget'
+      "#{@group.to_label}'s Annual Budget Editor"
+    else
+      "#{controller_name}##{action_name}"
+    end
+  rescue
+    "#{controller_name}##{action_name}"
   end
 end

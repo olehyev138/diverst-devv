@@ -4,6 +4,7 @@ class Groups::GroupMembersController < ApplicationController
   before_action :set_member, only: [:destroy, :accept_pending, :remove_member]
   before_action :set_user, only: [:show, :edit, :update]
   after_action :verify_authorized
+  after_action :visit_page, only: [:index, :show]
 
   layout 'erg'
 
@@ -14,14 +15,13 @@ class Groups::GroupMembersController < ApplicationController
     @members = @group.active_members.ransack(params[:q]).result.uniq
     @segments = @group.enterprise.segments
     respond_to do |format|
-      format.html { visit_page("#{@group.name}'s Member List") }
+      format.html
       format.json { render json: GroupMemberDatatable.new(view_context, @group, @members) }
     end
   end
 
   def pending
     authorize [@group], :update?, policy_class: GroupMemberPolicy
-    visit_page("#{@group.name}'s Pending Member List")
 
     @pending_members = @group.pending_members.page(params[:page])
   end
@@ -80,7 +80,6 @@ class Groups::GroupMembersController < ApplicationController
 
   def show
     authorize [@group, @user], :update?, policy_class: GroupMemberPolicy
-    visit_page("#{@group.name} Member: #{@user.name}")
   end
 
   def edit
@@ -306,5 +305,24 @@ class Groups::GroupMembersController < ApplicationController
 
   def options_to_leave_sub_groups_or_parent_group_service
     GroupMembership::Options.new(@group, current_user).leave_sub_groups_or_parent_group
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      "#{@group.to_label}'s Member List"
+    when 'show'
+      "#{@group.to_label} Member: #{@user.to_label}"
+    when 'pending'
+      "#{@group.to_label}'s Pending Member List"
+    else
+      "#{controller_name}##{action_name}"
+    end
+  rescue
+    "#{controller_name}##{action_name}"
   end
 end

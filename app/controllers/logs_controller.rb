@@ -1,6 +1,7 @@
 class LogsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_enterprise
+  before_action :visit_page, only: [:index]
 
   layout 'global_settings'
 
@@ -9,7 +10,6 @@ class LogsController < ApplicationController
 
     respond_to do |format|
       format.html {
-        visit_page('Logs')
         @activities = PublicActivity::Activity.includes(:owner, :trackable).where(recipient: @enterprise).order(created_at: :desc)
         @groups = @enterprise.groups
         @q = PublicActivity::Activity.ransack(params[:q])
@@ -32,5 +32,20 @@ class LogsController < ApplicationController
 
   def set_enterprise
     @enterprise = current_user.enterprise
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      'Logs'
+    else
+      "#{controller_name}##{action_name}"
+    end
+  rescue
+    "#{controller_name}##{action_name}"
   end
 end

@@ -1,6 +1,7 @@
 class User::UsersController < ApplicationController
   before_action :authenticate_user!
   before_action :set_user, only: [:show, :edit, :update, :update_linkedin, :edit_linkedin, :delete_linkedin]
+  after_action :visit_page, only: [:show, :edit]
 
   layout 'user'
 
@@ -10,12 +11,10 @@ class User::UsersController < ApplicationController
     end
 
     authorize @user
-    visit_page("#{@user.name}'s Profile")
   end
 
   def edit
     authorize @user
-    visit_page("#{@user.name}'s Profile Edit")
     @user_groups = @user.user_groups.where(accepted_member: true)
   end
 
@@ -83,5 +82,22 @@ class User::UsersController < ApplicationController
     params.require(:user).permit(
       :linkedin_profile_url
     )
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'show'
+      "#{@user.to_label}'s Profile"
+    when 'edit'
+      "#{@user.to_label}'s Profile Edit"
+    else
+      "#{controller_name}##{action_name}"
+    end
+  rescue
+    "#{controller_name}##{action_name}"
   end
 end

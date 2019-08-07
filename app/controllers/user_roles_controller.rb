@@ -1,19 +1,18 @@
 class UserRolesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_user_role, only: [:edit, :update, :destroy]
+  after_action :visit_page, only: [:new, :edit]
 
   layout 'global_settings'
 
   def new
     authorize UserRole
-    visit_page('User Role Creation')
     @user_role = current_user.enterprise.user_roles.new
     @user_role.role_name = ''
   end
 
   def edit
     authorize UserRole
-    visit_page("User Role Edit: #{@user_role}")
   end
 
   def create
@@ -67,5 +66,22 @@ class UserRolesController < ApplicationController
         :role_type,
         :priority
       )
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'new'
+      'User Role Creation'
+    when 'edit'
+      "User Role Edit: #{@user_role}"
+    else
+      "#{controller_name}##{action_name}"
+    end
+  rescue
+    "#{controller_name}##{action_name}"
   end
 end

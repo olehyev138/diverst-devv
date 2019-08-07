@@ -3,18 +3,17 @@ class Groups::UpdatesController < ApplicationController
   before_action :set_group
   before_action :set_update, only: [:edit, :update, :destroy, :show]
   after_action :verify_authorized
+  after_action :visit_page, only: [:index, :new, :show, :edit]
 
   layout 'erg'
 
   def index
     authorize @group, :update?
-    visit_page("#{@group.name}'s Updates")
     @updates = @group.updates
   end
 
   def new
     authorize Group
-    visit_page("#{@group.name}'s Update Creation")
     @update = @group.updates.new
   end
 
@@ -35,12 +34,10 @@ class Groups::UpdatesController < ApplicationController
 
   def show
     authorize @group
-    visit_page("#{@group.name} Specific Update")
   end
 
   def edit
     authorize Group
-    visit_page("#{@group.name} Update Edit")
   end
 
   def update
@@ -76,5 +73,26 @@ class Groups::UpdatesController < ApplicationController
 
   def update_params
     params.require(:group_update).permit(:created_at)
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      "#{@group.to_label}'s Updates"
+    when 'new'
+      "#{@group.to_label}'s Update Creation"
+    when 'show'
+      "#{@group.to_label} Specific Update"
+    when 'edit'
+      "#{@group.to_label} Update Edit"
+    else
+      "#{controller_name}##{action_name}"
+    end
+  rescue
+    "#{controller_name}##{action_name}"
   end
 end

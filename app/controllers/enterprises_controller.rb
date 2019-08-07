@@ -3,12 +3,13 @@ class EnterprisesController < ApplicationController
   before_action :set_enterprise, except: [:index, :new, :create, :calendar]
   after_action :verify_authorized, except: :calendar
   after_action :allow_iframe, only: [:calendar]
+  after_action :visit_page, only: [:edit, :edit_fields, :edit_budgeting, :edit_mobile_fields,
+                                   :edit_auth, :edit_branding, :edit_algo, :calendar]
 
   layout :resolve_layout
 
   def edit
     authorize @enterprise, :enterprise_manage?
-    visit_page('Enterprise Settings')
   end
 
   def update
@@ -31,7 +32,6 @@ class EnterprisesController < ApplicationController
 
   def edit_fields
     authorize @enterprise
-    visit_page('Fields Edit')
   end
 
   def update_enterprise
@@ -57,7 +57,6 @@ class EnterprisesController < ApplicationController
 
   def edit_budgeting
     authorize @enterprise, :update?
-    visit_page('Budget Settings')
     @groups = @enterprise.groups
   end
 
@@ -69,12 +68,10 @@ class EnterprisesController < ApplicationController
   # missing a template layout called handshake
   def edit_mobile_fields
     authorize @enterprise
-    visit_page('Mobile Fields Settings')
   end
 
   def edit_auth
     authorize @enterprise
-    visit_page('Authentication Settings')
   end
 
   def auto_archive_switch
@@ -90,7 +87,6 @@ class EnterprisesController < ApplicationController
 
   def edit_branding
     authorize @enterprise
-    visit_page('Branding Settings')
     @emails = @enterprise.emails
     set_theme
   end
@@ -98,7 +94,6 @@ class EnterprisesController < ApplicationController
   # missing template
   def edit_algo
     authorize @enterprise, :update?
-    visit_page('Algorithm Settings')
   end
 
   def update_branding
@@ -148,7 +143,6 @@ class EnterprisesController < ApplicationController
   end
 
   def calendar
-    visit_page('Calender')
     @enterprise = Enterprise.find(params[:id])
     render layout: false
   end
@@ -265,5 +259,34 @@ class EnterprisesController < ApplicationController
           :_destroy
         ]
       )
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'edit'
+      'Enterprise Settings'
+    when 'edit_fields'
+      'Fields Edit'
+    when 'edit_budgeting'
+      'Budget Settings'
+    when 'edit_mobile_fields'
+      'Mobile Fields Settings'
+    when 'edit_auth'
+      'Authentication Settings'
+    when 'edit_branding'
+      'Branding Settings'
+    when 'edit_algo'
+      'Algorithm Settings'
+    when 'calendar'
+      'Calender'
+    else
+      "#{controller_name}##{action_name}"
+    end
+  rescue
+    "#{controller_name}##{action_name}"
   end
 end

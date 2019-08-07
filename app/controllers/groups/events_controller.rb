@@ -4,6 +4,7 @@ class Groups::EventsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_group
   before_action :set_event, only: [:edit, :update, :destroy, :show, :export_ics]
+  after_action :visit_page, only: [:index, :show]
 
   layout 'erg'
 
@@ -18,7 +19,6 @@ class Groups::EventsController < ApplicationController
       @past_events = @group.initiatives.past + @group.participating_initiatives.past
       @ongoing_events = @group.initiatives.ongoing + @group.participating_initiatives.ongoing
     end
-    visit_page("#{@group.name}'s Events")
   end
 
   def calendar_data
@@ -51,7 +51,6 @@ class Groups::EventsController < ApplicationController
 
   def show
     authorize @event
-    visit_page("#{@event.name}")
 
     @all_comments = @event.comments
     @approved_comments = @event.comments.approved
@@ -91,5 +90,22 @@ class Groups::EventsController < ApplicationController
 
   def set_event
     @event = @group.initiatives.find(params[:id])
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      "#{@group.to_label}'s Events"
+    when 'show'
+      "#{@event.to_label}"
+    else
+      "#{controller_name}##{action_name}"
+    end
+  rescue
+    "#{controller_name}##{action_name}"
   end
 end

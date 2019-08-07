@@ -1,18 +1,17 @@
 class MentoringInterestsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_topic, only: [:edit, :update, :destroy]
+  after_action :visit_page, only: [:index, :new, :edit]
 
   layout 'mentorship'
 
   def index
     authorize MentoringInterest
-    visit_page('Mentorship Topics')
     @topics = current_user.enterprise.mentoring_interests
   end
 
   def new
     authorize MentoringInterest
-    visit_page('Mentorship Topic Creation')
     @topic = current_user.enterprise.mentoring_interests.new
   end
 
@@ -31,7 +30,6 @@ class MentoringInterestsController < ApplicationController
 
   def edit
     authorize MentoringInterest
-    visit_page("Mentorship Topic Edit: #{@topic.name}")
   end
 
   def update
@@ -64,5 +62,24 @@ class MentoringInterestsController < ApplicationController
       .permit(
         :name
       )
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      'Mentorship Topics'
+    when 'new'
+      'Mentorship Topic Creation'
+    when 'edit'
+      "Mentorship Topic Edit: #{@topic.to_label}"
+    else
+      "#{controller_name}##{action_name}"
+    end
+  rescue
+    "#{controller_name}##{action_name}"
   end
 end

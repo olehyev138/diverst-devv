@@ -3,18 +3,17 @@ class OutcomesController < ApplicationController
   before_action :set_group
   before_action :set_outcome, only: [:edit, :update, :destroy, :show]
   after_action :verify_authorized
+  after_action :visit_page, only: [:index, :new, :edit]
 
   layout 'erg'
 
   def index
     authorize Outcome
-    visit_page('Outcomes')
   end
 
   # MISSING TEMPLATE
   def new
     authorize Outcome
-    visit_page('Outcome Creation')
     @outcome = Outcome.new
   end
 
@@ -38,7 +37,6 @@ class OutcomesController < ApplicationController
 
   def edit
     authorize @outcome
-    visit_page("Outcome Edit: #{@outcome.name}")
   end
 
   def update
@@ -75,5 +73,24 @@ class OutcomesController < ApplicationController
         :name,
         :group_id
       )
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      'Outcomes'
+    when 'new'
+      'Outcome Creation'
+    when 'edit'
+      "Outcome Edit: #{@outcome.to_label}"
+    else
+      "#{controller_name}##{action_name}"
+    end
+  rescue
+    "#{controller_name}##{action_name}"
   end
 end

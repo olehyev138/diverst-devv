@@ -1,6 +1,7 @@
 class Metrics::CampaignGraphsController < ApplicationController
   include Metrics
   before_action :set_campaign
+  after_action :visit_page, only: [:index]
 
   layout 'metrics'
 
@@ -44,5 +45,20 @@ class Metrics::CampaignGraphsController < ApplicationController
   def set_campaign
     passed_campaign_id = metrics_params[:scoped_by_models[0]]
     @campaign = passed_campaign_id.present? ? Campaign.find(passed_campaign_id) : Campaign.first
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      'Campaign Metrics'
+    else
+      "#{controller_name}##{action_name}"
+    end
+  rescue
+    "#{controller_name}##{action_name}"
   end
 end

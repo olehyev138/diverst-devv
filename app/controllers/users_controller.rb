@@ -5,6 +5,8 @@ class UsersController < ApplicationController
                   :show, :group_surveys, :show_usage, :user_url_usage_data
                 ]
   after_action :verify_authorized, except: [:edit_profile, :group_surveys]
+  after_action :visit_page, only: [:index, :new, :show, :group_surveys,
+                                   :edit, :show_usage]
 
   layout :resolve_layout
 
@@ -32,7 +34,7 @@ class UsersController < ApplicationController
     end
 
     respond_to do |format|
-      format.html { visit_page('User List') }
+      format.html
       format.json { render json: UserDatatable.new(view_context, @users) }
     end
   end
@@ -60,16 +62,13 @@ class UsersController < ApplicationController
   # MISSING HTML TEMPLATE
   def new
     authorize User
-    visit_page('User Creation')
   end
 
   def show
     authorize @user
-    visit_page("#{@user.name}'s Details")
   end
 
   def group_surveys
-    visit_page("#{@user.name}'s Survey Answers")
     @is_own_survey = current_user == @user
 
     if params[:group_id].present?
@@ -85,7 +84,6 @@ class UsersController < ApplicationController
   # For admins. Dedicated to editing any user's info
   def edit
     authorize @user
-    visit_page("#{@user.name}'s Edit")
     @is_admin_view = true
   end
 
@@ -186,13 +184,11 @@ class UsersController < ApplicationController
 
   def show_usage
     authorize @user, :show?
-    visit_page("#{@user.name}'s Usage Stats")
     get_user_usage_metrics
   end
 
   def index_usage
     authorize User, :index?
-    visit_page('Aggregate Usage Stats')
     get_aggregate_usage_metrics
   end
 
@@ -421,5 +417,30 @@ class UsersController < ApplicationController
 
   def extra_params
     params.permit(:not_current_user, :can_metrics_dashboard_create)
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      'User List'
+    when 'new'
+      'User Creation'
+    when 'show'
+      "#{@user.to_label}'s Details"
+    when 'group_surveys'
+      "#{@user.to_label}'s Survey Answers"
+    when 'edit'
+      "#{@user.to_label}'s Edit"
+    when 'show_usage'
+      "#{@user.to_label}'s Usage Stats"
+    else
+      "#{controller_name}##{action_name}"
+    end
+  rescue
+    "#{controller_name}##{action_name}"
   end
 end

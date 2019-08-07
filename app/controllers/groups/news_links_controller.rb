@@ -5,26 +5,23 @@ class Groups::NewsLinksController < ApplicationController
 
   before_action :set_group, except: [:url_info]
   before_action :set_news_link, only: [:comments, :create_comment, :edit, :update, :destroy, :news_link_photos, :archive]
+  after_action :visit_page, only: [:index, :new, :edit, :comments]
 
   layout 'erg'
 
   def index
     @news_links = @group.news_links.includes(:author).order(created_at: :desc)
-    visit_page("#{@group.name}'s News Links")
   end
 
   def new
-    visit_page("#{@group.name}'s News Link Creation")
     @news_link = @group.news_links.new
     @news_link.build_news_feed_link(news_feed_id: @group.news_feed.id)
   end
 
   def edit
-    visit_page("#{@group.name}'s News Link Edit")
   end
 
   def comments
-    visit_page("#{@news_link.title}'s Comments")
     @comments = @news_link.comments.includes(:author)
     @new_comment = NewsLinkComment.new
     @news_link.increment_view(current_user)
@@ -135,5 +132,26 @@ class Groups::NewsLinksController < ApplicationController
         .permit(
           :content
         )
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      "#{@group.to_label}'s News Links"
+    when 'new'
+      "#{@group.to_label}'s News Link Creation"
+    when 'edit'
+      "#{@group.to_label}'s News Link Edit"
+    when 'comments'
+      "#{@news_link.to_label}'s Comments"
+    else
+      "#{controller_name}##{action_name}"
+    end
+  rescue
+    "#{controller_name}##{action_name}"
   end
 end

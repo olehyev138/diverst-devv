@@ -2,18 +2,17 @@ class ExpenseCategoriesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_expense_category, only: [:edit, :update, :destroy, :show, :export_csv]
   after_action :verify_authorized
+  after_action :visit_page, only: [:index, :new, :edit]
 
   layout 'collaborate'
 
   def index
     authorize ExpenseCategory
-    visit_page('Expense Categories')
     @expense_categories = policy_scope(ExpenseCategory)
   end
 
   def new
     authorize ExpenseCategory
-    visit_page('Expense Category Creation')
     @expense_category = current_user.enterprise.expense_categories.new
   end
 
@@ -33,7 +32,6 @@ class ExpenseCategoriesController < ApplicationController
 
   def edit
     authorize @expense_category
-    visit_page("Expense Category Edit: #{@expense_category.name}")
   end
 
   def update
@@ -71,5 +69,24 @@ class ExpenseCategoriesController < ApplicationController
         :income,
         :icon
       )
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      'Expense Categories'
+    when 'new'
+      'Expense Category Creation'
+    when 'edit'
+      "Expense Category Edit: #{@expense_category.to_label}"
+    else
+      "#{controller_name}##{action_name}"
+    end
+  rescue
+    "#{controller_name}##{action_name}"
   end
 end

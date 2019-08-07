@@ -3,24 +3,22 @@ class QuestionsController < ApplicationController
   before_action :set_campaign, only: [:index, :new, :create]
   before_action :set_question, only: [:edit, :update, :destroy, :show, :reopen]
   after_action :verify_authorized
+  after_action :visit_page, only: [:index, :new, :show, :edit]
 
   layout 'collaborate'
 
   def index
     authorize @campaign
-    visit_page("#{@campaign.title} Questions")
     @questions = @campaign.questions.order(created_at: :desc)
   end
 
   def new
     authorize @campaign
-    visit_page("Create Question for #{@campaign.title}")
     @question = @campaign.questions.new
   end
 
   def show
     authorize @question.campaign
-    visit_page("#{@question.campaign.title} Question: #{@question.title}")
     @answers = @question.answers
       .includes(:author, comments: :author)
       .order(chosen: :desc)
@@ -49,7 +47,6 @@ class QuestionsController < ApplicationController
 
   def edit
     authorize @question.campaign
-    visit_page("#{@question.campaign.title} Question Edit: #{@question.title}")
   end
 
   def update
@@ -104,5 +101,26 @@ class QuestionsController < ApplicationController
           ]
         ]
       )
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      "#{@campaign.to_label} Questions"
+    when 'new'
+      "Create Question for #{@campaign.to_label}"
+    when 'show'
+      "#{@question.campaign.to_label} Question: #{@question.to_label}"
+    when 'edit'
+      "#{@question.campaign.to_label} Question Edit: #{@question.to_label}"
+    else
+      "#{controller_name}##{action_name}"
+    end
+  rescue
+    "#{controller_name}##{action_name}"
   end
 end

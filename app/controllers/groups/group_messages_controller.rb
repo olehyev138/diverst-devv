@@ -4,16 +4,15 @@ class Groups::GroupMessagesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_group
   before_action :set_message, only: [:show, :destroy, :edit, :update, :archive]
+  after_action :visit_page, only: [:index, :show, :new, :edit]
 
   layout 'erg'
 
   def index
-    visit_page("#{@group.name}'s Messages")
     @messages = @group.messages.includes(:owner).order(created_at: :desc).page(0)
   end
 
   def show
-    visit_page("#{@message.subject}")
     @comments = @message.comments.includes(:author)
 
     @new_comment = GroupMessageComment.new
@@ -22,14 +21,12 @@ class Groups::GroupMessagesController < ApplicationController
   end
 
   def new
-    visit_page('Message Creation')
     @message = @group.messages.new
     @message.build_news_feed_link(news_feed_id: @group.news_feed.id)
   end
 
   def edit
     authorize [@group, @message], :update?, policy_class: GroupMessagePolicy
-    visit_page("Edit Message: #{@message.subject}")
   end
 
   def create
@@ -120,5 +117,26 @@ class Groups::GroupMessagesController < ApplicationController
         .permit(
           :content
         )
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      "#{@group.to_label}'s Messages"
+    when 'show'
+      "#{@message.to_label}"
+    when 'new'
+      'Message Creation'
+    when 'edit'
+      "Edit Message: #{@message.to_label}"
+    else
+      "#{controller_name}##{action_name}"
+    end
+  rescue
+    "#{controller_name}##{action_name}"
   end
 end

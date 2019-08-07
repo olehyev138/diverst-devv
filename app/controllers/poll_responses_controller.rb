@@ -5,12 +5,12 @@ class PollResponsesController < ApplicationController
   before_action :set_poll
   before_action :set_response, only: [:edit, :update, :destroy, :show]
   skip_before_action :verify_authenticity_token, only: [:create]
+  after_action :visit_page, only: [:index, :new]
 
   layout 'guest'
 
   # MISSING TEMPLATE
   def index
-    visit_page('Poll Responses')
     @responses = @poll.responses
   end
 
@@ -20,7 +20,6 @@ class PollResponsesController < ApplicationController
       redirect_to action: 'thank_you', id: response.id
     end
 
-    visit_page('Poll Response Creation')
     @response = @poll.responses.new
   end
 
@@ -66,5 +65,22 @@ class PollResponsesController < ApplicationController
 
   def poll_response_params
     params.require(:poll_response).permit(:anonymous)
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      'Poll Response'
+    when 'new'
+      'Poll Response Creation'
+    else
+      "#{controller_name}##{action_name}"
+    end
+  rescue
+    "#{controller_name}##{action_name}"
   end
 end

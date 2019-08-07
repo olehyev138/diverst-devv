@@ -1,9 +1,9 @@
 class MentoringsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_mentoring, only: [:update, :destroy]
+  after_action :visit_page, only: [:index]
 
   def index
-    visit_page('Mentorship Home Page')
     @users = current_user.enterprise.users.enterprise_mentors([current_user.id] + current_user.mentors.ids) if params[:mentor]
     @users = current_user.enterprise.users.enterprise_mentees([current_user.id] + current_user.mentees.ids) if params[:mentee]
 
@@ -34,5 +34,20 @@ class MentoringsController < ApplicationController
 
   def search_params
     params.permit(:mentor, :mentee)
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      'Mentorship Home Page'
+    else
+      "#{controller_name}##{action_name}"
+    end
+  rescue
+    "#{controller_name}##{action_name}"
   end
 end

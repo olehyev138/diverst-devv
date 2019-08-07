@@ -1,10 +1,10 @@
 class MentoringRequestsController < ApplicationController
   before_action :set_mentoring_request, only: [:update, :destroy]
+  after_action :visit_page, only: [:new]
 
   layout 'user'
 
   def new
-    visit_page('New Mentorship Request')
     @mentoring_request = MentoringRequest.new(sender_id: params[:sender_id], receiver_id: params[:receiver_id], mentoring_type: params[:mentoring_type])
 
     if params[:mentoring_type] === 'mentor'
@@ -65,5 +65,20 @@ class MentoringRequestsController < ApplicationController
 
   def set_mentoring_request
     @mentoring_request = current_user.enterprise.mentoring_requests.find(params[:id])
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'new'
+      'New Mentorship Request'
+    else
+      "#{controller_name}##{action_name}"
+    end
+  rescue
+    "#{controller_name}##{action_name}"
   end
 end

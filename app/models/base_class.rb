@@ -61,6 +61,20 @@ class BaseClass < ActiveRecord::Base
     self.reflections[association.to_s].klass.table_name
   end
 
+  def to_label
+    if respond_to?('name')
+      name
+    elsif respond_to?('title')
+      title
+    elsif respond_to?('subject')
+      subject
+    elsif respond_to?('description')
+      description
+    else
+      "#{self.class.name}(#{id})"
+    end
+  end
+
   after_commit on: [:create] { update_elasticsearch_index('index') }
   after_commit on: [:update] { update_elasticsearch_index('update') }
   after_commit on: [:destroy] { update_elasticsearch_index('delete') }

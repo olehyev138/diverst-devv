@@ -4,12 +4,12 @@ class InitiativesController < ApplicationController
   before_action :set_initiative, only: [:edit, :update, :destroy, :show, :todo, :finish_expenses, :export_attendees_csv, :archive]
   before_action :set_segments, only: [:new, :create, :edit, :update]
   after_action :verify_authorized
+  after_action :visit_page, only: [:index, :new, :show, :edit, :todo]
 
   layout 'erg'
 
   def index
     authorize Initiative
-    visit_page("#{@group.name}'s Initiative")
     @outcomes = @group.outcomes.includes(:pillars)
 
     set_filter
@@ -17,7 +17,6 @@ class InitiativesController < ApplicationController
 
   def new
     authorize Initiative
-    visit_page("#{@group.name} Initiative Creation")
     @initiative = Initiative.new
   end
 
@@ -43,13 +42,11 @@ class InitiativesController < ApplicationController
 
   def show
     authorize @initiative
-    visit_page("Event: #{@initiative.name}")
     @updates = @initiative.updates.order(created_at: :desc).limit(3).reverse # Shows the last 3 updates in chronological order
   end
 
   def edit
     authorize @initiative
-    visit_page("Initiative Edit: #{@initiative.name}")
   end
 
   def update
@@ -93,7 +90,6 @@ class InitiativesController < ApplicationController
 
   def todo
     authorize @initiative, :update?
-    visit_page("Initiative Todo: #{@initiative.name}")
   end
 
   def export_attendees_csv
@@ -205,5 +201,28 @@ class InitiativesController < ApplicationController
           :_destroy
         ],
       )
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      "#{@group.to_label}'s Initiative"
+    when 'new'
+      "#{@group.to_label} Initiative Creation"
+    when 'show'
+      "Event: #{@initiative.to_label}"
+    when 'edit'
+      "Initiative Edit: #{@initiative.to_label}"
+    when 'todo'
+      "Initiative Todo: #{@initiative.to_label}"
+    else
+      "#{controller_name}##{action_name}"
+    end
+  rescue
+    "#{controller_name}##{action_name}"
   end
 end

@@ -1,11 +1,11 @@
 class ArchivedPostsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_post, only: [:restore, :destroy]
+  after_action :visit_page, only: [:index]
 
   layout 'erg_manager'
 
   def index
-    visit_page('Archived Posts')
     # get all news feed for current enterprise
     @posts = NewsFeed.archived_posts(current_user.enterprise).order(created_at: :desc)
     authorize current_user.enterprise, :manage_posts?, policy_class: EnterprisePolicy
@@ -60,5 +60,20 @@ class ArchivedPostsController < ApplicationController
 
   def set_post
     @post = NewsFeedLink.find(params[:id])
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      'Archived Post'
+    else
+      "#{controller_name}##{action_name}"
+    end
+  rescue
+    "#{controller_name}##{action_name}"
   end
 end

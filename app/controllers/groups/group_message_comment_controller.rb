@@ -1,10 +1,10 @@
 class Groups::GroupMessageCommentController < ApplicationController
   before_action :set_group, :set_group_message
+  after_action :visit_page, only: [:edit]
 
   layout 'erg'
 
   def edit
-    visit_page('Edit Group Message Comment')
     @comment = @group_message.comments.find(params[:id])
   end
 
@@ -43,5 +43,20 @@ class Groups::GroupMessageCommentController < ApplicationController
           :content,
           :approved
         )
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'edit'
+      'Edit Group Message Comment'
+    else
+      "#{controller_name}##{action_name}"
+    end
+  rescue
+    "#{controller_name}##{action_name}"
   end
 end

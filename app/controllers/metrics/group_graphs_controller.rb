@@ -1,11 +1,12 @@
 class Metrics::GroupGraphsController < ApplicationController
   include Metrics
 
+  after_action :visit_page, only: [:index, :initiatives, :social_media, :resources]
+
   layout 'metrics'
 
   def index
     authorize MetricsDashboard
-    visit_page('Group Metrics')
 
     @group_metrics = {
       total_groups: current_user.enterprise.groups.size,
@@ -14,15 +15,12 @@ class Metrics::GroupGraphsController < ApplicationController
   end
 
   def initiatives
-    visit_page('Group Events Metrics')
   end
 
   def social_media
-    visit_page('Group Social Media Metrics')
   end
 
   def resources
-    visit_page('Group Resource Metrics')
   end
 
   # Metric actions
@@ -220,5 +218,26 @@ class Metrics::GroupGraphsController < ApplicationController
         render json: @graph.growth_of_resources(metrics_params[:date_range], metrics_params[:scoped_by_models])
       }
     end
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      'Group Metrics'
+    when 'initiatives'
+      'Group Events Metrics'
+    when 'social_media'
+      'Group Social Media Metrics'
+    when 'resources'
+      'Group Resource Metrics'
+    else
+      "#{controller_name}##{action_name}"
+    end
+  rescue
+    "#{controller_name}##{action_name}"
   end
 end

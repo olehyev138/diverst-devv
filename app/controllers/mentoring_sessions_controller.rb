@@ -1,11 +1,11 @@
 class MentoringSessionsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_mentoring_session, only: [:show, :edit, :update, :destroy, :start, :join, :export_ics]
+  after_action :visit_page, only: [:new, :edit, :show]
 
   layout 'user', except: [:start, :join]
 
   def new
-    visit_page('Mentoring Session Creation')
     @mentoring_session = current_user.mentoring_sessions.new
     @mentoring_session.format = 'Video'
     @mentoring_session.mentorship_sessions.new(user_id: current_user.id)
@@ -16,14 +16,12 @@ class MentoringSessionsController < ApplicationController
 
   def edit
     authorize @mentoring_session
-    visit_page('Mentoring Session Edit')
 
     render 'user/mentorship/sessions/edit'
   end
 
   def show
     authorize @mentoring_session
-    visit_page('Mentoring Session')
 
     @comments = @mentoring_session.comments.includes(:user)
 
@@ -193,5 +191,24 @@ class MentoringSessionsController < ApplicationController
 
   def set_mentoring_session
     @mentoring_session = current_user.mentoring_sessions.find(params[:id])
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'new'
+      'Mentoring Session Creation'
+    when 'edit'
+      'Mentoring Session Edit'
+    when 'show'
+      'Mentoring Session'
+    else
+      "#{controller_name}##{action_name}"
+    end
+  rescue
+    "#{controller_name}##{action_name}"
   end
 end

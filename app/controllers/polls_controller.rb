@@ -2,18 +2,17 @@ class PollsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_poll, only: [:edit, :update, :destroy, :show, :export_csv]
   after_action :verify_authorized
+  after_action :visit_page, only: [:index, :new, :show, :edit]
 
   layout 'market_scope'
 
   def index
     authorize Poll
-    visit_page('Polls')
     @polls = policy_scope(Poll)
   end
 
   def new
     authorize Poll
-    visit_page('Poll Creation')
     @poll = current_user.enterprise.polls.new
   end
 
@@ -34,7 +33,6 @@ class PollsController < ApplicationController
 
   def show
     authorize @poll
-    visit_page("Poll: #{@poll.title}")
 
     @graphs = @poll.graphs.includes(:field, :aggregation)
     @responses = @poll.responses
@@ -44,7 +42,6 @@ class PollsController < ApplicationController
 
   def edit
     authorize @poll
-    visit_page("Poll Edit: #{@poll.title}")
   end
 
   def update
@@ -107,5 +104,26 @@ class PollsController < ApplicationController
           :alternative_layout
         ]
       )
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      'Polls'
+    when 'new'
+      'Poll Creation'
+    when 'show'
+      "Poll: #{@poll.to_label}"
+    when 'edit'
+      "Poll Edit: #{@poll.to_label}"
+    else
+      "#{controller_name}##{action_name}"
+    end
+  rescue
+    "#{controller_name}##{action_name}"
   end
 end

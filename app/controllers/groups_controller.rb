@@ -4,6 +4,8 @@ class GroupsController < ApplicationController
   before_action :set_groups, only: [:index, :get_all_groups]
   skip_before_action :verify_authenticity_token, only: [:create, :calendar_data]
   after_action :verify_authorized, except: [:calendar_data]
+  after_action :visit_page, only: [:index, :close_budgets, :calender, :new, :show, :edit, :layouts,
+                                   :settings, :plan_overview, :metrics, :import_csv, :edit_fields]
 
   layout :resolve_layout
 
@@ -15,7 +17,7 @@ class GroupsController < ApplicationController
     @groups = @groups.includes(:children)
 
     respond_to do |format|
-      format.html { visit_page("#{c_t(:sub_erg)} List") }
+      format.html
       format.json { render json: GroupDatatable.new(view_context, @groups) }
     end
   end
@@ -73,7 +75,6 @@ class GroupsController < ApplicationController
 
   def close_budgets
     authorize Group, :manage_all_group_budgets?
-    visit_page('Close Budgets')
     @groups = policy_scope(Group).includes(:children).all_parents
   end
 
@@ -88,7 +89,6 @@ class GroupsController < ApplicationController
   # calendar for all of the groups
   def calendar
     authorize Group
-    visit_page("#{c_t(:sub_erg).pluralize} Calender")
     enterprise = current_user.enterprise
     @groups = []
     enterprise.groups.each do |group|
@@ -148,7 +148,6 @@ class GroupsController < ApplicationController
 
   def new
     authorize Group
-    visit_page("#{c_t(:sub_erg)} Creation")
     @group = current_user.enterprise.groups.new
     @categories = current_user.enterprise.group_categories
     # groups available to be parents or children
@@ -157,7 +156,6 @@ class GroupsController < ApplicationController
 
   def show
     authorize @group
-    visit_page("#{@group.name}'s Home")
     @group_sponsors = @group.sponsors
     @show_events = should_show_event?(@group)
 
@@ -208,7 +206,6 @@ class GroupsController < ApplicationController
 
   def edit
     authorize @group
-    visit_page("#{c_t(:sub_erg)} Edit: #{@group.name}")
     @categories = current_user.enterprise.group_categories
     # groups available to be parents or children
     @available_groups = @group.enterprise.groups.where.not(id: @group.id)
@@ -268,17 +265,14 @@ class GroupsController < ApplicationController
 
   def layouts
     authorize @group
-    visit_page("#{@group.name}'s Layout Setting")
   end
 
   def settings
     authorize @group
-    visit_page("#{@group.name}'s Settings")
   end
 
   def plan_overview
     authorize [@group], :index?, policy_class: GroupBudgetPolicy
-    visit_page("#{@group.name}'s Plan Overview")
   end
 
   def destroy
@@ -296,13 +290,11 @@ class GroupsController < ApplicationController
 
   def metrics
     authorize @group, :manage?
-    visit_page("#{@group.name}'s Metrics")
     @updates = @group.updates
   end
 
   def import_csv
     authorize @group, :edit?
-    visit_page("#{@group.name}'s Member CSV Import")
   end
 
   def sample_csv
@@ -355,7 +347,6 @@ class GroupsController < ApplicationController
 
   def edit_fields
     authorize @group, :edit?
-    visit_page("#{@group.name}'s Survey Question Settings")
   end
 
   def delete_attachment
@@ -537,5 +528,42 @@ class GroupsController < ApplicationController
             :_destroy
           ]
         )
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      "#{c_t(:sub_erg)} List"
+    when 'close_budgets'
+      'Close Budgets'
+    when 'calendar'
+      "#{c_t(:sub_erg).pluralize} Calender"
+    when 'new'
+      "#{c_t(:sub_erg)} Creation"
+    when show
+      "#{@group.to_label}'s Home"
+    when 'edit'
+      "#{c_t(:sub_erg)} Edit: #{@group.to_label}"
+    when 'layouts'
+      "#{@group.to_label}'s Layout Setting"
+    when settings
+      "#{@group.to_label}'s Settings"
+    when plan_overview
+      "#{@group.to_label}'s Plan Overview"
+    when 'metrics'
+      "#{@group.to_label}'s Metrics"
+    when 'import_csv'
+      "#{@group.to_label}'s Member CSV Import"
+    when 'edit_fields'
+      "#{@group.to_label}'s Survey Question Settings"
+    else
+      "#{controller_name}##{action_name}"
+    end
+  rescue
+    "#{controller_name}##{action_name}"
   end
 end

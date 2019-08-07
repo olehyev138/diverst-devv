@@ -1,18 +1,17 @@
 class PolicyGroupTemplatesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_policy_group_template, only: [:edit, :update]
+  after_action :visit_page, only: [:index, :edit]
 
   layout 'global_settings'
 
   def index
     authorize PolicyGroupTemplate
-    visit_page('Policy Group Templates')
     @policy_group_templates = current_user.enterprise.policy_group_templates
   end
 
   def edit
     authorize PolicyGroupTemplate
-    visit_page("Policy Group Edit: #{@policy_group_template.name}")
   end
 
   def update
@@ -100,5 +99,22 @@ class PolicyGroupTemplatesController < ApplicationController
         :mentorship_manage,
         :auto_archive_manage
       )
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      'Policy Group Templates'
+    when 'edit'
+      "Policy Group Edit: #{@policy_group_template.to_label}"
+    else
+      "#{controller_name}##{action_name}"
+    end
+  rescue
+    "#{controller_name}##{action_name}"
   end
 end
