@@ -4,12 +4,9 @@
  *
  * - Acts as the 'super' component
  * - Given a field object and renders the appropriate field input
- */
-
-/*
- ***********************************************************************************
- * - NOT USED (See utils/customFieldHelpers)
- ***********************************************************************************
+ *
+ * - We use Formiks 'connect' function to hook into Formik's context
+ * - This way we can build our own custom Formik fields
  */
 
 import React from 'react';
@@ -17,14 +14,22 @@ import PropTypes from 'prop-types';
 import dig from 'object-dig';
 
 import CustomTextField from 'components/Shared/Fields/FieldInputs/TextField';
+import CustomDateField from 'components/Shared/Fields/FieldInputs/DateField';
+import CustomSelectField from 'components/Shared/Fields/FieldInputs/SelectField';
 
 const CustomField = (props) => {
-  const fieldData = dig(props, 'fieldData');
+  const fieldData = dig(props, 'fieldDatum');
 
   const renderField = (fieldData) => {
     switch (dig(fieldData, 'field', 'type')) {
       case 'TextField':
-        return (<CustomTextField fieldData={fieldData} />);
+        return (<CustomTextField {...props} inputType='' />);
+      case 'NumericField':
+        return (<CustomTextField {...props} inputType='number' />);
+      case 'DateField':
+        return (<CustomDateField {...props} />);
+      case 'SelectField':
+        return (<CustomSelectField {...props} />);
       default:
         return (<React.Fragment />);
     }
@@ -34,8 +39,8 @@ const CustomField = (props) => {
 };
 
 CustomField.propTypes = {
-  fieldData: PropTypes.object,
-  field: PropTypes.object
+  fieldDatum: PropTypes.object,
+  fieldDatumIndex: PropTypes.number
 };
 
 export default CustomField;

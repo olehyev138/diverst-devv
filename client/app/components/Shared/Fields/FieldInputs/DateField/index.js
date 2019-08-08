@@ -1,8 +1,10 @@
 /**
  *
- * TextField
+ * DateField
  *
  */
+
+/* TODO: switch input to use @material-ui/pickers */
 
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -12,7 +14,7 @@ import dig from 'object-dig';
 
 import { TextField } from '@material-ui/core';
 
-const CustomTextField = (props) => {
+const CustomDateField = (props) => {
   const fieldDatum = dig(props, 'fieldDatum');
   const fieldDatumIndex = dig(props, 'fieldDatumIndex');
 
@@ -22,7 +24,7 @@ const CustomTextField = (props) => {
     <TextField
       name={dataLocation}
       id={dataLocation}
-      type={props.inputType}
+      type='date'
       label={fieldDatum.field.title}
       value={getIn(props.formik.values, dataLocation)}
       onChange={props.formik.handleChange}
@@ -30,11 +32,10 @@ const CustomTextField = (props) => {
   );
 };
 
-CustomTextField.propTypes = {
+CustomDateField.propTypes = {
   fieldDatum: PropTypes.object,
   fieldDatumIndex: PropTypes.number,
-  inputType: PropTypes.string,
   formik: PropTypes.object
 };
 
-export default connect(CustomTextField);
+export default connect(CustomDateField);

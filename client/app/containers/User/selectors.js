@@ -47,13 +47,17 @@ function deserializeDatum(fieldDatum) {
   const datum = fieldDatum.data;
   const type = dig(fieldDatum, 'field', 'type');
 
-  /* Certain fields have there data json serialized as a single item array  */
-  if (type && (type === 'SelectField' || type === 'CheckBoxField')) {
-    const parsedDatum = JSON.parse(datum)[0];
-    return { label: parsedDatum, value: parsedDatum };
+  switch (type) {
+    case 'CheckBoxField':
+    case 'SelectField':
+      /* Certain fields have there data json serialized as a single item array  */
+      return { label: JSON.parse(datum)[0], value: JSON.parse(datum)[0] };
+    case 'DateField':
+      /* TODO: change this to use Moment.js */
+      return new Date(JSON.parse(datum)).toISOString().split('T')[0];
+    default:
+      return datum;
   }
-
-  return datum;
 }
 
 function deserializeOptionsText(datum) {

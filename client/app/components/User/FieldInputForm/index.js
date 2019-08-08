@@ -41,10 +41,10 @@ export function FieldInputFormInner({ formikProps, ...props }) {
           name='fields'
           render={_ => (
             <CardContent>
-              {values.field_data.map((field_datum, i) => (
-                <Grid item key={field_datum.id} className={props.classes.fieldInput}>
-                  {Object.entries(field_datum).length !== 0 && (
-                    renderFieldInput(field_datum, i, formikProps)
+              {values.field_data.map((fieldDatum, i) => (
+                <Grid item key={fieldDatum.id} className={props.classes.fieldInput}>
+                  {Object.entries(fieldDatum).length !== 0 && (
+                    <CustomField fieldDatum={fieldDatum} fieldDatumIndex={i} />
                   )}
                 </Grid>
               ))}
@@ -74,7 +74,10 @@ export function FieldInputForm(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        props.updateFieldDataBegin({ field_data: values.field_data });
+        /* TODO:
+         *  - map field_data.data to strings before sending to server
+         */
+        // props.updateFieldDataBegin({ field_data: values.field_data });
       }}
 
       render={formikProps => <FieldInputFormInner formikProps={formikProps} {...props} />}

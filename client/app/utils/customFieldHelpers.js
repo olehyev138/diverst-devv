@@ -1,7 +1,12 @@
 /*
  * - Helpers to render custom field inputs
- * - Custom components aren't working because the way Formik works
+ *
+ *****************************************************************************************
+ * NOTE:
+ *   - renderFieldInput, buildFieldInput & sub functions are not being used
+ *****************************************************************************************
  */
+
 
 /* eslint-disable react/prop-types */
 
@@ -14,7 +19,6 @@ import { Field } from 'formik';
 
 /*
  * Render a custom Formik field for use in a Formik form
- *  @field        - the field object, this contains general info about the field
  *  @fieldData    - list of 'field datums' - each is the current users specific selection of the field its associated too
  *  @formikProps  - list of props formik passes
  */
@@ -79,8 +83,6 @@ function buildCheckboxField(field, fieldDatum, props, formikProps) {
  *  - value is the initial value as passed from the backend
  */
 function buildBaseProps(fieldDatum, fieldDatumIndex, formikProps) {
-  console.log(formikProps.values.field_data[fieldDatumIndex].data);
-
   return {
     name: `field_data.${fieldDatumIndex}.data`,
     id: `field_data.${fieldDatumIndex}.data`,
@@ -93,5 +95,3 @@ function buildBaseProps(fieldDatum, fieldDatumIndex, formikProps) {
 function getFieldData(field, fieldData) {
   return fieldData.findIndex(obj => field.id === obj.field_id);
 }
-
-export default renderFieldInput;
