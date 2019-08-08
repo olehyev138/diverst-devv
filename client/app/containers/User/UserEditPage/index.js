@@ -7,7 +7,6 @@ import { compose } from 'redux';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/User/reducer';
-import { selectUser } from 'containers/User/selectors';
 
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -16,6 +15,8 @@ import {
   getUserBegin, getUsersBegin, updateFieldDataBegin,
   updateUserBegin, userUnmount
 } from 'containers/User/actions';
+
+import { selectUser, selectFieldData } from 'containers/User/selectors';
 
 import saga from 'containers/User/saga';
 import UserForm from 'components/User/UserForm';
@@ -42,10 +43,9 @@ export function UserEditPage(props) {
       <UserForm
         userAction={props.updateUserBegin}
         updateFieldDataBegin={props.updateFieldDataBegin}
-        getUsersBegin={props.getUsersBegin}
-        selectUsers={props.users}
         links={links}
         user={props.user}
+        fieldData={props.fieldData}
         buttonText='Update'
       />
     </React.Fragment>
@@ -54,9 +54,8 @@ export function UserEditPage(props) {
 
 UserEditPage.propTypes = {
   user: PropTypes.object,
-  users: PropTypes.array,
+  fieldData: PropTypes.array,
   getUserBegin: PropTypes.func,
-  getUsersBegin: PropTypes.func,
   updateUserBegin: PropTypes.func,
   updateFieldDataBegin: PropTypes.func,
   userUnmount: PropTypes.func
@@ -64,11 +63,11 @@ UserEditPage.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
   user: selectUser(),
+  fieldData: selectFieldData()
 });
 
 const mapDispatchToProps = {
   getUserBegin,
-  getUsersBegin,
   updateUserBegin,
   updateFieldDataBegin,
   userUnmount

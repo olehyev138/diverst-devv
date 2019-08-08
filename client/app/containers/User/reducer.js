@@ -26,7 +26,7 @@ function usersReducer(state = initialState, action) {
         draft.userTotal = action.payload.total;
         break;
       case GET_USER_SUCCESS:
-        draft.currentUser = deserializeFieldData(action.payload.user);
+        draft.currentUser = action.payload.user;
         break;
       case USER_UNMOUNT:
         return initialState;
@@ -46,12 +46,5 @@ function formatUsers(users) {
   }, {});
 }
 
-function deserializeFieldData(user) {
-  user.field_data.forEach((fd) => {
-    fd.data = JSON.parse(fd.data);
-  });
-
-  return user;
-}
 
 export default usersReducer;

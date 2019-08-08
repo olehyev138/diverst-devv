@@ -1,12 +1,7 @@
 class UserSerializer < ApplicationRecordSerializer
-  attributes :enterprise, :last_name, :user_groups, :user_role, :avatar_location, :fields, :fields_deprecated
+  attributes :enterprise, :last_name, :user_groups, :user_role, :avatar_location, :fields_deprecated
 
   has_many :field_data
-
-  # User does not actually 'have many' fields
-  # -  we implement a method #fields to return all Fields for the users enterprise
-  # -  declaring it like this allows the Field serializer to kick in
-  has_many :fields
 
   # Serialize all user fields, including the custom attributes listed above, and excluding the `excluded_keys`
   def serialize_all_fields

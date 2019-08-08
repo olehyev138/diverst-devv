@@ -63,7 +63,11 @@ export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, 
         </CardActions>
       </Form>
       <Divider />
-      <FieldInputForm user={props.user} updateFieldDataBegin={props.updateFieldDataBegin} />
+      <FieldInputForm
+        user={props.user}
+        fieldData={props.fieldData}
+        updateFieldDataBegin={props.updateFieldDataBegin}
+      />
     </Card>
   );
 }
@@ -98,6 +102,7 @@ UserForm.propTypes = {
 
 UserFormInner.propTypes = {
   user: PropTypes.object,
+  fieldData: PropTypes.array,
   updateFieldDataBegin: PropTypes.func,
   handleSubmit: PropTypes.func,
   handleChange: PropTypes.func,

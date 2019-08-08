@@ -18,22 +18,15 @@ import { Field } from 'formik';
  *  @fieldData    - list of 'field datums' - each is the current users specific selection of the field its associated too
  *  @formikProps  - list of props formik passes
  */
-function renderFieldInput(field, fieldData, formikProps) {
-  if (!field || !fieldData)
+function renderFieldInput(fieldDatum, fieldDatumIndex, formikProps) {
+  if (!fieldDatum)
     return <React.Fragment />;
 
-  const fieldDatumIndex = getFieldData(field, fieldData);
-
-  if (fieldDatumIndex < 0)
-    return <React.Fragment />;
-
-  const baseProps = buildBaseProps(field, fieldData, fieldDatumIndex, formikProps);
+  const baseProps = buildBaseProps(fieldDatum, fieldDatumIndex, formikProps);
 
   return (
     <React.Fragment>
-      { (fieldDatumIndex >= 0)
-        ? buildField(field, fieldData[fieldDatumIndex], baseProps, formikProps)
-        : <React.Fragment /> }
+      {buildField(fieldDatum, baseProps, formikProps)}
     </React.Fragment>
   );
 }
@@ -41,20 +34,20 @@ function renderFieldInput(field, fieldData, formikProps) {
 /*
  * Delegates to a specific field builder
  */
-function buildField(field, fieldDatum, props, formikProps) {
-  switch (dig(field, 'type')) {
+function buildField(fieldDatum, props, formikProps) {
+  switch (dig(fieldDatum, 'field', 'type')) {
     case 'TextField':
-      return buildTextField(field, fieldDatum, props, formikProps);
+      return buildTextField(fieldDatum, props, formikProps);
     case 'SelectField':
-      return buildSelectField(field, fieldDatum, props, formikProps);
+      return buildSelectField(fieldDatum, props, formikProps);
     default:
-      return buildTextField(field, fieldDatum, props, formikProps);
+      return buildTextField(fieldDatum, props, formikProps);
   }
 }
 
 /* Field Builders for each type */
 
-function buildTextField(field, fieldDatum, props, formikProps) {
+function buildTextField(fieldDatum, props, formikProps) {
   return (
     <Field
       component={TextField}
@@ -63,9 +56,7 @@ function buildTextField(field, fieldDatum, props, formikProps) {
   );
 }
 
-function buildSelectField(field, fieldDatum, props, formikProps) {
-  const options = field.options_text.split('\n').map(option => ({ label: option, value: option }));
-
+function buildSelectField(fieldDatum, props, formikProps) {
   return (
     <Field
       fullWidth
@@ -73,7 +64,7 @@ function buildSelectField(field, fieldDatum, props, formikProps) {
       name={props.name}
       id={props.id}
       value={props.value}
-      options={options}
+      options={fieldDatum.field.options_text}
       onChange={v => formikProps.setFieldValue(props.name, v)}
     />
   );
@@ -87,12 +78,14 @@ function buildCheckboxField(field, fieldDatum, props, formikProps) {
  *  - name & id are the 'key' for formik to access the relevant data in its values hash
  *  - value is the initial value as passed from the backend
  */
-function buildBaseProps(field, fieldData, fieldDatumIndex, formikProps) {
+function buildBaseProps(fieldDatum, fieldDatumIndex, formikProps) {
+  console.log(formikProps.values.field_data[fieldDatumIndex].data);
+
   return {
     name: `field_data.${fieldDatumIndex}.data`,
     id: `field_data.${fieldDatumIndex}.data`,
     value: formikProps.values.field_data[fieldDatumIndex].data,
-    label: field.title,
+    label: fieldDatum.field.title,
     onChange: formikProps.handleChange
   };
 }

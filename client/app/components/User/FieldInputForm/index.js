@@ -12,7 +12,8 @@ import dig from 'object-dig';
 import { FormattedMessage } from 'react-intl';
 import { FieldArray, Formik, Form } from 'formik';
 import {
-  Button, Card, CardActions, CardContent, Grid, TextField
+  Button, Card, CardActions, CardContent, Grid,
+  TextField
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -40,10 +41,10 @@ export function FieldInputFormInner({ formikProps, ...props }) {
           name='fields'
           render={_ => (
             <CardContent>
-              {values.fields.map((field, i) => (
-                <Grid item key={field.id} className={props.classes.fieldInput}>
-                  {Object.entries(field).length !== 0 && (
-                    renderFieldInput(field, values.field_data, formikProps)
+              {values.field_data.map((field_datum, i) => (
+                <Grid item key={field_datum.id} className={props.classes.fieldInput}>
+                  {Object.entries(field_datum).length !== 0 && (
+                    renderFieldInput(field_datum, i, formikProps)
                   )}
                 </Grid>
               ))}
@@ -64,20 +65,8 @@ export function FieldInputFormInner({ formikProps, ...props }) {
 }
 
 export function FieldInputForm(props) {
-  const user = dig(props, 'user');
-
-  const initialValues = buildValues(user, {
+  const initialValues = buildValues({ field_data: props.fieldData }, {
     field_data: { default: [] },
-    fields: { default: [] }
-  });
-
-  initialValues.field_data.forEach((datum) => {
-    if (datum)
-      try {
-        const data = JSON.parse(datum.data);
-        if (Array.isArray(data))
-          datum.data = { value: data[0], label: data[0] }; /* eslint-disable-line no-param-reassign */
-      } catch (e) { /* means field type is a plain string */ }
   });
 
   return (
@@ -95,7 +84,7 @@ export function FieldInputForm(props) {
 
 FieldInputForm.propTypes = {
   updateFieldDataBegin: PropTypes.func,
-  currentUser: PropTypes.object,
+  fieldData: PropTypes.array,
 };
 
 FieldInputFormInner.propTypes = {
