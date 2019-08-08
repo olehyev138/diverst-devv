@@ -1,5 +1,5 @@
 class GenerateFieldData < ActiveRecord::Migration[5.1]
-  def change
+  def up
     # Generate a set of field data objects for each users `data/info` hash
 
     User.all.each do |user|
@@ -24,8 +24,6 @@ class GenerateFieldData < ActiveRecord::Migration[5.1]
   end
 
   def down
-    User.each do |u|
-      u.field_data.delete_all
-    end
+    FieldData.destroy_all
   end
 end

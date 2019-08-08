@@ -34,7 +34,7 @@ Diverst::Application.routes.draw do
       resources :expenses
       resources :expense_categories
       resources :fields
-      resources :field_data, path: 'field_data' do
+      resources :field_data, path: 'field_data', only: [] do
         collection do
           post 'update_field_data'
         end

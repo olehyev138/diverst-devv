@@ -21,7 +21,7 @@ import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import messages from 'containers/User/messages';
 import { buildValues } from 'utils/formHelpers';
 
-import renderFieldInput from 'utils/customFieldHelpers';
+import { serializeFieldData } from 'utils/customFieldHelpers';
 import CustomField from 'components/Shared/Fields/FieldInputs/Field';
 
 const styles = theme => ({
@@ -41,7 +41,7 @@ export function FieldInputFormInner({ formikProps, ...props }) {
           name='fields'
           render={_ => (
             <CardContent>
-              {values.field_data.map((fieldDatum, i) => (
+              {values.fieldData.map((fieldDatum, i) => (
                 <Grid item key={fieldDatum.id} className={props.classes.fieldInput}>
                   {Object.entries(fieldDatum).length !== 0 && (
                     <CustomField fieldDatum={fieldDatum} fieldDatumIndex={i} />
@@ -65,8 +65,8 @@ export function FieldInputFormInner({ formikProps, ...props }) {
 }
 
 export function FieldInputForm(props) {
-  const initialValues = buildValues({ field_data: props.fieldData }, {
-    field_data: { default: [] },
+  const initialValues = buildValues({ fieldData: props.fieldData }, {
+    fieldData: { default: [] },
   });
 
   return (
@@ -74,10 +74,9 @@ export function FieldInputForm(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        /* TODO:
-         *  - map field_data.data to strings before sending to server
-         */
-        // props.updateFieldDataBegin({ field_data: values.field_data });
+        props.updateFieldDataBegin({
+          field_data: serializeFieldData(values.fieldData)
+        });
       }}
 
       render={formikProps => <FieldInputFormInner formikProps={formikProps} {...props} />}

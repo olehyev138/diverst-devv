@@ -18,7 +18,7 @@ const CustomDateField = (props) => {
   const fieldDatum = dig(props, 'fieldDatum');
   const fieldDatumIndex = dig(props, 'fieldDatumIndex');
 
-  const dataLocation = `field_data.${fieldDatumIndex}.data`;
+  const dataLocation = `fieldData.${fieldDatumIndex}.data`;
 
   return (
     <TextField

@@ -94,8 +94,7 @@ export function* updateFieldData(action) {
     const payload = { field_data: { field_data: action.payload.field_data } };
     const response = yield call(api.fieldData.updateFieldData.bind(api.fieldData), payload);
 
-    yield put(push(ROUTES.admin.system.users.index.path()));
-    yield put(showSnackbar({ message: 'User updated', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: 'Fields updated', options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateUserError(err));
 
