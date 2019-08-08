@@ -17,8 +17,11 @@ import { getEventsBegin, eventsUnmount } from 'containers/Event/actions';
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
+import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import EventsList from 'components/Event/EventsList';
-import { Paper, Tab, Tabs } from '@material-ui/core';
+import {
+  Paper, Tab, Tabs, Button, Grid, Box
+} from '@material-ui/core';
 
 const EventTypes = Object.freeze({
   upcoming: 0,
@@ -40,6 +43,9 @@ export function EventsPage(props) {
   const rs = new RouteService(useContext);
   const links = {
     eventsIndex: ROUTES.group.events.index.path(rs.params('group_id')),
+    eventShow: id => ROUTES.group.events.show.path(rs.params('group_id'), id),
+    eventNew: ROUTES.group.events.new.path(rs.params('group_id')),
+    eventEdit: id => ROUTES.group.events.edit.path(rs.params('group_id'), id)
   };
 
   const [tab, setTab] = useState(EventTypes.upcoming);
@@ -96,6 +102,20 @@ export function EventsPage(props) {
 
   return (
     <React.Fragment>
+      <Grid container justify='flex-end'>
+        <Grid item>
+          <Button
+            variant='contained'
+            to={links.eventNew}
+            color='primary'
+            size='large'
+            component={WrappedNavLink}
+          >
+            New Event
+          </Button>
+        </Grid>
+      </Grid>
+      <Box mb={2} />
       <Paper>
         <Tabs
           value={tab}

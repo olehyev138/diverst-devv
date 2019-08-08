@@ -42,5 +42,15 @@
   "diverst.containers.News.form.button.update": "Update",
   "diverst.containers.News.form.button.cancel": "Cancel",
   "diverst.containers.News.form.group_message.input.subject": "Subject",
-  "diverst.containers.News.form.group_message.input.content": "Content"
+  "diverst.containers.News.form.group_message.input.content": "Content",
+  "diverst.containers.Event.index.button.new": "New",
+  "diverst.containers.Event.index.button.edit": "Edit",
+  "diverst.containers.Event.index.button.delete": "Delete",
+  "diverst.containers.Event.index.button.rows": "Rows per page",
+  "diverst.containers.Event.index.button.page": "of",
+  "diverst.containers.Event.form.button.create": "Create",
+  "diverst.containers.Event.form.button.update": "Update",
+  "diverst.containers.Event.form.button.cancel": "Cancel",
+  "diverst.containers.Event.form.input.name": "Name",
+  "diverst.containers.Event.form.input.description": "Description"
 }

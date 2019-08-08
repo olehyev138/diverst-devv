@@ -9,8 +9,28 @@ import { defineMessages } from 'react-intl';
 export const scope = 'diverst.containers.Event';
 
 export default defineMessages({
-  default: {
-    id: `${scope}.default`,
-    defaultMessage: 'This is the Events container!',
+  new: {
+    id: `${scope}.index.button.new`,
+  },
+  edit: {
+    id: `${scope}.index.button.edit`,
+  },
+  delete: {
+    id: `${scope}.index.button.delete`,
+  },
+  create: {
+    id: `${scope}.form.button.create`,
+  },
+  update: {
+    id: `${scope}.form.button.update`,
+  },
+  cancel: {
+    id: `${scope}.form.button.cancel`,
+  },
+  name: {
+    id: `${scope}.form.input.name`,
+  },
+  description: {
+    id: `${scope}.form.input.description`,
   },
 });
