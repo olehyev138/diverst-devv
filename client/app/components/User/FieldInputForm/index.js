@@ -65,9 +65,19 @@ export function FieldInputFormInner({ formikProps, ...props }) {
 
 export function FieldInputForm(props) {
   const user = dig(props, 'user');
+
   const initialValues = buildValues(user, {
     field_data: { default: [] },
     fields: { default: [] }
+  });
+
+  initialValues.field_data.forEach((datum) => {
+    if (datum)
+      try {
+        const data = JSON.parse(datum.data);
+        if (Array.isArray(data))
+          datum.data = { value: data[0], label: data[0] }; /* eslint-disable-line no-param-reassign */
+      } catch (e) { /* means field type is a plain string */ }
   });
 
   return (

@@ -26,7 +26,7 @@ export function GroupEditPage(props) {
   const rs = new RouteService(useContext);
 
   useEffect(() => {
-    props.getGroupBegin({ id: rs.params('id') });
+    props.getGroupBegin({ id: rs.params('group_id') });
 
     return () => {
       props.groupFormUnmount();

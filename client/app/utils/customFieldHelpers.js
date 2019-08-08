@@ -3,6 +3,8 @@
  * - Custom components aren't working because the way Formik works
  */
 
+/* eslint-disable react/prop-types */
+
 import React from 'react';
 import dig from 'object-dig';
 
@@ -62,13 +64,17 @@ function buildTextField(field, fieldDatum, props, formikProps) {
 }
 
 function buildSelectField(field, fieldDatum, props, formikProps) {
-  const options = [];
-  const value = undefined;
+  const options = field.options_text.split('\n').map(option => ({ label: option, value: option }));
 
   return (
     <Field
+      fullWidth
       component={Select}
-      options={[{ value: 0, label: 'test' }, { value: 1, label: 'ugh' }]}
+      name={props.name}
+      id={props.id}
+      value={props.value}
+      options={options}
+      onChange={v => formikProps.setFieldValue(props.name, v)}
     />
   );
 }
@@ -85,7 +91,7 @@ function buildBaseProps(field, fieldData, fieldDatumIndex, formikProps) {
   return {
     name: `field_data.${fieldDatumIndex}.data`,
     id: `field_data.${fieldDatumIndex}.data`,
-    value: fieldData[fieldDatumIndex].data,
+    value: formikProps.values.field_data[fieldDatumIndex].data,
     label: field.title,
     onChange: formikProps.handleChange
   };
