@@ -8,6 +8,7 @@ import GroupLayout from 'containers/Layouts/GroupLayout/index';
 import AdminLayout from 'containers/Layouts/AdminLayout/index';
 import SessionLayout from 'containers/Layouts/SessionLayout/index';
 import ErrorLayout from 'containers/Layouts/ErrorLayout/index';
+import GlobalSettingsLayout from 'containers/Layouts/GlobalSettingsLayout';
 
 // Pages
 import {
@@ -19,6 +20,14 @@ import UserGroupListPage from 'containers/Group/UserGroupListPage';
 import AdminGroupListPage from 'containers/Group/AdminGroupListPage';
 import GroupCreatePage from 'containers/Group/GroupCreatePage';
 import GroupEditPage from 'containers/Group/GroupEditPage';
+
+/* Admin - System - Global Settings */
+import FieldsPage from 'containers/GlobalSettings/Field/FieldsPage';
+
+/* Admin - System - User */
+import UsersPage from 'containers/User/UsersPage';
+import UserCreatePage from 'containers/User/UserCreatePage';
+import UserEditPage from 'containers/User/UserEditPage';
 
 /* Group */
 import GroupHomePage from 'containers/Group/GroupHomePage';
@@ -53,6 +62,14 @@ export default function Routes(props) {
       <AdminLayout exact {...expandRoute(ROUTES.admin.manage.groups.index)} component={AdminGroupListPage} />
       <AdminLayout {...expandRoute(ROUTES.admin.manage.groups.new)} component={GroupCreatePage} />
       <AdminLayout {...expandRoute(ROUTES.admin.manage.groups.edit)} component={GroupEditPage} />
+
+      { /* Admin - System - GlobalSettings */ }
+      <GlobalSettingsLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.fields.index)} component={FieldsPage} />
+
+      { /* Admin - System - Users */ }
+      <AdminLayout exact {...expandRoute(ROUTES.admin.system.users.index)} component={UsersPage} />
+      <AdminLayout exact {...expandRoute(ROUTES.admin.system.users.new)} component={UserCreatePage} />
+      <AdminLayout exact {...expandRoute(ROUTES.admin.system.users.edit)} component={UserEditPage} />
 
       <UserLayout exact {...expandRoute(ROUTES.user.home)} component={PlaceholderPage} />
       <UserLayout {...expandRoute(ROUTES.user.innovate)} component={PlaceholderPage} />

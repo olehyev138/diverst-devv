@@ -114,7 +114,7 @@ GroupMemberList.propTypes = {
   }),
   memberList: PropTypes.object,
   memberTotal: PropTypes.number,
-  groupId: PropTypes.number
+  groupId: PropTypes.string
 };
 
 export default compose(
