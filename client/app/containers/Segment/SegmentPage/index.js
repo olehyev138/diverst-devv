@@ -13,8 +13,8 @@ import RouteService from 'utils/routeHelpers';
 
 import { selectSegment } from 'containers/Segment/selectors';
 import {
-  getSegmentBegin, updateSegmentBegin,
-  segmentUnmount
+  getSegmentBegin, createSegmentBegin,
+  updateSegmentBegin, segmentUnmount
 } from 'containers/Segment/actions';
 
 import SegmentForm from 'components/Segment/SegmentForm';
@@ -24,9 +24,11 @@ export function SegmentEditPage(props) {
   useInjectSaga({ key: 'segments', saga });
 
   const rs = new RouteService(useContext);
+  const segmentId = rs.params('segment_id');
 
   useEffect(() => {
-    props.getSegmentBegin({ id: rs.params('segment_id') });
+    if (segmentId[0])
+      props.getSegmentBegin({ id: rs.params('segment_id') });
 
     return () => {
       props.segmentUnmount();
@@ -36,9 +38,9 @@ export function SegmentEditPage(props) {
   return (
     <React.Fragment>
       <SegmentForm
-        segmentAction={props.updateSegmentBegin}
+        segmentAction={segmentId[0] ? props.updateSegmentBegin : props.createSegmentBegin}
         segment={props.segment}
-        buttonText='Save'
+        buttonText={segmentId[0] ? 'Update' : 'Create'}
       />
     </React.Fragment>
   );
@@ -47,6 +49,7 @@ export function SegmentEditPage(props) {
 SegmentEditPage.propTypes = {
   segment: PropTypes.object,
   getSegmentBegin: PropTypes.func,
+  createSegmentBegin: PropTypes.func,
   updateSegmentBegin: PropTypes.func,
   segmentUnmount: PropTypes.func
 };
@@ -57,6 +60,7 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = {
   getSegmentBegin,
+  createSegmentBegin,
   updateSegmentBegin,
   segmentUnmount
 };
