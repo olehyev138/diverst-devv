@@ -121,6 +121,7 @@ export function GroupFormInner({ handleSubmit, handleChange, handleBlur, values,
 
 export function GroupForm(props) {
   const initialValues = buildValues(props.group, {
+    id: { default: '' },
     name: { default: '' },
     short_description: { default: '' },
     description: { default: '' },

@@ -11,7 +11,7 @@ import reducer from 'containers/Segment/reducer';
 
 import RouteService from 'utils/routeHelpers';
 
-import { selectFormSegment } from 'containers/Segment/selectors';
+import { selectSegment } from 'containers/Segment/selectors';
 import {
   getSegmentBegin, updateSegmentBegin,
   segmentUnmount
@@ -37,8 +37,6 @@ export function SegmentEditPage(props) {
     <React.Fragment>
       <SegmentForm
         segmentAction={props.updateSegmentBegin}
-        getSegmentsBegin={props.getSegmentsBegin}
-        selectSegments={props.segments}
         segment={props.segment}
         buttonText='Save'
       />
@@ -48,15 +46,13 @@ export function SegmentEditPage(props) {
 
 SegmentEditPage.propTypes = {
   segment: PropTypes.object,
-  segments: PropTypes.array,
   getSegmentBegin: PropTypes.func,
-  getSegmentsBegin: PropTypes.func,
   updateSegmentBegin: PropTypes.func,
   segmentUnmount: PropTypes.func
 };
 
 const mapStateToProps = createStructuredSelector({
-  segment: selectFormSegment(),
+  segment: selectSegment(),
 });
 
 const mapDispatchToProps = {

@@ -32,7 +32,8 @@ export function SegmentListPage(props) {
 
   const rs = new RouteService(useContext);
   const links = {
-    segmentPage: id => ROUTES.admin.manage.segments.show.path(rs.params('segment_id'), id)
+    segmentNew: ROUTES.admin.manage.segments.new.path(),
+    segmentPage: id => ROUTES.admin.manage.segments.show.path(id)
   };
 
   useEffect(() => {

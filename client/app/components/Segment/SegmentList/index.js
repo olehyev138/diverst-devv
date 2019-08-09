@@ -65,7 +65,7 @@ export function SegmentList(props, context) {
         <Grid item>
           <Button
             variant='contained'
-            to={links.segmentPage()}
+            to={links.segmentNew}
             color='primary'
             size='large'
             component={WrappedNavLink}
@@ -82,7 +82,7 @@ export function SegmentList(props, context) {
                   {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                   <Link
                     component={WrappedNavLink}
-                    to={links.segmentPage()}
+                    to={links.segmentPage(segment.id)}
                   >
                     <Typography variant='h5' component='h2' display='inline'>
                       {segment.name}
@@ -106,36 +106,8 @@ export function SegmentList(props, context) {
                   >
                     <FormattedMessage {...messages.delete} />
                   </Button>
-                  <Button
-                    size='small'
-                    onClick={() => {
-                      setExpandedSegments({ ...expandedSegments, [segment.id]: !expandedSegments[segment.id] });
-                    }}
-                  >
-                    <FormattedMessage {...messages.children_collapse} />
-                  </Button>
                 </CardActions>
               </Card>
-              <Collapse in={expandedSegments[`${segment.id}`]}>
-                {segment.children && segment.children.map((segment, i) => (
-                  /* eslint-disable-next-line react/jsx-wrap-multilines */
-                  <Card key={segment.id}>
-                    <CardContent>
-                      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                      <Link href='#'>
-                        <Typography variant='h5' component='h2' display='inline'>
-                          {segment.name}
-                        </Typography>
-                      </Link>
-                      {segment.description && (
-                        <Typography color='textSecondary' className={classes.segmentListItemDescription}>
-                          {segment.description}
-                        </Typography>
-                      )}
-                    </CardContent>
-                  </Card>))
-                }
-              </Collapse>
             </Grid>
           );
         })}

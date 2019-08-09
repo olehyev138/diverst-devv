@@ -146,8 +146,11 @@ export const ROUTES = {
             titleMessage: messages.admin.manage.segments,
           }
         },
+        new: {
+          path: (segmentId = ':segment_id') => `/admin/manage/segments/new`,
+        },
         show: {
-          path: (segmentId = ':segment_id') => `/admin/manage/segments/${segmentId}show`,
+          path: (segmentId = ':segment_id') => `/admin/manage/segments/${segmentId}`,
         },
       },
     },

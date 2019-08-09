@@ -55,6 +55,7 @@ export function SegmentFormInner({ handleSubmit, handleChange, handleBlur, value
 
 export function SegmentForm(props) {
   const initialValues = buildValues(props.segment, {
+    id: { default: '' },
     name: { default: '' },
   });
 
@@ -63,7 +64,7 @@ export function SegmentForm(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        props.segmentAction({ segment: values.segment });
+        props.segmentAction(values);
       }}
 
       render={formikProps => <SegmentFormInner {...props} {...formikProps} />}

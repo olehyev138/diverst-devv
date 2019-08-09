@@ -64,7 +64,11 @@ export function* createSegment(action) {
 
 export function* updateSegment(action) {
   try {
+    console.log(action);
     const payload = { segment: action.payload };
+
+    console.log(payload);
+
     const response = yield call(api.segments.update.bind(api.segments), payload.segment.id, payload);
 
     yield put(push(ROUTES.admin.manage.segments.index.path()));
