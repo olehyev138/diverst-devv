@@ -1,6 +1,6 @@
 /**
  *
- * Admin AdminGroupList List
+ * AdminGroupList List
  *
  */
 
@@ -8,7 +8,10 @@ import React, { memo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
-import { NavLink } from 'react-router-dom';
+import { FormattedMessage } from 'react-intl';
+import messages from 'containers/Group/messages';
+
+import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import {
@@ -16,11 +19,6 @@ import {
   Typography, Grid, Link, TablePagination, Collapse
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-
-import WrappedNavLink from 'components/Shared/WrappedNavLink';
-
-import { FormattedMessage } from 'react-intl';
-import messages from 'containers/Group/messages';
 
 const styles = theme => ({
   groupListItem: {
