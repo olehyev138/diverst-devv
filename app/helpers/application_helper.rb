@@ -106,10 +106,12 @@ module ApplicationHelper
   end
 
   def group_initiative_expenses_link(text, group, initiative)
-    return link_to text, group_initiative_expenses_path(group, initiative) if initiative.estimated_funding != 0
+    link_to text, group_initiative_expenses_path(group, initiative)
+  end
 
-    return link_to text, group_initiative_expenses_path(group, initiative),
-                   data: { confirm: 'you are not allowed to make a negative expense' } if initiative.estimated_funding == 0
+  def percentage_expenditure(total_expenses, budget)
+    expenses_percent = (total_expenses / budget) * 100
+    expenses_percent.nan? ? 0 : expenses_percent
   end
 
   def default_path

@@ -112,16 +112,6 @@ RSpec.describe Initiatives::ExpensesController, type: :controller do
           expect { post :create, group_id: group.id, initiative_id: initiative1.id, initiative_expense: { amount: 10, description: 'description' } }
           .to change(InitiativeExpense, :count).by(0)
         end
-
-        it 'flashes an alert message' do
-          post :create, group_id: group.id, initiative_id: initiative1.id, initiative_expense: { amount: 10, description: 'description' }
-          expect(flash[:alert]).to eq 'you are not allowed to create a negative expense'
-        end
-
-        it 'redirects to action new' do
-          post :create, group_id: group.id, initiative_id: initiative1.id, initiative_expense: { amount: 10, description: 'description' }
-          expect(response).to render_template :new
-        end
       end
     end
 
