@@ -4,7 +4,7 @@
  *
  */
 
-import React, { memo, useEffect, useState } from 'react';
+import React, {memo, useContext, useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
@@ -16,6 +16,9 @@ import { useInjectReducer } from 'utils/injectReducer';
 import saga from 'containers/Segment/saga';
 import reducer from 'containers/Segment/reducer';
 
+import RouteService from 'utils/routeHelpers';
+import { ROUTES } from 'containers/Shared/Routes/constants';
+
 import { selectPaginatedSegments, selectSegmentTotal } from 'containers/Segment/selectors';
 import { getSegmentsBegin, segmentUnmount, deleteSegmentBegin } from 'containers/Segment/actions';
 
@@ -26,6 +29,11 @@ export function SegmentListPage(props) {
   useInjectSaga({ key: 'segments', saga });
 
   const [params, setParams] = useState({ count: 5, page: 0, order: 'asc' });
+
+  const rs = new RouteService(useContext);
+  const links = {
+    segmentPage: id => ROUTES.admin.manage.segments.show.path(rs.params('segment_id'), id)
+  };
 
   useEffect(() => {
     props.getSegmentsBegin(params);
@@ -49,6 +57,7 @@ export function SegmentListPage(props) {
         segmentTotal={props.segmentTotal}
         deleteSegmentBegin={props.deleteSegmentBegin}
         handlePagination={handlePagination}
+        links={links}
       />
     </React.Fragment>
   );

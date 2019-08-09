@@ -21,6 +21,10 @@ import AdminGroupListPage from 'containers/Group/AdminGroupListPage';
 import GroupCreatePage from 'containers/Group/GroupCreatePage';
 import GroupEditPage from 'containers/Group/GroupEditPage';
 
+/* Admin - Manage - Group */
+import SegmentListPage from 'containers/Segment/SegmentListPage';
+import SegmentPage from 'containers/Segment/SegmentPage';
+
 /* Admin - System - Global Settings */
 import FieldsPage from 'containers/GlobalSettings/Field/FieldsPage';
 
@@ -59,9 +63,13 @@ export default function Routes(props) {
 
       { /* Admin - Manage */ }
       { /* Admin - Manage - Groups */ }
-      <AdminLayout exact {...expandRoute(ROUTES.admin.manage.groups.index)} component={AdminGroupListPage} />
       <AdminLayout {...expandRoute(ROUTES.admin.manage.groups.new)} component={GroupCreatePage} />
       <AdminLayout {...expandRoute(ROUTES.admin.manage.groups.edit)} component={GroupEditPage} />
+      <AdminLayout exact {...expandRoute(ROUTES.admin.manage.groups.index)} component={AdminGroupListPage} />
+
+      { /* Admin - Manage - Segments */ }
+      <AdminLayout {...expandRoute(ROUTES.admin.manage.segments.show)} component={SegmentPage} />
+      <AdminLayout exact {...expandRoute(ROUTES.admin.manage.segments.index)} component={SegmentListPage} />
 
       { /* Admin - System - GlobalSettings */ }
       <GlobalSettingsLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.fields.index)} component={FieldsPage} />

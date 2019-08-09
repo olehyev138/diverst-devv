@@ -34,6 +34,7 @@ const styles = theme => ({
 
 export function SegmentList(props, context) {
   const { classes } = props;
+  const { links } = props;
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [expandedSegments, setExpandedSegments] = useState({});
@@ -64,7 +65,7 @@ export function SegmentList(props, context) {
         <Grid item>
           <Button
             variant='contained'
-            to={ROUTES.manage.segments.new.path()}
+            to={links.segmentPage()}
             color='primary'
             size='large'
             component={WrappedNavLink}
@@ -81,10 +82,7 @@ export function SegmentList(props, context) {
                   {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                   <Link
                     component={WrappedNavLink}
-                    to={{
-                      pathname: `${ROUTES.segment.pathPrefix}/${segment.id}`,
-                      state: { id: segment.id }
-                    }}
+                    to={links.segmentPage()}
                   >
                     <Typography variant='h5' component='h2' display='inline'>
                       {segment.name}
@@ -97,16 +95,6 @@ export function SegmentList(props, context) {
                   )}
                 </CardContent>
                 <CardActions>
-                  <Button
-                    size='small'
-                    to={{
-                      pathname: `${ROUTES.manage.segments.pathPrefix}/${segment.id}/edit`,
-                      state: { id: segment.id }
-                    }}
-                    component={WrappedNavLink}
-                  >
-                    <FormattedMessage {...messages.edit} />
-                  </Button>
                   <Button
                     size='small'
                     className={classes.errorButton}
@@ -176,7 +164,8 @@ SegmentList.propTypes = {
   segments: PropTypes.object,
   segmentTotal: PropTypes.number,
   deleteSegmentBegin: PropTypes.func,
-  handlePagination: PropTypes.func
+  handlePagination: PropTypes.func,
+  links: PropTypes.object
 };
 
 export default compose(

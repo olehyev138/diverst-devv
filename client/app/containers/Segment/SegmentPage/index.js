@@ -40,7 +40,7 @@ export function SegmentEditPage(props) {
         getSegmentsBegin={props.getSegmentsBegin}
         selectSegments={props.segments}
         segment={props.segment}
-        buttonText='Update'
+        buttonText='Save'
       />
     </React.Fragment>
   );
