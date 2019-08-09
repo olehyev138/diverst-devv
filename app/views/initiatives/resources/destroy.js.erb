@@ -1,6 +1,6 @@
 $("#group_resource_<%= @resource.id %>").fadeOut(500, function(){
 	$(this).remove();
-	var resource_count = parseInt("<%= @resources.count %>");
+	var resource_count = parseInt("<%= @resources.size %>");
 	removeResourceRow(resource_count);
 });
 
@@ -14,7 +14,7 @@ function removeResourceRow(resource_count) {
 
 $("#enterprise_resource_<%= @resource.id %>").fadeOut(500, function(){
 	$(this).remove();
-	var resource_count = parseInt("<%= @resources.count %>");
+	var resource_count = parseInt("<%= @resources.size %>");
 	removeResourceRow(resource_count);
 });
 

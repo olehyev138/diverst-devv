@@ -84,6 +84,7 @@ ActiveRecord::Schema.define(version: 20190730124943) do
     t.integer  "supporting_document_file_size",    limit: 4
     t.datetime "supporting_document_updated_at"
     t.integer  "contributing_group_id",            limit: 4
+    t.integer  "likes_count",                      limit: 4
   end
 
   add_index "answers", ["contributing_group_id"], name: "index_answers_on_contributing_group_id", using: :btree
@@ -115,16 +116,17 @@ ActiveRecord::Schema.define(version: 20190730124943) do
   end
 
   create_table "budgets", force: :cascade do |t|
-    t.text     "description",      limit: 65535
+    t.text     "description",        limit: 65535
     t.boolean  "is_approved"
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
-    t.integer  "approver_id",      limit: 4
-    t.integer  "requester_id",     limit: 4
-    t.integer  "group_id",         limit: 4
-    t.text     "comments",         limit: 65535
-    t.string   "decline_reason",   limit: 191
-    t.integer  "annual_budget_id", limit: 4
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
+    t.integer  "approver_id",        limit: 4
+    t.integer  "requester_id",       limit: 4
+    t.integer  "group_id",           limit: 4
+    t.text     "comments",           limit: 65535
+    t.string   "decline_reason",     limit: 191
+    t.integer  "annual_budget_id",   limit: 4
+    t.integer  "budget_items_count", limit: 4
   end
 
   add_index "budgets", ["approver_id"], name: "fk_rails_a057b1443a", using: :btree
@@ -158,6 +160,7 @@ ActiveRecord::Schema.define(version: 20190730124943) do
     t.datetime "banner_updated_at"
     t.integer  "owner_id",            limit: 4
     t.integer  "status",              limit: 4,     default: 0
+    t.integer  "questions_count",     limit: 4
   end
 
   create_table "campaigns_groups", force: :cascade do |t|
@@ -347,6 +350,10 @@ ActiveRecord::Schema.define(version: 20190730124943) do
     t.integer  "expiry_age_for_resources",              limit: 4,     default: 0
     t.string   "unit_of_expiry_age",                    limit: 191
     t.boolean  "auto_archive",                                        default: false
+    t.integer  "groups_count",                          limit: 4
+    t.integer  "segments_count",                        limit: 4
+    t.integer  "polls_count",                           limit: 4
+    t.integer  "users_count",                           limit: 4
   end
 
   create_table "expense_categories", force: :cascade do |t|
@@ -411,6 +418,7 @@ ActiveRecord::Schema.define(version: 20190730124943) do
     t.integer  "parent_id",          limit: 4
     t.integer  "enterprise_id",      limit: 4
     t.integer  "group_id",           limit: 4
+    t.integer  "views_count",        limit: 4
   end
 
   create_table "frequency_periods", force: :cascade do |t|
@@ -586,6 +594,7 @@ ActiveRecord::Schema.define(version: 20190730124943) do
     t.string   "unit_of_expiry_age",          limit: 191
     t.boolean  "auto_archive",                                                      default: false
     t.string   "event_attendance_visibility", limit: 191
+    t.integer  "views_count",                 limit: 4
   end
 
   create_table "groups_metrics_dashboards", force: :cascade do |t|
@@ -867,6 +876,8 @@ ActiveRecord::Schema.define(version: 20190730124943) do
     t.integer  "social_link_id",   limit: 4
     t.boolean  "is_pinned",                  default: false
     t.datetime "archived_at"
+    t.integer  "views_count",      limit: 4
+    t.integer  "likes_count",      limit: 4
   end
 
   create_table "news_feeds", force: :cascade do |t|
@@ -1095,13 +1106,14 @@ ActiveRecord::Schema.define(version: 20190730124943) do
   end
 
   create_table "questions", force: :cascade do |t|
-    t.string   "title",       limit: 191
-    t.text     "description", limit: 65535
-    t.integer  "campaign_id", limit: 4
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.string   "title",         limit: 191
+    t.text     "description",   limit: 65535
+    t.integer  "campaign_id",   limit: 4
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
     t.datetime "solved_at"
-    t.text     "conclusion",  limit: 65535
+    t.text     "conclusion",    limit: 65535
+    t.integer  "answers_count", limit: 4
   end
 
   create_table "resources", force: :cascade do |t|
@@ -1121,6 +1133,7 @@ ActiveRecord::Schema.define(version: 20190730124943) do
     t.integer  "group_id",             limit: 4
     t.integer  "initiative_id",        limit: 4
     t.datetime "archived_at"
+    t.integer  "views_count",          limit: 4
   end
 
   create_table "reward_actions", force: :cascade do |t|
@@ -1426,6 +1439,7 @@ ActiveRecord::Schema.define(version: 20190730124943) do
     t.boolean  "accepting_mentor_requests",                    default: true
     t.boolean  "accepting_mentee_requests",                    default: true
     t.datetime "last_group_notification_date"
+    t.boolean  "seen_onboarding",                              default: false
   end
 
   add_index "users", ["active"], name: "index_users_on_active", using: :btree

@@ -12,7 +12,7 @@ class Poll < BaseClass
   has_many :groups_polls, dependent: :destroy
   has_many :groups, inverse_of: :polls, through: :groups_polls
 
-  belongs_to :enterprise, inverse_of: :polls
+  belongs_to :enterprise, inverse_of: :polls, counter_cache: true
   belongs_to :owner, class_name: 'User'
   belongs_to :initiative
 

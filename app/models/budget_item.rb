@@ -1,6 +1,6 @@
 class BudgetItem < BaseClass
   LEFTOVER_BUDGET_ITEM_ID = -1
-  belongs_to :budget
+  belongs_to :budget, counter_cache: true
   has_many :initiatives
 
   validates_length_of :title, maximum: 191

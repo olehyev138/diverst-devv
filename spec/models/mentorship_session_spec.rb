@@ -4,14 +4,16 @@ RSpec.describe MentorshipSession, type: :model do
   let(:user) { create(:user) }
   let(:mentorship_session) { create(:mentorship_session) }
 
-  describe 'validations' do
-    it { expect(mentorship_session).to validate_presence_of(:user) }
-    it { expect(mentorship_session).to validate_presence_of(:mentoring_session) }
-
+  describe 'associations and validations' do
     it { expect(mentorship_session).to belong_to(:user) }
     it { expect(mentorship_session).to belong_to(:mentoring_session) }
 
+    it { expect(mentorship_session).to validate_presence_of(:user) }
+    it { expect(mentorship_session).to validate_presence_of(:role) }
+    it { expect(mentorship_session).to validate_presence_of(:mentoring_session).on(:update) }
     it { expect(mentorship_session).to validate_uniqueness_of(:user_id).scoped_to(:mentoring_session_id) }
+    it { expect(mentorship_session).to validate_length_of(:status).is_at_most(191) }
+    it { expect(mentorship_session).to validate_length_of(:role).is_at_most(191) }
   end
 
   describe 'methods' do

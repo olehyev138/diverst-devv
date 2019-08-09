@@ -18,7 +18,7 @@ class User < BaseClass
   scope :inactive,            -> { where(active: false).distinct }
 
 
-  belongs_to  :enterprise
+  belongs_to  :enterprise, counter_cache: true
   belongs_to  :user_role
   has_one :policy_group, dependent: :destroy, inverse_of: :user
 
@@ -351,13 +351,6 @@ class User < BaseClass
     self.firebase_token = @@fb_token_generator.create_token(payload, options)
     self.firebase_token_generated_at = Time.current
     save
-  end
-
-  # Updates this user's match scores with all other enterprise users
-  def update_match_scores
-    enterprise.users.where.not(id: id).find_each do |other_user|
-      CalculateMatchScoreJob.perform_later(self, other_user, skip_existing: false)
-    end
   end
 
   # Initializes a user from a yammer user

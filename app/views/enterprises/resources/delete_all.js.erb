@@ -2,7 +2,7 @@ $("tbody").fadeOut(500, function() {
 	$(this).remove();
 	decreasePostsCount();
 	$("#restore_buttons").hide();
-	var resource_count = parseInt("<%= @resources.count %>");
+	var resource_count = parseInt("<%= @resources.size %>");
 	removeResourceRow(resource_count);	
 });
 

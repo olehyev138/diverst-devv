@@ -1,5 +1,5 @@
 <div class="col-xs-8">
-  <% if @sessions.count > 0 %>
+  <% if @sessions.size > 0 %>
     <div class="card">
     <div class="card__section">
         <h4>Leave feedback for past sessions</h4>
@@ -23,7 +23,7 @@
   <% end %>
   <div class="card">
     <div class="card__section">
-      <% if @ratings.count > 0 %>
+      <% if @ratings.size > 0 %>
         <h4>Feedback for past sessions</h4>
           <% @ratings.each do |rating| %>
             <div class="card__section card__section--border">
