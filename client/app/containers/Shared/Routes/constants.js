@@ -134,15 +134,33 @@ export const ROUTES = {
           path: () => '/admin/manage/groups/new',
         },
         edit: {
-          path: () => '/admin/manage/groups/:id/edit',
+          path: (groupId = ':group_id') => `/admin/manage/groups/${groupId}/edit`,
         },
       }
     },
     system: {
       index: {
         data: {
-          pathPrefix: '/settings',
+          pathPrefix: '/system',
           titleMessage: messages.admin.system.index,
+        }
+      },
+      users: {
+        index: {
+          path: () => '/admin/system/users',
+        },
+        new: {
+          path: () => '/admin/system/users/new',
+        },
+        edit: {
+          path: (userId = ':user_id') => `/admin/system/users/${userId}/edit`,
+        },
+      },
+      globalSettings: {
+        fields: {
+          index: {
+            path: () => '/admin/system/settings/fields'
+          }
         }
       }
     }
