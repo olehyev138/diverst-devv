@@ -1,5 +1,7 @@
 class Api::V1::GroupsController < DiverstController
   def index
+    authorize klass, :index?
+
     params.permit![:parent_id] = nil
     super
   end

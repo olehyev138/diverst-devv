@@ -25,4 +25,8 @@ class RewardPolicy < ApplicationPolicy
   def destroy?
     manage?
   end
+
+  def show?
+    index?
+  end
 end

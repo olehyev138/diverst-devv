@@ -1,11 +1,22 @@
 class GroupBasePolicy < Struct.new(:user, :context)
   attr_accessor :user, :group, :record, :group_leader_role_ids
 
-  def initialize(user, context)
+  def initialize(user, context, params = nil)
     self.user = user
-    self.group = context.first
-    self.record = context.second
     self.group_leader_role_ids = user.group_leaders.pluck(:user_role_id)
+
+    # Check if it's a collection, a record, or a class
+    if context.is_a?(Enumerable) # Collection/Enumerable
+      self.group = context.first
+      self.record = context.second
+    elsif context.is_a?(Class) # Class
+      # Set group using params if context is a class as this will be for
+      # nested model actions such as index and create, which require a group
+      self.group = ::Group.find(params[:group_id] || params.dig(context.model_name.param_key.to_sym, :group_id))
+    else # Record
+      self.group = context.group
+      self.record = context
+    end
   end
 
   def is_a_member?

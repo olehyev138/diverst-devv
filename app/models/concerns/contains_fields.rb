@@ -11,7 +11,7 @@ module ContainsFields
     self.data = '{}' if data.nil?
     json_hash = JSON.parse(data)
     @info = Hash[json_hash.map { |k, v| [k.to_i, v] }] # Convert the hash keys to integers since they're strings after JSON parsing
-    @info.extend(FieldData)
+    @info.extend(FieldDataDeprecated)
   end
 
   # Called before validation to presist the (maybe) edited info object in the DB
