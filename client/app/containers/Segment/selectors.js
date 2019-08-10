@@ -1,6 +1,8 @@
 import { createSelector } from 'reselect/lib/index';
 import { initialState } from 'containers/Segment/reducer';
 
+import dig from 'object-dig';
+
 const selectSegmentsDomain = state => state.segments || initialState;
 
 const selectPaginatedSegments = () => createSelector(
@@ -16,6 +18,15 @@ const selectSegmentTotal = () => createSelector(
 const selectSegment = () => createSelector(
   selectSegmentsDomain,
   segmentsState => segmentsState.currentSegment
+);
+
+const selectSegmentRules = () => createSelector(
+  selectSegmentsDomain,
+  (segmentsState) => ({
+    fieldRules: dig(segmentsState, 'currentSegment', 'field_rules'),
+    orderRules: dig(segmentsState, 'currentSegment', 'order_rules'),
+    groupRules: dig(segmentsState, 'currentSegment', 'group_rules')
+  })
 );
 
 const selectFormSegment = () => createSelector(
@@ -38,5 +49,6 @@ const selectFormSegment = () => createSelector(
 
 export {
   selectSegmentsDomain, selectPaginatedSegments,
-  selectSegmentTotal, selectSegment, selectFormSegment
+  selectSegmentTotal, selectSegment,
+  selectSegmentRules, selectFormSegment
 };

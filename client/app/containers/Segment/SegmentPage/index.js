@@ -11,13 +11,14 @@ import reducer from 'containers/Segment/reducer';
 
 import RouteService from 'utils/routeHelpers';
 
-import { selectSegment } from 'containers/Segment/selectors';
+import { selectSegment, selectSegmentRules } from 'containers/Segment/selectors';
 import {
   getSegmentBegin, createSegmentBegin,
   updateSegmentBegin, segmentUnmount
 } from 'containers/Segment/actions';
 
 import SegmentForm from 'components/Segment/SegmentForm';
+import SegmentRulesForm from 'components/Segment/SegmentRulesForm';
 
 export function SegmentEditPage(props) {
   useInjectReducer({ key: 'segments', reducer });
@@ -42,6 +43,9 @@ export function SegmentEditPage(props) {
         segment={props.segment}
         buttonText={segmentId[0] ? 'Update' : 'Create'}
       />
+      <SegmentRulesForm
+        rules={props.rules}
+      />
     </React.Fragment>
   );
 }
@@ -56,6 +60,7 @@ SegmentEditPage.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
   segment: selectSegment(),
+  rules: selectSegmentRules()
 });
 
 const mapDispatchToProps = {
