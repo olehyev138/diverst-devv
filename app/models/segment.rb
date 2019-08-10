@@ -20,7 +20,7 @@ class Segment < ApplicationRecord
   belongs_to :owner, class_name: 'User'
 
   # Rules
-  has_many :field_rules, class_name: 'SegmentRule', dependent: :destroy
+  has_many :field_rules, class_name: 'SegmentFieldRule', dependent: :destroy
   has_many :order_rules, class_name: 'SegmentOrderRule', dependent: :destroy
   has_many :group_rules, class_name: 'SegmentGroupScopeRule', dependent: :destroy
 
