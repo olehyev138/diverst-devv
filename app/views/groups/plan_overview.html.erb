@@ -43,7 +43,7 @@
             <td><%= number_to_currency(annual_budget.amount) %></td>
             <td><%= number_to_currency(annual_budget.approved_budget) %></td>
             <td>
-              <%= number_to_currency(annual_budget.available_budget) %>
+              <%= number_to_currency(annual_budget.available_budget) %><%= inline_svg('icons/information', class: 'icon', title: 'total expenses exceeds approved budget ') if annual_budget.available_budget < 0 %>
             </td>
           </tbody>
         </table>
