@@ -8,6 +8,8 @@ import React, {
   memo, useRef, useState, useEffect
 } from 'react';
 import { compose } from 'redux';
+import dig from 'object-dig';
+
 import PropTypes from 'prop-types';
 import Select from 'react-select';
 import {Field, Formik, Form, FieldArray} from 'formik';
@@ -21,7 +23,7 @@ import { buildValues, mapFields } from 'utils/formHelpers';
 
 import {
   Button, Card, CardActions, CardContent, Grid,
-  TextField, Hidden, FormControl
+  Paper, Tab, Tabs, TextField, Hidden, FormControl
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -31,82 +33,73 @@ const styles = theme => ({
   },
 });
 
+const RuleTypes = Object.freeze({
+  field: 0,
+  order: 1,
+  group: 2,
+});
+
 
 /* eslint-disable object-curly-newline */
 export function SegmentRulesFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
-  console.log(values);
+  /*
+   *  - Tab for each 'rule type'
+   *  - Define a 'ruleData' object for each type - including where to find it in values & a label
+   *  - On tab change, swap out 'ruleData' object
+   */
 
-  const [rulePositions, setRulePositions] = useState({
-    fieldRulePosition: 0,
-    orderRulePosition: 0,
-    segmentRulePosition: 0
-  });
+  const [tab, setTab] = useState(RuleTypes.field);
+  const ruleData = [
+    { name: 'fieldRules', label: '+ Field Rule', rules: values.fieldRules },
+    { name: 'orderRules', label: '+ Order Rule', rules: values.orderRules },
+    { name: 'groupRules', label: '+ Group Rule', rules: values.groupRules },
+  ];
+
+  const handleChangeTab = (event, newTab) => {
+    setTab(newTab);
+  };
 
   return (
     <Card>
       <Form>
+        <Paper>
+          <Tabs
+            value={tab}
+            onChange={handleChangeTab}
+            indicatorColor='primary'
+            textColor='primary'
+            centered
+          >
+            <Tab label='Field Rules' />
+            <Tab label='Order Rules' />
+            <Tab label='Group Rules' />
+          </Tabs>
+        </Paper>
         <FieldArray
-          name='field_rules'
+          name={ruleData[tab].name}
           render={arrayHelpers => (
             <React.Fragment>
-              <Grid container>
-                <Grid item>
-                  <Button
-                    color='primary'
-                    onClick={() => {
-                      console.log('field rule');
-                    }}
-                  >
-                    + Field Rule
-                  </Button>
-                </Grid>
-                <Grid item>
-                  <Button
-                    color='primary'
-                    onClick={() => { console.log('order rule'); }}
-                  >
-                    + Order Rule
-                  </Button>
-                </Grid>
-                <Grid item>
-                  <Button
-                    color='primary'
-                    onClick={() => { console.log('group rule'); }}
-                  >
-                    + Group Rule
-                  </Button>
-                </Grid>
-              </Grid>
               <CardContent>
-                { /* Field rules */ }
-                <Grid>
-                  {values.fieldRules.map((rule, i) => (
-                    <Grid item key={rule.id} className={props.classes.ruleInput}>
-                      {Object.entries(rule).length !== 0 && (
-                        <p>{rule.id}</p>
-                      )}
-                    </Grid>
-                  ))}
-                </Grid>
-                { /* Order rules */ }
-                <Grid>
-                  {[].map((rule, i) => (
-                    <Grid item key={rule.id} className={props.classes.ruleInput}>
-                      {Object.entries(rule).length !== 0 && (
-                        <React.Fragment />
-                      )}
-                    </Grid>
-                  ))}
-                </Grid>
-                { /* Group rules */ }
                 <Grid container>
-                  {[].map((fieldDatum, i) => (
-                    <Grid item key={fieldDatum.id} className={props.classes.ruleInput}>
-                      {Object.entries(fieldDatum).length !== 0 && (
-                        <React.Fragment />
-                      )}
+                  {ruleData[tab].rules.map((rule, i) => (
+                    /* eslint-disable-next-line react/no-array-index-key */
+                    <Grid item key={i} className={props.classes.ruleInput}>
+                      <Field
+                        component={TextField}
+                        name={`${ruleData[tab].name}[${i}].id`}
+                        id={`${ruleData[tab].name}[${i}].id`}
+                        value={dig(values[ruleData[tab].name][i], 'id')}
+                      />
+                      <Button
+                        onClick={() => arrayHelpers.remove(i)}
+                      >
+                        X
+                      </Button>
                     </Grid>
                   ))}
+                  <Button onClick={() => arrayHelpers.push({ id: '' })}>
+                    {ruleData[tab].label}
+                  </Button>
                 </Grid>
               </CardContent>
             </React.Fragment>
