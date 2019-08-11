@@ -27,6 +27,8 @@ import {
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
+import SegmentRule from 'components/Segment/SegmentRules/SegmentRule';
+
 const styles = theme => ({
   ruleInput: {
     width: '100%',
@@ -47,7 +49,6 @@ export function SegmentRulesFormInner({ handleSubmit, handleChange, handleBlur, 
    *  - Define a 'ruleData' object for each type - including where to find it in values & a label
    *  - On tab change, swap out 'ruleData' object
    */
-
   const [tab, setTab] = useState(RuleTypes.field);
   const ruleData = [
     { name: 'fieldRules', label: '+ Field Rule', rules: values.fieldRules },
@@ -84,17 +85,8 @@ export function SegmentRulesFormInner({ handleSubmit, handleChange, handleBlur, 
                   {ruleData[tab].rules.map((rule, i) => (
                     /* eslint-disable-next-line react/no-array-index-key */
                     <Grid item key={i} className={props.classes.ruleInput}>
-                      <Field
-                        component={TextField}
-                        name={`${ruleData[tab].name}[${i}].id`}
-                        id={`${ruleData[tab].name}[${i}].id`}
-                        value={dig(values[ruleData[tab].name][i], 'id')}
-                      />
-                      <Button
-                        onClick={() => arrayHelpers.remove(i)}
-                      >
-                        X
-                      </Button>
+                      <SegmentRule ruleName={ruleData[tab].name} ruleIndex={i} />
+                      <Button onClick={() => arrayHelpers.remove(i)}>X</Button>
                     </Grid>
                   ))}
                   <Button onClick={() => arrayHelpers.push({ id: '' })}>
