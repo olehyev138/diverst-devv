@@ -8,40 +8,55 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { connect, getIn } from 'formik';
-import dig from 'object-dig';
-
-import { Grid, TextField } from '@material-ui/core';
+import Select from 'react-select';
 
 /*
- * Define UI strings for each order field number
+ * Define UI strings for each order field
  *  - Could define UI strings in backend as well
  */
-const fields = Object.freeze({
-  0: 'Sign-in Count',
-  1: 'Reward Points',
-});
+const fields = [
+  { value: 0, label: 'Sign-in Count' },
+  { value: 1, label: 'Reward Points' }
+];
 
 /*
- * Define UI strings for each order field operator
+ * Define UI strings for each order operator
  *  - Could define UI strings in backend as well
  */
-const operators = Object.freeze({
-  0: 'Ascending',
-  1: 'Descending'
-});
+const operators = [
+  { value: 0, label: 'Ascending' },
+  { value: 1, label: 'Descending' },
+];
 
 const SegmentOrderRule = ({ rule, ...props }) => {
   const { ruleName } = props;
   const { ruleIndex } = props;
-  const ruleLocation = `${ruleName}.${ruleIndex}.id`;
+  const ruleLocation = `${ruleName}.${ruleIndex}`;
+
+  const fieldValue = getIn(props.formik.values, `${ruleLocation}.field`);
+  const operatorValue = getIn(props.formik.values, `${ruleLocation}.operator`);
+
+  console.log(props.formik.values);
 
   return (
-    <TextField
-      name={ruleLocation}
-      id={ruleLocation}
-      value={getIn(props.formik.values, ruleLocation)}
-      onChange={props.formik.handleChange}
-    />
+    <React.Fragment>
+      <Select
+        name={`${ruleLocation}.field`}
+        id={`${ruleLocation}.field`}
+        label='Order Field'
+        options={fields}
+        value={{ value: fieldValue, label: fields[fieldValue].label }}
+        onChange={v => props.formik.setFieldValue(`${ruleLocation}.field`, v.value)}
+      />
+      <Select
+        name={`${ruleLocation}.operator`}
+        id={`${ruleLocation}.operator`}
+        label='Order Operator'
+        options={operators}
+        value={{ value: operatorValue, label: operators[operatorValue].label }}
+        onChange={v => props.formik.setFieldValue(`${ruleLocation}.operator`, v.value)}
+      />
+    </React.Fragment>
   );
 };
 

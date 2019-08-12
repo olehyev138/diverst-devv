@@ -56,6 +56,12 @@ export function SegmentRulesFormInner({ handleSubmit, handleChange, handleBlur, 
     { name: 'groupRules', label: '+ Group Rule', rules: values.groupRules },
   ];
 
+  const initialRules = [
+    { field_id: 0, operator: 0, values: [] },
+    { field: 0, operator: 0 },
+    { id: 0 }
+  ];
+
   const handleChangeTab = (event, newTab) => {
     setTab(newTab);
   };
@@ -89,7 +95,7 @@ export function SegmentRulesFormInner({ handleSubmit, handleChange, handleBlur, 
                       <Button onClick={() => arrayHelpers.remove(i)}>X</Button>
                     </Grid>
                   ))}
-                  <Button onClick={() => arrayHelpers.push({ id: '' })}>
+                  <Button onClick={() => arrayHelpers.push(initialRules[tab])}>
                     {ruleData[tab].label}
                   </Button>
                 </Grid>

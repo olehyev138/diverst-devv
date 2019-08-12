@@ -1,5 +1,3 @@
 class SegmentOrderRuleSerializer < ApplicationRecordSerializer
-  def serialize_all_fields
-    true
-  end
+  attributes :id, :segment_id, :field, :operator
 end
