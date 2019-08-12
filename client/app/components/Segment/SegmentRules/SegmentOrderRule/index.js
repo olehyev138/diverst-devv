@@ -36,8 +36,6 @@ const SegmentOrderRule = ({ rule, ...props }) => {
   const fieldValue = getIn(props.formik.values, `${ruleLocation}.field`);
   const operatorValue = getIn(props.formik.values, `${ruleLocation}.operator`);
 
-  console.log(props.formik.values);
-
   return (
     <React.Fragment>
       <Select

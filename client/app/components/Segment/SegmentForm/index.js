@@ -23,6 +23,15 @@ import {
   Button, Card, CardActions, CardContent, Grid,
   TextField, Hidden, FormControl
 } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
+
+import SegmentRulesList from 'components/Segment/SegmentRulesList';
+
+const styles = theme => ({
+  ruleInput: {
+    width: '100%',
+  },
+});
 
 /* eslint-disable object-curly-newline */
 export function SegmentFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
@@ -48,6 +57,10 @@ export function SegmentFormInner({ handleSubmit, handleChange, handleBlur, value
             {buttonText}
           </Button>
         </CardActions>
+        <SegmentRulesList
+          values={values}
+          classes={props.classes}
+        />
       </Form>
     </Card>
   );
@@ -57,6 +70,9 @@ export function SegmentForm(props) {
   const initialValues = buildValues(props.segment, {
     id: { default: '' },
     name: { default: '' },
+    field_rules: { default: [], customKey: 'field_rules_attributes' },
+    order_rules: { default: [], customKey: 'order_rules_attributes' },
+    group_rules: { default: [], customKey: 'group_rules_attributes' }
   });
 
   return (
@@ -64,6 +80,7 @@ export function SegmentForm(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
+        console.log(values);
         props.segmentAction(values);
       }}
 
@@ -84,9 +101,12 @@ SegmentFormInner.propTypes = {
   values: PropTypes.object,
   buttonText: PropTypes.string,
   setFieldValue: PropTypes.func,
-  setFieldTouched: PropTypes.func
+  setFieldTouched: PropTypes.func,
+  rules: PropTypes.object,
+  classes: PropTypes.object
 };
 
 export default compose(
   memo,
+  withStyles(styles)
 )(SegmentForm);

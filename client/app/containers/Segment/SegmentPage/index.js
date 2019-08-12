@@ -18,7 +18,6 @@ import {
 } from 'containers/Segment/actions';
 
 import SegmentForm from 'components/Segment/SegmentForm';
-import SegmentRulesForm from 'components/Segment/SegmentRulesForm';
 
 export function SegmentEditPage(props) {
   useInjectReducer({ key: 'segments', reducer });
@@ -41,10 +40,8 @@ export function SegmentEditPage(props) {
       <SegmentForm
         segmentAction={segmentId[0] ? props.updateSegmentBegin : props.createSegmentBegin}
         segment={props.segment}
-        buttonText={segmentId[0] ? 'Update' : 'Create'}
-      />
-      <SegmentRulesForm
         rules={props.rules}
+        buttonText={segmentId[0] ? 'Update' : 'Create'}
       />
     </React.Fragment>
   );
@@ -52,6 +49,7 @@ export function SegmentEditPage(props) {
 
 SegmentEditPage.propTypes = {
   segment: PropTypes.object,
+  rules: PropTypes.object,
   getSegmentBegin: PropTypes.func,
   createSegmentBegin: PropTypes.func,
   updateSegmentBegin: PropTypes.func,

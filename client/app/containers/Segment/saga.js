@@ -7,7 +7,8 @@ import { showSnackbar } from 'containers/Shared/Notifier/actions';
 
 import {
   GET_SEGMENTS_BEGIN, CREATE_SEGMENT_BEGIN,
-  GET_SEGMENT_BEGIN, UPDATE_SEGMENT_BEGIN, DELETE_SEGMENT_BEGIN
+  GET_SEGMENT_BEGIN, UPDATE_SEGMENT_BEGIN,
+  DELETE_SEGMENT_BEGIN
 } from 'containers/Segment/constants';
 
 import {
@@ -15,6 +16,7 @@ import {
   createSegmentSuccess, createSegmentError,
   getSegmentSuccess, getSegmentError,
   updateSegmentSuccess, updateSegmentError,
+  updateSegmentRulesSuccess, updateSegmentRulesError,
   deleteSegmentError
 } from 'containers/Segment/actions';
 
@@ -51,6 +53,7 @@ export function* createSegment(action) {
 
     const response = yield call(api.segments.create.bind(api.segments), payload);
 
+    // TODO: get id from response & direct to show/update page
     yield put(push(ROUTES.admin.manage.segments.index.path()));
     yield put(showSnackbar({ message: 'Segment created', options: { variant: 'success' } }));
   } catch (err) {
@@ -66,7 +69,6 @@ export function* updateSegment(action) {
     const payload = { segment: action.payload };
     const response = yield call(api.segments.update.bind(api.segments), payload.segment.id, payload);
 
-    yield put(push(ROUTES.admin.manage.segments.index.path()));
     yield put(showSnackbar({ message: 'Segment updated', options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateSegmentError(err));

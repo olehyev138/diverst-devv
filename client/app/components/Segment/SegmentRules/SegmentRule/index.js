@@ -20,7 +20,7 @@ const SegmentRule = (props) => {
 
   const renderRule = (ruleName) => {
     switch (ruleName) {
-      case 'orderRules':
+      case 'order_rules_attributes':
         return (<SegmentOrderRule {...props} />);
       default:
         return (<React.Fragment />);
