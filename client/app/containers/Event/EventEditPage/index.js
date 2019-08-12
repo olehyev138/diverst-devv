@@ -27,22 +27,23 @@ import {
 import EventForm from 'components/Event/EventForm';
 
 export function EventEditPage(props) {
-  useInjectReducer({ key: 'event', reducer });
-  useInjectSaga({ key: 'event', saga });
+  useInjectReducer({ key: 'events', reducer });
+  useInjectSaga({ key: 'events', saga });
 
   const rs = new RouteService(useContext);
   const links = {
-    eventFeedIndex: ROUTES.group.events.index.path(rs.params('group_id')),
+    eventsIndex: ROUTES.group.events.index.path(rs.params('group_id')),
+    eventShow: ROUTES.group.events.show.path(rs.params('group_id'), rs.params('event_id')),
   };
 
   useEffect(() => {
-    const eventItemId = rs.params('item_id');
-    props.getEventItemBegin({ id: eventItemId });
+    const eventId = rs.params('event_id');
+    props.getEventBegin({ id: eventId });
 
-    return () => props.eventFeedUnmount();
+    return () => props.eventsUnmount();
   }, []);
 
-  const { currentUser, currentGroup, currentEventItem } = props;
+  const { currentUser, currentGroup, currentEvent } = props;
 
   return (
     <EventForm
@@ -50,25 +51,25 @@ export function EventEditPage(props) {
       buttonText='Update'
       currentUser={currentUser}
       currentGroup={currentGroup}
-      eventItem={currentEventItem}
+      event={currentEvent}
       links={links}
     />
   );
 }
 
 EventEditPage.propTypes = {
-  getEventItemBegin: PropTypes.func,
+  getEventBegin: PropTypes.func,
   updateEventBegin: PropTypes.func,
-  eventFeedUnmount: PropTypes.func,
+  eventsUnmount: PropTypes.func,
   currentUser: PropTypes.object,
   currentGroup: PropTypes.object,
-  currentEventItem: PropTypes.object,
+  currentEvent: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
   currentGroup: selectGroup(),
   currentUser: selectUser(),
-  currentEventItem: selectEvent(),
+  currentEvent: selectEvent(),
 });
 
 const mapDispatchToProps = {

@@ -17,23 +17,24 @@ import { selectGroup } from 'containers/Group/selectors';
 import { selectUser } from 'containers/Shared/App/selectors';
 import { selectEvent } from 'containers/Event/selectors';
 
-import { getEventBegin, eventsUnmount } from 'containers/Event/actions';
+import { getEventBegin, deleteEventBegin, eventsUnmount } from 'containers/Event/actions';
 
 import Event from 'components/Event/Event';
 
 export function EventPage(props) {
-  useInjectReducer({ key: 'event', reducer });
-  useInjectSaga({ key: 'event', saga });
+  useInjectReducer({ key: 'events', reducer });
+  useInjectSaga({ key: 'events', saga });
 
   const rs = new RouteService(useContext);
   const links = {
     eventsIndex: ROUTES.group.events.index.path(rs.params('group_id')),
+    eventEdit: ROUTES.group.events.edit.path(rs.params('group_id'), rs.params('event_id'))
   };
 
   useEffect(() => {
     const eventId = rs.params('event_id');
 
-    // get event item & comments specified in path
+    // get event specified in path
     props.getEventBegin({ id: eventId });
 
     return () => props.eventsUnmount();
@@ -44,6 +45,7 @@ export function EventPage(props) {
   return (
     <Event
       currentUserId={currentUser.id}
+      deleteEventBegin={props.deleteEventBegin}
       event={currentEvent}
       links={links}
     />
@@ -52,7 +54,7 @@ export function EventPage(props) {
 
 EventPage.propTypes = {
   getEventBegin: PropTypes.func,
-  updateEventBegin: PropTypes.func,
+  deleteEventBegin: PropTypes.func,
   eventsUnmount: PropTypes.func,
   currentUser: PropTypes.object,
   currentGroup: PropTypes.object,
@@ -67,6 +69,7 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = {
   getEventBegin,
+  deleteEventBegin,
   eventsUnmount
 };
 

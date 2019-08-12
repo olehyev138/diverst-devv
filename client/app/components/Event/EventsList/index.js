@@ -13,12 +13,12 @@ import classNames from 'classnames';
 
 import {
   Box, Tabs, Tab, Paper,
-  Card, CardContent, Grid, Link, TablePagination, Typography,
+  Card, CardContent, Grid, Link, TablePagination, Typography, Button,
 } from '@material-ui/core';
 
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import messages from 'containers/Event/messages';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -49,8 +49,8 @@ const styles = theme => ({
   }
 });
 
-export function EventsList(props) {
-  const { classes } = props;
+export function EventsList(props, context) {
+  const { classes, intl } = props;
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -69,6 +69,34 @@ export function EventsList(props) {
 
   return (
     <React.Fragment>
+      <Grid container justify='flex-end'>
+        <Grid item>
+          <Button
+            variant='contained'
+            to={props.links.eventNew}
+            color='primary'
+            size='large'
+            component={WrappedNavLink}
+          >
+            <FormattedMessage {...messages.new} />
+          </Button>
+        </Grid>
+      </Grid>
+      <Box mb={2} />
+      <Paper>
+        <Tabs
+          value={props.currentTab}
+          onChange={props.handleChangeTab}
+          indicatorColor='primary'
+          textColor='primary'
+          centered
+        >
+          <Tab label={intl.formatMessage(messages.index.upcoming)} />
+          <Tab label={intl.formatMessage(messages.index.ongoing)} />
+          <Tab label={intl.formatMessage(messages.index.past)} />
+        </Tabs>
+      </Paper>
+      <br />
       <Grid container spacing={3}>
         { /* eslint-disable-next-line arrow-body-style */}
         {props.events && Object.values(props.events).map((item, i) => {
@@ -120,7 +148,7 @@ export function EventsList(props) {
             <Grid item sm>
               <Box mt={3} />
               <Typography variant='h6' align='center' color='textSecondary'>
-                There are no events in this section.
+                <FormattedMessage {...messages.index.emptySection} />
               </Typography>
             </Grid>
           </React.Fragment>
@@ -148,14 +176,18 @@ export function EventsList(props) {
 }
 
 EventsList.propTypes = {
+  intl: PropTypes.object,
   classes: PropTypes.object,
   events: PropTypes.array,
   eventsTotal: PropTypes.number,
+  currentTab: PropTypes.number,
+  handleChangeTab: PropTypes.func,
   handlePagination: PropTypes.func,
   links: PropTypes.object,
 };
 
 export default compose(
   memo,
+  injectIntl,
   withStyles(styles)
 )(EventsList);

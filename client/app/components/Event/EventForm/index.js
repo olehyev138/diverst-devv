@@ -31,7 +31,7 @@ export function EventFormInner({ handleSubmit, handleChange, handleBlur, values,
             fullWidth
             id='name'
             name='name'
-            label={<FormattedMessage {...messages.name} />}
+            label={<FormattedMessage {...messages.form.name} />}
             value={values.name}
           />
           <Field
@@ -41,7 +41,25 @@ export function EventFormInner({ handleSubmit, handleChange, handleBlur, values,
             id='description'
             name='description'
             value={values.description}
-            label={<FormattedMessage {...messages.description} />}
+            label={<FormattedMessage {...messages.form.description} />}
+          />
+          <Field
+            component={TextField}
+            onChange={handleChange}
+            fullWidth
+            id='start'
+            name='start'
+            value={values.start}
+            label={<FormattedMessage {...messages.form.start} />}
+          />
+          <Field
+            component={TextField}
+            onChange={handleChange}
+            fullWidth
+            id='end'
+            name='end'
+            value={values.end}
+            label={<FormattedMessage {...messages.form.end} />}
           />
         </CardContent>
         <CardActions>
@@ -52,7 +70,7 @@ export function EventFormInner({ handleSubmit, handleChange, handleBlur, values,
             {buttonText}
           </Button>
           <Button
-            to={props.links.eventsIndex}
+            to={props.eventExists ? props.links.eventShow : props.links.eventsIndex}
             component={WrappedNavLink}
           >
             <FormattedMessage {...messages.cancel} />
@@ -67,10 +85,18 @@ export function EventForm(props) {
   const event = dig(props, 'event');
 
   const initialValues = buildValues(event, {
+    id: { default: '' },
     name: { default: '' },
     description: { default: '' },
+    start: { default: '' },
+    end: { default: '' },
+    max_attendees: { default: '' },
+    location: { default: '' },
+    annual_budget_id: { default: '' },
+    budget_item_id: { default: '' },
+    pillar_id: { default: '' },
     owner_id: { default: dig(props, 'currentUser', 'id') || '' },
-    group_id: { default: dig(props, 'currentGroup', 'id') || '' }
+    owner_group_id: { default: dig(props, 'currentGroup', 'id') || '' }
   });
 
   return (
@@ -81,7 +107,7 @@ export function EventForm(props) {
         props.eventAction(values);
       }}
 
-      render={formikProps => <EventFormInner {...props} {...formikProps} />}
+      render={formikProps => <EventFormInner eventExists={!!event} {...props} {...formikProps} />}
     />
   );
 }
@@ -94,6 +120,7 @@ EventForm.propTypes = {
 };
 
 EventFormInner.propTypes = {
+  eventExists: PropTypes.bool,
   handleSubmit: PropTypes.func,
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
@@ -102,7 +129,8 @@ EventFormInner.propTypes = {
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
   links: PropTypes.shape({
-    eventsIndex: PropTypes.string
+    eventsIndex: PropTypes.string,
+    eventShow: PropTypes.string,
   })
 };
 

@@ -20,8 +20,8 @@ import { createEventBegin, eventsUnmount } from 'containers/Event/actions';
 import EventForm from 'components/Event/EventForm';
 
 export function EventCreatePage(props) {
-  useInjectReducer({ key: 'event', reducer });
-  useInjectSaga({ key: 'event', saga });
+  useInjectReducer({ key: 'events', reducer });
+  useInjectSaga({ key: 'events', saga });
 
   const { currentUser, currentGroup } = props;
   const rs = new RouteService(useContext);

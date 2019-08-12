@@ -25,6 +25,9 @@ export default class RouteService {
     return this.location.pathname;
   }
 
+  // Returns an array no matter what, but passing an array with a string ID as an ID to the server works
+  // Ex:   const eventId = rs.params('event_id');
+  //       props.getEventBegin({ id: eventId });
   params(...keys) {
     const params = [];
     for (const key of keys)

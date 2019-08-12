@@ -22,7 +22,7 @@ function eventsReducer(state = initialState, action) {
         draft.eventsTotal = action.payload.total;
         break;
       case GET_EVENT_SUCCESS:
-        draft.currentEvent = action.payload.event;
+        draft.currentEvent = action.payload.initiative;
         break;
       case EVENTS_UNMOUNT:
         return initialState;
