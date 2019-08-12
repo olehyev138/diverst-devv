@@ -67,9 +67,9 @@ class SelectField < Field
     field_value = user.info[rule.field][0]
 
     case rule.operator
-    when SegmentRule.operators[:contains_any_of]
+    when SegmentFieldRule.operators[:contains_any_of]
       rule.values_array.include?(field_value)
-    when SegmentRule.operators[:is_not]
+    when SegmentFieldRule.operators[:is_not]
       !rule.values_array.include?(field_value)
     end
   end

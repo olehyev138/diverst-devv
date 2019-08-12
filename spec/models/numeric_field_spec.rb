@@ -40,8 +40,8 @@ RSpec.describe NumericField, type: :model do
       numeric_field.save!
       user_1 = create(:user, data: "{\"#{numeric_field.id}\":21}", enterprise: enterprise)
       segment = create(:segment, name: 'Seniors', enterprise: enterprise)
-      segment_rule = create(:segment_rule, segment_id: segment.id, field_id: numeric_field.id, operator: 1, values: '["20"]')
-      boolean = numeric_field.validates_rule_for_user?(rule: segment_rule, user: user_1)
+      segment_field_rule = create(:segment_field_rule, segment_id: segment.id, field_id: numeric_field.id, operator: 1, values: '["20"]')
+      boolean = numeric_field.validates_rule_for_user?(rule: segment_field_rule, user: user_1)
       expect(boolean).to be(true)
     end
 
@@ -51,8 +51,8 @@ RSpec.describe NumericField, type: :model do
       numeric_field.save!
       user_1 = create(:user, data: "{\"#{numeric_field.id}\":19}", enterprise: enterprise)
       segment = create(:segment, name: 'Seniors', enterprise: enterprise)
-      segment_rule = create(:segment_rule, segment_id: segment.id, field_id: numeric_field.id, operator: 1, values: '["20"]')
-      boolean = numeric_field.validates_rule_for_user?(rule: segment_rule, user: user_1)
+      segment_field_rule = create(:segment_field_rule, segment_id: segment.id, field_id: numeric_field.id, operator: 1, values: '["20"]')
+      boolean = numeric_field.validates_rule_for_user?(rule: segment_field_rule, user: user_1)
       expect(boolean).to be(false)
     end
 
@@ -62,8 +62,8 @@ RSpec.describe NumericField, type: :model do
       numeric_field.save!
       user_1 = create(:user, data: "{\"#{numeric_field.id}\":20}", enterprise: enterprise)
       segment = create(:segment, name: 'Seniors', enterprise: enterprise)
-      segment_rule = create(:segment_rule, segment_id: segment.id, field_id: numeric_field.id, operator: 0, values: '["20"]')
-      boolean = numeric_field.validates_rule_for_user?(rule: segment_rule, user: user_1)
+      segment_field_rule = create(:segment_field_rule, segment_id: segment.id, field_id: numeric_field.id, operator: 0, values: '["20"]')
+      boolean = numeric_field.validates_rule_for_user?(rule: segment_field_rule, user: user_1)
       expect(boolean).to be(true)
     end
 
@@ -73,8 +73,8 @@ RSpec.describe NumericField, type: :model do
       numeric_field.save!
       user_1 = create(:user, data: "{\"#{numeric_field.id}\":19}", enterprise: enterprise)
       segment = create(:segment, name: 'Seniors', enterprise: enterprise)
-      segment_rule = create(:segment_rule, segment_id: segment.id, field_id: numeric_field.id, operator: 0, values: '["20"]')
-      boolean = numeric_field.validates_rule_for_user?(rule: segment_rule, user: user_1)
+      segment_field_rule = create(:segment_field_rule, segment_id: segment.id, field_id: numeric_field.id, operator: 0, values: '["20"]')
+      boolean = numeric_field.validates_rule_for_user?(rule: segment_field_rule, user: user_1)
       expect(boolean).to be(false)
     end
 
@@ -84,8 +84,8 @@ RSpec.describe NumericField, type: :model do
       numeric_field.save!
       user_1 = create(:user, data: "{\"#{numeric_field.id}\":19}", enterprise: enterprise)
       segment = create(:segment, name: 'Seniors', enterprise: enterprise)
-      segment_rule = create(:segment_rule, segment_id: segment.id, field_id: numeric_field.id, operator: 2, values: '["20"]')
-      boolean = numeric_field.validates_rule_for_user?(rule: segment_rule, user: user_1)
+      segment_field_rule = create(:segment_field_rule, segment_id: segment.id, field_id: numeric_field.id, operator: 2, values: '["20"]')
+      boolean = numeric_field.validates_rule_for_user?(rule: segment_field_rule, user: user_1)
       expect(boolean).to be(true)
     end
 
@@ -95,8 +95,8 @@ RSpec.describe NumericField, type: :model do
       numeric_field.save!
       user_1 = create(:user, data: "{\"#{numeric_field.id}\":21}", enterprise: enterprise)
       segment = create(:segment, name: 'Seniors', enterprise: enterprise)
-      segment_rule = create(:segment_rule, segment_id: segment.id, field_id: numeric_field.id, operator: 2, values: '["20"]')
-      boolean = numeric_field.validates_rule_for_user?(rule: segment_rule, user: user_1)
+      segment_field_rule = create(:segment_field_rule, segment_id: segment.id, field_id: numeric_field.id, operator: 2, values: '["20"]')
+      boolean = numeric_field.validates_rule_for_user?(rule: segment_field_rule, user: user_1)
       expect(boolean).to be(false)
     end
 
@@ -106,8 +106,8 @@ RSpec.describe NumericField, type: :model do
       numeric_field.save!
       user_1 = create(:user, data: "{\"#{numeric_field.id}\":19}", enterprise: enterprise)
       segment = create(:segment, name: 'Seniors', enterprise: enterprise)
-      segment_rule = create(:segment_rule, segment_id: segment.id, field_id: numeric_field.id, operator: 3, values: '["20"]')
-      boolean = numeric_field.validates_rule_for_user?(rule: segment_rule, user: user_1)
+      segment_field_rule = create(:segment_field_rule, segment_id: segment.id, field_id: numeric_field.id, operator: 3, values: '["20"]')
+      boolean = numeric_field.validates_rule_for_user?(rule: segment_field_rule, user: user_1)
       expect(boolean).to be(true)
     end
 
@@ -117,8 +117,8 @@ RSpec.describe NumericField, type: :model do
       numeric_field.save!
       user_1 = create(:user, data: "{\"#{numeric_field.id}\":20}", enterprise: enterprise)
       segment = create(:segment, name: 'Seniors', enterprise: enterprise)
-      segment_rule = create(:segment_rule, segment_id: segment.id, field_id: numeric_field.id, operator: 3, values: '["20"]')
-      boolean = numeric_field.validates_rule_for_user?(rule: segment_rule, user: user_1)
+      segment_field_rule = create(:segment_field_rule, segment_id: segment.id, field_id: numeric_field.id, operator: 3, values: '["20"]')
+      boolean = numeric_field.validates_rule_for_user?(rule: segment_field_rule, user: user_1)
       expect(boolean).to be(false)
     end
   end

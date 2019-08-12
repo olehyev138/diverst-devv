@@ -37,13 +37,13 @@ class NumericField < Field
     return false if user.info[rule.field].nil?
 
     case rule.operator
-    when SegmentRule.operators[:equals]
+    when SegmentFieldRule.operators[:equals]
       user.info[rule.field] == rule.values_array[0].to_i
-    when SegmentRule.operators[:greater_than]
+    when SegmentFieldRule.operators[:greater_than]
       user.info[rule.field] > rule.values_array[0].to_i
-    when SegmentRule.operators[:lesser_than]
+    when SegmentFieldRule.operators[:lesser_than]
       user.info[rule.field] < rule.values_array[0].to_i
-    when SegmentRule.operators[:is_not]
+    when SegmentFieldRule.operators[:is_not]
       user.info[rule.field] != rule.values_array[0].to_i
     end
   end

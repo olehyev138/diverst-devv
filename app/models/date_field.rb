@@ -62,13 +62,13 @@ class DateField < Field
     user_date = user.info[rule.field]
 
     case rule.operator
-    when SegmentRule.operators[:equals]
+    when SegmentFieldRule.operators[:equals]
       user_date == rule_date
-    when SegmentRule.operators[:greater_than]
+    when SegmentFieldRule.operators[:greater_than]
       user_date > rule_date
-    when SegmentRule.operators[:lesser_than]
+    when SegmentFieldRule.operators[:lesser_than]
       user_date < rule_date
-    when SegmentRule.operators[:is_not]
+    when SegmentFieldRule.operators[:is_not]
       user_date != rule_date
     end
   end
