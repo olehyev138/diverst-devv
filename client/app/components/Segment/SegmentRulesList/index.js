@@ -50,9 +50,9 @@ export function SegmentRules({ values, classes, ...props }) {
    */
   const [tab, setTab] = useState(RuleTypes.field);
   const ruleData = [
-    { name: 'field_rules_attributes', label: '+ Field Rule', rules: values.field_rules_attributes },
-    { name: 'order_rules_attributes', label: '+ Order Rule', rules: values.order_rules_attributes },
-    { name: 'group_rules_attributes', label: '+ Group Rule', rules: values.group_rules_attributes },
+    { name: 'field_rules_attributes', label: '+ Field Rule' },
+    { name: 'order_rules_attributes', label: '+ Order Rule' },
+    { name: 'group_rules_attributes', label: '+ Group Rule' }
   ];
 
   const initialRules = [
@@ -88,14 +88,13 @@ export function SegmentRules({ values, classes, ...props }) {
             <CardContent>
               <Grid container>
                 {getIn(props.formik.values, `${ruleData[tab].name}`).map((rule, i) => {
-                  // if (Object.hasOwnProperty.call(rule, 'destroy')) return (<React.Fragment />);
+                  if (Object.hasOwnProperty.call(rule, '_destroy')) return (<React.Fragment key={i} />);
 
                   return (
                     /* eslint-disable-next-line react/no-array-index-key */
                     <Grid item key={i} className={classes.ruleInput}>
                       <SegmentRule ruleName={ruleData[tab].name} ruleIndex={i} />
-                      <Button onClick={() => {
-                      }}>
+                      <Button onClick={() => props.formik.setFieldValue(`${ruleData[tab].name}.${i}._destroy`, '1')}>
                         X
                       </Button>
                     </Grid>
