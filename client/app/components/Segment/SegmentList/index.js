@@ -53,9 +53,9 @@ export function SegmentList(props, context) {
   if (props.segments && Object.keys(props.segments).length !== 0 && Object.keys(expandedSegments).length <= 0) {
     const initialExpandedSegments = {};
 
-    /* eslint-disable-next-line no-return-assign */
     /* Setup initial hash, with each segment set to false - do it like this because of how React works with state */
-    Object.keys(props.segments).map((id, i) => initialExpandedSegments[id] = false);
+    /* eslint-disable-next-line no-return-assign */
+    Object.keys(props.segments).map((id, i) => initialExpandedSegments[id] = false); // eslint-disable
     setExpandedSegments(initialExpandedSegments);
   }
 

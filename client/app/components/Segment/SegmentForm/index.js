@@ -80,7 +80,6 @@ export function SegmentForm(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        console.log(values);
         props.segmentAction(values);
       }}
 
@@ -102,7 +101,6 @@ SegmentFormInner.propTypes = {
   buttonText: PropTypes.string,
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
-  rules: PropTypes.object,
   classes: PropTypes.object
 };
 

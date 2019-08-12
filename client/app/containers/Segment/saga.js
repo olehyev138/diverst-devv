@@ -16,7 +16,6 @@ import {
   createSegmentSuccess, createSegmentError,
   getSegmentSuccess, getSegmentError,
   updateSegmentSuccess, updateSegmentError,
-  updateSegmentRulesSuccess, updateSegmentRulesError,
   deleteSegmentError
 } from 'containers/Segment/actions';
 

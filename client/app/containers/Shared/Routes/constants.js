@@ -147,7 +147,7 @@ export const ROUTES = {
           }
         },
         new: {
-          path: (segmentId = ':segment_id') => `/admin/manage/segments/new`,
+          path: () => '/admin/manage/segments/new',
         },
         show: {
           path: (segmentId = ':segment_id') => `/admin/manage/segments/${segmentId}`,

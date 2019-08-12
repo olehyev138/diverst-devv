@@ -20,15 +20,6 @@ const selectSegment = () => createSelector(
   segmentsState => segmentsState.currentSegment
 );
 
-const selectSegmentRules = () => createSelector(
-  selectSegmentsDomain,
-  (segmentsState) => ({
-    fieldRules: dig(segmentsState, 'currentSegment', 'field_rules'),
-    orderRules: dig(segmentsState, 'currentSegment', 'order_rules'),
-    groupRules: dig(segmentsState, 'currentSegment', 'group_rules')
-  })
-);
-
 const selectFormSegment = () => createSelector(
   selectSegmentsDomain,
   (segmentsState) => {
@@ -50,5 +41,5 @@ const selectFormSegment = () => createSelector(
 export {
   selectSegmentsDomain, selectPaginatedSegments,
   selectSegmentTotal, selectSegment,
-  selectSegmentRules, selectFormSegment
+  selectFormSegment
 };

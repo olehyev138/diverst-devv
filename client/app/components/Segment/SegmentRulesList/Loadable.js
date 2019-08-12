@@ -6,4 +6,4 @@
 
 import loadable from 'utils/loadable';
 
-export default loadable(() => import('components/Segment/SegmentRulesForm/index'));
+export default loadable(() => import('components/Segment/SegmentRulesList/index'));

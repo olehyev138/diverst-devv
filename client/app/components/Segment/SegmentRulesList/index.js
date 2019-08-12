@@ -12,7 +12,7 @@ import dig from 'object-dig';
 
 import PropTypes from 'prop-types';
 import Select from 'react-select';
-import { FieldArray, connect, getIn, setIn } from 'formik';
+import { FieldArray, connect, getIn } from 'formik';
 import { FormattedMessage } from 'react-intl';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
@@ -88,7 +88,7 @@ export function SegmentRules({ values, classes, ...props }) {
             <CardContent>
               <Grid container>
                 {getIn(props.formik.values, `${ruleData[tab].name}`).map((rule, i) => {
-                  if (Object.hasOwnProperty.call(rule, '_destroy')) return (<React.Fragment key={i} />);
+                  if (Object.hasOwnProperty.call(rule, '_destroy')) return (<React.Fragment key={i} />); // eslint-disable-line react/no-array-index-key
 
                   return (
                     /* eslint-disable-next-line react/no-array-index-key */
@@ -117,7 +117,6 @@ SegmentRules.propTypes = {
   updateSegmentBegin: PropTypes.func,
   values: PropTypes.object,
   classes: PropTypes.object,
-  rules: PropTypes.object,
   formik: PropTypes.object
 };
 
