@@ -1,10 +1,14 @@
 class IncrementViewCountJob < ActiveJob::Base
   queue_as :low
 
-  def perform(user, page, name, controller, action)
-    record = PageVisitationData.find_by(user: user, page_url: page)
+  def perform(user_id, page, name, controller, action)
+    if page == '/'
+      page = Rails.application.routes.url_helpers.metrics_overview_index_path
+    end
+
+    record = PageVisitationData.find_or_create_by(user_id: user_id, page_url: page)
     if record.nil?
-      record = PageVisitationData.new(user: user, page_url: page, controller: controller, action: action)
+      record = PageVisitationData.new(user_id: user_id, page_url: page, controller: controller, action: action)
     end
     record.name = name
     record.visits_all += 1

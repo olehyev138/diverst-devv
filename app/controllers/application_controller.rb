@@ -146,7 +146,7 @@ class ApplicationController < ActionController::Base
     return unless request.format == 'html'
     return if Rails.env.test?
 
-    user = current_user
+    user = current_user.id
     controller = controller_name
     action = action_name
     origin = URI(request.referer || '').path
