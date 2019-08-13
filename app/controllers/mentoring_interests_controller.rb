@@ -1,6 +1,7 @@
 class MentoringInterestsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_topic, only: [:edit, :update, :destroy]
+  after_action :visit_page, only: [:index, :new, :edit]
 
   layout 'mentorship'
 
@@ -49,6 +50,8 @@ class MentoringInterestsController < ApplicationController
     redirect_to :back
   end
 
+  private
+
   def set_topic
     @topic = current_user.enterprise.mentoring_interests.find(params[:id])
   end
@@ -59,5 +62,24 @@ class MentoringInterestsController < ApplicationController
       .permit(
         :name
       )
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      'Mentorship Topics'
+    when 'new'
+      'Mentorship Topic Creation'
+    when 'edit'
+      "Mentorship Topic Edit: #{@topic.to_label}"
+    else
+      "#{controller_name}##{action_name}"
+    end
+  rescue
+    "#{controller_name}##{action_name}"
   end
 end

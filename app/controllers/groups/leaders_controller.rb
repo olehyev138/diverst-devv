@@ -2,6 +2,7 @@ class Groups::LeadersController < ApplicationController
   before_action :authenticate_user!
   before_action :set_group
   after_action :verify_authorized
+  after_action :visit_page, only: [:index, :new]
 
   layout 'erg'
 
@@ -38,5 +39,22 @@ class Groups::LeadersController < ApplicationController
       [:id, :position, :user_id, :position_name, :user_role_id, :_destroy, :visible,
        :pending_member_notifications_enabled, :pending_comments_notifications_enabled,
        :pending_posts_notifications_enabled, :default_group_contact])
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      "#{@group.to_label}'s Leaders"
+    when 'new'
+      "#{@group.to_label} Leader Creation"
+    else
+      "#{controller_name}##{action_name}"
+    end
+  rescue
+    "#{controller_name}##{action_name}"
   end
 end

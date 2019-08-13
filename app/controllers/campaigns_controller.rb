@@ -2,6 +2,7 @@ class CampaignsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_campaign, only: [:edit, :update, :destroy, :show, :contributions_per_erg, :top_performers]
   after_action :verify_authorized
+  after_action :visit_page, only: [:index, :new, :show, :edit]
 
   layout :resolve_layout
 
@@ -149,5 +150,26 @@ class CampaignsController < ApplicationController
     return 'user' if current_user.nil?
 
     'collaborate'
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      'Campaigns'
+    when 'new'
+      'Campaign Creation'
+    when 'show'
+      "Campaign: #{@campaign.to_label}"
+    when 'edit'
+      'Campaign Edit'
+    else
+      "#{controller_name}##{action_name}"
+    end
+  rescue
+    "#{controller_name}##{action_name}"
   end
 end

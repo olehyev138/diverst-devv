@@ -1,6 +1,7 @@
 class ArchivedInitiativesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_initiative, only: [:restore, :destroy]
+  after_action :visit_page, only: [:index]
 
   layout 'erg_manager'
 
@@ -59,5 +60,20 @@ class ArchivedInitiativesController < ApplicationController
 
   def set_initiative
     @initiative = Initiative.find(params[:id])
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      'Archived Initiatives'
+    else
+      "#{controller_name}##{action_name}"
+    end
+  rescue
+    "#{controller_name}##{action_name}"
   end
 end

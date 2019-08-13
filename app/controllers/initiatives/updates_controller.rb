@@ -4,6 +4,7 @@ class Initiatives::UpdatesController < ApplicationController
   before_action :set_initiative
   before_action :set_update, only: [:edit, :update, :destroy, :show, :export_csv]
   after_action :verify_authorized
+  after_action :visit_page, only: [:index, :new, :show, :edit]
 
   layout 'erg'
 
@@ -80,5 +81,26 @@ class Initiatives::UpdatesController < ApplicationController
       .permit(
         :report_date
       )
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      "#{@initiative.to_label}'s Updates"
+    when 'new'
+      "#{@initiative.to_label} Update Creation"
+    when 'show'
+      "View a(n) #{@initiative.to_label} Update"
+    when 'edit'
+      "Edit a(n) #{@initiative.to_label} Update"
+    else
+      "#{controller_name}##{action_name}"
+    end
+  rescue
+    "#{controller_name}##{action_name}"
   end
 end

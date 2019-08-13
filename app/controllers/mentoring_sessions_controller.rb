@@ -1,6 +1,7 @@
 class MentoringSessionsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_mentoring_session, only: [:show, :edit, :update, :destroy, :start, :join, :export_ics]
+  after_action :visit_page, only: [:new, :edit, :show]
 
   layout 'user', except: [:start, :join]
 
@@ -190,5 +191,24 @@ class MentoringSessionsController < ApplicationController
 
   def set_mentoring_session
     @mentoring_session = current_user.mentoring_sessions.find(params[:id])
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'new'
+      'Mentoring Session Creation'
+    when 'edit'
+      'Mentoring Session Edit'
+    when 'show'
+      'Mentoring Session'
+    else
+      "#{controller_name}##{action_name}"
+    end
+  rescue
+    "#{controller_name}##{action_name}"
   end
 end

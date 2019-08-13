@@ -4,6 +4,8 @@ class Metrics::MetricsDashboardsController < ApplicationController
   before_action :set_metrics_dashboard, except: [:index, :new, :create, :shared_dashboard]
   after_action :add_shared_dashboards, only: [:create, :update]
   after_action :remove_shared_dashboards, only: [:update]
+  after_action :visit_page, only: [:index, :new, :show, :edit]
+
   layout 'metrics'
 
   def index
@@ -36,7 +38,7 @@ class Metrics::MetricsDashboardsController < ApplicationController
     authorize @metrics_dashboard
     @graphs = @metrics_dashboard.graphs.includes(:field, :aggregation)
 
-    if not @metrics_dashboard.update_shareable_token
+    unless @metrics_dashboard.update_shareable_token
       render :edit
     end
   end
@@ -71,16 +73,16 @@ class Metrics::MetricsDashboardsController < ApplicationController
   end
 
   def destroy
-    unless @metrics_dashboard.is_user_shared?(current_user)
+    if @metrics_dashboard.is_user_shared?(current_user)
+      authorize @metrics_dashboard, :index?
+
+      @metrics_dashboard.shared_metrics_dashboards.destroy(SharedMetricsDashboard.find_by(user_id: current_user.id))
+      redirect_to action: :index
+    else
       authorize @metrics_dashboard
 
       track_activity(@metrics_dashboard, :destroy)
       @metrics_dashboard.destroy
-      redirect_to action: :index
-    else
-      authorize @metrics_dashboard, :index?
-
-      @metrics_dashboard.shared_metrics_dashboards.destroy(SharedMetricsDashboard.find_by(user_id: current_user.id))
       redirect_to action: :index
     end
   end
@@ -134,5 +136,26 @@ class Metrics::MetricsDashboardsController < ApplicationController
         group_ids: [],
         shared_user_ids: []
       )
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      'Metrics Dashboards'
+    when 'new'
+      'Metrics Dashboard Creation'
+    when 'show'
+      'Metrics Dashboard View'
+    when 'edit'
+      'Metrics Dashboard Edit'
+    else
+      "#{controller_name}##{action_name}"
+    end
+  rescue
+    "#{controller_name}##{action_name}"
   end
 end
