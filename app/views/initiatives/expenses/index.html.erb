@@ -80,7 +80,7 @@
       </div>
       <div class="flex-row__cell flex-row__cell--grow flex-row__cell--spaced">
         <div class="progress-bar">
-          <div class="progress-bar__fill <%= " warning" if percentage_expenditure(@expenses.sum(:amount), @initiative.estimated_funding) > 100 %>" style="width: <%= percentage_expenditure(@expenses.sum(:amount), @initiative.estimated_funding) %>%;"></div>
+          <div class="progress-bar__fill <%= " warning" if negative_budget_pressure(initiative: @initiative) %>" style="width: <%= percentage_expenditure(@expenses.sum(:amount), @initiative.estimated_funding) %>%;"></div>
         </div>
       </div>
       <div class="flex-row__cell flex-row__cell--spaced">

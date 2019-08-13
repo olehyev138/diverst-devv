@@ -25,10 +25,10 @@ RSpec.describe InitiativeDecorator do
   end
 
   describe '#budget_percentage' do
-    it 'returns 0' do
+    it 'returns 100' do
       initiative.estimated_funding = 0
       decorated_initiative = initiative.decorate
-      expect(decorated_initiative.budget_percentage).to eq(0)
+      expect(decorated_initiative.budget_percentage).to eq(100)
     end
 
     it 'returns 2' do
