@@ -1,5 +1,6 @@
 class User::EventsController < ApplicationController
   before_action :authenticate_user!, except: [:onboarding_calendar_data]
+  after_action :visit_page, only: [:index]
 
   layout 'user'
 
@@ -33,5 +34,20 @@ class User::EventsController < ApplicationController
     else
       redirect_to user_root_path
     end
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      'User\'s Events Page'
+    else
+      "#{controller_name}##{action_name}"
+    end
+  rescue
+    "#{controller_name}##{action_name}"
   end
 end

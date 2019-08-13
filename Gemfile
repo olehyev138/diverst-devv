@@ -81,6 +81,9 @@ gem 'omniauth-slack'
 gem 'picky'
 gem 'picky-client'
 gem 'picky-generators'
+gem 'json_on_rails', '~> 0.2.0'
+gem 'scenic'
+gem 'scenic-mysql_adapter'
 gem 'factory_bot_rails', '~> 4.8.0' # Create mock objects for testing
 gem 'tty-spinner'
 

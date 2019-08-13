@@ -3,6 +3,8 @@ class EnterprisesController < ApplicationController
   before_action :set_enterprise, except: [:index, :new, :create, :calendar]
   after_action :verify_authorized, except: :calendar
   after_action :allow_iframe, only: [:calendar]
+  after_action :visit_page, only: [:edit, :edit_fields, :edit_budgeting, :edit_mobile_fields,
+                                   :edit_auth, :edit_branding, :edit_algo, :calendar]
 
   layout :resolve_layout
 
@@ -257,5 +259,34 @@ class EnterprisesController < ApplicationController
           :_destroy
         ]
       )
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'edit'
+      'Enterprise Settings'
+    when 'edit_fields'
+      'Fields Edit'
+    when 'edit_budgeting'
+      'Budget Settings'
+    when 'edit_mobile_fields'
+      'Mobile Fields Settings'
+    when 'edit_auth'
+      'Authentication Settings'
+    when 'edit_branding'
+      'Branding Settings'
+    when 'edit_algo'
+      'Algorithm Settings'
+    when 'calendar'
+      'Calender'
+    else
+      "#{controller_name}##{action_name}"
+    end
+  rescue
+    "#{controller_name}##{action_name}"
   end
 end

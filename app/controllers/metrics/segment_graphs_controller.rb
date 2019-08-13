@@ -1,6 +1,8 @@
 class Metrics::SegmentGraphsController < ApplicationController
   include Metrics
 
+  after_action :visit_page, only: [:index]
+
   layout 'metrics'
 
   def index
@@ -24,5 +26,20 @@ class Metrics::SegmentGraphsController < ApplicationController
         render json: { notice: 'Please check your Secure Downloads section in a couple of minutes' }
       }
     end
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      'Segment Metrics'
+    else
+      "#{controller_name}##{action_name}"
+    end
+  rescue
+    "#{controller_name}##{action_name}"
   end
 end

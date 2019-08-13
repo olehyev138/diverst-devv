@@ -3,6 +3,7 @@ class RewardsController < ApplicationController
   before_action :set_enterprise
   before_action :set_reward, only: [:edit, :update, :destroy]
   after_action :verify_authorized
+  after_action :visit_page, only: [:index, :new, :edit]
 
   layout 'global_settings'
 
@@ -72,5 +73,24 @@ class RewardsController < ApplicationController
 
   def reward_params
     params.require(:reward).permit(:label, :points, :responsible_id, :picture, :description)
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      'Rewards'
+    when 'new'
+      'Reward Creation'
+    when 'edit'
+      "Reward Edit: #{@reward.label}"
+    else
+      "#{controller_name}##{action_name}"
+    end
+  rescue
+    "#{controller_name}##{action_name}"
   end
 end

@@ -5,6 +5,7 @@ class Groups::AttendancesController < ApplicationController
   before_action :set_group
   before_action :set_event
   before_action :set_attendance, only: [:create, :destroy]
+  after_action :visit_page, only: [:show]
 
   layout 'erg'
 
@@ -81,5 +82,20 @@ class Groups::AttendancesController < ApplicationController
 
   def set_attendance
     @attendance = @event.initiative_users.where(user: current_user).first
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'show'
+      "#{@event.to_label} Attendees"
+    else
+      "#{controller_name}##{action_name}"
+    end
+  rescue
+    "#{controller_name}##{action_name}"
   end
 end

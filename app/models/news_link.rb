@@ -2,7 +2,7 @@ class NewsLink < BaseClass
   include PublicActivity::Common
 
   belongs_to :group
-  belongs_to :author, class_name: 'User'
+  belongs_to :author, class_name: 'User', counter_cache: :own_news_links_count
 
   has_one :news_feed_link
 

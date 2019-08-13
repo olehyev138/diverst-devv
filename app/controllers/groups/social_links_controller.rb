@@ -5,6 +5,7 @@ class Groups::SocialLinksController < ApplicationController
 
   before_action :set_group
   before_action :set_social_link, only: [:destroy, :archive]
+  after_action :visit_page, only: [:index, :new]
 
   layout 'erg'
 
@@ -66,5 +67,22 @@ class Groups::SocialLinksController < ApplicationController
           :url,
           news_feed_link_attributes: [:id, :approved, :news_feed_id, :link, shared_news_feed_ids: [], segment_ids: []],
         )
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      "#{@group.to_label}'s Social Links"
+    when 'new'
+      "#{@group.to_label}'s Social Link Creation"
+    else
+      "#{controller_name}##{action_name}"
+    end
+  rescue
+    "#{controller_name}##{action_name}"
   end
 end

@@ -1,6 +1,7 @@
 class EmailsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_email, only: [:edit, :update, :show]
+  after_action :visit_page, only: [:index, :edit]
 
   layout 'global_settings'
 
@@ -36,5 +37,22 @@ class EmailsController < ApplicationController
         :content,
         :subject
       )
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      'Email Configurations'
+    when 'edit'
+      'Edit Email Configurations'
+    else
+      "#{controller_name}##{action_name}"
+    end
+  rescue
+    "#{controller_name}##{action_name}"
   end
 end

@@ -2,9 +2,9 @@ class GroupCategoryTypesController < ApplicationController
   before_action :authenticate_user!
   after_action :verify_authorized
   before_action :set_category_type, only: [:edit, :update, :add_category, :update_with_new_category, :destroy]
+  after_action :visit_page, only: [:edit, :add_category]
 
   layout :resolve_layout
-
 
   def edit
     authorize Group, :manage_all_groups?
@@ -68,5 +68,22 @@ class GroupCategoryTypesController < ApplicationController
 
   def set_category_type
     @category_type = current_user.enterprise.group_category_types.find(params[:id])
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'edit'
+      "Group Category Edit: #{@category_type.to_label}"
+    when 'add_category'
+      'Add Group Category'
+    else
+      "#{controller_name}##{action_name}"
+    end
+  rescue
+    "#{controller_name}##{action_name}"
   end
 end
