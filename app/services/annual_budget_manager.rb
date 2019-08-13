@@ -56,7 +56,7 @@ class AnnualBudgetManager
 
   # this method to resolve inconsistencies where the annual budget of an initiative is not equal to annual budget of selected budget item
   def re_assign_annual_budget(budget_item_id, initiative_id)
-    return if budget_item_id.nil? || budget_item_id.blank?
+    return if budget_item_id.to_i == 0 || budget_item_id.to_i < 0
 
     budget_item_annual_budget = BudgetItem.find(budget_item_id).budget.annual_budget
     initiative = Initiative.find(initiative_id)

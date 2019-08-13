@@ -17,8 +17,8 @@ class InitiativeDecorator < Draper::Decorator
     # Show empty bar if no funds is allocated
     return 0 if initiative.estimated_funding == 0
 
-    # Show just barely visible bar if expences are expected but not published yet.
-    return 2 if initiative_expences == 0
+    # Show empty bar if expences is zero.
+    return 0 if initiative_expences == 0
 
     return 100 if initiative_expences > initiative.estimated_funding
 
