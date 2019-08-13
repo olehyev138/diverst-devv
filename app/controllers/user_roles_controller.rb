@@ -79,9 +79,9 @@ class UserRolesController < ApplicationController
     when 'edit'
       "User Role Edit: #{@user_role}"
     else
-      "#{controller_name}##{action_name}"
+      "#{controller_path}##{action_name}"
     end
   rescue
-    "#{controller_name}##{action_name}"
+    "#{controller_path}##{action_name}"
   end
 end

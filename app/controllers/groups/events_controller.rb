@@ -103,9 +103,9 @@ class Groups::EventsController < ApplicationController
     when 'show'
       "#{@event.to_label}"
     else
-      "#{controller_name}##{action_name}"
+      "#{controller_path}##{action_name}"
     end
   rescue
-    "#{controller_name}##{action_name}"
+    "#{controller_path}##{action_name}"
   end
 end

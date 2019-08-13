@@ -147,7 +147,7 @@ class ApplicationController < ActionController::Base
     return if Rails.env.test?
 
     user_id = current_user.id
-    controller = controller_name
+    controller = controller_path
     action = action_name
     origin = URI(request.referer || '').path
     page = URI(request.original_url).path

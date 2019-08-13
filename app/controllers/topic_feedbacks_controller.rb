@@ -72,9 +72,9 @@ class TopicFeedbacksController < ApplicationController
     when 'new'
       'Feedback Creation'
     else
-      "#{controller_name}##{action_name}"
+      "#{controller_path}##{action_name}"
     end
   rescue
-    "#{controller_name}##{action_name}"
+    "#{controller_path}##{action_name}"
   end
 end

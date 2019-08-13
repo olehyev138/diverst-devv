@@ -109,9 +109,9 @@ class Groups::TwitterAccountsController < ApplicationController
     when 'edit'
       "#{@group.to_label}'s Twitter Account Edit"
     else
-      "#{controller_name}##{action_name}"
+      "#{controller_path}##{action_name}"
     end
   rescue
-    "#{controller_name}##{action_name}"
+    "#{controller_path}##{action_name}"
   end
 end

@@ -196,9 +196,9 @@ class BudgetsController < ApplicationController
     when 'edit_annual_budget'
       "#{@group.to_label}'s Annual Budget Editor"
     else
-      "#{controller_name}##{action_name}"
+      "#{controller_path}##{action_name}"
     end
   rescue
-    "#{controller_name}##{action_name}"
+    "#{controller_path}##{action_name}"
   end
 end

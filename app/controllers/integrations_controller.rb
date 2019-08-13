@@ -42,9 +42,9 @@ class IntegrationsController < ApplicationController
     when 'calendar'
       'Integrations Calender'
     else
-      "#{controller_name}##{action_name}"
+      "#{controller_path}##{action_name}"
     end
   rescue
-    "#{controller_name}##{action_name}"
+    "#{controller_path}##{action_name}"
   end
 end

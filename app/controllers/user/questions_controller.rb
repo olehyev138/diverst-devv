@@ -40,9 +40,9 @@ class User::QuestionsController < ApplicationController
     when 'show'
       'User\'s Campaigns Answer'
     else
-      "#{controller_name}##{action_name}"
+      "#{controller_path}##{action_name}"
     end
   rescue
-    "#{controller_name}##{action_name}"
+    "#{controller_path}##{action_name}"
   end
 end

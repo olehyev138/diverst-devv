@@ -68,9 +68,9 @@ class Groups::QuestionsController < ApplicationController
     when 'survey'
       "#{@group.to_label}'s Survey"
     else
-      "#{controller_name}##{action_name}"
+      "#{controller_path}##{action_name}"
     end
   rescue
-    "#{controller_name}##{action_name}"
+    "#{controller_path}##{action_name}"
   end
 end

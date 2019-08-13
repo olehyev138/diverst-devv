@@ -52,9 +52,9 @@ class Groups::LeadersController < ApplicationController
     when 'new'
       "#{@group.to_label} Leader Creation"
     else
-      "#{controller_name}##{action_name}"
+      "#{controller_path}##{action_name}"
     end
   rescue
-    "#{controller_name}##{action_name}"
+    "#{controller_path}##{action_name}"
   end
 end
