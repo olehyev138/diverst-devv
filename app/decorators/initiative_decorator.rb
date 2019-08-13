@@ -10,7 +10,7 @@ class InitiativeDecorator < Draper::Decorator
 
   def budget_percentage
     initiative_expences = initiative.expenses.sum(:amount).to_f
-    
+
     # show red bar if expenses are greater than estimated_funding
     return 100 if initiative_expences > initiative.estimated_funding
 
