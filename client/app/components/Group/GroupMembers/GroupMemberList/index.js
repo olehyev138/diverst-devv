@@ -92,6 +92,16 @@ export function GroupMemberList(props) {
               { title: 'Last Name', field: 'last_name' }
             ]}
             data={buildDataFunction(props.memberList, page, props.memberTotal)}
+            actions={[{
+              icon: tableIcons.Delete,
+              tooltip: 'Delete Member',
+              onClick: (_, rowData) => {
+                /* eslint-disable-next-line no-alert, no-restricted-globals */
+                if (confirm('Delete member?'))
+                  props.deleteMemberBegin({ userId: rowData.id, groupId: props.groupId });
+              }
+            }
+            ]}
           />
         </Grid>
       </Grid>
