@@ -445,6 +445,33 @@ class Group < BaseClass
     survey_fields.count > 0
   end
 
+  def upcoming_events_slack_block
+    upcoming_events = initiatives.upcoming.limit(5) + participating_initiatives.upcoming.limit(3)
+    init_block = [
+      {
+        type: 'section',
+        text: {
+          type: 'mrkdwn',
+          text: "*#{name}*"
+        }
+      },
+      {
+        type: 'divider'
+      }
+    ]
+    blocks = upcoming_events.reduce(init_block) { |sum, event| sum + event.to_slack_block + [{ type: 'divider' }] }
+    pk, _ = enterprise.get_colours
+    {
+      attachments: [
+        {
+          fallback: "Events for #{name}",
+          color: pk,
+          blocks: blocks
+        }
+      ]
+    }
+  end
+
   protected
 
   def smart_add_url_protocol

@@ -1,5 +1,6 @@
 class Initiative < BaseClass
   include PublicActivity::Common
+  include Rails.application.routes.url_helpers
 
   attr_accessor :associated_budget_id, :skip_allocate_budget_funds, :from, :to
 
@@ -65,6 +66,9 @@ class Initiative < BaseClass
 
   # we don't want to run this callback when finish_expenses! is triggered in initiatives_controller.rb, finish_expense action
   before_save { allocate_budget_funds unless skip_allocate_budget_funds }
+
+  # Slack Call Back
+  after_create :post_new_event_to_slack
 
   has_attached_file :picture, styles: { medium: '1000x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: 'private'
   validates_attachment_content_type :picture, content_type: %r{\Aimage\/.*\Z}
@@ -358,7 +362,94 @@ class Initiative < BaseClass
     report.to_csv
   end
 
+  def text_description
+    HtmlHelper.to_pain_text(description)
+  end
+
+  def mrkdwn_description
+    HtmlHelper.to_mrkdwn(description)
+  end
+
+  def to_slack_block(modifier: '')
+    [
+      slack_block_title(modifier: modifier)
+        .merge(slack_block_image)
+        .merge(slack_time_frame),
+      slack_view_event_button,
+      slack_last_updated
+    ]
+  end
+
   protected
+
+  def slack_block_title(modifier: '')
+    {
+      type: 'section',
+      text: {
+        type: 'mrkdwn',
+        text: "*#{modifier} Event: #{name}*\n#{mrkdwn_description}"
+      }
+    }
+  end
+
+  def slack_block_image
+    if picture_file_name.present? && ENV['DOMAIN'].present?
+      {
+        accessory: {
+          type: 'image',
+          image_url: "#{ENV['DOMAIN'] || 'localhost:3000'}#{picture.url}",
+          alt_text: 'Event Picture'
+        }
+      }
+    else
+      {}
+    end
+  end
+
+  def slack_time_frame
+    {
+      fields: [
+        {
+          type: 'mrkdwn',
+          text: "*Start Time*\n#{start.strftime('%F %T')}"
+        },
+        {
+          type: 'mrkdwn',
+          text: "*End Time*\n#{self.end.strftime('%F %T')}"
+        }
+      ]
+    }
+  end
+
+  def slack_view_event_button
+    {
+      type: 'actions',
+      elements: [
+        {
+          type: 'button',
+          text: {
+            type: 'plain_text',
+            emoji: true,
+            text: 'View Event'
+          },
+          url: group_event_url(group.id, id),
+          style: 'primary'
+        }
+      ]
+    }
+  end
+
+  def slack_last_updated
+    {
+      type: 'context',
+      elements: [
+        {
+          type: 'mrkdwn',
+          text: "Last updated: #{updated_at.strftime('%F %T')}"
+        }
+      ]
+    }
+  end
 
   def update_owner_group
     return true if self.owner_group_id
@@ -445,5 +536,21 @@ class Initiative < BaseClass
     initiatives = group.initiatives.where('end < ?', expiry_date).where(archived_at: nil)
 
     initiatives.update_all(archived_at: DateTime.now) if initiatives.any?
+  end
+
+  private
+
+  def post_new_event_to_slack
+    pk, _ = enterprise.get_colours
+    message = {
+      attachments: [
+        {
+          fallback: "New Event for #{name}",
+          color: pk,
+          blocks: to_slack_block(modifier: 'New')
+        }
+      ]
+    }
+    SlackClient.post_web_hook_message(message)
   end
 end
