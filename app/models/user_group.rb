@@ -1,5 +1,6 @@
 class UserGroup < ApplicationRecord
   include ContainsFields
+  include UserGroup::Actions
 
   # associations
   belongs_to :user

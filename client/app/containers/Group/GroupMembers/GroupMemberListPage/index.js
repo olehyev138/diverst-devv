@@ -33,10 +33,17 @@ export function GroupMemberListPage(props) {
   };
 
   const [params, setParams] = useState({
-    group_id: groupId, count: 5, page: 0, order: 'asc'
+    group_id: groupId, count: 5, page: 0, orderBy: 'users.id', order: 'asc'
   });
   const handlePagination = (payload) => {
     const newParams = { ...params, count: payload.count, page: payload.page };
+
+    props.getMembersBegin(newParams);
+    setParams(newParams);
+  };
+
+  const handleOrdering = (payload) => {
+    const newParams = { ...params, orderBy: payload.orderBy, order: payload.orderDir };
 
     props.getMembersBegin(newParams);
     setParams(newParams);
@@ -57,8 +64,11 @@ export function GroupMemberListPage(props) {
         memberTotal={props.memberTotal}
         groupId={groupId}
         deleteMemberBegin={props.deleteMemberBegin}
-        handlePagination={handlePagination}
         links={links}
+        setParams={params}
+        params={params}
+        handlePagination={handlePagination}
+        handleOrdering={handleOrdering}
       />
     </React.Fragment>
   );

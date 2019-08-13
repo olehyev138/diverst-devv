@@ -15,7 +15,7 @@ import { RouteContext } from 'containers/Layouts/ApplicationLayout';
 
 import {
   Button, Card, CardActions, CardContent, Collapse, Grid, Link,
-  TablePagination, Typography
+  TablePagination, Typography, Box
 } from '@material-ui/core/index';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -28,6 +28,8 @@ import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { FormattedMessage } from 'react-intl';
 import messages from 'containers/Group/GroupMembers/messages';
 import buildDataFunction from 'utils/dataTableHelper';
+
+import DeleteOutline from '@material-ui/icons/DeleteOutline';
 
 const styles = theme => ({
   errorButton: {
@@ -50,6 +52,18 @@ export function GroupMemberList(props) {
     setRowsPerPage(+pageSize);
     props.handlePagination({ count: +pageSize, page });
   };
+
+  const handleOrderChange = (columnId, orderDir) => {
+    props.handleOrdering({
+      orderBy: (columnId === -1) ? 'users.id' : `users.${columns[columnId].field}`,
+      orderDir: (columnId === -1) ? 'asc' : orderDir
+    });
+  };
+
+  const columns = [
+    { title: 'First Name', field: 'first_name' },
+    { title: 'Last Name', field: 'last_name' }
+  ];
 
   /* Store reference to table & use to refresh table when data changes */
   const ref = useRef();
@@ -80,28 +94,31 @@ export function GroupMemberList(props) {
             <FormattedMessage {...messages.export} />
           </Button>
         </Grid>
-        <Grid item xs={12}>
+      </Grid>
+      <Grid container spacing={3}>
+        <Grid item xs>
           <MaterialTable
             tableRef={ref}
             icons={tableIcons}
             title='Members'
             onChangePage={handleChangePage}
             onChangeRowsPerPage={handleChangeRowsPerPage}
-            columns={[
-              { title: 'First Name', field: 'first_name' },
-              { title: 'Last Name', field: 'last_name' }
-            ]}
+            onOrderChange={handleOrderChange}
             data={buildDataFunction(props.memberList, page, props.memberTotal)}
+            columns={columns}
             actions={[{
-              icon: tableIcons.Delete,
+              icon: () => <DeleteOutline />,
               tooltip: 'Delete Member',
               onClick: (_, rowData) => {
                 /* eslint-disable-next-line no-alert, no-restricted-globals */
                 if (confirm('Delete member?'))
                   props.deleteMemberBegin({ userId: rowData.id, groupId: props.groupId });
               }
-            }
-            ]}
+            }]}
+            options={{
+              actionsColumnIndex: -1,
+              pageSize: rowsPerPage,
+            }}
           />
         </Grid>
       </Grid>
@@ -118,7 +135,8 @@ GroupMemberList.propTypes = {
   memberList: PropTypes.array,
   memberTotal: PropTypes.number,
   groupId: PropTypes.string,
-  handlePagination: PropTypes.func
+  handlePagination: PropTypes.func,
+  handleOrdering: PropTypes.func
 };
 
 export default compose(
