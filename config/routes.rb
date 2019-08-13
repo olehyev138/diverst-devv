@@ -21,6 +21,12 @@ Rails.application.routes.draw do
 
   resources :onboarding, only: [:index]
 
+  resources :slack, only: [] do
+    collection do
+      post 'interactive_message_response'
+    end
+  end
+
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
       resources :users

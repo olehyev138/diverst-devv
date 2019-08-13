@@ -20,6 +20,9 @@
         <% end %>
       </div>
       <div class="flex-row__cell">
+        <%= link_to 'Slack Integration',
+                    'https://slack.com/oauth/authorize?scope=chat:write:bot&client_id=6867881287.709097094274&redirect_uri=http://localhost:3000/omniauth/slack/callback',
+                    class: 'title_bar' %>
         <%= link_to "Employee dashboard", user_root_path, class: "title_bar" %> &nbsp;|&nbsp;
         <%= link_to current_user.name, user_user_path(current_user), class: "title_bar" %>
       </div>

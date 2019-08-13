@@ -3,6 +3,7 @@ class OmniAuthController < ApplicationController
 
   def callback
     linkedin if params[:provider] == 'linkedin'
+    slack if params[:provider] == 'slack'
   end
 
   def linkedin
@@ -18,5 +19,9 @@ class OmniAuthController < ApplicationController
     SaveUserAvatarFromUrlJob.perform_later(current_user.id, picture_url)
 
     redirect_to edit_linkedin_user_user_path(current_user)
+  end
+
+  def slack
+    render json: params
   end
 end
