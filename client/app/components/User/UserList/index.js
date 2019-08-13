@@ -5,7 +5,7 @@
  *
  */
 
-import React, { memo, useContext, useState } from 'react';
+import React, { memo, useContext, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
@@ -20,6 +20,11 @@ import { withStyles } from '@material-ui/core/styles';
 import { FormattedMessage } from 'react-intl';
 import messages from 'containers/User/messages';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
+import MaterialTable from 'material-table';
+import tableIcons from 'utils/tableIcons';
+import buildDataFunction from 'utils/dataTableHelper';
+import DeleteOutline from '@material-ui/icons/DeleteOutline';
+import Edit from '@material-ui/icons/Edit';
 
 
 const styles = theme => ({
@@ -42,15 +47,32 @@ export function UserList(props, context) {
 
   const [userForm, setUserForm] = useState(undefined);
 
-  const handleChangePage = (event, newPage) => {
+  /* MaterialTable pagination handlers (defined differently then MaterialUI pagination) */
+  const handleChangePage = (newPage) => {
     setPage(newPage);
     props.handlePagination({ count: rowsPerPage, page: newPage });
   };
 
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
-    props.handlePagination({ count: +event.target.value, page });
+  const handleChangeRowsPerPage = (pageSize) => {
+    setRowsPerPage(+pageSize);
+    props.handlePagination({ count: +pageSize, page });
   };
+
+  const handleOrderChange = (columnId, orderDir) => {
+    props.handleOrdering({
+      orderBy: (columnId === -1) ? 'id' : columns[columnId].field,
+      orderDir: (columnId === -1) ? 'asc' : orderDir
+    });
+  };
+
+  const columns = [
+    { title: 'First Name', field: 'first_name' },
+    { title: 'Last Name', field: 'last_name' }
+  ];
+
+  /* Store reference to table & use to refresh table when data changes */
+  const ref = useRef();
+  useEffect(() => ref.current && ref.current.onQueryChange(), [props.users]);
 
   return (
     <React.Fragment>
@@ -66,55 +88,39 @@ export function UserList(props, context) {
             <FormattedMessage {...messages.new} />
           </Button>
         </Grid>
-        {userForm && <Grid item xs={12}>{userForm}</Grid>}
-        { /* eslint-disable-next-line arrow-body-style */ }
-        {props.users && Object.values(props.users).map((user, i) => {
-          return (
-            <Grid item key={user.id} className={classes.userListItem}>
-              <Card>
-                <CardContent>
-                  <p>{`${user.first_name} ${user.last_name}`}</p>
-                </CardContent>
-                <CardActions>
-                  <Button
-                    size='small'
-                    to={props.links.userEdit(user.id)}
-                    component={WrappedNavLink}
-                  >
-                    <FormattedMessage {...messages.edit} />
-                  </Button>
-                  <Button
-                    size='small'
-                    className={classes.errorButton}
-                    onClick={() => {
-                      /* eslint-disable-next-line no-alert, no-restricted-globals */
-                      if (confirm('Delete user?'))
-                        props.deleteUserBegin(user.id);
-                    }}
-                  >
-                    <FormattedMessage {...messages.delete} />
-                  </Button>
-                </CardActions>
-              </Card>
-            </Grid>
-          );
-        })}
       </Grid>
-      <TablePagination
-        component='div'
-        page={page}
-        rowsPerPageOptions={[5, 10, 25]}
-        rowsPerPage={rowsPerPage}
-        count={props.userTotal || 0}
-        onChangePage={handleChangePage}
-        onChangeRowsPerPage={handleChangeRowsPerPage}
-        backIconButtonProps={{
-          'aria-label': 'Previous Page',
-        }}
-        nextIconButtonProps={{
-          'aria-label': 'Next Page',
-        }}
-      />
+      <Grid container spacing={3}>
+        <Grid item xs>
+          <MaterialTable
+            tableRef={ref}
+            icons={tableIcons}
+            title='Members'
+            onChangePage={handleChangePage}
+            onChangeRowsPerPage={handleChangeRowsPerPage}
+            onOrderChange={handleOrderChange}
+            data={buildDataFunction(Object.values(props.users), page, props.userTotal)}
+            columns={columns}
+            actions={[{
+              icon: () => <Edit />,
+              tooltip: 'Edit Member',
+              onClick: (_, rowData) => {
+                // TODO
+              } }, {
+              icon: () => <DeleteOutline />,
+              tooltip: 'Delete Member',
+              onClick: (_, rowData) => {
+                /* eslint-disable-next-line no-alert, no-restricted-globals */
+                if (confirm('Delete member?'))
+                  props.deleteUserBegin(rowData.id);
+              }
+            }]}
+            options={{
+              actionsColumnIndex: -1,
+              pageSize: rowsPerPage,
+            }}
+          />
+        </Grid>
+      </Grid>
     </React.Fragment>
   );
 }
@@ -125,6 +131,7 @@ UserList.propTypes = {
   userTotal: PropTypes.number,
   deleteUserBegin: PropTypes.func,
   handlePagination: PropTypes.func,
+  handleOrdering: PropTypes.func,
   links: PropTypes.shape({
     userNew: PropTypes.string,
     userEdit: PropTypes.func

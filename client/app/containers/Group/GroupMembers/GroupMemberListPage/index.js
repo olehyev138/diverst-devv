@@ -28,13 +28,15 @@ export function GroupMemberListPage(props) {
 
   const rs = new RouteService(useContext);
   const groupId = rs.params('group_id')[0];
+
+  const [params, setParams] = useState({
+    group_id: groupId, count: 5, page: 0,
+    orderBy: 'users.id', order: 'asc'
+  });
   const links = {
     groupMembersNew: ROUTES.group.members.new.path(groupId),
   };
 
-  const [params, setParams] = useState({
-    group_id: groupId, count: 5, page: 0, orderBy: 'users.id', order: 'asc'
-  });
   const handlePagination = (payload) => {
     const newParams = { ...params, count: payload.count, page: payload.page };
 

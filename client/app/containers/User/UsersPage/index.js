@@ -64,6 +64,13 @@ export function UserListPage(props) {
     setParams(newParams);
   };
 
+  const handleOrdering = (payload) => {
+    const newParams = { ...params, orderBy: payload.orderBy, order: payload.orderDir };
+
+    props.getUsersBegin(newParams);
+    setParams(newParams);
+  };
+
   return (
     <React.Fragment>
       <UserList
@@ -71,6 +78,7 @@ export function UserListPage(props) {
         userTotal={props.userTotal}
         deleteUserBegin={props.deleteUserBegin}
         handlePagination={handlePagination}
+        handleOrdering={handleOrdering}
         links={links}
       />
     </React.Fragment>
@@ -93,7 +101,7 @@ const mapStateToProps = createStructuredSelector({
 const mapDispatchToProps = {
   getUsersBegin,
   deleteUserBegin,
-  userUnmount
+  userUnmount,
 };
 
 const withConnect = connect(
