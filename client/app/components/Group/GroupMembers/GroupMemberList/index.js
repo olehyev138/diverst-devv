@@ -40,19 +40,20 @@ export function GroupMemberList(props) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  const handleChangePage = (event, newPage) => {
+  /* MaterialTable pagination handlers (defined differently then MaterialUI pagination) */
+  const handleChangePage = (newPage) => {
     setPage(newPage);
-    // props.handlePagination({ count: rowsPerPage, page: newPage });
+    props.handlePagination({ count: rowsPerPage, page: newPage });
   };
 
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
-    // props.handlePagination({ count: +event.target.value, page });
+  const handleChangeRowsPerPage = (pageSize) => {
+    setRowsPerPage(+pageSize);
+    props.handlePagination({ count: +pageSize, page });
   };
 
   /* Store reference to table & use to refresh table when data changes */
   const ref = useRef();
-  useEffect(() => ref.current && ref.current.onQueryChange(), [props.memberList, props.memberTotal]);
+  useEffect(() => ref.current && ref.current.onQueryChange(), [props.memberList]);
 
   return (
     <React.Fragment>
@@ -84,11 +85,13 @@ export function GroupMemberList(props) {
             tableRef={ref}
             icons={tableIcons}
             title='Members'
+            onChangePage={handleChangePage}
+            onChangeRowsPerPage={handleChangeRowsPerPage}
             columns={[
               { title: 'First Name', field: 'first_name' },
               { title: 'Last Name', field: 'last_name' }
             ]}
-            data={buildDataFunction(props.memberList, 0, props.memberTotal)}
+            data={buildDataFunction(props.memberList, page, props.memberTotal)}
           />
         </Grid>
       </Grid>
@@ -104,7 +107,8 @@ GroupMemberList.propTypes = {
   }),
   memberList: PropTypes.array,
   memberTotal: PropTypes.number,
-  groupId: PropTypes.string
+  groupId: PropTypes.string,
+  handlePagination: PropTypes.func
 };
 
 export default compose(

@@ -1,5 +1,5 @@
 import React, {
-  memo, useEffect, useContext
+  memo, useEffect, useContext, useState
 } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -32,9 +32,17 @@ export function GroupMemberListPage(props) {
     groupMembersNew: ROUTES.group.members.new.path(groupId),
   };
 
-  useEffect(() => {
-    const params = { group_id: groupId };
+  const [params, setParams] = useState({
+    group_id: groupId, count: 5, page: 0, order: 'asc'
+  });
+  const handlePagination = (payload) => {
+    const newParams = { ...params, count: payload.count, page: payload.page };
 
+    props.getMembersBegin(newParams);
+    setParams(newParams);
+  };
+
+  useEffect(() => {
     props.getMembersBegin(params);
 
     return () => {
@@ -49,6 +57,7 @@ export function GroupMemberListPage(props) {
         memberTotal={props.memberTotal}
         groupId={groupId}
         deleteMemberBegin={props.deleteMemberBegin}
+        handlePagination={handlePagination}
         links={links}
       />
     </React.Fragment>
