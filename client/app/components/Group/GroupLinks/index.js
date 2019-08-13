@@ -53,7 +53,13 @@ export function GroupLinks(props) {
         News Feed
       </Button>
       <Button component={WrappedNavLink} to='/user/groups' activeStyle={{ color: activeColor }}>Manage</Button>
-      <Button component={WrappedNavLink} to='/user/groups' activeStyle={{ color: activeColor }}>Plan</Button>
+      <Button
+        component={WrappedNavLink}
+        to={ROUTES.group.outcomes.index.path(rs.params('group_id'))}
+        activeStyle={{ color: activeColor }}
+      >
+        Plan
+      </Button>
     </Toolbar>
   );
 

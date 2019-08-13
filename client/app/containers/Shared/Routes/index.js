@@ -24,6 +24,7 @@ import GroupEditPage from 'containers/Group/GroupEditPage';
 import GroupHomePage from 'containers/Group/GroupHomePage';
 import EventsPage from 'containers/Event/EventsPage';
 import NewsFeedPage from 'containers/News/NewsFeedPage';
+import OutcomesPage from 'containers/Group/Outcome/OutcomesPage';
 
 /* Group - Events */
 import EventPage from 'containers/Event/EventPage';
@@ -57,18 +58,18 @@ export default function Routes(props) {
       <AdminLayout {...expandRoute(ROUTES.admin.manage.groups.edit)} component={GroupEditPage} />
 
       <UserLayout exact {...expandRoute(ROUTES.user.home)} component={PlaceholderPage} />
-      <UserLayout {...expandRoute(ROUTES.user.innovate)} component={PlaceholderPage} />
-      <UserLayout {...expandRoute(ROUTES.user.innovate)} component={PlaceholderPage} />
-      <UserLayout {...expandRoute(ROUTES.user.news)} component={PlaceholderPage} />
-      <UserLayout {...expandRoute(ROUTES.user.events)} component={PlaceholderPage} />
-      <UserLayout {...expandRoute(ROUTES.user.groups)} component={PlaceholderPage} />
-      <UserLayout {...expandRoute(ROUTES.user.downloads)} component={PlaceholderPage} />
+      <UserLayout exact {...expandRoute(ROUTES.user.innovate)} component={PlaceholderPage} />
+      <UserLayout exact {...expandRoute(ROUTES.user.news)} component={PlaceholderPage} />
+      <UserLayout exact {...expandRoute(ROUTES.user.events)} component={PlaceholderPage} />
+      <UserLayout exact {...expandRoute(ROUTES.user.groups)} component={PlaceholderPage} />
+      <UserLayout exact {...expandRoute(ROUTES.user.downloads)} component={PlaceholderPage} />
       <UserLayout {...expandRoute(ROUTES.user.mentorship)} component={PlaceholderPage} />
 
       { /* Group */ }
       <GroupLayout exact {...expandRoute(ROUTES.group.home)} component={GroupHomePage} />
       <GroupLayout exact {...expandRoute(ROUTES.group.events.index)} component={EventsPage} />
       <GroupLayout exact {...expandRoute(ROUTES.group.news.index)} component={NewsFeedPage} />
+      <GroupLayout exact {...expandRoute(ROUTES.group.outcomes.index)} component={OutcomesPage} />
 
       { /* Group Events */ }
       <GroupLayout {...expandRoute(ROUTES.group.events.new)} component={EventCreatePage} />

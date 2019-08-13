@@ -5,6 +5,7 @@ import initiatives from 'api/initiatives/initiatives';
 import newsFeedLinks from 'api/news_feed_links/news_feed_links';
 import groupMessages from 'api/group_messages/group_messages';
 import groupMessageComments from 'api/group_message_comments/group_message_comments';
+import outcomes from 'api/outcomes/outcomes';
 
 const Api = {
   users,
@@ -13,7 +14,8 @@ const Api = {
   initiatives,
   newsFeedLinks,
   groupMessages,
-  groupMessageComments
+  groupMessageComments,
+  outcomes,
 };
 
 export default Api;
