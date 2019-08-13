@@ -59,7 +59,7 @@ GroupMemberListPage.propTypes = {
   getMembersBegin: PropTypes.func,
   deleteMemberBegin: PropTypes.func,
   groupMembersUnmount: PropTypes.func,
-  memberList: PropTypes.object,
+  memberList: PropTypes.array,
   memberTotal: PropTypes.number
 };
 

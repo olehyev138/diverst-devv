@@ -10,7 +10,7 @@ import {
 } from 'containers/Group/GroupMembers/constants';
 
 export const initialState = {
-  memberList: {},
+  memberList: [],
   memberTotal: null,
 };
 
@@ -33,13 +33,13 @@ function membersReducer(state = initialState, action) {
 function formatMembers(members) {
   /* eslint-disable no-return-assign */
 
-  /* Format users to hash by id:
-   *   { <id>: { name: user_01, ... } }
+  /* Extract user out of each member
+   *   { group_id: <>, user: { ... }  } -> { first_name: <>, ... }
    */
   return members.reduce((map, member) => {
-    map[member.user_id] = member.user;
+    map.push(member.user);
     return map;
-  }, {});
+  }, []);
 }
 
 export default membersReducer;
