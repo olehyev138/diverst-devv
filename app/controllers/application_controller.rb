@@ -146,7 +146,7 @@ class ApplicationController < ActionController::Base
     return unless request.format == 'html'
     return if Rails.env.test?
 
-    user = current_user.id
+    user_id = current_user.id
     controller = controller_name
     action = action_name
     origin = URI(request.referer || '').path
@@ -154,7 +154,7 @@ class ApplicationController < ActionController::Base
 
     return if page == origin
 
-    IncrementViewCountJob.perform_later(user, page, name, controller, action)
+    IncrementViewCountJob.perform_later(user_id, page, name, controller, action)
   end
 
   protected

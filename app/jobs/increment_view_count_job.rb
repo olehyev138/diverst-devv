@@ -6,7 +6,7 @@ class IncrementViewCountJob < ActiveJob::Base
       page = Rails.application.routes.url_helpers.metrics_overview_index_path
     end
 
-    record = PageVisitationData.find_or_create_by(user_id: user_id, page_url: page)
+    record = PageVisitationData.find_by(user_id: user_id, page_url: page)
     if record.nil?
       record = PageVisitationData.new(user_id: user_id, page_url: page, controller: controller, action: action)
     end
