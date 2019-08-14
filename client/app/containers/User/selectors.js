@@ -16,6 +16,11 @@ const selectUserTotal = () => createSelector(
   usersState => usersState.userTotal
 );
 
+const selectIsFetchingUsers = () => createSelector(
+  selectUsersDomain,
+  usersState => usersState.isFetchingUsers
+);
+
 const selectUser = () => createSelector(
   selectUsersDomain,
   usersState => usersState.currentUser
@@ -44,5 +49,6 @@ const selectFieldData = () => createSelector(
 
 export {
   selectUsersDomain, selectPaginatedUsers,
-  selectUserTotal, selectUser, selectFieldData
+  selectUserTotal, selectUser, selectFieldData,
+  selectIsFetchingUsers
 };

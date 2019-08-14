@@ -96,6 +96,7 @@ export function UserList(props, context) {
           <MaterialTable
             tableRef={ref}
             icons={tableIcons}
+            isLoading={props.isFetchingUsers}
             title='Members'
             onChangePage={handleChangePage}
             onChangeRowsPerPage={handleChangeRowsPerPage}
@@ -106,7 +107,7 @@ export function UserList(props, context) {
               icon: () => <Edit />,
               tooltip: 'Edit Member',
               onClick: (_, rowData) => {
-                // TODO
+                props.handleVisitUserEdit(rowData.id);
               } }, {
               icon: () => <DeleteOutline />,
               tooltip: 'Delete Member',
@@ -131,9 +132,11 @@ UserList.propTypes = {
   classes: PropTypes.object,
   users: PropTypes.object,
   userTotal: PropTypes.number,
+  isFetchingUsers: PropTypes.bool,
   deleteUserBegin: PropTypes.func,
   handlePagination: PropTypes.func,
   handleOrdering: PropTypes.func,
+  handleVisitUserEdit: PropTypes.func,
   links: PropTypes.shape({
     userNew: PropTypes.string,
     userEdit: PropTypes.func
