@@ -20,6 +20,8 @@ class BudgetsController < ApplicationController
   def new
     authorize [@group], :create?, policy_class: GroupBudgetPolicy
 
+    redirect_to(:back, alert: 'Annual Budget is not set for this group. Please check back later.') if @group.annual_budgets.find(params[:annual_budget_id])&.amount == 0
+
     @annual_budget_id = params[:annual_budget_id]
     @budget = Budget.new
   end
