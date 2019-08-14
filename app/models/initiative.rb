@@ -67,7 +67,7 @@ class Initiative < BaseClass
   before_save { allocate_budget_funds unless skip_allocate_budget_funds }
 
   # Slack Call Back
-  after_create :post_new_event_to_slack
+  after_create :post_new_event_to_slack, unless: Rails.env.test?
 
   has_attached_file :picture, styles: { medium: '1000x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: 'private'
   validates_attachment_content_type :picture, content_type: %r{\Aimage\/.*\Z}

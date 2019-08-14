@@ -11,7 +11,7 @@ class GroupMessage < BaseClass
 
   has_one :news_feed_link
   after_create :approve_link
-  after_create :post_new_message_to_slack
+  after_create :post_new_message_to_slack, unless: Rails.env.test?
 
   accepts_nested_attributes_for :news_feed_link, allow_destroy: true
 
