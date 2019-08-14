@@ -4,6 +4,7 @@ class BaseClass < ActiveRecord::Base
   include ::BaseSearch
   include ::BaseElasticsearch
   include ::BaseGraph
+  include Rails.application.routes.url_helpers
 
   def self.inherited(child)
     super

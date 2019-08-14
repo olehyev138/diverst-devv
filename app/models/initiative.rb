@@ -1,6 +1,5 @@
 class Initiative < BaseClass
   include PublicActivity::Common
-  include Rails.application.routes.url_helpers
 
   attr_accessor :associated_budget_id, :skip_allocate_budget_funds, :from, :to
 
@@ -545,7 +544,7 @@ class Initiative < BaseClass
     message = {
       attachments: [
         {
-          fallback: "New Event for #{name}",
+          fallback: "New Event for #{group.name}",
           color: pk,
           blocks: to_slack_block(modifier: 'New')
         }

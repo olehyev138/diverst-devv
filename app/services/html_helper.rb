@@ -56,8 +56,9 @@ class HtmlHelper
   end
 
   def self.to_pain_text(html)
-    html = html.gsub('<br>', "\n")
+    html = html.gsub(/<br.*>/, "\n")
     html = html.gsub("\r\n\r\n", "\n")
+    html = html.gsub('&nbsp;', ' ')
 
     html = html.gsub(/<.*?>/, '')
     html
@@ -79,30 +80,45 @@ class HtmlHelper
     html = html.gsub('<u>', '')
     html = html.gsub('</u>', '')
 
+    html = html.gsub('&nbsp;', ' ')
+
     # <a href="http://youtube.com">YOUTUBE LINK</a>
     html = html.gsub(/<a href="(.*)">(.*)<\/a>/, '<\1|\2>')
 
-    html = html.gsub('<br>', "\n")
+    html = html.gsub(/<br.*>/, "\n")
     html = html.gsub("\r\n\r\n", "\n")
+    html = html.gsub("\r\n", "\n")
+    html = html.gsub("\t", '')
 
-    in_bullet = true
+    in_bullet = false
+    in_list = false
     in_quote = false
     in_tag = false
+    in_list_element = false
     list_count = 1
 
     new = ''
 
     (0...html.length).each do |i|
       if html[i] == '<'
+        link_substring = html[i..-1][/\A<.*?\|.*?>/]
+        new.concat link_substring unless link_substring.nil?
         in_tag = true
         if html[i..i + 3] == '<ul>'
           in_bullet = true
-        elsif html[i..i + 3] == '<ol>'
+        elsif html[i..i + 4] == '</ul>'
           in_bullet = false
+        elsif html[i..i + 3] == '<ol>'
+          in_list = true
           list_count = 1
+        elsif html[i..i + 4] == '</ol>'
+          in_list = false
         elsif html[i..i + 3] == '<li>'
-          new.concat(in_bullet ? '- ' : "#{list_count}. ")
+          new.concat("\t- ") if in_bullet
+          new.concat("\t#{list_count}. ") if in_list
           list_count += 1
+        elsif html[i..i + 4] == '</li>'
+          new.concat("\n")
         elsif html[i..i + 11] == '<blockquote>'
           in_quote = true
         elsif html[i..i + 12] == '</blockquote>'
@@ -113,7 +129,9 @@ class HtmlHelper
         in_tag = false
         next
       end
-      new.concat html[i] unless in_tag
+      unless html[i] =~ /[\n\t\r]/ && (in_list || in_bullet)
+        new.concat html[i] unless in_tag
+      end
       if html[i] == "\n"
         new.concat '>' if in_quote && html[i + 1..i + 13] != '</blockquote>'
       end

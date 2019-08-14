@@ -11,6 +11,7 @@ class GroupMessage < BaseClass
 
   has_one :news_feed_link
   after_create :approve_link
+  after_create :post_new_message_to_slack
 
   accepts_nested_attributes_for :news_feed_link, allow_destroy: true
 
@@ -107,7 +108,87 @@ class GroupMessage < BaseClass
     group_messages_segment.news_feed_link_segment.destroy
   end
 
+  def text_content
+    HtmlHelper.to_pain_text(content)
+  end
+
+  def mrkdwn_content
+    HtmlHelper.to_mrkdwn(content)
+  end
+
+  def to_slack_block(modifier: '')
+    [
+      slack_block_title(modifier: modifier),
+      slack_block_author,
+      slack_block_content,
+      slack_view_event_button,
+      slack_last_updated
+    ]
+  end
+
   private
+
+  def slack_block_title(modifier: '')
+    {
+      type: 'section',
+      text: {
+        type: 'mrkdwn',
+        text: "*#{modifier} Message from <#{group_url(group)}|#{group.name}>*:\n\t *<#{group_group_message_url(group.id, id)}|#{subject}>*"
+      }
+    }
+  end
+
+  def slack_block_content
+    {
+      type: 'section',
+      text: {
+        type: 'mrkdwn',
+        text: "#{mrkdwn_content}"
+      }
+    }
+  end
+
+  def slack_block_author
+    {
+      type: 'context',
+      elements: [
+        {
+          type: 'mrkdwn',
+          text: "*Author:* #{owner.name}"
+        }
+      ]
+    }
+  end
+
+  def slack_view_event_button
+    {
+      type: 'actions',
+      elements: [
+        {
+          type: 'button',
+          text: {
+            type: 'plain_text',
+            emoji: true,
+            text: 'Make Comment'
+          },
+          url: group_group_message_url(group.id, id),
+          style: 'primary'
+        }
+      ]
+    }
+  end
+
+  def slack_last_updated
+    {
+      type: 'context',
+      elements: [
+        {
+          type: 'mrkdwn',
+          text: "Last updated: #{updated_at.strftime('%F %T')}"
+        }
+      ]
+    }
+  end
 
   def build_default_link
     return if news_feed_link.present?
@@ -117,5 +198,19 @@ class GroupMessage < BaseClass
 
   def remove_news_feed_link
     news_feed_link.destroy if news_feed_link.present?
+  end
+
+  def post_new_message_to_slack
+    pk, _ = group.enterprise.get_colours
+    message = {
+      attachments: [
+        {
+          fallback: "New Message from #{group.name}",
+          color: pk,
+          blocks: to_slack_block(modifier: 'New')
+        }
+      ]
+    }
+    SlackClient.post_web_hook_message(message)
   end
 end
