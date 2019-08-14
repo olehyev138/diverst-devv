@@ -101,6 +101,7 @@ export function GroupMemberList(props) {
             tableRef={ref}
             icons={tableIcons}
             title='Members'
+            isLoading={props.isFetchingMembers}
             onChangePage={handleChangePage}
             onChangeRowsPerPage={handleChangeRowsPerPage}
             onOrderChange={handleOrderChange}
@@ -134,6 +135,7 @@ GroupMemberList.propTypes = {
   }),
   memberList: PropTypes.array,
   memberTotal: PropTypes.number,
+  isFetchingMembers: PropTypes.bool,
   groupId: PropTypes.string,
   handlePagination: PropTypes.func,
   handleOrdering: PropTypes.func

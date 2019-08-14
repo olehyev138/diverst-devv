@@ -15,7 +15,10 @@ import {
   getMembersBegin, deleteMemberBegin,
   groupMembersUnmount
 } from 'containers/Group/GroupMembers/actions';
-import { selectPaginatedMembers, selectMemberTotal } from 'containers/Group/GroupMembers/selectors';
+import {
+  selectPaginatedMembers, selectMemberTotal,
+  selectIsFetchingMembers
+} from 'containers/Group/GroupMembers/selectors';
 
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -64,6 +67,7 @@ export function GroupMemberListPage(props) {
       <GroupMemberList
         memberList={props.memberList}
         memberTotal={props.memberTotal}
+        isFetchingMembers={props.isFetchingMembers}
         groupId={groupId}
         deleteMemberBegin={props.deleteMemberBegin}
         links={links}
@@ -81,12 +85,14 @@ GroupMemberListPage.propTypes = {
   deleteMemberBegin: PropTypes.func,
   groupMembersUnmount: PropTypes.func,
   memberList: PropTypes.array,
-  memberTotal: PropTypes.number
+  memberTotal: PropTypes.number,
+  isFetchingMembers: PropTypes.bool
 };
 
 const mapStateToProps = createStructuredSelector({
   memberList: selectPaginatedMembers(),
-  memberTotal: selectMemberTotal()
+  memberTotal: selectMemberTotal(),
+  isFetchingMembers: selectIsFetchingMembers()
 });
 
 const mapDispatchToProps = {
