@@ -28,7 +28,12 @@ const selectMemberTotal = () => createSelector(
   membersState => membersState.memberTotal
 );
 
+const selectIsFetchingMembers = () => createSelector(
+  selectMembersDomain,
+  membersState => membersState.isFetchingMembers
+);
+
 export {
   selectMembersDomain, selectPaginatedMembers, selectPaginatedSelectMembers,
-  selectMemberTotal
+  selectMemberTotal, selectIsFetchingMembers
 };

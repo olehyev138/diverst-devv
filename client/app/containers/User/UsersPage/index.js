@@ -17,6 +17,7 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { push } from 'connected-react-router';
 
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
@@ -24,7 +25,10 @@ import { compose } from 'redux';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 
-import { selectPaginatedUsers, selectUserTotal } from 'containers/User/selectors';
+import {
+  selectPaginatedUsers, selectUserTotal,
+  selectIsFetchingUsers
+} from 'containers/User/selectors';
 import {
   getUsersBegin, userUnmount, deleteUserBegin
 } from 'containers/User/actions';
@@ -64,13 +68,23 @@ export function UserListPage(props) {
     setParams(newParams);
   };
 
+  const handleOrdering = (payload) => {
+    const newParams = { ...params, orderBy: payload.orderBy, order: payload.orderDir };
+
+    props.getUsersBegin(newParams);
+    setParams(newParams);
+  };
+
   return (
     <React.Fragment>
       <UserList
         users={props.users}
         userTotal={props.userTotal}
+        isFetchingUsers={props.isFetchingUsers}
         deleteUserBegin={props.deleteUserBegin}
         handlePagination={handlePagination}
+        handleOrdering={handleOrdering}
+        handleVisitUserEdit={props.handleVisitUserEdit}
         links={links}
       />
     </React.Fragment>
@@ -81,20 +95,24 @@ UserListPage.propTypes = {
   getUsersBegin: PropTypes.func.isRequired,
   users: PropTypes.object,
   userTotal: PropTypes.number,
+  isFetchingUsers: PropTypes.bool,
   deleteUserBegin: PropTypes.func,
-  userUnmount: PropTypes.func.isRequired
+  userUnmount: PropTypes.func.isRequired,
+  handleVisitUserEdit: PropTypes.func
 };
 
 const mapStateToProps = createStructuredSelector({
   users: selectPaginatedUsers(),
   userTotal: selectUserTotal(),
+  isFetchingUsers: selectIsFetchingUsers()
 });
 
-const mapDispatchToProps = {
-  getUsersBegin,
-  deleteUserBegin,
-  userUnmount
-};
+const mapDispatchToProps = dispatch => ({
+  getUsersBegin: payload => dispatch(getUsersBegin(payload)),
+  deleteUserBegin: payload => dispatch(deleteUserBegin(payload)),
+  userUnmount: () => dispatch(userUnmount()),
+  handleVisitUserEdit: id => dispatch(push(ROUTES.admin.system.users.edit.path(id)))
+});
 
 const withConnect = connect(
   mapStateToProps,
