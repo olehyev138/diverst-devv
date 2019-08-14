@@ -28,6 +28,8 @@ class AnnualBudgetManager
   def edit(annual_budget_params)
     return if annual_budget_params['annual_budget'].to_i == 0
 
+    annual_budget_params['leftover_money'] = (annual_budget_params['annual_budget'].to_f - @group.approved_budget.to_f) + @group.available_budget.to_f
+
     @group.update(annual_budget_params) unless annual_budget_params.empty?
     find_or_create_annual_budget_and_update
   end
