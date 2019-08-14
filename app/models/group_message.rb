@@ -11,7 +11,7 @@ class GroupMessage < BaseClass
 
   has_one :news_feed_link
   after_create :approve_link
-  after_create :post_new_message_to_slack, unless: Rails.env.test?
+  after_create :post_new_message_to_slack, unless: Proc.new { Rails.env.test? }
 
   accepts_nested_attributes_for :news_feed_link, allow_destroy: true
 
@@ -169,7 +169,7 @@ class GroupMessage < BaseClass
           text: {
             type: 'plain_text',
             emoji: true,
-            text: 'Make Comment'
+            text: 'View Message and Comments'
           },
           url: group_group_message_url(group.id, id),
           style: 'primary'
