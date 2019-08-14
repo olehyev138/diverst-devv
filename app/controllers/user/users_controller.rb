@@ -95,9 +95,9 @@ class User::UsersController < ApplicationController
     when 'edit'
       "#{@user.to_label}'s Profile Edit"
     else
-      "#{controller_name}##{action_name}"
+      "#{controller_path}##{action_name}"
     end
   rescue
-    "#{controller_name}##{action_name}"
+    "#{controller_path}##{action_name}"
   end
 end

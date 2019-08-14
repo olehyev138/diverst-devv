@@ -90,9 +90,9 @@ class Groups::UpdatesController < ApplicationController
     when 'edit'
       "#{@group.to_label} Update Edit"
     else
-      "#{controller_name}##{action_name}"
+      "#{controller_path}##{action_name}"
     end
   rescue
-    "#{controller_name}##{action_name}"
+    "#{controller_path}##{action_name}"
   end
 end

@@ -80,9 +80,9 @@ class Groups::SocialLinksController < ApplicationController
     when 'new'
       "#{@group.to_label}'s Social Link Creation"
     else
-      "#{controller_name}##{action_name}"
+      "#{controller_path}##{action_name}"
     end
   rescue
-    "#{controller_name}##{action_name}"
+    "#{controller_path}##{action_name}"
   end
 end

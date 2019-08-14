@@ -119,9 +119,9 @@ class Metrics::GraphsController < ApplicationController
     when 'new'
       'Metric Graph Creation'
     else
-      "#{controller_name}##{action_name}"
+      "#{controller_path}##{action_name}"
     end
   rescue
-    "#{controller_name}##{action_name}"
+    "#{controller_path}##{action_name}"
   end
 end

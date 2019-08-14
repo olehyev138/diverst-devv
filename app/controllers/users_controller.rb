@@ -373,9 +373,9 @@ class UsersController < ApplicationController
     when 'show_usage'
       "#{@user.to_label}'s Usage Stats"
     else
-      "#{controller_name}##{action_name}"
+      "#{controller_path}##{action_name}"
     end
   rescue
-    "#{controller_name}##{action_name}"
+    "#{controller_path}##{action_name}"
   end
 end

@@ -65,9 +65,9 @@ class User::DashboardController < ApplicationController
     when 'privacy_statement'
       'Privacy Statement'
     else
-      "#{controller_name}##{action_name}"
+      "#{controller_path}##{action_name}"
     end
   rescue
-    "#{controller_name}##{action_name}"
+    "#{controller_path}##{action_name}"
   end
 end

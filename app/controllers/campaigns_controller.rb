@@ -167,9 +167,9 @@ class CampaignsController < ApplicationController
     when 'edit'
       'Campaign Edit'
     else
-      "#{controller_name}##{action_name}"
+      "#{controller_path}##{action_name}"
     end
   rescue
-    "#{controller_name}##{action_name}"
+    "#{controller_path}##{action_name}"
   end
 end

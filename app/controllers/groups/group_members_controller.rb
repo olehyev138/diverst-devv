@@ -320,9 +320,9 @@ class Groups::GroupMembersController < ApplicationController
     when 'pending'
       "#{@group.to_label}'s Pending Member List"
     else
-      "#{controller_name}##{action_name}"
+      "#{controller_path}##{action_name}"
     end
   rescue
-    "#{controller_name}##{action_name}"
+    "#{controller_path}##{action_name}"
   end
 end

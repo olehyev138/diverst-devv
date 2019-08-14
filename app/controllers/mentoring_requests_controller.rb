@@ -76,9 +76,9 @@ class MentoringRequestsController < ApplicationController
     when 'new'
       'New Mentorship Request'
     else
-      "#{controller_name}##{action_name}"
+      "#{controller_path}##{action_name}"
     end
   rescue
-    "#{controller_name}##{action_name}"
+    "#{controller_path}##{action_name}"
   end
 end

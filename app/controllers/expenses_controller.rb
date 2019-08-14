@@ -82,9 +82,9 @@ class ExpensesController < ApplicationController
     when 'edit'
       "Expense Edit: #{@expense.to_label}"
     else
-      "#{controller_name}##{action_name}"
+      "#{controller_path}##{action_name}"
     end
   rescue
-    "#{controller_name}##{action_name}"
+    "#{controller_path}##{action_name}"
   end
 end

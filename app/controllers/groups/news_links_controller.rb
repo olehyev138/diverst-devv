@@ -149,9 +149,9 @@ class Groups::NewsLinksController < ApplicationController
     when 'comments'
       "#{@news_link.to_label}'s Comments"
     else
-      "#{controller_name}##{action_name}"
+      "#{controller_path}##{action_name}"
     end
   rescue
-    "#{controller_name}##{action_name}"
+    "#{controller_path}##{action_name}"
   end
 end

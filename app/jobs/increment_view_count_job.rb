@@ -11,6 +11,8 @@ class IncrementViewCountJob < ActiveJob::Base
       record = PageVisitationData.new(user_id: user_id, page_url: page, controller: controller, action: action)
     end
     record.name = name
+    record.controller = controller
+    record.action = action
     record.visits_all += 1
     record.visits_day += 1
     record.visits_week += 1
