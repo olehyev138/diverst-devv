@@ -43,9 +43,9 @@ class LogsController < ApplicationController
     when 'index'
       'Logs'
     else
-      "#{controller_name}##{action_name}"
+      "#{controller_path}##{action_name}"
     end
   rescue
-    "#{controller_name}##{action_name}"
+    "#{controller_path}##{action_name}"
   end
 end

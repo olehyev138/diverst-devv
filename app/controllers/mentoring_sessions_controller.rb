@@ -206,9 +206,9 @@ class MentoringSessionsController < ApplicationController
     when 'show'
       'Mentoring Session'
     else
-      "#{controller_name}##{action_name}"
+      "#{controller_path}##{action_name}"
     end
   rescue
-    "#{controller_name}##{action_name}"
+    "#{controller_path}##{action_name}"
   end
 end

@@ -54,9 +54,9 @@ class Groups::GroupMessageCommentController < ApplicationController
     when 'edit'
       'Edit Group Message Comment'
     else
-      "#{controller_name}##{action_name}"
+      "#{controller_path}##{action_name}"
     end
   rescue
-    "#{controller_name}##{action_name}"
+    "#{controller_path}##{action_name}"
   end
 end

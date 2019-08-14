@@ -50,9 +50,9 @@ class EmailsController < ApplicationController
     when 'edit'
       'Edit Email Configurations'
     else
-      "#{controller_name}##{action_name}"
+      "#{controller_path}##{action_name}"
     end
   rescue
-    "#{controller_name}##{action_name}"
+    "#{controller_path}##{action_name}"
   end
 end

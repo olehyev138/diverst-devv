@@ -54,9 +54,9 @@ class Groups::NewsLinkCommentController < ApplicationController
     when 'edit'
       'News Link Comment Edit'
     else
-      "#{controller_name}##{action_name}"
+      "#{controller_path}##{action_name}"
     end
   rescue
-    "#{controller_name}##{action_name}"
+    "#{controller_path}##{action_name}"
   end
 end

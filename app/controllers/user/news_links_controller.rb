@@ -52,9 +52,9 @@ class User::NewsLinksController < ApplicationController
     when 'index'
       'User\'s News Feed'
     else
-      "#{controller_name}##{action_name}"
+      "#{controller_path}##{action_name}"
     end
   rescue
-    "#{controller_name}##{action_name}"
+    "#{controller_path}##{action_name}"
   end
 end

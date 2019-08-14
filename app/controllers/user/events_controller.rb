@@ -45,9 +45,9 @@ class User::EventsController < ApplicationController
     when 'index'
       'User\'s Events Page'
     else
-      "#{controller_name}##{action_name}"
+      "#{controller_path}##{action_name}"
     end
   rescue
-    "#{controller_name}##{action_name}"
+    "#{controller_path}##{action_name}"
   end
 end

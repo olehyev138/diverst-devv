@@ -132,9 +132,9 @@ class Initiatives::ExpensesController < ApplicationController
     when 'edit'
       "Edit an Expense for #{@initiative.to_label}"
     else
-      "#{controller_name}##{action_name}"
+      "#{controller_path}##{action_name}"
     end
   rescue
-    "#{controller_name}##{action_name}"
+    "#{controller_path}##{action_name}"
   end
 end

@@ -121,9 +121,9 @@ class PollsController < ApplicationController
     when 'edit'
       "Poll Edit: #{@poll.to_label}"
     else
-      "#{controller_name}##{action_name}"
+      "#{controller_path}##{action_name}"
     end
   rescue
-    "#{controller_name}##{action_name}"
+    "#{controller_path}##{action_name}"
   end
 end

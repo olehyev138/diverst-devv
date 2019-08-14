@@ -71,9 +71,9 @@ class ArchivedInitiativesController < ApplicationController
     when 'index'
       'Archived Initiatives'
     else
-      "#{controller_name}##{action_name}"
+      "#{controller_path}##{action_name}"
     end
   rescue
-    "#{controller_name}##{action_name}"
+    "#{controller_path}##{action_name}"
   end
 end

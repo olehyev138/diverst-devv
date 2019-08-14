@@ -537,14 +537,14 @@ class GroupsController < ApplicationController
   def page_name
     case action_name
     when 'index'
-      "#{c_t(:sub_erg)} List"
+      "#{c_t(:erg)} List"
     when 'close_budgets'
       'Close Budgets'
     when 'calendar'
-      "#{c_t(:sub_erg).pluralize} Calender"
+      "#{c_t(:erg).pluralize} Calender"
     when 'new'
-      "#{c_t(:sub_erg)} Creation"
-    when show
+      "#{c_t(:erg)} Creation"
+    when 'show'
       "#{@group.to_label}'s Home"
     when 'edit'
       "#{c_t(:sub_erg)} Edit: #{@group.to_label}"
@@ -561,9 +561,9 @@ class GroupsController < ApplicationController
     when 'edit_fields'
       "#{@group.to_label}'s Survey Question Settings"
     else
-      "#{controller_name}##{action_name}"
+      "#{controller_path}##{action_name}"
     end
   rescue
-    "#{controller_name}##{action_name}"
+    "#{controller_path}##{action_name}"
   end
 end

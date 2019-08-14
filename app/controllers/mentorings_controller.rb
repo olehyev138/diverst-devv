@@ -45,9 +45,9 @@ class MentoringsController < ApplicationController
     when 'index'
       'Mentorship Home Page'
     else
-      "#{controller_name}##{action_name}"
+      "#{controller_path}##{action_name}"
     end
   rescue
-    "#{controller_name}##{action_name}"
+    "#{controller_path}##{action_name}"
   end
 end

@@ -34,9 +34,9 @@ class User::DownloadsController < ApplicationController
     when 'index'
       'User\'s Downloads Page'
     else
-      "#{controller_name}##{action_name}"
+      "#{controller_path}##{action_name}"
     end
   rescue
-    "#{controller_name}##{action_name}"
+    "#{controller_path}##{action_name}"
   end
 end
