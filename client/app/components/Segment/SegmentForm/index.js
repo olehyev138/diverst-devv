@@ -60,6 +60,7 @@ export function SegmentFormInner({ handleSubmit, handleChange, handleBlur, value
         <SegmentRulesList
           values={values}
           classes={props.classes}
+          {...props.ruleProps}
         />
       </Form>
     </Card>
@@ -80,7 +81,8 @@ export function SegmentForm(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        props.segmentAction(values);
+        // TEMP: disabled
+        // props.segmentAction(values);
       }}
 
       render={formikProps => <SegmentFormInner {...props} {...formikProps} />}
@@ -101,7 +103,9 @@ SegmentFormInner.propTypes = {
   buttonText: PropTypes.string,
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
-  classes: PropTypes.object
+  classes: PropTypes.object,
+  getGroupsBegin: PropTypes.func,
+  ruleProps: PropTypes.object
 };
 
 export default compose(

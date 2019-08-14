@@ -58,13 +58,12 @@ export function SegmentRules({ values, classes, ...props }) {
   const initialRules = [
     { field_id: 0, operator: 0, values: [] },
     { field: 0, operator: 0 },
-    { id: 0 }
+    { id: 0, group_ids: [] }
   ];
 
   const handleChangeTab = (event, newTab) => {
     setTab(newTab);
   };
-
 
   return (
     <Card>
@@ -93,7 +92,7 @@ export function SegmentRules({ values, classes, ...props }) {
                   return (
                     /* eslint-disable-next-line react/no-array-index-key */
                     <Grid item key={i} className={classes.ruleInput}>
-                      <SegmentRule ruleName={ruleData[tab].name} ruleIndex={i} />
+                      <SegmentRule ruleName={ruleData[tab].name} ruleIndex={i} {...props} />
                       <Button onClick={() => props.formik.setFieldValue(`${ruleData[tab].name}.${i}._destroy`, '1')}>
                         X
                       </Button>

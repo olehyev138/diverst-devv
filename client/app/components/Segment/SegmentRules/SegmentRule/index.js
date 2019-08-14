@@ -14,6 +14,7 @@ import PropTypes from 'prop-types';
 import dig from 'object-dig';
 
 import SegmentOrderRule from 'components/Segment/SegmentRules/SegmentOrderRule';
+import SegmentGroupRule from 'components/Segment/SegmentRules/SegmentGroupRule';
 
 const SegmentRule = (props) => {
   const ruleName = dig(props, 'ruleName');
@@ -22,6 +23,8 @@ const SegmentRule = (props) => {
     switch (ruleName) {
       case 'order_rules_attributes':
         return (<SegmentOrderRule {...props} />);
+      case 'group_rules_attributes':
+        return (<SegmentGroupRule {...props} />);
       default:
         return (<React.Fragment />);
     }
