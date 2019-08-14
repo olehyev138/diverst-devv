@@ -57,83 +57,83 @@
               </li>
             <% end %>
           <% end %>
-          
+
           <% if GroupFolderPolicy.new(current_user, [@group]).index? %>
             <li>
               <%= active_link_to "Resources", group_folders_path(@group) %>
             </li>
           <% end %>
-          
+
           <% if GroupLeaderPolicy.new(current_user, [@group]).index? %>
             <li>
             <%= active_link_to "Leaders", group_leaders_path(@group) %>
           </li>
           <% end %>
-          
+
           <% if GroupPolicy.new(current_user, @group).insights? %>
             <li>
             <%= active_link_to "Insights", group_questions_path(@group) %>
           </li>
           <% end %>
-          
+
           <% if GroupPolicy.new(current_user, @group).layouts? %>
             <li>
             <%= active_link_to "Layouts", layouts_group_path(@group) %>
           </li>
           <% end %>
-          
+
           <% if GroupPolicy.new(current_user, @group).settings? %>
             <li>
             <%= active_link_to "Settings", settings_group_path(@group) %>
           </li>
           <% end %>
-          
+
           <% if GroupBudgetPolicy.new(current_user, [@group]).index? %>
             <li>
               <%= active_link_to "Overview", plan_overview_group_path(@group) %>
             </li>
           <% end %>
-          
+
           <% if GroupEventsPolicy.new(current_user, [@group]).update? %>
             <li>
               <%= active_link_to "Evvent Management", group_initiatives_path(@group)  %>
             </li>
           <% end %>
-          
+
           <% if GroupPolicy.new(current_user, @group).manage? %>
             <li>
               <%= active_link_to "KPI", metrics_group_path(@group) %>
             </li>
           <% end %>
-          
+
           <% if GroupPolicy.new(current_user, @group).manage? %>
             <li>
               <%= active_link_to c_t(:structure), group_outcomes_path(@group) %>
             </li>
           <% end %>
-          
+
           <% if GroupPolicy.new(current_user, @group).manage? %>
             <li>
               <%= active_link_to "Updates", group_updates_path(@group) %>
             </li>
           <% end %>
-          
+
           <% if GroupBudgetPolicy.new(current_user, [@group]).update? %>
               <li>
                 <%= active_link_to "Edit Annual Budget", edit_annual_budget_group_budgets_path(@group) %>
               </li>
           <% end %>
-            
+
         </ul>
       </nav>
     </div>
     <div class="menu menu--desktop">
       <%= active_link_to "Home", group_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: :exclusive %>
-      
+
       <% if show_members_link?(@group) %>
         <%= active_link_to 'Members&nbsp;<span class="caret"></span>'.html_safe, "", "aria-label":"Members", "aria-control": "navigation", "data-jq-dropdown": "#members", class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: :exclusive %>
       <% end %>
-      
+
       <nav id="members" class="jq-dropdown jq-dropdown-tip">
         <ul class="jq-dropdown-menu">
           <% if GroupMemberPolicy.new(current_user, [@group]).view_members? %>
@@ -141,7 +141,7 @@
               <%= active_link_to "Active Members", group_group_members_path(@group) %>
             </li>
           <% end %>
-      
+
           <% if @group.pending_users.enabled? && GroupMemberPolicy.new(current_user, [@group]).update? %>
             <li>
               <%= active_link_to "Pending Members (#{@group.pending_members.count})", pending_group_group_members_path(@group) %>
@@ -149,15 +149,15 @@
           <% end %>
         </ul>
       </nav>
-      
+
       <%= active_link_to "Events", group_events_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if GroupEventsPolicy.new(current_user, [@group]).view_upcoming_events? %>
       <%= active_link_to "Resources", group_folders_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if GroupFolderPolicy.new(current_user, [@group]).index? %>
       <%= active_link_to "News Feed", group_posts_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if GroupPostsPolicy.new(current_user, [@group]).view_latest_news? %>
-      
+
       <% if show_manage_link?(@group) %>
         <%= active_link_to 'Manage&nbsp;<span class="caret"></span>'.html_safe, "", "aria-label":"Manage", "aria-control": "navigation", "data-jq-dropdown": "#manage", class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: :exclusive %>
       <% end %>
-      
+
       <nav id="manage" class="jq-dropdown jq-dropdown-tip">
           <ul class="jq-dropdown-menu">
           <% if GroupLeaderPolicy.new(current_user, [@group]).index? %>
@@ -165,73 +165,75 @@
             <%= active_link_to "Leaders", group_leaders_path(@group) %>
           </li>
           <% end %>
-          
+
           <% if GroupPolicy.new(current_user, @group).insights? %>
             <li>
             <%= active_link_to "Insights", group_questions_path(@group) %>
           </li>
           <% end %>
-          
+
           <% if GroupPolicy.new(current_user, @group).layouts? %>
             <li>
             <%= active_link_to "Layouts", layouts_group_path(@group) %>
           </li>
           <% end %>
-          
+
           <% if GroupPolicy.new(current_user, @group).settings? %>
-            <li>
-            <%= active_link_to "Settings", settings_group_path(@group) %>
-          </li>
+            <li> <%= active_link_to "Settings", settings_group_path(@group) %> </li>
+          <% end %>
+
+          <% if GroupPolicy.new(current_user, @group).settings? %>
+              <a href="https://slack.com/oauth/authorize?client_id=<%= ENV['SLACK_CLIENT_ID'] %>&redirect_uri=<%= omniauth_callback_url('slack') %>&scope=bot,incoming-webhook,commands,links:read"><img alt="Add to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x"></a>
           <% end %>
         </ul>
         </nav>
-      
+
       <% if current_user.enterprise.plan_module_enabled && show_plan_link?(@group) %>
         <%= active_link_to 'Plan&nbsp;<span class="caret"></span>'.html_safe, "", "aria-label":"Plan", "aria-control": "navigation", "data-jq-dropdown": "#plan", class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: :exclusive %>
-        
+
         <nav id="plan" class="jq-dropdown jq-dropdown-tip">
           <ul class="jq-dropdown-menu">
-            
+
             <% if GroupBudgetPolicy.new(current_user, [@group]).index? %>
               <li>
                 <%= active_link_to "Overview", plan_overview_group_path(@group) %>
               </li>
             <% end %>
-            
+
             <% if GroupEventsPolicy.new(current_user, [@group]).update? %>
               <li>
                 <%= active_link_to "Event Management", group_initiatives_path(@group)  %>
               </li>
             <% end %>
-            
+
             <% if GroupPolicy.new(current_user, @group).manage? %>
               <li>
                 <%= active_link_to "KPI", metrics_group_path(@group) %>
               </li>
             <% end %>
-            
+
             <% if GroupPolicy.new(current_user, @group).manage? %>
               <li>
                 <%= active_link_to c_t(:structure), group_outcomes_path(@group) %>
               </li>
             <% end %>
-            
+
             <% if GroupPolicy.new(current_user, @group).manage? %>
               <li>
                 <%= active_link_to "Updates", group_updates_path(@group) %>
               </li>
             <% end %>
-            
+
             <% if GroupBudgetPolicy.new(current_user, [@group]).update? %>
                 <li>
                   <%= active_link_to "Edit Annual Budget", edit_annual_budget_group_budgets_path(@group) %>
                 </li>
             <% end %>
-            
+
           </ul>
         </nav>
       <% end %>
-    
+
     </div>
   </header>
 

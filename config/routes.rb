@@ -17,7 +17,7 @@ Rails.application.routes.draw do
 
   get 'users/invitation', to: 'users/invitations#index'
 
-  get 'omniauth/:provider/callback', to: 'omni_auth#callback'
+  get 'omniauth/:provider/callback', to: 'omni_auth#callback', as: 'omniauth_callback'
 
   resources :onboarding, only: [:index]
 

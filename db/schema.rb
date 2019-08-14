@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190806163846) do
+ActiveRecord::Schema.define(version: 20190814193417) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -626,6 +626,7 @@ ActiveRecord::Schema.define(version: 20190806163846) do
     t.string   "sp_import_news",              limit: 191,                           default: "No"
     t.string   "sp_import_pages",             limit: 191,                           default: "No"
     t.integer  "views_count",                 limit: 4
+    t.string   "slack_webhook",               limit: 191
   end
 
   add_index "groups", ["share_point_files_id"], name: "index_groups_on_share_point_files_id", using: :btree
