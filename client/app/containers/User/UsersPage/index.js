@@ -108,8 +108,8 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = dispatch => ({
-  getUsersBegin: (payload) => dispatch(getUsersBegin(payload)),
-  deleteUserBegin: (payload) => dispatch(deleteUserBegin(payload)),
+  getUsersBegin: payload => dispatch(getUsersBegin(payload)),
+  deleteUserBegin: payload => dispatch(deleteUserBegin(payload)),
   userUnmount: () => dispatch(userUnmount()),
   handleVisitUserEdit: id => dispatch(push(ROUTES.admin.system.users.edit.path(id)))
 });
