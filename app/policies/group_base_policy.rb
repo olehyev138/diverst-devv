@@ -8,6 +8,10 @@ class GroupBasePolicy < Struct.new(:user, :context)
     self.group_leader_role_ids = user.group_leaders.pluck(:user_role_id)
   end
 
+  def admin?
+    user.policy_group.enterprise_manage? || user.policy_group.manage_all?
+  end
+
   def is_a_member?
     UserGroup.where(user_id: user.id, group_id: group.id).exists?
   end

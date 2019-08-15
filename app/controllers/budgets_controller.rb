@@ -81,7 +81,7 @@ class BudgetsController < ApplicationController
   end
 
   def destroy
-    authorize [@group], :destroy?, policy_class: GroupBudgetPolicy
+    authorize [@group, @budget], :destroy?, policy_class: GroupBudgetPolicy
     track_activity(@budget, :destroy)
     if @budget.destroy
       flash[:notice] = 'Your budget was deleted'
