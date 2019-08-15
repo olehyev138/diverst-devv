@@ -58,7 +58,7 @@ export function SegmentRules({ values, classes, ...props }) {
   const initialRules = [
     { field_id: 0, operator: 0, values: [] },
     { field: 0, operator: 0 },
-    { id: 0, group_ids: [] }
+    { operator: 0, group_ids: [] }
   ];
 
   const handleChangeTab = (event, newTab) => {
@@ -87,11 +87,10 @@ export function SegmentRules({ values, classes, ...props }) {
             <CardContent>
               <Grid container>
                 {getIn(props.formik.values, `${ruleData[tab].name}`).map((rule, i) => {
-                  if (Object.hasOwnProperty.call(rule, '_destroy')) return (<React.Fragment key={i} />); // eslint-disable-line react/no-array-index-key
+                  if (Object.hasOwnProperty.call(rule, '_destroy')) return (<React.Fragment key={rule.id} />);
 
                   return (
-                    /* eslint-disable-next-line react/no-array-index-key */
-                    <Grid item key={i} className={classes.ruleInput}>
+                    <Grid item key={rule.id} className={classes.ruleInput}>
                       <SegmentRule ruleName={ruleData[tab].name} ruleIndex={i} {...props} />
                       <Button onClick={() => props.formik.setFieldValue(`${ruleData[tab].name}.${i}._destroy`, '1')}>
                         X

@@ -81,8 +81,12 @@ export function SegmentForm(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        // TEMP: disabled
-        // props.segmentAction(values);
+        // map each groups rules array of groups to an array of group ids
+        values.group_rules_attributes.forEach((groupRule) => {
+          groupRule.group_ids = groupRule.group_ids.map(group => group.value);
+        });
+
+        props.segmentAction(values);
       }}
 
       render={formikProps => <SegmentFormInner {...props} {...formikProps} />}
