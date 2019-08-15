@@ -11,10 +11,6 @@ class SlackClient
     end
   end
 
-  def self.web_hook
-    @web_hook ||= 'https://hooks.slack.com/services/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'
-  end
-
   def self.client
     @client ||= Slack::RealTime::Client.new
   end
@@ -73,7 +69,7 @@ class SlackClient
     client.stop!
   end
 
-  def self.post_web_hook_message(message)
-    HTTP.post(web_hook, body: message.to_json)
+  def self.post_web_hook_message(encrypted_webhook, message)
+    HTTP.post(RsaEncryption.decode(encrypted_webhook), body: message.to_json)
   end
 end

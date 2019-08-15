@@ -187,6 +187,9 @@ Rails.application.routes.draw do
       get 'get_all_groups'
       get 'get_paginated_groups'
     end
+    member do
+      get 'slack_button_redirect'
+    end
     resources :budgets, only: [:index, :show, :new, :create, :destroy] do
       post 'approve'
       post 'decline'

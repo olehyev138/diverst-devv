@@ -376,6 +376,33 @@ class GroupsController < ApplicationController
     render nothing: true
   end
 
+  def slack_button_redirect
+    authorize @group, :settings?
+    client = Slack::Web::Client.new
+
+    if params[:code].blank?
+      flash[:alert] = 'You did not grant permission. Diverst was not added to slack'
+    else
+      # Request a token using the temporary code
+      rc = client.oauth_access(
+        client_id: ENV['SLACK_CLIENT_ID'],
+        client_secret: ENV['SLACK_CLIENT_SECRET'],
+        redirect_uri: slack_button_redirect_group_url(@group),
+        code: params[:code]
+      )
+
+      # Pluck the token from the response
+      @group.slack_webhook = RsaEncryption.encode(rc['incoming_webhook']['url'])
+      @group.slack_auth_data = RsaEncryption.encode(rc.to_json)
+      if @group.save
+        flash[:notice] = 'Congratulations. We will send a slack notification when an event or post is created'
+      else
+        flash[:alert] = 'There was an error. Diverst was not added to slack'
+      end
+    end
+    redirect_to @group
+  end
+
   protected
 
   def should_show_event?(group)

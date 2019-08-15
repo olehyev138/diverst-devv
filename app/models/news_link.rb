@@ -200,6 +200,9 @@ class NewsLink < BaseClass
         }
       ]
     }
-    SlackClient.post_web_hook_message(message)
+    group.send_slack_webhook_message message
+    news_feed_link.shared_news_feeds.each do |nf|
+      nf.group.send_slack_webhook_message message
+    end
   end
 end

@@ -58,7 +58,9 @@ class HtmlHelper
   def self.to_pain_text(html)
     html = html.gsub(/<br.*>/, "\n")
     html = html.gsub("\r\n\r\n", "\n")
+
     html = html.gsub('&nbsp;', ' ')
+    html = html.gsub('&#39;', '\'')
 
     html = html.gsub(/<.*?>/, '')
     html
@@ -81,6 +83,7 @@ class HtmlHelper
     html = html.gsub('</u>', '')
 
     html = html.gsub('&nbsp;', ' ')
+    html = html.gsub('&#39;', '\'')
 
     # <a href="http://youtube.com">YOUTUBE LINK</a>
     html = html.gsub(/<a href="(.*)">(.*)<\/a>/, '<\1|\2>')
@@ -101,7 +104,7 @@ class HtmlHelper
 
     (0...html.length).each do |i|
       if html[i] == '<'
-        link_substring = html[i..-1][/\A<.*?\|.*?>/]
+        link_substring = html[i..-1][/\A<[^>]*?\|[^<]*?>/]
         new.concat link_substring unless link_substring.nil?
         in_tag = true
         if html[i..i + 3] == '<ul>'

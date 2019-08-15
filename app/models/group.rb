@@ -472,6 +472,12 @@ class Group < BaseClass
     }
   end
 
+  def send_slack_webhook_message(message)
+    if slack_webhook.present?
+      SlackClient.post_web_hook_message(slack_webhook, message)
+    end
+  end
+
   protected
 
   def smart_add_url_protocol
