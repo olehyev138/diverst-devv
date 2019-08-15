@@ -403,6 +403,12 @@ class GroupsController < ApplicationController
     redirect_to @group
   end
 
+  def slack_uninstall
+    authorize @group, :settings?
+    @group.uninstall_slack
+    redirect_to :back
+  end
+
   protected
 
   def should_show_event?(group)

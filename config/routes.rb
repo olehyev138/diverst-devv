@@ -189,6 +189,7 @@ Rails.application.routes.draw do
     end
     member do
       get 'slack_button_redirect'
+      get 'slack_uninstall'
     end
     resources :budgets, only: [:index, :show, :new, :create, :destroy] do
       post 'approve'

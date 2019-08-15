@@ -478,6 +478,14 @@ class Group < BaseClass
     end
   end
 
+  def uninstall_slack
+    SlackClient.uninstall(slack_auth_data)
+    self.update(
+          slack_auth_data: nil,
+          slack_webhook: nil
+        )
+  end
+
   protected
 
   def smart_add_url_protocol
