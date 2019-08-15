@@ -4,7 +4,7 @@
  *
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import dig from 'object-dig';
@@ -33,14 +33,14 @@ const operators = [
 ];
 
 const SegmentFieldRule = ({ rule, ...props }) => {
-  const { ruleName } = props;
-  const { ruleIndex } = props;
-  const ruleLocation = `${ruleName}.${ruleIndex}`;
+  const [fieldOperators, setFieldOperators] = useState([]);
+  const [fieldOptions, setFieldOptions] = useState([]);
 
+  const ruleLocation = `${props.ruleName}.${props.ruleIndex}`;
   const field = getIn(props.formik.values, `${ruleLocation}.field_id`);
   const operatorValue = getIn(props.formik.values, `${ruleLocation}.operator`);
-  let fieldOptions = [];
 
+  /* Dispatch action to load fields */
   const fieldSelectAction = (searchKey = '') => {
     props.getFieldsBegin({
       count: 10, page: 0, order: 'asc',
@@ -48,15 +48,20 @@ const SegmentFieldRule = ({ rule, ...props }) => {
     });
   };
 
+  /* Set new field & update options for field operator & option selects */
   const onFieldSelectChange = (value) => {
     props.formik.setFieldValue(`${ruleLocation}.field_id`, value);
-
     const field = props.fields[value.value];
-    fieldOptions = dig(field, 'options_text')
+
+    // set appropiate operators for newly selected field
+    setFieldOperators(loadOperators(field));
+
+    // deserialize field options & update state for newly selected field
+    setFieldOptions(dig(field, 'options_text')
       ? field.options_text
         .split('\n')
         .map(option => ({ label: option, value: option }))
-      : '';
+      : []);
   };
 
   return (
@@ -79,27 +84,42 @@ const SegmentFieldRule = ({ rule, ...props }) => {
             name={`${ruleLocation}.operator`}
             id={`${ruleLocation}.operator`}
             label='Field Operator'
-            options={operators}
+            options={fieldOperators}
             value={{ value: operatorValue, label: operators[operatorValue].label }}
             onChange={v => props.formik.setFieldValue(`${ruleLocation}.operator`, v.value)}
           />
         </Grid>
         <Grid item xs={3}>
           <Select
-            name={`${ruleLocation}.field_ids`}
-            id={`${ruleLocation}.field_ids`}
+            name={`${ruleLocation}.values`}
+            id={`${ruleLocation}.values`}
             label='Options'
             options={fieldOptions}
             onMenuOpen={fieldSelectAction}
-            onChange={v => props.formik.setFieldValue(`${ruleLocation}.field_ids`, v)}
+            onChange={v => props.formik.setFieldValue(`${ruleLocation}.values`, v)}
             onInputChange={value => fieldSelectAction(value)}
-            onBlur={() => props.formik.setFieldTouched('field_ids', true)}
+            onBlur={() => props.formik.setFieldTouched('values', true)}
           />
         </Grid>
       </Grid>
     </React.Fragment>
   );
 };
+
+function loadOperators(field) {
+  console.log(field);
+
+  switch (field.type) {
+    case 'SelectField':
+      return [operators[0], operators[3]];
+    case 'TextField':
+      return [];
+    case 'NumericField':
+      return [];
+    default:
+      return [];
+  }
+}
 
 SegmentFieldRule.propTypes = {
   ruleName: PropTypes.string,

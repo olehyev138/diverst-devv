@@ -86,7 +86,9 @@ export function SegmentForm(props) {
           groupRule.group_ids = groupRule.group_ids.map(group => group.value);
         });
 
-        props.segmentAction(values);
+        // props.segmentAction(values);
+
+        console.log(values);
       }}
 
       render={formikProps => <SegmentFormInner {...props} {...formikProps} />}
