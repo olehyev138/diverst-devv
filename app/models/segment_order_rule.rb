@@ -1,3 +1,8 @@
+#
+# Segment rule to order users based on various fields on the User model
+#   - order has *zero* effect if segment `limit` field is not set
+#   - through limit - the segment population can be limited to say - `top 10 users with highest sign_in_count`
+#
 class SegmentOrderRule < ApplicationRecord
   belongs_to :segment
 

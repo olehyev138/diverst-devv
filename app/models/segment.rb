@@ -93,7 +93,8 @@ class Segment < ApplicationRecord
   # Rule methods
 
   def apply_field_rules(users)
-    users.select { |user| user.is_part_of_segment?(self) }
+    # users.select { |user| user.is_part_of_segment?(self) }
+
   end
 
   def apply_group_rules(users)
@@ -122,7 +123,7 @@ class Segment < ApplicationRecord
     old_members = self.members.all
     new_members = self.enterprise.users.all
 
-    # reduce user dataset by applying:
+    # start with entire user dataset & reduce by applying rules in the following order:
     #  - field rules
     #  - group rules
     #  - order rules
@@ -133,19 +134,22 @@ class Segment < ApplicationRecord
     new_members = new_members.take(self.limit) if self.limit.present?
 
     # Compare new dataset to old
+    # members to remove - members that were in old & not in new
+    # members to add - members that are in new but not in old
     members_to_remove = old_members - new_members
     members_to_add = new_members - old_members
 
-    # Delete old members
+    # First delete old members
     members_to_remove.each do |member|
       self.members.delete(member)
     end
 
-    # Finally add new members
+    # Lastly add new members
     members_to_add.each do |member|
-      self.members << member if !self.members.where(id: member.id).exists?
+      self.members << member unless self.members.where(id: member.id).exists?
       begin
-        member.__elasticsearch__.update_document # Update user in Elasticsearch to reflect their new segment
+        # Update user in Elasticsearch to reflect segment (user_segment) membership
+        member.__elasticsearch__.update_document
       rescue
         next
       end

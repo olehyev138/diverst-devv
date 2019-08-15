@@ -16,7 +16,7 @@ const selectPaginatedSelectFields = () => createSelector(
   fieldsState => (
     Object
       .values(fieldsState.fieldList)
-      .map(field => ({ value: field.id, label: field.name }))
+      .map(field => ({ value: field.id, label: field.title }))
   )
 );
 

@@ -1,3 +1,6 @@
+#
+# Segment rule to filter users based on custom user fields
+#
 class SegmentFieldRule < ApplicationRecord
   belongs_to :segment
   belongs_to :field
@@ -6,22 +9,25 @@ class SegmentFieldRule < ApplicationRecord
   validates :field, presence: true
   validates :field_id, presence: true
 
-  # TODO validate that operator is in @@operators
+  # TODO validate that:
+  #  - operator 'matches' with selected field - ie '>=' for a TextField is invalid
+  #  - operator is in @@operators
+
   validates :operator, presence: true
   validates :values, presence: true
 
-  @@operators = {
-    equals: 0,
-    greater_than: 1,
-    lesser_than: 2,
-    is_not: 3,
-    contains_any_of: 4,
-    contains_all_of: 5,
-    does_not_contain: 6
-  }.freeze
-
   def self.operators
-    @@operators
+    {
+      equals: 0,
+      greater_than: 1,
+      lesser_than: 2,
+      is_not: 3,
+      contains_any_of: 4,
+      contains_all_of: 5,
+      does_not_contain: 6,
+      greater_than_equal: 7,
+      lesser_than_equal: 8,
+    }
   end
 
   def values

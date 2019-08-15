@@ -6,31 +6,39 @@ import { createStructuredSelector } from 'reselect/lib';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
+
 import saga from 'containers/Segment/saga';
 import reducer from 'containers/Segment/reducer';
-
 import groupSaga from 'containers/Group/saga';
 import groupReducer from 'containers/Group/reducer';
+import fieldsSaga from 'containers/GlobalSettings/Field/saga';
+import fieldReducer from 'containers/GlobalSettings/Field/reducer';
 
-import RouteService from 'utils/routeHelpers';
-
-import { selectSegment, selectSegmentWithRules } from 'containers/Segment/selectors';
+import { getGroupsBegin } from 'containers/Group/actions';
+import { getFieldsBegin } from 'containers/GlobalSettings/Field/actions';
 import {
   getSegmentBegin, createSegmentBegin,
   updateSegmentBegin, segmentUnmount
 } from 'containers/Segment/actions';
 
-import { getGroupsBegin } from 'containers/Group/actions';
+import { selectSegmentWithRules } from 'containers/Segment/selectors';
 import { selectPaginatedSelectGroups } from 'containers/Group/selectors';
+import {
+  selectPaginatedFields, selectPaginatedSelectFields
+} from 'containers/GlobalSettings/Field/selectors';
+
+import RouteService from 'utils/routeHelpers';
 
 import SegmentForm from 'components/Segment/SegmentForm';
 import GroupForm from 'components/Group/GroupForm';
 
-export function SegmentEditPage(props) {
+export function SegmentPage(props) {
   useInjectReducer({ key: 'segments', reducer });
+  useInjectReducer({ key: 'groups', reducer: groupReducer });
+  useInjectReducer({ key: 'fields', reducer: fieldReducer });
   useInjectSaga({ key: 'segments', saga });
   useInjectSaga({ key: 'groups', saga: groupSaga });
-  useInjectReducer({ key: 'groups', reducer: groupReducer });
+  useInjectSaga({ key: 'fields', saga: fieldsSaga });
 
   const rs = new RouteService(useContext);
   const segmentId = rs.params('segment_id');
@@ -51,7 +59,10 @@ export function SegmentEditPage(props) {
         segment={props.segment}
         ruleProps={{
           getGroupsBegin: props.getGroupsBegin,
-          groups: props.groups
+          getFieldsBegin: props.getFieldsBegin,
+          groups: props.groups,
+          selectFields: props.selectFields,
+          fields: props.fields
         }}
         buttonText={segmentId[0] ? 'Update' : 'Create'}
       />
@@ -59,12 +70,15 @@ export function SegmentEditPage(props) {
   );
 }
 
-SegmentEditPage.propTypes = {
+SegmentPage.propTypes = {
   segment: PropTypes.object,
   rules: PropTypes.object,
   getSegmentBegin: PropTypes.func,
   getGroupsBegin: PropTypes.func,
+  getFieldsBegin: PropTypes.func,
   groups: PropTypes.array,
+  selectFields: PropTypes.array,
+  fields: PropTypes.object,
   createSegmentBegin: PropTypes.func,
   updateSegmentBegin: PropTypes.func,
   segmentUnmount: PropTypes.func
@@ -72,7 +86,9 @@ SegmentEditPage.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
   segment: selectSegmentWithRules(),
-  groups: selectPaginatedSelectGroups()
+  groups: selectPaginatedSelectGroups(),
+  selectFields: selectPaginatedSelectFields(),
+  fields: selectPaginatedFields()
 });
 
 const mapDispatchToProps = {
@@ -80,7 +96,8 @@ const mapDispatchToProps = {
   createSegmentBegin,
   updateSegmentBegin,
   segmentUnmount,
-  getGroupsBegin
+  getGroupsBegin,
+  getFieldsBegin
 };
 
 const withConnect = connect(
@@ -91,4 +108,4 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(SegmentEditPage);
+)(SegmentPage);

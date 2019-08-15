@@ -1,3 +1,7 @@
+#
+# Segment rule to filter users based on 1 to many group memberships
+#  - allow for `join` & `intersect` operators
+#
 class SegmentGroupScopeRule < ApplicationRecord
   belongs_to :segment
   has_many :segment_group_scope_rule_groups

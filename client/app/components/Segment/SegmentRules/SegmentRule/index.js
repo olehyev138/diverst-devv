@@ -13,6 +13,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import dig from 'object-dig';
 
+import SegmentFieldRule from 'components/Segment/SegmentRules/SegmentFieldRule';
 import SegmentOrderRule from 'components/Segment/SegmentRules/SegmentOrderRule';
 import SegmentGroupRule from 'components/Segment/SegmentRules/SegmentGroupRule';
 
@@ -21,6 +22,8 @@ const SegmentRule = (props) => {
 
   const renderRule = (ruleName) => {
     switch (ruleName) {
+      case 'field_rules_attributes':
+        return (<SegmentFieldRule {...props} />);
       case 'order_rules_attributes':
         return (<SegmentOrderRule {...props} />);
       case 'group_rules_attributes':
