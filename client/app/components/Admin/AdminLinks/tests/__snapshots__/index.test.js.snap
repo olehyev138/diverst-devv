@@ -40,9 +40,12 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
           <WithStyles(ForwardRef(ListItemIcon))>
             <EqualizerIcon />
           </WithStyles(ForwardRef(ListItemIcon))>
-          <WithStyles(ForwardRef(ListItemText))
-            primary="Analyze"
-          />
+          <WithStyles(ForwardRef(ListItemText))>
+            <FormattedMessage
+              id="diverst.containers.Routes.admin.analyze.index"
+              values={Object {}}
+            />
+          </WithStyles(ForwardRef(ListItemText))>
           <ExpandMoreIcon />
         </WithStyles(ForwardRef(ListItem))>
         <WithStyles(ForwardRef(Collapse))
@@ -102,9 +105,12 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
           <WithStyles(ForwardRef(ListItemIcon))>
             <DeviceHubIcon />
           </WithStyles(ForwardRef(ListItemIcon))>
-          <WithStyles(ForwardRef(ListItemText))
-            primary="Manage"
-          />
+          <WithStyles(ForwardRef(ListItemText))>
+            <FormattedMessage
+              id="diverst.containers.Routes.admin.manage.index"
+              values={Object {}}
+            />
+          </WithStyles(ForwardRef(ListItemText))>
           <ExpandMoreIcon />
         </WithStyles(ForwardRef(ListItem))>
         <WithStyles(ForwardRef(Collapse))
@@ -180,14 +186,97 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
         <WithStyles(ForwardRef(Divider)) />
         <WithStyles(ForwardRef(ListItem))
           button={true}
+          onClick={[Function]}
         >
           <WithStyles(ForwardRef(ListItemIcon))>
             <SettingsIcon />
           </WithStyles(ForwardRef(ListItemIcon))>
-          <WithStyles(ForwardRef(ListItemText))
-            primary="Global Settings"
-          />
+          <WithStyles(ForwardRef(ListItemText))>
+            <FormattedMessage
+              id="diverst.containers.Routes.admin.system.index"
+              values={Object {}}
+            />
+          </WithStyles(ForwardRef(ListItemText))>
+          <ExpandMoreIcon />
         </WithStyles(ForwardRef(ListItem))>
+        <WithStyles(ForwardRef(Collapse))
+          in={false}
+          timeout="auto"
+          unmountOnExit={true}
+        >
+          <WithStyles(ForwardRef(List))
+            disablePadding={true}
+          >
+            <WithStyles(ForwardRef(MenuItem))
+              component={
+                Object {
+                  "$$typeof": Symbol(react.forward_ref),
+                  "render": [Function],
+                }
+              }
+              exact={true}
+              to="/admin/system/settings/fields"
+            >
+              <WithStyles(ForwardRef(ListItemIcon))>
+                <ListIcon />
+              </WithStyles(ForwardRef(ListItemIcon))>
+              <WithStyles(ForwardRef(ListItemText))>
+                Global Settings
+              </WithStyles(ForwardRef(ListItemText))>
+            </WithStyles(ForwardRef(MenuItem))>
+            <WithStyles(ForwardRef(MenuItem))
+              component={
+                Object {
+                  "$$typeof": Symbol(react.forward_ref),
+                  "render": [Function],
+                }
+              }
+              exact={true}
+              to="#"
+            >
+              <WithStyles(ForwardRef(ListItemIcon))>
+                <ListIcon />
+              </WithStyles(ForwardRef(ListItemIcon))>
+              <WithStyles(ForwardRef(ListItemText))>
+                Users
+              </WithStyles(ForwardRef(ListItemText))>
+            </WithStyles(ForwardRef(MenuItem))>
+            <WithStyles(ForwardRef(MenuItem))
+              component={
+                Object {
+                  "$$typeof": Symbol(react.forward_ref),
+                  "render": [Function],
+                }
+              }
+              exact={true}
+              to="#"
+            >
+              <WithStyles(ForwardRef(ListItemIcon))>
+                <ListIcon />
+              </WithStyles(ForwardRef(ListItemIcon))>
+              <WithStyles(ForwardRef(ListItemText))>
+                Logs
+              </WithStyles(ForwardRef(ListItemText))>
+            </WithStyles(ForwardRef(MenuItem))>
+            <WithStyles(ForwardRef(MenuItem))
+              component={
+                Object {
+                  "$$typeof": Symbol(react.forward_ref),
+                  "render": [Function],
+                }
+              }
+              exact={true}
+              to="#"
+            >
+              <WithStyles(ForwardRef(ListItemIcon))>
+                <ListIcon />
+              </WithStyles(ForwardRef(ListItemIcon))>
+              <WithStyles(ForwardRef(ListItemText))>
+                Diversity
+              </WithStyles(ForwardRef(ListItemText))>
+            </WithStyles(ForwardRef(MenuItem))>
+          </WithStyles(ForwardRef(List))>
+        </WithStyles(ForwardRef(Collapse))>
         <WithStyles(ForwardRef(Divider)) />
       </WithStyles(ForwardRef(List))>
     </WithStyles(ForwardRef(Drawer))>
@@ -224,9 +313,12 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
           <WithStyles(ForwardRef(ListItemIcon))>
             <EqualizerIcon />
           </WithStyles(ForwardRef(ListItemIcon))>
-          <WithStyles(ForwardRef(ListItemText))
-            primary="Analyze"
-          />
+          <WithStyles(ForwardRef(ListItemText))>
+            <FormattedMessage
+              id="diverst.containers.Routes.admin.analyze.index"
+              values={Object {}}
+            />
+          </WithStyles(ForwardRef(ListItemText))>
           <ExpandMoreIcon />
         </WithStyles(ForwardRef(ListItem))>
         <WithStyles(ForwardRef(Collapse))
@@ -286,9 +378,12 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
           <WithStyles(ForwardRef(ListItemIcon))>
             <DeviceHubIcon />
           </WithStyles(ForwardRef(ListItemIcon))>
-          <WithStyles(ForwardRef(ListItemText))
-            primary="Manage"
-          />
+          <WithStyles(ForwardRef(ListItemText))>
+            <FormattedMessage
+              id="diverst.containers.Routes.admin.manage.index"
+              values={Object {}}
+            />
+          </WithStyles(ForwardRef(ListItemText))>
           <ExpandMoreIcon />
         </WithStyles(ForwardRef(ListItem))>
         <WithStyles(ForwardRef(Collapse))
@@ -364,14 +459,97 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
         <WithStyles(ForwardRef(Divider)) />
         <WithStyles(ForwardRef(ListItem))
           button={true}
+          onClick={[Function]}
         >
           <WithStyles(ForwardRef(ListItemIcon))>
             <SettingsIcon />
           </WithStyles(ForwardRef(ListItemIcon))>
-          <WithStyles(ForwardRef(ListItemText))
-            primary="Global Settings"
-          />
+          <WithStyles(ForwardRef(ListItemText))>
+            <FormattedMessage
+              id="diverst.containers.Routes.admin.system.index"
+              values={Object {}}
+            />
+          </WithStyles(ForwardRef(ListItemText))>
+          <ExpandMoreIcon />
         </WithStyles(ForwardRef(ListItem))>
+        <WithStyles(ForwardRef(Collapse))
+          in={false}
+          timeout="auto"
+          unmountOnExit={true}
+        >
+          <WithStyles(ForwardRef(List))
+            disablePadding={true}
+          >
+            <WithStyles(ForwardRef(MenuItem))
+              component={
+                Object {
+                  "$$typeof": Symbol(react.forward_ref),
+                  "render": [Function],
+                }
+              }
+              exact={true}
+              to="/admin/system/settings/fields"
+            >
+              <WithStyles(ForwardRef(ListItemIcon))>
+                <ListIcon />
+              </WithStyles(ForwardRef(ListItemIcon))>
+              <WithStyles(ForwardRef(ListItemText))>
+                Global Settings
+              </WithStyles(ForwardRef(ListItemText))>
+            </WithStyles(ForwardRef(MenuItem))>
+            <WithStyles(ForwardRef(MenuItem))
+              component={
+                Object {
+                  "$$typeof": Symbol(react.forward_ref),
+                  "render": [Function],
+                }
+              }
+              exact={true}
+              to="#"
+            >
+              <WithStyles(ForwardRef(ListItemIcon))>
+                <ListIcon />
+              </WithStyles(ForwardRef(ListItemIcon))>
+              <WithStyles(ForwardRef(ListItemText))>
+                Users
+              </WithStyles(ForwardRef(ListItemText))>
+            </WithStyles(ForwardRef(MenuItem))>
+            <WithStyles(ForwardRef(MenuItem))
+              component={
+                Object {
+                  "$$typeof": Symbol(react.forward_ref),
+                  "render": [Function],
+                }
+              }
+              exact={true}
+              to="#"
+            >
+              <WithStyles(ForwardRef(ListItemIcon))>
+                <ListIcon />
+              </WithStyles(ForwardRef(ListItemIcon))>
+              <WithStyles(ForwardRef(ListItemText))>
+                Logs
+              </WithStyles(ForwardRef(ListItemText))>
+            </WithStyles(ForwardRef(MenuItem))>
+            <WithStyles(ForwardRef(MenuItem))
+              component={
+                Object {
+                  "$$typeof": Symbol(react.forward_ref),
+                  "render": [Function],
+                }
+              }
+              exact={true}
+              to="#"
+            >
+              <WithStyles(ForwardRef(ListItemIcon))>
+                <ListIcon />
+              </WithStyles(ForwardRef(ListItemIcon))>
+              <WithStyles(ForwardRef(ListItemText))>
+                Diversity
+              </WithStyles(ForwardRef(ListItemText))>
+            </WithStyles(ForwardRef(MenuItem))>
+          </WithStyles(ForwardRef(List))>
+        </WithStyles(ForwardRef(Collapse))>
         <WithStyles(ForwardRef(Divider)) />
       </WithStyles(ForwardRef(List))>
     </WithStyles(ForwardRef(Drawer))>

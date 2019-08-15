@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, memo } from 'react';
+import React, { useContext, memo } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
@@ -33,7 +33,13 @@ export function GroupLinks(props) {
       >
         Home
       </Button>
-      <Button component={WrappedNavLink} to='/user/campaigns' activeStyle={{ color: activeColor }}>Members</Button>
+      <Button
+        component={WrappedNavLink}
+        to={ROUTES.group.members.index.path(rs.params('group_id'))}
+        activeStyle={{ color: activeColor }}
+      >
+        Members
+      </Button>
       <Button
         component={WrappedNavLink}
         to={ROUTES.group.events.index.path(rs.params('group_id'))}

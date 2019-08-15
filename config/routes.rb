@@ -34,6 +34,11 @@ Diverst::Application.routes.draw do
       resources :expenses
       resources :expense_categories
       resources :fields
+      resources :field_data, path: 'field_data', only: [] do
+        collection do
+          post 'update_field_data'
+        end
+      end
       resources :folders do
         member do
           get '/password', to: 'folders#validate_password'
@@ -52,6 +57,12 @@ Diverst::Application.routes.draw do
       resources :group_updates
       resources :groups_metrics_dashboards
       resources :groups_polls
+      resources :group_members, path: 'members' do
+        collection do
+          post 'add_members'
+          post 'remove_members'
+        end
+      end
       resources :initiatives do
         member do
           post '/qrcode', to: 'initiatives#generate_qr_code'

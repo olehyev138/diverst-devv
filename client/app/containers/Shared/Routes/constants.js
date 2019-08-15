@@ -95,6 +95,14 @@ export const ROUTES = {
         },
       }
     },
+    members: {
+      index: {
+        path: (groupId = ':group_id') => `/groups/${groupId}/members`
+      },
+      new: {
+        path: (groupId = ':group_id') => `/groups/${groupId}/members/new`
+      }
+    },
     outcomes: {
       index: {
         path: (groupId = ':group_id') => `/groups/${groupId}/outcomes`
@@ -114,7 +122,12 @@ export const ROUTES = {
     get root() { return this.analyze.overview; },
     pathPrefix: '/admin',
     analyze: {
-      pathPrefix: '/admin/analyze',
+      index: {
+        data: {
+          pathPrefix: '/admin/analyze',
+          titleMessage: messages.admin.analyze.index
+        },
+      },
       overview: {
         path: () => '/admin/analyze',
         data: {
@@ -129,7 +142,12 @@ export const ROUTES = {
       },
     },
     manage: {
-      pathPrefix: '/admin/manage',
+      index: {
+        data: {
+          pathPrefix: '/admin/manage',
+          titleMessage: messages.admin.manage.index
+        }
+      },
       groups: {
         pathPrefix: '/admin/manage/groups',
         index: {
@@ -143,9 +161,35 @@ export const ROUTES = {
           path: () => '/admin/manage/groups/new',
         },
         edit: {
-          path: () => '/admin/manage/groups/:id/edit',
+          path: (groupId = ':group_id') => `/admin/manage/groups/${groupId}/edit`,
         },
       }
     },
+    system: {
+      index: {
+        data: {
+          pathPrefix: '/system',
+          titleMessage: messages.admin.system.index,
+        }
+      },
+      users: {
+        index: {
+          path: () => '/admin/system/users',
+        },
+        new: {
+          path: () => '/admin/system/users/new',
+        },
+        edit: {
+          path: (userId = ':user_id') => `/admin/system/users/${userId}/edit`,
+        },
+      },
+      globalSettings: {
+        fields: {
+          index: {
+            path: () => '/admin/system/settings/fields'
+          }
+        }
+      }
+    }
   },
 };
