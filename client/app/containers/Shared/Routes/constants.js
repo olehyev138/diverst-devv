@@ -99,6 +99,13 @@ export const ROUTES = {
       index: {
         path: (groupId = ':group_id') => `/groups/${groupId}/outcomes`
       },
+      new: {
+        path: (groupId = ':group_id') => `/groups/${groupId}/outcomes/new`
+      },
+      edit: {
+        path:
+          (groupId = ':group_id', outcomeId = ':outcome_id') => `/groups/${groupId}/outcomes/${outcomeId}/edit`
+      },
     },
   },
 

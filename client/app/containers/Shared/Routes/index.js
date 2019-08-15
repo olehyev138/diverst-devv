@@ -36,6 +36,10 @@ import GroupMessagePage from 'containers/News/GroupMessage/GroupMessagePage';
 import GroupMessageCreatePage from 'containers/News/GroupMessage/GroupMessageCreatePage';
 import GroupMessageEditPage from 'containers/News/GroupMessage/GroupMessageEditPage';
 
+/* Group - Outcomes */
+import OutcomeCreatePage from 'containers/Group/Outcome/OutcomeCreatePage';
+import OutcomeEditPage from 'containers/Group/Outcome/OutcomeEditPage';
+
 // Paths
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
@@ -80,6 +84,10 @@ export default function Routes(props) {
       <GroupLayout {...expandRoute(ROUTES.group.news.messages.new)} component={GroupMessageCreatePage} />
       <GroupLayout {...expandRoute(ROUTES.group.news.messages.edit)} component={GroupMessageEditPage} />
       <GroupLayout exact {...expandRoute(ROUTES.group.news.messages.index)} component={GroupMessagePage} />
+
+      { /* Group Outcomes */ }
+      <GroupLayout {...expandRoute(ROUTES.group.outcomes.new)} component={OutcomeCreatePage} />
+      <GroupLayout {...expandRoute(ROUTES.group.outcomes.edit)} component={OutcomeEditPage} />
 
       <ErrorLayout path='' component={NotFoundPage} />
     </Switch>

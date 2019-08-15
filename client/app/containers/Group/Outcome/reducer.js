@@ -12,6 +12,8 @@ import {
 
 export const initialState = {
   outcomes: [],
+  outcomeTotal: null,
+  currentOutcome: null,
 };
 
 /* eslint-disable default-case, no-param-reassign */
@@ -21,25 +23,15 @@ function outcomesReducer(state = initialState, action) {
     switch (action.type) {
       case GET_OUTCOMES_SUCCESS:
         draft.outcomes = action.payload.items;
+        draft.outcomeTotal = action.payload.total;
+        break;
+      case GET_OUTCOME_SUCCESS:
+        draft.currentOutcome = action.payload.outcome;
         break;
       case OUTCOMES_UNMOUNT:
         return initialState;
     }
   });
-}
-
-/* Helpers */
-
-function formatOutcomes(outcomes) {
-  /* eslint-disable no-return-assign */
-
-  /* Format outcomes to hash by id:
-   *   { <id>: { name: outcome_01, ... } }
-   */
-  return outcomes.reduce((map, outcome) => {
-    map[outcome.id] = outcome;
-    return map;
-  }, {});
 }
 
 export default outcomesReducer;

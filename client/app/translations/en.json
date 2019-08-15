@@ -59,5 +59,7 @@
   "diverst.containers.Event.form.input.description": "Description",
   "diverst.containers.Event.form.input.start": "Start",
   "diverst.containers.Event.form.input.end": "End",
-  "diverst.containers.Event.show.date_and_time": "Date & Time"
+  "diverst.containers.Event.show.date_and_time": "Date & Time",
+  "diverst.containers.Group.Outcome.Pillar.text": "Pillars",
+  "diverst.containers.Group.Outcome.index.button.new": "New Outcome"
 }

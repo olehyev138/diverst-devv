@@ -18,12 +18,6 @@ export default defineMessages({
   delete: {
     id: `${scope}.index.button.delete`,
   },
-  delete_message: {
-    id: `${scope}.index.text.delete_message`,
-  },
-  children_collapse: {
-    id: `${scope}.index.button.children_collapse`,
-  },
   rows: {
     id: `${scope}.index.button.rows`,
   },
@@ -42,16 +36,18 @@ export default defineMessages({
   name: {
     id: `${scope}.form.input.name`,
   },
-  short_description: {
-    id: `${scope}.form.input.short_description`,
-  },
-  description: {
-    id: `${scope}.form.input.description`,
-  },
-  children: {
-    id: `${scope}.form.input.children`,
-  },
-  parent: {
-    id: `${scope}.form.input.parent`,
+  pillars: {
+    text: {
+      id: `${scope}.Pillar.text`,
+    },
+    delete: {
+      id: `${scope}.Pillar.form.button.delete`,
+    },
+    name: {
+      id: `${scope}.Pillar.form.input.name`,
+    },
+    value: {
+      id: `${scope}.Pillar.form.input.value`,
+    },
   },
 });

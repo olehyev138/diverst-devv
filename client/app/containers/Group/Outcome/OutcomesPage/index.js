@@ -11,16 +11,16 @@ import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/Group/Outcome/reducer';
 import saga from 'containers/Group/Outcome/saga';
 
-import { selectOutcomes } from 'containers/Group/Outcome/selectors';
+import { selectPaginatedOutcomes, selectOutcomeTotal } from 'containers/Group/Outcome/selectors';
 import { getOutcomesBegin, outcomesUnmount } from 'containers/Group/Outcome/actions';
 
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
-import Outcomes from 'components/Group/Outcome/Outcomes';
+import OutcomesList from 'components/Group/Outcome/OutcomesList';
 
 const defaultParams = Object.freeze({
-  count: 1000,
+  count: 10,
   page: 0,
   order: 'asc',
   orderBy: 'id',
@@ -30,17 +30,41 @@ export function OutcomesPage(props) {
   useInjectReducer({ key: 'outcomes', reducer });
   useInjectSaga({ key: 'outcomes', saga });
 
+  const [params, setParams] = useState(defaultParams);
+  const groupId = dig(props.currentGroup, 'id');
+
+  const rs = new RouteService(useContext);
+  const links = {
+    outcomesIndex: ROUTES.group.outcomes.index.path(rs.params('group_id')),
+    outcomeNew: ROUTES.group.outcomes.new.path(rs.params('group_id')),
+    outcomeEdit: id => ROUTES.group.outcomes.edit.path(rs.params('group_id'), id)
+  };
+
   useEffect(() => {
-    const groupId = dig(props.currentGroup, 'id');
     if (groupId)
-      props.getOutcomesBegin({ ...defaultParams, group_id: groupId });
+      props.getOutcomesBegin({ ...params, group_id: groupId });
 
     return () => props.outcomesUnmount();
-  }, [dig(props.currentGroup, 'id')]);
+  }, []);
+
+  const handlePagination = (payload) => {
+    const newParams = {
+      ...params,
+      count: payload.count,
+      page: payload.page
+    };
+
+    props.getOutcomesBegin({ ...newParams, group_id: groupId });
+    setParams(newParams);
+  };
 
   return (
-    <Outcomes
+    <OutcomesList
       outcomes={props.outcomes}
+      outcomeTotal={props.outcomeTotal}
+      defaultParams={defaultParams}
+      handlePagination={handlePagination}
+      links={links}
     />
   );
 }
@@ -49,13 +73,15 @@ OutcomesPage.propTypes = {
   getOutcomesBegin: PropTypes.func.isRequired,
   outcomesUnmount: PropTypes.func.isRequired,
   outcomes: PropTypes.array,
+  outcomeTotal: PropTypes.number,
   currentGroup: PropTypes.shape({
     id: PropTypes.number,
   }),
 };
 
 const mapStateToProps = createStructuredSelector({
-  outcomes: selectOutcomes(),
+  outcomes: selectPaginatedOutcomes(),
+  outcomeTotal: selectOutcomeTotal(),
 });
 
 const mapDispatchToProps = {

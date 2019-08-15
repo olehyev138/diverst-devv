@@ -3,9 +3,19 @@ import { initialState } from 'containers/Group/Outcome/reducer';
 
 const selectOutcomesDomain = state => state.outcomes || initialState;
 
-const selectOutcomes = () => createSelector(
+const selectPaginatedOutcomes = () => createSelector(
   selectOutcomesDomain,
   outcomesState => outcomesState.outcomes
 );
 
-export { selectOutcomes };
+const selectOutcomeTotal = () => createSelector(
+  selectOutcomesDomain,
+  outcomesState => outcomesState.outcomeTotal
+);
+
+const selectOutcome = () => createSelector(
+  selectOutcomesDomain,
+  outcomesState => outcomesState.currentOutcome
+);
+
+export { selectPaginatedOutcomes, selectOutcomeTotal, selectOutcome };
