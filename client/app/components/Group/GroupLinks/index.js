@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, memo } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
@@ -16,8 +16,6 @@ export function GroupLinks(props) {
   const { theme } = props;
   const activeColor = theme.palette.primary.main;
   const rs = new RouteService(useContext);
-
-  // to={buildPath(ROUTES.group.news.index.path(), props, ['group_id'])}
 
   const NavLinks = () => (
     <Toolbar
@@ -81,19 +79,7 @@ GroupLinks.propTypes = {
   }),
 };
 
-export function mapDispatchToProps(dispatch) {
-  return {
-    dispatch
-  };
-}
-
-const mapStateToProps = createStructuredSelector({});
-
-const withConnect = connect(
-  mapStateToProps,
-  mapDispatchToProps
-);
-
 export default compose(
-  withConnect,
-)(withTheme(GroupLinks));
+  withTheme,
+  memo,
+)(GroupLinks);

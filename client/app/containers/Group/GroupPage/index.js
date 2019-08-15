@@ -34,13 +34,9 @@ export function GroupPage(props) {
 
     if (dig(props.currentGroup, 'id') !== groupId)
       props.getGroupBegin({ id: groupId });
-  }, [dig(props.currentGroup, 'id')]);
 
-  useEffect(() => (
-    () => {
-      props.groupFormUnmount();
-    }
-  ), []);
+    return () => props.groupFormUnmount();
+  }, []);
 
   return (
     <React.Fragment>

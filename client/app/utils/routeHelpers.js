@@ -14,11 +14,16 @@ import { RouteContext } from 'containers/Layouts/ApplicationLayout';
  *
  */
 export default class RouteService {
-  constructor(contextFunc) {
-    this.contextFunc = contextFunc;
-    this.routeData = this.contextFunc(RouteContext);
-    this.match = this.routeData.computedMatch;
-    this.location = this.routeData.location;
+  constructor(routeData) {
+    if (typeof routeData === 'function') {
+      this.contextFunc = routeData;
+      this.routeData = this.contextFunc(RouteContext);
+      this.match = this.routeData.computedMatch;
+      this.location = this.routeData.location;
+    } else {
+      this.match = routeData.computedMatch;
+      this.location = routeData.location;
+    }
   }
 
   path() {

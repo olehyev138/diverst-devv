@@ -70,7 +70,7 @@ export function EventsPage(props) {
     return () => {
       props.eventsUnmount();
     };
-  }, [dig(props.currentGroup, 'id')]);
+  }, []);
 
   const handleChangeTab = (event, newTab) => {
     setTab(newTab);

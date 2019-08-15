@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useEffect } from 'react';
 import { Route } from 'react-router';
 import PropTypes from 'prop-types';
 
@@ -15,17 +15,18 @@ const ApplicationLayout = ({ component: Component, ...rest }) => {
   return (
     <Route
       {...other}
-    >
-      <RouteContext.Provider
-        value={{
-          computedMatch: other.computedMatch,
-          location: other.location
-        }}
-      >
-        <CssBaseline />
-        <Component {...rest} />
-      </RouteContext.Provider>
-    </Route>
+      render={routeProps => (
+        <RouteContext.Provider
+          value={{
+            computedMatch: routeProps.match,
+            location: routeProps.location
+          }}
+        >
+          <CssBaseline />
+          <Component {...rest} />
+        </RouteContext.Provider>
+      )}
+    />
   );
 };
 
