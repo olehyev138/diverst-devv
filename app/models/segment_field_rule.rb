@@ -16,6 +16,31 @@ class SegmentFieldRule < ApplicationRecord
   validates :operator, presence: true
   validates :values, presence: true
 
+
+  #
+  # SelectField
+  #   -> Equals any one of (the following options)
+  #   -> Does not equal any of (the following options)
+  #
+  # MultiSelectField (CheckboxField)
+  #   -> Contains any of (the following options)
+  #   -> Contains all of (the following options)
+  #   -> Does not equal any of (the following options)
+  #
+  # TextField
+  #   -> Is equal to
+  #   -> Is part of
+  #   -> Is not equal to
+  #
+  # NumericField
+  #    -> Is equal to
+  #    -> Is not equal to
+  #    -> Greater then (exclusive)
+  #    -> Greater then (inclusive)
+  #    -> Lesser then (exclusive)
+  #    -> Lesser then (inclusive)
+  #
+
   def self.operators
     {
       equals: 0,
@@ -27,6 +52,7 @@ class SegmentFieldRule < ApplicationRecord
       does_not_contain: 6,
       greater_than_equal: 7,
       lesser_than_equal: 8,
+      equals_any_of: 9,
     }
   end
 

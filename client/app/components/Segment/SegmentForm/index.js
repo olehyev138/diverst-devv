@@ -86,11 +86,14 @@ export function SegmentForm(props) {
           groupRule.group_ids = groupRule.group_ids.map(group => group.value);
         });
 
+        values.field_rules_attributes.forEach((fieldRule) => {
+          fieldRule.field_id = fieldRule.field_id.value;
+        });
+
         // props.segmentAction(values);
 
         console.log(values);
       }}
-
       render={formikProps => <SegmentFormInner {...props} {...formikProps} />}
     />
   );

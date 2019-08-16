@@ -94,6 +94,7 @@ const SegmentFieldRule = ({ rule, ...props }) => {
             name={`${ruleLocation}.values`}
             id={`${ruleLocation}.values`}
             label='Options'
+            isMulti
             options={fieldOptions}
             onMenuOpen={fieldSelectAction}
             onChange={v => props.formik.setFieldValue(`${ruleLocation}.values`, v)}
