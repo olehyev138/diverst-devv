@@ -1,4 +1,20 @@
+# Custom SelectField
+#  - holds a *singular* value - non multi
+#  - CheckBoxField is a multi select
 class SelectField < Field
+
+  # return list of operator codes for a SelectField
+  def operators
+    [
+      Field::OPERATORS[:equals_any_of],
+      Field::OPERATORS[:not_equal_any_of]
+    ]
+  end
+
+  # -------------------------------------------------------------------------------------------------
+  # TODO: Everything below here is most likely deprecated & needs to be removed
+  # DEPRECATED
+  # -------------------------------------------------------------------------------------------------
   include Optionnable
 
   def string_value(value)

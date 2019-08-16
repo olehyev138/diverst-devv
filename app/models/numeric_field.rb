@@ -1,4 +1,24 @@
+# Custom NumericField
+#  - holds a singular numeric value - ie age
 class NumericField < Field
+
+  # return list of operator codes for a NumericField
+  def operators
+    [
+      Field.OPERATORS[:equals],
+      Field.OPERATORS[:is_not],
+      Field.OPERATORS[:greater_than_excl],
+      Field.OPERATORS[:lesser_than_excl],
+      Field.OPERATORS[:greater_than_incl],
+      Field.OPERATORS[:greater_than_incl]
+    ]
+  end
+
+  # -------------------------------------------------------------------------------------------------
+  # TODO: Everything below here is most likely deprecated & needs to be removed
+  # DEPRECATED
+  # -------------------------------------------------------------------------------------------------
+
   include NumericOptionnable
 
   def string_value(value)
