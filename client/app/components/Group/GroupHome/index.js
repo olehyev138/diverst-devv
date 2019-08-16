@@ -20,7 +20,9 @@ export function GroupHome(props) {
       {
         props.group && (
           <Typography variant='h4' align='center' color='primary'>
-            Welcome to the <strong>{props.group.name}</strong>!
+            <span>Welcome to the </span>
+            <strong>{props.group.name}</strong>
+            !
           </Typography>
         )
       }
@@ -29,6 +31,7 @@ export function GroupHome(props) {
 }
 
 GroupHome.propTypes = {
+  group: PropTypes.object,
 };
 
 export default compose(

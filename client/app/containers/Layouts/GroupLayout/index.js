@@ -1,5 +1,4 @@
-import React, { memo, useContext, useEffect } from 'react';
-import { Route } from 'react-router';
+import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
@@ -43,9 +42,9 @@ const GroupLayout = ({ component: Component, ...rest }) => {
   const rs = new RouteService({ computedMatch, location });
 
   useEffect(() => {
-    const groupId = rs.params('group_id');
+    const [groupId] = rs.params('group_id');
 
-    if (dig(other.currentGroup, 'id') !== groupId)
+    if (groupId && dig(other.currentGroup, 'id') !== groupId)
       other.getGroupBegin({ id: groupId });
 
     return () => other.groupFormUnmount();

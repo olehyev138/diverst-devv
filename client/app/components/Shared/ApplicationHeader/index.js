@@ -267,6 +267,7 @@ export class ApplicationHeader extends React.PureComponent {
 ApplicationHeader.propTypes = {
   classes: PropTypes.object,
   user: PropTypes.object,
+  group: PropTypes.object,
   drawerOpen: PropTypes.bool,
   drawerToggleCallback: PropTypes.func,
   enterprise: PropTypes.object,

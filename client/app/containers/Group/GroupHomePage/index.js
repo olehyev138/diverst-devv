@@ -21,6 +21,7 @@ export function GroupHomePage(props) {
 }
 
 GroupHomePage.propTypes = {
+  currentGroup: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
