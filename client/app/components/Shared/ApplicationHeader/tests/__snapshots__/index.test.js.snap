@@ -23,7 +23,9 @@ exports[`<ApplicationHeader /> should render and match the snapshot 1`] = `
           verticalPadding={20}
         />
       </WithStyles(ForwardRef(Button))>
-      <div />
+      <div
+        className=""
+      />
       <div>
         <div>
           <Hidden
