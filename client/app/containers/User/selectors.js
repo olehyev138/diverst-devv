@@ -37,10 +37,8 @@ const selectFieldData = () => createSelector(
     const fieldData = dig(usersState, 'currentUser', 'field_data');
     if (fieldData)
       fieldData.forEach((datum) => {
-        /* eslint-disable no-param-reassign */
         datum.data = deserializeDatum(datum);
-        datum.field.options_text = deserializeOptionsText(datum);
-        /* eslint-enable no-param-reassign */
+        datum.field.options_text = deserializeOptionsText(datum.field);
       });
 
     return fieldData;

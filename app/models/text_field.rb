@@ -5,9 +5,9 @@ class TextField < Field
   # return list of operator codes for a TextField
   def operators
     [
-      Field.OPERATORS[:equals],
-      Field.OPERATORS[:is_not],
-      Field.OPERATORS[:is_part_of]
+      Field::OPERATORS[:equals],
+      Field::OPERATORS[:is_not],
+      Field::OPERATORS[:is_part_of]
     ]
   end
 

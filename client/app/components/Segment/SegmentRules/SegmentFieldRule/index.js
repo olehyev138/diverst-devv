@@ -13,34 +13,64 @@ import Select from 'react-select';
 import { FormattedMessage } from 'react-intl';
 import messages from 'containers/Segment/messages';
 
-import { Grid } from '@material-ui/core';
+import { Grid, TextField } from '@material-ui/core';
+import CustomField from 'components/Shared/Fields/FieldInputs/Field';
+
+import { deserializeOptionsText } from 'utils/customFieldHelpers';
 
 /*
  * Define operator values & associated UI strings
- *  WARNING: - this must be *exactly* the same as the one in models/segment_field_rule
- *           - ideally this should be pulled from the server
+ *  WARNING: - these codes MUST match the operators defined in the Field model in the backend
+ *           - use hash as we should not depend on order
  */
-const operators = [
-  { value: 0, label: 'Equals' },
-  { value: 1, label: 'Greater then' },
-  { value: 2, label: 'Lesser then' },
-  { value: 3, label: 'Is not' },
-  { value: 4, label: 'Contains any of' },
-  { value: 5, label: 'Contains all of' },
-  { value: 6, label: 'Does not contain' },
-  { value: 7, label: 'Greater then or equal' },
-  { value: 8, label: 'Lesser then or equal' },
-];
+const operators = {
+  0: 'Equals',
+  1: 'Greater then',
+  2: 'Lesser then',
+  3: 'Is not',
+  4: 'Contains any of',
+  5: 'Contains all of',
+  6: 'Does not contain',
+  7: 'Greater then or equal',
+  8: 'Lesser then or equal',
+  9: 'Equals any of',
+  10: 'Does not equal any of',
+  11: 'Is part of'
+};
 
-const SegmentFieldRule = ({ rule, ...props }) => {
-  const [fieldOperators, setFieldOperators] = useState([]);
-  const [fieldOptions, setFieldOptions] = useState([]);
+/*
+ * SegmentFieldRule
+ *   - filter users based on there custom field values - defined in User.field_data
+ *   - render 2 selects & a values input:
+ *      - field select
+ *      - operator select
+ *      - values sinput
+ *
+ *    - field select:
+ *       - async select that fetches Field's - this is the custom Field to filter on, ie 'Nationality'
+ *    - operator select
+ *       - dynamically loaded & dependent on the value of field select
+ *       - these are the operators specific to the field type & evaluate if a user follows a field or not
+ *       - each field (fetched via field select) is serialized with an array of operator codes
+ *     - values input
+ *       - dynamically loaded & dependent on the value of field select
+ *       - the type of input depends on the type of field (SelectField - multi select, NumericField - number input...)
+ *
+ */
 
+const SegmentFieldRule = (props) => {
+  // define location of rule in values & pull rule object out
   const ruleLocation = `${props.ruleName}.${props.ruleIndex}`;
-  const field = getIn(props.formik.values, `${ruleLocation}.field_id`);
-  const operatorValue = getIn(props.formik.values, `${ruleLocation}.operator`);
+  // const rule = getIn(props.formik.values, `${ruleLocation}`);
 
-  /* Dispatch action to load fields */
+  // pull out field object, operator & format them for select
+  const currentField = getIn(props.formik.values, `${ruleLocation}.field`);
+  const currentOperator = getIn(props.formik.values, `${ruleLocation}.operator`);
+
+  // build options array for possible operators for currentField
+  const [currentFieldOperators, setCurrentFieldOperators] = useState(buildOperatorOptions(currentField));
+
+  // callback to fetch fields from backend
   const fieldSelectAction = (searchKey = '') => {
     props.getFieldsBegin({
       count: 10, page: 0, order: 'asc',
@@ -48,20 +78,21 @@ const SegmentFieldRule = ({ rule, ...props }) => {
     });
   };
 
-  /* Set new field & update options for field operator & option selects */
   const onFieldSelectChange = (value) => {
-    props.formik.setFieldValue(`${ruleLocation}.field_id`, value);
-    const field = props.fields[value.value];
+    // wipe data & operator values
+    props.formik.setFieldValue(`${ruleLocation}.data`, '');
+    props.formik.setFieldValue(`${ruleLocation}.operator`, {});
 
-    // set appropiate operators for newly selected field
-    setFieldOperators(loadOperators(field));
+    // fetch field object & deserialize options text for select
+    const newField = props.fields[value.value];
+    newField.options_text = deserializeOptionsText(newField);
 
-    // deserialize field options & update state for newly selected field
-    setFieldOptions(dig(field, 'options_text')
-      ? field.options_text
-        .split('\n')
-        .map(option => ({ label: option, value: option }))
-      : []);
+    // Set new field object & id on rule
+    props.formik.setFieldValue(`${ruleLocation}.field`, newField);
+    props.formik.setFieldValue(`${ruleLocation}.field_id`, newField.id);
+
+    // Build field options for new field
+    setCurrentFieldOperators(buildOperatorOptions(newField));
   };
 
   return (
@@ -69,11 +100,11 @@ const SegmentFieldRule = ({ rule, ...props }) => {
       <Grid container>
         <Grid item xs={3}>
           <Select
-            name={`${ruleLocation}.field_ids`}
-            id={`${ruleLocation}.field_ids`}
+            name={`${ruleLocation}.field`}
+            id={`${ruleLocation}.field`}
             label='Fields'
             options={props.selectFields}
-            value={field}
+            value={{ value: currentField.id, label: currentField.title }}
             onMenuOpen={fieldSelectAction}
             onChange={onFieldSelectChange}
             onInputChange={value => fieldSelectAction(value)}
@@ -83,23 +114,17 @@ const SegmentFieldRule = ({ rule, ...props }) => {
           <Select
             name={`${ruleLocation}.operator`}
             id={`${ruleLocation}.operator`}
-            label='Field Operator'
-            options={fieldOperators}
-            value={{ value: operatorValue, label: operators[operatorValue].label }}
+            label='Operator'
+            options={currentFieldOperators}
+            value={{ value: currentOperator, label: operators[currentOperator] }}
             onChange={v => props.formik.setFieldValue(`${ruleLocation}.operator`, v.value)}
           />
         </Grid>
         <Grid item xs={3}>
-          <Select
-            name={`${ruleLocation}.values`}
-            id={`${ruleLocation}.values`}
-            label='Options'
-            isMulti
-            options={fieldOptions}
-            onMenuOpen={fieldSelectAction}
-            onChange={v => props.formik.setFieldValue(`${ruleLocation}.values`, v)}
-            onInputChange={value => fieldSelectAction(value)}
-            onBlur={() => props.formik.setFieldTouched('values', true)}
+          <CustomField
+            fieldDatum={getIn(props.formik.values, ruleLocation)}
+            fieldDatumIndex={props.ruleIndex}
+            dataLocation={`${ruleLocation}.data`}
           />
         </Grid>
       </Grid>
@@ -107,20 +132,9 @@ const SegmentFieldRule = ({ rule, ...props }) => {
   );
 };
 
-function loadOperators(field) {
-  console.log(field);
-
-  switch (field.type) {
-    case 'SelectField':
-      return [operators[0], operators[3]];
-    case 'TextField':
-      return [];
-    case 'NumericField':
-      return [];
-    default:
-      return [];
-  }
-}
+const buildOperatorOptions = field => (
+  field.operators.map(op => ({ value: op, label: operators[op] }))
+);
 
 SegmentFieldRule.propTypes = {
   ruleName: PropTypes.string,

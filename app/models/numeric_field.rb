@@ -5,12 +5,12 @@ class NumericField < Field
   # return list of operator codes for a NumericField
   def operators
     [
-      Field.OPERATORS[:equals],
-      Field.OPERATORS[:is_not],
-      Field.OPERATORS[:greater_than_excl],
-      Field.OPERATORS[:lesser_than_excl],
-      Field.OPERATORS[:greater_than_incl],
-      Field.OPERATORS[:greater_than_incl]
+      Field::OPERATORS[:equals],
+      Field::OPERATORS[:is_not],
+      Field::OPERATORS[:greater_than_excl],
+      Field::OPERATORS[:lesser_than_excl],
+      Field::OPERATORS[:greater_than_incl],
+      Field::OPERATORS[:greater_than_incl]
     ]
   end
 
