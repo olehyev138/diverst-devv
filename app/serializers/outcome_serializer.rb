@@ -1,5 +1,5 @@
 class OutcomeSerializer < ApplicationRecordSerializer
-  attributes :group
+  attributes :group, :pillars
 
   def serialize_all_fields
     true

@@ -4,10 +4,11 @@ import { compose } from 'redux';
 import { push } from 'connected-react-router';
 import PropTypes from 'prop-types';
 import { createStructuredSelector } from 'reselect';
+import classNames from 'classnames';
 
 import { withStyles } from '@material-ui/core/styles';
 import {
-  AppBar, Button, Hidden, IconButton, ListItemIcon, Menu, MenuItem, Toolbar
+  AppBar, Button, Hidden, IconButton, ListItemIcon, Menu, MenuItem, Toolbar, Typography,
 } from '@material-ui/core';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import PermIdentityIcon from '@material-ui/icons/PermIdentity';
@@ -21,6 +22,8 @@ import { logoutBegin, setUser } from 'containers/Shared/App/actions';
 
 import { selectEnterprise, selectToken, selectUser } from 'containers/Shared/App/selectors';
 
+import { selectGroup } from 'containers/Group/selectors';
+
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 const styles = theme => ({
@@ -29,6 +32,9 @@ const styles = theme => ({
   },
   grow: {
     flexGrow: 1,
+  },
+  centerText: {
+    textAlign: 'center',
   },
   sectionDesktop: {
     display: 'flex',
@@ -119,7 +125,7 @@ export class ApplicationHeader extends React.PureComponent {
   render() {
     const { menuAnchor } = this.state;
     const {
-      classes, enterprise, position, isAdmin
+      classes, enterprise, group, position, isAdmin
     } = this.props;
     const isMenuOpen = Boolean(menuAnchor);
 
@@ -200,7 +206,15 @@ export class ApplicationHeader extends React.PureComponent {
             >
               <Logo imgClass='large-img' verticalPadding={20} />
             </Button>
-            <div className={classes.grow} />
+            <div className={classNames(classes.grow, classes.centerText)}>
+              { group ? (
+                <Typography variant='h5'>
+                  {group.name}
+                </Typography>
+              )
+                : (<React.Fragment />)
+              }
+            </div>
             <div className={classes.sectionDesktop}>
               <div className={classes.buttonSection}>
                 <Hidden xsDown>
@@ -253,6 +267,7 @@ export class ApplicationHeader extends React.PureComponent {
 ApplicationHeader.propTypes = {
   classes: PropTypes.object,
   user: PropTypes.object,
+  group: PropTypes.object,
   drawerOpen: PropTypes.bool,
   drawerToggleCallback: PropTypes.func,
   enterprise: PropTypes.object,
@@ -285,6 +300,7 @@ const mapStateToProps = createStructuredSelector({
   token: selectToken(),
   user: selectUser(),
   enterprise: selectEnterprise(),
+  group: selectGroup(),
 });
 
 const withConnect = connect(
