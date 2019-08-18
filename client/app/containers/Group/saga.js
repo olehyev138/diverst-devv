@@ -86,7 +86,7 @@ export function* deleteGroup(action) {
     yield put(deleteGroupError(err));
 
     // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to update group', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: 'Failed to delete group', options: { variant: 'warning' } }));
   }
 }
 
@@ -95,6 +95,5 @@ export default function* groupsSaga() {
   yield takeLatest(GET_GROUP_BEGIN, getGroup);
   yield takeLatest(CREATE_GROUP_BEGIN, createGroup);
   yield takeLatest(UPDATE_GROUP_BEGIN, updateGroup);
-
   yield takeLatest(DELETE_GROUP_BEGIN, deleteGroup);
 }

@@ -27,7 +27,6 @@ import SocialLinkListItem from 'components/News/SocialLink/SocialLinkListItem';
 
 import { FormattedMessage } from 'react-intl';
 import messages from 'containers/News/messages';
-import { fillPath, buildPath } from 'utils/routeHelpers';
 
 const styles = theme => ({
   newsItem: {
