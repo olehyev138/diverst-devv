@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { push } from 'connected-react-router';
@@ -207,13 +207,15 @@ export class ApplicationHeader extends React.PureComponent {
               <Logo imgClass='large-img' verticalPadding={20} />
             </Button>
             <div className={classNames(classes.grow, classes.centerText)}>
-              { group ? (
-                <Typography variant='h5'>
-                  {group.name}
-                </Typography>
-              )
-                : (<React.Fragment />)
-              }
+              <Hidden xsDown>
+                {group ? (
+                  <Typography variant='h5'>
+                    {group.name}
+                  </Typography>
+                )
+                  : (<React.Fragment />)
+                }
+              </Hidden>
             </div>
             <div className={classes.sectionDesktop}>
               <div className={classes.buttonSection}>
@@ -313,4 +315,5 @@ export const StyledApplicationHeader = withStyles(styles)(ApplicationHeader);
 export default compose(
   withConnect,
   withStyles(styles),
+  memo,
 )(ApplicationHeader);
