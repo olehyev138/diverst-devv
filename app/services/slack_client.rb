@@ -70,7 +70,7 @@ class SlackClient
   end
 
   def self.post_web_hook_message(encrypted_webhook, message)
-    HTTP.post(RsaEncryption.decode(encrypted_webhook), body: message.to_json)
+    PostToSlackJob.perform_later(encrypted_webhook, RsaEncryption.encode(message.to_json))
   end
 
   def self.uninstall(auth)
