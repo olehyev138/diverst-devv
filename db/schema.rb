@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190806163846) do
+ActiveRecord::Schema.define(version: 20190819190150) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -626,6 +626,8 @@ ActiveRecord::Schema.define(version: 20190806163846) do
     t.string   "sp_import_news",              limit: 191,                           default: "No"
     t.string   "sp_import_pages",             limit: 191,                           default: "No"
     t.integer  "views_count",                 limit: 4
+    t.string   "slack_webhook",               limit: 191
+    t.text     "slack_auth_data",             limit: 65535
   end
 
   add_index "groups", ["share_point_files_id"], name: "index_groups_on_share_point_files_id", using: :btree
@@ -915,6 +917,11 @@ ActiveRecord::Schema.define(version: 20190806163846) do
     t.integer  "likes_count",      limit: 4
   end
 
+  create_table "news_feed_links_tags", id: false, force: :cascade do |t|
+    t.integer "news_feed_link_id", limit: 4, null: false
+    t.integer "news_tag_id",       limit: 4, null: false
+  end
+
   create_table "news_feeds", force: :cascade do |t|
     t.integer  "group_id",   limit: 4
     t.datetime "created_at",           null: false
@@ -959,6 +966,12 @@ ActiveRecord::Schema.define(version: 20190806163846) do
     t.integer  "picture_file_size",    limit: 4
     t.datetime "picture_updated_at"
     t.integer  "author_id",            limit: 4
+  end
+
+  create_table "news_tags", id: false, force: :cascade do |t|
+    t.string   "name",       limit: 191
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
   end
 
   create_table "outcomes", force: :cascade do |t|

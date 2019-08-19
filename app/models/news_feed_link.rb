@@ -14,6 +14,8 @@ class NewsFeedLink < BaseClass
   has_many :likes, dependent: :destroy
   has_many :views, dependent: :destroy
 
+  has_and_belongs_to_many :news_tags
+
   delegate :group,    to: :news_feed
   delegate :segment,  to: :news_feed_link_segment, allow_nil: true
 
