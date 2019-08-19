@@ -66,6 +66,8 @@ class Initiative < BaseClass
   # we don't want to run this callback when finish_expenses! is triggered in initiatives_controller.rb, finish_expense action
   before_save { allocate_budget_funds unless skip_allocate_budget_funds }
 
+  after_destroy :update_annual_budget
+
   has_attached_file :picture, styles: { medium: '1000x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: 'private'
   validates_attachment_content_type :picture, content_type: %r{\Aimage\/.*\Z}
 
@@ -449,5 +451,17 @@ class Initiative < BaseClass
     initiatives = group.initiatives.where('end < ?', expiry_date).where(archived_at: nil)
 
     initiatives.update_all(archived_at: DateTime.now) if initiatives.any?
+  end
+
+  def update_annual_budget
+    group = owner_group
+    annual_budget = AnnualBudget.find_or_create_by(closed: false, group_id: group.id)
+    return if annual_budget.nil?
+
+    leftover_of_annual_budget = ((group.annual_budget || annual_budget.amount) - group.approved_budget) + group.available_budget
+    group.update(leftover_money: leftover_of_annual_budget, annual_budget: annual_budget.amount)
+    annual_budget.update(amount: group.annual_budget, available_budget: group.available_budget,
+                         leftover_money: group.leftover_money, expenses: group.spent_budget,
+                         approved_budget: group.approved_budget)
   end
 end

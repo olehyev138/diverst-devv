@@ -37,13 +37,13 @@
           <thead>
             <th>Annual Budget</th>
             <th>Approved budget</th>
-            <th>Available budget</th>
+            <th title="Approved Budget - Spent Budget">Available budget</th>
           </thead>
           <tbody>
             <td><%= number_to_currency(annual_budget.amount) %></td>
             <td><%= number_to_currency(annual_budget.approved_budget) %></td>
             <td>
-              <%= number_to_currency(annual_budget.available_budget) %><%= inline_svg('icons/information', class: 'icon', title: 'total expenses exceeds approved budget ') if annual_budget.available_budget < 0 %>
+              <%= number_to_currency(annual_budget.available_budget) %><%= inline_svg('icons/information', class: 'icon', title: 'available budget is negative because total expenses exceeds approved budget ') if annual_budget.available_budget < 0 %>
             </td>
           </tbody>
         </table>
@@ -55,7 +55,7 @@
             <th>Event</th>
             <th>Estimated funding</th>
             <th>Spent so far</th>
-            <th>Unspent</th>
+            <th title="Estimated funding - Spent so far">Unspent</th>
             <th>Spending status</th>
           </thead>
           <tbody>

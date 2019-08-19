@@ -64,11 +64,15 @@ class Budget < BaseClass
     flattened_items
   end
 
-  def self.pre_approved_events_for_select(group, user = nil)
+  def self.pre_approved_events_for_select(group, user = nil, initiative = nil)
     budget_items = self.pre_approved_events(group, user)
 
     select_items = budget_items.map do |bi|
       [ bi.title_with_amount, bi.id ]
+    end
+
+    unless initiative && initiative.new_record?
+      return select_items if initiative&.current_expences_sum.to_f > initiative&.estimated_funding.to_f
     end
 
     select_items << [ group.title_with_leftover_amount, BudgetItem::LEFTOVER_BUDGET_ITEM_ID ]
