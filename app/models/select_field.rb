@@ -2,7 +2,6 @@
 #  - holds a *singular* value - non multi
 #  - CheckBoxField is a multi select
 class SelectField < Field
-
   # return list of operator codes for a SelectField
   def operators
     [

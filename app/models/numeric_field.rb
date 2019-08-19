@@ -1,7 +1,6 @@
 # Custom NumericField
 #  - holds a singular numeric value - ie age
 class NumericField < Field
-
   # return list of operator codes for a NumericField
   def operators
     [

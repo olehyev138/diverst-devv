@@ -1,7 +1,6 @@
 # Custom TextField
 #  - value is a string of 'free-form' text written by user
 class TextField < Field
-
   # return list of operator codes for a TextField
   def operators
     [

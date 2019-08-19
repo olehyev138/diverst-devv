@@ -20,7 +20,7 @@ import { deserializeOptionsText } from 'utils/customFieldHelpers';
 
 /*
  * Define operator values & associated UI strings
- *  WARNING: - these codes MUST match the operators defined in the Field model in the backend
+ *  WARNING: - these ids MUST match the operators defined in the Field model in the backend
  *           - use hash as we should not depend on order
  */
 const operators = {
@@ -44,7 +44,7 @@ const operators = {
  *   - render 2 selects & a values input:
  *      - field select
  *      - operator select
- *      - values sinput
+ *      - values input
  *
  *    - field select:
  *       - async select that fetches Field's - this is the custom Field to filter on, ie 'Nationality'
@@ -61,9 +61,8 @@ const operators = {
 const SegmentFieldRule = (props) => {
   // define location of rule in values & pull rule object out
   const ruleLocation = `${props.ruleName}.${props.ruleIndex}`;
-  // const rule = getIn(props.formik.values, `${ruleLocation}`);
 
-  // pull out field object, operator & format them for select
+  // pull out field object, operator
   const currentField = getIn(props.formik.values, `${ruleLocation}.field`);
   const currentOperator = getIn(props.formik.values, `${ruleLocation}.operator`);
 

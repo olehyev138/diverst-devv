@@ -1,6 +1,4 @@
 class DateField < Field
-
-
   # return list of operator codes for a DateField
   def operators
     [
