@@ -3,6 +3,7 @@ class SegmentsController < ApplicationController
   after_action :verify_authorized
   before_action :set_segment, only: [:edit, :show, :export_csv, :update, :destroy]
   before_action :set_segments, only: [:index, :get_all_segments]
+  after_action :visit_page, only: [:index, new, :show, :edit]
 
   layout 'erg_manager'
 
@@ -154,5 +155,26 @@ class SegmentsController < ApplicationController
           group_ids: []
         ]
       )
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      'Segment List'
+    when 'new'
+      'Segment Creation'
+    when 'show'
+      "Segment: #{@segment.to_label}"
+    when 'edit'
+      "Segment Edit: #{@segment.to_label}"
+    else
+      "#{controller_path}##{action_name}"
+    end
+  rescue
+    "#{controller_path}##{action_name}"
   end
 end

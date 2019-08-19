@@ -1,6 +1,7 @@
 class PolicyGroupTemplatesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_policy_group_template, only: [:edit, :update]
+  after_action :visit_page, only: [:index, :edit]
 
   layout 'global_settings'
 
@@ -98,5 +99,22 @@ class PolicyGroupTemplatesController < ApplicationController
         :mentorship_manage,
         :auto_archive_manage
       )
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      'Policy Group Templates'
+    when 'edit'
+      "Policy Group Edit: #{@policy_group_template.to_label}"
+    else
+      "#{controller_path}##{action_name}"
+    end
+  rescue
+    "#{controller_path}##{action_name}"
   end
 end

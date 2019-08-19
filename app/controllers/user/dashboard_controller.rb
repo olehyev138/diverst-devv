@@ -1,6 +1,7 @@
 class User::DashboardController < ApplicationController
   before_action :authenticate_user!
   before_action :set_enterprise
+  after_action :visit_page, only: [:home, :rewards, :privacy_statement]
 
   layout 'user'
 
@@ -49,5 +50,24 @@ class User::DashboardController < ApplicationController
   def joins
     'LEFT OUTER JOIN news_feed_link_segments ON news_feed_link_segments.news_feed_link_id = news_feed_links.id
      LEFT OUTER JOIN shared_news_feed_links ON shared_news_feed_links.news_feed_link_id = news_feed_links.id'
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'home'
+      'User\'s Home Page'
+    when 'rewards'
+      'User\'s Rewards Page'
+    when 'privacy_statement'
+      'Privacy Statement'
+    else
+      "#{controller_path}##{action_name}"
+    end
+  rescue
+    "#{controller_path}##{action_name}"
   end
 end
