@@ -13,7 +13,7 @@ class Api::V1::SegmentsController < DiverstController
           :field_id,
           :operator,
           :_destroy,
-          values: []
+          :data
         ],
         order_rules_attributes: [
           :id,

@@ -1,10 +1,6 @@
 /*
  * - Helpers to render custom field inputs
  *
- *****************************************************************************************
- * NOTE:
- *   - renderFieldInput, buildFieldInput & sub functions are not being used
- *****************************************************************************************
  */
 
 
@@ -77,7 +73,34 @@ function deserializeOptionsText(field) {
     : optionsText;
 }
 
+function serializeSegment(segment) {
+  const serializedSegment = { ...segment };
+
+  // serialize field rules
+  // pluck out attributes we want - (should use spread op)
+  serializedSegment.field_rules_attributes = serializedSegment.field_rules_attributes.map(r => ({
+    id: r.id,
+    field_id: r.field_id,
+    segment_id: r.segment_id,
+    operator: r.operator,
+    // copy data
+  }));
+
+  // serialize group rules
+  // pluck out attributes we want
+  // map each groups rules array of groups to an array of group ids
+  serializedSegment.group_rules_attributes = serializedSegment.group_rules_attributes.map(r => ({
+    id: r.id,
+    field: r.field,
+    operator: r.operator,
+    group_ids: Object.assign({}, r.group_ids).map(g => g.value)
+  }));
+
+  return serializedSegment;
+}
+
 export {
   serializeFieldData, serializeDatum,
-  deserializeDatum, deserializeOptionsText
+  deserializeDatum, deserializeOptionsText,
+  serializeSegment
 };

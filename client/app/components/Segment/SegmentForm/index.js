@@ -25,6 +25,8 @@ import {
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
+import { serializeSegment } from 'utils/customFieldHelpers';
+
 import SegmentRulesList from 'components/Segment/SegmentRulesList';
 
 const styles = theme => ({
@@ -81,14 +83,9 @@ export function SegmentForm(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        // map each groups rules array of groups to an array of group ids
-        values.group_rules_attributes.forEach((groupRule) => {
-          groupRule.group_ids = groupRule.group_ids.map(group => group.value);
-        });
+        console.log(values);
 
-        values.field_rules_attributes.forEach((fieldRule) => {
-          fieldRule.field_id = fieldRule.field_id.value;
-        });
+        const serialized = serializeSegment(values);
 
         // props.segmentAction(values);
 
