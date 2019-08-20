@@ -550,9 +550,9 @@ class GroupsController < ApplicationController
       "#{c_t(:sub_erg)} Edit: #{@group.to_label}"
     when 'layouts'
       "#{@group.to_label}'s Layout Setting"
-    when settings
+    when 'settings'
       "#{@group.to_label}'s Settings"
-    when plan_overview
+    when 'plan_overview'
       "#{@group.to_label}'s Plan Overview"
     when 'metrics'
       "#{@group.to_label}'s Metrics"
