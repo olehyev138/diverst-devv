@@ -922,6 +922,9 @@ ActiveRecord::Schema.define(version: 20190819190150) do
     t.integer "news_tag_id",       limit: 4, null: false
   end
 
+  add_index "news_feed_links_tags", ["news_feed_link_id", "news_tag_id"], name: "index_news_feed_links_tags_on_news_feed_link_id_and_news_tag_id", using: :btree
+  add_index "news_feed_links_tags", ["news_tag_id", "news_feed_link_id"], name: "index_news_feed_links_tags_on_news_tag_id_and_news_feed_link_id", using: :btree
+
   create_table "news_feeds", force: :cascade do |t|
     t.integer  "group_id",   limit: 4
     t.datetime "created_at",           null: false
@@ -968,7 +971,7 @@ ActiveRecord::Schema.define(version: 20190819190150) do
     t.integer  "author_id",            limit: 4
   end
 
-  create_table "news_tags", id: false, force: :cascade do |t|
+  create_table "news_tags", force: :cascade do |t|
     t.string   "name",       limit: 191
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
