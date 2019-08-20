@@ -44,6 +44,7 @@ class Groups::NewsLinksController < ApplicationController
   def create
     @news_link = @group.news_links.new(news_link_params)
     @news_link.author = current_user
+    add_tags(tag_params)
 
     if @news_link.save
       track_activity(@news_link, :create)
@@ -57,6 +58,7 @@ class Groups::NewsLinksController < ApplicationController
   end
 
   def update
+    add_tags(tag_params)
     if @news_link.update(news_link_params)
       track_activity(@news_link, :update)
       flash[:notice] = 'Your news was updated'
@@ -113,6 +115,15 @@ class Groups::NewsLinksController < ApplicationController
     @news_link = @group.news_links.find(params[:id])
   end
 
+  def add_tags(params)
+    tags = params[:news_feed_link_attributes][:news_tag_ids]
+    tags.each do |tag|
+      next if tag == ''
+
+      @news_link.news_feed_link.news_tags << NewsTag.find_or_create_by(name: tag.downcase)
+    end
+  end
+
   def news_link_params
     params
         .require(:news_link)
@@ -131,6 +142,14 @@ class Groups::NewsLinksController < ApplicationController
         .require(:news_link_comment)
         .permit(
           :content
+        )
+  end
+
+  def tag_params
+    params
+      .require(:news_link)
+      .permit(
+        news_feed_link_attributes: [news_tag_ids: []],
         )
   end
 

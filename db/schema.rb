@@ -903,6 +903,14 @@ ActiveRecord::Schema.define(version: 20190819190150) do
     t.integer  "social_link_segment_id",    limit: 4
   end
 
+  create_table "news_feed_link_tags", id: false, force: :cascade do |t|
+    t.integer "news_feed_link_id", limit: 4
+    t.string  "news_tag_name",     limit: 191
+  end
+
+  add_index "news_feed_link_tags", ["news_feed_link_id", "news_tag_name"], name: "index_news_feed_link_tags_on_news_feed_link_id_and_news_tag_name", using: :btree
+  add_index "news_feed_link_tags", ["news_tag_name", "news_feed_link_id"], name: "index_news_feed_link_tags_on_news_tag_name_and_news_feed_link_id", using: :btree
+
   create_table "news_feed_links", force: :cascade do |t|
     t.integer  "news_feed_id",     limit: 4
     t.boolean  "approved",                   default: false
@@ -916,14 +924,6 @@ ActiveRecord::Schema.define(version: 20190819190150) do
     t.integer  "views_count",      limit: 4
     t.integer  "likes_count",      limit: 4
   end
-
-  create_table "news_feed_links_tags", id: false, force: :cascade do |t|
-    t.integer "news_feed_link_id", limit: 4, null: false
-    t.integer "news_tag_id",       limit: 4, null: false
-  end
-
-  add_index "news_feed_links_tags", ["news_feed_link_id", "news_tag_id"], name: "index_news_feed_links_tags_on_news_feed_link_id_and_news_tag_id", using: :btree
-  add_index "news_feed_links_tags", ["news_tag_id", "news_feed_link_id"], name: "index_news_feed_links_tags_on_news_tag_id_and_news_feed_link_id", using: :btree
 
   create_table "news_feeds", force: :cascade do |t|
     t.integer  "group_id",   limit: 4
@@ -971,7 +971,7 @@ ActiveRecord::Schema.define(version: 20190819190150) do
     t.integer  "author_id",            limit: 4
   end
 
-  create_table "news_tags", force: :cascade do |t|
+  create_table "news_tags", id: false, force: :cascade do |t|
     t.string   "name",       limit: 191
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
