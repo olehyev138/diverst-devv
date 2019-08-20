@@ -1,5 +1,4 @@
 class NewsTagsDatatable < AjaxDatatablesRails::Base
-
   def initialize(view_context, tag)
     super(view_context)
     @tag = tag

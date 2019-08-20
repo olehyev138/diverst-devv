@@ -152,7 +152,7 @@ class Groups::NewsLinksController < ApplicationController
       .require(:news_link)
       .permit(
         news_feed_link_attributes: [news_tag_ids: []],
-        )
+      )
   end
 
   def visit_page
