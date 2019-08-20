@@ -39,8 +39,8 @@ const styles = theme => ({
 
 export function GroupMemberList(props) {
   const { classes } = props;
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [page, setPage] = useState(props.params.page);
+  const [rowsPerPage, setRowsPerPage] = useState(props.params.count);
 
   /* MaterialTable pagination handlers (defined differently then MaterialUI pagination) */
   const handleChangePage = (newPage) => {
@@ -71,7 +71,18 @@ export function GroupMemberList(props) {
 
   return (
     <React.Fragment>
-      <Grid container spacing={3}>
+      <Grid container spacing={3} justify='flex-end'>
+        <Grid item>
+          <Button
+            variant='contained'
+            to='#'
+            color='secondary'
+            size='large'
+            component={WrappedNavLink}
+          >
+            <FormattedMessage {...messages.export} />
+          </Button>
+        </Grid>
         <Grid item>
           <Button
             variant='contained'
@@ -83,46 +94,32 @@ export function GroupMemberList(props) {
             <FormattedMessage {...messages.new} />
           </Button>
         </Grid>
-        <Grid item>
-          <Button
-            variant='contained'
-            to='#'
-            color='primary'
-            size='large'
-            component={WrappedNavLink}
-          >
-            <FormattedMessage {...messages.export} />
-          </Button>
-        </Grid>
       </Grid>
-      <Grid container spacing={3}>
-        <Grid item xs>
-          <MaterialTable
-            tableRef={ref}
-            icons={tableIcons}
-            title='Members'
-            isLoading={props.isFetchingMembers}
-            onChangePage={handleChangePage}
-            onChangeRowsPerPage={handleChangeRowsPerPage}
-            onOrderChange={handleOrderChange}
-            data={buildDataFunction(props.memberList, page, props.memberTotal)}
-            columns={columns}
-            actions={[{
-              icon: () => <DeleteOutline />,
-              tooltip: 'Delete Member',
-              onClick: (_, rowData) => {
-                /* eslint-disable-next-line no-alert, no-restricted-globals */
-                if (confirm('Delete member?'))
-                  props.deleteMemberBegin({ userId: rowData.id, groupId: props.groupId });
-              }
-            }]}
-            options={{
-              actionsColumnIndex: -1,
-              pageSize: rowsPerPage,
-            }}
-          />
-        </Grid>
-      </Grid>
+      <Box mb={2} />
+      <MaterialTable
+        tableRef={ref}
+        icons={tableIcons}
+        title='Members'
+        isLoading={props.isFetchingMembers}
+        onChangePage={handleChangePage}
+        onChangeRowsPerPage={handleChangeRowsPerPage}
+        onOrderChange={handleOrderChange}
+        data={buildDataFunction(props.memberList, page, props.memberTotal)}
+        columns={columns}
+        actions={[{
+          icon: () => <DeleteOutline />,
+          tooltip: 'Delete Member',
+          onClick: (_, rowData) => {
+            /* eslint-disable-next-line no-alert, no-restricted-globals */
+            if (confirm('Delete member?'))
+              props.deleteMemberBegin({ userId: rowData.id, groupId: props.groupId });
+          }
+        }]}
+        options={{
+          actionsColumnIndex: -1,
+          pageSize: rowsPerPage,
+        }}
+      />
     </React.Fragment>
   );
 }

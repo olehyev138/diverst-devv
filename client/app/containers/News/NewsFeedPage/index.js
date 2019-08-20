@@ -62,6 +62,7 @@ export function NewsFeedPage(props, context) {
       <NewsFeed
         newsItems={props.newsItems}
         newsItemsTotal={props.newsItemsTotal}
+        defaultParams={params}
         handlePagination={handlePagination}
         links={links}
       />

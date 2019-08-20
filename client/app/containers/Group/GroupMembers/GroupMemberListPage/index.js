@@ -33,7 +33,7 @@ export function GroupMemberListPage(props) {
   const groupId = rs.params('group_id')[0];
 
   const [params, setParams] = useState({
-    group_id: groupId, count: 5, page: 0,
+    group_id: groupId, count: 10, page: 0,
     orderBy: 'users.id', order: 'asc'
   });
   const links = {

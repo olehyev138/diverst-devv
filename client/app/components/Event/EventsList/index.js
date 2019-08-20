@@ -69,7 +69,7 @@ export function EventsList(props, context) {
 
   return (
     <React.Fragment>
-      <Grid container justify='flex-end'>
+      <Grid container spacing={3} justify='flex-end'>
         <Grid item>
           <Button
             variant='contained'

@@ -13,7 +13,7 @@ import { compose } from 'redux/';
 
 import {
   Button, Card, CardActions, CardContent, Grid,
-  TextField, Hidden, FormControl
+  TextField, Hidden, FormControl, Link, Typography, Box,
 } from '@material-ui/core/index';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -30,7 +30,21 @@ export function SocialLinkListItem(props) {
   return (
     <Card>
       <CardContent>
-        <p>{socialLink.url}</p>
+        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+        <Link href={socialLink.url} target='_blank'>
+          <Typography variant='h6'>
+            {socialLink.url}
+          </Typography>
+        </Link>
+        {socialLink.author ? (
+          <React.Fragment>
+            <Box mb={2} />
+            <Typography variant='body2' color='textSecondary'>
+              {`Submitted by ${socialLink.author.first_name} ${socialLink.owner.last_name}`}
+            </Typography>
+          </React.Fragment>
+        ) : <React.Fragment />
+        }
       </CardContent>
     </Card>
   );

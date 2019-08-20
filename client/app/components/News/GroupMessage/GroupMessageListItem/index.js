@@ -9,8 +9,8 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux/';
 
 import {
-  Button, Card, CardActions, CardContent
-} from '@material-ui/core/index';
+  Button, Card, CardActions, CardContent, Typography, CardHeader, Avatar, Box
+} from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
@@ -26,12 +26,28 @@ export function GroupMessageListItem(props) {
 
   return (
     <Card>
+      <CardHeader
+        avatar={(
+          <Avatar>
+            {/* Replace this with the user icon */}
+            {String.fromCharCode(65 + Math.floor(Math.random() * 26))}
+          </Avatar>
+        )}
+        title={groupMessage.subject}
+        subheader={groupMessage.created_at}
+      />
       <CardContent>
-        <p>{groupMessage.content}</p>
+        <Typography gutterBottom>
+          {groupMessage.content}
+        </Typography>
+        <Typography variant='body2' color='textSecondary'>
+          {`Submitted by ${groupMessage.owner.first_name} ${groupMessage.owner.last_name}`}
+        </Typography>
       </CardContent>
       <CardActions>
         <Button
           size='small'
+          color='primary'
           to={props.links.groupMessageEdit(newsItem.id)}
           component={WrappedNavLink}
         >
