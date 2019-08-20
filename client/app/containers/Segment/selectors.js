@@ -28,13 +28,15 @@ const selectSegmentWithRules = () => createSelector(
 
     if (!segment) return segment;
 
+    // TODO: multi selects
+
     (dig(segmentsState.currentSegment, 'field_rules') || []).forEach((fieldRule) => {
       fieldRule.data = deserializeDatum(fieldRule);
       fieldRule.field.options_text = deserializeOptionsText(fieldRule.field);
     });
 
     segment.group_rules = (dig(segmentsState.currentSegment, 'group_rules') || []).map((groupRule) => {
-      groupRule.group_ids = groupRule.group_ids.map(group => ({ label: group.name, value: group.id })); /* eslint-disable-line no-param-reassign */
+      groupRule.group_ids = groupRule.group_ids.map(group => ({ label: group.name, value: group.id }));
       return groupRule;
     });
 

@@ -83,13 +83,7 @@ export function SegmentForm(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        console.log(values);
-
-        const serialized = serializeSegment(values);
-
-        // props.segmentAction(values);
-
-        console.log(values);
+        props.segmentAction(serializeSegment(values));
       }}
       render={formikProps => <SegmentFormInner {...props} {...formikProps} />}
     />

@@ -4,7 +4,7 @@
  */
 
 
-/* eslint-disable react/prop-types */
+/* eslint-disable react/prop-types, no-underscore-dangle */
 
 import React from 'react';
 import dig from 'object-dig';
@@ -83,7 +83,8 @@ function serializeSegment(segment) {
     field_id: r.field_id,
     segment_id: r.segment_id,
     operator: r.operator,
-    // copy data
+    data: JSON.stringify([r.data.value]), // TODO: change this to multi
+    _destroy: r._destroy || 0
   }));
 
   // serialize group rules
@@ -91,9 +92,9 @@ function serializeSegment(segment) {
   // map each groups rules array of groups to an array of group ids
   serializedSegment.group_rules_attributes = serializedSegment.group_rules_attributes.map(r => ({
     id: r.id,
-    field: r.field,
     operator: r.operator,
-    group_ids: Object.assign({}, r.group_ids).map(g => g.value)
+    group_ids: r.group_ids.map(g => g.value),
+    _destroy: r._destroy || 0
   }));
 
   return serializedSegment;

@@ -103,7 +103,7 @@ const SegmentFieldRule = (props) => {
             id={`${ruleLocation}.field`}
             label='Fields'
             options={props.selectFields}
-            value={{ value: currentField.id, label: currentField.title }}
+            value={(currentField) ? { value: currentField.id, label: currentField.title } : {}}
             onMenuOpen={fieldSelectAction}
             onChange={onFieldSelectChange}
             onInputChange={value => fieldSelectAction(value)}
@@ -131,9 +131,10 @@ const SegmentFieldRule = (props) => {
   );
 };
 
-const buildOperatorOptions = field => (
-  field.operators.map(op => ({ value: op, label: operators[op] }))
-);
+const buildOperatorOptions = (field) => {
+  if (!field) return [];
+  return field.operators.map(op => ({ value: op, label: operators[op] }));
+};
 
 SegmentFieldRule.propTypes = {
   ruleName: PropTypes.string,

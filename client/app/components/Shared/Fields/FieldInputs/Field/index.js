@@ -13,6 +13,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import dig from 'object-dig';
 
+import {TextField} from '@material-ui/core';
 import CustomTextField from 'components/Shared/Fields/FieldInputs/TextField';
 import CustomDateField from 'components/Shared/Fields/FieldInputs/DateField';
 import CustomSelectField from 'components/Shared/Fields/FieldInputs/SelectField';
@@ -31,7 +32,7 @@ const CustomField = (props) => {
       case 'SelectField':
         return (<CustomSelectField {...props} />);
       default:
-        return (<React.Fragment />);
+        return (<TextField disabled />); // looks better then rendering nothing
     }
   };
 

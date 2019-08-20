@@ -56,7 +56,7 @@ export function SegmentRules({ values, classes, ...props }) {
   ];
 
   const initialRules = [
-    { field_id: 0, operator: 0, values: [] },
+    { field_id: 0, operator: 0, values: {} },
     { field: 0, operator: 0 },
     { operator: 0, group_ids: [] }
   ];
@@ -87,10 +87,17 @@ export function SegmentRules({ values, classes, ...props }) {
             <CardContent>
               <Grid container>
                 {getIn(props.formik.values, `${ruleData[tab].name}`).map((rule, i) => {
-                  if (Object.hasOwnProperty.call(rule, '_destroy')) return (<React.Fragment key={rule.id} />);
+                  // TODO: figure out what to use as key
+
+                  /* - On rule remove event mark item to be destroyed with '_destroy' key.
+                   * - Rails backend knows to destroy model if it sees this
+                   * - Check if item has been marked for removal if so, render nothing, effectively 'removing' it
+                   */
+
+                  if (Object.hasOwnProperty.call(rule, '_destroy')) return (<React.Fragment key={i} />);
 
                   return (
-                    <Grid item key={rule.id} className={classes.ruleInput}>
+                    <Grid item key={i} className={classes.ruleInput}>
                       <SegmentRule ruleName={ruleData[tab].name} ruleIndex={i} {...props} />
                       <Button onClick={() => props.formik.setFieldValue(`${ruleData[tab].name}.${i}._destroy`, '1')}>
                         X
