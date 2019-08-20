@@ -17,6 +17,9 @@ class Field < ApplicationRecord
   validates :title, uniqueness: { scope: :enterprise_id },
                     unless: Proc.new { |object| (object.type == 'SegmentsField' || object.type == 'GroupsField') }, if: :container_type_is_enterprise?
 
+  # Operators
+  #  - equals_any_of:
+  #     - evaluate if singular value (v1) is in an array (v2) - non commutative
   OPERATORS = {
     equals: 0,
     greater_than_excl: 1,
@@ -39,6 +42,8 @@ class Field < ApplicationRecord
     Field::OPERATORS
   end
 
+  # Compare two values via a operator as defined by OPERATORS
+  #  - not all operators are commutative
   def evaluate(v1, v2, operator)
     case operator
     when OPERATORS[:equals]
@@ -49,11 +54,15 @@ class Field < ApplicationRecord
       v1 < v2
     when OPERATORS[:is_not]
       v1 != v2
-    when OPERATORS[:contains_any_of], OPERATORS[:equals_any_of]
+    when OPERATORS[:equals_any_of]
+      v2.is_a?(Array) && (v2.include? v1)
+    when OPERATORS[:not_equal_any_of]
+      v2.is_a?(Array) && (v2.exclude? v1)
+    when OPERATORS[:contains_any_of]
       v1.is_a?(Array) && v2.is_a?(Array) && (v1 & v2).length > 0
     when operators[:contains_all_of]
       v1 == v2
-    when operators[:does_not_contain], OPERATORS[:not_equal_any_of]
+    when operators[:does_not_contain]
       v1.is_a?(Array) && v2.is_a?(Array) && (v1 & v2).length <= 0
     when OPERATORS[:greater_than_incl]
       v1 >= v2

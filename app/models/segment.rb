@@ -93,8 +93,18 @@ class Segment < ApplicationRecord
   # Rule methods
 
   def apply_field_rules(users)
-    # users.select { |user| user.is_part_of_segment?(self) }
+    users.select do |user|
+      follows_rules = true
 
+      field_rules.each do |rule|
+        unless rule.followed_by?(user)
+          follows_rules = false
+          break
+        end
+      end
+
+      follows_rules
+    end
   end
 
   def apply_group_rules(users)
@@ -119,6 +129,7 @@ class Segment < ApplicationRecord
     self.order_rules.reduce(users) { |ordered_users, rule| ordered_users.order(rule.field_name => rule.operator_name) }
   end
 
+  # central method to build segment with new/updated rules
   def update_members
     old_members = self.members.all
     new_members = self.enterprise.users.all

@@ -14,47 +14,34 @@ class SegmentFieldRule < ApplicationRecord
   #  - operator is in @@operators
 
   validates :operator, presence: true
-  validates :values, presence: true
+  validates :data, presence: true
 
+  # Find users field_data & compare to field_rule data
+  def followed_by?(user)
+    # find field data for field_rule field type
+    field_data = user.field_data.find_by(field_id: field.id)
 
-  #
-  # SelectField
-  #   -> Equals any one of (the following options)
-  #   -> Does not equal any of (the following options)
-  #
-  # MultiSelectField (CheckboxField)
-  #   -> Contains any of (the following options)
-  #   -> Contains all of (the following options)
-  #   -> Does not equal any of (the following options)
-  #
-  # TextField
-  #   -> Is equal to
-  #   -> Is part of
-  #   -> Is not equal to
-  #
-  # NumericField
-  #    -> Is equal to
-  #    -> Is not equal to
-  #    -> Greater then (exclusive)
-  #    -> Greater then (inclusive)
-  #    -> Lesser then (exclusive)
-  #    -> Lesser then (inclusive)
-  #
+    return false unless field_data
 
-  def self.operators
-    {
-      equals: 0,
-      greater_than: 1,
-      lesser_than: 2,
-      is_not: 3,
-      contains_any_of: 4,
-      contains_all_of: 5,
-      does_not_contain: 6,
-      greater_than_equal: 7,
-      lesser_than_equal: 8,
-      equals_any_of: 9,
-    }
+    field.evaluate(field_data.deserialized_data, deserialized_data, operator)
   end
+
+  def deserialized_data
+    case field.type
+    when 'SelectField'
+      # TODO: multi select - assume single element array for now
+      JSON.parse(data)
+    else
+      data
+    end
+  end
+
+  #
+  # -------------------------------------------------------------------------------------------------
+  # TODO: Everything below here is most likely deprecated & needs to be removed
+  # DEPRECATED
+  # -------------------------------------------------------------------------------------------------
+  #
 
   def values
     self[:values].presence || '[]'
@@ -68,7 +55,7 @@ class SegmentFieldRule < ApplicationRecord
     JSON.parse values
   end
 
-  def followed_by?(user)
+  def followed_by_oldaf?(user)
     return true if field.nil?
 
     field.validates_rule_for_user?(rule: self, user: user)
