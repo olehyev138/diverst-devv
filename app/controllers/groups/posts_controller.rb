@@ -9,6 +9,7 @@ class Groups::PostsController < ApplicationController
   layout 'erg'
 
   def index
+    visit_page("#{@group.name}'s News Feed")
     @tweets = recent_tweets
     if GroupPolicy.new(current_user, @group).manage?
       without_segments
@@ -22,6 +23,7 @@ class Groups::PostsController < ApplicationController
   end
 
   def pending
+    visit_page("#{@group.name}'s Pending Posts")
     if @group.enterprise.enable_social_media?
       @posts = @group.news_feed_links.includes(:news_link, :group_message, :social_link).not_approved.where(archived_at: nil).order(created_at: :desc)
     else
@@ -41,7 +43,7 @@ class Groups::PostsController < ApplicationController
 
   def pin
     @link.is_pinned = true
-    if !@link.save
+    unless @link.save
       flash[:alert] = 'Link was not pinned'
     end
     redirect_to :back
@@ -70,7 +72,7 @@ class Groups::PostsController < ApplicationController
 
   def without_segments
     @posts = NewsFeed.all_links_without_segments(@group.news_feed.id, @group.enterprise)
-    @count = @posts.count
+    @count = @posts.size
     @posts = @posts.order(is_pinned: :desc, created_at: :desc)
                .limit(@limit)
   end
@@ -81,7 +83,7 @@ class Groups::PostsController < ApplicationController
     return without_segments if segment_ids.empty?
 
     @posts = NewsFeed.all_links(@group.news_feed.id, segment_ids, @group.enterprise)
-    @count = @posts.count
+    @count = @posts.size
     @posts = @posts.order(is_pinned: :desc, created_at: :desc)
                .limit(@limit)
   end

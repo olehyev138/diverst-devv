@@ -4,8 +4,20 @@ RSpec.describe MentoringRequest, type: :model do
   describe 'validations' do
     let(:mentoring_request) { build_stubbed(:mentoring_request) }
 
+    it { expect(mentoring_request).to have_many(:mentoring_request_interests) }
+    it { expect(mentoring_request).to have_many(:mentoring_interests).through(:mentoring_request_interests) }
+
+    it { expect(mentoring_request).to belong_to(:enterprise) }
+    it { expect(mentoring_request).to belong_to(:sender).class_name('User') }
+    it { expect(mentoring_request).to belong_to(:receiver).class_name('User') }
+
+    it { expect(mentoring_request).to validate_length_of(:mentoring_type).is_at_most(191) }
+    it { expect(mentoring_request).to validate_length_of(:notes).is_at_most(65535) }
+    it { expect(mentoring_request).to validate_length_of(:status).is_at_most(191) }
+
     it { expect(mentoring_request).to validate_presence_of(:sender) }
     it { expect(mentoring_request).to validate_presence_of(:receiver) }
+    it { expect(mentoring_request).to validate_length_of(:status) }
 
     context 'custom validations' do
       let(:sender) { create(:user) }

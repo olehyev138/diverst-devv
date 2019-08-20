@@ -38,7 +38,7 @@
                 </td>
                 <td><%= budget.status_title + " by " + approver_name(budget) %></td>
                 <td><%= budget.created_at.to_s :reversed_slashes %></td>
-                <td><%= budget.budget_items.count %></td>
+                <td><%= budget.budget_items.size %></td>
                 <td><%= budget.description %></td>
                 <th><%= link_to 'Details', group_budget_path(@group, budget, annual_budget_id: params[:annual_budget_id]) %></th>
                 <th><%= link_to "Delete", group_budget_path(@group, budget, annual_budget_id: params[:annual_budget_id]), method: :delete, class: 'error', data: { confirm: "Are you sure?" } if GroupBudgetPolicy.new(current_user, [@group]).destroy? %></th>

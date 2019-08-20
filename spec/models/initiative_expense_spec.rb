@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe InitiativeExpense, type: :model do
-  describe 'when validating' do
+  describe 'tests associations and validations' do
     let(:initiative_expense) { build_stubbed(:initiative_expense) }
 
     it { expect(initiative_expense).to belong_to(:initiative) }
@@ -11,6 +11,7 @@ RSpec.describe InitiativeExpense, type: :model do
     it { expect(initiative_expense).to validate_presence_of(:owner) }
     it { expect(initiative_expense).to validate_presence_of(:amount) }
     it { expect(initiative_expense).to validate_numericality_of(:amount).is_greater_than_or_equal_to(0) }
+    it { expect(initiative_expense).to validate_length_of(:description).is_at_most(191) }
   end
 
 

@@ -4,12 +4,12 @@ class InitiativesController < ApplicationController
   before_action :set_initiative, only: [:edit, :update, :destroy, :show, :todo, :finish_expenses, :export_attendees_csv, :archive]
   before_action :set_segments, only: [:new, :create, :edit, :update]
   after_action :verify_authorized
+  after_action :visit_page, only: [:index, :new, :show, :edit, :todo]
 
   layout 'erg'
 
   def index
     authorize Initiative
-
     @outcomes = @group.outcomes.includes(:pillars)
 
     set_filter
@@ -172,6 +172,7 @@ class InitiativesController < ApplicationController
         :pillar_id,
         :location,
         :picture,
+        :video,
         :budget_item_id,
         :estimated_funding,
         :archived_at,
@@ -200,5 +201,28 @@ class InitiativesController < ApplicationController
           :_destroy
         ],
       )
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      "#{@group.to_label}'s Initiative"
+    when 'new'
+      "#{@group.to_label} Initiative Creation"
+    when 'show'
+      "Event: #{@initiative.to_label}"
+    when 'edit'
+      "Initiative Edit: #{@initiative.to_label}"
+    when 'todo'
+      "Initiative Todo: #{@initiative.to_label}"
+    else
+      "#{controller_path}##{action_name}"
+    end
+  rescue
+    "#{controller_path}##{action_name}"
   end
 end

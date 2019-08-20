@@ -9,7 +9,12 @@ RSpec.describe Graph, type: :model do
     it { expect(graph).to belong_to(:field) }
     it { expect(graph).to belong_to(:metrics_dashboard) }
     it { expect(graph).to belong_to(:poll) }
-    it { expect(graph).to belong_to(:aggregation) }
+    it { expect(graph).to belong_to(:aggregation).class_name('Field') }
+    it { expect(graph).to delegate_method(:title).to(:field) }
+
+    it { expect(graph).to validate_length_of(:custom_aggregation).is_at_most(191) }
+    it { expect(graph).to validate_length_of(:custom_field).is_at_most(191) }
+    it { expect(graph).to validate_presence_of(:field) }
   end
 
   describe 'build_query' do

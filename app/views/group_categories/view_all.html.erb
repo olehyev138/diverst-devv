@@ -27,8 +27,8 @@
 		<div class="card__section card__section--border">
 			<div class="flex-row flex-row--middle">
 				<div class="flex-row__cell flex-row__cell--grow">
-					<%= link_to "#{category}" + "(#{category.groups.count})", "#", class: "nested_show", id: category.id %>
-					<%= link_to "#{category}" + "(#{category.groups.count})", "#", class: "nested_hide", id: category.id, style: "display:none;" %>
+					<%= link_to "#{category}" + "(#{category.groups.size})", "#", class: "nested_show", id: category.id %>
+					<%= link_to "#{category}" + "(#{category.groups.size})", "#", class: "nested_hide", id: category.id, style: "display:none;" %>
 				</div>
 				<div class="flex-row__cell flex-row__cell--grow">
 				  <div class="flex-row__cell link-group">

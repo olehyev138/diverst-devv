@@ -117,13 +117,6 @@ class Enterprise < BaseClass
 
   validates_format_of :redirect_email_contact, with: /\A[^@\s]+@[^@\s]+\z/, allow_blank: true
 
-  def resolve_auto_archive_state
-    update(auto_archive: false)
-  end
-
-  def no_expiry_age_set_and_auto_archive_true?
-    return true if auto_archive? && expiry_age_for_resources == 0
-  end
 
   def archive_switch
     if auto_archive?
@@ -193,12 +186,6 @@ class Enterprise < BaseClass
 
   def update_matches
     GenerateEnterpriseMatchesJob.perform_later self
-  end
-
-  def update_match_scores
-    enterprise.users.where.not(id: id).find_each do |other_user|
-      CalculateMatchScoreJob.perform_later(self, other_user, skip_existing: false)
-    end
   end
 
   def users_csv(nb_rows, export_csv_params = nil)
@@ -293,7 +280,7 @@ class Enterprise < BaseClass
       members = members.where('user_groups.created_at <= ?', to_date) if to_date.present?
 
       {
-          y: members.count,
+          y: members.size,
           name: g.name,
           drilldown: g.name
       }
@@ -340,11 +327,11 @@ class Enterprise < BaseClass
       groups.each do |group|
         from_date_total = group.user_groups
         from_date_total = from_date_total.where('created_at <= ?', from_date) if from_date.present?
-        from_date_total = from_date_total.count.to_f
+        from_date_total = from_date_total.size.to_f
 
         to_date_total = group.user_groups
         to_date_total = to_date_total.where('created_at <= ?', to_date) if to_date.present?
-        to_date_total = to_date_total.count.to_f
+        to_date_total = to_date_total.size.to_f
 
         change_percentage = 0
         if (from_date_total == 0) && (to_date_total > 0)
@@ -414,7 +401,7 @@ class Enterprise < BaseClass
       mentoring_sessions = mentoring_sessions.where('mentoring_sessions.created_at <= ?', to_date) if to_date.present?
 
       {
-          y: mentoring_sessions.count,
+          y: mentoring_sessions.size,
           name: g.name,
           drilldown: g.name
       }
@@ -458,7 +445,7 @@ class Enterprise < BaseClass
       events = events.where('initiatives.created_at <= ?', to_date) if to_date.present?
 
       {
-          y: events.count,
+          y: events.size,
           name: g.name,
           drilldown: g.name
       }
@@ -486,7 +473,7 @@ class Enterprise < BaseClass
       messages = messages.where('group_messages.created_at <= ?', to_date) if to_date.present?
 
       {
-        y: messages.count,
+        y: messages.size,
         name: g.name,
         drilldown: g.name
       }
@@ -513,7 +500,7 @@ class Enterprise < BaseClass
       views = views.where('views.created_at <= ?', to_date) if to_date.present?
 
       {
-          y: views.count,
+          y: views.size,
           name: g.name,
           drilldown: g.name
       }
@@ -540,7 +527,7 @@ class Enterprise < BaseClass
       views = views.where('views.created_at <= ?', to_date) if to_date.present?
 
       {
-        y: views.count,
+        y: views.size,
         name: !f.group.nil? ? f.group.name + ': ' + f.name : 'Shared folder: ' + f.name,
         drilldown: f.name
       }
@@ -569,7 +556,7 @@ class Enterprise < BaseClass
       views = views.where('views.created_at <= ?', to_date) if to_date.present?
 
       {
-          y: views.count,
+          y: views.size,
           name: resource.title
       }
     end
@@ -768,5 +755,13 @@ class Enterprise < BaseClass
   def create_elasticsearch_only_fields
     fields << GroupsField.create
     fields << SegmentsField.create
+  end
+
+  def resolve_auto_archive_state
+    update(auto_archive: false)
+  end
+
+  def no_expiry_age_set_and_auto_archive_true?
+    return true if auto_archive? && expiry_age_for_resources == 0
   end
 end

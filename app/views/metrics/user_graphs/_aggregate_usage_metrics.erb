@@ -1,0 +1,53 @@
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      <h2>Aggregate Usage Stats</h2>
+      <% @fields.each do |fld| %>
+        <div class="row">
+          <div class="col md-12 sm-12">
+            <br>
+            <h3><%= @aggregate_metrics[fld.to_sym][:name] %></h3>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col md-3 sm-6 xs-12">
+            <div class="panel panel--primary text-center margin-bottom-0">
+              <div class="panel-headline"><p><strong>Total Number</strong></p></div>
+              <div class="panel-data"><p><b class="accent"><%= @aggregate_metrics[fld.to_sym][:sum] %></b></p></div>
+            </div>
+          </div>
+          <div class="col md-3 sm-6 xs-12">
+            <div class="panel panel--primary text-center margin-bottom-0">
+              <div class="panel-headline"><p><strong>Maximum by User</strong></p></div>
+              <div class="panel-data"><p><b class="accent"><%= @aggregate_metrics[fld.to_sym][:max]%></b></p></div>
+            </div>
+          </div>
+          <div class="col md-3 sm-6 xs-12">
+            <div class="panel panel--primary text-center margin-bottom-0">
+              <div class="panel-headline"><p><strong>Average per User</strong></p></div>
+              <div class="panel-data"><p><b class="accent"><%= @aggregate_metrics[fld.to_sym][:mean] %></b></p></div>
+            </div>
+          </div>
+          <div class="col md-3 sm-6 xs-12">
+            <div class="panel panel--primary text-center margin-bottom-0">
+              <div class="panel-headline"><p><strong>Standard Deviation</strong></p></div>
+              <div class="panel-data"><p><b class="accent"><%= @aggregate_metrics[fld.to_sym][:sd]%></b></p></div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card__section">
+    <h2>Most Visited Pages</h2>
+    <%= render 'url_table', source: url_usage_data_metrics_users_path(format: :json) %>
+  </div>
+</div>
+
+<script>
+
+
+</script>

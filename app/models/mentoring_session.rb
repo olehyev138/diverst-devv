@@ -3,7 +3,6 @@ class MentoringSession < BaseClass
   belongs_to :creator, class_name: 'User'
   belongs_to :enterprise
 
-  has_many :mentoring_ratings
   has_many :resources, dependent: :destroy
 
   has_many :mentoring_session_topics, dependent: :destroy

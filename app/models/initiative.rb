@@ -68,6 +68,11 @@ class Initiative < BaseClass
 
   has_attached_file :picture, styles: { medium: '1000x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: 'private'
   validates_attachment_content_type :picture, content_type: %r{\Aimage\/.*\Z}
+
+  has_attached_file :video
+  do_not_validate_attachment_file_type :video
+
+
   validates :start, presence: true
   validates :end, presence: true
   validates :max_attendees, numericality: { greater_than: 0, allow_nil: true }

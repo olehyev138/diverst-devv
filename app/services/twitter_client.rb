@@ -68,7 +68,7 @@ class TwitterClient
 
   def self.delete_tweets
     timeline = client.user_timeline(this_account, exclude_replies: false)
-    tweets_count = timeline.count
+    tweets_count = timeline.size
     timeline.each do |twt|
       client.destroy_tweet(twt.id)
       tweet_cache.delete(twt.id)
