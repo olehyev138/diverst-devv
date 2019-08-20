@@ -9,19 +9,19 @@ RSpec.describe SegmentFieldRule, type: :model do
 
     it { is_expected.to validate_presence_of(:operator) }
     it { is_expected.to validate_presence_of(:field) }
-    # it { is_expected.to validate_presence_of(:values) }
+    # it { is_expected.to validate_presence_of(:data) }
   end
 
-  describe '#values' do
-    it 'allows a length of values over 255 characters' do
-      values = '["Atlanta", "BrookwoodBirmAL", "Charlotte-Hearst Tower", "Columbia 1333", "Columbia, SC", "Fort Myers - 4211 Metro Pkwy",
+  describe '#data' do
+    it 'allows a length of data over 255 characters' do
+      data = '["Atlanta", "BrookwoodBirmAL", "Charlotte-Hearst Tower", "Columbia 1333", "Columbia, SC", "Fort Myers - 4211 Metro Pkwy",
                  "Ft. Lauderdale 401 E Las Olas", "GreensboroNC800Valley", "HallandaleBchFL", "Jacksonville - 76 Laura St", "Lithia Springs GA",
                  "Nashville, TN", "Miami, FL", "Raleigh, NC"]'
 
-      expect(values.length).to eq(328)
+      expect(data.length).to eq(328)
 
       segment_field_rule = build(:segment_field_rule)
-      segment_field_rule.values = values
+      segment_field_rule.data = data
       segment_field_rule.save!
 
       expect(segment_field_rule.valid?).to be(true)

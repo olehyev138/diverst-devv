@@ -13,7 +13,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import dig from 'object-dig';
 
-import {TextField} from '@material-ui/core';
+import { TextField } from '@material-ui/core';
 import CustomTextField from 'components/Shared/Fields/FieldInputs/TextField';
 import CustomDateField from 'components/Shared/Fields/FieldInputs/DateField';
 import CustomSelectField from 'components/Shared/Fields/FieldInputs/SelectField';

@@ -3,6 +3,6 @@ FactoryBot.define do
     segment
     field
     operator SegmentFieldRule.operators[:equals]
-    values ['abc'].to_json
+    data ['abc'].to_json
   end
 end

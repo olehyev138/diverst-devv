@@ -67,7 +67,7 @@ RSpec.describe DateField, type: :model do
       date_field.save!
       user_1 = create(:user, data: "{\"#{date_field.id}\":-1641600}", enterprise: enterprise)
       segment = create(:segment, name: 'Seniors', enterprise: enterprise)
-      segment_field_rule = create(:segment_field_rule, segment_id: segment.id, field_id: date_field.id, operator: 1, values: '["1968-02-03"]')
+      segment_field_rule = create(:segment_field_rule, segment_id: segment.id, field_id: date_field.id, operator: 1, data: '["1968-02-03"]')
       boolean = date_field.validates_rule_for_user?(rule: segment_field_rule, user: user_1)
 
       expect(boolean).to be(true)
@@ -79,7 +79,7 @@ RSpec.describe DateField, type: :model do
       date_field.save!
       user_1 = create(:user, data: "{\"#{date_field.id}\":-1641600}", enterprise: enterprise)
       segment = create(:segment, name: 'Seniors', enterprise: enterprise)
-      segment_field_rule = create(:segment_field_rule, segment_id: segment.id, field_id: date_field.id, operator: 1, values: '["1998-02-03"]')
+      segment_field_rule = create(:segment_field_rule, segment_id: segment.id, field_id: date_field.id, operator: 1, data: '["1998-02-03"]')
       boolean = date_field.validates_rule_for_user?(rule: segment_field_rule, user: user_1)
 
       expect(boolean).to be(false)
@@ -91,7 +91,7 @@ RSpec.describe DateField, type: :model do
       date_field.save!
       user_1 = create(:user, data: "{\"#{date_field.id}\":-60307200}", enterprise: enterprise)
       segment = create(:segment, name: 'Seniors', enterprise: enterprise)
-      segment_field_rule = create(:segment_field_rule, segment_id: segment.id, field_id: date_field.id, operator: 0, values: '["1968-02-03"]')
+      segment_field_rule = create(:segment_field_rule, segment_id: segment.id, field_id: date_field.id, operator: 0, data: '["1968-02-03"]')
       boolean = date_field.validates_rule_for_user?(rule: segment_field_rule, user: user_1)
 
       expect(boolean).to be(true)
@@ -103,7 +103,7 @@ RSpec.describe DateField, type: :model do
       date_field.save!
       user_1 = create(:user, data: "{\"#{date_field.id}\":-60220800}", enterprise: enterprise)
       segment = create(:segment, name: 'Seniors', enterprise: enterprise)
-      segment_field_rule = create(:segment_field_rule, segment_id: segment.id, field_id: date_field.id, operator: 0, values: '["1968-02-03"]')
+      segment_field_rule = create(:segment_field_rule, segment_id: segment.id, field_id: date_field.id, operator: 0, data: '["1968-02-03"]')
       boolean = date_field.validates_rule_for_user?(rule: segment_field_rule, user: user_1)
 
       expect(boolean).to be(false)
@@ -115,7 +115,7 @@ RSpec.describe DateField, type: :model do
       date_field.save!
       user_1 = create(:user, data: "{\"#{date_field.id}\":-691372800}", enterprise: enterprise)
       segment = create(:segment, name: 'Seniors', enterprise: enterprise)
-      segment_field_rule = create(:segment_field_rule, segment_id: segment.id, field_id: date_field.id, operator: 2, values: '["1968-02-03"]')
+      segment_field_rule = create(:segment_field_rule, segment_id: segment.id, field_id: date_field.id, operator: 2, data: '["1968-02-03"]')
       boolean = date_field.validates_rule_for_user?(rule: segment_field_rule, user: user_1)
 
       expect(boolean).to be(true)
@@ -127,7 +127,7 @@ RSpec.describe DateField, type: :model do
       date_field.save!
       user_1 = create(:user, data: "{\"#{date_field.id}\":886550400}", enterprise: enterprise)
       segment = create(:segment, name: 'Seniors', enterprise: enterprise)
-      segment_field_rule = create(:segment_field_rule, segment_id: segment.id, field_id: date_field.id, operator: 2, values: '["1968-02-03"]')
+      segment_field_rule = create(:segment_field_rule, segment_id: segment.id, field_id: date_field.id, operator: 2, data: '["1968-02-03"]')
       boolean = date_field.validates_rule_for_user?(rule: segment_field_rule, user: user_1)
 
       expect(boolean).to be(false)
@@ -139,7 +139,7 @@ RSpec.describe DateField, type: :model do
       date_field.save!
       user_1 = create(:user, data: "{\"#{date_field.id}\":886550400}", enterprise: enterprise)
       segment = create(:segment, name: 'Seniors', enterprise: enterprise)
-      segment_field_rule = create(:segment_field_rule, segment_id: segment.id, field_id: date_field.id, operator: 3, values: '["1968-02-03"]')
+      segment_field_rule = create(:segment_field_rule, segment_id: segment.id, field_id: date_field.id, operator: 3, data: '["1968-02-03"]')
       boolean = date_field.validates_rule_for_user?(rule: segment_field_rule, user: user_1)
 
       expect(boolean).to be(true)
@@ -151,7 +151,7 @@ RSpec.describe DateField, type: :model do
       date_field.save!
       user_1 = create(:user, data: "{\"#{date_field.id}\":-60307200}", enterprise: enterprise)
       segment = create(:segment, name: 'Seniors', enterprise: enterprise)
-      segment_field_rule = create(:segment_field_rule, segment_id: segment.id, field_id: date_field.id, operator: 3, values: '["1968-02-03"]')
+      segment_field_rule = create(:segment_field_rule, segment_id: segment.id, field_id: date_field.id, operator: 3, data: '["1968-02-03"]')
       boolean = date_field.validates_rule_for_user?(rule: segment_field_rule, user: user_1)
 
       expect(boolean).to be(false)

@@ -8,7 +8,7 @@ RSpec.describe TextField, type: :model do
       text_field.save!
       user_1 = create(:user, data: "{\"#{text_field.id}\": \"Customer Service Representative\"}", enterprise: enterprise)
       segment = create(:segment, name: 'Customer Service Reps', enterprise: enterprise)
-      segment_field_rule = create(:segment_field_rule, segment_id: segment.id, field_id: text_field.id, operator: 0, values: '["Customer Service Representative"]')
+      segment_field_rule = create(:segment_field_rule, segment_id: segment.id, field_id: text_field.id, operator: 0, data: '["Customer Service Representative"]')
       boolean = text_field.validates_rule_for_user?(rule: segment_field_rule, user: user_1)
 
       expect(boolean).to be(true)
@@ -20,7 +20,7 @@ RSpec.describe TextField, type: :model do
       text_field.save!
       user_1 = create(:user, data: "{\"#{text_field.id}\": \"Customer Service Representative\"}", enterprise: enterprise)
       segment = create(:segment, name: 'Engineers', enterprise: enterprise)
-      segment_field_rule = create(:segment_field_rule, segment_id: segment.id, field_id: text_field.id, operator: 4, values: '["Engineer"]')
+      segment_field_rule = create(:segment_field_rule, segment_id: segment.id, field_id: text_field.id, operator: 4, data: '["Engineer"]')
       boolean = text_field.validates_rule_for_user?(rule: segment_field_rule, user: user_1)
 
       expect(boolean).to be(false)
@@ -32,7 +32,7 @@ RSpec.describe TextField, type: :model do
       text_field.save!
       user_1 = create(:user, data: "{\"#{text_field.id}\": \"Customer Service Representative\"}", enterprise: enterprise)
       segment = create(:segment, name: 'Engineers', enterprise: enterprise)
-      segment_field_rule = create(:segment_field_rule, segment_id: segment.id, field_id: text_field.id, operator: 6, values: '["Engineer"]')
+      segment_field_rule = create(:segment_field_rule, segment_id: segment.id, field_id: text_field.id, operator: 6, data: '["Engineer"]')
       boolean = text_field.validates_rule_for_user?(rule: segment_field_rule, user: user_1)
 
       expect(boolean).to be(true)
