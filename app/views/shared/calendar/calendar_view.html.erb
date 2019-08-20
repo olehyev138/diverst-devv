@@ -55,14 +55,14 @@
     <br/>
     <% @groups.each do |group| %>
       <% if group.is_parent_group? %>
-        <span class="" style="color: <%= to_color group.calendar_color %>;">
+        <span class="" style="color: #<%= group.calendar_color %>;">
           <%= group.name %>
           <% unless group == @groups.last %>
             -
           <% end %>
         </span>
       <% elsif group.is_standard_group? %>
-        <span class="" style="color: <%= to_color group.calendar_color %>;">
+        <span class="" style="color: #<%= group.calendar_color %>;">
           <%= group.name %>
           <% unless group == @groups.last %>
             -

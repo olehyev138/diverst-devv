@@ -60,7 +60,7 @@
               <% if resource.enterprise.sponsors.any? %>
                 <% if resource.enterprise.sponsors.first.sponsor_media.present? %>
                   <% show_sponsor_media?(resource.enterprise.sponsors.first, "sponsor_media_content_type") do %>
-                    <%= image_tag(resource.enterprise.sponsors.first.sponsor_media.expiring_url(3600), class: "block img-responsive center-block", style: "max-width: 300px; max-height: 300px;") %>
+                    <%= image_tag(resource.enterprise.sponsors.first.sponsor_media.expiring_url(3600), class: "block img-responsive center-block", style: "max-height: 300px;") %>
                   <% end %>
                   
                   <% show_sponsor_video?(resource.enterprise.sponsors.first, "sponsor_media_content_type") do %>
