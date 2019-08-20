@@ -10,6 +10,8 @@ class GroupMessage < BaseClass
   belongs_to :group
 
   has_one :news_feed_link
+  has_many :news_tags, through: :news_feed_link
+
   after_create :approve_link
 
   accepts_nested_attributes_for :news_feed_link, allow_destroy: true

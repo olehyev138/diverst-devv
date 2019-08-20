@@ -72,6 +72,7 @@ class Groups::PostsController < ApplicationController
 
   def without_segments
     @posts = NewsFeed.all_links_without_segments(@group.news_feed.id, @group.enterprise)
+    @posts = @posts.includes(:news_tags).where(news_tags: { name: params[:tag] })
     @count = @posts.size
     @posts = @posts.order(is_pinned: :desc, created_at: :desc)
                .limit(@limit)
@@ -83,13 +84,14 @@ class Groups::PostsController < ApplicationController
     return without_segments if segment_ids.empty?
 
     @posts = NewsFeed.all_links(@group.news_feed.id, segment_ids, @group.enterprise)
+    @posts = @posts.includes(:news_tags).where(news_tags: { name: params[:tag] })
     @count = @posts.size
     @posts = @posts.order(is_pinned: :desc, created_at: :desc)
                .limit(@limit)
   end
 
   def filter_posts(posts)
-    @posts = posts.select { |news|
+    @posts = posts.includes([:news_link, :group_message, :social_link]).select { |news|
       news.news_link || news.group_message || news.social_link
     }
   end

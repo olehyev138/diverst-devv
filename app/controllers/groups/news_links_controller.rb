@@ -117,11 +117,13 @@ class Groups::NewsLinksController < ApplicationController
 
   def add_tags(params)
     tags = params[:news_feed_link_attributes][:news_tag_ids]
-    tags.each do |tag|
+    tag_records = []
+    tags.map { |i| i.downcase }.uniq.each do |tag|
       next if tag == ''
 
-      @news_link.news_feed_link.news_tags << NewsTag.find_or_create_by(name: tag.downcase)
+      tag_records << NewsTag.find_or_create_by(name: tag)
     end
+    @news_link.news_feed_link.news_tags = tag_records
   end
 
   def news_link_params
