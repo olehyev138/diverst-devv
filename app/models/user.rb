@@ -58,6 +58,7 @@ class User < BaseClass
   has_many :news_links, through: :groups
   has_many :own_news_links, class_name: 'NewsLink', foreign_key: :author_id, dependent: :destroy
   has_many :messages, through: :groups
+  has_many :own_messages, class_name: 'GroupMessage', foreign_key: :owner_id
   has_many :message_comments, class_name: 'GroupMessageComment', foreign_key: :author_id, dependent: :destroy
   has_many :social_links, foreign_key: :author_id, dependent: :destroy
   has_many :initiative_users, dependent: :destroy
@@ -74,6 +75,12 @@ class User < BaseClass
   has_many :csv_files
   has_many :metrics_dashboards, foreign_key: :owner_id
   has_many :shared_metrics_dashboards
+  has_many :urls_visited, dependent: :destroy, class_name: 'PageVisitationData'
+  has_many :pages_visited, dependent: :destroy, class_name: 'PageVisitation'
+  has_many :page_names_visited, dependent: :destroy, class_name: 'PageVisitationByName'
+  has_many :visits, class_name: 'Ahoy::Visit'
+  has_many :answer_comments, foreign_key: :author_id, dependent: :destroy
+  has_many :news_link_comments, foreign_key: :author_id, dependent: :destroy
 
   has_attached_file :avatar, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing_user.png'), s3_permissions: 'private'
   validates_length_of :mentorship_description, maximum: 65535
@@ -570,6 +577,24 @@ class User < BaseClass
       linkedin_profile_url: nil,
       avatar_file_name: nil
     )
+  end
+
+  def get_login_count
+    self.sign_in_count
+  end
+
+  def most_viewed_pages(limit: nil)
+    page_visitation_data.select(:page, :times_visited).order(times_visited: :desc).limit(limit).to_a
+  end
+
+  def most_viewed_pages_json(limit: nil)
+    data = most_viewed_pages(limit: limit)
+    {
+      'draw' => 0,
+      'recordsTotal' => data.count,
+      'recordsFiltered' => data.count,
+      'data' => data.map { |pg| [pg.page, pg.times_visited] }
+    }
   end
 
   private

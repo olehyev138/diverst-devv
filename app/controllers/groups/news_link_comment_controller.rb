@@ -1,5 +1,6 @@
 class Groups::NewsLinkCommentController < ApplicationController
   before_action :set_group, :set_news_link
+  after_action :visit_page, only: [:edit]
 
   layout 'erg'
 
@@ -42,5 +43,20 @@ class Groups::NewsLinkCommentController < ApplicationController
           :content,
           :approved
         )
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'edit'
+      'News Link Comment Edit'
+    else
+      "#{controller_path}##{action_name}"
+    end
+  rescue
+    "#{controller_path}##{action_name}"
   end
 end

@@ -17,7 +17,7 @@ class SocialLink < BaseClass
 
   before_create :populate_embed_code, :build_default_link, :add_trailing_slash
 
-  belongs_to :author, class_name: 'User', required: true
+  belongs_to :author, class_name: 'User', required: true, counter_cache: true
   belongs_to :group
 
   after_destroy :remove_news_feed_link

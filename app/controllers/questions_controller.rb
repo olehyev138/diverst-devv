@@ -3,6 +3,7 @@ class QuestionsController < ApplicationController
   before_action :set_campaign, only: [:index, :new, :create]
   before_action :set_question, only: [:edit, :update, :destroy, :show, :reopen]
   after_action :verify_authorized
+  after_action :visit_page, only: [:index, :new, :show, :edit]
 
   layout 'collaborate'
 
@@ -100,5 +101,26 @@ class QuestionsController < ApplicationController
           ]
         ]
       )
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      "#{@campaign.to_label} Questions"
+    when 'new'
+      "Create Question for #{@campaign.to_label}"
+    when 'show'
+      "#{@question.campaign.to_label} Question: #{@question.to_label}"
+    when 'edit'
+      "#{@question.campaign.to_label} Question Edit: #{@question.to_label}"
+    else
+      "#{controller_path}##{action_name}"
+    end
+  rescue
+    "#{controller_path}##{action_name}"
   end
 end

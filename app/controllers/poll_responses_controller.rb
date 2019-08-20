@@ -5,6 +5,7 @@ class PollResponsesController < ApplicationController
   before_action :set_poll
   before_action :set_response, only: [:edit, :update, :destroy, :show]
   skip_before_action :verify_authenticity_token, only: [:create]
+  after_action :visit_page, only: [:index, :new]
 
   layout 'guest'
 
@@ -15,7 +16,7 @@ class PollResponsesController < ApplicationController
 
   def new
     # Redirect to thank you page if user already answered
-    if response = current_user.poll_responses.where(poll: @poll).first
+    if (response = current_user.poll_responses.where(poll: @poll).first)
       redirect_to action: 'thank_you', id: response.id
     end
 
@@ -64,5 +65,22 @@ class PollResponsesController < ApplicationController
 
   def poll_response_params
     params.require(:poll_response).permit(:anonymous)
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      'Poll Response'
+    when 'new'
+      'Poll Response Creation'
+    else
+      "#{controller_path}##{action_name}"
+    end
+  rescue
+    "#{controller_path}##{action_name}"
   end
 end
