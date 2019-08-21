@@ -91,6 +91,11 @@ RSpec.describe Field do
     end
   end
 
+  describe 'evaluate' do
+    # TODO - test evaluate evaluates each operator correctly
+    pending('TODO')
+  end
+
   describe 'operators' do
     context 'operators should have correct ids' do
       it 'equals: 0' do

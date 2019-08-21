@@ -7,7 +7,7 @@ class DateField < Field
       Field::OPERATORS[:greater_than_excl],
       Field::OPERATORS[:lesser_than_excl],
       Field::OPERATORS[:greater_than_incl],
-      Field::OPERATORS[:greater_than_incl]
+      Field::OPERATORS[:lesser_than_incl]
     ]
   end
 
