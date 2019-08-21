@@ -1,5 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe PageVisitationByName, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  let(:page_visitation_by_name) { build_stubbed(:page_visitation_by_name) }
+
+  it { expect(page_visitation_by_name).to belong_to(:user) }
 end
