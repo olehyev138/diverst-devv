@@ -72,7 +72,7 @@ class Groups::PostsController < ApplicationController
 
   def without_segments
     @posts = NewsFeed.all_links_without_segments(@group.news_feed.id, @group.enterprise)
-    @posts = @posts.includes(:news_tags).where(news_tags: { name: params[:tag] })
+    @posts = @posts.includes(:news_tags).where(news_tags: { name: params[:tag] }) if params[:tag].present?
     @count = @posts.size
     @posts = @posts.order(is_pinned: :desc, created_at: :desc)
                .limit(@limit)
@@ -84,7 +84,7 @@ class Groups::PostsController < ApplicationController
     return without_segments if segment_ids.empty?
 
     @posts = NewsFeed.all_links(@group.news_feed.id, segment_ids, @group.enterprise)
-    @posts = @posts.includes(:news_tags).where(news_tags: { name: params[:tag] })
+    @posts = @posts.includes(:news_tags).where(news_tags: { name: params[:tag] }) if params[:tag].present?
     @count = @posts.size
     @posts = @posts.order(is_pinned: :desc, created_at: :desc)
                .limit(@limit)
