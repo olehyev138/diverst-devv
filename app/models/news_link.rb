@@ -75,8 +75,8 @@ class NewsLink < BaseClass
     [
       slack_block_title(modifier: modifier),
       slack_block_author,
-      slack_block_content
-        .merge(slack_block_image),
+      slack_block_content,
+      # .merge(slack_block_image),
       slack_block_buttons,
     ]
   end
@@ -116,11 +116,11 @@ class NewsLink < BaseClass
   end
 
   def slack_block_image
-    if picture_file_name.present? && ENV['DOMAIN'].present?
+    if picture_file_name.present?
       {
         accessory: {
           type: 'image',
-          image_url: "#{ENV['DOMAIN'] || 'localhost:3000'}#{picture.url}",
+          image_url: picture.url,
           alt_text: 'Event Picture'
         }
       }
@@ -140,7 +140,7 @@ class NewsLink < BaseClass
             emoji: true,
             text: 'View Comments'
           },
-          url: group_news_link_news_link_comment_index_url(group.id, id),
+          url: comments_group_news_link_url(group.id, id),
           style: 'primary'
         },
         {

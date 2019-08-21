@@ -392,11 +392,11 @@ class Initiative < BaseClass
   end
 
   def slack_block_image
-    if picture_file_name.present? && ENV['DOMAIN'].present?
+    if picture_file_name.present?
       {
         accessory: {
           type: 'image',
-          image_url: "#{ENV['DOMAIN'] || 'localhost:3000'}#{picture.url}",
+          image_url: picture.expiring_url(5.days),
           alt_text: 'Event Picture'
         }
       }
