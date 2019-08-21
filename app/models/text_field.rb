@@ -14,6 +14,8 @@ class TextField < Field
   # TODO: Everything below here is most likely deprecated & needs to be removed
   # DEPRECATED
   # -------------------------------------------------------------------------------------------------
+
+  # @deprecated
   def validates_rule_for_user?(rule:, user:)
     case rule.operator
     when SegmentFieldRule.operators[:equals]

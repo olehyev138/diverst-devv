@@ -19,6 +19,23 @@ class DateField < Field
 
   include NumericOptionnable
 
+  # @deprecated
+  def validates_rule_for_user?(rule:, user:)
+    rule_date = Date.parse(rule.values_array[0])
+    user_date = user.info[rule.field]
+
+    case rule.operator
+    when SegmentFieldRule.operators[:equals]
+      user_date == rule_date
+    when SegmentFieldRule.operators[:greater_than]
+      user_date > rule_date
+    when SegmentFieldRule.operators[:lesser_than]
+      user_date < rule_date
+    when SegmentFieldRule.operators[:is_not]
+      user_date != rule_date
+    end
+  end
+
   after_initialize :set_options_array
   attr_accessor :options
 
@@ -73,22 +90,6 @@ class DateField < Field
 
     delta = (e1_value - e2_value).abs
     delta.to_f / high_delta
-  end
-
-  def validates_rule_for_user?(rule:, user:)
-    rule_date = Date.parse(rule.values_array[0])
-    user_date = user.info[rule.field]
-
-    case rule.operator
-    when SegmentFieldRule.operators[:equals]
-      user_date == rule_date
-    when SegmentFieldRule.operators[:greater_than]
-      user_date > rule_date
-    when SegmentFieldRule.operators[:lesser_than]
-      user_date < rule_date
-    when SegmentFieldRule.operators[:is_not]
-      user_date != rule_date
-    end
   end
 
   def get_buckets_for_range(nb_buckets:, min:, max:)

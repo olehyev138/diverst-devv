@@ -18,6 +18,22 @@ class NumericField < Field
   # DEPRECATED
   # -------------------------------------------------------------------------------------------------
 
+  # @deprecated
+  def validates_rule_for_user?(rule:, user:)
+    return false if user.info[rule.field].nil?
+
+    case rule.operator
+    when SegmentFieldRule.operators[:equals]
+      user.info[rule.field] == rule.values_array[0].to_i
+    when SegmentFieldRule.operators[:greater_than]
+      user.info[rule.field] > rule.values_array[0].to_i
+    when SegmentFieldRule.operators[:lesser_than]
+      user.info[rule.field] < rule.values_array[0].to_i
+    when SegmentFieldRule.operators[:is_not]
+      user.info[rule.field] != rule.values_array[0].to_i
+    end
+  end
+
   include NumericOptionnable
 
   def string_value(value)
@@ -52,20 +68,6 @@ class NumericField < Field
     delta.to_f / high_delta
   end
 
-  def validates_rule_for_user?(rule:, user:)
-    return false if user.info[rule.field].nil?
-
-    case rule.operator
-    when SegmentFieldRule.operators[:equals]
-      user.info[rule.field] == rule.values_array[0].to_i
-    when SegmentFieldRule.operators[:greater_than]
-      user.info[rule.field] > rule.values_array[0].to_i
-    when SegmentFieldRule.operators[:lesser_than]
-      user.info[rule.field] < rule.values_array[0].to_i
-    when SegmentFieldRule.operators[:is_not]
-      user.info[rule.field] != rule.values_array[0].to_i
-    end
-  end
 
   def stats_in(entries)
     values = entries.map do |entry|

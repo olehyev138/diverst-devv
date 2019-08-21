@@ -31,9 +31,9 @@ class Field < ApplicationRecord
     greater_than_incl: 7,
     lesser_than_incl: 8,
     equals_any_of: 9,
-    not_equal_any_of: 10,
+    not_equals_any_of: 10,
     is_part_of: 11
-  }
+  }.freeze
 
   # generic super operators method
   #  - return all operators
@@ -56,7 +56,7 @@ class Field < ApplicationRecord
       v1 != v2
     when OPERATORS[:equals_any_of]
       v2.is_a?(Array) && (v2.include? v1)
-    when OPERATORS[:not_equal_any_of]
+    when OPERATORS[:not_equals_any_of]
       v2.is_a?(Array) && (v2.exclude? v1)
     when OPERATORS[:contains_any_of]
       v1.is_a?(Array) && v2.is_a?(Array) && (v1 & v2).length > 0

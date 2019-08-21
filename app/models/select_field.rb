@@ -6,7 +6,7 @@ class SelectField < Field
   def operators
     [
       Field::OPERATORS[:equals_any_of],
-      Field::OPERATORS[:not_equal_any_of]
+      Field::OPERATORS[:not_equals_any_of]
     ]
   end
 
