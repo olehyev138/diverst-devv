@@ -3,17 +3,7 @@
 exports[`<AdminLinks /> should render and match the snapshot 1`] = `
 <nav>
   <Hidden
-    implementation="js"
-    lgDown={false}
-    lgUp={false}
-    mdDown={false}
     mdUp={true}
-    smDown={false}
-    smUp={false}
-    xlDown={false}
-    xlUp={false}
-    xsDown={false}
-    xsUp={false}
   >
     <WithStyles(ForwardRef(Drawer))
       ModalProps={
@@ -305,17 +295,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
     </WithStyles(ForwardRef(Drawer))>
   </Hidden>
   <Hidden
-    implementation="js"
-    lgDown={false}
-    lgUp={false}
-    mdDown={false}
-    mdUp={false}
     smDown={true}
-    smUp={false}
-    xlDown={false}
-    xlUp={false}
-    xsDown={false}
-    xsUp={false}
   >
     <WithStyles(ForwardRef(Drawer))
       classes={
