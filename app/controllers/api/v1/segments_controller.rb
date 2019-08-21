@@ -1,4 +1,7 @@
 class Api::V1::SegmentsController < DiverstController
+  def status
+  end
+
   def payload
     params
       .require(:segment)

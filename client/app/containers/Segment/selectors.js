@@ -3,6 +3,7 @@ import { initialState } from 'containers/Segment/reducer';
 
 import dig from 'object-dig';
 import { deserializeDatum, deserializeOptionsText } from 'utils/customFieldHelpers';
+import { selectMembersDomain } from 'containers/Group/GroupMembers/selectors';
 
 const selectSegmentsDomain = state => state.segments || initialState;
 
@@ -64,8 +65,31 @@ const selectFormSegment = () => createSelector(
   }
 );
 
+const selectPaginatedSegmentMembers = () => createSelector(
+  selectSegmentsDomain,
+  segmentsState => segmentsState.segmentMemberList
+);
+
+const selectSegmentMemberTotal = () => createSelector(
+  selectSegmentsDomain,
+  segmentsState => segmentsState.segmentMemberTotal
+);
+
+const selectIsFetchingSegmentMembers = () => createSelector(
+  selectSegmentsDomain,
+  segmentsState => segmentsState.isFetchingSegmentMembers
+);
+
+const selectIsSegmentBuilding = () => createSelector(
+  selectSegmentsDomain,
+  segmentsState => segmentsState.isSegmentBuilding
+);
+
+
 export {
   selectSegmentsDomain, selectPaginatedSegments,
   selectSegmentTotal, selectSegment, selectSegmentWithRules,
+  selectPaginatedSegmentMembers, selectSegmentMemberTotal,
+  selectIsFetchingSegmentMembers, selectIsSegmentBuilding,
   selectFormSegment
 };

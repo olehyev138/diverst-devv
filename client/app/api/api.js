@@ -1,5 +1,6 @@
 import users from 'api/users/users';
 import userGroups from 'api/user_groups/user_groups';
+import userSegments from 'api/user_segments/user_segments';
 import sessions from 'api/sessions/sessions';
 import fields from 'api/fields/fields';
 import fieldData from 'api/field_data/field_data';
@@ -15,6 +16,7 @@ import outcomes from 'api/outcomes/outcomes';
 const Api = {
   users,
   userGroups,
+  userSegments,
   sessions,
   fields,
   fieldData,

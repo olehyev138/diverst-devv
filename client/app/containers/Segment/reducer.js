@@ -7,6 +7,8 @@
 import produce from 'immer/dist/immer';
 import {
   GET_SEGMENTS_SUCCESS, GET_SEGMENT_SUCCESS,
+  GET_SEGMENT_MEMBERS_BEGIN, GET_SEGMENT_MEMBERS_SUCCESS,
+  GET_SEGMENT_MEMBERS_ERROR,
   SEGMENT_UNMOUNT
 } from 'containers/Segment/constants';
 
@@ -14,6 +16,10 @@ export const initialState = {
   segmentList: {},
   segmentTotal: null,
   currentSegment: null,
+  segmentMemberList: [],
+  segmentMemberTotal: null,
+  isFetchingSegmentMembers: true,
+  isSegmentBuilding: false
 };
 
 /* eslint-disable default-case, no-param-reassign */
@@ -27,6 +33,17 @@ function segmentsReducer(state = initialState, action) {
         break;
       case GET_SEGMENT_SUCCESS:
         draft.currentSegment = action.payload.segment;
+        break;
+      case GET_SEGMENT_MEMBERS_BEGIN:
+        draft.isFetchingSegmentMembers = true;
+        break;
+      case GET_SEGMENT_MEMBERS_SUCCESS:
+        draft.segmentMemberList = formatSegmentMembers(action.payload.items);
+        draft.segmentMemberTotal = action.payload.total;
+        draft.isFetchingSegmentMembers = false;
+        break;
+      case GET_SEGMENT_MEMBERS_ERROR:
+        draft.isFetchingSegmentMembers = false;
         break;
       case SEGMENT_UNMOUNT:
         return initialState;
@@ -47,5 +64,18 @@ function formatSegments(segments) {
     return map;
   }, {});
 }
+
+function formatSegmentMembers(members) {
+  /* eslint-disable no-return-assign */
+
+  /* Extract user out of each member
+   *   { group_id: <>, user: { ... }  } -> { first_name: <>, ... }
+   */
+  return members.reduce((map, member) => {
+    map.push(member.user);
+    return map;
+  }, []);
+}
+
 
 export default segmentsReducer;

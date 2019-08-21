@@ -10,6 +10,7 @@ import {
   CREATE_SEGMENT_BEGIN, CREATE_SEGMENT_SUCCESS, CREATE_SEGMENT_ERROR,
   UPDATE_SEGMENT_BEGIN, UPDATE_SEGMENT_SUCCESS, UPDATE_SEGMENT_ERROR,
   DELETE_SEGMENT_BEGIN, DELETE_SEGMENT_SUCCESS, DELETE_SEGMENT_ERROR,
+  GET_SEGMENT_MEMBERS_BEGIN, GET_SEGMENT_MEMBERS_SUCCESS, GET_SEGMENT_MEMBERS_ERROR,
   SEGMENT_UNMOUNT
 } from 'containers/Segment/constants';
 
@@ -127,6 +128,30 @@ export function deleteSegmentError(error) {
     error,
   };
 }
+
+/* Segment Members */
+
+export function getSegmentMembersBegin(payload) {
+  return {
+    type: GET_SEGMENT_MEMBERS_BEGIN,
+    payload
+  };
+}
+
+export function getSegmentMembersSuccess(payload) {
+  return {
+    type: GET_SEGMENT_MEMBERS_SUCCESS,
+    payload
+  };
+}
+
+export function getSegmentMembersError(error) {
+  return {
+    type: GET_SEGMENT_MEMBERS_ERROR,
+    error,
+  };
+}
+
 
 export function segmentUnmount() {
   return {

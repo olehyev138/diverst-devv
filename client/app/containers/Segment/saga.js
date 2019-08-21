@@ -8,7 +8,7 @@ import { showSnackbar } from 'containers/Shared/Notifier/actions';
 import {
   GET_SEGMENTS_BEGIN, CREATE_SEGMENT_BEGIN,
   GET_SEGMENT_BEGIN, UPDATE_SEGMENT_BEGIN,
-  DELETE_SEGMENT_BEGIN
+  GET_SEGMENT_MEMBERS_BEGIN, DELETE_SEGMENT_BEGIN
 } from 'containers/Segment/constants';
 
 import {
@@ -16,10 +16,12 @@ import {
   createSegmentSuccess, createSegmentError,
   getSegmentSuccess, getSegmentError,
   updateSegmentSuccess, updateSegmentError,
+  getSegmentMembersSuccess, getSegmentMembersError,
   deleteSegmentError
 } from 'containers/Segment/actions';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
+import { getMembersError, getMembersSuccess } from 'containers/Group/GroupMembers/actions';
 
 export function* getSegments(action) {
   try {
@@ -90,11 +92,25 @@ export function* deleteSegment(action) {
   }
 }
 
+export function* getSegmentMembers(action) {
+  try {
+    const response = yield call(api.userSegments.all.bind(api.userSegments), action.payload);
+
+    yield put(getSegmentMembersSuccess(response.data.page));
+  } catch (err) {
+    yield put(getSegmentMembersError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to load segment members', options: { variant: 'warning' } }));
+  }
+}
+
 export default function* segmentsSaga() {
   yield takeLatest(GET_SEGMENTS_BEGIN, getSegments);
   yield takeLatest(GET_SEGMENT_BEGIN, getSegment);
   yield takeLatest(CREATE_SEGMENT_BEGIN, createSegment);
   yield takeLatest(UPDATE_SEGMENT_BEGIN, updateSegment);
-
   yield takeLatest(DELETE_SEGMENT_BEGIN, deleteSegment);
+
+  yield takeLatest(GET_SEGMENT_MEMBERS_BEGIN, getSegmentMembers);
 }

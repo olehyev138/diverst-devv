@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useContext } from 'react';
+import React, { memo, useEffect, useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
@@ -17,7 +17,7 @@ import fieldReducer from 'containers/GlobalSettings/Field/reducer';
 import { getGroupsBegin } from 'containers/Group/actions';
 import { getFieldsBegin } from 'containers/GlobalSettings/Field/actions';
 import {
-  getSegmentBegin, createSegmentBegin,
+  getSegmentBegin, createSegmentBegin, getSegmentMembersBegin,
   updateSegmentBegin, segmentUnmount
 } from 'containers/Segment/actions';
 
@@ -30,7 +30,7 @@ import {
 import RouteService from 'utils/routeHelpers';
 
 import SegmentForm from 'components/Segment/SegmentForm';
-import GroupForm from 'components/Group/GroupForm';
+import SegmentMemberListPage from 'containers/Segment/SegmentMemberListPage';
 
 export function SegmentPage(props) {
   useInjectReducer({ key: 'segments', reducer });
@@ -43,9 +43,15 @@ export function SegmentPage(props) {
   const rs = new RouteService(useContext);
   const segmentId = rs.params('segment_id');
 
+  const params = {
+    segment_id: segmentId, count: 5, page: 0, order: 'asc'
+  };
+
   useEffect(() => {
-    if (segmentId[0])
+    if (segmentId[0]) {
       props.getSegmentBegin({ id: rs.params('segment_id') });
+      props.getSegmentMembersBegin(params);
+    }
 
     return () => {
       props.segmentUnmount();
@@ -66,6 +72,7 @@ export function SegmentPage(props) {
         }}
         buttonText={segmentId[0] ? 'Update' : 'Create'}
       />
+      <SegmentMemberListPage />
     </React.Fragment>
   );
 }
@@ -97,7 +104,8 @@ const mapDispatchToProps = {
   updateSegmentBegin,
   segmentUnmount,
   getGroupsBegin,
-  getFieldsBegin
+  getFieldsBegin,
+  getSegmentMembersBegin,
 };
 
 const withConnect = connect(
