@@ -13,7 +13,7 @@ import classNames from 'classnames';
 
 import {
   Box, Tabs, Tab, Paper,
-  Card, CardContent, Grid, Link, TablePagination, Typography, Button,
+  Card, CardContent, Grid, Link, TablePagination, Typography, Button, Hidden,
 } from '@material-ui/core';
 
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
@@ -114,7 +114,7 @@ export function EventsList(props, context) {
                 <Card>
                   <CardContent>
                     <Grid container spacing={1} justify='space-between' alignItems='center'>
-                      <Grid item sm>
+                      <Grid item xs>
                         <Typography color='primary' variant='h6' component='h2'>
                           {item.name}
                         </Typography>
@@ -133,9 +133,11 @@ export function EventsList(props, context) {
                           {item.start.substring(0, 10).replace(/-/g, '/')}
                         </Typography>
                       </Grid>
-                      <Grid item>
-                        <KeyboardArrowRightIcon className={classes.arrowRight} />
-                      </Grid>
+                      <Hidden xsDown>
+                        <Grid item>
+                          <KeyboardArrowRightIcon className={classes.arrowRight} />
+                        </Grid>
+                      </Hidden>
                     </Grid>
                   </CardContent>
                 </Card>

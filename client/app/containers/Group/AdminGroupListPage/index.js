@@ -29,9 +29,7 @@ export function AdminGroupListPage(props) {
   useEffect(() => {
     props.getGroupsBegin(params);
 
-    return () => {
-      props.groupListUnmount();
-    };
+    return () => props.groupListUnmount();
   }, []);
 
   const handlePagination = (payload) => {
@@ -46,6 +44,7 @@ export function AdminGroupListPage(props) {
       <GroupList
         groups={props.groups}
         groupTotal={props.groupTotal}
+        defaultParams={params}
         deleteGroupBegin={props.deleteGroupBegin}
         handlePagination={handlePagination}
       />

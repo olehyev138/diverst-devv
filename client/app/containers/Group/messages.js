@@ -24,6 +24,9 @@ export default defineMessages({
   children_collapse: {
     id: `${scope}.index.button.children_collapse`,
   },
+  children_expand: {
+    id: `${scope}.index.button.children_expand`,
+  },
   rows: {
     id: `${scope}.index.button.rows`,
   },
