@@ -1,5 +1,5 @@
 class UpdateUsageStatsDataJob < ActiveJob::Base
-  queue_as :default
+  queue_as :low
 
   def perform(*args)
     params = [
