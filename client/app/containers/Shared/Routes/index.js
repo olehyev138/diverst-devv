@@ -2,56 +2,14 @@ import React from 'react';
 import { Switch } from 'react-router';
 import PropTypes from 'prop-types';
 
-// Layouts
-import UserLayout from 'containers/Layouts/UserLayout/index';
-import GroupLayout from 'containers/Layouts/GroupLayout/index';
-import AdminLayout from 'containers/Layouts/AdminLayout/index';
-import SessionLayout from 'containers/Layouts/SessionLayout/index';
-import ErrorLayout from 'containers/Layouts/ErrorLayout/index';
-import GlobalSettingsLayout from 'containers/Layouts/GlobalSettingsLayout';
-
 // Pages
 import {
-  HomePage, LoginPage, NotFoundPage, PlaceholderPage
-} from 'containers/Shared/Routes/templates';
-
-/* Admin - Manage - Group */
-import UserGroupListPage from 'containers/Group/UserGroupListPage';
-import AdminGroupListPage from 'containers/Group/AdminGroupListPage';
-import GroupCreatePage from 'containers/Group/GroupCreatePage';
-import GroupEditPage from 'containers/Group/GroupEditPage';
-
-/* Admin - System - Global Settings */
-import FieldsPage from 'containers/GlobalSettings/Field/FieldsPage';
-
-/* Admin - System - User */
-import UsersPage from 'containers/User/UsersPage';
-import UserCreatePage from 'containers/User/UserCreatePage';
-import UserEditPage from 'containers/User/UserEditPage';
-
-/* Group */
-import GroupHomePage from 'containers/Group/GroupHomePage';
-import EventsPage from 'containers/Event/EventsPage';
-import NewsFeedPage from 'containers/News/NewsFeedPage';
-import OutcomesPage from 'containers/Group/Outcome/OutcomesPage';
-
-/* Group - Events */
-import EventPage from 'containers/Event/EventPage';
-import EventCreatePage from 'containers/Event/EventCreatePage';
-import EventEditPage from 'containers/Event/EventEditPage';
-
-/* Group - News Feed */
-import GroupMessagePage from 'containers/News/GroupMessage/GroupMessagePage';
-import GroupMessageCreatePage from 'containers/News/GroupMessage/GroupMessageCreatePage';
-import GroupMessageEditPage from 'containers/News/GroupMessage/GroupMessageEditPage';
-
-/* Group - Outcomes */
-import OutcomeCreatePage from 'containers/Group/Outcome/OutcomeCreatePage';
-import OutcomeEditPage from 'containers/Group/Outcome/OutcomeEditPage';
-
-/* Group - Members */
-import GroupMemberListPage from 'containers/Group/GroupMembers/GroupMemberListPage';
-import GroupMemberCreatePage from 'containers/Group/GroupMembers/GroupMemberCreatePage';
+  UserLayout, GroupLayout, AdminLayout, SessionLayout, ErrorLayout, GlobalSettingsLayout, LoginPage, HomePage,
+  UserGroupListPage, AdminGroupListPage, GroupCreatePage, GroupEditPage, FieldsPage, UsersPage, UserCreatePage,
+  UserEditPage, GroupHomePage, EventsPage, NewsFeedPage, OutcomesPage, EventPage, EventCreatePage, EventEditPage,
+  GroupMessagePage, GroupMessageCreatePage, GroupMessageEditPage, OutcomeCreatePage, OutcomeEditPage,
+  GroupMemberListPage, GroupMemberCreatePage, NotFoundPage, PlaceholderPage
+} from './templates';
 
 // Paths
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -69,7 +27,7 @@ export default function Routes(props) {
       <UserLayout exact {...expandRoute(ROUTES.user.innovate)} component={PlaceholderPage} />
       <UserLayout exact {...expandRoute(ROUTES.user.news)} component={PlaceholderPage} />
       <UserLayout exact {...expandRoute(ROUTES.user.events)} component={PlaceholderPage} />
-      <UserLayout exact {...expandRoute(ROUTES.user.groups)} component={PlaceholderPage} />
+      <UserLayout exact {...expandRoute(ROUTES.user.groups)} component={UserGroupListPage} />
       <UserLayout exact {...expandRoute(ROUTES.user.downloads)} component={PlaceholderPage} />
       <UserLayout {...expandRoute(ROUTES.user.mentorship)} component={PlaceholderPage} />
 
