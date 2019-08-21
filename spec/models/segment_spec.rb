@@ -11,7 +11,7 @@ RSpec.describe Segment, type: :model do
     it { expect(segment).to belong_to(:owner).class_name('User') }
 
     # Rules
-    it { expect(segment).to have_many(:field_rules).class_name('SegmentRule') }
+    it { expect(segment).to have_many(:field_rules).class_name('SegmentFieldRule') }
     it { expect(segment).to have_many(:order_rules).class_name('SegmentOrderRule') }
     it { expect(segment).to have_many(:group_rules).class_name('SegmentGroupScopeRule') }
 

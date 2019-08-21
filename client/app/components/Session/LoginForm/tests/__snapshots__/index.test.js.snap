@@ -49,6 +49,7 @@ exports[`<LoginForm /> <LoginFormInner /> Should render and match the snapshot 1
                 "error": [Function],
                 "fullWidth": [Function],
                 "helperText": [Function],
+                "hiddenLabel": [Function],
                 "id": [Function],
                 "inputProps": [Function],
                 "inputRef": [Function],
@@ -388,6 +389,7 @@ exports[`<LoginForm /> <LoginFormInner /> Should render and match the snapshot 1
                 "error": [Function],
                 "fullWidth": [Function],
                 "helperText": [Function],
+                "hiddenLabel": [Function],
                 "id": [Function],
                 "inputProps": [Function],
                 "inputRef": [Function],
@@ -734,17 +736,7 @@ exports[`<LoginForm /> <LoginFormInner /> Should render and match the snapshot 1
             variant="contained"
           >
             <Hidden
-              implementation="js"
-              lgDown={false}
-              lgUp={false}
-              mdDown={false}
-              mdUp={false}
-              smDown={false}
-              smUp={false}
-              xlDown={false}
-              xlUp={false}
               xsDown={true}
-              xsUp={false}
             >
               <LockOpenIcon />
             </Hidden>

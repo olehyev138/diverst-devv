@@ -1,22 +1,22 @@
 import React, { memo, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
+import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
-import { compose } from 'redux';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
+import saga from 'containers/Group/saga';
 import reducer from 'containers/Group/reducer';
-import { selectFormGroup, selectPaginatedSelectGroups } from 'containers/Group/selectors';
 
 import RouteService from 'utils/routeHelpers';
 
+import { selectFormGroup, selectPaginatedSelectGroups } from 'containers/Group/selectors';
 import {
   getGroupBegin, getGroupsBegin,
   updateGroupBegin, groupFormUnmount
 } from 'containers/Group/actions';
 
-import saga from 'containers/Group/saga';
 import GroupForm from 'components/Group/GroupForm';
 
 export function GroupEditPage(props) {

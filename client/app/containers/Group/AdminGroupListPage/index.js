@@ -6,17 +6,18 @@
 
 import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
-import { compose } from 'redux';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
-import { selectPaginatedGroups, selectGroupTotal } from 'containers/Group/selectors';
-import { getGroupsBegin, groupListUnmount, deleteGroupBegin } from 'containers/Group/actions';
-import reducer from 'containers/Group/reducer';
 
 import saga from 'containers/Group/saga';
+import reducer from 'containers/Group/reducer';
+
+import { selectPaginatedGroups, selectGroupTotal } from 'containers/Group/selectors';
+import { getGroupsBegin, groupListUnmount, deleteGroupBegin } from 'containers/Group/actions';
 
 import GroupList from 'components/Group/AdminGroupList';
 
@@ -66,13 +67,11 @@ const mapStateToProps = createStructuredSelector({
   groupTotal: selectGroupTotal(),
 });
 
-function mapDispatchToProps(dispatch) {
-  return {
-    getGroupsBegin: payload => dispatch(getGroupsBegin(payload)),
-    groupListUnmount: () => dispatch(groupListUnmount()),
-    deleteGroupBegin: payload => dispatch(deleteGroupBegin(payload))
-  };
-}
+const mapDispatchToProps = {
+  getGroupsBegin,
+  groupListUnmount,
+  deleteGroupBegin
+};
 
 const withConnect = connect(
   mapStateToProps,

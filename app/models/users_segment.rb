@@ -1,4 +1,6 @@
 class UsersSegment < ApplicationRecord
+  include UsersSegment::Actions
+
   belongs_to :user
   belongs_to :segment
 

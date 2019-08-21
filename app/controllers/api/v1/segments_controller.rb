@@ -1,4 +1,7 @@
 class Api::V1::SegmentsController < DiverstController
+  def status
+  end
+
   def payload
     params
       .require(:segment)
@@ -13,7 +16,7 @@ class Api::V1::SegmentsController < DiverstController
           :field_id,
           :operator,
           :_destroy,
-          values: []
+          :data
         ],
         order_rules_attributes: [
           :id,

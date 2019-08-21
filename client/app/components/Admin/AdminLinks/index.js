@@ -190,6 +190,20 @@ class AdminLinks extends React.PureComponent {
                   <FormattedMessage {...ROUTES.admin.manage.groups.index.data.titleMessage} />
                 </ListItemText>
               </MenuItem>
+              <MenuItem
+                component={WrappedNavLink}
+                exact
+                to={ROUTES.admin.manage.segments.index.path()}
+                className={classes.nested}
+                activeClassName={classes.navLinkActive}
+              >
+                <ListItemIcon>
+                  <ListIcon />
+                </ListItemIcon>
+                <ListItemText>
+                  <FormattedMessage {...ROUTES.admin.manage.segments.index.data.titleMessage} />
+                </ListItemText>
+              </MenuItem>
             </List>
           </Collapse>
 
@@ -251,7 +265,7 @@ class AdminLinks extends React.PureComponent {
               <MenuItem
                 component={WrappedNavLink}
                 exact
-                to='#'
+                to={ROUTES.admin.system.users.index.path()}
                 className={classes.nested}
                 activeClassName={classes.navLinkActive}
               >
@@ -259,7 +273,7 @@ class AdminLinks extends React.PureComponent {
                   <ListIcon />
                 </ListItemIcon>
                 <ListItemText>
-                  Users
+                  <FormattedMessage {...ROUTES.admin.system.users.index.data.titleMessage} />
                 </ListItemText>
               </MenuItem>
               <MenuItem

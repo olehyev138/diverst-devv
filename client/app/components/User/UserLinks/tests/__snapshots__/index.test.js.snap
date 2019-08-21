@@ -163,17 +163,7 @@ exports[`<UserLinks /> <NavMenu /> Should render and match the snapshot 1`] = `
     to="/"
   >
     <Hidden
-      implementation="js"
-      lgDown={false}
-      lgUp={false}
-      mdDown={false}
-      mdUp={false}
       smDown={true}
-      smUp={false}
-      xlDown={false}
-      xlUp={false}
-      xsDown={false}
-      xsUp={false}
     >
       <HomeOutlinedIcon />
     </Hidden>
@@ -192,17 +182,7 @@ exports[`<UserLinks /> <NavMenu /> Should render and match the snapshot 1`] = `
     to="/campaigns"
   >
     <Hidden
-      implementation="js"
-      lgDown={false}
-      lgUp={false}
-      mdDown={false}
-      mdUp={false}
       smDown={true}
-      smUp={false}
-      xlDown={false}
-      xlUp={false}
-      xsDown={false}
-      xsUp={false}
     >
       <WbIncandescentOutlinedIcon />
     </Hidden>
@@ -221,17 +201,7 @@ exports[`<UserLinks /> <NavMenu /> Should render and match the snapshot 1`] = `
     to="/news"
   >
     <Hidden
-      implementation="js"
-      lgDown={false}
-      lgUp={false}
-      mdDown={false}
-      mdUp={false}
       smDown={true}
-      smUp={false}
-      xlDown={false}
-      xlUp={false}
-      xsDown={false}
-      xsUp={false}
     >
       <QuestionAnswerOutlinedIcon />
     </Hidden>
@@ -250,17 +220,7 @@ exports[`<UserLinks /> <NavMenu /> Should render and match the snapshot 1`] = `
     to="/events"
   >
     <Hidden
-      implementation="js"
-      lgDown={false}
-      lgUp={false}
-      mdDown={false}
-      mdUp={false}
       smDown={true}
-      smUp={false}
-      xlDown={false}
-      xlUp={false}
-      xsDown={false}
-      xsUp={false}
     >
       <EventOutlinedIcon />
     </Hidden>
@@ -279,17 +239,7 @@ exports[`<UserLinks /> <NavMenu /> Should render and match the snapshot 1`] = `
     to="/groups"
   >
     <Hidden
-      implementation="js"
-      lgDown={false}
-      lgUp={false}
-      mdDown={false}
-      mdUp={false}
       smDown={true}
-      smUp={false}
-      xlDown={false}
-      xlUp={false}
-      xsDown={false}
-      xsUp={false}
     >
       <GroupOutlinedIcon />
     </Hidden>
@@ -308,17 +258,7 @@ exports[`<UserLinks /> <NavMenu /> Should render and match the snapshot 1`] = `
     to="/downloads"
   >
     <Hidden
-      implementation="js"
-      lgDown={false}
-      lgUp={false}
-      mdDown={false}
-      mdUp={false}
       smDown={true}
-      smUp={false}
-      xlDown={false}
-      xlUp={false}
-      xsDown={false}
-      xsUp={false}
     >
       <CloudDownloadOutlinedIcon />
     </Hidden>
@@ -337,17 +277,7 @@ exports[`<UserLinks /> <NavMenu /> Should render and match the snapshot 1`] = `
     to="/mentorship"
   >
     <Hidden
-      implementation="js"
-      lgDown={false}
-      lgUp={false}
-      mdDown={false}
-      mdUp={false}
       smDown={true}
-      smUp={false}
-      xlDown={false}
-      xlUp={false}
-      xsDown={false}
-      xsUp={false}
     >
       <GroupWorkOutlinedIcon />
     </Hidden>
@@ -362,17 +292,7 @@ exports[`<UserLinks /> <NavMenu /> Should render and match the snapshot 1`] = `
 exports[`<UserLinks /> Should render and match the snapshot 1`] = `
 <Fragment>
   <Hidden
-    implementation="js"
-    lgDown={false}
-    lgUp={false}
-    mdDown={false}
-    mdUp={false}
-    smDown={false}
     smUp={true}
-    xlDown={false}
-    xlUp={false}
-    xsDown={false}
-    xsUp={false}
   >
     <WithStyles(ForwardRef(Toolbar))>
       <WithStyles(ForwardRef(Button))
@@ -396,17 +316,7 @@ exports[`<UserLinks /> Should render and match the snapshot 1`] = `
     />
   </Hidden>
   <Hidden
-    implementation="js"
-    lgDown={false}
-    lgUp={false}
-    mdDown={false}
-    mdUp={false}
-    smDown={false}
-    smUp={false}
-    xlDown={false}
-    xlUp={false}
     xsDown={true}
-    xsUp={false}
   >
     <NavLinks
       classes={Object {}}

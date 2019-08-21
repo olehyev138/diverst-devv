@@ -1,6 +1,6 @@
 /*
  *
- * Group actions
+ * Group Member actions
  *
  */
 

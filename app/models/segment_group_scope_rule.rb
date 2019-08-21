@@ -1,3 +1,7 @@
+#
+# Segment rule to filter users based on 1 to many group memberships
+#  - allow for `join` & `intersect` operators
+#
 class SegmentGroupScopeRule < ApplicationRecord
   belongs_to :segment
   has_many :segment_group_scope_rule_groups
@@ -40,7 +44,7 @@ class SegmentGroupScopeRule < ApplicationRecord
     # returns an array
 
     # get list of member ids for each group
-    members_per_group = Group.find(group_ids).map { |g| g.members.ids.select { |id| users.ids.include?(id) } }
+    members_per_group = Group.find(group_ids).map { |g| g.members.ids.select { |id| users.map(&:id).include?(id) } }
 
     # run an intersection operation on every member list
     # ie get all member ids that are common between all groups

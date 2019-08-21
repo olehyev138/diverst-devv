@@ -50,10 +50,16 @@ export default defineMessages({
       groups: {
         id: `${scope}.admin.manage.groups`,
       },
+      segments: {
+        id: `${scope}.admin.manage.segments`,
+      },
     },
     system: {
       index: {
         id: `${scope}.admin.system.index`,
+      },
+      users: {
+        id: `${scope}.admin.system.users`,
       }
     }
   }

@@ -1,4 +1,7 @@
-class SegmentRule < ApplicationRecord
+#
+# Segment rule to filter users based on custom user fields
+#
+class SegmentFieldRule < ApplicationRecord
   belongs_to :segment
   belongs_to :field
 
@@ -6,23 +9,39 @@ class SegmentRule < ApplicationRecord
   validates :field, presence: true
   validates :field_id, presence: true
 
-  # TODO validate that operator is in @@operators
+  # TODO validate that:
+  #  - operator 'matches' with selected field - ie '>=' for a TextField is invalid
+  #  - operator is in @@operators
+
   validates :operator, presence: true
-  validates :values, presence: true
+  validates :data, presence: true
 
-  @@operators = {
-    equals: 0,
-    greater_than: 1,
-    lesser_than: 2,
-    is_not: 3,
-    contains_any_of: 4,
-    contains_all_of: 5,
-    does_not_contain: 6
-  }.freeze
+  # Find users field_data & compare to field_rule data
+  def followed_by?(user)
+    # find field data for field_rule field type
+    field_data = user.field_data.find_by(field_id: field.id)
 
-  def self.operators
-    @@operators
+    return false unless field_data
+
+    field.evaluate(field_data.deserialized_data, deserialized_data, operator)
   end
+
+  def deserialized_data
+    case field.type
+    when 'SelectField'
+      # TODO: multi select - assume single element array for now
+      JSON.parse(data)
+    else
+      data
+    end
+  end
+
+  #
+  # -------------------------------------------------------------------------------------------------
+  # TODO: Everything below here is most likely deprecated & needs to be removed
+  # DEPRECATED
+  # -------------------------------------------------------------------------------------------------
+  #
 
   def values
     self[:values].presence || '[]'
@@ -36,7 +55,7 @@ class SegmentRule < ApplicationRecord
     JSON.parse values
   end
 
-  def followed_by?(user)
+  def followed_by_oldaf?(user)
     return true if field.nil?
 
     field.validates_rule_for_user?(rule: self, user: user)
