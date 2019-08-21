@@ -9,13 +9,12 @@ class UpdateUsageStatsDataJob < ActiveJob::Base
     ]
 
     params.each_slice(2) do |fields, where|
-      Rails.cache.write("count_list/#{User.model_name.name}:#{fields}:#{where}", expires_in: 2.hours) do
-        User.count_list(*fields, where: where)
-      end
+      Rails.cache.write(
+        "count_list/#{User.model_name.name}:#{fields}:#{where}",
+        User.count_list(*fields, where: where),
+        expires_in: 2.hours)
     end
 
-    Rails.cache.write('aggregate_login_count', expires_in: 2.hours) do
-      User.all.map(&:sign_in_count)
-    end
+    Rails.cache.write('aggregate_login_count', User.all.map(&:sign_in_count), expires_in: 2.hours)
   end
 end
