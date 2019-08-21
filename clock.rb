@@ -29,9 +29,9 @@ module Clockwork
 
   # every(30.minutes, 'Sync Yammer members') { Group.all.each { |group| SyncYammerGroupJob.perform_later(group.id) } }
 
-  every(1.day, 'Update the page visit count for every user', at: '00:00') { UpdatePageVisitationDataJob.perform_later }
-
   every(1.day, 'Update the Daily Page Visits Count', at: '23:50') { ResetDailyPageCountJob.perform_later }
+
+  every(60.minutes, 'Recalculate Cached Usage Stats') { UpdateUsageStatsDataJob.perform_later }
 
   every(1.hour, 'Update cached segment members') { Segment.update_all_members }
 

@@ -37,7 +37,7 @@ class CustomTextsController < ApplicationController
 
   def page_name
     case action_name
-    when 'show'
+    when 'edit'
       'Custom Text Editor'
     else
       "#{controller_path}##{action_name}"
