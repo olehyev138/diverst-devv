@@ -40,8 +40,11 @@ const RuleTypes = Object.freeze({
   group: 2,
 });
 
+/* TODO: figure out solution for this - index or generated key is bad but no id for new object
+ *       If there's any wackiness with adding/removing rules - its possibly due to this
+ */
+/* eslint-disable react/no-array-index-key  */
 
-/* eslint-disable object-curly-newline */
 export function SegmentRules({ values, classes, ...props }) {
   /*
    *  - Tab for each 'rule type'
