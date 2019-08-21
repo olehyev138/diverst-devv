@@ -49,13 +49,13 @@ export function SegmentMemberListPage(props) {
     setParams(newParams);
   };
 
-//  useEffect(() => {
-//    props.getSegmentMembersBegin(params);
-//
-//    return () => {
-//      props.segmentUnmount();
-//    };
-//  }, []);
+  useEffect(() => {
+    props.getSegmentMembersBegin(params);
+
+    return () => {
+      props.segmentUnmount();
+    };
+  }, []);
 
   return (
     <React.Fragment>

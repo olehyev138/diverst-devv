@@ -129,6 +129,9 @@ class Segment < ApplicationRecord
     self.order_rules.reduce(users) { |ordered_users, rule| ordered_users.order(rule.field_name => rule.operator_name) }
   end
 
+
+  # TODO: deal with activerecord vs array nonsense - as field_rule application returns array now
+
   # central method to build segment with new/updated rules
   def update_members
     old_members = self.members.all

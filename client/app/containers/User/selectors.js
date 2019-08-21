@@ -1,4 +1,6 @@
 import { createSelector } from 'reselect/lib';
+
+import produce from 'immer';
 import dig from 'object-dig';
 
 import { initialState } from 'containers/User/reducer';
@@ -35,13 +37,15 @@ const selectFieldData = () => createSelector(
   selectUsersDomain,
   (usersState) => {
     const fieldData = dig(usersState, 'currentUser', 'field_data');
-    if (fieldData)
-      fieldData.forEach((datum) => {
-        datum.data = deserializeDatum(datum);
-        datum.field.options_text = deserializeOptionsText(datum.field);
-      });
+    if (!fieldData) return fieldData;
 
-    return fieldData;
+    return produce(fieldData, (draft) => {
+      if (fieldData)
+        fieldData.forEach((datum) => {
+          datum.data = deserializeDatum(datum);
+          datum.field.options_text = deserializeOptionsText(datum.field);
+        });
+    });
   }
 );
 

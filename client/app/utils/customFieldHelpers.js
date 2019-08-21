@@ -76,6 +76,8 @@ function deserializeOptionsText(field) {
 function serializeSegment(segment) {
   const serializedSegment = { ...segment };
 
+  // TODO: switch to immer
+
   // serialize field rules
   // pluck out attributes we want - (should use spread op)
   serializedSegment.field_rules_attributes = serializedSegment.field_rules_attributes.map(r => ({

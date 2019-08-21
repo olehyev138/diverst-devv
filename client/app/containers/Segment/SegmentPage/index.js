@@ -48,10 +48,8 @@ export function SegmentPage(props) {
   };
 
   useEffect(() => {
-    if (segmentId[0]) {
+    if (segmentId[0])
       props.getSegmentBegin({ id: rs.params('segment_id') });
-      props.getSegmentMembersBegin(params);
-    }
 
     return () => {
       props.segmentUnmount();
