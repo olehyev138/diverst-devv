@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe DateField, type: :model do
-
   describe 'operators' do
     let(:operators) {  DateField.new.operators }
 
