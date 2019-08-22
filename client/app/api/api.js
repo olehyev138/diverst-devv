@@ -31,7 +31,9 @@ const Api = {
   groupMessageComments,
   groupMembers,
   outcomes,
-  groupGraphs
+  metrics: {
+    groupGraphs
+  }
 };
 
 export default Api;

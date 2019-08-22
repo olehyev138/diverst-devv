@@ -22,7 +22,7 @@ function metricsReducer(state = initialState, action) {
   return produce(state, (draft) => {
     switch (action.type) {
       case GET_GROUP_POPULATION_SUCCESS:
-        draft.metricsData.groupPopulation = action.payload.data;
+        draft.metricsData.groupPopulation = action.payload;
         break;
       case METRICS_UNMOUNT:
         return initialState;

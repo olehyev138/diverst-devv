@@ -16,7 +16,7 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 export function* getGroupPopulation(action) {
   try {
-    const response = yield call(api.groups.all.bind(api.groups), action.payload);
+    const response = yield call(api.metrics.groupGraphs.groupPopulation.bind(api.metrics.groupGraphs), action.payload);
 
     yield put(getGroupPopulationSuccess(response.data));
   } catch (err) {

@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { initialState } from 'containers/Group/reducer';
+import { initialState } from 'containers/Analyze/reducer';
 
 const selectMetricsDomain = state => state.metrics || initialState;
 

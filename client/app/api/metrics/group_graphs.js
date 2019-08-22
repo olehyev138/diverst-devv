@@ -1,7 +1,7 @@
 import API from 'api/base/base';
 const axios = require('axios');
 
-const GroupGraphs = new API({ controller: 'groups' });
+const GroupGraphs = new API({ controller: 'metrics/groups' });
 
 Object.assign(GroupGraphs, {
   groupPopulation() {

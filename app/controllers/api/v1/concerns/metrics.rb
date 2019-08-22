@@ -1,4 +1,4 @@
-module Metrics
+module Api::V1::Concerns::Metrics
   extend ActiveSupport::Concern
 
   included do
