@@ -4,6 +4,8 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 
+import dig from 'object-dig';
+
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 
@@ -26,7 +28,8 @@ export function GroupPopulationGraphPage(props) {
   useInjectReducer({ key: 'metrics', reducer });
   useInjectSaga({ key: 'metrics', saga });
 
-  console.log(props);
+  // TEMP - swap x & y for horizontal
+  const data = (dig(props.data, 'series', 0, 'values') || [{ x: '', y: 0 }]).map(d => ({ x: d.y, y: d.x }));
 
   useEffect(() => {
     props.getGroupPopulationBegin();
@@ -34,12 +37,15 @@ export function GroupPopulationGraphPage(props) {
 
   return (
     <React.Fragment>
-      <GroupPopulationGraph />
+      <GroupPopulationGraph
+        data={data}
+      />
     </React.Fragment>
   );
 }
 
 GroupPopulationGraphPage.propTypes = {
+  data: PropTypes.object,
   getGroupPopulationBegin: PropTypes.func,
   metricsUnmount: PropTypes.func
 };
