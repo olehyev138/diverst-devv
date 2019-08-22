@@ -41,6 +41,9 @@ export default defineMessages({
       },
       users: {
         id: `${scope}.admin.analyze.users`,
+      },
+      groups: {
+        id: `${scope}.admin.analyze.groups`,
       }
     },
     manage: {

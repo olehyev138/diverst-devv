@@ -162,6 +162,20 @@ class AdminLinks extends React.PureComponent {
                   <FormattedMessage {...ROUTES.admin.analyze.users.data.titleMessage} />
                 </ListItemText>
               </MenuItem>
+              <MenuItem
+                component={WrappedNavLink}
+                exact
+                to={ROUTES.admin.analyze.groups.path()}
+                className={classes.nested}
+                activeClassName={classes.navLinkActive}
+              >
+                <ListItemIcon>
+                  <ListIcon />
+                </ListItemIcon>
+                <ListItemText>
+                  <FormattedMessage {...ROUTES.admin.analyze.groups.data.titleMessage} />
+                </ListItemText>
+              </MenuItem>
             </List>
           </Collapse>
 

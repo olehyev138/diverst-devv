@@ -15,6 +15,9 @@ import {
   HomePage, LoginPage, NotFoundPage, PlaceholderPage
 } from 'containers/Shared/Routes/templates';
 
+/* Admin - Analyze */
+import GroupMetricsDashboardPage from 'containers/Analyze/Dashboards/GroupMetricsDashboardPage';
+
 /* Admin - Manage - Group */
 import UserGroupListPage from 'containers/Group/UserGroupListPage';
 import AdminGroupListPage from 'containers/Group/AdminGroupListPage';
@@ -79,8 +82,9 @@ export default function Routes(props) {
 
       { /* Admin */ }
       { /* Admin - Analyze */ }
-      <AdminLayout {...expandRoute(ROUTES.admin.analyze.overview)} component={PlaceholderPage} />
       <AdminLayout {...expandRoute(ROUTES.admin.analyze.users)} component={PlaceholderPage} />
+      <AdminLayout {...expandRoute(ROUTES.admin.analyze.groups)} component={GroupMetricsDashboardPage} />
+      <AdminLayout exact {...expandRoute(ROUTES.admin.analyze.overview)} component={PlaceholderPage} />
 
       { /* Admin - Manage */ }
       { /* Admin - Manage - Groups */ }

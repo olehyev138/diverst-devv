@@ -140,6 +140,12 @@ export const ROUTES = {
           titleMessage: messages.admin.analyze.users,
         }
       },
+      groups: {
+        path: () => '/admin/analyze/groups',
+        data: {
+          titleMessage: messages.admin.analyze.groups,
+        }
+      },
     },
     manage: {
       index: {
