@@ -237,12 +237,12 @@ class ApplicationController < ActionController::Base
   end
 
   def aggregate_data_from_field(model, *fields, where: [nil])
-    list_of_values = model.count_list(*fields, where: where)
+    list_of_values = model.cached_count_list(*fields, where: where)
     calculate_aggregate_data(list_of_values)
   end
 
   def percentile_from_field(model, number, *fields, where: [nil])
-    list_of_values = model.count_list(*fields, where: where)
+    list_of_values = model.cached_count_list(*fields, where: where)
     calculate_percentile(number, list_of_values)
   end
 

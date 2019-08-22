@@ -16,31 +16,37 @@ class BaseClass < ActiveRecord::Base
   end
 
   def self.count_list(*fields, from: nil, where: [nil])
-    Rails.cache.fetch("count_list/#{self.model_name.name}:#{fields}:#{where}", expires_in: 2.hours) do
-      if where == [nil] && from.nil?
-        # WITHOUT ANY EXTRA CONDITION, CAN USE COUNTING CACHE
-        results = []
-        self.all.map do |record|
+    if where == [nil] && from.nil?
+      # WITHOUT ANY EXTRA CONDITION, CAN USE COUNTING CACHE
+      results = []
+      self.find_in_batches do |records|
+        records.map do |record|
           sum = fields.sum do |field|
             record.send(field).size
           end
           results.append sum
         end
-      else
-        # IF THERE IS A CONDITION, LEFT JOIN ALL THE FIELDS,
-        # APPLY THE CONDITION, GROUP BY USER ID, AND COUNT DISTINCT
-        active_record = self.left_joins(*fields).where(*where).group(:id)
-        count_hash = fields.reduce(nil) do |sum, n|
-          hash = active_record.distinct.count("#{get_association_table_name(n)}.id")
-          if sum.present?
-            sum.merge(hash) { | _, x, y| x + y }
-          else
-            hash
-          end
-        end
-        results = count_hash.values
       end
-      results.sort
+    else
+      # IF THERE IS A CONDITION, LEFT JOIN ALL THE FIELDS,
+      # APPLY THE CONDITION, GROUP BY USER ID, AND COUNT DISTINCT
+      active_record = self.left_joins(*fields).where(*where).group(:id)
+      count_hash = fields.reduce(nil) do |sum, n|
+        hash = active_record.distinct.count("#{get_association_table_name(n)}.id")
+        if sum.present?
+          sum.merge(hash) { | _, x, y| x + y }
+        else
+          hash
+        end
+      end
+      results = count_hash.values
+    end
+    results.sort
+  end
+
+  def self.cached_count_list(*fields, from: nil, where: [nil])
+    Rails.cache.fetch("count_list/#{self.model_name.name}:#{fields}:#{where}", expires_in: 2.hours) do
+      count_list(*fields, from: from, where: where)
     end
   end
 
