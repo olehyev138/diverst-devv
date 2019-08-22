@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190806163846) do
+ActiveRecord::Schema.define(version: 20190822140020) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -973,6 +973,9 @@ ActiveRecord::Schema.define(version: 20190806163846) do
     t.string "page_name", limit: 191
   end
 
+  add_index "page_names", %w(page_name page_url), name: "index_page_names_on_page_name_and_page_url", using: :btree
+  add_index "page_names", %w(page_url page_name), name: "index_page_names_on_page_url_and_page_name", using: :btree
+
   create_table "page_visitation_data", force: :cascade do |t|
     t.integer  "user_id",      limit: 4
     t.string   "page_url",     limit: 191
@@ -986,6 +989,9 @@ ActiveRecord::Schema.define(version: 20190806163846) do
     t.datetime "created_at",                           null: false
     t.datetime "updated_at",                           null: false
   end
+
+  add_index "page_visitation_data", %w(page_url user_id), name: "index_page_visitation_data_on_page_url_and_user_id", using: :btree
+  add_index "page_visitation_data", %w(user_id page_url), name: "index_page_visitation_data_on_user_id_and_page_url", using: :btree
 
   create_table "pillars", force: :cascade do |t|
     t.string   "name",              limit: 191
