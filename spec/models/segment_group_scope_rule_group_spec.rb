@@ -1,5 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe SegmentGroupScopeRuleGroup, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  it { should belong_to(:segment_group_scope_rule) }
+  it { should belong_to(:group) }
 end
