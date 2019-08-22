@@ -8,6 +8,11 @@ const selectGroupPopulation = () => createSelector(
   metricsState => metricsState.metricsData.groupPopulation
 );
 
+const selectGrowthOfGroups = () => createSelector(
+  selectMetricsDomain,
+  metricsState => metricsState.metricsData.growthOfGroups
+);
+
 export {
-  selectMetricsDomain, selectGroupPopulation
+  selectMetricsDomain, selectGroupPopulation, selectGrowthOfGroups
 };

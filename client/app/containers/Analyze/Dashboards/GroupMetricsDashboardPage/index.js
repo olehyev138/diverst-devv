@@ -10,6 +10,7 @@ import { useInjectReducer } from 'utils/injectReducer';
 import { metricsUnmount } from 'containers/Analyze/actions';
 
 import GroupPopulationGraphPage from 'containers/Analyze/Graphs/GroupPopulationGraphPage';
+import GrowthOfGroupsGraphPage from 'containers/Analyze/Graphs/GrowthOfGroupsGraphPage';
 
 export function GroupMetricsDashboardPage(props) {
   useEffect(() => {
@@ -19,7 +20,7 @@ export function GroupMetricsDashboardPage(props) {
   }, []);
 
   return (
-    <GroupPopulationGraphPage />
+    <GrowthOfGroupsGraphPage />
   );
 }
 
