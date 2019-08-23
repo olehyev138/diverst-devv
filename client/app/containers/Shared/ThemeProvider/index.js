@@ -10,19 +10,13 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 
-import injectReducer from 'utils/injectReducer';
-
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import Slide from '@material-ui/core/Slide';
 
 import { makeSelectPrimary, makeSelectSecondary } from './selectors';
-import { changePrimary, changeSecondary } from './actions';
-import reducer from './reducer';
 
 import SnackbarProviderWrapper from 'components/Shared/SnackbarProviderWrapper';
 
 import App from 'containers/Shared/App/Loadable';
-import { loginSuccess, setUser, setEnterprise } from 'containers/Shared/App/actions';
 
 export class ThemeProvider extends React.PureComponent {
   render() {

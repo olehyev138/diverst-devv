@@ -21,7 +21,6 @@ const AuthenticatedLayout = ({
     classes, data, ...other
   } = rest;
 
-
   /* Use AuthService to keep AuthenticatedLayout unconnected from store.
    *   - Probably better to keep layouts unconnected too
    *   - Causes problems when state updates, causing children to remount
@@ -50,7 +49,7 @@ const AuthenticatedLayout = ({
                     />
                   )
               }
-              <Component {...matchProps} />
+              <Component {...other} {...matchProps} />
             </div>
           )}
         />

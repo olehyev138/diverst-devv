@@ -18,12 +18,13 @@ const ApplicationLayout = ({ component: Component, ...rest }) => {
       render={routeProps => (
         <RouteContext.Provider
           value={{
+            history: routeProps.history,
+            location: routeProps.location,
             computedMatch: routeProps.match,
-            location: routeProps.location
           }}
         >
           <CssBaseline />
-          <Component {...rest} />
+          <Component {...rest} {...routeProps} />
         </RouteContext.Provider>
       )}
     />
