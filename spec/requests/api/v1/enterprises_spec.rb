@@ -101,11 +101,12 @@ RSpec.describe "#{model.pluralize}", type: :request do
     end
 
     it 'returns a link to login page because there are errors in the response' do
+      domain = ENV['DOMAIN'] || 'http://www.example.com'
       saml = OpenStruct.new({ is_valid?: false, nameid: 'test@gmail.com', attributes: {}, errors: ['Actual Audience does not match expected audience'] })
       allow(OneLogin::RubySaml::Response).to receive(:new).and_return(saml)
 
       post "/api/v1/#{route}/#{item.id}/sso_login", params: {}, headers: headers
-      expect(response.header['Location']).to eq "#{ENV['DOMAIN']}/login?errorMessage=Actual Audience does not match expected audience"
+      expect(response.header['Location']).to eq "#{domain}/login?errorMessage=Actual Audience does not match expected audience"
     end
   end
 
