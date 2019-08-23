@@ -5,7 +5,7 @@ import {
   logout,
   findEnterprise
 }
-from 'containers/Shared/App/saga';
+  from 'containers/Shared/App/saga';
 import {
   loginSuccess,
   setUser,
@@ -17,7 +17,7 @@ import {
   setEnterprise,
   findEnterpriseError
 }
-from 'containers/Shared/App/actions';
+  from 'containers/Shared/App/actions';
 import { changePrimary, changeSecondary } from 'containers/Shared/ThemeProvider/actions';
 import { push } from 'connected-react-router';
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -52,7 +52,7 @@ beforeEach(() => {
 });
 
 describe('Login Saga', () => {
-  it('should get token from API', async() => {
+  it('should get token from API', async () => {
     api.sessions.create.mockImplementation(() => Promise.resolve({ data: { token, policy_group: policyGroup } }));
     const results = [loginSuccess(token), setUser(user), setUserPolicyGroup({ policy_group: policyGroup }), push(ROUTES.user.home.path())];
     const initialAction = { payload: { email: 'test@gmail.com', password: 'password' } };
@@ -65,7 +65,7 @@ describe('Login Saga', () => {
     expect(dispatched).toEqual(results);
   });
 
-  it('should return error from API', async() => {
+  it('should return error from API', async () => {
     const response = { data: { message: 'ERROR!' } };
     api.sessions.create.mockImplementation(() => Promise.reject(response));
     const results = [loginError(response)];
@@ -81,7 +81,7 @@ describe('Login Saga', () => {
 });
 
 describe('ssoLogin Saga', () => {
-  it('should get token from API', async() => {
+  it('should get token from API', async () => {
     api.policyGroups.get.mockImplementation(() => Promise.resolve({ data: { policy_group: policyGroup } }));
     const results = [loginSuccess(token), setUser(user), setUserPolicyGroup({ policy_group: policyGroup }), push(ROUTES.user.home.path())];
     const initialAction = { payload: { userToken: token, policyGroupId: 1 } };
@@ -94,7 +94,7 @@ describe('ssoLogin Saga', () => {
     expect(dispatched).toEqual(results);
   });
 
-  it('should return error from API', async() => {
+  it('should return error from API', async () => {
     const response = { response: { data: 'ERROR!' } };
     const notified = {
       notification: {
@@ -118,7 +118,7 @@ describe('ssoLogin Saga', () => {
 });
 
 describe('ssoLinkFind Saga', () => {
-  it('should get sso redirect link from API', async() => {
+  it('should get sso redirect link from API', async () => {
     api.enterprises.getSsoLink.mockImplementation(() => Promise.resolve({ data: 'https://www.diverst.com' }));
     const results = [];
     const initialAction = { payload: { enterpriseId: 1, relayState: 'groups' } };
@@ -132,7 +132,7 @@ describe('ssoLinkFind Saga', () => {
     expect(dispatched).toEqual(results);
   });
 
-  it('should return error from API', async() => {
+  it('should return error from API', async () => {
     const response = { response: { data: 'ERROR!' } };
     const notified = {
       notification: {
@@ -156,7 +156,7 @@ describe('ssoLinkFind Saga', () => {
 });
 
 describe('logout Saga', () => {
-  it('logs user out and sends user to home page', async() => {
+  it('logs user out and sends user to home page', async () => {
     api.sessions.destroy.mockImplementation(() => Promise.resolve({ data: {} }));
     const notified = {
       notification: {
@@ -178,7 +178,7 @@ describe('logout Saga', () => {
     expect(dispatched).toEqual(results);
   });
 
-  it('logs user out and redirects to sso login page', async() => {
+  it('logs user out and redirects to sso login page', async () => {
     api.sessions.destroy.mockImplementation(() => Promise.resolve({ data: { logout_link: 'www.diverst.com' } }));
     const notified = {
       notification: {
@@ -200,7 +200,7 @@ describe('logout Saga', () => {
     expect(dispatched).toEqual(results);
   });
 
-  it('should return error from API', async() => {
+  it('should return error from API', async () => {
     const response = { response: { data: 'ERROR!' } };
     api.sessions.destroy.mockImplementation(() => Promise.reject(response));
     const results = [setUser(null), setUserPolicyGroup({ policy_group: null }), logoutError(response), push(ROUTES.session.login.path())];
@@ -216,7 +216,7 @@ describe('logout Saga', () => {
 });
 
 describe('findEnterprise Saga', () => {
-  it('should get sso redirect link from API', async() => {
+  it('should get sso redirect link from API', async () => {
     const response = { data: { enterprise: { id: 1, theme: { primary_color: '', secondary_color: '' } } } };
     api.users.findEnterprise.mockImplementation(() => Promise.resolve(response));
     const results = [findEnterpriseSuccess(), setEnterprise(response.data.enterprise), changePrimary(response.data.enterprise.theme.primary_color), changeSecondary(response.data.enterprise.theme.secondary_color)];
@@ -230,7 +230,7 @@ describe('findEnterprise Saga', () => {
     expect(dispatched).toEqual(results);
   });
 
-  it('should return error from API', async() => {
+  it('should return error from API', async () => {
     const response = { response: { data: 'ERROR!' } };
     api.users.findEnterprise.mockImplementation(() => Promise.reject(response));
     const results = [findEnterpriseError(response)];

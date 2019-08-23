@@ -6,7 +6,7 @@ axios.defaults.headers.common['Diverst-APIKey'] = config.apiKey;
 
 class API {
   constructor(args) {
-    this.baseUrl = `/api/v1/`;
+    this.baseUrl = '/api/v1/';
     this.controller = args.controller;
     this.url = this.baseUrl + this.controller;
   }

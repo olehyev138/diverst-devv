@@ -27,7 +27,7 @@ import {
   ssoLoginBegin,
   ssoLinkBegin
 }
-from 'containers/Shared/App/actions';
+  from 'containers/Shared/App/actions';
 
 const styles = theme => ({});
 
