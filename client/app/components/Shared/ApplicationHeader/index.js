@@ -1,14 +1,13 @@
 import React, { memo } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { push } from 'connected-react-router';
 import PropTypes from 'prop-types';
 import { createStructuredSelector } from 'reselect';
 import classNames from 'classnames';
 
 import { withStyles } from '@material-ui/core/styles';
 import {
-  AppBar, Button, Hidden, IconButton, ListItemIcon, Menu, MenuItem, Toolbar, Typography,
+  AppBar, Button, Hidden, IconButton, Link, ListItemIcon, Menu, MenuItem, Toolbar, Typography,
 } from '@material-ui/core';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import PermIdentityIcon from '@material-ui/icons/PermIdentity';
@@ -17,8 +16,10 @@ import BuildIcon from '@material-ui/icons/Build';
 import DvrIcon from '@material-ui/icons/Dvr';
 import MenuIcon from '@material-ui/icons/Menu';
 
+import WrappedNavLink from 'components/Shared/WrappedNavLink';
+
 import Logo from 'components/Shared/Logo/index';
-import { logoutBegin, setUser } from 'containers/Shared/App/actions';
+import { logoutBegin } from 'containers/Shared/App/actions';
 
 import { selectEnterprise, selectToken, selectUser } from 'containers/Shared/App/selectors';
 
@@ -57,6 +58,8 @@ const styles = theme => ({
     alignItems: 'center',
   },
   dashboardSwitchButton: {
+    color: '#FFFFFF',
+    borderColor: '#FFFFFF',
     height: '40px',
     padding: '0px 8px',
     marginRight: '8px',
@@ -91,20 +94,10 @@ export class ApplicationHeader extends React.PureComponent {
     };
 
     this.logoutBegin = this.logoutBegin.bind(this);
-    this.handleVisitAdmin = this.handleVisitAdmin.bind(this);
-    this.handleVisitHome = this.handleVisitHome.bind(this);
   }
 
   logoutBegin() {
     this.props.logoutBegin(this.props.user);
-  }
-
-  handleVisitAdmin() {
-    this.props.handleVisitAdmin();
-  }
-
-  handleVisitHome() {
-    this.props.handleVisitHome();
   }
 
   handleProfileMenuOpen = (event) => {
@@ -145,8 +138,9 @@ export class ApplicationHeader extends React.PureComponent {
         onClose={this.handleProfileMenuClose}
       >
         <MenuItem
+          component={WrappedNavLink}
+          to={isAdmin ? ROUTES.user.root.path() : ROUTES.admin.root.path()}
           className={classes.dashboardSwitchMenuItem}
-          onClick={isAdmin ? this.handleVisitHome : this.handleVisitAdmin}
         >
           { isAdmin
             ? (
@@ -200,12 +194,14 @@ export class ApplicationHeader extends React.PureComponent {
               )
               : <React.Fragment />
             }
-            <Button
-              size='small'
-              onClick={this.handleVisitHome}
+            <Link
+              component={WrappedNavLink}
+              to={ROUTES.user.root.path()}
             >
-              <Logo imgClass='large-img' verticalPadding={20} />
-            </Button>
+              <Button>
+                <Logo imgClass='large-img' verticalPadding={20} />
+              </Button>
+            </Link>
             <div className={classNames(classes.grow, classes.centerText)}>
               <Hidden xsDown>
                 {group ? (
@@ -220,27 +216,30 @@ export class ApplicationHeader extends React.PureComponent {
             <div className={classes.sectionDesktop}>
               <div className={classes.buttonSection}>
                 <Hidden xsDown>
-                  <Button
-                    className={classes.dashboardSwitchButton}
-                    variant='outlined'
-                    color='inherit'
-                    onClick={isAdmin ? this.handleVisitHome : this.handleVisitAdmin}
+                  <Link
+                    component={WrappedNavLink}
+                    to={isAdmin ? ROUTES.user.root.path() : ROUTES.admin.root.path()}
                   >
-                    { isAdmin
-                      ? (
-                        <span>
-                          <DvrIcon className={classes.dashboardIcon} />
-                        Dashboard
-                        </span>
-                      )
-                      : (
-                        <span>
-                          <BuildIcon className={classes.adminIcon} />
-                        Admin
-                        </span>
-                      )
-                    }
-                  </Button>
+                    <Button
+                      className={classes.dashboardSwitchButton}
+                      variant='outlined'
+                    >
+                      { isAdmin
+                        ? (
+                          <span>
+                            <DvrIcon className={classes.dashboardIcon} />
+                            Dashboard
+                          </span>
+                        )
+                        : (
+                          <span>
+                            <BuildIcon className={classes.adminIcon} />
+                            Admin
+                          </span>
+                        )
+                      }
+                    </Button>
+                  </Link>
                 </Hidden>
                 <div>
                   <IconButton
@@ -289,12 +288,6 @@ export function mapDispatchToProps(dispatch, ownProps) {
     logoutBegin(user) {
       dispatch(logoutBegin(user));
     },
-    handleVisitAdmin() {
-      dispatch(push(ROUTES.admin.root.path()));
-    },
-    handleVisitHome() {
-      dispatch(push(ROUTES.user.root.path()));
-    }
   };
 }
 
