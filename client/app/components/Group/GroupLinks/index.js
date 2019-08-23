@@ -1,14 +1,13 @@
 import React, { useContext, memo } from 'react';
-import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { createStructuredSelector } from 'reselect';
 import { withStyles } from '@material-ui/core/styles';
 import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
+import { matchPath } from 'react-router';
 
+import { useLastLocation } from 'react-router-last-location';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
-import { AppBar, Toolbar, Button, Hidden } from '@material-ui/core';
-import { NavLink } from 'react-router-dom';
+import { Toolbar, Button, Hidden } from '@material-ui/core';
 import PropTypes from 'prop-types';
 
 import BackIcon from '@material-ui/icons/KeyboardBackspaceOutlined';
@@ -112,6 +111,16 @@ export function GroupLinks(props) {
   const { classes } = props;
   const rs = new RouteService(useContext);
 
+  const lastLocation = useLastLocation();
+  let lastPageWasGroupLayout = true;
+
+  if (lastLocation)
+    lastPageWasGroupLayout = !!matchPath(lastLocation.pathname, {
+      path: ROUTES.group.home.path(),
+      exact: false,
+      strict: false,
+    });
+
   const NavLinks = () => (
     <React.Fragment>
       <Toolbar className={classes.toolbar}>
@@ -119,7 +128,7 @@ export function GroupLinks(props) {
           <Button
             component={WrappedNavLink}
             exact
-            to={ROUTES.user.home.path()}
+            to={lastPageWasGroupLayout ? ROUTES.user.home.path() : lastLocation}
             className={classNames(classes.navLink, classes.backNavLink)}
             activeClassName={classes.navLinkActive}
           >
