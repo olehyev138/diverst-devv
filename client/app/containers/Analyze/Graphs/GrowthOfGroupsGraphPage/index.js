@@ -30,7 +30,6 @@ export function GrowthOfGroupsGraphPage(props) {
 
   const data = (dig(props.data, 'series') || undefined);
 
-
   useEffect(() => {
     props.getGrowthOfGroupsBegin();
   }, []);
@@ -38,7 +37,7 @@ export function GrowthOfGroupsGraphPage(props) {
   return (
     <React.Fragment>
       <GrowthOfGroupsGraph
-        data={data || [ { key: '', values: [{ x: 0, y: 0 }] } ]}
+        data={data ? data.slice(0, 5) : undefined}
       />
     </React.Fragment>
   );

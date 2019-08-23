@@ -2,24 +2,56 @@ import React, { memo, useEffect, useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
+import produce from 'immer';
 import dig from 'object-dig';
 
 import { Grid, Paper } from '@material-ui/core';
 
 import {
   XYPlot, LineSeries, VerticalGridLines, HorizontalGridLines,
-  Hint, XAxis, YAxis, Highlight
+  Hint, XAxis, YAxis, Highlight, Crosshair, Borders, DiscreteColorLegend
 } from 'react-vis/';
 import '../../../../../node_modules/react-vis/dist/style.css'; // TODO: fix this nonsense
 
 export function GrowthOfGroupsGraph(props) {
-  const [value, setValue] = useState(undefined);
-
   const [lastDrawLocation, setLastDrawLocation] = useState(null);
+  const [values, setValues] = useState([]);
+
+  const [legendData, setLegendData] = useState({});
+
+  const buildLegendData = (data) => {
+    const newLegendData = {};
+    data.forEach(d => newLegendData[d.key] = { title: d.key, hidden: false });
+
+    return newLegendData;
+  };
+
+  if (props.data && props.data.length > 0 && legendData && Object.keys(legendData).length <= 0)
+    setLegendData(buildLegendData(props.data));
+
+  // TODO: updating state with different values causes highlighting & crosshair lag
+  const updateCrossHairs = (v, { index }) => setValues(props.data.map(d => d.values[index]));
+
 
   return (
     <React.Fragment>
       <Paper>
+        <Grid container justify='center'>
+          <Grid item xs={6}>
+            <DiscreteColorLegend
+              items={Object.values(legendData)}
+              orientation='horizontal'
+              height={100}
+              onItemClick={v => {
+                const p = produce(legendData, draft => {
+                  draft[v.title].hidden = !draft[v.title].hidden;
+                });
+
+                setLegendData(p);
+              }}
+            />
+          </Grid>
+        </Grid>
         <Grid container justify='center'>
           <XYPlot
             animation
@@ -39,20 +71,25 @@ export function GrowthOfGroupsGraph(props) {
               ]
             }
           >
+            <HorizontalGridLines />
+            <VerticalGridLines />
+            { props.data && props.data.map((series, index) => {
+              if (dig(legendData[series.key], 'hidden')) return (<React.Fragment key={series.key} />);
+
+              return (
+                <LineSeries
+                  key={series.key}
+                  data={series.values}
+                />
+              );
+            })}
+            <Borders style={{ all: { fill: '#fff' }}} />
             <XAxis
               tickPadding={20}
               tickLabelAngle={10}
               tickFormat={value => new Date(value).toLocaleDateString()}
             />
             <YAxis />
-            <HorizontalGridLines />
-            <VerticalGridLines />
-            { props.data.slice(0, 20).map(series => (
-              <LineSeries
-                key={series.key}
-                data={series.values}
-              />
-            ))}
             <Highlight
               onBrushEnd={area => setLastDrawLocation(area)}
               onDrag={(area) => {
@@ -73,6 +110,7 @@ export function GrowthOfGroupsGraph(props) {
 
 GrowthOfGroupsGraph.propTypes = {
   data: PropTypes.array,
+  titles: PropTypes.array,
   metricsUnmount: PropTypes.func
 };
 
