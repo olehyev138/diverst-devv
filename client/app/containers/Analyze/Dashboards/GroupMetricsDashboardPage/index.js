@@ -20,7 +20,7 @@ export function GroupMetricsDashboardPage(props) {
   }, []);
 
   return (
-    <GrowthOfGroupsGraphPage />
+    <GroupPopulationGraphPage />
   );
 }
 
