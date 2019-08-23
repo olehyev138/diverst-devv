@@ -30,8 +30,12 @@ export function GrowthOfGroupsGraphPage(props) {
 
   const data = (dig(props.data, 'series') || undefined);
 
+  const params = {
+    date_range: { from_date: '1m' }
+  };
+
   useEffect(() => {
-    props.getGrowthOfGroupsBegin();
+    props.getGrowthOfGroupsBegin(params);
   }, []);
 
   return (

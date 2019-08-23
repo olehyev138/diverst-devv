@@ -5,7 +5,9 @@ import { compose } from 'redux';
 import produce from 'immer';
 import dig from 'object-dig';
 
-import { Grid, Paper } from '@material-ui/core';
+import {
+  Grid, Paper, Button
+} from '@material-ui/core';
 
 import {
   XYPlot, LineSeries, VerticalGridLines, HorizontalGridLines,
@@ -19,9 +21,9 @@ export function GrowthOfGroupsGraph(props) {
 
   const [legendData, setLegendData] = useState({});
 
-  const buildLegendData = (data) => {
+  const buildLegendData = (data, hidden = false) => {
     const newLegendData = {};
-    data.forEach(d => newLegendData[d.key] = { title: d.key, hidden: false });
+    data.forEach(d => newLegendData[d.key] = { title: d.key, hidden: hidden });
 
     return newLegendData;
   };
