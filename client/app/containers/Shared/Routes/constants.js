@@ -178,7 +178,23 @@ export const ROUTES = {
         edit: {
           path: (groupId = ':group_id') => `/admin/manage/groups/${groupId}/edit`,
         },
-      }
+      },
+      segments: {
+        pathPrefix: '/admin/manage/segments',
+        index: {
+          path: () => '/admin/manage/segments',
+          data: {
+            permission: 'segments_index',
+            titleMessage: messages.admin.manage.segments,
+          }
+        },
+        new: {
+          path: () => '/admin/manage/segments/new',
+        },
+        show: {
+          path: (segmentId = ':segment_id') => `/admin/manage/segments/${segmentId}`,
+        },
+      },
     },
     system: {
       index: {
@@ -190,6 +206,10 @@ export const ROUTES = {
       users: {
         index: {
           path: () => '/admin/system/users',
+          data: {
+            pathPrefix: '/system/users',
+            titleMessage: messages.admin.system.users,
+          }
         },
         new: {
           path: () => '/admin/system/users/new',

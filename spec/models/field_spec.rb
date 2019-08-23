@@ -90,4 +90,61 @@ RSpec.describe Field do
       expect { YammerFieldMapping.find(yammer_field_mapping.id) }.to raise_error(ActiveRecord::RecordNotFound)
     end
   end
+
+  describe 'evaluate' do
+    # TODO - test evaluate evaluates each operator correctly
+    pending('TODO')
+  end
+
+  describe 'operators' do
+    context 'operators should have correct ids' do
+      it 'equals: 0' do
+        expect(Field::OPERATORS[:equals]).to eq 0
+      end
+
+      it 'greater_than_excl: 1' do
+        expect(Field::OPERATORS[:greater_than_excl]).to eq 1
+      end
+
+      it 'lesser_than: 2' do
+        expect(Field::OPERATORS[:lesser_than_excl]).to eq 2
+      end
+
+      it 'is_not: 3' do
+        expect(Field::OPERATORS[:is_not]).to eq 3
+      end
+
+      it 'contains_any_of: 4' do
+        expect(Field::OPERATORS[:contains_any_of]).to eq 4
+      end
+
+      it 'contains_all_of: 5' do
+        expect(Field::OPERATORS[:contains_all_of]).to eq 5
+      end
+
+      it 'does_not_contain: 6' do
+        expect(Field::OPERATORS[:does_not_contain]).to eq 6
+      end
+
+      it 'greater_than_incl: 7' do
+        expect(Field::OPERATORS[:greater_than_incl]).to eq 7
+      end
+
+      it 'lesser_than_incl: 8' do
+        expect(Field::OPERATORS[:lesser_than_incl]).to eq 8
+      end
+
+      it 'equals_any_of: 9' do
+        expect(Field::OPERATORS[:equals_any_of]).to eq 9
+      end
+
+      it 'not_equals_any_of: 10' do
+        expect(Field::OPERATORS[:not_equals_any_of]).to eq 10
+      end
+
+      it 'is_part_of: 11' do
+        expect(Field::OPERATORS[:is_part_of]).to eq 11
+      end
+    end
+  end
 end

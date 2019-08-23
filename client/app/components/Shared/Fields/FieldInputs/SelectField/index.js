@@ -16,7 +16,8 @@ const CustomSelectField = (props) => {
   const fieldDatum = dig(props, 'fieldDatum');
   const fieldDatumIndex = dig(props, 'fieldDatumIndex');
 
-  const dataLocation = `fieldData.${fieldDatumIndex}.data`;
+  // allow specification of dataLocation
+  const dataLocation = props.dataLocation || `fieldData.${fieldDatumIndex}.data`;
 
   return (
     <Select
@@ -33,6 +34,7 @@ const CustomSelectField = (props) => {
 CustomSelectField.propTypes = {
   fieldDatum: PropTypes.object,
   fieldDatumIndex: PropTypes.number,
+  dataLocation: PropTypes.string,
   formik: PropTypes.object
 };
 

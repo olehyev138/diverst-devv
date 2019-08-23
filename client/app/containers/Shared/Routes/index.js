@@ -5,10 +5,10 @@ import PropTypes from 'prop-types';
 // Pages
 import {
   UserLayout, GroupLayout, AdminLayout, SessionLayout, ErrorLayout, GlobalSettingsLayout, LoginPage, HomePage,
-  UserGroupListPage, AdminGroupListPage, GroupCreatePage, GroupEditPage, FieldsPage, UsersPage, UserCreatePage,
-  UserEditPage, GroupHomePage, EventsPage, NewsFeedPage, OutcomesPage, EventPage, EventCreatePage, EventEditPage,
-  GroupMessagePage, GroupMessageCreatePage, GroupMessageEditPage, OutcomeCreatePage, OutcomeEditPage,
-  GroupMemberListPage, GroupMemberCreatePage, NotFoundPage, PlaceholderPage
+  UserGroupListPage, AdminGroupListPage, GroupCreatePage, GroupEditPage, SegmentListPage, SegmentPage FieldsPage,
+  UsersPage, UserCreatePage, UserEditPage, GroupHomePage, EventsPage, NewsFeedPage, OutcomesPage, EventPage,
+  EventCreatePage, EventEditPage, GroupMessagePage, GroupMessageCreatePage, GroupMessageEditPage, OutcomeCreatePage,
+  OutcomeEditPage, GroupMemberListPage, GroupMemberCreatePage, NotFoundPage, PlaceholderPage
 } from './templates';
 
 // Paths
@@ -38,9 +38,14 @@ export default function Routes(props) {
 
       { /* Admin - Manage */ }
       { /* Admin - Manage - Groups */ }
-      <AdminLayout exact {...expandRoute(ROUTES.admin.manage.groups.index)} component={AdminGroupListPage} />
       <AdminLayout {...expandRoute(ROUTES.admin.manage.groups.new)} component={GroupCreatePage} />
       <AdminLayout {...expandRoute(ROUTES.admin.manage.groups.edit)} component={GroupEditPage} />
+      <AdminLayout exact {...expandRoute(ROUTES.admin.manage.groups.index)} component={AdminGroupListPage} />
+
+      { /* Admin - Manage - Segments */ }
+      <AdminLayout {...expandRoute(ROUTES.admin.manage.segments.new)} component={SegmentPage} />
+      <AdminLayout {...expandRoute(ROUTES.admin.manage.segments.show)} component={SegmentPage} />
+      <AdminLayout exact {...expandRoute(ROUTES.admin.manage.segments.index)} component={SegmentListPage} />
 
       { /* Admin - System - GlobalSettings */ }
       <GlobalSettingsLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.fields.index)} component={FieldsPage} />

@@ -86,13 +86,13 @@ module.exports = {
     'no-shadow': 0,
     'object-property-newline': 0,
     'object-curly-newline': 0,
+    'no-param-reassign':['error', { 'props': false }]
   },
   overrides: [
     {
       files: ["reducer.js"],
       rules: {
         'default-case': 'off',
-        'no-param-reassign': 'off',
       },
     },
   ],

@@ -1,6 +1,6 @@
 /*
  *
- * User constants
+ * GroupMember constants
  *
  */
 
