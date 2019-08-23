@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, memo } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
@@ -17,8 +17,6 @@ export function GroupLinks(props) {
   const activeColor = theme.palette.primary.main;
   const rs = new RouteService(useContext);
 
-  // to={buildPath(ROUTES.group.news.index.path(), props, ['group_id'])}
-
   const NavLinks = () => (
     <Toolbar
       style={{
@@ -28,8 +26,8 @@ export function GroupLinks(props) {
       }}
     >
       <Button
-        exact
         component={WrappedNavLink}
+        exact
         to={ROUTES.group.home.path(rs.params('group_id'))}
         activeStyle={{ color: activeColor }}
       >
@@ -42,7 +40,13 @@ export function GroupLinks(props) {
       >
         Members
       </Button>
-      <Button component={WrappedNavLink} to='events' activeStyle={{ color: activeColor }}>Events</Button>
+      <Button
+        component={WrappedNavLink}
+        to={ROUTES.group.events.index.path(rs.params('group_id'))}
+        activeStyle={{ color: activeColor }}
+      >
+        Events
+      </Button>
       <Button component={WrappedNavLink} to='resources' activeStyle={{ color: activeColor }}>Resources</Button>
       { /* TODO: do this properly */ }
       <Button
@@ -53,7 +57,13 @@ export function GroupLinks(props) {
         News Feed
       </Button>
       <Button component={WrappedNavLink} to='/user/groups' activeStyle={{ color: activeColor }}>Manage</Button>
-      <Button component={WrappedNavLink} to='/user/groups' activeStyle={{ color: activeColor }}>Plan</Button>
+      <Button
+        component={WrappedNavLink}
+        to={ROUTES.group.outcomes.index.path(rs.params('group_id'))}
+        activeStyle={{ color: activeColor }}
+      >
+        Plan
+      </Button>
     </Toolbar>
   );
 
@@ -75,19 +85,7 @@ GroupLinks.propTypes = {
   }),
 };
 
-export function mapDispatchToProps(dispatch) {
-  return {
-    dispatch
-  };
-}
-
-const mapStateToProps = createStructuredSelector({});
-
-const withConnect = connect(
-  mapStateToProps,
-  mapDispatchToProps
-);
-
 export default compose(
-  withConnect,
-)(withTheme(GroupLinks));
+  withTheme,
+  memo,
+)(GroupLinks);

@@ -1,4 +1,19 @@
+# Custom SelectField
+#  - holds a *singular* value - non multi
+#  - CheckBoxField is a multi select
 class SelectField < Field
+  # return list of operator codes for a SelectField
+  def operators
+    [
+      Field::OPERATORS[:equals_any_of],
+      Field::OPERATORS[:not_equals_any_of]
+    ]
+  end
+
+  # -------------------------------------------------------------------------------------------------
+  # TODO: Everything below here is most likely deprecated & needs to be removed
+  # DEPRECATED
+  # -------------------------------------------------------------------------------------------------
   include Optionnable
 
   def string_value(value)
@@ -67,9 +82,9 @@ class SelectField < Field
     field_value = user.info[rule.field][0]
 
     case rule.operator
-    when SegmentRule.operators[:contains_any_of]
+    when SegmentFieldRule.operators[:contains_any_of]
       rule.values_array.include?(field_value)
-    when SegmentRule.operators[:is_not]
+    when SegmentFieldRule.operators[:is_not]
       !rule.values_array.include?(field_value)
     end
   end

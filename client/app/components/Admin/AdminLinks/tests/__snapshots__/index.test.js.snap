@@ -3,17 +3,7 @@
 exports[`<AdminLinks /> should render and match the snapshot 1`] = `
 <nav>
   <Hidden
-    implementation="js"
-    lgDown={false}
-    lgUp={false}
-    mdDown={false}
     mdUp={true}
-    smDown={false}
-    smUp={false}
-    xlDown={false}
-    xlUp={false}
-    xsDown={false}
-    xsUp={false}
   >
     <WithStyles(ForwardRef(Drawer))
       ModalProps={
@@ -141,6 +131,26 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                 />
               </WithStyles(ForwardRef(ListItemText))>
             </WithStyles(ForwardRef(MenuItem))>
+            <WithStyles(ForwardRef(MenuItem))
+              component={
+                Object {
+                  "$$typeof": Symbol(react.forward_ref),
+                  "render": [Function],
+                }
+              }
+              exact={true}
+              to="/admin/manage/segments"
+            >
+              <WithStyles(ForwardRef(ListItemIcon))>
+                <ListIcon />
+              </WithStyles(ForwardRef(ListItemIcon))>
+              <WithStyles(ForwardRef(ListItemText))>
+                <FormattedMessage
+                  id="diverst.containers.Routes.admin.manage.segments"
+                  values={Object {}}
+                />
+              </WithStyles(ForwardRef(ListItemText))>
+            </WithStyles(ForwardRef(MenuItem))>
           </WithStyles(ForwardRef(List))>
         </WithStyles(ForwardRef(Collapse))>
         <WithStyles(ForwardRef(ListItem))
@@ -232,13 +242,16 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                 }
               }
               exact={true}
-              to="#"
+              to="/admin/system/users"
             >
               <WithStyles(ForwardRef(ListItemIcon))>
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
               <WithStyles(ForwardRef(ListItemText))>
-                Users
+                <FormattedMessage
+                  id="diverst.containers.Routes.admin.system.users"
+                  values={Object {}}
+                />
               </WithStyles(ForwardRef(ListItemText))>
             </WithStyles(ForwardRef(MenuItem))>
             <WithStyles(ForwardRef(MenuItem))
@@ -282,17 +295,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
     </WithStyles(ForwardRef(Drawer))>
   </Hidden>
   <Hidden
-    implementation="js"
-    lgDown={false}
-    lgUp={false}
-    mdDown={false}
-    mdUp={false}
     smDown={true}
-    smUp={false}
-    xlDown={false}
-    xlUp={false}
-    xsDown={false}
-    xsUp={false}
   >
     <WithStyles(ForwardRef(Drawer))
       classes={
@@ -414,6 +417,26 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                 />
               </WithStyles(ForwardRef(ListItemText))>
             </WithStyles(ForwardRef(MenuItem))>
+            <WithStyles(ForwardRef(MenuItem))
+              component={
+                Object {
+                  "$$typeof": Symbol(react.forward_ref),
+                  "render": [Function],
+                }
+              }
+              exact={true}
+              to="/admin/manage/segments"
+            >
+              <WithStyles(ForwardRef(ListItemIcon))>
+                <ListIcon />
+              </WithStyles(ForwardRef(ListItemIcon))>
+              <WithStyles(ForwardRef(ListItemText))>
+                <FormattedMessage
+                  id="diverst.containers.Routes.admin.manage.segments"
+                  values={Object {}}
+                />
+              </WithStyles(ForwardRef(ListItemText))>
+            </WithStyles(ForwardRef(MenuItem))>
           </WithStyles(ForwardRef(List))>
         </WithStyles(ForwardRef(Collapse))>
         <WithStyles(ForwardRef(ListItem))
@@ -505,13 +528,16 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                 }
               }
               exact={true}
-              to="#"
+              to="/admin/system/users"
             >
               <WithStyles(ForwardRef(ListItemIcon))>
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
               <WithStyles(ForwardRef(ListItemText))>
-                Users
+                <FormattedMessage
+                  id="diverst.containers.Routes.admin.system.users"
+                  values={Object {}}
+                />
               </WithStyles(ForwardRef(ListItemText))>
             </WithStyles(ForwardRef(MenuItem))>
             <WithStyles(ForwardRef(MenuItem))

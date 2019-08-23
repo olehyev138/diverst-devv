@@ -1,6 +1,34 @@
 require 'rails_helper'
 
 RSpec.describe NumericField, type: :model do
+  describe 'operators' do
+    let(:operators) {  NumericField.new.operators }
+
+    it 'includes equals' do
+      expect(operators).to include Field::OPERATORS[:equals]
+    end
+
+    it 'includes is_not' do
+      expect(operators).to include Field::OPERATORS[:is_not]
+    end
+
+    it 'includes greater_than_excl' do
+      expect(operators).to include Field::OPERATORS[:greater_than_excl]
+    end
+
+    it 'includes lesser_than_excl' do
+      expect(operators).to include Field::OPERATORS[:lesser_than_excl]
+    end
+
+    it 'includes greater_than_incl' do
+      expect(operators).to include Field::OPERATORS[:greater_than_incl]
+    end
+
+    it 'includes lesser_than_incl' do
+      expect(operators).to include Field::OPERATORS[:lesser_than_incl]
+    end
+  end
+
   describe '#string_value' do
     it 'returns nil' do
       value = NumericField.new.string_value(nil)
@@ -30,96 +58,6 @@ RSpec.describe NumericField, type: :model do
       create_list(:user, 8, data: "{\"#{numeric_field.id}\":1}", enterprise: enterprise)
       match_score_between = numeric_field.match_score_between(user_1, user_2, enterprise.users)
       expect(match_score_between).to eq(0.0)
-    end
-  end
-
-  describe '#validates_rule_for_user' do
-    it 'returns true' do
-      enterprise = create(:enterprise)
-      numeric_field = NumericField.new(type: 'NumericField', title: 'Seniority (in years)', min: 0, max: 40, enterprise: enterprise)
-      numeric_field.save!
-      user_1 = create(:user, data: "{\"#{numeric_field.id}\":21}", enterprise: enterprise)
-      segment = create(:segment, name: 'Seniors', enterprise: enterprise)
-      segment_rule = create(:segment_rule, segment_id: segment.id, field_id: numeric_field.id, operator: 1, values: '["20"]')
-      boolean = numeric_field.validates_rule_for_user?(rule: segment_rule, user: user_1)
-      expect(boolean).to be(true)
-    end
-
-    it 'returns false' do
-      enterprise = create(:enterprise)
-      numeric_field = NumericField.new(type: 'NumericField', title: 'Seniority (in years)', min: 0, max: 40, enterprise: enterprise)
-      numeric_field.save!
-      user_1 = create(:user, data: "{\"#{numeric_field.id}\":19}", enterprise: enterprise)
-      segment = create(:segment, name: 'Seniors', enterprise: enterprise)
-      segment_rule = create(:segment_rule, segment_id: segment.id, field_id: numeric_field.id, operator: 1, values: '["20"]')
-      boolean = numeric_field.validates_rule_for_user?(rule: segment_rule, user: user_1)
-      expect(boolean).to be(false)
-    end
-
-    it 'returns true' do
-      enterprise = create(:enterprise)
-      numeric_field = NumericField.new(type: 'NumericField', title: 'Seniority (in years)', min: 0, max: 40, enterprise: enterprise)
-      numeric_field.save!
-      user_1 = create(:user, data: "{\"#{numeric_field.id}\":20}", enterprise: enterprise)
-      segment = create(:segment, name: 'Seniors', enterprise: enterprise)
-      segment_rule = create(:segment_rule, segment_id: segment.id, field_id: numeric_field.id, operator: 0, values: '["20"]')
-      boolean = numeric_field.validates_rule_for_user?(rule: segment_rule, user: user_1)
-      expect(boolean).to be(true)
-    end
-
-    it 'returns false' do
-      enterprise = create(:enterprise)
-      numeric_field = NumericField.new(type: 'NumericField', title: 'Seniority (in years)', min: 0, max: 40, enterprise: enterprise)
-      numeric_field.save!
-      user_1 = create(:user, data: "{\"#{numeric_field.id}\":19}", enterprise: enterprise)
-      segment = create(:segment, name: 'Seniors', enterprise: enterprise)
-      segment_rule = create(:segment_rule, segment_id: segment.id, field_id: numeric_field.id, operator: 0, values: '["20"]')
-      boolean = numeric_field.validates_rule_for_user?(rule: segment_rule, user: user_1)
-      expect(boolean).to be(false)
-    end
-
-    it 'returns true' do
-      enterprise = create(:enterprise)
-      numeric_field = NumericField.new(type: 'NumericField', title: 'Seniority (in years)', min: 0, max: 40, enterprise: enterprise)
-      numeric_field.save!
-      user_1 = create(:user, data: "{\"#{numeric_field.id}\":19}", enterprise: enterprise)
-      segment = create(:segment, name: 'Seniors', enterprise: enterprise)
-      segment_rule = create(:segment_rule, segment_id: segment.id, field_id: numeric_field.id, operator: 2, values: '["20"]')
-      boolean = numeric_field.validates_rule_for_user?(rule: segment_rule, user: user_1)
-      expect(boolean).to be(true)
-    end
-
-    it 'returns false' do
-      enterprise = create(:enterprise)
-      numeric_field = NumericField.new(type: 'NumericField', title: 'Seniority (in years)', min: 0, max: 40, enterprise: enterprise)
-      numeric_field.save!
-      user_1 = create(:user, data: "{\"#{numeric_field.id}\":21}", enterprise: enterprise)
-      segment = create(:segment, name: 'Seniors', enterprise: enterprise)
-      segment_rule = create(:segment_rule, segment_id: segment.id, field_id: numeric_field.id, operator: 2, values: '["20"]')
-      boolean = numeric_field.validates_rule_for_user?(rule: segment_rule, user: user_1)
-      expect(boolean).to be(false)
-    end
-
-    it 'returns true' do
-      enterprise = create(:enterprise)
-      numeric_field = NumericField.new(type: 'NumericField', title: 'Seniority (in years)', min: 0, max: 40, enterprise: enterprise)
-      numeric_field.save!
-      user_1 = create(:user, data: "{\"#{numeric_field.id}\":19}", enterprise: enterprise)
-      segment = create(:segment, name: 'Seniors', enterprise: enterprise)
-      segment_rule = create(:segment_rule, segment_id: segment.id, field_id: numeric_field.id, operator: 3, values: '["20"]')
-      boolean = numeric_field.validates_rule_for_user?(rule: segment_rule, user: user_1)
-      expect(boolean).to be(true)
-    end
-
-    it 'returns false' do
-      enterprise = create(:enterprise)
-      numeric_field = NumericField.new(type: 'NumericField', title: 'Seniority (in years)', min: 0, max: 40, enterprise: enterprise)
-      numeric_field.save!
-      user_1 = create(:user, data: "{\"#{numeric_field.id}\":20}", enterprise: enterprise)
-      segment = create(:segment, name: 'Seniors', enterprise: enterprise)
-      segment_rule = create(:segment_rule, segment_id: segment.id, field_id: numeric_field.id, operator: 3, values: '["20"]')
-      boolean = numeric_field.validates_rule_for_user?(rule: segment_rule, user: user_1)
-      expect(boolean).to be(false)
     end
   end
 end

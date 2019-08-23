@@ -21,6 +21,10 @@ import AdminGroupListPage from 'containers/Group/AdminGroupListPage';
 import GroupCreatePage from 'containers/Group/GroupCreatePage';
 import GroupEditPage from 'containers/Group/GroupEditPage';
 
+/* Admin - Manage - Group */
+import SegmentListPage from 'containers/Segment/SegmentListPage';
+import SegmentPage from 'containers/Segment/SegmentPage';
+
 /* Admin - System - Global Settings */
 import FieldsPage from 'containers/GlobalSettings/Field/FieldsPage';
 
@@ -31,12 +35,23 @@ import UserEditPage from 'containers/User/UserEditPage';
 
 /* Group */
 import GroupHomePage from 'containers/Group/GroupHomePage';
+import EventsPage from 'containers/Event/EventsPage';
 import NewsFeedPage from 'containers/News/NewsFeedPage';
+import OutcomesPage from 'containers/Group/Outcome/OutcomesPage';
+
+/* Group - Events */
+import EventPage from 'containers/Event/EventPage';
+import EventCreatePage from 'containers/Event/EventCreatePage';
+import EventEditPage from 'containers/Event/EventEditPage';
 
 /* Group - News Feed */
 import GroupMessagePage from 'containers/News/GroupMessage/GroupMessagePage';
 import GroupMessageCreatePage from 'containers/News/GroupMessage/GroupMessageCreatePage';
 import GroupMessageEditPage from 'containers/News/GroupMessage/GroupMessageEditPage';
+
+/* Group - Outcomes */
+import OutcomeCreatePage from 'containers/Group/Outcome/OutcomeCreatePage';
+import OutcomeEditPage from 'containers/Group/Outcome/OutcomeEditPage';
 
 /* Group - Members */
 import GroupMemberListPage from 'containers/Group/GroupMembers/GroupMemberListPage';
@@ -50,7 +65,17 @@ export default function Routes(props) {
 
   return (
     <Switch>
+      { /* Session */ }
       <SessionLayout {...expandRoute(ROUTES.session.login)} component={LoginPage} />
+
+      { /* User */}
+      <UserLayout exact {...expandRoute(ROUTES.user.home)} component={PlaceholderPage} />
+      <UserLayout exact {...expandRoute(ROUTES.user.innovate)} component={PlaceholderPage} />
+      <UserLayout exact {...expandRoute(ROUTES.user.news)} component={PlaceholderPage} />
+      <UserLayout exact {...expandRoute(ROUTES.user.events)} component={PlaceholderPage} />
+      <UserLayout exact {...expandRoute(ROUTES.user.groups)} component={PlaceholderPage} />
+      <UserLayout exact {...expandRoute(ROUTES.user.downloads)} component={PlaceholderPage} />
+      <UserLayout {...expandRoute(ROUTES.user.mentorship)} component={PlaceholderPage} />
 
       { /* Admin */ }
       { /* Admin - Analyze */ }
@@ -59,9 +84,14 @@ export default function Routes(props) {
 
       { /* Admin - Manage */ }
       { /* Admin - Manage - Groups */ }
-      <AdminLayout exact {...expandRoute(ROUTES.admin.manage.groups.index)} component={AdminGroupListPage} />
       <AdminLayout {...expandRoute(ROUTES.admin.manage.groups.new)} component={GroupCreatePage} />
       <AdminLayout {...expandRoute(ROUTES.admin.manage.groups.edit)} component={GroupEditPage} />
+      <AdminLayout exact {...expandRoute(ROUTES.admin.manage.groups.index)} component={AdminGroupListPage} />
+
+      { /* Admin - Manage - Segments */ }
+      <AdminLayout {...expandRoute(ROUTES.admin.manage.segments.new)} component={SegmentPage} />
+      <AdminLayout {...expandRoute(ROUTES.admin.manage.segments.show)} component={SegmentPage} />
+      <AdminLayout exact {...expandRoute(ROUTES.admin.manage.segments.index)} component={SegmentListPage} />
 
       { /* Admin - System - GlobalSettings */ }
       <GlobalSettingsLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.fields.index)} component={FieldsPage} />
@@ -71,16 +101,18 @@ export default function Routes(props) {
       <AdminLayout exact {...expandRoute(ROUTES.admin.system.users.new)} component={UserCreatePage} />
       <AdminLayout exact {...expandRoute(ROUTES.admin.system.users.edit)} component={UserEditPage} />
 
-      <UserLayout exact {...expandRoute(ROUTES.user.home)} component={PlaceholderPage} />
-      <UserLayout {...expandRoute(ROUTES.user.innovate)} component={PlaceholderPage} />
-      <UserLayout {...expandRoute(ROUTES.user.innovate)} component={PlaceholderPage} />
-      <UserLayout {...expandRoute(ROUTES.user.news)} component={PlaceholderPage} />
-      <UserLayout {...expandRoute(ROUTES.user.events)} component={PlaceholderPage} />
-      <UserLayout {...expandRoute(ROUTES.user.groups)} component={PlaceholderPage} />
-      <UserLayout {...expandRoute(ROUTES.user.downloads)} component={PlaceholderPage} />
-      <UserLayout {...expandRoute(ROUTES.user.mentorship)} component={PlaceholderPage} />
-
       { /* Group */ }
+      <GroupLayout exact {...expandRoute(ROUTES.group.home)} component={GroupHomePage} />
+      <GroupLayout exact {...expandRoute(ROUTES.group.members.index)} component={GroupMemberListPage} />
+      <GroupLayout exact {...expandRoute(ROUTES.group.events.index)} component={EventsPage} />
+      <GroupLayout exact {...expandRoute(ROUTES.group.news.index)} component={NewsFeedPage} />
+      <GroupLayout exact {...expandRoute(ROUTES.group.outcomes.index)} component={OutcomesPage} />
+
+      { /* Group Events */ }
+      <GroupLayout {...expandRoute(ROUTES.group.events.new)} component={EventCreatePage} />
+      <GroupLayout {...expandRoute(ROUTES.group.events.edit)} component={EventEditPage} />
+      <GroupLayout exact {...expandRoute(ROUTES.group.events.show)} component={EventPage} />
+
       { /* Group News Feed */ }
       <GroupLayout exact {...expandRoute(ROUTES.group.news.index)} component={NewsFeedPage} />
       <GroupLayout {...expandRoute(ROUTES.group.news.messages.new)} component={GroupMessageCreatePage} />
@@ -89,9 +121,10 @@ export default function Routes(props) {
 
       { /* Group Members */ }
       <GroupLayout {...expandRoute(ROUTES.group.members.new)} component={GroupMemberCreatePage} />
-      <GroupLayout exact {...expandRoute(ROUTES.group.members.index)} component={GroupMemberListPage} />
 
-      <GroupLayout exact {...expandRoute(ROUTES.group.home)} component={GroupHomePage} />
+      { /* Group Outcomes */ }
+      <GroupLayout {...expandRoute(ROUTES.group.outcomes.new)} component={OutcomeCreatePage} />
+      <GroupLayout {...expandRoute(ROUTES.group.outcomes.edit)} component={OutcomeEditPage} />
 
       <ErrorLayout path='' component={NotFoundPage} />
     </Switch>

@@ -1,17 +1,16 @@
 import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
-import { compose } from 'redux';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
-import { selectPaginatedSelectGroups, selectGroupTotal } from 'containers/Group/selectors';
 import reducer from 'containers/Group/reducer';
+import saga from 'containers/Group/saga';
 
 import { createGroupBegin, getGroupsBegin, groupFormUnmount } from 'containers/Group/actions';
-
-import saga from 'containers/Group/saga';
+import { selectPaginatedSelectGroups, selectGroupTotal } from 'containers/Group/selectors';
 
 import GroupForm from 'components/Group/GroupForm';
 

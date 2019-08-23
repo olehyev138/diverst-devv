@@ -60,34 +60,61 @@ export const ROUTES = {
   group: {
     pathPrefix: '/group',
     home: {
-      path: (groupId = ':group_id') => `/group/${groupId}/`
+      path: (groupId = ':group_id') => `/groups/${groupId}`
+    },
+    events: {
+      index: {
+        path: (groupId = ':group_id') => `/groups/${groupId}/events`
+      },
+      show: {
+        path: (groupId = ':group_id', eventId = ':event_id') => `/groups/${groupId}/events/${eventId}`
+      },
+      new: {
+        path: (groupId = ':group_id') => `/groups/${groupId}/events/new`
+      },
+      edit: {
+        path:
+          (groupId = ':group_id', eventId = ':event_id') => `/groups/${groupId}/events/${eventId}/edit`
+      },
     },
     news: {
       index: {
-        path: (groupId = ':group_id') => `/group/${groupId}/news`
+        path: (groupId = ':group_id') => `/groups/${groupId}/news`
       },
       messages: {
         index: {
           path:
-            (groupId = ':group_id', itemId = ':item_id') => `/group/${groupId}/news/message/${itemId}`
+            (groupId = ':group_id', itemId = ':item_id') => `/groups/${groupId}/news/messages/${itemId}`
         },
         new: {
-          path: (groupId = ':group_id') => `/group/${groupId}/news/message/new`
+          path: (groupId = ':group_id') => `/groups/${groupId}/news/messages/new`
         },
         edit: {
           path:
-            (groupId = ':group_id', itemId = ':item_id') => `/group/${groupId}/news/message/${itemId}/edit`
+            (groupId = ':group_id', itemId = ':item_id') => `/groups/${groupId}/news/messages/${itemId}/edit`
         },
       }
     },
     members: {
       index: {
-        path: (groupId = ':group_id') => `/group/${groupId}/members`
+        path: (groupId = ':group_id') => `/groups/${groupId}/members`
       },
       new: {
-        path: (groupId = ':group_id') => `/group/${groupId}/members/new`
+        path: (groupId = ':group_id') => `/groups/${groupId}/members/new`
       }
-    }
+    },
+    outcomes: {
+      index: {
+        path: (groupId = ':group_id') => `/groups/${groupId}/outcomes`
+      },
+      new: {
+        path: (groupId = ':group_id') => `/groups/${groupId}/outcomes/new`
+      },
+      edit: {
+        path:
+          (groupId = ':group_id', outcomeId = ':outcome_id') => `/groups/${groupId}/outcomes/${outcomeId}/edit`
+      },
+    },
   },
 
   // Admin
@@ -136,7 +163,23 @@ export const ROUTES = {
         edit: {
           path: (groupId = ':group_id') => `/admin/manage/groups/${groupId}/edit`,
         },
-      }
+      },
+      segments: {
+        pathPrefix: '/admin/manage/segments',
+        index: {
+          path: () => '/admin/manage/segments',
+          data: {
+            permission: 'segments_index',
+            titleMessage: messages.admin.manage.segments,
+          }
+        },
+        new: {
+          path: () => '/admin/manage/segments/new',
+        },
+        show: {
+          path: (segmentId = ':segment_id') => `/admin/manage/segments/${segmentId}`,
+        },
+      },
     },
     system: {
       index: {
@@ -148,6 +191,10 @@ export const ROUTES = {
       users: {
         index: {
           path: () => '/admin/system/users',
+          data: {
+            pathPrefix: '/system/users',
+            titleMessage: messages.admin.system.users,
+          }
         },
         new: {
           path: () => '/admin/system/users/new',

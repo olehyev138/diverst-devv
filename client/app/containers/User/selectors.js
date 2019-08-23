@@ -1,4 +1,6 @@
 import { createSelector } from 'reselect/lib';
+
+import produce from 'immer';
 import dig from 'object-dig';
 
 import { initialState } from 'containers/User/reducer';
@@ -16,6 +18,11 @@ const selectUserTotal = () => createSelector(
   usersState => usersState.userTotal
 );
 
+const selectIsFetchingUsers = () => createSelector(
+  selectUsersDomain,
+  usersState => usersState.isFetchingUsers
+);
+
 const selectUser = () => createSelector(
   selectUsersDomain,
   usersState => usersState.currentUser
@@ -30,19 +37,20 @@ const selectFieldData = () => createSelector(
   selectUsersDomain,
   (usersState) => {
     const fieldData = dig(usersState, 'currentUser', 'field_data');
-    if (fieldData)
-      fieldData.forEach((datum) => {
-        /* eslint-disable no-param-reassign */
-        datum.data = deserializeDatum(datum);
-        datum.field.options_text = deserializeOptionsText(datum);
-        /* eslint-enable no-param-reassign */
-      });
+    if (!fieldData) return fieldData;
 
-    return fieldData;
+    return produce(fieldData, (draft) => {
+      if (fieldData)
+        fieldData.forEach((datum) => {
+          datum.data = deserializeDatum(datum);
+          datum.field.options_text = deserializeOptionsText(datum.field);
+        });
+    });
   }
 );
 
 export {
   selectUsersDomain, selectPaginatedUsers,
-  selectUserTotal, selectUser, selectFieldData
+  selectUserTotal, selectUser, selectFieldData,
+  selectIsFetchingUsers
 };

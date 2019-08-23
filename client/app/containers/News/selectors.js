@@ -8,15 +8,14 @@ const selectPaginatedNewsItems = () => createSelector(
   newsState => newsState.newsItems
 );
 
-const selectNewsItem = () => createSelector(
-  selectNewsDomain,
-  newsState => newsState.currentNewsItem
-);
-
-
 const selectNewsItemsTotal = () => createSelector(
   selectNewsDomain,
   newsState => newsState.newsItemsTotal
+);
+
+const selectNewsItem = () => createSelector(
+  selectNewsDomain,
+  newsState => newsState.currentNewsItem
 );
 
 export {

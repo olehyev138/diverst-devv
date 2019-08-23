@@ -63,11 +63,11 @@ class CheckboxField < Field
     return false if user.info[rule.field].nil?
 
     case rule.operator
-    when SegmentRule.operators[:contains_any_of]
+    when SegmentFieldRule.operators[:contains_any_of]
       (user.info[rule.field] & rule.values_array).size > 0
-    when SegmentRule.operators[:contains_all_of]
+    when SegmentFieldRule.operators[:contains_all_of]
       (user.info[rule.field] & rule.values_array).size == rule.values_array.size
-    when SegmentRule.operators[:does_not_contain]
+    when SegmentFieldRule.operators[:does_not_contain]
       (user.info[rule.field] & rule.values_array).size == 0
     end
   end

@@ -1,19 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<ApplicationLayout /> Should render and match the snapshot 1`] = `
-<Route>
-  <ContextProvider
-    value={
-      Object {
-        "computedMatch": undefined,
-        "location": undefined,
-      }
-    }
-  >
-    <CssBaseline />
-    <mockConstructor
-      classes={Object {}}
-    />
-  </ContextProvider>
-</Route>
+<Route
+  render={[Function]}
+/>
 `;

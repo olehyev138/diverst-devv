@@ -1,6 +1,6 @@
 class Api::V1::GroupMembersController < DiverstController
   def add_members
-    # authorize [@group], :create?, policy_class: GroupMemberPolicy
+    # authorize [@group], :create?, policy_class: GroupMemberPolicy - TODO
 
     group = Group.find(payload[:group_id])
 
@@ -25,7 +25,7 @@ class Api::V1::GroupMembersController < DiverstController
   end
 
   def remove_members
-    # authorize [@group, @member], :destroy?, policy_class: GroupMemberPolicy
+    # authorize [@group, @member], :destroy?, policy_class: GroupMemberPolicy - TODO
     group = Group.find(payload[:group_id])
 
     payload[:member_ids].each do |user_id|

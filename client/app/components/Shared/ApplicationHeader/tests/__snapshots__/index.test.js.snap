@@ -23,21 +23,13 @@ exports[`<ApplicationHeader /> should render and match the snapshot 1`] = `
           verticalPadding={20}
         />
       </WithStyles(ForwardRef(Button))>
-      <div />
+      <div
+        className=""
+      />
       <div>
         <div>
           <Hidden
-            implementation="js"
-            lgDown={false}
-            lgUp={false}
-            mdDown={false}
-            mdUp={false}
-            smDown={false}
-            smUp={false}
-            xlDown={false}
-            xlUp={false}
             xsDown={true}
-            xsUp={false}
           >
             <WithStyles(ForwardRef(Button))
               color="inherit"

@@ -7,6 +7,10 @@ module Initiative::Actions
   end
 
   module ClassMethods
+    def valid_scopes
+      ['upcoming', 'ongoing', 'past']
+    end
+
     def build(diverst_request, params)
       item = super
       annual_budget = diverst_request.user.enterprise.annual_budgets.find_or_create_by(closed: false, group_id: item.group)

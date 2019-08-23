@@ -27,17 +27,7 @@ exports[`<NotFoundPage /> should render and match the snapshot 1`] = `
     variant="contained"
   >
     <Hidden
-      implementation="js"
-      lgDown={false}
-      lgUp={false}
-      mdDown={false}
-      mdUp={false}
-      smDown={false}
-      smUp={false}
-      xlDown={false}
-      xlUp={false}
       xsDown={true}
-      xsUp={false}
     >
       <HomeIcon />
     </Hidden>
