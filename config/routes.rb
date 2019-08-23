@@ -29,7 +29,12 @@ Diverst::Application.routes.draw do
       resources :devices
       resources :emails
       resources :email_variables
-      resources :enterprises
+      resources :enterprises do
+        member do
+          post '/sso_login',    to: 'enterprises#sso_login'
+          post '/sso_link',     to: 'enterprises#sso_link'
+        end
+      end
       resources :enterprise_email_variables
       resources :expenses
       resources :expense_categories
