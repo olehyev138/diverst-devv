@@ -130,6 +130,7 @@ GroupMemberList.propTypes = {
   links: PropTypes.shape({
     groupMembersNew: PropTypes.string,
   }),
+  params: PropTypes.object,
   memberList: PropTypes.array,
   memberTotal: PropTypes.number,
   isFetchingMembers: PropTypes.bool,
