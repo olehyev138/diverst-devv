@@ -106,6 +106,8 @@ class Groups::GroupMessagesController < ApplicationController
   end
 
   def add_tags(params)
+    return if params.blank?
+
     tags = params[:news_feed_link_attributes][:news_tag_ids]
     tag_records = []
     tags.map { |i| i.downcase }.uniq.each do |tag|
