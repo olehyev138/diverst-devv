@@ -1,6 +1,7 @@
-import React, { memo, useEffect } from 'react';
+import React, { memo } from 'react';
 import { Route } from 'react-router';
 import PropTypes from 'prop-types';
+import { compose } from 'redux';
 
 import { withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -36,4 +37,7 @@ ApplicationLayout.propTypes = {
   component: PropTypes.elementType,
 };
 
-export default withStyles(styles)(ApplicationLayout);
+export default compose(
+  memo,
+  withStyles(styles),
+)(ApplicationLayout);

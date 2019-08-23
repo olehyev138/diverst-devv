@@ -1,5 +1,4 @@
 import React, { memo } from 'react';
-import { Route } from 'react-router';
 import { Redirect } from 'react-router-dom';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
@@ -79,5 +78,6 @@ AuthenticatedLayout.propTypes = {
 };
 
 export default compose(
+  memo,
   withStyles(styles),
 )(AuthenticatedLayout);

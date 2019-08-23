@@ -1,4 +1,5 @@
 import React, { memo } from 'react';
+import { compose } from 'redux';
 import PropTypes from 'prop-types';
 
 import Container from '@material-ui/core/Container';
@@ -39,4 +40,7 @@ ErrorLayout.propTypes = {
   component: PropTypes.elementType,
 };
 
-export default withStyles(styles)(ErrorLayout);
+export default compose(
+  memo,
+  withStyles(styles),
+)(ErrorLayout);

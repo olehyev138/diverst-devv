@@ -1,4 +1,5 @@
 import React, { memo } from 'react';
+import { compose } from 'redux';
 import PropTypes from 'prop-types';
 
 import Container from '@material-ui/core/Container';
@@ -43,4 +44,7 @@ UserLayout.propTypes = {
   pageTitle: PropTypes.object,
 };
 
-export default withStyles(styles)(UserLayout);
+export default compose(
+  memo,
+  withStyles(styles),
+)(UserLayout);
