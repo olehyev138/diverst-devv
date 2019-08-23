@@ -13,7 +13,7 @@ import {
   XYPlot, LineSeries, VerticalGridLines, HorizontalGridLines,
   Hint, XAxis, YAxis, Highlight, Crosshair, Borders, DiscreteColorLegend
 } from 'react-vis/';
-import '../../../../../node_modules/react-vis/dist/style.css'; // TODO: fix this nonsense
+import 'react-vis/dist/style.css'; // TODO: fix this nonsense
 
 export function GrowthOfGroupsGraph(props) {
   const [lastDrawLocation, setLastDrawLocation] = useState(null);
@@ -23,7 +23,7 @@ export function GrowthOfGroupsGraph(props) {
 
   const buildLegendData = (data, hidden = false) => {
     const newLegendData = {};
-    data.forEach(d => newLegendData[d.key] = { title: d.key, hidden: hidden });
+    data.forEach(d => newLegendData[d.key] = { title: d.key, hidden });
 
     return newLegendData;
   };

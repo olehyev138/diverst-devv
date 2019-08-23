@@ -116,7 +116,11 @@ Diverst::Application.routes.draw do
       resources :segment_group_scope_rules
       resources :segment_group_scope_rule_groups
       resources :segment_order_rules
-      resources :segments
+      resources :segments do
+        member do
+          get 'status'
+        end
+      end
       resources :sessions, only: [:create, :destroy]
       resources :shared_metrics_dashboards
       resources :shared_news_feed_links
@@ -139,6 +143,74 @@ Diverst::Application.routes.draw do
       resources :users_segments
       resources :views
       resources :yammer_field_mappings
+
+      namespace :metrics do
+        resources :overview, controller: :overview_graphs, only: [:index]
+        resources :users, controller: :user_graphs, only: [:index] do
+          collection do
+            get 'users_per_group'
+            get 'users_per_segment'
+            get 'user_growth'
+            get 'user_groups_intersection'
+            get 'url_usage_data'
+            get 'user_usage_data'
+          end
+        end
+
+        resources :groups, controller: :group_graphs, only: [:index] do
+          collection do
+            get 'initiatives'
+            get 'social_media'
+            get 'resources'
+
+            get 'group_population'
+            get 'initiatives_per_group'
+            get 'messages_per_group'
+            get 'views_per_group'
+            get 'views_per_folder'
+            get 'views_per_resource'
+            get 'views_per_news_link'
+            get 'growth_of_groups'
+            get 'growth_of_resources'
+          end
+        end
+
+        resources :segments, controller: :segment_graphs, only: [:index] do
+          collection do
+            get 'segment_population'
+          end
+        end
+
+        resources :mentorships, controller: :mentorship_graphs, only: [:index] do
+          collection do
+            get 'user_mentorship_interest_per_group'
+            get 'mentoring_sessions_per_creator'
+            get 'mentoring_interests'
+            get 'mentors_per_group'
+            get 'top_mentors'
+          end
+        end
+
+        resources :campaigns, controller: :campaign_graphs, only: [:index] do
+          collection do
+            get 'contributions_per_erg'
+            get 'total_votes_per_user'
+          end
+        end
+
+        resources :metrics_dashboards do
+          member do
+            get 'shared_dashboard'
+          end
+
+          resources :graphs do
+            member do
+              get 'data'
+              get 'export_csv'
+            end
+          end
+        end
+      end
     end
   end
 

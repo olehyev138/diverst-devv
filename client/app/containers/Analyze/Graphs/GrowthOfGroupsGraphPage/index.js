@@ -35,7 +35,7 @@ export function GrowthOfGroupsGraphPage(props) {
   };
 
   useEffect(() => {
-    props.getGrowthOfGroupsBegin(params);
+    props.getGrowthOfGroupsBegin();
   }, []);
 
   return (

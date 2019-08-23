@@ -8,7 +8,7 @@ import {
   XYPlot, HorizontalBarSeries, VerticalGridLines, HorizontalGridLines,
   Hint, XAxis, YAxis
 } from 'react-vis/';
-import '../../../../../../node_modules/react-vis/dist/style.css'; // TODO: fix this nonsense
+import 'react-vis/dist/style.css';
 
 export function BarGraph(props) {
   const [value, setValue] = useState(undefined);

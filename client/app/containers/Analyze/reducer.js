@@ -12,7 +12,8 @@ import {
 
 export const initialState = {
   metricsData: {
-    groupPopulation: {}
+    groupPopulation: {},
+    growthOfGroups: {}
   }
 };
 
