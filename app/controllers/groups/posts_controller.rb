@@ -9,6 +9,7 @@ class Groups::PostsController < ApplicationController
   layout 'erg'
 
   def index
+    @search = params[:search]
     visit_page("#{@group.name}'s News Feed")
     @tweets = recent_tweets
     if GroupPolicy.new(current_user, @group).manage?
@@ -51,7 +52,7 @@ class Groups::PostsController < ApplicationController
 
   def unpin
     @link.is_pinned = false
-    if !@link.save
+    unless @link.save
       flash[:alert] = 'Link was not unpinned'
     end
     redirect_to :back
@@ -59,23 +60,28 @@ class Groups::PostsController < ApplicationController
 
   protected
 
+  def split_search_terms
+    (@search || '').split(' ')
+  end
+
   def recent_tweets(nb = 5)
-    all_tweets = []
-    @accounts.find_each do |account|
-      all_tweets += TwitterClient.get_tweets(account.account).first(nb)
+    if params['search'].blank?
+      all_tweets = []
+      @accounts.find_each do |account|
+        all_tweets += TwitterClient.get_tweets(account.account).first(nb)
+      end
+
+      all_tweets.sort_by!(&:created_at)
+
+      all_tweets.first(nb)
+    else
+      []
     end
-
-    all_tweets.sort_by!(&:created_at)
-
-    all_tweets.first(nb)
   end
 
   def without_segments
     @posts = NewsFeed.all_links_without_segments(@group.news_feed.id, @group.enterprise)
-    @posts = @posts.includes(:news_tags).where(news_tags: { name: params[:tag] }) if params[:tag].present?
-    @count = @posts.size
-    @posts = @posts.order(is_pinned: :desc, created_at: :desc)
-               .limit(@limit)
+    prune_posts
   end
 
   def with_segments
@@ -84,7 +90,14 @@ class Groups::PostsController < ApplicationController
     return without_segments if segment_ids.empty?
 
     @posts = NewsFeed.all_links(@group.news_feed.id, segment_ids, @group.enterprise)
-    @posts = @posts.includes(:news_tags).where(news_tags: { name: params[:tag] }) if params[:tag].present?
+    prune_posts
+  end
+
+  def prune_posts
+    search_terms = split_search_terms
+    if search_terms.present?
+      @posts = @posts.search(search_terms)
+    end
     @count = @posts.size
     @posts = @posts.order(is_pinned: :desc, created_at: :desc)
                .limit(@limit)

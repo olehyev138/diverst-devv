@@ -69,16 +69,12 @@
 <div class="content__main">
   <div class="card">
     <div class="card__section">
-      <h1>Search Tags:</h1>
-      <%= form_tag(group_posts_path(@group),
-                   method: :get,
-                   class: 'navbar-form navbar-left') do %>
-        <div class="input-group">
-          <%= search_field_tag :tag, params[:tag], placeholder: "Search Tag", class: "form-control" %>
-          <div class="input-group-btn">
-            <%= button_tag "Search", :class => 'btn btn-info ' %>
-          </div>
-        </div>
+      <%= simple_form_for @group.news_feed, url: group_posts_path(@group), method: :get do |f| %>
+        <%= f.input :search,
+                    as: :fake,
+                    label: "Search",
+                    input_html: {value:  @search || ''}%>
+        <%= f.button :submit, 'Search', class: 'btn btn-primary btn-sm' %>
       <% end %>
     </div>
   </div>
@@ -153,6 +149,6 @@
 
 <% unless @posts.size === @count %>
   <div class="flex-row__cell text-center">
-    <%= link_to "Load More", group_posts_path(:page => @page + 1), class: "btn btn--primary" %>
+    <%= link_to "Load More", group_posts_path(:page => @page + 1, search: @search), class: "btn btn--primary" %>
   </div>
 <% end %>

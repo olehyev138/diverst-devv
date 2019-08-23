@@ -80,6 +80,18 @@ class NewsFeedLink < BaseClass
     end
   end
 
+  def to_label
+    if group_message_id.present?
+      group_message.to_label
+    elsif news_link_id.present?
+      news_link.to_label
+    elsif social_link_id.present?
+      social_link.to_label
+    else
+      super
+    end
+  end
+
   def self.archive_expired_news(group)
     return unless group.auto_archive?
 
@@ -87,5 +99,25 @@ class NewsFeedLink < BaseClass
     news = group.news_feed_links.where('created_at < ?', expiry_date).where(archived_at: nil)
 
     news.update_all(archived_at: DateTime.now) if news.any?
+  end
+
+  def self.search(search)
+    if search
+      left_joins(:group_message, :news_link, :news_tags)
+      .where(
+        [
+          (
+            [
+              'news_tags.name LIKE ? OR ' +
+                'LOWER( group_messages.subject ) LIKE ? OR ' +
+                'LOWER( group_messages.content ) LIKE ? OR ' +
+                'LOWER( news_links.title ) LIKE ? OR ' +
+                'LOWER( news_links.description ) LIKE ?'
+            ] * search.length
+          ).join(' OR ')
+        ] + search.reduce([]) { |sum, term| sum + ["#{term.downcase}"] + (["%#{term.downcase}%"] * 4) })
+    else
+      all
+    end
   end
 end

@@ -13,6 +13,8 @@ class Groups::GroupMessagesController < ApplicationController
   end
 
   def show
+    @tags = @message.news_tags
+
     @comments = @message.comments.includes(:author)
 
     @new_comment = GroupMessageComment.new

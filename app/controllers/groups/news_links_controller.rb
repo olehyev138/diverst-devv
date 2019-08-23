@@ -22,6 +22,7 @@ class Groups::NewsLinksController < ApplicationController
   end
 
   def comments
+    @tags = @news_link.news_tags
     @comments = @news_link.comments.includes(:author)
     @new_comment = NewsLinkComment.new
     @news_link.increment_view(current_user)

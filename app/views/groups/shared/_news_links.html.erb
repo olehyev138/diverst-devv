@@ -42,7 +42,7 @@
           <% unless news_link.news_tags.size == 0 %>
             <strong>Tags: </strong>
             <% news_link.news_tags.limit(5).each do |tag| %>
-              <%= link_to "##{tag.name}", group_posts_path(news_link.group, tag: tag.name) %>
+              <%= link_to "##{tag.name}", group_posts_path(news_link.group, search: tag.name) %>
             <% end %>
             <%= '...' if news_link.news_tags.size > 5 %>
           <% end %>
