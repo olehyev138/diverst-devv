@@ -17,11 +17,7 @@ import { selectPaginatedGroups, selectGroupTotal, selectGroupIsLoading } from 'c
 import saga from 'containers/Group/saga';
 import reducer from 'containers/Group/reducer';
 
-import { selectPaginatedGroups, selectGroupTotal } from 'containers/Group/selectors';
 import { getGroupsBegin, groupListUnmount, deleteGroupBegin } from 'containers/Group/actions';
-import reducer from 'containers/Group/reducer';
-
-import saga from 'containers/Group/saga';
 
 import GroupList from 'components/Group/AdminGroupList';
 

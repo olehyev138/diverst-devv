@@ -21,6 +21,10 @@ import AdminGroupListPage from 'containers/Group/AdminGroupListPage/Loadable';
 import GroupCreatePage from 'containers/Group/GroupCreatePage/Loadable';
 import GroupEditPage from 'containers/Group/GroupEditPage/Loadable';
 
+/* Admin - Manage - Segment */
+import SegmentListPage from 'containers/Segment/SegmentListPage/Loadable';
+import SegmentPage from 'containers/Segment/SegmentPage/Loadable';
+
 /* Admin - System - Global Settings */
 import FieldsPage from 'containers/GlobalSettings/Field/FieldsPage/Loadable';
 
@@ -62,8 +66,8 @@ import PlaceholderPage from 'components/Shared/PlaceholderPage/Loadable';
 
 export {
   UserLayout, GroupLayout, AdminLayout, SessionLayout, ErrorLayout, GlobalSettingsLayout, LoginPage, HomePage,
-  UserGroupListPage, AdminGroupListPage, GroupCreatePage, GroupEditPage, FieldsPage, UsersPage, UserCreatePage,
-  UserEditPage, GroupHomePage, EventsPage, NewsFeedPage, OutcomesPage, EventPage, EventCreatePage, EventEditPage,
-  GroupMessagePage, GroupMessageCreatePage, GroupMessageEditPage, OutcomeCreatePage, OutcomeEditPage,
-  GroupMemberListPage, GroupMemberCreatePage, NotFoundPage, PlaceholderPage
+  UserGroupListPage, AdminGroupListPage, GroupCreatePage, GroupEditPage, SegmentListPage, SegmentPage, FieldsPage,
+  UsersPage, UserCreatePage, UserEditPage, GroupHomePage, EventsPage, NewsFeedPage, OutcomesPage, EventPage,
+  EventCreatePage, EventEditPage, GroupMessagePage, GroupMessageCreatePage, GroupMessageEditPage, OutcomeCreatePage,
+  OutcomeEditPage, GroupMemberListPage, GroupMemberCreatePage, NotFoundPage, PlaceholderPage
 };
