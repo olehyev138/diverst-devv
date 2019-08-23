@@ -13,10 +13,8 @@ import GroupPopulationGraphPage from 'containers/Analyze/Graphs/GroupPopulationG
 import GrowthOfGroupsGraphPage from 'containers/Analyze/Graphs/GrowthOfGroupsGraphPage';
 
 export function GroupMetricsDashboardPage(props) {
-  useEffect(() => {
-    return () => {
-      props.metricsUnmount();
-    };
+  useEffect(() => () => {
+    props.metricsUnmount();
   }, []);
 
   return (
