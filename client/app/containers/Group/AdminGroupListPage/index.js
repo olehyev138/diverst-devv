@@ -12,7 +12,7 @@ import { compose } from 'redux';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
-import { selectPaginatedGroups, selectGroupTotal } from 'containers/Group/selectors';
+import { selectPaginatedGroups, selectGroupTotal, selectGroupIsLoading } from 'containers/Group/selectors';
 import { getGroupsBegin, groupListUnmount, deleteGroupBegin } from 'containers/Group/actions';
 import reducer from 'containers/Group/reducer';
 
@@ -42,6 +42,7 @@ export function AdminGroupListPage(props) {
   return (
     <React.Fragment>
       <GroupList
+        isLoading={props.isLoading}
         groups={props.groups}
         groupTotal={props.groupTotal}
         defaultParams={params}
@@ -55,12 +56,14 @@ export function AdminGroupListPage(props) {
 AdminGroupListPage.propTypes = {
   getGroupsBegin: PropTypes.func.isRequired,
   groupListUnmount: PropTypes.func.isRequired,
+  isLoading: PropTypes.bool,
   groups: PropTypes.object,
   groupTotal: PropTypes.number,
   deleteGroupBegin: PropTypes.func
 };
 
 const mapStateToProps = createStructuredSelector({
+  isLoading: selectGroupIsLoading(),
   groups: selectPaginatedGroups(),
   groupTotal: selectGroupTotal(),
 });

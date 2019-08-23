@@ -11,7 +11,7 @@ import { compose } from 'redux';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import {
-  Button, Card, CardContent, CardActions, CardActionArea,
+  CircularProgress, Card, CardContent, CardActionArea,
   Typography, Grid, Link, TablePagination, Collapse, Box,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
@@ -22,8 +22,8 @@ import RemoveIcon from '@material-ui/icons/Remove';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
 const styles = theme => ({
-  groupListItemDescription: {
-    paddingTop: 8,
+  progress: {
+    margin: theme.spacing(8),
   },
   errorButton: {
     color: theme.palette.error.main,
@@ -92,6 +92,18 @@ export function UserGroupList(props, context) {
     Object.keys(props.groups).map((id, i) => initialExpandedGroups[id] = false);
     setExpandedGroups(initialExpandedGroups);
   }
+
+  if (props.isLoading)
+    return (
+      <Grid container justify='center'>
+        <Grid item>
+          <CircularProgress
+            size={50}
+            className={classes.progress}
+          />
+        </Grid>
+      </Grid>
+    );
 
   return (
     <React.Fragment>
@@ -205,6 +217,7 @@ export function UserGroupList(props, context) {
 UserGroupList.propTypes = {
   defaultParams: PropTypes.object,
   classes: PropTypes.object,
+  isLoading: PropTypes.bool,
   groups: PropTypes.object,
   groupTotal: PropTypes.number,
   deleteGroupBegin: PropTypes.func,

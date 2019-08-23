@@ -8,12 +8,11 @@ import React, { memo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
-import { NavLink } from 'react-router-dom';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import {
   Button, Card, CardContent, CardActions,
-  Typography, Grid, Link, TablePagination, Collapse, Box,
+  Typography, Grid, Link, TablePagination, Collapse, Box, CircularProgress,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -23,6 +22,9 @@ import { FormattedMessage } from 'react-intl';
 import messages from 'containers/Group/messages';
 
 const styles = theme => ({
+  progress: {
+    margin: theme.spacing(8),
+  },
   groupListItemDescription: {
     paddingTop: 8,
   },
@@ -71,6 +73,18 @@ export function AdminGroupList(props, context) {
     Object.keys(props.groups).map((id, i) => initialExpandedGroups[id] = false);
     setExpandedGroups(initialExpandedGroups);
   }
+
+  if (props.isLoading)
+    return (
+      <Grid container justify='center'>
+        <Grid item>
+          <CircularProgress
+            size={50}
+            className={classes.progress}
+          />
+        </Grid>
+      </Grid>
+    );
 
   return (
     <React.Fragment>
@@ -228,6 +242,7 @@ export function AdminGroupList(props, context) {
 AdminGroupList.propTypes = {
   defaultParams: PropTypes.object,
   classes: PropTypes.object,
+  isLoading: PropTypes.bool,
   groups: PropTypes.object,
   groupTotal: PropTypes.number,
   deleteGroupBegin: PropTypes.func,
