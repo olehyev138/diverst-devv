@@ -44,7 +44,8 @@ export function LineGraph(props) {
     return newLegendData;
   };
 
-  if (props.data && props.data.length > 0 && legendData && Object.keys(legendData).length <= 0)
+  // TODO: use a boolean or something to indicate data is still loading
+  if (props.data && props.data[0].key !== 'dummy' && legendData && Object.keys(legendData).length <= 0)
     setLegendData(buildLegendData(props.data));
 
   // TODO: updating state with different values causes highlighting & crosshair lag

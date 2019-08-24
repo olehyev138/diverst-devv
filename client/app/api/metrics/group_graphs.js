@@ -8,8 +8,8 @@ Object.assign(GroupGraphs, {
     return axios.get(`${this.url}/group_population`);
   },
 
-  growthOfGroups() {
-    return axios.get(`${this.url}/growth_of_groups`);
+  growthOfGroups(params) {
+    return axios.get(`${this.url}/growth_of_groups`, { params });
   }
 });
 

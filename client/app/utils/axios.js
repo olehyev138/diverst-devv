@@ -1,4 +1,5 @@
 const axios = require('axios');
+const qs = require('qs');
 
 export default function configureAxios() {
   // Add a request interceptor
@@ -28,4 +29,14 @@ export default function configureAxios() {
       return Promise.reject(rejection);
     },
   );
+
+  // Format nested params correctly
+  axios.interceptors.request.use((config) => {
+    config.paramsSerializer = params => qs.stringify(params, {
+      arrayFormat: 'brackets',
+      encode: false
+    });
+
+    return config;
+  });
 }
