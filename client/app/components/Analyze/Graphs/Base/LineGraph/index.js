@@ -2,20 +2,36 @@ import React, { memo, useEffect, useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
+import 'react-perfect-scrollbar/dist/css/styles.css';
+import PerfectScrollbar from 'react-perfect-scrollbar';
+
 import produce from 'immer';
 import dig from 'object-dig';
 
 import {
-  Grid, Paper, Button
+  Grid, Paper, Button, withStyles,
 } from '@material-ui/core';
 
 import {
-  XYPlot, LineSeries, VerticalGridLines, HorizontalGridLines,
+  makeWidthFlexible, FlexibleWidthXYPlot, LineSeries, VerticalGridLines, HorizontalGridLines,
   Hint, XAxis, YAxis, Highlight, Crosshair, Borders, DiscreteColorLegend
 } from 'react-vis/';
 import 'react-vis/dist/style.css';
 
+const FlexibleWidthDiscreteColorLegend = makeWidthFlexible(DiscreteColorLegend);
+
+const styles = theme => ({
+  paper: {
+    padding: theme.spacing(3),
+  },
+  legend: {
+    overflow: 'visible',
+  },
+});
+
 export function LineGraph(props) {
+  const { classes } = props;
+
   const [lastDrawLocation, setLastDrawLocation] = useState(null);
   const [values, setValues] = useState([]);
 
@@ -37,84 +53,84 @@ export function LineGraph(props) {
 
   return (
     <React.Fragment>
-      <Paper>
-        <Grid container justify='center'>
-          <Grid item xs={6}>
-            <DiscreteColorLegend
-              items={Object.values(legendData)}
-              orientation='horizontal'
-              height={100}
-              onItemClick={v => {
-                const p = produce(legendData, draft => {
-                  draft[v.title].hidden = !draft[v.title].hidden;
-                });
+      <Paper className={classes.paper}>
+        <PerfectScrollbar>
+          <FlexibleWidthDiscreteColorLegend
+            style={{
+              overflow: 'visible',
+              paddingBottom: 16,
+            }}
+            items={Object.values(legendData)}
+            orientation='horizontal'
+            onItemClick={(v) => {
+              const p = produce(legendData, (draft) => {
+                draft[v.title].hidden = !draft[v.title].hidden;
+              });
 
-                setLegendData(p);
-              }}
-            />
-          </Grid>
-        </Grid>
-        <Grid container justify='center'>
-          <XYPlot
-            animation
-            height={500}
-            width={700}
-            margin={{ left: 100 }}
-            xDomain={
-              lastDrawLocation && [
-                lastDrawLocation.left,
-                lastDrawLocation.right
-              ]
-            }
-            yDomain={
-              lastDrawLocation && [
-                lastDrawLocation.bottom,
-                lastDrawLocation.top
-              ]
-            }
-          >
-            <HorizontalGridLines />
-            <VerticalGridLines />
-            { props.data && props.data.map((series, index) => {
-              if (dig(legendData[series.key], 'hidden')) return (<React.Fragment key={series.key} />);
+              setLegendData(p);
+            }}
+          />
+        </PerfectScrollbar>
+        <br />
+        <FlexibleWidthXYPlot
+          animation
+          height={500}
+          xDomain={
+            lastDrawLocation && [
+              lastDrawLocation.left,
+              lastDrawLocation.right
+            ]
+          }
+          yDomain={
+            lastDrawLocation && [
+              lastDrawLocation.bottom,
+              lastDrawLocation.top
+            ]
+          }
+        >
+          <HorizontalGridLines />
+          <VerticalGridLines />
+          { props.data && props.data.map((series, index) => {
+            if (dig(legendData[series.key], 'hidden')) return (<React.Fragment key={series.key} />);
 
-              return (
-                <LineSeries
-                  key={series.key}
-                  data={series.values}
-                />
-              );
-            })}
-            <Borders style={{ all: { fill: '#fff' }}} />
-            <XAxis
-              tickPadding={20}
-              tickLabelAngle={10}
-              tickFormat={value => new Date(value).toLocaleDateString()}
-            />
-            <YAxis />
-            <Highlight
-              onBrushEnd={area => setLastDrawLocation(area)}
-              onDrag={(area) => {
-                setLastDrawLocation({
-                  bottom: lastDrawLocation.bottom + (area.top - area.bottom),
-                  left: lastDrawLocation.left - (area.right - area.left),
-                  right: lastDrawLocation.right - (area.right - area.left),
-                  top: lastDrawLocation.top + (area.top - area.bottom)
-                });
-              }}
-            />
-          </XYPlot>
-        </Grid>
+            return (
+              <LineSeries
+                key={series.key}
+                data={series.values}
+              />
+            );
+          })}
+          <Borders style={{ all: { fill: '#fff' }}} />
+          <XAxis
+            tickPadding={20}
+            tickLabelAngle={10}
+            tickFormat={value => new Date(value).toLocaleDateString()}
+          />
+          <YAxis />
+          <Highlight
+            onBrushEnd={area => setLastDrawLocation(area)}
+            onDrag={(area) => {
+              setLastDrawLocation({
+                bottom: lastDrawLocation.bottom + (area.top - area.bottom),
+                left: lastDrawLocation.left - (area.right - area.left),
+                right: lastDrawLocation.right - (area.right - area.left),
+                top: lastDrawLocation.top + (area.top - area.bottom)
+              });
+            }}
+          />
+        </FlexibleWidthXYPlot>
       </Paper>
     </React.Fragment>
   );
 }
 
 LineGraph.propTypes = {
+  classes: PropTypes.object,
   data: PropTypes.array,
   metricsUnmount: PropTypes.func
 };
 
 export default compose(
   memo,
+  withStyles(styles)
 )(LineGraph);

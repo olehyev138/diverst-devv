@@ -4,6 +4,8 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 
+import { Grid, Card, CardContent } from '@material-ui/core';
+
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 
@@ -18,7 +20,27 @@ export function GroupMetricsDashboardPage(props) {
   }, []);
 
   return (
-    <GroupPopulationGraphPage />
+    <Grid container spacing={3}>
+      <Grid item xs={6}>
+        <GroupPopulationGraphPage />
+      </Grid>
+      <Grid item xs={6}>
+        <GroupPopulationGraphPage />
+      </Grid>
+      <Grid item xs={12}>
+        <GroupPopulationGraphPage />
+      </Grid>
+
+      <Grid item xs={6}>
+        <GrowthOfGroupsGraphPage />
+      </Grid>
+      <Grid item xs={6}>
+        <GrowthOfGroupsGraphPage />
+      </Grid>
+      <Grid item xs={12}>
+        <GrowthOfGroupsGraphPage />
+      </Grid>
+    </Grid>
   );
 }
 

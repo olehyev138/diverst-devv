@@ -19,12 +19,17 @@ import dig from 'object-dig';
 import RouteService from 'utils/routeHelpers';
 import { createStructuredSelector } from 'reselect';
 
+import 'react-perfect-scrollbar/dist/css/styles.css';
+import PerfectScrollbar from 'react-perfect-scrollbar';
+
 const styles = theme => ({
   toolbar: theme.mixins.toolbar,
   content: {
     flexGrow: 1,
     padding: theme.spacing(3),
   },
+  container: {
+  }
 });
 
 const GroupLayout = ({ component: Component, ...rest }) => {
@@ -59,13 +64,15 @@ const GroupLayout = ({ component: Component, ...rest }) => {
           <div className={classes.toolbar} />
           <GroupLinks {...other} />
 
-          <Container>
-            <div className={classes.content}>
-              {currentGroup && (
-                <Component currentGroup={currentGroup} {...other} />
-              )}
-            </div>
-          </Container>
+          <PerfectScrollbar>
+            <Container className={classes.container}>
+              <div className={classes.content}>
+                {currentGroup && (
+                  <Component currentGroup={currentGroup} {...other} />
+                )}
+              </div>
+            </Container>
+          </PerfectScrollbar>
         </React.Fragment>
       )}
     />

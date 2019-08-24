@@ -41,7 +41,7 @@ export function GrowthOfGroupsGraphPage(props) {
   return (
     <React.Fragment>
       <GrowthOfGroupsGraph
-        data={data ? data.slice(0, 5) : undefined}
+        data={data ? data.slice(0, 15) : undefined}
       />
     </React.Fragment>
   );
