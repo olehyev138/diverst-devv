@@ -20,11 +20,13 @@ class BaseClass < ActiveRecord::Base
     if where == [nil] && from.nil?
       # WITHOUT ANY EXTRA CONDITION, CAN USE COUNTING CACHE
       results = []
-      self.all.map do |record|
-        sum = fields.sum do |field|
-          record.send(field).size
+      self.find_in_batches do |records|
+        records.map do |record|
+          sum = fields.sum do |field|
+            record.send(field).size
+          end
+          results.append sum
         end
-        results.append sum
       end
     else
       # IF THERE IS A CONDITION, LEFT JOIN ALL THE FIELDS,
