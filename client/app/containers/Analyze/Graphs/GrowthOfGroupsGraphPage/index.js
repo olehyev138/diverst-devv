@@ -30,18 +30,29 @@ export function GrowthOfGroupsGraphPage(props) {
 
   const data = (dig(props.data, 'series') || undefined);
 
-  const params = {
-    date_range: { from_date: '6m' }
+  const [params, setParams] = useState({
+    date_range: {
+      from_date: '',
+      to_date: ''
+    }
+  });
+
+  const updateRange = (range) => {
+    const newParams = { ...params, date_range: range };
+
+    props.getGrowthOfGroupsBegin(newParams);
+    setParams(newParams);
   };
 
   useEffect(() => {
-    props.getGrowthOfGroupsBegin();
+    props.getGrowthOfGroupsBegin(params);
   }, []);
 
   return (
     <React.Fragment>
       <GrowthOfGroupsGraph
         data={data ? data.slice(0, 15) : [{ key: 'dummy', values: [{ x: 0, y: 0 }] }]}
+        updateRange={updateRange}
       />
     </React.Fragment>
   );

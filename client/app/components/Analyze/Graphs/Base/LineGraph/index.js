@@ -17,8 +17,10 @@ import {
   Hint, XAxis, YAxis, Highlight, Crosshair, Borders, DiscreteColorLegend
 } from 'react-vis/';
 import 'react-vis/dist/style.css';
+import RangeSelector from 'components/Analyze/Shared/RangeSelector';
 
 const FlexibleWidthDiscreteColorLegend = makeWidthFlexible(DiscreteColorLegend);
+
 
 const styles = theme => ({
   paper: {
@@ -55,6 +57,7 @@ export function LineGraph(props) {
   return (
     <React.Fragment>
       <Paper className={classes.paper}>
+        <RangeSelector updateRange={props.updateRange} />
         <PerfectScrollbar>
           <FlexibleWidthDiscreteColorLegend
             style={{
@@ -128,6 +131,7 @@ export function LineGraph(props) {
 LineGraph.propTypes = {
   classes: PropTypes.object,
   data: PropTypes.array,
+  updateRange: PropTypes.func,
   metricsUnmount: PropTypes.func
 };
 

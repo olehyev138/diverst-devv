@@ -31,14 +31,29 @@ export function GroupPopulationGraphPage(props) {
   // TEMP - swap x & y for horizontal
   const data = (dig(props.data, 'series', 0, 'values') || [{ x: '', y: 0 }]).map(d => ({ x: d.y, y: d.x }));
 
+  const [params, setParams] = useState({
+    date_range: {
+      from_date: '',
+      to_date: ''
+    }
+  });
+
+  const updateRange = (range) => {
+    const newParams = { ...params, date_range: range };
+
+    props.getGroupPopulationBegin(newParams);
+    setParams(newParams);
+  };
+
   useEffect(() => {
-    props.getGroupPopulationBegin();
+    props.getGroupPopulationBegin(params);
   }, []);
 
   return (
     <React.Fragment>
       <GroupPopulationGraph
         data={data}
+        updateRange={updateRange}
       />
     </React.Fragment>
   );

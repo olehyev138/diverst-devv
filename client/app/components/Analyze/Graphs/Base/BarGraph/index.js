@@ -10,6 +10,8 @@ import {
 } from 'react-vis/';
 import 'react-vis/dist/style.css';
 
+import RangeSelector from 'components/Analyze/Shared/RangeSelector';
+
 const styles = theme => ({
   paper: {
     padding: theme.spacing(3),
@@ -23,6 +25,7 @@ export function BarGraph(props) {
   return (
     <React.Fragment>
       <Paper className={classes.paper}>
+        <RangeSelector updateRange={props.updateRange} />
         <FlexibleWidthXYPlot
           yType='ordinal'
           animation='stiff'
@@ -54,6 +57,7 @@ export function BarGraph(props) {
 BarGraph.propTypes = {
   classes: PropTypes.object,
   data: PropTypes.array,
+  updateRange: PropTypes.func,
   metricsUnmount: PropTypes.func
 };
 

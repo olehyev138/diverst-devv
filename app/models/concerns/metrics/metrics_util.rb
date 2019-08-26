@@ -1,13 +1,14 @@
 module Metrics
   module MetricsUtil
     def parse_date_range(date_range)
-      # Parse a date range from a frontend range_controller for a es date range aggregation
+      # Parse a date range from the frontend for a es date range aggregation
       # Date range is {} or looks like { from: <>, to: <> }, with to being optional
 
       default_from_date = 'now-200y/y'
       default_to_date = DateTime.tomorrow.strftime('%F')
 
-      return { from: default_from_date, to: default_to_date } if date_range.blank?
+      # return default date range if date range is blank or all values are blank
+      return { from: default_from_date, to: default_to_date } if date_range.blank? || date_range.values.all?(&:blank?)
 
       from_date = date_range[:from_date].presence || default_from_date
       to_date = DateTime.parse((date_range[:to_date].presence || default_to_date)).strftime('%F')
