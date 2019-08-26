@@ -16,7 +16,7 @@ import { FormattedMessage } from 'react-intl';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
-import messages from 'containers/Segment/messages';
+import messages from 'containers/Analyze/messages';
 import { buildValues, mapFields } from 'utils/formHelpers';
 
 import {
@@ -29,7 +29,7 @@ const styles = theme => ({
 });
 
 /* eslint-disable object-curly-newline */
-export function SegmentFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
+export function RangeSelectorInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
   return (
     <Card>
       <Form>
@@ -111,7 +111,7 @@ export function SegmentFormInner({ handleSubmit, handleChange, handleBlur, value
   );
 }
 
-export function SegmentForm(props) {
+export function RangeSelector(props) {
   const initialValues = buildValues({}, {
     from_date: { default: '' },
     to_date: { default: '' },
@@ -122,16 +122,16 @@ export function SegmentForm(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => props.updateRange(values)}
-      render={formikProps => <SegmentFormInner {...props} {...formikProps} />}
+      render={formikProps => <RangeSelectorInner {...props} {...formikProps} />}
     />
   );
 }
 
-SegmentForm.propTypes = {
+RangeSelector.propTypes = {
   updateRange: PropTypes.func.isRequired,
 };
 
-SegmentFormInner.propTypes = {
+RangeSelectorInner.propTypes = {
   handleSubmit: PropTypes.func,
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
@@ -145,4 +145,4 @@ SegmentFormInner.propTypes = {
 export default compose(
   memo,
   withStyles(styles)
-)(SegmentForm);
+)(RangeSelector);
