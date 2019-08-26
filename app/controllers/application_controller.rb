@@ -118,6 +118,20 @@ class ApplicationController < ActionController::Base
 
   around_action :user_time_zone, if: :current_user
 
+  def temp
+    Enterprise.first.users.each do |usr|
+      r1 = rand(1..10)
+      r2 = rand(1..10)
+      GroupMessage.all.sample(r1).each do |gm|
+        usr.message_comments << gm.comments.new(content: Faker::Lorem.sentence)
+      end
+      NewsLink.all.sample(r2).each do |nl|
+        usr.news_link_comments << nl.comments.new(content: Faker::Lorem.sentence)
+      end
+    end
+    nil
+  end
+
   def redirect_on_error
     if user_signed_in?
       redirect_to(request.referrer || default_path)
@@ -219,12 +233,12 @@ class ApplicationController < ActionController::Base
 
   def calculate_aggregate_data(sample)
     Rails.cache.fetch("calculate_aggregate_data/#{sample}") do
-      max = sample.max
+      max = sample.max_by { |x| x[1] }
       n = sample.count
-      sum = sample.sum
+      sum = sample.sum { |x| x[1] }
       mean = sum.to_f / n
-      sd = Math.sqrt(sample.reduce(0) { |partial, element| partial + (element - mean)**2 / n })
-      return sum, max, mean.round(2), sd.round(2)
+      sd = Math.sqrt(sample.reduce(0) { |partial, element| partial + (element[1] - mean)**2 / n })
+      return sum, max[0], max[1], mean.round(2), sd.round(2)
     end
   end
 
@@ -243,7 +257,7 @@ class ApplicationController < ActionController::Base
 
   def percentile_from_field(model, number, *fields, where: [nil])
     list_of_values = model.cached_count_list(*fields, where: where)
-    calculate_percentile(number, list_of_values)
+    calculate_percentile(number, list_of_values.map { |count| count[1] }.sort)
   end
 
   private

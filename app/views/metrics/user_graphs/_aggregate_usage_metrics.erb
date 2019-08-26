@@ -19,7 +19,13 @@
           <div class="col md-3 sm-6 xs-12">
             <div class="panel panel--primary text-center margin-bottom-0">
               <div class="panel-headline"><p><strong>Maximum by User</strong></p></div>
-              <div class="panel-data"><p><b class="accent"><%= @aggregate_metrics[fld.to_sym][:max]%></b></p></div>
+              <div class="panel-data">
+                <p>
+                  <b class="accent">
+                    <%= link_to @aggregate_metrics[fld.to_sym][:max], show_usage_user_path(@aggregate_metrics[fld.to_sym][:max_user]) %>
+                  </b>
+                </p>
+              </div>
             </div>
           </div>
           <div class="col md-3 sm-6 xs-12">

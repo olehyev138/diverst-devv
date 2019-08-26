@@ -196,15 +196,9 @@ class UsersController < ApplicationController
 
   protected
 
-  def aggregate_sign_ins
-    Rails.cache.fetch('aggregate_login_count', expires_in: 2.hours) do
-      User.all.map(&:sign_in_count)
-    end
-  end
-
   def get_user_usage_metrics
     logins = @user.sign_in_count
-    logins_p = calculate_percentile(logins, aggregate_sign_ins.sort)
+    logins_p = calculate_percentile(logins, User.aggregate_sign_ins.map { |usr_count| usr_count[1] }.sort)
     logins_n = 'Times Logged In'
 
     posts = @user.number_of(:social_links, :own_messages, :own_news_links)

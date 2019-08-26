@@ -421,6 +421,14 @@ class User < BaseClass
     end
   end
 
+  def self.aggregate_sign_ins
+    Rails.cache.fetch('aggregate_login_count', expires_in: 2.hours) do
+      all.map do |usr|
+        [usr.id, usr.sign_in_count]
+      end
+    end
+  end
+
   def group_member?(group_id)
     user_group = user_groups.find_by(group_id: group_id)
     user_group.present?

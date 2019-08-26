@@ -24,7 +24,7 @@ class BaseClass < ActiveRecord::Base
           sum = fields.sum do |field|
             record.send(field).size
           end
-          results.append sum
+          results.append [record.id, sum]
         end
       end
     else
@@ -39,9 +39,16 @@ class BaseClass < ActiveRecord::Base
           hash
         end
       end
-      results = count_hash.values
+      results = count_hash.to_a
     end
     results.sort
+  end
+
+  def temp
+    user = Enterprise.first.users.sample ; nil
+    GroupMessage.all.sample(20).each do |gm|
+      user.message_comments << gm.comments.new(content: Faker::Lorem.sentence)
+    end ; nil
   end
 
   def self.cached_count_list(*fields, from: nil, where: [nil])
