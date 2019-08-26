@@ -35,19 +35,22 @@ export function GroupPopulationGraphPage(props) {
     date_range: {
       from_date: '',
       to_date: ''
-    }
+    },
+    scoped_by_models: props.dashboardParams.scoped_by_models
   });
 
   const updateRange = (range) => {
     const newParams = { ...params, date_range: range };
 
-    props.getGroupPopulationBegin(newParams);
     setParams(newParams);
   };
 
+  if (params.scoped_by_models !== props.dashboardParams.scoped_by_models)
+    setParams({ ...params, scoped_by_models: props.dashboardParams.scoped_by_models });
+
   useEffect(() => {
     props.getGroupPopulationBegin(params);
-  }, []);
+  }, [params]);
 
   return (
     <React.Fragment>
@@ -61,6 +64,7 @@ export function GroupPopulationGraphPage(props) {
 
 GroupPopulationGraphPage.propTypes = {
   data: PropTypes.object,
+  dashboardParams: PropTypes.object,
   getGroupPopulationBegin: PropTypes.func,
   metricsUnmount: PropTypes.func
 };

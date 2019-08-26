@@ -53,7 +53,6 @@ export function LineGraph(props) {
   // TODO: updating state with different values causes highlighting & crosshair lag
   const updateCrossHairs = (v, { index }) => setValues(props.data.map(d => d.values[index]));
 
-
   return (
     <React.Fragment>
       <Paper className={classes.paper}>

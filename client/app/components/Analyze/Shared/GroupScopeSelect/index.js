@@ -30,10 +30,28 @@ const styles = theme => ({
 
 /* eslint-disable object-curly-newline */
 export function GroupScopeSelectInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
+  const groupSelectAction = (searchKey = '') => {
+    props.getGroupsBegin({
+      count: 10, page: 0, order: 'asc',
+      search: searchKey,
+    });
+  };
+
   return (
     <Card>
       <Form>
         <CardContent>
+          <Select
+            name='group_select'
+            id='group_select'
+            label='Groups'
+            isMulti
+            options={props.groups}
+            value={values.groups}
+            onMenuOpen={groupSelectAction}
+            onChange={v => setFieldValue('groups', v)}
+            onInputChange={value => groupSelectAction(value)}
+          />
         </CardContent>
         <CardActions>
           <Button
@@ -50,22 +68,21 @@ export function GroupScopeSelectInner({ handleSubmit, handleChange, handleBlur, 
 
 export function GroupScopeSelect(props) {
   const initialValues = buildValues({}, {
-    from_date: { default: '' },
-    to_date: { default: '' },
+    groups: []
   });
 
   return (
     <Formik
       initialValues={initialValues}
       enableReinitialize
-      onSubmit={(values, actions) => props.updateRange(values)}
+      onSubmit={(values, actions) => props.updateScope(values)}
       render={formikProps => <GroupScopeSelectInner {...props} {...formikProps} />}
     />
   );
 }
 
 GroupScopeSelect.propTypes = {
-  updateRange: PropTypes.func.isRequired,
+  updateScope: PropTypes.func.isRequired,
 };
 
 GroupScopeSelectInner.propTypes = {
@@ -77,6 +94,8 @@ GroupScopeSelectInner.propTypes = {
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
   classes: PropTypes.object,
+  groups: PropTypes.array,
+  getGroupsBegin: PropTypes.func
 };
 
 export default compose(

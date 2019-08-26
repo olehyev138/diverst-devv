@@ -34,7 +34,8 @@ export function GrowthOfGroupsGraphPage(props) {
     date_range: {
       from_date: '',
       to_date: ''
-    }
+    },
+    scoped_by_models: []
   });
 
   const updateRange = (range) => {
@@ -44,9 +45,12 @@ export function GrowthOfGroupsGraphPage(props) {
     setParams(newParams);
   };
 
+  if (params.scoped_by_models !== props.dashboardParams.scoped_by_models)
+    setParams({ ...params, scoped_by_models: props.dashboardParams.scoped_by_models });
+
   useEffect(() => {
     props.getGrowthOfGroupsBegin(params);
-  }, []);
+  }, [params]);
 
   return (
     <React.Fragment>
@@ -60,6 +64,7 @@ export function GrowthOfGroupsGraphPage(props) {
 
 GrowthOfGroupsGraphPage.propTypes = {
   data: PropTypes.object,
+  dashboardParams: PropTypes.object,
   getGrowthOfGroupsBegin: PropTypes.func,
   metricsUnmount: PropTypes.func
 };
