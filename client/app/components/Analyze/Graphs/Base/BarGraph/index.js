@@ -28,7 +28,6 @@ export function BarGraph(props) {
         <RangeSelector updateRange={props.updateRange} />
         <FlexibleWidthXYPlot
           yType='ordinal'
-          animation='stiff'
           margin={{ left: 100 }}
           height={500}
           onMouseLeave={() => setValue(undefined)}
