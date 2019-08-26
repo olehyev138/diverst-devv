@@ -4,7 +4,7 @@ class InitiativeUserSerializer < ApplicationRecordSerializer
   def user
     UserSerializer.new(object.user).attributes
   end
-  
+
   def initiative
     InitiativeSerializer.new(object.initiative).attributes
   end
