@@ -5,6 +5,7 @@
 </div>
 
 <div class="content__main">
+
   <div class="card">
     <div class="card__section">
       <div class="row">
@@ -31,6 +32,7 @@
       </div>
     </div>
   </div>
+
   <div class="row">
     <div class="col md-6 sm-12">
       <div class="card">
@@ -63,6 +65,26 @@
     </div>
   </div>
 
+  <%= render 'aggregate_usage_metrics' %>
+
+  <div class="card">
+    <div class="card__section">
+      <h2><%= c_t(:erg) %> Membership Usage</h2>
+
+      <table class="table--has-border data-table" data-source="<%= user_usage_data_metrics_users_path(format: :json) %>" id="users-usage-table">
+        <thead>
+        <th>First name</th>
+        <th>Last name</th>
+        <th>Email</th>
+        <th>Points</th>
+        <th>Details</th>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
   </div>
   <div class="card">
     <div class="card__section">
@@ -78,6 +100,7 @@
       </div>
     </div>
   </div>
+
   <div class="card">
     <div class="card__section">
       <h2><%= c_t(:erg) %> Membership Cross Section</h2>
@@ -98,7 +121,7 @@
         <a href="#" id="users_intersection_csv" data-url="<%= user_groups_intersection_metrics_users_path(format: :csv) %>">Export CSV</a>
       </div>
 
-      <table class="table--has-border" data-source="<%= user_groups_intersection_metrics_users_path(format: :json) %>" id="users-table">
+      <table class="table--has-border" data-source="<%= user_groups_intersection_metrics_users_path(format: :json)%>" id='users-table'>
         <thead>
         <th>ID</th>
         <th>First name</th>
@@ -125,6 +148,14 @@
       ajax: { url: "<%= user_groups_intersection_metrics_users_path(format: :json) %>", data: function(d) { d.scoped_by_models = scoped_by_models } },
       columnDefs: [
         { bSortable: false, targets: [3, 4] }
+      ]
+    }));
+
+    var table2 = $('#users-show_usage-table').DataTable(Utility.mergeWithDTDefaults({
+      serverSide: true,
+      ajax: { url: "<%= user_usage_data_metrics_users_path(format: :json) %>", data: function(d) { d.scoped_by_models = scoped_by_models } },
+      columnDefs: [
+        { bSortable: false, targets: [4] }
       ]
     }));
 

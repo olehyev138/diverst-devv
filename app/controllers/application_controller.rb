@@ -142,6 +142,20 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def visit_page(name)
+    return unless request.format == 'html'
+    return if Rails.env.test?
+
+    user_id = current_user.id
+    controller = controller_path
+    action = action_name
+    origin = URI(request.referer || '').path
+    page = URI(request.original_url).path
+
+    return if page == origin
+
+    IncrementViewCountJob.perform_later(user_id, page, name, controller, action)
+  end
 
   protected
 
@@ -201,6 +215,35 @@ class ApplicationController < ActionController::Base
 
   def user_time_zone(&block)
     Time.use_zone(current_user.default_time_zone, &block)
+  end
+
+  def calculate_aggregate_data(sample)
+    Rails.cache.fetch("calculate_aggregate_data/#{sample}") do
+      max = sample.max
+      n = sample.count
+      sum = sample.sum
+      mean = sum.to_f / n
+      sd = Math.sqrt(sample.reduce(0) { |partial, element| partial + (element - mean)**2 / n })
+      return sum, max, mean.round(2), sd.round(2)
+    end
+  end
+
+  def calculate_percentile(number, sample)
+    Rails.cache.fetch("calculate_percentile/#{number}, #{sample}") do
+      n = sample.count
+      i = sample.each_index.select { |r| sample[r] <= number }.last
+      101 - (100 * (i - 0.5) / n).round
+    end
+  end
+
+  def aggregate_data_from_field(model, *fields, where: [nil])
+    list_of_values = model.cached_count_list(*fields, where: where)
+    calculate_aggregate_data(list_of_values)
+  end
+
+  def percentile_from_field(model, number, *fields, where: [nil])
+    list_of_values = model.cached_count_list(*fields, where: where)
+    calculate_percentile(number, list_of_values)
   end
 
   private

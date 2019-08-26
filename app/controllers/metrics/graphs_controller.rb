@@ -2,6 +2,7 @@ class Metrics::GraphsController < ApplicationController
   before_action :authenticate_user!, except: [:data, :export_csv] # TODO vulnerability - check current_user or enterprise token to be present
   before_action :set_graph, except: [:index, :new, :create]
   before_action :set_collection, except: [:data, :export_csv]
+  after_action :visit_page, only: [:new, :edit, :index]
 
   layout 'dashboard'
 
@@ -103,5 +104,24 @@ class Metrics::GraphsController < ApplicationController
         :date_range,
         :unset_series
       )
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      'Metric Graph List'
+    when 'edit'
+      'Metric Graph Edit'
+    when 'new'
+      'Metric Graph Creation'
+    else
+      "#{controller_path}##{action_name}"
+    end
+  rescue
+    "#{controller_path}##{action_name}"
   end
 end
