@@ -20,8 +20,6 @@ import {
   selectGroupPopulation
 } from 'containers/Analyze/selectors';
 
-import RouteService from 'utils/routeHelpers';
-
 import GroupPopulationGraph from 'components/Analyze/Graphs/GroupPopulationGraph';
 
 export function GroupPopulationGraphPage(props) {

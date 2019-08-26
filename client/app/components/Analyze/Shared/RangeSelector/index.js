@@ -4,110 +4,130 @@
  *
  */
 
-import React, {
-  memo, useRef, useState, useEffect
-} from 'react';
+import React, { memo } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
-import Select from 'react-select';
 import { Field, Formik, Form } from 'formik';
-import { FormattedMessage } from 'react-intl';
 
-import WrappedNavLink from 'components/Shared/WrappedNavLink';
-import { ROUTES } from 'containers/Shared/Routes/constants';
-
-import messages from 'containers/Analyze/messages';
-import { buildValues, mapFields } from 'utils/formHelpers';
+import { buildValues } from 'utils/formHelpers';
 
 import {
   Button, Card, CardActions, CardContent, Grid,
-  TextField, Hidden, FormControl
+  TextField, ButtonGroup,
 } from '@material-ui/core';
+import RefreshIcon from '@material-ui/icons/Cached';
 import { withStyles } from '@material-ui/core/styles';
 
 const styles = theme => ({
+  dateInput: {
+    padding: '8.5px 10px',
+  },
+  refreshButton: {
+    minWidth: 'initial',
+    padding: '7px 10px',
+  }
 });
 
 /* eslint-disable object-curly-newline */
 export function RangeSelectorInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
+  const { classes } = props;
+
   return (
-    <Card>
-      <Form>
-        <CardContent>
-          <Field
-            component={Button}
-            onChange={handleChange}
-            fullWidth
-            id='name'
-            name='name'
-            children='1M'
-            onClick={() => setFieldValue('from_date', '1m')}
-          />
-          <Field
-            component={Button}
-            onChange={handleChange}
-            fullWidth
-            id='name'
-            name='name'
-            children='3M'
-            onClick={() => setFieldValue('from_date', '3m')}
-          />
-          <Field
-            component={Button}
-            onChange={handleChange}
-            fullWidth
-            id='name'
-            name='name'
-            children='6M'
-            onClick={() => setFieldValue('from_date', '6m')}
-          />
-          <Field
-            component={Button}
-            onChange={handleChange}
-            fullWidth
-            id='name'
-            name='name'
-            children='1Y'
-            onClick={() => setFieldValue('from_date', '1y')}
-          />
-          <Field
-            component={Button}
-            onChange={handleChange}
-            fullWidth
-            id='name'
-            name='name'
-            children='YTD'
-            onClick={() => setFieldValue('from_date', 'ytd')}
-          />
+    <Form>
+      <Grid container spacing={2}>
+        <Grid item>
+          <ButtonGroup
+            color='secondary'
+            size='medium'
+            variant='contained'
+          >
+            <Field
+              component={Button}
+              onChange={handleChange}
+              id='name'
+              name='name'
+              children='1M'
+              onClick={() => setFieldValue('from_date', '1m')}
+            />
+            <Field
+              component={Button}
+              onChange={handleChange}
+              id='name'
+              name='name'
+              children='3M'
+              onClick={() => setFieldValue('from_date', '3m')}
+            />
+            <Field
+              component={Button}
+              onChange={handleChange}
+              id='name'
+              name='name'
+              children='6M'
+              onClick={() => setFieldValue('from_date', '6m')}
+            />
+            <Field
+              component={Button}
+              onChange={handleChange}
+              id='name'
+              name='name'
+              children='1Y'
+              onClick={() => setFieldValue('from_date', '1y')}
+            />
+            <Field
+              component={Button}
+              onChange={handleChange}
+              id='name'
+              name='name'
+              children='YTD'
+              onClick={() => setFieldValue('from_date', 'ytd')}
+            />
+          </ButtonGroup>
+        </Grid>
+        <Grid item>
           <Field
             component={TextField}
+            margin='none'
+            type='date'
+            variant='outlined'
             onChange={handleChange}
-            fullWidth
             id='name'
             name='name'
-            label='From'
+            helperText='From'
             value={values.from_date}
+            inputProps={{
+              className: classes.dateInput
+            }}
           />
+        </Grid>
+        <Grid item>
           <Field
             component={TextField}
+            margin='none'
+            type='date'
+            variant='outlined'
             onChange={handleChange}
-            fullWidth
             id='name'
             name='name'
-            label='To'
+            helperText='To'
             value={values.to_date}
+            inputProps={{
+              className: classes.dateInput
+            }}
           />
-        </CardContent>
-        <CardActions>
+        </Grid>
+        <Grid item>
           <Button
             color='primary'
             type='submit'
+            size='small'
+            variant='contained'
+            className={classes.refreshButton}
           >
-            Refresh
+            <RefreshIcon />
           </Button>
-        </CardActions>
-      </Form>
-    </Card>
+        </Grid>
+      </Grid>
+    </Form>
   );
 }
 

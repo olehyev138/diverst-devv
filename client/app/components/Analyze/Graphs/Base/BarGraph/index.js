@@ -11,6 +11,7 @@ import {
 import 'react-vis/dist/style.css';
 
 import RangeSelector from 'components/Analyze/Shared/RangeSelector';
+import Box from '@material-ui/core/Box';
 
 const styles = theme => ({
   paper: {
@@ -26,6 +27,7 @@ export function BarGraph(props) {
     <React.Fragment>
       <Paper className={classes.paper}>
         <RangeSelector updateRange={props.updateRange} />
+        <Box mb={2} />
         <FlexibleWidthXYPlot
           yType='ordinal'
           animation='stiff'
