@@ -30,7 +30,6 @@ export function BarGraph(props) {
         <Box mb={2} />
         <FlexibleWidthXYPlot
           yType='ordinal'
-          animation='stiff'
           margin={{ left: 100 }}
           height={500}
           onMouseLeave={() => setValue(undefined)}
