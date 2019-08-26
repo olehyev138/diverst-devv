@@ -56,7 +56,7 @@ RSpec.describe GroupMemberListDownloadJob, type: :job do
       end
     end
 
-    context 'for all group_parent_members' do 
+    context 'for all group_parent_members' do
       it 'creates a downloadable csv file' do
         expect { subject.perform(user.id, group.id, 'group_parent_members') }
           .to change(CsvFile, :count).by(1)
