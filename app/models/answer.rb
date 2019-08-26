@@ -66,7 +66,7 @@ class Answer < ApplicationRecord
         include: { author: { only: [:enterprise_id, :id] },
                    question: { only: [:campaign_id] },
                    contributing_group: { only: [:name] } },
-        methods: [:total_votes]
+        methods: [:total_value]
       )
     )
   end
