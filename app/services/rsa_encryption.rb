@@ -2,11 +2,11 @@ class RsaEncryption
   RSA_INTERVAL = 100
 
   def self.public_key
-    @public_key ||= OpenSSL::PKey::RSA.new(ENV['RSA_PUBLIC_KEY'] || RSA_PUBLIC_KEY)
+    @public_key ||= OpenSSL::PKey::RSA.new(ENV['RSA_PUBLIC_KEY'])
   end
 
   def self.private_key
-    @private_key ||= OpenSSL::PKey::RSA.new(ENV['RSA_PRIVATE_KEY'] || RSA_PRIVATE_KEY, ENV['PASSWORD'] || PASSWORD)
+    @private_key ||= OpenSSL::PKey::RSA.new(ENV['RSA_PRIVATE_KEY'], ENV['PASSWORD'])
   end
 
   def self.encode(string)
