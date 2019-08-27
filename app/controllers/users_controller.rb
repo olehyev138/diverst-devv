@@ -209,8 +209,8 @@ class UsersController < ApplicationController
     comments_p = percentile_from_field(User, comments, :answer_comments, :message_comments, :news_link_comments)
     comments_n = 'Comments Made'
 
-    events = @user.number_of(:initiatives, where: ['initiatives.start < ? OR initiatives.id IS NULL', Time.now])
-    events_p = percentile_from_field(User, events, :initiatives, where: ['initiatives.start < ? OR initiatives.id IS NULL', Time.now])
+    events = @user.number_of(:initiatives, where: ['initiatives.start < NOW() OR initiatives.id IS NULL'])
+    events_p = percentile_from_field(User, events, :initiatives, where: ['initiatives.start < NOW() OR initiatives.id IS NULL'])
     events_n = 'Events Attended'
 
     @fields = %w(logins posts comments events)

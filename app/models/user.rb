@@ -422,7 +422,7 @@ class User < BaseClass
   end
 
   def self.aggregate_sign_ins
-    Rails.cache.fetch('aggregate_login_count', expires_in: 2.hours) do
+    Rails.cache.fetch('aggregate_login_count', expires_in: 10.hours) do
       all.map do |usr|
         [usr.id, usr.sign_in_count]
       end

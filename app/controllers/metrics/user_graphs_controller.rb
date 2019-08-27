@@ -31,7 +31,7 @@ class Metrics::UserGraphsController < ApplicationController
     comments_s, comments_mu, comments_m, comments_a, comments_sd = aggregate_data_from_field(User, :answer_comments, :message_comments, :news_link_comments)
     comments_n = 'Comments Made'
 
-    events_s, events_mu, events_m, events_a, events_sd = aggregate_data_from_field(User, :initiatives, where: ['initiatives.start < ? OR initiatives.id IS NULL', Time.now])
+    events_s, events_mu, events_m, events_a, events_sd = aggregate_data_from_field(User, :initiatives, where: ['initiatives.start < NOW() OR initiatives.id IS NULL', Time.now])
     events_n = 'Events Attendance'
 
     @aggregate_metrics = {}

@@ -52,7 +52,7 @@ class BaseClass < ActiveRecord::Base
   end
 
   def self.cached_count_list(*fields, from: nil, where: [nil])
-    Rails.cache.fetch("count_list/#{self.model_name.name}:#{fields}:#{where}", expires_in: 2.hours) do
+    Rails.cache.fetch("count_list/#{self.model_name.name}:#{fields}:#{where}", expires_in: 10.hours) do
       count_list(*fields, from: from, where: where)
     end
   end
