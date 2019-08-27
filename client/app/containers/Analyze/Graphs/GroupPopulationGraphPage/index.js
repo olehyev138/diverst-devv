@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useContext, useState } from 'react';
+import React, { memo, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
@@ -28,6 +28,7 @@ export function GroupPopulationGraphPage(props) {
 
   const [data, setData] = useState([]);
   const [isDrilldown, setIsDrillDown] = useState(false);
+  const isInitalRender = useRef(true);
 
   const handleDrilldown = (datapoint) => {
     const newData = datapoint
@@ -36,7 +37,6 @@ export function GroupPopulationGraphPage(props) {
         .children
         .values.map(d => ({ x: d.y, y: d.x }))
       : (dig(props.data, 'series', 0, 'values') || [{ x: '', y: 0 }]).map(d => ({ x: d.y, y: d.x }));
-
 
     setData(newData);
     setIsDrillDown(!isDrilldown);
@@ -61,7 +61,9 @@ export function GroupPopulationGraphPage(props) {
   }, [props.data]);
 
   useEffect(() => {
-    if (props.dashboardParams.scoped_by_models > 0)
+    if (isInitalRender.current)
+      isInitalRender.current = false;
+    else
       setParams({ ...params, scoped_by_models: props.dashboardParams.scoped_by_models });
   }, [props.dashboardParams]);
 
