@@ -26,8 +26,18 @@ export function GroupPopulationGraphPage(props) {
   useInjectReducer({ key: 'metrics', reducer });
   useInjectSaga({ key: 'metrics', saga });
 
-  // TEMP - swap x & y for horizontal
-  const data = (dig(props.data, 'series', 0, 'values') || [{ x: '', y: 0 }]).map(d => ({ x: d.y, y: d.x }));
+  const [data, setData] = useState([]);
+
+  if (Object.keys(props.data).length > 0 && data.length <= 0) {
+    // TEMP - swap x & y for horizontal
+    setData((dig(props.data, 'series', 0, 'values') || [{ x: '', y: 0 }]).map(d => ({ x: d.y, y: d.x })));
+  }
+
+  const onDrilldown = ((datapoint) => {
+    const children = props.data.series[0].values.find(s => s.x === datapoint.y).children;
+    setData(children.values.map(d => ({ x: d.y, y: d.x })));
+  });
+
 
   const [params, setParams] = useState({
     date_range: {
@@ -55,6 +65,7 @@ export function GroupPopulationGraphPage(props) {
       <GroupPopulationGraph
         data={data}
         updateRange={updateRange}
+        onDrilldown={onDrilldown}
       />
     </React.Fragment>
   );

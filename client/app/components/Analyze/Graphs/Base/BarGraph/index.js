@@ -45,6 +45,7 @@ export function BarGraph(props) {
             data={props.data}
             barWidth={0.7}
             onValueMouseOver={value => setValue(value)}
+            onValueClick={props.onDrilldown || undefined}
           />
           {value && <Hint value={value} />}
         </FlexibleWidthXYPlot>
@@ -57,6 +58,7 @@ BarGraph.propTypes = {
   classes: PropTypes.object,
   data: PropTypes.array,
   updateRange: PropTypes.func,
+  onDrilldown: PropTypes.func,
   metricsUnmount: PropTypes.func
 };
 
