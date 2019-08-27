@@ -27,12 +27,15 @@ export class ThemeProvider extends React.PureComponent {
       palette: {
         primary: {
           main: primary,
+          main25: `${primary}40`,
+          main50: `${primary}80`,
+          main75: `${primary}C0`,
         },
         secondary: {
           main: secondary,
         },
         error: {
-          main: '#d32f2f',
+          main: '#D32F2F',
         },
         warning: {
           main: '#ffa000',

@@ -9,7 +9,7 @@ import React, {
 } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
-import Select from 'react-select';
+import Select from 'components/Shared/DiverstSelect';
 import { Field, Formik, Form } from 'formik';
 import { FormattedMessage } from 'react-intl';
 
