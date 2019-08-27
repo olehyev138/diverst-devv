@@ -49,7 +49,7 @@ export function BarGraph(props) {
             onValueMouseOver={value => setValue(value)}
             onValueClick={props.handleDrilldown || undefined}
           />
-          {value && <Hint value={value} />}
+          {value && <Hint value={{ x: value.x, y: value.y }} />}
         </FlexibleWidthXYPlot>
         <Box mb={2} />
         { props.isDrilldown && (
@@ -60,6 +60,7 @@ export function BarGraph(props) {
       </Paper>
     </React.Fragment>
   );
+
 }
 
 BarGraph.propTypes = {

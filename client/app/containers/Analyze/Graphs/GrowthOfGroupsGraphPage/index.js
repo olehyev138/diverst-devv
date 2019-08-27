@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useContext, useState } from 'react';
+import React, { memo, useEffect, useContext, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
@@ -12,15 +12,11 @@ import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/Analyze/reducer';
 import saga from 'containers/Analyze/saga';
 
-import {
-  getGrowthOfGroupsBegin, metricsUnmount
-} from 'containers/Analyze/actions';
+import { getGrowthOfGroupsBegin, metricsUnmount } from 'containers/Analyze/actions';
+import { selectGrowthOfGroups } from 'containers/Analyze/selectors';
 
-import {
-  selectGrowthOfGroups
-} from 'containers/Analyze/selectors';
-
-import RouteService from 'utils/routeHelpers';
+// helpers
+import { getUpdateRange } from 'utils/metricsHelpers';
 
 import GrowthOfGroupsGraph from 'components/Analyze/Graphs/GrowthOfGroupsGraph';
 
@@ -29,6 +25,8 @@ export function GrowthOfGroupsGraphPage(props) {
   useInjectSaga({ key: 'metrics', saga });
 
   const data = (dig(props.data, 'series') || undefined);
+  const [currentData, setCurrentData] = useState([]);
+  const isInitalRender = useRef(true);
 
   const [params, setParams] = useState({
     date_range: {
@@ -38,15 +36,16 @@ export function GrowthOfGroupsGraphPage(props) {
     scoped_by_models: []
   });
 
-  const updateRange = (range) => {
-    const newParams = { ...params, date_range: range };
+  useEffect(() => {
+    setCurrentData(props.data);
+  }, [props.data]);
 
-    props.getGrowthOfGroupsBegin(newParams);
-    setParams(newParams);
-  };
-
-  if (params.scoped_by_models !== props.dashboardParams.scoped_by_models)
-    setParams({ ...params, scoped_by_models: props.dashboardParams.scoped_by_models });
+  useEffect(() => {
+    if (isInitalRender.current)
+      isInitalRender.current = false;
+    else
+      setParams({ ...params, scoped_by_models: props.dashboardParams.scoped_by_models });
+  }, [props.dashboardParams]);
 
   useEffect(() => {
     props.getGrowthOfGroupsBegin(params);
@@ -55,8 +54,8 @@ export function GrowthOfGroupsGraphPage(props) {
   return (
     <React.Fragment>
       <GrowthOfGroupsGraph
-        data={data ? data.slice(0, 15) : [{ key: 'dummy', values: [{ x: 0, y: 0 }] }]}
-        updateRange={updateRange}
+        data={data}
+        updateRange={getUpdateRange([params, setParams])}
       />
     </React.Fragment>
   );

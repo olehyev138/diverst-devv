@@ -20,33 +20,20 @@ import {
   selectGroupPopulation
 } from 'containers/Analyze/selectors';
 
+// helpers
+import {
+  getUpdateRange, getHandleDrilldown, formatBarGraphData
+} from 'utils/metricsHelpers';
+
 import GroupPopulationGraph from 'components/Analyze/Graphs/GroupPopulationGraph';
 
 export function GroupPopulationGraphPage(props) {
   useInjectReducer({ key: 'metrics', reducer });
   useInjectSaga({ key: 'metrics', saga });
 
-  const [data, setData] = useState([]);
-  const [isDrilldown, setIsDrillDown] = useState(false);
+  const [currentData, setCurrentData] = useState([]);
+  const [isDrilldown, setIsDrilldown] = useState(false);
   const isInitalRender = useRef(true);
-
-  const handleDrilldown = (datapoint) => {
-    const newData = datapoint
-      ? props.data.series[0]
-        .values.find(s => s.x === datapoint.y)
-        .children
-        .values.map(d => ({ x: d.y, y: d.x }))
-      : (dig(props.data, 'series', 0, 'values') || [{ x: '', y: 0 }]).map(d => ({ x: d.y, y: d.x }));
-
-    setData(newData);
-    setIsDrillDown(!isDrilldown);
-  };
-
-  const updateRange = (range) => {
-    const newParams = { ...params, date_range: range };
-
-    setParams(newParams);
-  };
 
   const [params, setParams] = useState({
     date_range: {
@@ -57,7 +44,7 @@ export function GroupPopulationGraphPage(props) {
   });
 
   useEffect(() => {
-    setData((dig(props.data, 'series', 0, 'values') || [{ x: '', y: 0 }]).map(d => ({ x: d.y, y: d.x })));
+    setCurrentData(props.data);
   }, [props.data]);
 
   useEffect(() => {
@@ -74,9 +61,9 @@ export function GroupPopulationGraphPage(props) {
   return (
     <React.Fragment>
       <GroupPopulationGraph
-        data={data}
-        updateRange={updateRange}
-        handleDrilldown={handleDrilldown}
+        data={currentData}
+        updateRange={getUpdateRange([params, setParams])}
+        handleDrilldown={getHandleDrilldown([props.data, setCurrentData], [isDrilldown, setIsDrilldown])}
         isDrilldown={isDrilldown}
       />
     </React.Fragment>
@@ -84,7 +71,7 @@ export function GroupPopulationGraphPage(props) {
 }
 
 GroupPopulationGraphPage.propTypes = {
-  data: PropTypes.object,
+  data: PropTypes.array,
   dashboardParams: PropTypes.object,
   getGroupPopulationBegin: PropTypes.func,
   metricsUnmount: PropTypes.func
