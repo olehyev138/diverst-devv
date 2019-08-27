@@ -35,20 +35,21 @@ export function LineGraph(props) {
   const { classes } = props;
 
   const [lastDrawLocation, setLastDrawLocation] = useState(null);
+  const [legendData, setLegendData] = useState({});
   const [values, setValues] = useState([]);
 
-  const [legendData, setLegendData] = useState({});
-
   const buildLegendData = (data, hidden = false) => {
+    if (!data) return [];
+
     const newLegendData = {};
     data.forEach((d) => { newLegendData[d.key] = { title: d.key, hidden }; });
 
     return newLegendData;
   };
 
-  // TODO: use a boolean or something to indicate data is still loading
-  if (props.data && props.data[0].key !== 'dummy' && legendData && Object.keys(legendData).length <= 0)
+  useEffect(() => {
     setLegendData(buildLegendData(props.data));
+  }, [props.data]);
 
   // TODO: updating state with different values causes highlighting & crosshair lag
   const updateCrossHairs = (v, { index }) => setValues(props.data.map(d => d.values[index]));
