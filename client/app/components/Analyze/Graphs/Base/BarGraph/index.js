@@ -2,7 +2,10 @@ import React, { memo, useEffect, useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
-import { Grid, Paper, withStyles } from '@material-ui/core';
+import {
+  Grid, Paper, withStyles, Box,
+  Button
+} from '@material-ui/core';
 
 import {
   FlexibleWidthXYPlot, HorizontalBarSeries, VerticalGridLines, HorizontalGridLines,
@@ -11,7 +14,6 @@ import {
 import 'react-vis/dist/style.css';
 
 import RangeSelector from 'components/Analyze/Shared/RangeSelector';
-import Box from '@material-ui/core/Box';
 
 const styles = theme => ({
   paper: {
@@ -45,10 +47,16 @@ export function BarGraph(props) {
             data={props.data}
             barWidth={0.7}
             onValueMouseOver={value => setValue(value)}
-            onValueClick={props.onDrilldown || undefined}
+            onValueClick={props.handleDrilldown || undefined}
           />
           {value && <Hint value={value} />}
         </FlexibleWidthXYPlot>
+        <Box mb={2} />
+        { props.isDrilldown && (
+          <Button onClick={() => props.handleDrilldown()}>
+            Back
+          </Button>
+        )}
       </Paper>
     </React.Fragment>
   );
@@ -58,7 +66,8 @@ BarGraph.propTypes = {
   classes: PropTypes.object,
   data: PropTypes.array,
   updateRange: PropTypes.func,
-  onDrilldown: PropTypes.func,
+  handleDrilldown: PropTypes.func,
+  isDrilldown: PropTypes.bool,
   metricsUnmount: PropTypes.func
 };
 

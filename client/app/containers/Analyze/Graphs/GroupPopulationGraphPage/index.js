@@ -27,17 +27,26 @@ export function GroupPopulationGraphPage(props) {
   useInjectSaga({ key: 'metrics', saga });
 
   const [data, setData] = useState([]);
+  const [isDrilldown, setIsDrillDown] = useState(false);
 
-  if (Object.keys(props.data).length > 0 && data.length <= 0) {
-    // TEMP - swap x & y for horizontal
-    setData((dig(props.data, 'series', 0, 'values') || [{ x: '', y: 0 }]).map(d => ({ x: d.y, y: d.x })));
-  }
+  const handleDrilldown = (datapoint) => {
+    const newData = datapoint
+      ? props.data.series[0]
+        .values.find(s => s.x === datapoint.y)
+        .children
+        .values.map(d => ({ x: d.y, y: d.x }))
+      : (dig(props.data, 'series', 0, 'values') || [{ x: '', y: 0 }]).map(d => ({ x: d.y, y: d.x }));
 
-  const onDrilldown = ((datapoint) => {
-    const children = props.data.series[0].values.find(s => s.x === datapoint.y).children;
-    setData(children.values.map(d => ({ x: d.y, y: d.x })));
-  });
 
+    setData(newData);
+    setIsDrillDown(!isDrilldown);
+  };
+
+  const updateRange = (range) => {
+    const newParams = { ...params, date_range: range };
+
+    setParams(newParams);
+  };
 
   const [params, setParams] = useState({
     date_range: {
@@ -47,14 +56,14 @@ export function GroupPopulationGraphPage(props) {
     scoped_by_models: props.dashboardParams.scoped_by_models
   });
 
-  const updateRange = (range) => {
-    const newParams = { ...params, date_range: range };
+  useEffect(() => {
+    setData((dig(props.data, 'series', 0, 'values') || [{ x: '', y: 0 }]).map(d => ({ x: d.y, y: d.x })));
+  }, [props.data]);
 
-    setParams(newParams);
-  };
-
-  if (params.scoped_by_models !== props.dashboardParams.scoped_by_models)
-    setParams({ ...params, scoped_by_models: props.dashboardParams.scoped_by_models });
+  useEffect(() => {
+    if (props.dashboardParams.scoped_by_models > 0)
+      setParams({ ...params, scoped_by_models: props.dashboardParams.scoped_by_models });
+  }, [props.dashboardParams]);
 
   useEffect(() => {
     props.getGroupPopulationBegin(params);
@@ -65,7 +74,8 @@ export function GroupPopulationGraphPage(props) {
       <GroupPopulationGraph
         data={data}
         updateRange={updateRange}
-        onDrilldown={onDrilldown}
+        handleDrilldown={handleDrilldown}
+        isDrilldown={isDrilldown}
       />
     </React.Fragment>
   );

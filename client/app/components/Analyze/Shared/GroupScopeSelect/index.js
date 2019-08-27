@@ -45,6 +45,7 @@ export function GroupScopeSelectInner({ handleSubmit, handleChange, handleBlur, 
             name='group_select'
             id='group_select'
             label='Groups'
+            menuPortalTarget={document.body}
             isMulti
             options={props.groups}
             value={values.groups}
