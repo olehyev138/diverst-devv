@@ -89,6 +89,10 @@ class BaseClass < ActiveRecord::Base
     end
   end
 
+  def file_safe_name
+    to_label.gsub(/[^0-9A-Za-z.\-]/, '_')
+  end
+
   after_commit on: [:create] { update_elasticsearch_index('index') }
   after_commit on: [:update] { update_elasticsearch_index('update') }
   after_commit on: [:destroy] { update_elasticsearch_index('delete') }

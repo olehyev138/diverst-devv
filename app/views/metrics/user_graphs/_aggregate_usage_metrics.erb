@@ -3,6 +3,9 @@
     <div class="card__section">
       <h2>Aggregate Usage
         Stats <%= link_to('View Graph', users_usage_metric_metrics_users_path, target: '_blank') %></h2>
+      <div class="card__action">
+        <a href="#" id="usage_csv" data-url="<%= users_usage_metric_metrics_users_path(format: :csv) %>">Export CSV</a>
+      </div>
       <% @fields.each do |fld| %>
         <div class="row">
           <div class="col md-12 sm-12">
@@ -49,6 +52,10 @@
 
 <div class="card">
   <div class="card__section">
+    <div class="card__action">
+      <a href="#" id="page_visitation_csv" data-url="<%= url_usage_data_metrics_users_path(format: :csv) %>">Export CSV</a>
+    </div>
+
     <h2>Most Visited Pages</h2>
     <%= render 'url_table', source: url_usage_data_metrics_users_path(format: :json) %>
   </div>
@@ -71,5 +78,16 @@
         });
     });
 
+    $('#page_visitation_csv').click(function () {
+        $.get($('#page_visitation_csv').data('url'), function(data) {
+            Utility.displayFlash(data);
+        }, "JSON");
+    });
+
+    $('#usage_csv').click(function () {
+        $.get($('#usage_csv').data('url'), function(data) {
+            Utility.displayFlash(data);
+        }, "JSON");
+    });
 
 </script>

@@ -27,6 +27,9 @@
 
 <h3>Most Visited Pages</h3>
 <div class="card">
+  <div class="card__action">
+    <a href="#" id="page_visitation_data_csv" data-url="<%= user_url_usage_data_user_path(@user, format: :csv) %>">Export CSV</a>
+  </div>
   <div class="card__section">
     <%= render 'url_table', source: user_url_usage_data_user_path(@user, format: :json) %>
   </div>
@@ -47,6 +50,12 @@
             // Check dataTables documentation to learn more about
             // available options.
         });
+    });
+
+    $('#page_visitation_data_csv').click(function () {
+        $.get($('#page_visitation_data_csv').data('url'),  function(data) {
+            Utility.displayFlash(data);
+        }, "JSON");
     });
 
 </script>

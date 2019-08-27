@@ -66,6 +66,23 @@ class Metrics::UserGraphsController < ApplicationController
     else
       @graphs = %w(logins posts comments events)
     end
+
+    fields = {}
+
+    @graphs.each do |type|
+      fields[type] = {
+        'fields' => get_fields(type).map { |fld| fld.to_s },
+        'where' => get_where(type)
+      }
+    end
+
+    respond_to do |format|
+      format.html
+      format.csv {
+        AggregateDataCsvJob.perform_later(current_user.id, @graphs, fields)
+        render json: { notice: 'Please check your Secure Downloads section in a couple of minutes' }
+      }
+    end
   end
 
   def get_fields(metric)
@@ -91,16 +108,16 @@ class Metrics::UserGraphsController < ApplicationController
   end
 
   def get_aggregate_usage_metrics
-    logins_s, logins_mu, logins_m, logins_a, logins_sd = calculate_aggregate_data(User.aggregate_sign_ins)
+    logins_s, logins_mu, logins_m, logins_a, logins_sd = DataAnalyst.calculate_aggregate_data(User.aggregate_sign_ins)
     logins_n = 'Logins'
 
-    posts_s, posts_mu, posts_m, posts_a, posts_sd = aggregate_data_from_field(User, *get_fields('posts'), where: get_where('posts'))
+    posts_s, posts_mu, posts_m, posts_a, posts_sd = DataAnalyst.aggregate_data_from_field(User, *get_fields('posts'), where: get_where('posts'))
     posts_n = 'Posts Made'
 
-    comments_s, comments_mu, comments_m, comments_a, comments_sd = aggregate_data_from_field(User, *get_fields('comments'), where: get_where('comments'))
+    comments_s, comments_mu, comments_m, comments_a, comments_sd = DataAnalyst.aggregate_data_from_field(User, *get_fields('comments'), where: get_where('comments'))
     comments_n = 'Comments Made'
 
-    events_s, events_mu, events_m, events_a, events_sd = aggregate_data_from_field(User, *get_fields('events'), where: get_where('events'))
+    events_s, events_mu, events_m, events_a, events_sd = DataAnalyst.aggregate_data_from_field(User, *get_fields('events'), where: get_where('events'))
     events_n = 'Events Attendance'
 
     @aggregate_metrics = {}
@@ -121,6 +138,10 @@ class Metrics::UserGraphsController < ApplicationController
   def url_usage_data
     authorize User, :index?
     respond_to do |format|
+      format.csv {
+        PageVisitsCsvJob.perform_later(current_user.id)
+        render json: { notice: 'Please check your Secure Downloads section in a couple of minutes' }
+      }
       format.json { render json: AggregateUrlStatsDatatable.new(view_context) }
     end
   end
