@@ -37,9 +37,7 @@ export function BarGraph(props) {
         >
           <XAxis />
           <YAxis
-            tickFormat={(value) => {
-              return (value.length > 8) ? `${value.substring(0, 11)}...` : value;
-            }}
+            tickFormat={value => (value.length > 8) ? `${value.substring(0, 11)}...` : value}
           />
           <HorizontalGridLines />
           <VerticalGridLines />

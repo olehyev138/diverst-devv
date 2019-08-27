@@ -103,7 +103,7 @@ export function LineGraph(props) {
               />
             );
           })}
-          <Borders style={{ all: { fill: '#fff' }}} />
+          <Borders style={{ all: { fill: '#fff' } }} />
           <XAxis
             tickPadding={20}
             tickLabelAngle={10}
