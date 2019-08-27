@@ -46,41 +46,46 @@ export function RangeSelectorInner({ handleSubmit, handleChange, handleBlur, val
               onChange={handleChange}
               id='name'
               name='name'
-              children='1M'
               onClick={() => setFieldValue('from_date', '1m')}
-            />
+            >
+              1M
+            </Field>
             <Field
               component={Button}
               onChange={handleChange}
               id='name'
               name='name'
-              children='3M'
               onClick={() => setFieldValue('from_date', '3m')}
-            />
+            >
+              3M
+            </Field>
             <Field
               component={Button}
               onChange={handleChange}
               id='name'
               name='name'
-              children='6M'
               onClick={() => setFieldValue('from_date', '6m')}
-            />
+            >
+              6M
+            </Field>
             <Field
               component={Button}
               onChange={handleChange}
               id='name'
               name='name'
-              children='1Y'
-              onClick={() => setFieldValue('from_date', '1y')}
-            />
-            <Field
-              component={Button}
-              onChange={handleChange}
-              id='name'
-              name='name'
-              children='YTD'
               onClick={() => setFieldValue('from_date', 'ytd')}
-            />
+            >
+              YTD
+            </Field>
+            <Field
+              component={Button}
+              onChange={handleChange}
+              id='name'
+              name='name'
+              onClick={() => setFieldValue('from_date', '1y')}
+            >
+              YTD
+            </Field>
           </ButtonGroup>
         </Grid>
         <Grid item>
