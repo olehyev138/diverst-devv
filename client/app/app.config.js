@@ -1,7 +1,7 @@
 const config = {
-  apiKey: 'hIKPe0mXQbf4TlWKfc8Mggtt',
-  apiUrl: 'http://localhost:3000',
-  environment: 'development'
+  apiKey: process.env.API_KEY,
+  apiUrl: process.env.API_URL,
+  environment: process.env.ENVIRONMENT
 };
 
 export default config;
