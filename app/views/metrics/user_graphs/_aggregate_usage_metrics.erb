@@ -1,7 +1,8 @@
 <div class="content__main">
   <div class="card">
     <div class="card__section">
-      <h2>Aggregate Usage Stats <%= link_to('View Graph', users_usage_metric_metrics_users_path, target: '_blank') %></h2>
+      <h2>Aggregate Usage
+        Stats <%= link_to('View Graph', users_usage_metric_metrics_users_path, target: '_blank') %></h2>
       <% @fields.each do |fld| %>
         <div class="row">
           <div class="col md-12 sm-12">
@@ -37,7 +38,7 @@
           <div class="col md-3 sm-6 xs-12">
             <div class="panel panel--primary text-center margin-bottom-0">
               <div class="panel-headline"><p><strong>Standard Deviation</strong></p></div>
-              <div class="panel-data"><p><b class="accent"><%= @aggregate_metrics[fld.to_sym][:sd]%></b></p></div>
+              <div class="panel-data"><p><b class="accent"><%= @aggregate_metrics[fld.to_sym][:sd] %></b></p></div>
             </div>
           </div>
         </div>
@@ -54,6 +55,21 @@
 </div>
 
 <script>
+
+    $(document).on('ready page:load', function () {
+        $('#page_visitation_data').dataTable({
+            "processing": true,
+            "serverSide": true,
+            "ajax": {
+                "url": $('#page_visitation_data').data('source')
+            },
+            "pagingType": "full_numbers",
+            "order": [[ 4, "desc" ]]
+            // pagingType is optional, if you want full pagination controls.
+            // Check dataTables documentation to learn more about
+            // available options.
+        });
+    });
 
 
 </script>
