@@ -11,11 +11,17 @@ const selectGroupPopulation = () => createSelector(
   metricsState => formatBarGraphData(dig(metricsState.metricsData.groupPopulation, 'series', 0, 'values') || [])
 );
 
+const selectViewsPerGroup = () => createSelector(
+  selectMetricsDomain,
+  metricsState => formatBarGraphData(dig(metricsState.metricsData.viewsPerGroup, 'series', 0, 'values') || [])
+);
+
 const selectGrowthOfGroups = () => createSelector(
   selectMetricsDomain,
   metricsState => metricsState.metricsData.growthOfGroups
 );
 
 export {
-  selectMetricsDomain, selectGroupPopulation, selectGrowthOfGroups
+  selectMetricsDomain, selectGroupPopulation, selectViewsPerGroup,
+  selectGrowthOfGroups,
 };

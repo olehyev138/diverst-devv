@@ -16,10 +16,12 @@ import { getGroupsBegin } from 'containers/Group/actions';
 import { selectPaginatedSelectGroups } from 'containers/Group/selectors';
 
 import { Grid, Card, CardContent } from '@material-ui/core';
+import GroupScopeSelect from 'components/Analyze/Shared/GroupScopeSelect';
+
 import GroupPopulationGraphPage from 'containers/Analyze/Graphs/GroupPopulationGraphPage';
+import ViewsPerGroupGraphPage from 'containers/Analyze/Graphs/ViewsPerGroupGraphPage';
 import GrowthOfGroupsGraphPage from 'containers/Analyze/Graphs/GrowthOfGroupsGraphPage';
 
-import GroupScopeSelect from 'components/Analyze/Shared/GroupScopeSelect';
 
 export function GroupMetricsDashboardPage(props) {
   useInjectReducer({ key: 'metrics', reducer });
@@ -50,6 +52,10 @@ export function GroupMetricsDashboardPage(props) {
       </Grid>
       <Grid item xs={12}>
         <GroupPopulationGraphPage dashboardParams={params} />
+      </Grid>
+
+      <Grid item xs={12}>
+        <ViewsPerGroupGraphPage dashboardParams={params} />
       </Grid>
 
       <Grid item xs={12}>
