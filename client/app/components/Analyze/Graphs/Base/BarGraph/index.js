@@ -60,7 +60,6 @@ export function BarGraph(props) {
       </Paper>
     </React.Fragment>
   );
-
 }
 
 BarGraph.propTypes = {
