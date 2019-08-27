@@ -11,13 +11,16 @@
               <li><%= link_to "Export Active Members", export_group_members_list_csv_group_group_members_path(@group, export_csv_params: "active_members") %></li>
               <li><%= link_to "Export Inactive Members", export_group_members_list_csv_group_group_members_path(@group, export_csv_params: "inactive_members") %></li>
               <li><%= link_to "Export Pending Members", export_group_members_list_csv_group_group_members_path(@group, export_csv_params: "pending_members") %></li>
-              <% if @group.is_parent_group?%>
-                <li><%= link_to "Export Members of #{c_t(:sub_erg)}", '#'%></li>
-              <% end %>
 
-              <% if @group.is_sub_group? %>
-                <li><%= link_to "Export Members of #{c_t(:parent)}",  export_group_members_list_csv_group_group_members_path(@group, export_csv_params: "parent_group_members") %></li>
-              <% end %>  
+              <% if @group.pending_users.enabled? %>
+                <% if @group.is_parent_group?%>
+                  <li><%= link_to "Export Members of #{c_t(:sub_erg)}", export_group_members_list_csv_group_group_members_path(@group, export_csv_params: "sub_groups_members") %></li>
+                <% end %>
+
+                <% if @group.is_sub_group? %>
+                  <li><%= link_to "Export Members of #{c_t(:parent)}",  export_group_members_list_csv_group_group_members_path(@group, export_csv_params: "parent_group_members") %></li>
+                <% end %>
+              <% end %>    
             </ul>
           </nav>
 
@@ -28,13 +31,16 @@
           <li><%= link_to "Export Active Members", export_group_members_list_csv_group_group_members_path(@group, export_csv_params: "active_members") %></li>
           <li><%= link_to "Export Inactive Members", export_group_members_list_csv_group_group_members_path(@group, export_csv_params: "inactive_members") %></li>
           <li><%= link_to "Export Pending Members", export_group_members_list_csv_group_group_members_path(@group, export_csv_params: "pending_members") %></li>
-          <% if @group.is_parent_group?%>
-            <li><%= link_to "Export Members of #{c_t(:sub_erg)}", '#'%></li>
-          <% end %>
 
-          <% if @group.is_sub_group? %>
-            <li><%= link_to "Export Members of #{c_t(:parent)}", export_group_members_list_csv_group_group_members_path(@group, export_csv_params: "parent_group_members") %></li>
-          <% end %>
+          <% if @group.pending_users.enabled? %>
+            <% if @group.is_parent_group?%>
+              <li><%= link_to "Export Members of #{c_t(:sub_erg)}", export_group_members_list_csv_group_group_members_path(@group, export_csv_params: "sub_groups_members") %></li>
+            <% end %>
+
+            <% if @group.is_sub_group? %>
+              <li><%= link_to "Export Members of #{c_t(:parent)}", export_group_members_list_csv_group_group_members_path(@group, export_csv_params: "parent_group_members") %></li>
+            <% end %>
+          <% end %>  
         </ul>
       </nav>
     </div>
