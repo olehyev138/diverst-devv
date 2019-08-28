@@ -38,11 +38,12 @@
 <script>
 
     $(document).on('ready page:load', function () {
-        $('#page_visitation_data').dataTable({
+        $('#user_page_visitation_data').dataTable({
+            "retrieve": true,
             "processing": true,
             "serverSide": true,
             "ajax": {
-                "url": $('#page_visitation_data').data('source')
+                "url": $('#user_page_visitation_data').data('source')
             },
             "pagingType": "full_numbers",
             "order": [[ 4, "desc" ]]

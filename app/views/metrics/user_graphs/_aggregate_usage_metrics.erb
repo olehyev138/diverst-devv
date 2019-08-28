@@ -65,6 +65,7 @@
 
     $(document).on('ready page:load', function () {
         $('#page_visitation_data').dataTable({
+            "retrieve": true,
             "processing": true,
             "serverSide": true,
             "ajax": {
