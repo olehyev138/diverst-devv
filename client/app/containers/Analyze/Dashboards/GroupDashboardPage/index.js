@@ -17,35 +17,48 @@ import { selectPaginatedSelectGroups } from 'containers/Group/selectors';
 
 import { Grid, Card, CardContent } from '@material-ui/core';
 
-import GroupDashboardLayout from 'components/Analyze/Dashboards/GroupDashboard/GroupDashboardLayout';
+import GroupDashboardLinks from 'components/Analyze/Dashboards/GroupDashboard/GroupDashboardLinks';
 import GroupScopeSelect from 'components/Analyze/Shared/GroupScopeSelect';
 
 // Sub dashboards
 import OverviewDashboard from 'components/Analyze/Dashboards/GroupDashboard/OverviewDashboard';
+
+const Dashboards = Object.freeze({
+  overview: 0,
+  events: 1,
+  social: 2,
+  resources: 3,
+});
 
 export function GroupDashboardPage(props) {
   useInjectReducer({ key: 'metrics', reducer });
   useInjectReducer({ key: 'groups', reducer: groupReducer });
   useInjectSaga({ key: 'groups', saga: groupSaga });
 
-  const [params, setParams] = useState({
-    scoped_by_models: []
-  });
+  const [params, setParams] = useState({ scoped_by_models: [] });
+  const [currentDashboard, setCurrentDashboard] = useState(Dashboards.overview);
+
+  const dashboards = [
+    <OverviewDashboard dashboardParams={params} />
+  ];
 
   const updateScope = (scope) => {
     const newParams = { scoped_by_models: scope.groups ? scope.groups.map(g => g.value) : [] };
-
     setParams(newParams);
   };
 
-  useEffect(() => () => {
-  }, []);
+  const handleDashboardChange = (_, newDashboard) => {
+    setCurrentDashboard(newDashboard);
+  };
 
-  // TODO - render dashboard based on path
+  useEffect(() => () => () => metricsUnmount(), []);
 
   return (
     <React.Fragment>
-      <GroupDashboardLayout />
+      <GroupDashboardLinks
+        currentDashboard={currentDashboard}
+        handleDashboardChange={handleDashboardChange}
+      />
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <GroupScopeSelect
@@ -55,7 +68,7 @@ export function GroupDashboardPage(props) {
           />
         </Grid>
       </Grid>
-      <OverviewDashboard dashboardParams={params} />
+      { dashboards[currentDashboard] }
     </React.Fragment>
   );
 }
