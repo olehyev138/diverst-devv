@@ -11,7 +11,7 @@ import { RouteContext } from 'containers/Layouts/ApplicationLayout';
 import withStyles from '@material-ui/core/styles/withStyles';
 
 import {
-  Box, Tabs, Tab, Paper,
+  Box, Tab, Paper,
   Card, CardContent, Grid, Link, TablePagination, Typography, Button, Hidden,
 } from '@material-ui/core';
 
@@ -21,6 +21,8 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import messages from 'containers/Event/messages';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { ROUTES } from 'containers/Shared/Routes/constants';
+
+import ResponsiveTabs from 'components/Shared/ResponsiveTabs';
 
 const styles = theme => ({
   eventListItem: {
@@ -83,17 +85,16 @@ export function EventsList(props, context) {
       </Grid>
       <Box mb={2} />
       <Paper>
-        <Tabs
+        <ResponsiveTabs
           value={props.currentTab}
           onChange={props.handleChangeTab}
           indicatorColor='primary'
           textColor='primary'
-          centered
         >
           <Tab label={intl.formatMessage(messages.index.upcoming)} />
           <Tab label={intl.formatMessage(messages.index.ongoing)} />
           <Tab label={intl.formatMessage(messages.index.past)} />
-        </Tabs>
+        </ResponsiveTabs>
       </Paper>
       <br />
       <Grid container spacing={3}>
@@ -188,7 +189,7 @@ EventsList.propTypes = {
 };
 
 export default compose(
-  memo,
   injectIntl,
-  withStyles(styles)
+  withStyles(styles),
+  memo,
 )(EventsList);
