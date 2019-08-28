@@ -21,6 +21,10 @@ class UpdateUsageStatsDataJob < ActiveJob::Base
           [usr.id, usr.sign_in_count]
         end
       )
+
+      Rails.cache.write("total_page_visitations:#{ent.id}") do
+        ent.total_page_visitations
+      end
     end
   end
 end
