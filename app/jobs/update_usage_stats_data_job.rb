@@ -15,6 +15,12 @@ class UpdateUsageStatsDataJob < ActiveJob::Base
         expires_in: 2.hours)
     end
 
-    Rails.cache.write('aggregate_login_count', User.all.map(&:sign_in_count), expires_in: 10.hours)
+    Rails.cache.write(
+      'aggregate_login_count',
+      User.all.map do |usr|
+        [usr.id, usr.sign_in_count]
+      end,
+      expires_in: 10.hours
+    )
   end
 end
