@@ -14,7 +14,7 @@ class DataAnalyst
     Rails.cache.fetch("calculate_percentile/#{number}, #{sample}") do
       n = sample.count
       i = sample.each_index.select { |r| sample[r] <= number }.last
-      101 - (100 * (i - 0.5) / n).round
+      101 - (100 * ((i + 1) - 0.5) / n).round
     end
   end
 

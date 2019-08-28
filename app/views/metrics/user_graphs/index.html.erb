@@ -69,15 +69,15 @@
 
   <div class="card">
     <div class="card__section">
-      <h2><%= c_t(:erg) %> Membership Usage</h2>
+      <h2>User <%= c_t(:dci_abbreviation) %> Point and Usage Stats</h2>
 
       <table class="table--has-border data-table" data-source="<%= user_usage_data_metrics_users_path(format: :json) %>" id="users-usage-table">
         <thead>
         <th>First name</th>
         <th>Last name</th>
         <th>Email</th>
-        <th>Points</th>
-        <th>Details</th>
+        <th><%= c_t(:dci_abbreviation) %></th>
+        <th>Usage Stats</th>
         </thead>
         <tbody>
         </tbody>

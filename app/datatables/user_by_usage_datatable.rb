@@ -26,7 +26,7 @@ class UserByUsageDatatable < AjaxDatatablesRails::Base
         record.last_name,
         record.email,
         record.points,
-        "#{link_to('Details', show_usage_user_path(record))}"
+        "#{link_to('Link', show_usage_user_path(record))}"
       ]
     end
   end
