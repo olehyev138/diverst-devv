@@ -157,12 +157,13 @@ class Metrics::UserGraphsController < ApplicationController
 
   def url_usage_data
     authorize User, :index?
+    enterprise_id = current_user.enterprise.id
     respond_to do |format|
       format.csv {
-        PageVisitsCsvJob.perform_later(current_user.id)
+        PageVisitsCsvJob.perform_later(current_user.id, enterprise_id: enterprise_id)
         render json: { notice: 'Please check your Secure Downloads section in a couple of minutes' }
       }
-      format.json { render json: AggregateUrlStatsDatatable.new(view_context) }
+      format.json { render json: AggregateUrlStatsDatatable.new(view_context, enterprise_id) }
     end
   end
 

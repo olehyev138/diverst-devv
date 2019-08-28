@@ -1,14 +1,14 @@
 class PageVisitsCsvJob < ActiveJob::Base
   queue_as :default
 
-  def perform(user_id, page_user_id: nil)
+  def perform(user_id, enterprise_id: nil, page_user_id: nil)
     if page_user_id.present?
       page_user = User.find(page_user_id)
       filename = "#{page_user.file_safe_name}_s_page_visitation"
       pvs = PageVisitation.where(user_id: user_id).order(visits_all: :desc)
     else
       filename = 'total_page_visitation'
-      pvs = TotalPageVisitation.order(visits_all: :desc)
+      pvs = Enterprise.find(enterprise_id).total_page_visitations.order(visits_all: :desc)
     end
     data = CSV.generate do |csv|
       if page_user.present?
