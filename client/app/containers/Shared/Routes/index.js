@@ -16,7 +16,7 @@ import {
 } from 'containers/Shared/Routes/templates';
 
 /* Admin - Analyze */
-import GroupMetricsDashboardPage from 'containers/Analyze/Dashboards/GroupMetricsDashboardPage';
+import GroupDashboardPage from 'containers/Analyze/Dashboards/GroupDashboardPage';
 
 /* Admin - Manage - Group */
 import UserGroupListPage from 'containers/Group/UserGroupListPage';
@@ -83,7 +83,7 @@ export default function Routes(props) {
       { /* Admin */ }
       { /* Admin - Analyze */ }
       <AdminLayout {...expandRoute(ROUTES.admin.analyze.users)} component={PlaceholderPage} />
-      <AdminLayout {...expandRoute(ROUTES.admin.analyze.groups)} component={GroupMetricsDashboardPage} />
+      <AdminLayout {...expandRoute(ROUTES.admin.analyze.groups)} component={GroupDashboardPage} />
       <AdminLayout exact {...expandRoute(ROUTES.admin.analyze.overview)} component={PlaceholderPage} />
 
       { /* Admin - Manage */ }

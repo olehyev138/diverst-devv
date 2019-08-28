@@ -16,14 +16,14 @@ import { getGroupsBegin } from 'containers/Group/actions';
 import { selectPaginatedSelectGroups } from 'containers/Group/selectors';
 
 import { Grid, Card, CardContent } from '@material-ui/core';
+
+import GroupDashboardLayout from 'components/Analyze/Dashboards/GroupDashboard/GroupDashboardLayout';
 import GroupScopeSelect from 'components/Analyze/Shared/GroupScopeSelect';
 
-import GroupPopulationGraphPage from 'containers/Analyze/Graphs/GroupPopulationGraphPage';
-import ViewsPerGroupGraphPage from 'containers/Analyze/Graphs/ViewsPerGroupGraphPage';
-import GrowthOfGroupsGraphPage from 'containers/Analyze/Graphs/GrowthOfGroupsGraphPage';
+// Sub dashboards
+import OverviewDashboard from 'components/Analyze/Dashboards/GroupDashboard/OverviewDashboard';
 
-
-export function GroupMetricsDashboardPage(props) {
+export function GroupDashboardPage(props) {
   useInjectReducer({ key: 'metrics', reducer });
   useInjectReducer({ key: 'groups', reducer: groupReducer });
   useInjectSaga({ key: 'groups', saga: groupSaga });
@@ -41,31 +41,26 @@ export function GroupMetricsDashboardPage(props) {
   useEffect(() => () => {
   }, []);
 
+  // TODO - render dashboard based on path
+
   return (
-    <Grid container spacing={3}>
-      <Grid item xs={12}>
-        <GroupScopeSelect
-          groups={props.groups}
-          getGroupsBegin={props.getGroupsBegin}
-          updateScope={updateScope}
-        />
+    <React.Fragment>
+      <GroupDashboardLayout />
+      <Grid container spacing={3}>
+        <Grid item xs={12}>
+          <GroupScopeSelect
+            groups={props.groups}
+            getGroupsBegin={props.getGroupsBegin}
+            updateScope={updateScope}
+          />
+        </Grid>
       </Grid>
-      <Grid item xs={12}>
-        <GroupPopulationGraphPage dashboardParams={params} />
-      </Grid>
-
-      <Grid item xs={12}>
-        <ViewsPerGroupGraphPage dashboardParams={params} />
-      </Grid>
-
-      <Grid item xs={12}>
-        <GrowthOfGroupsGraphPage dashboardParams={params} />
-      </Grid>
-    </Grid>
+      <OverviewDashboard dashboardParams={params} />
+    </React.Fragment>
   );
 }
 
-GroupMetricsDashboardPage.propTypes = {
+GroupDashboardPage.propTypes = {
   groups: PropTypes.array,
   getGroupsBegin: PropTypes.func,
   metricsUnmount: PropTypes.func
@@ -88,4 +83,4 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(GroupMetricsDashboardPage);
+)(GroupDashboardPage);
