@@ -30,9 +30,9 @@ class Metrics::UserGraphsController < ApplicationController
     end
     case metric
     when 'logins'
-      data = User.aggregate_sign_ins
+      data = User.aggregate_sign_ins(enterprise_id: current_user.enterprise.id)
     else
-      data = User.cached_count_list(*get_fields(metric), where: get_where(metric))
+      data = User.cached_count_list(*get_fields(metric), where: get_where(metric), enterprise_id: current_user.enterprise.id)
     end
 
     data.sort_by! { |datum| -datum[1] }
@@ -79,7 +79,7 @@ class Metrics::UserGraphsController < ApplicationController
     respond_to do |format|
       format.html
       format.csv {
-        AggregateDataCsvJob.perform_later(current_user.id, @graphs, fields)
+        AggregateDataCsvJob.perform_later(current_user.id, @graphs, fields, enterprise_id: current_user.enterprise.id)
         render json: { notice: 'Please check your Secure Downloads section in a couple of minutes' }
       }
     end
@@ -108,16 +108,36 @@ class Metrics::UserGraphsController < ApplicationController
   end
 
   def get_aggregate_usage_metrics
-    logins_s, logins_mu, logins_m, logins_a, logins_sd = DataAnalyst.calculate_aggregate_data(User.aggregate_sign_ins)
+    enterprise_id = current_user.enterprise.id
+    logins_s, logins_mu, logins_m, logins_a, logins_sd = DataAnalyst.calculate_aggregate_data(
+      User.aggregate_sign_ins(
+        enterprise_id: enterprise_id
+      )
+    )
     logins_n = 'Logins'
 
-    posts_s, posts_mu, posts_m, posts_a, posts_sd = DataAnalyst.aggregate_data_from_field(User, *get_fields('posts'), where: get_where('posts'))
+    posts_s, posts_mu, posts_m, posts_a, posts_sd = DataAnalyst.aggregate_data_from_field(
+      User,
+      *get_fields('posts'),
+      where: get_where('posts'),
+      enterprise_id: enterprise_id
+    )
     posts_n = 'Posts Made'
 
-    comments_s, comments_mu, comments_m, comments_a, comments_sd = DataAnalyst.aggregate_data_from_field(User, *get_fields('comments'), where: get_where('comments'))
+    comments_s, comments_mu, comments_m, comments_a, comments_sd = DataAnalyst.aggregate_data_from_field(
+      User,
+      *get_fields('comments'),
+      where: get_where('comments'),
+      enterprise_id: enterprise_id
+    )
     comments_n = 'Comments Made'
 
-    events_s, events_mu, events_m, events_a, events_sd = DataAnalyst.aggregate_data_from_field(User, *get_fields('events'), where: get_where('events'))
+    events_s, events_mu, events_m, events_a, events_sd = DataAnalyst.aggregate_data_from_field(
+      User,
+      *get_fields('events'),
+      where: get_where('events'),
+      enterprise_id: enterprise_id
+    )
     events_n = 'Events Attendance'
 
     @aggregate_metrics = {}

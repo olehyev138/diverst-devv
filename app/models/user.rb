@@ -421,9 +421,9 @@ class User < BaseClass
     end
   end
 
-  def self.aggregate_sign_ins
-    Rails.cache.fetch('aggregate_login_count', expires_in: 10.hours) do
-      all.map do |usr|
+  def self.aggregate_sign_ins(enterprise_id:)
+    Rails.cache.fetch("aggregate_login_count:#{enterprise_id}") do
+      where(enterprise: enterprise_id).all.map do |usr|
         [usr.id, usr.sign_in_count]
       end
     end

@@ -8,19 +8,19 @@ class UpdateUsageStatsDataJob < ActiveJob::Base
       [:initiatives], ['initiatives.start < ? OR initiatives.id IS NULL', Time.now]
     ]
 
-    params.each_slice(2) do |fields, where|
-      Rails.cache.write(
-        "count_list/#{User.model_name.name}:#{fields}:#{where}",
-        User.count_list(*fields, where: where),
-        expires_in: 2.hours)
-    end
+    Enterprise.find_each do |ent|
+      params.each_slice(2) do |fields, where|
+        Rails.cache.write(
+          "count_list/#{User.model_name.name}:#{fields}:#{where}",
+          User.count_list(*fields, where: where, enterprise_id: ent.id))
+      end
 
-    Rails.cache.write(
-      'aggregate_login_count',
-      User.all.map do |usr|
-        [usr.id, usr.sign_in_count]
-      end,
-      expires_in: 10.hours
-    )
+      Rails.cache.write(
+        "aggregate_login_count:#{ent.id}",
+        ent.users.all.map do |usr|
+          [usr.id, usr.sign_in_count]
+        end
+      )
+    end
   end
 end

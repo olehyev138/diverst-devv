@@ -201,20 +201,43 @@ class UsersController < ApplicationController
   protected
 
   def get_user_usage_metrics
+    enterprise_id = current_user.enterprise.id
+
     logins = @user.sign_in_count
-    logins_p = DataAnalyst.calculate_percentile(logins, User.aggregate_sign_ins.map { |usr_count| usr_count[1] }.sort)
+    logins_p = DataAnalyst.calculate_percentile(
+      logins,
+      User.aggregate_sign_ins(
+        enterprise_id: enterprise_id
+      ).map { |usr_count| usr_count[1] }.sort
+    )
     logins_n = 'Times Logged In'
 
     posts = @user.number_of(:social_links, :own_messages, :own_news_links)
-    posts_p = DataAnalyst.percentile_from_field(User, posts, :social_links, :own_messages, :own_news_links)
+    posts_p = DataAnalyst.percentile_from_field(
+      User,
+      posts,
+      :social_links, :own_messages, :own_news_links,
+      enterprise_id: enterprise_id
+    )
     posts_n = 'Posts Made'
 
     comments = @user.number_of(:answer_comments, :message_comments, :news_link_comments)
-    comments_p = DataAnalyst.percentile_from_field(User, comments, :answer_comments, :message_comments, :news_link_comments)
+    comments_p = DataAnalyst.percentile_from_field(
+      User,
+      comments,
+      :answer_comments, :message_comments, :news_link_comments,
+      enterprise_id: enterprise_id
+    )
     comments_n = 'Comments Made'
 
     events = @user.number_of(:initiatives, where: ['initiatives.start < NOW() OR initiatives.id IS NULL'])
-    events_p = DataAnalyst.percentile_from_field(User, events, :initiatives, where: ['initiatives.start < NOW() OR initiatives.id IS NULL'])
+    events_p = DataAnalyst.percentile_from_field(
+      User,
+      events,
+      :initiatives,
+      where: ['initiatives.start < NOW() OR initiatives.id IS NULL'],
+      enterprise_id: enterprise_id
+    )
     events_n = 'Events Attended'
 
     @fields = %w(logins posts comments events)

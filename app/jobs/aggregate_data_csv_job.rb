@@ -1,15 +1,16 @@
 class AggregateDataCsvJob < ActiveJob::Base
   queue_as :default
 
-  def perform(user_id, tables, fields)
+  def perform(user_id, tables, fields, enterprise_id:)
     tables.each do |metric|
       case metric
       when 'logins'
-        data = User.aggregate_sign_ins
+        data = User.aggregate_sign_ins(enterprise_id: current_user.enterprise.id)
       else
         data = User.cached_count_list(
           *(fields[metric]['fields'].map { |fld| fld.to_sym }),
-          where: fields[metric]['where']
+          where: fields[metric]['where'],
+          enterprise_id: enterprise_id
         )
       end
 

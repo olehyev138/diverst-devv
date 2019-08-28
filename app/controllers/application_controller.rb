@@ -118,20 +118,6 @@ class ApplicationController < ActionController::Base
 
   around_action :user_time_zone, if: :current_user
 
-  def temp
-    Enterprise.first.users.each do |usr|
-      r1 = rand(1..10)
-      r2 = rand(1..10)
-      GroupMessage.all.sample(r1).each do |gm|
-        usr.message_comments << gm.comments.new(content: Faker::Lorem.sentence)
-      end
-      NewsLink.all.sample(r2).each do |nl|
-        usr.news_link_comments << nl.comments.new(content: Faker::Lorem.sentence)
-      end
-    end
-    nil
-  end
-
   def redirect_on_error
     if user_signed_in?
       redirect_to(request.referrer || default_path)

@@ -18,13 +18,13 @@ class DataAnalyst
     end
   end
 
-  def self.aggregate_data_from_field(model, *fields, where: [nil])
-    list_of_values = model.cached_count_list(*fields, where: where)
+  def self.aggregate_data_from_field(model, *fields, where: [nil], enterprise_id: nil)
+    list_of_values = model.cached_count_list(*fields, where: where, enterprise_id: enterprise_id)
     calculate_aggregate_data(list_of_values)
   end
 
-  def self.percentile_from_field(model, number, *fields, where: [nil])
-    list_of_values = model.cached_count_list(*fields, where: where)
+  def self.percentile_from_field(model, number, *fields, where: [nil], enterprise_id: nil)
+    list_of_values = model.cached_count_list(*fields, where: where, enterprise_id: enterprise_id)
     calculate_percentile(number, list_of_values.map { |count| count[1] }.sort)
   end
 end
