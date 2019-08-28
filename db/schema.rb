@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190822140020) do
+ActiveRecord::Schema.define(version: 20190828134721) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -369,6 +369,7 @@ ActiveRecord::Schema.define(version: 20190822140020) do
     t.integer  "segments_count",                        limit: 4
     t.integer  "polls_count",                           limit: 4
     t.integer  "users_count",                           limit: 4
+    t.boolean  "slack_enabled",                                       default: false
   end
 
   add_index "enterprises", ["share_point_files_id"], name: "fk_rails_6315f961bd", using: :btree
