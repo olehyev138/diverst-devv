@@ -40,7 +40,7 @@ Object.assign(GroupGraphs, {
     return axios.get(`${this.url}/views_per_folder`, { params });
   },
 
-  viewsPerResources(params) {
+  viewsPerResource(params) {
     return axios.get(`${this.url}/views_per_resource`, { params });
   },
 

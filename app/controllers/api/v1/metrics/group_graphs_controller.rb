@@ -21,7 +21,7 @@ class Api::V1::Metrics::GroupGraphsController < DiverstController
     render json: @graph.growth_of_groups(metrics_params[:date_range], metrics_params[:scoped_by_models])
   end
 
-  # Initatives
+  # Initiatives
 
   def initiatives_per_group
     authorize MetricsDashboard, :index?

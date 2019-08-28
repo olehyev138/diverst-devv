@@ -29,3 +29,7 @@ export function formatBarGraphData(data) {
 
   return [];
 }
+
+export function selectSeriesValues(data, series) {
+  return dig(data, 'series', series, 'values');
+}

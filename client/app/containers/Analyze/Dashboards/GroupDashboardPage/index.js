@@ -22,6 +22,9 @@ import GroupScopeSelect from 'components/Analyze/Shared/GroupScopeSelect';
 
 // Sub dashboards
 import OverviewDashboard from 'components/Analyze/Dashboards/GroupDashboard/OverviewDashboard';
+import EventsDashboard from 'components/Analyze/Dashboards/GroupDashboard/EventsDashboard';
+import SocialMediaDashboard from 'components/Analyze/Dashboards/GroupDashboard/SocialMediaDashboard';
+import ResourcesDashboard from 'components/Analyze/Dashboards/GroupDashboard/ResourcesDashboard';
 
 const Dashboards = Object.freeze({
   overview: 0,
@@ -38,10 +41,6 @@ export function GroupDashboardPage(props) {
   const [params, setParams] = useState({ scoped_by_models: [] });
   const [currentDashboard, setCurrentDashboard] = useState(Dashboards.overview);
 
-  const dashboards = [
-    <OverviewDashboard dashboardParams={params} />
-  ];
-
   const updateScope = (scope) => {
     const newParams = { scoped_by_models: scope.groups ? scope.groups.map(g => g.value) : [] };
     setParams(newParams);
@@ -53,13 +52,22 @@ export function GroupDashboardPage(props) {
 
   useEffect(() => () => () => metricsUnmount(), []);
 
+  const dashboards = [
+    <OverviewDashboard dashboardParams={params} />,
+    <EventsDashboard dashboardParams={params} />,
+    <SocialMediaDashboard dashboardParams={params} />,
+    <ResourcesDashboard dashboardParams={params} />
+  ];
+
   return (
     <React.Fragment>
-      <GroupDashboardLinks
-        currentDashboard={currentDashboard}
-        handleDashboardChange={handleDashboardChange}
-      />
       <Grid container spacing={3}>
+        <Grid item xs={12}>
+          <GroupDashboardLinks
+            currentDashboard={currentDashboard}
+            handleDashboardChange={handleDashboardChange}
+          />
+        </Grid>
         <Grid item xs={12}>
           <GroupScopeSelect
             groups={props.groups}
