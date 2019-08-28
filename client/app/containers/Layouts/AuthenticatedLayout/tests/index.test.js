@@ -2,8 +2,8 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { unwrap } from '@material-ui/core/test-utils';
 
-import AuthenticationLayout from '../index';
-const AuthenticatedLayoutNaked = unwrap(AuthenticationLayout);
+import { StyledAuthenticatedLayout } from '../index';
+const AuthenticatedLayoutNaked = unwrap(StyledAuthenticatedLayout);
 
 /**
  * TODO:

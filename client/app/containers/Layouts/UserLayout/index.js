@@ -44,6 +44,8 @@ UserLayout.propTypes = {
   pageTitle: PropTypes.object,
 };
 
+export const StyledUserLayout = withStyles(styles)(UserLayout);
+
 export default compose(
   memo,
   withStyles(styles),

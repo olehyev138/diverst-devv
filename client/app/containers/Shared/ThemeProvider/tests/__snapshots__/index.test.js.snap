@@ -72,7 +72,7 @@ exports[`<ThemeProvider /> should render and match the snapshot 1`] = `
           "contrastText": "#fff",
           "dark": "rgb(147, 32, 32)",
           "light": "rgb(219, 88, 88)",
-          "main": "#d32f2f",
+          "main": "#D32F2F",
         },
         "getContrastText": [Function],
         "grey": Object {
@@ -99,6 +99,9 @@ exports[`<ThemeProvider /> should render and match the snapshot 1`] = `
           "dark": "rgb(86, 83, 140)",
           "light": "rgb(149, 146, 211)",
           "main": "#7B77C9",
+          "main25": "#7B77C940",
+          "main50": "#7B77C980",
+          "main75": "#7B77C9C0",
         },
         "secondary": Object {
           "contrastText": "#fff",

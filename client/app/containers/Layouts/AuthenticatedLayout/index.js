@@ -77,6 +77,8 @@ AuthenticatedLayout.propTypes = {
   policy_group: PropTypes.object,
 };
 
+export const StyledAuthenticatedLayout = withStyles(styles)(AuthenticatedLayout);
+
 export default compose(
   memo,
   withStyles(styles),

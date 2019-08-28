@@ -48,6 +48,8 @@ SessionLayout.propTypes = {
   component: PropTypes.elementType,
 };
 
+export const StyledSessionLayout = withStyles(styles)(SessionLayout);
+
 export default compose(
   memo,
   withStyles(styles),

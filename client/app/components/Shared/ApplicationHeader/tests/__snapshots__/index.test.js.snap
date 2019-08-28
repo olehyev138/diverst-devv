@@ -14,30 +14,27 @@ exports[`<ApplicationHeader /> should render and match the snapshot 1`] = `
       >
         <MenuIcon />
       </WithStyles(ForwardRef(IconButton))>
-      <WithStyles(ForwardRef(Button))
-        onClick={[Function]}
-        size="small"
+      <WithStyles(ForwardRef(Link))
+        component={
+          Object {
+            "$$typeof": Symbol(react.forward_ref),
+            "render": [Function],
+          }
+        }
+        to="/"
       >
-        <Connect(WithStyles(Logo))
-          imgClass="large-img"
-          verticalPadding={20}
-        />
-      </WithStyles(ForwardRef(Button))>
+        <WithStyles(ForwardRef(Button))>
+          <Connect(WithStyles(Logo))
+            imgClass="large-img"
+            verticalPadding={20}
+          />
+        </WithStyles(ForwardRef(Button))>
+      </WithStyles(ForwardRef(Link))>
       <div
         className=""
       >
         <Hidden
-          implementation="js"
-          lgDown={false}
-          lgUp={false}
-          mdDown={false}
-          mdUp={false}
-          smDown={false}
-          smUp={false}
-          xlDown={false}
-          xlUp={false}
           xsDown={true}
-          xsUp={false}
         />
       </div>
       <div>
@@ -45,16 +42,24 @@ exports[`<ApplicationHeader /> should render and match the snapshot 1`] = `
           <Hidden
             xsDown={true}
           >
-            <WithStyles(ForwardRef(Button))
-              color="inherit"
-              onClick={[Function]}
-              variant="outlined"
+            <WithStyles(ForwardRef(Link))
+              component={
+                Object {
+                  "$$typeof": Symbol(react.forward_ref),
+                  "render": [Function],
+                }
+              }
+              to="/"
             >
-              <span>
-                <DvrIcon />
-                Dashboard
-              </span>
-            </WithStyles(ForwardRef(Button))>
+              <WithStyles(ForwardRef(Button))
+                variant="outlined"
+              >
+                <span>
+                  <DvrIcon />
+                  Dashboard
+                </span>
+              </WithStyles(ForwardRef(Button))>
+            </WithStyles(ForwardRef(Link))>
           </Hidden>
           <div>
             <WithStyles(ForwardRef(IconButton))
@@ -96,7 +101,13 @@ exports[`<ApplicationHeader /> should render and match the snapshot 1`] = `
     }
   >
     <WithStyles(ForwardRef(MenuItem))
-      onClick={[Function]}
+      component={
+        Object {
+          "$$typeof": Symbol(react.forward_ref),
+          "render": [Function],
+        }
+      }
+      to="/"
     >
       <WithStyles(ForwardRef(ListItemIcon))>
         <DvrIcon />

@@ -40,6 +40,8 @@ ErrorLayout.propTypes = {
   component: PropTypes.elementType,
 };
 
+export const StyledErrorLayout = withStyles(styles)(ErrorLayout);
+
 export default compose(
   memo,
   withStyles(styles),

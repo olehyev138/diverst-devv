@@ -1,12 +1,10 @@
 import React, { memo } from 'react';
-import { Route } from 'react-router';
+import { Route } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
 import { withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-
-const styles = theme => ({});
 
 export const RouteContext = React.createContext(null);
 
@@ -39,5 +37,4 @@ ApplicationLayout.propTypes = {
 
 export default compose(
   memo,
-  withStyles(styles),
 )(ApplicationLayout);
