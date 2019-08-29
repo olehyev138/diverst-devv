@@ -1,5 +1,4 @@
 import React, { memo } from 'react';
-import { Route } from 'react-router';
 import { Redirect } from 'react-router-dom';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
@@ -20,7 +19,6 @@ const AuthenticatedLayout = ({
   const {
     classes, data, ...other
   } = rest;
-
 
   /* Use AuthService to keep AuthenticatedLayout unconnected from store.
    *   - Probably better to keep layouts unconnected too
@@ -50,7 +48,7 @@ const AuthenticatedLayout = ({
                     />
                   )
               }
-              <Component {...matchProps} />
+              <Component {...other} {...matchProps} />
             </div>
           )}
         />
@@ -79,6 +77,9 @@ AuthenticatedLayout.propTypes = {
   policy_group: PropTypes.object,
 };
 
+export const StyledAuthenticatedLayout = withStyles(styles)(AuthenticatedLayout);
+
 export default compose(
+  memo,
   withStyles(styles),
 )(AuthenticatedLayout);

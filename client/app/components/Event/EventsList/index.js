@@ -9,11 +9,10 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { RouteContext } from 'containers/Layouts/ApplicationLayout';
 import withStyles from '@material-ui/core/styles/withStyles';
-import classNames from 'classnames';
 
 import {
-  Box, Tabs, Tab, Paper,
-  Card, CardContent, Grid, Link, TablePagination, Typography, Button,
+  Box, Tab, Paper,
+  Card, CardContent, Grid, Link, TablePagination, Typography, Button, Hidden,
 } from '@material-ui/core';
 
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
@@ -22,6 +21,8 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import messages from 'containers/Event/messages';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { ROUTES } from 'containers/Shared/Routes/constants';
+
+import ResponsiveTabs from 'components/Shared/ResponsiveTabs';
 
 const styles = theme => ({
   eventListItem: {
@@ -69,7 +70,7 @@ export function EventsList(props, context) {
 
   return (
     <React.Fragment>
-      <Grid container justify='flex-end'>
+      <Grid container spacing={3} justify='flex-end'>
         <Grid item>
           <Button
             variant='contained'
@@ -84,17 +85,16 @@ export function EventsList(props, context) {
       </Grid>
       <Box mb={2} />
       <Paper>
-        <Tabs
+        <ResponsiveTabs
           value={props.currentTab}
           onChange={props.handleChangeTab}
           indicatorColor='primary'
           textColor='primary'
-          centered
         >
           <Tab label={intl.formatMessage(messages.index.upcoming)} />
           <Tab label={intl.formatMessage(messages.index.ongoing)} />
           <Tab label={intl.formatMessage(messages.index.past)} />
-        </Tabs>
+        </ResponsiveTabs>
       </Paper>
       <br />
       <Grid container spacing={3}>
@@ -114,7 +114,7 @@ export function EventsList(props, context) {
                 <Card>
                   <CardContent>
                     <Grid container spacing={1} justify='space-between' alignItems='center'>
-                      <Grid item sm>
+                      <Grid item xs>
                         <Typography color='primary' variant='h6' component='h2'>
                           {item.name}
                         </Typography>
@@ -133,9 +133,11 @@ export function EventsList(props, context) {
                           {item.start.substring(0, 10).replace(/-/g, '/')}
                         </Typography>
                       </Grid>
-                      <Grid item>
-                        <KeyboardArrowRightIcon className={classes.arrowRight} />
-                      </Grid>
+                      <Hidden xsDown>
+                        <Grid item>
+                          <KeyboardArrowRightIcon className={classes.arrowRight} />
+                        </Grid>
+                      </Hidden>
                     </Grid>
                   </CardContent>
                 </Card>
@@ -187,7 +189,7 @@ EventsList.propTypes = {
 };
 
 export default compose(
-  memo,
   injectIntl,
-  withStyles(styles)
+  withStyles(styles),
+  memo,
 )(EventsList);

@@ -2,8 +2,8 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { unwrap } from '@material-ui/core/test-utils';
 
-import SessionLayout from '../index';
-const SessionLayoutNaked = unwrap(SessionLayout);
+import { StyledSessionLayout } from '../index';
+const SessionLayoutNaked = unwrap(StyledSessionLayout);
 
 /**
  * TODO:

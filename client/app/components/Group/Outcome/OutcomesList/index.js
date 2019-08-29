@@ -47,8 +47,8 @@ export function OutcomesList(props, context) {
 
   return (
     <React.Fragment>
-      <Grid container spacing={3}>
-        <Grid item xs={12}>
+      <Grid container spacing={3} justify='flex-end'>
+        <Grid item>
           <Button
             variant='contained'
             to={props.links.outcomeNew}
@@ -59,6 +59,9 @@ export function OutcomesList(props, context) {
             <FormattedMessage {...messages.new} />
           </Button>
         </Grid>
+      </Grid>
+      <Box mb={2} />
+      <Grid container>
         { /* eslint-disable-next-line arrow-body-style */}
         {props.outcomes && props.outcomes.map((outcome, i) => (
           <Grid item key={outcome.id} xs={12}>
@@ -97,6 +100,7 @@ export function OutcomesList(props, context) {
                 </Button>
               </CardActions>
             </Card>
+            <Box mb={3} />
           </Grid>
         ))}
       </Grid>

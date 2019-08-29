@@ -60,14 +60,31 @@ export const ROUTES = {
   group: {
     pathPrefix: '/group',
     home: {
-      path: (groupId = ':group_id') => `/groups/${groupId}`
+      path: (groupId = ':group_id') => `/groups/${groupId}`,
+      data: {
+        titleMessage: messages.groups.home,
+      }
+    },
+    members: {
+      index: {
+        path: (groupId = ':group_id') => `/groups/${groupId}/members`,
+        data: {
+          titleMessage: messages.groups.members.index,
+        }
+      },
+      new: {
+        path: (groupId = ':group_id') => `/groups/${groupId}/members/new`
+      }
     },
     events: {
       index: {
-        path: (groupId = ':group_id') => `/groups/${groupId}/events`
+        path: (groupId = ':group_id') => `/groups/${groupId}/events`,
+        data: {
+          titleMessage: messages.groups.events.index,
+        }
       },
       show: {
-        path: (groupId = ':group_id', eventId = ':event_id') => `/groups/${groupId}/events/${eventId}`
+        path: (groupId = ':group_id', eventId = ':event_id') => `/groups/${groupId}/events/${eventId}`,
       },
       new: {
         path: (groupId = ':group_id') => `/groups/${groupId}/events/new`
@@ -79,7 +96,10 @@ export const ROUTES = {
     },
     news: {
       index: {
-        path: (groupId = ':group_id') => `/groups/${groupId}/news`
+        path: (groupId = ':group_id') => `/groups/${groupId}/news`,
+        data: {
+          titleMessage: messages.groups.news.index,
+        }
       },
       messages: {
         index: {
@@ -95,17 +115,12 @@ export const ROUTES = {
         },
       }
     },
-    members: {
-      index: {
-        path: (groupId = ':group_id') => `/groups/${groupId}/members`
-      },
-      new: {
-        path: (groupId = ':group_id') => `/groups/${groupId}/members/new`
-      }
-    },
     outcomes: {
       index: {
-        path: (groupId = ':group_id') => `/groups/${groupId}/outcomes`
+        path: (groupId = ':group_id') => `/groups/${groupId}/outcomes`,
+        data: {
+          titleMessage: messages.groups.outcomes.index,
+        }
       },
       new: {
         path: (groupId = ':group_id') => `/groups/${groupId}/outcomes/new`

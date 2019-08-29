@@ -13,8 +13,9 @@ import { compose } from 'redux';
 import { RouteContext } from 'containers/Layouts/ApplicationLayout';
 
 import {
+  Box,
   Button, Card, CardActions, CardContent, Grid,
-  TablePagination
+  TablePagination,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -39,8 +40,8 @@ const styles = theme => ({
 
 export function NewsFeed(props) {
   const { classes } = props;
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [page, setPage] = useState(props.defaultParams.page);
+  const [rowsPerPage, setRowsPerPage] = useState(props.defaultParams.count);
   const routeContext = useContext(RouteContext);
 
   const handleChangePage = (event, newPage) => {
@@ -67,7 +68,7 @@ export function NewsFeed(props) {
 
   return (
     <React.Fragment>
-      <Grid container spacing={3}>
+      <Grid container spacing={3} justify='flex-end'>
         <Grid item>
           <Button
             variant='contained'
@@ -101,11 +102,15 @@ export function NewsFeed(props) {
             New Social Link
           </Button>
         </Grid>
+      </Grid>
+      <Box mb={2} />
+      <Grid container>
         { /* eslint-disable-next-line arrow-body-style */ }
         {props.newsItems && Object.values(props.newsItems).map((item, i) => {
           return (
             <Grid item key={item.id} className={classes.newsItem}>
-              { renderNewsItem(item) }
+              {renderNewsItem(item)}
+              <Box mb={3} />
             </Grid>
           );
         })}
@@ -130,6 +135,7 @@ export function NewsFeed(props) {
 }
 
 NewsFeed.propTypes = {
+  defaultParams: PropTypes.object,
   classes: PropTypes.object,
   newsItems: PropTypes.array,
   newsItemsTotal: PropTypes.number,
