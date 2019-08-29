@@ -394,6 +394,30 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
         post :add_members, group_id: group.id, group: { member_ids: [add.id] }
         expect(add.user_groups.last.accepted_member).to eq true
       end
+
+      context 'public activity' do
+        enable_public_activity
+
+        it 'creates public activity record' do
+          perform_enqueued_jobs do
+            expect { post :add_members, group_id: group.id, group: { member_ids: [add.id] }
+            }.to change(PublicActivity::Activity, :count).by(1)
+          end
+        end
+
+        describe 'activity record' do
+          let(:model) { group }
+          let(:owner) { user }
+          let(:key) { 'group.add_members_to_group' }
+
+          before {
+            perform_enqueued_jobs do
+              post :add_members, group_id: group.id, group: { member_ids: [add.id] }
+            end
+          }
+          include_examples 'correct public activity'
+        end
+      end
     end
 
     context 'when user is not logged in' do
@@ -406,21 +430,45 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
     context 'when user is logged in' do
       let!(:group_leader) { create(:group_leader, user_id: user.id, group_id: group.id, user_role_id: group_role.id) }
       login_user_from_let
-      before {
-        user_group.save
-        delete :remove_member, group_id: group.id, id: user.id
-      }
+      before { user_group.save }
 
       it 'redirects to index action' do
+        delete :remove_member, group_id: group.id, id: user.id
         expect(response).to redirect_to action: 'index'
       end
 
       it 'removes the user' do
+        delete :remove_member, group_id: group.id, id: user.id
         expect(UserGroup.where(user_id: user.id, group_id: group.id).count).to eq(0)
       end
 
       it 'deletes the leader' do
+        delete :remove_member, group_id: group.id, id: user.id
         expect { GroupLeader.find(group_leader.id) }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+
+      context 'public activity' do
+        enable_public_activity
+
+        it 'creates public activity record' do
+          perform_enqueued_jobs do
+            expect { delete :remove_member, group_id: group.id, id: user.id
+            }.to change(PublicActivity::Activity, :count).by(1)
+          end
+        end
+
+        describe 'activity record' do
+          let(:model) { group }
+          let(:owner) { user }
+          let(:key) { 'group.remove_member_from_group' }
+
+          before {
+            perform_enqueued_jobs do
+              delete :remove_member, group_id: group.id, id: user.id
+            end
+          }
+          include_examples 'correct public activity'
+        end
       end
     end
 
