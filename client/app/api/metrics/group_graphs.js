@@ -31,7 +31,7 @@ Object.assign(GroupGraphs, {
   },
 
   viewsPerNewsLink(params) {
-    return axios.get(`${this.url}/view_per_news_link`, { params });
+    return axios.get(`${this.url}/views_per_news_link`, { params });
   },
 
   // Resources

@@ -19,7 +19,6 @@ const GroupDashboardLinks = ({ currentDashboard, handleDashboardChange }) => (
         onChange={handleDashboardChange}
       >
         <Tab label='Overview' />
-        <Tab label='Events' />
         <Tab label='Social' />
         <Tab label='Resources' />
         <Tab />

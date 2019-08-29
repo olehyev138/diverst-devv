@@ -22,7 +22,6 @@ import GroupScopeSelect from 'components/Analyze/Shared/GroupScopeSelect';
 
 // Sub dashboards
 import OverviewDashboard from 'components/Analyze/Dashboards/GroupDashboard/OverviewDashboard';
-import EventsDashboard from 'components/Analyze/Dashboards/GroupDashboard/EventsDashboard';
 import SocialMediaDashboard from 'components/Analyze/Dashboards/GroupDashboard/SocialMediaDashboard';
 import ResourcesDashboard from 'components/Analyze/Dashboards/GroupDashboard/ResourcesDashboard';
 
@@ -54,7 +53,6 @@ export function GroupDashboardPage(props) {
 
   const dashboards = [
     <OverviewDashboard dashboardParams={params} />,
-    <EventsDashboard dashboardParams={params} />,
     <SocialMediaDashboard dashboardParams={params} />,
     <ResourcesDashboard dashboardParams={params} />
   ];
