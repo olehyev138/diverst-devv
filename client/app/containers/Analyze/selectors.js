@@ -2,18 +2,18 @@ import { createSelector } from 'reselect';
 import { initialState } from 'containers/Analyze/reducer';
 
 import dig from 'object-dig';
-import { formatBarGraphData } from 'utils/metricsHelpers';
+import { formatBarGraphData, selectSeriesValues } from 'utils/metricsHelpers';
 
 const selectMetricsDomain = state => state.metrics || initialState;
 
 const selectGroupPopulation = () => createSelector(
   selectMetricsDomain,
-  metricsState => formatBarGraphData(dig(metricsState.metricsData.groupPopulation, 'series', 0, 'values') || [])
+  metricsState => formatBarGraphData(selectSeriesValues(metricsState.metricsData.groupPopulation, 0) || [])
 );
 
 const selectViewsPerGroup = () => createSelector(
   selectMetricsDomain,
-  metricsState => formatBarGraphData(dig(metricsState.metricsData.viewsPerGroup, 'series', 0, 'values') || [])
+  metricsState => formatBarGraphData(selectSeriesValues(metricsState.metricsData.viewsPerGroup, 0) || [])
 );
 
 const selectGrowthOfGroups = () => createSelector(
@@ -21,7 +21,39 @@ const selectGrowthOfGroups = () => createSelector(
   metricsState => metricsState.metricsData.growthOfGroups
 );
 
+const selectInitiativesPerGroup = () => createSelector(
+  selectMetricsDomain,
+  metricsState => formatBarGraphData(selectSeriesValues(metricsState.metricsData.initiativesPerGroup, 0) || [])
+);
+
+const selectMessagesPerGroup = () => createSelector(
+  selectMetricsDomain,
+  metricsState => formatBarGraphData(selectSeriesValues(metricsState.metricsData.messagesPerGroup, 0) || [])
+);
+
+const selectViewsPerNewsLink = () => createSelector(
+  selectMetricsDomain,
+  metricsState => formatBarGraphData(selectSeriesValues(metricsState.metricsData.viewsPerNewsLink, 0) || [])
+);
+
+const selectViewsPerFolder = () => createSelector(
+  selectMetricsDomain,
+  metricsState => formatBarGraphData(selectSeriesValues(metricsState.metricsData.viewsPerFolder, 0) || [])
+);
+
+const selectViewsPerResource = () => createSelector(
+  selectMetricsDomain,
+  metricsState => formatBarGraphData(selectSeriesValues(metricsState.metricsData.viewsPerResource, 0) || [])
+);
+
+const selectGrowthOfResources = () => createSelector(
+  selectMetricsDomain,
+  metricsState => metricsState.metricsData.growthOfResources
+);
+
 export {
   selectMetricsDomain, selectGroupPopulation, selectViewsPerGroup,
-  selectGrowthOfGroups,
+  selectGrowthOfGroups, selectInitiativesPerGroup, selectMessagesPerGroup,
+  selectViewsPerNewsLink, selectViewsPerFolder, selectViewsPerResource,
+  selectGrowthOfResources
 };
