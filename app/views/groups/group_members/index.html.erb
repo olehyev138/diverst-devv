@@ -17,7 +17,7 @@
                   <li><a href="#" data-toggle="modal" data-target="#exampleModal">
                     <%= "Export Members of #{c_t(:sub_erg).pluralize}" %>
                   </a>
-                    <%#= link_to "Export Members of #{c_t(:sub_erg)}", export_group_members_list_csv_group_group_members_path(@group, export_csv_params: "sub_groups_members") %></li>
+                   </li>
                 <% end %>
 
                 <% if @group.is_sub_group? %>
@@ -37,7 +37,9 @@
 
           <% if @group.pending_users.enabled? %>
             <% if @group.is_parent_group?%>
-              <li><%= link_to "Export Members of #{c_t(:sub_erg)}", export_group_members_list_csv_group_group_members_path(@group, export_csv_params: "sub_groups_members") %></li>
+              <li><a href="#" data-toggle="modal" data-target="#exampleModal">
+                    <%= "Export Members of #{c_t(:sub_erg).pluralize}" %>
+                  </a></li>
             <% end %>
 
             <% if @group.is_sub_group? %>

@@ -511,6 +511,56 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
     end
   end
 
+  describe 'POST#export_sub_groups_members_list_csv' do
+    context 'when user is logged in' do
+      let!(:sub_group) { create(:group, parent: group, enterprise: user.enterprise) }
+      let!(:member) { create(:user_group, user_id: create(:user).id, group_id: sub_group.id) }
+      login_user_from_let
+
+      before do
+        allow(GroupMemberListDownloadJob).to receive(:perform_later)
+        request.env['HTTP_REFERER'] = 'back'
+        post :export_sub_groups_members_list_csv, group_id: group.id, groups: { sub_group.name => sub_group.id }
+      end
+
+      it 'redirects to user' do
+        expect(response).to redirect_to 'back'
+      end
+
+      it 'flashes' do
+        expect(flash[:notice]).to eq 'Please check your Secure Downloads section in a couple of minutes'
+      end
+
+      it 'calls job' do
+        expect(GroupMemberListDownloadJob).to have_received(:perform_later)
+      end
+
+      describe 'public activity' do
+        enable_public_activity
+
+        it 'creates public activity record' do
+          perform_enqueued_jobs do
+            expect { post :export_sub_groups_members_list_csv, group_id: group.id, groups: { sub_group.name => sub_group.id } }.to change(PublicActivity::Activity, :count).by(1)
+          end
+        end
+
+        describe 'activity record' do
+          let(:model) { group }
+          let(:owner) { user }
+          let(:key) { 'group.export_sub_groups_members_list' }
+
+          before {
+            perform_enqueued_jobs do
+              post :export_sub_groups_members_list_csv, group_id: group.id, groups: { sub_group.name => sub_group.id }
+            end
+          }
+
+          include_examples 'correct public activity'
+        end
+      end
+    end
+  end
+
   describe 'GET#export_group_members_list_csv' do
     context 'when user is logged in' do
       let!(:active_members) { create_list(:user, 5, enterprise_id: user.enterprise.id, user_role_id: user.user_role_id, active: true) }
