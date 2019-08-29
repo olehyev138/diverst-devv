@@ -68,11 +68,9 @@ export function GroupLinks(props) {
   );
 
   return (
-    <div>
-      <AppBar position='static' style={{ backgroundColor: 'white' }}>
-        <NavLinks />
-      </AppBar>
-    </div>
+    <AppBar position='relative' style={{ backgroundColor: 'white' }}>
+      <NavLinks />
+    </AppBar>
   );
 }
 

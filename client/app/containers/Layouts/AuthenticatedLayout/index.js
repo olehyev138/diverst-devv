@@ -12,7 +12,9 @@ import ApplicationLayout from 'containers/Layouts/ApplicationLayout';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import AuthService from 'utils/authService';
 
-const styles = theme => ({});
+const styles = theme => ({
+  toolbar: theme.mixins.toolbar,
+});
 
 const AuthenticatedLayout = ({
   renderAppBar, drawerToggleCallback, drawerOpen, position, isAdmin, component: Component, ...rest
@@ -20,6 +22,8 @@ const AuthenticatedLayout = ({
   const {
     classes, data, ...other
   } = rest;
+
+  console.log(!renderAppBar);
 
 
   /* Use AuthService to keep AuthenticatedLayout unconnected from store.
@@ -36,22 +40,20 @@ const AuthenticatedLayout = ({
         <ApplicationLayout
           {...other}
           component={matchProps => (
-            <div>
-              {
-                renderAppBar === false
-                  ? <React.Fragment />
-                  : (
-                    <ApplicationHeader
-                      drawerToggleCallback={drawerToggleCallback}
-                      drawerOpen={drawerOpen}
-                      position={position}
-                      isAdmin={isAdmin}
-                      {...matchProps}
-                    />
-                  )
-              }
+            <React.Fragment>
+              { !!renderAppBar && (
+                <React.Fragment>
+                  <ApplicationHeader
+                    drawerToggleCallback={drawerToggleCallback}
+                    drawerOpen={drawerOpen}
+                    position={position}
+                    isAdmin={isAdmin}
+                    {...matchProps}
+                  />
+                </React.Fragment>
+              )}
               <Component {...matchProps} />
-            </div>
+            </React.Fragment>
           )}
         />
       );
@@ -77,6 +79,10 @@ AuthenticatedLayout.propTypes = {
   isAdmin: PropTypes.bool,
   component: PropTypes.elementType,
   policy_group: PropTypes.object,
+};
+
+AuthenticatedLayout.defaultProps = {
+  renderAppBar: true
 };
 
 export default compose(

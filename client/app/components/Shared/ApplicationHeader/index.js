@@ -27,9 +27,6 @@ import { selectGroup } from 'containers/Group/selectors';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 const styles = theme => ({
-  root: {
-    width: '100%',
-  },
   grow: {
     flexGrow: 1,
   },
@@ -183,7 +180,7 @@ export class ApplicationHeader extends React.PureComponent {
     );
 
     return (
-      <div className={classes.root}>
+      <React.Fragment>
         <AppBar position={position} className={classes.appBar}>
           <Toolbar className={classes.toolbar}>
             { isAdmin
@@ -259,7 +256,7 @@ export class ApplicationHeader extends React.PureComponent {
           </Toolbar>
         </AppBar>
         {renderMenu}
-      </div>
+      </React.Fragment>
     );
   }
 }
