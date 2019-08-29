@@ -145,8 +145,11 @@ Diverst::Application.routes.draw do
       resources :yammer_field_mappings
 
       namespace :metrics do
-        resources :overview, controller: :overview_graphs, only: [:index]
-        resources :users, controller: :user_graphs, only: [:index] do
+        resources :overview, controller: :overview_graphs, only: [] do
+          get 'overview_metrics'
+        end
+
+        resources :users, controller: :user_graphs, only: [] do
           collection do
             get 'users_per_group'
             get 'users_per_segment'
@@ -157,7 +160,7 @@ Diverst::Application.routes.draw do
           end
         end
 
-        resources :groups, controller: :group_graphs, only: [:index] do
+        resources :groups, controller: :group_graphs, only: [] do
           collection do
             get 'initiatives'
             get 'social_media'
@@ -175,13 +178,13 @@ Diverst::Application.routes.draw do
           end
         end
 
-        resources :segments, controller: :segment_graphs, only: [:index] do
+        resources :segments, controller: :segment_graphs, only: [] do
           collection do
             get 'segment_population'
           end
         end
 
-        resources :mentorships, controller: :mentorship_graphs, only: [:index] do
+        resources :mentorships, controller: :mentorship_graphs, only: [] do
           collection do
             get 'user_mentorship_interest_per_group'
             get 'mentoring_sessions_per_creator'
@@ -191,7 +194,7 @@ Diverst::Application.routes.draw do
           end
         end
 
-        resources :campaigns, controller: :campaign_graphs, only: [:index] do
+        resources :campaigns, controller: :campaign_graphs, only: [] do
           collection do
             get 'contributions_per_erg'
             get 'total_votes_per_user'
