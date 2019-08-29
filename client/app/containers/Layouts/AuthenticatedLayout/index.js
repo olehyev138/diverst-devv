@@ -1,5 +1,4 @@
 import React, { memo } from 'react';
-import { Route } from 'react-router';
 import { Redirect } from 'react-router-dom';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
@@ -82,6 +81,9 @@ AuthenticatedLayout.defaultProps = {
   renderAppBar: true
 };
 
+export const StyledAuthenticatedLayout = withStyles(styles)(AuthenticatedLayout);
+
 export default compose(
+  memo,
   withStyles(styles),
 )(AuthenticatedLayout);

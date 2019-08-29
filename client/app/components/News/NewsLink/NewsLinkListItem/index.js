@@ -13,10 +13,11 @@ import { compose } from 'redux/';
 
 import {
   Button, Card, CardActions, CardContent, Grid,
-  TextField, Hidden, FormControl
+  TextField, Hidden, FormControl, Typography, Link, Box,
 } from '@material-ui/core/index';
 import { withStyles } from '@material-ui/core/styles';
 
+import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import { FormattedMessage } from 'react-intl';
 import messages from 'containers/News/messages';
@@ -30,7 +31,25 @@ export function NewsLinkListItem(props) {
   return (
     <Card>
       <CardContent>
-        <p>{newsLink.title}</p>
+        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+        <Link href={newsLink.url} target='_blank'>
+          <Typography>
+            {newsLink.title}
+          </Typography>
+        </Link>
+        <Box mb={2} />
+        <Typography variant='body2' color='textSecondary'>
+          {newsLink.description}
+        </Typography>
+        {newsLink.author ? (
+          <React.Fragment>
+            <Box mb={2} />
+            <Typography variant='body2' color='textSecondary'>
+              {`Submitted by ${newsLink.author.first_name} ${newsLink.owner.last_name}`}
+            </Typography>
+          </React.Fragment>
+        ) : <React.Fragment />
+        }
       </CardContent>
     </Card>
   );

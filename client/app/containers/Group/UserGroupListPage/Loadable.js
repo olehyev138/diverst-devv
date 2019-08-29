@@ -1,6 +1,6 @@
 /**
  *
- * Asynchronously loads the component for AdminGroupList
+ * Asynchronously loads the component for UserGroupList
  *
  */
 

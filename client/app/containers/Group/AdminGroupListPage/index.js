@@ -6,17 +6,17 @@
 
 import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
+import { compose } from 'redux';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
+import { selectPaginatedGroups, selectGroupTotal, selectGroupIsLoading } from 'containers/Group/selectors';
 
 import saga from 'containers/Group/saga';
 import reducer from 'containers/Group/reducer';
 
-import { selectPaginatedGroups, selectGroupTotal } from 'containers/Group/selectors';
 import { getGroupsBegin, groupListUnmount, deleteGroupBegin } from 'containers/Group/actions';
 
 import GroupList from 'components/Group/AdminGroupList';
@@ -30,9 +30,7 @@ export function AdminGroupListPage(props) {
   useEffect(() => {
     props.getGroupsBegin(params);
 
-    return () => {
-      props.groupListUnmount();
-    };
+    return () => props.groupListUnmount();
   }, []);
 
   const handlePagination = (payload) => {
@@ -45,8 +43,10 @@ export function AdminGroupListPage(props) {
   return (
     <React.Fragment>
       <GroupList
+        isLoading={props.isLoading}
         groups={props.groups}
         groupTotal={props.groupTotal}
+        defaultParams={params}
         deleteGroupBegin={props.deleteGroupBegin}
         handlePagination={handlePagination}
       />
@@ -57,12 +57,14 @@ export function AdminGroupListPage(props) {
 AdminGroupListPage.propTypes = {
   getGroupsBegin: PropTypes.func.isRequired,
   groupListUnmount: PropTypes.func.isRequired,
+  isLoading: PropTypes.bool,
   groups: PropTypes.object,
   groupTotal: PropTypes.number,
   deleteGroupBegin: PropTypes.func
 };
 
 const mapStateToProps = createStructuredSelector({
+  isLoading: selectGroupIsLoading(),
   groups: selectPaginatedGroups(),
   groupTotal: selectGroupTotal(),
 });

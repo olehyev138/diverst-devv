@@ -10,6 +10,7 @@ describe('groupsReducer', () => {
   let state;
   beforeEach(() => {
     state = {
+      isLoading: true,
       groupList: {},
       groupTotal: null,
       currentGroup: null
@@ -25,6 +26,7 @@ describe('groupsReducer', () => {
     const expected = produce(state, (draft) => {
       draft.groupList = { 37: { id: 37, name: 'dummy' } };
       draft.groupTotal = 49;
+      draft.isLoading = false;
     });
 
     expect(
@@ -32,7 +34,7 @@ describe('groupsReducer', () => {
         state,
         getGroupsSuccess({
           items: [{ id: 37, name: 'dummy' }],
-          total: 49
+          total: 49,
         })
       )
     ).toEqual(expected);
@@ -41,12 +43,13 @@ describe('groupsReducer', () => {
   it('handles the getGroupSuccess action correctly', () => {
     const expected = produce(state, (draft) => {
       draft.currentGroup = { id: 37, name: 'dummy' };
+      draft.isLoading = false;
     });
 
     expect(
       groupsReducer(
         state,
-        getGroupSuccess({ group: { id: 37, name: 'dummy' } })
+        getGroupSuccess({ group: { id: 37, name: 'dummy' }, })
       )
     ).toEqual(expected);
   });

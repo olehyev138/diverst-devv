@@ -31,6 +31,31 @@ export default defineMessages({
       id: `${scope}.user.mentorship`,
     },
   },
+  groups: {
+    home: {
+      id: `${scope}.group.home`
+    },
+    members: {
+      index: {
+        id: `${scope}.group.members.index`
+      }
+    },
+    events: {
+      index: {
+        id: `${scope}.group.events.index`
+      }
+    },
+    news: {
+      index: {
+        id: `${scope}.group.news.index`
+      }
+    },
+    outcomes: {
+      index: {
+        id: `${scope}.group.outcomes.index`
+      }
+    },
+  },
   admin: {
     analyze: {
       index: {

@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<UserLayout /> Should render and match the snapshot 1`] = `
-<WithStyles(AuthenticatedLayout)
+<Memo(WithStyles(AuthenticatedLayout))
   component={[Function]}
   pageTitle={Object {}}
   position="absolute"

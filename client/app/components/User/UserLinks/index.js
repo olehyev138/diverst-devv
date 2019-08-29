@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
@@ -328,22 +328,9 @@ UserLinks.propTypes = {
   pageTitle: PropTypes.object,
 };
 
-export function mapDispatchToProps(dispatch) {
-  return {
-    dispatch
-  };
-}
-
-const mapStateToProps = createStructuredSelector({});
-
-const withConnect = connect(
-  mapStateToProps,
-  mapDispatchToProps
-);
-
 export const StyledUserLinks = withStyles(styles)(UserLinks);
 
 export default compose(
-  withConnect,
   withStyles(styles),
+  memo,
 )(UserLinks);

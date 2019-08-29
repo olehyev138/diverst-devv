@@ -1,6 +1,5 @@
 import React, { memo } from 'react';
 import { compose } from 'redux';
-import { Route } from 'react-router';
 import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
@@ -49,6 +48,9 @@ SessionLayout.propTypes = {
   component: PropTypes.elementType,
 };
 
+export const StyledSessionLayout = withStyles(styles)(SessionLayout);
+
 export default compose(
-  withStyles(styles)
+  memo,
+  withStyles(styles),
 )(SessionLayout);

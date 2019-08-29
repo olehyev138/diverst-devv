@@ -1,11 +1,10 @@
-import React, { memo, useEffect } from 'react';
-import { Route } from 'react-router';
+import React, { memo } from 'react';
+import { Route } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { compose } from 'redux';
 
 import { withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-
-const styles = theme => ({});
 
 export const RouteContext = React.createContext(null);
 
@@ -18,12 +17,13 @@ const ApplicationLayout = ({ component: Component, ...rest }) => {
       render={routeProps => (
         <RouteContext.Provider
           value={{
+            history: routeProps.history,
+            location: routeProps.location,
             computedMatch: routeProps.match,
-            location: routeProps.location
           }}
         >
           <CssBaseline />
-          <Component {...rest} />
+          <Component {...rest} {...routeProps} />
         </RouteContext.Provider>
       )}
     />
@@ -35,4 +35,6 @@ ApplicationLayout.propTypes = {
   component: PropTypes.elementType,
 };
 
-export default withStyles(styles)(ApplicationLayout);
+export default compose(
+  memo,
+)(ApplicationLayout);

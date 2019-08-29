@@ -20,6 +20,7 @@ export default class RouteService {
       this.routeData = this.contextFunc(RouteContext);
       this.match = this.routeData.computedMatch;
       this.location = this.routeData.location;
+      this.history = this.routeData.history;
     } else {
       this.match = routeData.computedMatch;
       this.location = routeData.location;

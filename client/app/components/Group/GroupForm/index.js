@@ -9,9 +9,10 @@ import React, {
 } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
-import Select from 'react-select';
+import Select from 'components/Shared/DiverstSelect';
 import { Field, Formik, Form } from 'formik';
 import { FormattedMessage } from 'react-intl';
+import { withStyles } from '@material-ui/core/styles';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -20,12 +21,18 @@ import messages from 'containers/Group/messages';
 import { buildValues, mapFields } from 'utils/formHelpers';
 
 import {
-  Button, Card, CardActions, CardContent, Grid,
-  TextField, Hidden, FormControl
+  Button, Card, CardActions, CardContent, Grid, Paper,
+  TextField, Hidden, FormControl, Divider, Switch, FormControlLabel,
 } from '@material-ui/core';
 
+const styles = theme => ({
+  noBottomPadding: {
+    paddingBottom: '0 !important',
+  },
+});
+
 /* eslint-disable object-curly-newline */
-export function GroupFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
+export function GroupFormInner({ classes, handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
   const childrenSelectAction = (searchKey = '') => {
     props.getGroupsBegin({
       count: 10, page: 0, order: 'asc',
@@ -45,21 +52,52 @@ export function GroupFormInner({ handleSubmit, handleChange, handleBlur, values,
     <Card>
       <Form>
         <CardContent>
-          <Field
-            component={TextField}
-            onChange={handleChange}
-            fullWidth
-            id='name'
-            name='name'
-            label={<FormattedMessage {...messages.name} />}
-            value={values.name}
-          />
+          <Grid container spacing={3}>
+            <Grid item xs className={classes.noBottomPadding}>
+              <Field
+                component={TextField}
+                required
+                onChange={handleChange}
+                fullWidth
+                id='name'
+                name='name'
+                margin='normal'
+                label={<FormattedMessage {...messages.name} />}
+                value={values.name}
+              />
+            </Grid>
+            <Grid item className={classes.noBottomPadding}>
+              <FormControl
+                variant='outlined'
+                margin='normal'
+              >
+                <FormControlLabel
+                  labelPlacement='top'
+                  checked={values.private}
+                  control={(
+                    <Field
+                      component={Switch}
+                      color='primary'
+                      onChange={handleChange}
+                      id='private'
+                      name='private'
+                      margin='normal'
+                      checked={values.private}
+                      value={values.private}
+                    />
+                  )}
+                  label='Private?'
+                />
+              </FormControl>
+            </Grid>
+          </Grid>
           <Field
             component={TextField}
             onChange={handleChange}
             fullWidth
             id='short_description'
             name='short_description'
+            margin='normal'
             value={values.short_description}
             label={<FormattedMessage {...messages.short_description} />}
           />
@@ -69,9 +107,16 @@ export function GroupFormInner({ handleSubmit, handleChange, handleBlur, values,
             fullWidth
             id='description'
             name='description'
+            multiline
+            rows={4}
+            variant='outlined'
+            margin='normal'
             label={<FormattedMessage {...messages.description} />}
             value={values.description}
           />
+        </CardContent>
+        <Divider />
+        <CardContent>
           <Field
             component={Select}
             fullWidth
@@ -79,6 +124,7 @@ export function GroupFormInner({ handleSubmit, handleChange, handleBlur, values,
             name='child_ids'
             label={<FormattedMessage {...messages.children} />}
             isMulti
+            margin='normal'
             value={values.child_ids}
             options={props.selectGroups}
             onMenuOpen={childrenSelectAction}
@@ -86,12 +132,16 @@ export function GroupFormInner({ handleSubmit, handleChange, handleBlur, values,
             onInputChange={value => childrenSelectAction(value)}
             onBlur={() => setFieldTouched('child_ids', true)}
           />
+        </CardContent>
+        <Divider />
+        <CardContent>
           <Field
             component={Select}
             fullWidth
             id='parent_id'
             name='parent_id'
             label={<FormattedMessage {...messages.parent} />}
+            margin='normal'
             value={values.parent_id}
             options={props.selectGroups}
             onMenuOpen={parentSelectAction}
@@ -100,6 +150,7 @@ export function GroupFormInner({ handleSubmit, handleChange, handleBlur, values,
             onBlur={() => setFieldTouched('parent_id', true)}
           />
         </CardContent>
+        <Divider />
         <CardActions>
           <Button
             color='primary'
@@ -122,6 +173,7 @@ export function GroupFormInner({ handleSubmit, handleChange, handleBlur, values,
 export function GroupForm(props) {
   const initialValues = buildValues(props.group, {
     id: { default: '' },
+    private: { default: false },
     name: { default: '' },
     short_description: { default: '' },
     description: { default: '' },
@@ -148,6 +200,7 @@ GroupForm.propTypes = {
 };
 
 GroupFormInner.propTypes = {
+  classes: PropTypes.object,
   handleSubmit: PropTypes.func,
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
@@ -161,4 +214,5 @@ GroupFormInner.propTypes = {
 
 export default compose(
   memo,
+  withStyles(styles)
 )(GroupForm);

@@ -1,12 +1,10 @@
 import React, { memo } from 'react';
-import { Route } from 'react-router';
 import { compose } from 'redux';
 
 import Container from '@material-ui/core/Container';
 import AdminLinks from 'components/Admin/AdminLinks';
 import { withStyles } from '@material-ui/core/styles';
 import AuthenticatedLayout from '../AuthenticatedLayout';
-import { createStructuredSelector } from 'reselect';
 import PropTypes from 'prop-types';
 
 import Scrollbar from 'components/Shared/Scrollbar';
@@ -96,4 +94,7 @@ AdminLayout.propTypes = {
   location: PropTypes.object,
 };
 
-export default withStyles(styles)(AdminLayout);
+export default compose(
+  memo,
+  withStyles(styles),
+)(AdminLayout);
