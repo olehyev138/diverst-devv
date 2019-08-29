@@ -18,7 +18,11 @@ import UserGroupListPage from 'containers/Group/UserGroupListPage/Loadable';
 /* Admin - Analyze */
 import GroupDashboardPage from 'containers/Analyze/Dashboards/GroupDashboardPage/Loadable';
 import UserDashboardPage from 'containers/Analyze/Dashboards/UserDashboardPage/Loadable';
+
+/* Admin - Analyze - Custom */
 import MetricsDashboardListPage from 'containers/Analyze/Dashboards/MetricsDashboard/MetricsDashboardListPage/Loadable';
+import MetricsDashboardCreatePage from 'containers/Analyze/Dashboards/MetricsDashboard/MetricsDashboardCreatePage/Loadable';
+import MetricsDashboardEditPage from 'containers/Analyze/Dashboards/MetricsDashboard/MetricsDashboardEditPage/Loadable';
 
 /* Admin - Manage - Group */
 import AdminGroupListPage from 'containers/Group/AdminGroupListPage/Loadable';
@@ -74,5 +78,5 @@ export {
   UsersPage, UserCreatePage, UserEditPage, GroupHomePage, EventsPage, NewsFeedPage, OutcomesPage, EventPage,
   EventCreatePage, EventEditPage, GroupMessagePage, GroupMessageCreatePage, GroupMessageEditPage, OutcomeCreatePage,
   OutcomeEditPage, GroupMemberListPage, GroupMemberCreatePage, NotFoundPage, PlaceholderPage, GroupDashboardPage,
-  UserDashboardPage, MetricsDashboardListPage
+  UserDashboardPage, MetricsDashboardListPage, MetricsDashboardCreatePage, MetricsDashboardEditPage
 };

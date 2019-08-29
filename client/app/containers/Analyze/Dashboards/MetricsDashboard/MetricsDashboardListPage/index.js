@@ -33,7 +33,7 @@ export function MetricsDashboardListPage(props) {
   const links = {
     metricsDashboardsIndex: ROUTES.admin.analyze.custom.index.path(rs.params('group_id')),
     metricsDashboardShow: id => ROUTES.admin.analyze.custom.show.path(rs.params('group_id'), id),
-    metricsDashboardNew: ROUTES.admin.analyze.custom.new.path(rs.params('group_id')),
+    metricsDashboardNew: ROUTES.admin.analyze.custom.new.path(),
     metricsDashboardEdit: id => ROUTES.admin.analyze.custom.edit.path(rs.params('group_id'), id)
   };
 

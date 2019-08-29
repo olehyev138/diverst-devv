@@ -27,37 +27,11 @@ export default defineMessages({
   cancel: {
     id: `${scope}.form.button.cancel`,
   },
-  index: {
-    upcoming: {
-      id: `${scope}.index.tabs.upcoming`,
-    },
-    ongoing: {
-      id: `${scope}.index.tabs.ongoing`,
-    },
-    past: {
-      id: `${scope}.index.tabs.past`,
-    },
-    emptySection: {
-      id: `${scope}.index.tabs.empty_section`,
-    }
-  },
   form: {
     name: {
       id: `${scope}.form.input.name`,
-    },
-    description: {
-      id: `${scope}.form.input.description`,
-    },
-    start: {
-      id: `${scope}.form.input.start`,
-    },
-    end: {
-      id: `${scope}.form.input.end`,
-    },
+    }
   },
   show: {
-    dateAndTime: {
-      id: `${scope}.show.date_and_time`,
-    },
   },
 });

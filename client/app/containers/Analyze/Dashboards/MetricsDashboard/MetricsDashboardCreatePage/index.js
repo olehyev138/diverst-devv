@@ -26,7 +26,7 @@ export function MetricsDashboardCreatePage(props) {
   const { currentUser, currentGroup } = props;
   const rs = new RouteService(useContext);
   const links = {
-    metricsDashboardsIndex: ROUTES.group.metricsDashboards.index.path(rs.params('group_id')),
+    metricsDashboardsIndex: ROUTES.admin.analyze.custom.index.path(),
   };
 
   useEffect(() => () => props.metricsDashboardsUnmount(), []);

@@ -22,7 +22,7 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 export function* getMetricsDashboards(action) {
   try {
-    const response = yield call(api.metricsDashboards.all.bind(api.metricsDashboards), action.payload);
+    const response = yield call(api.metrics.metricsDashboards.all.bind(api.metrics.metricsDashboards), action.payload);
 
     yield (put(getMetricsDashboardsSuccess(response.data.page)));
   } catch (err) {
@@ -38,7 +38,7 @@ export function* getMetricsDashboards(action) {
 
 export function* getMetricsDashboard(action) {
   try {
-    const response = yield call(api.metricsDashboards.get.bind(api.metricsDashboards), action.payload.id);
+    const response = yield call(api.metrics.metricsDashboards.get.bind(api.metrics.metricsDashboards), action.payload.id);
     yield put(getMetricsDashboardSuccess(response.data));
   } catch (err) {
     // TODO: intl message
@@ -54,11 +54,11 @@ export function* createMetricsDashboard(action) {
   try {
     const payload = { metricsDashboard: action.payload };
 
-    const response = yield call(api.metricsDashboards.create.bind(api.metricsDashboards), payload);
+    const response = yield call(api.metrics.metricsDashboards.create.bind(api.metrics.metricsDashboards), payload);
 
     // yield put(push(ROUTES.group.metrics_dashboards.index.path(payload.metricsDashboard.group_id)));
     yield put(showSnackbar({
-      message: 'MetricsDashboard created',
+      message: 'Metrics dashboard created',
       options: { variant: 'success' }
     }));
   } catch (err) {
@@ -75,7 +75,8 @@ export function* createMetricsDashboard(action) {
 export function* updateMetricsDashboard(action) {
   try {
     const payload = { metricsDashboard: action.payload };
-    const response = yield call(api.metricsDashboards.update.bind(api.metricsDashboards), payload.metricsDashboard.id, payload);
+    const response = yield call(api.metrics.metricsDashboards.update.bind(api.metrics.metricsDashboards),
+      payload.metricsDashboard.id, payload);
 
     // yield put(push(ROUTES.group.metrics_dashboards.index.path(payload.metricsDashboard.owner_group_id)));
     yield put(showSnackbar({
@@ -95,7 +96,7 @@ export function* updateMetricsDashboard(action) {
 
 export function* deleteMetricsDashboard(action) {
   try {
-    yield call(api.metricsDashboards.destroy.bind(api.metricsDashboards), action.payload.id);
+    yield call(api.metrics.metricsDashboards.destroy.bind(api.metrics.metricsDashboards), action.payload.id);
     yield put(push(ROUTES.group.metrics_dashboards.index.path(action.payload.group_id)));
     yield put(showSnackbar({
       message: 'Metrics dashboard deleted',

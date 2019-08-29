@@ -16,7 +16,7 @@ import {
 } from '@material-ui/core';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
-import messages from 'containers/MetricsDashboard/messages';
+import messages from 'containers/Analyze/Dashboards/MetricsDashboard/messages';
 import { buildValues } from 'utils/formHelpers';
 
 /* eslint-disable object-curly-newline */
@@ -33,33 +33,6 @@ export function MetricsDashboardFormInner({ handleSubmit, handleChange, handleBl
             name='name'
             label={<FormattedMessage {...messages.form.name} />}
             value={values.name}
-          />
-          <Field
-            component={TextField}
-            onChange={handleChange}
-            fullWidth
-            id='description'
-            name='description'
-            value={values.description}
-            label={<FormattedMessage {...messages.form.description} />}
-          />
-          <Field
-            component={TextField}
-            onChange={handleChange}
-            fullWidth
-            id='start'
-            name='start'
-            value={values.start}
-            label={<FormattedMessage {...messages.form.start} />}
-          />
-          <Field
-            component={TextField}
-            onChange={handleChange}
-            fullWidth
-            id='end'
-            name='end'
-            value={values.end}
-            label={<FormattedMessage {...messages.form.end} />}
           />
         </CardContent>
         <CardActions>
