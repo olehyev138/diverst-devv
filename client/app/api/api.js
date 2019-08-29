@@ -13,6 +13,11 @@ import groupMessageComments from 'api/group_message_comments/group_message_comme
 import groupMembers from 'api/group_members/group_members';
 import outcomes from 'api/outcomes/outcomes';
 
+/* Metrics */
+import overviewGraphs from 'api/metrics/overview_graphs';
+import userGraphs from 'api/metrics/user_graphs';
+import groupGraphs from 'api/metrics/group_graphs';
+
 const Api = {
   users,
   userGroups,
@@ -28,6 +33,11 @@ const Api = {
   groupMessageComments,
   groupMembers,
   outcomes,
+  metrics: {
+    overviewGraphs,
+    userGraphs,
+    groupGraphs,
+  }
 };
 
 export default Api;

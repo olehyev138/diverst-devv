@@ -1,0 +1,59 @@
+/*
+ *
+ * Metric constants
+ *
+ */
+
+/* Group */
+
+// Group Population graph
+export const GET_GROUP_POPULATION_BEGIN = 'app/Metrics/GET_GROUP_POPULATION_BEGIN';
+export const GET_GROUP_POPULATION_SUCCESS = 'app/Metrics/GET_GROUP_POPULATION_SUCCESS';
+export const GET_GROUP_POPULATION_ERROR = 'app/Metrics/GET_GROUP_POPULATION_ERROR';
+
+// Group Views graph
+export const GET_VIEWS_PER_GROUP_BEGIN = 'app/Metrics/GET_VIEWS_PER_GROUP_BEGIN';
+export const GET_VIEWS_PER_GROUP_SUCCESS = 'app/Metrics/GET_VIEWS_PER_GROUP_SUCCESS ';
+export const GET_VIEWS_PER_GROUP_ERROR = 'app/Metrics/GET_VIEWS_PER_GROUP_SUCCESS ';
+
+// Group Growth graph
+export const GET_GROWTH_OF_GROUPS_BEGIN = 'app/Metrics/GET_GROWTH_OF_GROUPS_BEGIN';
+export const GET_GROWTH_OF_GROUPS_SUCCESS = 'app/Metrics/GET_GROWTH_OF_GROUPS_SUCCESS';
+export const GET_GROWTH_OF_GROUPS_ERROR = 'app/Metrics/GET_GROWTH_OF_GROUPS_ERROR';
+
+// Initiatives per Group
+export const GET_INITIATIVES_PER_GROUP_BEGIN = 'app/Metrics/GET_INITIATIVES_PER_GROUP_BEGIN';
+export const GET_INITIATIVES_PER_GROUP_SUCCESS = 'app/Metrics/GET_INITIATIVES_PER_GROUP_SUCCESS';
+export const GET_INITIATIVES_PER_GROUP_ERROR = 'app/Metrics/GET_INITIATIVES_PER_GROUP_ERROR';
+
+// Messages per Group
+export const GET_MESSAGES_PER_GROUP_BEGIN = 'app/Metrics/GET_MESSAGES_PER_GROUP_BEGIN';
+export const GET_MESSAGES_PER_GROUP_SUCCESS = 'app/Metrics/GET_MESSAGES_PER_GROUP_SUCCESS';
+export const GET_MESSAGES_PER_GROUP_ERROR = 'app/Metrics/GET_MESSAGES_PER_GROUP_ERROR';
+
+// Views per News Link
+export const GET_VIEWS_PER_NEWS_LINK_BEGIN = 'app/Metrics/GET_VIEWS_PER_NEWS_LINK_BEGIN';
+export const GET_VIEWS_PER_NEWS_LINK_SUCCESS = 'app/Metrics/GET_VIEWS_PER_NEWS_LINK_SUCCESS';
+export const GET_VIEWS_PER_NEWS_LINK_ERROR = 'app/Metrics/GET_VIEWS_PER_NEWS_LINK_ERROR';
+
+// Views per Folder
+export const GET_VIEWS_PER_FOLDER_BEGIN = 'app/Metrics/GET_VIEWS_PER_FOLDER_BEGIN';
+export const GET_VIEWS_PER_FOLDER_SUCCESS = 'app/Metrics/GET_VIEWS_PER_FOLDER_SUCCESS';
+export const GET_VIEWS_PER_FOLDER_ERROR = 'app/Metrics/GET_VIEWS_PER_FOLDER_ERROR';
+
+// Views per Resources
+export const GET_VIEWS_PER_RESOURCE_BEGIN = 'app/Metrics/GET_VIEWS_PER_RESOURCE_BEGIN';
+export const GET_VIEWS_PER_RESOURCE_SUCCESS = 'app/Metrics/GET_VIEWS_PER_RESOURCE_SUCCESS';
+export const GET_VIEWS_PER_RESOURCE_ERROR = 'app/Metrics/GET_VIEWS_PER_RESOURCE_ERROR';
+
+// Growth of Resources
+export const GET_GROWTH_OF_RESOURCES_BEGIN = 'app/Metrics/GET_GROWTH_OF_RESOURCES_BEGIN';
+export const GET_GROWTH_OF_RESOURCES_SUCCESS = 'app/Metrics/GET_GROWTH_OF_RESOURCES_SUCCESS';
+export const GET_GROWTH_OF_RESOURCES_ERROR = 'app/Metrics/GET_GROWTH_OF_RESOURCES_ERROR';
+
+// Growth of Users
+export const GET_GROWTH_OF_USERS_BEGIN = 'app/Metrics/GET_GROWTH_OF_USERS_BEGIN';
+export const GET_GROWTH_OF_USERS_SUCCESS = 'app/Metrics/GET_GROWTH_OF_USERS_SUCCESS';
+export const GET_GROWTH_OF_USERS_ERROR = 'app/Metrics/GET_GROWTH_OF_USERS_ERROR';
+
+export const METRICS_UNMOUNT = 'app/Group/GROUP_FORM_UNMOUNT';

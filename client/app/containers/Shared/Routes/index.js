@@ -7,7 +7,8 @@ import {
   UserGroupListPage, AdminGroupListPage, GroupCreatePage, GroupEditPage, SegmentListPage, SegmentPage, FieldsPage,
   UsersPage, UserCreatePage, UserEditPage, GroupHomePage, EventsPage, NewsFeedPage, OutcomesPage, EventPage,
   EventCreatePage, EventEditPage, GroupMessagePage, GroupMessageCreatePage, GroupMessageEditPage, OutcomeCreatePage,
-  OutcomeEditPage, GroupMemberListPage, GroupMemberCreatePage, NotFoundPage, PlaceholderPage
+  OutcomeEditPage, GroupMemberListPage, GroupMemberCreatePage, NotFoundPage, PlaceholderPage, GroupDashboardPage,
+  UserDashboardPage
 } from './templates';
 
 // Paths
@@ -32,8 +33,9 @@ export default function Routes(props) {
 
       { /* Admin */ }
       { /* Admin - Analyze */ }
-      <AdminLayout {...expandRoute(ROUTES.admin.analyze.overview)} component={PlaceholderPage} />
-      <AdminLayout {...expandRoute(ROUTES.admin.analyze.users)} component={PlaceholderPage} />
+      <AdminLayout {...expandRoute(ROUTES.admin.analyze.users)} component={UserDashboardPage} />
+      <AdminLayout {...expandRoute(ROUTES.admin.analyze.groups)} component={GroupDashboardPage} />
+      <AdminLayout exact {...expandRoute(ROUTES.admin.analyze.overview)} component={PlaceholderPage} />
 
       { /* Admin - Manage */ }
       { /* Admin - Manage - Groups */ }

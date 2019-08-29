@@ -15,6 +15,9 @@ import LoginPage from 'containers/Session/LoginPage/Loadable';
 import HomePage from 'containers/User/HomePage/Loadable';
 import UserGroupListPage from 'containers/Group/UserGroupListPage/Loadable';
 
+/* Admin - Analyze */
+import GroupDashboardPage from 'containers/Analyze/Dashboards/GroupDashboardPage';
+import UserDashboardPage from 'containers/Analyze/Dashboards/UserDashboardPage';
 
 /* Admin - Manage - Group */
 import AdminGroupListPage from 'containers/Group/AdminGroupListPage/Loadable';
@@ -69,5 +72,6 @@ export {
   UserGroupListPage, AdminGroupListPage, GroupCreatePage, GroupEditPage, SegmentListPage, SegmentPage, FieldsPage,
   UsersPage, UserCreatePage, UserEditPage, GroupHomePage, EventsPage, NewsFeedPage, OutcomesPage, EventPage,
   EventCreatePage, EventEditPage, GroupMessagePage, GroupMessageCreatePage, GroupMessageEditPage, OutcomeCreatePage,
-  OutcomeEditPage, GroupMemberListPage, GroupMemberCreatePage, NotFoundPage, PlaceholderPage
+  OutcomeEditPage, GroupMemberListPage, GroupMemberCreatePage, NotFoundPage, PlaceholderPage, GroupDashboardPage,
+  UserDashboardPage
 };

@@ -26,6 +26,7 @@
   "diverst.containers.Routes.admin.analyze.index": "Analyze",
   "diverst.containers.Routes.admin.analyze.overview": "Overview",
   "diverst.containers.Routes.admin.analyze.users": "Users",
+  "diverst.containers.Routes.admin.analyze.groups": "Groups",
   "diverst.containers.Routes.admin.manage.index": "Manage",
   "diverst.containers.Routes.admin.manage.groups": "Groups",
   "diverst.containers.Routes.admin.manage.segments": "Segments",
