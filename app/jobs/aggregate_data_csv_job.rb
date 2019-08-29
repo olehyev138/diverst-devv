@@ -5,7 +5,7 @@ class AggregateDataCsvJob < ActiveJob::Base
     tables.each do |metric|
       case metric
       when 'logins'
-        data = User.aggregate_sign_ins(enterprise_id: current_user.enterprise.id)
+        data = User.aggregate_sign_ins(enterprise_id: enterprise_id)
       else
         data = User.cached_count_list(
           *(fields[metric]['fields'].map { |fld| fld.to_sym }),

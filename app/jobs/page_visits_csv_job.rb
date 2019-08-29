@@ -14,7 +14,7 @@ class PageVisitsCsvJob < ActiveJob::Base
       if page_user.present?
         first_row = [
           'Page Visitation For',
-          User.find(page_user_id).name
+          (User.find(page_user_id).name rescue 'Deleted User')
         ]
       else
         first_row = [
