@@ -12,6 +12,7 @@ import { Grid } from '@material-ui/core';
 import GroupPopulationGraphPage from 'containers/Analyze/Graphs/GroupPopulationGraphPage';
 import ViewsPerGroupGraphPage from 'containers/Analyze/Graphs/ViewsPerGroupGraphPage';
 import GrowthOfGroupsGraphPage from 'containers/Analyze/Graphs/GrowthOfGroupsGraphPage';
+import InitiativesPerGroupGraphPage from 'containers/Analyze/Graphs/InitiativesPerGroupGraphPage';
 
 const OverviewDashboard = ({ dashboardParams }) => (
   <Grid container spacing={3}>
@@ -25,6 +26,10 @@ const OverviewDashboard = ({ dashboardParams }) => (
 
     <Grid item xs={12}>
       <GrowthOfGroupsGraphPage dashboardParams={dashboardParams} />
+    </Grid>
+
+    <Grid item xs={12}>
+      <InitiativesPerGroupGraphPage dashboardParams={dashboardParams} />
     </Grid>
   </Grid>
 );
