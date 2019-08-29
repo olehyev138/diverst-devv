@@ -7,7 +7,8 @@ class Api::V1::MetricsDashboardsController < DiverstController
         :name,
         :owner_id,
         :shareable_token,
-        group_ids: []
-      )
+        group_ids: [],
+        segment_ids: []
+    )
   end
 end

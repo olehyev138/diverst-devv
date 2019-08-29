@@ -16,8 +16,8 @@ import HomePage from 'containers/User/HomePage/Loadable';
 import UserGroupListPage from 'containers/Group/UserGroupListPage/Loadable';
 
 /* Admin - Analyze */
-import GroupDashboardPage from 'containers/Analyze/Dashboards/GroupDashboardPage';
-import UserDashboardPage from 'containers/Analyze/Dashboards/UserDashboardPage';
+import GroupDashboardPage from 'containers/Analyze/Dashboards/GroupDashboardPage/Loadable';
+import UserDashboardPage from 'containers/Analyze/Dashboards/UserDashboardPage/Loadable';
 
 /* Admin - Manage - Group */
 import AdminGroupListPage from 'containers/Group/AdminGroupListPage/Loadable';
