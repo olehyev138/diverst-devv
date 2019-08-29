@@ -23,9 +23,6 @@ const AuthenticatedLayout = ({
     classes, data, ...other
   } = rest;
 
-  console.log(!renderAppBar);
-
-
   /* Use AuthService to keep AuthenticatedLayout unconnected from store.
    *   - Probably better to keep layouts unconnected too
    *   - Causes problems when state updates, causing children to remount
