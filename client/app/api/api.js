@@ -14,6 +14,8 @@ import groupMembers from 'api/group_members/group_members';
 import outcomes from 'api/outcomes/outcomes';
 
 /* Metrics */
+import overviewGraphs from 'api/metrics/overview_graphs';
+import userGraphs from 'api/metrics/user_graphs';
 import groupGraphs from 'api/metrics/group_graphs';
 
 const Api = {
@@ -32,7 +34,9 @@ const Api = {
   groupMembers,
   outcomes,
   metrics: {
-    groupGraphs
+    overviewGraphs,
+    userGraphs,
+    groupGraphs,
   }
 };
 

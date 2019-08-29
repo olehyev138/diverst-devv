@@ -14,6 +14,7 @@ import {
   GET_VIEWS_PER_FOLDER_BEGIN, GET_VIEWS_PER_FOLDER_SUCCESS, GET_VIEWS_PER_FOLDER_ERROR,
   GET_VIEWS_PER_RESOURCE_BEGIN, GET_VIEWS_PER_RESOURCE_SUCCESS, GET_VIEWS_PER_RESOURCE_ERROR,
   GET_GROWTH_OF_RESOURCES_BEGIN, GET_GROWTH_OF_RESOURCES_SUCCESS, GET_GROWTH_OF_RESOURCES_ERROR,
+  GET_GROWTH_OF_USERS_BEGIN, GET_GROWTH_OF_USERS_SUCCESS, GET_GROWTH_OF_USERS_ERROR,
   METRICS_UNMOUNT,
 } from 'containers/Analyze/constants';
 
@@ -220,6 +221,29 @@ export function getGrowthOfResourcesSuccess(payload) {
 export function getGrowthOfResourcesError(payload) {
   return {
     type: GET_GROWTH_OF_RESOURCES_ERROR,
+    payload
+  };
+}
+
+/* Growth of Users */
+
+export function getGrowthOfUsersBegin(payload) {
+  return {
+    type: GET_GROWTH_OF_USERS_BEGIN,
+    payload
+  };
+}
+
+export function getGrowthOfUsersSuccess(payload) {
+  return {
+    type: GET_GROWTH_OF_USERS_SUCCESS,
+    payload
+  };
+}
+
+export function getGrowthOfUsersError(payload) {
+  return {
+    type: GET_GROWTH_OF_USERS_ERROR,
     payload
   };
 }

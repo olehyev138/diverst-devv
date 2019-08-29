@@ -9,7 +9,7 @@ import {
   GET_GROUP_POPULATION_SUCCESS, GET_VIEWS_PER_GROUP_SUCCESS, GET_GROWTH_OF_GROUPS_SUCCESS,
   GET_INITIATIVES_PER_GROUP_SUCCESS, GET_MESSAGES_PER_GROUP_SUCCESS, GET_VIEWS_PER_NEWS_LINK_SUCCESS,
   GET_VIEWS_PER_FOLDER_SUCCESS, GET_VIEWS_PER_RESOURCE_SUCCESS, GET_GROWTH_OF_RESOURCES_SUCCESS,
-  METRICS_UNMOUNT
+  GET_GROWTH_OF_USERS_SUCCESS, METRICS_UNMOUNT
 } from 'containers/Analyze/constants';
 
 export const initialState = {
@@ -23,6 +23,7 @@ export const initialState = {
     viewsPerFolder: {},
     viewsPerResource: {},
     growthOfResources: {},
+    growthOfUsers: {},
   }
 };
 
@@ -58,12 +59,13 @@ function metricsReducer(state = initialState, action) {
       case GET_GROWTH_OF_RESOURCES_SUCCESS:
         draft.metricsData.growthOfResources = action.payload;
         break;
+      case GET_GROWTH_OF_USERS_SUCCESS:
+        draft.metricsData.growthOfUsers = action.payload;
+        break;
       case METRICS_UNMOUNT:
         return initialState;
     }
   });
 }
-
-/* Helpers */
 
 export default metricsReducer;

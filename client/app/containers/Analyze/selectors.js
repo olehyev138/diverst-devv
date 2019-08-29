@@ -51,9 +51,16 @@ const selectGrowthOfResources = () => createSelector(
   metricsState => metricsState.metricsData.growthOfResources
 );
 
+const selectGrowthOfUsers = () => createSelector(
+  selectMetricsDomain,
+  metricsState => metricsState.metricsData.growthOfUsers
+);
+
+
 export {
   selectMetricsDomain, selectGroupPopulation, selectViewsPerGroup,
   selectGrowthOfGroups, selectInitiativesPerGroup, selectMessagesPerGroup,
   selectViewsPerNewsLink, selectViewsPerFolder, selectViewsPerResource,
-  selectGrowthOfResources
+  selectGrowthOfResources, selectGrowthOfUsers
+
 };

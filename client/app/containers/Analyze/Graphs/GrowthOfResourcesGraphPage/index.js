@@ -26,7 +26,7 @@ export function GrowthOfResourcesGraphPage(props) {
 
   const data = (dig(props.data, 'series') || undefined);
   const [currentData, setCurrentData] = useState([]);
-  const isInitalRender = useRef(true);
+  const isInitialRender = useRef(true);
 
   const [params, setParams] = useState({
     date_range: {
@@ -41,8 +41,8 @@ export function GrowthOfResourcesGraphPage(props) {
   }, [props.data]);
 
   useEffect(() => {
-    if (isInitalRender.current)
-      isInitalRender.current = false;
+    if (isInitialRender.current)
+      isInitialRender.current = false;
     else
       setParams({ ...params, scoped_by_models: props.dashboardParams.scoped_by_models });
   }, [props.dashboardParams]);

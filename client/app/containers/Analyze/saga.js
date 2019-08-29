@@ -8,6 +8,7 @@ import {
   GET_GROUP_POPULATION_BEGIN, GET_VIEWS_PER_GROUP_BEGIN, GET_GROWTH_OF_GROUPS_BEGIN,
   GET_INITIATIVES_PER_GROUP_BEGIN, GET_MESSAGES_PER_GROUP_BEGIN, GET_VIEWS_PER_NEWS_LINK_BEGIN,
   GET_VIEWS_PER_FOLDER_BEGIN, GET_VIEWS_PER_RESOURCE_BEGIN, GET_GROWTH_OF_RESOURCES_BEGIN,
+  GET_GROWTH_OF_USERS_BEGIN
 } from 'containers/Analyze/constants';
 
 import {
@@ -20,6 +21,7 @@ import {
   getViewsPerFolderSuccess, getViewsPerFolderError,
   getViewsPerResourceSuccess, getViewsPerResourceError,
   getGrowthOfResourcesSuccess, getGrowthOfResourcesError,
+  getGrowthOfUsersSuccess, getGrowthOfUsersError,
 } from 'containers/Analyze/actions';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -141,6 +143,20 @@ export function* getGrowthOfResources(action) {
   }
 }
 
+export function* getGrowthOfUsers(action) {
+  try {
+    const response = yield call(api.metrics.userGraphs.growthOfUsers.bind(api.metrics.userGraphs), action.payload);
+
+    yield put(getGrowthOfUsersSuccess(response.data));
+  } catch (err) {
+    yield put(getGrowthOfUsersError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to load growth of users graph', options: { variant: 'warning' } }));
+  }
+}
+
+
 export default function* metricsSaga() {
   yield takeLatest(GET_GROUP_POPULATION_BEGIN, getGroupPopulation);
   yield takeLatest(GET_VIEWS_PER_GROUP_BEGIN, getViewsPerGroup);
@@ -151,4 +167,6 @@ export default function* metricsSaga() {
   yield takeLatest(GET_VIEWS_PER_FOLDER_BEGIN, getViewsPerFolder);
   yield takeLatest(GET_VIEWS_PER_RESOURCE_BEGIN, getViewsPerResource);
   yield takeLatest(GET_GROWTH_OF_RESOURCES_BEGIN, getGrowthOfResources);
+  yield takeLatest(GET_GROWTH_OF_RESOURCES_BEGIN, getGrowthOfResources);
+  yield takeLatest(GET_GROWTH_OF_USERS_BEGIN, getGrowthOfUsers);
 }
