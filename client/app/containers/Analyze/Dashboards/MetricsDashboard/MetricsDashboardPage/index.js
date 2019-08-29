@@ -21,7 +21,7 @@ import {
   getMetricsDashboardBegin, deleteMetricsDashboardBegin, metricsDashboardsUnmount
 } from 'containers/Analyze/Dashboards/MetricsDashboard/actions';
 
-// import MetricsDashboard from 'components/Analyze/Dashboards/MetricsDashboard/MetricsDashboard';
+import MetricsDashboard from 'components/Analyze/Dashboards/MetricsDashboard/MetricsDashboard';
 
 export function MetricsDashboardPage(props) {
   useInjectReducer({ key: 'metrics_dashboards', reducer });
@@ -29,15 +29,15 @@ export function MetricsDashboardPage(props) {
 
   const rs = new RouteService(useContext);
   const links = {
-    metrics_dashboardsIndex: ROUTES.group.metrics_dashboards.index.path(rs.params('group_id')),
-    metrics_dashboardEdit: ROUTES.group.metrics_dashboards.edit.path(rs.params('group_id'), rs.params('metrics_dashboard_id'))
+    metrics_dashboardsIndex: ROUTES.group.custom.index.path(rs.params('group_id')),
+    metrics_dashboardEdit: ROUTES.group.custom.edit.path(rs.params('group_id'), rs.params('metrics_dashboard_id'))
   };
 
   useEffect(() => {
     const metricsDashboardId = rs.params('metrics_dashboard_id');
 
     // get metrics_dashboard specified in path
-    props.getMetricsDashboardBegin({ id: metrics_dashboard_id });
+    // props.getMetricsDashboardBegin({ id: metrics_dashboard_id });
 
     return () => props.metrics_dashboardsUnmount();
   }, []);

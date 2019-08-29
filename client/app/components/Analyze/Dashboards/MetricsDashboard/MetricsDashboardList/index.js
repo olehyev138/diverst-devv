@@ -11,18 +11,16 @@ import { RouteContext } from 'containers/Layouts/ApplicationLayout';
 import withStyles from '@material-ui/core/styles/withStyles';
 
 import {
-  Box, Tab, Paper,
+  Box, Paper,
   Card, CardContent, Grid, Link, TablePagination, Typography, Button, Hidden,
 } from '@material-ui/core';
 
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 
 import { FormattedMessage, injectIntl } from 'react-intl';
-import messages from 'containers/MetricsDashboard/messages';
+import messages from 'containers/Analyze/Dashboards/MetricsDashboard/messages';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { ROUTES } from 'containers/Shared/Routes/constants';
-
-import ResponsiveTabs from 'components/Shared/ResponsiveTabs';
 
 const styles = theme => ({
   metricsDashboardListItem: {
@@ -84,18 +82,6 @@ export function MetricsDashboardsList(props, context) {
         </Grid>
       </Grid>
       <Box mb={2} />
-      <Paper>
-        <ResponsiveTabs
-          value={props.currentTab}
-          onChange={props.handleChangeTab}
-          indicatorColor='primary'
-          textColor='primary'
-        >
-          <Tab label={intl.formatMessage(messages.index.upcoming)} />
-          <Tab label={intl.formatMessage(messages.index.ongoing)} />
-          <Tab label={intl.formatMessage(messages.index.past)} />
-        </ResponsiveTabs>
-      </Paper>
       <br />
       <Grid container spacing={3}>
         { /* eslint-disable-next-line arrow-body-style */}
