@@ -1,16 +1,13 @@
 import React from 'react';
 import { Switch } from 'react-router';
 
-/* Admin - Analyze */
-import GroupDashboardPage from 'containers/Analyze/Dashboards/GroupDashboardPage';
-
 // Pages
-import {  
+import {
   UserLayout, GroupLayout, AdminLayout, SessionLayout, ErrorLayout, GlobalSettingsLayout, LoginPage, HomePage,
   UserGroupListPage, AdminGroupListPage, GroupCreatePage, GroupEditPage, SegmentListPage, SegmentPage, FieldsPage,
   UsersPage, UserCreatePage, UserEditPage, GroupHomePage, EventsPage, NewsFeedPage, OutcomesPage, EventPage,
   EventCreatePage, EventEditPage, GroupMessagePage, GroupMessageCreatePage, GroupMessageEditPage, OutcomeCreatePage,
-  OutcomeEditPage, GroupMemberListPage, GroupMemberCreatePage, NotFoundPage, PlaceholderPage
+  OutcomeEditPage, GroupMemberListPage, GroupMemberCreatePage, NotFoundPage, PlaceholderPage, GroupDashboardPage
 } from './templates';
 
 // Paths
