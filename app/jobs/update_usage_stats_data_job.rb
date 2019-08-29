@@ -22,9 +22,7 @@ class UpdateUsageStatsDataJob < ActiveJob::Base
         end
       )
 
-      Rails.cache.write("total_page_visitations:#{ent.id}") do
-        ent.total_page_visitations
-      end
+      Rails.cache.write("total_page_visitations:#{ent.id}", ent.total_page_visitations)
     end
   end
 end
