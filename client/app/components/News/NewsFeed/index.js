@@ -15,7 +15,6 @@ import { RouteContext } from 'containers/Layouts/ApplicationLayout';
 import {
   Box,
   Button, Card, CardActions, CardContent, Grid,
-  TablePagination,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -28,6 +27,8 @@ import SocialLinkListItem from 'components/News/SocialLink/SocialLinkListItem';
 
 import { FormattedMessage } from 'react-intl';
 import messages from 'containers/News/messages';
+
+import Pagination from 'components/Shared/Pagination';
 
 const styles = theme => ({
   newsItem: {
@@ -115,20 +116,12 @@ export function NewsFeed(props) {
           );
         })}
       </Grid>
-      <TablePagination
-        component='div'
+      <Pagination
         page={page}
-        rowsPerPageOptions={[5, 10, 25]}
         rowsPerPage={rowsPerPage}
-        count={props.newsItemsTotal || 0}
+        count={props.newsItemsTotal}
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
-        backIconButtonProps={{
-          'aria-label': 'Previous Page',
-        }}
-        nextIconButtonProps={{
-          'aria-label': 'Next Page',
-        }}
       />
     </React.Fragment>
   );

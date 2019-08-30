@@ -41,6 +41,7 @@ const styles = theme => ({
     borderBottomStyle: 'solid',
     borderBottomColor: theme.custom.colors.lightGrey,
     paddingTop: 12,
+    paddingBottom: 6,
   },
   mobileToolbar: {
     display: 'block',

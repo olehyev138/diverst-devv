@@ -11,8 +11,7 @@ import { RouteContext } from 'containers/Layouts/ApplicationLayout';
 import withStyles from '@material-ui/core/styles/withStyles';
 
 import {
-  Box, Tab, Paper,
-  Card, CardContent, Grid, Link, TablePagination, Typography, Button, Hidden,
+  Box, Tab, Paper, Card, CardContent, Grid, Link, Typography, Button, Hidden,
 } from '@material-ui/core';
 
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
@@ -23,6 +22,7 @@ import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import ResponsiveTabs from 'components/Shared/ResponsiveTabs';
+import Pagination from 'components/Shared/Pagination';
 
 const styles = theme => ({
   eventListItem: {
@@ -157,20 +157,12 @@ export function EventsList(props, context) {
         )}
       </Grid>
       {props.events && props.events.length > 0 && (
-        <TablePagination
-          component='div'
+        <Pagination
           page={page}
-          rowsPerPageOptions={[5, 10, 25]}
           rowsPerPage={rowsPerPage}
-          count={props.eventsTotal || 0}
+          count={props.eventsTotal}
           onChangePage={handleChangePage}
           onChangeRowsPerPage={handleChangeRowsPerPage}
-          backIconButtonProps={{
-            'aria-label': 'Previous Page',
-          }}
-          nextIconButtonProps={{
-            'aria-label': 'Next Page',
-          }}
         />
       )}
     </React.Fragment>

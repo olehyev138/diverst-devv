@@ -16,9 +16,11 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import {
   Button, Card, CardContent, CardActions,
-  Typography, Grid, Link, TablePagination, Collapse, Box, CircularProgress,
+  Typography, Grid, Link, Collapse, Box, CircularProgress,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+
+import Pagination from 'components/Shared/Pagination';
 
 const styles = theme => ({
   progress: {
@@ -219,20 +221,12 @@ export function AdminGroupList(props, context) {
           );
         })}
       </Grid>
-      <TablePagination
-        component='div'
+      <Pagination
         page={page}
-        rowsPerPageOptions={[5, 10, 25]}
         rowsPerPage={rowsPerPage}
-        count={props.groupTotal || 0}
+        count={props.groupTotal}
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
-        backIconButtonProps={{
-          'aria-label': 'Previous Page',
-        }}
-        nextIconButtonProps={{
-          'aria-label': 'Next Page',
-        }}
       />
     </React.Fragment>
   );
