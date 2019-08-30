@@ -1,6 +1,12 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:edit, :update, :destroy, :resend_invitation, :show, :group_surveys]
+  before_action :set_user,
+                only: [
+                  :edit, :update, :destroy, :resend_invitation,
+                  :show, :group_surveys, :show_usage, :user_url_usage_data
+                ]
   after_action :verify_authorized, except: [:edit_profile, :group_surveys]
+  after_action :visit_page, only: [:index, :new, :show, :group_surveys,
+                                   :edit, :show_usage]
 
   layout :resolve_layout
 
@@ -176,7 +182,74 @@ class UsersController < ApplicationController
     end
   end
 
+  def show_usage
+    authorize @user, :show?
+    get_user_usage_metrics
+  end
+
+  def user_url_usage_data
+    authorize @user, :show?
+    respond_to do |format|
+      format.json { render json: UserUsageDatatable.new(view_context, @user) }
+      format.csv {
+        PageVisitsCsvJob.perform_later(current_user.id, page_user_id: @user.id)
+        render json: { notice: 'Please check your Secure Downloads section in a couple of minutes' }
+      }
+    end
+  end
+
   protected
+
+  def get_user_usage_metrics
+    enterprise_id = current_user.enterprise.id
+
+    logins = @user.sign_in_count
+    logins_p = DataAnalyst.calculate_percentile(
+      logins,
+      User.aggregate_sign_ins(
+        enterprise_id: enterprise_id
+      ).map { |usr_count| usr_count[1] }.sort
+    )
+    logins_n = 'Times Logged In'
+
+    posts = @user.number_of(:social_links, :own_messages, :own_news_links)
+    posts_p = DataAnalyst.percentile_from_field(
+      User,
+      posts,
+      :social_links, :own_messages, :own_news_links,
+      enterprise_id: enterprise_id
+    )
+    posts_n = 'Posts Made'
+
+    comments = @user.number_of(:answer_comments, :message_comments, :news_link_comments)
+    comments_p = DataAnalyst.percentile_from_field(
+      User,
+      comments,
+      :answer_comments, :message_comments, :news_link_comments,
+      enterprise_id: enterprise_id
+    )
+    comments_n = 'Comments Made'
+
+    events = @user.number_of(:initiatives, where: ['initiatives.start < NOW() OR initiatives.id IS NULL'])
+    events_p = DataAnalyst.percentile_from_field(
+      User,
+      events,
+      :initiatives,
+      where: ['initiatives.start < NOW() OR initiatives.id IS NULL'],
+      enterprise_id: enterprise_id
+    )
+    events_n = 'Events Attended'
+
+    @fields = %w(logins posts comments events)
+    @user_metrics = {}
+    @fields.each do |type|
+      @user_metrics[type.to_sym] = {
+        count: binding.local_variable_get("#{type}"),
+        percentile: binding.local_variable_get("#{type}_p"),
+        name: binding.local_variable_get("#{type}_n")
+      }
+    end
+  end
 
   def resolve_layout
     case action_name
@@ -188,6 +261,12 @@ class UsersController < ApplicationController
       end
     when 'edit_profile', 'group_surveys'
       'user'
+    when 'show_usage'
+      if root_admin_path
+        'metrics'
+      else
+        'user'
+      end
     else
       'global_settings'
     end
@@ -294,5 +373,30 @@ class UsersController < ApplicationController
 
   def extra_params
     params.permit(:not_current_user, :can_metrics_dashboard_create)
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      'User List'
+    when 'new'
+      'User Creation'
+    when 'show'
+      "#{@user.to_label}'s Details"
+    when 'group_surveys'
+      "#{@user.to_label}'s Survey Answers"
+    when 'edit'
+      "#{@user.to_label}'s Edit"
+    when 'show_usage'
+      "#{@user.to_label}'s Usage Stats"
+    else
+      "#{controller_path}##{action_name}"
+    end
+  rescue
+    "#{controller_path}##{action_name}"
   end
 end

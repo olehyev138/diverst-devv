@@ -2,6 +2,7 @@ class PollFieldsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_field, only: [:answer_popularities, :show]
   before_action :set_poll
+  after_action :visit_page, only: [:show]
 
   layout 'market_scope'
 
@@ -21,5 +22,20 @@ class PollFieldsController < ApplicationController
 
   def set_field
     @field = Field.find(params[:id])
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'show'
+      "Poll Field: #{@field.to_label}"
+    else
+      "#{controller_path}##{action_name}"
+    end
+  rescue
+    "#{controller_path}##{action_name}"
   end
 end

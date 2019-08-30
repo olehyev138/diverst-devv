@@ -2,6 +2,7 @@ class Polls::GraphsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_poll, except: [:data, :show, :edit, :update, :destroy]
   before_action :set_graph, except: [:index, :new, :create]
+  after_action :visit_page, only: [:new]
 
   layout 'global_settings'
 
@@ -34,5 +35,20 @@ class Polls::GraphsController < ApplicationController
         :field_id,
         :aggregation_id
       )
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'new'
+      'Poll Graph Creation'
+    else
+      "#{controller_path}##{action_name}"
+    end
+  rescue
+    "#{controller_path}##{action_name}"
   end
 end

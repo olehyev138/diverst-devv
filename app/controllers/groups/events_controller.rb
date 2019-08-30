@@ -4,6 +4,7 @@ class Groups::EventsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_group
   before_action :set_event, only: [:edit, :update, :destroy, :show, :export_ics]
+  after_action :visit_page, only: [:index, :show]
 
   layout 'erg'
 
@@ -89,5 +90,22 @@ class Groups::EventsController < ApplicationController
 
   def set_event
     @event = @group.initiatives.find(params[:id])
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      "#{@group.to_label}'s Events"
+    when 'show'
+      "#{@event.to_label}"
+    else
+      "#{controller_path}##{action_name}"
+    end
+  rescue
+    "#{controller_path}##{action_name}"
   end
 end

@@ -292,10 +292,6 @@ class Group < BaseClass
     pending_users.enabled?
   end
 
-  def file_safe_name
-    name.gsub(/[^0-9A-Za-z.\-]/, '_')
-  end
-
   def logo_expiring_thumb
     return nil if logo.blank?
 

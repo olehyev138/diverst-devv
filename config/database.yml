@@ -1,5 +1,5 @@
 default: &default
-  adapter: mysql2
+  adapter: mysql2_json
   url: <%= ENV["DATABASE_URL"] %>
   pool: <%= ENV["DB_POOL"] || ENV["MAX_THREADS"] || 20 %>
   encoding: utf8mb4

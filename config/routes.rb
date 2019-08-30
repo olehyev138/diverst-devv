@@ -55,6 +55,8 @@ Rails.application.routes.draw do
   resources :user_roles
   resources :users do
     member do
+      get 'show_usage'
+      get 'user_url_usage_data'
       get 'group_surveys'
       put 'resend_invitation'
     end
@@ -371,6 +373,7 @@ Rails.application.routes.draw do
     end
   end
 
+
   resources :news_links, only: [] do
     collection do
       get 'url_info'
@@ -382,13 +385,13 @@ Rails.application.routes.draw do
       get 'export_csv'
     end
 
-    resources :poll_responses, path: 'responses' do
+    resources :poll_responses, except: [:show, :edit], path: 'responses' do
       member do
         get 'thank_you'
       end
     end
 
-    resources :poll_fields do
+    resources :poll_fields, only: [:show] do
       member do
         get 'answer_popularities'
       end
@@ -601,6 +604,10 @@ Rails.application.routes.draw do
         get 'users_per_segment'
         get 'user_growth'
         get 'user_groups_intersection'
+        get 'url_usage_data'
+        get 'user_usage_data'
+        get 'users_usage_graph'
+        get 'users_usage_metric'
       end
     end
 

@@ -11,7 +11,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190805235733) do
+
+ActiveRecord::Schema.define(version: 20190828180853) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -350,11 +351,30 @@ ActiveRecord::Schema.define(version: 20190805235733) do
     t.integer  "expiry_age_for_resources",              limit: 4,     default: 0
     t.string   "unit_of_expiry_age",                    limit: 191
     t.boolean  "auto_archive",                                        default: false
+    t.string   "sp_mode",                               limit: 191
+    t.string   "sp_host",                               limit: 191
+    t.string   "sp_site",                               limit: 191
+    t.string   "sp_username",                           limit: 191
+    t.string   "sp_password",                           limit: 191
+    t.integer  "share_point_files_id",                  limit: 4
+    t.integer  "share_point_pages_id",                  limit: 4
+    t.integer  "share_point_lists_id",                  limit: 4
+    t.string   "sp_import_lists",                       limit: 191,   default: "No"
+    t.string   "sp_import_files",                       limit: 191,   default: "No"
+    t.string   "sp_import_news",                        limit: 191,   default: "No"
+    t.boolean  "sp_group_integration",                                default: false
+    t.boolean  "sp_group_settings_same",                              default: true
+    t.string   "sp_import_pages",                       limit: 191,   default: "No"
+    t.boolean  "share_point_active",                                  default: false
     t.integer  "groups_count",                          limit: 4
     t.integer  "segments_count",                        limit: 4
     t.integer  "polls_count",                           limit: 4
     t.integer  "users_count",                           limit: 4
   end
+
+  add_index "enterprises", ["share_point_files_id"], name: "fk_rails_6315f961bd", using: :btree
+  add_index "enterprises", ["share_point_lists_id"], name: "fk_rails_9079d32818", using: :btree
+  add_index "enterprises", ["share_point_pages_id"], name: "fk_rails_a7e31215f7", using: :btree
 
   create_table "expense_categories", force: :cascade do |t|
     t.integer  "enterprise_id",     limit: 4
@@ -594,8 +614,24 @@ ActiveRecord::Schema.define(version: 20190805235733) do
     t.string   "unit_of_expiry_age",          limit: 191
     t.boolean  "auto_archive",                                                      default: false
     t.string   "event_attendance_visibility", limit: 191
+    t.string   "sp_mode",                     limit: 191
+    t.string   "sp_host",                     limit: 191
+    t.string   "sp_site",                     limit: 191
+    t.string   "sp_username",                 limit: 191
+    t.string   "sp_password",                 limit: 191
+    t.integer  "share_point_files_id",        limit: 4
+    t.integer  "share_point_pages_id",        limit: 4
+    t.integer  "share_point_lists_id",        limit: 4
+    t.string   "sp_import_lists",             limit: 191,                           default: "No"
+    t.string   "sp_import_files",             limit: 191,                           default: "No"
+    t.string   "sp_import_news",              limit: 191,                           default: "No"
+    t.string   "sp_import_pages",             limit: 191,                           default: "No"
     t.integer  "views_count",                 limit: 4
   end
+
+  add_index "groups", ["share_point_files_id"], name: "index_groups_on_share_point_files_id", using: :btree
+  add_index "groups", ["share_point_lists_id"], name: "index_groups_on_share_point_lists_id", using: :btree
+  add_index "groups", ["share_point_pages_id"], name: "index_groups_on_share_point_pages_id", using: :btree
 
   create_table "groups_metrics_dashboards", force: :cascade do |t|
     t.integer "group_id",             limit: 4
@@ -618,12 +654,12 @@ ActiveRecord::Schema.define(version: 20190805235733) do
 
   create_table "initiative_expenses", force: :cascade do |t|
     t.string   "description",      limit: 191
+    t.decimal  "amount",                       precision: 8, scale: 2, default: 0.0
     t.integer  "owner_id",         limit: 4
     t.integer  "initiative_id",    limit: 4
     t.datetime "created_at",                                                         null: false
     t.datetime "updated_at",                                                         null: false
     t.integer  "annual_budget_id", limit: 4
-    t.decimal  "amount",                       precision: 8, scale: 2, default: 0.0
   end
 
   create_table "initiative_fields", force: :cascade do |t|
@@ -933,6 +969,31 @@ ActiveRecord::Schema.define(version: 20190805235733) do
     t.datetime "updated_at",             null: false
   end
 
+  create_table "page_names", id: false, force: :cascade do |t|
+    t.string "page_url",  limit: 191
+    t.string "page_name", limit: 191
+  end
+
+  add_index "page_names", %w(page_name page_url), name: "index_page_names_on_page_name_and_page_url", using: :btree
+  add_index "page_names", %w(page_url page_name), name: "index_page_names_on_page_url_and_page_name", using: :btree
+
+  create_table "page_visitation_data", force: :cascade do |t|
+    t.integer  "user_id",      limit: 4
+    t.string   "page_url",     limit: 191
+    t.string   "controller",   limit: 191
+    t.string   "action",       limit: 191
+    t.integer  "visits_day",   limit: 4,   default: 0
+    t.integer  "visits_week",  limit: 4,   default: 0
+    t.integer  "visits_month", limit: 4,   default: 0
+    t.integer  "visits_year",  limit: 4,   default: 0
+    t.integer  "visits_all",   limit: 4,   default: 0
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
+  end
+
+  add_index "page_visitation_data", %w(page_url user_id), name: "index_page_visitation_data_on_page_url_and_user_id", using: :btree
+  add_index "page_visitation_data", %w(user_id page_url), name: "index_page_visitation_data_on_user_id_and_page_url", using: :btree
+
   create_table "pillars", force: :cascade do |t|
     t.string   "name",              limit: 191
     t.string   "value_proposition", limit: 191
@@ -1240,6 +1301,13 @@ ActiveRecord::Schema.define(version: 20190805235733) do
     t.datetime "updated_at"
   end
 
+  create_table "sharepoint_data", force: :cascade do |t|
+    t.string   "data_type",  limit: 191
+    t.text     "data",       limit: 4294967295
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+  end
+
   create_table "social_link_segments", force: :cascade do |t|
     t.integer  "social_link_id", limit: 4
     t.integer  "segment_id",     limit: 4
@@ -1318,8 +1386,8 @@ ActiveRecord::Schema.define(version: 20190805235733) do
 
   create_table "twitter_accounts", force: :cascade do |t|
     t.integer  "group_id",   limit: 4
-    t.string   "name",       limit: 191, null: false
-    t.string   "account",    limit: 191, null: false
+    t.string   "name",       limit: 191
+    t.string   "account",    limit: 191
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
   end
@@ -1439,6 +1507,13 @@ ActiveRecord::Schema.define(version: 20190805235733) do
     t.boolean  "accepting_mentee_requests",                    default: true
     t.datetime "last_group_notification_date"
     t.boolean  "seen_onboarding",                              default: false
+    t.integer  "initiatives_count",              limit: 4
+    t.integer  "social_links_count",             limit: 4
+    t.integer  "own_messages_count",             limit: 4
+    t.integer  "own_news_links_count",           limit: 4
+    t.integer  "answer_comments_count",          limit: 4
+    t.integer  "message_comments_count",         limit: 4
+    t.integer  "news_link_comments_count",       limit: 4
   end
 
   add_index "users", ["active"], name: "index_users_on_active", using: :btree
@@ -1482,6 +1557,12 @@ ActiveRecord::Schema.define(version: 20190805235733) do
   add_foreign_key "budgets", "users", column: "approver_id"
   add_foreign_key "budgets", "users", column: "requester_id"
   add_foreign_key "custom_texts", "enterprises"
+  add_foreign_key "enterprises", "sharepoint_data", column: "share_point_files_id"
+  add_foreign_key "enterprises", "sharepoint_data", column: "share_point_lists_id"
+  add_foreign_key "enterprises", "sharepoint_data", column: "share_point_pages_id"
+  add_foreign_key "groups", "sharepoint_data", column: "share_point_files_id"
+  add_foreign_key "groups", "sharepoint_data", column: "share_point_lists_id"
+  add_foreign_key "groups", "sharepoint_data", column: "share_point_pages_id"
   add_foreign_key "likes", "answers"
   add_foreign_key "likes", "enterprises"
   add_foreign_key "likes", "news_feed_links"
@@ -1500,4 +1581,23 @@ ActiveRecord::Schema.define(version: 20190805235733) do
   add_foreign_key "user_rewards", "rewards"
   add_foreign_key "user_rewards", "users"
   add_foreign_key "user_roles", "enterprises"
+
+  create_view "duplicate_page_names", sql_definition: <<-SQL
+      select `page_names`.`page_url` AS `page_url`,`page_names`.`page_name` AS `page_name` from `page_names` where `page_names`.`page_name` in (select `page_names`.`page_name` from `page_names` group by `page_names`.`page_name` having (count(0) > 1))
+  SQL
+  create_view "unique_page_names", sql_definition: <<-SQL
+      select `page_names`.`page_url` AS `page_url`,`page_names`.`page_name` AS `page_name` from `page_names` where `page_names`.`page_name` in (select `page_names`.`page_name` from `page_names` group by `page_names`.`page_name` having (count(0) = 1))
+  SQL
+  create_view "page_visitation_by_names", sql_definition: <<-SQL
+      (select `a`.`user_id` AS `user_id`,`b`.`page_name` AS `page_name`,NULL AS `page_url`,sum(`a`.`visits_day`) AS `visits_day`,sum(`a`.`visits_week`) AS `visits_week`,sum(`a`.`visits_month`) AS `visits_month`,sum(`a`.`visits_year`) AS `visits_year`,sum(`a`.`visits_all`) AS `visits_all` from (`page_visitation_data` `a` join `duplicate_page_names` `b` on((`a`.`page_url` = `b`.`page_url`))) group by `a`.`user_id`,`b`.`page_name`) union all (select `a`.`user_id` AS `user_id`,`b`.`page_name` AS `page_name`,`a`.`page_url` AS `page_url`,sum(`a`.`visits_day`) AS `visits_day`,sum(`a`.`visits_week`) AS `visits_week`,sum(`a`.`visits_month`) AS `visits_month`,sum(`a`.`visits_year`) AS `visits_year`,sum(`a`.`visits_all`) AS `visits_all` from (`page_visitation_data` `a` join `unique_page_names` `b` on((`a`.`page_url` = `b`.`page_url`))) group by `a`.`user_id`,`b`.`page_url`,`b`.`page_name`)
+  SQL
+  create_view "page_visitations", sql_definition: <<-SQL
+      select `a`.`id` AS `id`,`a`.`user_id` AS `user_id`,`a`.`page_url` AS `page_url`,`a`.`controller` AS `controller`,`a`.`action` AS `action`,`a`.`visits_day` AS `visits_day`,`a`.`visits_week` AS `visits_week`,`a`.`visits_month` AS `visits_month`,`a`.`visits_year` AS `visits_year`,`a`.`visits_all` AS `visits_all`,`a`.`created_at` AS `created_at`,`a`.`updated_at` AS `updated_at`,`b`.`page_name` AS `page_name` from (`page_visitation_data` `a` join `page_names` `b` on((`a`.`page_url` = `b`.`page_url`)))
+  SQL
+  create_view "total_page_visitation_by_names", sql_definition: <<-SQL
+      (select `b`.`page_name` AS `page_name`,NULL AS `page_url`,sum(`a`.`visits_day`) AS `visits_day`,sum(`a`.`visits_week`) AS `visits_week`,sum(`a`.`visits_month`) AS `visits_month`,sum(`a`.`visits_year`) AS `visits_year`,sum(`a`.`visits_all`) AS `visits_all` from ((`page_visitation_data` `a` join `duplicate_page_names` `b` on((`a`.`page_url` = `b`.`page_url`))) join `users` `c` on((`c`.`id` = `a`.`user_id`))) group by `b`.`page_name`,`c`.`enterprise_id`) union all (select `b`.`page_name` AS `page_name`,`a`.`page_url` AS `page_url`,sum(`a`.`visits_day`) AS `visits_day`,sum(`a`.`visits_week`) AS `visits_week`,sum(`a`.`visits_month`) AS `visits_month`,sum(`a`.`visits_year`) AS `visits_year`,sum(`a`.`visits_all`) AS `visits_all` from ((`page_visitation_data` `a` join `unique_page_names` `b` on((`a`.`page_url` = `b`.`page_url`))) join `users` `c` on((`c`.`id` = `a`.`user_id`))) group by `b`.`page_url`,`b`.`page_name`,`c`.`enterprise_id`)
+  SQL
+  create_view "total_page_visitations", sql_definition: <<-SQL
+      select `a`.`page_url` AS `page_url`,`b`.`page_name` AS `page_name`,`c`.`enterprise_id` AS `enterprise_id`,sum(`a`.`visits_day`) AS `visits_day`,sum(`a`.`visits_week`) AS `visits_week`,sum(`a`.`visits_month`) AS `visits_month`,sum(`a`.`visits_year`) AS `visits_year`,sum(`a`.`visits_all`) AS `visits_all` from ((`page_visitation_data` `a` join `page_names` `b` on((`a`.`page_url` = `b`.`page_url`))) join `users` `c` on((`c`.`id` = `a`.`user_id`))) group by `a`.`page_url`,`b`.`page_name`,`c`.`enterprise_id`
+  SQL
 end

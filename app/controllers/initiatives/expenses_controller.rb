@@ -4,6 +4,7 @@ class Initiatives::ExpensesController < ApplicationController
   before_action :set_initiative
   before_action :set_expense, only: [:edit, :update, :destroy, :show]
   after_action :verify_authorized
+  after_action :visit_page, only: [:index, :new, :show, :edit]
 
   layout 'erg'
 
@@ -114,5 +115,26 @@ class Initiatives::ExpensesController < ApplicationController
         :amount,
         :annual_budget_id
       )
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      "#{@initiative.to_label}'s Expenses"
+    when 'new'
+      "#{@initiative.to_label}'s Expense Creation"
+    when 'show'
+      "View Expense #{@expense.to_label}"
+    when 'edit'
+      "Edit an Expense for #{@initiative.to_label}"
+    else
+      "#{controller_path}##{action_name}"
+    end
+  rescue
+    "#{controller_path}##{action_name}"
   end
 end
