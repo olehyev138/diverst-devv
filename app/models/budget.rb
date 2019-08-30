@@ -71,7 +71,7 @@ class Budget < BaseClass
       [ bi.title_with_amount, bi.id ]
     end
 
-    unless initiative && initiative.new_record?
+    if initiative && initiative.persisted?
       return select_items if initiative&.current_expences_sum.to_f > initiative&.estimated_funding.to_f
     end
 
