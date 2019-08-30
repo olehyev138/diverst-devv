@@ -52,7 +52,8 @@ export function* getMetricsDashboard(action) {
 
 export function* createMetricsDashboard(action) {
   try {
-    const payload = { metricsDashboard: action.payload };
+    console.log(action);
+    const payload = { metrics_dashboard: action.payload };
 
     const response = yield call(api.metrics.metricsDashboards.create.bind(api.metrics.metricsDashboards), payload);
 

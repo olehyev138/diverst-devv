@@ -5,12 +5,12 @@ const selectMetricsDashboardsDomain = state => state.metricsDashboards || initia
 
 const selectPaginatedMetricsDashboards = () => createSelector(
   selectMetricsDashboardsDomain,
-  metricsDashboardsState => metricsDashboardsState.metrics_dashboards
+  metricsDashboardsState => metricsDashboardsState.metricsDashboards
 );
 
 const selectMetricsDashboardsTotal = () => createSelector(
   selectMetricsDashboardsDomain,
-  metricsDashboardsState => metricsDashboardsState.metrics_dashboardsTotal
+  metricsDashboardsState => metricsDashboardsState.metricsDashboardsTotal
 );
 
 const selectMetricsDashboard = () => createSelector(

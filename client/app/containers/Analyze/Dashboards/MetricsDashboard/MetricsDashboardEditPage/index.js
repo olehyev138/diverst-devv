@@ -9,49 +9,62 @@ import { compose } from 'redux';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 
+// reducers & sagas
 import reducer from 'containers/Analyze/Dashboards/MetricsDashboard/reducer';
 import saga from 'containers/Analyze/Dashboards/MetricsDashboard/saga';
+import groupSaga from 'containers/Group/saga';
+import groupReducer from 'containers/Group/reducer';
+import segmentSaga from 'containers/Segment/saga';
+import segmentReducer from 'containers/Segment/reducer';
 
-import RouteService from 'utils/routeHelpers';
-import { ROUTES } from 'containers/Shared/Routes/constants';
-
-import { selectGroup } from 'containers/Group/selectors';
-import { selectUser } from 'containers/Shared/App/selectors';
-import { selectMetricsDashboard } from 'containers/Analyze/Dashboards/MetricsDashboard/selectors';
-
+// actions
+import { getGroupsBegin } from 'containers/Group/actions';
+import { getSegmentsBegin } from 'containers/Segment/actions';
 import {
   getMetricsDashboardBegin, updateMetricsDashboardBegin,
   metricsDashboardsUnmount
 } from 'containers/Analyze/Dashboards/MetricsDashboard/actions';
 
+// selectors
+import { selectMetricsDashboard } from 'containers/Analyze/Dashboards/MetricsDashboard/selectors';
+import { selectPaginatedSelectGroups } from 'containers/Group/selectors';
+import { selectPaginatedSelectSegments } from 'containers/Segment/selectors';
+
+import RouteService from 'utils/routeHelpers';
+import { ROUTES } from 'containers/Shared/Routes/constants';
+
 import MetricsDashboardForm from 'components/Analyze/Dashboards/MetricsDashboard/MetricsDashboardForm';
 
 export function MetricsDashboardEditPage(props) {
   useInjectReducer({ key: 'metrics_dashboards', reducer });
+  useInjectReducer({ key: 'groups', reducer: groupReducer });
+  useInjectReducer({ key: 'segments', reducer: segmentReducer });
   useInjectSaga({ key: 'metrics_dashboards', saga });
+  useInjectSaga({ key: 'groups', saga: groupSaga });
+  useInjectSaga({ key: 'segments', saga: segmentSaga });
 
   const rs = new RouteService(useContext);
   const links = {
-    metricsDashboardsIndex: ROUTES.group.metricsDashboards.index.path(rs.params('group_id')),
-    metricsDashboardShow: ROUTES.group.metricsDashboards.show.path(rs.params('group_id'), rs.params('metricsDashboard_id')),
+    metricsDashboardsIndex: ROUTES.admin.analyze.custom.index.path(),
+    metricsDashboardShow: ROUTES.admin.analyze.custom.show.path()
   };
 
   useEffect(() => {
-    const metricsDashboardId = rs.params('metricsDashboard_id');
+    const metricsDashboardId = rs.params('metrics_dashboard_id');
     props.getMetricsDashboardBegin({ id: metricsDashboardId });
 
     return () => props.metricsDashboardsUnmount();
   }, []);
 
-  const { currentUser, currentGroup, currentMetricsDashboard } = props;
-
   return (
     <MetricsDashboardForm
       metricsDashboardAction={props.updateMetricsDashboardBegin}
+      getGroupsBegin={props.getGroupsBegin}
+      getSegmentsBegin={props.getSegmentsBegin}
+      groups={props.groups}
+      segments={props.segments}
       buttonText='Update'
-      currentUser={currentUser}
-      currentGroup={currentGroup}
-      metricsDashboard={currentMetricsDashboard}
+      metricsDashboard={props.currentMetricsDashboard}
       links={links}
     />
   );
@@ -61,20 +74,24 @@ MetricsDashboardEditPage.propTypes = {
   getMetricsDashboardBegin: PropTypes.func,
   updateMetricsDashboardBegin: PropTypes.func,
   metricsDashboardsUnmount: PropTypes.func,
-  currentUser: PropTypes.object,
-  currentGroup: PropTypes.object,
   currentMetricsDashboard: PropTypes.object,
+  getGroupsBegin: PropTypes.func,
+  getSegmentsBegin: PropTypes.func,
+  groups: PropTypes.array,
+  segments: PropTypes.array,
 };
 
 const mapStateToProps = createStructuredSelector({
-  currentGroup: selectGroup(),
-  currentUser: selectUser(),
   currentMetricsDashboard: selectMetricsDashboard(),
+  groups: selectPaginatedSelectGroups(),
+  segments: selectPaginatedSelectSegments()
 });
 
 const mapDispatchToProps = {
   getMetricsDashboardBegin,
   updateMetricsDashboardBegin,
+  getGroupsBegin,
+  getSegmentsBegin,
   metricsDashboardsUnmount
 };
 
