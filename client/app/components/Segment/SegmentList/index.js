@@ -16,9 +16,11 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import {
   Button, Card, CardContent, CardActions,
-  Typography, Grid, Link, TablePagination, Collapse
+  Typography, Grid, Link, Collapse
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+
+import Pagination from 'components/Shared/Pagination';
 
 const styles = theme => ({
   segmentListItem: {
@@ -112,20 +114,12 @@ export function SegmentList(props, context) {
           );
         })}
       </Grid>
-      <TablePagination
-        component='div'
+      <Pagination
         page={page}
-        rowsPerPageOptions={[5, 10, 25]}
         rowsPerPage={rowsPerPage}
-        count={props.segmentTotal || 0}
+        count={props.segmentTotal}
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
-        backIconButtonProps={{
-          'aria-label': 'Previous Page',
-        }}
-        nextIconButtonProps={{
-          'aria-label': 'Next Page',
-        }}
       />
     </React.Fragment>
   );

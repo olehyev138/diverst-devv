@@ -12,7 +12,7 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import {
   CircularProgress, Card, CardContent, CardActionArea,
-  Typography, Grid, Link, TablePagination, Collapse, Box,
+  Typography, Grid, Link, Collapse, Box,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -20,6 +20,8 @@ import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
+
+import Pagination from 'components/Shared/Pagination';
 
 const styles = theme => ({
   progress: {
@@ -195,20 +197,12 @@ export function UserGroupList(props, context) {
           </Grid>
         ))}
       </Grid>
-      <TablePagination
-        component='div'
+      <Pagination
         page={page}
-        rowsPerPageOptions={[5, 10, 25]}
         rowsPerPage={rowsPerPage}
-        count={props.groupTotal || 0}
+        count={props.groupTotal}
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
-        backIconButtonProps={{
-          'aria-label': 'Previous Page',
-        }}
-        nextIconButtonProps={{
-          'aria-label': 'Next Page',
-        }}
       />
     </React.Fragment>
   );
