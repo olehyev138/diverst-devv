@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-import dig from 'object-dig';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/Analyze/Dashboards/MetricsDashboard/reducer';
@@ -26,8 +25,8 @@ const defaultParams = Object.freeze({
 });
 
 export function MetricsDashboardListPage(props) {
-  useInjectReducer({ key: 'metrics_dashboards', reducer });
-  useInjectSaga({ key: 'metrics_dashboards', saga });
+  useInjectReducer({ key: 'customMetrics', reducer });
+  useInjectSaga({ key: 'customMetrics', saga });
 
   const rs = new RouteService(useContext);
   const links = {

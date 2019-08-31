@@ -25,7 +25,6 @@ function metricsDashboardsReducer(state = initialState, action) {
         draft.metricsDashboardsTotal = action.payload.total;
         break;
       case GET_METRICS_DASHBOARD_SUCCESS:
-        console.log(action);
         draft.currentMetricsDashboard = action.payload.metrics_dashboard;
         break;
       case METRICS_DASHBOARDS_UNMOUNT:

@@ -26,7 +26,7 @@ import {
 } from 'containers/Analyze/Dashboards/MetricsDashboard/actions';
 
 // selectors
-import { selectMetricsDashboard } from 'containers/Analyze/Dashboards/MetricsDashboard/selectors';
+import { selectFormMetricsDashboard } from 'containers/Analyze/Dashboards/MetricsDashboard/selectors';
 import { selectPaginatedSelectGroups } from 'containers/Group/selectors';
 import { selectPaginatedSelectSegments } from 'containers/Segment/selectors';
 
@@ -36,10 +36,10 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import MetricsDashboardForm from 'components/Analyze/Dashboards/MetricsDashboard/MetricsDashboardForm';
 
 export function MetricsDashboardEditPage(props) {
-  useInjectReducer({ key: 'metrics_dashboards', reducer });
+  useInjectReducer({ key: 'customMetrics', reducer });
   useInjectReducer({ key: 'groups', reducer: groupReducer });
   useInjectReducer({ key: 'segments', reducer: segmentReducer });
-  useInjectSaga({ key: 'metrics_dashboards', saga });
+  useInjectSaga({ key: 'customMetrics', saga });
   useInjectSaga({ key: 'groups', saga: groupSaga });
   useInjectSaga({ key: 'segments', saga: segmentSaga });
 
@@ -82,7 +82,7 @@ MetricsDashboardEditPage.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
-  currentMetricsDashboard: selectMetricsDashboard(),
+  currentMetricsDashboard: selectFormMetricsDashboard(),
   groups: selectPaginatedSelectGroups(),
   segments: selectPaginatedSelectSegments()
 });

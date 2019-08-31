@@ -52,7 +52,6 @@ export function* getMetricsDashboard(action) {
 
 export function* createMetricsDashboard(action) {
   try {
-    console.log(action);
     const payload = { metrics_dashboard: action.payload };
 
     const response = yield call(api.metrics.metricsDashboards.create.bind(api.metrics.metricsDashboards), payload);
@@ -75,9 +74,10 @@ export function* createMetricsDashboard(action) {
 
 export function* updateMetricsDashboard(action) {
   try {
-    const payload = { metricsDashboard: action.payload };
+    const payload = { metrics_dashboard: action.payload };
+    console.log(payload.metrics_dashboard.id);
     const response = yield call(api.metrics.metricsDashboards.update.bind(api.metrics.metricsDashboards),
-      payload.metricsDashboard.id, payload);
+      payload.metrics_dashboard.id, payload);
 
     // yield put(push(ROUTES.group.metrics_dashboards.index.path(payload.metricsDashboard.owner_group_id)));
     yield put(showSnackbar({
@@ -86,6 +86,8 @@ export function* updateMetricsDashboard(action) {
     }));
   } catch (err) {
     yield put(updateMetricsDashboardError(err));
+
+    console.log(err);
 
     // TODO: intl message
     yield put(showSnackbar({

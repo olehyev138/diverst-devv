@@ -92,10 +92,7 @@ export function MetricsDashboardsList(props, context) {
               <Link
                 className={classes.metricsDashboardLink}
                 component={WrappedNavLink}
-                to={{
-                  pathname: ROUTES.group.metricsDashboards.show.path(item.owner_group_id, item.id),
-                  state: { id: item.id }
-                }}
+                to='#'
               >
                 <Card>
                   <CardContent>
@@ -105,19 +102,7 @@ export function MetricsDashboardsList(props, context) {
                           {item.name}
                         </Typography>
                         <hr className={classes.divider} />
-                        {item.description && (
-                          <React.Fragment>
-                            <Typography color='textSecondary'>
-                              {item.description}
-                            </Typography>
-                            <Box pb={1} />
-                          </React.Fragment>
-                        )}
                         <Box pt={1} />
-                        <Typography color='textSecondary' variant='subtitle2' className={classes.dateText}>
-                          { /* TODO: Use a clientside date library for this */ }
-                          {item.start.substring(0, 10).replace(/-/g, '/')}
-                        </Typography>
                       </Grid>
                       <Hidden xsDown>
                         <Grid item>
@@ -136,7 +121,7 @@ export function MetricsDashboardsList(props, context) {
             <Grid item sm>
               <Box mt={3} />
               <Typography variant='h6' align='center' color='textSecondary'>
-                <FormattedMessage {...messages.index.emptySection} />
+                Empty
               </Typography>
             </Grid>
           </React.Fragment>

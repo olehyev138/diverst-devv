@@ -30,12 +30,12 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import MetricsDashboardForm from 'components/Analyze/Dashboards/MetricsDashboard/MetricsDashboardForm';
 
 export function MetricsDashboardCreatePage(props) {
-  useInjectReducer({ key: 'metrics_dashboards', reducer });
+  useInjectReducer({ key: 'customMetrics', reducer });
   useInjectReducer({ key: 'groups', reducer: groupReducer });
   useInjectReducer({ key: 'segments', reducer: segmentReducer });
   useInjectSaga({ key: 'groups', saga: groupSaga });
   useInjectSaga({ key: 'segments', saga: segmentSaga });
-  useInjectSaga({ key: 'metrics_dashboards', saga });
+  useInjectSaga({ key: 'customMetrics', saga });
 
   const rs = new RouteService(useContext);
   const links = {

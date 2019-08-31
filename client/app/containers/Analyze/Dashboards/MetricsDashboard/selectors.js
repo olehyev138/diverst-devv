@@ -1,21 +1,41 @@
 import { createSelector } from 'reselect';
 import { initialState } from './reducer';
+import produce from 'immer';
 
-const selectMetricsDashboardsDomain = state => state.metricsDashboards || initialState;
+const selectCustomMetricsDomain = state => state.customMetrics || initialState;
+
+/* Dashboards */
 
 const selectPaginatedMetricsDashboards = () => createSelector(
-  selectMetricsDashboardsDomain,
-  metricsDashboardsState => metricsDashboardsState.metricsDashboards
+  selectCustomMetricsDomain,
+  customMetricsState => customMetricsState.metricsDashboards
 );
 
 const selectMetricsDashboardsTotal = () => createSelector(
-  selectMetricsDashboardsDomain,
-  metricsDashboardsState => metricsDashboardsState.metricsDashboardsTotal
+  selectCustomMetricsDomain,
+  customMetricsState => customMetricsState.metricsDashboardsTotal
 );
 
 const selectMetricsDashboard = () => createSelector(
-  selectMetricsDashboardsDomain,
-  metricsDashboardsState => metricsDashboardsState.currentMetricsDashboard
+  selectCustomMetricsDomain,
+  customMetricsState => customMetricsState.currentMetricsDashboard
 );
 
-export { selectPaginatedMetricsDashboards, selectMetricsDashboardsTotal, selectMetricsDashboard };
+const selectFormMetricsDashboard = () => createSelector(
+  selectCustomMetricsDomain,
+  (customMetricsState) => {
+    const dashboard = customMetricsState.currentMetricsDashboard;
+    if (!dashboard) return dashboard;
+
+    return produce(dashboard, (draft) => {
+      draft.groups = draft.groups.map(g => ({ label: g.name, value: g.id }));
+    });
+  }
+);
+
+/* Graphs */
+
+export {
+  selectPaginatedMetricsDashboards, selectMetricsDashboardsTotal, selectMetricsDashboard,
+  selectFormMetricsDashboard
+};
