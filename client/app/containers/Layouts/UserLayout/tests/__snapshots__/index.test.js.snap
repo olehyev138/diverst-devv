@@ -4,6 +4,6 @@ exports[`<UserLayout /> Should render and match the snapshot 1`] = `
 <Memo(WithStyles(AuthenticatedLayout))
   component={[Function]}
   pageTitle={Object {}}
-  position="absolute"
+  position="relative"
 />
 `;
