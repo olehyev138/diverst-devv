@@ -4,7 +4,7 @@
  *
  */
 
-import React, { memo, useContext, useState } from 'react';
+import React, {memo, useContext, useEffect, useRef, useState} from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { RouteContext } from 'containers/Layouts/ApplicationLayout';
@@ -17,10 +17,16 @@ import {
 
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 
+import MaterialTable from 'material-table';
+import tableIcons from 'utils/tableIcons';
+import buildDataFunction from 'utils/dataTableHelper';
+import DeleteOutline from '@material-ui/icons/DeleteOutline';
+
 import { FormattedMessage, injectIntl } from 'react-intl';
 import messages from 'containers/Analyze/Dashboards/MetricsDashboard/messages';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { ROUTES } from 'containers/Shared/Routes/constants';
+import Edit from '@material-ui/icons/Edit';
 
 const styles = theme => ({
   metricsDashboardListItem: {
@@ -66,6 +72,14 @@ export function MetricsDashboardsList(props, context) {
     props.handlePagination({ count: +metricsDashboard.target.value, page });
   };
 
+  const columns = [
+    { title: 'Name', field: 'name' }
+  ];
+
+  /* Store reference to table & use to refresh table when data changes */
+  const ref = useRef();
+  useEffect(() => ref.current && ref.current.onQueryChange(), [props.metricsDashboards]);
+
   return (
     <React.Fragment>
       <Grid container spacing={3} justify='flex-end'>
@@ -84,66 +98,37 @@ export function MetricsDashboardsList(props, context) {
       <Box mb={2} />
       <br />
       <Grid container spacing={3}>
-        { /* eslint-disable-next-line arrow-body-style */}
-        {props.metricsDashboards && Object.values(props.metricsDashboards).map((item, i) => {
-          return (
-            <Grid item key={item.id} className={classes.metricsDashboardListItem}>
-              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-              <Link
-                className={classes.metricsDashboardLink}
-                component={WrappedNavLink}
-                to='#'
-              >
-                <Card>
-                  <CardContent>
-                    <Grid container spacing={1} justify='space-between' alignItems='center'>
-                      <Grid item xs>
-                        <Typography color='primary' variant='h6' component='h2'>
-                          {item.name}
-                        </Typography>
-                        <hr className={classes.divider} />
-                        <Box pt={1} />
-                      </Grid>
-                      <Hidden xsDown>
-                        <Grid item>
-                          <KeyboardArrowRightIcon className={classes.arrowRight} />
-                        </Grid>
-                      </Hidden>
-                    </Grid>
-                  </CardContent>
-                </Card>
-              </Link>
-            </Grid>
-          );
-        })}
-        {props.metricsDashboards && props.metricsDashboards.length <= 0 && (
-          <React.Fragment>
-            <Grid item sm>
-              <Box mt={3} />
-              <Typography variant='h6' align='center' color='textSecondary'>
-                Empty
-              </Typography>
-            </Grid>
-          </React.Fragment>
-        )}
+        <Grid item xs>
+          <MaterialTable
+            tableRef={ref}
+            icons={tableIcons}
+            title='Custom Dashboards'
+            onChangePage={handleChangePage}
+            onChangeRowsPerPage={handleChangeRowsPerPage}
+            data={buildDataFunction(Object.values(props.metricsDashboards), page, props.metricsDashboardsTotal)}
+            columns={columns}
+            actions={[{
+              icon: () => <Edit />,
+              tooltip: 'Edit Member',
+              onClick: (_, rowData) => {
+                props.handleVisitDashboardEdit(rowData.id);
+              } }, {
+              icon: () => <DeleteOutline />,
+              tooltip: 'Delete Member',
+              onClick: (_, rowData) => {
+                console.log(rowData);
+                /* eslint-disable-next-line no-alert, no-restricted-globals */
+                if (confirm('Delete member?'))
+                  props.deleteMetricsDashboardBegin(rowData.id);
+              }
+            }]}
+            options={{
+              actionsColumnIndex: -1,
+              pageSize: rowsPerPage,
+            }}
+          />
+        </Grid>
       </Grid>
-      {props.metricsDashboards && props.metricsDashboards.length > 0 && (
-        <TablePagination
-          component='div'
-          page={page}
-          rowsPerPageOptions={[5, 10, 25]}
-          rowsPerPage={rowsPerPage}
-          count={props.metricsDashboardsTotal || 0}
-          onChangePage={handleChangePage}
-          onChangeRowsPerPage={handleChangeRowsPerPage}
-          backIconButtonProps={{
-            'aria-label': 'Previous Page',
-          }}
-          nextIconButtonProps={{
-            'aria-label': 'Next Page',
-          }}
-        />
-      )}
     </React.Fragment>
   );
 }
@@ -153,6 +138,8 @@ MetricsDashboardsList.propTypes = {
   classes: PropTypes.object,
   metricsDashboards: PropTypes.array,
   metricsDashboardsTotal: PropTypes.number,
+  deleteMetricsDashboardBegin: PropTypes.func,
+  handleVisitDashboardEdit: PropTypes.func,
   currentTab: PropTypes.number,
   handleChangeTab: PropTypes.func,
   handlePagination: PropTypes.func,

@@ -53,10 +53,9 @@ export function* getMetricsDashboard(action) {
 export function* createMetricsDashboard(action) {
   try {
     const payload = { metrics_dashboard: action.payload };
-
     const response = yield call(api.metrics.metricsDashboards.create.bind(api.metrics.metricsDashboards), payload);
 
-    // yield put(push(ROUTES.group.metrics_dashboards.index.path(payload.metricsDashboard.group_id)));
+    yield put(push(ROUTES.admin.analyze.custom.index.path()));
     yield put(showSnackbar({
       message: 'Metrics dashboard created',
       options: { variant: 'success' }
@@ -75,19 +74,16 @@ export function* createMetricsDashboard(action) {
 export function* updateMetricsDashboard(action) {
   try {
     const payload = { metrics_dashboard: action.payload };
-    console.log(payload.metrics_dashboard.id);
     const response = yield call(api.metrics.metricsDashboards.update.bind(api.metrics.metricsDashboards),
       payload.metrics_dashboard.id, payload);
 
-    // yield put(push(ROUTES.group.metrics_dashboards.index.path(payload.metricsDashboard.owner_group_id)));
+    yield put(push(ROUTES.admin.analyze.custom.index.path()));
     yield put(showSnackbar({
       message: 'Metrics dashboard updated',
       options: { variant: 'success' }
     }));
   } catch (err) {
     yield put(updateMetricsDashboardError(err));
-
-    console.log(err);
 
     // TODO: intl message
     yield put(showSnackbar({
@@ -99,8 +95,8 @@ export function* updateMetricsDashboard(action) {
 
 export function* deleteMetricsDashboard(action) {
   try {
-    yield call(api.metrics.metricsDashboards.destroy.bind(api.metrics.metricsDashboards), action.payload.id);
-    yield put(push(ROUTES.group.metrics_dashboards.index.path(action.payload.group_id)));
+    yield call(api.metrics.metricsDashboards.destroy.bind(api.metrics.metricsDashboards), action.payload);
+    yield put(push(ROUTES.admin.analyze.custom.index.path()));
     yield put(showSnackbar({
       message: 'Metrics dashboard deleted',
       options: { variant: 'success' }

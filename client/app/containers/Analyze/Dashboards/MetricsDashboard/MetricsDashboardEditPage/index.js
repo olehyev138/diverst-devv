@@ -46,7 +46,6 @@ export function MetricsDashboardEditPage(props) {
   const rs = new RouteService(useContext);
   const links = {
     metricsDashboardsIndex: ROUTES.admin.analyze.custom.index.path(),
-    metricsDashboardShow: ROUTES.admin.analyze.custom.show.path()
   };
 
   useEffect(() => {

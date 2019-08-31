@@ -12,7 +12,7 @@ import { withStyles } from '@material-ui/core/styles';
 import classNames from 'classnames';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
-import messages from 'containers/MetricsDashboard/messages';
+import messages from 'containers/Analyze/Dashboards/MetricsDashboard/messages';
 import { FormattedMessage } from 'react-intl';
 
 const styles = theme => ({
@@ -28,7 +28,7 @@ const styles = theme => ({
     paddingBottom: theme.spacing(1),
   },
   data: {
-    '&:not(:last-of-type)': { // PrmetricsDashboard last data item from adding bottom padding
+    '&:not(:last-of-type)': {
       paddingBottom: theme.spacing(3),
     },
   },
@@ -42,8 +42,6 @@ const styles = theme => ({
 });
 
 export function MetricsDashboard(props) {
-  /* Render an MetricsDashboard */
-
   const { classes } = props;
   const metricsDashboard = dig(props, 'metricsDashboard');
 
@@ -58,6 +56,19 @@ export function MetricsDashboard(props) {
           </Grid>
           <Grid item sm>
             <Button
+              variant='contained'
+              size='large'
+              color='primary'
+              className={classNames(classes.buttons, classes.deleteButton)}
+              onClick={() => {
+                /* eslint-disable-next-line no-alert, no-restricted-globals */
+                if (confirm('Delete metricsDashboard?'))
+                  props.deleteMetricsDashboardBegin(metricsDashboard.id);
+              }}
+            >
+              <FormattedMessage {...messages.delete} />
+            </Button>
+            <Button
               component={WrappedNavLink}
               to={props.links.metricsDashboardEdit}
               variant='contained'
@@ -67,37 +78,8 @@ export function MetricsDashboard(props) {
             >
               <FormattedMessage {...messages.edit} />
             </Button>
-            <Button
-              variant='contained'
-              size='large'
-              color='primary'
-              className={classNames(classes.buttons, classes.deleteButton)}
-              onClick={() => {
-                /* eslint-disable-next-line no-alert, no-restricted-globals */
-                if (confirm('Delete metricsDashboard?'))
-                  props.deleteMetricsDashboardBegin({ id: metricsDashboard.id, group_id: metricsDashboard.owner_group_id });
-              }}
-            >
-              <FormattedMessage {...messages.delete} />
-            </Button>
           </Grid>
         </Grid>
-        <Paper className={classes.padding}>
-          <Typography className={classes.dataHeaders}>
-            <FormattedMessage {...messages.show.dateAndTime} />
-          </Typography>
-          <Typography variant='overline'>From</Typography>
-          <Typography color='textSecondary'>{metricsDashboard.start}</Typography>
-          <Typography variant='overline'>To</Typography>
-          <Typography color='textSecondary' className={classes.data}>{metricsDashboard.end}</Typography>
-
-          <Typography className={classes.dataHeaders}>
-            <FormattedMessage {...messages.form.description} />
-          </Typography>
-          <Typography color='textSecondary' className={classes.data}>
-            {metricsDashboard.description}
-          </Typography>
-        </Paper>
       </React.Fragment>
     ) : <React.Fragment />
   );

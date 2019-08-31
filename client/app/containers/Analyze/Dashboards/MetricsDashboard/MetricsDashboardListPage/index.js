@@ -7,16 +7,25 @@ import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
-import reducer from 'containers/Analyze/Dashboards/MetricsDashboard/reducer';
-import saga from 'containers/Analyze/Dashboards/MetricsDashboard/saga';
-
-import { selectPaginatedMetricsDashboards, selectMetricsDashboardsTotal } from 'containers/Analyze/Dashboards/MetricsDashboard/selectors';
-import { getMetricsDashboardsBegin, metricsDashboardsUnmount } from 'containers/Analyze/Dashboards/MetricsDashboard/actions';
-
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
+// reducers & sagas
+import reducer from 'containers/Analyze/Dashboards/MetricsDashboard/reducer';
+import saga from 'containers/Analyze/Dashboards/MetricsDashboard/saga';
+
+// actions
+import {
+  getMetricsDashboardsBegin, deleteMetricsDashboardBegin, metricsDashboardsUnmount
+} from 'containers/Analyze/Dashboards/MetricsDashboard/actions';
+
+// selectors
+import {
+  selectPaginatedMetricsDashboards, selectMetricsDashboardsTotal
+} from 'containers/Analyze/Dashboards/MetricsDashboard/selectors';
+
 import MetricsDashboardsList from 'components/Analyze/Dashboards/MetricsDashboard/MetricsDashboardList';
+import {push} from "connected-react-router";
 
 const defaultParams = Object.freeze({
   count: 10,
@@ -57,6 +66,9 @@ export function MetricsDashboardListPage(props) {
     <MetricsDashboardsList
       metricsDashboards={props.metricsDashboards}
       metricsDashboardsTotal={props.metricsDashboardsTotal}
+      handleVisitDashboardEdit={props.handleVisitDashboardEdit}
+      deleteMetricsDashboardBegin={props.deleteMetricsDashboardBegin}
+      handleVisit
       handlePagination={handlePagination}
       links={links}
     />
@@ -65,6 +77,8 @@ export function MetricsDashboardListPage(props) {
 
 MetricsDashboardListPage.propTypes = {
   getMetricsDashboardsBegin: PropTypes.func.isRequired,
+  deleteMetricsDashboardBegin: PropTypes.func.isRequired,
+  handleVisitDashboardEdit: PropTypes.func.isRequired,
   metricsDashboardsUnmount: PropTypes.func.isRequired,
   metricsDashboards: PropTypes.array,
   metricsDashboardsTotal: PropTypes.number,
@@ -75,10 +89,12 @@ const mapStateToProps = createStructuredSelector({
   metricsDashboardsTotal: selectMetricsDashboardsTotal(),
 });
 
-const mapDispatchToProps = {
-  getMetricsDashboardsBegin,
-  metricsDashboardsUnmount,
-};
+const mapDispatchToProps = dispatch => ({
+  getMetricsDashboardsBegin: payload => dispatch(getMetricsDashboardsBegin(payload)),
+  deleteMetricsDashboardBegin: payload => dispatch(deleteMetricsDashboardBegin(payload)),
+  handleVisitDashboardEdit: id => dispatch(push(ROUTES.admin.analyze.custom.edit.path(id))),
+  metricsDashboardsUnmount: () => dispatch(metricsDashboardsUnmount()),
+});
 
 const withConnect = connect(
   mapStateToProps,

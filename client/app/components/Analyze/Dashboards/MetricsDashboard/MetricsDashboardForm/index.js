@@ -89,7 +89,7 @@ export function MetricsDashboardFormInner({ handleSubmit, handleChange, handleBl
             {buttonText}
           </Button>
           <Button
-            to={props.metricsDashboardExists ? props.links.metricsDashboardShow : props.links.metricsDashboardsIndex}
+            to={props.links.metricsDashboardsIndex}
             component={WrappedNavLink}
           >
             <FormattedMessage {...messages.cancel} />
@@ -102,9 +102,6 @@ export function MetricsDashboardFormInner({ handleSubmit, handleChange, handleBl
 
 export function MetricsDashboardForm(props) {
   const metricsDashboard = dig(props, 'metricsDashboard');
-
-  console.log(metricsDashboard);
-
   const initialValues = buildValues(metricsDashboard, {
     id: { default: '' },
     name: { default: '' },

@@ -1,3 +1,3 @@
 import loadable from 'utils/loadable';
 
-export default loadable(() => import('components/MetricsDashboard/MetricsDashboard/index'));
+export default loadable(() => import('components/Analyze/Dashboards/MetricsDashboard/MetricsDashboard/index'));
