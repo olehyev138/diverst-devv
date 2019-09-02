@@ -36,6 +36,9 @@ class Enterprise < BaseClass
   has_many :yammer_field_mappings, dependent: :destroy
   has_many :emails, dependent: :destroy
   has_many :email_variables, class_name: 'EnterpriseEmailVariable', dependent: :destroy
+  has_many :total_page_visitations
+  has_many :total_page_visitation_by_name
+
   belongs_to :theme
 
   has_many :expenses, dependent: :destroy

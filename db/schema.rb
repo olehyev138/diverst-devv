@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190828134721) do
+ActiveRecord::Schema.define(version: 20190828180853) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -1598,9 +1598,9 @@ ActiveRecord::Schema.define(version: 20190828134721) do
       select `a`.`id` AS `id`,`a`.`user_id` AS `user_id`,`a`.`page_url` AS `page_url`,`a`.`controller` AS `controller`,`a`.`action` AS `action`,`a`.`visits_day` AS `visits_day`,`a`.`visits_week` AS `visits_week`,`a`.`visits_month` AS `visits_month`,`a`.`visits_year` AS `visits_year`,`a`.`visits_all` AS `visits_all`,`a`.`created_at` AS `created_at`,`a`.`updated_at` AS `updated_at`,`b`.`page_name` AS `page_name` from (`page_visitation_data` `a` join `page_names` `b` on((`a`.`page_url` = `b`.`page_url`)))
   SQL
   create_view "total_page_visitation_by_names", sql_definition: <<-SQL
-      (select `b`.`page_name` AS `page_name`,NULL AS `page_url`,sum(`a`.`visits_day`) AS `visits_day`,sum(`a`.`visits_week`) AS `visits_week`,sum(`a`.`visits_month`) AS `visits_month`,sum(`a`.`visits_year`) AS `visits_year`,sum(`a`.`visits_all`) AS `visits_all` from (`page_visitation_data` `a` join `duplicate_page_names` `b` on((`a`.`page_url` = `b`.`page_url`))) group by `b`.`page_name`) union all (select `b`.`page_name` AS `page_name`,`a`.`page_url` AS `page_url`,sum(`a`.`visits_day`) AS `visits_day`,sum(`a`.`visits_week`) AS `visits_week`,sum(`a`.`visits_month`) AS `visits_month`,sum(`a`.`visits_year`) AS `visits_year`,sum(`a`.`visits_all`) AS `visits_all` from (`page_visitation_data` `a` join `unique_page_names` `b` on((`a`.`page_url` = `b`.`page_url`))) group by `b`.`page_url`,`b`.`page_name`)
+      (select `b`.`page_name` AS `page_name`,NULL AS `page_url`,sum(`a`.`visits_day`) AS `visits_day`,sum(`a`.`visits_week`) AS `visits_week`,sum(`a`.`visits_month`) AS `visits_month`,sum(`a`.`visits_year`) AS `visits_year`,sum(`a`.`visits_all`) AS `visits_all` from ((`page_visitation_data` `a` join `duplicate_page_names` `b` on((`a`.`page_url` = `b`.`page_url`))) join `users` `c` on((`c`.`id` = `a`.`user_id`))) group by `b`.`page_name`,`c`.`enterprise_id`) union all (select `b`.`page_name` AS `page_name`,`a`.`page_url` AS `page_url`,sum(`a`.`visits_day`) AS `visits_day`,sum(`a`.`visits_week`) AS `visits_week`,sum(`a`.`visits_month`) AS `visits_month`,sum(`a`.`visits_year`) AS `visits_year`,sum(`a`.`visits_all`) AS `visits_all` from ((`page_visitation_data` `a` join `unique_page_names` `b` on((`a`.`page_url` = `b`.`page_url`))) join `users` `c` on((`c`.`id` = `a`.`user_id`))) group by `b`.`page_url`,`b`.`page_name`,`c`.`enterprise_id`)
   SQL
   create_view "total_page_visitations", sql_definition: <<-SQL
-      select `a`.`page_url` AS `page_url`,`b`.`page_name` AS `page_name`,sum(`a`.`visits_day`) AS `visits_day`,sum(`a`.`visits_week`) AS `visits_week`,sum(`a`.`visits_month`) AS `visits_month`,sum(`a`.`visits_year`) AS `visits_year`,sum(`a`.`visits_all`) AS `visits_all` from (`page_visitation_data` `a` join `page_names` `b` on((`a`.`page_url` = `b`.`page_url`))) group by `a`.`page_url`,`b`.`page_name`
+      select `a`.`page_url` AS `page_url`,`b`.`page_name` AS `page_name`,`c`.`enterprise_id` AS `enterprise_id`,sum(`a`.`visits_day`) AS `visits_day`,sum(`a`.`visits_week`) AS `visits_week`,sum(`a`.`visits_month`) AS `visits_month`,sum(`a`.`visits_year`) AS `visits_year`,sum(`a`.`visits_all`) AS `visits_all` from ((`page_visitation_data` `a` join `page_names` `b` on((`a`.`page_url` = `b`.`page_url`))) join `users` `c` on((`c`.`id` = `a`.`user_id`))) group by `a`.`page_url`,`b`.`page_name`,`c`.`enterprise_id`
   SQL
 end

@@ -610,6 +610,8 @@ Rails.application.routes.draw do
         get 'user_groups_intersection'
         get 'url_usage_data'
         get 'user_usage_data'
+        get 'users_usage_graph'
+        get 'users_usage_metric'
       end
     end
 
