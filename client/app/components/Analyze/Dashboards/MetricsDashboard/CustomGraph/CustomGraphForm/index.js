@@ -38,7 +38,7 @@ export function CustomGraphFormInner({ handleSubmit, handleChange, handleBlur, v
             component={Select}
             fullWidth
             name='field_id'
-            id='group_ids'
+            id='field_id'
             label='Fields'
             margin='normal'
             value={values.field_id}
@@ -47,6 +47,20 @@ export function CustomGraphFormInner({ handleSubmit, handleChange, handleBlur, v
             onChange={value => setFieldValue('field_id', value)}
             onInputChange={value => fieldSelectAction(value)}
             onBlur={() => setFieldTouched('field_id', true)}
+          />
+          <Field
+            component={Select}
+            fullWidth
+            name='aggregation_id'
+            id='aggregation_id'
+            label='Aggregations'
+            margin='normal'
+            value={values.aggregation_id}
+            options={props.fields}
+            onMenuOpen={fieldSelectAction}
+            onChange={value => setFieldValue('aggregation_id', value)}
+            onInputChange={value => fieldSelectAction(value)}
+            onBlur={() => setFieldTouched('aggregation_id', true)}
           />
         </CardContent>
         <CardActions>
@@ -73,6 +87,8 @@ export function CustomGraphForm(props) {
   const initialValues = buildValues(customGraph, {
     id: { default: '' },
     field: { default: '', customKey: 'field_id' },
+    aggregation: { default: '', customKey: 'aggregation_id' },
+    metrics_dashboard_id: { default: props.metricsDashboardId }
   });
 
   return (
@@ -80,7 +96,7 @@ export function CustomGraphForm(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        props.customGraphAction(mapFields(values, ['field_id']));
+        props.customGraphAction(mapFields(values, ['field_id', 'aggregation_id']));
       }}
 
       render={formikProps => <CustomGraphFormInner {...formikProps} {...props} />}
@@ -91,6 +107,7 @@ export function CustomGraphForm(props) {
 CustomGraphForm.propTypes = {
   customGraphAction: PropTypes.func,
   customGraph: PropTypes.object,
+  metricsDashboardId: PropTypes.string.isRequired,
 };
 
 CustomGraphFormInner.propTypes = {
@@ -104,7 +121,6 @@ CustomGraphFormInner.propTypes = {
   setFieldTouched: PropTypes.func,
   getFieldsBegin: PropTypes.func,
   fields: PropTypes.array,
-  segments: PropTypes.array,
   links: PropTypes.shape({
     metricsDashboardShow: PropTypes.string,
   })

@@ -19,11 +19,12 @@ import {
 } from 'containers/Analyze/Dashboards/MetricsDashboard/actions';
 
 import {
-  CREATE_CUSTOM_GRAPH_BEGIN, UPDATE_CUSTOM_GRAPH_BEGIN,
+  GET_CUSTOM_GRAPH_BEGIN, CREATE_CUSTOM_GRAPH_BEGIN, UPDATE_CUSTOM_GRAPH_BEGIN,
   DELETE_CUSTOM_GRAPH_BEGIN,
 } from 'containers/Analyze/Dashboards/MetricsDashboard/CustomGraph/constants';
 
 import {
+  getCustomGraphSuccess,
   createCustomGraphSuccess, createCustomGraphError,
   updateCustomGraphSuccess, updateCustomGraphError,
   deleteCustomGraphError,
@@ -128,13 +129,13 @@ export function* deleteMetricsDashboard(action) {
 /* Graphs */
 export function* getCustomGraph(action) {
   try {
-    const response = yield call(api.metrics.graph.get.bind(api.metrics.metricsDashboards), action.payload.id);
-    yield put(getMetricsDashboardSuccess(response.data));
+    const response = yield call(api.metrics.customGraphs.get.bind(api.metrics.customGraphs), action.payload.id);
+    yield put(getCustomGraphSuccess(response.data));
   } catch (err) {
     // TODO: intl message
     yield put(getMetricsDashboardError(err));
     yield put(showSnackbar({
-      message: 'Failed to get metrics_dashboard',
+      message: 'Failed to get graph',
       options: { variant: 'warning' }
     }));
   }
@@ -165,7 +166,7 @@ export function* updateCustomGraph(action) {
   try {
     const payload = { graph: action.payload };
     const response = yield call(api.metrics.customGraphs.update.bind(api.metrics.customGraphs),
-      payload.custom_graph.id, payload);
+      payload.graph.id, payload);
 
     yield put(push(ROUTES.admin.analyze.custom.index.path()));
     yield put(showSnackbar({
@@ -212,6 +213,7 @@ export default function* customMetricsSaga() {
   yield takeLatest(DELETE_METRICS_DASHBOARD_BEGIN, deleteMetricsDashboard);
 
   /* Graphs */
+  yield takeLatest(GET_CUSTOM_GRAPH_BEGIN, getCustomGraph);
   yield takeLatest(CREATE_CUSTOM_GRAPH_BEGIN, createCustomGraph);
   yield takeLatest(UPDATE_CUSTOM_GRAPH_BEGIN, updateCustomGraph);
   yield takeLatest(DELETE_CUSTOM_GRAPH_BEGIN, deleteCustomGraph);

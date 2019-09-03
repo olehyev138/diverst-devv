@@ -50,11 +50,12 @@ export function CustomGraphEditPage(props) {
 
   return (
     <CustomGraphForm
-      metricsDashboardAction={props.updateCustomGraphBegin}
+      customGraphAction={props.updateCustomGraphBegin}
       getFieldsBegin={props.getFieldsBegin}
       fields={props.fields}
       buttonText='Update'
-      metricsDashboard={props.currentMetricsDashboard}
+      customGraph={props.currentCustomGraph}
+      metricsDashboardId={metricsDashboardId[0]}
       links={links}
     />
   );
@@ -63,7 +64,7 @@ export function CustomGraphEditPage(props) {
 CustomGraphEditPage.propTypes = {
   getCustomGraphBegin: PropTypes.func,
   updateCustomGraphBegin: PropTypes.func,
-  currentMetricsDashboard: PropTypes.object,
+  currentCustomGraph: PropTypes.object,
   getFieldsBegin: PropTypes.func,
   fields: PropTypes.array,
   customGraphUnmount: PropTypes.func,

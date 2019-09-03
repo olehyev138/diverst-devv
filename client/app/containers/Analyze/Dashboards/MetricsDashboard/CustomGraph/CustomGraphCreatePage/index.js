@@ -44,6 +44,7 @@ export function CustomGraphCreatePage(props) {
       customGraphAction={props.createCustomGraphBegin}
       getFieldsBegin={props.getFieldsBegin}
       fields={props.fields}
+      metricsDashboardId={metricsDashboardId[0]}
       buttonText='Create'
       links={links}
     />
