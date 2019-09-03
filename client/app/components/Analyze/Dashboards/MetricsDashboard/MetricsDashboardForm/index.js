@@ -117,7 +117,7 @@ export function MetricsDashboardForm(props) {
         props.metricsDashboardAction(mapFields(values, ['group_ids', 'segment_ids']));
       }}
 
-      render={formikProps => <MetricsDashboardFormInner metricsDashboardExists={!!metricsDashboard} {...props} {...formikProps} />}
+      render={formikProps => <MetricsDashboardFormInner {...props} {...formikProps} />}
     />
   );
 }
@@ -125,8 +125,6 @@ export function MetricsDashboardForm(props) {
 MetricsDashboardForm.propTypes = {
   metricsDashboardAction: PropTypes.func,
   metricsDashboard: PropTypes.object,
-  currentUser: PropTypes.object,
-  currentGroup: PropTypes.object
 };
 
 MetricsDashboardFormInner.propTypes = {

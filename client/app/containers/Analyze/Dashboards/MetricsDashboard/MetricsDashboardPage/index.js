@@ -32,8 +32,6 @@ export function MetricsDashboardPage(props) {
     metricsDashboardEdit: ROUTES.admin.analyze.custom.edit.path(rs.params('metrics_dashboard_id'))
   };
 
-  console.log(props);
-
   useEffect(() => {
     // get metrics_dashboard specified in path
     const metricsDashboardId = rs.params('metrics_dashboard_id');

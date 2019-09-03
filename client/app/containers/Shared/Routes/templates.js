@@ -24,6 +24,8 @@ import MetricsDashboardListPage from 'containers/Analyze/Dashboards/MetricsDashb
 import MetricsDashboardCreatePage from 'containers/Analyze/Dashboards/MetricsDashboard/MetricsDashboardCreatePage/Loadable';
 import MetricsDashboardEditPage from 'containers/Analyze/Dashboards/MetricsDashboard/MetricsDashboardEditPage/Loadable';
 import MetricsDashboardPage from 'containers/Analyze/Dashboards/MetricsDashboard/MetricsDashboardPage/Loadable';
+import CustomGraphCreatePage from 'containers/Analyze/Dashboards/MetricsDashboard/CustomGraph/CustomGraphCreatePage/Loadable';
+import CustomGraphEditPage from 'containers/Analyze/Dashboards/MetricsDashboard/CustomGraph/CustomGraphEditPage/Loadable';
 
 /* Admin - Manage - Group */
 import AdminGroupListPage from 'containers/Group/AdminGroupListPage/Loadable';
@@ -79,5 +81,6 @@ export {
   UsersPage, UserCreatePage, UserEditPage, GroupHomePage, EventsPage, NewsFeedPage, OutcomesPage, EventPage,
   EventCreatePage, EventEditPage, GroupMessagePage, GroupMessageCreatePage, GroupMessageEditPage, OutcomeCreatePage,
   OutcomeEditPage, GroupMemberListPage, GroupMemberCreatePage, NotFoundPage, PlaceholderPage, GroupDashboardPage,
-  UserDashboardPage, MetricsDashboardListPage, MetricsDashboardCreatePage, MetricsDashboardEditPage, MetricsDashboardPage
+  UserDashboardPage, MetricsDashboardListPage, MetricsDashboardCreatePage, MetricsDashboardEditPage, MetricsDashboardPage,
+  CustomGraphCreatePage, CustomGraphEditPage
 };

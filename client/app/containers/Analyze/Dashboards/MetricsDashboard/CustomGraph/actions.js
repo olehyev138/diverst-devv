@@ -136,7 +136,7 @@ export function deleteCustomGraphError(error) {
   };
 }
 
-export function CustomGraphsUnmount() {
+export function customGraphUnmount() {
   return {
     type: CUSTOM_GRAPH_UNMOUNT,
   };
