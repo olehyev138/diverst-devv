@@ -115,6 +115,7 @@ class Groups::GroupMembersController < ApplicationController
       UserGroup.create(group_id: @group.id, user_id: user.id, accepted_member: @group.pending_users.disabled?)
     end
 
+    track_activity(@group, :add_members_to_group)
     redirect_to action: 'index'
   end
 
@@ -122,6 +123,7 @@ class Groups::GroupMembersController < ApplicationController
     authorize [@group, @member], :destroy?, policy_class: GroupMemberPolicy
 
     @group.members.destroy(@member)
+    track_activity(@group, :remove_member_from_group)
     redirect_to action: :index
   end
 
