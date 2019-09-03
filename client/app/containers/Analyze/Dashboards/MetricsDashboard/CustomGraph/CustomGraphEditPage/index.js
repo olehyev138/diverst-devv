@@ -22,7 +22,7 @@ import {
 import { getFieldsBegin } from 'containers/GlobalSettings/Field/actions';
 
 // selectors
-import { selectCustomGraph } from 'containers/Analyze/Dashboards/MetricsDashboard/selectors';
+import { selectFormCustomGraph } from 'containers/Analyze/Dashboards/MetricsDashboard/selectors';
 import { selectPaginatedSelectFields } from 'containers/GlobalSettings/Field/selectors';
 
 import RouteService from 'utils/routeHelpers';
@@ -71,7 +71,7 @@ CustomGraphEditPage.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
-  currentCustomGraph: selectCustomGraph(),
+  currentCustomGraph: selectFormCustomGraph(),
   fields: selectPaginatedSelectFields(),
 });
 

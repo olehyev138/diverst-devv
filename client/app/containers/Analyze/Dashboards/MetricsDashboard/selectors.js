@@ -43,7 +43,13 @@ const selectCustomGraph = () => createSelector(
 const selectFormCustomGraph = () => createSelector(
   selectCustomMetricsDomain,
   (customMetricsState) => {
-    // TODO
+    const customGraph = customMetricsState.currentCustomGraph;
+    if (!customGraph) return customGraph;
+
+    return produce(customGraph, (draft) => {
+      draft.field = { label: draft.field.title, value: draft.field.id };
+      draft.aggregation = draft.aggregation ? { label: draft.aggregation.title, value: draft.aggregation.id } : draft.aggregation;
+    });
   }
 );
 
