@@ -11,7 +11,7 @@ import { RouteContext } from 'containers/Layouts/ApplicationLayout';
 import withStyles from '@material-ui/core/styles/withStyles';
 
 import {
-  Grid, Card, CardContent, Typography, Link, CardActions, Button, Divider, Box, TablePagination,
+  Grid, Card, CardContent, Typography, Link, CardActions, Button, Divider, Box,
 } from '@material-ui/core';
 
 import { FormattedMessage } from 'react-intl';
@@ -20,6 +20,8 @@ import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import ListItemIcon from '@material-ui/icons/Remove';
+
+import Pagination from 'components/Shared/Pagination';
 
 const styles = theme => ({});
 
@@ -104,20 +106,12 @@ export function OutcomesList(props, context) {
           </Grid>
         ))}
       </Grid>
-      <TablePagination
-        component='div'
+      <Pagination
         page={page}
-        rowsPerPageOptions={[5, 10, 25]}
         rowsPerPage={rowsPerPage}
-        count={props.outcomeTotal || 0}
+        count={props.outcomeTotal}
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
-        backIconButtonProps={{
-          'aria-label': 'Previous Page',
-        }}
-        nextIconButtonProps={{
-          'aria-label': 'Next Page',
-        }}
       />
     </React.Fragment>
   );
