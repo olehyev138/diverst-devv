@@ -2,8 +2,8 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { unwrap } from '@material-ui/core/test-utils';
 
-import ErrorLayout from '../index';
-const ErrorLayoutNaked = unwrap(ErrorLayout);
+import { StyledErrorLayout } from '../index';
+const ErrorLayoutNaked = unwrap(StyledErrorLayout);
 
 /**
  * TODO:

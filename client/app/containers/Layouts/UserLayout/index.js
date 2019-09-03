@@ -1,10 +1,13 @@
 import React, { memo } from 'react';
+import { compose } from 'redux';
 import PropTypes from 'prop-types';
 
 import Container from '@material-ui/core/Container';
 import UserLinks from 'components/User/UserLinks';
 import { withStyles } from '@material-ui/core/styles';
 import AuthenticatedLayout from '../AuthenticatedLayout';
+
+import Scrollbar from 'components/Shared/Scrollbar';
 
 const styles = theme => ({
   toolbar: theme.mixins.toolbar,
@@ -19,18 +22,19 @@ const UserLayout = ({ component: Component, ...rest }) => {
 
   return (
     <AuthenticatedLayout
-      position='absolute'
+      position='relative'
       data={data}
       {...other}
       component={matchProps => (
         <React.Fragment>
-          <div className={classes.toolbar} />
           <UserLinks pageTitle={data.titleMessage} {...matchProps} />
-          <Container>
-            <div className={classes.content}>
-              <Component pageTitle={data.titleMessage} {...other} />
-            </div>
-          </Container>
+          <Scrollbar>
+            <Container>
+              <div className={classes.content}>
+                <Component pageTitle={data.titleMessage} {...other} />
+              </div>
+            </Container>
+          </Scrollbar>
         </React.Fragment>
       )}
     />
@@ -43,4 +47,9 @@ UserLayout.propTypes = {
   pageTitle: PropTypes.object,
 };
 
-export default withStyles(styles)(UserLayout);
+export const StyledUserLayout = withStyles(styles)(UserLayout);
+
+export default compose(
+  memo,
+  withStyles(styles),
+)(UserLayout);

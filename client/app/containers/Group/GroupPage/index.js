@@ -53,7 +53,7 @@ GroupPage.propTypes = {
     })
   }),
   currentGroup: PropTypes.object,
-  children: PropTypes.object,
+  children: PropTypes.any,
   groupFormUnmount: PropTypes.func,
   getGroupBegin: PropTypes.func
 };

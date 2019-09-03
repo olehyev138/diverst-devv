@@ -1,22 +1,36 @@
 import React, { memo } from 'react';
-import { Route } from 'react-router';
 import { compose } from 'redux';
 
 import Container from '@material-ui/core/Container';
 import AdminLinks from 'components/Admin/AdminLinks';
 import { withStyles } from '@material-ui/core/styles';
 import AuthenticatedLayout from '../AuthenticatedLayout';
-import { createStructuredSelector } from 'reselect';
 import PropTypes from 'prop-types';
+
+import Scrollbar from 'components/Shared/Scrollbar';
 
 const styles = theme => ({
   flex: {
     display: 'flex',
+    height: '100%'
   },
   toolbar: theme.mixins.toolbar,
+  container: {
+    overflow: 'hidden',
+  },
   content: {
-    flexGrow: 1,
     padding: theme.spacing(3),
+  },
+  block: {
+    display: 'block',
+    overflow: 'hidden',
+  },
+  scrollbarContentContainer: {
+    flexDirection: 'column',
+    display: 'flex',
+    width: '100%',
+    height: '100%',
+    overflow: 'hidden',
   },
 });
 
@@ -47,24 +61,29 @@ export class AdminLayout extends React.PureComponent {
       <AuthenticatedLayout
         drawerToggleCallback={this.drawerToggleCallback}
         drawerOpen={this.state.drawerOpen}
-        position='absolute'
+        position='relative'
         isAdmin
         {...other}
         component={matchProps => (
-          <div className={classes.flex}>
-            <AdminLinks
-              drawerToggleCallback={this.drawerToggleCallback}
-              drawerOpen={this.state.drawerOpen}
-              location={other.location}
-              {...matchProps}
-            />
-            <Container maxWidth='xl'>
-              <div className={classes.content}>
-                <div className={classes.toolbar} />
-                <Component {...other} />
+          <React.Fragment>
+            <div className={classes.flex}>
+              <AdminLinks
+                drawerToggleCallback={this.drawerToggleCallback}
+                drawerOpen={this.state.drawerOpen}
+                location={other.location}
+                {...matchProps}
+              />
+              <div className={classes.scrollbarContentContainer}>
+                <Scrollbar>
+                  <Container maxWidth='xl' className={classes.container}>
+                    <div className={classes.content}>
+                      <Component {...other} />
+                    </div>
+                  </Container>
+                </Scrollbar>
               </div>
-            </Container>
-          </div>
+            </div>
+          </React.Fragment>
         )}
       />
     );
@@ -77,4 +96,7 @@ AdminLayout.propTypes = {
   location: PropTypes.object,
 };
 
-export default withStyles(styles)(AdminLayout);
+export default compose(
+  memo,
+  withStyles(styles),
+)(AdminLayout);

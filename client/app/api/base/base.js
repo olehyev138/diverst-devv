@@ -6,7 +6,10 @@ axios.defaults.headers.common['Diverst-APIKey'] = config.apiKey;
 
 class API {
   constructor(args) {
-    this.baseUrl = '/api/v1/';
+    // eslint-disable-next-line no-console
+    if (!axios.defaults.baseURL) console.warn('API URL must be set');
+
+    this.baseUrl = `${axios.defaults.baseURL}/api/v1/`;
     this.controller = args.controller;
     this.url = this.baseUrl + this.controller;
   }

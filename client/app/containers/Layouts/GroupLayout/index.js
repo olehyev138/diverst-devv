@@ -19,10 +19,11 @@ import dig from 'object-dig';
 import RouteService from 'utils/routeHelpers';
 import { createStructuredSelector } from 'reselect';
 
+import Scrollbar from 'components/Shared/Scrollbar';
+
 const styles = theme => ({
   toolbar: theme.mixins.toolbar,
   content: {
-    flexGrow: 1,
     padding: theme.spacing(3),
   },
 });
@@ -52,20 +53,20 @@ const GroupLayout = ({ component: Component, ...rest }) => {
 
   return (
     <AuthenticatedLayout
-      position='absolute'
+      position='relative'
       {...other}
       component={() => (
         <React.Fragment>
-          <div className={classes.toolbar} />
           <GroupLinks {...other} />
-
-          <Container>
-            <div className={classes.content}>
-              {currentGroup && (
-                <Component currentGroup={currentGroup} {...other} />
-              )}
-            </div>
-          </Container>
+          <Scrollbar>
+            <Container>
+              <div className={classes.content}>
+                {currentGroup && (
+                  <Component currentGroup={currentGroup} {...other} />
+                )}
+              </div>
+            </Container>
+          </Scrollbar>
         </React.Fragment>
       )}
     />

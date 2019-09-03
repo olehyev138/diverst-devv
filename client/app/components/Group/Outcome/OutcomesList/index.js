@@ -11,7 +11,7 @@ import { RouteContext } from 'containers/Layouts/ApplicationLayout';
 import withStyles from '@material-ui/core/styles/withStyles';
 
 import {
-  Grid, Card, CardContent, Typography, Link, CardActions, Button, Divider, Box, TablePagination,
+  Grid, Card, CardContent, Typography, Link, CardActions, Button, Divider, Box,
 } from '@material-ui/core';
 
 import { FormattedMessage } from 'react-intl';
@@ -20,6 +20,8 @@ import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import ListItemIcon from '@material-ui/icons/Remove';
+
+import Pagination from 'components/Shared/Pagination';
 
 const styles = theme => ({});
 
@@ -47,8 +49,8 @@ export function OutcomesList(props, context) {
 
   return (
     <React.Fragment>
-      <Grid container spacing={3}>
-        <Grid item xs={12}>
+      <Grid container spacing={3} justify='flex-end'>
+        <Grid item>
           <Button
             variant='contained'
             to={props.links.outcomeNew}
@@ -59,6 +61,9 @@ export function OutcomesList(props, context) {
             <FormattedMessage {...messages.new} />
           </Button>
         </Grid>
+      </Grid>
+      <Box mb={2} />
+      <Grid container>
         { /* eslint-disable-next-line arrow-body-style */}
         {props.outcomes && props.outcomes.map((outcome, i) => (
           <Grid item key={outcome.id} xs={12}>
@@ -97,23 +102,16 @@ export function OutcomesList(props, context) {
                 </Button>
               </CardActions>
             </Card>
+            <Box mb={3} />
           </Grid>
         ))}
       </Grid>
-      <TablePagination
-        component='div'
+      <Pagination
         page={page}
-        rowsPerPageOptions={[5, 10, 25]}
         rowsPerPage={rowsPerPage}
-        count={props.outcomeTotal || 0}
+        count={props.outcomeTotal}
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
-        backIconButtonProps={{
-          'aria-label': 'Previous Page',
-        }}
-        nextIconButtonProps={{
-          'aria-label': 'Next Page',
-        }}
       />
     </React.Fragment>
   );

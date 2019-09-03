@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 import dig from 'object-dig';
 import { connect, Field, getIn } from 'formik';
 
-import Select from 'react-select';
+import Select from 'components/Shared/DiverstSelect';
 
 const CustomSelectField = (props) => {
   const fieldDatum = dig(props, 'fieldDatum');

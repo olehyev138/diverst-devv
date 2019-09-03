@@ -2,8 +2,8 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { unwrap } from '@material-ui/core/test-utils';
 
-import UserLayout from '../index';
-const UserLayoutNaked = unwrap(UserLayout);
+import { StyledUserLayout } from '../index';
+const UserLayoutNaked = unwrap(StyledUserLayout);
 
 /**
  * TODO:

@@ -13,8 +13,8 @@ import { compose } from 'redux';
 import { RouteContext } from 'containers/Layouts/ApplicationLayout';
 
 import {
+  Box,
   Button, Card, CardActions, CardContent, Grid,
-  TablePagination
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -28,6 +28,8 @@ import SocialLinkListItem from 'components/News/SocialLink/SocialLinkListItem';
 import { FormattedMessage } from 'react-intl';
 import messages from 'containers/News/messages';
 
+import Pagination from 'components/Shared/Pagination';
+
 const styles = theme => ({
   newsItem: {
     width: '100%',
@@ -39,8 +41,8 @@ const styles = theme => ({
 
 export function NewsFeed(props) {
   const { classes } = props;
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [page, setPage] = useState(props.defaultParams.page);
+  const [rowsPerPage, setRowsPerPage] = useState(props.defaultParams.count);
   const routeContext = useContext(RouteContext);
 
   const handleChangePage = (event, newPage) => {
@@ -67,7 +69,7 @@ export function NewsFeed(props) {
 
   return (
     <React.Fragment>
-      <Grid container spacing={3}>
+      <Grid container spacing={3} justify='flex-end'>
         <Grid item>
           <Button
             variant='contained'
@@ -101,35 +103,32 @@ export function NewsFeed(props) {
             New Social Link
           </Button>
         </Grid>
+      </Grid>
+      <Box mb={2} />
+      <Grid container>
         { /* eslint-disable-next-line arrow-body-style */ }
         {props.newsItems && Object.values(props.newsItems).map((item, i) => {
           return (
             <Grid item key={item.id} className={classes.newsItem}>
-              { renderNewsItem(item) }
+              {renderNewsItem(item)}
+              <Box mb={3} />
             </Grid>
           );
         })}
       </Grid>
-      <TablePagination
-        component='div'
+      <Pagination
         page={page}
-        rowsPerPageOptions={[5, 10, 25]}
         rowsPerPage={rowsPerPage}
-        count={props.newsItemsTotal || 0}
+        count={props.newsItemsTotal}
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
-        backIconButtonProps={{
-          'aria-label': 'Previous Page',
-        }}
-        nextIconButtonProps={{
-          'aria-label': 'Next Page',
-        }}
       />
     </React.Fragment>
   );
 }
 
 NewsFeed.propTypes = {
+  defaultParams: PropTypes.object,
   classes: PropTypes.object,
   newsItems: PropTypes.array,
   newsItemsTotal: PropTypes.number,

@@ -10,19 +10,13 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 
-import injectReducer from 'utils/injectReducer';
-
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import Slide from '@material-ui/core/Slide';
 
 import { makeSelectPrimary, makeSelectSecondary } from './selectors';
-import { changePrimary, changeSecondary } from './actions';
-import reducer from './reducer';
 
 import SnackbarProviderWrapper from 'components/Shared/SnackbarProviderWrapper';
 
 import App from 'containers/Shared/App/Loadable';
-import { loginSuccess, setUser, setEnterprise } from 'containers/Shared/App/actions';
 
 export class ThemeProvider extends React.PureComponent {
   render() {
@@ -33,12 +27,15 @@ export class ThemeProvider extends React.PureComponent {
       palette: {
         primary: {
           main: primary,
+          main25: `${primary}40`,
+          main50: `${primary}80`,
+          main75: `${primary}C0`,
         },
         secondary: {
           main: secondary,
         },
         error: {
-          main: '#d32f2f',
+          main: '#D32F2F',
         },
         warning: {
           main: '#ffa000',

@@ -38,6 +38,8 @@ import { translationMessages } from './i18n';
 
 import { store, history, persistor } from './configureStore';
 
+import { LastLocationProvider } from 'react-router-last-location';
+
 configureAxios();
 
 const MOUNT_NODE = document.getElementById('app');
@@ -48,7 +50,9 @@ const render = (messages) => {
       <PersistGate loading={null} persistor={persistor}>
         <LanguageProvider messages={messages}>
           <ConnectedRouter history={history}>
-            <ThemeProvider />
+            <LastLocationProvider>
+              <ThemeProvider />
+            </LastLocationProvider>
           </ConnectedRouter>
         </LanguageProvider>
       </PersistGate>

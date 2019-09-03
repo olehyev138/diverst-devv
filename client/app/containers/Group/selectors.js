@@ -30,6 +30,11 @@ const selectGroup = () => createSelector(
   groupsState => groupsState.currentGroup
 );
 
+const selectGroupIsLoading = () => createSelector(
+  selectGroupsDomain,
+  groupsState => groupsState.isLoading
+);
+
 const selectFormGroup = () => createSelector(
   selectGroupsDomain,
   (groupsState) => {
@@ -50,5 +55,5 @@ const selectFormGroup = () => createSelector(
 
 export {
   selectGroupsDomain, selectPaginatedGroups, selectPaginatedSelectGroups,
-  selectGroupTotal, selectGroup, selectFormGroup
+  selectGroupTotal, selectGroup, selectFormGroup, selectGroupIsLoading
 };
