@@ -18,7 +18,20 @@ import {
   deleteMetricsDashboardError,
 } from 'containers/Analyze/Dashboards/MetricsDashboard/actions';
 
+import {
+  CREATE_CUSTOM_GRAPH_BEGIN, UPDATE_CUSTOM_GRAPH_BEGIN,
+  DELETE_CUSTOM_GRAPH_BEGIN,
+} from 'containers/Analyze/Dashboards/MetricsDashboard/CustomGraph/constants';
+
+import {
+  createCustomGraphSuccess, createCustomGraphError,
+  updateCustomGraphSuccess, updateCustomGraphError,
+  deleteCustomGraphError,
+} from 'containers/Analyze/Dashboards/MetricsDashboard/CustomGraph/actions';
+
 import { ROUTES } from 'containers/Shared/Routes/constants';
+
+/* Metrics Dashboard */
 
 export function* getMetricsDashboards(action) {
   try {
@@ -112,10 +125,94 @@ export function* deleteMetricsDashboard(action) {
   }
 }
 
-export default function* metricsDashboardsSaga() {
+/* Graphs */
+export function* getCustomGraph(action) {
+  try {
+    const response = yield call(api.metrics.graph.get.bind(api.metrics.metricsDashboards), action.payload.id);
+    yield put(getMetricsDashboardSuccess(response.data));
+  } catch (err) {
+    // TODO: intl message
+    yield put(getMetricsDashboardError(err));
+    yield put(showSnackbar({
+      message: 'Failed to get metrics_dashboard',
+      options: { variant: 'warning' }
+    }));
+  }
+}
+
+export function* createCustomGraph(action) {
+  try {
+    const payload = { graph: action.payload };
+    const response = yield call(api.metrics.customGraphs.create.bind(api.metrics.customGraphs), payload);
+
+    yield put(push(ROUTES.admin.analyze.custom.index.path()));
+    yield put(showSnackbar({
+      message: 'Metrics dashboard created',
+      options: { variant: 'success' }
+    }));
+  } catch (err) {
+    yield put(createCustomGraphError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({
+      message: 'Failed to create graph',
+      options: { variant: 'warning' }
+    }));
+  }
+}
+
+export function* updateCustomGraph(action) {
+  try {
+    const payload = { graph: action.payload };
+    const response = yield call(api.metrics.customGraphs.update.bind(api.metrics.customGraphs),
+      payload.custom_graph.id, payload);
+
+    yield put(push(ROUTES.admin.analyze.custom.index.path()));
+    yield put(showSnackbar({
+      message: 'Graph updated',
+      options: { variant: 'success' }
+    }));
+  } catch (err) {
+    yield put(updateCustomGraphError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({
+      message: 'Failed to update graph',
+      options: { variant: 'warning' }
+    }));
+  }
+}
+
+export function* deleteCustomGraph(action) {
+  try {
+    yield call(api.metrics.customGraphs.destroy.bind(api.metrics.customGraphs), action.payload);
+    yield put(push(ROUTES.admin.analyze.custom.index.path()));
+    yield put(showSnackbar({
+      message: 'Metrics dashboard deleted',
+      options: { variant: 'success' }
+    }));
+  } catch (err) {
+    yield put(deleteCustomGraphError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({
+      message: 'Failed to delete graph',
+      options: { variant: 'warning' }
+    }));
+  }
+}
+
+
+export default function* customMetricsSaga() {
+  /* Dashboards */
   yield takeLatest(GET_METRICS_DASHBOARDS_BEGIN, getMetricsDashboards);
   yield takeLatest(GET_METRICS_DASHBOARD_BEGIN, getMetricsDashboard);
   yield takeLatest(CREATE_METRICS_DASHBOARD_BEGIN, createMetricsDashboard);
   yield takeLatest(UPDATE_METRICS_DASHBOARD_BEGIN, updateMetricsDashboard);
   yield takeLatest(DELETE_METRICS_DASHBOARD_BEGIN, deleteMetricsDashboard);
+
+  /* Graphs */
+  yield takeLatest(CREATE_CUSTOM_GRAPH_BEGIN, createCustomGraph);
+  yield takeLatest(UPDATE_CUSTOM_GRAPH_BEGIN, updateCustomGraph);
+  yield takeLatest(DELETE_CUSTOM_GRAPH_BEGIN, deleteCustomGraph);
 }

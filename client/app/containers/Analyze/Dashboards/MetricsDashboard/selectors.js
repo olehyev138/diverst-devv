@@ -35,7 +35,20 @@ const selectFormMetricsDashboard = () => createSelector(
 
 /* Graphs */
 
+const selectCustomGraph = () => createSelector(
+  selectCustomMetricsDomain,
+  customMetricsState => customMetricsState.currentCustomGraph
+);
+
+const selectFormCustomGraph = () => createSelector(
+  selectCustomMetricsDomain,
+  (customMetricsState) => {
+    // TODO
+  }
+);
+
+
 export {
   selectPaginatedMetricsDashboards, selectMetricsDashboardsTotal, selectMetricsDashboard,
-  selectFormMetricsDashboard
+  selectFormMetricsDashboard, selectCustomGraph, selectFormCustomGraph
 };
