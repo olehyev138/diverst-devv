@@ -561,7 +561,7 @@ class Initiative < BaseClass
       gr.send_slack_webhook_message message
     end
   end
-  
+
   def update_annual_budget
     group = owner_group
     annual_budget = AnnualBudget.find_or_create_by(closed: false, group_id: group.id)
