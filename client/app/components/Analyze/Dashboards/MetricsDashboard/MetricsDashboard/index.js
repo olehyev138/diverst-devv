@@ -83,13 +83,11 @@ export function MetricsDashboard(props) {
           </Grid>
         </Grid>
         <Grid container spacing={3}>
-          {metricsDashboard.graphs && metricsDashboard.graphs.map(((graph) => {
-            return (
-              <Grid item key={graph.id}>
-                <CustomGraphPage customGraph={graph} />
-              </Grid>
-            );
-          }))}
+          {metricsDashboard.graphs && metricsDashboard.graphs.map((graph => (
+            <Grid item key={graph.id}>
+              <CustomGraphPage customGraph={graph} />
+            </Grid>
+          )))}
         </Grid>
       </React.Fragment>
     ) : <React.Fragment />

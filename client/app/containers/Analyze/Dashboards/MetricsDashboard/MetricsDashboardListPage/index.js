@@ -25,7 +25,6 @@ import {
 } from 'containers/Analyze/Dashboards/MetricsDashboard/selectors';
 
 import MetricsDashboardsList from 'components/Analyze/Dashboards/MetricsDashboard/MetricsDashboardList';
-import {push} from "connected-react-router";
 
 const defaultParams = Object.freeze({
   count: 10,

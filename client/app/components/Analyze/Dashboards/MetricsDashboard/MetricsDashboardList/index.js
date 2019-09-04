@@ -4,7 +4,9 @@
  *
  */
 
-import React, {memo, useContext, useEffect, useRef, useState} from 'react';
+import React, {
+  memo, useContext, useEffect, useRef, useState
+} from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { RouteContext } from 'containers/Layouts/ApplicationLayout';
@@ -116,7 +118,6 @@ export function MetricsDashboardsList(props, context) {
               icon: () => <DeleteOutline />,
               tooltip: 'Delete Member',
               onClick: (_, rowData) => {
-                console.log(rowData);
                 /* eslint-disable-next-line no-alert, no-restricted-globals */
                 if (confirm('Delete member?'))
                   props.deleteMetricsDashboardBegin(rowData.id);
