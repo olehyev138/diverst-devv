@@ -20,11 +20,11 @@ import {
 
 import {
   GET_CUSTOM_GRAPH_BEGIN, CREATE_CUSTOM_GRAPH_BEGIN, UPDATE_CUSTOM_GRAPH_BEGIN,
-  DELETE_CUSTOM_GRAPH_BEGIN,
+  GET_CUSTOM_GRAPH_DATA_BEGIN, DELETE_CUSTOM_GRAPH_BEGIN,
 } from 'containers/Analyze/Dashboards/MetricsDashboard/CustomGraph/constants';
 
 import {
-  getCustomGraphSuccess,
+  getCustomGraphSuccess, getCustomGraphDataSuccess,
   createCustomGraphSuccess, createCustomGraphError,
   updateCustomGraphSuccess, updateCustomGraphError,
   deleteCustomGraphError,
@@ -135,6 +135,21 @@ export function* getCustomGraph(action) {
     // TODO: intl message
     yield put(getMetricsDashboardError(err));
     yield put(showSnackbar({
+      message: 'Failed to get graph data',
+      options: { variant: 'warning' }
+    }));
+  }
+}
+
+export function* getCustomGraphData(action) {
+  console.log('hey');
+  try {
+    const response = yield call(api.metrics.customGraphs.data.bind(api.metrics.customGraphs), action.payload);
+    yield put(getCustomGraphDataSuccess(response.data));
+  } catch (err) {
+    // TODO: intl message
+    yield put(getMetricsDashboardError(err));
+    yield put(showSnackbar({
       message: 'Failed to get graph',
       options: { variant: 'warning' }
     }));
@@ -214,6 +229,7 @@ export default function* customMetricsSaga() {
 
   /* Graphs */
   yield takeLatest(GET_CUSTOM_GRAPH_BEGIN, getCustomGraph);
+  yield takeLatest(GET_CUSTOM_GRAPH_DATA_BEGIN, getCustomGraphData);
   yield takeLatest(CREATE_CUSTOM_GRAPH_BEGIN, createCustomGraph);
   yield takeLatest(UPDATE_CUSTOM_GRAPH_BEGIN, updateCustomGraph);
   yield takeLatest(DELETE_CUSTOM_GRAPH_BEGIN, deleteCustomGraph);

@@ -15,6 +15,8 @@ import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import messages from 'containers/Analyze/Dashboards/MetricsDashboard/messages';
 import { FormattedMessage } from 'react-intl';
 
+import CustomGraphPage from 'containers/Analyze/Dashboards/MetricsDashboard/CustomGraph/CustomGraphPage';
+
 const styles = theme => ({
   padding: {
     padding: theme.spacing(3, 2),
@@ -79,6 +81,15 @@ export function MetricsDashboard(props) {
               <FormattedMessage {...messages.edit} />
             </Button>
           </Grid>
+        </Grid>
+        <Grid container spacing={3}>
+          {metricsDashboard.graphs && metricsDashboard.graphs.map(((graph) => {
+            return (
+              <Grid item key={graph.id}>
+                <CustomGraphPage customGraph={graph} />
+              </Grid>
+            );
+          }))}
         </Grid>
       </React.Fragment>
     ) : <React.Fragment />

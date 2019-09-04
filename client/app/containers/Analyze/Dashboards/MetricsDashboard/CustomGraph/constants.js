@@ -24,4 +24,8 @@ export const DELETE_CUSTOM_GRAPH_BEGIN = 'app/Analyze/Dashboards/MetricsDashboar
 export const DELETE_CUSTOM_GRAPH_SUCCESS = 'app/Analyze/Dashboards/MetricsDashboard/DELETE_CUSTOM_GRAPH_SUCCESS';
 export const DELETE_CUSTOM_GRAPH_ERROR = 'app/Analyze/Dashboards/MetricsDashboard/DELETE_CUSTOM_GRAPH_ERROR';
 
+export const GET_CUSTOM_GRAPH_DATA_BEGIN = 'app/Analyze/Dashboards/MetricsDashboard/GET_CUSTOM_GRAPH_DATA_BEGIN';
+export const GET_CUSTOM_GRAPH_DATA_SUCCESS = 'app/Analyze/Dashboards/MetricsDashboard/GET_CUSTOM_GRAPH_DATA_SUCCESS';
+export const GET_CUSTOM_GRAPH_DATA_ERROR = 'app/Analyze/Dashboards/MetricsDashboard/GET_CUSTOM_GRAPH_DATA_ERROR';
+
 export const CUSTOM_GRAPH_UNMOUNT = 'app/Analyze/Dashboards/MetricsDashboard/CUSTOM_GRAPH_UNMOUNT';

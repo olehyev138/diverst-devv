@@ -53,8 +53,12 @@ const selectFormCustomGraph = () => createSelector(
   }
 );
 
+const selectCustomGraphData = () => createSelector(
+  selectCustomMetricsDomain,
+  customMetricsState => customMetricsState.currentCustomGraphData
+);
 
 export {
   selectPaginatedMetricsDashboards, selectMetricsDashboardsTotal, selectMetricsDashboard,
-  selectFormMetricsDashboard, selectCustomGraph, selectFormCustomGraph
+  selectFormMetricsDashboard, selectCustomGraph, selectFormCustomGraph, selectCustomGraphData
 };

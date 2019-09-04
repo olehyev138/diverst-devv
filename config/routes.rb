@@ -208,7 +208,7 @@ Diverst::Application.routes.draw do
         end
 
         resources :graphs do
-          member do
+          collection do
             get 'data'
             get 'export_csv'
           end

@@ -3,4 +3,5 @@ class MetricsDashboardSerializer < ApplicationRecordSerializer
 
   has_many :groups
   has_many :segments
+  has_many :graphs
 end

@@ -20,6 +20,9 @@ import {
   UPDATE_CUSTOM_GRAPH_BEGIN,
   UPDATE_CUSTOM_GRAPH_SUCCESS,
   UPDATE_CUSTOM_GRAPH_ERROR,
+  GET_CUSTOM_GRAPH_DATA_BEGIN,
+  GET_CUSTOM_GRAPH_DATA_SUCCESS,
+  GET_CUSTOM_GRAPH_DATA_ERROR,
   CUSTOM_GRAPH_UNMOUNT
 } from './constants';
 
@@ -132,6 +135,27 @@ export function deleteCustomGraphSuccess(payload) {
 export function deleteCustomGraphError(error) {
   return {
     type: DELETE_CUSTOM_GRAPH_ERROR,
+    error,
+  };
+}
+
+export function getCustomGraphDataBegin(payload) {
+  return {
+    type: GET_CUSTOM_GRAPH_DATA_BEGIN,
+    payload
+  };
+}
+
+export function getCustomGraphDataSuccess(payload) {
+  return {
+    type: GET_CUSTOM_GRAPH_DATA_SUCCESS,
+    payload
+  };
+}
+
+export function getCustomGraphDataError(error) {
+  return {
+    type: GET_CUSTOM_GRAPH_DATA_ERROR,
     error,
   };
 }

@@ -10,14 +10,15 @@ import {
 } from './constants';
 
 import {
-  GET_CUSTOM_GRAPH_SUCCESS, CUSTOM_GRAPH_UNMOUNT
+  GET_CUSTOM_GRAPH_SUCCESS, GET_CUSTOM_GRAPH_DATA_SUCCESS, CUSTOM_GRAPH_UNMOUNT
 } from 'containers/Analyze/Dashboards/MetricsDashboard/CustomGraph/constants';
 
 export const initialState = {
   metricsDashboards: [],
   metricsDashboardsTotal: null,
   currentMetricsDashboard: null,
-  currentCustomGraph: null
+  currentCustomGraph: null,
+  currentCustomGraphData: {}
 };
 
 /* eslint-disable default-case, no-param-reassign */
@@ -34,6 +35,9 @@ function customMetricsReducer(state = initialState, action) {
         break;
       case GET_CUSTOM_GRAPH_SUCCESS:
         draft.currentCustomGraph = action.payload.graph;
+        break;
+      case GET_CUSTOM_GRAPH_DATA_SUCCESS:
+        draft.currentCustomGraphData = action.payload.data;
         break;
       case CUSTOM_GRAPH_UNMOUNT:
         draft.currentCustomGraph = null;
