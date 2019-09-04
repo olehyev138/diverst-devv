@@ -142,9 +142,8 @@ export function* getCustomGraph(action) {
 }
 
 export function* getCustomGraphData(action) {
-  console.log('hey');
   try {
-    const response = yield call(api.metrics.customGraphs.data.bind(api.metrics.customGraphs), action.payload);
+    const response = yield call(api.metrics.customGraphs.data.bind(api.metrics.customGraphs), { graph: action.payload });
     yield put(getCustomGraphDataSuccess(response.data));
   } catch (err) {
     // TODO: intl message

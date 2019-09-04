@@ -51,7 +51,7 @@ export function CustomGraphPage(props) {
 
 CustomGraphPage.propTypes = {
   customGraph: PropTypes.object.isRequired,
-  data: PropTypes.object,
+  data: PropTypes.array,
   getCustomGraphDataBegin: PropTypes.func,
   customGraphUnmount: PropTypes.func
 };

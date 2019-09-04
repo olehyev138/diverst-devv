@@ -37,7 +37,7 @@ function customMetricsReducer(state = initialState, action) {
         draft.currentCustomGraph = action.payload.graph;
         break;
       case GET_CUSTOM_GRAPH_DATA_SUCCESS:
-        draft.currentCustomGraphData = action.payload.data;
+        draft.currentCustomGraphData = action.payload;
         break;
       case CUSTOM_GRAPH_UNMOUNT:
         draft.currentCustomGraph = null;

@@ -1,6 +1,8 @@
 import { createSelector } from 'reselect';
 import { initialState } from './reducer';
 import produce from 'immer';
+import dig from 'object-dig';
+import { formatBarGraphData, selectSeriesValues } from 'utils/metricsHelpers';
 
 const selectCustomMetricsDomain = state => state.customMetrics || initialState;
 
@@ -55,7 +57,7 @@ const selectFormCustomGraph = () => createSelector(
 
 const selectCustomGraphData = () => createSelector(
   selectCustomMetricsDomain,
-  customMetricsState => customMetricsState.currentCustomGraphData
+  customMetricsState => formatBarGraphData(selectSeriesValues(customMetricsState.currentCustomGraphData, 0) || [])
 );
 
 export {

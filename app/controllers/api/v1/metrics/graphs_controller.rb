@@ -2,10 +2,10 @@ class Api::V1::Metrics::GraphsController < DiverstController
   include Api::V1::Concerns::Metrics
 
   def data
-    graph = Graph.find(payload[:id])
+    graph = Graph.find_by(id: payload[:id])
 
     render json: {} unless graph
-    render json: @graph.data(payload[:date_range])
+    render json: graph.data(payload[:date_range])
   end
 
   def payload
