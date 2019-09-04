@@ -1,5 +1,7 @@
 class PollSerializer < ApplicationRecordSerializer
-  attributes :fields, :groups, :segments
+  attributes :groups, :segments
+
+  has_many :fields, each_serializer: FieldSerializer
 
   def serialize_all_fields
     true
