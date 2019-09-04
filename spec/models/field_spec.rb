@@ -17,6 +17,30 @@ RSpec.describe Field do
       end
     end
 
+    context 'validate presence of type for field' do
+      it 'valid if type is present' do
+        field.type = 'TextField'
+        expect(field).to be_valid
+      end
+
+      it 'invalid if type is absent' do
+        field.type = ''
+        expect(field).not_to be_valid
+      end
+    end
+
+    context 'validate inclusion of type for field' do
+      it 'valid if type is present' do
+        field.type = 'TextField'
+        expect(field).to be_valid
+      end
+
+      it 'invalid if type is fake field' do
+        field.type = 'TestField'
+        expect(field).not_to be_valid
+      end
+    end
+
     context 'validate presence of title for field1' do
       it 'valid if title is present' do
         field1.title = 'title'
