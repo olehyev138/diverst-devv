@@ -69,6 +69,8 @@ class Initiative < BaseClass
   # Slack Call Back
   after_create :post_new_event_to_slack, unless: Proc.new { Rails.env.test? }
 
+  after_destroy :update_annual_budget
+
   has_attached_file :picture, styles: { medium: '1000x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: 'private'
   validates_attachment_content_type :picture, content_type: %r{\Aimage\/.*\Z}
 
@@ -101,6 +103,10 @@ class Initiative < BaseClass
         end
       end
     end
+  end
+
+  def ended?
+    self.end < DateTime.now
   end
 
   def archived?
@@ -554,5 +560,17 @@ class Initiative < BaseClass
     participating_groups.each do |gr|
       gr.send_slack_webhook_message message
     end
+  end
+  
+  def update_annual_budget
+    group = owner_group
+    annual_budget = AnnualBudget.find_or_create_by(closed: false, group_id: group.id)
+    return if annual_budget.nil?
+
+    leftover_of_annual_budget = ((group.annual_budget || annual_budget.amount) - group.approved_budget) + group.available_budget
+    group.update(leftover_money: leftover_of_annual_budget, annual_budget: annual_budget.amount)
+    annual_budget.update(amount: group.annual_budget, available_budget: group.available_budget,
+                         leftover_money: group.leftover_money, expenses: group.spent_budget,
+                         approved_budget: group.approved_budget)
   end
 end

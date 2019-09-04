@@ -16,9 +16,11 @@
       <%= link_to "New Expense", new_group_initiative_expense_path(@group, @initiative), class: "btn btn--primary" if InitiativeExpensePolicy.new(current_user, InitiativeExpense).new? %>
     </div>
     <% unless @initiative.expenses.empty? %>
-      <div class="flex-row__cell">
-        <%= link_to "Finish Expenses", finish_expenses_group_initiative_path(@group, @initiative), method: :post, class: "btn btn--secondary" if InitiativePolicy.new(current_user, @initiative).update? %>
-      </div>
+      <% if @initiative.ended? %>
+        <div class="flex-row__cell">
+          <%= link_to "Finish Expenses", finish_expenses_group_initiative_path(@group, @initiative), method: :post, class: "btn btn--secondary" if InitiativePolicy.new(current_user, @initiative).update? %>
+        </div>
+      <% end %>  
     <% end %>  
   <% end %>
   </div>
@@ -78,7 +80,7 @@
       </div>
       <div class="flex-row__cell flex-row__cell--grow flex-row__cell--spaced">
         <div class="progress-bar">
-          <div class="progress-bar__fill" style="width: <%= @expenses.sum(:amount).to_f / @initiative.estimated_funding * 100 %>%;"></div>
+          <div class="progress-bar__fill <%= " warning" if negative_budget_pressure(initiative: @initiative) %>" style="width: <%= percentage_expenditure(@expenses.sum(:amount), @initiative.estimated_funding) %>%;"></div>
         </div>
       </div>
       <div class="flex-row__cell flex-row__cell--spaced">

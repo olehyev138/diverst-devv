@@ -50,7 +50,7 @@ class Enterprise < BaseClass
   has_many :mentoring_requests, dependent: :destroy
   has_many :mentoring_sessions, dependent: :destroy
   has_many :mentoring_types, dependent: :destroy
-  has_many :sponsors, as: :sponsorable, dependent: :destroy
+  has_many :sponsors, dependent: :destroy
 
   has_many :policy_group_templates, dependent: :destroy
   has_many :rewards, dependent: :destroy

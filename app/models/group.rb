@@ -106,7 +106,7 @@ class Group < BaseClass
 
   has_many :group_leaders, -> { order(position: :asc) }, dependent: :destroy
   has_many :leaders, through: :group_leaders, source: :user
-  has_many :sponsors, as: :sponsorable, dependent: :destroy
+  has_many :sponsors, dependent: :destroy
 
   has_many :children, class_name: 'Group', foreign_key: :parent_id, dependent: :destroy
   has_many :annual_budgets, dependent: :destroy
@@ -422,7 +422,11 @@ class Group < BaseClass
   end
 
   def title_with_leftover_amount
-    "Create event from #{name} leftover ($#{leftover_money == 0 ? 0.0 : available_budget})"
+    if annual_budget == leftover_money
+      "Create event from #{name} ($#{available_budget})"
+    else
+      "Create event from #{name} leftover ($#{leftover_money == 0 ? 0.0 : available_budget})"
+    end
   end
 
   def pending_comments_count
