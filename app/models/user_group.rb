@@ -23,6 +23,7 @@ class UserGroup < ApplicationRecord
 
   settings do
     # dynamic template for combined_info fields, maps them to keyword
+    #  - they must be keywords in order to perform aggregations on them
     mappings dynamic_templates: [
       {
         string_template: {
@@ -51,6 +52,11 @@ class UserGroup < ApplicationRecord
         indexes :active, type: :boolean
         indexes :mentor, type: :boolean
         indexes :mentee, type: :boolean
+        indexes :field_data do
+          indexes :user_id, type: :integer
+          indexes :field_id, type: :integer
+          indexes :data, type: :keyword
+        end
       end
     end
   end
@@ -65,7 +71,8 @@ class UserGroup < ApplicationRecord
             include: { parent: { only: [:name] } },
           },
           user: {
-            only: [:enterprise_id, :created_at, :mentor, :mentee, :active]
+            only: [:enterprise_id, :created_at, :mentor, :mentee, :active],
+            include: { field_data: { only: [:user_id, :field_id, :data] } }
           }
         },
         methods: [:user_combined_info]

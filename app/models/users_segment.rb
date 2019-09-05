@@ -30,6 +30,11 @@ class UsersSegment < ApplicationRecord
       indexes :user do
         indexes :enterprise_id, type: :integer
         indexes :created_at, type: :date
+        indexes :field_data do
+          indexes :user_id, type: :integer
+          indexes :field_id, type: :integer
+          indexes :data, type: :keyword
+        end
       end
     end
   end
@@ -37,10 +42,16 @@ class UsersSegment < ApplicationRecord
   def as_indexed_json(options = {})
     self.as_json(
       options.merge(
-        include: { segment: {
-          only: [:enterprise_id, :name],
-          include: { parent: { only: [:name] } }
-        }, user: { only: [:created_at, :enterprise_id] } },
+        include: {
+          segment: {
+            only: [:enterprise_id, :name],
+            include: { parent: { only: [:name] } }
+          },
+          user: {
+            only: [:created_at, :enterprise_id],
+            include: { field_data: { only: [:user_id, :field_id, :data] } }
+          }
+        },
         methods: [:user_combined_info]
       )
     )
