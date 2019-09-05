@@ -22,7 +22,7 @@ class UserGroup < ApplicationRecord
   after_destroy { update_mentor_fields(false) }
 
   settings do
-    # dynamic template for combined_info fields, maps them to keyword
+    # dynamic template for field_data hash - maps value/data string to es type 'keyword'
     #  - they must be keywords in order to perform aggregations on them
     mappings dynamic_templates: [
       {
@@ -52,11 +52,6 @@ class UserGroup < ApplicationRecord
         indexes :active, type: :boolean
         indexes :mentor, type: :boolean
         indexes :mentee, type: :boolean
-        indexes :field_data do
-          indexes :user_id, type: :integer
-          indexes :field_id, type: :integer
-          indexes :data, type: :keyword
-        end
       end
     end
   end
@@ -72,10 +67,9 @@ class UserGroup < ApplicationRecord
           },
           user: {
             only: [:enterprise_id, :created_at, :mentor, :mentee, :active],
-            include: { field_data: { only: [:user_id, :field_id, :data] } }
           }
         },
-        methods: [:user_combined_info]
+        methods: [:field_data]
       )
     )
     .deep_merge({
@@ -86,8 +80,9 @@ class UserGroup < ApplicationRecord
     })
   end
 
-  def user_combined_info
-    user.combined_info
+  # For use by ES indexing - method has to be defined in same class
+  def field_data
+    user.indexed_field_data
   end
 
   def string_for_field(field)
