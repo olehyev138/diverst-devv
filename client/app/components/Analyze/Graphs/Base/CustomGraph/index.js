@@ -35,7 +35,7 @@ export function CustomGraph(props) {
           margin={{ left: 100 }}
           height={500}
           onMouseLeave={() => setValue(undefined)}
-          stackBy='y'
+          stackBy='x'
           {...props}
         >
           <XAxis />
@@ -45,16 +45,20 @@ export function CustomGraph(props) {
           <HorizontalGridLines />
           <VerticalGridLines />
           { props.data && props.data.map((series, index) => {
+            // TODO: hide/show series with legend like line graph
             // if (dig(legendData[series.key], 'hidden')) return (<React.Fragment key={series.key} />);
 
             return (
               <HorizontalBarSeries
                 key={series.key}
                 data={series.values}
+                onValueMouseOver={value => {
+                  setValue(value);
+                }}
               />
             );
           })}
-          {value && <Hint value={{ x: value.x, y: value.y }} />}
+          {value && <Hint value={{ x: (value.x - (value.x0 ? value.x0 : 0)), y: value.series }} />}
         </FlexibleWidthXYPlot>
         <Box mb={2} />
       </Paper>

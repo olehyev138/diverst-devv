@@ -70,7 +70,7 @@ const selectCustomAggGraphData = () => createSelector(
     const formatted = series.map(series => {
       return {
         key: series.key,
-        values: series.values.map(value => ({ x: value.y, y: value.x }))
+        values: series.values.map(value => ({ x: value.y, y: value.x, series: series.key }))
       };
     });
 
