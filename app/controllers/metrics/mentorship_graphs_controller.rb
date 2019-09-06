@@ -15,6 +15,25 @@ class Metrics::MentorshipGraphsController < ApplicationController
     }
   end
 
+  def user_mentorship
+    MentoringInterestPolicy.new(current_user, MentoringInterest).index?
+    @user = User.find(params[:id])
+  end
+
+  def users_mentorship_count
+    authorize MetricsDashboard, :index?
+    with_mentorship = params[:with_mentorship] || 'true'
+    respond_to do |format|
+      format.json {
+        render json: UserMentorshipStatsDatatable.new(view_context, has_value: with_mentorship == 'true')
+      }
+      format.csv {
+        # TODO
+        render json: { notice: 'TODO' }
+      }
+    end
+  end
+
   def top_mentors
     authorize MetricsDashboard, :index?
 
