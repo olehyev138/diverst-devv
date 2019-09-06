@@ -16,6 +16,11 @@ class Api::V1::Metrics::GraphsController < DiverstController
         :field_id,
         :aggregation_id,
         :metrics_dashboard_id,
+        :unset_series,
+        date_range: [
+          :from_date,
+          :to_date
+        ]
       )
   end
 end
