@@ -1,6 +1,8 @@
 import React, {
   memo, useContext, useEffect, useState
 } from 'react';
+
+import { push } from 'connected-react-router';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -67,7 +69,6 @@ export function MetricsDashboardListPage(props) {
       metricsDashboardsTotal={props.metricsDashboardsTotal}
       handleVisitDashboardEdit={props.handleVisitDashboardEdit}
       deleteMetricsDashboardBegin={props.deleteMetricsDashboardBegin}
-      handleVisit
       handlePagination={handlePagination}
       links={links}
     />

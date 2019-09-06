@@ -113,6 +113,7 @@ export function MetricsDashboardsList(props, context) {
               icon: () => <Edit />,
               tooltip: 'Edit Member',
               onClick: (_, rowData) => {
+                console.log(props);
                 props.handleVisitDashboardEdit(rowData.id);
               } }, {
               icon: () => <DeleteOutline />,
