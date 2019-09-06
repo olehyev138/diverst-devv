@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190906131721) do
+ActiveRecord::Schema.define(version: 20190906204614) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -1601,6 +1601,9 @@ ActiveRecord::Schema.define(version: 20190906131721) do
   SQL
   create_view "total_page_visitations", sql_definition: <<-SQL
       select `a`.`page_url` AS `page_url`,`b`.`page_name` AS `page_name`,`c`.`enterprise_id` AS `enterprise_id`,sum(`a`.`visits_day`) AS `visits_day`,sum(`a`.`visits_week`) AS `visits_week`,sum(`a`.`visits_month`) AS `visits_month`,sum(`a`.`visits_year`) AS `visits_year`,sum(`a`.`visits_all`) AS `visits_all` from ((`page_visitation_data` `a` join `page_names` `b` on((`a`.`page_url` = `b`.`page_url`))) join `users` `c` on((`c`.`id` = `a`.`user_id`))) group by `a`.`page_url`,`b`.`page_name`,`c`.`enterprise_id`
+  SQL
+  create_view "user_mentor_pairs", sql_definition: <<-SQL
+      select `mentor`.`id` AS `mentor_id`,`mentor`.`first_name` AS `mentor_first_name`,`mentor`.`last_name` AS `mentor_last_name`,`mentor`.`email` AS `mentor_email`,`mentee`.`id` AS `mentee_id`,`mentee`.`first_name` AS `mentee_first_name`,`mentee`.`last_name` AS `mentee_last_name`,`mentee`.`email` AS `mentee_email` from ((`users` `mentor` join `mentorings` on((`mentor`.`id` = `mentorings`.`mentor_id`))) join `users` `mentee` on((`mentee`.`id` = `mentorings`.`mentee_id`)))
   SQL
   create_view "user_with_mentor_counts", sql_definition: <<-SQL
       select `u`.`id` AS `user_id`,`u`.`first_name` AS `first_name`,`u`.`last_name` AS `last_name`,`u`.`email` AS `email`,count(distinct `m1`.`mentee_id`) AS `number_of_mentees`,count(distinct `m2`.`mentor_id`) AS `number_of_mentors` from ((`users` `u` left join `mentorings` `m1` on((`u`.`id` = `m1`.`mentor_id`))) left join `mentorings` `m2` on((`u`.`id` = `m2`.`mentee_id`))) group by `u`.`id`,`u`.`first_name`,`u`.`last_name`,`u`.`email`
