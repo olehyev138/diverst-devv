@@ -2,6 +2,8 @@ import React, { memo, useEffect, useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
+import dig from 'object-dig';
+
 import {
   Grid, Paper, withStyles, Box,
   Button
@@ -9,13 +11,18 @@ import {
 
 import {
   FlexibleWidthXYPlot, HorizontalBarSeries, VerticalGridLines, HorizontalGridLines,
-  Hint, XAxis, YAxis
+  Hint, XAxis, YAxis, DiscreteColorLegend, makeWidthFlexible
 } from 'react-vis/';
 import { Edit, DeleteOutline } from '@material-ui/icons';
 import 'react-vis/dist/style.css';
 
+import 'react-perfect-scrollbar/dist/css/styles.css';
+import PerfectScrollbar from 'react-perfect-scrollbar';
+
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import RangeSelector from 'components/Analyze/Shared/RangeSelector';
+
+const FlexibleWidthDiscreteColorLegend = makeWidthFlexible(DiscreteColorLegend);
 
 const styles = theme => ({
   paper: {
@@ -26,6 +33,20 @@ const styles = theme => ({
 export function CustomGraph(props) {
   const { classes } = props;
   const [value, setValue] = useState(undefined);
+  const [legendData, setLegendData] = useState({});
+
+  const buildLegendData = (data, hidden = false) => {
+    if (!data) return [];
+
+    const newLegendData = {};
+    data.forEach((d) => { newLegendData[d.key] = { title: d.key, hidden }; });
+
+    return newLegendData;
+  };
+
+  useEffect(() => {
+    setLegendData(buildLegendData(props.data));
+  }, [props.data]);
 
   return (
     <React.Fragment>
@@ -51,6 +72,23 @@ export function CustomGraph(props) {
             </Button>
           </Grid>
         </Grid>
+        <PerfectScrollbar>
+          <FlexibleWidthDiscreteColorLegend
+            style={{
+              overflow: 'visible',
+              paddingBottom: 16,
+            }}
+            items={Object.values(legendData)}
+            orientation='horizontal'
+            onItemClick={(v) => {
+              const p = produce(legendData, (draft) => {
+                draft[v.title].hidden = !draft[v.title].hidden;
+              });
+
+              setLegendData(p);
+            }}
+          />
+        </PerfectScrollbar>
         <RangeSelector updateRange={props.updateRange} />
         <Box mb={2} />
         <FlexibleWidthXYPlot
@@ -69,15 +107,13 @@ export function CustomGraph(props) {
           <VerticalGridLines />
           { props.data && props.data.map((series, index) => {
             // TODO: hide/show series with legend like line graph
-            // if (dig(legendData[series.key], 'hidden')) return (<React.Fragment key={series.key} />);
+            if (dig(legendData[series.key], 'hidden')) return (<React.Fragment key={series.key} />);
 
             return (
               <HorizontalBarSeries
                 key={series.key}
                 data={series.values}
-                onValueMouseOver={value => {
-                  setValue(value);
-                }}
+                onValueMouseOver={value => setValue(value)}
               />
             );
           })}
@@ -95,8 +131,7 @@ CustomGraph.propTypes = {
   customGraph: PropTypes.object,
   links: PropTypes.object,
   updateRange: PropTypes.func,
-  handleDrilldown: PropTypes.func,
-  isDrilldown: PropTypes.bool,
+  deleteCustomGraphBegin: PropTypes.func,
   metricsUnmount: PropTypes.func
 };
 
