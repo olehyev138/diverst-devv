@@ -11,8 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-
-ActiveRecord::Schema.define(version: 20190828180853) do
+ActiveRecord::Schema.define(version: 20190906131721) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -977,8 +976,8 @@ ActiveRecord::Schema.define(version: 20190828180853) do
     t.string "page_name", limit: 191
   end
 
-  add_index "page_names", %w(page_name page_url), name: "index_page_names_on_page_name_and_page_url", using: :btree
-  add_index "page_names", %w(page_url page_name), name: "index_page_names_on_page_url_and_page_name", using: :btree
+  add_index "page_names", ["page_name", "page_url"], name: "index_page_names_on_page_name_and_page_url", using: :btree
+  add_index "page_names", ["page_url", "page_name"], name: "index_page_names_on_page_url_and_page_name", using: :btree
 
   create_table "page_visitation_data", force: :cascade do |t|
     t.integer  "user_id",      limit: 4
@@ -994,8 +993,8 @@ ActiveRecord::Schema.define(version: 20190828180853) do
     t.datetime "updated_at",                           null: false
   end
 
-  add_index "page_visitation_data", %w(page_url user_id), name: "index_page_visitation_data_on_page_url_and_user_id", using: :btree
-  add_index "page_visitation_data", %w(user_id page_url), name: "index_page_visitation_data_on_user_id_and_page_url", using: :btree
+  add_index "page_visitation_data", ["page_url", "user_id"], name: "index_page_visitation_data_on_page_url_and_user_id", using: :btree
+  add_index "page_visitation_data", ["user_id", "page_url"], name: "index_page_visitation_data_on_user_id_and_page_url", using: :btree
 
   create_table "pillars", force: :cascade do |t|
     t.string   "name",              limit: 191
@@ -1602,5 +1601,8 @@ ActiveRecord::Schema.define(version: 20190828180853) do
   SQL
   create_view "total_page_visitations", sql_definition: <<-SQL
       select `a`.`page_url` AS `page_url`,`b`.`page_name` AS `page_name`,`c`.`enterprise_id` AS `enterprise_id`,sum(`a`.`visits_day`) AS `visits_day`,sum(`a`.`visits_week`) AS `visits_week`,sum(`a`.`visits_month`) AS `visits_month`,sum(`a`.`visits_year`) AS `visits_year`,sum(`a`.`visits_all`) AS `visits_all` from ((`page_visitation_data` `a` join `page_names` `b` on((`a`.`page_url` = `b`.`page_url`))) join `users` `c` on((`c`.`id` = `a`.`user_id`))) group by `a`.`page_url`,`b`.`page_name`,`c`.`enterprise_id`
+  SQL
+  create_view "user_with_mentor_counts", sql_definition: <<-SQL
+      select `u`.`id` AS `user_id`,`u`.`first_name` AS `first_name`,`u`.`last_name` AS `last_name`,`u`.`email` AS `email`,count(distinct `m1`.`mentee_id`) AS `number_of_mentees`,count(distinct `m2`.`mentor_id`) AS `number_of_mentors` from ((`users` `u` left join `mentorings` `m1` on((`u`.`id` = `m1`.`mentor_id`))) left join `mentorings` `m2` on((`u`.`id` = `m2`.`mentee_id`))) group by `u`.`id`,`u`.`first_name`,`u`.`last_name`,`u`.`email`
   SQL
 end
