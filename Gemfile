@@ -35,8 +35,10 @@ gem 'active_link_to', '~> 1.0', '>= 1.0.3' # Automatically add an active class t
 gem 'paperclip', '~> 4.3'# Handle attachments for models and forms
 gem 'aws-sdk', '< 2.0'# The official AWS SDK
 gem 'kaminari', '~> 0.16.3' # Pagination
-gem 'jquery-datatables-rails', '~> 3.3' # Datatables
+# gem 'jquery-datatables-rails', '~> 3.3' # Datatables
+gem 'jquery-datatables-rails', '~> 3.4.0' # Datatables
 gem 'ajax-datatables-rails', '~> 0.3.1' # Adds AJAX routes for datatables queries
+# gem 'ajax-datatables-rails', '~> 0.4.3' # Trying to update to most recent version to fix bug
 gem 'elasticsearch-model', '~> 6.0.0'
 gem 'elasticsearch-rails', '~> 6.0.0'
 gem 'sprockets', '>= 3.0.0'

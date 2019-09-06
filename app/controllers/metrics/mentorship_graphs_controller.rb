@@ -18,6 +18,36 @@ class Metrics::MentorshipGraphsController < ApplicationController
   def user_mentorship
     MentoringInterestPolicy.new(current_user, MentoringInterest).index?
     @user = User.find(params[:id])
+    respond_to do |format|
+      format.html { }
+      format.csv {
+        UserMentorsCsvJob.perform_later(current_user.id, @user.id)
+        flash[:notice] = 'Please check your Secure Downloads section in a couple of minutes'
+        redirect_to :back
+      }
+    end
+  end
+
+  def users_mentorship
+    MentoringInterestPolicy.new(current_user, MentoringInterest).index?
+    respond_to do |format|
+      format.csv {
+        AllUsersMentorsCsvJob.perform_later(current_user.id)
+        render json: { notice: 'Please check your Secure Downloads section in a couple of minutes' }
+      }
+    end
+  end
+
+  def user_mentors
+    authorize MetricsDashboard, :index?
+    user = User.find(params[:user_id].to_i)
+    type = params[:type] || 'mentees'
+    users = user.send(type).to_a
+    respond_to do |format|
+      format.json {
+        render json: UserDatatable.new(view_context, users, read_only: true)
+      }
+    end
   end
 
   def users_mentorship_count

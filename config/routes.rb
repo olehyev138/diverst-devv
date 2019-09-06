@@ -648,6 +648,8 @@ Rails.application.routes.draw do
         get 'mentors_per_group'
         get 'top_mentors'
         get 'users_mentorship_count'
+        get 'user_mentors'
+        get 'users_mentorship'
       end
 
       member do

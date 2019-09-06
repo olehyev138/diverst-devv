@@ -6,6 +6,30 @@
   <div class="card">
     <div class="card__section">
       <h2>HELLO</h2>
+      <%= render 'user_mentorship',
+                 source: user_mentors_metrics_mentorships_path(format: :json, user_id: @user.id, type: 'mentees'),
+                 id: 'user_mentee_count'
+      %>
     </div>
   </div>
 </div>
+
+<script>
+    $(document).on('ready page:load', function () {
+        $('#user_mentee_count').dataTable({
+            "retrieve": true,
+            "processing": true,
+            "serverSide": true,
+            "ajax": {
+                "url": $('#user_mentee_count').data('source')
+            },
+            "pagingType": "full_numbers",
+            columnDefs: [
+                {bSortable: false, targets: [0]}
+            ]
+            // pagingType is optional, if you want full pagination controls.
+            // Check dataTables documentation to learn more about
+            // available options.
+        });
+    });
+</script>
