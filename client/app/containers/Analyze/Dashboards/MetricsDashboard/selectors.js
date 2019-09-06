@@ -60,7 +60,27 @@ const selectCustomGraphData = () => createSelector(
   customMetricsState => formatBarGraphData(selectSeriesValues(customMetricsState.currentCustomGraphData, 0) || [])
 );
 
+const selectCustomAggGraphData = () => createSelector(
+  selectCustomMetricsDomain,
+  (customMetricsState) => {
+    // TODO: cleanup
+
+    const data = customMetricsState.currentCustomGraphData;
+    const series = dig(customMetricsState.currentCustomGraphData, 'series') || [];
+    const formatted = series.map(series => {
+      return {
+        key: series.key,
+        values: series.values.map(value => ({ x: value.y, y: value.x }))
+      };
+    });
+
+    return formatted;
+  }
+);
+
+
 export {
   selectPaginatedMetricsDashboards, selectMetricsDashboardsTotal, selectMetricsDashboard,
-  selectFormMetricsDashboard, selectCustomGraph, selectFormCustomGraph, selectCustomGraphData
+  selectFormMetricsDashboard, selectCustomGraph, selectFormCustomGraph, selectCustomGraphData,
+  selectCustomAggGraphData
 };

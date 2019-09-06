@@ -11,10 +11,10 @@ import reducer from 'containers/Analyze/Dashboards/MetricsDashboard/reducer';
 import saga from 'containers/Analyze/Dashboards/MetricsDashboard/saga';
 
 import { getCustomGraphDataBegin, customGraphUnmount } from '../actions';
-import { selectCustomGraphData } from 'containers/Analyze/Dashboards/MetricsDashboard/selectors';
+import { selectCustomAggGraphData } from 'containers/Analyze/Dashboards/MetricsDashboard/selectors';
 
 // helpers
-import { getUpdateRange, formatBarGraphData } from 'utils/metricsHelpers';
+import { getUpdateRange } from 'utils/metricsHelpers';
 import CustomGraph from 'components/Analyze/Graphs/Base/CustomGraph';
 
 export function CustomGraphPage(props) {
@@ -57,7 +57,7 @@ CustomGraphPage.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
-  data: selectCustomGraphData()
+  data: selectCustomAggGraphData()
 });
 
 const mapDispatchToProps = {
