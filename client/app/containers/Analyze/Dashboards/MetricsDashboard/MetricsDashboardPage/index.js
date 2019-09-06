@@ -29,7 +29,8 @@ export function MetricsDashboardPage(props) {
   const rs = new RouteService(useContext);
   const links = {
     metricsDashboardsIndex: ROUTES.admin.analyze.custom.index.path(),
-    metricsDashboardEdit: ROUTES.admin.analyze.custom.edit.path(rs.params('metrics_dashboard_id'))
+    metricsDashboardEdit: ROUTES.admin.analyze.custom.edit.path(rs.params('metrics_dashboard_id')),
+    customGraphNew: ROUTES.admin.analyze.custom.graphs.new.path(rs.params('metrics_dashboard_id')),
   };
 
   useEffect(() => {

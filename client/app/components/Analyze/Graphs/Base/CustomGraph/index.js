@@ -11,8 +11,10 @@ import {
   FlexibleWidthXYPlot, HorizontalBarSeries, VerticalGridLines, HorizontalGridLines,
   Hint, XAxis, YAxis
 } from 'react-vis/';
+import { Edit, DeleteOutline } from '@material-ui/icons';
 import 'react-vis/dist/style.css';
 
+import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import RangeSelector from 'components/Analyze/Shared/RangeSelector';
 
 const styles = theme => ({
@@ -28,6 +30,27 @@ export function CustomGraph(props) {
   return (
     <React.Fragment>
       <Paper className={classes.paper}>
+        <Grid container justify='flex-end'>
+          <Grid item>
+            <Button
+              component={WrappedNavLink}
+              to={props.links.customGraphEdit(props.customGraph.id)}
+            >
+              <Edit />
+            </Button>
+          </Grid>
+          <Grid item>
+            <Button
+              onClick={() => {
+                /* eslint-disable-next-line no-alert, no-restricted-globals */
+                if (confirm('Delete metricsDashboard?'))
+                  props.deleteCustomGraphBegin(props.customGraph.id);
+              }}
+            >
+              <DeleteOutline />
+            </Button>
+          </Grid>
+        </Grid>
         <RangeSelector updateRange={props.updateRange} />
         <Box mb={2} />
         <FlexibleWidthXYPlot
@@ -69,6 +92,8 @@ export function CustomGraph(props) {
 CustomGraph.propTypes = {
   classes: PropTypes.object,
   data: PropTypes.array,
+  customGraph: PropTypes.object,
+  links: PropTypes.object,
   updateRange: PropTypes.func,
   handleDrilldown: PropTypes.func,
   isDrilldown: PropTypes.bool,

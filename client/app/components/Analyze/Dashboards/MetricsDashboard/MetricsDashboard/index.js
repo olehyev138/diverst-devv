@@ -81,6 +81,18 @@ export function MetricsDashboard(props) {
               <FormattedMessage {...messages.edit} />
             </Button>
           </Grid>
+          <Grid item xs>
+            <Button
+              component={WrappedNavLink}
+              variant='contained'
+              size='large'
+              color='primary'
+              className={classNames(classes.buttons)}
+              to={props.links.customGraphNew}
+            >
+              Create Graph
+            </Button>
+          </Grid>
         </Grid>
         <Grid container spacing={3}>
           {metricsDashboard.graphs && metricsDashboard.graphs.map((graph => (
@@ -101,6 +113,7 @@ MetricsDashboard.propTypes = {
   currentUserId: PropTypes.number,
   links: PropTypes.shape({
     metricsDashboardEdit: PropTypes.string,
+    customGraphNew: PropTypes.string,
   })
 };
 
