@@ -3,10 +3,7 @@ class Api::V1::SessionsController < DiverstController
 
   def create
     user = User.signin(params[:email], params[:password])
-    render status: 200, json: {
-      token: UserTokenService.create_jwt(user, params),
-      **ActiveModelSerializers::SerializableResource.new(user.policy_group).as_json # Expand the serialized policy group hash into the login response
-    }
+    render status: 200, json: { token: UserTokenService.create_jwt(user, params) }
   rescue => e
     raise BadRequestException.new(e.message)
   end
