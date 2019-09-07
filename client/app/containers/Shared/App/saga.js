@@ -36,7 +36,7 @@ export function* login(action) {
     const user = JSON.parse(window.atob(response.data.token.split('.')[1]));
 
     yield put(setUser(user));
-    yield put(setUserPolicyGroup({ policy_group: response.data.policy_group }));
+    yield put(setUserPolicyGroup(user.policy_group));
     yield put(push(ROUTES.user.home.path()));
   } catch (err) {
     yield put(loginError(err));

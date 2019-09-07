@@ -15,7 +15,7 @@ describe('appReducer', () => {
   beforeEach(() => {
     state = {
       user: null,
-      policy_group: null,
+      policyGroup: null,
       enterprise: null,
       token: null,
     };
@@ -60,9 +60,9 @@ describe('appReducer', () => {
 
   it('handles the setUserPolicyGroup action correctly', () => {
     const expected = produce(state, (draft) => {
-      draft.policy_group = { groups_index: false };
+      draft.policyGroup = { groups_index: false };
     });
 
-    expect(appReducer(state, setUserPolicyGroup({ policy_group: { groups_index: false } }))).toEqual(expected);
+    expect(appReducer(state, setUserPolicyGroup({ groups_index: false }))).toEqual(expected);
   });
 });
