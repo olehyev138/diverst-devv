@@ -15,7 +15,7 @@ describe('appReducer', () => {
   beforeEach(() => {
     state = {
       user: null,
-      policy_group: null,
+      policyGroup: null,
       enterprise: null,
       token: null,
     };
@@ -52,17 +52,17 @@ describe('appReducer', () => {
 
   it('handles the setUser action correctly', () => {
     const expected = produce(state, (draft) => {
-      draft.user = 'user';
+      draft.user = { id: 1, email: 'tech@diverst.com' };
     });
 
-    expect(appReducer(state, setUser('user'))).toEqual(expected);
+    expect(appReducer(state, setUser({ id: 1, email: 'tech@diverst.com', policy_group: { permission: true } }))).toEqual(expected);
   });
 
   it('handles the setUserPolicyGroup action correctly', () => {
     const expected = produce(state, (draft) => {
-      draft.policy_group = { groups_index: false };
+      draft.policyGroup = { groups_index: false };
     });
 
-    expect(appReducer(state, setUserPolicyGroup({ policy_group: { groups_index: false } }))).toEqual(expected);
+    expect(appReducer(state, setUserPolicyGroup({ groups_index: false }))).toEqual(expected);
   });
 });
