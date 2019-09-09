@@ -741,6 +741,16 @@ class Enterprise < BaseClass
     LogCsv.build(logs)
   end
 
+  def get_colours
+    if theme.nil?
+      %w(#7B77C9 #7B77C9)
+    else
+      p_color = theme.primary_color || '#7B77C9'
+      s_color = theme.secondary_color || p_color
+      [p_color, s_color]
+    end
+  end
+
   protected
 
   def smart_add_url_protocol

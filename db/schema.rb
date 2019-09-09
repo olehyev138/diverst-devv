@@ -370,6 +370,7 @@ ActiveRecord::Schema.define(version: 20190828180853) do
     t.integer  "segments_count",                        limit: 4
     t.integer  "polls_count",                           limit: 4
     t.integer  "users_count",                           limit: 4
+    t.boolean  "slack_enabled",                                       default: false
   end
 
   add_index "enterprises", ["share_point_files_id"], name: "fk_rails_6315f961bd", using: :btree
@@ -627,6 +628,8 @@ ActiveRecord::Schema.define(version: 20190828180853) do
     t.string   "sp_import_news",              limit: 191,                           default: "No"
     t.string   "sp_import_pages",             limit: 191,                           default: "No"
     t.integer  "views_count",                 limit: 4
+    t.string   "slack_webhook",               limit: 191
+    t.text     "slack_auth_data",             limit: 65535
   end
 
   add_index "groups", ["share_point_files_id"], name: "index_groups_on_share_point_files_id", using: :btree

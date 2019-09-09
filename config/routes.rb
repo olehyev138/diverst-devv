@@ -17,7 +17,7 @@ Rails.application.routes.draw do
 
   get 'users/invitation', to: 'users/invitations#index'
 
-  get 'omniauth/:provider/callback', to: 'omni_auth#callback'
+  get 'omniauth/:provider/callback', to: 'omni_auth#callback', as: 'omniauth_callback'
 
   resources :onboarding, only: [:index]
 
@@ -186,6 +186,10 @@ Rails.application.routes.draw do
       post :sort
       get 'get_all_groups'
       get 'get_paginated_groups'
+    end
+    member do
+      get 'slack_button_redirect'
+      get 'slack_uninstall'
     end
     resources :budgets, only: [:index, :show, :new, :create, :destroy] do
       post 'approve'
