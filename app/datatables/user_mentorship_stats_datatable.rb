@@ -29,8 +29,8 @@ class UserMentorshipStatsDatatable < AjaxDatatablesRails::Base
           record.email,
           record.number_of_mentees,
           record.number_of_mentors,
-          link_to('Details', user_mentorship_metrics_mentorship_path(record.user_id), target: :_blank)
-          # link_to('Export CSV', user_mentorship_metrics_mentorship_path(record.user_id, format: :csv))
+          link_to('Details', user_mentorship_metrics_mentorship_path(record.user_id), target: :_blank),
+          link_to('Export CSV', user_mentorship_metrics_mentorship_path(record.user_id, format: :csv))
         ]
       end
     else
