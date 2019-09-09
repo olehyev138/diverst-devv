@@ -107,6 +107,7 @@ export function MetricsDashboardsList(props, context) {
             title='Custom Dashboards'
             onChangePage={handleChangePage}
             onChangeRowsPerPage={handleChangeRowsPerPage}
+            onRowClick={(_, rowData) => props.handleVisitDashboardPage(rowData.id)}
             data={buildDataFunction(Object.values(props.metricsDashboards), page, props.metricsDashboardsTotal)}
             columns={columns}
             actions={[{
@@ -140,6 +141,7 @@ MetricsDashboardsList.propTypes = {
   metricsDashboards: PropTypes.array,
   metricsDashboardsTotal: PropTypes.number,
   deleteMetricsDashboardBegin: PropTypes.func,
+  handleVisitDashboardPage: PropTypes.func,
   handleVisitDashboardEdit: PropTypes.func,
   currentTab: PropTypes.number,
   handleChangeTab: PropTypes.func,

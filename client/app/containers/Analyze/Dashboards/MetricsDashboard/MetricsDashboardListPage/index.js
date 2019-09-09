@@ -67,6 +67,7 @@ export function MetricsDashboardListPage(props) {
     <MetricsDashboardsList
       metricsDashboards={props.metricsDashboards}
       metricsDashboardsTotal={props.metricsDashboardsTotal}
+      handleVisitDashboardPage={props.handleVisitDashboardPage}
       handleVisitDashboardEdit={props.handleVisitDashboardEdit}
       deleteMetricsDashboardBegin={props.deleteMetricsDashboardBegin}
       handlePagination={handlePagination}
@@ -78,6 +79,7 @@ export function MetricsDashboardListPage(props) {
 MetricsDashboardListPage.propTypes = {
   getMetricsDashboardsBegin: PropTypes.func.isRequired,
   deleteMetricsDashboardBegin: PropTypes.func.isRequired,
+  handleVisitDashboardPage: PropTypes.func.isRequired,
   handleVisitDashboardEdit: PropTypes.func.isRequired,
   metricsDashboardsUnmount: PropTypes.func.isRequired,
   metricsDashboards: PropTypes.array,
@@ -92,6 +94,7 @@ const mapStateToProps = createStructuredSelector({
 const mapDispatchToProps = dispatch => ({
   getMetricsDashboardsBegin: payload => dispatch(getMetricsDashboardsBegin(payload)),
   deleteMetricsDashboardBegin: payload => dispatch(deleteMetricsDashboardBegin(payload)),
+  handleVisitDashboardPage: id => dispatch(push(ROUTES.admin.analyze.custom.show.path(id))),
   handleVisitDashboardEdit: id => dispatch(push(ROUTES.admin.analyze.custom.edit.path(id))),
   metricsDashboardsUnmount: () => dispatch(metricsDashboardsUnmount()),
 });
