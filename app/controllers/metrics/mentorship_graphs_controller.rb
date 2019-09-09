@@ -22,8 +22,7 @@ class Metrics::MentorshipGraphsController < ApplicationController
       format.html { }
       format.csv {
         UserMentorsCsvJob.perform_later(current_user.id, @user.id)
-        flash[:notice] = 'Please check your Secure Downloads section in a couple of minutes'
-        redirect_to :back
+        render json: { notice: 'Please check your Secure Downloads section in a couple of minutes' }
       }
     end
   end
@@ -56,10 +55,6 @@ class Metrics::MentorshipGraphsController < ApplicationController
     respond_to do |format|
       format.json {
         render json: UserMentorshipStatsDatatable.new(view_context, has_value: with_mentorship == 'true')
-      }
-      format.csv {
-        # TODO
-        render json: { notice: 'TODO' }
       }
     end
   end
