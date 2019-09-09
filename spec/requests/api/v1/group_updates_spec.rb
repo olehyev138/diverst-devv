@@ -21,7 +21,6 @@ RSpec.describe 'GroupUpdates', type: :request do
 
   it 'creates an item' do
     post "/api/v1/#{route}", params: { "#{route.singularize}": build(route.singularize.to_sym).attributes }, headers: headers
-    puts JSON.parse(response.body).inspect
     expect(response).to have_http_status(201)
   end
 

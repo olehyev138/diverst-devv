@@ -157,10 +157,11 @@ class User < ApplicationRecord
     self.avatar = URI.parse(url)
   end
 
-  def avatar_location
+  def avatar_location(expires_in: 3600, default_style: :medium)
     return nil if !avatar.presence
 
-    avatar.expiring_url(36000)
+    default_style = :medium if !avatar.styles.keys.include? default_style
+    avatar.expiring_url(expires_in, default_style)
   end
 
   def generate_authentication_token(length = 20)

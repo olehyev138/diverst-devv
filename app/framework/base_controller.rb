@@ -51,7 +51,6 @@ module BaseController
   def destroy
     item = klass.find(params[:id])
     base_authorize(item)
-
     klass.destroy(self.diverst_request, params[:id])
     head :no_content
   rescue => e

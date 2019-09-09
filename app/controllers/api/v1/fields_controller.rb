@@ -5,7 +5,7 @@ class Api::V1::FieldsController < DiverstController
   # Fallback to super if params not passed (ie: index)
   #  ex: params: { field: { type: 'TextField '}} => loads TextField subclass
   def klass
-    params[:field] ? payload[:type].classify.constantize : super
+    params[:field].presence ? payload[:type].classify.constantize : super
   end
 
   def payload
