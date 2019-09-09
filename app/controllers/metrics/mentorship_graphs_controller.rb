@@ -41,16 +41,11 @@ class Metrics::MentorshipGraphsController < ApplicationController
   def user_mentors
     authorize MetricsDashboard, :index?
     user_id = params[:user_id].to_i
+    user = User.find(user_id)
     type = params[:type] || 'mentees'
-    # users = User.find(user_id).send(type).all
     respond_to do |format|
       format.json {
-        if type == 'mentors'
-          render json: UserMentorListDatatable.new(view_context, user_id)
-        elsif type == 'mentees'
-          render json: UserMenteeListDatatable.new(view_context, user_id)
-        end
-        # render json: UserDatatable.new(view_context, users, read_only: true)
+        render json: UserMentorGenericListDatatable.new(view_context, user_id, user.send(type))
       }
     end
   end
