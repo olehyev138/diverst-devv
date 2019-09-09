@@ -88,7 +88,7 @@ class NewsLink < BaseClass
       type: 'section',
       text: {
         type: 'mrkdwn',
-        text: "*#{modifier} News Link Shared from <#{group_url(group)}|#{group.name}>*:\n\t*<#{group_news_link_news_link_comment_index_url(group.id, id)}|#{title}>*\n\t*Link:* #{url}"
+        text: "*#{modifier} News Link Shared from <#{group_url(group)}|#{group.name}>*:\n\t*<#{comments_group_news_link_url(group.id, id)}|#{title}>*\n\t*Link:* #{url}"
       }
     }
   end
