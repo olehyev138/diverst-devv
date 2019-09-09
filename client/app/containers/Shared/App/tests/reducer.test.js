@@ -52,10 +52,10 @@ describe('appReducer', () => {
 
   it('handles the setUser action correctly', () => {
     const expected = produce(state, (draft) => {
-      draft.user = 'user';
+      draft.user = { id: 1, email: 'tech@diverst.com' };
     });
 
-    expect(appReducer(state, setUser('user'))).toEqual(expected);
+    expect(appReducer(state, setUser({ id: 1, email: 'tech@diverst.com', policy_group: { permission: true } }))).toEqual(expected);
   });
 
   it('handles the setUserPolicyGroup action correctly', () => {
