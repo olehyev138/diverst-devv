@@ -4,7 +4,6 @@ import React, {
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect/lib';
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
@@ -15,9 +14,8 @@ import reducer from 'containers/Analyze/Dashboards/MetricsDashboard/reducer';
 import saga from 'containers/Analyze/Dashboards/MetricsDashboard/saga';
 
 import { getCustomGraphDataBegin, deleteCustomGraphBegin, customGraphUnmount } from '../actions';
-import { selectCustomAggGraphData } from 'containers/Analyze/Dashboards/MetricsDashboard/selectors';
+import { selectCustomGraphData } from 'containers/Analyze/Dashboards/MetricsDashboard/selectors';
 
-// helpers
 import { getUpdateRange } from 'utils/metricsHelpers';
 import CustomGraph from 'components/Analyze/Graphs/Base/CustomGraph';
 
@@ -41,10 +39,6 @@ export function CustomGraphPage(props) {
   });
 
   useEffect(() => {
-    setCurrentData(props.data);
-  }, [props.data]);
-
-  useEffect(() => {
     props.getCustomGraphDataBegin(params);
   }, [params]);
 
@@ -52,7 +46,7 @@ export function CustomGraphPage(props) {
     <React.Fragment>
       <CustomGraph
         customGraph={customGraph}
-        data={currentData}
+        data={props.selectData(customGraph.id)}
         updateRange={getUpdateRange([params, setParams])}
         deleteCustomGraphBegin={props.deleteCustomGraphBegin}
         links={links}
@@ -63,14 +57,14 @@ export function CustomGraphPage(props) {
 
 CustomGraphPage.propTypes = {
   customGraph: PropTypes.object.isRequired,
-  data: PropTypes.array,
+  selectData: PropTypes.func,
   getCustomGraphDataBegin: PropTypes.func,
   deleteCustomGraphBegin: PropTypes.func,
   customGraphUnmount: PropTypes.func
 };
 
-const mapStateToProps = createStructuredSelector({
-  data: selectCustomAggGraphData()
+const mapStateToProps = state => ({
+  selectData: id => selectCustomGraphData(id)(state)
 });
 
 const mapDispatchToProps = {

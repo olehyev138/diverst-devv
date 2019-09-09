@@ -1,4 +1,4 @@
-import { call, put, takeLatest } from 'redux-saga/effects';
+import { call, put, takeLatest, takeEvery } from 'redux-saga/effects';
 import api from 'api/api';
 import { push } from 'connected-react-router';
 
@@ -11,6 +11,7 @@ import {
 } from 'containers/Analyze/Dashboards/MetricsDashboard/constants';
 
 import {
+  getMetricsDashboardBegin,
   getMetricsDashboardsSuccess, getMetricsDashboardsError,
   getMetricsDashboardSuccess, getMetricsDashboardError,
   createMetricsDashboardSuccess, createMetricsDashboardError,
@@ -20,14 +21,14 @@ import {
 
 import {
   GET_CUSTOM_GRAPH_BEGIN, CREATE_CUSTOM_GRAPH_BEGIN, UPDATE_CUSTOM_GRAPH_BEGIN,
-  GET_CUSTOM_GRAPH_DATA_BEGIN, DELETE_CUSTOM_GRAPH_BEGIN,
+  GET_CUSTOM_GRAPH_DATA_BEGIN, DELETE_CUSTOM_GRAPH_BEGIN
 } from 'containers/Analyze/Dashboards/MetricsDashboard/CustomGraph/constants';
 
 import {
   getCustomGraphSuccess, getCustomGraphDataSuccess,
   createCustomGraphSuccess, createCustomGraphError,
   updateCustomGraphSuccess, updateCustomGraphError,
-  deleteCustomGraphError,
+  deleteCustomGraphError, deleteCustomGraphSuccess
 } from 'containers/Analyze/Dashboards/MetricsDashboard/CustomGraph/actions';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -127,6 +128,7 @@ export function* deleteMetricsDashboard(action) {
 }
 
 /* Graphs */
+
 export function* getCustomGraph(action) {
   try {
     const response = yield call(api.metrics.customGraphs.get.bind(api.metrics.customGraphs), action.payload.id);
@@ -144,7 +146,7 @@ export function* getCustomGraph(action) {
 export function* getCustomGraphData(action) {
   try {
     const response = yield call(api.metrics.customGraphs.data.bind(api.metrics.customGraphs), { graph: action.payload });
-    yield put(getCustomGraphDataSuccess(response.data));
+    yield put(getCustomGraphDataSuccess({ id: action.payload.id, data: response.data }));
   } catch (err) {
     // TODO: intl message
     yield put(getMetricsDashboardError(err));
@@ -162,7 +164,7 @@ export function* createCustomGraph(action) {
 
     yield put(push(ROUTES.admin.analyze.custom.show.path(action.payload.metrics_dashboard_id)));
     yield put(showSnackbar({
-      message: 'Metrics dashboard created',
+      message: 'Graph created',
       options: { variant: 'success' }
     }));
   } catch (err) {
@@ -200,13 +202,12 @@ export function* updateCustomGraph(action) {
 
 export function* deleteCustomGraph(action) {
   try {
-    yield call(api.metrics.customGraphs.destroy.bind(api.metrics.customGraphs), action.payload);
+    yield call(api.metrics.customGraphs.destroy.bind(api.metrics.customGraphs), action.payload.graphId);
+    yield put(deleteCustomGraphSuccess(action.payload));
 
-    // TODO: re render page
-    window.location.reload();
-
+    yield put(getMetricsDashboardBegin({ id: action.payload.dashboardId }));
     yield put(showSnackbar({
-      message: 'Metrics dashboard deleted',
+      message: 'Custom graph deleted',
       options: { variant: 'success' }
     }));
   } catch (err) {
@@ -220,7 +221,6 @@ export function* deleteCustomGraph(action) {
   }
 }
 
-
 export default function* customMetricsSaga() {
   /* Dashboards */
   yield takeLatest(GET_METRICS_DASHBOARDS_BEGIN, getMetricsDashboards);
@@ -231,7 +231,7 @@ export default function* customMetricsSaga() {
 
   /* Graphs */
   yield takeLatest(GET_CUSTOM_GRAPH_BEGIN, getCustomGraph);
-  yield takeLatest(GET_CUSTOM_GRAPH_DATA_BEGIN, getCustomGraphData);
+  yield takeEvery(GET_CUSTOM_GRAPH_DATA_BEGIN, getCustomGraphData);
   yield takeLatest(CREATE_CUSTOM_GRAPH_BEGIN, createCustomGraph);
   yield takeLatest(UPDATE_CUSTOM_GRAPH_BEGIN, updateCustomGraph);
   yield takeLatest(DELETE_CUSTOM_GRAPH_BEGIN, deleteCustomGraph);

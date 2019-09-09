@@ -2,6 +2,7 @@ import React, { memo, useEffect, useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
+import produce from 'immer';
 import dig from 'object-dig';
 
 import {
@@ -65,7 +66,10 @@ export function CustomGraph(props) {
               onClick={() => {
                 /* eslint-disable-next-line no-alert, no-restricted-globals */
                 if (confirm('Delete metricsDashboard?'))
-                  props.deleteCustomGraphBegin(props.customGraph.id);
+                  props.deleteCustomGraphBegin({
+                    dashboardId: props.customGraph.metrics_dashboard_id,
+                    graphId: props.customGraph.id
+                  });
               }}
             >
               <DeleteOutline />

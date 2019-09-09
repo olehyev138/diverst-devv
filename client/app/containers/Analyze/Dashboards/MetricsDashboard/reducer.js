@@ -10,7 +10,8 @@ import {
 } from './constants';
 
 import {
-  GET_CUSTOM_GRAPH_SUCCESS, GET_CUSTOM_GRAPH_DATA_SUCCESS, CUSTOM_GRAPH_UNMOUNT
+  GET_CUSTOM_GRAPH_SUCCESS, GET_CUSTOM_GRAPH_DATA_SUCCESS,
+  DELETE_CUSTOM_GRAPH_SUCCESS, CUSTOM_GRAPH_UNMOUNT
 } from 'containers/Analyze/Dashboards/MetricsDashboard/CustomGraph/constants';
 
 export const initialState = {
@@ -34,11 +35,14 @@ function customMetricsReducer(state = initialState, action) {
         draft.currentMetricsDashboard = action.payload.metrics_dashboard;
         break;
       case GET_CUSTOM_GRAPH_SUCCESS:
+        /* Used only for CustomGraph Edit page */
         draft.currentCustomGraph = action.payload.graph;
         break;
       case GET_CUSTOM_GRAPH_DATA_SUCCESS:
-        draft.currentCustomGraphData = action.payload;
+        draft.currentCustomGraphData[action.payload.id] = action.payload.data;
         break;
+      case DELETE_CUSTOM_GRAPH_SUCCESS:
+        delete draft.currentCustomGraphData[action.payload];
       case CUSTOM_GRAPH_UNMOUNT:
         draft.currentCustomGraph = null;
         break;
