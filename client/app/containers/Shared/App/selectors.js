@@ -19,7 +19,7 @@ const selectToken = () => createSelector(
 
 const selectUserPolicyGroup = () => createSelector(
   selectGlobal,
-  globalState => globalState.policy_group
+  globalState => globalState.policyGroup
 );
 
 const selectUser = () => createSelector(
@@ -27,13 +27,8 @@ const selectUser = () => createSelector(
   globalState => globalState.user
 );
 
-const selectIsAuthenticated = () => createSelector(
-  selectGlobal,
-  globalState => !!globalState.token
-);
-
 export {
   selectGlobal, selectRouter, selectLocation,
   selectEnterprise, selectToken, selectUserPolicyGroup,
-  selectUser, selectIsAuthenticated,
+  selectUser,
 };

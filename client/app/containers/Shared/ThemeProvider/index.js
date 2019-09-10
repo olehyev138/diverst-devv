@@ -86,7 +86,6 @@ export class ThemeProvider extends React.PureComponent {
 ThemeProvider.propTypes = {
   primary: PropTypes.string,
   secondary: PropTypes.string,
-  loginSuccess: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({

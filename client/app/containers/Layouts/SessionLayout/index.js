@@ -26,7 +26,7 @@ const SessionLayout = ({ component: Component, ...rest }) => {
   const { classes, ...other } = rest;
 
   return (
-    !AuthService.isAuthenticated()
+    !AuthService.getJwt()
       ? (
         <ApplicationLayout
           {...other}
