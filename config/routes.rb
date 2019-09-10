@@ -212,6 +212,7 @@ Rails.application.routes.draw do
           delete 'leave_all_sub_groups'
           get 'view_sub_groups'
           get 'export_group_members_list_csv'
+          post 'export_sub_groups_members_list_csv'
         end
         member do
           post 'accept_pending'

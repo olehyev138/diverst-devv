@@ -198,6 +198,15 @@ class Groups::GroupMembersController < ApplicationController
     redirect_to :back
   end
 
+  def export_sub_groups_members_list_csv
+    authorize [@group], :update?, policy_class: GroupMemberPolicy
+    groups = Group.where(id: params['groups'].values, enterprise_id: current_user.enterprise_id)
+    groups.each { |group| GroupMemberListDownloadJob.perform_later(current_user.id, group.id, '') }
+    track_activity(@group, :export_sub_groups_members_list)
+    flash[:notice] = 'Please check your Secure Downloads section in a couple of minutes'
+    redirect_to :back
+  end
+
   protected
 
   def set_group
