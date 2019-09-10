@@ -100,10 +100,10 @@ export function setEnterprise(enterprise) {
   };
 }
 
-export function setUserPolicyGroup(payload) {
+export function setUserPolicyGroup(policyGroup) {
   return {
     type: SET_USER_POLICY_GROUP,
-    payload,
+    policyGroup,
   };
 }
 

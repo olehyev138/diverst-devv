@@ -15,14 +15,9 @@ import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router';
 import 'sanitize.css/sanitize.css';
 
-// Import root app
-import App from 'containers/Shared/App';
-
 // Import Language Provider
 import LanguageProvider from 'containers/Shared/LanguageProvider';
 import ThemeProvider from 'containers/Shared/ThemeProvider/Loadable';
-
-import { PersistGate } from 'redux-persist/integration/react';
 
 
 // Load the favicon and the .htaccess file
@@ -36,7 +31,7 @@ import configureAxios from 'utils/axios';
 // Import i18n messages
 import { translationMessages } from './i18n';
 
-import { store, history, persistor } from './configureStore';
+import { store, history } from './configureStore';
 
 import { LastLocationProvider } from 'react-router-last-location';
 
@@ -47,15 +42,13 @@ const MOUNT_NODE = document.getElementById('app');
 const render = (messages) => {
   ReactDOM.render(
     <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <LanguageProvider messages={messages}>
-          <ConnectedRouter history={history}>
-            <LastLocationProvider>
-              <ThemeProvider />
-            </LastLocationProvider>
-          </ConnectedRouter>
-        </LanguageProvider>
-      </PersistGate>
+      <LanguageProvider messages={messages}>
+        <ConnectedRouter history={history}>
+          <LastLocationProvider>
+            <ThemeProvider />
+          </LastLocationProvider>
+        </ConnectedRouter>
+      </LanguageProvider>
     </Provider>,
     MOUNT_NODE,
   );

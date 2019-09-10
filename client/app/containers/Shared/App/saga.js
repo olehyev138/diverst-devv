@@ -33,6 +33,8 @@ import { showSnackbar } from 'containers/Shared/Notifier/actions';
 
 import { changePrimary, changeSecondary } from 'containers/Shared/ThemeProvider/actions';
 
+import AuthService from 'utils/authService';
+
 const axios = require('axios');
 
 export function* login(action) {
@@ -43,12 +45,13 @@ export function* login(action) {
     yield put(loginSuccess(response.data.token));
 
     axios.defaults.headers.common['Diverst-UserToken'] = response.data.token;
+    yield call(AuthService.storeJwt, response.data.token);
 
     // decode token to get user object
-    const user = JSON.parse(window.atob(response.data.token.split('.')[1]));
+    const user = yield call(AuthService.getUser, response.data.token);
 
     yield put(setUser(user));
-    yield put(setUserPolicyGroup({ policy_group: response.data.policy_group }));
+    yield put(setUserPolicyGroup(user.policy_group));
     yield put(push(ROUTES.user.home.path()));
   } catch (err) {
     yield put(loginError(err));
@@ -90,6 +93,7 @@ export function* logout(action) {
     yield put(setUserPolicyGroup({ policy_group: null }));
     const response = yield call(api.sessions.destroy.bind(api.sessions), action.token);
     yield put(logoutSuccess());
+    yield call(AuthService.discardJwt);
 
     if (response.data.logout_link)
       window.location.assign(response.data.logout_link);
