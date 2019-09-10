@@ -85,11 +85,11 @@ export function CustomGraph(props) {
             items={Object.values(legendData)}
             orientation='horizontal'
             onItemClick={(v) => {
-              const p = produce(legendData, (draft) => {
+              const updatedLegendData = produce(legendData, (draft) => {
                 draft[v.title].hidden = !draft[v.title].hidden;
               });
 
-              setLegendData(p);
+              setLegendData(updatedLegendData);
             }}
           />
         </PerfectScrollbar>

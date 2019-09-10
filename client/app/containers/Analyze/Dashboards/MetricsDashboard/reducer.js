@@ -43,6 +43,7 @@ function customMetricsReducer(state = initialState, action) {
         break;
       case DELETE_CUSTOM_GRAPH_SUCCESS:
         delete draft.currentCustomGraphData[action.payload];
+        break;
       case CUSTOM_GRAPH_UNMOUNT:
         draft.currentCustomGraph = null;
         break;
