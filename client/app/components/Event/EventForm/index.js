@@ -31,7 +31,7 @@ export function EventFormInner({ handleSubmit, handleChange, handleBlur, values,
             fullWidth
             id='name'
             name='name'
-            label={<FormattedMessage {...messages.form.name} />}
+            label={<FormattedMessage {...messages.inputs.name} />}
             value={values.name}
           />
           <Field
@@ -41,7 +41,7 @@ export function EventFormInner({ handleSubmit, handleChange, handleBlur, values,
             id='description'
             name='description'
             value={values.description}
-            label={<FormattedMessage {...messages.form.description} />}
+            label={<FormattedMessage {...messages.inputs.description} />}
           />
           <Field
             component={TextField}
@@ -50,7 +50,7 @@ export function EventFormInner({ handleSubmit, handleChange, handleBlur, values,
             id='start'
             name='start'
             value={values.start}
-            label={<FormattedMessage {...messages.form.start} />}
+            label={<FormattedMessage {...messages.inputs.start} />}
           />
           <Field
             component={TextField}
@@ -59,7 +59,7 @@ export function EventFormInner({ handleSubmit, handleChange, handleBlur, values,
             id='end'
             name='end'
             value={values.end}
-            label={<FormattedMessage {...messages.form.end} />}
+            label={<FormattedMessage {...messages.inputs.end} />}
           />
         </CardContent>
         <CardActions>

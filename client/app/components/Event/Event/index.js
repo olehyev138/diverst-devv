@@ -92,7 +92,7 @@ export function Event(props) {
           <Typography color='textSecondary' className={classes.data}>{event.end}</Typography>
 
           <Typography className={classes.dataHeaders}>
-            <FormattedMessage {...messages.form.description} />
+            <FormattedMessage {...messages.inputs.description} />
           </Typography>
           <Typography color='textSecondary' className={classes.data}>
             {event.description}

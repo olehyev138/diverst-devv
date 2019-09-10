@@ -41,7 +41,7 @@ export default defineMessages({
       id: `${scope}.index.tabs.empty_section`,
     }
   },
-  form: {
+  inputs: {
     name: {
       id: `${scope}.form.input.name`,
     },
