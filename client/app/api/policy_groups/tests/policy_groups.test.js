@@ -19,7 +19,7 @@ describe('PolicyGroup API Calls', () => {
 
     expect(page).toEqual(response);
     expect(mockAxios.get).toHaveBeenCalledTimes(1);
-    expect(mockAxios.get).toHaveBeenCalledWith('undefined/api/v1/policy_groups?page=1&count=10&order=desc&orderBy=policy_groups.created_at');
+    expect(mockAxios.get).toHaveBeenCalledWith(`${mockAxios.defaults.baseURL}/api/v1/policy_groups?page=1&count=10&order=desc&orderBy=policy_groups.created_at`);
   });
 
   it('calls GET function', async () => {
@@ -32,7 +32,7 @@ describe('PolicyGroup API Calls', () => {
 
     expect(page).toEqual(response);
     expect(mockAxios.get).toHaveBeenCalledTimes(1);
-    expect(mockAxios.get).toHaveBeenCalledWith('undefined/api/v1/policy_groups/1');
+    expect(mockAxios.get).toHaveBeenCalledWith(`${mockAxios.defaults.baseURL}/api/v1/policy_groups/1`);
   });
 
   it('calls POST function', async () => {
@@ -46,7 +46,7 @@ describe('PolicyGroup API Calls', () => {
 
     expect(page).toEqual(response);
     expect(mockAxios.post).toHaveBeenCalledTimes(1);
-    expect(mockAxios.post).toHaveBeenCalledWith('undefined/api/v1/policy_groups', {});
+    expect(mockAxios.post).toHaveBeenCalledWith(`${mockAxios.defaults.baseURL}/api/v1/policy_groups`, {});
   });
 
   it('calls PUT function', async () => {
@@ -60,7 +60,7 @@ describe('PolicyGroup API Calls', () => {
 
     expect(page).toEqual(response);
     expect(mockAxios.put).toHaveBeenCalledTimes(1);
-    expect(mockAxios.put).toHaveBeenCalledWith('undefined/api/v1/policy_groups/1', {});
+    expect(mockAxios.put).toHaveBeenCalledWith(`${mockAxios.defaults.baseURL}/api/v1/policy_groups/1`, {});
   });
 
   it('calls DELETE function', async () => {
@@ -73,6 +73,6 @@ describe('PolicyGroup API Calls', () => {
 
     expect(page).toEqual(response);
     expect(mockAxios.delete).toHaveBeenCalledTimes(1);
-    expect(mockAxios.delete).toHaveBeenCalledWith('undefined/api/v1/policy_groups/1');
+    expect(mockAxios.delete).toHaveBeenCalledWith(`${mockAxios.defaults.baseURL}/api/v1/policy_groups/1`);
   });
 });
