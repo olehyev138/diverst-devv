@@ -61,18 +61,20 @@ export function* login(action) {
 export function* ssoLogin(action) {
   try {
     axios.defaults.headers.common['Diverst-UserToken'] = action.payload.userToken;
-    const response = yield call(api.policyGroups.get.bind(api.policyGroups), action.payload.policyGroupId);
-
     yield put(loginSuccess(action.payload.userToken));
+    
+    yield call(AuthService.storeJwt, action.payload.userToken);
+
     // decode token to get user object
-    const user = JSON.parse(window.atob(action.payload.userToken.split('.')[1]));
+    const user = yield call(AuthService.getUser, action.payload.userToken);
 
     yield put(setUser(user));
-    yield put(setUserPolicyGroup({ policy_group: response.data.policy_group }));
+    yield put(setUserPolicyGroup(user.policy_group));
     yield put(push(ROUTES.user.home.path()));
   } catch (err) {
+    console.log(err);
     yield put(loginError(err));
-    yield put(showSnackbar({ message: err.response.data }));
+    yield put(showSnackbar({ message: err }));
   }
 }
 
@@ -90,7 +92,7 @@ export function* logout(action) {
   try {
     // Destroy session and redirect to login
     yield put(setUser(null));
-    yield put(setUserPolicyGroup({ policy_group: null }));
+    yield put(setUserPolicyGroup(null));
     const response = yield call(api.sessions.destroy.bind(api.sessions), action.token);
     yield put(logoutSuccess());
     yield call(AuthService.discardJwt);
