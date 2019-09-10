@@ -36,6 +36,7 @@ export function OutcomesPage(props) {
   const rs = new RouteService(useContext);
   const links = {
     outcomesIndex: ROUTES.group.outcomes.index.path(rs.params('group_id')),
+    outcomeShow: id => ROUTES.group.outcomes.show.path(rs.params('group_id'), id),
     outcomeNew: ROUTES.group.outcomes.new.path(rs.params('group_id')),
     outcomeEdit: id => ROUTES.group.outcomes.edit.path(rs.params('group_id'), id)
   };

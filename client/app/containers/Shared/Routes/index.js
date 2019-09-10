@@ -6,9 +6,9 @@ import {
   UserLayout, GroupLayout, AdminLayout, SessionLayout, ErrorLayout, GlobalSettingsLayout, LoginPage, HomePage,
   UserGroupListPage, AdminGroupListPage, GroupCreatePage, GroupEditPage, SegmentListPage, SegmentPage, FieldsPage,
   UsersPage, UserCreatePage, UserEditPage, GroupHomePage, EventsPage, NewsFeedPage, OutcomesPage, EventPage,
-  EventCreatePage, EventEditPage, GroupMessagePage, GroupMessageCreatePage, GroupMessageEditPage, OutcomeCreatePage,
-  OutcomeEditPage, GroupMemberListPage, GroupMemberCreatePage, NotFoundPage, PlaceholderPage, GroupDashboardPage,
-  UserDashboardPage
+  EventCreatePage, EventEditPage, GroupMessagePage, GroupMessageCreatePage, GroupMessageEditPage, OutcomePage,
+  OutcomeCreatePage, OutcomeEditPage, GroupMemberListPage, GroupMemberCreatePage, NotFoundPage, PlaceholderPage,
+  GroupDashboardPage, UserDashboardPage
 } from './templates';
 
 // Paths
@@ -80,6 +80,7 @@ export default function Routes(props) {
       { /* Group Outcomes */ }
       <GroupLayout {...expandRoute(ROUTES.group.outcomes.new)} component={OutcomeCreatePage} />
       <GroupLayout {...expandRoute(ROUTES.group.outcomes.edit)} component={OutcomeEditPage} />
+      <GroupLayout exact {...expandRoute(ROUTES.group.outcomes.show)} component={OutcomePage} />
 
       <ErrorLayout path='' component={NotFoundPage} />
     </Switch>

@@ -18,6 +18,7 @@ import messages from 'containers/Group/Outcome/messages';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
 import ListItemIcon from '@material-ui/icons/Remove';
+import EventIcon from '@material-ui/icons/Event';
 
 import Pagination from 'components/Shared/Pagination';
 
@@ -105,6 +106,14 @@ export function OutcomesList(props, context) {
                 <Button
                   component={WrappedNavLink}
                   color='primary'
+                  to={props.links.outcomeShow(outcome.id)}
+                >
+                  <EventIcon className={classes.buttonIcon} />
+                  Events
+                </Button>
+                <Button
+                  component={WrappedNavLink}
+                  color='secondary'
                   to={props.links.outcomeEdit(outcome.id)}
                 >
                   Edit

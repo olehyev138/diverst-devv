@@ -54,6 +54,7 @@ import GroupMessageCreatePage from 'containers/News/GroupMessage/GroupMessageCre
 import GroupMessageEditPage from 'containers/News/GroupMessage/GroupMessageEditPage/Loadable';
 
 /* Group - Outcomes */
+import OutcomePage from 'containers/Group/Outcome/OutcomePage/Loadable';
 import OutcomeCreatePage from 'containers/Group/Outcome/OutcomeCreatePage/Loadable';
 import OutcomeEditPage from 'containers/Group/Outcome/OutcomeEditPage/Loadable';
 
@@ -71,7 +72,7 @@ export {
   UserLayout, GroupLayout, AdminLayout, SessionLayout, ErrorLayout, GlobalSettingsLayout, LoginPage, HomePage,
   UserGroupListPage, AdminGroupListPage, GroupCreatePage, GroupEditPage, SegmentListPage, SegmentPage, FieldsPage,
   UsersPage, UserCreatePage, UserEditPage, GroupHomePage, EventsPage, NewsFeedPage, OutcomesPage, EventPage,
-  EventCreatePage, EventEditPage, GroupMessagePage, GroupMessageCreatePage, GroupMessageEditPage, OutcomeCreatePage,
-  OutcomeEditPage, GroupMemberListPage, GroupMemberCreatePage, NotFoundPage, PlaceholderPage, GroupDashboardPage,
-  UserDashboardPage
+  EventCreatePage, EventEditPage, GroupMessagePage, GroupMessageCreatePage, GroupMessageEditPage, OutcomePage,
+  OutcomeCreatePage, OutcomeEditPage, GroupMemberListPage, GroupMemberCreatePage, NotFoundPage, PlaceholderPage,
+  GroupDashboardPage, UserDashboardPage
 };
