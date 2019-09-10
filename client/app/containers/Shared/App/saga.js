@@ -72,7 +72,6 @@ export function* ssoLogin(action) {
     yield put(setUserPolicyGroup(user.policy_group));
     yield put(push(ROUTES.user.home.path()));
   } catch (err) {
-    console.log(err);
     yield put(loginError(err));
     yield put(showSnackbar({ message: err }));
   }
