@@ -1,6 +1,7 @@
 import React, { memo } from 'react';
 import { Redirect } from 'react-router-dom';
 import { compose } from 'redux';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { withStyles } from '@material-ui/core/styles';
@@ -10,10 +11,13 @@ import ApplicationLayout from 'containers/Layouts/ApplicationLayout';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import AuthService from 'utils/authService';
+import { loginSuccess, setUser, setEnterprise, setUserPolicyGroup } from 'containers/Shared/App/actions';
 
 const styles = theme => ({
   toolbar: theme.mixins.toolbar,
 });
+
+const axios = require('axios');
 
 const AuthenticatedLayout = ({
   renderAppBar, drawerToggleCallback, drawerOpen, position, isAdmin, component: Component, ...rest
@@ -26,8 +30,20 @@ const AuthenticatedLayout = ({
    *   - Probably better to keep layouts unconnected too
    *   - Causes problems when state updates, causing children to remount
    */
-  if (AuthService.isAuthenticated()) {
+  const userJwt = AuthService.getJwt();
+  const enterprise = AuthService.getEnterprise();
+
+  if (userJwt) {
     // Authenticated
+    const user = AuthService.getUser(userJwt);
+    if (!AuthService.isUserInStore()) {
+      axios.defaults.headers.common['Diverst-UserToken'] = userJwt;
+      other.loginSuccess(userJwt);
+      other.setUser(user);
+      other.setEnterprise(enterprise || user.enterprise);
+      other.setUserPolicyGroup(user.policy_group);
+    }
+
     // TODO: Handle if policy group isn't set. Perhaps clear token (sign out) if the policy group is not found
     if (AuthService.hasPermission(data))
       // Authorized - note: if no `permission` is defined on the route object it renders the
@@ -67,14 +83,24 @@ const AuthenticatedLayout = ({
   );
 };
 
+const mapDispatchToProps = {
+  loginSuccess,
+  setUser,
+  setEnterprise,
+  setUserPolicyGroup,
+};
+
 AuthenticatedLayout.propTypes = {
+  loginSuccess: PropTypes.func,
+  setUser: PropTypes.func,
+  setEnterprise: PropTypes.func,
+  setUserPolicyGroup: PropTypes.func,
   renderAppBar: PropTypes.bool,
   drawerOpen: PropTypes.bool,
   drawerToggleCallback: PropTypes.func,
   position: PropTypes.string,
   isAdmin: PropTypes.bool,
   component: PropTypes.elementType,
-  policy_group: PropTypes.object,
 };
 
 AuthenticatedLayout.defaultProps = {
@@ -84,6 +110,7 @@ AuthenticatedLayout.defaultProps = {
 export const StyledAuthenticatedLayout = withStyles(styles)(AuthenticatedLayout);
 
 export default compose(
+  connect(undefined, mapDispatchToProps), // Only connect for dispatching actions
   memo,
   withStyles(styles),
 )(AuthenticatedLayout);

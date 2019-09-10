@@ -13,7 +13,7 @@ import {
 // The initial state of the App
 export const initialState = {
   user: null,
-  policy_group: null,
+  policyGroup: null,
   enterprise: null,
   token: null,
 };
@@ -27,7 +27,7 @@ function appReducer(state = initialState, action) {
       case LOGOUT_SUCCESS:
         draft.token = initialState.token;
         draft.user = initialState.user;
-        draft.policy_group = initialState.policy_group;
+        draft.policyGroup = initialState.policyGroup;
         break;
       case LOGOUT_ERROR:
         draft.error = action.error;
@@ -36,10 +36,14 @@ function appReducer(state = initialState, action) {
         draft.enterprise = action.enterprise;
         break;
       case SET_USER_POLICY_GROUP:
-        draft.policy_group = action.payload.policy_group;
+        draft.policyGroup = action.policyGroup;
         break;
       case SET_USER:
-        draft.user = action.user;
+        // Clear policy group because we already have it in the store at the parent level
+        draft.user = {
+          ...action.user,
+          policy_group: undefined,
+        };
         break;
     }
   });
