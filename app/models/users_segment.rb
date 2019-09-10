@@ -30,11 +30,6 @@ class UsersSegment < ApplicationRecord
       indexes :user do
         indexes :enterprise_id, type: :integer
         indexes :created_at, type: :date
-        indexes :field_data do
-          indexes :user_id, type: :integer
-          indexes :field_id, type: :integer
-          indexes :data, type: :keyword
-        end
       end
     end
   end
@@ -49,16 +44,15 @@ class UsersSegment < ApplicationRecord
           },
           user: {
             only: [:created_at, :enterprise_id],
-            include: { field_data: { only: [:user_id, :field_id, :data] } }
           }
         },
-        methods: [:user_combined_info]
+        methods: [:field_data]
       )
     )
     .deep_merge({ 'user' => { 'created_at' => user.created_at.beginning_of_hour } })
   end
 
-  def user_combined_info
-    user.combined_info
+  def field_data
+    user.indexed_field_data
   end
 end
