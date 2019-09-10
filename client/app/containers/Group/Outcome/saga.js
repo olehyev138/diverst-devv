@@ -79,8 +79,8 @@ export function* updateOutcome(action) {
 
 export function* deleteOutcome(action) {
   try {
-    yield call(api.outcomes.destroy.bind(api.outcomes), action.payload);
-    yield put(push(ROUTES.admin.manage.outcomes.index.path()));
+    yield call(api.outcomes.destroy.bind(api.outcomes), action.payload.id);
+    yield put(push(ROUTES.group.outcomes.index.path(action.payload.group_id)));
     yield put(showSnackbar({ message: 'Outcome deleted', options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteOutcomeError(err));

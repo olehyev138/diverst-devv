@@ -12,7 +12,7 @@ import reducer from 'containers/Group/Outcome/reducer';
 import saga from 'containers/Group/Outcome/saga';
 
 import { selectPaginatedOutcomes, selectOutcomeTotal } from 'containers/Group/Outcome/selectors';
-import { getOutcomesBegin, outcomesUnmount } from 'containers/Group/Outcome/actions';
+import { getOutcomesBegin, deleteOutcomeBegin, outcomesUnmount } from 'containers/Group/Outcome/actions';
 
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -62,6 +62,7 @@ export function OutcomesPage(props) {
     <OutcomesList
       outcomes={props.outcomes}
       outcomeTotal={props.outcomeTotal}
+      deleteOutcomeBegin={props.deleteOutcomeBegin}
       defaultParams={defaultParams}
       handlePagination={handlePagination}
       links={links}
@@ -71,6 +72,7 @@ export function OutcomesPage(props) {
 
 OutcomesPage.propTypes = {
   getOutcomesBegin: PropTypes.func.isRequired,
+  deleteOutcomeBegin: PropTypes.func.isRequired,
   outcomesUnmount: PropTypes.func.isRequired,
   outcomes: PropTypes.array,
   outcomeTotal: PropTypes.number,
@@ -86,6 +88,7 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = {
   getOutcomesBegin,
+  deleteOutcomeBegin,
   outcomesUnmount,
 };
 

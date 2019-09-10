@@ -7,23 +7,28 @@
 import React, { memo, useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
-import { RouteContext } from 'containers/Layouts/ApplicationLayout';
 import withStyles from '@material-ui/core/styles/withStyles';
 
 import {
-  Grid, Card, CardContent, Typography, Link, CardActions, Button, Divider, Box,
+  Grid, Card, CardContent, Typography, CardActions, Button, Divider, Box,
 } from '@material-ui/core';
 
 import { FormattedMessage } from 'react-intl';
 import messages from 'containers/Group/Outcome/messages';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
-import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import ListItemIcon from '@material-ui/icons/Remove';
 
 import Pagination from 'components/Shared/Pagination';
 
-const styles = theme => ({});
+const styles = theme => ({
+  errorButton: {
+    color: theme.palette.error.main,
+  },
+  buttonIcon: {
+    paddingRight: 4,
+  }
+});
 
 export function OutcomesList(props, context) {
   const { classes, intl } = props;
@@ -69,11 +74,15 @@ export function OutcomesList(props, context) {
           <Grid item key={outcome.id} xs={12}>
             <Card>
               <CardContent>
-                <Typography variant='h6' gutterBottom>
+                <Typography
+                  color='primary'
+                  variant='h6'
+                  gutterBottom
+                >
                   {outcome.name}
                 </Typography>
                 <Box mb={1} mt={2}>
-                  <Typography color='textSecondary'>
+                  <Typography color='secondary'>
                     <FormattedMessage {...messages.pillars.text} />
                   </Typography>
                   <Divider />
@@ -98,7 +107,17 @@ export function OutcomesList(props, context) {
                   color='primary'
                   to={props.links.outcomeEdit(outcome.id)}
                 >
-                  Manage
+                  Edit
+                </Button>
+                <Button
+                  className={classes.errorButton}
+                  onClick={() => {
+                    /* eslint-disable-next-line no-alert, no-restricted-globals */
+                    if (confirm('Delete outcome?'))
+                      props.deleteOutcomeBegin(outcome);
+                  }}
+                >
+                  Delete
                 </Button>
               </CardActions>
             </Card>
@@ -125,6 +144,7 @@ OutcomesList.propTypes = {
   defaultParams: PropTypes.object,
   handlePagination: PropTypes.func,
   links: PropTypes.object,
+  deleteOutcomeBegin: PropTypes.func.isRequired,
 };
 
 export default compose(
