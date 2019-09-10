@@ -33,8 +33,10 @@ export default defineMessages({
   cancel: {
     id: `${scope}.form.button.cancel`,
   },
-  name: {
-    id: `${scope}.form.input.name`,
+  inputs: {
+    name: {
+      id: `${scope}.form.input.name`,
+    },
   },
   pillars: {
     text: {

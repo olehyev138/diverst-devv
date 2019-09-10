@@ -25,6 +25,15 @@ export function OutcomeFormInner({ handleSubmit, handleChange, handleBlur, value
     <Card>
       <Form>
         <CardContent>
+          <Field
+            component={TextField}
+            onChange={handleChange}
+            fullWidth
+            id='name'
+            name='name'
+            label={<FormattedMessage {...messages.inputs.name} />}
+            value={values.name}
+          />
         </CardContent>
         <CardActions>
           <Button
@@ -58,7 +67,7 @@ export function OutcomeForm(props) {
     <Formik
       initialValues={initialValues}
       enableReinitialize
-      onSubmit={(values, actions) => {
+      onSubmit={(values, _) => {
         props.outcomeAction(values);
       }}
 

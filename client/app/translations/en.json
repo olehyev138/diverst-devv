@@ -114,5 +114,7 @@
   "diverst.containers.Event.form.input.end": "End",
   "diverst.containers.Event.show.date_and_time": "Date & Time",
   "diverst.containers.Group.Outcome.Pillar.text": "Pillars",
-  "diverst.containers.Group.Outcome.index.button.new": "New Outcome"
+  "diverst.containers.Group.Outcome.index.button.new": "New Outcome",
+  "diverst.containers.Group.Outcome.form.button.cancel": "Cancel",
+  "diverst.containers.Group.Outcome.form.input.name": "Name"
 }
