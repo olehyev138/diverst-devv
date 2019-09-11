@@ -1,8 +1,12 @@
-<table class='table--has-border' id="users_no_mentorship_list" data-source="<%= source %>">
+<table class='table--has-border' id="<%= id %>" data-source="<%= source %>">
   <thead>
   <th>First Name</th>
   <th>Last Name</th>
-  <th>E-Mail</th>
+  <% if id =~ /^without/ %>
+    <th>Details</th>
+  <% else %>
+    <th>E-Mail</th>
+  <% end %>
   </thead>
   <tbody>
   </tbody>

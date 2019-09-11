@@ -51,10 +51,10 @@ class Metrics::MentorshipGraphsController < ApplicationController
 
   def users_mentorship_count
     authorize MetricsDashboard, :index?
-    with_mentorship = params[:with_mentorship] || 'true'
+    type = params[:type] || 'has_either'
     respond_to do |format|
       format.json {
-        render json: UserMentorshipStatsDatatable.new(view_context, has_value: with_mentorship == 'true')
+        render json: UserMentorshipStatsDatatable.new(view_context, type: type)
       }
     end
   end

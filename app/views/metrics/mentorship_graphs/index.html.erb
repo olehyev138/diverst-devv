@@ -90,7 +90,30 @@
           <h2>
             Mentor/Mentee Count By User
           </h2>
-          <%= render 'users_mentor_count', source: users_mentorship_count_metrics_mentorships_path(format: :json, with_mentorship: 'true') %>
+          <%= render 'users_mentor_count', source: users_mentorship_count_metrics_mentorships_path(format: :json, type: 'has_either') %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col md-6 sm-12">
+      <div class="card">
+        <div class="card__section">
+          <h2>
+            Users With Mentors but no Mentee
+          </h2>
+          <%= render 'users_no_mentorship', source: users_mentorship_count_metrics_mentorships_path(format: :json, type: 'no_mentee'), id: 'without_mentee_list' %>
+        </div>
+      </div>
+    </div>
+    <div class="col md-6 sm-12">
+      <div class="card">
+        <div class="card__section">
+          <h2>
+            Users With Mentees but no Mentors
+          </h2>
+          <%= render 'users_no_mentorship', source: users_mentorship_count_metrics_mentorships_path(format: :json, type: 'no_mentor'), id: 'without_mentor_list' %>
         </div>
       </div>
     </div>
@@ -101,9 +124,9 @@
       <div class="card">
         <div class="card__section">
           <h2>
-            Users Without a Mentor or Mentee
+            Users Without Mentee or Mentee
           </h2>
-          <%= render 'users_no_mentorship', source: users_mentorship_count_metrics_mentorships_path(format: :json, with_mentorship: 'false') %>
+          <%= render 'users_no_mentorship', source: users_mentorship_count_metrics_mentorships_path(format: :json, type: 'has_neither'), id: 'has_neither_list' %>
         </div>
       </div>
     </div>
@@ -184,12 +207,48 @@
     });
 
     $(document).on('ready page:load', function () {
-        $('#users_no_mentorship_list').dataTable({
+        $('#without_mentee_list').dataTable({
             "retrieve": true,
             "processing": true,
             "serverSide": true,
             "ajax": {
-                "url": $('#users_no_mentorship_list').data('source')
+                "url": $('#without_mentee_list').data('source')
+            },
+            "pagingType": "full_numbers",
+            columnDefs: [
+                {bSortable: false, targets: [2]}
+            ]
+            // pagingType is optional, if you want full pagination controls.
+            // Check dataTables documentation to learn more about
+            // available options.
+        });
+    });
+
+    $(document).on('ready page:load', function () {
+        $('#without_mentor_list').dataTable({
+            "retrieve": true,
+            "processing": true,
+            "serverSide": true,
+            "ajax": {
+                "url": $('#without_mentor_list').data('source')
+            },
+            "pagingType": "full_numbers",
+            columnDefs: [
+                {bSortable: false, targets: [2]}
+            ]
+            // pagingType is optional, if you want full pagination controls.
+            // Check dataTables documentation to learn more about
+            // available options.
+        });
+    });
+
+    $(document).on('ready page:load', function () {
+        $('#has_neither_list').dataTable({
+            "retrieve": true,
+            "processing": true,
+            "serverSide": true,
+            "ajax": {
+                "url": $('#has_neither_list').data('source')
             },
             "pagingType": "full_numbers"
             // pagingType is optional, if you want full pagination controls.

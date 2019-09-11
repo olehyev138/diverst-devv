@@ -3,9 +3,9 @@ class UserMentorshipStatsDatatable < AjaxDatatablesRails::Base
   def_delegator :@view, :user_mentorship_metrics_mentorship_path
   def_delegator :@view, :user_user_path
 
-  def initialize(view_context, has_value: true)
+  def initialize(view_context, type: 'has_either')
     super(view_context)
-    @has_value = has_value
+    @type = type
   end
 
   def sortable_columns
@@ -21,7 +21,8 @@ class UserMentorshipStatsDatatable < AjaxDatatablesRails::Base
   private
 
   def data
-    if @has_value
+    case @type
+    when 'has_either'
       records.map do |record|
         [
           link_to(record.first_name, user_user_path(record.user_id), target: :_blank),
@@ -31,6 +32,14 @@ class UserMentorshipStatsDatatable < AjaxDatatablesRails::Base
           record.number_of_mentors,
           link_to('Details', user_mentorship_metrics_mentorship_path(record.user_id), target: :_blank),
           # link_to('Export CSV', user_mentorship_metrics_mentorship_path(record.user_id, format: :csv))
+        ]
+      end
+    when /^no/
+      records.map do |record|
+        [
+          link_to(record.first_name, user_user_path(record.user_id), target: :_blank),
+          record.last_name,
+          link_to('Details', user_mentorship_metrics_mentorship_path(record.user_id), target: :_blank)
         ]
       end
     else
@@ -45,10 +54,15 @@ class UserMentorshipStatsDatatable < AjaxDatatablesRails::Base
   end
 
   def get_raw_records
-    if @has_value
+    case @type
+    when 'has_either'
       UserWithMentorCount.where('number_of_mentees > 0 OR number_of_mentors > 0')
-    else
-      UserWithMentorCount.where('number_of_mentees <= 0 AND number_of_mentors <= 0')
+    when 'no_mentee'
+      UserWithMentorCount.where('number_of_mentees <= 0 AND number_of_mentors > 0')
+    when 'no_mentor'
+      UserWithMentorCount.where('number_of_mentors <= 0 AND number_of_mentees > 0')
+    when 'has_neither'
+      UserWithMentorCount.where('number_of_mentors <= 0 AND number_of_mentees <= 0')
     end
   end
 end
