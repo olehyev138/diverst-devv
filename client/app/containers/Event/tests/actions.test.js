@@ -17,7 +17,7 @@ import {
   EVENTS_UNMOUNT
 } from 'containers/Event/constants';
 
-import{
+import {
   getEventsBegin,
   getEventsSuccess,
   getEventsError,
@@ -34,7 +34,7 @@ import{
   deleteEventSuccess,
   deleteEventError,
   eventsUnmount
-} from 'containers/Event/actions'
+} from 'containers/Event/actions';
 
 describe('Event actions', () => {
   describe('Event list actions', () => {
@@ -44,7 +44,7 @@ describe('Event actions', () => {
           type: GET_EVENTS_BEGIN,
         };
 
-        expect(getEventsBegin()).toEqual(expected)
+        expect(getEventsBegin()).toEqual(expected);
       });
     });
 
@@ -55,7 +55,7 @@ describe('Event actions', () => {
           payload: { items: {} }
         };
 
-        expect(getEventsSuccess({ items: { } })).toEqual(expected)
+        expect(getEventsSuccess({ items: { } })).toEqual(expected);
       });
     });
 
@@ -64,9 +64,9 @@ describe('Event actions', () => {
         const expected = {
           type: GET_EVENTS_ERROR,
           error: 'error'
-        }
+        };
 
-        expect(getEventsError('error')).toEqual(expected)
+        expect(getEventsError('error')).toEqual(expected);
       });
     });
   });
@@ -78,7 +78,7 @@ describe('Event actions', () => {
           type: GET_EVENT_BEGIN,
         };
 
-        expect(getEventBegin()).toEqual(expected)
+        expect(getEventBegin()).toEqual(expected);
       });
     });
 
@@ -203,6 +203,18 @@ describe('Event actions', () => {
         };
 
         expect(deleteEventError('error')).toEqual(expected);
+      });
+    });
+  });
+
+  describe('State cleaning actions', () => {
+    describe('eventsUnmount', () => {
+      it('has a type of EVENTS_UNMOUNT', () => {
+        const expected = {
+          type: EVENTS_UNMOUNT
+        };
+
+        expect(eventsUnmount()).toEqual(expected);
       });
     });
   });
