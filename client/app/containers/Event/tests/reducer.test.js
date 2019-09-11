@@ -2,7 +2,7 @@ import produce from 'immer';
 import eventsReducer from 'containers/Event/reducer';
 import {
   getEventSuccess, getEventsSuccess, eventsUnmount
-} from "containers/Event/actions";
+} from 'containers/Event/actions';
 
 describe('eventsReducer', () => {
   let state;
@@ -33,7 +33,7 @@ describe('eventsReducer', () => {
           total: 49,
         })
       )
-    ).toEqual(expected)
+    ).toEqual(expected);
   });
 
   it('handles the getEventSuccess action correctly', () => {
