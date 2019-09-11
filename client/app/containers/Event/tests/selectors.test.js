@@ -15,10 +15,10 @@ describe('Event selectors', () => {
 
   describe('selectPaginatedEvent', () => {
     it('should select the paginared events', () => {
-      const mockedState = { events: { 43: {} } };
+      const mockedState = { events: [{ id: 37, name: 'dummy' }] };
       const selected = selectPaginatedEvents().resultFunc(mockedState);
 
-      expect(selected).toEqual(({ 43: {} }));
+      expect(selected).toEqual([{ id: 37, name: 'dummy' }]);
     });
   });
 
@@ -34,7 +34,7 @@ describe('Event selectors', () => {
   describe('selectEvent', () => {
     it('should select the current event', () => {
       const mockedState = { currentEvent: { name: 'dummy-event-02' } };
-      const selected = selectEvent(43).resultFunc(mockedState);
+      const selected = selectEvent().resultFunc(mockedState);
 
       expect(selected).toEqual({ name: 'dummy-event-02' });
     });
