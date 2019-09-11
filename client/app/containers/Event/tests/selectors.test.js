@@ -6,7 +6,7 @@ import {
 describe('Event selectors', () => {
   describe('selectEventsDomain', () => {
     it('should select the events domain', () => {
-      const mockedState = {events: { event: {} } };
+      const mockedState = { events: { event: {} } };
       const selected = selectEventsDomain(mockedState);
 
       expect(selected).toEqual({ event: {} });
@@ -27,16 +27,16 @@ describe('Event selectors', () => {
       const mockedState = { eventsTotal: 84 };
       const selected = selectEventsTotal().resultFunc(mockedState);
 
-      expect(selected).toEqual(84)
+      expect(selected).toEqual(84);
     });
   });
 
   describe('selectEvent', () => {
     it('should select the current event', () => {
-      const mockedState = {currentEvent: { name: 'dummy-event-02' } };
+      const mockedState = { currentEvent: { name: 'dummy-event-02' } };
       const selected = selectEvent(43).resultFunc(mockedState);
 
-      expect(selected).toEqual({ name: 'dummy-event-02' } );
+      expect(selected).toEqual({ name: 'dummy-event-02' });
     });
   });
 });
