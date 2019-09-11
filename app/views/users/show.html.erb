@@ -53,7 +53,7 @@
     <div class="card">
       <div class="card__section card__section--border">
         <h2>Hidden info</h2>
-        <h4>Only D&I Management and Admins can see hidden fields</h4>
+        <h4>Only D&I Management can see hidden fields</h4>
       </div>
       <% @user.enterprise.fields.where(private: false).each do |field| %>
         <div class="card__section card__section--border">

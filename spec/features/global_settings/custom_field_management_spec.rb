@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.feature 'Custom-field Management' do
   let!(:enterprise) { create(:enterprise, time_zone: 'UTC') }
   let!(:admin_user) { create(:user, enterprise: enterprise) }
+  let!(:user) { create(:user, enterprise: enterprise) }
 
   before do
     enterprise.fields.destroy_all
@@ -98,11 +99,11 @@ RSpec.feature 'Custom-field Management' do
 
         click_on 'Save user fields'
 
-        visit user_user_path(admin_user)
+        visit user_path(user)
 
-        expect(page).to have_no_content 'BIO'
+        expect(page).to have_content 'BIO'
 
-        click_on 'Edit profile'
+        click_on 'Edit User'
 
         expect(page).to have_no_content 'BIO'
       end
@@ -210,11 +211,11 @@ RSpec.feature 'Custom-field Management' do
 
         click_on 'Save user fields'
 
-        visit user_user_path(admin_user)
+        visit user_path(user)
 
-        expect(page).to have_no_content 'Gender'
+        expect(page).to have_content 'Gender'
 
-        click_on 'Edit profile'
+        click_on 'Edit User'
 
         expect(page).to have_no_content 'Gender'
       end
@@ -541,11 +542,11 @@ RSpec.feature 'Custom-field Management' do
 
         click_on 'Save user fields'
 
-        visit user_user_path(admin_user)
+        visit user_path(user)
 
-        expect(page).to have_no_content 'Date of Birth'
+        expect(page).to have_content 'Date of Birth'
 
-        visit edit_user_user_path(admin_user)
+        visit edit_user_path(user)
 
         expect(page).to have_no_field '* Title', with: 'Date of Birth'
       end
