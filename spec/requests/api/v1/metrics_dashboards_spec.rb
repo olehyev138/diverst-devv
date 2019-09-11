@@ -68,7 +68,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
       expect(response).to have_http_status(:bad_request)
     end
 
-      # TODO: update these to support routes that dont match the model/table name
+    # TODO: update these to support routes that dont match the model/table name
     # include_examples 'InvalidInputException when updating', model
   end
 
