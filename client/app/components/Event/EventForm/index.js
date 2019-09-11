@@ -8,6 +8,7 @@ import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import dig from 'object-dig';
+import { DateTime } from 'luxon';
 
 import { FormattedMessage } from 'react-intl';
 import { Field, Formik, Form } from 'formik';
@@ -19,8 +20,14 @@ import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import messages from 'containers/Event/messages';
 import { buildValues } from 'utils/formHelpers';
 
+import DiverstDateTimePicker from 'components/Shared/Pickers/DiverstDateTimePicker';
+
 /* eslint-disable object-curly-newline */
-export function EventFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
+export function EventFormInner({
+  handleSubmit, handleChange, handleBlur, values, touched, errors,
+  buttonText, setFieldValue, setFieldTouched, setFieldError,
+  ...props
+}) {
   return (
     <Card>
       <Form>
@@ -44,21 +51,27 @@ export function EventFormInner({ handleSubmit, handleChange, handleBlur, values,
             label={<FormattedMessage {...messages.form.description} />}
           />
           <Field
-            component={TextField}
-            onChange={handleChange}
+            component={DiverstDateTimePicker}
+            keyboardMode
+            /* eslint-disable-next-line dot-notation */
+            maxDate={touched['end'] ? values['end'] : undefined}
+            maxDateMessage='Start date cannot be after end date'
+            disablePast
             fullWidth
             id='start'
             name='start'
-            value={values.start}
             label={<FormattedMessage {...messages.form.start} />}
           />
           <Field
-            component={TextField}
-            onChange={handleChange}
+            component={DiverstDateTimePicker}
+            keyboardMode
+            /* eslint-disable-next-line dot-notation */
+            minDate={values['start']}
+            minDateMessage='End date cannot be before start date'
+            disablePast
             fullWidth
             id='end'
             name='end'
-            value={values.end}
             label={<FormattedMessage {...messages.form.end} />}
           />
         </CardContent>
@@ -88,8 +101,8 @@ export function EventForm(props) {
     id: { default: '' },
     name: { default: '' },
     description: { default: '' },
-    start: { default: '' },
-    end: { default: '' },
+    start: { default: DateTime.local().plus({ hour: 1 }) },
+    end: { default: DateTime.local().plus({ hour: 2 }) },
     max_attendees: { default: '' },
     location: { default: '' },
     annual_budget_id: { default: '' },
@@ -125,9 +138,12 @@ EventFormInner.propTypes = {
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
   values: PropTypes.object,
+  touched: PropTypes.object,
+  errors: PropTypes.object,
   buttonText: PropTypes.string,
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
+  setFieldError: PropTypes.func,
   links: PropTypes.shape({
     eventsIndex: PropTypes.string,
     eventShow: PropTypes.string,
