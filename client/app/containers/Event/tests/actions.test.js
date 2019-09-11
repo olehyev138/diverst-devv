@@ -90,7 +90,7 @@ describe('Event actions', () => {
         };
 
         expect(getEventSuccess({})).toEqual(expected);
-      })
+      });
     });
 
     describe('getEventError', () => {
