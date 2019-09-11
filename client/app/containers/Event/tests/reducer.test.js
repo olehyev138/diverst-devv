@@ -16,7 +16,7 @@ describe('eventsReducer', () => {
 
   it('returns the initial state', () => {
     const expected = state;
-    expect(eventsReducer(undefined, {})).toEqual(expected)
+    expect(eventsReducer(undefined, {})).toEqual(expected);
   });
 
   it('handles the getEventsSuccess action correctly', () => {
