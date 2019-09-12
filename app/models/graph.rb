@@ -9,13 +9,18 @@ class Graph < ApplicationRecord
 
   belongs_to :poll
   belongs_to :metrics_dashboard
+
+  # TODO: should be has_one
   belongs_to :field
   belongs_to :aggregation, class_name: 'Field'
 
+  # TODO: should have its own title
   delegate :title, to: :field
 
+  # TODO: unused, deprecated fields should be removed
   validates_length_of :custom_aggregation, maximum: 191
   validates_length_of :custom_field, maximum: 191
+
   validates :field, presence: true
 
   after_initialize :set_graph_builder
@@ -29,6 +34,8 @@ class Graph < ApplicationRecord
       @graph_builder.set_enterprise_filter(field: 'user.enterprise_id', value: collection.enterprise.id)
 
       @graph_builder.formatter.type = 'custom'
+
+      # TODO: look into this since frontend has changed
       @graph_builder.formatter.filter_zeros = false # filtering 0 values breaks stacked bar graphs
     end
   end
