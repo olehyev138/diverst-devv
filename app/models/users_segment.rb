@@ -37,17 +37,22 @@ class UsersSegment < ApplicationRecord
   def as_indexed_json(options = {})
     self.as_json(
       options.merge(
-        include: { segment: {
-          only: [:enterprise_id, :name],
-          include: { parent: { only: [:name] } }
-        }, user: { only: [:created_at, :enterprise_id] } },
-        methods: [:user_combined_info]
+        include: {
+          segment: {
+            only: [:enterprise_id, :name],
+            include: { parent: { only: [:name] } }
+          },
+          user: {
+            only: [:created_at, :enterprise_id],
+          }
+        },
+        methods: [:field_data]
       )
     )
     .deep_merge({ 'user' => { 'created_at' => user.created_at.beginning_of_hour } })
   end
 
-  def user_combined_info
-    user.combined_info
+  def field_data
+    user.indexed_field_data
   end
 end

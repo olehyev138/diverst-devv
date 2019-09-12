@@ -17,6 +17,8 @@ import outcomes from 'api/outcomes/outcomes';
 import overviewGraphs from 'api/metrics/overview_graphs';
 import userGraphs from 'api/metrics/user_graphs';
 import groupGraphs from 'api/metrics/group_graphs';
+import metricsDashboards from 'api/metrics/metrics_dashboards';
+import customGraphs from 'api/metrics/custom_graphs';
 
 const Api = {
   users,
@@ -37,6 +39,8 @@ const Api = {
     overviewGraphs,
     userGraphs,
     groupGraphs,
+    metricsDashboards,
+    customGraphs
   }
 };
 

@@ -14,6 +14,18 @@ const selectPaginatedSegments = () => createSelector(
   segmentsState => segmentsState.segmentList
 );
 
+/* Select segment list & format it for a select
+ *  looks like: [ { value: <>, label: <> } ... ]
+ */
+const selectPaginatedSelectSegments = () => createSelector(
+  selectSegmentsDomain,
+  groupsState => (
+    Object
+      .values(groupsState.segmentList)
+      .map(segment => ({ value: segment.id, label: segment.name }))
+  )
+);
+
 const selectSegmentTotal = () => createSelector(
   selectSegmentsDomain,
   segmentsState => segmentsState.segmentTotal
@@ -86,7 +98,7 @@ const selectIsSegmentBuilding = () => createSelector(
 
 
 export {
-  selectSegmentsDomain, selectPaginatedSegments,
+  selectSegmentsDomain, selectPaginatedSegments, selectPaginatedSelectSegments,
   selectSegmentTotal, selectSegment, selectSegmentWithRules,
   selectPaginatedSegmentMembers, selectSegmentMemberTotal,
   selectIsFetchingSegmentMembers, selectIsSegmentBuilding,
