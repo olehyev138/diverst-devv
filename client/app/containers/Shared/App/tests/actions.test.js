@@ -1,18 +1,71 @@
 import {
-  LOGIN_BEGIN, LOGIN_SUCCESS, LOGIN_ERROR,
-  LOGOUT_BEGIN, LOGOUT_SUCCESS, LOGOUT_ERROR,
-  FIND_ENTERPRISE_BEGIN, SET_ENTERPRISE, FIND_ENTERPRISE_ERROR,
-  SET_USER
-} from 'containers/Shared/App/constants';
+  LOGIN_BEGIN,
+  LOGIN_SUCCESS,
+  LOGIN_ERROR,
+  LOGOUT_BEGIN,
+  LOGOUT_SUCCESS,
+  LOGOUT_ERROR,
+  FIND_ENTERPRISE_BEGIN,
+  SET_ENTERPRISE,
+  FIND_ENTERPRISE_ERROR,
+  SET_USER,
+  SSO_LINK_BEGIN,
+  SSO_LOGIN_BEGIN,
+  FIND_ENTERPRISE_SUCCESS
+}
+  from 'containers/Shared/App/constants';
 
 import {
-  loginBegin, loginSuccess, loginError,
-  logoutBegin, logoutSuccess, logoutError,
-  findEnterpriseBegin, setEnterprise, findEnterpriseError,
-  setUser
-} from 'containers/Shared/App/actions';
+  loginBegin,
+  loginSuccess,
+  loginError,
+  logoutBegin,
+  logoutSuccess,
+  logoutError,
+  findEnterpriseBegin,
+  setEnterprise,
+  findEnterpriseError,
+  setUser,
+  ssoLinkBegin,
+  ssoLoginBegin,
+  findEnterpriseSuccess
+}
+  from 'containers/Shared/App/actions';
 
 describe('App actions', () => {
+  describe('loginBegin', () => {
+    it('it has a type of LOGIN_BEGIN and sets a given payload', () => {
+      const expected = {
+        type: LOGIN_BEGIN,
+        payload: { payload: 'payload' }
+      };
+
+      expect(loginBegin({ payload: 'payload' })).toEqual(expected);
+    });
+  });
+
+  describe('ssoLinkBegin', () => {
+    it('it has a type of SSO_LINK_BEGIN and sets a given payload', () => {
+      const expected = {
+        type: SSO_LINK_BEGIN,
+        payload: { payload: 'payload' }
+      };
+
+      expect(ssoLinkBegin({ payload: 'payload' })).toEqual(expected);
+    });
+  });
+
+  describe('ssoLoginBegin', () => {
+    it('it has a type of SSO_LOGIN_BEGIN and sets a given payload', () => {
+      const expected = {
+        type: SSO_LOGIN_BEGIN,
+        payload: { payload: 'payload' }
+      };
+
+      expect(ssoLoginBegin({ payload: 'payload' })).toEqual(expected);
+    });
+  });
+
   describe('loginBegin', () => {
     it('it has a type of LOGIN_BEGIN and sets a given payload', () => {
       const expected = {
@@ -86,6 +139,16 @@ describe('App actions', () => {
       };
 
       expect(findEnterpriseBegin({ payload: 'payload' })).toEqual(expected);
+    });
+  });
+
+  describe('findEnterpriseSuccess', () => {
+    it('it has a type of FIND_ENTERPRISE_SUCCESS and sets a given payload', () => {
+      const expected = {
+        type: FIND_ENTERPRISE_SUCCESS
+      };
+
+      expect(findEnterpriseSuccess({ payload: 'payload' })).toEqual(expected);
     });
   });
 

@@ -197,10 +197,11 @@ class Group < ApplicationRecord
     self.logo = URI.parse(url)
   end
 
-  def logo_location
+  def logo_location(expires_in: 3600, default_style: :medium)
     return nil if !logo.presence
 
-    logo.expiring_url(36000)
+    default_style = :medium if !logo.styles.keys.include? default_style
+    logo.expiring_url(expires_in, default_style)
   end
 
   def banner_location

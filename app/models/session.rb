@@ -1,4 +1,6 @@
 class Session < ApplicationRecord
+  include Session::Actions
+
   # associations
   belongs_to :user
 
