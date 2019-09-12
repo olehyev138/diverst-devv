@@ -44,6 +44,24 @@ RSpec.describe Campaign, type: :model do
       expect(campaign).to be_valid
     end
   end
+  
+  describe '#image_location' do
+    it 'returns the actual logo location' do
+      campaign = create(:campaign, image: File.new('spec/fixtures/files/verizon_logo.png'))
+
+      expect(campaign.image_location).to_not be nil
+      expect(campaign.image_location).to_not eq '/assets/missing.png'
+    end
+  end
+
+  describe '#banner_location' do
+    it 'returns the actual banner location' do
+      campaign = create(:campaign, banner: File.new('spec/fixtures/files/verizon_logo.png'))
+
+      expect(campaign.banner_location).to_not be nil
+      expect(campaign.banner_location).to_not eq '/assets/missing.png'
+    end
+  end
 
   describe '#create_invites' do
     it 'does not import' do

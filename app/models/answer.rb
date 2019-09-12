@@ -33,6 +33,10 @@ class Answer < ApplicationRecord
   rescue
     ''
   end
+  
+  def total_likes
+    likes.count
+  end
 
   # Base value + total of income items - total of expense items
   def total_value

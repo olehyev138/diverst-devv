@@ -29,11 +29,11 @@ class Campaign < ApplicationRecord
   validates_length_of :title, maximum: 191
 
   # Paperclip
-  #  has_attached_file :image, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: 'private'
-  #  validates_attachment_content_type :image, content_type: %r{\Aimage\/.*\Z}
-  #
-  #  has_attached_file :banner, styles: { medium: '1200x1200>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: 'private'
-  #  validates_attachment_content_type :banner, content_type: %r{\Aimage\/.*\Z}
+  has_attached_file :image, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: 'private'
+  validates_attachment_content_type :image, content_type: %r{\Aimage\/.*\Z}
+  
+  has_attached_file :banner, styles: { medium: '1200x1200>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: 'private'
+  validates_attachment_content_type :banner, content_type: %r{\Aimage\/.*\Z}
 
   validates :title,       presence: true
   validates :description, presence: true
@@ -50,6 +50,20 @@ class Campaign < ApplicationRecord
   after_create :create_invites, :send_invitation_emails
 
   scope :ongoing, -> { where('start < :current_time AND end > :current_time', current_time: Time.current) }
+
+  def image_location(expires_in: 3600, default_style: :medium)
+    return nil if !image.presence
+
+    default_style = :medium if !image.styles.keys.include? default_style
+    image.expiring_url(expires_in, default_style)
+  end
+  
+  def banner_location(expires_in: 3600, default_style: :medium)
+    return nil if !banner.presence
+
+    default_style = :medium if !banner.styles.keys.include? default_style
+    banner.expiring_url(expires_in, default_style)
+  end
 
   def create_invites
     return if enterprise.nil?
