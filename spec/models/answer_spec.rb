@@ -21,7 +21,7 @@ RSpec.describe Answer, type: :model do
       it { expect(answer).to validate_presence_of(:contributing_group) }
     end
   end
-  
+
   describe '#total_likes' do
     it 'returns 10' do
       answer = create :answer

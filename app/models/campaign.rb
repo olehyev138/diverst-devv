@@ -31,7 +31,7 @@ class Campaign < ApplicationRecord
   # Paperclip
   has_attached_file :image, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: 'private'
   validates_attachment_content_type :image, content_type: %r{\Aimage\/.*\Z}
-  
+
   has_attached_file :banner, styles: { medium: '1200x1200>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: 'private'
   validates_attachment_content_type :banner, content_type: %r{\Aimage\/.*\Z}
 
@@ -57,7 +57,7 @@ class Campaign < ApplicationRecord
     default_style = :medium if !image.styles.keys.include? default_style
     image.expiring_url(expires_in, default_style)
   end
-  
+
   def banner_location(expires_in: 3600, default_style: :medium)
     return nil if !banner.presence
 

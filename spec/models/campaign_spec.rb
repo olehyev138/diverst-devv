@@ -44,7 +44,7 @@ RSpec.describe Campaign, type: :model do
       expect(campaign).to be_valid
     end
   end
-  
+
   describe '#image_location' do
     it 'returns the actual logo location' do
       campaign = create(:campaign, image: File.new('spec/fixtures/files/verizon_logo.png'))

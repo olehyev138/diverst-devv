@@ -33,7 +33,7 @@ class Answer < ApplicationRecord
   rescue
     ''
   end
-  
+
   def total_likes
     likes.count
   end
