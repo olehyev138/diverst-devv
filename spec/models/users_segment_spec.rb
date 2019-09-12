@@ -40,7 +40,7 @@ RSpec.describe UsersSegment, type: :model do
             'created_at' => object.user.created_at.beginning_of_hour,
             'enterprise_id' => object.user.enterprise_id,
           },
-          'user_combined_info' => object.user_combined_info
+          'field_data' => object.field_data
         }
         expect(object.as_indexed_json).to eq(hash)
       end

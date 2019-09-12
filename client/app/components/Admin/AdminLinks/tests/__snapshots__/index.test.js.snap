@@ -106,6 +106,23 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                 />
               </WithStyles(ForwardRef(ListItemText))>
             </WithStyles(ForwardRef(MenuItem))>
+            <WithStyles(ForwardRef(MenuItem))
+              component={
+                Object {
+                  "$$typeof": Symbol(react.forward_ref),
+                  "render": [Function],
+                }
+              }
+              exact={true}
+              to="/admin/analyze/custom"
+            >
+              <WithStyles(ForwardRef(ListItemIcon))>
+                <ListIcon />
+              </WithStyles(ForwardRef(ListItemIcon))>
+              <WithStyles(ForwardRef(ListItemText))>
+                Custom
+              </WithStyles(ForwardRef(ListItemText))>
+            </WithStyles(ForwardRef(MenuItem))>
           </WithStyles(ForwardRef(List))>
         </WithStyles(ForwardRef(Collapse))>
         <WithStyles(ForwardRef(ListItem))
@@ -410,6 +427,23 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   id="diverst.containers.Routes.admin.analyze.groups"
                   values={Object {}}
                 />
+              </WithStyles(ForwardRef(ListItemText))>
+            </WithStyles(ForwardRef(MenuItem))>
+            <WithStyles(ForwardRef(MenuItem))
+              component={
+                Object {
+                  "$$typeof": Symbol(react.forward_ref),
+                  "render": [Function],
+                }
+              }
+              exact={true}
+              to="/admin/analyze/custom"
+            >
+              <WithStyles(ForwardRef(ListItemIcon))>
+                <ListIcon />
+              </WithStyles(ForwardRef(ListItemIcon))>
+              <WithStyles(ForwardRef(ListItemText))>
+                Custom
               </WithStyles(ForwardRef(ListItemText))>
             </WithStyles(ForwardRef(MenuItem))>
           </WithStyles(ForwardRef(List))>

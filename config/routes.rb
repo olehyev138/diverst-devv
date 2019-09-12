@@ -210,12 +210,12 @@ Diverst::Application.routes.draw do
           member do
             get 'shared_dashboard'
           end
+        end
 
-          resources :graphs do
-            member do
-              get 'data'
-              get 'export_csv'
-            end
+        resources :graphs do
+          collection do
+            get 'data'
+            get 'export_csv'
           end
         end
       end

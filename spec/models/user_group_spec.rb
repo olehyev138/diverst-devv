@@ -178,7 +178,7 @@ RSpec.describe UserGroup do
             'mentee' => object.user.mentee,
             'active' => object.user.active
           },
-          'user_combined_info' => object.user_combined_info
+          'field_data' => object.field_data
         }
         expect(object.as_indexed_json).to eq(hash)
       end

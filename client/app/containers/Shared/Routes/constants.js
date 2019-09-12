@@ -161,6 +161,32 @@ export const ROUTES = {
           titleMessage: messages.admin.analyze.groups,
         }
       },
+      custom: {
+        index: {
+          path: () => '/admin/analyze/custom',
+          data: {
+            titleMessage: messages.admin.analyze.custom,
+          },
+        },
+        new: {
+          path: () => '/admin/analyze/custom/new',
+        },
+        edit: {
+          path: (metricsDashboardId = ':metrics_dashboard_id') => `/admin/analyze/custom/${metricsDashboardId}/edit`,
+        },
+        show: {
+          path: (metricsDashboardId = ':metrics_dashboard_id') => `/admin/analyze/custom/${metricsDashboardId}`,
+        },
+        graphs: {
+          new: {
+            path: (metricsDashboardId = ':metrics_dashboard_id') => `/admin/analyze/custom/${metricsDashboardId}/graphs/new`,
+          },
+          edit: {
+            path: (metricsDashboardId = ':metrics_dashboard_id', graphId = ':graph_id') => (
+              `/admin/analyze/custom/${metricsDashboardId}/graphs/${graphId}/edit`)
+          },
+        },
+      },
     },
     manage: {
       index: {
