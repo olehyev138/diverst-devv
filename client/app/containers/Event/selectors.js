@@ -18,4 +18,4 @@ const selectEvent = () => createSelector(
   eventsState => eventsState.currentEvent
 );
 
-export { selectPaginatedEvents, selectEventsTotal, selectEvent };
+export { selectEventsDomain, selectPaginatedEvents, selectEventsTotal, selectEvent };
