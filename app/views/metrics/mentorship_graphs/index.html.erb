@@ -85,7 +85,9 @@
       <div class="card">
         <div class="card__section">
           <div class="card__action">
-            <a href="#" id="users_mentors_csv" data-url="<%= users_mentorship_metrics_mentorships_path(format: :csv) %>">Export CSV</a>
+            <a href="#" id="users_mentors_csv_1" data-url="<%= users_mentorship_metrics_mentorships_path(format: :csv, version: 1) %>">Export CSV Version 1</a>
+            <br>
+            <a href="#" id="users_mentors_csv_2" data-url="<%= users_mentorship_metrics_mentorships_path(format: :csv, version: 2) %>">Export CSV Version 2</a>
           </div>
           <h2>
             Mentor/Mentee Count By User
@@ -254,8 +256,16 @@
     });
 
     $(document).on('ready page:change', function () {
-        $('#users_mentors_csv').click(function () {
-            $.get($('#users_mentors_csv').data('url'), function (data) {
+        $('#users_mentors_csv_1').click(function () {
+            $.get($('#users_mentors_csv_1').data('url'), function (data) {
+                Utility.displayFlash(data);
+            }, "JSON");
+        });
+    });
+
+    $(document).on('ready page:change', function () {
+        $('#users_mentors_csv_2').click(function () {
+            $.get($('#users_mentors_csv_2').data('url'), function (data) {
                 Utility.displayFlash(data);
             }, "JSON");
         });

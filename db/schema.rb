@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190906131721) do
+ActiveRecord::Schema.define(version: 20190913141553) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -1516,6 +1516,8 @@ ActiveRecord::Schema.define(version: 20190906131721) do
     t.integer  "answer_comments_count",          limit: 4
     t.integer  "message_comments_count",         limit: 4
     t.integer  "news_link_comments_count",       limit: 4
+    t.integer  "mentors_count",                  limit: 4
+    t.integer  "mentees_count",                  limit: 4
   end
 
   add_index "users", ["active"], name: "index_users_on_active", using: :btree
@@ -1601,8 +1603,5 @@ ActiveRecord::Schema.define(version: 20190906131721) do
   SQL
   create_view "total_page_visitations", sql_definition: <<-SQL
       select `a`.`page_url` AS `page_url`,`b`.`page_name` AS `page_name`,`c`.`enterprise_id` AS `enterprise_id`,sum(`a`.`visits_day`) AS `visits_day`,sum(`a`.`visits_week`) AS `visits_week`,sum(`a`.`visits_month`) AS `visits_month`,sum(`a`.`visits_year`) AS `visits_year`,sum(`a`.`visits_all`) AS `visits_all` from ((`page_visitation_data` `a` join `page_names` `b` on((`a`.`page_url` = `b`.`page_url`))) join `users` `c` on((`c`.`id` = `a`.`user_id`))) group by `a`.`page_url`,`b`.`page_name`,`c`.`enterprise_id`
-  SQL
-  create_view "user_with_mentor_counts", sql_definition: <<-SQL
-      select `u`.`id` AS `user_id`,`u`.`first_name` AS `first_name`,`u`.`last_name` AS `last_name`,`u`.`email` AS `email`,count(distinct `m1`.`mentee_id`) AS `number_of_mentees`,count(distinct `m2`.`mentor_id`) AS `number_of_mentors` from ((`users` `u` left join `mentorings` `m1` on((`u`.`id` = `m1`.`mentor_id`))) left join `mentorings` `m2` on((`u`.`id` = `m2`.`mentee_id`))) group by `u`.`id`,`u`.`first_name`,`u`.`last_name`,`u`.`email`
   SQL
 end

@@ -1,7 +1,7 @@
 class Mentoring < BaseClass
   # associations
-  belongs_to :mentee, class_name: 'User'
-  belongs_to :mentor, class_name: 'User'
+  belongs_to :mentee, class_name: 'User', counter_cache: :mentors_count
+  belongs_to :mentor, class_name: 'User', counter_cache: :mentees_count
 
   # validations
   validates   :mentor,  presence: true

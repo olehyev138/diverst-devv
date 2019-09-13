@@ -31,7 +31,8 @@ class Metrics::MentorshipGraphsController < ApplicationController
     MentoringInterestPolicy.new(current_user, MentoringInterest).index?
     respond_to do |format|
       format.csv {
-        AllUsersMentorsCsvJob.perform_later(current_user.id)
+        csv_version = (params[:version] || 1).to_i
+        AllUsersMentorsCsvJob.perform_later(current_user.id, version: csv_version)
         render json: { notice: 'Please check your Secure Downloads section in a couple of minutes' }
       }
     end
