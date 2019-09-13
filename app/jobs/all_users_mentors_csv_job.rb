@@ -96,7 +96,7 @@ class AllUsersMentorsCsvJob < ActiveJob::Base
         end
 
         row = [
-          "#{user.name}", mentors
+          "#{user.name} | #{user.email}", mentors
         ]
 
         csv << row
@@ -135,7 +135,7 @@ class AllUsersMentorsCsvJob < ActiveJob::Base
         end
 
         row = [
-          "#{user.name}", mentees
+          "#{user.name} | #{user.email}", mentees
         ]
 
         csv << row
