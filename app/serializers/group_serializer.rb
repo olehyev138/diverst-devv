@@ -5,4 +5,8 @@ class GroupSerializer < ApplicationRecordSerializer
              :logo_location, :banner_location, :annual_budget
 
   has_many :children
+
+  def logo_location
+    object.logo_location(default_style: instance_options.dig(:scope, :image_size)&.to_sym)
+  end
 end

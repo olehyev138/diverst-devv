@@ -153,14 +153,21 @@ class User < ApplicationRecord
     self.enterprise.fields
   end
 
+  # Format users field data for a ES index
+  # Returns { <field_data.id> => <field_data.data } }
+  def indexed_field_data
+    field_data.to_h { |fd| [fd.field_id, fd.data] }
+  end
+
   def avatar_url=(url)
     self.avatar = URI.parse(url)
   end
 
-  def avatar_location
+  def avatar_location(expires_in: 3600, default_style: :medium)
     return nil if !avatar.presence
 
-    avatar.expiring_url(36000)
+    default_style = :medium if !avatar.styles.keys.include? default_style
+    avatar.expiring_url(expires_in, default_style)
   end
 
   def generate_authentication_token(length = 20)

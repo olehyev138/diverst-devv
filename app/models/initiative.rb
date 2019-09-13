@@ -125,20 +125,22 @@ class Initiative < ApplicationRecord
     self.picture = URI.parse(url)
   end
 
-  def picture_location
+  def picture_location(expires_in: 3600, default_style: :medium)
     return nil if !picture.presence
 
-    picture.expiring_url(36000)
+    default_style = :medium if !picture.styles.keys.include? default_style
+    picture.expiring_url(expires_in, default_style)
   end
 
   def qr_code_url=(url)
     self.qr_code = URI.parse(url)
   end
 
-  def qr_code_location
+  def qr_code_location(expires_in: 3600, default_style: :medium)
     return nil if !qr_code.presence
 
-    qr_code.expiring_url(36000)
+    default_style = :medium if !qr_code.styles.keys.include? default_style
+    qr_code.expiring_url(expires_in, default_style)
   end
 
   def initiative_date(date_type)

@@ -8,6 +8,10 @@ class UserSerializer < ApplicationRecordSerializer
     true
   end
 
+  def avatar_location
+    object.avatar_location(default_style: instance_options.dig(:scope, :image_size)&.to_sym)
+  end
+
   def excluded_keys
     [:password_digest]
   end

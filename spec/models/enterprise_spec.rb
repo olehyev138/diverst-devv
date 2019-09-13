@@ -339,4 +339,12 @@ RSpec.describe Enterprise, type: :model do
       end
     end
   end
+
+  describe '#saml_settings' do
+    it 'gives the correct resource count for the enterprise' do
+      enterprise = create(:enterprise)
+      saml_settings = enterprise.saml_settings
+      expect(saml_settings.assertion_consumer_service_url).to eq "#{ENV['DOMAIN']}/api/v1/enterprises/#{enterprise.id}/sso_login"
+    end
+  end
 end

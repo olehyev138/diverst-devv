@@ -9,13 +9,7 @@ class Api::V1::SessionsController < DiverstController
   end
 
   def destroy
-    session = Session.find_by_token(params[:id])
-    if session.nil?
-      render status: 404, json: { message: 'Invalid user Token' }
-    else
-      session.update(status: 1)
-      render status: 200, json: { token: params[:id] }
-    end
+    render status: 200, json: klass.destroy(self.diverst_request, params)
   rescue => e
     raise BadRequestException.new(e.message)
   end

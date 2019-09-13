@@ -51,7 +51,6 @@ module BaseController
   def destroy
     item = klass.find(params[:id])
     base_authorize(item)
-
     klass.destroy(self.diverst_request, params[:id])
     head :no_content
   rescue => e
@@ -60,7 +59,7 @@ module BaseController
 
   def payload
     params.require(klass.symbol).permit(
-      klass.attribute_names
+      klass.attribute_names - ['id', 'created_at', 'updated_at', 'enterprise_id']
     )
   end
 

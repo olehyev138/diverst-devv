@@ -2,8 +2,6 @@ import config from '../../app.config';
 import { appendQueryArgs } from 'utils/apiHelpers';
 
 const axios = require('axios');
-
-axios.defaults.baseURL = config.apiUrl;
 axios.defaults.headers.common['Diverst-APIKey'] = config.apiKey;
 
 class API {

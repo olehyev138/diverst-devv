@@ -33,7 +33,7 @@ module.exports = require('./webpack.base.babel')({
   // Add development plugins
   plugins: [
     new Dotenv({
-      path: path.resolve(__dirname, './.env')
+      path: path.resolve(__dirname, '../../.env')
     }),
     new webpack.HotModuleReplacementPlugin(), // Tell webpack we want hot reloading
     new HtmlWebpackPlugin({
