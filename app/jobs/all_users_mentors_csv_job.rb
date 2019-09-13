@@ -69,17 +69,12 @@ class AllUsersMentorsCsvJob < ActiveJob::Base
   end
 
   def version2(current_id, enterprise_id)
-    version2mentors(current_id, enterprise_id)
-    version2mentees(current_id, enterprise_id)
-  end
-
-  def version2mentors(current_id, enterprise_id)
     csv_data = CSV.generate do |csv|
       first_row = [
-        'All Users with their Mentors'
+        'All Users with their Mentors and Mentees'
       ]
 
-      second_row = %w(Mentee Mentors)
+      second_row = %w(User Mentors Mentees)
 
       csv << first_row
       csv << second_row
@@ -89,43 +84,14 @@ class AllUsersMentorsCsvJob < ActiveJob::Base
           "#{men.name} | #{men.email}"
         end
 
+        mentee_list = user.mentees.map do |men|
+          "#{men.name} | #{men.email}"
+        end
+
         mentors = if mentor_list.present?
           mentor_list.join("\n")
         else
           'None'
-        end
-
-        row = [
-          "#{user.name} | #{user.email}", mentors
-        ]
-
-        csv << row
-      end
-    end
-
-    file = CsvFile.new(user_id: current_id, download_file_name: 'all_users_mentors')
-
-    file.download_file = StringIO.new(csv_data)
-    file.download_file.instance_write(:content_type, 'text/csv')
-    file.download_file.instance_write(:file_name, 'all_users_mentors.csv')
-
-    file.save!
-  end
-
-  def version2mentees(current_id, enterprise_id)
-    csv_data = CSV.generate do |csv|
-      first_row = [
-        'All User with their Mentees'
-      ]
-
-      second_row = %w(Mentor Mentees)
-
-      csv << first_row
-      csv << second_row
-
-      User.where(enterprise_id: enterprise_id).find_each do |user|
-        mentee_list = user.mentees.map do |men|
-          "#{men.name} | #{men.email}"
         end
 
         mentees = if mentee_list.present?
@@ -135,18 +101,18 @@ class AllUsersMentorsCsvJob < ActiveJob::Base
         end
 
         row = [
-          "#{user.name} | #{user.email}", mentees
+          "#{user.name} | #{user.email}", mentors, mentees
         ]
 
         csv << row
       end
     end
 
-    file = CsvFile.new(user_id: current_id, download_file_name: 'all_users_mentees')
+    file = CsvFile.new(user_id: current_id, download_file_name: 'all_users_mentors_and_mentees')
 
     file.download_file = StringIO.new(csv_data)
     file.download_file.instance_write(:content_type, 'text/csv')
-    file.download_file.instance_write(:file_name, 'all_users_mentees.csv')
+    file.download_file.instance_write(:file_name, 'all_users_mentors_and_mentees.csv')
 
     file.save!
   end
