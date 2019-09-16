@@ -22,6 +22,14 @@ RSpec.describe Answer, type: :model do
     end
   end
 
+  describe '#total_likes' do
+    it 'returns 10' do
+      answer = create :answer
+      create_list(:like, 10, answer: answer)
+      expect(answer.total_likes).to eq(10)
+    end
+  end
+
   describe '#total_value' do
     it 'returns 0' do
       answer = create :answer
