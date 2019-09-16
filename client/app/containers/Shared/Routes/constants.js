@@ -255,6 +255,11 @@ export const ROUTES = {
           index: {
             path: () => '/admin/system/settings/fields'
           }
+        },
+        customText: {
+          edit: {
+            path: () => 'admin/system/settings/custom_text'
+          }
         }
       }
     }
