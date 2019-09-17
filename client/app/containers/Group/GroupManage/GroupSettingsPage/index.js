@@ -27,17 +27,14 @@ export function GroupSettingsPage(props) {
     <React.Fragment>
       <GroupSettings
         groupAction={props.updateGroupBegin}
-        group={props.group}
+        group={props.currentGroup}
       />
     </React.Fragment>
   );
 }
 
 GroupSettingsPage.propTypes = {
-  group: PropTypes.object,
-  groups: PropTypes.array,
-  getGroupBegin: PropTypes.func,
-  getGroupsBegin: PropTypes.func,
+  currentGroup: PropTypes.object,
   updateGroupBegin: PropTypes.func,
   groupFormUnmount: PropTypes.func
 };

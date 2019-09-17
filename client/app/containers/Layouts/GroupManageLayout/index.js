@@ -44,7 +44,7 @@ const GroupManageLayout = ({ component: Component, ...rest }) => {
           />
           <Container>
             <div className={classes.content}>
-              <Component {...other} />
+              <Component currentGroup={matchProps.currentGroup} {...other} />
             </div>
           </Container>
         </React.Fragment>

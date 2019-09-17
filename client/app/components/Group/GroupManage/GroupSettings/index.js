@@ -75,6 +75,7 @@ export function GroupSettingsInner({ classes, handleSubmit, handleChange, handle
 export function GroupSettings(props) {
   const initialValues = buildValues(props.group, {
     id: { default: '' },
+    name: { default: '' }
   });
 
   return (
