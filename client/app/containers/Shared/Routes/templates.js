@@ -71,6 +71,7 @@ import GroupMemberListPage from 'containers/Group/GroupMembers/GroupMemberListPa
 import GroupMemberCreatePage from 'containers/Group/GroupMembers/GroupMemberCreatePage/Loadable';
 
 /* Group - Manage */
+import GroupSettingsPage from 'containers/Group/GroupManage/GroupSettingsPage/Loadable';
 
 /* Global */
 import NotFoundPage from 'containers/Shared/NotFoundPage/Loadable';
@@ -84,5 +85,5 @@ export {
   EventCreatePage, EventEditPage, GroupMessagePage, GroupMessageCreatePage, GroupMessageEditPage, OutcomeCreatePage,
   OutcomeEditPage, GroupMemberListPage, GroupMemberCreatePage, NotFoundPage, PlaceholderPage, GroupDashboardPage,
   UserDashboardPage, MetricsDashboardListPage, MetricsDashboardCreatePage, MetricsDashboardEditPage, MetricsDashboardPage,
-  CustomGraphCreatePage, CustomGraphEditPage, GroupManageLayout
+  CustomGraphCreatePage, CustomGraphEditPage, GroupManageLayout, GroupSettingsPage
 };
