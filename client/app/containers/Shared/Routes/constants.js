@@ -130,6 +130,24 @@ export const ROUTES = {
           (groupId = ':group_id', outcomeId = ':outcome_id') => `/groups/${groupId}/outcomes/${outcomeId}/edit`
       },
     },
+    manage: {
+      settings: {
+        index: {
+          path: (groupId = ':group_id') => `/groups/${groupId}/manage/settings`,
+          data: {
+            titleMessage: 'todo'
+          }
+        }
+      },
+      leaders: {
+        index: {
+          path: (groupId = ':group_id') => `/groups/${groupId}/manage/leaders`,
+          data: {
+            titleMessage: 'todo'
+          }
+        }
+      }
+    }
   },
 
   // Admin
