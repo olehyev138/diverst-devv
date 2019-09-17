@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190727185249) do
+ActiveRecord::Schema.define(version: 20190817013235) do
 
   create_table "activities", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.string "trackable_type", collation: "utf8mb4_unicode_ci"
@@ -407,6 +407,16 @@ ActiveRecord::Schema.define(version: 20190727185249) do
     t.bigint "category_id"
     t.index ["category_id"], name: "index_expenses_on_category_id"
     t.index ["enterprise_id"], name: "index_expenses_on_enterprise_id"
+  end
+
+  create_table "field_data", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin" do |t|
+    t.bigint "user_id"
+    t.bigint "field_id"
+    t.string "data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["field_id"], name: "index_field_data_on_field_id"
+    t.index ["user_id"], name: "index_field_data_on_user_id"
   end
 
   create_table "fields", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
@@ -1298,6 +1308,17 @@ ActiveRecord::Schema.define(version: 20190727185249) do
     t.index ["user_id"], name: "index_samples_on_user_id"
   end
 
+  create_table "segment_field_rules", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+    t.bigint "segment_id"
+    t.bigint "field_id"
+    t.integer "operator"
+    t.text "data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["field_id"], name: "index_segment_field_rules_on_field_id"
+    t.index ["segment_id"], name: "index_segment_field_rules_on_segment_id"
+  end
+
   create_table "segment_group_scope_rule_groups", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.bigint "segment_group_scope_rule_id"
     t.bigint "group_id"
@@ -1322,17 +1343,6 @@ ActiveRecord::Schema.define(version: 20190727185249) do
     t.integer "operator", null: false
     t.integer "field", null: false
     t.index ["segment_id"], name: "index_segment_order_rules_on_segment_id"
-  end
-
-  create_table "segment_rules", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
-    t.bigint "segment_id"
-    t.bigint "field_id"
-    t.integer "operator"
-    t.text "values"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["field_id"], name: "index_segment_rules_on_field_id"
-    t.index ["segment_id"], name: "index_segment_rules_on_segment_id"
   end
 
   create_table "segments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
