@@ -32,7 +32,6 @@ export function CustomTextEditPage(props) {
   const links = {
     customTextEdit: ROUTES.admin.system.globalSettings.customText.edit.path()
   };
-  console.log(props);
   useEffect(() => {
     const newsItemId = rs.params('item_id');
     props.getCustomTextBegin({ id: newsItemId });
