@@ -11,7 +11,7 @@ import {
 } from 'containers/GlobalSettings/CustomText/constants';
 
 export const initialState = {
-  customText: null
+  currentCustomText: null
 };
 
 function customTextReducer(state = initialState, action) {
