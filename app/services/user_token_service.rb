@@ -9,11 +9,8 @@ class UserTokenService
     token = user.generate_authentication_token
     payload = {
         id: user.id,
-        enterprise: {
-            id: user.enterprise.id,
-            name: user.enterprise.name,
-            theme: user.enterprise.theme ? user.enterprise.theme.attributes : nil
-        },
+        # TODO: Make a separate serializer or another alternative for this
+        enterprise: user.enterprise.as_json,
         **ActiveModelSerializers::SerializableResource.new(user.policy_group).as_json, # Expand the serialized policy group hash into the jwt token
         email: user.email,
         user_token: token,
