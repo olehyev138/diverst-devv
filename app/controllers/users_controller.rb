@@ -280,6 +280,7 @@ class UsersController < ApplicationController
     params.require(:user).permit(
       :avatar,
       :email,
+      :notifications_email,
       :first_name,
       :last_name,
       :biography,

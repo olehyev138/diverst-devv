@@ -4,6 +4,7 @@
       input_html: { autofocus: true } %>
 <% if @is_admin_view %>
   <%= f.input :email %>
+  <%= f.input :notifications_email %>
 <% end %>
 
 <%= f.input :first_name %>

@@ -3,7 +3,7 @@ class UserGroupMailer < ApplicationMailer
     @user = user
     @groups = groups
     @custom_text = user.enterprise.custom_text rescue CustomText.new
-    @email = @user.email
+    @email = @user.email_for_notification
     return if @user.enterprise.disable_emails?
 
     set_defaults(user.enterprise, method_name)

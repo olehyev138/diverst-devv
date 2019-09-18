@@ -102,11 +102,14 @@ class User < BaseClass
   validates_length_of :reset_password_token, maximum: 191
   validates_length_of :encrypted_password, maximum: 191
   validates_length_of :email, maximum: 191
+  validates_length_of :notifications_email, maximum: 191
   validates_length_of :auth_source, maximum: 191
   validates_length_of :data, maximum: 65535
   validates_length_of :last_name, maximum: 191
   validates_length_of :first_name, maximum: 191
   validates_attachment_content_type :avatar, content_type: /\Aimage\/.*\Z/
+
+  validates :notifications_email, uniqueness: true, allow_blank: true, format: { with: Devise.email_regexp }
 
   validates :first_name, presence: true
   validates :last_name, presence: true
@@ -142,6 +145,10 @@ class User < BaseClass
   scope :mentees, -> { where(mentee: true) }
 
   accepts_nested_attributes_for :availabilities, allow_destroy: true
+
+  def email_for_notification
+    (notifications_email.present?) || email
+  end
 
   def last_notified_date
     last_group_notification_date&.to_date
