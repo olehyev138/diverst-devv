@@ -19,6 +19,7 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import messages from 'containers/Group/messages';
 import { buildValues, mapFields } from 'utils/formHelpers';
 
+import Select from 'components/Shared/DiverstSelect';
 import {
   Button, Card, CardActions, CardContent, Grid,
   TextField, FormControl, Divider, Switch, FormControlLabel,
@@ -30,8 +31,22 @@ const styles = theme => ({
   },
 });
 
+const SETTINGS_OPTIONS = Object.freeze({
+  pendingUsers: [
+    { label: 'Enabled', value: 'enabled' },
+    { label: 'Disabled', value: 'disabled' }
+  ],
+  membersVisibility: [
+    { label: 'Global', value: 'global' },
+    { label: 'Group', value: 'group' },
+    { label: 'Members Only', value: 'managers_only' }
+  ],
+});
+
 /* eslint-disable object-curly-newline */
 export function GroupSettingsInner({ classes, handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
+  const capitalize = str => str.charAt(0).toUpperCase() + str.slice(1);
+
   return (
     <Card>
       <Form>
@@ -39,15 +54,30 @@ export function GroupSettingsInner({ classes, handleSubmit, handleChange, handle
           <Grid container spacing={3}>
             <Grid item xs className={classes.noBottomPadding}>
               <Field
-                component={TextField}
+                component={Select}
                 required
-                onChange={handleChange}
                 fullWidth
-                id='name'
-                name='name'
+                id='pending_users'
+                name='pending_users'
                 margin='normal'
-                label={<FormattedMessage {...messages.name} />}
-                value={values.name}
+                label='Pending Users'
+                options={SETTINGS_OPTIONS.pendingUsers}
+                value={{ value: values.pending_users, label: capitalize(values.pending_users) }}
+                onChange={value => setFieldValue('pending_users', value.value)}
+              />
+            </Grid>
+            <Grid item xs className={classes.noBottomPadding}>
+              <Field
+                component={Select}
+                required
+                fullWidth
+                id='pending_users'
+                name='pending_users'
+                margin='normal'
+                label='Members Visibility'
+                options={SETTINGS_OPTIONS.membersVisibility}
+                value={{ value: values.members_visibility, label: capitalize(values.members_visibility) }}
+                onChange={value => setFieldValue('members_visibility', value.value)}
               />
             </Grid>
           </Grid>
@@ -75,7 +105,8 @@ export function GroupSettingsInner({ classes, handleSubmit, handleChange, handle
 export function GroupSettings(props) {
   const initialValues = buildValues(props.group, {
     id: { default: '' },
-    name: { default: '' }
+    pending_users: { default: '' },
+    members_visibility: { default: '' }
   });
 
   return (
