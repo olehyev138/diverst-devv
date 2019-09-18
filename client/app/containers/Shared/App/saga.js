@@ -52,6 +52,8 @@ export function* login(action) {
 
     yield put(setUser(user));
     yield put(setUserPolicyGroup(user.policy_group));
+    // Important as the client only gets a simplified version of the enterprise before being fully authenticated
+    yield put(setEnterprise(user.enterprise));
     yield put(push(ROUTES.user.home.path()));
   } catch (err) {
     yield put(loginError(err));
@@ -62,7 +64,7 @@ export function* ssoLogin(action) {
   try {
     axios.defaults.headers.common['Diverst-UserToken'] = action.payload.userToken;
     yield put(loginSuccess(action.payload.userToken));
-    
+
     yield call(AuthService.storeJwt, action.payload.userToken);
 
     // decode token to get user object
@@ -98,7 +100,7 @@ export function* logout(action) {
 
     if (response.data.logout_link)
       window.location.assign(response.data.logout_link);
-    
+
     else {
       yield put(push(ROUTES.session.login.path()));
       yield put(showSnackbar({ message: 'You have been logged out' }));
