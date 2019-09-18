@@ -41,10 +41,11 @@ function appReducer(state = initialState, action) {
         draft.policyGroup = action.policyGroup;
         break;
       case SET_USER:
-        // Clear policy group because we already have it in the store at the parent level
+        // Clear policy group and enterprise because we already have them in the store at the parent level
         draft.user = {
           ...action.user,
           policy_group: undefined,
+          enterprise: undefined,
         };
         break;
     }
