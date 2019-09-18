@@ -57,7 +57,7 @@ beforeEach(() => {
 describe('Login Saga', () => {
   it('should get token from API', async () => {
     api.sessions.create.mockImplementation(() => Promise.resolve({ data: { token } }));
-    const results = [loginSuccess(token), setUser(user), setUserPolicyGroup(user.policy_group), push(ROUTES.user.home.path())];
+    const results = [loginSuccess(token), setUser(user), setUserPolicyGroup(user.policy_group), setEnterprise(user.enterprise), push(ROUTES.user.home.path())];
     const initialAction = { payload: { email: 'test@gmail.com', password: 'password' } };
     const dispatched = await recordSaga(
       login,

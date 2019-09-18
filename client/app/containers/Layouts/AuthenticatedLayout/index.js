@@ -40,7 +40,7 @@ const AuthenticatedLayout = ({
       axios.defaults.headers.common['Diverst-UserToken'] = userJwt;
       other.loginSuccess(userJwt);
       other.setUser(user);
-      other.setEnterprise(enterprise || user.enterprise);
+      other.setEnterprise(user.enterprise);
       other.setUserPolicyGroup(user.policy_group);
     }
 
