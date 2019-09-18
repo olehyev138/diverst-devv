@@ -14,6 +14,8 @@ class EnterpriseSerializer < ApplicationRecordSerializer
              :enable_social_media, :redirect_all_emails, :redirect_email_contact, :disable_emails,
              :expiry_age_for_resources, :unit_of_expiry_age, :auto_archive, :theme
 
+  has_one :custom_text
+
   def theme
     return nil if object.theme.nil?
 

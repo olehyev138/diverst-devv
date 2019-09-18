@@ -151,18 +151,18 @@ export function CustomTextForm(props) {
   const customText = dig(props, 'customText');
 
   const initialValues = buildValues(customText, {
-    erg: { default: 'ERG' },
-    program: { default: 'Goal' },
-    structure: { default: 'Structure' },
-    outcome: { default: 'Focus Area' },
-    badge: { default: 'Badge' },
-    segment: { default: 'Segment' },
-    dci_full_title: { default: 'Engagement' },
-    dci_abbreviation: { default: 'Engagement' },
-    member_preference: { default: 'Member Survey' },
-    parent: { default: 'Parent' },
-    sub_erg: { default: 'Sub-Group' },
-    privacy_statement: { default: 'Privacy Statement' }
+    erg: { default: 'ERG TEST' },
+    program: { default: 'Goal TEST' },
+    structure: { default: 'Structure TEST' },
+    outcome: { default: 'Focus Area TEST' },
+    badge: { default: 'Badge TEST' },
+    segment: { default: 'Segment TEST' },
+    dci_full_title: { default: 'Engagement TEST' },
+    dci_abbreviation: { default: 'Engagement TEST' },
+    member_preference: { default: 'Member Survey TEST' },
+    parent: { default: 'Parent TEST' },
+    sub_erg: { default: 'Sub-Group TEST' },
+    privacy_statement: { default: 'Privacy Statement TEST' }
   });
 
   return (

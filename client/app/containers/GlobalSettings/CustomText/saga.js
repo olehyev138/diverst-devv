@@ -30,13 +30,18 @@ export function* getCustomText(action) {
 }
 
 export function* updateCustomText(action) {
+  console.log('Hello M\'Fucker');
   try {
+    console.log('Hello M\'Fucker 2');
     const payload = { custom_text: action.payload };
+    console.log('Hello M\'Fucker 3');
     const response = yield call(api.customText.update.bind(api.customText), payload.custom_text.id, payload);
+    console.log('Hello M\'Fucker 4');
 
     yield put(push(ROUTES.admin.system.globalSettings.customText));
     yield put(showSnackbar({ message: 'Custom text updated', options: { variant: 'success' } }));
   } catch (err) {
+    console.log(err);
     yield put(updateCustomTextError(err));
 
     // TODO: intl message
