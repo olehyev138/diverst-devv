@@ -29,7 +29,7 @@ class UsersController < ApplicationController
     end
 
     if extra_params[:can_metrics_dashboard_create]
-      user_ids_with_perms = current_user.enterprise.users.where(active: 1)
+      user_ids_with_perms = current_user.enterprise.users.active
                             .joins(:policy_group).where('policy_groups.metrics_dashboards_create = true OR policy_groups.manage_all = true').map(&:id)
       @users = @users.where(id: user_ids_with_perms)
     end
