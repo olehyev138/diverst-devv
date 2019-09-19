@@ -13,7 +13,8 @@ import { DateTime } from 'luxon';
 import { FormattedMessage } from 'react-intl';
 import { Field, Formik, Form } from 'formik';
 import {
-  Button, Card, CardActions, CardContent, TextField
+  withStyles,
+  Button, Card, CardActions, CardContent, TextField, Grid, Divider
 } from '@material-ui/core';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
@@ -21,6 +22,12 @@ import messages from 'containers/Event/messages';
 import { buildValues } from 'utils/formHelpers';
 
 import DiverstDateTimePicker from 'components/Shared/Pickers/DiverstDateTimePicker';
+
+const styles = theme => ({
+  noBottomPadding: {
+    paddingBottom: '0 !important',
+  },
+});
 
 /* eslint-disable object-curly-newline */
 export function EventFormInner({
@@ -35,9 +42,11 @@ export function EventFormInner({
           <Field
             component={TextField}
             onChange={handleChange}
+            required
             fullWidth
             id='name'
             name='name'
+            margin='normal'
             label={<FormattedMessage {...messages.form.name} />}
             value={values.name}
           />
@@ -47,34 +56,52 @@ export function EventFormInner({
             fullWidth
             id='description'
             name='description'
-            value={values.description}
+            multiline
+            rows={4}
+            variant='outlined'
+            margin='normal'
             label={<FormattedMessage {...messages.form.description} />}
-          />
-          <Field
-            component={DiverstDateTimePicker}
-            keyboardMode
-            /* eslint-disable-next-line dot-notation */
-            maxDate={touched['end'] ? values['end'] : undefined}
-            maxDateMessage='Start date cannot be after end date'
-            disablePast
-            fullWidth
-            id='start'
-            name='start'
-            label={<FormattedMessage {...messages.form.start} />}
-          />
-          <Field
-            component={DiverstDateTimePicker}
-            keyboardMode
-            /* eslint-disable-next-line dot-notation */
-            minDate={values['start']}
-            minDateMessage='End date cannot be before start date'
-            disablePast
-            fullWidth
-            id='end'
-            name='end'
-            label={<FormattedMessage {...messages.form.end} />}
+            value={values.description}
           />
         </CardContent>
+        <Divider />
+        <CardContent>
+          <Grid container spacing={6} justify='space-between'>
+            <Grid item xs md={5}>
+              <Field
+                component={DiverstDateTimePicker}
+                required
+                keyboardMode
+                /* eslint-disable-next-line dot-notation */
+                maxDate={touched['end'] ? values['end'] : undefined}
+                maxDateMessage='Start date cannot be after end date'
+                disablePast
+                fullWidth
+                id='start'
+                name='start'
+                margin='normal'
+                label={<FormattedMessage {...messages.form.start} />}
+              />
+            </Grid>
+            <Grid item xs md={5}>
+              <Field
+                component={DiverstDateTimePicker}
+                required
+                keyboardMode
+                /* eslint-disable-next-line dot-notation */
+                minDate={values['start']}
+                minDateMessage='End date cannot be before start date'
+                disablePast
+                fullWidth
+                id='end'
+                name='end'
+                margin='normal'
+                label={<FormattedMessage {...messages.form.end} />}
+              />
+            </Grid>
+          </Grid>
+        </CardContent>
+        <Divider />
         <CardActions>
           <Button
             color='primary'
@@ -152,4 +179,5 @@ EventFormInner.propTypes = {
 
 export default compose(
   memo,
+  withStyles(styles),
 )(EventForm);
