@@ -81,10 +81,8 @@ class UsersController < ApplicationController
     end
   end
 
-  # For admins. Dedicated to editing any user's info
   def edit
     authorize @user
-    @is_admin_view = true
   end
 
   def update
