@@ -21,7 +21,7 @@ import { buildValues, mapFields } from 'utils/formHelpers';
 
 import Select from 'components/Shared/DiverstSelect';
 import {
-  Button, Card, CardActions, CardContent, Grid,
+  Button, Card, CardActions, CardContent, Grid, Checkbox,
   TextField, FormControl, Divider, Switch, FormControlLabel,
 } from '@material-ui/core';
 
@@ -39,48 +39,122 @@ const SETTINGS_OPTIONS = Object.freeze({
   membersVisibility: [
     { label: 'Global', value: 'global' },
     { label: 'Group', value: 'group' },
-    { label: 'Members Only', value: 'managers_only' }
+    { label: 'Managers Only', value: 'managers_only' }
+  ],
+  eventAttendanceVisibility: [
+    { label: 'Global', value: 'global' },
+    { label: 'Group', value: 'group' },
+    { label: 'Managers Only', value: 'managers_only' }
+  ],
+  messagesVisibility: [
+    { label: 'Global', value: 'global' },
+    { label: 'Group', value: 'group' },
+    { label: 'Managers Only', value: 'managers_only' }
+  ],
+  latestNewsVisibility: [
+    { label: 'Public', value: 'public' },
+    { label: 'Group', value: 'group' },
+    { label: 'Leaders Only', value: 'leaders_only' }
+  ],
+  upcomingEventsVisibility: [
+    { label: 'Public', value: 'public' },
+    { label: 'Group', value: 'group' },
+    { label: 'Leaders Only', value: 'leaders_only' },
+    { label: 'Non member', value: 'non_member' }
   ],
 });
 
 /* eslint-disable object-curly-newline */
 export function GroupSettingsInner({ classes, handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
-  const capitalize = str => str.charAt(0).toUpperCase() + str.slice(1);
+  const prettify = str => (str.charAt(0).toUpperCase() + str.slice(1)).replace(/_/g, ' ');
 
   return (
     <Card>
       <Form>
         <CardContent>
-          <Grid container spacing={3}>
-            <Grid item xs className={classes.noBottomPadding}>
-              <Field
-                component={Select}
-                required
-                fullWidth
-                id='pending_users'
-                name='pending_users'
-                margin='normal'
-                label='Pending Users'
-                options={SETTINGS_OPTIONS.pendingUsers}
-                value={{ value: values.pending_users, label: capitalize(values.pending_users) }}
-                onChange={value => setFieldValue('pending_users', value.value)}
-              />
-            </Grid>
-            <Grid item xs className={classes.noBottomPadding}>
-              <Field
-                component={Select}
-                required
-                fullWidth
-                id='pending_users'
-                name='pending_users'
-                margin='normal'
-                label='Members Visibility'
-                options={SETTINGS_OPTIONS.membersVisibility}
-                value={{ value: values.members_visibility, label: capitalize(values.members_visibility) }}
-                onChange={value => setFieldValue('members_visibility', value.value)}
-              />
-            </Grid>
-          </Grid>
+          <Field
+            component={Select}
+            required
+            fullWidth
+            id='pending_users'
+            name='pending_users'
+            margin='normal'
+            label='Pending Users'
+            options={SETTINGS_OPTIONS.pendingUsers}
+            value={{ value: values.pending_users, label: prettify(values.pending_users) }}
+            onChange={value => setFieldValue('pending_users', value.value)}
+          />
+          <Field
+            component={Select}
+            required
+            fullWidth
+            id='members_visibility'
+            name='members_visibility'
+            margin='normal'
+            label='Members Visibility'
+            options={SETTINGS_OPTIONS.membersVisibility}
+            value={{ value: values.members_visibility, label: prettify(values.members_visibility) }}
+            onChange={value => setFieldValue('members_visibility', value.value)}
+          />
+          <Field
+            component={Select}
+            required
+            fullWidth
+            id='event_attendance_visibility'
+            name='event_attendance_visibility'
+            margin='normal'
+            label='Event Attendance Visibility'
+            options={SETTINGS_OPTIONS.eventAttendanceVisibility}
+            value={{ value: values.event_attendance_visibility, label: prettify(values.event_attendance_visibility) }}
+            onChange={value => setFieldValue('event_attendance_visibility', value.value)}
+          />
+          <Field
+            component={Select}
+            required
+            fullWidth
+            id='messages_visibility'
+            name='messages_visibility'
+            margin='normal'
+            label='Messages Visibility'
+            options={SETTINGS_OPTIONS.messagesVisibility}
+            value={{ value: values.messages_visibility, label: prettify(values.messages_visibility) }}
+            onChange={value => setFieldValue('messages_visibility', value.value)}
+          />
+          <Field
+            component={Select}
+            required
+            fullWidth
+            id='latest_news_visibility'
+            name='latest_news_visibility'
+            margin='normal'
+            label='Latest News Visibility'
+            options={SETTINGS_OPTIONS.latestNewsVisibility}
+            value={{ value: values.latest_news_visibility, label: prettify(values.latest_news_visibility) }}
+            onChange={value => setFieldValue('latest_news_visibility', value.value)}
+          />
+          <Field
+            component={Select}
+            required
+            fullWidth
+            id='upcoming_events_visibility'
+            name='upcoming_events_visibility'
+            margin='normal'
+            label='Upcoming Events Visibility'
+            options={SETTINGS_OPTIONS.upcomingEventsVisibility}
+            value={{ value: values.upcoming_events_visibility, label: prettify(values.upcoming_events_visibility) }}
+            onChange={value => setFieldValue('upcoming_events_visibility', value.value)}
+          />
+          <Field
+            component={TextField}
+            required
+            fullWidth
+            id='calendar_color'
+            name='calendar_color'
+            margin='normal'
+            label='Calendar Colour'
+            value={values.calendar_color}
+            onChange={handleChange}
+          />
         </CardContent>
         <Divider />
         <CardActions>
@@ -106,7 +180,13 @@ export function GroupSettings(props) {
   const initialValues = buildValues(props.group, {
     id: { default: '' },
     pending_users: { default: '' },
-    members_visibility: { default: '' }
+    members_visibility: { default: '' },
+    event_attendance_visibility: { default: '' },
+    messages_visibility: { default: '' },
+    latest_news_visibility: { default: '' },
+    upcoming_events_visibility: { default: '' },
+    calendar_color: { default: '' },
+    auto_archive: { default: '' },
   });
 
   return (
