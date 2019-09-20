@@ -151,6 +151,7 @@ export function CustomTextForm(props) {
   const customText = dig(props, 'customText');
 
   const initialValues = buildValues(customText, {
+    id: { default: '' },
     erg: { default: 'ERG TEST' },
     program: { default: 'Goal TEST' },
     structure: { default: 'Structure TEST' },

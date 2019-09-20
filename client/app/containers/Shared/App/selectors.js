@@ -27,8 +27,13 @@ const selectUser = () => createSelector(
   globalState => globalState.user
 );
 
+const selectCustomText = () => createSelector(
+  selectGlobal,
+  globalState => globalState.enterprise.custom_text
+);
+
 export {
   selectGlobal, selectRouter, selectLocation,
   selectEnterprise, selectToken, selectUserPolicyGroup,
-  selectUser,
+  selectUser, selectCustomText,
 };

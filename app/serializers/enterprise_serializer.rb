@@ -4,8 +4,6 @@ class EnterpriseSerializer < ApplicationRecordSerializer
              :xml_sso_config_file_name, :xml_sso_config_content_type, :xml_sso_config_file_size,
              :time_zone, :theme
 
-  has_one :custom_text
-
   def theme
     return nil if object.theme.nil?
 

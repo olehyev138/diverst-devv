@@ -17,24 +17,13 @@ import {
   updateCustomTextSuccess, updateCustomTextError,
 } from 'containers/GlobalSettings/CustomText/actions';
 
-export function* getCustomText(action) {
-  try {
-    const response = yield call(api.customText.get.bind(api.customText), action.payload.id);
-    yield (put(getCustomTextSuccess(response.data)));
-  } catch (err) {
-    yield put(getCustomTextError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to load custom text', options: { variant: 'warning' } }));
-  }
-}
-
 export function* updateCustomText(action) {
   try {
     const payload = { custom_text: action.payload };
     const response = yield call(api.customText.update.bind(api.customText), payload.custom_text.id, payload);
 
     yield put(push(ROUTES.admin.system.globalSettings.customText));
+    yield put(updateCustomTextSuccess(response.data));
     yield put(showSnackbar({ message: 'Custom text updated', options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateCustomTextError(err));
@@ -45,6 +34,5 @@ export function* updateCustomText(action) {
 }
 
 export default function* customTextSaga() {
-  yield takeLatest(GET_CUSTOM_TEXT_BEGIN, getCustomText);
   yield takeLatest(UPDATE_CUSTOM_TEXT_BEGIN, updateCustomText);
 }
