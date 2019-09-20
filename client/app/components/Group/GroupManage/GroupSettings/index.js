@@ -31,6 +31,7 @@ const styles = theme => ({
   },
 });
 
+/* Define valid options for group settings - validated on backend */
 const SETTINGS_OPTIONS = Object.freeze({
   pendingUsers: [
     { label: 'Enabled', value: 'enabled' },

@@ -11,7 +11,7 @@ import reducer from 'containers/Group/reducer';
 
 import RouteService from 'utils/routeHelpers';
 import {
-  updateGroupBegin, groupFormUnmount
+  updateGroupSettingsBegin, groupFormUnmount
 } from 'containers/Group/actions';
 
 import GroupSettings from 'components/Group/GroupManage/GroupSettings';
@@ -26,7 +26,7 @@ export function GroupSettingsPage(props) {
   return (
     <React.Fragment>
       <GroupSettings
-        groupAction={props.updateGroupBegin}
+        groupAction={props.updateGroupSettingsBegin}
         group={props.currentGroup}
       />
     </React.Fragment>
@@ -35,7 +35,7 @@ export function GroupSettingsPage(props) {
 
 GroupSettingsPage.propTypes = {
   currentGroup: PropTypes.object,
-  updateGroupBegin: PropTypes.func,
+  updateGroupSettingsBegin: PropTypes.func,
   groupFormUnmount: PropTypes.func
 };
 
@@ -43,7 +43,7 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = {
-  updateGroupBegin,
+  updateGroupSettingsBegin,
   groupFormUnmount
 };
 

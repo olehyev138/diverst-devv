@@ -9,6 +9,7 @@ import {
   GET_GROUP_BEGIN, GET_GROUP_SUCCESS, GET_GROUP_ERROR,
   CREATE_GROUP_BEGIN, CREATE_GROUP_SUCCESS, CREATE_GROUP_ERROR,
   UPDATE_GROUP_BEGIN, UPDATE_GROUP_SUCCESS, UPDATE_GROUP_ERROR,
+  UPDATE_GROUP_SETTINGS_BEGIN, UPDATE_GROUP_SETTINGS_SUCCESS, UPDATE_GROUP_SETTINGS_ERROR,
   DELETE_GROUP_BEGIN, DELETE_GROUP_SUCCESS, DELETE_GROUP_ERROR,
   GROUP_LIST_UNMOUNT, GROUP_FORM_UNMOUNT
 } from 'containers/Group/constants';
@@ -105,7 +106,30 @@ export function updateGroupError(error) {
   };
 }
 
-/* Group deleting */
+/* Group settings updating */
+
+export function updateGroupSettingsBegin(payload) {
+  return {
+    type: UPDATE_GROUP_SETTINGS_BEGIN,
+    payload,
+  };
+}
+
+export function updateGroupSettingsSuccess(payload) {
+  return {
+    type: UPDATE_GROUP_SETTINGS_SUCCESS,
+    payload,
+  };
+}
+
+export function updateGroupSettingsError(error) {
+  return {
+    type: UPDATE_GROUP_SETTINGS_ERROR,
+    error,
+  };
+}
+
+/* Group settings deleting */
 
 export function deleteGroupBegin(payload) {
   return {
