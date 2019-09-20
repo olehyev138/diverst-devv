@@ -29,6 +29,7 @@ export function CustomTextFormInner({ handleSubmit, handleChange, handleBlur, va
             component={TextField}
             onChange={handleChange}
             fullWidth
+            margin='normal'
             id='erg'
             name='erg'
             label={<FormattedMessage {...messages.erg} />}
@@ -38,6 +39,7 @@ export function CustomTextFormInner({ handleSubmit, handleChange, handleBlur, va
             component={TextField}
             onChange={handleChange}
             fullWidth
+            margin='normal'
             id='program'
             name='program'
             label={<FormattedMessage {...messages.program} />}
@@ -47,6 +49,7 @@ export function CustomTextFormInner({ handleSubmit, handleChange, handleBlur, va
             component={TextField}
             onChange={handleChange}
             fullWidth
+            margin='normal'
             id='structure'
             name='structure'
             label={<FormattedMessage {...messages.structure} />}
@@ -56,6 +59,7 @@ export function CustomTextFormInner({ handleSubmit, handleChange, handleBlur, va
             component={TextField}
             onChange={handleChange}
             fullWidth
+            margin='normal'
             id='outcome'
             name='outcome'
             label={<FormattedMessage {...messages.outcome} />}
@@ -65,6 +69,7 @@ export function CustomTextFormInner({ handleSubmit, handleChange, handleBlur, va
             component={TextField}
             onChange={handleChange}
             fullWidth
+            margin='normal'
             id='badge'
             name='badge'
             label={<FormattedMessage {...messages.badge} />}
@@ -74,6 +79,7 @@ export function CustomTextFormInner({ handleSubmit, handleChange, handleBlur, va
             component={TextField}
             onChange={handleChange}
             fullWidth
+            margin='normal'
             id='segment'
             name='segment'
             label={<FormattedMessage {...messages.segment} />}
@@ -83,6 +89,7 @@ export function CustomTextFormInner({ handleSubmit, handleChange, handleBlur, va
             component={TextField}
             onChange={handleChange}
             fullWidth
+            margin='normal'
             id='dci_full_title'
             name='dci_full_title'
             label={<FormattedMessage {...messages.dci_full_title} />}
@@ -92,6 +99,7 @@ export function CustomTextFormInner({ handleSubmit, handleChange, handleBlur, va
             component={TextField}
             onChange={handleChange}
             fullWidth
+            margin='normal'
             id='dci_abbreviation'
             name='dci_abbreviation'
             label={<FormattedMessage {...messages.dci_abbreviation} />}
@@ -101,6 +109,7 @@ export function CustomTextFormInner({ handleSubmit, handleChange, handleBlur, va
             component={TextField}
             onChange={handleChange}
             fullWidth
+            margin='normal'
             id='member_preference'
             name='member_preference'
             label={<FormattedMessage {...messages.member_preference} />}
@@ -110,6 +119,7 @@ export function CustomTextFormInner({ handleSubmit, handleChange, handleBlur, va
             component={TextField}
             onChange={handleChange}
             fullWidth
+            margin='normal'
             id='parent'
             name='parent'
             label={<FormattedMessage {...messages.parent} />}
@@ -119,6 +129,7 @@ export function CustomTextFormInner({ handleSubmit, handleChange, handleBlur, va
             component={TextField}
             onChange={handleChange}
             fullWidth
+            margin='normal'
             id='sub_erg'
             name='sub_erg'
             label={<FormattedMessage {...messages.sub_erg} />}
@@ -128,6 +139,7 @@ export function CustomTextFormInner({ handleSubmit, handleChange, handleBlur, va
             component={TextField}
             onChange={handleChange}
             fullWidth
+            margin='normal'
             id='privacy_statement'
             name='privacy_statement'
             label={<FormattedMessage {...messages.privacy_statement} />}
