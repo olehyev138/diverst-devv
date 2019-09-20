@@ -3,7 +3,7 @@ default: &default
   host: <%= ENV["DATABASE_HOST"] %>
   url: <%= ENV["DATABASE_URL"] %>
   pool: <%= ENV["DB_POOL"] || ENV["MAX_THREADS"] || 20 %>
-  username: <%= ENV["DATABASE_USERNAME"] %>
+  username: <%= ENV["DATABASE_USERNAME"] || "root" %>
   password: <%= ENV["DATABASE_PASSWORD"] %>
   encoding: utf8mb4
   collation: utf8mb4_bin

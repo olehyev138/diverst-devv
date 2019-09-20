@@ -10,6 +10,11 @@ import {
   SET_USER, SET_USER_POLICY_GROUP, SET_ENTERPRISE,
   LOGIN_ERROR
 } from 'containers/Shared/App/constants';
+import {
+  UPDATE_CUSTOM_TEXT_SUCCESS
+} from 'containers//GlobalSettings/CustomText/constants';
+
+import { act } from 'react-testing-library';
 
 // The initial state of the App
 export const initialState = {
@@ -41,11 +46,15 @@ function appReducer(state = initialState, action) {
         draft.policyGroup = action.policyGroup;
         break;
       case SET_USER:
-        // Clear policy group because we already have it in the store at the parent level
+        // Clear policy group and enterprise because we already have them in the store at the parent level
         draft.user = {
           ...action.user,
           policy_group: undefined,
+          enterprise: undefined,
         };
+        break;
+      case UPDATE_CUSTOM_TEXT_SUCCESS:
+        draft.enterprise.custom_text = action.payload.custom_text;
         break;
     }
   });

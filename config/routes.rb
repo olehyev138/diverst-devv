@@ -140,7 +140,7 @@ Diverst::Application.routes.draw do
       resources :user_reward_actions
       resources :users do
         collection do
-          post '/email', to: 'users#find_user_by_email'
+          post '/email', to: 'users#find_user_enterprise_by_email'
         end
       end
       resources :user_groups

@@ -100,11 +100,7 @@ export class LoginPage extends React.PureComponent {
 }
 
 LoginPage.propTypes = {
-  enterprise: PropTypes.shape({
-    id: PropTypes.number,
-    name: PropTypes.string,
-    has_enabled_saml: PropTypes.bool
-  }),
+  enterprise: PropTypes.object,
   formErrors: PropTypes.shape({
     email: PropTypes.string,
     password: PropTypes.string,
