@@ -6,7 +6,6 @@
 
 import {
   UPDATE_CUSTOM_TEXT_BEGIN, UPDATE_CUSTOM_TEXT_SUCCESS, UPDATE_CUSTOM_TEXT_ERROR,
-  CUSTOM_TEXT_UNMOUNT
 } from 'containers/GlobalSettings/CustomText/constants';
 
 /* Group Message updating */
