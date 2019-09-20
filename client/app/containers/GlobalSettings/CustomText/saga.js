@@ -8,12 +8,10 @@ import { RouteContext } from 'containers/Layouts/ApplicationLayout';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import {
-  GET_CUSTOM_TEXT_BEGIN,
   UPDATE_CUSTOM_TEXT_BEGIN,
 } from 'containers/GlobalSettings/CustomText/constants';
 
 import {
-  getCustomTextSuccess, getCustomTextError,
   updateCustomTextSuccess, updateCustomTextError,
 } from 'containers/GlobalSettings/CustomText/actions';
 
