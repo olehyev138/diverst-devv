@@ -75,7 +75,6 @@ export function GroupSettingsInner({ classes, handleSubmit, handleChange, handle
         <CardContent>
           <Field
             component={Select}
-            required
             fullWidth
             id='pending_users'
             name='pending_users'
@@ -87,7 +86,6 @@ export function GroupSettingsInner({ classes, handleSubmit, handleChange, handle
           />
           <Field
             component={Select}
-            required
             fullWidth
             id='members_visibility'
             name='members_visibility'
@@ -99,7 +97,6 @@ export function GroupSettingsInner({ classes, handleSubmit, handleChange, handle
           />
           <Field
             component={Select}
-            required
             fullWidth
             id='event_attendance_visibility'
             name='event_attendance_visibility'
@@ -111,7 +108,6 @@ export function GroupSettingsInner({ classes, handleSubmit, handleChange, handle
           />
           <Field
             component={Select}
-            required
             fullWidth
             id='messages_visibility'
             name='messages_visibility'
@@ -123,7 +119,6 @@ export function GroupSettingsInner({ classes, handleSubmit, handleChange, handle
           />
           <Field
             component={Select}
-            required
             fullWidth
             id='latest_news_visibility'
             name='latest_news_visibility'
@@ -135,7 +130,6 @@ export function GroupSettingsInner({ classes, handleSubmit, handleChange, handle
           />
           <Field
             component={Select}
-            required
             fullWidth
             id='upcoming_events_visibility'
             name='upcoming_events_visibility'
@@ -147,7 +141,6 @@ export function GroupSettingsInner({ classes, handleSubmit, handleChange, handle
           />
           <Field
             component={TextField}
-            required
             fullWidth
             id='calendar_color'
             name='calendar_color'
