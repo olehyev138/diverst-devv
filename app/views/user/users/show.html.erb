@@ -21,6 +21,15 @@
       <%#= link_to 'Connect with LinkedIn', @linkedin_url, class: "btn btn--secondary" unless @user.linkedin_profile_url %>
     <%# end %>
   </div>
+  <% if @user.enterprise.enable_rewards? %>
+    <div class="flex-row__cell--grow">
+      <div align="right">
+        <h2>
+          <%= c_t(:dci_abbreviation) %> Point(s): <%= @user.points %>
+        </h2>
+      </div>
+    </div>
+  <% end %>
 </div>
 
 <div class="card" style="margin-top: 30px;">
@@ -40,7 +49,7 @@
     <label><strong>Time zone</strong></label>
     <p><%= @user.default_time_zone %></p>
   </div>
-  
+
   <% if UserPolicy.new(current_user, @user).access_hidden_info? %>
     <div class="card">
       <% @user.enterprise.fields.each do |field| %>
@@ -62,7 +71,7 @@
           <p><%= @user.string_for_field(field) %></p>
         </div>
       <% end %>
-    </div>  
+    </div>
   <% end %>
 
   <div class="card">
