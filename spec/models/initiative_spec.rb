@@ -310,13 +310,6 @@ RSpec.describe Initiative, type: :model do
     end
   end
 
-  describe '#time_string' do
-    it 'returns day and start/end time' do
-      initiative = build(:initiative, start: Date.today, end: Date.today + 1.hour)
-      expect(initiative.time_string).to eq("#{initiative.start.to_s :dateonly} from #{initiative.start.to_s :ampmtime} to #{initiative.end.to_s :ampmtime}")
-    end
-  end
-
   describe '#highcharts_history' do
     it 'returns data', skip: 'test fails' do
       initiative = build(:initiative, start: Date.today, end: Date.today + 1.hour)
