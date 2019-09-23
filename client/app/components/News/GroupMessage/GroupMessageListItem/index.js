@@ -17,6 +17,8 @@ import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { FormattedMessage } from 'react-intl';
 import messages from 'containers/News/messages';
 
+import { formatDateTimeString } from 'utils/dateTimeHelpers';
+
 const styles = theme => ({
 });
 
@@ -34,7 +36,7 @@ export function GroupMessageListItem(props) {
           </Avatar>
         )}
         title={groupMessage.subject}
-        subheader={groupMessage.created_at}
+        subheader={formatDateTimeString(groupMessage.created_at)}
       />
       <CardContent>
         <Typography gutterBottom>
