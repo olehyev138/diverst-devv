@@ -98,7 +98,6 @@ export function* logout(action) {
 
     if (response.data.logout_link)
       window.location.assign(response.data.logout_link);
-
     else {
       yield put(push(ROUTES.session.login.path()));
       yield put(showSnackbar({ message: 'You have been logged out' }));
