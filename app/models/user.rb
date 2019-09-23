@@ -82,6 +82,7 @@ class User < ApplicationRecord
   has_attached_file :avatar, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing_user.png'), s3_permissions: 'private'
   validates_length_of :mentorship_description, maximum: 65535
   validates_length_of :unlock_token, maximum: 191
+  # TODO: Validate that user and enterprise timezone are in list of timezones
   validates_length_of :time_zone, maximum: 191
   validates_length_of :biography, maximum: 65535
   validates_length_of :avatar_content_type, maximum: 191
