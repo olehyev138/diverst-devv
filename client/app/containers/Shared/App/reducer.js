@@ -53,9 +53,6 @@ function appReducer(state = initialState, action) {
           enterprise: undefined,
         };
         break;
-      case UPDATE_CUSTOM_TEXT_SUCCESS:
-        draft.enterprise.custom_text = action.payload.custom_text;
-        break;
     }
   });
 }

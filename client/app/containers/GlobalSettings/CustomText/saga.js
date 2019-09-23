@@ -1,4 +1,4 @@
-import { call, put, takeLatest } from 'redux-saga/effects';
+import { delay, call, put, takeLatest } from 'redux-saga/effects';
 import api from 'api/api';
 import { push } from 'connected-react-router';
 
@@ -23,6 +23,7 @@ export function* updateCustomText(action) {
     yield put(push(ROUTES.admin.system.globalSettings.customText));
     yield put(updateCustomTextSuccess(response.data));
     yield put(showSnackbar({ message: 'Custom text updated', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: 'Changes will only applied next time you login', options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateCustomTextError(err));
 
