@@ -38,6 +38,10 @@
     <p><%= @user.email %></p>
   </div>
   <div class="card__section card__section--border">
+    <label><strong>Notifications Email</strong></label>
+    <p><%= @user.notifications_email || 'None' %></p>
+  </div>
+  <div class="card__section card__section--border">
     <label><strong>Name</strong></label>
     <p><%= @user.first_name %> <%= @user.last_name %></p>
   </div>

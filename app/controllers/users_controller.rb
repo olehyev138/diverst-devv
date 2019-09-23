@@ -82,10 +82,8 @@ class UsersController < ApplicationController
     end
   end
 
-  # For admins. Dedicated to editing any user's info
   def edit
     authorize @user
-    @is_admin_view = true
   end
 
   def update
@@ -281,6 +279,7 @@ class UsersController < ApplicationController
     params.require(:user).permit(
       :avatar,
       :email,
+      :notifications_email,
       :first_name,
       :last_name,
       :biography,

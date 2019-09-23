@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190913141553) do
+ActiveRecord::Schema.define(version: 20190917150716) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -1460,6 +1460,7 @@ ActiveRecord::Schema.define(version: 20190913141553) do
     t.datetime "created_at",                                                   null: false
     t.datetime "updated_at",                                                   null: false
     t.string   "email",                          limit: 191
+    t.string   "notifications_email",            limit: 191
     t.string   "encrypted_password",             limit: 191
     t.string   "reset_password_token",           limit: 191
     t.datetime "reset_password_sent_at"
