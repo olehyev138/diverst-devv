@@ -82,7 +82,6 @@ class User < ApplicationRecord
   has_attached_file :avatar, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing_user.png'), s3_permissions: 'private'
   validates_length_of :mentorship_description, maximum: 65535
   validates_length_of :unlock_token, maximum: 191
-  # TODO: Validate that user and enterprise timezone are in list of timezones
   validates_length_of :time_zone, maximum: 191
   validates_length_of :biography, maximum: 65535
   validates_length_of :avatar_content_type, maximum: 191
@@ -123,6 +122,7 @@ class User < ApplicationRecord
   validate :policy_group
   before_validation :add_linkedin_http, unless: -> { linkedin_profile_url.nil? }
   validate :valid_linkedin_url, unless: -> { linkedin_profile_url.nil? }
+  validate :valid_time_zone
 
   before_validation :generate_password_if_saml
   before_validation :set_provider
@@ -519,6 +519,14 @@ class User < ApplicationRecord
     # We use info_hash instead of just info because Hash#merge accesses uses [], which is overriden in FieldData
     # info_hash.merge(polls_hash)
     info_hash.merge(polls_hash)
+  end
+
+  def valid_time_zone
+    valid_timezones = ActiveSupport::TimeZone.all.map { |tz| tz.name }
+
+    unless valid_timezones.include?(time_zone)
+      errors.add(:time_zone, "isn't a valid timezone")
+    end
   end
 
   settings do
