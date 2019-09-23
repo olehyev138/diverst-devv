@@ -1517,6 +1517,8 @@ ActiveRecord::Schema.define(version: 20190917150716) do
     t.integer  "answer_comments_count",          limit: 4
     t.integer  "message_comments_count",         limit: 4
     t.integer  "news_link_comments_count",       limit: 4
+    t.integer  "mentors_count",                  limit: 4
+    t.integer  "mentees_count",                  limit: 4
   end
 
   add_index "users", ["active"], name: "index_users_on_active", using: :btree
