@@ -93,7 +93,8 @@ class Resource < ApplicationRecord
     return folder if folder.present?
     return initiative if initiative.present?
     return group if group.present?
-    mentoring_session if mentoring_session.present?
+
+    mentoring_session.presence
   end
 
   def total_views
