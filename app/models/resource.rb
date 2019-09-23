@@ -11,10 +11,11 @@ class Resource < ApplicationRecord
   belongs_to :owner, class_name: 'User'
   belongs_to :mentoring_session
 
-  has_many :tags, dependent: :destroy
-  has_many :views, dependent: :destroy
+  # TODO React Resources doesn't have tags or views. Discuss
+  # has_many :tags, dependent: :destroy
+  # has_many :views, dependent: :destroy
 
-  accepts_nested_attributes_for :tags
+  # accepts_nested_attributes_for :tags
 
   # Paperclip
   has_attached_file :file, s3_permissions: 'private'
@@ -25,7 +26,7 @@ class Resource < ApplicationRecord
   validates_length_of :file_content_type, maximum: 191
   validates_length_of :file_file_name, maximum: 191
   validates_length_of :title, maximum: 191
-  validates_presence_of :title
+  validates_presence_of   :title
   validates_presence_of   :url, if: Proc.new { |r| r.file.nil? && r.url.blank? }
   validates_length_of     :url, maximum: 255
 
@@ -92,7 +93,7 @@ class Resource < ApplicationRecord
     return folder if folder.present?
     return initiative if initiative.present?
     return group if group.present?
-    return mentoring_session if mentoring_session.present?
+    mentoring_session if mentoring_session.present?
   end
 
   def total_views

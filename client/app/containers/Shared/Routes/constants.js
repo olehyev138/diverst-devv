@@ -130,6 +130,33 @@ export const ROUTES = {
           (groupId = ':group_id', outcomeId = ':outcome_id') => `/groups/${groupId}/outcomes/${outcomeId}/edit`
       },
     },
+    resources: {
+      folders: {
+        index: {
+          path: (groupId = ':group_id') => `/groups/${groupId}/resources`,
+          data: {
+            titleMessage: messages.groups.news.index,
+          }
+        },
+        new: {
+          path: (groupId = ':group_id') => `/groups/${groupId}/resources/folder/new`,
+        },
+        show: {
+          path: (groupId = ':group_id', itemId = ':item_id') => `/groups/${groupId}/resources/folder/${itemId}`,
+        },
+        edit: {
+          path: (groupId = ':group_id', itemId = ':item_id') => `/groups/${groupId}/resources/folder/${itemId}/edit`,
+        },
+      },
+      resources: {
+        new: {
+          path: (groupId = ':group_id') => `/groups/${groupId}/resources/new`,
+        },
+        edit: {
+          path: (groupId = ':group_id', itemId = ':item_id') => `/groups/${groupId}/resources/${itemId}/edit`,
+        },
+      }
+    }
   },
 
   // Admin

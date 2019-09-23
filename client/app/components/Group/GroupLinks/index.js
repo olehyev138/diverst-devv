@@ -180,7 +180,11 @@ export function GroupLinks(props) {
         </Button>
 
         <Button
+          component={WrappedNavLink}
+          exact
+          to={ROUTES.group.resources.folders.index.path(rs.params('group_id'))}
           className={classes.navLink}
+          activeClassName={classes.navLinkActive}
         >
           <Hidden smDown>
             <ResourcesIcon className={classes.navIcon} />

@@ -55,6 +55,9 @@ export default defineMessages({
         id: `${scope}.group.outcomes.index`
       }
     },
+    resources: {
+      id: `${scope}.group.resources.index`
+    }
   },
   admin: {
     analyze: {
