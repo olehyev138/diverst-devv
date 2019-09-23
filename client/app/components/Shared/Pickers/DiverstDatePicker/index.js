@@ -3,7 +3,7 @@ import { compose } from 'redux';
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 
-import { DateTimePicker, KeyboardDateTimePicker } from '@material-ui/pickers';
+import { DatePicker, KeyboardDatePicker } from '@material-ui/pickers';
 
 const styles = theme => ({
   inlinePickerPopover: {
@@ -13,7 +13,7 @@ const styles = theme => ({
   },
 });
 
-export function DiverstDateTimePicker({ classes, keyboardMode, variant, field, form, disablePast, disableFuture, ...props }) {
+export function DiverstDatePicker({ classes, keyboardMode, variant, field, form, disablePast, disableFuture, ...props }) {
   let inlineProps = {};
 
   // Necessary as there's an issue with the word-break property for the inline variant
@@ -50,27 +50,27 @@ export function DiverstDateTimePicker({ classes, keyboardMode, variant, field, f
 
   if (keyboardMode)
     return (
-      <KeyboardDateTimePicker
+      <KeyboardDatePicker
         {...pickerProps}
-        format='yyyy/MM/dd hh:mm a'
-        mask='____/__/__ __:__ _M'
+        format='yyyy/MM/dd'
+        mask='____/__/__'
         {...props}
       />
     );
 
   return (
-    <DateTimePicker
+    <DatePicker
       {...pickerProps}
       {...props}
     />
   );
 }
 
-DiverstDateTimePicker.defaultProps = {
+DiverstDatePicker.defaultProps = {
   keyboardMode: false,
 };
 
-DiverstDateTimePicker.propTypes = {
+DiverstDatePicker.propTypes = {
   classes: PropTypes.object,
   keyboardMode: PropTypes.bool,
   variant: PropTypes.string,
@@ -83,4 +83,4 @@ DiverstDateTimePicker.propTypes = {
 export default compose(
   memo,
   withStyles(styles),
-)(DiverstDateTimePicker);
+)(DiverstDatePicker);
