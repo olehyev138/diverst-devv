@@ -92,11 +92,9 @@ export function* ssoLinkFind(action) {
 export function* logout(action) {
   try {
     // Destroy session and redirect to login
-    yield put(setUser(null));
-    yield put(setUserPolicyGroup(null));
     const response = yield call(api.sessions.destroy.bind(api.sessions), action.token);
-    yield put(logoutSuccess());
     yield call(AuthService.discardJwt);
+    yield put(logoutSuccess());
 
     if (response.data.logout_link)
       window.location.assign(response.data.logout_link);
