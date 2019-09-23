@@ -1,0 +1,79 @@
+<div class="content__header">
+  <h1>
+    <%= @user.name %>'s Mentorship Stats
+  </h1>
+</div>
+
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      <a href="#" id="user_mentorship_csv" data-url="<%= user_mentorship_metrics_mentorship_path(@user.id, format: :csv) %>">Export CSV</a>
+    </div>
+  </div>
+  <% if @user.mentors.size > 0 %>
+    <div class="card">
+      <div class="card__section">
+        <h2>Mentors</h2>
+        <%= render 'user_mentorship',
+                   source: user_mentors_metrics_mentorships_path(format: :json, user_id: @user.id, type: 'mentors'),
+                   id: 'user_mentor_count'
+        %>
+      </div>
+    </div>
+  <% end %>
+  <% if @user.mentees.size > 0 %>
+    <div class="card">
+      <div class="card__section">
+        <h2>Mentees</h2>
+        <%= render 'user_mentorship',
+                   source: user_mentors_metrics_mentorships_path(format: :json, user_id: @user.id, type: 'mentees'),
+                   id: 'user_mentee_count'
+        %>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<script>
+    $(document).on('ready page:load', function () {
+        $('#user_mentee_count').dataTable({
+            "retrieve": true,
+            "processing": true,
+            "serverSide": true,
+            "ajax": {
+                "url": $('#user_mentee_count').data('source')
+            },
+            "pagingType": "full_numbers",
+            columnDefs: [
+                {bSortable: false, targets: [3]}
+            ]
+            // pagingType is optional, if you want full pagination controls.
+            // Check dataTables documentation to learn more about
+            // available options.
+        });
+    });
+
+    $(document).on('ready page:load', function () {
+        $('#user_mentor_count').dataTable({
+            "retrieve": true,
+            "processing": true,
+            "serverSide": true,
+            "ajax": {
+                "url": $('#user_mentor_count').data('source')
+            },
+            "pagingType": "full_numbers",
+            columnDefs: [
+                {bSortable: false, targets: [3]}
+            ]
+            // pagingType is optional, if you want full pagination controls.
+            // Check dataTables documentation to learn more about
+            // available options.
+        });
+    });
+
+    $('#user_mentorship_csv').click(function () {
+        $.get($('#user_mentorship_csv').data('url'), function(data) {
+            Utility.displayFlash(data);
+        }, "JSON");
+    });
+</script>
