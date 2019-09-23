@@ -45,8 +45,9 @@ const AuthenticatedLayout = ({
       other.setEnterprise(user.enterprise);
       other.setUserPolicyGroup(user.policy_group);
     }
-    // TODO: Set user timezone and locale to their profile settings
-    // Settings.defaultZoneName = 'America/New_York';
+    // Set user time zone from their profile settings
+    Settings.defaultZoneName = user.time_zone;
+    // TODO: Set user locale
     // Settings.defaultLocale = 'en';
 
     // TODO: Handle if policy group isn't set. Perhaps clear token (sign out) if the policy group is not found
