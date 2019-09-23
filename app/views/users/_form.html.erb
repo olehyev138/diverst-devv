@@ -3,8 +3,8 @@
       label: 'Profile Picture',
       input_html: { autofocus: true } %>    
 
-<!-- only users(essentially Admins) with access to this view can edit emails of other users
-admin view comes from users_controller -->
+<%# only users(essentially Admins) with access to this view can edit emails of other users
+admin view comes from users_controller %>
 <% if params[:controller] == "users" %>
   <%= f.input :email %>
 <% end %>

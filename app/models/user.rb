@@ -147,7 +147,7 @@ class User < BaseClass
   accepts_nested_attributes_for :availabilities, allow_destroy: true
 
   def email_for_notification
-    (notifications_email.present? ? notifications_email : nil) || email
+    notifications_email.present? ? notifications_email : email 
   end
 
   def last_notified_date
