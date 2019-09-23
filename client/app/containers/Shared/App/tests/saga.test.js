@@ -65,14 +65,6 @@ describe('Login Saga', () => {
     );
 
     expect(api.sessions.create).toHaveBeenCalledWith(initialAction.payload);
-    console.log('--------------------------------');
-    console.log('Dispatched');
-    console.log('--------------------------------');
-    console.log(dispatched);
-    console.log('--------------------------------');
-    console.log('Results');
-    console.log('--------------------------------');
-    console.log(results);
     expect(dispatched).toEqual(results);
   });
 
