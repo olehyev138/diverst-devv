@@ -42,6 +42,10 @@ function foldersReducer(state = initialState, action) {
         break;
       case RESOURCES_UNMOUNT:
         return initialState;
+      case FOLDERS_UNMOUNT:
+        draft.folders = [];
+        draft.foldersTotal = null;
+        draft.currentFolder = null;
     }
   });
 }

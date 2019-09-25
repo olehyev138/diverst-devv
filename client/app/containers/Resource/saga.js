@@ -61,10 +61,9 @@ export function* getFolder(action) {
 export function* createFolder(action) {
   try {
     const payload = { folder: action.payload };
-
     const response = yield call(api.folders.create.bind(api.folders), payload);
 
-    yield put(push(ROUTES.group.folders.index.path(payload.folder.group_id)));
+    yield put(push(ROUTES.group.resources.folders.index.path(payload.folder.group_id)));
     yield put(showSnackbar({
       message: 'Folder created',
       options: { variant: 'success' }
@@ -85,7 +84,7 @@ export function* updateFolder(action) {
     const payload = { folder: action.payload };
     const response = yield call(api.folders.update.bind(api.folders), payload.folder.id, payload);
 
-    yield put(push(ROUTES.group.folders.index.path(payload.folder.owner_group_id)));
+    yield put(push(ROUTES.group.resources.folders.index.path(payload.folder.group_id)));
     yield put(showSnackbar({
       message: 'Folder updated',
       options: { variant: 'success' }
@@ -104,7 +103,7 @@ export function* updateFolder(action) {
 export function* deleteFolder(action) {
   try {
     yield call(api.folders.destroy.bind(api.folders), action.payload.id);
-    yield put(push(ROUTES.group.folders.index.path(action.payload.group_id)));
+    yield put(push(ROUTES.group.resources.folders.index.path(action.payload.folder.group_id)));
     yield put(showSnackbar({
       message: 'Folder deleted',
       options: { variant: 'success' }

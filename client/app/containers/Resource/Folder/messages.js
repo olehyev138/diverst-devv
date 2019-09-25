@@ -36,7 +36,7 @@ export default defineMessages({
     name: {
       id: `${scope}.form.input.name`,
     },
-    folder: {
+    parent: {
       id: `${scope}.form.input.folder`,
     },
     protected: {
