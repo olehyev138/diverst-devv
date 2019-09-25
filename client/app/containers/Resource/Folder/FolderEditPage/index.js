@@ -17,11 +17,11 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { selectGroup } from 'containers/Group/selectors';
 import { selectUser } from 'containers/Shared/App/selectors';
-import { selectFolder } from 'containers/Resource/selectors';
+import { selectFolder, selectPaginatedFolders } from 'containers/Resource/selectors';
 
 import {
   getFolderBegin, updateFolderBegin,
-  foldersUnmount
+  foldersUnmount, getFoldersBegin
 } from 'containers/Resource/actions';
 
 import FolderForm from 'components/Resource/Folder/FolderForm';
@@ -44,7 +44,9 @@ export function FolderEditPage(props) {
 
   useEffect(() => {
     const folderId = rs.params('item_id');
+    const groupId = rs.params('group_id');
     props.getFolderBegin({ id: folderId });
+    props.getFoldersBegin({ group_id: groupId[0] });
 
     return () => props.foldersUnmount();
   }, []);
@@ -53,6 +55,8 @@ export function FolderEditPage(props) {
 
   return (
     <FolderForm
+      getFoldersBegin={props.getFoldersBegin}
+      selectFolders={props.folders}
       folderAction={props.updateFolderBegin}
       buttonText='Update'
       currentUser={currentUser}
@@ -65,23 +69,28 @@ export function FolderEditPage(props) {
 
 FolderEditPage.propTypes = {
   path: PropTypes.string,
+  getFoldersBegin: PropTypes.func,
+  selectFolders: PropTypes.array,
   getFolderBegin: PropTypes.func,
   updateFolderBegin: PropTypes.func,
   foldersUnmount: PropTypes.func,
   currentUser: PropTypes.object,
   currentGroup: PropTypes.object,
   currentFolder: PropTypes.object,
+  folders: PropTypes.array
 };
 
 const mapStateToProps = createStructuredSelector({
   currentGroup: selectGroup(),
   currentUser: selectUser(),
   currentFolder: selectFolder(),
+  folders: selectPaginatedFolders(),
 });
 
 const mapDispatchToProps = {
   getFolderBegin,
   updateFolderBegin,
+  getFoldersBegin,
   foldersUnmount
 };
 

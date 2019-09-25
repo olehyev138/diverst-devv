@@ -66,7 +66,8 @@ export function FoldersPage(props) {
     if (id) {
       const newParams = {
         ...params,
-        group_id: id
+        group_id: id,
+        parent_id: null,
       };
       props.getFoldersBegin(newParams);
       setParams(newParams);

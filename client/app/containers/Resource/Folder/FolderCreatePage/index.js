@@ -11,12 +11,13 @@ import reducer from 'containers/Resource/reducer';
 import saga from 'containers/Resource/saga';
 
 import { selectGroup } from 'containers/Group/selectors';
+import { selectPaginatedFolders } from 'containers/Resource/selectors';
 import { selectUser } from 'containers/Shared/App/selectors';
 
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
-import { createFolderBegin, foldersUnmount } from 'containers/Resource/actions';
+import { getFoldersBegin, createFolderBegin, foldersUnmount } from 'containers/Resource/actions';
 import FolderForm from 'components/Resource/Folder/FolderForm';
 
 export function FolderCreatePage(props) {
@@ -36,12 +37,16 @@ export function FolderCreatePage(props) {
     foldersIndex: foldersIndexPath,
   };
 
-  useEffect(() => () => {
-    props.foldersUnmount();
+  useEffect(() => {
+    const groupId = rs.params('group_id');
+    props.getFoldersBegin({ group_id: groupId[0] });
+    return () => props.foldersUnmount();
   }, []);
 
   return (
     <FolderForm
+      getFoldersBegin={props.getFoldersBegin}
+      selectFolders={props.folders}
       folderAction={props.createFolderBegin}
       buttonText='Create'
       currentUser={currentUser}
@@ -53,19 +58,24 @@ export function FolderCreatePage(props) {
 
 FolderCreatePage.propTypes = {
   path: PropTypes.string,
+  getFoldersBegin: PropTypes.func,
+  selectFolders: PropTypes.array,
   createFolderBegin: PropTypes.func,
   foldersUnmount: PropTypes.func,
   currentUser: PropTypes.object,
   currentGroup: PropTypes.object,
+  folders: PropTypes.array
 };
 
 const mapStateToProps = createStructuredSelector({
   currentGroup: selectGroup(),
-  currentUser: selectUser()
+  currentUser: selectUser(),
+  folders: selectPaginatedFolders(),
 });
 
 const mapDispatchToProps = {
   createFolderBegin,
+  getFoldersBegin,
   foldersUnmount
 };
 
