@@ -14,6 +14,7 @@ class UserTokenService
         email: user.email,
         user_token: token,
         role: user.user_role.role_name,
+        time_zone: ActiveSupport::TimeZone.find_tzinfo(user.time_zone).name,
         created_at: user.created_at,
         time: (Time.now.to_f * 1000).to_i + 5000
     }

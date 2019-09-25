@@ -292,7 +292,11 @@ exports[`<ThemeProvider /> should render and match the snapshot 1`] = `
   }
 >
   <Memo(WithStyles(SnackbarProviderWrapper))>
-    <Component />
+    <MuiPickersUtilsProvider
+      utils={[Function]}
+    >
+      <Component />
+    </MuiPickersUtilsProvider>
   </Memo(WithStyles(SnackbarProviderWrapper))>
 </ThemeProvider>
 `;

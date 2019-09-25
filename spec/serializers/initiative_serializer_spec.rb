@@ -15,7 +15,6 @@ RSpec.describe InitiativeSerializer, type: :serializer do
     expect(serializer.serializable_hash[:expenses_status]).to_not be nil
     expect(serializer.serializable_hash[:current_expences_sum]).to_not be nil
     expect(serializer.serializable_hash[:leftover]).to_not be nil
-    expect(serializer.serializable_hash[:time_string]).to_not be nil
     expect(serializer.serializable_hash[:picture_location]).to_not be nil
     expect(serializer.serializable_hash[:qr_code_location]).to_not be nil
     expect(serializer.serializable_hash[:full?]).to be false
