@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 import { initialState } from './reducer';
 
-const selectFoldersDomain = state => state.folders || initialState;
+const selectFoldersDomain = state => state.resource || initialState;
 
 const selectPaginatedFolders = () => createSelector(
   selectFoldersDomain,

@@ -21,6 +21,7 @@ import { buildValues } from 'utils/formHelpers';
 
 /* eslint-disable object-curly-newline */
 export function FolderFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
+  console.log(values);
   return (
     <Card>
       <Form>
@@ -32,7 +33,7 @@ export function FolderFormInner({ handleSubmit, handleChange, handleBlur, values
             id='name'
             name='name'
             label={<FormattedMessage {...messages.form.name} />}
-            value={values.subject}
+            value={values.name}
           />
           <Field
             component={TextField}
@@ -40,7 +41,7 @@ export function FolderFormInner({ handleSubmit, handleChange, handleBlur, values
             fullWidth
             id='parent'
             name='parent'
-            value={values.content}
+            value={values.parent}
             label={<FormattedMessage {...messages.form.parent} />}
           />
           <Field
@@ -81,9 +82,9 @@ export function FolderFormInner({ handleSubmit, handleChange, handleBlur, values
 }
 
 export function FolderForm(props) {
-  const folder = dig(props, 'resourceItem', 'group_message');
-
+  const folder = dig(props, 'folder');
   const initialValues = buildValues(folder, {
+    id: { default: '' },
     name: { default: '' },
     parent: { default: '' },
     password: { default: '' },

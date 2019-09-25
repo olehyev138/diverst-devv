@@ -22,7 +22,7 @@ export const initialState = {
 };
 
 /* eslint-disable default-case, no-param-reassign */
-function foldersReducer(state = initialState, action) {
+function resourcesReducer(state = initialState, action) {
   /* eslint-disable consistent-return */
   return produce(state, (draft) => {
     switch (action.type) {
@@ -50,4 +50,4 @@ function foldersReducer(state = initialState, action) {
   });
 }
 
-export default foldersReducer;
+export default resourcesReducer;

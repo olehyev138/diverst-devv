@@ -27,8 +27,8 @@ const defaultParams = Object.freeze({
 });
 
 export function FoldersPage(props) {
-  useInjectReducer({ key: 'folders', reducer });
-  useInjectSaga({ key: 'folders', saga });
+  useInjectReducer({ key: 'resource', reducer });
+  useInjectSaga({ key: 'resource', saga });
 
   const rs = new RouteService(useContext);
 
