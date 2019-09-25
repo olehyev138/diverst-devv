@@ -11,11 +11,10 @@ class Resource < ApplicationRecord
   belongs_to :owner, class_name: 'User'
   belongs_to :mentoring_session
 
-  # TODO React Resources doesn't have tags or views. Discuss
-  # has_many :tags, dependent: :destroy
-  # has_many :views, dependent: :destroy
+  has_many :tags, dependent: :destroy
+  has_many :views, dependent: :destroy
 
-  # accepts_nested_attributes_for :tags
+  accepts_nested_attributes_for :tags
 
   # Paperclip
   has_attached_file :file, s3_permissions: 'private'
