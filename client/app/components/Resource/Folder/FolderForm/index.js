@@ -22,8 +22,6 @@ import { buildValues } from 'utils/formHelpers';
 
 /* eslint-disable object-curly-newline */
 export function FolderFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
-  console.log('INNER');
-  console.log(props);
   const parentSelectAction = (searchKey = '') => {
     props.getFoldersBegin({
       count: 10, page: 0, order: 'asc',
@@ -120,8 +118,6 @@ export function FolderFormInner({ handleSubmit, handleChange, handleBlur, values
 }
 
 export function FolderForm(props) {
-  console.log('FORM');
-  console.log(props);
   const folder = dig(props, 'folder');
   const initialValues = buildValues(folder, {
     id: { default: '' },
