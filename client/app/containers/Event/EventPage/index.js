@@ -42,14 +42,15 @@ export function EventPage(props) {
 
   const { currentUser, currentEvent } = props;
 
-  return (
-    <Event
-      currentUserId={currentUser.id}
-      deleteEventBegin={props.deleteEventBegin}
-      event={currentEvent}
-      links={links}
-    />
-  );
+  if (currentUser && currentEvent)
+    return (
+      <Event
+        currentUserId={currentUser.id}
+        deleteEventBegin={props.deleteEventBegin}
+        event={currentEvent}
+        links={links}
+      />
+    );
 }
 
 EventPage.propTypes = {

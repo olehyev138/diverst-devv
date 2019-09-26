@@ -42,14 +42,15 @@ export function OutcomePage(props) {
 
   const { currentUser, currentOutcome } = props;
 
-  return (
-    <Outcome
-      currentUserId={currentUser.id}
-      deleteOutcomeBegin={props.deleteOutcomeBegin}
-      outcome={currentOutcome}
-      links={links}
-    />
-  );
+  if (currentUser && currentOutcome)
+    return (
+      <Outcome
+        currentUserId={currentUser.id}
+        deleteOutcomeBegin={props.deleteOutcomeBegin}
+        outcome={currentOutcome}
+        links={links}
+      />
+    );
 }
 
 OutcomePage.propTypes = {
