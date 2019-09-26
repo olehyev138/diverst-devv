@@ -34,6 +34,10 @@ class Answer < ApplicationRecord
     ''
   end
 
+  def total_likes
+    likes.count
+  end
+
   # Base value + total of income items - total of expense items
   def total_value
     return 0 if self.value.nil?

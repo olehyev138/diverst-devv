@@ -2,11 +2,14 @@ import produce from 'immer/dist/immer';
 
 import appReducer from 'containers/Shared/App/reducer';
 import {
-  loginBegin, loginSuccess, loginError,
-  logoutBegin, logoutSuccess, logoutError,
-  findEnterpriseBegin, setEnterprise, findEnterpriseError,
-  setUser, setUserPolicyGroup
-} from 'containers/Shared/App/actions';
+  loginSuccess,
+  loginError,
+  logoutSuccess,
+  setEnterprise,
+  setUser,
+  setUserPolicyGroup
+}
+  from 'containers/Shared/App/actions';
 
 /* eslint-disable default-case, no-param-reassign */
 describe('appReducer', () => {
@@ -32,6 +35,14 @@ describe('appReducer', () => {
     });
 
     expect(appReducer(state, loginSuccess('token'))).toEqual(expected);
+  });
+  
+  it('handles the loginError action correctly', () => {
+    const expected = produce(state, (draft) => {
+      draft.error = 'error!';
+    });
+
+    expect(appReducer(state, loginError('error!'))).toEqual(expected);
   });
 
   it('handles the logoutSuccess action correctly', () => {

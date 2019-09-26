@@ -13,10 +13,11 @@ class NewsLinkPhoto < ApplicationRecord
     self.file = URI.parse(url)
   end
 
-  def file_location
+  def file_location(expires_in: 3600, default_style: :medium)
     return nil if !file.presence
 
-    file.expiring_url(36000)
+    default_style = :medium if !file.styles.keys.include? default_style
+    file.expiring_url(expires_in, default_style)
   end
 
   def group

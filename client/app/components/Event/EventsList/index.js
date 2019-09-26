@@ -24,6 +24,8 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import ResponsiveTabs from 'components/Shared/ResponsiveTabs';
 import Pagination from 'components/Shared/Pagination';
 
+import { formatDateTimeString, DateTime } from 'utils/dateTimeHelpers';
+
 const styles = theme => ({
   eventListItem: {
     width: '100%',
@@ -129,8 +131,7 @@ export function EventsList(props, context) {
                         )}
                         <Box pt={1} />
                         <Typography color='textSecondary' variant='subtitle2' className={classes.dateText}>
-                          { /* TODO: Use a clientside date library for this */ }
-                          {item.start.substring(0, 10).replace(/-/g, '/')}
+                          {formatDateTimeString(item.start, DateTime.DATETIME_MED)}
                         </Typography>
                       </Grid>
                       <Hidden xsDown>

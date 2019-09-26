@@ -122,6 +122,7 @@ class User < ApplicationRecord
   validate :policy_group
   before_validation :add_linkedin_http, unless: -> { linkedin_profile_url.nil? }
   validate :valid_linkedin_url, unless: -> { linkedin_profile_url.nil? }
+  validate :valid_time_zone
 
   before_validation :generate_password_if_saml
   before_validation :set_provider
@@ -134,6 +135,13 @@ class User < ApplicationRecord
   accepts_nested_attributes_for :policy_group
 
   after_update :add_to_default_mentor_group
+
+  # Default values
+  after_initialize do
+    if self.new_record?
+      self.time_zone ||= self.enterprise&.default_time_zone || 'UTC'
+    end
+  end
 
   scope :for_segments, -> (segments) { joins(:segments).where('segments.id' => segments.map(&:id)).distinct if segments.any? }
   scope :for_groups, -> (groups) { joins(:groups).where('groups.id' => groups.map(&:id)).distinct if groups.any? }
@@ -153,14 +161,21 @@ class User < ApplicationRecord
     self.enterprise.fields
   end
 
+  # Format users field data for a ES index
+  # Returns { <field_data.id> => <field_data.data } }
+  def indexed_field_data
+    field_data.to_h { |fd| [fd.field_id, fd.data] }
+  end
+
   def avatar_url=(url)
     self.avatar = URI.parse(url)
   end
 
-  def avatar_location
+  def avatar_location(expires_in: 3600, default_style: :medium)
     return nil if !avatar.presence
 
-    avatar.expiring_url(36000)
+    default_style = :medium if !avatar.styles.keys.include? default_style
+    avatar.expiring_url(expires_in, default_style)
   end
 
   def generate_authentication_token(length = 20)
@@ -504,6 +519,14 @@ class User < ApplicationRecord
     # We use info_hash instead of just info because Hash#merge accesses uses [], which is overriden in FieldData
     # info_hash.merge(polls_hash)
     info_hash.merge(polls_hash)
+  end
+
+  def valid_time_zone
+    valid_timezones = ActiveSupport::TimeZone.all.map { |tz| tz.name }
+
+    unless valid_timezones.include?(time_zone)
+      errors.add(:time_zone, "isn't a valid timezone")
+    end
   end
 
   settings do

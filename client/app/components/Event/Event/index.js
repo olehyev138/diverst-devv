@@ -15,6 +15,8 @@ import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import messages from 'containers/Event/messages';
 import { FormattedMessage } from 'react-intl';
 
+import { formatDateTimeString, DateTime } from 'utils/dateTimeHelpers';
+
 const styles = theme => ({
   padding: {
     padding: theme.spacing(3, 2),
@@ -87,9 +89,9 @@ export function Event(props) {
             <FormattedMessage {...messages.show.dateAndTime} />
           </Typography>
           <Typography variant='overline'>From</Typography>
-          <Typography color='textSecondary'>{event.start}</Typography>
+          <Typography color='textSecondary'>{formatDateTimeString(event.start, DateTime.DATETIME_FULL)}</Typography>
           <Typography variant='overline'>To</Typography>
-          <Typography color='textSecondary' className={classes.data}>{event.end}</Typography>
+          <Typography color='textSecondary' className={classes.data}>{formatDateTimeString(event.end, DateTime.DATETIME_FULL)}</Typography>
 
           <Typography className={classes.dataHeaders}>
             <FormattedMessage {...messages.inputs.description} />

@@ -53,19 +53,6 @@ export function GroupFormInner({ classes, handleSubmit, handleChange, handleBlur
       <Form>
         <CardContent>
           <Grid container spacing={3}>
-            <Grid item xs className={classes.noBottomPadding}>
-              <Field
-                component={TextField}
-                required
-                onChange={handleChange}
-                fullWidth
-                id='name'
-                name='name'
-                margin='normal'
-                label={<FormattedMessage {...messages.name} />}
-                value={values.name}
-              />
-            </Grid>
             <Grid item className={classes.noBottomPadding}>
               <FormControl
                 variant='outlined'
@@ -89,6 +76,19 @@ export function GroupFormInner({ classes, handleSubmit, handleChange, handleBlur
                   label='Private?'
                 />
               </FormControl>
+            </Grid>
+            <Grid item xs className={classes.noBottomPadding}>
+              <Field
+                component={TextField}
+                required
+                onChange={handleChange}
+                fullWidth
+                id='name'
+                name='name'
+                margin='normal'
+                label={<FormattedMessage {...messages.name} />}
+                value={values.name}
+              />
             </Grid>
           </Grid>
           <Field

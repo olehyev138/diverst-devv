@@ -106,12 +106,14 @@ class DiverstController < ApplicationController
   def get_serialization_scope
     if self.current_user.nil?
       return {
+               image_size: params[:image_size],
                controller: self.diverst_request.controller,
                action: self.diverst_request.action
              }
     end
 
     {
+      image_size: params[:image_size],
       current_user: self.diverst_request.user,
       policy_group: self.diverst_request.policy_group,
       controller: self.diverst_request.controller,

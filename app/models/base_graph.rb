@@ -115,10 +115,10 @@ module BaseGraph
 
     def stacked_nested_terms(elements)
       # Reformats an es nested terms response to a nvd3 stacked/grouped bar chart
-      # ES has all child buckets logically nested inside parent bucket
-      # Nvd3 represents each child element/'stack' as a seperate *series*
+      # ES has all child buckets nested inside parent bucket
+      # Nvd3 represents each child element/'stack' as a separate *series*
       #  ex: Ergs aggregated on certifications would have each certification name as
-      #      a seperate series. Ie all elements for cert-01 would be in the cert-01 series
+      #      a separate series. Ie all elements for cert-01 would be in the cert-01 series
       #      Each elements key in a series is set to the parents element name.
       #      This ties elements to a parent and sets the y axis label
       #  structure: [ { series: 'cert-01', values: [ { key: 'group-01', value: 5 } ] },
