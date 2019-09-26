@@ -119,7 +119,7 @@
   "diverst.containers.MetricsDashboard.index.button.edit": "Edit",
   "diverst.containers.MetricsDashboard.index.button.delete": "Delete",
   "diverst.containers.MetricsDashboard.form.input.name": "Name",
-  "diverst.containers.MetricsDashboard.form.button.cancel": "Cancel"
+  "diverst.containers.MetricsDashboard.form.button.cancel": "Cancel",
   "diverst.containers.Group.Outcome.index.button.new": "New Outcome",
   "diverst.containers.Group.Outcome.form.button.cancel": "Cancel",
   "diverst.containers.Group.Outcome.form.input.name": "Name"
