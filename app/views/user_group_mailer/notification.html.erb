@@ -40,4 +40,4 @@
     <% end %>
   <% end %>
 <% end %>
-Email notification options may be changed <%= link_to "here", user_preferences_edit_url(saml_for_enterprise: @user.enterprise.id) %>
+Email notification options may be changed <%= link_to "here", edit_user_user_url(@user, anchor: 'user_group_notifications') %>
