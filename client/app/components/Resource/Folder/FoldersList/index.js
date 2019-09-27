@@ -91,37 +91,51 @@ export function FoldersList(props, context) {
           return (
             <Grid item key={item.id} className={classes.folderListItem}>
               {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-              <Link
-                className={classes.folderLink}
-                component={WrappedNavLink}
-                to={props.links.folderShow(item.id)}
-              >
-                <Card>
-                  <CardContent>
-                    <Grid container spacing={1} justify='space-between' alignItems='center'>
-                      <Grid item xs>
+              <Card>
+                <CardContent>
+                  <Grid container spacing={1} justify='space-between' alignItems='center'>
+                    <Grid item xs>
+                      <Link
+                        className={classes.folderLink}
+                        component={WrappedNavLink}
+                        to={props.links.folderShow(item.id)}
+                      >
                         <Typography color='primary' variant='h6' component='h2'>
                           {item.name}
                         </Typography>
-                        <hr className={classes.divider} />
-                        {item.description && (
-                          <React.Fragment>
-                            <Typography color='textSecondary'>
-                              {item.description}
-                            </Typography>
-                            <Box pb={1} />
-                          </React.Fragment>
-                        )}
-                      </Grid>
-                      <Hidden xsDown>
-                        <Grid item>
-                          <KeyboardArrowRightIcon className={classes.arrowRight} />
-                        </Grid>
-                      </Hidden>
+                      </Link>
+                      <hr className={classes.divider} />
+                      <React.Fragment>
+                        <Link
+                          className={classes.folderLink}
+                          component={WrappedNavLink}
+                          to={props.links.folderEdit(item.id)}
+                        >
+                          <Typography color='textSecondary'>
+                            <FormattedMessage {...messages.edit} />
+                          </Typography>
+                        </Link>
+
+                        <Link
+                          className={classes.folderLink}
+                          component={WrappedNavLink}
+                          to={props.links.folderEdit(item.id)}
+                        >
+                          <Typography color='error'>
+                            <FormattedMessage {...messages.delete} />
+                          </Typography>
+                        </Link>
+                        <Box pb={1} />
+                      </React.Fragment>
                     </Grid>
-                  </CardContent>
-                </Card>
-              </Link>
+                    <Hidden xsDown>
+                      <Grid item>
+                        <KeyboardArrowRightIcon className={classes.arrowRight} />
+                      </Grid>
+                    </Hidden>
+                  </Grid>
+                </CardContent>
+              </Card>
             </Grid>
           );
         })}

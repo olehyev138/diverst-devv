@@ -17,7 +17,7 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { selectGroup } from 'containers/Group/selectors';
 import { selectUser } from 'containers/Shared/App/selectors';
-import { selectFolder, selectPaginatedFolders } from 'containers/Resource/selectors';
+import { selectFolder, selectPaginatedSelectFolders } from 'containers/Resource/selectors';
 
 import {
   getFolderBegin, updateFolderBegin,
@@ -84,7 +84,7 @@ const mapStateToProps = createStructuredSelector({
   currentGroup: selectGroup(),
   currentUser: selectUser(),
   currentFolder: selectFolder(),
-  folders: selectPaginatedFolders(),
+  folders: selectPaginatedSelectFolders(),
 });
 
 const mapDispatchToProps = {

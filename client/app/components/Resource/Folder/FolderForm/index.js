@@ -18,7 +18,7 @@ import {
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import messages from 'containers/Resource/Folder/messages';
-import { buildValues } from 'utils/formHelpers';
+import { buildValues, mapFields } from 'utils/formHelpers';
 
 /* eslint-disable object-curly-newline */
 export function FolderFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
@@ -56,6 +56,7 @@ export function FolderFormInner({ handleSubmit, handleChange, handleBlur, values
             onChange={value => setFieldValue('parent_id', value)}
             onInputChange={value => parentSelectAction(value)}
             onBlur={() => setFieldTouched('parent_id', true)}
+            isClearable
           />
           <Grid container spacing={3}>
             <Grid item>
@@ -122,7 +123,7 @@ export function FolderForm(props) {
   const initialValues = buildValues(folder, {
     id: { default: '' },
     name: { default: '' },
-    parent: { default: '', customKey: 'parent_id' },
+    parent: { default: null, customKey: 'parent_id' },
     password: { default: '' },
     password_protected: { default: false },
     owner_id: { default: dig(props, 'currentUser', 'id') || '' },
@@ -134,7 +135,7 @@ export function FolderForm(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        props.folderAction(values);
+        props.folderAction(mapFields(values, ['child_ids', 'parent_id']));
       }}
 
       render={formikProps => <FolderFormInner {...props} {...formikProps} />}

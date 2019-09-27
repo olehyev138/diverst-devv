@@ -24,6 +24,7 @@ class Folder < ApplicationRecord
   validates_uniqueness_of :name, scope: [:group_id], if: -> { group_id.present? }
   validates :password, presence: true, if: Proc.new { |folder| folder.password_protected? && !folder.password_digest }
   validates :password, length: { minimum: 6 }, if: Proc.new { |folder| folder.password_protected? && folder.password.present? }
+  validate :parent_is_not_self
 
   # scopes
   scope :only_parents, -> { where(parent_id: nil) }
@@ -42,4 +43,13 @@ class Folder < ApplicationRecord
   def total_views
     views.count
   end
+
+  private
+
+  def parent_is_not_self
+    if id == parent_id
+      errors.add(:parent, 'can\'t be itself')
+    end
+  end
+
 end

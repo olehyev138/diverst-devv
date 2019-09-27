@@ -11,7 +11,7 @@ import reducer from 'containers/Resource/reducer';
 import saga from 'containers/Resource/saga';
 
 import { selectGroup } from 'containers/Group/selectors';
-import { selectPaginatedFolders } from 'containers/Resource/selectors';
+import { selectPaginatedSelectFolders } from 'containers/Resource/selectors';
 import { selectUser } from 'containers/Shared/App/selectors';
 
 import RouteService from 'utils/routeHelpers';
@@ -70,7 +70,7 @@ FolderCreatePage.propTypes = {
 const mapStateToProps = createStructuredSelector({
   currentGroup: selectGroup(),
   currentUser: selectUser(),
-  folders: selectPaginatedFolders(),
+  folders: selectPaginatedSelectFolders(),
 });
 
 const mapDispatchToProps = {
