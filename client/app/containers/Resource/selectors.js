@@ -27,4 +27,12 @@ const selectFolder = () => createSelector(
   foldersState => foldersState.currentFolder
 );
 
-export { selectFoldersDomain, selectPaginatedFolders, selectPaginatedSelectFolders, selectFoldersTotal, selectFolder };
+const selectValid = () => createSelector(
+  selectFoldersDomain,
+  foldersState => foldersState.valid
+);
+
+export {
+  selectFoldersDomain, selectPaginatedFolders, selectPaginatedSelectFolders,
+  selectFoldersTotal, selectFolder, selectValid,
+};

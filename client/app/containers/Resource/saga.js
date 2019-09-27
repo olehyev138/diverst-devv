@@ -11,6 +11,7 @@ import {
   GET_RESOURCES_BEGIN, GET_RESOURCE_BEGIN,
   CREATE_RESOURCE_BEGIN, UPDATE_RESOURCE_BEGIN,
   DELETE_RESOURCE_BEGIN,
+  VALIDATE_FOLDER_PASSWORD_BEGIN,
 } from 'containers/Resource/constants';
 
 import {
@@ -24,6 +25,7 @@ import {
   createResourceSuccess, createResourceError,
   updateResourceSuccess, updateResourceError,
   deleteResourceError,
+  validateFolderPasswordSuccess, validateFolderPasswordError
 } from 'containers/Resource/actions';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -211,6 +213,21 @@ export function* deleteResource(action) {
   }
 }
 
+export function* validateFolderPassword(action) {
+  try {
+    console.log(action)
+    const response = yield call(api.folders.validatePassword.bind(api.folders), action.payload);
+    yield put(validateFolderPasswordSuccess(response.data));
+  } catch (err) {
+    // TODO: intl message
+    yield put(validateFolderPasswordError(err));
+    yield put(showSnackbar({
+      message: 'Password Incorrect',
+      options: { variant: 'warning' }
+    }));
+  }
+}
+
 export default function* foldersSaga() {
   yield takeLatest(GET_FOLDERS_BEGIN, getFolders);
   yield takeLatest(GET_FOLDER_BEGIN, getFolder);
@@ -222,4 +239,5 @@ export default function* foldersSaga() {
   yield takeLatest(CREATE_RESOURCE_BEGIN, createResource);
   yield takeLatest(UPDATE_RESOURCE_BEGIN, updateResource);
   yield takeLatest(DELETE_RESOURCE_BEGIN, deleteResource);
+  yield takeLatest(VALIDATE_FOLDER_PASSWORD_BEGIN, validateFolderPassword);
 }

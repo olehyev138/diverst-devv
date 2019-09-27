@@ -14,6 +14,9 @@ import {
   DELETE_FOLDER_BEGIN,
   DELETE_FOLDER_SUCCESS,
   DELETE_FOLDER_ERROR,
+  VALIDATE_FOLDER_PASSWORD_BEGIN,
+  VALIDATE_FOLDER_PASSWORD_SUCCESS,
+  VALIDATE_FOLDER_PASSWORD_ERROR,
   GET_FOLDER_BEGIN,
   GET_FOLDER_SUCCESS,
   GET_FOLDER_ERROR,
@@ -148,6 +151,27 @@ export function deleteFolderSuccess(payload) {
 export function deleteFolderError(error) {
   return {
     type: DELETE_FOLDER_ERROR,
+    error,
+  };
+}
+
+export function validateFolderPasswordBegin(payload) {
+  return {
+    type: VALIDATE_FOLDER_PASSWORD_BEGIN,
+    payload,
+  };
+}
+
+export function validateFolderPasswordSuccess(payload) {
+  return {
+    type: VALIDATE_FOLDER_PASSWORD_SUCCESS,
+    payload,
+  };
+}
+
+export function validateFolderPasswordError(error) {
+  return {
+    type: VALIDATE_FOLDER_PASSWORD_ERROR,
     error,
   };
 }

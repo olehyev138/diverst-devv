@@ -17,14 +17,21 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { selectGroup } from 'containers/Group/selectors';
 import { selectUser } from 'containers/Shared/App/selectors';
-import { selectFolder, selectPaginatedSelectFolders } from 'containers/Resource/selectors';
+import { selectFolder, selectPaginatedSelectFolders, selectValid } from 'containers/Resource/selectors';
 
 import {
   getFolderBegin, updateFolderBegin,
-  foldersUnmount, getFoldersBegin
+  foldersUnmount, getFoldersBegin,
+  validateFolderPasswordBegin,
 } from 'containers/Resource/actions';
 
 import FolderForm from 'components/Resource/Folder/FolderForm';
+
+import {
+  Card, CardContent, Button, TextField,
+  DialogActions, DialogContent, DialogContentText, DialogTitle
+} from '@material-ui/core';
+import { Field, Formik, Form } from 'formik';
 
 export function FolderEditPage(props) {
   useInjectReducer({ key: 'resource', reducer });
@@ -51,19 +58,67 @@ export function FolderEditPage(props) {
     return () => props.foldersUnmount();
   }, []);
 
-  const { currentUser, currentGroup, currentFolder } = props;
+  const { currentUser, currentGroup, currentFolder, valid } = props;
 
   return (
-    <FolderForm
-      getFoldersBegin={props.getFoldersBegin}
-      selectFolders={props.folders}
-      folderAction={props.updateFolderBegin}
-      buttonText='Update'
-      currentUser={currentUser}
-      currentGroup={currentGroup}
-      folder={currentFolder}
-      links={links}
-    />
+    <div>
+      { valid === false && (
+        <Formik
+          initialValues={{
+            password: '',
+          }}
+          enableReinitialize
+          onSubmit={(values, actions) => {
+            const folderId = rs.params('item_id');
+            console.log(folderId);
+            props.validateFolderPasswordBegin({
+              id: folderId[0],
+              password: values.password
+            });
+          }}
+          render={({ values, handleChange, handleSubmit }) => (
+            <Form onSubmit={handleSubmit}>
+              <Card>
+                <CardContent>
+                  This folder is password protected.
+                  <br />
+                  Please enter the password to access the resources.
+                  <Field
+                    component={TextField}
+                    autoFocus
+                    margin='dense'
+                    id='password'
+                    name='password'
+                    label='Password'
+                    type='password'
+                    value={values.password}
+                    onChange={handleChange}
+                    fullWidth
+                  />
+                </CardContent>
+                <Card>
+                  <Button color='primary' type='submit'>
+                    AUTHENTICATE
+                  </Button>
+                </Card>
+              </Card>
+            </Form>
+          )}
+        />
+      )}
+      { valid === true && (
+        <FolderForm
+          getFoldersBegin={props.getFoldersBegin}
+          selectFolders={props.folders}
+          folderAction={props.updateFolderBegin}
+          buttonText='Update'
+          currentUser={currentUser}
+          currentGroup={currentGroup}
+          folder={currentFolder}
+          links={links}
+        />
+      )}
+    </div>
   );
 }
 
@@ -73,11 +128,13 @@ FolderEditPage.propTypes = {
   selectFolders: PropTypes.array,
   getFolderBegin: PropTypes.func,
   updateFolderBegin: PropTypes.func,
+  validateFolderPasswordBegin: PropTypes.func,
   foldersUnmount: PropTypes.func,
   currentUser: PropTypes.object,
   currentGroup: PropTypes.object,
   currentFolder: PropTypes.object,
-  folders: PropTypes.array
+  folders: PropTypes.array,
+  valid: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -85,13 +142,15 @@ const mapStateToProps = createStructuredSelector({
   currentUser: selectUser(),
   currentFolder: selectFolder(),
   folders: selectPaginatedSelectFolders(),
+  valid: selectValid(),
 });
 
 const mapDispatchToProps = {
   getFolderBegin,
   updateFolderBegin,
   getFoldersBegin,
-  foldersUnmount
+  foldersUnmount,
+  validateFolderPasswordBegin
 };
 
 const withConnect = connect(

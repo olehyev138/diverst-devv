@@ -8,8 +8,10 @@ import {
   GET_FOLDERS_SUCCESS,
   FOLDERS_UNMOUNT,
   GET_FOLDER_SUCCESS,
+  VALIDATE_FOLDER_PASSWORD_SUCCESS,
   GET_RESOURCES_SUCCESS,
-  GET_RESOURCE_SUCCESS, RESOURCES_UNMOUNT
+  GET_RESOURCE_SUCCESS,
+  RESOURCES_UNMOUNT
 } from './constants';
 
 export const initialState = {
@@ -18,7 +20,8 @@ export const initialState = {
   foldersTotal: null,
   resourcesTotal: null,
   currentFolder: null,
-  currentResource: null
+  currentResource: null,
+  valid: null,
 };
 
 /* eslint-disable default-case, no-param-reassign */
@@ -32,6 +35,7 @@ function resourcesReducer(state = initialState, action) {
         break;
       case GET_FOLDER_SUCCESS:
         draft.currentFolder = action.payload.folder;
+        draft.valid = !action.payload.folder.password_protected;
         break;
       case GET_RESOURCES_SUCCESS:
         draft.resources = action.payload.items;
@@ -46,6 +50,10 @@ function resourcesReducer(state = initialState, action) {
         draft.folders = [];
         draft.foldersTotal = null;
         draft.currentFolder = null;
+        draft.valid = null;
+        break;
+      case VALIDATE_FOLDER_PASSWORD_SUCCESS:
+        draft.valid = true;
     }
   });
 }
