@@ -1,12 +1,13 @@
 class ClockworkDatabaseEvent < ApplicationRecord
   include PublicActivity::Common
+  include TimeZoneValidation
+  time_zone_attribute :tz
 
   # associations
   belongs_to :frequency_period
   belongs_to :enterprise
 
   # validations
-  validates_length_of :tz, maximum: 191
   validates_length_of :method_args, maximum: 191
   validates_length_of :method_name, maximum: 191
   validates_length_of :job_name, maximum: 191
@@ -19,9 +20,6 @@ class ClockworkDatabaseEvent < ApplicationRecord
   validates_presence_of :enterprise
   validates_presence_of :job_name
   validates_presence_of :method_name
-
-  # we want to make sure the timezone is valid
-  validates_inclusion_of :tz, in: ActiveSupport::TimeZone.all.map(&:name)
 
   # we want to make sure the timezone is valid
   validates_inclusion_of :day, in: Date::DAYNAMES.map(&:downcase), if: Proc.new { |c| c.day.present? }
