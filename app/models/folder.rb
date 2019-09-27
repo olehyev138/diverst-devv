@@ -51,5 +51,4 @@ class Folder < ApplicationRecord
       errors.add(:parent, 'can\'t be itself')
     end
   end
-
 end
