@@ -70,7 +70,6 @@ export function FolderEditPage(props) {
           enableReinitialize
           onSubmit={(values, actions) => {
             const folderId = rs.params('item_id');
-            console.log(folderId);
             props.validateFolderPasswordBegin({
               id: folderId[0],
               password: values.password

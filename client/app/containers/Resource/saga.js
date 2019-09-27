@@ -215,7 +215,6 @@ export function* deleteResource(action) {
 
 export function* validateFolderPassword(action) {
   try {
-    console.log(action)
     const response = yield call(api.folders.validatePassword.bind(api.folders), action.payload);
     yield put(validateFolderPasswordSuccess(response.data));
   } catch (err) {
