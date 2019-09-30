@@ -131,6 +131,8 @@
   "diverst.containers.Folder.form.input.folder" : "Move to a Folder",
   "diverst.containers.Folder.form.input.protected" : "Password protected?",
   "diverst.containers.Folder.form.input.password" : "Password",
-  "diverst.containers.Folder.show.addFolder" : "Add Folder",
-  "diverst.containers.Folder.show.addResource" : "Add Resource"
+  "diverst.containers.Folder.show.addFolder" : "+ Add Folder",
+  "diverst.containers.Folder.show.addResource" : "+ Add Resource",
+  "diverst.containers.Folder.show.parentFolder" : "⤣ Parent Folder",
+  "diverst.containers.Folder.folders" : "Folders"
 }

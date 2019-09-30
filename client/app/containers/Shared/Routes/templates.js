@@ -73,6 +73,7 @@ import GroupMemberCreatePage from 'containers/Group/GroupMembers/GroupMemberCrea
 import FoldersPage from 'containers/Resource/Folder/FoldersPage/Loadable';
 import FolderCreatePage from 'containers/Resource/Folder/FolderCreatePage/Loadable';
 import FolderEditPage from 'containers/Resource/Folder/FolderEditPage/Loadable';
+import FolderPage from 'containers/Resource/Folder/FolderPage/Loadable';
 
 /* Global */
 import NotFoundPage from 'containers/Shared/NotFoundPage/Loadable';
@@ -86,5 +87,5 @@ export {
   EventCreatePage, EventEditPage, GroupMessagePage, GroupMessageCreatePage, GroupMessageEditPage, OutcomeCreatePage,
   OutcomeEditPage, GroupMemberListPage, GroupMemberCreatePage, NotFoundPage, PlaceholderPage, GroupDashboardPage,
   UserDashboardPage, MetricsDashboardListPage, MetricsDashboardCreatePage, MetricsDashboardEditPage, MetricsDashboardPage,
-  CustomGraphCreatePage, CustomGraphEditPage, FoldersPage, FolderCreatePage, FolderEditPage
+  CustomGraphCreatePage, CustomGraphEditPage, FoldersPage, FolderCreatePage, FolderEditPage, FolderPage
 };

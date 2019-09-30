@@ -9,6 +9,9 @@ import { defineMessages } from 'react-intl';
 export const scope = 'diverst.containers.Folder';
 
 export default defineMessages({
+  folders: {
+    id: `${scope}.folders`
+  },
   new: {
     id: `${scope}.index.button.new`,
   },
@@ -52,6 +55,9 @@ export default defineMessages({
     },
     addResource: {
       id: `${scope}.show.addResource`,
+    },
+    parent: {
+      id: `${scope}.show.parentFolder`
     },
   },
 });

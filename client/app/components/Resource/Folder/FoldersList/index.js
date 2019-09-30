@@ -15,6 +15,7 @@ import {
 } from '@material-ui/core';
 
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
+import FolderIcon from '@material-ui/icons/Folder';
 
 import { FormattedMessage, injectIntl } from 'react-intl';
 import messages from 'containers/Resource/Folder/messages';
@@ -100,9 +101,16 @@ export function FoldersList(props, context) {
                         component={WrappedNavLink}
                         to={props.links.folderShow(item.id)}
                       >
-                        <Typography color='primary' variant='h6' component='h2'>
-                          {item.name}
-                        </Typography>
+                        <Grid container spacing={1}>
+                          <Grid item>
+                            <FolderIcon />
+                          </Grid>
+                          <Grid item xs>
+                            <Typography color='primary' variant='h6' component='h2'>
+                              {item.name}
+                            </Typography>
+                          </Grid>
+                        </Grid>
                       </Link>
                       <hr className={classes.divider} />
                       <React.Fragment>

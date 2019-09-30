@@ -1,15 +1,15 @@
 import { createSelector } from 'reselect';
 import { initialState } from './reducer';
 
-const selectFoldersDomain = state => state.resource || initialState;
+const selectResourcesDomain = state => state.resource || initialState;
 
 const selectPaginatedFolders = () => createSelector(
-  selectFoldersDomain,
+  selectResourcesDomain,
   foldersState => foldersState.folders
 );
 
 const selectPaginatedSelectFolders = () => createSelector(
-  selectFoldersDomain,
+  selectResourcesDomain,
   foldersState => (
     Object
       .values(foldersState.folders)
@@ -18,21 +18,40 @@ const selectPaginatedSelectFolders = () => createSelector(
 );
 
 const selectFoldersTotal = () => createSelector(
-  selectFoldersDomain,
+  selectResourcesDomain,
   foldersState => foldersState.foldersTotal
 );
 
 const selectFolder = () => createSelector(
-  selectFoldersDomain,
+  selectResourcesDomain,
   foldersState => foldersState.currentFolder
 );
 
 const selectValid = () => createSelector(
-  selectFoldersDomain,
+  selectResourcesDomain,
   foldersState => foldersState.valid
 );
 
+const selectPaginatedResources = () => createSelector(
+  selectResourcesDomain,
+  resourcesState => resourcesState.resources
+);
+
+const selectResourcesTotal = () => createSelector(
+  selectResourcesDomain,
+  resourcesState => resourcesState.resourcesTotal
+);
+
+const selectResource = () => createSelector(
+  selectResourcesDomain,
+  resourcesState => resourcesState.currentResource
+);
+
 export {
-  selectFoldersDomain, selectPaginatedFolders, selectPaginatedSelectFolders,
-  selectFoldersTotal, selectFolder, selectValid,
+  selectResourcesDomain,
+  selectPaginatedFolders, selectPaginatedSelectFolders,
+  selectFoldersTotal, selectFolder,
+  selectValid,
+  selectPaginatedResources,
+  selectResourcesTotal, selectResource,
 };
