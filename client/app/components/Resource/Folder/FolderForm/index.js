@@ -137,7 +137,7 @@ export function FolderForm(props) {
   const initialValues = buildValues(folder, {
     id: { default: '' },
     name: { default: '' },
-    parent: { default: props.from ? {value: props.from.id, label: props.from.name} : null, customKey: 'parent_id' },
+    parent: { default: props.from ? { value: props.from.id, label: props.from.name } : null, customKey: 'parent_id' },
     password: { default: '' },
     password_protected: { default: false },
     owner_id: { default: dig(props, 'currentUser', 'id') || '' },
