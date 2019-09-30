@@ -141,8 +141,7 @@ export function FolderForm(props) {
     password: { default: '' },
     password_protected: { default: false },
     owner_id: { default: dig(props, 'currentUser', 'id') || '' },
-    group_id: { default: props.type === 'group' ? dig(props, 'currentGroup', 'id') : '' },
-    enterprise_id: { default: props.type === 'admin' ? dig(props, 'currentEnterprise', 'id') : '' }
+    group_id: { default: props.type === 'group' ? dig(props, 'currentGroup', 'id') : null },
   });
 
   return (

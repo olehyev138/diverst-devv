@@ -31,9 +31,10 @@ class Folder < ApplicationRecord
 
   # callbacks
   before_save :set_password
+  before_save :nil_enterprise
 
   def set_password
-    self.password = nil if !password_protected?
+    self.password = nil unless password_protected?
   end
 
   def valid_password?(user_password)
@@ -49,6 +50,13 @@ class Folder < ApplicationRecord
   def parent_is_not_self
     if id == parent_id
       errors.add(:parent, 'can\'t be itself')
+    end
+  end
+
+  # TODO: Find a better solution to not set enterprise for folder objects
+  def nil_enterprise
+    if group_id.present?
+      self.enterprise_id = nil;
     end
   end
 end
