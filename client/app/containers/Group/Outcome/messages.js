@@ -33,6 +33,9 @@ export default defineMessages({
   cancel: {
     id: `${scope}.form.button.cancel`,
   },
+  empty: {
+    id: `${scope}.empty`,
+  },
   inputs: {
     name: {
       id: `${scope}.form.input.name`,
@@ -45,11 +48,13 @@ export default defineMessages({
     delete: {
       id: `${scope}.Pillar.form.button.delete`,
     },
-    name: {
-      id: `${scope}.Pillar.form.input.name`,
-    },
-    value: {
-      id: `${scope}.Pillar.form.input.value`,
+    inputs: {
+      name: {
+        id: `${scope}.Pillar.form.input.name`,
+      },
+      value: {
+        id: `${scope}.Pillar.form.input.value`,
+      },
     },
   },
 });

@@ -113,8 +113,6 @@
   "diverst.containers.Event.form.input.start": "Start Date",
   "diverst.containers.Event.form.input.end": "End Date",
   "diverst.containers.Event.show.date_and_time": "Date & Time",
-  "diverst.containers.Group.Outcome.Pillar.text": "Pillars",
-  "diverst.containers.Group.Outcome.index.button.new": "New Outcome",
   "diverst.containers.MetricsDashboard.index.button.new": "New Dashboard",
   "diverst.containers.MetricsDashboard.index.button.edit": "Edit",
   "diverst.containers.MetricsDashboard.index.button.delete": "Delete",
@@ -136,5 +134,9 @@
   "diverst.containers.GlobalSettings.CustomText.form.custom_text.privacy_statement" : "Privacy statement",
   "diverst.containers.Group.Outcome.index.button.new": "New Outcome",
   "diverst.containers.Group.Outcome.form.button.cancel": "Cancel",
-  "diverst.containers.Group.Outcome.form.input.name": "Name"
+  "diverst.containers.Group.Outcome.form.input.name": "Name",
+  "diverst.containers.Group.Outcome.empty": "There are no pillars for this outcome.",
+  "diverst.containers.Group.Outcome.Pillar.text": "Pillars",
+  "diverst.containers.Group.Outcome.Pillar.form.input.name": "Name",
+  "diverst.containers.Group.Outcome.Pillar.form.input.value": "Value Proposition"
 }

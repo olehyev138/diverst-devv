@@ -98,7 +98,7 @@ export function OutcomesList(props, context) {
                 ))}
                 {(!outcome.pillars || outcome.pillars.length <= 0) && (
                   <Typography>
-                    There are no pillars for this outcome.
+                    <FormattedMessage {...messages.empty} />
                   </Typography>
                 )}
               </CardContent>
