@@ -4,6 +4,7 @@ class User < ApplicationRecord
   include PublicActivity::Common
   include User::Actions
   include ContainsFields
+  include TimeZoneValidation
 
   enum groups_notifications_frequency: [:hourly, :daily, :weekly, :disabled]
   enum groups_notifications_date: [:sunday, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday]
@@ -134,6 +135,13 @@ class User < ApplicationRecord
   accepts_nested_attributes_for :policy_group
 
   after_update :add_to_default_mentor_group
+
+  # Default values
+  after_initialize do
+    if self.new_record?
+      self.time_zone ||= self.enterprise&.default_time_zone || ActiveSupport::TimeZone.find_tzinfo('UTC').name
+    end
+  end
 
   scope :for_segments, -> (segments) { joins(:segments).where('segments.id' => segments.map(&:id)).distinct if segments.any? }
   scope :for_groups, -> (groups) { joins(:groups).where('groups.id' => groups.map(&:id)).distinct if groups.any? }

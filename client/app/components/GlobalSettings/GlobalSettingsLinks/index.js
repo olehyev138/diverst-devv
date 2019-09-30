@@ -139,6 +139,15 @@ export function NavLinks({ classes }) {
       >
         Fields
       </Button>
+      <Button
+        component={WrappedNavLink}
+        exact
+        to={ROUTES.admin.system.globalSettings.customText.edit.path()}
+        className={classes.navLink}
+        activeClassName={classes.navLinkActive}
+      >
+        Custom Text
+      </Button>
     </Toolbar>
   );
 }

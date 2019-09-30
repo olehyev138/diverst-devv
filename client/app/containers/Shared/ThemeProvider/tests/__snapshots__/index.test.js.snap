@@ -286,13 +286,18 @@ exports[`<ThemeProvider /> should render and match the snapshot 1`] = `
         "mobileStepper": 1000,
         "modal": 1300,
         "snackbar": 1400,
+        "speedDial": 1050,
         "tooltip": 1500,
       },
     }
   }
 >
   <Memo(WithStyles(SnackbarProviderWrapper))>
-    <Component />
+    <MuiPickersUtilsProvider
+      utils={[Function]}
+    >
+      <Component />
+    </MuiPickersUtilsProvider>
   </Memo(WithStyles(SnackbarProviderWrapper))>
 </ThemeProvider>
 `;

@@ -233,14 +233,6 @@ class Initiative < ApplicationRecord
     name
   end
 
-  def time_string
-    if start.to_date == self.end.to_date # If the initiative starts and ends on the same day
-      "#{start.to_s :dateonly} from #{start.to_s :ampmtime} to #{self.end.to_s :ampmtime}"
-    else
-      "From #{start.to_s :datetime} to #{self.end.to_s :datetime}"
-    end
-  end
-
   def self.to_csv(initiatives:, enterprise: nil)
     # initiative column titles
     CSV.generate(headers: true) do |csv|

@@ -2,7 +2,7 @@ FactoryBot.define do
   factory :enterprise do
     name { Faker::Company.name }
     created_at { Date.today }
-    time_zone 'UTC'
+    time_zone ActiveSupport::TimeZone.find_tzinfo('UTC').name
     theme nil
 
     after(:create) do |enterprise|
