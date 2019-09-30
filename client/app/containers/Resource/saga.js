@@ -65,7 +65,7 @@ export function* createFolder(action) {
     const payload = { folder: action.payload };
     const response = yield call(api.folders.create.bind(api.folders), payload);
 
-    yield put(push(ROUTES.group.resources.folders.index.path(payload.folder.group_id)));
+    yield put(push(payload.folder.path || ROUTES.group.resources.folders.index.path(payload.folder.group_id)));
     yield put(showSnackbar({
       message: 'Folder created',
       options: { variant: 'success' }

@@ -121,7 +121,7 @@ export function FolderFormInner({ handleSubmit, handleChange, handleBlur, values
             {buttonText}
           </Button>
           <Button
-            to={props.links.foldersIndex}
+            to={props.from ? props.links.folderShow(props.from.id) : props.links.foldersIndex}
             component={WrappedNavLink}
           >
             <FormattedMessage {...messages.cancel} />
@@ -137,7 +137,7 @@ export function FolderForm(props) {
   const initialValues = buildValues(folder, {
     id: { default: '' },
     name: { default: '' },
-    parent: { default: null, customKey: 'parent_id' },
+    parent: { default: props.from ? {value: props.from.id, label: props.from.name} : null, customKey: 'parent_id' },
     password: { default: '' },
     password_protected: { default: false },
     owner_id: { default: dig(props, 'currentUser', 'id') || '' },
@@ -149,7 +149,9 @@ export function FolderForm(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        props.folderAction(mapFields(values, ['child_ids', 'parent_id']));
+        const payload = mapFields(values, ['child_ids', 'parent_id']);
+        payload.path = props.from ? props.links.folderShow(props.from.id) : null;
+        props.folderAction(payload);
       }}
 
       render={formikProps => <FolderFormInner {...props} {...formikProps} />}
@@ -166,6 +168,11 @@ FolderForm.propTypes = {
   currentUser: PropTypes.object,
   currentGroup: PropTypes.object,
   currentEnterprise: PropTypes.object,
+  from: PropTypes.object,
+  links: PropTypes.shape({
+    foldersIndex: PropTypes.string,
+    folderShow: PropTypes.func,
+  })
 };
 
 FolderFormInner.propTypes = {
@@ -181,8 +188,12 @@ FolderFormInner.propTypes = {
   buttonText: PropTypes.string,
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
+  from: PropTypes.shape({
+    id: PropTypes.number,
+  }),
   links: PropTypes.shape({
-    foldersIndex: PropTypes.string
+    foldersIndex: PropTypes.string,
+    folderShow: PropTypes.func,
   })
 };
 

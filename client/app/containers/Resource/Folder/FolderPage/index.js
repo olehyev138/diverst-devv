@@ -45,15 +45,15 @@ export function FolderPage(props) {
     folderShowPath = id => ROUTES.group.resources.folders.show.path(rs.params('group_id'), id);
     folderNewPath = ROUTES.group.resources.folders.new.path(rs.params('group_id'));
     folderEditPath = id => ROUTES.group.resources.folders.edit.path(rs.params('group_id'), id);
-    resourceEditPath = id => ROUTES.group.resources.resources.edit.path(rs.params('group_id'), id);
-    resourceNewPath = ROUTES.group.resources.resources.new.path(rs.params('group_id'));
+    resourceEditPath = id => ROUTES.group.resources.resources.edit.path(rs.params('group_id'), rs.params('item_id'), id);
+    resourceNewPath = ROUTES.group.resources.resources.new.path(rs.params('group_id'), rs.params('item_id'));
   } else {
     foldersIndexPath = ROUTES.admin.manage.resources.folders.index.path();
     folderShowPath = id => ROUTES.admin.manage.resources.folders.show.path(id);
     folderNewPath = ROUTES.group.admin.manage.folders.new.path(rs.params());
     folderEditPath = id => ROUTES.admin.manage.resources.folders.edit.path(id);
-    resourceEditPath = id => ROUTES.admin.manage.resources.resources.edit.path(rs.params('group_id'), id);
-    resourceNewPath = ROUTES.group.admin.manage.resources.new.path(rs.params('group_id'));
+    resourceEditPath = id => ROUTES.admin.manage.resources.resources.edit.path(rs.params('group_id'), rs.params('item_id'), id);
+    resourceNewPath = ROUTES.group.admin.manage.resources.new.path(rs.params('group_id'), rs.params('item_id'));
   }
 
   const links = {

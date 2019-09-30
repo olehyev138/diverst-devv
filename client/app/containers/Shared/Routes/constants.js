@@ -139,21 +139,21 @@ export const ROUTES = {
           }
         },
         new: {
-          path: (groupId = ':group_id') => `/groups/${groupId}/resources/folder/new`,
+          path: (groupId = ':group_id') => `/groups/${groupId}/folder/new`,
         },
         show: {
-          path: (groupId = ':group_id', itemId = ':item_id') => `/groups/${groupId}/resources/folder/${itemId}`,
+          path: (groupId = ':group_id', itemId = ':item_id') => `/groups/${groupId}/folder/${itemId}`,
         },
         edit: {
-          path: (groupId = ':group_id', itemId = ':item_id') => `/groups/${groupId}/resources/folder/${itemId}/edit`,
+          path: (groupId = ':group_id', itemId = ':item_id') => `/groups/${groupId}/folder/${itemId}/edit`,
         },
       },
       resources: {
         new: {
-          path: (groupId = ':group_id') => `/groups/${groupId}/resources/new`,
+          path: (groupId = ':group_id', folderId = ':folder_id') => `/groups/${groupId}/folder/${folderId}/resource/new`,
         },
         edit: {
-          path: (groupId = ':group_id', itemId = ':item_id') => `/groups/${groupId}/resources/${itemId}/edit`,
+          path: (groupId = ':group_id', folderId = ':folder_id', itemId = ':item_id') => `/groups/${groupId}/folder/${folderId}/resource/${itemId}/edit`,
         },
       }
     }

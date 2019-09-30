@@ -26,19 +26,24 @@ export function FolderCreatePage(props) {
 
   const { currentUser, currentGroup, currentEnterprise } = props;
   const rs = new RouteService(useContext);
+  const from = rs.location;
 
   let foldersIndexPath;
+  let folderShowPath;
   let type;
   if (props.path.startsWith('/groups')) {
     type = 'group';
     foldersIndexPath = ROUTES.group.resources.folders.index.path(rs.params('group_id'));
+    folderShowPath = id => ROUTES.group.resources.folders.show.path(rs.params('group_id'), id);
   } else {
     type = 'admin';
     foldersIndexPath = ROUTES.admin.manage.resources.folders.index.path();
+    folderShowPath = id => ROUTES.admin.manage.resources.folders.show.path(id);
   }
 
   const links = {
     foldersIndex: foldersIndexPath,
+    folderShow: folderShowPath,
   };
 
   useEffect(() => {
@@ -60,6 +65,7 @@ export function FolderCreatePage(props) {
       currentGroup={currentGroup}
       links={links}
       type={type}
+      from={from.fromFolder ? from.fromFolder : null}
     />
   );
 }
@@ -73,7 +79,10 @@ FolderCreatePage.propTypes = {
   currentUser: PropTypes.object,
   currentGroup: PropTypes.object,
   currentEnterprise: PropTypes.object,
-  folders: PropTypes.array
+  folders: PropTypes.array,
+  location: PropTypes.shape({
+    state: PropTypes.object,
+  })
 };
 
 const mapStateToProps = createStructuredSelector({

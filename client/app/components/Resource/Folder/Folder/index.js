@@ -80,7 +80,10 @@ export function Folder(props) {
           <Grid item>
             <Button
               variant='contained'
-              to={props.links.folderNew}
+              to={{
+                pathname: props.links.folderNew,
+                fromFolder: folder,
+              }}
               color='primary'
               size='large'
               component={WrappedNavLink}
