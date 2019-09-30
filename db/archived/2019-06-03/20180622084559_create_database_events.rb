@@ -4,7 +4,7 @@ class CreateDatabaseEvents < ActiveRecord::Migration[5.1]
       t.string :name,   :null => false, :default => "daily"
       t.timestamps
     end
-    
+
     create_table :clockwork_database_events do |t|
       t.string        :name,                :null => false
       t.integer       :frequency_quantity,  :null => false, :default => 1
@@ -19,15 +19,15 @@ class CreateDatabaseEvents < ActiveRecord::Migration[5.1]
       t.string        :tz,                  :null => false
       t.timestamps
     end
-    
+
     add_index :clockwork_database_events, :frequency_period_id
-    
+
     [:second, :minute, :hour, :day, :week, :month].each do |period|
         FrequencyPeriod.create(name: period)
     end
-    
-    Enterprise.update_all(:time_zone => "Eastern Time (US & Canada)")
-    
+
+    Enterprise.update_all(:time_zone => ActiveSupport::TimeZone.find_tzinfo("Eastern Time (US & Canada)").name)
+
     Enterprise.find_each do |enterprise|
       enterprise.clockwork_database_events.create!(
           [
