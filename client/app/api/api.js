@@ -14,6 +14,7 @@ import groupMessages from 'api/group_messages/group_messages';
 import groupMessageComments from 'api/group_message_comments/group_message_comments';
 import groupMembers from 'api/group_members/group_members';
 import outcomes from 'api/outcomes/outcomes';
+import customText from 'api/custom_text/custom_text';
 
 /* Metrics */
 import overviewGraphs from 'api/metrics/overview_graphs';
@@ -39,6 +40,7 @@ const Api = {
   groupMembers,
   policyGroups,
   outcomes,
+  customText,
   metrics: {
     overviewGraphs,
     userGraphs,
