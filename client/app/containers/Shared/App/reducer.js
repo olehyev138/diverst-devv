@@ -10,6 +10,11 @@ import {
   SET_USER, SET_USER_POLICY_GROUP, SET_ENTERPRISE,
   LOGIN_ERROR
 } from 'containers/Shared/App/constants';
+import {
+  UPDATE_CUSTOM_TEXT_SUCCESS
+} from 'containers//GlobalSettings/CustomText/constants';
+
+import { act } from 'react-testing-library';
 
 // The initial state of the App
 export const initialState = {
