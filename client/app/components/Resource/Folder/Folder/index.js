@@ -18,7 +18,7 @@ import messages from 'containers/Resource/Folder/messages';
 import { FormattedMessage } from 'react-intl';
 
 import { formatDateTimeString, DateTime } from 'utils/dateTimeHelpers';
-import KeyboardArrowRightIcon from "@material-ui/core/SvgIcon/SvgIcon";
+import KeyboardArrowRightIcon from '@material-ui/core/SvgIcon/SvgIcon';
 
 const styles = theme => ({
   folderListItem: {
@@ -173,7 +173,7 @@ export function Folder(props) {
         && props.resources && props.resources.length > 0 && (
           <React.Fragment>
             <Box pb={2} />
-            <Divider variant='middle'/>
+            <Divider variant='middle' />
             <Box pb={2} />
           </React.Fragment>
         )}

@@ -56,7 +56,7 @@ class Folder < ApplicationRecord
   # TODO: Find a better solution to not set enterprise for folder objects
   def nil_enterprise
     if group_id.present?
-      self.enterprise_id = nil;
+      self.enterprise_id = nil
     end
   end
 end
