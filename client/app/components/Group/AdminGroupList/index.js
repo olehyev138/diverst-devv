@@ -69,8 +69,8 @@ export function AdminGroupList(props, context) {
   if (props.groups && Object.keys(props.groups).length !== 0 && Object.keys(expandedGroups).length <= 0) {
     const initialExpandedGroups = {};
 
-    /* eslint-disable-next-line no-return-assign */
     /* Setup initial hash, with each group set to false - do it like this because of how React works with state */
+    /* eslint-disable-next-line no-return-assign */
     Object.keys(props.groups).map((id, i) => initialExpandedGroups[id] = false);
     setExpandedGroups(initialExpandedGroups);
   }
