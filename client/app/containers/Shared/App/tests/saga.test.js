@@ -24,7 +24,6 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import recordSaga from 'utils/recordSaga';
 import * as Notifiers from 'containers/Shared/Notifier/actions';
 import api from 'api/api';
-import AuthService from 'utils/authService';
 
 api.sessions.create = jest.fn();
 api.sessions.destroy = jest.fn();
@@ -33,21 +32,22 @@ api.enterprises.getSsoLink = jest.fn();
 api.policyGroups.get = jest.fn();
 window.location.assign = jest.fn();
 
-const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcmVhdGVkX2F0IjoiU3VuLCAwNCBBdWcgMjAxOSAxMzo1NjowNSBFRFQgLTA0OjAwIiwiZW1haWwiOiJkZXZAZGl2ZXJzdC5jb20iLCJlbnRlcnByaXNlIjp7ImlkIjoxLCJuYW1lIjoiUGVwc2kgQ28iLCJ0aGVtZSI6bnVsbH0sImV4cCI6MTU2NjUxNDExNSwiaWF0IjoxNTY2NTEwNTE1LCJpZCI6IjEiLCJqdGkiOiIyZjM2ODY3OC1mNmY4LTQ4NTAtYWVmYi1mNWI0YTQ1MzIyOGUiLCJyb2xlIjoiU3VwZXIgQWRtaW4iLCJ0aW1lIjoxMjM0NTY3ODkwLCJ1c2VyX3Rva2VuIjoiV0RGczNZOFdWcmFwRnktMWVjWGEiLCJwb2xpY3lfZ3JvdXAiOnsibWFuYWdlX2FsbCI6ZmFsc2V9fQ.9sYHIozRs9uUua8w9trkDIbQOG56JQ7wC3NK0tJquXg';
+const token = 'eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiZW50ZXJwcmlzZSI6eyJpZCI6MSwibmFtZSI6IlBlcHNpIENvIiwidGhlbWUiOm51bGx9LCJjcmVhdGVkX2F0IjoiU3VuLCAwNCBBdWcgMjAxOSAxMzo1NjowNSBFRFQgLTA0OjAwIiwiZW1haWwiOiJkZXZAZGl2ZXJzdC5jb20iLCJwb2xpY3lfZ3JvdXAiOnsibWFuYWdlX2FsbCI6ZmFsc2V9LCJ1c2VyX3Rva2VuIjoiV0RGczNZOFdWcmFwRnktMWVjWGEiLCJ0aW1lX3pvbmUiOiJBbWVyaWNhL05ld19Zb3JrIiwidGltZSI6MTIzNDU2Nzg5MCwicm9sZSI6IlN1cGVyIEFkbWluIiwianRpIjoiMmYzNjg2NzgtZjZmOC00ODUwLWFlZmItZjViNGE0NTMyMjhlIiwiZXhwIjoxNTY2NTE0MTE1LCJpYXQiOjE1NjY1MTA1MTV9.4tqmNDZFgWtglFw7o9dZAR_wSAqcuLpEyP7EMrnacAU';
 const user = {
   created_at: 'Sun, 04 Aug 2019 13:56:05 EDT -04:00',
   email: 'dev@diverst.com',
   enterprise: { id: 1, name: 'Pepsi Co', theme: null },
   exp: 1566514115,
   iat: 1566510515,
-  id: '1',
+  id: 1,
   jti: '2f368678-f6f8-4850-aefb-f5b4a453228e',
   role: 'Super Admin',
   time: 1234567890,
   user_token: 'WDFs3Y8WVrapFy-1ecXa',
   policy_group: {
     manage_all: false
-  }
+  },
+  time_zone: 'America/New_York',
 };
 
 beforeEach(() => {
@@ -169,7 +169,7 @@ describe('logout Saga', () => {
       type: 'app/Notifier/ENQUEUE_SNACKBAR'
     };
     jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
-    const results = [setUser(null), setUserPolicyGroup(null), logoutSuccess(), push(ROUTES.session.login.path()), notified];
+    const results = [logoutSuccess(), push(ROUTES.session.login.path()), notified];
     const initialAction = { token: 'WDFs3Y8WVrapFy-1ecXa' };
     const dispatched = await recordSaga(
       logout,
@@ -191,7 +191,7 @@ describe('logout Saga', () => {
       type: 'app/Notifier/ENQUEUE_SNACKBAR'
     };
     jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
-    const results = [setUser(null), setUserPolicyGroup(null), logoutSuccess()];
+    const results = [logoutSuccess()];
     const initialAction = { token: 'WDFs3Y8WVrapFy-1ecXa' };
     const dispatched = await recordSaga(
       logout,
@@ -206,7 +206,7 @@ describe('logout Saga', () => {
   it('should return error from API', async () => {
     const response = { response: { data: 'ERROR!' } };
     api.sessions.destroy.mockImplementation(() => Promise.reject(response));
-    const results = [setUser(null), setUserPolicyGroup(null), logoutError(response), push(ROUTES.session.login.path())];
+    const results = [logoutError(response), push(ROUTES.session.login.path())];
     const initialAction = { token: 'WDFs3Y8WVrapFy-1ecXa' };
     const dispatched = await recordSaga(
       logout,

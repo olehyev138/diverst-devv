@@ -18,6 +18,10 @@ import SnackbarProviderWrapper from 'components/Shared/SnackbarProviderWrapper';
 
 import App from 'containers/Shared/App/Loadable';
 
+// Date/time pickers
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import LuxonUtils from '@date-io/luxon';
+
 export class ThemeProvider extends React.PureComponent {
   render() {
     const defaultTheme = createMuiTheme();
@@ -76,7 +80,9 @@ export class ThemeProvider extends React.PureComponent {
     return (
       <MuiThemeProvider theme={theme}>
         <SnackbarProviderWrapper>
-          <App />
+          <MuiPickersUtilsProvider utils={LuxonUtils}>
+            <App />
+          </MuiPickersUtilsProvider>
         </SnackbarProviderWrapper>
       </MuiThemeProvider>
     );
