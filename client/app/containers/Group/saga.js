@@ -7,7 +7,8 @@ import { showSnackbar } from 'containers/Shared/Notifier/actions';
 
 import {
   GET_GROUPS_BEGIN, CREATE_GROUP_BEGIN,
-  GET_GROUP_BEGIN, UPDATE_GROUP_BEGIN, DELETE_GROUP_BEGIN
+  GET_GROUP_BEGIN, UPDATE_GROUP_BEGIN,
+  UPDATE_GROUP_SETTINGS_BEGIN, DELETE_GROUP_BEGIN
 } from 'containers/Group/constants';
 
 import {
@@ -15,6 +16,7 @@ import {
   createGroupSuccess, createGroupError,
   getGroupSuccess, getGroupError,
   updateGroupSuccess, updateGroupError,
+  updateGroupSettingsSuccess, updateGroupSettingsError,
   deleteGroupError
 } from 'containers/Group/actions';
 
@@ -77,6 +79,26 @@ export function* updateGroup(action) {
   }
 }
 
+export function* updateGroupSettings(action) {
+  try {
+    const payload = { group: action.payload };
+    const response = yield call(api.groups.update.bind(api.groups), payload.group.id, payload);
+
+    yield put(showSnackbar({
+      message: 'Group settings updated',
+      options: { variant: 'success' }
+    }));
+  } catch (err) {
+    yield put(updateGroupError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({
+      message: 'Failed to update group settings',
+      options: { variant: 'warning' }
+    }));
+  }
+}
+
 export function* deleteGroup(action) {
   try {
     yield call(api.groups.destroy.bind(api.groups), action.payload);
@@ -95,5 +117,6 @@ export default function* groupsSaga() {
   yield takeLatest(GET_GROUP_BEGIN, getGroup);
   yield takeLatest(CREATE_GROUP_BEGIN, createGroup);
   yield takeLatest(UPDATE_GROUP_BEGIN, updateGroup);
+  yield takeLatest(UPDATE_GROUP_SETTINGS_BEGIN, updateGroupSettings);
   yield takeLatest(DELETE_GROUP_BEGIN, deleteGroup);
 }
