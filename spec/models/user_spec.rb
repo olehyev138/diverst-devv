@@ -277,6 +277,29 @@ RSpec.describe User do
     end
   end
 
+  describe '#email_for_notification' do
+    let(:user) { create(:user, notifications_email: 'user@email.com') }
+
+    context 'when email_for_notification is set' do
+      it 'notifications_email attribute should not be nil or empty string' do
+        expect(user.email_for_notification).not_to be_nil
+        expect(user.email_for_notification).not_to be_empty
+      end
+
+      it 'returns selected email for notification' do
+        expect(user.email_for_notification).to eq(user.notifications_email)
+      end
+    end
+
+    context 'when email_for_notification is not set' do
+      let(:user1) { create(:user) }
+
+      it 'returns default email' do
+        expect(user1.email_for_notification).to eq(user1.email)
+      end
+    end
+  end
+
   describe '#erg_leader?' do
     let!(:user) { create :user }
     let!(:group) { create :group, enterprise: user.enterprise }

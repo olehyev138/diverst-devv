@@ -55,24 +55,41 @@ RSpec.describe BudgetsController, type: :controller do
   end
 
   describe 'GET#new' do
-    let!(:user) { create(:user) }
-    let!(:group) { create(:group, enterprise: user.enterprise) }
-
     context 'with logged user' do
       login_user_from_let
 
-      before { get :new, group_id: group.id }
+      context 'with annual budget set' do
+        before { get :new, group_id: group.id, annual_budget_id: annual_budget.id }
 
-      it 'returns a valid group object' do
-        expect(assigns[:group]).to be_valid
+        it 'returns a valid group object' do
+          expect(assigns[:group]).to be_valid
+        end
+
+        it 'return a new Budget object' do
+          expect(assigns[:budget]).to be_a_new(Budget)
+        end
+
+        it 'render new template' do
+          expect(response).to render_template :new
+        end
       end
 
-      it 'return a new Budget object' do
-        expect(assigns[:budget]).to be_a_new(Budget)
-      end
+      context 'with no annual budget set' do
+        let!(:another_group) { create(:group, enterprise: user.enterprise) }
+        let!(:another_annual_budget) { create(:annual_budget, group_id: another_group.id, amount: another_group.annual_budget, enterprise_id: user.enterprise_id) }
 
-      it 'render new template' do
-        expect(response).to render_template :new
+        before do
+          request.env['HTTP_REFERER'] = 'back'
+          get :new, group_id: another_group.id, annual_budget_id: another_annual_budget.id
+        end
+
+        it 'redirects to previous page' do
+          expect(response).to redirect_to 'back'
+        end
+
+        it 'displays flash alert message' do
+          expect(flash[:alert]).to eq 'Annual Budget is not set for this group. Please check back later.'
+        end
       end
     end
 

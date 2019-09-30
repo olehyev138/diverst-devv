@@ -5,12 +5,12 @@ class Groups::PostsController < ApplicationController
   before_action :set_twitter_accounts
   before_action :set_page,    only: [:index, :pending]
   before_action :set_link,    only: [:approve, :pin, :unpin]
+  after_action :visit_page, only: [:index, :pending]
 
   layout 'erg'
 
   def index
     @search = params[:search]
-    visit_page("#{@group.name}'s News Feed")
     @tweets = recent_tweets
     if GroupPolicy.new(current_user, @group).manage?
       without_segments
@@ -24,7 +24,6 @@ class Groups::PostsController < ApplicationController
   end
 
   def pending
-    visit_page("#{@group.name}'s Pending Posts")
     if @group.enterprise.enable_social_media?
       @posts = @group.news_feed_links.includes(:news_link, :group_message, :social_link).not_approved.where(archived_at: nil).order(created_at: :desc)
     else
@@ -129,5 +128,22 @@ class Groups::PostsController < ApplicationController
 
   def set_link
     @link = @group.news_feed_links.find(params[:link_id])
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      "#{@group.name}'s News Feed"
+    when 'pending'
+      "#{@group.name}'s Pending Posts"
+    else
+      "#{controller_path}##{action_name}"
+    end
+  rescue
+    "#{controller_path}##{action_name}"
   end
 end

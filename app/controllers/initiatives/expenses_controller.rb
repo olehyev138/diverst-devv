@@ -11,8 +11,6 @@ class Initiatives::ExpensesController < ApplicationController
   def index
     authorize InitiativeExpense
     @expenses = @initiative.expenses
-
-    redirect_to :back if @initiative.has_no_estimated_funding?
   end
 
   def new
@@ -25,20 +23,15 @@ class Initiatives::ExpensesController < ApplicationController
     @expense = @initiative.expenses.new(expense_params)
     @expense.owner = current_user
 
-    if @initiative.has_no_estimated_funding?
-      flash[:alert] = 'you are not allowed to create a negative expense'
-      render :new
-    else
-      annual_budget = current_user.enterprise.annual_budgets.find_or_create_by(closed: false, group_id: @group.id)
-      annual_budget.initiative_expenses << @expense
+    annual_budget = current_user.enterprise.annual_budgets.find_or_create_by(closed: false, group_id: @group.id)
+    annual_budget.initiative_expenses << @expense
 
-      if @expense.save
-        flash[:notice] = 'Your expense was created'
-        redirect_to action: :index
-      else
-        flash[:alert] = 'Your expense was not created. Please fix the errors'
-        render :new
-      end
+    if @expense.save
+      flash[:notice] = 'Your expense was created'
+      redirect_to action: :index
+    else
+      flash[:alert] = 'Your expense was not created. Please fix the errors'
+      render :new
     end
   end
 

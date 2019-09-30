@@ -24,12 +24,12 @@
           </div>
           <div class="flex-row__cell flex-row__cell--grow flex-row__cell--spaced" style="margin-bottom: 20px;">
             <div class="progress-bar">
-              <div class="progress-bar__fill" style="width: <%= AnnualBudgetDecorator.decorate(annual_budget).spendings_percentage %>%;>"></div>
+              <div class="progress-bar__fill <%= " warning" if negative_budget_pressure(annual_budget: annual_budget) %>" style="width: <%= AnnualBudgetDecorator.decorate(annual_budget).spendings_percentage %>%;>"></div>
             </div>
           </div>
           <div class="flex-row__cell flex-row__cell--spaced">
             <strong>Annual Budget</strong><br>
-            <%= number_to_currency(annual_budget.amount) %>
+            <%= number_to_currency(annual_budget.amount) %><%= inline_svg('icons/information', class: 'icon', title: 'total expenses exceeds annual budget ') if negative_budget_pressure(annual_budget: annual_budget) %>
           </div>
         </div>
 
@@ -37,13 +37,13 @@
           <thead>
             <th>Annual Budget</th>
             <th>Approved budget</th>
-            <th>Available budget</th>
+            <th title="Approved Budget - Spent Budget">Available budget</th>
           </thead>
           <tbody>
             <td><%= number_to_currency(annual_budget.amount) %></td>
             <td><%= number_to_currency(annual_budget.approved_budget) %></td>
             <td>
-              <%= number_to_currency(annual_budget.available_budget) %>
+              <%= number_to_currency(annual_budget.available_budget) %><%= inline_svg('icons/information', class: 'icon', title: 'available budget is negative because total expenses exceeds approved budget ') if annual_budget.available_budget < 0 %>
             </td>
           </tbody>
         </table>
@@ -55,7 +55,7 @@
             <th>Event</th>
             <th>Estimated funding</th>
             <th>Spent so far</th>
-            <th>Unspent</th>
+            <th title="Estimated funding - Expenses">Unspent</th>
             <th>Spending status</th>
           </thead>
           <tbody>

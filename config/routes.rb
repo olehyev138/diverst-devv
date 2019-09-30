@@ -17,7 +17,7 @@ Rails.application.routes.draw do
 
   get 'users/invitation', to: 'users/invitations#index'
 
-  get 'omniauth/:provider/callback', to: 'omni_auth#callback'
+  get 'omniauth/:provider/callback', to: 'omni_auth#callback', as: 'omniauth_callback'
 
   get 'tags', to: 'news_tags#tags_search'
 
@@ -189,6 +189,10 @@ Rails.application.routes.draw do
       get 'get_all_groups'
       get 'get_paginated_groups'
     end
+    member do
+      get 'slack_button_redirect'
+      get 'slack_uninstall'
+    end
     resources :budgets, only: [:index, :show, :new, :create, :destroy] do
       post 'approve'
       post 'decline'
@@ -210,6 +214,7 @@ Rails.application.routes.draw do
           delete 'leave_all_sub_groups'
           get 'view_sub_groups'
           get 'export_group_members_list_csv'
+          post 'export_sub_groups_members_list_csv'
         end
         member do
           post 'accept_pending'
@@ -490,8 +495,8 @@ Rails.application.routes.draw do
       get 'rewards', to: 'dashboard#rewards'
       get 'bias', to: 'dashboard#bias'
       get 'privacy_statement', to: 'dashboard#privacy_statement'
-      get 'preferences/edit', to: 'user_groups#edit'
-      patch 'preferences/update', to: 'user_groups#update'
+      get 'preferences/edit', to: 'users#edit'
+      patch 'preferences/update', to: 'users#update'
 
       resources :social_links
       resources :news_links
@@ -608,6 +613,8 @@ Rails.application.routes.draw do
         get 'user_groups_intersection'
         get 'url_usage_data'
         get 'user_usage_data'
+        get 'users_usage_graph'
+        get 'users_usage_metric'
       end
     end
 
@@ -642,6 +649,13 @@ Rails.application.routes.draw do
         get 'mentoring_interests'
         get 'mentors_per_group'
         get 'top_mentors'
+        get 'users_mentorship_count'
+        get 'user_mentors'
+        get 'users_mentorship'
+      end
+
+      member do
+        get 'user_mentorship'
       end
     end
 

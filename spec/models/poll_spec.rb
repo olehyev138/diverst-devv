@@ -5,18 +5,18 @@ RSpec.describe Poll, type: :model do
     let(:poll) { build_stubbed(:poll) }
 
     context 'test associations' do
-      it { expect(poll).to belong_to(:enterprise).inverse_of(:polls) }
+      it { expect(poll).to belong_to(:enterprise).inverse_of(:polls).counter_cache(true) }
       it { expect(poll).to belong_to(:owner).class_name('User') }
       it { expect(poll).to belong_to(:initiative) }
 
       it { expect(poll).to have_many(:segments).inverse_of(:polls).through(:polls_segments) }
       it { expect(poll).to have_many(:groups).through(:groups_polls) }
 
-      it { expect(poll).to have_many(:fields) }
-      it { expect(poll).to have_many(:responses).class_name('PollResponse').inverse_of(:poll) }
-      it { expect(poll).to have_many(:graphs) }
-      it { expect(poll).to have_many(:polls_segments) }
-      it { expect(poll).to have_many(:groups_polls) }
+      it { expect(poll).to have_many(:fields).dependent(:destroy) }
+      it { expect(poll).to have_many(:responses).class_name('PollResponse').inverse_of(:poll).dependent(:destroy) }
+      it { expect(poll).to have_many(:graphs).dependent(:destroy) }
+      it { expect(poll).to have_many(:polls_segments).dependent(:destroy) }
+      it { expect(poll).to have_many(:groups_polls).dependent(:destroy) }
       it { expect(poll).to have_many(:groups).inverse_of(:polls).through(:groups_polls) }
       it { expect(poll).to accept_nested_attributes_for(:fields).allow_destroy(true) }
     end
@@ -31,6 +31,9 @@ RSpec.describe Poll, type: :model do
       [:title, :description, :status, :enterprise, :owner].each do |attribute|
         it { expect(poll).to validate_presence_of(attribute) }
       end
+
+      it { expect(poll).to validate_length_of(:description).is_at_most(65535) }
+      it { expect(poll).to validate_length_of(:title).is_at_most(191) }
     end
 
     it { expect(poll).to define_enum_for(:status).with([:published, :draft]) }
@@ -249,8 +252,29 @@ RSpec.describe Poll, type: :model do
     end
   end
 
+  describe '#can_be_saved_as_draft?' do
+    it 'return true if new record' do
+      poll = build(:poll)
+      expect(poll.can_be_saved_as_draft?).to eq(true)
+    end
+
+    it 'returns true if draft' do
+      poll = create(:poll, status: 1)
+      expect(poll.can_be_saved_as_draft?).to eq(true)
+    end
+  end
+
+  describe '#graphable_fields' do
+    let(:user) { create(:user) }
+    let(:poll) { create(:poll, enterprise_id: user.enterprise.id) }
+
+    it 'returns enterprise fields' do
+      expect(poll.graphable_fields(user)).to eq user.enterprise.fields + poll.fields
+    end
+  end
+
   describe '#destroy_callbacks' do
-    it 'removes the child objects', skip: 'this spec will pass when PR 1245 is merged to master' do
+    it 'removes the child objects' do
       poll = create(:poll)
       field = create(:field, poll: poll)
       response = create(:poll_response, poll: poll)

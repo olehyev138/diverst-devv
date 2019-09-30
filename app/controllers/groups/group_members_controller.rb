@@ -115,6 +115,7 @@ class Groups::GroupMembersController < ApplicationController
       UserGroup.create(group_id: @group.id, user_id: user.id, accepted_member: @group.pending_users.disabled?)
     end
 
+    track_activity(@group, :add_members_to_group)
     redirect_to action: 'index'
   end
 
@@ -122,6 +123,7 @@ class Groups::GroupMembersController < ApplicationController
     authorize [@group, @member], :destroy?, policy_class: GroupMemberPolicy
 
     @group.members.destroy(@member)
+    track_activity(@group, :remove_member_from_group)
     redirect_to action: :index
   end
 
@@ -192,6 +194,15 @@ class Groups::GroupMembersController < ApplicationController
     export_csv_params = params[:export_csv_params]
     GroupMemberListDownloadJob.perform_later(current_user.id, @group.id, export_csv_params)
     track_activity(@group, :export_member_list)
+    flash[:notice] = 'Please check your Secure Downloads section in a couple of minutes'
+    redirect_to :back
+  end
+
+  def export_sub_groups_members_list_csv
+    authorize [@group], :update?, policy_class: GroupMemberPolicy
+    groups = Group.where(id: params['groups'].values, enterprise_id: current_user.enterprise_id)
+    groups.each { |group| GroupMemberListDownloadJob.perform_later(current_user.id, group.id, '') }
+    track_activity(@group, :export_sub_groups_members_list)
     flash[:notice] = 'Please check your Secure Downloads section in a couple of minutes'
     redirect_to :back
   end

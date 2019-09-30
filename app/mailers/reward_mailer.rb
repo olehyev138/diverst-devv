@@ -2,7 +2,7 @@ class RewardMailer < ApplicationMailer
   def redeem_reward(responsible, user, reward)
     @user = user
     @reward = reward
-    @email = responsible.email
+    @email = responsible.email_for_notification
     return if @user.enterprise.disable_emails?
 
     set_defaults(@user.enterprise, method_name)

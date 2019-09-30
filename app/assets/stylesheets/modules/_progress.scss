@@ -20,3 +20,7 @@
   border-radius: $border-radius;
   transition: width $time $curve;
 }
+
+.warning {
+  background-color: $diverst-warning-red;
+}

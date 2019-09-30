@@ -66,6 +66,11 @@ class Initiative < BaseClass
   # we don't want to run this callback when finish_expenses! is triggered in initiatives_controller.rb, finish_expense action
   before_save { allocate_budget_funds unless skip_allocate_budget_funds }
 
+  # Slack Call Back
+  after_create :post_new_event_to_slack, unless: Proc.new { Rails.env.test? }
+
+  after_destroy :update_annual_budget
+
   has_attached_file :picture, styles: { medium: '1000x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: 'private'
   validates_attachment_content_type :picture, content_type: %r{\Aimage\/.*\Z}
 
@@ -98,6 +103,10 @@ class Initiative < BaseClass
         end
       end
     end
+  end
+
+  def ended?
+    self.end < DateTime.now
   end
 
   def archived?
@@ -358,7 +367,94 @@ class Initiative < BaseClass
     report.to_csv
   end
 
+  def text_description
+    HtmlHelper.to_pain_text(description)
+  end
+
+  def mrkdwn_description
+    HtmlHelper.to_mrkdwn(description)
+  end
+
+  def to_slack_block(modifier: '')
+    [
+      slack_block_title(modifier: modifier)
+        .merge(slack_block_image)
+        .merge(slack_time_frame),
+      slack_view_event_button,
+      slack_last_updated
+    ]
+  end
+
   protected
+
+  def slack_block_title(modifier: '')
+    {
+      type: 'section',
+      text: {
+        type: 'mrkdwn',
+        text: "*#{modifier} Event: #{name}*\n#{mrkdwn_description}"
+      }
+    }
+  end
+
+  def slack_block_image
+    if picture_file_name.present?
+      {
+        accessory: {
+          type: 'image',
+          image_url: picture.expiring_url(5.days),
+          alt_text: 'Event Picture'
+        }
+      }
+    else
+      {}
+    end
+  end
+
+  def slack_time_frame
+    {
+      fields: [
+        {
+          type: 'mrkdwn',
+          text: "*Start Time*\n#{start.strftime('%F %T')}"
+        },
+        {
+          type: 'mrkdwn',
+          text: "*End Time*\n#{self.end.strftime('%F %T')}"
+        }
+      ]
+    }
+  end
+
+  def slack_view_event_button
+    {
+      type: 'actions',
+      elements: [
+        {
+          type: 'button',
+          text: {
+            type: 'plain_text',
+            emoji: true,
+            text: 'View Event'
+          },
+          url: group_event_url(group.id, id),
+          style: 'primary'
+        }
+      ]
+    }
+  end
+
+  def slack_last_updated
+    {
+      type: 'context',
+      elements: [
+        {
+          type: 'mrkdwn',
+          text: "Last updated: #{updated_at.strftime('%F %T')}"
+        }
+      ]
+    }
+  end
 
   def update_owner_group
     return true if self.owner_group_id
@@ -445,5 +541,36 @@ class Initiative < BaseClass
     initiatives = group.initiatives.where('end < ?', expiry_date).where(archived_at: nil)
 
     initiatives.update_all(archived_at: DateTime.now) if initiatives.any?
+  end
+
+  private
+
+  def post_new_event_to_slack
+    pk, _ = enterprise.get_colours
+    message = {
+      attachments: [
+        {
+          fallback: "New Event for #{group.name}",
+          color: pk,
+          blocks: to_slack_block(modifier: 'New')
+        }
+      ]
+    }
+    group.send_slack_webhook_message message
+    participating_groups.each do |gr|
+      gr.send_slack_webhook_message message
+    end
+  end
+
+  def update_annual_budget
+    group = owner_group
+    annual_budget = AnnualBudget.find_or_create_by(closed: false, group_id: group.id)
+    return if annual_budget.nil?
+
+    leftover_of_annual_budget = ((group.annual_budget || annual_budget.amount) - group.approved_budget) + group.available_budget
+    group.update(leftover_money: leftover_of_annual_budget, annual_budget: annual_budget.amount)
+    annual_budget.update(amount: group.annual_budget, available_budget: group.available_budget,
+                         leftover_money: group.leftover_money, expenses: group.spent_budget,
+                         approved_budget: group.approved_budget)
   end
 end

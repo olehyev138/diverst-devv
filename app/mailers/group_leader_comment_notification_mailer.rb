@@ -5,7 +5,7 @@ class GroupLeaderCommentNotificationMailer < ApplicationMailer
     @count = count
     return if @leader.enterprise.disable_emails?
 
-    @email = @leader.email
+    @email = @leader.email_for_notification
 
     set_defaults(@leader.enterprise, method_name)
 

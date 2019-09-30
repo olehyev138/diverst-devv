@@ -36,6 +36,9 @@ class Enterprise < BaseClass
   has_many :yammer_field_mappings, dependent: :destroy
   has_many :emails, dependent: :destroy
   has_many :email_variables, class_name: 'EnterpriseEmailVariable', dependent: :destroy
+  has_many :total_page_visitations
+  has_many :total_page_visitation_by_name
+
   belongs_to :theme
 
   has_many :expenses, dependent: :destroy
@@ -47,7 +50,7 @@ class Enterprise < BaseClass
   has_many :mentoring_requests, dependent: :destroy
   has_many :mentoring_sessions, dependent: :destroy
   has_many :mentoring_types, dependent: :destroy
-  has_many :sponsors, as: :sponsorable, dependent: :destroy
+  has_many :sponsors, dependent: :destroy
 
   has_many :policy_group_templates, dependent: :destroy
   has_many :rewards, dependent: :destroy
@@ -736,6 +739,16 @@ class Enterprise < BaseClass
   def logs_csv
     logs = PublicActivity::Activity.includes(:owner, :trackable).where(recipient: self).order(created_at: :desc)
     LogCsv.build(logs)
+  end
+
+  def get_colours
+    if theme.nil?
+      %w(#7B77C9 #7B77C9)
+    else
+      p_color = theme.primary_color || '#7B77C9'
+      s_color = theme.secondary_color || p_color
+      [p_color, s_color]
+    end
   end
 
   protected
