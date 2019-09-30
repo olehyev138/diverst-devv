@@ -12,7 +12,7 @@ import saga from 'containers/Resource/saga';
 
 import { selectGroup } from 'containers/Group/selectors';
 import { selectPaginatedSelectFolders } from 'containers/Resource/selectors';
-import { selectUser } from 'containers/Shared/App/selectors';
+import { selectUser, selectEnterprise } from 'containers/Shared/App/selectors';
 
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -24,14 +24,18 @@ export function FolderCreatePage(props) {
   useInjectReducer({ key: 'resource', reducer });
   useInjectSaga({ key: 'resource', saga });
 
-  const { currentUser, currentGroup } = props;
+  const { currentUser, currentGroup, currentEnterprise } = props;
   const rs = new RouteService(useContext);
 
   let foldersIndexPath;
-  if (props.path.startsWith('/groups'))
+  let type;
+  if (props.path.startsWith('/groups')) {
+    type = 'group';
     foldersIndexPath = ROUTES.group.resources.folders.index.path(rs.params('group_id'));
-  else
+  } else {
+    type = 'admin';
     foldersIndexPath = ROUTES.admin.manage.resources.folders.index.path();
+  }
 
   const links = {
     foldersIndex: foldersIndexPath,
@@ -39,7 +43,10 @@ export function FolderCreatePage(props) {
 
   useEffect(() => {
     const groupId = rs.params('group_id');
-    props.getFoldersBegin({ group_id: groupId[0] });
+    if (type === 'group')
+      props.getFoldersBegin({ group_id: groupId[0] });
+    else if (type === 'admin')
+      props.getFoldersBegin({ group_id: currentEnterprise.id });
     return () => props.foldersUnmount();
   }, []);
 
@@ -52,6 +59,7 @@ export function FolderCreatePage(props) {
       currentUser={currentUser}
       currentGroup={currentGroup}
       links={links}
+      type={type}
     />
   );
 }
@@ -64,6 +72,7 @@ FolderCreatePage.propTypes = {
   foldersUnmount: PropTypes.func,
   currentUser: PropTypes.object,
   currentGroup: PropTypes.object,
+  currentEnterprise: PropTypes.object,
   folders: PropTypes.array
 };
 
@@ -71,6 +80,7 @@ const mapStateToProps = createStructuredSelector({
   currentGroup: selectGroup(),
   currentUser: selectUser(),
   folders: selectPaginatedSelectFolders(),
+  currentEnterprise: selectEnterprise(),
 });
 
 const mapDispatchToProps = {

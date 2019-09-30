@@ -22,10 +22,24 @@ import { buildValues, mapFields } from 'utils/formHelpers';
 
 /* eslint-disable object-curly-newline */
 export function FolderFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
+  const getGroupId = () => {
+    if (props.type === 'group' && props.currentGroup)
+      return props.currentGroup.id;
+    return null;
+  };
+
+  const getEnterpriseId = () => {
+    if (props.type === 'admin' && props.currentEnterprise)
+      return props.currentEnterprise.id;
+    return null;
+  };
+
   const parentSelectAction = (searchKey = '') => {
     props.getFoldersBegin({
       count: 10, page: 0, order: 'asc',
       search: searchKey,
+      group_id: getGroupId(),
+      enterprise_id: getEnterpriseId(),
     });
   };
 
@@ -127,7 +141,8 @@ export function FolderForm(props) {
     password: { default: '' },
     password_protected: { default: false },
     owner_id: { default: dig(props, 'currentUser', 'id') || '' },
-    group_id: { default: dig(props, 'currentGroup', 'id') || '' }
+    group_id: { default: props.type === 'group' ? dig(props, 'currentGroup', 'id') : '' },
+    enterprise_id: { default: props.type === 'admin' ? dig(props, 'currentEnterprise', 'id') : '' }
   });
 
   return (
@@ -144,17 +159,22 @@ export function FolderForm(props) {
 }
 
 FolderForm.propTypes = {
+  type: PropTypes.string,
   getFoldersBegin: PropTypes.func,
   selectFolders: PropTypes.array,
   folderAction: PropTypes.func,
   folder: PropTypes.object,
   currentUser: PropTypes.object,
-  currentGroup: PropTypes.object
+  currentGroup: PropTypes.object,
+  currentEnterprise: PropTypes.object,
 };
 
 FolderFormInner.propTypes = {
+  type: PropTypes.string,
   getFoldersBegin: PropTypes.func,
   selectFolders: PropTypes.array,
+  currentGroup: PropTypes.object,
+  currentEnterprise: PropTypes.object,
   handleSubmit: PropTypes.func,
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,

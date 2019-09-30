@@ -12,6 +12,7 @@ import reducer from 'containers/Resource/reducer';
 import saga from 'containers/Resource/saga';
 
 import { selectPaginatedFolders, selectFoldersTotal } from 'containers/Resource/selectors';
+import { selectEnterprise } from 'containers/Shared/App/selectors';
 import { getFoldersBegin, foldersUnmount } from 'containers/Resource/actions';
 
 import RouteService from 'utils/routeHelpers';
@@ -58,15 +59,24 @@ export function FoldersPage(props) {
   const [params, setParams] = useState(defaultParams);
 
   const getFolders = (scopes, resetParams = false) => {
-    const id = dig(props, 'currentGroup', 'id');
+    const groupId = dig(props, 'currentGroup', 'id');
+    const enterpriseId = dig(props, 'currentEnterprise', 'id');
 
     if (resetParams)
       setParams(defaultParams);
 
-    if (id) {
+    if (groupId) {
       const newParams = {
         ...params,
-        group_id: id,
+        group_id: groupId,
+        parent_id: null,
+      };
+      props.getFoldersBegin(newParams);
+      setParams(newParams);
+    } else {
+      const newParams = {
+        ...params,
+        enterprise_id: enterpriseId,
         parent_id: null,
       };
       props.getFoldersBegin(newParams);
@@ -108,11 +118,15 @@ FoldersPage.propTypes = {
   currentGroup: PropTypes.shape({
     id: PropTypes.number,
   }),
+  currentEnterprise: PropTypes.shape({
+    id: PropTypes.number,
+  }),
 };
 
 const mapStateToProps = createStructuredSelector({
   folders: selectPaginatedFolders(),
   foldersTotal: selectFoldersTotal(),
+  currentEnterprise: selectEnterprise(),
 });
 
 const mapDispatchToProps = {

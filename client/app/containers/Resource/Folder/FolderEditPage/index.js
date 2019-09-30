@@ -16,7 +16,7 @@ import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { selectGroup } from 'containers/Group/selectors';
-import { selectUser } from 'containers/Shared/App/selectors';
+import { selectUser, selectEnterprise } from 'containers/Shared/App/selectors';
 import { selectFolder, selectPaginatedSelectFolders, selectValid } from 'containers/Resource/selectors';
 
 import {
@@ -40,25 +40,32 @@ export function FolderEditPage(props) {
   const rs = new RouteService(useContext);
 
   let foldersIndexPath;
-  if (props.path.startsWith('/groups'))
+  let type;
+  if (props.path.startsWith('/groups')) {
+    type = 'group';
     foldersIndexPath = ROUTES.group.resources.folders.index.path(rs.params('group_id'));
-  else
+  } else {
+    type = 'admin';
     foldersIndexPath = ROUTES.admin.manage.resources.folders.index.path();
+  }
 
   const links = {
     foldersIndex: foldersIndexPath,
   };
 
+  const { currentUser, currentGroup, currentFolder, currentEnterprise, valid } = props;
+
   useEffect(() => {
     const folderId = rs.params('item_id');
     const groupId = rs.params('group_id');
     props.getFolderBegin({ id: folderId });
-    props.getFoldersBegin({ group_id: groupId[0] });
+    if (type === 'group')
+      props.getFoldersBegin({ group_id: groupId[0] });
+    else if (type === 'admin')
+      props.getFoldersBegin({ group_id: currentEnterprise.id });
 
     return () => props.foldersUnmount();
   }, []);
-
-  const { currentUser, currentGroup, currentFolder, valid } = props;
 
   return (
     <div>
@@ -115,6 +122,7 @@ export function FolderEditPage(props) {
           currentGroup={currentGroup}
           folder={currentFolder}
           links={links}
+          type={type}
         />
       )}
     </div>
@@ -132,6 +140,7 @@ FolderEditPage.propTypes = {
   currentUser: PropTypes.object,
   currentGroup: PropTypes.object,
   currentFolder: PropTypes.object,
+  currentEnterprise: PropTypes.object,
   folders: PropTypes.array,
   valid: PropTypes.bool,
 };
@@ -141,6 +150,7 @@ const mapStateToProps = createStructuredSelector({
   currentUser: selectUser(),
   currentFolder: selectFolder(),
   folders: selectPaginatedSelectFolders(),
+  currentEnterprise: selectEnterprise(),
   valid: selectValid(),
 });
 
