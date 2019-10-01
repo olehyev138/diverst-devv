@@ -56,6 +56,10 @@ class UserPolicy < ApplicationPolicy
     @user != @record ? true : false
   end
 
+  def users_points_ranking?
+    create?
+  end
+
   class Scope < Scope
     def index?
       UserPolicy.new(user, nil).index?

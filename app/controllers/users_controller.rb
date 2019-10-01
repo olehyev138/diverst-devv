@@ -197,6 +197,17 @@ class UsersController < ApplicationController
     end
   end
 
+  def users_points_ranking
+    authorize User
+
+    @users = current_user.enterprise.users.limit(params[:limit] || 25)
+
+    respond_to do |format|
+      format.html
+      format.json { render json: UserDatatable.new(view_context, @users) }
+    end
+  end
+
   protected
 
   def get_user_usage_metrics
