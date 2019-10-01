@@ -204,7 +204,7 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.json { render json: UserDatatable.new(view_context, @users) }
+      format.json { render json: UsersByPointsDatatable.new(view_context, @users) }
     end
   end
 
