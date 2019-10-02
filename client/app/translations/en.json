@@ -150,5 +150,17 @@
   "diverst.containers.Folder.show.addResource" : "+ Add Resource",
   "diverst.containers.Folder.show.parentFolder" : "⤣ Parent Folder",
   "diverst.containers.Folder.show.empty" : "There are currently no Resources or Sub-Folders",
-  "diverst.containers.Folder.folders" : "Folders"
+  "diverst.containers.Folder.folders" : "Folders",
+  "diverst.containers.Resource.resources" : "Resources",
+  "diverst.containers.Resource.index.button.new" : "New Resource",
+  "diverst.containers.Resource.index.button.edit" : "Edit Resource",
+  "diverst.containers.Resource.index.button.delete" : "Delete Resource",
+  "diverst.containers.Resource.index.button.confirm_delete" : "Delete Resource?",
+  "diverst.containers.Resource.form.button.create" : "Create Resource",
+  "diverst.containers.Resource.form.button.update" : "Update Resource",
+  "diverst.containers.Resource.form.button.cancel" : "Cancel",
+  "diverst.containers.Resource.form.input.title" : "Give this resource a title!",
+  "diverst.containers.Resource.form.input.folder" : "Move to a Folder",
+  "diverst.containers.Resource.form.input.upload" : "Upload the file you want to share",
+  "diverst.containers.Resource.form.input.url" : "URL",
 }
