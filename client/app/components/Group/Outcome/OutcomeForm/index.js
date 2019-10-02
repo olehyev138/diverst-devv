@@ -190,6 +190,7 @@ OutcomeForm.propTypes = {
 };
 
 OutcomeFormInner.propTypes = {
+  classes: PropTypes.object,
   outcome: PropTypes.object,
   handleSubmit: PropTypes.func,
   handleChange: PropTypes.func,
