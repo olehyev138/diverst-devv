@@ -70,6 +70,7 @@ Rails.application.routes.draw do
       get 'sent_invitations'
       get 'saml_logins'
       get 'users_points_ranking'
+      get 'users_points_csv'
     end
   end
 

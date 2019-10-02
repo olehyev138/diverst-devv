@@ -60,6 +60,10 @@ class UserPolicy < ApplicationPolicy
     create?
   end
 
+  def users_points_csv?
+    users_points_ranking?
+  end
+
   class Scope < Scope
     def index?
       UserPolicy.new(user, nil).index?

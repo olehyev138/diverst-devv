@@ -209,17 +209,12 @@ class Enterprise < BaseClass
     User.to_csv(users: [], fields: fields, nb_rows: nb_rows)
   end
 
-  def users_points_report_csv
+  def users_points_report_csv(users)
     CSV.generate do |csv|
-      first_row = %w(first_name last_name points)
-
-      csv << first_row
+      csv << ['Name', 'Email', 'Points']
 
       users.order(points: :desc).each do |user|
-        users_points = []
-        users_points << [user.first_name, user.last_name, user.email, user.points]
-
-        csv << users_points
+        csv << [user.name, user.email, user.points]
       end
     end
   end
