@@ -8,6 +8,6 @@ FactoryBot.define do
     job_name { 'UserGroupNotificationJob' }
     method_name { 'perform_later' }
     method_args { '{"notifications_frequency":"weekly"}' }
-    tz { 'Eastern Time (US & Canada)' }
+    tz { ActiveSupport::TimeZone.find_tzinfo('Eastern Time (US & Canada)').name }
   end
 end

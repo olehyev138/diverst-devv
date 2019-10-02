@@ -5,6 +5,7 @@ import AdminLayout from 'containers/Layouts/AdminLayout/Loadable';
 import SessionLayout from 'containers/Layouts/SessionLayout/Loadable';
 import ErrorLayout from 'containers/Layouts/ErrorLayout/Loadable';
 import GlobalSettingsLayout from 'containers/Layouts/GlobalSettingsLayout/Loadable';
+import GroupManageLayout from 'containers/Layouts/GroupManageLayout/Loadable';
 
 
 /* Session */
@@ -70,6 +71,9 @@ import OutcomeEditPage from 'containers/Group/Outcome/OutcomeEditPage/Loadable';
 import GroupMemberListPage from 'containers/Group/GroupMembers/GroupMemberListPage/Loadable';
 import GroupMemberCreatePage from 'containers/Group/GroupMembers/GroupMemberCreatePage/Loadable';
 
+/* Group - Manage */
+import GroupSettingsPage from 'containers/Group/GroupManage/GroupSettingsPage/Loadable';
+
 /* Group/Admin - Resource */
 import FoldersPage from 'containers/Resource/Folder/FoldersPage/Loadable';
 import FolderCreatePage from 'containers/Resource/Folder/FolderCreatePage/Loadable';
@@ -88,6 +92,6 @@ export {
   EventCreatePage, EventEditPage, GroupMessagePage, GroupMessageCreatePage, GroupMessageEditPage, OutcomeCreatePage,
   OutcomeEditPage, GroupMemberListPage, GroupMemberCreatePage, NotFoundPage, PlaceholderPage, GroupDashboardPage,
   UserDashboardPage, MetricsDashboardListPage, MetricsDashboardCreatePage, MetricsDashboardEditPage, MetricsDashboardPage,
-  CustomGraphCreatePage, CustomGraphEditPage, CustomTextEditPage, FoldersPage, FolderCreatePage, FolderEditPage,
-  FolderPage
+  CustomGraphCreatePage, CustomGraphEditPage, GroupManageLayout, GroupSettingsPage, CustomTextEditPage, FoldersPage,
+  FolderCreatePage, FolderEditPage, FolderPage
 };

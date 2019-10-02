@@ -92,12 +92,12 @@ RSpec.describe Enterprise, type: :model do
   describe '#default_time_zone' do
     it 'returns UTC' do
       enterprise = build_stubbed(:enterprise, time_zone: nil)
-      expect(enterprise.default_time_zone).to eq 'UTC'
+      expect(enterprise.default_time_zone).to eq ActiveSupport::TimeZone.find_tzinfo('UTC').name
     end
 
     it 'returns EST' do
-      enterprise = build_stubbed(:enterprise, time_zone: 'EST')
-      expect(enterprise.default_time_zone).to eq 'EST'
+      enterprise = build_stubbed(:enterprise, time_zone: 'America/New_York')
+      expect(enterprise.default_time_zone).to eq 'America/New_York'
     end
   end
 

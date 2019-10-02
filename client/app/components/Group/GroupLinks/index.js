@@ -219,7 +219,10 @@ export function GroupLinks(props) {
         </Button>
 
         <Button
+          component={WrappedNavLink}
           className={classes.navLink}
+          activeClassName={classes.navLinkActive}
+          to={ROUTES.group.manage.settings.index.path(rs.params('group_id'))}
         >
           <Hidden smDown>
             <ManageIcon className={classes.navIcon} />

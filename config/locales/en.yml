@@ -52,9 +52,6 @@ en:
     parent: Parent
     sub_erg: Sub-Group
     privacy_statement: Privacy Statement
-  time:
-    formats:
-      default: "%l:%M %p"
   activerecord:
     attributes:
       mentoring_request:

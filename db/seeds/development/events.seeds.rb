@@ -1,7 +1,7 @@
 after 'development:enterprise' do
   spinner = TTY::Spinner.new(":spinner Populating enterprises with events...", format: :spin_2)
   spinner.run do |spinner|
-    Enterprise.update_all(:time_zone => "Eastern Time (US & Canada)")
+    Enterprise.update_all(:time_zone => ActiveSupport::TimeZone.find_tzinfo("Eastern Time (US & Canada)").name)
 
     Enterprise.all.each do |enterprise|
       [:second, :minute, :hour, :day, :week, :month].each do |period|
