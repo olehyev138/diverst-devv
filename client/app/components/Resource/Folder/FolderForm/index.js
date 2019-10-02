@@ -134,22 +134,10 @@ export function FolderFormInner({ handleSubmit, handleChange, handleBlur, values
 
 export function FolderForm(props) {
   const folder = dig(props, 'folder');
-
-  let defaultParent;
-  if (folder)
-    if (folder.parent)
-      defaultParent = { value: folder.parent.id, label: folder.parent.name };
-    else
-      defaultParent = null;
-  else if (props.from)
-    defaultParent = { value: props.from.folder.id, label: props.from.folder.name };
-  else
-    defaultParent = null;
-
   const initialValues = buildValues(folder, {
     id: { default: '' },
     name: { default: '' },
-    parent: { set: defaultParent, customKey: 'parent_id' },
+    parent: { default: props.from && props.from.action === 'new' ? { value: props.from.folder.id, label: props.from.folder.name } : null, customKey: 'parent_id' },
     password: { default: '' },
     password_protected: { default: false },
     owner_id: { default: dig(props, 'currentUser', 'id') || '' },

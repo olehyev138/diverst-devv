@@ -17,7 +17,7 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { selectGroup } from 'containers/Group/selectors';
 import { selectUser, selectEnterprise } from 'containers/Shared/App/selectors';
-import { selectFolder, selectPaginatedSelectFolders, selectValid } from 'containers/Resource/selectors';
+import { selectFormFolder, selectPaginatedSelectFolders, selectValid } from 'containers/Resource/selectors';
 
 import {
   getFolderBegin, updateFolderBegin,
@@ -154,7 +154,7 @@ FolderEditPage.propTypes = {
 const mapStateToProps = createStructuredSelector({
   currentGroup: selectGroup(),
   currentUser: selectUser(),
-  currentFolder: selectFolder(),
+  currentFolder: selectFormFolder(),
   folders: selectPaginatedSelectFolders(),
   currentEnterprise: selectEnterprise(),
   valid: selectValid(),
