@@ -98,7 +98,7 @@ export default function Routes(props) {
       <GroupManageLayout {...expandRoute(ROUTES.group.manage.leaders.index)} component={PlaceholderPage} />
 
       { /* Group Resources */ }
-      <GroupLayout {...expandRoute(ROUTES.group.resources.resources.new)} component={ResourceCreatePage} />}
+      <GroupLayout {...expandRoute(ROUTES.group.resources.resources.new)} component={ResourceCreatePage} />
 
       <GroupLayout {...expandRoute(ROUTES.group.resources.folders.edit)} component={FolderEditPage} />
       <GroupLayout {...expandRoute(ROUTES.group.resources.folders.new)} component={FolderCreatePage} />
