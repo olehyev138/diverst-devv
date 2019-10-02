@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useState } from 'react';
 
 import { compose } from 'redux/';
 import PropTypes from 'prop-types';
@@ -16,6 +16,8 @@ import LockIcon from '@material-ui/icons/Lock';
 import classNames from 'classnames';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
+import Pagination from 'components/Shared/Pagination';
+
 import messages from 'containers/Resource/Folder/messages';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 
@@ -54,12 +56,39 @@ const styles = theme => ({
 export function Folder(props) {
   /* Render an Folder */
 
+  const [foldPage, setFoldPage] = useState(0);
+  const [resPage, setResPage] = useState(0);
+
+  const [rowsPerFoldPage, setRowsPerFoldPage] = useState(5);
+  const [rowsPerResPage, setRowsPerResPage] = useState(5);
+
   const { classes } = props;
   const folder = dig(props, 'folder');
+
+  const handleFolderChangePage = (folder, newPage) => {
+    setFoldPage(newPage);
+    props.handlePagination({ count: rowsPerFoldPage, page: newPage });
+  };
+
+  const handleFolderChangeRowsPerPage = (folder) => {
+    setRowsPerFoldPage(+folder.target.value);
+    props.handlePagination({ count: +folder.target.value, foldPage });
+  };
+
+  const handleResourceChangePage = (resource, newPage) => {
+    setResPage(newPage);
+    props.handlePagination({ count: rowsPerResPage, page: newPage });
+  };
+
+  const handleResourceChangeRowsPerPage = (resource) => {
+    setRowsPerResPage(+resource.target.value);
+    props.handlePagination({ count: +resource.target.value, resPage });
+  };
 
   return (
     (folder) ? (
       <React.Fragment>
+        {/* Buttons */}
         <Grid container spacing={1}>
           <Grid item>
             <Typography color='primary' variant='h5' component='h2' className={classes.title}>
@@ -122,6 +151,7 @@ export function Folder(props) {
             </Button>
           </Grid>
         </Grid>
+        {/* Parent */}
         <Grid container spacing={3}>
           <Grid item>
             <Button
@@ -140,6 +170,7 @@ export function Folder(props) {
         <Divider />
 
         <Box mb={2} />
+        {/* Sub Folders */}
         <Grid container spacing={1}>
           { /* eslint-disable-next-line arrow-body-style */}
           {props.folders && Object.values(props.folders).map((item, i) => {
@@ -212,6 +243,15 @@ export function Folder(props) {
             );
           })}
         </Grid>
+        {props.folders && props.folders.length > 0 && (
+          <Pagination
+            page={foldPage}
+            rowsPerPage={rowsPerFoldPage}
+            count={props.foldersTotal}
+            onChangePage={handleFolderChangePage}
+            onChangeRowsPerPage={handleFolderChangeRowsPerPage}
+          />
+        )}
         {props.folders && props.folders.length > 0
         && props.resources && props.resources.length > 0 && (
           <React.Fragment>
@@ -220,6 +260,8 @@ export function Folder(props) {
             <Box pb={2} />
           </React.Fragment>
         )}
+
+        { /* Resources */ }
         <Grid container spacing={1}>
           { /* eslint-disable-next-line arrow-body-style */}
           {props.resources && Object.values(props.resources).map((item, i) => {
@@ -284,6 +326,16 @@ export function Folder(props) {
             );
           })}
         </Grid>
+        {props.resources && props.resources.length > 0 && (
+          <Pagination
+            page={resPage}
+            rowsPerPage={rowsPerResPage}
+            count={props.resourcesTotal}
+            onChangePage={handleResourceChangePage}
+            onChangeRowsPerPage={handleResourceChangeRowsPerPage}
+          />
+        )}
+
         {props.folders && props.folders.length <= 0
         && props.resources && props.resources.length <= 0 && (
           <React.Fragment>
@@ -307,8 +359,11 @@ Folder.propTypes = {
   classes: PropTypes.object,
   folder: PropTypes.object,
   folders: PropTypes.array,
+  foldersTotal: PropTypes.number,
   resources: PropTypes.array,
+  resourcesTotal: PropTypes.number,
   currentUserId: PropTypes.number,
+  handlePagination: PropTypes.func,
   intl: intlShape.isRequired,
   links: PropTypes.shape({
     foldersIndex: PropTypes.string,

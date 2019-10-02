@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useContext } from 'react';
+import React, { memo, useEffect, useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
@@ -15,7 +15,10 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { selectGroup } from 'containers/Group/selectors';
 import { selectUser } from 'containers/Shared/App/selectors';
-import { selectFolder, selectValid, selectPaginatedFolders, selectPaginatedResources } from 'containers/Resource/selectors';
+import { selectFolder, selectValid,
+  selectPaginatedFolders, selectPaginatedResources,
+  selectFoldersTotal, selectResourcesTotal,
+} from 'containers/Resource/selectors';
 
 import {
   getFolderBegin, getFoldersBegin,
@@ -28,6 +31,14 @@ import Folder from 'components/Resource/Folder/Folder';
 
 import { Field, Form, Formik } from 'formik';
 import { Button, Card, CardContent, TextField } from '@material-ui/core';
+import dig from 'object-dig';
+
+const defaultParams = Object.freeze({
+  count: 5, // TODO: Make this a constant and use it also in Folder
+  page: 0,
+  order: 'desc',
+  orderBy: 'id',
+});
 
 export function FolderPage(props) {
   useInjectReducer({ key: 'resource', reducer });
@@ -72,16 +83,76 @@ export function FolderPage(props) {
     resources,
     valid } = props;
 
+  const [params, setParams] = useState(defaultParams);
+
+  const getFolders = (parentId, scopes, resetParams = false) => {
+    const groupId = dig(props, 'currentGroup', 'id');
+    const enterpriseId = dig(props, 'currentEnterprise', 'id');
+
+    if (resetParams)
+      setParams(defaultParams);
+
+    if (groupId) {
+      const newParams = {
+        ...params,
+        group_id: groupId,
+        parent_id: parentId,
+      };
+      props.getFoldersBegin(newParams);
+      setParams(newParams);
+    } else {
+      const newParams = {
+        ...params,
+        enterprise_id: enterpriseId,
+        parent_id: parentId,
+      };
+      props.getFoldersBegin(newParams);
+      setParams(newParams);
+    }
+  };
+
+  const getResources = (folderId, scopes, resetParams = false) => {
+    const groupId = dig(props, 'currentGroup', 'id');
+    const enterpriseId = dig(props, 'currentEnterprise', 'id');
+
+    if (resetParams)
+      setParams(defaultParams);
+
+    if (groupId) {
+      const newParams = {
+        ...params,
+        folder_id: folderId,
+      };
+      props.getFoldersBegin(newParams);
+      setParams(newParams);
+    } else {
+      const newParams = {
+        ...params,
+        enterprise_id: enterpriseId,
+        folder_id: folderId,
+      };
+      props.getFoldersBegin(newParams);
+      setParams(newParams);
+    }
+  };
+
   useEffect(() => {
-    const folderId = rs.params('item_id');
+    const folderId = rs.params('item_id')[0];
 
     // get folder specified in path
     props.getFolderBegin({ id: folderId });
-    props.getFoldersBegin({ parent_id: folderId[0] });
-    props.getResourcesBegin({ folder_id: folderId[0] });
+    getFolders(folderId);
+    props.getResourcesBegin({ folder_id: folderId });
 
     return () => props.foldersUnmount();
   }, []);
+
+  const handlePagination = (payload) => {
+    const newParams = { ...params, count: payload.count, page: payload.page };
+
+    props.getFoldersBegin(newParams);
+    setParams(newParams);
+  };
 
   return (
     <div>
@@ -134,6 +205,9 @@ export function FolderPage(props) {
           deleteFolderBegin={props.deleteFolderBegin}
           folder={currentFolder}
           folders={subFolders}
+          foldersTotal={props.foldersTotal}
+          resourcesTotal={props.resourcesTotal}
+          handlePagination={handlePagination}
           resources={resources}
           links={links}
         />
@@ -154,7 +228,9 @@ FolderPage.propTypes = {
   currentGroup: PropTypes.object,
   currentFolder: PropTypes.object,
   subFolders: PropTypes.array,
+  foldersTotal: PropTypes.number,
   resources: PropTypes.array,
+  resourcesTotal: PropTypes.number,
   valid: PropTypes.bool,
 };
 
@@ -163,7 +239,9 @@ const mapStateToProps = createStructuredSelector({
   currentUser: selectUser(),
   currentFolder: selectFolder(),
   subFolders: selectPaginatedFolders(),
+  foldersTotal: selectFoldersTotal(),
   resources: selectPaginatedResources(),
+  resourcesTotal: selectResourcesTotal(),
   valid: selectValid(),
 });
 
