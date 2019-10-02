@@ -67,7 +67,13 @@ export function Folder(props) {
           <Grid item sm>
             <Button
               variant='contained'
-              to={props.links.folderEdit(folder.id)}
+              to={{
+                pathname: props.links.folderEdit(folder.id),
+                fromFolder: {
+                  folder,
+                  action: 'edit'
+                },
+              }}
               color='primary'
               size='large'
               component={WrappedNavLink}
@@ -82,7 +88,10 @@ export function Folder(props) {
               variant='contained'
               to={{
                 pathname: props.links.folderNew,
-                fromFolder: folder,
+                fromFolder: {
+                  folder,
+                  action: 'new'
+                },
               }}
               color='primary'
               size='large'

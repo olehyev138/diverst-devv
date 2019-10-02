@@ -121,7 +121,7 @@ export function FolderFormInner({ handleSubmit, handleChange, handleBlur, values
             {buttonText}
           </Button>
           <Button
-            to={props.from ? props.links.folderShow(props.from.id) : props.links.foldersIndex}
+            to={props.from ? props.links.folderShow(props.from.folder.id) : props.links.foldersIndex}
             component={WrappedNavLink}
           >
             <FormattedMessage {...messages.cancel} />
@@ -134,10 +134,22 @@ export function FolderFormInner({ handleSubmit, handleChange, handleBlur, values
 
 export function FolderForm(props) {
   const folder = dig(props, 'folder');
+
+  let defaultParent;
+  if (folder)
+    if (folder.parent)
+      defaultParent = { value: folder.parent.id, label: folder.parent.name };
+    else
+      defaultParent = null;
+  else if (props.from)
+    defaultParent = { value: props.from.folder.id, label: props.from.folder.name };
+  else
+    defaultParent = null;
+
   const initialValues = buildValues(folder, {
     id: { default: '' },
     name: { default: '' },
-    parent: { default: props.from ? { value: props.from.id, label: props.from.name } : null, customKey: 'parent_id' },
+    parent: { set: defaultParent, customKey: 'parent_id' },
     password: { default: '' },
     password_protected: { default: false },
     owner_id: { default: dig(props, 'currentUser', 'id') || '' },
@@ -149,8 +161,8 @@ export function FolderForm(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        const payload = mapFields(values, ['child_ids', 'parent_id']);
-        payload.path = props.from ? props.links.folderShow(props.from.id) : null;
+        const payload = mapFields(values, ['parent_id']);
+        payload.path = props.from ? props.links.folderShow(props.from.folder.id) : null;
         props.folderAction(payload);
       }}
 
@@ -168,7 +180,13 @@ FolderForm.propTypes = {
   currentUser: PropTypes.object,
   currentGroup: PropTypes.object,
   currentEnterprise: PropTypes.object,
-  from: PropTypes.object,
+  from: PropTypes.shape({
+    folder: PropTypes.shape({
+      id: PropTypes.number,
+      name: PropTypes.string,
+    }),
+    action: PropTypes.string,
+  }),
   links: PropTypes.shape({
     foldersIndex: PropTypes.string,
     folderShow: PropTypes.func,
@@ -189,7 +207,11 @@ FolderFormInner.propTypes = {
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
   from: PropTypes.shape({
-    id: PropTypes.number,
+    folder: PropTypes.shape({
+      id: PropTypes.number,
+      name: PropTypes.string,
+    }),
+    action: PropTypes.string,
   }),
   links: PropTypes.shape({
     foldersIndex: PropTypes.string,

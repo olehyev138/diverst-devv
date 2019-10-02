@@ -26,7 +26,7 @@ export function FolderCreatePage(props) {
 
   const { currentUser, currentGroup, currentEnterprise } = props;
   const rs = new RouteService(useContext);
-  const from = rs.location;
+  const { location } = rs;
 
   let foldersIndexPath;
   let folderShowPath;
@@ -65,7 +65,7 @@ export function FolderCreatePage(props) {
       currentGroup={currentGroup}
       links={links}
       type={type}
-      from={from.fromFolder ? from.fromFolder : null}
+      from={location.fromFolder ? location.fromFolder : null}
     />
   );
 }

@@ -65,6 +65,7 @@ export function* createFolder(action) {
     const payload = { folder: action.payload };
     const response = yield call(api.folders.create.bind(api.folders), payload);
 
+    // TODO check for group vs enterprise
     yield put(push(payload.folder.path || ROUTES.group.resources.folders.index.path(payload.folder.group_id)));
     yield put(showSnackbar({
       message: 'Folder created',
@@ -86,7 +87,8 @@ export function* updateFolder(action) {
     const payload = { folder: action.payload };
     const response = yield call(api.folders.update.bind(api.folders), payload.folder.id, payload);
 
-    yield put(push(ROUTES.group.resources.folders.index.path(payload.folder.group_id)));
+    // TODO check for group vs enterprise
+    yield put(push(payload.folder.path || ROUTES.group.resources.folders.index.path(payload.folder.group_id)));
     yield put(showSnackbar({
       message: 'Folder updated',
       options: { variant: 'success' }
@@ -105,6 +107,7 @@ export function* updateFolder(action) {
 export function* deleteFolder(action) {
   try {
     yield call(api.folders.destroy.bind(api.folders), action.payload.id);
+    // TODO check for group vs enterprise
     yield put(push(ROUTES.group.resources.folders.index.path(action.payload.folder.group_id)));
     yield put(showSnackbar({
       message: 'Folder deleted',
@@ -157,6 +160,7 @@ export function* createResource(action) {
 
     const response = yield call(api.resources.create.bind(api.resources), payload);
 
+    // TODO check for group vs enterprise
     yield put(push(ROUTES.group.resources.index.path(payload.resource.group_id)));
     yield put(showSnackbar({
       message: 'Resource created',
@@ -178,6 +182,7 @@ export function* updateResource(action) {
     const payload = { resource: action.payload };
     const response = yield call(api.resources.update.bind(api.resources), payload.resource.id, payload);
 
+    // TODO check for group vs enterprise
     yield put(push(ROUTES.group.resources.index.path(payload.resource.owner_group_id)));
     yield put(showSnackbar({
       message: 'Resource updated',
@@ -197,6 +202,7 @@ export function* updateResource(action) {
 export function* deleteResource(action) {
   try {
     yield call(api.resources.destroy.bind(api.resources), action.payload.id);
+    // TODO check for group vs enterprise
     yield put(push(ROUTES.group.resources.index.path(action.payload.group_id)));
     yield put(showSnackbar({
       message: 'Resource deleted',

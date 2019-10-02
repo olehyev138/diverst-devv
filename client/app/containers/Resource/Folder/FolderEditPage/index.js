@@ -38,19 +38,24 @@ export function FolderEditPage(props) {
   useInjectSaga({ key: 'resource', saga });
 
   const rs = new RouteService(useContext);
+  const { location } = rs;
 
   let foldersIndexPath;
+  let folderShowPath;
   let type;
   if (props.path.startsWith('/groups')) {
     type = 'group';
     foldersIndexPath = ROUTES.group.resources.folders.index.path(rs.params('group_id'));
+    folderShowPath = id => ROUTES.group.resources.folders.show.path(rs.params('group_id'), id);
   } else {
     type = 'admin';
     foldersIndexPath = ROUTES.admin.manage.resources.folders.index.path();
+    folderShowPath = id => ROUTES.admin.manage.resources.folders.show.path(id);
   }
 
   const links = {
     foldersIndex: foldersIndexPath,
+    folderShow: folderShowPath,
   };
 
   const { currentUser, currentGroup, currentFolder, currentEnterprise, valid } = props;
@@ -123,6 +128,7 @@ export function FolderEditPage(props) {
           folder={currentFolder}
           links={links}
           type={type}
+          from={location.fromFolder ? location.fromFolder : null}
         />
       )}
     </div>
