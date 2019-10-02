@@ -533,4 +533,32 @@ RSpec.describe UsersController, type: :controller do
       end
     end
   end
+
+  describe 'GET#users_points_csv' do
+    context 'when user is logged in' do
+      login_user_from_let
+      before {
+        allow(UsersPointsDownloadJob).to receive(:perform_later)
+        request.env['HTTP_REFERER'] = 'back'
+        get :users_points_csv
+      }
+
+      it 'redirects to user' do
+        expect(response).to redirect_to 'back'
+      end
+
+      it 'flashes' do
+        expect(flash[:notice]).to eq 'Please check your Secure Downloads section in a couple of minutes'
+      end
+
+      it 'calls job' do
+        expect(UsersPointsDownloadJob).to have_received(:perform_later)
+      end
+    end
+
+    context 'when user is not logged in' do
+      before { get :users_points_csv }
+      it_behaves_like 'redirect user to users/sign_in path'
+    end
+  end
 end
