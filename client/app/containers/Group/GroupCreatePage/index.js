@@ -45,7 +45,7 @@ const mapDispatchToProps = {
   createGroupBegin,
   getGroupsBegin,
   groupFormUnmount
-}
+};
 
 const withConnect = connect(
   mapStateToProps,
