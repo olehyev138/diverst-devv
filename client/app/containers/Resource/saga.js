@@ -181,11 +181,10 @@ export function* getResource(action) {
 export function* createResource(action) {
   try {
     const payload = { resource: action.payload };
-
     const response = yield call(api.resources.create.bind(api.resources), payload);
 
     // TODO check for group vs enterprise
-    yield put(push(ROUTES.group.resources.index.path(payload.resource.group_id)));
+    yield put(push(payload.resource.path));
     yield put(showSnackbar({
       message: 'Resource created',
       options: { variant: 'success' }

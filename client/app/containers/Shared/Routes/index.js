@@ -10,7 +10,7 @@ import {
   OutcomeEditPage, GroupMemberListPage, GroupMemberCreatePage, NotFoundPage, PlaceholderPage, GroupDashboardPage,
   UserDashboardPage, MetricsDashboardListPage, MetricsDashboardCreatePage, MetricsDashboardEditPage, MetricsDashboardPage,
   CustomGraphCreatePage, CustomGraphEditPage, GroupManageLayout, GroupSettingsPage, CustomTextEditPage, FoldersPage,
-  FolderCreatePage, FolderEditPage, FolderPage,
+  FolderCreatePage, FolderEditPage, FolderPage, ResourceCreatePage
 } from './templates';
 
 // Paths
@@ -98,6 +98,8 @@ export default function Routes(props) {
       <GroupManageLayout {...expandRoute(ROUTES.group.manage.leaders.index)} component={PlaceholderPage} />
 
       { /* Group Resources */ }
+      <GroupLayout {...expandRoute(ROUTES.group.resources.resources.new)} component={ResourceCreatePage} />}
+
       <GroupLayout {...expandRoute(ROUTES.group.resources.folders.edit)} component={FolderEditPage} />
       <GroupLayout {...expandRoute(ROUTES.group.resources.folders.new)} component={FolderCreatePage} />
       <GroupLayout {...expandRoute(ROUTES.group.resources.folders.show)} component={FolderPage} />

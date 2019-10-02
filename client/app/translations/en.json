@@ -162,5 +162,5 @@
   "diverst.containers.Resource.form.input.title" : "Give this resource a title!",
   "diverst.containers.Resource.form.input.folder" : "Move to a Folder",
   "diverst.containers.Resource.form.input.upload" : "Upload the file you want to share",
-  "diverst.containers.Resource.form.input.url" : "URL",
+  "diverst.containers.Resource.form.input.url" : "URL"
 }

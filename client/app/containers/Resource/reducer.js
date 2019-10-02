@@ -47,11 +47,7 @@ function resourcesReducer(state = initialState, action) {
       case RESOURCES_UNMOUNT:
         return initialState;
       case FOLDERS_UNMOUNT:
-        draft.folders = [];
-        draft.foldersTotal = null;
-        draft.currentFolder = null;
-        draft.valid = null;
-        break;
+        return initialState;
       case VALIDATE_FOLDER_PASSWORD_SUCCESS:
         draft.valid = true;
     }

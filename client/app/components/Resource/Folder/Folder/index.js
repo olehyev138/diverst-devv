@@ -132,6 +132,26 @@ export function Folder(props) {
               <FormattedMessage {...messages.show.addFolder} />
             </Button>
           </Grid>
+
+          <Grid item>
+            <Button
+              variant='contained'
+              to={{
+                pathname: props.links.resourceNew,
+                fromFolder: {
+                  folder,
+                  action: 'new'
+                },
+              }}
+              color='primary'
+              size='large'
+              component={WrappedNavLink}
+              className={classes.buttons}
+            >
+              <FormattedMessage {...messages.show.addResource} />
+            </Button>
+          </Grid>
+
           <Grid item>
             <Button
               variant='contained'

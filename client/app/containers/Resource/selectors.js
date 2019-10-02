@@ -57,6 +57,16 @@ const selectResource = () => createSelector(
   resourcesState => resourcesState.currentResource
 );
 
+const selectFormResource = () => createSelector(
+  selectResourcesDomain,
+  (resourcesState) => {
+    const resource = Object.assign({}, resourcesState.currentResource);
+    if (resource.parent)
+      resource.folder = { value: resource.folder.id, label: resource.folder.name };
+    return resource;
+  }
+);
+
 export {
   selectResourcesDomain,
   selectPaginatedFolders, selectPaginatedSelectFolders,
