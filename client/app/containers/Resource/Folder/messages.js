@@ -21,6 +21,9 @@ export default defineMessages({
   delete: {
     id: `${scope}.index.button.delete`,
   },
+  confirm_delete: {
+    id: `${scope}.index.button.confirm_delete`,
+  },
   create: {
     id: `${scope}.form.button.create`,
   },
@@ -59,5 +62,8 @@ export default defineMessages({
     parent: {
       id: `${scope}.show.parentFolder`
     },
+    empty: {
+      id: `${scope}.show.empty`
+    }
   },
 });

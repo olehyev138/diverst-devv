@@ -13,7 +13,7 @@ import saga from 'containers/Resource/saga';
 
 import { selectPaginatedFolders, selectFoldersTotal } from 'containers/Resource/selectors';
 import { selectEnterprise } from 'containers/Shared/App/selectors';
-import { getFoldersBegin, foldersUnmount } from 'containers/Resource/actions';
+import { getFoldersBegin, foldersUnmount, deleteFolderBegin } from 'containers/Resource/actions';
 
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -103,6 +103,7 @@ export function FoldersPage(props) {
     <FoldersList
       folders={props.folders}
       foldersTotal={props.foldersTotal}
+      deleteFolderBegin={props.deleteFolderBegin}
       handlePagination={handlePagination}
       links={links}
     />
@@ -112,6 +113,7 @@ export function FoldersPage(props) {
 FoldersPage.propTypes = {
   path: PropTypes.string,
   getFoldersBegin: PropTypes.func.isRequired,
+  deleteFolderBegin: PropTypes.func,
   foldersUnmount: PropTypes.func.isRequired,
   folders: PropTypes.array,
   foldersTotal: PropTypes.number,
@@ -132,6 +134,7 @@ const mapStateToProps = createStructuredSelector({
 const mapDispatchToProps = {
   getFoldersBegin,
   foldersUnmount,
+  deleteFolderBegin,
 };
 
 const withConnect = connect(

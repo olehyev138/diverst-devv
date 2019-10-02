@@ -15,9 +15,11 @@ import {
 } from '@material-ui/core';
 
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
-import FolderIcon from '@material-ui/icons/Folder';
 
-import { FormattedMessage, injectIntl } from 'react-intl';
+import FolderIcon from '@material-ui/icons/Folder';
+import LockIcon from '@material-ui/icons/Lock';
+
+import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Resource/Folder/messages';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -104,6 +106,9 @@ export function FoldersList(props, context) {
                         <Grid container spacing={1}>
                           <Grid item>
                             <FolderIcon />
+                            { item.password_protected && (
+                              <LockIcon />
+                            )}
                           </Grid>
                           <Grid item xs>
                             <Typography color='primary' variant='h6' component='h2'>
@@ -114,7 +119,7 @@ export function FoldersList(props, context) {
                       </Link>
                       <hr className={classes.divider} />
                       <React.Fragment>
-                        <Link
+                        <Button
                           className={classes.folderLink}
                           component={WrappedNavLink}
                           to={props.links.folderEdit(item.id)}
@@ -122,17 +127,25 @@ export function FoldersList(props, context) {
                           <Typography color='textSecondary'>
                             <FormattedMessage {...messages.edit} />
                           </Typography>
-                        </Link>
+                        </Button>
 
-                        <Link
-                          className={classes.folderLink}
-                          component={WrappedNavLink}
-                          to={props.links.folderEdit(item.id)}
-                        >
-                          <Typography color='error'>
-                            <FormattedMessage {...messages.delete} />
-                          </Typography>
-                        </Link>
+                        { !item.password_protected && (
+                          <Button
+                            className={classes.folderLink}
+                            onClick={() => {
+                              // eslint-disable-next-line no-restricted-globals,no-alert
+                              if (confirm(props.intl.formatMessage(messages.confirm_delete)))
+                                props.deleteFolderBegin({
+                                  id: item.id,
+                                  folder: item,
+                                });
+                            }}
+                          >
+                            <Typography color='error'>
+                              <FormattedMessage {...messages.delete} />
+                            </Typography>
+                          </Button>
+                        )}
                         <Box pb={1} />
                       </React.Fragment>
                     </Grid>
@@ -172,7 +185,7 @@ export function FoldersList(props, context) {
 }
 
 FoldersList.propTypes = {
-  intl: PropTypes.object,
+  intl: intlShape.isRequired,
   classes: PropTypes.object,
   folders: PropTypes.array,
   foldersTotal: PropTypes.number,
@@ -180,6 +193,7 @@ FoldersList.propTypes = {
   handleChangeTab: PropTypes.func,
   handlePagination: PropTypes.func,
   links: PropTypes.object,
+  deleteFolderBegin: PropTypes.func,
 };
 
 export default compose(

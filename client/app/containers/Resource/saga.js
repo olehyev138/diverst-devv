@@ -30,6 +30,24 @@ import {
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
+function getFolderShowPath(folder) {
+  if (folder.group_id)
+    return ROUTES.group.resources.folders.show.path(folder.group_id, folder.id);
+  if (folder.enterprise_id)
+    return ROUTES.admin.manage.resources.folders.show.path(folder.id);
+
+  return null;
+}
+
+function getFolderIndexPath(folder) {
+  if (folder.group_id)
+    return ROUTES.group.resources.folders.index.path(folder.group_id);
+  if (folder.enterprise_id)
+    return ROUTES.admin.manage.resources.folders.index.path();
+
+  return null;
+}
+
 export function* getFolders(action) {
   try {
     const response = yield call(api.folders.all.bind(api.folders), action.payload);
@@ -107,8 +125,14 @@ export function* updateFolder(action) {
 export function* deleteFolder(action) {
   try {
     yield call(api.folders.destroy.bind(api.folders), action.payload.id);
-    // TODO check for group vs enterprise
-    yield put(push(ROUTES.group.resources.folders.index.path(action.payload.folder.group_id)));
+    let path;
+    const { folder } = action.payload;
+    if (folder.parent)
+      path = getFolderShowPath(folder.parent);
+    else
+      path = getFolderIndexPath(folder);
+
+    yield put(push(path));
     yield put(showSnackbar({
       message: 'Folder deleted',
       options: { variant: 'success' }

@@ -137,6 +137,7 @@
   "diverst.containers.Folder.index.button.new" : "New Folder",
   "diverst.containers.Folder.index.button.edit" : "Edit Folder",
   "diverst.containers.Folder.index.button.delete" : "Delete Folder",
+  "diverst.containers.Folder.index.button.confirm_delete" : "Delete Folder (and Sub-Folders)?",
   "diverst.containers.Folder.index.empty" : "There are currently no Folders",
   "diverst.containers.Folder.form.button.create" : "Create Folder",
   "diverst.containers.Folder.form.button.update" : "Update Folder",
@@ -148,5 +149,6 @@
   "diverst.containers.Folder.show.addFolder" : "+ Add Folder",
   "diverst.containers.Folder.show.addResource" : "+ Add Resource",
   "diverst.containers.Folder.show.parentFolder" : "⤣ Parent Folder",
+  "diverst.containers.Folder.show.empty" : "There are currently no Resources or Sub-Folders",
   "diverst.containers.Folder.folders" : "Folders"
 }

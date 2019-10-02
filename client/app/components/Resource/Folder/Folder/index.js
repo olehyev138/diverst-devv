@@ -8,14 +8,16 @@ import {
   Paper, Typography, Grid, Button, Box, Card, CardContent, Link, Hidden, Divider
 } from '@material-ui/core/index';
 import { withStyles } from '@material-ui/core/styles';
+
 import PublicIcon from '@material-ui/icons/Public';
 import FolderIcon from '@material-ui/icons/Folder';
+import LockIcon from '@material-ui/icons/Lock';
 
 import classNames from 'classnames';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import messages from 'containers/Resource/Folder/messages';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 
 import { formatDateTimeString, DateTime } from 'utils/dateTimeHelpers';
 import KeyboardArrowRightIcon from '@material-ui/core/SvgIcon/SvgIcon';
@@ -58,7 +60,7 @@ export function Folder(props) {
   return (
     (folder) ? (
       <React.Fragment>
-        <Grid container spacing={3}>
+        <Grid container spacing={1}>
           <Grid item>
             <Typography color='primary' variant='h5' component='h2' className={classes.title}>
               {folder.name}
@@ -96,8 +98,27 @@ export function Folder(props) {
               color='primary'
               size='large'
               component={WrappedNavLink}
+              className={classes.buttons}
             >
               <FormattedMessage {...messages.show.addFolder} />
+            </Button>
+          </Grid>
+          <Grid item>
+            <Button
+              variant='contained'
+              color='primary'
+              size='large'
+              className={classNames(classes.buttons, classes.deleteButton)}
+              onClick={() => {
+                // eslint-disable-next-line no-restricted-globals,no-alert
+                if (confirm(props.intl.formatMessage(messages.confirm_delete)))
+                  props.deleteFolderBegin({
+                    id: folder.id,
+                    folder,
+                  });
+              }}
+            >
+              <FormattedMessage {...messages.delete} />
             </Button>
           </Grid>
         </Grid>
@@ -137,6 +158,9 @@ export function Folder(props) {
                           <Grid container spacing={1}>
                             <Grid item>
                               <FolderIcon />
+                              { item.password_protected && (
+                                <LockIcon />
+                              )}
                             </Grid>
                             <Grid item xs>
                               <Typography color='primary' variant='h6' component='h2'>
@@ -147,7 +171,7 @@ export function Folder(props) {
                         </Link>
                         <hr className={classes.divider} />
                         <React.Fragment>
-                          <Link
+                          <Button
                             className={classes.folderLink}
                             component={WrappedNavLink}
                             to={props.links.folderEdit(item.id)}
@@ -155,17 +179,24 @@ export function Folder(props) {
                             <Typography color='textSecondary'>
                               <FormattedMessage {...messages.edit} />
                             </Typography>
-                          </Link>
-
-                          <Link
-                            className={classes.folderLink}
-                            component={WrappedNavLink}
-                            to={props.links.folderEdit(item.id)}
-                          >
-                            <Typography color='error'>
-                              <FormattedMessage {...messages.delete} />
-                            </Typography>
-                          </Link>
+                          </Button>
+                          { !item.password_protected && (
+                            <Button
+                              className={classes.folderLink}
+                              onClick={() => {
+                                // eslint-disable-next-line no-restricted-globals,no-alert
+                                if (confirm(props.intl.formatMessage(messages.confirm_delete)))
+                                  props.deleteFolderBegin({
+                                    id: item.id,
+                                    folder: item,
+                                  });
+                              }}
+                            >
+                              <Typography color='error'>
+                                <FormattedMessage {...messages.delete} />
+                              </Typography>
+                            </Button>
+                          )}
                           <Box pb={1} />
                         </React.Fragment>
                       </Grid>
@@ -259,7 +290,7 @@ export function Folder(props) {
             <Grid item sm>
               <Box mt={3} />
               <Typography variant='h6' align='center' color='textSecondary'>
-                {'TODO MESSAGES: There are currently no Resources or Sub-Folders'}
+                <FormattedMessage {...messages.show.empty} />
               </Typography>
             </Grid>
           </React.Fragment>
@@ -278,6 +309,7 @@ Folder.propTypes = {
   folders: PropTypes.array,
   resources: PropTypes.array,
   currentUserId: PropTypes.number,
+  intl: intlShape.isRequired,
   links: PropTypes.shape({
     foldersIndex: PropTypes.string,
     folderNew: PropTypes.string,
@@ -290,5 +322,6 @@ Folder.propTypes = {
 
 export default compose(
   memo,
+  injectIntl,
   withStyles(styles)
 )(Folder);
