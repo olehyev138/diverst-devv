@@ -48,7 +48,12 @@ export default defineMessages({
     news: {
       index: {
         id: `${scope}.group.news.index`
-      }
+      },
+      messages: {
+        index: {
+          id: `${scope}.group.news.messages.index`
+        },
+      },
     },
     outcomes: {
       index: {

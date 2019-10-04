@@ -67,7 +67,7 @@ export default function Routes(props) {
       <AdminLayout exact {...expandRoute(ROUTES.admin.system.users.edit)} component={UserEditPage} />
 
       { /* Group */ }
-      <GroupLayout exact {...expandRoute(ROUTES.group.home)} component={GroupHomePage} />
+      <GroupLayout exact {...expandRoute(ROUTES.group.home)} component={GroupHomePage} disableBreadcrumbs />
       <GroupLayout exact {...expandRoute(ROUTES.group.members.index)} component={GroupMemberListPage} />
       <GroupLayout exact {...expandRoute(ROUTES.group.events.index)} component={EventsPage} />
       <GroupLayout exact {...expandRoute(ROUTES.group.news.index)} component={NewsFeedPage} />

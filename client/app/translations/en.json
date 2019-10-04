@@ -23,6 +23,7 @@
   "diverst.containers.Routes.group.events.index": "Events",
   "diverst.containers.Routes.group.news.index": "News",
   "diverst.containers.Routes.group.outcomes.index": "Plan",
+  "diverst.containers.Routes.group.news.messages.index": "Group Messages",
   "diverst.containers.Routes.admin.analyze.index": "Analyze",
   "diverst.containers.Routes.admin.analyze.overview": "Overview",
   "diverst.containers.Routes.admin.analyze.users": "Users",
