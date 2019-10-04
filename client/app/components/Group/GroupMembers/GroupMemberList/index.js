@@ -9,9 +9,7 @@ import React, {
   useEffect, useRef
 } from 'react';
 import { compose } from 'redux';
-import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { RouteContext } from 'containers/Layouts/ApplicationLayout';
 
 import {
   Button, Card, CardActions, CardContent, Collapse, Grid, Link,
@@ -22,7 +20,6 @@ import { withStyles } from '@material-ui/core/styles';
 import MaterialTable from 'material-table';
 import tableIcons from 'utils/tableIcons';
 
-import { ROUTES } from 'containers/Shared/Routes/constants';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
 import { FormattedMessage } from 'react-intl';
@@ -30,10 +27,25 @@ import messages from 'containers/Group/GroupMembers/messages';
 import buildDataFunction from 'utils/dataTableHelper';
 
 import DeleteOutline from '@material-ui/icons/DeleteOutline';
+import AddIcon from '@material-ui/icons/Add';
+import ExportIcon from '@material-ui/icons/SaveAlt';
 
 const styles = theme => ({
   errorButton: {
     color: theme.palette.error.main,
+  },
+  actionButton: {
+    marginRight: 12,
+    marginBottom: 12,
+  },
+  floatRight: {
+    float: 'right',
+    marginBottom: 12,
+  },
+  floatSpacer: {
+    display: 'flex',
+    width: '100%',
+    marginBottom: 24,
   },
 });
 
@@ -71,31 +83,31 @@ export function GroupMemberList(props) {
 
   return (
     <React.Fragment>
-      <Grid container spacing={3} justify='flex-end'>
-        <Grid item>
-          <Button
-            variant='contained'
-            to='#'
-            color='secondary'
-            size='large'
-            component={WrappedNavLink}
-          >
-            <FormattedMessage {...messages.export} />
-          </Button>
-        </Grid>
-        <Grid item>
-          <Button
-            variant='contained'
-            to={props.links.groupMembersNew}
-            color='primary'
-            size='large'
-            component={WrappedNavLink}
-          >
-            <FormattedMessage {...messages.new} />
-          </Button>
-        </Grid>
-      </Grid>
-      <Box mb={2} />
+      <Box className={classes.floatRight}>
+        <Button
+          className={classes.actionButton}
+          variant='contained'
+          to={props.links.groupMembersNew}
+          color='primary'
+          size='large'
+          component={WrappedNavLink}
+          startIcon={<AddIcon />}
+        >
+          <FormattedMessage {...messages.new} />
+        </Button>
+        <Button
+          className={classes.actionButton}
+          variant='contained'
+          to='#'
+          color='secondary'
+          size='large'
+          component={WrappedNavLink}
+          startIcon={<ExportIcon />}
+        >
+          <FormattedMessage {...messages.export} />
+        </Button>
+      </Box>
+      <Box className={classes.floatSpacer} />
       <MaterialTable
         tableRef={ref}
         icons={tableIcons}

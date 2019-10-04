@@ -50,7 +50,15 @@ const styles = theme => ({
   },
   dateText: {
     fontWeight: 'bold',
-  }
+  },
+  floatRight: {
+    float: 'right',
+  },
+  floatSpacer: {
+    display: 'flex',
+    width: '100%',
+    marginBottom: 24,
+  },
 });
 
 export function EventsList(props, context) {
@@ -73,21 +81,18 @@ export function EventsList(props, context) {
 
   return (
     <React.Fragment>
-      <Grid container spacing={3} justify='flex-end'>
-        <Grid item>
-          <Button
-            variant='contained'
-            to={props.links.eventNew}
-            color='primary'
-            size='large'
-            component={WrappedNavLink}
-            startIcon={<AddIcon />}
-          >
-            <FormattedMessage {...messages.new} />
-          </Button>
-        </Grid>
-      </Grid>
-      <Box mb={2} />
+      <Button
+        className={classes.floatRight}
+        variant='contained'
+        to={props.links.eventNew}
+        color='primary'
+        size='large'
+        component={WrappedNavLink}
+        startIcon={<AddIcon />}
+      >
+        <FormattedMessage {...messages.new} />
+      </Button>
+      <Box className={classes.floatSpacer} />
       <Paper>
         <ResponsiveTabs
           value={props.currentTab}

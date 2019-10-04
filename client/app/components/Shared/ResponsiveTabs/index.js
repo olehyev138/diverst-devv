@@ -11,11 +11,8 @@ export function ResponsiveTabs(props) {
   let variant = 'standard';
   let centered = true;
 
-  if (isWidthDown('xs', width)) {
+  if (isWidthDown('sm', width)) {
     variant = 'scrollable';
-    centered = false;
-  } else if (isWidthDown('sm', width)) {
-    variant = 'fullWidth';
     centered = false;
   }
 

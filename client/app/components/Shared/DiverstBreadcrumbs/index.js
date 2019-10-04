@@ -15,6 +15,7 @@ const styles = theme => ({
     width: 'fit-content',
     display: 'inline-block',
     marginBottom: 24,
+    marginRight: 8,
   },
   breadcrumbCurrentPageText: {
     color: theme.custom.colors.offBlack,

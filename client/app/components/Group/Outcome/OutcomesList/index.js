@@ -7,7 +7,6 @@
 import React, { memo, useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
-import { RouteContext } from 'containers/Layouts/ApplicationLayout';
 import withStyles from '@material-ui/core/styles/withStyles';
 
 import {
@@ -17,13 +16,18 @@ import {
 import { FormattedMessage } from 'react-intl';
 import messages from 'containers/Group/Outcome/messages';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
-import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import ListItemIcon from '@material-ui/icons/Remove';
+import AddIcon from '@material-ui/icons/Add';
 
 import Pagination from 'components/Shared/Pagination';
 
-const styles = theme => ({});
+const styles = theme => ({
+  floatRight: {
+    float: 'right',
+    marginBottom: 24,
+  }
+});
 
 export function OutcomesList(props, context) {
   const { classes, intl } = props;
@@ -49,20 +53,17 @@ export function OutcomesList(props, context) {
 
   return (
     <React.Fragment>
-      <Grid container spacing={3} justify='flex-end'>
-        <Grid item>
-          <Button
-            variant='contained'
-            to={props.links.outcomeNew}
-            color='primary'
-            size='large'
-            component={WrappedNavLink}
-          >
-            <FormattedMessage {...messages.new} />
-          </Button>
-        </Grid>
-      </Grid>
-      <Box mb={2} />
+      <Button
+        className={classes.floatRight}
+        variant='contained'
+        to={props.links.outcomeNew}
+        color='primary'
+        size='large'
+        component={WrappedNavLink}
+        startIcon={<AddIcon />}
+      >
+        <FormattedMessage {...messages.new} />
+      </Button>
       <Grid container>
         { /* eslint-disable-next-line arrow-body-style */}
         {props.outcomes && props.outcomes.map((outcome, i) => (
