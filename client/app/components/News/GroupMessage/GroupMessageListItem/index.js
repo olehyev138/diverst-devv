@@ -46,23 +46,25 @@ export function GroupMessageListItem(props) {
           {`Submitted by ${groupMessage.owner.first_name} ${groupMessage.owner.last_name}`}
         </Typography>
       </CardContent>
-      <CardActions>
-        <Button
-          size='small'
-          color='primary'
-          to={props.links.groupMessageEdit(newsItem.id)}
-          component={WrappedNavLink}
-        >
-          <FormattedMessage {...messages.edit} />
-        </Button>
-        <Button
-          size='small'
-          to={props.links.groupMessageIndex(newsItem.id)}
-          component={WrappedNavLink}
-        >
-          Comments
-        </Button>
-      </CardActions>
+      {props.links && (
+        <CardActions>
+          <Button
+            size='small'
+            color='primary'
+            to={props.links.groupMessageEdit(newsItem.id)}
+            component={WrappedNavLink}
+          >
+            <FormattedMessage {...messages.edit} />
+          </Button>
+          <Button
+            size='small'
+            to={props.links.groupMessageIndex(newsItem.id)}
+            component={WrappedNavLink}
+          >
+            Comments
+          </Button>
+        </CardActions>
+      )}
     </Card>
   );
 }
