@@ -15,6 +15,7 @@ import {
 } from '@material-ui/core';
 
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
+import AddIcon from '@material-ui/icons/Add';
 
 import { FormattedMessage, injectIntl } from 'react-intl';
 import messages from 'containers/Event/messages';
@@ -80,6 +81,7 @@ export function EventsList(props, context) {
             color='primary'
             size='large'
             component={WrappedNavLink}
+            startIcon={<AddIcon />}
           >
             <FormattedMessage {...messages.new} />
           </Button>
