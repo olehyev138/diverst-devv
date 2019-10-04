@@ -144,7 +144,7 @@ export function FolderPage(props) {
     // get folder specified in path
     props.getFolderBegin({ id: folderId });
     getFolders(folderId);
-    getResources(folderId)
+    getResources(folderId);
 
     return () => props.foldersUnmount();
   }, []);
