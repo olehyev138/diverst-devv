@@ -107,7 +107,7 @@ export function Folder(props) {
             <Button
               variant='contained'
               to={{
-                pathname: props.links.folderEdit(folder.id),
+                pathname: props.links.folderEdit(folder),
                 fromFolder: {
                   folder,
                   action: 'edit'
@@ -125,13 +125,7 @@ export function Folder(props) {
           <Grid item>
             <Button
               variant='contained'
-              to={{
-                pathname: props.links.folderNew,
-                fromFolder: {
-                  folder,
-                  action: 'new'
-                },
-              }}
+              to={props.links.folderNew}
               color='primary'
               size='large'
               component={WrappedNavLink}
@@ -144,13 +138,7 @@ export function Folder(props) {
           <Grid item>
             <Button
               variant='contained'
-              to={{
-                pathname: props.links.resourceNew,
-                fromFolder: {
-                  folder,
-                  action: 'new'
-                },
-              }}
+              to={props.links.resourceNew}
               color='primary'
               size='large'
               component={WrappedNavLink}
@@ -184,7 +172,7 @@ export function Folder(props) {
           <Grid item>
             <Button
               variant='contained'
-              to={folder.parent_id ? props.links.folderShow(folder.parent_id) : props.links.foldersIndex}
+              to={props.links.parentFolder}
               color='primary'
               size='large'
               component={WrappedNavLink}
@@ -212,7 +200,7 @@ export function Folder(props) {
                         <Link
                           className={classes.folderLink}
                           component={WrappedNavLink}
-                          to={props.links.folderShow(item.id)}
+                          to={props.links.folderShow(item)}
                         >
                           <Grid container spacing={1}>
                             <Grid item>
@@ -233,7 +221,7 @@ export function Folder(props) {
                           <Button
                             className={classes.folderLink}
                             component={WrappedNavLink}
-                            to={props.links.folderEdit(item.id)}
+                            to={props.links.folderEdit(item)}
                           >
                             <Typography color='textSecondary'>
                               <FormattedMessage {...messages.edit} />
@@ -323,7 +311,7 @@ export function Folder(props) {
                           <Button
                             className={classes.folderLink}
                             component={WrappedNavLink}
-                            to={props.links.resourceEdit(item.id)}
+                            to={props.links.resourceEdit(item)}
                           >
                             <Typography color='textSecondary'>
                               <FormattedMessage {...resourceMessages.edit} />
@@ -403,7 +391,8 @@ Folder.propTypes = {
   intl: intlShape.isRequired,
   links: PropTypes.shape({
     foldersIndex: PropTypes.string,
-    folderNew: PropTypes.string,
+    folderNew: PropTypes.object,
+    parentFolder: PropTypes.string,
     folderShow: PropTypes.func,
     folderEdit: PropTypes.func,
     resourceEdit: PropTypes.func,

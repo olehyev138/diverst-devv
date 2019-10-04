@@ -101,7 +101,7 @@ export function FoldersList(props, context) {
                       <Link
                         className={classes.folderLink}
                         component={WrappedNavLink}
-                        to={props.links.folderShow(item.id)}
+                        to={props.links.folderShow(item)}
                       >
                         <Grid container spacing={1}>
                           <Grid item>
@@ -122,7 +122,7 @@ export function FoldersList(props, context) {
                         <Button
                           className={classes.folderLink}
                           component={WrappedNavLink}
-                          to={props.links.folderEdit(item.id)}
+                          to={props.links.folderEdit(item)}
                         >
                           <Typography color='textSecondary'>
                             <FormattedMessage {...messages.edit} />

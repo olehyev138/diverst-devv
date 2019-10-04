@@ -32,6 +32,10 @@ import {
 
 import ResourceForm from 'components/Resource/Resource/ResourceForm';
 import messages from '../messages';
+import {
+  getFolderShowPath,
+  getFolderIndexPath,
+} from 'utils/resourceHelpers';
 
 export function FolderEditPage(props) {
   useInjectReducer({ key: 'resource', reducer });
@@ -40,25 +44,13 @@ export function FolderEditPage(props) {
   const rs = new RouteService(useContext);
   const { location } = rs;
 
-  let foldersIndexPath;
-  let folderShowPath;
-  let type;
-  if (props.path.startsWith('/groups')) {
-    type = 'group';
-    foldersIndexPath = ROUTES.group.resources.folders.index.path(rs.params('group_id'));
-    folderShowPath = id => ROUTES.group.resources.folders.show.path(rs.params('group_id'), id);
-  } else {
-    type = 'admin';
-    foldersIndexPath = ROUTES.admin.manage.resources.folders.index.path();
-    folderShowPath = id => ROUTES.admin.manage.resources.folders.show.path(id);
-  }
-
-  const links = {
-    foldersIndex: foldersIndexPath,
-    folderShow: folderShowPath,
-  };
+  const type = props.path.startsWith('/groups') ? 'group' : 'admin';
 
   const { currentUser, currentGroup, currentFolder, currentEnterprise, currentResource } = props;
+
+  const links = {
+    cancelPath: getFolderShowPath(currentFolder) || getFolderIndexPath(type, rs.params('group_id')[0]),
+  };
 
   useEffect(() => {
     const resourceId = rs.params('item_id')[0];

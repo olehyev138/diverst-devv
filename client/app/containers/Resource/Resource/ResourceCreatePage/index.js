@@ -26,6 +26,10 @@ import {
 import ResourceForm from 'components/Resource/Resource/ResourceForm';
 
 import messages from '../messages';
+import {
+  getFolderShowPath,
+  getFolderIndexPath
+} from 'utils/resourceHelpers';
 
 export function ResourceCreatePage(props) {
   useInjectReducer({ key: 'resource', reducer });
@@ -34,18 +38,10 @@ export function ResourceCreatePage(props) {
   const { currentUser, currentGroup, currentEnterprise, currentFolder } = props;
   const rs = new RouteService(useContext);
 
-  let folderShowPath;
-  let type;
-  if (props.path.startsWith('/groups')) {
-    type = 'group';
-    folderShowPath = id => ROUTES.group.resources.folders.show.path(rs.params('group_id'), id);
-  } else {
-    type = 'admin';
-    folderShowPath = id => ROUTES.admin.manage.resources.folders.show.path(id);
-  }
+  const type = props.path.startsWith('/groups') ? 'group' : 'admin';
 
   const links = {
-    folderShow: folderShowPath,
+    cancelPath: getFolderShowPath(currentFolder) || getFolderIndexPath(type, rs.params('group_id')[0]),
   };
 
   useEffect(() => {

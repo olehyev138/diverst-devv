@@ -122,7 +122,7 @@ export function ResourceFormInner({ handleSubmit, handleChange, handleBlur, valu
             {buttonText}
           </Button>
           <Button
-            to={props.currentFolder ? props.links.folderShow(props.currentFolder.id) : ''}
+            to={props.links.cancelPath}
             component={WrappedNavLink}
           >
             <FormattedMessage {...messages.cancel} />
@@ -150,7 +150,6 @@ export function ResourceForm(props) {
       enableReinitialize
       onSubmit={(values, actions) => {
         const payload = mapFields(values, ['folder_id']);
-        payload.path = props.links.folderShow(values.folder_id.value);
         props.resourceAction(payload);
       }}
 
@@ -180,7 +179,7 @@ ResourceForm.propTypes = {
     action: PropTypes.string,
   }),
   links: PropTypes.shape({
-    folderShow: PropTypes.func,
+    cancelPath: PropTypes.string,
   })
 };
 
@@ -209,7 +208,7 @@ ResourceFormInner.propTypes = {
     action: PropTypes.string,
   }),
   links: PropTypes.shape({
-    folderShow: PropTypes.func,
+    cancelPath: PropTypes.string,
   })
 };
 

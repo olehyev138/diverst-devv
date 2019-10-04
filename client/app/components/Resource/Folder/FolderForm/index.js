@@ -150,7 +150,6 @@ export function FolderForm(props) {
       enableReinitialize
       onSubmit={(values, actions) => {
         const payload = mapFields(values, ['parent_id']);
-        payload.path = props.from ? props.links.folderShow(props.from.folder.id) : null;
         props.folderAction(payload);
       }}
 
@@ -176,8 +175,6 @@ FolderForm.propTypes = {
     action: PropTypes.string,
   }),
   links: PropTypes.shape({
-    foldersIndex: PropTypes.string,
-    folderShow: PropTypes.func,
     cancelLink: PropTypes.string,
   })
 };
@@ -203,8 +200,6 @@ FolderFormInner.propTypes = {
     action: PropTypes.string,
   }),
   links: PropTypes.shape({
-    foldersIndex: PropTypes.string,
-    folderShow: PropTypes.func,
     cancelLink: PropTypes.string,
   })
 };

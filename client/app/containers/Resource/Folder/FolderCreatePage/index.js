@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
 
+import { injectIntl, intlShape } from 'react-intl';
+
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 
@@ -20,6 +22,13 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import { getFoldersBegin, createFolderBegin, foldersUnmount } from 'containers/Resource/actions';
 import FolderForm from 'components/Resource/Folder/FolderForm';
 
+import {
+  getFolderShowPath,
+  getFolderIndexPath
+} from 'utils/resourceHelpers';
+import messages from 'containers/Resource/Folder/messages';
+
+
 export function FolderCreatePage(props) {
   useInjectReducer({ key: 'resource', reducer });
   useInjectSaga({ key: 'resource', saga });
@@ -28,23 +37,10 @@ export function FolderCreatePage(props) {
   const rs = new RouteService(useContext);
   const { location } = rs;
 
-  let foldersIndexPath;
-  let folderShowPath;
-  let type;
-  if (props.path.startsWith('/groups')) {
-    type = 'group';
-    foldersIndexPath = ROUTES.group.resources.folders.index.path(rs.params('group_id'));
-    folderShowPath = id => ROUTES.group.resources.folders.show.path(rs.params('group_id'), id);
-  } else {
-    type = 'admin';
-    foldersIndexPath = ROUTES.admin.manage.resources.folders.index.path();
-    folderShowPath = id => ROUTES.admin.manage.resources.folders.show.path(id);
-  }
+  const type = props.path.startsWith('/groups') ? 'group' : 'admin';
 
   const links = {
-    foldersIndex: foldersIndexPath,
-    folderShow: folderShowPath,
-    cancelLink: location.fromFolder ? folderShowPath(location.fromFolder.folder.id) : foldersIndexPath
+    cancelLink: location.fromFolder ? getFolderShowPath(location.fromFolder.folder) : getFolderIndexPath(type, rs.params('group_id')[0])
   };
 
   useEffect(() => {
@@ -61,7 +57,7 @@ export function FolderCreatePage(props) {
       getFoldersBegin={props.getFoldersBegin}
       selectFolders={props.folders}
       folderAction={props.createFolderBegin}
-      buttonText='Create'
+      buttonText={props.intl.formatMessage(messages.create)}
       currentUser={currentUser}
       currentGroup={currentGroup}
       links={links}
@@ -72,6 +68,7 @@ export function FolderCreatePage(props) {
 }
 
 FolderCreatePage.propTypes = {
+  intl: intlShape.isRequired,
   path: PropTypes.string,
   getFoldersBegin: PropTypes.func,
   selectFolders: PropTypes.array,
@@ -107,4 +104,5 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
+  injectIntl
 )(FolderCreatePage);

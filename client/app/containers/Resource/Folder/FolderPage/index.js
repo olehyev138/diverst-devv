@@ -33,6 +33,14 @@ import Folder from 'components/Resource/Folder/Folder';
 import { Field, Form, Formik } from 'formik';
 import { Button, Card, CardContent, TextField } from '@material-ui/core';
 import dig from 'object-dig';
+import {
+  getParentPage,
+  getFolderNewPath,
+  getFolderEditPath,
+  getFolderShowPath,
+  getResourceNewPath,
+  getResourceEditPath,
+} from 'utils/resourceHelpers';
 
 const defaultParams = Object.freeze({
   count: 5, // TODO: Make this a constant and use it also in Folder
@@ -46,43 +54,23 @@ export function FolderPage(props) {
   useInjectSaga({ key: 'resource', saga });
 
   const rs = new RouteService(useContext);
-  let foldersIndexPath;
-  let folderNewPath;
-  let folderEditPath;
-  let folderShowPath;
-  let resourceEditPath;
-  let resourceNewPath;
-  if (props.path.startsWith('/groups')) {
-    foldersIndexPath = ROUTES.group.resources.folders.index.path(rs.params('group_id'));
-    folderShowPath = id => ROUTES.group.resources.folders.show.path(rs.params('group_id'), id);
-    folderNewPath = ROUTES.group.resources.folders.new.path(rs.params('group_id'));
-    folderEditPath = id => ROUTES.group.resources.folders.edit.path(rs.params('group_id'), id);
-    resourceEditPath = id => ROUTES.group.resources.resources.edit.path(rs.params('group_id'), rs.params('item_id'), id);
-    resourceNewPath = ROUTES.group.resources.resources.new.path(rs.params('group_id'), rs.params('item_id'));
-  } else {
-    foldersIndexPath = ROUTES.admin.manage.resources.folders.index.path();
-    folderShowPath = id => ROUTES.admin.manage.resources.folders.show.path(id);
-    folderNewPath = ROUTES.admin.manage.resources.folders.new.path(rs.params());
-    folderEditPath = id => ROUTES.admin.manage.resources.folders.edit.path(id);
-    resourceEditPath = id => ROUTES.admin.manage.resources.resources.edit.path(rs.params('item_id'), id);
-    resourceNewPath = ROUTES.admin.manage.resources.resources.new.path(rs.params('item_id'));
-  }
-
-  const links = {
-    foldersIndex: foldersIndexPath,
-    folderShow: folderShowPath,
-    folderNew: folderNewPath,
-    folderEdit: folderEditPath,
-    resourceNew: resourceNewPath,
-    resourceEdit: resourceEditPath,
-  };
 
   const {
     currentUser,
     currentFolder,
     subFolders,
     resources,
-    valid } = props;
+    valid,
+  } = props;
+
+  const links = {
+    folderShow: folder => getFolderShowPath(folder),
+    folderNew: getFolderNewPath(currentFolder),
+    parentFolder: getParentPage(currentFolder),
+    folderEdit: folder => getFolderEditPath(folder),
+    resourceNew: getResourceNewPath(currentFolder),
+    resourceEdit: resource => getResourceEditPath(currentFolder, resource),
+  };
 
   const [params, setParams] = useState(defaultParams);
 

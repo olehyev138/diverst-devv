@@ -19,6 +19,11 @@ import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import FoldersList from 'components/Resource/Folder/FoldersList';
+import {
+  getFolderEditPath,
+  getFolderNewPath,
+  getFolderShowPath
+} from 'utils/resourceHelpers';
 
 const defaultParams = Object.freeze({
   count: 10, // TODO: Make this a constant and use it also in FoldersList
@@ -33,27 +38,12 @@ export function FoldersPage(props) {
 
   const rs = new RouteService(useContext);
 
-  let foldersIndexPath;
-  let folderShowPath;
-  let folderNewPath;
-  let folderEditPath;
-  if (props.path.startsWith('/groups')) {
-    foldersIndexPath = ROUTES.group.resources.folders.index.path(rs.params('group_id'));
-    folderShowPath = id => ROUTES.group.resources.folders.show.path(rs.params('group_id'), id);
-    folderNewPath = ROUTES.group.resources.folders.new.path(rs.params('group_id'));
-    folderEditPath = id => ROUTES.group.resources.folders.edit.path(rs.params('group_id'), id);
-  } else {
-    foldersIndexPath = ROUTES.admin.manage.resources.folders.index.path();
-    folderShowPath = id => ROUTES.admin.manage.resources.folders.show.path(id);
-    folderNewPath = ROUTES.admin.manage.resources.folders.new.path();
-    folderEditPath = id => ROUTES.admin.manage.resources.folders.edit.path(id);
-  }
+  const type = props.path.startsWith('/groups') ? 'group' : 'admin';
 
   const links = {
-    foldersIndex: foldersIndexPath,
-    folderShow: folderShowPath,
-    folderNew: folderNewPath,
-    folderEdit: folderEditPath,
+    folderShow: folder => getFolderShowPath(folder),
+    folderNew: getFolderNewPath(type, rs.params('group_id')),
+    folderEdit: folder => getFolderEditPath(folder),
   };
 
   const [params, setParams] = useState(defaultParams);

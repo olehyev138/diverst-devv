@@ -9,6 +9,8 @@ import { compose } from 'redux';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 
+import { injectIntl, intlShape } from 'react-intl';
+
 import reducer from 'containers/Resource/reducer';
 import saga from 'containers/Resource/saga';
 
@@ -39,6 +41,7 @@ import {
   DialogActions, DialogContent, DialogContentText, DialogTitle
 } from '@material-ui/core';
 import { Field, Formik, Form } from 'formik';
+import messages from 'containers/Resource/Folder/messages';
 
 export function FolderEditPage(props) {
   useInjectReducer({ key: 'resource', reducer });
@@ -47,24 +50,11 @@ export function FolderEditPage(props) {
   const rs = new RouteService(useContext);
   const { location } = rs;
 
-  let foldersIndexPath;
-  let folderShowPath;
-  let type;
-  if (props.path.startsWith('/groups')) {
-    type = 'group';
-    foldersIndexPath = ROUTES.group.resources.folders.index.path(rs.params('group_id'));
-    folderShowPath = id => ROUTES.group.resources.folders.show.path(rs.params('group_id'), id);
-  } else {
-    type = 'admin';
-    foldersIndexPath = ROUTES.admin.manage.resources.folders.index.path();
-    folderShowPath = id => ROUTES.admin.manage.resources.folders.show.path(id);
-  }
+  const type = props.path.startsWith('/groups') ? 'group' : 'admin';
 
   const { currentUser, currentGroup, currentFolder, currentFormFolder, currentEnterprise, valid } = props;
 
   const links = {
-    foldersIndex: foldersIndexPath,
-    folderShow: folderShowPath,
     cancelLink: getParentPage(currentFolder)
   };
 
@@ -130,7 +120,7 @@ export function FolderEditPage(props) {
           getFoldersBegin={props.getFoldersBegin}
           selectFolders={props.folders}
           folderAction={props.updateFolderBegin}
-          buttonText='Update'
+          buttonText={props.intl.formatMessage(messages.update)}
           currentUser={currentUser}
           currentGroup={currentGroup}
           folder={currentFormFolder}
@@ -144,6 +134,7 @@ export function FolderEditPage(props) {
 }
 
 FolderEditPage.propTypes = {
+  intl: intlShape.isRequired,
   path: PropTypes.string,
   getFoldersBegin: PropTypes.func,
   selectFolders: PropTypes.array,
@@ -186,4 +177,5 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
+  injectIntl
 )(FolderEditPage);
