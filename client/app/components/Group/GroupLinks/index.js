@@ -155,7 +155,6 @@ export function GroupLinks(props) {
 
         <Button
           component={WrappedNavLink}
-          exact
           to={ROUTES.group.members.index.path(rs.params('group_id'))}
           className={classes.navLink}
           activeClassName={classes.navLinkActive}
@@ -168,7 +167,6 @@ export function GroupLinks(props) {
 
         <Button
           component={WrappedNavLink}
-          exact
           to={ROUTES.group.events.index.path(rs.params('group_id'))}
           className={classes.navLink}
           activeClassName={classes.navLinkActive}
@@ -190,7 +188,6 @@ export function GroupLinks(props) {
 
         <Button
           component={WrappedNavLink}
-          exact
           to={ROUTES.group.news.index.path(rs.params('group_id'))}
           className={classes.navLink}
           activeClassName={classes.navLinkActive}
@@ -203,7 +200,6 @@ export function GroupLinks(props) {
 
         <Button
           component={WrappedNavLink}
-          exact
           to={ROUTES.group.outcomes.index.path(rs.params('group_id'))}
           className={classes.navLink}
           activeClassName={classes.navLinkActive}
