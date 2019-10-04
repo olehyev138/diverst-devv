@@ -184,7 +184,7 @@ export function* createResource(action) {
     const response = yield call(api.resources.create.bind(api.resources), payload);
 
     // TODO check for group vs enterprise
-    yield put(push(payload.resource.path));
+    yield put(push(payload.resource.path || getFolderShowPath(response.data.resource.folder)));
     yield put(showSnackbar({
       message: 'Resource created',
       options: { variant: 'success' }
@@ -206,7 +206,7 @@ export function* updateResource(action) {
     const response = yield call(api.resources.update.bind(api.resources), payload.resource.id, payload);
 
     // TODO check for group vs enterprise
-    yield put(push(ROUTES.group.resources.index.path(payload.resource.owner_group_id)));
+    yield put(push(payload.resource.path || getFolderShowPath(response.data.resource.folder)));
     yield put(showSnackbar({
       message: 'Resource updated',
       options: { variant: 'success' }

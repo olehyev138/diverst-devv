@@ -134,6 +134,7 @@ export function ResourceFormInner({ handleSubmit, handleChange, handleBlur, valu
 }
 
 export function ResourceForm(props) {
+  console.log(resource);
   const resource = dig(props, 'resource');
   const initialValues = buildValues(resource, {
     id: { default: '' },

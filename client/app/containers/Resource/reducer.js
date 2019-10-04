@@ -42,7 +42,7 @@ function resourcesReducer(state = initialState, action) {
         draft.resourcesTotal = action.payload.total;
         break;
       case GET_RESOURCE_SUCCESS:
-        draft.currentResouce = action.payload.resource;
+        draft.currentResource = action.payload.resource;
         break;
       case RESOURCES_UNMOUNT:
         return initialState;

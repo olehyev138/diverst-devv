@@ -33,6 +33,8 @@ class Resource < ApplicationRecord
 
   before_validation :smart_add_url_protocol
 
+  before_save :unset_enterprise
+
   attr_reader :tag_tokens
 
   settings do
@@ -129,5 +131,9 @@ class Resource < ApplicationRecord
 
   def have_protocol?
     url[%r{\Ahttp:\/\/}] || url[%r{\Ahttps:\/\/}]
+  end
+
+  def unset_enterprise
+    self.enterprise_id = nil if self.group_id.present?
   end
 end

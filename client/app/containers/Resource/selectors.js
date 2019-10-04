@@ -61,7 +61,7 @@ const selectFormResource = () => createSelector(
   selectResourcesDomain,
   (resourcesState) => {
     const resource = Object.assign({}, resourcesState.currentResource);
-    if (resource.parent)
+    if (resource.folder)
       resource.folder = { value: resource.folder.id, label: resource.folder.name };
     return resource;
   }
@@ -70,8 +70,10 @@ const selectFormResource = () => createSelector(
 export {
   selectResourcesDomain,
   selectPaginatedFolders, selectPaginatedSelectFolders,
-  selectFoldersTotal, selectFolder, selectFormFolder,
+  selectFoldersTotal,
+  selectFolder, selectFormFolder,
   selectValid,
   selectPaginatedResources,
-  selectResourcesTotal, selectResource,
+  selectResourcesTotal,
+  selectResource, selectFormResource
 };
