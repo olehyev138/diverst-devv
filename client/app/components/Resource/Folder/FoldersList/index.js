@@ -170,6 +170,16 @@ export function FoldersList(props, context) {
             </Grid>
           </React.Fragment>
         )}
+        {props.folders == null && (
+          <React.Fragment>
+            <Grid item sm>
+              <Box mt={3} />
+              <Typography variant='h6' align='center' color='textSecondary'>
+                Loading...
+              </Typography>
+            </Grid>
+          </React.Fragment>
+        )}
       </Grid>
       {props.folders && props.folders.length > 0 && (
         <Pagination

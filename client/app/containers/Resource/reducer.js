@@ -15,8 +15,8 @@ import {
 } from './constants';
 
 export const initialState = {
-  folders: [],
-  resources: [],
+  folders: null,
+  resources: null,
   foldersTotal: null,
   resourcesTotal: null,
   currentFolder: null,

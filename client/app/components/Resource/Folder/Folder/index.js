@@ -369,6 +369,17 @@ export function Folder(props) {
             </Grid>
           </React.Fragment>
         )}
+
+        {props.folders == null && props.resources == null && (
+          <React.Fragment>
+            <Grid item sm>
+              <Box mt={3} />
+              <Typography variant='h6' align='center' color='textSecondary'>
+                Loading...
+              </Typography>
+            </Grid>
+          </React.Fragment>
+        )}
       </React.Fragment>
     ) : (
       <React.Fragment />
