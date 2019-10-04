@@ -19,7 +19,6 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import NewsFeed from 'components/News/NewsFeed';
 
-
 export function NewsFeedPage(props, context) {
   useInjectReducer({ key: 'news', reducer });
   useInjectSaga({ key: 'news', saga });
@@ -89,7 +88,7 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = {
   getNewsItemsBegin,
-  newsFeedUnmount
+  newsFeedUnmount,
 };
 
 const withConnect = connect(
