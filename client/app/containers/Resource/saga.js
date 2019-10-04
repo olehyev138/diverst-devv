@@ -29,7 +29,6 @@ import {
 } from 'containers/Resource/actions';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
-import {act} from "react-testing-library";
 
 function getFolderShowPath(folder) {
   if (folder.group_id)
