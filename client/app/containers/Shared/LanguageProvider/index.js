@@ -14,6 +14,8 @@ import { IntlProvider } from 'react-intl';
 
 import { makeSelectLocale } from './selectors';
 
+import GlobalLanguageProvider from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
+
 export function LanguageProvider(props) {
   return (
     <IntlProvider
@@ -21,7 +23,9 @@ export function LanguageProvider(props) {
       key={props.locale}
       messages={props.messages[props.locale]}
     >
-      {React.Children.only(props.children)}
+      <GlobalLanguageProvider>
+        {React.Children.only(props.children)}
+      </GlobalLanguageProvider>
     </IntlProvider>
   );
 }
