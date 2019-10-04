@@ -14,7 +14,7 @@ import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { selectGroup } from 'containers/Group/selectors';
-import { selectUser } from 'containers/Shared/App/selectors';
+import { selectUser, selectEnterprise } from 'containers/Shared/App/selectors';
 import { selectFolder, selectValid,
   selectPaginatedFolders, selectPaginatedResources,
   selectFoldersTotal, selectResourcesTotal,
@@ -62,10 +62,10 @@ export function FolderPage(props) {
   } else {
     foldersIndexPath = ROUTES.admin.manage.resources.folders.index.path();
     folderShowPath = id => ROUTES.admin.manage.resources.folders.show.path(id);
-    folderNewPath = ROUTES.group.admin.manage.folders.new.path(rs.params());
+    folderNewPath = ROUTES.admin.manage.resources.folders.new.path(rs.params());
     folderEditPath = id => ROUTES.admin.manage.resources.folders.edit.path(id);
-    resourceEditPath = id => ROUTES.admin.manage.resources.resources.edit.path(rs.params('group_id'), rs.params('item_id'), id);
-    resourceNewPath = ROUTES.group.admin.manage.resources.new.path(rs.params('group_id'), rs.params('item_id'));
+    resourceEditPath = id => ROUTES.admin.manage.resources.resources.edit.path(rs.params('item_id'), id);
+    resourceNewPath = ROUTES.admin.manage.resources.resources.new.path(rs.params('item_id'));
   }
 
   const links = {
@@ -122,9 +122,10 @@ export function FolderPage(props) {
     if (groupId) {
       const newParams = {
         ...params,
+        group_id: groupId,
         folder_id: folderId,
       };
-      props.getFoldersBegin(newParams);
+      props.getResourcesBegin(newParams);
       setParams(newParams);
     } else {
       const newParams = {
@@ -132,7 +133,7 @@ export function FolderPage(props) {
         enterprise_id: enterpriseId,
         folder_id: folderId,
       };
-      props.getFoldersBegin(newParams);
+      props.getResourcesBegin(newParams);
       setParams(newParams);
     }
   };
@@ -143,15 +144,22 @@ export function FolderPage(props) {
     // get folder specified in path
     props.getFolderBegin({ id: folderId });
     getFolders(folderId);
-    props.getResourcesBegin({ folder_id: folderId });
+    getResources(folderId)
 
     return () => props.foldersUnmount();
   }, []);
 
-  const handlePagination = (payload) => {
+  const handleFolderPagination = (payload) => {
     const newParams = { ...params, count: payload.count, page: payload.page };
 
     props.getFoldersBegin(newParams);
+    setParams(newParams);
+  };
+
+  const handleResourcePagination = (payload) => {
+    const newParams = { ...params, count: payload.count, page: payload.page };
+
+    props.getResourcesBegin(newParams);
     setParams(newParams);
   };
 
@@ -209,7 +217,8 @@ export function FolderPage(props) {
           folders={subFolders}
           foldersTotal={props.foldersTotal}
           resourcesTotal={props.resourcesTotal}
-          handlePagination={handlePagination}
+          handleResourcePagination={handleResourcePagination}
+          handleFolderPagination={handleFolderPagination}
           resources={resources}
           links={links}
         />
@@ -230,6 +239,7 @@ FolderPage.propTypes = {
   currentUser: PropTypes.object,
   currentGroup: PropTypes.object,
   currentFolder: PropTypes.object,
+  currentEnterprise: PropTypes.object,
   subFolders: PropTypes.array,
   foldersTotal: PropTypes.number,
   resources: PropTypes.array,
@@ -241,6 +251,7 @@ const mapStateToProps = createStructuredSelector({
   currentGroup: selectGroup(),
   currentUser: selectUser(),
   currentFolder: selectFolder(),
+  currentEnterprise: selectEnterprise(),
   subFolders: selectPaginatedFolders(),
   foldersTotal: selectFoldersTotal(),
   resources: selectPaginatedResources(),

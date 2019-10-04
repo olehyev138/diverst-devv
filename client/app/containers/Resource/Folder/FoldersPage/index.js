@@ -45,7 +45,7 @@ export function FoldersPage(props) {
   } else {
     foldersIndexPath = ROUTES.admin.manage.resources.folders.index.path();
     folderShowPath = id => ROUTES.admin.manage.resources.folders.show.path(id);
-    folderNewPath = ROUTES.group.admin.manage.folders.new.path(rs.params());
+    folderNewPath = ROUTES.admin.manage.resources.folders.new.path();
     folderEditPath = id => ROUTES.admin.manage.resources.folders.edit.path(id);
   }
 

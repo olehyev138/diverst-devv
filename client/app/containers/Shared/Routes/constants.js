@@ -153,7 +153,7 @@ export const ROUTES = {
         index: {
           path: (groupId = ':group_id') => `/groups/${groupId}/resources`,
           data: {
-            titleMessage: messages.groups.news.index,
+            titleMessage: messages.groups.resources,
           }
         },
         new: {
@@ -272,6 +272,33 @@ export const ROUTES = {
           path: (segmentId = ':segment_id') => `/admin/manage/segments/${segmentId}`,
         },
       },
+      resources: {
+        folders: {
+          index: {
+            path: () => '/admin/manage/resources',
+            data: {
+              titleMessage: messages.admin.manage.resources,
+            }
+          },
+          new: {
+            path: () => '/admin/manage/folder/new',
+          },
+          show: {
+            path: (itemId = ':item_id') => `/admin/manage/folder/${itemId}`,
+          },
+          edit: {
+            path: (itemId = ':item_id') => `/admin/manage/folder/${itemId}/edit`,
+          },
+        },
+        resources: {
+          new: {
+            path: (folderId = ':folder_id') => `/admin/manage/folder/${folderId}/resource/new`,
+          },
+          edit: {
+            path: (folderId = ':folder_id', itemId = ':item_id') => `/admin/manage/folder/${folderId}/resource/${itemId}/edit`,
+          },
+        }
+      }
     },
     system: {
       index: {

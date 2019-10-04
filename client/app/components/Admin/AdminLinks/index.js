@@ -232,6 +232,20 @@ class AdminLinks extends React.PureComponent {
                   <FormattedMessage {...ROUTES.admin.manage.segments.index.data.titleMessage} />
                 </ListItemText>
               </MenuItem>
+              <MenuItem
+                component={WrappedNavLink}
+                exact
+                to={ROUTES.admin.manage.resources.folders.index.path()}
+                className={classes.nested}
+                activeClassName={classes.navLinkActive}
+              >
+                <ListItemIcon>
+                  <ListIcon />
+                </ListItemIcon>
+                <ListItemText>
+                  <FormattedMessage {...ROUTES.admin.manage.resources.folders.index.data.titleMessage} />
+                </ListItemText>
+              </MenuItem>
             </List>
           </Collapse>
 

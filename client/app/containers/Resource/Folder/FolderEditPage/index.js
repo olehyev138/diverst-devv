@@ -17,7 +17,14 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { selectGroup } from 'containers/Group/selectors';
 import { selectUser, selectEnterprise } from 'containers/Shared/App/selectors';
-import { selectFormFolder, selectPaginatedSelectFolders, selectValid } from 'containers/Resource/selectors';
+import {
+  selectFormFolder, selectFolder,
+  selectPaginatedSelectFolders, selectValid
+} from 'containers/Resource/selectors';
+
+import {
+  getParentPage,
+} from 'utils/resourceHelpers';
 
 import {
   getFolderBegin, updateFolderBegin,
@@ -53,12 +60,13 @@ export function FolderEditPage(props) {
     folderShowPath = id => ROUTES.admin.manage.resources.folders.show.path(id);
   }
 
+  const { currentUser, currentGroup, currentFolder, currentFormFolder, currentEnterprise, valid } = props;
+
   const links = {
     foldersIndex: foldersIndexPath,
     folderShow: folderShowPath,
+    cancelLink: getParentPage(currentFolder)
   };
-
-  const { currentUser, currentGroup, currentFolder, currentEnterprise, valid } = props;
 
   useEffect(() => {
     const folderId = rs.params('item_id');
@@ -125,7 +133,7 @@ export function FolderEditPage(props) {
           buttonText='Update'
           currentUser={currentUser}
           currentGroup={currentGroup}
-          folder={currentFolder}
+          folder={currentFormFolder}
           links={links}
           type={type}
           from={location.fromFolder ? location.fromFolder : null}
@@ -146,6 +154,7 @@ FolderEditPage.propTypes = {
   currentUser: PropTypes.object,
   currentGroup: PropTypes.object,
   currentFolder: PropTypes.object,
+  currentFormFolder: PropTypes.object,
   currentEnterprise: PropTypes.object,
   folders: PropTypes.array,
   valid: PropTypes.bool,
@@ -154,7 +163,8 @@ FolderEditPage.propTypes = {
 const mapStateToProps = createStructuredSelector({
   currentGroup: selectGroup(),
   currentUser: selectUser(),
-  currentFolder: selectFormFolder(),
+  currentFolder: selectFolder(),
+  currentFormFolder: selectFormFolder(),
   folders: selectPaginatedSelectFolders(),
   currentEnterprise: selectEnterprise(),
   valid: selectValid(),

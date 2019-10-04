@@ -189,7 +189,7 @@ export function GroupLinks(props) {
           <Hidden smDown>
             <ResourcesIcon className={classes.navIcon} />
           </Hidden>
-          Resources
+          <FormattedMessage {...ROUTES.group.resources.folders.index.data.titleMessage} />
         </Button>
 
         <Button

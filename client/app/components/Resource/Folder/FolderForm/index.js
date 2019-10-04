@@ -121,7 +121,7 @@ export function FolderFormInner({ handleSubmit, handleChange, handleBlur, values
             {buttonText}
           </Button>
           <Button
-            to={props.from ? props.links.folderShow(props.from.folder.id) : props.links.foldersIndex}
+            to={props.links.cancelLink}
             component={WrappedNavLink}
           >
             <FormattedMessage {...messages.cancel} />
@@ -178,6 +178,7 @@ FolderForm.propTypes = {
   links: PropTypes.shape({
     foldersIndex: PropTypes.string,
     folderShow: PropTypes.func,
+    cancelLink: PropTypes.string,
   })
 };
 
@@ -204,6 +205,7 @@ FolderFormInner.propTypes = {
   links: PropTypes.shape({
     foldersIndex: PropTypes.string,
     folderShow: PropTypes.func,
+    cancelLink: PropTypes.string,
   })
 };
 

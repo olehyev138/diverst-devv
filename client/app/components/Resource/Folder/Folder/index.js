@@ -69,22 +69,28 @@ export function Folder(props) {
 
   const handleFolderChangePage = (folder, newPage) => {
     setFoldPage(newPage);
-    props.handlePagination({ count: rowsPerFoldPage, page: newPage });
+    props.handleFolderPagination({ count: rowsPerFoldPage, page: newPage });
   };
 
   const handleFolderChangeRowsPerPage = (folder) => {
+    const topIndex = rowsPerFoldPage * foldPage;
     setRowsPerFoldPage(+folder.target.value);
-    props.handlePagination({ count: +folder.target.value, foldPage });
+    const newPage = Math.ceil(topIndex / +folder.target.value);
+    setFoldPage(newPage);
+    props.handleFolderPagination({ count: +folder.target.value, newPage });
   };
 
   const handleResourceChangePage = (resource, newPage) => {
     setResPage(newPage);
-    props.handlePagination({ count: rowsPerResPage, page: newPage });
+    props.handleResourcePagination({ count: rowsPerResPage, page: newPage });
   };
 
   const handleResourceChangeRowsPerPage = (resource) => {
+    const topIndex = rowsPerResPage * foldPage;
     setRowsPerResPage(+resource.target.value);
-    props.handlePagination({ count: +resource.target.value, resPage });
+    const newPage = Math.ceil(topIndex / +resource.target.value);
+    setResPage(newPage);
+    props.handleResourcePagination({ count: +resource.target.value, newPage });
   };
 
   return (
@@ -392,7 +398,8 @@ Folder.propTypes = {
   resources: PropTypes.array,
   resourcesTotal: PropTypes.number,
   currentUserId: PropTypes.number,
-  handlePagination: PropTypes.func,
+  handleFolderPagination: PropTypes.func,
+  handleResourcePagination: PropTypes.func,
   intl: intlShape.isRequired,
   links: PropTypes.shape({
     foldersIndex: PropTypes.string,

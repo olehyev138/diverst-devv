@@ -44,6 +44,7 @@ export function FolderCreatePage(props) {
   const links = {
     foldersIndex: foldersIndexPath,
     folderShow: folderShowPath,
+    cancelLink: location.fromFolder ? folderShowPath(location.fromFolder.folder.id) : foldersIndexPath
   };
 
   useEffect(() => {

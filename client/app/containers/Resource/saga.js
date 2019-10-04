@@ -28,25 +28,11 @@ import {
   validateFolderPasswordSuccess, validateFolderPasswordError
 } from 'containers/Resource/actions';
 
-import { ROUTES } from 'containers/Shared/Routes/constants';
-
-function getFolderShowPath(folder) {
-  if (folder.group_id)
-    return ROUTES.group.resources.folders.show.path(folder.group_id, folder.id);
-  if (folder.enterprise_id)
-    return ROUTES.admin.manage.resources.folders.show.path(folder.id);
-
-  return null;
-}
-
-function getFolderIndexPath(folder) {
-  if (folder.group_id)
-    return ROUTES.group.resources.folders.index.path(folder.group_id);
-  if (folder.enterprise_id)
-    return ROUTES.admin.manage.resources.folders.index.path();
-
-  return null;
-}
+import {
+  getParentPage,
+  getFolderShowPath,
+  getFolderIndexPath,
+} from 'utils/resourceHelpers';
 
 export function* getFolders(action) {
   try {
@@ -83,8 +69,7 @@ export function* createFolder(action) {
     const payload = { folder: action.payload };
     const response = yield call(api.folders.create.bind(api.folders), payload);
 
-    // TODO check for group vs enterprise
-    yield put(push(payload.folder.path || ROUTES.group.resources.folders.index.path(payload.folder.group_id)));
+    yield put(push(getParentPage(response.data.folder)));
     yield put(showSnackbar({
       message: 'Folder created',
       options: { variant: 'success' }
@@ -105,8 +90,7 @@ export function* updateFolder(action) {
     const payload = { folder: action.payload };
     const response = yield call(api.folders.update.bind(api.folders), payload.folder.id, payload);
 
-    // TODO check for group vs enterprise
-    yield put(push(payload.folder.path || ROUTES.group.resources.folders.index.path(payload.folder.group_id)));
+    yield put(push(getParentPage(response.data.folder)));
     yield put(showSnackbar({
       message: 'Folder updated',
       options: { variant: 'success' }
@@ -125,14 +109,8 @@ export function* updateFolder(action) {
 export function* deleteFolder(action) {
   try {
     yield call(api.folders.destroy.bind(api.folders), action.payload.id);
-    let path;
-    const { folder } = action.payload;
-    if (folder.parent)
-      path = getFolderShowPath(folder.parent);
-    else
-      path = getFolderIndexPath(folder);
 
-    yield put(push(path));
+    yield put(push(getParentPage(action.payload.folder)));
     yield put(showSnackbar({
       message: 'Folder deleted',
       options: { variant: 'success' }
@@ -183,8 +161,7 @@ export function* createResource(action) {
     const payload = { resource: action.payload };
     const response = yield call(api.resources.create.bind(api.resources), payload);
 
-    // TODO check for group vs enterprise
-    yield put(push(payload.resource.path || getFolderShowPath(response.data.resource.folder)));
+    yield put(push(getFolderShowPath(response.data.resource.folder)));
     yield put(showSnackbar({
       message: 'Resource created',
       options: { variant: 'success' }
@@ -205,8 +182,7 @@ export function* updateResource(action) {
     const payload = { resource: action.payload };
     const response = yield call(api.resources.update.bind(api.resources), payload.resource.id, payload);
 
-    // TODO check for group vs enterprise
-    yield put(push(payload.resource.path || getFolderShowPath(response.data.resource.folder)));
+    yield put(push(getFolderShowPath(response.data.resource.folder)));
     yield put(showSnackbar({
       message: 'Resource updated',
       options: { variant: 'success' }
