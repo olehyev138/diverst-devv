@@ -72,16 +72,47 @@ export function ResourceFormInner({ handleSubmit, handleChange, handleBlur, valu
             onBlur={() => setFieldTouched('folder_id', true)}
             isClearable
           />
-          <Field
-            component={TextField}
-            onChange={handleChange}
-            fullWidth
-            id='url'
-            name='url'
-            margin='normal'
-            label={<FormattedMessage {...messages.form.url} />}
-            value={values.url}
-          />
+          <h4>
+            Resource Type:
+          </h4>
+          <FormControl
+            variant='outlined'
+          >
+            <FormControlLabel
+              labelPlacement='top'
+              checked={values.type}
+              control={(
+                <Field
+                  component={Switch}
+                  color='primary'
+                  onChange={handleChange}
+                  id='type'
+                  name='type'
+                  margin='normal'
+                  checked={values.type}
+                  value={values.type}
+                />
+              )}
+              label='URL / File'
+            />
+          </FormControl>
+          { values.type && (
+            <h3>
+              To Be Added: File Upload
+            </h3>
+          )}
+          { !values.type && (
+            <Field
+              component={TextField}
+              onChange={handleChange}
+              fullWidth
+              id='url'
+              name='url'
+              margin='normal'
+              label={<FormattedMessage {...messages.form.url} />}
+              value={values.url}
+            />
+          )}
         </CardContent>
         <CardActions>
           <Button
@@ -109,6 +140,7 @@ export function ResourceForm(props) {
     title: { default: '' },
     folder: { default: props.currentFolder ? { value: props.currentFolder.id, label: props.currentFolder.name } : null, customKey: 'folder_id' },
     url: { default: '' },
+    type: { default: false },
     group_id: { default: props.type === 'group' ? dig(props, 'currentGroup', 'id') : null },
   });
 
