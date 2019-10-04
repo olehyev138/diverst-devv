@@ -67,7 +67,7 @@ export function EventFormInner({
         <Divider />
         <CardContent>
           <Grid container spacing={6} justify='space-between'>
-            <Grid item xs md={5}>
+            <Grid item xs={12} sm md={5}>
               <Field
                 component={DiverstDateTimePicker}
                 required
@@ -83,7 +83,7 @@ export function EventFormInner({
                 label={<FormattedMessage {...messages.inputs.start} />}
               />
             </Grid>
-            <Grid item xs md={5}>
+            <Grid item xs={12} sm md={5}>
               <Field
                 component={DiverstDateTimePicker}
                 required
