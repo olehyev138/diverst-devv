@@ -25,6 +25,7 @@ import {
   deleteFolderBegin, foldersUnmount,
   validateFolderPasswordBegin,
   getResourcesBegin,
+  deleteResourceBegin,
 } from 'containers/Resource/actions';
 
 import Folder from 'components/Resource/Folder/Folder';
@@ -203,6 +204,7 @@ export function FolderPage(props) {
         <Folder
           currentUserId={currentUser.id}
           deleteFolderBegin={props.deleteFolderBegin}
+          deleteResourceBegin={props.deleteResourceBegin}
           folder={currentFolder}
           folders={subFolders}
           foldersTotal={props.foldersTotal}
@@ -221,6 +223,7 @@ FolderPage.propTypes = {
   getFolderBegin: PropTypes.func,
   getFoldersBegin: PropTypes.func,
   deleteFolderBegin: PropTypes.func,
+  deleteResourceBegin: PropTypes.func,
   validateFolderPasswordBegin: PropTypes.func,
   getResourcesBegin: PropTypes.func,
   foldersUnmount: PropTypes.func,
@@ -252,6 +255,7 @@ const mapDispatchToProps = {
   foldersUnmount,
   validateFolderPasswordBegin,
   getResourcesBegin,
+  deleteResourceBegin,
 };
 
 const withConnect = connect(

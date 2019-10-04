@@ -19,6 +19,8 @@ import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import Pagination from 'components/Shared/Pagination';
 
 import messages from 'containers/Resource/Folder/messages';
+import resourceMessages from 'containers/Resource/Resource/messages';
+
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 
 import { formatDateTimeString, DateTime } from 'utils/dateTimeHelpers';
@@ -312,25 +314,31 @@ export function Folder(props) {
                         )}
                         <hr className={classes.divider} />
                         <React.Fragment>
-                          <Link
+                          <Button
                             className={classes.folderLink}
                             component={WrappedNavLink}
                             to={props.links.resourceEdit(item.id)}
                           >
                             <Typography color='textSecondary'>
-                              {'TODO MESSAGES: Edit Resource'}
+                              <FormattedMessage {...resourceMessages.edit} />
                             </Typography>
-                          </Link>
+                          </Button>
 
-                          <Link
+                          <Button
                             className={classes.folderLink}
-                            component={WrappedNavLink}
-                            to={props.links.resourceEdit(item.id)}
+                            onClick={() => {
+                              // eslint-disable-next-line no-restricted-globals,no-alert
+                              if (confirm(props.intl.formatMessage(resourceMessages.confirm_delete)))
+                                props.deleteResourceBegin({
+                                  id: item.id,
+                                  folder: item.folder,
+                                });
+                            }}
                           >
                             <Typography color='error'>
-                              {'TODO MESSAGES: Delete Resource'}
+                              <FormattedMessage {...resourceMessages.delete} />
                             </Typography>
-                          </Link>
+                          </Button>
                           <Box pb={1} />
                         </React.Fragment>
                       </Grid>
@@ -376,6 +384,7 @@ export function Folder(props) {
 
 Folder.propTypes = {
   deleteFolderBegin: PropTypes.func,
+  deleteResourceBegin: PropTypes.func,
   classes: PropTypes.object,
   folder: PropTypes.object,
   folders: PropTypes.array,

@@ -29,6 +29,7 @@ import {
 } from 'containers/Resource/actions';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
+import {act} from "react-testing-library";
 
 function getFolderShowPath(folder) {
   if (folder.group_id)
@@ -226,7 +227,8 @@ export function* deleteResource(action) {
   try {
     yield call(api.resources.destroy.bind(api.resources), action.payload.id);
     // TODO check for group vs enterprise
-    yield put(push(ROUTES.group.resources.index.path(action.payload.group_id)));
+
+    yield put(push(getFolderShowPath(action.payload.folder)));
     yield put(showSnackbar({
       message: 'Resource deleted',
       options: { variant: 'success' }
