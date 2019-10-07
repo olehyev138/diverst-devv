@@ -23,7 +23,7 @@ import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import ResponsiveTabs from 'components/Shared/ResponsiveTabs';
-import Pagination from 'components/Shared/Pagination';
+import Pagination from 'components/Shared/DiverstPagination';
 
 import { formatDateTimeString, DateTime } from 'utils/dateTimeHelpers';
 
@@ -64,20 +64,7 @@ const styles = theme => ({
 export function EventsList(props, context) {
   const { classes, intl } = props;
 
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-
   const routeContext = useContext(RouteContext);
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-    props.handlePagination({ count: rowsPerPage, page: newPage });
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
-    props.handlePagination({ count: +event.target.value, page });
-  };
 
   return (
     <React.Fragment>
@@ -166,11 +153,8 @@ export function EventsList(props, context) {
       </Grid>
       {props.events && props.events.length > 0 && (
         <Pagination
-          page={page}
-          rowsPerPage={rowsPerPage}
           count={props.eventsTotal}
-          onChangePage={handleChangePage}
-          onChangeRowsPerPage={handleChangeRowsPerPage}
+          handlePagination={props.handlePagination}
         />
       )}
     </React.Fragment>

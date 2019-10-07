@@ -20,7 +20,7 @@ import {
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
-import Pagination from 'components/Shared/Pagination';
+import Pagination from 'components/Shared/DiverstPagination';
 
 const styles = theme => ({
   segmentListItem: {
@@ -37,19 +37,7 @@ const styles = theme => ({
 export function SegmentList(props, context) {
   const { classes } = props;
   const { links } = props;
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
   const [expandedSegments, setExpandedSegments] = useState({});
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-    props.handlePagination({ count: rowsPerPage, page: newPage });
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
-    props.handlePagination({ count: +event.target.value, page });
-  };
 
   /* Store a expandedSegmentsHash for each segment, that tracks whether or not its children are expanded */
   if (props.segments && Object.keys(props.segments).length !== 0 && Object.keys(expandedSegments).length <= 0) {
@@ -115,11 +103,9 @@ export function SegmentList(props, context) {
         })}
       </Grid>
       <Pagination
-        page={page}
-        rowsPerPage={rowsPerPage}
+        rowsPerPage={5}
         count={props.segmentTotal}
-        onChangePage={handleChangePage}
-        onChangeRowsPerPage={handleChangeRowsPerPage}
+        handlePagination={props.handlePagination}
       />
     </React.Fragment>
   );

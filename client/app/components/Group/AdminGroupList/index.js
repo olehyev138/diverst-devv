@@ -20,7 +20,7 @@ import {
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
-import Pagination from 'components/Shared/Pagination';
+import Pagination from 'components/Shared/DiverstPagination';
 
 const styles = theme => ({
   progress: {
@@ -51,19 +51,7 @@ const styles = theme => ({
 
 export function AdminGroupList(props, context) {
   const { classes, defaultParams } = props;
-  const [page, setPage] = useState(defaultParams.page);
-  const [rowsPerPage, setRowsPerPage] = useState(defaultParams.count);
   const [expandedGroups, setExpandedGroups] = useState({});
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-    props.handlePagination({ count: rowsPerPage, page: newPage });
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
-    props.handlePagination({ count: +event.target.value, page });
-  };
 
   /* Store a expandedGroupsHash for each group, that tracks whether or not its children are expanded */
   if (props.groups && Object.keys(props.groups).length !== 0 && Object.keys(expandedGroups).length <= 0) {
@@ -222,11 +210,9 @@ export function AdminGroupList(props, context) {
         })}
       </Grid>
       <Pagination
-        page={page}
-        rowsPerPage={rowsPerPage}
+        handlePagination={props.handlePagination}
+        rowsPerPage={defaultParams.count}
         count={props.groupTotal}
-        onChangePage={handleChangePage}
-        onChangeRowsPerPage={handleChangeRowsPerPage}
       />
     </React.Fragment>
   );

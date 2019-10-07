@@ -24,7 +24,7 @@ import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
 import FieldForm from 'components/Shared/Fields/FieldForms/FieldForm';
 
-import Pagination from 'components/Shared/Pagination';
+import Pagination from 'components/Shared/DiverstPagination';
 
 const styles = theme => ({
   fieldListItem: {
@@ -40,21 +40,9 @@ const styles = theme => ({
 
 export function FieldList(props, context) {
   const { classes } = props;
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
   const [expandedFields, setExpandedFields] = useState({});
 
   const [fieldForm, setFieldForm] = useState(undefined);
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-    props.handlePagination({ count: rowsPerPage, page: newPage });
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
-    props.handlePagination({ count: +event.target.value, page });
-  };
 
   const renderFieldForm = (field, fieldAction) => {
     setFieldForm(<FieldForm
@@ -124,11 +112,9 @@ export function FieldList(props, context) {
         })}
       </Grid>
       <Pagination
-        page={page}
-        rowsPerPage={rowsPerPage}
+        rowsPerPage={5}
         count={props.fieldTotal}
-        onChangePage={handleChangePage}
-        onChangeRowsPerPage={handleChangeRowsPerPage}
+        handlePagination={props.handlePagination}
       />
     </React.Fragment>
   );

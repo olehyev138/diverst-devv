@@ -21,7 +21,7 @@ import RemoveIcon from '@material-ui/icons/Remove';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
-import Pagination from 'components/Shared/Pagination';
+import Pagination from 'components/Shared/DiverstPagination';
 
 import DiverstLoader from 'components/Shared/DiverstLoader';
 
@@ -70,19 +70,7 @@ const styles = theme => ({
 
 export function UserGroupList(props, context) {
   const { classes, defaultParams } = props;
-  const [page, setPage] = useState(defaultParams.page);
-  const [rowsPerPage, setRowsPerPage] = useState(defaultParams.count);
   const [expandedGroups, setExpandedGroups] = useState({});
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-    props.handlePagination({ count: rowsPerPage, page: newPage });
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
-    props.handlePagination({ count: +event.target.value, page });
-  };
 
   /* Store a expandedGroupsHash for each group, that tracks whether or not its children are expanded */
   if (props.groups && Object.keys(props.groups).length !== 0 && Object.keys(expandedGroups).length <= 0) {
@@ -186,11 +174,9 @@ export function UserGroupList(props, context) {
           ))}
         </Grid>
         <Pagination
-          page={page}
-          rowsPerPage={rowsPerPage}
+          rowsPerPage={defaultParams.count}
           count={props.groupTotal}
-          onChangePage={handleChangePage}
-          onChangeRowsPerPage={handleChangeRowsPerPage}
+          handlePagination={props.handlePagination}
         />
       </DiverstLoader>
     </React.Fragment>

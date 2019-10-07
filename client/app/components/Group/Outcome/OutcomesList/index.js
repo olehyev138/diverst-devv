@@ -20,7 +20,7 @@ import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import ListItemIcon from '@material-ui/icons/Remove';
 import AddIcon from '@material-ui/icons/Add';
 
-import Pagination from 'components/Shared/Pagination';
+import Pagination from 'components/Shared/DiverstPagination';
 
 const styles = theme => ({
   floatRight: {
@@ -31,25 +31,6 @@ const styles = theme => ({
 
 export function OutcomesList(props, context) {
   const { classes, intl } = props;
-
-  const [page, setPage] = useState(props.defaultParams.page);
-  const [rowsPerPage, setRowsPerPage] = useState(props.defaultParams.count);
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-    props.handlePagination({
-      count: rowsPerPage,
-      page: newPage
-    });
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
-    props.handlePagination({
-      count: +event.target.value,
-      page
-    });
-  };
 
   return (
     <React.Fragment>
@@ -108,11 +89,9 @@ export function OutcomesList(props, context) {
         ))}
       </Grid>
       <Pagination
-        page={page}
-        rowsPerPage={rowsPerPage}
+        rowsPerPage={props.defaultParams.count}
         count={props.outcomeTotal}
-        onChangePage={handleChangePage}
-        onChangeRowsPerPage={handleChangeRowsPerPage}
+        handlePagination={props.handlePagination}
       />
     </React.Fragment>
   );

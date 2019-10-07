@@ -26,7 +26,7 @@ import GroupMessageListItem from 'components/News/GroupMessage/GroupMessageListI
 import NewsLinkListItem from 'components/News/NewsLink/NewsLinkListItem';
 import SocialLinkListItem from 'components/News/SocialLink/SocialLinkListItem';
 
-import Pagination from 'components/Shared/Pagination';
+import Pagination from 'components/Shared/DiverstPagination';
 
 const styles = theme => ({
   newsItem: {
@@ -70,19 +70,7 @@ export function NewsFeed(props) {
   ];
 
   const { classes } = props;
-  const [page, setPage] = useState(props.defaultParams.page);
-  const [rowsPerPage, setRowsPerPage] = useState(props.defaultParams.count);
   const [speedDialOpen, setSpeedDialOpen] = React.useState(false);
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-    props.handlePagination({ count: rowsPerPage, page: newPage });
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
-    props.handlePagination({ count: +event.target.value, page });
-  };
 
   const handleSpeedDialOpen = () => setSpeedDialOpen(true);
   const handleSpeedDialClose = () => setSpeedDialOpen(false);
@@ -141,11 +129,9 @@ export function NewsFeed(props) {
         })}
       </Grid>
       <Pagination
-        page={page}
-        rowsPerPage={rowsPerPage}
+        rowsPerPage={props.defaultParams.count}
         count={props.newsItemsTotal}
-        onChangePage={handleChangePage}
-        onChangeRowsPerPage={handleChangeRowsPerPage}
+        handlePagination={props.handlePagination}
       />
     </React.Fragment>
   );
