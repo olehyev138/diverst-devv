@@ -12,7 +12,6 @@ import { FormattedMessage } from 'react-intl';
 import messages from 'containers/Segment/messages';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
-import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import {
   Button, Card, CardContent, CardActions,
@@ -20,7 +19,10 @@ import {
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
-import Pagination from 'components/Shared/DiverstPagination';
+import AddIcon from '@material-ui/icons/Add';
+
+import DiverstLoader from 'components/Shared/DiverstLoader';
+import DiverstPagination from 'components/Shared/DiverstPagination';
 
 const styles = theme => ({
   segmentListItem: {
@@ -51,7 +53,7 @@ export function SegmentList(props, context) {
 
   return (
     <React.Fragment>
-      <Grid container spacing={3}>
+      <Grid container spacing={3} justify='flex-end'>
         <Grid item>
           <Button
             variant='contained'
@@ -59,50 +61,54 @@ export function SegmentList(props, context) {
             color='primary'
             size='large'
             component={WrappedNavLink}
+            startIcon={<AddIcon />}
           >
             <FormattedMessage {...messages.new} />
           </Button>
         </Grid>
-        { /* eslint-disable-next-line arrow-body-style */ }
-        {props.segments && Object.values(props.segments).map((segment, i) => {
-          return (
-            <Grid item key={segment.id} className={classes.segmentListItem}>
-              <Card>
-                <CardContent>
-                  {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                  <Link
-                    component={WrappedNavLink}
-                    to={links.segmentPage(segment.id)}
-                  >
-                    <Typography variant='h5' component='h2' display='inline'>
-                      {segment.name}
-                    </Typography>
-                  </Link>
-                  {segment.description && (
-                    <Typography color='textSecondary' className={classes.segmentListItemDescription}>
-                      {segment.description}
-                    </Typography>
-                  )}
-                </CardContent>
-                <CardActions>
-                  <Button
-                    size='small'
-                    className={classes.errorButton}
-                    onClick={() => {
-                      /* eslint-disable-next-line no-alert, no-restricted-globals */
-                      if (confirm('Delete segment?'))
-                        props.deleteSegmentBegin(segment.id);
-                    }}
-                  >
-                    <FormattedMessage {...messages.delete} />
-                  </Button>
-                </CardActions>
-              </Card>
-            </Grid>
-          );
-        })}
+        <DiverstLoader isLoading={props.isLoading}>
+          { /* eslint-disable-next-line arrow-body-style */ }
+          {props.segments && Object.values(props.segments).map((segment, i) => {
+            return (
+              <Grid item key={segment.id} className={classes.segmentListItem}>
+                <Card>
+                  <CardContent>
+                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                    <Link
+                      component={WrappedNavLink}
+                      to={links.segmentPage(segment.id)}
+                    >
+                      <Typography variant='h5' component='h2' display='inline'>
+                        {segment.name}
+                      </Typography>
+                    </Link>
+                    {segment.description && (
+                      <Typography color='textSecondary' className={classes.segmentListItemDescription}>
+                        {segment.description}
+                      </Typography>
+                    )}
+                  </CardContent>
+                  <CardActions>
+                    <Button
+                      size='small'
+                      className={classes.errorButton}
+                      onClick={() => {
+                        /* eslint-disable-next-line no-alert, no-restricted-globals */
+                        if (confirm('Delete segment?'))
+                          props.deleteSegmentBegin(segment.id);
+                      }}
+                    >
+                      <FormattedMessage {...messages.delete} />
+                    </Button>
+                  </CardActions>
+                </Card>
+              </Grid>
+            );
+          })}
+        </DiverstLoader>
       </Grid>
-      <Pagination
+      <DiverstPagination
+        isLoading={props.isLoading}
         rowsPerPage={5}
         count={props.segmentTotal}
         handlePagination={props.handlePagination}
@@ -117,7 +123,8 @@ SegmentList.propTypes = {
   segmentTotal: PropTypes.number,
   deleteSegmentBegin: PropTypes.func,
   handlePagination: PropTypes.func,
-  links: PropTypes.object
+  links: PropTypes.object,
+  isLoading: PropTypes.bool,
 };
 
 export default compose(

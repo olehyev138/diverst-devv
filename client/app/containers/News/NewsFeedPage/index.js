@@ -11,7 +11,7 @@ import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/News/reducer';
 import saga from 'containers/News/saga';
 
-import { selectPaginatedNewsItems, selectNewsItemsTotal } from 'containers/News/selectors';
+import { selectPaginatedNewsItems, selectNewsItemsTotal, selectIsLoading } from 'containers/News/selectors';
 import { getNewsItemsBegin, newsFeedUnmount } from 'containers/News/actions';
 
 import RouteService from 'utils/routeHelpers';
@@ -61,6 +61,7 @@ export function NewsFeedPage(props, context) {
       <NewsFeed
         newsItems={props.newsItems}
         newsItemsTotal={props.newsItemsTotal}
+        isLoading={props.isLoading}
         defaultParams={params}
         handlePagination={handlePagination}
         links={links}
@@ -74,6 +75,7 @@ NewsFeedPage.propTypes = {
   newsFeedUnmount: PropTypes.func.isRequired,
   newsItems: PropTypes.array,
   newsItemsTotal: PropTypes.number,
+  isLoading: PropTypes.bool,
   currentGroup: PropTypes.shape({
     news_feed: PropTypes.shape({
       id: PropTypes.number
@@ -83,7 +85,8 @@ NewsFeedPage.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
   newsItems: selectPaginatedNewsItems(),
-  newsItemsTotal: selectNewsItemsTotal()
+  newsItemsTotal: selectNewsItemsTotal(),
+  isLoading: selectIsLoading(),
 });
 
 const mapDispatchToProps = {

@@ -33,7 +33,7 @@
   "diverst.containers.Routes.admin.manage.segments": "Segments",
   "diverst.containers.Routes.admin.system.index": "System",
   "diverst.containers.Routes.admin.system.users": "Users",
-  "diverst.containers.Group.index.button.new": "New",
+  "diverst.containers.Group.index.button.new": "New Group",
   "diverst.containers.Group.index.button.edit": "Edit",
   "diverst.containers.Group.index.button.delete": "Delete",
   "diverst.containers.Group.index.button.children_collapse": "Hide Children",

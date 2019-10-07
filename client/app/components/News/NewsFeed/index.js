@@ -26,7 +26,9 @@ import GroupMessageListItem from 'components/News/GroupMessage/GroupMessageListI
 import NewsLinkListItem from 'components/News/NewsLink/NewsLinkListItem';
 import SocialLinkListItem from 'components/News/SocialLink/SocialLinkListItem';
 
-import Pagination from 'components/Shared/DiverstPagination';
+import DiverstPagination from 'components/Shared/DiverstPagination';
+
+import DiverstLoader from 'components/Shared/DiverstLoader';
 
 const styles = theme => ({
   newsItem: {
@@ -117,18 +119,21 @@ export function NewsFeed(props) {
           />
         ))}
       </SpeedDial>
-      <Grid container>
-        { /* eslint-disable-next-line arrow-body-style */ }
-        {props.newsItems && Object.values(props.newsItems).map((item, i) => {
-          return (
-            <Grid item key={item.id} className={classes.newsItem}>
-              {renderNewsItem(item)}
-              <Box mb={3} />
-            </Grid>
-          );
-        })}
-      </Grid>
-      <Pagination
+      <DiverstLoader isLoading={props.isLoading}>
+        <Grid container>
+          { /* eslint-disable-next-line arrow-body-style */ }
+          {props.newsItems && Object.values(props.newsItems).map((item, i) => {
+            return (
+              <Grid item key={item.id} className={classes.newsItem}>
+                {renderNewsItem(item)}
+                <Box mb={3} />
+              </Grid>
+            );
+          })}
+        </Grid>
+      </DiverstLoader>
+      <DiverstPagination
+        isLoading={props.isLoading}
         rowsPerPage={props.defaultParams.count}
         count={props.newsItemsTotal}
         handlePagination={props.handlePagination}
@@ -143,6 +148,7 @@ NewsFeed.propTypes = {
   newsItems: PropTypes.array,
   newsItemsTotal: PropTypes.number,
   handlePagination: PropTypes.func,
+  isLoading: PropTypes.bool,
   links: PropTypes.shape({
     groupMessageNew: PropTypes.string
   })

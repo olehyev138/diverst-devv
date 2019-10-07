@@ -1,10 +1,10 @@
-import React, { memo, useContext, useState } from 'react';
+import React, { memo, useState } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
 
 import { withStyles } from '@material-ui/core/styles';
 
-import { TablePagination, Box } from '@material-ui/core';
+import { TablePagination } from '@material-ui/core';
 
 const styles = theme => ({
   paginationContainer: {
@@ -44,6 +44,9 @@ export function DiverstPagination(props) {
     props.handlePagination({ count: +event.target.value, page });
   };
 
+  if (props.isLoading === true)
+    return undefined;
+
   return (
     <div className={classes.paginationContainer}>
       <TablePagination
@@ -74,6 +77,7 @@ DiverstPagination.propTypes = {
   rowsPerPage: PropTypes.number,
   onChangePage: PropTypes.func,
   onChangeRowsPerPage: PropTypes.func,
+  isLoading: PropTypes.bool,
 };
 
 export default compose(

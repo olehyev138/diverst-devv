@@ -21,7 +21,7 @@ import RemoveIcon from '@material-ui/icons/Remove';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
-import Pagination from 'components/Shared/DiverstPagination';
+import DiverstPagination from 'components/Shared/DiverstPagination';
 
 import DiverstLoader from 'components/Shared/DiverstLoader';
 
@@ -173,12 +173,13 @@ export function UserGroupList(props, context) {
             </Grid>
           ))}
         </Grid>
-        <Pagination
-          rowsPerPage={defaultParams.count}
-          count={props.groupTotal}
-          handlePagination={props.handlePagination}
-        />
       </DiverstLoader>
+      <DiverstPagination
+        isLoading={props.isLoading}
+        rowsPerPage={defaultParams.count}
+        count={props.groupTotal}
+        handlePagination={props.handlePagination}
+      />
     </React.Fragment>
   );
 }

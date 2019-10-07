@@ -13,7 +13,7 @@ import { compose } from 'redux';
 
 import {
   Button, Card, CardContent, CardActions,
-  Typography, Grid, Link, TablePagination, Collapse
+  Typography, Grid, Link, TablePagination, Collapse, Box,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -21,6 +21,7 @@ import { FormattedMessage } from 'react-intl';
 import messages from 'containers/User/messages';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
+import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/DeleteOutline';
 import EditIcon from '@material-ui/icons/Edit';
 
@@ -52,7 +53,7 @@ export function UserList(props, context) {
 
   return (
     <React.Fragment>
-      <Grid container spacing={3}>
+      <Grid container spacing={3} justify='flex-end'>
         <Grid item>
           <Button
             variant='contained'
@@ -60,15 +61,19 @@ export function UserList(props, context) {
             size='large'
             to={props.links.userNew}
             component={WrappedNavLink}
+            startIcon={<AddIcon />}
           >
             <FormattedMessage {...messages.new} />
           </Button>
         </Grid>
       </Grid>
+      <Box mb={1} />
       <Grid container spacing={3}>
         <Grid item xs>
           <DiverstTable
             title='Members'
+            handlePagination={props.handlePagination}
+            handleOrdering={props.handleOrdering}
             isLoading={props.isFetchingUsers}
             rowsPerPage={5}
             dataArray={Object.values(props.users)}

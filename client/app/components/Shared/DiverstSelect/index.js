@@ -64,15 +64,17 @@ export function DiverstSelect(props) {
         })}
         {...selectProps}
       />
-      <FormHelperText
-        id={`${props.id}-helper-text`}
-        disabled={disabled}
-        error={error}
-        required={required}
-        variant={variant}
-      >
-        {props.helperText}
-      </FormHelperText>
+      {!props.hideHelperText && (
+        <FormHelperText
+          id={`${props.id}-helper-text`}
+          disabled={disabled}
+          error={error}
+          required={required}
+          variant={variant}
+        >
+          {props.helperText}
+        </FormHelperText>
+      )}
     </FormControl>
   );
 }
@@ -88,6 +90,7 @@ DiverstSelect.propTypes = {
   coloredDefault: PropTypes.bool,
   imgClass: PropTypes.string,
   alt: PropTypes.string,
+  hideHelperText: PropTypes.bool,
 };
 
 export default compose(

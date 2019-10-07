@@ -8,11 +8,12 @@ import produce from 'immer/dist/immer';
 import {
   GET_SEGMENTS_SUCCESS, GET_SEGMENT_SUCCESS,
   GET_SEGMENT_MEMBERS_BEGIN, GET_SEGMENT_MEMBERS_SUCCESS,
-  GET_SEGMENT_MEMBERS_ERROR,
-  SEGMENT_UNMOUNT
+  GET_SEGMENT_MEMBERS_ERROR, GET_SEGMENTS_BEGIN,
+  SEGMENT_UNMOUNT, GET_SEGMENTS_ERROR, GET_SEGMENT_ERROR
 } from 'containers/Segment/constants';
 
 export const initialState = {
+  isLoading: true,
   segmentList: {},
   segmentTotal: null,
   currentSegment: null,
@@ -27,12 +28,23 @@ function segmentsReducer(state = initialState, action) {
   /* eslint-disable consistent-return */
   return produce(state, (draft) => {
     switch (action.type) {
+      case GET_SEGMENTS_BEGIN:
+        draft.isLoading = true;
+        break;
       case GET_SEGMENTS_SUCCESS:
         draft.segmentList = formatSegments(action.payload.items);
         draft.segmentTotal = action.payload.total;
+        draft.isLoading = false;
+        break;
+      case GET_SEGMENTS_ERROR:
+        draft.isLoading = false;
         break;
       case GET_SEGMENT_SUCCESS:
         draft.currentSegment = action.payload.segment;
+        draft.isLoading = false;
+        break;
+      case GET_SEGMENT_ERROR:
+        draft.isLoading = false;
         break;
       case GET_SEGMENT_MEMBERS_BEGIN:
         draft.isFetchingSegmentMembers = true;

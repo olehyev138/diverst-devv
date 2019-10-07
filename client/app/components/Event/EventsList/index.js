@@ -23,9 +23,10 @@ import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import ResponsiveTabs from 'components/Shared/ResponsiveTabs';
-import Pagination from 'components/Shared/DiverstPagination';
+import DiverstPagination from 'components/Shared/DiverstPagination';
 
 import { formatDateTimeString, DateTime } from 'utils/dateTimeHelpers';
+import DiverstLoader from 'components/Shared/DiverstLoader';
 
 const styles = theme => ({
   eventListItem: {
@@ -93,66 +94,69 @@ export function EventsList(props, context) {
         </ResponsiveTabs>
       </Paper>
       <br />
-      <Grid container spacing={3}>
-        { /* eslint-disable-next-line arrow-body-style */}
-        {props.events && Object.values(props.events).map((item, i) => {
-          return (
-            <Grid item key={item.id} className={classes.eventListItem}>
-              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-              <Link
-                className={classes.eventLink}
-                component={WrappedNavLink}
-                to={{
-                  pathname: ROUTES.group.events.show.path(item.owner_group_id, item.id),
-                  state: { id: item.id }
-                }}
-              >
-                <Card>
-                  <CardContent>
-                    <Grid container spacing={1} justify='space-between' alignItems='center'>
-                      <Grid item xs>
-                        <Typography color='primary' variant='h6' component='h2'>
-                          {item.name}
-                        </Typography>
-                        <hr className={classes.divider} />
-                        {item.description && (
-                          <React.Fragment>
-                            <Typography color='textSecondary'>
-                              {item.description}
-                            </Typography>
-                            <Box pb={1} />
-                          </React.Fragment>
-                        )}
-                        <Box pt={1} />
-                        <Typography color='textSecondary' variant='subtitle2' className={classes.dateText}>
-                          {formatDateTimeString(item.start, DateTime.DATETIME_MED)}
-                        </Typography>
-                      </Grid>
-                      <Hidden xsDown>
-                        <Grid item>
-                          <KeyboardArrowRightIcon className={classes.arrowRight} />
+      <DiverstLoader isLoading={props.isLoading}>
+        <Grid container spacing={3}>
+          { /* eslint-disable-next-line arrow-body-style */}
+          {props.events && Object.values(props.events).map((item, i) => {
+            return (
+              <Grid item key={item.id} className={classes.eventListItem}>
+                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                <Link
+                  className={classes.eventLink}
+                  component={WrappedNavLink}
+                  to={{
+                    pathname: ROUTES.group.events.show.path(item.owner_group_id, item.id),
+                    state: { id: item.id }
+                  }}
+                >
+                  <Card>
+                    <CardContent>
+                      <Grid container spacing={1} justify='space-between' alignItems='center'>
+                        <Grid item xs>
+                          <Typography color='primary' variant='h6' component='h2'>
+                            {item.name}
+                          </Typography>
+                          <hr className={classes.divider} />
+                          {item.description && (
+                            <React.Fragment>
+                              <Typography color='textSecondary'>
+                                {item.description}
+                              </Typography>
+                              <Box pb={1} />
+                            </React.Fragment>
+                          )}
+                          <Box pt={1} />
+                          <Typography color='textSecondary' variant='subtitle2' className={classes.dateText}>
+                            {formatDateTimeString(item.start, DateTime.DATETIME_MED)}
+                          </Typography>
                         </Grid>
-                      </Hidden>
-                    </Grid>
-                  </CardContent>
-                </Card>
-              </Link>
-            </Grid>
-          );
-        })}
-        {props.events && props.events.length <= 0 && (
-          <React.Fragment>
-            <Grid item sm>
-              <Box mt={3} />
-              <Typography variant='h6' align='center' color='textSecondary'>
-                <FormattedMessage {...messages.index.emptySection} />
-              </Typography>
-            </Grid>
-          </React.Fragment>
-        )}
-      </Grid>
+                        <Hidden xsDown>
+                          <Grid item>
+                            <KeyboardArrowRightIcon className={classes.arrowRight} />
+                          </Grid>
+                        </Hidden>
+                      </Grid>
+                    </CardContent>
+                  </Card>
+                </Link>
+              </Grid>
+            );
+          })}
+          {props.events && props.events.length <= 0 && (
+            <React.Fragment>
+              <Grid item sm>
+                <Box mt={3} />
+                <Typography variant='h6' align='center' color='textSecondary'>
+                  <FormattedMessage {...messages.index.emptySection} />
+                </Typography>
+              </Grid>
+            </React.Fragment>
+          )}
+        </Grid>
+      </DiverstLoader>
       {props.events && props.events.length > 0 && (
-        <Pagination
+        <DiverstPagination
+          isLoading={props.isLoading}
           count={props.eventsTotal}
           handlePagination={props.handlePagination}
         />
@@ -167,6 +171,7 @@ EventsList.propTypes = {
   events: PropTypes.array,
   eventsTotal: PropTypes.number,
   currentTab: PropTypes.number,
+  isLoading: PropTypes.bool,
   handleChangeTab: PropTypes.func,
   handlePagination: PropTypes.func,
   links: PropTypes.object,

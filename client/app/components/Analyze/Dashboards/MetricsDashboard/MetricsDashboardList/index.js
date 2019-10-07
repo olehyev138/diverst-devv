@@ -17,6 +17,7 @@ import {
   Card, CardContent, Grid, Link, TablePagination, Typography, Button, Hidden,
 } from '@material-ui/core';
 
+import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/DeleteOutline';
 
@@ -71,13 +72,13 @@ export function MetricsDashboardsList(props, context) {
             color='primary'
             size='large'
             component={WrappedNavLink}
+            startIcon={<AddIcon />}
           >
             <FormattedMessage {...messages.new} />
           </Button>
         </Grid>
       </Grid>
-      <Box mb={2} />
-      <br />
+      <Box mb={1} />
       <Grid container spacing={3}>
         <Grid item xs>
           <DiverstTable
