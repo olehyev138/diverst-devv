@@ -197,6 +197,25 @@ class UsersController < ApplicationController
     end
   end
 
+  def users_points_ranking
+    authorize User
+
+    @users = current_user.enterprise.users.order(points: :desc).limit(params[:limit] || 25)
+
+    respond_to do |format|
+      format.html
+      format.json { render json: UsersByPointsDatatable.new(view_context, @users) }
+    end
+  end
+
+  def users_points_csv
+    authorize User
+
+    UsersPointsDownloadJob.perform_later(current_user.id)
+    flash[:notice] = 'Please check your Secure Downloads section in a couple of minutes'
+    redirect_to :back
+  end
+
   protected
 
   def get_user_usage_metrics

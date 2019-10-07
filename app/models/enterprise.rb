@@ -209,6 +209,16 @@ class Enterprise < BaseClass
     User.to_csv(users: [], fields: fields, nb_rows: nb_rows)
   end
 
+  def users_points_report_csv(users)
+    CSV.generate do |csv|
+      csv << ['Name', 'Email', 'Points']
+
+      users.order(points: :desc).each do |user|
+        csv << [user.name, user.email, user.points]
+      end
+    end
+  end
+
   def close_budgets_csv
     CSV.generate do |csv|
       csv << ['Group name', 'Annual budget', 'Leftover money', 'Approved budget']
