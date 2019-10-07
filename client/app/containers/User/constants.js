@@ -12,6 +12,10 @@ export const GET_USER_BEGIN = 'app/User/GET_USER_BEGIN';
 export const GET_USER_SUCCESS = 'app/User/GET_USER_SUCCESS';
 export const GET_USER_ERROR = 'app/User/GET_USER_ERROR';
 
+export const GET_USER_POSTS_BEGIN = 'app/User/GET_USER_POSTS_BEGIN';
+export const GET_USER_POSTS_SUCCESS = 'app/User/GET_USER_POSTS_SUCCESS';
+export const GET_USER_POSTS_ERROR = 'app/User/GET_USER_POSTS_ERROR';
+
 export const CREATE_USER_BEGIN = 'app/User/CREATE_USER_BEGIN';
 export const CREATE_USER_SUCCESS = 'app/User/CREATE_USER_SUCCESS';
 export const CREATE_USER_ERROR = 'app/User/CREATE_USER_ERROR';

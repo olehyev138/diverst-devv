@@ -138,6 +138,11 @@ Diverst::Application.routes.draw do
       resources :twitter_accounts
       resources :user_rewards
       resources :user_reward_actions
+      resources :user, only: [] do
+        collection do
+          post '/posts', to: 'user#get_posts'
+        end
+      end
       resources :users do
         collection do
           post '/email', to: 'users#find_user_enterprise_by_email'

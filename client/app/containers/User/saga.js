@@ -7,7 +7,7 @@ import { showSnackbar } from 'containers/Shared/Notifier/actions';
 import {
   GET_USERS_BEGIN, CREATE_USER_BEGIN,
   GET_USER_BEGIN, UPDATE_USER_BEGIN, DELETE_USER_BEGIN,
-  UPDATE_FIELD_DATA_BEGIN
+  UPDATE_FIELD_DATA_BEGIN, GET_USER_POSTS_BEGIN
 } from 'containers/User/constants';
 
 import {
@@ -15,7 +15,8 @@ import {
   createUserSuccess, createUserError,
   getUserSuccess, getUserError,
   updateUserSuccess, updateUserError,
-  deleteUserError
+  deleteUserError,
+  getUserPostsSuccess, getUserPostsError,
 } from 'containers/User/actions';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -43,6 +44,17 @@ export function* getUser(action) {
   }
 }
 
+export function* getUserPosts(action) {
+  try {
+    const response = yield call(api.user.getPosts.bind(api.user), action.payload);
+    yield put(getUserPostsSuccess(response.data.page));
+  } catch (err) {
+    yield put(getUserPostsError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to load users', options: { variant: 'warning' } }));
+  }
+}
 
 export function* createUser(action) {
   try {
@@ -110,6 +122,7 @@ export default function* usersSaga() {
   yield takeLatest(CREATE_USER_BEGIN, createUser);
   yield takeLatest(UPDATE_USER_BEGIN, updateUser);
   yield takeLatest(DELETE_USER_BEGIN, deleteUser);
+  yield takeLatest(GET_USER_POSTS_BEGIN, getUserPosts);
 
   yield takeLatest(UPDATE_FIELD_DATA_BEGIN, updateFieldData);
 }

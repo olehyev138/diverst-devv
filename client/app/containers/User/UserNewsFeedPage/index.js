@@ -8,11 +8,12 @@ import { compose } from 'redux';
 import dig from 'object-dig';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
-import reducer from 'containers/News/reducer';
-import saga from 'containers/News/saga';
+import reducer from 'containers/User/reducer';
+import saga from 'containers/User/saga';
 
-import { selectPaginatedNewsItems, selectNewsItemsTotal } from 'containers/News/selectors';
-import { getNewsItemsBegin, newsFeedUnmount } from 'containers/News/actions';
+import { selectPaginatedPosts, selectPostsTotal } from 'containers/User/selectors';
+import { selectUser } from 'containers/Shared/App/selectors';
+import { getUserPostsBegin, userUnmount } from 'containers/User/actions';
 
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -21,40 +22,31 @@ import NewsFeed from 'components/News/NewsFeed';
 
 
 export function NewsFeedPage(props, context) {
-  console.log(props);
-  useInjectReducer({ key: 'news', reducer });
-  useInjectSaga({ key: 'news', saga });
+  useInjectReducer({ key: 'users', reducer });
+  useInjectSaga({ key: 'users', saga });
 
   const [params, setParams] = useState({
-    count: 5, page: 0, order: 'asc', news_feed_id: -1
+    count: 5, page: 0, order: 'desc', order_by: 'created_at',
   });
 
   const rs = new RouteService(useContext);
   const links = {
-    newsFeedIndex: ROUTES.group.news.index.path(rs.params('group_id')),
-    groupMessageIndex: id => ROUTES.group.news.messages.index.path(rs.params('group_id'), id),
-    groupMessageNew: ROUTES.group.news.messages.new.path(rs.params('group_id')),
-    groupMessageEdit: id => ROUTES.group.news.messages.edit.path(rs.params('group_id'), id)
+    groupMessageIndex: (groupId, id) => ROUTES.group.news.messages.index.path(groupId, id)
   };
 
   useEffect(() => {
-    const id = dig(props, 'currentGroup', 'news_feed', 'id');
-
-    if (id) {
-      const newParams = { ...params, news_feed_id: id };
-      props.getNewsItemsBegin(newParams);
-      setParams(newParams);
-    }
+    const userId = dig(props, 'currentUser', 'id');
+    props.getUserPostsBegin(params);
 
     return () => {
-      props.newsFeedUnmount();
+      props.userUnmount();
     };
-  }, [props.currentGroup]);
+  }, []);
 
   const handlePagination = (payload) => {
     const newParams = { ...params, count: payload.count, page: payload.page };
 
-    props.getNewsItemsBegin(newParams);
+    props.getUserPostsBegin(newParams);
     setParams(newParams);
   };
 
@@ -66,14 +58,16 @@ export function NewsFeedPage(props, context) {
         defaultParams={params}
         handlePagination={handlePagination}
         links={links}
+        readonly
       />
     </React.Fragment>
   );
 }
 
 NewsFeedPage.propTypes = {
-  getNewsItemsBegin: PropTypes.func.isRequired,
-  newsFeedUnmount: PropTypes.func.isRequired,
+  currentUser: PropTypes.object,
+  getUserPostsBegin: PropTypes.func.isRequired,
+  userUnmount: PropTypes.func.isRequired,
   newsItems: PropTypes.array,
   newsItemsTotal: PropTypes.number,
   currentGroup: PropTypes.shape({
@@ -84,13 +78,14 @@ NewsFeedPage.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
-  newsItems: selectPaginatedNewsItems(),
-  newsItemsTotal: selectNewsItemsTotal()
+  newsItems: selectPaginatedPosts(),
+  newsItemsTotal: selectPostsTotal(),
+  currentUser: selectUser(),
 });
 
 const mapDispatchToProps = {
-  getNewsItemsBegin,
-  newsFeedUnmount
+  getUserPostsBegin,
+  userUnmount,
 };
 
 const withConnect = connect(

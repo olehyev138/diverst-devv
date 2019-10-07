@@ -44,7 +44,7 @@ module User::Actions
     end
 
     def valid_scopes
-      ['active', 'enterprise_mentors']
+      %w(active enterprise_mentors)
     end
 
     def signin(email, password)
@@ -56,7 +56,7 @@ module User::Actions
       raise BadRequestException.new 'User does not exist' if user.nil?
 
       # verify the password
-      if not user.valid_password?(password)
+      unless user.valid_password?(password)
         raise BadRequestException.new 'Incorrect password'
       end
 
@@ -76,6 +76,54 @@ module User::Actions
       raise BadRequestException.new 'User does not exist' if user.nil?
 
       user
+    end
+
+    def posts(current_user, params)
+      count = params[:count].to_i || 5
+      page = params[:page].to_i || 0
+      order = params[:order].to_sym rescue :desc
+      order_by = params[:order_by].to_sym rescue :created_at
+
+      # get the news_feed_ids
+      news_feed_ids = NewsFeed.where(group_id: current_user.groups.ids).ids
+
+      # get the news_feed_links
+      nfls = NewsFeedLink
+        .joins(:news_feed).joins(joins_query)
+        .includes(:group_message, :news_link, :social_link)
+        .where('news_feed_links.news_feed_id IN (?) OR shared_news_feed_links.news_feed_id IN (?)', news_feed_ids, news_feed_ids)
+        .where(approved: true, archived_at: nil)
+        .where(where_querey, current_user.segments.pluck(:id))
+        .order(order_by => order)
+        .distinct
+
+      total = nfls.size
+      paged = nfls.limit(count).offset(page * count)
+
+      serialized = paged.map {|nfl| NewsFeedLinkSerializer.new(nfl).to_h }
+
+      {page: {
+        items: serialized,
+        total: total,
+        type: 'newsfeedlink'
+      }}
+    end
+
+    private
+
+    def where_querey
+      'news_feed_link_segments.segment_id IS NULL OR news_feed_link_segments.segment_id IN (?)'
+    end
+
+    def joins_query
+      'LEFT OUTER JOIN news_feed_link_segments ON news_feed_link_segments.news_feed_link_id = news_feed_links.id
+     LEFT OUTER JOIN shared_news_feed_links ON shared_news_feed_links.news_feed_link_id = news_feed_links.id'
+    end
+
+    def set_page
+      @limit = 5
+      @page = params[:page].present? ? params[:page].to_i : 1
+      @limit *= @page
     end
   end
 end

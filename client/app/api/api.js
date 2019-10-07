@@ -15,6 +15,7 @@ import groupMessageComments from 'api/group_message_comments/group_message_comme
 import groupMembers from 'api/group_members/group_members';
 import outcomes from 'api/outcomes/outcomes';
 import customText from 'api/custom_text/custom_text';
+import user from 'api/user/user';
 
 /* Metrics */
 import overviewGraphs from 'api/metrics/overview_graphs';
@@ -26,6 +27,7 @@ import customGraphs from 'api/metrics/custom_graphs';
 const Api = {
   enterprises,
   users,
+  user,
   userGroups,
   userSegments,
   sessions,

@@ -51,60 +51,67 @@ export function NewsFeed(props) {
   };
 
   const handleChangeRowsPerPage = (event) => {
+    const topIndex = rowsPerPage * page;
     setRowsPerPage(+event.target.value);
-    props.handlePagination({ count: +event.target.value, page });
+    const newPage = Math.floor(topIndex / +event.target.value);
+    setPage(newPage);
+    props.handlePagination({ count: +event.target.value, page: newPage });
   };
 
   /* Check news_feed_link type & render appropriate list item component */
   const renderNewsItem = (item) => {
     if (item.group_message)
-      return (<GroupMessageListItem links={props.links} newsItem={item} />);
+      return (<GroupMessageListItem links={props.links} newsItem={item} readonly={props.readonly} groupId={item.news_feed.group_id} />);
     else if (item.news_link) // eslint-disable-line no-else-return
-      return (<NewsLinkListItem newsLink={item.news_link} />);
+      return (<NewsLinkListItem newsLink={item.news_link} readonly={props.readonly} />);
     else if (item.social_link)
-      return (<SocialLinkListItem socialLink={item.social_link} />);
+      return (<SocialLinkListItem socialLink={item.social_link} readonly={props.readonly} />);
 
     return undefined;
   };
 
   return (
     <React.Fragment>
-      <Grid container spacing={3} justify='flex-end'>
-        <Grid item>
-          <Button
-            variant='contained'
-            to={props.links.groupMessageNew}
-            color='primary'
-            size='large'
-            component={WrappedNavLink}
-          >
-            New Group Message
-          </Button>
-        </Grid>
-        <Grid item>
-          <Button
-            variant='contained'
-            to={ROUTES.admin.manage.groups.new.path()}
-            color='primary'
-            size='large'
-            component={WrappedNavLink}
-          >
-            New News Link
-          </Button>
-        </Grid>
-        <Grid item>
-          <Button
-            variant='contained'
-            to={ROUTES.admin.manage.groups.new.path()}
-            color='primary'
-            size='large'
-            component={WrappedNavLink}
-          >
-            New Social Link
-          </Button>
-        </Grid>
-      </Grid>
-      <Box mb={2} />
+      {!props.readonly && (
+        <div>
+          <Grid container spacing={3} justify='flex-end'>
+            <Grid item>
+              <Button
+                variant='contained'
+                to={props.links.groupMessageNew}
+                color='primary'
+                size='large'
+                component={WrappedNavLink}
+              >
+                New Group Message
+              </Button>
+            </Grid>
+            <Grid item>
+              <Button
+                variant='contained'
+                to={ROUTES.admin.manage.groups.new.path()}
+                color='primary'
+                size='large'
+                component={WrappedNavLink}
+              >
+                New News Link
+              </Button>
+            </Grid>
+            <Grid item>
+              <Button
+                variant='contained'
+                to={ROUTES.admin.manage.groups.new.path()}
+                color='primary'
+                size='large'
+                component={WrappedNavLink}
+              >
+                New Social Link
+              </Button>
+            </Grid>
+          </Grid>
+          <Box mb={2} />
+        </div>
+      )}
       <Grid container>
         { /* eslint-disable-next-line arrow-body-style */ }
         {props.newsItems && Object.values(props.newsItems).map((item, i) => {
@@ -135,7 +142,8 @@ NewsFeed.propTypes = {
   handlePagination: PropTypes.func,
   links: PropTypes.shape({
     groupMessageNew: PropTypes.string
-  })
+  }),
+  readonly: PropTypes.bool,
 };
 
 export default compose(
