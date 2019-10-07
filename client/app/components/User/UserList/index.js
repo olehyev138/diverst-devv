@@ -11,8 +11,6 @@ import React, {
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
-import { NavLink } from 'react-router-dom';
-
 import {
   Button, Card, CardContent, CardActions,
   Typography, Grid, Link, TablePagination, Collapse
@@ -22,11 +20,11 @@ import { withStyles } from '@material-ui/core/styles';
 import { FormattedMessage } from 'react-intl';
 import messages from 'containers/User/messages';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
-import MaterialTable from 'material-table';
-import tableIcons from 'utils/tableIcons';
-import buildDataFunction from 'utils/dataTableHelper';
-import DeleteOutline from '@material-ui/icons/DeleteOutline';
-import Edit from '@material-ui/icons/Edit';
+
+import DeleteIcon from '@material-ui/icons/DeleteOutline';
+import EditIcon from '@material-ui/icons/Edit';
+
+import DiverstTable from 'components/Shared/DiverstTable';
 
 
 const styles = theme => ({
@@ -43,38 +41,14 @@ const styles = theme => ({
 
 export function UserList(props, context) {
   const { classes } = props;
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
   const [expandedUsers, setExpandedUsers] = useState({});
 
   const [userForm, setUserForm] = useState(undefined);
-
-  /* MaterialTable pagination handlers (defined differently then MaterialUI pagination) */
-  const handleChangePage = (newPage) => {
-    setPage(newPage);
-    props.handlePagination({ count: rowsPerPage, page: newPage });
-  };
-
-  const handleChangeRowsPerPage = (pageSize) => {
-    setRowsPerPage(+pageSize);
-    props.handlePagination({ count: +pageSize, page });
-  };
-
-  const handleOrderChange = (columnId, orderDir) => {
-    props.handleOrdering({
-      orderBy: (columnId === -1) ? 'id' : columns[columnId].field,
-      orderDir: (columnId === -1) ? 'asc' : orderDir
-    });
-  };
 
   const columns = [
     { title: 'First Name', field: 'first_name' },
     { title: 'Last Name', field: 'last_name' }
   ];
-
-  /* Store reference to table & use to refresh table when data changes */
-  const ref = useRef();
-  useEffect(() => ref.current && ref.current.onQueryChange(), [props.users]);
 
   return (
     <React.Fragment>
@@ -93,23 +67,21 @@ export function UserList(props, context) {
       </Grid>
       <Grid container spacing={3}>
         <Grid item xs>
-          <MaterialTable
-            tableRef={ref}
-            icons={tableIcons}
-            isLoading={props.isFetchingUsers}
+          <DiverstTable
             title='Members'
-            onChangePage={handleChangePage}
-            onChangeRowsPerPage={handleChangeRowsPerPage}
-            onOrderChange={handleOrderChange}
-            data={buildDataFunction(Object.values(props.users), page, props.userTotal)}
+            isLoading={props.isFetchingUsers}
+            rowsPerPage={5}
+            dataArray={Object.values(props.users)}
+            dataTotal={props.userTotal}
             columns={columns}
             actions={[{
-              icon: () => <Edit />,
+              icon: () => <EditIcon />,
               tooltip: 'Edit Member',
               onClick: (_, rowData) => {
                 props.handleVisitUserEdit(rowData.id);
-              } }, {
-              icon: () => <DeleteOutline />,
+              }
+            }, {
+              icon: () => <DeleteIcon />,
               tooltip: 'Delete Member',
               onClick: (_, rowData) => {
                 /* eslint-disable-next-line no-alert, no-restricted-globals */
@@ -117,10 +89,6 @@ export function UserList(props, context) {
                   props.deleteUserBegin(rowData.id);
               }
             }]}
-            options={{
-              actionsColumnIndex: -1,
-              pageSize: rowsPerPage,
-            }}
           />
         </Grid>
       </Grid>

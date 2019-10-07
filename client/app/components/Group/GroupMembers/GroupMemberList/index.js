@@ -4,31 +4,25 @@
  *
  */
 
-import React, {
-  forwardRef, memo, useState,
-  useEffect, useRef
-} from 'react';
+import React, { memo } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
 
 import {
-  Button, Card, CardActions, CardContent, Collapse, Grid, Link,
-  TablePagination, Typography, Box
+  Button, Box
 } from '@material-ui/core/index';
 import { withStyles } from '@material-ui/core/styles';
-
-import MaterialTable from 'material-table';
-import tableIcons from 'utils/tableIcons';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
 import { FormattedMessage } from 'react-intl';
 import messages from 'containers/Group/GroupMembers/messages';
-import buildDataFunction from 'utils/dataTableHelper';
 
-import DeleteOutline from '@material-ui/icons/DeleteOutline';
+import DeleteIcon from '@material-ui/icons/DeleteOutline';
 import AddIcon from '@material-ui/icons/Add';
 import ExportIcon from '@material-ui/icons/SaveAlt';
+
+import DiverstTable from 'components/Shared/DiverstTable';
 
 const styles = theme => ({
   errorButton: {
@@ -51,19 +45,6 @@ const styles = theme => ({
 
 export function GroupMemberList(props) {
   const { classes } = props;
-  const [page, setPage] = useState(props.params.page);
-  const [rowsPerPage, setRowsPerPage] = useState(props.params.count);
-
-  /* MaterialTable pagination handlers (defined differently then MaterialUI pagination) */
-  const handleChangePage = (newPage) => {
-    setPage(newPage);
-    props.handlePagination({ count: rowsPerPage, page: newPage });
-  };
-
-  const handleChangeRowsPerPage = (pageSize) => {
-    setRowsPerPage(+pageSize);
-    props.handlePagination({ count: +pageSize, page });
-  };
 
   const handleOrderChange = (columnId, orderDir) => {
     props.handleOrdering({
@@ -76,10 +57,6 @@ export function GroupMemberList(props) {
     { title: 'First Name', field: 'first_name' },
     { title: 'Last Name', field: 'last_name' }
   ];
-
-  /* Store reference to table & use to refresh table when data changes */
-  const ref = useRef();
-  useEffect(() => ref.current && ref.current.onQueryChange(), [props.memberList]);
 
   return (
     <React.Fragment>
@@ -108,29 +85,27 @@ export function GroupMemberList(props) {
         </Button>
       </Box>
       <Box className={classes.floatSpacer} />
-      <MaterialTable
-        tableRef={ref}
-        icons={tableIcons}
+      <DiverstTable
         title='Members'
+        handlePagination={props.handlePagination}
         isLoading={props.isFetchingMembers}
-        onChangePage={handleChangePage}
-        onChangeRowsPerPage={handleChangeRowsPerPage}
         onOrderChange={handleOrderChange}
-        data={buildDataFunction(props.memberList, page, props.memberTotal)}
+        dataArray={props.memberList}
+        dataTotal={props.memberTotal}
         columns={columns}
+        rowsPerPage={props.params.count}
         actions={[{
-          icon: () => <DeleteOutline />,
+          icon: () => <DeleteIcon />,
           tooltip: 'Delete Member',
           onClick: (_, rowData) => {
             /* eslint-disable-next-line no-alert, no-restricted-globals */
             if (confirm('Delete member?'))
-              props.deleteMemberBegin({ userId: rowData.id, groupId: props.groupId });
+              props.deleteMemberBegin({
+                userId: rowData.id,
+                groupId: props.groupId
+              });
           }
         }]}
-        options={{
-          actionsColumnIndex: -1,
-          pageSize: rowsPerPage,
-        }}
       />
     </React.Fragment>
   );

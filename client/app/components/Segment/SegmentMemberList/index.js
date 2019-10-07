@@ -9,27 +9,17 @@ import React, {
   useEffect, useRef
 } from 'react';
 import { compose } from 'redux';
-import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { RouteContext } from 'containers/Layouts/ApplicationLayout';
 
 import {
   Button, Card, CardActions, CardContent, Collapse, Grid, Link,
   TablePagination, Typography, Box
-} from '@material-ui/core/index';
+} from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
-import MaterialTable from 'material-table';
-import tableIcons from 'utils/tableIcons';
-
-import { ROUTES } from 'containers/Shared/Routes/constants';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
-import { FormattedMessage } from 'react-intl';
-import messages from 'containers/Segment/messages';
-import buildDataFunction from 'utils/dataTableHelper';
-
-import DeleteOutline from '@material-ui/icons/DeleteOutline';
+import DiverstTable from 'components/Shared/DiverstTable';
 
 const styles = theme => ({
   errorButton: {
@@ -39,19 +29,6 @@ const styles = theme => ({
 
 export function SegmentMemberList(props) {
   const { classes } = props;
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
-
-  /* MaterialTable pagination handlers (defined differently then MaterialUI pagination) */
-  const handleChangePage = (newPage) => {
-    setPage(newPage);
-    props.handlePagination({ count: rowsPerPage, page: newPage });
-  };
-
-  const handleChangeRowsPerPage = (pageSize) => {
-    setRowsPerPage(+pageSize);
-    props.handlePagination({ count: +pageSize, page });
-  };
 
   const handleOrderChange = (columnId, orderDir) => {
     props.handleOrdering({
@@ -64,10 +41,6 @@ export function SegmentMemberList(props) {
     { title: 'First Name', field: 'first_name' },
     { title: 'Last Name', field: 'last_name' }
   ];
-
-  /* Store reference to table & use to refresh table when data changes */
-  const ref = useRef();
-  useEffect(() => ref.current && ref.current.onQueryChange(), [props.memberList]);
 
   return (
     <React.Fragment>
@@ -86,20 +59,15 @@ export function SegmentMemberList(props) {
       </Grid>
       <Grid container spacing={3}>
         <Grid item xs>
-          <MaterialTable
-            tableRef={ref}
-            icons={tableIcons}
+          <DiverstTable
             title='Members'
+            handlePagination={props.handlePagination}
             isLoading={props.isFetchingMembers}
-            onChangePage={handleChangePage}
-            onChangeRowsPerPage={handleChangeRowsPerPage}
             onOrderChange={handleOrderChange}
-            data={buildDataFunction(props.memberList, page, props.memberTotal)}
+            dataArray={props.memberList}
+            dataTotal={props.memberTotal}
             columns={columns}
-            options={{
-              actionsColumnIndex: -1,
-              pageSize: rowsPerPage,
-            }}
+            rowsPerPage={5}
           />
         </Grid>
       </Grid>
