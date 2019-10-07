@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo, useContext, useState } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
 
@@ -22,22 +22,38 @@ const styles = theme => ({
     '& .MuiIconButton-root': {
       padding: 6,
     },
+    '& .MuiTablePagination-root': {
+      color: theme.palette.text.secondary,
+    },
   },
 });
 
-export function Pagination(props) {
+export function DiverstPagination(props) {
   const { classes, ...rest } = props;
+
+  const [page, setPage] = useState(props.page || 0);
+  const [rowsPerPage, setRowsPerPage] = useState(props.rowsPerPage || 10);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+    props.handlePagination({ count: rowsPerPage, page: newPage });
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    props.handlePagination({ count: +event.target.value, page });
+  };
 
   return (
     <div className={classes.paginationContainer}>
       <TablePagination
         component='div'
-        page={props.page}
+        page={page}
         rowsPerPageOptions={props.rowsPerPageOptions || [5, 10, 25]}
-        rowsPerPage={props.rowsPerPage || 0}
+        rowsPerPage={rowsPerPage || 0}
         count={props.count || 0}
-        onChangePage={props.onChangePage}
-        onChangeRowsPerPage={props.onChangeRowsPerPage}
+        onChangePage={props.onChangePage || handleChangePage}
+        onChangeRowsPerPage={props.onChangeRowsPerPage || handleChangeRowsPerPage}
         backIconButtonProps={{
           'aria-label': 'Previous Page',
         }}
@@ -49,16 +65,18 @@ export function Pagination(props) {
   );
 }
 
-Pagination.propTypes = {
+DiverstPagination.propTypes = {
   classes: PropTypes.object,
+  handlePagination: PropTypes.func.isRequired,
+  count: PropTypes.number,
   page: PropTypes.number,
   rowsPerPageOptions: PropTypes.array,
   rowsPerPage: PropTypes.number,
-  count: PropTypes.number,
   onChangePage: PropTypes.func,
   onChangeRowsPerPage: PropTypes.func,
 };
 
 export default compose(
-  withStyles(styles)
-)(Pagination);
+  withStyles(styles),
+  memo,
+)(DiverstPagination);
