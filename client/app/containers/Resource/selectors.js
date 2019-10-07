@@ -12,7 +12,7 @@ const selectPaginatedSelectFolders = () => createSelector(
   selectResourcesDomain,
   foldersState => (
     Object
-      .values(foldersState.folders)
+      .values(foldersState.folders || [])
       .map(folder => ({ value: folder.id, label: folder.name }))
   )
 );

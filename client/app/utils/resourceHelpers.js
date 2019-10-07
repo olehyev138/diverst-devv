@@ -53,9 +53,9 @@ export function getFolderNewPathFromObject(folder) {
 
 export function getFolderNewPathFromType(type, groupId = null) {
   if (type === 'group')
-    return ROUTES.group.resources.folders.index.path(groupId);
+    return ROUTES.group.resources.folders.new.path(groupId);
   if (type === 'admin')
-    return ROUTES.admin.manage.resources.folders.index.path();
+    return ROUTES.admin.manage.resources.folders.new.path();
 
   return null;
 }

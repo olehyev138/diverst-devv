@@ -51,7 +51,7 @@ export function ResourceCreatePage(props) {
     if (type === 'group')
       props.getFoldersBegin({ group_id: groupId });
     else if (type === 'admin')
-      props.getFoldersBegin({ group_id: currentEnterprise.id });
+      props.getFoldersBegin({ enterprise_id: currentEnterprise.id });
     return () => props.resourcesUnmount();
   }, []);
 
@@ -89,7 +89,6 @@ ResourceCreatePage.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
-  currentGroup: selectGroup(),
   currentUser: selectUser(),
   searchFolders: selectPaginatedSelectFolders(),
   currentFolder: selectFolder(),

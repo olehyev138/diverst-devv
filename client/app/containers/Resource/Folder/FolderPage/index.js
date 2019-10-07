@@ -236,7 +236,6 @@ FolderPage.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
-  currentGroup: selectGroup(),
   currentUser: selectUser(),
   currentFolder: selectFolder(),
   currentEnterprise: selectEnterprise(),
