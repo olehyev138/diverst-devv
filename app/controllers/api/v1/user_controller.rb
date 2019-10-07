@@ -4,8 +4,4 @@ class Api::V1::UserController < DiverstController
   rescue => e
     raise BadRequestException.new(e.message)
   end
-
-  def index
-
-  end
 end

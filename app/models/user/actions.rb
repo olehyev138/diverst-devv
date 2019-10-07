@@ -100,13 +100,13 @@ module User::Actions
       total = nfls.size
       paged = nfls.limit(count).offset(page * count)
 
-      serialized = paged.map {|nfl| NewsFeedLinkSerializer.new(nfl).to_h }
+      serialized = paged.map { |nfl| NewsFeedLinkSerializer.new(nfl).to_h }
 
-      {page: {
+      { page: {
         items: serialized,
         total: total,
         type: 'newsfeedlink'
-      }}
+      } }
     end
 
     private
