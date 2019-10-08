@@ -38,11 +38,23 @@ export default defineMessages({
     members: {
       index: {
         id: `${scope}.group.members.index`
-      }
+      },
+      new: {
+        id: `${scope}.group.members.new`
+      },
     },
     events: {
       index: {
         id: `${scope}.group.events.index`
+      },
+      show: {
+        id: `${scope}.group.events.show`
+      },
+      new: {
+        id: `${scope}.group.events.new`
+      },
+      edit: {
+        id: `${scope}.group.events.edit`
       }
     },
     news: {
@@ -53,12 +65,36 @@ export default defineMessages({
         index: {
           id: `${scope}.group.news.messages.index`
         },
+        new: {
+          id: `${scope}.group.news.messages.new`
+        },
+        edit: {
+          id: `${scope}.group.news.messages.edit`
+        }
       },
     },
     outcomes: {
       index: {
         id: `${scope}.group.outcomes.index`
+      },
+      new: {
+        id: `${scope}.group.outcomes.new`
+      },
+      edit: {
+        id: `${scope}.group.outcomes.edit`
       }
+    },
+    manage: {
+      settings: {
+        index: {
+          id: `${scope}.group.manage.settings.index`,
+        }
+      },
+      leaders: {
+        index: {
+          id: `${scope}.group.manage.leaders.index`,
+        }
+      },
     },
   },
   admin: {
