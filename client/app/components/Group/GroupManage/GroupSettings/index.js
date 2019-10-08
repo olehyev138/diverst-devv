@@ -25,6 +25,8 @@ import {
   TextField, FormControl, Divider, Switch, FormControlLabel,
 } from '@material-ui/core';
 
+import DiverstColorPicker from 'components/Shared/DiverstColorPicker';
+
 const styles = theme => ({
   noBottomPadding: {
     paddingBottom: '0 !important',
@@ -140,14 +142,15 @@ export function GroupSettingsInner({ classes, handleSubmit, handleChange, handle
             onChange={value => setFieldValue('upcoming_events_visibility', value.value)}
           />
           <Field
-            component={TextField}
-            fullWidth
+            component={DiverstColorPicker}
             id='calendar_color'
             name='calendar_color'
-            margin='normal'
             label='Calendar Colour'
             value={values.calendar_color}
-            onChange={handleChange}
+            onChange={value => setFieldValue('calendar_color', value)}
+            FormControlProps={{
+              margin: 'normal'
+            }}
           />
         </CardContent>
         <Divider />
@@ -157,12 +160,6 @@ export function GroupSettingsInner({ classes, handleSubmit, handleChange, handle
             type='submit'
           >
             Save
-          </Button>
-          <Button
-            to={ROUTES.admin.manage.groups.index.path()}
-            component={WrappedNavLink}
-          >
-            <FormattedMessage {...messages.cancel} />
           </Button>
         </CardActions>
       </Form>
