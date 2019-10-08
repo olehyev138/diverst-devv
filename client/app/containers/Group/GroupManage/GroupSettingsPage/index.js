@@ -11,7 +11,7 @@ import reducer from 'containers/Group/reducer';
 
 import RouteService from 'utils/routeHelpers';
 import {
-  updateGroupSettingsBegin, groupFormUnmount
+  updateGroupSettingsBegin
 } from 'containers/Group/actions';
 
 import GroupSettings from 'components/Group/GroupManage/GroupSettings';
@@ -21,7 +21,6 @@ export function GroupSettingsPage(props) {
   useInjectSaga({ key: 'groups', saga });
 
   const rs = new RouteService(useContext);
-  useEffect(() => () => props.groupFormUnmount());
 
   return (
     <React.Fragment>
@@ -36,7 +35,6 @@ export function GroupSettingsPage(props) {
 GroupSettingsPage.propTypes = {
   currentGroup: PropTypes.object,
   updateGroupSettingsBegin: PropTypes.func,
-  groupFormUnmount: PropTypes.func
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -44,7 +42,6 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = {
   updateGroupSettingsBegin,
-  groupFormUnmount
 };
 
 const withConnect = connect(

@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 
 import Container from '@material-ui/core/Container';
 import { withStyles } from '@material-ui/core/styles';
-import RouteService from 'utils/routeHelpers';
 
 import GroupLayout from '../GroupLayout';
 import GroupManageLinks from 'components/Group/GroupManage/GroupManageLinks';
@@ -24,10 +23,11 @@ const ManagePages = Object.freeze({
 
 const GroupManageLayout = ({ component: Component, ...rest }) => {
   const { classes, data, computedMatch, location, ...other } = rest;
-  const [tab, setTab] = useState(ManagePages.settings);
 
   /* Get last element of current path, ie: '/group/:id/manage/settings -> settings */
   const currentPagePath = location.pathname.split('/').pop();
+
+  const [tab, setTab] = useState(ManagePages[currentPagePath]);
 
   useEffect(() => {
     setTab(ManagePages[currentPagePath]);
