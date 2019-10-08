@@ -1,4 +1,11 @@
 class UserReward < BaseClass
+  extend Enumerize
+
+  enumerize :status, in: [
+    :pending,
+    :redeemed
+  ]
+
   belongs_to :user
   belongs_to :reward
 
