@@ -39,8 +39,8 @@ module User::Actions
 
   module ClassMethods
     def base_query
-      "#{self.table_name}.id LIKE :search OR LOWER(#{self.table_name}.first_name) LIKE :search OR LOWER(#{self.table_name}.last_name) LIKE :search
-      OR LOWER(#{self.table_name}.email) LIKE :search"
+      "#{ self.table_name }.id LIKE :search OR LOWER(#{ self.table_name }.first_name) LIKE :search OR LOWER(#{ self.table_name }.last_name) LIKE :search
+      OR LOWER(#{ self.table_name }.email) LIKE :search"
     end
 
     def valid_scopes
@@ -88,14 +88,27 @@ module User::Actions
       news_feed_ids = NewsFeed.where(group_id: current_user.groups.ids).ids
 
       # get the news_feed_links
-      nfls = NewsFeedLink
-               .joins(:news_feed).joins(news_joins)
+      base_nfls = NewsFeedLink
+               .joins(:news_feed)
+               .left_joins(:news_feed_link_segments, :shared_news_feed_links)
                .includes(:group_message, :news_link, :social_link)
-               .where('news_feed_links.news_feed_id IN (?) OR shared_news_feed_links.news_feed_id IN (?)', news_feed_ids, news_feed_ids)
-               .where(approved: true, archived_at: nil)
-               .where(news_where, current_user.segments.pluck(:id))
-               .order(order_by => order)
-               .distinct
+
+      news_feed_or = []
+      news_feed_or << NewsFeedLink.sql_where(news_feed_links: { news_feed_id: news_feed_ids })
+      news_feed_or << NewsFeedLink.sql_where(shared_news_feed_links: { news_feed_id: news_feed_ids })
+
+      segment_ors = []
+      segment_ors << NewsFeedLink.sql_where(news_feed_link_segments: { segment_id: nil })
+      segment_ors << NewsFeedLink.sql_where(
+        news_feed_link_segments: { segment_id: current_user.segment_ids }
+      )
+
+      nfls = base_nfls
+        .where(news_feed_or.join(' OR '))
+        .where(approved: true, archived_at: nil)
+        .where(segment_ors.join(' OR '))
+        .order(order_by => order)
+        .distinct
 
       total = nfls.size
       paged = nfls.limit(count).offset(page * count)
@@ -170,22 +183,22 @@ module User::Actions
       #   (NO SEGMENT OR IN SEGMENT)
       # ))
       group_ors = []
-      group_ors << sql_where(owner_group_id: current_user.group_ids)
-      group_ors << sql_where(
-        initiative_participating_groups: {group_id: current_user.group_ids}
+      group_ors << Initiative.sql_where(owner_group_id: current_user.group_ids)
+      group_ors << Initiative.sql_where(
+        initiative_participating_groups: { group_id: current_user.group_ids }
       )
 
       segment_ors = []
-      segment_ors << sql_where(initiative_segments: {segment_id: nil})
-      segment_ors << sql_where(
-        initiative_segments: {segment_id: current_user.segment_ids}
+      segment_ors << Initiative.sql_where(initiative_segments: { segment_id: nil })
+      segment_ors << Initiative.sql_where(
+        initiative_segments: { segment_id: current_user.segment_ids }
       )
 
       valid_ors = []
-      valid_ors << sql_where(
-        initiative_invitees: {user_id: current_user.id}
+      valid_ors << Initiative.sql_where(
+        initiative_invitees: { user_id: current_user.id }
       )
-      valid_ors << sql_where("(#{group_ors.join(' OR ')}) AND (#{segment_ors.join(' OR ')})")
+      valid_ors << sql_where("(#{ group_ors.join(' OR ')}) AND (#{ segment_ors.join(' OR ')})")
 
       ordered = included_events
         .where(valid_ors.join(' OR '))
@@ -203,23 +216,6 @@ module User::Actions
         total: total,
         type: 'initiatives'
       } }
-    end
-
-    private
-
-    def sql_where(*args)
-      sql = Initiative.unscoped.where(*args).to_sql
-      match = sql.match(/WHERE\s(.*)$/)
-      "(#{match[1]})"
-    end
-
-    def news_where
-      'news_feed_link_segments.segment_id IS NULL OR news_feed_link_segments.segment_id IN (?)'
-    end
-
-    def news_joins
-      'LEFT OUTER JOIN news_feed_link_segments ON news_feed_link_segments.news_feed_link_id = news_feed_links.id
-     LEFT OUTER JOIN shared_news_feed_links ON shared_news_feed_links.news_feed_link_id = news_feed_links.id'
     end
   end
 end

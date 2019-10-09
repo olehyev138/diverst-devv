@@ -105,6 +105,8 @@
   "diverst.containers.Event.index.tabs.ongoing": "Ongoing",
   "diverst.containers.Event.index.tabs.past": "Past",
   "diverst.containers.Event.index.tabs.empty_section": "There are no events in this section.",
+  "diverst.containers.Event.index.tabs.participating": "Participating",
+  "diverst.containers.Event.index.tabs.all": "All",
   "diverst.containers.Event.form.button.create": "Create Event",
   "diverst.containers.Event.form.button.update": "Update Event",
   "diverst.containers.Event.form.button.cancel": "Cancel",

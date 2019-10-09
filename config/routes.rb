@@ -142,6 +142,7 @@ Diverst::Application.routes.draw do
         collection do
           get '/posts', to: 'user#get_posts'
           get '/joined_events', to: 'user#get_joined_events'
+          get '/all_events', to: 'user#get_all_events'
         end
       end
       resources :users do

@@ -60,7 +60,11 @@ export function* getUserPosts(action) {
 
 export function* getUserEvents(action) {
   try {
-    const response = yield call(api.user.getJoinedEvents.bind(api.user), action.payload);
+    let response;
+    if (action.payload.participation === 'all')
+      response = yield call(api.user.getAllEvents.bind(api.user), action.payload);
+    else
+      response = yield call(api.user.getJoinedEvents.bind(api.user), action.payload);
     yield put(getUserEventsSuccess(response.data.page));
   } catch (err) {
     yield put(getUserEventsError(err));

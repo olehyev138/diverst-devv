@@ -11,6 +11,10 @@ Object.assign(User, {
 
   getJoinedEvents(payload) {
     return axios.get(appendQueryArgs(`${this.url}/joined_events`, payload));
+  },
+
+  getAllEvents(payload) {
+    return axios.get(appendQueryArgs(`${this.url}/all_events`, payload));
   }
 });
 

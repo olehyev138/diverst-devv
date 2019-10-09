@@ -10,4 +10,10 @@ class Api::V1::UserController < DiverstController
   rescue => e
     raise BadRequestException.new(e.message)
   end
+
+  def get_all_events
+    render json: klass.all_events(self.diverst_request.user, params)
+  rescue => e
+    raise BadRequestException.new(e.message)
+  end
 end

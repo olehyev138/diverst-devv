@@ -93,6 +93,17 @@ export function EventsList(props, context) {
         </div>
       )}
       <Paper>
+        {props.currentPTab != null && (
+          <ResponsiveTabs
+            value={props.currentPTab}
+            onChange={props.handleChangePTab}
+            indicatorColor='primary'
+            textColor='primary'
+          >
+            <Tab label={intl.formatMessage(messages.index.participating)} />
+            <Tab label={intl.formatMessage(messages.index.all)} />
+          </ResponsiveTabs>
+        )}
         <ResponsiveTabs
           value={props.currentTab}
           onChange={props.handleChangeTab}
@@ -183,6 +194,8 @@ EventsList.propTypes = {
   eventsTotal: PropTypes.number,
   currentTab: PropTypes.number,
   handleChangeTab: PropTypes.func,
+  currentPTab: PropTypes.number,
+  handleChangePTab: PropTypes.func,
   handlePagination: PropTypes.func,
   links: PropTypes.object,
   readonly: PropTypes.bool,
