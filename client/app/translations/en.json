@@ -1,4 +1,7 @@
 {
+  "diverst.containers.HomePage.header" : "This is the HomePage container!",
+  "diverst.containers.HomePage.news" : "Your News",
+  "diverst.containers.HomePage.events" : "Your Events",
   "diverst.containers.Login.button.login": "Login",
   "diverst.containers.Login.button.signup": "Sign Up",
   "diverst.containers.Login.input.email": "Email",

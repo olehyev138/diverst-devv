@@ -23,7 +23,16 @@ import {
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
-const styles = theme => ({});
+const styles = theme => ({
+  title: {
+    textAlign: 'center',
+    fontWeight: 'bold',
+    paddingBottom: theme.spacing(1),
+  },
+  dataHeaders: {
+    paddingBottom: theme.spacing(1),
+  },
+});
 
 /* eslint-disable react/prefer-stateless-function */
 export class HomePage extends React.PureComponent {
@@ -34,12 +43,18 @@ export class HomePage extends React.PureComponent {
       <React.Fragment>
         <Grid container spacing={3}>
           <Grid item xs>
+            <h1 className={classes.title}>
+              <FormattedMessage {...messages.events} />
+            </h1>
             <EventsPage />
           </Grid>
           <Grid item xs='auto'>
             <Divider orientation='vertical' />
           </Grid>
           <Grid item xs>
+            <h1 className={classes.title}>
+              <FormattedMessage {...messages.news} />
+            </h1>
             <NewsPage />
           </Grid>
         </Grid>
