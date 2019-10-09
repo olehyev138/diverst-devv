@@ -12,7 +12,7 @@ import dig from 'object-dig';
 import { FormattedMessage } from 'react-intl';
 import { Field, Formik, Form } from 'formik';
 import {
-  Button, Card, CardActions, CardContent, TextField
+  Button, Card, CardActions, CardContent, TextField, Divider
 } from '@material-ui/core';
 
 
@@ -37,6 +37,7 @@ export function TextFieldFormInner({ handleSubmit, handleChange, handleBlur, val
             label={<FormattedMessage {...messages.title} />}
           />
         </CardContent>
+        <Divider />
         <CardActions>
           <Button
             color='primary'
@@ -45,7 +46,6 @@ export function TextFieldFormInner({ handleSubmit, handleChange, handleBlur, val
             Submit
           </Button>
           <Button
-            color='primary'
             onClick={props.cancelAction}
           >
             <FormattedMessage {...messages.cancel} />
