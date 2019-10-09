@@ -15,7 +15,7 @@ import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
 import {
   Button, Card, CardContent, CardActions,
-  Typography, Grid, Link, Collapse
+  Typography, Grid, Link, Collapse, Box,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -66,7 +66,10 @@ export function SegmentList(props, context) {
             <FormattedMessage {...messages.new} />
           </Button>
         </Grid>
-        <DiverstLoader isLoading={props.isLoading}>
+      </Grid>
+      <Box mb={1} />
+      <DiverstLoader isLoading={props.isLoading}>
+        <Grid container spacing={3}>
           { /* eslint-disable-next-line arrow-body-style */ }
           {props.segments && Object.values(props.segments).map((segment, i) => {
             return (
@@ -105,8 +108,8 @@ export function SegmentList(props, context) {
               </Grid>
             );
           })}
-        </DiverstLoader>
-      </Grid>
+        </Grid>
+      </DiverstLoader>
       <DiverstPagination
         isLoading={props.isLoading}
         rowsPerPage={5}

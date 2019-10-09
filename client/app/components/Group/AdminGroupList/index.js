@@ -81,7 +81,10 @@ export function AdminGroupList(props, context) {
             <FormattedMessage {...messages.new} />
           </Button>
         </Grid>
-        <DiverstLoader isLoading={props.isLoading}>
+      </Grid>
+      <Box mb={1} />
+      <DiverstLoader isLoading={props.isLoading}>
+        <Grid container spacing={3}>
           { /* eslint-disable-next-line arrow-body-style */ }
           {props.groups && Object.values(props.groups).map((group, i) => {
             return (
@@ -201,8 +204,8 @@ export function AdminGroupList(props, context) {
               </Grid>
             );
           })}
-        </DiverstLoader>
-      </Grid>
+        </Grid>
+      </DiverstLoader>
       <DiverstPagination
         isLoading={props.isLoading}
         handlePagination={props.handlePagination}

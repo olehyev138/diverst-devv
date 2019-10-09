@@ -3,7 +3,7 @@ import { compose } from 'redux';
 import PropTypes from 'prop-types';
 
 import { withStyles } from '@material-ui/core/styles';
-import { CircularProgress, Grid } from '@material-ui/core';
+import { CircularProgress, Grid, Slide } from '@material-ui/core';
 
 const styles = theme => ({
   progress: {
@@ -14,19 +14,24 @@ const styles = theme => ({
 export function DiverstLoader(props) {
   const { classes, isLoading, children } = props;
 
-  if (isLoading === true)
-    return (
-      <Grid container justify='center'>
-        <Grid item>
-          <CircularProgress
-            size={50}
-            className={classes.progress}
-          />
-        </Grid>
-      </Grid>
-    );
+  return (
+    <React.Fragment>
+      <Slide direction='left' in={!isLoading} mountOnEnter unmountOnExit>
+        {props.children}
+      </Slide>
 
-  return props.children;
+      {isLoading ? (
+        <Grid container justify='center'>
+          <Grid item>
+            <CircularProgress
+              size={50}
+              className={classes.progress}
+            />
+          </Grid>
+        </Grid>
+      ) : undefined}
+    </React.Fragment>
+  );
 }
 
 DiverstLoader.propTypes = {
