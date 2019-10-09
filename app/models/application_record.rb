@@ -20,13 +20,15 @@ class ApplicationRecord < ActiveRecord::Base
     end
   end
 
-  protected def self.sql_where(*args)
+  after_commit on: [:create] do update_elasticsearch_index('index') end
+  after_commit on: [:update] do update_elasticsearch_index('update') end
+  after_commit on: [:destroy] do update_elasticsearch_index('delete') end
+
+  protected
+
+  def self.sql_where(*args)
     sql = self.unscoped.where(*args).to_sql
     match = sql.match(/WHERE\s(.*)$/)
     "(#{match[1]})"
   end
-
-  after_commit on: [:create] do update_elasticsearch_index('index') end
-  after_commit on: [:update] do update_elasticsearch_index('update') end
-  after_commit on: [:destroy] do update_elasticsearch_index('delete') end
 end
