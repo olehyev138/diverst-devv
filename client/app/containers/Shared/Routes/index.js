@@ -26,7 +26,7 @@ export default function Routes(props) {
       <SessionLayout {...expandRoute(ROUTES.session.login)} component={LoginPage} />
 
       { /* User */}
-      <UserLayout exact {...expandRoute(ROUTES.user.home)} component={PlaceholderPage} />
+      <UserLayout exact {...expandRoute(ROUTES.user.home)} component={HomePage} />
       <UserLayout exact {...expandRoute(ROUTES.user.innovate)} component={PlaceholderPage} />
       <UserLayout exact {...expandRoute(ROUTES.user.news)} component={UserNewsLinkPage} />
       <UserLayout exact {...expandRoute(ROUTES.user.events)} component={UserEventsPage} />

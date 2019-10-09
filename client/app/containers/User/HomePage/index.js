@@ -15,8 +15,11 @@ import injectReducer from 'utils/injectReducer';
 import reducer from './reducer';
 import messages from './messages';
 
+import EventsPage from '../UserEventsPage/index';
+import NewsPage from '../UserNewsFeedPage';
+
 import {
-  Typography, Button, Grid, Card, CardActions, CardContent, Paper
+  Typography, Button, Grid, Card, CardActions, CardContent, Paper, Divider
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -29,6 +32,17 @@ export class HomePage extends React.PureComponent {
 
     return (
       <React.Fragment>
+        <Grid container spacing={3}>
+          <Grid item xs>
+            <EventsPage />
+          </Grid>
+          <Grid item xs='auto'>
+            <Divider orientation='vertical' />
+          </Grid>
+          <Grid item xs>
+            <NewsPage />
+          </Grid>
+        </Grid>
       </React.Fragment>
     );
   }
