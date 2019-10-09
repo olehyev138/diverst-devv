@@ -140,7 +140,8 @@ Diverst::Application.routes.draw do
       resources :user_reward_actions
       resources :user, only: [] do
         collection do
-          post '/posts', to: 'user#get_posts'
+          get '/posts', to: 'user#get_posts'
+          get '/joined_events', to: 'user#get_joined_events'
         end
       end
       resources :users do

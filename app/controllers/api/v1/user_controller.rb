@@ -4,4 +4,10 @@ class Api::V1::UserController < DiverstController
   rescue => e
     raise BadRequestException.new(e.message)
   end
+
+  def get_joined_events
+    render json: klass.joined_events(self.diverst_request.user, params)
+  rescue => e
+    raise BadRequestException.new(e.message)
+  end
 end

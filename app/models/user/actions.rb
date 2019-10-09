@@ -109,6 +109,41 @@ module User::Actions
       } }
     end
 
+    def joined_events(current_user, params)
+      count = params[:count].to_i || 5
+      page = params[:page].to_i || 0
+      order = params[:order].to_sym rescue :asc
+      order_by = params[:order_by].to_sym rescue :start
+      scope =
+        JSON.parse params[:query_scopes] || params[:query_scope]
+
+      # get the events
+      if scope.class.to_s == 'Array'
+        events = scope.reduce(current_user.initiatives.union(current_user.invited_initiatives)) { |sum, n| sum.send(n.to_sym) }
+      elsif scope.respond_to?(:to_sym)
+        events = current_user.initiatives.union(current_user.invited_initiatives).send(scope.to_sym)
+      else
+        events = current_user.initiatives.union(current_user.invited_initiatives)
+      end
+
+      # order the event
+      ordered = events
+        .order(order_by => order)
+        .distinct
+
+      # truncate and serialize the events
+      total = ordered.size
+      paged = ordered.limit(count).offset(page * count)
+
+      serialized = paged.map { |nfl| InitiativeSerializer.new(nfl).to_h }
+
+      { page: {
+        items: serialized,
+        total: total,
+        type: 'initiatives'
+      } }
+    end
+
     private
 
     def where_querey
@@ -118,12 +153,6 @@ module User::Actions
     def joins_query
       'LEFT OUTER JOIN news_feed_link_segments ON news_feed_link_segments.news_feed_link_id = news_feed_links.id
      LEFT OUTER JOIN shared_news_feed_links ON shared_news_feed_links.news_feed_link_id = news_feed_links.id'
-    end
-
-    def set_page
-      @limit = 5
-      @page = params[:page].present? ? params[:page].to_i : 1
-      @limit *= @page
     end
   end
 end

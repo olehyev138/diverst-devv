@@ -7,7 +7,8 @@ import { showSnackbar } from 'containers/Shared/Notifier/actions';
 import {
   GET_USERS_BEGIN, CREATE_USER_BEGIN,
   GET_USER_BEGIN, UPDATE_USER_BEGIN, DELETE_USER_BEGIN,
-  UPDATE_FIELD_DATA_BEGIN, GET_USER_POSTS_BEGIN
+  UPDATE_FIELD_DATA_BEGIN, GET_USER_POSTS_BEGIN,
+  GET_USER_EVENTS_BEGIN
 } from 'containers/User/constants';
 
 import {
@@ -17,6 +18,7 @@ import {
   updateUserSuccess, updateUserError,
   deleteUserError,
   getUserPostsSuccess, getUserPostsError,
+  getUserEventsSuccess, getUserEventsError,
 } from 'containers/User/actions';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -52,7 +54,19 @@ export function* getUserPosts(action) {
     yield put(getUserPostsError(err));
 
     // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to load users', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: 'Failed to load posts', options: { variant: 'warning' } }));
+  }
+}
+
+export function* getUserEvents(action) {
+  try {
+    const response = yield call(api.user.getJoinedEvents.bind(api.user), action.payload);
+    yield put(getUserEventsSuccess(response.data.page));
+  } catch (err) {
+    yield put(getUserEventsError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to load events', options: { variant: 'warning' } }));
   }
 }
 
@@ -123,6 +137,6 @@ export default function* usersSaga() {
   yield takeLatest(UPDATE_USER_BEGIN, updateUser);
   yield takeLatest(DELETE_USER_BEGIN, deleteUser);
   yield takeLatest(GET_USER_POSTS_BEGIN, getUserPosts);
-
+  yield takeLatest(GET_USER_EVENTS_BEGIN, getUserEvents);
   yield takeLatest(UPDATE_FIELD_DATA_BEGIN, updateFieldData);
 }

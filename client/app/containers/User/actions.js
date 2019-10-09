@@ -11,7 +11,8 @@ import {
   UPDATE_USER_BEGIN, UPDATE_USER_SUCCESS, UPDATE_USER_ERROR,
   DELETE_USER_BEGIN, DELETE_USER_SUCCESS, DELETE_USER_ERROR,
   UPDATE_FIELD_DATA_BEGIN, UPDATE_FIELD_DATA_SUCCESS, UPDATE_FIELD_DATA_ERROR,
-  USER_UNMOUNT, GET_USER_POSTS_BEGIN, GET_USER_POSTS_SUCCESS, GET_USER_POSTS_ERROR
+  USER_UNMOUNT, GET_USER_POSTS_BEGIN, GET_USER_POSTS_SUCCESS, GET_USER_POSTS_ERROR,
+  GET_USER_EVENTS_BEGIN, GET_USER_EVENTS_SUCCESS, GET_USER_EVENTS_ERROR,
 } from 'containers/User/constants';
 
 /* User listing */
@@ -77,6 +78,27 @@ export function getUserPostsSuccess(payload) {
 export function getUserPostsError(error) {
   return {
     type: GET_USER_POSTS_ERROR,
+    error,
+  };
+}
+
+export function getUserEventsBegin(payload) {
+  return {
+    type: GET_USER_EVENTS_BEGIN,
+    payload,
+  };
+}
+
+export function getUserEventsSuccess(payload) {
+  return {
+    type: GET_USER_EVENTS_SUCCESS,
+    payload,
+  };
+}
+
+export function getUserEventsError(error) {
+  return {
+    type: GET_USER_EVENTS_ERROR,
     error,
   };
 }

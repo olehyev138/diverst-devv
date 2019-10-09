@@ -8,11 +8,11 @@ import { compose } from 'redux';
 import dig from 'object-dig';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
-import reducer from 'containers/Event/reducer';
-import saga from 'containers/Event/saga';
+import reducer from 'containers/User/reducer';
+import saga from 'containers/User/saga';
 
-import { selectPaginatedEvents, selectEventsTotal } from 'containers/Event/selectors';
-import { getEventsBegin, eventsUnmount } from 'containers/Event/actions';
+import { selectPaginatedEvents, selectEventsTotal } from 'containers/User/selectors';
+import { getUserEventsBegin, userUnmount } from 'containers/User/actions';
 
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -33,8 +33,8 @@ const defaultParams = Object.freeze({
 });
 
 export function EventsPage(props) {
-  useInjectReducer({ key: 'events', reducer });
-  useInjectSaga({ key: 'events', saga });
+  useInjectReducer({ key: 'users', reducer });
+  useInjectSaga({ key: 'users', saga });
 
   const rs = new RouteService(useContext);
   const links = {
@@ -48,27 +48,22 @@ export function EventsPage(props) {
   const [params, setParams] = useState(defaultParams);
 
   const getEvents = (scopes, resetParams = false) => {
-    const id = dig(props, 'currentGroup', 'id');
-
     if (resetParams)
       setParams(defaultParams);
 
-    if (id) {
-      const newParams = {
-        ...params,
-        group_id: id,
-        query_scopes: scopes
-      };
-      props.getEventsBegin(newParams);
-      setParams(newParams);
-    }
+    const newParams = {
+      ...params,
+      query_scopes: scopes
+    };
+    props.getUserEventsBegin(newParams);
+    setParams(newParams);
   };
 
   useEffect(() => {
     getEvents(['upcoming']);
 
     return () => {
-      props.eventsUnmount();
+      props.userUnmount();
     };
   }, []);
 
@@ -92,7 +87,7 @@ export function EventsPage(props) {
   const handlePagination = (payload) => {
     const newParams = { ...params, count: payload.count, page: payload.page };
 
-    props.getEventsBegin(newParams);
+    props.getUserEventsBegin(newParams);
     setParams(newParams);
   };
 
@@ -104,14 +99,14 @@ export function EventsPage(props) {
       handleChangeTab={handleChangeTab}
       handlePagination={handlePagination}
       links={links}
-      readonly={false}
+      readonly
     />
   );
 }
 
 EventsPage.propTypes = {
-  getEventsBegin: PropTypes.func.isRequired,
-  eventsUnmount: PropTypes.func.isRequired,
+  getUserEventsBegin: PropTypes.func.isRequired,
+  userUnmount: PropTypes.func.isRequired,
   events: PropTypes.array,
   eventsTotal: PropTypes.number,
   currentGroup: PropTypes.shape({
@@ -125,8 +120,8 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = {
-  getEventsBegin,
-  eventsUnmount,
+  getUserEventsBegin,
+  userUnmount,
 };
 
 const withConnect = connect(

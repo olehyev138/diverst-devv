@@ -8,7 +8,8 @@ import produce from 'immer/dist/immer';
 import {
   GET_USERS_BEGIN, GET_USERS_SUCCESS,
   GET_USERS_ERROR, GET_USER_SUCCESS, USER_UNMOUNT,
-  GET_USER_POSTS_SUCCESS
+  GET_USER_POSTS_SUCCESS,
+  GET_USER_EVENTS_SUCCESS,
 } from 'containers/User/constants';
 
 export const initialState = {
@@ -18,6 +19,8 @@ export const initialState = {
   isFetchingUsers: true,
   posts: [],
   postsTotal: null,
+  events: [],
+  eventsTotal: null,
 };
 
 /* eslint-disable-next-line default-case, no-param-reassign */
@@ -42,6 +45,10 @@ function usersReducer(state = initialState, action) {
       case GET_USER_POSTS_SUCCESS:
         draft.posts = action.payload.items;
         draft.postsTotal = action.payload.total;
+        break;
+      case GET_USER_EVENTS_SUCCESS:
+        draft.events = action.payload.items;
+        draft.eventsTotal = action.payload.total;
         break;
       case USER_UNMOUNT:
         return initialState;

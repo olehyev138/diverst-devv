@@ -16,6 +16,7 @@ import LoginPage from 'containers/Session/LoginPage/Loadable';
 import HomePage from 'containers/User/HomePage/Loadable';
 import UserGroupListPage from 'containers/Group/UserGroupListPage/Loadable';
 import UserNewsLinkPage from 'containers/User/UserNewsFeedPage/Loadable';
+import UserEventsPage from 'containers/User/UserEventsPage/Loadable';
 
 /* Admin - Analyze */
 import GroupDashboardPage from 'containers/Analyze/Dashboards/GroupDashboardPage/Loadable';
@@ -88,5 +89,6 @@ export {
   OutcomeEditPage, GroupMemberListPage, GroupMemberCreatePage, NotFoundPage, PlaceholderPage, GroupDashboardPage,
   UserDashboardPage, MetricsDashboardListPage, MetricsDashboardCreatePage, MetricsDashboardEditPage, MetricsDashboardPage,
   CustomGraphCreatePage, CustomGraphEditPage, GroupManageLayout, GroupSettingsPage, CustomTextEditPage,
-  UserNewsLinkPage
+  UserNewsLinkPage,
+  UserEventsPage,
 };
