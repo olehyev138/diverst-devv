@@ -12,10 +12,9 @@ import dig from 'object-dig';
 import { FormattedMessage } from 'react-intl';
 import { Field, Formik, Form } from 'formik';
 import {
-  Button, Card, CardActions, CardContent, TextField
+  Button, Card, CardActions, CardContent, TextField, Divider, Grid
 } from '@material-ui/core';
 
-import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import messages from 'containers/GlobalSettings/CustomText/messages';
 import { buildValues } from 'utils/formHelpers';
 
@@ -25,127 +24,142 @@ export function CustomTextFormInner({ handleSubmit, handleChange, handleBlur, va
     <Card>
       <Form>
         <CardContent>
-          <Field
-            component={TextField}
-            onChange={handleChange}
-            fullWidth
-            margin='normal'
-            id='erg'
-            name='erg'
-            label={<FormattedMessage {...messages.erg} />}
-            value={values.erg}
-          />
-          <Field
-            component={TextField}
-            onChange={handleChange}
-            fullWidth
-            margin='normal'
-            id='program'
-            name='program'
-            label={<FormattedMessage {...messages.program} />}
-            value={values.program}
-          />
-          <Field
-            component={TextField}
-            onChange={handleChange}
-            fullWidth
-            margin='normal'
-            id='structure'
-            name='structure'
-            label={<FormattedMessage {...messages.structure} />}
-            value={values.structure}
-          />
-          <Field
-            component={TextField}
-            onChange={handleChange}
-            fullWidth
-            margin='normal'
-            id='outcome'
-            name='outcome'
-            label={<FormattedMessage {...messages.outcome} />}
-            value={values.outcome}
-          />
-          <Field
-            component={TextField}
-            onChange={handleChange}
-            fullWidth
-            margin='normal'
-            id='badge'
-            name='badge'
-            label={<FormattedMessage {...messages.badge} />}
-            value={values.badge}
-          />
-          <Field
-            component={TextField}
-            onChange={handleChange}
-            fullWidth
-            margin='normal'
-            id='segment'
-            name='segment'
-            label={<FormattedMessage {...messages.segment} />}
-            value={values.segment}
-          />
-          <Field
-            component={TextField}
-            onChange={handleChange}
-            fullWidth
-            margin='normal'
-            id='dci_full_title'
-            name='dci_full_title'
-            label={<FormattedMessage {...messages.dci_full_title} />}
-            value={values.dci_full_title}
-          />
-          <Field
-            component={TextField}
-            onChange={handleChange}
-            fullWidth
-            margin='normal'
-            id='dci_abbreviation'
-            name='dci_abbreviation'
-            label={<FormattedMessage {...messages.dci_abbreviation} />}
-            value={values.dci_abbreviation}
-          />
-          <Field
-            component={TextField}
-            onChange={handleChange}
-            fullWidth
-            margin='normal'
-            id='member_preference'
-            name='member_preference'
-            label={<FormattedMessage {...messages.member_preference} />}
-            value={values.member_preference}
-          />
-          <Field
-            component={TextField}
-            onChange={handleChange}
-            fullWidth
-            margin='normal'
-            id='parent'
-            name='parent'
-            label={<FormattedMessage {...messages.parent} />}
-            value={values.parent}
-          />
-          <Field
-            component={TextField}
-            onChange={handleChange}
-            fullWidth
-            margin='normal'
-            id='sub_erg'
-            name='sub_erg'
-            label={<FormattedMessage {...messages.sub_erg} />}
-            value={values.sub_erg}
-          />
-          <Field
-            component={TextField}
-            onChange={handleChange}
-            fullWidth
-            margin='normal'
-            id='privacy_statement'
-            name='privacy_statement'
-            label={<FormattedMessage {...messages.privacy_statement} />}
-            value={values.privacy_statement}
-          />
+          <Grid container spacing={3} justify='center'>
+            <Grid item xs='auto'>
+              <Field
+                component={TextField}
+                onChange={handleChange}
+                margin='normal'
+                id='erg'
+                name='erg'
+                label={<FormattedMessage {...messages.erg} />}
+                value={values.erg}
+              />
+            </Grid>
+            <Grid item xs='auto'>
+              <Field
+                component={TextField}
+                onChange={handleChange}
+                margin='normal'
+                id='program'
+                name='program'
+                label={<FormattedMessage {...messages.program} />}
+                value={values.program}
+              />
+            </Grid>
+            <Grid item xs='auto'>
+              <Field
+                component={TextField}
+                onChange={handleChange}
+                margin='normal'
+                id='structure'
+                name='structure'
+                label={<FormattedMessage {...messages.structure} />}
+                value={values.structure}
+              />
+            </Grid>
+            <Grid item xs='auto'>
+              <Field
+                component={TextField}
+                onChange={handleChange}
+                margin='normal'
+                id='outcome'
+                name='outcome'
+                label={<FormattedMessage {...messages.outcome} />}
+                value={values.outcome}
+              />
+            </Grid>
+            <Grid item xs='auto'>
+              <Field
+                component={TextField}
+                onChange={handleChange}
+                margin='normal'
+                id='badge'
+                name='badge'
+                label={<FormattedMessage {...messages.badge} />}
+                value={values.badge}
+              />
+            </Grid>
+            <Grid item xs='auto'>
+              <Field
+                component={TextField}
+                onChange={handleChange}
+                margin='normal'
+                id='segment'
+                name='segment'
+                label={<FormattedMessage {...messages.segment} />}
+                value={values.segment}
+              />
+            </Grid>
+            <Grid item xs='auto'>
+              <Field
+                component={TextField}
+                onChange={handleChange}
+                margin='normal'
+                id='dci_full_title'
+                name='dci_full_title'
+                label={<FormattedMessage {...messages.dci_full_title} />}
+                value={values.dci_full_title}
+              />
+            </Grid>
+            <Grid item xs='auto'>
+              <Field
+                component={TextField}
+                onChange={handleChange}
+                margin='normal'
+                id='dci_abbreviation'
+                name='dci_abbreviation'
+                label={<FormattedMessage {...messages.dci_abbreviation} />}
+                value={values.dci_abbreviation}
+              />
+            </Grid>
+            <Grid item xs='auto'>
+              <Field
+                component={TextField}
+                onChange={handleChange}
+                margin='normal'
+                id='member_preference'
+                name='member_preference'
+                label={<FormattedMessage {...messages.member_preference} />}
+                value={values.member_preference}
+              />
+            </Grid>
+            <Grid item xs='auto'>
+              <Field
+                component={TextField}
+                onChange={handleChange}
+                margin='normal'
+                id='parent'
+                name='parent'
+                label={<FormattedMessage {...messages.parent} />}
+                value={values.parent}
+              />
+            </Grid>
+            <Grid item xs='auto'>
+              <Field
+                component={TextField}
+                onChange={handleChange}
+                margin='normal'
+                id='sub_erg'
+                name='sub_erg'
+                label={<FormattedMessage {...messages.sub_erg} />}
+                value={values.sub_erg}
+              />
+            </Grid>
+            <Grid item xs='auto'>
+              <Field
+                component={TextField}
+                onChange={handleChange}
+                margin='normal'
+                id='privacy_statement'
+                name='privacy_statement'
+                label={<FormattedMessage {...messages.privacy_statement} />}
+                value={values.privacy_statement}
+              />
+            </Grid>
+          </Grid>
         </CardContent>
+        <Divider />
         <CardActions>
           <Button
             color='primary'
