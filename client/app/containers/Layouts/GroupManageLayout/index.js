@@ -2,16 +2,13 @@ import React, { memo, useEffect, useState } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
 
-import Container from '@material-ui/core/Container';
 import { withStyles } from '@material-ui/core/styles';
 
 import GroupLayout from '../GroupLayout';
 import GroupManageLinks from 'components/Group/GroupManage/GroupManageLinks';
 
 const styles = theme => ({
-  toolbar: theme.mixins.toolbar,
   content: {
-    flexGrow: 1,
     padding: theme.spacing(3),
   },
 });
@@ -42,11 +39,9 @@ const GroupManageLayout = ({ component: Component, ...rest }) => {
             currentTab={tab}
             {...matchProps}
           />
-          <Container>
-            <div className={classes.content}>
-              <Component currentGroup={matchProps.currentGroup} {...other} />
-            </div>
-          </Container>
+          <div className={classes.content}>
+            <Component currentGroup={matchProps.currentGroup} {...other} />
+          </div>
         </React.Fragment>
       )}
     />

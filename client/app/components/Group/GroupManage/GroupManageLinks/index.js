@@ -1,23 +1,17 @@
-import React, { memo, useState } from 'react';
-import { connect } from 'react-redux';
+import React, { memo } from 'react';
 import { compose } from 'redux';
-import { createStructuredSelector } from 'reselect';
 import PropTypes from 'prop-types';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
-import {
-  AppBar, Toolbar, Button, Hidden, Menu, MenuItem, ListItemIcon, IconButton,
-  Tab, Paper
-} from '@material-ui/core';
+import { Tab, Paper } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import ResponsiveTabs from 'components/Shared/ResponsiveTabs';
 
-const styles = theme => ({
-});
+const styles = theme => ({});
 
 /* eslint-disable react/no-multi-comp */
 export function GroupManageLinks(props) {
@@ -54,20 +48,9 @@ GroupManageLinks.propTypes = {
   currentGroup: PropTypes.object
 };
 
-const mapStateToProps = createStructuredSelector({});
-
-const mapDispatchToProps = {
-};
-
-const withConnect = connect(
-  mapStateToProps,
-  mapDispatchToProps
-);
-
 export const StyledGroupManageLinks = withStyles(styles)(GroupManageLinks);
 
 export default compose(
-  withConnect,
   withStyles(styles),
   memo,
 )(GroupManageLinks);
