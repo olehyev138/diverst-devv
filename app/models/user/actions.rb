@@ -89,13 +89,13 @@ module User::Actions
 
       # get the news_feed_links
       nfls = NewsFeedLink
-        .joins(:news_feed).joins(joins_query)
-        .includes(:group_message, :news_link, :social_link)
-        .where('news_feed_links.news_feed_id IN (?) OR shared_news_feed_links.news_feed_id IN (?)', news_feed_ids, news_feed_ids)
-        .where(approved: true, archived_at: nil)
-        .where(where_querey, current_user.segments.pluck(:id))
-        .order(order_by => order)
-        .distinct
+               .joins(:news_feed).joins(news_joins)
+               .includes(:group_message, :news_link, :social_link)
+               .where('news_feed_links.news_feed_id IN (?) OR shared_news_feed_links.news_feed_id IN (?)', news_feed_ids, news_feed_ids)
+               .where(approved: true, archived_at: nil)
+               .where(news_where, current_user.segments.pluck(:id))
+               .order(order_by => order)
+               .distinct
 
       total = nfls.size
       paged = nfls.limit(count).offset(page * count)
@@ -144,13 +144,80 @@ module User::Actions
       } }
     end
 
+    def all_events(current_user, params)
+      count = params[:count].to_i || 5
+      page = params[:page].to_i || 0
+      order = params[:order].to_sym rescue :desc
+      order_by = params[:order_by].to_sym rescue :created_at
+      scope =
+        JSON.parse params[:query_scopes] || params[:query_scope]
+
+      # get the events in scope
+      if scope.class.to_s == 'Array'
+        scoped_events = scope.reduce(Initiative) { |sum, n| sum.send(n.to_sym) }
+      elsif scope.respond_to?(:to_sym)
+        scoped_events = Initiative.send(scope.to_sym)
+      else
+        scoped_events = Initiative
+      end
+
+      # join the necessary events
+      included_events = scoped_events.left_joins(:initiative_segments, :initiative_participating_groups, :initiative_invitees)
+
+      # SCOPE AND
+      # ( INVITED OR (
+      #   (IN GROUP OR IN PARTICIPATING GROUP) AND
+      #   (NO SEGMENT OR IN SEGMENT)
+      # ))
+      group_ors = []
+      group_ors << sql_where(owner_group_id: current_user.group_ids)
+      group_ors << sql_where(
+        initiative_participating_groups: {group_id: current_user.group_ids}
+      )
+
+      segment_ors = []
+      segment_ors << sql_where(initiative_segments: {segment_id: nil})
+      segment_ors << sql_where(
+        initiative_segments: {segment_id: current_user.segment_ids}
+      )
+
+      valid_ors = []
+      valid_ors << sql_where(
+        initiative_invitees: {user_id: current_user.id}
+      )
+      valid_ors << sql_where("(#{group_ors.join(' OR ')}) AND (#{segment_ors.join(' OR ')})")
+
+      ordered = included_events
+        .where(valid_ors.join(' OR '))
+        .order(order_by => order)
+        .distinct
+
+
+      total = ordered.size
+      paged = ordered.limit(count).offset(page * count)
+
+      serialized = paged.map { |nfl| InitiativeSerializer.new(nfl).to_h }
+
+      { page: {
+        items: serialized,
+        total: total,
+        type: 'initiatives'
+      } }
+    end
+
     private
 
-    def where_querey
+    def sql_where(*args)
+      sql = Initiative.unscoped.where(*args).to_sql
+      match = sql.match(/WHERE\s(.*)$/)
+      "(#{match[1]})"
+    end
+
+    def news_where
       'news_feed_link_segments.segment_id IS NULL OR news_feed_link_segments.segment_id IN (?)'
     end
 
-    def joins_query
+    def news_joins
       'LEFT OUTER JOIN news_feed_link_segments ON news_feed_link_segments.news_feed_link_id = news_feed_links.id
      LEFT OUTER JOIN shared_news_feed_links ON shared_news_feed_links.news_feed_link_id = news_feed_links.id'
     end
