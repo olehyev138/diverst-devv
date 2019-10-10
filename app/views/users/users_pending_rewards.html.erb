@@ -1,0 +1,42 @@
+<div class="content__main">
+    <div class="content__header">
+      <h1>Rewards to be redeemed</h1>
+    </div>
+    <div class="card">
+      <div class="card__section">
+        <% if @pending_rewards.empty? %>
+          <p>There are no rewards to be redeemed yet.</p>
+        <% else %>
+          <table class="table--has-border">
+            <thead>
+              <th>Pending Rewards</th>
+              <th>Points</th>
+              <th>Users</th>
+              <th>Status</th>
+              <th>Options</th>
+            </thead>
+            <tbody>
+              <% @pending_rewards.each do |pending_reward| %>
+                <tr>
+                  <td>
+                     <a href="<%= pending_reward.reward.picture.expiring_url(3600) %>" class="icon icon--bg icon--large" style="background-image: url(<%= pending_reward.reward.picture.expiring_url(3600) %>)"></a>
+                     <%= pending_reward.reward.label %>
+                   </td>
+                  <td><%= pending_reward.points %></td>
+                  <td class="icon-column">
+                    <%= pending_reward.user.name %>  
+                  </td>
+                   <td>
+                     <%= pending_reward.status %>
+                   </td>
+                  <td>
+                    <%= link_to 'Approve', approve_reward_user_reward_user_reward_path(reward_id: pending_reward.reward_id, id: pending_reward.id), method: :patch, data: { confirm: 'Are you sure?' } %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        <% end %>
+      </div>
+    </div>
+  </div>

@@ -64,6 +64,10 @@ class UserPolicy < ApplicationPolicy
     users_points_ranking?
   end
 
+  def users_pending_rewards?
+    users_points_ranking?
+  end
+
   class Scope < Scope
     def index?
       UserPolicy.new(user, nil).index?

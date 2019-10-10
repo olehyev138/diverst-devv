@@ -1,10 +1,10 @@
 class UserReward < BaseClass
   extend Enumerize
 
-  enumerize :status, in: [
-    :pending,
-    :redeemed
-  ]
+  enumerize :status, in: {
+    pending: 0,
+    redeemed: 1
+  }
 
   belongs_to :user
   belongs_to :reward
@@ -12,4 +12,9 @@ class UserReward < BaseClass
   validates :user, presence: true
   validates :reward, presence: true
   validates :points, numericality: { only_integer: true }, presence: true
+
+
+  def approve_reward_redemption
+    self.update(status: 1)
+  end
 end
