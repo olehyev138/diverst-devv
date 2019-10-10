@@ -114,11 +114,11 @@ export const ROUTES = {
         }
       },
       messages: {
-        index: {
+        show: {
           path:
             (groupId = ':group_id', itemId = ':item_id') => `/groups/${groupId}/news/messages/${itemId}`,
           data: {
-            titleMessage: messages.groups.news.messages.index,
+            titleMessage: messages.groups.news.messages.show,
           }
         },
         new: {

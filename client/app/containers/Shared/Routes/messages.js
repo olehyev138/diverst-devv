@@ -62,8 +62,8 @@ export default defineMessages({
         id: `${scope}.group.news.index`
       },
       messages: {
-        index: {
-          id: `${scope}.group.news.messages.index`
+        show: {
+          id: `${scope}.group.news.messages.show`
         },
         new: {
           id: `${scope}.group.news.messages.new`
