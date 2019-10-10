@@ -16,5 +16,6 @@ class UserReward < BaseClass
 
   def approve_reward_redemption
     self.update(status: 1)
+    self.user.update(credits: Rewards::Points::Reporting.new(self.user).user_credits)
   end
 end
