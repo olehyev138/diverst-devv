@@ -23,8 +23,6 @@ export function GroupMessageComment(props) {
 
   const { classes, comment } = props;
 
-  console.log(comment);
-
   return (
     <Card className={classes.margin}>
       <CardContent>

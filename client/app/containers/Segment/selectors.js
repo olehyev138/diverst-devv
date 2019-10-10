@@ -5,7 +5,6 @@ import dig from 'object-dig';
 import produce from 'immer';
 
 import { deserializeDatum, deserializeOptionsText } from 'utils/customFieldHelpers';
-import { selectMembersDomain } from 'containers/Group/GroupMembers/selectors';
 
 const selectSegmentsDomain = state => state.segments || initialState;
 
@@ -99,7 +98,7 @@ const selectIsSegmentBuilding = () => createSelector(
 const selectIsLoading = () => createSelector(
   selectSegmentsDomain,
   segmentsState => segmentsState.isLoading
-)
+);
 
 
 export {
