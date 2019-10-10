@@ -11,6 +11,9 @@ const styles = theme => ({
     width: '100%',
     paddingTop: 8,
   },
+  formLabel: {
+    fontSize: '0.9rem',
+  },
 });
 
 export function DiverstSelect(props) {
@@ -39,6 +42,7 @@ export function DiverstSelect(props) {
       variant={variant}
     >
       <FormLabel
+        className={classes.formLabel}
         htmlFor={props.id}
         disabled={disabled}
         error={error}
