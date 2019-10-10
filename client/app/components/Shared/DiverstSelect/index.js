@@ -7,6 +7,9 @@ import Select from 'react-select';
 import { FormControl, FormHelperText, FormLabel } from '@material-ui/core';
 
 const styles = theme => ({
+  formControl: {
+    minWidth: 150,
+  },
   select: {
     width: '100%',
     paddingTop: 8,
@@ -33,6 +36,7 @@ export function DiverstSelect(props) {
 
   return (
     <FormControl
+      className={classes.formControl}
       disabled={disabled}
       error={error}
       fullWidth={fullWidth}
