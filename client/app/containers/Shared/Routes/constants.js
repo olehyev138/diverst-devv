@@ -276,7 +276,7 @@ export const ROUTES = {
     system: {
       index: {
         data: {
-          pathPrefix: '/system',
+          pathPrefix: '/admin/system',
           titleMessage: messages.admin.system.index,
         }
       },

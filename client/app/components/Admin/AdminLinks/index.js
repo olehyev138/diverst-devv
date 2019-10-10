@@ -150,7 +150,6 @@ class AdminLinks extends React.PureComponent {
               </MenuItem>
               <MenuItem
                 component={WrappedNavLink}
-                exact
                 to={ROUTES.admin.analyze.users.path()}
                 className={classes.nested}
                 activeClassName={classes.navLinkActive}
@@ -164,7 +163,6 @@ class AdminLinks extends React.PureComponent {
               </MenuItem>
               <MenuItem
                 component={WrappedNavLink}
-                exact
                 to={ROUTES.admin.analyze.groups.path()}
                 className={classes.nested}
                 activeClassName={classes.navLinkActive}
@@ -178,7 +176,6 @@ class AdminLinks extends React.PureComponent {
               </MenuItem>
               <MenuItem
                 component={WrappedNavLink}
-                exact
                 to={ROUTES.admin.analyze.custom.index.path()}
                 className={classes.nested}
                 activeClassName={classes.navLinkActive}
@@ -206,7 +203,6 @@ class AdminLinks extends React.PureComponent {
             <List disablePadding>
               <MenuItem
                 component={WrappedNavLink}
-                exact
                 to={ROUTES.admin.manage.groups.index.path()}
                 className={classes.nested}
                 activeClassName={classes.navLinkActive}
@@ -220,7 +216,6 @@ class AdminLinks extends React.PureComponent {
               </MenuItem>
               <MenuItem
                 component={WrappedNavLink}
-                exact
                 to={ROUTES.admin.manage.segments.index.path()}
                 className={classes.nested}
                 activeClassName={classes.navLinkActive}
@@ -278,7 +273,6 @@ class AdminLinks extends React.PureComponent {
             <List disablePadding>
               <MenuItem
                 component={WrappedNavLink}
-                exact
                 to={ROUTES.admin.system.globalSettings.fields.index.path()}
                 className={classes.nested}
                 activeClassName={classes.navLinkActive}
@@ -292,7 +286,6 @@ class AdminLinks extends React.PureComponent {
               </MenuItem>
               <MenuItem
                 component={WrappedNavLink}
-                exact
                 to={ROUTES.admin.system.users.index.path()}
                 className={classes.nested}
                 activeClassName={classes.navLinkActive}
@@ -306,7 +299,6 @@ class AdminLinks extends React.PureComponent {
               </MenuItem>
               <MenuItem
                 component={WrappedNavLink}
-                exact
                 to='#'
                 className={classes.nested}
                 activeClassName={classes.navLinkActive}
@@ -320,7 +312,6 @@ class AdminLinks extends React.PureComponent {
               </MenuItem>
               <MenuItem
                 component={WrappedNavLink}
-                exact
                 to='#'
                 className={classes.nested}
                 activeClassName={classes.navLinkActive}
