@@ -6,22 +6,30 @@
  * IntlProvider component and i18n messages (loaded from `app/translations`)
  */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { createSelector } from 'reselect';
+import { createStructuredSelector } from 'reselect';
 import { IntlProvider } from 'react-intl';
 
-import { makeSelectLocale } from './selectors';
+import { selectLocale } from './selectors';
+import { selectCustomText } from 'containers/Shared/App/selectors';
 
 import GlobalLanguageProvider from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
 
 export function LanguageProvider(props) {
+  const messages = { ...props.messages[props.locale] };
+
+  useEffect(() => {
+    if (props.customTexts) // eslint-disable-next-line no-return-assign
+      Object.keys(props.customTexts).forEach(key => messages[`diverst.texts.${key}`] = props.customTexts[key]);
+  }, [props.customTexts]);
+
   return (
     <IntlProvider
       locale={props.locale}
       key={props.locale}
-      messages={props.messages[props.locale]}
+      messages={messages}
     >
       <GlobalLanguageProvider>
         {React.Children.only(props.children)}
@@ -34,22 +42,15 @@ LanguageProvider.propTypes = {
   locale: PropTypes.string,
   messages: PropTypes.object,
   children: PropTypes.element.isRequired,
+  customTexts: PropTypes.object,
 };
 
-const mapStateToProps = createSelector(
-  makeSelectLocale(),
-  locale => ({
-    locale,
-  }),
-);
-
-function mapDispatchToProps(dispatch) {
-  return {
-    dispatch,
-  };
-}
+const mapStateToProps = createStructuredSelector({
+  locale: selectLocale(),
+  customTexts: selectCustomText(),
+});
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  undefined,
 )(LanguageProvider);
