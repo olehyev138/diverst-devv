@@ -71,7 +71,6 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   "render": [Function],
                 }
               }
-              exact={true}
               to="/admin/analyze/users"
             >
               <WithStyles(ForwardRef(ListItemIcon))>
@@ -90,7 +89,6 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   "render": [Function],
                 }
               }
-              exact={true}
               to="/admin/analyze/groups"
             >
               <WithStyles(ForwardRef(ListItemIcon))>
@@ -109,7 +107,6 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   "render": [Function],
                 }
               }
-              exact={true}
               to="/admin/analyze/custom"
             >
               <WithStyles(ForwardRef(ListItemIcon))>
@@ -150,7 +147,6 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   "render": [Function],
                 }
               }
-              exact={true}
               to="/admin/manage/groups"
             >
               <WithStyles(ForwardRef(ListItemIcon))>
@@ -169,7 +165,6 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   "render": [Function],
                 }
               }
-              exact={true}
               to="/admin/manage/segments"
             >
               <WithStyles(ForwardRef(ListItemIcon))>
@@ -253,7 +248,6 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   "render": [Function],
                 }
               }
-              exact={true}
               to="/admin/system/settings/fields"
             >
               <WithStyles(ForwardRef(ListItemIcon))>
@@ -270,7 +264,6 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   "render": [Function],
                 }
               }
-              exact={true}
               to="/admin/system/users"
             >
               <WithStyles(ForwardRef(ListItemIcon))>
@@ -289,7 +282,6 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   "render": [Function],
                 }
               }
-              exact={true}
               to="#"
             >
               <WithStyles(ForwardRef(ListItemIcon))>
@@ -306,7 +298,6 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   "render": [Function],
                 }
               }
-              exact={true}
               to="#"
             >
               <WithStyles(ForwardRef(ListItemIcon))>
@@ -385,7 +376,6 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   "render": [Function],
                 }
               }
-              exact={true}
               to="/admin/analyze/users"
             >
               <WithStyles(ForwardRef(ListItemIcon))>
@@ -404,7 +394,6 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   "render": [Function],
                 }
               }
-              exact={true}
               to="/admin/analyze/groups"
             >
               <WithStyles(ForwardRef(ListItemIcon))>
@@ -423,7 +412,6 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   "render": [Function],
                 }
               }
-              exact={true}
               to="/admin/analyze/custom"
             >
               <WithStyles(ForwardRef(ListItemIcon))>
@@ -464,7 +452,6 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   "render": [Function],
                 }
               }
-              exact={true}
               to="/admin/manage/groups"
             >
               <WithStyles(ForwardRef(ListItemIcon))>
@@ -483,7 +470,6 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   "render": [Function],
                 }
               }
-              exact={true}
               to="/admin/manage/segments"
             >
               <WithStyles(ForwardRef(ListItemIcon))>
@@ -567,7 +553,6 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   "render": [Function],
                 }
               }
-              exact={true}
               to="/admin/system/settings/fields"
             >
               <WithStyles(ForwardRef(ListItemIcon))>
@@ -584,7 +569,6 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   "render": [Function],
                 }
               }
-              exact={true}
               to="/admin/system/users"
             >
               <WithStyles(ForwardRef(ListItemIcon))>
@@ -603,7 +587,6 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   "render": [Function],
                 }
               }
-              exact={true}
               to="#"
             >
               <WithStyles(ForwardRef(ListItemIcon))>
@@ -620,7 +603,6 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   "render": [Function],
                 }
               }
-              exact={true}
               to="#"
             >
               <WithStyles(ForwardRef(ListItemIcon))>
