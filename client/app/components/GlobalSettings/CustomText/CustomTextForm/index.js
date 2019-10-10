@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import dig from 'object-dig';
 
-import { FormattedMessage } from 'react-intl';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { Field, Formik, Form } from 'formik';
 import {
   Button, Card, CardActions, CardContent, TextField, Divider, Grid
@@ -32,7 +32,7 @@ export function CustomTextFormInner({ handleSubmit, handleChange, handleBlur, va
                 margin='normal'
                 id='erg'
                 name='erg'
-                label={<FormattedMessage {...messages.erg} />}
+                label={<DiverstFormattedMessage {...messages.erg} />}
                 value={values.erg}
               />
             </Grid>
@@ -43,7 +43,7 @@ export function CustomTextFormInner({ handleSubmit, handleChange, handleBlur, va
                 margin='normal'
                 id='program'
                 name='program'
-                label={<FormattedMessage {...messages.program} />}
+                label={<DiverstFormattedMessage {...messages.program} />}
                 value={values.program}
               />
             </Grid>
@@ -54,7 +54,7 @@ export function CustomTextFormInner({ handleSubmit, handleChange, handleBlur, va
                 margin='normal'
                 id='structure'
                 name='structure'
-                label={<FormattedMessage {...messages.structure} />}
+                label={<DiverstFormattedMessage {...messages.structure} />}
                 value={values.structure}
               />
             </Grid>
@@ -65,7 +65,7 @@ export function CustomTextFormInner({ handleSubmit, handleChange, handleBlur, va
                 margin='normal'
                 id='outcome'
                 name='outcome'
-                label={<FormattedMessage {...messages.outcome} />}
+                label={<DiverstFormattedMessage {...messages.outcome} />}
                 value={values.outcome}
               />
             </Grid>
@@ -76,7 +76,7 @@ export function CustomTextFormInner({ handleSubmit, handleChange, handleBlur, va
                 margin='normal'
                 id='badge'
                 name='badge'
-                label={<FormattedMessage {...messages.badge} />}
+                label={<DiverstFormattedMessage {...messages.badge} />}
                 value={values.badge}
               />
             </Grid>
@@ -87,7 +87,7 @@ export function CustomTextFormInner({ handleSubmit, handleChange, handleBlur, va
                 margin='normal'
                 id='segment'
                 name='segment'
-                label={<FormattedMessage {...messages.segment} />}
+                label={<DiverstFormattedMessage {...messages.segment} />}
                 value={values.segment}
               />
             </Grid>
@@ -98,7 +98,7 @@ export function CustomTextFormInner({ handleSubmit, handleChange, handleBlur, va
                 margin='normal'
                 id='dci_full_title'
                 name='dci_full_title'
-                label={<FormattedMessage {...messages.dci_full_title} />}
+                label={<DiverstFormattedMessage {...messages.dci_full_title} />}
                 value={values.dci_full_title}
               />
             </Grid>
@@ -109,7 +109,7 @@ export function CustomTextFormInner({ handleSubmit, handleChange, handleBlur, va
                 margin='normal'
                 id='dci_abbreviation'
                 name='dci_abbreviation'
-                label={<FormattedMessage {...messages.dci_abbreviation} />}
+                label={<DiverstFormattedMessage {...messages.dci_abbreviation} />}
                 value={values.dci_abbreviation}
               />
             </Grid>
@@ -120,7 +120,7 @@ export function CustomTextFormInner({ handleSubmit, handleChange, handleBlur, va
                 margin='normal'
                 id='member_preference'
                 name='member_preference'
-                label={<FormattedMessage {...messages.member_preference} />}
+                label={<DiverstFormattedMessage {...messages.member_preference} />}
                 value={values.member_preference}
               />
             </Grid>
@@ -131,7 +131,7 @@ export function CustomTextFormInner({ handleSubmit, handleChange, handleBlur, va
                 margin='normal'
                 id='parent'
                 name='parent'
-                label={<FormattedMessage {...messages.parent} />}
+                label={<DiverstFormattedMessage {...messages.parent} />}
                 value={values.parent}
               />
             </Grid>
@@ -142,7 +142,7 @@ export function CustomTextFormInner({ handleSubmit, handleChange, handleBlur, va
                 margin='normal'
                 id='sub_erg'
                 name='sub_erg'
-                label={<FormattedMessage {...messages.sub_erg} />}
+                label={<DiverstFormattedMessage {...messages.sub_erg} />}
                 value={values.sub_erg}
               />
             </Grid>
@@ -153,7 +153,7 @@ export function CustomTextFormInner({ handleSubmit, handleChange, handleBlur, va
                 margin='normal'
                 id='privacy_statement'
                 name='privacy_statement'
-                label={<FormattedMessage {...messages.privacy_statement} />}
+                label={<DiverstFormattedMessage {...messages.privacy_statement} />}
                 value={values.privacy_statement}
               />
             </Grid>

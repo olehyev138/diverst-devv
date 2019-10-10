@@ -10,7 +10,7 @@ import React, {
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import { Field, Formik, Form } from 'formik';
-import { FormattedMessage } from 'react-intl';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { withStyles } from '@material-ui/core/styles';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';

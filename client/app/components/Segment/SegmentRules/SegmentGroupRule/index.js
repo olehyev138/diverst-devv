@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 
 import { connect, Field, getIn } from 'formik';
 import Select from 'react-select';
-import { FormattedMessage } from 'react-intl';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Segment/messages';
 import { CardContent } from '@material-ui/core';
 

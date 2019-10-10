@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import dig from 'object-dig';
 
-import { FormattedMessage } from 'react-intl';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { Field, Formik, Form } from 'formik';
 import {
   Button, Card, CardActions, CardContent, CardHeader, TextField, Typography, Divider,
@@ -44,7 +44,7 @@ export function GroupMessageCommentFormInner({ classes, handleSubmit, handleChan
             name='content'
             variant='outlined'
             value={values.content}
-            label={<FormattedMessage {...messages.content} />}
+            label={<DiverstFormattedMessage {...messages.content} />}
           />
         </CardContent>
         <Divider />

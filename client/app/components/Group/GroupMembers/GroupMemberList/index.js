@@ -15,7 +15,7 @@ import { withStyles } from '@material-ui/core/styles';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
-import { FormattedMessage } from 'react-intl';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Group/GroupMembers/messages';
 
 import DeleteIcon from '@material-ui/icons/DeleteOutline';
@@ -70,7 +70,7 @@ export function GroupMemberList(props) {
           component={WrappedNavLink}
           startIcon={<AddIcon />}
         >
-          <FormattedMessage {...messages.new} />
+          <DiverstFormattedMessage {...messages.new} />
         </Button>
         <Button
           className={classes.actionButton}
@@ -81,7 +81,7 @@ export function GroupMemberList(props) {
           component={WrappedNavLink}
           startIcon={<ExportIcon />}
         >
-          <FormattedMessage {...messages.export} />
+          <DiverstFormattedMessage {...messages.export} />
         </Button>
       </Box>
       <Box className={classes.floatSpacer} />

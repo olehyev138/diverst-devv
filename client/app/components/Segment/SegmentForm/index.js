@@ -11,7 +11,7 @@ import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import Select from 'react-select';
 import { Field, Formik, Form } from 'formik';
-import { FormattedMessage } from 'react-intl';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -47,7 +47,7 @@ export function SegmentFormInner({ handleSubmit, handleChange, handleBlur, value
             fullWidth
             id='name'
             name='name'
-            label={<FormattedMessage {...messages.form.name} />}
+            label={<DiverstFormattedMessage {...messages.form.name} />}
             value={values.name}
           />
         </CardContent>

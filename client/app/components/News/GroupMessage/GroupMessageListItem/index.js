@@ -14,7 +14,7 @@ import {
 import { withStyles } from '@material-ui/core/styles';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
-import { FormattedMessage } from 'react-intl';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/News/messages';
 
 import { formatDateTimeString } from 'utils/dateTimeHelpers';
@@ -54,7 +54,7 @@ export function GroupMessageListItem(props) {
             to={props.links.groupMessageEdit(newsItem.id)}
             component={WrappedNavLink}
           >
-            <FormattedMessage {...messages.edit} />
+            <DiverstFormattedMessage {...messages.edit} />
           </Button>
           <Button
             size='small'

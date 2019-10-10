@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import dig from 'object-dig';
 
-import { FormattedMessage } from 'react-intl';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { Field, Formik, Form } from 'formik';
 import {
   Button, Card, CardActions, CardContent, TextField,
@@ -35,7 +35,7 @@ export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, 
             id='first_name'
             name='first_name'
             value={values.first_name}
-            label={<FormattedMessage {...messages.first_name} />}
+            label={<DiverstFormattedMessage {...messages.first_name} />}
           />
           <Field
             component={TextField}
@@ -44,7 +44,7 @@ export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, 
             id='last_name'
             name='last_name'
             value={values.last_name}
-            label={<FormattedMessage {...messages.last_name} />}
+            label={<DiverstFormattedMessage {...messages.last_name} />}
           />
         </CardContent>
         <CardActions>
@@ -58,7 +58,7 @@ export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, 
             to={props.links.usersIndex}
             component={WrappedNavLink}
           >
-            <FormattedMessage {...messages.cancel} />
+            <DiverstFormattedMessage {...messages.cancel} />
           </Button>
         </CardActions>
       </Form>

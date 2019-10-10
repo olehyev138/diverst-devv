@@ -8,7 +8,7 @@ import React, { memo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
-import { FormattedMessage } from 'react-intl';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Group/messages';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
@@ -78,7 +78,7 @@ export function AdminGroupList(props, context) {
             component={WrappedNavLink}
             startIcon={<AddIcon />}
           >
-            <FormattedMessage {...messages.new} />
+            <DiverstFormattedMessage {...messages.new} />
           </Button>
         </Grid>
       </Grid>
@@ -119,7 +119,7 @@ export function AdminGroupList(props, context) {
                       }}
                       component={WrappedNavLink}
                     >
-                      <FormattedMessage {...messages.edit} />
+                      <DiverstFormattedMessage {...messages.edit} />
                     </Button>
                     <Button
                       size='small'
@@ -130,7 +130,7 @@ export function AdminGroupList(props, context) {
                           props.deleteGroupBegin(group.id);
                       }}
                     >
-                      <FormattedMessage {...messages.delete} />
+                      <DiverstFormattedMessage {...messages.delete} />
                     </Button>
                     <Button
                       size='small'
@@ -139,9 +139,9 @@ export function AdminGroupList(props, context) {
                       }}
                     >
                       {expandedGroups[group.id] ? (
-                        <FormattedMessage {...messages.children_collapse} />
+                        <DiverstFormattedMessage {...messages.children_collapse} />
                       ) : (
-                        <FormattedMessage {...messages.children_expand} />
+                        <DiverstFormattedMessage {...messages.children_expand} />
                       )}
                     </Button>
                   </CardActions>
@@ -182,7 +182,7 @@ export function AdminGroupList(props, context) {
                               }}
                               component={WrappedNavLink}
                             >
-                              <FormattedMessage {...messages.edit} />
+                              <DiverstFormattedMessage {...messages.edit} />
                             </Button>
                             <Button
                               size='small'
@@ -193,7 +193,7 @@ export function AdminGroupList(props, context) {
                                   props.deleteGroupBegin(childGroup.id);
                               }}
                             >
-                              <FormattedMessage {...messages.delete} />
+                              <DiverstFormattedMessage {...messages.delete} />
                             </Button>
                           </CardActions>
                         </Card>

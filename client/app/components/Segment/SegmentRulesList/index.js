@@ -13,7 +13,7 @@ import dig from 'object-dig';
 import PropTypes from 'prop-types';
 import Select from 'react-select';
 import { FieldArray, connect, getIn } from 'formik';
-import { FormattedMessage } from 'react-intl';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { ROUTES } from 'containers/Shared/Routes/constants';

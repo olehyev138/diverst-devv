@@ -8,7 +8,7 @@ import React, { memo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
-import { FormattedMessage } from 'react-intl';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Segment/messages';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
@@ -63,7 +63,7 @@ export function SegmentList(props, context) {
             component={WrappedNavLink}
             startIcon={<AddIcon />}
           >
-            <FormattedMessage {...messages.new} />
+            <DiverstFormattedMessage {...messages.new} />
           </Button>
         </Grid>
       </Grid>
@@ -101,7 +101,7 @@ export function SegmentList(props, context) {
                           props.deleteSegmentBegin(segment.id);
                       }}
                     >
-                      <FormattedMessage {...messages.delete} />
+                      <DiverstFormattedMessage {...messages.delete} />
                     </Button>
                   </CardActions>
                 </Card>

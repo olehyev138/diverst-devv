@@ -17,7 +17,7 @@ import {
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 import AddIcon from '@material-ui/icons/Add';
 
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import messages from 'containers/Event/messages';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -27,6 +27,7 @@ import DiverstPagination from 'components/Shared/DiverstPagination';
 
 import { formatDateTimeString, DateTime } from 'utils/dateTimeHelpers';
 import DiverstLoader from 'components/Shared/DiverstLoader';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 
 const styles = theme => ({
   eventListItem: {
@@ -78,7 +79,7 @@ export function EventsList(props, context) {
         component={WrappedNavLink}
         startIcon={<AddIcon />}
       >
-        <FormattedMessage {...messages.new} />
+        <DiverstFormattedMessage {...messages.new} />
       </Button>
       <Box className={classes.floatSpacer} />
       <Paper>
@@ -147,7 +148,7 @@ export function EventsList(props, context) {
               <Grid item sm>
                 <Box mt={3} />
                 <Typography variant='h6' align='center' color='textSecondary'>
-                  <FormattedMessage {...messages.index.emptySection} />
+                  <DiverstFormattedMessage {...messages.index.emptySection} />
                 </Typography>
               </Grid>
             </React.Fragment>

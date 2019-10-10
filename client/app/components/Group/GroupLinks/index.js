@@ -1,7 +1,7 @@
 import React, { useContext, memo } from 'react';
 import { compose } from 'redux';
 import { withStyles } from '@material-ui/core/styles';
-import { FormattedMessage } from 'react-intl';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import classNames from 'classnames';
 import { matchPath } from 'react-router';
 
@@ -159,7 +159,7 @@ export function GroupLinks(props) {
             <Hidden smDown>
               <HomeIcon className={classes.navIcon} />
             </Hidden>
-            <FormattedMessage {...ROUTES.group.home.data.titleMessage} />
+            <DiverstFormattedMessage {...ROUTES.group.home.data.titleMessage} />
           </Button>
 
           <Button
@@ -171,7 +171,7 @@ export function GroupLinks(props) {
             <Hidden smDown>
               <MembersIcon className={classes.navIcon} />
             </Hidden>
-            <FormattedMessage {...ROUTES.group.members.index.data.titleMessage} />
+            <DiverstFormattedMessage {...ROUTES.group.members.index.data.titleMessage} />
           </Button>
 
           <Button
@@ -183,7 +183,7 @@ export function GroupLinks(props) {
             <Hidden smDown>
               <EventIcon className={classes.navIcon} />
             </Hidden>
-            <FormattedMessage {...ROUTES.group.events.index.data.titleMessage} />
+            <DiverstFormattedMessage {...ROUTES.group.events.index.data.titleMessage} />
           </Button>
 
           <Button
@@ -204,7 +204,7 @@ export function GroupLinks(props) {
             <Hidden smDown>
               <NewsIcon className={classes.navIcon} />
             </Hidden>
-            <FormattedMessage {...ROUTES.group.news.index.data.titleMessage} />
+            <DiverstFormattedMessage {...ROUTES.group.news.index.data.titleMessage} />
           </Button>
 
           <Button
@@ -216,7 +216,7 @@ export function GroupLinks(props) {
             <Hidden smDown>
               <PlanIcon className={classes.navIcon} />
             </Hidden>
-            <FormattedMessage {...ROUTES.group.outcomes.index.data.titleMessage} />
+            <DiverstFormattedMessage {...ROUTES.group.outcomes.index.data.titleMessage} />
           </Button>
 
           <Button

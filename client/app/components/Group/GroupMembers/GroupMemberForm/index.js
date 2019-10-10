@@ -16,7 +16,7 @@ import Select from 'components/Shared/DiverstSelect';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { Field, Formik, Form } from 'formik';
 
-import { FormattedMessage } from 'react-intl';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Group/GroupMembers/messages';
 
 import { buildValues, mapFields } from 'utils/formHelpers';
@@ -56,13 +56,13 @@ export function GroupMemberFormInner({ handleSubmit, handleChange, handleBlur, v
             color='primary'
             type='submit'
           >
-            <FormattedMessage {...messages.create} />
+            <DiverstFormattedMessage {...messages.create} />
           </Button>
           <Button
             to={props.links.groupMembersIndex}
             component={WrappedNavLink}
           >
-            <FormattedMessage {...messages.cancel} />
+            <DiverstFormattedMessage {...messages.cancel} />
           </Button>
         </CardActions>
       </Form>

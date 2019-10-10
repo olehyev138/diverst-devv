@@ -17,7 +17,7 @@ import { withStyles } from '@material-ui/core/styles';
 
 import AddIcon from '@material-ui/icons/Add';
 
-import { FormattedMessage } from 'react-intl';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/GlobalSettings/Field/messages';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
@@ -84,7 +84,7 @@ export function FieldList(props, context) {
             onClick={() => renderFieldForm({ type: 'TextField' }, props.createFieldBegin)}
             startIcon={<AddIcon />}
           >
-            <FormattedMessage {...messages.newTextField} />
+            <DiverstFormattedMessage {...messages.newTextField} />
           </Button>
         </Grid>
         <Collapse
@@ -127,7 +127,7 @@ export function FieldList(props, context) {
                       to='#'
                       component={WrappedNavLink}
                     >
-                      <FormattedMessage {...messages.edit} />
+                      <DiverstFormattedMessage {...messages.edit} />
                     </Button>
                     <Button
                       size='small'
@@ -138,7 +138,7 @@ export function FieldList(props, context) {
                           props.deleteFieldBegin(field.id);
                       }}
                     >
-                      <FormattedMessage {...messages.delete} />
+                      <DiverstFormattedMessage {...messages.delete} />
                     </Button>
                   </CardActions>
                 </Card>

@@ -17,7 +17,7 @@ import {
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
-import { FormattedMessage } from 'react-intl';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/User/messages';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
@@ -63,7 +63,7 @@ export function UserList(props, context) {
             component={WrappedNavLink}
             startIcon={<AddIcon />}
           >
-            <FormattedMessage {...messages.new} />
+            <DiverstFormattedMessage {...messages.new} />
           </Button>
         </Grid>
       </Grid>

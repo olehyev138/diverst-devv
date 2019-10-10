@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import dig from 'object-dig';
 
-import { FormattedMessage } from 'react-intl';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { Field, Formik, Form } from 'formik';
 import {
   Button, Card, CardActions, CardContent, TextField, Divider
@@ -34,7 +34,7 @@ export function TextFieldFormInner({ handleSubmit, handleChange, handleBlur, val
             id='title'
             name='title'
             value={values.title}
-            label={<FormattedMessage {...messages.title} />}
+            label={<DiverstFormattedMessage {...messages.title} />}
           />
         </CardContent>
         <Divider />
@@ -48,7 +48,7 @@ export function TextFieldFormInner({ handleSubmit, handleChange, handleBlur, val
           <Button
             onClick={props.cancelAction}
           >
-            <FormattedMessage {...messages.cancel} />
+            <DiverstFormattedMessage {...messages.cancel} />
           </Button>
         </CardActions>
       </Form>

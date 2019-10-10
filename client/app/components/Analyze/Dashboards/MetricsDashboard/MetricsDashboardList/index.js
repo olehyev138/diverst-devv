@@ -21,11 +21,12 @@ import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/DeleteOutline';
 
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import messages from 'containers/Analyze/Dashboards/MetricsDashboard/messages';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
 import DiverstTable from 'components/Shared/DiverstTable';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 
 const styles = theme => ({
   metricsDashboardListItem: {
@@ -74,7 +75,7 @@ export function MetricsDashboardsList(props, context) {
             component={WrappedNavLink}
             startIcon={<AddIcon />}
           >
-            <FormattedMessage {...messages.new} />
+            <DiverstFormattedMessage {...messages.new} />
           </Button>
         </Grid>
       </Grid>

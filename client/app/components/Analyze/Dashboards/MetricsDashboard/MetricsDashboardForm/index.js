@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import dig from 'object-dig';
 
-import { FormattedMessage } from 'react-intl';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { Field, Formik, Form } from 'formik';
 import {
   Button, Card, CardActions, CardContent, TextField
@@ -47,7 +47,7 @@ export function MetricsDashboardFormInner({ handleSubmit, handleChange, handleBl
             fullWidth
             id='name'
             name='name'
-            label={<FormattedMessage {...messages.form.name} />}
+            label={<DiverstFormattedMessage {...messages.form.name} />}
             value={values.name}
           />
           <Field
@@ -92,7 +92,7 @@ export function MetricsDashboardFormInner({ handleSubmit, handleChange, handleBl
             to={props.links.metricsDashboardsIndex}
             component={WrappedNavLink}
           >
-            <FormattedMessage {...messages.cancel} />
+            <DiverstFormattedMessage {...messages.cancel} />
           </Button>
         </CardActions>
       </Form>

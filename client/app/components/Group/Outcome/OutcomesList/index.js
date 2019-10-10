@@ -13,7 +13,6 @@ import {
   Grid, Card, CardContent, Typography, Link, CardActions, Button, Divider, Box,
 } from '@material-ui/core';
 
-import { FormattedMessage } from 'react-intl';
 import messages from 'containers/Group/Outcome/messages';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
@@ -22,6 +21,7 @@ import AddIcon from '@material-ui/icons/Add';
 
 import DiverstPagination from 'components/Shared/DiverstPagination';
 import DiverstLoader from 'components/Shared/DiverstLoader';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 
 const styles = theme => ({
   floatRight: {
@@ -44,7 +44,7 @@ export function OutcomesList(props, context) {
         component={WrappedNavLink}
         startIcon={<AddIcon />}
       >
-        <FormattedMessage {...messages.new} />
+        <DiverstFormattedMessage {...messages.new} />
       </Button>
       <DiverstLoader isLoading={props.isLoading}>
         <Grid container>
@@ -58,7 +58,7 @@ export function OutcomesList(props, context) {
                   </Typography>
                   <Box mb={1} mt={2}>
                     <Typography color='textSecondary'>
-                      <FormattedMessage {...messages.pillars.text} />
+                      <DiverstFormattedMessage {...messages.pillars.text} />
                     </Typography>
                     <Divider />
                   </Box>
