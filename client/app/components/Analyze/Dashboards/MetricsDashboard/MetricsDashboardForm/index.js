@@ -12,7 +12,7 @@ import dig from 'object-dig';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { Field, Formik, Form } from 'formik';
 import {
-  Button, Card, CardActions, CardContent, TextField
+  Button, Card, CardActions, CardContent, TextField, Divider
 } from '@material-ui/core';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
@@ -45,8 +45,10 @@ export function MetricsDashboardFormInner({ handleSubmit, handleChange, handleBl
             component={TextField}
             onChange={handleChange}
             fullWidth
+            required
             id='name'
             name='name'
+            margin='normal'
             label={<DiverstFormattedMessage {...messages.form.name} />}
             value={values.name}
           />
@@ -81,6 +83,7 @@ export function MetricsDashboardFormInner({ handleSubmit, handleChange, handleBl
             onBlur={() => setFieldTouched('segment_ids', true)}
           />
         </CardContent>
+        <Divider />
         <CardActions>
           <Button
             color='primary'
