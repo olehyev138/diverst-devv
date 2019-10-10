@@ -13,6 +13,9 @@ import { customTexts } from 'utils/customTextHelpers';
 
 const styles = theme => ({
   paper: {
+    borderColor: '#DEDEDE',
+    borderStyle: 'solid',
+    borderWidth: 1,
     padding: theme.spacing(1, 2),
     width: 'fit-content',
     display: 'inline-block',
