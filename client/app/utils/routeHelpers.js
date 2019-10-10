@@ -51,17 +51,17 @@ export default class RouteService {
     //       - parse with querystring library
   }
 
-  findTitleForPath({ path, object = ROUTES, params = [] }) {
+  findTitleForPath({ path, object = ROUTES, params = [], textArguments = {} }) {
     if (!object || typeof object !== 'object')
       return null;
 
     if (Object.hasOwnProperty.call(object, 'path') && typeof object.path === 'function') {
       if (object.path(...params) === path)
-        return intl.formatMessage(object.data.titleMessage);
+        return intl.formatMessage(object.data.titleMessage, textArguments);
     } else {
       const subObjects = Object.values(object);
       for (const subObject of subObjects) {
-        const result = this.findTitleForPath({ path, object: subObject, params });
+        const result = this.findTitleForPath({ path, object: subObject, params, textArguments });
         if (result)
           return result;
       }
