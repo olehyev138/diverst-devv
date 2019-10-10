@@ -7,6 +7,6 @@ class RewardMailer < ApplicationMailer
 
     set_defaults(@user.enterprise, method_name)
 
-    mail(from: @from_address, to: @email, subject: 'A reward was redeemed')
+    mail(from: @from_address, to: @email, subject: 'A request for reward redemption')
   end
 end
