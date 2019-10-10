@@ -1,7 +1,7 @@
 class User::UserRewardsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_reward, only: [:create]
-  before_action :set_user_reward, only: [:approve_reward]
+  before_action :set_user_reward, only: [:approve_reward, :destroy]
 
   layout :resolve_layout
 
@@ -18,6 +18,16 @@ class User::UserRewardsController < ApplicationController
 
     @user_reward.approve_reward_redemption
     flash[:notice] = "#{@user_reward.user.name}'s reward has been redeemed!"
+
+    redirect_to :back
+  end
+
+  def destroy
+    authorize current_user.enterprise, :update?
+
+    @user = @user_reward.user
+    @user_reward.destroy
+    flash[:notice] = "#{@user.name}'s reward has been forfeited!"
 
     redirect_to :back
   end

@@ -30,7 +30,8 @@
                      <%= pending_reward.status %>
                    </td>
                   <td>
-                    <%= link_to 'Approve', approve_reward_user_reward_user_reward_path(reward_id: pending_reward.reward_id, id: pending_reward.id), method: :patch, data: { confirm: 'Are you sure?' } %>
+                    <%= link_to 'Approve', approve_reward_user_reward_user_reward_path(reward_id: pending_reward.reward_id, id: pending_reward.id), method: :patch, data: { confirm: 'Are you sure?' } %> - 
+                    <%= link_to 'Forfeit', user_reward_user_reward_path(reward_id: pending_reward.reward_id, id: pending_reward.id), method: :delete, data: { confirm: 'Are you sure?' } %>
                   </td>
                 </tr>
               <% end %>

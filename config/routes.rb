@@ -537,7 +537,7 @@ Rails.application.routes.draw do
       end
 
       resources :rewards, only: [] do
-        resources :user_rewards, only: :create do
+        resources :user_rewards, only: [:create, :destroy] do
           member { patch :approve_reward }
 
           collection do
