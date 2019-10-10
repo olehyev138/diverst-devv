@@ -93,12 +93,16 @@ export function Event(props) {
           <Typography variant='overline'>To</Typography>
           <Typography color='textSecondary' className={classes.data}>{formatDateTimeString(event.end, DateTime.DATETIME_FULL)}</Typography>
 
-          <Typography className={classes.dataHeaders}>
-            <DiverstFormattedMessage {...messages.form.description} />
-          </Typography>
-          <Typography color='textSecondary' className={classes.data}>
-            {event.description}
-          </Typography>
+          {event.description && (
+            <React.Fragment>
+              <Typography className={classes.dataHeaders}>
+                <DiverstFormattedMessage {...messages.form.description} />
+              </Typography>
+              <Typography color='textSecondary' className={classes.data}>
+                {event.description}
+              </Typography>
+            </React.Fragment>
+          )}
         </Paper>
       </React.Fragment>
     ) : <React.Fragment />
