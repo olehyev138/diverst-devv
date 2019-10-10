@@ -16,6 +16,7 @@ import {
   TablePagination, Typography, Box
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+import ExportIcon from '@material-ui/icons/SaveAlt';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
@@ -44,33 +45,31 @@ export function SegmentMemberList(props) {
 
   return (
     <React.Fragment>
-      <Grid container spacing={3}>
+      <Grid container spacing={3} justify='flex-end'>
         <Grid item>
           <Button
             variant='contained'
             to='#'
-            color='primary'
+            color='secondary'
             size='large'
             component={WrappedNavLink}
+            startIcon={<ExportIcon />}
           >
-            Export
+            Export Members
           </Button>
         </Grid>
       </Grid>
-      <Grid container spacing={3}>
-        <Grid item xs>
-          <DiverstTable
-            title='Members'
-            handlePagination={props.handlePagination}
-            isLoading={props.isFetchingMembers}
-            onOrderChange={handleOrderChange}
-            dataArray={props.memberList}
-            dataTotal={props.memberTotal}
-            columns={columns}
-            rowsPerPage={5}
-          />
-        </Grid>
-      </Grid>
+      <Box mb={2} />
+      <DiverstTable
+        title='Members'
+        handlePagination={props.handlePagination}
+        isLoading={props.isFetchingMembers}
+        onOrderChange={handleOrderChange}
+        dataArray={props.memberList}
+        dataTotal={props.memberTotal}
+        columns={columns}
+        rowsPerPage={5}
+      />
     </React.Fragment>
   );
 }

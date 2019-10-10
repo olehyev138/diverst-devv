@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 
 import dig from 'object-dig';
 import { connect, Field, getIn } from 'formik';
-import Select from 'react-select';
+import Select from 'components/Shared/DiverstSelect';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Segment/messages';
 
@@ -96,8 +96,8 @@ const SegmentFieldRule = (props) => {
 
   return (
     <React.Fragment>
-      <Grid container>
-        <Grid item xs={3}>
+      <Grid container spacing={3} alignItems='center'>
+        <Grid item xs>
           <Select
             name={`${ruleLocation}.field`}
             id={`${ruleLocation}.field`}
@@ -109,7 +109,7 @@ const SegmentFieldRule = (props) => {
             onInputChange={value => fieldSelectAction(value)}
           />
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs>
           <Select
             name={`${ruleLocation}.operator`}
             id={`${ruleLocation}.operator`}
@@ -119,7 +119,7 @@ const SegmentFieldRule = (props) => {
             onChange={v => props.formik.setFieldValue(`${ruleLocation}.operator`, v.value)}
           />
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs>
           <CustomField
             fieldDatum={getIn(props.formik.values, ruleLocation)}
             fieldDatumIndex={props.ruleIndex}
