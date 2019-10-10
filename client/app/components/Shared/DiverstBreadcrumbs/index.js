@@ -9,6 +9,8 @@ import BreadcrumbSeparatorIcon from '@material-ui/icons/NavigateNext';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import RouteService from 'utils/routeHelpers';
 
+import { customTexts } from 'utils/customTextHelpers';
+
 const styles = theme => ({
   paper: {
     padding: theme.spacing(1, 2),
@@ -43,7 +45,8 @@ export function DiverstBreadcrumbs(props) {
             const to = `/${pathNames.slice(0, index + 1).join('/')}`;
             const title = rs.findTitleForPath({
               path: to,
-              params: Object.values(rs.routeData.computedMatch.params)
+              params: Object.values(rs.routeData.computedMatch.params),
+              textArguments: customTexts()
             });
 
             if (!title)
