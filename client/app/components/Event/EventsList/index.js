@@ -28,6 +28,7 @@ import DiverstPagination from 'components/Shared/DiverstPagination';
 import { formatDateTimeString, DateTime } from 'utils/dateTimeHelpers';
 import DiverstLoader from 'components/Shared/DiverstLoader';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import { customTexts } from 'utils/customTextHelpers';
 
 const styles = theme => ({
   eventListItem: {
@@ -89,9 +90,9 @@ export function EventsList(props, context) {
           indicatorColor='primary'
           textColor='primary'
         >
-          <Tab label={intl.formatMessage(messages.index.upcoming)} />
-          <Tab label={intl.formatMessage(messages.index.ongoing)} />
-          <Tab label={intl.formatMessage(messages.index.past)} />
+          <Tab label={intl.formatMessage(messages.index.upcoming, customTexts())} />
+          <Tab label={intl.formatMessage(messages.index.ongoing, customTexts())} />
+          <Tab label={intl.formatMessage(messages.index.past, customTexts())} />
         </ResponsiveTabs>
       </Paper>
       <br />
