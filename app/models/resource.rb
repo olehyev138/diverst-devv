@@ -133,7 +133,8 @@ class Resource < ApplicationRecord
     url[%r{\Ahttp:\/\/}] || url[%r{\Ahttps:\/\/}]
   end
 
-  def unset_enterprise
+  # TODO: Find a better solution to not set enterprise for resource objects
+  def nil_enterprise
     self.enterprise_id = nil if self.group_id.present?
   end
 end
