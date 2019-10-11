@@ -14,6 +14,7 @@ import classNames from 'classnames';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import messages from 'containers/User/messages';
 import { FormattedMessage } from 'react-intl';
+import CustomFieldShow from 'components/Shared/Fields/FieldDisplays/Field/index';
 
 import { formatDateTimeString, DateTime } from 'utils/dateTimeHelpers';
 
@@ -42,9 +43,9 @@ const styles = theme => ({
 
 export function Profile(props) {
   /* Render an Profile */
-
   const { classes } = props;
   const user = dig(props, 'user');
+  const fieldData = dig(props, 'fieldData');
 
   return (
     (user) ? (
@@ -69,7 +70,14 @@ export function Profile(props) {
           </Grid>
         </Grid>
         <Paper className={classes.padding}>
-
+          {fieldData && fieldData.map((fieldDatum, i) => (
+            <Grid item key={fieldDatum.id}>
+              <CustomFieldShow
+                fieldDatum={fieldDatum}
+                fieldDatumIndex={i}
+              />
+            </Grid>
+          ))}
         </Paper>
       </React.Fragment>
     ) : <React.Fragment />
