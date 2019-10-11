@@ -23,8 +23,7 @@ import CustomCheckBox from 'components/Shared/Fields/FieldDisplays/CheckBoxField
 
 const styles = theme => ({
   cell: {
-    paddingBottom: theme.spacing(1),
-    paddingTop: theme.spacing(1),
+
   },
   dataHeaders: {
 
@@ -51,9 +50,7 @@ const CustomFieldShow = (props) => {
       case 'CheckboxField':
         return (<CustomCheckBox {...props} classes={classes} />);
       default:
-        return (<p>
-          null
-        </p>);
+        return null;
     }
   };
 

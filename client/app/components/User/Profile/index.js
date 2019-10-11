@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import dig from 'object-dig';
 
 import {
-  Paper, Typography, Grid, Button, Divider
+  Paper, Typography, Grid, Button, Divider, CardContent, Card
 } from '@material-ui/core/index';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -21,6 +21,7 @@ import { formatDateTimeString, DateTime } from 'utils/dateTimeHelpers';
 const styles = theme => ({
   padding: {
     padding: theme.spacing(3, 2),
+    margin: theme.spacing(1, 0),
   },
   title: {
     textAlign: 'center',
@@ -69,15 +70,19 @@ export function Profile(props) {
             </Button>
           </Grid>
         </Grid>
-        <Paper className={classes.padding}>
+        <Paper>
           {fieldData && fieldData.map((fieldDatum, i) => (
-            <Grid item key={fieldDatum.id}>
-              <CustomFieldShow
-                fieldDatum={fieldDatum}
-                fieldDatumIndex={i}
-              />
+            <div key={fieldDatum.id}>
+              <CardContent>
+                <Grid item>
+                  <CustomFieldShow
+                    fieldDatum={fieldDatum}
+                    fieldDatumIndex={i}
+                  />
+                </Grid>
+              </CardContent>
               <Divider />
-            </Grid>
+            </div>
           ))}
         </Paper>
       </React.Fragment>
