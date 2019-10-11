@@ -46,7 +46,7 @@ Diverst::Application.routes.draw do
       end
       resources :folders do
         member do
-          get '/password', to: 'folders#validate_password'
+          post '/password', to: 'folders#validate_password'
         end
       end
       resources :folder_shares

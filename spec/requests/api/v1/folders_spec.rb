@@ -21,13 +21,13 @@ RSpec.describe 'Folders', type: :request do
   end
 
   it 'verifies a password' do
-    get "/api/v1/#{route}/#{item.id}/password", params: { password: password }, headers: headers
+    post "/api/v1/#{route}/#{item.id}/password", params: { password: password }, headers: headers
     expect(response).to have_http_status(:ok)
   end
 
   it 'raises an error with invalid password' do
     folder = create(:folder)
-    get "/api/v1/#{route}/#{folder.id}/password", params: { password: 'fake' }, headers: headers
+    post "/api/v1/#{route}/#{folder.id}/password", params: { password: 'fake' }, headers: headers
     expect(response).to have_http_status(:bad_request)
   end
 
