@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import dig from 'object-dig';
 
 import {
-  Paper, Typography, Grid, Button
+  Paper, Typography, Grid, Button, Divider
 } from '@material-ui/core/index';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -76,6 +76,7 @@ export function Profile(props) {
                 fieldDatum={fieldDatum}
                 fieldDatumIndex={i}
               />
+              <Divider />
             </Grid>
           ))}
         </Paper>

@@ -19,15 +19,12 @@ const CustomSelect = (props) => {
   const fieldDatum = dig(props, 'fieldDatum');
   const fieldDatumIndex = dig(props, 'fieldDatumIndex');
 
-  // allow specification of dataLocation
-  const dataLocation = props.dataLocation || `fieldData.${fieldDatumIndex}.data`;
-
   return (
-    <div>
-      <Typography variant='h5' component='h2' className={classes.dataHeaders}>
+    <div className={classes.cell}>
+      <Typography color='primary' variant='h6' component='h2' className={classes.dataHeaders}>
         {fieldDatum.field.title}
       </Typography>
-      <Typography component='h2'>
+      <Typography color='secondary' component='h2' className={classes.data}>
         {fieldDatum.data.value}
       </Typography>
     </div>

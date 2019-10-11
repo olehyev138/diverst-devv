@@ -9,7 +9,7 @@
  * - This way we can build our own custom Formik fields
  */
 
-import React, {memo} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import dig from 'object-dig';
 
@@ -22,14 +22,15 @@ import CustomSelect from 'components/Shared/Fields/FieldDisplays/SelectField';
 import CustomCheckBox from 'components/Shared/Fields/FieldDisplays/CheckBoxField';
 
 const styles = theme => ({
-  dataHeaders: {
+  cell: {
     paddingBottom: theme.spacing(1),
+    paddingTop: theme.spacing(1),
+  },
+  dataHeaders: {
+
   },
   data: {
-    '&:not(:last-of-type)': { // Prevent last data item from adding bottom padding
-      paddingBottom: theme.spacing(3),
-      paddingLeft: theme.spacing(3),
-    },
+
   },
 });
 
