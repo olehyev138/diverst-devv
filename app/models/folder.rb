@@ -31,7 +31,7 @@ class Folder < ApplicationRecord
 
   # callbacks
   before_save :set_password
-  before_save :nil_enterprise
+  before_save :unset_enterprise
 
   def set_password
     self.password = nil unless password_protected?
@@ -54,7 +54,7 @@ class Folder < ApplicationRecord
   end
 
   # TODO: Find a better solution to not set enterprise for folder objects
-  def nil_enterprise
+  def unset_enterprise
     self.enterprise_id = nil if self.group_id.present?
   end
 end

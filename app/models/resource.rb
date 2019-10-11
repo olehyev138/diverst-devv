@@ -134,7 +134,7 @@ class Resource < ApplicationRecord
   end
 
   # TODO: Find a better solution to not set enterprise for resource objects
-  def nil_enterprise
+  def unset_enterprise
     self.enterprise_id = nil if self.group_id.present?
   end
 end
