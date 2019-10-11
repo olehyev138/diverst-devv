@@ -4,7 +4,7 @@
  *
  */
 
-import React, { memo } from 'react';
+import React, { memo, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import dig from 'object-dig';
@@ -12,7 +12,7 @@ import dig from 'object-dig';
 import { FormattedMessage } from 'react-intl';
 import { Field, Formik, Form, FieldArray } from 'formik';
 import {
-  withStyles, Button, Card, CardActions, CardContent, TextField, Divider, Typography, Paper, Box, Grid, IconButton,
+  withStyles, Button, Card, CardActions, CardContent, TextField, Divider, Typography, Paper, Box, Grid, IconButton, Collapse
 } from '@material-ui/core';
 
 import DeleteIcon from '@material-ui/icons/DeleteForever';
@@ -76,7 +76,7 @@ export function OutcomeFormInner({ handleSubmit, handleChange, handleBlur, value
                   <Grid item>
                     <IconButton
                       color='primary'
-                      onClick={() => arrayHelpers.push(INITIAL_PILLAR)}
+                      onClick={() => arrayHelpers.push({ ...INITIAL_PILLAR, localKey: `new_${Date.now().toString()}_${(Math.random() + 1).toString(36).substring(3)}` })}
                     >
                       <AddIcon className={classes.addItemButtonIcon} />
                     </IconButton>
@@ -88,46 +88,58 @@ export function OutcomeFormInner({ handleSubmit, handleChange, handleBlur, value
                   if (Object.hasOwnProperty.call(pillar, '_destroy')) return (<React.Fragment key={pillar.id} />);
 
                   return (
-                    <React.Fragment key={pillar.id || `new_${i}`}>
-                      {i > 0 && (<Box mb={3} />)}
-                      <Paper
-                        className={classes.removableItem}
-                        elevation={2}
-                        square
+                    <div key={pillar.id || pillar.localKey}>
+                      <Collapse
+                        in={!pillar.hidden}
+                        appear={pillar.hidden || !pillar.initialized}
+                        onExited={() => {
+                          if (pillar.id)
+                            setFieldValue(`pillars_attributes.${i}._destroy`, '1');
+                          else
+                            arrayHelpers.remove(i);
+                        }}
+                        onEntered={(_, isAppearing) => {
+                          if (isAppearing)
+                            setFieldValue(`pillars_attributes.${i}.initialized`, true);
+                        }}
                       >
-                        <IconButton
-                          className={classes.itemRemoveButton}
-                          onClick={() => {
-                            if (values.pillars_attributes[i].id)
-                              setFieldValue(`pillars_attributes.${i}._destroy`, '1');
-                            else
-                              arrayHelpers.remove(i);
-                          }}
+                        <Paper
+                          className={classes.removableItem}
+                          elevation={2}
+                          square
                         >
-                          <DeleteIcon />
-                        </IconButton>
-                        <CardContent>
-                          <Field
-                            component={TextField}
-                            onChange={handleChange}
-                            fullWidth
-                            id={`pillars_attributes.${i}.name`}
-                            name={`pillars_attributes.${i}.name`}
-                            label={<FormattedMessage {...messages.pillars.inputs.name} />}
-                            value={values.pillars_attributes[i].name}
-                          />
-                          <Field
-                            component={TextField}
-                            onChange={handleChange}
-                            fullWidth
-                            id={`pillars_attributes.${i}.value_proposition`}
-                            name={`pillars_attributes.${i}.value_proposition`}
-                            label={<FormattedMessage {...messages.pillars.inputs.value} />}
-                            value={values.pillars_attributes[i].value_proposition || ''}
-                          />
-                        </CardContent>
-                      </Paper>
-                    </React.Fragment>
+                          <IconButton
+                            className={classes.itemRemoveButton}
+                            onClick={() => setFieldValue(`pillars_attributes.${i}.hidden`, true)}
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                          <CardContent>
+                            <Field
+                              component={TextField}
+                              onChange={handleChange}
+                              fullWidth
+                              id={`pillars_attributes.${i}.name`}
+                              name={`pillars_attributes.${i}.name`}
+                              margin='normal'
+                              label={<FormattedMessage {...messages.pillars.inputs.name} />}
+                              value={values.pillars_attributes[i].name}
+                            />
+                            <Field
+                              component={TextField}
+                              onChange={handleChange}
+                              fullWidth
+                              id={`pillars_attributes.${i}.value_proposition`}
+                              name={`pillars_attributes.${i}.value_proposition`}
+                              margin='normal'
+                              label={<FormattedMessage {...messages.pillars.inputs.value} />}
+                              value={values.pillars_attributes[i].value_proposition || ''}
+                            />
+                          </CardContent>
+                        </Paper>
+                        <Box mb={3} />
+                      </Collapse>
+                    </div>
                   );
                 })}
                 {props.outcome && (!values.pillars_attributes || values.pillars_attributes.length <= 0) && (
