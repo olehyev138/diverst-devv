@@ -1,5 +1,5 @@
 class UserSerializer < ApplicationRecordSerializer
-  attributes :enterprise, :last_name, :user_groups, :user_role, :avatar_location, :fields
+  attributes :enterprise, :last_name, :user_groups, :user_role, :avatar_location, :fields, :name, :last_initial
 
   has_many :field_data
 
@@ -34,9 +34,5 @@ class UserSerializer < ApplicationRecordSerializer
     end
 
     fields_hash
-  end
-
-  def last_name
-    "#{(object.last_name || '')[0].capitalize}."
   end
 end

@@ -12,23 +12,22 @@ import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import {
-  getUserBegin, getUsersBegin, updateFieldDataBegin,
+  getUserBegin, updateFieldDataBegin,
   updateUserBegin, userUnmount
 } from 'containers/User/actions';
 
 import { selectUser, selectFieldData } from 'containers/User/selectors';
 
 import saga from 'containers/User/saga';
-import UserForm from 'components/User/UserForm';
+import Profile from 'components/User/Profile';
 
-export function UserEditPage(props) {
+export function UserProfilePage(props) {
   useInjectReducer({ key: 'users', reducer });
   useInjectSaga({ key: 'users', saga });
 
   const rs = new RouteService(useContext);
   const links = {
-    usersIndex: ROUTES.admin.system.users.index.path(),
-    usersPath: id => ROUTES.user.show.path(id),
+    userEdit: id => ROUTES.user.edit.path(id),
   };
 
   useEffect(() => {
@@ -41,26 +40,21 @@ export function UserEditPage(props) {
 
   return (
     <React.Fragment>
-      <UserForm
-        userAction={props.updateUserBegin}
-        updateFieldDataBegin={props.updateFieldDataBegin}
+      <Profile
         links={links}
         user={props.user}
         fieldData={props.fieldData}
         buttonText='Update'
-        admin={props.path.startsWith('/admin')}
       />
     </React.Fragment>
   );
 }
 
-UserEditPage.propTypes = {
+UserProfilePage.propTypes = {
   path: PropTypes.string,
   user: PropTypes.object,
   fieldData: PropTypes.array,
   getUserBegin: PropTypes.func,
-  updateUserBegin: PropTypes.func,
-  updateFieldDataBegin: PropTypes.func,
   userUnmount: PropTypes.func
 };
 
@@ -71,8 +65,6 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = {
   getUserBegin,
-  updateUserBegin,
-  updateFieldDataBegin,
   userUnmount
 };
 
@@ -84,4 +76,4 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(UserEditPage);
+)(UserProfilePage);

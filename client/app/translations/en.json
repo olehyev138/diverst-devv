@@ -18,6 +18,8 @@
   "diverst.containers.Routes.user.groups": "Groups",
   "diverst.containers.Routes.user.downloads": "Downloads",
   "diverst.containers.Routes.user.mentorship": "Mentorship",
+  "diverst.containers.Routes.user.profile": "Profile",
+  "diverst.containers.Routes.user.edit": "Profile Edit",
   "diverst.containers.Routes.group.home": "Home",
   "diverst.containers.Routes.group.members.index": "Members",
   "diverst.containers.Routes.group.events.index": "Events",

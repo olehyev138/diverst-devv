@@ -55,7 +55,7 @@ export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, 
             {buttonText}
           </Button>
           <Button
-            to={props.links.usersIndex}
+            to={props.admin ? props.links.usersIndex : props.links.usersPath(values.id)}
             component={WrappedNavLink}
           >
             <FormattedMessage {...messages.cancel} />
@@ -67,6 +67,7 @@ export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, 
         user={props.user}
         fieldData={props.fieldData}
         updateFieldDataBegin={props.updateFieldDataBegin}
+        admin={props.admin}
       />
     </Card>
   );
@@ -86,6 +87,7 @@ export function UserForm(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
+        values.redirectPath = props.admin ? props.links.usersIndex : props.links.usersPath(user.id);
         props.userAction(values);
       }}
 
@@ -98,6 +100,11 @@ UserForm.propTypes = {
   userAction: PropTypes.func,
   user: PropTypes.object,
   currentUser: PropTypes.object,
+  admin: PropTypes.bool,
+  links: PropTypes.shape({
+    usersIndex: PropTypes.string,
+    usersPath: PropTypes.func,
+  })
 };
 
 UserFormInner.propTypes = {
@@ -111,8 +118,10 @@ UserFormInner.propTypes = {
   buttonText: PropTypes.string,
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
+  admin: PropTypes.bool,
   links: PropTypes.shape({
-    usersIndex: PropTypes.string
+    usersIndex: PropTypes.string,
+    usersPath: PropTypes.func,
   })
 };
 
