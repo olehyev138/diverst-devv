@@ -241,7 +241,7 @@ export class ApplicationHeader extends React.PureComponent {
                     </Button>
                   </Link>
                 </Hidden>
-                <React.Fragment>
+                <div>
                   <IconButton
                     aria-controls={
                       isMenuOpen
@@ -254,7 +254,7 @@ export class ApplicationHeader extends React.PureComponent {
                   >
                     <AccountCircleIcon />
                   </IconButton>
-                </React.Fragment>
+                </div>
               </div>
             </div>
           </Toolbar>
