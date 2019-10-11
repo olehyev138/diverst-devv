@@ -19,7 +19,7 @@ import { withStyles } from '@material-ui/core/styles';
 import CustomText from 'components/Shared/Fields/FieldDisplays/TextField';
 import CustomDate from 'components/Shared/Fields/FieldDisplays/DateField';
 import CustomSelect from 'components/Shared/Fields/FieldDisplays/SelectField';
-import CustomCheckBox from 'components/Shared/Fields/FieldDisplays/CheckBoxField';
+import CustomCheckbox from 'components/Shared/Fields/FieldDisplays/CheckboxField';
 
 const styles = theme => ({
   cell: {
@@ -48,7 +48,7 @@ const CustomFieldShow = (props) => {
       case 'SelectField':
         return (<CustomSelect {...props} classes={classes} />);
       case 'CheckboxField':
-        return (<CustomCheckBox {...props} classes={classes} />);
+        return (<CustomCheckbox {...props} classes={classes} />);
       default:
         return null;
     }

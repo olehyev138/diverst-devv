@@ -12,7 +12,7 @@ import dig from 'object-dig';
 import { FormattedMessage } from 'react-intl';
 import { FieldArray, Formik, Form } from 'formik';
 import {
-  Button, Card, CardActions, CardContent, Grid,
+  Button, Card, CardActions, CardContent, Grid, Divider,
   TextField
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
@@ -42,11 +42,16 @@ export function FieldInputFormInner({ formikProps, ...props }) {
           render={_ => (
             <CardContent>
               {values.fieldData.map((fieldDatum, i) => (
-                <Grid item key={fieldDatum.id} className={props.classes.fieldInput}>
-                  {Object.entries(fieldDatum).length !== 0 && (
-                    <CustomField fieldDatum={fieldDatum} fieldDatumIndex={i} />
-                  )}
-                </Grid>
+                <div key={fieldDatum.id}>
+                  <CardContent>
+                    <Grid item className={props.classes.fieldInput}>
+                      {Object.entries(fieldDatum).length !== 0 && (
+                        <CustomField fieldDatum={fieldDatum} fieldDatumIndex={i} />
+                      )}
+                    </Grid>
+                  </CardContent>
+                  <Divider variant='middle' />
+                </div>
               ))}
             </CardContent>
           )}

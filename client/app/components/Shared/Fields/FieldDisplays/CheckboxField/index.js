@@ -1,6 +1,6 @@
 /**
  *
- * CheckBoxField
+ * CheckboxField
  *
  */
 
@@ -13,7 +13,7 @@ import { connect, Field, getIn } from 'formik';
 import { List, ListItem, Typography, ListItemIcon } from '@material-ui/core';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 
-const CustomCheckBox = (props) => {
+const CustomCheckbox = (props) => {
   const { classes } = props;
 
   const fieldDatum = dig(props, 'fieldDatum');
@@ -26,11 +26,11 @@ const CustomCheckBox = (props) => {
       </Typography>
       <Typography color='secondary' component='h2'>
         <List>
-          {JSON.parse(fieldDatum.data).map((datum, i) => (
+          {fieldDatum.data.map((datum, i) => (
             // eslint-disable-next-line react/no-array-index-key
             <ListItem dense key={`fieldData${fieldDatum.id}-${i}`}>
               <ArrowRightIcon fontSize='small' />
-              {`${datum}`}
+              {`${datum.value}`}
             </ListItem>
           ))}
         </List>
@@ -39,13 +39,13 @@ const CustomCheckBox = (props) => {
   );
 };
 
-CustomCheckBox.propTypes = {
+CustomCheckbox.propTypes = {
   classes: PropTypes.object,
   fieldDatum: PropTypes.shape({
-    data: PropTypes.string,
+    data: PropTypes.array,
   }),
   fieldDatumIndex: PropTypes.number,
   dataLocation: PropTypes.string,
 };
 
-export default connect(CustomCheckBox);
+export default connect(CustomCheckbox);

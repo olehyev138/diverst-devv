@@ -41,7 +41,7 @@ const selectFieldData = () => createSelector(
 
     return produce(fieldData, (draft) => {
       if (fieldData)
-        fieldData.forEach((datum) => {
+        draft.forEach((datum) => {
           datum.data = deserializeDatum(datum);
           datum.field.options_text = deserializeOptionsText(datum.field);
         });

@@ -31,7 +31,12 @@ function serializeDatum(fieldDatum) {
   const type = dig(fieldDatum, 'field', 'type');
 
   switch (type) {
-    case 'CheckBoxField':
+    case 'CheckboxField':
+      if (datum.lenght === 0)
+        return '[]';
+      if (typeof datum[0] === 'object')
+        return JSON.stringify(datum.map(i => i.value));
+      return JSON.stringify(datum);
     case 'SelectField':
       return JSON.stringify([datum.value]);
     case 'DateField':
@@ -46,7 +51,8 @@ function deserializeDatum(fieldDatum) {
   const type = dig(fieldDatum, 'field', 'type');
 
   switch (type) {
-    case 'CheckBoxField':
+    case 'CheckboxField':
+      return JSON.parse(datum).map(i => ({ label: i, value: i }));
     case 'SelectField':
       /* Certain fields have there data json serialized as a single item array  */
       return { label: JSON.parse(datum)[0], value: JSON.parse(datum)[0] };
