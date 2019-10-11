@@ -71,6 +71,42 @@ export function Profile(props) {
           </Grid>
         </Grid>
         <Paper>
+          <CardContent>
+            <Grid item>
+              <Typography color='primary' variant='h6' component='h2' className={classes.dataHeaders}>
+                E-mail
+              </Typography>
+              <Typography color='secondary' component='h2' className={classes.data}>
+                {user.email}
+              </Typography>
+            </Grid>
+          </CardContent>
+          <Divider />
+          <CardContent>
+            <Grid item>
+              <Typography color='primary' variant='h6' component='h2' className={classes.dataHeaders}>
+                Biography
+              </Typography>
+              {(user.biography || 'None').split('\n').map((text, i) => (
+                // eslint-disable-next-line react/no-array-index-key
+                <Typography color='secondary' component='h2' key={i}>
+                  {text}
+                </Typography>
+              ))}
+            </Grid>
+          </CardContent>
+          <Divider />
+          <CardContent>
+            <Grid item>
+              <Typography color='primary' variant='h6' component='h2' className={classes.dataHeaders}>
+                Time Zone
+              </Typography>
+              <Typography color='secondary' component='h2' className={classes.data}>
+                {user.time_zone || 'UTC'}
+              </Typography>
+            </Grid>
+          </CardContent>
+          <Divider />
           {fieldData && fieldData.map((fieldDatum, i) => (
             <div key={fieldDatum.id}>
               <CardContent>

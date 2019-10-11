@@ -1,5 +1,6 @@
 class UserSerializer < ApplicationRecordSerializer
-  attributes :enterprise, :last_name, :user_groups, :user_role, :avatar_location, :fields, :name, :last_initial
+  attributes :enterprise, :last_name, :user_groups, :user_role, :avatar_location, :fields, :name, :last_initial,
+             :timezones, :time_zone
 
   has_many :field_data
 
@@ -20,6 +21,14 @@ class UserSerializer < ApplicationRecordSerializer
 
   def enterprise
     EnterpriseSerializer.new(object.enterprise).attributes
+  end
+
+  def timezones
+    ActiveSupport::TimeZone.all.map { |tz| [tz.tzinfo.name, tz.name] }
+  end
+
+  def time_zone
+    ActiveSupport::TimeZone::MAPPING.key(object.time_zone)
   end
 
   def fields

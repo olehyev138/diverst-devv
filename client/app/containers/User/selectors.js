@@ -25,7 +25,25 @@ const selectIsFetchingUsers = () => createSelector(
 
 const selectUser = () => createSelector(
   selectUsersDomain,
-  usersState => usersState.currentUser
+  userState => userState.currentUser
+);
+
+const selectFormUser = () => createSelector(
+  selectUsersDomain,
+  (usersState) => {
+    const user = usersState.currentUser;
+    if (user) {
+      const timezoneArray = user.timezones;
+      return produce(user, (draft) => {
+        draft.timezones = timezoneArray.map((element) => {
+          if (element[1] === user.time_zone)
+            draft.time_zone = { label: element[1], value: element[0] };
+          return { label: element[1], value: element[0] };
+        });
+      });
+    }
+    return null;
+  }
 );
 
 /*
@@ -52,5 +70,6 @@ const selectFieldData = () => createSelector(
 export {
   selectUsersDomain, selectPaginatedUsers,
   selectUserTotal, selectUser, selectFieldData,
-  selectIsFetchingUsers
+  selectIsFetchingUsers,
+  selectFormUser
 };

@@ -13,7 +13,7 @@ import { FormattedMessage } from 'react-intl';
 import { FieldArray, Formik, Form } from 'formik';
 import {
   Button, Card, CardActions, CardContent, Grid, Divider,
-  TextField
+  TextField, Typography
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -36,6 +36,14 @@ export function FieldInputFormInner({ formikProps, ...props }) {
 
   return (
     <Card>
+      <CardContent>
+        <Typography component='h6'>
+          <FormattedMessage {...messages.fields} />
+        </Typography>
+        <Typography color='secondary' component='h2'>
+          <FormattedMessage {...messages.privacy} />
+        </Typography>
+      </CardContent>
       <Form>
         <FieldArray
           name='fields'

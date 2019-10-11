@@ -20,7 +20,7 @@ const CustomCheckboxField = (props) => {
   const dataLocation = props.dataLocation || `fieldData.${fieldDatumIndex}.data`;
 
   return (
-    <div>
+    <React.Fragment>
       <Select
         name={dataLocation}
         id={dataLocation}
@@ -32,7 +32,7 @@ const CustomCheckboxField = (props) => {
         options={fieldDatum.field.options_text}
         onChange={v => props.formik.setFieldValue(dataLocation, v)}
       />
-    </div>
+    </React.Fragment>
   );
 };
 

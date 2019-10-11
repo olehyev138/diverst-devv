@@ -26,7 +26,7 @@ const UserLayout = ({ component: Component, ...rest }) => {
       data={data}
       {...other}
       component={matchProps => (
-        <React.Fragment>
+        <div>
           <UserLinks pageTitle={data.titleMessage} {...matchProps} />
           <Scrollbar>
             <Container>
@@ -35,7 +35,7 @@ const UserLayout = ({ component: Component, ...rest }) => {
               </div>
             </Container>
           </Scrollbar>
-        </React.Fragment>
+        </div>
       )}
     />
   );

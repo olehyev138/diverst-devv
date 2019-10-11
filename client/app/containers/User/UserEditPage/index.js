@@ -16,7 +16,7 @@ import {
   updateUserBegin, userUnmount
 } from 'containers/User/actions';
 
-import { selectUser, selectFieldData } from 'containers/User/selectors';
+import { selectFormUser, selectFieldData } from 'containers/User/selectors';
 
 import saga from 'containers/User/saga';
 import UserForm from 'components/User/UserForm';
@@ -65,7 +65,7 @@ UserEditPage.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
-  user: selectUser(),
+  user: selectFormUser(),
   fieldData: selectFieldData()
 });
 
