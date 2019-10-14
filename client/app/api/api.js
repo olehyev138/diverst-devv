@@ -16,6 +16,8 @@ import groupMembers from 'api/group_members/group_members';
 import outcomes from 'api/outcomes/outcomes';
 import customText from 'api/custom_text/custom_text';
 import user from 'api/user/user';
+import folders from 'api/folders/folders';
+import resources from 'api/resources/resources';
 
 /* Metrics */
 import overviewGraphs from 'api/metrics/overview_graphs';
@@ -43,6 +45,8 @@ const Api = {
   policyGroups,
   outcomes,
   customText,
+  folders,
+  resources,
   metrics: {
     overviewGraphs,
     userGraphs,

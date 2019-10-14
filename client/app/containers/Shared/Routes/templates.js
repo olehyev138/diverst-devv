@@ -76,6 +76,14 @@ import GroupMemberCreatePage from 'containers/Group/GroupMembers/GroupMemberCrea
 /* Group - Manage */
 import GroupSettingsPage from 'containers/Group/GroupManage/GroupSettingsPage/Loadable';
 
+/* Group/Admin - Resource */
+import FoldersPage from 'containers/Resource/Folder/FoldersPage/Loadable';
+import FolderCreatePage from 'containers/Resource/Folder/FolderCreatePage/Loadable';
+import FolderEditPage from 'containers/Resource/Folder/FolderEditPage/Loadable';
+import FolderPage from 'containers/Resource/Folder/FolderPage/Loadable';
+import ResourceCreatePage from 'containers/Resource/Resource/ResourceCreatePage/Loadable';
+import ResourceEditPage from 'containers/Resource/Resource/ResourceEditPage/Loadable';
+
 /* Global */
 import NotFoundPage from 'containers/Shared/NotFoundPage/Loadable';
 import PlaceholderPage from 'components/Shared/PlaceholderPage/Loadable';
@@ -89,6 +97,6 @@ export {
   OutcomeEditPage, GroupMemberListPage, GroupMemberCreatePage, NotFoundPage, PlaceholderPage, GroupDashboardPage,
   UserDashboardPage, MetricsDashboardListPage, MetricsDashboardCreatePage, MetricsDashboardEditPage, MetricsDashboardPage,
   CustomGraphCreatePage, CustomGraphEditPage, GroupManageLayout, GroupSettingsPage, CustomTextEditPage,
-  UserNewsLinkPage,
-  UserEventsPage,
+  UserNewsLinkPage, UserEventsPage,
+  FoldersPage, FolderCreatePage, FolderEditPage, FolderPage, ResourceCreatePage, ResourceEditPage,
 };
