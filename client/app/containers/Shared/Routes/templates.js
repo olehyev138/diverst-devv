@@ -96,6 +96,6 @@ export {
   OutcomeEditPage, GroupMemberListPage, GroupMemberCreatePage, NotFoundPage, PlaceholderPage, GroupDashboardPage,
   UserDashboardPage, MetricsDashboardListPage, MetricsDashboardCreatePage, MetricsDashboardEditPage, MetricsDashboardPage,
   CustomGraphCreatePage, CustomGraphEditPage, GroupManageLayout, GroupSettingsPage, CustomTextEditPage,
-  FoldersPage, FolderCreatePage, FolderEditPage, FolderPage, ResourceCreatePage, ResourceEditPage
+  FoldersPage, FolderCreatePage, FolderEditPage, FolderPage, ResourceCreatePage, ResourceEditPage,
   UserProfilePage,
 };
