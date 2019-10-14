@@ -219,6 +219,7 @@ class UsersController < ApplicationController
   def users_pending_rewards
     authorize User
 
+    @user_rewards_responsible = UserReward.joins(:reward).where(rewards: { responsible_id: current_user.id }).where(status: 0)
     @pending_rewards = UserReward.where(user_id: current_user.enterprise.users.joins(:user_rewards).uniq, status: 0)
   end
 

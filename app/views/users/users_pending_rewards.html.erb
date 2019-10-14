@@ -4,8 +4,8 @@
     </div>
     <div class="card">
       <div class="card__section">
-        <% if @pending_rewards.empty? %>
-          <p>There are no rewards to be redeemed yet.</p>
+        <% if @user_rewards_responsible.empty? %>
+          <p>You have no reward redemption requests to approve.</p>
         <% else %>
           <table class="table--has-border">
             <thead>
