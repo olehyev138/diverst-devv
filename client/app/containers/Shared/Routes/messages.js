@@ -61,6 +61,9 @@ export default defineMessages({
         id: `${scope}.group.outcomes.index`
       }
     },
+    resources: {
+      id: `${scope}.group.resources.index`
+    }
   },
   admin: {
     analyze: {
@@ -87,6 +90,9 @@ export default defineMessages({
       segments: {
         id: `${scope}.admin.manage.segments`,
       },
+      resources: {
+        id: `${scope}.admin.manage.resources.index`
+      }
     },
     system: {
       index: {
@@ -96,5 +102,6 @@ export default defineMessages({
         id: `${scope}.admin.system.users`,
       }
     }
-  }
+  },
+
 });
