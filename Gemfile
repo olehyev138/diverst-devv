@@ -73,7 +73,7 @@ group :development, :test do
   gem 'rubocop-performance', '~> 1.2.0'
   gem 'shoulda-matchers', '4.0.1'
   gem 'timecop', '~> 0.8.1'
-  gem "clipboard"
+  gem 'clipboard'
 end
 
 group :test do
