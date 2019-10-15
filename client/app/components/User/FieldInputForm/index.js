@@ -17,7 +17,6 @@ import {
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
-import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import messages from 'containers/User/messages';
 import { buildValues } from 'utils/formHelpers';
 
@@ -48,22 +47,21 @@ export function FieldInputFormInner({ formikProps, ...props }) {
         <FieldArray
           name='fields'
           render={_ => (
-            <CardContent>
+            <React.Fragment>
               {values.fieldData.map((fieldDatum, i) => (
-                <div key={fieldDatum.id}>
+                <div key={fieldDatum.id} className={props.classes.fieldInput}>
+                  <Divider />
                   <CardContent>
-                    <Grid item className={props.classes.fieldInput}>
-                      {Object.entries(fieldDatum).length !== 0 && (
-                        <CustomField fieldDatum={fieldDatum} fieldDatumIndex={i} />
-                      )}
-                    </Grid>
+                    {Object.entries(fieldDatum).length !== 0 && (
+                      <CustomField fieldDatum={fieldDatum} fieldDatumIndex={i} />
+                    )}
                   </CardContent>
-                  <Divider variant='middle' />
                 </div>
               ))}
-            </CardContent>
+            </React.Fragment>
           )}
         />
+        <Divider />
         <CardActions>
           <Button
             color='primary'

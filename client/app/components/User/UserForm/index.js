@@ -68,6 +68,7 @@ export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, 
               fullWidth
               id='time_zone'
               name='time_zone'
+              margin='normal'
               label={<FormattedMessage {...messages.time_zone} />}
               value={values.time_zone}
               options={dig(props, 'user', 'timezones') || []}
@@ -75,6 +76,7 @@ export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, 
               onBlur={() => setFieldTouched('time_zone', true)}
             />
           </CardContent>
+          <Divider />
           <CardActions>
             <Button
               color='primary'
