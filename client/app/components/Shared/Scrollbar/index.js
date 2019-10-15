@@ -37,5 +37,5 @@ Scrollbar.propTypes = {
 };
 
 export default compose(
-  withStyles(styles())
+  withStyles(styles)
 )(Scrollbar);
