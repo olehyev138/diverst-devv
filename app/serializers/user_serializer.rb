@@ -24,7 +24,7 @@ class UserSerializer < ApplicationRecordSerializer
   end
 
   def timezones
-    ActiveSupport::TimeZone.all.map { |tz| [tz.tzinfo.name, tz.name] }
+    ActiveSupport::TimeZone.all.map { |tz| [tz.tzinfo.name, "#{tz.name} (GMT#{tz.formatted_offset(true, '')})"] }
   end
 
   def time_zone
