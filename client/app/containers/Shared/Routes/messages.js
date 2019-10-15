@@ -58,7 +58,26 @@ export default defineMessages({
       }
     },
     resources: {
-      id: `${scope}.group.resources.index`
+      index: {
+        id: `${scope}.group.resources.index`
+      },
+      new: {
+        id: `${scope}.group.resources.new`
+      },
+      edit: {
+        id: `${scope}.group.resources.edit`
+      },
+      folders: {
+        new: {
+          id: `${scope}.group.resources.folders.new`
+        },
+        edit: {
+          id: `${scope}.group.resources.folders.edit`
+        },
+        show: {
+          id: `${scope}.group.resources.folders.show`
+        },
+      },
     },
     news: {
       index: {

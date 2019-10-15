@@ -43,5 +43,5 @@ Scrollbar.propTypes = {
 export { CONTENT_SCROLL_CLASS_NAME };
 
 export default compose(
-  withStyles(styles())
+  withStyles(styles)
 )(Scrollbar);

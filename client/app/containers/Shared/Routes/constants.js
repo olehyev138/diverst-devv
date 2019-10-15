@@ -176,32 +176,45 @@ export const ROUTES = {
       }
     },
     resources: {
+      index: {
+        path: (groupId = ':group_id') => `/groups/${groupId}/resources`,
+        data: {
+          titleMessage: messages.groups.resources.index,
+        }
+      },
+      new: {
+        path: (groupId = ':group_id', folderId = ':folder_id') => `/groups/${groupId}/folders/${folderId}/resources/new`,
+        data: {
+          titleMessage: messages.groups.resources.new,
+        }
+      },
+      edit: {
+        path: (groupId = ':group_id', folderId = ':folder_id', itemId = ':item_id') => `/groups/${groupId}/folders/${folderId}/resources/${itemId}/edit`,
+        data: {
+          titleMessage: messages.groups.resources.edit,
+        }
+      },
       folders: {
-        index: {
-          path: (groupId = ':group_id') => `/groups/${groupId}/resources`,
+        new: {
+          path: (groupId = ':group_id') => `/groups/${groupId}/folders/new`,
           data: {
-            titleMessage: messages.groups.resources,
+            titleMessage: messages.groups.resources.folders.new,
           }
         },
-        new: {
-          path: (groupId = ':group_id') => `/groups/${groupId}/folder/new`,
-        },
         show: {
-          path: (groupId = ':group_id', itemId = ':item_id') => `/groups/${groupId}/folder/${itemId}`,
+          path: (groupId = ':group_id', itemId = ':item_id') => `/groups/${groupId}/folders/${itemId}`,
+          data: {
+            titleMessage: messages.groups.resources.folders.show,
+          }
         },
         edit: {
-          path: (groupId = ':group_id', itemId = ':item_id') => `/groups/${groupId}/folder/${itemId}/edit`,
+          path: (groupId = ':group_id', itemId = ':item_id') => `/groups/${groupId}/folders/${itemId}/edit`,
+          data: {
+            titleMessage: messages.groups.resources.folders.edit,
+          }
         },
       },
-      resources: {
-        new: {
-          path: (groupId = ':group_id', folderId = ':folder_id') => `/groups/${groupId}/folder/${folderId}/resource/new`,
-        },
-        edit: {
-          path: (groupId = ':group_id', folderId = ':folder_id', itemId = ':item_id') => `/groups/${groupId}/folder/${folderId}/resource/${itemId}/edit`,
-        },
-      }
-    }
+    },
   },
 
   // Admin
@@ -300,31 +313,44 @@ export const ROUTES = {
         },
       },
       resources: {
+        index: {
+          path: () => '/admin/manage/resources',
+          data: {
+            titleMessage: messages.admin.manage.resources,
+          }
+        },
+        new: {
+          path: (folderId = ':folder_id') => `/admin/manage/folders/${folderId}/resources/new`,
+          data: {
+            titleMessage: messages.groups.resources.new
+          }
+        },
+        edit: {
+          path: (folderId = ':folder_id', itemId = ':item_id') => `/admin/manage/folders/${folderId}/resources/${itemId}/edit`,
+          data: {
+            titleMessage: messages.groups.resources.edit
+          }
+        },
         folders: {
-          index: {
-            path: () => '/admin/manage/resources',
+          new: {
+            path: () => '/admin/manage/folders/new',
             data: {
-              titleMessage: messages.admin.manage.resources,
+              titleMessage: messages.groups.resources.folders.new
             }
           },
-          new: {
-            path: () => '/admin/manage/folder/new',
-          },
           show: {
-            path: (itemId = ':item_id') => `/admin/manage/folder/${itemId}`,
+            path: (itemId = ':item_id') => `/admin/manage/folders/${itemId}`,
+            data: {
+              titleMessage: messages.groups.resources.folders.show
+            }
           },
           edit: {
-            path: (itemId = ':item_id') => `/admin/manage/folder/${itemId}/edit`,
+            path: (itemId = ':item_id') => `/admin/manage/folders/${itemId}/edit`,
+            data: {
+              titleMessage: messages.groups.resources.folders.edit
+            }
           },
         },
-        resources: {
-          new: {
-            path: (folderId = ':folder_id') => `/admin/manage/folder/${folderId}/resource/new`,
-          },
-          edit: {
-            path: (folderId = ':folder_id', itemId = ':item_id') => `/admin/manage/folder/${folderId}/resource/${itemId}/edit`,
-          },
-        }
       }
     },
     system: {

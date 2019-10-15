@@ -230,7 +230,7 @@ class AdminLinks extends React.PureComponent {
               <MenuItem
                 component={WrappedNavLink}
                 exact
-                to={ROUTES.admin.manage.resources.folders.index.path()}
+                to={ROUTES.admin.manage.resources.index.path()}
                 className={classes.nested}
                 activeClassName={classes.navLinkActive}
               >
@@ -238,7 +238,7 @@ class AdminLinks extends React.PureComponent {
                   <ListIcon />
                 </ListItemIcon>
                 <ListItemText>
-                  <DiverstFormattedMessage {...ROUTES.admin.manage.resources.folders.index.data.titleMessage} />
+                  <DiverstFormattedMessage {...ROUTES.admin.manage.resources.index.data.titleMessage} />
                 </ListItemText>
               </MenuItem>
             </List>

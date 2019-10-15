@@ -230,6 +230,7 @@ export function Folder(props) {
         </Grid>
         {props.folders && props.folders.length > 0 && (
           <DiverstPagination
+            isLoading={props.isLoading}
             count={props.foldersTotal}
             handlePagination={props.handleFolderPagination}
           />
@@ -316,6 +317,7 @@ export function Folder(props) {
         </Grid>
         {props.resources && props.resources.length > 0 && (
           <DiverstPagination
+            isLoading={props.isLoading}
             count={props.resourcesTotal}
             handlePagination={props.handleResourcePagination}
           />
@@ -363,6 +365,7 @@ Folder.propTypes = {
   handleFolderPagination: PropTypes.func,
   handleResourcePagination: PropTypes.func,
   intl: intlShape.isRequired,
+  isLoading: PropTypes.bool,
   links: PropTypes.shape({
     foldersIndex: PropTypes.string,
     folderNew: PropTypes.object,

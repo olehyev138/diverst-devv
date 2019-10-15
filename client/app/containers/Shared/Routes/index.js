@@ -10,8 +10,8 @@ import {
   OutcomeEditPage, GroupMemberListPage, GroupMemberCreatePage, NotFoundPage, PlaceholderPage, GroupDashboardPage,
   UserDashboardPage, MetricsDashboardListPage, MetricsDashboardCreatePage, MetricsDashboardEditPage, MetricsDashboardPage,
   CustomGraphCreatePage, CustomGraphEditPage, GroupManageLayout, GroupSettingsPage, CustomTextEditPage,
-  UserNewsLinkPage, UserEventsPage,
-  FoldersPage, FolderCreatePage, FolderEditPage, FolderPage, ResourceCreatePage, ResourceEditPage,
+  UserNewsLinkPage, UserEventsPage, FoldersPage, FolderCreatePage, FolderEditPage, FolderPage, ResourceCreatePage,
+  ResourceEditPage,
 } from './templates';
 
 // Paths
@@ -60,12 +60,12 @@ export default function Routes(props) {
       <AdminLayout exact {...expandRoute(ROUTES.admin.manage.segments.index)} component={SegmentListPage} />
 
       { /* Admin - Manage - Resources */ }
-      <AdminLayout {...expandRoute(ROUTES.admin.manage.resources.resources.new)} component={ResourceCreatePage} />
-      <AdminLayout {...expandRoute(ROUTES.admin.manage.resources.resources.edit)} component={ResourceEditPage} />
+      <AdminLayout {...expandRoute(ROUTES.admin.manage.resources.index)} component={FoldersPage} />
+      <AdminLayout {...expandRoute(ROUTES.admin.manage.resources.new)} component={ResourceCreatePage} />
+      <AdminLayout {...expandRoute(ROUTES.admin.manage.resources.edit)} component={ResourceEditPage} />
       <AdminLayout {...expandRoute(ROUTES.admin.manage.resources.folders.edit)} component={FolderEditPage} />
       <AdminLayout {...expandRoute(ROUTES.admin.manage.resources.folders.new)} component={FolderCreatePage} />
       <AdminLayout {...expandRoute(ROUTES.admin.manage.resources.folders.show)} component={FolderPage} />
-      <AdminLayout {...expandRoute(ROUTES.admin.manage.resources.folders.index)} component={FoldersPage} />
 
       { /* Admin - System - GlobalSettings */ }
       <GlobalSettingsLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.fields.index)} component={FieldsPage} />
@@ -107,12 +107,12 @@ export default function Routes(props) {
       <GroupManageLayout {...expandRoute(ROUTES.group.manage.leaders.index)} component={PlaceholderPage} />
 
       { /* Group Resources */ }
-      <GroupLayout {...expandRoute(ROUTES.group.resources.resources.new)} component={ResourceCreatePage} />
-      <GroupLayout {...expandRoute(ROUTES.group.resources.resources.edit)} component={ResourceEditPage} />
+      <GroupLayout {...expandRoute(ROUTES.group.resources.index)} component={FoldersPage} />
+      <GroupLayout {...expandRoute(ROUTES.group.resources.new)} component={ResourceCreatePage} />
+      <GroupLayout {...expandRoute(ROUTES.group.resources.edit)} component={ResourceEditPage} />
       <GroupLayout {...expandRoute(ROUTES.group.resources.folders.edit)} component={FolderEditPage} />
       <GroupLayout {...expandRoute(ROUTES.group.resources.folders.new)} component={FolderCreatePage} />
       <GroupLayout {...expandRoute(ROUTES.group.resources.folders.show)} component={FolderPage} />
-      <GroupLayout {...expandRoute(ROUTES.group.resources.folders.index)} component={FoldersPage} />
 
       <ErrorLayout path='' component={NotFoundPage} />
     </Switch>
