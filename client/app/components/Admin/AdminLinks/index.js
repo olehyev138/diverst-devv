@@ -238,7 +238,7 @@ class AdminLinks extends React.PureComponent {
                   <ListIcon />
                 </ListItemIcon>
                 <ListItemText>
-                  <FormattedMessage {...ROUTES.admin.manage.resources.folders.index.data.titleMessage} />
+                  <DiverstFormattedMessage {...ROUTES.admin.manage.resources.folders.index.data.titleMessage} />
                 </ListItemText>
               </MenuItem>
             </List>

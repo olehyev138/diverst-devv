@@ -190,9 +190,8 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
               <WithStyles(ForwardRef(ListItemText))>
-                <FormattedMessage
+                <Memo(DiverstFormattedMessage)
                   id="diverst.containers.Routes.admin.manage.resources.index"
-                  values={Object {}}
                 />
               </WithStyles(ForwardRef(ListItemText))>
             </WithStyles(ForwardRef(MenuItem))>
@@ -515,9 +514,8 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
               <WithStyles(ForwardRef(ListItemText))>
-                <FormattedMessage
+                <Memo(DiverstFormattedMessage)
                   id="diverst.containers.Routes.admin.manage.resources.index"
-                  values={Object {}}
                 />
               </WithStyles(ForwardRef(ListItemText))>
             </WithStyles(ForwardRef(MenuItem))>
