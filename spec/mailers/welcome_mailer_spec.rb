@@ -13,7 +13,7 @@ RSpec.describe WelcomeMailer, type: :mailer do
   	end
 
   	it 'renders the subject' do 
-  	  expect(mail.subject).to eq "Hi #{user.name} and welcome to #{group.name}."
+  	  expect(mail.subject).to eq "Notification"
   	end
 
   	it 'renders the receiver email' do
