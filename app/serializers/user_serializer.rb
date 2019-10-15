@@ -28,7 +28,8 @@ class UserSerializer < ApplicationRecordSerializer
   end
 
   def time_zone
-    ActiveSupport::TimeZone::MAPPING.key(object.time_zone)
+    tz = ActiveSupport::TimeZone[ActiveSupport::TimeZone::MAPPING.key(object.time_zone)]
+    "#{tz.name} (GMT#{tz.formatted_offset(true, '')})"
   end
 
   def fields
