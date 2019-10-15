@@ -1,5 +1,5 @@
 class UserSerializer < ApplicationRecordSerializer
-  attributes :enterprise, :last_name, :user_groups, :user_role, :avatar_location, :fields
+  attributes :enterprise, :last_name, :user_groups, :user_role, :avatar_location, :fields, :news_link_ids
 
   has_many :field_data
 

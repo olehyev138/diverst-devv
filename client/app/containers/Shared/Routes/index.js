@@ -9,8 +9,9 @@ import {
   EventCreatePage, EventEditPage, GroupMessagePage, GroupMessageCreatePage, GroupMessageEditPage, OutcomeCreatePage,
   OutcomeEditPage, GroupMemberListPage, GroupMemberCreatePage, NotFoundPage, PlaceholderPage, GroupDashboardPage,
   UserDashboardPage, MetricsDashboardListPage, MetricsDashboardCreatePage, MetricsDashboardEditPage, MetricsDashboardPage,
-  CustomGraphCreatePage, CustomGraphEditPage, GroupManageLayout, GroupSettingsPage, CustomTextEditPage, FoldersPage,
-  FolderCreatePage, FolderEditPage, FolderPage, ResourceCreatePage, ResourceEditPage
+  CustomGraphCreatePage, CustomGraphEditPage, GroupManageLayout, GroupSettingsPage, CustomTextEditPage,
+  UserNewsLinkPage, UserEventsPage,
+  FoldersPage, FolderCreatePage, FolderEditPage, FolderPage, ResourceCreatePage, ResourceEditPage,
 } from './templates';
 
 // Paths
@@ -25,10 +26,10 @@ export default function Routes(props) {
       <SessionLayout {...expandRoute(ROUTES.session.login)} component={LoginPage} />
 
       { /* User */}
-      <UserLayout exact {...expandRoute(ROUTES.user.home)} component={PlaceholderPage} />
+      <UserLayout exact {...expandRoute(ROUTES.user.home)} component={HomePage} />
       <UserLayout exact {...expandRoute(ROUTES.user.innovate)} component={PlaceholderPage} />
-      <UserLayout exact {...expandRoute(ROUTES.user.news)} component={PlaceholderPage} />
-      <UserLayout exact {...expandRoute(ROUTES.user.events)} component={PlaceholderPage} />
+      <UserLayout exact {...expandRoute(ROUTES.user.news)} component={UserNewsLinkPage} />
+      <UserLayout exact {...expandRoute(ROUTES.user.events)} component={UserEventsPage} />
       <UserLayout exact {...expandRoute(ROUTES.user.groups)} component={UserGroupListPage} />
       <UserLayout exact {...expandRoute(ROUTES.user.downloads)} component={PlaceholderPage} />
       <UserLayout {...expandRoute(ROUTES.user.mentorship)} component={PlaceholderPage} />

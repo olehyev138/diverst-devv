@@ -28,6 +28,26 @@ const selectUser = () => createSelector(
   usersState => usersState.currentUser
 );
 
+const selectPaginatedPosts = () => createSelector(
+  selectUsersDomain,
+  userState => userState.posts
+);
+
+const selectPostsTotal = () => createSelector(
+  selectUsersDomain,
+  userState => userState.postsTotal
+);
+
+const selectPaginatedEvents = () => createSelector(
+  selectUsersDomain,
+  userState => userState.events
+);
+
+const selectEventsTotal = () => createSelector(
+  selectUsersDomain,
+  userState => userState.eventsTotal
+);
+
 /*
  * - Select fieldData objects out of user
  *   - parse field_data.data strings
@@ -52,5 +72,7 @@ const selectFieldData = () => createSelector(
 export {
   selectUsersDomain, selectPaginatedUsers,
   selectUserTotal, selectUser, selectFieldData,
-  selectIsFetchingUsers
+  selectIsFetchingUsers,
+  selectPaginatedPosts, selectPostsTotal,
+  selectPaginatedEvents, selectEventsTotal,
 };
