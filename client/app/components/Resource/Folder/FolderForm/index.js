@@ -12,7 +12,7 @@ import dig from 'object-dig';
 
 import { Field, Formik, Form } from 'formik';
 import {
-  Button, Card, CardActions, CardContent, TextField, Switch, FormControlLabel, FormControl, Grid
+  Button, Card, CardActions, CardContent, TextField, Switch, FormControlLabel, FormControl, Grid, Divider
 } from '@material-ui/core';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
@@ -89,7 +89,6 @@ export function FolderFormInner({ handleSubmit, handleChange, handleBlur, values
                       onChange={handleChange}
                       id='password_protected'
                       name='password_protected'
-                      margin='normal'
                       checked={values.password_protected}
                       value={values.password_protected}
                     />
@@ -114,6 +113,7 @@ export function FolderFormInner({ handleSubmit, handleChange, handleBlur, values
             )}
           </Grid>
         </CardContent>
+        <Divider />
         <CardActions>
           <Button
             color='primary'

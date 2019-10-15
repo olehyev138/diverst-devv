@@ -9,6 +9,10 @@ import {
 } from '@material-ui/core/index';
 import { withStyles } from '@material-ui/core/styles';
 
+import AddIcon from '@material-ui/icons/Add';
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/DeleteOutline';
+import GoToParentIcon from '@material-ui/icons/SubdirectoryArrowLeft';
 import PublicIcon from '@material-ui/icons/Public';
 import FolderIcon from '@material-ui/icons/Folder';
 import LockIcon from '@material-ui/icons/Lock';
@@ -31,13 +35,15 @@ const styles = theme => ({
   folderListItem: {
     width: '100%',
   },
+  parentIcon: {
+    transform: 'rotate(90deg)',
+  },
   padding: {
     padding: theme.spacing(3, 2),
   },
   title: {
-    textAlign: 'center',
     fontWeight: 'bold',
-    paddingBottom: theme.spacing(3),
+    wordBreak: 'keep-all',
   },
   dataHeaders: {
     paddingBottom: theme.spacing(1),
@@ -46,10 +52,6 @@ const styles = theme => ({
     '&:not(:last-of-type)': { // Prevent last data item from adding bottom padding
       paddingBottom: theme.spacing(3),
     },
-  },
-  buttons: {
-    marginLeft: 20,
-    float: 'right',
   },
   deleteButton: {
     backgroundColor: theme.palette.error.main,
@@ -66,13 +68,42 @@ export function Folder(props) {
     (folder) ? (
       <React.Fragment>
         {/* Buttons */}
-        <Grid container spacing={1}>
-          <Grid item>
+        <Grid container spacing={3} alignItems='center' justify='flex-end'>
+          <Grid item xs>
             <Typography color='primary' variant='h5' component='h2' className={classes.title}>
               {folder.name}
             </Typography>
           </Grid>
-          <Grid item sm>
+
+          <Grid item>
+            <Button
+              variant='contained'
+              to={props.links.resourceNew}
+              color='primary'
+              size='large'
+              component={WrappedNavLink}
+              className={classes.buttons}
+              startIcon={<AddIcon />}
+            >
+              <DiverstFormattedMessage {...messages.show.addResource} />
+            </Button>
+          </Grid>
+
+          <Grid item>
+            <Button
+              variant='contained'
+              to={props.links.folderNew}
+              color='primary'
+              size='large'
+              component={WrappedNavLink}
+              className={classes.buttons}
+              startIcon={<AddIcon />}
+            >
+              <DiverstFormattedMessage {...messages.show.addFolder} />
+            </Button>
+          </Grid>
+
+          <Grid item>
             <Button
               variant='contained'
               to={{
@@ -86,34 +117,9 @@ export function Folder(props) {
               size='large'
               component={WrappedNavLink}
               className={classes.buttons}
+              startIcon={<EditIcon />}
             >
               <DiverstFormattedMessage {...messages.edit} />
-            </Button>
-          </Grid>
-
-          <Grid item>
-            <Button
-              variant='contained'
-              to={props.links.folderNew}
-              color='primary'
-              size='large'
-              component={WrappedNavLink}
-              className={classes.buttons}
-            >
-              <DiverstFormattedMessage {...messages.show.addFolder} />
-            </Button>
-          </Grid>
-
-          <Grid item>
-            <Button
-              variant='contained'
-              to={props.links.resourceNew}
-              color='primary'
-              size='large'
-              component={WrappedNavLink}
-              className={classes.buttons}
-            >
-              <DiverstFormattedMessage {...messages.show.addResource} />
             </Button>
           </Grid>
 
@@ -123,6 +129,7 @@ export function Folder(props) {
               color='primary'
               size='large'
               className={classNames(classes.buttons, classes.deleteButton)}
+              startIcon={<DeleteIcon />}
               onClick={() => {
                 // eslint-disable-next-line no-restricted-globals,no-alert
                 if (confirm(props.intl.formatMessage(messages.confirm_delete)))
@@ -136,6 +143,9 @@ export function Folder(props) {
             </Button>
           </Grid>
         </Grid>
+        <Box mb={2} />
+        <Divider />
+        <Box mb={2} />
         {/* Parent */}
         <Grid container spacing={3}>
           <Grid item>
@@ -145,18 +155,15 @@ export function Folder(props) {
               color='primary'
               size='large'
               component={WrappedNavLink}
+              startIcon={<GoToParentIcon className={classes.parentIcon} />}
             >
               <DiverstFormattedMessage {...messages.show.parent} />
             </Button>
           </Grid>
         </Grid>
         <Box mb={2} />
-
-        <Divider />
-
-        <Box mb={2} />
         {/* Sub Folders */}
-        <Grid container spacing={1}>
+        <Grid container spacing={3}>
           { /* eslint-disable-next-line arrow-body-style */}
           {props.folders && Object.values(props.folders).map((item, i) => {
             return (
@@ -171,7 +178,7 @@ export function Folder(props) {
                           component={WrappedNavLink}
                           to={props.links.folderShow(item)}
                         >
-                          <Grid container spacing={1}>
+                          <Grid container spacing={1} alignItems='center'>
                             <Grid item>
                               <FolderIcon />
                               { item.password_protected && (
@@ -185,7 +192,7 @@ export function Folder(props) {
                             </Grid>
                           </Grid>
                         </Link>
-                        <hr className={classes.divider} />
+                        <Divider />
                         <React.Fragment>
                           <Button
                             className={classes.folderLink}
@@ -245,7 +252,7 @@ export function Folder(props) {
         )}
 
         { /* Resources */ }
-        <Grid container spacing={1}>
+        <Grid container spacing={3}>
           { /* eslint-disable-next-line arrow-body-style */}
           {props.resources && Object.values(props.resources).map((item, i) => {
             return (
@@ -261,7 +268,7 @@ export function Folder(props) {
                             target='_blank'
                             rel='noopener'
                           >
-                            <Grid container spacing={1}>
+                            <Grid container spacing={1} alignItems='center'>
                               <Grid item>
                                 <PublicIcon />
                               </Grid>
@@ -273,7 +280,7 @@ export function Folder(props) {
                             </Grid>
                           </Link>
                         )}
-                        <hr className={classes.divider} />
+                        <Divider />
                         <React.Fragment>
                           <Button
                             className={classes.folderLink}
