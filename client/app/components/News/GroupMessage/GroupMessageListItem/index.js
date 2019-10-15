@@ -46,7 +46,7 @@ export function GroupMessageListItem(props) {
           {`Submitted by ${groupMessage.owner.first_name} ${groupMessage.owner.last_name}`}
         </Typography>
       </CardContent>
-      {props.links && !props.readonly (
+      { props.links && !props.readonly && (
         <CardActions>
           <Button
             size='small'
@@ -75,7 +75,7 @@ GroupMessageListItem.propTypes = {
   groupId: PropTypes.number,
   links: PropTypes.shape({
     groupMessageEdit: PropTypes.func,
-    groupMessageIndex: PropTypes.func
+    groupMessageShow: PropTypes.func
   })
 };
 

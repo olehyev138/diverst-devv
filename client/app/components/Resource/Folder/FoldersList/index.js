@@ -19,13 +19,12 @@ import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 import FolderIcon from '@material-ui/icons/Folder';
 import LockIcon from '@material-ui/icons/Lock';
 
-import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Resource/Folder/messages';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
-import { ROUTES } from 'containers/Shared/Routes/constants';
 
-import ResponsiveTabs from 'components/Shared/ResponsiveTabs';
-import Pagination from 'components/Shared/Pagination';
+import DiverstPagination from 'components/Shared/DiverstPagination';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 
 const styles = theme => ({
   folderListItem: {
@@ -56,20 +55,7 @@ const styles = theme => ({
 export function FoldersList(props, context) {
   const { classes, intl } = props;
 
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-
   const routeContext = useContext(RouteContext);
-
-  const handleChangePage = (folder, newPage) => {
-    setPage(newPage);
-    props.handlePagination({ count: rowsPerPage, page: newPage });
-  };
-
-  const handleChangeRowsPerPage = (folder) => {
-    setRowsPerPage(+folder.target.value);
-    props.handlePagination({ count: +folder.target.value, page });
-  };
 
   return (
     <React.Fragment>
@@ -82,7 +68,7 @@ export function FoldersList(props, context) {
             size='large'
             component={WrappedNavLink}
           >
-            <FormattedMessage {...messages.new} />
+            <DiverstFormattedMessage {...messages.new} />
           </Button>
         </Grid>
       </Grid>
@@ -125,7 +111,7 @@ export function FoldersList(props, context) {
                           to={props.links.folderEdit(item)}
                         >
                           <Typography color='textSecondary'>
-                            <FormattedMessage {...messages.edit} />
+                            <DiverstFormattedMessage {...messages.edit} />
                           </Typography>
                         </Button>
 
@@ -142,7 +128,7 @@ export function FoldersList(props, context) {
                             }}
                           >
                             <Typography color='error'>
-                              <FormattedMessage {...messages.delete} />
+                              <DiverstFormattedMessage {...messages.delete} />
                             </Typography>
                           </Button>
                         )}
@@ -165,7 +151,7 @@ export function FoldersList(props, context) {
             <Grid item sm>
               <Box mt={3} />
               <Typography variant='h6' align='center' color='textSecondary'>
-                <FormattedMessage {...messages.index.emptySection} />
+                <DiverstFormattedMessage {...messages.index.emptySection} />
               </Typography>
             </Grid>
           </React.Fragment>
@@ -182,12 +168,9 @@ export function FoldersList(props, context) {
         )}
       </Grid>
       {props.folders && props.folders.length > 0 && (
-        <Pagination
-          page={page}
-          rowsPerPage={rowsPerPage}
+        <DiverstPagination
           count={props.foldersTotal}
-          onChangePage={handleChangePage}
-          onChangeRowsPerPage={handleChangeRowsPerPage}
+          handlePagination={props.handlePagination}
         />
       )}
     </React.Fragment>

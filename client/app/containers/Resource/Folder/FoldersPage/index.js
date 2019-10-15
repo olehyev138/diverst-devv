@@ -16,7 +16,6 @@ import { selectEnterprise } from 'containers/Shared/App/selectors';
 import { getFoldersBegin, foldersUnmount, deleteFolderBegin } from 'containers/Resource/actions';
 
 import RouteService from 'utils/routeHelpers';
-import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import FoldersList from 'components/Resource/Folder/FoldersList';
 import {

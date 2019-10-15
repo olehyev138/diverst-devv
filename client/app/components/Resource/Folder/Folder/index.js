@@ -16,15 +16,16 @@ import LockIcon from '@material-ui/icons/Lock';
 import classNames from 'classnames';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
-import Pagination from 'components/Shared/Pagination';
+import DiverstPagination from 'components/Shared/DiverstPagination';
 
 import messages from 'containers/Resource/Folder/messages';
 import resourceMessages from 'containers/Resource/Resource/messages';
 
-import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import { injectIntl, intlShape } from 'react-intl';
 
-import { formatDateTimeString, DateTime } from 'utils/dateTimeHelpers';
 import KeyboardArrowRightIcon from '@material-ui/core/SvgIcon/SvgIcon';
+
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 
 const styles = theme => ({
   folderListItem: {
@@ -58,40 +59,8 @@ const styles = theme => ({
 export function Folder(props) {
   /* Render an Folder */
 
-  const [foldPage, setFoldPage] = useState(0);
-  const [resPage, setResPage] = useState(0);
-
-  const [rowsPerFoldPage, setRowsPerFoldPage] = useState(5);
-  const [rowsPerResPage, setRowsPerResPage] = useState(5);
-
   const { classes } = props;
   const folder = dig(props, 'folder');
-
-  const handleFolderChangePage = (folder, newPage) => {
-    setFoldPage(newPage);
-    props.handleFolderPagination({ count: rowsPerFoldPage, page: newPage });
-  };
-
-  const handleFolderChangeRowsPerPage = (folder) => {
-    const topIndex = rowsPerFoldPage * foldPage;
-    setRowsPerFoldPage(+folder.target.value);
-    const newPage = Math.ceil(topIndex / +folder.target.value);
-    setFoldPage(newPage);
-    props.handleFolderPagination({ count: +folder.target.value, newPage });
-  };
-
-  const handleResourceChangePage = (resource, newPage) => {
-    setResPage(newPage);
-    props.handleResourcePagination({ count: rowsPerResPage, page: newPage });
-  };
-
-  const handleResourceChangeRowsPerPage = (resource) => {
-    const topIndex = rowsPerResPage * foldPage;
-    setRowsPerResPage(+resource.target.value);
-    const newPage = Math.ceil(topIndex / +resource.target.value);
-    setResPage(newPage);
-    props.handleResourcePagination({ count: +resource.target.value, newPage });
-  };
 
   return (
     (folder) ? (
@@ -118,7 +87,7 @@ export function Folder(props) {
               component={WrappedNavLink}
               className={classes.buttons}
             >
-              <FormattedMessage {...messages.edit} />
+              <DiverstFormattedMessage {...messages.edit} />
             </Button>
           </Grid>
 
@@ -131,7 +100,7 @@ export function Folder(props) {
               component={WrappedNavLink}
               className={classes.buttons}
             >
-              <FormattedMessage {...messages.show.addFolder} />
+              <DiverstFormattedMessage {...messages.show.addFolder} />
             </Button>
           </Grid>
 
@@ -144,7 +113,7 @@ export function Folder(props) {
               component={WrappedNavLink}
               className={classes.buttons}
             >
-              <FormattedMessage {...messages.show.addResource} />
+              <DiverstFormattedMessage {...messages.show.addResource} />
             </Button>
           </Grid>
 
@@ -163,7 +132,7 @@ export function Folder(props) {
                   });
               }}
             >
-              <FormattedMessage {...messages.delete} />
+              <DiverstFormattedMessage {...messages.delete} />
             </Button>
           </Grid>
         </Grid>
@@ -177,7 +146,7 @@ export function Folder(props) {
               size='large'
               component={WrappedNavLink}
             >
-              <FormattedMessage {...messages.show.parent} />
+              <DiverstFormattedMessage {...messages.show.parent} />
             </Button>
           </Grid>
         </Grid>
@@ -224,7 +193,7 @@ export function Folder(props) {
                             to={props.links.folderEdit(item)}
                           >
                             <Typography color='textSecondary'>
-                              <FormattedMessage {...messages.edit} />
+                              <DiverstFormattedMessage {...messages.edit} />
                             </Typography>
                           </Button>
                           { !item.password_protected && (
@@ -240,7 +209,7 @@ export function Folder(props) {
                               }}
                             >
                               <Typography color='error'>
-                                <FormattedMessage {...messages.delete} />
+                                <DiverstFormattedMessage {...messages.delete} />
                               </Typography>
                             </Button>
                           )}
@@ -260,12 +229,9 @@ export function Folder(props) {
           })}
         </Grid>
         {props.folders && props.folders.length > 0 && (
-          <Pagination
-            page={foldPage}
-            rowsPerPage={rowsPerFoldPage}
+          <DiverstPagination
             count={props.foldersTotal}
-            onChangePage={handleFolderChangePage}
-            onChangeRowsPerPage={handleFolderChangeRowsPerPage}
+            handlePagination={props.handleFolderPagination}
           />
         )}
         {props.folders && props.folders.length > 0
@@ -314,7 +280,7 @@ export function Folder(props) {
                             to={props.links.resourceEdit(item)}
                           >
                             <Typography color='textSecondary'>
-                              <FormattedMessage {...resourceMessages.edit} />
+                              <DiverstFormattedMessage {...resourceMessages.edit} />
                             </Typography>
                           </Button>
 
@@ -330,7 +296,7 @@ export function Folder(props) {
                             }}
                           >
                             <Typography color='error'>
-                              <FormattedMessage {...resourceMessages.delete} />
+                              <DiverstFormattedMessage {...resourceMessages.delete} />
                             </Typography>
                           </Button>
                           <Box pb={1} />
@@ -349,12 +315,9 @@ export function Folder(props) {
           })}
         </Grid>
         {props.resources && props.resources.length > 0 && (
-          <Pagination
-            page={resPage}
-            rowsPerPage={rowsPerResPage}
+          <DiverstPagination
             count={props.resourcesTotal}
-            onChangePage={handleResourceChangePage}
-            onChangeRowsPerPage={handleResourceChangeRowsPerPage}
+            handlePagination={props.handleResourcePagination}
           />
         )}
 
@@ -364,7 +327,7 @@ export function Folder(props) {
             <Grid item sm>
               <Box mt={3} />
               <Typography variant='h6' align='center' color='textSecondary'>
-                <FormattedMessage {...messages.show.empty} />
+                <DiverstFormattedMessage {...messages.show.empty} />
               </Typography>
             </Grid>
           </React.Fragment>
