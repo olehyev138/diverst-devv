@@ -66,27 +66,44 @@ export function EventsList(props, context) {
   };
 
   const handleChangeRowsPerPage = (event) => {
+    const topIndex = rowsPerPage * page;
     setRowsPerPage(+event.target.value);
-    props.handlePagination({ count: +event.target.value, page });
+    const newPage = Math.floor(topIndex / +event.target.value);
+    setPage(newPage);
+    props.handlePagination({ count: +event.target.value, page: newPage });
   };
-
   return (
     <React.Fragment>
-      <Grid container spacing={3} justify='flex-end'>
-        <Grid item>
-          <Button
-            variant='contained'
-            to={props.links.eventNew}
-            color='primary'
-            size='large'
-            component={WrappedNavLink}
-          >
-            <FormattedMessage {...messages.new} />
-          </Button>
-        </Grid>
-      </Grid>
-      <Box mb={2} />
+      {props.readonly || (
+        <div>
+          <Grid container spacing={3} justify='flex-end'>
+            <Grid item>
+              <Button
+                variant='contained'
+                to={props.links.eventNew}
+                color='primary'
+                size='large'
+                component={WrappedNavLink}
+              >
+                <FormattedMessage {...messages.new} />
+              </Button>
+            </Grid>
+          </Grid>
+          <Box mb={2} />
+        </div>
+      )}
       <Paper>
+        {props.currentPTab != null && (
+          <ResponsiveTabs
+            value={props.currentPTab}
+            onChange={props.handleChangePTab}
+            indicatorColor='primary'
+            textColor='primary'
+          >
+            <Tab label={intl.formatMessage(messages.index.participating)} />
+            <Tab label={intl.formatMessage(messages.index.all)} />
+          </ResponsiveTabs>
+        )}
         <ResponsiveTabs
           value={props.currentTab}
           onChange={props.handleChangeTab}
@@ -177,8 +194,11 @@ EventsList.propTypes = {
   eventsTotal: PropTypes.number,
   currentTab: PropTypes.number,
   handleChangeTab: PropTypes.func,
+  currentPTab: PropTypes.number,
+  handleChangePTab: PropTypes.func,
   handlePagination: PropTypes.func,
   links: PropTypes.object,
+  readonly: PropTypes.bool,
 };
 
 export default compose(

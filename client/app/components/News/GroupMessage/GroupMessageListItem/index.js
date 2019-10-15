@@ -47,17 +47,19 @@ export function GroupMessageListItem(props) {
         </Typography>
       </CardContent>
       <CardActions>
+        {!props.readonly && (
+          <Button
+            size='small'
+            color='primary'
+            to={props.links.groupMessageEdit(newsItem.id)}
+            component={WrappedNavLink}
+          >
+            <FormattedMessage {...messages.edit} />
+          </Button>
+        )}
         <Button
           size='small'
-          color='primary'
-          to={props.links.groupMessageEdit(newsItem.id)}
-          component={WrappedNavLink}
-        >
-          <FormattedMessage {...messages.edit} />
-        </Button>
-        <Button
-          size='small'
-          to={props.links.groupMessageIndex(newsItem.id)}
+          to={props.links.groupMessageIndex(props.groupId, newsItem.id)}
           component={WrappedNavLink}
         >
           Comments
@@ -69,6 +71,8 @@ export function GroupMessageListItem(props) {
 
 GroupMessageListItem.propTypes = {
   newsItem: PropTypes.object,
+  readonly: PropTypes.bool,
+  groupId: PropTypes.number,
   links: PropTypes.shape({
     groupMessageEdit: PropTypes.func,
     groupMessageIndex: PropTypes.func
