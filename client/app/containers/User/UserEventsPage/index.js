@@ -8,11 +8,11 @@ import { compose } from 'redux';
 import dig from 'object-dig';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
-import reducer from 'containers/Event/reducer';
-import saga from 'containers/Event/saga';
+import reducer from 'containers/User/reducer';
+import saga from 'containers/User/saga';
 
-import { selectPaginatedEvents, selectEventsTotal, selectIsLoading } from 'containers/Event/selectors';
-import { getEventsBegin, eventsUnmount } from 'containers/Event/actions';
+import { selectPaginatedEvents, selectEventsTotal } from 'containers/User/selectors';
+import { getUserEventsBegin, userUnmount } from 'containers/User/actions';
 
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -25,6 +25,11 @@ const EventTypes = Object.freeze({
   past: 2,
 });
 
+const ParticipationTypes = Object.freeze({
+  participating: 0,
+  all: 1,
+});
+
 const defaultParams = Object.freeze({
   count: 10, // TODO: Make this a constant and use it also in EventsList
   page: 0,
@@ -33,8 +38,8 @@ const defaultParams = Object.freeze({
 });
 
 export function EventsPage(props) {
-  useInjectReducer({ key: 'events', reducer });
-  useInjectSaga({ key: 'events', saga });
+  useInjectReducer({ key: 'users', reducer });
+  useInjectSaga({ key: 'users', saga });
 
   const rs = new RouteService(useContext);
   const links = {
@@ -45,30 +50,59 @@ export function EventsPage(props) {
   };
 
   const [tab, setTab] = useState(EventTypes.upcoming);
+  const [participateTab, setParticipateTab] = useState(ParticipationTypes.participating);
   const [params, setParams] = useState(defaultParams);
 
-  const getEvents = (scopes, resetParams = false) => {
-    const id = dig(props, 'currentGroup', 'id');
-
+  const getEvents = (scopes = null, participation = null, resetParams = false) => {
     if (resetParams)
       setParams(defaultParams);
 
-    if (id) {
-      const newParams = {
-        ...params,
-        group_id: id,
-        query_scopes: scopes
-      };
-      props.getEventsBegin(newParams);
-      setParams(newParams);
-    }
+    if (participation == null)
+      switch (participateTab) {
+        case 0:
+          // eslint-disable-next-line no-param-reassign
+          participation = 'participation';
+          break;
+        case 1:
+          // eslint-disable-next-line no-param-reassign
+          participation = 'all';
+          break;
+        default:
+          break;
+      }
+
+    if (scopes == null)
+      switch (tab) {
+        case 0:
+          // eslint-disable-next-line no-param-reassign
+          scopes = ['upcoming'];
+          break;
+        case 1:
+          // eslint-disable-next-line no-param-reassign
+          scopes = ['ongoing'];
+          break;
+        case 2:
+          // eslint-disable-next-line no-param-reassign
+          scopes = ['past'];
+          break;
+        default:
+          break;
+      }
+
+    const newParams = {
+      ...params,
+      query_scopes: scopes,
+      participation
+    };
+    props.getUserEventsBegin(newParams);
+    setParams(newParams);
   };
 
   useEffect(() => {
     getEvents(['upcoming']);
 
     return () => {
-      props.eventsUnmount();
+      props.userUnmount();
     };
   }, []);
 
@@ -76,13 +110,27 @@ export function EventsPage(props) {
     setTab(newTab);
     switch (newTab) {
       case EventTypes.upcoming:
-        getEvents(['upcoming'], true);
+        getEvents(['upcoming'], null, true);
         break;
       case EventTypes.ongoing:
-        getEvents(['ongoing'], true);
+        getEvents(['ongoing'], null, true);
         break;
       case EventTypes.past:
-        getEvents(['past'], true);
+        getEvents(['past'], null, true);
+        break;
+      default:
+        break;
+    }
+  };
+
+  const handleChangeParticipationTab = (event, newTab) => {
+    setParticipateTab(newTab);
+    switch (newTab) {
+      case ParticipationTypes.participating:
+        getEvents(null, 'participating', true);
+        break;
+      case ParticipationTypes.all:
+        getEvents(null, 'all', true);
         break;
       default:
         break;
@@ -92,7 +140,7 @@ export function EventsPage(props) {
   const handlePagination = (payload) => {
     const newParams = { ...params, count: payload.count, page: payload.page };
 
-    props.getEventsBegin(newParams);
+    props.getUserEventsBegin(newParams);
     setParams(newParams);
   };
 
@@ -100,22 +148,22 @@ export function EventsPage(props) {
     <EventsList
       events={props.events}
       eventsTotal={props.eventsTotal}
-      isLoading={props.isLoading}
       currentTab={tab}
+      currentPTab={participateTab}
+      handleChangePTab={handleChangeParticipationTab}
       handleChangeTab={handleChangeTab}
       handlePagination={handlePagination}
       links={links}
-      readonly={false}
+      readonly
     />
   );
 }
 
 EventsPage.propTypes = {
-  getEventsBegin: PropTypes.func.isRequired,
-  eventsUnmount: PropTypes.func.isRequired,
+  getUserEventsBegin: PropTypes.func.isRequired,
+  userUnmount: PropTypes.func.isRequired,
   events: PropTypes.array,
   eventsTotal: PropTypes.number,
-  isLoading: PropTypes.bool,
   currentGroup: PropTypes.shape({
     id: PropTypes.number,
   }),
@@ -124,12 +172,11 @@ EventsPage.propTypes = {
 const mapStateToProps = createStructuredSelector({
   events: selectPaginatedEvents(),
   eventsTotal: selectEventsTotal(),
-  isLoading: selectIsLoading(),
 });
 
 const mapDispatchToProps = {
-  getEventsBegin,
-  eventsUnmount,
+  getUserEventsBegin,
+  userUnmount,
 };
 
 const withConnect = connect(

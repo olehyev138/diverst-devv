@@ -71,19 +71,34 @@ export function EventsList(props, context) {
 
   return (
     <React.Fragment>
-      <Button
-        className={classes.floatRight}
-        variant='contained'
-        to={props.links.eventNew}
-        color='primary'
-        size='large'
-        component={WrappedNavLink}
-        startIcon={<AddIcon />}
-      >
-        <DiverstFormattedMessage {...messages.new} />
-      </Button>
-      <Box className={classes.floatSpacer} />
+      {!props.readonly && (
+        <React.Fragment>
+          <Button
+            className={classes.floatRight}
+            variant='contained'
+            to={props.links.eventNew}
+            color='primary'
+            size='large'
+            component={WrappedNavLink}
+            startIcon={<AddIcon />}
+          >
+            <DiverstFormattedMessage {...messages.new} />
+          </Button>
+          <Box className={classes.floatSpacer} />
+        </React.Fragment>
+      )}
       <Paper>
+        {props.currentPTab != null && (
+          <ResponsiveTabs
+            value={props.currentPTab}
+            onChange={props.handleChangePTab}
+            indicatorColor='primary'
+            textColor='primary'
+          >
+            <Tab label={intl.formatMessage(messages.index.participating)} />
+            <Tab label={intl.formatMessage(messages.index.all)} />
+          </ResponsiveTabs>
+        )}
         <ResponsiveTabs
           value={props.currentTab}
           onChange={props.handleChangeTab}
@@ -175,8 +190,11 @@ EventsList.propTypes = {
   currentTab: PropTypes.number,
   isLoading: PropTypes.bool,
   handleChangeTab: PropTypes.func,
+  currentPTab: PropTypes.number,
+  handleChangePTab: PropTypes.func,
   handlePagination: PropTypes.func,
   links: PropTypes.object,
+  readonly: PropTypes.bool,
 };
 
 export default compose(

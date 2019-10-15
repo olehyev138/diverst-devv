@@ -7,7 +7,8 @@ import { showSnackbar } from 'containers/Shared/Notifier/actions';
 import {
   GET_USERS_BEGIN, CREATE_USER_BEGIN,
   GET_USER_BEGIN, UPDATE_USER_BEGIN, DELETE_USER_BEGIN,
-  UPDATE_FIELD_DATA_BEGIN
+  UPDATE_FIELD_DATA_BEGIN, GET_USER_POSTS_BEGIN,
+  GET_USER_EVENTS_BEGIN
 } from 'containers/User/constants';
 
 import {
@@ -15,7 +16,9 @@ import {
   createUserSuccess, createUserError,
   getUserSuccess, getUserError,
   updateUserSuccess, updateUserError,
-  deleteUserError
+  deleteUserError,
+  getUserPostsSuccess, getUserPostsError,
+  getUserEventsSuccess, getUserEventsError,
 } from 'containers/User/actions';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -43,6 +46,33 @@ export function* getUser(action) {
   }
 }
 
+export function* getUserPosts(action) {
+  try {
+    const response = yield call(api.user.getPosts.bind(api.user), action.payload);
+    yield put(getUserPostsSuccess(response.data.page));
+  } catch (err) {
+    yield put(getUserPostsError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to load posts', options: { variant: 'warning' } }));
+  }
+}
+
+export function* getUserEvents(action) {
+  try {
+    let response;
+    if (action.payload.participation === 'all')
+      response = yield call(api.user.getAllEvents.bind(api.user), action.payload);
+    else
+      response = yield call(api.user.getJoinedEvents.bind(api.user), action.payload);
+    yield put(getUserEventsSuccess(response.data.page));
+  } catch (err) {
+    yield put(getUserEventsError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to load events', options: { variant: 'warning' } }));
+  }
+}
 
 export function* createUser(action) {
   try {
@@ -110,6 +140,7 @@ export default function* usersSaga() {
   yield takeLatest(CREATE_USER_BEGIN, createUser);
   yield takeLatest(UPDATE_USER_BEGIN, updateUser);
   yield takeLatest(DELETE_USER_BEGIN, deleteUser);
-
+  yield takeLatest(GET_USER_POSTS_BEGIN, getUserPosts);
+  yield takeLatest(GET_USER_EVENTS_BEGIN, getUserEvents);
   yield takeLatest(UPDATE_FIELD_DATA_BEGIN, updateFieldData);
 }

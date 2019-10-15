@@ -46,7 +46,7 @@ export function GroupMessageListItem(props) {
           {`Submitted by ${groupMessage.owner.first_name} ${groupMessage.owner.last_name}`}
         </Typography>
       </CardContent>
-      {props.links && (
+      {props.links && !props.readonly (
         <CardActions>
           <Button
             size='small'
@@ -58,7 +58,7 @@ export function GroupMessageListItem(props) {
           </Button>
           <Button
             size='small'
-            to={props.links.groupMessageIndex(newsItem.id)}
+            to={props.links.groupMessageShow(props.groupId, newsItem.id)}
             component={WrappedNavLink}
           >
             Comments
@@ -71,6 +71,8 @@ export function GroupMessageListItem(props) {
 
 GroupMessageListItem.propTypes = {
   newsItem: PropTypes.object,
+  readonly: PropTypes.bool,
+  groupId: PropTypes.number,
   links: PropTypes.shape({
     groupMessageEdit: PropTypes.func,
     groupMessageIndex: PropTypes.func

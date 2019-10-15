@@ -80,45 +80,49 @@ export function NewsFeed(props) {
   /* Check news_feed_link type & render appropriate list item component */
   const renderNewsItem = (item) => {
     if (item.group_message)
-      return (<GroupMessageListItem links={props.links} newsItem={item} />);
+      return (<GroupMessageListItem links={props.links} newsItem={item} readonly={props.readonly} groupId={item.news_feed.group_id} />);
     else if (item.news_link) // eslint-disable-line no-else-return
-      return (<NewsLinkListItem newsLink={item.news_link} />);
+      return (<NewsLinkListItem newsLink={item.news_link} readonly={props.readonly} />);
     else if (item.social_link)
-      return (<SocialLinkListItem socialLink={item.social_link} />);
+      return (<SocialLinkListItem socialLink={item.social_link} readonly={props.readonly} />);
 
     return undefined;
   };
 
   return (
     <React.Fragment>
-      <Backdrop open={speedDialOpen} className={classes.backdrop} />
-      <SpeedDial
-        ariaLabel='Add Item'
-        className={classes.speedDial}
-        icon={<SpeedDialIcon />}
-        onClose={handleSpeedDialClose}
-        onOpen={handleSpeedDialOpen}
-        open={speedDialOpen}
-        direction='left'
-        FabProps={{
-          className: classes.speedDialButton
-        }}
-      >
-        {actions.map(action => (
-          <SpeedDialAction
-            component={WrappedNavLink}
-            to={action.linkPath}
-            key={action.name}
-            icon={action.icon}
-            tooltipTitle={<Typography>{action.name}</Typography>}
-            tooltipPlacement='bottom'
-            onClick={handleSpeedDialClose}
-            PopperProps={{
-              disablePortal: true,
+      {!props.readonly && (
+        <React.Fragment>
+          <Backdrop open={speedDialOpen} className={classes.backdrop} />
+          <SpeedDial
+            ariaLabel='Add Item'
+            className={classes.speedDial}
+            icon={<SpeedDialIcon />}
+            onClose={handleSpeedDialClose}
+            onOpen={handleSpeedDialOpen}
+            open={speedDialOpen}
+            direction='left'
+            FabProps={{
+              className: classes.speedDialButton
             }}
-          />
-        ))}
-      </SpeedDial>
+          >
+            {actions.map(action => (
+              <SpeedDialAction
+                component={WrappedNavLink}
+                to={action.linkPath}
+                key={action.name}
+                icon={action.icon}
+                tooltipTitle={<Typography>{action.name}</Typography>}
+                tooltipPlacement='bottom'
+                onClick={handleSpeedDialClose}
+                PopperProps={{
+                  disablePortal: true,
+                }}
+              />
+            ))}
+          </SpeedDial>
+        </React.Fragment>
+      )}
       <DiverstLoader isLoading={props.isLoading}>
         <Grid container>
           { /* eslint-disable-next-line arrow-body-style */ }
@@ -151,7 +155,8 @@ NewsFeed.propTypes = {
   isLoading: PropTypes.bool,
   links: PropTypes.shape({
     groupMessageNew: PropTypes.string
-  })
+  }),
+  readonly: PropTypes.bool,
 };
 
 export default compose(
