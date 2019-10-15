@@ -48,6 +48,16 @@ const selectEventsTotal = () => createSelector(
   userState => userState.eventsTotal
 );
 
+const selectIsLoadingPosts = () => createSelector(
+  selectUsersDomain,
+  userState => userState.isLoadingPosts
+);
+
+const selectIsLoadingEvents = () => createSelector(
+  selectUsersDomain,
+  userState => userState.isLoadingEvents
+);
+
 /*
  * - Select fieldData objects out of user
  *   - parse field_data.data strings
@@ -72,7 +82,8 @@ const selectFieldData = () => createSelector(
 export {
   selectUsersDomain, selectPaginatedUsers,
   selectUserTotal, selectUser, selectFieldData,
-  selectIsFetchingUsers,
-  selectPaginatedPosts, selectPostsTotal,
-  selectPaginatedEvents, selectEventsTotal,
+  selectIsFetchingUsers, selectIsLoadingPosts,
+  selectIsLoadingEvents, selectPaginatedPosts,
+  selectPostsTotal, selectPaginatedEvents,
+  selectEventsTotal,
 };

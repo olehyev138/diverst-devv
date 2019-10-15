@@ -11,7 +11,7 @@ import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/User/reducer';
 import saga from 'containers/User/saga';
 
-import { selectPaginatedEvents, selectEventsTotal } from 'containers/User/selectors';
+import { selectPaginatedEvents, selectEventsTotal, selectIsLoadingEvents } from 'containers/User/selectors';
 import { getUserEventsBegin, userUnmount } from 'containers/User/actions';
 
 import RouteService from 'utils/routeHelpers';
@@ -153,6 +153,7 @@ export function EventsPage(props) {
       handleChangePTab={handleChangeParticipationTab}
       handleChangeTab={handleChangeTab}
       handlePagination={handlePagination}
+      isLoading={props.isLoading}
       links={links}
       readonly
     />
@@ -164,6 +165,7 @@ EventsPage.propTypes = {
   userUnmount: PropTypes.func.isRequired,
   events: PropTypes.array,
   eventsTotal: PropTypes.number,
+  isLoading: PropTypes.bool,
   currentGroup: PropTypes.shape({
     id: PropTypes.number,
   }),
@@ -172,6 +174,7 @@ EventsPage.propTypes = {
 const mapStateToProps = createStructuredSelector({
   events: selectPaginatedEvents(),
   eventsTotal: selectEventsTotal(),
+  isLoading: selectIsLoadingEvents(),
 });
 
 const mapDispatchToProps = {
