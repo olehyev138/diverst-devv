@@ -29,4 +29,8 @@ class CampaignMailer < ApplicationMailer
       group_names: @group_names
     }
   end
+
+  def url
+    campaign_url(@campaign)
+  end
 end

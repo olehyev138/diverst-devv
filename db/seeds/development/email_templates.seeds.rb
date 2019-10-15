@@ -55,7 +55,7 @@ after 'development:enterprise' do
             :name => "Campaign Mailer", 
             :mailer_name => "campaign_mailer",
             :mailer_method => "invitation",
-            :content => "<p>Hello %{user.name},</p>\r\n\r\n<p>You are invited to join other members in the following online collaborative conversation in Diverst: %{campaign.title}</p>\r\n\r\n<p>%{campaign.link} to provide feedback and offer your thoughts and suggestions.</p>\r\n", 
+            :content => "<p>Hello %{user.name},</p>\r\n\r\n<p>You are invited to join other members in the following online collaborative conversation in Diverst: %{campaign.title}</p>\r\n\r\n<p>%{click_here} to provide feedback and offer your thoughts and suggestions.</p>\r\n", 
             :subject => "You are invited to join %{group_names} in an online conversation in Diverst.", 
             :description => "Email that goes out to users after a campaign is created",
             :template => ""
