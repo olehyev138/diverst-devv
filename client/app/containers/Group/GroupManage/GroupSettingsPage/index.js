@@ -14,19 +14,23 @@ import {
   updateGroupSettingsBegin
 } from 'containers/Group/actions';
 
+import GroupManageLayout from 'containers/Layouts/GroupManageLayout';
 import GroupSettings from 'components/Group/GroupManage/GroupSettings';
 
 export function GroupSettingsPage(props) {
   useInjectReducer({ key: 'groups', reducer });
   useInjectSaga({ key: 'groups', saga });
 
-  const rs = new RouteService(useContext);
-
   return (
     <React.Fragment>
-      <GroupSettings
-        groupAction={props.updateGroupSettingsBegin}
-        group={props.currentGroup}
+      <GroupManageLayout
+        component={() => (
+          <GroupSettings
+            groupAction={props.updateGroupSettingsBegin}
+            group={props.currentGroup}
+          />
+        )}
+        {...props}
       />
     </React.Fragment>
   );
@@ -37,15 +41,12 @@ GroupSettingsPage.propTypes = {
   updateGroupSettingsBegin: PropTypes.func,
 };
 
-const mapStateToProps = createStructuredSelector({
-});
-
 const mapDispatchToProps = {
   updateGroupSettingsBegin,
 };
 
 const withConnect = connect(
-  mapStateToProps,
+  undefined,
   mapDispatchToProps,
 );
 

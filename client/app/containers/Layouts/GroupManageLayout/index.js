@@ -18,8 +18,8 @@ const ManagePages = Object.freeze({
   leaders: 1
 });
 
-const GroupManageLayout = ({ component: Component, ...rest }) => {
-  const { classes, data, computedMatch, location, ...other } = rest;
+const GroupManageLayout = ({ component: Component, classes, ...rest }) => {
+  const { currentGroup, location, ...other } = rest;
 
   /* Get last element of current path, ie: '/group/:id/manage/settings -> settings */
   const currentPagePath = location.pathname.split('/').pop();
@@ -27,24 +27,20 @@ const GroupManageLayout = ({ component: Component, ...rest }) => {
   const [tab, setTab] = useState(ManagePages[currentPagePath]);
 
   useEffect(() => {
-    setTab(ManagePages[currentPagePath]);
+    if (tab !== ManagePages[currentPagePath])
+      setTab(ManagePages[currentPagePath]);
   }, [currentPagePath]);
 
   return (
-    <GroupLayout
-      {...rest}
-      component={matchProps => (
-        <React.Fragment>
-          <GroupManageLinks
-            currentTab={tab}
-            {...matchProps}
-          />
-          <div className={classes.content}>
-            <Component currentGroup={matchProps.currentGroup} {...other} />
-          </div>
-        </React.Fragment>
-      )}
-    />
+    <React.Fragment>
+      <GroupManageLinks
+        currentTab={tab}
+        {...rest}
+      />
+      <div className={classes.content}>
+        <Component currentGroup={currentGroup} {...other} />
+      </div>
+    </React.Fragment>
   );
 };
 

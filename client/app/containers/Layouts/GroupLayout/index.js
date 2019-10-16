@@ -29,12 +29,12 @@ const styles = theme => ({
   },
 });
 
-const GroupLayout = ({ component: Component, ...rest }) => {
+const GroupLayout = ({ component: Component, classes, ...rest }) => {
   useInjectReducer({ key: 'groups', reducer });
   useInjectSaga({ key: 'groups', saga });
 
   const {
-    classes, computedMatch, location, currentGroup, disableBreadcrumbs, ...other
+    computedMatch, location, currentGroup, disableBreadcrumbs, ...other
   } = rest;
 
   /* - currentGroup will be wrapped around every container in the group section
@@ -69,7 +69,7 @@ const GroupLayout = ({ component: Component, ...rest }) => {
                     ) : (
                       <React.Fragment />
                     )}
-                    <Component currentGroup={currentGroup} {...other} />
+                    <Component currentGroup={currentGroup} {...rest} />
                   </React.Fragment>
                 )}
               </div>
