@@ -53,7 +53,9 @@ class Groups::GroupMembersController < ApplicationController
     @group_member.accepted_member = @group.pending_users.disabled?
 
     if @group_member.save
+      WelcomeNotificationJob.perform_later(@group.id, current_user.id)
       flash[:notice] = 'You are now a member'
+
 
       if @group.default_mentor_group?
         redirect_to edit_user_mentorship_url(id: current_user.id)
