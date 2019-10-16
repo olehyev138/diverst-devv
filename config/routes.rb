@@ -216,6 +216,7 @@ Rails.application.routes.draw do
           get 'view_sub_groups'
           get 'export_group_members_list_csv'
           post 'export_sub_groups_members_list_csv'
+          get 'view_list_of_sub_groups_for_export'
         end
         member do
           post 'accept_pending'

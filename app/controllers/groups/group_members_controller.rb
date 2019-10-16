@@ -200,13 +200,29 @@ class Groups::GroupMembersController < ApplicationController
     redirect_to :back
   end
 
+  def view_list_of_sub_groups_for_export
+    authorize [@group], :index?, policy_class: GroupMemberPolicy
+    @sub_groups = @group.children
+
+    respond_to do |format|
+      format.html { redirect_to :back }
+      format.js
+    end
+  end
+
   def export_sub_groups_members_list_csv
     authorize [@group], :update?, policy_class: GroupMemberPolicy
-    groups = Group.where(id: params['groups'].values, enterprise_id: current_user.enterprise_id)
-    groups.each { |group| GroupMemberListDownloadJob.perform_later(current_user.id, group.id, '') }
-    track_activity(@group, :export_sub_groups_members_list)
-    flash[:notice] = 'Please check your Secure Downloads section in a couple of minutes'
-    redirect_to :back
+
+    if params['groups'].nil?
+      flash[:notice] = 'no group was selected for download'
+      redirect_to :back
+    else
+      groups = Group.where(id: params['groups'].values, enterprise_id: current_user.enterprise_id)
+      groups.each { |group| GroupMemberListDownloadJob.perform_later(current_user.id, group.id, '') }
+      track_activity(@group, :export_sub_groups_members_list)
+      flash[:notice] = 'Please check your Secure Downloads section in a couple of minutes'
+      redirect_to :back
+    end
   end
 
   protected
