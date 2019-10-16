@@ -51,22 +51,35 @@ export default class RouteService {
     //       - parse with querystring library
   }
 
+  // Returns [title, isPathPrefix]
+  // title is null when not found
+  // isPathPrefix is true when the title that was found only has a pathPrefix and not a path
   findTitleForPath({ path, object = ROUTES, params = [], textArguments = {} }) {
     if (!object || typeof object !== 'object')
-      return null;
+      return [null, null];
 
-    if (Object.hasOwnProperty.call(object, 'path') && typeof object.path === 'function') {
-      if (object.path(...params) === path)
-        return intl.formatMessage(object.data.titleMessage, textArguments);
+    if (Object.hasOwnProperty.call(object, 'data')) {
+      if (Object.hasOwnProperty.call(object, 'path')) {
+        if (typeof object.path === 'function') {
+          if (object.path(...params) === path)
+            return [intl.formatMessage(object.data.titleMessage, textArguments), false];
+        } else if (object.path === path)
+          return [intl.formatMessage(object.data.titleMessage, textArguments), false];
+      } else if (Object.hasOwnProperty.call(object.data, 'pathPrefix'))
+        if (typeof object.data.pathPrefix === 'function') {
+          if (object.data.pathPrefix(...params) === path)
+            return [intl.formatMessage(object.data.titleMessage, textArguments), true];
+        } else if (object.data.pathPrefix === path)
+          return [intl.formatMessage(object.data.titleMessage, textArguments), true];
     } else {
       const subObjects = Object.values(object);
       for (const subObject of subObjects) {
-        const result = this.findTitleForPath({ path, object: subObject, params, textArguments });
+        const [result, isPathPrefix] = this.findTitleForPath({ path, object: subObject, params, textArguments });
         if (result)
-          return result;
+          return [result, isPathPrefix];
       }
     }
 
-    return null;
+    return [null, null];
   }
 }
