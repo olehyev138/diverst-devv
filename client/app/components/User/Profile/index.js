@@ -9,7 +9,7 @@ import {
 } from '@material-ui/core/index';
 import { withStyles } from '@material-ui/core/styles';
 
-import classNames from 'classnames';
+import EditIcon from '@material-ui/icons/Edit';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import messages from 'containers/User/messages';
@@ -65,6 +65,7 @@ export function Profile(props) {
               size='large'
               color='primary'
               className={classes.buttons}
+              startIcon={<EditIcon />}
             >
               <FormattedMessage {...messages.edit} />
             </Button>
