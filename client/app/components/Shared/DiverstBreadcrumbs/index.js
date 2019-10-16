@@ -46,7 +46,7 @@ export function DiverstBreadcrumbs(props) {
           {pathNames.map((value, index) => {
             const last = index === pathNames.length - 1;
             const to = `/${pathNames.slice(0, index + 1).join('/')}`;
-            const title = rs.findTitleForPath({
+            const [title, isPathPrefix] = rs.findTitleForPath({
               path: to,
               params: Object.values(rs.routeData.computedMatch.params),
               textArguments: customTexts()
@@ -55,7 +55,7 @@ export function DiverstBreadcrumbs(props) {
             if (!title)
               return undefined;
 
-            return last ? (
+            return last || isPathPrefix ? (
               <Typography
                 className={classes.breadcrumbCurrentPageText}
                 key={to}
