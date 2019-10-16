@@ -17,7 +17,9 @@ export function DiverstLoader(props) {
   return (
     <React.Fragment>
       <Slide direction='left' in={!isLoading} mountOnEnter unmountOnExit>
-        {props.children}
+        <div>
+          {props.children}
+        </div>
       </Slide>
 
       {isLoading ? (
