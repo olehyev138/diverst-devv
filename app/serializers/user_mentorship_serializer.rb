@@ -1,5 +1,6 @@
 class UserMentorshipSerializer < ApplicationRecordSerializer
-  attributes :id, :first_name, :last_name, :enterprise_id, :avatar_location, :mentors, :mentees
+  attributes :id, :first_name, :last_name, :enterprise_id, :avatar_location, :mentors, :mentees,
+             :accepting_mentor_requests, :accepting_mentee_requests, :mentorship_description
 
   has_many :mentors
   has_many :mentees
