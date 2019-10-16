@@ -51,11 +51,11 @@ export function LandingPage() {
           </Grid>
 
           <Grid item>
-            <div>
+            <React.Fragment>
               <Button color='primary'>
                 <Link to={ROUTES.session.login.path()}>Login</Link>
               </Button>
-            </div>
+            </React.Fragment>
           </Grid>
         </Grid>
       </Toolbar>
