@@ -19,7 +19,7 @@ const styles = theme => ({
 });
 
 const UserLayout = ({ component: Component, ...rest }) => {
-  const { classes, data, ...other } = rest;
+  const { classes, data, disableBreadcrumbs, ...other } = rest;
 
   return (
     <AuthenticatedLayout
@@ -32,7 +32,11 @@ const UserLayout = ({ component: Component, ...rest }) => {
           <Scrollbar>
             <Container>
               <div className={classes.content}>
-                <DiverstBreadcrumbs />
+                {disableBreadcrumbs !== true ? (
+                  <DiverstBreadcrumbs />
+                ) : (
+                  <React.Fragment />
+                )}
                 <Component pageTitle={data.titleMessage} {...other} />
               </div>
             </Container>
@@ -47,6 +51,7 @@ UserLayout.propTypes = {
   classes: PropTypes.object,
   component: PropTypes.elementType,
   pageTitle: PropTypes.object,
+  disableBreadcrumbs: PropTypes.bool,
 };
 
 export const StyledUserLayout = withStyles(styles)(UserLayout);
