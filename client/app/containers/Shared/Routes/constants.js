@@ -12,14 +12,14 @@ export const ROUTES = {
   // User
   user: {
     get root() { return this.home; },
-    edit: {
-      path: (userId = ':user_id') => `/user/${userId}/edit`,
+    show: {
+      path: (userId = ':user_id') => `/user/${userId}`,
       data: {
         titleMessage: messages.user.profile,
       }
     },
-    show: {
-      path: (userId = ':user_id') => `/user/${userId}`,
+    edit: {
+      path: (userId = ':user_id') => `/user/${userId}/edit`,
       data: {
         titleMessage: messages.user.edit,
       }
