@@ -25,7 +25,25 @@ const selectIsFetchingUsers = () => createSelector(
 
 const selectUser = () => createSelector(
   selectUsersDomain,
-  usersState => usersState.currentUser
+  userState => userState.currentUser
+);
+
+const selectFormUser = () => createSelector(
+  selectUsersDomain,
+  (usersState) => {
+    const user = usersState.currentUser;
+    if (user) {
+      const timezoneArray = user.timezones;
+      return produce(user, (draft) => {
+        draft.timezones = timezoneArray.map((element) => {
+          if (element[1] === user.time_zone)
+            draft.time_zone = { label: element[1], value: element[0] };
+          return { label: element[1], value: element[0] };
+        });
+      });
+    }
+    return null;
+  }
 );
 
 const selectPaginatedPosts = () => createSelector(
@@ -71,7 +89,7 @@ const selectFieldData = () => createSelector(
 
     return produce(fieldData, (draft) => {
       if (fieldData)
-        fieldData.forEach((datum) => {
+        draft.forEach((datum) => {
           datum.data = deserializeDatum(datum);
           datum.field.options_text = deserializeOptionsText(datum.field);
         });
@@ -83,7 +101,7 @@ export {
   selectUsersDomain, selectPaginatedUsers,
   selectUserTotal, selectUser, selectFieldData,
   selectIsFetchingUsers, selectIsLoadingPosts,
-  selectIsLoadingEvents, selectPaginatedPosts,
-  selectPostsTotal, selectPaginatedEvents,
-  selectEventsTotal,
+  selectIsLoadingEvents, selectFormUser,
+  selectPaginatedPosts, selectPostsTotal,
+  selectPaginatedEvents, selectEventsTotal,
 };

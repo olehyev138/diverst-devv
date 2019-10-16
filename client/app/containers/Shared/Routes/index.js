@@ -11,7 +11,7 @@ import {
   UserDashboardPage, MetricsDashboardListPage, MetricsDashboardCreatePage, MetricsDashboardEditPage, MetricsDashboardPage,
   CustomGraphCreatePage, CustomGraphEditPage, GroupManageLayout, GroupSettingsPage, CustomTextEditPage,
   UserNewsLinkPage, UserEventsPage, FoldersPage, FolderCreatePage, FolderEditPage, FolderPage, ResourceCreatePage,
-  ResourceEditPage,
+  ResourceEditPage, UserProfilePage
 } from './templates';
 
 // Paths
@@ -32,6 +32,8 @@ export default function Routes(props) {
       <UserLayout exact {...expandRoute(ROUTES.user.events)} component={UserEventsPage} />
       <UserLayout exact {...expandRoute(ROUTES.user.groups)} component={UserGroupListPage} />
       <UserLayout exact {...expandRoute(ROUTES.user.downloads)} component={PlaceholderPage} />
+      <UserLayout exact {...expandRoute(ROUTES.user.show)} component={UserProfilePage} />
+      <UserLayout exact {...expandRoute(ROUTES.user.edit)} component={UserEditPage} />
       <UserLayout {...expandRoute(ROUTES.user.mentorship)} component={PlaceholderPage} />
 
       { /* Admin */ }

@@ -15,6 +15,7 @@ import LoginPage from 'containers/Session/LoginPage/Loadable';
 /* User */
 import HomePage from 'containers/User/HomePage/Loadable';
 import UserGroupListPage from 'containers/Group/UserGroupListPage/Loadable';
+import UserProfilePage from 'containers/User/UserProfilePage/Loadable';
 import UserNewsLinkPage from 'containers/User/UserNewsFeedPage/Loadable';
 import UserEventsPage from 'containers/User/UserEventsPage/Loadable';
 
@@ -97,6 +98,6 @@ export {
   OutcomeEditPage, GroupMemberListPage, GroupMemberCreatePage, NotFoundPage, PlaceholderPage, GroupDashboardPage,
   UserDashboardPage, MetricsDashboardListPage, MetricsDashboardCreatePage, MetricsDashboardEditPage, MetricsDashboardPage,
   CustomGraphCreatePage, CustomGraphEditPage, GroupManageLayout, GroupSettingsPage, CustomTextEditPage,
-  UserNewsLinkPage, UserEventsPage,
-  FoldersPage, FolderCreatePage, FolderEditPage, FolderPage, ResourceCreatePage, ResourceEditPage,
+  UserNewsLinkPage, UserEventsPage, FoldersPage, FolderCreatePage, FolderEditPage, FolderPage, ResourceCreatePage,
+  ResourceEditPage, UserProfilePage
 };

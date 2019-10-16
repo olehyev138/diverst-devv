@@ -115,7 +115,7 @@ export class ApplicationHeader extends React.PureComponent {
   render() {
     const { menuAnchor } = this.state;
     const {
-      classes, enterprise, group, position, isAdmin
+      classes, enterprise, group, position, isAdmin, user
     } = this.props;
     const isMenuOpen = Boolean(menuAnchor);
 
@@ -158,7 +158,10 @@ export class ApplicationHeader extends React.PureComponent {
             )
           }
         </MenuItem>
-        <MenuItem onClick={this.handleProfileMenuClose}>
+        <MenuItem
+          component={WrappedNavLink}
+          to={ROUTES.user.show.path(user.id)}
+        >
           <ListItemIcon>
             <PermIdentityIcon />
           </ListItemIcon>

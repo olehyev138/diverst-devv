@@ -30,6 +30,12 @@ export default defineMessages({
     mentorship: {
       id: `${scope}.user.mentorship`,
     },
+    profile: {
+      id: `${scope}.user.profile`,
+    },
+    edit: {
+      id: `${scope}.user.edit`,
+    },
   },
   groups: {
     home: {

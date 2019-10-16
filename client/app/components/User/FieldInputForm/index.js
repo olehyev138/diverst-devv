@@ -12,12 +12,11 @@ import dig from 'object-dig';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { FieldArray, Formik, Form } from 'formik';
 import {
-  Button, Card, CardActions, CardContent, Grid,
-  TextField
+  Button, Card, CardActions, CardContent, Grid, Divider,
+  TextField, Typography
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
-import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import messages from 'containers/User/messages';
 import { buildValues } from 'utils/formHelpers';
 
@@ -36,21 +35,33 @@ export function FieldInputFormInner({ formikProps, ...props }) {
 
   return (
     <Card>
+      <CardContent>
+        <Typography component='h6'>
+          <FormattedMessage {...messages.fields} />
+        </Typography>
+        <Typography color='secondary' component='h2'>
+          <FormattedMessage {...messages.privacy} />
+        </Typography>
+      </CardContent>
       <Form>
         <FieldArray
           name='fields'
           render={_ => (
-            <CardContent>
+            <React.Fragment>
               {values.fieldData.map((fieldDatum, i) => (
-                <Grid item key={fieldDatum.id} className={props.classes.fieldInput}>
-                  {Object.entries(fieldDatum).length !== 0 && (
-                    <CustomField fieldDatum={fieldDatum} fieldDatumIndex={i} />
-                  )}
-                </Grid>
+                <div key={fieldDatum.id} className={props.classes.fieldInput}>
+                  <Divider />
+                  <CardContent>
+                    {Object.entries(fieldDatum).length !== 0 && (
+                      <CustomField fieldDatum={fieldDatum} fieldDatumIndex={i} />
+                    )}
+                  </CardContent>
+                </div>
               ))}
-            </CardContent>
+            </React.Fragment>
           )}
         />
+        <Divider />
         <CardActions>
           <Button
             color='primary'

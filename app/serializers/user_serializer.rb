@@ -1,5 +1,6 @@
 class UserSerializer < ApplicationRecordSerializer
-  attributes :enterprise, :last_name, :user_groups, :user_role, :avatar_location, :fields, :name, :news_link_ids
+  attributes :enterprise, :last_name, :user_groups, :user_role, :avatar_location, :fields, :news_link_ids, :name,
+             :last_initial, :timezones, :time_zone
 
   has_many :field_data
 
@@ -22,6 +23,15 @@ class UserSerializer < ApplicationRecordSerializer
     EnterpriseSerializer.new(object.enterprise).attributes
   end
 
+  def timezones
+    ActiveSupport::TimeZone.all.map { |tz| [tz.tzinfo.name, "(GMT#{tz.formatted_offset(true, '')}) #{tz.name}"] }
+  end
+
+  def time_zone
+    tz = ActiveSupport::TimeZone[ActiveSupport::TimeZone::MAPPING.key(object.time_zone)]
+    "(GMT#{tz.formatted_offset(true, '')}) #{tz.name}"
+  end
+
   def fields
     fields = object.enterprise.mobile_fields.map(&:field)
     fields_hash = []
@@ -34,9 +44,5 @@ class UserSerializer < ApplicationRecordSerializer
     end
 
     fields_hash
-  end
-
-  def last_name
-    "#{(object.last_name || '')[0].capitalize}."
   end
 end
