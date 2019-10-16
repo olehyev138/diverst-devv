@@ -24,7 +24,7 @@ const CustomText = (props) => {
         {fieldDatum.field.title}
       </Typography>
       <Typography color='secondary' component='h2' className={classes.data}>
-        {fieldDatum.data.value}
+        {fieldDatum.data ? fieldDatum.data : '(Not Entered)'}
       </Typography>
     </div>
   );

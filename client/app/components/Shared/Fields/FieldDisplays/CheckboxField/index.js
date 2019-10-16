@@ -25,15 +25,24 @@ const CustomCheckbox = (props) => {
         {fieldDatum.field.title}
       </Typography>
       <Typography color='secondary' component='h2'>
-        <List>
-          {fieldDatum.data.map((datum, i) => (
-            // eslint-disable-next-line react/no-array-index-key
-            <ListItem dense key={`fieldData${fieldDatum.id}-${i}`}>
-              <ArrowRightIcon fontSize='small' />
-              {`${datum.value}`}
+        {fieldDatum.data.length > 0 && (
+          <List>
+            {fieldDatum.data.map((datum, i) => (
+              // eslint-disable-next-line react/no-array-index-key
+              <ListItem dense key={`fieldData${fieldDatum.id}-${i}`}>
+                <ArrowRightIcon fontSize='small' />
+                {`${datum.value}`}
+              </ListItem>
+            ))}
+          </List>
+        )}
+        {fieldDatum.data.length <= 0 && (
+          <List>
+            <ListItem dense>
+              (Nothing Selected)
             </ListItem>
-          ))}
-        </List>
+          </List>
+        )}
       </Typography>
     </div>
   );

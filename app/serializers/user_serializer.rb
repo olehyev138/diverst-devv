@@ -24,12 +24,12 @@ class UserSerializer < ApplicationRecordSerializer
   end
 
   def timezones
-    ActiveSupport::TimeZone.all.map { |tz| [tz.tzinfo.name, "#{tz.name} (GMT#{tz.formatted_offset(true, '')})"] }
+    ActiveSupport::TimeZone.all.map { |tz| [tz.tzinfo.name, "(GMT#{tz.formatted_offset(true, '')}) #{tz.name}"] }
   end
 
   def time_zone
     tz = ActiveSupport::TimeZone[ActiveSupport::TimeZone::MAPPING.key(object.time_zone)]
-    "#{tz.name} (GMT#{tz.formatted_offset(true, '')})"
+    "(GMT#{tz.formatted_offset(true, '')}) #{tz.name}"
   end
 
   def fields
