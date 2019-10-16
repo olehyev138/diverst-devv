@@ -228,6 +228,11 @@ export function GroupLinks(props) {
             className={classes.navLink}
             activeClassName={classes.navLinkActive}
             to={ROUTES.group.manage.settings.index.path(rs.params('group_id'))}
+            isActive={(match, location) => !!matchPath(location.pathname, {
+              path: ROUTES.group.manage.index.data.pathPrefix(rs.params('group_id')),
+              exact: false,
+              strict: false,
+            })}
           >
             <Hidden smDown>
               <ManageIcon className={classes.navIcon} />
