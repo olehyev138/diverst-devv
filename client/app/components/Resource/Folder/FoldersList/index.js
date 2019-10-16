@@ -29,6 +29,8 @@ import DiverstPagination from 'components/Shared/DiverstPagination';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import DiverstLoader from 'components/Shared/DiverstLoader';
 
+import FolderListItem from 'components/Resource/Shared/FolderListItem';
+
 const styles = theme => ({
   folderListItem: {
     width: '100%',
@@ -36,9 +38,6 @@ const styles = theme => ({
   arrowRight: {
     color: theme.custom.colors.grey,
     marginRight: 8,
-  },
-  divider: {
-    marginTop: 12,
   },
   folderLink: {
     '&:hover': {
@@ -90,68 +89,11 @@ export function FoldersList(props, context) {
           {props.folders && Object.values(props.folders).map((item, i) => {
             return (
               <Grid item key={item.id} className={classes.folderListItem}>
-                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                <Card>
-                  <Grid container spacing={1} justify='space-between' alignItems='center'>
-                    <Grid item xs>
-                      <CardContent>
-                        <Link
-                          className={classes.folderLink}
-                          component={WrappedNavLink}
-                          to={props.links.folderShow(item)}
-                        >
-                          <Grid container spacing={1} alignItems='center'>
-                            <Grid item>
-                              <FolderIcon />
-                              { item.password_protected && (
-                                <LockIcon />
-                              )}
-                            </Grid>
-                            <Grid item xs>
-                              <Typography color='primary' variant='h6' component='h2'>
-                                {item.name}
-                              </Typography>
-                            </Grid>
-                          </Grid>
-                        </Link>
-                        <Divider className={classes.divider} />
-                      </CardContent>
-                      <CardActions>
-                        <Button
-                          size='small'
-                          color='primary'
-                          className={classes.folderLink}
-                          component={WrappedNavLink}
-                          to={props.links.folderEdit(item)}
-                        >
-                          <DiverstFormattedMessage {...messages.edit} />
-                        </Button>
-
-                        { !item.password_protected && (
-                          <Button
-                            size='small'
-                            className={classNames(classes.folderLink, classes.folderDeleteLink)}
-                            onClick={() => {
-                              // eslint-disable-next-line no-restricted-globals,no-alert
-                              if (confirm(props.intl.formatMessage(messages.confirm_delete)))
-                                props.deleteFolderBegin({
-                                  id: item.id,
-                                  folder: item,
-                                });
-                            }}
-                          >
-                            <DiverstFormattedMessage {...messages.delete} />
-                          </Button>
-                        )}
-                      </CardActions>
-                    </Grid>
-                    <Hidden xsDown>
-                      <Grid item>
-                        <KeyboardArrowRightIcon className={classes.arrowRight} />
-                      </Grid>
-                    </Hidden>
-                  </Grid>
-                </Card>
+                <FolderListItem
+                  item={item}
+                  deleteAction={props.deleteFolderBegin}
+                  links={props.links}
+                />
               </Grid>
             );
           })}
