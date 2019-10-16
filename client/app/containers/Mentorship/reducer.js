@@ -6,15 +6,15 @@
 
 import produce from 'immer/dist/immer';
 import {
-  GET_USERS_BEGIN, GET_USERS_SUCCESS,
-  GET_USERS_ERROR, GET_USER_SUCCESS, USER_UNMOUNT
-} from 'containers/User/constants';
+  GET_MENTORSHIP_USERS_BEGIN, GET_MENTORSHIP_USERS_SUCCESS,
+  GET_MENTORSHIP_USERS_ERROR, GET_MENTORSHIP_USER_SUCCESS, MENTORSHIP_USER_UNMOUNT
+} from 'containers/Mentorship/constants';
 
 export const initialState = {
   userList: {},
   userTotal: null,
   currentUser: null,
-  isFetchingUsers: true
+  isFetchingUsers: false
 };
 
 /* eslint-disable-next-line default-case, no-param-reassign */
@@ -22,21 +22,21 @@ function usersReducer(state = initialState, action) {
   /* eslint-disable consistent-return */
   return produce(state, (draft) => {
     switch (action.type) {
-      case GET_USERS_BEGIN:
+      case GET_MENTORSHIP_USERS_BEGIN:
         draft.isFetchingUsers = true;
         return;
-      case GET_USERS_SUCCESS:
+      case GET_MENTORSHIP_USERS_SUCCESS:
         draft.userList = formatUsers(action.payload.items);
         draft.userTotal = action.payload.total;
         draft.isFetchingUsers = false;
         break;
-      case GET_USERS_ERROR:
+      case GET_MENTORSHIP_USERS_ERROR:
         draft.isFetchingUsers = false;
         return;
-      case GET_USER_SUCCESS:
+      case GET_MENTORSHIP_USER_SUCCESS:
         draft.currentUser = action.payload.user;
         break;
-      case USER_UNMOUNT:
+      case MENTORSHIP_USER_UNMOUNT:
         return initialState;
     }
   });
