@@ -177,7 +177,7 @@ export const ROUTES = {
     },
     resources: {
       index: {
-        path: (groupId = ':group_id') => `/groups/${groupId}/resources`,
+        path: (groupId = ':group_id') => `/groups/${groupId}/folders`,
         data: {
           titleMessage: messages.groups.resources.index,
         }
@@ -314,7 +314,7 @@ export const ROUTES = {
       },
       resources: {
         index: {
-          path: () => '/admin/manage/resources',
+          path: () => '/admin/manage/folders',
           data: {
             titleMessage: messages.admin.manage.resources,
           }
