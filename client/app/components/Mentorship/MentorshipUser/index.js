@@ -227,6 +227,14 @@ export function Profile(props) {
                   <FormattedMessage {...mentorMessages.long.availability} />
                 </Typography>
                 <Typography color='secondary' component='h2' className={classes.data}>
+                  <Grid container>
+                    <Grid item xs>
+                      In your time zone
+                    </Grid>
+                    <Grid item xs>
+                      In their time zone
+                    </Grid>
+                  </Grid>
                   {user.availabilities && user.availabilities.length > 0 && (
                     <List>
                       {user.availabilities.map((time, i) => (
