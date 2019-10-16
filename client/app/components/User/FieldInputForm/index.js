@@ -37,10 +37,10 @@ export function FieldInputFormInner({ formikProps, ...props }) {
     <Card>
       <CardContent>
         <Typography component='h6'>
-          <FormattedMessage {...messages.fields} />
+          <DiverstFormattedMessage {...messages.fields} />
         </Typography>
         <Typography color='secondary' component='h2'>
-          <FormattedMessage {...messages.privacy} />
+          <DiverstFormattedMessage {...messages.privacy} />
         </Typography>
       </CardContent>
       <Form>
