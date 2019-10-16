@@ -21,7 +21,7 @@ import reducer from 'containers/Segment/reducer';
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
-import { selectPaginatedSegments, selectSegmentTotal } from 'containers/Segment/selectors';
+import { selectPaginatedSegments, selectSegmentTotal, selectIsLoading } from 'containers/Segment/selectors';
 import { getSegmentsBegin, segmentUnmount, deleteSegmentBegin } from 'containers/Segment/actions';
 
 import SegmentList from 'components/Segment/SegmentList';
@@ -58,6 +58,7 @@ export function SegmentListPage(props) {
       <SegmentList
         segments={props.segments}
         segmentTotal={props.segmentTotal}
+        isLoading={props.isLoading}
         deleteSegmentBegin={props.deleteSegmentBegin}
         handlePagination={handlePagination}
         links={links}
@@ -71,12 +72,14 @@ SegmentListPage.propTypes = {
   segmentUnmount: PropTypes.func.isRequired,
   segments: PropTypes.object,
   segmentTotal: PropTypes.number,
-  deleteSegmentBegin: PropTypes.func
+  deleteSegmentBegin: PropTypes.func,
+  isLoading: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
   segments: selectPaginatedSegments(),
   segmentTotal: selectSegmentTotal(),
+  isLoading: selectIsLoading(),
 });
 
 const mapDispatchToProps = {

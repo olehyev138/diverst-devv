@@ -11,9 +11,8 @@ exports[`<HomePage /> Should render and match the snapshot 1`] = `
       xs={true}
     >
       <h1>
-        <FormattedMessage
+        <Memo(DiverstFormattedMessage)
           id="diverst.containers.HomePage.events"
-          values={Object {}}
         />
       </h1>
       <Connect(Component) />
@@ -31,9 +30,8 @@ exports[`<HomePage /> Should render and match the snapshot 1`] = `
       xs={true}
     >
       <h1>
-        <FormattedMessage
+        <Memo(DiverstFormattedMessage)
           id="diverst.containers.HomePage.news"
-          values={Object {}}
         />
       </h1>
       <Connect(Component) />

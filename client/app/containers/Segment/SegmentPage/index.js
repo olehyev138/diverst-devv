@@ -27,6 +27,8 @@ import {
   selectPaginatedFields, selectPaginatedSelectFields
 } from 'containers/GlobalSettings/Field/selectors';
 
+import { Divider, Box } from '@material-ui/core';
+
 import RouteService from 'utils/routeHelpers';
 
 import SegmentForm from 'components/Segment/SegmentForm';
@@ -70,6 +72,9 @@ export function SegmentPage(props) {
         }}
         buttonText={segmentId[0] ? 'Update' : 'Create'}
       />
+      <Box mb={4} />
+      <Divider />
+      <Box mb={4} />
       <SegmentMemberListPage />
     </React.Fragment>
   );

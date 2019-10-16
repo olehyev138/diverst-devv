@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import dig from 'object-dig';
 
-import { FormattedMessage } from 'react-intl';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { Field, Formik, Form } from 'formik';
 import {
   Button, Card, CardActions, CardContent, TextField,
@@ -38,7 +38,7 @@ export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, 
               id='first_name'
               name='first_name'
               value={values.first_name}
-              label={<FormattedMessage {...messages.first_name} />}
+              label={<DiverstFormattedMessage {...messages.first_name} />}
             />
             <Field
               component={TextField}
@@ -48,7 +48,7 @@ export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, 
               id='last_name'
               name='last_name'
               value={values.last_name}
-              label={<FormattedMessage {...messages.last_name} />}
+              label={<DiverstFormattedMessage {...messages.last_name} />}
             />
             <Field
               component={TextField}
@@ -61,7 +61,7 @@ export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, 
               id='biography'
               name='biography'
               value={values.biography}
-              label={<FormattedMessage {...messages.biography} />}
+              label={<DiverstFormattedMessage {...messages.biography} />}
             />
             <Field
               component={Select}
@@ -69,7 +69,7 @@ export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, 
               id='time_zone'
               name='time_zone'
               margin='normal'
-              label={<FormattedMessage {...messages.time_zone} />}
+              label={<DiverstFormattedMessage {...messages.time_zone} />}
               value={values.time_zone}
               options={dig(props, 'user', 'timezones') || []}
               onChange={value => setFieldValue('time_zone', value)}
@@ -88,7 +88,7 @@ export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, 
               to={props.admin ? props.links.usersIndex : props.links.usersPath(values.id)}
               component={WrappedNavLink}
             >
-              <FormattedMessage {...messages.cancel} />
+              <DiverstFormattedMessage {...messages.cancel} />
             </Button>
           </CardActions>
         </Form>

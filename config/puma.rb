@@ -2,8 +2,8 @@ workers Integer(ENV['WEB_CONCURRENCY'] || 1)
 threads_count = Integer(ENV['MAX_THREADS'] || 5)
 threads threads_count, threads_count
 
-worker_timeout 20
-worker_shutdown_timeout 8
+worker_timeout !Rails.env.development? ? 20 : 999999999
+worker_shutdown_timeout !Rails.env.development? ? 8 : 999999999
 
 preload_app!
 

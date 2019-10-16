@@ -80,6 +80,9 @@ const styles = theme => ({
       display: 'none',
     },
   },
+  navLinkActive: {
+    backgroundColor: 'rgba(0, 0, 0, 0.14)',
+  },
 });
 
 export class ApplicationHeader extends React.PureComponent {
@@ -161,6 +164,7 @@ export class ApplicationHeader extends React.PureComponent {
         <MenuItem
           component={WrappedNavLink}
           to={ROUTES.user.show.path(user.id)}
+          activeClassName={classes.navLinkActive}
         >
           <ListItemIcon>
             <PermIdentityIcon />

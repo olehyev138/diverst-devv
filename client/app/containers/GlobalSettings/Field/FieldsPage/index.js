@@ -22,7 +22,7 @@ import { compose } from 'redux';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 
-import { selectPaginatedFields, selectFieldTotal } from 'containers/GlobalSettings/Field/selectors';
+import { selectPaginatedFields, selectFieldTotal, selectIsLoading } from 'containers/GlobalSettings/Field/selectors';
 import {
   getFieldsBegin, createFieldBegin, updateFieldBegin,
   fieldUnmount, deleteFieldBegin
@@ -59,6 +59,7 @@ export function FieldListPage(props) {
       <FieldList
         fields={props.fields}
         fieldTotal={props.fieldTotal}
+        isLoading={props.isLoading}
         createFieldBegin={props.createFieldBegin}
         updateFieldBegin={props.updateFieldBegin}
         deleteFieldBegin={props.deleteFieldBegin}
@@ -74,6 +75,7 @@ FieldListPage.propTypes = {
   updateFieldBegin: PropTypes.func.isRequired,
   fields: PropTypes.object,
   fieldTotal: PropTypes.number,
+  isLoading: PropTypes.bool,
   deleteFieldBegin: PropTypes.func,
   fieldUnmount: PropTypes.func.isRequired
 };
@@ -81,6 +83,7 @@ FieldListPage.propTypes = {
 const mapStateToProps = createStructuredSelector({
   fields: selectPaginatedFields(),
   fieldTotal: selectFieldTotal(),
+  isLoading: selectIsLoading(),
 });
 
 const mapDispatchToProps = {

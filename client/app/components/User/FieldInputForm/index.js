@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import dig from 'object-dig';
 
-import { FormattedMessage } from 'react-intl';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { FieldArray, Formik, Form } from 'formik';
 import {
   Button, Card, CardActions, CardContent, Grid, Divider,
@@ -37,10 +37,10 @@ export function FieldInputFormInner({ formikProps, ...props }) {
     <Card>
       <CardContent>
         <Typography component='h6'>
-          <FormattedMessage {...messages.fields} />
+          <DiverstFormattedMessage {...messages.fields} />
         </Typography>
         <Typography color='secondary' component='h2'>
-          <FormattedMessage {...messages.privacy} />
+          <DiverstFormattedMessage {...messages.privacy} />
         </Typography>
       </CardContent>
       <Form>

@@ -11,7 +11,7 @@ import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/Group/Outcome/reducer';
 import saga from 'containers/Group/Outcome/saga';
 
-import { selectPaginatedOutcomes, selectOutcomeTotal } from 'containers/Group/Outcome/selectors';
+import { selectPaginatedOutcomes, selectOutcomeTotal, selectIsLoading } from 'containers/Group/Outcome/selectors';
 import { getOutcomesBegin, outcomesUnmount } from 'containers/Group/Outcome/actions';
 
 import RouteService from 'utils/routeHelpers';
@@ -62,6 +62,7 @@ export function OutcomesPage(props) {
     <OutcomesList
       outcomes={props.outcomes}
       outcomeTotal={props.outcomeTotal}
+      isLoading={props.isLoading}
       defaultParams={defaultParams}
       handlePagination={handlePagination}
       links={links}
@@ -74,6 +75,7 @@ OutcomesPage.propTypes = {
   outcomesUnmount: PropTypes.func.isRequired,
   outcomes: PropTypes.array,
   outcomeTotal: PropTypes.number,
+  isLoading: PropTypes.bool,
   currentGroup: PropTypes.shape({
     id: PropTypes.number,
   }),
@@ -82,6 +84,7 @@ OutcomesPage.propTypes = {
 const mapStateToProps = createStructuredSelector({
   outcomes: selectPaginatedOutcomes(),
   outcomeTotal: selectOutcomeTotal(),
+  isLoading: selectIsLoading(),
 });
 
 const mapDispatchToProps = {

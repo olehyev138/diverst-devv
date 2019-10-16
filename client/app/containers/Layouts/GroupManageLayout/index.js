@@ -2,17 +2,13 @@ import React, { memo, useEffect, useState } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
 
-import Container from '@material-ui/core/Container';
 import { withStyles } from '@material-ui/core/styles';
-import RouteService from 'utils/routeHelpers';
 
 import GroupLayout from '../GroupLayout';
 import GroupManageLinks from 'components/Group/GroupManage/GroupManageLinks';
 
 const styles = theme => ({
-  toolbar: theme.mixins.toolbar,
   content: {
-    flexGrow: 1,
     padding: theme.spacing(3),
   },
 });
@@ -22,34 +18,29 @@ const ManagePages = Object.freeze({
   leaders: 1
 });
 
-const GroupManageLayout = ({ component: Component, ...rest }) => {
-  const { classes, data, computedMatch, location, ...other } = rest;
-  const [tab, setTab] = useState(ManagePages.settings);
+const GroupManageLayout = ({ component: Component, classes, ...rest }) => {
+  const { currentGroup, location, ...other } = rest;
 
   /* Get last element of current path, ie: '/group/:id/manage/settings -> settings */
   const currentPagePath = location.pathname.split('/').pop();
 
+  const [tab, setTab] = useState(ManagePages[currentPagePath]);
+
   useEffect(() => {
-    setTab(ManagePages[currentPagePath]);
+    if (tab !== ManagePages[currentPagePath])
+      setTab(ManagePages[currentPagePath]);
   }, [currentPagePath]);
 
   return (
-    <GroupLayout
-      {...rest}
-      component={matchProps => (
-        <React.Fragment>
-          <GroupManageLinks
-            currentTab={tab}
-            {...matchProps}
-          />
-          <Container>
-            <div className={classes.content}>
-              <Component currentGroup={matchProps.currentGroup} {...other} />
-            </div>
-          </Container>
-        </React.Fragment>
-      )}
-    />
+    <React.Fragment>
+      <GroupManageLinks
+        currentTab={tab}
+        {...rest}
+      />
+      <div className={classes.content}>
+        <Component currentGroup={currentGroup} {...other} />
+      </div>
+    </React.Fragment>
   );
 };
 

@@ -4,16 +4,20 @@ import PropTypes from 'prop-types';
 
 import { withStyles } from '@material-ui/core/styles';
 
+import classNames from 'classnames';
+
 // Perfect Scrollbar
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import PerfectScrollbar from 'react-perfect-scrollbar';
+
+const CONTENT_SCROLL_CLASS_NAME = 'primary-content-scroll-container';
 
 const styles = theme => ({
   scrollContent: {
     flexGrow: 1,
     marginTop: 3,
     marginBottom: 3,
-  }
+  },
 });
 
 export function Scrollbar(props) {
@@ -24,7 +28,7 @@ export function Scrollbar(props) {
       options={{
         suppressScrollX: true,
       }}
-      className={classes.scrollContent}
+      className={classNames(classes.scrollContent, CONTENT_SCROLL_CLASS_NAME)}
     >
       {props.children}
     </PerfectScrollbar>
@@ -35,6 +39,8 @@ Scrollbar.propTypes = {
   classes: PropTypes.object,
   children: PropTypes.any,
 };
+
+export { CONTENT_SCROLL_CLASS_NAME };
 
 export default compose(
   withStyles(styles)

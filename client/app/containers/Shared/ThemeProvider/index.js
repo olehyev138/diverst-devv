@@ -29,6 +29,9 @@ export class ThemeProvider extends React.PureComponent {
     const { primary, secondary } = this.props;
     const theme = createMuiTheme({
       palette: {
+        background: {
+          default: '#f5f5f5',
+        },
         primary: {
           main: primary,
           main25: `${primary}40`,
@@ -71,6 +74,8 @@ export class ThemeProvider extends React.PureComponent {
       // Custom theme additions & global styles should be placed here
       custom: {
         colors: {
+          offBlack: '#333333',
+          darkGrey: '#4c4c4c',
           grey: '#a7a8a9',
           lightGrey: '#dedfe0',
         },

@@ -11,12 +11,11 @@ import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/Resource/reducer';
 import saga from 'containers/Resource/saga';
 
-import { selectPaginatedFolders, selectFoldersTotal } from 'containers/Resource/selectors';
+import { selectPaginatedFolders, selectFoldersTotal, selectIsLoading } from 'containers/Resource/selectors';
 import { selectEnterprise } from 'containers/Shared/App/selectors';
 import { getFoldersBegin, foldersUnmount, deleteFolderBegin } from 'containers/Resource/actions';
 
 import RouteService from 'utils/routeHelpers';
-import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import FoldersList from 'components/Resource/Folder/FoldersList';
 import {
@@ -95,6 +94,7 @@ export function FoldersPage(props) {
       foldersTotal={props.foldersTotal}
       deleteFolderBegin={props.deleteFolderBegin}
       handlePagination={handlePagination}
+      isLoading={props.isLoading}
       links={links}
     />
   );
@@ -107,6 +107,7 @@ FoldersPage.propTypes = {
   foldersUnmount: PropTypes.func.isRequired,
   folders: PropTypes.array,
   foldersTotal: PropTypes.number,
+  isLoading: PropTypes.bool,
   currentGroup: PropTypes.shape({
     id: PropTypes.number,
   }),
@@ -119,6 +120,7 @@ const mapStateToProps = createStructuredSelector({
   folders: selectPaginatedFolders(),
   foldersTotal: selectFoldersTotal(),
   currentEnterprise: selectEnterprise(),
+  isLoading: selectIsLoading(),
 });
 
 const mapDispatchToProps = {

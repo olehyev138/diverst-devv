@@ -11,13 +11,11 @@ import reducer from 'containers/Resource/reducer';
 import saga from 'containers/Resource/saga';
 
 import RouteService from 'utils/routeHelpers';
-import { ROUTES } from 'containers/Shared/Routes/constants';
 
-import { selectGroup } from 'containers/Group/selectors';
 import { selectUser, selectEnterprise } from 'containers/Shared/App/selectors';
 import { selectFolder, selectValid,
   selectPaginatedFolders, selectPaginatedResources,
-  selectFoldersTotal, selectResourcesTotal,
+  selectFoldersTotal, selectResourcesTotal, selectIsLoading
 } from 'containers/Resource/selectors';
 
 import {
@@ -208,6 +206,7 @@ export function FolderPage(props) {
           handleResourcePagination={handleResourcePagination}
           handleFolderPagination={handleFolderPagination}
           resources={resources}
+          isLoading={props.isLoading}
           links={links}
         />
       )}
@@ -232,6 +231,7 @@ FolderPage.propTypes = {
   foldersTotal: PropTypes.number,
   resources: PropTypes.array,
   resourcesTotal: PropTypes.number,
+  isLoading: PropTypes.bool,
   valid: PropTypes.bool,
 };
 
@@ -243,6 +243,7 @@ const mapStateToProps = createStructuredSelector({
   foldersTotal: selectFoldersTotal(),
   resources: selectPaginatedResources(),
   resourcesTotal: selectResourcesTotal(),
+  isLoading: selectIsLoading(),
   valid: selectValid(),
 });
 

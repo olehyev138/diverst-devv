@@ -11,7 +11,7 @@ import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/User/reducer';
 import saga from 'containers/User/saga';
 
-import { selectPaginatedPosts, selectPostsTotal } from 'containers/User/selectors';
+import { selectPaginatedPosts, selectPostsTotal, selectIsLoadingPosts } from 'containers/User/selectors';
 import { selectUser } from 'containers/Shared/App/selectors';
 import { getUserPostsBegin, userUnmount } from 'containers/User/actions';
 
@@ -19,7 +19,6 @@ import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import NewsFeed from 'components/News/NewsFeed';
-
 
 export function NewsFeedPage(props, context) {
   useInjectReducer({ key: 'users', reducer });
@@ -31,7 +30,7 @@ export function NewsFeedPage(props, context) {
 
   const rs = new RouteService(useContext);
   const links = {
-    groupMessageIndex: (groupId, id) => ROUTES.group.news.messages.index.path(groupId, id)
+    groupMessageShow: (groupId, id) => ROUTES.group.news.messages.show.path(groupId, id)
   };
 
   useEffect(() => {
@@ -58,6 +57,7 @@ export function NewsFeedPage(props, context) {
         defaultParams={params}
         handlePagination={handlePagination}
         links={links}
+        isLoading={props.isLoading}
         readonly
       />
     </React.Fragment>
@@ -70,6 +70,7 @@ NewsFeedPage.propTypes = {
   userUnmount: PropTypes.func.isRequired,
   newsItems: PropTypes.array,
   newsItemsTotal: PropTypes.number,
+  isLoading: PropTypes.bool,
   currentGroup: PropTypes.shape({
     news_feed: PropTypes.shape({
       id: PropTypes.number
@@ -81,6 +82,7 @@ const mapStateToProps = createStructuredSelector({
   newsItems: selectPaginatedPosts(),
   newsItemsTotal: selectPostsTotal(),
   currentUser: selectUser(),
+  isLoading: selectIsLoadingPosts(),
 });
 
 const mapDispatchToProps = {
