@@ -5,6 +5,50 @@ class Api::V1::UsersController < DiverstController
     render json: User.find_user_by_email(self.diverst_request.user, params).enterprise
   end
 
+  def index
+    # Authorize with policy, only if policy exists
+    # TODO: Don't only authorize if policy exists as every model should have a policy.
+    # TODO: This is temporary to allow API calls to work properly without a policy during development.
+    base_authorize(klass)
+
+    render status: 200, json: klass.index(self.diverst_request, params.permit!), each_serializer: serializer(params)
+  rescue => e
+    raise BadRequestException.new(e.message)
+  end
+
+  def show
+    item = klass.find(params[:id])
+    base_authorize(item)
+
+    render status: 200, json: klass.show(self.diverst_request, params), serializer: serializer(params)
+  rescue => e
+    raise BadRequestException.new(e.message)
+  end
+
+  def update
+    params[klass.symbol] = payload
+    item = klass.find(params[:id])
+    base_authorize(item)
+
+    render status: 200, json: klass.update(self.diverst_request, params), serializer: serializer(params)
+  rescue => e
+    case e
+    when InvalidInputException
+      raise
+    else
+      raise BadRequestException.new(e.message)
+    end
+  end
+
+  def serializer(params)
+    case params[:serializer]
+    when 'mentorship'
+      UserMentorshipSerializer
+    else
+      UserSerializer
+    end
+  end
+
   def payload
     params
       .require(:user)

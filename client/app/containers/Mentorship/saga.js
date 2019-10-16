@@ -18,8 +18,13 @@ import {
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
+function addSerializer(action) {
+  action.payload.serializeer = 'mentorship';
+}
+
 export function* getUsers(action) {
   try {
+    addSerializer(action);
     const response = yield call(api.users.all.bind(api.users), action.payload);
     yield put(getUsersSuccess(response.data.page));
   } catch (err) {
@@ -32,6 +37,7 @@ export function* getUsers(action) {
 
 export function* getUser(action) {
   try {
+    addSerializer(action);
     const response = yield call(api.users.get.bind(api.users), action.payload.id);
     yield put(getUserSuccess(response.data));
   } catch (err) {
@@ -43,6 +49,7 @@ export function* getUser(action) {
 
 export function* updateUser(action) {
   try {
+    addSerializer(action);
     const payload = { user: action.payload };
     const response = yield call(api.users.update.bind(api.users), payload.user.id, payload);
 
