@@ -107,6 +107,9 @@ export default defineMessages({
       }
     },
     manage: {
+      index: {
+        id: `${scope}.group.manage.index`
+      },
       settings: {
         index: {
           id: `${scope}.group.manage.settings.index`,

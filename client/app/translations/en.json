@@ -47,6 +47,7 @@
   "diverst.containers.Routes.group.news.messages.show": "Group Message Comments",
   "diverst.containers.Routes.group.news.messages.new": "New Group Message",
   "diverst.containers.Routes.group.news.messages.edit": "Edit Group Message",
+  "diverst.containers.Routes.group.manage.index": "Manage",
   "diverst.containers.Routes.group.manage.settings.index": "Settings",
   "diverst.containers.Routes.group.manage.leaders.index": "Leaders",
   "diverst.containers.Routes.group.resources.index": "Resources",

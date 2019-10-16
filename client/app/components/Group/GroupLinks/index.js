@@ -232,7 +232,7 @@ export function GroupLinks(props) {
             <Hidden smDown>
               <ManageIcon className={classes.navIcon} />
             </Hidden>
-            Manage
+            <DiverstFormattedMessage {...ROUTES.group.manage.index.data.titleMessage} />
           </Button>
         </Toolbar>
       </PerfectScrollbar>
