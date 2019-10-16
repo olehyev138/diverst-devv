@@ -6,43 +6,87 @@
 
 import { defineMessages } from 'react-intl';
 
-export const scope = 'diverst.containers.User';
+export const scope = 'diverst.containers.Mentorship';
 
 export default defineMessages({
-  new: {
-    id: `${scope}.index.button.new`,
+  mentor: {
+    male: {
+      id: `${scope}.mentor_m`
+    },
+    female: {
+      id: `${scope}.mentor_f`
+    },
+    neutral: {
+      id: `${scope}.mentor`
+    },
+    isA: {
+      male: {
+        id: `${scope}.isA.mentor_m`,
+      },
+      female: {
+        id: `${scope}.isA.mentor_f`,
+      },
+      neutral: {
+        id: `${scope}.isA.mentor`,
+      },
+    },
   },
-  edit: {
-    id: `${scope}.index.button.edit`,
+  accepting: {
+    mentors: {
+      id: `${scope}.accepting.mentors`,
+    },
+    mentees: {
+      id: `${scope}.accepting.mentees`,
+    },
   },
-  delete: {
-    id: `${scope}.index.button.delete`,
+  mentee: {
+    male: {
+      id: `${scope}.mentee_m`
+    },
+    female: {
+      id: `${scope}.mentee_f`
+    },
+    neutral: {
+      id: `${scope}.mentee`
+    },
+    isA: {
+      male: {
+        id: `${scope}.isA.mentee_m`,
+      },
+      female: {
+        id: `${scope}.isA.mentee_f`,
+      },
+      neutral: {
+        id: `${scope}.isA.mentee`,
+      },
+    },
   },
-  delete_message: {
-    id: `${scope}.index.text.delete_message`,
+  short: {
+    interests: {
+      id: `${scope}.short.interests`
+    },
+    availability: {
+      id: `${scope}.short.availability`
+    },
+    goals: {
+      id: `${scope}.short.goals`
+    },
+    types: {
+      id: `${scope}.short.types`
+    }
   },
-  children_collapse: {
-    id: `${scope}.index.button.children_collapse`,
-  },
-  rows: {
-    id: `${scope}.index.button.rows`,
-  },
-  page: {
-    id: `${scope}.index.button.page`,
-  },
-  create: {
-    id: `${scope}.form.button.create`,
-  },
-  update: {
-    id: `${scope}.form.button.edit`,
-  },
-  cancel: {
-    id: `${scope}.form.button.cancel`,
-  },
-  first_name: {
-    id: `${scope}.form.input.first_name`,
-  },
-  last_name: {
-    id: `${scope}.form.input.last_name`,
+  long: {
+    interests: {
+      id: `${scope}.long.interests`
+    },
+    availability: {
+      id: `${scope}.long.availability`
+    },
+    goals: {
+      id: `${scope}.long.goals`
+    },
+    types: {
+      id: `${scope}.long.types`
+    }
   },
 });

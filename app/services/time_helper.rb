@@ -65,4 +65,16 @@ class TimeHelper
       'Sunday'
     end
   end
+
+  def self.timezone_conversion(time, source, target = Time.zone.name)
+    diff = time_zone_difference(source, target)
+    time + diff
+  end
+
+  def self.time_zone_difference(source, target)
+    time1 = Time.zone.now.in_time_zone(source)
+    time2 = Time.zone.now.in_time_zone(target)
+
+    time2.utc_offset - time1.utc_offset
+  end
 end

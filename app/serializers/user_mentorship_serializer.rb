@@ -1,10 +1,8 @@
 class UserMentorshipSerializer < ApplicationRecordSerializer
-  attributes :id, :first_name, :last_name, :enterprise_id, :avatar_location, :mentors, :mentees,
-             :accepting_mentor_requests, :accepting_mentee_requests, :mentorship_description
+  attributes :id, :email, :biography, :name, :first_name, :last_name, :enterprise_id, :avatar_location,
+             :mentor, :mentee, :mentors, :mentees, :accepting_mentor_requests, :accepting_mentee_requests, :mentorship_description,
+             :availabilities, :mentors, :mentees, :time_zone
 
-  has_many :mentors
-  has_many :mentees
-  has_many :availabilities
   has_many :mentorship_ratings
   has_many :mentoring_interests
   has_many :mentoring_sessions
@@ -16,13 +14,15 @@ class UserMentorshipSerializer < ApplicationRecordSerializer
 
   def mentors
     object.mentors.map do |m|
-      UserMentorshipLiteSerializer.new(m).as_json
+      p m.id
+      UserMentorshipLiteSerializer.new(m, scope: scope, scope_name: :scope).as_json
     end
   end
 
   def mentees
     object.mentees.map do |m|
-      UserMentorshipLiteSerializer.new(m).as_json
+      p m.id
+      UserMentorshipLiteSerializer.new(m, scope: scope, scope_name: :scope).as_json
     end
   end
 
@@ -32,5 +32,11 @@ class UserMentorshipSerializer < ApplicationRecordSerializer
 
   def excluded_keys
     [:password_digest]
+  end
+
+  def availabilities
+    object.availabilities.map do |ava|
+      MentorshipAvailabilitySerializer.new(ava, time_zone: scope[:current_user].time_zone).as_json
+    end
   end
 end

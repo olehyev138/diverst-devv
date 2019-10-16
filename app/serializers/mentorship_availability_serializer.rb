@@ -1,35 +1,27 @@
 class MentorshipAvailabilitySerializer < ApplicationRecordSerializer
-  attributes :start, :end, :day, :user_time_zone
+  attributes :start, :end, :day, :user_time_zone, :local_start, :local_end
 
   def serialize_all_fields
     true
   end
 
   def start
-    if object.start.is_a? ActiveSupport::TimeWithZone
-      TimeHelper.time_to_s(object.start)
-    else
-      object.start
-    end
+    object.start
   end
 
   def end
-    if object.end.is_a? ActiveSupport::TimeWithZone
-      TimeHelper.time_to_s(object.end)
-    else
-      object.end
-    end
-  end
-
-  def day
-    if object.day.is_a? Integer
-      TimeHelper.i_to_weekday(object.day)
-    else
-      object.day
-    end
+    object.end
   end
 
   def user_time_zone
     object.user.time_zone
+  end
+
+  def local_start
+    TimeHelper.timezone_conversion(object.start, user_time_zone, @instance_options[:time_zone])
+  end
+
+  def local_end
+    TimeHelper.timezone_conversion(object.end, user_time_zone, @instance_options[:time_zone])
   end
 end

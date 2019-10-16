@@ -19,7 +19,7 @@ import {
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 function addSerializer(action) {
-  action.payload.serializeer = 'mentorship';
+  action.payload.serializer = 'mentorship';
 }
 
 export function* getUsers(action) {
@@ -38,7 +38,7 @@ export function* getUsers(action) {
 export function* getUser(action) {
   try {
     addSerializer(action);
-    const response = yield call(api.users.get.bind(api.users), action.payload.id);
+    const response = yield call(api.users.get.bind(api.users), action.payload.id, { serializer: action.payload.serializer });
     yield put(getUserSuccess(response.data));
   } catch (err) {
     // TODO: intl message

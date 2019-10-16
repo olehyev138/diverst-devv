@@ -50,11 +50,23 @@ export const ROUTES = {
       }
     },
     mentorship: {
-      path: () => '/mentorship',
       data: {
         titleMessage: messages.user.mentorship,
+      },
+      home: {
+        path: () => '/mentorship',
+        data: {
+          titleMessage: messages.user.mentorship,
+        },
+      },
+      show: {
+        path: (userId = ':user_id') => `/mentorship/${userId}`,
+        data: {
+          titleMessage: messages.user.mentorship,
+        },
       }
-    },
+    }
+    ,
   },
 
   group: {

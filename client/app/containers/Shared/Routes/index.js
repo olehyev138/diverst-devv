@@ -10,7 +10,8 @@ import {
   OutcomeEditPage, GroupMemberListPage, GroupMemberCreatePage, NotFoundPage, PlaceholderPage, GroupDashboardPage,
   UserDashboardPage, MetricsDashboardListPage, MetricsDashboardCreatePage, MetricsDashboardEditPage, MetricsDashboardPage,
   CustomGraphCreatePage, CustomGraphEditPage, GroupManageLayout, GroupSettingsPage, CustomTextEditPage, FoldersPage,
-  FolderCreatePage, FolderEditPage, FolderPage, ResourceCreatePage, ResourceEditPage
+  FolderCreatePage, FolderEditPage, FolderPage, ResourceCreatePage, ResourceEditPage,
+  MentorshipProfilePage,
 } from './templates';
 
 // Paths
@@ -31,7 +32,10 @@ export default function Routes(props) {
       <UserLayout exact {...expandRoute(ROUTES.user.events)} component={PlaceholderPage} />
       <UserLayout exact {...expandRoute(ROUTES.user.groups)} component={UserGroupListPage} />
       <UserLayout exact {...expandRoute(ROUTES.user.downloads)} component={PlaceholderPage} />
-      <UserLayout {...expandRoute(ROUTES.user.mentorship)} component={PlaceholderPage} />
+
+      { /* User - Mentorship */ }
+      <UserLayout {...expandRoute(ROUTES.user.mentorship.show)} component={MentorshipProfilePage} />
+      <UserLayout {...expandRoute(ROUTES.user.mentorship.home)} component={PlaceholderPage} />
 
       { /* Admin */ }
       { /* Admin - Analyze */ }
