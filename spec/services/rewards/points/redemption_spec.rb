@@ -23,11 +23,6 @@ RSpec.describe Rewards::Points::Redemption do
         redemption.redeem
       end
 
-      it 'updates user credits' do
-        redemption.redeem
-        expect(user.credits).to eq 0
-      end
-
       it 'returns true' do
         expect(redemption.redeem).to be_truthy
       end

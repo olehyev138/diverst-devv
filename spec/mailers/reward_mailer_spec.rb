@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe RewardMailer, type: :mailer do
+  include ActionView::Helpers
+  
   let!(:responsible) { create(:user, first_name: 'Cali', last_name: "O'Connell") }
   let!(:user) { create(:user, first_name: 'Cali', last_name: "O'Connell") }
   let!(:reward) { create(:reward) }
@@ -13,7 +15,7 @@ RSpec.describe RewardMailer, type: :mailer do
     end
 
     it 'renders the subject' do
-      expect(mail.subject).to eq 'A reward was redeemed'
+      expect(mail.subject).to eq 'A request for reward redemption'
     end
 
     it 'renders the receiver email' do
@@ -28,7 +30,8 @@ RSpec.describe RewardMailer, type: :mailer do
       # user name with apostrophe will cause test to fail - ex: Cali O'Connell
       # so we escape the string
       name = CGI.escapeHTML("#{user.name}")
-      expect(mail.body.decoded).to include("The user #{ name } redeemed the prize #{ reward.label }. Please contact him.")
+      expect(mail.body.decoded).to include("The user #{name} has requested to redeem a prize #{reward.label}. Please visit #{link_to 'here', users_pending_rewards_users_url} to approve or deny request.
+".html_safe)
     end
   end
 

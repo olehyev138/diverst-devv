@@ -70,6 +70,7 @@ class User < BaseClass
   has_many :leading_groups, through: :group_leaders, source: :group
   has_many :user_reward_actions, dependent: :destroy
   has_many :reward_actions, through: :user_reward_actions
+  has_many :user_rewards
   has_many :rewards, foreign_key: :responsible_id, dependent: :destroy
   has_many :likes, dependent: :destroy
   has_many :csv_files
@@ -145,6 +146,14 @@ class User < BaseClass
   scope :mentees, -> { where(mentee: true) }
 
   accepts_nested_attributes_for :availabilities, allow_destroy: true
+
+  def pending_rewards
+    user_rewards.where(status: 0)
+  end
+
+  def redeemed_rewards
+    user_rewards.where(status: 1)
+  end
 
   def email_for_notification
     notifications_email.presence || email

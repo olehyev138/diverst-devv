@@ -277,6 +277,21 @@ RSpec.describe User do
     end
   end
 
+  describe '#pending_rewards' do
+    let!(:user) { create(:user) }
+    let!(:reward) { create(:reward, enterprise: user.enterprise, points: 10) }
+    let!(:pending_rewards) { create_list(:user_reward, 2, reward_id: reward.id, points: 10, user_id: user.id, status: 0) }
+    let!(:redeemed_rewards) { create_list(:user_reward, 2, reward_id: reward.id, points: 10, user_id: user.id, status: 1) }
+
+    it 'should return pending_rewards' do
+      expect(user.pending_rewards).to eq(pending_rewards)
+    end
+
+    it 'should return redeemed rewards' do
+      expect(user.redeemed_rewards).to eq(redeemed_rewards)
+    end
+  end
+
   describe '#email_for_notification' do
     let(:user) { create(:user, notifications_email: 'user@email.com') }
 

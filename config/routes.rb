@@ -71,6 +71,7 @@ Rails.application.routes.draw do
       get 'saml_logins'
       get 'users_points_ranking'
       get 'users_points_csv'
+      get 'users_pending_rewards'
     end
   end
 
@@ -536,7 +537,9 @@ Rails.application.routes.draw do
       end
 
       resources :rewards, only: [] do
-        resources :user_rewards, only: :create do
+        resources :user_rewards, only: [:create, :destroy] do
+          member { patch :approve_reward }
+
           collection do
             get :success
             get :error
