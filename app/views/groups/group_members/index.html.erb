@@ -14,10 +14,11 @@
 
               <% if @group.pending_users.enabled? %>
                 <% if @group.is_parent_group?%>
-                  <li><a href="#" data-toggle="modal" data-target="#exampleModal">
-                    <%= "Export Members of #{c_t(:sub_erg).pluralize}" %>
-                  </a>
-                   </li>
+                  <li>
+                    <%= link_to view_list_of_sub_groups_for_export_group_group_members_path, remote: true do %>
+                      <p>Export Members of <%= c_t(:sub_erg).pluralize %></p> 
+                    <% end %>
+                  </li> 
                 <% end %>
 
                 <% if @group.is_sub_group? %>
@@ -37,9 +38,11 @@
 
           <% if @group.pending_users.enabled? %>
             <% if @group.is_parent_group?%>
-              <li><a href="#" data-toggle="modal" data-target="#exampleModal">
-                    <%= "Export Members of #{c_t(:sub_erg).pluralize}" %>
-                  </a></li>
+              <li>
+                <%= link_to view_list_of_sub_groups_for_export_group_group_members_path, remote: true do %>
+                  <p>Export Members of <%= c_t(:sub_erg).pluralize %></p> 
+                <% end %>
+              </li> 
             <% end %>
 
             <% if @group.is_sub_group? %>
@@ -51,6 +54,7 @@
     </div>
   <% end %>
 </div>
+
 
 <div class="content__main">
   <%= search_form_for @q, url: group_group_members_path(@group), builder: SimpleForm::FormBuilder do |f| %>
@@ -119,41 +123,5 @@
   </div>
 </div>
 
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel"></h5>
-        <%= "List of #{c_t(:sub_erg).pluralize}" %>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        
-          <div class="card__section row">
-            <%= form_tag export_sub_groups_members_list_csv_group_group_members_path(@group), method: :post do %>
-              <% @group.children.each do |child| %>
-                
-                <div class="col md-6 mb10">
-                  <label class="control">                      
-                    <%= check_box_tag("groups[#{child.name.split(' ').join('_')}]", child.id, false, { class: "control__input" }) %>   
-                    <span class="control__indicator control__indicator--checkbox"></span><span class="control__label"><%= child.name %></span>
-                  </label>
-                </div>
-              <% end %>
-          </div>
-        
-          <br>
-        
-            <div class="modal-footer">
-              <%= submit_tag 'Export', class: 'btn btn-primary' %>
-            </div>
-          <% end %>    
-      </div>
-    </div>
-  </div>
-</div>
-
+<%= render 'groups/group_members/sub_groups_list_modal' %>
 <%= render partial: 'shared/select2_ajax_search.js.erb' %>
