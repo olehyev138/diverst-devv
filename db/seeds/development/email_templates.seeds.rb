@@ -99,7 +99,7 @@ after 'development:enterprise' do
             :name => 'Welcome Mailer',
             :mailer_name => 'welcome_mailer',
             :mailer_method => 'notification',
-            :content => "<p>Hello %{user.name},</p>\r\n\r\n<p>Welcome as a new member of %{group.name}! Select the link(s) below to access Diverst and discover the %{group.name} Home page.</p>\r\n",
+            :content => "<p>Hello %{user.name},</p>\r\n\r\n<p>Welcome as a new member of %{group.name}! Be sure to check our page often for latest news and messages and look forward to seeing you at our events!.</p>\r\n",
             :subject => "Hi %{user.name} and welcome to %{group.name}.",
             :description => "Email that goes out to group leaders when there are pending group members",
             :template => ""
