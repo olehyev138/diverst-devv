@@ -11,7 +11,7 @@ import { compose } from 'redux';
 import { Typography } from '@material-ui/core';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
-import { FormattedMessage } from 'react-intl';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Group/messages';
 
 export function GroupHome(props) {

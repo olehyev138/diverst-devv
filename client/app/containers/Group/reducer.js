@@ -8,7 +8,8 @@ import produce from 'immer/dist/immer';
 import {
   GET_GROUPS_ERROR, GET_GROUPS_SUCCESS,
   GET_GROUP_ERROR, GET_GROUP_SUCCESS,
-  GROUP_LIST_UNMOUNT, GROUP_FORM_UNMOUNT
+  GROUP_LIST_UNMOUNT, GROUP_FORM_UNMOUNT,
+  GET_GROUPS_BEGIN,
 } from 'containers/Group/constants';
 
 export const initialState = {
@@ -30,12 +31,15 @@ function groupsReducer(state = initialState, action) {
         draft.currentGroup = action.payload.group;
         draft.isLoading = false;
         break;
-      case GET_GROUPS_ERROR:
-        draft.isLoading = false;
+      case GET_GROUPS_BEGIN:
+        draft.isLoading = true;
         break;
       case GET_GROUPS_SUCCESS:
         draft.groupList = formatGroups(action.payload.items);
         draft.groupTotal = action.payload.total;
+        draft.isLoading = false;
+        break;
+      case GET_GROUPS_ERROR:
         draft.isLoading = false;
         break;
       case GROUP_LIST_UNMOUNT:

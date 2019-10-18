@@ -9,21 +9,17 @@ import React, {
 } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
-import Select from 'react-select';
 import { Field, Formik, Form } from 'formik';
-import { FormattedMessage } from 'react-intl';
 
-import WrappedNavLink from 'components/Shared/WrappedNavLink';
-import { ROUTES } from 'containers/Shared/Routes/constants';
-
-import messages from 'containers/Analyze/messages';
 import { buildValues, mapFields } from 'utils/formHelpers';
 
 import {
   Button, Card, CardActions, CardContent, Grid,
-  TextField, Hidden, FormControl
+  TextField, Hidden, FormControl, Divider
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+
+import DiverstSelect from 'components/Shared/DiverstSelect';
 
 const styles = theme => ({
 });
@@ -41,19 +37,21 @@ export function GroupScopeSelectInner({ handleSubmit, handleChange, handleBlur, 
     <Card>
       <Form>
         <CardContent>
-          <Select
+          <DiverstSelect
             name='group_select'
+            fullWidth
             id='group_select'
             label='Groups'
-            menuPortalTarget={document.body}
             isMulti
             options={props.groups}
             value={values.groups}
             onMenuOpen={groupSelectAction}
             onChange={v => setFieldValue('groups', v)}
             onInputChange={value => groupSelectAction(value)}
+            hideHelperText
           />
         </CardContent>
+        <Divider />
         <CardActions>
           <Button
             color='primary'

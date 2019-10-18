@@ -10,15 +10,16 @@ import Select from 'components/Shared/DiverstSelect';
 import { compose } from 'redux';
 import dig from 'object-dig';
 
-import { FormattedMessage } from 'react-intl';
 import { Field, Formik, Form } from 'formik';
 import {
-  Button, Card, CardActions, CardContent, TextField, Switch, FormControlLabel, FormControl, Grid
+  Button, Card, CardActions, CardContent, TextField, Switch, FormControlLabel, FormControl, Grid, Divider
 } from '@material-ui/core';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import messages from 'containers/Resource/Resource/messages';
 import { buildValues, mapFields } from 'utils/formHelpers';
+
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 
 /* eslint-disable object-curly-newline */
 export function ResourceFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
@@ -54,7 +55,7 @@ export function ResourceFormInner({ handleSubmit, handleChange, handleBlur, valu
             id='title'
             name='title'
             margin='normal'
-            label={<FormattedMessage {...messages.form.title} />}
+            label={<DiverstFormattedMessage {...messages.form.title} />}
             value={values.title}
           />
           <Field
@@ -62,7 +63,7 @@ export function ResourceFormInner({ handleSubmit, handleChange, handleBlur, valu
             fullWidth
             id='folder_id'
             name='folder_id'
-            label={<FormattedMessage {...messages.form.folder} />}
+            label={<DiverstFormattedMessage {...messages.form.folder} />}
             margin='normal'
             value={values.folder_id}
             options={props.selectFolders}
@@ -109,11 +110,12 @@ export function ResourceFormInner({ handleSubmit, handleChange, handleBlur, valu
               id='url'
               name='url'
               margin='normal'
-              label={<FormattedMessage {...messages.form.url} />}
+              label={<DiverstFormattedMessage {...messages.form.url} />}
               value={values.url}
             />
           )}
         </CardContent>
+        <Divider />
         <CardActions>
           <Button
             color='primary'
@@ -125,7 +127,7 @@ export function ResourceFormInner({ handleSubmit, handleChange, handleBlur, valu
             to={props.links.cancelPath}
             component={WrappedNavLink}
           >
-            <FormattedMessage {...messages.cancel} />
+            <DiverstFormattedMessage {...messages.cancel} />
           </Button>
         </CardActions>
       </Form>

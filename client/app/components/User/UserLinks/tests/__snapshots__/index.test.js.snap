@@ -40,9 +40,8 @@ exports[`<UserLinks /> <MobileNavMenu /> Should render and match the snapshot 1`
     <WithStyles(ForwardRef(ListItemIcon))>
       <HomeOutlinedIcon />
     </WithStyles(ForwardRef(ListItemIcon))>
-    <FormattedMessage
+    <Memo(DiverstFormattedMessage)
       id="diverst.containers.Routes.user.home"
-      values={Object {}}
     />
   </WithStyles(ForwardRef(MenuItem))>
   <WithStyles(ForwardRef(MenuItem))
@@ -57,9 +56,8 @@ exports[`<UserLinks /> <MobileNavMenu /> Should render and match the snapshot 1`
     <WithStyles(ForwardRef(ListItemIcon))>
       <WbIncandescentOutlinedIcon />
     </WithStyles(ForwardRef(ListItemIcon))>
-    <FormattedMessage
+    <Memo(DiverstFormattedMessage)
       id="diverst.containers.Routes.user.innovate"
-      values={Object {}}
     />
   </WithStyles(ForwardRef(MenuItem))>
   <WithStyles(ForwardRef(MenuItem))
@@ -74,9 +72,8 @@ exports[`<UserLinks /> <MobileNavMenu /> Should render and match the snapshot 1`
     <WithStyles(ForwardRef(ListItemIcon))>
       <QuestionAnswerOutlinedIcon />
     </WithStyles(ForwardRef(ListItemIcon))>
-    <FormattedMessage
+    <Memo(DiverstFormattedMessage)
       id="diverst.containers.Routes.user.news"
-      values={Object {}}
     />
   </WithStyles(ForwardRef(MenuItem))>
   <WithStyles(ForwardRef(MenuItem))
@@ -91,9 +88,8 @@ exports[`<UserLinks /> <MobileNavMenu /> Should render and match the snapshot 1`
     <WithStyles(ForwardRef(ListItemIcon))>
       <EventOutlinedIcon />
     </WithStyles(ForwardRef(ListItemIcon))>
-    <FormattedMessage
+    <Memo(DiverstFormattedMessage)
       id="diverst.containers.Routes.user.events"
-      values={Object {}}
     />
   </WithStyles(ForwardRef(MenuItem))>
   <WithStyles(ForwardRef(MenuItem))
@@ -108,9 +104,8 @@ exports[`<UserLinks /> <MobileNavMenu /> Should render and match the snapshot 1`
     <WithStyles(ForwardRef(ListItemIcon))>
       <GroupOutlinedIcon />
     </WithStyles(ForwardRef(ListItemIcon))>
-    <FormattedMessage
+    <Memo(DiverstFormattedMessage)
       id="diverst.containers.Routes.user.groups"
-      values={Object {}}
     />
   </WithStyles(ForwardRef(MenuItem))>
   <WithStyles(ForwardRef(MenuItem))
@@ -125,9 +120,8 @@ exports[`<UserLinks /> <MobileNavMenu /> Should render and match the snapshot 1`
     <WithStyles(ForwardRef(ListItemIcon))>
       <CloudDownloadOutlinedIcon />
     </WithStyles(ForwardRef(ListItemIcon))>
-    <FormattedMessage
+    <Memo(DiverstFormattedMessage)
       id="diverst.containers.Routes.user.downloads"
-      values={Object {}}
     />
   </WithStyles(ForwardRef(MenuItem))>
   <WithStyles(ForwardRef(MenuItem))
@@ -142,9 +136,8 @@ exports[`<UserLinks /> <MobileNavMenu /> Should render and match the snapshot 1`
     <WithStyles(ForwardRef(ListItemIcon))>
       <GroupWorkOutlinedIcon />
     </WithStyles(ForwardRef(ListItemIcon))>
-    <FormattedMessage
+    <Memo(DiverstFormattedMessage)
       id="diverst.containers.Routes.user.mentorship"
-      values={Object {}}
     />
   </WithStyles(ForwardRef(MenuItem))>
 </WithStyles(ForwardRef(Menu))>
@@ -167,9 +160,8 @@ exports[`<UserLinks /> <NavMenu /> Should render and match the snapshot 1`] = `
     >
       <HomeOutlinedIcon />
     </Hidden>
-    <FormattedMessage
+    <Memo(DiverstFormattedMessage)
       id="diverst.containers.Routes.user.home"
-      values={Object {}}
     />
   </WithStyles(ForwardRef(Button))>
   <WithStyles(ForwardRef(Button))
@@ -186,9 +178,8 @@ exports[`<UserLinks /> <NavMenu /> Should render and match the snapshot 1`] = `
     >
       <WbIncandescentOutlinedIcon />
     </Hidden>
-    <FormattedMessage
+    <Memo(DiverstFormattedMessage)
       id="diverst.containers.Routes.user.innovate"
-      values={Object {}}
     />
   </WithStyles(ForwardRef(Button))>
   <WithStyles(ForwardRef(Button))
@@ -205,9 +196,8 @@ exports[`<UserLinks /> <NavMenu /> Should render and match the snapshot 1`] = `
     >
       <QuestionAnswerOutlinedIcon />
     </Hidden>
-    <FormattedMessage
+    <Memo(DiverstFormattedMessage)
       id="diverst.containers.Routes.user.news"
-      values={Object {}}
     />
   </WithStyles(ForwardRef(Button))>
   <WithStyles(ForwardRef(Button))
@@ -224,9 +214,8 @@ exports[`<UserLinks /> <NavMenu /> Should render and match the snapshot 1`] = `
     >
       <EventOutlinedIcon />
     </Hidden>
-    <FormattedMessage
+    <Memo(DiverstFormattedMessage)
       id="diverst.containers.Routes.user.events"
-      values={Object {}}
     />
   </WithStyles(ForwardRef(Button))>
   <WithStyles(ForwardRef(Button))
@@ -243,9 +232,8 @@ exports[`<UserLinks /> <NavMenu /> Should render and match the snapshot 1`] = `
     >
       <GroupOutlinedIcon />
     </Hidden>
-    <FormattedMessage
+    <Memo(DiverstFormattedMessage)
       id="diverst.containers.Routes.user.groups"
-      values={Object {}}
     />
   </WithStyles(ForwardRef(Button))>
   <WithStyles(ForwardRef(Button))
@@ -262,9 +250,8 @@ exports[`<UserLinks /> <NavMenu /> Should render and match the snapshot 1`] = `
     >
       <CloudDownloadOutlinedIcon />
     </Hidden>
-    <FormattedMessage
+    <Memo(DiverstFormattedMessage)
       id="diverst.containers.Routes.user.downloads"
-      values={Object {}}
     />
   </WithStyles(ForwardRef(Button))>
   <WithStyles(ForwardRef(Button))
@@ -281,9 +268,8 @@ exports[`<UserLinks /> <NavMenu /> Should render and match the snapshot 1`] = `
     >
       <GroupWorkOutlinedIcon />
     </Hidden>
-    <FormattedMessage
+    <Memo(DiverstFormattedMessage)
       id="diverst.containers.Routes.user.mentorship"
-      values={Object {}}
     />
   </WithStyles(ForwardRef(Button))>
 </WithStyles(ForwardRef(Toolbar))>
@@ -302,9 +288,8 @@ exports[`<UserLinks /> Should render and match the snapshot 1`] = `
         <ArrowDropDownIcon
           className=""
         />
-        <FormattedMessage
+        <Memo(DiverstFormattedMessage)
           id="diverst.containers.Routes.user.home"
-          values={Object {}}
         />
       </WithStyles(ForwardRef(Button))>
     </WithStyles(ForwardRef(Toolbar))>

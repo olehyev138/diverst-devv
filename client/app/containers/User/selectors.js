@@ -25,7 +25,55 @@ const selectIsFetchingUsers = () => createSelector(
 
 const selectUser = () => createSelector(
   selectUsersDomain,
-  usersState => usersState.currentUser
+  userState => userState.currentUser
+);
+
+const selectFormUser = () => createSelector(
+  selectUsersDomain,
+  (usersState) => {
+    const user = usersState.currentUser;
+    if (user) {
+      const timezoneArray = user.timezones;
+      return produce(user, (draft) => {
+        draft.timezones = timezoneArray.map((element) => {
+          if (element[1] === user.time_zone)
+            draft.time_zone = { label: element[1], value: element[0] };
+          return { label: element[1], value: element[0] };
+        });
+      });
+    }
+    return null;
+  }
+);
+
+const selectPaginatedPosts = () => createSelector(
+  selectUsersDomain,
+  userState => userState.posts
+);
+
+const selectPostsTotal = () => createSelector(
+  selectUsersDomain,
+  userState => userState.postsTotal
+);
+
+const selectPaginatedEvents = () => createSelector(
+  selectUsersDomain,
+  userState => userState.events
+);
+
+const selectEventsTotal = () => createSelector(
+  selectUsersDomain,
+  userState => userState.eventsTotal
+);
+
+const selectIsLoadingPosts = () => createSelector(
+  selectUsersDomain,
+  userState => userState.isLoadingPosts
+);
+
+const selectIsLoadingEvents = () => createSelector(
+  selectUsersDomain,
+  userState => userState.isLoadingEvents
 );
 
 /*
@@ -41,7 +89,7 @@ const selectFieldData = () => createSelector(
 
     return produce(fieldData, (draft) => {
       if (fieldData)
-        fieldData.forEach((datum) => {
+        draft.forEach((datum) => {
           datum.data = deserializeDatum(datum);
           datum.field.options_text = deserializeOptionsText(datum.field);
         });
@@ -52,5 +100,8 @@ const selectFieldData = () => createSelector(
 export {
   selectUsersDomain, selectPaginatedUsers,
   selectUserTotal, selectUser, selectFieldData,
-  selectIsFetchingUsers
+  selectIsFetchingUsers, selectIsLoadingPosts,
+  selectIsLoadingEvents, selectFormUser,
+  selectPaginatedPosts, selectPostsTotal,
+  selectPaginatedEvents, selectEventsTotal,
 };

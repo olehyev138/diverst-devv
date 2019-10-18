@@ -10,15 +10,16 @@ import Select from 'components/Shared/DiverstSelect';
 import { compose } from 'redux';
 import dig from 'object-dig';
 
-import { FormattedMessage } from 'react-intl';
 import { Field, Formik, Form } from 'formik';
 import {
-  Button, Card, CardActions, CardContent, TextField, Switch, FormControlLabel, FormControl, Grid
+  Button, Card, CardActions, CardContent, TextField, Switch, FormControlLabel, FormControl, Grid, Divider
 } from '@material-ui/core';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import messages from 'containers/Resource/Folder/messages';
 import { buildValues, mapFields } from 'utils/formHelpers';
+
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 
 /* eslint-disable object-curly-newline */
 export function FolderFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
@@ -54,7 +55,7 @@ export function FolderFormInner({ handleSubmit, handleChange, handleBlur, values
             id='name'
             name='name'
             margin='normal'
-            label={<FormattedMessage {...messages.form.name} />}
+            label={<DiverstFormattedMessage {...messages.form.name} />}
             value={values.name}
           />
           <Field
@@ -62,7 +63,7 @@ export function FolderFormInner({ handleSubmit, handleChange, handleBlur, values
             fullWidth
             id='parent_id'
             name='parent_id'
-            label={<FormattedMessage {...messages.form.parent} />}
+            label={<DiverstFormattedMessage {...messages.form.parent} />}
             margin='normal'
             value={values.parent_id}
             options={props.selectFolders}
@@ -88,7 +89,6 @@ export function FolderFormInner({ handleSubmit, handleChange, handleBlur, values
                       onChange={handleChange}
                       id='password_protected'
                       name='password_protected'
-                      margin='normal'
                       checked={values.password_protected}
                       value={values.password_protected}
                     />
@@ -107,12 +107,13 @@ export function FolderFormInner({ handleSubmit, handleChange, handleBlur, values
                   name='password'
                   margin='normal'
                   value={values.password}
-                  label={<FormattedMessage {...messages.form.password} />}
+                  label={<DiverstFormattedMessage {...messages.form.password} />}
                 />
               </Grid>
             )}
           </Grid>
         </CardContent>
+        <Divider />
         <CardActions>
           <Button
             color='primary'
@@ -124,7 +125,7 @@ export function FolderFormInner({ handleSubmit, handleChange, handleBlur, values
             to={props.links.cancelLink}
             component={WrappedNavLink}
           >
-            <FormattedMessage {...messages.cancel} />
+            <DiverstFormattedMessage {...messages.cancel} />
           </Button>
         </CardActions>
       </Form>

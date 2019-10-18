@@ -11,7 +11,7 @@ import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import Select from 'react-select';
 import { Field, Formik, Form } from 'formik';
-import { FormattedMessage } from 'react-intl';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -21,7 +21,7 @@ import { buildValues, mapFields } from 'utils/formHelpers';
 
 import {
   Button, Card, CardActions, CardContent, Grid,
-  TextField, Hidden, FormControl
+  TextField, Hidden, FormControl, Divider, Box,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -38,34 +38,39 @@ const styles = theme => ({
 /* eslint-disable object-curly-newline */
 export function SegmentFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
   return (
-    <Card>
-      <Form>
-        <CardContent>
-          <Field
-            component={TextField}
-            onChange={handleChange}
-            fullWidth
-            id='name'
-            name='name'
-            label={<FormattedMessage {...messages.form.name} />}
-            value={values.name}
-          />
-        </CardContent>
-        <CardActions>
-          <Button
-            color='primary'
-            type='submit'
-          >
-            {buttonText}
-          </Button>
-        </CardActions>
-        <SegmentRulesList
-          values={values}
-          classes={props.classes}
-          {...props.ruleProps}
-        />
-      </Form>
-    </Card>
+    <React.Fragment>
+      <Card>
+        <Form>
+          <CardContent>
+            <Field
+              component={TextField}
+              onChange={handleChange}
+              fullWidth
+              required
+              id='name'
+              name='name'
+              label={<DiverstFormattedMessage {...messages.form.name} />}
+              value={values.name}
+            />
+          </CardContent>
+          <Divider />
+          <CardActions>
+            <Button
+              color='primary'
+              type='submit'
+            >
+              {buttonText}
+            </Button>
+          </CardActions>
+        </Form>
+      </Card>
+      <Box mb={3} />
+      <SegmentRulesList
+        values={values}
+        classes={props.classes}
+        {...props.ruleProps}
+      />
+    </React.Fragment>
   );
 }
 

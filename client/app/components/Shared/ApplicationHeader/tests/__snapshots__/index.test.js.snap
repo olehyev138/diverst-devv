@@ -115,7 +115,13 @@ exports[`<ApplicationHeader /> should render and match the snapshot 1`] = `
       Dashboard
     </WithStyles(ForwardRef(MenuItem))>
     <WithStyles(ForwardRef(MenuItem))
-      onClick={[Function]}
+      component={
+        Object {
+          "$$typeof": Symbol(react.forward_ref),
+          "render": [Function],
+        }
+      }
+      to="/user/:user_id"
     >
       <WithStyles(ForwardRef(ListItemIcon))>
         <PermIdentityIcon />

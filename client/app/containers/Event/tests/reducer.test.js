@@ -8,6 +8,7 @@ describe('eventsReducer', () => {
   let state;
   beforeEach(() => {
     state = {
+      isLoading: true,
       events: [],
       eventsTotal: null,
       currentEvent: null,
@@ -23,6 +24,7 @@ describe('eventsReducer', () => {
     const expected = produce(state, (draft) => {
       draft.events = [{ id: 37, name: 'dummy' }];
       draft.eventsTotal = 49;
+      draft.isLoading = false;
     });
 
     expect(
@@ -39,6 +41,7 @@ describe('eventsReducer', () => {
   it('handles the getEventSuccess action correctly', () => {
     const expected = produce(state, (draft) => {
       draft.currentEvent = { id: 67, name: 'dummy-2' };
+      draft.isLoading = false;
     });
 
     expect(

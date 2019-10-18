@@ -30,6 +30,12 @@ export default defineMessages({
     mentorship: {
       id: `${scope}.user.mentorship`,
     },
+    profile: {
+      id: `${scope}.user.profile`,
+    },
+    edit: {
+      id: `${scope}.user.edit`,
+    },
   },
   groups: {
     home: {
@@ -38,26 +44,89 @@ export default defineMessages({
     members: {
       index: {
         id: `${scope}.group.members.index`
-      }
+      },
+      new: {
+        id: `${scope}.group.members.new`
+      },
     },
     events: {
       index: {
         id: `${scope}.group.events.index`
+      },
+      show: {
+        id: `${scope}.group.events.show`
+      },
+      new: {
+        id: `${scope}.group.events.new`
+      },
+      edit: {
+        id: `${scope}.group.events.edit`
       }
+    },
+    resources: {
+      index: {
+        id: `${scope}.group.resources.index`
+      },
+      new: {
+        id: `${scope}.group.resources.new`
+      },
+      edit: {
+        id: `${scope}.group.resources.edit`
+      },
+      folders: {
+        new: {
+          id: `${scope}.group.resources.folders.new`
+        },
+        edit: {
+          id: `${scope}.group.resources.folders.edit`
+        },
+        show: {
+          id: `${scope}.group.resources.folders.show`
+        },
+      },
     },
     news: {
       index: {
         id: `${scope}.group.news.index`
-      }
+      },
+      messages: {
+        show: {
+          id: `${scope}.group.news.messages.show`
+        },
+        new: {
+          id: `${scope}.group.news.messages.new`
+        },
+        edit: {
+          id: `${scope}.group.news.messages.edit`
+        }
+      },
     },
     outcomes: {
       index: {
         id: `${scope}.group.outcomes.index`
+      },
+      new: {
+        id: `${scope}.group.outcomes.new`
+      },
+      edit: {
+        id: `${scope}.group.outcomes.edit`
       }
     },
-    resources: {
-      id: `${scope}.group.resources.index`
-    }
+    manage: {
+      index: {
+        id: `${scope}.group.manage.index`
+      },
+      settings: {
+        index: {
+          id: `${scope}.group.manage.settings.index`,
+        }
+      },
+      leaders: {
+        index: {
+          id: `${scope}.group.manage.leaders.index`,
+        }
+      },
+    },
   },
   admin: {
     analyze: {

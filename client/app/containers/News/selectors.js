@@ -18,7 +18,12 @@ const selectNewsItem = () => createSelector(
   newsState => newsState.currentNewsItem
 );
 
+const selectIsLoading = () => createSelector(
+  selectNewsDomain,
+  newsState => newsState.isLoading
+);
+
 export {
   selectNewsDomain, selectPaginatedNewsItems,
-  selectNewsItem, selectNewsItemsTotal
+  selectNewsItem, selectNewsItemsTotal, selectIsLoading
 };

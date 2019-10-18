@@ -13,7 +13,7 @@ import classNames from 'classnames';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import messages from 'containers/Analyze/Dashboards/MetricsDashboard/messages';
-import { FormattedMessage } from 'react-intl';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 
 import CustomGraphPage from 'containers/Analyze/Dashboards/MetricsDashboard/CustomGraph/CustomGraphPage';
 
@@ -68,7 +68,7 @@ export function MetricsDashboard(props) {
                   props.deleteMetricsDashboardBegin(metricsDashboard.id);
               }}
             >
-              <FormattedMessage {...messages.delete} />
+              <DiverstFormattedMessage {...messages.delete} />
             </Button>
             <Button
               component={WrappedNavLink}
@@ -78,7 +78,7 @@ export function MetricsDashboard(props) {
               color='primary'
               className={classes.buttons}
             >
-              <FormattedMessage {...messages.edit} />
+              <DiverstFormattedMessage {...messages.edit} />
             </Button>
           </Grid>
           <Grid item xs>

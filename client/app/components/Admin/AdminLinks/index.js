@@ -24,7 +24,7 @@ import LightbulbIcon from '@material-ui/icons/WbIncandescent';
 import HowToVoteIcon from '@material-ui/icons/HowToVote';
 import UsersCircleIcon from '@material-ui/icons/GroupWork';
 import { ROUTES } from 'containers/Shared/Routes/constants';
-import { FormattedMessage } from 'react-intl';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 
 const drawerWidth = 240;
 const styles = theme => ({
@@ -128,7 +128,7 @@ class AdminLinks extends React.PureComponent {
               <EqualizerIcon />
             </ListItemIcon>
             <ListItemText>
-              <FormattedMessage {...ROUTES.admin.analyze.index.data.titleMessage} />
+              <DiverstFormattedMessage {...ROUTES.admin.analyze.index.data.titleMessage} />
             </ListItemText>
             {this.state.analyze.open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
           </ListItem>
@@ -145,12 +145,11 @@ class AdminLinks extends React.PureComponent {
                   <ListIcon />
                 </ListItemIcon>
                 <ListItemText>
-                  <FormattedMessage {...ROUTES.admin.analyze.overview.data.titleMessage} />
+                  <DiverstFormattedMessage {...ROUTES.admin.analyze.overview.data.titleMessage} />
                 </ListItemText>
               </MenuItem>
               <MenuItem
                 component={WrappedNavLink}
-                exact
                 to={ROUTES.admin.analyze.users.path()}
                 className={classes.nested}
                 activeClassName={classes.navLinkActive}
@@ -159,12 +158,11 @@ class AdminLinks extends React.PureComponent {
                   <ListIcon />
                 </ListItemIcon>
                 <ListItemText>
-                  <FormattedMessage {...ROUTES.admin.analyze.users.data.titleMessage} />
+                  <DiverstFormattedMessage {...ROUTES.admin.analyze.users.data.titleMessage} />
                 </ListItemText>
               </MenuItem>
               <MenuItem
                 component={WrappedNavLink}
-                exact
                 to={ROUTES.admin.analyze.groups.path()}
                 className={classes.nested}
                 activeClassName={classes.navLinkActive}
@@ -173,12 +171,11 @@ class AdminLinks extends React.PureComponent {
                   <ListIcon />
                 </ListItemIcon>
                 <ListItemText>
-                  <FormattedMessage {...ROUTES.admin.analyze.groups.data.titleMessage} />
+                  <DiverstFormattedMessage {...ROUTES.admin.analyze.groups.data.titleMessage} />
                 </ListItemText>
               </MenuItem>
               <MenuItem
                 component={WrappedNavLink}
-                exact
                 to={ROUTES.admin.analyze.custom.index.path()}
                 className={classes.nested}
                 activeClassName={classes.navLinkActive}
@@ -198,7 +195,7 @@ class AdminLinks extends React.PureComponent {
               <DeviceHubIcon />
             </ListItemIcon>
             <ListItemText>
-              <FormattedMessage {...ROUTES.admin.manage.index.data.titleMessage} />
+              <DiverstFormattedMessage {...ROUTES.admin.manage.index.data.titleMessage} />
             </ListItemText>
             {this.state.manage.open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
           </ListItem>
@@ -206,7 +203,6 @@ class AdminLinks extends React.PureComponent {
             <List disablePadding>
               <MenuItem
                 component={WrappedNavLink}
-                exact
                 to={ROUTES.admin.manage.groups.index.path()}
                 className={classes.nested}
                 activeClassName={classes.navLinkActive}
@@ -215,12 +211,11 @@ class AdminLinks extends React.PureComponent {
                   <ListIcon />
                 </ListItemIcon>
                 <ListItemText>
-                  <FormattedMessage {...ROUTES.admin.manage.groups.index.data.titleMessage} />
+                  <DiverstFormattedMessage {...ROUTES.admin.manage.groups.index.data.titleMessage} />
                 </ListItemText>
               </MenuItem>
               <MenuItem
                 component={WrappedNavLink}
-                exact
                 to={ROUTES.admin.manage.segments.index.path()}
                 className={classes.nested}
                 activeClassName={classes.navLinkActive}
@@ -229,13 +224,12 @@ class AdminLinks extends React.PureComponent {
                   <ListIcon />
                 </ListItemIcon>
                 <ListItemText>
-                  <FormattedMessage {...ROUTES.admin.manage.segments.index.data.titleMessage} />
+                  <DiverstFormattedMessage {...ROUTES.admin.manage.segments.index.data.titleMessage} />
                 </ListItemText>
               </MenuItem>
               <MenuItem
                 component={WrappedNavLink}
-                exact
-                to={ROUTES.admin.manage.resources.folders.index.path()}
+                to={ROUTES.admin.manage.resources.index.path()}
                 className={classes.nested}
                 activeClassName={classes.navLinkActive}
               >
@@ -243,7 +237,7 @@ class AdminLinks extends React.PureComponent {
                   <ListIcon />
                 </ListItemIcon>
                 <ListItemText>
-                  <FormattedMessage {...ROUTES.admin.manage.resources.folders.index.data.titleMessage} />
+                  <DiverstFormattedMessage {...ROUTES.admin.manage.resources.index.data.titleMessage} />
                 </ListItemText>
               </MenuItem>
             </List>
@@ -284,7 +278,7 @@ class AdminLinks extends React.PureComponent {
               <SettingsIcon />
             </ListItemIcon>
             <ListItemText>
-              <FormattedMessage {...ROUTES.admin.system.index.data.titleMessage} />
+              <DiverstFormattedMessage {...ROUTES.admin.system.index.data.titleMessage} />
             </ListItemText>
             {this.state.system.open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
           </ListItem>
@@ -292,7 +286,6 @@ class AdminLinks extends React.PureComponent {
             <List disablePadding>
               <MenuItem
                 component={WrappedNavLink}
-                exact
                 to={ROUTES.admin.system.globalSettings.fields.index.path()}
                 className={classes.nested}
                 activeClassName={classes.navLinkActive}
@@ -306,7 +299,6 @@ class AdminLinks extends React.PureComponent {
               </MenuItem>
               <MenuItem
                 component={WrappedNavLink}
-                exact
                 to={ROUTES.admin.system.users.index.path()}
                 className={classes.nested}
                 activeClassName={classes.navLinkActive}
@@ -315,12 +307,11 @@ class AdminLinks extends React.PureComponent {
                   <ListIcon />
                 </ListItemIcon>
                 <ListItemText>
-                  <FormattedMessage {...ROUTES.admin.system.users.index.data.titleMessage} />
+                  <DiverstFormattedMessage {...ROUTES.admin.system.users.index.data.titleMessage} />
                 </ListItemText>
               </MenuItem>
               <MenuItem
                 component={WrappedNavLink}
-                exact
                 to='#'
                 className={classes.nested}
                 activeClassName={classes.navLinkActive}
@@ -334,7 +325,6 @@ class AdminLinks extends React.PureComponent {
               </MenuItem>
               <MenuItem
                 component={WrappedNavLink}
-                exact
                 to='#'
                 className={classes.nested}
                 activeClassName={classes.navLinkActive}

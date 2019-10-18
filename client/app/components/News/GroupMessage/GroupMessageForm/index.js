@@ -9,10 +9,10 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import dig from 'object-dig';
 
-import { FormattedMessage } from 'react-intl';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { Field, Formik, Form } from 'formik';
 import {
-  Button, Card, CardActions, CardContent, TextField
+  Button, Card, CardActions, CardContent, TextField, Divider
 } from '@material-ui/core';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
@@ -29,21 +29,29 @@ export function GroupMessageFormInner({ handleSubmit, handleChange, handleBlur, 
             component={TextField}
             onChange={handleChange}
             fullWidth
+            required
             id='subject'
             name='subject'
-            label={<FormattedMessage {...messages.subject} />}
+            margin='normal'
+            label={<DiverstFormattedMessage {...messages.subject} />}
             value={values.subject}
           />
           <Field
             component={TextField}
             onChange={handleChange}
+            required
             fullWidth
+            multiline
+            rows={4}
+            variant='outlined'
             id='content'
             name='content'
+            margin='normal'
             value={values.content}
-            label={<FormattedMessage {...messages.content} />}
+            label={<DiverstFormattedMessage {...messages.content} />}
           />
         </CardContent>
+        <Divider />
         <CardActions>
           <Button
             color='primary'
@@ -55,7 +63,7 @@ export function GroupMessageFormInner({ handleSubmit, handleChange, handleBlur, 
             to={props.links.newsFeedIndex}
             component={WrappedNavLink}
           >
-            <FormattedMessage {...messages.cancel} />
+            <DiverstFormattedMessage {...messages.cancel} />
           </Button>
         </CardActions>
       </Form>

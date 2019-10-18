@@ -4,24 +4,19 @@
  *
  */
 
-import React, {
-  memo, useRef, useState, useEffect
-} from 'react';
-import { NavLink } from 'react-router-dom';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
 import {
-  Button, Card, CardActions, CardContent, Grid,
-  TextField, Hidden, FormControl
+  Button, Card, CardActions, CardContent, Divider
 } from '@material-ui/core';
-import Select from 'react-select';
+import Select from 'components/Shared/DiverstSelect';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { Field, Formik, Form } from 'formik';
-import { ROUTES } from 'containers/Shared/Routes/constants';
 
-import { FormattedMessage } from 'react-intl';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Group/GroupMembers/messages';
 
 import { buildValues, mapFields } from 'utils/formHelpers';
@@ -46,6 +41,7 @@ export function GroupMemberFormInner({ handleSubmit, handleChange, handleBlur, v
             name='member_ids'
             label='New Members'
             isMulti
+            margin='normal'
             value={values.member_ids}
             options={props.selectUsers}
             onMenuOpen={usersSelectAction}
@@ -54,18 +50,19 @@ export function GroupMemberFormInner({ handleSubmit, handleChange, handleBlur, v
             onBlur={() => setFieldTouched('member_ids', true)}
           />
         </CardContent>
+        <Divider />
         <CardActions>
           <Button
             color='primary'
             type='submit'
           >
-            <FormattedMessage {...messages.create} />
+            <DiverstFormattedMessage {...messages.create} />
           </Button>
           <Button
             to={props.links.groupMembersIndex}
             component={WrappedNavLink}
           >
-            <FormattedMessage {...messages.cancel} />
+            <DiverstFormattedMessage {...messages.cancel} />
           </Button>
         </CardActions>
       </Form>

@@ -14,18 +14,18 @@ export function getFolderShowPath(folder) {
 
 export function getFolderIndexPathFromObject(folder) {
   if (folder.group_id)
-    return ROUTES.group.resources.folders.index.path(folder.group_id);
+    return ROUTES.group.resources.index.path(folder.group_id);
   if (folder.enterprise_id)
-    return ROUTES.admin.manage.resources.folders.index.path();
+    return ROUTES.admin.manage.resources.index.path();
 
   return null;
 }
 
 export function getFolderIndexPathFromType(type, groupId = null) {
   if (type === 'group')
-    return ROUTES.group.resources.folders.index.path(groupId);
+    return ROUTES.group.resources.index.path(groupId);
   if (type === 'admin')
-    return ROUTES.admin.manage.resources.folders.index.path();
+    return ROUTES.admin.manage.resources.index.path();
 
   return null;
 }
@@ -110,9 +110,9 @@ export function getResourceNewPath(folder) {
     return null;
 
   if (folder.group_id)
-    return ROUTES.group.resources.resources.new.path(folder.group_id, folder.id);
+    return ROUTES.group.resources.new.path(folder.group_id, folder.id);
   if (folder.enterprise_id)
-    return ROUTES.admin.manage.resources.resources.new.path(folder.id);
+    return ROUTES.admin.manage.resources.new.path(folder.id);
 
   return null;
 }
@@ -122,9 +122,9 @@ export function getResourceEditPath(folder, resource) {
     return null;
 
   if (folder.group_id)
-    return ROUTES.group.resources.resources.edit.path(folder.group_id, folder.id, resource.id);
+    return ROUTES.group.resources.edit.path(folder.group_id, folder.id, resource.id);
   if (folder.enterprise_id)
-    return ROUTES.admin.manage.resources.resources.edit.path(folder.id, resource.id);
+    return ROUTES.admin.manage.resources.edit.path(folder.id, resource.id);
 
   return null;
 }
