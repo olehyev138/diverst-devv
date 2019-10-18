@@ -13,10 +13,10 @@ import classNames from 'classnames';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { height } from '@material-ui/system';
-import { FormattedMessage } from 'react-intl';
-import messages from 'containers/User/messages';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import userMessages from 'containers/User/messages';
 import appMessages from 'containers/Shared/App/messages';
-import mentorMessages from 'containers/Mentorship/messages';
+import messages from 'containers/Mentorship/messages';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
@@ -59,7 +59,7 @@ export function MentorshipMenu(props) {
                 color='primary'
                 size='large'
               >
-                Profile
+                <DiverstFormattedMessage {...messages.menu.profile} />
               </Button>
             </CardContent>
             <CardContent>
@@ -69,7 +69,7 @@ export function MentorshipMenu(props) {
                 color='primary'
                 size='large'
               >
-                Edit Profile
+                <DiverstFormattedMessage {...messages.menu.editProfile} />
               </Button>
             </CardContent>
             <CardContent>
@@ -77,7 +77,7 @@ export function MentorshipMenu(props) {
                 to={ROUTES.user.mentorship.show.path(user.id)}
                 component={WrappedNavLink}
               >
-                Mentors
+                <DiverstFormattedMessage {...messages.menu.mentors} />
               </Button>
             </CardContent>
             <CardContent>
@@ -85,7 +85,7 @@ export function MentorshipMenu(props) {
                 to={ROUTES.user.mentorship.show.path(user.id)}
                 component={WrappedNavLink}
               >
-                Mentees
+                <DiverstFormattedMessage {...messages.menu.mentees} />
               </Button>
             </CardContent>
             <CardContent>
@@ -93,7 +93,7 @@ export function MentorshipMenu(props) {
                 to={ROUTES.user.mentorship.show.path(user.id)}
                 component={WrappedNavLink}
               >
-                Requests
+                <DiverstFormattedMessage {...messages.menu.requests} />
               </Button>
             </CardContent>
             <CardContent>
@@ -101,7 +101,7 @@ export function MentorshipMenu(props) {
                 to={ROUTES.user.mentorship.show.path(user.id)}
                 component={WrappedNavLink}
               >
-                Schedule A Session
+                <DiverstFormattedMessage {...messages.menu.schedule} />
               </Button>
             </CardContent>
             <CardContent>
@@ -109,7 +109,7 @@ export function MentorshipMenu(props) {
                 to={ROUTES.user.mentorship.show.path(user.id)}
                 component={WrappedNavLink}
               >
-                Upcoming Sessions
+                <DiverstFormattedMessage {...messages.menu.upcoming} />
               </Button>
             </CardContent>
             <CardContent>
@@ -117,7 +117,7 @@ export function MentorshipMenu(props) {
                 to={ROUTES.user.mentorship.show.path(user.id)}
                 component={WrappedNavLink}
               >
-                Session Feedback
+                <DiverstFormattedMessage {...messages.menu.feedback} />
               </Button>
             </CardContent>
           </React.Fragment>

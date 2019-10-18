@@ -89,4 +89,53 @@ export default defineMessages({
       id: `${scope}.long.types`
     }
   },
+  form: {
+    mentor: {
+      id: `${scope}.form.mentor`
+    },
+    mentee: {
+      id: `${scope}.form.mentee`
+    },
+    acceptMentor: {
+      id: `${scope}.form.acceptMentor`
+    },
+    acceptMentee: {
+      id: `${scope}.form.acceptMentee`
+    },
+    mentorDescription: {
+      id: `${scope}.form.mentorDescription`
+    },
+    interests: {
+      id: `${scope}.form.interests`
+    },
+    types: {
+      id: `${scope}.form.types`
+    },
+  },
+  menu: {
+    profile: {
+      id: `${scope}.menu.profile`
+    },
+    editProfile: {
+      id: `${scope}.menu.editProfile`
+    },
+    mentors: {
+      id: `${scope}.menu.mentors`
+    },
+    mentees: {
+      id: `${scope}.menu.mentees`
+    },
+    requests: {
+      id: `${scope}.menu.requests`
+    },
+    schedule: {
+      id: `${scope}.menu.schedule`
+    },
+    upcoming: {
+      id: `${scope}.menu.upcoming`
+    },
+    feedback: {
+      id: `${scope}.menu.feedback`
+    },
+  }
 });

@@ -33,13 +33,13 @@ export default function Routes(props) {
       <UserLayout exact {...expandRoute(ROUTES.user.events)} component={UserEventsPage} />
       <UserLayout exact {...expandRoute(ROUTES.user.groups)} component={UserGroupListPage} />
       <UserLayout exact {...expandRoute(ROUTES.user.downloads)} component={PlaceholderPage} />
-
-      { /* User - Mentorship */ }
-      <UserLayout {...expandRoute(ROUTES.user.mentorship.edit)} component={MentorshipEditProfilePage} />
       <UserLayout {...expandRoute(ROUTES.user.edit)} component={UserEditPage} />
       <UserLayout {...expandRoute(ROUTES.user.show)} component={UserProfilePage} disableBreadcrumbs />
-      <UserLayout {...expandRoute(ROUTES.user.mentorship.show)} component={MentorshipProfilePage} />
-      <UserLayout {...expandRoute(ROUTES.user.mentorship.home)} component={PlaceholderPage} />
+
+      { /* User - Mentorship */ }
+      <UserLayout {...expandRoute(ROUTES.user.mentorship.edit)} component={MentorshipEditProfilePage} disableBreadcrumbs />
+      <UserLayout {...expandRoute(ROUTES.user.mentorship.show)} component={MentorshipProfilePage} disableBreadcrumbs />
+      <UserLayout {...expandRoute(ROUTES.user.mentorship.home)} component={PlaceholderPage} disableBreadcrumbs />
 
       { /* Admin */ }
       { /* Admin - Analyze */ }

@@ -68,7 +68,7 @@ export function MentorshipUserFormInner({ handleSubmit, handleChange, handleBlur
                                 value={values.mentor}
                               />
                             )}
-                            label='Are you interested in being a mentor?'
+                            label={<DiverstFormattedMessage {...messages.form.mentor} />}
                           />
                         </FormControl>
                       </Grid>
@@ -93,7 +93,7 @@ export function MentorshipUserFormInner({ handleSubmit, handleChange, handleBlur
                                 value={values.mentee}
                               />
                             )}
-                            label='Are you interested in being mentored?'
+                            label={<DiverstFormattedMessage {...messages.form.mentee} />}
                           />
                         </FormControl>
                       </Grid>
@@ -121,7 +121,7 @@ export function MentorshipUserFormInner({ handleSubmit, handleChange, handleBlur
                                 value={values.accepting_mentor_requests}
                               />
                             )}
-                            label='Accept requests to be a mentor?'
+                            label={<DiverstFormattedMessage {...messages.form.acceptMentor} />}
                           />
                         </FormControl>
                       </Grid>
@@ -146,7 +146,7 @@ export function MentorshipUserFormInner({ handleSubmit, handleChange, handleBlur
                                 value={values.accepting_mentee_requests}
                               />
                             )}
-                            label='Accept requests to be a mentee?'
+                            label={<DiverstFormattedMessage {...messages.form.acceptMentee} />}
                           />
                         </FormControl>
                       </Grid>
@@ -177,7 +177,7 @@ export function MentorshipUserFormInner({ handleSubmit, handleChange, handleBlur
                       id='mentorship_description'
                       name='mentorship_description'
                       value={values.mentorship_description}
-                      label='Please describe specifically why you want to be mentored:'
+                      label={<DiverstFormattedMessage {...messages.form.mentorDescription} />}
                     />
                     {/* Interest */}
                     <Select
@@ -186,7 +186,7 @@ export function MentorshipUserFormInner({ handleSubmit, handleChange, handleBlur
                       isMulti
                       fullWidth
                       margin='normal'
-                      label='In what areas are you interested in providing mentorship or being mentored in?'
+                      label={<DiverstFormattedMessage {...messages.form.interests} />}
                       value={values.mentoring_interest_ids}
                       options={dig(props, 'user', 'interest_options')}
                       onChange={value => setFieldValue('mentoring_interest_ids', value)}
@@ -198,7 +198,7 @@ export function MentorshipUserFormInner({ handleSubmit, handleChange, handleBlur
                       isMulti
                       fullWidth
                       margin='normal'
-                      label='What type of mentoring do you prefer?'
+                      label={<DiverstFormattedMessage {...messages.form.types} />}
                       value={values.mentoring_type_ids}
                       options={dig(props, 'user', 'type_options')}
                       onChange={value => setFieldValue('mentoring_type_ids', value)}
