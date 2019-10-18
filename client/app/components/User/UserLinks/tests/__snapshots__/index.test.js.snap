@@ -274,7 +274,7 @@ exports[`<UserLinks /> <NavMenu /> Should render and match the snapshot 1`] = `
         "render": [Function],
       }
     }
-    to="/mentorship"
+    to="/mentorship/1"
   >
     <Hidden
       smDown={true}
