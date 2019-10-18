@@ -155,6 +155,7 @@ export function EventsPage(props) {
       handlePagination={handlePagination}
       isLoading={props.isLoading}
       links={links}
+      loaderProps={props.loaderProps}
       readonly
     />
   );
@@ -166,6 +167,7 @@ EventsPage.propTypes = {
   events: PropTypes.array,
   eventsTotal: PropTypes.number,
   isLoading: PropTypes.bool,
+  loaderProps: PropTypes.object,
   currentGroup: PropTypes.shape({
     id: PropTypes.number,
   }),

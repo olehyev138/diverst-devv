@@ -43,7 +43,13 @@ export class HomePage extends React.PureComponent {
             <h1 className={classes.title}>
               <DiverstFormattedMessage {...messages.events} />
             </h1>
-            <EventsPage />
+            <EventsPage
+              loaderProps={{
+                transitionProps: {
+                  direction: 'right',
+                },
+              }}
+            />
           </Grid>
           <Grid item xs='auto'>
             <Divider orientation='vertical' />
