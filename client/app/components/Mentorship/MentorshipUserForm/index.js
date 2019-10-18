@@ -23,189 +23,201 @@ import userMessages from 'containers/User/messages';
 import appMessages from 'containers/Shared/App/messages';
 import { buildValues, mapFields } from 'utils/formHelpers';
 import { withStyles } from '@material-ui/core/styles';
+import MentorshipMenu from 'components/Mentorship/MentorshipMenu';
 
 /* eslint-disable object-curly-newline */
 export function MentorshipUserFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
   const days = [...Array(7).keys()].map(day => ({ label: props.intl.formatMessage(appMessages.days_of_week[day]), value: day }));
   return (
-    <Card>
-      <Form>
-        <CardContent>
-          {/* Mentorship? */}
-          <Grid container>
-            <Grid item xs>
-              <FormControl
-                variant='outlined'
-                margin='normal'
-                fullWidth
-              >
-                <FormControlLabel
-                  labelPlacement='top'
-                  checked={values.mentor}
-                  control={(
-                    <Field
-                      component={Switch}
-                      color='primary'
-                      onChange={handleChange}
-                      id='mentor'
-                      name='mentor'
-                      margin='normal'
-                      checked={values.mentor}
-                      value={values.mentor}
-                    />
-                  )}
-                  label='Are you interested in being a mentor?'
-                />
-              </FormControl>
-            </Grid>
-            <Grid item xs>
-              <FormControl
-                variant='outlined'
-                margin='normal'
-                fullWidth
-              >
-                <FormControlLabel
-                  labelPlacement='top'
-                  checked={values.mentee}
-                  control={(
-                    <Field
-                      component={Switch}
-                      color='primary'
-                      onChange={handleChange}
-                      id='mentee'
-                      name='mentee'
-                      margin='normal'
-                      checked={values.mentee}
-                      value={values.mentee}
-                    />
-                  )}
-                  label='Are you interested in being mentored?'
-                />
-              </FormControl>
-            </Grid>
-          </Grid>
-          {/* Mentorship Accepting? */}
-          <Grid container>
-            <Grid item xs>
-              <FormControl
-                variant='outlined'
-                margin='normal'
-                fullWidth
-              >
-                <FormControlLabel
-                  labelPlacement='top'
-                  checked={values.accepting_mentor_requests}
-                  control={(
-                    <Field
-                      component={Switch}
-                      color='primary'
-                      onChange={handleChange}
-                      id='accepting_mentor_requests'
-                      name='accepting_mentor_requests'
-                      margin='normal'
-                      checked={values.accepting_mentor_requests}
-                      value={values.accepting_mentor_requests}
-                    />
-                  )}
-                  label='Accept requests to be a mentor?'
-                />
-              </FormControl>
-            </Grid>
-            <Grid item xs>
-              <FormControl
-                variant='outlined'
-                margin='normal'
-                fullWidth
-              >
-                <FormControlLabel
-                  labelPlacement='top'
-                  checked={values.accepting_mentee_requests}
-                  control={(
-                    <Field
-                      component={Switch}
-                      color='primary'
-                      onChange={handleChange}
-                      id='accepting_mentee_requests'
-                      name='accepting_mentee_requests'
-                      margin='normal'
-                      checked={values.accepting_mentee_requests}
-                      value={values.accepting_mentee_requests}
-                    />
-                  )}
-                  label='Accept requests to be a mentee?'
-                />
-              </FormControl>
-            </Grid>
-          </Grid>
-          {/* Availability? */}
-          {/* <Field */}
-          {/*  component={Select} */}
-          {/*  fullWidth */}
-          {/*  id={`availabilities[${0}].day` } */}
-          {/*  name={`availabilities[${0}].day`} */}
-          {/*  margin='normal' */}
-          {/*  label='Sonic The Hedgehog' */}
-          {/*  value={values.availabilities ? values.availabilities[0].day : null} */}
-          {/*  options={days || []} */}
-          {/*  onChange={value => setFieldValue(`availabilities[${0}].day`, value)} */}
-          {/*  onBlur={() => setFieldTouched(`availabilities[${0}].day`, true)} */}
-          {/* /> */}
+    <React.Fragment>
+      <Grid container>
+        <Grid item xs={4}>
+          <CardContent>
+            <MentorshipMenu
+              user={props.user}
+            />
+          </CardContent>
+        </Grid>
+        <Grid item xs={8}>
+          <CardContent>
+            { props.user && (
+              <Card>
+                <Form>
+                  <CardContent>
+                    {/* Mentorship? */}
+                    <Grid container>
+                      <Grid item xs>
+                        <FormControl
+                          variant='outlined'
+                          margin='normal'
+                          fullWidth
+                        >
+                          <FormControlLabel
+                            labelPlacement='top'
+                            checked={values.mentor}
+                            control={(
+                              <Field
+                                component={Switch}
+                                color='primary'
+                                onChange={handleChange}
+                                id='mentor'
+                                name='mentor'
+                                margin='normal'
+                                checked={values.mentor}
+                                value={values.mentor}
+                              />
+                            )}
+                            label='Are you interested in being a mentor?'
+                          />
+                        </FormControl>
+                      </Grid>
+                      <Grid item xs>
+                        <FormControl
+                          variant='outlined'
+                          margin='normal'
+                          fullWidth
+                        >
+                          <FormControlLabel
+                            labelPlacement='top'
+                            checked={values.mentee}
+                            control={(
+                              <Field
+                                component={Switch}
+                                color='primary'
+                                onChange={handleChange}
+                                id='mentee'
+                                name='mentee'
+                                margin='normal'
+                                checked={values.mentee}
+                                value={values.mentee}
+                              />
+                            )}
+                            label='Are you interested in being mentored?'
+                          />
+                        </FormControl>
+                      </Grid>
+                    </Grid>
+                    {/* Mentorship Accepting? */}
+                    <Grid container>
+                      <Grid item xs>
+                        <FormControl
+                          variant='outlined'
+                          margin='normal'
+                          fullWidth
+                        >
+                          <FormControlLabel
+                            labelPlacement='top'
+                            checked={values.accepting_mentor_requests}
+                            control={(
+                              <Field
+                                component={Switch}
+                                color='primary'
+                                onChange={handleChange}
+                                id='accepting_mentor_requests'
+                                name='accepting_mentor_requests'
+                                margin='normal'
+                                checked={values.accepting_mentor_requests}
+                                value={values.accepting_mentor_requests}
+                              />
+                            )}
+                            label='Accept requests to be a mentor?'
+                          />
+                        </FormControl>
+                      </Grid>
+                      <Grid item xs>
+                        <FormControl
+                          variant='outlined'
+                          margin='normal'
+                          fullWidth
+                        >
+                          <FormControlLabel
+                            labelPlacement='top'
+                            checked={values.accepting_mentee_requests}
+                            control={(
+                              <Field
+                                component={Switch}
+                                color='primary'
+                                onChange={handleChange}
+                                id='accepting_mentee_requests'
+                                name='accepting_mentee_requests'
+                                margin='normal'
+                                checked={values.accepting_mentee_requests}
+                                value={values.accepting_mentee_requests}
+                              />
+                            )}
+                            label='Accept requests to be a mentee?'
+                          />
+                        </FormControl>
+                      </Grid>
+                    </Grid>
+                    {/* Availability? */}
+                    {/* <Field */}
+                    {/*  component={Select} */}
+                    {/*  fullWidth */}
+                    {/*  id={`availabilities[${0}].day` } */}
+                    {/*  name={`availabilities[${0}].day`} */}
+                    {/*  margin='normal' */}
+                    {/*  label='Sonic The Hedgehog' */}
+                    {/*  value={values.availabilities ? values.availabilities[0].day : null} */}
+                    {/*  options={days || []} */}
+                    {/*  onChange={value => setFieldValue(`availabilities[${0}].day`, value)} */}
+                    {/*  onBlur={() => setFieldTouched(`availabilities[${0}].day`, true)} */}
+                    {/* /> */}
 
-          {/* Mentor Bio */}
-          <Field
-            component={TextField}
-            onChange={handleChange}
-            fullWidth
-            margin='normal'
-            multiline
-            rows={4}
-            variant='outlined'
-            id='mentorship_description'
-            name='mentorship_description'
-            value={values.mentorship_description}
-            label='Please describe specifically why you want to be mentored:'
-          />
-          {/* Interest */}
-          <Select
-            name='mentoring_interest_ids'
-            id='mentoring_interest_ids'
-            isMulti
-            fullWidth
-            margin='normal'
-            label='In what areas are you interested in providing mentorship or being mentored in?'
-            value={values.mentoring_interest_ids}
-            options={dig(props, 'user', 'interest_options')}
-            onChange={value => setFieldValue('mentoring_interest_ids', value)}
-          />
-          {/* Types */}
-          <Select
-            name='mentoring_type_ids'
-            id='mentoring_type_ids'
-            isMulti
-            fullWidth
-            margin='normal'
-            label='What type of mentoring do you prefer?'
-            value={values.mentoring_type_ids}
-            options={dig(props, 'user', 'type_options')}
-            onChange={value => setFieldValue('mentoring_type_ids', value)}
-          />
-        </CardContent>
-        <CardActions>
-          <Button
-            color='primary'
-            type='submit'
-          >
-            Submit
-          </Button>
-          <Button
-            to='/'
-            component={WrappedNavLink}
-          >
-            <FormattedMessage {...userMessages.cancel} />
-          </Button>
-        </CardActions>
-      </Form>
-    </Card>
+                    {/* Mentor Bio */}
+                    <Field
+                      component={TextField}
+                      onChange={handleChange}
+                      fullWidth
+                      margin='normal'
+                      multiline
+                      rows={4}
+                      variant='outlined'
+                      id='mentorship_description'
+                      name='mentorship_description'
+                      value={values.mentorship_description}
+                      label='Please describe specifically why you want to be mentored:'
+                    />
+                    {/* Interest */}
+                    <Select
+                      name='mentoring_interest_ids'
+                      id='mentoring_interest_ids'
+                      isMulti
+                      fullWidth
+                      margin='normal'
+                      label='In what areas are you interested in providing mentorship or being mentored in?'
+                      value={values.mentoring_interest_ids}
+                      options={dig(props, 'user', 'interest_options')}
+                      onChange={value => setFieldValue('mentoring_interest_ids', value)}
+                    />
+                    {/* Types */}
+                    <Select
+                      name='mentoring_type_ids'
+                      id='mentoring_type_ids'
+                      isMulti
+                      fullWidth
+                      margin='normal'
+                      label='What type of mentoring do you prefer?'
+                      value={values.mentoring_type_ids}
+                      options={dig(props, 'user', 'type_options')}
+                      onChange={value => setFieldValue('mentoring_type_ids', value)}
+                    />
+                  </CardContent>
+                  <CardActions>
+                    <Button
+                      color='primary'
+                      type='submit'
+                    >
+                      Submit
+                    </Button>
+                  </CardActions>
+                </Form>
+              </Card>
+            )}
+          </CardContent>
+        </Grid>
+      </Grid>
+    </React.Fragment>
   );
 }
 
