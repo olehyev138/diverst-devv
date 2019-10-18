@@ -32,7 +32,7 @@ export function CustomTextFormInner({ handleSubmit, handleChange, handleBlur, va
                 margin='normal'
                 id='erg'
                 name='erg'
-                label={<DiverstFormattedMessage {...messages.erg} />}
+                label={<DiverstFormattedMessage {...messages.texts.erg} />}
                 value={values.erg}
               />
             </Grid>
@@ -43,7 +43,7 @@ export function CustomTextFormInner({ handleSubmit, handleChange, handleBlur, va
                 margin='normal'
                 id='program'
                 name='program'
-                label={<DiverstFormattedMessage {...messages.program} />}
+                label={<DiverstFormattedMessage {...messages.texts.program} />}
                 value={values.program}
               />
             </Grid>
@@ -54,7 +54,7 @@ export function CustomTextFormInner({ handleSubmit, handleChange, handleBlur, va
                 margin='normal'
                 id='structure'
                 name='structure'
-                label={<DiverstFormattedMessage {...messages.structure} />}
+                label={<DiverstFormattedMessage {...messages.texts.structure} />}
                 value={values.structure}
               />
             </Grid>
@@ -65,7 +65,7 @@ export function CustomTextFormInner({ handleSubmit, handleChange, handleBlur, va
                 margin='normal'
                 id='outcome'
                 name='outcome'
-                label={<DiverstFormattedMessage {...messages.outcome} />}
+                label={<DiverstFormattedMessage {...messages.texts.outcome} />}
                 value={values.outcome}
               />
             </Grid>
@@ -76,7 +76,7 @@ export function CustomTextFormInner({ handleSubmit, handleChange, handleBlur, va
                 margin='normal'
                 id='badge'
                 name='badge'
-                label={<DiverstFormattedMessage {...messages.badge} />}
+                label={<DiverstFormattedMessage {...messages.texts.badge} />}
                 value={values.badge}
               />
             </Grid>
@@ -87,7 +87,7 @@ export function CustomTextFormInner({ handleSubmit, handleChange, handleBlur, va
                 margin='normal'
                 id='segment'
                 name='segment'
-                label={<DiverstFormattedMessage {...messages.segment} />}
+                label={<DiverstFormattedMessage {...messages.texts.segment} />}
                 value={values.segment}
               />
             </Grid>
@@ -98,7 +98,7 @@ export function CustomTextFormInner({ handleSubmit, handleChange, handleBlur, va
                 margin='normal'
                 id='dci_full_title'
                 name='dci_full_title'
-                label={<DiverstFormattedMessage {...messages.dci_full_title} />}
+                label={<DiverstFormattedMessage {...messages.texts.dci_full_title} />}
                 value={values.dci_full_title}
               />
             </Grid>
@@ -109,7 +109,7 @@ export function CustomTextFormInner({ handleSubmit, handleChange, handleBlur, va
                 margin='normal'
                 id='dci_abbreviation'
                 name='dci_abbreviation'
-                label={<DiverstFormattedMessage {...messages.dci_abbreviation} />}
+                label={<DiverstFormattedMessage {...messages.texts.dci_abbreviation} />}
                 value={values.dci_abbreviation}
               />
             </Grid>
@@ -120,7 +120,7 @@ export function CustomTextFormInner({ handleSubmit, handleChange, handleBlur, va
                 margin='normal'
                 id='member_preference'
                 name='member_preference'
-                label={<DiverstFormattedMessage {...messages.member_preference} />}
+                label={<DiverstFormattedMessage {...messages.texts.member_preference} />}
                 value={values.member_preference}
               />
             </Grid>
@@ -131,7 +131,7 @@ export function CustomTextFormInner({ handleSubmit, handleChange, handleBlur, va
                 margin='normal'
                 id='parent'
                 name='parent'
-                label={<DiverstFormattedMessage {...messages.parent} />}
+                label={<DiverstFormattedMessage {...messages.texts.parent} />}
                 value={values.parent}
               />
             </Grid>
@@ -142,7 +142,7 @@ export function CustomTextFormInner({ handleSubmit, handleChange, handleBlur, va
                 margin='normal'
                 id='sub_erg'
                 name='sub_erg'
-                label={<DiverstFormattedMessage {...messages.sub_erg} />}
+                label={<DiverstFormattedMessage {...messages.texts.sub_erg} />}
                 value={values.sub_erg}
               />
             </Grid>
@@ -153,7 +153,7 @@ export function CustomTextFormInner({ handleSubmit, handleChange, handleBlur, va
                 margin='normal'
                 id='privacy_statement'
                 name='privacy_statement'
-                label={<DiverstFormattedMessage {...messages.privacy_statement} />}
+                label={<DiverstFormattedMessage {...messages.texts.privacy_statement} />}
                 value={values.privacy_statement}
               />
             </Grid>
