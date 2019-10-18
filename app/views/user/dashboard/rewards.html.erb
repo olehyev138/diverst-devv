@@ -12,7 +12,7 @@
 
           <h3>My points: <%= current_user.credits %>
             <% if current_user.user_rewards.where(status: 0).any? %>
-              <span title='pending reward requests exist'>**</span>
+              <span title='Reward request(s) pending'>**</span>
             <% end %>
           </h3>
 
