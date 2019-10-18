@@ -19,20 +19,13 @@ import { selectUser } from 'containers/Mentorship/selectors';
 
 import saga from 'containers/Mentorship/saga';
 import Profile from 'components/Mentorship/MentorshipUser';
+import dig from "object-dig";
 
 export function UserProfilePage(props) {
   useInjectReducer({ key: 'mentorship', reducer });
   useInjectSaga({ key: 'mentorship', saga });
 
   const rs = new RouteService(useContext);
-
-  useEffect(() => {
-    props.getUserBegin({ id: rs.params('user_id') });
-
-    return () => {
-      props.userUnmount();
-    };
-  }, []);
 
   return (
     <React.Fragment>
@@ -51,7 +44,6 @@ UserProfilePage.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
-  user: selectUser(),
 });
 
 const mapDispatchToProps = {

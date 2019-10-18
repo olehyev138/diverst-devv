@@ -58,230 +58,217 @@ export function Profile(props) {
 
   return (
     <React.Fragment>
-      <Grid container>
-        <Grid item xs={4}>
-          <CardContent>
-            <MentorshipMenu
-              user={user}
-            />
-          </CardContent>
-        </Grid>
-        <Grid item xs>
-          {(user) ? (
+      {(user) ? (
+        <React.Fragment>
+          { /* BASIC INFO */ }
+          <Paper>
             <CardContent>
-              <React.Fragment>
-                { /* BASIC INFO */ }
-                <Paper>
-                  <CardContent>
-                    <Typography color='primary' variant='h5' component='h2' className={classes.title}>
-                      {user.name}
-                    </Typography>
-                  </CardContent>
-                  <Divider />
-                  <CardContent>
-                    <Typography color='primary' variant='h6' component='h2' className={classes.dataHeaders}>
-                      E-mail
-                    </Typography>
-                    <Typography color='secondary' component='h2' className={classes.data}>
-                      {user.email}
-                    </Typography>
-                  </CardContent>
-                  <Divider />
-                  <CardContent>
-                    <Typography color='primary' variant='h6' component='h2' className={classes.dataHeaders}>
-                      Biography
-                    </Typography>
-                    {(user.biography || 'None').split('\n').map((text, i) => (
-                      // eslint-disable-next-line react/no-array-index-key
-                      <Typography color='secondary' component='h2' key={i}>
-                        {text}
-                      </Typography>
-                    ))}
-                  </CardContent>
-                  <Divider />
-                  <CardContent>
-                    <Typography color='primary' variant='h6' component='h2' className={classes.dataHeaders}>
-                      Time Zone
-                    </Typography>
-                    <Typography color='secondary' component='h2' className={classes.data}>
-                      {user.time_zone || 'UTC'}
-                    </Typography>
-                  </CardContent>
-                </Paper>
-                <Box mb={2} />
-                { /* MENTORSHIP INFO */ }
-                <Paper>
-                  { user.mentorship_description && (
-                    <CardContent>
-                      <Grid container spacing={1}>
-                        <Grid item xs>
-                          <Typography color='primary' variant='h6' component='h2' className={classes.dataHeaders}>
-                            <DiverstFormattedMessage {...mentorMessages.long.goals} />
-                          </Typography>
-                          <Typography color='secondary' component='h2' className={classes.data}>
-                            { user.mentorship_description }
-                          </Typography>
-                        </Grid>
-                      </Grid>
-                    </CardContent>
-                  )}
-                  <Divider />
-                  <CardContent>
-                    <Grid container spacing={1}>
-                      <Grid item xs>
-                        <Typography color='primary' variant='h6' component='h2' className={classes.dataHeaders}>
-                          <DiverstFormattedMessage {...mentorMessages.mentor.isA.neutral} />
-                        </Typography>
-                        <Typography color='secondary' component='h2' className={classes.data}>
-                          {user.mentor ? (
-                            <DiverstFormattedMessage {...appMessages.confirmation.yes} />
-                          ) : (
-                            <DiverstFormattedMessage {...appMessages.confirmation.no} />
-                          )}
-                        </Typography>
-                      </Grid>
-                      <Grid item xs>
-                        <Typography color='primary' variant='h6' component='h2' className={classes.dataHeaders}>
-                          <DiverstFormattedMessage {...mentorMessages.mentee.isA.neutral} />
-                        </Typography>
-                        <Typography color='secondary' component='h2' className={classes.data}>
-                          {user.mentee ? (
-                            <DiverstFormattedMessage {...appMessages.confirmation.yes} />
-                          ) : (
-                            <DiverstFormattedMessage {...appMessages.confirmation.no} />
-                          )}
-                        </Typography>
-                      </Grid>
-                    </Grid>
-                  </CardContent>
-                  <Divider />
-                  <CardContent>
-                    <Grid container spacing={1}>
-                      <Grid item xs>
-                        <Typography color='primary' variant='h6' component='h2' className={classes.dataHeaders}>
-                          <DiverstFormattedMessage {...mentorMessages.accepting.mentees} />
-                        </Typography>
-                        <Typography color='secondary' component='h2' className={classes.data}>
-                          {user.accepting_mentee_requests ? (
-                            <DiverstFormattedMessage {...appMessages.confirmation.yes} />
-                          ) : (
-                            <DiverstFormattedMessage {...appMessages.confirmation.no} />
-                          )}
-                        </Typography>
-                      </Grid>
-                      <Grid item xs>
-                        <Typography color='primary' variant='h6' component='h2' className={classes.dataHeaders}>
-                          <DiverstFormattedMessage {...mentorMessages.accepting.mentors} />
-                        </Typography>
-                        <Typography color='secondary' component='h2' className={classes.data}>
-                          {user.accepting_mentor_requests ? (
-                            <DiverstFormattedMessage {...appMessages.confirmation.yes} />
-                          ) : (
-                            <DiverstFormattedMessage {...appMessages.confirmation.no} />
-                          )}
-                        </Typography>
-                      </Grid>
-                    </Grid>
-                  </CardContent>
-                  <Divider />
-                  <CardContent>
-                    <Grid container spacing={1}>
-                      <Grid item xs>
-                        <Typography color='primary' variant='h6' component='h2' className={classes.dataHeaders}>
-                          <DiverstFormattedMessage {...mentorMessages.long.interests} />
-                        </Typography>
-                        <Typography color='secondary' component='h2' className={classes.data}>
-                          {user.mentoring_interests && user.mentoring_interests.length > 0 && (
-                            <List>
-                              {user.mentoring_interests.map((interest, i) => (
-                                // eslint-disable-next-line react/no-array-index-key
-                                <ListItem dense key={`fieldData${interest.id}-${i}`}>
-                                  <ArrowRightIcon fontSize='small' />
-                                  {`${interest.name}`}
-                                </ListItem>
-                              ))}
-                            </List>
-                          )}
-                          {user.mentoring_interests && user.mentoring_interests.length <= 0 && (
-                            'None'
-                          )}
-                        </Typography>
-                      </Grid>
-                      <Grid item xs>
-                        <Typography color='primary' variant='h6' component='h2' className={classes.dataHeaders}>
-                          <DiverstFormattedMessage {...mentorMessages.long.types} />
-                        </Typography>
-                        <Typography color='secondary' component='h2' className={classes.data}>
-                          {user.mentoring_types && user.mentoring_types.length > 0 && (
-                            <List>
-                              {user.mentoring_types.map((type, i) => (
-                                // eslint-disable-next-line react/no-array-index-key
-                                <ListItem dense key={`fieldData${type.id}-${i}`}>
-                                  <ArrowRightIcon fontSize='small' />
-                                  {`${type.name}`}
-                                </ListItem>
-                              ))}
-                            </List>
-                          )}
-                          {user.mentoring_types && user.mentoring_types.length <= 0 && (
-                            'None'
-                          )}
-                        </Typography>
-                      </Grid>
-                    </Grid>
-                  </CardContent>
-                  <Divider />
-                  <CardContent>
-                    <Grid container spacing={1}>
-                      <Grid item xs>
-                        <Typography color='primary' variant='h6' component='h2' className={classes.dataHeaders}>
-                          <DiverstFormattedMessage {...mentorMessages.long.availability} />
-                        </Typography>
-                        <Typography color='secondary' component='h2' className={classes.data}>
-                          <Grid container>
-                            <Grid item xs>
-                              In your time zone
-                            </Grid>
-                            <Grid item xs>
-                              In their time zone
-                            </Grid>
-                          </Grid>
-                          {user.availabilities && user.availabilities.length > 0 && (
-                            <List>
-                              {user.availabilities.map((time, i) => (
-                                // eslint-disable-next-line react/no-array-index-key
-                                <Grid container key={`fieldData${time.id}-${i}`}>
-                                  <ListItem dense>
-                                    <Grid item xs>
-                                      <ArrowRightIcon fontSize='small' />
-                                      <DiverstFormattedMessage {...appMessages.days_of_week[time.day]} />
-                                      &nbsp;&nbsp;
-                                      {`${timeToSimpleString(time.local_start)} − ${timeToSimpleString(time.local_end)}`}
-                                    </Grid>
-                                    <Grid item xs>
-                                      <ArrowRightIcon fontSize='small' />
-                                      <DiverstFormattedMessage {...appMessages.days_of_week[time.day]} />
-                                      &nbsp;&nbsp;
-                                      {`${timeToSimpleString(time.start)} − ${timeToSimpleString(time.end)}`}
-                                    </Grid>
-                                  </ListItem>
-                                </Grid>
-                              ))}
-                            </List>
-                          )}
-                          {user.availabilities && user.availabilities.length <= 0 && (
-                            'None'
-                          )}
-                        </Typography>
-                      </Grid>
-                    </Grid>
-                  </CardContent>
-                </Paper>
-              </React.Fragment>
+              <Typography color='primary' variant='h5' component='h2' className={classes.title}>
+                {user.name}
+              </Typography>
             </CardContent>
-          ) : <React.Fragment />}
-        </Grid>
-      </Grid>
+            <Divider />
+            <CardContent>
+              <Typography color='primary' variant='h6' component='h2' className={classes.dataHeaders}>
+                E-mail
+              </Typography>
+              <Typography color='secondary' component='h2' className={classes.data}>
+                {user.email}
+              </Typography>
+            </CardContent>
+            <Divider />
+            <CardContent>
+              <Typography color='primary' variant='h6' component='h2' className={classes.dataHeaders}>
+                Biography
+              </Typography>
+              {(user.biography || 'None').split('\n').map((text, i) => (
+                // eslint-disable-next-line react/no-array-index-key
+                <Typography color='secondary' component='h2' key={i}>
+                  {text}
+                </Typography>
+              ))}
+            </CardContent>
+            <Divider />
+            <CardContent>
+              <Typography color='primary' variant='h6' component='h2' className={classes.dataHeaders}>
+                Time Zone
+              </Typography>
+              <Typography color='secondary' component='h2' className={classes.data}>
+                {user.time_zone || 'UTC'}
+              </Typography>
+            </CardContent>
+          </Paper>
+          <Box mb={2} />
+          { /* MENTORSHIP INFO */ }
+          <Paper>
+            { user.mentorship_description && (
+              <CardContent>
+                <Grid container spacing={1}>
+                  <Grid item xs>
+                    <Typography color='primary' variant='h6' component='h2' className={classes.dataHeaders}>
+                      <DiverstFormattedMessage {...mentorMessages.long.goals} />
+                    </Typography>
+                    <Typography color='secondary' component='h2' className={classes.data}>
+                      { user.mentorship_description }
+                    </Typography>
+                  </Grid>
+                </Grid>
+              </CardContent>
+            )}
+            <Divider />
+            <CardContent>
+              <Grid container spacing={1}>
+                <Grid item xs>
+                  <Typography color='primary' variant='h6' component='h2' className={classes.dataHeaders}>
+                    <DiverstFormattedMessage {...mentorMessages.mentor.isA.neutral} />
+                  </Typography>
+                  <Typography color='secondary' component='h2' className={classes.data}>
+                    {user.mentor ? (
+                      <DiverstFormattedMessage {...appMessages.confirmation.yes} />
+                    ) : (
+                      <DiverstFormattedMessage {...appMessages.confirmation.no} />
+                    )}
+                  </Typography>
+                </Grid>
+                <Grid item xs>
+                  <Typography color='primary' variant='h6' component='h2' className={classes.dataHeaders}>
+                    <DiverstFormattedMessage {...mentorMessages.mentee.isA.neutral} />
+                  </Typography>
+                  <Typography color='secondary' component='h2' className={classes.data}>
+                    {user.mentee ? (
+                      <DiverstFormattedMessage {...appMessages.confirmation.yes} />
+                    ) : (
+                      <DiverstFormattedMessage {...appMessages.confirmation.no} />
+                    )}
+                  </Typography>
+                </Grid>
+              </Grid>
+            </CardContent>
+            <Divider />
+            <CardContent>
+              <Grid container spacing={1}>
+                <Grid item xs>
+                  <Typography color='primary' variant='h6' component='h2' className={classes.dataHeaders}>
+                    <DiverstFormattedMessage {...mentorMessages.accepting.mentees} />
+                  </Typography>
+                  <Typography color='secondary' component='h2' className={classes.data}>
+                    {user.accepting_mentee_requests ? (
+                      <DiverstFormattedMessage {...appMessages.confirmation.yes} />
+                    ) : (
+                      <DiverstFormattedMessage {...appMessages.confirmation.no} />
+                    )}
+                  </Typography>
+                </Grid>
+                <Grid item xs>
+                  <Typography color='primary' variant='h6' component='h2' className={classes.dataHeaders}>
+                    <DiverstFormattedMessage {...mentorMessages.accepting.mentors} />
+                  </Typography>
+                  <Typography color='secondary' component='h2' className={classes.data}>
+                    {user.accepting_mentor_requests ? (
+                      <DiverstFormattedMessage {...appMessages.confirmation.yes} />
+                    ) : (
+                      <DiverstFormattedMessage {...appMessages.confirmation.no} />
+                    )}
+                  </Typography>
+                </Grid>
+              </Grid>
+            </CardContent>
+            <Divider />
+            <CardContent>
+              <Grid container spacing={1}>
+                <Grid item xs>
+                  <Typography color='primary' variant='h6' component='h2' className={classes.dataHeaders}>
+                    <DiverstFormattedMessage {...mentorMessages.long.interests} />
+                  </Typography>
+                  <Typography color='secondary' component='h2' className={classes.data}>
+                    {user.mentoring_interests && user.mentoring_interests.length > 0 && (
+                      <List>
+                        {user.mentoring_interests.map((interest, i) => (
+                          // eslint-disable-next-line react/no-array-index-key
+                          <ListItem dense key={`fieldData${interest.id}-${i}`}>
+                            <ArrowRightIcon fontSize='small' />
+                            {`${interest.label}`}
+                          </ListItem>
+                        ))}
+                      </List>
+                    )}
+                    {user.mentoring_interests && user.mentoring_interests.length <= 0 && (
+                      'None'
+                    )}
+                  </Typography>
+                </Grid>
+                <Grid item xs>
+                  <Typography color='primary' variant='h6' component='h2' className={classes.dataHeaders}>
+                    <DiverstFormattedMessage {...mentorMessages.long.types} />
+                  </Typography>
+                  <Typography color='secondary' component='h2' className={classes.data}>
+                    {user.mentoring_types && user.mentoring_types.length > 0 && (
+                      <List>
+                        {user.mentoring_types.map((type, i) => (
+                          // eslint-disable-next-line react/no-array-index-key
+                          <ListItem dense key={`fieldData${type.id}-${i}`}>
+                            <ArrowRightIcon fontSize='small' />
+                            {`${type.label}`}
+                          </ListItem>
+                        ))}
+                      </List>
+                    )}
+                    {user.mentoring_types && user.mentoring_types.length <= 0 && (
+                      'None'
+                    )}
+                  </Typography>
+                </Grid>
+              </Grid>
+            </CardContent>
+            <Divider />
+            <CardContent>
+              <Grid container spacing={1}>
+                <Grid item xs>
+                  <Typography color='primary' variant='h6' component='h2' className={classes.dataHeaders}>
+                    <DiverstFormattedMessage {...mentorMessages.long.availability} />
+                  </Typography>
+                  <Typography color='secondary' component='h2' className={classes.data}>
+                    <Grid container>
+                      <Grid item xs>
+                        In your time zone
+                      </Grid>
+                      <Grid item xs>
+                        In their time zone
+                      </Grid>
+                    </Grid>
+                    {user.availabilities && user.availabilities.length > 0 && (
+                      <List>
+                        {user.availabilities.map((time, i) => (
+                          // eslint-disable-next-line react/no-array-index-key
+                          <Grid container key={`fieldData${time.id}-${i}`}>
+                            <ListItem dense>
+                              <Grid item xs>
+                                <ArrowRightIcon fontSize='small' />
+                                <DiverstFormattedMessage {...appMessages.days_of_week[time.day.value]} />
+                                &nbsp;&nbsp;
+                                {`${timeToSimpleString(time.local_start)} − ${timeToSimpleString(time.local_end)}`}
+                              </Grid>
+                              <Grid item xs>
+                                <ArrowRightIcon fontSize='small' />
+                                <DiverstFormattedMessage {...appMessages.days_of_week[time.day.value]} />
+                                &nbsp;&nbsp;
+                                {`${timeToSimpleString(time.start)} − ${timeToSimpleString(time.end)}`}
+                              </Grid>
+                            </ListItem>
+                          </Grid>
+                        ))}
+                      </List>
+                    )}
+                    {user.availabilities && user.availabilities.length <= 0 && (
+                      'None'
+                    )}
+                  </Typography>
+                </Grid>
+              </Grid>
+            </CardContent>
+          </Paper>
+        </React.Fragment>
+      ) : <React.Fragment />}
     </React.Fragment>
   );
 }

@@ -26,14 +26,6 @@ export function UserProfilePage(props) {
 
   const rs = new RouteService(useContext);
 
-  useEffect(() => {
-    props.getUserBegin({ id: rs.params('user_id') });
-
-    return () => {
-      props.userUnmount();
-    };
-  }, []);
-
   return (
     <React.Fragment>
       <MentorshipUserForm
@@ -53,7 +45,6 @@ UserProfilePage.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
-  user: selectFormUser(),
 });
 
 const mapDispatchToProps = {

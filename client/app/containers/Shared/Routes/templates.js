@@ -6,6 +6,7 @@ import SessionLayout from 'containers/Layouts/SessionLayout/Loadable';
 import ErrorLayout from 'containers/Layouts/ErrorLayout/Loadable';
 import GlobalSettingsLayout from 'containers/Layouts/GlobalSettingsLayout/Loadable';
 import GroupManageLayout from 'containers/Layouts/GroupManageLayout/Loadable';
+import MentorshipLayout from 'containers/Layouts/MentorshipLayout/Loadable';
 
 
 /* Session */
@@ -104,5 +105,5 @@ export {
   CustomGraphCreatePage, CustomGraphEditPage, GroupManageLayout, GroupSettingsPage, CustomTextEditPage,
   UserNewsLinkPage, UserEventsPage, FoldersPage, FolderCreatePage, FolderEditPage, FolderPage, ResourceCreatePage,
   ResourceEditPage, UserProfilePage,
-  MentorshipProfilePage, MentorshipEditProfilePage,
+  MentorshipProfilePage, MentorshipEditProfilePage, MentorshipLayout
 };

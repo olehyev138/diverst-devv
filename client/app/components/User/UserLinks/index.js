@@ -242,7 +242,7 @@ export function NavLinks({ classes }) {
       </Button>
       <Button
         component={WrappedNavLink}
-        to={ROUTES.user.mentorship.show.path(1)}
+        to={ROUTES.user.mentorship.home.path()}
         className={classes.navLink}
         activeClassName={classes.navLinkActive}
       >

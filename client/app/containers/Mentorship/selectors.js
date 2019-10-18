@@ -37,8 +37,14 @@ const selectFormUser = () => createSelector(
         if (user.availabilities)
           draft.availabilities = user.availabilities.map(i => ({
             // label: new Date().toLocaleString('en-us', { weekday: 'long' }),
-            label: weekdays[i.day],
-            value: i.day
+            day: {
+              label: weekdays[i.day],
+              value: i.day
+            },
+            start: i.start,
+            end: i.end,
+            local_start: i.local_start,
+            local_end: i.local_end,
           }));
         if (user.interest_options)
           draft.interest_options = user.interest_options.map(i => ({ label: i.name, value: i.id }));

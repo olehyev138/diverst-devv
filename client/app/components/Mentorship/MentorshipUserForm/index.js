@@ -31,193 +31,180 @@ export function MentorshipUserFormInner({ handleSubmit, handleChange, handleBlur
   const days = [...Array(7).keys()].map(day => ({ label: props.intl.formatMessage(appMessages.days_of_week[day]), value: day }));
   return (
     <React.Fragment>
-      <Grid container>
-        <Grid item xs={4}>
-          <CardContent>
-            <MentorshipMenu
-              user={props.user}
-            />
-          </CardContent>
-        </Grid>
-        <Grid item xs={8}>
-          <CardContent>
-            { props.user && (
-              <Card>
-                <Form>
-                  <CardContent>
-                    {/* Mentorship? */}
-                    <Grid container>
-                      <Grid item xs>
-                        <FormControl
-                          variant='outlined'
+      { props.user && (
+        <Card>
+          <Form>
+            <CardContent>
+              {/* Mentorship? */}
+              <Grid container>
+                <Grid item xs>
+                  <FormControl
+                    variant='outlined'
+                    margin='normal'
+                    fullWidth
+                  >
+                    <FormControlLabel
+                      labelPlacement='top'
+                      checked={values.mentor}
+                      control={(
+                        <Field
+                          component={Switch}
+                          color='primary'
+                          onChange={handleChange}
+                          id='mentor'
+                          name='mentor'
                           margin='normal'
-                          fullWidth
-                        >
-                          <FormControlLabel
-                            labelPlacement='top'
-                            checked={values.mentor}
-                            control={(
-                              <Field
-                                component={Switch}
-                                color='primary'
-                                onChange={handleChange}
-                                id='mentor'
-                                name='mentor'
-                                margin='normal'
-                                checked={values.mentor}
-                                value={values.mentor}
-                              />
-                            )}
-                            label={<DiverstFormattedMessage {...messages.form.mentor} />}
-                          />
-                        </FormControl>
-                      </Grid>
-                      <Grid item xs>
-                        <FormControl
-                          variant='outlined'
+                          checked={values.mentor}
+                          value={values.mentor}
+                        />
+                      )}
+                      label={<DiverstFormattedMessage {...messages.form.mentor} />}
+                    />
+                  </FormControl>
+                </Grid>
+                <Grid item xs>
+                  <FormControl
+                    variant='outlined'
+                    margin='normal'
+                    fullWidth
+                  >
+                    <FormControlLabel
+                      labelPlacement='top'
+                      checked={values.mentee}
+                      control={(
+                        <Field
+                          component={Switch}
+                          color='primary'
+                          onChange={handleChange}
+                          id='mentee'
+                          name='mentee'
                           margin='normal'
-                          fullWidth
-                        >
-                          <FormControlLabel
-                            labelPlacement='top'
-                            checked={values.mentee}
-                            control={(
-                              <Field
-                                component={Switch}
-                                color='primary'
-                                onChange={handleChange}
-                                id='mentee'
-                                name='mentee'
-                                margin='normal'
-                                checked={values.mentee}
-                                value={values.mentee}
-                              />
-                            )}
-                            label={<DiverstFormattedMessage {...messages.form.mentee} />}
-                          />
-                        </FormControl>
-                      </Grid>
-                    </Grid>
-                    {/* Mentorship Accepting? */}
-                    <Grid container>
-                      <Grid item xs>
-                        <FormControl
-                          variant='outlined'
+                          checked={values.mentee}
+                          value={values.mentee}
+                        />
+                      )}
+                      label={<DiverstFormattedMessage {...messages.form.mentee} />}
+                    />
+                  </FormControl>
+                </Grid>
+              </Grid>
+              {/* Mentorship Accepting? */}
+              <Grid container>
+                <Grid item xs>
+                  <FormControl
+                    variant='outlined'
+                    margin='normal'
+                    fullWidth
+                  >
+                    <FormControlLabel
+                      labelPlacement='top'
+                      checked={values.accepting_mentor_requests}
+                      control={(
+                        <Field
+                          component={Switch}
+                          color='primary'
+                          onChange={handleChange}
+                          id='accepting_mentor_requests'
+                          name='accepting_mentor_requests'
                           margin='normal'
-                          fullWidth
-                        >
-                          <FormControlLabel
-                            labelPlacement='top'
-                            checked={values.accepting_mentor_requests}
-                            control={(
-                              <Field
-                                component={Switch}
-                                color='primary'
-                                onChange={handleChange}
-                                id='accepting_mentor_requests'
-                                name='accepting_mentor_requests'
-                                margin='normal'
-                                checked={values.accepting_mentor_requests}
-                                value={values.accepting_mentor_requests}
-                              />
-                            )}
-                            label={<DiverstFormattedMessage {...messages.form.acceptMentor} />}
-                          />
-                        </FormControl>
-                      </Grid>
-                      <Grid item xs>
-                        <FormControl
-                          variant='outlined'
+                          checked={values.accepting_mentor_requests}
+                          value={values.accepting_mentor_requests}
+                        />
+                      )}
+                      label={<DiverstFormattedMessage {...messages.form.acceptMentor} />}
+                    />
+                  </FormControl>
+                </Grid>
+                <Grid item xs>
+                  <FormControl
+                    variant='outlined'
+                    margin='normal'
+                    fullWidth
+                  >
+                    <FormControlLabel
+                      labelPlacement='top'
+                      checked={values.accepting_mentee_requests}
+                      control={(
+                        <Field
+                          component={Switch}
+                          color='primary'
+                          onChange={handleChange}
+                          id='accepting_mentee_requests'
+                          name='accepting_mentee_requests'
                           margin='normal'
-                          fullWidth
-                        >
-                          <FormControlLabel
-                            labelPlacement='top'
-                            checked={values.accepting_mentee_requests}
-                            control={(
-                              <Field
-                                component={Switch}
-                                color='primary'
-                                onChange={handleChange}
-                                id='accepting_mentee_requests'
-                                name='accepting_mentee_requests'
-                                margin='normal'
-                                checked={values.accepting_mentee_requests}
-                                value={values.accepting_mentee_requests}
-                              />
-                            )}
-                            label={<DiverstFormattedMessage {...messages.form.acceptMentee} />}
-                          />
-                        </FormControl>
-                      </Grid>
-                    </Grid>
-                    {/* Availability? */}
-                    {/* <Field */}
-                    {/*  component={Select} */}
-                    {/*  fullWidth */}
-                    {/*  id={`availabilities[${0}].day` } */}
-                    {/*  name={`availabilities[${0}].day`} */}
-                    {/*  margin='normal' */}
-                    {/*  label='Sonic The Hedgehog' */}
-                    {/*  value={values.availabilities ? values.availabilities[0].day : null} */}
-                    {/*  options={days || []} */}
-                    {/*  onChange={value => setFieldValue(`availabilities[${0}].day`, value)} */}
-                    {/*  onBlur={() => setFieldTouched(`availabilities[${0}].day`, true)} */}
-                    {/* /> */}
+                          checked={values.accepting_mentee_requests}
+                          value={values.accepting_mentee_requests}
+                        />
+                      )}
+                      label={<DiverstFormattedMessage {...messages.form.acceptMentee} />}
+                    />
+                  </FormControl>
+                </Grid>
+              </Grid>
+              {/* Availability? */}
+              {/* <Field */}
+              {/*  component={Select} */}
+              {/*  fullWidth */}
+              {/*  id={`availabilities[${0}].day` } */}
+              {/*  name={`availabilities[${0}].day`} */}
+              {/*  margin='normal' */}
+              {/*  label='Sonic The Hedgehog' */}
+              {/*  value={values.availabilities ? values.availabilities[0].day : null} */}
+              {/*  options={days || []} */}
+              {/*  onChange={value => setFieldValue(`availabilities[${0}].day`, value)} */}
+              {/*  onBlur={() => setFieldTouched(`availabilities[${0}].day`, true)} */}
+              {/* /> */}
 
-                    {/* Mentor Bio */}
-                    <Field
-                      component={TextField}
-                      onChange={handleChange}
-                      fullWidth
-                      margin='normal'
-                      multiline
-                      rows={4}
-                      variant='outlined'
-                      id='mentorship_description'
-                      name='mentorship_description'
-                      value={values.mentorship_description}
-                      label={<DiverstFormattedMessage {...messages.form.mentorDescription} />}
-                    />
-                    {/* Interest */}
-                    <Select
-                      name='mentoring_interest_ids'
-                      id='mentoring_interest_ids'
-                      isMulti
-                      fullWidth
-                      margin='normal'
-                      label={<DiverstFormattedMessage {...messages.form.interests} />}
-                      value={values.mentoring_interest_ids}
-                      options={dig(props, 'user', 'interest_options')}
-                      onChange={value => setFieldValue('mentoring_interest_ids', value)}
-                    />
-                    {/* Types */}
-                    <Select
-                      name='mentoring_type_ids'
-                      id='mentoring_type_ids'
-                      isMulti
-                      fullWidth
-                      margin='normal'
-                      label={<DiverstFormattedMessage {...messages.form.types} />}
-                      value={values.mentoring_type_ids}
-                      options={dig(props, 'user', 'type_options')}
-                      onChange={value => setFieldValue('mentoring_type_ids', value)}
-                    />
-                  </CardContent>
-                  <CardActions>
-                    <Button
-                      color='primary'
-                      type='submit'
-                    >
-                      Submit
-                    </Button>
-                  </CardActions>
-                </Form>
-              </Card>
-            )}
-          </CardContent>
-        </Grid>
-      </Grid>
+              {/* Mentor Bio */}
+              <Field
+                component={TextField}
+                onChange={handleChange}
+                fullWidth
+                margin='normal'
+                multiline
+                rows={4}
+                variant='outlined'
+                id='mentorship_description'
+                name='mentorship_description'
+                value={values.mentorship_description}
+                label={<DiverstFormattedMessage {...messages.form.mentorDescription} />}
+              />
+              {/* Interest */}
+              <Select
+                name='mentoring_interest_ids'
+                id='mentoring_interest_ids'
+                isMulti
+                fullWidth
+                margin='normal'
+                label={<DiverstFormattedMessage {...messages.form.interests} />}
+                value={values.mentoring_interest_ids}
+                options={dig(props, 'user', 'interest_options')}
+                onChange={value => setFieldValue('mentoring_interest_ids', value)}
+              />
+              {/* Types */}
+              <Select
+                name='mentoring_type_ids'
+                id='mentoring_type_ids'
+                isMulti
+                fullWidth
+                margin='normal'
+                label={<DiverstFormattedMessage {...messages.form.types} />}
+                value={values.mentoring_type_ids}
+                options={dig(props, 'user', 'type_options')}
+                onChange={value => setFieldValue('mentoring_type_ids', value)}
+              />
+            </CardContent>
+            <CardActions>
+              <Button
+                color='primary'
+                type='submit'
+              >
+                Submit
+              </Button>
+            </CardActions>
+          </Form>
+        </Card>
+      )}
     </React.Fragment>
   );
 }
