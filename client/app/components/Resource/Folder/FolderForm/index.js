@@ -21,6 +21,8 @@ import { buildValues, mapFields } from 'utils/formHelpers';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 
+import DiverstSubmit from 'components/Shared/DiverstSubmit';
+
 /* eslint-disable object-curly-newline */
 export function FolderFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
   const getGroupId = () => {
@@ -52,6 +54,7 @@ export function FolderFormInner({ handleSubmit, handleChange, handleBlur, values
             component={TextField}
             onChange={handleChange}
             fullWidth
+            disabled={props.isCommitting}
             id='name'
             name='name'
             margin='normal'
@@ -61,6 +64,7 @@ export function FolderFormInner({ handleSubmit, handleChange, handleBlur, values
           <Field
             component={Select}
             fullWidth
+            disabled={props.isCommitting}
             id='parent_id'
             name='parent_id'
             label={<DiverstFormattedMessage {...messages.form.parent} />}
@@ -87,6 +91,7 @@ export function FolderFormInner({ handleSubmit, handleChange, handleBlur, values
                       component={Switch}
                       color='primary'
                       onChange={handleChange}
+                      disabled={props.isCommitting}
                       id='password_protected'
                       name='password_protected'
                       checked={values.password_protected}
@@ -103,6 +108,7 @@ export function FolderFormInner({ handleSubmit, handleChange, handleBlur, values
                   component={TextField}
                   onChange={handleChange}
                   fullWidth
+                  disabled={props.isCommitting}
                   id='password'
                   name='password'
                   margin='normal'
@@ -115,12 +121,9 @@ export function FolderFormInner({ handleSubmit, handleChange, handleBlur, values
         </CardContent>
         <Divider />
         <CardActions>
-          <Button
-            color='primary'
-            type='submit'
-          >
+          <DiverstSubmit isCommitting={props.isCommitting}>
             {buttonText}
-          </Button>
+          </DiverstSubmit>
           <Button
             to={props.links.cancelLink}
             component={WrappedNavLink}
@@ -168,6 +171,7 @@ FolderForm.propTypes = {
   currentUser: PropTypes.object,
   currentGroup: PropTypes.object,
   currentEnterprise: PropTypes.object,
+  isCommitting: PropTypes.bool,
   from: PropTypes.shape({
     folder: PropTypes.shape({
       id: PropTypes.number,
@@ -193,6 +197,7 @@ FolderFormInner.propTypes = {
   buttonText: PropTypes.string,
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
+  isCommitting: PropTypes.bool,
   from: PropTypes.shape({
     folder: PropTypes.shape({
       id: PropTypes.number,

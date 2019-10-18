@@ -21,6 +21,8 @@ import { buildValues, mapFields } from 'utils/formHelpers';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 
+import DiverstSubmit from 'components/Shared/DiverstSubmit';
+
 /* eslint-disable object-curly-newline */
 export function ResourceFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
   const getGroupId = () => {
@@ -52,6 +54,7 @@ export function ResourceFormInner({ handleSubmit, handleChange, handleBlur, valu
             component={TextField}
             onChange={handleChange}
             fullWidth
+            disabled={props.isCommitting}
             id='title'
             name='title'
             margin='normal'
@@ -61,6 +64,7 @@ export function ResourceFormInner({ handleSubmit, handleChange, handleBlur, valu
           <Field
             component={Select}
             fullWidth
+            disabled={props.isCommitting}
             id='folder_id'
             name='folder_id'
             label={<DiverstFormattedMessage {...messages.form.folder} />}
@@ -87,6 +91,7 @@ export function ResourceFormInner({ handleSubmit, handleChange, handleBlur, valu
                   component={Switch}
                   color='primary'
                   onChange={handleChange}
+                  disabled={props.isCommitting}
                   id='type'
                   name='type'
                   margin='normal'
@@ -107,6 +112,7 @@ export function ResourceFormInner({ handleSubmit, handleChange, handleBlur, valu
               component={TextField}
               onChange={handleChange}
               fullWidth
+              disabled={props.isCommitting}
               id='url'
               name='url'
               margin='normal'
@@ -117,12 +123,9 @@ export function ResourceFormInner({ handleSubmit, handleChange, handleBlur, valu
         </CardContent>
         <Divider />
         <CardActions>
-          <Button
-            color='primary'
-            type='submit'
-          >
+          <DiverstSubmit isCommitting={props.isCommitting}>
             {buttonText}
-          </Button>
+          </DiverstSubmit>
           <Button
             to={props.links.cancelPath}
             component={WrappedNavLink}
@@ -169,6 +172,7 @@ ResourceForm.propTypes = {
   currentUser: PropTypes.object,
   currentGroup: PropTypes.object,
   currentEnterprise: PropTypes.object,
+  isCommitting: PropTypes.bool,
   currentFolder: PropTypes.shape({
     id: PropTypes.number,
     name: PropTypes.string,
@@ -202,6 +206,7 @@ ResourceFormInner.propTypes = {
   buttonText: PropTypes.string,
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
+  isCommitting: PropTypes.bool,
   from: PropTypes.shape({
     resource: PropTypes.shape({
       id: PropTypes.number,

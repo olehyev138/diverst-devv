@@ -15,13 +15,11 @@ import reducer from 'containers/Resource/reducer';
 import saga from 'containers/Resource/saga';
 
 import RouteService from 'utils/routeHelpers';
-import { ROUTES } from 'containers/Shared/Routes/constants';
 
-import { selectGroup } from 'containers/Group/selectors';
 import { selectUser, selectEnterprise } from 'containers/Shared/App/selectors';
 import {
   selectFormFolder, selectFolder,
-  selectPaginatedSelectFolders, selectValid
+  selectPaginatedSelectFolders, selectValid, selectIsCommitting,
 } from 'containers/Resource/selectors';
 
 import {
@@ -127,6 +125,7 @@ export function FolderEditPage(props) {
           links={links}
           type={type}
           from={location.fromFolder ? location.fromFolder : null}
+          isCommitting={props.isCommitting}
         />
       )}
     </div>
@@ -149,6 +148,7 @@ FolderEditPage.propTypes = {
   currentEnterprise: PropTypes.object,
   folders: PropTypes.array,
   valid: PropTypes.bool,
+  isCommitting: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -158,6 +158,7 @@ const mapStateToProps = createStructuredSelector({
   folders: selectPaginatedSelectFolders(),
   currentEnterprise: selectEnterprise(),
   valid: selectValid(),
+  isCommitting: selectIsCommitting(),
 });
 
 const mapDispatchToProps = {
