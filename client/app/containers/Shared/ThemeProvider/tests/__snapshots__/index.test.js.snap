@@ -112,6 +112,7 @@ exports[`<ThemeProvider /> should render and match the snapshot 1`] = `
           "main": "#8A8A8A",
         },
         "success": Object {
+          "lightBackground": "#8bcf8e",
           "main": "#43a047",
         },
         "text": Object {
