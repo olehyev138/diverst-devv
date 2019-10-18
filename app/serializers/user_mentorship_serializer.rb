@@ -1,7 +1,7 @@
 class UserMentorshipSerializer < ApplicationRecordSerializer
   attributes :id, :email, :biography, :name, :first_name, :last_name, :enterprise_id, :avatar_location,
              :mentor, :mentee, :mentors, :mentees, :accepting_mentor_requests, :accepting_mentee_requests, :mentorship_description,
-             :availabilities, :mentors, :mentees, :time_zone
+             :availabilities, :mentors, :mentees, :time_zone, :interest_options, :type_options
 
   has_many :mentorship_ratings
   has_many :mentoring_interests
@@ -12,17 +12,23 @@ class UserMentorshipSerializer < ApplicationRecordSerializer
 
   # Serialize all user fields, including the custom attributes listed above, and excluding the `excluded_keys`
 
+  def interest_options
+    MentoringInterest.all.as_json
+  end
+
+  def type_options
+    MentoringType.all.as_json
+  end
+
   def mentors
     object.mentors.map do |m|
-      p m.id
-      UserMentorshipLiteSerializer.new(m, scope: scope, scope_name: :scope).as_json
+     UserMentorshipLiteSerializer.new(m, scope: scope, scope_name: :scope).as_json
     end
   end
 
   def mentees
     object.mentees.map do |m|
-      p m.id
-      UserMentorshipLiteSerializer.new(m, scope: scope, scope_name: :scope).as_json
+     UserMentorshipLiteSerializer.new(m, scope: scope, scope_name: :scope).as_json
     end
   end
 

@@ -1,7 +1,7 @@
 {
   "diverst.containers.App.dayOfWeek.sunday": "Sunday",
   "diverst.containers.App.dayOfWeek.monday": "Monday",
-  "diverst.containers.App.dayOfWeek.tuesday": "Thursday",
+  "diverst.containers.App.dayOfWeek.tuesday": "Tuesday",
   "diverst.containers.App.dayOfWeek.wednesday": "Wednesday",
   "diverst.containers.App.dayOfWeek.thursday": "Thursday",
   "diverst.containers.App.dayOfWeek.friday": "Friday",
@@ -127,7 +127,7 @@
   "diverst.containers.Mentorship.accepting.mentors": "Accepting Mentors",
   "diverst.containers.Mentorship.short.goals": "Goals",
   "diverst.containers.Mentorship.short.interests": "Interests",
-  "diverst.containers.Mentorship.short.interests": "Types of Mentorship",
+  "diverst.containers.Mentorship.short.types": "Types of Mentorship",
   "diverst.containers.Mentorship.short.availability": "Availability",
   "diverst.containers.Mentorship.long.goals": "Mentorship Goals",
   "diverst.containers.Mentorship.long.interests": "Areas of Mentorship Interests",

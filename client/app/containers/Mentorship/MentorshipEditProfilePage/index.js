@@ -12,13 +12,13 @@ import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import {
-  getUserBegin, userUnmount
+  getUserBegin, userUnmount, updateUserBegin
 } from 'containers/Mentorship/actions';
 
-import { selectUser } from 'containers/Mentorship/selectors';
+import { selectFormUser } from 'containers/Mentorship/selectors';
 
 import saga from 'containers/Mentorship/saga';
-import Profile from 'components/Mentorship/MentorshipUser';
+import MentorshipUserForm from 'components/Mentorship/MentorshipUserForm';
 
 export function UserProfilePage(props) {
   useInjectReducer({ key: 'mentorship', reducer });
@@ -36,14 +36,16 @@ export function UserProfilePage(props) {
 
   return (
     <React.Fragment>
-      <Profile
+      <MentorshipUserForm
         user={props.user}
+        userAction={props.updateUserBegin}
       />
     </React.Fragment>
   );
 }
 
 UserProfilePage.propTypes = {
+  updateUserBegin: PropTypes.func,
   path: PropTypes.string,
   user: PropTypes.object,
   getUserBegin: PropTypes.func,
@@ -51,12 +53,13 @@ UserProfilePage.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
-  user: selectUser(),
+  user: selectFormUser(),
 });
 
 const mapDispatchToProps = {
   getUserBegin,
-  userUnmount
+  userUnmount,
+  updateUserBegin,
 };
 
 const withConnect = connect(

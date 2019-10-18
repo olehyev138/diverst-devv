@@ -74,6 +74,7 @@ class Api::V1::UsersController < DiverstController
         :active,
         :mentorship_description,
         mentoring_interest_ids: [],
+        mentoring_type_ids: [],
         policy_group_attributes: [
           :id,
           :campaigns_index,

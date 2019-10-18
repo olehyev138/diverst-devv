@@ -11,7 +11,7 @@ import {
   UserDashboardPage, MetricsDashboardListPage, MetricsDashboardCreatePage, MetricsDashboardEditPage, MetricsDashboardPage,
   CustomGraphCreatePage, CustomGraphEditPage, GroupManageLayout, GroupSettingsPage, CustomTextEditPage, FoldersPage,
   FolderCreatePage, FolderEditPage, FolderPage, ResourceCreatePage, ResourceEditPage,
-  MentorshipProfilePage,
+  MentorshipProfilePage, MentorshipEditProfilePage
 } from './templates';
 
 // Paths
@@ -34,6 +34,7 @@ export default function Routes(props) {
       <UserLayout exact {...expandRoute(ROUTES.user.downloads)} component={PlaceholderPage} />
 
       { /* User - Mentorship */ }
+      <UserLayout {...expandRoute(ROUTES.user.mentorship.edit)} component={MentorshipEditProfilePage} />
       <UserLayout {...expandRoute(ROUTES.user.mentorship.show)} component={MentorshipProfilePage} />
       <UserLayout {...expandRoute(ROUTES.user.mentorship.home)} component={PlaceholderPage} />
 
