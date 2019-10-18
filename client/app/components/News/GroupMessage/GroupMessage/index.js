@@ -4,17 +4,14 @@ import { compose } from 'redux/';
 import PropTypes from 'prop-types';
 import dig from 'object-dig';
 
-import { Card, CardContent, Grid } from '@material-ui/core/index';
+import { Box, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
 import GroupMessageComment from 'components/News/GroupMessage/GroupMessageComment';
 import GroupMessageCommentForm from 'components/News/GroupMessage/GroupMessageCommentForm';
+import GroupMessageListItem from 'components/News/GroupMessage/GroupMessageListItem';
 
-const styles = theme => ({
-  comment: {
-    width: '100%',
-  },
-});
+const styles = theme => ({});
 
 export function GroupMessage(props) {
   /* Render a GroupMessage, its comments & a comment form */
@@ -26,34 +23,25 @@ export function GroupMessage(props) {
   return (
     (groupMessage) ? (
       <React.Fragment>
-        <Grid container spacing={3}>
-          <Grid item className={classes.comment}>
-            <Card>
-              <CardContent>
-                <p>{groupMessage.content}</p>
-              </CardContent>
-            </Card>
-          </Grid>
-          <Grid item className={classes.comment}>
-            <GroupMessageCommentForm
-              currentUserId={props.currentUserId}
-              newsItem={props.newsItem}
-              commentAction={props.commentAction}
-            />
-          </Grid>
-          <Grid item className={classes.comment}>
-            <Card>
-              { /* eslint-disable-next-line arrow-body-style */ }
-              {dig(groupMessage, 'comments') && groupMessage.comments.map((comment, i) => {
-                return (
-                  <Grid item key={comment.id} className={classes.comment}>
-                    <GroupMessageComment comment={comment} />
-                  </Grid>
-                );
-              })}
-            </Card>
-          </Grid>
-        </Grid>
+        <GroupMessageListItem
+          newsItem={newsItem}
+        />
+        <Box mb={4} />
+        <GroupMessageCommentForm
+          currentUserId={props.currentUserId}
+          newsItem={props.newsItem}
+          commentAction={props.commentAction}
+        />
+        <Box mb={4} />
+        <Typography variant='h6'>
+          Comments
+        </Typography>
+        { /* eslint-disable-next-line arrow-body-style */ }
+        {dig(groupMessage, 'comments') && groupMessage.comments.map((comment, i) => {
+          return (
+            <GroupMessageComment key={comment.id} comment={comment} />
+          );
+        })}
       </React.Fragment>
     ) : <React.Fragment />
   );

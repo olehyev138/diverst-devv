@@ -10,6 +10,7 @@ import { compose } from 'redux';
 import dig from 'object-dig';
 
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { Field, Formik, Form } from 'formik';
 import {
   Button, Card, CardActions, CardContent, TextField,
@@ -201,7 +202,7 @@ export function MentorshipUserFormInner({ handleSubmit, handleChange, handleBlur
             to='/'
             component={WrappedNavLink}
           >
-            <FormattedMessage {...userMessages.cancel} />
+            <DiverstFormattedMessage {...userMessages.cancel} />
           </Button>
         </CardActions>
       </Form>

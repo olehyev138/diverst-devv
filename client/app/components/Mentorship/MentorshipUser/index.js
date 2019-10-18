@@ -12,7 +12,7 @@ import { withStyles } from '@material-ui/core/styles';
 import classNames from 'classnames';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
-import { FormattedMessage } from 'react-intl';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/User/messages';
 import appMessages from 'containers/Shared/App/messages';
 import mentorMessages from 'containers/Mentorship/messages';
@@ -105,7 +105,7 @@ export function Profile(props) {
               <Grid container spacing={1}>
                 <Grid item xs>
                   <Typography color='primary' variant='h6' component='h2' className={classes.dataHeaders}>
-                    <FormattedMessage {...mentorMessages.long.goals} />
+                    <DiverstFormattedMessage {...mentorMessages.long.goals} />
                   </Typography>
                   <Typography color='secondary' component='h2' className={classes.data}>
                     { user.mentorship_description }
@@ -119,25 +119,25 @@ export function Profile(props) {
             <Grid container spacing={1}>
               <Grid item xs>
                 <Typography color='primary' variant='h6' component='h2' className={classes.dataHeaders}>
-                  <FormattedMessage {...mentorMessages.mentor.isA.neutral} />
+                  <DiverstFormattedMessage {...mentorMessages.mentor.isA.neutral} />
                 </Typography>
                 <Typography color='secondary' component='h2' className={classes.data}>
                   {user.mentor ? (
-                    <FormattedMessage {...appMessages.confirmation.yes} />
+                    <DiverstFormattedMessage {...appMessages.confirmation.yes} />
                   ) : (
-                    <FormattedMessage {...appMessages.confirmation.no} />
+                    <DiverstFormattedMessage {...appMessages.confirmation.no} />
                   )}
                 </Typography>
               </Grid>
               <Grid item xs>
                 <Typography color='primary' variant='h6' component='h2' className={classes.dataHeaders}>
-                  <FormattedMessage {...mentorMessages.mentee.isA.neutral} />
+                  <DiverstFormattedMessage {...mentorMessages.mentee.isA.neutral} />
                 </Typography>
                 <Typography color='secondary' component='h2' className={classes.data}>
                   {user.mentee ? (
-                    <FormattedMessage {...appMessages.confirmation.yes} />
+                    <DiverstFormattedMessage {...appMessages.confirmation.yes} />
                   ) : (
-                    <FormattedMessage {...appMessages.confirmation.no} />
+                    <DiverstFormattedMessage {...appMessages.confirmation.no} />
                   )}
                 </Typography>
               </Grid>
@@ -148,25 +148,25 @@ export function Profile(props) {
             <Grid container spacing={1}>
               <Grid item xs>
                 <Typography color='primary' variant='h6' component='h2' className={classes.dataHeaders}>
-                  <FormattedMessage {...mentorMessages.accepting.mentees} />
+                  <DiverstFormattedMessage {...mentorMessages.accepting.mentees} />
                 </Typography>
                 <Typography color='secondary' component='h2' className={classes.data}>
                   {user.accepting_mentee_requests ? (
-                    <FormattedMessage {...appMessages.confirmation.yes} />
+                    <DiverstFormattedMessage {...appMessages.confirmation.yes} />
                   ) : (
-                    <FormattedMessage {...appMessages.confirmation.no} />
+                    <DiverstFormattedMessage {...appMessages.confirmation.no} />
                   )}
                 </Typography>
               </Grid>
               <Grid item xs>
                 <Typography color='primary' variant='h6' component='h2' className={classes.dataHeaders}>
-                  <FormattedMessage {...mentorMessages.accepting.mentors} />
+                  <DiverstFormattedMessage {...mentorMessages.accepting.mentors} />
                 </Typography>
                 <Typography color='secondary' component='h2' className={classes.data}>
                   {user.accepting_mentor_requests ? (
-                    <FormattedMessage {...appMessages.confirmation.yes} />
+                    <DiverstFormattedMessage {...appMessages.confirmation.yes} />
                   ) : (
-                    <FormattedMessage {...appMessages.confirmation.no} />
+                    <DiverstFormattedMessage {...appMessages.confirmation.no} />
                   )}
                 </Typography>
               </Grid>
@@ -177,7 +177,7 @@ export function Profile(props) {
             <Grid container spacing={1}>
               <Grid item xs>
                 <Typography color='primary' variant='h6' component='h2' className={classes.dataHeaders}>
-                  <FormattedMessage {...mentorMessages.long.interests} />
+                  <DiverstFormattedMessage {...mentorMessages.long.interests} />
                 </Typography>
                 <Typography color='secondary' component='h2' className={classes.data}>
                   {user.mentoring_interests && user.mentoring_interests.length > 0 && (
@@ -198,7 +198,7 @@ export function Profile(props) {
               </Grid>
               <Grid item xs>
                 <Typography color='primary' variant='h6' component='h2' className={classes.dataHeaders}>
-                  <FormattedMessage {...mentorMessages.long.types} />
+                  <DiverstFormattedMessage {...mentorMessages.long.types} />
                 </Typography>
                 <Typography color='secondary' component='h2' className={classes.data}>
                   {user.mentoring_types && user.mentoring_types.length > 0 && (
@@ -224,7 +224,7 @@ export function Profile(props) {
             <Grid container spacing={1}>
               <Grid item xs>
                 <Typography color='primary' variant='h6' component='h2' className={classes.dataHeaders}>
-                  <FormattedMessage {...mentorMessages.long.availability} />
+                  <DiverstFormattedMessage {...mentorMessages.long.availability} />
                 </Typography>
                 <Typography color='secondary' component='h2' className={classes.data}>
                   <Grid container>
@@ -243,13 +243,13 @@ export function Profile(props) {
                           <ListItem dense>
                             <Grid item xs>
                               <ArrowRightIcon fontSize='small' />
-                              <FormattedMessage {...appMessages.days_of_week[time.day]} />
+                              <DiverstFormattedMessage {...appMessages.days_of_week[time.day]} />
                               &nbsp;&nbsp;
                               {`${timeToSimpleString(time.local_start)} − ${timeToSimpleString(time.local_end)}`}
                             </Grid>
                             <Grid item xs>
                               <ArrowRightIcon fontSize='small' />
-                              <FormattedMessage {...appMessages.days_of_week[time.day]} />
+                              <DiverstFormattedMessage {...appMessages.days_of_week[time.day]} />
                               &nbsp;&nbsp;
                               {`${timeToSimpleString(time.start)} − ${timeToSimpleString(time.end)}`}
                             </Grid>

@@ -1,8 +1,50 @@
+/*
+ * App Messages
+ *
+ * This contains all the custom text messages
+ */
+
 import { defineMessages } from 'react-intl';
 
 export const scope = 'diverst.containers.App';
 
 export default defineMessages({
+  erg: {
+    id: `${scope}.texts.erg`,
+  },
+  program: {
+    id: `${scope}.texts.program`,
+  },
+  structure: {
+    id: `${scope}.texts.structure`,
+  },
+  outcome: {
+    id: `${scope}.texts.outcome`,
+  },
+  badge: {
+    id: `${scope}.texts.badge`,
+  },
+  segment: {
+    id: `${scope}.texts.segment`,
+  },
+  dci_full_title: {
+    id: `${scope}.texts.dci_full_title`,
+  },
+  dci_abbreviation: {
+    id: `${scope}.texts.dci_abbreviation`,
+  },
+  member_preference: {
+    id: `${scope}.texts.member_preference`,
+  },
+  parent: {
+    id: `${scope}.texts.parent`,
+  },
+  sub_erg: {
+    id: `${scope}.texts.sub_erg`,
+  },
+  privacy_statement: {
+    id: `${scope}.texts.privacy_statement`,
+  },
   days_of_week: [
     {
       id: `${scope}.dayOfWeek.sunday`,

@@ -67,12 +67,17 @@ const selectFormResource = () => createSelector(
   }
 );
 
+const selectIsLoading = () => createSelector(
+  selectResourcesDomain,
+  resourcesState => resourcesState.isLoading
+);
+
 export {
   selectResourcesDomain,
   selectPaginatedFolders, selectPaginatedSelectFolders,
   selectFoldersTotal,
   selectFolder, selectFormFolder,
-  selectValid,
+  selectValid, selectIsLoading,
   selectPaginatedResources,
   selectResourcesTotal,
   selectResource, selectFormResource

@@ -4,54 +4,47 @@
  *
  */
 
-import React, {
-  forwardRef, memo, useState,
-  useEffect, useRef
-} from 'react';
+import React, { memo } from 'react';
 import { compose } from 'redux';
-import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { RouteContext } from 'containers/Layouts/ApplicationLayout';
 
 import {
-  Button, Card, CardActions, CardContent, Collapse, Grid, Link,
-  TablePagination, Typography, Box
+  Button, Box
 } from '@material-ui/core/index';
 import { withStyles } from '@material-ui/core/styles';
 
-import MaterialTable from 'material-table';
-import tableIcons from 'utils/tableIcons';
-
-import { ROUTES } from 'containers/Shared/Routes/constants';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
-import { FormattedMessage } from 'react-intl';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Group/GroupMembers/messages';
-import buildDataFunction from 'utils/dataTableHelper';
 
-import DeleteOutline from '@material-ui/icons/DeleteOutline';
+import DeleteIcon from '@material-ui/icons/DeleteOutline';
+import AddIcon from '@material-ui/icons/Add';
+import ExportIcon from '@material-ui/icons/SaveAlt';
+
+import DiverstTable from 'components/Shared/DiverstTable';
 
 const styles = theme => ({
   errorButton: {
     color: theme.palette.error.main,
   },
+  actionButton: {
+    marginRight: 12,
+    marginBottom: 12,
+  },
+  floatRight: {
+    float: 'right',
+    marginBottom: 12,
+  },
+  floatSpacer: {
+    display: 'flex',
+    width: '100%',
+    marginBottom: 24,
+  },
 });
 
 export function GroupMemberList(props) {
   const { classes } = props;
-  const [page, setPage] = useState(props.params.page);
-  const [rowsPerPage, setRowsPerPage] = useState(props.params.count);
-
-  /* MaterialTable pagination handlers (defined differently then MaterialUI pagination) */
-  const handleChangePage = (newPage) => {
-    setPage(newPage);
-    props.handlePagination({ count: rowsPerPage, page: newPage });
-  };
-
-  const handleChangeRowsPerPage = (pageSize) => {
-    setRowsPerPage(+pageSize);
-    props.handlePagination({ count: +pageSize, page });
-  };
 
   const handleOrderChange = (columnId, orderDir) => {
     props.handleOrdering({
@@ -65,60 +58,54 @@ export function GroupMemberList(props) {
     { title: 'Last Name', field: 'last_name' }
   ];
 
-  /* Store reference to table & use to refresh table when data changes */
-  const ref = useRef();
-  useEffect(() => ref.current && ref.current.onQueryChange(), [props.memberList]);
-
   return (
     <React.Fragment>
-      <Grid container spacing={3} justify='flex-end'>
-        <Grid item>
-          <Button
-            variant='contained'
-            to='#'
-            color='secondary'
-            size='large'
-            component={WrappedNavLink}
-          >
-            <FormattedMessage {...messages.export} />
-          </Button>
-        </Grid>
-        <Grid item>
-          <Button
-            variant='contained'
-            to={props.links.groupMembersNew}
-            color='primary'
-            size='large'
-            component={WrappedNavLink}
-          >
-            <FormattedMessage {...messages.new} />
-          </Button>
-        </Grid>
-      </Grid>
-      <Box mb={2} />
-      <MaterialTable
-        tableRef={ref}
-        icons={tableIcons}
+      <Box className={classes.floatRight}>
+        <Button
+          className={classes.actionButton}
+          variant='contained'
+          to={props.links.groupMembersNew}
+          color='primary'
+          size='large'
+          component={WrappedNavLink}
+          startIcon={<AddIcon />}
+        >
+          <DiverstFormattedMessage {...messages.new} />
+        </Button>
+        <Button
+          className={classes.actionButton}
+          variant='contained'
+          to='#'
+          color='secondary'
+          size='large'
+          component={WrappedNavLink}
+          startIcon={<ExportIcon />}
+        >
+          <DiverstFormattedMessage {...messages.export} />
+        </Button>
+      </Box>
+      <Box className={classes.floatSpacer} />
+      <DiverstTable
         title='Members'
+        handlePagination={props.handlePagination}
         isLoading={props.isFetchingMembers}
-        onChangePage={handleChangePage}
-        onChangeRowsPerPage={handleChangeRowsPerPage}
         onOrderChange={handleOrderChange}
-        data={buildDataFunction(props.memberList, page, props.memberTotal)}
+        dataArray={props.memberList}
+        dataTotal={props.memberTotal}
         columns={columns}
+        rowsPerPage={props.params.count}
         actions={[{
-          icon: () => <DeleteOutline />,
+          icon: () => <DeleteIcon />,
           tooltip: 'Delete Member',
           onClick: (_, rowData) => {
             /* eslint-disable-next-line no-alert, no-restricted-globals */
             if (confirm('Delete member?'))
-              props.deleteMemberBegin({ userId: rowData.id, groupId: props.groupId });
+              props.deleteMemberBegin({
+                userId: rowData.id,
+                groupId: props.groupId
+              });
           }
         }]}
-        options={{
-          actionsColumnIndex: -1,
-          pageSize: rowsPerPage,
-        }}
       />
     </React.Fragment>
   );

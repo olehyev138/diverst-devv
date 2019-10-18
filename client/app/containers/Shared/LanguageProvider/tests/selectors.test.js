@@ -1,4 +1,4 @@
-import { selectLanguage, makeSelectLocale } from '../selectors';
+import { selectLanguage, selectLocale } from '../selectors';
 
 describe('LanguageProvider selectors', () => {
   describe('selectLanguage', () => {
@@ -13,7 +13,7 @@ describe('LanguageProvider selectors', () => {
   describe('makeSelectLocale', () => {
     it('should select the locale', () => {
       const mockedState = { locale: 'en' };
-      const selected = makeSelectLocale().resultFunc(mockedState);
+      const selected = selectLocale().resultFunc(mockedState);
 
       expect(selected).toEqual('en');
     });

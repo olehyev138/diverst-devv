@@ -10,7 +10,7 @@ import { compose } from 'redux';
 import dig from 'object-dig';
 import { DateTime } from 'luxon';
 
-import { FormattedMessage } from 'react-intl';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { Field, Formik, Form } from 'formik';
 import {
   withStyles,
@@ -47,7 +47,7 @@ export function EventFormInner({
             id='name'
             name='name'
             margin='normal'
-            label={<FormattedMessage {...messages.form.name} />}
+            label={<DiverstFormattedMessage {...messages.form.name} />}
             value={values.name}
           />
           <Field
@@ -60,7 +60,7 @@ export function EventFormInner({
             rows={4}
             variant='outlined'
             margin='normal'
-            label={<FormattedMessage {...messages.form.description} />}
+            label={<DiverstFormattedMessage {...messages.form.description} />}
             value={values.description}
           />
         </CardContent>
@@ -80,7 +80,7 @@ export function EventFormInner({
                 id='start'
                 name='start'
                 margin='normal'
-                label={<FormattedMessage {...messages.form.start} />}
+                label={<DiverstFormattedMessage {...messages.form.start} />}
               />
             </Grid>
             <Grid item xs md={5}>
@@ -96,7 +96,7 @@ export function EventFormInner({
                 id='end'
                 name='end'
                 margin='normal'
-                label={<FormattedMessage {...messages.form.end} />}
+                label={<DiverstFormattedMessage {...messages.form.end} />}
               />
             </Grid>
           </Grid>
@@ -113,7 +113,7 @@ export function EventFormInner({
             to={props.eventExists ? props.links.eventShow : props.links.eventsIndex}
             component={WrappedNavLink}
           >
-            <FormattedMessage {...messages.cancel} />
+            <DiverstFormattedMessage {...messages.cancel} />
           </Button>
         </CardActions>
       </Form>

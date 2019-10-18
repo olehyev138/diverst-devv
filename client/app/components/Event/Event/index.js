@@ -13,7 +13,7 @@ import classNames from 'classnames';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import messages from 'containers/Event/messages';
-import { FormattedMessage } from 'react-intl';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 
 import { formatDateTimeString, DateTime } from 'utils/dateTimeHelpers';
 
@@ -67,7 +67,7 @@ export function Event(props) {
               color='primary'
               className={classes.buttons}
             >
-              <FormattedMessage {...messages.edit} />
+              <DiverstFormattedMessage {...messages.edit} />
             </Button>
             <Button
               variant='contained'
@@ -80,25 +80,29 @@ export function Event(props) {
                   props.deleteEventBegin({ id: event.id, group_id: event.owner_group_id });
               }}
             >
-              <FormattedMessage {...messages.delete} />
+              <DiverstFormattedMessage {...messages.delete} />
             </Button>
           </Grid>
         </Grid>
         <Paper className={classes.padding}>
           <Typography className={classes.dataHeaders}>
-            <FormattedMessage {...messages.show.dateAndTime} />
+            <DiverstFormattedMessage {...messages.show.dateAndTime} />
           </Typography>
           <Typography variant='overline'>From</Typography>
           <Typography color='textSecondary'>{formatDateTimeString(event.start, DateTime.DATETIME_FULL)}</Typography>
           <Typography variant='overline'>To</Typography>
           <Typography color='textSecondary' className={classes.data}>{formatDateTimeString(event.end, DateTime.DATETIME_FULL)}</Typography>
 
-          <Typography className={classes.dataHeaders}>
-            <FormattedMessage {...messages.form.description} />
-          </Typography>
-          <Typography color='textSecondary' className={classes.data}>
-            {event.description}
-          </Typography>
+          {event.description && (
+            <React.Fragment>
+              <Typography className={classes.dataHeaders}>
+                <DiverstFormattedMessage {...messages.form.description} />
+              </Typography>
+              <Typography color='textSecondary' className={classes.data}>
+                {event.description}
+              </Typography>
+            </React.Fragment>
+          )}
         </Paper>
       </React.Fragment>
     ) : <React.Fragment />

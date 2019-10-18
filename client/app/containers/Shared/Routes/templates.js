@@ -15,6 +15,9 @@ import LoginPage from 'containers/Session/LoginPage/Loadable';
 /* User */
 import HomePage from 'containers/User/HomePage/Loadable';
 import UserGroupListPage from 'containers/Group/UserGroupListPage/Loadable';
+import UserProfilePage from 'containers/User/UserProfilePage/Loadable';
+import UserNewsLinkPage from 'containers/User/UserNewsFeedPage/Loadable';
+import UserEventsPage from 'containers/User/UserEventsPage/Loadable';
 
 /* User - Mentorship */
 import MentorshipProfilePage from 'containers/Mentorship/MentorshipProfilePage/Loadable';
@@ -98,7 +101,8 @@ export {
   EventCreatePage, EventEditPage, GroupMessagePage, GroupMessageCreatePage, GroupMessageEditPage, OutcomeCreatePage,
   OutcomeEditPage, GroupMemberListPage, GroupMemberCreatePage, NotFoundPage, PlaceholderPage, GroupDashboardPage,
   UserDashboardPage, MetricsDashboardListPage, MetricsDashboardCreatePage, MetricsDashboardEditPage, MetricsDashboardPage,
-  CustomGraphCreatePage, CustomGraphEditPage, GroupManageLayout, GroupSettingsPage, CustomTextEditPage, FoldersPage,
-  FolderCreatePage, FolderEditPage, FolderPage, ResourceCreatePage, ResourceEditPage,
+  CustomGraphCreatePage, CustomGraphEditPage, GroupManageLayout, GroupSettingsPage, CustomTextEditPage,
+  UserNewsLinkPage, UserEventsPage, FoldersPage, FolderCreatePage, FolderEditPage, FolderPage, ResourceCreatePage,
+  ResourceEditPage, UserProfilePage,
   MentorshipProfilePage, MentorshipEditProfilePage,
 };

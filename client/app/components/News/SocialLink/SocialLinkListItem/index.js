@@ -18,7 +18,7 @@ import {
 import { withStyles } from '@material-ui/core/styles';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
-import { FormattedMessage } from 'react-intl';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/News/messages';
 
 const styles = theme => ({

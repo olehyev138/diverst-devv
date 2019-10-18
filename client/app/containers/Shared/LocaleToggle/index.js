@@ -14,7 +14,7 @@ import Wrapper from 'containers/Shared/LocaleToggle/Wrapper';
 import messages from 'containers/Shared/LocaleToggle/messages';
 import { appLocales } from 'i18n';
 import { changeLocale } from 'containers/Shared/LanguageProvider/actions';
-import { makeSelectLocale } from 'containers/Shared/LanguageProvider/selectors';
+import { selectLocale } from 'containers/Shared/LanguageProvider/selectors';
 
 export class LocaleToggle extends React.PureComponent {
   // eslint-disable-line react/prefer-stateless-function
@@ -37,7 +37,7 @@ LocaleToggle.propTypes = {
   locale: PropTypes.string,
 };
 
-const mapStateToProps = createSelector(makeSelectLocale(), locale => ({
+const mapStateToProps = createSelector(selectLocale(), locale => ({
   locale,
 }));
 

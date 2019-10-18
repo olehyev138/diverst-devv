@@ -9,9 +9,10 @@ import {
   EventCreatePage, EventEditPage, GroupMessagePage, GroupMessageCreatePage, GroupMessageEditPage, OutcomeCreatePage,
   OutcomeEditPage, GroupMemberListPage, GroupMemberCreatePage, NotFoundPage, PlaceholderPage, GroupDashboardPage,
   UserDashboardPage, MetricsDashboardListPage, MetricsDashboardCreatePage, MetricsDashboardEditPage, MetricsDashboardPage,
-  CustomGraphCreatePage, CustomGraphEditPage, GroupManageLayout, GroupSettingsPage, CustomTextEditPage, FoldersPage,
-  FolderCreatePage, FolderEditPage, FolderPage, ResourceCreatePage, ResourceEditPage,
-  MentorshipProfilePage, MentorshipEditProfilePage
+  CustomGraphCreatePage, CustomGraphEditPage, GroupManageLayout, GroupSettingsPage, CustomTextEditPage,
+  UserNewsLinkPage, UserEventsPage, FoldersPage, FolderCreatePage, FolderEditPage, FolderPage, ResourceCreatePage,
+  ResourceEditPage, UserProfilePage,
+  MentorshipProfilePage, MentorshipEditProfilePage,
 } from './templates';
 
 // Paths
@@ -26,15 +27,17 @@ export default function Routes(props) {
       <SessionLayout {...expandRoute(ROUTES.session.login)} component={LoginPage} />
 
       { /* User */}
-      <UserLayout exact {...expandRoute(ROUTES.user.home)} component={PlaceholderPage} />
+      <UserLayout exact {...expandRoute(ROUTES.user.home)} component={HomePage} />
       <UserLayout exact {...expandRoute(ROUTES.user.innovate)} component={PlaceholderPage} />
-      <UserLayout exact {...expandRoute(ROUTES.user.news)} component={PlaceholderPage} />
-      <UserLayout exact {...expandRoute(ROUTES.user.events)} component={PlaceholderPage} />
+      <UserLayout exact {...expandRoute(ROUTES.user.news)} component={UserNewsLinkPage} />
+      <UserLayout exact {...expandRoute(ROUTES.user.events)} component={UserEventsPage} />
       <UserLayout exact {...expandRoute(ROUTES.user.groups)} component={UserGroupListPage} />
       <UserLayout exact {...expandRoute(ROUTES.user.downloads)} component={PlaceholderPage} />
 
       { /* User - Mentorship */ }
       <UserLayout {...expandRoute(ROUTES.user.mentorship.edit)} component={MentorshipEditProfilePage} />
+      <UserLayout {...expandRoute(ROUTES.user.edit)} component={UserEditPage} />
+      <UserLayout {...expandRoute(ROUTES.user.show)} component={UserProfilePage} disableBreadcrumbs />
       <UserLayout {...expandRoute(ROUTES.user.mentorship.show)} component={MentorshipProfilePage} />
       <UserLayout {...expandRoute(ROUTES.user.mentorship.home)} component={PlaceholderPage} />
 
@@ -64,12 +67,12 @@ export default function Routes(props) {
       <AdminLayout exact {...expandRoute(ROUTES.admin.manage.segments.index)} component={SegmentListPage} />
 
       { /* Admin - Manage - Resources */ }
-      <AdminLayout {...expandRoute(ROUTES.admin.manage.resources.resources.new)} component={ResourceCreatePage} />
-      <AdminLayout {...expandRoute(ROUTES.admin.manage.resources.resources.edit)} component={ResourceEditPage} />
+      <AdminLayout {...expandRoute(ROUTES.admin.manage.resources.new)} component={ResourceCreatePage} />
+      <AdminLayout {...expandRoute(ROUTES.admin.manage.resources.edit)} component={ResourceEditPage} />
       <AdminLayout {...expandRoute(ROUTES.admin.manage.resources.folders.edit)} component={FolderEditPage} />
       <AdminLayout {...expandRoute(ROUTES.admin.manage.resources.folders.new)} component={FolderCreatePage} />
       <AdminLayout {...expandRoute(ROUTES.admin.manage.resources.folders.show)} component={FolderPage} />
-      <AdminLayout {...expandRoute(ROUTES.admin.manage.resources.folders.index)} component={FoldersPage} />
+      <AdminLayout {...expandRoute(ROUTES.admin.manage.resources.index)} component={FoldersPage} />
 
       { /* Admin - System - GlobalSettings */ }
       <GlobalSettingsLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.fields.index)} component={FieldsPage} />
@@ -81,7 +84,7 @@ export default function Routes(props) {
       <AdminLayout exact {...expandRoute(ROUTES.admin.system.users.edit)} component={UserEditPage} />
 
       { /* Group */ }
-      <GroupLayout exact {...expandRoute(ROUTES.group.home)} component={GroupHomePage} />
+      <GroupLayout exact {...expandRoute(ROUTES.group.home)} component={GroupHomePage} disableBreadcrumbs />
       <GroupLayout exact {...expandRoute(ROUTES.group.members.index)} component={GroupMemberListPage} />
       <GroupLayout exact {...expandRoute(ROUTES.group.events.index)} component={EventsPage} />
       <GroupLayout exact {...expandRoute(ROUTES.group.news.index)} component={NewsFeedPage} />
@@ -96,7 +99,7 @@ export default function Routes(props) {
       <GroupLayout exact {...expandRoute(ROUTES.group.news.index)} component={NewsFeedPage} />
       <GroupLayout {...expandRoute(ROUTES.group.news.messages.new)} component={GroupMessageCreatePage} />
       <GroupLayout {...expandRoute(ROUTES.group.news.messages.edit)} component={GroupMessageEditPage} />
-      <GroupLayout exact {...expandRoute(ROUTES.group.news.messages.index)} component={GroupMessagePage} />
+      <GroupLayout exact {...expandRoute(ROUTES.group.news.messages.show)} component={GroupMessagePage} />
 
       { /* Group Members */ }
       <GroupLayout {...expandRoute(ROUTES.group.members.new)} component={GroupMemberCreatePage} />
@@ -107,16 +110,16 @@ export default function Routes(props) {
 
       { /* Group Manage */ }
       { /* TODO - redirect /manage -> /manage/settings */ }
-      <GroupManageLayout {...expandRoute(ROUTES.group.manage.settings.index)} component={GroupSettingsPage} />
-      <GroupManageLayout {...expandRoute(ROUTES.group.manage.leaders.index)} component={PlaceholderPage} />
+      <GroupLayout {...expandRoute(ROUTES.group.manage.settings.index)} component={GroupSettingsPage} />
+      <GroupLayout {...expandRoute(ROUTES.group.manage.leaders.index)} component={PlaceholderPage} />
 
       { /* Group Resources */ }
-      <GroupLayout {...expandRoute(ROUTES.group.resources.resources.new)} component={ResourceCreatePage} />
-      <GroupLayout {...expandRoute(ROUTES.group.resources.resources.edit)} component={ResourceEditPage} />
+      <GroupLayout {...expandRoute(ROUTES.group.resources.new)} component={ResourceCreatePage} />
+      <GroupLayout {...expandRoute(ROUTES.group.resources.edit)} component={ResourceEditPage} />
       <GroupLayout {...expandRoute(ROUTES.group.resources.folders.edit)} component={FolderEditPage} />
       <GroupLayout {...expandRoute(ROUTES.group.resources.folders.new)} component={FolderCreatePage} />
       <GroupLayout {...expandRoute(ROUTES.group.resources.folders.show)} component={FolderPage} />
-      <GroupLayout {...expandRoute(ROUTES.group.resources.folders.index)} component={FoldersPage} />
+      <GroupLayout {...expandRoute(ROUTES.group.resources.index)} component={FoldersPage} />
 
       <ErrorLayout path='' component={NotFoundPage} />
     </Switch>
