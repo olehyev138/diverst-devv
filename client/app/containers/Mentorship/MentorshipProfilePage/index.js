@@ -19,7 +19,7 @@ import { selectUser } from 'containers/Mentorship/selectors';
 
 import saga from 'containers/Mentorship/saga';
 import Profile from 'components/Mentorship/MentorshipUser';
-import dig from "object-dig";
+import dig from 'object-dig';
 
 export function UserProfilePage(props) {
   useInjectReducer({ key: 'mentorship', reducer });
