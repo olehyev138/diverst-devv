@@ -19,6 +19,8 @@ import { Field, Formik, Form } from 'formik';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Group/GroupMembers/messages';
 
+import DiverstSubmit from 'components/Shared/DiverstSubmit';
+
 import { buildValues, mapFields } from 'utils/formHelpers';
 
 /* eslint-disable object-curly-newline */
@@ -40,6 +42,7 @@ export function GroupMemberFormInner({ handleSubmit, handleChange, handleBlur, v
             id='member_ids'
             name='member_ids'
             label='New Members'
+            disabled={props.isCommitting}
             isMulti
             margin='normal'
             value={values.member_ids}
@@ -52,12 +55,9 @@ export function GroupMemberFormInner({ handleSubmit, handleChange, handleBlur, v
         </CardContent>
         <Divider />
         <CardActions>
-          <Button
-            color='primary'
-            type='submit'
-          >
+          <DiverstSubmit isCommitting={props.isCommitting}>
             <DiverstFormattedMessage {...messages.create} />
-          </Button>
+          </DiverstSubmit>
           <Button
             to={props.links.groupMembersIndex}
             component={WrappedNavLink}
@@ -94,7 +94,8 @@ export function GroupMemberForm(props) {
 GroupMemberForm.propTypes = {
   createMembersBegin: PropTypes.func,
   group: PropTypes.object,
-  groupId: PropTypes.string
+  groupId: PropTypes.string,
+  isCommitting: PropTypes.bool,
 };
 
 GroupMemberFormInner.propTypes = {
@@ -107,6 +108,7 @@ GroupMemberFormInner.propTypes = {
   getMembersBegin: PropTypes.func,
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
+  isCommitting: PropTypes.bool,
   links: PropTypes.shape({
     groupMembersIndex: PropTypes.string
   }),
