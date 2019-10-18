@@ -6,7 +6,7 @@ class UserMentorshipLiteSerializer < ApplicationRecordSerializer
   has_many :mentoring_types
 
   def availabilities
-   object.availabilities.map do |ava|
+    object.availabilities.map do |ava|
       MentorshipAvailabilitySerializer.new(ava, time_zone: scope[:current_user].time_zone).as_json
     end
   end
