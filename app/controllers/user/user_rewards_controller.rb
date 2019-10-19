@@ -1,7 +1,7 @@
 class User::UserRewardsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_reward, only: [:create]
-  before_action :set_user_reward, only: [:approve_reward, :destroy]
+  before_action :set_user_reward, only: [:approve_reward, :update, :reward_to_be_forfeited]
 
   layout :resolve_layout
 
@@ -22,13 +22,26 @@ class User::UserRewardsController < ApplicationController
     redirect_to :back
   end
 
-  def destroy
+  def reward_to_be_forfeited
+    authorize current_user.enterprise, :update?
+
+    respond_to do |format|
+      format.html
+      format.js
+    end
+  end
+
+  def update
     authorize current_user.enterprise, :update?
 
     @user = @user_reward.user
-    @user_reward.destroy
-    flash[:notice] = "#{@user.name}'s reward has been forfeited!"
 
+    if user_reward_params[:comment].blank?
+      @user_reward.destroy
+    else
+      @user_reward.update(user_reward_params.merge({ status: 2 }))
+    end
+    flash[:notice] = "#{@user.name}'s reward has been forfeited!"
     redirect_to :back
   end
 
@@ -54,5 +67,9 @@ class User::UserRewardsController < ApplicationController
 
   def set_user_reward
     @user_reward = UserReward.find(params[:id])
+  end
+
+  def user_reward_params
+    params.require(:user_reward).permit(:comment)
   end
 end

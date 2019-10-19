@@ -3,7 +3,8 @@ class UserReward < BaseClass
 
   enumerize :status, in: {
     pending: 0,
-    redeemed: 1
+    redeemed: 1, 
+    forfeited: 2
   }
 
   belongs_to :user
