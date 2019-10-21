@@ -45,4 +45,16 @@ export default defineMessages({
   last_name: {
     id: `${scope}.form.input.last_name`,
   },
+  biography: {
+    id: `${scope}.form.input.biography`,
+  },
+  time_zone: {
+    id: `${scope}.form.input.time_zone`,
+  },
+  fields: {
+    id: `${scope}.profile.fields`
+  },
+  privacy: {
+    id: `${scope}.profile.privacy`
+  },
 });

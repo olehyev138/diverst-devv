@@ -46,7 +46,7 @@ Diverst::Application.routes.draw do
       end
       resources :folders do
         member do
-          get '/password', to: 'folders#validate_password'
+          post '/password', to: 'folders#validate_password'
         end
       end
       resources :folder_shares
@@ -138,6 +138,13 @@ Diverst::Application.routes.draw do
       resources :twitter_accounts
       resources :user_rewards
       resources :user_reward_actions
+      resources :user, only: [] do
+        collection do
+          get '/posts', to: 'user#get_posts'
+          get '/joined_events', to: 'user#get_joined_events'
+          get '/all_events', to: 'user#get_all_events'
+        end
+      end
       resources :users do
         collection do
           post '/email', to: 'users#find_user_enterprise_by_email'

@@ -48,7 +48,12 @@ const selectFormField = () => createSelector(
   }
 );
 
+const selectIsLoading = () => createSelector(
+  selectFieldsDomain,
+  fieldsState => fieldsState.isLoading
+);
+
 export {
   selectFieldsDomain, selectPaginatedFields, selectPaginatedSelectFields,
-  selectFieldTotal, selectField, selectFormField
+  selectFieldTotal, selectField, selectFormField, selectIsLoading
 };

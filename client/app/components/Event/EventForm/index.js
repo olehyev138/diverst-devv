@@ -8,19 +8,33 @@ import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import dig from 'object-dig';
+import { DateTime } from 'luxon';
 
-import { FormattedMessage } from 'react-intl';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { Field, Formik, Form } from 'formik';
 import {
-  Button, Card, CardActions, CardContent, TextField
+  withStyles,
+  Button, Card, CardActions, CardContent, TextField, Grid, Divider
 } from '@material-ui/core';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import messages from 'containers/Event/messages';
 import { buildValues } from 'utils/formHelpers';
 
+import DiverstDateTimePicker from 'components/Shared/Pickers/DiverstDateTimePicker';
+
+const styles = theme => ({
+  noBottomPadding: {
+    paddingBottom: '0 !important',
+  },
+});
+
 /* eslint-disable object-curly-newline */
-export function EventFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
+export function EventFormInner({
+  handleSubmit, handleChange, handleBlur, values, touched, errors,
+  buttonText, setFieldValue, setFieldTouched, setFieldError,
+  ...props
+}) {
   return (
     <Card>
       <Form>
@@ -28,10 +42,12 @@ export function EventFormInner({ handleSubmit, handleChange, handleBlur, values,
           <Field
             component={TextField}
             onChange={handleChange}
+            required
             fullWidth
             id='name'
             name='name'
-            label={<FormattedMessage {...messages.form.name} />}
+            margin='normal'
+            label={<DiverstFormattedMessage {...messages.form.name} />}
             value={values.name}
           />
           <Field
@@ -40,28 +56,52 @@ export function EventFormInner({ handleSubmit, handleChange, handleBlur, values,
             fullWidth
             id='description'
             name='description'
+            multiline
+            rows={4}
+            variant='outlined'
+            margin='normal'
+            label={<DiverstFormattedMessage {...messages.form.description} />}
             value={values.description}
-            label={<FormattedMessage {...messages.form.description} />}
-          />
-          <Field
-            component={TextField}
-            onChange={handleChange}
-            fullWidth
-            id='start'
-            name='start'
-            value={values.start}
-            label={<FormattedMessage {...messages.form.start} />}
-          />
-          <Field
-            component={TextField}
-            onChange={handleChange}
-            fullWidth
-            id='end'
-            name='end'
-            value={values.end}
-            label={<FormattedMessage {...messages.form.end} />}
           />
         </CardContent>
+        <Divider />
+        <CardContent>
+          <Grid container spacing={6} justify='space-between'>
+            <Grid item xs md={5}>
+              <Field
+                component={DiverstDateTimePicker}
+                required
+                keyboardMode
+                /* eslint-disable-next-line dot-notation */
+                maxDate={touched['end'] ? values['end'] : undefined}
+                maxDateMessage='Start date cannot be after end date'
+                disablePast
+                fullWidth
+                id='start'
+                name='start'
+                margin='normal'
+                label={<DiverstFormattedMessage {...messages.form.start} />}
+              />
+            </Grid>
+            <Grid item xs md={5}>
+              <Field
+                component={DiverstDateTimePicker}
+                required
+                keyboardMode
+                /* eslint-disable-next-line dot-notation */
+                minDate={values['start']}
+                minDateMessage='End date cannot be before start date'
+                disablePast
+                fullWidth
+                id='end'
+                name='end'
+                margin='normal'
+                label={<DiverstFormattedMessage {...messages.form.end} />}
+              />
+            </Grid>
+          </Grid>
+        </CardContent>
+        <Divider />
         <CardActions>
           <Button
             color='primary'
@@ -73,7 +113,7 @@ export function EventFormInner({ handleSubmit, handleChange, handleBlur, values,
             to={props.eventExists ? props.links.eventShow : props.links.eventsIndex}
             component={WrappedNavLink}
           >
-            <FormattedMessage {...messages.cancel} />
+            <DiverstFormattedMessage {...messages.cancel} />
           </Button>
         </CardActions>
       </Form>
@@ -88,8 +128,8 @@ export function EventForm(props) {
     id: { default: '' },
     name: { default: '' },
     description: { default: '' },
-    start: { default: '' },
-    end: { default: '' },
+    start: { default: DateTime.local().plus({ hour: 1 }) },
+    end: { default: DateTime.local().plus({ hour: 2 }) },
     max_attendees: { default: '' },
     location: { default: '' },
     annual_budget_id: { default: '' },
@@ -125,9 +165,12 @@ EventFormInner.propTypes = {
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
   values: PropTypes.object,
+  touched: PropTypes.object,
+  errors: PropTypes.object,
   buttonText: PropTypes.string,
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
+  setFieldError: PropTypes.func,
   links: PropTypes.shape({
     eventsIndex: PropTypes.string,
     eventShow: PropTypes.string,
@@ -136,4 +179,5 @@ EventFormInner.propTypes = {
 
 export default compose(
   memo,
+  withStyles(styles),
 )(EventForm);

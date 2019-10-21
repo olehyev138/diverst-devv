@@ -17,18 +17,16 @@ import {
   Card, CardContent, Grid, Link, TablePagination, Typography, Button, Hidden,
 } from '@material-ui/core';
 
-import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
+import AddIcon from '@material-ui/icons/Add';
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/DeleteOutline';
 
-import MaterialTable from 'material-table';
-import tableIcons from 'utils/tableIcons';
-import buildDataFunction from 'utils/dataTableHelper';
-import DeleteOutline from '@material-ui/icons/DeleteOutline';
-
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import messages from 'containers/Analyze/Dashboards/MetricsDashboard/messages';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
-import { ROUTES } from 'containers/Shared/Routes/constants';
-import Edit from '@material-ui/icons/Edit';
+
+import DiverstTable from 'components/Shared/DiverstTable';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 
 const styles = theme => ({
   metricsDashboardListItem: {
@@ -59,28 +57,11 @@ const styles = theme => ({
 export function MetricsDashboardsList(props, context) {
   const { classes, intl } = props;
 
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-
   const routeContext = useContext(RouteContext);
-
-  const handleChangePage = (metricsDashboard, newPage) => {
-    setPage(newPage);
-    props.handlePagination({ count: rowsPerPage, page: newPage });
-  };
-
-  const handleChangeRowsPerPage = (metricsDashboard) => {
-    setRowsPerPage(+metricsDashboard.target.value);
-    props.handlePagination({ count: +metricsDashboard.target.value, page });
-  };
 
   const columns = [
     { title: 'Name', field: 'name' }
   ];
-
-  /* Store reference to table & use to refresh table when data changes */
-  const ref = useRef();
-  useEffect(() => ref.current && ref.current.onQueryChange(), [props.metricsDashboards]);
 
   return (
     <React.Fragment>
@@ -92,31 +73,30 @@ export function MetricsDashboardsList(props, context) {
             color='primary'
             size='large'
             component={WrappedNavLink}
+            startIcon={<AddIcon />}
           >
-            <FormattedMessage {...messages.new} />
+            <DiverstFormattedMessage {...messages.new} />
           </Button>
         </Grid>
       </Grid>
-      <Box mb={2} />
-      <br />
+      <Box mb={1} />
       <Grid container spacing={3}>
         <Grid item xs>
-          <MaterialTable
-            tableRef={ref}
-            icons={tableIcons}
+          <DiverstTable
             title='Custom Dashboards'
-            onChangePage={handleChangePage}
-            onChangeRowsPerPage={handleChangeRowsPerPage}
-            onRowClick={(_, rowData) => props.handleVisitDashboardPage(rowData.id)}
-            data={buildDataFunction(Object.values(props.metricsDashboards), page, props.metricsDashboardsTotal)}
+            handlePagination={props.handlePagination}
+            handleRowClick={(_, rowData) => props.handleVisitDashboardPage(rowData.id)}
+            dataArray={Object.values(props.metricsDashboards)}
+            dataTotal={props.metricsDashboardsTotal}
             columns={columns}
             actions={[{
-              icon: () => <Edit />,
+              icon: () => <EditIcon />,
               tooltip: 'Edit Member',
               onClick: (_, rowData) => {
                 props.handleVisitDashboardEdit(rowData.id);
-              } }, {
-              icon: () => <DeleteOutline />,
+              }
+            }, {
+              icon: () => <DeleteIcon />,
               tooltip: 'Delete Member',
               onClick: (_, rowData) => {
                 /* eslint-disable-next-line no-alert, no-restricted-globals */
@@ -124,10 +104,6 @@ export function MetricsDashboardsList(props, context) {
                   props.deleteMetricsDashboardBegin(rowData.id);
               }
             }]}
-            options={{
-              actionsColumnIndex: -1,
-              pageSize: rowsPerPage,
-            }}
           />
         </Grid>
       </Grid>

@@ -11,7 +11,7 @@ import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import Select from 'components/Shared/DiverstSelect';
 import { Field, Formik, Form } from 'formik';
-import { FormattedMessage } from 'react-intl';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { withStyles } from '@material-ui/core/styles';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
@@ -53,19 +53,6 @@ export function GroupFormInner({ classes, handleSubmit, handleChange, handleBlur
       <Form>
         <CardContent>
           <Grid container spacing={3}>
-            <Grid item xs className={classes.noBottomPadding}>
-              <Field
-                component={TextField}
-                required
-                onChange={handleChange}
-                fullWidth
-                id='name'
-                name='name'
-                margin='normal'
-                label={<FormattedMessage {...messages.name} />}
-                value={values.name}
-              />
-            </Grid>
             <Grid item className={classes.noBottomPadding}>
               <FormControl
                 variant='outlined'
@@ -90,6 +77,19 @@ export function GroupFormInner({ classes, handleSubmit, handleChange, handleBlur
                 />
               </FormControl>
             </Grid>
+            <Grid item xs className={classes.noBottomPadding}>
+              <Field
+                component={TextField}
+                required
+                onChange={handleChange}
+                fullWidth
+                id='name'
+                name='name'
+                margin='normal'
+                label={<DiverstFormattedMessage {...messages.name} />}
+                value={values.name}
+              />
+            </Grid>
           </Grid>
           <Field
             component={TextField}
@@ -99,7 +99,7 @@ export function GroupFormInner({ classes, handleSubmit, handleChange, handleBlur
             name='short_description'
             margin='normal'
             value={values.short_description}
-            label={<FormattedMessage {...messages.short_description} />}
+            label={<DiverstFormattedMessage {...messages.short_description} />}
           />
           <Field
             component={TextField}
@@ -111,7 +111,7 @@ export function GroupFormInner({ classes, handleSubmit, handleChange, handleBlur
             rows={4}
             variant='outlined'
             margin='normal'
-            label={<FormattedMessage {...messages.description} />}
+            label={<DiverstFormattedMessage {...messages.description} />}
             value={values.description}
           />
         </CardContent>
@@ -122,7 +122,7 @@ export function GroupFormInner({ classes, handleSubmit, handleChange, handleBlur
             fullWidth
             id='child_ids'
             name='child_ids'
-            label={<FormattedMessage {...messages.children} />}
+            label={<DiverstFormattedMessage {...messages.children} />}
             isMulti
             margin='normal'
             value={values.child_ids}
@@ -140,7 +140,7 @@ export function GroupFormInner({ classes, handleSubmit, handleChange, handleBlur
             fullWidth
             id='parent_id'
             name='parent_id'
-            label={<FormattedMessage {...messages.parent} />}
+            label={<DiverstFormattedMessage {...messages.parent} />}
             margin='normal'
             value={values.parent_id}
             options={props.selectGroups}
@@ -162,7 +162,7 @@ export function GroupFormInner({ classes, handleSubmit, handleChange, handleBlur
             to={ROUTES.admin.manage.groups.index.path()}
             component={WrappedNavLink}
           >
-            <FormattedMessage {...messages.cancel} />
+            <DiverstFormattedMessage {...messages.cancel} />
           </Button>
         </CardActions>
       </Form>

@@ -24,7 +24,7 @@ class ErrorBoundary extends React.Component {
     if (this.state.hasError)
       // You can render any custom fallback UI
       return (
-        <div>
+        <React.Fragment>
           <Grid
             container
             spacing={0}
@@ -41,7 +41,7 @@ class ErrorBoundary extends React.Component {
               <Button>Home</Button>
             </Grid>
           </Grid>
-        </div>
+        </React.Fragment>
       );
 
 

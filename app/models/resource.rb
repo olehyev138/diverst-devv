@@ -25,13 +25,15 @@ class Resource < ApplicationRecord
   validates_length_of :file_content_type, maximum: 191
   validates_length_of :file_file_name, maximum: 191
   validates_length_of :title, maximum: 191
-  validates_presence_of :title
+  validates_presence_of   :title
   validates_presence_of   :url, if: Proc.new { |r| r.file.nil? && r.url.blank? }
   validates_length_of     :url, maximum: 255
 
   scope :unarchived_resources, ->(folder_ids, initiative_ids) { where('resources.initiative_id IN (?) OR resources.folder_id IN (?)', initiative_ids, folder_ids).where.not(archived_at: nil) }
 
   before_validation :smart_add_url_protocol
+
+  before_save :unset_enterprise
 
   attr_reader :tag_tokens
 
@@ -92,7 +94,8 @@ class Resource < ApplicationRecord
     return folder if folder.present?
     return initiative if initiative.present?
     return group if group.present?
-    return mentoring_session if mentoring_session.present?
+
+    mentoring_session.presence
   end
 
   def total_views
@@ -128,5 +131,10 @@ class Resource < ApplicationRecord
 
   def have_protocol?
     url[%r{\Ahttp:\/\/}] || url[%r{\Ahttps:\/\/}]
+  end
+
+  # TODO: Find a better solution to not set enterprise for resource objects
+  def unset_enterprise
+    self.enterprise_id = nil if self.group_id.present?
   end
 end

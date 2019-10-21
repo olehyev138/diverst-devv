@@ -9,10 +9,10 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import dig from 'object-dig';
 
-import { FormattedMessage } from 'react-intl';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { Field, Formik, Form } from 'formik';
 import {
-  Button, Card, CardActions, CardContent, TextField
+  Button, Card, CardActions, CardContent, Divider
 } from '@material-ui/core';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
@@ -37,6 +37,7 @@ export function CustomGraphFormInner({ handleSubmit, handleChange, handleBlur, v
           <Field
             component={Select}
             fullWidth
+            required
             name='field_id'
             id='field_id'
             label='Fields'
@@ -63,6 +64,7 @@ export function CustomGraphFormInner({ handleSubmit, handleChange, handleBlur, v
             onBlur={() => setFieldTouched('aggregation_id', true)}
           />
         </CardContent>
+        <Divider />
         <CardActions>
           <Button
             color='primary'
@@ -74,7 +76,7 @@ export function CustomGraphFormInner({ handleSubmit, handleChange, handleBlur, v
             component={WrappedNavLink}
             to={props.links.metricsDashboardShow}
           >
-            <FormattedMessage {...messages.cancel} />
+            <DiverstFormattedMessage {...messages.cancel} />
           </Button>
         </CardActions>
       </Form>

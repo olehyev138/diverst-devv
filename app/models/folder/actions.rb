@@ -16,7 +16,7 @@ module Folder::Actions
       raise BadRequestException.new 'Folder does not exist' if folder.nil?
 
       # verify the password
-      if not folder.valid_password?(password)
+      unless folder.valid_password?(password)
         raise BadRequestException.new 'Incorrect password'
       end
 

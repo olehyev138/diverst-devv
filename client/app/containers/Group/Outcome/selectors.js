@@ -18,4 +18,9 @@ const selectOutcome = () => createSelector(
   outcomesState => outcomesState.currentOutcome
 );
 
-export { selectPaginatedOutcomes, selectOutcomeTotal, selectOutcome };
+const selectIsLoading = () => createSelector(
+  selectOutcomesDomain,
+  outcomesState => outcomesState.isLoading
+);
+
+export { selectPaginatedOutcomes, selectOutcomeTotal, selectOutcome, selectIsLoading };

@@ -9,10 +9,10 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import dig from 'object-dig';
 
-import { FormattedMessage } from 'react-intl';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { Field, Formik, Form } from 'formik';
 import {
-  Button, Card, CardActions, CardContent, TextField
+  Button, Card, CardActions, CardContent, TextField, Divider
 } from '@material-ui/core';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
@@ -45,9 +45,11 @@ export function MetricsDashboardFormInner({ handleSubmit, handleChange, handleBl
             component={TextField}
             onChange={handleChange}
             fullWidth
+            required
             id='name'
             name='name'
-            label={<FormattedMessage {...messages.form.name} />}
+            margin='normal'
+            label={<DiverstFormattedMessage {...messages.form.name} />}
             value={values.name}
           />
           <Field
@@ -81,6 +83,7 @@ export function MetricsDashboardFormInner({ handleSubmit, handleChange, handleBl
             onBlur={() => setFieldTouched('segment_ids', true)}
           />
         </CardContent>
+        <Divider />
         <CardActions>
           <Button
             color='primary'
@@ -92,7 +95,7 @@ export function MetricsDashboardFormInner({ handleSubmit, handleChange, handleBl
             to={props.links.metricsDashboardsIndex}
             component={WrappedNavLink}
           >
-            <FormattedMessage {...messages.cancel} />
+            <DiverstFormattedMessage {...messages.cancel} />
           </Button>
         </CardActions>
       </Form>

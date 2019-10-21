@@ -13,6 +13,8 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import AuthService from 'utils/authService';
 import { loginSuccess, setUser, setEnterprise, setUserPolicyGroup } from 'containers/Shared/App/actions';
 
+import { Settings } from 'luxon'; // Timezone and locale
+
 const styles = theme => ({
   toolbar: theme.mixins.toolbar,
 });
@@ -43,6 +45,10 @@ const AuthenticatedLayout = ({
       other.setEnterprise(user.enterprise);
       other.setUserPolicyGroup(user.policy_group);
     }
+    // Set user time zone from their profile settings
+    Settings.defaultZoneName = user.time_zone;
+    // TODO: Set user locale
+    // Settings.defaultLocale = 'en';
 
     // TODO: Handle if policy group isn't set. Perhaps clear token (sign out) if the policy group is not found
     if (AuthService.hasPermission(data))

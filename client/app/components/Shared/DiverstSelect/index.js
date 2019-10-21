@@ -7,9 +7,15 @@ import Select from 'react-select';
 import { FormControl, FormHelperText, FormLabel } from '@material-ui/core';
 
 const styles = theme => ({
+  formControl: {
+    minWidth: 150,
+  },
   select: {
     width: '100%',
     paddingTop: 8,
+  },
+  formLabel: {
+    fontSize: '0.9rem',
   },
 });
 
@@ -30,6 +36,7 @@ export function DiverstSelect(props) {
 
   return (
     <FormControl
+      className={classes.formControl}
       disabled={disabled}
       error={error}
       fullWidth={fullWidth}
@@ -39,6 +46,7 @@ export function DiverstSelect(props) {
       variant={variant}
     >
       <FormLabel
+        className={classes.formLabel}
         htmlFor={props.id}
         disabled={disabled}
         error={error}
@@ -64,15 +72,17 @@ export function DiverstSelect(props) {
         })}
         {...selectProps}
       />
-      <FormHelperText
-        id={`${props.id}-helper-text`}
-        disabled={disabled}
-        error={error}
-        required={required}
-        variant={variant}
-      >
-        {props.helperText}
-      </FormHelperText>
+      {!props.hideHelperText && (
+        <FormHelperText
+          id={`${props.id}-helper-text`}
+          disabled={disabled}
+          error={error}
+          required={required}
+          variant={variant}
+        >
+          {props.helperText}
+        </FormHelperText>
+      )}
     </FormControl>
   );
 }
@@ -88,6 +98,7 @@ DiverstSelect.propTypes = {
   coloredDefault: PropTypes.bool,
   imgClass: PropTypes.string,
   alt: PropTypes.string,
+  hideHelperText: PropTypes.bool,
 };
 
 export default compose(

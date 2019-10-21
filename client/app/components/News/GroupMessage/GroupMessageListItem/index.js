@@ -14,8 +14,10 @@ import {
 import { withStyles } from '@material-ui/core/styles';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
-import { FormattedMessage } from 'react-intl';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/News/messages';
+
+import { formatDateTimeString } from 'utils/dateTimeHelpers';
 
 const styles = theme => ({
 });
@@ -34,7 +36,7 @@ export function GroupMessageListItem(props) {
           </Avatar>
         )}
         title={groupMessage.subject}
-        subheader={groupMessage.created_at}
+        subheader={formatDateTimeString(groupMessage.created_at)}
       />
       <CardContent>
         <Typography gutterBottom>
@@ -44,32 +46,36 @@ export function GroupMessageListItem(props) {
           {`Submitted by ${groupMessage.owner.first_name} ${groupMessage.owner.last_name}`}
         </Typography>
       </CardContent>
-      <CardActions>
-        <Button
-          size='small'
-          color='primary'
-          to={props.links.groupMessageEdit(newsItem.id)}
-          component={WrappedNavLink}
-        >
-          <FormattedMessage {...messages.edit} />
-        </Button>
-        <Button
-          size='small'
-          to={props.links.groupMessageIndex(newsItem.id)}
-          component={WrappedNavLink}
-        >
-          Comments
-        </Button>
-      </CardActions>
+      { props.links && !props.readonly && (
+        <CardActions>
+          <Button
+            size='small'
+            color='primary'
+            to={props.links.groupMessageEdit(newsItem.id)}
+            component={WrappedNavLink}
+          >
+            <DiverstFormattedMessage {...messages.edit} />
+          </Button>
+          <Button
+            size='small'
+            to={props.links.groupMessageShow(props.groupId, newsItem.id)}
+            component={WrappedNavLink}
+          >
+            Comments
+          </Button>
+        </CardActions>
+      )}
     </Card>
   );
 }
 
 GroupMessageListItem.propTypes = {
   newsItem: PropTypes.object,
+  readonly: PropTypes.bool,
+  groupId: PropTypes.number,
   links: PropTypes.shape({
     groupMessageEdit: PropTypes.func,
-    groupMessageIndex: PropTypes.func
+    groupMessageShow: PropTypes.func
   })
 };
 
