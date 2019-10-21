@@ -6,7 +6,7 @@ class RewardMailerJob < ActiveJob::Base
 
     return if user_reward.nil?
 
-    RewardMailer.redeem_reward(user_reward_id).deliver_later if user_reward.status.pending?
+    RewardMailer.request_to_redeem_reward(user_reward_id).deliver_later if user_reward.status.pending?
     RewardMailer.approve_reward(user_reward_id).deliver_later if user_reward.status.redeemed?
     RewardMailer.forfeit_reward(user_reward_id).deliver_later if user_reward.status.forfeited?
   end

@@ -15,7 +15,7 @@ RSpec.describe UserReward do
   describe '#Enumerize' do
     let(:user_reward) { build(:user_reward) }
 
-    it { expect(user_reward).to enumerize(:status).in(:pending, :redeemed) }
+    it { expect(user_reward).to enumerize(:status).in(:pending, :redeemed, :forfeited) }
   end
 
   describe '#approve_reward_redemption' do

@@ -1,5 +1,5 @@
 class RewardMailer < ApplicationMailer
-  def redeem_reward(user_reward_id)
+  def request_to_redeem_reward(user_reward_id)
     return if user_reward_id.nil?
 
     user_reward = UserReward.find_by(id: user_reward_id)
