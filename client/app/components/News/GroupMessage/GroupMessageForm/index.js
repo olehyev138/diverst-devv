@@ -18,6 +18,7 @@ import {
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import messages from 'containers/News/messages';
 import { buildValues } from 'utils/formHelpers';
+import DiverstSubmit from 'components/Shared/DiverstSubmit';
 
 /* eslint-disable object-curly-newline */
 export function GroupMessageFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
@@ -53,12 +54,9 @@ export function GroupMessageFormInner({ handleSubmit, handleChange, handleBlur, 
         </CardContent>
         <Divider />
         <CardActions>
-          <Button
-            color='primary'
-            type='submit'
-          >
+          <DiverstSubmit isCommitting={props.isCommitting}>
             {buttonText}
-          </Button>
+          </DiverstSubmit>
           <Button
             to={props.links.newsFeedIndex}
             component={WrappedNavLink}
@@ -75,6 +73,7 @@ export function GroupMessageForm(props) {
   const groupMessage = dig(props, 'newsItem', 'group_message');
 
   const initialValues = buildValues(groupMessage, {
+    id: { default: '' },
     subject: { default: '' },
     content: { default: '' },
     owner_id: { default: dig(props, 'currentUser', 'id') || '' },
@@ -98,7 +97,8 @@ GroupMessageForm.propTypes = {
   groupMessageAction: PropTypes.func,
   groupMessage: PropTypes.object,
   currentUser: PropTypes.object,
-  currentGroup: PropTypes.object
+  currentGroup: PropTypes.object,
+  isCommitting: PropTypes.bool,
 };
 
 GroupMessageFormInner.propTypes = {
@@ -109,6 +109,7 @@ GroupMessageFormInner.propTypes = {
   buttonText: PropTypes.string,
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
+  isCommitting: PropTypes.bool,
   links: PropTypes.shape({
     newsFeedIndex: PropTypes.string
   })

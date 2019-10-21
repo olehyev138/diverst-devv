@@ -17,6 +17,7 @@ import {
 import withStyles from '@material-ui/core/styles/withStyles';
 
 import messages from 'containers/News/messages';
+import DiverstSubmit from 'components/Shared/DiverstSubmit';
 
 const styles = theme => ({
   formTitle: {
@@ -26,7 +27,7 @@ const styles = theme => ({
 });
 
 /* eslint-disable object-curly-newline */
-export function GroupMessageCommentFormInner({ classes, handleSubmit, handleChange, handleBlur, values, setFieldValue, setFieldTouched }) {
+export function GroupMessageCommentFormInner({ classes, handleSubmit, handleChange, handleBlur, values, setFieldValue, setFieldTouched, ...props }) {
   return (
     <Card>
       <Form>
@@ -49,12 +50,10 @@ export function GroupMessageCommentFormInner({ classes, handleSubmit, handleChan
         </CardContent>
         <Divider />
         <CardActions>
-          <Button
-            color='primary'
-            type='submit'
-          >
-            Submit
-          </Button>
+
+          <DiverstSubmit isCommitting={props.isCommitting}>
+            <DiverstFormattedMessage {...messages.comment_submit} />
+          </DiverstSubmit>
         </CardActions>
       </Form>
     </Card>
@@ -94,6 +93,7 @@ GroupMessageCommentForm.propTypes = {
   commentAction: PropTypes.func,
   newsItem: PropTypes.object,
   currentUserId: PropTypes.number,
+  isCommitting: PropTypes.bool,
 };
 
 GroupMessageCommentFormInner.propTypes = {
@@ -104,6 +104,7 @@ GroupMessageCommentFormInner.propTypes = {
   values: PropTypes.object,
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
+  isCommitting: PropTypes.bool,
   links: PropTypes.shape({
     newsFeedIndex: PropTypes.string
   })

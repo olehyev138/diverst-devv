@@ -96,6 +96,7 @@
   "diverst.containers.News.form.button.cancel": "Cancel",
   "diverst.containers.News.form.group_message.input.subject": "Subject",
   "diverst.containers.News.form.group_message.input.content": "Content",
+  "diverst.containers.News.form.group_message.comment.submit": "Submit",
   "diverst.containers.Segment.index.button.new": "New {segment}",
   "diverst.containers.Segment.index.button.edit": "Edit",
   "diverst.containers.Segment.index.button.delete": "Delete",
