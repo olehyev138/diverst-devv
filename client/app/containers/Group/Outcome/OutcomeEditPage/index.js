@@ -17,7 +17,7 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { selectGroup } from 'containers/Group/selectors';
 import { selectUser } from 'containers/Shared/App/selectors';
-import { selectOutcome } from 'containers/Group/Outcome/selectors';
+import { selectOutcome, selectIsCommitting } from 'containers/Group/Outcome/selectors';
 
 import {
   getOutcomeBegin, updateOutcomeBegin,
@@ -52,6 +52,7 @@ export function OutcomeEditPage(props) {
       currentGroup={currentGroup}
       outcome={currentOutcome}
       links={links}
+      isCommitting={props.isCommitting}
     />
   );
 }
@@ -63,12 +64,14 @@ OutcomeEditPage.propTypes = {
   currentUser: PropTypes.object,
   currentGroup: PropTypes.object,
   currentOutcome: PropTypes.object,
+  isCommitting: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
   currentGroup: selectGroup(),
   currentUser: selectUser(),
   currentOutcome: selectOutcome(),
+  isCommitting: selectIsCommitting(),
 });
 
 const mapDispatchToProps = {

@@ -18,6 +18,7 @@ import {
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import messages from 'containers/Group/Outcome/messages';
 import { buildValues } from 'utils/formHelpers';
+import DiverstSubmit from 'components/Shared/DiverstSubmit';
 
 /* eslint-disable object-curly-newline */
 export function OutcomeFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
@@ -27,12 +28,9 @@ export function OutcomeFormInner({ handleSubmit, handleChange, handleBlur, value
         <CardContent>
         </CardContent>
         <CardActions>
-          <Button
-            color='primary'
-            type='submit'
-          >
+          <DiverstSubmit isCommitting={props.isCommitting}>
             {buttonText}
-          </Button>
+          </DiverstSubmit>
           <Button
             to={props.links.outcomesIndex}
             component={WrappedNavLink}
@@ -71,7 +69,8 @@ OutcomeForm.propTypes = {
   outcomeAction: PropTypes.func,
   outcome: PropTypes.object,
   currentUser: PropTypes.object,
-  currentGroup: PropTypes.object
+  currentGroup: PropTypes.object,
+  isCommitting: PropTypes.bool,
 };
 
 OutcomeFormInner.propTypes = {
@@ -82,6 +81,7 @@ OutcomeFormInner.propTypes = {
   buttonText: PropTypes.string,
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
+  isCommitting: PropTypes.bool,
   links: PropTypes.shape({
     outcomesIndex: PropTypes.string,
   })
