@@ -17,6 +17,7 @@ class User::UserRewardsController < ApplicationController
     authorize current_user.enterprise, :update?
 
     @user_reward.approve_reward_redemption
+    RewardMailerJob.perform_later(@user_reward.id)
     flash[:notice] = "#{@user_reward.user.name}'s reward has been redeemed!"
 
     redirect_to :back
@@ -35,12 +36,9 @@ class User::UserRewardsController < ApplicationController
     authorize current_user.enterprise, :update?
 
     @user = @user_reward.user
+    @user_reward.update(user_reward_params.merge({ status: 2 }))
 
-    if user_reward_params[:comment].blank?
-      @user_reward.destroy
-    else
-      @user_reward.update(user_reward_params.merge({ status: 2 }))
-    end
+    RewardMailerJob.perform_later(@user_reward.id)
     flash[:notice] = "#{@user.name}'s reward has been forfeited!"
     redirect_to :back
   end
