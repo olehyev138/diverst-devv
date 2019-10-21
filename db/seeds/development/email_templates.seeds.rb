@@ -101,7 +101,7 @@ after 'development:enterprise' do
             :mailer_method => 'notification',
             :content => "<p>Hello %{user.name},</p>\r\n\r\n<p>Welcome as a new member of %{group.name}! Be sure to check our page often for latest news and messages and look forward to seeing you at our events!.</p>\r\n",
             :subject => "Hi %{user.name} and welcome to %{group.name}.",
-            :description => "Email that goes out to group leaders when there are pending group members",
+            :description => "Email that goes out to new group members",
             :template => ""
           }
         ]
