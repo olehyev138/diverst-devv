@@ -25,6 +25,8 @@ import {
   TextField, Hidden, FormControl, Divider, Switch, FormControlLabel,
 } from '@material-ui/core';
 
+import DiverstSubmit from 'components/Shared/DiverstSubmit';
+
 const styles = theme => ({
   noBottomPadding: {
     paddingBottom: '0 !important',
@@ -152,12 +154,9 @@ export function GroupFormInner({ classes, handleSubmit, handleChange, handleBlur
         </CardContent>
         <Divider />
         <CardActions>
-          <Button
-            color='primary'
-            type='submit'
-          >
+          <DiverstSubmit isCommitting={props.isCommitting}>
             {buttonText}
-          </Button>
+          </DiverstSubmit>
           <Button
             to={ROUTES.admin.manage.groups.index.path()}
             component={WrappedNavLink}
@@ -197,6 +196,7 @@ export function GroupForm(props) {
 GroupForm.propTypes = {
   groupAction: PropTypes.func,
   group: PropTypes.object,
+  isCommitting: PropTypes.bool,
 };
 
 GroupFormInner.propTypes = {
@@ -209,7 +209,8 @@ GroupFormInner.propTypes = {
   selectGroups: PropTypes.array,
   getGroupsBegin: PropTypes.func,
   setFieldValue: PropTypes.func,
-  setFieldTouched: PropTypes.func
+  setFieldTouched: PropTypes.func,
+  isCommitting: PropTypes.bool,
 };
 
 export default compose(

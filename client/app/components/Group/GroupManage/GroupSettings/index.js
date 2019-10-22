@@ -13,9 +13,6 @@ import { Field, Formik, Form } from 'formik';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { withStyles } from '@material-ui/core/styles';
 
-import WrappedNavLink from 'components/Shared/WrappedNavLink';
-import { ROUTES } from 'containers/Shared/Routes/constants';
-
 import messages from 'containers/Group/messages';
 import { buildValues, mapFields } from 'utils/formHelpers';
 
@@ -26,6 +23,7 @@ import {
 } from '@material-ui/core';
 
 import DiverstColorPicker from 'components/Shared/DiverstColorPicker';
+import DiverstSubmit from 'components/Shared/DiverstSubmit';
 
 const styles = theme => ({
   noBottomPadding: {
@@ -165,12 +163,9 @@ export function GroupSettingsInner({ classes, handleSubmit, handleChange, handle
         </CardContent>
         <Divider />
         <CardActions>
-          <Button
-            color='primary'
-            type='submit'
-          >
-            Save
-          </Button>
+          <DiverstSubmit isCommitting={props.isCommitting}>
+            <DiverstFormattedMessage {...messages.settings_save} />
+          </DiverstSubmit>
         </CardActions>
       </Form>
     </Card>
@@ -206,6 +201,7 @@ export function GroupSettings(props) {
 GroupSettings.propTypes = {
   groupAction: PropTypes.func,
   group: PropTypes.object,
+  isCommitting: PropTypes.bool,
 };
 
 GroupSettingsInner.propTypes = {
@@ -216,7 +212,8 @@ GroupSettingsInner.propTypes = {
   values: PropTypes.object,
   buttonText: PropTypes.string,
   setFieldValue: PropTypes.func,
-  setFieldTouched: PropTypes.func
+  setFieldTouched: PropTypes.func,
+  isCommitting: PropTypes.bool,
 };
 
 export default compose(

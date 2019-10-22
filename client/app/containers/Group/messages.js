@@ -57,4 +57,7 @@ export default defineMessages({
   parent: {
     id: `${scope}.form.input.parent`,
   },
+  settings_save: {
+    id: `${scope}.settings.form.button.save`
+  },
 });
