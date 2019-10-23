@@ -11,7 +11,7 @@ import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/User/reducer';
 import saga from 'containers/User/saga';
 
-import { selectUserTotal } from 'containers/User/selectors';
+import { selectIsCommitting } from 'containers/User/selectors';
 import {
   createUserBegin, updateFieldDataBegin,
   getUsersBegin, userUnmount
@@ -43,6 +43,7 @@ export function UserCreatePage(props) {
       getUsersBegin={props.getUsersBegin}
       selectUsers={props.users}
       links={links}
+      isCommitting={props.isCommitting}
     />
   );
 }
@@ -52,10 +53,12 @@ UserCreatePage.propTypes = {
   updateFieldDataBegin: PropTypes.func,
   getUsersBegin: PropTypes.func,
   userUnmount: PropTypes.func,
-  users: PropTypes.array
+  users: PropTypes.array,
+  isCommitting: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
+  isCommitting: selectIsCommitting(),
 });
 
 const mapDispatchToProps = {
