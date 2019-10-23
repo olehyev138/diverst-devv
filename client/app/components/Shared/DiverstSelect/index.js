@@ -71,6 +71,7 @@ export function DiverstSelect(props) {
           }
         })}
         {...selectProps}
+        isDisabled={disabled}
       />
       {!props.hideHelperText && (
         <FormHelperText
