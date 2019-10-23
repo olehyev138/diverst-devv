@@ -16,7 +16,7 @@ const styles = theme => ({});
 export function GroupMessage(props) {
   /* Render a GroupMessage, its comments & a comment form */
 
-  const { classes } = props;
+  const { classes, ...rest } = props;
   const newsItem = dig(props, 'newsItem');
   const groupMessage = dig(newsItem, 'group_message');
 
@@ -31,6 +31,7 @@ export function GroupMessage(props) {
           currentUserId={props.currentUserId}
           newsItem={props.newsItem}
           commentAction={props.commentAction}
+          {...rest}
         />
         <Box mb={4} />
         <Typography variant='h6'>

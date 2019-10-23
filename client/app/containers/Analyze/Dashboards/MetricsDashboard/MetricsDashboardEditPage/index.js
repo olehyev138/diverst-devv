@@ -26,7 +26,7 @@ import {
 } from 'containers/Analyze/Dashboards/MetricsDashboard/actions';
 
 // selectors
-import { selectFormMetricsDashboard } from 'containers/Analyze/Dashboards/MetricsDashboard/selectors';
+import { selectFormMetricsDashboard, selectIsCommitting } from 'containers/Analyze/Dashboards/MetricsDashboard/selectors';
 import { selectPaginatedSelectGroups } from 'containers/Group/selectors';
 import { selectPaginatedSelectSegments } from 'containers/Segment/selectors';
 
@@ -65,6 +65,7 @@ export function MetricsDashboardEditPage(props) {
       buttonText='Update'
       metricsDashboard={props.currentMetricsDashboard}
       links={links}
+      isCommitting={props.isCommitting}
     />
   );
 }
@@ -78,12 +79,14 @@ MetricsDashboardEditPage.propTypes = {
   getSegmentsBegin: PropTypes.func,
   groups: PropTypes.array,
   segments: PropTypes.array,
+  isCommitting: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
   currentMetricsDashboard: selectFormMetricsDashboard(),
   groups: selectPaginatedSelectGroups(),
-  segments: selectPaginatedSelectSegments()
+  segments: selectPaginatedSelectSegments(),
+  isCommitting: selectIsCommitting(),
 });
 
 const mapDispatchToProps = {

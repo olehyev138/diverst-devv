@@ -15,13 +15,11 @@ import saga from 'containers/Resource/saga';
 import { injectIntl, intlShape } from 'react-intl';
 
 import RouteService from 'utils/routeHelpers';
-import { ROUTES } from 'containers/Shared/Routes/constants';
 
-import { selectGroup } from 'containers/Group/selectors';
 import { selectUser, selectEnterprise } from 'containers/Shared/App/selectors';
 import {
   selectFormFolder, selectPaginatedSelectFolders, selectValid,
-  selectFormResource,
+  selectFormResource, selectIsCommitting
 } from 'containers/Resource/selectors';
 
 import {
@@ -78,6 +76,7 @@ export function FolderEditPage(props) {
       currentFolder={currentFolder}
       links={links}
       type={type}
+      isCommitting={props.isCommitting}
     />
   );
 }
@@ -98,6 +97,7 @@ FolderEditPage.propTypes = {
   currentResource: PropTypes.object,
   folders: PropTypes.array,
   valid: PropTypes.bool,
+  isCommitting: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -107,6 +107,7 @@ const mapStateToProps = createStructuredSelector({
   currentResource: selectFormResource(),
   currentEnterprise: selectEnterprise(),
   valid: selectValid(),
+  isCommitting: selectIsCommitting(),
 });
 
 const mapDispatchToProps = {

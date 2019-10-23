@@ -11,6 +11,7 @@ describe('groupsReducer', () => {
   beforeEach(() => {
     state = {
       isLoading: true,
+      isCommitting: false,
       groupList: {},
       groupTotal: null,
       currentGroup: null

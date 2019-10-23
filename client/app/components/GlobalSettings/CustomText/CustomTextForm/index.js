@@ -17,6 +17,7 @@ import {
 
 import messages from 'containers/GlobalSettings/CustomText/messages';
 import { buildValues } from 'utils/formHelpers';
+import DiverstSubmit from 'components/Shared/DiverstSubmit';
 
 /* eslint-disable object-curly-newline */
 export function CustomTextFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
@@ -30,6 +31,7 @@ export function CustomTextFormInner({ handleSubmit, handleChange, handleBlur, va
                 component={TextField}
                 onChange={handleChange}
                 margin='normal'
+                disabled={props.isCommitting}
                 id='erg'
                 name='erg'
                 label={<DiverstFormattedMessage {...messages.erg} />}
@@ -41,6 +43,7 @@ export function CustomTextFormInner({ handleSubmit, handleChange, handleBlur, va
                 component={TextField}
                 onChange={handleChange}
                 margin='normal'
+                disabled={props.isCommitting}
                 id='program'
                 name='program'
                 label={<DiverstFormattedMessage {...messages.program} />}
@@ -52,6 +55,7 @@ export function CustomTextFormInner({ handleSubmit, handleChange, handleBlur, va
                 component={TextField}
                 onChange={handleChange}
                 margin='normal'
+                disabled={props.isCommitting}
                 id='structure'
                 name='structure'
                 label={<DiverstFormattedMessage {...messages.structure} />}
@@ -63,6 +67,7 @@ export function CustomTextFormInner({ handleSubmit, handleChange, handleBlur, va
                 component={TextField}
                 onChange={handleChange}
                 margin='normal'
+                disabled={props.isCommitting}
                 id='outcome'
                 name='outcome'
                 label={<DiverstFormattedMessage {...messages.outcome} />}
@@ -74,6 +79,7 @@ export function CustomTextFormInner({ handleSubmit, handleChange, handleBlur, va
                 component={TextField}
                 onChange={handleChange}
                 margin='normal'
+                disabled={props.isCommitting}
                 id='badge'
                 name='badge'
                 label={<DiverstFormattedMessage {...messages.badge} />}
@@ -85,6 +91,7 @@ export function CustomTextFormInner({ handleSubmit, handleChange, handleBlur, va
                 component={TextField}
                 onChange={handleChange}
                 margin='normal'
+                disabled={props.isCommitting}
                 id='segment'
                 name='segment'
                 label={<DiverstFormattedMessage {...messages.segment} />}
@@ -96,6 +103,7 @@ export function CustomTextFormInner({ handleSubmit, handleChange, handleBlur, va
                 component={TextField}
                 onChange={handleChange}
                 margin='normal'
+                disabled={props.isCommitting}
                 id='dci_full_title'
                 name='dci_full_title'
                 label={<DiverstFormattedMessage {...messages.dci_full_title} />}
@@ -107,6 +115,7 @@ export function CustomTextFormInner({ handleSubmit, handleChange, handleBlur, va
                 component={TextField}
                 onChange={handleChange}
                 margin='normal'
+                disabled={props.isCommitting}
                 id='dci_abbreviation'
                 name='dci_abbreviation'
                 label={<DiverstFormattedMessage {...messages.dci_abbreviation} />}
@@ -118,6 +127,7 @@ export function CustomTextFormInner({ handleSubmit, handleChange, handleBlur, va
                 component={TextField}
                 onChange={handleChange}
                 margin='normal'
+                disabled={props.isCommitting}
                 id='member_preference'
                 name='member_preference'
                 label={<DiverstFormattedMessage {...messages.member_preference} />}
@@ -129,6 +139,7 @@ export function CustomTextFormInner({ handleSubmit, handleChange, handleBlur, va
                 component={TextField}
                 onChange={handleChange}
                 margin='normal'
+                disabled={props.isCommitting}
                 id='parent'
                 name='parent'
                 label={<DiverstFormattedMessage {...messages.parent} />}
@@ -140,6 +151,7 @@ export function CustomTextFormInner({ handleSubmit, handleChange, handleBlur, va
                 component={TextField}
                 onChange={handleChange}
                 margin='normal'
+                disabled={props.isCommitting}
                 id='sub_erg'
                 name='sub_erg'
                 label={<DiverstFormattedMessage {...messages.sub_erg} />}
@@ -151,6 +163,7 @@ export function CustomTextFormInner({ handleSubmit, handleChange, handleBlur, va
                 component={TextField}
                 onChange={handleChange}
                 margin='normal'
+                disabled={props.isCommitting}
                 id='privacy_statement'
                 name='privacy_statement'
                 label={<DiverstFormattedMessage {...messages.privacy_statement} />}
@@ -161,12 +174,9 @@ export function CustomTextFormInner({ handleSubmit, handleChange, handleBlur, va
         </CardContent>
         <Divider />
         <CardActions>
-          <Button
-            color='primary'
-            type='submit'
-          >
+          <DiverstSubmit isCommitting={props.isCommitting}>
             {buttonText}
-          </Button>
+          </DiverstSubmit>
         </CardActions>
       </Form>
     </Card>
@@ -209,7 +219,8 @@ CustomTextForm.propTypes = {
   customTextAction: PropTypes.func,
   customText: PropTypes.object,
   currentUser: PropTypes.object,
-  currentGroup: PropTypes.object
+  currentGroup: PropTypes.object,
+  isCommitting: PropTypes.bool,
 };
 
 CustomTextFormInner.propTypes = {
@@ -220,6 +231,7 @@ CustomTextFormInner.propTypes = {
   buttonText: PropTypes.string,
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
+  isCommitting: PropTypes.bool,
   links: PropTypes.shape({
     customTextEdit: PropTypes.string
   })

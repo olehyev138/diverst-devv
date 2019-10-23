@@ -12,12 +12,10 @@ import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/Resource/reducer';
 import saga from 'containers/Resource/saga';
 
-import { selectGroup } from 'containers/Group/selectors';
-import { selectPaginatedSelectFolders } from 'containers/Resource/selectors';
+import { selectPaginatedSelectFolders, selectIsCommitting } from 'containers/Resource/selectors';
 import { selectUser, selectEnterprise } from 'containers/Shared/App/selectors';
 
 import RouteService from 'utils/routeHelpers';
-import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { getFoldersBegin, createFolderBegin, foldersUnmount } from 'containers/Resource/actions';
 import FolderForm from 'components/Resource/Folder/FolderForm';
@@ -63,6 +61,7 @@ export function FolderCreatePage(props) {
       links={links}
       type={type}
       from={location.fromFolder ? location.fromFolder : null}
+      isCommitting={props.isCommitting}
     />
   );
 }
@@ -78,6 +77,7 @@ FolderCreatePage.propTypes = {
   currentGroup: PropTypes.object,
   currentEnterprise: PropTypes.object,
   folders: PropTypes.array,
+  isCommitting: PropTypes.bool,
   location: PropTypes.shape({
     state: PropTypes.object,
   })
@@ -87,6 +87,7 @@ const mapStateToProps = createStructuredSelector({
   currentUser: selectUser(),
   folders: selectPaginatedSelectFolders(),
   currentEnterprise: selectEnterprise(),
+  isCommitting: selectIsCommitting(),
 });
 
 const mapDispatchToProps = {

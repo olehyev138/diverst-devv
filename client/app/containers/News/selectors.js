@@ -23,7 +23,12 @@ const selectIsLoading = () => createSelector(
   newsState => newsState.isLoading
 );
 
+const selectIsCommitting = () => createSelector(
+  selectNewsDomain,
+  newsState => newsState.isCommitting
+);
+
 export {
   selectNewsDomain, selectPaginatedNewsItems,
-  selectNewsItem, selectNewsItemsTotal, selectIsLoading
+  selectNewsItem, selectNewsItemsTotal, selectIsLoading, selectIsCommitting
 };

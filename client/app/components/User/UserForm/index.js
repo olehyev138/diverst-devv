@@ -22,6 +22,7 @@ import messages from 'containers/User/messages';
 import { buildValues, mapFields } from 'utils/formHelpers';
 
 import FieldInputForm from 'components/User/FieldInputForm/Loadable';
+import DiverstSubmit from 'components/Shared/DiverstSubmit';
 
 /* eslint-disable object-curly-newline */
 export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
@@ -34,6 +35,7 @@ export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, 
               component={TextField}
               onChange={handleChange}
               fullWidth
+              disabled={props.isCommitting}
               margin='normal'
               id='first_name'
               name='first_name'
@@ -44,6 +46,7 @@ export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, 
               component={TextField}
               onChange={handleChange}
               fullWidth
+              disabled={props.isCommitting}
               margin='normal'
               id='last_name'
               name='last_name'
@@ -54,6 +57,7 @@ export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, 
               component={TextField}
               onChange={handleChange}
               fullWidth
+              disabled={props.isCommitting}
               margin='normal'
               multiline
               rows={4}
@@ -66,6 +70,7 @@ export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, 
             <Field
               component={Select}
               fullWidth
+              disabled={props.isCommitting}
               id='time_zone'
               name='time_zone'
               margin='normal'
@@ -78,13 +83,11 @@ export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, 
           </CardContent>
           <Divider />
           <CardActions>
-            <Button
-              color='primary'
-              type='submit'
-            >
+            <DiverstSubmit isCommitting={props.isCommitting}>
               {buttonText}
-            </Button>
+            </DiverstSubmit>
             <Button
+              disabled={props.isCommitting}
               to={props.admin ? props.links.usersIndex : props.links.usersPath(values.id)}
               component={WrappedNavLink}
             >
@@ -93,13 +96,18 @@ export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, 
           </CardActions>
         </Form>
       </Card>
-      <Box mb={2} />
-      <FieldInputForm
-        user={props.user}
-        fieldData={props.fieldData}
-        updateFieldDataBegin={props.updateFieldDataBegin}
-        admin={props.admin}
-      />
+      {!props.create && (
+        <React.Fragment>
+          <Box mb={2} />
+          <FieldInputForm
+            user={props.user}
+            fieldData={props.fieldData}
+            updateFieldDataBegin={props.updateFieldDataBegin}
+            admin={props.admin}
+            isCommitting={props.isCommitting}
+          />
+        </React.Fragment>
+      )}
     </React.Fragment>
   );
 }
@@ -135,6 +143,8 @@ UserForm.propTypes = {
   user: PropTypes.object,
   currentUser: PropTypes.object,
   admin: PropTypes.bool,
+  create: PropTypes.bool,
+  isCommitting: PropTypes.bool,
   links: PropTypes.shape({
     usersIndex: PropTypes.string,
     usersPath: PropTypes.func,
@@ -153,6 +163,8 @@ UserFormInner.propTypes = {
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
   admin: PropTypes.bool,
+  create: PropTypes.bool,
+  isCommitting: PropTypes.bool,
   links: PropTypes.shape({
     usersIndex: PropTypes.string,
     usersPath: PropTypes.func,

@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
-import { NavLink } from 'react-router-dom';
 import { matchPath } from 'react-router';
 
 import {
@@ -289,6 +288,11 @@ class AdminLinks extends React.PureComponent {
                 to={ROUTES.admin.system.globalSettings.fields.index.path()}
                 className={classes.nested}
                 activeClassName={classes.navLinkActive}
+                isActive={(match, location) => !!matchPath(location.pathname, {
+                  path: ROUTES.admin.system.globalSettings.pathPrefix,
+                  exact: false,
+                  strict: false,
+                })}
               >
                 <ListItemIcon>
                   <ListIcon />

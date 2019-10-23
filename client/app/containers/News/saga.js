@@ -17,7 +17,8 @@ import {
   getNewsItemsSuccess, getNewsItemsError,
   getNewsItemBegin, getNewsItemSuccess, getNewsItemError,
   createGroupMessageSuccess, createGroupMessageError,
-  createGroupMessageCommentError
+  createGroupMessageCommentError, updateGroupMessageSuccess,
+  createGroupMessageCommentSuccess
 } from 'containers/News/actions';
 
 
@@ -49,6 +50,7 @@ export function* createGroupMessage(action) {
     const payload = { group_message: action.payload };
     const response = yield call(api.groupMessages.create.bind(api.groupMessages), payload);
 
+    yield put(createGroupMessageSuccess());
     yield put(push(ROUTES.group.news.index.path(action.payload.group_id)));
     yield put(showSnackbar({ message: 'Group message created', options: { variant: 'success' } }));
   } catch (err) {
@@ -64,6 +66,7 @@ export function* updateGroupMessage(action) {
     const payload = { group_message: action.payload };
     const response = yield call(api.groupMessages.update.bind(api.groupMessages), payload.group_message.id, payload);
 
+    yield put(updateGroupMessageSuccess());
     yield put(push(ROUTES.group.news.index.path(action.payload.group_id)));
     yield put(showSnackbar({ message: 'Group message updated', options: { variant: 'success' } }));
   } catch (err) {
@@ -81,6 +84,7 @@ export function* createGroupMessageComment(action) {
     const payload = { group_message_comment: action.payload.attributes };
     const response = yield call(api.groupMessageComments.create.bind(api.groupMessageComments), payload);
 
+    yield put(createGroupMessageCommentSuccess());
     yield put(getNewsItemBegin({ id: action.payload.news_feed_link_id }));
     yield put(showSnackbar({ message: 'Group message comment created', options: { variant: 'success' } }));
   } catch (err) {

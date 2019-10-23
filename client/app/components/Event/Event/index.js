@@ -8,6 +8,8 @@ import {
   Paper, Typography, Grid, Button
 } from '@material-ui/core/index';
 import { withStyles } from '@material-ui/core/styles';
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/DeleteOutline';
 
 import classNames from 'classnames';
 
@@ -60,20 +62,11 @@ export function Event(props) {
           </Grid>
           <Grid item sm>
             <Button
-              component={WrappedNavLink}
-              to={props.links.eventEdit}
-              variant='contained'
-              size='large'
-              color='primary'
-              className={classes.buttons}
-            >
-              <DiverstFormattedMessage {...messages.edit} />
-            </Button>
-            <Button
               variant='contained'
               size='large'
               color='primary'
               className={classNames(classes.buttons, classes.deleteButton)}
+              startIcon={<DeleteIcon />}
               onClick={() => {
                 /* eslint-disable-next-line no-alert, no-restricted-globals */
                 if (confirm('Delete event?'))
@@ -81,6 +74,17 @@ export function Event(props) {
               }}
             >
               <DiverstFormattedMessage {...messages.delete} />
+            </Button>
+            <Button
+              component={WrappedNavLink}
+              to={props.links.eventEdit}
+              variant='contained'
+              size='large'
+              color='primary'
+              className={classes.buttons}
+              startIcon={<EditIcon />}
+            >
+              <DiverstFormattedMessage {...messages.edit} />
             </Button>
           </Grid>
         </Grid>

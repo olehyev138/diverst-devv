@@ -8,6 +8,7 @@ describe('eventsReducer', () => {
   let state;
   beforeEach(() => {
     state = {
+      isCommitting: false,
       isLoading: true,
       events: [],
       eventsTotal: null,

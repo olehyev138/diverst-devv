@@ -111,7 +111,7 @@ export function EventsList(props, context) {
         </ResponsiveTabs>
       </Paper>
       <br />
-      <DiverstLoader isLoading={props.isLoading}>
+      <DiverstLoader isLoading={props.isLoading} {...props.loaderProps}>
         <Grid container spacing={3}>
           { /* eslint-disable-next-line arrow-body-style */}
           {props.events && Object.values(props.events).map((item, i) => {
@@ -195,6 +195,7 @@ EventsList.propTypes = {
   handlePagination: PropTypes.func,
   links: PropTypes.object,
   readonly: PropTypes.bool,
+  loaderProps: PropTypes.object,
 };
 
 export default compose(

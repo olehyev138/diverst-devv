@@ -9,11 +9,16 @@ import {
   GET_GROUPS_ERROR, GET_GROUPS_SUCCESS,
   GET_GROUP_ERROR, GET_GROUP_SUCCESS,
   GROUP_LIST_UNMOUNT, GROUP_FORM_UNMOUNT,
-  GET_GROUPS_BEGIN,
+  GET_GROUPS_BEGIN, CREATE_GROUP_BEGIN,
+  CREATE_GROUP_SUCCESS, CREATE_GROUP_ERROR,
+  UPDATE_GROUP_BEGIN, UPDATE_GROUP_SUCCESS,
+  UPDATE_GROUP_ERROR, UPDATE_GROUP_SETTINGS_BEGIN,
+  UPDATE_GROUP_SETTINGS_SUCCESS, UPDATE_GROUP_SETTINGS_ERROR
 } from 'containers/Group/constants';
 
 export const initialState = {
   isLoading: true,
+  isCommitting: false,
   groupList: {},
   groupTotal: null,
   currentGroup: null,
@@ -41,6 +46,19 @@ function groupsReducer(state = initialState, action) {
         break;
       case GET_GROUPS_ERROR:
         draft.isLoading = false;
+        break;
+      case CREATE_GROUP_BEGIN:
+      case UPDATE_GROUP_BEGIN:
+      case UPDATE_GROUP_SETTINGS_BEGIN:
+        draft.isCommitting = true;
+        break;
+      case CREATE_GROUP_SUCCESS:
+      case UPDATE_GROUP_SUCCESS:
+      case UPDATE_GROUP_SETTINGS_SUCCESS:
+      case CREATE_GROUP_ERROR:
+      case UPDATE_GROUP_ERROR:
+      case UPDATE_GROUP_SETTINGS_ERROR:
+        draft.isCommitting = false;
         break;
       case GROUP_LIST_UNMOUNT:
         return initialState;
