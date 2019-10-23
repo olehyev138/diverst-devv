@@ -12,7 +12,7 @@ import {
   CustomGraphCreatePage, CustomGraphEditPage, GroupManageLayout, GroupSettingsPage, CustomTextEditPage,
   UserNewsLinkPage, UserEventsPage, FoldersPage, FolderCreatePage, FolderEditPage, FolderPage, ResourceCreatePage,
   ResourceEditPage, UserProfilePage,
-  MentorshipProfilePage, MentorshipEditProfilePage, MentorshipLayout
+  MentorshipProfilePage, MentorshipEditProfilePage, MentorshipLayout, MentorsPage,
 } from './templates';
 
 // Paths
@@ -38,6 +38,7 @@ export default function Routes(props) {
 
       { /* User - Mentorship */ }
       <MentorshipLayout {...expandRoute(ROUTES.user.mentorship.edit)} component={MentorshipEditProfilePage} disableBreadcrumbs />
+      <MentorshipLayout {...expandRoute(ROUTES.user.mentorship.mentors)} component={MentorsPage} disableBreadcrumbs />
       <MentorshipLayout {...expandRoute(ROUTES.user.mentorship.show)} component={MentorshipProfilePage} disableBreadcrumbs />
       <MentorshipLayout {...expandRoute(ROUTES.user.mentorship.home)} component={MentorshipProfilePage} disableBreadcrumbs />
 

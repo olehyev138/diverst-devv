@@ -23,6 +23,7 @@ import UserEventsPage from 'containers/User/UserEventsPage/Loadable';
 /* User - Mentorship */
 import MentorshipProfilePage from 'containers/Mentorship/MentorshipProfilePage/Loadable';
 import MentorshipEditProfilePage from 'containers/Mentorship/MentorshipEditProfilePage/Loadable';
+import MentorsPage from 'containers/Mentorship/MentorsPage/Loadable';
 
 /* Admin - Analyze */
 import GroupDashboardPage from 'containers/Analyze/Dashboards/GroupDashboardPage/Loadable';
@@ -105,5 +106,5 @@ export {
   CustomGraphCreatePage, CustomGraphEditPage, GroupManageLayout, GroupSettingsPage, CustomTextEditPage,
   UserNewsLinkPage, UserEventsPage, FoldersPage, FolderCreatePage, FolderEditPage, FolderPage, ResourceCreatePage,
   ResourceEditPage, UserProfilePage,
-  MentorshipProfilePage, MentorshipEditProfilePage, MentorshipLayout
+  MentorshipProfilePage, MentorshipEditProfilePage, MentorshipLayout, MentorsPage,
 };

@@ -60,9 +60,57 @@ const selectFormUser = () => createSelector(
   }
 );
 
+const selectPaginatedMentors = () => createSelector(
+  selectMentorshipDomain,
+  (mentorshipState) => {
+    const mentorings = mentorshipState.mentorList;
+    if (mentorings) {
+      return mentorings.map(mentoring => mentoring.mentor);
+    }
+    return [];
+  }
+);
+
+const selectMentorTotal = () => createSelector(
+  selectMentorshipDomain,
+  mentorshipState => mentorshipState.mentorTotal
+);
+
+const selectIsFetchingMentors = () => createSelector(
+  selectMentorshipDomain,
+  mentorshipState => mentorshipState.isFetchingMentors
+);
+
+const selectPaginatedMentees = () => createSelector(
+  selectMentorshipDomain,
+  (mentorshipState) => {
+    const mentorings = mentorshipState.menteeList;
+    if (mentorings)
+      return mentorings.map(mentoring => mentoring.mentee);
+    return [];
+  }
+);
+
+const selectMenteeTotal = () => createSelector(
+  selectMentorshipDomain,
+  mentorshipState => mentorshipState.menteeTotal
+);
+
+const selectIsFetchingMentees = () => createSelector(
+  selectMentorshipDomain,
+  mentorshipState => mentorshipState.isFetchingMentees
+);
+
+
 export {
   selectMentorshipDomain, selectPaginatedUsers,
   selectUserTotal, selectUser,
   selectIsFetchingUsers,
-  selectFormUser
+  selectFormUser,
+  selectPaginatedMentors,
+  selectMentorTotal,
+  selectIsFetchingMentors,
+  selectPaginatedMentees,
+  selectMenteeTotal,
+  selectIsFetchingMentees,
 };

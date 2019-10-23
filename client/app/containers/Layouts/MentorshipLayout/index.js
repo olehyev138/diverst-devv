@@ -49,15 +49,19 @@ const MentorshipLayout = ({ component: Component, ...rest }) => {
 
   useEffect(() => {
     const [userId1] = rs.params('user_id');
-    const userId2 = dig(rest, 'globalUser', 'id');
+    // const userId2 = dig(rest, 'globalUser', 'id');
 
-    const userId = userId1 || userId2;
+    const userId = userId1;
+    // const userId = userId1 || userId2;
 
     if (userId && dig(other.user, 'id') !== userId)
       other.getUserBegin({ id: userId });
 
-    return () => other.userUnmount();
-  }, [rest.globalUser]);
+    return () => {
+      console.log('tabernak');
+      other.userUnmount();
+    };
+  }, []);
 
   return (
     <UserLayout

@@ -83,6 +83,12 @@ export const ROUTES = {
           titleMessage: messages.user.mentorship,
         },
       },
+      mentors: {
+        path: (userId = ':user_id') => `/mentorship/${userId}/mentors`,
+        data: {
+          titleMessage: messages.user.mentorship,
+        },
+      }
     }
     ,
   },

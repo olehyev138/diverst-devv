@@ -880,7 +880,7 @@ ActiveRecord::Schema.define(version: 20191014182207) do
     t.index ["enterprise_id"], name: "index_mentoring_types_on_enterprise_id"
   end
 
-  create_table "mentorings", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+  create_table "mentoring", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.bigint "mentor_id"
     t.bigint "mentee_id"
     t.datetime "created_at", null: false

@@ -1,0 +1,11 @@
+import API from 'api/base/base';
+import { appendQueryArgs } from 'utils/apiHelpers';
+const axios = require('axios');
+
+const Mentoring = new API({ controller: 'mentorings' });
+
+Object.assign(Mentoring, {
+
+});
+
+export default Mentoring;
