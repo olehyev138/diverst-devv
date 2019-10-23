@@ -17,7 +17,7 @@ import {
   getSegmentSuccess, getSegmentError,
   updateSegmentSuccess, updateSegmentError,
   getSegmentMembersSuccess, getSegmentMembersError,
-  deleteSegmentError
+  deleteSegmentError, deleteSegmentSuccess,
 } from 'containers/Segment/actions';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -54,6 +54,7 @@ export function* createSegment(action) {
 
     const response = yield call(api.segments.create.bind(api.segments), payload);
 
+    yield(put(createSegmentSuccess()));
     // TODO: get id from response & direct to show/update page
     yield put(push(ROUTES.admin.manage.segments.index.path()));
     yield put(showSnackbar({ message: 'Segment created', options: { variant: 'success' } }));
@@ -70,6 +71,7 @@ export function* updateSegment(action) {
     const payload = { segment: action.payload };
     const response = yield call(api.segments.update.bind(api.segments), payload.segment.id, payload);
 
+    yield put(updateSegmentSuccess());
     yield put(showSnackbar({ message: 'Segment updated', options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateSegmentError(err));
@@ -82,6 +84,8 @@ export function* updateSegment(action) {
 export function* deleteSegment(action) {
   try {
     yield call(api.segments.destroy.bind(api.segments), action.payload);
+
+    yield put(deleteSegmentSuccess());
     yield put(push(ROUTES.admin.manage.segments.index.path()));
     yield put(showSnackbar({ message: 'Segment deleted', options: { variant: 'success' } }));
   } catch (err) {
