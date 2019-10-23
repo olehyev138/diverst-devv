@@ -40,10 +40,21 @@ class Api::V1::UsersController < DiverstController
     end
   end
 
+  def index_except_user
+    item = klass.find(params[:id])
+    # base_authorize(item)
+
+    render status: 200, json: item.index_except_self(params, serializer: serializer(params))
+  rescue => e
+    raise BadRequestException.new(e)
+  end
+
   def serializer(params)
     case params[:serializer]
     when 'mentorship'
       UserMentorshipSerializer
+    when 'mentorship_lite'
+      UserMentorshipLiteSerializer
     else
       UserSerializer
     end

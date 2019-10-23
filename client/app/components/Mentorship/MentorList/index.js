@@ -24,6 +24,7 @@ import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/DeleteOutline';
 import EditIcon from '@material-ui/icons/Edit';
+import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
 
 import DiverstTable from 'components/Shared/DiverstTable';
 import DiverstLoader from 'components/Shared/DiverstLoader';
@@ -48,59 +49,49 @@ export function UserList(props, context) {
   //
   // const [userForm, setUserForm] = useState(undefined);
 
+  const { type } = props;
+
   const columns = [
-    { title: 'First Name', field: 'first_name' },
-    { title: 'Last Name', field: 'last_name' }
+    { title: 'Name', field: 'name' },
+    { title: 'Email', field: 'email' },
+    { title: 'Interests', field: 'interests' },
   ];
 
   return (
     <React.Fragment>
-      <Grid container spacing={3} justify='flex-end'>
-        <Grid item>
-          <Button
-            variant='contained'
-            color='primary'
-            size='large'
-            to={props.links.userNew}
-            component={WrappedNavLink}
-            startIcon={<AddIcon />}
-          >
-            <DiverstFormattedMessage {...messages.new} />
-          </Button>
-        </Grid>
-      </Grid>
-      <Box mb={1} />
       <DiverstLoader isLoading={props.isFetchingUsers}>
-        <Grid container>
-          { /* eslint-disable-next-line arrow-body-style */ }
-          {props.users && props.users.map((item, i) => {
-            return (
-              <Grid item key={item.id}>
-                <Grid container>
-                  <Grid item xs>
-                    {item.first_name}
-                  </Grid>
-                  <Grid item xs>
-                    {item.last_name}
-                  </Grid>
-                </Grid>
-                <Box mb={3} />
-              </Grid>
-            );
-          })}
-        </Grid>
+        <DiverstTable
+          title={`Current ${type.charAt(0).toUpperCase() + type.slice(1)}`}
+          handlePagination={props.handleMentorPagination}
+          handleOrdering={props.handleMentorOrdering}
+          isLoading={props.isFetchingUsers}
+          rowsPerPage={5}
+          dataArray={props.users}
+          dataTotal={props.userTotal}
+          columns={columns}
+          actions={[{
+            icon: () => <AssignmentIndIcon />,
+            tooltip: 'Edit Member',
+            onClick: (_, rowData) => {
+              // console.log('click 1');
+            }
+          }, {
+            icon: () => <DeleteIcon />,
+            tooltip: 'Delete Member',
+            onClick: (_, rowData) => {
+              /* eslint-disable-next-line no-alert, no-restricted-globals */
+              // if (confirm('Delete member?'))
+              // console.log('click 2');
+            }
+          }]}
+        />
       </DiverstLoader>
-      <DiverstPagination
-        isLoading={props.isFetchingUsers}
-        rowsPerPage={props.userParams.count}
-        count={props.userTotal}
-        handlePagination={props.handleMentorPagination}
-      />
     </React.Fragment>
   );
 }
 
 UserList.propTypes = {
+  type: PropTypes.string,
   classes: PropTypes.object,
   users: PropTypes.array,
   userTotal: PropTypes.number,

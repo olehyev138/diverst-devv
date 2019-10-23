@@ -5,12 +5,14 @@ import { push } from 'connected-react-router';
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
 
 import {
-  GET_USER_MENTORS_BEGIN, GET_USER_MENTEES_BEGIN,
+  GET_USER_MENTORS_BEGIN, GET_USER_MENTEES_BEGIN, GET_AVAILABLE_MENTORS_BEGIN, GET_AVAILABLE_MENTEES_BEGIN,
 } from 'containers/Mentorship/Mentoring/constants';
 
 import {
   getMentorsSuccess, getMentorsError,
-  getMenteesSuccess, getMenteesError
+  getMenteesSuccess, getMenteesError,
+  getAvailableMentorsSuccess, getAvailableMentorsError,
+  getAvailableMenteesSuccess, getAvailableMenteesError,
 } from 'containers/Mentorship/Mentoring/actions';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -43,8 +45,36 @@ export function* getMentees(action) {
   }
 }
 
+export function* getAvailableMentors(action) {
+  try {
+    const { payload } = action;
+    const response = yield call(api.users.allExcept.bind(api.users), payload.userId, { ...payload, serializer: 'mentorship_lite' });
+    yield put(getAvailableMentorsSuccess(response.data.page));
+  } catch (err) {
+    yield put(getAvailableMentorsError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to load available mentors', options: { variant: 'warning' } }));
+  }
+}
+
+export function* getAvailableMentees(action) {
+  try {
+    const { payload } = action;
+    const response = yield call(api.users.allExcept.bind(api.users), payload.userId, { ...payload, serializer: 'mentorship_lite' });
+    yield put(getAvailableMenteesSuccess(response.data.page));
+  } catch (err) {
+    yield put(getAvailableMenteesError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to load available mentees', options: { variant: 'warning' } }));
+  }
+}
 
 export default function* mentorshipSaga() {
   yield takeLatest(GET_USER_MENTORS_BEGIN, getMentors);
   yield takeLatest(GET_USER_MENTEES_BEGIN, getMentees);
+
+  yield takeLatest(GET_AVAILABLE_MENTORS_BEGIN, getAvailableMentors);
+  yield takeLatest(GET_AVAILABLE_MENTEES_BEGIN, getAvailableMentees);
 }

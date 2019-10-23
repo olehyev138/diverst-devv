@@ -34,7 +34,9 @@ import {
   selectIsFetchingMentees,
 } from 'containers/Mentorship/Mentoring/selectors';
 import {
-  getMentorsBegin, getMenteesBegin, mentorsUnmount
+  getMentorsBegin, getMenteesBegin,
+  getAvailableMentorsBegin, getAvailableMenteesBegin,
+  mentorsUnmount
 } from 'containers/Mentorship/Mentoring/actions';
 
 import reducer from 'containers/Mentorship/Mentoring/reducer';
@@ -54,10 +56,13 @@ export function MentorsPage(props) {
   useEffect(() => {
     if (props.user) {
       const userId = props.user.id;
-      if (props.type === 'mentees')
+      if (props.type === 'mentees') {
         props.getMenteesBegin({ ...params, userId });
-      else
+        props.getAvailableMenteesBegin({ ...params, userId, query_scopes: ['mentees'] });
+      } else {
         props.getMentorsBegin({ ...params, userId });
+        props.getAvailableMentorsBegin({ ...params, userId, query_scopes: ['mentors'] });
+      }
     }
     return () => {
       props.mentorsUnmount();
@@ -93,6 +98,7 @@ export function MentorsPage(props) {
         userParams={params}
         handleMentorPagination={handleMentorPagination}
         handleMentorOrdering={handleMentorOrdering}
+        type={props.type}
         links={links}
       />
     </React.Fragment>
@@ -110,6 +116,8 @@ MentorsPage.propTypes = {
   user: PropTypes.object,
   isFetchingMentor: PropTypes.bool,
   isFetchingMentee: PropTypes.bool,
+  getAvailableMentorsBegin: PropTypes.func.isRequired,
+  getAvailableMenteesBegin: PropTypes.func.isRequired,
   mentorsUnmount: PropTypes.func.isRequired,
 };
 
@@ -125,6 +133,8 @@ const mapStateToProps = createStructuredSelector({
 const mapDispatchToProps = {
   getMentorsBegin,
   getMenteesBegin,
+  getAvailableMentorsBegin,
+  getAvailableMenteesBegin,
   mentorsUnmount,
 };
 

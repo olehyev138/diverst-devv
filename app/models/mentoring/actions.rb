@@ -3,7 +3,6 @@ module Mentoring::Actions
     klass.extend ClassMethods
   end
 
-  module ClassMethodss
+  module ClassMethods
   end
 end
-

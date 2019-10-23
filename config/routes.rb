@@ -150,8 +150,7 @@ Diverst::Application.routes.draw do
           post '/email', to: 'users#find_user_enterprise_by_email'
         end
         member do
-          get 'mentors', to: 'users#mentors'
-          get 'mentees', to: 'users#mentees'
+          get '/index_except', to: 'users#index_except_user'
         end
       end
       resources :user_groups
