@@ -538,9 +538,10 @@ Rails.application.routes.draw do
       end
 
       resources :rewards, only: [] do
-        resources :user_rewards, only: [:create, :update] do
+        resources :user_rewards, only: [:create] do
           member do
             patch :approve_reward
+            patch :forfeit_reward
             get :reward_to_be_forfeited
           end
 

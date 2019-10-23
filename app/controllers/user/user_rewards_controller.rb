@@ -1,7 +1,7 @@
 class User::UserRewardsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_reward, only: [:create]
-  before_action :set_user_reward, only: [:approve_reward, :update, :reward_to_be_forfeited]
+  before_action :set_user_reward, only: [:approve_reward, :forfeit_reward, :reward_to_be_forfeited]
 
   layout :resolve_layout
 
@@ -32,7 +32,7 @@ class User::UserRewardsController < ApplicationController
     end
   end
 
-  def update
+  def forfeit_reward
     authorize current_user.enterprise, :update?
 
     @user = @user_reward.user

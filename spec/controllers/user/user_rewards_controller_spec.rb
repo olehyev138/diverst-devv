@@ -99,7 +99,7 @@ RSpec.describe User::UserRewardsController, type: :controller do
     end
   end
 
-  describe 'PATCH#update' do
+  describe 'PATCH#forfeit_reward' do
     let(:pending_reward) { create(:user_reward, status: 0,
                                                 points: 10,
                                                 user_id: user.id,
@@ -113,7 +113,7 @@ RSpec.describe User::UserRewardsController, type: :controller do
         before do
           allow(RewardMailerJob).to receive(:perform_later)
           request.env['HTTP_REFERER'] = 'back'
-          patch :update, reward_id: reward.id, id: pending_reward.id, user_reward: { comment: 'not qualified for this reward' }
+          patch :forfeit_reward, reward_id: reward.id, id: pending_reward.id, user_reward: { comment: 'not qualified for this reward' }
         end
 
         it 'forfeit user_reward' do
