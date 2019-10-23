@@ -28,6 +28,7 @@ const CustomTextField = (props) => {
       label={fieldDatum.field.title}
       value={getIn(props.formik.values, dataLocation)}
       onChange={props.formik.handleChange}
+      {...props}
     />
   );
 };

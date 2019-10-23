@@ -16,7 +16,7 @@ import {
   updateUserBegin, userUnmount
 } from 'containers/User/actions';
 
-import { selectFormUser, selectFieldData } from 'containers/User/selectors';
+import { selectFormUser, selectFieldData, selectIsCommitting } from 'containers/User/selectors';
 
 import saga from 'containers/User/saga';
 import UserForm from 'components/User/UserForm';
@@ -49,6 +49,7 @@ export function UserEditPage(props) {
         fieldData={props.fieldData}
         buttonText='Update'
         admin={props.path.startsWith('/admin')}
+        isCommitting={props.isCommitting}
       />
     </React.Fragment>
   );
@@ -61,12 +62,14 @@ UserEditPage.propTypes = {
   getUserBegin: PropTypes.func,
   updateUserBegin: PropTypes.func,
   updateFieldDataBegin: PropTypes.func,
-  userUnmount: PropTypes.func
+  userUnmount: PropTypes.func,
+  isCommitting: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
   user: selectFormUser(),
-  fieldData: selectFieldData()
+  fieldData: selectFieldData(),
+  isCommitting: selectIsCommitting(),
 });
 
 const mapDispatchToProps = {

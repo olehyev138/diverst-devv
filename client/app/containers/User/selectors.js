@@ -76,6 +76,11 @@ const selectIsLoadingEvents = () => createSelector(
   userState => userState.isLoadingEvents
 );
 
+const selectIsCommitting = () => createSelector(
+  selectUsersDomain,
+  userState => userState.isCommitting
+);
+
 /*
  * - Select fieldData objects out of user
  *   - parse field_data.data strings
@@ -104,4 +109,5 @@ export {
   selectIsLoadingEvents, selectFormUser,
   selectPaginatedPosts, selectPostsTotal,
   selectPaginatedEvents, selectEventsTotal,
+  selectIsCommitting
 };

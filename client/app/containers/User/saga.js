@@ -18,7 +18,7 @@ import {
   updateUserSuccess, updateUserError,
   deleteUserError,
   getUserPostsSuccess, getUserPostsError,
-  getUserEventsSuccess, getUserEventsError,
+  getUserEventsSuccess, getUserEventsError, deleteUserSuccess, updateFieldDataSuccess,
 } from 'containers/User/actions';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -80,6 +80,7 @@ export function* createUser(action) {
 
     const response = yield call(api.users.create.bind(api.users), payload);
 
+    yield put(createUserSuccess());
     yield put(push(ROUTES.admin.system.users.index.path()));
     yield put(showSnackbar({ message: 'User created', options: { variant: 'success' } }));
   } catch (err) {
@@ -95,6 +96,7 @@ export function* updateUser(action) {
     const payload = { user: action.payload };
     const response = yield call(api.users.update.bind(api.users), payload.user.id, payload);
 
+    yield put(updateUserSuccess());
     yield put(push(payload.user.redirectPath || ROUTES.admin.system.users.index.path()));
     yield put(showSnackbar({ message: 'User updated', options: { variant: 'success' } }));
   } catch (err) {
@@ -109,6 +111,7 @@ export function* deleteUser(action) {
   try {
     yield call(api.users.destroy.bind(api.users), action.payload);
 
+    yield put(deleteUserSuccess());
     yield put(push(ROUTES.admin.system.users.index.path()));
     yield put(showSnackbar({ message: 'User deleted', options: { variant: 'success' } }));
   } catch (err) {
@@ -124,6 +127,7 @@ export function* updateFieldData(action) {
     const payload = { field_data: { field_data: action.payload.field_data } };
     const response = yield call(api.fieldData.updateFieldData.bind(api.fieldData), payload);
 
+    yield put(updateFieldDataSuccess());
     yield put(showSnackbar({ message: 'Fields updated', options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateUserError(err));
