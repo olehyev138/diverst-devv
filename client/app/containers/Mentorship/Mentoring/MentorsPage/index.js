@@ -29,14 +29,13 @@ import {
   selectPaginatedMentors,
   selectMentorTotal,
   selectIsFetchingMentors,
-  selectUser,
-} from 'containers/Mentorship/selectors';
+} from 'containers/Mentorship/Mentoring/selectors';
 import {
   getMentorsBegin, mentorsUnmount
-} from 'containers/Mentorship/actions';
+} from 'containers/Mentorship/Mentoring/actions';
 
-import reducer from 'containers/Mentorship/reducer';
-import saga from 'containers/Mentorship/saga';
+import reducer from 'containers/Mentorship/Mentoring/reducer';
+import saga from 'containers/Mentorship/Mentoring/saga';
 
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -44,11 +43,10 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import MentorList from 'components/Mentorship/MentorList';
 
 export function MentorsPage(props) {
-  // useInjectReducer({ key: 'mentorship', reducer });
-  // useInjectSaga({ key: 'mentorship', saga });
+  useInjectReducer({ key: 'mentoring', reducer });
+  useInjectSaga({ key: 'mentoring', saga });
   const [params, setParams] = useState({ count: 5, page: 0, order: 'asc' });
   const rs = new RouteService(useContext);
-  // const [userId] = rs.params('user_id');
 
   useEffect(() => {
     if (props.user) {
@@ -57,7 +55,7 @@ export function MentorsPage(props) {
     }
     return () => {
       console.log('aa_unmountMentor');
-      // props.mentorsUnmount();
+      props.mentorsUnmount();
     };
   }, []);
 

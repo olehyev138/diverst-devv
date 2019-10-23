@@ -7,7 +7,7 @@ import { showSnackbar } from 'containers/Shared/Notifier/actions';
 import {
   GET_MENTORSHIP_USERS_BEGIN,
   GET_MENTORSHIP_USER_BEGIN,
-  UPDATE_MENTORSHIP_USER_BEGIN, GET_USER_MENTORS_BEGIN, GET_USER_MENTEES_BEGIN,
+  UPDATE_MENTORSHIP_USER_BEGIN,
 } from 'containers/Mentorship/constants';
 
 import {
@@ -67,42 +67,9 @@ export function* updateUser(action) {
   }
 }
 
-export function* getMentors(action) {
-  console.log('aa_getMentors');
-  try {
-    const { payload } = action;
-    payload.mentee_id = payload.userId;
-    const response = yield call(api.mentorings.all.bind(api.mentorings), payload);
-    yield put(getMentorsSuccess(response.data.page));
-  } catch (err) {
-    yield put(getMentorsError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to load user\'s mentors', options: { variant: 'warning' } }));
-  }
-}
-
-export function* getMentees(action) {
-  console.log('aa_getMentee');
-  try {
-    const { payload } = action;
-    payload.mentor_id = payload.userId;
-    const response = yield call(api.mentorings.all.bind(api.mentorings), payload);
-    yield put(getMenteesSuccess(response.data.page));
-  } catch (err) {
-    yield put(getMenteesError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to load user\'s mentees', options: { variant: 'warning' } }));
-  }
-}
-
 
 export default function* mentorshipSaga() {
   yield takeLatest(GET_MENTORSHIP_USERS_BEGIN, getUsers);
   yield takeLatest(GET_MENTORSHIP_USER_BEGIN, getUser);
   yield takeLatest(UPDATE_MENTORSHIP_USER_BEGIN, updateUser);
-
-  yield takeLatest(GET_USER_MENTORS_BEGIN, getMentors);
-  yield takeLatest(GET_USER_MENTEES_BEGIN, getMentees);
 }
