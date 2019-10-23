@@ -54,7 +54,7 @@ export function* createSegment(action) {
 
     const response = yield call(api.segments.create.bind(api.segments), payload);
 
-    yield(put(createSegmentSuccess()));
+    yield put(createSegmentSuccess());
     // TODO: get id from response & direct to show/update page
     yield put(push(ROUTES.admin.manage.segments.index.path()));
     yield put(showSnackbar({ message: 'Segment created', options: { variant: 'success' } }));
