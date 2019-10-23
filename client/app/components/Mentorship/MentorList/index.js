@@ -26,8 +26,8 @@ import DeleteIcon from '@material-ui/icons/DeleteOutline';
 import EditIcon from '@material-ui/icons/Edit';
 
 import DiverstTable from 'components/Shared/DiverstTable';
-import DiverstLoader from "../../Shared/DiverstLoader";
-import DiverstPagination from "../../Shared/DiverstPagination";
+import DiverstLoader from 'components/Shared/DiverstLoader';
+import DiverstPagination from 'components/Shared/DiverstPagination';
 
 
 const styles = theme => ({

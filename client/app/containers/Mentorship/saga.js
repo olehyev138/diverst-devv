@@ -14,8 +14,6 @@ import {
   getUsersSuccess, getUsersError,
   getUserSuccess, getUserError,
   updateUserSuccess, updateUserError,
-  getMentorsSuccess, getMentorsError,
-  getMenteesSuccess, getMenteesError
 } from 'containers/Mentorship/actions';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';

@@ -24,7 +24,6 @@ export const initialState = {
 
 /* eslint-disable-next-line default-case, no-param-reassign */
 function mentorshipReducer(state = initialState, action) {
-  console.log(`aa_${action.type}`);
   /* eslint-disable consistent-return */
   return produce(state, (draft) => {
     switch (action.type) {

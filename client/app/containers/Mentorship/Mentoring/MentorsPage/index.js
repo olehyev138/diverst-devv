@@ -79,18 +79,16 @@ export function MentorsPage(props) {
 
   return (
     <React.Fragment>
-      {/*<MentorList*/}
-      {/*  mentors={props.mentors}*/}
-      {/*  mentorTotal={props.mentorTotal}*/}
-      {/*  isFetchingMentors={props.isFetchingMentor}*/}
-      {/*  mentorParams={params}*/}
-      {/*  handleMentorPagination={handleMentorPagination}*/}
-      {/*  handleMentorOrdering={handleMentorOrdering}*/}
-      {/*  links={links}*/}
-      {/*/>*/}
-      {props.user && (
-        `${props.user.id}`
-      )}
+      <MentorList
+        user={props.user}
+        mentors={props.mentors}
+        mentorTotal={props.mentorTotal}
+        isFetchingMentors={props.isFetchingMentor}
+        mentorParams={params}
+        handleMentorPagination={handleMentorPagination}
+        handleMentorOrdering={handleMentorOrdering}
+        links={links}
+      />
     </React.Fragment>
   );
 }
