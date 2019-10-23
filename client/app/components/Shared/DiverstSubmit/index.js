@@ -10,6 +10,10 @@ const styles = theme => ({
     position: 'relative',
   },
   buttonProgress: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
     backgroundColor: theme.palette.success.lightBackground,
     '& .MuiLinearProgress-bar': {
       backgroundColor: theme.palette.success.main,
