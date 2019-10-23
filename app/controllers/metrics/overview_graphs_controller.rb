@@ -8,6 +8,10 @@ class Metrics::OverviewGraphsController < ApplicationController
   def index
     authorize MetricsDashboard
 
+    unless root_admin_path
+      redirect_to user_root_path
+    end
+
     enterprise = current_user.enterprise
     @general_metrics = {
       nb_users: enterprise.users.active.count,
