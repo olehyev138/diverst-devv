@@ -96,14 +96,18 @@ export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, 
           </CardActions>
         </Form>
       </Card>
-      <Box mb={2} />
-      <FieldInputForm
-        user={props.user}
-        fieldData={props.fieldData}
-        updateFieldDataBegin={props.updateFieldDataBegin}
-        admin={props.admin}
-        isCommitting={props.isCommitting}
-      />
+      {!props.create && (
+        <React.Fragment>
+          <Box mb={2} />
+          <FieldInputForm
+            user={props.user}
+            fieldData={props.fieldData}
+            updateFieldDataBegin={props.updateFieldDataBegin}
+            admin={props.admin}
+            isCommitting={props.isCommitting}
+          />
+        </React.Fragment>
+      )}
     </React.Fragment>
   );
 }
@@ -139,6 +143,7 @@ UserForm.propTypes = {
   user: PropTypes.object,
   currentUser: PropTypes.object,
   admin: PropTypes.bool,
+  create: PropTypes.bool,
   isCommitting: PropTypes.bool,
   links: PropTypes.shape({
     usersIndex: PropTypes.string,
@@ -158,6 +163,7 @@ UserFormInner.propTypes = {
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
   admin: PropTypes.bool,
+  create: PropTypes.bool,
   isCommitting: PropTypes.bool,
   links: PropTypes.shape({
     usersIndex: PropTypes.string,
