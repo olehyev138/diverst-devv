@@ -17,6 +17,7 @@ import {
 
 
 import messages from 'containers/GlobalSettings/Field/messages';
+import DiverstSubmit from 'components/Shared/DiverstSubmit';
 
 /* Important constant for each field form - tells backend which field subclass to load */
 const FIELD_TYPE = 'TextField';
@@ -31,6 +32,7 @@ export function TextFieldFormInner({ handleSubmit, handleChange, handleBlur, val
             component={TextField}
             onChange={handleChange}
             fullWidth
+            disabled={props.isCommitting}
             id='title'
             name='title'
             value={values.title}
@@ -39,14 +41,12 @@ export function TextFieldFormInner({ handleSubmit, handleChange, handleBlur, val
         </CardContent>
         <Divider />
         <CardActions>
-          <Button
-            color='primary'
-            type='submit'
-          >
-            Submit
-          </Button>
+          <DiverstSubmit isCommitting={props.isCommitting}>
+            <DiverstFormattedMessage {...messages.create} />
+          </DiverstSubmit>
           <Button
             onClick={props.cancelAction}
+            disabled={props.isCommitting}
           >
             <DiverstFormattedMessage {...messages.cancel} />
           </Button>
@@ -79,6 +79,7 @@ export function TextFieldForm(props) {
 TextFieldForm.propTypes = {
   fieldAction: PropTypes.func,
   field: PropTypes.object,
+  isCommitting: PropTypes.bool,
 };
 
 TextFieldFormInner.propTypes = {
@@ -89,6 +90,7 @@ TextFieldFormInner.propTypes = {
   values: PropTypes.object,
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
+  isCommitting: PropTypes.bool,
   links: PropTypes.shape({
   })
 };
