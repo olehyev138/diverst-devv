@@ -720,5 +720,5 @@ Rails.application.routes.draw do
 
   match '*a', to: 'application#routing_error', via: [:get, :post]
 
-  root to: 'root#root'
+  root to: 'application#root'
 end

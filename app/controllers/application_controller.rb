@@ -157,6 +157,10 @@ class ApplicationController < ActionController::Base
     IncrementViewCountJob.perform_later(user_id, page, name, controller, action)
   end
 
+  def root
+    redirect_to default_path
+  end
+
   protected
 
   def set_persist_login_param
