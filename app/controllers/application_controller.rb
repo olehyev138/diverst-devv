@@ -182,7 +182,7 @@ class ApplicationController < ActionController::Base
 
     # This ensures unauthorized users are not accessing main page, which is admin only
     # This also ensures we don't get stuck with invitation as our previous url. Otherwise it redirects to non-existent page
-    if !current_user.seen_onboarding
+    if (!current_user.seen_onboarding rescue false)
       onboarding_index_path
     elsif prev_url && (prev_url != root_url) && (!prev_url.include? 'invitation')
       prev_url
