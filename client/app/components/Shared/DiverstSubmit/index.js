@@ -17,7 +17,7 @@ const styles = theme => ({
   },
 });
 
-export function DiverstSubmit(props) {
+function DiverstSubmit(props) {
   const { classes, children, isCommitting, ...rest } = props;
 
   return (
