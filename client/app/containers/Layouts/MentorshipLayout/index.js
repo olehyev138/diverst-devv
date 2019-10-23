@@ -58,7 +58,6 @@ const MentorshipLayout = ({ component: Component, ...rest }) => {
       other.getUserBegin({ id: userId });
 
     return () => {
-      console.log('aa_userMentorUnmount');
       other.userUnmount();
     };
   }, []);

@@ -16,7 +16,6 @@ import {
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 export function* getMentors(action) {
-  console.log('aa_getMentors');
   try {
     const { payload } = action;
     payload.mentee_id = payload.userId;
@@ -31,7 +30,6 @@ export function* getMentors(action) {
 }
 
 export function* getMentees(action) {
-  console.log('aa_getMentee');
   try {
     const { payload } = action;
     payload.mentor_id = payload.userId;

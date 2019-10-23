@@ -54,7 +54,6 @@ export function MentorsPage(props) {
       props.getMentorsBegin({ ...params, userId });
     }
     return () => {
-      console.log('aa_unmountMentor');
       props.mentorsUnmount();
     };
   }, []);
