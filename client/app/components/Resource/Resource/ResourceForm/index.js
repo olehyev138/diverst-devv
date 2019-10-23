@@ -127,6 +127,7 @@ export function ResourceFormInner({ handleSubmit, handleChange, handleBlur, valu
             {buttonText}
           </DiverstSubmit>
           <Button
+            disabled={props.isCommitting}
             to={props.links.cancelPath}
             component={WrappedNavLink}
           >

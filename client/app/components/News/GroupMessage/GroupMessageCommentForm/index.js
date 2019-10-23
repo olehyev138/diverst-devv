@@ -41,6 +41,7 @@ export function GroupMessageCommentFormInner({ classes, handleSubmit, handleChan
             component={TextField}
             onChange={handleChange}
             fullWidth
+            disabled={props.isCommitting}
             id='content'
             name='content'
             variant='outlined'
@@ -50,7 +51,6 @@ export function GroupMessageCommentFormInner({ classes, handleSubmit, handleChan
         </CardContent>
         <Divider />
         <CardActions>
-
           <DiverstSubmit isCommitting={props.isCommitting}>
             <DiverstFormattedMessage {...messages.comment_submit} />
           </DiverstSubmit>

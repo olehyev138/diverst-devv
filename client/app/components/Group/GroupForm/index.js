@@ -71,6 +71,7 @@ export function GroupFormInner({ classes, handleSubmit, handleChange, handleBlur
                       id='private'
                       name='private'
                       margin='normal'
+                      disabled={props.isCommitting}
                       checked={values.private}
                       value={values.private}
                     />
@@ -88,6 +89,7 @@ export function GroupFormInner({ classes, handleSubmit, handleChange, handleBlur
                 id='name'
                 name='name'
                 margin='normal'
+                disabled={props.isCommitting}
                 label={<DiverstFormattedMessage {...messages.name} />}
                 value={values.name}
               />
@@ -100,6 +102,7 @@ export function GroupFormInner({ classes, handleSubmit, handleChange, handleBlur
             id='short_description'
             name='short_description'
             margin='normal'
+            disabled={props.isCommitting}
             value={values.short_description}
             label={<DiverstFormattedMessage {...messages.short_description} />}
           />
@@ -113,6 +116,7 @@ export function GroupFormInner({ classes, handleSubmit, handleChange, handleBlur
             rows={4}
             variant='outlined'
             margin='normal'
+            disabled={props.isCommitting}
             label={<DiverstFormattedMessage {...messages.description} />}
             value={values.description}
           />
@@ -127,6 +131,7 @@ export function GroupFormInner({ classes, handleSubmit, handleChange, handleBlur
             label={<DiverstFormattedMessage {...messages.children} />}
             isMulti
             margin='normal'
+            disabled={props.isCommitting}
             value={values.child_ids}
             options={props.selectGroups}
             onMenuOpen={childrenSelectAction}
@@ -144,6 +149,7 @@ export function GroupFormInner({ classes, handleSubmit, handleChange, handleBlur
             name='parent_id'
             label={<DiverstFormattedMessage {...messages.parent} />}
             margin='normal'
+            disabled={props.isCommitting}
             value={values.parent_id}
             options={props.selectGroups}
             onMenuOpen={parentSelectAction}
@@ -158,6 +164,7 @@ export function GroupFormInner({ classes, handleSubmit, handleChange, handleBlur
             {buttonText}
           </DiverstSubmit>
           <Button
+            disabled={props.isCommitting}
             to={ROUTES.admin.manage.groups.index.path()}
             component={WrappedNavLink}
           >

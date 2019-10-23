@@ -32,6 +32,7 @@ export function OutcomeFormInner({ handleSubmit, handleChange, handleBlur, value
             {buttonText}
           </DiverstSubmit>
           <Button
+            disabled={props.isCommitting}
             to={props.links.outcomesIndex}
             component={WrappedNavLink}
           >

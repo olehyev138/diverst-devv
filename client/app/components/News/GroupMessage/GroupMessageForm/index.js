@@ -30,6 +30,7 @@ export function GroupMessageFormInner({ handleSubmit, handleChange, handleBlur, 
             component={TextField}
             onChange={handleChange}
             fullWidth
+            disabled={props.isCommitting}
             required
             id='subject'
             name='subject'
@@ -42,6 +43,7 @@ export function GroupMessageFormInner({ handleSubmit, handleChange, handleBlur, 
             onChange={handleChange}
             required
             fullWidth
+            disabled={props.isCommitting}
             multiline
             rows={4}
             variant='outlined'
@@ -58,6 +60,7 @@ export function GroupMessageFormInner({ handleSubmit, handleChange, handleBlur, 
             {buttonText}
           </DiverstSubmit>
           <Button
+            disabled={props.isCommitting}
             to={props.links.newsFeedIndex}
             component={WrappedNavLink}
           >

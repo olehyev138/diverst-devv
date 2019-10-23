@@ -125,6 +125,7 @@ export function FolderFormInner({ handleSubmit, handleChange, handleBlur, values
             {buttonText}
           </DiverstSubmit>
           <Button
+            disabled={props.isCommitting}
             to={props.links.cancelLink}
             component={WrappedNavLink}
           >

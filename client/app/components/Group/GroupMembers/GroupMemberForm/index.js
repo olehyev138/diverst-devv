@@ -59,6 +59,7 @@ export function GroupMemberFormInner({ handleSubmit, handleChange, handleBlur, v
             <DiverstFormattedMessage {...messages.create} />
           </DiverstSubmit>
           <Button
+            disabled={props.isCommitting}
             to={props.links.groupMembersIndex}
             component={WrappedNavLink}
           >
