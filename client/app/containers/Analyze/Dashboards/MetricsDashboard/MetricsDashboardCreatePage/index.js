@@ -21,6 +21,7 @@ import { getGroupsBegin } from 'containers/Group/actions';
 import { getSegmentsBegin } from 'containers/Segment/actions';
 
 // selectors
+import { selectIsCommitting } from 'containers/Analyze/Dashboards/MetricsDashboard/selectors';
 import { selectPaginatedSelectGroups } from 'containers/Group/selectors';
 import { selectPaginatedSelectSegments } from 'containers/Segment/selectors';
 
@@ -53,6 +54,7 @@ export function MetricsDashboardCreatePage(props) {
       segments={props.segments}
       buttonText='Create'
       links={links}
+      isCommitting={props.isCommitting}
     />
   );
 }
@@ -63,12 +65,14 @@ MetricsDashboardCreatePage.propTypes = {
   getSegmentsBegin: PropTypes.func,
   groups: PropTypes.array,
   segments: PropTypes.array,
-  metricsDashboardsUnmount: PropTypes.func
+  metricsDashboardsUnmount: PropTypes.func,
+  isCommitting: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
   groups: selectPaginatedSelectGroups(),
-  segments: selectPaginatedSelectSegments()
+  segments: selectPaginatedSelectSegments(),
+  isCommitting: selectIsCommitting(),
 });
 
 const mapDispatchToProps = {
