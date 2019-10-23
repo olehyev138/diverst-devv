@@ -25,6 +25,7 @@ function addSerializer(action) {
 }
 
 export function* getUsers(action) {
+  console.log('aa_getUsers');
   try {
     addSerializer(action);
     const response = yield call(api.users.all.bind(api.users), action.payload);
@@ -38,7 +39,7 @@ export function* getUsers(action) {
 }
 
 export function* getUser(action) {
-  console.log('fonge');
+  console.log('aa_getUser');
   try {
     addSerializer(action);
     const response = yield call(api.users.get.bind(api.users), action.payload.id, { serializer: action.payload.serializer });
@@ -51,6 +52,7 @@ export function* getUser(action) {
 }
 
 export function* updateUser(action) {
+  console.log('aa_updateUser');
   try {
     addSerializer(action);
     const payload = { user: action.payload };
@@ -66,7 +68,7 @@ export function* updateUser(action) {
 }
 
 export function* getMentors(action) {
-  console.log('ostie');
+  console.log('aa_getMentors');
   try {
     const { payload } = action;
     payload.mentee_id = payload.userId;
@@ -81,6 +83,7 @@ export function* getMentors(action) {
 }
 
 export function* getMentees(action) {
+  console.log('aa_getMentee');
   try {
     const { payload } = action;
     payload.mentor_id = payload.userId;

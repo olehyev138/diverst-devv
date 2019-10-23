@@ -49,16 +49,16 @@ const MentorshipLayout = ({ component: Component, ...rest }) => {
 
   useEffect(() => {
     const [userId1] = rs.params('user_id');
-    // const userId2 = dig(rest, 'globalUser', 'id');
+    const userId2 = dig(rest, 'globalUser', 'id');
 
-    const userId = userId1;
-    // const userId = userId1 || userId2;
+    // const userId = userId1;
+    const userId = userId1 || userId2;
 
     if (userId && dig(other.user, 'id') !== userId)
       other.getUserBegin({ id: userId });
 
     return () => {
-      console.log('tabernak');
+      console.log('aa_userMentorUnmount');
       other.userUnmount();
     };
   }, []);
@@ -80,9 +80,11 @@ const MentorshipLayout = ({ component: Component, ...rest }) => {
               </CardContent>
             </Grid>
             <Grid item xs={8}>
-              <CardContent>
-                <Component user={user} pageTitle={data.titleMessage} {...other} />
-              </CardContent>
+              {user && (
+                <CardContent>
+                  <Component user={user} pageTitle={data.titleMessage} {...rest} />
+                </CardContent>
+              )}
             </Grid>
           </Grid>
         </React.Fragment>

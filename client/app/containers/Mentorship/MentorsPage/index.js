@@ -44,19 +44,20 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import MentorList from 'components/Mentorship/MentorList';
 
 export function MentorsPage(props) {
-  useInjectReducer({ key: 'mentorship', reducer });
-  useInjectSaga({ key: 'mentorship', saga });
-
+  // useInjectReducer({ key: 'mentorship', reducer });
+  // useInjectSaga({ key: 'mentorship', saga });
   const [params, setParams] = useState({ count: 5, page: 0, order: 'asc' });
   const rs = new RouteService(useContext);
+  // const [userId] = rs.params('user_id');
 
   useEffect(() => {
-    const [userId] = rs.params('user_id');
-    props.getMentorsBegin({ ...params, userId });
-
+    if (props.user) {
+      const userId = props.user.id;
+      props.getMentorsBegin({ ...params, userId });
+    }
     return () => {
-      console.log('putant');
-      props.mentorsUnmount();
+      console.log('aa_unmountMentor');
+      // props.mentorsUnmount();
     };
   }, []);
 
@@ -90,7 +91,9 @@ export function MentorsPage(props) {
       {/*  handleMentorOrdering={handleMentorOrdering}*/}
       {/*  links={links}*/}
       {/*/>*/}
-      Hello World
+      {props.user && (
+        `${props.user.id}`
+      )}
     </React.Fragment>
   );
 }
@@ -99,6 +102,7 @@ MentorsPage.propTypes = {
   getMentorsBegin: PropTypes.func.isRequired,
   mentors: PropTypes.array,
   mentorTotal: PropTypes.number,
+  user: PropTypes.object,
   isFetchingMentor: PropTypes.bool,
   mentorsUnmount: PropTypes.func.isRequired,
 };
