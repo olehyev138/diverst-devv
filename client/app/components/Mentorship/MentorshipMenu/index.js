@@ -84,8 +84,10 @@ export function MentorshipMenu(props) {
             </CardContent>
             <CardContent>
               <Button
-                to={ROUTES.user.mentorship.show.path(user.id)}
+                to={ROUTES.user.mentorship.mentees.path(user.id)}
                 component={WrappedNavLink}
+                color='primary'
+                size='large'
               >
                 <DiverstFormattedMessage {...messages.menu.mentees} />
               </Button>

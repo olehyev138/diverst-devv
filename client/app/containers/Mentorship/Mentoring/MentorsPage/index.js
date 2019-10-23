@@ -29,9 +29,12 @@ import {
   selectPaginatedMentors,
   selectMentorTotal,
   selectIsFetchingMentors,
+  selectPaginatedMentees,
+  selectMenteeTotal,
+  selectIsFetchingMentees,
 } from 'containers/Mentorship/Mentoring/selectors';
 import {
-  getMentorsBegin, mentorsUnmount
+  getMentorsBegin, getMenteesBegin, mentorsUnmount
 } from 'containers/Mentorship/Mentoring/actions';
 
 import reducer from 'containers/Mentorship/Mentoring/reducer';
@@ -51,7 +54,10 @@ export function MentorsPage(props) {
   useEffect(() => {
     if (props.user) {
       const userId = props.user.id;
-      props.getMentorsBegin({ ...params, userId });
+      if (props.type === 'mentees')
+        props.getMenteesBegin({ ...params, userId });
+      else
+        props.getMentorsBegin({ ...params, userId });
     }
     return () => {
       props.mentorsUnmount();
@@ -81,10 +87,10 @@ export function MentorsPage(props) {
     <React.Fragment>
       <MentorList
         user={props.user}
-        mentors={props.mentors}
-        mentorTotal={props.mentorTotal}
-        isFetchingMentors={props.isFetchingMentor}
-        mentorParams={params}
+        users={props.type === 'mentees' ? props.mentees : props.mentors}
+        userTotal={props.type === 'mentees' ? props.menteeTotal : props.mentorTotal}
+        isFetchingUsers={props.isFetchingMentor || props.isFetchingMentee}
+        userParams={params}
         handleMentorPagination={handleMentorPagination}
         handleMentorOrdering={handleMentorOrdering}
         links={links}
@@ -94,22 +100,31 @@ export function MentorsPage(props) {
 }
 
 MentorsPage.propTypes = {
+  type: PropTypes.string,
   getMentorsBegin: PropTypes.func.isRequired,
+  getMenteesBegin: PropTypes.func.isRequired,
   mentors: PropTypes.array,
+  mentees: PropTypes.array,
   mentorTotal: PropTypes.number,
+  menteeTotal: PropTypes.number,
   user: PropTypes.object,
   isFetchingMentor: PropTypes.bool,
+  isFetchingMentee: PropTypes.bool,
   mentorsUnmount: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
   mentors: selectPaginatedMentors(),
+  mentees: selectPaginatedMentees(),
   mentorTotal: selectMentorTotal(),
+  menteeTotal: selectMenteeTotal(),
   isFetchingMentor: selectIsFetchingMentors(),
+  isFetchingMentee: selectIsFetchingMentees(),
 });
 
 const mapDispatchToProps = {
   getMentorsBegin,
+  getMenteesBegin,
   mentorsUnmount,
 };
 

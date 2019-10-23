@@ -70,10 +70,10 @@ export function UserList(props, context) {
         </Grid>
       </Grid>
       <Box mb={1} />
-      <DiverstLoader isLoading={props.isFetchingMentors}>
+      <DiverstLoader isLoading={props.isFetchingUsers}>
         <Grid container>
           { /* eslint-disable-next-line arrow-body-style */ }
-          {props.mentors && props.mentors.map((item, i) => {
+          {props.users && props.users.map((item, i) => {
             return (
               <Grid item key={item.id}>
                 <Grid container>
@@ -91,9 +91,9 @@ export function UserList(props, context) {
         </Grid>
       </DiverstLoader>
       <DiverstPagination
-        isLoading={props.isFetchingMentors}
-        rowsPerPage={props.mentorParams.count}
-        count={props.mentorTotal}
+        isLoading={props.isFetchingUsers}
+        rowsPerPage={props.userParams.count}
+        count={props.userTotal}
         handlePagination={props.handleMentorPagination}
       />
     </React.Fragment>
@@ -102,10 +102,10 @@ export function UserList(props, context) {
 
 UserList.propTypes = {
   classes: PropTypes.object,
-  mentors: PropTypes.array,
-  mentorTotal: PropTypes.number,
-  isFetchingMentors: PropTypes.bool,
-  mentorParams: PropTypes.object,
+  users: PropTypes.array,
+  userTotal: PropTypes.number,
+  isFetchingUsers: PropTypes.bool,
+  userParams: PropTypes.object,
   handleMentorPagination: PropTypes.func,
   handleMentorOrdering: PropTypes.func,
   links: PropTypes.shape({
