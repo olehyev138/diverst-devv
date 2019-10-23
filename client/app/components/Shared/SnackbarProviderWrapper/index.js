@@ -38,6 +38,8 @@ function SnackbarProviderWrapper(props) {
 
   return (
     <SnackbarProvider
+      maxSnack={3}
+      preventDuplicate
       ref={notistackRef}
       classes={{
         variantSuccess: props.classes.snackbarSuccess,
