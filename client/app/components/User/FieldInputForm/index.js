@@ -7,7 +7,6 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
-import dig from 'object-dig';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { FieldArray, Formik, Form } from 'formik';
@@ -22,6 +21,8 @@ import { buildValues } from 'utils/formHelpers';
 
 import { serializeFieldData } from 'utils/customFieldHelpers';
 import CustomField from 'components/Shared/Fields/FieldInputs/Field';
+
+import DiverstSubmit from 'components/Shared/DiverstSubmit';
 
 const styles = theme => ({
   fieldInput: {
@@ -53,7 +54,11 @@ export function FieldInputFormInner({ formikProps, ...props }) {
                   <Divider />
                   <CardContent>
                     {Object.entries(fieldDatum).length !== 0 && (
-                      <CustomField fieldDatum={fieldDatum} fieldDatumIndex={i} />
+                      <CustomField
+                        fieldDatum={fieldDatum}
+                        fieldDatumIndex={i}
+                        disabled={props.isCommitting}
+                      />
                     )}
                   </CardContent>
                 </div>
@@ -63,12 +68,9 @@ export function FieldInputFormInner({ formikProps, ...props }) {
         />
         <Divider />
         <CardActions>
-          <Button
-            color='primary'
-            type='submit'
-          >
-            Save
-          </Button>
+          <DiverstSubmit isCommitting={props.isCommitting}>
+            <DiverstFormattedMessage {...messages.fields_save} />
+          </DiverstSubmit>
         </CardActions>
       </Form>
     </Card>
@@ -98,11 +100,13 @@ export function FieldInputForm(props) {
 FieldInputForm.propTypes = {
   updateFieldDataBegin: PropTypes.func,
   fieldData: PropTypes.array,
+  isCommitting: PropTypes.bool,
 };
 
 FieldInputFormInner.propTypes = {
   formikProps: PropTypes.object,
-  classes: PropTypes.object
+  classes: PropTypes.object,
+  isCommitting: PropTypes.bool,
 };
 
 export default compose(

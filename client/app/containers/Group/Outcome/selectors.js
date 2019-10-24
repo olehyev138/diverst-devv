@@ -23,4 +23,9 @@ const selectIsLoading = () => createSelector(
   outcomesState => outcomesState.isLoading
 );
 
-export { selectPaginatedOutcomes, selectOutcomeTotal, selectOutcome, selectIsLoading };
+const selectIsCommitting = () => createSelector(
+  selectOutcomesDomain,
+  outcomesState => outcomesState.isCommitting
+);
+
+export { selectPaginatedOutcomes, selectOutcomeTotal, selectOutcome, selectIsLoading, selectIsCommitting };

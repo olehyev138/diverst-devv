@@ -13,10 +13,23 @@ import {
   GET_RESOURCE_SUCCESS,
   RESOURCES_UNMOUNT,
   GET_FOLDERS_BEGIN,
-  GET_RESOURCES_BEGIN
+  GET_RESOURCES_BEGIN,
+  CREATE_FOLDER_BEGIN,
+  CREATE_FOLDER_SUCCESS,
+  CREATE_FOLDER_ERROR,
+  CREATE_RESOURCE_BEGIN,
+  CREATE_RESOURCE_SUCCESS,
+  CREATE_RESOURCE_ERROR,
+  UPDATE_FOLDER_BEGIN,
+  UPDATE_FOLDER_SUCCESS,
+  UPDATE_FOLDER_ERROR,
+  UPDATE_RESOURCE_BEGIN,
+  UPDATE_RESOURCE_SUCCESS,
+  UPDATE_RESOURCE_ERROR
 } from './constants';
 
 export const initialState = {
+  isCommitting: false,
   isLoading: true,
   folders: null,
   resources: null,
@@ -56,6 +69,22 @@ function resourcesReducer(state = initialState, action) {
       case GET_RESOURCE_SUCCESS:
         draft.currentResource = action.payload.resource;
         draft.isLoading = false;
+        break;
+      case CREATE_FOLDER_BEGIN:
+      case CREATE_RESOURCE_BEGIN:
+      case UPDATE_FOLDER_BEGIN:
+      case UPDATE_RESOURCE_BEGIN:
+        draft.isCommitting = true;
+        break;
+      case CREATE_FOLDER_SUCCESS:
+      case CREATE_FOLDER_ERROR:
+      case CREATE_RESOURCE_SUCCESS:
+      case CREATE_RESOURCE_ERROR:
+      case UPDATE_FOLDER_SUCCESS:
+      case UPDATE_FOLDER_ERROR:
+      case UPDATE_RESOURCE_SUCCESS:
+      case UPDATE_RESOURCE_ERROR:
+        draft.isCommitting = false;
         break;
       case RESOURCES_UNMOUNT:
         return initialState;

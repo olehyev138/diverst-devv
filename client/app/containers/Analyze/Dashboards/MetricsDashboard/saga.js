@@ -16,7 +16,7 @@ import {
   getMetricsDashboardSuccess, getMetricsDashboardError,
   createMetricsDashboardSuccess, createMetricsDashboardError,
   updateMetricsDashboardSuccess, updateMetricsDashboardError,
-  deleteMetricsDashboardError,
+  deleteMetricsDashboardError, deleteMetricsDashboardSuccess,
 } from 'containers/Analyze/Dashboards/MetricsDashboard/actions';
 
 import {
@@ -70,6 +70,7 @@ export function* createMetricsDashboard(action) {
     const payload = { metrics_dashboard: action.payload };
     const response = yield call(api.metrics.metricsDashboards.create.bind(api.metrics.metricsDashboards), payload);
 
+    yield put(createMetricsDashboardSuccess());
     yield put(push(ROUTES.admin.analyze.custom.index.path()));
     yield put(showSnackbar({
       message: 'Metrics dashboard created',
@@ -92,6 +93,7 @@ export function* updateMetricsDashboard(action) {
     const response = yield call(api.metrics.metricsDashboards.update.bind(api.metrics.metricsDashboards),
       payload.metrics_dashboard.id, payload);
 
+    yield put(updateMetricsDashboardSuccess());
     yield put(push(ROUTES.admin.analyze.custom.index.path()));
     yield put(showSnackbar({
       message: 'Metrics dashboard updated',
@@ -111,6 +113,8 @@ export function* updateMetricsDashboard(action) {
 export function* deleteMetricsDashboard(action) {
   try {
     yield call(api.metrics.metricsDashboards.destroy.bind(api.metrics.metricsDashboards), action.payload);
+
+    yield put(deleteMetricsDashboardSuccess());
     yield put(push(ROUTES.admin.analyze.custom.index.path()));
     yield put(showSnackbar({
       message: 'Metrics dashboard deleted',
@@ -162,6 +166,7 @@ export function* createCustomGraph(action) {
     const payload = { graph: action.payload };
     const response = yield call(api.metrics.customGraphs.create.bind(api.metrics.customGraphs), payload);
 
+    yield put(createCustomGraphSuccess());
     yield put(push(ROUTES.admin.analyze.custom.show.path(action.payload.metrics_dashboard_id)));
     yield put(showSnackbar({
       message: 'Graph created',
@@ -184,6 +189,7 @@ export function* updateCustomGraph(action) {
     const response = yield call(api.metrics.customGraphs.update.bind(api.metrics.customGraphs),
       payload.graph.id, payload);
 
+    yield put(updateCustomGraphSuccess());
     yield put(push(ROUTES.admin.analyze.custom.show.path(action.payload.metrics_dashboard_id)));
     yield put(showSnackbar({
       message: 'Graph updated',
@@ -203,8 +209,8 @@ export function* updateCustomGraph(action) {
 export function* deleteCustomGraph(action) {
   try {
     yield call(api.metrics.customGraphs.destroy.bind(api.metrics.customGraphs), action.payload.graphId);
-    yield put(deleteCustomGraphSuccess(action.payload));
 
+    yield put(deleteCustomGraphSuccess(action.payload));
     yield put(getMetricsDashboardBegin({ id: action.payload.dashboardId }));
     yield put(showSnackbar({
       message: 'Custom graph deleted',

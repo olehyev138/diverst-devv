@@ -33,4 +33,7 @@ export default defineMessages({
   content: {
     id: `${scope}.form.group_message.input.content`,
   },
+  comment_submit: {
+    id: `${scope}.form.group_message.comment.submit`
+  },
 });

@@ -22,7 +22,7 @@ import {
 import { getFieldsBegin } from 'containers/GlobalSettings/Field/actions';
 
 // selectors
-import { selectFormCustomGraph } from 'containers/Analyze/Dashboards/MetricsDashboard/selectors';
+import { selectFormCustomGraph, selectIsCommitting } from 'containers/Analyze/Dashboards/MetricsDashboard/selectors';
 import { selectPaginatedSelectFields } from 'containers/GlobalSettings/Field/selectors';
 
 import RouteService from 'utils/routeHelpers';
@@ -57,6 +57,7 @@ export function CustomGraphEditPage(props) {
       customGraph={props.currentCustomGraph}
       metricsDashboardId={metricsDashboardId[0]}
       links={links}
+      isCommitting={props.isCommitting}
     />
   );
 }
@@ -68,11 +69,13 @@ CustomGraphEditPage.propTypes = {
   getFieldsBegin: PropTypes.func,
   fields: PropTypes.array,
   customGraphUnmount: PropTypes.func,
+  isCommitting: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
   currentCustomGraph: selectFormCustomGraph(),
   fields: selectPaginatedSelectFields(),
+  isCommitting: selectIsCommitting(),
 });
 
 const mapDispatchToProps = {

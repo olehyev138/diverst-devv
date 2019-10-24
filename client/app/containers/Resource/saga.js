@@ -25,7 +25,7 @@ import {
   createResourceSuccess, createResourceError,
   updateResourceSuccess, updateResourceError,
   deleteResourceError,
-  validateFolderPasswordSuccess, validateFolderPasswordError
+  validateFolderPasswordSuccess, validateFolderPasswordError, deleteFolderSuccess, deleteResourceSuccess,
 } from 'containers/Resource/actions';
 
 import {
@@ -69,6 +69,7 @@ export function* createFolder(action) {
     const payload = { folder: action.payload };
     const response = yield call(api.folders.create.bind(api.folders), payload);
 
+    yield put(createFolderSuccess());
     yield put(push(getParentPage(response.data.folder)));
     yield put(showSnackbar({
       message: 'Folder created',
@@ -90,6 +91,7 @@ export function* updateFolder(action) {
     const payload = { folder: action.payload };
     const response = yield call(api.folders.update.bind(api.folders), payload.folder.id, payload);
 
+    yield put(updateFolderSuccess());
     yield put(push(getParentPage(response.data.folder)));
     yield put(showSnackbar({
       message: 'Folder updated',
@@ -110,6 +112,7 @@ export function* deleteFolder(action) {
   try {
     yield call(api.folders.destroy.bind(api.folders), action.payload.id);
 
+    yield put(deleteFolderSuccess());
     yield put(push(getParentPage(action.payload.folder)));
     yield put(showSnackbar({
       message: 'Folder deleted',
@@ -161,6 +164,7 @@ export function* createResource(action) {
     const payload = { resource: action.payload };
     const response = yield call(api.resources.create.bind(api.resources), payload);
 
+    yield put(createResourceSuccess());
     yield put(push(getFolderShowPath(response.data.resource.folder)));
     yield put(showSnackbar({
       message: 'Resource created',
@@ -182,6 +186,7 @@ export function* updateResource(action) {
     const payload = { resource: action.payload };
     const response = yield call(api.resources.update.bind(api.resources), payload.resource.id, payload);
 
+    yield put(updateResourceSuccess());
     yield put(push(getFolderShowPath(response.data.resource.folder)));
     yield put(showSnackbar({
       message: 'Resource updated',
@@ -203,6 +208,7 @@ export function* deleteResource(action) {
     yield call(api.resources.destroy.bind(api.resources), action.payload.id);
     // TODO check for group vs enterprise
 
+    yield put(deleteResourceSuccess());
     yield put(push(getFolderShowPath(action.payload.folder)));
     yield put(showSnackbar({
       message: 'Resource deleted',

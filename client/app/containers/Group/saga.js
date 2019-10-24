@@ -54,6 +54,7 @@ export function* createGroup(action) {
     // TODO: use bind here or no?
     const response = yield call(api.groups.create.bind(api.groups), payload);
 
+    yield put(createGroupSuccess());
     yield put(push(ROUTES.admin.manage.groups.index.path()));
     yield put(showSnackbar({ message: 'Group created', options: { variant: 'success' } }));
   } catch (err) {
@@ -69,6 +70,7 @@ export function* updateGroup(action) {
     const payload = { group: action.payload };
     const response = yield call(api.groups.update.bind(api.groups), payload.group.id, payload);
 
+    yield put(updateGroupSuccess());
     yield put(push(ROUTES.admin.manage.groups.index.path()));
     yield put(showSnackbar({ message: 'Group updated', options: { variant: 'success' } }));
   } catch (err) {
@@ -84,12 +86,13 @@ export function* updateGroupSettings(action) {
     const payload = { group: action.payload };
     const response = yield call(api.groups.update.bind(api.groups), payload.group.id, payload);
 
+    yield put(updateGroupSettingsSuccess());
     yield put(showSnackbar({
       message: 'Group settings updated',
       options: { variant: 'success' }
     }));
   } catch (err) {
-    yield put(updateGroupError(err));
+    yield put(updateGroupSettingsError(err));
 
     // TODO: intl message
     yield put(showSnackbar({

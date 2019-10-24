@@ -15,7 +15,15 @@ exports[`<HomePage /> Should render and match the snapshot 1`] = `
           id="diverst.containers.HomePage.events"
         />
       </h1>
-      <Connect(Component) />
+      <Connect(Component)
+        loaderProps={
+          Object {
+            "transitionProps": Object {
+              "direction": "right",
+            },
+          }
+        }
+      />
     </WithStyles(ForwardRef(Grid))>
     <WithStyles(ForwardRef(Grid))
       item={true}

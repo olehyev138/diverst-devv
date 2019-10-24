@@ -9,10 +9,11 @@ import { useInjectReducer } from 'utils/injectReducer';
 import saga from 'containers/Group/saga';
 import reducer from 'containers/Group/reducer';
 
-import RouteService from 'utils/routeHelpers';
 import {
   updateGroupSettingsBegin
 } from 'containers/Group/actions';
+
+import { selectGroupIsCommitting } from 'containers/Group/selectors';
 
 import GroupManageLayout from 'containers/Layouts/GroupManageLayout';
 import GroupSettings from 'components/Group/GroupManage/GroupSettings';
@@ -28,6 +29,7 @@ export function GroupSettingsPage(props) {
           <GroupSettings
             groupAction={props.updateGroupSettingsBegin}
             group={props.currentGroup}
+            isCommitting={props.isCommitting}
           />
         )}
         {...props}
@@ -39,14 +41,19 @@ export function GroupSettingsPage(props) {
 GroupSettingsPage.propTypes = {
   currentGroup: PropTypes.object,
   updateGroupSettingsBegin: PropTypes.func,
+  isCommitting: PropTypes.bool,
 };
+
+const mapStateToProps = createStructuredSelector({
+  isCommitting: selectGroupIsCommitting(),
+});
 
 const mapDispatchToProps = {
   updateGroupSettingsBegin,
 };
 
 const withConnect = connect(
-  undefined,
+  mapStateToProps,
   mapDispatchToProps,
 );
 

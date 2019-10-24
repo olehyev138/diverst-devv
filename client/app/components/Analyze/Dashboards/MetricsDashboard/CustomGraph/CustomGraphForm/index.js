@@ -20,6 +20,7 @@ import messages from 'containers/Analyze/Dashboards/MetricsDashboard/messages';
 import Select from 'components/Shared/DiverstSelect';
 
 import { buildValues, mapFields } from 'utils/formHelpers';
+import DiverstSubmit from 'components/Shared/DiverstSubmit';
 
 /* eslint-disable object-curly-newline */
 export function CustomGraphFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
@@ -42,6 +43,7 @@ export function CustomGraphFormInner({ handleSubmit, handleChange, handleBlur, v
             id='field_id'
             label='Fields'
             margin='normal'
+            disabled={props.isCommitting}
             value={values.field_id}
             options={props.fields}
             onMenuOpen={fieldSelectAction}
@@ -56,6 +58,7 @@ export function CustomGraphFormInner({ handleSubmit, handleChange, handleBlur, v
             id='aggregation_id'
             label='Aggregations'
             margin='normal'
+            disabled={props.isCommitting}
             value={values.aggregation_id}
             options={props.fields}
             onMenuOpen={fieldSelectAction}
@@ -66,15 +69,13 @@ export function CustomGraphFormInner({ handleSubmit, handleChange, handleBlur, v
         </CardContent>
         <Divider />
         <CardActions>
-          <Button
-            color='primary'
-            type='submit'
-          >
+          <DiverstSubmit isCommitting={props.isCommitting}>
             {buttonText}
-          </Button>
+          </DiverstSubmit>
           <Button
             component={WrappedNavLink}
             to={props.links.metricsDashboardShow}
+            disabled={props.isCommitting}
           >
             <DiverstFormattedMessage {...messages.cancel} />
           </Button>
@@ -110,6 +111,7 @@ CustomGraphForm.propTypes = {
   customGraphAction: PropTypes.func,
   customGraph: PropTypes.object,
   metricsDashboardId: PropTypes.string.isRequired,
+  isCommitting: PropTypes.bool,
 };
 
 CustomGraphFormInner.propTypes = {
@@ -123,6 +125,7 @@ CustomGraphFormInner.propTypes = {
   setFieldTouched: PropTypes.func,
   getFieldsBegin: PropTypes.func,
   fields: PropTypes.array,
+  isCommitting: PropTypes.bool,
   links: PropTypes.shape({
     metricsDashboardShow: PropTypes.string,
   })

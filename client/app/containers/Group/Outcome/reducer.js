@@ -7,11 +7,14 @@
 import produce from 'immer/dist/immer';
 import {
   GET_OUTCOMES_SUCCESS, GET_OUTCOME_SUCCESS, GET_OUTCOMES_BEGIN,
-  OUTCOMES_UNMOUNT, GET_OUTCOMES_ERROR, GET_OUTCOME_ERROR
+  OUTCOMES_UNMOUNT, GET_OUTCOMES_ERROR, GET_OUTCOME_ERROR,
+  CREATE_OUTCOME_BEGIN, CREATE_OUTCOME_SUCCESS, CREATE_OUTCOME_ERROR,
+  UPDATE_OUTCOME_BEGIN, UPDATE_OUTCOME_SUCCESS, UPDATE_OUTCOME_ERROR,
 } from 'containers/Group/Outcome/constants';
 
 export const initialState = {
   isLoading: true,
+  isCommitting: false,
   outcomes: [],
   outcomeTotal: null,
   currentOutcome: null,
@@ -39,6 +42,16 @@ function outcomesReducer(state = initialState, action) {
         break;
       case GET_OUTCOME_ERROR:
         draft.isLoading = false;
+        break;
+      case CREATE_OUTCOME_BEGIN:
+      case UPDATE_OUTCOME_BEGIN:
+        draft.isCommitting = true;
+        break;
+      case CREATE_OUTCOME_SUCCESS:
+      case UPDATE_OUTCOME_SUCCESS:
+      case CREATE_OUTCOME_ERROR:
+      case UPDATE_OUTCOME_ERROR:
+        draft.isCommitting = false;
         break;
       case OUTCOMES_UNMOUNT:
         return initialState;

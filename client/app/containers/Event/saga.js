@@ -15,7 +15,7 @@ import {
   getEventSuccess, getEventError,
   createEventSuccess, createEventError,
   updateEventSuccess, updateEventError,
-  deleteEventError,
+  deleteEventError, deleteEventSuccess
 } from 'containers/Event/actions';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -56,6 +56,7 @@ export function* createEvent(action) {
 
     const response = yield call(api.initiatives.create.bind(api.initiatives), payload);
 
+    yield put(createEventSuccess());
     yield put(push(ROUTES.group.events.index.path(payload.initiative.group_id)));
     yield put(showSnackbar({
       message: 'Event created',
@@ -77,6 +78,7 @@ export function* updateEvent(action) {
     const payload = { initiative: action.payload };
     const response = yield call(api.initiatives.update.bind(api.initiatives), payload.initiative.id, payload);
 
+    yield put(updateEventSuccess());
     yield put(push(ROUTES.group.events.index.path(payload.initiative.owner_group_id)));
     yield put(showSnackbar({
       message: 'Event updated',
@@ -96,6 +98,7 @@ export function* updateEvent(action) {
 export function* deleteEvent(action) {
   try {
     yield call(api.initiatives.destroy.bind(api.initiatives), action.payload.id);
+    yield put(deleteEventSuccess());
     yield put(push(ROUTES.group.events.index.path(action.payload.group_id)));
     yield put(showSnackbar({
       message: 'Event deleted',

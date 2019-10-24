@@ -9,12 +9,8 @@ import React, {
 } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
-import Select from 'react-select';
 import { Field, Formik, Form } from 'formik';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
-
-import WrappedNavLink from 'components/Shared/WrappedNavLink';
-import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import messages from 'containers/Segment/messages';
 import { buildValues, mapFields } from 'utils/formHelpers';
@@ -28,6 +24,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { serializeSegment } from 'utils/customFieldHelpers';
 
 import SegmentRulesList from 'components/Segment/SegmentRulesList';
+import DiverstSubmit from 'components/Shared/DiverstSubmit';
 
 const styles = theme => ({
   ruleInput: {
@@ -46,6 +43,7 @@ export function SegmentFormInner({ handleSubmit, handleChange, handleBlur, value
               component={TextField}
               onChange={handleChange}
               fullWidth
+              disabled={props.isCommitting}
               required
               id='name'
               name='name'
@@ -55,12 +53,9 @@ export function SegmentFormInner({ handleSubmit, handleChange, handleBlur, value
           </CardContent>
           <Divider />
           <CardActions>
-            <Button
-              color='primary'
-              type='submit'
-            >
+            <DiverstSubmit isCommitting={props.isCommitting}>
               {buttonText}
-            </Button>
+            </DiverstSubmit>
           </CardActions>
         </Form>
       </Card>
@@ -98,6 +93,7 @@ export function SegmentForm(props) {
 SegmentForm.propTypes = {
   segmentAction: PropTypes.func,
   segment: PropTypes.object,
+  isCommitting: PropTypes.bool,
 };
 
 SegmentFormInner.propTypes = {
@@ -110,7 +106,8 @@ SegmentFormInner.propTypes = {
   setFieldTouched: PropTypes.func,
   classes: PropTypes.object,
   getGroupsBegin: PropTypes.func,
-  ruleProps: PropTypes.object
+  ruleProps: PropTypes.object,
+  isCommitting: PropTypes.bool,
 };
 
 export default compose(

@@ -7,10 +7,12 @@
 import produce from 'immer/dist/immer';
 import {
   GET_MEMBERS_BEGIN, GET_MEMBERS_ERROR,
-  GET_MEMBERS_SUCCESS, GROUP_MEMBERS_UNMOUNT
+  GET_MEMBERS_SUCCESS, GROUP_MEMBERS_UNMOUNT,
+  CREATE_MEMBERS_BEGIN, CREATE_MEMBERS_SUCCESS, CREATE_MEMBERS_ERROR,
 } from 'containers/Group/GroupMembers/constants';
 
 export const initialState = {
+  isCommitting: false,
   memberList: [],
   memberTotal: null,
   isFetchingMembers: true
@@ -30,6 +32,13 @@ function membersReducer(state = initialState, action) {
         break;
       case GET_MEMBERS_ERROR:
         draft.isFetchingMembers = false;
+        break;
+      case CREATE_MEMBERS_BEGIN:
+        draft.isCommitting = true;
+        break;
+      case CREATE_MEMBERS_SUCCESS:
+      case CREATE_MEMBERS_ERROR:
+        draft.isCommitting = false;
         break;
       case GROUP_MEMBERS_UNMOUNT:
         return initialState;

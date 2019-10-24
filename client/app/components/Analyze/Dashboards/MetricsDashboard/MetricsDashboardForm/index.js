@@ -20,6 +20,7 @@ import messages from 'containers/Analyze/Dashboards/MetricsDashboard/messages';
 import Select from 'components/Shared/DiverstSelect';
 
 import { buildValues, mapFields } from 'utils/formHelpers';
+import DiverstSubmit from 'components/Shared/DiverstSubmit';
 
 /* eslint-disable object-curly-newline */
 export function MetricsDashboardFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
@@ -49,6 +50,7 @@ export function MetricsDashboardFormInner({ handleSubmit, handleChange, handleBl
             id='name'
             name='name'
             margin='normal'
+            disabled={props.isCommitting}
             label={<DiverstFormattedMessage {...messages.form.name} />}
             value={values.name}
           />
@@ -60,6 +62,7 @@ export function MetricsDashboardFormInner({ handleSubmit, handleChange, handleBl
             label='Groups'
             isMulti
             margin='normal'
+            disabled={props.isCommitting}
             value={values.group_ids}
             options={props.groups}
             onMenuOpen={groupSelectAction}
@@ -75,6 +78,7 @@ export function MetricsDashboardFormInner({ handleSubmit, handleChange, handleBl
             label='Segments'
             isMulti
             margin='normal'
+            disabled={props.isCommitting}
             value={values.segment_ids}
             options={props.segments}
             onMenuOpen={segmentSelectAction}
@@ -85,15 +89,13 @@ export function MetricsDashboardFormInner({ handleSubmit, handleChange, handleBl
         </CardContent>
         <Divider />
         <CardActions>
-          <Button
-            color='primary'
-            type='submit'
-          >
+          <DiverstSubmit isCommitting={props.isCommitting}>
             {buttonText}
-          </Button>
+          </DiverstSubmit>
           <Button
             to={props.links.metricsDashboardsIndex}
             component={WrappedNavLink}
+            disabled={props.isCommitting}
           >
             <DiverstFormattedMessage {...messages.cancel} />
           </Button>
@@ -128,6 +130,7 @@ export function MetricsDashboardForm(props) {
 MetricsDashboardForm.propTypes = {
   metricsDashboardAction: PropTypes.func,
   metricsDashboard: PropTypes.object,
+  isCommitting: PropTypes.bool,
 };
 
 MetricsDashboardFormInner.propTypes = {
@@ -143,6 +146,7 @@ MetricsDashboardFormInner.propTypes = {
   getSegmentsBegin: PropTypes.func,
   groups: PropTypes.array,
   segments: PropTypes.array,
+  isCommitting: PropTypes.bool,
   links: PropTypes.shape({
     metricsDashboardsIndex: PropTypes.string,
     metricsDashboardShow: PropTypes.string,

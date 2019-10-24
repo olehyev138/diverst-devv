@@ -13,8 +13,7 @@ import { DateTime } from 'luxon';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { Field, Formik, Form } from 'formik';
 import {
-  withStyles,
-  Button, Card, CardActions, CardContent, TextField, Grid, Divider
+  Button, Card, CardActions, CardContent, TextField, Grid, Divider, LinearProgress
 } from '@material-ui/core';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
@@ -23,11 +22,7 @@ import { buildValues } from 'utils/formHelpers';
 
 import DiverstDateTimePicker from 'components/Shared/Pickers/DiverstDateTimePicker';
 
-const styles = theme => ({
-  noBottomPadding: {
-    paddingBottom: '0 !important',
-  },
-});
+import DiverstSubmit from 'components/Shared/DiverstSubmit';
 
 /* eslint-disable object-curly-newline */
 export function EventFormInner({
@@ -42,6 +37,7 @@ export function EventFormInner({
           <Field
             component={TextField}
             onChange={handleChange}
+            disabled={props.isCommitting}
             required
             fullWidth
             id='name'
@@ -53,6 +49,7 @@ export function EventFormInner({
           <Field
             component={TextField}
             onChange={handleChange}
+            disabled={props.isCommitting}
             fullWidth
             id='description'
             name='description'
@@ -70,12 +67,12 @@ export function EventFormInner({
             <Grid item xs md={5}>
               <Field
                 component={DiverstDateTimePicker}
+                disabled={props.isCommitting}
                 required
                 keyboardMode
                 /* eslint-disable-next-line dot-notation */
                 maxDate={touched['end'] ? values['end'] : undefined}
                 maxDateMessage='Start date cannot be after end date'
-                disablePast
                 fullWidth
                 id='start'
                 name='start'
@@ -86,12 +83,12 @@ export function EventFormInner({
             <Grid item xs md={5}>
               <Field
                 component={DiverstDateTimePicker}
+                disabled={props.isCommitting}
                 required
                 keyboardMode
                 /* eslint-disable-next-line dot-notation */
                 minDate={values['start']}
                 minDateMessage='End date cannot be before start date'
-                disablePast
                 fullWidth
                 id='end'
                 name='end'
@@ -103,15 +100,13 @@ export function EventFormInner({
         </CardContent>
         <Divider />
         <CardActions>
-          <Button
-            color='primary'
-            type='submit'
-          >
+          <DiverstSubmit isCommitting={props.isCommitting}>
             {buttonText}
-          </Button>
+          </DiverstSubmit>
           <Button
             to={props.eventExists ? props.links.eventShow : props.links.eventsIndex}
             component={WrappedNavLink}
+            disabled={props.isCommitting}
           >
             <DiverstFormattedMessage {...messages.cancel} />
           </Button>
@@ -153,13 +148,16 @@ export function EventForm(props) {
 }
 
 EventForm.propTypes = {
+  classes: PropTypes.object,
   eventAction: PropTypes.func,
   event: PropTypes.object,
   currentUser: PropTypes.object,
-  currentGroup: PropTypes.object
+  currentGroup: PropTypes.object,
+  isCommitting: PropTypes.bool,
 };
 
 EventFormInner.propTypes = {
+  classes: PropTypes.object,
   eventExists: PropTypes.bool,
   handleSubmit: PropTypes.func,
   handleChange: PropTypes.func,
@@ -171,6 +169,7 @@ EventFormInner.propTypes = {
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
   setFieldError: PropTypes.func,
+  isCommitting: PropTypes.bool,
   links: PropTypes.shape({
     eventsIndex: PropTypes.string,
     eventShow: PropTypes.string,
@@ -179,5 +178,4 @@ EventFormInner.propTypes = {
 
 export default compose(
   memo,
-  withStyles(styles),
 )(EventForm);
