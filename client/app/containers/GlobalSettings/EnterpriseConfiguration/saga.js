@@ -1,125 +1,48 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 import api from 'api/api';
 import { push } from 'connected-react-router';
-
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
 
+import {
+  GET_ENTERPRISE_BEGIN, UPDATE_ENTERPRISE_BEGIN, CONFIGURATION_UNMOUNT
+} from 'containers/GlobalSettings/EnterpriseConfiguration/constants';
 
 import {
-  GET_GROUPS_BEGIN, CREATE_GROUP_BEGIN,
-  GET_GROUP_BEGIN, UPDATE_GROUP_BEGIN,
-  UPDATE_GROUP_SETTINGS_BEGIN, DELETE_GROUP_BEGIN
-} from 'containers/Group/constants';
-
-import {
-  getGroupsSuccess, getGroupsError,
-  createGroupSuccess, createGroupError,
-  getGroupSuccess, getGroupError,
-  updateGroupSuccess, updateGroupError,
-  updateGroupSettingsSuccess, updateGroupSettingsError,
-  deleteGroupError
-} from 'containers/Group/actions';
+  getEnterpriseBegin, getEnterpriseError,
+  getEnterpriseSuccess, updateEnterpriseBegin,
+  updateEnterpriseSuccess, updateEnterpriseError
+} from 'containers/GlobalSettings/EnterpriseConfiguration/actions';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
-export function* getGroups(action) {
+export function* getEnterprise(action) {
   try {
-    const response = yield call(api.groups.all.bind(api.groups), action.payload);
-
-    yield put(getGroupsSuccess(response.data.page));
+    const response = yield call(api.enterprises.get.bind(api.enterprises), action.payload.id);
+    yield put(getEnterpriseSuccess(response.data));
   } catch (err) {
-    yield put(getGroupsError(err));
-
     // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to load groups', options: { variant: 'warning' } }));
+    yield put(getEnterpriseError(err));
+    yield put(showSnackbar({ message: 'Failed to get enterprise', options: { variant: 'warning' } }));
   }
 }
 
-export function* getGroup(action) {
-  try {
-    const response = yield call(api.groups.get.bind(api.groups), action.payload.id);
-    yield put(getGroupSuccess(response.data));
-  } catch (err) {
-    // TODO: intl message
-    yield put(getGroupError(err));
-    yield put(showSnackbar({ message: 'Failed to get group', options: { variant: 'warning' } }));
-  }
-}
-
-
-export function* createGroup(action) {
+export function* updateEnterprise(action) {
   try {
     const payload = { group: action.payload };
+    const response = yield call(api.enterprises.update.bind(api.enterprises), payload.enterprise.id, payload);
 
-    // TODO: use bind here or no?
-    const response = yield call(api.groups.create.bind(api.groups), payload);
-
-    yield put(createGroupSuccess());
+    yield put(updateEnterpriseSuccess());
     yield put(push(ROUTES.admin.manage.groups.index.path()));
-    yield put(showSnackbar({ message: 'Group created', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: 'Enterprise updated', options: { variant: 'success' } }));
   } catch (err) {
-    yield put(createGroupError(err));
+    yield put(updateEnterpriseError(err));
 
     // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to create group', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: 'Failed to update enterprise', options: { variant: 'warning' } }));
   }
 }
 
-export function* updateGroup(action) {
-  try {
-    const payload = { group: action.payload };
-    const response = yield call(api.groups.update.bind(api.groups), payload.group.id, payload);
-
-    yield put(updateGroupSuccess());
-    yield put(push(ROUTES.admin.manage.groups.index.path()));
-    yield put(showSnackbar({ message: 'Group updated', options: { variant: 'success' } }));
-  } catch (err) {
-    yield put(updateGroupError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to update group', options: { variant: 'warning' } }));
-  }
-}
-
-export function* updateGroupSettings(action) {
-  try {
-    const payload = { group: action.payload };
-    const response = yield call(api.groups.update.bind(api.groups), payload.group.id, payload);
-
-    yield put(updateGroupSettingsSuccess());
-    yield put(showSnackbar({
-      message: 'Group settings updated',
-      options: { variant: 'success' }
-    }));
-  } catch (err) {
-    yield put(updateGroupSettingsError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({
-      message: 'Failed to update group settings',
-      options: { variant: 'warning' }
-    }));
-  }
-}
-
-export function* deleteGroup(action) {
-  try {
-    yield call(api.groups.destroy.bind(api.groups), action.payload);
-    yield put(push(ROUTES.admin.manage.groups.index.path()));
-    yield put(showSnackbar({ message: 'Group deleted', options: { variant: 'success' } }));
-  } catch (err) {
-    yield put(deleteGroupError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to delete group', options: { variant: 'warning' } }));
-  }
-}
-
-export default function* groupsSaga() {
-  yield takeLatest(GET_GROUPS_BEGIN, getGroups);
-  yield takeLatest(GET_GROUP_BEGIN, getGroup);
-  yield takeLatest(CREATE_GROUP_BEGIN, createGroup);
-  yield takeLatest(UPDATE_GROUP_BEGIN, updateGroup);
-  yield takeLatest(UPDATE_GROUP_SETTINGS_BEGIN, updateGroupSettings);
-  yield takeLatest(DELETE_GROUP_BEGIN, deleteGroup);
+export default function* configurationSaga() {
+  yield takeLatest(GET_ENTERPRISE_BEGIN, getEnterprise);
+  yield takeLatest(UPDATE_ENTERPRISE_BEGIN, updateEnterprise);
 }

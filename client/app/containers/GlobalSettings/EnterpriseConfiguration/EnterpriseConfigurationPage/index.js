@@ -54,6 +54,8 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = {
+  getEnterpriseBegin,
+  configurationUnmount
 };
 
 const withConnect = connect(
