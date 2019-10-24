@@ -46,9 +46,7 @@ export function EnterpriseConfigurationInner({ classes, handleSubmit, handleChan
           >
             Save
           </Button>
-          <Button
-            component={WrappedNavLink}
-          >
+          <Button>
             Cancel
           </Button>
         </CardActions>

@@ -6,35 +6,36 @@ import { createStructuredSelector } from 'reselect/lib';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
-// import saga from 'containers/Group/saga';
-// import reducer from 'containers/Group/reducer';
+
+import reducer from '../reducer';
+import saga from '../saga';
+import { selectEnterprise } from '../selectors';
+import {
+  getEnterpriseBegin,
+  updateEnterpriseBegin,
+  configurationUnmount
+} from '../actions';
 
 import RouteService from 'utils/routeHelpers';
-
-// import { selectFormGroup, selectPaginatedSelectGroups } from 'containers/Group/selectors';
-// import {
-// } from 'containers/Group/actions';
-
 import EnterpriseConfiguration from 'components/GlobalSettings/EnterpriseConfiguration';
 
 export function EnterpriseConfigurationPage(props) {
-  // useInjectReducer({ key: 'groups', reducer });
-  // useInjectSaga({ key: 'groups', saga });
-
-  // const rs = new RouteService(useContext);
+  useInjectReducer({ key: 'configuration', reducer });
+  useInjectSaga({ key: 'configuration', saga });
 
   useEffect(() => {
-    // props.getGroupBegin({ id: rs.params('group_id') });
+    // todo: get enterprise id
+    props.getEnterpriseBegin({});
 
     return () => {
-      // props.groupFormUnmount();
+      props.configurationUnmount();
     };
   }, []);
 
   return (
     <React.Fragment>
       <EnterpriseConfiguration
-        groupAction={props.updateEnterpriseBegin}
+        enterpriseAction={props.updateEnterpriseBegin}
         enterprise={props.enterprise}
         buttonText='Update'
       />
@@ -44,8 +45,9 @@ export function EnterpriseConfigurationPage(props) {
 
 EnterpriseConfigurationPage.propTypes = {
   enterprise: PropTypes.object,
+  getEnterpriseBegin: PropTypes.func,
   updateEnterpriseBegin: PropTypes.func,
-  enterpriseFormUnmount: PropTypes.func
+  configurationUnmount: PropTypes.func
 };
 
 const mapStateToProps = createStructuredSelector({

@@ -36,6 +36,11 @@ export function GlobalSettingsLinks(props) {
             to={ROUTES.admin.system.globalSettings.customText.edit.path()}
             label='Custom Texts'
           />
+          <Tab
+            component={WrappedNavLink}
+            to={ROUTES.admin.system.globalSettings.enterpriseConfiguration.index.path()}
+            label='Configuration'
+          />
         </ResponsiveTabs>
       </Paper>
     </React.Fragment>
