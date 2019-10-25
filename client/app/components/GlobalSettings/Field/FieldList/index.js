@@ -5,7 +5,7 @@
  *
  */
 
-import React, { memo, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
@@ -49,18 +49,31 @@ const styles = theme => ({
 });
 
 export function FieldList(props, context) {
-  const { classes } = props;
+  const { classes, ...rest } = props;
+
+  const FIELDS = {
+    text: {
+      field: {
+        type: 'TextField',
+      },
+      action: props.createFieldBegin,
+    }
+  };
+
   const [expandedFields, setExpandedFields] = useState({});
 
-  const [fieldForm, setFieldForm] = useState(undefined);
   const [showFieldForm, setShowFieldForm] = useState(false);
+  const [enableFieldForm, setEnableFieldForm] = useState(showFieldForm);
+  const [fieldFormType, setFieldFormType] = useState(undefined);
 
-  const renderFieldForm = (field, fieldAction) => {
-    setFieldForm(<FieldForm
-      field={field}
-      fieldAction={fieldAction}
-      cancelAction={hideFieldForm}
-    />);
+  useEffect(() => {
+    if (showFieldForm && props.commitSuccess)
+      hideFieldForm();
+  }, [props.commitSuccess]);
+
+  const renderFieldForm = (type) => {
+    setFieldFormType(type);
+    setEnableFieldForm(true);
     setShowFieldForm(true);
   };
 
@@ -69,8 +82,9 @@ export function FieldList(props, context) {
     setShowFieldForm(false);
   };
 
-  const fieldFormCancel = () => {
-    setFieldForm(undefined);
+  const disableFieldForm = () => {
+    setEnableFieldForm(false);
+    setFieldFormType(undefined);
   };
 
   return (
@@ -81,7 +95,7 @@ export function FieldList(props, context) {
             variant='contained'
             color='primary'
             size='large'
-            onClick={() => renderFieldForm({ type: 'TextField' }, props.createFieldBegin)}
+            onClick={() => renderFieldForm('text')}
             startIcon={<AddIcon />}
           >
             <DiverstFormattedMessage {...messages.newTextField} />
@@ -91,10 +105,17 @@ export function FieldList(props, context) {
           className={classes.fieldFormCollapse}
           in={showFieldForm}
           component='span'
-          onExited={() => fieldFormCancel()}
+          onExited={() => disableFieldForm()}
         >
-          <div className={fieldForm ? classes.fieldFormContainer : undefined}>
-            {fieldForm}
+          <div className={enableFieldForm ? classes.fieldFormContainer : undefined}>
+            {enableFieldForm && (
+              <FieldForm
+                field={FIELDS[fieldFormType].field}
+                fieldAction={FIELDS[fieldFormType].action}
+                cancelAction={hideFieldForm}
+                {...rest}
+              />
+            )}
           </div>
         </Collapse>
       </Grid>
@@ -165,7 +186,9 @@ FieldList.propTypes = {
   createFieldBegin: PropTypes.func,
   updateFieldBegin: PropTypes.func,
   deleteFieldBegin: PropTypes.func,
-  handlePagination: PropTypes.func
+  handlePagination: PropTypes.func,
+  isCommitting: PropTypes.bool,
+  commitSuccess: PropTypes.bool,
 };
 
 export default compose(

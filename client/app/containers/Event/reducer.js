@@ -4,10 +4,14 @@
  *
  */
 import produce from 'immer';
-import { GET_EVENTS_BEGIN, GET_EVENTS_SUCCESS, EVENTS_UNMOUNT, GET_EVENT_SUCCESS, GET_EVENTS_ERROR, GET_EVENT_ERROR } from './constants';
+import {
+  GET_EVENTS_BEGIN, GET_EVENTS_SUCCESS, EVENTS_UNMOUNT, GET_EVENT_SUCCESS, GET_EVENTS_ERROR, GET_EVENT_ERROR,
+  CREATE_EVENT_BEGIN, UPDATE_EVENT_BEGIN, CREATE_EVENT_SUCCESS, UPDATE_EVENT_SUCCESS, CREATE_EVENT_ERROR, UPDATE_EVENT_ERROR
+} from './constants';
 
 export const initialState = {
   isLoading: true,
+  isCommitting: false,
   events: [],
   eventsTotal: null,
   currentEvent: null,
@@ -35,6 +39,16 @@ function eventsReducer(state = initialState, action) {
         break;
       case GET_EVENT_ERROR:
         draft.isLoading = false;
+        break;
+      case CREATE_EVENT_BEGIN:
+      case UPDATE_EVENT_BEGIN:
+        draft.isCommitting = true;
+        break;
+      case CREATE_EVENT_SUCCESS:
+      case CREATE_EVENT_ERROR:
+      case UPDATE_EVENT_SUCCESS:
+      case UPDATE_EVENT_ERROR:
+        draft.isCommitting = false;
         break;
       case EVENTS_UNMOUNT:
         return initialState;

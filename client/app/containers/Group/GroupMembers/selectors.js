@@ -33,7 +33,12 @@ const selectIsFetchingMembers = () => createSelector(
   membersState => membersState.isFetchingMembers
 );
 
+const selectIsCommitting = () => createSelector(
+  selectMembersDomain,
+  membersState => membersState.isCommitting
+);
+
 export {
   selectMembersDomain, selectPaginatedMembers, selectPaginatedSelectMembers,
-  selectMemberTotal, selectIsFetchingMembers
+  selectMemberTotal, selectIsFetchingMembers, selectIsCommitting
 };

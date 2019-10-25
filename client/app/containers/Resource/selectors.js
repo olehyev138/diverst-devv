@@ -72,6 +72,11 @@ const selectIsLoading = () => createSelector(
   resourcesState => resourcesState.isLoading
 );
 
+const selectIsCommitting = () => createSelector(
+  selectResourcesDomain,
+  resourcesState => resourcesState.isCommitting
+);
+
 export {
   selectResourcesDomain,
   selectPaginatedFolders, selectPaginatedSelectFolders,
@@ -80,5 +85,6 @@ export {
   selectValid, selectIsLoading,
   selectPaginatedResources,
   selectResourcesTotal,
-  selectResource, selectFormResource
+  selectResource, selectFormResource,
+  selectIsCommitting
 };

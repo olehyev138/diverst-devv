@@ -424,6 +424,7 @@ export const ROUTES = {
         },
       },
       globalSettings: {
+        pathPrefix: '/admin/system/settings',
         fields: {
           index: {
             path: () => '/admin/system/settings/fields'
@@ -431,7 +432,7 @@ export const ROUTES = {
         },
         customText: {
           edit: {
-            path: () => '/admin/system/settings/custom_text'
+            path: () => '/admin/system/settings/custom_texts'
           }
         }
       }

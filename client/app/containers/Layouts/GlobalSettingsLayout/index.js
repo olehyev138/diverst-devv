@@ -12,7 +12,7 @@ const styles = theme => ({});
 
 const GlobalSettingsPages = Object.freeze({
   fields: 0,
-  custom_text: 1
+  custom_texts: 1
 });
 
 const GlobalSettingsLayout = ({ component: Component, ...rest }) => {

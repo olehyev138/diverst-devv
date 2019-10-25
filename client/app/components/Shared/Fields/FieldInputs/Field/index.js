@@ -35,7 +35,7 @@ const CustomField = (props) => {
       case 'CheckboxField':
         return (<CustomCheckboxField {...props} />);
       default:
-        return (<TextField disabled />); // looks better then rendering nothing
+        return (<TextField disabled />); // looks better than rendering nothing
     }
   };
 

@@ -100,11 +100,16 @@ const selectIsLoading = () => createSelector(
   segmentsState => segmentsState.isLoading
 );
 
+const selectIsCommitting = () => createSelector(
+  selectSegmentsDomain,
+  segmentsState => segmentsState.isCommitting
+);
+
 
 export {
   selectSegmentsDomain, selectPaginatedSegments, selectPaginatedSelectSegments,
   selectSegmentTotal, selectSegment, selectSegmentWithRules,
   selectPaginatedSegmentMembers, selectSegmentMemberTotal,
   selectIsFetchingSegmentMembers, selectIsSegmentBuilding,
-  selectFormSegment, selectIsLoading
+  selectFormSegment, selectIsLoading, selectIsCommitting
 };

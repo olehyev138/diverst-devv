@@ -21,7 +21,7 @@ import {
   updateSegmentBegin, segmentUnmount
 } from 'containers/Segment/actions';
 
-import { selectSegmentWithRules } from 'containers/Segment/selectors';
+import { selectIsCommitting, selectSegmentWithRules } from 'containers/Segment/selectors';
 import { selectPaginatedSelectGroups } from 'containers/Group/selectors';
 import {
   selectPaginatedFields, selectPaginatedSelectFields
@@ -71,6 +71,7 @@ export function SegmentPage(props) {
           fields: props.fields
         }}
         buttonText={segmentId[0] ? 'Update' : 'Create'}
+        isCommitting={props.isCommitting}
       />
       <Box mb={4} />
       <Divider />
@@ -91,14 +92,16 @@ SegmentPage.propTypes = {
   fields: PropTypes.object,
   createSegmentBegin: PropTypes.func,
   updateSegmentBegin: PropTypes.func,
-  segmentUnmount: PropTypes.func
+  segmentUnmount: PropTypes.func,
+  isCommitting: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
   segment: selectSegmentWithRules(),
   groups: selectPaginatedSelectGroups(),
   selectFields: selectPaginatedSelectFields(),
-  fields: selectPaginatedFields()
+  fields: selectPaginatedFields(),
+  isCommitting: selectIsCommitting(),
 });
 
 const mapDispatchToProps = {

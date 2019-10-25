@@ -35,6 +35,11 @@ const selectFormMetricsDashboard = () => createSelector(
   }
 );
 
+const selectIsCommitting = () => createSelector(
+  selectCustomMetricsDomain,
+  customMetricsState => customMetricsState.isCommitting
+);
+
 /* Graphs */
 
 const selectCustomGraph = () => createSelector(
@@ -68,5 +73,6 @@ const selectCustomGraphData = graphId => createSelector(
 
 export {
   selectPaginatedMetricsDashboards, selectMetricsDashboardsTotal, selectMetricsDashboard,
-  selectFormMetricsDashboard, selectCustomGraph, selectFormCustomGraph, selectCustomGraphData
+  selectFormMetricsDashboard, selectCustomGraph, selectFormCustomGraph, selectCustomGraphData,
+  selectIsCommitting
 };

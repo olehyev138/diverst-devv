@@ -10,6 +10,7 @@ describe('newsReducer', () => {
   beforeEach(() => {
     state = {
       isLoading: true,
+      isCommitting: false,
       newsItems: [],
       currentNewsItem: null,
       newsItemsTotal: null

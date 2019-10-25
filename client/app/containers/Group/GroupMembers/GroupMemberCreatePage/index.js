@@ -15,7 +15,7 @@ import reducer from 'containers/Group/GroupMembers/reducer';
 import saga from 'containers/Group/GroupMembers/saga';
 
 import { createMembersBegin, getMembersBegin, groupMembersUnmount } from 'containers/Group/GroupMembers/actions';
-import { selectPaginatedSelectMembers, selectMemberTotal } from 'containers/Group/GroupMembers/selectors';
+import { selectPaginatedSelectMembers, selectMemberTotal, selectIsCommitting } from 'containers/Group/GroupMembers/selectors';
 
 import GroupMemberForm from 'components/Group/GroupMembers/GroupMemberForm';
 
@@ -37,6 +37,7 @@ export function GroupMemberCreatePage(props) {
       createMembersBegin={props.createMembersBegin}
       getMembersBegin={props.getMembersBegin}
       selectUsers={props.users}
+      isCommitting={props.isCommitting}
       links={links}
     />
   );
@@ -46,12 +47,14 @@ GroupMemberCreatePage.propTypes = {
   createMembersBegin: PropTypes.func,
   getMembersBegin: PropTypes.func,
   groupMembersUnmount: PropTypes.func,
-  users: PropTypes.array
+  users: PropTypes.array,
+  isCommitting: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
   users: selectPaginatedSelectMembers(),
-  userTotal: selectMemberTotal()
+  userTotal: selectMemberTotal(),
+  isCommitting: selectIsCommitting(),
 });
 
 const mapDispatchToProps = {

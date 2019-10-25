@@ -52,6 +52,7 @@ export class ThemeProvider extends React.PureComponent {
         },
         success: {
           main: '#43a047',
+          lightBackground: '#8bcf8e',
         },
       },
       typography: {
