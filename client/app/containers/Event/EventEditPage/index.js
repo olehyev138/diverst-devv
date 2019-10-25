@@ -17,7 +17,7 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { selectGroup } from 'containers/Group/selectors';
 import { selectUser } from 'containers/Shared/App/selectors';
-import { selectEvent, selectIsCommitting } from 'containers/Event/selectors';
+import { selectEvent, selectIsCommitting, selectIsLoading } from 'containers/Event/selectors';
 
 import {
   getEventBegin, updateEventBegin,
@@ -47,8 +47,10 @@ export function EventEditPage(props) {
 
   return (
     <EventForm
+      edit
       eventAction={props.updateEventBegin}
       isCommitting={props.isCommitting}
+      isLoading={props.isLoading}
       buttonText='Update'
       currentUser={currentUser}
       currentGroup={currentGroup}
@@ -66,6 +68,7 @@ EventEditPage.propTypes = {
   currentGroup: PropTypes.object,
   currentEvent: PropTypes.object,
   isCommitting: PropTypes.bool,
+  isLoading: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -73,6 +76,7 @@ const mapStateToProps = createStructuredSelector({
   currentUser: selectUser(),
   currentEvent: selectEvent(),
   isCommitting: selectIsCommitting(),
+  isLoading: selectIsLoading(),
 });
 
 const mapDispatchToProps = {
