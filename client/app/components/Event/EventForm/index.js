@@ -31,7 +31,7 @@ export function EventFormInner({
   ...props
 }) {
   return (
-    <DiverstFormLoader isLoading={props.isLoading} isError={props.edit && !props.event}>
+    <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.event}>
       <Card>
         <Form>
           <CardContent>
@@ -155,7 +155,7 @@ EventForm.propTypes = {
   currentUser: PropTypes.object,
   currentGroup: PropTypes.object,
   isCommitting: PropTypes.bool,
-  isLoading: PropTypes.bool,
+  isFormLoading: PropTypes.bool,
 };
 
 EventFormInner.propTypes = {
@@ -173,7 +173,7 @@ EventFormInner.propTypes = {
   setFieldTouched: PropTypes.func,
   setFieldError: PropTypes.func,
   isCommitting: PropTypes.bool,
-  isLoading: PropTypes.bool,
+  isFormLoading: PropTypes.bool,
   links: PropTypes.shape({
     eventsIndex: PropTypes.string,
     eventShow: PropTypes.string,
