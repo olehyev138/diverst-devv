@@ -7,14 +7,13 @@
 import produce from 'immer/dist/immer';
 import {
   GET_MENTORSHIP_USERS_BEGIN,
-  GET_MENTORSHIP_USERS_SUCCESS,
   GET_MENTORSHIP_USERS_ERROR,
   GET_MENTORSHIP_USER_SUCCESS,
   MENTORSHIP_USER_UNMOUNT,
 } from 'containers/Mentorship/constants';
 
 export const initialState = {
-  userList: {},
+  userList: [],
   userTotal: null,
 
   currentUser: null,

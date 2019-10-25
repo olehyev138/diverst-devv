@@ -20,32 +20,9 @@ import {
   GET_AVAILABLE_MENTEES_ERROR,
   GET_AVAILABLE_MENTEES_SUCCESS,
 } from 'containers/Mentorship/Mentoring/constants';
+import { initialState as state } from 'containers/Mentorship/reducer';
 
-export const initialState = {
-  mentorList: [],
-  mentorTotal: null,
-
-  availableMentorList: [],
-  availableMentorTotal: null,
-
-  menteeList: [],
-  menteeTotal: null,
-
-  availableMenteeList: [],
-  availableMenteeTotal: null,
-
-  mentorRequestList: [],
-  mentorRequestTotal: null,
-
-  menteeRequestList: [],
-  menteeRequestTotal: null,
-
-  isFetchingUsers: false,
-  isFetchingMentors: false,
-  isFetchingMentees: false,
-  isFetchingAvailableMentors: false,
-  isFetchingAvailableMentees: false,
-};
+export const initialState = state;
 
 /* eslint-disable-next-line default-case, no-param-reassign */
 function mentorshipReducer(state = initialState, action) {
@@ -54,57 +31,35 @@ function mentorshipReducer(state = initialState, action) {
     switch (action.type) {
       // BEGIN
       case GET_USER_MENTORS_BEGIN:
-        draft.isFetchingMentors = true;
-        break;
       case GET_USER_MENTEES_BEGIN:
-        draft.isFetchingMentees = true;
-        break;
       case GET_AVAILABLE_MENTORS_BEGIN:
-        draft.isFetchingAvailableMentors = true;
-        break;
       case GET_AVAILABLE_MENTEES_BEGIN:
-        draft.isFetchingAvailableMentees = true;
+        draft.isFetchingUsers = true;
         break;
 
       // ERROR
       case GET_USER_MENTORS_ERROR:
-        draft.isFetchingMentors = false;
-        break;
       case GET_USER_MENTEES_ERROR:
-        draft.isFetchingMentees = false;
-        break;
       case GET_AVAILABLE_MENTORS_ERROR:
-        draft.isFetchingAvailableMentors = false;
-        break;
       case GET_AVAILABLE_MENTEES_ERROR:
-        draft.isFetchingAvailableMentees = false;
+        draft.isFetchingUsers = false;
         break;
 
       // SUCCESS
       case GET_USER_MENTORS_SUCCESS:
-        draft.mentorList = action.payload.items;
-        draft.mentorTotal = action.payload.total;
-        draft.isFetchingMentors = false;
-        break;
       case GET_USER_MENTEES_SUCCESS:
-        draft.menteeList = action.payload.items;
-        draft.menteeTotal = action.payload.total;
-        draft.isFetchingMentees = false;
-        break;
       case GET_AVAILABLE_MENTORS_SUCCESS:
-        draft.availableMentorList = action.payload.items;
-        draft.availableMentorTotal = action.payload.total;
-        draft.isFetchingAvailableMentors = false;
-        break;
       case GET_AVAILABLE_MENTEES_SUCCESS:
-        draft.availableMenteeList = action.payload.items;
-        draft.availableMenteeTotal = action.payload.total;
-        draft.isFetchingAvailableMentees = false;
+        draft.userList = action.payload.items;
+        draft.userTotal = action.payload.total;
+        draft.isFetchingUsers = false;
         break;
 
       // UNMOUNT
       case MENTORSHIP_MENTORS_UNMOUNT:
-        return initialState;
+        draft.userList = [];
+        draft.userTotal = null;
+        draft.isFetchingUsers = false;
     }
   });
 }

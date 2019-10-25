@@ -61,7 +61,7 @@ class Api::V1::UsersController < DiverstController
     when 'mentorship_lite'
       UserMentorshipLiteSerializer
     else
-      UserSerializer
+      nil
     end
   end
 

@@ -13,7 +13,7 @@ import { compose } from 'redux';
 
 import {
   Button, Card, CardContent, CardActions,
-  Typography, Grid, Link, TablePagination, Collapse, Box, Paper,
+  Typography, Grid, Link, TablePagination, Collapse, Box, Paper, Tab,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -29,6 +29,8 @@ import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
 import DiverstTable from 'components/Shared/DiverstTable';
 import DiverstLoader from 'components/Shared/DiverstLoader';
 import DiverstPagination from 'components/Shared/DiverstPagination';
+import { customTexts } from '../../../utils/customTextHelpers';
+import ResponsiveTabs from '../../Shared/ResponsiveTabs';
 
 
 const styles = theme => ({
@@ -60,40 +62,27 @@ export function UserList(props, context) {
 
   return (
     <React.Fragment>
+      <Paper>
+        <ResponsiveTabs
+          value={props.currentTab}
+          onChange={props.handleChangeTab}
+          indicatorColor='primary'
+          textColor='primary'
+        >
+          <Tab label='Current' />
+          <Tab label='Available' />
+          {/* <Tab label={intl.formatMessage(messages.index.ongoing, customTexts())} /> */}
+        </ResponsiveTabs>
+      </Paper>
+      <Box mb={1} />
       <DiverstTable
-        title={`Your ${type.charAt(0).toUpperCase() + type.slice(1)}`}
+        title={`${props.currentTab === 0 ? 'Your' : 'Available'} ${type.charAt(0).toUpperCase() + type.slice(1)}`}
         handlePagination={props.handleMentorPagination}
         handleOrdering={props.handleMentorOrdering}
         isLoading={props.isFetchingUsers}
         rowsPerPage={5}
         dataArray={props.users}
         dataTotal={props.userTotal}
-        columns={columns}
-        actions={[{
-          icon: () => <AssignmentIndIcon />,
-          tooltip: 'Edit Member',
-          onClick: (_, rowData) => {
-            // console.log('click 1');
-          }
-        }, {
-          icon: () => <DeleteIcon />,
-          tooltip: 'Delete Member',
-          onClick: (_, rowData) => {
-            /* eslint-disable-next-line no-alert, no-restricted-globals */
-            // if (confirm('Delete member?'))
-            // console.log('click 2');
-          }
-        }]}
-      />
-      <Box mb={2} />
-      <DiverstTable
-        title={`Available ${type.charAt(0).toUpperCase() + type.slice(1)}`}
-        handlePagination={props.handleMentorPagination}
-        handleOrdering={props.handleMentorOrdering}
-        isLoading={props.isFetchingAvailableUsers}
-        rowsPerPage={5}
-        dataArray={props.availableUsers}
-        dataTotal={props.availableUserTotal}
         columns={columns}
         actions={[{
           icon: () => <AssignmentIndIcon />,
@@ -127,6 +116,8 @@ UserList.propTypes = {
   userParams: PropTypes.object,
   handleMentorPagination: PropTypes.func,
   handleMentorOrdering: PropTypes.func,
+  currentTab: PropTypes.number,
+  handleChangeTab: PropTypes.func,
   links: PropTypes.shape({
     userNew: PropTypes.string,
     userEdit: PropTypes.func

@@ -118,11 +118,13 @@ module BaseSearcher
       searchValue = params[:search]
 
       # get the id and association
-      raise NameError, 'No association given' unless params[:association].present?
+      raise NameError, 'No association given' if params[:association].blank?
+
       association = params[:association]
       raise NameError, 'Invalid association name' unless valid_associations.include? association
 
-      raise NameError, 'No id given' unless params[:objectId].present?
+      raise NameError, 'No id given' if params[:objectId].blank?
+
       id = params[:objectId].to_i
 
       association = association.to_sym
@@ -183,9 +185,8 @@ module BaseSearcher
           .where.not(where_not)
           .all
           .distinct
-          end
+      end
     end
-
 
     def get_base_query
       return {} unless self.respond_to? :base_query
