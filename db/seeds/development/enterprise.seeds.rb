@@ -33,7 +33,8 @@ spinner.run do |spinner|
     has_enabled_saml: true,
     theme_id: 1,
     disable_emails: true,
-    created_at: 2.years.ago
+    created_at: 2.years.ago,
+    time_zone: ActiveSupport::TimeZone.find_tzinfo('UTC').name
   )
 
   Enterprise.create(
@@ -69,7 +70,8 @@ spinner.run do |spinner|
     has_enabled_saml: true,
     theme_id: 1,
     disable_emails: true,
-    created_at: 2.years.ago
+    created_at: 2.years.ago,
+    time_zone: ActiveSupport::TimeZone.find_tzinfo('UTC').name
   )
 
   Enterprise.all.each do |enterprise|
