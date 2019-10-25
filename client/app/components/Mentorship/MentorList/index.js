@@ -52,68 +52,65 @@ export function UserList(props, context) {
   const { type } = props;
 
   const columns = [
-    { title: 'Name', field: 'name' },
+    { title: 'First Name', field: 'first_name' },
+    { title: 'Last Name', field: 'last_name' },
     { title: 'Email', field: 'email' },
     { title: 'Interests', field: 'interests' },
   ];
 
   return (
     <React.Fragment>
-      <DiverstLoader isLoading={props.isFetchingUsers}>
-        <DiverstTable
-          title={`Your ${type.charAt(0).toUpperCase() + type.slice(1)}`}
-          handlePagination={props.handleMentorPagination}
-          handleOrdering={props.handleMentorOrdering}
-          isLoading={props.isFetchingUsers}
-          rowsPerPage={5}
-          dataArray={props.users}
-          dataTotal={props.userTotal}
-          columns={columns}
-          actions={[{
-            icon: () => <AssignmentIndIcon />,
-            tooltip: 'Edit Member',
-            onClick: (_, rowData) => {
-              // console.log('click 1');
-            }
-          }, {
-            icon: () => <DeleteIcon />,
-            tooltip: 'Delete Member',
-            onClick: (_, rowData) => {
-              /* eslint-disable-next-line no-alert, no-restricted-globals */
-              // if (confirm('Delete member?'))
-              // console.log('click 2');
-            }
-          }]}
-        />
-      </DiverstLoader>
+      <DiverstTable
+        title={`Your ${type.charAt(0).toUpperCase() + type.slice(1)}`}
+        handlePagination={props.handleMentorPagination}
+        handleOrdering={props.handleMentorOrdering}
+        isLoading={props.isFetchingUsers}
+        rowsPerPage={5}
+        dataArray={props.users}
+        dataTotal={props.userTotal}
+        columns={columns}
+        actions={[{
+          icon: () => <AssignmentIndIcon />,
+          tooltip: 'Edit Member',
+          onClick: (_, rowData) => {
+            // console.log('click 1');
+          }
+        }, {
+          icon: () => <DeleteIcon />,
+          tooltip: 'Delete Member',
+          onClick: (_, rowData) => {
+            /* eslint-disable-next-line no-alert, no-restricted-globals */
+            // if (confirm('Delete member?'))
+            // console.log('click 2');
+          }
+        }]}
+      />
       <Box mb={2} />
-      <DiverstLoader isLoading={props.isFetchingAvailableUsers}>
-        <DiverstTable
-          title={`Available ${type.charAt(0).toUpperCase() + type.slice(1)}`}
-          handlePagination={props.handleMentorPagination}
-          handleOrdering={props.handleMentorOrdering}
-          isLoading={props.isFetchingAvailableUsers}
-          rowsPerPage={5}
-          dataArray={props.availableUsers}
-          dataTotal={props.availableUserTotal}
-          columns={columns}
-          actions={[{
-            icon: () => <AssignmentIndIcon />,
-            tooltip: 'Edit Member',
-            onClick: (_, rowData) => {
-              // console.log('click 1');
-            }
-          }, {
-            icon: () => <DeleteIcon />,
-            tooltip: 'Delete Member',
-            onClick: (_, rowData) => {
-              /* eslint-disable-next-line no-alert, no-restricted-globals */
-              // if (confirm('Delete member?'))
-              // console.log('click 2');
-            }
-          }]}
-        />
-      </DiverstLoader>
+      <DiverstTable
+        title={`Available ${type.charAt(0).toUpperCase() + type.slice(1)}`}
+        handlePagination={props.handleMentorPagination}
+        handleOrdering={props.handleMentorOrdering}
+        isLoading={props.isFetchingAvailableUsers}
+        rowsPerPage={5}
+        dataArray={props.availableUsers}
+        dataTotal={props.availableUserTotal}
+        columns={columns}
+        actions={[{
+          icon: () => <AssignmentIndIcon />,
+          tooltip: 'Edit Member',
+          onClick: (_, rowData) => {
+            // console.log('click 1');
+          }
+        }, {
+          icon: () => <DeleteIcon />,
+          tooltip: 'Delete Member',
+          onClick: (_, rowData) => {
+            /* eslint-disable-next-line no-alert, no-restricted-globals */
+            // if (confirm('Delete member?'))
+            // console.log('click 2');
+          }
+        }]}
+      />
     </React.Fragment>
   );
 }

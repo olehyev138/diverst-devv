@@ -11,7 +11,12 @@ class Api::V1::UsersController < DiverstController
     # TODO: This is temporary to allow API calls to work properly without a policy during development.
     base_authorize(klass)
 
-    render status: 200, json: klass.index(self.diverst_request, params.permit!), each_serializer: serializer(params)
+
+    if params[:search_method].present?
+      render status: 200, json: klass.index(self.diverst_request, params.permit!, params[:search_method].to_sym), use_serializer: serializer(params)
+    else
+      render status: 200, json: klass.index(self.diverst_request, params.permit!), use_serializer: serializer(params)
+    end
   rescue => e
     raise BadRequestException.new(e.message)
   end

@@ -20,8 +20,13 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 export function* getMentors(action) {
   try {
     const { payload } = action;
-    payload.mentee_id = payload.userId;
-    const response = yield call(api.mentorings.all.bind(api.mentorings), payload);
+    // const response = yield call(api.mentorings.all.bind(api.mentorings), payload);
+    const response = yield call(api.users.all.bind(api.users), {
+      ...payload,
+      search_method: 'has_many_search',
+      association: 'mentors',
+      serializer: 'mentorship_lite',
+    });
     yield put(getMentorsSuccess(response.data.page));
   } catch (err) {
     yield put(getMentorsError(err));
@@ -34,8 +39,13 @@ export function* getMentors(action) {
 export function* getMentees(action) {
   try {
     const { payload } = action;
-    payload.mentor_id = payload.userId;
-    const response = yield call(api.mentorings.all.bind(api.mentorings), payload);
+    // const response = yield call(api.mentorings.all.bind(api.mentorings), payload);
+    const response = yield call(api.users.all.bind(api.users), {
+      ...payload,
+      search_method: 'has_many_search',
+      association: 'mentees',
+      serializer: 'mentorship_lite',
+    });
     yield put(getMenteesSuccess(response.data.page));
   } catch (err) {
     yield put(getMenteesError(err));
@@ -48,7 +58,7 @@ export function* getMentees(action) {
 export function* getAvailableMentors(action) {
   try {
     const { payload } = action;
-    const response = yield call(api.users.allExcept.bind(api.users), payload.userId, { ...payload, serializer: 'mentorship_lite' });
+    const response = yield call(api.users.all.bind(api.users), { ...payload, serializer: 'mentorship_lite' });
     yield put(getAvailableMentorsSuccess(response.data.page));
   } catch (err) {
     yield put(getAvailableMentorsError(err));
@@ -61,7 +71,7 @@ export function* getAvailableMentors(action) {
 export function* getAvailableMentees(action) {
   try {
     const { payload } = action;
-    const response = yield call(api.users.allExcept.bind(api.users), payload.userId, { ...payload, serializer: 'mentorship_lite' });
+    const response = yield call(api.users.all.bind(api.users), { ...payload, serializer: 'mentorship_lite' });
     yield put(getAvailableMenteesSuccess(response.data.page));
   } catch (err) {
     yield put(getAvailableMenteesError(err));

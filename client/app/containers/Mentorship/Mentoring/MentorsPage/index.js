@@ -63,11 +63,11 @@ export function MentorsPage(props) {
     if (props.user) {
       const userId = props.user.id;
       if (props.type === 'mentees') {
-        props.getMenteesBegin({ ...params, userId });
-        props.getAvailableMenteesBegin({ ...params, userId, query_scopes: ['mentees'] });
+        props.getMenteesBegin({ ...params, objectId: userId });
+        props.getAvailableMenteesBegin({ ...params, $id: userId, query_scopes: ['mentees'] });
       } else {
-        props.getMentorsBegin({ ...params, userId });
-        props.getAvailableMentorsBegin({ ...params, userId, query_scopes: ['mentors'] });
+        props.getMentorsBegin({ ...params, objectId: userId });
+        props.getAvailableMentorsBegin({ ...params, $id: userId, query_scopes: ['mentors'] });
       }
     }
     return () => {
@@ -90,7 +90,10 @@ export function MentorsPage(props) {
   const handleMentorOrdering = (payload) => {
     const newParams = { ...params, orderBy: payload.orderBy, order: payload.orderDir };
 
-    props.getMentorsBegin(newParams);
+    if (props.type === 'mentees')
+      props.getMenteesBegin({ ...newParams, objectId: props.user.id });
+    else
+      props.getMentorsBegin({ ...newParams, objectId: props.user.id });
     setParams(newParams);
   };
 

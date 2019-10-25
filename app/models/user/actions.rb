@@ -86,20 +86,13 @@ module User::Actions
     page = (params[:page] || 0).to_i
     order = params[:order].to_sym rescue :asc
     order_by = params[:order_by].to_sym rescue :start
-    scope =
-      JSON.parse params[:query_scopes] || []
+
+    query_scopes = self.class.set_query_scopes(params)
 
     # get the events
-    if scope.class.to_s == 'Array'
-      events = scope.reduce(initiatives.union(invited_initiatives)) { |sum, n| sum.send(n.to_sym) }
-    elsif scope.respond_to?(:to_sym)
-      events = initiatives.union(invited_initiatives).send(scope.to_sym)
-    else
-      events = initiatives.union(invited_initiatives)
-    end
-
     # order the event
-    ordered = events
+    ordered = initiatives
+                .send_chain(query_scopes)
                 .order(order_by => order)
                 .distinct
 
@@ -121,20 +114,8 @@ module User::Actions
     page = (params[:page] || 0).to_i
     order = params[:order].to_sym rescue :desc
     order_by = params[:order_by].to_sym rescue :created_at
-    scope =
-      JSON.parse params[:query_scopes] || []
 
-    # get the events in scope
-    if scope.class.to_s == 'Array'
-      scoped_events = scope.reduce(Initiative) { |sum, n| sum.send(n.to_sym) }
-    elsif scope.respond_to?(:to_sym)
-      scoped_events = Initiative.send(scope.to_sym)
-    else
-      scoped_events = Initiative
-    end
-
-    # join the necessary events
-    included_events = scoped_events.left_joins(:initiative_segments, :initiative_participating_groups, :initiative_invitees)
+    query_scopes = self.class.set_query_scopes(params)
 
     # SCOPE AND
     # ( INVITED OR (
@@ -159,7 +140,9 @@ module User::Actions
     )
     valid_ors << User.sql_where("(#{ group_ors.join(' OR ')}) AND (#{ segment_ors.join(' OR ')})")
 
-    ordered = included_events
+    ordered = initiatives
+                .left_joins(:initiative_segments, :initiative_participating_groups, :initiative_invitees)
+                .send_chain(query_scopes)
                 .where(valid_ors.join(' OR '))
                 .order(order_by => order)
                 .distinct
@@ -218,7 +201,11 @@ module User::Actions
     end
 
     def valid_scopes
-      %w(active enterprise_mentors)
+      %w(active enterprise_mentors mentors mentees)
+    end
+
+    def valid_associations
+      %w(mentors mentees)
     end
 
     def signin(email, password)

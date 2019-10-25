@@ -29,7 +29,7 @@ module BasePager
       order = params[:order].presence || default_order
 
       # get the search method
-      search_method_obj = self.method(:lookup)
+      search_method_obj = self.method(search_method)
 
       # search
       total = search_method_obj.call(params, diverst_request).count

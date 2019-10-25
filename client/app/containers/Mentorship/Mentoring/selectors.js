@@ -10,12 +10,13 @@ const selectMentoringDomain = state => state.mentoring || initialState;
 
 const selectPaginatedMentors = () => createSelector(
   selectMentoringDomain,
-  (mentorshipState) => {
-    const { mentorList } = mentorshipState;
-    if (mentorList)
-      return mentorList.map(mentoring => mentoring.mentor);
-    return [];
-  }
+  // (mentorshipState) => {
+  //   const { mentorList } = mentorshipState;
+  //   if (mentorList)
+  //     return mentorList.map(mentoring => mentoring.mentor);
+  //   return [];
+  // }
+  mentorshipState => mentorshipState.mentorList
 );
 
 const selectMentorTotal = () => createSelector(
@@ -30,12 +31,13 @@ const selectIsFetchingMentors = () => createSelector(
 
 const selectPaginatedMentees = () => createSelector(
   selectMentoringDomain,
-  (mentorshipState) => {
-    const mentorings = mentorshipState.menteeList;
-    if (mentorings)
-      return mentorings.map(mentoring => mentoring.mentee);
-    return [];
-  }
+  // (mentorshipState) => {
+  //   const mentorings = mentorshipState.menteeList;
+  //   if (mentorings)
+  //     return mentorings.map(mentoring => mentoring.mentee);
+  //   return [];
+  // }
+  mentorshipState => mentorshipState.menteeList
 );
 
 const selectMenteeTotal = () => createSelector(
@@ -51,7 +53,6 @@ const selectIsFetchingMentees = () => createSelector(
 const selectPaginatedAvailableMentors = () => createSelector(
   selectMentoringDomain,
   mentorshipState => mentorshipState.availableMentorList
-
 );
 
 const selectAvailableMentorTotal = () => createSelector(
