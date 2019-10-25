@@ -15,7 +15,7 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { selectGroup } from 'containers/Group/selectors';
 import { selectUser } from 'containers/Shared/App/selectors';
-import { selectEvent } from 'containers/Event/selectors';
+import { selectEvent, selectIsFormLoading } from 'containers/Event/selectors';
 
 import { getEventBegin, deleteEventBegin, eventsUnmount } from 'containers/Event/actions';
 
@@ -48,6 +48,7 @@ export function EventPage(props) {
       deleteEventBegin={props.deleteEventBegin}
       event={currentEvent}
       links={links}
+      isFormLoading={props.isFormLoading}
     />
   );
 }
@@ -59,12 +60,14 @@ EventPage.propTypes = {
   currentUser: PropTypes.object,
   currentGroup: PropTypes.object,
   currentEvent: PropTypes.object,
+  isFormLoading: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
   currentGroup: selectGroup(),
   currentUser: selectUser(),
   currentEvent: selectEvent(),
+  isFormLoading: selectIsFormLoading(),
 });
 
 const mapDispatchToProps = {
