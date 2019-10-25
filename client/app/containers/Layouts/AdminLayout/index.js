@@ -2,6 +2,7 @@ import React, { memo } from 'react';
 import { compose } from 'redux';
 
 import Container from '@material-ui/core/Container';
+import Fade from '@material-ui/core/Fade';
 import AdminLinks from 'components/Admin/AdminLinks';
 import { withStyles } from '@material-ui/core/styles';
 import AuthenticatedLayout from '../AuthenticatedLayout';
@@ -75,11 +76,13 @@ export class AdminLayout extends React.PureComponent {
               />
               <div className={classes.scrollbarContentContainer}>
                 <Scrollbar>
-                  <Container maxWidth='xl' className={classes.container}>
-                    <div className={classes.content}>
-                      <Component {...other} />
-                    </div>
-                  </Container>
+                  <Fade in appear>
+                    <Container maxWidth='xl' className={classes.container}>
+                      <div className={classes.content}>
+                        <Component {...other} />
+                      </div>
+                    </Container>
+                  </Fade>
                 </Scrollbar>
               </div>
             </div>
