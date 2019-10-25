@@ -19,7 +19,8 @@ import RouteService from 'utils/routeHelpers';
 import { selectUser, selectEnterprise } from 'containers/Shared/App/selectors';
 import {
   selectFormFolder, selectFolder,
-  selectPaginatedSelectFolders, selectValid, selectIsCommitting,
+  selectPaginatedSelectFolders, selectValid,
+  selectIsCommitting, selectIsFormLoading
 } from 'containers/Resource/selectors';
 
 import {
@@ -35,8 +36,8 @@ import {
 import FolderForm from 'components/Resource/Folder/FolderForm';
 
 import {
-  Card, CardContent, Button, TextField,
-  DialogActions, DialogContent, DialogContentText, DialogTitle
+  Card, CardContent, CardActions, Button, TextField, Divider,
+  DialogActions, DialogContent, DialogContentText, DialogTitle, Typography,
 } from '@material-ui/core';
 import { Field, Formik, Form } from 'formik';
 import messages from 'containers/Resource/Folder/messages';
@@ -87,9 +88,12 @@ export function FolderEditPage(props) {
             <Form onSubmit={handleSubmit}>
               <Card>
                 <CardContent>
-                  This folder is password protected.
-                  <br />
-                  Please enter the password to access the resources.
+                  <Typography>
+                    This folder is password protected.
+                  </Typography>
+                  <Typography>
+                    Please enter the password to access the resources.
+                  </Typography>
                   <Field
                     component={TextField}
                     autoFocus
@@ -103,11 +107,12 @@ export function FolderEditPage(props) {
                     fullWidth
                   />
                 </CardContent>
-                <Card>
+                <Divider />
+                <CardActions>
                   <Button color='primary' type='submit'>
                     AUTHENTICATE
                   </Button>
-                </Card>
+                </CardActions>
               </Card>
             </Form>
           )}
@@ -115,6 +120,7 @@ export function FolderEditPage(props) {
       )}
       { valid === true && (
         <FolderForm
+          edit
           getFoldersBegin={props.getFoldersBegin}
           selectFolders={props.folders}
           folderAction={props.updateFolderBegin}
@@ -126,6 +132,7 @@ export function FolderEditPage(props) {
           type={type}
           from={location.fromFolder ? location.fromFolder : null}
           isCommitting={props.isCommitting}
+          isFormLoading={props.isFormLoading}
         />
       )}
     </div>
@@ -149,6 +156,7 @@ FolderEditPage.propTypes = {
   folders: PropTypes.array,
   valid: PropTypes.bool,
   isCommitting: PropTypes.bool,
+  isFormLoading: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -159,6 +167,7 @@ const mapStateToProps = createStructuredSelector({
   currentEnterprise: selectEnterprise(),
   valid: selectValid(),
   isCommitting: selectIsCommitting(),
+  isFormLoading: selectIsFormLoading(),
 });
 
 const mapDispatchToProps = {
