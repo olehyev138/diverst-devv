@@ -10,6 +10,7 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
+import { useFormik } from 'formik';
 
 import {
   Button, Card, CardContent, CardActions,
@@ -40,6 +41,15 @@ const styles = theme => ({
 
 export function MentorList(props, context) {
   const { type } = props;
+
+  const formik = useFormik({
+    initialValues: {
+      notes: '',
+    },
+    onSubmit: (values) => {
+      alert(JSON.stringify(values, null, 2));
+    },
+  });
 
   const defaultCreatePayload = {
     mentoring_type: type.slice(0, -1),
@@ -120,37 +130,41 @@ export function MentorList(props, context) {
         }]}
       />
       <Dialog open={open} onClose={handleClose} aria-labelledby='form-dialog-title'>
-        <DialogTitle id='form-dialog-title'>
-          Mentorship Request
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Why do you want this person to mentor you?
-          </DialogContentText>
+        <form onSubmit={formik.handleSubmit}>
+          <DialogTitle id='form-dialog-title'>
+            Mentorship Request
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Why do you want this person to mentor you?
+            </DialogContentText>
 
-          <TextField
-            autoFocus
-            fullWidth
-            margin='dense'
-            id='notes'
-            name='notes'
-            type='text'
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={() => handleClose(null, null, 'Cancel')}
-            color='primary'
-          >
-            Cancel
-          </Button>
-          <Button
-            type='submit'
-            color='primary'
-          >
-            Submit
-          </Button>
-        </DialogActions>
+            <TextField
+              autoFocus
+              fullWidth
+              margin='dense'
+              id='notes'
+              name='notes'
+              type='text'
+              onChange={formik.handleChange}
+              value={formik.values.notes}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={() => handleClose(null, null, 'Cancel')}
+              color='primary'
+            >
+              Cancel
+            </Button>
+            <Button
+              type='submit'
+              color='primary'
+            >
+              Submit
+            </Button>
+          </DialogActions>
+        </form>
       </Dialog>
     </React.Fragment>
   );
