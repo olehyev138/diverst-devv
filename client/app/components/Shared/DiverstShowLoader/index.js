@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import { withStyles } from '@material-ui/core/styles';
 import FormErrorIcon from '@material-ui/icons/SyncProblem';
-import { CircularProgress, Grid, Typography } from '@material-ui/core';
+import { CircularProgress, Grid, Slide } from '@material-ui/core';
 
 const styles = theme => ({
   loader: {
@@ -16,7 +16,7 @@ const styles = theme => ({
 });
 
 export function DiverstShowLoader(props) {
-  const { classes, isLoading, isError, children } = props;
+  const { classes, isLoading, isError, children, TransitionProps } = props;
 
   return (
     <React.Fragment>
@@ -30,7 +30,15 @@ export function DiverstShowLoader(props) {
             ))}
           </Grid>
         </Grid>
-      ) : children }
+      ) : (
+        <React.Fragment>
+          <Slide direction='up' in appear {...TransitionProps}>
+            <div>
+              {children}
+            </div>
+          </Slide>
+        </React.Fragment>
+      )}
     </React.Fragment>
   );
 }
@@ -40,6 +48,7 @@ DiverstShowLoader.propTypes = {
   isLoading: PropTypes.bool,
   isError: PropTypes.bool,
   children: PropTypes.node,
+  TransitionProps: PropTypes.object,
 };
 
 export default compose(
