@@ -17,7 +17,7 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 export function* getEnterprise(action) {
   try {
-    const response = yield call(api.enterprises.get.bind(api.enterprises), action.payload.id);
+    const response = yield call(api.enterprises.get.bind(api.enterprises));
     yield put(getEnterpriseSuccess(response.data));
   } catch (err) {
     // TODO: intl message
@@ -28,11 +28,11 @@ export function* getEnterprise(action) {
 
 export function* updateEnterprise(action) {
   try {
-    const payload = { group: action.payload };
-    const response = yield call(api.enterprises.update.bind(api.enterprises), payload.enterprise.id, payload);
+    const payload = { enterprise: action.payload };
+    const response = yield call(api.enterprises.update.bind(api.enterprises), -1, payload);
 
     yield put(updateEnterpriseSuccess());
-    yield put(push(ROUTES.admin.manage.groups.index.path()));
+    // yield put(push(ROUTES.admin.manage.groups.index.path()));
     yield put(showSnackbar({ message: 'Enterprise updated', options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateEnterpriseError(err));

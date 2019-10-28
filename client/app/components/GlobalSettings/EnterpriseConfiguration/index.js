@@ -37,6 +37,70 @@ export function EnterpriseConfigurationInner({ classes, handleSubmit, handleChan
     <Card>
       <Form>
         <CardContent>
+          <Grid container>
+            <Grid item xs={12} className={classes.noBottomPadding}>
+              <Field
+                component={TextField}
+                required
+                onChange={handleChange}
+                fullWidth
+                id='name'
+                name='name'
+                margin='normal'
+                label='Name'
+                value={values.name}
+              />
+            </Grid>
+            <Grid item xs={12} className={classes.noBottomPadding}>
+              <Field
+                component={TextField}
+                onChange={handleChange}
+                fullWidth
+                id='default_from_email_address'
+                name='default_from_email_address'
+                margin='normal'
+                label='Default from email'
+                value={values.default_from_email_address}
+              />
+            </Grid>
+            <Grid item xs={12} className={classes.noBottomPadding}>
+              <Field
+                component={TextField}
+                onChange={handleChange}
+                fullWidth
+                id='default_from_email_display_name'
+                name='default_from_email_display_name'
+                margin='normal'
+                label='Default from email display name'
+                value={values.default_from_email_display_name}
+              />
+            </Grid>
+            <Grid item xs={12} className={classes.noBottomPadding}>
+              <Field
+                component={TextField}
+                onChange={handleChange}
+                fullWidth
+                id='redirect_email_contact'
+                name='redirect_email_contact'
+                margin='normal'
+                label='Redirect email contact'
+                value={values.redirect_email_contact}
+              />
+            </Grid>
+            <Grid item xs={12} className={classes.noBottomPadding}>
+              <Field
+                component={Switch}
+                onChange={handleChange}
+                color='primary'
+                id='mentorship_module_enabled'
+                name='mentorship_module_enabled'
+                margin='normal'
+                label='Mentorship Module Enabled'
+                checked={values.mentorship_module_enabled}
+                value={values.mentorship_module_enabled}
+              />
+            </Grid>
+          </Grid>
         </CardContent>
         <Divider />
         <CardActions>
@@ -58,6 +122,11 @@ export function EnterpriseConfigurationInner({ classes, handleSubmit, handleChan
 export function EnterpriseConfiguration(props) {
   const initialValues = buildValues(props.enterprise, {
     id: { default: '' },
+    name: { default: '' },
+    default_from_email_address: { default: '' },
+    default_from_email_display_name: { default: '' },
+    redirect_email_contact: { default: '' },
+    mentorship_module_enabled: { default: true },
   });
 
   return (
@@ -65,7 +134,7 @@ export function EnterpriseConfiguration(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        props.enterpriseAction(mapFields(values, ['child_ids', 'parent_id']));
+        props.enterpriseAction(values);
       }}
 
       render={formikProps => <EnterpriseConfigurationInner {...props} {...formikProps} />}

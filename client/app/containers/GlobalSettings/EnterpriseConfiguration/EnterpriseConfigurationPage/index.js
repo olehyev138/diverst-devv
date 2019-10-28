@@ -23,9 +23,10 @@ export function EnterpriseConfigurationPage(props) {
   useInjectReducer({ key: 'configuration', reducer });
   useInjectSaga({ key: 'configuration', saga });
 
+  console.log(props);
+
   useEffect(() => {
-    // todo: get enterprise id
-    props.getEnterpriseBegin({});
+    props.getEnterpriseBegin();
 
     return () => {
       props.configurationUnmount();
@@ -51,10 +52,12 @@ EnterpriseConfigurationPage.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
+  enterprise: selectEnterprise()
 });
 
 const mapDispatchToProps = {
   getEnterpriseBegin,
+  updateEnterpriseBegin,
   configurationUnmount
 };
 
