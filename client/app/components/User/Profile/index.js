@@ -16,7 +16,7 @@ import messages from 'containers/User/messages';
 import { FormattedMessage } from 'react-intl';
 import CustomFieldShow from 'components/Shared/Fields/FieldDisplays/Field/index';
 
-import { formatDateTimeString, DateTime } from 'utils/dateTimeHelpers';
+import DiverstShowLoader from 'components/Shared/DiverstShowLoader';
 
 const styles = theme => ({
   padding: {
@@ -49,81 +49,83 @@ export function Profile(props) {
   const fieldData = dig(props, 'fieldData');
 
   return (
-    (user) ? (
-      <React.Fragment>
-        <Grid container spacing={1}>
-          <Grid item>
-            <Typography color='primary' variant='h5' component='h2' className={classes.title}>
-              {user.name}
-            </Typography>
-          </Grid>
-          <Grid item sm>
-            <Button
-              component={WrappedNavLink}
-              to={props.links.userEdit(user.id)}
-              variant='contained'
-              size='large'
-              color='primary'
-              className={classes.buttons}
-              startIcon={<EditIcon />}
-            >
-              <FormattedMessage {...messages.edit} />
-            </Button>
-          </Grid>
-        </Grid>
-        <Paper>
-          <CardContent>
+    <DiverstShowLoader isLoading={props.isFormLoading} isError={!props.isFormLoading && !user}>
+      {user && (
+        <React.Fragment>
+          <Grid container spacing={1}>
             <Grid item>
-              <Typography color='primary' variant='h6' component='h2' className={classes.dataHeaders}>
-                E-mail
-              </Typography>
-              <Typography color='secondary' component='h2' className={classes.data}>
-                {user.email}
+              <Typography color='primary' variant='h5' component='h2' className={classes.title}>
+                {user.name}
               </Typography>
             </Grid>
-          </CardContent>
-          <Divider />
-          <CardContent>
-            <Grid item>
-              <Typography color='primary' variant='h6' component='h2' className={classes.dataHeaders}>
-                Biography
-              </Typography>
-              {(user.biography || 'None').split('\n').map((text, i) => (
-                // eslint-disable-next-line react/no-array-index-key
-                <Typography color='secondary' component='h2' key={i}>
-                  {text}
+            <Grid item sm>
+              <Button
+                component={WrappedNavLink}
+                to={props.links.userEdit(user.id)}
+                variant='contained'
+                size='large'
+                color='primary'
+                className={classes.buttons}
+                startIcon={<EditIcon />}
+              >
+                <FormattedMessage {...messages.edit} />
+              </Button>
+            </Grid>
+          </Grid>
+          <Paper>
+            <CardContent>
+              <Grid item>
+                <Typography color='primary' variant='h6' component='h2' className={classes.dataHeaders}>
+                  E-mail
                 </Typography>
-              ))}
-            </Grid>
-          </CardContent>
-          <Divider />
-          <CardContent>
-            <Grid item>
-              <Typography color='primary' variant='h6' component='h2' className={classes.dataHeaders}>
-                Time Zone
-              </Typography>
-              <Typography color='secondary' component='h2' className={classes.data}>
-                {user.time_zone || 'UTC'}
-              </Typography>
-            </Grid>
-          </CardContent>
-          <Divider />
-          {fieldData && fieldData.map((fieldDatum, i) => (
-            <div key={fieldDatum.id}>
-              <CardContent>
-                <Grid item>
-                  <CustomFieldShow
-                    fieldDatum={fieldDatum}
-                    fieldDatumIndex={i}
-                  />
-                </Grid>
-              </CardContent>
-              <Divider />
-            </div>
-          ))}
-        </Paper>
-      </React.Fragment>
-    ) : <React.Fragment />
+                <Typography color='secondary' component='h2' className={classes.data}>
+                  {user.email}
+                </Typography>
+              </Grid>
+            </CardContent>
+            <Divider />
+            <CardContent>
+              <Grid item>
+                <Typography color='primary' variant='h6' component='h2' className={classes.dataHeaders}>
+                  Biography
+                </Typography>
+                {(user.biography || 'None').split('\n').map((text, i) => (
+                  // eslint-disable-next-line react/no-array-index-key
+                  <Typography color='secondary' component='h2' key={i}>
+                    {text}
+                  </Typography>
+                ))}
+              </Grid>
+            </CardContent>
+            <Divider />
+            <CardContent>
+              <Grid item>
+                <Typography color='primary' variant='h6' component='h2' className={classes.dataHeaders}>
+                  Time Zone
+                </Typography>
+                <Typography color='secondary' component='h2' className={classes.data}>
+                  {user.time_zone || 'UTC'}
+                </Typography>
+              </Grid>
+            </CardContent>
+            <Divider />
+            {fieldData && fieldData.map((fieldDatum, i) => (
+              <div key={fieldDatum.id}>
+                <CardContent>
+                  <Grid item>
+                    <CustomFieldShow
+                      fieldDatum={fieldDatum}
+                      fieldDatumIndex={i}
+                    />
+                  </Grid>
+                </CardContent>
+                <Divider />
+              </div>
+            ))}
+          </Paper>
+        </React.Fragment>
+      )}
+    </DiverstShowLoader>
   );
 }
 
@@ -132,6 +134,7 @@ Profile.propTypes = {
   classes: PropTypes.object,
   event: PropTypes.object,
   currentUserId: PropTypes.number,
+  isFormLoading: PropTypes.bool,
   links: PropTypes.shape({
     userEdit: PropTypes.func,
   })

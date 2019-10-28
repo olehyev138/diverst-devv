@@ -36,7 +36,6 @@ export function UserCreatePage(props) {
   return (
     <UserForm
       admin
-      create
       userAction={props.createUserBegin}
       updateFieldDataBegin={props.updateFieldDataBegin}
       buttonText='Create'
