@@ -21,6 +21,7 @@ import Select from 'components/Shared/DiverstSelect';
 
 import { buildValues, mapFields } from 'utils/formHelpers';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
+import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 
 /* eslint-disable object-curly-newline */
 export function CustomGraphFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
@@ -32,56 +33,58 @@ export function CustomGraphFormInner({ handleSubmit, handleChange, handleBlur, v
   };
 
   return (
-    <Card>
-      <Form>
-        <CardContent>
-          <Field
-            component={Select}
-            fullWidth
-            required
-            name='field_id'
-            id='field_id'
-            label='Fields'
-            margin='normal'
-            disabled={props.isCommitting}
-            value={values.field_id}
-            options={props.fields}
-            onMenuOpen={fieldSelectAction}
-            onChange={value => setFieldValue('field_id', value)}
-            onInputChange={value => fieldSelectAction(value)}
-            onBlur={() => setFieldTouched('field_id', true)}
-          />
-          <Field
-            component={Select}
-            fullWidth
-            name='aggregation_id'
-            id='aggregation_id'
-            label='Aggregations'
-            margin='normal'
-            disabled={props.isCommitting}
-            value={values.aggregation_id}
-            options={props.fields}
-            onMenuOpen={fieldSelectAction}
-            onChange={value => setFieldValue('aggregation_id', value)}
-            onInputChange={value => fieldSelectAction(value)}
-            onBlur={() => setFieldTouched('aggregation_id', true)}
-          />
-        </CardContent>
-        <Divider />
-        <CardActions>
-          <DiverstSubmit isCommitting={props.isCommitting}>
-            {buttonText}
-          </DiverstSubmit>
-          <Button
-            component={WrappedNavLink}
-            to={props.links.metricsDashboardShow}
-            disabled={props.isCommitting}
-          >
-            <DiverstFormattedMessage {...messages.cancel} />
-          </Button>
-        </CardActions>
-      </Form>
-    </Card>
+    <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.customGraph}>
+      <Card>
+        <Form>
+          <CardContent>
+            <Field
+              component={Select}
+              fullWidth
+              required
+              name='field_id'
+              id='field_id'
+              label='Fields'
+              margin='normal'
+              disabled={props.isCommitting}
+              value={values.field_id}
+              options={props.fields}
+              onMenuOpen={fieldSelectAction}
+              onChange={value => setFieldValue('field_id', value)}
+              onInputChange={value => fieldSelectAction(value)}
+              onBlur={() => setFieldTouched('field_id', true)}
+            />
+            <Field
+              component={Select}
+              fullWidth
+              name='aggregation_id'
+              id='aggregation_id'
+              label='Aggregations'
+              margin='normal'
+              disabled={props.isCommitting}
+              value={values.aggregation_id}
+              options={props.fields}
+              onMenuOpen={fieldSelectAction}
+              onChange={value => setFieldValue('aggregation_id', value)}
+              onInputChange={value => fieldSelectAction(value)}
+              onBlur={() => setFieldTouched('aggregation_id', true)}
+            />
+          </CardContent>
+          <Divider />
+          <CardActions>
+            <DiverstSubmit isCommitting={props.isCommitting}>
+              {buttonText}
+            </DiverstSubmit>
+            <Button
+              component={WrappedNavLink}
+              to={props.links.metricsDashboardShow}
+              disabled={props.isCommitting}
+            >
+              <DiverstFormattedMessage {...messages.cancel} />
+            </Button>
+          </CardActions>
+        </Form>
+      </Card>
+    </DiverstFormLoader>
   );
 }
 
@@ -108,13 +111,17 @@ export function CustomGraphForm(props) {
 }
 
 CustomGraphForm.propTypes = {
+  edit: PropTypes.bool,
   customGraphAction: PropTypes.func,
   customGraph: PropTypes.object,
   metricsDashboardId: PropTypes.string.isRequired,
   isCommitting: PropTypes.bool,
+  isFormLoading: PropTypes.bool,
 };
 
 CustomGraphFormInner.propTypes = {
+  edit: PropTypes.bool,
+  customGraph: PropTypes.object,
   metricsDashboardExists: PropTypes.bool,
   handleSubmit: PropTypes.func,
   handleChange: PropTypes.func,
@@ -126,6 +133,7 @@ CustomGraphFormInner.propTypes = {
   getFieldsBegin: PropTypes.func,
   fields: PropTypes.array,
   isCommitting: PropTypes.bool,
+  isFormLoading: PropTypes.bool,
   links: PropTypes.shape({
     metricsDashboardShow: PropTypes.string,
   })
