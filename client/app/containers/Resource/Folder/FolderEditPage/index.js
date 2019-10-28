@@ -36,8 +36,7 @@ import {
 import FolderForm from 'components/Resource/Folder/FolderForm';
 
 import {
-  Card, CardContent, CardActions, Button, TextField, Divider,
-  DialogActions, DialogContent, DialogContentText, DialogTitle, Typography,
+  Card, CardContent, CardActions, Button, TextField, Divider, Typography,
 } from '@material-ui/core';
 import { Field, Formik, Form } from 'formik';
 import messages from 'containers/Resource/Folder/messages';
