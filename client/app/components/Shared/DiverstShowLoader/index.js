@@ -16,7 +16,16 @@ const styles = theme => ({
 });
 
 function DiverstShowLoader(props) {
-  const { classes, isLoading, isError, children, TransitionProps } = props;
+  const { classes, isLoading, isError, children, disableTransition, TransitionProps, TransitionComponent } = props;
+
+  const transitionComponentIsDefault = TransitionComponent === Slide;
+
+  const transitionProps = {
+    direction: transitionComponentIsDefault ? 'up' : undefined,
+    in: transitionComponentIsDefault ? true : undefined,
+    appear: transitionComponentIsDefault ? true : undefined,
+    ...TransitionProps,
+  };
 
   return (
     <React.Fragment>
@@ -32,11 +41,13 @@ function DiverstShowLoader(props) {
         </Grid>
       ) : (
         <React.Fragment>
-          <Slide direction='up' in appear {...TransitionProps}>
-            <div>
-              {children}
-            </div>
-          </Slide>
+          {disableTransition ? children : (
+            <TransitionComponent {...transitionProps}>
+              <div>
+                {children}
+              </div>
+            </TransitionComponent>
+          )}
         </React.Fragment>
       )}
     </React.Fragment>
@@ -48,7 +59,13 @@ DiverstShowLoader.propTypes = {
   isLoading: PropTypes.bool,
   isError: PropTypes.bool,
   children: PropTypes.node,
+  disableTransition: PropTypes.bool,
   TransitionProps: PropTypes.object,
+  TransitionComponent: PropTypes.any,
+};
+
+DiverstShowLoader.defaultProps = {
+  TransitionComponent: Slide,
 };
 
 export default compose(
