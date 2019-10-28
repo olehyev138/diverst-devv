@@ -31,9 +31,11 @@ import {
   selectIsFetchingUsers,
 } from 'containers/Mentorship/Mentoring/selectors';
 import {
-  getMentorsBegin, getMenteesBegin,
-  getAvailableMentorsBegin, getAvailableMenteesBegin,
-  mentorsUnmount
+  getMentorsBegin,
+  getAvailableMentorsBegin,
+  mentorsUnmount,
+  deleteMentorshipBegin,
+  requestsMentorshipBegin,
 } from 'containers/Mentorship/Mentoring/actions';
 
 import reducer from 'containers/Mentorship/Mentoring/reducer';
@@ -146,6 +148,8 @@ export function MentorsPage(props) {
         params={params}
         type={props.type}
         links={links}
+        deleteMentorship={props.deleteMentorshipBegin}
+        requestMentorship={props.requestsMentorshipBegin}
 
         currentTab={tab}
         handleChangeTab={handleChangeTab}
@@ -163,6 +167,8 @@ MentorsPage.propTypes = {
   userTotal: PropTypes.number,
   isFetchingUsers: PropTypes.bool,
   mentorsUnmount: PropTypes.func.isRequired,
+  deleteMentorshipBegin: PropTypes.func.isRequired,
+  requestsMentorshipBegin: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -173,10 +179,10 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = {
   getMentorsBegin,
-  getMenteesBegin,
   getAvailableMentorsBegin,
-  getAvailableMenteesBegin,
   mentorsUnmount,
+  deleteMentorshipBegin,
+  requestsMentorshipBegin
 };
 
 const withConnect = connect(

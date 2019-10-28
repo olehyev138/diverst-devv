@@ -1,6 +1,6 @@
 /**
  *
- * UserList Component
+ * MentorList Component
  *
  *
  */
@@ -14,22 +14,15 @@ import { compose } from 'redux';
 import {
   Button, Card, CardContent, CardActions,
   Typography, Grid, Link, TablePagination, Collapse, Box, Paper, Tab,
+  Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
+  TextField,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
-import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
-import messages from 'containers/User/messages';
-import WrappedNavLink from 'components/Shared/WrappedNavLink';
-
-import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/DeleteOutline';
-import EditIcon from '@material-ui/icons/Edit';
 import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
 
 import DiverstTable from 'components/Shared/DiverstTable';
-import DiverstLoader from 'components/Shared/DiverstLoader';
-import DiverstPagination from 'components/Shared/DiverstPagination';
-import { customTexts } from '../../../utils/customTextHelpers';
 import ResponsiveTabs from '../../Shared/ResponsiveTabs';
 
 
@@ -45,8 +38,26 @@ const styles = theme => ({
   },
 });
 
-export function UserList(props, context) {
+export function MentorList(props, context) {
   const { type } = props;
+
+  const defaultCreatePayload = {
+    mentoring_type: type.slice(0, -1),
+    sender_id: props.user.id,
+    receiver_id: null,
+  };
+
+  const [payload, setPayload] = React.useState(defaultCreatePayload);
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = (receiverId) => {
+    setPayload({ ...payload, receiver_id: receiverId });
+    setOpen(true);
+  };
+
+  const handleClose = (event, typeOfClose, submit = 'Cancel') => {
+    setOpen(false);
+  };
 
   const columns = [
     { title: 'First Name', field: 'first_name' },
@@ -86,13 +97,21 @@ export function UserList(props, context) {
           onClick: (_, rowData) => {
             switch (props.currentTab) {
               case 0:
-                if (confirm('Delete member?'))
-                  props.deleteMemberBegin({
-                    userId: rowData.id,
-                    groupId: props.groupId
-                  });
+                // eslint-disable-next-line no-restricted-globals,no-alert
+                if (confirm('Delete mentorship?')) {
+                  const payload = { userId: props.user.id, type };
+                  if (type === 'mentors') {
+                    payload.mentor_id = rowData.id;
+                    payload.mentee_id = props.user.id;
+                  } else if (type === 'mentees') {
+                    payload.mentor_id = props.user.id;
+                    payload.mentee_id = rowData.id;
+                  }
+                  props.deleteMentorship(payload);
+                }
                 break;
               case 1:
+                handleClickOpen(rowData.id);
                 break;
               default:
                 break;
@@ -100,13 +119,47 @@ export function UserList(props, context) {
           }
         }]}
       />
+      <Dialog open={open} onClose={handleClose} aria-labelledby='form-dialog-title'>
+        <DialogTitle id='form-dialog-title'>
+          Mentorship Request
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Why do you want this person to mentor you?
+          </DialogContentText>
+
+          <TextField
+            autoFocus
+            fullWidth
+            margin='dense'
+            id='notes'
+            name='notes'
+            type='text'
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => handleClose(null, null, 'Cancel')}
+            color='primary'
+          >
+            Cancel
+          </Button>
+          <Button
+            type='submit'
+            color='primary'
+          >
+            Submit
+          </Button>
+        </DialogActions>
+      </Dialog>
     </React.Fragment>
   );
 }
 
-UserList.propTypes = {
+MentorList.propTypes = {
   type: PropTypes.string,
   classes: PropTypes.object,
+  user: PropTypes.object,
   users: PropTypes.array,
   userTotal: PropTypes.number,
   isFetchingUsers: PropTypes.bool,
@@ -119,6 +172,8 @@ UserList.propTypes = {
   currentTab: PropTypes.number,
   handleChangeTab: PropTypes.func,
   params: PropTypes.object,
+  deleteMentorship: PropTypes.func,
+  requestMentorship: PropTypes.func,
   links: PropTypes.shape({
     userNew: PropTypes.string,
     userEdit: PropTypes.func
@@ -128,4 +183,4 @@ UserList.propTypes = {
 export default compose(
   memo,
   withStyles(styles),
-)(UserList);
+)(MentorList);

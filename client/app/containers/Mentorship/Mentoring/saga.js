@@ -51,10 +51,10 @@ export function* deleteMentorship(action) {
   try {
     const { payload } = action;
     const path = payload.type === 'mentors'
-      ? ROUTES.mentorship.mentors.path(payload.userId)
-      : ROUTES.mentorship.mentee.path(payload.userId);
+      ? ROUTES.user.mentorship.mentors.path(payload.userId)
+      : ROUTES.user.mentorship.mentees.path(payload.userId);
 
-    yield call(api.mentorings.removeMembers.bind(api.mentorings), payload.id);
+    yield call(api.mentorings.removeMembers.bind(api.mentorings), payload);
 
     yield put(deleteMentorshipSuccess());
     yield put(push(path));
@@ -67,9 +67,25 @@ export function* deleteMentorship(action) {
   }
 }
 
+export function* requestMentorship(action) {
+  try {
+    const { payload } = action;
+    yield call(api.mentoringRequests.create.bind(api.mentoringRequests), payload);
+
+    yield put(requestsMentorshipSuccess());
+    yield put(showSnackbar({ message: 'Request Submitted', options: { variant: 'success' } }));
+  } catch (err) {
+    yield put(requestsMentorshipError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Request Failed to Submit', options: { variant: 'warning' } }));
+  }
+}
+
 export default function* mentorshipSaga() {
   yield takeLatest(GET_USER_MENTORS_BEGIN, getMentors);
   yield takeLatest(GET_AVAILABLE_MENTORS_BEGIN, getAvailableMentors);
 
-  yield takeLatest(DELETE_MENTORSHIP_BEGIN, deleteMentorshipError);
+  yield takeLatest(DELETE_MENTORSHIP_BEGIN, deleteMentorship);
+  yield takeLatest(REQUEST_MENTORSHIP_BEGIN, requestMentorship);
 }
