@@ -26,7 +26,8 @@ export function DiverstLoader(props) {
         <Grid container justify='center'>
           <Grid item>
             <CircularProgress
-              size={50}
+              size={80}
+              thickness={1.5}
               className={classes.progress}
             />
           </Grid>
