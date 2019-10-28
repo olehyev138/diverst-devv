@@ -105,7 +105,7 @@ export function EventFormInner({
               {buttonText}
             </DiverstSubmit>
             <Button
-              to={props.eventExists ? props.links.eventShow : props.links.eventsIndex}
+              to={props.event ? props.links.eventShow : props.links.eventsIndex}
               component={WrappedNavLink}
               disabled={props.isCommitting}
             >
@@ -144,7 +144,7 @@ export function EventForm(props) {
         props.eventAction(values);
       }}
 
-      render={formikProps => <EventFormInner eventExists={!!event} {...props} {...formikProps} />}
+      render={formikProps => <EventFormInner {...props} {...formikProps} />}
     />
   );
 }
@@ -161,7 +161,6 @@ EventForm.propTypes = {
 EventFormInner.propTypes = {
   edit: PropTypes.bool,
   event: PropTypes.object,
-  eventExists: PropTypes.bool,
   handleSubmit: PropTypes.func,
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
