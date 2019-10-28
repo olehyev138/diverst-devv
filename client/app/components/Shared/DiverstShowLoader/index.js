@@ -8,14 +8,14 @@ import { CircularProgress, Grid, Slide } from '@material-ui/core';
 
 const styles = theme => ({
   loader: {
-    marginTop: 48,
+    marginTop: 60,
   },
   errorIcon: {
     fontSize: 80,
   },
 });
 
-export function DiverstShowLoader(props) {
+function DiverstShowLoader(props) {
   const { classes, isLoading, isError, children, TransitionProps } = props;
 
   return (

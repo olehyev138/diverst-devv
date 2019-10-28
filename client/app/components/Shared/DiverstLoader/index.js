@@ -11,7 +11,7 @@ const styles = theme => ({
   },
 });
 
-export function DiverstLoader(props) {
+function DiverstLoader(props) {
   const { classes, isLoading, transitionProps, children } = props;
 
   return (

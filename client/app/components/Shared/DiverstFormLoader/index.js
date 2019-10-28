@@ -26,7 +26,7 @@ const styles = theme => ({
   },
 });
 
-export function DiverstFormLoader(props) {
+function DiverstFormLoader(props) {
   const { classes, isLoading, isError, children } = props;
 
   const dimForm = isLoading === true || isError === true;
