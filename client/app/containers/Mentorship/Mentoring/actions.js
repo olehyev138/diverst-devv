@@ -11,13 +11,13 @@ import {
   GET_AVAILABLE_MENTORS_BEGIN,
   GET_AVAILABLE_MENTORS_SUCCESS,
   GET_AVAILABLE_MENTORS_ERROR,
-  GET_USER_MENTEES_BEGIN,
-  GET_USER_MENTEES_SUCCESS,
-  GET_USER_MENTEES_ERROR,
-  GET_AVAILABLE_MENTEES_BEGIN,
-  GET_AVAILABLE_MENTEES_SUCCESS,
-  GET_AVAILABLE_MENTEES_ERROR,
+  DELETE_MENTORSHIP_BEGIN,
+  DELETE_MENTORSHIP_SUCCESS,
+  DELETE_MENTORSHIP_ERROR,
   MENTORSHIP_MENTORS_UNMOUNT,
+  REQUEST_MENTORSHIP_BEGIN,
+  REQUEST_MENTORSHIP_SUCCESS,
+  REQUEST_MENTORSHIP_ERROR,
 } from 'containers/Mentorship/Mentoring/constants';
 
 /* User Mentors/Mentee */
@@ -65,45 +65,44 @@ export function getAvailableMentorsError(error) {
   };
 }
 
-export function getMenteesBegin(payload) {
+export function deleteMentorshipBegin(payload) {
   return {
-    type: GET_USER_MENTEES_BEGIN,
+    type: DELETE_MENTORSHIP_BEGIN,
     payload,
   };
 }
 
-export function getMenteesSuccess(payload) {
+export function deleteMentorshipSuccess(payload) {
   return {
-    type: GET_USER_MENTEES_SUCCESS,
+    type: DELETE_MENTORSHIP_SUCCESS,
     payload,
   };
 }
 
-export function getMenteesError(error) {
+export function deleteMentorshipError(error) {
   return {
-    type: GET_USER_MENTEES_ERROR,
+    type: DELETE_MENTORSHIP_ERROR,
     error,
   };
 }
 
-
-export function getAvailableMenteesBegin(payload) {
+export function requestsMentorshipBegin(payload) {
   return {
-    type: GET_AVAILABLE_MENTEES_BEGIN,
+    type: REQUEST_MENTORSHIP_BEGIN,
     payload,
   };
 }
 
-export function getAvailableMenteesSuccess(payload) {
+export function requestsMentorshipSuccess(payload) {
   return {
-    type: GET_AVAILABLE_MENTEES_SUCCESS,
+    type: REQUEST_MENTORSHIP_SUCCESS,
     payload,
   };
 }
 
-export function getAvailableMenteesError(error) {
+export function requestsMentorshipError(error) {
   return {
-    type: GET_AVAILABLE_MENTEES_ERROR,
+    type: REQUEST_MENTORSHIP_ERROR,
     error,
   };
 }

@@ -81,18 +81,22 @@ export function UserList(props, context) {
         dataTotal={props.userTotal}
         columns={columns}
         actions={[{
-          icon: () => <AssignmentIndIcon />,
-          tooltip: 'Edit Member',
+          icon: () => props.currentTab === 0 ? (<DeleteIcon />) : (<AssignmentIndIcon />),
+          tooltip: props.currentTab === 0 ? 'Remove' : 'Send Request',
           onClick: (_, rowData) => {
-            // console.log('click 1');
-          }
-        }, {
-          icon: () => <DeleteIcon />,
-          tooltip: 'Delete Member',
-          onClick: (_, rowData) => {
-            /* eslint-disable-next-line no-alert, no-restricted-globals */
-            // if (confirm('Delete member?'))
-            // console.log('click 2');
+            switch (props.currentTab) {
+              case 0:
+                if (confirm('Delete member?'))
+                  props.deleteMemberBegin({
+                    userId: rowData.id,
+                    groupId: props.groupId
+                  });
+                break;
+              case 1:
+                break;
+              default:
+                break;
+            }
           }
         }]}
       />
