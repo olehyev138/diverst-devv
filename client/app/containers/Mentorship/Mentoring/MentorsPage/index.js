@@ -49,6 +49,12 @@ const Types = Object.freeze({
   available: 1,
 });
 
+const defaultParams = Object.freeze({
+  count: 5,
+  page: 0,
+  order: 'asc'
+});
+
 export function MentorsPage(props) {
   useInjectReducer({ key: 'mentoring', reducer });
   useInjectSaga({ key: 'mentoring', saga });
@@ -58,8 +64,13 @@ export function MentorsPage(props) {
 
   const rs = new RouteService(useContext);
 
-  function getUsers(tab, params = params) {
-    if (props.user) {
+  const validType = type => type === 'mentors' || type === 'mentees';
+
+  function getUsers(tab, params = params, resetParams = false) {
+    if (props.user && validType(props.type)) {
+      if (resetParams)
+        setParams({ ...params, page: defaultParams.page });
+
       const userId = props.user.id;
       if (tab === Types.current)
         props.getMentorsBegin({ ...params, objectId: userId, association: props.type });
@@ -82,10 +93,21 @@ export function MentorsPage(props) {
   };
 
   const handleMentorPagination = (payload) => {
-    const newParams = { ...params, count: payload.count, page: payload.page };
+    const oldPageNum = params.page;
+    const oldRows = params.count;
+    let newPageNum = payload.page;
+    const newRows = payload.count;
+
+    if (oldRows !== newRows) {
+      const index = oldPageNum * oldRows + 1;
+      newPageNum = Math.floor(index / newRows);
+    }
+
+    const newParams = { ...params, count: newRows, page: newPageNum };
 
     getUsers(tab, newParams);
     setParams(newParams);
+    return newParams;
   };
 
   const handleMentorOrdering = (payload) => {
@@ -99,10 +121,10 @@ export function MentorsPage(props) {
     setTab(newTab);
     switch (newTab) {
       case Types.current:
-        getUsers(Types.current);
+        getUsers(Types.current, params, true);
         break;
       case Types.available:
-        getUsers(Types.available);
+        getUsers(Types.available, params, true);
         break;
       default:
         break;
@@ -121,6 +143,7 @@ export function MentorsPage(props) {
 
         handleMentorPagination={handleMentorPagination}
         handleMentorOrdering={handleMentorOrdering}
+        params={params}
         type={props.type}
         links={links}
 

@@ -46,11 +46,6 @@ const styles = theme => ({
 });
 
 export function UserList(props, context) {
-  // const { classes } = props;
-  // const [expandedUsers, setExpandedUsers] = useState({});
-  //
-  // const [userForm, setUserForm] = useState(undefined);
-
   const { type } = props;
 
   const columns = [
@@ -81,6 +76,7 @@ export function UserList(props, context) {
         handleOrdering={props.handleMentorOrdering}
         isLoading={props.isFetchingUsers}
         rowsPerPage={5}
+        params={props.params}
         dataArray={props.users}
         dataTotal={props.userTotal}
         columns={columns}
@@ -118,6 +114,7 @@ UserList.propTypes = {
   handleMentorOrdering: PropTypes.func,
   currentTab: PropTypes.number,
   handleChangeTab: PropTypes.func,
+  params: PropTypes.object,
   links: PropTypes.shape({
     userNew: PropTypes.string,
     userEdit: PropTypes.func

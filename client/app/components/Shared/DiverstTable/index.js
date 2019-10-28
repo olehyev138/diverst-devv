@@ -21,19 +21,22 @@ const styles = theme => ({
 });
 
 export function DiverstTable(props) {
-  const { classes, ...rest } = props;
+  const { classes, params, ...rest } = props;
 
-  const [page, setPage] = useState(props.page || 0);
-  const [rowsPerPage, setRowsPerPage] = useState(props.rowsPerPage || 10);
+  const [pageState, setPage] = useState(props.page || 0);
+  const [rowsPerPageState, setRowsPerPage] = useState(props.rowsPerPage || 10);
+
+  const page = () => params ? params.page : pageState;
+  const rowsPerPage = () => params ? params.count : rowsPerPageState;
 
   const handleChangePage = (newPage) => {
     setPage(newPage);
-    props.handlePagination({ count: rowsPerPage, page: newPage });
+    props.handlePagination({ count: rowsPerPage(), page: newPage });
   };
 
   const handleChangeRowsPerPage = (pageSize) => {
     setRowsPerPage(+pageSize);
-    props.handlePagination({ count: +pageSize, page });
+    props.handlePagination({ count: +pageSize, page: page() });
   };
 
   const handleOrderChange = (columnId, orderDir) => {
@@ -45,25 +48,28 @@ export function DiverstTable(props) {
 
   /* Store reference to table & use to refresh table when data changes */
   const ref = useRef();
-  useEffect(() => ref.current && ref.current.onQueryChange(), [props.dataArray]);
+  useEffect(() => {
+    if (ref.current)
+      ref.current.onQueryChange({ page: page(), pageSize: rowsPerPage() });
+  }, [props.dataArray]);
 
   return (
     <div className={classes.materialTableContainer}>
       <MaterialTable
         tableRef={ref}
-        page={page}
+        page={page()}
         icons={tableIcons}
         title={props.title || 'Table'}
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
         onOrderChange={handleOrderChange}
         onRowClick={props.handleRowClick}
-        data={props.dataArray && buildDataFunction(props.dataArray, page, props.dataTotal || 0)}
+        data={buildDataFunction(props.dataArray, page() || 0, props.dataTotal || 0)}
         columns={props.columns}
         actions={props.actions}
         options={{
           actionsColumnIndex: -1,
-          pageSize: rowsPerPage,
+          pageSize: rowsPerPage(),
         }}
         {...rest}
       />
@@ -83,6 +89,7 @@ DiverstTable.propTypes = {
   title: PropTypes.string,
   page: PropTypes.number,
   rowsPerPage: PropTypes.number,
+  params: PropTypes.object,
 };
 
 export default compose(

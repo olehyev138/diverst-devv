@@ -71,14 +71,14 @@ const MentorshipLayout = ({ component: Component, ...rest }) => {
       component={matchProps => (
         <React.Fragment>
           <Grid container>
-            <Grid item xs={4}>
+            <Grid item xs={3}>
               <CardContent>
                 <MentorshipMenu
                   user={user}
                 />
               </CardContent>
             </Grid>
-            <Grid item xs={8}>
+            <Grid item xs={9}>
               {user && (
                 <CardContent>
                   <Component user={user} pageTitle={data.titleMessage} {...rest} />

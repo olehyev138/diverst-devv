@@ -87,7 +87,7 @@ module User::Actions
     order = params[:order].to_sym rescue :asc
     order_by = params[:order_by].to_sym rescue :start
 
-    query_scopes = self.class.set_query_scopes(params)
+    query_scopes = Initiative.set_query_scopes(params)
 
     # get the events
     # order the event
@@ -115,7 +115,7 @@ module User::Actions
     order = params[:order].to_sym rescue :desc
     order_by = params[:order_by].to_sym rescue :created_at
 
-    query_scopes = self.class.set_query_scopes(params)
+    query_scopes = Initiative.set_query_scopes(params)
 
     # SCOPE AND
     # ( INVITED OR (
@@ -140,7 +140,12 @@ module User::Actions
     )
     valid_ors << User.sql_where("(#{ group_ors.join(' OR ')}) AND (#{ segment_ors.join(' OR ')})")
 
-    ordered = initiatives
+    p '-------------------------------------'
+    p query_scopes
+    p valid_ors.join(' OR ')
+    p '-------------------------------------'
+
+    ordered = Initiative
                 .left_joins(:initiative_segments, :initiative_participating_groups, :initiative_invitees)
                 .send_chain(query_scopes)
                 .where(valid_ors.join(' OR '))
