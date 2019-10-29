@@ -9,7 +9,7 @@ import { useInjectReducer } from 'utils/injectReducer';
 
 import reducer from '../reducer';
 import saga from '../saga';
-import { selectEnterprise } from '../selectors';
+import { selectFormEnterprise } from '../selectors';
 import {
   getEnterpriseBegin,
   updateEnterpriseBegin,
@@ -22,8 +22,6 @@ import EnterpriseConfiguration from 'components/GlobalSettings/EnterpriseConfigu
 export function EnterpriseConfigurationPage(props) {
   useInjectReducer({ key: 'configuration', reducer });
   useInjectSaga({ key: 'configuration', saga });
-
-  console.log(props);
 
   useEffect(() => {
     props.getEnterpriseBegin();
@@ -52,7 +50,7 @@ EnterpriseConfigurationPage.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
-  enterprise: selectEnterprise()
+  enterprise: selectFormEnterprise()
 });
 
 const mapDispatchToProps = {

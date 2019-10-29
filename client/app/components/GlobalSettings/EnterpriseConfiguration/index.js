@@ -7,9 +7,9 @@
 import React, {
   memo, useRef, useState, useEffect
 } from 'react';
+import dig from 'object-dig';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
-import Select from 'components/Shared/DiverstSelect';
 import { Field, Formik, Form } from 'formik';
 import { FormattedMessage } from 'react-intl';
 import { withStyles } from '@material-ui/core/styles';
@@ -24,6 +24,7 @@ import {
   Button, Card, CardActions, CardContent, Grid, Paper,
   TextField, Hidden, FormControl, Divider, Switch, FormControlLabel,
 } from '@material-ui/core';
+import Select from 'components/Shared/DiverstSelect';
 
 const styles = theme => ({
   noBottomPadding: {
@@ -38,7 +39,7 @@ export function EnterpriseConfigurationInner({ classes, handleSubmit, handleChan
       <Form>
         <CardContent>
           <Grid container>
-            <Grid item xs={4} className={classes.noBottomPadding}>
+            <Grid item xs={12} className={classes.noBottomPadding}>
               <Field
                 component={TextField}
                 required
@@ -51,7 +52,21 @@ export function EnterpriseConfigurationInner({ classes, handleSubmit, handleChan
                 value={values.name}
               />
             </Grid>
-            <Grid item xs={4} className={classes.noBottomPadding}>
+            <Grid item xs={12} className={classes.noBottomPadding}>
+              <Field
+                component={Select}
+                fullWidth
+                id='time_zone'
+                name='time_zone'
+                margin='normal'
+                label='Time Zone'
+                value={values.time_zone}
+                options={dig(props, 'enterprise', 'timezones') || []}
+                onChange={value => setFieldValue('time_zone', value)}
+                onBlur={() => setFieldTouched('time_zone', true)}
+              />
+            </Grid>
+            <Grid item xs={12} className={classes.noBottomPadding}>
               <Field
                 component={TextField}
                 onChange={handleChange}
@@ -63,7 +78,7 @@ export function EnterpriseConfigurationInner({ classes, handleSubmit, handleChan
                 value={values.default_from_email_address}
               />
             </Grid>
-            <Grid item xs={4} className={classes.noBottomPadding}>
+            <Grid item xs={12} className={classes.noBottomPadding}>
               <Field
                 component={TextField}
                 onChange={handleChange}
@@ -324,6 +339,7 @@ export function EnterpriseConfiguration(props) {
     enable_rewards: { default: false },
     enable_social_media: { default: false },
     plan_module_enabled: { default: false },
+    time_zone: { default: null }
   });
 
   return (

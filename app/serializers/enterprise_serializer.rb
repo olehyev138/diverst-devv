@@ -5,12 +5,25 @@ class EnterpriseSerializer < ApplicationRecordSerializer
              :time_zone, :theme, :default_from_email_address, :default_from_email_display_name,
              :redirect_email_contact, :mentorship_module_enabled, :disable_likes, :enable_pending_comments,
              :collaborate_module_enabled, :scope_module_enabled, :has_enabled_onboarding_email, :disable_emails,
-             :enable_rewards, :enable_social_media, :plan_module_enabled
+             :enable_rewards, :enable_social_media, :plan_module_enabled, :timezones, :time_zone
 
+  # Custom Attributes
 
   def theme
     return nil if object.theme.nil?
 
     ThemeSerializer.new(object.theme).attributes
   end
+
+  def timezones
+    ActiveSupport::TimeZone.all.map do |tz|
+      [tz.tzinfo.name, "(GMT#{tz.formatted_offset(true, '')}) #{tz.name}"]
+    end
+  end
+
+  def timezone
+    tz = ActiveSupport::TimeZone[ActiveSupport::TimeZone::MAPPING.key(object.time_zone)]
+    "(GMT#{tz.formatted_offset(true, '')}) #{tz.name}"
+  end
+
 end
