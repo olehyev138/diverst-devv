@@ -25,5 +25,4 @@ class EnterpriseSerializer < ApplicationRecordSerializer
     tz = ActiveSupport::TimeZone[ActiveSupport::TimeZone::MAPPING.key(object.time_zone)]
     "(GMT#{tz.formatted_offset(true, '')}) #{tz.name}"
   end
-
 end
