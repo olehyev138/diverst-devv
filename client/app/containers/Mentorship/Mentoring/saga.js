@@ -23,7 +23,7 @@ export function* getMentors(action) {
     const response = yield call(api.users.all.bind(api.users), {
       ...payload,
       search_method: 'has_many_search',
-      serializer: 'mentorship_lite',
+      serializer: 'mentorship',
     });
     yield put(getMentorsSuccess(response.data.page));
   } catch (err) {
@@ -37,7 +37,7 @@ export function* getMentors(action) {
 export function* getAvailableMentors(action) {
   try {
     const { payload } = action;
-    const response = yield call(api.users.all.bind(api.users), { ...payload, serializer: 'mentorship_lite' });
+    const response = yield call(api.users.all.bind(api.users), { ...payload, serializer: 'mentorship' });
     yield put(getAvailableMentorsSuccess(response.data.page));
   } catch (err) {
     yield put(getAvailableMentorsError(err));

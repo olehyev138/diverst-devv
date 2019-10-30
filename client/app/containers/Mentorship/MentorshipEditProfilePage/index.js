@@ -29,7 +29,7 @@ export function UserProfilePage(props) {
   return (
     <React.Fragment>
       <MentorshipUserForm
-        user={props.user}
+        user={props.formUser}
         userAction={props.updateUserBegin}
       />
     </React.Fragment>
@@ -40,11 +40,13 @@ UserProfilePage.propTypes = {
   updateUserBegin: PropTypes.func,
   path: PropTypes.string,
   user: PropTypes.object,
+  formUser: PropTypes.object,
   getUserBegin: PropTypes.func,
   userUnmount: PropTypes.func
 };
 
 const mapStateToProps = createStructuredSelector({
+  formUser: selectFormUser(),
 });
 
 const mapDispatchToProps = {

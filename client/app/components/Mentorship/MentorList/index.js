@@ -13,8 +13,7 @@ import { compose } from 'redux';
 import { useFormik } from 'formik';
 
 import {
-  Button, Card, CardContent, CardActions,
-  Typography, Grid, Link, TablePagination, Collapse, Box, Paper, Tab,
+  Button, Box, Paper, Tab,
   Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
   TextField,
 } from '@material-ui/core';
@@ -22,9 +21,12 @@ import { withStyles } from '@material-ui/core/styles';
 
 import DeleteIcon from '@material-ui/icons/DeleteOutline';
 import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
+import PersonIcon from '@material-ui/icons/Person';
 
 import DiverstTable from 'components/Shared/DiverstTable';
-import ResponsiveTabs from '../../Shared/ResponsiveTabs';
+import ResponsiveTabs from 'components/Shared/ResponsiveTabs';
+
+import Profile from 'components/Mentorship/MentorshipUser';
 
 
 const styles = theme => ({
@@ -49,7 +51,9 @@ export function MentorList(props, context) {
   };
 
   const [payload, setPayload] = React.useState(defaultCreatePayload);
-  const [open, setOpen] = React.useState(false);
+  const [formOpen, setFormOpen] = React.useState(false);
+  const [profileOpen, setProfileOpen] = React.useState(false);
+  const [profile, setProfile] = React.useState();
 
   const formik = useFormik({
     initialValues: {
@@ -57,17 +61,26 @@ export function MentorList(props, context) {
     },
     onSubmit: (values) => {
       props.requestMentorship({ ...values, ...payload });
-      handleClose();
+      handleFormClose();
     },
   });
 
-  const handleClickOpen = (receiverId) => {
+  const handleFormClickOpen = (receiverId) => {
     setPayload({ ...payload, receiver_id: receiverId });
-    setOpen(true);
+    setFormOpen(true);
   };
 
-  const handleClose = () => {
-    setOpen(false);
+  const handleFormClose = () => {
+    setFormOpen(false);
+  };
+
+  const handleProfileClickOpen = (userObject) => {
+    setProfile(userObject);
+    setProfileOpen(true);
+  };
+
+  const handleProfileClose = () => {
+    setProfileOpen(false);
   };
 
   const columns = [
@@ -122,15 +135,21 @@ export function MentorList(props, context) {
                 }
                 break;
               case 1:
-                handleClickOpen(rowData.id);
+                handleFormClickOpen(rowData.id);
                 break;
               default:
                 break;
             }
           }
+        }, {
+          icon: () => <PersonIcon />,
+          tooltip: 'See Profile',
+          onClick: (_, rowData) => {
+            handleProfileClickOpen(rowData);
+          }
         }]}
       />
-      <Dialog open={open} onClose={handleClose} aria-labelledby='form-dialog-title'>
+      <Dialog open={formOpen} onClose={handleFormClose} aria-labelledby='form-dialog-title'>
         <form onSubmit={formik.handleSubmit}>
           <DialogTitle id='form-dialog-title'>
             Mentorship Request
@@ -153,7 +172,7 @@ export function MentorList(props, context) {
           </DialogContent>
           <DialogActions>
             <Button
-              onClick={() => handleClose()}
+              onClick={() => handleFormClose()}
               color='primary'
             >
               Cancel
@@ -166,6 +185,25 @@ export function MentorList(props, context) {
             </Button>
           </DialogActions>
         </form>
+      </Dialog>
+      <Dialog
+        open={profileOpen}
+        fullWidth
+        maxWidth='md'
+        onClose={handleProfileClose}
+        aria-labelledby='alert-dialog-slide-title'
+        aria-describedby='alert-dialog-slide-description'
+      >
+        <DialogContent>
+          <Profile
+            user={profile}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleProfileClose} color='primary'>
+            Close
+          </Button>
+        </DialogActions>
       </Dialog>
     </React.Fragment>
   );

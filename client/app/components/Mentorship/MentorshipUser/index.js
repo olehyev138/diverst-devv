@@ -244,13 +244,13 @@ export function Profile(props) {
                             <ListItem dense>
                               <Grid item xs>
                                 <ArrowRightIcon fontSize='small' />
-                                <DiverstFormattedMessage {...appMessages.days_of_week[time.day.value]} />
+                                <DiverstFormattedMessage {...appMessages.days_of_week[time.day]} />
                                 &nbsp;&nbsp;
                                 {`${timeToSimpleString(time.local_start)} − ${timeToSimpleString(time.local_end)}`}
                               </Grid>
                               <Grid item xs>
                                 <ArrowRightIcon fontSize='small' />
-                                <DiverstFormattedMessage {...appMessages.days_of_week[time.day.value]} />
+                                <DiverstFormattedMessage {...appMessages.days_of_week[time.day]} />
                                 &nbsp;&nbsp;
                                 {`${timeToSimpleString(time.start)} − ${timeToSimpleString(time.end)}`}
                               </Grid>

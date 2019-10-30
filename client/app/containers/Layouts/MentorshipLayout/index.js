@@ -19,7 +19,7 @@ import dig from 'object-dig';
 import { getUserBegin, userUnmount } from 'containers/Mentorship/actions';
 
 import { selectUser as selectGlobalUser } from 'containers/Shared/App/selectors';
-import { selectFormUser } from 'containers/Mentorship/selectors';
+import { selectFormUser, selectUser } from 'containers/Mentorship/selectors';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import { CardContent, Grid } from '@material-ui/core';
@@ -102,7 +102,7 @@ MentorshipLayout.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
   globalUser: selectGlobalUser(),
-  user: selectFormUser(),
+  user: selectUser(),
 });
 
 const mapDispatchToProps = {
