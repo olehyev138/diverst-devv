@@ -33,6 +33,15 @@ module BaseController
     raise BadRequestException.new(e.message)
   end
 
+  def has_many
+    item = klass.find(params[:id])
+    authorize item, :show?
+
+    render status: 200, json: klass.association_search(self.diverst_request, params)
+  rescue => e
+    raise BadRequestException.new(e.message)
+  end
+
   def update
     params[klass.symbol] = payload
     item = klass.find(params[:id])

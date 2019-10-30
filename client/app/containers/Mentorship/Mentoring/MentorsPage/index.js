@@ -75,7 +75,7 @@ export function MentorsPage(props) {
 
       const userId = props.user.id;
       if (tab === Types.current)
-        props.getMentorsBegin({ ...params, objectId: userId, association: props.type });
+        props.getMentorsBegin({ ...params, userId, association: props.type });
       else
         props.getAvailableMentorsBegin({ ...params, $id: userId, query_scopes: [props.type] });
     }

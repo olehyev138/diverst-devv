@@ -154,7 +154,7 @@ Diverst::Application.routes.draw do
           post '/email', to: 'users#find_user_enterprise_by_email'
         end
         member do
-          get '/index_except', to: 'users#index_except_user'
+          get '/association', to: 'users#association'
         end
       end
       resources :user_groups

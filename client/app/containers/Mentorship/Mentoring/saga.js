@@ -20,9 +20,8 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 export function* getMentors(action) {
   try {
     const { payload } = action;
-    const response = yield call(api.users.all.bind(api.users), {
+    const response = yield call(api.users.getAssociation.bind(api.users), payload.userId, {
       ...payload,
-      search_method: 'has_many_search',
       serializer: 'mentorship',
     });
     yield put(getMentorsSuccess(response.data.page));

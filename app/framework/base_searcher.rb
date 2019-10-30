@@ -113,7 +113,7 @@ module BaseSearcher
       end
     end
 
-    def has_many_search(params = {}, diverst_request = nil)
+    def has_many_search(item, params = {}, diverst_request = nil)
       # get the search value
       searchValue = params[:search]
 
@@ -122,10 +122,6 @@ module BaseSearcher
 
       association = params[:association]
       raise NameError, 'Invalid association name' unless valid_associations.include? association
-
-      raise NameError, 'No id given' if params[:objectId].blank?
-
-      id = params[:objectId].to_i
 
       association = association.to_sym
 
@@ -166,11 +162,9 @@ module BaseSearcher
         @items = self
       end
 
-      @item = @items.find(id)
-
       # search the system
       if searchValue.present?
-        @item
+        item
           .send(association)
           .send_chain(query_scopes)
           .where(query, search: "%#{searchValue}%".downcase)
@@ -178,7 +172,7 @@ module BaseSearcher
           .where.not(where_not)
           .distinct
       else
-        @item
+        item
           .send(association)
           .send_chain(query_scopes)
           .where(where)
