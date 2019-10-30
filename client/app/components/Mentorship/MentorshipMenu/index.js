@@ -14,8 +14,7 @@ import classNames from 'classnames';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { height } from '@material-ui/system';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
-import userMessages from 'containers/User/messages';
-import appMessages from 'containers/Shared/App/messages';
+
 import messages from 'containers/Mentorship/messages';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';

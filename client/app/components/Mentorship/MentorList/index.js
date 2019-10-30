@@ -42,15 +42,6 @@ const styles = theme => ({
 export function MentorList(props, context) {
   const { type } = props;
 
-  const formik = useFormik({
-    initialValues: {
-      notes: '',
-    },
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
-    },
-  });
-
   const defaultCreatePayload = {
     mentoring_type: type.slice(0, -1),
     sender_id: props.user.id,
@@ -60,12 +51,22 @@ export function MentorList(props, context) {
   const [payload, setPayload] = React.useState(defaultCreatePayload);
   const [open, setOpen] = React.useState(false);
 
+  const formik = useFormik({
+    initialValues: {
+      notes: '',
+    },
+    onSubmit: (values) => {
+      props.requestMentorship({ ...values, ...payload });
+      handleClose();
+    },
+  });
+
   const handleClickOpen = (receiverId) => {
     setPayload({ ...payload, receiver_id: receiverId });
     setOpen(true);
   };
 
-  const handleClose = (event, typeOfClose, submit = 'Cancel') => {
+  const handleClose = () => {
     setOpen(false);
   };
 
@@ -152,7 +153,7 @@ export function MentorList(props, context) {
           </DialogContent>
           <DialogActions>
             <Button
-              onClick={() => handleClose(null, null, 'Cancel')}
+              onClick={() => handleClose()}
               color='primary'
             >
               Cancel
