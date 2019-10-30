@@ -2,13 +2,79 @@ import React, { memo, useState, useEffect } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
 
-import { withStyles } from '@material-ui/core/styles';
-
-import { TablePagination } from '@material-ui/core';
+import { withStyles, useTheme } from '@material-ui/core/styles';
+import { TablePagination, IconButton } from '@material-ui/core';
+import FirstPageIcon from '@material-ui/icons/FirstPage';
+import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
+import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
+import LastPageIcon from '@material-ui/icons/LastPage';
 
 import animateScrollTo from 'animated-scroll-to';
 
 import { CONTENT_SCROLL_CLASS_NAME } from 'components/Shared/Scrollbar';
+
+const paginationActionsStyles = theme => ({
+  root: {
+    flexShrink: 0,
+    marginLeft: theme.spacing(2.5),
+  },
+});
+
+function PaginationActions(props) {
+  const theme = useTheme();
+  const { classes, count, page, rowsPerPage, onChangePage } = props;
+
+  const handleFirstPageButtonClick = event => onChangePage(event, 0);
+
+  const handleBackButtonClick = event => onChangePage(event, page - 1);
+
+  const handleNextButtonClick = event => onChangePage(event, page + 1);
+
+  const handleLastPageButtonClick = event => onChangePage(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
+
+  return (
+    <div className={classes.root}>
+      <IconButton
+        onClick={handleFirstPageButtonClick}
+        disabled={page === 0}
+        aria-label='first page'
+      >
+        {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
+      </IconButton>
+      <IconButton
+        onClick={handleBackButtonClick}
+        disabled={page === 0}
+        aria-label='previous page'
+      >
+        {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+      </IconButton>
+      <IconButton
+        onClick={handleNextButtonClick}
+        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+        aria-label='next page'
+      >
+        {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+      </IconButton>
+      <IconButton
+        onClick={handleLastPageButtonClick}
+        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+        aria-label='last page'
+      >
+        {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
+      </IconButton>
+    </div>
+  );
+}
+
+PaginationActions.propTypes = {
+  classes: PropTypes.object,
+  count: PropTypes.number.isRequired,
+  onChangePage: PropTypes.func.isRequired,
+  page: PropTypes.number.isRequired,
+  rowsPerPage: PropTypes.number.isRequired,
+};
+
+const PaginationActionsComponent = withStyles(paginationActionsStyles)(PaginationActions);
 
 const styles = theme => ({
   paginationContainer: {
@@ -60,7 +126,8 @@ export function DiverstPagination(props) {
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
-    props.handlePagination({ count: +event.target.value, page });
+    setPage(0);
+    props.handlePagination({ count: +event.target.value, page: 0 });
   };
 
   useEffect(() => {
@@ -79,6 +146,7 @@ export function DiverstPagination(props) {
     <div className={classes.paginationContainer}>
       <TablePagination
         className={paginationClassName}
+        ActionsComponent={PaginationActionsComponent}
         component='div'
         page={page}
         rowsPerPageOptions={props.rowsPerPageOptions || [5, 10, 25]}
