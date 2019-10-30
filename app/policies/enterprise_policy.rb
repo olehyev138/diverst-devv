@@ -7,6 +7,10 @@ class EnterprisePolicy < ApplicationPolicy
     @policy_group.enterprise_manage?
   end
 
+  def update_enterprise?
+    update?
+  end
+
   def edit_auth?
     return true if manage_all?
     return true if basic_group_leader_permission?('sso_manage')
