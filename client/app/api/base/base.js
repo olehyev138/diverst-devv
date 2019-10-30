@@ -15,8 +15,12 @@ class API {
     return axios.get(appendQueryArgs(this.url, opts));
   }
 
-  get(id) {
-    return axios.get(`${this.url}/${id}`);
+  get(id, payload = undefined) {
+    return axios.get(appendQueryArgs(`${this.url}/${id}`, payload));
+  }
+
+  getAssociation(id, payload = undefined) {
+    return axios.get(appendQueryArgs(`${this.url}/${id}/association`, payload));
   }
 
   create(payload) {
