@@ -11,6 +11,7 @@ describe('groupsReducer', () => {
   beforeEach(() => {
     state = {
       isLoading: true,
+      isFormLoading: true,
       isCommitting: false,
       groupList: {},
       groupTotal: null,
@@ -44,7 +45,7 @@ describe('groupsReducer', () => {
   it('handles the getGroupSuccess action correctly', () => {
     const expected = produce(state, (draft) => {
       draft.currentGroup = { id: 37, name: 'dummy' };
-      draft.isLoading = false;
+      draft.isFormLoading = false;
     });
 
     expect(

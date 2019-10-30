@@ -19,28 +19,31 @@ import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import messages from 'containers/Group/Outcome/messages';
 import { buildValues } from 'utils/formHelpers';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
+import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 
 /* eslint-disable object-curly-newline */
 export function OutcomeFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
   return (
-    <Card>
-      <Form>
-        <CardContent>
-        </CardContent>
-        <CardActions>
-          <DiverstSubmit isCommitting={props.isCommitting}>
-            {buttonText}
-          </DiverstSubmit>
-          <Button
-            disabled={props.isCommitting}
-            to={props.links.outcomesIndex}
-            component={WrappedNavLink}
-          >
-            <DiverstFormattedMessage {...messages.cancel} />
-          </Button>
-        </CardActions>
-      </Form>
-    </Card>
+    <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.outcome}>
+      <Card>
+        <Form>
+          <CardContent>
+          </CardContent>
+          <CardActions>
+            <DiverstSubmit isCommitting={props.isCommitting}>
+              {buttonText}
+            </DiverstSubmit>
+            <Button
+              disabled={props.isCommitting}
+              to={props.links.outcomesIndex}
+              component={WrappedNavLink}
+            >
+              <DiverstFormattedMessage {...messages.cancel} />
+            </Button>
+          </CardActions>
+        </Form>
+      </Card>
+    </DiverstFormLoader>
   );
 }
 
@@ -67,14 +70,18 @@ export function OutcomeForm(props) {
 }
 
 OutcomeForm.propTypes = {
+  edit: PropTypes.bool,
   outcomeAction: PropTypes.func,
   outcome: PropTypes.object,
   currentUser: PropTypes.object,
   currentGroup: PropTypes.object,
   isCommitting: PropTypes.bool,
+  isFormLoading: PropTypes.bool,
 };
 
 OutcomeFormInner.propTypes = {
+  edit: PropTypes.bool,
+  outcome: PropTypes.object,
   handleSubmit: PropTypes.func,
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
@@ -83,6 +90,7 @@ OutcomeFormInner.propTypes = {
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
   isCommitting: PropTypes.bool,
+  isFormLoading: PropTypes.bool,
   links: PropTypes.shape({
     outcomesIndex: PropTypes.string,
   })

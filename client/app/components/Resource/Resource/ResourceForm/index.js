@@ -20,8 +20,8 @@ import messages from 'containers/Resource/Resource/messages';
 import { buildValues, mapFields } from 'utils/formHelpers';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
-
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
+import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 
 /* eslint-disable object-curly-newline */
 export function ResourceFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
@@ -47,95 +47,97 @@ export function ResourceFormInner({ handleSubmit, handleChange, handleBlur, valu
   };
 
   return (
-    <Card>
-      <Form>
-        <CardContent>
-          <Field
-            component={TextField}
-            onChange={handleChange}
-            fullWidth
-            disabled={props.isCommitting}
-            id='title'
-            name='title'
-            margin='normal'
-            label={<DiverstFormattedMessage {...messages.form.title} />}
-            value={values.title}
-          />
-          <Field
-            component={Select}
-            fullWidth
-            disabled={props.isCommitting}
-            id='folder_id'
-            name='folder_id'
-            label={<DiverstFormattedMessage {...messages.form.folder} />}
-            margin='normal'
-            value={values.folder_id}
-            options={props.selectFolders}
-            onMenuOpen={parentSelectAction}
-            onChange={value => setFieldValue('folder_id', value)}
-            onInputChange={value => parentSelectAction(value)}
-            onBlur={() => setFieldTouched('folder_id', true)}
-            isClearable
-          />
-          <h4>
-            Resource Type:
-          </h4>
-          <FormControl
-            variant='outlined'
-          >
-            <FormControlLabel
-              labelPlacement='top'
-              checked={values.type}
-              control={(
-                <Field
-                  component={Switch}
-                  color='primary'
-                  onChange={handleChange}
-                  disabled={props.isCommitting}
-                  id='type'
-                  name='type'
-                  margin='normal'
-                  checked={values.type}
-                  value={values.type}
-                />
-              )}
-              label='URL / File'
-            />
-          </FormControl>
-          { values.type && (
-            <h3>
-              To Be Added: File Upload
-            </h3>
-          )}
-          { !values.type && (
+    <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.resource}>
+      <Card>
+        <Form>
+          <CardContent>
             <Field
               component={TextField}
               onChange={handleChange}
               fullWidth
               disabled={props.isCommitting}
-              id='url'
-              name='url'
+              id='title'
+              name='title'
               margin='normal'
-              label={<DiverstFormattedMessage {...messages.form.url} />}
-              value={values.url}
+              label={<DiverstFormattedMessage {...messages.form.title} />}
+              value={values.title}
             />
-          )}
-        </CardContent>
-        <Divider />
-        <CardActions>
-          <DiverstSubmit isCommitting={props.isCommitting}>
-            {buttonText}
-          </DiverstSubmit>
-          <Button
-            disabled={props.isCommitting}
-            to={props.links.cancelPath}
-            component={WrappedNavLink}
-          >
-            <DiverstFormattedMessage {...messages.cancel} />
-          </Button>
-        </CardActions>
-      </Form>
-    </Card>
+            <Field
+              component={Select}
+              fullWidth
+              disabled={props.isCommitting}
+              id='folder_id'
+              name='folder_id'
+              label={<DiverstFormattedMessage {...messages.form.folder} />}
+              margin='normal'
+              value={values.folder_id}
+              options={props.selectFolders}
+              onMenuOpen={parentSelectAction}
+              onChange={value => setFieldValue('folder_id', value)}
+              onInputChange={value => parentSelectAction(value)}
+              onBlur={() => setFieldTouched('folder_id', true)}
+              isClearable
+            />
+            <h4>
+              Resource Type:
+            </h4>
+            <FormControl
+              variant='outlined'
+            >
+              <FormControlLabel
+                labelPlacement='top'
+                checked={values.type}
+                control={(
+                  <Field
+                    component={Switch}
+                    color='primary'
+                    onChange={handleChange}
+                    disabled={props.isCommitting}
+                    id='type'
+                    name='type'
+                    margin='normal'
+                    checked={values.type}
+                    value={values.type}
+                  />
+                )}
+                label='URL / File'
+              />
+            </FormControl>
+            {values.type && (
+              <h3>
+                To Be Added: File Upload
+              </h3>
+            )}
+            {!values.type && (
+              <Field
+                component={TextField}
+                onChange={handleChange}
+                fullWidth
+                disabled={props.isCommitting}
+                id='url'
+                name='url'
+                margin='normal'
+                label={<DiverstFormattedMessage {...messages.form.url} />}
+                value={values.url}
+              />
+            )}
+          </CardContent>
+          <Divider />
+          <CardActions>
+            <DiverstSubmit isCommitting={props.isCommitting}>
+              {buttonText}
+            </DiverstSubmit>
+            <Button
+              disabled={props.isCommitting}
+              to={props.links.cancelPath}
+              component={WrappedNavLink}
+            >
+              <DiverstFormattedMessage {...messages.cancel} />
+            </Button>
+          </CardActions>
+        </Form>
+      </Card>
+    </DiverstFormLoader>
   );
 }
 
@@ -165,6 +167,7 @@ export function ResourceForm(props) {
 }
 
 ResourceForm.propTypes = {
+  edit: PropTypes.bool,
   type: PropTypes.string,
   getFoldersBegin: PropTypes.func,
   selectFolders: PropTypes.array,
@@ -174,6 +177,7 @@ ResourceForm.propTypes = {
   currentGroup: PropTypes.object,
   currentEnterprise: PropTypes.object,
   isCommitting: PropTypes.bool,
+  isFormLoading: PropTypes.bool,
   currentFolder: PropTypes.shape({
     id: PropTypes.number,
     name: PropTypes.string,
@@ -191,6 +195,8 @@ ResourceForm.propTypes = {
 };
 
 ResourceFormInner.propTypes = {
+  edit: PropTypes.bool,
+  resource: PropTypes.object,
   type: PropTypes.string,
   getFoldersBegin: PropTypes.func,
   selectFolders: PropTypes.array,
@@ -208,6 +214,7 @@ ResourceFormInner.propTypes = {
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
   isCommitting: PropTypes.bool,
+  isFormLoading: PropTypes.bool,
   from: PropTypes.shape({
     resource: PropTypes.shape({
       id: PropTypes.number,

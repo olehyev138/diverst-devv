@@ -11,6 +11,8 @@ import GroupMessageComment from 'components/News/GroupMessage/GroupMessageCommen
 import GroupMessageCommentForm from 'components/News/GroupMessage/GroupMessageCommentForm';
 import GroupMessageListItem from 'components/News/GroupMessage/GroupMessageListItem';
 
+import DiverstShowLoader from 'components/Shared/DiverstShowLoader';
+
 const styles = theme => ({});
 
 export function GroupMessage(props) {
@@ -21,30 +23,32 @@ export function GroupMessage(props) {
   const groupMessage = dig(newsItem, 'group_message');
 
   return (
-    (groupMessage) ? (
-      <React.Fragment>
-        <GroupMessageListItem
-          newsItem={newsItem}
-        />
-        <Box mb={4} />
-        <GroupMessageCommentForm
-          currentUserId={props.currentUserId}
-          newsItem={props.newsItem}
-          commentAction={props.commentAction}
-          {...rest}
-        />
-        <Box mb={4} />
-        <Typography variant='h6'>
-          Comments
-        </Typography>
-        { /* eslint-disable-next-line arrow-body-style */ }
-        {dig(groupMessage, 'comments') && groupMessage.comments.map((comment, i) => {
-          return (
-            <GroupMessageComment key={comment.id} comment={comment} />
-          );
-        })}
-      </React.Fragment>
-    ) : <React.Fragment />
+    <DiverstShowLoader isLoading={props.isFormLoading} isError={!props.isFormLoading && !groupMessage}>
+      {groupMessage && (
+        <React.Fragment>
+          <GroupMessageListItem
+            newsItem={newsItem}
+          />
+          <Box mb={4} />
+          <GroupMessageCommentForm
+            currentUserId={props.currentUserId}
+            newsItem={props.newsItem}
+            commentAction={props.commentAction}
+            {...rest}
+          />
+          <Box mb={4} />
+          <Typography variant='h6'>
+            Comments
+          </Typography>
+          { /* eslint-disable-next-line arrow-body-style */}
+          {dig(groupMessage, 'comments') && groupMessage.comments.map((comment, i) => {
+            return (
+              <GroupMessageComment key={comment.id} comment={comment} />
+            );
+          })}
+        </React.Fragment>
+      )}
+    </DiverstShowLoader>
   );
 }
 
@@ -53,6 +57,7 @@ GroupMessage.propTypes = {
   newsItem: PropTypes.object,
   currentUserId: PropTypes.number,
   commentAction: PropTypes.func,
+  isFormLoading: PropTypes.bool,
   links: PropTypes.shape({
     groupMessageEdit: PropTypes.func
   })

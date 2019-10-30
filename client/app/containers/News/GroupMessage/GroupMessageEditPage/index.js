@@ -17,7 +17,7 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { selectGroup } from 'containers/Group/selectors';
 import { selectUser } from 'containers/Shared/App/selectors';
-import { selectNewsItem, selectIsCommitting } from 'containers/News/selectors';
+import { selectNewsItem, selectIsCommitting, selectIsFormLoading } from 'containers/News/selectors';
 
 import {
   getNewsItemBegin, updateGroupMessageBegin,
@@ -46,6 +46,7 @@ export function GroupMessageEditPage(props) {
 
   return (
     <GroupMessageForm
+      edit
       groupMessageAction={props.updateGroupMessageBegin}
       buttonText='Update'
       currentUser={currentUser}
@@ -53,6 +54,7 @@ export function GroupMessageEditPage(props) {
       newsItem={currentNewsItem}
       links={links}
       isCommitting={props.isCommitting}
+      isFormLoading={props.isFormLoading}
     />
   );
 }
@@ -65,6 +67,7 @@ GroupMessageEditPage.propTypes = {
   currentGroup: PropTypes.object,
   currentNewsItem: PropTypes.object,
   isCommitting: PropTypes.bool,
+  isFormLoading: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -72,6 +75,7 @@ const mapStateToProps = createStructuredSelector({
   currentUser: selectUser(),
   currentNewsItem: selectNewsItem(),
   isCommitting: selectIsCommitting(),
+  isFormLoading: selectIsFormLoading(),
 });
 
 const mapDispatchToProps = {

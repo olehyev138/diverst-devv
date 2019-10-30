@@ -11,6 +11,7 @@ describe('newsReducer', () => {
     state = {
       isLoading: true,
       isCommitting: false,
+      isFormLoading: true,
       newsItems: [],
       currentNewsItem: null,
       newsItemsTotal: null

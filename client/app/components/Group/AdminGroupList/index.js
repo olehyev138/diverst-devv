@@ -42,6 +42,9 @@ const styles = theme => ({
     borderTopLeftRadius: 4,
     borderBottomLeftRadius: 4,
   },
+  groupLink: {
+    textTransform: 'none',
+  },
   childGroupCard: {
     marginLeft: 24,
     borderLeftWidth: 2,
@@ -92,7 +95,9 @@ export function AdminGroupList(props, context) {
                 <Card className={classes.groupCard}>
                   <CardContent>
                     {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                    <Link
+                    <Button
+                      className={classes.groupLink}
+                      color='primary'
                       component={WrappedNavLink}
                       to={{
                         pathname: ROUTES.group.home.path(group.id),
@@ -102,7 +107,7 @@ export function AdminGroupList(props, context) {
                       <Typography variant='h5' component='h2' display='inline'>
                         {group.name}
                       </Typography>
-                    </Link>
+                    </Button>
                     {group.description && (
                       <Typography color='textSecondary' className={classes.groupListItemDescription}>
                         {group.description}

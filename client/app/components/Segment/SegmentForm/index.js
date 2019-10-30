@@ -25,6 +25,7 @@ import { serializeSegment } from 'utils/customFieldHelpers';
 
 import SegmentRulesList from 'components/Segment/SegmentRulesList';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
+import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 
 const styles = theme => ({
   ruleInput: {
@@ -36,35 +37,39 @@ const styles = theme => ({
 export function SegmentFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
   return (
     <React.Fragment>
-      <Card>
-        <Form>
-          <CardContent>
-            <Field
-              component={TextField}
-              onChange={handleChange}
-              fullWidth
-              disabled={props.isCommitting}
-              required
-              id='name'
-              name='name'
-              label={<DiverstFormattedMessage {...messages.form.name} />}
-              value={values.name}
-            />
-          </CardContent>
-          <Divider />
-          <CardActions>
-            <DiverstSubmit isCommitting={props.isCommitting}>
-              {buttonText}
-            </DiverstSubmit>
-          </CardActions>
-        </Form>
-      </Card>
+      <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.segment}>
+        <Card>
+          <Form>
+            <CardContent>
+              <Field
+                component={TextField}
+                onChange={handleChange}
+                fullWidth
+                disabled={props.isCommitting}
+                required
+                id='name'
+                name='name'
+                label={<DiverstFormattedMessage {...messages.form.name} />}
+                value={values.name}
+              />
+            </CardContent>
+            <Divider />
+            <CardActions>
+              <DiverstSubmit isCommitting={props.isCommitting}>
+                {buttonText}
+              </DiverstSubmit>
+            </CardActions>
+          </Form>
+        </Card>
+      </DiverstFormLoader>
       <Box mb={3} />
-      <SegmentRulesList
-        values={values}
-        classes={props.classes}
-        {...props.ruleProps}
-      />
+      <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.segment}>
+        <SegmentRulesList
+          values={values}
+          classes={props.classes}
+          {...props.ruleProps}
+        />
+      </DiverstFormLoader>
     </React.Fragment>
   );
 }
@@ -91,12 +96,16 @@ export function SegmentForm(props) {
 }
 
 SegmentForm.propTypes = {
+  edit: PropTypes.bool,
   segmentAction: PropTypes.func,
   segment: PropTypes.object,
   isCommitting: PropTypes.bool,
+  isFormLoading: PropTypes.bool,
 };
 
 SegmentFormInner.propTypes = {
+  edit: PropTypes.bool,
+  segment: PropTypes.object,
   handleSubmit: PropTypes.func,
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
@@ -108,6 +117,7 @@ SegmentFormInner.propTypes = {
   getGroupsBegin: PropTypes.func,
   ruleProps: PropTypes.object,
   isCommitting: PropTypes.bool,
+  isFormLoading: PropTypes.bool,
 };
 
 export default compose(
