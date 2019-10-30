@@ -187,7 +187,7 @@ export function Profile(props) {
                           // eslint-disable-next-line react/no-array-index-key
                           <ListItem dense key={`fieldData${interest.id}-${i}`}>
                             <ArrowRightIcon fontSize='small' />
-                            {`${interest.label}`}
+                            {`${interest.name}`}
                           </ListItem>
                         ))}
                       </List>
@@ -208,7 +208,7 @@ export function Profile(props) {
                           // eslint-disable-next-line react/no-array-index-key
                           <ListItem dense key={`fieldData${type.id}-${i}`}>
                             <ArrowRightIcon fontSize='small' />
-                            {`${type.label}`}
+                            {`${type.name}`}
                           </ListItem>
                         ))}
                       </List>
