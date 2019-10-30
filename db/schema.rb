@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191008194002) do
+ActiveRecord::Schema.define(version: 20191018163508) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -1429,12 +1429,13 @@ ActiveRecord::Schema.define(version: 20191008194002) do
   add_index "user_reward_actions", ["user_id"], name: "index_user_reward_actions_on_user_id", using: :btree
 
   create_table "user_rewards", force: :cascade do |t|
-    t.integer  "user_id",    limit: 4, null: false
-    t.integer  "reward_id",  limit: 4, null: false
-    t.integer  "points",     limit: 4, null: false
+    t.integer  "user_id",    limit: 4,     null: false
+    t.integer  "reward_id",  limit: 4,     null: false
+    t.integer  "points",     limit: 4,     null: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "status",     limit: 4
+    t.text     "comment",    limit: 65535
   end
 
   add_index "user_rewards", ["reward_id"], name: "index_user_rewards_on_reward_id", using: :btree
