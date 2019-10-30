@@ -58,7 +58,7 @@ export default function Routes(props) {
 
       { /* Admin - Manage - Segments */ }
       <AdminLayout {...expandRoute(ROUTES.admin.manage.segments.new)} component={SegmentPage} />
-      <AdminLayout {...expandRoute(ROUTES.admin.manage.segments.show)} component={SegmentPage} />
+      <AdminLayout {...expandRoute(ROUTES.admin.manage.segments.show)} component={SegmentPage} edit />
       <AdminLayout exact {...expandRoute(ROUTES.admin.manage.segments.index)} component={SegmentListPage} />
 
       { /* Admin - Manage - Resources */ }
