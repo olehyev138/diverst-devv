@@ -15,7 +15,8 @@ import RouteService from 'utils/routeHelpers';
 import { selectUser, selectEnterprise } from 'containers/Shared/App/selectors';
 import { selectFolder, selectValid,
   selectPaginatedFolders, selectPaginatedResources,
-  selectFoldersTotal, selectResourcesTotal, selectIsLoading
+  selectFoldersTotal, selectResourcesTotal, selectIsLoading,
+  selectIsFormLoading
 } from 'containers/Resource/selectors';
 
 import {
@@ -207,6 +208,7 @@ export function FolderPage(props) {
           handleFolderPagination={handleFolderPagination}
           resources={resources}
           isLoading={props.isLoading}
+          isFormLoading={props.isFormLoading}
           links={links}
         />
       )}
@@ -232,6 +234,7 @@ FolderPage.propTypes = {
   resources: PropTypes.array,
   resourcesTotal: PropTypes.number,
   isLoading: PropTypes.bool,
+  isFormLoading: PropTypes.bool,
   valid: PropTypes.bool,
 };
 
@@ -244,6 +247,7 @@ const mapStateToProps = createStructuredSelector({
   resources: selectPaginatedResources(),
   resourcesTotal: selectResourcesTotal(),
   isLoading: selectIsLoading(),
+  isFormLoading: selectIsFormLoading(),
   valid: selectValid(),
 });
 

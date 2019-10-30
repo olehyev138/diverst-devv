@@ -16,7 +16,7 @@ import {
   updateUserBegin, userUnmount
 } from 'containers/User/actions';
 
-import { selectUser, selectFieldData } from 'containers/User/selectors';
+import { selectUser, selectFieldData, selectIsFormLoading } from 'containers/User/selectors';
 
 import saga from 'containers/User/saga';
 import Profile from 'components/User/Profile';
@@ -45,6 +45,7 @@ export function UserProfilePage(props) {
         user={props.user}
         fieldData={props.fieldData}
         buttonText='Update'
+        isFormLoading={props.isFormLoading}
       />
     </React.Fragment>
   );
@@ -55,12 +56,14 @@ UserProfilePage.propTypes = {
   user: PropTypes.object,
   fieldData: PropTypes.array,
   getUserBegin: PropTypes.func,
-  userUnmount: PropTypes.func
+  userUnmount: PropTypes.func,
+  isFormLoading: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
   user: selectUser(),
-  fieldData: selectFieldData()
+  fieldData: selectFieldData(),
+  isFormLoading: selectIsFormLoading(),
 });
 
 const mapDispatchToProps = {

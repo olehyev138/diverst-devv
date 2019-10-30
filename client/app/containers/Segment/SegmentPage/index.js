@@ -21,7 +21,7 @@ import {
   updateSegmentBegin, segmentUnmount
 } from 'containers/Segment/actions';
 
-import { selectIsCommitting, selectSegmentWithRules } from 'containers/Segment/selectors';
+import { selectIsCommitting, selectSegmentWithRules, selectIsFormLoading } from 'containers/Segment/selectors';
 import { selectPaginatedSelectGroups } from 'containers/Group/selectors';
 import {
   selectPaginatedFields, selectPaginatedSelectFields
@@ -61,6 +61,7 @@ export function SegmentPage(props) {
   return (
     <React.Fragment>
       <SegmentForm
+        edit={props.edit}
         segmentAction={segmentId[0] ? props.updateSegmentBegin : props.createSegmentBegin}
         segment={props.segment}
         ruleProps={{
@@ -72,6 +73,7 @@ export function SegmentPage(props) {
         }}
         buttonText={segmentId[0] ? 'Update' : 'Create'}
         isCommitting={props.isCommitting}
+        isFormLoading={props.edit ? props.isFormLoading : undefined}
       />
       <Box mb={4} />
       <Divider />
@@ -82,6 +84,7 @@ export function SegmentPage(props) {
 }
 
 SegmentPage.propTypes = {
+  edit: PropTypes.bool,
   segment: PropTypes.object,
   rules: PropTypes.object,
   getSegmentBegin: PropTypes.func,
@@ -94,6 +97,7 @@ SegmentPage.propTypes = {
   updateSegmentBegin: PropTypes.func,
   segmentUnmount: PropTypes.func,
   isCommitting: PropTypes.bool,
+  isFormLoading: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -102,6 +106,7 @@ const mapStateToProps = createStructuredSelector({
   selectFields: selectPaginatedSelectFields(),
   fields: selectPaginatedFields(),
   isCommitting: selectIsCommitting(),
+  isFormLoading: selectIsFormLoading(),
 });
 
 const mapDispatchToProps = {

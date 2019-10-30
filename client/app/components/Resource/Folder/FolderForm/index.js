@@ -20,8 +20,8 @@ import messages from 'containers/Resource/Folder/messages';
 import { buildValues, mapFields } from 'utils/formHelpers';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
-
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
+import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 
 /* eslint-disable object-curly-newline */
 export function FolderFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
@@ -47,93 +47,95 @@ export function FolderFormInner({ handleSubmit, handleChange, handleBlur, values
   };
 
   return (
-    <Card>
-      <Form>
-        <CardContent>
-          <Field
-            component={TextField}
-            onChange={handleChange}
-            fullWidth
-            disabled={props.isCommitting}
-            id='name'
-            name='name'
-            margin='normal'
-            label={<DiverstFormattedMessage {...messages.form.name} />}
-            value={values.name}
-          />
-          <Field
-            component={Select}
-            fullWidth
-            disabled={props.isCommitting}
-            id='parent_id'
-            name='parent_id'
-            label={<DiverstFormattedMessage {...messages.form.parent} />}
-            margin='normal'
-            value={values.parent_id}
-            options={props.selectFolders}
-            onMenuOpen={parentSelectAction}
-            onChange={value => setFieldValue('parent_id', value)}
-            onInputChange={value => parentSelectAction(value)}
-            onBlur={() => setFieldTouched('parent_id', true)}
-            isClearable
-          />
-          <Grid container spacing={3}>
-            <Grid item>
-              <FormControl
-                variant='outlined'
-                margin='normal'
-              >
-                <FormControlLabel
-                  labelPlacement='bottom'
-                  checked={values.password_protected}
-                  control={(
-                    <Field
-                      component={Switch}
-                      color='primary'
-                      onChange={handleChange}
-                      disabled={props.isCommitting}
-                      id='password_protected'
-                      name='password_protected'
-                      checked={values.password_protected}
-                      value={values.password_protected}
-                    />
-                  )}
-                  label='Password?'
-                />
-              </FormControl>
-            </Grid>
-            { (values.password_protected) && (
-              <Grid item xs>
-                <Field
-                  component={TextField}
-                  onChange={handleChange}
-                  fullWidth
-                  disabled={props.isCommitting}
-                  id='password'
-                  name='password'
+    <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.folder}>
+      <Card>
+        <Form>
+          <CardContent>
+            <Field
+              component={TextField}
+              onChange={handleChange}
+              fullWidth
+              disabled={props.isCommitting}
+              id='name'
+              name='name'
+              margin='normal'
+              label={<DiverstFormattedMessage {...messages.form.name} />}
+              value={values.name}
+            />
+            <Field
+              component={Select}
+              fullWidth
+              disabled={props.isCommitting}
+              id='parent_id'
+              name='parent_id'
+              label={<DiverstFormattedMessage {...messages.form.parent} />}
+              margin='normal'
+              value={values.parent_id}
+              options={props.selectFolders}
+              onMenuOpen={parentSelectAction}
+              onChange={value => setFieldValue('parent_id', value)}
+              onInputChange={value => parentSelectAction(value)}
+              onBlur={() => setFieldTouched('parent_id', true)}
+              isClearable
+            />
+            <Grid container spacing={3}>
+              <Grid item>
+                <FormControl
+                  variant='outlined'
                   margin='normal'
-                  value={values.password}
-                  label={<DiverstFormattedMessage {...messages.form.password} />}
-                />
+                >
+                  <FormControlLabel
+                    labelPlacement='bottom'
+                    checked={values.password_protected}
+                    control={(
+                      <Field
+                        component={Switch}
+                        color='primary'
+                        onChange={handleChange}
+                        disabled={props.isCommitting}
+                        id='password_protected'
+                        name='password_protected'
+                        checked={values.password_protected}
+                        value={values.password_protected}
+                      />
+                    )}
+                    label='Password?'
+                  />
+                </FormControl>
               </Grid>
-            )}
-          </Grid>
-        </CardContent>
-        <Divider />
-        <CardActions>
-          <DiverstSubmit isCommitting={props.isCommitting}>
-            {buttonText}
-          </DiverstSubmit>
-          <Button
-            disabled={props.isCommitting}
-            to={props.links.cancelLink}
-            component={WrappedNavLink}
-          >
-            <DiverstFormattedMessage {...messages.cancel} />
-          </Button>
-        </CardActions>
-      </Form>
-    </Card>
+              {(values.password_protected) && (
+                <Grid item xs>
+                  <Field
+                    component={TextField}
+                    onChange={handleChange}
+                    fullWidth
+                    disabled={props.isCommitting}
+                    id='password'
+                    name='password'
+                    margin='normal'
+                    value={values.password}
+                    label={<DiverstFormattedMessage {...messages.form.password} />}
+                  />
+                </Grid>
+              )}
+            </Grid>
+          </CardContent>
+          <Divider />
+          <CardActions>
+            <DiverstSubmit isCommitting={props.isCommitting}>
+              {buttonText}
+            </DiverstSubmit>
+            <Button
+              disabled={props.isCommitting}
+              to={props.links.cancelLink}
+              component={dig(props, 'links', 'cancelLink') ? WrappedNavLink : 'button'}
+            >
+              <DiverstFormattedMessage {...messages.cancel} />
+            </Button>
+          </CardActions>
+        </Form>
+      </Card>
+    </DiverstFormLoader>
   );
 }
 
@@ -164,6 +166,7 @@ export function FolderForm(props) {
 }
 
 FolderForm.propTypes = {
+  edit: PropTypes.bool,
   type: PropTypes.string,
   getFoldersBegin: PropTypes.func,
   selectFolders: PropTypes.array,
@@ -173,6 +176,7 @@ FolderForm.propTypes = {
   currentGroup: PropTypes.object,
   currentEnterprise: PropTypes.object,
   isCommitting: PropTypes.bool,
+  isFormLoading: PropTypes.bool,
   from: PropTypes.shape({
     folder: PropTypes.shape({
       id: PropTypes.number,
@@ -186,6 +190,8 @@ FolderForm.propTypes = {
 };
 
 FolderFormInner.propTypes = {
+  edit: PropTypes.bool,
+  folder: PropTypes.object,
   type: PropTypes.string,
   getFoldersBegin: PropTypes.func,
   selectFolders: PropTypes.array,
@@ -199,6 +205,7 @@ FolderFormInner.propTypes = {
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
   isCommitting: PropTypes.bool,
+  isFormLoading: PropTypes.bool,
   from: PropTypes.shape({
     folder: PropTypes.shape({
       id: PropTypes.number,

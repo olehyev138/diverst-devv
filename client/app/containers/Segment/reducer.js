@@ -11,11 +11,12 @@ import {
   GET_SEGMENT_MEMBERS_ERROR, GET_SEGMENTS_BEGIN,
   SEGMENT_UNMOUNT, GET_SEGMENTS_ERROR, GET_SEGMENT_ERROR,
   CREATE_SEGMENT_BEGIN, CREATE_SEGMENT_SUCCESS, CREATE_SEGMENT_ERROR,
-  UPDATE_SEGMENT_BEGIN, UPDATE_SEGMENT_SUCCESS, UPDATE_SEGMENT_ERROR
+  UPDATE_SEGMENT_BEGIN, UPDATE_SEGMENT_SUCCESS, UPDATE_SEGMENT_ERROR, GET_SEGMENT_BEGIN,
 } from 'containers/Segment/constants';
 
 export const initialState = {
   isLoading: true,
+  isFormLoading: true,
   isCommitting: false,
   segmentList: {},
   segmentTotal: null,
@@ -31,6 +32,16 @@ function segmentsReducer(state = initialState, action) {
   /* eslint-disable consistent-return */
   return produce(state, (draft) => {
     switch (action.type) {
+      case GET_SEGMENT_BEGIN:
+        draft.isFormLoading = true;
+        break;
+      case GET_SEGMENT_SUCCESS:
+        draft.currentSegment = action.payload.segment;
+        draft.isFormLoading = false;
+        break;
+      case GET_SEGMENT_ERROR:
+        draft.isFormLoading = false;
+        break;
       case GET_SEGMENTS_BEGIN:
         draft.isLoading = true;
         break;
@@ -40,13 +51,6 @@ function segmentsReducer(state = initialState, action) {
         draft.isLoading = false;
         break;
       case GET_SEGMENTS_ERROR:
-        draft.isLoading = false;
-        break;
-      case GET_SEGMENT_SUCCESS:
-        draft.currentSegment = action.payload.segment;
-        draft.isLoading = false;
-        break;
-      case GET_SEGMENT_ERROR:
         draft.isLoading = false;
         break;
       case GET_SEGMENT_MEMBERS_BEGIN:
