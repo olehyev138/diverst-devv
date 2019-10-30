@@ -52,6 +52,14 @@ function resourcesReducer(state = initialState, action) {
   /* eslint-disable consistent-return */
   return produce(state, (draft) => {
     switch (action.type) {
+      case GET_FOLDER_BEGIN:
+        draft.isFormLoading = true;
+        break;
+      case GET_FOLDER_SUCCESS:
+        draft.currentFolder = action.payload.folder;
+        draft.valid = !action.payload.folder.password_protected;
+        draft.isFormLoading = false;
+        break;
       case GET_FOLDERS_BEGIN:
         draft.isLoading = true;
         break;
@@ -60,12 +68,11 @@ function resourcesReducer(state = initialState, action) {
         draft.foldersTotal = action.payload.total;
         draft.isLoading = false;
         break;
-      case GET_FOLDER_BEGIN:
+      case GET_RESOURCE_BEGIN:
         draft.isFormLoading = true;
         break;
-      case GET_FOLDER_SUCCESS:
-        draft.currentFolder = action.payload.folder;
-        draft.valid = !action.payload.folder.password_protected;
+      case GET_RESOURCE_SUCCESS:
+        draft.currentResource = action.payload.resource;
         draft.isFormLoading = false;
         break;
       case GET_RESOURCES_BEGIN:
@@ -76,20 +83,13 @@ function resourcesReducer(state = initialState, action) {
         draft.resourcesTotal = action.payload.total;
         draft.isLoading = false;
         break;
-      case GET_RESOURCE_BEGIN:
-        draft.isFormLoading = true;
-        break;
-      case GET_RESOURCE_SUCCESS:
-        draft.currentResource = action.payload.resource;
+      case GET_FOLDER_ERROR:
+      case GET_RESOURCE_ERROR:
         draft.isFormLoading = false;
         break;
       case GET_FOLDERS_ERROR:
       case GET_RESOURCES_ERROR:
         draft.isLoading = false;
-        break;
-      case GET_FOLDER_ERROR:
-      case GET_RESOURCE_ERROR:
-        draft.isFormLoading = false;
         break;
       case CREATE_FOLDER_BEGIN:
       case CREATE_RESOURCE_BEGIN:
