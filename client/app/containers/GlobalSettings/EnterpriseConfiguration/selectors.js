@@ -18,7 +18,7 @@ const selectFormEnterprise = () => createSelector(
       const timezoneArray = enterprise.timezones;
       return produce(enterprise, (draft) => {
         draft.timezones = timezoneArray.map((element) => {
-          if (element[0] === enterprise.time_zone)
+          if (element[1] === enterprise.time_zone)
             draft.time_zone = { label: element[1], value: element[0] };
           return { label: element[1], value: element[0] };
         });

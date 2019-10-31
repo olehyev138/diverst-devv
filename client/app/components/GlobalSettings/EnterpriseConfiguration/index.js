@@ -347,7 +347,7 @@ export function EnterpriseConfiguration(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        props.enterpriseAction(values);
+        props.enterpriseAction(mapFields(values, ['time_zone']));
       }}
 
       render={formikProps => <EnterpriseConfigurationInner {...props} {...formikProps} />}

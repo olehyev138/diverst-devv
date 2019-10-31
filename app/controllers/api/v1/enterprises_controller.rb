@@ -24,7 +24,8 @@ class Api::V1::EnterprisesController < DiverstController
   end
 
   def update_enterprise
-    params[klass.symbol] = payload.except(:id)
+    params[klass.symbol] = payload
+
     enterprise = Enterprise.find(diverst_request.user.enterprise.id)
     base_authorize(enterprise)
 

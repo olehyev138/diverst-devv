@@ -16,13 +16,10 @@ class EnterpriseSerializer < ApplicationRecordSerializer
   end
 
   def timezones
-    ActiveSupport::TimeZone.all.map do |tz|
-      [tz.tzinfo.name, "(GMT#{tz.formatted_offset(true, '')}) #{tz.name}"]
-    end
+    TimeZoneHelpers.timezones
   end
 
-  def timezone
-    tz = ActiveSupport::TimeZone[ActiveSupport::TimeZone::MAPPING.key(object.time_zone)]
-    "(GMT#{tz.formatted_offset(true, '')}) #{tz.name}"
+  def time_zone
+    TimeZoneHelpers.time_zone(object)
   end
 end
