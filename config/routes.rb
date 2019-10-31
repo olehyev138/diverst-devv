@@ -8,7 +8,6 @@ Diverst::Application.routes.draw do
 
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
-
       # manual match for enterprise update - without id
       # match 'enterprises/update_enterprise' => 'enterprises#update_enterprise', via: :post
 
