@@ -9,11 +9,12 @@ import {
   GET_OUTCOMES_SUCCESS, GET_OUTCOME_SUCCESS, GET_OUTCOMES_BEGIN,
   OUTCOMES_UNMOUNT, GET_OUTCOMES_ERROR, GET_OUTCOME_ERROR,
   CREATE_OUTCOME_BEGIN, CREATE_OUTCOME_SUCCESS, CREATE_OUTCOME_ERROR,
-  UPDATE_OUTCOME_BEGIN, UPDATE_OUTCOME_SUCCESS, UPDATE_OUTCOME_ERROR,
+  UPDATE_OUTCOME_BEGIN, UPDATE_OUTCOME_SUCCESS, UPDATE_OUTCOME_ERROR, GET_OUTCOME_BEGIN,
 } from 'containers/Group/Outcome/constants';
 
 export const initialState = {
   isLoading: true,
+  isFormLoading: true,
   isCommitting: false,
   outcomes: [],
   outcomeTotal: null,
@@ -36,12 +37,15 @@ function outcomesReducer(state = initialState, action) {
       case GET_OUTCOMES_ERROR:
         draft.isLoading = false;
         break;
+      case GET_OUTCOME_BEGIN:
+        draft.isFormLoading = true;
+        break;
       case GET_OUTCOME_SUCCESS:
         draft.currentOutcome = action.payload.outcome;
-        draft.isLoading = false;
+        draft.isFormLoading = false;
         break;
       case GET_OUTCOME_ERROR:
-        draft.isLoading = false;
+        draft.isFormLoading = false;
         break;
       case CREATE_OUTCOME_BEGIN:
       case UPDATE_OUTCOME_BEGIN:

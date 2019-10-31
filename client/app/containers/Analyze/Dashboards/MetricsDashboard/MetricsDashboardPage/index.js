@@ -18,7 +18,7 @@ import {
 } from 'containers/Analyze/Dashboards/MetricsDashboard/actions';
 
 // selectors
-import { selectMetricsDashboard } from 'containers/Analyze/Dashboards/MetricsDashboard/selectors';
+import { selectMetricsDashboard, selectIsFormLoading } from 'containers/Analyze/Dashboards/MetricsDashboard/selectors';
 
 import MetricsDashboard from 'components/Analyze/Dashboards/MetricsDashboard/MetricsDashboard';
 
@@ -46,6 +46,7 @@ export function MetricsDashboardPage(props) {
       deleteMetricsDashboardBegin={props.deleteMetricsDashboardBegin}
       metricsDashboard={props.currentMetricsDashboard}
       links={links}
+      isFormLoading={props.isFormLoading}
     />
   );
 }
@@ -55,10 +56,12 @@ MetricsDashboardPage.propTypes = {
   deleteMetricsDashboardBegin: PropTypes.func,
   metricsDashboardsUnmount: PropTypes.func,
   currentMetricsDashboard: PropTypes.object,
+  isFormLoading: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
   currentMetricsDashboard: selectMetricsDashboard(),
+  isFormLoading: selectIsFormLoading(),
 });
 
 const mapDispatchToProps = {

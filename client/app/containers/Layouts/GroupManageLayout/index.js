@@ -3,8 +3,8 @@ import { compose } from 'redux';
 import PropTypes from 'prop-types';
 
 import { withStyles } from '@material-ui/core/styles';
+import Fade from '@material-ui/core/Fade';
 
-import GroupLayout from '../GroupLayout';
 import GroupManageLinks from 'components/Group/GroupManage/GroupManageLinks';
 
 const styles = theme => ({
@@ -37,9 +37,11 @@ const GroupManageLayout = ({ component: Component, classes, ...rest }) => {
         currentTab={tab}
         {...rest}
       />
-      <div className={classes.content}>
-        <Component currentGroup={currentGroup} {...other} />
-      </div>
+      <Fade in appear>
+        <div className={classes.content}>
+          <Component currentGroup={currentGroup} {...other} />
+        </div>
+      </Fade>
     </React.Fragment>
   );
 };

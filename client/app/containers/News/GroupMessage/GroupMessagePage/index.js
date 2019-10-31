@@ -15,7 +15,7 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { selectGroup } from 'containers/Group/selectors';
 import { selectUser } from 'containers/Shared/App/selectors';
-import { selectNewsItem, selectIsCommitting } from 'containers/News/selectors';
+import { selectNewsItem, selectIsCommitting, selectIsFormLoading } from 'containers/News/selectors';
 
 import { getNewsItemBegin, createGroupMessageCommentBegin, newsFeedUnmount } from 'containers/News/actions';
 
@@ -48,6 +48,7 @@ export function GroupMessagePage(props) {
       newsItem={currentNewsItem}
       links={links}
       isCommitting={props.isCommitting}
+      isFormLoading={props.isFormLoading}
     />
   );
 }
@@ -61,6 +62,7 @@ GroupMessagePage.propTypes = {
   currentGroup: PropTypes.object,
   currentNewsItem: PropTypes.object,
   isCommitting: PropTypes.bool,
+  isFormLoading: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -68,6 +70,7 @@ const mapStateToProps = createStructuredSelector({
   currentUser: selectUser(),
   currentNewsItem: selectNewsItem(),
   isCommitting: selectIsCommitting(),
+  isFormLoading: selectIsFormLoading(),
 });
 
 const mapDispatchToProps = {
