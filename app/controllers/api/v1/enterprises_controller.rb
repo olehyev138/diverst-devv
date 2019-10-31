@@ -15,7 +15,12 @@ class Api::V1::EnterprisesController < DiverstController
   end
 
   def get_enterprise
-    render status: 200, json: diverst_request.user.enterprise
+    enterprise = self.diverst_request.user.enterprise
+    base_authorize(enterprise)
+
+    render status: 200, json: enterprise
+  rescue => e
+    raise BadRequestException.new(e.message)
   end
 
   def update_enterprise
