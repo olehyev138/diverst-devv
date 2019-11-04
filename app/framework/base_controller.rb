@@ -33,7 +33,7 @@ module BaseController
     raise BadRequestException.new(e.message)
   end
 
-  def has_many
+  def association
     item = klass.find(params[:id])
     authorize item, :show?
 

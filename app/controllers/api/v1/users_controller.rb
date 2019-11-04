@@ -29,8 +29,6 @@ class Api::V1::UsersController < DiverstController
     item = klass.find(params[:id])
     authorize item, :show?
 
-    p 'YO ITS YA BOI'
-
     render status: 200, json: klass.association_search(self.diverst_request, params), use_serializer: serializer(params)
   rescue => e
     raise BadRequestException.new(e.message)
