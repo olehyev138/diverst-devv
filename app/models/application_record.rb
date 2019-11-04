@@ -31,17 +31,4 @@ class ApplicationRecord < ActiveRecord::Base
     match = sql.match(/WHERE\s(.*)$/)
     "(#{match[1]})"
   end
-
-  def self.current_table_name
-    current_table = current_scope.arel.source.left
-
-    case current_table
-    when Arel::Table
-      current_table.name
-    when Arel::Nodes::TableAlias
-      current_table.right
-    else
-      fail
-    end
-  end
 end

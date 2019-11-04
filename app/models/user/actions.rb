@@ -140,11 +140,6 @@ module User::Actions
     )
     valid_ors << User.sql_where("(#{ group_ors.join(' OR ')}) AND (#{ segment_ors.join(' OR ')})")
 
-    p '-------------------------------------'
-    p query_scopes
-    p valid_ors.join(' OR ')
-    p '-------------------------------------'
-
     ordered = Initiative
                 .left_joins(:initiative_segments, :initiative_participating_groups, :initiative_invitees)
                 .send_chain(query_scopes)
