@@ -26,7 +26,7 @@ exports[`<EnterpriseForm /> <EnterpriseFormInner /> Should render and match the 
         </WithStyles(ForwardRef(Grid))>
       </WithStyles(ForwardRef(Grid))>
       <br />
-      <FormikConnect(FieldInner)
+      <Field
         autoFocus={true}
         component={
           Object {
@@ -409,16 +409,13 @@ exports[`<EnterpriseForm /> <EnterpriseFormInner /> Should render and match the 
 `;
 
 exports[`<EnterpriseForm /> Formik Should render and match the snapshot 1`] = `
-<Formik
-  enableReinitialize={false}
+<ForwardRef
   initialValues={
     Object {
       "email": "",
     }
   }
-  isInitialValid={false}
   onSubmit={[Function]}
-  render={[Function]}
   validateOnBlur={false}
   validateOnChange={false}
   validationSchema={
@@ -482,5 +479,7 @@ exports[`<EnterpriseForm /> Formik Should render and match the snapshot 1`] = `
       ],
     }
   }
-/>
+>
+  <Component />
+</ForwardRef>
 `;
