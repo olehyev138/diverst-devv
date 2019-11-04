@@ -153,9 +153,6 @@ Diverst::Application.routes.draw do
         collection do
           post '/email', to: 'users#find_user_enterprise_by_email'
         end
-        member do
-          get '/association', to: 'users#association'
-        end
       end
       resources :user_groups
       resources :user_roles

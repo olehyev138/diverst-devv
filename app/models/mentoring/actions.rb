@@ -4,8 +4,8 @@ module Mentoring::Actions
   end
 
   module ClassMethods
-    def base_joins
-      [ :mentor, :mentee ]
+    def valid_includes
+      ['mentee', 'mentor']
     end
   end
 end

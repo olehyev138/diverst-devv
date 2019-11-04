@@ -209,10 +209,6 @@ module User::Actions
       %w(active enterprise_mentors mentors mentees)
     end
 
-    def valid_associations
-      %w(mentors mentees)
-    end
-
     def signin(email, password)
       # check for an email and password
       raise BadRequestException.new 'Email and password required' unless email.present? && password.present?

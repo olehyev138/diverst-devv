@@ -20,16 +20,27 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 export function* getMentors(action) {
   try {
     const { payload } = action;
-    const response = yield call(api.users.getAssociation.bind(api.users), payload.userId, {
+    const { type, userId } = payload;
+
+    const query = {};
+    if (type === 'mentors') {
+      query.mentee_id = userId;
+      query.includes = ['mentor'];
+    } else {
+      query.mentor_id = userId;
+      query.includes = ['mentee'];
+    }
+
+    const response = yield call(api.mentorings.all.bind(api.mentorings), {
       ...payload,
-      serializer: 'mentorship',
+      ...query,
     });
     yield put(getMentorsSuccess(response.data.page));
   } catch (err) {
     yield put(getMentorsError(err));
 
     // TODO: intl message
-    yield put(showSnackbar({ message: `Failed to load user's ${action.payload.association}`, options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: 'Failed to load user\'s mentorships', options: { variant: 'warning' } }));
   }
 }
 

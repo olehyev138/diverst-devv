@@ -16,7 +16,7 @@ module BaseSearcher
       [:destroy_all, :delete_all, 'destroy_all', 'delete_all']
     end
 
-    def valid_associations
+    def valid_includes
       []
     end
 
@@ -45,6 +45,31 @@ module BaseSearcher
       end
     end
 
+    def set_includes(params)
+      if params[:includes].presence
+        case params[:includes].class.name
+        when 'Array'
+          includes = params[:includes]
+        when 'String'
+          includes = JSON.parse(params[:includes])
+        else
+          includes = []
+        end
+
+        Clipboard.copy valid_includes
+
+        includes.select { |include|
+          if include.kind_of?(String) || include.kind_of?(Symbol)
+            valid_includes.include?(include)
+          else
+            valid_includes.include?(include.first)
+          end
+        }
+      else
+        []
+      end
+    end
+
     def lookup(params = {}, diverst_request = nil)
       # get the search value
       searchValue = params[:search]
@@ -60,7 +85,7 @@ module BaseSearcher
       where_not = {}
 
       # get the base includes/joins and base query
-      includes = get_includes
+      includes = get_includes(params)
       joins = get_joins
       query = get_base_query
 
@@ -113,85 +138,21 @@ module BaseSearcher
       end
     end
 
-    def has_many_search(item, params = {}, diverst_request = nil)
-      # get the search value
-      searchValue = params[:search]
-
-      # get the id and association
-      raise NameError, 'No association given' if params[:association].blank?
-
-      association = params[:association]
-      raise NameError, 'Invalid association name' unless valid_associations.include? association
-
-      association = association.to_sym
-
-      query_scopes = set_query_scopes(params)
-
-      # the custom args where/where_not clauses
-      where = {}
-      where_not = {}
-
-      # get the base includes/joins and base query
-      includes = get_includes
-      joins = get_joins
-      query = get_base_query
-
-      add_custom_args(where, where_not, params, includes, joins)
-
-      current_user = diverst_request.user
-
-      begin
-        policy_name = self.name + 'Policy'
-        policy_scope = (policy_name + '::Scope').constantize
-
-        # Raise error if Policy exists but Scope doesn't
-        # When scope is not defined it defers to ApplicationPolicy::Scope which has logic we don't necessarily want
-        raise NameError if policy_scope.parent != policy_name.constantize
-
-        # Apply the associated policy scope for the model to filter based on authorization
-        @items = policy_scope.new(current_user, self).resolve
-      rescue NameError
-        # TODO: Uncomment this when we have more policies defined. Commenting now to pass tests early.
-        # raise PolicyScopeNotFoundException
-        warn(
-          '---------------------------------------',
-          '! WARNING !',
-          'It is likely that a policy scope was not found for this model. Ensure that a proper Policy and Scope exist, and filter if necessary (by enterprise, etc.)',
-          '---------------------------------------'
-        )
-        @items = self
-      end
-
-      # search the system
-      if searchValue.present?
-        item
-          .send(association)
-          .send_chain(query_scopes)
-          .where(query, search: "%#{searchValue}%".downcase)
-          .where(where)
-          .where.not(where_not)
-          .distinct
-      else
-        item
-          .send(association)
-          .send_chain(query_scopes)
-          .where(where)
-          .where.not(where_not)
-          .all
-          .distinct
-      end
-    end
-
     def get_base_query
       return {} unless self.respond_to? :base_query
 
       self.base_query
     end
 
-    def get_includes
-      return [] unless self.respond_to? :base_includes
+    def get_includes(params)
+      base_includes = if self.respond_to? :base_includes
+                        self.base_includes
+                      else
+                        []
+                      end
 
-      self.base_includes
+      param_includes = set_includes(params)
+      base_includes | param_includes
     end
 
     def get_joins

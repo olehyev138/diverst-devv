@@ -29,6 +29,10 @@ import {
   selectPaginatedUsers,
   selectUsersTotal,
   selectIsFetchingUsers,
+  selectPaginatedMentors,
+  selectPaginatedMentees,
+  selectMentorshipsTotal,
+  selectIsFetchingMentorships,
 } from 'containers/Mentorship/Mentoring/selectors';
 import {
   getMentorsBegin,
@@ -75,7 +79,7 @@ export function MentorsPage(props) {
 
       const userId = props.user.id;
       if (tab === Types.current)
-        props.getMentorsBegin({ ...params, userId, association: props.type });
+        props.getMentorsBegin({ ...params, userId, type: props.type });
       else
         props.getAvailableMentorsBegin({ ...params, $id: userId, query_scopes: [props.type] });
     }
@@ -133,15 +137,45 @@ export function MentorsPage(props) {
     }
   };
 
+  const selectUsers = () => {
+    if (tab === Types.current)
+      if (props.type === 'mentors')
+        return props.mentors;
+      else if (props.type === 'mentees') {
+        return props.mentees;
+      } else
+        return [];
+    else if (tab === Types.available)
+      return props.available;
+    else
+      return [];
+  };
+
+  const selectTotal = () => {
+    if (tab === Types.current)
+      return props.mentorshipsTotal;
+    if (tab === Types.available)
+      return props.availableTotal;
+    return [];
+  };
+
+  const selectFetching = () => {
+    if (tab === Types.current)
+      return props.isFetchingMentorships;
+    if (tab === Types.available)
+      return props.isFetchingAvailable;
+    return false;
+  };
+
   return (
     <React.Fragment>
       <MentorList
         user={props.user}
         userParams={params}
 
-        users={props.users}
-        userTotal={props.userTotal}
-        isFetchingUsers={props.isFetchingUsers}
+        users={selectUsers()}
+        userTotal={selectTotal()}
+        isFetchingUsers={selectFetching()}
 
         handleMentorPagination={handleMentorPagination}
         handleMentorOrdering={handleMentorOrdering}
@@ -161,20 +195,34 @@ export function MentorsPage(props) {
 MentorsPage.propTypes = {
   type: PropTypes.string,
   user: PropTypes.object,
+
   getMentorsBegin: PropTypes.func.isRequired,
   getAvailableMentorsBegin: PropTypes.func.isRequired,
-  users: PropTypes.array,
-  userTotal: PropTypes.number,
-  isFetchingUsers: PropTypes.bool,
+
+  available: PropTypes.array,
+  availableTotal: PropTypes.number,
+  isFetchingAvailable: PropTypes.bool,
+
+  mentors: PropTypes.array,
+  mentees: PropTypes.array,
+  mentorshipsTotal: PropTypes.number,
+  isFetchingMentorships: PropTypes.bool,
+
   mentorsUnmount: PropTypes.func.isRequired,
+
   deleteMentorshipBegin: PropTypes.func.isRequired,
   requestsMentorshipBegin: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
-  users: selectPaginatedUsers(),
-  userTotal: selectUsersTotal(),
-  isFetchingUsers: selectIsFetchingUsers(),
+  available: selectPaginatedUsers(),
+  availableTotal: selectUsersTotal(),
+  isFetchingAvailable: selectIsFetchingUsers(),
+
+  mentors: selectPaginatedMentors(),
+  mentees: selectPaginatedMentees(),
+  mentorshipsTotal: selectMentorshipsTotal(),
+  isFetchingMentorships: selectIsFetchingMentorships(),
 });
 
 const mapDispatchToProps = {

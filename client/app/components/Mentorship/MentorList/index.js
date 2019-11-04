@@ -43,6 +43,7 @@ const styles = theme => ({
 
 export function MentorList(props, context) {
   const { type } = props;
+  const singleType = type.slice(-1);
 
   const defaultCreatePayload = {
     mentoring_type: type.slice(0, -1),
@@ -90,6 +91,15 @@ export function MentorList(props, context) {
     { title: 'Interests', field: 'interests' },
   ];
 
+  const handleOrderChange = (columnId, orderDir) => {
+    console.log(columnId);
+    console.log(columns);
+    props.handleMentorOrdering({
+      orderBy: (columnId === -1) ? 'users.id' : `users.${columns[columnId].field}`,
+      orderDir: (columnId === -1) ? 'asc' : orderDir
+    });
+  };
+
   return (
     <React.Fragment>
       <Paper>
@@ -108,7 +118,7 @@ export function MentorList(props, context) {
       <DiverstTable
         title={`${props.currentTab === 0 ? 'Your' : 'Available'} ${type.charAt(0).toUpperCase() + type.slice(1)}`}
         handlePagination={props.handleMentorPagination}
-        handleOrdering={props.handleMentorOrdering}
+        onOrderChange={handleOrderChange}
         isLoading={props.isFetchingUsers}
         rowsPerPage={5}
         params={props.params}

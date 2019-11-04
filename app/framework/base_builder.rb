@@ -44,18 +44,6 @@ module BaseBuilder
       item
     end
 
-    def association_search(diverst_request, params)
-      raise BadRequestException.new "#{self.name.titleize} ID required" if params[:id].nil?
-
-      # get the item
-      item = find(params[:id])
-      params.delete(:id)
-
-      Clipboard.copy has_many_search(item, params, diverst_request).to_sql
-
-      pager_with_query(has_many_search(item, params, diverst_request), params)
-    end
-
     def update(diverst_request, params)
       raise BadRequestException.new "#{self.name.titleize} ID required" if params[:id].nil?
       raise BadRequestException.new "#{self.name.titleize} required" if params[symbol].nil?

@@ -23,9 +23,33 @@ const selectIsFetchingUsers = () => createSelector(
   mentorshipState => mentorshipState.isFetchingUsers
 );
 
+const selectPaginatedMentors = () => createSelector(
+  selectMentoringDomain,
+  mentorshipState => mentorshipState.mentorshipList.map(mentorship => mentorship.mentor)
+);
+
+const selectPaginatedMentees = () => createSelector(
+  selectMentoringDomain,
+  mentorshipState => mentorshipState.mentorshipList.map(mentorship => mentorship.mentee)
+);
+
+const selectMentorshipsTotal = () => createSelector(
+  selectMentoringDomain,
+  mentorshipState => mentorshipState.mentorshipListTotal
+);
+
+const selectIsFetchingMentorships = () => createSelector(
+  selectMentoringDomain,
+  mentorshipState => mentorshipState.isFetchingMentorships
+);
+
 
 export {
   selectPaginatedUsers,
   selectUsersTotal,
   selectIsFetchingUsers,
+  selectPaginatedMentors,
+  selectPaginatedMentees,
+  selectMentorshipsTotal,
+  selectIsFetchingMentorships,
 };
