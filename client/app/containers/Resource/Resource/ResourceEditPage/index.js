@@ -19,7 +19,7 @@ import RouteService from 'utils/routeHelpers';
 import { selectUser, selectEnterprise } from 'containers/Shared/App/selectors';
 import {
   selectFormFolder, selectPaginatedSelectFolders, selectValid,
-  selectFormResource, selectIsCommitting
+  selectFormResource, selectIsCommitting, selectIsFormLoading
 } from 'containers/Resource/selectors';
 
 import {
@@ -66,6 +66,7 @@ export function FolderEditPage(props) {
 
   return (
     <ResourceForm
+      edit
       getFoldersBegin={props.getFoldersBegin}
       selectFolders={props.folders}
       resourceAction={props.updateResourceBegin}
@@ -77,6 +78,7 @@ export function FolderEditPage(props) {
       links={links}
       type={type}
       isCommitting={props.isCommitting}
+      isFormLoading={props.isFormLoading}
     />
   );
 }
@@ -98,6 +100,7 @@ FolderEditPage.propTypes = {
   folders: PropTypes.array,
   valid: PropTypes.bool,
   isCommitting: PropTypes.bool,
+  isFormLoading: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -108,6 +111,7 @@ const mapStateToProps = createStructuredSelector({
   currentEnterprise: selectEnterprise(),
   valid: selectValid(),
   isCommitting: selectIsCommitting(),
+  isFormLoading: selectIsFormLoading(),
 });
 
 const mapDispatchToProps = {

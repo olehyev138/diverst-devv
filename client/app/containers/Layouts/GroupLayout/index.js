@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 
 import Container from '@material-ui/core/Container';
+import Fade from '@material-ui/core/Fade';
 import { withStyles } from '@material-ui/core/styles';
 
 import GroupLinks from 'components/Group/GroupLinks';
@@ -60,20 +61,22 @@ const GroupLayout = ({ component: Component, classes, ...rest }) => {
         <React.Fragment>
           <GroupLinks {...other} />
           <Scrollbar>
-            <Container>
-              <div className={classes.content}>
-                {currentGroup && (
-                  <React.Fragment>
-                    {disableBreadcrumbs !== true ? (
-                      <DiverstBreadcrumbs />
-                    ) : (
-                      <React.Fragment />
-                    )}
-                    <Component currentGroup={currentGroup} {...rest} />
-                  </React.Fragment>
-                )}
-              </div>
-            </Container>
+            <Fade in appear>
+              <Container>
+                <div className={classes.content}>
+                  {currentGroup && (
+                    <React.Fragment>
+                      {disableBreadcrumbs !== true ? (
+                        <DiverstBreadcrumbs />
+                      ) : (
+                        <React.Fragment />
+                      )}
+                      <Component currentGroup={currentGroup} {...rest} />
+                    </React.Fragment>
+                  )}
+                </div>
+              </Container>
+            </Fade>
           </Scrollbar>
         </React.Fragment>
       )}

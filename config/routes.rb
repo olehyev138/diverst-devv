@@ -8,6 +8,9 @@ Diverst::Application.routes.draw do
 
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
+      # manual match for enterprise update - without id
+      # match 'enterprises/update_enterprise' => 'enterprises#update_enterprise', via: :post
+
       resources :api_keys
       resources :annual_budgets
       resources :answers
@@ -30,6 +33,10 @@ Diverst::Application.routes.draw do
       resources :emails
       resources :email_variables
       resources :enterprises do
+        collection do
+          get 'get_enterprise', to: 'enterprises#get_enterprise'
+          post 'update_enterprise', to: 'enterprises#update_enterprise'
+        end
         member do
           post '/sso_login',    to: 'enterprises#sso_login'
           post '/sso_link',     to: 'enterprises#sso_link'
