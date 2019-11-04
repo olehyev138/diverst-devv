@@ -92,8 +92,6 @@ export function MentorList(props, context) {
   ];
 
   const handleOrderChange = (columnId, orderDir) => {
-    console.log(columnId);
-    console.log(columns);
     props.handleMentorOrdering({
       orderBy: (columnId === -1) ? 'users.id' : `users.${columns[columnId].field}`,
       orderDir: (columnId === -1) ? 'asc' : orderDir

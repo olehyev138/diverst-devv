@@ -146,10 +146,10 @@ module BaseSearcher
 
     def get_includes(params)
       base_includes = if self.respond_to? :base_includes
-                        self.base_includes
-                      else
-                        []
-                      end
+        self.base_includes
+      else
+        []
+      end
 
       param_includes = set_includes(params)
       base_includes | param_includes
