@@ -23,6 +23,17 @@
           </p>
         </div>
       </div>
+      <% if @tags.present? %>
+        <row>
+          <div class="col">
+            <p>
+              <% @tags.each do |tag| %>
+                <%= link_to "##{tag.name}", group_posts_path(@group, search: tag.name) %>
+              <% end %>
+            </p>
+          </div>
+        </row>
+      <% end %>
     </div>
   </div>
 </div>

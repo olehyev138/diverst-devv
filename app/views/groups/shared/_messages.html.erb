@@ -22,6 +22,15 @@
               <br>
               <i>by <%= message.owner.name_with_status %></i>
             <% end %>
+            <p>
+              <% unless message.news_tags.size == 0 %>
+                <strong>Tags: </strong>
+                <% message.news_tags.limit(5).each do |tag| %>
+                  <%= link_to "##{tag.name}", group_posts_path(message.group, search: tag.name) %>
+                <% end %>
+                <%= '...' if message.news_tags.size > 5 %>
+              <% end %>
+            </p>
             <div class="row">
               <div class="col commentsLink">
                 <%= link_to "Comments(#{message.comments_count})", group_group_message_path(message.group, message) %>

@@ -10,6 +10,8 @@ class GroupMessage < BaseClass
   belongs_to :group
 
   has_one :news_feed_link
+  has_many :news_tags, through: :news_feed_link
+
   after_create :approve_link
   after_create :post_new_message_to_slack, unless: Proc.new { Rails.env.test? }
 

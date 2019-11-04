@@ -19,6 +19,8 @@ Rails.application.routes.draw do
 
   get 'omniauth/:provider/callback', to: 'omni_auth#callback', as: 'omniauth_callback'
 
+  get 'tags', to: 'news_tags#tags_search'
+
   resources :onboarding, only: [:index]
 
   namespace :api, defaults: { format: :json } do

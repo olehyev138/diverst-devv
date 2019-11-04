@@ -904,6 +904,14 @@ ActiveRecord::Schema.define(version: 20191104145811) do
     t.integer  "social_link_segment_id",    limit: 4
   end
 
+  create_table "news_feed_link_tags", id: false, force: :cascade do |t|
+    t.integer "news_feed_link_id", limit: 4
+    t.string  "news_tag_name",     limit: 191
+  end
+
+  add_index "news_feed_link_tags", ["news_feed_link_id", "news_tag_name"], name: "index_news_feed_link_tags_on_news_feed_link_id_and_news_tag_name", using: :btree
+  add_index "news_feed_link_tags", ["news_tag_name", "news_feed_link_id"], name: "index_news_feed_link_tags_on_news_tag_name_and_news_feed_link_id", using: :btree
+
   create_table "news_feed_links", force: :cascade do |t|
     t.integer  "news_feed_id",     limit: 4
     t.boolean  "approved",                   default: false
@@ -962,6 +970,12 @@ ActiveRecord::Schema.define(version: 20191104145811) do
     t.integer  "picture_file_size",    limit: 4
     t.datetime "picture_updated_at"
     t.integer  "author_id",            limit: 4
+  end
+
+  create_table "news_tags", id: false, force: :cascade do |t|
+    t.string   "name",       limit: 191
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
   end
 
   create_table "outcomes", force: :cascade do |t|

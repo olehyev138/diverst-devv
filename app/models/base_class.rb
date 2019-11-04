@@ -106,17 +106,16 @@ class BaseClass < ActiveRecord::Base
       raise "#{field} is not a field of #{self.class}" if reflection.blank?
 
       chain = reflection.chain.reverse
-      table_name = self.table_name
-      full_join + chain.reduce(['', table_name]) do |sum, n|
+      full_join + chain.reduce(['', self]) do |sum, n|
         if joined.include?([n.klass, n.foreign_key])
           sum
         else
           joined.append([n.klass, n.foreign_key])
           [
             n.source_macro == :belongs_to ?
-              sum[0] + " LEFT JOIN `#{n.klass.table_name}` ON `#{n.klass.table_name}`.`id` = `#{sum[1]}`.`#{n.foreign_key}`" :
-              sum[0] + " LEFT JOIN `#{n.klass.table_name}` ON `#{sum[1]}`.`id` = `#{n.klass.table_name}`.`#{n.foreign_key}`",
-            n.klass.table_name
+              sum[0] + " LEFT JOIN `#{n.klass.table_name}` ON `#{n.klass.table_name}`.`#{n.klass.primary_key}` = `#{sum[1].table_name}`.`#{n.foreign_key}`" :
+              sum[0] + " LEFT JOIN `#{n.klass.table_name}` ON `#{sum[1].table_name}`.`#{sum[1].primary_key}` = `#{n.klass.table_name}`.`#{n.foreign_key}`",
+            n.klass
           ]
         end
       end[0]
