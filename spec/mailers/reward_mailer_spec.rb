@@ -98,7 +98,7 @@ RSpec.describe RewardMailer, type: :mailer do
       end
 
       it 'renders the receiver email' do
-        expect(mail.to).to eq([responsible.email])
+        expect(mail.to).to eq([user.email])
       end
 
       it 'renders the sender email' do
@@ -173,7 +173,7 @@ RSpec.describe RewardMailer, type: :mailer do
       end
 
       it 'renders the receiver email' do
-        expect(mail.to).to eq([responsible.email])
+        expect(mail.to).to eq([user.email])
       end
 
       it 'renders the sender email' do
