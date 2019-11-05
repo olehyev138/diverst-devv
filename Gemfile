@@ -2,11 +2,12 @@ source 'https://rubygems.org'
 
 ruby '2.6.0'
 
-gem 'actionmailer', '~> 5.0'
-gem 'actionpack', '~> 5.0'
-gem 'active_model_serializers', '~> 0.10.9'
+gem 'mini_magick', '~> 4.9.5'
+gem 'actionmailer', '~> 5.2.3'
+gem 'actionpack', '~> 5.2.3'
+gem 'active_model_serializers', '~> 0.10.10'
 gem 'active_record_union'
-gem 'activerecord', '~> 5.0'
+gem 'activerecord', '~> 5.2.3'
 gem 'activerecord-import', '~> 0.14.0' # Adds a faster way to INSERT multiple rows in the DB
 gem 'autoprefixer-rails', '~> 6.3', '>= 6.3.3.1' # Automatically adds vendor prefixes to CSS declarations
 gem 'aws-sdk', '< 2.0'# The official AWS SDK
@@ -34,7 +35,6 @@ gem 'linkedin-oauth2', '~> 1.0' # OAuth for LinkedIn
 gem 'liquid', '~> 3.0', '>= 3.0.6' # Templating engine used for email templates
 gem 'mailgun_rails', '~> 0.8.0'
 gem 'mysql2', '~> 0.5.2'
-gem 'paperclip', '~> 4.3'# Handle attachments for models and forms
 gem 'pismo', '~> 0.7.4' # Extracts metadata from an URL
 gem 'public_activity'
 gem 'puma', '~> 3.1' # Better web server than WEBRick
@@ -42,8 +42,8 @@ gem 'pundit', '~> 2.0.0'# Authorization
 gem 'rack-cors', '~> 0.4.0', require: 'rack/cors' # will be used to support mobile
 gem 'rack-rewrite', '~> 1.5' # A rack middleware for enforcing rewrite rules. In many cases you can get away with rack-rewrite instead of writing Apache mod_rewrite rules.
 gem 'rack-timeout', '~> 0.4.2'
-gem 'rails', '~> 5.0'
-gem 'railties', '~> 5.0'
+gem 'rails', '~> 5.2.3'
+gem 'railties', '~> 5.2.3'
 gem 'rollbar', '~> 2.14.1'
 gem 'rqrcode', '~> 0.10.1', require: false
 gem 'ruby-oembed', '~> 0.12', git: 'https://github.com/TeamDiverst/ruby-oembed.git'
