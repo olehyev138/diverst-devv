@@ -91,12 +91,12 @@ describe('actions', () => {
     expect(getFoldersSuccess({ payload: 'payload' })).toEqual(expected);
   });
 
-  it('has a type of GET_FOLDERS_ERROR and sets a given payload', () => {
+  it('has a type of GET_FOLDERS_ERROR and gives an error message', () => {
     const expected = {
       type: GET_FOLDERS_ERROR,
-      payload: { payload: 'payload' }
+      error: { error: 'error'}
     };
-    expect(getFoldersError({ payload: 'payload' })).toEqual(expected);
+    expect(getFoldersError({ error:'error' })).toEqual(expected);
   });
 
   it('has a type of GET_FOLDER_BEGIN and sets a given payload', () => {
@@ -115,12 +115,12 @@ describe('actions', () => {
     expect(getFolderSuccess({ payload: 'payload' })).toEqual(expected);
   });
 
-  it('has a type of GET_FOLDER_ERROR and sets a given payload', () => {
+  it('has a type of GET_FOLDER_ERROR and gives an error message', () => {
     const expected = {
       type: GET_FOLDER_ERROR,
-      payload: { payload: 'payload' }
+      error: { error: 'error' }
     };
-    expect(getFolderError({ payload: 'payload' })).toEqual(expected);
+    expect(getFolderError({ error: 'error' })).toEqual(expected);
   });
 
   it('has a type of CREATE_FOLDER_BEGIN and sets a given payload', () => {
@@ -139,12 +139,12 @@ describe('actions', () => {
     expect(createFolderSuccess({ payload: 'payload' })).toEqual(expected);
   });
 
-  it('has a type of CREATE_FOLDER_ERROR and sets a given payload', () => {
+  it('has a type of CREATE_FOLDER_ERROR and gives an error message', () => {
     const expected = {
       type: CREATE_FOLDER_ERROR,
-      payload: { payload: 'payload' }
+      error: { error: 'error' }
     };
-    expect(createFolderError({ payload: 'payload' })).toEqual(expected);
+    expect(createFolderError({ error: 'error' })).toEqual(expected);
   });
 
   it('has a type of DELETE_FOLDER_BEGIN and sets a given payload', () => {
@@ -152,7 +152,7 @@ describe('actions', () => {
       type: DELETE_FOLDER_BEGIN,
       payload: { payload: 'payload' }
     };
-    expect(deleteFolderBegin ({ payload: 'payload' })).toEqual(expected);
+    expect(deleteFolderBegin({ payload: 'payload' })).toEqual(expected);
   });
 
   it('has a type of DELETE_FOLDER_SUCCESS and sets a given payload', () => {
@@ -160,15 +160,15 @@ describe('actions', () => {
       type: DELETE_FOLDER_SUCCESS,
       payload: { payload: 'payload' }
     };
-    expect(deleteFolderSuccess ({ payload: 'payload' })).toEqual(expected);
+    expect(deleteFolderSuccess({ payload: 'payload' })).toEqual(expected);
   });
 
-  it('has a type of DELETE_FOLDER_ERROR and sets a given payload', () => {
+  it('has a type of DELETE_FOLDER_ERROR and gives an error message', () => {
     const expected = {
       type: DELETE_FOLDER_ERROR,
-      payload: { payload: 'payload' }
+      error: { error: 'error' }
     };
-    expect(deleteFolderError({ payload: 'payload' })).toEqual(expected);
+    expect(deleteFolderError({ error: 'error' })).toEqual(expected);
   });
 
   it('has a type of VALIDATE_FOLDER_PASSWORD_BEGIN and sets a given payload', () => {
@@ -187,12 +187,12 @@ describe('actions', () => {
     expect(validateFolderPasswordSuccess({ payload: 'payload' })).toEqual(expected);
   });
 
-  it('has a type of VALIDATE_FOLDER_PASSWORD_ERROR and sets a given payload', () => {
+  it('has a type of VALIDATE_FOLDER_PASSWORD_ERROR and gives an error message', () => {
     const expected = {
       type: VALIDATE_FOLDER_PASSWORD_ERROR,
-      payload: { payload: 'payload' }
+      error: { error: 'error' }
     };
-    expect(validateFolderPasswordError({ payload: 'payload' })).toEqual(expected);
+    expect(validateFolderPasswordError({ error: 'error' })).toEqual(expected);
   });
 
   it('has a type of UPDATE_FOLDER_BEGIN and sets a given payload', () => {
@@ -211,28 +211,27 @@ describe('actions', () => {
     expect(updateFolderSuccess({ payload: 'payload' })).toEqual(expected);
   });
 
-  it('has a type of UPDATE_FOLDER_ERROR and sets a given payload', () => {
+  it('has a type of UPDATE_FOLDER_ERROR and gives an error message', () => {
     const expected = {
       type: UPDATE_FOLDER_ERROR,
-      payload: { payload: 'payload' }
+      error: { error: 'error' }
     };
-    expect(updateFolderError({ payload: 'payload' })).toEqual(expected);
+    expect(updateFolderError({ error: 'error' })).toEqual(expected);
   });
 
-  it('has a type of UPDATE_FOLDER_ERROR and sets a given payload', () => {
+  it('has a type of UPDATE_FOLDER_ERROR and gives an error message', () => {
     const expected = {
       type: UPDATE_FOLDER_ERROR,
-      payload: { payload: 'payload' }
+      error: { error: 'error' }
     };
-    expect(updateFolderError({ payload: 'payload' })).toEqual(expected);
+    expect(updateFolderError({ error: 'error' })).toEqual(expected);
   });
 
   it('has a type of FOLDERS_UNMOUNT and sets a given payload', () => {
     const expected = {
       type: FOLDERS_UNMOUNT,
-      payload: { payload: 'payload' }
     };
-    expect(foldersUnmount({ payload: 'payload' })).toEqual(expected);
+    expect(foldersUnmount()).toEqual(expected);
   });
 
   it('has a type of GET_RESOURCES_BEGIN and sets a given payload', () => {
@@ -251,12 +250,12 @@ describe('actions', () => {
     expect(getResourcesSuccess({ payload: 'payload' })).toEqual(expected);
   });
 
-  it('has a type of GET_RESOURCES_ERROR and sets a given payload', () => {
+  it('has a type of GET_RESOURCES_ERROR and gives an error message', () => {
     const expected = {
       type: GET_RESOURCES_ERROR,
-      payload: { payload: 'payload' }
+      error: { error: 'error' }
     };
-    expect(getResourcesError({ payload: 'payload' })).toEqual(expected);
+    expect(getResourcesError({ error: 'error' })).toEqual(expected);
   });
 
   it('has a type of CREATE_RESOURCE_BEGIN and sets a given payload', () => {
@@ -275,12 +274,12 @@ describe('actions', () => {
     expect(createResourceSuccess({ payload: 'payload' })).toEqual(expected);
   });
 
-  it('has a type of CREATE_RESOURCE_ERROR and sets a given payload', () => {
+  it('has a type of CREATE_RESOURCE_ERROR and gives an error message', () => {
     const expected = {
       type: CREATE_RESOURCE_ERROR,
-      payload: { payload: 'payload' }
+      error: { error: 'error' }
     };
-    expect(createResourceError({ payload: 'payload' })).toEqual(expected);
+    expect(createResourceError({ error: 'error' })).toEqual(expected);
   });
 
   it('has a type of DELETE_RESOURCE_BEGIN and sets a given payload', () => {
@@ -299,12 +298,12 @@ describe('actions', () => {
     expect(deleteResourceSuccess({ payload: 'payload' })).toEqual(expected);
   });
 
-  it('has a type of DELETE_RESOURCE_ERROR and sets a given payload', () => {
+  it('has a type of DELETE_RESOURCE_ERROR and gives an error message', () => {
     const expected = {
       type: DELETE_RESOURCE_ERROR,
-      payload: { payload: 'payload' }
+      error: { error: 'error' }
     };
-    expect(deleteResourceError({ payload: 'payload' })).toEqual(expected);
+    expect(deleteResourceError({ error: 'error' })).toEqual(expected);
   });
 
   it('has a type of GET_RESOURCE_BEGIN and sets a given payload', () => {
@@ -323,12 +322,12 @@ describe('actions', () => {
     expect(getResourceSuccess({ payload: 'payload' })).toEqual(expected);
   });
 
-  it('has a type of GET_RESOURCE_ERROR and sets a given payload', () => {
+  it('has a type of GET_RESOURCE_ERROR and gives an error message', () => {
     const expected = {
       type: GET_RESOURCE_ERROR,
-      payload: { payload: 'payload' }
+      error: { error: 'error' }
     };
-    expect(getResourceError({ payload: 'payload' })).toEqual(expected);
+    expect(getResourceError({ error: 'error' })).toEqual(expected);
   });
 
   it('has a type of UPDATE_RESOURCE_BEGIN and sets a given payload', () => {
@@ -347,19 +346,19 @@ describe('actions', () => {
     expect(updateResourceSuccess({ payload: 'payload' })).toEqual(expected);
   });
 
-  it('has a type of UPDATE_RESOURCE_ERROR and sets a given payload', () => {
+  it('has a type of UPDATE_RESOURCE_ERROR and gives an error message', () => {
     const expected = {
       type: UPDATE_RESOURCE_ERROR,
-      payload: { payload: 'payload' }
+      error: { error: 'error' }
     };
-    expect(updateResourceError({ payload: 'payload' })).toEqual(expected);
+    expect(updateResourceError({ error: 'error' })).toEqual(expected);
   });
 
   it('has a type of RESOURCES_UNMOUNT and sets a given payload', () => {
     const expected = {
       type: RESOURCES_UNMOUNT,
-      payload: { payload: 'payload' }
     };
-    expect(resourcesUnmount({ payload: 'payload' })).toEqual(expected);
+
+    expect(resourcesUnmount()).toEqual(expected);
   });
 });
