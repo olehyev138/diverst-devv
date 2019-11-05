@@ -57,7 +57,7 @@ module Diverst
     config.filter_parameters += [:password]
 
     # Enable the asset pipeline
-    config.assets.enabled = false
+    # config.assets.enabled = true
 
     config.middleware.use ActiveRecord::Migration::CheckPending
     config.middleware.use Rack::Deflater
