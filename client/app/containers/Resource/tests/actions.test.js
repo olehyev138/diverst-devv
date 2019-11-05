@@ -80,6 +80,7 @@ describe('actions', () => {
       type: GET_FOLDERS_BEGIN,
       payload: { payload: 'payload' }
     };
+
     expect(getFoldersBegin({ payload: 'payload' })).toEqual(expected);
   });
 
@@ -88,15 +89,17 @@ describe('actions', () => {
       type: GET_FOLDERS_SUCCESS,
       payload: { payload: 'payload' }
     };
+
     expect(getFoldersSuccess({ payload: 'payload' })).toEqual(expected);
   });
 
   it('has a type of GET_FOLDERS_ERROR and gives an error message', () => {
     const expected = {
       type: GET_FOLDERS_ERROR,
-      error: { error: 'error'}
+      error: { error: 'error' }
     };
-    expect(getFoldersError({ error:'error' })).toEqual(expected);
+
+    expect(getFoldersError({ error: 'error' })).toEqual(expected);
   });
 
   it('has a type of GET_FOLDER_BEGIN and sets a given payload', () => {
@@ -104,6 +107,7 @@ describe('actions', () => {
       type: GET_FOLDER_BEGIN,
       payload: { payload: 'payload' }
     };
+
     expect(getFolderBegin({ payload: 'payload' })).toEqual(expected);
   });
 
@@ -112,6 +116,7 @@ describe('actions', () => {
       type: GET_FOLDER_SUCCESS,
       payload: { payload: 'payload' }
     };
+
     expect(getFolderSuccess({ payload: 'payload' })).toEqual(expected);
   });
 
@@ -120,6 +125,7 @@ describe('actions', () => {
       type: GET_FOLDER_ERROR,
       error: { error: 'error' }
     };
+
     expect(getFolderError({ error: 'error' })).toEqual(expected);
   });
 
@@ -128,6 +134,7 @@ describe('actions', () => {
       type: CREATE_FOLDER_BEGIN,
       payload: { payload: 'payload' }
     };
+
     expect(createFolderBegin({ payload: 'payload' })).toEqual(expected);
   });
 
@@ -136,6 +143,7 @@ describe('actions', () => {
       type: CREATE_FOLDER_SUCCESS,
       payload: { payload: 'payload' }
     };
+
     expect(createFolderSuccess({ payload: 'payload' })).toEqual(expected);
   });
 
@@ -144,6 +152,7 @@ describe('actions', () => {
       type: CREATE_FOLDER_ERROR,
       error: { error: 'error' }
     };
+
     expect(createFolderError({ error: 'error' })).toEqual(expected);
   });
 
@@ -152,6 +161,7 @@ describe('actions', () => {
       type: DELETE_FOLDER_BEGIN,
       payload: { payload: 'payload' }
     };
+
     expect(deleteFolderBegin({ payload: 'payload' })).toEqual(expected);
   });
 
@@ -160,6 +170,7 @@ describe('actions', () => {
       type: DELETE_FOLDER_SUCCESS,
       payload: { payload: 'payload' }
     };
+
     expect(deleteFolderSuccess({ payload: 'payload' })).toEqual(expected);
   });
 
@@ -168,6 +179,7 @@ describe('actions', () => {
       type: DELETE_FOLDER_ERROR,
       error: { error: 'error' }
     };
+
     expect(deleteFolderError({ error: 'error' })).toEqual(expected);
   });
 
@@ -176,6 +188,7 @@ describe('actions', () => {
       type: VALIDATE_FOLDER_PASSWORD_BEGIN,
       payload: { payload: 'payload' }
     };
+
     expect(validateFolderPasswordBegin({ payload: 'payload' })).toEqual(expected);
   });
 
@@ -200,6 +213,7 @@ describe('actions', () => {
       type: UPDATE_FOLDER_BEGIN,
       payload: { payload: 'payload' }
     };
+
     expect(updateFolderBegin({ payload: 'payload' })).toEqual(expected);
   });
 
@@ -208,6 +222,7 @@ describe('actions', () => {
       type: UPDATE_FOLDER_SUCCESS,
       payload: { payload: 'payload' }
     };
+
     expect(updateFolderSuccess({ payload: 'payload' })).toEqual(expected);
   });
 
@@ -216,6 +231,7 @@ describe('actions', () => {
       type: UPDATE_FOLDER_ERROR,
       error: { error: 'error' }
     };
+
     expect(updateFolderError({ error: 'error' })).toEqual(expected);
   });
 
@@ -224,6 +240,7 @@ describe('actions', () => {
       type: UPDATE_FOLDER_ERROR,
       error: { error: 'error' }
     };
+
     expect(updateFolderError({ error: 'error' })).toEqual(expected);
   });
 
@@ -231,6 +248,7 @@ describe('actions', () => {
     const expected = {
       type: FOLDERS_UNMOUNT,
     };
+
     expect(foldersUnmount()).toEqual(expected);
   });
 
@@ -239,6 +257,7 @@ describe('actions', () => {
       type: GET_RESOURCES_BEGIN,
       payload: { payload: 'payload' }
     };
+
     expect(getResourcesBegin({ payload: 'payload' })).toEqual(expected);
   });
 
@@ -247,6 +266,7 @@ describe('actions', () => {
       type: GET_RESOURCES_SUCCESS,
       payload: { payload: 'payload' }
     };
+
     expect(getResourcesSuccess({ payload: 'payload' })).toEqual(expected);
   });
 
@@ -255,6 +275,7 @@ describe('actions', () => {
       type: GET_RESOURCES_ERROR,
       error: { error: 'error' }
     };
+
     expect(getResourcesError({ error: 'error' })).toEqual(expected);
   });
 
@@ -263,6 +284,7 @@ describe('actions', () => {
       type: CREATE_RESOURCE_BEGIN,
       payload: { payload: 'payload' }
     };
+
     expect(createResourceBegin({ payload: 'payload' })).toEqual(expected);
   });
 
@@ -271,6 +293,7 @@ describe('actions', () => {
       type: CREATE_RESOURCE_SUCCESS,
       payload: { payload: 'payload' }
     };
+
     expect(createResourceSuccess({ payload: 'payload' })).toEqual(expected);
   });
 
@@ -279,6 +302,7 @@ describe('actions', () => {
       type: CREATE_RESOURCE_ERROR,
       error: { error: 'error' }
     };
+
     expect(createResourceError({ error: 'error' })).toEqual(expected);
   });
 
@@ -287,6 +311,7 @@ describe('actions', () => {
       type: DELETE_RESOURCE_BEGIN,
       payload: { payload: 'payload' }
     };
+
     expect(deleteResourceBegin({ payload: 'payload' })).toEqual(expected);
   });
 
@@ -295,6 +320,7 @@ describe('actions', () => {
       type: DELETE_RESOURCE_SUCCESS,
       payload: { payload: 'payload' }
     };
+
     expect(deleteResourceSuccess({ payload: 'payload' })).toEqual(expected);
   });
 
@@ -303,6 +329,7 @@ describe('actions', () => {
       type: DELETE_RESOURCE_ERROR,
       error: { error: 'error' }
     };
+
     expect(deleteResourceError({ error: 'error' })).toEqual(expected);
   });
 
@@ -311,6 +338,7 @@ describe('actions', () => {
       type: GET_RESOURCE_BEGIN,
       payload: { payload: 'payload' }
     };
+
     expect(getResourceBegin({ payload: 'payload' })).toEqual(expected);
   });
 
@@ -319,6 +347,7 @@ describe('actions', () => {
       type: GET_RESOURCE_SUCCESS,
       payload: { payload: 'payload' }
     };
+
     expect(getResourceSuccess({ payload: 'payload' })).toEqual(expected);
   });
 
@@ -327,6 +356,7 @@ describe('actions', () => {
       type: GET_RESOURCE_ERROR,
       error: { error: 'error' }
     };
+
     expect(getResourceError({ error: 'error' })).toEqual(expected);
   });
 
@@ -335,6 +365,7 @@ describe('actions', () => {
       type: UPDATE_RESOURCE_BEGIN,
       payload: { payload: 'payload' }
     };
+
     expect(updateResourceBegin({ payload: 'payload' })).toEqual(expected);
   });
 
@@ -343,6 +374,7 @@ describe('actions', () => {
       type: UPDATE_RESOURCE_SUCCESS,
       payload: { payload: 'payload' }
     };
+
     expect(updateResourceSuccess({ payload: 'payload' })).toEqual(expected);
   });
 
@@ -351,6 +383,7 @@ describe('actions', () => {
       type: UPDATE_RESOURCE_ERROR,
       error: { error: 'error' }
     };
+
     expect(updateResourceError({ error: 'error' })).toEqual(expected);
   });
 
