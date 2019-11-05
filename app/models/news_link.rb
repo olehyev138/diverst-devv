@@ -32,9 +32,9 @@ class NewsLink < ApplicationRecord
   validates :author_id,       presence: true
   validates :url,             length: { maximum: 191 }
 
-  # Paperclip
-  has_attached_file :picture, styles: { medium: '1000x300>', thumb: '100x100>' }, s3_permissions: :private
-  validates_attachment_content_type :picture, content_type: %r{\Aimage\/.*\Z}
+  # Paperclip TODO
+  #has_attached_file :picture, styles: { medium: '1000x300>', thumb: '100x100>' }, s3_permissions: :private
+  #validates_attachment_content_type :picture, content_type: %r{\Aimage\/.*\Z}
 
   after_create :build_default_link
   after_destroy :remove_news_feed_link

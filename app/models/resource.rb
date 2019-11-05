@@ -16,10 +16,10 @@ class Resource < ApplicationRecord
 
   accepts_nested_attributes_for :tags
 
-  # Paperclip
-  has_attached_file :file, s3_permissions: 'private'
-  validates_with AttachmentPresenceValidator, attributes: :file, if: Proc.new { |r| r.url.blank? }
-  do_not_validate_attachment_file_type :file
+  # Paperclip TODO
+  #has_attached_file :file, s3_permissions: 'private'
+  #validates_with AttachmentPresenceValidator, attributes: :file, if: Proc.new { |r| r.url.blank? }
+  #do_not_validate_attachment_file_type :file
 
   validates_length_of :resource_type, maximum: 191
   validates_length_of :file_content_type, maximum: 191

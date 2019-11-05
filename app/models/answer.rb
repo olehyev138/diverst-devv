@@ -13,7 +13,7 @@ class Answer < ApplicationRecord
 
   belongs_to :contributing_group, class_name: 'Group'
 
-  # Paperclip
+  # Paperclip TODO
   # has_attached_file :supporting_document, s3_permissions: 'private'
   # do_not_validate_attachment_file_type :supporting_document
 

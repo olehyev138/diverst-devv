@@ -28,12 +28,12 @@ class Campaign < ApplicationRecord
   validates_length_of :description, maximum: 65535
   validates_length_of :title, maximum: 191
 
-  # Paperclip
-  has_attached_file :image, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: 'private'
-  validates_attachment_content_type :image, content_type: %r{\Aimage\/.*\Z}
+  # Paperclip TODO
+  #has_attached_file :image, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: 'private'
+  #validates_attachment_content_type :image, content_type: %r{\Aimage\/.*\Z}
 
-  has_attached_file :banner, styles: { medium: '1200x1200>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: 'private'
-  validates_attachment_content_type :banner, content_type: %r{\Aimage\/.*\Z}
+  #has_attached_file :banner, styles: { medium: '1200x1200>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: 'private'
+  #validates_attachment_content_type :banner, content_type: %r{\Aimage\/.*\Z}
 
   validates :title,       presence: true
   validates :description, presence: true

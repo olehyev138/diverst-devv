@@ -116,12 +116,12 @@ class Group < ApplicationRecord
   belongs_to :group_category
   belongs_to :group_category_type
 
-  # Paperclip
+  # Paperclip TODO
   # re-add to allow migration file to run
   # has_attached_file :sponsor_media, s3_permissions: :private
   # do_not_validate_attachment_file_type :sponsor_media
 
-  has_attached_file :logo, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: :private
+  #has_attached_file :logo, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: :private
   validates_length_of :event_attendance_visibility, maximum: 191
   validates_length_of :unit_of_expiry_age, maximum: 191
   validates_length_of :home_message, maximum: 65535
@@ -144,10 +144,10 @@ class Group < ApplicationRecord
   validates_length_of :logo_file_name, maximum: 191
   validates_length_of :description, maximum: 65535
   validates_length_of :name, maximum: 191
-  validates_attachment_content_type :logo, content_type: %r{\Aimage\/.*\Z}
+  #validates_attachment_content_type :logo, content_type: %r{\Aimage\/.*\Z}
 
-  has_attached_file :banner
-  validates_attachment_content_type :banner, content_type: /\Aimage\/.*\Z/
+  #has_attached_file :banner
+  #validates_attachment_content_type :banner, content_type: /\Aimage\/.*\Z/
 
   validates :name, presence: true, uniqueness: { scope: :enterprise_id }
 
