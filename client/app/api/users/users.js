@@ -8,9 +8,6 @@ Object.assign(Users, {
   findEnterprise(payload) {
     return axios.post(`${this.url}/email`, payload);
   },
-  allExcept(id, opts) {
-    return axios.get(appendQueryArgs(`${this.url}/${id}/index_except`, opts));
-  }
 });
 
 export default Users;

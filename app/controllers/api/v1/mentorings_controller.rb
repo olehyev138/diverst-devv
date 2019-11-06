@@ -1,22 +1,24 @@
 class Api::V1::MentoringsController < DiverstController
   def delete_mentorship
-    # authorize [@group, @member], :destroy?, policy_class: GroupMemberPolicy - TODO
     mentor = User.find(payload[:mentor_id])
     mentee = User.find(payload[:mentor_id])
 
     if mentee && mentor
-      begin
-        mentorship = Mentoring.find_by(mentor_id: payload[:mentor_id], mentee_id: payload[:mentee_id])
-        mentorship.destroy if mentorship
-      rescue => e
-        raise BadRequestException.new(e.message)
+      mentorship = Mentoring.find_by(mentor_id: payload[:mentor_id], mentee_id: payload[:mentee_id])
+      if mentorship.present?
+        begin
+          base_authorize mentorship
+          mentorship.destroy
+
+          head :no_content
+        rescue => e
+          raise BadRequestException.new(e.message)
+        end
+      else
+        raise BadRequestException.new('Mentorship does\'t exist')
       end
     else
-      # TODO: done properly?
-      raise BadRequestException.new('Mentorship doesnt exist')
+      raise BadRequestException.new('One of the users does\'t exist')
     end
-
-    # if we made it here - were good
-    render status: 204, json: {}
   end
 end

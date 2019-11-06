@@ -5,7 +5,7 @@ const axios = require('axios');
 const Mentoring = new API({ controller: 'mentorings' });
 
 Object.assign(Mentoring, {
-  removeMembers(payload) {
+  removeMentorship(payload) {
     return axios.post(`${this.url}/delete_mentorship`, payload);
   }
 });

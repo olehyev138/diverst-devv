@@ -56,8 +56,6 @@ module BaseSearcher
           includes = []
         end
 
-        Clipboard.copy valid_includes
-
         includes.select { |include|
           if include.kind_of?(String) || include.kind_of?(Symbol)
             valid_includes.include?(include)

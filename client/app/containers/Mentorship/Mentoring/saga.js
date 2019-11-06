@@ -64,7 +64,7 @@ export function* deleteMentorship(action) {
       ? ROUTES.user.mentorship.mentors.path(payload.userId)
       : ROUTES.user.mentorship.mentees.path(payload.userId);
 
-    yield call(api.mentorings.removeMembers.bind(api.mentorings), payload);
+    yield call(api.mentorings.removeMentorship.bind(api.mentorings), payload);
 
     yield put(deleteMentorshipSuccess());
     yield put(push(path));

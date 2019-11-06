@@ -5,14 +5,6 @@ class MentorshipAvailabilitySerializer < ApplicationRecordSerializer
     true
   end
 
-  def start
-    object.start
-  end
-
-  def end
-    object.end
-  end
-
   def user_time_zone
     object.user.time_zone
   end
