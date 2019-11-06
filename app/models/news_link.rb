@@ -22,8 +22,6 @@ class NewsLink < ApplicationRecord
   accepts_nested_attributes_for :photos, allow_destroy: true
   accepts_nested_attributes_for :news_feed_link, allow_destroy: true
 
-  validates_length_of :picture_content_type, maximum: 191
-  validates_length_of :picture_file_name, maximum: 191
   validates_length_of :description, maximum: 65535
   validates_length_of :title, maximum: 191
   validates :group_id,        presence: true
@@ -32,9 +30,13 @@ class NewsLink < ApplicationRecord
   validates :author_id,       presence: true
   validates :url,             length: { maximum: 191 }
 
+  # ActiveStorage
+  has_one_attached :picture
+  validates :picture, content_type: AttachmentHelper.common_image_types
+
   # Paperclip TODO
-  #has_attached_file :picture, styles: { medium: '1000x300>', thumb: '100x100>' }, s3_permissions: :private
-  #validates_attachment_content_type :picture, content_type: %r{\Aimage\/.*\Z}
+  # has_attached_file :picture, styles: { medium: '1000x300>', thumb: '100x100>' }, s3_permissions: :private
+  # validates_attachment_content_type :picture, content_type: %r{\Aimage\/.*\Z}
 
   after_create :build_default_link
   after_destroy :remove_news_feed_link

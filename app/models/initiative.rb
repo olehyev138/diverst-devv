@@ -14,8 +14,6 @@ class Initiative < ApplicationRecord
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
 
   validates_length_of :location, maximum: 191
-  validates_length_of :picture_content_type, maximum: 191
-  validates_length_of :picture_file_name, maximum: 191
   validates_length_of :description, maximum: 65535
   validates_length_of :name, maximum: 191
   validates :end, date: { after: :start, message: 'must be after start' }, on: [:create, :update]
@@ -67,13 +65,17 @@ class Initiative < ApplicationRecord
   # we don't want to run this callback when finish_expenses! is triggered in initiatives_controller.rb, finish_expense action
   before_save { allocate_budget_funds unless skip_allocate_budget_funds }
 
-  # Paperclip TODO
-  #has_attached_file :picture, styles: { medium: '1000x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: 'private'
-  #validates_attachment_content_type :picture, content_type: %r{\Aimage\/.*\Z}
+  # ActiveStorage
+  has_one_attached :picture
+  validates :picture, content_type: AttachmentHelper.common_image_types
+  has_one_attached :qr_code
+  validates :qr_code, content_type: AttachmentHelper.common_image_types
 
   # Paperclip TODO
-  #has_attached_file :qr_code, styles: { medium: '1000x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: 'private'
-  #validates_attachment_content_type :qr_code, content_type: %r{\Aimage\/.*\Z}
+  # has_attached_file :picture, styles: { medium: '1000x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: 'private'
+  # validates_attachment_content_type :picture, content_type: %r{\Aimage\/.*\Z}
+  # has_attached_file :qr_code, styles: { medium: '1000x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: 'private'
+  # validates_attachment_content_type :qr_code, content_type: %r{\Aimage\/.*\Z}
 
   validates :start, presence: true
   validates :end, presence: true

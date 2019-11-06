@@ -13,14 +13,15 @@ class Answer < ApplicationRecord
 
   belongs_to :contributing_group, class_name: 'Group'
 
+  # ActiveStorage
+  has_one_attached :supporting_document
+
   # Paperclip TODO
   # has_attached_file :supporting_document, s3_permissions: 'private'
   # do_not_validate_attachment_file_type :supporting_document
 
   accepts_nested_attributes_for :expenses, reject_if: :all_blank, allow_destroy: true
 
-  validates_length_of :supporting_document_content_type, maximum: 191
-  validates_length_of :supporting_document_file_name, maximum: 191
   validates_length_of :outcome, maximum: 65535
   validates_length_of :content, maximum: 65535
   validates :question, presence: true

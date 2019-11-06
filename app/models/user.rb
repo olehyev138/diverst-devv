@@ -80,13 +80,18 @@ class User < ApplicationRecord
   has_many :metrics_dashboards, foreign_key: :owner_id
   has_many :shared_metrics_dashboards
 
-  #has_attached_file :avatar, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing_user.png'), s3_permissions: 'private'
+  # ActiveStorage
+  has_one_attached :avatar
+  validates :avatar, content_type: AttachmentHelper.common_image_types
+
+  # Paperclip
+  # has_attached_file :avatar, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing_user.png'), s3_permissions: 'private'
+  # validates_attachment_content_type :avatar, content_type: /\Aimage\/.*\Z/
+
   validates_length_of :mentorship_description, maximum: 65535
   validates_length_of :unlock_token, maximum: 191
   validates_length_of :time_zone, maximum: 191
   validates_length_of :biography, maximum: 65535
-  validates_length_of :avatar_content_type, maximum: 191
-  validates_length_of :avatar_file_name, maximum: 191
   validates_length_of :linkedin_profile_url, maximum: 191
   validates_length_of :yammer_token, maximum: 191
   validates_length_of :firebase_token, maximum: 191
@@ -103,7 +108,6 @@ class User < ApplicationRecord
   validates_length_of :data, maximum: 65535
   validates_length_of :last_name, maximum: 191
   validates_length_of :first_name, maximum: 191
-  #validates_attachment_content_type :avatar, content_type: /\Aimage\/.*\Z/
 
   validates :first_name, presence: true
   validates :last_name, presence: true

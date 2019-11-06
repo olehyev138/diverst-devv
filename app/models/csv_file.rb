@@ -4,17 +4,23 @@ class CsvFile < ApplicationRecord
   belongs_to :user
   belongs_to :group
 
-  # Paperclip
-  #  has_attached_file :import_file, s3_permissions: 'private'
-  #  has_attached_file :download_file, s3_permissions: 'private',
-  #                                    s3_headers: lambda { |attachment|
+  # ActiveStorage
+  has_one_attached :import_file
+  has_one_attached :download_file
+  validates :import_file, attached: true, if: Proc.new { |c| !c.download_file.attached? }
+  validates :download_file, attached: true, if: Proc.new { |c| !c.import_file.attached? }
+
+  # Paperclip TODO
+  # has_attached_file :import_file, s3_permissions: 'private'
+  # has_attached_file :download_file, s3_permissions: 'private',
+  #                                   s3_headers: lambda { |attachment|
   #                                                  {
   #                                                      'Content-Type' => 'text/csv',
   #                                                      'Content-Disposition' => 'attachment',
   #                                                  }
   #                                                }
-  #  do_not_validate_attachment_file_type :import_file
-  #  do_not_validate_attachment_file_type :download_file
+  # do_not_validate_attachment_file_type :import_file
+  # do_not_validate_attachment_file_type :download_file
 
   after_commit :schedule_users_import, on: :create
 
