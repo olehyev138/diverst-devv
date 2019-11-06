@@ -20,6 +20,7 @@
 # require 'paperclip/matchers'
 require 'pundit/rspec'
 require 'rspec/retry'
+require 'support/matchers'
 
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
