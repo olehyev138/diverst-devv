@@ -16,7 +16,7 @@ RSpec::Matchers.define :validate_attachment_presence do |name|
 end
 
 # Validate attached file content type matcher for ActiveStorage
-# content_types & not_content_types: Accepts an array of content_type strings
+# content_types & excluded_content_types: Accepts an array of content_type strings
 # not_content_types is optional:
 #   if you leave it empty, it verifies that all common content types (excluding passed valid `content_types`) are invalid
 #   if you pass in an array of content types, it will verify that those content types are invalid
