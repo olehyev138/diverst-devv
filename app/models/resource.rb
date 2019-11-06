@@ -71,20 +71,10 @@ class Resource < ApplicationRecord
     self.tag_ids = Tag.ids_from_tokens(tokens)
   end
 
-  def file_url=(url)
-    self.file = URI.parse(url)
-  end
-
   def file_location
     return nil if !file.presence
 
     file.expiring_url(36000)
-  end
-
-  def file_extension
-    File.extname(file_file_name)[1..-1].downcase
-  rescue
-    ''
   end
 
   def expiration_time
