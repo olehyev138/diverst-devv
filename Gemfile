@@ -2,6 +2,7 @@ source 'https://rubygems.org'
 
 ruby '2.6.0'
 
+gem 'active_storage_validations', '~> 0.8.4'
 gem 'mini_magick', '~> 4.9.5'
 gem 'actionmailer', '~> 5.2.3'
 gem 'actionpack', '~> 5.2.3'
@@ -10,7 +11,7 @@ gem 'active_record_union'
 gem 'activerecord', '~> 5.2.3'
 gem 'activerecord-import', '~> 0.14.0' # Adds a faster way to INSERT multiple rows in the DB
 gem 'autoprefixer-rails', '~> 6.3', '>= 6.3.3.1' # Automatically adds vendor prefixes to CSS declarations
-gem 'aws-sdk', '< 2.0'# The official AWS SDK
+gem 'aws-sdk', '< 2.0' # The official AWS SDK
 gem 'bcrypt'
 gem 'bootsnap', require: false
 gem 'clockwork', '~> 1.2' # Schedule recurring jobs
