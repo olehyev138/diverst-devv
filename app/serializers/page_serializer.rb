@@ -2,8 +2,7 @@ class PageSerializer < ApplicationRecordSerializer
   attributes :total, :type, :items
 
   def items
-    serializer = @instance_options[:use_serializer].present? ?
-                 @instance_options[:use_serializer] :
+    serializer = @instance_options[:use_serializer] |
                  ActiveModel::Serializer.serializer_for(object.items.first)
 
     object.items.map do |item|
