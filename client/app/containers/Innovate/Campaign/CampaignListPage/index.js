@@ -12,7 +12,7 @@ import reducer from 'containers/Innovate/Campaign/reducer';
 import saga from 'containers/Innovate/Campaign/saga';
 
 import {
-  getMembersBegin, deleteMemberBegin,
+  getCampaignBegin, deleteCampaignBegin,
   CampaignsUnmount
 } from 'containers/Innovate/Campaign/actions';
 import {
