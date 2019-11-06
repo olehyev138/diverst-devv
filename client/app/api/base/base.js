@@ -15,8 +15,8 @@ class API {
     return axios.get(appendQueryArgs(this.url, opts));
   }
 
-  get(id, payload = undefined) {
-    return axios.get(appendQueryArgs(`${this.url}/${id}`, payload));
+  get(id) {
+    return axios.get(`${this.url}/${id}`);
   }
 
   create(payload) {
