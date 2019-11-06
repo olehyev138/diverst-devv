@@ -53,21 +53,27 @@ class View < ApplicationRecord
     self.as_json(
       options.merge(
         only: [:enterprise_id, :group_id, :title, :created_at],
-        include: { group: {
-          only: [:name, :parent_id],
-          include: { parent: { only: [:name] } }
-        }, folder: {
-          only: [:id, :name],
-          include: { group: { only: [:id, :name] } }
-        }, resource: {
-          only: [:id, :title],
-          include: { group: { only: [:id, :name] } }
-        }, news_feed_link: {
-          only: [],
-          include: { news_link: { only: [:id, :title] },
-                     group: { only: [:id, :name] } }
-        },
-       }
+        include: {
+          group: {
+            only: [:name, :parent_id],
+            include: { parent: { only: [:name] } }
+          },
+          folder: {
+            only: [:id, :name],
+            include: { group: { only: [:id, :name] } }
+          },
+          resource: {
+            only: [:id, :title],
+            include: { group: { only: [:id, :name] } }
+          },
+          news_feed_link: {
+            only: [],
+            include: {
+              news_link: { only: [:id, :title] },
+              group: { only: [:id, :name] }
+            }
+          },
+        }
       )
     ).merge({ 'created_at' => self.created_at.beginning_of_hour })
   end
