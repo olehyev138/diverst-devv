@@ -4,13 +4,19 @@
       <div class="col-xs-2 pull-left" style="word-spacing: 10px;">
         <% if EnterprisePolicy.new(current_user, current_user.enterprise).manage_posts? && news_link.news_feed_link.approved? %>
           <%= link_to archive_group_news_link_path(news_link.group, news_link), remote: true, method: :patch do %>
-            Archive
+            <%= inline_svg('icons/archive.svg', class: "icon card__icon", title: 'Archive') %>
           <% end %>
         <% end %>
-        <% if !news_link.news_feed_link.is_pinned? %>
-          <%= link_to "Pin", pin_group_posts_path(:group_id => news_link.group_id, :link_id => news_link.news_feed_link.id), method: :patch if GroupPostsPolicy.new(current_user, [news_link.group]).update? %>
-        <% else %>
-          <%= link_to "Unpin", unpin_group_posts_path(:group_id => news_link.group_id, :link_id => news_link.news_feed_link.id), method: :patch if GroupPostsPolicy.new(current_user, [news_link.group]).update? %>
+        <% if GroupPostsPolicy.new(current_user, [news_link.group]).update? %>
+          <% if !news_link.news_feed_link.is_pinned? %>
+            <%= link_to pin_group_posts_path(:group_id => news_link.group_id, :link_id => news_link.news_feed_link.id), method: :patch  do %>
+              <%= inline_svg('icons/pin.svg', class: 'icon card__icon', title: 'Pin') %>
+            <% end %>
+          <% else %>
+            <%= link_to unpin_group_posts_path(:group_id => news_link.group_id, :link_id => news_link.news_feed_link.id), method: :patch do %>
+            <%= inline_svg('icons/pin.svg', class: 'icon card__yellow', title: 'UnPin') %>
+            <% end %>
+          <% end %>
         <% end %>
       </div>
       <div class="col-xs-2">

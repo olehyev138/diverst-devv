@@ -1,7 +1,7 @@
 <div class="card__section card__section--border" id="restored_message_<%= message.id %>">
   <% if EnterprisePolicy.new(current_user, current_user.enterprise).manage_posts? && message.news_feed_link.approved? %>
     <%= link_to archive_group_group_message_path(message.group, message), method: :patch, remote: true do %>
-    <%= inline_svg('icons/calendar.svg', class: "icon card__icon") %>
+      <%= inline_svg('icons/archive.svg', class: "icon card__icon", title: 'Archive') %>
     <% end %>
   <% end %>
   <div class="row">

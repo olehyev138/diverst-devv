@@ -1,7 +1,7 @@
 <div class="card__section card__section--border" id="archived_message_<%= message.news_feed_link.id %>">
   <% if EnterprisePolicy.new(current_user, current_user.enterprise).manage_posts? %>  
     <%= link_to restore_archived_post_path(message.news_feed_link.id), method: :patch, remote: true do %>
-      Restore
+      <%= inline_svg('icons/archive.svg', class: "icon card__black", title: 'UnArchive') %>
     <% end %>
   <% end %>
   <div class="row">
