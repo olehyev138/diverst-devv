@@ -13,4 +13,29 @@ class Api::V1::EnterprisesController < DiverstController
   rescue => e
     raise BadRequestException.new(e.message)
   end
+
+  def get_enterprise
+    enterprise = self.diverst_request.user.enterprise
+    base_authorize(enterprise)
+
+    render status: 200, json: enterprise
+  rescue => e
+    raise BadRequestException.new(e.message)
+  end
+
+  def update_enterprise
+    params[klass.symbol] = payload
+
+    enterprise = Enterprise.find(diverst_request.user.enterprise.id)
+    base_authorize(enterprise)
+
+    render status: 200, json: enterprise.update(params[:enterprise])
+  rescue => e
+    case e
+    when InvalidInputException
+      raise
+    else
+      raise BadRequestException.new(e.message)
+    end
+  end
 end

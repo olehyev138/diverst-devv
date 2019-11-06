@@ -10,6 +10,7 @@ describe('eventsReducer', () => {
     state = {
       isCommitting: false,
       isLoading: true,
+      isFormLoading: true,
       events: [],
       eventsTotal: null,
       currentEvent: null,
@@ -42,7 +43,7 @@ describe('eventsReducer', () => {
   it('handles the getEventSuccess action correctly', () => {
     const expected = produce(state, (draft) => {
       draft.currentEvent = { id: 67, name: 'dummy-2' };
-      draft.isLoading = false;
+      draft.isFormLoading = false;
     });
 
     expect(

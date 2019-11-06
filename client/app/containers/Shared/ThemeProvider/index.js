@@ -29,6 +29,7 @@ export class ThemeProvider extends React.PureComponent {
     const { primary, secondary } = this.props;
     const theme = createMuiTheme({
       palette: {
+        type: 'light',
         background: {
           default: '#f5f5f5',
         },
@@ -40,6 +41,9 @@ export class ThemeProvider extends React.PureComponent {
         },
         secondary: {
           main: secondary,
+        },
+        tertiary: {
+          main: '#8b8c8d',
         },
         error: {
           main: '#D32F2F',

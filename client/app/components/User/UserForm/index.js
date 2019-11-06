@@ -23,88 +23,93 @@ import { buildValues, mapFields } from 'utils/formHelpers';
 
 import FieldInputForm from 'components/User/FieldInputForm/Loadable';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
+import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 
 /* eslint-disable object-curly-newline */
 export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
   return (
     <React.Fragment>
-      <Card>
-        <Form>
-          <CardContent>
-            <Field
-              component={TextField}
-              onChange={handleChange}
-              fullWidth
-              disabled={props.isCommitting}
-              margin='normal'
-              id='first_name'
-              name='first_name'
-              value={values.first_name}
-              label={<DiverstFormattedMessage {...messages.first_name} />}
-            />
-            <Field
-              component={TextField}
-              onChange={handleChange}
-              fullWidth
-              disabled={props.isCommitting}
-              margin='normal'
-              id='last_name'
-              name='last_name'
-              value={values.last_name}
-              label={<DiverstFormattedMessage {...messages.last_name} />}
-            />
-            <Field
-              component={TextField}
-              onChange={handleChange}
-              fullWidth
-              disabled={props.isCommitting}
-              margin='normal'
-              multiline
-              rows={4}
-              variant='outlined'
-              id='biography'
-              name='biography'
-              value={values.biography}
-              label={<DiverstFormattedMessage {...messages.biography} />}
-            />
-            <Field
-              component={Select}
-              fullWidth
-              disabled={props.isCommitting}
-              id='time_zone'
-              name='time_zone'
-              margin='normal'
-              label={<DiverstFormattedMessage {...messages.time_zone} />}
-              value={values.time_zone}
-              options={dig(props, 'user', 'timezones') || []}
-              onChange={value => setFieldValue('time_zone', value)}
-              onBlur={() => setFieldTouched('time_zone', true)}
-            />
-          </CardContent>
-          <Divider />
-          <CardActions>
-            <DiverstSubmit isCommitting={props.isCommitting}>
-              {buttonText}
-            </DiverstSubmit>
-            <Button
-              disabled={props.isCommitting}
-              to={props.admin ? props.links.usersIndex : props.links.usersPath(values.id)}
-              component={WrappedNavLink}
-            >
-              <DiverstFormattedMessage {...messages.cancel} />
-            </Button>
-          </CardActions>
-        </Form>
-      </Card>
-      {!props.create && (
+      <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.user}>
+        <Card>
+          <Form>
+            <CardContent>
+              <Field
+                component={TextField}
+                onChange={handleChange}
+                fullWidth
+                disabled={props.isCommitting}
+                margin='normal'
+                id='first_name'
+                name='first_name'
+                value={values.first_name}
+                label={<DiverstFormattedMessage {...messages.first_name} />}
+              />
+              <Field
+                component={TextField}
+                onChange={handleChange}
+                fullWidth
+                disabled={props.isCommitting}
+                margin='normal'
+                id='last_name'
+                name='last_name'
+                value={values.last_name}
+                label={<DiverstFormattedMessage {...messages.last_name} />}
+              />
+              <Field
+                component={TextField}
+                onChange={handleChange}
+                fullWidth
+                disabled={props.isCommitting}
+                margin='normal'
+                multiline
+                rows={4}
+                variant='outlined'
+                id='biography'
+                name='biography'
+                value={values.biography}
+                label={<DiverstFormattedMessage {...messages.biography} />}
+              />
+              <Field
+                component={Select}
+                fullWidth
+                disabled={props.isCommitting}
+                id='time_zone'
+                name='time_zone'
+                margin='normal'
+                label={<DiverstFormattedMessage {...messages.time_zone} />}
+                value={values.time_zone}
+                options={dig(props, 'user', 'timezones') || []}
+                onChange={value => setFieldValue('time_zone', value)}
+                onBlur={() => setFieldTouched('time_zone', true)}
+              />
+            </CardContent>
+            <Divider />
+            <CardActions>
+              <DiverstSubmit isCommitting={props.isCommitting}>
+                {buttonText}
+              </DiverstSubmit>
+              <Button
+                disabled={props.isCommitting}
+                to={props.admin ? props.links.usersIndex : props.links.usersPath(values.id)}
+                component={WrappedNavLink}
+              >
+                <DiverstFormattedMessage {...messages.cancel} />
+              </Button>
+            </CardActions>
+          </Form>
+        </Card>
+      </DiverstFormLoader>
+      {props.edit && (
         <React.Fragment>
           <Box mb={2} />
           <FieldInputForm
+            edit
             user={props.user}
             fieldData={props.fieldData}
             updateFieldDataBegin={props.updateFieldDataBegin}
             admin={props.admin}
             isCommitting={props.isCommitting}
+            isFormLoading={props.isFormLoading}
           />
         </React.Fragment>
       )}
@@ -143,8 +148,9 @@ UserForm.propTypes = {
   user: PropTypes.object,
   currentUser: PropTypes.object,
   admin: PropTypes.bool,
-  create: PropTypes.bool,
+  edit: PropTypes.bool,
   isCommitting: PropTypes.bool,
+  isFormLoading: PropTypes.bool,
   links: PropTypes.shape({
     usersIndex: PropTypes.string,
     usersPath: PropTypes.func,
@@ -163,8 +169,9 @@ UserFormInner.propTypes = {
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
   admin: PropTypes.bool,
-  create: PropTypes.bool,
+  edit: PropTypes.bool,
   isCommitting: PropTypes.bool,
+  isFormLoading: PropTypes.bool,
   links: PropTypes.shape({
     usersIndex: PropTypes.string,
     usersPath: PropTypes.func,

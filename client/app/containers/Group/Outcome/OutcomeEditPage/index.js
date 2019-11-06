@@ -17,7 +17,7 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { selectGroup } from 'containers/Group/selectors';
 import { selectUser } from 'containers/Shared/App/selectors';
-import { selectOutcome, selectIsCommitting } from 'containers/Group/Outcome/selectors';
+import { selectOutcome, selectIsCommitting, selectIsFormLoading } from 'containers/Group/Outcome/selectors';
 
 import {
   getOutcomeBegin, updateOutcomeBegin,
@@ -46,6 +46,7 @@ export function OutcomeEditPage(props) {
 
   return (
     <OutcomeForm
+      edit
       outcomeAction={props.updateOutcomeBegin}
       buttonText='Update'
       currentUser={currentUser}
@@ -53,6 +54,7 @@ export function OutcomeEditPage(props) {
       outcome={currentOutcome}
       links={links}
       isCommitting={props.isCommitting}
+      isFormLoading={props.isFormLoading}
     />
   );
 }
@@ -65,6 +67,7 @@ OutcomeEditPage.propTypes = {
   currentGroup: PropTypes.object,
   currentOutcome: PropTypes.object,
   isCommitting: PropTypes.bool,
+  isFormLoading: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -72,6 +75,7 @@ const mapStateToProps = createStructuredSelector({
   currentUser: selectUser(),
   currentOutcome: selectOutcome(),
   isCommitting: selectIsCommitting(),
+  isFormLoading: selectIsFormLoading(),
 });
 
 const mapDispatchToProps = {

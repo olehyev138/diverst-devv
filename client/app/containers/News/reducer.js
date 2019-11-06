@@ -7,7 +7,7 @@
 import produce from 'immer/dist/immer';
 import {
   GET_NEWS_ITEMS_SUCCESS, GET_NEWS_ITEM_SUCCESS, GET_NEWS_ITEMS_BEGIN,
-  NEWS_FEED_UNMOUNT, GET_NEWS_ITEM_ERROR, GET_NEWS_ITEMS_ERROR,
+  NEWS_FEED_UNMOUNT, GET_NEWS_ITEM_ERROR, GET_NEWS_ITEMS_ERROR, GET_NEWS_ITEM_BEGIN,
   CREATE_GROUP_MESSAGE_BEGIN, CREATE_GROUP_MESSAGE_SUCCESS, CREATE_GROUP_MESSAGE_ERROR,
   UPDATE_GROUP_MESSAGE_BEGIN, UPDATE_GROUP_MESSAGE_SUCCESS, UPDATE_GROUP_MESSAGE_ERROR,
   CREATE_GROUP_MESSAGE_COMMENT_BEGIN, CREATE_GROUP_MESSAGE_COMMENT_SUCCESS, CREATE_GROUP_MESSAGE_COMMENT_ERROR,
@@ -15,6 +15,7 @@ import {
 
 export const initialState = {
   isLoading: true,
+  isFormLoading: true,
   isCommitting: false,
   newsItems: [],
   newsItemsTotal: null,
@@ -37,12 +38,15 @@ function newsReducer(state = initialState, action) {
       case GET_NEWS_ITEMS_ERROR:
         draft.isLoading = false;
         break;
+      case GET_NEWS_ITEM_BEGIN:
+        draft.isFormLoading = true;
+        break;
       case GET_NEWS_ITEM_SUCCESS:
         draft.currentNewsItem = action.payload.news_feed_link;
-        draft.isLoading = false;
+        draft.isFormLoading = false;
         break;
       case GET_NEWS_ITEM_ERROR:
-        draft.isLoading = false;
+        draft.isFormLoading = false;
         break;
       case CREATE_GROUP_MESSAGE_BEGIN:
       case UPDATE_GROUP_MESSAGE_BEGIN:

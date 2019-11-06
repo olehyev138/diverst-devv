@@ -16,6 +16,7 @@ import {
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
+import JoinedGroupIcon from '@material-ui/icons/CheckCircle';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
 
@@ -38,7 +39,15 @@ const styles = theme => ({
     borderBottomLeftRadius: 4,
   },
   groupCardContent: {
-    paddingBottom: 28,
+    paddingTop: 20,
+    paddingBottom: 20,
+  },
+  groupCardTitle: {
+    verticalAlign: 'middle',
+  },
+  groupCardIcon: {
+    verticalAlign: 'middle',
+    marginRight: 6,
   },
   groupCardDescription: {
     paddingTop: 8,
@@ -103,7 +112,10 @@ export function UserGroupList(props, context) {
                     >
                       <CardActionArea>
                         <CardContent className={classes.groupCardContent}>
-                          <Typography variant='h5' component='h2' display='inline'>
+                          {group.current_user_is_member === true && (
+                            <JoinedGroupIcon className={classes.groupCardIcon} />
+                          )}
+                          <Typography variant='h5' component='h2' display='inline' className={classes.groupCardTitle}>
                             {group.name}
                           </Typography>
                           {group.description && (
