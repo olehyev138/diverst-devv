@@ -17,9 +17,8 @@ RSpec.describe Resource, type: :model do
   describe 'when validating' do
     let(:resource) { build_stubbed(:resource) }
 
-    # Paperclip
-    #    it { expect(resource).to validate_presence_of(:title) }
-    #    it { expect(resource).to have_attached_file(:file) }
+    # ActiveStorage
+    it { expect(resource).to have_attached_file(:file) }
 
     # do we want to validate presence of file in resource model? if so then i will uncomment this code
     # it { expect(resource).to validate_attachment_presence(:file)}
@@ -33,13 +32,6 @@ RSpec.describe Resource, type: :model do
         expect(resource).to receive(:smart_add_url_protocol)
         resource.valid?
       end
-    end
-  end
-
-  describe '#extension' do
-    it "returns the file's lowercase extension without the dot" do
-      resource = build_stubbed(:resource)
-      expect(resource.file_extension).to eq 'csv'
     end
   end
 
@@ -95,27 +87,6 @@ RSpec.describe Resource, type: :model do
 
       resource.reload
       expect(resource.tags.count).to eq(0)
-    end
-  end
-
-  describe '#file_url' do
-    it 'sets the file for resource from url' do
-      resource = create(:resource, file: nil)
-      allow(URI).to receive(:parse).and_return(File.open('spec/fixtures/files/verizon_logo.png'))
-      expect(resource.file_file_name).to be nil
-
-      resource.file_url = Faker::LoremPixel.image(secure: false)
-      resource.save!
-      resource.reload
-
-      expect(resource.file_file_name).to_not be nil
-    end
-  end
-
-  describe '#file_extension' do
-    it "returns '' " do
-      resource = build(:resource, file_file_name: nil, file: nil)
-      expect(resource.file_extension).to eq('')
     end
   end
 
