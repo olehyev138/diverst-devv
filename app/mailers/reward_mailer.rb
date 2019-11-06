@@ -19,7 +19,7 @@ class RewardMailer < ApplicationMailer
     user_reward = UserReward.find_by(id: user_reward_id)
     @user = user_reward.user
     @reward = user_reward.reward
-    @email = @reward.responsible.email_for_notification
+    @email = @user.email_for_notification
     return if @user.enterprise.disable_emails?
 
     set_defaults(@user.enterprise, method_name)
@@ -33,7 +33,7 @@ class RewardMailer < ApplicationMailer
     user_reward = UserReward.find_by(id: user_reward_id)
     @user = user_reward.user
     @reward = user_reward.reward
-    @email = @reward.responsible.email_for_notification
+    @email = @user.email_for_notification
     @comment = user_reward.comment
     return if @user.enterprise.disable_emails?
 

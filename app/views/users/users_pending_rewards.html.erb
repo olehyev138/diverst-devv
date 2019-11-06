@@ -32,7 +32,7 @@
                      </td>
                     <td>
                       <%= link_to 'Approve', approve_reward_user_reward_user_reward_path(reward_id: pending_reward.reward_id, id: pending_reward.id), method: :patch, data: { confirm: 'Are you sure?' } %> - 
-                      <%= link_to 'Forfeit', reward_to_be_forfeited_user_reward_user_reward_path(reward_id: pending_reward.reward_id, id: pending_reward.id), remote: true, data: { toggle: 'modal', target: "commentModal_#{pending_reward.id}" } %>
+                      <%= link_to 'Decline', reward_to_be_forfeited_user_reward_user_reward_path(reward_id: pending_reward.reward_id, id: pending_reward.id), remote: true, data: { toggle: 'modal', target: "commentModal_#{pending_reward.id}" } %>
                       <%= render 'user/user_rewards/comment_modal' %>
                     </td>
                   </tr>
