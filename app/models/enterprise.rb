@@ -159,7 +159,7 @@ class Enterprise < ApplicationRecord
 
   def saml_settings
     # if xml config file is present - take settings from it
-    if xml_sso_config?
+    if xml_sso_config.attached?
       # Paperclip TODO
       #idp_metadata_parser = OneLogin::RubySaml::IdpMetadataParser.new
       #file_content = Paperclip.io_adapters.for(xml_sso_config).read
