@@ -24,11 +24,12 @@ end
 #
 # Note: 'common content types' are defined in AttachmentHelper
 RSpec::Matchers.define :validate_attachment_content_type do |name, content_types, excluded_content_types = nil|
-  not_content_types = case excluded_content_types
-                        when false then false
-                        when nil then AttachmentHelper.common_types - content_types
-                        else excluded_content_types
-                      end
+  not_content_types =
+    case excluded_content_types
+    when false then false
+    when nil then AttachmentHelper.common_types - content_types
+    else excluded_content_types
+    end
 
   match do |record|
     file_path = "#{Rails.root}/spec/fixtures/files/empty_file"

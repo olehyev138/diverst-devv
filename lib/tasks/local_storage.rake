@@ -6,7 +6,7 @@ namespace :local_storage do
 
       source = attachment.record.send(name).path
       dest_dir = File.join(
-        "storage",
+        'storage',
         attachment.blob.key.first(2),
         attachment.blob.key.first(4).last(2))
       dest = File.join(dest_dir, attachment.blob.key)

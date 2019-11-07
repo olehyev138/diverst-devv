@@ -112,10 +112,10 @@ class Enterprise < ApplicationRecord
   # validates_attachment_content_type :xml_sso_config, content_type: 'text/xml'
 
   # has_attached_file :sponsor_media, s3_permissions: :private
-  #do_not_validate_attachment_file_type :sponsor_media
+  # do_not_validate_attachment_file_type :sponsor_media
 
   # has_attached_file :onboarding_sponsor_media, s3_permissions: :private
-  #do_not_validate_attachment_file_type :onboarding_sponsor_media
+  # do_not_validate_attachment_file_type :onboarding_sponsor_media
 
   validates_format_of :redirect_email_contact, with: /\A[^@\s]+@[^@\s]+\z/, allow_blank: true
 
@@ -161,9 +161,9 @@ class Enterprise < ApplicationRecord
     # if xml config file is present - take settings from it
     if xml_sso_config.attached?
       # Paperclip TODO
-      #idp_metadata_parser = OneLogin::RubySaml::IdpMetadataParser.new
-      #file_content = Paperclip.io_adapters.for(xml_sso_config).read
-      #settings = idp_metadata_parser.parse(file_content)
+      # idp_metadata_parser = OneLogin::RubySaml::IdpMetadataParser.new
+      # file_content = Paperclip.io_adapters.for(xml_sso_config).read
+      # settings = idp_metadata_parser.parse(file_content)
     else # otherwise - initialize empty settings
       settings = OneLogin::RubySaml::Settings.new
       settings.name_identifier_format = 'urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress'

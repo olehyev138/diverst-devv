@@ -12,7 +12,7 @@ RSpec.describe Badge, type: :model do
     # ActiveStorage
     it { expect(badge).to have_attached_file(:image) }
     it { expect(badge).to validate_attachment_presence(:image) }
-    it { expect(badge).to validate_attachment_content_type(:image, AttachmentHelper.common_image_types)}
+    it { expect(badge).to validate_attachment_content_type(:image, AttachmentHelper.common_image_types) }
 
     # Paperclip
     # it { expect(badge).to have_attached_file(:image) }
