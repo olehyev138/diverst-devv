@@ -53,7 +53,7 @@ class UserPolicy < ApplicationPolicy
   end
 
   def user_not_current_user?
-    @user != @record ? true : false
+    @user != @record
   end
 
   class Scope < Scope
