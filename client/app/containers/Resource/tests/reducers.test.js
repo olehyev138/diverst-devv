@@ -32,9 +32,6 @@ import {
   updateResourceBegin,
   updateResourceSuccess,
   updateResourceError,
-  deleteResourceBegin,
-  deleteResourceSuccess,
-  deleteResourceError,
   resourcesUnmount } from '../actions';
 
 describe('resourcesReducer', () => {
@@ -141,7 +138,7 @@ describe('resourcesReducer', () => {
     const expected = produce(state, (draft) => {
       draft.isCommitting = false;
     });
-    expect(resourcesReducer(state, createFolderError(false))).toEqual(expected);
+    expect(resourcesReducer(state, createFolderError('error'))).toEqual(expected);
   });
 
   it('handles the updateFolderBegin action correctly', () => {
@@ -157,11 +154,12 @@ describe('resourcesReducer', () => {
     });
     expect(resourcesReducer(state, updateFolderSuccess(false))).toEqual(expected);
   });
+
   it('handles the updateFolderError action correctly', () => {
     const expected = produce(state, (draft) => {
       draft.isCommitting = false;
     });
-    expect(resourcesReducer(state, updateFolderError(false))).toEqual(expected);
+    expect(resourcesReducer(state, updateFolderError('error'))).toEqual(expected);
   });
 
   it('handles the validateFolderPasswordSuccess action correctly', () => {
@@ -228,7 +226,7 @@ describe('resourcesReducer', () => {
     const expected = produce(state, (draft) => {
       draft.isLoading = false;
     });
-    expect(resourcesReducer(state, getResourcesError(false))).toEqual(expected);
+    expect(resourcesReducer(state, getResourcesError('error'))).toEqual(expected);
   });
 
   it('handles the getResourceBegin action correctly', () => {
@@ -243,14 +241,14 @@ describe('resourcesReducer', () => {
       draft.currentResource = { resource_id: 1 };
       draft.isFormLoading = false;
     });
-    expect(resourcesReducer(state, getResourceSuccess({ resource: { resource_id:1 } }))).toEqual(expected);
+    expect(resourcesReducer(state, getResourceSuccess({ resource: { resource_id: 1 } }))).toEqual(expected);
   });
 
   it('handles the getResourceError action correctly', () => {
     const expected = produce(state, (draft) => {
       draft.isFormLoading = false;
     });
-    expect(resourcesReducer(state, getResourceError(false))).toEqual(expected);
+    expect(resourcesReducer(state, getResourceError('error'))).toEqual(expected);
   });
 
   it('handles the createResourceBegin action correctly', () => {
@@ -260,12 +258,72 @@ describe('resourcesReducer', () => {
     expect(resourcesReducer(state, createResourceBegin(true))).toEqual(expected);
   });
 
-  // it('handles the createResourceSuccess action correctly', () => {
-  //   const expected = produce(state, (draft) => {
-  //     draft.isCommitting = false;
-  //     draft.currentResource = undefined;
-  //     draft.isFormLoading = false;
-  //   });
-  //   expect(resourcesReducer(state, getResourceSuccess({currentResource: undefined }))).toEqual(expected);
-  // });
+  it('handles the createResourceSuccess action correctly', () => {
+    const expected = produce(state, (draft) => {
+      draft.isCommitting = false;
+    });
+    expect(resourcesReducer(state, createResourceSuccess({
+      isCommitting: false,
+    }))).toEqual(expected);
+  });
+
+  it('handles the createResourceError action correctly', () => {
+    const expected = produce(state, (draft) => {
+      draft.isCommitting = false;
+    });
+    expect(resourcesReducer(state, createResourceError('error'))).toEqual(expected);
+  });
+
+  it('handles the updateResourceBegin action correctly', () => {
+    const expected = produce(state, (draft) =>{
+      draft.isCommitting = true;
+    });
+    expect(resourcesReducer(state, updateResourceBegin({ isCommitting: true })))
+  });
+
+  it('handles the updateResourceSuccess action correctly', () => {
+    const expected = produce(state, (draft) => {
+      draft.isCommitting = false;
+    });
+    expect(resourcesReducer(state, updateResourceSuccess({
+      isCommitting: false,
+    }))).toEqual(expected);
+  });
+
+  it('handles the updateResourceError action correctly', () => {
+    const expected = produce(state, (draft) => {
+      draft.isCommitting = false;
+    });
+    expect(resourcesReducer(state, updateResourceError('error'))).toEqual(expected);
+  });
+  
+  it('handles the resourcesUnmount action correctly', () => {
+    const expected = produce(state, (draft) => {
+      draft.isCommitting = false;
+      draft.isLoading = true;
+      draft.isFormLoading = true;
+      draft.folders = null;
+      draft.resources = null;
+      draft.foldersTotal = null;
+      draft.resourcesTotal = null;
+      draft.currentFolder = null;
+      draft.currentResource = null;
+      draft.valid = true;
+    });
+    expect(resourcesReducer(
+      state,
+      resourcesUnmount({
+        isCommitting: false,
+        isLoading: true,
+        isFormLoading: true,
+        folders: null,
+        resources: null,
+        foldersTotal: null,
+        resourcesTotal: null,
+        currentFolder: null,
+        currentResource: null,
+        valid: true,
+      })
+    )).toEqual(expected);
+  });
 });
