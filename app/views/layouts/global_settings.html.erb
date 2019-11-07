@@ -43,7 +43,7 @@
       <%= active_link_to c_t(:dci_abbreviation), rewards_path, class: "secondary-header__tab" if EnterprisePolicy.new(current_user, current_user.enterprise).diversity_manage? %>
     </li>
     <li>
-      <%= active_link_to 'Points Rankings', users_points_ranking_users_path %>
+      <%= active_link_to 'Point Rankings', users_points_ranking_users_path %>
     </li>
     <li>
       <%= active_link_to 'Pending Reward Requests', users_pending_rewards_users_path %>
@@ -141,7 +141,7 @@
         <%= active_link_to c_t(:dci_abbreviation), rewards_path %>
       </li>
       <li>
-        <%= active_link_to 'Points Rankings', users_points_ranking_users_path %>
+        <%= active_link_to 'Point Rankings', users_points_ranking_users_path %>
       </li>
       <li>
         <%= active_link_to 'Pending Reward Requests', users_pending_rewards_users_path %>
