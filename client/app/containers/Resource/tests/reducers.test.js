@@ -1,6 +1,6 @@
 /*
  *
- * Resource reducers
+ * Resource reducer tests
  *
  */
 import resourcesReducer from "../reducer";
@@ -296,7 +296,7 @@ describe('resourcesReducer', () => {
     });
     expect(resourcesReducer(state, updateResourceError('error'))).toEqual(expected);
   });
-  
+
   it('handles the resourcesUnmount action correctly', () => {
     const expected = produce(state, (draft) => {
       draft.isCommitting = false;
