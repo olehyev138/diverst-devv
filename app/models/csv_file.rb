@@ -38,7 +38,7 @@ class CsvFile < ApplicationRecord
   protected
 
   def schedule_users_import
-    return if self.download_file?
+    return if self.download_file.attached?
 
     if group_id
       GroupMemberImportCSVJob.perform_later(self.id)

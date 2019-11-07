@@ -3,7 +3,7 @@ class Theme < ApplicationRecord
 
   # ActiveStorage
   has_one_attached :logo
-  validates :icon, content_type: AttachmentHelper.common_image_types
+  validates :logo, content_type: AttachmentHelper.common_image_types
 
   # Paperclip
   # has_attached_file :logo, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: 'private'
