@@ -101,7 +101,7 @@ describe('Resource selectors', () => {
       const mockedState = { valid: false };
       const selected = selectValid().resultFunc(mockedState);
 
-      expect(selected).toEqual( false );
+      expect(selected).toEqual(false);
     });
   });
 
@@ -119,7 +119,7 @@ describe('Resource selectors', () => {
       const mockedState = { resources: [{ id: 37, name: 'dummy' }] };
       const selected = selectPaginatedResources().resultFunc(mockedState);
 
-      expect(selected).toEqual( [{ id: 37, name: 'dummy' }] );
+      expect(selected).toEqual([{ id: 37, name: 'dummy' }]);
     });
   });
 
@@ -146,7 +146,7 @@ describe('Resource selectors', () => {
       const mockedState = { isLoading: false };
       const selected = selectIsLoading().resultFunc(mockedState);
 
-      expect(selected).toEqual( false );
+      expect(selected).toEqual(false);
     });
   });
 
@@ -155,7 +155,7 @@ describe('Resource selectors', () => {
       const mockedState = { isFormLoading: false };
       const selected = selectIsFormLoading().resultFunc(mockedState);
 
-      expect(selected).toEqual( false );
+      expect(selected).toEqual(false);
     });
   });
 
@@ -164,7 +164,7 @@ describe('Resource selectors', () => {
       const mockedState = { isFormLoading: false };
       const selected = selectIsFormLoading().resultFunc(mockedState);
 
-      expect(selected).toEqual( false );
+      expect(selected).toEqual(false);
     });
   });
 });

@@ -171,16 +171,16 @@ describe('resourcesReducer', () => {
 
   it('handles the foldersUnmount action correctly', () => {
     const expected = produce(state, (draft) => {
-       draft.isCommitting = false;
-       draft.isLoading = true;
-       draft.isFormLoading = true;
-       draft.folders = null;
-       draft.resources = null;
-       draft.foldersTotal = null;
-       draft.resourcesTotal = null;
-       draft.currentFolder = null;
-       draft.currentResource = null;
-       draft.valid = true;
+      draft.isCommitting = false;
+      draft.isLoading = true;
+      draft.isFormLoading = true;
+      draft.folders = null;
+      draft.resources = null;
+      draft.foldersTotal = null;
+      draft.resourcesTotal = null;
+      draft.currentFolder = null;
+      draft.currentResource = null;
+      draft.valid = true;
     });
     expect(resourcesReducer(
       state,
@@ -214,11 +214,11 @@ describe('resourcesReducer', () => {
     });
     expect(resourcesReducer(
       state,
-        getResourcesSuccess({
-          items: [{ item1: 'item 1' }, { item2: 'item 2' }],
-          total: 3,
-          isLoading: false,
-        })
+      getResourcesSuccess({
+        items: [{ item1: 'item 1' }, { item2: 'item 2' }],
+        total: 3,
+        isLoading: false,
+      })
     )).toEqual(expected);
   });
 
@@ -233,7 +233,7 @@ describe('resourcesReducer', () => {
     const expected = produce(state, (draft) => {
       draft.isFormLoading = true;
     });
-    expect(resourcesReducer(state, getResourceBegin( true ))).toEqual(expected);
+    expect(resourcesReducer(state, getResourceBegin(true))).toEqual(expected);
   });
 
   it('handles the getResourceSuccess action correctly', () => {
@@ -275,10 +275,10 @@ describe('resourcesReducer', () => {
   });
 
   it('handles the updateResourceBegin action correctly', () => {
-    const expected = produce(state, (draft) =>{
+    const expected = produce(state, (draft) => {
       draft.isCommitting = true;
     });
-    expect(resourcesReducer(state, updateResourceBegin({ isCommitting: true })))
+    expect(resourcesReducer(state, updateResourceBegin({ isCommitting: true }))).toEqual(expected);
   });
 
   it('handles the updateResourceSuccess action correctly', () => {
