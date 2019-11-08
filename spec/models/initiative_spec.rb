@@ -86,8 +86,7 @@ RSpec.describe Initiative, type: :model do
 
   describe '#picture_location' do
     it 'returns the actual picture location' do
-      initiative = create(:initiative)
-      initiative.picture.attach(io: File.open('spec/fixtures/files/verizon_logo.png'), filename: 'file.png')
+      initiative = create(:initiative, picture: { io: File.open('spec/fixtures/files/verizon_logo.png'), filename: 'file.png' })
 
       expect(initiative.picture_location).to_not be nil
     end
@@ -95,8 +94,7 @@ RSpec.describe Initiative, type: :model do
 
   describe '#qr_code_location' do
     it 'returns the actual qr_code location' do
-      initiative = create(:initiative)
-      initiative.qr_code.attach(io: File.open('spec/fixtures/files/verizon_logo.png'), filename: 'file.png')
+      initiative = create(:initiative, qr_code: { io: File.open('spec/fixtures/files/verizon_logo.png'), filename: 'file.png' })
 
       expect(initiative.qr_code_location).to_not be nil
     end

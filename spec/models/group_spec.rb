@@ -163,8 +163,7 @@ RSpec.describe Group, type: :model do
 
   describe '#logo_location' do
     it 'returns the actual logo location' do
-      group = create(:group)
-      group.logo.attach(io: File.open('spec/fixtures/files/verizon_logo.png'), filename: 'file.png')
+      group = create(:group, logo: { io: File.open('spec/fixtures/files/verizon_logo.png'), filename: 'file.png' })
 
       expect(group.logo_location).to_not be nil
     end
@@ -172,8 +171,7 @@ RSpec.describe Group, type: :model do
 
   describe '#banner_location' do
     it 'returns the actual banner location' do
-      group = create(:group)
-      group.banner.attach(io: File.open('spec/fixtures/files/verizon_logo.png'), filename: 'file.png')
+      group = create(:group, banner: { io: File.open('spec/fixtures/files/verizon_logo.png'), filename: 'file.png' })
 
       expect(group.banner_location).to_not be nil
     end

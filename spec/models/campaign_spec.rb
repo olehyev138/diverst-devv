@@ -53,8 +53,7 @@ RSpec.describe Campaign, type: :model do
 
   describe '#image_location' do
     it 'returns the actual logo location' do
-      campaign = create(:campaign)
-      campaign.image.attach(io: File.open('spec/fixtures/files/verizon_logo.png'), filename: 'image.png')
+      campaign = create(:campaign, image: { io: File.open('spec/fixtures/files/verizon_logo.png'), filename: 'file.png' })
 
       expect(campaign.image_location).to_not be nil
     end
@@ -62,8 +61,7 @@ RSpec.describe Campaign, type: :model do
 
   describe '#banner_location' do
     it 'returns the actual banner location' do
-      campaign = create(:campaign)
-      campaign.banner.attach(io: File.open('spec/fixtures/files/verizon_logo.png'), filename: 'image.png')
+      campaign = create(:campaign, banner: { io: File.open('spec/fixtures/files/verizon_logo.png'), filename: 'file.png' })
 
       expect(campaign.banner_location).to_not be nil
     end
