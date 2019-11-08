@@ -4,7 +4,7 @@ class MentoringPolicy < ApplicationPolicy
   end
 
   def show?
-    return true if update?
+    return true if manage_all?
 
     record.mentee_id == user.id || record.mentor_id == user.id
   end
@@ -27,5 +27,19 @@ class MentoringPolicy < ApplicationPolicy
 
   def delete_mentorship?
     show?
+  end
+
+  class Scope < Scope
+    def index?
+      MentoringPolicy.new(@user, nil).index?
+    end
+
+    def resolve
+      scope.joins(:mentor).where(
+        users: {
+          enterprise_id: @user.enterprise.id
+        },
+      )
+    end
   end
 end
