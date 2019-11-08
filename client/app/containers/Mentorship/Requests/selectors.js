@@ -1,55 +1,31 @@
 import { createSelector } from 'reselect/lib';
-import produce from 'immer';
-import { initialState } from 'containers/Mentorship/Mentoring/reducer';
+import { initialState } from './reducer';
 
-const weekdays = [
-  'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
-];
+const selectRequestDomain = state => state.request || initialState;
 
-const selectMentoringDomain = state => state.mentoring || initialState;
-
-const selectPaginatedUsers = () => createSelector(
-  selectMentoringDomain,
-  mentorshipState => mentorshipState.userList
+const selectPaginatedRequests = () => createSelector(
+  selectRequestDomain,
+  requestState => requestState.requestList
 );
 
-const selectUsersTotal = () => createSelector(
-  selectMentoringDomain,
-  mentorshipState => mentorshipState.userTotal
+const selectRequestsTotal = () => createSelector(
+  selectRequestDomain,
+  requestState => requestState.requestListTotal
 );
 
-const selectIsFetchingUsers = () => createSelector(
-  selectMentoringDomain,
-  mentorshipState => mentorshipState.isFetchingUsers
+const selectRequest = () => createSelector(
+  selectRequestDomain,
+  requestState => requestState.currentRequest
 );
 
-const selectPaginatedMentors = () => createSelector(
-  selectMentoringDomain,
-  mentorshipState => mentorshipState.mentorshipList.map(mentorship => mentorship.mentor)
+const selectIsFetchingRequests = () => createSelector(
+  selectRequestDomain,
+  requestState => requestState.isFetchingRequests
 );
-
-const selectPaginatedMentees = () => createSelector(
-  selectMentoringDomain,
-  mentorshipState => mentorshipState.mentorshipList.map(mentorship => mentorship.mentee)
-);
-
-const selectMentorshipsTotal = () => createSelector(
-  selectMentoringDomain,
-  mentorshipState => mentorshipState.mentorshipListTotal
-);
-
-const selectIsFetchingMentorships = () => createSelector(
-  selectMentoringDomain,
-  mentorshipState => mentorshipState.isFetchingMentorships
-);
-
 
 export {
-  selectPaginatedUsers,
-  selectUsersTotal,
-  selectIsFetchingUsers,
-  selectPaginatedMentors,
-  selectPaginatedMentees,
-  selectMentorshipsTotal,
-  selectIsFetchingMentorships,
+  selectPaginatedRequests,
+  selectRequestsTotal,
+  selectRequest,
+  selectIsFetchingRequests,
 };

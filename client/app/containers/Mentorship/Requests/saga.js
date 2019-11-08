@@ -4,98 +4,94 @@ import { push } from 'connected-react-router';
 
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
 
-import {
-  GET_USER_MENTORS_BEGIN, GET_AVAILABLE_MENTORS_BEGIN, DELETE_MENTORSHIP_BEGIN, REQUEST_MENTORSHIP_BEGIN
-} from 'containers/Mentorship/Mentoring/constants';
-
-import {
-  getMentorsSuccess, getMentorsError,
-  getAvailableMentorsSuccess, getAvailableMentorsError,
-  deleteMentorshipSuccess, deleteMentorshipError,
-  requestsMentorshipSuccess, requestsMentorshipError,
-} from 'containers/Mentorship/Mentoring/actions';
-
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
-export function* getMentors(action) {
+import {
+  GET_REQUESTS_BEGIN,
+  GET_PROPOSALS_BEGIN,
+  ACCEPT_REQUEST_BEGIN,
+  DENY_REQUEST_BEGIN,
+  CREATE_MENTORSHIP_BEGIN,
+} from './constants';
+
+import {
+  getRequestsSuccess, getRequestsError,
+  getProposalsSuccess, getProposalsError,
+  acceptRequestSuccess, acceptRequestError,
+  denyRequestSuccess, denyRequestError,
+  createMentorshipSuccess, createMentorshipError,
+} from './actions';
+
+export function* getRequests(action) {
   try {
-    const { payload } = action;
-    const { type, userId } = payload;
+    const response = { data: 'API CALL' };
 
-    const query = {};
-    if (type === 'mentors') {
-      query.mentee_id = userId;
-      query.includes = ['mentor'];
-    } else {
-      query.mentor_id = userId;
-      query.includes = ['mentee'];
-    }
-
-    const response = yield call(api.mentorings.all.bind(api.mentorings), {
-      ...payload,
-      ...query,
-    });
-    yield put(getMentorsSuccess(response.data.page));
+    yield put(getRequestsSuccess(response.data.page));
   } catch (err) {
-    yield put(getMentorsError(err));
+    yield put(getRequestsError(err));
 
     // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to load user\'s mentorships', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: 'Failed to get requests', options: { variant: 'warning' } }));
   }
 }
 
-export function* getAvailableMentors(action) {
+export function* getProposals(action) {
   try {
-    const { payload } = action;
-    const response = yield call(api.users.all.bind(api.users), { ...payload, serializer: 'mentorship' });
-    yield put(getAvailableMentorsSuccess(response.data.page));
+    const response = { data: 'API CALL' };
+
+    yield put(getProposalsSuccess(response.data.page));
   } catch (err) {
-    yield put(getAvailableMentorsError(err));
+    yield put(getProposalsError(err));
 
     // TODO: intl message
-    yield put(showSnackbar({ message: `Failed to load available ${action.payload.query_scopes[0]}`, options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: 'Failed to get proposals', options: { variant: 'warning' } }));
   }
 }
 
-export function* deleteMentorship(action) {
+export function* acceptRequest(action) {
   try {
-    const { payload } = action;
-    const path = payload.type === 'mentors'
-      ? ROUTES.user.mentorship.mentors.path(payload.userId)
-      : ROUTES.user.mentorship.mentees.path(payload.userId);
+    const response = { data: 'API CALL' };
 
-    yield call(api.mentorings.removeMentorship.bind(api.mentorings), payload);
-
-    yield put(deleteMentorshipSuccess());
-    yield put(push(path));
-    yield put(showSnackbar({ message: 'Mentorship deleted', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: 'Successfully accepted request', options: { variant: 'success' } }));
   } catch (err) {
-    yield put(deleteMentorshipError(err));
+    yield put(acceptRequestError(err));
 
     // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to delete mentorship', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: 'Failed to accept request', options: { variant: 'warning' } }));
   }
 }
 
-export function* requestMentorship(action) {
+export function* denyRequest(action) {
   try {
-    const { payload } = action;
-    yield call(api.mentoringRequests.create.bind(api.mentoringRequests), payload);
+    const response = { data: 'API CALL' };
 
-    yield put(requestsMentorshipSuccess());
-    yield put(showSnackbar({ message: 'Request Submitted', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: 'Successfully denied request', options: { variant: 'success' } }));
   } catch (err) {
-    yield put(requestsMentorshipError(err));
+    yield put(denyRequestError(err));
 
     // TODO: intl message
-    yield put(showSnackbar({ message: 'Request Failed to Submit', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: 'Failed to deny request', options: { variant: 'warning' } }));
   }
 }
 
-export default function* mentorshipSaga() {
-  yield takeLatest(GET_USER_MENTORS_BEGIN, getMentors);
-  yield takeLatest(GET_AVAILABLE_MENTORS_BEGIN, getAvailableMentors);
+export function* createMentorship(action) {
+  try {
+    const response = { data: 'API CALL' };
 
-  yield takeLatest(DELETE_MENTORSHIP_BEGIN, deleteMentorship);
-  yield takeLatest(REQUEST_MENTORSHIP_BEGIN, requestMentorship);
+    yield put(showSnackbar({ message: 'Successfully created mentorship', options: { variant: 'success' } }));
+  } catch (err) {
+    yield put(createMentorshipError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to create mentorship', options: { variant: 'warning' } }));
+  }
+}
+
+
+export default function* RequestSaga() {
+  yield takeLatest(GET_REQUESTS_BEGIN, getRequests);
+  yield takeLatest(GET_PROPOSALS_BEGIN, getProposals);
+  yield takeLatest(ACCEPT_REQUEST_BEGIN, acceptRequest);
+  yield takeLatest(DENY_REQUEST_BEGIN, denyRequest);
+  yield takeLatest(CREATE_MENTORSHIP_BEGIN, createMentorship);
 }
