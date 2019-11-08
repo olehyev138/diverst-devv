@@ -19,7 +19,7 @@ RSpec.describe PageVisitationData, type: :model do
 
   describe '.end_of_day_count' do
     let!(:page_visitation_data1) { create(:page_visitation_data, visits_day: 1, visits_week: 2, visits_month: 3, visits_year: 2,
-                                                                 created_at: DateTime.now.weeks_ago(1), updated_at: DateTime.now.weeks_ago(1))
+                                                                 created_at: 1.5.weeks.ago, updated_at: 1.week.ago)
     }
 
     it 'returns end of day count' do
