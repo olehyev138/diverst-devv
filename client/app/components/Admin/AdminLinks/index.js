@@ -87,6 +87,13 @@ class AdminLinks extends React.PureComponent {
           strict: false
         }),
       },
+      innovate: {
+        open: !!matchPath(props.location.pathname, {
+          path: ROUTES.admin.innovate.index.data.pathPrefix,
+          exact: false,
+          strict: false
+        }),
+      },
       system: {
         open: !!matchPath(props.location.pathname, {
           path: ROUTES.admin.system.index.data.pathPrefix,
@@ -110,6 +117,10 @@ class AdminLinks extends React.PureComponent {
 
   handleManageClick = () => {
     this.setState(state => ({ manage: { open: !state.manage.open } }));
+  };
+
+  handleInnovateClick = () => {
+    this.setState(state => ({ innovate: { open: !state.innovate.open } }));
   };
 
   handleSystemClick = () => {
@@ -249,12 +260,43 @@ class AdminLinks extends React.PureComponent {
             <ListItemText primary='Plan' />
           </ListItem>
 
-          <ListItem button>
+          <ListItem button onClick={this.handleInnovateClick}>
             <ListItemIcon>
               <LightbulbIcon className={classes.lightbulbIcon} />
             </ListItemIcon>
             <ListItemText primary='Innovate' />
+            {this.state.innovate.open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
           </ListItem>
+          <Collapse in={this.state.innovate.open} timeout='auto' unmountOnExit>
+            <List disablePadding>
+              <MenuItem
+                component={WrappedNavLink}
+                to={ROUTES.admin.innovate.campaigns.index.path()}
+                className={classes.nested}
+                activeClassName={classes.navLinkActive}
+              >
+                <ListItemIcon>
+                  <ListIcon />
+                </ListItemIcon>
+                <ListItemText>
+                  Campaigns
+                </ListItemText>
+              </MenuItem>
+              <MenuItem
+                component={WrappedNavLink}
+                to={ROUTES.admin.innovate.financials.index.path()}
+                className={classes.nested}
+                activeClassName={classes.navLinkActive}
+              >
+                <ListItemIcon>
+                  <ListIcon />
+                </ListItemIcon>
+                <ListItemText>
+                  Financials
+                </ListItemText>
+              </MenuItem>
+            </List>
+          </Collapse>
 
           <ListItem button>
             <ListItemIcon>

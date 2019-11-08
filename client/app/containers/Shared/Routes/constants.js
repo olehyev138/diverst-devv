@@ -401,6 +401,23 @@ export const ROUTES = {
         },
       }
     },
+    innovate: {
+      index: {
+        data: {
+          pathPrefix: '/admin/innovate',
+        }
+      },
+      campaigns: {
+        index: {
+          path: () => '/admin/innovate/campaigns'
+        }
+      },
+      financials: {
+        index: {
+          path: () => '/admin/innovate/financials'
+        }
+      },
+    },
     system: {
       index: {
         data: {

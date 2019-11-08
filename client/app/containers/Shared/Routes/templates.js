@@ -7,7 +7,7 @@ import ErrorLayout from 'containers/Layouts/ErrorLayout/Loadable';
 import GlobalSettingsLayout from 'containers/Layouts/GlobalSettingsLayout/Loadable';
 import GroupManageLayout from 'containers/Layouts/GroupManageLayout/Loadable';
 import MentorshipLayout from 'containers/Layouts/MentorshipLayout/Loadable';
-
+import InnovateLayout from 'containers/Layouts/InnovateLayout/Loadable';
 
 /* Session */
 import LoginPage from 'containers/Session/LoginPage/Loadable';
@@ -92,6 +92,8 @@ import FolderPage from 'containers/Resource/Folder/FolderPage/Loadable';
 import ResourceCreatePage from 'containers/Resource/Resource/ResourceCreatePage/Loadable';
 import ResourceEditPage from 'containers/Resource/Resource/ResourceEditPage/Loadable';
 
+/* Admin Innovate */
+
 /* Global */
 import NotFoundPage from 'containers/Shared/NotFoundPage/Loadable';
 import PlaceholderPage from 'components/Shared/PlaceholderPage/Loadable';
@@ -106,6 +108,6 @@ export {
   UserDashboardPage, MetricsDashboardListPage, MetricsDashboardCreatePage, MetricsDashboardEditPage, MetricsDashboardPage,
   CustomGraphCreatePage, CustomGraphEditPage, GroupManageLayout, GroupSettingsPage, CustomTextEditPage,
   UserNewsLinkPage, UserEventsPage, FoldersPage, FolderCreatePage, FolderEditPage, FolderPage, ResourceCreatePage,
-  ResourceEditPage, UserProfilePage, EnterpriseConfigurationPage,
+  ResourceEditPage, UserProfilePage, InnovateLayout, EnterpriseConfigurationPage,
   MentorshipProfilePage, MentorshipEditProfilePage, MentorshipLayout, MentorsPage,
 };
