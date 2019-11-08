@@ -20,8 +20,4 @@ export const DENY_REQUEST_BEGIN = 'app/Mentorship/DENY_REQUEST_BEGIN';
 export const DENY_REQUEST_SUCCESS = 'app/Mentorship/DENY_REQUEST_SUCCESS';
 export const DENY_REQUEST_ERROR = 'app/Mentorship/DENY_REQUEST_ERROR';
 
-export const CREATE_MENTORSHIP_BEGIN = 'app/Mentorship/CREATE_MENTORSHIP_BEGIN';
-export const CREATE_MENTORSHIP_SUCCESS = 'app/Mentorship/CREATE_MENTORSHIP_SUCCESS';
-export const CREATE_MENTORSHIP_ERROR = 'app/Mentorship/CREATE_MENTORSHIP_ERROR';
-
 export const REQUEST_UNMOUNT = 'app/Mentorship/MENTORSHIP_REQUEST_UNMOUNT';

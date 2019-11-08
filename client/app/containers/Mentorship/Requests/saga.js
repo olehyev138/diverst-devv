@@ -11,7 +11,6 @@ import {
   GET_PROPOSALS_BEGIN,
   ACCEPT_REQUEST_BEGIN,
   DENY_REQUEST_BEGIN,
-  CREATE_MENTORSHIP_BEGIN,
 } from './constants';
 
 import {
@@ -19,12 +18,15 @@ import {
   getProposalsSuccess, getProposalsError,
   acceptRequestSuccess, acceptRequestError,
   denyRequestSuccess, denyRequestError,
-  createMentorshipSuccess, createMentorshipError,
 } from './actions';
 
 export function* getRequests(action) {
   try {
-    const response = { data: 'API CALL' };
+    const { payload } = action;
+    payload.receiver_id = payload.userId;
+    payload.query_scopes = [...(action.query_scopes || []), 'pending'];
+
+    const response = yield call(api.mentoringRequests.all.bind(api.mentoringRequests), payload);
 
     yield put(getRequestsSuccess(response.data.page));
   } catch (err) {
@@ -37,7 +39,10 @@ export function* getRequests(action) {
 
 export function* getProposals(action) {
   try {
-    const response = { data: 'API CALL' };
+    const { payload } = action;
+    payload.sender_id = payload.userId;
+
+    const response = yield call(api.mentoringRequests.all.bind(api.mentoringRequests), payload);
 
     yield put(getProposalsSuccess(response.data.page));
   } catch (err) {
@@ -50,7 +55,7 @@ export function* getProposals(action) {
 
 export function* acceptRequest(action) {
   try {
-    const response = { data: 'API CALL' };
+    const response = yield call(api.mentoringRequests.acceptRequest.bind(api.mentoringRequests), action.payload.id);
 
     yield put(showSnackbar({ message: 'Successfully accepted request', options: { variant: 'success' } }));
   } catch (err) {
@@ -63,7 +68,7 @@ export function* acceptRequest(action) {
 
 export function* denyRequest(action) {
   try {
-    const response = { data: 'API CALL' };
+    const response = yield call(api.mentoringRequests.denyRequest.bind(api.mentoringRequests), action.payload.id);
 
     yield put(showSnackbar({ message: 'Successfully denied request', options: { variant: 'success' } }));
   } catch (err) {
@@ -74,24 +79,10 @@ export function* denyRequest(action) {
   }
 }
 
-export function* createMentorship(action) {
-  try {
-    const response = { data: 'API CALL' };
-
-    yield put(showSnackbar({ message: 'Successfully created mentorship', options: { variant: 'success' } }));
-  } catch (err) {
-    yield put(createMentorshipError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to create mentorship', options: { variant: 'warning' } }));
-  }
-}
-
 
 export default function* RequestSaga() {
   yield takeLatest(GET_REQUESTS_BEGIN, getRequests);
   yield takeLatest(GET_PROPOSALS_BEGIN, getProposals);
   yield takeLatest(ACCEPT_REQUEST_BEGIN, acceptRequest);
   yield takeLatest(DENY_REQUEST_BEGIN, denyRequest);
-  yield takeLatest(CREATE_MENTORSHIP_BEGIN, createMentorship);
 }

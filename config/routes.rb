@@ -91,13 +91,18 @@ Diverst::Application.routes.draw do
       resources :initiative_users
       resources :invitation_segments_groups
       resources :likes
-      resources :mentorings do
+      resources :mentorings, except: [:create] do
         collection do
           post 'delete_mentorship'
         end
       end
       resources :mentoring_interests
-      resources :mentoring_requests
+      resources :mentoring_requests do
+        member do
+          post 'accept'
+          post 'deny'
+        end
+      end
       resources :mentoring_request_interests
       resources :mentoring_sessions
       resources :mentoring_session_comments

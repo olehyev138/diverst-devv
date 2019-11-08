@@ -25,6 +25,10 @@ class MentoringRequest < ApplicationRecord
   scope :mentor_requests, -> { where(mentoring_type: 'mentor') }
   scope :mentee_requests, -> { where(mentoring_type: 'mentee') }
 
+  scope :pending, -> { where(status: 'pending')}
+  scope :accepted, -> { where(status: 'accepted')}
+  scope :denied, -> { where(status: 'denied')}
+
   def notify_receiver
     MentorMailer.new_mentoring_request(id).deliver_later
   end

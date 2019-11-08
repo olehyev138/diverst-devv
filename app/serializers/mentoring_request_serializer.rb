@@ -1,6 +1,5 @@
 class MentoringRequestSerializer < ApplicationRecordSerializer
-  belongs_to :sender
-  belongs_to :receiver
+  attributes :sender, :receiver
 
   def serialize_all_fields
     true

@@ -17,9 +17,6 @@ import {
   DENY_REQUEST_BEGIN,
   DENY_REQUEST_SUCCESS,
   DENY_REQUEST_ERROR,
-  CREATE_MENTORSHIP_BEGIN,
-  CREATE_MENTORSHIP_SUCCESS,
-  CREATE_MENTORSHIP_ERROR,
   REQUEST_UNMOUNT,
 } from './constants';
 
@@ -103,27 +100,6 @@ export function denyRequestSuccess(payload) {
 export function denyRequestError(payload) {
   return {
     type: DENY_REQUEST_ERROR,
-    payload,
-  };
-}
-
-export function createMentorshipBegin(payload) {
-  return {
-    type: CREATE_MENTORSHIP_BEGIN,
-    payload,
-  };
-}
-
-export function createMentorshipSuccess(payload) {
-  return {
-    type: CREATE_MENTORSHIP_SUCCESS,
-    payload,
-  };
-}
-
-export function createMentorshipError(payload) {
-  return {
-    type: CREATE_MENTORSHIP_ERROR,
     payload,
   };
 }
