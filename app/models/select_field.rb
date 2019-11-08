@@ -3,6 +3,8 @@
 #  - CheckboxField is a multi select
 class SelectField < Field
   # return list of operator codes for a SelectField
+  include Optionnable # TODO: MAY BE DEPRECATED
+
   def operators
     [
       Field::OPERATORS[:equals_any_of],
@@ -14,7 +16,6 @@ class SelectField < Field
   # TODO: Everything below here is most likely deprecated & needs to be removed
   # DEPRECATED
   # -------------------------------------------------------------------------------------------------
-  include Optionnable
 
   def string_value(value)
     return '-' if value.blank?

@@ -1,5 +1,8 @@
 class DateField < Field
   # return list of operator codes for a DateField
+  include NumericOptionnable # TODO: MAY BE DEPRECATED
+  DEFAULT_DATE_FORMAT = '%F' # TODO: MAY BE DEPRECATED, The ISO 8601 date format (%Y-%m-%d)
+
   def operators
     [
       Field::OPERATORS[:equals],
@@ -15,9 +18,6 @@ class DateField < Field
   # TODO: Everything below here is most likely deprecated & needs to be removed
   # DEPRECATED
   # -------------------------------------------------------------------------------------------------
-
-
-  include NumericOptionnable
 
   # @deprecated
   def validates_rule_for_user?(rule:, user:)
@@ -38,8 +38,6 @@ class DateField < Field
 
   after_initialize :set_options_array
   attr_accessor :options
-
-  DEFAULT_DATE_FORMAT = '%F' # The ISO 8601 date format (%Y-%m-%d)
 
   def string_value(value)
     return '-' if value.nil?

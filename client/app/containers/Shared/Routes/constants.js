@@ -421,6 +421,11 @@ export const ROUTES = {
           edit: {
             path: () => '/admin/system/settings/custom_texts'
           }
+        },
+        enterpriseConfiguration: {
+          index: {
+            path: () => '/admin/system/settings/configuration'
+          }
         }
       }
     }
