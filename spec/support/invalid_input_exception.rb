@@ -1,5 +1,7 @@
-RSpec.shared_examples 'InvalidInputException when creating' do |model|
+RSpec.shared_examples 'InvalidInputException when creating' do |*input|
+  model = input[0]
   it 'captures the error when InvalidInputException' do
+    pending(input[2]) if input.include?(:pending)
     allow_any_instance_of(model.constantize).to receive(:save).and_return(false)
     allow_any_instance_of(model.constantize).to receive_message_chain(:errors, :full_messages) { [] }
     allow_any_instance_of(model.constantize).to receive_message_chain(:errors, :messages) { [[]] }
@@ -8,8 +10,10 @@ RSpec.shared_examples 'InvalidInputException when creating' do |model|
   end
 end
 
-RSpec.shared_examples 'InvalidInputException when updating' do |model|
+RSpec.shared_examples 'InvalidInputException when updating' do |*input|
+  model = input[0]
   it 'captures the error when InvalidInputException' do
+    pending(input[2]) if input.include?(:pending)
     allow_any_instance_of(model.constantize).to receive(:save).and_return(false)
     allow_any_instance_of(model.constantize).to receive_message_chain(:errors, :full_messages) { [] }
     allow_any_instance_of(model.constantize).to receive_message_chain(:errors, :messages) { [[]] }
