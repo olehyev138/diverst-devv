@@ -47,15 +47,9 @@ export function CampaignList(props) {
   const { classes } = props;
 
   const handleOrderChange = (columnId, orderDir) => {
-//    props.handleOrdering({
-//      orderBy: (columnId === -1) ? 'users.id' : `users.${columns[columnId].field}`,
-//      orderDir: (columnId === -1) ? 'asc' : orderDir
-//    });
   };
 
   const columns = [
-//    { title: 'First Name', field: 'first_name' },
-//    { title: 'Last Name', field: 'last_name' }
   ];
 
   return (

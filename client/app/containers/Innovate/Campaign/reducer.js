@@ -8,7 +8,7 @@ import produce from 'immer/dist/immer';
 import {
   GET_CAMPAIGNS_BEGIN, GET_CAMPAIGNS_ERROR,
   GET_CAMPAIGNS_SUCCESS, CAMPAIGNS_UNMOUNT,
-  CREATE_CAMPAIGNS_BEGIN, CREATE_CAMPAIGNS_SUCCESS, CREATE_CAMPAIGNS_ERROR,
+  CREATE_CAMPAIGN_BEGIN, CREATE_CAMPAIGN_SUCCESS, CREATE_CAMPAIGN_ERROR,
 } from './constants';
 
 export const initialState = {
@@ -33,11 +33,11 @@ function campaignsReducer(state = initialState, action) {
       case GET_CAMPAIGNS_ERROR:
         draft.isFetchingCampaigns = false;
         break;
-      case CREATE_CAMPAIGNS_BEGIN:
+      case CREATE_CAMPAIGN_BEGIN:
         draft.isCommitting = true;
         break;
-      case CREATE_CAMPAIGNS_SUCCESS:
-      case CREATE_CAMPAIGNS_ERROR:
+      case CREATE_CAMPAIGN_SUCCESS:
+      case CREATE_CAMPAIGN_ERROR:
         draft.isCommitting = false;
         break;
       case CAMPAIGNS_UNMOUNT:

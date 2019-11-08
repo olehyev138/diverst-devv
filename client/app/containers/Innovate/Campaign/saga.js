@@ -5,13 +5,13 @@ import { push } from 'connected-react-router';
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
 
 import {
-  GET_CAMPAIGNS_BEGIN, CREATE_CAMPAIGNS_BEGIN,
+  GET_CAMPAIGNS_BEGIN, CREATE_CAMPAIGN_BEGIN,
   DELETE_CAMPAIGN_BEGIN
 } from 'containers/Innovate/Campaign/constants';
 
 import {
   getCampaignsSuccess, getCampaignsError, deleteCampaignSuccess,
-  createCampaignsError, deleteCampaignError, createCampaignsSuccess
+  createCampaignError, deleteCampaignError, createCampaignSuccess
 } from 'containers/Innovate/Campaign/actions';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -38,11 +38,11 @@ export function* createCampaigns(action) {
 
     const response = yield call(api.campaigns.create.bind(api.campaigns), payload);
 
-    yield put(createCampaignsSuccess());
+    yield put(createCampaignSuccess());
     yield put(push(ROUTES.group.campaigns.index.path(action.payload.groupId)));
     yield put(showSnackbar({ message: 'User updated', options: { variant: 'success' } }));
   } catch (err) {
-    yield put(createCampaignsError(err));
+    yield put(createCampaignError(err));
 
     // TODO: intl message
     yield put(showSnackbar({ message: 'Failed to create campaigns', options: { variant: 'warning' } }));
@@ -70,6 +70,6 @@ export function* deleteCampaigns(action) {
 
 export default function* campaignsSaga() {
   yield takeLatest(GET_CAMPAIGNS_BEGIN, getCampaigns);
-  yield takeLatest(CREATE_CAMPAIGNS_BEGIN, createCampaigns);
+  yield takeLatest(CREATE_CAMPAIGN_BEGIN, createCampaigns);
   yield takeLatest(DELETE_CAMPAIGN_BEGIN, deleteCampaigns);
 }
