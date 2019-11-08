@@ -50,6 +50,8 @@ export function CampaignList(props) {
   };
 
   const columns = [
+    { title: 'Title', field: 'title' },
+    { title: 'Description', field: 'description' }
   ];
 
   return (
@@ -58,7 +60,7 @@ export function CampaignList(props) {
         <Button
           className={classes.actionButton}
           variant='contained'
-          to={props.links.campaignNew}
+          to='#'
           color='primary'
           size='large'
           component={WrappedNavLink}

@@ -26,7 +26,8 @@ function campaignsReducer(state = initialState, action) {
         draft.isFetchingCampaigns = true;
         break;
       case GET_CAMPAIGNS_SUCCESS:
-        draft.campaignList = formatCampaigns(action.payload.items);
+        console.log(action);
+        draft.campaignList = action.payload.items;
         draft.campaignTotal = action.payload.total;
         draft.isFetchingCampaigns = false;
         break;
@@ -44,20 +45,6 @@ function campaignsReducer(state = initialState, action) {
         return initialState;
     }
   });
-}
-
-/* Helpers */
-
-function formatCampaigns(campaigns) {
-  /* eslint-disable no-return-assign */
-
-  /* Extract user out of each campaign
-   *   { group_id: <>, user: { ... }  } -> { first_name: <>, ... }
-   */
-  return campaigns.reduce((map, campaign) => {
-    map.push(campaign.user);
-    return map;
-  }, []);
 }
 
 export default campaignsReducer;

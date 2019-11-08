@@ -18,6 +18,7 @@ import customText from 'api/custom_text/custom_text';
 import user from 'api/user/user';
 import folders from 'api/folders/folders';
 import resources from 'api/resources/resources';
+import campaigns from 'api/campaigns/campaigns';
 
 /* Metrics */
 import overviewGraphs from 'api/metrics/overview_graphs';
@@ -47,6 +48,7 @@ const Api = {
   customText,
   folders,
   resources,
+  campaigns,
   metrics: {
     overviewGraphs,
     userGraphs,

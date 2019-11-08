@@ -11,7 +11,7 @@ import {
   UserDashboardPage, MetricsDashboardListPage, MetricsDashboardCreatePage, MetricsDashboardEditPage, MetricsDashboardPage,
   CustomGraphCreatePage, CustomGraphEditPage, GroupManageLayout, GroupSettingsPage, CustomTextEditPage,
   UserNewsLinkPage, UserEventsPage, FoldersPage, FolderCreatePage, FolderEditPage, FolderPage, ResourceCreatePage,
-  ResourceEditPage, UserProfilePage, InnovateLayout, EnterpriseConfigurationPage
+  ResourceEditPage, UserProfilePage, InnovateLayout, CampaignListPage, EnterpriseConfigurationPage
 } from './templates';
 
 // Paths
@@ -70,7 +70,7 @@ export default function Routes(props) {
       <AdminLayout {...expandRoute(ROUTES.admin.manage.resources.index)} component={FoldersPage} />
 
       { /* Admin - Innovate */ }
-      <AdminLayout {...expandRoute(ROUTES.admin.innovate.campaigns.index)} component={PlaceholderPage} />
+      <AdminLayout {...expandRoute(ROUTES.admin.innovate.campaigns.index)} component={CampaignListPage} />
       <AdminLayout {...expandRoute(ROUTES.admin.innovate.financials.index)} component={PlaceholderPage} />
 
       { /* Admin - System - GlobalSettings */ }

@@ -58,7 +58,7 @@ export function CampaignListPage(props) {
     props.getCampaignsBegin(params);
 
     return () => {
-      props.getCampaignsBegin();
+      props.campaignsUnmount();
     };
   }, []);
 

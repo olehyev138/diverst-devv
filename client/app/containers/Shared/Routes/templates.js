@@ -87,6 +87,7 @@ import ResourceCreatePage from 'containers/Resource/Resource/ResourceCreatePage/
 import ResourceEditPage from 'containers/Resource/Resource/ResourceEditPage/Loadable';
 
 /* Admin Innovate */
+import CampaignListPage from 'containers/Innovate/Campaign/CampaignListPage/Loadable';
 
 /* Global */
 import NotFoundPage from 'containers/Shared/NotFoundPage/Loadable';
@@ -102,5 +103,5 @@ export {
   UserDashboardPage, MetricsDashboardListPage, MetricsDashboardCreatePage, MetricsDashboardEditPage, MetricsDashboardPage,
   CustomGraphCreatePage, CustomGraphEditPage, GroupManageLayout, GroupSettingsPage, CustomTextEditPage,
   UserNewsLinkPage, UserEventsPage, FoldersPage, FolderCreatePage, FolderEditPage, FolderPage, ResourceCreatePage,
-  ResourceEditPage, UserProfilePage, InnovateLayout, EnterpriseConfigurationPage
+  ResourceEditPage, UserProfilePage, InnovateLayout, CampaignListPage, EnterpriseConfigurationPage
 };
