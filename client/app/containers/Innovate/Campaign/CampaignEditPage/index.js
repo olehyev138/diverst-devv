@@ -14,8 +14,8 @@ import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/Innovate/Campaign/reducer';
 import saga from 'containers/Innovate/Campaign/saga';
 
-import { createMembersBegin, getMembersBegin, CampaignsUnmount } from 'containers/Innovate/Campaign/actions';
-import { selectPaginatedSelectMembers, selectMemberTotal, selectIsCommitting } from 'containers/Innovate/Campaign/selectors';
+import { updateCampaignBegin, getCampaignsBegin, campaignsUnmount } from 'containers/Innovate/Campaign/actions';
+import { selectCampaignTotal, selectIsCommitting } from 'containers/Innovate/Campaign/selectors';
 
 import CampaignForm from 'components/Innovate/Campaign/CampaignForm';
 
@@ -51,8 +51,8 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = {
-  createMembersBegin,
-  CampaignsUnmount,
+  updateCampaignBegin,
+  campaignsUnmount,
 };
 
 const withConnect = connect(

@@ -12,12 +12,13 @@ import reducer from 'containers/Innovate/Campaign/reducer';
 import saga from 'containers/Innovate/Campaign/saga';
 
 import {
-  getCampaignBegin, deleteCampaignBegin,
-  CampaignsUnmount
+  getCampaignsBegin, deleteCampaignBegin,
+  campaignsUnmount
 } from 'containers/Innovate/Campaign/actions';
+
 import {
-  selectPaginatedMembers, selectMemberTotal,
-  selectIsFetchingMembers
+  selectPaginatedCampaigns, selectCampaignTotal,
+  selectIsFetchingCampaigns
 } from 'containers/Innovate/Campaign/selectors';
 
 import RouteService from 'utils/routeHelpers';
@@ -88,9 +89,9 @@ CampaignListPage.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
-  campaignList: selectPaginatedMembers(),
-  campaignTotal: selectMemberTotal(),
-  isFetchingCampaigns: selectIsFetchingMembers()
+  campaignList: selectPaginatedCampaigns(),
+  campaignTotal: selectCampaignTotal(),
+  isFetchingCampaigns: selectIsFetchingCampaigns()
 });
 
 const mapDispatchToProps = {
