@@ -51,15 +51,12 @@ class NewsLink < ApplicationRecord
   scope :unapproved, -> { joins(:news_feed_link).where(news_feed_links: { approved: false }) }
   scope :approved, -> { joins(:news_feed_link).where(news_feed_links: { approved: true }) }
 
-  def picture_url=(url)
-    self.picture = URI.parse(url)
-  end
-
   def picture_location(expires_in: 3600, default_style: :medium)
-    return nil if !picture.presence
+    return nil if !picture.attached?
 
-    default_style = :medium if !picture.styles.keys.include? default_style
-    picture.expiring_url(expires_in, default_style)
+    # default_style = :medium if !picture.styles.keys.include? default_style
+    # picture.expiring_url(expires_in, default_style)
+    Rails.application.routes.url_helpers.url_for(picture)
   end
 
   # call back to delete news link segment associations
