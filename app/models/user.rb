@@ -171,15 +171,12 @@ class User < ApplicationRecord
     field_data.to_h { |fd| [fd.field_id, fd.data] }
   end
 
-  def avatar_url=(url)
-    self.avatar = URI.parse(url)
-  end
-
   def avatar_location(expires_in: 3600, default_style: :medium)
-    return nil if !avatar.presence
+    return nil if !avatar.attached?
 
-    default_style = :medium if !avatar.styles.keys.include? default_style
-    avatar.expiring_url(expires_in, default_style)
+    # default_style = :medium if !avatar.styles.keys.include? default_style
+    # avatar.expiring_url(expires_in, default_style)
+    Rails.application.routes.url_helpers.url_for(avatar)
   end
 
   def generate_authentication_token(length = 20)
@@ -199,7 +196,7 @@ class User < ApplicationRecord
   end
 
   def add_to_default_mentor_group
-    if mentor_changed? || mentee_changed?
+    if saved_change_to_mentor? || saved_change_to_mentee?
       DefaultMentorGroupMemberUpdateJob.perform_later(id, mentor, mentee)
     end
   end
