@@ -123,26 +123,20 @@ class Initiative < ApplicationRecord
     ).merge({ 'created_at' => self.created_at.beginning_of_hour })
   end
 
-  def picture_url=(url)
-    self.picture = URI.parse(url)
-  end
-
   def picture_location(expires_in: 3600, default_style: :medium)
     return nil if !picture.presence
 
-    default_style = :medium if !picture.styles.keys.include? default_style
-    picture.expiring_url(expires_in, default_style)
-  end
-
-  def qr_code_url=(url)
-    self.qr_code = URI.parse(url)
+    # default_style = :medium if !picture.styles.keys.include? default_style
+    # picture.expiring_url(expires_in, default_style)
+    Rails.application.routes.url_helpers.url_for(picture)
   end
 
   def qr_code_location(expires_in: 3600, default_style: :medium)
     return nil if !qr_code.presence
 
-    default_style = :medium if !qr_code.styles.keys.include? default_style
-    qr_code.expiring_url(expires_in, default_style)
+    # default_style = :medium if !qr_code.styles.keys.include? default_style
+    # qr_code.expiring_url(expires_in, default_style)
+    Rails.application.routes.url_helpers.url_for(qr_code)
   end
 
   def initiative_date(date_type)

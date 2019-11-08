@@ -86,46 +86,19 @@ RSpec.describe Initiative, type: :model do
 
   describe '#picture_location' do
     it 'returns the actual picture location' do
-      initiative = create(:initiative, picture: File.new('spec/fixtures/files/verizon_logo.png'))
+      initiative = create(:initiative)
+      initiative.picture.attach(io: File.open('spec/fixtures/files/verizon_logo.png'), filename: 'file.png')
 
       expect(initiative.picture_location).to_not be nil
-      expect(initiative.picture_location).to_not eq '/assets/missing.png'
-    end
-  end
-
-  describe '#picture_url' do
-    it 'sets the picture for initiative from url' do
-      initiative = create(:initiative, picture: nil)
-      allow(URI).to receive(:parse).and_return(File.open('spec/fixtures/files/verizon_logo.png'))
-      expect(initiative.picture_file_name).to be nil
-
-      initiative.picture_url = Faker::LoremPixel.image(secure: false)
-      initiative.save!
-      initiative.reload
-
-      expect(initiative.picture_file_name).to_not be nil
     end
   end
 
   describe '#qr_code_location' do
     it 'returns the actual qr_code location' do
-      initiative = create(:initiative, qr_code: File.new('spec/fixtures/files/verizon_logo.png'))
+      initiative = create(:initiative)
+      initiative.qr_code.attach(io: File.open('spec/fixtures/files/verizon_logo.png'), filename: 'file.png')
 
       expect(initiative.qr_code_location).to_not be nil
-      expect(initiative.qr_code_location).to_not eq '/assets/missing.png'
-    end
-  end
-
-  describe '#qr_code_url' do
-    it 'sets the qr_code for initiative from url' do
-      initiative = create(:initiative, qr_code: nil)
-      expect(initiative.qr_code_file_name).to be nil
-
-      initiative.qr_code_url = Faker::LoremPixel.image(secure: false)
-      initiative.save!
-      initiative.reload
-
-      expect(initiative.qr_code_file_name).to_not be nil
     end
   end
 
