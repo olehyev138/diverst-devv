@@ -55,17 +55,20 @@ class Campaign < ApplicationRecord
   scope :ongoing, -> { where('start < :current_time AND end > :current_time', current_time: Time.current) }
 
   def image_location(expires_in: 3600, default_style: :medium)
-    return nil if !image.presence
+    return nil if !image.attached?
 
-    default_style = :medium if !image.styles.keys.include? default_style
-    image.expiring_url(expires_in, default_style)
+    # default_style = :medium if !image.styles.keys.include? default_style
+    # image.expiring_url(expires_in, default_style)
+
+    Rails.application.routes.url_helpers.url_for(image)
   end
 
   def banner_location(expires_in: 3600, default_style: :medium)
-    return nil if !banner.presence
+    return nil if !banner.attached?
 
-    default_style = :medium if !banner.styles.keys.include? default_style
-    banner.expiring_url(expires_in, default_style)
+    # default_style = :medium if !banner.styles.keys.include? default_style
+    # banner.expiring_url(expires_in, default_style)
+    Rails.application.routes.url_helpers.url_for(banner)
   end
 
   def create_invites
