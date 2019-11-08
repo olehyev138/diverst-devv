@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 
 import Container from '@material-ui/core/Container';
+import Fade from '@material-ui/core/Fade';
 import { withStyles } from '@material-ui/core/styles';
 
 import GroupLinks from 'components/Group/GroupLinks';
@@ -20,6 +21,7 @@ import RouteService from 'utils/routeHelpers';
 import { createStructuredSelector } from 'reselect';
 
 import Scrollbar from 'components/Shared/Scrollbar';
+import DiverstBreadcrumbs from 'components/Shared/DiverstBreadcrumbs';
 
 const styles = theme => ({
   toolbar: theme.mixins.toolbar,
@@ -28,12 +30,12 @@ const styles = theme => ({
   },
 });
 
-const GroupLayout = ({ component: Component, ...rest }) => {
+const GroupLayout = ({ component: Component, classes, ...rest }) => {
   useInjectReducer({ key: 'groups', reducer });
   useInjectSaga({ key: 'groups', saga });
 
   const {
-    classes, computedMatch, location, currentGroup, ...other
+    computedMatch, location, currentGroup, disableBreadcrumbs, ...other
   } = rest;
 
   /* - currentGroup will be wrapped around every container in the group section
@@ -59,13 +61,22 @@ const GroupLayout = ({ component: Component, ...rest }) => {
         <React.Fragment>
           <GroupLinks {...other} />
           <Scrollbar>
-            <Container>
-              <div className={classes.content}>
-                {currentGroup && (
-                  <Component currentGroup={currentGroup} {...other} />
-                )}
-              </div>
-            </Container>
+            <Fade in appear>
+              <Container>
+                <div className={classes.content}>
+                  {currentGroup && (
+                    <React.Fragment>
+                      {disableBreadcrumbs !== true ? (
+                        <DiverstBreadcrumbs />
+                      ) : (
+                        <React.Fragment />
+                      )}
+                      <Component currentGroup={currentGroup} {...rest} />
+                    </React.Fragment>
+                  )}
+                </div>
+              </Container>
+            </Fade>
           </Scrollbar>
         </React.Fragment>
       )}
@@ -77,6 +88,7 @@ GroupLayout.propTypes = {
   component: PropTypes.elementType,
   classes: PropTypes.object,
   currentGroup: PropTypes.object,
+  disableBreadcrumbs: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({

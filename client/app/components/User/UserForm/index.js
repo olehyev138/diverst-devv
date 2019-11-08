@@ -9,66 +9,111 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import dig from 'object-dig';
 
-import { FormattedMessage } from 'react-intl';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { Field, Formik, Form } from 'formik';
 import {
   Button, Card, CardActions, CardContent, TextField,
-  Divider
+  Divider, Typography, Box
 } from '@material-ui/core';
 
+import Select from 'components/Shared/DiverstSelect';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import messages from 'containers/User/messages';
-import { buildValues } from 'utils/formHelpers';
+import { buildValues, mapFields } from 'utils/formHelpers';
 
 import FieldInputForm from 'components/User/FieldInputForm/Loadable';
+import DiverstSubmit from 'components/Shared/DiverstSubmit';
+import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 
 /* eslint-disable object-curly-newline */
 export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
   return (
-    <Card>
-      <Form>
-        <CardContent>
-          <Field
-            component={TextField}
-            onChange={handleChange}
-            fullWidth
-            id='first_name'
-            name='first_name'
-            value={values.first_name}
-            label={<FormattedMessage {...messages.first_name} />}
+    <React.Fragment>
+      <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.user}>
+        <Card>
+          <Form>
+            <CardContent>
+              <Field
+                component={TextField}
+                onChange={handleChange}
+                fullWidth
+                disabled={props.isCommitting}
+                margin='normal'
+                id='first_name'
+                name='first_name'
+                value={values.first_name}
+                label={<DiverstFormattedMessage {...messages.first_name} />}
+              />
+              <Field
+                component={TextField}
+                onChange={handleChange}
+                fullWidth
+                disabled={props.isCommitting}
+                margin='normal'
+                id='last_name'
+                name='last_name'
+                value={values.last_name}
+                label={<DiverstFormattedMessage {...messages.last_name} />}
+              />
+              <Field
+                component={TextField}
+                onChange={handleChange}
+                fullWidth
+                disabled={props.isCommitting}
+                margin='normal'
+                multiline
+                rows={4}
+                variant='outlined'
+                id='biography'
+                name='biography'
+                value={values.biography}
+                label={<DiverstFormattedMessage {...messages.biography} />}
+              />
+              <Field
+                component={Select}
+                fullWidth
+                disabled={props.isCommitting}
+                id='time_zone'
+                name='time_zone'
+                margin='normal'
+                label={<DiverstFormattedMessage {...messages.time_zone} />}
+                value={values.time_zone}
+                options={dig(props, 'user', 'timezones') || []}
+                onChange={value => setFieldValue('time_zone', value)}
+                onBlur={() => setFieldTouched('time_zone', true)}
+              />
+            </CardContent>
+            <Divider />
+            <CardActions>
+              <DiverstSubmit isCommitting={props.isCommitting}>
+                {buttonText}
+              </DiverstSubmit>
+              <Button
+                disabled={props.isCommitting}
+                to={props.admin ? props.links.usersIndex : props.links.usersPath(values.id)}
+                component={WrappedNavLink}
+              >
+                <DiverstFormattedMessage {...messages.cancel} />
+              </Button>
+            </CardActions>
+          </Form>
+        </Card>
+      </DiverstFormLoader>
+      {props.edit && (
+        <React.Fragment>
+          <Box mb={2} />
+          <FieldInputForm
+            edit
+            user={props.user}
+            fieldData={props.fieldData}
+            updateFieldDataBegin={props.updateFieldDataBegin}
+            admin={props.admin}
+            isCommitting={props.isCommitting}
+            isFormLoading={props.isFormLoading}
           />
-          <Field
-            component={TextField}
-            onChange={handleChange}
-            fullWidth
-            id='last_name'
-            name='last_name'
-            value={values.last_name}
-            label={<FormattedMessage {...messages.last_name} />}
-          />
-        </CardContent>
-        <CardActions>
-          <Button
-            color='primary'
-            type='submit'
-          >
-            {buttonText}
-          </Button>
-          <Button
-            to={props.links.usersIndex}
-            component={WrappedNavLink}
-          >
-            <FormattedMessage {...messages.cancel} />
-          </Button>
-        </CardActions>
-      </Form>
-      <Divider />
-      <FieldInputForm
-        user={props.user}
-        fieldData={props.fieldData}
-        updateFieldDataBegin={props.updateFieldDataBegin}
-      />
-    </Card>
+        </React.Fragment>
+      )}
+    </React.Fragment>
   );
 }
 
@@ -78,7 +123,9 @@ export function UserForm(props) {
   const initialValues = buildValues(user, {
     first_name: { default: '' },
     last_name: { default: '' },
-    id: { default: undefined }
+    biography: { default: '' },
+    time_zone: { default: null },
+    id: { default: undefined },
   });
 
   return (
@@ -86,7 +133,9 @@ export function UserForm(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        props.userAction(values);
+        const payload = mapFields(values, ['time_zone']);
+        payload.redirectPath = props.admin ? props.links.usersIndex : props.links.usersPath(user.id);
+        props.userAction(payload);
       }}
 
       render={formikProps => <UserFormInner {...props} {...formikProps} />}
@@ -98,6 +147,14 @@ UserForm.propTypes = {
   userAction: PropTypes.func,
   user: PropTypes.object,
   currentUser: PropTypes.object,
+  admin: PropTypes.bool,
+  edit: PropTypes.bool,
+  isCommitting: PropTypes.bool,
+  isFormLoading: PropTypes.bool,
+  links: PropTypes.shape({
+    usersIndex: PropTypes.string,
+    usersPath: PropTypes.func,
+  })
 };
 
 UserFormInner.propTypes = {
@@ -111,8 +168,13 @@ UserFormInner.propTypes = {
   buttonText: PropTypes.string,
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
+  admin: PropTypes.bool,
+  edit: PropTypes.bool,
+  isCommitting: PropTypes.bool,
+  isFormLoading: PropTypes.bool,
   links: PropTypes.shape({
-    usersIndex: PropTypes.string
+    usersIndex: PropTypes.string,
+    usersPath: PropTypes.func,
   })
 };
 

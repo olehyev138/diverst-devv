@@ -53,10 +53,11 @@ class NewsLink < ApplicationRecord
     self.picture = URI.parse(url)
   end
 
-  def picture_location
+  def picture_location(expires_in: 3600, default_style: :medium)
     return nil if !picture.presence
 
-    picture.expiring_url(36000)
+    default_style = :medium if !picture.styles.keys.include? default_style
+    picture.expiring_url(expires_in, default_style)
   end
 
   # call back to delete news link segment associations

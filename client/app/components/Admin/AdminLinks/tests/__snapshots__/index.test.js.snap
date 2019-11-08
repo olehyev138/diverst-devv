@@ -31,9 +31,8 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
             <EqualizerIcon />
           </WithStyles(ForwardRef(ListItemIcon))>
           <WithStyles(ForwardRef(ListItemText))>
-            <FormattedMessage
+            <Memo(DiverstFormattedMessage)
               id="diverst.containers.Routes.admin.analyze.index"
-              values={Object {}}
             />
           </WithStyles(ForwardRef(ListItemText))>
           <ExpandMoreIcon />
@@ -60,9 +59,8 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
               <WithStyles(ForwardRef(ListItemText))>
-                <FormattedMessage
+                <Memo(DiverstFormattedMessage)
                   id="diverst.containers.Routes.admin.analyze.overview"
-                  values={Object {}}
                 />
               </WithStyles(ForwardRef(ListItemText))>
             </WithStyles(ForwardRef(MenuItem))>
@@ -73,16 +71,14 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   "render": [Function],
                 }
               }
-              exact={true}
               to="/admin/analyze/users"
             >
               <WithStyles(ForwardRef(ListItemIcon))>
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
               <WithStyles(ForwardRef(ListItemText))>
-                <FormattedMessage
+                <Memo(DiverstFormattedMessage)
                   id="diverst.containers.Routes.admin.analyze.users"
-                  values={Object {}}
                 />
               </WithStyles(ForwardRef(ListItemText))>
             </WithStyles(ForwardRef(MenuItem))>
@@ -93,17 +89,31 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   "render": [Function],
                 }
               }
-              exact={true}
               to="/admin/analyze/groups"
             >
               <WithStyles(ForwardRef(ListItemIcon))>
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
               <WithStyles(ForwardRef(ListItemText))>
-                <FormattedMessage
+                <Memo(DiverstFormattedMessage)
                   id="diverst.containers.Routes.admin.analyze.groups"
-                  values={Object {}}
                 />
+              </WithStyles(ForwardRef(ListItemText))>
+            </WithStyles(ForwardRef(MenuItem))>
+            <WithStyles(ForwardRef(MenuItem))
+              component={
+                Object {
+                  "$$typeof": Symbol(react.forward_ref),
+                  "render": [Function],
+                }
+              }
+              to="/admin/analyze/custom"
+            >
+              <WithStyles(ForwardRef(ListItemIcon))>
+                <ListIcon />
+              </WithStyles(ForwardRef(ListItemIcon))>
+              <WithStyles(ForwardRef(ListItemText))>
+                Custom
               </WithStyles(ForwardRef(ListItemText))>
             </WithStyles(ForwardRef(MenuItem))>
           </WithStyles(ForwardRef(List))>
@@ -116,9 +126,8 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
             <DeviceHubIcon />
           </WithStyles(ForwardRef(ListItemIcon))>
           <WithStyles(ForwardRef(ListItemText))>
-            <FormattedMessage
+            <Memo(DiverstFormattedMessage)
               id="diverst.containers.Routes.admin.manage.index"
-              values={Object {}}
             />
           </WithStyles(ForwardRef(ListItemText))>
           <ExpandMoreIcon />
@@ -138,16 +147,14 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   "render": [Function],
                 }
               }
-              exact={true}
               to="/admin/manage/groups"
             >
               <WithStyles(ForwardRef(ListItemIcon))>
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
               <WithStyles(ForwardRef(ListItemText))>
-                <FormattedMessage
+                <Memo(DiverstFormattedMessage)
                   id="diverst.containers.Routes.admin.manage.groups"
-                  values={Object {}}
                 />
               </WithStyles(ForwardRef(ListItemText))>
             </WithStyles(ForwardRef(MenuItem))>
@@ -158,16 +165,32 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   "render": [Function],
                 }
               }
-              exact={true}
               to="/admin/manage/segments"
             >
               <WithStyles(ForwardRef(ListItemIcon))>
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
               <WithStyles(ForwardRef(ListItemText))>
-                <FormattedMessage
+                <Memo(DiverstFormattedMessage)
                   id="diverst.containers.Routes.admin.manage.segments"
-                  values={Object {}}
+                />
+              </WithStyles(ForwardRef(ListItemText))>
+            </WithStyles(ForwardRef(MenuItem))>
+            <WithStyles(ForwardRef(MenuItem))
+              component={
+                Object {
+                  "$$typeof": Symbol(react.forward_ref),
+                  "render": [Function],
+                }
+              }
+              to="/admin/manage/folders"
+            >
+              <WithStyles(ForwardRef(ListItemIcon))>
+                <ListIcon />
+              </WithStyles(ForwardRef(ListItemIcon))>
+              <WithStyles(ForwardRef(ListItemText))>
+                <Memo(DiverstFormattedMessage)
+                  id="diverst.containers.Routes.admin.manage.resources.index"
                 />
               </WithStyles(ForwardRef(ListItemText))>
             </WithStyles(ForwardRef(MenuItem))>
@@ -222,9 +245,8 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
             <SettingsIcon />
           </WithStyles(ForwardRef(ListItemIcon))>
           <WithStyles(ForwardRef(ListItemText))>
-            <FormattedMessage
+            <Memo(DiverstFormattedMessage)
               id="diverst.containers.Routes.admin.system.index"
-              values={Object {}}
             />
           </WithStyles(ForwardRef(ListItemText))>
           <ExpandMoreIcon />
@@ -244,7 +266,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   "render": [Function],
                 }
               }
-              exact={true}
+              isActive={[Function]}
               to="/admin/system/settings/fields"
             >
               <WithStyles(ForwardRef(ListItemIcon))>
@@ -261,16 +283,14 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   "render": [Function],
                 }
               }
-              exact={true}
               to="/admin/system/users"
             >
               <WithStyles(ForwardRef(ListItemIcon))>
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
               <WithStyles(ForwardRef(ListItemText))>
-                <FormattedMessage
+                <Memo(DiverstFormattedMessage)
                   id="diverst.containers.Routes.admin.system.users"
-                  values={Object {}}
                 />
               </WithStyles(ForwardRef(ListItemText))>
             </WithStyles(ForwardRef(MenuItem))>
@@ -281,7 +301,6 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   "render": [Function],
                 }
               }
-              exact={true}
               to="#"
             >
               <WithStyles(ForwardRef(ListItemIcon))>
@@ -298,7 +317,6 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   "render": [Function],
                 }
               }
-              exact={true}
               to="#"
             >
               <WithStyles(ForwardRef(ListItemIcon))>
@@ -337,9 +355,8 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
             <EqualizerIcon />
           </WithStyles(ForwardRef(ListItemIcon))>
           <WithStyles(ForwardRef(ListItemText))>
-            <FormattedMessage
+            <Memo(DiverstFormattedMessage)
               id="diverst.containers.Routes.admin.analyze.index"
-              values={Object {}}
             />
           </WithStyles(ForwardRef(ListItemText))>
           <ExpandMoreIcon />
@@ -366,9 +383,8 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
               <WithStyles(ForwardRef(ListItemText))>
-                <FormattedMessage
+                <Memo(DiverstFormattedMessage)
                   id="diverst.containers.Routes.admin.analyze.overview"
-                  values={Object {}}
                 />
               </WithStyles(ForwardRef(ListItemText))>
             </WithStyles(ForwardRef(MenuItem))>
@@ -379,16 +395,14 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   "render": [Function],
                 }
               }
-              exact={true}
               to="/admin/analyze/users"
             >
               <WithStyles(ForwardRef(ListItemIcon))>
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
               <WithStyles(ForwardRef(ListItemText))>
-                <FormattedMessage
+                <Memo(DiverstFormattedMessage)
                   id="diverst.containers.Routes.admin.analyze.users"
-                  values={Object {}}
                 />
               </WithStyles(ForwardRef(ListItemText))>
             </WithStyles(ForwardRef(MenuItem))>
@@ -399,17 +413,31 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   "render": [Function],
                 }
               }
-              exact={true}
               to="/admin/analyze/groups"
             >
               <WithStyles(ForwardRef(ListItemIcon))>
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
               <WithStyles(ForwardRef(ListItemText))>
-                <FormattedMessage
+                <Memo(DiverstFormattedMessage)
                   id="diverst.containers.Routes.admin.analyze.groups"
-                  values={Object {}}
                 />
+              </WithStyles(ForwardRef(ListItemText))>
+            </WithStyles(ForwardRef(MenuItem))>
+            <WithStyles(ForwardRef(MenuItem))
+              component={
+                Object {
+                  "$$typeof": Symbol(react.forward_ref),
+                  "render": [Function],
+                }
+              }
+              to="/admin/analyze/custom"
+            >
+              <WithStyles(ForwardRef(ListItemIcon))>
+                <ListIcon />
+              </WithStyles(ForwardRef(ListItemIcon))>
+              <WithStyles(ForwardRef(ListItemText))>
+                Custom
               </WithStyles(ForwardRef(ListItemText))>
             </WithStyles(ForwardRef(MenuItem))>
           </WithStyles(ForwardRef(List))>
@@ -422,9 +450,8 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
             <DeviceHubIcon />
           </WithStyles(ForwardRef(ListItemIcon))>
           <WithStyles(ForwardRef(ListItemText))>
-            <FormattedMessage
+            <Memo(DiverstFormattedMessage)
               id="diverst.containers.Routes.admin.manage.index"
-              values={Object {}}
             />
           </WithStyles(ForwardRef(ListItemText))>
           <ExpandMoreIcon />
@@ -444,16 +471,14 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   "render": [Function],
                 }
               }
-              exact={true}
               to="/admin/manage/groups"
             >
               <WithStyles(ForwardRef(ListItemIcon))>
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
               <WithStyles(ForwardRef(ListItemText))>
-                <FormattedMessage
+                <Memo(DiverstFormattedMessage)
                   id="diverst.containers.Routes.admin.manage.groups"
-                  values={Object {}}
                 />
               </WithStyles(ForwardRef(ListItemText))>
             </WithStyles(ForwardRef(MenuItem))>
@@ -464,16 +489,32 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   "render": [Function],
                 }
               }
-              exact={true}
               to="/admin/manage/segments"
             >
               <WithStyles(ForwardRef(ListItemIcon))>
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
               <WithStyles(ForwardRef(ListItemText))>
-                <FormattedMessage
+                <Memo(DiverstFormattedMessage)
                   id="diverst.containers.Routes.admin.manage.segments"
-                  values={Object {}}
+                />
+              </WithStyles(ForwardRef(ListItemText))>
+            </WithStyles(ForwardRef(MenuItem))>
+            <WithStyles(ForwardRef(MenuItem))
+              component={
+                Object {
+                  "$$typeof": Symbol(react.forward_ref),
+                  "render": [Function],
+                }
+              }
+              to="/admin/manage/folders"
+            >
+              <WithStyles(ForwardRef(ListItemIcon))>
+                <ListIcon />
+              </WithStyles(ForwardRef(ListItemIcon))>
+              <WithStyles(ForwardRef(ListItemText))>
+                <Memo(DiverstFormattedMessage)
+                  id="diverst.containers.Routes.admin.manage.resources.index"
                 />
               </WithStyles(ForwardRef(ListItemText))>
             </WithStyles(ForwardRef(MenuItem))>
@@ -528,9 +569,8 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
             <SettingsIcon />
           </WithStyles(ForwardRef(ListItemIcon))>
           <WithStyles(ForwardRef(ListItemText))>
-            <FormattedMessage
+            <Memo(DiverstFormattedMessage)
               id="diverst.containers.Routes.admin.system.index"
-              values={Object {}}
             />
           </WithStyles(ForwardRef(ListItemText))>
           <ExpandMoreIcon />
@@ -550,7 +590,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   "render": [Function],
                 }
               }
-              exact={true}
+              isActive={[Function]}
               to="/admin/system/settings/fields"
             >
               <WithStyles(ForwardRef(ListItemIcon))>
@@ -567,16 +607,14 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   "render": [Function],
                 }
               }
-              exact={true}
               to="/admin/system/users"
             >
               <WithStyles(ForwardRef(ListItemIcon))>
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
               <WithStyles(ForwardRef(ListItemText))>
-                <FormattedMessage
+                <Memo(DiverstFormattedMessage)
                   id="diverst.containers.Routes.admin.system.users"
-                  values={Object {}}
                 />
               </WithStyles(ForwardRef(ListItemText))>
             </WithStyles(ForwardRef(MenuItem))>
@@ -587,7 +625,6 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   "render": [Function],
                 }
               }
-              exact={true}
               to="#"
             >
               <WithStyles(ForwardRef(ListItemIcon))>
@@ -604,7 +641,6 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   "render": [Function],
                 }
               }
-              exact={true}
               to="#"
             >
               <WithStyles(ForwardRef(ListItemIcon))>

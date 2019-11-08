@@ -5,8 +5,8 @@ after 'development:enterprise' do
       rules: [
         {
           field: -> (enterprise) { enterprise.fields.where(title: 'Gender').first },
-          operator: SegmentRule.operators[:contains_any_of],
-          values: ['Male'].to_json
+          operator: Field::OPERATORS[:contains_any_of],
+          data: ['Male'].to_json
         }
       ]
     },
@@ -15,8 +15,8 @@ after 'development:enterprise' do
       rules: [
         {
           field: -> (enterprise) { enterprise.fields.where(title: 'Gender').first },
-          operator: SegmentRule.operators[:contains_any_of],
-          values: ['Female'].to_json
+          operator: Field::OPERATORS[:contains_any_of],
+          data: ['Female'].to_json
         }
       ]
     },
@@ -25,8 +25,8 @@ after 'development:enterprise' do
       rules: [
         {
           field: -> (enterprise) { enterprise.fields.where(title: 'Chapter').first },
-          operator: SegmentRule.operators[:contains_any_of],
-          values: ['Boston', 'Montreal', 'New York'].to_json
+          operator: Field::OPERATORS[:contains_any_of],
+          data: ['Boston', 'Montreal', 'New York'].to_json
         }
       ]
     },
@@ -35,8 +35,8 @@ after 'development:enterprise' do
       rules: [
         {
           field: -> (enterprise) { enterprise.fields.where(title: 'Veteran?').first },
-          operator: SegmentRule.operators[:contains_any_of],
-          values: ['Yes'].to_json
+          operator: Field::OPERATORS[:contains_any_of],
+          data: ['Yes'].to_json
         }
       ]
     },
@@ -45,8 +45,8 @@ after 'development:enterprise' do
       rules: [
         {
           field: -> (enterprise) { enterprise.fields.where(title: 'Status').first },
-          operator: SegmentRule.operators[:contains_any_of],
-          values: ['Married'].to_json
+          operator: Field::OPERATORS[:contains_any_of],
+          data: ['Married'].to_json
         }
       ]
     },
@@ -55,8 +55,8 @@ after 'development:enterprise' do
       rules: [
         {
           field: -> (enterprise) { enterprise.fields.where(title: 'LGBT?').first },
-          operator: SegmentRule.operators[:contains_any_of],
-          values: ['Yes'].to_json
+          operator: Field::OPERATORS[:contains_any_of],
+          data: ['Yes'].to_json
         }
       ]
     }
@@ -75,7 +75,7 @@ after 'development:enterprise' do
           s.field_rules.new(
             field: rule[:field].call(enterprise),
             operator: rule[:operator],
-            values: rule[:values]
+            data: rule[:data]
           )
         end
 

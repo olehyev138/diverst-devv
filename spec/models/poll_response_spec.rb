@@ -6,6 +6,9 @@ RSpec.describe PollResponse do
 
     it { expect(poll_response).to belong_to(:poll) }
     it { expect(poll_response).to belong_to(:user) }
+
+    it { expect(poll_response).to validate_presence_of(:poll) }
+    it { expect(poll_response).to validate_presence_of(:user) }
   end
 
   describe 'when describing callbacks' do

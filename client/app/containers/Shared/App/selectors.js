@@ -1,6 +1,8 @@
 import { createSelector } from 'reselect';
 import { initialState } from 'containers/Shared/App/reducer';
 
+import dig from 'object-dig';
+
 const selectGlobal = state => state.global || initialState;
 const selectRouter = state => state.router;
 
@@ -19,7 +21,7 @@ const selectToken = () => createSelector(
 
 const selectUserPolicyGroup = () => createSelector(
   selectGlobal,
-  globalState => globalState.policy_group
+  globalState => globalState.policyGroup
 );
 
 const selectUser = () => createSelector(
@@ -27,13 +29,13 @@ const selectUser = () => createSelector(
   globalState => globalState.user
 );
 
-const selectIsAuthenticated = () => createSelector(
+const selectCustomText = () => createSelector(
   selectGlobal,
-  globalState => !!globalState.token
+  globalState => dig(globalState, 'enterprise', 'custom_text')
 );
 
 export {
   selectGlobal, selectRouter, selectLocation,
   selectEnterprise, selectToken, selectUserPolicyGroup,
-  selectUser, selectIsAuthenticated,
+  selectUser, selectCustomText,
 };

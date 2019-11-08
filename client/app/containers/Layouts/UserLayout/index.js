@@ -3,11 +3,13 @@ import { compose } from 'redux';
 import PropTypes from 'prop-types';
 
 import Container from '@material-ui/core/Container';
+import Fade from '@material-ui/core/Fade';
 import UserLinks from 'components/User/UserLinks';
 import { withStyles } from '@material-ui/core/styles';
 import AuthenticatedLayout from '../AuthenticatedLayout';
 
 import Scrollbar from 'components/Shared/Scrollbar';
+import DiverstBreadcrumbs from 'components/Shared/DiverstBreadcrumbs';
 
 const styles = theme => ({
   toolbar: theme.mixins.toolbar,
@@ -18,7 +20,7 @@ const styles = theme => ({
 });
 
 const UserLayout = ({ component: Component, ...rest }) => {
-  const { classes, data, ...other } = rest;
+  const { classes, data, disableBreadcrumbs, ...other } = rest;
 
   return (
     <AuthenticatedLayout
@@ -29,11 +31,18 @@ const UserLayout = ({ component: Component, ...rest }) => {
         <React.Fragment>
           <UserLinks pageTitle={data.titleMessage} {...matchProps} />
           <Scrollbar>
-            <Container>
-              <div className={classes.content}>
-                <Component pageTitle={data.titleMessage} {...other} />
-              </div>
-            </Container>
+            <Fade in appear>
+              <Container>
+                <div className={classes.content}>
+                  {disableBreadcrumbs !== true ? (
+                    <DiverstBreadcrumbs />
+                  ) : (
+                    <React.Fragment />
+                  )}
+                  <Component pageTitle={data.titleMessage} {...other} />
+                </div>
+              </Container>
+            </Fade>
           </Scrollbar>
         </React.Fragment>
       )}
@@ -45,6 +54,7 @@ UserLayout.propTypes = {
   classes: PropTypes.object,
   component: PropTypes.elementType,
   pageTitle: PropTypes.object,
+  disableBreadcrumbs: PropTypes.bool,
 };
 
 export const StyledUserLayout = withStyles(styles)(UserLayout);

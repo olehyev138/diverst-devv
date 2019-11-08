@@ -9,15 +9,13 @@ class UserTokenService
     token = user.generate_authentication_token
     payload = {
         id: user.id,
-        enterprise: {
-            id: user.enterprise.id,
-            name: user.enterprise.name,
-            theme: user.enterprise.theme ? user.enterprise.theme.attributes : nil
-        },
+        enterprise: AuthenticatedEnterpriseSerializer.new(user.enterprise).as_json,
+        policy_group: PolicyGroupSerializer.new(user.policy_group).as_json,
         email: user.email,
         user_token: token,
         role: user.user_role.role_name,
-        created_at: user.created_at,
+        time_zone: ActiveSupport::TimeZone.find_tzinfo(user.time_zone).name,
+        created_at: user.created_at.as_json,
         time: (Time.now.to_f * 1000).to_i + 5000
     }
 

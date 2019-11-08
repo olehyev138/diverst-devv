@@ -4,6 +4,7 @@ class User < ApplicationRecord
   include PublicActivity::Common
   include User::Actions
   include ContainsFields
+  include TimeZoneValidation
 
   enum groups_notifications_frequency: [:hourly, :daily, :weekly, :disabled]
   enum groups_notifications_date: [:sunday, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday]
@@ -135,6 +136,13 @@ class User < ApplicationRecord
 
   after_update :add_to_default_mentor_group
 
+  # Default values
+  after_initialize do
+    if self.new_record?
+      self.time_zone ||= self.enterprise&.default_time_zone || ActiveSupport::TimeZone.find_tzinfo('UTC').name
+    end
+  end
+
   scope :for_segments, -> (segments) { joins(:segments).where('segments.id' => segments.map(&:id)).distinct if segments.any? }
   scope :for_groups, -> (groups) { joins(:groups).where('groups.id' => groups.map(&:id)).distinct if groups.any? }
   scope :answered_poll, -> (poll) { joins(:poll_responses).where(poll_responses: { poll_id: poll.id }) }
@@ -153,14 +161,21 @@ class User < ApplicationRecord
     self.enterprise.fields
   end
 
+  # Format users field data for a ES index
+  # Returns { <field_data.id> => <field_data.data } }
+  def indexed_field_data
+    field_data.to_h { |fd| [fd.field_id, fd.data] }
+  end
+
   def avatar_url=(url)
     self.avatar = URI.parse(url)
   end
 
-  def avatar_location
+  def avatar_location(expires_in: 3600, default_style: :medium)
     return nil if !avatar.presence
 
-    avatar.expiring_url(36000)
+    default_style = :medium if !avatar.styles.keys.include? default_style
+    avatar.expiring_url(expires_in, default_style)
   end
 
   def generate_authentication_token(length = 20)
@@ -199,6 +214,10 @@ class User < ApplicationRecord
 
   def name
     "#{first_name} #{last_name}"
+  end
+
+  def last_initial
+    "#{(last_name || '')[0].capitalize}."
   end
 
   def user_role_presence

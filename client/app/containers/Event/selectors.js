@@ -18,4 +18,19 @@ const selectEvent = () => createSelector(
   eventsState => eventsState.currentEvent
 );
 
-export { selectPaginatedEvents, selectEventsTotal, selectEvent };
+const selectIsLoading = () => createSelector(
+  selectEventsDomain,
+  eventsState => eventsState.isLoading
+);
+
+const selectIsFormLoading = () => createSelector(
+  selectEventsDomain,
+  eventsState => eventsState.isFormLoading
+);
+
+const selectIsCommitting = () => createSelector(
+  selectEventsDomain,
+  eventsState => eventsState.isCommitting
+);
+
+export { selectEventsDomain, selectPaginatedEvents, selectEventsTotal, selectEvent, selectIsLoading, selectIsFormLoading, selectIsCommitting };

@@ -52,6 +52,7 @@ export function* createOutcome(action) {
     // TODO: use bind here or no?
     const response = yield call(api.outcomes.create.bind(api.outcomes), payload);
 
+    yield put(createOutcomeSuccess());
     yield put(push(ROUTES.admin.manage.outcomes.index.path()));
     yield put(showSnackbar({ message: 'Outcome created', options: { variant: 'success' } }));
   } catch (err) {
@@ -67,6 +68,7 @@ export function* updateOutcome(action) {
     const payload = { outcome: action.payload };
     const response = yield call(api.outcomes.update.bind(api.outcomes), payload.outcome.id, payload);
 
+    yield put(updateOutcomeSuccess());
     yield put(push(ROUTES.admin.manage.outcomes.index.path()));
     yield put(showSnackbar({ message: 'Outcome updated', options: { variant: 'success' } }));
   } catch (err) {

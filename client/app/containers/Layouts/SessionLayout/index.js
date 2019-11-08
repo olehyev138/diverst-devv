@@ -3,12 +3,14 @@ import { compose } from 'redux';
 import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-import Container from '@material-ui/core/Container';
-import ApplicationLayout from '../ApplicationLayout';
 import { withStyles } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
+import Fade from '@material-ui/core/Fade';
 
 import AuthService from 'utils/authService';
 import { ROUTES } from 'containers/Shared/Routes/constants';
+
+import ApplicationLayout from '../ApplicationLayout';
 
 const styles = theme => ({
   container: {
@@ -26,15 +28,17 @@ const SessionLayout = ({ component: Component, ...rest }) => {
   const { classes, ...other } = rest;
 
   return (
-    !AuthService.isAuthenticated()
+    !AuthService.getJwt()
       ? (
         <ApplicationLayout
           {...other}
           component={matchProps => (
             <Container maxWidth='sm' className={classes.container}>
-              <div className={classes.content}>
-                <Component {...other} />
-              </div>
+              <Fade in appear>
+                <div className={classes.content}>
+                  <Component {...other} />
+                </div>
+              </Fade>
             </Container>
           )}
         />

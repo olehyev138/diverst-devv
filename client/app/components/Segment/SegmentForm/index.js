@@ -9,25 +9,23 @@ import React, {
 } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
-import Select from 'react-select';
 import { Field, Formik, Form } from 'formik';
-import { FormattedMessage } from 'react-intl';
-
-import WrappedNavLink from 'components/Shared/WrappedNavLink';
-import { ROUTES } from 'containers/Shared/Routes/constants';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 
 import messages from 'containers/Segment/messages';
 import { buildValues, mapFields } from 'utils/formHelpers';
 
 import {
   Button, Card, CardActions, CardContent, Grid,
-  TextField, Hidden, FormControl
+  TextField, Hidden, FormControl, Divider, Box,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
 import { serializeSegment } from 'utils/customFieldHelpers';
 
 import SegmentRulesList from 'components/Segment/SegmentRulesList';
+import DiverstSubmit from 'components/Shared/DiverstSubmit';
+import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 
 const styles = theme => ({
   ruleInput: {
@@ -38,34 +36,41 @@ const styles = theme => ({
 /* eslint-disable object-curly-newline */
 export function SegmentFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
   return (
-    <Card>
-      <Form>
-        <CardContent>
-          <Field
-            component={TextField}
-            onChange={handleChange}
-            fullWidth
-            id='name'
-            name='name'
-            label={<FormattedMessage {...messages.form.name} />}
-            value={values.name}
-          />
-        </CardContent>
-        <CardActions>
-          <Button
-            color='primary'
-            type='submit'
-          >
-            {buttonText}
-          </Button>
-        </CardActions>
+    <React.Fragment>
+      <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.segment}>
+        <Card>
+          <Form>
+            <CardContent>
+              <Field
+                component={TextField}
+                onChange={handleChange}
+                fullWidth
+                disabled={props.isCommitting}
+                required
+                id='name'
+                name='name'
+                label={<DiverstFormattedMessage {...messages.form.name} />}
+                value={values.name}
+              />
+            </CardContent>
+            <Divider />
+            <CardActions>
+              <DiverstSubmit isCommitting={props.isCommitting}>
+                {buttonText}
+              </DiverstSubmit>
+            </CardActions>
+          </Form>
+        </Card>
+      </DiverstFormLoader>
+      <Box mb={3} />
+      <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.segment}>
         <SegmentRulesList
           values={values}
           classes={props.classes}
           {...props.ruleProps}
         />
-      </Form>
-    </Card>
+      </DiverstFormLoader>
+    </React.Fragment>
   );
 }
 
@@ -91,11 +96,16 @@ export function SegmentForm(props) {
 }
 
 SegmentForm.propTypes = {
+  edit: PropTypes.bool,
   segmentAction: PropTypes.func,
   segment: PropTypes.object,
+  isCommitting: PropTypes.bool,
+  isFormLoading: PropTypes.bool,
 };
 
 SegmentFormInner.propTypes = {
+  edit: PropTypes.bool,
+  segment: PropTypes.object,
   handleSubmit: PropTypes.func,
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
@@ -105,7 +115,9 @@ SegmentFormInner.propTypes = {
   setFieldTouched: PropTypes.func,
   classes: PropTypes.object,
   getGroupsBegin: PropTypes.func,
-  ruleProps: PropTypes.object
+  ruleProps: PropTypes.object,
+  isCommitting: PropTypes.bool,
+  isFormLoading: PropTypes.bool,
 };
 
 export default compose(

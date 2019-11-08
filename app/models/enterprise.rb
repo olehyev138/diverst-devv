@@ -1,6 +1,8 @@
 class Enterprise < ApplicationRecord
   include ContainsResources
   include PublicActivity::Common
+  include Enterprise::Actions
+  include TimeZoneValidation
 
   extend Enumerize
 
@@ -77,7 +79,6 @@ class Enterprise < ApplicationRecord
   validates_length_of :onboarding_sponsor_media_content_type, maximum: 191
   validates_length_of :onboarding_sponsor_media_file_name, maximum: 191
   validates_length_of :company_video_url, maximum: 191
-  validates_length_of :time_zone, maximum: 191
 
   validates_length_of :xml_sso_config_content_type, maximum: 191
   validates_length_of :xml_sso_config_file_name, maximum: 191
@@ -99,23 +100,20 @@ class Enterprise < ApplicationRecord
   validates_length_of :name, maximum: 191
   validates :idp_sso_target_url, url: { allow_blank: true }
 
-  # Paperclip has been removed
+  has_attached_file :cdo_picture, styles: { medium: '1000x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: :private
+  validates_attachment_content_type :cdo_picture, content_type: %r{\Aimage\/.*\Z}
 
-  # has_attached_file :cdo_picture, styles: { medium: '1000x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: :private
-  # validates_attachment_content_type :cdo_picture, content_type: %r{\Aimage\/.*\Z}
+  has_attached_file :banner
+  validates_attachment_content_type :banner, content_type: /\Aimage\/.*\Z/
 
-  # has_attached_file :banner
-  # validates_attachment_content_type :banner, content_type: /\Aimage\/.*\Z/
+  has_attached_file :xml_sso_config
+  validates_attachment_content_type :xml_sso_config, content_type: 'text/xml'
 
-  # has_attached_file :xml_sso_config
-  # validates_attachment_content_type :xml_sso_config, content_type: 'text/xml'
+  has_attached_file :sponsor_media, s3_permissions: :private
+  do_not_validate_attachment_file_type :sponsor_media
 
-  # re-add to allow migration file to run
-  # has_attached_file :sponsor_media, s3_permissions: :private
-  # do_not_validate_attachment_file_type :sponsor_media
-
-  # has_attached_file :onboarding_sponsor_media, s3_permissions: :private
-  # do_not_validate_attachment_file_type :onboarding_sponsor_media
+  has_attached_file :onboarding_sponsor_media, s3_permissions: :private
+  do_not_validate_attachment_file_type :onboarding_sponsor_media
 
   validates_format_of :redirect_email_contact, with: /\A[^@\s]+@[^@\s]+\z/, allow_blank: true
 
@@ -142,7 +140,7 @@ class Enterprise < ApplicationRecord
   def default_time_zone
     return time_zone if time_zone.present?
 
-    'UTC'
+    ActiveSupport::TimeZone.find_tzinfo('UTC').name
   end
 
   def default_user_role
@@ -168,7 +166,7 @@ class Enterprise < ApplicationRecord
       settings.name_identifier_format = 'urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress'
     end
 
-    settings.assertion_consumer_service_url = "https://#{ENV['DOMAIN']}/enterprises/#{id}/saml/acs"
+    settings.assertion_consumer_service_url = "#{ENV['DOMAIN']}/api/v1/enterprises/#{id}/sso_login"
 
     # override xml file settings with enterprise settings, if they are present
     settings.issuer = sp_entity_id                    if sp_entity_id.present?

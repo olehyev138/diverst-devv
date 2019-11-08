@@ -10,12 +10,11 @@ import {
 } from 'containers/Group/GroupMembers/constants';
 
 import {
-  getMembersSuccess, getMembersError,
-  createMembersError, deleteMemberError
+  getMembersSuccess, getMembersError, deleteMemberSuccess,
+  createMembersError, deleteMemberError, createMembersSuccess
 } from 'containers/Group/GroupMembers/actions';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
-
 export function* getMembers(action) {
   try {
     const response = yield call(api.userGroups.all.bind(api.userGroups), action.payload);
@@ -38,6 +37,7 @@ export function* createMembers(action) {
 
     const response = yield call(api.groupMembers.addMembers.bind(api.groupMembers), payload);
 
+    yield put(createMembersSuccess());
     yield put(push(ROUTES.group.members.index.path(action.payload.groupId)));
     yield put(showSnackbar({ message: 'User updated', options: { variant: 'success' } }));
   } catch (err) {
@@ -57,6 +57,7 @@ export function* deleteMembers(action) {
 
     yield call(api.groupMembers.removeMembers.bind(api.groupMembers), payload);
 
+    yield put(deleteMemberSuccess());
     yield put(push(ROUTES.group.members.index.path(action.payload.groupId)));
     yield put(showSnackbar({ message: 'User deleted', options: { variant: 'success' } }));
   } catch (err) {

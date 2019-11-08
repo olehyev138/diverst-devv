@@ -22,7 +22,13 @@ import { compose } from 'redux';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 
-import { selectPaginatedFields, selectFieldTotal } from 'containers/GlobalSettings/Field/selectors';
+import {
+  selectPaginatedFields,
+  selectFieldTotal,
+  selectIsLoading,
+  selectIsCommitting,
+  selectCommitSuccess
+} from 'containers/GlobalSettings/Field/selectors';
 import {
   getFieldsBegin, createFieldBegin, updateFieldBegin,
   fieldUnmount, deleteFieldBegin
@@ -59,10 +65,13 @@ export function FieldListPage(props) {
       <FieldList
         fields={props.fields}
         fieldTotal={props.fieldTotal}
+        isLoading={props.isLoading}
         createFieldBegin={props.createFieldBegin}
         updateFieldBegin={props.updateFieldBegin}
         deleteFieldBegin={props.deleteFieldBegin}
         handlePagination={handlePagination}
+        isCommitting={props.isCommitting}
+        commitSuccess={props.commitSuccess}
       />
     </React.Fragment>
   );
@@ -74,13 +83,19 @@ FieldListPage.propTypes = {
   updateFieldBegin: PropTypes.func.isRequired,
   fields: PropTypes.object,
   fieldTotal: PropTypes.number,
+  isLoading: PropTypes.bool,
   deleteFieldBegin: PropTypes.func,
-  fieldUnmount: PropTypes.func.isRequired
+  fieldUnmount: PropTypes.func.isRequired,
+  isCommitting: PropTypes.bool,
+  commitSuccess: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
   fields: selectPaginatedFields(),
   fieldTotal: selectFieldTotal(),
+  isLoading: selectIsLoading(),
+  isCommitting: selectIsCommitting(),
+  commitSuccess: selectCommitSuccess(),
 });
 
 const mapDispatchToProps = {

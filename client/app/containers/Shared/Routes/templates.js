@@ -5,6 +5,7 @@ import AdminLayout from 'containers/Layouts/AdminLayout/Loadable';
 import SessionLayout from 'containers/Layouts/SessionLayout/Loadable';
 import ErrorLayout from 'containers/Layouts/ErrorLayout/Loadable';
 import GlobalSettingsLayout from 'containers/Layouts/GlobalSettingsLayout/Loadable';
+import GroupManageLayout from 'containers/Layouts/GroupManageLayout/Loadable';
 
 
 /* Session */
@@ -14,10 +15,21 @@ import LoginPage from 'containers/Session/LoginPage/Loadable';
 /* User */
 import HomePage from 'containers/User/HomePage/Loadable';
 import UserGroupListPage from 'containers/Group/UserGroupListPage/Loadable';
+import UserProfilePage from 'containers/User/UserProfilePage/Loadable';
+import UserNewsLinkPage from 'containers/User/UserNewsFeedPage/Loadable';
+import UserEventsPage from 'containers/User/UserEventsPage/Loadable';
 
 /* Admin - Analyze */
-import GroupDashboardPage from 'containers/Analyze/Dashboards/GroupDashboardPage';
-import UserDashboardPage from 'containers/Analyze/Dashboards/UserDashboardPage';
+import GroupDashboardPage from 'containers/Analyze/Dashboards/GroupDashboardPage/Loadable';
+import UserDashboardPage from 'containers/Analyze/Dashboards/UserDashboardPage/Loadable';
+
+/* Admin - Analyze - Custom */
+import MetricsDashboardListPage from 'containers/Analyze/Dashboards/MetricsDashboard/MetricsDashboardListPage/Loadable';
+import MetricsDashboardCreatePage from 'containers/Analyze/Dashboards/MetricsDashboard/MetricsDashboardCreatePage/Loadable';
+import MetricsDashboardEditPage from 'containers/Analyze/Dashboards/MetricsDashboard/MetricsDashboardEditPage/Loadable';
+import MetricsDashboardPage from 'containers/Analyze/Dashboards/MetricsDashboard/MetricsDashboardPage/Loadable';
+import CustomGraphCreatePage from 'containers/Analyze/Dashboards/MetricsDashboard/CustomGraph/CustomGraphCreatePage/Loadable';
+import CustomGraphEditPage from 'containers/Analyze/Dashboards/MetricsDashboard/CustomGraph/CustomGraphEditPage/Loadable';
 
 /* Admin - Manage - Group */
 import AdminGroupListPage from 'containers/Group/AdminGroupListPage/Loadable';
@@ -30,6 +42,8 @@ import SegmentPage from 'containers/Segment/SegmentPage/Loadable';
 
 /* Admin - System - Global Settings */
 import FieldsPage from 'containers/GlobalSettings/Field/FieldsPage/Loadable';
+import CustomTextEditPage from 'containers/GlobalSettings/CustomText/CustomTextEditPage/Loadable';
+import EnterpriseConfigurationPage from 'containers/GlobalSettings/EnterpriseConfiguration/EnterpriseConfigurationPage/Loadable';
 
 /* Admin - System - User */
 import UsersPage from 'containers/User/UsersPage/Loadable';
@@ -61,6 +75,16 @@ import OutcomeEditPage from 'containers/Group/Outcome/OutcomeEditPage/Loadable';
 import GroupMemberListPage from 'containers/Group/GroupMembers/GroupMemberListPage/Loadable';
 import GroupMemberCreatePage from 'containers/Group/GroupMembers/GroupMemberCreatePage/Loadable';
 
+/* Group - Manage */
+import GroupSettingsPage from 'containers/Group/GroupManage/GroupSettingsPage/Loadable';
+
+/* Group/Admin - Resource */
+import FoldersPage from 'containers/Resource/Folder/FoldersPage/Loadable';
+import FolderCreatePage from 'containers/Resource/Folder/FolderCreatePage/Loadable';
+import FolderEditPage from 'containers/Resource/Folder/FolderEditPage/Loadable';
+import FolderPage from 'containers/Resource/Folder/FolderPage/Loadable';
+import ResourceCreatePage from 'containers/Resource/Resource/ResourceCreatePage/Loadable';
+import ResourceEditPage from 'containers/Resource/Resource/ResourceEditPage/Loadable';
 
 /* Global */
 import NotFoundPage from 'containers/Shared/NotFoundPage/Loadable';
@@ -73,5 +97,8 @@ export {
   UsersPage, UserCreatePage, UserEditPage, GroupHomePage, EventsPage, NewsFeedPage, OutcomesPage, EventPage,
   EventCreatePage, EventEditPage, GroupMessagePage, GroupMessageCreatePage, GroupMessageEditPage, OutcomeCreatePage,
   OutcomeEditPage, GroupMemberListPage, GroupMemberCreatePage, NotFoundPage, PlaceholderPage, GroupDashboardPage,
-  UserDashboardPage
+  UserDashboardPage, MetricsDashboardListPage, MetricsDashboardCreatePage, MetricsDashboardEditPage, MetricsDashboardPage,
+  CustomGraphCreatePage, CustomGraphEditPage, GroupManageLayout, GroupSettingsPage, CustomTextEditPage,
+  UserNewsLinkPage, UserEventsPage, FoldersPage, FolderCreatePage, FolderEditPage, FolderPage, ResourceCreatePage,
+  ResourceEditPage, UserProfilePage, EnterpriseConfigurationPage
 };

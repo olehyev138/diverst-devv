@@ -14,6 +14,8 @@ class Field < ApplicationRecord
   validates_length_of :title, maximum: 191
   validates_length_of :type, maximum: 191
   validates :title, presence: true
+  validates :type,  presence: true
+  validates_inclusion_of :type, in: ['SelectField', 'TextField', 'SegmentsField', 'NumericField', 'GroupsField', 'CheckboxField', 'DateField']
   validates :title, uniqueness: { scope: :enterprise_id },
                     unless: Proc.new { |object| (object.type == 'SegmentsField' || object.type == 'GroupsField') }, if: :container_type_is_enterprise?
 

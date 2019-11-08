@@ -24,15 +24,17 @@ class Folder < ApplicationRecord
   validates_uniqueness_of :name, scope: [:group_id], if: -> { group_id.present? }
   validates :password, presence: true, if: Proc.new { |folder| folder.password_protected? && !folder.password_digest }
   validates :password, length: { minimum: 6 }, if: Proc.new { |folder| folder.password_protected? && folder.password.present? }
+  validate :parent_is_not_self, if: Proc.new { |folder| folder.id.present? && folder.parent_id.present? }
 
   # scopes
   scope :only_parents, -> { where(parent_id: nil) }
 
   # callbacks
   before_save :set_password
+  before_save :unset_enterprise
 
   def set_password
-    self.password = nil if !password_protected?
+    self.password = nil unless password_protected?
   end
 
   def valid_password?(user_password)
@@ -41,5 +43,18 @@ class Folder < ApplicationRecord
 
   def total_views
     views.count
+  end
+
+  private
+
+  def parent_is_not_self
+    if id == parent_id
+      errors.add(:parent, 'can\'t be itself')
+    end
+  end
+
+  # TODO: Find a better solution to not set enterprise for folder objects
+  def unset_enterprise
+    self.enterprise_id = nil if self.group_id.present?
   end
 end

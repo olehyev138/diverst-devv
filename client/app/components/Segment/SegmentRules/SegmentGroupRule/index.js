@@ -8,10 +8,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { connect, Field, getIn } from 'formik';
-import Select from 'react-select';
-import { FormattedMessage } from 'react-intl';
-import messages from 'containers/Segment/messages';
-import { CardContent } from '@material-ui/core';
+import Select from 'components/Shared/DiverstSelect';
+import { Grid } from '@material-ui/core';
 
 /*
  * Define UI strings for each Group operator
@@ -39,26 +37,32 @@ const SegmentGroupRule = ({ rule, ...props }) => {
 
   return (
     <React.Fragment>
-      <Select
-        name={`${ruleLocation}.group_ids`}
-        id={`${ruleLocation}.group_ids`}
-        label='Groups'
-        isMulti
-        options={props.groups}
-        value={groups}
-        onMenuOpen={groupSelectAction}
-        onChange={v => props.formik.setFieldValue(`${ruleLocation}.group_ids`, v)}
-        onInputChange={value => groupSelectAction(value)}
-        onBlur={() => props.formik.setFieldTouched('group_ids', true)}
-      />
-      <Select
-        name={`${ruleLocation}.operator`}
-        id={`${ruleLocation}.operator`}
-        label='Group Operator'
-        options={operators}
-        value={{ value: operatorValue, label: operators[operatorValue].label }}
-        onChange={v => props.formik.setFieldValue(`${ruleLocation}.operator`, v.value)}
-      />
+      <Grid container spacing={3} alignItems='center'>
+        <Grid item xs>
+          <Select
+            name={`${ruleLocation}.group_ids`}
+            id={`${ruleLocation}.group_ids`}
+            label='Groups'
+            isMulti
+            options={props.groups}
+            value={groups}
+            onMenuOpen={groupSelectAction}
+            onChange={v => props.formik.setFieldValue(`${ruleLocation}.group_ids`, v)}
+            onInputChange={value => groupSelectAction(value)}
+            onBlur={() => props.formik.setFieldTouched('group_ids', true)}
+          />
+        </Grid>
+        <Grid item xs>
+          <Select
+            name={`${ruleLocation}.operator`}
+            id={`${ruleLocation}.operator`}
+            label='Group Operator'
+            options={operators}
+            value={{ value: operatorValue, label: operators[operatorValue].label }}
+            onChange={v => props.formik.setFieldValue(`${ruleLocation}.operator`, v.value)}
+          />
+        </Grid>
+      </Grid>
     </React.Fragment>
   );
 };

@@ -6,7 +6,7 @@
 
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 
 import messages from 'components/Shared/PlaceholderPage/messages';
 
@@ -30,7 +30,7 @@ function PlaceholderPage(props, context) {
       {
         pageTitle ? (
           <Typography variant='h4' className={classes.pageTitle}>
-            <FormattedMessage {...pageTitle} />
+            <DiverstFormattedMessage {...pageTitle} />
           </Typography>
         )
           : null

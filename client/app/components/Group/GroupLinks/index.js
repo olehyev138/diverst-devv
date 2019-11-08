@@ -1,7 +1,7 @@
 import React, { useContext, memo } from 'react';
 import { compose } from 'redux';
 import { withStyles } from '@material-ui/core/styles';
-import { FormattedMessage } from 'react-intl';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import classNames from 'classnames';
 import { matchPath } from 'react-router';
 
@@ -21,11 +21,13 @@ import PlanIcon from '@material-ui/icons/AssignmentTurnedInOutlined';
 
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
+import PerfectScrollbar from 'react-perfect-scrollbar';
 
 const styles = theme => ({
   toolbar: {
-    overflowX: 'auto',
+    overflowX: 'visible',
     overflowY: 'hidden',
+    minWidth: 'max-content',
     whiteSpace: 'nowrap',
     display: 'block',
     backgroundColor: 'white',
@@ -36,7 +38,7 @@ const styles = theme => ({
     borderBottomStyle: 'solid',
     borderBottomColor: theme.custom.colors.lightGrey,
     paddingTop: 12,
-    paddingBottom: 6,
+    paddingBottom: 0,
   },
   mobileToolbar: {
     display: 'block',
@@ -123,107 +125,123 @@ export function GroupLinks(props) {
     });
 
   const NavLinks = () => (
-    <React.Fragment>
-      <Toolbar className={classes.toolbar}>
-        <div className={classes.backNavLinkContainer}>
+    <div>
+      <PerfectScrollbar
+        options={{
+          suppressScrollY: true,
+          useBothWheelAxes: true,
+          swipeEasing: true,
+        }}
+      >
+        <Toolbar className={classes.toolbar}>
+          <div className={classes.backNavLinkContainer}>
+            <Button
+              component={WrappedNavLink}
+              exact
+              to={lastPageWasGroupLayout ? ROUTES.user.home.path() : lastLocation}
+              className={classNames(classes.navLink, classes.backNavLink)}
+              activeClassName={classes.navLinkActive}
+            >
+              <Hidden smDown>
+                <BackIcon className={classes.navIcon} />
+              </Hidden>
+              Back to Dashboard
+            </Button>
+          </div>
+
           <Button
             component={WrappedNavLink}
             exact
-            to={lastPageWasGroupLayout ? ROUTES.user.home.path() : lastLocation}
-            className={classNames(classes.navLink, classes.backNavLink)}
+            to={ROUTES.group.home.path(rs.params('group_id'))}
+            className={classes.navLink}
             activeClassName={classes.navLinkActive}
           >
             <Hidden smDown>
-              <BackIcon className={classes.navIcon} />
+              <HomeIcon className={classes.navIcon} />
             </Hidden>
-            Back to Dashboard
+            <DiverstFormattedMessage {...ROUTES.group.home.data.titleMessage} />
           </Button>
-        </div>
 
-        <Button
-          component={WrappedNavLink}
-          exact
-          to={ROUTES.group.home.path(rs.params('group_id'))}
-          className={classes.navLink}
-          activeClassName={classes.navLinkActive}
-        >
-          <Hidden smDown>
-            <HomeIcon className={classes.navIcon} />
-          </Hidden>
-          <FormattedMessage {...ROUTES.group.home.data.titleMessage} />
-        </Button>
+          <Button
+            component={WrappedNavLink}
+            to={ROUTES.group.members.index.path(rs.params('group_id'))}
+            className={classes.navLink}
+            activeClassName={classes.navLinkActive}
+          >
+            <Hidden smDown>
+              <MembersIcon className={classes.navIcon} />
+            </Hidden>
+            <DiverstFormattedMessage {...ROUTES.group.members.index.data.titleMessage} />
+          </Button>
 
-        <Button
-          component={WrappedNavLink}
-          exact
-          to={ROUTES.group.members.index.path(rs.params('group_id'))}
-          className={classes.navLink}
-          activeClassName={classes.navLinkActive}
-        >
-          <Hidden smDown>
-            <MembersIcon className={classes.navIcon} />
-          </Hidden>
-          <FormattedMessage {...ROUTES.group.members.index.data.titleMessage} />
-        </Button>
+          <Button
+            component={WrappedNavLink}
+            to={ROUTES.group.events.index.path(rs.params('group_id'))}
+            className={classes.navLink}
+            activeClassName={classes.navLinkActive}
+          >
+            <Hidden smDown>
+              <EventIcon className={classes.navIcon} />
+            </Hidden>
+            <DiverstFormattedMessage {...ROUTES.group.events.index.data.titleMessage} />
+          </Button>
 
-        <Button
-          component={WrappedNavLink}
-          exact
-          to={ROUTES.group.events.index.path(rs.params('group_id'))}
-          className={classes.navLink}
-          activeClassName={classes.navLinkActive}
-        >
-          <Hidden smDown>
-            <EventIcon className={classes.navIcon} />
-          </Hidden>
-          <FormattedMessage {...ROUTES.group.events.index.data.titleMessage} />
-        </Button>
+          <Button
+            component={WrappedNavLink}
+            exact
+            to={ROUTES.group.resources.index.path(rs.params('group_id'))}
+            className={classes.navLink}
+            activeClassName={classes.navLinkActive}
+          >
+            <Hidden smDown>
+              <ResourcesIcon className={classes.navIcon} />
+            </Hidden>
+            <DiverstFormattedMessage {...ROUTES.group.resources.index.data.titleMessage} />
+          </Button>
 
-        <Button
-          className={classes.navLink}
-        >
-          <Hidden smDown>
-            <ResourcesIcon className={classes.navIcon} />
-          </Hidden>
-          Resources
-        </Button>
+          <Button
+            component={WrappedNavLink}
+            to={ROUTES.group.news.index.path(rs.params('group_id'))}
+            className={classes.navLink}
+            activeClassName={classes.navLinkActive}
+          >
+            <Hidden smDown>
+              <NewsIcon className={classes.navIcon} />
+            </Hidden>
+            <DiverstFormattedMessage {...ROUTES.group.news.index.data.titleMessage} />
+          </Button>
 
-        <Button
-          component={WrappedNavLink}
-          exact
-          to={ROUTES.group.news.index.path(rs.params('group_id'))}
-          className={classes.navLink}
-          activeClassName={classes.navLinkActive}
-        >
-          <Hidden smDown>
-            <NewsIcon className={classes.navIcon} />
-          </Hidden>
-          <FormattedMessage {...ROUTES.group.news.index.data.titleMessage} />
-        </Button>
+          <Button
+            component={WrappedNavLink}
+            to={ROUTES.group.outcomes.index.path(rs.params('group_id'))}
+            className={classes.navLink}
+            activeClassName={classes.navLinkActive}
+          >
+            <Hidden smDown>
+              <PlanIcon className={classes.navIcon} />
+            </Hidden>
+            <DiverstFormattedMessage {...ROUTES.group.outcomes.index.data.titleMessage} />
+          </Button>
 
-        <Button
-          component={WrappedNavLink}
-          exact
-          to={ROUTES.group.outcomes.index.path(rs.params('group_id'))}
-          className={classes.navLink}
-          activeClassName={classes.navLinkActive}
-        >
-          <Hidden smDown>
-            <PlanIcon className={classes.navIcon} />
-          </Hidden>
-          <FormattedMessage {...ROUTES.group.outcomes.index.data.titleMessage} />
-        </Button>
-
-        <Button
-          className={classes.navLink}
-        >
-          <Hidden smDown>
-            <ManageIcon className={classes.navIcon} />
-          </Hidden>
-          Manage
-        </Button>
-      </Toolbar>
-    </React.Fragment>
+          <Button
+            component={WrappedNavLink}
+            className={classes.navLink}
+            activeClassName={classes.navLinkActive}
+            to={ROUTES.group.manage.settings.index.path(rs.params('group_id'))}
+            isActive={(match, location) => !!matchPath(location.pathname, {
+              path: ROUTES.group.manage.index.data.pathPrefix(rs.params('group_id')),
+              exact: false,
+              strict: false,
+            })}
+          >
+            <Hidden smDown>
+              <ManageIcon className={classes.navIcon} />
+            </Hidden>
+            <DiverstFormattedMessage {...ROUTES.group.manage.index.data.titleMessage} />
+          </Button>
+        </Toolbar>
+      </PerfectScrollbar>
+    </div>
   );
 
   return (

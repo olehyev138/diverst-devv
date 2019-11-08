@@ -18,4 +18,19 @@ const selectOutcome = () => createSelector(
   outcomesState => outcomesState.currentOutcome
 );
 
-export { selectPaginatedOutcomes, selectOutcomeTotal, selectOutcome };
+const selectIsLoading = () => createSelector(
+  selectOutcomesDomain,
+  outcomesState => outcomesState.isLoading
+);
+
+const selectIsFormLoading = () => createSelector(
+  selectOutcomesDomain,
+  outcomesState => outcomesState.isFormLoading
+);
+
+const selectIsCommitting = () => createSelector(
+  selectOutcomesDomain,
+  outcomesState => outcomesState.isCommitting
+);
+
+export { selectPaginatedOutcomes, selectOutcomeTotal, selectOutcome, selectIsLoading, selectIsCommitting, selectIsFormLoading };

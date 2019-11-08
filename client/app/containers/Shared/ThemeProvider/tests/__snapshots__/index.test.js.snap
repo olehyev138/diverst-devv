@@ -27,8 +27,10 @@ exports[`<ThemeProvider /> should render and match the snapshot 1`] = `
       },
       "custom": Object {
         "colors": Object {
+          "darkGrey": "#4c4c4c",
           "grey": "#a7a8a9",
           "lightGrey": "#dedfe0",
+          "offBlack": "#333333",
         },
       },
       "direction": "ltr",
@@ -59,7 +61,7 @@ exports[`<ThemeProvider /> should render and match the snapshot 1`] = `
         },
         "augmentColor": [Function],
         "background": Object {
-          "default": "#fafafa",
+          "default": "#f5f5f5",
           "paper": "#fff",
         },
         "common": Object {
@@ -110,7 +112,11 @@ exports[`<ThemeProvider /> should render and match the snapshot 1`] = `
           "main": "#8A8A8A",
         },
         "success": Object {
+          "lightBackground": "#8bcf8e",
           "main": "#43a047",
+        },
+        "tertiary": Object {
+          "main": "#8b8c8d",
         },
         "text": Object {
           "disabled": "rgba(0, 0, 0, 0.38)",
@@ -286,13 +292,18 @@ exports[`<ThemeProvider /> should render and match the snapshot 1`] = `
         "mobileStepper": 1000,
         "modal": 1300,
         "snackbar": 1400,
+        "speedDial": 1050,
         "tooltip": 1500,
       },
     }
   }
 >
   <Memo(WithStyles(SnackbarProviderWrapper))>
-    <Component />
+    <MuiPickersUtilsProvider
+      utils={[Function]}
+    >
+      <Component />
+    </MuiPickersUtilsProvider>
   </Memo(WithStyles(SnackbarProviderWrapper))>
 </ThemeProvider>
 `;

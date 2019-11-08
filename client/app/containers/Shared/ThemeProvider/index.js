@@ -18,6 +18,10 @@ import SnackbarProviderWrapper from 'components/Shared/SnackbarProviderWrapper';
 
 import App from 'containers/Shared/App/Loadable';
 
+// Date/time pickers
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import LuxonUtils from '@date-io/luxon';
+
 export class ThemeProvider extends React.PureComponent {
   render() {
     const defaultTheme = createMuiTheme();
@@ -25,6 +29,10 @@ export class ThemeProvider extends React.PureComponent {
     const { primary, secondary } = this.props;
     const theme = createMuiTheme({
       palette: {
+        type: 'light',
+        background: {
+          default: '#f5f5f5',
+        },
         primary: {
           main: primary,
           main25: `${primary}40`,
@@ -33,6 +41,9 @@ export class ThemeProvider extends React.PureComponent {
         },
         secondary: {
           main: secondary,
+        },
+        tertiary: {
+          main: '#8b8c8d',
         },
         error: {
           main: '#D32F2F',
@@ -45,6 +56,7 @@ export class ThemeProvider extends React.PureComponent {
         },
         success: {
           main: '#43a047',
+          lightBackground: '#8bcf8e',
         },
       },
       typography: {
@@ -67,6 +79,8 @@ export class ThemeProvider extends React.PureComponent {
       // Custom theme additions & global styles should be placed here
       custom: {
         colors: {
+          offBlack: '#333333',
+          darkGrey: '#4c4c4c',
           grey: '#a7a8a9',
           lightGrey: '#dedfe0',
         },
@@ -76,7 +90,9 @@ export class ThemeProvider extends React.PureComponent {
     return (
       <MuiThemeProvider theme={theme}>
         <SnackbarProviderWrapper>
-          <App />
+          <MuiPickersUtilsProvider utils={LuxonUtils}>
+            <App />
+          </MuiPickersUtilsProvider>
         </SnackbarProviderWrapper>
       </MuiThemeProvider>
     );
@@ -86,7 +102,6 @@ export class ThemeProvider extends React.PureComponent {
 ThemeProvider.propTypes = {
   primary: PropTypes.string,
   secondary: PropTypes.string,
-  loginSuccess: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({

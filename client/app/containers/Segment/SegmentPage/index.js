@@ -21,11 +21,13 @@ import {
   updateSegmentBegin, segmentUnmount
 } from 'containers/Segment/actions';
 
-import { selectSegmentWithRules } from 'containers/Segment/selectors';
+import { selectIsCommitting, selectSegmentWithRules, selectIsFormLoading } from 'containers/Segment/selectors';
 import { selectPaginatedSelectGroups } from 'containers/Group/selectors';
 import {
   selectPaginatedFields, selectPaginatedSelectFields
 } from 'containers/GlobalSettings/Field/selectors';
+
+import { Divider, Box } from '@material-ui/core';
 
 import RouteService from 'utils/routeHelpers';
 
@@ -59,6 +61,7 @@ export function SegmentPage(props) {
   return (
     <React.Fragment>
       <SegmentForm
+        edit={props.edit}
         segmentAction={segmentId[0] ? props.updateSegmentBegin : props.createSegmentBegin}
         segment={props.segment}
         ruleProps={{
@@ -69,13 +72,19 @@ export function SegmentPage(props) {
           fields: props.fields
         }}
         buttonText={segmentId[0] ? 'Update' : 'Create'}
+        isCommitting={props.isCommitting}
+        isFormLoading={props.edit ? props.isFormLoading : undefined}
       />
+      <Box mb={4} />
+      <Divider />
+      <Box mb={4} />
       <SegmentMemberListPage />
     </React.Fragment>
   );
 }
 
 SegmentPage.propTypes = {
+  edit: PropTypes.bool,
   segment: PropTypes.object,
   rules: PropTypes.object,
   getSegmentBegin: PropTypes.func,
@@ -86,14 +95,18 @@ SegmentPage.propTypes = {
   fields: PropTypes.object,
   createSegmentBegin: PropTypes.func,
   updateSegmentBegin: PropTypes.func,
-  segmentUnmount: PropTypes.func
+  segmentUnmount: PropTypes.func,
+  isCommitting: PropTypes.bool,
+  isFormLoading: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
   segment: selectSegmentWithRules(),
   groups: selectPaginatedSelectGroups(),
   selectFields: selectPaginatedSelectFields(),
-  fields: selectPaginatedFields()
+  fields: selectPaginatedFields(),
+  isCommitting: selectIsCommitting(),
+  isFormLoading: selectIsFormLoading(),
 });
 
 const mapDispatchToProps = {

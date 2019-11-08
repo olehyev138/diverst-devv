@@ -11,7 +11,7 @@ import reducer from 'containers/Group/reducer';
 
 import RouteService from 'utils/routeHelpers';
 
-import { selectFormGroup, selectPaginatedSelectGroups } from 'containers/Group/selectors';
+import { selectFormGroup, selectGroupIsCommitting, selectPaginatedSelectGroups, selectGroupIsFormLoading } from 'containers/Group/selectors';
 import {
   getGroupBegin, getGroupsBegin,
   updateGroupBegin, groupFormUnmount
@@ -36,11 +36,14 @@ export function GroupEditPage(props) {
   return (
     <React.Fragment>
       <GroupForm
+        edit
         groupAction={props.updateGroupBegin}
         getGroupsBegin={props.getGroupsBegin}
         selectGroups={props.groups}
         group={props.group}
         buttonText='Update'
+        isCommitting={props.isCommitting}
+        isFormLoading={props.isFormLoading}
       />
     </React.Fragment>
   );
@@ -52,12 +55,16 @@ GroupEditPage.propTypes = {
   getGroupBegin: PropTypes.func,
   getGroupsBegin: PropTypes.func,
   updateGroupBegin: PropTypes.func,
-  groupFormUnmount: PropTypes.func
+  groupFormUnmount: PropTypes.func,
+  isCommitting: PropTypes.bool,
+  isFormLoading: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
   group: selectFormGroup(),
-  groups: selectPaginatedSelectGroups()
+  groups: selectPaginatedSelectGroups(),
+  isCommitting: selectGroupIsCommitting(),
+  isFormLoading: selectGroupIsFormLoading(),
 });
 
 const mapDispatchToProps = {

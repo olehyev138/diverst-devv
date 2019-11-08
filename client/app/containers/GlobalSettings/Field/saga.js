@@ -49,7 +49,7 @@ export function* createField(action) {
 
     const response = yield call(api.fields.create.bind(api.fields), payload);
 
-    yield put(push(ROUTES.admin.system.globalSettings.fields.index.path()));
+    yield put(createFieldSuccess());
     yield put(showSnackbar({ message: 'Field created', options: { variant: 'success' } }));
   } catch (err) {
     yield put(createFieldError(err));
@@ -64,7 +64,7 @@ export function* updateField(action) {
     const payload = { field: action.payload };
     const response = yield call(api.fields.update.bind(api.fields), payload.field.id, payload);
 
-    yield put(push(ROUTES.admin.system.globalSettings.fields.index.path()));
+    yield put(updateFieldSuccess());
     yield put(showSnackbar({ message: 'Field updated', options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateFieldError(err));

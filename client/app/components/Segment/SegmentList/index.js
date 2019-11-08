@@ -8,19 +8,21 @@ import React, { memo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
-import { FormattedMessage } from 'react-intl';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Segment/messages';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
-import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import {
   Button, Card, CardContent, CardActions,
-  Typography, Grid, Link, Collapse
+  Typography, Grid, Link, Collapse, Box,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
-import Pagination from 'components/Shared/Pagination';
+import AddIcon from '@material-ui/icons/Add';
+
+import DiverstLoader from 'components/Shared/DiverstLoader';
+import DiverstPagination from 'components/Shared/DiverstPagination';
 
 const styles = theme => ({
   segmentListItem: {
@@ -37,19 +39,7 @@ const styles = theme => ({
 export function SegmentList(props, context) {
   const { classes } = props;
   const { links } = props;
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
   const [expandedSegments, setExpandedSegments] = useState({});
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-    props.handlePagination({ count: rowsPerPage, page: newPage });
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
-    props.handlePagination({ count: +event.target.value, page });
-  };
 
   /* Store a expandedSegmentsHash for each segment, that tracks whether or not its children are expanded */
   if (props.segments && Object.keys(props.segments).length !== 0 && Object.keys(expandedSegments).length <= 0) {
@@ -63,7 +53,7 @@ export function SegmentList(props, context) {
 
   return (
     <React.Fragment>
-      <Grid container spacing={3}>
+      <Grid container spacing={3} justify='flex-end'>
         <Grid item>
           <Button
             variant='contained'
@@ -71,55 +61,60 @@ export function SegmentList(props, context) {
             color='primary'
             size='large'
             component={WrappedNavLink}
+            startIcon={<AddIcon />}
           >
-            <FormattedMessage {...messages.new} />
+            <DiverstFormattedMessage {...messages.new} />
           </Button>
         </Grid>
-        { /* eslint-disable-next-line arrow-body-style */ }
-        {props.segments && Object.values(props.segments).map((segment, i) => {
-          return (
-            <Grid item key={segment.id} className={classes.segmentListItem}>
-              <Card>
-                <CardContent>
-                  {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                  <Link
-                    component={WrappedNavLink}
-                    to={links.segmentPage(segment.id)}
-                  >
-                    <Typography variant='h5' component='h2' display='inline'>
-                      {segment.name}
-                    </Typography>
-                  </Link>
-                  {segment.description && (
-                    <Typography color='textSecondary' className={classes.segmentListItemDescription}>
-                      {segment.description}
-                    </Typography>
-                  )}
-                </CardContent>
-                <CardActions>
-                  <Button
-                    size='small'
-                    className={classes.errorButton}
-                    onClick={() => {
-                      /* eslint-disable-next-line no-alert, no-restricted-globals */
-                      if (confirm('Delete segment?'))
-                        props.deleteSegmentBegin(segment.id);
-                    }}
-                  >
-                    <FormattedMessage {...messages.delete} />
-                  </Button>
-                </CardActions>
-              </Card>
-            </Grid>
-          );
-        })}
       </Grid>
-      <Pagination
-        page={page}
-        rowsPerPage={rowsPerPage}
+      <Box mb={1} />
+      <DiverstLoader isLoading={props.isLoading}>
+        <Grid container spacing={3}>
+          { /* eslint-disable-next-line arrow-body-style */ }
+          {props.segments && Object.values(props.segments).map((segment, i) => {
+            return (
+              <Grid item key={segment.id} className={classes.segmentListItem}>
+                <Card>
+                  <CardContent>
+                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                    <Link
+                      component={WrappedNavLink}
+                      to={links.segmentPage(segment.id)}
+                    >
+                      <Typography variant='h5' component='h2' display='inline'>
+                        {segment.name}
+                      </Typography>
+                    </Link>
+                    {segment.description && (
+                      <Typography color='textSecondary' className={classes.segmentListItemDescription}>
+                        {segment.description}
+                      </Typography>
+                    )}
+                  </CardContent>
+                  <CardActions>
+                    <Button
+                      size='small'
+                      className={classes.errorButton}
+                      onClick={() => {
+                        /* eslint-disable-next-line no-alert, no-restricted-globals */
+                        if (confirm('Delete segment?'))
+                          props.deleteSegmentBegin(segment.id);
+                      }}
+                    >
+                      <DiverstFormattedMessage {...messages.delete} />
+                    </Button>
+                  </CardActions>
+                </Card>
+              </Grid>
+            );
+          })}
+        </Grid>
+      </DiverstLoader>
+      <DiverstPagination
+        isLoading={props.isLoading}
+        rowsPerPage={5}
         count={props.segmentTotal}
-        onChangePage={handleChangePage}
-        onChangeRowsPerPage={handleChangeRowsPerPage}
+        handlePagination={props.handlePagination}
       />
     </React.Fragment>
   );
@@ -131,7 +126,8 @@ SegmentList.propTypes = {
   segmentTotal: PropTypes.number,
   deleteSegmentBegin: PropTypes.func,
   handlePagination: PropTypes.func,
-  links: PropTypes.object
+  links: PropTypes.object,
+  isLoading: PropTypes.bool,
 };
 
 export default compose(

@@ -23,9 +23,12 @@ const CustomTextField = (props) => {
       name={dataLocation}
       id={dataLocation}
       type={props.inputType}
+      fullWidth
+      margin='normal'
       label={fieldDatum.field.title}
       value={getIn(props.formik.values, dataLocation)}
       onChange={props.formik.handleChange}
+      {...props}
     />
   );
 };

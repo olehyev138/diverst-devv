@@ -92,12 +92,12 @@ RSpec.describe Enterprise, type: :model do
   describe '#default_time_zone' do
     it 'returns UTC' do
       enterprise = build_stubbed(:enterprise, time_zone: nil)
-      expect(enterprise.default_time_zone).to eq 'UTC'
+      expect(enterprise.default_time_zone).to eq ActiveSupport::TimeZone.find_tzinfo('UTC').name
     end
 
     it 'returns EST' do
-      enterprise = build_stubbed(:enterprise, time_zone: 'EST')
-      expect(enterprise.default_time_zone).to eq 'EST'
+      enterprise = build_stubbed(:enterprise, time_zone: 'America/New_York')
+      expect(enterprise.default_time_zone).to eq 'America/New_York'
     end
   end
 
@@ -337,6 +337,14 @@ RSpec.describe Enterprise, type: :model do
             .to include "#{user.first_name},#{user.last_name},#{user.email},#{user.biography},#{user.active},#{user.groups.map(&:name).join(',')}"
         end
       end
+    end
+  end
+
+  describe '#saml_settings' do
+    it 'gives the correct resource count for the enterprise' do
+      enterprise = create(:enterprise)
+      saml_settings = enterprise.saml_settings
+      expect(saml_settings.assertion_consumer_service_url).to eq "#{ENV['DOMAIN']}/api/v1/enterprises/#{enterprise.id}/sso_login"
     end
   end
 end

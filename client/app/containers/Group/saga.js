@@ -7,7 +7,8 @@ import { showSnackbar } from 'containers/Shared/Notifier/actions';
 
 import {
   GET_GROUPS_BEGIN, CREATE_GROUP_BEGIN,
-  GET_GROUP_BEGIN, UPDATE_GROUP_BEGIN, DELETE_GROUP_BEGIN
+  GET_GROUP_BEGIN, UPDATE_GROUP_BEGIN,
+  UPDATE_GROUP_SETTINGS_BEGIN, DELETE_GROUP_BEGIN
 } from 'containers/Group/constants';
 
 import {
@@ -15,6 +16,7 @@ import {
   createGroupSuccess, createGroupError,
   getGroupSuccess, getGroupError,
   updateGroupSuccess, updateGroupError,
+  updateGroupSettingsSuccess, updateGroupSettingsError,
   deleteGroupError
 } from 'containers/Group/actions';
 
@@ -52,6 +54,7 @@ export function* createGroup(action) {
     // TODO: use bind here or no?
     const response = yield call(api.groups.create.bind(api.groups), payload);
 
+    yield put(createGroupSuccess());
     yield put(push(ROUTES.admin.manage.groups.index.path()));
     yield put(showSnackbar({ message: 'Group created', options: { variant: 'success' } }));
   } catch (err) {
@@ -67,6 +70,7 @@ export function* updateGroup(action) {
     const payload = { group: action.payload };
     const response = yield call(api.groups.update.bind(api.groups), payload.group.id, payload);
 
+    yield put(updateGroupSuccess());
     yield put(push(ROUTES.admin.manage.groups.index.path()));
     yield put(showSnackbar({ message: 'Group updated', options: { variant: 'success' } }));
   } catch (err) {
@@ -74,6 +78,27 @@ export function* updateGroup(action) {
 
     // TODO: intl message
     yield put(showSnackbar({ message: 'Failed to update group', options: { variant: 'warning' } }));
+  }
+}
+
+export function* updateGroupSettings(action) {
+  try {
+    const payload = { group: action.payload };
+    const response = yield call(api.groups.update.bind(api.groups), payload.group.id, payload);
+
+    yield put(updateGroupSettingsSuccess());
+    yield put(showSnackbar({
+      message: 'Group settings updated',
+      options: { variant: 'success' }
+    }));
+  } catch (err) {
+    yield put(updateGroupSettingsError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({
+      message: 'Failed to update group settings',
+      options: { variant: 'warning' }
+    }));
   }
 }
 
@@ -95,5 +120,6 @@ export default function* groupsSaga() {
   yield takeLatest(GET_GROUP_BEGIN, getGroup);
   yield takeLatest(CREATE_GROUP_BEGIN, createGroup);
   yield takeLatest(UPDATE_GROUP_BEGIN, updateGroup);
+  yield takeLatest(UPDATE_GROUP_SETTINGS_BEGIN, updateGroupSettings);
   yield takeLatest(DELETE_GROUP_BEGIN, deleteGroup);
 }

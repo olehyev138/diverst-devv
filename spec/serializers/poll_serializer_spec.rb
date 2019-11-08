@@ -13,5 +13,7 @@ RSpec.describe PollSerializer, type: :serializer do
     expect(serializer.serializable_hash[:groups].empty?).to be false
     expect(serializer.serializable_hash[:segments].empty?).to be false
     expect(serializer.serializable_hash[:fields].empty?).to be false
+    field = serializer.serializable_hash[:fields].first
+    expect(field[:type]).to_not be nil
   end
 end

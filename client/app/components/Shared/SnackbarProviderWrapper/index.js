@@ -7,7 +7,11 @@
 import React, { memo } from 'react';
 import { compose } from 'redux';
 import { SnackbarProvider } from 'notistack';
+
+import { IconButton } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+import CloseIcon from '@material-ui/icons/Close';
+
 import Slide from '@material-ui/core/Slide';
 import PropTypes from 'prop-types';
 
@@ -30,8 +34,13 @@ function SnackbarProviderWrapper(props) {
   /* eslint-disable-next-line no-shadow */
   const SlideTransition = props => <Slide {...props} direction='up' />;
 
+  const notistackRef = React.createRef();
+
   return (
     <SnackbarProvider
+      maxSnack={3}
+      preventDuplicate
+      ref={notistackRef}
       classes={{
         variantSuccess: props.classes.snackbarSuccess,
         variantInfo: props.classes.snackbarInfo,
@@ -43,6 +52,16 @@ function SnackbarProviderWrapper(props) {
         horizontal: 'right',
       }}
       TransitionComponent={SlideTransition}
+      action={key => (
+        <IconButton
+          key='close'
+          aria-label='close'
+          color='inherit'
+          onClick={() => notistackRef.current.handleDismissSnack(key)}
+        >
+          <CloseIcon />
+        </IconButton>
+      )}
     >
       {props.children}
     </SnackbarProvider>
@@ -52,6 +71,7 @@ function SnackbarProviderWrapper(props) {
 SnackbarProviderWrapper.propTypes = {
   children: PropTypes.node.isRequired,
   classes: PropTypes.object,
+  closeSnackbar: PropTypes.func,
 };
 
 export default compose(

@@ -9,7 +9,7 @@ FactoryBot.define do
     invitation_accepted_at Time.current
     enterprise
     provider 'email'
-    time_zone 'UTC'
+    time_zone ActiveSupport::TimeZone.find_tzinfo('UTC').name
     user_role { enterprise.user_roles.where(role_type: 'admin').first }
     after(:create) do |user|
       user.policy_group = create(:policy_group)

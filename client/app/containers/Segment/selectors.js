@@ -5,13 +5,24 @@ import dig from 'object-dig';
 import produce from 'immer';
 
 import { deserializeDatum, deserializeOptionsText } from 'utils/customFieldHelpers';
-import { selectMembersDomain } from 'containers/Group/GroupMembers/selectors';
 
 const selectSegmentsDomain = state => state.segments || initialState;
 
 const selectPaginatedSegments = () => createSelector(
   selectSegmentsDomain,
   segmentsState => segmentsState.segmentList
+);
+
+/* Select segment list & format it for a select
+ *  looks like: [ { value: <>, label: <> } ... ]
+ */
+const selectPaginatedSelectSegments = () => createSelector(
+  selectSegmentsDomain,
+  groupsState => (
+    Object
+      .values(groupsState.segmentList)
+      .map(segment => ({ value: segment.id, label: segment.name }))
+  )
 );
 
 const selectSegmentTotal = () => createSelector(
@@ -84,11 +95,27 @@ const selectIsSegmentBuilding = () => createSelector(
   segmentsState => segmentsState.isSegmentBuilding
 );
 
+const selectIsLoading = () => createSelector(
+  selectSegmentsDomain,
+  segmentsState => segmentsState.isLoading
+);
+
+const selectIsFormLoading = () => createSelector(
+  selectSegmentsDomain,
+  segmentsState => segmentsState.isFormLoading
+);
+
+const selectIsCommitting = () => createSelector(
+  selectSegmentsDomain,
+  segmentsState => segmentsState.isCommitting
+);
+
 
 export {
-  selectSegmentsDomain, selectPaginatedSegments,
+  selectSegmentsDomain, selectPaginatedSegments, selectPaginatedSelectSegments,
   selectSegmentTotal, selectSegment, selectSegmentWithRules,
   selectPaginatedSegmentMembers, selectSegmentMemberTotal,
   selectIsFetchingSegmentMembers, selectIsSegmentBuilding,
-  selectFormSegment
+  selectFormSegment, selectIsLoading, selectIsCommitting,
+  selectIsFormLoading,
 };

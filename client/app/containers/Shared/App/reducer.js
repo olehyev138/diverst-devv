@@ -7,15 +7,16 @@
 import produce from 'immer/dist/immer';
 import {
   LOGIN_SUCCESS, LOGOUT_SUCCESS, LOGOUT_ERROR,
-  SET_USER, SET_USER_POLICY_GROUP, SET_ENTERPRISE
+  SET_USER, SET_USER_POLICY_GROUP, SET_ENTERPRISE,
+  LOGIN_ERROR
 } from 'containers/Shared/App/constants';
 
 // The initial state of the App
 export const initialState = {
   user: null,
-  policy_group: null,
+  policyGroup: null,
   enterprise: null,
-  token: null,
+  token: null
 };
 
 function appReducer(state = initialState, action) {
@@ -27,8 +28,9 @@ function appReducer(state = initialState, action) {
       case LOGOUT_SUCCESS:
         draft.token = initialState.token;
         draft.user = initialState.user;
-        draft.policy_group = initialState.policy_group;
+        draft.policyGroup = initialState.policyGroup;
         break;
+      case LOGIN_ERROR:
       case LOGOUT_ERROR:
         draft.error = action.error;
         break;
@@ -36,10 +38,15 @@ function appReducer(state = initialState, action) {
         draft.enterprise = action.enterprise;
         break;
       case SET_USER_POLICY_GROUP:
-        draft.policy_group = action.payload.policy_group;
+        draft.policyGroup = action.policyGroup;
         break;
       case SET_USER:
-        draft.user = action.user;
+        // Clear policy group and enterprise because we already have them in the store at the parent level
+        draft.user = {
+          ...action.user,
+          policy_group: undefined,
+          enterprise: undefined,
+        };
         break;
     }
   });

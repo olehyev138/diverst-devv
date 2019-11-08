@@ -2,11 +2,14 @@ import produce from 'immer/dist/immer';
 
 import appReducer from 'containers/Shared/App/reducer';
 import {
-  loginBegin, loginSuccess, loginError,
-  logoutBegin, logoutSuccess, logoutError,
-  findEnterpriseBegin, setEnterprise, findEnterpriseError,
-  setUser, setUserPolicyGroup
-} from 'containers/Shared/App/actions';
+  loginSuccess,
+  loginError,
+  logoutSuccess,
+  setEnterprise,
+  setUser,
+  setUserPolicyGroup
+}
+  from 'containers/Shared/App/actions';
 
 /* eslint-disable default-case, no-param-reassign */
 describe('appReducer', () => {
@@ -15,7 +18,7 @@ describe('appReducer', () => {
   beforeEach(() => {
     state = {
       user: null,
-      policy_group: null,
+      policyGroup: null,
       enterprise: null,
       token: null,
     };
@@ -32,6 +35,14 @@ describe('appReducer', () => {
     });
 
     expect(appReducer(state, loginSuccess('token'))).toEqual(expected);
+  });
+  
+  it('handles the loginError action correctly', () => {
+    const expected = produce(state, (draft) => {
+      draft.error = 'error!';
+    });
+
+    expect(appReducer(state, loginError('error!'))).toEqual(expected);
   });
 
   it('handles the logoutSuccess action correctly', () => {
@@ -52,17 +63,17 @@ describe('appReducer', () => {
 
   it('handles the setUser action correctly', () => {
     const expected = produce(state, (draft) => {
-      draft.user = 'user';
+      draft.user = { id: 1, email: 'tech@diverst.com' };
     });
 
-    expect(appReducer(state, setUser('user'))).toEqual(expected);
+    expect(appReducer(state, setUser({ id: 1, email: 'tech@diverst.com', policy_group: { permission: true } }))).toEqual(expected);
   });
 
   it('handles the setUserPolicyGroup action correctly', () => {
     const expected = produce(state, (draft) => {
-      draft.policy_group = { groups_index: false };
+      draft.policyGroup = { groups_index: false };
     });
 
-    expect(appReducer(state, setUserPolicyGroup({ policy_group: { groups_index: false } }))).toEqual(expected);
+    expect(appReducer(state, setUserPolicyGroup({ groups_index: false }))).toEqual(expected);
   });
 });

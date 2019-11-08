@@ -1,5 +1,5 @@
 /* eslint consistent-return:0 import/order:0 */
-
+require('dotenv').config();
 const express = require('express');
 const logger = require('./logger');
 
@@ -8,11 +8,18 @@ const port = require('./port');
 const setup = require('./middlewares/frontendMiddleware');
 const isDev = process.env.NODE_ENV !== 'production';
 const ngrok =
-  (isDev && process.env.ENABLE_TUNNEL) || argv.tunnel
-    ? require('ngrok')
-    : false;
+  (isDev && process.env.ENABLE_TUNNEL) || argv.tunnel ?
+  require('ngrok') :
+  false;
 const { resolve } = require('path');
 const app = express();
+const proxy = require('http-proxy-middleware');
+const apiProxy = proxy('/api', {
+  target: process.env.API_URL,
+  logLevel: 'debug',
+  secure: false
+});
+app.use('/api', apiProxy);
 
 // If you need a backend, e.g. an API, add your custom backend-specific middleware here
 // app.use('/api', myApi);
@@ -46,11 +53,13 @@ app.listen(port, host, async err => {
     let url;
     try {
       url = await ngrok.connect(port);
-    } catch (e) {
+    }
+    catch (e) {
       return logger.error(e);
     }
     logger.appStarted(port, prettyHost, url);
-  } else {
+  }
+  else {
     logger.appStarted(port, prettyHost);
   }
 });

@@ -1,7 +1,10 @@
 default: &default
   adapter: mysql2
+  host: <%= ENV["DATABASE_HOST"] %>
   url: <%= ENV["DATABASE_URL"] %>
   pool: <%= ENV["DB_POOL"] || ENV["MAX_THREADS"] || 20 %>
+  username: <%= ENV["DATABASE_USERNAME"] || "root" %>
+  password: <%= ENV["DATABASE_PASSWORD"] %>
   encoding: utf8mb4
   collation: utf8mb4_bin
   timeout: 15000
@@ -10,7 +13,6 @@ default: &default
 development:
   <<: *default
   database: diverst_development
-  username: root
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -18,7 +20,6 @@ development:
 test:
   <<: *default
   database: diverst_test
-  username: root
 
 production:
   <<: *default
