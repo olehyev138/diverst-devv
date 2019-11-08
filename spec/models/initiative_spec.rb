@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Initiative, type: :model do
   describe 'when validating' do
-    let(:initiative) { build_stubbed(:initiative) }
+    let(:initiative) { build(:initiative) }
 
     it { expect(initiative).to belong_to(:pillar) }
     it { expect(initiative).to belong_to(:owner).class_name('User') }
@@ -34,6 +34,10 @@ RSpec.describe Initiative, type: :model do
 
     it { expect(initiative).to have_many(:initiative_users) }
     it { expect(initiative).to have_many(:attendees).through(:initiative_users).source(:user) }
+
+    # ActiveStorage
+    it { expect(initiative).to have_attached_file(:picture) }
+    it { expect(initiative).to validate_attachment_content_type(:picture, AttachmentHelper.common_image_types) }
 
     # Paperclip
     # it { expect(initiative).to have_attached_file(:picture) }
