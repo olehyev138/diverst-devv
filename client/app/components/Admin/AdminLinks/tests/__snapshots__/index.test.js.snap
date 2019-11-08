@@ -208,6 +208,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
         </WithStyles(ForwardRef(ListItem))>
         <WithStyles(ForwardRef(ListItem))
           button={true}
+          onClick={[Function]}
         >
           <WithStyles(ForwardRef(ListItemIcon))>
             <WbIncandescentIcon />
@@ -215,7 +216,50 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
           <WithStyles(ForwardRef(ListItemText))
             primary="Innovate"
           />
+          <ExpandMoreIcon />
         </WithStyles(ForwardRef(ListItem))>
+        <WithStyles(ForwardRef(Collapse))
+          in={false}
+          timeout="auto"
+          unmountOnExit={true}
+        >
+          <WithStyles(ForwardRef(List))
+            disablePadding={true}
+          >
+            <WithStyles(ForwardRef(MenuItem))
+              component={
+                Object {
+                  "$$typeof": Symbol(react.forward_ref),
+                  "render": [Function],
+                }
+              }
+              to="/admin/innovate/campaigns"
+            >
+              <WithStyles(ForwardRef(ListItemIcon))>
+                <ListIcon />
+              </WithStyles(ForwardRef(ListItemIcon))>
+              <WithStyles(ForwardRef(ListItemText))>
+                Campaigns
+              </WithStyles(ForwardRef(ListItemText))>
+            </WithStyles(ForwardRef(MenuItem))>
+            <WithStyles(ForwardRef(MenuItem))
+              component={
+                Object {
+                  "$$typeof": Symbol(react.forward_ref),
+                  "render": [Function],
+                }
+              }
+              to="/admin/innovate/financials"
+            >
+              <WithStyles(ForwardRef(ListItemIcon))>
+                <ListIcon />
+              </WithStyles(ForwardRef(ListItemIcon))>
+              <WithStyles(ForwardRef(ListItemText))>
+                Financials
+              </WithStyles(ForwardRef(ListItemText))>
+            </WithStyles(ForwardRef(MenuItem))>
+          </WithStyles(ForwardRef(List))>
+        </WithStyles(ForwardRef(Collapse))>
         <WithStyles(ForwardRef(ListItem))
           button={true}
         >
@@ -532,6 +576,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
         </WithStyles(ForwardRef(ListItem))>
         <WithStyles(ForwardRef(ListItem))
           button={true}
+          onClick={[Function]}
         >
           <WithStyles(ForwardRef(ListItemIcon))>
             <WbIncandescentIcon />
@@ -539,7 +584,50 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
           <WithStyles(ForwardRef(ListItemText))
             primary="Innovate"
           />
+          <ExpandMoreIcon />
         </WithStyles(ForwardRef(ListItem))>
+        <WithStyles(ForwardRef(Collapse))
+          in={false}
+          timeout="auto"
+          unmountOnExit={true}
+        >
+          <WithStyles(ForwardRef(List))
+            disablePadding={true}
+          >
+            <WithStyles(ForwardRef(MenuItem))
+              component={
+                Object {
+                  "$$typeof": Symbol(react.forward_ref),
+                  "render": [Function],
+                }
+              }
+              to="/admin/innovate/campaigns"
+            >
+              <WithStyles(ForwardRef(ListItemIcon))>
+                <ListIcon />
+              </WithStyles(ForwardRef(ListItemIcon))>
+              <WithStyles(ForwardRef(ListItemText))>
+                Campaigns
+              </WithStyles(ForwardRef(ListItemText))>
+            </WithStyles(ForwardRef(MenuItem))>
+            <WithStyles(ForwardRef(MenuItem))
+              component={
+                Object {
+                  "$$typeof": Symbol(react.forward_ref),
+                  "render": [Function],
+                }
+              }
+              to="/admin/innovate/financials"
+            >
+              <WithStyles(ForwardRef(ListItemIcon))>
+                <ListIcon />
+              </WithStyles(ForwardRef(ListItemIcon))>
+              <WithStyles(ForwardRef(ListItemText))>
+                Financials
+              </WithStyles(ForwardRef(ListItemText))>
+            </WithStyles(ForwardRef(MenuItem))>
+          </WithStyles(ForwardRef(List))>
+        </WithStyles(ForwardRef(Collapse))>
         <WithStyles(ForwardRef(ListItem))
           button={true}
         >
