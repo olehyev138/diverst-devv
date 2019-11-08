@@ -41,8 +41,6 @@ class Api::V1::GroupsController < DiverstController
       :expiry_age_for_resources,
       :expiry_age_for_events,
       :unit_of_expiry_age,
-      :banner_url,
-      :logo_url,
       manager_ids: [],
       child_ids: [],
       member_ids: [],

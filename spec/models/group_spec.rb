@@ -163,19 +163,19 @@ RSpec.describe Group, type: :model do
 
   describe '#logo_location' do
     it 'returns the actual logo location' do
-      group = create(:group, logo: File.new('spec/fixtures/files/verizon_logo.png'))
+      group = create(:group)
+      group.logo.attach(io: File.open('spec/fixtures/files/verizon_logo.png'), filename: 'file.png')
 
       expect(group.logo_location).to_not be nil
-      expect(group.logo_location).to_not eq '/assets/missing.png'
     end
   end
 
   describe '#banner_location' do
     it 'returns the actual banner location' do
-      group = create(:group, banner: File.new('spec/fixtures/files/verizon_logo.png'))
+      group = create(:group)
+      group.banner.attach(io: File.open('spec/fixtures/files/verizon_logo.png'), filename: 'file.png')
 
       expect(group.banner_location).to_not be nil
-      expect(group.banner_location).to_not eq '/assets/missing.png'
     end
   end
 
@@ -224,20 +224,6 @@ RSpec.describe Group, type: :model do
 
       expect(created.banner.presence).to_not be nil
       expect(created.logo.presence).to_not be nil
-    end
-  end
-
-  describe '#logo_url' do
-    it 'sets the logo for group from url' do
-      group = create(:group)
-      allow(URI).to receive(:parse).and_return(File.open('spec/fixtures/files/verizon_logo.png'))
-      expect(group.logo_file_name).to be nil
-
-      group.logo_url = Faker::LoremPixel.image(secure: false)
-      group.save!
-      group.reload
-
-      expect(group.logo_file_name).to_not be nil
     end
   end
 

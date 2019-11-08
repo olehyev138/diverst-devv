@@ -190,25 +190,19 @@ class Group < ApplicationRecord
   accepts_nested_attributes_for :group_leaders, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :sponsors, reject_if: :all_blank, allow_destroy: true
 
-  def banner_url=(url)
-    self.banner = URI.parse(url)
-  end
-
-  def logo_url=(url)
-    self.logo = URI.parse(url)
-  end
-
   def logo_location(expires_in: 3600, default_style: :medium)
-    return nil if !logo.presence
+    return nil if !logo.attached?
 
-    default_style = :medium if !logo.styles.keys.include? default_style
-    logo.expiring_url(expires_in, default_style)
+    # default_style = :medium if !logo.styles.keys.include? default_style
+    # logo.expiring_url(expires_in, default_style)
+    Rails.application.routes.url_helpers.url_for(logo)
   end
 
   def banner_location
-    return nil if !banner.presence
+    return nil if !banner.attached?
 
-    banner.expiring_url(36000)
+    # banner.expiring_url(36000)
+    Rails.application.routes.url_helpers.url_for(banner)
   end
 
   def resolve_auto_archive_state
@@ -329,12 +323,6 @@ class Group < ApplicationRecord
 
   def file_safe_name
     name.gsub(/[^0-9A-Za-z.\-]/, '_')
-  end
-
-  def logo_expiring_thumb
-    return nil if logo.blank?
-
-    logo.expiring_url(30, :thumb)
   end
 
   def possible_participating_groups
