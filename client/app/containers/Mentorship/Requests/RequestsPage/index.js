@@ -37,6 +37,7 @@ import {
   requestUnmount,
   acceptRequestBegin,
   rejectRequestBegin,
+  deleteRequestBegin,
 } from 'containers/Mentorship/Requests/actions';
 
 import reducer from 'containers/Mentorship/Requests/reducer';
@@ -124,14 +125,15 @@ export function MentorsPage(props) {
         requestsTotal={requestsTotal}
         isFetchingRequests={isFetchingRequests}
 
-        handleMentorPagination={handleRequestPagination}
-        handleMentorOrdering={handleRequestOrdering}
+        handleRequestPagination={handleRequestPagination}
+        handleRequestOrdering={handleRequestOrdering}
 
         params={params}
         type={props.type}
 
         acceptRequest={props.acceptRequestBegin}
         rejectRequest={props.rejectRequestBegin}
+        deleteRequest={props.deleteRequestBegin}
       />
     </React.Fragment>
   );
@@ -152,6 +154,7 @@ MentorsPage.propTypes = {
 
   acceptRequestBegin: PropTypes.func.isRequired,
   rejectRequestBegin: PropTypes.func.isRequired,
+  deleteRequestBegin: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -166,6 +169,7 @@ const mapDispatchToProps = {
   requestUnmount,
   acceptRequestBegin,
   rejectRequestBegin,
+  deleteRequestBegin,
 };
 
 const withConnect = connect(

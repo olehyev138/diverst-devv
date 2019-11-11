@@ -22,6 +22,7 @@ import { withStyles } from '@material-ui/core/styles';
 import PersonIcon from '@material-ui/icons/Person';
 import CheckIcon from '@material-ui/icons/Check';
 import ClearIcon from '@material-ui/icons/Clear';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 import DiverstTable from 'components/Shared/DiverstTable';
 
@@ -64,6 +65,52 @@ export function MentorList(props, context) {
     { title: 'Status', field: 'status' },
   ];
 
+  const actions = [];
+  if (type === 'incoming') {
+    actions.push({
+      icon: () => (<CheckIcon />),
+      tooltip: 'Accept Request',
+      onClick: (_, rowData) => {
+        // eslint-disable-next-line no-restricted-globals,no-alert
+        if (confirm('Accept request?')) {
+          const payload = { id: rowData.id };
+          props.acceptRequest(payload);
+        }
+      }
+    });
+
+    actions.push({
+      icon: () => (<ClearIcon />),
+      tooltip: 'Reject Request',
+      onClick: (_, rowData) => {
+        // eslint-disable-next-line no-restricted-globals,no-alert
+        if (confirm('Reject request?')) {
+          const payload = { id: rowData.id };
+          props.rejectRequest(payload);
+        }
+      }
+    });
+  } else
+    actions.push({
+      icon: () => (<DeleteIcon />),
+      tooltip: 'Delete Request',
+      onClick: (_, rowData) => {
+        // eslint-disable-next-line no-restricted-globals,no-alert
+        if (confirm('Delete request?')) {
+          const payload = { id: rowData.id };
+          props.deleteRequest(payload);
+        }
+      }
+    });
+
+  actions.push({
+    icon: () => <PersonIcon />,
+    tooltip: 'See Profile',
+    onClick: (_, rowData) => {
+      handleProfileClickOpen(type === 'incoming' ? rowData.sender : rowData.receiver);
+    }
+  });
+
   const handleOrderChange = (columnId, orderDir) => {
     const payload = {};
     if (columnId === -1) {
@@ -94,33 +141,26 @@ export function MentorList(props, context) {
         dataArray={props.requests}
         dataTotal={props.requestsTotal}
         columns={columns}
-        actions={[{
-          icon: () => (<CheckIcon />),
-          tooltip: 'Accept Request',
-          onClick: (_, rowData) => {
-            // eslint-disable-next-line no-restricted-globals,no-alert
-            if (confirm('Accept request?')) {
-              const payload = { userId: props.user.id, id: rowData.id };
-              props.acceptRequest(payload);
+        actions={actions}
+        my_options={{
+          rowStyle: (rowData) => {
+            let colour;
+            switch (rowData.status) {
+              case 'accepted':
+                colour = '#EFE';
+                break;
+              case 'rejected':
+                colour = '#FEE';
+                break;
+              default:
+                colour = '#FFF';
+                break;
             }
+            return {
+              backgroundColor: colour
+            };
           }
-        }, {
-          icon: () => (<ClearIcon />),
-          tooltip: 'Reject Request',
-          onClick: (_, rowData) => {
-            // eslint-disable-next-line no-restricted-globals,no-alert
-            if (confirm('Delete request?')) {
-              const payload = { userId: props.user.id, id: rowData.id };
-              props.rejectRequest(payload);
-            }
-          }
-        }, {
-          icon: () => <PersonIcon />,
-          tooltip: 'See Profile',
-          onClick: (_, rowData) => {
-            handleProfileClickOpen(type === 'incoming' ? rowData.sender : rowData.receiver);
-          }
-        }]}
+        }}
       />
       <Dialog
         open={profileOpen}
@@ -158,6 +198,7 @@ MentorList.propTypes = {
   params: PropTypes.object,
   rejectRequest: PropTypes.func,
   acceptRequest: PropTypes.func,
+  deleteRequest: PropTypes.func,
 };
 
 export default compose(

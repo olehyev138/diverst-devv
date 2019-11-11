@@ -10,7 +10,8 @@ import {
   GET_REQUESTS_BEGIN,
   GET_PROPOSALS_BEGIN,
   ACCEPT_REQUEST_BEGIN,
-  DENY_REQUEST_BEGIN,
+  REJECT_REQUEST_BEGIN,
+  DELETE_REQUEST_BEGIN,
 } from './constants';
 
 import {
@@ -18,6 +19,7 @@ import {
   getProposalsSuccess, getProposalsError,
   acceptRequestSuccess, acceptRequestError,
   rejectRequestSuccess, rejectRequestError,
+  deleteRequestSuccess, deleteRequestError,
 } from './actions';
 
 export function* getRequests(action) {
@@ -79,10 +81,24 @@ export function* rejectRequest(action) {
   }
 }
 
+export function* deleteRequest(action) {
+  try {
+    const response = yield call(api.mentoringRequests.destroy.bind(api.mentoringRequests), action.payload.id);
+
+    yield put(showSnackbar({ message: 'Successfully deleted request', options: { variant: 'success' } }));
+  } catch (err) {
+    yield put(deleteRequestError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to delete request', options: { variant: 'warning' } }));
+  }
+}
+
 
 export default function* RequestSaga() {
   yield takeLatest(GET_REQUESTS_BEGIN, getRequests);
   yield takeLatest(GET_PROPOSALS_BEGIN, getProposals);
   yield takeLatest(ACCEPT_REQUEST_BEGIN, acceptRequest);
-  yield takeLatest(DENY_REQUEST_BEGIN, rejectRequest);
+  yield takeLatest(REJECT_REQUEST_BEGIN, rejectRequest);
+  yield takeLatest(DELETE_REQUEST_BEGIN, deleteRequest);
 }

@@ -16,8 +16,12 @@ export const ACCEPT_REQUEST_BEGIN = 'app/Mentorship/ACCEPT_REQUEST_BEGIN';
 export const ACCEPT_REQUEST_SUCCESS = 'app/Mentorship/ACCEPT_REQUEST_SUCCESS';
 export const ACCEPT_REQUEST_ERROR = 'app/Mentorship/ACCEPT_REQUEST_ERROR';
 
-export const DENY_REQUEST_BEGIN = 'app/Mentorship/DENY_REQUEST_BEGIN';
-export const DENY_REQUEST_SUCCESS = 'app/Mentorship/DENY_REQUEST_SUCCESS';
-export const DENY_REQUEST_ERROR = 'app/Mentorship/DENY_REQUEST_ERROR';
+export const REJECT_REQUEST_BEGIN = 'app/Mentorship/REJECT_REQUEST_BEGIN';
+export const REJECT_REQUEST_SUCCESS = 'app/Mentorship/REJECT_REQUEST_SUCCESS';
+export const REJECT_REQUEST_ERROR = 'app/Mentorship/REJECT_REQUEST_ERROR';
+
+export const DELETE_REQUEST_BEGIN = 'app/Mentorship/DELETE_REQUEST_BEGIN';
+export const DELETE_REQUEST_SUCCESS = 'app/Mentorship/DELETE_REQUEST_SUCCESS';
+export const DELETE_REQUEST_ERROR = 'app/Mentorship/DELETE_REQUEST_ERROR';
 
 export const REQUEST_UNMOUNT = 'app/Mentorship/MENTORSHIP_REQUEST_UNMOUNT';

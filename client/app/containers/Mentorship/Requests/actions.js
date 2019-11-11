@@ -14,9 +14,12 @@ import {
   ACCEPT_REQUEST_BEGIN,
   ACCEPT_REQUEST_SUCCESS,
   ACCEPT_REQUEST_ERROR,
-  DENY_REQUEST_BEGIN,
-  DENY_REQUEST_SUCCESS,
-  DENY_REQUEST_ERROR,
+  REJECT_REQUEST_BEGIN,
+  REJECT_REQUEST_SUCCESS,
+  REJECT_REQUEST_ERROR,
+  DELETE_REQUEST_BEGIN,
+  DELETE_REQUEST_SUCCESS,
+  DELETE_REQUEST_ERROR,
   REQUEST_UNMOUNT,
 } from './constants';
 
@@ -85,21 +88,42 @@ export function acceptRequestError(payload) {
 
 export function rejectRequestBegin(payload) {
   return {
-    type: DENY_REQUEST_BEGIN,
+    type: REJECT_REQUEST_BEGIN,
     payload,
   };
 }
 
 export function rejectRequestSuccess(payload) {
   return {
-    type: DENY_REQUEST_SUCCESS,
+    type: REJECT_REQUEST_SUCCESS,
     payload,
   };
 }
 
 export function rejectRequestError(payload) {
   return {
-    type: DENY_REQUEST_ERROR,
+    type: REJECT_REQUEST_ERROR,
+    payload,
+  };
+}
+
+export function deleteRequestBegin(payload) {
+  return {
+    type: DELETE_REQUEST_BEGIN,
+    payload,
+  };
+}
+
+export function deleteRequestSuccess(payload) {
+  return {
+    type: DELETE_REQUEST_SUCCESS,
+    payload,
+  };
+}
+
+export function deleteRequestError(payload) {
+  return {
+    type: DELETE_REQUEST_ERROR,
     payload,
   };
 }

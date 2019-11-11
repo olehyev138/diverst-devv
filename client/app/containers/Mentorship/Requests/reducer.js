@@ -12,15 +12,8 @@ import {
   GET_PROPOSALS_BEGIN,
   GET_PROPOSALS_SUCCESS,
   GET_PROPOSALS_ERROR,
-  ACCEPT_REQUEST_BEGIN,
-  ACCEPT_REQUEST_SUCCESS,
-  ACCEPT_REQUEST_ERROR,
-  DENY_REQUEST_BEGIN,
-  DENY_REQUEST_SUCCESS,
-  DENY_REQUEST_ERROR,
   REQUEST_UNMOUNT,
 } from './constants';
-import mentorshipReducer from "../reducer";
 
 export const initialState = {
   requestList: [],
@@ -56,5 +49,4 @@ function requestReducer(state = initialState, action) {
     }
   });
 }
-
-export default requestReducer;
+  export default requestReducer;
