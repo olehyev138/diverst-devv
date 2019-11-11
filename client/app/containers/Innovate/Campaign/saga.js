@@ -31,16 +31,12 @@ export function* getCampaigns(action) {
 
 export function* createCampaigns(action) {
   try {
-    const payload = {
-      group_id: action.payload.groupId,
-      campaign_ids: action.payload.attributes.campaign_ids
-    };
-
+    const payload = { campaign: action.payload };
     const response = yield call(api.campaigns.create.bind(api.campaigns), payload);
 
     yield put(createCampaignSuccess());
     yield put(push(ROUTES.group.campaigns.index.path(action.payload.groupId)));
-    yield put(showSnackbar({ message: 'User updated', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: 'Campaign created', options: { variant: 'success' } }));
   } catch (err) {
     yield put(createCampaignError(err));
 

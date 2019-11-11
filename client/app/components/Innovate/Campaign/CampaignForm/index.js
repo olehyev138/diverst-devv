@@ -9,10 +9,10 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
 import {
-  Button, Card, CardActions, CardContent, Divider, TextField
+  Button, Card, CardActions, CardContent, Divider, Grid, TextField
 } from '@material-ui/core';
 import Select from 'components/Shared/DiverstSelect';
-
+import DiverstDateTimePicker from 'components/Shared/Pickers/DiverstDateTimePicker';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { Field, Formik, Form } from 'formik';
 
@@ -21,16 +21,16 @@ import messages from 'containers/Group/GroupMembers/messages';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 
 import { buildValues, mapFields } from 'utils/formHelpers';
+import {DateTime} from "luxon";
 
 /* eslint-disable object-curly-newline */
-export function CampaignFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
+export function CampaignFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, touched, ...props }) {
   return (
     <Card>
       <Form>
         <CardContent>
           <Field
             component={TextField}
-            required
             onChange={handleChange}
             fullWidth
             id='title'
@@ -79,6 +79,8 @@ export function CampaignForm(props) {
     id: { default: '' },
     title: { default: '' },
     description: { default: '' },
+    // start: { default: DateTime.local().plus({ hour: 1 }) },
+    // end: { default: DateTime.local().plus({ hour: 2 }) },
   });
 
   return (
@@ -86,7 +88,7 @@ export function CampaignForm(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        props.createCampaignBegin(mapFields(values, ['title', 'description']));
+        props.createCampaignBegin(values);
       }}
 
       render={formikProps => <CampaignFormInner {...props} {...formikProps} />}
