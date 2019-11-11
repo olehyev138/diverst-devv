@@ -26,7 +26,6 @@ function campaignsReducer(state = initialState, action) {
         draft.isFetchingCampaigns = true;
         break;
       case GET_CAMPAIGNS_SUCCESS:
-        console.log(action);
         draft.campaignList = action.payload.items;
         draft.campaignTotal = action.payload.total;
         draft.isFetchingCampaigns = false;
