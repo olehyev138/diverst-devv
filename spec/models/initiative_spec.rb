@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Initiative, type: :model do
+  include ActiveJob::TestHelper
+
   describe 'when validating' do
     let(:initiative) { build(:initiative) }
 
@@ -75,16 +77,18 @@ RSpec.describe Initiative, type: :model do
   describe '#build' do
     it 'sets the picture for initiative from url when creating initiative' do
       user = create(:user)
-      file = File.open('spec/fixtures/files/verizon_logo.png')
       group = create(:group, enterprise: user.enterprise)
       outcome = create(:outcome, group: group)
       pillar = create(:pillar, outcome: outcome)
+
+      file = fixture_file_upload('spec/fixtures/files/verizon_logo.png', 'image/png')
+
       request = Request.create_request(user)
-      payload = { initiative: { name: 'Save', pillar_id: pillar.id, picture: file, owner_group_id: group.id, owner_id: user.id, start: Date.today, end: Date.tomorrow + 1.day } }
+      payload = { initiative: { name: 'Save', pillar_id: pillar.id, picture: file, owner_group_id: group.id, owner_id: user.id, start: Date.today, end: Date.tomorrow + 1.day, picture: file } }
       params = ActionController::Parameters.new(payload)
       created = Initiative.build(request, params.permit!)
 
-      expect(created.picture.presence).to_not be nil
+      expect(created.picture.attached?).to be true
     end
   end
 

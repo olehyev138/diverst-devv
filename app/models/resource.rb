@@ -72,9 +72,9 @@ class Resource < ApplicationRecord
   end
 
   def file_location
-    return nil if !file.presence
+    return nil if !file.attached?
 
-    file.expiring_url(36000)
+    Rails.application.routes.url_helpers.url_for(file)
   end
 
   def expiration_time

@@ -21,6 +21,7 @@ module Initiative::Actions
     end
 
     def generate_qr_code(diverst_request, params)
+      # TODO: Fix this for ActiveStorage
       item = show(diverst_request, params)
       hash = {
         id: item.id,
