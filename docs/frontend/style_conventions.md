@@ -117,11 +117,11 @@ Ex:
 
   Now lookup is instantaneous and we dont have to dig deep into a data structure to find what were looking for. If we say needed to store a ordered version of objects, then in addition to our byId hash, we can have a 'ordered' array of just ids. Like: `ordered: [5, 6, 1, 3]`
   
-## Components
-  
+  This is a general rule, and like all rules, does not always apply. In many cases in the app, we store things as a simple array as this is how the server returns the data to us and we have no need for individual, key access.   
+    
 ## Actions
 - Generally map action names to API rest/crud actions, ie: `GET_GROUP`, `CREATE_GROUP`
-- Actions relating to API querying should have **3 states**: `BEGIN`, `SUCCESS`, `ERROR` / `FAIL`
+- Actions relating to API querying should have **3 states**: `BEGIN`, `SUCCESS`, `ERROR`
 
   `BEGIN` should be the action a saga listens to, to begin the API querying
   
@@ -134,10 +134,10 @@ Ex:
   GET_GROUP_ERROR
   ```
 
-- Use `ERROR` over `FAIL` for indiciating failed API queries, to keep things consistent within the project.
+- Constant names should be namespaced, so as to avoid possible collision with other actions. Format should be `app/containers/<ContainerName>/ActionName`
+- Do not Use `FAIL` for indiciating failed API queries, so as to keep things consistent within the project.
 - Action names should be defined in `./constants.js` where `./` is container directory
-- Action names should be namespaced, so as to avoid possible collision with other actions. Format should be `app/containers/<ContainerName>/ActionName`
-- Use action creators, define them in `./actions.js`
+- Action creators should always be used and are defined in `./actions.js`
 
 - Structure should mainly consist of a mandatory `type` and optional `payload`. Error related actions should have a `error` field. `payload` should be a object consisting of one or more fields of data related to the action. Type should be value imported from `constants.js` file
 
