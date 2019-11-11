@@ -20,6 +20,7 @@ import {
   DENY_REQUEST_ERROR,
   REQUEST_UNMOUNT,
 } from './constants';
+import mentorshipReducer from "../reducer";
 
 export const initialState = {
   requestList: [],
@@ -55,3 +56,5 @@ function requestReducer(state = initialState, action) {
     }
   });
 }
+
+export default requestReducer;

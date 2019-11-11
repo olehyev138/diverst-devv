@@ -41,7 +41,7 @@ const styles = theme => ({
 });
 
 export function MentorList(props, context) {
-  // type = 'sender' or 'receiver'
+  // type = 'incoming' or 'outgoing'
   const { type } = props;
 
   const [profileOpen, setProfileOpen] = React.useState(false);
@@ -57,8 +57,8 @@ export function MentorList(props, context) {
   };
 
   const columns = [
-    { title: 'First Name', field: 'first_name' },
-    { title: 'Last Name', field: 'last_name' },
+    { title: 'First Name', field: `${type === 'incoming' ? 'sender' : 'receiver'}.first_name` },
+    { title: 'Last Name', field: `${type === 'incoming' ? 'sender' : 'receiver'}.last_name` },
     { title: 'Notes', field: 'notes' },
     { title: 'Type', field: 'mentoring_type' },
     { title: 'Status', field: 'status' },

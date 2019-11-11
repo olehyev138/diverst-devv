@@ -1,6 +1,6 @@
 /**
  *
- * MentorsPage
+ * RequestsPage
  *
  *  - lists all enterprise custom users
  *  - renders forms for creating & editing custom users
@@ -55,8 +55,8 @@ const defaultParams = Object.freeze({
 });
 
 export function MentorsPage(props) {
-  useInjectReducer({ key: 'mentoring', reducer });
-  useInjectSaga({ key: 'mentoring', saga });
+  useInjectReducer({ key: 'request', reducer });
+  useInjectSaga({ key: 'request', saga });
 
   const [params, setParams] = useState({ count: 5, page: 0, order: 'asc' });
 

@@ -6,4 +6,4 @@
 
 import loadable from 'utils/loadable';
 
-export default loadable(() => import('containers/Mentorship/Mentoring/MentorsPage/index'));
+export default loadable(() => import('containers/Mentorship/Requests/RequestsPage/index'));
