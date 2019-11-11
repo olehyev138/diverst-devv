@@ -100,7 +100,7 @@ Diverst::Application.routes.draw do
       resources :mentoring_requests do
         member do
           post 'accept'
-          post 'deny'
+          post 'reject'
         end
       end
       resources :mentoring_request_interests

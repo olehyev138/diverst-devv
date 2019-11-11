@@ -83,21 +83,21 @@ export function acceptRequestError(payload) {
   };
 }
 
-export function denyRequestBegin(payload) {
+export function rejectRequestBegin(payload) {
   return {
     type: DENY_REQUEST_BEGIN,
     payload,
   };
 }
 
-export function denyRequestSuccess(payload) {
+export function rejectRequestSuccess(payload) {
   return {
     type: DENY_REQUEST_SUCCESS,
     payload,
   };
 }
 
-export function denyRequestError(payload) {
+export function rejectRequestError(payload) {
   return {
     type: DENY_REQUEST_ERROR,
     payload,

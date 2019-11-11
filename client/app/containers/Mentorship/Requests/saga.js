@@ -17,7 +17,7 @@ import {
   getRequestsSuccess, getRequestsError,
   getProposalsSuccess, getProposalsError,
   acceptRequestSuccess, acceptRequestError,
-  denyRequestSuccess, denyRequestError,
+  rejectRequestSuccess, rejectRequestError,
 } from './actions';
 
 export function* getRequests(action) {
@@ -66,16 +66,16 @@ export function* acceptRequest(action) {
   }
 }
 
-export function* denyRequest(action) {
+export function* rejectRequest(action) {
   try {
-    const response = yield call(api.mentoringRequests.denyRequest.bind(api.mentoringRequests), action.payload.id);
+    const response = yield call(api.mentoringRequests.rejectRequest.bind(api.mentoringRequests), action.payload.id);
 
     yield put(showSnackbar({ message: 'Successfully denied request', options: { variant: 'success' } }));
   } catch (err) {
-    yield put(denyRequestError(err));
+    yield put(rejectRequestError(err));
 
     // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to deny request', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: 'Failed to reject request', options: { variant: 'warning' } }));
   }
 }
 
@@ -84,5 +84,5 @@ export default function* RequestSaga() {
   yield takeLatest(GET_REQUESTS_BEGIN, getRequests);
   yield takeLatest(GET_PROPOSALS_BEGIN, getProposals);
   yield takeLatest(ACCEPT_REQUEST_BEGIN, acceptRequest);
-  yield takeLatest(DENY_REQUEST_BEGIN, denyRequest);
+  yield takeLatest(DENY_REQUEST_BEGIN, rejectRequest);
 }

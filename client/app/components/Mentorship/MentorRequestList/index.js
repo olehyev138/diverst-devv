@@ -118,7 +118,7 @@ export function MentorList(props, context) {
           icon: () => <PersonIcon />,
           tooltip: 'See Profile',
           onClick: (_, rowData) => {
-            handleProfileClickOpen(rowData);
+            handleProfileClickOpen(type === 'incoming' ? rowData.sender : rowData.receiver);
           }
         }]}
       />

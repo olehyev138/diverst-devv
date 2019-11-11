@@ -30,10 +30,10 @@ class MentoringRequestPolicy < ApplicationPolicy
   def accept?
     return true if manage_all?
 
-    record.sender_id == @user.id
+    record.receiver_id == @user.id
   end
 
-  def deny?
+  def reject?
     accept?
   end
 

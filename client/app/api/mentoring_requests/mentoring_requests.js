@@ -6,10 +6,10 @@ const MentoringRequests = new API({ controller: 'mentoring_requests' });
 
 Object.assign(MentoringRequests, {
   acceptRequest(id) {
-    return axios.post(`${this.url}/accept/${id}`);
+    return axios.post(`${this.url}/${id}/accept`);
   },
-  denyRequest(id) {
-    return axios.post(`${this.url}/deny/${id}`);
+  rejectRequest(id) {
+    return axios.post(`${this.url}/${id}/reject`);
   },
 });
 
