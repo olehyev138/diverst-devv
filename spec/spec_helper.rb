@@ -44,7 +44,11 @@ RSpec.configure do |config|
   config.display_try_failure_messages = true
 
   config.around(:each) do |ex|
-    ex.run_with_retry retry: 3
+    if ENV['TEST_RETRY'] == 'true'
+      ex.run_with_retry retry: 3
+    else
+      ex.run
+    end
   end
 
   # rspec-mocks config goes here. You can use an alternate test double
