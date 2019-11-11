@@ -26,34 +26,27 @@ import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 
 import {
-  selectPaginatedUsers,
-  selectUsersTotal,
-  selectIsFetchingUsers,
-  selectPaginatedMentors,
-  selectPaginatedMentees,
-  selectMentorshipsTotal,
-  selectIsFetchingMentorships,
-} from 'containers/Mentorship/Mentoring/selectors';
+  selectPaginatedRequests,
+  selectRequestsTotal,
+  selectRequest,
+  selectIsFetchingRequests
+} from 'containers/Mentorship/Requests/selectors';
 import {
-  getMentorsBegin,
-  getAvailableMentorsBegin,
-  mentorsUnmount,
-  deleteMentorshipBegin,
-  requestsMentorshipBegin,
-} from 'containers/Mentorship/Mentoring/actions';
+  getProposalsBegin,
+  getRequestsBegin,
+  requestUnmount,
+  acceptRequestBegin,
+  denyRequestBegin,
+} from 'containers/Mentorship/Requests/actions';
 
-import reducer from 'containers/Mentorship/Mentoring/reducer';
-import saga from 'containers/Mentorship/Mentoring/saga';
+import reducer from 'containers/Mentorship/Requests/reducer';
+import saga from 'containers/Mentorship/Requests/saga';
 
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
-import MentorList from 'components/Mentorship/MentorList';
+import RequestList from 'components/Mentorship/MentorRequestList';
 
-const Types = Object.freeze({
-  current: 0,
-  available: 1,
-});
 
 const defaultParams = Object.freeze({
   count: 5,
@@ -66,39 +59,34 @@ export function MentorsPage(props) {
   useInjectSaga({ key: 'mentoring', saga });
 
   const [params, setParams] = useState({ count: 5, page: 0, order: 'asc' });
-  const [tab, setTab] = useState(Types.current);
 
   const rs = new RouteService(useContext);
 
-  const validType = type => type === 'mentors' || type === 'mentees';
+  const validType = type => type === 'outgoing' || type === 'incoming';
 
-  function getUsers(tab, params = params, resetParams = false) {
+  function getRequests(params = params, resetParams = false) {
     if (props.user && validType(props.type)) {
       if (resetParams)
         setParams({ ...params, page: defaultParams.page });
 
       const userId = props.user.id;
-      if (tab === Types.current)
-        props.getMentorsBegin({ ...params, userId, type: props.type });
+      if (props.type === 'outgoing')
+        props.getProposalsBegin({ ...params, userId });
       else
-        props.getAvailableMentorsBegin({ ...params, $id: userId, query_scopes: [props.type] });
+        props.getRequestsBegin({ ...params, userId });
     }
   }
 
   useEffect(() => {
-    getUsers(Types.current);
+    getRequests();
 
     return () => {
-      props.mentorsUnmount();
+      props.requestUnmount();
     };
   }, []);
 
-  const links = {
-    userNew: ROUTES.admin.system.users.new.path(),
-    userEdit: id => ROUTES.admin.system.users.edit.path(id),
-  };
 
-  const handleMentorPagination = (payload) => {
+  const handleRequestPagination = (payload) => {
     const oldPageNum = params.page;
     const oldRows = params.count;
     let newPageNum = payload.page;
@@ -111,82 +99,39 @@ export function MentorsPage(props) {
 
     const newParams = { ...params, count: newRows, page: newPageNum };
 
-    getUsers(tab, newParams);
+    getRequests(newParams);
     setParams(newParams);
     return newParams;
   };
 
-  const handleMentorOrdering = (payload) => {
+  const handleRequestOrdering = (payload) => {
     const newParams = { ...params, orderBy: payload.orderBy, order: payload.orderDir };
 
-    getUsers(tab, newParams);
+    getRequests(newParams);
     setParams(newParams);
   };
 
-  const handleChangeTab = (event, newTab) => {
-    setTab(newTab);
-    switch (newTab) {
-      case Types.current:
-        getUsers(Types.current, params, true);
-        break;
-      case Types.available:
-        getUsers(Types.available, params, true);
-        break;
-      default:
-        break;
-    }
-  };
 
-  const selectUsers = () => {
-    if (tab === Types.current)
-      if (props.type === 'mentors')
-        return props.mentors;
-      else if (props.type === 'mentees') {
-        return props.mentees;
-      } else
-        return [];
-    else if (tab === Types.available)
-      return props.available;
-    else
-      return [];
-  };
-
-  const selectTotal = () => {
-    if (tab === Types.current)
-      return props.mentorshipsTotal;
-    if (tab === Types.available)
-      return props.availableTotal;
-    return [];
-  };
-
-  const selectFetching = () => {
-    if (tab === Types.current)
-      return props.isFetchingMentorships;
-    if (tab === Types.available)
-      return props.isFetchingAvailable;
-    return false;
-  };
+  const { requests, requestsTotal, isFetchingRequests } = props;
 
   return (
     <React.Fragment>
-      <MentorList
+      <RequestList
         user={props.user}
         userParams={params}
 
-        users={selectUsers()}
-        userTotal={selectTotal()}
-        isFetchingUsers={selectFetching()}
+        requests={requests}
+        requestsTotal={requestsTotal}
+        isFetchingRequests={isFetchingRequests}
 
-        handleMentorPagination={handleMentorPagination}
-        handleMentorOrdering={handleMentorOrdering}
+        handleMentorPagination={handleRequestPagination}
+        handleMentorOrdering={handleRequestOrdering}
+
         params={params}
         type={props.type}
-        links={links}
-        deleteMentorship={props.deleteMentorshipBegin}
-        requestMentorship={props.requestsMentorshipBegin}
 
-        currentTab={tab}
-        handleChangeTab={handleChangeTab}
+        acceptRequest={props.acceptRequestBegin}
+        rejectRequest={props.denyRequestBegin}
       />
     </React.Fragment>
   );
@@ -196,41 +141,31 @@ MentorsPage.propTypes = {
   type: PropTypes.string,
   user: PropTypes.object,
 
-  getMentorsBegin: PropTypes.func.isRequired,
-  getAvailableMentorsBegin: PropTypes.func.isRequired,
+  getProposalsBegin: PropTypes.func.isRequired,
+  getRequestsBegin: PropTypes.func.isRequired,
 
-  available: PropTypes.array,
-  availableTotal: PropTypes.number,
-  isFetchingAvailable: PropTypes.bool,
+  requests: PropTypes.array,
+  requestsTotal: PropTypes.number,
+  isFetchingRequests: PropTypes.bool,
 
-  mentors: PropTypes.array,
-  mentees: PropTypes.array,
-  mentorshipsTotal: PropTypes.number,
-  isFetchingMentorships: PropTypes.bool,
+  requestUnmount: PropTypes.func.isRequired,
 
-  mentorsUnmount: PropTypes.func.isRequired,
-
-  deleteMentorshipBegin: PropTypes.func.isRequired,
-  requestsMentorshipBegin: PropTypes.func.isRequired,
+  acceptRequestBegin: PropTypes.func.isRequired,
+  denyRequestBegin: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
-  available: selectPaginatedUsers(),
-  availableTotal: selectUsersTotal(),
-  isFetchingAvailable: selectIsFetchingUsers(),
-
-  mentors: selectPaginatedMentors(),
-  mentees: selectPaginatedMentees(),
-  mentorshipsTotal: selectMentorshipsTotal(),
-  isFetchingMentorships: selectIsFetchingMentorships(),
+  requests: selectPaginatedRequests(),
+  requestsTotal: selectRequestsTotal(),
+  isFetchingRequests: selectIsFetchingRequests(),
 });
 
 const mapDispatchToProps = {
-  getMentorsBegin,
-  getAvailableMentorsBegin,
-  mentorsUnmount,
-  deleteMentorshipBegin,
-  requestsMentorshipBegin
+  getProposalsBegin,
+  getRequestsBegin,
+  requestUnmount,
+  acceptRequestBegin,
+  denyRequestBegin,
 };
 
 const withConnect = connect(
