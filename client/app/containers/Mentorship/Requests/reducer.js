@@ -71,4 +71,5 @@ function requestReducer(state = initialState, action) {
     }
   });
 }
-  export default requestReducer;
+
+export default requestReducer;

@@ -88,7 +88,6 @@ export function MentorsPage(props) {
   useEffect(() => {
     if (props.successfulChange)
       getRequests();
-
   }, [props.successfulChange]);
 
   const reload = id => getRequests({ ...params, $id: id });

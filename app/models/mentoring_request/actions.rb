@@ -4,7 +4,7 @@ module MentoringRequest::Actions
   end
 
   def accept(diverst_request)
-    if self.update_attributes({status: 'accepted'})
+    if self.update_attributes({ status: 'accepted' })
       mentor_id = mentoring_type == 'mentor' ? receiver_id : sender_id
       mentee_id = mentoring_type == 'mentor' ? sender_id : receiver_id
 
@@ -19,10 +19,10 @@ module MentoringRequest::Actions
     else
       raise InvalidInputException.new({ message: self.errors.full_messages.first, attribute: item.errors.messages.first.first })
     end
-    end
+  end
 
   def reject
-    if self.update_attributes({status: 'rejected'})
+    if self.update_attributes({ status: 'rejected' })
       notify_declined_request
       self
     else
