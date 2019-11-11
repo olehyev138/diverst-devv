@@ -88,7 +88,7 @@ export function MentorList(props, context) {
     { title: 'First Name', field: 'first_name' },
     { title: 'Last Name', field: 'last_name' },
     { title: 'Email', field: 'email' },
-    { title: 'Interests', field: 'interests' },
+    { title: 'Interests', field: 'interests', sorting: false },
   ];
 
   const handleOrderChange = (columnId, orderDir) => {
