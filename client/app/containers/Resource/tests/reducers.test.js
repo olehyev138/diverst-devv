@@ -3,7 +3,7 @@
  * Resource reducer tests
  *
  */
-import resourcesReducer from "../reducer";
+import resourcesReducer from '../reducer';
 import produce from 'immer';
 import {
   getFoldersBegin,
@@ -62,12 +62,12 @@ describe('resourcesReducer', () => {
       draft.isFormLoading = true;
     });
 
-    expect(resourcesReducer(state, getFoldersBegin( true ))).toEqual(expected);
+    expect(resourcesReducer(state, getFoldersBegin(true))).toEqual(expected);
   });
 
   it('handles the getFoldersSuccess action correctly', () => {
     const expected = produce(state, (draft) => {
-      draft.folders = [{ id:4 }, { id:5 }, { id:6 }];
+      draft.folders = [{ id: 4 }, { id: 5 }, { id: 6 }];
       draft.foldersTotal = 3;
       draft.isLoading = false;
     });
@@ -75,7 +75,7 @@ describe('resourcesReducer', () => {
       resourcesReducer(
         state,
         getFoldersSuccess({
-          items: [{ id:4 }, { id:5 }, { id:6 }],
+          items: [{ id: 4 }, { id: 5 }, { id: 6 }],
           total: 3,
         })
       )
@@ -89,11 +89,11 @@ describe('resourcesReducer', () => {
     expect(resourcesReducer(state, getFoldersError('error'))).toEqual(expected);
   });
 
-  it('handles the getFolderBegin action correctly', ()=> {
+  it('handles the getFolderBegin action correctly', () => {
     const expected = produce(state, (draft) => {
       draft.isFormLoading = true;
     });
-    expect(resourcesReducer(state, getFolderBegin( true ))).toEqual(expected);
+    expect(resourcesReducer(state, getFolderBegin(true))).toEqual(expected);
   });
 
   it('handles the getFolderSuccess action correctly', () => {
@@ -105,7 +105,7 @@ describe('resourcesReducer', () => {
     expect(
       resourcesReducer(
         state,
-        getFolderSuccess( {
+        getFolderSuccess({
           folder: { id: 4 }
         })
       )
