@@ -35,6 +35,7 @@ export function CampaignCreatePage(props) {
   return (
     <CampaignForm
       createCampaignBegin={props.createCampaignBegin}
+      buttonText='Create'
       isCommitting={props.isCommitting}
       links={links}
     />

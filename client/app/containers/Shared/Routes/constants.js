@@ -380,6 +380,9 @@ export const ROUTES = {
       campaigns: {
         index: {
           path: () => '/admin/innovate/campaigns'
+        },
+        new: {
+          path: () => '/admin/innovate/campaigns/new'
         }
       },
       financials: {

@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
 import {
-  Button, Card, CardActions, CardContent, Divider
+  Button, Card, CardActions, CardContent, Divider, TextField
 } from '@material-ui/core';
 import Select from 'components/Shared/DiverstSelect';
 
@@ -24,40 +24,41 @@ import { buildValues, mapFields } from 'utils/formHelpers';
 
 /* eslint-disable object-curly-newline */
 export function CampaignFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
-//  const usersSelectAction = (searchKey = '') => {
-//    props.getMembersBegin({
-//      count: 10, page: 0, order: 'asc',
-//      search: searchKey,
-//    });
-//  };
-  /*
-          <Field
-            component={Select}
-            fullWidth
-            id='member_ids'
-            name='member_ids'
-            label='New Members'
-            disabled={props.isCommitting}
-            isMulti
-            margin='normal'
-            value={values.member_ids}
-            options={props.selectUsers}
-            onMenuOpen={usersSelectAction}
-            onChange={value => setFieldValue('member_ids', value)}
-            onInputChange={value => usersSelectAction(value)}
-            onBlur={() => setFieldTouched('member_ids', true)}
-          />
-   */
-
   return (
     <Card>
       <Form>
         <CardContent>
+          <Field
+            component={TextField}
+            required
+            onChange={handleChange}
+            fullWidth
+            id='title'
+            name='title'
+            margin='normal'
+            disabled={props.isCommitting}
+            label='Campaign Title'
+            value={values.title}
+          />
+          <Field
+            component={TextField}
+            onChange={handleChange}
+            fullWidth
+            id='description'
+            name='description'
+            multiline
+            rows={4}
+            variant='outlined'
+            margin='normal'
+            disabled={props.isCommitting}
+            label='Description'
+            value={values.description}
+          />
         </CardContent>
         <Divider />
         <CardActions>
           <DiverstSubmit isCommitting={props.isCommitting}>
-            <DiverstFormattedMessage {...messages.create} />
+            {buttonText}
           </DiverstSubmit>
           <Button
             disabled={props.isCommitting}
@@ -70,11 +71,14 @@ export function CampaignFormInner({ handleSubmit, handleChange, handleBlur, valu
       </Form>
     </Card>
   );
-}
+};
 
 export function CampaignForm(props) {
   const initialValues = buildValues(undefined, {
     // users: { default: [], customKey: 'member_ids' }
+    id: { default: '' },
+    title: { default: '' },
+    description: { default: '' },
   });
 
   return (
@@ -82,9 +86,7 @@ export function CampaignForm(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        props.createCampaignBegin({
-          // attributes: mapFields(values, ['member_ids'])
-        });
+        props.createCampaignBegin(mapFields(values, ['title', 'description']));
       }}
 
       render={formikProps => <CampaignFormInner {...props} {...formikProps} />}
