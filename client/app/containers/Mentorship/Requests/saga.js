@@ -59,6 +59,7 @@ export function* acceptRequest(action) {
   try {
     const response = yield call(api.mentoringRequests.acceptRequest.bind(api.mentoringRequests), action.payload.id);
 
+    yield put(acceptRequestSuccess({}));
     yield put(showSnackbar({ message: 'Successfully accepted request', options: { variant: 'success' } }));
   } catch (err) {
     yield put(acceptRequestError(err));
@@ -72,7 +73,8 @@ export function* rejectRequest(action) {
   try {
     const response = yield call(api.mentoringRequests.rejectRequest.bind(api.mentoringRequests), action.payload.id);
 
-    yield put(showSnackbar({ message: 'Successfully denied request', options: { variant: 'success' } }));
+    yield put(rejectRequestSuccess({}));
+    yield put(showSnackbar({ message: 'Successfully rejected request', options: { variant: 'success' } }));
   } catch (err) {
     yield put(rejectRequestError(err));
 
@@ -85,6 +87,7 @@ export function* deleteRequest(action) {
   try {
     const response = yield call(api.mentoringRequests.destroy.bind(api.mentoringRequests), action.payload.id);
 
+    yield put(deleteRequestSuccess({}));
     yield put(showSnackbar({ message: 'Successfully deleted request', options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteRequestError(err));

@@ -16,7 +16,7 @@ class MentoringRequestPolicy < ApplicationPolicy
   end
 
   def create?
-    false
+    true
   end
 
   def update?

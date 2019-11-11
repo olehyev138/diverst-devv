@@ -29,7 +29,8 @@ import {
   selectPaginatedRequests,
   selectRequestsTotal,
   selectRequest,
-  selectIsFetchingRequests
+  selectIsFetchingRequests,
+  selectSuccessfulChange
 } from 'containers/Mentorship/Requests/selectors';
 import {
   getProposalsBegin,
@@ -59,22 +60,20 @@ export function MentorsPage(props) {
   useInjectReducer({ key: 'request', reducer });
   useInjectSaga({ key: 'request', saga });
 
-  const [params, setParams] = useState({ count: 5, page: 0, order: 'asc' });
+  const [params, setParams] = useState({ count: 5, page: 0, order: 'asc', orderBy: 'id' });
 
   const rs = new RouteService(useContext);
 
   const validType = type => type === 'outgoing' || type === 'incoming';
 
-  function getRequests(params = params, resetParams = false) {
+  function getRequests(newParams = params) {
     if (props.user && validType(props.type)) {
-      if (resetParams)
-        setParams({ ...params, page: defaultParams.page });
-
       const userId = props.user.id;
+
       if (props.type === 'outgoing')
-        props.getProposalsBegin({ ...params, userId });
+        props.getProposalsBegin({ ...newParams, userId });
       else
-        props.getRequestsBegin({ ...params, userId });
+        props.getRequestsBegin({ ...newParams, userId });
     }
   }
 
@@ -86,6 +85,13 @@ export function MentorsPage(props) {
     };
   }, []);
 
+  useEffect(() => {
+    if (props.successfulChange)
+      getRequests();
+
+  }, [props.successfulChange]);
+
+  const reload = id => getRequests({ ...params, $id: id });
 
   const handleRequestPagination = (payload) => {
     const oldPageNum = params.page;
@@ -102,7 +108,6 @@ export function MentorsPage(props) {
 
     getRequests(newParams);
     setParams(newParams);
-    return newParams;
   };
 
   const handleRequestOrdering = (payload) => {
@@ -134,6 +139,7 @@ export function MentorsPage(props) {
         acceptRequest={props.acceptRequestBegin}
         rejectRequest={props.rejectRequestBegin}
         deleteRequest={props.deleteRequestBegin}
+        reloadRequest={reload}
       />
     </React.Fragment>
   );
@@ -155,12 +161,15 @@ MentorsPage.propTypes = {
   acceptRequestBegin: PropTypes.func.isRequired,
   rejectRequestBegin: PropTypes.func.isRequired,
   deleteRequestBegin: PropTypes.func.isRequired,
+
+  successfulChange: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
   requests: selectPaginatedRequests(),
   requestsTotal: selectRequestsTotal(),
   isFetchingRequests: selectIsFetchingRequests(),
+  successfulChange: selectSuccessfulChange(),
 });
 
 const mapDispatchToProps = {

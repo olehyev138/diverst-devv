@@ -41,7 +41,7 @@ const styles = theme => ({
   },
 });
 
-export function MentorList(props, context) {
+export function MentorRequestList(props, context) {
   // type = 'incoming' or 'outgoing'
   const { type } = props;
 
@@ -58,11 +58,17 @@ export function MentorList(props, context) {
   };
 
   const columns = [
-    { title: 'First Name', field: `${type === 'incoming' ? 'sender' : 'receiver'}.first_name` },
-    { title: 'Last Name', field: `${type === 'incoming' ? 'sender' : 'receiver'}.last_name` },
-    { title: 'Notes', field: 'notes' },
-    { title: 'Type', field: 'mentoring_type' },
-    { title: 'Status', field: 'status' },
+    { title: 'First Name',
+      field: `${type === 'incoming' ? 'sender' : 'receiver'}.first_name`,
+      query_field: 'users.first_name'
+    },
+    { title: 'Last Name',
+      field: `${type === 'incoming' ? 'sender' : 'receiver'}.last_name`,
+      query_field: 'users.last_name'
+    },
+    { title: 'Notes', field: 'notes', query_field: 'notes' },
+    { title: 'Type', field: 'mentoring_type', query_field: 'mentoring_type' },
+    { title: 'Status', field: 'status', query_field: 'status' },
   ];
 
   const actions = [];
@@ -112,19 +118,9 @@ export function MentorList(props, context) {
   });
 
   const handleOrderChange = (columnId, orderDir) => {
-    const payload = {};
-    if (columnId === -1) {
-      payload.orderBy = 'id';
-      payload.orderDir = 'asc';
-    } else if ([0, 1].includes(columnId)) {
-      payload.orderBy = `users.${columns[columnId].field}`;
-      payload.orderDir = orderDir;
-    } else {
-      payload.orderBy = columns[columnId].field;
-      payload.orderDir = orderDir;
-    }
     props.handleRequestOrdering({
-      payload
+      orderBy: (columnId === -1) ? 'id' : `${columns[columnId].query_field}`,
+      orderDir: (columnId === -1) ? 'asc' : orderDir
     });
   };
 
@@ -185,7 +181,7 @@ export function MentorList(props, context) {
   );
 }
 
-MentorList.propTypes = {
+MentorRequestList.propTypes = {
   type: PropTypes.string,
   classes: PropTypes.object,
   user: PropTypes.object,
@@ -199,9 +195,10 @@ MentorList.propTypes = {
   rejectRequest: PropTypes.func,
   acceptRequest: PropTypes.func,
   deleteRequest: PropTypes.func,
+  reloadRequest: PropTypes.func,
 };
 
 export default compose(
   memo,
   withStyles(styles),
-)(MentorList);
+)(MentorRequestList);

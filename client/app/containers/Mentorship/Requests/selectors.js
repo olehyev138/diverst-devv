@@ -23,9 +23,15 @@ const selectIsFetchingRequests = () => createSelector(
   requestState => requestState.isFetchingRequests
 );
 
+const selectSuccessfulChange = () => createSelector(
+  selectRequestDomain,
+  requestState => requestState.successfulChange
+);
+
 export {
   selectPaginatedRequests,
   selectRequestsTotal,
   selectRequest,
   selectIsFetchingRequests,
+  selectSuccessfulChange,
 };
