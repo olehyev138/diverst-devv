@@ -467,7 +467,7 @@ class Group < BaseClass
     users = users.where('`user_groups`.`created_at` <= ?', to) if to.present?
     users.distinct
   end
-  
+
   def upcoming_events_slack_block
     upcoming_events = initiatives.upcoming.limit(5) + participating_initiatives.upcoming.limit(3)
     init_block = [
