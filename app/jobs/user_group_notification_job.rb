@@ -101,7 +101,7 @@ class UserGroupNotificationJob < ActiveJob::Base
     segment_ids = user_segment_ids(user)
     news_feed_link_ids = NewsFeed.all_links(group.news_feed.id, segment_ids, group.enterprise).ids
     GroupMessage.joins(:news_feed_link)
-      .where(news_feed_links: { id: news_feed_link_ids }, updated_at: frequency_range)
+      .where(news_feed_links: { id: news_feed_link_ids, approved: true }, updated_at: frequency_range)
       .of_segments(user_segment_ids(user)).order(:updated_at).to_a
   end
 
@@ -111,7 +111,7 @@ class UserGroupNotificationJob < ActiveJob::Base
     news_feed_link_ids = NewsFeed.all_links(group.news_feed.id, segment_ids, group.enterprise).ids
 
     NewsLink.joins(:news_feed_link)
-      .where(news_feed_links: { id: news_feed_link_ids }, updated_at: frequency_range).order(:updated_at).to_a
+      .where(news_feed_links: { id: news_feed_link_ids, approved: true }, updated_at: frequency_range).order(:updated_at).to_a
   end
 
   def get_social(user, group, frequency_range)
@@ -120,7 +120,7 @@ class UserGroupNotificationJob < ActiveJob::Base
     news_feed_link_ids = NewsFeed.all_links(group.news_feed.id, segment_ids, group.enterprise).ids
 
     SocialLink.joins(:news_feed_link)
-      .where(news_feed_links: { id: news_feed_link_ids }, updated_at: frequency_range).order(:updated_at).to_a
+      .where(news_feed_links: { id: news_feed_link_ids, approved: true }, updated_at: frequency_range).order(:updated_at).to_a
   end
 
   def get_participating_events(user, group, frequency_range)

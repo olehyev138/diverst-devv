@@ -40,6 +40,17 @@ RSpec.describe RewardPolicy, type: :policy do
     end
   end
 
+  describe '#user_responsible?' do
+    context 'returns true' do
+      let!(:user1) { create(:user, enterprise: enterprise) }
+      let!(:reward1) { create(:reward, responsible_id: user1.id, points: 10) }
+
+      it 'returns true' do
+        expect(RewardPolicy.new(reward1.responsible, reward1).user_responsible?).to eq(true)
+      end
+    end
+  end
+
   describe 'for users with no access' do
     let(:user) { no_access }
     it { is_expected.to forbid_actions([:index, :new, :create, :update, :destroy]) }

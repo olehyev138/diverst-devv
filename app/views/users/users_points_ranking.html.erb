@@ -1,0 +1,4 @@
+<h1>Users By Engagement Points <%= link_to "Export Users Points Csv", users_points_csv_users_path, class: "btn btn--primary pull-right" %></h1>
+
+<br>
+<%= render "user_points", source: users_points_ranking_users_path(format: :json) %>

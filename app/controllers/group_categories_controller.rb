@@ -2,6 +2,7 @@ class GroupCategoriesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_category, only: [:edit, :update, :destroy]
   after_action :verify_authorized
+  after_action :visit_page, only: [:index, :new, :edit, :view_all]
 
   layout :resolve_layout
 
@@ -14,7 +15,7 @@ class GroupCategoriesController < ApplicationController
 
   def new
     authorize Group, :manage_all_groups?
-    @parent = Group.find(params[:parent_id].to_i) if !params[:parent_id].to_i.zero?
+    @parent = Group.find(params[:parent_id].to_i) unless params[:parent_id].to_i.zero?
     @group_category_type = current_user.enterprise.group_category_types.new
   end
 
@@ -22,7 +23,7 @@ class GroupCategoriesController < ApplicationController
     authorize Group, :manage_all_groups?
 
     @group_category_type = current_user.enterprise.group_category_types.new(category_type_params)
-    @parent = Group.find(params[:group_category_type][:parent_id].to_i) if !params[:group_category_type][:parent_id].to_i.zero?
+    @parent = Group.find(params[:group_category_type][:parent_id].to_i) unless params[:group_category_type][:parent_id].to_i.zero?
 
     if @group_category_type.save
       flash[:notice] = "You just created a category named #{@group_category_type.name}"
@@ -177,5 +178,26 @@ class GroupCategoriesController < ApplicationController
 
   def set_category
     @category = current_user.enterprise.group_categories.find(params[:id])
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      'Group Categories'
+    when 'new'
+      'Group Category Creation'
+    when 'edit'
+      "Group Category Edit: #{@category.to_label}"
+    when 'view_all'
+      'View All Group Categories'
+    else
+      "#{controller_path}##{action_name}"
+    end
+  rescue
+    "#{controller_path}##{action_name}"
   end
 end

@@ -1,6 +1,6 @@
 <div class="modal-header">
   <h4 class="modal-title text-center">
-  <% if @group.parent.nil? && @group.children.any? %>
+  <% if @group.is_parent_group? %>
     Thanks for joining the <%= c_t(:parent) %>! <br>
     <% unless @group.children.all? { |child| current_user.is_member_of?(child) } %>
       Do you also want to join a <%= c_t(:sub_erg) %>?
@@ -17,7 +17,7 @@
 <div class="modal-body">
   <div class="container-fluid">
     <div class="row text-center">
-    <% if @group.parent.nil? && @group.children.any? %>
+    <% if @group.is_parent_group? %>
        <% if @group.children.all? { |child| current_user.is_member_of?(child) } %>
          <%= link_to "OK", :back, class: "btn btn--primary", style: 'margin-bottom: 20px;' %> 
        <% else %>   

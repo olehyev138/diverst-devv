@@ -4,6 +4,8 @@ class GroupsController < ApplicationController
   before_action :set_groups, only: [:index, :get_all_groups]
   skip_before_action :verify_authenticity_token, only: [:create, :calendar_data]
   after_action :verify_authorized, except: [:calendar_data]
+  after_action :visit_page, only: [:index, :close_budgets, :calender, :new, :show, :edit, :layouts,
+                                   :settings, :plan_overview, :metrics, :import_csv, :edit_fields]
 
   layout :resolve_layout
 
@@ -374,6 +376,39 @@ class GroupsController < ApplicationController
     render nothing: true
   end
 
+  def slack_button_redirect
+    authorize @group, :settings?
+    client = Slack::Web::Client.new
+
+    if params[:code].blank?
+      flash[:alert] = 'You did not grant permission. Diverst was not added to slack'
+    else
+      # Request a token using the temporary code
+      rc = client.oauth_access(
+        client_id: ENV['SLACK_CLIENT_ID'],
+        client_secret: ENV['SLACK_CLIENT_SECRET'],
+        redirect_uri: slack_button_redirect_group_url(@group),
+        code: params[:code]
+      )
+
+      # Pluck the token from the response
+      @group.slack_webhook = RsaEncryption.encode(rc['incoming_webhook']['url'])
+      @group.slack_auth_data = RsaEncryption.encode(rc.to_json)
+      if @group.save
+        flash[:notice] = 'Congratulations. We will send a slack notification when an event or post is created'
+      else
+        flash[:alert] = 'There was an error. Diverst was not added to slack'
+      end
+    end
+    redirect_to @group
+  end
+
+  def slack_uninstall
+    authorize @group, :settings?
+    @group.uninstall_slack
+    redirect_to :back
+  end
+
   protected
 
   def should_show_event?(group)
@@ -526,5 +561,42 @@ class GroupsController < ApplicationController
             :_destroy
           ]
         )
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      "#{c_t(:erg)} List"
+    when 'close_budgets'
+      'Close Budgets'
+    when 'calendar'
+      "#{c_t(:erg).pluralize} Calender"
+    when 'new'
+      "#{c_t(:erg)} Creation"
+    when 'show'
+      "#{@group.to_label}'s Home"
+    when 'edit'
+      "#{c_t(:sub_erg)} Edit: #{@group.to_label}"
+    when 'layouts'
+      "#{@group.to_label}'s Layout Setting"
+    when 'settings'
+      "#{@group.to_label}'s Settings"
+    when 'plan_overview'
+      "#{@group.to_label}'s Plan Overview"
+    when 'metrics'
+      "#{@group.to_label}'s Metrics"
+    when 'import_csv'
+      "#{@group.to_label}'s Member CSV Import"
+    when 'edit_fields'
+      "#{@group.to_label}'s Survey Question Settings"
+    else
+      "#{controller_path}##{action_name}"
+    end
+  rescue
+    "#{controller_path}##{action_name}"
   end
 end

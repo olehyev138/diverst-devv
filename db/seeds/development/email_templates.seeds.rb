@@ -55,7 +55,7 @@ after 'development:enterprise' do
             :name => "Campaign Mailer", 
             :mailer_name => "campaign_mailer",
             :mailer_method => "invitation",
-            :content => "<p>Hello %{user.name},</p>\r\n\r\n<p>You are invited to join other members in the following online collaborative conversation in Diverst: %{campaign.title}</p>\r\n\r\n<p>%{campaign.link} to provide feedback and offer your thoughts and suggestions.</p>\r\n", 
+            :content => "<p>Hello %{user.name},</p>\r\n\r\n<p>You are invited to join other members in the following online collaborative conversation in Diverst: %{campaign.title}</p>\r\n\r\n<p>%{click_here} to provide feedback and offer your thoughts and suggestions.</p>\r\n", 
             :subject => "You are invited to join %{group_names} in an online conversation in Diverst.", 
             :description => "Email that goes out to users after a campaign is created",
             :template => ""
@@ -91,6 +91,17 @@ after 'development:enterprise' do
             :content => "<p>Hello %{user.name},</p>\r\n\r\n<p>%{group.name} has %{count} pending member(s). Click below to view them and accept/deny group membership.</p>\r\n\r\n<p>%{click_here} to view pending members.</p>\r\n", 
             :subject => "%{count} Pending Member(s) for %{group.name}", 
             :description => "Email that goes out to group leaders when there are pending group members",
+            :template => ""
+          },
+          # welcome_mailer
+          {
+            :enterprise => enterprise,
+            :name => 'Welcome Mailer',
+            :mailer_name => 'welcome_mailer',
+            :mailer_method => 'notification',
+            :content => "<p>Hello %{user.name},</p>\r\n\r\n<p>Welcome as a new member of %{group.name}! Be sure to check our page often for latest news and messages and look forward to seeing you at our events!.</p>\r\n",
+            :subject => "Hi %{user.name} and welcome to %{group.name}.",
+            :description => "Email that goes out to new group members",
             :template => ""
           }
         ]

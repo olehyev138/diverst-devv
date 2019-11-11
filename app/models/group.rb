@@ -52,7 +52,7 @@ class Group < BaseClass
     :years
   ]
 
-  belongs_to :enterprise
+  belongs_to :enterprise, counter_cache: true
   belongs_to :lead_manager, class_name: 'User'
   belongs_to :owner, class_name: 'User'
 
@@ -106,7 +106,7 @@ class Group < BaseClass
 
   has_many :group_leaders, -> { order(position: :asc) }, dependent: :destroy
   has_many :leaders, through: :group_leaders, source: :user
-  has_many :sponsors, as: :sponsorable, dependent: :destroy
+  has_many :sponsors, dependent: :destroy
 
   has_many :children, class_name: 'Group', foreign_key: :parent_id, dependent: :destroy
   has_many :annual_budgets, dependent: :destroy
@@ -149,8 +149,6 @@ class Group < BaseClass
 
   validates :name, presence: true, uniqueness: { scope: :enterprise_id }
 
-  validates_format_of :contact_email, with: Devise.email_regexp, allow_blank: true
-
   # only allow one default_mentor_group per enterprise
   validates_uniqueness_of :default_mentor_group, scope: [:enterprise_id], conditions: -> { where(default_mentor_group: true) }
 
@@ -186,14 +184,6 @@ class Group < BaseClass
   accepts_nested_attributes_for :group_leaders, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :sponsors, reject_if: :all_blank, allow_destroy: true
 
-  def resolve_auto_archive_state
-    update(auto_archive: false)
-  end
-
-  def no_expiry_age_set_and_auto_archive_true?
-    return true if auto_archive? && (expiry_age_for_news == 0) && (expiry_age_for_events == 0) && (expiry_age_for_resources == 0)
-  end
-
   def archive_switch
     if auto_archive?
       update(auto_archive: false)
@@ -219,7 +209,7 @@ class Group < BaseClass
   end
 
   def total_views
-    views.count
+    views.size
   end
 
   def is_standard_group?
@@ -302,10 +292,6 @@ class Group < BaseClass
     pending_users.enabled?
   end
 
-  def file_safe_name
-    name.gsub(/[^0-9A-Za-z.\-]/, '_')
-  end
-
   def logo_expiring_thumb
     return nil if logo.blank?
 
@@ -386,6 +372,7 @@ class Group < BaseClass
     mentorship_module_enabled = enterprise.mentorship_module_enabled?
     fields = enterprise.fields.where(add_to_member_list: true)
     fields.map(&:title)
+
     CSV.generate do |csv|
       first_row = %w(first_name last_name email_address)
       first_row += %w(mentor mentee) if mentorship_module_enabled
@@ -435,7 +422,11 @@ class Group < BaseClass
   end
 
   def title_with_leftover_amount
-    "Create event from #{name} leftover ($#{leftover_money == 0 ? 0.0 : available_budget})"
+    if annual_budget == leftover_money
+      "Create event from #{name} ($#{available_budget})"
+    else
+      "Create event from #{name} leftover ($#{leftover_money == 0 ? 0.0 : available_budget})"
+    end
   end
 
   def pending_comments_count
@@ -476,6 +467,47 @@ class Group < BaseClass
     users = users.where('`user_groups`.`created_at` <= ?', to) if to.present?
     users.distinct
   end
+  
+  def upcoming_events_slack_block
+    upcoming_events = initiatives.upcoming.limit(5) + participating_initiatives.upcoming.limit(3)
+    init_block = [
+      {
+        type: 'section',
+        text: {
+          type: 'mrkdwn',
+          text: "*#{name}*"
+        }
+      },
+      {
+        type: 'divider'
+      }
+    ]
+    blocks = upcoming_events.reduce(init_block) { |sum, event| sum + event.to_slack_block + [{ type: 'divider' }] }
+    pk, _ = enterprise.get_colours
+    {
+      attachments: [
+        {
+          fallback: "Events for #{name}",
+          color: pk,
+          blocks: blocks
+        }
+      ]
+    }
+  end
+
+  def send_slack_webhook_message(message)
+    if slack_webhook.present?
+      SlackClient.post_web_hook_message(slack_webhook, message)
+    end
+  end
+
+  def uninstall_slack
+    SlackClient.uninstall(slack_auth_data)
+    self.update(
+          slack_auth_data: nil,
+          slack_webhook: nil
+        )
+  end
 
   protected
 
@@ -490,6 +522,14 @@ class Group < BaseClass
   end
 
   private
+
+  def resolve_auto_archive_state
+    update(auto_archive: false)
+  end
+
+  def no_expiry_age_set_and_auto_archive_true?
+    return true if auto_archive? && (expiry_age_for_news == 0) && (expiry_age_for_events == 0) && (expiry_age_for_resources == 0)
+  end
 
   def ensure_one_level_nesting
     if parent.present? && children.present?

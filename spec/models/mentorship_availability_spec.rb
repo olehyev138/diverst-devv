@@ -5,6 +5,7 @@ RSpec.describe MentorshipAvailability, type: :model do
     let(:mentorship_availability) { build_stubbed(:mentorship_availability) }
 
     it { expect(mentorship_availability).to validate_presence_of(:user) }
+    it { expect(mentorship_availability).to validate_presence_of(:day) }
     it { expect(mentorship_availability).to validate_presence_of(:start) }
     it { expect(mentorship_availability).to validate_presence_of(:end) }
 

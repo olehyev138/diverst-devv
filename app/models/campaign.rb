@@ -16,7 +16,7 @@ class Campaign < BaseClass
   has_many :answer_comments, through: :questions
   has_many :campaigns_managers, dependent: :destroy
   has_many :managers, through: :campaigns_managers, source: :user
-  has_many :sponsors, as: :sponsorable, dependent: :destroy
+  has_many :sponsors, dependent: :destroy
 
   accepts_nested_attributes_for :questions, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :sponsors, reject_if: :all_blank, allow_destroy: true
@@ -96,9 +96,9 @@ class Campaign < BaseClass
 
   # Returns the % of questions that have been closed
   def progression
-    return 0 if questions.count == 0
+    return 0 if questions.size == 0
 
-    (questions.solved.count.to_f / questions.count * 100).round
+    (questions.solved.count.to_f / questions.size * 100).round
   end
 
   def contributions_per_erg_csv(erg_text)

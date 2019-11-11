@@ -31,6 +31,10 @@
       <p><%= @user.email %></p>
     </div>
     <div class="card__section card__section--border">
+      <label><strong>Notifications Email</strong></label>
+      <p><%= @user.notifications_email || 'None' %></p>
+    </div>
+    <div class="card__section card__section--border">
       <label><strong>Biography</strong></label>
       <p><%= @user.biography %></p>
     </div>
@@ -42,6 +46,15 @@
 
   <% if UserPolicy.new(current_user, @user).access_hidden_info? %>
     <div class="card">
+      <% @user.enterprise.fields.each do |field| %>
+        <div class="card__section card__section--border">
+          <label><strong><%= field.title %></strong></label>
+          <p><%= @user.string_for_field(field) %></p>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="card">
       <div class="card__section card__section--border">
         <h2>Hidden info</h2>
         <h4>Only D&I Management can see hidden fields</h4>
@@ -52,7 +65,7 @@
           <p><%= @user.string_for_field(field) %></p>
         </div>
       <% end %>
-    </div>
+    </div>  
   <% end %>
 
   <div class="card">

@@ -16,16 +16,11 @@ RSpec.describe Rewards::Points::Redemption do
       end
 
       it 'send an email to responsible of reward' do
-        mailer = double('RewardMailer')
-        expect(RewardMailer).to receive(:redeem_reward).with(reward.responsible, user, reward) { mailer }
-        expect(mailer).to receive(:deliver_later)
-
+        user_reward = UserReward.create(reward: reward, user: user, status: 0)
+        allow(RewardMailerJob).to receive(:perform_later)
         redemption.redeem
-      end
 
-      it 'updates user credits' do
-        redemption.redeem
-        expect(user.credits).to eq 0
+        expect(RewardMailerJob).to have_received(:perform_later)
       end
 
       it 'returns true' do
@@ -39,7 +34,7 @@ RSpec.describe Rewards::Points::Redemption do
       end
 
       it 'does not send any email' do
-        expect(RewardMailer).to_not receive(:redeem_reward)
+        expect(RewardMailer).to_not receive(:request_to_redeem_reward)
 
         redemption.redeem
       end

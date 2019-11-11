@@ -1,0 +1,13 @@
+<table class='table--has-border' id="<%= id %>" data-source="<%= source %>">
+  <thead>
+  <th>First Name</th>
+  <th>Last Name</th>
+  <% if id =~ /^without/ %>
+    <th>Details</th>
+  <% else %>
+    <th>E-Mail</th>
+  <% end %>
+  </thead>
+  <tbody>
+  </tbody>
+</table>

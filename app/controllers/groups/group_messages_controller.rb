@@ -4,6 +4,7 @@ class Groups::GroupMessagesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_group
   before_action :set_message, only: [:show, :destroy, :edit, :update, :archive]
+  after_action :visit_page, only: [:index, :show, :new, :edit]
 
   layout 'erg'
 
@@ -12,6 +13,8 @@ class Groups::GroupMessagesController < ApplicationController
   end
 
   def show
+    @tags = @message.news_tags
+
     @comments = @message.comments.includes(:author)
 
     @new_comment = GroupMessageComment.new
@@ -31,6 +34,7 @@ class Groups::GroupMessagesController < ApplicationController
   def create
     @message = @group.messages.new(message_params)
     @message.owner = current_user
+    add_tags(tag_params)
 
     if @message.save
       track_activity(@message, :create)
@@ -45,6 +49,7 @@ class Groups::GroupMessagesController < ApplicationController
 
   def update
     authorize [@group, @message], :update?, policy_class: GroupMessagePolicy
+    add_tags(tag_params)
     if @message.update(message_params)
       track_activity(@message, :update)
       redirect_to group_posts_path(@group)
@@ -100,6 +105,19 @@ class Groups::GroupMessagesController < ApplicationController
     @message = @group.messages.find(params[:id])
   end
 
+  def add_tags(params)
+    return if params.blank?
+
+    tags = params[:news_feed_link_attributes][:news_tag_ids]
+    tag_records = []
+    tags.map { |i| i.downcase }.uniq.each do |tag|
+      next if tag == ''
+
+      tag_records << NewsTag.find_or_create_by(name: tag)
+    end
+    @message.news_feed_link.news_tags = tag_records
+  end
+
   def message_params
     params
         .require(:group_message)
@@ -110,11 +128,40 @@ class Groups::GroupMessagesController < ApplicationController
         )
   end
 
+  def tag_params
+    params
+      .require(:group_message)
+      .permit(
+        news_feed_link_attributes: [news_tag_ids: []],
+      )
+  end
+
   def message_comments_params
     params
         .require(:group_message_comment)
         .permit(
           :content
         )
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      "#{@group.to_label}'s Messages"
+    when 'show'
+      "#{@message.to_label}"
+    when 'new'
+      'Message Creation'
+    when 'edit'
+      "Edit Message: #{@message.to_label}"
+    else
+      "#{controller_path}##{action_name}"
+    end
+  rescue
+    "#{controller_path}##{action_name}"
   end
 end

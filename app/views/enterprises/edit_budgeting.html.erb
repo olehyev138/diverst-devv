@@ -15,7 +15,7 @@
           </tr>
         </thead>
         <tbody>
-          <% if @enterprise.groups.count == 0 %>
+          <% if @enterprise.groups.size == 0 %>
             There are no groups yet. Start by <%= link_to 'creating', new_group_path %> one.
           <% end %>
 

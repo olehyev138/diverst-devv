@@ -16,5 +16,9 @@ FactoryBot.define do
       user.policy_group = create(:policy_group)
     end
     seen_onboarding true
+
+    trait :with_notifications_email do
+      notifications_email { Faker::Internet.email }
+    end
   end
 end

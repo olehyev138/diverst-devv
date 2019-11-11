@@ -8,6 +8,9 @@
         <%= f.simple_fields_for :news_feed_link, @message.news_feed_link do |nfl| %>
           <%= nfl.hidden_field :id, :value => nfl.object.id %>
           <%= nfl.hidden_field :news_feed_id, :value => @group.news_feed.id %>
+
+          <%#= nfl.association :news_tags, label: "Tags", input_html: { class: "select2" } %>
+          <%= nfl.association :news_tags, input_html: { class: 'multiple-input', multiple: "multiple" }, collection: @message.news_feed_link.news_tags, label: "Tags" %>
           <%= nfl.association :segments, label: "#{c_t(:segment).pluralize}", collection: @group.enterprise.segments, input_html: { class: "select2-field-segments" } %>
           <%= nfl.association :shared_news_feeds, label: 'Share with other ' + "#{c_t(:erg).pluralize}", label_method: lambda { |n| "#{n.group.name}" }, collection: NewsFeed.where(:group_id => @group.enterprise.groups.ids).where.not(:group_id => @group.id), input_html: { class: "select2" } %>
         <% end %>

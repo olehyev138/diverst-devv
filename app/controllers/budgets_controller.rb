@@ -2,6 +2,7 @@ class BudgetsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_group
   before_action :set_budget, only: [:show, :approve, :decline, :destroy]
+  after_action :visit_page, only: [:index, :show, :new, :edit_annual_budget]
 
   layout 'erg'
 
@@ -19,6 +20,10 @@ class BudgetsController < ApplicationController
 
   def new
     authorize [@group], :create?, policy_class: GroupBudgetPolicy
+
+    if @group.annual_budgets.find(params[:annual_budget_id])&.amount == 0
+      redirect_to(:back, alert: 'Annual Budget is not set for this group. Please check back later.')
+    end
 
     @annual_budget_id = params[:annual_budget_id]
     @budget = Budget.new
@@ -79,7 +84,7 @@ class BudgetsController < ApplicationController
   end
 
   def destroy
-    authorize [@group], :destroy?, policy_class: GroupBudgetPolicy
+    authorize [@group, @budget], :destroy?, policy_class: GroupBudgetPolicy
     track_activity(@budget, :destroy)
     if @budget.destroy
       flash[:notice] = 'Your budget was deleted'
@@ -178,5 +183,26 @@ class BudgetsController < ApplicationController
         :annual_budget,
         :leftover_money
       )
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      "#{@group.to_label}'s Budgets"
+    when 'show'
+      @budget.to_label.present? ? "Budget: #{@budget.to_label}" : 'Budget Info'
+    when 'new'
+      "#{@group.to_label}'s Budget Creation"
+    when 'edit_annual_budget'
+      "#{@group.to_label}'s Annual Budget Editor"
+    else
+      "#{controller_path}##{action_name}"
+    end
+  rescue
+    "#{controller_path}##{action_name}"
   end
 end

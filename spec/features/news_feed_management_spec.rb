@@ -11,7 +11,7 @@ RSpec.feature 'News Feed Management' do
     page.execute_script <<-SCRIPT
 	    CKEDITOR.instances['#{locator}'].setData(#{content});
 	    $('textarea##{locator}').text(#{content});
-	  SCRIPT
+    SCRIPT
   end
 
   context 'when enterprise has pending comments enabled' do

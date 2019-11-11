@@ -4,14 +4,13 @@ class Initiatives::ExpensesController < ApplicationController
   before_action :set_initiative
   before_action :set_expense, only: [:edit, :update, :destroy, :show]
   after_action :verify_authorized
+  after_action :visit_page, only: [:index, :new, :show, :edit]
 
   layout 'erg'
 
   def index
     authorize InitiativeExpense
     @expenses = @initiative.expenses
-
-    redirect_to :back if @initiative.has_no_estimated_funding?
   end
 
   def new
@@ -24,20 +23,15 @@ class Initiatives::ExpensesController < ApplicationController
     @expense = @initiative.expenses.new(expense_params)
     @expense.owner = current_user
 
-    if @initiative.has_no_estimated_funding?
-      flash[:alert] = 'you are not allowed to create a negative expense'
-      render :new
-    else
-      annual_budget = current_user.enterprise.annual_budgets.find_or_create_by(closed: false, group_id: @group.id)
-      annual_budget.initiative_expenses << @expense
+    annual_budget = current_user.enterprise.annual_budgets.find_or_create_by(closed: false, group_id: @group.id)
+    annual_budget.initiative_expenses << @expense
 
-      if @expense.save
-        flash[:notice] = 'Your expense was created'
-        redirect_to action: :index
-      else
-        flash[:alert] = 'Your expense was not created. Please fix the errors'
-        render :new
-      end
+    if @expense.save
+      flash[:notice] = 'Your expense was created'
+      redirect_to action: :index
+    else
+      flash[:alert] = 'Your expense was not created. Please fix the errors'
+      render :new
     end
   end
 
@@ -114,5 +108,26 @@ class Initiatives::ExpensesController < ApplicationController
         :amount,
         :annual_budget_id
       )
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      "#{@initiative.to_label}'s Expenses"
+    when 'new'
+      "#{@initiative.to_label}'s Expense Creation"
+    when 'show'
+      "View Expense #{@expense.to_label}"
+    when 'edit'
+      "Edit an Expense for #{@initiative.to_label}"
+    else
+      "#{controller_path}##{action_name}"
+    end
+  rescue
+    "#{controller_path}##{action_name}"
   end
 end

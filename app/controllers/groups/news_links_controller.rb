@@ -5,6 +5,7 @@ class Groups::NewsLinksController < ApplicationController
 
   before_action :set_group, except: [:url_info]
   before_action :set_news_link, only: [:comments, :create_comment, :edit, :update, :destroy, :news_link_photos, :archive]
+  after_action :visit_page, only: [:index, :new, :edit, :comments]
 
   layout 'erg'
 
@@ -17,9 +18,11 @@ class Groups::NewsLinksController < ApplicationController
     @news_link.build_news_feed_link(news_feed_id: @group.news_feed.id)
   end
 
-  def edit; end
+  def edit
+  end
 
   def comments
+    @tags = @news_link.news_tags
     @comments = @news_link.comments.includes(:author)
     @new_comment = NewsLinkComment.new
     @news_link.increment_view(current_user)
@@ -42,6 +45,7 @@ class Groups::NewsLinksController < ApplicationController
   def create
     @news_link = @group.news_links.new(news_link_params)
     @news_link.author = current_user
+    add_tags(tag_params)
 
     if @news_link.save
       track_activity(@news_link, :create)
@@ -55,6 +59,7 @@ class Groups::NewsLinksController < ApplicationController
   end
 
   def update
+    add_tags(tag_params)
     if @news_link.update(news_link_params)
       track_activity(@news_link, :update)
       flash[:notice] = 'Your news was updated'
@@ -111,6 +116,19 @@ class Groups::NewsLinksController < ApplicationController
     @news_link = @group.news_links.find(params[:id])
   end
 
+  def add_tags(params)
+    return if params.blank?
+
+    tags = params[:news_feed_link_attributes][:news_tag_ids]
+    tag_records = []
+    tags.map { |i| i.downcase }.uniq.each do |tag|
+      next if tag == ''
+
+      tag_records << NewsTag.find_or_create_by(name: tag)
+    end
+    @news_link.news_feed_link.news_tags = tag_records
+  end
+
   def news_link_params
     params
         .require(:news_link)
@@ -130,5 +148,34 @@ class Groups::NewsLinksController < ApplicationController
         .permit(
           :content
         )
+  end
+
+  def tag_params
+    params
+      .require(:news_link)
+      .permit(
+        news_feed_link_attributes: [news_tag_ids: []],
+      )
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      "#{@group.to_label}'s News Links"
+    when 'new'
+      "#{@group.to_label}'s News Link Creation"
+    when 'edit'
+      "#{@group.to_label}'s News Link Edit"
+    when 'comments'
+      "#{@news_link.to_label}'s Comments"
+    else
+      "#{controller_path}##{action_name}"
+    end
+  rescue
+    "#{controller_path}##{action_name}"
   end
 end

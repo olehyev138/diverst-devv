@@ -10,7 +10,11 @@
       <div class="card">
         <div class="card__section">
 
-          <h3>My points: <%= current_user.credits %></h3>
+          <h3>My points: <%= current_user.credits %>
+            <% if current_user.user_rewards.where(status: 0).any? %>
+              <span title='Reward request(s) pending'>**</span>
+            <% end %>
+          </h3>
 
           <table class="table--has-border" id="campaigns-table">
             <thead>

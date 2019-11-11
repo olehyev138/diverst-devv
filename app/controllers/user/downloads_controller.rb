@@ -1,6 +1,7 @@
 class User::DownloadsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_csv_file, only: [:download]
+  after_action :visit_page, only: [:index]
 
   layout 'user'
 
@@ -22,5 +23,20 @@ class User::DownloadsController < ApplicationController
     params.require(:download).permit(
       :download_id,
     )
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      'User\'s Downloads Page'
+    else
+      "#{controller_path}##{action_name}"
+    end
+  rescue
+    "#{controller_path}##{action_name}"
   end
 end

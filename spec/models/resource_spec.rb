@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Resource, type: :model do
-  describe 'test associations' do
+  describe 'test associations and validations' do
     let(:resource) { build_stubbed(:resource) }
 
     it { expect(resource).to belong_to(:enterprise) }
@@ -9,19 +9,19 @@ RSpec.describe Resource, type: :model do
     it { expect(resource).to belong_to(:group) }
     it { expect(resource).to belong_to(:initiative) }
     it { expect(resource).to belong_to(:owner).class_name('User') }
+    it { expect(resource).to belong_to(:mentoring_session) }
     it { expect(resource).to have_many(:tags).dependent(:destroy) }
-    it { expect(resource).to accept_nested_attributes_for(:tags) }
-    it { expect(resource).to validate_length_of(:url) }
-  end
 
-  describe 'when validating' do
-    let(:resource) { build_stubbed(:resource) }
+    it { expect(resource).to accept_nested_attributes_for(:tags) }
+
+    it { expect(resource).to validate_length_of(:resource_type).is_at_most(191) }
+    it { expect(resource).to validate_length_of(:file_content_type).is_at_most(191) }
+    it { expect(resource).to validate_length_of(:file_file_name).is_at_most(191) }
+    it { expect(resource).to validate_length_of(:title).is_at_most(191) }
 
     it { expect(resource).to validate_presence_of(:title) }
-    it { expect(resource).to have_attached_file(:file) }
 
-    # do we want to validate presence of file in resource model? if so then i will uncomment this code
-    # it{ expect(resource).to validate_attachment_presence(:file)}
+    it { expect(resource).to have_attached_file(:file) }
   end
 
   describe 'test callbacks' do
@@ -111,6 +111,39 @@ RSpec.describe Resource, type: :model do
     end
   end
 
+  describe 'container' do
+    let(:enterprise) { create(:enterprise) }
+    let(:folder) { create(:folder) }
+    let(:initiative) { create(:initiative) }
+    let(:group) { create(:group) }
+    let(:mentoring_session) { create(:mentoring_session) }
+
+    it 'return enterprise if enterprise is present' do
+      resource = build(:resource, enterprise_id: enterprise.id)
+      expect(resource.container).to eq(enterprise)
+    end
+
+    it 'returns folder if folder is present' do
+      resource = build(:resource, folder_id: folder.id)
+      expect(resource.container).to eq(folder)
+    end
+
+    it 'returns initiative if initiative is present' do
+      resource = build(:resource, initiative_id: initiative.id, folder_id: nil)
+      expect(resource.container).to eq(initiative)
+    end
+
+    it 'returns group if group is present' do
+      resource = build(:resource, group_id: group.id, folder_id: nil)
+      expect(resource.container).to eq(group)
+    end
+
+    it 'returns mentoring_session if mentoring_session is present' do
+      resource = build(:resource, mentoring_session_id: mentoring_session.id, folder_id: nil)
+      expect(resource.container).to eq(mentoring_session)
+    end
+  end
+
   describe 'elasticsearch methods' do
     context '#as_indexed_json' do
       let!(:object) { create(:resource) }
@@ -150,6 +183,20 @@ RSpec.describe Resource, type: :model do
       create_list(:view, 10, resource: resource)
 
       expect(resource.total_views).to eq(10)
+    end
+  end
+
+  describe '.unarchived_resources' do
+    let!(:enterprise) { create(:enterprise) }
+    let!(:group) { create(:group, enterprise: enterprise) }
+    let!(:group_folder) { create(:folder, group_id: group.id, enterprise_id: nil) }
+    let!(:enterprise_folder) { create(:folder, enterprise_id: enterprise.id, group_id: nil) }
+    let!(:group_resources) { create_list(:resource, 2, folder: group_folder, archived_at: DateTime.now) }
+    let!(:enterprise_resources) { create_list(:resource, 4, folder: enterprise_folder) }
+
+    it 'returns unarchived resources' do
+      folder_ids = [group_folder.id]
+      expect(described_class.unarchived_resources(folder_ids, [])).to eq(group_resources)
     end
   end
 

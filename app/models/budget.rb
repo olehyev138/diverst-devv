@@ -64,11 +64,15 @@ class Budget < BaseClass
     flattened_items
   end
 
-  def self.pre_approved_events_for_select(group, user = nil)
+  def self.pre_approved_events_for_select(group, user = nil, initiative = nil)
     budget_items = self.pre_approved_events(group, user)
 
     select_items = budget_items.map do |bi|
       [ bi.title_with_amount, bi.id ]
+    end
+
+    if initiative && initiative.persisted?
+      return select_items if initiative&.current_expences_sum.to_f > initiative&.estimated_funding.to_f
     end
 
     select_items << [ group.title_with_leftover_amount, BudgetItem::LEFTOVER_BUDGET_ITEM_ID ]
@@ -80,8 +84,8 @@ class Budget < BaseClass
     annual_budget = AnnualBudget.find_or_create_by(closed: false, group_id: group.id)
     return if annual_budget.nil?
 
-    leftover_of_annual_budget = (group.annual_budget - group.approved_budget) + group.available_budget
-    group.update(leftover_money: leftover_of_annual_budget)
+    leftover_of_annual_budget = ((group.annual_budget || annual_budget.amount) - group.approved_budget) + group.available_budget
+    group.update(leftover_money: leftover_of_annual_budget, annual_budget: annual_budget.amount)
     annual_budget.update(amount: group.annual_budget, available_budget: group.available_budget,
                          leftover_money: group.leftover_money, expenses: group.spent_budget,
                          approved_budget: group.approved_budget)

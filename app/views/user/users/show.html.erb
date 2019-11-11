@@ -21,12 +21,25 @@
       <%#= link_to 'Connect with LinkedIn', @linkedin_url, class: "btn btn--secondary" unless @user.linkedin_profile_url %>
     <%# end %>
   </div>
+  <% if @user.enterprise.enable_rewards? %>
+    <div class="flex-row__cell--grow">
+      <div align="right">
+        <h2>
+          <%= c_t(:dci_abbreviation) %> Point(s): <%= @user.points %>
+        </h2>
+      </div>
+    </div>
+  <% end %>
 </div>
 
 <div class="card" style="margin-top: 30px;">
   <div class="card__section card__section--border">
     <label><strong>Email</strong></label>
     <p><%= @user.email %></p>
+  </div>
+  <div class="card__section card__section--border">
+    <label><strong>Notifications Email</strong></label>
+    <p><%= @user.notifications_email || 'None' %></p>
   </div>
   <div class="card__section card__section--border">
     <label><strong>Name</strong></label>
@@ -40,17 +53,29 @@
     <label><strong>Time zone</strong></label>
     <p><%= @user.default_time_zone %></p>
   </div>
+
   <% if UserPolicy.new(current_user, @user).access_hidden_info? %>
-  <div class="card__section card__section--border">
-    <label><h2>Hidden info</h2></label>
-    <label><h4>Only D&I Management can see hidden fields</h4></label>
-  </div>  
-    <% @user.enterprise.fields.where(private: false).each do |field| %>
-    <div class="card__section card__section--border">
-      <label><strong><%= field.title %></strong></label>
-      <p><%= @user.string_for_field(field) %></p>
+    <div class="card">
+      <% @user.enterprise.fields.each do |field| %>
+        <div class="card__section card__section--border">
+          <label><strong><%= field.title %></strong></label>
+          <p><%= @user.string_for_field(field) %></p>
+        </div>
+      <% end %>
     </div>
-    <% end %>
+  <% else %>
+    <div class="card">
+      <div class="card__section card__section--border">
+        <h2>Hidden info</h2>
+        <h4>Only D&I Management can see hidden fields</h4>
+      </div>
+      <% @user.enterprise.fields.where(private: false).each do |field| %>
+        <div class="card__section card__section--border">
+          <label><strong><%= field.title %></strong></label>
+          <p><%= @user.string_for_field(field) %></p>
+        </div>
+      <% end %>
+    </div>
   <% end %>
 
   <div class="card">

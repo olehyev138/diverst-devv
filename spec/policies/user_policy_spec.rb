@@ -188,5 +188,59 @@ RSpec.describe UserPolicy, type: :policy do
         end
       end
     end
+
+    describe '#users_points_ranking?' do
+      context 'when manage_all is true' do
+        before { user.policy_group.update manage_all: true }
+
+        it 'returns true' do
+          expect(subject.users_points_ranking?).to eq true
+        end
+      end
+
+      context 'when users_manage is true' do
+        before { user.policy_group.update users_manage: true }
+
+        it 'returns true' do
+          expect(subject.users_points_ranking?).to eq true
+        end
+      end
+    end
+
+    describe '#users_points_csv?' do
+      context 'when manage_all is true' do
+        before { user.policy_group.update manage_all: true }
+
+        it 'returns true' do
+          expect(subject.users_points_csv?).to eq true
+        end
+      end
+
+      context 'when users_manage is true' do
+        before { user.policy_group.update users_manage: true }
+
+        it 'returns true' do
+          expect(subject.users_points_csv?).to eq true
+        end
+      end
+    end
+
+    describe '#users_pending_rewards?' do
+      context 'when manage_all is true' do
+        before { user.policy_group.update manage_all: true }
+
+        it 'returns true' do
+          expect(subject.users_pending_rewards?).to eq true
+        end
+      end
+
+      context 'when users_manage is true' do
+        before { user.policy_group.update users_manage: true }
+
+        it 'returns true' do
+          expect(subject.users_pending_rewards?).to eq true
+        end
+      end
+    end
   end
 end

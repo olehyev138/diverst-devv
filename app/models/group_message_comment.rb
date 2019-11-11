@@ -1,5 +1,5 @@
 class GroupMessageComment < BaseClass
-  belongs_to :author, class_name: 'User'
+  belongs_to :author, class_name: 'User', counter_cache: :message_comments_count
   belongs_to :message, class_name: 'GroupMessage'
 
   has_many :user_reward_actions
