@@ -35,17 +35,6 @@ RSpec.describe Campaign, type: :model do
     it { expect(campaign).to have_attached_file(:banner) }
     it { expect(campaign).to validate_attachment_content_type(:banner, AttachmentHelper.common_image_types) }
 
-    # Paperclip
-    #    describe 'paperclip validation' do
-    #      # paperclip_attributes = [:image, :banner]
-    #      # paperclip_attributes.each do |paperclip_attribute|
-    #        # it { should have_attached_file(paperclip_attribute) }
-    #        it { should validate_attachment_content_type(paperclip_attribute).allowing('image/png', 'image/gif')
-    #            .rejecting('text/plain', 'text/xml')
-    #        }
-    # end
-    # end
-
     it 'is valid' do
       expect(campaign).to be_valid
     end

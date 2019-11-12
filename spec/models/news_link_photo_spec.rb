@@ -10,13 +10,6 @@ RSpec.describe NewsLinkPhoto, type: :model do
     it { expect(news_link_photo).to have_attached_file(:file) }
     it { expect(news_link_photo).to validate_attachment_presence(:file) }
     it { expect(news_link_photo).to validate_attachment_content_type(:file, AttachmentHelper.common_image_types) }
-
-    # Paperclip
-    # it { expect(news_link_photo).to have_attached_file(:file) }
-    #    it { expect(news_link_photo).to validate_attachment_content_type(:file)
-    #      .allowing('image/png', 'image/gif', 'image/jpeg', 'image/jpg')
-    #      .rejecting('text/xml', 'text/plain')
-    #    }
   end
 
   describe '#group' do

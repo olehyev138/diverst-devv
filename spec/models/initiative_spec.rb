@@ -41,10 +41,6 @@ RSpec.describe Initiative, type: :model do
     it { expect(initiative).to have_attached_file(:picture) }
     it { expect(initiative).to validate_attachment_content_type(:picture, AttachmentHelper.common_image_types) }
 
-    # Paperclip
-    # it { expect(initiative).to have_attached_file(:picture) }
-    # it { expect(initiative).to validate_attachment_content_type(:picture).allowing('image/png', 'image/gif').rejecting('text/plain', 'text/xml') }
-
     it { expect(initiative).to validate_presence_of(:start) }
     it { expect(initiative).to validate_presence_of(:end) }
     it { expect(initiative).to validate_presence_of(:pillar) }

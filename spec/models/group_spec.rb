@@ -4,7 +4,7 @@ RSpec.describe Group, type: :model do
   include ActiveJob::TestHelper
 
   describe 'validations' do
-    let(:group) { build_stubbed(:group) }
+    let(:group) { build(:group) }
 
     it { expect(group).to validate_presence_of(:name) }
 
@@ -60,14 +60,11 @@ RSpec.describe Group, type: :model do
     it { expect(group).to belong_to(:group_category) }
     it { expect(group).to belong_to(:group_category_type) }
 
-    # Paperclip
-    #    [:logo, :banner].each do |attribute|
-    #      it { expect(group).to have_attached_file(attribute) }
-    #    end
-
-    #    [:logo, :banner].each do |attribute|
-    #      it { expect(group).to validate_attachment_content_type(attribute).allowing('image/png', 'image/gif').rejecting('text/plain', 'text/xml') }
-    #    end
+    # ActiveStorage
+    [:logo, :banner].each do |attribute|
+      it { expect(group).to have_attached_file(attribute) }
+      it { expect(group).to validate_attachment_content_type(attribute, AttachmentHelper.common_image_types) }
+    end
 
     [:outcomes, :fields, :survey_fields, :group_leaders, :sponsors].each do |attribute|
       it { expect(group).to accept_nested_attributes_for(attribute).allow_destroy(true) }
