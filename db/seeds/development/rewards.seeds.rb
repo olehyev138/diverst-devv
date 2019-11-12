@@ -1,6 +1,6 @@
 after 'development:enterprise' do
   # TODO
-  # Paperclip
+  # ActiveStorage
 
 #  spinner = TTY::Spinner.new(":spinner Populating enterprises with prizes...", format: :spin_2)
 #  spinner.run do |spinner|

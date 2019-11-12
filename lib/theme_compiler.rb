@@ -43,7 +43,6 @@ class ThemeCompiler
 
   def upload
     if Rails.env.production?
-      # Paperclip TODO
       connection = Fog::Storage.new(
         provider: 'AWS',
         aws_access_key_id: ENV['AWS_ACCESS_KEY_ID'],
