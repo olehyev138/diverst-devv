@@ -20,9 +20,7 @@ class SegmentMembersDownloadJob < ActiveJob::Base
     csv = User.to_csv users: members, fields: segment.enterprise.fields
     file = CsvFile.new(user_id: user.id, download_file_name: "#{segment.name}")
 
-    file.download_file = StringIO.new(csv)
-    file.download_file.instance_write(:content_type, 'text/csv')
-    file.download_file.instance_write(:file_name, "#{segment.name}.csv")
+    file.download_file.attach(io: StringIO.new(csv), filename: "#{file.download_file_name}.csv", content_type: 'text/csv')
 
     file.save!
   end

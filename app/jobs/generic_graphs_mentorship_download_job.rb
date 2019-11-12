@@ -11,9 +11,7 @@ class GenericGraphsMentorshipDownloadJob < ActiveJob::Base
     csv = enterprise.generic_graphs_mentorship_csv(erg_text)
     file = CsvFile.new(user_id: user.id, download_file_name: 'graph_group_mentorship')
 
-    file.download_file = StringIO.new(csv)
-    file.download_file.instance_write(:content_type, 'text/csv')
-    file.download_file.instance_write(:file_name, 'graph_group_mentorship.csv')
+    file.download_file.attach(io: StringIO.new(csv), filename: "#{file.download_file_name}.csv", content_type: 'text/csv')
 
     file.save!
   end

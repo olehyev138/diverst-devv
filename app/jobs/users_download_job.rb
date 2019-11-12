@@ -13,9 +13,7 @@ class UsersDownloadJob < ActiveJob::Base
     csv = enterprise.users_csv(nil, export_csv_params)
     file = CsvFile.new(user_id: user.id, download_file_name: export_csv_params.downcase.split(' ').join('_'))
 
-    file.download_file = StringIO.new(csv)
-    file.download_file.instance_write(:content_type, 'text/csv')
-    file.download_file.instance_write(:file_name, "#{file.download_file_name}.csv")
+    file.download_file.attach(io: StringIO.new(csv), filename: "#{file.download_file_name}.csv", content_type: 'text/csv')
 
     file.save!
   end

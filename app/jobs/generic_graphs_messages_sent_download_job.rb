@@ -11,9 +11,7 @@ class GenericGraphsMessagesSentDownloadJob < ActiveJob::Base
     csv = demo ? enterprise.generic_graphs_demo_messages_sent_csv : enterprise.generic_graphs_non_demo_messages_sent_csv(erg_text, from_date, to_date, scoped_by_models)
     file = CsvFile.new(user_id: user.id, download_file_name: 'graph_messages_sent')
 
-    file.download_file = StringIO.new(csv)
-    file.download_file.instance_write(:content_type, 'text/csv')
-    file.download_file.instance_write(:file_name, 'graph_messages_sent.csv')
+    file.download_file.attach(io: StringIO.new(csv), filename: "#{file.download_file_name}.csv", content_type: 'text/csv')
 
     file.save!
   end
