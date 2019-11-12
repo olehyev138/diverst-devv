@@ -200,7 +200,7 @@ class UsersController < ApplicationController
   def users_points_ranking
     authorize User
 
-    @users = current_user.enterprise.users.order(points: :desc).limit(params[:limit] || 25)
+    @users = current_user.enterprise.users.active.order(points: :desc).limit(params[:limit] || 25)
 
     respond_to do |format|
       format.html

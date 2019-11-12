@@ -536,6 +536,7 @@ RSpec.describe UsersController, type: :controller do
 
   describe 'GET#users_points_ranking' do
     context 'when user is logged in' do
+      let!(:inactive_user) { create(:user, enterprise: enterprise, active: false) }
       login_user_from_let
       before { get :users_points_ranking }
 
@@ -543,7 +544,7 @@ RSpec.describe UsersController, type: :controller do
         expect(response).to render_template :users_points_ranking
       end
 
-      it 'returns users' do
+      it 'returns active users' do
         expect(assigns[:users]).to eq([user])
       end
     end
