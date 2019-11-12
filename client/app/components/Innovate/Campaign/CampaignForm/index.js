@@ -4,7 +4,7 @@
  *
  */
 
-import React, { memo } from 'react';
+import React, {memo, useState} from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
@@ -21,16 +21,24 @@ import messages from 'containers/Group/GroupMembers/messages';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 
 import { buildValues, mapFields } from 'utils/formHelpers';
-import {DateTime} from "luxon";
+import { DateTime } from 'luxon';
 
 /* eslint-disable object-curly-newline */
 export function CampaignFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, touched, ...props }) {
+  const groupSelectAction = (searchKey = '') => {
+    props.getGroupsBegin({
+      count: 10, page: 0, order: 'asc',
+      search: searchKey,
+    });
+  };
+
   return (
     <Card>
       <Form>
         <CardContent>
           <Field
             component={TextField}
+            required
             onChange={handleChange}
             fullWidth
             id='title'
@@ -56,13 +64,70 @@ export function CampaignFormInner({ handleSubmit, handleChange, handleBlur, valu
           />
         </CardContent>
         <Divider />
+        <CardContent>
+          <Grid container spacing={6} justify='space-between'>
+            <Grid item xs md={5}>
+              <Field
+                component={DiverstDateTimePicker}
+                disabled={props.isCommitting}
+                required
+                keyboardMode
+                /* eslint-disable-next-line dot-notation */
+                maxDate={touched['end'] ? values['end'] : undefined}
+                maxDateMessage='Start date cannot be after end date'
+                fullWidth
+                id='start'
+                name='start'
+                margin='normal'
+                label='Pick start date and time'
+              />
+            </Grid>
+            <Grid item xs md={5}>
+              <Field
+                component={DiverstDateTimePicker}
+                disabled={props.isCommitting}
+                required
+                keyboardMode
+                /* eslint-disable-next-line dot-notation */
+                minDate={values['start']}
+                minDateMessage='End date cannot be before start date'
+                fullWidth
+                id='end'
+                name='end'
+                margin='normal'
+                label='Pick end date and time'
+              />
+            </Grid>
+          </Grid>
+          <Divider />
+        </CardContent>
+        <Divider />
+        <CardContent>
+          <Field
+            component={Select}
+            fullWidth
+            id='group_ids'
+            name='group_ids'
+            label='Select Group'
+            isMulti
+            margin='normal'
+            disabled={props.isCommitting}
+            value={values.group_ids}
+            options={props.selectGroups}
+            onMenuOpen={groupSelectAction}
+            onChange={value => setFieldValue('group_ids', value)}
+            onInputChange={value => groupSelectAction(value)}
+            onBlur={() => setFieldTouched('group_ids', true)}
+          />
+        </CardContent>
+        <Divider />
         <CardActions>
           <DiverstSubmit isCommitting={props.isCommitting}>
             {buttonText}
           </DiverstSubmit>
           <Button
             disabled={props.isCommitting}
-            to={props.links.campaignIndex}
+            to={props.links.campaignsIndex}
             component={WrappedNavLink}
           >
             <DiverstFormattedMessage {...messages.cancel} />
@@ -71,16 +136,20 @@ export function CampaignFormInner({ handleSubmit, handleChange, handleBlur, valu
       </Form>
     </Card>
   );
-};
+}
 
 export function CampaignForm(props) {
-  const initialValues = buildValues(undefined, {
+  const [defaultStartDate] = useState(DateTime.local().plus({ hour: 1 }));
+  const [defaultEndDate] = useState(DateTime.local().plus({ hour: 2 }));
+
+  const initialValues = buildValues(props.campaign, {
     // users: { default: [], customKey: 'member_ids' }
     id: { default: '' },
     title: { default: '' },
     description: { default: '' },
-    // start: { default: DateTime.local().plus({ hour: 1 }) },
-    // end: { default: DateTime.local().plus({ hour: 2 }) },
+    start: { default: defaultStartDate },
+    end: { default: defaultEndDate },
+    groups: { default: [], customKey: 'group_ids' },
   });
 
   return (
@@ -88,7 +157,7 @@ export function CampaignForm(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        props.createCampaignBegin(values);
+        props.createCampaignBegin(mapFields(values, ['group_ids']));
       }}
 
       render={formikProps => <CampaignFormInner {...props} {...formikProps} />}
@@ -110,9 +179,12 @@ CampaignFormInner.propTypes = {
   values: PropTypes.object,
   buttonText: PropTypes.string,
   selectUsers: PropTypes.array,
+  selectGroups: PropTypes.array,
+  getGroupsBegin: PropTypes.func,
   // getMembersBegin: PropTypes.func,
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
+  touched: PropTypes.object,
   isCommitting: PropTypes.bool,
   links: PropTypes.shape({
     campaignIndex: PropTypes.string

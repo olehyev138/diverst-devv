@@ -35,7 +35,7 @@ export function* createCampaigns(action) {
     const response = yield call(api.campaigns.create.bind(api.campaigns), payload);
 
     yield put(createCampaignSuccess());
-    yield put(push(ROUTES.group.campaigns.index.path(action.payload.groupId)));
+    yield put(push(ROUTES.admin.innovate.campaigns.index.path()));
     yield put(showSnackbar({ message: 'Campaign created', options: { variant: 'success' } }));
   } catch (err) {
     yield put(createCampaignError(err));
