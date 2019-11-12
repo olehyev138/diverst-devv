@@ -54,7 +54,7 @@ gem 'sidekiq', '~> 5.0.5' # Background jobs
 gem 'thor', '0.20.0' # Expected string default value for '--decorator'; got true (boolean) - setting version removes this message
 gem 'tty-spinner'
 gem 'twilio-ruby', '~> 5.10.0'
-gem 'twitter' # twitter implementation
+gem 'twitter', '~> 6.2.0' # twitter implementation
 gem 'validate_url', '~> 1.0', '>= 1.0.2' # Active Model validation for URLs
 gem 'yam', '~> 2.5' # Yammer ruby SDK
 
