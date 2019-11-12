@@ -84,10 +84,6 @@ class User < ApplicationRecord
   has_one_attached :avatar
   validates :avatar, content_type: AttachmentHelper.common_image_types
 
-  # Paperclip
-  # has_attached_file :avatar, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing_user.png'), s3_permissions: 'private'
-  # validates_attachment_content_type :avatar, content_type: /\Aimage\/.*\Z/
-
   validates_length_of :mentorship_description, maximum: 65535
   validates_length_of :unlock_token, maximum: 191
   validates_length_of :time_zone, maximum: 191
@@ -634,8 +630,8 @@ class User < ApplicationRecord
   def delete_linkedin_info
     self.update(
       linkedin_profile_url: nil,
-      avatar_file_name: nil
     )
+    avatar.purge_later
   end
 
   private

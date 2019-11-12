@@ -102,21 +102,6 @@ class Enterprise < ApplicationRecord
   has_one_attached :sponsor_media
   has_one_attached :onboarding_sponsor_media
 
-  # has_attached_file :cdo_picture, styles: { medium: '1000x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: :private
-  # validates_attachment_content_type :cdo_picture, content_type: %r{\Aimage\/.*\Z}
-
-  # has_attached_file :banner
-  # validates_attachment_content_type :banner, content_type: /\Aimage\/.*\Z/
-
-  # has_attached_file :xml_sso_config
-  # validates_attachment_content_type :xml_sso_config, content_type: 'text/xml'
-
-  # has_attached_file :sponsor_media, s3_permissions: :private
-  # do_not_validate_attachment_file_type :sponsor_media
-
-  # has_attached_file :onboarding_sponsor_media, s3_permissions: :private
-  # do_not_validate_attachment_file_type :onboarding_sponsor_media
-
   validates_format_of :redirect_email_contact, with: /\A[^@\s]+@[^@\s]+\z/, allow_blank: true
 
   def resolve_auto_archive_state
@@ -160,10 +145,10 @@ class Enterprise < ApplicationRecord
   def saml_settings
     # if xml config file is present - take settings from it
     if xml_sso_config.attached?
-      # Paperclip TODO
-      # idp_metadata_parser = OneLogin::RubySaml::IdpMetadataParser.new
-      # file_content = Paperclip.io_adapters.for(xml_sso_config).read
-      # settings = idp_metadata_parser.parse(file_content)
+      # ActiveStorage
+      idp_metadata_parser = OneLogin::RubySaml::IdpMetadataParser.new
+      file_content = xml_sso_config.download
+      settings = idp_metadata_parser.parse(file_content)
     else # otherwise - initialize empty settings
       settings = OneLogin::RubySaml::Settings.new
       settings.name_identifier_format = 'urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress'

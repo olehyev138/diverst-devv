@@ -71,12 +71,6 @@ class Initiative < ApplicationRecord
   has_one_attached :qr_code
   validates :qr_code, content_type: AttachmentHelper.common_image_types
 
-  # Paperclip TODO
-  # has_attached_file :picture, styles: { medium: '1000x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: 'private'
-  # validates_attachment_content_type :picture, content_type: %r{\Aimage\/.*\Z}
-  # has_attached_file :qr_code, styles: { medium: '1000x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: 'private'
-  # validates_attachment_content_type :qr_code, content_type: %r{\Aimage\/.*\Z}
-
   validates :start, presence: true
   validates :end, presence: true
   validates :max_attendees, numericality: { greater_than: 0, allow_nil: true }

@@ -34,10 +34,6 @@ class NewsLink < ApplicationRecord
   has_one_attached :picture
   validates :picture, content_type: AttachmentHelper.common_image_types
 
-  # Paperclip TODO
-  # has_attached_file :picture, styles: { medium: '1000x300>', thumb: '100x100>' }, s3_permissions: :private
-  # validates_attachment_content_type :picture, content_type: %r{\Aimage\/.*\Z}
-
   after_create :build_default_link
   after_destroy :remove_news_feed_link
 

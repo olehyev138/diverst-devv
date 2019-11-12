@@ -16,10 +16,6 @@ class Answer < ApplicationRecord
   # ActiveStorage
   has_one_attached :supporting_document
 
-  # Paperclip TODO
-  # has_attached_file :supporting_document, s3_permissions: 'private'
-  # do_not_validate_attachment_file_type :supporting_document
-
   accepts_nested_attributes_for :expenses, reject_if: :all_blank, allow_destroy: true
 
   validates_length_of :outcome, maximum: 65535
@@ -30,7 +26,7 @@ class Answer < ApplicationRecord
   validates :contributing_group, presence: true
 
   def supporting_document_extension
-    File.extname(supporting_document_file_name)[1..-1].downcase
+    File.extname(supporting_document.blob.filename)[1..-1].downcase
   rescue
     ''
   end

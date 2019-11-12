@@ -8,12 +8,6 @@ class Reward < ApplicationRecord
   has_one_attached :picture
   validates :picture, content_type: AttachmentHelper.common_image_types
 
-  # Paperclip
-  # has_attached_file :picture,
-  #                    styles: { thumb: '120x120>' },
-  #                    default_url: ActionController::Base.helpers.image_path('/assets/missing.png')
-  # validates_attachment_content_type :picture, content_type: %r{\Aimage\/.*\Z}
-
   validates_length_of :description, maximum: 65535
   validates_length_of :label, maximum: 191
   validates :enterprise, presence: true

@@ -20,11 +20,6 @@ class Resource < ApplicationRecord
   has_one_attached :file
   validates :file, attached: true, if: Proc.new { |r| r.url.blank? }
 
-  # Paperclip TODO
-  # has_attached_file :file, s3_permissions: 'private'
-  # validates_with AttachmentPresenceValidator, attributes: :file, if: Proc.new { |r| r.url.blank? }
-  # do_not_validate_attachment_file_type :file
-
   validates_length_of :resource_type, maximum: 191
   validates_length_of :title, maximum: 191
   validates_presence_of   :title

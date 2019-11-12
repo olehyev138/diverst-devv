@@ -11,9 +11,4 @@ class Badge < ApplicationRecord
   # ActiveStorage
   has_one_attached :image
   validates :image, attached: true, content_type: AttachmentHelper.common_image_types
-
-  # Paperclip
-  # has_attached_file :image, styles: { thumb: '120x120>' }
-  # validates_attachment_presence :image
-  # validates_attachment_content_type :image, content_type: %r{\Aimage\/.*\Z}
 end

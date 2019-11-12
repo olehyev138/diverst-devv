@@ -10,28 +10,15 @@ class CsvFile < ApplicationRecord
   validates :import_file, attached: true, if: Proc.new { |c| !c.download_file.attached? }
   validates :download_file, attached: true, if: Proc.new { |c| !c.import_file.attached? }
 
-  # Paperclip TODO
-  # has_attached_file :import_file, s3_permissions: 'private'
-  # has_attached_file :download_file, s3_permissions: 'private',
-  #                                   s3_headers: lambda { |attachment|
-  #                                                  {
-  #                                                      'Content-Type' => 'text/csv',
-  #                                                      'Content-Disposition' => 'attachment',
-  #                                                  }
-  #                                                }
-  # do_not_validate_attachment_file_type :import_file
-  # do_not_validate_attachment_file_type :download_file
-
   after_commit :schedule_users_import, on: :create
 
-  scope :download_files, -> { where("download_file_file_name <> ''") }
+  scope :download_files, -> { where("download_file_name <> ''") }
 
   def path_for_csv
     if File.exist?(self.import_file.path)
       self.import_file.path
     else
-      # Paperclip.io_adapters.for(self.import_file).path
-      ''
+      ActiveStorage::Blob.service.send(:path_for, self.import_file.key)
     end
   end
 
