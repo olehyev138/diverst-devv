@@ -17,7 +17,6 @@
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 
-# require 'paperclip/matchers'
 require 'pundit/rspec'
 require 'rspec/retry'
 require 'support/matchers'
@@ -105,8 +104,6 @@ RSpec.configure do |config|
   # test failures related to randomization by passing the same `--seed` value
   # as the one that triggered the failure.
   Kernel.srand config.seed
-
-  # config.include Paperclip::Shoulda::Matchers
 
   # https://stackoverflow.com/questions/3175591/rails3-warning-toplevel-constant-applicationcontroller-referenced-by?rq=1
 
