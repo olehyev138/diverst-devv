@@ -1,5 +1,3 @@
-include ActiveJob::TestHelper
-
 FactoryBot.define do
   factory :news_link_photo do
     association :news_link
