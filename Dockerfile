@@ -11,8 +11,6 @@ RUN mkdir -p /home/nonadmin
 
 WORKDIR /home/nonadmin
 
-RUN git clone -b paperclip_version https://github.com/TeamDiverst/simple_form_fancy_uploads.git
-
 RUN mkdir -p diverst
 
 WORKDIR /home/nonadmin/diverst
