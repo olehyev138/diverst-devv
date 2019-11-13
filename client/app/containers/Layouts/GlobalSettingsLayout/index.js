@@ -2,8 +2,9 @@ import React, { memo, useEffect, useState } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
 
-import Box from '@material-ui/core/Box';
 import { withStyles } from '@material-ui/core/styles';
+import Box from '@material-ui/core/Box';
+import Fade from '@material-ui/core/Fade';
 
 import AdminLayout from '../AdminLayout';
 import GlobalSettingsLinks from 'components/GlobalSettings/GlobalSettingsLinks';
@@ -12,7 +13,8 @@ const styles = theme => ({});
 
 const GlobalSettingsPages = Object.freeze({
   fields: 0,
-  custom_texts: 1
+  custom_texts: 1,
+  configuration: 2
 });
 
 const GlobalSettingsLayout = ({ component: Component, ...rest }) => {
@@ -37,7 +39,11 @@ const GlobalSettingsLayout = ({ component: Component, ...rest }) => {
             {...matchProps}
           />
           <Box mb={3} />
-          <Component {...other} />
+          <Fade in appear>
+            <div>
+              <Component {...other} />
+            </div>
+          </Fade>
         </React.Fragment>
       )}
     />

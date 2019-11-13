@@ -12,12 +12,13 @@ import {
   GET_USER_EVENTS_SUCCESS, GET_USER_POSTS_BEGIN,
   CREATE_USER_BEGIN, CREATE_USER_SUCCESS, CREATE_USER_ERROR,
   UPDATE_USER_BEGIN, UPDATE_USER_SUCCESS, UPDATE_USER_ERROR,
-  UPDATE_FIELD_DATA_BEGIN, UPDATE_FIELD_DATA_SUCCESS, UPDATE_FIELD_DATA_ERROR
+  UPDATE_FIELD_DATA_BEGIN, UPDATE_FIELD_DATA_SUCCESS, UPDATE_FIELD_DATA_ERROR, GET_USER_BEGIN, GET_USER_ERROR,
 } from 'containers/User/constants';
 
 export const initialState = {
   isLoadingPosts: true,
   isLoadingEvents: true,
+  isFormLoading: true,
   isCommitting: false,
   userList: {},
   userTotal: null,
@@ -45,8 +46,15 @@ function usersReducer(state = initialState, action) {
       case GET_USERS_ERROR:
         draft.isFetchingUsers = false;
         return;
+      case GET_USER_BEGIN:
+        draft.isFormLoading = true;
+        break;
       case GET_USER_SUCCESS:
         draft.currentUser = action.payload.user;
+        draft.isFormLoading = false;
+        break;
+      case GET_USER_ERROR:
+        draft.isFormLoading = false;
         break;
       case GET_USER_POSTS_BEGIN:
         draft.isLoadingPosts = true;

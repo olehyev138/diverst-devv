@@ -371,6 +371,23 @@ export const ROUTES = {
         },
       }
     },
+    innovate: {
+      index: {
+        data: {
+          pathPrefix: '/admin/innovate',
+        }
+      },
+      campaigns: {
+        index: {
+          path: () => '/admin/innovate/campaigns'
+        }
+      },
+      financials: {
+        index: {
+          path: () => '/admin/innovate/financials'
+        }
+      },
+    },
     system: {
       index: {
         data: {
@@ -403,6 +420,11 @@ export const ROUTES = {
         customText: {
           edit: {
             path: () => '/admin/system/settings/custom_texts'
+          }
+        },
+        enterpriseConfiguration: {
+          index: {
+            path: () => '/admin/system/settings/configuration'
           }
         }
       }

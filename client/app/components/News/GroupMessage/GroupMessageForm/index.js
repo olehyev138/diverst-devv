@@ -19,56 +19,59 @@ import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import messages from 'containers/News/messages';
 import { buildValues } from 'utils/formHelpers';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
+import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 
 /* eslint-disable object-curly-newline */
 export function GroupMessageFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
   return (
-    <Card>
-      <Form>
-        <CardContent>
-          <Field
-            component={TextField}
-            onChange={handleChange}
-            fullWidth
-            disabled={props.isCommitting}
-            required
-            id='subject'
-            name='subject'
-            margin='normal'
-            label={<DiverstFormattedMessage {...messages.subject} />}
-            value={values.subject}
-          />
-          <Field
-            component={TextField}
-            onChange={handleChange}
-            required
-            fullWidth
-            disabled={props.isCommitting}
-            multiline
-            rows={4}
-            variant='outlined'
-            id='content'
-            name='content'
-            margin='normal'
-            value={values.content}
-            label={<DiverstFormattedMessage {...messages.content} />}
-          />
-        </CardContent>
-        <Divider />
-        <CardActions>
-          <DiverstSubmit isCommitting={props.isCommitting}>
-            {buttonText}
-          </DiverstSubmit>
-          <Button
-            disabled={props.isCommitting}
-            to={props.links.newsFeedIndex}
-            component={WrappedNavLink}
-          >
-            <DiverstFormattedMessage {...messages.cancel} />
-          </Button>
-        </CardActions>
-      </Form>
-    </Card>
+    <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.groupMessage}>
+      <Card>
+        <Form>
+          <CardContent>
+            <Field
+              component={TextField}
+              onChange={handleChange}
+              fullWidth
+              disabled={props.isCommitting}
+              required
+              id='subject'
+              name='subject'
+              margin='normal'
+              label={<DiverstFormattedMessage {...messages.subject} />}
+              value={values.subject}
+            />
+            <Field
+              component={TextField}
+              onChange={handleChange}
+              required
+              fullWidth
+              disabled={props.isCommitting}
+              multiline
+              rows={4}
+              variant='outlined'
+              id='content'
+              name='content'
+              margin='normal'
+              value={values.content}
+              label={<DiverstFormattedMessage {...messages.content} />}
+            />
+          </CardContent>
+          <Divider />
+          <CardActions>
+            <DiverstSubmit isCommitting={props.isCommitting}>
+              {buttonText}
+            </DiverstSubmit>
+            <Button
+              disabled={props.isCommitting}
+              to={props.links.newsFeedIndex}
+              component={WrappedNavLink}
+            >
+              <DiverstFormattedMessage {...messages.cancel} />
+            </Button>
+          </CardActions>
+        </Form>
+      </Card>
+    </DiverstFormLoader>
   );
 }
 
@@ -91,20 +94,24 @@ export function GroupMessageForm(props) {
         props.groupMessageAction(values);
       }}
 
-      render={formikProps => <GroupMessageFormInner {...props} {...formikProps} />}
+      render={formikProps => <GroupMessageFormInner {...props} {...formikProps} groupMessage={groupMessage} />}
     />
   );
 }
 
 GroupMessageForm.propTypes = {
+  edit: PropTypes.bool,
   groupMessageAction: PropTypes.func,
   groupMessage: PropTypes.object,
   currentUser: PropTypes.object,
   currentGroup: PropTypes.object,
   isCommitting: PropTypes.bool,
+  isFormLoading: PropTypes.bool,
 };
 
 GroupMessageFormInner.propTypes = {
+  edit: PropTypes.bool,
+  groupMessage: PropTypes.object,
   handleSubmit: PropTypes.func,
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
@@ -113,6 +120,7 @@ GroupMessageFormInner.propTypes = {
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
   isCommitting: PropTypes.bool,
+  isFormLoading: PropTypes.bool,
   links: PropTypes.shape({
     newsFeedIndex: PropTypes.string
   })

@@ -5,12 +5,24 @@
  */
 import produce from 'immer';
 import {
-  GET_EVENTS_BEGIN, GET_EVENTS_SUCCESS, EVENTS_UNMOUNT, GET_EVENT_SUCCESS, GET_EVENTS_ERROR, GET_EVENT_ERROR,
-  CREATE_EVENT_BEGIN, UPDATE_EVENT_BEGIN, CREATE_EVENT_SUCCESS, UPDATE_EVENT_SUCCESS, CREATE_EVENT_ERROR, UPDATE_EVENT_ERROR
+  GET_EVENTS_BEGIN,
+  GET_EVENTS_SUCCESS,
+  EVENTS_UNMOUNT,
+  GET_EVENT_SUCCESS,
+  GET_EVENTS_ERROR,
+  GET_EVENT_ERROR,
+  CREATE_EVENT_BEGIN,
+  UPDATE_EVENT_BEGIN,
+  CREATE_EVENT_SUCCESS,
+  UPDATE_EVENT_SUCCESS,
+  CREATE_EVENT_ERROR,
+  UPDATE_EVENT_ERROR,
+  GET_EVENT_BEGIN,
 } from './constants';
 
 export const initialState = {
   isLoading: true,
+  isFormLoading: true,
   isCommitting: false,
   events: [],
   eventsTotal: null,
@@ -33,12 +45,15 @@ function eventsReducer(state = initialState, action) {
       case GET_EVENTS_ERROR:
         draft.isLoading = false;
         break;
+      case GET_EVENT_BEGIN:
+        draft.isFormLoading = true;
+        break;
       case GET_EVENT_SUCCESS:
         draft.currentEvent = action.payload.initiative;
-        draft.isLoading = false;
+        draft.isFormLoading = false;
         break;
       case GET_EVENT_ERROR:
-        draft.isLoading = false;
+        draft.isFormLoading = false;
         break;
       case CREATE_EVENT_BEGIN:
       case UPDATE_EVENT_BEGIN:

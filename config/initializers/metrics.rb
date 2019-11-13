@@ -33,8 +33,12 @@
                 series_name: 'sidekiq_jobs',
                 retention_policy: nil,
                 start_events: true,
-                tags: { application: app_name, server: Socket.gethostname,
-                        instance: instance, domain: ENV['DOMAIN'] },
+                tags: {
+                  application: app_name,
+                  server: Socket.gethostname,
+                  instance: instance,
+                  domain: ENV['DOMAIN']
+                },
                 except: []
     end
   end

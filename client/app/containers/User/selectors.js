@@ -76,6 +76,11 @@ const selectIsLoadingEvents = () => createSelector(
   userState => userState.isLoadingEvents
 );
 
+const selectIsFormLoading = () => createSelector(
+  selectUsersDomain,
+  userState => userState.isFormLoading
+);
+
 const selectIsCommitting = () => createSelector(
   selectUsersDomain,
   userState => userState.isCommitting
@@ -109,5 +114,5 @@ export {
   selectIsLoadingEvents, selectFormUser,
   selectPaginatedPosts, selectPostsTotal,
   selectPaginatedEvents, selectEventsTotal,
-  selectIsCommitting
+  selectIsCommitting, selectIsFormLoading
 };

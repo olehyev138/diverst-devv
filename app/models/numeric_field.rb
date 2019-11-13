@@ -2,6 +2,8 @@
 #  - holds a singular numeric value - ie age
 class NumericField < Field
   # return list of operator codes for a NumericField
+  include NumericOptionnable # TODO: MAY BE DEPRECATED
+
   def operators
     [
       Field::OPERATORS[:equals],
@@ -34,8 +36,6 @@ class NumericField < Field
     end
   end
 
-  include NumericOptionnable
-
   def string_value(value)
     return '-' if value.nil?
 
@@ -67,7 +67,6 @@ class NumericField < Field
 
     delta.to_f / high_delta
   end
-
 
   def stats_in(entries)
     values = entries.map do |entry|

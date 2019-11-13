@@ -25,19 +25,26 @@ import {
   UPDATE_FOLDER_ERROR,
   UPDATE_RESOURCE_BEGIN,
   UPDATE_RESOURCE_SUCCESS,
-  UPDATE_RESOURCE_ERROR
+  UPDATE_RESOURCE_ERROR,
+  GET_RESOURCE_BEGIN,
+  GET_FOLDER_BEGIN,
+  GET_FOLDER_ERROR,
+  GET_FOLDERS_ERROR,
+  GET_RESOURCE_ERROR,
+  GET_RESOURCES_ERROR,
 } from './constants';
 
 export const initialState = {
   isCommitting: false,
   isLoading: true,
+  isFormLoading: true,
   folders: null,
   resources: null,
   foldersTotal: null,
   resourcesTotal: null,
   currentFolder: null,
   currentResource: null,
-  valid: null,
+  valid: true,
 };
 
 /* eslint-disable default-case, no-param-reassign */
@@ -45,6 +52,14 @@ function resourcesReducer(state = initialState, action) {
   /* eslint-disable consistent-return */
   return produce(state, (draft) => {
     switch (action.type) {
+      case GET_FOLDER_BEGIN:
+        draft.isFormLoading = true;
+        break;
+      case GET_FOLDER_SUCCESS:
+        draft.currentFolder = action.payload.folder;
+        draft.valid = !action.payload.folder.password_protected;
+        draft.isFormLoading = false;
+        break;
       case GET_FOLDERS_BEGIN:
         draft.isLoading = true;
         break;
@@ -53,10 +68,12 @@ function resourcesReducer(state = initialState, action) {
         draft.foldersTotal = action.payload.total;
         draft.isLoading = false;
         break;
-      case GET_FOLDER_SUCCESS:
-        draft.currentFolder = action.payload.folder;
-        draft.valid = !action.payload.folder.password_protected;
-        draft.isLoading = false;
+      case GET_RESOURCE_BEGIN:
+        draft.isFormLoading = true;
+        break;
+      case GET_RESOURCE_SUCCESS:
+        draft.currentResource = action.payload.resource;
+        draft.isFormLoading = false;
         break;
       case GET_RESOURCES_BEGIN:
         draft.isLoading = true;
@@ -66,8 +83,12 @@ function resourcesReducer(state = initialState, action) {
         draft.resourcesTotal = action.payload.total;
         draft.isLoading = false;
         break;
-      case GET_RESOURCE_SUCCESS:
-        draft.currentResource = action.payload.resource;
+      case GET_FOLDER_ERROR:
+      case GET_RESOURCE_ERROR:
+        draft.isFormLoading = false;
+        break;
+      case GET_FOLDERS_ERROR:
+      case GET_RESOURCES_ERROR:
         draft.isLoading = false;
         break;
       case CREATE_FOLDER_BEGIN:

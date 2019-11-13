@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { withStyles } from '@material-ui/core/styles';
+import Fade from '@material-ui/core/Fade';
 
 import ApplicationHeader from 'components/Shared/ApplicationHeader';
 import ApplicationLayout from 'containers/Layouts/ApplicationLayout';
@@ -70,7 +71,9 @@ const AuthenticatedLayout = ({
                   />
                 </React.Fragment>
               )}
-              <Component {...matchProps} />
+              <Fade in appear>
+                <Component {...matchProps} />
+              </Fade>
             </React.Fragment>
           )}
         />
