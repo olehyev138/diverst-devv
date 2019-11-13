@@ -6,43 +6,76 @@
 
 import { defineMessages } from 'react-intl';
 
-export const scope = 'diverst.texts';
+export const scope = 'diverst.containers.App';
 
 export default defineMessages({
-  erg: {
-    id: `${scope}.erg`,
+  texts: {
+    erg: {
+      id: `${scope}.texts.erg`,
+    },
+    program: {
+      id: `${scope}.texts.program`,
+    },
+    structure: {
+      id: `${scope}.texts.structure`,
+    },
+    outcome: {
+      id: `${scope}.texts.outcome`,
+    },
+    badge: {
+      id: `${scope}.texts.badge`,
+    },
+    segment: {
+      id: `${scope}.texts.segment`,
+    },
+    dci_full_title: {
+      id: `${scope}.texts.dci_full_title`,
+    },
+    dci_abbreviation: {
+      id: `${scope}.texts.dci_abbreviation`,
+    },
+    member_preference: {
+      id: `${scope}.texts.member_preference`,
+    },
+    parent: {
+      id: `${scope}.texts.parent`,
+    },
+    sub_erg: {
+      id: `${scope}.texts.sub_erg`,
+    },
+    privacy_statement: {
+      id: `${scope}.texts.privacy_statement`,
+    },
   },
-  program: {
-    id: `${scope}.program`,
-  },
-  structure: {
-    id: `${scope}.structure`,
-  },
-  outcome: {
-    id: `${scope}.outcome`,
-  },
-  badge: {
-    id: `${scope}.badge`,
-  },
-  segment: {
-    id: `${scope}.segment`,
-  },
-  dci_full_title: {
-    id: `${scope}.dci_full_title`,
-  },
-  dci_abbreviation: {
-    id: `${scope}.dci_abbreviation`,
-  },
-  member_preference: {
-    id: `${scope}.member_preference`,
-  },
-  parent: {
-    id: `${scope}.parent`,
-  },
-  sub_erg: {
-    id: `${scope}.sub_erg`,
-  },
-  privacy_statement: {
-    id: `${scope}.privacy_statement`,
-  },
+  days_of_week: [
+    {
+      id: `${scope}.dayOfWeek.sunday`,
+    },
+    {
+      id: `${scope}.dayOfWeek.monday`,
+    },
+    {
+      id: `${scope}.dayOfWeek.tuesday`,
+    },
+    {
+      id: `${scope}.dayOfWeek.wednesday`,
+    },
+    {
+      id: `${scope}.dayOfWeek.thursday`,
+    },
+    {
+      id: `${scope}.dayOfWeek.friday`,
+    },
+    {
+      id: `${scope}.dayOfWeek.saturday`,
+    },
+  ],
+  confirmation: {
+    yes: {
+      id: `${scope}.confirmation.yes`
+    },
+    no: {
+      id: `${scope}.confirmation.no`
+    }
+  }
 });
