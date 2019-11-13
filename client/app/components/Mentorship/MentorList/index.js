@@ -12,6 +12,8 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { useFormik } from 'formik';
 
+import { injectIntl, intlShape } from 'react-intl';
+
 import {
   Button, Box, Paper, Tab,
   Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
@@ -27,6 +29,7 @@ import DiverstTable from 'components/Shared/DiverstTable';
 import ResponsiveTabs from 'components/Shared/ResponsiveTabs';
 
 import Profile from 'components/Mentorship/MentorshipUser';
+import messages from 'containers/Mentorship/Mentoring/messages';
 
 
 const styles = theme => ({
@@ -42,7 +45,7 @@ const styles = theme => ({
 });
 
 export function MentorList(props, context) {
-  const { type } = props;
+  const { type, intl } = props;
   const singleType = type.slice(-1);
 
   const defaultCreatePayload = {
@@ -85,10 +88,10 @@ export function MentorList(props, context) {
   };
 
   const columns = [
-    { title: 'First Name', field: 'first_name' },
-    { title: 'Last Name', field: 'last_name' },
-    { title: 'Email', field: 'email' },
-    { title: 'Interests', field: 'interests', sorting: false },
+    { title: intl.formatMessage(messages.columns.firstName), field: 'first_name' },
+    { title: intl.formatMessage(messages.columns.lastName), field: 'last_name' },
+    { title: intl.formatMessage(messages.columns.email), field: 'email' },
+    { title: intl.formatMessage(messages.columns.interests), field: 'interests', sorting: false },
   ];
 
   const handleOrderChange = (columnId, orderDir) => {
@@ -97,6 +100,16 @@ export function MentorList(props, context) {
       orderDir: (columnId === -1) ? 'asc' : orderDir
     });
   };
+
+  let title;
+  if (props.currentTab === 0 && type === 'mentors')
+    title = intl.formatMessage(messages.title.current.mentor);
+  else if (props.currentTab === 0 && type === 'mentees')
+    title = intl.formatMessage(messages.title.current.mentee);
+  else if (props.currentTab === 1 && type === 'mentors')
+    title = intl.formatMessage(messages.title.available.mentor);
+  else if (props.currentTab === 1 && type === 'mentees')
+    title = intl.formatMessage(messages.title.available.mentee);
 
   return (
     <React.Fragment>
@@ -107,14 +120,13 @@ export function MentorList(props, context) {
           indicatorColor='primary'
           textColor='primary'
         >
-          <Tab label='Current' />
-          <Tab label='Available' />
-          {/* <Tab label={intl.formatMessage(messages.index.ongoing, customTexts())} /> */}
+          <Tab label={intl.formatMessage(messages.tabs.current)} />
+          <Tab label={intl.formatMessage(messages.tabs.available)} />
         </ResponsiveTabs>
       </Paper>
       <Box mb={1} />
       <DiverstTable
-        title={`${props.currentTab === 0 ? 'Your' : 'Available'} ${type.charAt(0).toUpperCase() + type.slice(1)}`}
+        title={title}
         handlePagination={props.handleMentorPagination}
         onOrderChange={handleOrderChange}
         isLoading={props.isFetchingUsers}
@@ -125,12 +137,14 @@ export function MentorList(props, context) {
         columns={columns}
         actions={[{
           icon: () => props.currentTab === 0 ? (<DeleteIcon />) : (<AssignmentIndIcon />),
-          tooltip: props.currentTab === 0 ? 'Remove' : 'Send Request',
+          tooltip: props.currentTab === 0
+            ? intl.formatMessage(messages.actions.remove)
+            : intl.formatMessage(messages.actions.sendRequest),
           onClick: (_, rowData) => {
             switch (props.currentTab) {
               case 0:
                 // eslint-disable-next-line no-restricted-globals,no-alert
-                if (confirm('Delete mentorship?')) {
+                if (confirm(intl.formatMessage(messages.actions.deleteWarning))) {
                   const payload = { userId: props.user.id, type };
                   if (type === 'mentors') {
                     payload.mentor_id = rowData.id;
@@ -151,7 +165,7 @@ export function MentorList(props, context) {
           }
         }, {
           icon: () => <PersonIcon />,
-          tooltip: 'See Profile',
+          tooltip: intl.formatMessage(messages.actions.viewProfile),
           onClick: (_, rowData) => {
             handleProfileClickOpen(rowData);
           }
@@ -238,10 +252,12 @@ MentorList.propTypes = {
   links: PropTypes.shape({
     userNew: PropTypes.string,
     userEdit: PropTypes.func
-  })
+  }),
+  intl: intlShape.isRequired,
 };
 
 export default compose(
   memo,
   withStyles(styles),
+  injectIntl,
 )(MentorList);
