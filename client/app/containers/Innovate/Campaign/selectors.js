@@ -1,5 +1,7 @@
 import { createSelector } from 'reselect/lib';
 import { initialState } from './reducer';
+import {selectEventsDomain} from "../../Event/selectors";
+import {selectGroupsDomain} from "../../Group/selectors";
 
 const selectCampaignsDomain = state => state.campaigns || initialState;
 
@@ -28,6 +30,11 @@ const selectCampaignTotal = () => createSelector(
   campaignsState => campaignsState.campaignTotal
 );
 
+const selectCampaign = () => createSelector(
+  selectCampaignsDomain,
+  campaignsState => campaignsState.currentCampaign
+);
+
 const selectIsFetchingCampaigns = () => createSelector(
   selectCampaignsDomain,
   campaignsState => campaignsState.isFetchingCampaigns
@@ -38,7 +45,26 @@ const selectIsCommitting = () => createSelector(
   campaignsState => campaignsState.isCommitting
 );
 
+const selectFormCampaign = () => createSelector(
+  selectCampaignsDomain,
+  (campaignsState) => {
+    const { currentCampaign } = campaignsState;
+    if (!currentCampaign) return null;
+
+    // clone group before making mutations on it
+    const selectCampaign = Object.assign({}, currentCampaign);
+
+    selectCampaign.groups = selectCampaign.groups.map(group => ({
+      value: group.id,
+      label: group.name
+    }));
+
+    return selectCampaign;
+  }
+);
+
 export {
-  selectCampaignsDomain, selectPaginatedCampaigns,
-  selectCampaignTotal, selectIsFetchingCampaigns, selectIsCommitting
+  selectCampaignsDomain, selectPaginatedCampaigns, selectCampaign,
+  selectCampaignTotal, selectIsFetchingCampaigns, selectIsCommitting,
+  selectFormCampaign,
 };

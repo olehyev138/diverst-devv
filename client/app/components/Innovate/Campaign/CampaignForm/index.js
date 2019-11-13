@@ -32,6 +32,12 @@ export function CampaignFormInner({ handleSubmit, handleChange, handleBlur, valu
     });
   };
 
+  // const getCampaignBeginAction = (searchKey = '') => {
+  //   props.getCampaignBegin({
+  //     count:
+  //   })
+  // }
+
   return (
     <Card>
       <Form>
@@ -127,7 +133,7 @@ export function CampaignFormInner({ handleSubmit, handleChange, handleBlur, valu
           </DiverstSubmit>
           <Button
             disabled={props.isCommitting}
-            to={props.links.campaignsIndex}
+            to='#'
             component={WrappedNavLink}
           >
             <DiverstFormattedMessage {...messages.cancel} />
@@ -157,7 +163,7 @@ export function CampaignForm(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        props.createCampaignBegin(mapFields(values, ['group_ids']));
+        props.campaignAction(mapFields(values, ['group_ids']));
       }}
 
       render={formikProps => <CampaignFormInner {...props} {...formikProps} />}
@@ -166,13 +172,17 @@ export function CampaignForm(props) {
 }
 
 CampaignForm.propTypes = {
+  edit: PropTypes.bool,
   createCampaignBegin: PropTypes.func,
   group: PropTypes.object,
   groupId: PropTypes.string,
   isCommitting: PropTypes.bool,
+  campaign: PropTypes.object,
 };
 
 CampaignFormInner.propTypes = {
+  edit: PropTypes.bool,
+  createCampaignBegin: PropTypes.func,
   handleSubmit: PropTypes.func,
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,

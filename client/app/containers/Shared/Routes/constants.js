@@ -383,7 +383,10 @@ export const ROUTES = {
         },
         new: {
           path: () => '/admin/innovate/campaigns/new'
-        }
+        },
+        edit: {
+          path: (campaignId = ':campaign_id') => `/admin/innovate/campaigns/${campaignId}/edit`,
+        },
       },
       financials: {
         index: {

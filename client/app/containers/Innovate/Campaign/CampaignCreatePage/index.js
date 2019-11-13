@@ -40,7 +40,7 @@ export function CampaignCreatePage(props) {
 
   return (
     <CampaignForm
-      createCampaignBegin={props.createCampaignBegin}
+      campaignAction={props.createCampaignBegin}
       buttonText='Create'
       getGroupsBegin={props.getGroupsBegin}
       selectGroups={props.groups}
@@ -54,6 +54,7 @@ CampaignCreatePage.propTypes = {
   createCampaignBegin: PropTypes.func,
   campaignsUnmount: PropTypes.func,
   getGroupsBegin: PropTypes.func,
+  groups: PropTypes.array,
   users: PropTypes.array,
   isCommitting: PropTypes.bool,
 };
