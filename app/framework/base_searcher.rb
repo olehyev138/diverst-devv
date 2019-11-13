@@ -46,7 +46,7 @@ module BaseSearcher
     end
 
     def set_includes(params)
-      if params[:includes].presence
+      if params[:includes].present?
         case params[:includes].class.name
         when 'Array'
           includes = params[:includes]
