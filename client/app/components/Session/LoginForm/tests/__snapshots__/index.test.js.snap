@@ -26,7 +26,7 @@ exports[`<LoginForm /> <LoginFormInner /> Should render and match the snapshot 1
         </WithStyles(ForwardRef(Grid))>
       </WithStyles(ForwardRef(Grid))>
       <br />
-      <FormikConnect(FieldInner)
+      <Field
         autoComplete="off"
         autoFocus={true}
         component={
@@ -367,7 +367,7 @@ exports[`<LoginForm /> <LoginFormInner /> Should render and match the snapshot 1
         value=""
         variant="outlined"
       />
-      <FormikConnect(FieldInner)
+      <Field
         autoComplete="off"
         autoFocus={false}
         component={
@@ -772,17 +772,14 @@ exports[`<LoginForm /> <LoginFormInner /> Should render and match the snapshot 1
 `;
 
 exports[`<LoginForm /> Formik Should render and match the snapshot 1`] = `
-<Formik
-  enableReinitialize={false}
+<ForwardRef
   initialValues={
     Object {
       "email": "email@email.com",
       "password": "",
     }
   }
-  isInitialValid={false}
   onSubmit={[Function]}
-  render={[Function]}
   validateOnBlur={false}
   validateOnChange={false}
   validationSchema={
@@ -875,5 +872,7 @@ exports[`<LoginForm /> Formik Should render and match the snapshot 1`] = `
       ],
     }
   }
-/>
+>
+  <Component />
+</ForwardRef>
 `;

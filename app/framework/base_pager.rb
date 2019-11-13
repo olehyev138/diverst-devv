@@ -13,6 +13,16 @@ module BasePager
       self.count = 10
     end
 
+    def get_params(params)
+      item_page = params[:page].present? ? params[:page].to_i : page
+      item_count = params[:count].present? ? params[:count].to_i : count
+      offset = item_page * item_count
+      orderBy = params[:orderBy].presence || default_order_by
+      order = params[:order].presence || default_order
+
+      [item_page, item_count, offset, orderBy, order]
+    end
+
     def pager(diverst_request, params = {}, search_method = :lookup)
       return elasticsearch(diverst_request, params) if params[:elasticsearch]
 
@@ -22,14 +32,10 @@ module BasePager
       raise Exception.new if default_order.blank?
 
       # set the parameters
-      item_page = params[:page].present? ? params[:page].to_i : page
-      item_count = params[:count].present? ? params[:count].to_i : count
-      offset = item_page * item_count
-      orderBy = params[:orderBy].presence || default_order_by
-      order = params[:order].presence || default_order
+      item_page, item_count, offset, orderBy, order = get_params(params)
 
       # get the search method
-      search_method_obj = self.method(:lookup)
+      search_method_obj = self.method(search_method)
 
       # search
       total = search_method_obj.call(params, diverst_request).count
@@ -37,6 +43,26 @@ module BasePager
                         .order("#{orderBy} #{order}")
                         .limit(item_count)
                         .offset(offset)
+
+      # return the page
+      Page.new(items, total)
+    end
+
+    def pager_with_query(query, params = {})
+      set_defaults
+
+      raise Exception.new if default_order_by.blank?
+      raise Exception.new if default_order.blank?
+
+      # set the parameters
+      item_page, item_count, offset, orderBy, order = get_params(params)
+
+      # search
+      total = query.count
+      items = query
+                .order("#{orderBy} #{order}")
+                .limit(item_count)
+                .offset(offset)
 
       # return the page
       Page.new(items, total)

@@ -912,11 +912,11 @@ ActiveRecord::Schema.define(version: 2019_11_05_183507) do
 
   create_table "mentorship_availabilities", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.bigint "user_id", null: false
-    t.string "start", null: false
-    t.string "end", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "day", default: "monday", null: false
+    t.integer "day", default: 1, null: false
+    t.time "start", null: false
+    t.time "end", null: false
     t.index ["user_id"], name: "index_mentorship_availabilities_on_user_id"
   end
 

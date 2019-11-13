@@ -62,11 +62,41 @@ export const ROUTES = {
       }
     },
     mentorship: {
-      path: () => '/mentorship',
       data: {
         titleMessage: messages.user.mentorship,
-      }
-    },
+      },
+      home: {
+        path: () => '/mentorship',
+        data: {
+          titleMessage: messages.user.mentorship,
+        },
+      },
+      show: {
+        path: (userId = ':user_id') => `/mentorship/${userId}`,
+        data: {
+          titleMessage: messages.user.mentorship,
+        },
+      },
+      edit: {
+        path: (userId = ':user_id') => `/mentorship/${userId}/edit`,
+        data: {
+          titleMessage: messages.user.mentorship,
+        },
+      },
+      mentors: {
+        path: (userId = ':user_id') => `/mentorship/${userId}/mentors`,
+        data: {
+          titleMessage: messages.user.mentorship,
+        },
+      },
+      mentees: {
+        path: (userId = ':user_id') => `/mentorship/${userId}/mentees`,
+        data: {
+          titleMessage: messages.user.mentorship,
+        },
+      },
+    }
+    ,
   },
 
   group: {

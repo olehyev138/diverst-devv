@@ -6,7 +6,7 @@ module UserGroup::Actions
   end
 
   module ClassMethods
-    def base_joins
+    def base_includes
       [ :user, :group ]
     end
   end
