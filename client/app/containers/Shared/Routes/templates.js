@@ -90,6 +90,7 @@ import ResourceEditPage from 'containers/Resource/Resource/ResourceEditPage/Load
 import CampaignListPage from 'containers/Innovate/Campaign/CampaignListPage/Loadable';
 import CampaignCreatePage from 'containers/Innovate/Campaign/CampaignCreatePage/Loadable';
 import CampaignEditPage from 'containers/Innovate/Campaign/CampaignEditPage/Loadable';
+import CampaignShowPage from 'containers/Innovate/Campaign/CampaignShowPage/Loadable';
 /* Global */
 import NotFoundPage from 'containers/Shared/NotFoundPage/Loadable';
 import PlaceholderPage from 'components/Shared/PlaceholderPage/Loadable';
@@ -104,5 +105,6 @@ export {
   UserDashboardPage, MetricsDashboardListPage, MetricsDashboardCreatePage, MetricsDashboardEditPage, MetricsDashboardPage,
   CustomGraphCreatePage, CustomGraphEditPage, GroupManageLayout, GroupSettingsPage, CustomTextEditPage,
   UserNewsLinkPage, UserEventsPage, FoldersPage, FolderCreatePage, FolderEditPage, FolderPage, ResourceCreatePage,
-  ResourceEditPage, UserProfilePage, InnovateLayout, CampaignListPage, CampaignCreatePage, CampaignEditPage, EnterpriseConfigurationPage
+  ResourceEditPage, UserProfilePage, InnovateLayout, CampaignListPage, CampaignCreatePage, CampaignEditPage, CampaignShowPage,
+  EnterpriseConfigurationPage
 };

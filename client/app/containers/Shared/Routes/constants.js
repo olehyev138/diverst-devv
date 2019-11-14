@@ -387,6 +387,9 @@ export const ROUTES = {
         edit: {
           path: (campaignId = ':campaign_id') => `/admin/innovate/campaigns/${campaignId}/edit`,
         },
+        show: {
+          path: (campaignId = ':campaign_id') => `/admin/innovate/campaigns/${campaignId}/show`,
+        }
       },
       financials: {
         index: {
