@@ -1,7 +1,7 @@
 import React, {memo, useState} from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
-
+import dig from 'object-dig';
 import {
   Button, Card, CardActions, CardContent, Divider, Grid, TextField
 } from '@material-ui/core';
@@ -23,12 +23,11 @@ import { DateTime } from 'luxon';
 export function CampaignShow(props) {
   const [defaultStartDate] = useState(DateTime.local().plus({ hour: 1 }));
   const [defaultEndDate] = useState(DateTime.local().plus({ hour: 2 }));
-
   return (
     <React.Fragment>
-      <p>
-        {props.campaign.title}
-      </p>
+      <p>{dig(props.campaign, 'title')}</p>
+      <br/>
+      <p>{dig(props.campaign, 'description')}</p>
     </React.Fragment>
   );
 }
@@ -36,7 +35,7 @@ export function CampaignShow(props) {
 CampaignShow.propTypes = {
   edit: PropTypes.bool,
   createCampaignBegin: PropTypes.func,
-  group: PropTypes.object,
+  groups: PropTypes.object,
   groupId: PropTypes.string,
   getGroupsBegin: PropTypes.func,
   isCommitting: PropTypes.bool,
