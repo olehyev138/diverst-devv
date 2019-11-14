@@ -129,9 +129,7 @@ class Field < ApplicationRecord
   end
 
   def enterprise
-    enter_assoc = association(:enterprise)
-    return enter_assoc.target if enter_assoc.loaded? && !enter_assoc.stale_target?
-    return Enterprise.find_by_id(enterprise_id) if enterprise_id.present?
+    return association(:enterprise).reader if enterprise_id.present?
     return group.enterprise if group_id.present?
     return poll.enterprise if poll_id.present?
     return initiative.enterprise if initiative_id.present?
