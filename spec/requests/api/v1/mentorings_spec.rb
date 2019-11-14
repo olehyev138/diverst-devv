@@ -38,6 +38,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
 
   describe '#create' do
     it 'creates an item' do
+      pending('Policy for creations Temporarily Disabled')
       post "/api/v1/#{route}", params: { "#{route.singularize}": build(route.singularize.to_sym).attributes }, headers: headers
       expect(response).to have_http_status(201)
     end
@@ -48,7 +49,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
       expect(response).to have_http_status(:bad_request)
     end
 
-    include_examples 'InvalidInputException when creating', model
+    include_examples 'InvalidInputException when creating', model, :pending, 'Policy for creations Temporarily Disabled'
   end
 
   describe '#update' do

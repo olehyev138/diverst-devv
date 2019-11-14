@@ -151,8 +151,22 @@ function LoginForm(props, context) {
       form.current.setErrors({ ...form.current.state.errors, ...props.formErrors });
   });
 
+  const Form = React.forwardRef((props, ref) => {
+    const clone = Object.assign({}, props);
+    delete clone.children;
+
+    return (
+      <Formik
+        {...clone}
+      >
+        {/* eslint-disable-next-line react/prop-types */}
+        {props.children}
+      </Formik>
+    );
+  });
+
   return (
-    <Formik
+    <Form
       ref={form}
       initialValues={{
         email: props.email,
@@ -164,8 +178,9 @@ function LoginForm(props, context) {
       onSubmit={(values, actions) => {
         props.loginBegin(values);
       }}
-      render={props => <LoginFormInner {...props} classes={classes} width={width} />}
-    />
+    >
+      {props => <LoginFormInner {...props} classes={classes} width={width} />}
+    </Form>
   );
 }
 
