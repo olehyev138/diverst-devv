@@ -12,8 +12,6 @@ import {
   CREATE_CAMPAIGN_BEGIN, CREATE_CAMPAIGN_SUCCESS, CREATE_CAMPAIGN_ERROR,
 } from './constants';
 
-
-
 export const initialState = {
   isCommitting: false,
   campaignList: [],

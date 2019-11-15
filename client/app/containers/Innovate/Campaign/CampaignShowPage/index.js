@@ -36,7 +36,6 @@ export function CampaignShowPage(props) {
 
     return () => props.campaignsUnmount();
   }, []);
-  console.log(props.campaign);
   return (
     <CampaignShow
       getCampaignBegin={props.getCampaignBegin}

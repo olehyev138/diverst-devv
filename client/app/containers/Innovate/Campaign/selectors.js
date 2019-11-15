@@ -1,7 +1,6 @@
 import { createSelector } from 'reselect/lib';
 import { initialState } from './reducer';
-import {selectEventsDomain} from "../../Event/selectors";
-import {selectGroupsDomain} from "../../Group/selectors";
+import { selectGroupsDomain } from '../../Group/selectors';
 
 const selectCampaignsDomain = state => state.campaigns || initialState;
 

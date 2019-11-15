@@ -1,4 +1,4 @@
-import React, {memo, useState} from 'react';
+import React, { memo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import dig from 'object-dig';
@@ -23,11 +23,13 @@ import { DateTime } from 'luxon';
 export function CampaignShow(props) {
   const [defaultStartDate] = useState(DateTime.local().plus({ hour: 1 }));
   const [defaultEndDate] = useState(DateTime.local().plus({ hour: 2 }));
+  const campaignGroups= dig(props.campaign, 'groups');
+
   return (
     <React.Fragment>
-      <p>{dig(props.campaign, 'title')}</p>
-      <br/>
-      <p>{dig(props.campaign, 'description')}</p>
+      <p>{ dig(props.campaign, 'title') }</p>
+
+      <p>{ dig(props.campaign, 'description') }</p>
     </React.Fragment>
   );
 }
@@ -42,9 +44,6 @@ CampaignShow.propTypes = {
   campaign: PropTypes.object,
   campaignAction: PropTypes.func,
 };
-
-
-
 
 export default compose(
   memo,

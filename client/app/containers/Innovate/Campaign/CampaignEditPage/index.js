@@ -41,7 +41,6 @@ export function CampaignEditPage(props) {
 
     return () => props.campaignsUnmount();
   }, []);
-console.log(props.campaign);
   return (
     <CampaignForm
       edit

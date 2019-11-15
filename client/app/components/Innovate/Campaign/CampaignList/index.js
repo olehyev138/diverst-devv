@@ -56,7 +56,7 @@ export function CampaignList(props) {
   ];
 
   return (
-    <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.campaigns}>
+    <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.campaignList}>
       <React.Fragment>
         <Box className={classes.floatRight}>
           <Button
@@ -111,6 +111,7 @@ CampaignList.propTypes = {
   handlePagination: PropTypes.func,
   handleOrdering: PropTypes.func,
   isFormLoading: PropTypes.bool,
+  edit: PropTypes.bool,
 };
 
 export default compose(
