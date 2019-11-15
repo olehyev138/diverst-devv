@@ -192,7 +192,7 @@ class Groups::GroupMembersController < ApplicationController
   end
 
   def export_group_members_list_csv
-    authorize [@group], :update?, policy_class: GroupMemberPolicy
+    authorize [@group], :export_group_members_list_csv?, policy_class: GroupMemberPolicy
     export_csv_params = params[:export_csv_params]
     GroupMemberListDownloadJob.perform_later(current_user.id, @group.id, export_csv_params)
     track_activity(@group, :export_member_list)
