@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191104145811) do
+ActiveRecord::Schema.define(version: 20191115162806) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -1336,7 +1336,7 @@ ActiveRecord::Schema.define(version: 20191104145811) do
     t.text     "embed_code", limit: 65535
     t.datetime "created_at",               null: false
     t.datetime "updated_at",               null: false
-    t.string   "url",        limit: 191
+    t.text     "url",        limit: 65535
     t.integer  "group_id",   limit: 4
   end
 
