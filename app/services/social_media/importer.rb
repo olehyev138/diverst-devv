@@ -47,6 +47,7 @@ class SocialMedia::Importer
   end
 
   def self.fetch_resource(url, options = {})
+    url = url[0...-1] if url[-1] == '/'
     resource = OEmbed::Providers.get(url, DEFAULT_MEDIA_OPTIONS.merge(options))
   rescue
     nil
