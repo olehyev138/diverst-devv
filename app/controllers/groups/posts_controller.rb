@@ -22,21 +22,31 @@ class Groups::PostsController < ApplicationController
     end
 
     if @group.enterprise.enable_social_media?
-      @pending_posts = @group.news_feed_links.includes(:news_link, :group_message, :social_link).not_approved.where(archived_at: nil).order(created_at: :desc)
+      @pending_posts = @group.news_feed_links.includes(:news_link, :group_message, :social_link).where(approved: false, archived_at: nil).order(created_at: :desc)
       filter_posts(@posts.includes(:news_link, :group_message, :social_link).where(approved: true, archived_at: nil))
     else
-      @pending_posts = @group.news_feed_links.includes(:news_link, :group_message).not_approved.where(archived_at: nil).order(created_at: :desc)
+      @pending_posts = @group.news_feed_links.includes(:news_link, :group_message).where(approved: false, archived_at: nil).order(created_at: :desc)
       filter_posts(@posts.includes(:news_link, :group_message).where(approved: true, archived_at: nil))
     end
   end
 
   def pending
-    if @group.enterprise.enable_social_media?
-      @posts = @group.news_feed_links.includes(:news_link, :group_message, :social_link).approved.where(archived_at: nil).order(created_at: :desc)
-      @pending_posts = @group.news_feed_links.includes(:news_link, :group_message, :social_link).not_approved.where(archived_at: nil).order(created_at: :desc)
+    if GroupPolicy.new(current_user, @group).manage?
+      without_segments
+    elsif GroupPostsPolicy.new(current_user, [@group]).view_latest_news?
+      with_segments
     else
-      @posts = @group.news_feed_links.includes(:news_link, :group_message).approved.where(archived_at: nil).order(created_at: :desc)
-      @pending_posts = @group.news_feed_links.includes(:news_link, :group_message).not_approved.where(archived_at: nil).order(created_at: :desc)
+      @count = 0
+      @posts = []
+    end
+
+
+    if @group.enterprise.enable_social_media?
+      @pending_posts = @group.news_feed_links.includes(:news_link, :group_message, :social_link).where(approved: false, archived_at: nil).order(created_at: :desc)
+      filter_posts(@posts.includes(:news_link, :group_message, :social_link).where(approved: true, archived_at: nil))
+    else
+      @pending_posts = @group.news_feed_links.includes(:news_link, :group_message).where(approved: false, archived_at: nil).order(created_at: :desc)
+      filter_posts(@posts.includes(:news_link, :group_message).where(approved: true, archived_at: nil))
     end
   end
 
