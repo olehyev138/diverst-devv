@@ -619,6 +619,7 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
         allow(GroupMemberListDownloadJob).to receive(:perform_later)
         request.env['HTTP_REFERER'] = 'back'
         group.members << active_members
+        create(:group_leader, user: user, group: group)
         get :export_group_members_list_csv, group_id: group.id
       end
 
