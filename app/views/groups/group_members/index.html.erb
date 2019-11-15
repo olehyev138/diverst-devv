@@ -1,6 +1,6 @@
 <div class="content__header">
   <h1>Members (<%= @members.size %>)</h1>
-  <% if current_user.is_group_leader_of?(@group) || GroupMemberPolicy.new(current_user, [@group]).update? %>
+  <% if GroupMemberPolicy.new(current_user, [@group]).export_group_members_list_csv? %>
     <%= link_to "+ Add members", new_group_group_member_path(@group), class: "btn btn--primary hidden-xs" %>
     <%= link_to "+ Add members", new_group_group_member_path(@group), class: "btn btn-primary visible-xs" %>
     <div class="flex-row__cell">

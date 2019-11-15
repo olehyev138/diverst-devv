@@ -119,6 +119,10 @@ class GroupBasePolicy < Struct.new(:user, :context)
     manage_group_resource(base_manage_permission)
   end
 
+  def export_group_members_list_csv?
+    user.is_group_leader_of?(group) || update?
+  end
+
   def destroy?
     update?
   end
