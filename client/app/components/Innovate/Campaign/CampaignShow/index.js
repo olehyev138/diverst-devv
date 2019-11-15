@@ -23,7 +23,6 @@ import { DateTime } from 'luxon';
 export function CampaignShow(props) {
   const [defaultStartDate] = useState(DateTime.local().plus({ hour: 1 }));
   const [defaultEndDate] = useState(DateTime.local().plus({ hour: 2 }));
-  const campaignGroups= dig(props.campaign, 'groups');
 
   return (
     <React.Fragment>
