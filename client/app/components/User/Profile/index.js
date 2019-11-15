@@ -13,7 +13,7 @@ import EditIcon from '@material-ui/icons/Edit';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import messages from 'containers/User/messages';
-import { FormattedMessage } from 'react-intl';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import CustomFieldShow from 'components/Shared/Fields/FieldDisplays/Field/index';
 
 import DiverstShowLoader from 'components/Shared/DiverstShowLoader';
@@ -68,7 +68,7 @@ export function Profile(props) {
                 className={classes.buttons}
                 startIcon={<EditIcon />}
               >
-                <FormattedMessage {...messages.edit} />
+                <DiverstFormattedMessage {...messages.edit} />
               </Button>
             </Grid>
           </Grid>

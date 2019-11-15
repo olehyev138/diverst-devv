@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190817013235) do
+ActiveRecord::Schema.define(version: 20191014182207) do
 
   create_table "activities", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.string "trackable_type", collation: "utf8mb4_unicode_ci"
@@ -891,11 +891,11 @@ ActiveRecord::Schema.define(version: 20190817013235) do
 
   create_table "mentorship_availabilities", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.bigint "user_id", null: false
-    t.string "start", null: false
-    t.string "end", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "day", default: "monday", null: false
+    t.integer "day", default: 1, null: false
+    t.time "start", null: false
+    t.time "end", null: false
     t.index ["user_id"], name: "index_mentorship_availabilities_on_user_id"
   end
 

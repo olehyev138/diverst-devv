@@ -12,7 +12,8 @@ import {
   CustomGraphCreatePage, CustomGraphEditPage, GroupManageLayout, GroupSettingsPage, CustomTextEditPage,
   UserNewsLinkPage, UserEventsPage, FoldersPage, FolderCreatePage, FolderEditPage, FolderPage, ResourceCreatePage,
   ResourceEditPage, UserProfilePage, InnovateLayout, CampaignListPage, CampaignCreatePage, CampaignEditPage, CampaignShowPage,
-  EnterpriseConfigurationPage
+  EnterpriseConfigurationPage,
+  MentorshipProfilePage, MentorshipEditProfilePage, MentorshipLayout, MentorsPage,
 } from './templates';
 
 // Paths
@@ -35,7 +36,13 @@ export default function Routes(props) {
       <UserLayout exact {...expandRoute(ROUTES.user.downloads)} component={PlaceholderPage} />
       <UserLayout {...expandRoute(ROUTES.user.edit)} component={UserEditPage} />
       <UserLayout {...expandRoute(ROUTES.user.show)} component={UserProfilePage} disableBreadcrumbs />
-      <UserLayout {...expandRoute(ROUTES.user.mentorship)} component={PlaceholderPage} />
+
+      { /* User - Mentorship */ }
+      <MentorshipLayout {...expandRoute(ROUTES.user.mentorship.edit)} component={MentorshipEditProfilePage} disableBreadcrumbs />
+      <MentorshipLayout {...expandRoute(ROUTES.user.mentorship.mentors)} component={MentorsPage} type='mentors' disableBreadcrumbs />
+      <MentorshipLayout {...expandRoute(ROUTES.user.mentorship.mentees)} component={MentorsPage} type='mentees' disableBreadcrumbs />
+      <MentorshipLayout {...expandRoute(ROUTES.user.mentorship.show)} component={MentorshipProfilePage} disableBreadcrumbs />
+      <MentorshipLayout {...expandRoute(ROUTES.user.mentorship.home)} component={MentorshipProfilePage} disableBreadcrumbs />
 
       { /* Admin */ }
       { /* Admin - Analyze */ }

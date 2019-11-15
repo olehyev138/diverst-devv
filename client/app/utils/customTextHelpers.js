@@ -6,7 +6,7 @@ function customTexts() {
   const customTexts = {};
 
   // eslint-disable-next-line no-return-assign
-  Object.keys(customTextMessages).forEach((key, index) => customTexts[key] = intl.formatMessage(customTextMessages[key]));
+  Object.keys(customTextMessages.texts).forEach((key, index) => customTexts[key] = intl.formatMessage(customTextMessages.texts[key]));
 
   return customTexts;
 }

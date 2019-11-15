@@ -160,7 +160,7 @@ export function MobileNavMenu({ classes, mobileNavAnchor, isMobileNavOpen, handl
         </ListItemIcon>
         <DiverstFormattedMessage {...ROUTES.user.downloads.data.titleMessage} />
       </MenuItem>
-      <MenuItem component={WrappedNavLink} to={ROUTES.user.mentorship.path()} activeClassName={classes.mobileNavLinkActive}>
+      <MenuItem component={WrappedNavLink} to={ROUTES.user.mentorship.home.path()} activeClassName={classes.mobileNavLinkActive}>
         <ListItemIcon>
           <UsersCircleIcon />
         </ListItemIcon>
@@ -242,7 +242,7 @@ export function NavLinks({ classes }) {
       </Button>
       <Button
         component={WrappedNavLink}
-        to={ROUTES.user.mentorship.path()}
+        to={ROUTES.user.mentorship.home.path()}
         className={classes.navLink}
         activeClassName={classes.navLinkActive}
       >
