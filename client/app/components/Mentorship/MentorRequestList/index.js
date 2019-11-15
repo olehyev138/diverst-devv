@@ -12,6 +12,8 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { useFormik } from 'formik';
 
+import { injectIntl, intlShape } from 'react-intl';
+
 import {
   Button, Box, Paper, Tab,
   Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
@@ -27,6 +29,9 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import DiverstTable from 'components/Shared/DiverstTable';
 
 import Profile from 'components/Mentorship/MentorshipUser';
+import messages from 'containers/Mentorship/Requests/messages';
+import appMessages from 'containers/Shared/App/messages';
+import mentorMessages from 'containers/Mentorship/messages';
 
 
 const styles = theme => ({
@@ -43,7 +48,7 @@ const styles = theme => ({
 
 export function MentorRequestList(props, context) {
   // type = 'incoming' or 'outgoing'
-  const { type } = props;
+  const { type, intl } = props;
 
   const [profileOpen, setProfileOpen] = React.useState(false);
   const [profile, setProfile] = React.useState();
@@ -58,27 +63,44 @@ export function MentorRequestList(props, context) {
   };
 
   const columns = [
-    { title: 'First Name',
+    { title: intl.formatMessage(appMessages.person.givenName),
       field: `${type === 'incoming' ? 'sender' : 'receiver'}.first_name`,
       query_field: 'users.first_name'
     },
-    { title: 'Last Name',
+    { title: intl.formatMessage(appMessages.person.familyName),
       field: `${type === 'incoming' ? 'sender' : 'receiver'}.last_name`,
       query_field: 'users.last_name'
     },
-    { title: 'Notes', field: 'notes', query_field: 'notes' },
-    { title: 'Type', field: 'mentoring_type', query_field: 'mentoring_type' },
-    { title: 'Status', field: 'status', query_field: 'status' },
+    { title: intl.formatMessage(messages.columns.notes), field: 'notes', query_field: 'notes' },
+    {
+      title: intl.formatMessage(messages.columns.type),
+      field: 'mentoring_type',
+      query_field: 'mentoring_type',
+      lookup: {
+        mentor: intl.formatMessage(mentorMessages.mentor.neutral),
+        mentee: intl.formatMessage(mentorMessages.mentee.neutral),
+      }
+    },
+    {
+      title: intl.formatMessage(messages.columns.status),
+      field: 'status',
+      query_field: 'status',
+      lookup: {
+        pending: intl.formatMessage(messages.status.pending),
+        accepted: intl.formatMessage(messages.status.accept),
+        rejected: intl.formatMessage(messages.status.reject),
+      }
+    },
   ];
 
   const actions = [];
   if (type === 'incoming') {
     actions.push({
       icon: () => (<CheckIcon />),
-      tooltip: 'Accept Request',
+      tooltip: intl.formatMessage(messages.actions.approve),
       onClick: (_, rowData) => {
         // eslint-disable-next-line no-restricted-globals,no-alert
-        if (confirm('Accept request?')) {
+        if (confirm(intl.formatMessage(messages.actions.approveWarning))) {
           const payload = { id: rowData.id };
           props.acceptRequest(payload);
         }
@@ -87,10 +109,10 @@ export function MentorRequestList(props, context) {
 
     actions.push({
       icon: () => (<ClearIcon />),
-      tooltip: 'Reject Request',
+      tooltip: intl.formatMessage(messages.actions.reject),
       onClick: (_, rowData) => {
         // eslint-disable-next-line no-restricted-globals,no-alert
-        if (confirm('Reject request?')) {
+        if (confirm(intl.formatMessage(messages.actions.rejectWarning))) {
           const payload = { id: rowData.id };
           props.rejectRequest(payload);
         }
@@ -99,10 +121,10 @@ export function MentorRequestList(props, context) {
   } else
     actions.push({
       icon: () => (<DeleteIcon />),
-      tooltip: 'Delete Request',
+      tooltip: intl.formatMessage(messages.actions.remove),
       onClick: (_, rowData) => {
         // eslint-disable-next-line no-restricted-globals,no-alert
-        if (confirm('Delete request?')) {
+        if (confirm(intl.formatMessage(messages.actions.removeWarning))) {
           const payload = { id: rowData.id };
           props.deleteRequest(payload);
         }
@@ -111,7 +133,7 @@ export function MentorRequestList(props, context) {
 
   actions.push({
     icon: () => <PersonIcon />,
-    tooltip: 'See Profile',
+    tooltip: intl.formatMessage(messages.actions.viewProfile),
     onClick: (_, rowData) => {
       handleProfileClickOpen(type === 'incoming' ? rowData.sender : rowData.receiver);
     }
@@ -128,7 +150,9 @@ export function MentorRequestList(props, context) {
     <React.Fragment>
       <Box mb={1} />
       <DiverstTable
-        title={`${type.charAt(0).toUpperCase() + type.slice(1)} Request(s)`}
+        title={type === 'incoming'
+          ? intl.formatMessage(messages.title.incoming)
+          : intl.formatMessage(messages.title.outgoing)}
         handlePagination={props.handleRequestPagination}
         onOrderChange={handleOrderChange}
         isLoading={props.isFetchingRequests}
@@ -196,9 +220,11 @@ MentorRequestList.propTypes = {
   acceptRequest: PropTypes.func,
   deleteRequest: PropTypes.func,
   reloadRequest: PropTypes.func,
+  intl: intlShape.isRequired,
 };
 
 export default compose(
   memo,
   withStyles(styles),
+  injectIntl,
 )(MentorRequestList);

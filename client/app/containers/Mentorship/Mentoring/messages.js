@@ -10,15 +10,6 @@ export const scope = 'diverst.containers.MentorshipList';
 
 export default defineMessages({
   columns: {
-    firstName: {
-      id: `${scope}.column.firstName`
-    },
-    lastName: {
-      id: `${scope}.column.lastName`
-    },
-    email: {
-      id: `${scope}.column.email`
-    },
     interests: {
       id: `${scope}.column.interests`
     },

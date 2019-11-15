@@ -30,6 +30,7 @@ import ResponsiveTabs from 'components/Shared/ResponsiveTabs';
 
 import Profile from 'components/Mentorship/MentorshipUser';
 import messages from 'containers/Mentorship/Mentoring/messages';
+import appMessages from 'containers/Shared/App/messages';
 
 
 const styles = theme => ({
@@ -88,9 +89,9 @@ export function MentorList(props, context) {
   };
 
   const columns = [
-    { title: intl.formatMessage(messages.columns.firstName), field: 'first_name' },
-    { title: intl.formatMessage(messages.columns.lastName), field: 'last_name' },
-    { title: intl.formatMessage(messages.columns.email), field: 'email' },
+    { title: intl.formatMessage(appMessages.person.givenName), field: 'first_name' },
+    { title: intl.formatMessage(appMessages.person.familyName), field: 'last_name' },
+    { title: intl.formatMessage(appMessages.person.email), field: 'email' },
     { title: intl.formatMessage(messages.columns.interests), field: 'interests', sorting: false },
   ];
 
