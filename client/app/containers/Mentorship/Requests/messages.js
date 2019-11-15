@@ -4,23 +4,6 @@
  * This contains all the text for the Users containers/components.
  */
 
-/*
-  Outgoing Request(s)
-  Incoming Request(s)
-
-  First Name
-  Last Name
-  Notes
-  Type
-  Status
-
-  Mentor
-  Mentee
-
-  Accepted
-  Rejected
- */
-
 import { defineMessages } from 'react-intl';
 
 export const scope = 'diverst.containers.RequestList';
