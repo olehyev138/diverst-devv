@@ -129,7 +129,7 @@ class Field < ApplicationRecord
   end
 
   def enterprise
-    return Enterprise.find_by_id(enterprise_id) if enterprise_id.present?
+    return association(:enterprise).reader if enterprise_id.present?
     return group.enterprise if group_id.present?
     return poll.enterprise if poll_id.present?
     return initiative.enterprise if initiative_id.present?
