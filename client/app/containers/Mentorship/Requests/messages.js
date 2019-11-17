@@ -1,5 +1,5 @@
 /*
- * Mentorship Messages
+ * Requests Messages
  *
  * This contains all the text for the Users containers/components.
  */
