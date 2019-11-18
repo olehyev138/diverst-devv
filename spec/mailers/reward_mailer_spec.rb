@@ -106,7 +106,7 @@ RSpec.describe RewardMailer, type: :mailer do
       end
 
       it 'shows a message to user' do
-        expect(mail.body.decoded).to include("Congratulations #{user.name}! Your reward(#{reward.label}) has been approved and you will be contacted with more details shortly.".html_safe)
+        expect(mail.body.decoded).to include("Congratulations #{user.name}! Your reward (#{reward.label}) has been approved and you will be contacted with more details shortly.".html_safe)
       end
 
       context 'when enterprise wants to redirect emails and redirect_email_contact is set' do
@@ -182,7 +182,7 @@ RSpec.describe RewardMailer, type: :mailer do
 
       it 'shows a message to user' do
         # byebug
-        expect(mail.body.decoded).to include("Sorry, #{user.name}. Your reward(#{reward.label}) has been denied
+        expect(mail.body.decoded).to include("Sorry, #{user.name}. Your reward (#{reward.label}) has been denied
 #{unless user_reward.comment.blank?
  "due to the following reason:\n#{user_reward.comment}" 
 user_reward.comment
