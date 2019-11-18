@@ -1,4 +1,7 @@
 class MentoringSession < ApplicationRecord
+  include PublicActivity::Common
+  include MentoringSession::Actions
+
   # associations
   belongs_to :creator, class_name: 'User'
   belongs_to :enterprise
@@ -36,6 +39,7 @@ class MentoringSession < ApplicationRecord
   # scopes
   scope :past,            -> { where('end < ?', Time.now.utc) }
   scope :upcoming,        -> { where('end > ?', Time.now.utc) }
+  scope :ongoing,         -> { where('start <= ?', Time.current).where('end >= ?', Time.current) }
   scope :no_ratings,      -> { includes(:mentorship_ratings).where(mentorship_ratings: { id: nil }) }
   scope :with_ratings,    -> { includes(:mentorship_ratings).where.not(mentorship_ratings: { id: nil }) }
 
