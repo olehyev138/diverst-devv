@@ -1,8 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe PollDownloadJob, type: :job do
-  include ActiveJob::TestHelper
-
   let(:user) { create(:user) }
   let!(:poll) { create(:poll, status: 0, enterprise: user.enterprise, groups: []) }
 

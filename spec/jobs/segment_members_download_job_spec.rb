@@ -1,8 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe SegmentMembersDownloadJob, type: :job do
-  include ActiveJob::TestHelper
-
   describe '#perform' do
     it "creates a downloadable csv file when there's no group" do
       enterprise = create(:enterprise)

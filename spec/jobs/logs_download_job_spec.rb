@@ -1,8 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe LogsDownloadJob, type: :job do
-  include ActiveJob::TestHelper
-
   let!(:enterprise) { create(:enterprise) }
   let!(:user) { create(:user, enterprise: enterprise) }
 

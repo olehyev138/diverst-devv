@@ -1,8 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe CampaignTopPerformersDownloadJob, type: :job do
-  include ActiveJob::TestHelper
-
   describe '#perform' do
     it 'creates a downloadable csv file' do
       enterprise = create(:enterprise)

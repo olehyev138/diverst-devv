@@ -1,8 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe InitiativeExpensesTimeSeriesDownloadJob, type: :job do
-  include ActiveJob::TestHelper
-
   let(:enterprise) { create(:enterprise) }
   let(:user) { create(:user) }
   let(:group) { create(:group, enterprise: user.enterprise) }

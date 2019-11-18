@@ -1,8 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe EventAttendeeDownloadJob, type: :job do
-  include ActiveJob::TestHelper
-
   let(:enterprise) { create :enterprise }
   let(:user) { create :user, enterprise: enterprise }
   let!(:group) { create :group, enterprise: enterprise }

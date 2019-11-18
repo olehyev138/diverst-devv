@@ -1,8 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe GraphDownloadJob, type: :job do
-  include ActiveJob::TestHelper
-
   let(:enterprise) { create(:enterprise) }
   let(:user) { create(:user, enterprise: enterprise) }
   let(:metrics_dashboard) { create(:metrics_dashboard, enterprise_id: enterprise.id) }
