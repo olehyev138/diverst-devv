@@ -55,8 +55,13 @@ function sessionReducer(state = initialState, action) {
         break;
 
       case GET_LEADING_SESSIONS_SUCCESS:
-      case GET_PARTICIPATING_SESSIONS_SUCCESS:
         draft.sessionList = action.payload.items;
+        draft.sessionListTotal = action.payload.total;
+        draft.isFetchingSessions = false;
+        break;
+
+      case GET_PARTICIPATING_SESSIONS_SUCCESS:
+        draft.sessionList = formatSessions(action.payload.items);
         draft.sessionListTotal = action.payload.total;
         draft.isFetchingSessions = false;
         break;
@@ -82,3 +87,7 @@ function sessionReducer(state = initialState, action) {
   });
 }
 export default sessionReducer;
+
+function formatSessions(joinedData) {
+  joinedData.map(x => x.mentoring_session);
+}
