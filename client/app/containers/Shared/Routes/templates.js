@@ -8,6 +8,7 @@ import GlobalSettingsLayout from 'containers/Layouts/GlobalSettingsLayout/Loadab
 import GroupManageLayout from 'containers/Layouts/GroupManageLayout/Loadable';
 import MentorshipLayout from 'containers/Layouts/MentorshipLayout/Loadable';
 import InnovateLayout from 'containers/Layouts/InnovateLayout/Loadable';
+import SystemUserLayout from 'containers/Layouts/SystemUsersLayout/Loadable';
 
 /* Session */
 import LoginPage from 'containers/Session/LoginPage/Loadable';
@@ -112,7 +113,12 @@ export {
   UserDashboardPage, MetricsDashboardListPage, MetricsDashboardCreatePage, MetricsDashboardEditPage, MetricsDashboardPage,
   CustomGraphCreatePage, CustomGraphEditPage, GroupManageLayout, GroupSettingsPage, CustomTextEditPage,
   UserNewsLinkPage, UserEventsPage, FoldersPage, FolderCreatePage, FolderEditPage, FolderPage, ResourceCreatePage,
+<<<<<<< HEAD
   ResourceEditPage, UserProfilePage, InnovateLayout, CampaignListPage, CampaignCreatePage, CampaignEditPage, CampaignShowPage,
   EnterpriseConfigurationPage,
   MentorshipProfilePage, MentorshipEditProfilePage, MentorshipLayout, MentorsPage, MentorRequestsPage,
+=======
+  ResourceEditPage, UserProfilePage, InnovateLayout, EnterpriseConfigurationPage, MentorshipProfilePage, MentorshipEditProfilePage,
+  MentorshipLayout, MentorsPage, MentorRequestsPage, SystemUserLayout
+>>>>>>> df782848c9d6cafae313ce6abf927320bf8b0438
 };
