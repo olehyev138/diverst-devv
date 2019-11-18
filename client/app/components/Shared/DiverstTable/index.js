@@ -68,6 +68,7 @@ export function DiverstTable(props) {
         columns={props.columns}
         actions={props.actions}
         options={{
+          ...props.my_options,
           actionsColumnIndex: -1,
           pageSize: rowsPerPage(),
         }}
@@ -90,6 +91,7 @@ DiverstTable.propTypes = {
   page: PropTypes.number,
   rowsPerPage: PropTypes.number,
   params: PropTypes.object,
+  my_options: PropTypes.object,
 };
 
 export default compose(

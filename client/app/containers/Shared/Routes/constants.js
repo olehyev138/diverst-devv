@@ -95,6 +95,18 @@ export const ROUTES = {
           titleMessage: messages.user.mentorship,
         },
       },
+      proposals: {
+        path: (userId = ':user_id') => `/mentorship/${userId}/proposals`,
+        data: {
+          titleMessage: messages.user.mentorship,
+        },
+      },
+      requests: {
+        path: (userId = ':user_id') => `/mentorship/${userId}/requests`,
+        data: {
+          titleMessage: messages.user.mentorship,
+        },
+      },
     }
     ,
   },

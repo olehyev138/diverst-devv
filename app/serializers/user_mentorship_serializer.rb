@@ -1,7 +1,8 @@
 class UserMentorshipSerializer < ApplicationRecordSerializer
   attributes :id, :email, :biography, :name, :first_name, :last_name, :enterprise_id, :avatar_location,
              :mentor, :mentee, :mentors, :mentees, :accepting_mentor_requests, :accepting_mentee_requests, :mentorship_description,
-             :availabilities, :time_zone, :interest_options, :type_options, :interests, :types
+             :availabilities, :time_zone, :interest_options, :type_options, :interests, :types,
+             :mentorship_proposals, :mentorship_requests
 
   has_many :mentorship_ratings
   has_many :mentoring_interests
@@ -37,6 +38,18 @@ class UserMentorshipSerializer < ApplicationRecordSerializer
   def mentees
     object.mentees.map do |m|
       UserMentorshipLiteSerializer.new(m, scope: scope, scope_name: :scope).as_json
+    end
+  end
+
+  def mentorship_proposals
+    object.mentorship_proposals.map do |m|
+      MentoringRequestLiteSerializer.new(m, scope: scope, scope_name: :scope).as_json
+    end
+  end
+
+  def mentorship_requests
+    object.mentorship_requests.map do |m|
+      MentoringRequestLiteSerializer.new(m, scope: scope, scope_name: :scope).as_json
     end
   end
 

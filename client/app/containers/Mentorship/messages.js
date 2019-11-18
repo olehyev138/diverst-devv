@@ -125,6 +125,9 @@ export default defineMessages({
     mentees: {
       id: `${scope}.menu.mentees`
     },
+    proposals: {
+      id: `${scope}.menu.proposals`
+    },
     requests: {
       id: `${scope}.menu.requests`
     },

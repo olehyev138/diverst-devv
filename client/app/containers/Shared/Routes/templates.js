@@ -24,6 +24,7 @@ import UserEventsPage from 'containers/User/UserEventsPage/Loadable';
 import MentorshipProfilePage from 'containers/Mentorship/MentorshipProfilePage/Loadable';
 import MentorshipEditProfilePage from 'containers/Mentorship/MentorshipEditProfilePage/Loadable';
 import MentorsPage from 'containers/Mentorship/Mentoring/MentorsPage/Loadable';
+import MentorRequestsPage from 'containers/Mentorship/Requests/RequestsPage/Loadable';
 
 /* Admin - Analyze */
 import GroupDashboardPage from 'containers/Analyze/Dashboards/GroupDashboardPage/Loadable';
@@ -111,7 +112,12 @@ export {
   UserDashboardPage, MetricsDashboardListPage, MetricsDashboardCreatePage, MetricsDashboardEditPage, MetricsDashboardPage,
   CustomGraphCreatePage, CustomGraphEditPage, GroupManageLayout, GroupSettingsPage, CustomTextEditPage,
   UserNewsLinkPage, UserEventsPage, FoldersPage, FolderCreatePage, FolderEditPage, FolderPage, ResourceCreatePage,
+<<<<<<< HEAD
   ResourceEditPage, UserProfilePage, InnovateLayout, CampaignListPage, CampaignCreatePage, CampaignEditPage, CampaignShowPage,
   EnterpriseConfigurationPage,
   MentorshipProfilePage, MentorshipEditProfilePage, MentorshipLayout, MentorsPage,
+=======
+  ResourceEditPage, UserProfilePage, InnovateLayout, EnterpriseConfigurationPage,
+  MentorshipProfilePage, MentorshipEditProfilePage, MentorshipLayout, MentorsPage, MentorRequestsPage
+>>>>>>> 20b533772441bd7304be98c97cc287209aa65acc
 };

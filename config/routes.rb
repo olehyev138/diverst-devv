@@ -97,7 +97,12 @@ Diverst::Application.routes.draw do
         end
       end
       resources :mentoring_interests
-      resources :mentoring_requests
+      resources :mentoring_requests do
+        member do
+          post 'accept'
+          post 'reject'
+        end
+      end
       resources :mentoring_request_interests
       resources :mentoring_sessions
       resources :mentoring_session_comments
