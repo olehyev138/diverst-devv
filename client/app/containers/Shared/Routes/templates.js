@@ -112,12 +112,7 @@ export {
   UserDashboardPage, MetricsDashboardListPage, MetricsDashboardCreatePage, MetricsDashboardEditPage, MetricsDashboardPage,
   CustomGraphCreatePage, CustomGraphEditPage, GroupManageLayout, GroupSettingsPage, CustomTextEditPage,
   UserNewsLinkPage, UserEventsPage, FoldersPage, FolderCreatePage, FolderEditPage, FolderPage, ResourceCreatePage,
-<<<<<<< HEAD
   ResourceEditPage, UserProfilePage, InnovateLayout, CampaignListPage, CampaignCreatePage, CampaignEditPage, CampaignShowPage,
   EnterpriseConfigurationPage,
-  MentorshipProfilePage, MentorshipEditProfilePage, MentorshipLayout, MentorsPage,
-=======
-  ResourceEditPage, UserProfilePage, InnovateLayout, EnterpriseConfigurationPage,
-  MentorshipProfilePage, MentorshipEditProfilePage, MentorshipLayout, MentorsPage, MentorRequestsPage
->>>>>>> 20b533772441bd7304be98c97cc287209aa65acc
+  MentorshipProfilePage, MentorshipEditProfilePage, MentorshipLayout, MentorsPage, MentorRequestsPage,
 };
