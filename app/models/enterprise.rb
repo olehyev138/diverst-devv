@@ -3,6 +3,7 @@ class Enterprise < ApplicationRecord
   include PublicActivity::Common
   include Enterprise::Actions
   include TimeZoneValidation
+  include CustomTextHelpers
 
   extend Enumerize
 
