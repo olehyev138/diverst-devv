@@ -113,6 +113,20 @@
   fill: $primary-color;
 }
 
+.card__yellow {
+  position: relative;
+  margin-right: $spacing-small;
+  top: -2px;
+  fill: $diverst-yellow;
+}
+
+.card__black {
+  position: relative;
+  margin-right: $spacing-small;
+  top: -2px;
+  fill: $diverst-black;
+}
+
 
 // Scroll
 
