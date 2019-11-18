@@ -8,7 +8,8 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import {
   GET_SESSION_BEGIN,
-  GET_SESSIONS_BEGIN,
+  GET_LEADING_SESSIONS_BEGIN,
+  GET_PARTICIPATING_SESSIONS_BEGIN,
   CREATE_SESSION_BEGIN,
   UPDATE_SESSION_BEGIN,
   DELETE_SESSION_BEGIN,
@@ -16,7 +17,8 @@ import {
 
 import {
   getSessionSuccess, getSessionError,
-  getSessionsSuccess, getSessionsError,
+  getLeadingSessionsSuccess, getLeadingSessionsError,
+  getParticipatingSessionsSuccess, getParticipatingSessionsError,
   createSessionSuccess, createSessionError,
   updateSessionSuccess, updateSessionError,
   deleteSessionSuccess, deleteSessionError,
@@ -35,16 +37,29 @@ export function* getSession(action) {
   }
 }
 
-export function* getSessions(action) {
+export function* getLeadingSessions(action) {
   try {
     const response = { data: 'API CALL' };
 
-    yield put(getSessionsSuccess(response.data.page));
+    yield put(getLeadingSessionsSuccess(response.data.page));
   } catch (err) {
-    yield put(getSessionsError(err));
+    yield put(getLeadingSessionsError(err));
 
     // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to get sessions', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: 'Failed to get leading sessions', options: { variant: 'warning' } }));
+  }
+}
+
+export function* getParticipatingSessions(action) {
+  try {
+    const response = { data: 'API CALL' };
+
+    yield put(getParticipatingSessionsSuccess(response.data.page));
+  } catch (err) {
+    yield put(getParticipatingSessionsError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to get participating sessions', options: { variant: 'warning' } }));
   }
 }
 
@@ -93,7 +108,8 @@ export function* deleteSession(action) {
 
 export default function* SessionSaga() {
   yield takeLatest(GET_SESSION_BEGIN, getSession);
-  yield takeLatest(GET_SESSIONS_BEGIN, getSessions);
+  yield takeLatest(GET_LEADING_SESSIONS_BEGIN, getLeadingSessions);
+  yield takeLatest(GET_PARTICIPATING_SESSIONS_BEGIN, getParticipatingSessions);
   yield takeLatest(CREATE_SESSION_BEGIN, createSession);
   yield takeLatest(UPDATE_SESSION_BEGIN, updateSession);
   yield takeLatest(DELETE_SESSION_BEGIN, deleteSession);

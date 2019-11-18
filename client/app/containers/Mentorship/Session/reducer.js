@@ -9,9 +9,12 @@ import {
   GET_SESSION_BEGIN,
   GET_SESSION_SUCCESS,
   GET_SESSION_ERROR,
-  GET_SESSIONS_BEGIN,
-  GET_SESSIONS_SUCCESS,
-  GET_SESSIONS_ERROR,
+  GET_LEADING_SESSIONS_BEGIN,
+  GET_LEADING_SESSIONS_SUCCESS,
+  GET_LEADING_SESSIONS_ERROR,
+  GET_PARTICIPATING_SESSIONS_BEGIN,
+  GET_PARTICIPATING_SESSIONS_SUCCESS,
+  GET_PARTICIPATING_SESSIONS_ERROR,
   CREATE_SESSION_BEGIN,
   CREATE_SESSION_SUCCESS,
   CREATE_SESSION_ERROR,
@@ -37,11 +40,13 @@ function sessionReducer(state = initialState, action) {
   /* eslint-disable consistent-return */
   return produce(state, (draft) => {
     switch (action.type) {
-      case GET_SESSIONS_BEGIN:
+      case GET_LEADING_SESSIONS_BEGIN:
+      case GET_PARTICIPATING_SESSIONS_BEGIN:
         draft.isFetchingSessions = true;
         break;
 
-      case GET_SESSIONS_ERROR:
+      case GET_LEADING_SESSIONS_ERROR:
+      case GET_PARTICIPATING_SESSIONS_ERROR:
         draft.isFetchingSessions = false;
         break;
 
@@ -49,10 +54,23 @@ function sessionReducer(state = initialState, action) {
         draft.currentSession = action.payload.session;
         break;
 
-      case GET_SESSIONS_SUCCESS:
+      case GET_LEADING_SESSIONS_SUCCESS:
+      case GET_PARTICIPATING_SESSIONS_SUCCESS:
         draft.sessionList = action.payload.items;
         draft.sessionListTotal = action.payload.total;
         draft.isFetchingSessions = false;
+        break;
+
+      case CREATE_SESSION_BEGIN:
+      case UPDATE_SESSION_BEGIN:
+        draft.isCommitting = true;
+        break;
+
+      case CREATE_SESSION_SUCCESS:
+      case CREATE_SESSION_ERROR:
+      case UPDATE_SESSION_SUCCESS:
+      case UPDATE_SESSION_ERROR:
+        draft.isCommitting = false;
         break;
 
       case SESSION_UNMOUNT:

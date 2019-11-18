@@ -8,9 +8,12 @@ import {
   GET_SESSION_BEGIN,
   GET_SESSION_SUCCESS,
   GET_SESSION_ERROR,
-  GET_SESSIONS_BEGIN,
-  GET_SESSIONS_SUCCESS,
-  GET_SESSIONS_ERROR,
+  GET_LEADING_SESSIONS_BEGIN,
+  GET_LEADING_SESSIONS_SUCCESS,
+  GET_LEADING_SESSIONS_ERROR,
+  GET_PARTICIPATING_SESSIONS_BEGIN,
+  GET_PARTICIPATING_SESSIONS_SUCCESS,
+  GET_PARTICIPATING_SESSIONS_ERROR,
   CREATE_SESSION_BEGIN,
   CREATE_SESSION_SUCCESS,
   CREATE_SESSION_ERROR,
@@ -37,31 +40,52 @@ export function getSessionSuccess(payload) {
   };
 }
 
-export function getSessionError(payload) {
+export function getSessionError(error) {
   return {
     type: GET_SESSION_ERROR,
+    error,
+  };
+}
+
+export function getLeadingSessionsBegin(payload) {
+  return {
+    type: GET_LEADING_SESSIONS_BEGIN,
     payload,
   };
 }
 
-export function getSessionsBegin(payload) {
+export function getLeadingSessionsSuccess(payload) {
   return {
-    type: GET_SESSIONS_BEGIN,
+    type: GET_LEADING_SESSIONS_SUCCESS,
     payload,
   };
 }
 
-export function getSessionsSuccess(payload) {
+export function getLeadingSessionsError(error) {
   return {
-    type: GET_SESSIONS_SUCCESS,
+    type: GET_LEADING_SESSIONS_ERROR,
+    error,
+  };
+}
+
+export function getParticipatingSessionsBegin(payload) {
+  return {
+    type: GET_PARTICIPATING_SESSIONS_BEGIN,
     payload,
   };
 }
 
-export function getSessionsError(payload) {
+export function getParticipatingSessionsSuccess(payload) {
   return {
-    type: GET_SESSIONS_ERROR,
+    type: GET_PARTICIPATING_SESSIONS_SUCCESS,
     payload,
+  };
+}
+
+export function getParticipatingSessionsError(error) {
+  return {
+    type: GET_PARTICIPATING_SESSIONS_ERROR,
+    error,
   };
 }
 
@@ -79,10 +103,10 @@ export function createSessionSuccess(payload) {
   };
 }
 
-export function createSessionError(payload) {
+export function createSessionError(error) {
   return {
     type: CREATE_SESSION_ERROR,
-    payload,
+    error,
   };
 }
 
@@ -100,10 +124,10 @@ export function updateSessionSuccess(payload) {
   };
 }
 
-export function updateSessionError(payload) {
+export function updateSessionError(error) {
   return {
     type: UPDATE_SESSION_ERROR,
-    payload,
+    error,
   };
 }
 
@@ -121,10 +145,10 @@ export function deleteSessionSuccess(payload) {
   };
 }
 
-export function deleteSessionError(payload) {
+export function deleteSessionError(error) {
   return {
     type: DELETE_SESSION_ERROR,
-    payload,
+    error,
   };
 }
 
