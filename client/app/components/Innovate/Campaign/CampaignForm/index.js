@@ -26,6 +26,7 @@ import { DateTime } from 'luxon';
 
 /* eslint-disable object-curly-newline */
 export function CampaignFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, touched, ...props }) {
+  const { links } = props;
   const groupSelectAction = (searchKey = '') => {
     props.getGroupsBegin({
       count: 10, page: 0, order: 'asc',
@@ -135,7 +136,7 @@ export function CampaignFormInner({ handleSubmit, handleChange, handleBlur, valu
             </DiverstSubmit>
             <Button
               disabled={props.isCommitting}
-              to='#'
+              to={links.CampaignsIndex}
               component={WrappedNavLink}
             >
               <DiverstFormattedMessage {...messages.cancel} />
@@ -203,7 +204,7 @@ CampaignFormInner.propTypes = {
   isCommitting: PropTypes.bool,
   isFormLoading: PropTypes.bool,
   links: PropTypes.shape({
-    campaignIndex: PropTypes.string
+    campaignsIndex: PropTypes.string
   }),
 };
 

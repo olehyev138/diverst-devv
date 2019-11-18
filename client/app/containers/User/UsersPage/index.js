@@ -98,7 +98,7 @@ UserListPage.propTypes = {
   isFetchingUsers: PropTypes.bool,
   deleteUserBegin: PropTypes.func,
   userUnmount: PropTypes.func.isRequired,
-  handleVisitUserEdit: PropTypes.func
+  handleVisitUserEdit: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({

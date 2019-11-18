@@ -18,7 +18,7 @@ import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Group/GroupMembers/messages';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
-
+import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/DeleteOutline';
 import AddIcon from '@material-ui/icons/Add';
 import ExportIcon from '@material-ui/icons/SaveAlt';
@@ -46,6 +46,7 @@ const styles = theme => ({
 
 export function CampaignList(props) {
   const { classes } = props;
+  const { links } = props;
 
   const handleOrderChange = (columnId, orderDir) => {
   };
@@ -62,7 +63,7 @@ export function CampaignList(props) {
           <Button
             className={classes.actionButton}
             variant='contained'
-            to='campaigns/new'
+            to={links.campaignNew}
             color='primary'
             size='large'
             component={WrappedNavLink}
@@ -81,17 +82,23 @@ export function CampaignList(props) {
           dataTotal={props.campaignTotal}
           columns={columns}
           rowsPerPage={props.params.count}
-          actions={[{
-            icon: () => <DeleteIcon />,
-            tooltip: 'Delete Member',
-            onClick: (_, rowData) => {
-              /* eslint-disable-next-line no-alert, no-restricted-globals */
-              if (confirm('Delete campaign?'))
-                props.deleteCampaignBegin({
-                  userId: rowData.id,
-                });
-            }
-          }]}
+          actions={[
+            {
+              icon: () => <EditIcon />,
+              tooltip: 'Edit Member',
+              onClick: (_, rowData) => {
+                props.handleVisitCampaignEdit(rowData.id);
+              }
+            },
+            {
+              icon: () => <DeleteIcon />,
+              tooltip: 'Delete Campaign',
+              onClick: (_, rowData) => {
+                /* eslint-disable-next-line no-alert, no-restricted-globals */
+                if (confirm('Delete campaign?'))
+                  props.deleteCampaignBegin({ id: rowData.id });
+              }
+            }]}
         />
       </React.Fragment>
     </DiverstFormLoader>
@@ -112,6 +119,8 @@ CampaignList.propTypes = {
   handleOrdering: PropTypes.func,
   isFormLoading: PropTypes.bool,
   edit: PropTypes.bool,
+  campaign: PropTypes.object,
+  handleVisitCampaignEdit: PropTypes.func,
 };
 
 export default compose(

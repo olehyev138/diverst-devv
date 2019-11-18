@@ -62,14 +62,9 @@ export function* createCampaigns(action) {
 
 export function* deleteCampaigns(action) {
   try {
-    const payload = {
-      campaign_ids: [action.payload.userId]
-    };
-
-    yield call(api.campaigns.destroy.bind(api.campaigns), payload);
-
+    yield call(api.campaigns.destroy.bind(api.campaigns), action.payload.id);
     yield put(deleteCampaignSuccess());
-    yield put(push(ROUTES.group.campaigns.index.path(action.payload.groupId)));
+    yield put(push(ROUTES.admin.innovate.campaigns.index.path(action.payload.id)));
     yield put(showSnackbar({ message: 'User deleted', options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteCampaignError(err));
