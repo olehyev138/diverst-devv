@@ -23,7 +23,7 @@ import {
   DELETE_SESSION_BEGIN,
   DELETE_SESSION_SUCCESS,
   DELETE_SESSION_ERROR,
-  SESSION_UNMOUNT,
+  SESSIONS_UNMOUNT,
 } from './constants';
 
 export function getSessionBegin(payload) {
@@ -152,9 +152,9 @@ export function deleteSessionError(error) {
   };
 }
 
-export function sessionUnmount(payload) {
+export function sessionsUnmount(payload) {
   return {
-    type: SESSION_UNMOUNT,
+    type: SESSIONS_UNMOUNT,
     payload,
   };
 }

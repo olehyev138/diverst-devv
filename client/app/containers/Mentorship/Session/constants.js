@@ -28,4 +28,4 @@ export const DELETE_SESSION_BEGIN = 'app/Mentorship/Session/DELETE_SESSION_BEGIN
 export const DELETE_SESSION_SUCCESS = 'app/Mentorship/Session/DELETE_SESSION_SUCCESS';
 export const DELETE_SESSION_ERROR = 'app/Mentorship/Session/DELETE_SESSION_ERROR';
 
-export const SESSION_UNMOUNT = 'app/Mentorship/Session/SESSION_UNMOUNT';
+export const SESSIONS_UNMOUNT = 'app/Mentorship/Session/SESSIONS_UNMOUNT';

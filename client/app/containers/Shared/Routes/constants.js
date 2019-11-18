@@ -107,8 +107,39 @@ export const ROUTES = {
           titleMessage: messages.user.mentorship,
         },
       },
-    }
-    ,
+      sessions: {
+        leading: {
+          path: (userId = ':user_id') => `/mentorship/${userId}/leadingSessions`,
+          data: {
+            titleMessage: messages.user.mentorship,
+          },
+        },
+        participating: {
+          path: (userId = ':user_id') => `/mentorship/${userId}/participatingSessions`,
+          data: {
+            titleMessage: messages.user.mentorship,
+          },
+        },
+        schedule: {
+          path: () => '/mentorship/sessions/schedule',
+          data: {
+            titleMessage: messages.user.mentorship,
+          },
+        },
+        edit: {
+          path: (sessionId = ':session_id') => `/mentorship/sessions/${sessionId}/edit`,
+          data: {
+            titleMessage: messages.user.mentorship,
+          },
+        },
+        show: {
+          path: (sessionId = ':session_id') => `/mentorship/sessions/${sessionId}`,
+          data: {
+            titleMessage: messages.user.mentorship,
+          },
+        },
+      },
+    },
   },
 
   group: {

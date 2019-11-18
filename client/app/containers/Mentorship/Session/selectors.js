@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect/lib';
 import { initialState } from './reducer';
 
-const selectSessionDomain = state => state.session || initialState;
+const selectSessionDomain = state => state.sessions || initialState;
 
 const selectPaginatedSessions = () => createSelector(
   selectSessionDomain,

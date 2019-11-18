@@ -25,6 +25,7 @@ import MentorshipProfilePage from 'containers/Mentorship/MentorshipProfilePage/L
 import MentorshipEditProfilePage from 'containers/Mentorship/MentorshipEditProfilePage/Loadable';
 import MentorsPage from 'containers/Mentorship/Mentoring/MentorsPage/Loadable';
 import MentorRequestsPage from 'containers/Mentorship/Requests/RequestsPage/Loadable';
+import LeadingSessionsPage from 'containers/Mentorship/Session/LeadingSessionsPage/Loadable';
 
 /* Admin - Analyze */
 import GroupDashboardPage from 'containers/Analyze/Dashboards/GroupDashboardPage/Loadable';
@@ -110,5 +111,5 @@ export {
   CustomGraphCreatePage, CustomGraphEditPage, GroupManageLayout, GroupSettingsPage, CustomTextEditPage,
   UserNewsLinkPage, UserEventsPage, FoldersPage, FolderCreatePage, FolderEditPage, FolderPage, ResourceCreatePage,
   ResourceEditPage, UserProfilePage, InnovateLayout, EnterpriseConfigurationPage,
-  MentorshipProfilePage, MentorshipEditProfilePage, MentorshipLayout, MentorsPage, MentorRequestsPage
+  MentorshipProfilePage, MentorshipEditProfilePage, MentorshipLayout, MentorsPage, MentorRequestsPage, LeadingSessionsPage
 };

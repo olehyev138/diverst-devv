@@ -121,10 +121,20 @@ export function MentorshipMenu(props) {
             </CardContent>
             <CardContent>
               <Button
+                to={ROUTES.user.mentorship.sessions.leading.path(user.id)}
+                component={WrappedNavLink}
+                color='primary'
+                size='large'
+              >
+                <DiverstFormattedMessage {...messages.menu.leading} />
+              </Button>
+            </CardContent>
+            <CardContent>
+              <Button
                 to={ROUTES.user.mentorship.show.path(user.id)}
                 component={WrappedNavLink}
               >
-                <DiverstFormattedMessage {...messages.menu.upcoming} />
+                <DiverstFormattedMessage {...messages.menu.participating} />
               </Button>
             </CardContent>
             <CardContent>

@@ -27,11 +27,11 @@ class MentoringSession < ApplicationRecord
   validates_length_of :video_room_name, maximum: 191
   validates_length_of :access_token, maximum: 65535
   validates_length_of :link, maximum: 191
-  validates_length_of :format, maximum: 191
+  validates_length_of :medium, maximum: 191
   validates :start,   presence: true
   validates :end,     presence: true
   validates :status,  presence: true
-  validates :format,  presence: true
+  validates :medium,  presence: true
 
   validates :start,   date: { after: Date.yesterday, message: 'must be today or in the future' }, on: [:create, :update]
   validates :end,     date: { after: :start, message: 'must be after start' }, on: [:create, :update]

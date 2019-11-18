@@ -134,8 +134,11 @@ export default defineMessages({
     schedule: {
       id: `${scope}.menu.schedule`
     },
-    upcoming: {
-      id: `${scope}.menu.upcoming`
+    participating: {
+      id: `${scope}.menu.participating`
+    },
+    leading: {
+      id: `${scope}.menu.leading`
     },
     feedback: {
       id: `${scope}.menu.feedback`

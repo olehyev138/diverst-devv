@@ -41,7 +41,7 @@ export function* getLeadingSessions(action) {
   try {
     const { payload } = action;
     payload.creator_id = payload.userId;
-    payload.delete('userId');
+    delete payload.userId;
 
     const response = yield call(api.mentoringSessions.all.bind(api.mentoringSessions), payload);
 

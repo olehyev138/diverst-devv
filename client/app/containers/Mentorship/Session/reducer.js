@@ -24,7 +24,7 @@ import {
   DELETE_SESSION_BEGIN,
   DELETE_SESSION_SUCCESS,
   DELETE_SESSION_ERROR,
-  SESSION_UNMOUNT,
+  SESSIONS_UNMOUNT,
 } from './constants';
 
 export const initialState = {
@@ -81,7 +81,7 @@ function sessionReducer(state = initialState, action) {
         draft.isCommitting = false;
         break;
 
-      case SESSION_UNMOUNT:
+      case SESSIONS_UNMOUNT:
         return initialState;
     }
   });

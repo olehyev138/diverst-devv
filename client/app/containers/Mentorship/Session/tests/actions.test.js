@@ -17,7 +17,7 @@ import {
   DELETE_SESSION_BEGIN,
   DELETE_SESSION_SUCCESS,
   DELETE_SESSION_ERROR,
-  SESSION_UNMOUNT,
+  SESSIONS_UNMOUNT,
 } from '../constants';
 
 import {
@@ -39,7 +39,7 @@ import {
   deleteSessionBegin,
   deleteSessionSuccess,
   deleteSessionError,
-  sessionUnmount,
+  sessionsUnmount,
 } from '../actions';
 
 describe('session actions', () => {
@@ -254,13 +254,13 @@ describe('session actions', () => {
   });
 
   describe('State cleaning actions', () => {
-    describe('sessionUnmount', () => {
-      it('has a type of SESSION_UNMOUNT', () => {
+    describe('sessionsUnmount', () => {
+      it('has a type of SESSIONS_UNMOUNT', () => {
         const expected = {
-          type: SESSION_UNMOUNT,
+          type: SESSIONS_UNMOUNT,
         };
 
-        expect(sessionUnmount()).toEqual(expected);
+        expect(sessionsUnmount()).toEqual(expected);
       });
     });
   });
