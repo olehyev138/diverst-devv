@@ -62,9 +62,9 @@ const mapDispatchToProps = {
   getCampaignBegin,
   campaignsUnmount,
 };
-
 const withConnect = connect(
   mapStateToProps,
+
   mapDispatchToProps,
 );
 

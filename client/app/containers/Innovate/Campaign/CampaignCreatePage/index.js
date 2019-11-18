@@ -33,7 +33,7 @@ export function CampaignCreatePage(props) {
   useInjectSaga({ key: 'groups', saga: groupSaga });
 
   const links = {
-    campaignsIndex: ROUTES.admin.innovate.campaigns.index.path(),
+    CampaignsIndex: ROUTES.admin.innovate.campaigns.index.path(),
   };
 
   useEffect(() => () => props.campaignsUnmount(), []);
