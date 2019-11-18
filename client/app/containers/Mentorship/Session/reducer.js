@@ -63,6 +63,7 @@ function sessionReducer(state = initialState, action) {
 
       case CREATE_SESSION_BEGIN:
       case UPDATE_SESSION_BEGIN:
+      case DELETE_SESSION_BEGIN:
         draft.isCommitting = true;
         break;
 
@@ -70,6 +71,8 @@ function sessionReducer(state = initialState, action) {
       case CREATE_SESSION_ERROR:
       case UPDATE_SESSION_SUCCESS:
       case UPDATE_SESSION_ERROR:
+      case DELETE_SESSION_SUCCESS:
+      case DELETE_SESSION_ERROR:
         draft.isCommitting = false;
         break;
 

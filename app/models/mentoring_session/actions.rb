@@ -5,7 +5,7 @@ module MentoringSession::Actions
 
   module ClassMethods
     def base_includes
-      ['creator']
+      [:creator, creator: User.mentor_lite_includes]
     end
 
     def valid_scopes

@@ -26,7 +26,7 @@ import {
 
 export function* getSession(action) {
   try {
-    const response = { data: 'API CALL' };
+    const response = yield call(api.mentoringSessions.get.bind(api.mentoringSessions), action.payload.id);
 
     yield put(getSessionSuccess(response.data));
   } catch (err) {
@@ -39,7 +39,11 @@ export function* getSession(action) {
 
 export function* getLeadingSessions(action) {
   try {
-    const response = { data: 'API CALL' };
+    const { payload } = action;
+    payload.creator_id = payload.userId;
+    payload.delete('userId');
+
+    const response = yield call(api.mentoringSessions.all.bind(api.mentoringSessions), payload);
 
     yield put(getLeadingSessionsSuccess(response.data.page));
   } catch (err) {
@@ -52,7 +56,11 @@ export function* getLeadingSessions(action) {
 
 export function* getParticipatingSessions(action) {
   try {
-    const response = { data: 'API CALL' };
+    const { payload } = action;
+    payload.user_id = payload.userId;
+    payload.delete('userId');
+
+    const response = yield call(api.mentorshipSessions.all.bind(api.mentorshipSessions), payload);
 
     yield put(getParticipatingSessionsSuccess(response.data.page));
   } catch (err) {
@@ -65,9 +73,10 @@ export function* getParticipatingSessions(action) {
 
 export function* createSession(action) {
   try {
-    const response = { data: 'API CALL' };
+    const payload = { mentoring_sessions: action.payload };
+    const response = yield call(api.groups.create.bind(api.groups), payload.group.id, payload);
 
-    yield put(createSessionSuccess({}));
+    yield put(createSessionSuccess());
     yield put(showSnackbar({ message: 'Successfully created session', options: { variant: 'success' } }));
   } catch (err) {
     yield put(createSessionError(err));
@@ -79,9 +88,10 @@ export function* createSession(action) {
 
 export function* updateSession(action) {
   try {
-    const response = { data: 'API CALL' };
+    const payload = { mentoring_sessions: action.payload };
+    const response = yield call(api.groups.update.bind(api.groups), payload.group.id, payload);
 
-    yield put(updateSessionSuccess({}));
+    yield put(updateSessionSuccess());
     yield put(showSnackbar({ message: 'Successfully updated session', options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateSessionError(err));
@@ -93,7 +103,10 @@ export function* updateSession(action) {
 
 export function* deleteSession(action) {
   try {
-    const response = { data: 'API CALL' };
+    const { userId } = action.payload;
+
+    yield call(api.groups.destroy.bind(api.groups), action.payload.id);
+    yield put(push('/'));
 
     yield put(deleteSessionSuccess({}));
     yield put(showSnackbar({ message: 'Successfully deleted session', options: { variant: 'success' } }));

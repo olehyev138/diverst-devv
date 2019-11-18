@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191014182207) do
+ActiveRecord::Schema.define(version: 20191118200333) do
 
   create_table "activities", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.string "trackable_type", collation: "utf8mb4_unicode_ci"
@@ -860,7 +860,7 @@ ActiveRecord::Schema.define(version: 20191014182207) do
     t.bigint "creator_id", null: false
     t.datetime "start", null: false
     t.datetime "end", null: false
-    t.string "format", null: false
+    t.string "medium", null: false
     t.string "link"
     t.text "access_token"
     t.string "video_room_name"

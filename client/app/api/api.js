@@ -20,6 +20,8 @@ import folders from 'api/folders/folders';
 import resources from 'api/resources/resources';
 import mentorings from 'api/mentorings/mentorings';
 import mentoringRequests from 'api/mentoring_requests/mentoring_requests';
+import mentorshipSessions from 'api/mentorship_sessions/mentorship_sessions';
+import mentoringSessions from 'api/mentoring_sessions/mentoring_sessions';
 
 /* Metrics */
 import overviewGraphs from 'api/metrics/overview_graphs';
@@ -51,6 +53,8 @@ const Api = {
   resources,
   mentorings,
   mentoringRequests,
+  mentorshipSessions,
+  mentoringSessions,
   metrics: {
     overviewGraphs,
     userGraphs,
