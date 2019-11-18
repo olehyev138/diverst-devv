@@ -77,5 +77,16 @@ export default defineMessages({
     no: {
       id: `${scope}.confirmation.no`
     }
+  },
+  person: {
+    givenName: {
+      id: `${scope}.person.givenName`
+    },
+    familyName: {
+      id: `${scope}.person.familyName`
+    },
+    email: {
+      id: `${scope}.person.email`
+    }
   }
 });

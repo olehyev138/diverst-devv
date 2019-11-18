@@ -12,7 +12,7 @@ import {
   CustomGraphCreatePage, CustomGraphEditPage, GroupManageLayout, GroupSettingsPage, CustomTextEditPage,
   UserNewsLinkPage, UserEventsPage, FoldersPage, FolderCreatePage, FolderEditPage, FolderPage, ResourceCreatePage,
   ResourceEditPage, UserProfilePage, InnovateLayout, EnterpriseConfigurationPage,
-  MentorshipProfilePage, MentorshipEditProfilePage, MentorshipLayout, MentorsPage,
+  MentorshipProfilePage, MentorshipEditProfilePage, MentorshipLayout, MentorsPage, MentorRequestsPage
 
 } from './templates';
 
@@ -41,6 +41,8 @@ export default function Routes(props) {
       <MentorshipLayout {...expandRoute(ROUTES.user.mentorship.edit)} component={MentorshipEditProfilePage} disableBreadcrumbs />
       <MentorshipLayout {...expandRoute(ROUTES.user.mentorship.mentors)} component={MentorsPage} type='mentors' disableBreadcrumbs />
       <MentorshipLayout {...expandRoute(ROUTES.user.mentorship.mentees)} component={MentorsPage} type='mentees' disableBreadcrumbs />
+      <MentorshipLayout {...expandRoute(ROUTES.user.mentorship.proposals)} component={MentorRequestsPage} type='outgoing' disableBreadcrumbs />
+      <MentorshipLayout {...expandRoute(ROUTES.user.mentorship.requests)} component={MentorRequestsPage} type='incoming' disableBreadcrumbs />
       <MentorshipLayout {...expandRoute(ROUTES.user.mentorship.show)} component={MentorshipProfilePage} disableBreadcrumbs />
       <MentorshipLayout {...expandRoute(ROUTES.user.mentorship.home)} component={MentorshipProfilePage} disableBreadcrumbs />
 
