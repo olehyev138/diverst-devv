@@ -83,7 +83,6 @@ group :test do
   gem 'rspec_junit_formatter', '~> 0.2.3'
   gem 'simplecov', '~> 0.13.0'
   gem 'webmock', '~> 3.1.1'
-  gem 'rspec-retry', '~> 0.6.1'
 end
 
 group :development do
