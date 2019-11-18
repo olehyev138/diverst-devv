@@ -13,7 +13,7 @@ import {
   UserNewsLinkPage, UserEventsPage, FoldersPage, FolderCreatePage, FolderEditPage, FolderPage, ResourceCreatePage,
   ResourceEditPage, UserProfilePage, InnovateLayout, CampaignListPage, CampaignCreatePage, CampaignEditPage, CampaignShowPage,
   EnterpriseConfigurationPage,
-  MentorshipProfilePage, MentorshipEditProfilePage, MentorshipLayout, MentorsPage,MentorRequestsPage
+  MentorshipProfilePage, MentorshipEditProfilePage, MentorshipLayout, MentorsPage, MentorRequestsPage
 } from './templates';
 
 // Paths
