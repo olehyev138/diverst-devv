@@ -21,11 +21,7 @@ class SocialMedia::Importer
     when 'photo'
       "<img src='#{resource.url}'>"
     else
-      begin
-        resource.html || url
-      rescue
-        url
-      end
+      resource&.html || url
     end
   end
 
