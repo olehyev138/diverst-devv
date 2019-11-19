@@ -124,7 +124,8 @@ CampaignQuestionsList.propTypes = {
   isFetchingQuestions: PropTypes.bool,
   campaignId: PropTypes.string,
   handlePagination: PropTypes.func,
-  handleOrdering: PropTypes.func
+  handleOrdering: PropTypes.func,
+  handleVisitQuestionEdit: PropTypes.func,
 };
 
 export default compose(
