@@ -10,6 +10,7 @@ import {
 } from 'containers/User/UserRole/constants';
 
 import {
+  getUserRolesSuccess, getUserRolesError,
   getUserRoleSuccess, getUserRoleError,
   createUserRoleSuccess, createUserRoleError,
   updateUserRoleSuccess, updateUserRoleError,
@@ -18,21 +19,21 @@ import {
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
-export function* getUserRoleRole(action) {
+export function* getUserRoles(action) {
   try {
-    const response = yield call(api.users.all.bind(api.users), action.payload);
-    yield put(getUserRoleSuccess(response.data.page));
+    const response = yield call(api.userRoles.all.bind(api.userRoles), action.payload);
+    yield put(getUserRolesSuccess(response.data.page));
   } catch (err) {
-    yield put(getUserRoleError(err));
+    yield put(getUserRolesError(err));
 
     // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to load users', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: 'Failed to load user roles', options: { variant: 'warning' } }));
   }
 }
 
 export function* getUserRole(action) {
   try {
-    const response = yield call(api.users.get.bind(api.users), action.payload.id);
+    const response = yield call(api.userRoles.get.bind(api.userRoles), action.payload.id);
     yield put(getUserRoleSuccess(response.data));
   } catch (err) {
     // TODO: intl message
@@ -90,7 +91,7 @@ export function* deleteUserRole(action) {
 }
 
 export default function* usersSaga() {
-  yield takeLatest(GET_USER_ROLES_BEGIN, getUserRoleRole);
+  yield takeLatest(GET_USER_ROLES_BEGIN, getUserRoles);
   yield takeLatest(GET_USER_ROLE_BEGIN, getUserRole);
   yield takeLatest(CREATE_USER_ROLE_BEGIN, createUserRole);
   yield takeLatest(UPDATE_USER_ROLE_BEGIN, updateUserRole);

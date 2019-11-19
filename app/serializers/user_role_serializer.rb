@@ -1,5 +1,5 @@
 class UserRoleSerializer < ApplicationRecordSerializer
-  attributes :enterprise
+  attributes :enterprise, :role_name
 
   def serialize_all_fields
     true

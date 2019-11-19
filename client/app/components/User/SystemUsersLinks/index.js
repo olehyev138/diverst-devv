@@ -32,7 +32,7 @@ export function SystemUsersLinks(props) {
           />
           <Tab
             component={WrappedNavLink}
-            to='#'
+            to={ROUTES.admin.system.users.roles.index.path()}
             label='User Roles'
           />
           <Tab

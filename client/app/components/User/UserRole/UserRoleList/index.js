@@ -27,9 +27,8 @@ import EditIcon from '@material-ui/icons/Edit';
 
 import DiverstTable from 'components/Shared/DiverstTable';
 
-
 const styles = theme => ({
-  userListItem: {
+  userRoleListItem: {
     width: '100%',
   },
   userListItemDescription: {
@@ -42,13 +41,9 @@ const styles = theme => ({
 
 export function UserRoleList(props, context) {
   const { classes } = props;
-  const [expandedUsers, setExpandedUsers] = useState({});
-
-  const [userForm, setUserForm] = useState(undefined);
 
   const columns = [
-    { title: 'First Name', field: 'first_name' },
-    { title: 'Last Name', field: 'last_name' }
+    { title: 'Role Name', field: 'role_name' },
   ];
 
   return (
@@ -59,11 +54,11 @@ export function UserRoleList(props, context) {
             variant='contained'
             color='primary'
             size='large'
-            to={props.links.userNew}
+            to='#'
             component={WrappedNavLink}
             startIcon={<AddIcon />}
           >
-            <DiverstFormattedMessage {...messages.new} />
+            Add User Role
           </Button>
         </Grid>
       </Grid>
@@ -71,27 +66,27 @@ export function UserRoleList(props, context) {
       <Grid container spacing={3}>
         <Grid item xs>
           <DiverstTable
-            title='Members'
+            title='User Roles'
             handlePagination={props.handlePagination}
             handleOrdering={props.handleOrdering}
-            isLoading={props.isFetchingUsers}
+            isLoading={props.isFetchingUserRoles}
             rowsPerPage={5}
-            dataArray={Object.values(props.users)}
-            dataTotal={props.userTotal}
+            dataArray={Object.values(props.userRoles)}
+            dataTotal={props.userRoleTotal}
             columns={columns}
             actions={[{
               icon: () => <EditIcon />,
-              tooltip: 'Edit Member',
+              tooltip: 'Edit User Role',
               onClick: (_, rowData) => {
-                props.handleVisitUserEdit(rowData.id);
+                props.handleVisitUserRoleEdit(rowData.id);
               }
             }, {
               icon: () => <DeleteIcon />,
-              tooltip: 'Delete Member',
+              tooltip: 'Delete User Role',
               onClick: (_, rowData) => {
                 /* eslint-disable-next-line no-alert, no-restricted-globals */
-                if (confirm('Delete member?'))
-                  props.deleteUserBegin(rowData.id);
+                if (confirm('Delete user role?'))
+                  props.deleteUserRoleBegin(rowData.id);
               }
             }]}
           />
@@ -103,16 +98,16 @@ export function UserRoleList(props, context) {
 
 UserRoleList.propTypes = {
   classes: PropTypes.object,
-  users: PropTypes.object,
-  userTotal: PropTypes.number,
-  isFetchingUsers: PropTypes.bool,
-  deleteUserBegin: PropTypes.func,
+  userRoles: PropTypes.object,
+  userRoleTotal: PropTypes.number,
+  isFetchingUserRoles: PropTypes.bool,
+  deleteUserRoleBegin: PropTypes.func,
   handlePagination: PropTypes.func,
   handleOrdering: PropTypes.func,
-  handleVisitUserEdit: PropTypes.func,
+  handleVisitUserRoleEdit: PropTypes.func,
   links: PropTypes.shape({
-    userNew: PropTypes.string,
-    userEdit: PropTypes.func
+    userRoleNew: PropTypes.string,
+    userRoleEdit: PropTypes.func
   })
 };
 

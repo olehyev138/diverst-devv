@@ -15,7 +15,8 @@ const styles = theme => ({
 });
 
 const SystemUsersPages = Object.freeze({
-  users: 0
+  users: 0,
+  roles: 1
 });
 
 const SystemUsersLayout = ({ component: Component, classes, ...rest }) => {
@@ -41,7 +42,7 @@ const SystemUsersLayout = ({ component: Component, classes, ...rest }) => {
           />
           <Fade in appear>
             <div className={classes.content}>
-              <Component currentGroup={currentGroup} {...other} />
+              <Component {...other} />
             </div>
           </Fade>
         </React.Fragment>

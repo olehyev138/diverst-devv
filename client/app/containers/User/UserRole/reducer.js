@@ -28,10 +28,10 @@ function usersReducer(state = initialState, action) {
   return produce(state, (draft) => {
     switch (action.type) {
       case GET_USER_ROLES_BEGIN:
-        draft.isFetchingUserRole = true;
+        draft.isFetchingUserRoles = true;
         return;
       case GET_USER_ROLES_SUCCESS:
-        draft.userRoleList = formatUserRole(action.payload.items);
+        draft.userRoleList = formatUserRoles(action.payload.items);
         draft.userRoleTotal = action.payload.total;
         draft.isFetchingUserRoles = false;
         break;
@@ -69,7 +69,7 @@ function usersReducer(state = initialState, action) {
 /*
  * Format users to hash by id
  */
-function formatUserRole(roles) {
+function formatUserRoles(roles) {
   return roles.reduce((map, role) => {
     map[role.id] = role;
     return map;

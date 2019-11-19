@@ -1,6 +1,6 @@
 /**
  *
- * UserRolePage
+ * UserRoleListPage
  *
  */
 
@@ -18,32 +18,32 @@ import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 
 import {
-  selectPaginatedUserRole, selectUserTotal,
-  selectIsFetchingUserRole
-} from 'containers/User/selectors';
+  selectPaginatedUserRoles, selectUserRoleTotal,
+  selectIsFetchingUserRoles
+} from '../selectors';
 import {
-  getUserRoleBegin, userUnmount, deleteUserBegin
-} from 'containers/User/actions';
+  getUserRolesBegin, userRoleUnmount, deleteUserRoleBegin
+} from '../actions';
 
-import reducer from 'containers/User/reducer';
-import saga from 'containers/User/saga';
+import reducer from '../reducer';
+import saga from '../saga';
 
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import UserRoleList from 'components/User/UserRole/UserRoleList';
 
-export function UserListPage(props) {
-  // useInjectReducer({ key: 'users', reducer });
-  // useInjectSaga({ key: 'users', saga });
+export function UserRoleListPage(props) {
+  useInjectReducer({ key: 'roles', reducer });
+  useInjectSaga({ key: 'roles', saga });
 
   const [params, setParams] = useState({ count: 5, page: 0, order: 'asc' });
 
   useEffect(() => {
-    props.getUserRoleBegin(params);
+    props.getUserRolesBegin(params);
 
     return () => {
-      props.userUnmount();
+      props.userRoleUnmount();
     };
   }, []);
 
@@ -56,24 +56,24 @@ export function UserListPage(props) {
   const handlePagination = (payload) => {
     const newParams = { ...params, count: payload.count, page: payload.page };
 
-    props.getUserRoleBegin(newParams);
+    props.getUserRolesBegin(newParams);
     setParams(newParams);
   };
 
   const handleOrdering = (payload) => {
     const newParams = { ...params, orderBy: payload.orderBy, order: payload.orderDir };
 
-    props.getUserRoleBegin(newParams);
+    props.getUserRolesBegin(newParams);
     setParams(newParams);
   };
 
   return (
     <React.Fragment>
       <UserRoleList
-        users={props.users}
-        userTotal={props.userTotal}
+        userRoles={props.userRoles}
+        userRoleTotal={props.userRoleTotal}
         isFetchingUserRole={props.isFetchingUserRole}
-        deleteUserBegin={props.deleteUserBegin}
+        deleteUserBegin={props.deleteUserRoleBegin}
         handlePagination={handlePagination}
         handleOrdering={handleOrdering}
         handleVisitUserEdit={props.handleVisitUserEdit}
@@ -83,26 +83,26 @@ export function UserListPage(props) {
   );
 }
 
-UserListPage.propTypes = {
-  getUserRoleBegin: PropTypes.func.isRequired,
-  users: PropTypes.object,
-  userTotal: PropTypes.number,
+UserRoleListPage.propTypes = {
+  getUserRolesBegin: PropTypes.func.isRequired,
+  userRoles: PropTypes.object,
+  userRoleTotal: PropTypes.number,
   isFetchingUserRole: PropTypes.bool,
-  deleteUserBegin: PropTypes.func,
-  userUnmount: PropTypes.func.isRequired,
+  deleteUserRoleBegin: PropTypes.func,
+  userRoleUnmount: PropTypes.func.isRequired,
   handleVisitUserEdit: PropTypes.func
 };
 
 const mapStateToProps = createStructuredSelector({
-  users: selectPaginatedUserRole(),
-  userTotal: selectUserTotal(),
-  isFetchingUserRole: selectIsFetchingUserRole()
+  userRoles: selectPaginatedUserRoles(),
+  userRoleTotal: selectUserRoleTotal(),
+  isFetchingUserRoles: selectIsFetchingUserRoles()
 });
 
 const mapDispatchToProps = dispatch => ({
-  getUserRoleBegin: payload => dispatch(getUserRoleBegin(payload)),
-  deleteUserBegin: payload => dispatch(deleteUserBegin(payload)),
-  userUnmount: () => dispatch(userUnmount()),
+  getUserRolesBegin: payload => dispatch(getUserRolesBegin(payload)),
+  deleteUserBegin: payload => dispatch(deleteUserRoleBegin(payload)),
+  userRoleUnmount: () => dispatch(userRoleUnmount()),
   handleVisitUserEdit: id => dispatch(push(ROUTES.admin.system.users.edit.path(id)))
 });
 
@@ -114,4 +114,4 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(UserListPage);
+)(UserRoleListPage);

@@ -460,6 +460,14 @@ export const ROUTES = {
         edit: {
           path: (userId = ':user_id') => `/admin/system/users/${userId}/edit`,
         },
+        roles: {
+          index: {
+            path: () => '/admin/system/users/roles',
+            data: {
+              pathPrefix: '/system/users/roles',
+            }
+          }
+        }
       },
       globalSettings: {
         pathPrefix: '/admin/system/settings',

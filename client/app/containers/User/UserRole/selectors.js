@@ -1,44 +1,41 @@
 import { createSelector } from 'reselect/lib';
 
-import produce from 'immer';
-import dig from 'object-dig';
+import { initialState } from 'containers/User/UserRole/reducer';
 
-import { initialState } from 'containers/User/reducer';
+const selectUserRoleDomain = state => state.roles || initialState;
 
-const selectUserRoleDomain = state => state.users || initialState;
-
-const selectPaginatedUserRole = () => createSelector(
+const selectPaginatedUserRoles = () => createSelector(
   selectUserRoleDomain,
-  usersState => usersState.userList
+  roleState => roleState.userRoleList
 );
 
-const selectUserTotal = () => createSelector(
+const selectUserRoleTotal = () => createSelector(
   selectUserRoleDomain,
-  usersState => usersState.userTotal
+  roleState => roleState.userRoleTotal
 );
 
-const selectIsFetchingUserRole = () => createSelector(
+const selectIsFetchingUserRoles = () => createSelector(
   selectUserRoleDomain,
-  usersState => usersState.isFetchingUserRole
+  roleState => roleState.isFetchingUserRoles
 );
 
 const selectUserRole = () => createSelector(
   selectUserRoleDomain,
-  userState => userState.currentUserRole
+  roleState => roleState.currentUserRole
 );
 
 const selectIsFormLoading = () => createSelector(
   selectUserRoleDomain,
-  userState => userState.isFormLoading
+  roleState => roleState.isFormLoading
 );
 
 const selectIsCommitting = () => createSelector(
   selectUserRoleDomain,
-  userState => userState.isCommitting
+  roleState => roleState.isCommitting
 );
 
 export {
-  selectUserRoleDomain, selectPaginatedUserRole,
-  selectUserTotal, selectUserRole, selectIsFetchingUserRole,
+  selectUserRoleDomain, selectPaginatedUserRoles,
+  selectUserRoleTotal, selectUserRole, selectIsFetchingUserRoles,
   selectIsCommitting, selectIsFormLoading
 };
