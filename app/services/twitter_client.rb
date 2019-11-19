@@ -53,10 +53,10 @@ class TwitterClient
   def self.client
     # KEYS ARE FOR TESTING ACCOUNT. MOVE TO application.yml
     @client ||= Twitter::REST::Client.new do |config|
-      config.consumer_key        = ENV['TWITTER_CONSUMER_KEY'] || 'pL0LFoicmzqhb1OH5pyHTx2jB'
-      config.consumer_secret     = ENV['TWITTER_CONSUMER_SECRET'] || 'ocN6m4LuELmtgw9kISvUZ4365RDdfz0HVBRdEid74VHa40PTWz'
-      config.access_token        = ENV['TWITTER_ACCESS_TOKEN'] || '1126509815176495104-33357yN0yeoCbw2sSUJI08QcC2VqFT'
-      config.access_token_secret = ENV['TWITTER_ACCESS_SECRET'] || 'hEabjYDCs6mOiRAsYOY9ixDsyGPNc7qfg01jkLU3VOjb2'
+      config.consumer_key        = ENV['TWITTER_CONSUMER_KEY']
+      config.consumer_secret     = ENV['TWITTER_CONSUMER_SECRET']
+      config.access_token        = ENV['TWITTER_ACCESS_TOKEN']
+      config.access_token_secret = ENV['TWITTER_ACCESS_SECRET']
     end
   end
 
