@@ -18,11 +18,11 @@ import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 
 import {
-  selectPaginatedUsers, selectUserTotal,
-  selectIsFetchingUsers
+  selectPaginatedUserRole, selectUserTotal,
+  selectIsFetchingUserRole
 } from 'containers/User/selectors';
 import {
-  getUsersBegin, userUnmount, deleteUserBegin
+  getUserRoleBegin, userUnmount, deleteUserBegin
 } from 'containers/User/actions';
 
 import reducer from 'containers/User/reducer';
@@ -40,7 +40,7 @@ export function UserListPage(props) {
   const [params, setParams] = useState({ count: 5, page: 0, order: 'asc' });
 
   useEffect(() => {
-    props.getUsersBegin(params);
+    props.getUserRoleBegin(params);
 
     return () => {
       props.userUnmount();
@@ -56,14 +56,14 @@ export function UserListPage(props) {
   const handlePagination = (payload) => {
     const newParams = { ...params, count: payload.count, page: payload.page };
 
-    props.getUsersBegin(newParams);
+    props.getUserRoleBegin(newParams);
     setParams(newParams);
   };
 
   const handleOrdering = (payload) => {
     const newParams = { ...params, orderBy: payload.orderBy, order: payload.orderDir };
 
-    props.getUsersBegin(newParams);
+    props.getUserRoleBegin(newParams);
     setParams(newParams);
   };
 
@@ -72,7 +72,7 @@ export function UserListPage(props) {
       <UserRoleList
         users={props.users}
         userTotal={props.userTotal}
-        isFetchingUsers={props.isFetchingUsers}
+        isFetchingUserRole={props.isFetchingUserRole}
         deleteUserBegin={props.deleteUserBegin}
         handlePagination={handlePagination}
         handleOrdering={handleOrdering}
@@ -84,23 +84,23 @@ export function UserListPage(props) {
 }
 
 UserListPage.propTypes = {
-  getUsersBegin: PropTypes.func.isRequired,
+  getUserRoleBegin: PropTypes.func.isRequired,
   users: PropTypes.object,
   userTotal: PropTypes.number,
-  isFetchingUsers: PropTypes.bool,
+  isFetchingUserRole: PropTypes.bool,
   deleteUserBegin: PropTypes.func,
   userUnmount: PropTypes.func.isRequired,
   handleVisitUserEdit: PropTypes.func
 };
 
 const mapStateToProps = createStructuredSelector({
-  users: selectPaginatedUsers(),
+  users: selectPaginatedUserRole(),
   userTotal: selectUserTotal(),
-  isFetchingUsers: selectIsFetchingUsers()
+  isFetchingUserRole: selectIsFetchingUserRole()
 });
 
 const mapDispatchToProps = dispatch => ({
-  getUsersBegin: payload => dispatch(getUsersBegin(payload)),
+  getUserRoleBegin: payload => dispatch(getUserRoleBegin(payload)),
   deleteUserBegin: payload => dispatch(deleteUserBegin(payload)),
   userUnmount: () => dispatch(userUnmount()),
   handleVisitUserEdit: id => dispatch(push(ROUTES.admin.system.users.edit.path(id)))
