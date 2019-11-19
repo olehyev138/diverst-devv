@@ -18,13 +18,14 @@ import {
 
 import {
   selectPaginatedCampaigns, selectCampaignTotal,
-  selectIsFetchingCampaigns
+  selectIsFetchingCampaigns, selectFormCampaign,
 } from 'containers/Innovate/Campaign/selectors';
 
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import CampaignList from 'components/Innovate/Campaign/CampaignList';
+import { push } from 'connected-react-router';
 
 export function CampaignListPage(props) {
   useInjectReducer({ key: 'campaigns', reducer });
@@ -37,8 +38,12 @@ export function CampaignListPage(props) {
   });
 
   const links = {
+    campaignNew: ROUTES.admin.innovate.campaigns.new.path(),
+    campaignEdit: id => ROUTES.admin.campaigns.edit.path(id),
     // campaignsNew: ROUTES.group.members.new.path(groupId),
   };
+
+  const campaignId = rs.params('campaign_id');
 
   const handlePagination = (payload) => {
     const newParams = { ...params, count: payload.count, page: payload.page };
@@ -58,7 +63,7 @@ export function CampaignListPage(props) {
     props.getCampaignsBegin(params);
 
     return () => {
-      props.getCampaignsBegin();
+      props.campaignsUnmount();
     };
   }, []);
 
@@ -67,8 +72,9 @@ export function CampaignListPage(props) {
       <CampaignList
         campaignList={props.campaignList}
         camapaignTotal={props.campaignTotal}
-        isFetchingMembers={props.isFetchingCampaigns}
-        deleteMemberBegin={props.deleteCampaignBegin}
+        isFetchingCampaigns={props.isFetchingCampaigns}
+        deleteCampaignBegin={props.deleteCampaignBegin}
+        handleVisitCampaignEdit={props.handleVisitCampaignEdit}
         links={links}
         setParams={params}
         params={params}
@@ -85,20 +91,24 @@ CampaignListPage.propTypes = {
   campaignsUnmount: PropTypes.func,
   campaignList: PropTypes.array,
   campaignTotal: PropTypes.number,
-  isFetchingCampaigns: PropTypes.bool
+  isFetchingCampaigns: PropTypes.bool,
+  campaign: PropTypes.object,
+  handleVisitCampaignEdit: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
   campaignList: selectPaginatedCampaigns(),
   campaignTotal: selectCampaignTotal(),
-  isFetchingCampaigns: selectIsFetchingCampaigns()
+  isFetchingCampaigns: selectIsFetchingCampaigns(),
+  campaign: selectFormCampaign(),
 });
 
-const mapDispatchToProps = {
-  getCampaignsBegin,
-  deleteCampaignBegin,
-  campaignsUnmount
-};
+const mapDispatchToProps = dispatch => ({
+  getCampaignsBegin: payload => dispatch(getCampaignsBegin(payload)),
+  deleteCampaignBegin: payload => dispatch(deleteCampaignBegin(payload)),
+  campaignsUnmount: () => dispatch(campaignsUnmount()),
+  handleVisitCampaignEdit: id => dispatch(push(ROUTES.admin.innovate.campaigns.edit.path(id)))
+});
 
 const withConnect = connect(
   mapStateToProps,
