@@ -28,7 +28,7 @@ class Groups::SocialLinksController < ApplicationController
       redirect_to group_posts_path(@group)
     else
       flash[:alert] = 'Your social link was not created. Please fix the errors'
-      redirect_to :back
+      render :new
     end
   end
 

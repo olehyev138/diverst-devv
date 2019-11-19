@@ -11,7 +11,6 @@ class SocialMedia::Importer
     return nil unless self.valid_url? url
 
     set_up_providers
-
     resource = fetch_resource(url)
 
     return nil unless resource
@@ -22,7 +21,7 @@ class SocialMedia::Importer
     when 'photo'
       "<img src='#{resource.url}'>"
     else
-      url
+      resource&.html || url
     end
   end
 
@@ -36,16 +35,15 @@ class SocialMedia::Importer
   protected
 
   def self.set_up_providers
-    unless @key_registered
-      embedly_key = ENV['EMBEDLY_KEY']
-      OEmbed::Providers::Embedly.endpoint += "?key=#{embedly_key}"
-      @key_registered = true
-    end
-
-    OEmbed::Providers.register OEmbed::Providers::Embedly, OEmbed::Providers::Noembed
+    OEmbed::Providers.register_all
+    OEmbed::Providers.register_fallback(
+      OEmbed::ProviderDiscovery,
+      OEmbed::Providers::Noembed
+    )
   end
 
   def self.fetch_resource(url, options = {})
+    url = url[0...-1] if url[-1] == '/'
     resource = OEmbed::Providers.get(url, DEFAULT_MEDIA_OPTIONS.merge(options))
   rescue
     nil
