@@ -6,6 +6,7 @@
 
 import {
   GET_CAMPAIGNS_BEGIN, GET_CAMPAIGNS_SUCCESS, GET_CAMPAIGNS_ERROR,
+  GET_CAMPAIGN_BEGIN, GET_CAMPAIGN_SUCCESS, GET_CAMPAIGN_ERROR,
   CREATE_CAMPAIGN_BEGIN, CREATE_CAMPAIGN_SUCCESS, CREATE_CAMPAIGN_ERROR,
   UPDATE_CAMPAIGN_BEGIN, UPDATE_CAMPAIGN_SUCCESS, UPDATE_CAMPAIGN_ERROR,
   DELETE_CAMPAIGN_BEGIN, DELETE_CAMPAIGN_SUCCESS, DELETE_CAMPAIGN_ERROR,
@@ -39,21 +40,21 @@ export function getCampaignsError(error) {
 
 export function getCampaignBegin(payload) {
   return {
-    type: GET_CAMPAIGNS_BEGIN,
+    type: GET_CAMPAIGN_BEGIN,
     payload
   };
 }
 
 export function getCampaignSuccess(payload) {
   return {
-    type: GET_CAMPAIGNS_SUCCESS,
+    type: GET_CAMPAIGN_SUCCESS,
     payload
   };
 }
 
 export function getCampaignError(error) {
   return {
-    type: GET_CAMPAIGNS_ERROR,
+    type: GET_CAMPAIGN_ERROR,
     error,
   };
 }
