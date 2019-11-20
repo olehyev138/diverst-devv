@@ -14,7 +14,7 @@ RSpec.describe UsersDownloadJob, type: :job do
 
       it 'file name is all_users.csv' do
         subject.perform(user.id, 'all_users')
-        expect(CsvFile.last.download_file_file_name).to eq 'all_users.csv'
+        expect(CsvFile.last.download_file.filename.to_s).to eq 'all_users.csv'
       end
     end
 
@@ -26,7 +26,7 @@ RSpec.describe UsersDownloadJob, type: :job do
 
       it 'file name is active_users.csv' do
         subject.perform(user.id, 'active_users')
-        expect(CsvFile.last.download_file_file_name).to eq 'active_users.csv'
+        expect(CsvFile.last.download_file.filename.to_s).to eq 'active_users.csv'
       end
     end
 
@@ -38,7 +38,7 @@ RSpec.describe UsersDownloadJob, type: :job do
 
       it 'file name is inactive_users.csv' do
         subject.perform(user.id, 'inactive_users')
-        expect(CsvFile.last.download_file_file_name).to eq 'inactive_users.csv'
+        expect(CsvFile.last.download_file.filename.to_s).to eq 'inactive_users.csv'
       end
     end
 
@@ -52,7 +52,7 @@ RSpec.describe UsersDownloadJob, type: :job do
 
       it 'file name is user_role_name.csv' do
         subject.perform(user.id, "#{role_name}")
-        expect(CsvFile.last.download_file_file_name).to eq "#{role_name.split(' ').join('_')}.csv"
+        expect(CsvFile.last.download_file.filename.to_s).to eq "#{role_name.split(' ').join('_')}.csv"
       end
     end
   end
