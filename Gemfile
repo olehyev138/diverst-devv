@@ -79,10 +79,10 @@ end
 
 group :test do
   gem 'clockwork-test', '~> 0.2.0'
-  gem 'hashdiff', '0.3.7'
+  gem 'hashdiff', '0.4.0'
   gem 'rspec_junit_formatter', '~> 0.2.3'
   gem 'simplecov', '~> 0.13.0'
-  gem 'webmock', '~> 3.1.1'
+  gem 'webmock', '~> 3.7.6'
 end
 
 group :development do
