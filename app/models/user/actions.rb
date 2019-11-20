@@ -32,9 +32,11 @@ module User::Actions
     self
   end
 
-  def invite!
-    regenerate_access_token
-    UserMailer.delay(queue: 'mailers').send_invitation(self)
+  def invite!(manager = nil)
+    # TODO Fix this, it seemed to work using Devise previously so not sure where "UserMailer"
+    # TODO or "regenerate_access_token" are (they aren't in react or development)
+    # regenerate_access_token
+    # UserMailer.delay(queue: 'mailers').send_invitation(self)
   end
 
   def posts(params)
