@@ -6,7 +6,7 @@ RSpec.describe CacheSegmentMembersJob, type: :job do
     select_field = create(:select_field, type: 'SelectField', title: 'Gender', options_text: "Male\nFemale", enterprise: enterprise)
 
     segment = create(:segment, enterprise: enterprise)
-    create(:segment_rule, segment: segment, field: select_field, operator: 4, values: '["Female"]')
+    create(:segment_field_rule, segment: segment, field: select_field, operator: Field::OPERATORS[:equals_any_of], data: ['Female'].to_json)
 
     user = create(:user, enterprise: enterprise)
     create(:users_segment, user: user, segment: segment)
@@ -26,9 +26,10 @@ RSpec.describe CacheSegmentMembersJob, type: :job do
     select_field.save!
 
     segment = create(:segment, enterprise: enterprise)
-    create(:segment_rule, segment: segment, field: select_field, operator: 4, values: '["Female"]')
+    create(:segment_field_rule, segment: segment, field: select_field, operator: Field::OPERATORS[:equals_any_of], data: ['Female'].to_json)
 
-    create(:user, enterprise: enterprise, data: "{\"#{select_field.id}\":[\"Female\"]}", active: true)
+    user = create(:user, enterprise: enterprise, active: true)
+    create(:field_data, user_id: user.id, field_id: select_field.id, data: ['Female'].to_json)
 
     expect(segment.members.count).to eq(0)
 
