@@ -463,10 +463,13 @@ export const ROUTES = {
         roles: {
           index: {
             path: () => '/admin/system/users/roles',
-            data: {
-              pathPrefix: '/system/users/roles',
-            }
-          }
+          },
+          new: {
+            path: () => '/admin/system/users/roles/new',
+          },
+          edit: {
+            path: (roleId = ':role_id') => `/admin/system/users/roles/${roleId}/edit`,
+          },
         }
       },
       globalSettings: {

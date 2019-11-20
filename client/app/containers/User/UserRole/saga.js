@@ -44,12 +44,12 @@ export function* getUserRole(action) {
 
 export function* createUserRole(action) {
   try {
-    const payload = { user: action.payload };
+    const payload = { user_role: action.payload };
 
-    const response = yield call(api.users.create.bind(api.users), payload);
+    const response = yield call(api.userRoles.create.bind(api.userRoles), payload);
 
     yield put(createUserRoleSuccess());
-    yield put(push(ROUTES.admin.system.users.index.path()));
+    // yield put(push(ROUTES.admin.system.users.index.path()));
     yield put(showSnackbar({ message: 'UserRole created', options: { variant: 'success' } }));
   } catch (err) {
     yield put(createUserRoleError(err));
@@ -61,11 +61,11 @@ export function* createUserRole(action) {
 
 export function* updateUserRole(action) {
   try {
-    const payload = { user: action.payload };
-    const response = yield call(api.users.update.bind(api.users), payload.user.id, payload);
+    const payload = { user_role: action.payload };
+    const response = yield call(api.userRoles.update.bind(api.userRoles), payload.user.id, payload);
 
     yield put(updateUserRoleSuccess());
-    yield put(push(payload.user.redirectPath || ROUTES.admin.system.users.index.path()));
+    // yield put(push(payload.user.redirectPath || ROUTES.admin.system.users.index.path()));
     yield put(showSnackbar({ message: 'UserRole updated', options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateUserRoleError(err));
@@ -77,10 +77,10 @@ export function* updateUserRole(action) {
 
 export function* deleteUserRole(action) {
   try {
-    yield call(api.users.destroy.bind(api.users), action.payload);
+    yield call(api.userRoles.destroy.bind(api.userRoles), action.payload);
 
     yield put(deleteUserRoleSuccess());
-    yield put(push(ROUTES.admin.system.users.index.path()));
+    // yield put(push(ROUTES.admin.system.users.index.path()));
     yield put(showSnackbar({ message: 'UserRole deleted', options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteUserRoleError(err));

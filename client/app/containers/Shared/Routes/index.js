@@ -13,7 +13,7 @@ import {
   UserNewsLinkPage, UserEventsPage, FoldersPage, FolderCreatePage, FolderEditPage, FolderPage, ResourceCreatePage,
   ResourceEditPage, UserProfilePage, InnovateLayout, CampaignListPage, CampaignCreatePage, CampaignEditPage, CampaignShowPage,
   EnterpriseConfigurationPage, MentorshipProfilePage, MentorshipEditProfilePage, MentorshipLayout, MentorsPage,
-  MentorRequestsPage, SystemUserLayout, UserRolesListPage
+  MentorRequestsPage, SystemUserLayout, UserRolesListPage, UserRoleCreatePage
 } from './templates';
 
 // Paths
@@ -98,6 +98,7 @@ export default function Routes(props) {
 
       { /* Admin - System - User Roles */ }
       <SystemUserLayout exact {...expandRoute(ROUTES.admin.system.users.roles.index)} component={UserRolesListPage} />
+      <SystemUserLayout exact {...expandRoute(ROUTES.admin.system.users.roles.new)} component={UserRoleCreatePage} />
 
       { /* Group */ }
       <GroupLayout exact {...expandRoute(ROUTES.group.home)} component={GroupHomePage} disableBreadcrumbs />
