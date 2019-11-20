@@ -1,5 +1,5 @@
 class MentoringSessionSerializer < ApplicationRecordSerializer
-  attributes :creator, :interests
+  attributes :creator, :interests, :users
 
   has_many :mentoring_interests
 
@@ -12,6 +12,12 @@ class MentoringSessionSerializer < ApplicationRecordSerializer
   end
 
   def creator
-    UserMentorshipLiteSerializer.new(object.creator).as_json
+    UserMentorshipSerializer.new(object.creator, scope: scope, scope_name: :scope).as_json
+  end
+
+  def users
+    object.users.map do |user|
+      UserMentorshipLiteSerializer.new(user, scope: scope, scope_name: :scope).as_json
+    end
   end
 end

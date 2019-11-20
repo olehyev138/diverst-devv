@@ -29,7 +29,7 @@ const defaultParams = Object.freeze({
   count: 10, // TODO: Make this a constant and use it also in SessionsList
   page: 0,
   order: 'desc',
-  orderBy: 'start',
+  orderBy: 'mentoring_sessions.start',
 });
 
 export function SessionsPage(props) {

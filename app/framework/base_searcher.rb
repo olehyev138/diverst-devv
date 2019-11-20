@@ -84,6 +84,7 @@ module BaseSearcher
 
       # get the base includes/joins and base query
       includes = get_includes(params)
+      preloads = get_preloads(params)
       joins = get_joins
       query = get_base_query
 
@@ -118,6 +119,7 @@ module BaseSearcher
         @items
             .joins(joins)
             .includes(includes)
+            .preload(preloads)
             .send_chain(query_scopes)
             .where(query, search: "%#{searchValue}%".downcase)
             .where(where)
@@ -128,6 +130,7 @@ module BaseSearcher
         @items
             .joins(joins)
             .includes(includes)
+            .preload(preloads)
             .send_chain(query_scopes)
             .where(where)
             .where.not(where_not)
@@ -151,6 +154,14 @@ module BaseSearcher
 
       param_includes = set_includes(params)
       base_includes | param_includes
+    end
+
+    def get_preloads(params)
+      if self.respond_to? :base_includes
+        self.base_preloads
+      else
+        []
+      end
     end
 
     def get_joins

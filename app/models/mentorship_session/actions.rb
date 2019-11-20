@@ -4,8 +4,8 @@ module MentorshipSession::Actions
   end
 
   module ClassMethods
-    def base_includes
-      [:mentoring_session, mentoring_session: MentoringSession.base_includes]
+    def base_preloads
+      [:mentoring_session, mentoring_session: MentoringSession.base_preloads]
     end
 
     def valid_scopes

@@ -208,6 +208,11 @@ module User::Actions
       ['mentoring_interests', 'mentoring_types']
     end
 
+    def mentor_includes
+      [:mentoring_interests, :mentoring_types, :mentors, :mentees, :mentorship_ratings, :availabilities,
+      mentors: mentor_lite_includes, mentees: mentor_lite_includes]
+    end
+
     def signin(email, password)
       # check for an email and password
       raise BadRequestException.new 'Email and password required' unless email.present? && password.present?

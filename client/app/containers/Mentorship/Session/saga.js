@@ -58,6 +58,7 @@ export function* getParticipatingSessions(action) {
   try {
     const { payload } = action;
     payload.user_id = payload.userId;
+    payload.includes = ['mentoring_sessions']
     delete payload.userId;
 
     const response = yield call(api.mentorshipSessions.all.bind(api.mentorshipSessions), payload);
