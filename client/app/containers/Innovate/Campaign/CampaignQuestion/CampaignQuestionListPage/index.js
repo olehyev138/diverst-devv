@@ -39,7 +39,7 @@ export function CampaignQuestionListPage(props) {
 
   const links = {
     campaignQuestionNew: ROUTES.admin.innovate.campaigns.questions.new.path(campaignId),
-    campaignQuestionEdit: (id) => ROUTES.admin.innovate.campaigns.questions.new.path(campaignId, id)
+    campaignQuestionEdit: id => ROUTES.admin.innovate.campaigns.questions.new.path(campaignId, id)
   };
 
   const handlePagination = (payload) => {

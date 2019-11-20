@@ -52,7 +52,7 @@ export function CampaignQuestionsList(props) {
 
   const columns = [
     { title: 'Title', field: 'title' },
-    { title: 'Description', field: 'description'}
+    { title: 'Description', field: 'description' }
   ];
 
   return (

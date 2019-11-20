@@ -25,7 +25,7 @@ import { buildValues, mapFields } from 'utils/formHelpers';
 import { DateTime } from 'luxon';
 
 /* eslint-disable object-curly-newline */
-export function CampaignFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, touched, ...props }) {
+export function QuestionFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, touched, ...props }) {
   const { links } = props;
 
   // const getCampaignBeginAction = (searchKey = '') => {
@@ -35,7 +35,7 @@ export function CampaignFormInner({ handleSubmit, handleChange, handleBlur, valu
   // }
 
   return (
-    <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.campaignQuestion}>
+    <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.question}>
       <Card>
         <Form>
           <CardContent>
@@ -100,7 +100,7 @@ export function QuestionForm(props) {
     description: { default: '' },
     created_at: { default: defaultCreatedAt },
     updated_at: { default: '' },
-    campaign_id: { default: ''},
+    campaign_id: { default: '' },
   });
 
   return (
@@ -114,7 +114,7 @@ export function QuestionForm(props) {
         });
       }}
 
-      render={formikProps => <CFormInner {...props} {...formikProps} />}
+      render={formikProps => <QuestionFormInner {...props} {...formikProps} />}
     />
   );
 }
@@ -127,7 +127,7 @@ QuestionForm.propTypes = {
   campaignAction: PropTypes.func,
 };
 
-CampaignFormInner.propTypes = {
+QuestionFormInner.propTypes = {
   edit: PropTypes.bool,
   question: PropTypes.object,
   createQuestionBegin: PropTypes.func,
