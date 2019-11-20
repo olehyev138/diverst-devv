@@ -16,6 +16,7 @@ import {
 } from 'containers/Mentorship/actions';
 
 import { selectFormUser } from 'containers/Mentorship/selectors';
+import { selectMentoringInterests, selectMentoringTypes } from 'containers/Shared/App/selectors';
 
 import saga from 'containers/Mentorship/saga';
 import MentorshipUserForm from 'components/Mentorship/MentorshipUserForm';
@@ -31,6 +32,8 @@ export function UserProfilePage(props) {
       <MentorshipUserForm
         user={props.formUser}
         userAction={props.updateUserBegin}
+        interestOptions={props.interestOptions}
+        typeOptions={props.typeOptions}
       />
     </React.Fragment>
   );
@@ -42,11 +45,15 @@ UserProfilePage.propTypes = {
   user: PropTypes.object,
   formUser: PropTypes.object,
   getUserBegin: PropTypes.func,
-  userUnmount: PropTypes.func
+  userUnmount: PropTypes.func,
+  interestOptions: PropTypes.array,
+  typeOptions: PropTypes.array,
 };
 
 const mapStateToProps = createStructuredSelector({
   formUser: selectFormUser(),
+  interestOptions: selectMentoringInterests(),
+  typeOptions: selectMentoringTypes()
 });
 
 const mapDispatchToProps = {

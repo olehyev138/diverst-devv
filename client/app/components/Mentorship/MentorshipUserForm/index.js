@@ -178,7 +178,7 @@ export function MentorshipUserFormInner({ handleSubmit, handleChange, handleBlur
                 margin='normal'
                 label={<DiverstFormattedMessage {...messages.form.interests} />}
                 value={values.mentoring_interest_ids}
-                options={dig(props, 'user', 'interest_options')}
+                options={props.interestOptions}
                 onChange={value => setFieldValue('mentoring_interest_ids', value)}
               />
               {/* Types */}
@@ -190,7 +190,7 @@ export function MentorshipUserFormInner({ handleSubmit, handleChange, handleBlur
                 margin='normal'
                 label={<DiverstFormattedMessage {...messages.form.types} />}
                 value={values.mentoring_type_ids}
-                options={dig(props, 'user', 'type_options')}
+                options={props.typeOptions}
                 onChange={value => setFieldValue('mentoring_type_ids', value)}
               />
             </CardContent>
@@ -258,6 +258,8 @@ MentorshipUserFormInner.propTypes = {
   buttonText: PropTypes.string,
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
+  interestOptions: PropTypes.array,
+  typeOptions: PropTypes.array,
   links: PropTypes.shape({
     usersIndex: PropTypes.string
   })

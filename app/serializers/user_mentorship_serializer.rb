@@ -1,7 +1,7 @@
 class UserMentorshipSerializer < ApplicationRecordSerializer
   attributes :id, :email, :biography, :name, :first_name, :last_name, :enterprise_id, :avatar_location,
              :mentor, :mentee, :mentors, :mentees, :accepting_mentor_requests, :accepting_mentee_requests, :mentorship_description,
-             :availabilities, :time_zone, :interest_options, :type_options, :interests, :types,
+             :availabilities, :time_zone, :interests, :types,
              :mentorship_proposals, :mentorship_requests
 
   has_many :mentorship_ratings
@@ -19,14 +19,6 @@ class UserMentorshipSerializer < ApplicationRecordSerializer
 
   def types
     object.mentoring_types.map { |i| i.name }.join(', ')
-  end
-
-  def interest_options
-    MentoringInterest.all.as_json
-  end
-
-  def type_options
-    MentoringType.all.as_json
   end
 
   def mentors

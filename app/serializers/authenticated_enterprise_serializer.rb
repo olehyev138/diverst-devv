@@ -16,6 +16,8 @@ class AuthenticatedEnterpriseSerializer < ApplicationRecordSerializer
              :expiry_age_for_resources, :unit_of_expiry_age, :auto_archive, :theme
 
   has_one :custom_text
+  has_many :mentoring_interests
+  has_many :mentoring_types
 
   def theme
     return nil if object.theme.nil?

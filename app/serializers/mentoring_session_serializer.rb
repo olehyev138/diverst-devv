@@ -1,5 +1,5 @@
 class MentoringSessionSerializer < ApplicationRecordSerializer
-  attributes :creator, :interests, :interest_options
+  attributes :creator, :interests
 
   has_many :mentoring_interests
 
@@ -9,10 +9,6 @@ class MentoringSessionSerializer < ApplicationRecordSerializer
 
   def interests
     object.mentoring_interests.map { |i| i.name }.join(', ')
-  end
-
-  def interest_options
-    MentoringInterest.all.as_json
   end
 
   def creator
