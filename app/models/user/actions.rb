@@ -210,7 +210,7 @@ module User::Actions
 
     def mentor_includes
       [:mentoring_interests, :mentoring_types, :mentors, :mentees, :mentorship_ratings, :availabilities,
-      mentors: mentor_lite_includes, mentees: mentor_lite_includes]
+       mentors: mentor_lite_includes, mentees: mentor_lite_includes]
     end
 
     def signin(email, password)
