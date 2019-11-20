@@ -19,13 +19,17 @@ import { selectCampaignTotal, selectCampaign, selectIsCommitting } from 'contain
 
 import CampaignShow from 'components/Innovate/Campaign/CampaignShow';
 
-import { getGroupsBegin } from 'containers/Group/actions';
-
 export function CampaignShowPage(props) {
   useInjectReducer({ key: 'campaigns', reducer });
   useInjectSaga({ key: 'campaigns', saga });
 
   const rs = new RouteService(useContext);
+  const campaignId = rs.params('campaign_id')[0];
+
+  const [params, setParams] = useState({
+    count: 10, page: 0, orderBy: '', order: 'asc'
+  });
+
   const links = {
     CampaignsIndex: ROUTES.admin.innovate.campaigns.index.path(),
   };

@@ -8,8 +8,8 @@ import { compose } from 'redux';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
-import reducer from 'containers/Group/GroupMembers/reducer';
-import saga from 'containers/Group/GroupMembers/saga';
+import reducer from 'containers/Innovate/Campaign/CampaignQuestion/reducer';
+import saga from 'containers/Innovate/Campaign/CampaignQuestion/saga';
 
 import {
   getQuestionsBegin, deleteQuestionBegin,
