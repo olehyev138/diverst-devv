@@ -12,7 +12,7 @@ import reducer from 'containers/Mentorship/Session/reducer';
 import saga from 'containers/Mentorship/Session/saga';
 
 import { selectPaginatedSessions, selectSessionsTotal, selectIsFetchingSessions } from 'containers/Mentorship/Session/selectors';
-import { getLeadingSessionsBegin, sessionsUnmount } from 'containers/Mentorship/Session/actions';
+import { getHostingSessionsBegin, getParticipatingSessionsBegin, sessionsUnmount } from 'containers/Mentorship/Session/actions';
 
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -20,9 +20,9 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import SessionsList from 'components/Mentorship/SessionsList';
 
 const SessionTypes = Object.freeze({
-  upcoming: 0,
+  upcoming: 2,
   ongoing: 1,
-  past: 2,
+  past: 0,
 });
 
 const defaultParams = Object.freeze({
@@ -36,7 +36,7 @@ export function SessionsPage(props) {
   useInjectReducer({ key: 'sessions', reducer });
   useInjectSaga({ key: 'sessions', saga });
 
-  const { user } = props;
+  const { user, type } = props;
 
   const rs = new RouteService(useContext);
   const links = {
@@ -44,7 +44,7 @@ export function SessionsPage(props) {
     sessionShow: id => ROUTES.user.mentorship.sessions.show.path(id)
   };
 
-  const [tab, setTab] = useState(SessionTypes.upcoming);
+  const [tab, setTab] = useState(SessionTypes.ongoing);
   const [params, setParams] = useState(defaultParams);
 
   const getSessions = (scopes, resetParams = false) => {
@@ -59,13 +59,16 @@ export function SessionsPage(props) {
         userId: id,
         query_scopes: scopes
       };
-      props.getLeadingSessionsBegin({ ...newParams });
+      if (type === 'hosting')
+        props.getHostingSessionsBegin({ ...newParams });
+      else if (type === 'participating')
+        props.getParticipatingSessionsBegin({ ...newParams });
       setParams(newParams);
     }
   };
 
   useEffect(() => {
-    getSessions(['upcoming']);
+    getSessions(['ongoing']);
 
     return () => {
       props.sessionsUnmount();
@@ -92,12 +95,13 @@ export function SessionsPage(props) {
   const handlePagination = (payload) => {
     const newParams = { ...params, count: payload.count, page: payload.page };
 
-    props.getLeadingSessionsBegin({ ...newParams, userId: user.id });
+    props.getHostingSessionsBegin({ ...newParams, userId: user.id });
     setParams(newParams);
   };
 
   return (
     <SessionsList
+      type={type}
       sessions={props.sessions}
       sessionsTotal={props.sessionsTotal}
       isLoading={props.isLoading}
@@ -112,7 +116,9 @@ export function SessionsPage(props) {
 
 SessionsPage.propTypes = {
   user: PropTypes.object.isRequired,
-  getLeadingSessionsBegin: PropTypes.func.isRequired,
+  getHostingSessionsBegin: PropTypes.func.isRequired,
+  getParticipatingSessionsBegin: PropTypes.func.isRequired,
+  type: PropTypes.string.isRequired,
   sessionsUnmount: PropTypes.func.isRequired,
   sessions: PropTypes.array,
   sessionsTotal: PropTypes.number,
@@ -129,8 +135,9 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = {
-  getLeadingSessionsBegin,
+  getHostingSessionsBegin,
   sessionsUnmount,
+  getParticipatingSessionsBegin,
 };
 
 const withConnect = connect(

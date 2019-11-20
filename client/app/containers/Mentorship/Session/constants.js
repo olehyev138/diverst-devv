@@ -8,9 +8,9 @@ export const GET_SESSION_BEGIN = 'app/Mentorship/Session/GET_SESSION_BEGIN';
 export const GET_SESSION_SUCCESS = 'app/Mentorship/Session/GET_SESSION_SUCCESS';
 export const GET_SESSION_ERROR = 'app/Mentorship/Session/GET_SESSION_ERROR';
 
-export const GET_LEADING_SESSIONS_BEGIN = 'app/Mentorship/Session/GET_LEADING_SESSIONS_BEGIN';
-export const GET_LEADING_SESSIONS_SUCCESS = 'app/Mentorship/Session/GET_LEADING_SESSIONS_SUCCESS';
-export const GET_LEADING_SESSIONS_ERROR = 'app/Mentorship/Session/GET_LEADING_SESSIONS_ERROR';
+export const GET_HOSTING_SESSIONS_BEGIN = 'app/Mentorship/Session/GET_HOSTING_SESSIONS_BEGIN';
+export const GET_HOSTING_SESSIONS_SUCCESS = 'app/Mentorship/Session/GET_HOSTING_SESSIONS_SUCCESS';
+export const GET_HOSTING_SESSIONS_ERROR = 'app/Mentorship/Session/GET_HOSTING_SESSIONS_ERROR';
 
 export const GET_PARTICIPATING_SESSIONS_BEGIN = 'app/Mentorship/Session/GET_PARTICIPATING_SESSIONS_BEGIN';
 export const GET_PARTICIPATING_SESSIONS_SUCCESS = 'app/Mentorship/Session/GET_PARTICIPATING_SESSIONS_SUCCESS';

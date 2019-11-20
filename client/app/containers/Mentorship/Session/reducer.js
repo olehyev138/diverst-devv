@@ -9,9 +9,9 @@ import {
   GET_SESSION_BEGIN,
   GET_SESSION_SUCCESS,
   GET_SESSION_ERROR,
-  GET_LEADING_SESSIONS_BEGIN,
-  GET_LEADING_SESSIONS_SUCCESS,
-  GET_LEADING_SESSIONS_ERROR,
+  GET_HOSTING_SESSIONS_BEGIN,
+  GET_HOSTING_SESSIONS_SUCCESS,
+  GET_HOSTING_SESSIONS_ERROR,
   GET_PARTICIPATING_SESSIONS_BEGIN,
   GET_PARTICIPATING_SESSIONS_SUCCESS,
   GET_PARTICIPATING_SESSIONS_ERROR,
@@ -40,12 +40,12 @@ function sessionReducer(state = initialState, action) {
   /* eslint-disable consistent-return */
   return produce(state, (draft) => {
     switch (action.type) {
-      case GET_LEADING_SESSIONS_BEGIN:
+      case GET_HOSTING_SESSIONS_BEGIN:
       case GET_PARTICIPATING_SESSIONS_BEGIN:
         draft.isFetchingSessions = true;
         break;
 
-      case GET_LEADING_SESSIONS_ERROR:
+      case GET_HOSTING_SESSIONS_ERROR:
       case GET_PARTICIPATING_SESSIONS_ERROR:
         draft.isFetchingSessions = false;
         break;
@@ -54,7 +54,7 @@ function sessionReducer(state = initialState, action) {
         draft.currentSession = action.payload.session;
         break;
 
-      case GET_LEADING_SESSIONS_SUCCESS:
+      case GET_HOSTING_SESSIONS_SUCCESS:
         draft.sessionList = action.payload.items;
         draft.sessionListTotal = action.payload.total;
         draft.isFetchingSessions = false;
@@ -89,5 +89,5 @@ function sessionReducer(state = initialState, action) {
 export default sessionReducer;
 
 function formatSessions(joinedData) {
-  joinedData.map(x => x.mentoring_session);
+  return joinedData.map(x => x.mentoring_session);
 }

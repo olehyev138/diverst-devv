@@ -137,8 +137,8 @@ export default defineMessages({
     participating: {
       id: `${scope}.menu.participating`
     },
-    leading: {
-      id: `${scope}.menu.leading`
+    hosting: {
+      id: `${scope}.menu.hosting`
     },
     feedback: {
       id: `${scope}.menu.feedback`

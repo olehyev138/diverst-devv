@@ -8,9 +8,9 @@ import {
   GET_SESSION_BEGIN,
   GET_SESSION_SUCCESS,
   GET_SESSION_ERROR,
-  GET_LEADING_SESSIONS_BEGIN,
-  GET_LEADING_SESSIONS_SUCCESS,
-  GET_LEADING_SESSIONS_ERROR,
+  GET_HOSTING_SESSIONS_BEGIN,
+  GET_HOSTING_SESSIONS_SUCCESS,
+  GET_HOSTING_SESSIONS_ERROR,
   GET_PARTICIPATING_SESSIONS_BEGIN,
   GET_PARTICIPATING_SESSIONS_SUCCESS,
   GET_PARTICIPATING_SESSIONS_ERROR,
@@ -47,23 +47,23 @@ export function getSessionError(error) {
   };
 }
 
-export function getLeadingSessionsBegin(payload) {
+export function getHostingSessionsBegin(payload) {
   return {
-    type: GET_LEADING_SESSIONS_BEGIN,
+    type: GET_HOSTING_SESSIONS_BEGIN,
     payload,
   };
 }
 
-export function getLeadingSessionsSuccess(payload) {
+export function getHostingSessionsSuccess(payload) {
   return {
-    type: GET_LEADING_SESSIONS_SUCCESS,
+    type: GET_HOSTING_SESSIONS_SUCCESS,
     payload,
   };
 }
 
-export function getLeadingSessionsError(error) {
+export function getHostingSessionsError(error) {
   return {
-    type: GET_LEADING_SESSIONS_ERROR,
+    type: GET_HOSTING_SESSIONS_ERROR,
     error,
   };
 }

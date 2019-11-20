@@ -11,7 +11,7 @@ import { RouteContext } from 'containers/Layouts/ApplicationLayout';
 import withStyles from '@material-ui/core/styles/withStyles';
 
 import {
-  Box, Tab, Paper, Card, CardContent, Grid, Link, Typography, Button, Hidden,
+  Box, Tab, Paper, Card, CardContent, Grid, Link, Typography, Button, Hidden, CardHeader,
 } from '@material-ui/core';
 
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
@@ -68,21 +68,29 @@ export function SessionsList(props, context) {
   const { classes, intl } = props;
 
   const routeContext = useContext(RouteContext);
+  const titleMessage = props.type === 'hosting' ? messages.title.hosting : messages.title.participating;
 
   return (
     <React.Fragment>
-      <Paper>
+      <Card>
+        <CardHeader
+          title={(
+            <Typography variant='h5' align='center' color='primary'>
+              <DiverstFormattedMessage {...titleMessage} />
+            </Typography>
+          )}
+        />
         <ResponsiveTabs
           value={props.currentTab}
           onChange={props.handleChangeTab}
           indicatorColor='primary'
           textColor='primary'
         >
-          <Tab label={intl.formatMessage(messages.index.upcoming, customTexts())} />
-          <Tab label={intl.formatMessage(messages.index.ongoing, customTexts())} />
           <Tab label={intl.formatMessage(messages.index.past, customTexts())} />
+          <Tab label={intl.formatMessage(messages.index.ongoing, customTexts())} />
+          <Tab label={intl.formatMessage(messages.index.upcoming, customTexts())} />
         </ResponsiveTabs>
-      </Paper>
+      </Card>
       <br />
       <DiverstLoader isLoading={props.isLoading} {...props.loaderProps}>
         <Grid container spacing={3}>
@@ -156,6 +164,7 @@ export function SessionsList(props, context) {
 }
 
 SessionsList.propTypes = {
+  type: PropTypes.string.isRequired,
   intl: PropTypes.object,
   classes: PropTypes.object,
   sessions: PropTypes.array,

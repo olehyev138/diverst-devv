@@ -108,8 +108,8 @@ export const ROUTES = {
         },
       },
       sessions: {
-        leading: {
-          path: (userId = ':user_id') => `/mentorship/${userId}/leadingSessions`,
+        hosting: {
+          path: (userId = ':user_id') => `/mentorship/${userId}/hostingSessions`,
           data: {
             titleMessage: messages.user.mentorship,
           },

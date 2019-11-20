@@ -8,7 +8,7 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import {
   GET_SESSION_BEGIN,
-  GET_LEADING_SESSIONS_BEGIN,
+  GET_HOSTING_SESSIONS_BEGIN,
   GET_PARTICIPATING_SESSIONS_BEGIN,
   CREATE_SESSION_BEGIN,
   UPDATE_SESSION_BEGIN,
@@ -17,7 +17,7 @@ import {
 
 import {
   getSessionSuccess, getSessionError,
-  getLeadingSessionsSuccess, getLeadingSessionsError,
+  getHostingSessionsSuccess, getHostingSessionsError,
   getParticipatingSessionsSuccess, getParticipatingSessionsError,
   createSessionSuccess, createSessionError,
   updateSessionSuccess, updateSessionError,
@@ -37,7 +37,7 @@ export function* getSession(action) {
   }
 }
 
-export function* getLeadingSessions(action) {
+export function* getHostingSessions(action) {
   try {
     const { payload } = action;
     payload.creator_id = payload.userId;
@@ -45,12 +45,12 @@ export function* getLeadingSessions(action) {
 
     const response = yield call(api.mentoringSessions.all.bind(api.mentoringSessions), payload);
 
-    yield put(getLeadingSessionsSuccess(response.data.page));
+    yield put(getHostingSessionsSuccess(response.data.page));
   } catch (err) {
-    yield put(getLeadingSessionsError(err));
+    yield put(getHostingSessionsError(err));
 
     // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to get leading sessions', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: 'Failed to get hosting sessions', options: { variant: 'warning' } }));
   }
 }
 
@@ -58,7 +58,7 @@ export function* getParticipatingSessions(action) {
   try {
     const { payload } = action;
     payload.user_id = payload.userId;
-    payload.delete('userId');
+    delete payload.userId;
 
     const response = yield call(api.mentorshipSessions.all.bind(api.mentorshipSessions), payload);
 
@@ -121,7 +121,7 @@ export function* deleteSession(action) {
 
 export default function* SessionSaga() {
   yield takeLatest(GET_SESSION_BEGIN, getSession);
-  yield takeLatest(GET_LEADING_SESSIONS_BEGIN, getLeadingSessions);
+  yield takeLatest(GET_HOSTING_SESSIONS_BEGIN, getHostingSessions);
   yield takeLatest(GET_PARTICIPATING_SESSIONS_BEGIN, getParticipatingSessions);
   yield takeLatest(CREATE_SESSION_BEGIN, createSession);
   yield takeLatest(UPDATE_SESSION_BEGIN, updateSession);

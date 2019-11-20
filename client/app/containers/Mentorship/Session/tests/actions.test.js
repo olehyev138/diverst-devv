@@ -2,9 +2,9 @@ import {
   GET_SESSION_BEGIN,
   GET_SESSION_SUCCESS,
   GET_SESSION_ERROR,
-  GET_LEADING_SESSIONS_BEGIN,
-  GET_LEADING_SESSIONS_SUCCESS,
-  GET_LEADING_SESSIONS_ERROR,
+  GET_HOSTING_SESSIONS_BEGIN,
+  GET_HOSTING_SESSIONS_SUCCESS,
+  GET_HOSTING_SESSIONS_ERROR,
   GET_PARTICIPATING_SESSIONS_BEGIN,
   GET_PARTICIPATING_SESSIONS_SUCCESS,
   GET_PARTICIPATING_SESSIONS_ERROR,
@@ -24,9 +24,9 @@ import {
   getSessionBegin,
   getSessionSuccess,
   getSessionError,
-  getLeadingSessionsBegin,
-  getLeadingSessionsSuccess,
-  getLeadingSessionsError,
+  getHostingSessionsBegin,
+  getHostingSessionsSuccess,
+  getHostingSessionsError,
   getParticipatingSessionsBegin,
   getParticipatingSessionsSuccess,
   getParticipatingSessionsError,
@@ -78,37 +78,37 @@ describe('session actions', () => {
     });
   });
 
-  describe('leading session list actions', () => {
-    describe('getLeadingSessionsBegin', () => {
-      it('has a type of GET_LEADING_SESSIONS_BEGIN and sets a given payload', () => {
+  describe('hosting session list actions', () => {
+    describe('getHostingSessionsBegin', () => {
+      it('has a type of GET_HOSTING_SESSIONS_BEGIN and sets a given payload', () => {
         const expected = {
-          type: GET_LEADING_SESSIONS_BEGIN,
+          type: GET_HOSTING_SESSIONS_BEGIN,
           payload: { value: 260 }
         };
 
-        expect(getLeadingSessionsBegin({ value: 260 })).toEqual(expected);
+        expect(getHostingSessionsBegin({ value: 260 })).toEqual(expected);
       });
     });
 
-    describe('getLeadingSessionsSuccess', () => {
-      it('has a type of GET_LEADING_SESSIONS_SUCCESS and sets a given payload', () => {
+    describe('getHostingSessionsSuccess', () => {
+      it('has a type of GET_HOSTING_SESSIONS_SUCCESS and sets a given payload', () => {
         const expected = {
-          type: GET_LEADING_SESSIONS_SUCCESS,
+          type: GET_HOSTING_SESSIONS_SUCCESS,
           payload: { value: 908 }
         };
 
-        expect(getLeadingSessionsSuccess({ value: 908 })).toEqual(expected);
+        expect(getHostingSessionsSuccess({ value: 908 })).toEqual(expected);
       });
     });
 
-    describe('getLeadingSessionsError', () => {
-      it('has a type of GET_LEADING_SESSIONS_ERROR and sets a given error', () => {
+    describe('getHostingSessionsError', () => {
+      it('has a type of GET_HOSTING_SESSIONS_ERROR and sets a given error', () => {
         const expected = {
-          type: GET_LEADING_SESSIONS_ERROR,
+          type: GET_HOSTING_SESSIONS_ERROR,
           error: { value: 423 }
         };
 
-        expect(getLeadingSessionsError({ value: 423 })).toEqual(expected);
+        expect(getHostingSessionsError({ value: 423 })).toEqual(expected);
       });
     });
   });

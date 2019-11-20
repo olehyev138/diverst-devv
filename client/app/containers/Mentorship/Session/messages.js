@@ -22,5 +22,13 @@ export default defineMessages({
     emptySection: {
       id: `${scope}.index.tabs.empty_section`,
     },
+  },
+  title: {
+    hosting: {
+      id: `${scope}.title.hosting`,
+    },
+    participating: {
+      id: `${scope}.title.participating`,
+    },
   }
 });
