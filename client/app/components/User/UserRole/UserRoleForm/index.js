@@ -75,12 +75,12 @@ export function UserRoleFormInner({ handleSubmit, handleChange, handleBlur, valu
 }
 
 export function UserRoleForm(props) {
-  const user = dig(props, 'user');
+  const userRole = dig(props, 'userRole');
 
-  const initialValues = buildValues(user, {
+  const initialValues = buildValues(userRole, {
     id: { default: undefined },
     role_name: { default: '' },
-    priority: { default: '' },
+    priority: { default: -1 },
   });
 
   return (
@@ -98,9 +98,7 @@ export function UserRoleForm(props) {
 
 UserRoleForm.propTypes = {
   userRoleAction: PropTypes.func,
-  user: PropTypes.object,
-  currentUserRole: PropTypes.object,
-  admin: PropTypes.bool,
+  userRole: PropTypes.object,
   edit: PropTypes.bool,
   isCommitting: PropTypes.bool,
   isFormLoading: PropTypes.bool,

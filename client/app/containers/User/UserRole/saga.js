@@ -62,7 +62,7 @@ export function* createUserRole(action) {
 export function* updateUserRole(action) {
   try {
     const payload = { user_role: action.payload };
-    const response = yield call(api.userRoles.update.bind(api.userRoles), payload.user.id, payload);
+    const response = yield call(api.userRoles.update.bind(api.userRoles), payload.user_role.id, payload);
 
     yield put(updateUserRoleSuccess());
     // yield put(push(payload.user.redirectPath || ROUTES.admin.system.users.index.path()));

@@ -42,7 +42,7 @@ function usersReducer(state = initialState, action) {
         draft.isFormLoading = true;
         break;
       case GET_USER_ROLE_SUCCESS:
-        draft.currentUserRole = action.payload;
+        draft.currentUserRole = action.payload.user_role;
         draft.isFormLoading = false;
         break;
       case GET_USER_ROLE_ERROR:
