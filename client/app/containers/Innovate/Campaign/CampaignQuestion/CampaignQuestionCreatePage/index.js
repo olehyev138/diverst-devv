@@ -24,7 +24,7 @@ import {
 
 import QuestionForm from 'components/Innovate/Campaign/CampaignQuestion/QuestionForm';
 
-export function CampaignCreatePage(props) {
+export function CampaignQuestionCreatePage(props) {
   useInjectReducer({ key: 'questions', reducer });
   useInjectSaga({ key: 'questions', saga });
   useInjectReducer({ key: 'campaigns', reducer: campaignReducer });
@@ -33,7 +33,7 @@ export function CampaignCreatePage(props) {
   const rs = new RouteService(useContext);
   const campaignId = rs.params('campaign_id')[0];
   const links = {
-    questionsIndex: ROUTES.admin.innovate.campaigns.questions.index.path(campaignId),
+    questionsIndex: ROUTES.admin.innovate.campaigns.show.path(campaignId),
   };
 
   useEffect(() => () => props.campaignQuestionsUnmount(), []);
@@ -49,7 +49,7 @@ export function CampaignCreatePage(props) {
   );
 }
 
-CampaignCreatePage.propTypes = {
+CampaignQuestionCreatePage.propTypes = {
   createQuestionBegin: PropTypes.func,
   campaignQuestionsUnmount: PropTypes.func,
   getCampaignBegin: PropTypes.func,
@@ -75,4 +75,4 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(CampaignCreatePage);
+)(CampaignQuestionCreatePage);

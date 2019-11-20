@@ -434,7 +434,7 @@ export const ROUTES = {
         },
         questions: {
           new: {
-            path: (campaignId = ':campaign_id') => `/groups/${campaignId}/members/new`,
+            path: (campaignId = ':campaign_id') => `/admin/innovate/campaigns/${campaignId}/questions/new`,
           }
         },
       },

@@ -100,6 +100,8 @@ import CampaignCreatePage from 'containers/Innovate/Campaign/CampaignCreatePage/
 import CampaignEditPage from 'containers/Innovate/Campaign/CampaignEditPage/Loadable';
 import CampaignShowPage from 'containers/Innovate/Campaign/CampaignShowPage/Loadable';
 import CampaignQuestionListPage from 'containers/Innovate/Campaign/CampaignQuestion/CampaignQuestionListPage/Loadable';
+import CampaignQuestionCreatePage from 'containers/Innovate/Campaign/CampaignQuestion/CampaignQuestionCreatePage/Loadable';
+
 /* Global */
 import NotFoundPage from 'containers/Shared/NotFoundPage/Loadable';
 import PlaceholderPage from 'components/Shared/PlaceholderPage/Loadable';
@@ -115,7 +117,7 @@ export {
   CustomGraphCreatePage, CustomGraphEditPage, GroupManageLayout, GroupSettingsPage, CustomTextEditPage,
   UserNewsLinkPage, UserEventsPage, FoldersPage, FolderCreatePage, FolderEditPage, FolderPage, ResourceCreatePage,
   ResourceEditPage, UserProfilePage, InnovateLayout, CampaignListPage, CampaignCreatePage, CampaignEditPage, CampaignShowPage,
-  CampaignQuestionListPage,
+  CampaignQuestionListPage, CampaignQuestionCreatePage,
   EnterpriseConfigurationPage, MentorshipProfilePage, MentorshipEditProfilePage, MentorshipLayout, MentorsPage,
   MentorRequestsPage, SystemUserLayout
 };
