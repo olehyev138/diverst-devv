@@ -7,7 +7,8 @@
 import produce from 'immer/dist/immer';
 import {
   GET_CAMPAIGNS_BEGIN, GET_CAMPAIGNS_ERROR,
-  GET_CAMPAIGNS_SUCCESS, CAMPAIGNS_UNMOUNT,
+  GET_CAMPAIGNS_SUCCESS, GET_CAMPAIGN_BEGIN, GET_CAMPAIGN_SUCCESS,
+  GET_CAMPAIGN_ERROR, CAMPAIGNS_UNMOUNT,
   CREATE_CAMPAIGN_BEGIN, CREATE_CAMPAIGN_SUCCESS, CREATE_CAMPAIGN_ERROR,
 } from './constants';
 
@@ -26,7 +27,7 @@ function campaignsReducer(state = initialState, action) {
         draft.isFetchingCampaigns = true;
         break;
       case GET_CAMPAIGNS_SUCCESS:
-        draft.campaignList = formatCampaigns(action.payload.items);
+        draft.campaignList = action.payload.items;
         draft.campaignTotal = action.payload.total;
         draft.isFetchingCampaigns = false;
         break;
@@ -40,24 +41,20 @@ function campaignsReducer(state = initialState, action) {
       case CREATE_CAMPAIGN_ERROR:
         draft.isCommitting = false;
         break;
+      case GET_CAMPAIGN_BEGIN:
+        draft.isFormLoading = true;
+        break;
+      case GET_CAMPAIGN_SUCCESS:
+        draft.currentCampaign = action.payload.campaign;
+        draft.isFormLoading = false;
+        break;
+      case GET_CAMPAIGN_ERROR:
+        draft.isFormLoading = false;
+        break;
       case CAMPAIGNS_UNMOUNT:
         return initialState;
     }
   });
-}
-
-/* Helpers */
-
-function formatCampaigns(campaigns) {
-  /* eslint-disable no-return-assign */
-
-  /* Extract user out of each campaign
-   *   { group_id: <>, user: { ... }  } -> { first_name: <>, ... }
-   */
-  return campaigns.reduce((map, campaign) => {
-    map.push(campaign.user);
-    return map;
-  }, []);
 }
 
 export default campaignsReducer;
