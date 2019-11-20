@@ -8,10 +8,18 @@ class GroupMemberListDownloadJob < ActiveJob::Base
     group = Group.find_by_id(group_id)
     return if group.nil?
 
-    group_members = group.members if export_csv_params == 'all_members'
-    group_members = group.active_members if export_csv_params == 'active_members'
-    group_members = group.members.inactive if export_csv_params == 'inactive_members'
-    group_members = group.pending_members if export_csv_params == 'pending_members'
+    group_members = case export_csv_params
+                    when 'active_members'
+                      group.active_members
+                    when 'inactive_members'
+                      group.members.inactive
+                    when 'pending_members'
+                      group.pending_members
+                    when 'parent_group_members'
+                      group.parent.members
+                    else
+                      group.members
+    end
 
     csv = group.membership_list_csv(group_members)
     file = CsvFile.new(user_id: user.id, download_file_name: "#{group.file_safe_name}_membership_list(#{export_csv_params})")
