@@ -101,7 +101,6 @@ jobs:
             RACK_ENV: test
       - run: bundle exec rake db:migrate
       - run: mkdir -p $CIRCLE_TEST_REPORTS/rspec
-      - run: echo 'export TEST_RETRY="true"' >> $BASH_ENV # Enable Rspec retry
       # Run frontend tests
       - run:
           command: bundle exec rspec --color --require spec_helper --format RspecJunitFormatter --out $CIRCLE_TEST_REPORTS/rspec/rspec.xml --format progress -- $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=filesize)
