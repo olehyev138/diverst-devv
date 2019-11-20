@@ -10,7 +10,10 @@ class CsvFile < ApplicationRecord
   validates :import_file, attached: true, if: Proc.new { |c| !c.download_file.attached? }
   validates :download_file, attached: true, if: Proc.new { |c| !c.import_file.attached? }
 
+  validates_presence_of :download_file_name, if: Proc.new { |c| c.download_file.attached? }
+
   after_commit :schedule_users_import, on: :create
+  before_save :generate_download_file_name, if: Proc.new { |c| c.download_file.attached? }
 
   scope :download_files, -> { where("download_file_name <> ''") }
 
@@ -19,6 +22,12 @@ class CsvFile < ApplicationRecord
   end
 
   protected
+
+  def generate_download_file_name
+    return if download_file_name.present?
+
+    download_file_name = download_file.filename.base
+  end
 
   def schedule_users_import
     return if self.download_file.attached?
