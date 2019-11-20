@@ -56,7 +56,7 @@ class UserGroupNotificationJob < ActiveJob::Base
     User.joins(:groups)
         .where(enterprise_id: enterprise_id,
                groups_notifications_frequency: User.groups_notifications_frequencies[notifications_frequency.to_sym])
-        .uniq
+        .distinct
   end
 
   # checks if frequency is weekly and
