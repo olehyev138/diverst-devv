@@ -8,6 +8,7 @@ import GlobalSettingsLayout from 'containers/Layouts/GlobalSettingsLayout/Loadab
 import GroupManageLayout from 'containers/Layouts/GroupManageLayout/Loadable';
 import MentorshipLayout from 'containers/Layouts/MentorshipLayout/Loadable';
 import InnovateLayout from 'containers/Layouts/InnovateLayout/Loadable';
+import SystemUserLayout from 'containers/Layouts/SystemUsersLayout/Loadable';
 
 /* Session */
 import LoginPage from 'containers/Session/LoginPage/Loadable';
@@ -95,21 +96,81 @@ import ResourceCreatePage from 'containers/Resource/Resource/ResourceCreatePage/
 import ResourceEditPage from 'containers/Resource/Resource/ResourceEditPage/Loadable';
 
 /* Admin Innovate */
-
+import CampaignListPage from 'containers/Innovate/Campaign/CampaignListPage/Loadable';
+import CampaignCreatePage from 'containers/Innovate/Campaign/CampaignCreatePage/Loadable';
+import CampaignEditPage from 'containers/Innovate/Campaign/CampaignEditPage/Loadable';
+import CampaignShowPage from 'containers/Innovate/Campaign/CampaignShowPage/Loadable';
 /* Global */
 import NotFoundPage from 'containers/Shared/NotFoundPage/Loadable';
 import PlaceholderPage from 'components/Shared/PlaceholderPage/Loadable';
 
 
 export {
-  UserLayout, GroupLayout, AdminLayout, SessionLayout, ErrorLayout, GlobalSettingsLayout, LoginPage, HomePage,
-  UserGroupListPage, AdminGroupListPage, GroupCreatePage, GroupEditPage, SegmentListPage, SegmentPage, FieldsPage,
-  UsersPage, UserCreatePage, UserEditPage, GroupHomePage, EventsPage, NewsFeedPage, OutcomesPage, EventPage,
-  EventCreatePage, EventEditPage, GroupMessagePage, GroupMessageCreatePage, GroupMessageEditPage, OutcomeCreatePage,
-  OutcomeEditPage, GroupMemberListPage, GroupMemberCreatePage, NotFoundPage, PlaceholderPage, GroupDashboardPage,
-  UserDashboardPage, MetricsDashboardListPage, MetricsDashboardCreatePage, MetricsDashboardEditPage, MetricsDashboardPage,
-  CustomGraphCreatePage, CustomGraphEditPage, GroupManageLayout, GroupSettingsPage, CustomTextEditPage,
-  UserNewsLinkPage, UserEventsPage, FoldersPage, FolderCreatePage, FolderEditPage, FolderPage, ResourceCreatePage,
-  ResourceEditPage, UserProfilePage, InnovateLayout, EnterpriseConfigurationPage,
-  MentorshipProfilePage, MentorshipEditProfilePage, MentorshipLayout, MentorsPage, MentorRequestsPage, LeadingSessionsPage
+  UserLayout,
+  GroupLayout,
+  AdminLayout,
+  SessionLayout,
+  ErrorLayout,
+  GlobalSettingsLayout,
+  LoginPage,
+  HomePage,
+  UserGroupListPage,
+  AdminGroupListPage,
+  GroupCreatePage,
+  GroupEditPage,
+  SegmentListPage,
+  SegmentPage,
+  FieldsPage,
+  UsersPage,
+  UserCreatePage,
+  UserEditPage,
+  GroupHomePage,
+  EventsPage,
+  NewsFeedPage,
+  OutcomesPage,
+  EventPage,
+  EventCreatePage,
+  EventEditPage,
+  GroupMessagePage,
+  GroupMessageCreatePage,
+  GroupMessageEditPage,
+  OutcomeCreatePage,
+  OutcomeEditPage,
+  GroupMemberListPage,
+  GroupMemberCreatePage,
+  NotFoundPage,
+  PlaceholderPage,
+  GroupDashboardPage,
+  UserDashboardPage,
+  MetricsDashboardListPage,
+  MetricsDashboardCreatePage,
+  MetricsDashboardEditPage,
+  MetricsDashboardPage,
+  CustomGraphCreatePage,
+  CustomGraphEditPage,
+  GroupManageLayout,
+  GroupSettingsPage,
+  CustomTextEditPage,
+  UserNewsLinkPage,
+  UserEventsPage,
+  FoldersPage,
+  FolderCreatePage,
+  FolderEditPage,
+  FolderPage,
+  ResourceCreatePage,
+  ResourceEditPage,
+  UserProfilePage,
+  InnovateLayout,
+  CampaignListPage,
+  CampaignCreatePage,
+  CampaignEditPage,
+  CampaignShowPage,
+  EnterpriseConfigurationPage,
+  MentorshipProfilePage,
+  MentorshipEditProfilePage,
+  MentorshipLayout,
+  MentorsPage,
+  MentorRequestsPage,
+  LeadingSessionsPage,
+  SystemUserLayout
 };

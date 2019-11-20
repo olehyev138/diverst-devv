@@ -3,17 +3,73 @@ import { Switch } from 'react-router';
 
 // Pages
 import {
-  UserLayout, GroupLayout, AdminLayout, SessionLayout, ErrorLayout, GlobalSettingsLayout, LoginPage, HomePage,
-  UserGroupListPage, AdminGroupListPage, GroupCreatePage, GroupEditPage, SegmentListPage, SegmentPage, FieldsPage,
-  UsersPage, UserCreatePage, UserEditPage, GroupHomePage, EventsPage, NewsFeedPage, OutcomesPage, EventPage,
-  EventCreatePage, EventEditPage, GroupMessagePage, GroupMessageCreatePage, GroupMessageEditPage, OutcomeCreatePage,
-  OutcomeEditPage, GroupMemberListPage, GroupMemberCreatePage, NotFoundPage, PlaceholderPage, GroupDashboardPage,
-  UserDashboardPage, MetricsDashboardListPage, MetricsDashboardCreatePage, MetricsDashboardEditPage, MetricsDashboardPage,
-  CustomGraphCreatePage, CustomGraphEditPage, GroupManageLayout, GroupSettingsPage, CustomTextEditPage,
-  UserNewsLinkPage, UserEventsPage, FoldersPage, FolderCreatePage, FolderEditPage, FolderPage, ResourceCreatePage,
-  ResourceEditPage, UserProfilePage, InnovateLayout, EnterpriseConfigurationPage,
-  MentorshipProfilePage, MentorshipEditProfilePage, MentorshipLayout, MentorsPage, MentorRequestsPage, LeadingSessionsPage
-
+  UserLayout,
+  GroupLayout,
+  AdminLayout,
+  SessionLayout,
+  ErrorLayout,
+  GlobalSettingsLayout,
+  LoginPage,
+  HomePage,
+  UserGroupListPage,
+  AdminGroupListPage,
+  GroupCreatePage,
+  GroupEditPage,
+  SegmentListPage,
+  SegmentPage,
+  FieldsPage,
+  UsersPage,
+  UserCreatePage,
+  UserEditPage,
+  GroupHomePage,
+  EventsPage,
+  NewsFeedPage,
+  OutcomesPage,
+  EventPage,
+  EventCreatePage,
+  EventEditPage,
+  GroupMessagePage,
+  GroupMessageCreatePage,
+  GroupMessageEditPage,
+  OutcomeCreatePage,
+  OutcomeEditPage,
+  GroupMemberListPage,
+  GroupMemberCreatePage,
+  NotFoundPage,
+  PlaceholderPage,
+  GroupDashboardPage,
+  UserDashboardPage,
+  MetricsDashboardListPage,
+  MetricsDashboardCreatePage,
+  MetricsDashboardEditPage,
+  MetricsDashboardPage,
+  CustomGraphCreatePage,
+  CustomGraphEditPage,
+  GroupManageLayout,
+  GroupSettingsPage,
+  CustomTextEditPage,
+  UserNewsLinkPage,
+  UserEventsPage,
+  FoldersPage,
+  FolderCreatePage,
+  FolderEditPage,
+  FolderPage,
+  ResourceCreatePage,
+  ResourceEditPage,
+  UserProfilePage,
+  InnovateLayout,
+  CampaignListPage,
+  CampaignCreatePage,
+  CampaignEditPage,
+  CampaignShowPage,
+  EnterpriseConfigurationPage,
+  MentorshipProfilePage,
+  MentorshipEditProfilePage,
+  MentorshipLayout,
+  MentorsPage,
+  MentorRequestsPage,
+  LeadingSessionsPage,
+  SystemUserLayout
 } from './templates';
 
 // Paths
@@ -81,7 +137,10 @@ export default function Routes(props) {
       <AdminLayout {...expandRoute(ROUTES.admin.manage.resources.index)} component={FoldersPage} />
 
       { /* Admin - Innovate */ }
-      <AdminLayout {...expandRoute(ROUTES.admin.innovate.campaigns.index)} component={PlaceholderPage} />
+      <AdminLayout {...expandRoute(ROUTES.admin.innovate.campaigns.new)} component={CampaignCreatePage} />
+      <AdminLayout {...expandRoute(ROUTES.admin.innovate.campaigns.edit)} component={CampaignEditPage} />
+      <AdminLayout {...expandRoute(ROUTES.admin.innovate.campaigns.show)} component={CampaignShowPage} />
+      <AdminLayout {...expandRoute(ROUTES.admin.innovate.campaigns.index)} component={CampaignListPage} />
       <AdminLayout {...expandRoute(ROUTES.admin.innovate.financials.index)} component={PlaceholderPage} />
 
       { /* Admin - System - GlobalSettings */ }
@@ -90,7 +149,7 @@ export default function Routes(props) {
       <GlobalSettingsLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.enterpriseConfiguration.index)} component={EnterpriseConfigurationPage} />
 
       { /* Admin - System - Users */ }
-      <AdminLayout exact {...expandRoute(ROUTES.admin.system.users.index)} component={UsersPage} />
+      <SystemUserLayout exact {...expandRoute(ROUTES.admin.system.users.index)} component={UsersPage} />
       <AdminLayout exact {...expandRoute(ROUTES.admin.system.users.new)} component={UserCreatePage} />
       <AdminLayout exact {...expandRoute(ROUTES.admin.system.users.edit)} component={UserEditPage} />
 

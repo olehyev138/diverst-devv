@@ -453,6 +453,15 @@ export const ROUTES = {
       campaigns: {
         index: {
           path: () => '/admin/innovate/campaigns'
+        },
+        new: {
+          path: () => '/admin/innovate/campaigns/new'
+        },
+        edit: {
+          path: (campaignId = ':campaign_id') => `/admin/innovate/campaigns/${campaignId}/edit`,
+        },
+        show: {
+          path: (campaignId = ':campaign_id') => `/admin/innovate/campaigns/${campaignId}`,
         }
       },
       financials: {
