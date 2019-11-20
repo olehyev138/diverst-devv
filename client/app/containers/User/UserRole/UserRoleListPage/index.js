@@ -72,8 +72,8 @@ export function UserRoleListPage(props) {
       <UserRoleList
         userRoles={props.userRoles}
         userRoleTotal={props.userRoleTotal}
-        isFetchingUserRole={props.isFetchingUserRole}
-        deleteUserBegin={props.deleteUserRoleBegin}
+        isFetchingUserRoles={props.isFetchingUserRoles}
+        deleteUserRoleBegin={props.deleteUserRoleBegin}
         handlePagination={handlePagination}
         handleOrdering={handleOrdering}
         handleVisitUserEdit={props.handleVisitUserEdit}
@@ -87,7 +87,7 @@ UserRoleListPage.propTypes = {
   getUserRolesBegin: PropTypes.func.isRequired,
   userRoles: PropTypes.object,
   userRoleTotal: PropTypes.number,
-  isFetchingUserRole: PropTypes.bool,
+  isFetchingUserRoles: PropTypes.bool,
   deleteUserRoleBegin: PropTypes.func,
   userRoleUnmount: PropTypes.func.isRequired,
   handleVisitUserEdit: PropTypes.func
@@ -101,7 +101,7 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = dispatch => ({
   getUserRolesBegin: payload => dispatch(getUserRolesBegin(payload)),
-  deleteUserBegin: payload => dispatch(deleteUserRoleBegin(payload)),
+  deleteUserRoleBegin: payload => dispatch(deleteUserRoleBegin(payload)),
   userRoleUnmount: () => dispatch(userRoleUnmount()),
   handleVisitUserEdit: id => dispatch(push(ROUTES.admin.system.users.edit.path(id)))
 });

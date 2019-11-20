@@ -36,7 +36,7 @@ function usersReducer(state = initialState, action) {
         draft.isFetchingUserRoles = false;
         break;
       case GET_USER_ROLES_ERROR:
-        draft.isFetchingUserRole = false;
+        draft.isFetchingUserRoles = false;
         return;
       case GET_USER_ROLE_BEGIN:
         draft.isFormLoading = true;
