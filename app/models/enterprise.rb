@@ -110,7 +110,7 @@ class Enterprise < ApplicationRecord
   end
 
   def no_expiry_age_set_and_auto_archive_true?
-    return true if auto_archive? && expiry_age_for_resources == 0
+    true if auto_archive? && expiry_age_for_resources == 0
   end
 
   def archive_switch
