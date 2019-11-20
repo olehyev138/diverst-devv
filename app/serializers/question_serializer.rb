@@ -1,5 +1,5 @@
 class QuestionSerializer < ApplicationRecordSerializer
-  attributes  :questions, :answers
+  attributes  :answers, :title, :description, :campaign
 
   def serialize_all_fields
     true

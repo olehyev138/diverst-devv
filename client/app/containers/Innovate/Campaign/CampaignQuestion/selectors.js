@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect/lib';
 import { initialState } from 'containers/Innovate/Campaign/CampaignQuestion/reducer';
-import {getNewsItem} from "../../../News/saga";
+import {selectCampaignsDomain} from "../selectors";
 
 const selectQuestionsDomain = state => state.questions || initialState;
 
@@ -31,7 +31,7 @@ const selectQuestionTotal = () => createSelector(
 
 const selectIsFetchingQuestions = () => createSelector(
   selectQuestionsDomain,
-  questionsState => questionsState.isFetchingMembers
+  questionsState => questionsState.isFetchingQuestions
 );
 
 const selectIsCommitting = () => createSelector(

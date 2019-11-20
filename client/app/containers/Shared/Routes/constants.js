@@ -433,9 +433,6 @@ export const ROUTES = {
           path: (campaignId = ':campaign_id') => `/admin/innovate/campaigns/${campaignId}`,
         },
         questions: {
-          index: {
-            path: (campaignId = ':campaign_id') => `admin/innovate/campaigns/${campaignId}/questions`,
-          },
           new: {
             path: (campaignId = ':campaign_id') => `/groups/${campaignId}/members/new`,
           }

@@ -23,7 +23,7 @@ import {
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
-import CampaignQuestionsList from 'components/Innovate/Campaign/CampaignQuestionsList';
+import CampaignQuestionsList from 'components/Innovate/Campaign/CampaignQuestion/CampaignQuestionsList';
 import { push } from 'connected-react-router';
 
 export function CampaignQuestionListPage(props) {
@@ -38,7 +38,8 @@ export function CampaignQuestionListPage(props) {
   });
 
   const links = {
-    campaignQuestionNew: ROUTES.admin.innovate.campaigns.question.new.path(campaignId),
+    campaignQuestionNew: ROUTES.admin.innovate.campaigns.questions.new.path(campaignId),
+    campaignQuestionEdit: (id) => ROUTES.admin.innovate.campaigns.questions.new.path(campaignId, id)
   };
 
   const handlePagination = (payload) => {
@@ -100,7 +101,7 @@ const mapDispatchToProps = dispatch => ({
   getQuestionsBegin: payload => dispatch(getQuestionsBegin(payload)),
   deleteQuestionBegin: payload => dispatch(deleteQuestionBegin(payload)),
   campaignQuestionsUnmount: () => dispatch(campaignQuestionsUnmount()),
-  handleVisitQuestionEdit: id => dispatch(push(ROUTES.admin.innovate.campaigns.question.edit.path(id)))
+  handleVisitQuestionEdit: id => dispatch(push(ROUTES.admin.innovate.campaigns.questions.edit.path(id))),
 });
 
 const withConnect = connect(

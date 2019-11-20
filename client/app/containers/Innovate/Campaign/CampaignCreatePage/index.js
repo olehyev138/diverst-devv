@@ -16,7 +16,7 @@ import saga from 'containers/Innovate/Campaign/saga';
 import groupReducer from 'containers/Group/reducer';
 import groupSaga from 'containers/Group/saga';
 
-import { createCampaignBegin, getCampaignsBegin, campaignsUnmount } from 'containers/Innovate/Campaign/actions';
+import { createCampaignBegin, campaignQuestionsUnmount } from 'containers/Innovate/Campaign/actions';
 import {
   selectCampaignTotal, selectIsCommitting
 } from 'containers/Innovate/Campaign/selectors';

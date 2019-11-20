@@ -16,14 +16,13 @@ import { withStyles } from '@material-ui/core/styles';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
-import messages from 'containers/Group/GroupMembers/messages';
 
 import DeleteIcon from '@material-ui/icons/DeleteOutline';
 import AddIcon from '@material-ui/icons/Add';
 import ExportIcon from '@material-ui/icons/SaveAlt';
 
 import DiverstTable from 'components/Shared/DiverstTable';
-import EditIcon from '@material-ui/core/SvgIcon/SvgIcon';
+import EditIcon from '@material-ui/icons/Edit';
 
 const styles = theme => ({
   errorButton: {
@@ -52,8 +51,8 @@ export function CampaignQuestionsList(props) {
   };
 
   const columns = [
-    { title: 'Questions', field: 'questions' },
-    { title: '# of answers', field: 'answers' }
+    { title: 'Title', field: 'title' },
+    { title: 'Description', field: 'description'}
   ];
 
   return (
@@ -68,18 +67,7 @@ export function CampaignQuestionsList(props) {
           component={WrappedNavLink}
           startIcon={<AddIcon />}
         >
-          <DiverstFormattedMessage {...messages.new} />
-        </Button>
-        <Button
-          className={classes.actionButton}
-          variant='contained'
-          to='#'
-          color='secondary'
-          size='large'
-          component={WrappedNavLink}
-          startIcon={<ExportIcon />}
-        >
-          <DiverstFormattedMessage {...messages.export} />
+          ADD NEW QUESTION
         </Button>
       </Box>
       <Box className={classes.floatSpacer} />
@@ -94,7 +82,7 @@ export function CampaignQuestionsList(props) {
         rowsPerPage={props.params.count}
         actions={[{
           icon: () => <EditIcon />,
-          tooltip: 'Edit Member',
+          tooltip: 'Edit Question',
           onClick: (_, rowData) => {
             props.handleVisitQuestionEdit(rowData.id);
           }

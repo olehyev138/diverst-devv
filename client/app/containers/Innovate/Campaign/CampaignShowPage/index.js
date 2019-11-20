@@ -1,6 +1,8 @@
 import React, {
   memo, useContext, useEffect, useState
 } from 'react';
+
+import CampaignQuestionListPage from 'containers/Innovate/Campaign/CampaignQuestion/CampaignQuestionListPage';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
@@ -41,12 +43,9 @@ export function CampaignShowPage(props) {
     return () => props.campaignsUnmount();
   }, []);
   return (
-    <CampaignShow
-      getCampaignBegin={props.getCampaignBegin}
-      isFormLoading={props.isFormLoading}
-      campaign={props.campaign}
-      links={links}
-    />
+    <React.Fragment>
+      <CampaignQuestionListPage />
+    </React.Fragment>
   );
 }
 
