@@ -35,7 +35,7 @@ class PopulateMetricsDashboardJob < ActiveJob::Base
 
       # create initiatives
       numbers.pop.times do
-        pillar.initiatives.create(start: Date.yesterday, end: Date.tomorrow, owner_id: user.id)
+        pillar.initiatives.create(start: Date.yesterday, end: Date.tomorrow, owner_id: user.id, owner_group: group)
       end
     end
   end
