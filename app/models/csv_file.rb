@@ -15,11 +15,7 @@ class CsvFile < ApplicationRecord
   scope :download_files, -> { where("download_file_name <> ''") }
 
   def path_for_csv
-    if File.exist?(self.import_file.path)
-      self.import_file.path
-    else
-      ActiveStorage::Blob.service.send(:path_for, self.import_file.key)
-    end
+    ActiveStorage::Blob.service.send(:path_for, self.import_file.key)
   end
 
   protected

@@ -8,10 +8,12 @@ FactoryBot.define do
       import_file_file { Pathname.new("#{Rails.root}/spec/fixtures/files/diverst_csv_import.csv") }
 
       after(:build) do |csv_file, evaluator|
-        csv_file.import_file.attach(
-          io: evaluator.import_file_file.open,
-          filename: evaluator.import_file_file.basename.to_s
-        )
+        unless csv_file.import_file.attached?
+          csv_file.import_file.attach(
+            io: evaluator.import_file_file.open,
+            filename: evaluator.import_file_file.basename.to_s
+          )
+        end
       end
     end
   end
