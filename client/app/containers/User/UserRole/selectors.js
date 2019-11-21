@@ -29,7 +29,7 @@ const selectFormUserRole = () => createSelector(
   selectUserRoleDomain,
   (roleState) => {
     if (!roleState.currentUserRole)
-      return;
+      return null;
 
     return produce(roleState.currentUserRole, (draft) => {
       draft.role_type = {
