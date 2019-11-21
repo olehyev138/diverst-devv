@@ -435,8 +435,11 @@ export const ROUTES = {
         questions: {
           new: {
             path: (campaignId = ':campaign_id') => `/admin/innovate/campaigns/${campaignId}/questions/new`,
+          },
+          edit: {
+            path: (campaignId = ':campaign_id', questionId= ':question_id') =>`/admin/innovate/campaigns/${campaignId}/questions/${questionId}/edit`,
           }
-        },
+        }
       },
       financials: {
         index: {

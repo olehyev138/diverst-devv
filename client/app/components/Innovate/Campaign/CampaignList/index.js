@@ -24,6 +24,7 @@ import AddIcon from '@material-ui/icons/Add';
 import ExportIcon from '@material-ui/icons/SaveAlt';
 
 import DiverstTable from 'components/Shared/DiverstTable';
+import CampaignQuestionsList from "../CampaignQuestion/CampaignQuestionsList";
 
 const styles = theme => ({
   errorButton: {

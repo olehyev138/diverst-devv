@@ -85,6 +85,7 @@ export function CampaignQuestionFormInner({ handleSubmit, handleChange, handleBl
 
 export function CampaignQuestionForm(props) {
   const { campaignId } = props;
+  const { questionId } = props;
   const initialValues = buildValues(props.question, {
     // users: { default: [], customKey: 'member_ids' }
     id: { default: '' },
@@ -123,7 +124,7 @@ CampaignQuestionFormInner.propTypes = {
   values: PropTypes.object,
   buttonText: PropTypes.string,
   selectUsers: PropTypes.array,
-  getCampaignBegin: PropTypes.func,
+  getQuestionBegin: PropTypes.func,
   // getMembersBegin: PropTypes.func,
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,

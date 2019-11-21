@@ -2,7 +2,13 @@ import { createSelector } from 'reselect/lib';
 import { initialState } from 'containers/Innovate/Campaign/CampaignQuestion/reducer';
 import { selectCampaignsDomain } from '../selectors';
 
+
 const selectQuestionsDomain = state => state.questions || initialState;
+
+const selectQuestion = () => createSelector(
+  selectQuestionsDomain,
+  questionsState => questionsState.currentQuestion
+);
 
 const selectPaginatedQuestions = () => createSelector(
   selectQuestionsDomain,

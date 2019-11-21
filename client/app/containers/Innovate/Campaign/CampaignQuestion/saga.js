@@ -66,10 +66,10 @@ export function* deleteQuestion(action) {
       question_id: action.payload.question.id
     };
 
-    yield call(api.questions.destroy.bind(api.questions), action.payload.id);
+    yield call(api.questions.destroy.bind(api.questions), action.payload.question_id);
 
     yield put(deleteQuestionSuccess());
-    yield put(push(ROUTES.innovate.campaigns.questions.index.path(action.payload.campaign.id)));
+    yield put(push(ROUTES.innovate.campaigns.questions.index.path(action.payload.campaign./d)));
     yield put(showSnackbar({ message: 'Question deleted', options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteQuestionError(err));

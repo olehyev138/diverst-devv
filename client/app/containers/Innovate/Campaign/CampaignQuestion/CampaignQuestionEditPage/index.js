@@ -15,27 +15,21 @@ import reducer from 'containers/Innovate/Campaign/CampaignQuestion/reducer';
 import saga from 'containers/Innovate/Campaign/CampaignQuestion/saga';
 import campaignReducer from 'containers/Innovate/Campaign/reducer';
 import campaignSaga from 'containers/Innovate/Campaign/saga';
-import getCampaignBegin from 'containers/Innovate/Campaign/actions';
 
 import {
   selectQuestionTotal, selectIsCommitting
 } from 'containers/Innovate/Campaign/CampaignQuestion/selectors';
 
-import QuestionForm from 'components/Innovate/Campaign/CampaignQuestion/CampaignQuestionForm';
-
-import { updateQuestionBegin, getQuestionBegin, campaignQuestionsUnmount } from 'containers/Innovate/Campaign/CampaignQuestion/actions';
-import { selectCampaignTotal, selectFormCampaign, selectIsCommitting } from 'containers/Innovate/Campaign/selectors';
-
 import CampaignQuestionForm from 'components/Innovate/Campaign/CampaignQuestion/CampaignQuestionForm';
 
-import { getGroupsBegin } from 'containers/Group/actions';
-import { selectPaginatedSelectGroups, selectFormGroup } from 'containers/Group/selectors';
+import { updateQuestionBegin, getQuestionBegin, campaignQuestionsUnmount } from 'containers/Innovate/Campaign/CampaignQuestion/actions';
 
-export function CampaignEditPage(props) {
-  useInjectReducer({ key: 'campaigns', reducer });
-  useInjectSaga({ key: 'campaigns', saga });
-  useInjectReducer({ key: 'groups', reducer: groupReducer });
-  useInjectSaga({ key: 'groups', saga: groupSaga });
+
+export function CampaignQuestionEditPage(props) {
+  useInjectReducer({ key: 'questions', reducer });
+  useInjectSaga({ key: 'questions', saga });
+  useInjectReducer({ key: 'campaigns', reducer: campaignReducer });
+  useInjectSaga({ key: 'campaigns', saga: campaignSaga });
 
   const rs = new RouteService(useContext);
   const links = {
@@ -44,48 +38,47 @@ export function CampaignEditPage(props) {
 
   useEffect(() => {
     const campaignId = rs.params('campaign_id');
-    props.getCampaignBegin({ id: rs.params('campaign_id') });
+    const questionId = rs.params('question_id');
+    console.log(questionId);
 
-    return () => props.campaignsUnmount();
+    props.getQuestionBegin({ id: questionId });
+
+    return () => props.campaignQuestionsUnmount();
   }, []);
   return (
-    <CampaignForm
+    <CampaignQuestionForm
       edit
-      getCampaignBegin={props.getCampaignBegin}
-      getGroupsBegin={props.getGroupsBegin}
-      selectGroups={props.groups}
-      group={props.group}
-      campaignAction={props.updateCampaignBegin}
+      getQuestionBegin={props.getQuestionBegin}
+      questionAction={props.updateQuestionBegin}
+      campaignId={props.campaignId[0]}
+      questionId={props.questionId[0]}
       isCommitting={props.isCommitting}
       isFormLoading={props.isFormLoading}
       buttonText='Update'
-      campaign={props.campaign}
+      question={props.question}
       links={links}
     />
   );
 }
 
-CampaignEditPage.propTypes = {
-  getCampaignBegin: PropTypes.func,
-  getGroupsBegin: PropTypes.func,
-  updateCampaignBegin: PropTypes.func,
-  group: PropTypes.object,
-  groups: PropTypes.array,
-  campaignsUnmount: PropTypes.func,
+CampaignQuestionEditPage.propTypes = {
+  getQuestionBegin: PropTypes.func,
+  updateQuestionBegin: PropTypes.func,
+  campaignQuestionsUnmount: PropTypes.func,
   isFormLoading: PropTypes.func,
-  campaign: PropTypes.object,
+  question: PropTypes.object,
   users: PropTypes.array,
   isCommitting: PropTypes.bool,
+  campaignId: PropTypes.array,
+  questionId: PropTypes.array,
+
 };
 
 const mapStateToProps = createStructuredSelector({
-  campaign: selectFormCampaign(),
-  question: selectFormQuestion(),
   isCommitting: selectIsCommitting(),
 });
 
 const mapDispatchToProps = {
-  getCampaignBegin,
   getQuestionBegin,
   updateQuestionBegin,
   campaignQuestionsUnmount,

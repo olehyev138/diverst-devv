@@ -71,6 +71,8 @@ export function CampaignQuestionListPage(props) {
         questionTotal={props.questionTotal}
         isFetchingQuestions={props.isFetchingQuestions}
         campaignId={campaignId}
+        handleVisitQuestionEdit={props.handleVisitQuestionEdit}
+
         deleteQuestionBegin={props.deleteQuestionBegin}
         links={links}
         setParams={params}
@@ -101,7 +103,7 @@ const mapDispatchToProps = dispatch => ({
   getQuestionsBegin: payload => dispatch(getQuestionsBegin(payload)),
   deleteQuestionBegin: payload => dispatch(deleteQuestionBegin(payload)),
   campaignQuestionsUnmount: () => dispatch(campaignQuestionsUnmount()),
-  handleVisitQuestionEdit: id => dispatch(push(ROUTES.admin.innovate.campaigns.questions.edit.path(id))),
+  handleVisitQuestionEdit: (campaignId, id) => dispatch(push(ROUTES.admin.innovate.campaigns.questions.edit.path(campaignId, id))),
 });
 
 const withConnect = connect(

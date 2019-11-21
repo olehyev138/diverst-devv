@@ -84,7 +84,7 @@ export function CampaignQuestionsList(props) {
           icon: () => <EditIcon />,
           tooltip: 'Edit Question',
           onClick: (_, rowData) => {
-            props.handleVisitQuestionEdit(rowData.id);
+            props.handleVisitQuestionEdit(props.campaignId, rowData.id);
           }
         }, {
           icon: () => <DeleteIcon />,
