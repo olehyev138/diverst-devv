@@ -40,7 +40,7 @@ const styles = theme => ({
 });
 
 export function UserRoleList(props, context) {
-  const { classes } = props;
+  const { classes, links } = props;
 
   const columns = [
     { title: 'Role Name', field: 'role_name' },
@@ -56,7 +56,7 @@ export function UserRoleList(props, context) {
             variant='contained'
             color='primary'
             size='large'
-            to='#'
+            to={links.userRoleNew}
             component={WrappedNavLink}
             startIcon={<AddIcon />}
           >

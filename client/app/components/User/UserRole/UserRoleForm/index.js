@@ -82,7 +82,7 @@ export function UserRoleFormInner({ handleSubmit, handleChange, handleBlur, valu
               </DiverstSubmit>
               <Button
                 disabled={props.isCommitting}
-                to='#'
+                to={props.links.userRolesIndex}
                 component={WrappedNavLink}
               >
                 Cancel
@@ -146,8 +146,7 @@ UserRoleFormInner.propTypes = {
   isCommitting: PropTypes.bool,
   isFormLoading: PropTypes.bool,
   links: PropTypes.shape({
-    usersIndex: PropTypes.string,
-    usersPath: PropTypes.func,
+    userRolesIndex: PropTypes.string,
   })
 };
 

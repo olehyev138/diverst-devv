@@ -30,7 +30,7 @@ export function UserRoleCreatePage(props) {
 
   const rs = new RouteService(useContext);
   const links = {
-    usersIndex: ROUTES.admin.system.users.index.path(),
+    userRolesIndex: ROUTES.admin.system.users.roles.index.path(),
   };
 
   return (

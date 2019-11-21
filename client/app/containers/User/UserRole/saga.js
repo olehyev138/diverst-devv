@@ -38,7 +38,7 @@ export function* getUserRole(action) {
   } catch (err) {
     // TODO: intl message
     yield put(getUserRoleError(err));
-    yield put(showSnackbar({ message: 'Failed to get user', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: 'Failed to get user role', options: { variant: 'warning' } }));
   }
 }
 
@@ -49,13 +49,13 @@ export function* createUserRole(action) {
     const response = yield call(api.userRoles.create.bind(api.userRoles), payload);
 
     yield put(createUserRoleSuccess());
-    // yield put(push(ROUTES.admin.system.users.index.path()));
-    yield put(showSnackbar({ message: 'UserRole created', options: { variant: 'success' } }));
+    yield put(push(ROUTES.admin.system.users.roles.index.path()));
+    yield put(showSnackbar({ message: 'User role created', options: { variant: 'success' } }));
   } catch (err) {
     yield put(createUserRoleError(err));
 
     // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to create user', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: 'Failed to create user role', options: { variant: 'warning' } }));
   }
 }
 
@@ -65,13 +65,13 @@ export function* updateUserRole(action) {
     const response = yield call(api.userRoles.update.bind(api.userRoles), payload.user_role.id, payload);
 
     yield put(updateUserRoleSuccess());
-    // yield put(push(payload.user.redirectPath || ROUTES.admin.system.users.index.path()));
-    yield put(showSnackbar({ message: 'UserRole updated', options: { variant: 'success' } }));
+    yield put(push(ROUTES.admin.system.users.roles.index.path()));
+    yield put(showSnackbar({ message: 'User role updated', options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateUserRoleError(err));
 
     // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to update user', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: 'Failed to update user role', options: { variant: 'warning' } }));
   }
 }
 
@@ -80,8 +80,8 @@ export function* deleteUserRole(action) {
     yield call(api.userRoles.destroy.bind(api.userRoles), action.payload);
 
     yield put(deleteUserRoleSuccess());
-    // yield put(push(ROUTES.admin.system.users.index.path()));
-    yield put(showSnackbar({ message: 'UserRole deleted', options: { variant: 'success' } }));
+    yield put(push(ROUTES.admin.system.users.roles.index.path()));
+    yield put(showSnackbar({ message: 'User role deleted', options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteUserRoleError(err));
 

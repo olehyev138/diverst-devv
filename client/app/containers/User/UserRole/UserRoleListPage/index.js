@@ -49,8 +49,8 @@ export function UserRoleListPage(props) {
 
   const rs = new RouteService(useContext);
   const links = {
-    userNew: ROUTES.admin.system.users.new.path(),
-    userEdit: id => ROUTES.admin.system.users.edit.path(id),
+    userRoleNew: ROUTES.admin.system.users.roles.new.path(),
+    userRoleEdit: id => ROUTES.admin.system.users.edit.path(id),
   };
 
   const handlePagination = (payload) => {
@@ -76,7 +76,7 @@ export function UserRoleListPage(props) {
         deleteUserRoleBegin={props.deleteUserRoleBegin}
         handlePagination={handlePagination}
         handleOrdering={handleOrdering}
-        handleVisitUserEdit={props.handleVisitUserEdit}
+        handleVisitUserRoleEdit={props.handleVisitUserRoleEdit}
         links={links}
       />
     </React.Fragment>
@@ -90,7 +90,7 @@ UserRoleListPage.propTypes = {
   isFetchingUserRoles: PropTypes.bool,
   deleteUserRoleBegin: PropTypes.func,
   userRoleUnmount: PropTypes.func.isRequired,
-  handleVisitUserEdit: PropTypes.func
+  handleVisitUserRoleEdit: PropTypes.func
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -103,7 +103,7 @@ const mapDispatchToProps = dispatch => ({
   getUserRolesBegin: payload => dispatch(getUserRolesBegin(payload)),
   deleteUserRoleBegin: payload => dispatch(deleteUserRoleBegin(payload)),
   userRoleUnmount: () => dispatch(userRoleUnmount()),
-  handleVisitUserEdit: id => dispatch(push(ROUTES.admin.system.users.edit.path(id)))
+  handleVisitUserRoleEdit: id => dispatch(push(ROUTES.admin.system.users.roles.edit.path(id)))
 });
 
 const withConnect = connect(
