@@ -38,7 +38,7 @@ export function CampaignShowPage(props) {
 
   useEffect(() => {
     const campaignId = rs.params('campaign_id');
-    props.getCampaignBegin({ id: 17 });
+    props.getCampaignBegin({ id: rs.params('campaign_id') });
 
     return () => props.campaignsUnmount();
   }, []);

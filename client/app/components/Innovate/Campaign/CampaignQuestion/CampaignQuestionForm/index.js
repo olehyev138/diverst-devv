@@ -25,14 +25,8 @@ import { buildValues, mapFields } from 'utils/formHelpers';
 import { DateTime } from 'luxon';
 
 /* eslint-disable object-curly-newline */
-export function QuestionFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, touched, ...props }) {
+export function CampaignQuestionFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, touched, ...props }) {
   const { links } = props;
-
-  // const getCampaignBeginAction = (searchKey = '') => {
-  //   props.getCampaignBegin({
-  //     count:
-  //   })
-  // }
 
   return (
     <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.question}>
@@ -89,18 +83,14 @@ export function QuestionFormInner({ handleSubmit, handleChange, handleBlur, valu
   );
 }
 
-export function QuestionForm(props) {
-  const [defaultCreatedAt] = useState(DateTime.local());
-  const [defaultUpdatedAt] = useState(DateTime.local());
-
+export function CampaignQuestionForm(props) {
+  const { campaignId } = props;
   const initialValues = buildValues(props.question, {
     // users: { default: [], customKey: 'member_ids' }
     id: { default: '' },
     title: { default: '' },
     description: { default: '' },
-    created_at: { default: defaultCreatedAt },
-    updated_at: { default: '' },
-    campaign_id: { default: '' },
+    campaign_id: { default: campaignId },
   });
 
   return (
@@ -108,26 +98,22 @@ export function QuestionForm(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        props.createQuestionBegin({
-          campaignId: props.campaignId,
-          attributes: mapFields(values)
-        });
+        props.questionAction(values);
       }}
-
-      render={formikProps => <QuestionFormInner {...props} {...formikProps} />}
+      render={formikProps => <CampaignQuestionFormInner {...props} {...formikProps} />}
     />
   );
 }
-QuestionForm.propTypes = {
+CampaignQuestionForm.propTypes = {
   edit: PropTypes.bool,
   createQuestionBegin: PropTypes.func,
   campaignId: PropTypes.string,
   isCommitting: PropTypes.bool,
   question: PropTypes.object,
-  campaignAction: PropTypes.func,
+  questionAction: PropTypes.func,
 };
 
-QuestionFormInner.propTypes = {
+CampaignQuestionFormInner.propTypes = {
   edit: PropTypes.bool,
   question: PropTypes.object,
   createQuestionBegin: PropTypes.func,
@@ -151,4 +137,4 @@ QuestionFormInner.propTypes = {
 
 export default compose(
   memo,
-)(QuestionForm);
+)(CampaignQuestionForm);

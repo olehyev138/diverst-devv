@@ -31,15 +31,11 @@ export function* getQuestions(action) {
 
 export function* createQuestion(action) {
   try {
-    const payload = {
-      campaign_id: action.payload.campaign.id,
-      question_id: action.payload.attributes.question.id
-    };
-
+    const payload = { question: action.payload };
     const response = yield call(api.questions.create.bind(api.questions), payload);
 
     yield put(createQuestionSuccess());
-    yield put(push(ROUTES.innovate.campaigns.questions.index.path(action.payload.campaign.id)));
+    yield put(push(ROUTES.admin.innovate.campaigns.show.path(action.payload.campaign_id)));
     yield put(showSnackbar({ message: 'Question created', options: { variant: 'success' } }));
   } catch (err) {
     yield put(createQuestionError(err));

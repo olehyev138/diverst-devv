@@ -15,14 +15,11 @@ import reducer from 'containers/Innovate/Campaign/CampaignQuestion/reducer';
 import saga from 'containers/Innovate/Campaign/CampaignQuestion/saga';
 import campaignReducer from 'containers/Innovate/Campaign/reducer';
 import campaignSaga from 'containers/Innovate/Campaign/saga';
-import getCampaignBegin from 'containers/Innovate/Campaign/actions';
 
 import { createQuestionBegin, campaignQuestionsUnmount } from 'containers/Innovate/Campaign/CampaignQuestion/actions';
-import {
-  selectQuestionTotal, selectIsCommitting
-} from 'containers/Innovate/Campaign/CampaignQuestion/selectors';
+import { selectIsCommitting } from 'containers/Innovate/Campaign/CampaignQuestion/selectors';
 
-import QuestionForm from 'components/Innovate/Campaign/CampaignQuestion/QuestionForm';
+import CampaignQuestionForm from 'components/Innovate/Campaign/CampaignQuestion/CampaignQuestionForm';
 
 export function CampaignQuestionCreatePage(props) {
   useInjectReducer({ key: 'questions', reducer });
@@ -31,7 +28,7 @@ export function CampaignQuestionCreatePage(props) {
   useInjectSaga({ key: 'campaigns', saga: campaignSaga });
 
   const rs = new RouteService(useContext);
-  const campaignId = rs.params('campaign_id')[0];
+  const campaignId = rs.params('campaign_id');
   const links = {
     questionsIndex: ROUTES.admin.innovate.campaigns.show.path(campaignId),
   };
@@ -39,10 +36,10 @@ export function CampaignQuestionCreatePage(props) {
   useEffect(() => () => props.campaignQuestionsUnmount(), []);
 
   return (
-    <QuestionForm
+    <CampaignQuestionForm
       questionAction={props.createQuestionBegin}
+      campaignId={campaignId[0]}
       buttonText='CREATE QUESTION'
-      getCampaignBegin={props.getCampaignBegin}
       isCommitting={props.isCommitting}
       links={links}
     />
@@ -64,7 +61,6 @@ const mapStateToProps = createStructuredSelector({
 const mapDispatchToProps = {
   createQuestionBegin,
   campaignQuestionsUnmount,
-  getCampaignBegin,
 };
 
 const withConnect = connect(
