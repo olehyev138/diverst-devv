@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect/lib';
+import produce from 'immer';
 
 import { initialState } from 'containers/User/UserRole/reducer';
 
@@ -24,6 +25,21 @@ const selectUserRole = () => createSelector(
   roleState => roleState.currentUserRole
 );
 
+const selectFormUserRole = () => createSelector(
+  selectUserRoleDomain,
+  (roleState) => {
+    if (!roleState.currentUserRole)
+      return;
+
+    return produce(roleState.currentUserRole, (draft) => {
+      draft.role_type = {
+        label: draft.role_type.charAt(0).toUpperCase() + draft.role_type.slice(1),
+        value: draft.role_type
+      };
+    });
+  }
+);
+
 const selectIsFormLoading = () => createSelector(
   selectUserRoleDomain,
   roleState => roleState.isFormLoading
@@ -37,5 +53,5 @@ const selectIsCommitting = () => createSelector(
 export {
   selectUserRoleDomain, selectPaginatedUserRoles,
   selectUserRoleTotal, selectUserRole, selectIsFetchingUserRoles,
-  selectIsCommitting, selectIsFormLoading
+  selectIsCommitting, selectIsFormLoading, selectFormUserRole
 };

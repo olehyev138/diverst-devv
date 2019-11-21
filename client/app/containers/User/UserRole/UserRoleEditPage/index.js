@@ -18,7 +18,7 @@ import {
   updateUserRoleBegin, userRoleUnmount
 } from '../actions';
 import {
-  selectUserRole, selectIsCommitting, selectIsFormLoading
+  selectFormUserRole, selectIsCommitting, selectIsFormLoading
 } from '../selectors';
 
 import UserRoleForm from 'components/User/UserRole/UserRoleForm';
@@ -66,7 +66,7 @@ UserRoleEditPage.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
-  userRole: selectUserRole(),
+  userRole: selectFormUserRole(),
   isCommitting: selectIsCommitting(),
   isFormLoading: selectIsFormLoading(),
 });

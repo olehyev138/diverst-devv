@@ -22,9 +22,17 @@ import { buildValues, mapFields } from 'utils/formHelpers';
 
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
+import Select from 'components/Shared/DiverstSelect';
 
 /* eslint-disable object-curly-newline */
 export function UserRoleFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
+  /* This should always match the roles defined in the backend model */
+  const ROLE_TYPES = [
+    { label: 'Admin', value: 'admin' },
+    { label: 'Group', value: 'group' },
+    { label: 'User', value: 'user' }
+  ];
+
   return (
     <React.Fragment>
       <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.userRole}>
@@ -41,6 +49,19 @@ export function UserRoleFormInner({ handleSubmit, handleChange, handleBlur, valu
                 name='role_name'
                 value={values.role_name}
                 label='Role Name'
+              />
+              <Field
+                component={Select}
+                fullWidth
+                disabled={props.isCommitting}
+                id='role_type'
+                name='role_type'
+                margin='normal'
+                label='Role Type'
+                value={values.role_type}
+                options={ROLE_TYPES}
+                onChange={value => setFieldValue('role_type', value)}
+                onBlur={() => setFieldTouched('role_type', true)}
               />
               <Field
                 component={TextField}
@@ -80,7 +101,8 @@ export function UserRoleForm(props) {
   const initialValues = buildValues(userRole, {
     id: { default: undefined },
     role_name: { default: '' },
-    priority: { default: -1 },
+    role_type: { default: '' },
+    priority: { default: 0 },
   });
 
   return (
@@ -88,7 +110,7 @@ export function UserRoleForm(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        props.userRoleAction(values);
+        props.userRoleAction(mapFields(values, ['role_type']));
       }}
 
       render={formikProps => <UserRoleFormInner {...props} {...formikProps} />}
