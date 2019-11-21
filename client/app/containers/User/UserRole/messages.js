@@ -6,7 +6,7 @@
 
 import { defineMessages } from 'react-intl';
 
-export const scope = 'diverst.containers.User';
+export const scope = 'diverst.containers.UserRole';
 
 export default defineMessages({
   new: {
@@ -39,25 +39,13 @@ export default defineMessages({
   cancel: {
     id: `${scope}.form.button.cancel`,
   },
-  first_name: {
-    id: `${scope}.form.input.first_name`,
+  role_name: {
+    id: `${scope}.form.input.role_name`,
   },
-  last_name: {
-    id: `${scope}.form.input.last_name`,
+  role_type: {
+    id: `${scope}.form.input.role_type`,
   },
-  biography: {
-    id: `${scope}.form.input.biography`,
-  },
-  time_zone: {
-    id: `${scope}.form.input.time_zone`,
-  },
-  fields: {
-    id: `${scope}.profile.fields`
-  },
-  privacy: {
-    id: `${scope}.profile.privacy`
-  },
-  fields_save: {
-    id: `${scope}.profile.fields.form.save`
-  },
+  priority: {
+    id: `${scope}.form.input.priority`,
+  }
 });

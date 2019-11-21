@@ -48,7 +48,7 @@ export function UserRoleFormInner({ handleSubmit, handleChange, handleBlur, valu
                 id='role_name'
                 name='role_name'
                 value={values.role_name}
-                label='Role Name'
+                label={<DiverstFormattedMessage {...messages.role_name} />}
               />
               <Field
                 component={Select}
@@ -57,7 +57,7 @@ export function UserRoleFormInner({ handleSubmit, handleChange, handleBlur, valu
                 id='role_type'
                 name='role_type'
                 margin='normal'
-                label='Role Type'
+                label={<DiverstFormattedMessage {...messages.role_type} />}
                 value={values.role_type}
                 options={ROLE_TYPES}
                 onChange={value => setFieldValue('role_type', value)}
@@ -72,7 +72,7 @@ export function UserRoleFormInner({ handleSubmit, handleChange, handleBlur, valu
                 id='priority'
                 name='priority'
                 value={values.priority}
-                label='Priority'
+                label={<DiverstFormattedMessage {...messages.priority} />}
               />
             </CardContent>
             <Divider />
@@ -85,7 +85,7 @@ export function UserRoleFormInner({ handleSubmit, handleChange, handleBlur, valu
                 to={props.links.userRolesIndex}
                 component={WrappedNavLink}
               >
-                Cancel
+                <DiverstFormattedMessage {...messages.cancel} />
               </Button>
             </CardActions>
           </Form>

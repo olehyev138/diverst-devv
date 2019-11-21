@@ -18,7 +18,7 @@ import {
 import { withStyles } from '@material-ui/core/styles';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
-import messages from 'containers/User/messages';
+import messages from 'containers/User/UserRole/messages';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
 import AddIcon from '@material-ui/icons/Add';
@@ -60,7 +60,7 @@ export function UserRoleList(props, context) {
             component={WrappedNavLink}
             startIcon={<AddIcon />}
           >
-            Add User Role
+            <DiverstFormattedMessage {...messages.new} />
           </Button>
         </Grid>
       </Grid>
