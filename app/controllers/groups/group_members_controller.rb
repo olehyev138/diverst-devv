@@ -170,7 +170,6 @@ class Groups::GroupMembersController < ApplicationController
 
       if @group_member.save
         WelcomeNotificationJob.perform_later(@group.id, current_user.id)
-        
         respond_to do |format|
           format.html { redirect_to :back }
           format.js
