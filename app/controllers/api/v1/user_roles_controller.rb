@@ -6,7 +6,7 @@ class Api::V1::UserRolesController < DiverstController
       .permit(
         :role_name,
         :role_type,
-        :role_priority,
+        :priority,
      )
   end
 end

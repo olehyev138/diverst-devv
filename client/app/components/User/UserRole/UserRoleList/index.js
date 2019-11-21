@@ -44,6 +44,8 @@ export function UserRoleList(props, context) {
 
   const columns = [
     { title: 'Role Name', field: 'role_name' },
+    { title: 'Role Type', field: 'role_type' },
+    { title: 'Role Priority', field: 'priority' },
   ];
 
   return (
