@@ -16,7 +16,7 @@ import {
 } from 'containers/Innovate/Campaign/CampaignQuestion/actions';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
-import {updateCampaignError, updateCampaignSuccess} from "../actions";
+
 export function* getQuestions(action) {
   try {
     const response = yield call(api.questions.all.bind(api.questions), action.payload);

@@ -109,6 +109,7 @@ CampaignQuestionForm.propTypes = {
   edit: PropTypes.bool,
   createQuestionBegin: PropTypes.func,
   campaignId: PropTypes.string,
+  questionId: PropTypes.string,
   isCommitting: PropTypes.bool,
   question: PropTypes.object,
   questionAction: PropTypes.func,

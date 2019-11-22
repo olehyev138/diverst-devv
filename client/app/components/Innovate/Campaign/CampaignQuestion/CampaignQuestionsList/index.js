@@ -93,7 +93,7 @@ export function CampaignQuestionsList(props) {
           onClick: (_, rowData) => {
             /* eslint-disable-next-line no-alert, no-restricted-globals */
             if (confirm('Delete question?'))
-              props.deleteQuestionBegin({campaignId: props.campaignId, questionId: rowData.id});
+              props.deleteQuestionBegin({ campaignId: props.campaignId, questionId: rowData.id });
           }
         }]}
       />

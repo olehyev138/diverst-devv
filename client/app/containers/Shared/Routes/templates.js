@@ -121,7 +121,7 @@ export {
   CustomGraphCreatePage, CustomGraphEditPage, GroupManageLayout, GroupSettingsPage, CustomTextEditPage,
   UserNewsLinkPage, UserEventsPage, FoldersPage, FolderCreatePage, FolderEditPage, FolderPage, ResourceCreatePage,
   ResourceEditPage, UserProfilePage, InnovateLayout, CampaignListPage, CampaignCreatePage, CampaignEditPage, CampaignShowPage,
-  CampaignQuestionListPage, CampaignQuestionCreatePage,CampaignQuestionEditPage,
+  CampaignQuestionListPage, CampaignQuestionCreatePage, CampaignQuestionEditPage,
   EnterpriseConfigurationPage, MentorshipProfilePage, MentorshipEditProfilePage, MentorshipLayout, MentorsPage,
   MentorRequestsPage, SystemUserLayout, UserRolesListPage, UserRoleCreatePage, UserRoleEditPage
 

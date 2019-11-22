@@ -90,7 +90,8 @@ CampaignQuestionListPage.propTypes = {
   campaignQuestionsUnmount: PropTypes.func,
   questionList: PropTypes.array,
   questionTotal: PropTypes.number,
-  isFetchingQuestions: PropTypes.bool
+  isFetchingQuestions: PropTypes.bool,
+  handleVisitQuestionEdit: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
