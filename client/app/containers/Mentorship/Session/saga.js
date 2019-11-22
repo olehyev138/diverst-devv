@@ -74,8 +74,8 @@ export function* getParticipatingSessions(action) {
 
 export function* createSession(action) {
   try {
-    const payload = { mentoring_sessions: action.payload };
-    const response = yield call(api.groups.create.bind(api.groups), payload.group.id, payload);
+    const payload = { mentoring_session: action.payload };
+    const response = yield call(api.mentoringSessions.create.bind(api.mentoringSessions), payload);
 
     yield put(createSessionSuccess());
     yield put(showSnackbar({ message: 'Successfully created session', options: { variant: 'success' } }));
@@ -90,7 +90,7 @@ export function* createSession(action) {
 export function* updateSession(action) {
   try {
     const payload = { mentoring_sessions: action.payload };
-    const response = yield call(api.groups.update.bind(api.groups), payload.group.id, payload);
+    const response = yield call(api.mentoringSessions.update.bind(api.mentoringSessions), payload.mentoring_session.id, payload);
 
     yield put(updateSessionSuccess());
     yield put(showSnackbar({ message: 'Successfully updated session', options: { variant: 'success' } }));

@@ -6,4 +6,4 @@
 
 import loadable from 'utils/loadable';
 
-export default loadable(() => import('containers/Mentorship/Session/SessionCreatePage/index'));
+export default loadable(() => import('containers/Mentorship/Session/SessionEditPage/index'));

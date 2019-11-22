@@ -6,46 +6,61 @@ import { compose } from 'redux';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
-import reducer from 'containers/Mentorship/reducer';
+import reducer from 'containers/Mentorship/Session/reducer';
 
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import {
-  getSessionBegin, sessionsUnmount, updateSessionBegin
+  getSessionBegin, sessionsUnmount, updateSessionBegin, createSessionBegin
 } from 'containers/Mentorship/Session/actions';
 
 import { selectSession } from 'containers/Mentorship/Session/selectors';
 import { selectMentoringInterests, selectMentoringTypes } from 'containers/Shared/App/selectors';
 
-import saga from 'containers/Mentorship/saga';
+import saga from 'containers/Mentorship/Session/saga';
 import MentorshipSessionForm from 'components/Mentorship/SessionForm';
 
 export function SessionProfilePage(props) {
-  useInjectReducer({ key: 'mentorship', reducer });
-  useInjectSaga({ key: 'mentorship', saga });
+  useInjectReducer({ key: 'sessions', reducer });
+  useInjectSaga({ key: 'sessions', saga });
 
   const rs = new RouteService(useContext);
+  const { type } = props;
+
+  useEffect(() => {
+    if (type === 'edit') {
+      const sessionId = rs.params('session_id');
+      props.getSessionBegin({ id: sessionId });
+    }
+    return () => props.sessionsUnmount();
+  }, []);
 
   return (
     <React.Fragment>
       <MentorshipSessionForm
         session={props.formSession}
-        sessionAction={props.updateSessionBegin}
+        sessionAction={type === 'edit' ? props.updateSessionBegin : props.createSessionBegin}
         interestOptions={props.interestOptions}
-        typeOptions={props.typeOptions}
+        user={props.formUser}
+        isCommiting={props.isCommitting}
+        buttonText={type === 'edit' ? 'Update' : 'Create'}
       />
     </React.Fragment>
   );
 }
 
 SessionProfilePage.propTypes = {
+  formUser: PropTypes.object,
+  type: PropTypes.string.isRequired,
   updateSessionBegin: PropTypes.func,
+  createSessionBegin: PropTypes.func,
   path: PropTypes.string,
   session: PropTypes.object,
+  isCommitting: PropTypes.bool,
   formSession: PropTypes.object,
   getSessionBegin: PropTypes.func,
-  sessionUnmount: PropTypes.func,
+  sessionsUnmount: PropTypes.func,
   interestOptions: PropTypes.array,
   typeOptions: PropTypes.array,
 };
@@ -53,13 +68,13 @@ SessionProfilePage.propTypes = {
 const mapStateToProps = createStructuredSelector({
   formSession: selectSession(),
   interestOptions: selectMentoringInterests(),
-  typeOptions: selectMentoringTypes()
 });
 
 const mapDispatchToProps = {
   getSessionBegin,
   sessionsUnmount,
   updateSessionBegin,
+  createSessionBegin,
 };
 
 const withConnect = connect(

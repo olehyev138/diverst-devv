@@ -54,6 +54,10 @@ const selectFormUser = () => createSelector(
           draft.type_options = user.type_options.map(i => ({ label: i.name, value: i.id }));
         if (user.mentoring_types)
           draft.mentoring_types = user.mentoring_types.map(i => ({ label: i.name, value: i.id }));
+        if (user.mentees)
+          draft.mentees = user.mentees.map(i => ({ label: i.name, value: i.id }));
+        if (user.mentors)
+          draft.mentors = user.mentors.map(i => ({ label: i.name, value: i.id }));
       });
 
     return null;
