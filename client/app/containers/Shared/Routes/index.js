@@ -69,7 +69,10 @@ import {
   MentorsPage,
   MentorRequestsPage,
   SessionsPage,
-  SystemUserLayout
+  SystemUserLayout,
+  UserRolesListPage,
+  UserRoleCreatePage,
+  UserRoleEditPage
 } from './templates';
 
 // Paths
@@ -151,8 +154,13 @@ export default function Routes(props) {
 
       { /* Admin - System - Users */ }
       <SystemUserLayout exact {...expandRoute(ROUTES.admin.system.users.index)} component={UsersPage} />
-      <AdminLayout exact {...expandRoute(ROUTES.admin.system.users.new)} component={UserCreatePage} />
-      <AdminLayout exact {...expandRoute(ROUTES.admin.system.users.edit)} component={UserEditPage} />
+      <SystemUserLayout exact {...expandRoute(ROUTES.admin.system.users.new)} component={UserCreatePage} />
+      <SystemUserLayout exact {...expandRoute(ROUTES.admin.system.users.edit)} component={UserEditPage} />
+
+      { /* Admin - System - User Roles */ }
+      <SystemUserLayout exact {...expandRoute(ROUTES.admin.system.users.roles.index)} component={UserRolesListPage} />
+      <SystemUserLayout exact {...expandRoute(ROUTES.admin.system.users.roles.new)} component={UserRoleCreatePage} />
+      <SystemUserLayout exact {...expandRoute(ROUTES.admin.system.users.roles.edit)} component={UserRoleEditPage} />
 
       { /* Group */ }
       <GroupLayout exact {...expandRoute(ROUTES.group.home)} component={GroupHomePage} disableBreadcrumbs />

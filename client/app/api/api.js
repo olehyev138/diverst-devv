@@ -1,5 +1,6 @@
 import enterprises from 'api/enterprises/enterprises';
 import users from 'api/users/users';
+import userRoles from 'api/user_roles/user_roles';
 import userGroups from 'api/user_groups/user_groups';
 import userSegments from 'api/user_segments/user_segments';
 import sessions from 'api/sessions/sessions';
@@ -37,6 +38,7 @@ const Api = {
   user,
   userGroups,
   userSegments,
+  userRoles,
   sessions,
   fields,
   fieldData,

@@ -2,8 +2,11 @@ import React, { memo, useEffect, useState } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
 
+import { matchPath } from 'react-router';
 import { withStyles } from '@material-ui/core/styles';
 import Fade from '@material-ui/core/Fade';
+
+import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import AdminLayout from '../AdminLayout';
 import SystemUsersLinks from 'components/User/SystemUsersLinks';
@@ -15,20 +18,25 @@ const styles = theme => ({
 });
 
 const SystemUsersPages = Object.freeze({
-  users: 0
+  users: 0,
+  roles: 1
 });
 
 const SystemUsersLayout = ({ component: Component, classes, ...rest }) => {
   const { currentGroup, location, ...other } = rest;
 
-  /* Get last element of current path, ie: '/group/:id/manage/settings -> settings */
-  const currentPagePath = location.pathname.split('/').pop();
-  const [tab, setTab] = useState(SystemUsersPages[currentPagePath]);
+  let currentPage;
+  if (matchPath(location.pathname, { path: ROUTES.admin.system.users.roles.index.path() }))
+    currentPage = 'roles';
+  else if (matchPath(location.pathname, { path: ROUTES.admin.system.users.index.path() }))
+    currentPage = 'users';
+
+  const [tab, setTab] = useState(SystemUsersPages[currentPage]);
 
   useEffect(() => {
-    if (tab !== SystemUsersPages[currentPagePath])
-      setTab(SystemUsersPages[currentPagePath]);
-  }, [currentPagePath]);
+    if (tab !== SystemUsersPages[currentPage])
+      setTab(SystemUsersPages[currentPage]);
+  }, [currentPage]);
 
   return (
     <AdminLayout
@@ -41,7 +49,7 @@ const SystemUsersLayout = ({ component: Component, classes, ...rest }) => {
           />
           <Fade in appear>
             <div className={classes.content}>
-              <Component currentGroup={currentGroup} {...other} />
+              <Component {...other} />
             </div>
           </Fade>
         </React.Fragment>

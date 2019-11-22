@@ -491,6 +491,17 @@ export const ROUTES = {
         edit: {
           path: (userId = ':user_id') => `/admin/system/users/${userId}/edit`,
         },
+        roles: {
+          index: {
+            path: () => '/admin/system/users/roles',
+          },
+          new: {
+            path: () => '/admin/system/users/roles/new',
+          },
+          edit: {
+            path: (roleId = ':role_id') => `/admin/system/users/roles/${roleId}/edit`,
+          },
+        }
       },
       globalSettings: {
         pathPrefix: '/admin/system/settings',
