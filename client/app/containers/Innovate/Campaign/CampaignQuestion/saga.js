@@ -58,7 +58,6 @@ export function* updateQuestion(action) {
       options: { variant: 'success' }
     }));
   } catch (err) {
-    console.log(err);
     yield put(updateQuestionError(err));
 
     // TODO: intl message
@@ -86,15 +85,10 @@ export function* getQuestion(action) {
 
 export function* deleteQuestion(action) {
   try {
-    const payload = {
-      campaign_id: action.payload.campaign.id,
-      question_id: action.payload.question.id
-    };
-
-    yield call(api.questions.destroy.bind(api.questions), action.payload.question_id);
+    yield call(api.questions.destroy.bind(api.questions), action.payload.questionId);
 
     yield put(deleteQuestionSuccess());
-    yield put(push(ROUTES.innovate.campaigns.questions.index.path(action.payload.campaign.id)));
+    yield put(push(ROUTES.admin.innovate.campaigns.show.path(action.payload.campaignId)));
     yield put(showSnackbar({ message: 'Question deleted', options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteQuestionError(err));

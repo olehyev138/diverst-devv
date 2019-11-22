@@ -34,7 +34,8 @@ export function CampaignQuestionListPage(props) {
   const campaignId = rs.params('campaign_id')[0];
 
   const [params, setParams] = useState({
-    count: 10, page: 0, orderBy: '', order: 'asc'
+    campaign_id: campaignId, count: 10, page: 0,
+    orderBy: 'questions.id', order: 'asc'
   });
 
   const links = {
@@ -72,7 +73,6 @@ export function CampaignQuestionListPage(props) {
         isFetchingQuestions={props.isFetchingQuestions}
         campaignId={campaignId}
         handleVisitQuestionEdit={props.handleVisitQuestionEdit}
-
         deleteQuestionBegin={props.deleteQuestionBegin}
         links={links}
         setParams={params}
