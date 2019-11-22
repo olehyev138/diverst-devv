@@ -76,6 +76,7 @@ export function CampaignQuestionsList(props) {
         handlePagination={props.handlePagination}
         isLoading={props.isFetchingQuestions}
         onOrderChange={handleOrderChange}
+        handleRowClick={(_, rowData) => props.handleVisitQuestionEdit(props.campaignId, rowData.id)}
         dataArray={props.questionList}
         dataTotal={props.questionTotal}
         columns={columns}
