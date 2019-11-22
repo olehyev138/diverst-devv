@@ -40,7 +40,7 @@ function tabToScope(tab) {
     case 1:
       return ['ongoing'];
     case 2:
-      return ['past'];
+      return ['upcoming'];
     default:
       return [];
   }

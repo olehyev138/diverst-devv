@@ -38,8 +38,6 @@ export function SessionProfilePage(props) {
     return () => props.sessionsUnmount();
   }, []);
 
-  console.log(props.formSession);
-
   return (
     <React.Fragment>
       <MentorshipSessionForm

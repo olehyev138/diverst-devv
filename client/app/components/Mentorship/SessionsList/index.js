@@ -29,9 +29,7 @@ import { formatDateTimeString, DateTime } from 'utils/dateTimeHelpers';
 import DiverstLoader from 'components/Shared/DiverstLoader';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { customTexts } from 'utils/customTextHelpers';
-import resourceMessages from "../../../containers/Resource/Resource/messages";
-import folderMessages from "../../../containers/Resource/Folder/messages";
-import classNames from "classnames";
+import classNames from 'classnames';
 
 const styles = theme => ({
   sessionListItem: {

@@ -44,11 +44,13 @@ function sessionReducer(state = initialState, action) {
       case GET_HOSTING_SESSIONS_BEGIN:
       case GET_PARTICIPATING_SESSIONS_BEGIN:
         draft.isFetchingSessions = true;
+        draft.hasChanged = false;
         break;
 
       case GET_HOSTING_SESSIONS_ERROR:
       case GET_PARTICIPATING_SESSIONS_ERROR:
         draft.isFetchingSessions = false;
+        draft.hasChanged = false;
         break;
 
       case GET_SESSION_SUCCESS:
@@ -59,12 +61,14 @@ function sessionReducer(state = initialState, action) {
         draft.sessionList = action.payload.items;
         draft.sessionListTotal = action.payload.total;
         draft.isFetchingSessions = false;
+        draft.hasChanged = false;
         break;
 
       case GET_PARTICIPATING_SESSIONS_SUCCESS:
         draft.sessionList = formatSessions(action.payload.items);
         draft.sessionListTotal = action.payload.total;
         draft.isFetchingSessions = false;
+        draft.hasChanged = false;
         break;
 
       case CREATE_SESSION_BEGIN:
@@ -85,6 +89,7 @@ function sessionReducer(state = initialState, action) {
       case UPDATE_SESSION_ERROR:
       case DELETE_SESSION_ERROR:
         draft.isCommitting = false;
+        draft.hasChanged = false;
         break;
 
       case SESSIONS_UNMOUNT:

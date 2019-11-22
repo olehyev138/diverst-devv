@@ -78,7 +78,7 @@ export function* createSession(action) {
     const response = yield call(api.mentoringSessions.create.bind(api.mentoringSessions), payload);
 
     yield put(createSessionSuccess());
-    yield put(push(ROUTES.user.mentorship.sessions.hosting.path()));
+    yield put(push(ROUTES.user.mentorship.sessions.hosting.path(action.payload.creator_id)));
     yield put(showSnackbar({ message: 'Successfully created session', options: { variant: 'success' } }));
   } catch (err) {
     yield put(createSessionError(err));
@@ -94,7 +94,7 @@ export function* updateSession(action) {
     const response = yield call(api.mentoringSessions.update.bind(api.mentoringSessions), payload.mentoring_session.id, payload);
 
     yield put(updateSessionSuccess());
-    yield put(push(ROUTES.user.mentorship.sessions.hosting.path()));
+    yield put(push(ROUTES.user.mentorship.sessions.hosting.path(action.payload.creator_id)));
     yield put(showSnackbar({ message: 'Successfully updated session', options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateSessionError(err));
