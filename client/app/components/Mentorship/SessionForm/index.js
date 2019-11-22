@@ -25,7 +25,7 @@ import { buildValues, mapFields } from 'utils/formHelpers';
 import { withStyles } from '@material-ui/core/styles';
 import DiverstDateTimePicker from 'components/Shared/Pickers/DiverstDateTimePicker';
 import { DateTime } from 'luxon';
-import DiverstSubmit from "../../Shared/DiverstSubmit";
+import DiverstSubmit from 'components/Shared/DiverstSubmit';
 
 /* eslint-disable object-curly-newline */
 export function SessionFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
