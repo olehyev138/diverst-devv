@@ -22,6 +22,9 @@
             <% end %>
           </p>
         </div>
+        <div class="col">
+            <%= render partial: "groups/shared/like_feature", locals: {news_feed_link: @message.news_feed_link } %>
+          </div>
       </div>
       <% if @tags.present? %>
         <row>
