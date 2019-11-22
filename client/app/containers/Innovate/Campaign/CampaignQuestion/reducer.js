@@ -47,18 +47,10 @@ function questionsReducer(state = initialState, action) {
       case UPDATE_QUESTION_BEGIN:
         draft.isFormLoading = true;
         break;
-      case UPDATE_QUESTION_SUCCESS:
-        draft.currentQuestion = action.payload.campaign;
-        draft.isFormLoading = false;
-        break;
-      case UPDATE_QUESTION_ERROR:
-        draft.isFormLoading = false;
-        break;
       case GET_QUESTION_BEGIN:
         draft.isFormLoading = true;
         break;
       case GET_QUESTION_SUCCESS:
-        console.log(action.payload);
         draft.currentQuestion = action.payload.question;
         draft.isFormLoading = false;
         break;

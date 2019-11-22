@@ -6,16 +6,17 @@ import { showSnackbar } from 'containers/Shared/Notifier/actions';
 
 import {
   GET_QUESTIONS_BEGIN, GET_QUESTION_BEGIN, CREATE_QUESTION_BEGIN,
-  DELETE_QUESTION_BEGIN
+  DELETE_QUESTION_BEGIN, UPDATE_QUESTION_BEGIN, UPDATE_QUESTION_SUCCESS, UPDATE_QUESTION_ERROR,
 } from 'containers/Innovate/Campaign/CampaignQuestion/constants';
 
 import {
   getQuestionsSuccess, getQuestionsError, deleteQuestionSuccess,
   createQuestionError, deleteQuestionError, createQuestionSuccess,
-  getQuestionSuccess, getQuestionError,
+  getQuestionSuccess, getQuestionError, updateQuestionBegin, updateQuestionError, updateQuestionSuccess
 } from 'containers/Innovate/Campaign/CampaignQuestion/actions';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
+import {updateCampaignError, updateCampaignSuccess} from "../actions";
 export function* getQuestions(action) {
   try {
     const response = yield call(api.questions.all.bind(api.questions), action.payload);
@@ -44,6 +45,30 @@ export function* createQuestion(action) {
     yield put(showSnackbar({ message: 'Failed to create question', options: { variant: 'warning' } }));
   }
 }
+
+export function* updateQuestion(action) {
+  try {
+    const payload = { question: action.payload };
+    const response = yield call(api.questions.update.bind(api.questions), payload.question.id, payload);
+
+    yield put(updateQuestionSuccess());
+    yield put(push(ROUTES.admin.innovate.campaigns.show.path(action.payload.campaign_id)));
+    yield put(showSnackbar({
+      message: 'Question updated',
+      options: { variant: 'success' }
+    }));
+  } catch (err) {
+    console.log(err);
+    yield put(updateQuestionError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({
+      message: 'Failed to update question',
+      options: { variant: 'warning' }
+    }));
+  }
+}
+
 
 export function* getQuestion(action) {
   try {
@@ -84,4 +109,5 @@ export default function* questionsSaga() {
   yield takeLatest(CREATE_QUESTION_BEGIN, createQuestion);
   yield takeLatest(DELETE_QUESTION_BEGIN, deleteQuestion);
   yield takeLatest(GET_QUESTION_BEGIN, getQuestion);
+  yield takeLatest(UPDATE_QUESTION_BEGIN, updateQuestion);
 }
