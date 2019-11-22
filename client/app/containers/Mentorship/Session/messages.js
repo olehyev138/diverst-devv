@@ -22,6 +22,15 @@ export default defineMessages({
     emptySection: {
       id: `${scope}.index.tabs.empty_section`,
     },
+    delete: {
+      id: `${scope}.index.tabs.delete`,
+    },
+    deleteConfirmation: {
+      id: `${scope}.index.tabs.deleteConfirmation`,
+    },
+    edit: {
+      id: `${scope}.index.tabs.edit`,
+    },
   },
   title: {
     hosting: {

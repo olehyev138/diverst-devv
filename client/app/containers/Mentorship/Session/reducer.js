@@ -33,6 +33,7 @@ export const initialState = {
   currentSession: null,
   isFetchingSessions: false,
   isCommitting: false,
+  hasChanged: false,
 };
 
 /* eslint-disable-next-line default-case, no-param-reassign */
@@ -51,7 +52,7 @@ function sessionReducer(state = initialState, action) {
         break;
 
       case GET_SESSION_SUCCESS:
-        draft.currentSession = action.payload.session;
+        draft.currentSession = action.payload.mentoring_session;
         break;
 
       case GET_HOSTING_SESSIONS_SUCCESS:
@@ -70,13 +71,18 @@ function sessionReducer(state = initialState, action) {
       case UPDATE_SESSION_BEGIN:
       case DELETE_SESSION_BEGIN:
         draft.isCommitting = true;
+        draft.hasChanged = false;
         break;
 
       case CREATE_SESSION_SUCCESS:
-      case CREATE_SESSION_ERROR:
       case UPDATE_SESSION_SUCCESS:
-      case UPDATE_SESSION_ERROR:
       case DELETE_SESSION_SUCCESS:
+        draft.isCommitting = false;
+        draft.hasChanged = true;
+        break;
+
+      case CREATE_SESSION_ERROR:
+      case UPDATE_SESSION_ERROR:
       case DELETE_SESSION_ERROR:
         draft.isCommitting = false;
         break;

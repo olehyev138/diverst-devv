@@ -11,8 +11,16 @@ import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/Mentorship/Session/reducer';
 import saga from 'containers/Mentorship/Session/saga';
 
-import { selectPaginatedSessions, selectSessionsTotal, selectIsFetchingSessions } from 'containers/Mentorship/Session/selectors';
-import { getHostingSessionsBegin, getParticipatingSessionsBegin, sessionsUnmount } from 'containers/Mentorship/Session/actions';
+import {
+  selectPaginatedSessions,
+  selectSessionsTotal,
+  selectIsFetchingSessions,
+  selectHasChanged
+} from 'containers/Mentorship/Session/selectors';
+import {
+  getHostingSessionsBegin, getParticipatingSessionsBegin,
+  sessionsUnmount, deleteSessionBegin,
+} from 'containers/Mentorship/Session/actions';
 
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -24,6 +32,19 @@ const SessionTypes = Object.freeze({
   ongoing: 1,
   past: 0,
 });
+
+function tabToScope(tab) {
+  switch (tab) {
+    case 0:
+      return ['past'];
+    case 1:
+      return ['ongoing'];
+    case 2:
+      return ['past'];
+    default:
+      return [];
+  }
+}
 
 const defaultParams = Object.freeze({
   count: 10, // TODO: Make this a constant and use it also in SessionsList
@@ -75,6 +96,15 @@ export function SessionsPage(props) {
     };
   }, []);
 
+  useEffect(() => {
+    if (props.hasChanged)
+      getSessions(tabToScope(tab));
+
+    return () => {
+      props.sessionsUnmount();
+    };
+  }, [props.hasChanged]);
+
   const handleChangeTab = (session, newTab) => {
     setTab(newTab);
     switch (newTab) {
@@ -110,6 +140,7 @@ export function SessionsPage(props) {
       handlePagination={handlePagination}
       links={links}
       readonly={false}
+      deleteAction={props.deleteSessionBegin}
     />
   );
 }
@@ -120,6 +151,8 @@ SessionsPage.propTypes = {
   getParticipatingSessionsBegin: PropTypes.func.isRequired,
   type: PropTypes.string.isRequired,
   sessionsUnmount: PropTypes.func.isRequired,
+  deleteSessionBegin: PropTypes.func.isRequired,
+  hasChanged: PropTypes.bool,
   sessions: PropTypes.array,
   sessionsTotal: PropTypes.number,
   isLoading: PropTypes.bool,
@@ -132,12 +165,14 @@ const mapStateToProps = createStructuredSelector({
   sessions: selectPaginatedSessions(),
   sessionsTotal: selectSessionsTotal(),
   isLoading: selectIsFetchingSessions(),
+  hasChanged: selectHasChanged(),
 });
 
 const mapDispatchToProps = {
   getHostingSessionsBegin,
   sessionsUnmount,
   getParticipatingSessionsBegin,
+  deleteSessionBegin,
 };
 
 const withConnect = connect(

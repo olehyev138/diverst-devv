@@ -11,7 +11,7 @@ import { RouteContext } from 'containers/Layouts/ApplicationLayout';
 import withStyles from '@material-ui/core/styles/withStyles';
 
 import {
-  Box, Tab, Paper, Card, CardContent, Grid, Link, Typography, Button, Hidden, CardHeader,
+  Box, Tab, Paper, Card, CardContent, Grid, Link, Typography, Button, Hidden, CardHeader, CardActions,
 } from '@material-ui/core';
 
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
@@ -29,6 +29,9 @@ import { formatDateTimeString, DateTime } from 'utils/dateTimeHelpers';
 import DiverstLoader from 'components/Shared/DiverstLoader';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { customTexts } from 'utils/customTextHelpers';
+import resourceMessages from "../../../containers/Resource/Resource/messages";
+import folderMessages from "../../../containers/Resource/Folder/messages";
+import classNames from "classnames";
 
 const styles = theme => ({
   sessionListItem: {
@@ -51,16 +54,11 @@ const styles = theme => ({
       textDecoration: 'underline',
     },
   },
-  dateText: {
-    fontWeight: 'bold',
+  link: {
+    textDecoration: 'none !important',
   },
-  floatRight: {
-    float: 'right',
-  },
-  floatSpacer: {
-    display: 'flex',
-    width: '100%',
-    marginBottom: 24,
+  deleteButton: {
+    color: theme.palette.error.main,
   },
 });
 
@@ -99,44 +97,65 @@ export function SessionsList(props, context) {
             return (
               <Grid item key={item.id} className={classes.sessionListItem}>
                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                <Link
-                  className={classes.sessionLink}
-                  component={WrappedNavLink}
-                  to={{
-                    pathname: props.links.sessionShow(item.id),
-                    state: { id: item.id }
-                  }}
-                >
-                  <Card>
-                    <CardContent>
-                      <Grid container spacing={1} justify='space-between' alignItems='center'>
-                        <Grid item xs>
-                          <Typography color='primary' variant='h6' component='h2'>
-                            {item.interests || 'Mentorship'}
-                          </Typography>
-                          <hr className={classes.divider} />
-                          {item.interests && (
-                            <React.Fragment>
-                              <Typography color='textSecondary'>
-                                {`Hosted by ${item.creator.name}`}
-                              </Typography>
-                              <Box pb={1} />
-                            </React.Fragment>
-                          )}
-                          <Box pt={1} />
-                          <Typography color='textSecondary' variant='subtitle2' className={classes.dateText}>
-                            {formatDateTimeString(item.start, DateTime.DATETIME_MED)}
-                          </Typography>
-                        </Grid>
-                        <Hidden xsDown>
-                          <Grid item>
-                            <KeyboardArrowRightIcon className={classes.arrowRight} />
-                          </Grid>
-                        </Hidden>
+                <Card>
+                  <CardContent>
+                    <Link
+                      className={classes.sessionLink}
+                      component={WrappedNavLink}
+                      to={{
+                        pathname: props.links.sessionShow(item.id),
+                        state: { id: item.id }
+                      }}
+                    >
+                      <Typography color='primary' variant='h6' component='h2'>
+                        {item.interests || 'Mentorship'}
+                      </Typography>
+                    </Link>
+                    <hr className={classes.divider} />
+                    {item.interests && (
+                      <React.Fragment>
+                        <Typography color='textSecondary'>
+                          {`Hosted by ${item.creator.name}`}
+                        </Typography>
+                        <Box pb={1} />
+                      </React.Fragment>
+                    )}
+                    <Box pt={1} />
+                    <Grid container spacing={1} justify='space-between' alignItems='center'>
+                      <Grid item xs>
+                        <Typography color='textSecondary' variant='subtitle2' className={classes.dateText}>
+                          {formatDateTimeString(item.start, DateTime.DATETIME_MED)}
+                        </Typography>
                       </Grid>
-                    </CardContent>
-                  </Card>
-                </Link>
+                      <Grid item xs>
+                        { props.type === 'hosting' && (
+                          <React.Fragment>
+                            <Button
+                              color='primary'
+                              className={classes.folderLink}
+                              component={WrappedNavLink}
+                              to={props.links.sessionEdit(item.id)}
+                            >
+                              <DiverstFormattedMessage {...messages.index.edit} />
+                            </Button>
+                            <Button
+                              className={classNames(classes.folderLink, classes.deleteButton)}
+                              onClick={() => {
+                                // eslint-disable-next-line no-restricted-globals,no-alert
+                                if (confirm(props.intl.formatMessage(messages.index.deleteConfirmation)))
+                                  props.deleteAction({
+                                    id: item.id
+                                  });
+                              }}
+                            >
+                              <DiverstFormattedMessage {...messages.index.delete} />
+                            </Button>
+                          </React.Fragment>
+                        )}
+                      </Grid>
+                    </Grid>
+                  </CardContent>
+                </Card>
               </Grid>
             );
           })}
@@ -178,6 +197,7 @@ SessionsList.propTypes = {
   links: PropTypes.object,
   readonly: PropTypes.bool,
   loaderProps: PropTypes.object,
+  deleteAction: PropTypes.func.isRequired,
 };
 
 export default compose(

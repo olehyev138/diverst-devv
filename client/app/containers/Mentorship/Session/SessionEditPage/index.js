@@ -16,7 +16,7 @@ import {
   getSessionBegin, sessionsUnmount, updateSessionBegin, createSessionBegin
 } from 'containers/Mentorship/Session/actions';
 
-import { selectSession } from 'containers/Mentorship/Session/selectors';
+import { selectFormSession } from 'containers/Mentorship/Session/selectors';
 import { selectMentoringInterests, selectMentoringTypes } from 'containers/Shared/App/selectors';
 
 import saga from 'containers/Mentorship/Session/saga';
@@ -37,6 +37,8 @@ export function SessionProfilePage(props) {
     }
     return () => props.sessionsUnmount();
   }, []);
+
+  console.log(props.formSession);
 
   return (
     <React.Fragment>
@@ -71,7 +73,7 @@ SessionProfilePage.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
-  formSession: selectSession(),
+  formSession: selectFormSession(),
   interestOptions: selectMentoringInterests(),
 });
 
