@@ -47,5 +47,5 @@ const selectIsCommitting = () => createSelector(
 
 export {
   selectQuestionsDomain, selectPaginatedQuestions, selectPaginatedSelectQuestions,
-  selectQuestionTotal, selectIsFetchingQuestions, selectIsCommitting
+  selectQuestionTotal, selectIsFetchingQuestions, selectIsCommitting, selectQuestion
 };

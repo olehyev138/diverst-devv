@@ -15,6 +15,7 @@ import {
 
 
 export const initialState = {
+  currentQuestion: null,
   isCommitting: false,
   questionList: [],
   questionTotal: null,
@@ -57,7 +58,8 @@ function questionsReducer(state = initialState, action) {
         draft.isFormLoading = true;
         break;
       case GET_QUESTION_SUCCESS:
-        draft.currentCampaign = action.payload.campaign;
+        console.log(action.payload);
+        draft.currentQuestion = action.payload.question;
         draft.isFormLoading = false;
         break;
       case GET_QUESTION_ERROR:

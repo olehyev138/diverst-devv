@@ -17,7 +17,7 @@ import campaignReducer from 'containers/Innovate/Campaign/reducer';
 import campaignSaga from 'containers/Innovate/Campaign/saga';
 
 import {
-  selectQuestionTotal, selectIsCommitting
+  selectQuestionTotal, selectIsCommitting, selectQuestion
 } from 'containers/Innovate/Campaign/CampaignQuestion/selectors';
 
 import CampaignQuestionForm from 'components/Innovate/Campaign/CampaignQuestion/CampaignQuestionForm';
@@ -33,13 +33,12 @@ export function CampaignQuestionEditPage(props) {
 
   const rs = new RouteService(useContext);
   const links = {
-    CampaignsIndex: ROUTES.admin.innovate.campaigns.index.path(),
+    questionsIndex: ROUTES.admin.innovate.campaigns.show.path(rs.params('campaign_id')),
   };
 
   useEffect(() => {
     const campaignId = rs.params('campaign_id');
     const questionId = rs.params('question_id');
-    console.log(questionId);
 
     props.getQuestionBegin({ id: questionId });
 
@@ -50,8 +49,8 @@ export function CampaignQuestionEditPage(props) {
       edit
       getQuestionBegin={props.getQuestionBegin}
       questionAction={props.updateQuestionBegin}
-      campaignId={props.campaignId[0]}
-      questionId={props.questionId[0]}
+      campaignId={props.campaignId}
+      questionId={props.questionId}
       isCommitting={props.isCommitting}
       isFormLoading={props.isFormLoading}
       buttonText='Update'
@@ -76,6 +75,7 @@ CampaignQuestionEditPage.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
   isCommitting: selectIsCommitting(),
+  question: selectQuestion(),
 });
 
 const mapDispatchToProps = {
