@@ -1,0 +1,27 @@
+/*
+ *
+ * User Role constants
+ *
+ */
+
+export const GET_USER_ROLES_BEGIN = 'app/User/GET_USER_ROLES_BEGIN';
+export const GET_USER_ROLES_SUCCESS = 'app/User/GET_USER_ROLES_SUCCESS';
+export const GET_USER_ROLES_ERROR = 'app/User/GET_USER_ROLES_ERROR';
+
+export const GET_USER_ROLE_BEGIN = 'app/User/GET_USER_ROLE_BEGIN';
+export const GET_USER_ROLE_SUCCESS = 'app/User/GET_USER_ROLE_SUCCESS';
+export const GET_USER_ROLE_ERROR = 'app/User/GET_USER_ROLE_ERROR';
+
+export const CREATE_USER_ROLE_BEGIN = 'app/User/CREATE_USER_ROLE_BEGIN';
+export const CREATE_USER_ROLE_SUCCESS = 'app/User/CREATE_USER_ROLE_SUCCESS';
+export const CREATE_USER_ROLE_ERROR = 'app/User/CREATE_USER_ROLE_ERROR';
+
+export const UPDATE_USER_ROLE_BEGIN = 'app/User/UPDATE_USER_ROLE_BEGIN';
+export const UPDATE_USER_ROLE_SUCCESS = 'app/User/UPDATE_USER_ROLE_SUCCESS';
+export const UPDATE_USER_ROLE_ERROR = 'app/User/UPDATE_USER_ROLE_ERROR';
+
+export const DELETE_USER_ROLE_BEGIN = 'app/User/DELETE_USER_ROLE_BEGIN';
+export const DELETE_USER_ROLE_SUCCESS = 'app/User/DELETE_USER_ROLE_SUCCESS';
+export const DELETE_USER_ROLE_ERROR = 'app/User/DELETE_USER_ROLE_ERROR';
+
+export const USER_ROLE_UNMOUNT = 'app/User/USER_ROLE_UNMOUNT';
