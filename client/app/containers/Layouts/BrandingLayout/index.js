@@ -9,7 +9,7 @@ import Fade from '@material-ui/core/Fade';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import AdminLayout from '../AdminLayout';
-import BrandingLinks from 'components/GlobalSettings/Branding/BrandingLinks';
+import BrandingLinks from 'components/Branding/BrandingLinks';
 
 const styles = theme => ({
   content: {
