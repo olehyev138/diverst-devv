@@ -20,6 +20,10 @@ module BaseSearcher
       []
     end
 
+    def base_preloads
+      []
+    end
+
     def set_query_scopes(params)
       if params[:query_scopes].presence
         case params[:query_scopes].class.name
