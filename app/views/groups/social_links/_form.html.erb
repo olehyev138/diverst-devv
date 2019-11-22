@@ -63,7 +63,7 @@
         <%= f.button :submit %>
       <% end %>
     </div>
-    <% draw_urls(@links) %>
+    <% draw_urls(@links) if @links.present? %>
   </div>
 </div>
 
