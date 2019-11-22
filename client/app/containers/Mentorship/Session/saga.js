@@ -79,6 +79,7 @@ export function* createSession(action) {
 
     yield put(createSessionSuccess());
     yield put(showSnackbar({ message: 'Successfully created session', options: { variant: 'success' } }));
+    yield put(push(ROUTES.user.mentorship.sessions.hosting.path()));
   } catch (err) {
     yield put(createSessionError(err));
 

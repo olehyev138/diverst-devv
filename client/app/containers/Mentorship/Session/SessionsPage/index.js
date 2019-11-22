@@ -44,7 +44,7 @@ export function SessionsPage(props) {
     sessionShow: id => ROUTES.user.mentorship.sessions.show.path(id)
   };
 
-  const [tab, setTab] = useState(SessionTypes.ongoing);
+  const [tab, setTab] = useState(SessionTypes.upcoming);
   const [params, setParams] = useState(defaultParams);
 
   const getSessions = (scopes, resetParams = false) => {
@@ -68,7 +68,7 @@ export function SessionsPage(props) {
   };
 
   useEffect(() => {
-    getSessions(['ongoing']);
+    getSessions(['upcoming']);
 
     return () => {
       props.sessionsUnmount();
