@@ -488,6 +488,24 @@ export const ROUTES = {
           index: {
             path: () => '/admin/system/settings/configuration'
           }
+        },
+      },
+      branding: {
+        index: {
+          path: () => '/admin/system/branding/theme',
+          data: {
+            pathPrefix: '/system/branding',
+            titleMessage: messages.admin.system.branding,
+          }
+        },
+        theme: {
+          path: () => '/admin/system/branding/theme'
+        },
+        home: {
+          path: () => '/admin/system/branding/home'
+        },
+        sponsors: {
+          path: () => '/admin/system/branding/sponsors'
         }
       }
     }

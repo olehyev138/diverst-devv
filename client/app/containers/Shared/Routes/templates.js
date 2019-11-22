@@ -9,6 +9,7 @@ import GroupManageLayout from 'containers/Layouts/GroupManageLayout/Loadable';
 import MentorshipLayout from 'containers/Layouts/MentorshipLayout/Loadable';
 import InnovateLayout from 'containers/Layouts/InnovateLayout/Loadable';
 import SystemUserLayout from 'containers/Layouts/SystemUsersLayout/Loadable';
+import BrandingLayout from 'containers/Layouts/BrandingLayout/Loadable';
 
 /* Session */
 import LoginPage from 'containers/Session/LoginPage/Loadable';
@@ -119,6 +120,6 @@ export {
   UserNewsLinkPage, UserEventsPage, FoldersPage, FolderCreatePage, FolderEditPage, FolderPage, ResourceCreatePage,
   ResourceEditPage, UserProfilePage, InnovateLayout, CampaignListPage, CampaignCreatePage, CampaignEditPage, CampaignShowPage,
   EnterpriseConfigurationPage, MentorshipProfilePage, MentorshipEditProfilePage, MentorshipLayout, MentorsPage,
-  MentorRequestsPage, SystemUserLayout, UserRolesListPage, UserRoleCreatePage, UserRoleEditPage
+  MentorRequestsPage, SystemUserLayout, UserRolesListPage, UserRoleCreatePage, UserRoleEditPage, BrandingLayout
 
 };
