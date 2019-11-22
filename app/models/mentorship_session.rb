@@ -6,6 +6,9 @@ class MentorshipSession < ApplicationRecord
   belongs_to :user
   belongs_to :mentoring_session
 
+  # callbacks
+  before_validation :set_default_role
+
   # validations
   validates_length_of :status, maximum: 191
   validates_length_of :role, maximum: 191
@@ -47,5 +50,11 @@ class MentorshipSession < ApplicationRecord
 
   def declined?
     self.status == 'declined'
+  end
+
+  private
+
+  def set_default_role
+    self.role ||= 'viewer'
   end
 end

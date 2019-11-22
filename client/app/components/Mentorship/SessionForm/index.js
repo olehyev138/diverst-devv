@@ -26,6 +26,8 @@ import DiverstSubmit from 'components/Shared/DiverstSubmit';
 
 /* eslint-disable object-curly-newline */
 export function SessionFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
+  console.log(values);
+
   return (
     <React.Fragment>
       <Card>

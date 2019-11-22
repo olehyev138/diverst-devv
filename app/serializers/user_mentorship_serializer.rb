@@ -10,11 +10,11 @@ class UserMentorshipSerializer < ApplicationRecordSerializer
   # Serialize all user fields, including the custom attributes listed above, and excluding the `excluded_keys`
 
   def interests
-    object.mentoring_interests.map { |i| i.name }.join(', ')
+    object.mentoring_interests.map { |i| i.name.capitalize }.join(', ')
   end
 
   def types
-    object.mentoring_types.map { |i| i.name }.join(', ')
+    object.mentoring_types.map { |i| i.name.capitalize }.join(', ')
   end
 
   def mentors

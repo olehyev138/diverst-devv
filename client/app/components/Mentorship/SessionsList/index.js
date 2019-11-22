@@ -112,13 +112,13 @@ export function SessionsList(props, context) {
                       <Grid container spacing={1} justify='space-between' alignItems='center'>
                         <Grid item xs>
                           <Typography color='primary' variant='h6' component='h2'>
-                            {item.notes}
+                            {item.interests || 'Mentorship'}
                           </Typography>
                           <hr className={classes.divider} />
                           {item.interests && (
                             <React.Fragment>
                               <Typography color='textSecondary'>
-                                {item.interests}
+                                {`Hosted by ${item.creator.name}`}
                               </Typography>
                               <Box pb={1} />
                             </React.Fragment>

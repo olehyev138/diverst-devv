@@ -8,7 +8,11 @@ class MentoringSessionSerializer < ApplicationRecordSerializer
   end
 
   def interests
-    object.mentoring_interests.map { |i| i.name }.join(', ')
+    inters = object.mentoring_interests.map do |i|
+      i.name.split(' ').map { |j| j.capitalize }.join(' ')
+    end
+    inters.last.prepend 'and ' if inters.count > 1
+    inters.count > 2 ? inters.join(', ') : inters.join(' ')
   end
 
   def creator
