@@ -9,6 +9,7 @@ import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/Mentorship/Session/reducer';
 
 import RouteService from 'utils/routeHelpers';
+import messages from 'containers/Mentorship/Session/messages';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import {
@@ -20,6 +21,7 @@ import { selectMentoringInterests, selectMentoringTypes } from 'containers/Share
 
 import saga from 'containers/Mentorship/Session/saga';
 import MentorshipSessionForm from 'components/Mentorship/SessionForm';
+import { injectIntl, intlShape } from 'react-intl';
 
 export function SessionProfilePage(props) {
   useInjectReducer({ key: 'sessions', reducer });
@@ -44,13 +46,16 @@ export function SessionProfilePage(props) {
         interestOptions={props.interestOptions}
         user={props.formUser}
         isCommiting={props.isCommitting}
-        buttonText={type === 'edit' ? 'Update' : 'Create'}
+        buttonText={type === 'edit'
+          ? props.intl.formatMessage(messages.form.update)
+          : props.intl.formatMessage(messages.form.create)}
       />
     </React.Fragment>
   );
 }
 
 SessionProfilePage.propTypes = {
+  intl: intlShape.isRequired,
   formUser: PropTypes.object,
   type: PropTypes.string.isRequired,
   updateSessionBegin: PropTypes.func,
@@ -84,5 +89,6 @@ const withConnect = connect(
 
 export default compose(
   withConnect,
+  injectIntl,
   memo,
 )(SessionProfilePage);

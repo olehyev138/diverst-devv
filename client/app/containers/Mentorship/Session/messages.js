@@ -30,5 +30,28 @@ export default defineMessages({
     participating: {
       id: `${scope}.title.participating`,
     },
-  }
+  },
+  form: {
+    notes: {
+      id: `${scope}.form.input.notes`,
+    },
+    topics: {
+      id: `${scope}.form.input.topics`,
+    },
+    users: {
+      id: `${scope}.form.input.users`,
+    },
+    start: {
+      id: `${scope}.form.input.start`,
+    },
+    end: {
+      id: `${scope}.form.input.end`,
+    },
+    create: {
+      id: `${scope}.form.button.create`,
+    },
+    update: {
+      id: `${scope}.form.button.update`,
+    },
+  },
 });

@@ -18,11 +18,8 @@ import {
 } from '@material-ui/core';
 import Select from 'components/Shared/DiverstSelect';
 
-import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import messages from 'containers/Mentorship/Session/messages';
-import appMessages from 'containers/Shared/App/messages';
 import { buildValues, mapFields } from 'utils/formHelpers';
-import { withStyles } from '@material-ui/core/styles';
 import DiverstDateTimePicker from 'components/Shared/Pickers/DiverstDateTimePicker';
 import { DateTime } from 'luxon';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
@@ -47,7 +44,7 @@ export function SessionFormInner({ handleSubmit, handleChange, handleBlur, value
               id='notes'
               name='notes'
               value={values.notes}
-              label='TODO Notes'
+              label={props.intl.formatMessage(messages.form.notes)}
             />
             { /* Start and End Pickers */ }
             <Field
@@ -62,7 +59,7 @@ export function SessionFormInner({ handleSubmit, handleChange, handleBlur, value
               id='start'
               name='start'
               margin='normal'
-              label='TODO Start'
+              label={props.intl.formatMessage(messages.form.start)}
             />
             <Grid item xs md={5}>
               <Field
@@ -77,7 +74,7 @@ export function SessionFormInner({ handleSubmit, handleChange, handleBlur, value
                 id='end'
                 name='end'
                 margin='normal'
-                label='TODO End'
+                label={props.intl.formatMessage(messages.form.end)}
               />
             </Grid>
             {/* Interest */}
@@ -88,7 +85,7 @@ export function SessionFormInner({ handleSubmit, handleChange, handleBlur, value
               isMulti
               fullWidth
               margin='normal'
-              label='TODO Topic'
+              label={props.intl.formatMessage(messages.form.topics)}
               value={values.mentoring_interest_ids}
               options={props.interestOptions}
               onChange={value => setFieldValue('mentoring_interest_ids', value)}
@@ -100,7 +97,7 @@ export function SessionFormInner({ handleSubmit, handleChange, handleBlur, value
               isMulti
               fullWidth
               margin='normal'
-              label='TODO Users'
+              label={props.intl.formatMessage(messages.form.users)}
               value={values.user_ids}
               options={dig(props, 'user', 'mentees')}
               onChange={value => setFieldValue('user_ids', value)}
