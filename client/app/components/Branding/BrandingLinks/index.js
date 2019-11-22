@@ -27,7 +27,7 @@ export function BrandingLinks(props) {
         >
           <Tab
             component={WrappedNavLink}
-            to={ROUTES.admin.system.users.index.path()}
+            to={ROUTES.admin.system.branding.theme.path()}
             label='Theme'
           />
           <Tab

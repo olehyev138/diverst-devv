@@ -7,8 +7,8 @@ import { createStructuredSelector } from 'reselect/lib';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 
-import reducer from '../reducer';
-import saga from '../saga';
+import reducer from 'containers/GlobalSettings/EnterpriseConfiguration/reducer';
+import saga from 'containers/GlobalSettings/EnterpriseConfiguration/saga';
 import { selectFormEnterprise } from 'containers/GlobalSettings/EnterpriseConfiguration/selectors';
 import {
   getEnterpriseBegin,
