@@ -58,6 +58,10 @@ import UsersPage from 'containers/User/UsersPage/Loadable';
 import UserCreatePage from 'containers/User/UserCreatePage/Loadable';
 import UserEditPage from 'containers/User/UserEditPage/Loadable';
 
+/* Admin - System - User - Roles */
+import UserRolesListPage from 'containers/User/UserRole/UserRoleListPage/Loadable';
+import UserRoleCreatePage from 'containers/User/UserRole/UserRoleCreatePage/Loadable';
+import UserRoleEditPage from 'containers/User/UserRole/UserRoleEditPage/Loadable';
 
 /* Group */
 import GroupHomePage from 'containers/Group/GroupHomePage/Loadable';
@@ -119,5 +123,6 @@ export {
   ResourceEditPage, UserProfilePage, InnovateLayout, CampaignListPage, CampaignCreatePage, CampaignEditPage, CampaignShowPage,
   CampaignQuestionListPage, CampaignQuestionCreatePage,CampaignQuestionEditPage,
   EnterpriseConfigurationPage, MentorshipProfilePage, MentorshipEditProfilePage, MentorshipLayout, MentorsPage,
-  MentorRequestsPage, SystemUserLayout
+  MentorRequestsPage, SystemUserLayout, UserRolesListPage, UserRoleCreatePage, UserRoleEditPage
+
 };
