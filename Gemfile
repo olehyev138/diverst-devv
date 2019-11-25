@@ -11,7 +11,7 @@ gem 'active_record_union'
 gem 'activerecord', '~> 5.2.3'
 gem 'activerecord-import', '~> 0.14.0' # Adds a faster way to INSERT multiple rows in the DB
 gem 'autoprefixer-rails', '~> 6.3', '>= 6.3.3.1' # Automatically adds vendor prefixes to CSS declarations
-gem 'aws-sdk', '< 2.0' # The official AWS SDK
+gem 'aws-sdk', '~> 2.0.34' # The official AWS SDK
 gem 'bcrypt'
 gem 'bootsnap', require: false
 gem 'clockwork', '~> 1.2' # Schedule recurring jobs
@@ -36,6 +36,7 @@ gem 'linkedin-oauth2', '~> 1.0' # OAuth for LinkedIn
 gem 'liquid', '~> 3.0', '>= 3.0.6' # Templating engine used for email templates
 gem 'mailgun_rails', '~> 0.8.0'
 gem 'mysql2', '~> 0.5.2'
+gem 'paperclip', '~> 5.1.0' # TODO Remove after Paperclip to ActiveStorage migration
 gem 'pismo', '~> 0.7.4' # Extracts metadata from an URL
 gem 'public_activity'
 gem 'puma', '~> 3.1' # Better web server than WEBRick
