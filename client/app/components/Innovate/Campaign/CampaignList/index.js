@@ -24,6 +24,7 @@ import AddIcon from '@material-ui/icons/Add';
 import ExportIcon from '@material-ui/icons/SaveAlt';
 
 import DiverstTable from 'components/Shared/DiverstTable';
+import CampaignQuestionsList from '../CampaignQuestion/CampaignQuestionsList';
 
 const styles = theme => ({
   errorButton: {
@@ -78,6 +79,7 @@ export function CampaignList(props) {
           handlePagination={props.handlePagination}
           isLoading={props.isFetchingCampaigns}
           onOrderChange={handleOrderChange}
+          handleRowClick={(_, rowData) => props.handleVisitCampaignShow(rowData.id)}
           dataArray={props.campaignList}
           dataTotal={props.campaignTotal}
           columns={columns}
@@ -121,6 +123,7 @@ CampaignList.propTypes = {
   edit: PropTypes.bool,
   campaign: PropTypes.object,
   handleVisitCampaignEdit: PropTypes.func,
+  handleVisitCampaignShow: PropTypes.func,
 };
 
 export default compose(
