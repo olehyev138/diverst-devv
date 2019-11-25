@@ -7,13 +7,17 @@ class SocialMedia::Importer
     maxwidth: MEDIA_MAX_WIDTH
   }
 
-  def self.url_to_embed(url)
-    return nil unless self.valid_url? url
-
+  def self.url_to_embed(url, options=DEFAULT_MEDIA_OPTIONS)
     set_up_providers
-    resource = fetch_resource(url)
+    resource = fetch_resource(url, options)
 
-    return nil unless resource
+    unless !!resource
+      if matches_url? url
+        raise 'Post doesn\'t exist or is private'
+      else
+        raise 'Site is not supported or URL is not formatted correctly'
+      end
+    end
 
     case resource.type
     when 'rich', 'video'
@@ -30,6 +34,10 @@ class SocialMedia::Importer
     resource = fetch_resource(url)
 
     !!resource
+  end
+
+  def self.matches_url?(url)
+    OEmbed::Providers.find(url)
   end
 
   def self.oembed_link
@@ -58,7 +66,8 @@ class SocialMedia::Importer
       Yfrog: [ 'http://yfrog.com/*' ],
       Giphy: [ 'https://giphy.com/*' ],
       MlgTv: %w(http://tv.majorleaguegaming.com/video/* http://mlg.tv/video/*),
-      PollEverywhere: %w(http://www.polleverywhere.com/polls/* http://www.polleverywhere.com/multiple_choice_polls/* http://www.polleverywhere.com/free_text_polls/*),
+      PollEverywhere: %w( http://www.polleverywhere.com/polls/* http://www.polleverywhere.com/multiple_choice_polls/*
+                          http://www.polleverywhere.com/free_text_polls/*),
       MyOpera: [ 'http://my.opera.com/*' ],
       ClearspringWidgets: [ 'http://www.clearspring.com/widgets/*' ],
       NFBCanada: [ 'http://*.nfb.ca/film/*' ],
@@ -83,7 +92,7 @@ class SocialMedia::Importer
 
   def self.fetch_resource(url, options = {})
     url = url[0...-1] if url[-1] == '/'
-    resource = OEmbed::Providers.get(url, DEFAULT_MEDIA_OPTIONS.merge(options))
+    resource = OEmbed::Providers.get(url, options)
   rescue
     nil
   end
