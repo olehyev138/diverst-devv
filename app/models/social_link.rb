@@ -15,7 +15,7 @@ class SocialLink < BaseClass
 
   validates :author_id, presence: true
 
-  before_create :populate_embed_code, :build_default_link, :add_trailing_slash
+  before_create :build_default_link, :add_trailing_slash
 
   belongs_to :author, class_name: 'User', required: true, counter_cache: true
   belongs_to :group
@@ -41,20 +41,22 @@ class SocialLink < BaseClass
     social_link_segment.news_feed_link_segment.destroy
   end
 
+  def re_populate_embed_code
+    self.embed_code = SocialMedia::Importer.url_to_embed url
+  rescue => e
+    errors.add(:url, e.message)
+  end
+
   protected
 
   def correct_url?
-    unless SocialMedia::Importer.valid_url? url
-      errors.add(:url, 'is not a valid url for supported services')
-    end
+    self.embed_code = SocialMedia::Importer.url_to_embed url
+  rescue => e
+    errors.add(:url, e.message)
   end
 
   def add_trailing_slash
     self.url = File.join(self.url, '')
-  end
-
-  def populate_embed_code
-    self.embed_code = SocialMedia::Importer.url_to_embed url
   end
 
   private
