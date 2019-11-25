@@ -16,12 +16,13 @@ import reducer from 'containers/Innovate/Campaign/CampaignQuestion/reducer';
 import saga from 'containers/Innovate/Campaign/CampaignQuestion/saga';
 
 import {
-  getQuestionBegin,
+  getQuestionBegin, updateQuestionBegin,
   campaignQuestionsUnmount,
 } from 'containers/Innovate/Campaign/CampaignQuestion/actions';
 import { selectQuestion, selectIsCommitting } from 'containers/Innovate/Campaign/CampaignQuestion/selectors';
 
 import QuestionSummary from 'components/Innovate/Campaign/CampaignQuestion/QuestionSummary';
+import CampaignQuestionClose from 'components/Innovate/Campaign/CampaignQuestion/CampaignQuestionClose';
 
 export function CampaignQuestionShowPage(props) {
   useInjectReducer({ key: 'questions', reducer });
@@ -41,18 +42,31 @@ export function CampaignQuestionShowPage(props) {
   }, []);
 
   return (
-    <QuestionSummary
-      getQuestionBegin={props.getQuestionBegin}
-      campaignId={props.campaignId}
-      isFormLoading={props.isFormLoading}
-      question={props.question}
-      links={links}
-    />
+    props.question &&
+    <React.Fragment>
+      <QuestionSummary
+        getQuestionBegin={props.getQuestionBegin}
+        campaignId={props.campaignId}
+        isFormLoading={props.isFormLoading}
+        question={props.question}
+        links={links}
+      />
+      <CampaignQuestionClose
+        getQuestionBegin={props.getQuestionBegin}
+        campaignId={props.campaignId}
+        isFormLoading={props.isFormLoading}
+        questionAction={props.updateQuestionBegin}
+        question={props.question}
+        links={links}
+      />
+      {props.question.solved_at !== null ? (<h2>This question has been solved and is now closed.</h2>) : null}
+    </React.Fragment>
   );
 }
 
 CampaignQuestionShowPage.propTypes = {
   getQuestionBegin: PropTypes.func,
+  updateQuestionBegin: PropTypes.func,
   campaignQuestionsUnmount: PropTypes.func,
   isFormLoading: PropTypes.func,
   question: PropTypes.object,
@@ -70,6 +84,7 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = {
   getQuestionBegin,
+  updateQuestionBegin,
   campaignQuestionsUnmount,
 };
 const withConnect = connect(
