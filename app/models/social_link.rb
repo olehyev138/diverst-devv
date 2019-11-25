@@ -41,16 +41,24 @@ class SocialLink < BaseClass
     social_link_segment.news_feed_link_segment.destroy
   end
 
-  def re_populate_embed_code
-    self.embed_code = SocialMedia::Importer.url_to_embed url
+  def re_populate_embed_code(small: false)
+    new_html = SocialMedia::Importer.url_to_embed(url, small)
+
+    update_column(small ? :small_embed_code : :embed_code, new_html)
   rescue => e
     errors.add(:url, e.message)
+  end
+
+  def re_populate_both_embed_code
+    re_populate_embed_code small: false
+    re_populate_embed_code small: true
   end
 
   protected
 
   def correct_url?
     self.embed_code = SocialMedia::Importer.url_to_embed url
+    self.small_embed_code = SocialMedia::Importer.url_to_embed(url, small: true)
   rescue => e
     errors.add(:url, e.message)
   end

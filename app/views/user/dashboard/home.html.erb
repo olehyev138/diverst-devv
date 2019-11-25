@@ -55,7 +55,7 @@
                 </div>
               <% else %>
                 <% @posts.each do |news| %>
-                  <%= render "shared/flippable/news_link", news: news %>
+                  <%= render "shared/flippable/news_link", news: news, small: true %>
                 <% end %>
               <% end %>
             </div>

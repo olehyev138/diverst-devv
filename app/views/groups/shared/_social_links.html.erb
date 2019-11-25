@@ -8,13 +8,21 @@
       <% end %>
       <div class="flex-row flex-row--middle">
         <div class="flex-row__cell flex-row__cell--grow">
-          <% if social_link.url.include?("facebook") %>
-            <iframe src="https://www.facebook.com/plugins/post.php?href=<%= social_link.url_safe %>&width=500&show_text=true&height=290&appId" width="500" height="290" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
-          <% elsif social_link.url.include?("instagram") %>
-            <iframe width="320" height="440" src="<%= social_link.url %>embed" frameborder="0"></iframe>
-          <% else %>
-            <%= raw social_link.embed_code %>
-          <% end %>
+          <div class="__embeded_post" >
+            <% if social_link.url.include?("facebook") %>
+              <iframe src="https://www.facebook.com/plugins/post.php?href=<%= social_link.url_safe %>&show_text=true&appId"
+                      width="<%= small ? '500' : '1100' %>"
+                      height="<%= if social_link.url_safe.include?('video')
+                                    small ? '320' : '700'
+                                  else
+                                    '260'
+                                  end %>"
+                      style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true">
+              </iframe>
+            <% else %>
+                <%= raw small ? social_link.small_embed_code : social_link.embed_code %>
+            <% end %>
+          </div>
           <%= render partial: "groups/shared/like_feature", locals: {news_feed_link: social_link.news_feed_link } %>
         </div>
       </div>
