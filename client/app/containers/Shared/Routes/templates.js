@@ -105,6 +105,9 @@ import CampaignListPage from 'containers/Innovate/Campaign/CampaignListPage/Load
 import CampaignCreatePage from 'containers/Innovate/Campaign/CampaignCreatePage/Loadable';
 import CampaignEditPage from 'containers/Innovate/Campaign/CampaignEditPage/Loadable';
 import CampaignShowPage from 'containers/Innovate/Campaign/CampaignShowPage/Loadable';
+import CampaignQuestionListPage from 'containers/Innovate/Campaign/CampaignQuestion/CampaignQuestionListPage/Loadable';
+import CampaignQuestionCreatePage from 'containers/Innovate/Campaign/CampaignQuestion/CampaignQuestionCreatePage/Loadable';
+import CampaignQuestionEditPage from 'containers/Innovate/Campaign/CampaignQuestion/CampaignQuestionEditPage/Loadable';
 /* Global */
 import NotFoundPage from 'containers/Shared/NotFoundPage/Loadable';
 import PlaceholderPage from 'components/Shared/PlaceholderPage/Loadable';
@@ -170,6 +173,9 @@ export {
   CampaignCreatePage,
   CampaignEditPage,
   CampaignShowPage,
+  CampaignQuestionListPage,
+  CampaignQuestionCreatePage,
+  CampaignQuestionEditPage,
   EnterpriseConfigurationPage,
   MentorshipProfilePage,
   MentorshipEditProfilePage,

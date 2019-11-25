@@ -22,6 +22,7 @@ import resources from 'api/resources/resources';
 import campaigns from 'api/campaigns/campaigns';
 import mentorings from 'api/mentorings/mentorings';
 import mentoringRequests from 'api/mentoring_requests/mentoring_requests';
+import questions from 'api/campaign_questions/questions';
 import mentorshipSessions from 'api/mentorship_sessions/mentorship_sessions';
 import mentoringSessions from 'api/mentoring_sessions/mentoring_sessions';
 
@@ -55,6 +56,7 @@ const Api = {
   folders,
   resources,
   campaigns,
+  questions,
   mentorings,
   mentoringRequests,
   mentorshipSessions,
