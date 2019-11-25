@@ -13,6 +13,8 @@ import {
   CREATE_SESSION_BEGIN,
   UPDATE_SESSION_BEGIN,
   DELETE_SESSION_BEGIN,
+  ACCEPT_INVITATION_BEGIN,
+  DECLINE_INVITATION_BEGIN,
 } from './constants';
 
 import {
@@ -22,6 +24,8 @@ import {
   createSessionSuccess, createSessionError,
   updateSessionSuccess, updateSessionError,
   deleteSessionSuccess, deleteSessionError,
+  acceptInvitationSuccess, acceptInvitationError,
+  declineInvitationSuccess, declineInvitationError,
 } from './actions';
 
 export function* getSession(action) {
@@ -120,6 +124,34 @@ export function* deleteSession(action) {
   }
 }
 
+export function* acceptInvitation(action) {
+  try {
+    const response = yield call(api.mentorshipSessions.acceptInvite.bind(api.mentorshipSessions), action.payload.id);
+
+    yield put(acceptInvitationSuccess({}));
+    yield put(showSnackbar({ message: 'Successfully accepted invitation', options: { variant: 'success' } }));
+  } catch (err) {
+    yield put(acceptInvitationError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to accept invitation', options: { variant: 'warning' } }));
+  }
+}
+
+export function* declineInvitation(action) {
+  try {
+    const response = yield call(api.mentorshipSessions.declineInvite.bind(api.mentorshipSessions), action.payload.id);
+
+    yield put(declineInvitationSuccess({}));
+    yield put(showSnackbar({ message: 'Successfully declined invitation', options: { variant: 'success' } }));
+  } catch (err) {
+    yield put(declineInvitationError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to decline invitation', options: { variant: 'warning' } }));
+  }
+}
+
 
 export default function* SessionSaga() {
   yield takeLatest(GET_SESSION_BEGIN, getSession);
@@ -128,4 +160,6 @@ export default function* SessionSaga() {
   yield takeLatest(CREATE_SESSION_BEGIN, createSession);
   yield takeLatest(UPDATE_SESSION_BEGIN, updateSession);
   yield takeLatest(DELETE_SESSION_BEGIN, deleteSession);
+  yield takeLatest(ACCEPT_INVITATION_BEGIN, acceptInvitation);
+  yield takeLatest(DECLINE_INVITATION_BEGIN, declineInvitation);
 }

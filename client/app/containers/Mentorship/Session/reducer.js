@@ -24,6 +24,12 @@ import {
   DELETE_SESSION_BEGIN,
   DELETE_SESSION_SUCCESS,
   DELETE_SESSION_ERROR,
+  ACCEPT_INVITATION_BEGIN,
+  ACCEPT_INVITATION_SUCCESS,
+  ACCEPT_INVITATION_ERROR,
+  DECLINE_INVITATION_BEGIN,
+  DECLINE_INVITATION_SUCCESS,
+  DECLINE_INVITATION_ERROR,
   SESSIONS_UNMOUNT,
 } from './constants';
 
@@ -41,39 +47,37 @@ function sessionReducer(state = initialState, action) {
   /* eslint-disable consistent-return */
   return produce(state, (draft) => {
     switch (action.type) {
+      case GET_SESSION_BEGIN:
+        draft.hasChanged = false;
+        break;
+
+      case GET_SESSION_SUCCESS:
+        draft.currentSession = action.payload.session;
+        break;
+
       case GET_HOSTING_SESSIONS_BEGIN:
       case GET_PARTICIPATING_SESSIONS_BEGIN:
         draft.isFetchingSessions = true;
         draft.hasChanged = false;
         break;
 
-      case GET_HOSTING_SESSIONS_ERROR:
-      case GET_PARTICIPATING_SESSIONS_ERROR:
-        draft.isFetchingSessions = false;
-        draft.hasChanged = false;
-        break;
-
-      case GET_SESSION_SUCCESS:
-        draft.currentSession = action.payload.mentoring_session;
-        break;
-
       case GET_HOSTING_SESSIONS_SUCCESS:
         draft.sessionList = action.payload.items;
         draft.sessionListTotal = action.payload.total;
         draft.isFetchingSessions = false;
-        draft.hasChanged = false;
         break;
 
       case GET_PARTICIPATING_SESSIONS_SUCCESS:
         draft.sessionList = formatSessions(action.payload.items);
         draft.sessionListTotal = action.payload.total;
         draft.isFetchingSessions = false;
-        draft.hasChanged = false;
         break;
 
       case CREATE_SESSION_BEGIN:
       case UPDATE_SESSION_BEGIN:
       case DELETE_SESSION_BEGIN:
+      case ACCEPT_INVITATION_BEGIN:
+      case DECLINE_INVITATION_BEGIN:
         draft.isCommitting = true;
         draft.hasChanged = false;
         break;
@@ -81,6 +85,8 @@ function sessionReducer(state = initialState, action) {
       case CREATE_SESSION_SUCCESS:
       case UPDATE_SESSION_SUCCESS:
       case DELETE_SESSION_SUCCESS:
+      case ACCEPT_INVITATION_SUCCESS:
+      case DECLINE_INVITATION_SUCCESS:
         draft.isCommitting = false;
         draft.hasChanged = true;
         break;
@@ -88,6 +94,8 @@ function sessionReducer(state = initialState, action) {
       case CREATE_SESSION_ERROR:
       case UPDATE_SESSION_ERROR:
       case DELETE_SESSION_ERROR:
+      case ACCEPT_INVITATION_ERROR:
+      case DECLINE_INVITATION_ERROR:
         draft.isCommitting = false;
         draft.hasChanged = false;
         break;

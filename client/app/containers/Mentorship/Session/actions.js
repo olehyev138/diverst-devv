@@ -23,6 +23,12 @@ import {
   DELETE_SESSION_BEGIN,
   DELETE_SESSION_SUCCESS,
   DELETE_SESSION_ERROR,
+  ACCEPT_INVITATION_BEGIN,
+  ACCEPT_INVITATION_SUCCESS,
+  ACCEPT_INVITATION_ERROR,
+  DECLINE_INVITATION_BEGIN,
+  DECLINE_INVITATION_SUCCESS,
+  DECLINE_INVITATION_ERROR,
   SESSIONS_UNMOUNT,
 } from './constants';
 
@@ -148,6 +154,48 @@ export function deleteSessionSuccess(payload) {
 export function deleteSessionError(error) {
   return {
     type: DELETE_SESSION_ERROR,
+    error,
+  };
+}
+
+export function acceptInvitationBegin(payload) {
+  return {
+    type: ACCEPT_INVITATION_BEGIN,
+    payload,
+  };
+}
+
+export function acceptInvitationSuccess(payload) {
+  return {
+    type: ACCEPT_INVITATION_SUCCESS,
+    payload,
+  };
+}
+
+export function acceptInvitationError(error) {
+  return {
+    type: ACCEPT_INVITATION_ERROR,
+    error,
+  };
+}
+
+export function declineInvitationBegin(payload) {
+  return {
+    type: DECLINE_INVITATION_BEGIN,
+    payload,
+  };
+}
+
+export function declineInvitationSuccess(payload) {
+  return {
+    type: DECLINE_INVITATION_SUCCESS,
+    payload,
+  };
+}
+
+export function declineInvitationError(error) {
+  return {
+    type: DECLINE_INVITATION_ERROR,
     error,
   };
 }

@@ -28,4 +28,12 @@ export const DELETE_SESSION_BEGIN = 'app/Mentorship/Session/DELETE_SESSION_BEGIN
 export const DELETE_SESSION_SUCCESS = 'app/Mentorship/Session/DELETE_SESSION_SUCCESS';
 export const DELETE_SESSION_ERROR = 'app/Mentorship/Session/DELETE_SESSION_ERROR';
 
+export const ACCEPT_INVITATION_BEGIN = 'app/Mentorship/Session/ACCEPT_INVITATION_BEGIN';
+export const ACCEPT_INVITATION_SUCCESS = 'app/Mentorship/Session/ACCEPT_INVITATION_SUCCESS';
+export const ACCEPT_INVITATION_ERROR = 'app/Mentorship/Session/ACCEPT_INVITATION_ERROR';
+
+export const DECLINE_INVITATION_BEGIN = 'app/Mentorship/Session/DECLINE_INVITATION_BEGIN';
+export const DECLINE_INVITATION_SUCCESS = 'app/Mentorship/Session/DECLINE_INVITATION_SUCCESS';
+export const DECLINE_INVITATION_ERROR = 'app/Mentorship/Session/DECLINE_INVITATION_ERROR';
+
 export const SESSIONS_UNMOUNT = 'app/Mentorship/Session/SESSIONS_UNMOUNT';
