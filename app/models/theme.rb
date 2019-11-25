@@ -5,6 +5,9 @@ class Theme < ApplicationRecord
   has_one_attached :logo
   validates :logo, content_type: AttachmentHelper.common_image_types
 
+  # TODO Remove after Paperclip to ActiveStorage migration
+  has_attached_file :logo_paperclip, s3_permissions: 'private'
+
   validates_length_of :logo_redirect_url, maximum: 191
   validates_length_of :secondary_color, maximum: 191
   validates_length_of :digest, maximum: 191

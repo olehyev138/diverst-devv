@@ -16,6 +16,9 @@ class Answer < ApplicationRecord
   # ActiveStorage
   has_one_attached :supporting_document
 
+  # TODO Remove after Paperclip to ActiveStorage migration
+  has_attached_file :supporting_document_paperclip, s3_permissions: 'private'
+
   accepts_nested_attributes_for :expenses, reject_if: :all_blank, allow_destroy: true
 
   validates_length_of :outcome, maximum: 65535

@@ -20,6 +20,9 @@ class Resource < ApplicationRecord
   has_one_attached :file
   validates :file, attached: true, if: Proc.new { |r| r.url.blank? }
 
+  # TODO Remove after Paperclip to ActiveStorage migration
+  has_attached_file :file_paperclip, s3_permissions: 'private'
+
   validates_length_of :resource_type, maximum: 191
   validates_length_of :title, maximum: 191
   validates_presence_of   :title

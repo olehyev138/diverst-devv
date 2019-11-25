@@ -10,6 +10,10 @@ class CsvFile < ApplicationRecord
   validates :import_file, attached: true, if: Proc.new { |c| !c.download_file.attached? }
   validates :download_file, attached: true, if: Proc.new { |c| !c.import_file.attached? }
 
+  # TODO Remove after Paperclip to ActiveStorage migration
+  has_attached_file :import_file_paperclip, s3_permissions: 'private'
+  has_attached_file :download_file_paperclip, s3_permissions: 'private'
+
   validates_presence_of :download_file_name, if: Proc.new { |c| c.download_file.attached? }
 
   after_commit :schedule_users_import, on: :create

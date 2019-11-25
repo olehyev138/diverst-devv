@@ -103,6 +103,13 @@ class Enterprise < ApplicationRecord
   has_one_attached :sponsor_media
   has_one_attached :onboarding_sponsor_media
 
+  # TODO Remove after Paperclip to ActiveStorage migration
+  has_attached_file :banner_paperclip
+  has_attached_file :cdo_picture_paperclip, s3_permissions: 'private'
+  has_attached_file :xml_sso_config_paperclip
+  has_attached_file :sponsor_media_paperclip, s3_permissions: 'private'
+  has_attached_file :onboarding_sponsor_media_paperclip, s3_permissions: 'private'
+
   validates_format_of :redirect_email_contact, with: /\A[^@\s]+@[^@\s]+\z/, allow_blank: true
 
   def resolve_auto_archive_state

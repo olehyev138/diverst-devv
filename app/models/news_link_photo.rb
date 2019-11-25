@@ -7,6 +7,9 @@ class NewsLinkPhoto < ApplicationRecord
   has_one_attached :file
   validates :file, attached: true, content_type: AttachmentHelper.common_image_types
 
+  # TODO Remove after Paperclip to ActiveStorage migration
+  has_attached_file :file_paperclip, s3_permissions: 'private'
+
   def file_location(expires_in: 3600, default_style: :medium)
     return nil if !file.attached?
 

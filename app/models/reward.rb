@@ -8,6 +8,9 @@ class Reward < ApplicationRecord
   has_one_attached :picture
   validates :picture, content_type: AttachmentHelper.common_image_types
 
+  # TODO Remove after Paperclip to ActiveStorage migration
+  has_attached_file :picture_paperclip
+
   validates_length_of :description, maximum: 65535
   validates_length_of :label, maximum: 191
   validates :enterprise, presence: true

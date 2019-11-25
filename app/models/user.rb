@@ -84,6 +84,9 @@ class User < ApplicationRecord
   has_one_attached :avatar
   validates :avatar, content_type: AttachmentHelper.common_image_types
 
+  # TODO Remove after Paperclip to ActiveStorage migration
+  has_attached_file :avatar_paperclip, s3_permissions: 'private'
+
   validates_length_of :mentorship_description, maximum: 65535
   validates_length_of :unlock_token, maximum: 191
   validates_length_of :time_zone, maximum: 191

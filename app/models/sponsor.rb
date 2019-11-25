@@ -9,6 +9,9 @@ class Sponsor < ApplicationRecord
   # ActiveStorage
   has_one_attached :sponsor_media
 
+  # TODO Remove after Paperclip to ActiveStorage migration
+  has_attached_file :sponsor_media_paperclip, s3_permissions: 'private'
+
   def sponsor_media_location
     return nil if !sponsor_media.attached?
 

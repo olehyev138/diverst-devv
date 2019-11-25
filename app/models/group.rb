@@ -123,6 +123,11 @@ class Group < ApplicationRecord
   validates :banner, content_type: AttachmentHelper.common_image_types
   has_one_attached :sponsor_media
 
+  # TODO Remove after Paperclip to ActiveStorage migration
+  has_attached_file :logo_paperclip, s3_permissions: 'private'
+  has_attached_file :banner_paperclip
+  has_attached_file :sponsor_media_paperclip, s3_permissions: 'private'
+
   validates_length_of :event_attendance_visibility, maximum: 191
   validates_length_of :unit_of_expiry_age, maximum: 191
   validates_length_of :home_message, maximum: 65535

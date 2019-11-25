@@ -31,6 +31,10 @@ class Campaign < ApplicationRecord
   has_one_attached :banner
   validates :banner, content_type: AttachmentHelper.common_image_types
 
+  # TODO Remove after Paperclip to ActiveStorage migration
+  has_attached_file :image_paperclip, s3_permissions: 'private'
+  has_attached_file :banner_paperclip, s3_permissions: 'private'
+
   validates :title,       presence: true
   validates :description, presence: true
   validates :start,       presence: true
