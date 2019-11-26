@@ -20,7 +20,6 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 export function* getAnswers(action) {
   try {
     const response = yield call(api.answers.all.bind(api.answers), action.payload);
-
     yield put(getAnswersSuccess(response.data.page));
   } catch (err) {
     yield put(getAnswersError(err));

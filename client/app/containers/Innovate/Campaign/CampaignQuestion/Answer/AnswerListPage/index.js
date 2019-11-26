@@ -23,18 +23,22 @@ import {
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
-import AnswerList from 'components/Innovate/Campaign/CampaignQuestion/Answer/AnswersList';
+import AnswerList from 'components/Innovate/Campaign/CampaignQuestion/Answer/AnswerList';
 import { push } from 'connected-react-router';
+
 
 export function AnswerListPage(props) {
   useInjectReducer({ key: 'answers', reducer });
   useInjectSaga({ key: 'answers', saga });
 
+  console.log(props);
+
   const rs = new RouteService(useContext);
   const questionId = rs.params('question_id')[0];
+  const campaignId = rs.params('campaign_id')[0];
 
   const [params, setParams] = useState({
-    question_id: questionId, count: 10, page: 0,
+    question_id: questionId, count: 5, page: 0,
     orderBy: 'answers.id', order: 'asc'
   });
 
@@ -59,7 +63,6 @@ export function AnswerListPage(props) {
 
   useEffect(() => {
     props.getAnswersBegin(params);
-
     return () => {
       props.questionAnswersUnmount();
     };

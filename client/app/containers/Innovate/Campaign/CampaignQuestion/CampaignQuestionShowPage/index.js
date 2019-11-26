@@ -22,6 +22,7 @@ import {
 import { selectQuestion, selectIsCommitting } from 'containers/Innovate/Campaign/CampaignQuestion/selectors';
 
 import QuestionSummary from 'components/Innovate/Campaign/CampaignQuestion/QuestionSummary';
+import AnswerListPage from 'containers/Innovate/Campaign/CampaignQuestion/Answer/AnswerListPage';
 import CampaignQuestionClose from 'components/Innovate/Campaign/CampaignQuestion/CampaignQuestionClose';
 
 export function CampaignQuestionShowPage(props) {
@@ -51,6 +52,7 @@ export function CampaignQuestionShowPage(props) {
         question={props.question}
         links={links}
       />
+      <AnswerListPage />
       <CampaignQuestionClose
         getQuestionBegin={props.getQuestionBegin}
         campaignId={props.campaignId}

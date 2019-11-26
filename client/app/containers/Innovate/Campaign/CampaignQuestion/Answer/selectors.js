@@ -1,7 +1,5 @@
 import { createSelector } from 'reselect/lib';
-import { initialState } from 'containers/Innovate/Campaign/CampaignQuestion/reducer';
-import { selectCampaignsDomain } from '/../selectors';
-import { selectQuestionsDomain } from '/./selectors';
+import { initialState } from './reducer';
 
 
 const selectAnswersDomain = state => state.answers || initialState;

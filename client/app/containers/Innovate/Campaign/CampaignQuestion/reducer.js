@@ -15,6 +15,7 @@ import {
 
 
 export const initialState = {
+
   currentQuestion: null,
   isCommitting: false,
   questionList: [],

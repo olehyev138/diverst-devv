@@ -10,10 +10,6 @@ export function QuestionSummary(props) {
           Question:
           {props.question.title}
         </h2>
-        <br />
-        <h4>
-          {props.question.description}
-        </h4>
       </React.Fragment>
     )
   );
