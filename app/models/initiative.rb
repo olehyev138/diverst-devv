@@ -70,10 +70,12 @@ class Initiative < ApplicationRecord
   validates :picture, content_type: AttachmentHelper.common_image_types
   has_one_attached :qr_code
   validates :qr_code, content_type: AttachmentHelper.common_image_types
+  has_one_attached :video
 
   # TODO Remove after Paperclip to ActiveStorage migration
   has_attached_file :picture_paperclip, s3_permissions: 'private'
   has_attached_file :qr_code_paperclip, s3_permissions: 'private'
+  has_attached_file :video_paperclip, s3_permissions: 'private'
 
   validates :start, presence: true
   validates :end, presence: true
