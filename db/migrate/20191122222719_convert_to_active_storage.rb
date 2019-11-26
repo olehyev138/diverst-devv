@@ -44,23 +44,23 @@ class ConvertToActiveStorage < ActiveRecord::Migration[5.2]
               next
             end
 
-            ActiveRecord::Base.connection.execute_prepared(
-              'active_storage_blob_statement', [
+            updated_at = instance.try(:updated_at) || Time.current
+
+            active_storage_blob_statement.execute(
               key(instance, attachment),
               instance.send("#{attachment}_file_name"),
               instance.send("#{attachment}_content_type"),
               instance.send("#{attachment}_file_size"),
-              checksum(instance.send(attachment)),
-              instance.updated_at.iso8601
-            ])
+              checksum(instance.send("#{attachment}_paperclip")),
+              updated_at
+            )
 
-            ActiveRecord::Base.connection.execute_prepared(
-              'active_storage_attachment_statement', [
+            active_storage_attachment_statement.execute(
               attachment,
               model.name,
               instance.id,
-              instance.updated_at.iso8601,
-            ])
+              updated_at
+            )
           end
         end
       end

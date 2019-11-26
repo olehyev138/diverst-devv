@@ -1,5 +1,7 @@
 class ConvertKeysToBigInt < ActiveRecord::Migration[5.2]
   def change
+    # Note: This file has been commented out because it isn't working
+    #
     # # Disable foreign key checks temporarily to switch columns to bigints
     # # execute 'SET FOREIGN_KEY_CHECKS = 0'
     #
