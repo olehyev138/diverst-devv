@@ -4,8 +4,12 @@ class AddFullHtmlToSocialLink < ActiveRecord::Migration
 
     SocialLink.find_each do |sl|
       unless sl.embed_code && sl.small_embed_code
-        sl.re_populate_both_embed_code
-        sl.save!
+        old = sl.embed_code
+	sl.re_populate_both_embed_code
+        unless sl.save!
+	    sl.update_column(:embed_code, old)
+	    sl.update_column(:small_embed_code, old)
+	end
       end
     end
   end
@@ -13,8 +17,11 @@ class AddFullHtmlToSocialLink < ActiveRecord::Migration
   def down
     SocialLink.find_each do |sl|
       if sl.embed_code && sl.small_embed_code
+        old = sl.small_embed_code || sl.embed_code
         sl.embed_code = sl.small_embed_code
-        sl.save!
+        unless sl.save!
+          sl.update_column(:embed_code, old)
+        end
       end
     end
 
