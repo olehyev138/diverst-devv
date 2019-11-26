@@ -12,8 +12,9 @@ import {
   CustomGraphCreatePage, CustomGraphEditPage, GroupManageLayout, GroupSettingsPage, CustomTextEditPage,
   UserNewsLinkPage, UserEventsPage, FoldersPage, FolderCreatePage, FolderEditPage, FolderPage, ResourceCreatePage,
   ResourceEditPage, UserProfilePage, InnovateLayout, CampaignListPage, CampaignCreatePage, CampaignEditPage, CampaignShowPage,
-  EnterpriseConfigurationPage, MentorshipProfilePage, MentorshipEditProfilePage, MentorshipLayout, MentorsPage, MentorRequestsPage,
-  SystemUserLayout, UserRolesListPage, UserRoleCreatePage, UserRoleEditPage, BrandingLayout, BrandingThemePage
+  CampaignQuestionListPage, CampaignQuestionCreatePage, CampaignQuestionEditPage, EnterpriseConfigurationPage, MentorshipProfilePage,
+  MentorshipEditProfilePage, MentorshipLayout, MentorsPage, MentorRequestsPage, SystemUserLayout, UserRolesListPage,
+  UserRoleCreatePage, UserRoleEditPage, BrandingLayout, BrandingThemePage
 } from './templates';
 
 // Paths
