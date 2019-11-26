@@ -45,11 +45,11 @@ export function BrandingThemeInner({ classes, handleSubmit, handleChange, handle
                 required
                 onChange={handleChange}
                 fullWidth
-                id='name'
-                name='name'
+                id='primary_color'
+                name='primary_color'
                 margin='normal'
-                label='Name'
-                value={values.name}
+                label='Primary Colour'
+                value={values.primary_color}
               />
             </Grid>
           </Grid>
@@ -72,23 +72,9 @@ export function BrandingThemeInner({ classes, handleSubmit, handleChange, handle
 }
 
 export function BrandingTheme(props) {
-  const initialValues = buildValues(props.enterprise, {
+  const initialValues = buildValues(props.theme, {
     id: { default: '' },
-    name: { default: '' },
-    default_from_email_address: { default: '' },
-    default_from_email_display_name: { default: '' },
-    redirect_email_contact: { default: '' },
-    mentorship_module_enabled: { default: false },
-    disable_likes: { default: false },
-    enable_pending_comments: { default: false },
-    collaborate_module_enabled: { default: false },
-    scope_module_enabled: { default: false },
-    has_enabled_onboarding_email: { default: false },
-    disable_emails: { default: false },
-    enable_rewards: { default: false },
-    enable_social_media: { default: false },
-    plan_module_enabled: { default: false },
-    time_zone: { default: null }
+    primary_color: { default: '' },
   });
 
   return (
@@ -96,7 +82,8 @@ export function BrandingTheme(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        props.enterpriseAction(mapFields(values, ['time_zone']));
+        // Update theme through the enterprise controller
+        props.enterpriseAction({ theme_attributes: values });
       }}
 
       render={formikProps => <BrandingThemeInner {...props} {...formikProps} />}
@@ -106,7 +93,7 @@ export function BrandingTheme(props) {
 
 BrandingTheme.propTypes = {
   enterpriseAction: PropTypes.func,
-  enterprise: PropTypes.object,
+  theme: PropTypes.object,
 };
 
 BrandingThemeInner.propTypes = {

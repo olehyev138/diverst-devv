@@ -9,7 +9,7 @@ import { useInjectReducer } from 'utils/injectReducer';
 
 import reducer from 'containers/GlobalSettings/EnterpriseConfiguration/reducer';
 import saga from 'containers/GlobalSettings/EnterpriseConfiguration/saga';
-import { selectFormEnterprise } from 'containers/GlobalSettings/EnterpriseConfiguration/selectors';
+import { selectEnterpriseTheme } from 'containers/GlobalSettings/EnterpriseConfiguration/selectors';
 import {
   getEnterpriseBegin,
   updateEnterpriseBegin,
@@ -23,6 +23,8 @@ export function BrandingThemePage(props) {
   useInjectReducer({ key: 'configuration', reducer });
   useInjectSaga({ key: 'configuration', saga });
 
+  console.log(props);
+
   useEffect(() => {
     props.getEnterpriseBegin();
 
@@ -35,7 +37,7 @@ export function BrandingThemePage(props) {
     <React.Fragment>
       <BrandingTheme
         enterpriseAction={props.updateEnterpriseBegin}
-        enterprise={props.enterprise}
+        theme={props.theme}
         buttonText='Update'
       />
     </React.Fragment>
@@ -43,14 +45,14 @@ export function BrandingThemePage(props) {
 }
 
 BrandingThemePage.propTypes = {
-  enterprise: PropTypes.object,
+  theme: PropTypes.object,
   getEnterpriseBegin: PropTypes.func,
   updateEnterpriseBegin: PropTypes.func,
   configurationUnmount: PropTypes.func
 };
 
 const mapStateToProps = createStructuredSelector({
-  enterprise: selectFormEnterprise()
+  theme: selectEnterpriseTheme()
 });
 
 const mapDispatchToProps = {
