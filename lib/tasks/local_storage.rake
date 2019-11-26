@@ -4,7 +4,7 @@ namespace :local_storage do
     ActiveStorage::Attachment.find_each do |attachment|
       name = attachment.name
 
-      source = attachment.record.send(name).path
+      source = attachment.record.send("#{name}_paperclip").path
       dest_dir = File.join(
         'storage',
         attachment.blob.key.first(2),
