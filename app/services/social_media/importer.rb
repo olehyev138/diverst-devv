@@ -3,12 +3,13 @@ require 'oembed'
 class SocialMedia::Importer
   MEDIA_MAX_WIDTH = 380
 
-  DEFAULT_MEDIA_OPTIONS = {
+  SMALL_MEDIA_OPTIONS = {
     maxwidth: MEDIA_MAX_WIDTH
   }
 
-  def self.url_to_embed(url, options=DEFAULT_MEDIA_OPTIONS)
+  def self.url_to_embed(url, small: false)
     set_up_providers
+    options = small ? SMALL_MEDIA_OPTIONS : {}
     resource = fetch_resource(url, options)
 
     unless !!resource

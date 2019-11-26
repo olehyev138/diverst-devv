@@ -45,7 +45,7 @@ RSpec.describe SocialLink, type: :model do
 
         it 'adds error message' do
           expect(social_link).to_not be_valid
-          expect(social_link.errors[:url]).to include('is not a valid url for supported services')
+          expect(social_link.errors[:url]).to include('Site is not supported or URL is not formatted correctly')
         end
       end
     end
@@ -56,11 +56,6 @@ RSpec.describe SocialLink, type: :model do
     let!(:social_link) { build(:social_link) }
 
     context 'before_create callbacks' do
-      it 'calls #populate_embed_code before social_link object is created' do
-        expect(social_link).to receive(:populate_embed_code)
-        social_link.save
-      end
-
       it 'calls #build_default_link before social_link object is created' do
         expect(social_link).to receive(:build_default_link)
         social_link.save
