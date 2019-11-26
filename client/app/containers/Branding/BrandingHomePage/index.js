@@ -9,7 +9,7 @@ import { useInjectReducer } from 'utils/injectReducer';
 
 import reducer from 'containers/GlobalSettings/EnterpriseConfiguration/reducer';
 import saga from 'containers/GlobalSettings/EnterpriseConfiguration/saga';
-import { selectEnterpriseTheme } from 'containers/GlobalSettings/EnterpriseConfiguration/selectors';
+import { selectEnterprise } from 'containers/GlobalSettings/EnterpriseConfiguration/selectors';
 import {
   getEnterpriseBegin,
   updateEnterpriseBegin,
@@ -17,9 +17,9 @@ import {
 } from 'containers/GlobalSettings/EnterpriseConfiguration/actions';
 
 import RouteService from 'utils/routeHelpers';
-import BrandingTheme from 'components/Branding/BrandingTheme';
+import BrandingHome from 'components/Branding/BrandingHome';
 
-export function BrandingThemePage(props) {
+export function BrandingHomePage(props) {
   useInjectReducer({ key: 'configuration', reducer });
   useInjectSaga({ key: 'configuration', saga });
 
@@ -33,24 +33,24 @@ export function BrandingThemePage(props) {
 
   return (
     <React.Fragment>
-      <BrandingTheme
+      <BrandingHome
         enterpriseAction={props.updateEnterpriseBegin}
-        theme={props.theme}
+        enterprise={props.enterprise}
         buttonText='Update'
       />
     </React.Fragment>
   );
 }
 
-BrandingThemePage.propTypes = {
-  theme: PropTypes.object,
+BrandingHomePage.propTypes = {
+  enterprise: PropTypes.object,
   getEnterpriseBegin: PropTypes.func,
   updateEnterpriseBegin: PropTypes.func,
   configurationUnmount: PropTypes.func
 };
 
 const mapStateToProps = createStructuredSelector({
-  theme: selectEnterpriseTheme()
+  enterprise: selectEnterprise()
 });
 
 const mapDispatchToProps = {
@@ -67,4 +67,4 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(BrandingThemePage);
+)(BrandingHomePage);

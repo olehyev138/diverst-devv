@@ -32,12 +32,12 @@ export function BrandingLinks(props) {
           />
           <Tab
             component={WrappedNavLink}
-            to={ROUTES.admin.system.users.roles.index.path()}
+            to={ROUTES.admin.system.branding.home.path()}
             label='Home'
           />
           <Tab
             component={WrappedNavLink}
-            to='#'
+            to={ROUTES.admin.system.branding.sponsors.path()}
             label='Sponsors'
           />
         </ResponsiveTabs>

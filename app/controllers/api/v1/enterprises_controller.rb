@@ -18,7 +18,7 @@ class Api::V1::EnterprisesController < DiverstController
     enterprise = self.diverst_request.user.enterprise
     base_authorize(enterprise)
 
-    render status: 200, json: enterprise
+    render status: 200, json: enterprise, serializer: AuthenticatedEnterpriseSerializer
   rescue => e
     raise BadRequestException.new(e.message)
   end
@@ -43,7 +43,6 @@ class Api::V1::EnterprisesController < DiverstController
     params
     .require(klass.symbol)
     .permit(
-      :id,
       :name,
       :sp_entity_id,
       :idp_entity_id,

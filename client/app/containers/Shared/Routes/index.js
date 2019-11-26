@@ -14,7 +14,7 @@ import {
   ResourceEditPage, UserProfilePage, InnovateLayout, CampaignListPage, CampaignCreatePage, CampaignEditPage, CampaignShowPage,
   CampaignQuestionListPage, CampaignQuestionCreatePage, CampaignQuestionEditPage, EnterpriseConfigurationPage, MentorshipProfilePage,
   MentorshipEditProfilePage, MentorshipLayout, MentorsPage, MentorRequestsPage, SystemUserLayout, UserRolesListPage,
-  UserRoleCreatePage, UserRoleEditPage, BrandingLayout, BrandingThemePage
+  UserRoleCreatePage, UserRoleEditPage, BrandingLayout, BrandingThemePage, BrandingHomePage
 } from './templates';
 
 // Paths
@@ -106,6 +106,7 @@ export default function Routes(props) {
 
       { /* Admin - System - Branding */ }
       <BrandingLayout exact {...expandRoute(ROUTES.admin.system.branding.theme)} component={BrandingThemePage} />
+      <BrandingLayout exact {...expandRoute(ROUTES.admin.system.branding.home)} component={BrandingHomePage} />
 
       { /* Group */ }
       <GroupLayout exact {...expandRoute(ROUTES.group.home)} component={GroupHomePage} disableBreadcrumbs />

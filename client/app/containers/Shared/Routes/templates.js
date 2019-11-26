@@ -56,6 +56,7 @@ import EnterpriseConfigurationPage from 'containers/GlobalSettings/EnterpriseCon
 
 /* Admin - System - Branding */
 import BrandingThemePage from 'containers/Branding/BrandingThemePage/Loadable';
+import BrandingHomePage from 'containers/Branding/BrandingHomePage/Loadable';
 
 /* Admin - System - User */
 import UsersPage from 'containers/User/UsersPage/Loadable';
@@ -128,5 +129,5 @@ export {
   CampaignQuestionListPage, CampaignQuestionCreatePage, CampaignQuestionEditPage,
   EnterpriseConfigurationPage, MentorshipProfilePage, MentorshipEditProfilePage, MentorshipLayout, MentorsPage,
   MentorRequestsPage, SystemUserLayout, UserRolesListPage, UserRoleCreatePage, UserRoleEditPage, BrandingLayout,
-  BrandingThemePage
+  BrandingThemePage, BrandingHomePage
 };
