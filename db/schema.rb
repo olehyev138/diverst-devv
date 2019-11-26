@@ -659,11 +659,11 @@ ActiveRecord::Schema.define(version: 2019_11_05_183507) do
     t.string "calendar_color", collation: "utf8mb4_unicode_ci"
     t.integer "total_weekly_points", default: 0
     t.boolean "active", default: true
-    t.bigint "parent_id"
-    t.string "sponsor_image_file_name"
-    t.string "sponsor_image_content_type"
-    t.bigint "sponsor_image_file_size"
-    t.datetime "sponsor_image_updated_at"
+    t.integer "parent_id"
+    t.string "sponsor_media_file_name"
+    t.string "sponsor_media_content_type"
+    t.integer "sponsor_media_file_size"
+    t.datetime "sponsor_media_updated_at"
     t.string "company_video_url"
     t.string "latest_news_visibility"
     t.string "upcoming_events_visibility"
