@@ -24,6 +24,7 @@ import mentorings from 'api/mentorings/mentorings';
 import mentoringRequests from 'api/mentoring_requests/mentoring_requests';
 import questions from 'api/campaign_questions/questions';
 import answers from 'api/answers/answers';
+import comments from 'api/comments/comments';
 
 /* Metrics */
 import overviewGraphs from 'api/metrics/overview_graphs';
@@ -57,6 +58,7 @@ const Api = {
   campaigns,
   questions,
   answers,
+  comments,
   mentorings,
   mentoringRequests,
   metrics: {

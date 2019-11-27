@@ -6,6 +6,7 @@ import {
   Button, Box
 } from '@material-ui/core/index';
 import { withStyles } from '@material-ui/core/styles';
+import AnswerListItem from 'components/Innovate/Campaign/CampaignQuestion/Answer/AnswerListItem';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
@@ -39,38 +40,18 @@ const styles = theme => ({
 
 export function AnswerList(props) {
   const { classes } = props;
-
-  const handleOrderChange = (columnId, orderDir) => {
-  };
-
-  const columns = [
-    { title: 'Author', field: 'author.name' },
-    { title: 'Answer', field: 'content' },
-  ];
-
+  console.log(props.answerList);
   return (
     <React.Fragment>
+      {props.answerList && props.answerList.map((answer, i) => {
+        return (
+          <AnswerListItem
+            currentAnswer={answer}
+            key={answer.id}
+          />
+        );
+      })}
 
-      <Box className={classes.floatSpacer} />
-      <DiverstTable
-        title='Author'
-        handlePagination={props.handlePagination}
-        isLoading={props.isFetchingAnswers}
-        onOrderChange={handleOrderChange}
-        dataArray={props.answerList}
-        dataTotal={props.answerTotal}
-        columns={columns}
-        rowsPerPage={props.params.count}
-        actions={[{
-          icon: () => <DeleteIcon />,
-          tooltip: 'Delete Answer',
-          onClick: (_, rowData) => {
-            /* eslint-disable-next-line no-alert, no-restricted-globals */
-            if (confirm('Delete answer?'))
-              props.deleteAnswerBegin({ questionId: props.questionId, answerId: rowData.id });
-          }
-        }]}
-      />
     </React.Fragment>
   );
 }
