@@ -35,6 +35,7 @@ import {
 
 export const initialState = {
   sessionList: [],
+  userList: [],
   sessionListTotal: null,
   currentSession: null,
   isFetchingSessions: false,
@@ -69,6 +70,7 @@ function sessionReducer(state = initialState, action) {
 
       case GET_PARTICIPATING_SESSIONS_SUCCESS:
         draft.sessionList = formatSessions(action.payload.items);
+        draft.userList = formatUsers(action.payload.items);
         draft.sessionListTotal = action.payload.total;
         draft.isFetchingSessions = false;
         break;
@@ -109,4 +111,8 @@ export default sessionReducer;
 
 function formatSessions(joinedData) {
   return joinedData.map(x => x.mentoring_session);
+}
+
+function formatUsers(joinedData) {
+  return joinedData.map(x => ({ user: x.user, status: x.status }));
 }

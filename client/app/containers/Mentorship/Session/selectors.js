@@ -9,6 +9,11 @@ const selectPaginatedSessions = () => createSelector(
   sessionState => sessionState.sessionList
 );
 
+const selectPaginatedUsers = () => createSelector(
+  selectSessionDomain,
+  sessionState => sessionState.userList
+);
+
 const selectSessionsTotal = () => createSelector(
   selectSessionDomain,
   sessionState => sessionState.sessionListTotal
@@ -51,9 +56,9 @@ const selectHasChanged = () => createSelector(
 
 export {
   selectPaginatedSessions,
+  selectPaginatedUsers,
   selectSessionsTotal,
   selectSession,
-  selectFormSession,
   selectIsFetchingSessions,
   selectIsCommitting,
   selectHasChanged,
