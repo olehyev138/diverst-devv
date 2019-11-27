@@ -85,5 +85,14 @@ export default defineMessages({
     leading: {
       id: `${scope}.show.leading`,
     },
+    medium: {
+      id: `${scope}.show.medium`,
+    },
+    link: {
+      id: `${scope}.show.link`,
+    },
+    topics: {
+      id: `${scope}.show.topics`,
+    },
   }
 });

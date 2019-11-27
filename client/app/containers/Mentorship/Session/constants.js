@@ -41,3 +41,4 @@ export const DECLINE_INVITATION_SUCCESS = 'app/Mentorship/Session/DECLINE_INVITA
 export const DECLINE_INVITATION_ERROR = 'app/Mentorship/Session/DECLINE_INVITATION_ERROR';
 
 export const SESSIONS_UNMOUNT = 'app/Mentorship/Session/SESSIONS_UNMOUNT';
+export const SESSION_USERS_UNMOUNT = 'app/Mentorship/Session/SESSION_USERS_UNMOUNT';

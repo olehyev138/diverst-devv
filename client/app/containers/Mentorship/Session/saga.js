@@ -64,7 +64,7 @@ export function* getParticipatingSessions(action) {
   try {
     const { payload } = action;
     payload.user_id = payload.userId;
-    payload.includes = ['mentoring_sessions'];
+    payload.includes = ['mentoring_session'];
     delete payload.userId;
 
     const response = yield call(api.mentorshipSessions.all.bind(api.mentorshipSessions), payload);
@@ -82,7 +82,7 @@ export function* getParticipatingUsers(action) {
   try {
     const { payload } = action;
     payload.mentoring_session_id = payload.sessionId;
-    payload.includes = ['users'];
+    payload.includes = ['user'];
     delete payload.sessionId;
 
     const response = yield call(api.mentorshipSessions.all.bind(api.mentorshipSessions), payload);
@@ -146,7 +146,7 @@ export function* deleteSession(action) {
 
 export function* acceptInvitation(action) {
   try {
-    const response = yield call(api.mentorshipSessions.acceptInvite.bind(api.mentorshipSessions), action.payload.id);
+    const response = yield call(api.mentorshipSessions.acceptInvite.bind(api.mentorshipSessions), action.payload);
 
     yield put(acceptInvitationSuccess({}));
     yield put(showSnackbar({ message: 'Successfully accepted invitation', options: { variant: 'success' } }));
@@ -160,7 +160,7 @@ export function* acceptInvitation(action) {
 
 export function* declineInvitation(action) {
   try {
-    const response = yield call(api.mentorshipSessions.declineInvite.bind(api.mentorshipSessions), action.payload.id);
+    const response = yield call(api.mentorshipSessions.declineInvite.bind(api.mentorshipSessions), action.payload);
 
     yield put(declineInvitationSuccess({}));
     yield put(showSnackbar({ message: 'Successfully declined invitation', options: { variant: 'success' } }));
