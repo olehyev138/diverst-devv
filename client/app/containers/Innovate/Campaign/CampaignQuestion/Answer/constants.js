@@ -20,4 +20,4 @@ export const DELETE_ANSWER_BEGIN = 'app/Innovate/Campaign/CampaignQuestion/Answe
 export const DELETE_ANSWER_SUCCESS = 'app/Innovate/Campaign/CampaignQuestion/Answer/DELETE_ANSWER_SUCCESS';
 export const DELETE_ANSWER_ERROR = 'app/Innovate/Campaign/CampaignQuestion/Answer/DELETE_ANSWER_ERROR';
 
-export const QUESTION_ANSWERS_UNMOUNT = 'app/Innovate/Campaign/CampaignQuestion/Answer/CAMPAIGN_ANSWERS_UNMOUNT';
+export const QUESTION_ANSWERS_UNMOUNT = 'app/Innovate/Campaign/CampaignQuestion/Answer/QUESTION_ANSWERS_UNMOUNT';

@@ -61,7 +61,7 @@ export function AnswerList(props) {
         dataTotal={props.answerTotal}
         columns={columns}
         rowsPerPage={props.params.count}
-        actions={[ {
+        actions={[{
           icon: () => <DeleteIcon />,
           tooltip: 'Delete Answer',
           onClick: (_, rowData) => {

@@ -43,26 +43,28 @@ export function CampaignQuestionShowPage(props) {
   }, []);
 
   return (
-    props.question &&
-    <React.Fragment>
-      <QuestionSummary
-        getQuestionBegin={props.getQuestionBegin}
-        campaignId={props.campaignId}
-        isFormLoading={props.isFormLoading}
-        question={props.question}
-        links={links}
-      />
-      <AnswerListPage />
-      <CampaignQuestionClose
-        getQuestionBegin={props.getQuestionBegin}
-        campaignId={props.campaignId}
-        isFormLoading={props.isFormLoading}
-        questionAction={props.updateQuestionBegin}
-        question={props.question}
-        links={links}
-      />
-      {props.question.solved_at !== null ? (<h2>This question has been solved and is now closed.</h2>) : null}
-    </React.Fragment>
+    props.question
+    && (
+      <React.Fragment>
+        <QuestionSummary
+          getQuestionBegin={props.getQuestionBegin}
+          campaignId={props.campaignId}
+          isFormLoading={props.isFormLoading}
+          question={props.question}
+          links={links}
+        />
+        <AnswerListPage />
+        <CampaignQuestionClose
+          getQuestionBegin={props.getQuestionBegin}
+          campaignId={props.campaignId}
+          isFormLoading={props.isFormLoading}
+          questionAction={props.updateQuestionBegin}
+          question={props.question}
+          links={links}
+        />
+        {props.question.solved_at !== null ? (<h2>This question has been solved and is now closed.</h2>) : null}
+      </React.Fragment>
+    )
   );
 }
 

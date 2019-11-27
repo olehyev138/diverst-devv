@@ -47,4 +47,4 @@ const selectIsCommitting = () => createSelector(
 export {
   selectAnswersDomain, selectPaginatedAnswers, selectPaginatedSelectAnswers,
   selectAnswerTotal, selectIsFetchingAnswers, selectIsCommitting, selectAnswer
-}
+};

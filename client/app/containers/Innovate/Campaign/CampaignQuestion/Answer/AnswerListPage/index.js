@@ -31,8 +31,6 @@ export function AnswerListPage(props) {
   useInjectReducer({ key: 'answers', reducer });
   useInjectSaga({ key: 'answers', saga });
 
-  console.log(props);
-
   const rs = new RouteService(useContext);
   const questionId = rs.params('question_id')[0];
   const campaignId = rs.params('campaign_id')[0];
