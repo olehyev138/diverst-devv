@@ -72,6 +72,7 @@ import {
   MentorsPage,
   MentorRequestsPage,
   SessionsPage,
+  SessionPage,
   SessionsEditPage,
   SystemUserLayout,
   UserRolesListPage,
@@ -110,6 +111,7 @@ export default function Routes(props) {
       <MentorshipLayout {...expandRoute(ROUTES.user.mentorship.sessions.edit)} component={SessionsEditPage} type='edit' disableBreadcrumbs />
       <MentorshipLayout {...expandRoute(ROUTES.user.mentorship.sessions.hosting)} component={SessionsPage} type='hosting' disableBreadcrumbs />
       <MentorshipLayout {...expandRoute(ROUTES.user.mentorship.sessions.participating)} component={SessionsPage} type='participating' disableBreadcrumbs />
+      <MentorshipLayout {...expandRoute(ROUTES.user.mentorship.sessions.show)} component={SessionPage} disableBreadcrumbs />
       <MentorshipLayout {...expandRoute(ROUTES.user.mentorship.show)} component={MentorshipProfilePage} disableBreadcrumbs />
       <MentorshipLayout {...expandRoute(ROUTES.user.mentorship.home)} component={MentorshipProfilePage} disableBreadcrumbs />
 

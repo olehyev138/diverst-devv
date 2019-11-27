@@ -27,6 +27,7 @@ import MentorshipEditProfilePage from 'containers/Mentorship/MentorshipEditProfi
 import MentorsPage from 'containers/Mentorship/Mentoring/MentorsPage/Loadable';
 import MentorRequestsPage from 'containers/Mentorship/Requests/RequestsPage/Loadable';
 import SessionsPage from 'containers/Mentorship/Session/SessionsPage/Loadable';
+import SessionPage from 'containers/Mentorship/Session/SessionPage/Loadable';
 import SessionsEditPage from 'containers/Mentorship/Session/SessionEditPage/Loadable';
 
 /* Admin - Analyze */
@@ -183,6 +184,7 @@ export {
   MentorsPage,
   MentorRequestsPage,
   SessionsPage,
+  SessionPage,
   SessionsEditPage,
   SystemUserLayout,
   UserRolesListPage,

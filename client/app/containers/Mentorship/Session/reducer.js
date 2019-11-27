@@ -15,6 +15,9 @@ import {
   GET_PARTICIPATING_SESSIONS_BEGIN,
   GET_PARTICIPATING_SESSIONS_SUCCESS,
   GET_PARTICIPATING_SESSIONS_ERROR,
+  GET_PARTICIPATING_USERS_BEGIN,
+  GET_PARTICIPATING_USERS_SUCCESS,
+  GET_PARTICIPATING_USERS_ERROR,
   CREATE_SESSION_BEGIN,
   CREATE_SESSION_SUCCESS,
   CREATE_SESSION_ERROR,
@@ -38,8 +41,8 @@ export const initialState = {
   userList: [],
   sessionListTotal: null,
   currentSession: null,
-  isFetchingSessions: false,
-  isFetchingSession: false,
+  isFetchingSessions: true,
+  isFetchingSession: true,
   isCommitting: false,
   hasChanged: false,
 };
@@ -50,12 +53,11 @@ function sessionReducer(state = initialState, action) {
   return produce(state, (draft) => {
     switch (action.type) {
       case GET_SESSION_BEGIN:
-        draft.hasChanged = false;
         draft.isFetchingSession = true;
         break;
 
       case GET_SESSION_SUCCESS:
-        draft.currentSession = action.payload.session;
+        draft.currentSession = action.payload.mentoring_session;
         draft.isFetchingSession = false;
         break;
 
@@ -65,6 +67,7 @@ function sessionReducer(state = initialState, action) {
 
       case GET_HOSTING_SESSIONS_BEGIN:
       case GET_PARTICIPATING_SESSIONS_BEGIN:
+      case GET_PARTICIPATING_USERS_BEGIN:
         draft.isFetchingSessions = true;
         draft.hasChanged = false;
         break;
@@ -77,8 +80,19 @@ function sessionReducer(state = initialState, action) {
 
       case GET_PARTICIPATING_SESSIONS_SUCCESS:
         draft.sessionList = formatSessions(action.payload.items);
+        draft.sessionListTotal = action.payload.total;
+        draft.isFetchingSessions = false;
+        break;
+
+      case GET_PARTICIPATING_USERS_SUCCESS:
         draft.userList = formatUsers(action.payload.items);
         draft.sessionListTotal = action.payload.total;
+        draft.isFetchingSessions = false;
+        break;
+
+      case GET_HOSTING_SESSIONS_ERROR:
+      case GET_PARTICIPATING_SESSIONS_ERROR:
+      case GET_PARTICIPATING_USERS_ERROR:
         draft.isFetchingSessions = false;
         break;
 

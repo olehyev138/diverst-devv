@@ -73,5 +73,17 @@ export default defineMessages({
     reject: {
       id: `${scope}.show.reject`,
     },
+    accepted: {
+      id: `${scope}.show.accepted`,
+    },
+    rejected: {
+      id: `${scope}.show.rejected`,
+    },
+    pending: {
+      id: `${scope}.show.pending`,
+    },
+    leading: {
+      id: `${scope}.show.leading`,
+    },
   }
 });

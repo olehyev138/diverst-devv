@@ -14,6 +14,9 @@ import {
   GET_PARTICIPATING_SESSIONS_BEGIN,
   GET_PARTICIPATING_SESSIONS_SUCCESS,
   GET_PARTICIPATING_SESSIONS_ERROR,
+  GET_PARTICIPATING_USERS_BEGIN,
+  GET_PARTICIPATING_USERS_SUCCESS,
+  GET_PARTICIPATING_USERS_ERROR,
   CREATE_SESSION_BEGIN,
   CREATE_SESSION_SUCCESS,
   CREATE_SESSION_ERROR,
@@ -91,6 +94,27 @@ export function getParticipatingSessionsSuccess(payload) {
 export function getParticipatingSessionsError(error) {
   return {
     type: GET_PARTICIPATING_SESSIONS_ERROR,
+    error,
+  };
+}
+
+export function getParticipatingUsersBegin(payload) {
+  return {
+    type: GET_PARTICIPATING_USERS_BEGIN,
+    payload,
+  };
+}
+
+export function getParticipatingUsersSuccess(payload) {
+  return {
+    type: GET_PARTICIPATING_USERS_SUCCESS,
+    payload,
+  };
+}
+
+export function getParticipatingUsersError(error) {
+  return {
+    type: GET_PARTICIPATING_USERS_ERROR,
     error,
   };
 }

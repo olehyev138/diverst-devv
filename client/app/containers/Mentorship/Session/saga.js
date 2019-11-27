@@ -10,6 +10,7 @@ import {
   GET_SESSION_BEGIN,
   GET_HOSTING_SESSIONS_BEGIN,
   GET_PARTICIPATING_SESSIONS_BEGIN,
+  GET_PARTICIPATING_USERS_BEGIN,
   CREATE_SESSION_BEGIN,
   UPDATE_SESSION_BEGIN,
   DELETE_SESSION_BEGIN,
@@ -21,6 +22,7 @@ import {
   getSessionSuccess, getSessionError,
   getHostingSessionsSuccess, getHostingSessionsError,
   getParticipatingSessionsSuccess, getParticipatingSessionsError,
+  getParticipatingUsersSuccess, getParticipatingUsersError,
   createSessionSuccess, createSessionError,
   updateSessionSuccess, updateSessionError,
   deleteSessionSuccess, deleteSessionError,
@@ -73,6 +75,24 @@ export function* getParticipatingSessions(action) {
 
     // TODO: intl message
     yield put(showSnackbar({ message: 'Failed to get participating sessions', options: { variant: 'warning' } }));
+  }
+}
+
+export function* getParticipatingUsers(action) {
+  try {
+    const { payload } = action;
+    payload.mentoring_session_id = payload.sessionId;
+    payload.includes = ['users'];
+    delete payload.sessionId;
+
+    const response = yield call(api.mentorshipSessions.all.bind(api.mentorshipSessions), payload);
+
+    yield put(getParticipatingUsersSuccess(response.data.page));
+  } catch (err) {
+    yield put(getParticipatingUsersError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to get participating users', options: { variant: 'warning' } }));
   }
 }
 
@@ -157,6 +177,7 @@ export default function* SessionSaga() {
   yield takeLatest(GET_SESSION_BEGIN, getSession);
   yield takeLatest(GET_HOSTING_SESSIONS_BEGIN, getHostingSessions);
   yield takeLatest(GET_PARTICIPATING_SESSIONS_BEGIN, getParticipatingSessions);
+  yield takeLatest(GET_PARTICIPATING_USERS_BEGIN, getParticipatingUsers);
   yield takeLatest(CREATE_SESSION_BEGIN, createSession);
   yield takeLatest(UPDATE_SESSION_BEGIN, updateSession);
   yield takeLatest(DELETE_SESSION_BEGIN, deleteSession);
