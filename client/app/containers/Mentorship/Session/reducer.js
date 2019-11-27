@@ -39,6 +39,7 @@ export const initialState = {
   sessionListTotal: null,
   currentSession: null,
   isFetchingSessions: false,
+  isFetchingSession: false,
   isCommitting: false,
   hasChanged: false,
 };
@@ -50,10 +51,16 @@ function sessionReducer(state = initialState, action) {
     switch (action.type) {
       case GET_SESSION_BEGIN:
         draft.hasChanged = false;
+        draft.isFetchingSession = true;
         break;
 
       case GET_SESSION_SUCCESS:
         draft.currentSession = action.payload.session;
+        draft.isFetchingSession = false;
+        break;
+
+      case GET_SESSION_ERROR:
+        draft.isFetchingSession = false;
         break;
 
       case GET_HOSTING_SESSIONS_BEGIN:

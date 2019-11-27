@@ -63,4 +63,15 @@ export default defineMessages({
       id: `${scope}.form.button.update`,
     },
   },
+  show: {
+    dateAndTime: {
+      id: `${scope}.show.date_and_time`,
+    },
+    accept: {
+      id: `${scope}.show.accept`,
+    },
+    reject: {
+      id: `${scope}.show.reject`,
+    },
+  }
 });
