@@ -13,7 +13,7 @@ class Sponsor < ApplicationRecord
   has_attached_file :sponsor_media_paperclip, s3_permissions: 'private'
 
   def sponsor_media_location
-    return nil if !sponsor_media.attached?
+    return nil unless sponsor_media.attached?
 
     # sponsor_media.expiring_url(36000)
     Rails.application.routes.url_helpers.url_for(sponsor_media)
