@@ -29,7 +29,8 @@ import {
   deleteSessionBegin,
   acceptInvitationBegin,
   declineInvitationBegin,
-  sessionsUnmount
+  sessionsUnmount,
+  sessionUsersUnmount,
 } from 'containers/Mentorship/Session/actions';
 
 import Session from 'components/Mentorship/Session';
@@ -56,6 +57,7 @@ export function SessionPage(props) {
     const [sessionId] = rs.params('session_id');
 
     if (props.hasChanged) {
+      props.getSessionBegin({ id: sessionId });
       props.getParticipatingUsersBegin({ sessionId });
     }
 
@@ -90,7 +92,7 @@ SessionPage.propTypes = {
   acceptInvitationBegin: PropTypes.func,
   declineInvitationBegin: PropTypes.func,
   sessionsUnmount: PropTypes.func,
-
+  sessionUsersUnmount: PropTypes.func,
 
   user: PropTypes.object,
   loggedUser: PropTypes.object,
@@ -122,7 +124,8 @@ const mapDispatchToProps = {
   acceptInvitationBegin,
   declineInvitationBegin,
   deleteSessionBegin,
-  sessionsUnmount
+  sessionsUnmount,
+  sessionUsersUnmount,
 };
 
 const withConnect = connect(

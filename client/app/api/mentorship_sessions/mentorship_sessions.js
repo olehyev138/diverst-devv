@@ -5,11 +5,11 @@ const axios = require('axios');
 const MentorshipSessions = new API({ controller: 'mentorship_sessions' });
 
 Object.assign(MentorshipSessions, {
-  acceptInvite(id) {
-    return axios.post(`${this.url}/${id}/accept`);
+  acceptInvite(payload) {
+    return axios.post(`${this.url}/accept`, payload);
   },
-  declineInvite(id) {
-    return axios.post(`${this.url}/${id}/decline`);
+  declineInvite(payload) {
+    return axios.post(`${this.url}/decline`, payload);
   },
 });
 

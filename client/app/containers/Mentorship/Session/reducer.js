@@ -34,6 +34,7 @@ import {
   DECLINE_INVITATION_SUCCESS,
   DECLINE_INVITATION_ERROR,
   SESSIONS_UNMOUNT,
+  SESSION_USERS_UNMOUNT,
 } from './constants';
 
 export const initialState = {
@@ -125,6 +126,13 @@ function sessionReducer(state = initialState, action) {
 
       case SESSIONS_UNMOUNT:
         return initialState;
+
+      case SESSION_USERS_UNMOUNT:
+        draft.userList = [];
+        draft.sessionListTotal = null;
+        draft.hasChanged = false;
+        draft.isFetchingSessions = true;
+        break;
     }
   });
 }

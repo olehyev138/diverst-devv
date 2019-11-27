@@ -13,7 +13,7 @@ import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { withStyles } from '@material-ui/core/styles';
 import {
   Button, Card, CardActions, CardContent, TextField,
-  Divider, Grid, FormControlLabel, Switch, FormControl, Typography, Paper
+  Divider, Grid, FormControlLabel, Switch, FormControl, Typography, Paper, Box
 } from '@material-ui/core';
 
 import messages from 'containers/Mentorship/Session/messages';
@@ -22,13 +22,12 @@ import { DateTime } from 'luxon';
 
 import classNames from 'classnames';
 
-import DeleteIcon from '@material-ui/core/SvgIcon/SvgIcon';
+import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { formatDateTimeString } from 'components/../utils/dateTimeHelpers';
 import DiverstShowLoader from 'components/Shared/DiverstShowLoader';
-import ErrorBoundary from "../../../containers/Shared/ErrorBoundary";
 
 const styles = theme => ({
   padding: {
@@ -65,11 +64,6 @@ export function Session(props) {
       {session && (
         <React.Fragment>
           <Grid container spacing={1}>
-            <Grid item>
-              <Typography color='primary' variant='h5' component='h2' className={classes.title}>
-                {session.name}
-              </Typography>
-            </Grid>
             <Grid item sm>
               { loggedUser.id === session.creator_id && (
                 <React.Fragment>
@@ -102,10 +96,52 @@ export function Session(props) {
                   </Button>
                 </React.Fragment>
               )}
-
             </Grid>
           </Grid>
+          <Box mb={1}/>
           <Paper className={classes.padding}>
+
+            { /* ACCEPT / DECLINE Buttons */ }
+            {session.creator_id !== loggedUser.id
+            && session.current_user_session
+            && session.current_user_session.status === 'pending'
+            && (
+              <React.Fragment>
+                <Button
+                  variant='contained'
+                  size='large'
+                  color='primary'
+                  className={classNames(classes.buttons, classes.deleteButton)}
+                  onClick={() => {
+                    /* eslint-disable-next-line no-alert, no-restricted-globals */
+                    if (confirm('Decline Invitation?'))
+                      props.declineInvite({
+                        user_id: session.current_user_session.user_id,
+                        session_id: session.id
+                      });
+                  }}
+                >
+                  <DiverstFormattedMessage {...messages.show.reject} />
+                </Button>
+                <Button
+                  variant='contained'
+                  size='large'
+                  color='primary'
+                  className={classNames(classes.buttons)}
+                  onClick={() => {
+                    /* eslint-disable-next-line no-alert, no-restricted-globals */
+                    if (confirm('Accept Invitation?'))
+                      props.acceptInvite({
+                        user_id: session.current_user_session.user_id,
+                        session_id: session.id
+                      });
+                  }}
+                >
+                  <DiverstFormattedMessage {...messages.show.accept} />
+                </Button>
+              </React.Fragment>
+            )}
+
             <Typography className={classes.dataHeaders}>
               <DiverstFormattedMessage {...messages.show.dateAndTime} />
             </Typography>
@@ -146,7 +182,7 @@ Session.propTypes = {
 
   deleteSession: PropTypes.func,
   acceptInvite: PropTypes.func,
-  rejectInvite: PropTypes.func,
+  declineInvite: PropTypes.func,
 };
 
 export default compose(

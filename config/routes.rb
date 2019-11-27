@@ -112,7 +112,7 @@ Diverst::Application.routes.draw do
       resources :mentorship_interests
       resources :mentorship_ratings
       resources :mentorship_sessions do
-        member do
+        collection do
           post 'accept'
           post 'decline'
         end

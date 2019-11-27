@@ -33,6 +33,7 @@ import {
   DECLINE_INVITATION_SUCCESS,
   DECLINE_INVITATION_ERROR,
   SESSIONS_UNMOUNT,
+  SESSION_USERS_UNMOUNT,
 } from './constants';
 
 export function getSessionBegin(payload) {
@@ -227,6 +228,13 @@ export function declineInvitationError(error) {
 export function sessionsUnmount(payload) {
   return {
     type: SESSIONS_UNMOUNT,
+    payload,
+  };
+}
+
+export function sessionUsersUnmount(payload) {
+  return {
+    type: SESSION_USERS_UNMOUNT,
     payload,
   };
 }

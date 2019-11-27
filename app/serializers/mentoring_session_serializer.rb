@@ -1,5 +1,5 @@
 class MentoringSessionSerializer < ApplicationRecordSerializer
-  attributes :creator, :interests, :users
+  attributes :creator, :interests, :users, :current_user_session
 
   has_many :mentoring_interests
 
@@ -23,5 +23,9 @@ class MentoringSessionSerializer < ApplicationRecordSerializer
     object.users.map do |user|
       UserMentorshipLiteSerializer.new(user, scope: scope, scope_name: :scope).as_json
     end
+  end
+
+  def current_user_session
+    scope&.dig(:current_user)&.get_mentorship_session(object)
   end
 end
