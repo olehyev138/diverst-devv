@@ -1,4 +1,4 @@
-import React, {memo, useEffect, useContext, useState} from 'react';
+import React, { memo, useEffect, useContext, useState } from 'react';
 import dig from 'object-dig';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';

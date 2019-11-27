@@ -18,13 +18,23 @@ class MentorshipSession < ApplicationRecord
 
   validates_uniqueness_of :user_id, scope: [:mentoring_session_id]
 
-  scope :past,            -> { includes(:mentoring_session).where('mentoring_sessions.end < ?', Time.now.utc)
-                                 .references(:mentoring_session) }
-  scope :upcoming,        -> { includes(:mentoring_session).where('mentoring_sessions.end > ?', Time.now.utc)
-                                 .references(:mentoring_session) }
-  scope :ongoing,         -> { includes(:mentoring_session).where('mentoring_sessions.start <= ?', Time.current)
-                                 .where('mentoring_sessions.end >= ?', Time.current)
-                                 .references(:mentoring_session) }
+  scope :past, -> {
+    includes(:mentoring_session)
+      .where('mentoring_sessions.end < ?', Time.now.utc)
+      .references(:mentoring_session)
+  }
+
+  scope :upcoming, -> {
+    includes(:mentoring_session)
+      .where('mentoring_sessions.end > ?', Time.now.utc)
+      .references(:mentoring_session)
+  }
+
+  scope :ongoing, -> {
+    includes(:mentoring_session)
+      .where('mentoring_sessions.start <= ? AND mentoring_sessions.end >= ?', Time.current, Time.current)
+      .references(:mentoring_session)
+  }
 
   def creator?
     self.mentoring_session.creator_id == self.user_id

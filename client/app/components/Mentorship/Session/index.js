@@ -48,7 +48,7 @@ import DiverstShowLoader from 'components/Shared/DiverstShowLoader';
 import appMessages from 'containers/Shared/App/messages';
 import mentorMessages from 'containers/Mentorship/messages';
 import DiverstTable from 'components/Shared/DiverstTable';
-import Profile from "../MentorshipUser";
+import Profile from 'components/Mentorship/MentorshipUser';
 
 const styles = theme => ({
   link: {
