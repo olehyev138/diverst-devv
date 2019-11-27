@@ -40,18 +40,14 @@ const styles = theme => ({
 
 export function AnswerList(props) {
   const { classes } = props;
-  console.log(props.answerList);
   return (
     <React.Fragment>
-      {props.answerList && props.answerList.map((answer, i) => {
-        return (
-          <AnswerListItem
-            currentAnswer={answer}
-            key={answer.id}
-          />
-        );
-      })}
-
+      {props.answerList && props.answerList.map((answer, i) => (
+        <AnswerListItem
+          currentAnswer={answer}
+          key={answer.id}
+        />
+      ))}
     </React.Fragment>
   );
 }

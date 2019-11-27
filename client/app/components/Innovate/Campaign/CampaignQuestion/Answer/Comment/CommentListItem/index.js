@@ -4,15 +4,14 @@ import PropTypes from 'prop-types';
 
 
 export function CommentListItem(props) {
-  console.log(props.currentComment);
   return (
     props.currentComment && (
       <React.Fragment>
         <h3>
-          Author: {' '}
-          {props.currentComment.author}
+          {`${props.currentComment.author.first_name} ${props.currentComment.author.last_name}`}
+          commented:
+          {props.currentComment.content}
         </h3>
-        <h4>{props.currentAnswer.content}</h4>
       </React.Fragment>
     )
   );

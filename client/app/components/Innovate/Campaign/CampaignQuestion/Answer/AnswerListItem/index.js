@@ -4,23 +4,21 @@ import PropTypes from 'prop-types';
 import CommentListItem from 'components/Innovate/Campaign/CampaignQuestion/Answer/Comment/CommentListItem';
 
 export function AnswerListItem(props) {
-  console.log(props.currentAnswer);
   return (
     props.currentAnswer && (
       <React.Fragment>
         <h3>
-          Author: {' '}
-          {`${props.currentAnswer.author.first_name} ${props.currentAnswer.author.last_name}`}
+          {`${props.currentAnswer.author.first_name} ${props.currentAnswer.author.last_name} `}
+          answered:
+          {' '}
+          {props.currentAnswer.content}
         </h3>
-        <h4>{props.currentAnswer.content}</h4>
-        {props.currentAnswer.comments.map((comment, i) => {
-          return (
-            <CommentListItem
-              currentComment={comment}
-              key={comment.id}
-            />
-          );
-        })}
+        {props.currentAnswer.comments.map((comment, i) => (
+          <CommentListItem
+            currentComment={comment}
+            key={comment.id}
+          />
+        ))}
       </React.Fragment>
     )
   );
