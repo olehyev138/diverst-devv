@@ -12,8 +12,23 @@ import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { withStyles } from '@material-ui/core/styles';
 import {
-  Button, Card, CardActions, CardContent, TextField,
-  Divider, Grid, FormControlLabel, Switch, FormControl, Typography, Paper, Box, Link
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  TextField,
+  Divider,
+  Grid,
+  FormControlLabel,
+  Switch,
+  FormControl,
+  Typography,
+  Paper,
+  Box,
+  Link,
+  DialogContent,
+  DialogActions,
+  Dialog
 } from '@material-ui/core';
 
 import messages from 'containers/Mentorship/Session/messages';
@@ -25,10 +40,15 @@ import classNames from 'classnames';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import OpenInNew from '@material-ui/icons/OpenInNew';
+import PersonIcon from '@material-ui/icons/Person';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { formatDateTimeString } from 'components/../utils/dateTimeHelpers';
 import DiverstShowLoader from 'components/Shared/DiverstShowLoader';
+import appMessages from 'containers/Shared/App/messages';
+import mentorMessages from 'containers/Mentorship/messages';
+import DiverstTable from 'components/Shared/DiverstTable';
+import Profile from "../MentorshipUser";
 
 const styles = theme => ({
   link: {
@@ -61,7 +81,60 @@ const styles = theme => ({
 
 /* eslint-disable object-curly-newline */
 export function Session(props) {
-  const { session, classes, loggedUser } = props;
+  const { session, classes, loggedUser, intl } = props;
+
+  const [profileOpen, setProfileOpen] = React.useState(false);
+  const [profile, setProfile] = React.useState();
+
+  const handleProfileClickOpen = (userObject) => {
+    setProfile(userObject);
+    setProfileOpen(true);
+  };
+
+  const handleProfileClose = () => {
+    setProfileOpen(false);
+  };
+
+  const columns = [
+    { title: intl.formatMessage(appMessages.person.givenName),
+      field: 'user.first_name',
+      query_field: 'users.first_name'
+    },
+    { title: intl.formatMessage(appMessages.person.familyName),
+      field: 'user.last_name',
+      query_field: 'users.last_name'
+    },
+    { title: intl.formatMessage(messages.show.role),
+      field: 'role',
+      query_field: 'role' },
+    {
+      title: intl.formatMessage(messages.show.status),
+      field: 'status',
+      query_field: 'status',
+      lookup: {
+        pending: intl.formatMessage(messages.show.pending),
+        accepted: intl.formatMessage(messages.show.accepted),
+        declined: intl.formatMessage(messages.show.rejected),
+      }
+    },
+  ];
+
+  const actions = [];
+  actions.push({
+    icon: () => <PersonIcon />,
+    tooltip: intl.formatMessage(messages.show.viewProfile),
+    onClick: (_, rowData) => {
+      handleProfileClickOpen(rowData.user);
+    }
+  });
+
+  const handleOrderChange = (columnId, orderDir) => {
+    props.handleParticipantOrdering({
+      orderBy: (columnId === -1) ? 'id' : `${columns[columnId].query_field}`,
+      orderDir: (columnId === -1) ? 'asc' : orderDir
+    });
+  };
+
 
   return (
     <DiverstShowLoader isLoading={props.isFetchingSession} isError={!props.isFetchingSession && !session}>
@@ -206,6 +279,63 @@ export function Session(props) {
                 </Typography>
               </React.Fragment>
             )}
+
+            <Box mb={1} />
+
+            {session.users && (
+              <React.Fragment>
+                <DiverstTable
+                  title={intl.formatMessage(messages.show.title)}
+                  handlePagination={props.handleParticipantPagination}
+                  onOrderChange={handleOrderChange}
+                  isLoading={props.isFetchingSessions}
+                  rowsPerPage={5}
+                  params={props.params}
+                  dataArray={props.users}
+                  dataTotal={props.usersTotal}
+                  columns={columns}
+                  actions={actions}
+                  my_options={{
+                    rowStyle: (rowData) => {
+                      let colour;
+                      switch (rowData.status) {
+                        case 'accepted':
+                          colour = '#EFE';
+                          break;
+                        case 'declined':
+                          colour = '#FEE';
+                          break;
+                        default:
+                          colour = '#FFF';
+                          break;
+                      }
+                      return {
+                        backgroundColor: colour
+                      };
+                    }
+                  }}
+                />
+                <Dialog
+                  open={profileOpen}
+                  fullWidth
+                  maxWidth='md'
+                  onClose={handleProfileClose}
+                  aria-labelledby='alert-dialog-slide-title'
+                  aria-describedby='alert-dialog-slide-description'
+                >
+                  <DialogContent>
+                    <Profile
+                      user={profile}
+                    />
+                  </DialogContent>
+                  <DialogActions>
+                    <Button onClick={handleProfileClose} color='primary'>
+                      Close
+                    </Button>
+                  </DialogActions>
+                </Dialog>
+              </React.Fragment>
+            )}
           </Paper>
         </React.Fragment>
       )}
@@ -221,14 +351,21 @@ Session.propTypes = {
   links: PropTypes.object,
 
   users: PropTypes.array,
+  usersTotal: PropTypes.array,
 
-  isSessionsLoading: PropTypes.bool,
+  isFetchingSessions: PropTypes.bool,
   isFetchingSession: PropTypes.bool,
   isCommitting: PropTypes.bool,
+
+  params: PropTypes.object,
+  handleParticipantPagination: PropTypes.func,
+  handleParticipantOrdering: PropTypes.func,
 
   deleteSession: PropTypes.func,
   acceptInvite: PropTypes.func,
   declineInvite: PropTypes.func,
+
+  intl: intlShape.isRequired,
 };
 
 export default compose(

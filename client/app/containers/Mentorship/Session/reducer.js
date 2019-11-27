@@ -143,5 +143,5 @@ function formatSessions(joinedData) {
 }
 
 function formatUsers(joinedData) {
-  return joinedData.map(x => ({ user: x.user, status: x.status }));
+  return joinedData.map(x => ({ user: x.user, status: x.status, role: x.role }));
 }

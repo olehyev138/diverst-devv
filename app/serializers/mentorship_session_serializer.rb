@@ -4,7 +4,7 @@ class MentorshipSessionSerializer < ApplicationRecordSerializer
   has_one :mentoring_session
 
   def user
-    UserMentorshipLiteSerializer.new(object.user).as_json
+    UserMentorshipLiteSerializer.new(object.user, scope: scope, scope_name: :scope).as_json
   end
 
   def serialize_all_fields

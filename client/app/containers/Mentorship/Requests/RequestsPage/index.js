@@ -90,8 +90,6 @@ export function MentorsPage(props) {
       getRequests();
   }, [props.successfulChange]);
 
-  const reload = id => getRequests({ ...params, $id: id });
-
   const handleRequestPagination = (payload) => {
     const oldPageNum = params.page;
     const oldRows = params.count;
@@ -138,7 +136,6 @@ export function MentorsPage(props) {
         acceptRequest={props.acceptRequestBegin}
         rejectRequest={props.rejectRequestBegin}
         deleteRequest={props.deleteRequestBegin}
-        reloadRequest={reload}
       />
     </React.Fragment>
   );

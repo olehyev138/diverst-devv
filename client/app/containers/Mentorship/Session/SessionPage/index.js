@@ -1,4 +1,5 @@
-import React, { memo, useEffect, useContext } from 'react';
+import React, {memo, useEffect, useContext, useState} from 'react';
+import dig from 'object-dig';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
@@ -35,9 +36,17 @@ import {
 
 import Session from 'components/Mentorship/Session';
 
+const defaultParams = Object.freeze({
+  count: 5,
+  page: 0,
+  order: 'asc'
+});
+
 export function SessionPage(props) {
   useInjectReducer({ key: 'sessions', reducer });
   useInjectSaga({ key: 'sessions', saga });
+
+  const [params, setParams] = useState({ count: 5, page: 0, order: 'asc', orderBy: 'id' });
 
   const rs = new RouteService(useContext);
   const links = {
@@ -48,7 +57,7 @@ export function SessionPage(props) {
     const [sessionId] = rs.params('session_id');
     // get session specified in path
     props.getSessionBegin({ id: sessionId });
-    props.getParticipatingUsersBegin({ sessionId });
+    props.getParticipatingUsersBegin({ ...defaultParams, sessionId });
 
     return () => props.sessionsUnmount();
   }, []);
@@ -58,11 +67,42 @@ export function SessionPage(props) {
 
     if (props.hasChanged) {
       props.getSessionBegin({ id: sessionId });
-      props.getParticipatingUsersBegin({ sessionId });
+      props.getParticipatingUsersBegin({ ...params, sessionId });
     }
 
     return () => props.sessionsUnmount();
   }, [props.hasChanged]);
+
+  function getParticipants(newParams = params) {
+    if (dig(props, 'session', 'id')) {
+      const sessionId = props.session.id;
+      props.getParticipatingUsersBegin({ ...newParams, sessionId });
+    }
+  }
+
+  const handleParticipantPagination = (payload) => {
+    const oldPageNum = params.page;
+    const oldRows = params.count;
+    let newPageNum = payload.page;
+    const newRows = payload.count;
+
+    if (oldRows !== newRows) {
+      const index = oldPageNum * oldRows + 1;
+      newPageNum = Math.floor(index / newRows);
+    }
+
+    const newParams = { ...params, count: newRows, page: newPageNum };
+
+    getParticipants(newParams);
+    setParams(newParams);
+  };
+
+  const handleParticipantOrdering = (payload) => {
+    const newParams = { ...params, orderBy: payload.orderBy, order: payload.orderDir };
+
+    getParticipants(newParams);
+    setParams(newParams);
+  };
 
   return (
     <Session
@@ -81,6 +121,10 @@ export function SessionPage(props) {
       isCommitting={props.isCommitting}
       isFetchingSessions={props.isFetchingSessions}
       isFetchingSession={props.isFetchingSession}
+
+      params={params}
+      handleParticipantPagination={handleParticipantPagination}
+      handleParticipantOrdering={handleParticipantOrdering}
     />
   );
 }

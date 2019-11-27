@@ -97,5 +97,20 @@ export default defineMessages({
     topics: {
       id: `${scope}.show.topics`,
     },
+    role: {
+      id: `${scope}.show.role`,
+    },
+    status: {
+      id: `${scope}.show.status`,
+    },
+    users: {
+      id: `${scope}.show.users`,
+    },
+    viewProfile: {
+      id: `${scope}.show.viewProfile`,
+    },
+    title: {
+      id: `${scope}.show.title`,
+    },
   }
 });

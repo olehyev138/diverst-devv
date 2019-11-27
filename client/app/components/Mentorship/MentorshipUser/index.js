@@ -61,13 +61,15 @@ export function Profile(props) {
       {(user) ? (
         <React.Fragment>
           { /* BASIC INFO */ }
-          <Paper>
+          <Paper elevation={3}>
             <CardContent>
               <Typography color='primary' variant='h5' component='h2' className={classes.title}>
                 {user.name}
               </Typography>
             </CardContent>
-            <Divider />
+          </Paper>
+          <Box mb={2} />
+          <Paper elevation={3}>
             <CardContent>
               <Typography color='primary' variant='h6' component='h2' className={classes.dataHeaders}>
                 E-mail
@@ -100,7 +102,7 @@ export function Profile(props) {
           </Paper>
           <Box mb={2} />
           { /* MENTORSHIP INFO */ }
-          <Paper>
+          <Paper elevation={3}>
             { user.mentorship_description && (
               <CardContent>
                 <Grid container spacing={1}>

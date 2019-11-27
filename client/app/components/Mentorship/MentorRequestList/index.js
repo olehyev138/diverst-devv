@@ -219,7 +219,6 @@ MentorRequestList.propTypes = {
   rejectRequest: PropTypes.func,
   acceptRequest: PropTypes.func,
   deleteRequest: PropTypes.func,
-  reloadRequest: PropTypes.func,
   intl: intlShape.isRequired,
 };
 
