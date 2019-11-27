@@ -11,22 +11,22 @@ import { compose } from 'redux';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import {
-  CircularProgress, Card, CardContent, CardActionArea,
+  Card, CardContent, CardActionArea,
   Typography, Grid, Link, Collapse, Box,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
+import JoinedGroupIcon from '@material-ui/icons/CheckCircle';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
-import Pagination from 'components/Shared/Pagination';
+import DiverstPagination from 'components/Shared/DiverstPagination';
+
+import DiverstLoader from 'components/Shared/DiverstLoader';
 
 const styles = theme => ({
-  progress: {
-    margin: theme.spacing(8),
-  },
   errorButton: {
     color: theme.palette.error.main,
   },
@@ -39,7 +39,15 @@ const styles = theme => ({
     borderBottomLeftRadius: 4,
   },
   groupCardContent: {
-    paddingBottom: 28,
+    paddingTop: 20,
+    paddingBottom: 20,
+  },
+  groupCardTitle: {
+    verticalAlign: 'middle',
+  },
+  groupCardIcon: {
+    verticalAlign: 'middle',
+    marginRight: 6,
   },
   groupCardDescription: {
     paddingTop: 8,
@@ -71,19 +79,7 @@ const styles = theme => ({
 
 export function UserGroupList(props, context) {
   const { classes, defaultParams } = props;
-  const [page, setPage] = useState(defaultParams.page);
-  const [rowsPerPage, setRowsPerPage] = useState(defaultParams.count);
   const [expandedGroups, setExpandedGroups] = useState({});
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-    props.handlePagination({ count: rowsPerPage, page: newPage });
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
-    props.handlePagination({ count: +event.target.value, page });
-  };
 
   /* Store a expandedGroupsHash for each group, that tracks whether or not its children are expanded */
   if (props.groups && Object.keys(props.groups).length !== 0 && Object.keys(expandedGroups).length <= 0) {
@@ -95,114 +91,106 @@ export function UserGroupList(props, context) {
     setExpandedGroups(initialExpandedGroups);
   }
 
-  if (props.isLoading)
-    return (
-      <Grid container justify='center'>
-        <Grid item>
-          <CircularProgress
-            size={50}
-            className={classes.progress}
-          />
-        </Grid>
-      </Grid>
-    );
-
   return (
     <React.Fragment>
-      <Grid container spacing={3}>
-        { /* eslint-disable-next-line arrow-body-style */ }
-        {props.groups && Object.values(props.groups).map((group, i) => (
-          <Grid item xs={12} key={group.id}>
-            <Card className={classes.groupCard}>
-              <Grid container>
-                <Grid item xs>
-                  {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                  <Link
-                    component={WrappedNavLink}
-                    to={{
-                      pathname: ROUTES.group.home.path(group.id),
-                      state: { id: group.id }
-                    }}
-                    className={classes.groupCardLink}
-                  >
-                    <CardActionArea>
-                      <CardContent className={classes.groupCardContent}>
-                        <Typography variant='h5' component='h2' display='inline'>
-                          {group.name}
-                        </Typography>
-                        {group.description && (
-                          <Typography color='textSecondary' className={classes.groupCardDescription}>
-                            {group.description}
-                          </Typography>
-                        )}
-                      </CardContent>
-                    </CardActionArea>
-                  </Link>
-                </Grid>
-                {group.children && group.children.length > 0 && (
-                  <Grid item className={classes.expandActionAreaContainer}>
-                    <CardActionArea
-                      className={classes.expandActionArea}
-                      onClick={() => {
-                        setExpandedGroups({
-                          ...expandedGroups,
-                          [group.id]: !expandedGroups[group.id]
-                        });
+      <DiverstLoader isLoading={props.isLoading}>
+        <Grid container spacing={3}>
+          { /* eslint-disable-next-line arrow-body-style */ }
+          {props.groups && Object.values(props.groups).map((group, i) => (
+            <Grid item xs={12} key={group.id}>
+              <Card className={classes.groupCard}>
+                <Grid container>
+                  <Grid item xs>
+                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                    <Link
+                      component={WrappedNavLink}
+                      to={{
+                        pathname: ROUTES.group.home.path(group.id),
+                        state: { id: group.id }
                       }}
+                      className={classes.groupCardLink}
                     >
-                      {expandedGroups[group.id] ? (
-                        <RemoveIcon color='primary' className={classes.expandIcon} />
-                      ) : (
-                        <AddIcon color='primary' className={classes.expandIcon} />
-                      )}
-                    </CardActionArea>
-                  </Grid>
-                )}
-              </Grid>
-            </Card>
-            <Collapse in={expandedGroups[`${group.id}`]}>
-              <Box mt={1} />
-              <Grid container spacing={2} justify='flex-end'>
-                {group.children && group.children.map((childGroup, i) => (
-                  /* eslint-disable-next-line react/jsx-wrap-multilines */
-                  <Grid item key={childGroup.id} xs={12}>
-                    <Card className={classes.childGroupCard}>
-                      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                      <Link
-                        component={WrappedNavLink}
-                        to={{
-                          pathname: ROUTES.group.home.path(childGroup.id),
-                          state: { id: childGroup.id }
-                        }}
-                        className={classes.groupCardLink}
-                      >
-                        <CardActionArea>
-                          <CardContent className={classes.groupCardContent}>
-                            <Typography variant='h5' component='h2' display='inline'>
-                              {childGroup.name}
+                      <CardActionArea>
+                        <CardContent className={classes.groupCardContent}>
+                          {group.current_user_is_member === true && (
+                            <JoinedGroupIcon className={classes.groupCardIcon} />
+                          )}
+                          <Typography variant='h5' component='h2' display='inline' className={classes.groupCardTitle}>
+                            {group.name}
+                          </Typography>
+                          {group.description && (
+                            <Typography color='textSecondary' className={classes.groupCardDescription}>
+                              {group.description}
                             </Typography>
-                            {childGroup.description && (
-                              <Typography color='textSecondary' className={classes.groupCardDescription}>
-                                {childGroup.description}
-                              </Typography>
-                            )}
-                          </CardContent>
-                        </CardActionArea>
-                      </Link>
-                    </Card>
+                          )}
+                        </CardContent>
+                      </CardActionArea>
+                    </Link>
                   </Grid>
-                ))}
-              </Grid>
-            </Collapse>
-          </Grid>
-        ))}
-      </Grid>
-      <Pagination
-        page={page}
-        rowsPerPage={rowsPerPage}
+                  {group.children && group.children.length > 0 && (
+                    <Grid item className={classes.expandActionAreaContainer}>
+                      <CardActionArea
+                        className={classes.expandActionArea}
+                        onClick={() => {
+                          setExpandedGroups({
+                            ...expandedGroups,
+                            [group.id]: !expandedGroups[group.id]
+                          });
+                        }}
+                      >
+                        {expandedGroups[group.id] ? (
+                          <RemoveIcon color='primary' className={classes.expandIcon} />
+                        ) : (
+                          <AddIcon color='primary' className={classes.expandIcon} />
+                        )}
+                      </CardActionArea>
+                    </Grid>
+                  )}
+                </Grid>
+              </Card>
+              <Collapse in={expandedGroups[`${group.id}`]}>
+                <Box mt={1} />
+                <Grid container spacing={2} justify='flex-end'>
+                  {group.children && group.children.map((childGroup, i) => (
+                    /* eslint-disable-next-line react/jsx-wrap-multilines */
+                    <Grid item key={childGroup.id} xs={12}>
+                      <Card className={classes.childGroupCard}>
+                        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                        <Link
+                          component={WrappedNavLink}
+                          to={{
+                            pathname: ROUTES.group.home.path(childGroup.id),
+                            state: { id: childGroup.id }
+                          }}
+                          className={classes.groupCardLink}
+                        >
+                          <CardActionArea>
+                            <CardContent className={classes.groupCardContent}>
+                              <Typography variant='h5' component='h2' display='inline'>
+                                {childGroup.name}
+                              </Typography>
+                              {childGroup.description && (
+                                <Typography color='textSecondary' className={classes.groupCardDescription}>
+                                  {childGroup.description}
+                                </Typography>
+                              )}
+                            </CardContent>
+                          </CardActionArea>
+                        </Link>
+                      </Card>
+                    </Grid>
+                  ))}
+                </Grid>
+              </Collapse>
+            </Grid>
+          ))}
+        </Grid>
+      </DiverstLoader>
+      <DiverstPagination
+        isLoading={props.isLoading}
+        rowsPerPage={defaultParams.count}
         count={props.groupTotal}
-        onChangePage={handleChangePage}
-        onChangeRowsPerPage={handleChangeRowsPerPage}
+        handlePagination={props.handlePagination}
       />
     </React.Fragment>
   );

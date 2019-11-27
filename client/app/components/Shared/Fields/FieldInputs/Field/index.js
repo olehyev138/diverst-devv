@@ -17,6 +17,7 @@ import { TextField } from '@material-ui/core';
 import CustomTextField from 'components/Shared/Fields/FieldInputs/TextField';
 import CustomDateField from 'components/Shared/Fields/FieldInputs/DateField';
 import CustomSelectField from 'components/Shared/Fields/FieldInputs/SelectField';
+import CustomCheckboxField from 'components/Shared/Fields/FieldInputs/CheckboxField';
 
 const CustomField = (props) => {
   const fieldData = dig(props, 'fieldDatum');
@@ -31,8 +32,10 @@ const CustomField = (props) => {
         return (<CustomDateField {...props} />);
       case 'SelectField':
         return (<CustomSelectField {...props} />);
+      case 'CheckboxField':
+        return (<CustomCheckboxField {...props} />);
       default:
-        return (<TextField disabled />); // looks better then rendering nothing
+        return (<TextField disabled />); // looks better than rendering nothing
     }
   };
 

@@ -16,7 +16,7 @@ import {
   updateUserBegin, userUnmount
 } from 'containers/User/actions';
 
-import { selectUser, selectFieldData } from 'containers/User/selectors';
+import { selectFormUser, selectFieldData, selectIsCommitting, selectIsFormLoading } from 'containers/User/selectors';
 
 import saga from 'containers/User/saga';
 import UserForm from 'components/User/UserForm';
@@ -28,6 +28,7 @@ export function UserEditPage(props) {
   const rs = new RouteService(useContext);
   const links = {
     usersIndex: ROUTES.admin.system.users.index.path(),
+    usersPath: id => ROUTES.user.show.path(id),
   };
 
   useEffect(() => {
@@ -41,29 +42,38 @@ export function UserEditPage(props) {
   return (
     <React.Fragment>
       <UserForm
+        edit
         userAction={props.updateUserBegin}
         updateFieldDataBegin={props.updateFieldDataBegin}
         links={links}
         user={props.user}
         fieldData={props.fieldData}
         buttonText='Update'
+        admin={props.path.startsWith('/admin')}
+        isCommitting={props.isCommitting}
+        isFormLoading={props.isFormLoading}
       />
     </React.Fragment>
   );
 }
 
 UserEditPage.propTypes = {
+  path: PropTypes.string,
   user: PropTypes.object,
   fieldData: PropTypes.array,
   getUserBegin: PropTypes.func,
   updateUserBegin: PropTypes.func,
   updateFieldDataBegin: PropTypes.func,
-  userUnmount: PropTypes.func
+  userUnmount: PropTypes.func,
+  isCommitting: PropTypes.bool,
+  isFormLoading: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
-  user: selectUser(),
-  fieldData: selectFieldData()
+  user: selectFormUser(),
+  fieldData: selectFieldData(),
+  isCommitting: selectIsCommitting(),
+  isFormLoading: selectIsFormLoading(),
 });
 
 const mapDispatchToProps = {

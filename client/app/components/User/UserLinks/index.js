@@ -4,7 +4,7 @@ import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
 import {
@@ -128,43 +128,43 @@ export function MobileNavMenu({ classes, mobileNavAnchor, isMobileNavOpen, handl
         <ListItemIcon>
           <HomeIcon />
         </ListItemIcon>
-        <FormattedMessage {...ROUTES.user.home.data.titleMessage} />
+        <DiverstFormattedMessage {...ROUTES.user.home.data.titleMessage} />
       </MenuItem>
       <MenuItem component={WrappedNavLink} to={ROUTES.user.innovate.path()} activeClassName={classes.mobileNavLinkActive}>
         <ListItemIcon>
           <LightbulbIcon className={classes.lightbulbIcon} />
         </ListItemIcon>
-        <FormattedMessage {...ROUTES.user.innovate.data.titleMessage} />
+        <DiverstFormattedMessage {...ROUTES.user.innovate.data.titleMessage} />
       </MenuItem>
       <MenuItem component={WrappedNavLink} to={ROUTES.user.news.path()} activeClassName={classes.mobileNavLinkActive}>
         <ListItemIcon>
           <QuestionAnswerIcon />
         </ListItemIcon>
-        <FormattedMessage {...ROUTES.user.news.data.titleMessage} />
+        <DiverstFormattedMessage {...ROUTES.user.news.data.titleMessage} />
       </MenuItem>
       <MenuItem component={WrappedNavLink} to={ROUTES.user.events.path()} activeClassName={classes.mobileNavLinkActive}>
         <ListItemIcon>
           <EventIcon />
         </ListItemIcon>
-        <FormattedMessage {...ROUTES.user.events.data.titleMessage} />
+        <DiverstFormattedMessage {...ROUTES.user.events.data.titleMessage} />
       </MenuItem>
       <MenuItem component={WrappedNavLink} to={ROUTES.user.groups.path()} activeClassName={classes.mobileNavLinkActive}>
         <ListItemIcon>
           <GroupIcon />
         </ListItemIcon>
-        <FormattedMessage {...ROUTES.user.groups.data.titleMessage} />
+        <DiverstFormattedMessage {...ROUTES.user.groups.data.titleMessage} />
       </MenuItem>
       <MenuItem component={WrappedNavLink} to={ROUTES.user.downloads.path()} activeClassName={classes.mobileNavLinkActive}>
         <ListItemIcon>
           <CloudDownloadIcon />
         </ListItemIcon>
-        <FormattedMessage {...ROUTES.user.downloads.data.titleMessage} />
+        <DiverstFormattedMessage {...ROUTES.user.downloads.data.titleMessage} />
       </MenuItem>
-      <MenuItem component={WrappedNavLink} to={ROUTES.user.mentorship.path()} activeClassName={classes.mobileNavLinkActive}>
+      <MenuItem component={WrappedNavLink} to={ROUTES.user.mentorship.home.path()} activeClassName={classes.mobileNavLinkActive}>
         <ListItemIcon>
           <UsersCircleIcon />
         </ListItemIcon>
-        <FormattedMessage {...ROUTES.user.mentorship.data.titleMessage} />
+        <DiverstFormattedMessage {...ROUTES.user.mentorship.data.titleMessage} />
       </MenuItem>
     </Menu>
   );
@@ -183,7 +183,7 @@ export function NavLinks({ classes }) {
         <Hidden smDown>
           <HomeIcon className={classes.navIcon} />
         </Hidden>
-        <FormattedMessage {...ROUTES.user.home.data.titleMessage} />
+        <DiverstFormattedMessage {...ROUTES.user.home.data.titleMessage} />
       </Button>
       <Button
         component={WrappedNavLink}
@@ -194,7 +194,7 @@ export function NavLinks({ classes }) {
         <Hidden smDown>
           <LightbulbIcon className={classes.lightbulbIcon} />
         </Hidden>
-        <FormattedMessage {...ROUTES.user.innovate.data.titleMessage} />
+        <DiverstFormattedMessage {...ROUTES.user.innovate.data.titleMessage} />
       </Button>
       <Button
         component={WrappedNavLink}
@@ -205,7 +205,7 @@ export function NavLinks({ classes }) {
         <Hidden smDown>
           <QuestionAnswerIcon className={classes.navIcon} />
         </Hidden>
-        <FormattedMessage {...ROUTES.user.news.data.titleMessage} />
+        <DiverstFormattedMessage {...ROUTES.user.news.data.titleMessage} />
       </Button>
       <Button
         component={WrappedNavLink}
@@ -216,7 +216,7 @@ export function NavLinks({ classes }) {
         <Hidden smDown>
           <EventIcon className={classes.navIcon} />
         </Hidden>
-        <FormattedMessage {...ROUTES.user.events.data.titleMessage} />
+        <DiverstFormattedMessage {...ROUTES.user.events.data.titleMessage} />
       </Button>
       <Button
         component={WrappedNavLink}
@@ -227,7 +227,7 @@ export function NavLinks({ classes }) {
         <Hidden smDown>
           <GroupIcon className={classes.navIcon} />
         </Hidden>
-        <FormattedMessage {...ROUTES.user.groups.data.titleMessage} />
+        <DiverstFormattedMessage {...ROUTES.user.groups.data.titleMessage} />
       </Button>
       <Button
         component={WrappedNavLink}
@@ -238,18 +238,18 @@ export function NavLinks({ classes }) {
         <Hidden smDown>
           <CloudDownloadIcon className={classes.navIcon} />
         </Hidden>
-        <FormattedMessage {...ROUTES.user.downloads.data.titleMessage} />
+        <DiverstFormattedMessage {...ROUTES.user.downloads.data.titleMessage} />
       </Button>
       <Button
         component={WrappedNavLink}
-        to={ROUTES.user.mentorship.path()}
+        to={ROUTES.user.mentorship.home.path()}
         className={classes.navLink}
         activeClassName={classes.navLinkActive}
       >
         <Hidden smDown>
           <UsersCircleIcon className={classes.navIcon} />
         </Hidden>
-        <FormattedMessage {...ROUTES.user.mentorship.data.titleMessage} />
+        <DiverstFormattedMessage {...ROUTES.user.mentorship.data.titleMessage} />
       </Button>
     </Toolbar>
   );
@@ -295,7 +295,7 @@ export class UserLinks extends React.PureComponent {
               onClick={this.handleMobileNavOpen}
             >
               <ArrowDropDownIcon className={classNames(classes.arrowDropDownIcon, isMobileNavOpen ? classes.arrowDropDownIconRotated : null)} />
-              <FormattedMessage {...pageTitle} />
+              <DiverstFormattedMessage {...pageTitle} />
             </Button>
           </Toolbar>
           <MobileNavMenu

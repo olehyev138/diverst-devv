@@ -18,6 +18,7 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { createEventBegin, eventsUnmount } from 'containers/Event/actions';
 import EventForm from 'components/Event/EventForm';
+import { selectIsCommitting } from 'containers/Event/selectors';
 
 export function EventCreatePage(props) {
   useInjectReducer({ key: 'events', reducer });
@@ -34,6 +35,7 @@ export function EventCreatePage(props) {
   return (
     <EventForm
       eventAction={props.createEventBegin}
+      isCommitting={props.isCommitting}
       buttonText='Create'
       currentUser={currentUser}
       currentGroup={currentGroup}
@@ -47,11 +49,13 @@ EventCreatePage.propTypes = {
   eventsUnmount: PropTypes.func,
   currentUser: PropTypes.object,
   currentGroup: PropTypes.object,
+  isCommitting: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
   currentGroup: selectGroup(),
-  currentUser: selectUser()
+  currentUser: selectUser(),
+  isCommitting: selectIsCommitting(),
 });
 
 const mapDispatchToProps = {

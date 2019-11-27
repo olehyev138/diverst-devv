@@ -11,14 +11,13 @@ import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/News/reducer';
 import saga from 'containers/News/saga';
 
-import { selectPaginatedNewsItems, selectNewsItemsTotal } from 'containers/News/selectors';
+import { selectPaginatedNewsItems, selectNewsItemsTotal, selectIsLoading } from 'containers/News/selectors';
 import { getNewsItemsBegin, newsFeedUnmount } from 'containers/News/actions';
 
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import NewsFeed from 'components/News/NewsFeed';
-
 
 export function NewsFeedPage(props, context) {
   useInjectReducer({ key: 'news', reducer });
@@ -31,7 +30,7 @@ export function NewsFeedPage(props, context) {
   const rs = new RouteService(useContext);
   const links = {
     newsFeedIndex: ROUTES.group.news.index.path(rs.params('group_id')),
-    groupMessageIndex: id => ROUTES.group.news.messages.index.path(rs.params('group_id'), id),
+    groupMessageShow: (groupId, id) => ROUTES.group.news.messages.show.path(groupId, id),
     groupMessageNew: ROUTES.group.news.messages.new.path(rs.params('group_id')),
     groupMessageEdit: id => ROUTES.group.news.messages.edit.path(rs.params('group_id'), id)
   };
@@ -62,9 +61,11 @@ export function NewsFeedPage(props, context) {
       <NewsFeed
         newsItems={props.newsItems}
         newsItemsTotal={props.newsItemsTotal}
+        isLoading={props.isLoading}
         defaultParams={params}
         handlePagination={handlePagination}
         links={links}
+        readonly={false}
       />
     </React.Fragment>
   );
@@ -75,6 +76,7 @@ NewsFeedPage.propTypes = {
   newsFeedUnmount: PropTypes.func.isRequired,
   newsItems: PropTypes.array,
   newsItemsTotal: PropTypes.number,
+  isLoading: PropTypes.bool,
   currentGroup: PropTypes.shape({
     news_feed: PropTypes.shape({
       id: PropTypes.number
@@ -84,12 +86,13 @@ NewsFeedPage.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
   newsItems: selectPaginatedNewsItems(),
-  newsItemsTotal: selectNewsItemsTotal()
+  newsItemsTotal: selectNewsItemsTotal(),
+  isLoading: selectIsLoading(),
 });
 
 const mapDispatchToProps = {
   getNewsItemsBegin,
-  newsFeedUnmount
+  newsFeedUnmount,
 };
 
 const withConnect = connect(

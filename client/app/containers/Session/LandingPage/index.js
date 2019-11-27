@@ -7,7 +7,7 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { FormattedMessage } from 'react-intl';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 
@@ -51,11 +51,11 @@ export function LandingPage() {
           </Grid>
 
           <Grid item>
-            <div>
+            <React.Fragment>
               <Button color='primary'>
                 <Link to={ROUTES.session.login.path()}>Login</Link>
               </Button>
-            </div>
+            </React.Fragment>
           </Grid>
         </Grid>
       </Toolbar>

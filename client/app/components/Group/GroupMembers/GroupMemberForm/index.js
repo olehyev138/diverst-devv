@@ -4,25 +4,22 @@
  *
  */
 
-import React, {
-  memo, useRef, useState, useEffect
-} from 'react';
-import { NavLink } from 'react-router-dom';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
 import {
-  Button, Card, CardActions, CardContent, Grid,
-  TextField, Hidden, FormControl
+  Button, Card, CardActions, CardContent, Divider
 } from '@material-ui/core';
-import Select from 'react-select';
+import Select from 'components/Shared/DiverstSelect';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { Field, Formik, Form } from 'formik';
-import { ROUTES } from 'containers/Shared/Routes/constants';
 
-import { FormattedMessage } from 'react-intl';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Group/GroupMembers/messages';
+
+import DiverstSubmit from 'components/Shared/DiverstSubmit';
 
 import { buildValues, mapFields } from 'utils/formHelpers';
 
@@ -45,7 +42,9 @@ export function GroupMemberFormInner({ handleSubmit, handleChange, handleBlur, v
             id='member_ids'
             name='member_ids'
             label='New Members'
+            disabled={props.isCommitting}
             isMulti
+            margin='normal'
             value={values.member_ids}
             options={props.selectUsers}
             onMenuOpen={usersSelectAction}
@@ -54,18 +53,17 @@ export function GroupMemberFormInner({ handleSubmit, handleChange, handleBlur, v
             onBlur={() => setFieldTouched('member_ids', true)}
           />
         </CardContent>
+        <Divider />
         <CardActions>
+          <DiverstSubmit isCommitting={props.isCommitting}>
+            <DiverstFormattedMessage {...messages.create} />
+          </DiverstSubmit>
           <Button
-            color='primary'
-            type='submit'
-          >
-            <FormattedMessage {...messages.create} />
-          </Button>
-          <Button
+            disabled={props.isCommitting}
             to={props.links.groupMembersIndex}
             component={WrappedNavLink}
           >
-            <FormattedMessage {...messages.cancel} />
+            <DiverstFormattedMessage {...messages.cancel} />
           </Button>
         </CardActions>
       </Form>
@@ -97,7 +95,8 @@ export function GroupMemberForm(props) {
 GroupMemberForm.propTypes = {
   createMembersBegin: PropTypes.func,
   group: PropTypes.object,
-  groupId: PropTypes.string
+  groupId: PropTypes.string,
+  isCommitting: PropTypes.bool,
 };
 
 GroupMemberFormInner.propTypes = {
@@ -110,6 +109,7 @@ GroupMemberFormInner.propTypes = {
   getMembersBegin: PropTypes.func,
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
+  isCommitting: PropTypes.bool,
   links: PropTypes.shape({
     groupMembersIndex: PropTypes.string
   }),

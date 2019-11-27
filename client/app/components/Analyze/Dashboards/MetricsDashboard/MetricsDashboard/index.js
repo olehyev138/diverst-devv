@@ -13,9 +13,10 @@ import classNames from 'classnames';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import messages from 'containers/Analyze/Dashboards/MetricsDashboard/messages';
-import { FormattedMessage } from 'react-intl';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 
 import CustomGraphPage from 'containers/Analyze/Dashboards/MetricsDashboard/CustomGraph/CustomGraphPage';
+import DiverstShowLoader from 'components/Shared/DiverstShowLoader';
 
 const styles = theme => ({
   padding: {
@@ -48,61 +49,63 @@ export function MetricsDashboard(props) {
   const metricsDashboard = dig(props, 'metricsDashboard');
 
   return (
-    (metricsDashboard) ? (
-      <React.Fragment>
-        <Grid container spacing={1}>
-          <Grid item>
-            <Typography color='primary' variant='h5' component='h2' className={classes.title}>
-              {metricsDashboard.name}
-            </Typography>
-          </Grid>
-          <Grid item sm>
-            <Button
-              variant='contained'
-              size='large'
-              color='primary'
-              className={classNames(classes.buttons, classes.deleteButton)}
-              onClick={() => {
-                /* eslint-disable-next-line no-alert, no-restricted-globals */
-                if (confirm('Delete metricsDashboard?'))
-                  props.deleteMetricsDashboardBegin(metricsDashboard.id);
-              }}
-            >
-              <FormattedMessage {...messages.delete} />
-            </Button>
-            <Button
-              component={WrappedNavLink}
-              to={props.links.metricsDashboardEdit}
-              variant='contained'
-              size='large'
-              color='primary'
-              className={classes.buttons}
-            >
-              <FormattedMessage {...messages.edit} />
-            </Button>
-          </Grid>
-          <Grid item xs>
-            <Button
-              component={WrappedNavLink}
-              variant='contained'
-              size='large'
-              color='primary'
-              className={classNames(classes.buttons)}
-              to={props.links.customGraphNew}
-            >
-              Create Graph
-            </Button>
-          </Grid>
-        </Grid>
-        <Grid container spacing={3}>
-          {metricsDashboard.graphs && metricsDashboard.graphs.map((graph => (
-            <Grid item key={graph.id}>
-              <CustomGraphPage customGraph={graph} />
+    <DiverstShowLoader isLoading={props.isFormLoading} isError={!props.isFormLoading && !metricsDashboard}>
+      {metricsDashboard && (
+        <React.Fragment>
+          <Grid container spacing={1}>
+            <Grid item>
+              <Typography color='primary' variant='h5' component='h2' className={classes.title}>
+                {metricsDashboard.name}
+              </Typography>
             </Grid>
-          )))}
-        </Grid>
-      </React.Fragment>
-    ) : <React.Fragment />
+            <Grid item sm>
+              <Button
+                variant='contained'
+                size='large'
+                color='primary'
+                className={classNames(classes.buttons, classes.deleteButton)}
+                onClick={() => {
+                  /* eslint-disable-next-line no-alert, no-restricted-globals */
+                  if (confirm('Delete metricsDashboard?'))
+                    props.deleteMetricsDashboardBegin(metricsDashboard.id);
+                }}
+              >
+                <DiverstFormattedMessage {...messages.delete} />
+              </Button>
+              <Button
+                component={WrappedNavLink}
+                to={props.links.metricsDashboardEdit}
+                variant='contained'
+                size='large'
+                color='primary'
+                className={classes.buttons}
+              >
+                <DiverstFormattedMessage {...messages.edit} />
+              </Button>
+            </Grid>
+            <Grid item xs>
+              <Button
+                component={WrappedNavLink}
+                variant='contained'
+                size='large'
+                color='primary'
+                className={classNames(classes.buttons)}
+                to={props.links.customGraphNew}
+              >
+                Create Graph
+              </Button>
+            </Grid>
+          </Grid>
+          <Grid container spacing={3}>
+            {metricsDashboard.graphs && metricsDashboard.graphs.map((graph => (
+              <Grid item key={graph.id}>
+                <CustomGraphPage customGraph={graph} />
+              </Grid>
+            )))}
+          </Grid>
+        </React.Fragment>
+      )}
+    </DiverstShowLoader>
   );
 }
 
@@ -111,6 +114,7 @@ MetricsDashboard.propTypes = {
   classes: PropTypes.object,
   metricsDashboard: PropTypes.object,
   currentUserId: PropTypes.number,
+  isFormLoading: PropTypes.bool,
   links: PropTypes.shape({
     metricsDashboardEdit: PropTypes.string,
     customGraphNew: PropTypes.string,

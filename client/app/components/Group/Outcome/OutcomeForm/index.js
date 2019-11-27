@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import dig from 'object-dig';
 
-import { FormattedMessage } from 'react-intl';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { Field, Formik, Form, FieldArray } from 'formik';
 import {
   withStyles, Button, Card, CardActions, CardContent, TextField, Divider, Typography, Paper, Box, Grid, IconButton, Collapse
@@ -21,6 +21,8 @@ import AddIcon from '@material-ui/icons/AddCircle';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import messages from 'containers/Group/Outcome/messages';
 import { buildValues } from 'utils/formHelpers';
+import DiverstSubmit from 'components/Shared/DiverstSubmit';
+import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 
 const styles = theme => ({
   addItemButtonIcon: {
@@ -46,128 +48,133 @@ const INITIAL_PILLAR = {
 /* eslint-disable object-curly-newline */
 export function OutcomeFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, classes, ...props }) {
   return (
-    <Card>
-      <Form>
-        <CardContent>
-          <Field
-            component={TextField}
-            onChange={handleChange}
-            fullWidth
-            id='name'
-            name='name'
-            label={<FormattedMessage {...messages.inputs.name} />}
-            value={values.name}
-          />
-        </CardContent>
-        <Divider />
-        <CardContent>
-          <FieldArray
-            name='pillars_attributes'
-            render={arrayHelpers => (
-              <React.Fragment>
-                <Grid container alignItems='center'>
-                  <Grid item xs>
-                    <Typography
-                      variant='h6'
-                    >
-                      Pillars
-                    </Typography>
-                  </Grid>
-                  <Grid item>
-                    <IconButton
-                      color='primary'
-                      onClick={() => arrayHelpers.push({ ...INITIAL_PILLAR, localKey: `new_${Date.now().toString()}_${(Math.random() + 1).toString(36).substring(3)}` })}
-                    >
-                      <AddIcon className={classes.addItemButtonIcon} />
-                    </IconButton>
-                  </Grid>
-                </Grid>
-                <Box mb={1} />
-                {props.outcome && values.pillars_attributes && values.pillars_attributes.length > 0 && values.pillars_attributes.map((pillar, i) => {
-                  /* eslint-disable-next-line react/no-array-index-key  */
-                  if (Object.hasOwnProperty.call(pillar, '_destroy')) return (<React.Fragment key={pillar.id} />);
-
-                  return (
-                    <div key={pillar.id || pillar.localKey}>
-                      <Collapse
-                        in={!pillar.hidden}
-                        appear={pillar.hidden || !pillar.initialized}
-                        onExited={() => {
-                          if (pillar.id)
-                            setFieldValue(`pillars_attributes.${i}._destroy`, '1');
-                          else
-                            arrayHelpers.remove(i);
-                        }}
-                        onEntered={(_, isAppearing) => {
-                          if (isAppearing)
-                            setFieldValue(`pillars_attributes.${i}.initialized`, true);
-                        }}
+    <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.outcome}>
+      <Card>
+        <Form>
+          <CardContent>
+            <Field
+              component={TextField}
+              onChange={handleChange}
+              fullWidth
+              id='name'
+              name='name'
+              label={<FormattedMessage {...messages.inputs.name} />}
+              value={values.name}
+            />
+          </CardContent>
+          <Divider />
+          <CardContent>
+            <FieldArray
+              name='pillars_attributes'
+              render={arrayHelpers => (
+                <React.Fragment>
+                  <Grid container alignItems='center'>
+                    <Grid item xs>
+                      <Typography
+                        variant='h6'
                       >
-                        <Paper
-                          className={classes.removableItem}
-                          elevation={2}
-                          square
+                        Pillars
+                      </Typography>
+                    </Grid>
+                    <Grid item>
+                      <IconButton
+                        color='primary'
+                        onClick={() => arrayHelpers.push({
+                          ...INITIAL_PILLAR,
+                          localKey: `new_${Date.now().toString()}_${(Math.random() + 1).toString(36).substring(3)}`
+                        })}
+                      >
+                        <AddIcon className={classes.addItemButtonIcon} />
+                      </IconButton>
+                    </Grid>
+                  </Grid>
+                  <Box mb={1} />
+                  {props.outcome && values.pillars_attributes && values.pillars_attributes.length > 0 && values.pillars_attributes.map((pillar, i) => {
+                    /* eslint-disable-next-line react/no-array-index-key  */
+                    if (Object.hasOwnProperty.call(pillar, '_destroy')) return (<React.Fragment key={pillar.id} />);
+
+                    return (
+                      <div key={pillar.id || pillar.localKey}>
+                        <Collapse
+                          in={!pillar.hidden}
+                          appear={pillar.hidden || !pillar.initialized}
+                          onExited={() => {
+                            if (pillar.id)
+                              setFieldValue(`pillars_attributes.${i}._destroy`, '1');
+                            else
+                              arrayHelpers.remove(i);
+                          }}
+                          onEntered={(_, isAppearing) => {
+                            if (isAppearing)
+                              setFieldValue(`pillars_attributes.${i}.initialized`, true);
+                          }}
                         >
-                          <IconButton
-                            className={classes.itemRemoveButton}
-                            onClick={() => setFieldValue(`pillars_attributes.${i}.hidden`, true)}
+                          <Paper
+                            className={classes.removableItem}
+                            elevation={2}
+                            square
                           >
-                            <DeleteIcon />
-                          </IconButton>
-                          <CardContent>
-                            <Field
-                              component={TextField}
-                              onChange={handleChange}
-                              fullWidth
-                              id={`pillars_attributes.${i}.name`}
-                              name={`pillars_attributes.${i}.name`}
-                              margin='normal'
-                              label={<FormattedMessage {...messages.pillars.inputs.name} />}
-                              value={values.pillars_attributes[i].name}
-                            />
-                            <Field
-                              component={TextField}
-                              onChange={handleChange}
-                              fullWidth
-                              id={`pillars_attributes.${i}.value_proposition`}
-                              name={`pillars_attributes.${i}.value_proposition`}
-                              margin='normal'
-                              label={<FormattedMessage {...messages.pillars.inputs.value} />}
-                              value={values.pillars_attributes[i].value_proposition || ''}
-                            />
-                          </CardContent>
-                        </Paper>
-                        <Box mb={3} />
-                      </Collapse>
-                    </div>
-                  );
-                })}
-                {props.outcome && (!values.pillars_attributes || values.pillars_attributes.length <= 0) && (
-                  <Typography color='textSecondary'>
-                    <FormattedMessage {...messages.empty} />
-                  </Typography>
-                )}
-              </React.Fragment>
-            )}
-          />
-        </CardContent>
-        <Divider />
-        <CardActions>
-          <Button
-            color='primary'
-            type='submit'
-          >
-            {buttonText}
-          </Button>
-          <Button
-            to={props.links.outcomesIndex}
-            component={WrappedNavLink}
-          >
-            <FormattedMessage {...messages.cancel} />
-          </Button>
-        </CardActions>
-      </Form>
-    </Card>
+                            <IconButton
+                              className={classes.itemRemoveButton}
+                              onClick={() => setFieldValue(`pillars_attributes.${i}.hidden`, true)}
+                            >
+                              <DeleteIcon />
+                            </IconButton>
+                            <CardContent>
+                              <Field
+                                component={TextField}
+                                onChange={handleChange}
+                                fullWidth
+                                id={`pillars_attributes.${i}.name`}
+                                name={`pillars_attributes.${i}.name`}
+                                margin='normal'
+                                label={<FormattedMessage {...messages.pillars.inputs.name} />}
+                                value={values.pillars_attributes[i].name}
+                              />
+                              <Field
+                                component={TextField}
+                                onChange={handleChange}
+                                fullWidth
+                                id={`pillars_attributes.${i}.value_proposition`}
+                                name={`pillars_attributes.${i}.value_proposition`}
+                                margin='normal'
+                                label={<FormattedMessage {...messages.pillars.inputs.value} />}
+                                value={values.pillars_attributes[i].value_proposition || ''}
+                              />
+                            </CardContent>
+                          </Paper>
+                          <Box mb={3} />
+                        </Collapse>
+                      </div>
+                    );
+                  })}
+                  {props.outcome && (!values.pillars_attributes || values.pillars_attributes.length <= 0) && (
+                    <Typography color='textSecondary'>
+                      <FormattedMessage {...messages.empty} />
+                    </Typography>
+                  )}
+                </React.Fragment>
+              )}
+            />
+          </CardContent>
+          <Divider />
+          <CardActions>
+            <Button
+              color='primary'
+              type='submit'
+            >
+              {buttonText}
+            </Button>
+            <Button
+              to={props.links.outcomesIndex}
+              component={WrappedNavLink}
+            >
+              <FormattedMessage {...messages.cancel} />
+            </Button>
+          </CardActions>
+        </Form>
+      </Card>
+    </DiverstFormLoader>
   );
 }
 
@@ -195,13 +202,17 @@ export function OutcomeForm(props) {
 }
 
 OutcomeForm.propTypes = {
+  edit: PropTypes.bool,
   outcomeAction: PropTypes.func,
   outcome: PropTypes.object,
   currentUser: PropTypes.object,
-  currentGroup: PropTypes.object
+  currentGroup: PropTypes.object,
+  isCommitting: PropTypes.bool,
+  isFormLoading: PropTypes.bool,
 };
 
 OutcomeFormInner.propTypes = {
+  edit: PropTypes.bool,
   classes: PropTypes.object,
   outcome: PropTypes.object,
   handleSubmit: PropTypes.func,
@@ -211,6 +222,8 @@ OutcomeFormInner.propTypes = {
   buttonText: PropTypes.string,
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
+  isCommitting: PropTypes.bool,
+  isFormLoading: PropTypes.bool,
   links: PropTypes.shape({
     outcomesIndex: PropTypes.string,
   })

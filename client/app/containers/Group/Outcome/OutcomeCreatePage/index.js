@@ -12,6 +12,7 @@ import saga from 'containers/Group/Outcome/saga';
 
 import { selectGroup } from 'containers/Group/selectors';
 import { selectUser } from 'containers/Shared/App/selectors';
+import { selectIsCommitting } from 'containers/Group/Outcome/selectors';
 
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -38,6 +39,7 @@ export function OutcomeCreatePage(props) {
       currentUser={currentUser}
       currentGroup={currentGroup}
       links={links}
+      isCommitting={props.isCommitting}
     />
   );
 }
@@ -47,11 +49,13 @@ OutcomeCreatePage.propTypes = {
   outcomesUnmount: PropTypes.func,
   currentUser: PropTypes.object,
   currentGroup: PropTypes.object,
+  isCommitting: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
   currentGroup: selectGroup(),
-  currentUser: selectUser()
+  currentUser: selectUser(),
+  isCommitting: selectIsCommitting(),
 });
 
 const mapDispatchToProps = {

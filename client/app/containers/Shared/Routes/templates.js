@@ -6,7 +6,9 @@ import SessionLayout from 'containers/Layouts/SessionLayout/Loadable';
 import ErrorLayout from 'containers/Layouts/ErrorLayout/Loadable';
 import GlobalSettingsLayout from 'containers/Layouts/GlobalSettingsLayout/Loadable';
 import GroupManageLayout from 'containers/Layouts/GroupManageLayout/Loadable';
-
+import MentorshipLayout from 'containers/Layouts/MentorshipLayout/Loadable';
+import InnovateLayout from 'containers/Layouts/InnovateLayout/Loadable';
+import SystemUserLayout from 'containers/Layouts/SystemUsersLayout/Loadable';
 
 /* Session */
 import LoginPage from 'containers/Session/LoginPage/Loadable';
@@ -15,6 +17,15 @@ import LoginPage from 'containers/Session/LoginPage/Loadable';
 /* User */
 import HomePage from 'containers/User/HomePage/Loadable';
 import UserGroupListPage from 'containers/Group/UserGroupListPage/Loadable';
+import UserProfilePage from 'containers/User/UserProfilePage/Loadable';
+import UserNewsLinkPage from 'containers/User/UserNewsFeedPage/Loadable';
+import UserEventsPage from 'containers/User/UserEventsPage/Loadable';
+
+/* User - Mentorship */
+import MentorshipProfilePage from 'containers/Mentorship/MentorshipProfilePage/Loadable';
+import MentorshipEditProfilePage from 'containers/Mentorship/MentorshipEditProfilePage/Loadable';
+import MentorsPage from 'containers/Mentorship/Mentoring/MentorsPage/Loadable';
+import MentorRequestsPage from 'containers/Mentorship/Requests/RequestsPage/Loadable';
 
 /* Admin - Analyze */
 import GroupDashboardPage from 'containers/Analyze/Dashboards/GroupDashboardPage/Loadable';
@@ -40,12 +51,17 @@ import SegmentPage from 'containers/Segment/SegmentPage/Loadable';
 /* Admin - System - Global Settings */
 import FieldsPage from 'containers/GlobalSettings/Field/FieldsPage/Loadable';
 import CustomTextEditPage from 'containers/GlobalSettings/CustomText/CustomTextEditPage/Loadable';
+import EnterpriseConfigurationPage from 'containers/GlobalSettings/EnterpriseConfiguration/EnterpriseConfigurationPage/Loadable';
 
 /* Admin - System - User */
 import UsersPage from 'containers/User/UsersPage/Loadable';
 import UserCreatePage from 'containers/User/UserCreatePage/Loadable';
 import UserEditPage from 'containers/User/UserEditPage/Loadable';
 
+/* Admin - System - User - Roles */
+import UserRolesListPage from 'containers/User/UserRole/UserRoleListPage/Loadable';
+import UserRoleCreatePage from 'containers/User/UserRole/UserRoleCreatePage/Loadable';
+import UserRoleEditPage from 'containers/User/UserRole/UserRoleEditPage/Loadable';
 
 /* Group */
 import GroupHomePage from 'containers/Group/GroupHomePage/Loadable';
@@ -75,6 +91,22 @@ import GroupMemberCreatePage from 'containers/Group/GroupMembers/GroupMemberCrea
 /* Group - Manage */
 import GroupSettingsPage from 'containers/Group/GroupManage/GroupSettingsPage/Loadable';
 
+/* Group/Admin - Resource */
+import FoldersPage from 'containers/Resource/Folder/FoldersPage/Loadable';
+import FolderCreatePage from 'containers/Resource/Folder/FolderCreatePage/Loadable';
+import FolderEditPage from 'containers/Resource/Folder/FolderEditPage/Loadable';
+import FolderPage from 'containers/Resource/Folder/FolderPage/Loadable';
+import ResourceCreatePage from 'containers/Resource/Resource/ResourceCreatePage/Loadable';
+import ResourceEditPage from 'containers/Resource/Resource/ResourceEditPage/Loadable';
+
+/* Admin Innovate */
+import CampaignListPage from 'containers/Innovate/Campaign/CampaignListPage/Loadable';
+import CampaignCreatePage from 'containers/Innovate/Campaign/CampaignCreatePage/Loadable';
+import CampaignEditPage from 'containers/Innovate/Campaign/CampaignEditPage/Loadable';
+import CampaignShowPage from 'containers/Innovate/Campaign/CampaignShowPage/Loadable';
+import CampaignQuestionListPage from 'containers/Innovate/Campaign/CampaignQuestion/CampaignQuestionListPage/Loadable';
+import CampaignQuestionCreatePage from 'containers/Innovate/Campaign/CampaignQuestion/CampaignQuestionCreatePage/Loadable';
+import CampaignQuestionEditPage from 'containers/Innovate/Campaign/CampaignQuestion/CampaignQuestionEditPage/Loadable';
 /* Global */
 import NotFoundPage from 'containers/Shared/NotFoundPage/Loadable';
 import PlaceholderPage from 'components/Shared/PlaceholderPage/Loadable';
@@ -87,5 +119,10 @@ export {
   EventCreatePage, EventEditPage, GroupMessagePage, GroupMessageCreatePage, GroupMessageEditPage, OutcomePage,
   OutcomeCreatePage, OutcomeEditPage, GroupMemberListPage, GroupMemberCreatePage, NotFoundPage, PlaceholderPage,
   GroupDashboardPage, UserDashboardPage, MetricsDashboardListPage, MetricsDashboardCreatePage, MetricsDashboardEditPage, MetricsDashboardPage,
-  CustomGraphCreatePage, CustomGraphEditPage, GroupManageLayout, GroupSettingsPage, CustomTextEditPage
+  CustomGraphCreatePage, CustomGraphEditPage, GroupManageLayout, GroupSettingsPage, CustomTextEditPage,
+  UserNewsLinkPage, UserEventsPage, FoldersPage, FolderCreatePage, FolderEditPage, FolderPage, ResourceCreatePage,
+  ResourceEditPage, UserProfilePage, InnovateLayout, CampaignListPage, CampaignCreatePage, CampaignEditPage, CampaignShowPage,
+  CampaignQuestionListPage, CampaignQuestionCreatePage, CampaignQuestionEditPage,
+  EnterpriseConfigurationPage, MentorshipProfilePage, MentorshipEditProfilePage, MentorshipLayout, MentorsPage,
+  MentorRequestsPage, SystemUserLayout, UserRolesListPage, UserRoleCreatePage, UserRoleEditPage
 };

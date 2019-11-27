@@ -216,6 +216,10 @@ class User < ApplicationRecord
     "#{first_name} #{last_name}"
   end
 
+  def last_initial
+    "#{(last_name || '')[0].capitalize}."
+  end
+
   def user_role_presence
     if user_role_id.nil?
       self.user_role_id = enterprise.default_user_role

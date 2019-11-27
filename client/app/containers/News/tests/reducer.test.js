@@ -9,6 +9,9 @@ describe('newsReducer', () => {
   let state;
   beforeEach(() => {
     state = {
+      isLoading: true,
+      isCommitting: false,
+      isFormLoading: true,
       newsItems: [],
       currentNewsItem: null,
       newsItemsTotal: null
@@ -24,6 +27,7 @@ describe('newsReducer', () => {
     const expected = produce(state, (draft) => {
       draft.newsItems = [{ id: 37 }];
       draft.newsItemsTotal = 49;
+      draft.isLoading = false;
     });
 
     expect(

@@ -25,9 +25,11 @@ const CustomDateField = (props) => {
       name={dataLocation}
       id={dataLocation}
       type='date'
+      margin='normal'
       label={fieldDatum.field.title}
       value={getIn(props.formik.values, dataLocation)}
       onChange={props.formik.handleChange}
+      {...props}
     />
   );
 };

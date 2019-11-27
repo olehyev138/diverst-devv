@@ -16,6 +16,10 @@ module BaseSearcher
       [:destroy_all, :delete_all, 'destroy_all', 'delete_all']
     end
 
+    def valid_includes
+      []
+    end
+
     def set_query_scopes(params)
       if params[:query_scopes].presence
         case params[:query_scopes].class.name
@@ -41,6 +45,29 @@ module BaseSearcher
       end
     end
 
+    def set_includes(params)
+      if params[:includes].present?
+        case params[:includes].class.name
+        when 'Array'
+          includes = params[:includes]
+        when 'String'
+          includes = JSON.parse(params[:includes])
+        else
+          includes = []
+        end
+
+        includes.select { |include|
+          if include.kind_of?(String) || include.kind_of?(Symbol)
+            valid_includes.include?(include)
+          else
+            valid_includes.include?(include.first)
+          end
+        }
+      else
+        []
+      end
+    end
+
     def lookup(params = {}, diverst_request = nil)
       # get the search value
       searchValue = params[:search]
@@ -56,7 +83,7 @@ module BaseSearcher
       where_not = {}
 
       # get the base includes/joins and base query
-      includes = get_includes
+      includes = get_includes(params)
       joins = get_joins
       query = get_base_query
 
@@ -103,25 +130,31 @@ module BaseSearcher
             .includes(includes)
             .send_chain(query_scopes)
             .where(where)
+            .where.not(where_not)
             .all
             .distinct
       end
     end
 
     def get_base_query
-      return {} if not self.respond_to? :base_query
+      return {} unless self.respond_to? :base_query
 
       self.base_query
     end
 
-    def get_includes
-      return [] if not self.respond_to? :base_includes
+    def get_includes(params)
+      base_includes = if self.respond_to? :base_includes
+        self.base_includes
+      else
+        []
+      end
 
-      self.base_includes
+      param_includes = set_includes(params)
+      base_includes | param_includes
     end
 
     def get_joins
-      return [] if not self.respond_to? :base_joins
+      return [] unless self.respond_to? :base_joins
 
       self.base_joins
     end
@@ -140,13 +173,31 @@ module BaseSearcher
       end
     end
 
+    # def add_custom_args(where, where_not, params, includes, joins)
+    #   # check if the argument is defined in the class as a query argument
+    #   params.each do |arg|
+    #     if query_arguments.include?(arg.first.to_s)
+    #       where.merge!(query_arguments_hash(arg.first.to_s, params[arg.first.to_sym]))
+    #     elsif query_arguments.include?(arg)
+    #       where.merge!(query_arguments_hash(arg, params[arg]))
+    #     end
+    #   end
+    # end
+
     def add_custom_args(where, where_not, params, includes, joins)
       # check if the argument is defined in the class as a query argument
       params.each do |arg|
+        original_arg = arg
+        if arg.first.to_s == '$'
+          to_add = where_not
+          arg = arg[1..-1]
+        else
+          to_add = where
+        end
         if query_arguments.include?(arg.first.to_s)
-          where.merge!(query_arguments_hash(arg.first.to_s, params[arg.first.to_sym]))
+          to_add.merge!(query_arguments_hash(arg.first.to_s, params[arg.first.to_sym]))
         elsif query_arguments.include?(arg)
-          where.merge!(query_arguments_hash(arg, params[arg]))
+          to_add.merge!(query_arguments_hash(arg, params[original_arg]))
         end
       end
     end

@@ -39,7 +39,13 @@ export default defineMessages({
     },
     emptySection: {
       id: `${scope}.index.tabs.empty_section`,
-    }
+    },
+    participating: {
+      id: `${scope}.index.tabs.participating`
+    },
+    all: {
+      id: `${scope}.index.tabs.all`
+    },
   },
   inputs: {
     name: {

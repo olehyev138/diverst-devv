@@ -8,12 +8,16 @@ import {
   Paper, Typography, Grid, Button
 } from '@material-ui/core/index';
 import { withStyles } from '@material-ui/core/styles';
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/DeleteOutline';
 
 import classNames from 'classnames';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import messages from 'containers/Event/messages';
-import { FormattedMessage } from 'react-intl';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+
+import DiverstShowLoader from 'components/Shared/DiverstShowLoader';
 
 import { formatDateTimeString, DateTime } from 'utils/dateTimeHelpers';
 
@@ -50,58 +54,69 @@ export function Event(props) {
   const event = dig(props, 'event');
 
   return (
-    (event) ? (
-      <React.Fragment>
-        <Grid container spacing={1}>
-          <Grid item>
-            <Typography color='primary' variant='h5' component='h2' className={classes.title}>
-              {event.name}
+    <DiverstShowLoader isLoading={props.isFormLoading} isError={!props.isFormLoading && !event}>
+      {event && (
+        <React.Fragment>
+          <Grid container spacing={1}>
+            <Grid item>
+              <Typography color='primary' variant='h5' component='h2' className={classes.title}>
+                {event.name}
+              </Typography>
+            </Grid>
+            <Grid item sm>
+              <Button
+                variant='contained'
+                size='large'
+                color='primary'
+                className={classNames(classes.buttons, classes.deleteButton)}
+                startIcon={<DeleteIcon />}
+                onClick={() => {
+                  /* eslint-disable-next-line no-alert, no-restricted-globals */
+                  if (confirm('Delete event?'))
+                    props.deleteEventBegin({
+                      id: event.id,
+                      group_id: event.owner_group_id
+                    });
+                }}
+              >
+                <DiverstFormattedMessage {...messages.delete} />
+              </Button>
+              <Button
+                component={WrappedNavLink}
+                to={props.links.eventEdit}
+                variant='contained'
+                size='large'
+                color='primary'
+                className={classes.buttons}
+                startIcon={<EditIcon />}
+              >
+                <DiverstFormattedMessage {...messages.edit} />
+              </Button>
+            </Grid>
+          </Grid>
+          <Paper className={classes.padding}>
+            <Typography className={classes.dataHeaders}>
+              <DiverstFormattedMessage {...messages.show.dateAndTime} />
             </Typography>
-          </Grid>
-          <Grid item sm>
-            <Button
-              component={WrappedNavLink}
-              to={props.links.eventEdit}
-              variant='contained'
-              size='large'
-              color='primary'
-              className={classes.buttons}
-            >
-              <FormattedMessage {...messages.edit} />
-            </Button>
-            <Button
-              variant='contained'
-              size='large'
-              color='primary'
-              className={classNames(classes.buttons, classes.deleteButton)}
-              onClick={() => {
-                /* eslint-disable-next-line no-alert, no-restricted-globals */
-                if (confirm('Delete event?'))
-                  props.deleteEventBegin({ id: event.id, group_id: event.owner_group_id });
-              }}
-            >
-              <FormattedMessage {...messages.delete} />
-            </Button>
-          </Grid>
-        </Grid>
-        <Paper className={classes.padding}>
-          <Typography className={classes.dataHeaders}>
-            <FormattedMessage {...messages.show.dateAndTime} />
-          </Typography>
-          <Typography variant='overline'>From</Typography>
-          <Typography color='textSecondary'>{formatDateTimeString(event.start, DateTime.DATETIME_FULL)}</Typography>
-          <Typography variant='overline'>To</Typography>
-          <Typography color='textSecondary' className={classes.data}>{formatDateTimeString(event.end, DateTime.DATETIME_FULL)}</Typography>
+            <Typography variant='overline'>From</Typography>
+            <Typography color='textSecondary'>{formatDateTimeString(event.start, DateTime.DATETIME_FULL)}</Typography>
+            <Typography variant='overline'>To</Typography>
+            <Typography color='textSecondary' className={classes.data}>{formatDateTimeString(event.end, DateTime.DATETIME_FULL)}</Typography>
 
-          <Typography className={classes.dataHeaders}>
-            <FormattedMessage {...messages.inputs.description} />
-          </Typography>
-          <Typography color='textSecondary' className={classes.data}>
-            {event.description}
-          </Typography>
-        </Paper>
-      </React.Fragment>
-    ) : <React.Fragment />
+            {event.description && (
+              <React.Fragment>
+                <Typography className={classes.dataHeaders}>
+                  <DiverstFormattedMessage {...messages.form.description} />
+                </Typography>
+                <Typography color='textSecondary' className={classes.data}>
+                  {event.description}
+                </Typography>
+              </React.Fragment>
+            )}
+          </Paper>
+        </React.Fragment>
+      )}
+    </DiverstShowLoader>
   );
 }
 
@@ -110,6 +125,7 @@ Event.propTypes = {
   classes: PropTypes.object,
   event: PropTypes.object,
   currentUserId: PropTypes.number,
+  isFormLoading: PropTypes.bool,
   links: PropTypes.shape({
     eventEdit: PropTypes.string,
   })

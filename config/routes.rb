@@ -8,6 +8,9 @@ Diverst::Application.routes.draw do
 
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
+      # manual match for enterprise update - without id
+      # match 'enterprises/update_enterprise' => 'enterprises#update_enterprise', via: :post
+
       resources :api_keys
       resources :annual_budgets
       resources :answers
@@ -30,6 +33,10 @@ Diverst::Application.routes.draw do
       resources :emails
       resources :email_variables
       resources :enterprises do
+        collection do
+          get 'get_enterprise', to: 'enterprises#get_enterprise'
+          post 'update_enterprise', to: 'enterprises#update_enterprise'
+        end
         member do
           post '/sso_login',    to: 'enterprises#sso_login'
           post '/sso_link',     to: 'enterprises#sso_link'
@@ -46,7 +53,7 @@ Diverst::Application.routes.draw do
       end
       resources :folders do
         member do
-          get '/password', to: 'folders#validate_password'
+          post '/password', to: 'folders#validate_password'
         end
       end
       resources :folder_shares
@@ -84,9 +91,18 @@ Diverst::Application.routes.draw do
       resources :initiative_users
       resources :invitation_segments_groups
       resources :likes
-      resources :mentorings
+      resources :mentorings do
+        collection do
+          post 'delete_mentorship'
+        end
+      end
       resources :mentoring_interests
-      resources :mentoring_requests
+      resources :mentoring_requests do
+        member do
+          post 'accept'
+          post 'reject'
+        end
+      end
       resources :mentoring_request_interests
       resources :mentoring_sessions
       resources :mentoring_session_comments
@@ -138,6 +154,13 @@ Diverst::Application.routes.draw do
       resources :twitter_accounts
       resources :user_rewards
       resources :user_reward_actions
+      resources :user, only: [] do
+        collection do
+          get '/posts', to: 'user#get_posts'
+          get '/joined_events', to: 'user#get_joined_events'
+          get '/all_events', to: 'user#get_all_events'
+        end
+      end
       resources :users do
         collection do
           post '/email', to: 'users#find_user_enterprise_by_email'

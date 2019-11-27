@@ -7,7 +7,8 @@ import { showSnackbar } from 'containers/Shared/Notifier/actions';
 import {
   GET_USERS_BEGIN, CREATE_USER_BEGIN,
   GET_USER_BEGIN, UPDATE_USER_BEGIN, DELETE_USER_BEGIN,
-  UPDATE_FIELD_DATA_BEGIN
+  UPDATE_FIELD_DATA_BEGIN, GET_USER_POSTS_BEGIN,
+  GET_USER_EVENTS_BEGIN
 } from 'containers/User/constants';
 
 import {
@@ -15,7 +16,9 @@ import {
   createUserSuccess, createUserError,
   getUserSuccess, getUserError,
   updateUserSuccess, updateUserError,
-  deleteUserError
+  deleteUserError,
+  getUserPostsSuccess, getUserPostsError,
+  getUserEventsSuccess, getUserEventsError, deleteUserSuccess, updateFieldDataSuccess,
 } from 'containers/User/actions';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -43,6 +46,33 @@ export function* getUser(action) {
   }
 }
 
+export function* getUserPosts(action) {
+  try {
+    const response = yield call(api.user.getPosts.bind(api.user), action.payload);
+    yield put(getUserPostsSuccess(response.data.page));
+  } catch (err) {
+    yield put(getUserPostsError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to load posts', options: { variant: 'warning' } }));
+  }
+}
+
+export function* getUserEvents(action) {
+  try {
+    let response;
+    if (action.payload.participation === 'all')
+      response = yield call(api.user.getAllEvents.bind(api.user), action.payload);
+    else
+      response = yield call(api.user.getJoinedEvents.bind(api.user), action.payload);
+    yield put(getUserEventsSuccess(response.data.page));
+  } catch (err) {
+    yield put(getUserEventsError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to load events', options: { variant: 'warning' } }));
+  }
+}
 
 export function* createUser(action) {
   try {
@@ -50,6 +80,7 @@ export function* createUser(action) {
 
     const response = yield call(api.users.create.bind(api.users), payload);
 
+    yield put(createUserSuccess());
     yield put(push(ROUTES.admin.system.users.index.path()));
     yield put(showSnackbar({ message: 'User created', options: { variant: 'success' } }));
   } catch (err) {
@@ -65,7 +96,8 @@ export function* updateUser(action) {
     const payload = { user: action.payload };
     const response = yield call(api.users.update.bind(api.users), payload.user.id, payload);
 
-    yield put(push(ROUTES.admin.system.users.index.path()));
+    yield put(updateUserSuccess());
+    yield put(push(payload.user.redirectPath || ROUTES.admin.system.users.index.path()));
     yield put(showSnackbar({ message: 'User updated', options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateUserError(err));
@@ -79,6 +111,7 @@ export function* deleteUser(action) {
   try {
     yield call(api.users.destroy.bind(api.users), action.payload);
 
+    yield put(deleteUserSuccess());
     yield put(push(ROUTES.admin.system.users.index.path()));
     yield put(showSnackbar({ message: 'User deleted', options: { variant: 'success' } }));
   } catch (err) {
@@ -94,6 +127,7 @@ export function* updateFieldData(action) {
     const payload = { field_data: { field_data: action.payload.field_data } };
     const response = yield call(api.fieldData.updateFieldData.bind(api.fieldData), payload);
 
+    yield put(updateFieldDataSuccess());
     yield put(showSnackbar({ message: 'Fields updated', options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateUserError(err));
@@ -110,6 +144,7 @@ export default function* usersSaga() {
   yield takeLatest(CREATE_USER_BEGIN, createUser);
   yield takeLatest(UPDATE_USER_BEGIN, updateUser);
   yield takeLatest(DELETE_USER_BEGIN, deleteUser);
-
+  yield takeLatest(GET_USER_POSTS_BEGIN, getUserPosts);
+  yield takeLatest(GET_USER_EVENTS_BEGIN, getUserEvents);
   yield takeLatest(UPDATE_FIELD_DATA_BEGIN, updateFieldData);
 }

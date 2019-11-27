@@ -48,7 +48,23 @@ const selectFormField = () => createSelector(
   }
 );
 
+const selectIsLoading = () => createSelector(
+  selectFieldsDomain,
+  fieldsState => fieldsState.isLoading
+);
+
+const selectIsCommitting = () => createSelector(
+  selectFieldsDomain,
+  fieldsState => fieldsState.isCommitting
+);
+
+const selectCommitSuccess = () => createSelector(
+  selectFieldsDomain,
+  fieldsState => fieldsState.commitSuccess
+);
+
 export {
   selectFieldsDomain, selectPaginatedFields, selectPaginatedSelectFields,
-  selectFieldTotal, selectField, selectFormField
+  selectFieldTotal, selectField, selectFormField, selectIsLoading, selectIsCommitting,
+  selectCommitSuccess
 };
