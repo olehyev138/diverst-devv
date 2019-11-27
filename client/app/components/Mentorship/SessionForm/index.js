@@ -61,22 +61,33 @@ export function SessionFormInner({ handleSubmit, handleChange, handleBlur, value
               margin='normal'
               label={props.intl.formatMessage(messages.form.start)}
             />
-            <Grid item xs md={5}>
-              <Field
-                component={DiverstDateTimePicker}
-                disabled={props.isCommitting}
-                required
-                keyboardMode
-                /* eslint-disable-next-line dot-notation */
-                minDate={values['start']}
-                minDateMessage='End date cannot be before start date'
-                fullWidth
-                id='end'
-                name='end'
-                margin='normal'
-                label={props.intl.formatMessage(messages.form.end)}
-              />
-            </Grid>
+            <Field
+              component={DiverstDateTimePicker}
+              disabled={props.isCommitting}
+              required
+              keyboardMode
+              /* eslint-disable-next-line dot-notation */
+              minDate={values['start']}
+              minDateMessage='End date cannot be before start date'
+              fullWidth
+              id='end'
+              name='end'
+              margin='normal'
+              label={props.intl.formatMessage(messages.form.end)}
+            />
+            <Field
+              component={TextField}
+              onChange={handleChange}
+              disabled={props.isCommitting}
+              fullWidth
+              margin='normal'
+              rows={4}
+              variant='outlined'
+              id='link'
+              name='link'
+              value={values.link}
+              label={props.intl.formatMessage(messages.form.link)}
+            />
             {/* Interest */}
             <Select
               name='mentoring_interest_ids'
@@ -125,6 +136,7 @@ export function SessionForm(props) {
     resources: { default: [], customKey: 'resource_ids' },
     start: { default: DateTime.local().plus({ hour: 1 }) },
     end: { default: DateTime.local().plus({ hour: 2 }) },
+    link: { default: '' },
     creator_id: { default: props.user.id },
     notes: { default: '' },
     id: { default: undefined }

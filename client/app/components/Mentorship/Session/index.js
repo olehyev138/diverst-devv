@@ -13,7 +13,7 @@ import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { withStyles } from '@material-ui/core/styles';
 import {
   Button, Card, CardActions, CardContent, TextField,
-  Divider, Grid, FormControlLabel, Switch, FormControl, Typography, Paper, Box
+  Divider, Grid, FormControlLabel, Switch, FormControl, Typography, Paper, Box, Link
 } from '@material-ui/core';
 
 import messages from 'containers/Mentorship/Session/messages';
@@ -24,12 +24,16 @@ import classNames from 'classnames';
 
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
+import OpenInNew from '@material-ui/icons/OpenInNew';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { formatDateTimeString } from 'components/../utils/dateTimeHelpers';
 import DiverstShowLoader from 'components/Shared/DiverstShowLoader';
 
 const styles = theme => ({
+  link: {
+    textDecoration: 'none !important',
+  },
   padding: {
     padding: theme.spacing(3, 2),
   },
@@ -98,7 +102,7 @@ export function Session(props) {
               )}
             </Grid>
           </Grid>
-          <Box mb={1}/>
+          <Box mb={1} />
           <Paper className={classes.padding}>
 
             { /* ACCEPT / DECLINE Buttons */ }
@@ -150,6 +154,37 @@ export function Session(props) {
             <Typography variant='overline'>To</Typography>
             <Typography color='textSecondary' className={classes.data}>{formatDateTimeString(session.end, DateTime.DATETIME_FULL)}</Typography>
 
+            { /* Misc Fields */ }
+            {session.link && (
+              <React.Fragment>
+                <Typography className={classes.dataHeaders}>
+                  <DiverstFormattedMessage {...messages.show.link} />
+                </Typography>
+                <Typography color='textSecondary' className={classes.data}>
+                  <Link
+                    href={session.link}
+                    target='_blank'
+                    rel='noopener'
+                    className={classes.link}
+                  >
+                    {session.link}
+                    <OpenInNew color='secondary' fontSize='small' />
+                  </Link>
+                </Typography>
+              </React.Fragment>
+            )}
+
+            {session.medium && (
+              <React.Fragment>
+                <Typography className={classes.dataHeaders}>
+                  <DiverstFormattedMessage {...messages.show.medium} />
+                </Typography>
+                <Typography color='textSecondary' className={classes.data}>
+                  {session.medium}
+                </Typography>
+              </React.Fragment>
+            )}
+
             {session.notes && (
               <React.Fragment>
                 <Typography className={classes.dataHeaders}>
@@ -157,6 +192,17 @@ export function Session(props) {
                 </Typography>
                 <Typography color='textSecondary' className={classes.data}>
                   {session.notes}
+                </Typography>
+              </React.Fragment>
+            )}
+
+            {session.interests && (
+              <React.Fragment>
+                <Typography className={classes.dataHeaders}>
+                  <DiverstFormattedMessage {...messages.show.topics} />
+                </Typography>
+                <Typography color='textSecondary' className={classes.data}>
+                  {session.interests}
                 </Typography>
               </React.Fragment>
             )}

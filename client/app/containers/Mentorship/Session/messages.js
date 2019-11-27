@@ -56,6 +56,9 @@ export default defineMessages({
     end: {
       id: `${scope}.form.input.end`,
     },
+    link: {
+      id: `${scope}.form.input.link`,
+    },
     create: {
       id: `${scope}.form.button.create`,
     },

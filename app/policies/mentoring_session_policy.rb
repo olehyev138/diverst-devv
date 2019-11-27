@@ -8,6 +8,8 @@ class MentoringSessionPolicy < ApplicationPolicy
   end
 
   def update?
+    return true if manage_all?
+
     creator?
   end
 
