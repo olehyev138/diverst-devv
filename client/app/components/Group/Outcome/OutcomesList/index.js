@@ -69,7 +69,7 @@ export function OutcomesList(props, context) {
                   </Typography>
                   <Box mb={1} mt={2}>
                     <Typography color='secondary'>
-                      <FormattedMessage {...messages.pillars.text} />
+                      <DiverstFormattedMessage {...messages.pillars.text} />
                     </Typography>
                     <Divider />
                   </Box>
@@ -83,7 +83,7 @@ export function OutcomesList(props, context) {
                   ))}
                   {(!outcome.pillars || outcome.pillars.length <= 0) && (
                     <Typography>
-                      <FormattedMessage {...messages.empty} />
+                      <DiverstFormattedMessage {...messages.empty} />
                     </Typography>
                   )}
                 </CardContent>

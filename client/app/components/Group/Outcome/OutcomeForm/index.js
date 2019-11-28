@@ -58,7 +58,7 @@ export function OutcomeFormInner({ handleSubmit, handleChange, handleBlur, value
               fullWidth
               id='name'
               name='name'
-              label={<FormattedMessage {...messages.inputs.name} />}
+              label={<DiverstFormattedMessage {...messages.inputs.name} />}
               value={values.name}
             />
           </CardContent>
@@ -128,7 +128,7 @@ export function OutcomeFormInner({ handleSubmit, handleChange, handleBlur, value
                                 id={`pillars_attributes.${i}.name`}
                                 name={`pillars_attributes.${i}.name`}
                                 margin='normal'
-                                label={<FormattedMessage {...messages.pillars.inputs.name} />}
+                                label={<DiverstFormattedMessage {...messages.pillars.inputs.name} />}
                                 value={values.pillars_attributes[i].name}
                               />
                               <Field
@@ -138,7 +138,7 @@ export function OutcomeFormInner({ handleSubmit, handleChange, handleBlur, value
                                 id={`pillars_attributes.${i}.value_proposition`}
                                 name={`pillars_attributes.${i}.value_proposition`}
                                 margin='normal'
-                                label={<FormattedMessage {...messages.pillars.inputs.value} />}
+                                label={<DiverstFormattedMessage {...messages.pillars.inputs.value} />}
                                 value={values.pillars_attributes[i].value_proposition || ''}
                               />
                             </CardContent>
@@ -150,7 +150,7 @@ export function OutcomeFormInner({ handleSubmit, handleChange, handleBlur, value
                   })}
                   {props.outcome && (!values.pillars_attributes || values.pillars_attributes.length <= 0) && (
                     <Typography color='textSecondary'>
-                      <FormattedMessage {...messages.empty} />
+                      <DiverstFormattedMessage {...messages.empty} />
                     </Typography>
                   )}
                 </React.Fragment>
@@ -169,7 +169,7 @@ export function OutcomeFormInner({ handleSubmit, handleChange, handleBlur, value
               to={props.links.outcomesIndex}
               component={WrappedNavLink}
             >
-              <FormattedMessage {...messages.cancel} />
+              <DiverstFormattedMessage {...messages.cancel} />
             </Button>
           </CardActions>
         </Form>
