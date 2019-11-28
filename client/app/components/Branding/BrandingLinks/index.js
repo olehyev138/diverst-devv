@@ -37,7 +37,7 @@ export function BrandingLinks(props) {
           />
           <Tab
             component={WrappedNavLink}
-            to={ROUTES.admin.system.branding.sponsors.path()}
+            to={ROUTES.admin.system.branding.sponsors.index.path()}
             label='Sponsors'
           />
         </ResponsiveTabs>

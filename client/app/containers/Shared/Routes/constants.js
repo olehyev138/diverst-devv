@@ -513,7 +513,15 @@ export const ROUTES = {
           path: () => '/admin/system/branding/home'
         },
         sponsors: {
-          path: () => '/admin/system/branding/sponsors'
+          index: {
+            path: () => '/admin/system/branding/sponsors'
+          },
+          new: {
+            path: () => '/admin/system/branding/sponsors/new'
+          },
+          edit: {
+            path: (sponsorId = ':role_id') => `/admin/system/branding/sponsors/${sponsorId}/edit`,
+          },
         }
       }
     }

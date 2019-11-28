@@ -57,6 +57,7 @@ import EnterpriseConfigurationPage from 'containers/GlobalSettings/EnterpriseCon
 /* Admin - System - Branding */
 import BrandingThemePage from 'containers/Branding/BrandingThemePage/Loadable';
 import BrandingHomePage from 'containers/Branding/BrandingHomePage/Loadable';
+import SponsorListPage from 'containers/Branding/Sponsor/SponsorListPage/Loadable';
 
 /* Admin - System - User */
 import UsersPage from 'containers/User/UsersPage/Loadable';
@@ -111,6 +112,7 @@ import CampaignShowPage from 'containers/Innovate/Campaign/CampaignShowPage/Load
 import CampaignQuestionListPage from 'containers/Innovate/Campaign/CampaignQuestion/CampaignQuestionListPage/Loadable';
 import CampaignQuestionCreatePage from 'containers/Innovate/Campaign/CampaignQuestion/CampaignQuestionCreatePage/Loadable';
 import CampaignQuestionEditPage from 'containers/Innovate/Campaign/CampaignQuestion/CampaignQuestionEditPage/Loadable';
+
 /* Global */
 import NotFoundPage from 'containers/Shared/NotFoundPage/Loadable';
 import PlaceholderPage from 'components/Shared/PlaceholderPage/Loadable';
@@ -129,5 +131,5 @@ export {
   CampaignQuestionListPage, CampaignQuestionCreatePage, CampaignQuestionEditPage,
   EnterpriseConfigurationPage, MentorshipProfilePage, MentorshipEditProfilePage, MentorshipLayout, MentorsPage,
   MentorRequestsPage, SystemUserLayout, UserRolesListPage, UserRoleCreatePage, UserRoleEditPage, BrandingLayout,
-  BrandingThemePage, BrandingHomePage
+  BrandingThemePage, BrandingHomePage, SponsorListPage
 };

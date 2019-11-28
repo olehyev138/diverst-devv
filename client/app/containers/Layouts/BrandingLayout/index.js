@@ -20,7 +20,7 @@ const styles = theme => ({
 const BrandingPages = Object.freeze({
   theme: 0,
   home: 1,
-  sponsors: 1
+  sponsors: 2
 });
 
 const BrandingLayout = ({ component: Component, classes, ...rest }) => {
@@ -31,6 +31,8 @@ const BrandingLayout = ({ component: Component, classes, ...rest }) => {
     currentPage = 'theme';
   else if (matchPath(location.pathname, { path: ROUTES.admin.system.branding.home.path() }))
     currentPage = 'home';
+  else if (matchPath(location.pathname, { path: ROUTES.admin.system.branding.sponsors.index.path() }))
+    currentPage = 'sponsors';
 
   const [tab, setTab] = useState(BrandingPages[currentPage]);
 
