@@ -3,7 +3,7 @@ import { compose } from 'redux';
 import PropTypes from 'prop-types';
 
 import {
-  Button, Box
+  Button, Box, Card, CardContent, Grid
 } from '@material-ui/core/index';
 import { withStyles } from '@material-ui/core/styles';
 import AnswerListItem from 'components/Innovate/Campaign/CampaignQuestion/Answer/AnswerListItem';

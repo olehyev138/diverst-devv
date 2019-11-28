@@ -35,17 +35,21 @@ export function CampaignQuestionCloseInner({ handleSubmit, handleChange, handleB
           <CardContent>
             <h2>Mark this question as solved</h2>
             <h4>Mark this question as solved by explaining what the outcome of the discussion has been. This will block further communication on this question.</h4>
-            <Field
-              component={TextField}
-              onChange={handleChange}
-              fullWidth
-              id='conclusion'
-              name='conclusion'
-              margin='normal'
-              disabled={props.isCommitting}
-              placeholder='We have decided to do...'
-              value={values.conclusion}
-            />
+            <Card>
+              <CardContent>
+                <Field
+                  component={TextField}
+                  onChange={handleChange}
+                  fullWidth
+                  id='conclusion'
+                  name='conclusion'
+                  margin='normal'
+                  disabled={props.isCommitting}
+                  placeholder='We have decided to do...'
+                  value={values.conclusion}
+                />
+              </CardContent>
+            </Card>
           </CardContent>
           <Divider />
 

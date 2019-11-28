@@ -1,15 +1,23 @@
 import React, { memo } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
+import { Grid, Card, CardContent } from '@material-ui/core';
 
 export function QuestionSummary(props) {
   return (
     props.question && (
       <React.Fragment>
-        <h2>
-          Question:
-          {props.question.title}
-        </h2>
+        <Card>
+          <Grid item xs={8}>
+            <CardContent>
+              <h2>
+                Question:
+                {' '}
+                {props.question.title}
+              </h2>
+            </CardContent>
+          </Grid>
+        </Card>
       </React.Fragment>
     )
   );
