@@ -499,6 +499,11 @@ export const ROUTES = {
           index: {
             path: () => '/admin/system/settings/configuration'
           }
+        },
+        ssoSettings: {
+          edit: {
+            path: () => '/admin/system/settings/sso'
+          },
         }
       }
     }
