@@ -124,7 +124,7 @@ export {
   UserNewsLinkPage, UserEventsPage, FoldersPage, FolderCreatePage, FolderEditPage, FolderPage, ResourceCreatePage,
   ResourceEditPage, UserProfilePage, InnovateLayout, CampaignListPage, CampaignCreatePage, CampaignEditPage, CampaignShowPage,
   CampaignQuestionListPage, CampaignQuestionCreatePage, CampaignQuestionEditPage, CampaignQuestionShowPage,
-  EnterpriseConfigurationPage, SSOSettingsPage, MentorshipEditProfilePage, MentorshipLayout, MentorsPage,
+  EnterpriseConfigurationPage, SSOSettingsPage, MentorshipProfilePage, MentorshipLayout, MentorsPage, MentorshipEditProfilePage,
   MentorRequestsPage, SystemUserLayout, UserRolesListPage, UserRoleCreatePage, UserRoleEditPage
 
 };
