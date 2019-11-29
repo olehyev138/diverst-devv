@@ -10,7 +10,8 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import {
   GET_NEWS_ITEMS_BEGIN, GET_NEWS_ITEM_BEGIN,
   CREATE_GROUP_MESSAGE_BEGIN, UPDATE_GROUP_MESSAGE_BEGIN,
-  CREATE_GROUP_MESSAGE_COMMENT_BEGIN
+  CREATE_GROUP_MESSAGE_COMMENT_BEGIN, CREATE_NEWSLINK_BEGIN, UPDATE_NEWSLINK_BEGIN,
+  CREATE_NEWSLINK_COMMENT_BEGIN
 } from 'containers/News/constants';
 
 import {
@@ -18,7 +19,9 @@ import {
   getNewsItemBegin, getNewsItemSuccess, getNewsItemError,
   createGroupMessageSuccess, createGroupMessageError,
   createGroupMessageCommentError, updateGroupMessageSuccess,
-  createGroupMessageCommentSuccess
+  createGroupMessageCommentSuccess,
+  createNewslinkSuccess, createNewslinkError, createNewslinkCommentError,
+  updateNewslinkSuccess, createNewslinkCommentSuccess
 } from 'containers/News/actions';
 
 
@@ -95,10 +98,44 @@ export function* createGroupMessageComment(action) {
   }
 }
 
+export function* createNewslink(action) {
+  try {
+    const payload = { news_link : action.payload };
+    const response = yield call(api.newsFeedLinks.create.bind(api.newsFeedLinks), payload);
+
+    yield put(createGroupMessageSuccess());
+    yield put(push(ROUTES.group.news.index.path(action.payload.id)));
+    yield put(showSnackbar({ message: 'News link created', options: { variant: 'success' } }));
+  } catch (err) {
+    yield put(createNewslinkError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to create news link ', options: { variant: 'warning' } }));
+  }
+}
+
+export function* updateNewslink(action) {
+  try {
+    const payload = { news_link: action.payload };
+    const response = yield call(api.newsFeedLinks.update.bind(api.newsFeedLinks), payload.news_link.id, payload);
+
+    yield put(updateGroupMessageSuccess());
+    yield put(push(ROUTES.group.news.index.path(action.payload.id)));
+    yield put(showSnackbar({ message: 'News link updated', options: { variant: 'success' } }));
+  } catch (err) {
+    yield put(createGroupMessageError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to update news link', options: { variant: 'warning' } }));
+  }
+}
+
 export default function* newsSaga() {
   yield takeLatest(GET_NEWS_ITEMS_BEGIN, getNewsItems);
   yield takeLatest(GET_NEWS_ITEM_BEGIN, getNewsItem);
   yield takeLatest(CREATE_GROUP_MESSAGE_BEGIN, createGroupMessage);
   yield takeLatest(UPDATE_GROUP_MESSAGE_BEGIN, updateGroupMessage);
   yield takeLatest(CREATE_GROUP_MESSAGE_COMMENT_BEGIN, createGroupMessageComment);
+  yield takeLatest(CREATE_NEWSLINK_BEGIN, createNewslink);
+  yield takeLatest(UPDATE_NEWSLINK_BEGIN, updateNewslink);
 }
