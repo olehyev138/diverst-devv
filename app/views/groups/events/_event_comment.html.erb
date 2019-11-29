@@ -5,7 +5,7 @@
       <h3>You said: </h3>
       <% else %>
       <h3><%= comment.user.name %>
-        <% if comment.user.erg_leader? %>
+        <% if comment.user.is_group_leader_of?(group) %>
           (Group Leader)
         <% end %> said:
       </h3>
