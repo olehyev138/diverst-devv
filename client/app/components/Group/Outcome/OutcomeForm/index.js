@@ -20,9 +20,12 @@ import AddIcon from '@material-ui/icons/AddCircle';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import messages from 'containers/Group/Outcome/messages';
-import { buildValues } from 'utils/formHelpers';
+import { buildValues, isAttributesArrayEmpty } from 'utils/formHelpers';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
+
+import { CONTENT_SCROLL_CLASS_NAME } from 'components/Shared/Scrollbar';
+import animateScrollTo from 'animated-scroll-to';
 
 const styles = theme => ({
   addItemButtonIcon: {
@@ -45,8 +48,18 @@ const INITIAL_PILLAR = {
   value_proposition: '',
 };
 
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable object-curly-newline */
 export function OutcomeFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, classes, ...props }) {
+  const pillarsAttributes = values.pillars_attributes;
+
+  useEffect(() => {
+    if (!isAttributesArrayEmpty(pillarsAttributes) && pillarsAttributes[pillarsAttributes.length - 1]._initialized === true)
+      animateScrollTo(document.querySelector('.last-field-array-item'), {
+        elementToScroll: document.querySelector(`.${CONTENT_SCROLL_CLASS_NAME}`)
+      });
+  });
+
   return (
     <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.outcome}>
       <Card>
@@ -79,25 +92,28 @@ export function OutcomeFormInner({ handleSubmit, handleChange, handleBlur, value
                     <Grid item>
                       <IconButton
                         color='primary'
-                        onClick={() => arrayHelpers.push({
-                          ...INITIAL_PILLAR,
-                          localKey: `new_${Date.now().toString()}_${(Math.random() + 1).toString(36).substring(3)}`
-                        })}
+                        onClick={() => {
+                          arrayHelpers.push({
+                            ...INITIAL_PILLAR,
+                            _localKey: `new_${pillarsAttributes.length}`,
+                            _initialized: false,
+                          });
+                        }}
                       >
                         <AddIcon className={classes.addItemButtonIcon} />
                       </IconButton>
                     </Grid>
                   </Grid>
                   <Box mb={1} />
-                  {props.outcome && values.pillars_attributes && values.pillars_attributes.length > 0 && values.pillars_attributes.map((pillar, i) => {
+                  {pillarsAttributes && pillarsAttributes.length > 0 && pillarsAttributes.map((pillar, i) => {
                     /* eslint-disable-next-line react/no-array-index-key  */
                     if (Object.hasOwnProperty.call(pillar, '_destroy')) return (<React.Fragment key={pillar.id} />);
 
                     return (
-                      <div key={pillar.id || pillar.localKey}>
+                      <div key={pillar.id || pillar._localKey}>
                         <Collapse
-                          in={!pillar.hidden}
-                          appear={pillar.hidden || !pillar.initialized}
+                          in={!pillar._hidden}
+                          appear={pillar._hidden || !pillar._initialized}
                           onExited={() => {
                             if (pillar.id)
                               setFieldValue(`pillars_attributes.${i}._destroy`, '1');
@@ -105,8 +121,8 @@ export function OutcomeFormInner({ handleSubmit, handleChange, handleBlur, value
                               arrayHelpers.remove(i);
                           }}
                           onEntered={(_, isAppearing) => {
-                            if (isAppearing)
-                              setFieldValue(`pillars_attributes.${i}.initialized`, true);
+                            if (isAppearing && pillar._initialized === false)
+                              setFieldValue(`pillars_attributes.${i}._initialized`, true);
                           }}
                         >
                           <Paper
@@ -116,7 +132,7 @@ export function OutcomeFormInner({ handleSubmit, handleChange, handleBlur, value
                           >
                             <IconButton
                               className={classes.itemRemoveButton}
-                              onClick={() => setFieldValue(`pillars_attributes.${i}.hidden`, true)}
+                              onClick={() => setFieldValue(`pillars_attributes.${i}._hidden`, true)}
                             >
                               <DeleteIcon />
                             </IconButton>
@@ -129,7 +145,7 @@ export function OutcomeFormInner({ handleSubmit, handleChange, handleBlur, value
                                 name={`pillars_attributes.${i}.name`}
                                 margin='normal'
                                 label={<DiverstFormattedMessage {...messages.pillars.inputs.name} />}
-                                value={values.pillars_attributes[i].name}
+                                value={pillarsAttributes[i].name}
                               />
                               <Field
                                 component={TextField}
@@ -139,19 +155,24 @@ export function OutcomeFormInner({ handleSubmit, handleChange, handleBlur, value
                                 name={`pillars_attributes.${i}.value_proposition`}
                                 margin='normal'
                                 label={<DiverstFormattedMessage {...messages.pillars.inputs.value} />}
-                                value={values.pillars_attributes[i].value_proposition || ''}
+                                value={pillarsAttributes[i].value_proposition || ''}
                               />
                             </CardContent>
                           </Paper>
-                          <Box mb={3} />
+                          <Box
+                            mb={3}
+                            className={i === pillarsAttributes.length - 1 ? 'last-field-array-item' : undefined}
+                          />
                         </Collapse>
                       </div>
                     );
                   })}
-                  {props.outcome && (!values.pillars_attributes || values.pillars_attributes.length <= 0) && (
-                    <Typography color='textSecondary'>
-                      <DiverstFormattedMessage {...messages.empty} />
-                    </Typography>
+                  {isAttributesArrayEmpty(pillarsAttributes) && (
+                    <Collapse in appear>
+                      <Typography color='textSecondary'>
+                        <DiverstFormattedMessage {...messages.empty} />
+                      </Typography>
+                    </Collapse>
                   )}
                 </React.Fragment>
               )}
