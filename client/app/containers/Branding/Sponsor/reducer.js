@@ -16,6 +16,7 @@ export const initialState = {
   isCommitting: false,
   sponsorList: [],
   sponsorTotal: null,
+  currentSponsor: null,
   isFetchingSponsors: true
 };
 

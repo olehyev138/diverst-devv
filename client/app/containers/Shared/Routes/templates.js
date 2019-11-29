@@ -58,6 +58,8 @@ import EnterpriseConfigurationPage from 'containers/GlobalSettings/EnterpriseCon
 import BrandingThemePage from 'containers/Branding/BrandingThemePage/Loadable';
 import BrandingHomePage from 'containers/Branding/BrandingHomePage/Loadable';
 import SponsorListPage from 'containers/Branding/Sponsor/SponsorListPage/Loadable';
+import SponsorCreatePage from 'containers/Branding/Sponsor/SponsorCreatePage/Loadable';
+import SponsorEditPage from 'containers/Branding/Sponsor/SponsorEditPage/Loadable';
 
 /* Admin - System - User */
 import UsersPage from 'containers/User/UsersPage/Loadable';
@@ -131,5 +133,5 @@ export {
   CampaignQuestionListPage, CampaignQuestionCreatePage, CampaignQuestionEditPage,
   EnterpriseConfigurationPage, MentorshipProfilePage, MentorshipEditProfilePage, MentorshipLayout, MentorsPage,
   MentorRequestsPage, SystemUserLayout, UserRolesListPage, UserRoleCreatePage, UserRoleEditPage, BrandingLayout,
-  BrandingThemePage, BrandingHomePage, SponsorListPage
+  BrandingThemePage, BrandingHomePage, SponsorListPage, SponsorCreatePage, SponsorEditPage
 };

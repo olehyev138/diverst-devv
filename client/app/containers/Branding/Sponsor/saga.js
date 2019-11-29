@@ -50,7 +50,7 @@ export function* createSponsors(action) {
     const response = yield call(api.sponsors.create.bind(api.sponsors), payload);
 
     yield put(createSponsorSuccess());
-    yield put(push(ROUTES.admin.innovate.sponsors.index.path()));
+    yield put(push(ROUTES.admin.system.branding.sponsors.index.path()));
     yield put(showSnackbar({ message: 'Sponsor created', options: { variant: 'success' } }));
   } catch (err) {
     yield put(createSponsorError(err));
@@ -64,7 +64,8 @@ export function* deleteSponsors(action) {
   try {
     yield call(api.sponsors.destroy.bind(api.sponsors), action.payload.id);
     yield put(deleteSponsorSuccess());
-    yield put(push(ROUTES.admin.innovate.sponsors.index.path(action.payload.id)));
+
+    yield put(push(ROUTES.admin.system.branding.sponsors.index.path()));
     yield put(showSnackbar({ message: 'Sponsor deleted', options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteSponsorError(err));
@@ -79,14 +80,16 @@ export function* updateSponsor(action) {
     const payload = { sponsor: action.payload };
     const response = yield call(api.sponsors.update.bind(api.sponsors), payload.sponsor.id, payload);
 
+    yield put(push(ROUTES.admin.system.branding.sponsors.index.path()));
     yield put(updateSponsorSuccess());
-    yield put(push(ROUTES.admin.innovate.sponsors.index.path()));
     yield put(showSnackbar({
       message: 'Sponsor updated',
       options: { variant: 'success' }
     }));
   } catch (err) {
     yield put(updateSponsorError(err));
+
+    console.log(err);
 
     // TODO: intl message
     yield put(showSnackbar({

@@ -520,7 +520,7 @@ export const ROUTES = {
             path: () => '/admin/system/branding/sponsors/new'
           },
           edit: {
-            path: (sponsorId = ':role_id') => `/admin/system/branding/sponsors/${sponsorId}/edit`,
+            path: (sponsorId = ':sponsor_id') => `/admin/system/branding/sponsors/${sponsorId}/edit`,
           },
         }
       }
