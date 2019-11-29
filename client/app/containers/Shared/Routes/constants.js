@@ -219,6 +219,15 @@ export const ROUTES = {
             titleMessage: messages.groups.news.messages.edit
           }
         },
+      },
+      news_links: {
+        new: {
+          path:
+            (groupId = ':group_id') => `/groups/${groupId}/news_links/new`,
+        },
+        edit: {
+          path: (groupId = ':group_id', itemId = ':item_id') => `/groups/${groupId}/news_links/${itemId}/edit`,
+        },
       }
     },
     outcomes: {

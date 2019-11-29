@@ -35,7 +35,7 @@ export function NewsLinkCreatePage(props) {
 
   return (
     <NewsLinkForm
-      groupNewsAction={props.createNewsLinkBegin}
+      newsLinkAction={props.createNewsLinkBegin}
       buttonText='Create'
       currentUser={currentUser}
       currentGroup={currentGroup}

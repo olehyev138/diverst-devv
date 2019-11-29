@@ -81,6 +81,8 @@ import EventEditPage from 'containers/Event/EventEditPage/Loadable';
 import GroupMessagePage from 'containers/News/GroupMessage/GroupMessagePage/Loadable';
 import GroupMessageCreatePage from 'containers/News/GroupMessage/GroupMessageCreatePage/Loadable';
 import GroupMessageEditPage from 'containers/News/GroupMessage/GroupMessageEditPage/Loadable';
+import NewsLinkCreatePage from 'containers/News/NewsLink/NewsLinkCreatePage';
+import NewsLinkEditPage from 'containers/News/NewsLink/NewsLinkEditPage';
 
 /* Group - Outcomes */
 import OutcomeCreatePage from 'containers/Group/Outcome/OutcomeCreatePage/Loadable';
@@ -189,5 +191,7 @@ export {
   SystemUserLayout,
   UserRolesListPage,
   UserRoleCreatePage,
-  UserRoleEditPage
+  UserRoleEditPage,
+  NewsLinkEditPage,
+  NewsLinkCreatePage
 };

@@ -3,17 +3,17 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import dig from 'object-dig';
 
-import DiverstFormattedMessage from 'Shared/DiverstFormattedMessage';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { Field, Formik, Form } from 'formik';
 import {
   Button, Card, CardActions, CardContent, TextField, Divider
 } from '@material-ui/core';
 
-import WrappedNavLink from 'Shared/WrappedNavLink';
+import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import messages from 'containers/News/messages';
 import { buildValues } from 'utils/formHelpers';
-import DiverstSubmit from 'Shared/DiverstSubmit';
-import DiverstFormLoader from 'Shared/DiverstFormLoader';
+import DiverstSubmit from 'components/Shared/DiverstSubmit';
+import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 
 /* eslint-disable object-curly-newline */
 export function NewsLinkFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
@@ -70,7 +70,7 @@ export function NewsLinkFormInner({ handleSubmit, handleChange, handleBlur, valu
 }
 
 export function NewsLinkForm(props) {
-  const newsLink = dig(props, 'newsItem', 'group_news');
+  const newsLink = dig(props, 'newsItem', 'news_link');
 
   const initialValues = buildValues(newsLink, {
     id: { default: '' },
