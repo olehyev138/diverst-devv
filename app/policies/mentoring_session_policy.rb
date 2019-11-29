@@ -1,6 +1,20 @@
 class MentoringSessionPolicy < ApplicationPolicy
-  def show?
+  def index?
     true
+  end
+
+  def show?
+    return true if manage_all?
+
+    creator? || invited_user?
+  end
+
+  def create?
+    true
+  end
+
+  def new?
+    create?
   end
 
   def edit?
@@ -35,7 +49,23 @@ class MentoringSessionPolicy < ApplicationPolicy
     @record.mentorship_sessions.find_by(user_id: @user.id).accepted?
   end
 
+  def invited_user?
+    @record.mentorship_sessions.exists(user_id: @user.id)
+  end
+
   def creator?
     @user.id == @record.creator_id
+  end
+
+  class Scope < Scope
+    def index?
+      MentoringSessionPolicy.new(@user, nil).index?
+    end
+
+    def resolve
+      scope.where(
+          enterprise_id: @user.enterprise.id
+        )
+    end
   end
 end

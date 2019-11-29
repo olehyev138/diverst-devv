@@ -111,7 +111,7 @@ export function MentorshipUserFormInner({ handleSubmit, handleChange, handleBlur
                           value={values.accepting_mentor_requests}
                         />
                       )}
-                      label={<DiverstFormattedMessage {...messages.form.acceptMentor} />}
+                      label={<DiverstFormattedMessage {...messages.form.acceptMentorRequest} />}
                     />
                   </FormControl>
                 </Grid>
@@ -136,7 +136,7 @@ export function MentorshipUserFormInner({ handleSubmit, handleChange, handleBlur
                           value={values.accepting_mentee_requests}
                         />
                       )}
-                      label={<DiverstFormattedMessage {...messages.form.acceptMentee} />}
+                      label={<DiverstFormattedMessage {...messages.form.acceptMenteeRequest} />}
                     />
                   </FormControl>
                 </Grid>
@@ -234,9 +234,9 @@ export function MentorshipUserForm(props) {
         const payload = mapFields(values, ['mentoring_interest_ids', 'mentoring_type_ids']);
         props.userAction(payload);
       }}
-
-      render={formikProps => <MentorshipUserFormInner {...props} {...formikProps} />}
-    />
+    >
+      {formikProps => <MentorshipUserFormInner {...props} {...formikProps} />}
+    </Formik>
   );
 }
 
