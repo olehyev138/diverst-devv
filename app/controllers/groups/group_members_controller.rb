@@ -169,6 +169,7 @@ class Groups::GroupMembersController < ApplicationController
       @group_member.accepted_member = @group.pending_users.disabled?
 
       if @group_member.save
+        WelcomeNotificationJob.perform_later(@group.id, current_user.id)
         respond_to do |format|
           format.html { redirect_to :back }
           format.js
