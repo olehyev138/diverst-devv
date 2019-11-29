@@ -63,7 +63,7 @@ class GroupEventsPolicy < GroupBasePolicy
     view_upcoming_events?
   end
 
-  def ability_to_join_events?
+  def able_to_join_events?
     # super admins can join group
     return true if user.policy_group.manage_all?
 
