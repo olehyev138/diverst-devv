@@ -104,9 +104,9 @@ export function CustomGraphForm(props) {
       onSubmit={(values, actions) => {
         props.customGraphAction(mapFields(values, ['field_id', 'aggregation_id']));
       }}
-
-      render={formikProps => <CustomGraphFormInner {...formikProps} {...props} />}
-    />
+    >
+      {formikProps => <CustomGraphFormInner {...formikProps} {...props} />}
+    </Formik>
   );
 }
 

@@ -82,9 +82,9 @@ export function GroupMessageCommentForm(props) {
 
         actions.resetForm();
       }}
-
-      render={formikProps => <GroupMessageCommentFormInner {...props} {...formikProps} />}
-    />
+    >
+      {formikProps => <GroupMessageCommentFormInner {...props} {...formikProps} />}
+    </Formik>
   );
 }
 

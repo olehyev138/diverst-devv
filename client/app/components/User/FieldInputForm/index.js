@@ -95,9 +95,9 @@ export function FieldInputForm(props) {
           field_data: serializeFieldData(values.fieldData)
         });
       }}
-
-      render={formikProps => <FieldInputFormInner formikProps={formikProps} {...props} />}
-    />
+    >
+      {formikProps => <FieldInputFormInner formikProps={formikProps} {...props} />}
+    </Formik>
   );
 }
 

@@ -199,9 +199,9 @@ export function GroupSettings(props) {
       onSubmit={(values, actions) => {
         props.groupAction(mapFields(values, ['child_ids', 'parent_id']));
       }}
-
-      render={formikProps => <GroupSettingsInner {...props} {...formikProps} />}
-    />
+    >
+      {formikProps => <GroupSettingsInner {...props} {...formikProps} />}
+    </Formik>
   );
 }
 

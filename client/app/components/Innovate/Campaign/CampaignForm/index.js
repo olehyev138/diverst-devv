@@ -169,9 +169,9 @@ export function CampaignForm(props) {
       onSubmit={(values, actions) => {
         props.campaignAction(mapFields(values, ['group_ids']));
       }}
-
-      render={formikProps => <CampaignFormInner {...props} {...formikProps} />}
-    />
+    >
+      {formikProps => <CampaignFormInner {...props} {...formikProps} />}
+    </Formik>
   );
 }
 

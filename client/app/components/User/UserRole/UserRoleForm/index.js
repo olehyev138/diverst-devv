@@ -112,9 +112,9 @@ export function UserRoleForm(props) {
       onSubmit={(values, actions) => {
         props.userRoleAction(mapFields(values, ['role_type']));
       }}
-
-      render={formikProps => <UserRoleFormInner {...props} {...formikProps} />}
-    />
+    >
+      {formikProps => <UserRoleFormInner {...props} {...formikProps} />}
+    </Formik>
   );
 }
 

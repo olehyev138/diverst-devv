@@ -192,9 +192,9 @@ export function OutcomeForm(props) {
       onSubmit={(values, _) => {
         props.outcomeAction(values);
       }}
-
-      render={formikProps => <OutcomeFormInner {...props} {...formikProps} />}
-    />
+    >
+      {formikProps => <OutcomeFormInner {...props} {...formikProps} />}
+    </Formik>
   );
 }
 

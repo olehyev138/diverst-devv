@@ -349,9 +349,9 @@ export function EnterpriseConfiguration(props) {
       onSubmit={(values, actions) => {
         props.enterpriseAction(mapFields(values, ['time_zone']));
       }}
-
-      render={formikProps => <EnterpriseConfigurationInner {...props} {...formikProps} />}
-    />
+    >
+      {formikProps => <EnterpriseConfigurationInner {...props} {...formikProps} />}
+    </Formik>
   );
 }
 

@@ -234,9 +234,9 @@ export function MentorshipUserForm(props) {
         const payload = mapFields(values, ['mentoring_interest_ids', 'mentoring_type_ids']);
         props.userAction(payload);
       }}
-
-      render={formikProps => <MentorshipUserFormInner {...props} {...formikProps} />}
-    />
+    >
+      {formikProps => <MentorshipUserFormInner {...props} {...formikProps} />}
+    </Formik>
   );
 }
 

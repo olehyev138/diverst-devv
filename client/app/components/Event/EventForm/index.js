@@ -143,9 +143,9 @@ export function EventForm(props) {
       onSubmit={(values, actions) => {
         props.eventAction(values);
       }}
-
-      render={formikProps => <EventFormInner {...props} {...formikProps} />}
-    />
+    >
+      {formikProps => <EventFormInner {...props} {...formikProps} />}
+    </Formik>
   );
 }
 

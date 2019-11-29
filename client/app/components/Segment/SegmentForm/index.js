@@ -90,8 +90,9 @@ export function SegmentForm(props) {
       onSubmit={(values, actions) => {
         props.segmentAction(serializeSegment(values));
       }}
-      render={formikProps => <SegmentFormInner {...props} {...formikProps} />}
-    />
+    >
+      {formikProps => <SegmentFormInner {...props} {...formikProps} />}
+    </Formik>
   );
 }
 
