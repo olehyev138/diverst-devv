@@ -70,6 +70,9 @@ export default defineMessages({
     dateAndTime: {
       id: `${scope}.show.date_and_time`,
     },
+    leadedBy: {
+      id: `${scope}.show.leadedBy`,
+    },
     accept: {
       id: `${scope}.show.accept`,
     },
@@ -112,5 +115,16 @@ export default defineMessages({
     title: {
       id: `${scope}.show.title`,
     },
+    confirm: {
+      accept: {
+        id: `${scope}.show.confirm.accept`,
+      },
+      decline: {
+        id: `${scope}.show.confirm.decline`,
+      },
+      delete: {
+        id: `${scope}.show.confirm.delete`,
+      }
+    }
   }
 });

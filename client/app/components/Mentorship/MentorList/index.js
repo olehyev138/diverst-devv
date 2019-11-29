@@ -31,8 +31,8 @@ import ResponsiveTabs from 'components/Shared/ResponsiveTabs';
 import Profile from 'components/Mentorship/MentorshipUser';
 import messages from 'containers/Mentorship/Mentoring/messages';
 import appMessages from 'containers/Shared/App/messages';
-import dig from "object-dig";
-import CheckIcon from "@material-ui/core/SvgIcon/SvgIcon";
+import dig from 'object-dig';
+import { DiverstFormattedMessage } from 'components/Shared/DiverstFormattedMessage';
 
 
 const styles = theme => ({
@@ -50,8 +50,6 @@ const styles = theme => ({
 export function MentorList(props, context) {
   const { type, intl } = props;
   const singleType = type.slice(-1);
-
-  console.log(props);
 
   const actions = [];
   if (dig(props, 'user', 'id') === props.globalUser.id)
@@ -210,8 +208,8 @@ export function MentorList(props, context) {
           <DialogContent>
             <DialogContentText>
               {type === 'mentors'
-                ? 'Why do you want this person to mentor you?'
-                : 'Why do you want to mentor this person' }
+                ? (<DiverstFormattedMessage {...messages.actions.mentorWhy} />)
+                : (<DiverstFormattedMessage {...messages.actions.menteeWhy} />) }
             </DialogContentText>
 
             <TextField
