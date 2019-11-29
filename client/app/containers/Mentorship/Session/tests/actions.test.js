@@ -8,6 +8,9 @@ import {
   GET_PARTICIPATING_SESSIONS_BEGIN,
   GET_PARTICIPATING_SESSIONS_SUCCESS,
   GET_PARTICIPATING_SESSIONS_ERROR,
+  GET_PARTICIPATING_USERS_BEGIN,
+  GET_PARTICIPATING_USERS_SUCCESS,
+  GET_PARTICIPATING_USERS_ERROR,
   CREATE_SESSION_BEGIN,
   CREATE_SESSION_SUCCESS,
   CREATE_SESSION_ERROR,
@@ -17,7 +20,14 @@ import {
   DELETE_SESSION_BEGIN,
   DELETE_SESSION_SUCCESS,
   DELETE_SESSION_ERROR,
+  ACCEPT_INVITATION_BEGIN,
+  ACCEPT_INVITATION_SUCCESS,
+  ACCEPT_INVITATION_ERROR,
+  DECLINE_INVITATION_BEGIN,
+  DECLINE_INVITATION_SUCCESS,
+  DECLINE_INVITATION_ERROR,
   SESSIONS_UNMOUNT,
+  SESSION_USERS_UNMOUNT,
 } from '../constants';
 
 import {
@@ -30,6 +40,9 @@ import {
   getParticipatingSessionsBegin,
   getParticipatingSessionsSuccess,
   getParticipatingSessionsError,
+  getParticipatingUsersBegin,
+  getParticipatingUsersSuccess,
+  getParticipatingUsersError,
   createSessionBegin,
   createSessionSuccess,
   createSessionError,
@@ -39,7 +52,14 @@ import {
   deleteSessionBegin,
   deleteSessionSuccess,
   deleteSessionError,
+  acceptInvitationBegin,
+  acceptInvitationSuccess,
+  acceptInvitationError,
+  declineInvitationBegin,
+  declineInvitationSuccess,
+  declineInvitationError,
   sessionsUnmount,
+  sessionUsersUnmount,
 } from '../actions';
 
 describe('session actions', () => {
@@ -83,10 +103,10 @@ describe('session actions', () => {
       it('has a type of GET_HOSTING_SESSIONS_BEGIN and sets a given payload', () => {
         const expected = {
           type: GET_HOSTING_SESSIONS_BEGIN,
-          payload: { value: 260 }
+          payload: { value: 634 }
         };
 
-        expect(getHostingSessionsBegin({ value: 260 })).toEqual(expected);
+        expect(getHostingSessionsBegin({ value: 634 })).toEqual(expected);
       });
     });
 
@@ -94,10 +114,10 @@ describe('session actions', () => {
       it('has a type of GET_HOSTING_SESSIONS_SUCCESS and sets a given payload', () => {
         const expected = {
           type: GET_HOSTING_SESSIONS_SUCCESS,
-          payload: { value: 908 }
+          payload: { value: 52 }
         };
 
-        expect(getHostingSessionsSuccess({ value: 908 })).toEqual(expected);
+        expect(getHostingSessionsSuccess({ value: 52 })).toEqual(expected);
       });
     });
 
@@ -105,10 +125,10 @@ describe('session actions', () => {
       it('has a type of GET_HOSTING_SESSIONS_ERROR and sets a given error', () => {
         const expected = {
           type: GET_HOSTING_SESSIONS_ERROR,
-          error: { value: 423 }
+          error: { value: 495 }
         };
 
-        expect(getHostingSessionsError({ value: 423 })).toEqual(expected);
+        expect(getHostingSessionsError({ value: 495 })).toEqual(expected);
       });
     });
   });
@@ -144,6 +164,41 @@ describe('session actions', () => {
         };
 
         expect(getParticipatingSessionsError({ value: 802 })).toEqual(expected);
+      });
+    });
+  });
+
+  describe('participating user list actions', () => {
+    describe('getParticipatingUsersBegin', () => {
+      it('has a type of GET_PARTICIPATING_USERS_BEGIN and sets a given payload', () => {
+        const expected = {
+          type: GET_PARTICIPATING_USERS_BEGIN,
+          payload: { value: 467 }
+        };
+
+        expect(getParticipatingUsersBegin({ value: 467 })).toEqual(expected);
+      });
+    });
+
+    describe('getParticipatingUsersSuccess', () => {
+      it('has a type of GET_PARTICIPATING_USERS_SUCCESS and sets a given payload', () => {
+        const expected = {
+          type: GET_PARTICIPATING_USERS_SUCCESS,
+          payload: { value: 377 }
+        };
+
+        expect(getParticipatingUsersSuccess({ value: 377 })).toEqual(expected);
+      });
+    });
+
+    describe('getParticipatingUsersError', () => {
+      it('has a type of GET_PARTICIPATING_USERS_ERROR and sets a given error', () => {
+        const expected = {
+          type: GET_PARTICIPATING_USERS_ERROR,
+          error: { value: 681 }
+        };
+
+        expect(getParticipatingUsersError({ value: 681 })).toEqual(expected);
       });
     });
   });
@@ -253,6 +308,76 @@ describe('session actions', () => {
     });
   });
 
+  describe('invitation accepting actions', () => {
+    describe('acceptInvitationBegin', () => {
+      it('has a type of ACCEPT_INVITATION_BEGIN and sets a given payload', () => {
+        const expected = {
+          type: ACCEPT_INVITATION_BEGIN,
+          payload: { value: 561 }
+        };
+
+        expect(acceptInvitationBegin({ value: 561 })).toEqual(expected);
+      });
+    });
+
+    describe('acceptInvitationSuccess', () => {
+      it('has a type of ACCEPT_INVITATION_SUCCESS and sets a given payload', () => {
+        const expected = {
+          type: ACCEPT_INVITATION_SUCCESS,
+          payload: { value: 952 }
+        };
+
+        expect(acceptInvitationSuccess({ value: 952 })).toEqual(expected);
+      });
+    });
+
+    describe('acceptInvitationError', () => {
+      it('has a type of ACCEPT_INVITATION_ERROR and sets a given error', () => {
+        const expected = {
+          type: ACCEPT_INVITATION_ERROR,
+          error: { value: 980 }
+        };
+
+        expect(acceptInvitationError({ value: 980 })).toEqual(expected);
+      });
+    });
+  });
+
+  describe('invitation declining actions', () => {
+    describe('declineInvitationBegin', () => {
+      it('has a type of DECLINE_INVITATION_BEGIN and sets a given payload', () => {
+        const expected = {
+          type: DECLINE_INVITATION_BEGIN,
+          payload: { value: 984 }
+        };
+
+        expect(declineInvitationBegin({ value: 984 })).toEqual(expected);
+      });
+    });
+
+    describe('declineInvitationSuccess', () => {
+      it('has a type of DECLINE_INVITATION_SUCCESS and sets a given payload', () => {
+        const expected = {
+          type: DECLINE_INVITATION_SUCCESS,
+          payload: { value: 636 }
+        };
+
+        expect(declineInvitationSuccess({ value: 636 })).toEqual(expected);
+      });
+    });
+
+    describe('declineInvitationError', () => {
+      it('has a type of DECLINE_INVITATION_ERROR and sets a given error', () => {
+        const expected = {
+          type: DECLINE_INVITATION_ERROR,
+          error: { value: 667 }
+        };
+
+        expect(declineInvitationError({ value: 667 })).toEqual(expected);
+      });
+    });
+  });
+
   describe('State cleaning actions', () => {
     describe('sessionsUnmount', () => {
       it('has a type of SESSIONS_UNMOUNT', () => {
@@ -261,6 +386,16 @@ describe('session actions', () => {
         };
 
         expect(sessionsUnmount()).toEqual(expected);
+      });
+    });
+
+    describe('sessionUsersUnmount', () => {
+      it('has a type of SESSION_USERS_UNMOUNT', () => {
+        const expected = {
+          type: SESSION_USERS_UNMOUNT,
+        };
+
+        expect(sessionUsersUnmount()).toEqual(expected);
       });
     });
   });
