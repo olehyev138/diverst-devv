@@ -131,6 +131,8 @@ export function SessionsPage(props) {
 
   return (
     <SessionsList
+      user={props.user}
+      globalUser={props.globalUser}
       type={type}
       sessions={props.sessions}
       sessionsTotal={props.sessionsTotal}
@@ -147,6 +149,9 @@ export function SessionsPage(props) {
 
 SessionsPage.propTypes = {
   user: PropTypes.object.isRequired,
+  globalUser: PropTypes.shape({
+    id: PropTypes.number
+  }).isRequired,
   getHostingSessionsBegin: PropTypes.func.isRequired,
   getParticipatingSessionsBegin: PropTypes.func.isRequired,
   type: PropTypes.string.isRequired,

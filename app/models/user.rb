@@ -152,6 +152,8 @@ class User < ApplicationRecord
   scope :active, -> { where(active: true) }
   scope :mentors, -> { where(mentor: true) }
   scope :mentees, -> { where(mentee: true) }
+  scope :accepting_mentor_requests, -> { where(accepting_mentor_requests: true) }
+  scope :accepting_mentee_requests, -> { where(accepting_mentee_requests: true) }
 
   accepts_nested_attributes_for :availabilities, allow_destroy: true
 

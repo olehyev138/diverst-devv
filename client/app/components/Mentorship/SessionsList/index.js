@@ -126,7 +126,7 @@ export function SessionsList(props, context) {
                         </Typography>
                       </Grid>
                       <Grid item xs>
-                        { props.type === 'hosting' && (
+                        { props.type === 'hosting' && props.user.id === props.globalUser.id && (
                           <React.Fragment>
                             <Button
                               color='primary'
@@ -183,6 +183,10 @@ export function SessionsList(props, context) {
 SessionsList.propTypes = {
   type: PropTypes.string.isRequired,
   intl: PropTypes.object,
+  user: PropTypes.object.isRequired,
+  globalUser: PropTypes.shape({
+    id: PropTypes.number
+  }).isRequired,
   classes: PropTypes.object,
   sessions: PropTypes.array,
   sessionsTotal: PropTypes.number,

@@ -201,7 +201,7 @@ module User::Actions
     end
 
     def valid_scopes
-      %w(active enterprise_mentors mentors mentees)
+      %w(active enterprise_mentors mentors mentees accepting_mentee_requests accepting_mentor_requests)
     end
 
     def mentor_lite_includes

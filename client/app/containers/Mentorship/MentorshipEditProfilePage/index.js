@@ -31,6 +31,7 @@ export function UserProfilePage(props) {
     <React.Fragment>
       <MentorshipUserForm
         user={props.formUser}
+        globalUser={props.globalUser}
         userAction={props.updateUserBegin}
         interestOptions={props.interestOptions}
         typeOptions={props.typeOptions}
@@ -43,6 +44,9 @@ UserProfilePage.propTypes = {
   updateUserBegin: PropTypes.func,
   path: PropTypes.string,
   user: PropTypes.object,
+  globalUser: PropTypes.shape({
+    id: PropTypes.number
+  }).isRequired,
   formUser: PropTypes.object,
   getUserBegin: PropTypes.func,
   userUnmount: PropTypes.func,

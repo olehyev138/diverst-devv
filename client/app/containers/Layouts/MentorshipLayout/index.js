@@ -77,6 +77,7 @@ const MentorshipLayout = ({ component: Component, ...rest }) => {
                   {user && (
                     <MentorshipMenu
                       user={user}
+                      globalUser={dig(rest, 'globalUser')}
                     />
                   )}
                 </CardContent>

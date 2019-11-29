@@ -47,6 +47,14 @@ export function* getMentors(action) {
 export function* getAvailableMentors(action) {
   try {
     const { payload } = action;
+    const { type } = payload;
+    if (type === 'mentors')
+      payload.query_scopes = [...(payload.query_scopes || []), 'accepting_mentor_requests'];
+    else if (type === 'mentees')
+      payload.query_scopes = [...(payload.query_scopes || []), 'accepting_mentee_requests'];
+
+    delete payload.type;
+
     const response = yield call(api.users.all.bind(api.users), { ...payload, serializer: 'mentorship' });
     yield put(getAvailableMentorsSuccess(response.data.page));
   } catch (err) {

@@ -11,6 +11,7 @@ import React, {
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { useFormik } from 'formik';
+import dig from 'object-dig';
 
 import { injectIntl, intlShape } from 'react-intl';
 
@@ -94,7 +95,7 @@ export function MentorRequestList(props, context) {
   ];
 
   const actions = [];
-  if (type === 'incoming') {
+  if (type === 'incoming' && dig(props, 'user', 'id') === props.globalUser.id) {
     actions.push({
       icon: () => (<CheckIcon />),
       tooltip: intl.formatMessage(messages.actions.approve),
@@ -118,7 +119,7 @@ export function MentorRequestList(props, context) {
         }
       }
     });
-  } else
+  } else if (dig(props, 'user', 'id') === props.globalUser.id)
     actions.push({
       icon: () => (<DeleteIcon />),
       tooltip: intl.formatMessage(messages.actions.remove),
@@ -209,6 +210,9 @@ MentorRequestList.propTypes = {
   type: PropTypes.string,
   classes: PropTypes.object,
   user: PropTypes.object,
+  globalUser: PropTypes.shape({
+    id: PropTypes.number
+  }).isRequired,
   requests: PropTypes.array,
   requestsTotal: PropTypes.number,
   isFetchingRequests: PropTypes.bool,
