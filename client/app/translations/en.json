@@ -271,7 +271,7 @@
   "diverst.containers.Group.Outcome.index.button.new": "New {outcome}",
   "diverst.containers.Group.Outcome.form.button.cancel": "Cancel",
   "diverst.containers.Group.Outcome.form.input.name": "Name",
-  "diverst.containers.Group.Outcome.empty": "There are no {program}s for this {outcome}.",
+  "diverst.containers.Group.Outcome.empty": "There are no {program}s for this {outcome} yet.",
   "diverst.containers.Group.Outcome.Pillar.text": "{program}s",
   "diverst.containers.Group.Outcome.Pillar.form.input.name": "Name",
   "diverst.containers.Group.Outcome.Pillar.form.input.value": "Value Proposition",
