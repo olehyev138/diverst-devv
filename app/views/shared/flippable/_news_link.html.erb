@@ -40,8 +40,8 @@
   </div>
 <% elsif news.social_link && SocialLinkPolicy.new(current_user, nil).index? %>
   <% if news.social_link.url.include?("facebook") %>
-    <iframe src="https://www.facebook.com/plugins/post.php?href=<%= news.social_link.url_safe %>&width=700&show_text=true&height=290&appId"
-            width="320"
+    <iframe src="https://www.facebook.com/plugins/post.php?href=<%= news.social_link.url_safe %>&width=330&show_text=true&height=290&appId"
+            width="330"
             height="<%= news.social_link.url_safe.include?('video') ? '320' : '290' %>"
             style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true">
     </iframe>
