@@ -18,10 +18,10 @@ import { selectIsCommitting } from 'containers/News/selectors';
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
-import { createGroupNewsBegin, newsFeedUnmount } from 'containers/News/actions';
-import GroupNewsForm from 'components/News/GroupNews/GroupNewsForm';
+import { createNewsLinkBegin, newsFeedUnmount } from 'containers/News/actions';
+import NewsLinkForm from 'components/News/NewsLink/NewsLinkForm';
 
-export function GroupNewsCreatePage(props) {
+export function NewsLinkCreatePage(props) {
   useInjectReducer({ key: 'news', reducer });
   useInjectSaga({ key: 'news', saga });
 
@@ -34,8 +34,8 @@ export function GroupNewsCreatePage(props) {
   useEffect(() => () => props.newsFeedUnmount(), []);
 
   return (
-    <GroupNewsForm
-      groupNewsAction={props.createGroupNewsBegin}
+    <NewsLinkForm
+      groupNewsAction={props.createNewsLinkBegin}
       buttonText='Create'
       currentUser={currentUser}
       currentGroup={currentGroup}
@@ -45,8 +45,8 @@ export function GroupNewsCreatePage(props) {
   );
 }
 
-GroupNewsCreatePage.propTypes = {
-  createGroupNewsBegin: PropTypes.func,
+NewsLinkCreatePage.propTypes = {
+  createNewsLinkBegin: PropTypes.func,
   newsFeedUnmount: PropTypes.func,
   currentUser: PropTypes.object,
   currentGroup: PropTypes.object,
@@ -60,7 +60,7 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = {
-  createGroupNewsBegin,
+  createNewsLinkBegin,
   newsFeedUnmount
 };
 
@@ -72,4 +72,4 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(GroupNewsCreatePage);
+)(NewsLinkCreatePage);

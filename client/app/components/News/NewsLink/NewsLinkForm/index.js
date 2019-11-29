@@ -3,22 +3,22 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import dig from 'object-dig';
 
-import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import DiverstFormattedMessage from 'Shared/DiverstFormattedMessage';
 import { Field, Formik, Form } from 'formik';
 import {
   Button, Card, CardActions, CardContent, TextField, Divider
 } from '@material-ui/core';
 
-import WrappedNavLink from 'components/Shared/WrappedNavLink';
+import WrappedNavLink from 'Shared/WrappedNavLink';
 import messages from 'containers/News/messages';
 import { buildValues } from 'utils/formHelpers';
-import DiverstSubmit from 'components/Shared/DiverstSubmit';
-import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
+import DiverstSubmit from 'Shared/DiverstSubmit';
+import DiverstFormLoader from 'Shared/DiverstFormLoader';
 
 /* eslint-disable object-curly-newline */
-export function GroupNewsFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
+export function NewsLinkFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
   return (
-    <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.groupNews}>
+    <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.newsLink}>
       <Card>
         <Form>
           <CardContent>
@@ -69,14 +69,15 @@ export function GroupNewsFormInner({ handleSubmit, handleChange, handleBlur, val
   );
 }
 
-export function GroupNewsForm(props) {
-  const groupNews = dig(props, 'newsItem', 'group_news');
+export function NewsLinkForm(props) {
+  const newsLink = dig(props, 'newsItem', 'group_news');
 
-  const initialValues = buildValues(groupNews, {
+  const initialValues = buildValues(newsLink, {
     id: { default: '' },
-    subject: { default: '' },
-    content: { default: '' },
-    owner_id: { default: dig(props, 'currentUser', 'id') || '' },
+    title: { default: '' },
+    description: { default: '' },
+    url: { default: '' },
+    author_id: { default: dig(props, 'currentUser', 'id') || '' },
     group_id: { default: dig(props, 'currentGroup', 'id') || '' }
   });
 
@@ -85,27 +86,27 @@ export function GroupNewsForm(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        props.groupNewsAction(values);
+        props.newsLinkAction(values);
       }}
 
-      render={formikProps => <GroupNewsFormInner {...props} {...formikProps} groupNews={groupNews} />}
+      render={formikProps => <NewsLinkFormInner {...props} {...formikProps} newsLink={newsLink} />}
     />
   );
 }
 
-GroupNewsForm.propTypes = {
+NewsLinkForm.propTypes = {
   edit: PropTypes.bool,
-  groupNewsAction: PropTypes.func,
-  groupNews: PropTypes.object,
+  newsLinkAction: PropTypes.func,
+  newsLink: PropTypes.object,
   currentUser: PropTypes.object,
   currentGroup: PropTypes.object,
   isCommitting: PropTypes.bool,
   isFormLoading: PropTypes.bool,
 };
 
-GroupNewsFormInner.propTypes = {
+NewsLinkFormInner.propTypes = {
   edit: PropTypes.bool,
-  groupNews: PropTypes.object,
+  newsLink: PropTypes.object,
   handleSubmit: PropTypes.func,
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
@@ -122,4 +123,4 @@ GroupNewsFormInner.propTypes = {
 
 export default compose(
   memo,
-)(GroupNewsForm);
+)(NewsLinkForm);

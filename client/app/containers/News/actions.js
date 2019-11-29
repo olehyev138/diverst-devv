@@ -11,9 +11,9 @@ import {
   UPDATE_GROUP_MESSAGE_BEGIN, UPDATE_GROUP_MESSAGE_SUCCESS, UPDATE_GROUP_MESSAGE_ERROR,
   DELETE_GROUP_MESSAGE_BEGIN, DELETE_GROUP_MESSAGE_SUCCESS, DELETE_GROUP_MESSAGE_ERROR,
   CREATE_GROUP_MESSAGE_COMMENT_BEGIN, CREATE_GROUP_MESSAGE_COMMENT_SUCCESS, CREATE_GROUP_MESSAGE_COMMENT_ERROR,
-  NEWS_FEED_UNMOUNT, CREATE_GROUP_NEWS_BEGIN, CREATE_GROUP_NEWS_SUCCESS, CREATE_GROUP_NEWS_ERROR, UPDATE_GROUP_NEWS_BEGIN,
-  UPDATE_GROUP_NEWS_SUCCESS, UPDATE_GROUP_NEWS_ERROR, DELETE_GROUP_NEWS_BEGIN, DELETE_GROUP_NEWS_SUCCESS,
-  DELETE_GROUP_NEWS_ERROR, CREATE_GROUP_NEWS_COMMENT_BEGIN, CREATE_GROUP_NEWS_COMMENT_SUCCESS, CREATE_GROUP_NEWS_COMMENT_ERROR
+  NEWS_FEED_UNMOUNT, CREATE_NEWSLINK_BEGIN, CREATE_NEWSLINK_SUCCESS, CREATE_NEWSLINK_ERROR, UPDATE_NEWSLINK_BEGIN,
+  UPDATE_NEWSLINK_SUCCESS, UPDATE_NEWSLINK_ERROR, DELETE_NEWSLINK_BEGIN, DELETE_NEWSLINK_SUCCESS,
+  DELETE_NEWSLINK_ERROR, CREATE_NEWSLINK_COMMENT_BEGIN, CREATE_NEWSLINK_COMMENT_SUCCESS, CREATE_NEWSLINK_COMMENT_ERROR
 } from 'containers/News/constants';
 
 export function getNewsItemsBegin(payload) {
@@ -160,92 +160,92 @@ export function newsFeedUnmount() {
 
 /* Group Message creating */
 
-export function createGroupNewsBegin(payload) {
+export function createNewslinkBegin(payload) {
   return {
-    type: CREATE_GROUP_NEWS_BEGIN,
+    type: CREATE_NEWSLINK_BEGIN,
     payload,
   };
 }
 
-export function createGroupNewsSuccess(payload) {
+export function createNewslinkSuccess(payload) {
   return {
-    type: CREATE_GROUP_NEWS_SUCCESS,
+    type: CREATE_NEWSLINK_SUCCESS,
     payload,
   };
 }
 
-export function createGroupNewsError(error) {
+export function createNewslinkError(error) {
   return {
-    type: CREATE_GROUP_NEWS_ERROR,
+    type: CREATE_NEWSLINK_ERROR,
     error,
   };
 }
 
 /* Group Message updating */
 
-export function updateGroupNewsBegin(payload) {
+export function updateNewslinkBegin(payload) {
   return {
-    type: UPDATE_GROUP_NEWS_BEGIN,
+    type: UPDATE_NEWSLINK_BEGIN,
     payload,
   };
 }
 
-export function updateGroupNewsSuccess(payload) {
+export function updateNewslinkSuccess(payload) {
   return {
-    type: UPDATE_GROUP_NEWS_SUCCESS,
+    type: UPDATE_NEWSLINK_SUCCESS,
     payload,
   };
 }
 
-export function updateGroupNewsError(error) {
+export function updateNewslinkError(error) {
   return {
-    type: UPDATE_GROUP_NEWS_ERROR,
+    type: UPDATE_NEWSLINK_ERROR,
     error,
   };
 }
 
 /* Group Message deleting */
 
-export function deleteGroupNewsBegin(payload) {
+export function deleteNewslinkBegin(payload) {
   return {
-    type: DELETE_GROUP_NEWS_BEGIN,
+    type: DELETE_NEWSLINK_BEGIN,
     payload,
   };
 }
 
-export function deleteGroupNewsSuccess(payload) {
+export function deleteNewslinkSuccess(payload) {
   return {
-    type: DELETE_GROUP_NEWS_SUCCESS,
+    type: DELETE_NEWSLINK_SUCCESS,
     payload,
   };
 }
 
-export function deleteGroupNewsError(error) {
+export function deleteNewslinkError(error) {
   return {
-    type: DELETE_GROUP_NEWS_ERROR,
+    type: DELETE_NEWSLINK_ERROR,
     error,
   };
 }
 
 /* Group Message comments */
 
-export function createGroupNewsCommentBegin(payload) {
+export function createNewslinkCommentBegin(payload) {
   return {
-    type: CREATE_GROUP_NEWS_COMMENT_BEGIN,
+    type: CREATE_NEWSLINK_COMMENT_BEGIN,
     payload,
   };
 }
 
-export function createGroupNewsCommentSuccess(payload) {
+export function createNewslinkCommentSuccess(payload) {
   return {
-    type: CREATE_GROUP_NEWS_COMMENT_SUCCESS,
+    type: CREATE_NEWSLINK_COMMENT_SUCCESS,
     payload,
   };
 }
 
-export function createGroupNewsCommentError(error) {
+export function createNewslinkCommentError(error) {
   return {
-    type: CREATE_GROUP_NEWS_COMMENT_ERROR,
+    type: CREATE_NEWSLINK_COMMENT_ERROR,
     error,
   };
 }
