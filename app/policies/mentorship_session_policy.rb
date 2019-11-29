@@ -50,7 +50,7 @@ class MentorshipSessionPolicy < ApplicationPolicy
         mentoring_sessions: {
           enterprise_id: @user.enterprise.id
         },
-        )
+      )
     end
   end
 end
