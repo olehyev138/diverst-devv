@@ -16,10 +16,15 @@ import {
 
 import RouteService from 'utils/routeHelpers';
 import SponsorForm from 'components/Branding/Sponsor/SponsorForm';
+import { ROUTES } from 'containers/Shared/Routes/constants';
 
 export function SponsorCreatePage(props) {
   useInjectReducer({ key: 'sponsors', reducer });
   useInjectSaga({ key: 'sponsors', saga });
+
+  const links = {
+    sponsorIndex: ROUTES.admin.system.branding.sponsors.index.path(),
+  };
 
   useEffect(() => () => props.sponsorsUnmount(), []);
 
@@ -27,6 +32,7 @@ export function SponsorCreatePage(props) {
     <React.Fragment>
       <SponsorForm
         sponsorAction={props.createSponsorBegin}
+        links={links}
         buttonText='Create'
       />
     </React.Fragment>

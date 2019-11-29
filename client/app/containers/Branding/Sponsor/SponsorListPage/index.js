@@ -18,7 +18,7 @@ import {
 
 import {
   selectPaginatedSponsors, selectSponsorTotal,
-  selectIsFetchingSponsors, selectFormSponsor,
+  selectIsFetchingSponsors, selectsponsorsor,
 } from 'containers/Branding/Sponsor/selectors';
 
 import RouteService from 'utils/routeHelpers';
@@ -101,14 +101,13 @@ const mapStateToProps = createStructuredSelector({
   sponsorList: selectPaginatedSponsors(),
   sponsorTotal: selectSponsorTotal(),
   isFetchingSponsors: selectIsFetchingSponsors(),
-  sponsor: selectFormSponsor(),
 });
 
 const mapDispatchToProps = dispatch => ({
   getSponsorsBegin: payload => dispatch(getSponsorsBegin(payload)),
   deleteSponsorBegin: payload => dispatch(deleteSponsorBegin(payload)),
   sponsorsUnmount: () => dispatch(sponsorsUnmount()),
-  handleVisitSponsorEdit: id => dispatch(push(ROUTES.admin.innovate.sponsors.edit.path(id))),
+  handleVisitSponsorEdit: id => dispatch(push(ROUTES.admin.system.branding.sponsors.edit.path(id))),
 });
 
 const withConnect = connect(

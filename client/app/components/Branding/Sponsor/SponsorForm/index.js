@@ -75,7 +75,10 @@ export function SponsorFormInner({ classes, handleSubmit, handleChange, handleBl
           >
             Save
           </Button>
-          <Button>
+          <Button
+            component={WrappedNavLink}
+            to={props.links.sponsorIndex}
+          >
             Cancel
           </Button>
         </CardActions>
@@ -117,7 +120,10 @@ SponsorFormInner.propTypes = {
   values: PropTypes.object,
   buttonText: PropTypes.string,
   setFieldValue: PropTypes.func,
-  setFieldTouched: PropTypes.func
+  setFieldTouched: PropTypes.func,
+  links: PropTypes.shape({
+    sponsorIndex: PropTypes.string
+  })
 };
 
 export default compose(

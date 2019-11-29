@@ -28,26 +28,7 @@ const selectIsCommitting = () => createSelector(
   sponsorsState => sponsorsState.isCommitting
 );
 
-const selectFormSponsor = () => createSelector(
-  selectSponsorsDomain,
-  (sponsorsState) => {
-    const { currentSponsor } = sponsorsState;
-    if (!currentSponsor) return null;
-
-    // clone group before making mutations on it
-    const selectSponsor = Object.assign({}, currentSponsor);
-
-    selectSponsor.groups = selectSponsor.groups.map(group => ({
-      value: group.id,
-      label: group.name
-    }));
-
-    return selectSponsor;
-  }
-);
-
 export {
   selectSponsorsDomain, selectPaginatedSponsors, selectSponsor,
-  selectSponsorTotal, selectIsFetchingSponsors, selectIsCommitting,
-  selectFormSponsor,
+  selectSponsorTotal, selectIsFetchingSponsors, selectIsCommitting
 };

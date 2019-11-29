@@ -18,12 +18,16 @@ import {
 
 import RouteService from 'utils/routeHelpers';
 import SponsorForm from 'components/Branding/Sponsor/SponsorForm';
+import { ROUTES } from 'containers/Shared/Routes/constants';
 
 export function SponsorCreatePage(props) {
   useInjectReducer({ key: 'sponsors', reducer });
   useInjectSaga({ key: 'sponsors', saga });
 
   const rs = new RouteService(useContext);
+  const links = {
+    sponsorIndex: ROUTES.admin.system.branding.sponsors.index.path(),
+  };
 
   useEffect(() => {
     props.getSponsorBegin({ id: rs.params('sponsor_id') });
@@ -34,13 +38,12 @@ export function SponsorCreatePage(props) {
   }, []);
 
 
-  console.log(props);
-
   return (
     <React.Fragment>
       <SponsorForm
         sponsor={props.sponsor}
         sponsorAction={props.updateSponsorBegin}
+        links={links}
         buttonText='Create'
       />
     </React.Fragment>
