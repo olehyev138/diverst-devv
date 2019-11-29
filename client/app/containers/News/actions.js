@@ -11,7 +11,9 @@ import {
   UPDATE_GROUP_MESSAGE_BEGIN, UPDATE_GROUP_MESSAGE_SUCCESS, UPDATE_GROUP_MESSAGE_ERROR,
   DELETE_GROUP_MESSAGE_BEGIN, DELETE_GROUP_MESSAGE_SUCCESS, DELETE_GROUP_MESSAGE_ERROR,
   CREATE_GROUP_MESSAGE_COMMENT_BEGIN, CREATE_GROUP_MESSAGE_COMMENT_SUCCESS, CREATE_GROUP_MESSAGE_COMMENT_ERROR,
-  NEWS_FEED_UNMOUNT
+  NEWS_FEED_UNMOUNT, CREATE_GROUP_NEWS_BEGIN, CREATE_GROUP_NEWS_SUCCESS, CREATE_GROUP_NEWS_ERROR, UPDATE_GROUP_NEWS_BEGIN,
+  UPDATE_GROUP_NEWS_SUCCESS, UPDATE_GROUP_NEWS_ERROR, DELETE_GROUP_NEWS_BEGIN, DELETE_GROUP_NEWS_SUCCESS,
+  DELETE_GROUP_NEWS_ERROR, CREATE_GROUP_NEWS_COMMENT_BEGIN, CREATE_GROUP_NEWS_COMMENT_SUCCESS, CREATE_GROUP_NEWS_COMMENT_ERROR
 } from 'containers/News/constants';
 
 export function getNewsItemsBegin(payload) {
@@ -153,5 +155,97 @@ export function createGroupMessageCommentError(error) {
 export function newsFeedUnmount() {
   return {
     type: NEWS_FEED_UNMOUNT,
+  };
+}
+
+/* Group Message creating */
+
+export function createGroupNewsBegin(payload) {
+  return {
+    type: CREATE_GROUP_NEWS_BEGIN,
+    payload,
+  };
+}
+
+export function createGroupNewsSuccess(payload) {
+  return {
+    type: CREATE_GROUP_NEWS_SUCCESS,
+    payload,
+  };
+}
+
+export function createGroupNewsError(error) {
+  return {
+    type: CREATE_GROUP_NEWS_ERROR,
+    error,
+  };
+}
+
+/* Group Message updating */
+
+export function updateGroupNewsBegin(payload) {
+  return {
+    type: UPDATE_GROUP_NEWS_BEGIN,
+    payload,
+  };
+}
+
+export function updateGroupNewsSuccess(payload) {
+  return {
+    type: UPDATE_GROUP_NEWS_SUCCESS,
+    payload,
+  };
+}
+
+export function updateGroupNewsError(error) {
+  return {
+    type: UPDATE_GROUP_NEWS_ERROR,
+    error,
+  };
+}
+
+/* Group Message deleting */
+
+export function deleteGroupNewsBegin(payload) {
+  return {
+    type: DELETE_GROUP_NEWS_BEGIN,
+    payload,
+  };
+}
+
+export function deleteGroupNewsSuccess(payload) {
+  return {
+    type: DELETE_GROUP_NEWS_SUCCESS,
+    payload,
+  };
+}
+
+export function deleteGroupNewsError(error) {
+  return {
+    type: DELETE_GROUP_NEWS_ERROR,
+    error,
+  };
+}
+
+/* Group Message comments */
+
+export function createGroupNewsCommentBegin(payload) {
+  return {
+    type: CREATE_GROUP_NEWS_COMMENT_BEGIN,
+    payload,
+  };
+}
+
+export function createGroupNewsCommentSuccess(payload) {
+  return {
+    type: CREATE_GROUP_NEWS_COMMENT_SUCCESS,
+    payload,
+  };
+}
+
+export function createGroupNewsCommentError(error) {
+  return {
+    type: CREATE_GROUP_NEWS_COMMENT_ERROR,
+    error,
   };
 }
