@@ -57,7 +57,7 @@ function SnackbarProviderWrapper(props) {
           key='close'
           aria-label='close'
           color='inherit'
-          onClick={() => notistackRef.current.handleDismissSnack(key)}
+          onClick={() => notistackRef.current.closeSnackbar(key)}
         >
           <CloseIcon />
         </IconButton>
