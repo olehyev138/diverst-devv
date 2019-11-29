@@ -159,12 +159,9 @@ export function OutcomeFormInner({ handleSubmit, handleChange, handleBlur, value
           </CardContent>
           <Divider />
           <CardActions>
-            <Button
-              color='primary'
-              type='submit'
-            >
+            <DiverstSubmit isCommitting={props.isCommitting}>
               {buttonText}
-            </Button>
+            </DiverstSubmit>
             <Button
               to={props.links.outcomesIndex}
               component={WrappedNavLink}
