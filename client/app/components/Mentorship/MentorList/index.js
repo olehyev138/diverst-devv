@@ -31,6 +31,8 @@ import ResponsiveTabs from 'components/Shared/ResponsiveTabs';
 import Profile from 'components/Mentorship/MentorshipUser';
 import messages from 'containers/Mentorship/Mentoring/messages';
 import appMessages from 'containers/Shared/App/messages';
+import dig from 'object-dig';
+import { DiverstFormattedMessage } from 'components/Shared/DiverstFormattedMessage';
 
 
 const styles = theme => ({
@@ -48,6 +50,64 @@ const styles = theme => ({
 export function MentorList(props, context) {
   const { type, intl } = props;
   const singleType = type.slice(-1);
+
+  const actions = [];
+  if (dig(props, 'user', 'id') === props.globalUser.id)
+    if (type === 'mentors') {
+      if (props.currentTab === 0)
+        actions.push({
+          icon: () => (<DeleteIcon />),
+          tooltip: intl.formatMessage(messages.actions.remove),
+          onClick: (_, rowData) => {
+            // eslint-disable-next-line no-restricted-globals,no-alert
+            if (confirm(intl.formatMessage(messages.actions.deleteWarning))) {
+              const payload = { userId: props.user.id, type };
+              payload.mentor_id = rowData.id;
+              payload.mentee_id = props.user.id;
+              props.deleteMentorship(payload);
+            }
+          }
+        });
+      else if (props.currentTab === 1)
+        actions.push({
+          icon: () => (<AssignmentIndIcon />),
+          tooltip: intl.formatMessage(messages.actions.sendRequest),
+          onClick: (_, rowData) => {
+            handleFormClickOpen(rowData.id);
+          }
+        });
+    } else if (type === 'mentees')
+      if (props.currentTab === 0)
+        actions.push({
+          icon: () => (<DeleteIcon />),
+          tooltip: intl.formatMessage(messages.actions.remove),
+          onClick: (_, rowData) => {
+            // eslint-disable-next-line no-restricted-globals,no-alert
+            if (confirm(intl.formatMessage(messages.actions.deleteWarning))) {
+              const payload = { userId: props.user.id, type };
+              payload.mentor_id = props.user.id;
+              payload.mentee_id = rowData.id;
+              props.deleteMentorship(payload);
+            }
+          }
+        });
+      else if (props.currentTab === 1)
+        actions.push({
+          icon: () => (<AssignmentIndIcon />),
+          tooltip: intl.formatMessage(messages.actions.sendRequest),
+          onClick: (_, rowData) => {
+            handleFormClickOpen(rowData.id);
+          }
+        });
+
+
+  actions.push({
+    icon: () => <PersonIcon />,
+    tooltip: intl.formatMessage(messages.actions.viewProfile),
+    onClick: (_, rowData) => {
+      handleProfileClickOpen(rowData);
+    }
+  });
 
   const defaultCreatePayload = {
     mentoring_type: type.slice(0, -1),
@@ -122,7 +182,9 @@ export function MentorList(props, context) {
           textColor='primary'
         >
           <Tab label={intl.formatMessage(messages.tabs.current)} />
-          <Tab label={intl.formatMessage(messages.tabs.available)} />
+          { dig(props, 'user', 'id') === props.globalUser.id && (
+            <Tab label={intl.formatMessage(messages.tabs.available)} />
+          )}
         </ResponsiveTabs>
       </Paper>
       <Box mb={1} />
@@ -136,41 +198,7 @@ export function MentorList(props, context) {
         dataArray={props.users}
         dataTotal={props.userTotal}
         columns={columns}
-        actions={[{
-          icon: () => props.currentTab === 0 ? (<DeleteIcon />) : (<AssignmentIndIcon />),
-          tooltip: props.currentTab === 0
-            ? intl.formatMessage(messages.actions.remove)
-            : intl.formatMessage(messages.actions.sendRequest),
-          onClick: (_, rowData) => {
-            switch (props.currentTab) {
-              case 0:
-                // eslint-disable-next-line no-restricted-globals,no-alert
-                if (confirm(intl.formatMessage(messages.actions.deleteWarning))) {
-                  const payload = { userId: props.user.id, type };
-                  if (type === 'mentors') {
-                    payload.mentor_id = rowData.id;
-                    payload.mentee_id = props.user.id;
-                  } else if (type === 'mentees') {
-                    payload.mentor_id = props.user.id;
-                    payload.mentee_id = rowData.id;
-                  }
-                  props.deleteMentorship(payload);
-                }
-                break;
-              case 1:
-                handleFormClickOpen(rowData.id);
-                break;
-              default:
-                break;
-            }
-          }
-        }, {
-          icon: () => <PersonIcon />,
-          tooltip: intl.formatMessage(messages.actions.viewProfile),
-          onClick: (_, rowData) => {
-            handleProfileClickOpen(rowData);
-          }
-        }]}
+        actions={actions}
       />
       <Dialog open={formOpen} onClose={handleFormClose} aria-labelledby='form-dialog-title'>
         <form onSubmit={formik.handleSubmit}>
@@ -179,7 +207,9 @@ export function MentorList(props, context) {
           </DialogTitle>
           <DialogContent>
             <DialogContentText>
-              Why do you want this person to mentor you?
+              {type === 'mentors'
+                ? (<DiverstFormattedMessage {...messages.actions.mentorWhy} />)
+                : (<DiverstFormattedMessage {...messages.actions.menteeWhy} />) }
             </DialogContentText>
 
             <TextField
@@ -236,6 +266,9 @@ MentorList.propTypes = {
   type: PropTypes.string,
   classes: PropTypes.object,
   user: PropTypes.object,
+  globalUser: PropTypes.shape({
+    id: PropTypes.number
+  }).isRequired,
   users: PropTypes.array,
   userTotal: PropTypes.number,
   isFetchingUsers: PropTypes.bool,
