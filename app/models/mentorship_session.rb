@@ -1,7 +1,13 @@
 class MentorshipSession < ApplicationRecord
+  include PublicActivity::Common
+  include MentorshipSession::Actions
+
   # associations
   belongs_to :user
   belongs_to :mentoring_session
+
+  # callbacks
+  before_validation :set_default_role
 
   # validations
   validates_length_of :status, maximum: 191
@@ -11,6 +17,24 @@ class MentorshipSession < ApplicationRecord
   validates :mentoring_session,   presence: true, on: :update
 
   validates_uniqueness_of :user_id, scope: [:mentoring_session_id]
+
+  scope :past, -> {
+    includes(:mentoring_session)
+      .where('mentoring_sessions.end < ?', Time.now.utc)
+      .references(:mentoring_session)
+  }
+
+  scope :upcoming, -> {
+    includes(:mentoring_session)
+      .where('mentoring_sessions.end > ?', Time.now.utc)
+      .references(:mentoring_session)
+  }
+
+  scope :ongoing, -> {
+    includes(:mentoring_session)
+      .where('mentoring_sessions.start <= ? AND mentoring_sessions.end >= ?', Time.current, Time.current)
+      .references(:mentoring_session)
+  }
 
   def creator?
     self.mentoring_session.creator_id == self.user_id
@@ -40,5 +64,11 @@ class MentorshipSession < ApplicationRecord
 
   def declined?
     self.status == 'declined'
+  end
+
+  private
+
+  def set_default_role
+    self.role ||= 'viewer'
   end
 end

@@ -201,7 +201,16 @@ module User::Actions
     end
 
     def valid_scopes
-      %w(active enterprise_mentors mentors mentees)
+      %w(active enterprise_mentors mentors mentees accepting_mentee_requests accepting_mentor_requests)
+    end
+
+    def mentor_lite_includes
+      ['mentoring_interests', 'mentoring_types']
+    end
+
+    def mentor_includes
+      [:mentoring_interests, :mentoring_types, :mentors, :mentees, :mentorship_ratings, :availabilities,
+       mentors: mentor_lite_includes, mentees: mentor_lite_includes]
     end
 
     def signin(email, password)
