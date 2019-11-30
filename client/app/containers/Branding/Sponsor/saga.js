@@ -89,8 +89,6 @@ export function* updateSponsor(action) {
   } catch (err) {
     yield put(updateSponsorError(err));
 
-    console.log(err);
-
     // TODO: intl message
     yield put(showSnackbar({
       message: 'Failed to update sponsor',

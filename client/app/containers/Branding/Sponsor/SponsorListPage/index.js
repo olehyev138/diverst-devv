@@ -18,7 +18,7 @@ import {
 
 import {
   selectPaginatedSponsors, selectSponsorTotal,
-  selectIsFetchingSponsors, selectsponsorsor,
+  selectIsFetchingSponsors
 } from 'containers/Branding/Sponsor/selectors';
 
 import RouteService from 'utils/routeHelpers';
