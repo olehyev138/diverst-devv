@@ -4,7 +4,9 @@ class MentorshipSessionPolicy < ApplicationPolicy
   end
 
   def show?
-    false
+    return true if manage_all?
+
+    @record.user_id = @user.id
   end
 
   def create?
