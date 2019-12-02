@@ -11,7 +11,9 @@ import {
   GET_NEWS_ITEMS_BEGIN, GET_NEWS_ITEM_BEGIN,
   CREATE_GROUP_MESSAGE_BEGIN, UPDATE_GROUP_MESSAGE_BEGIN,
   CREATE_GROUP_MESSAGE_COMMENT_BEGIN, CREATE_NEWSLINK_BEGIN, UPDATE_NEWSLINK_BEGIN,
-  CREATE_NEWSLINK_COMMENT_BEGIN
+  CREATE_NEWSLINK_COMMENT_BEGIN,
+  CREATE_SOCIALLINK_BEGIN, UPDATE_SOCIALLINK_BEGIN,
+  CREATE_SOCIALLINK_COMMENT_BEGIN
 } from 'containers/News/constants';
 
 import {
@@ -20,8 +22,11 @@ import {
   createGroupMessageSuccess, createGroupMessageError,
   createGroupMessageCommentError, updateGroupMessageSuccess,
   createGroupMessageCommentSuccess, createNewsLinkBegin,
-  createNewsLinkSuccess, createNewslinkError, createNewsLinkCommentError,
-  updateNewsLinkSuccess, createNewsLinkCommentSuccess
+  createNewsLinkSuccess, createNewsLinkError, createNewsLinkCommentError,
+  updateNewsLinkSuccess, createNewsLinkCommentSuccess,
+  createSocialLinkBegin,
+  createSocialLinkSuccess, createSocialLinkError, createSocialLinkCommentError,
+  updateSocialLinkSuccess, createSocialLinkCommentSuccess
 } from 'containers/News/actions';
 
 
@@ -100,15 +105,14 @@ export function* createGroupMessageComment(action) {
 
 export function* createNewsLink(action) {
   try {
-    const payload = { news_link : action.payload };
-    console.log(payload);
+    const payload = { news_link: action.payload };
     const response = yield call(api.newsLinks.create.bind(api.newsLinks), payload);
 
     yield put(createGroupMessageSuccess());
     yield put(push(ROUTES.group.news.index.path(action.payload.id)));
     yield put(showSnackbar({ message: 'News link created', options: { variant: 'success' } }));
   } catch (err) {
-    yield put(createNewslinkError(err));
+    yield put(createNewsLinkError(err));
 
     // TODO: intl message
     yield put(showSnackbar({ message: 'Failed to create news link ', options: { variant: 'warning' } }));
@@ -131,6 +135,38 @@ export function* updateNewsLink(action) {
   }
 }
 
+export function* createSocialLink(action) {
+  try {
+    const payload = { news_link: action.payload };
+    const response = yield call(api.socialLinks.create.bind(api.socialLinks), payload);
+
+    yield put(createGroupMessageSuccess());
+    yield put(push(ROUTES.group.news.index.path(action.payload.id)));
+    yield put(showSnackbar({ message: 'Social link created', options: { variant: 'success' } }));
+  } catch (err) {
+    yield put(socialNewsLinkError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to create social link ', options: { variant: 'warning' } }));
+  }
+}
+
+export function* updateSocialLink(action) {
+  try {
+    const payload = { social_link: action.payload };
+    const response = yield call(api.socialLinks.update.bind(api.socialLinks), payload.social_link.id, payload);
+
+    yield put(updateGroupMessageSuccess());
+    yield put(push(ROUTES.group.news.index.path(action.payload.id)));
+    yield put(showSnackbar({ message: 'Social link updated', options: { variant: 'success' } }));
+  } catch (err) {
+    yield put(createGroupMessageError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to update social link', options: { variant: 'warning' } }));
+  }
+}
+
 export default function* newsSaga() {
   yield takeLatest(GET_NEWS_ITEMS_BEGIN, getNewsItems);
   yield takeLatest(GET_NEWS_ITEM_BEGIN, getNewsItem);
@@ -139,4 +175,6 @@ export default function* newsSaga() {
   yield takeLatest(CREATE_GROUP_MESSAGE_COMMENT_BEGIN, createGroupMessageComment);
   yield takeLatest(CREATE_NEWSLINK_BEGIN, createNewsLink);
   yield takeLatest(UPDATE_NEWSLINK_BEGIN, updateNewsLink);
+  yield takeLatest(CREATE_NEWSLINK_BEGIN, createSocialLink);
+  yield takeLatest(UPDATE_SOCIALLINK_BEGIN, updateSocialLink);
 }
