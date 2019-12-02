@@ -62,7 +62,7 @@ export function NewsFeed(props) {
     {
       icon: <NewsIcon />,
       name: 'News Link',
-      linkPath: props.links.groupMessageNew,
+      linkPath: props.links.newsLinkNew,
     },
     {
       icon: <SocialIcon />,
