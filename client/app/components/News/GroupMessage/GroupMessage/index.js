@@ -16,8 +16,6 @@ import DiverstShowLoader from 'components/Shared/DiverstShowLoader';
 const styles = theme => ({});
 
 export function GroupMessage(props) {
-  /* Render a GroupMessage, its comments & a comment form */
-
   const { classes, ...rest } = props;
   const newsItem = dig(props, 'newsItem');
   const groupMessage = dig(newsItem, 'group_message');

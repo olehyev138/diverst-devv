@@ -43,7 +43,6 @@ const styles = theme => ({
 });
 
 export function Profile(props) {
-  /* Render an Profile */
   const { classes } = props;
   const user = dig(props, 'user');
   const fieldData = dig(props, 'fieldData');

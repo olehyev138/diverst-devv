@@ -70,8 +70,6 @@ const styles = theme => ({
 });
 
 export function Folder(props) {
-  /* Render an Folder */
-
   const { classes } = props;
   const folder = dig(props, 'folder');
 
