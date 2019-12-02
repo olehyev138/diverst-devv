@@ -150,9 +150,7 @@ module ApplicationHelper
   def show_sponsor?(object)
     m = 'sponsor_name'
     if object.respond_to? m.to_sym
-      if object.public_send(m.to_sym).present?
-        yield
-      end
+      object.public_send(m.to_sym).present?
     end
   end
 

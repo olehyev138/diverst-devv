@@ -1,4 +1,4 @@
-<% if sponsors.any? %>
+<% if sponsors.any? { |sps| show_sponsor?(sps) } %>
   <% random = SecureRandom.hex %>
   <div class="card card--secondary">
     <% if sponsors.count > 1 %>
@@ -23,7 +23,7 @@
 
           <% sponsors.each_with_index do |sponsor, index| %>
             <div class="item <%= 'active' if index == 0 %>">
-              <% show_sponsor?(sponsor) do %>
+              <% if show_sponsor?(sponsor) %>
                 <% if sponsor.sponsor_media.present? %>
 
                   <% show_sponsor_media?(sponsor, "sponsor_media_content_type") do %>
@@ -40,9 +40,9 @@
 
                 <p style="font-style: italic;"><%= sponsor.sponsor_name %><br>
                 <%= sponsor.sponsor_title.present? ? sponsor.sponsor_title : nil %></p>
-                  <% if SponsorPolicy.new(current_user, sponsor).sponsor_message_visibility? %>
-                    <p style="font-style: italic; padding-top: 10px; padding-left: 10px;"><%= truncate(sponsor.sponsor_message, length: 200) %></p>
-                  <% end %>
+                <% if SponsorPolicy.new(current_user, sponsor).sponsor_message_visibility? %>
+                  <p style="font-style: italic; padding-top: 10px; padding-left: 10px;"><%= truncate(sponsor.sponsor_message, length: 200) %></p>
+                <% end %>
               <% end %>
             </div>
           <% end %>
