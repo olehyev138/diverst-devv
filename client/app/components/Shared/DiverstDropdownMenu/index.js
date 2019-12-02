@@ -30,7 +30,7 @@ const AnchoredMenu = withStyles({
   />
 ));
 
-export function DiverstDropdownMenu({ anchor, setAnchor, ...rest }) {
+export function DiverstDropdownMenu({ anchor, setAnchor, id, ...rest }) {
   const handleClose = () => {
     setAnchor(null);
   };
@@ -38,11 +38,12 @@ export function DiverstDropdownMenu({ anchor, setAnchor, ...rest }) {
   return (
     <React.Fragment>
       <AnchoredMenu
-        id={rest.id}
+        id={id}
         anchorEl={anchor}
         keepMounted
         open={Boolean(anchor)}
         onClose={handleClose}
+        {...rest}
       >
         {rest.children}
       </AnchoredMenu>

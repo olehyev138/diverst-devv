@@ -9,7 +9,7 @@ import { compose } from 'redux';
 import PropTypes from 'prop-types';
 
 import {
-  Button, Box, MenuItem
+  Button, Box, MenuItem, Grid, Typography
 } from '@material-ui/core/index';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -33,6 +33,17 @@ const styles = theme => ({
     marginRight: 12,
     marginBottom: 12,
   },
+  staticWidthButton: {
+    width: 300,
+    marginLeft: 12,
+    marginRight: 12,
+  },
+  menuItem: {
+    width: 300,
+  },
+  buttonLabel: {
+    'vertical-align': 'middle',
+  },
   floatRight: {
     float: 'right',
     marginBottom: 12,
@@ -40,7 +51,7 @@ const styles = theme => ({
   floatSpacer: {
     display: 'flex',
     width: '100%',
-    marginBottom: 24,
+    marginBottom: 12,
   },
 });
 
@@ -79,7 +90,7 @@ export function GroupMemberList(props) {
     {
       title: 'Membership Status',
       field: 'status',
-      query_field: '(CASE WHEN users.active = false THEN \'inactive\' WHEN groups.pending_users AND accepted_member THEN \'pending\' ELSE \'active\' END)',
+      query_field: '(CASE WHEN users.active = false THEN 3 WHEN groups.pending_users AND accepted_member THEN 2 ELSE 1 END)',
       sorting: true,
       lookup: {
         active: 'Active',
@@ -115,12 +126,38 @@ export function GroupMemberList(props) {
           <DiverstFormattedMessage {...messages.export} />
         </Button>
       </Box>
-      <Box className={classes.floatRight}>
-        <Button onClick={handleClick}>
-          {props.memberType}
-        </Button>
-      </Box>
+
       <Box className={classes.floatSpacer} />
+
+      <Box className={classes.floatRight}>
+        <Grid
+          container
+          justify='space-between'
+          align='center'
+          alignItems='center'
+          spacing={12}
+        >
+          <Grid item>
+            <Typography align='center' variant='h5' component='h2' color='textPrimary'>
+              Hello World:
+            </Typography>
+          </Grid>
+          <Grid item>
+            <Button
+              className={classes.staticWidthButton}
+              variant='contained'
+              color='secondary'
+              size='large'
+              onClick={handleClick}
+            >
+              {props.memberType}
+            </Button>
+          </Grid>
+        </Grid>
+      </Box>
+
+      <Box className={classes.floatSpacer} />
+
       <DiverstTable
         title='Members'
         handlePagination={props.handlePagination}
@@ -147,16 +184,16 @@ export function GroupMemberList(props) {
         anchor={anchor}
         setAnchor={setAnchor}
       >
-        <MenuItem onClick={() => handleClose('accepted_users')}>
+        <MenuItem onClick={() => handleClose('accepted_users')} style={{ width: 300, textAlign: 'center' }}>
           Active
         </MenuItem>
-        <MenuItem onClick={() => handleClose('inactive')}>
+        <MenuItem onClick={() => handleClose('inactive')} classes={classes.menuItem}>
           Inactive
         </MenuItem>
-        <MenuItem onClick={() => handleClose('pending')}>
+        <MenuItem onClick={() => handleClose('pending')} classes={classes.menuItem}>
           Pending
         </MenuItem>
-        <MenuItem onClick={() => handleClose('all')}>
+        <MenuItem onClick={() => handleClose('all')} classes={classes.menuItem}>
           All
         </MenuItem>
       </DiverstDropdownMenu>
