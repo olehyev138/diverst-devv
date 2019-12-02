@@ -44,6 +44,7 @@ exports[`<LoginForm /> <LoginFormInner /> Should render and match the snapshot 1
                 "children": [Function],
                 "className": [Function],
                 "classes": [Function],
+                "color": [Function],
                 "defaultValue": [Function],
                 "disabled": [Function],
                 "error": [Function],
@@ -71,6 +72,7 @@ exports[`<LoginForm /> <LoginFormInner /> Should render and match the snapshot 1
               },
               "render": [Function],
             },
+            "defaultProps": undefined,
             "displayName": "WithStyles(ForwardRef(TextField))",
             "options": Object {
               "defaultTheme": Object {
@@ -385,6 +387,7 @@ exports[`<LoginForm /> <LoginFormInner /> Should render and match the snapshot 1
                 "children": [Function],
                 "className": [Function],
                 "classes": [Function],
+                "color": [Function],
                 "defaultValue": [Function],
                 "disabled": [Function],
                 "error": [Function],
@@ -412,6 +415,7 @@ exports[`<LoginForm /> <LoginFormInner /> Should render and match the snapshot 1
               },
               "render": [Function],
             },
+            "defaultProps": undefined,
             "displayName": "WithStyles(ForwardRef(TextField))",
             "options": Object {
               "defaultTheme": Object {
