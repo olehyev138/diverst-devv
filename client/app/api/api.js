@@ -25,6 +25,7 @@ import mentoringRequests from 'api/mentoring_requests/mentoring_requests';
 import questions from 'api/campaign_questions/questions';
 import mentorshipSessions from 'api/mentorship_sessions/mentorship_sessions';
 import mentoringSessions from 'api/mentoring_sessions/mentoring_sessions';
+import newsLinks from 'api/newslinks/newslinks';
 
 /* Metrics */
 import overviewGraphs from 'api/metrics/overview_graphs';
@@ -47,6 +48,7 @@ const Api = {
   segments,
   initiatives,
   newsFeedLinks,
+  newsLinks,
   groupMessages,
   groupMessageComments,
   groupMembers,

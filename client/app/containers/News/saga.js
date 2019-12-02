@@ -102,7 +102,7 @@ export function* createNewslink(action) {
   try {
     const payload = { news_link : action.payload };
     console.log(payload);
-    const response = yield call(api.newsFeedLinks.create.bind(api.newsFeedLinks), payload);
+    const response = yield call(api.newsLinks.create.bind(api.newsLinks), payload);
 
     yield put(createGroupMessageSuccess());
     yield put(push(ROUTES.group.news.index.path(action.payload.id)));
@@ -118,7 +118,7 @@ export function* createNewslink(action) {
 export function* updateNewslink(action) {
   try {
     const payload = { news_link: action.payload };
-    const response = yield call(api.newsFeedLinks.update.bind(api.newsFeedLinks), payload.news_link.id, payload);
+    const response = yield call(api.newsLinks.update.bind(api.newsLinks), payload.news_link.id, payload);
 
     yield put(updateGroupMessageSuccess());
     yield put(push(ROUTES.group.news.index.path(action.payload.id)));
