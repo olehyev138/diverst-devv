@@ -139,8 +139,8 @@ export function DiverstPagination(props) {
     }
   }, [props.isLoading]);
 
-  if (props.isLoading === true)
-    return undefined;
+  if (props.isLoading === true || props.rowsPerPage <= 0 || props.count <= 0)
+    return <React.Fragment />;
 
   return (
     <div className={classes.paginationContainer}>
