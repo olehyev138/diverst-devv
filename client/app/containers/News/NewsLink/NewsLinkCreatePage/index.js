@@ -35,7 +35,7 @@ export function NewsLinkCreatePage(props) {
 
   return (
     <NewsLinkForm
-      newsLinkAction={props.createNewslinkBegin}
+      newsLinkAction={props.createNewsLinkBegin}
       buttonText='Create'
       currentUser={currentUser}
       currentGroup={currentGroup}
@@ -46,7 +46,7 @@ export function NewsLinkCreatePage(props) {
 }
 
 NewsLinkCreatePage.propTypes = {
-  createNewslinkBegin: PropTypes.func,
+  createNewsLinkBegin: PropTypes.func,
   newsFeedUnmount: PropTypes.func,
   currentUser: PropTypes.object,
   currentGroup: PropTypes.object,
@@ -60,7 +60,7 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = {
-  createNewslinkBegin,
+  createNewsLinkBegin,
   newsFeedUnmount
 };
 
