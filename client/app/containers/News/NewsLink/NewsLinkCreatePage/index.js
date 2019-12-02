@@ -18,7 +18,7 @@ import { selectIsCommitting } from 'containers/News/selectors';
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
-import { createNewsLinkBegin, newsFeedUnmount } from 'containers/News/actions';
+import { createNewslinkBegin, newsFeedUnmount } from 'containers/News/actions';
 import NewsLinkForm from 'components/News/NewsLink/NewsLinkForm';
 
 export function NewsLinkCreatePage(props) {
@@ -35,7 +35,7 @@ export function NewsLinkCreatePage(props) {
 
   return (
     <NewsLinkForm
-      newsLinkAction={props.createNewsLinkBegin}
+      newsLinkAction={props.createNewslinkBegin}
       buttonText='Create'
       currentUser={currentUser}
       currentGroup={currentGroup}
@@ -46,7 +46,7 @@ export function NewsLinkCreatePage(props) {
 }
 
 NewsLinkCreatePage.propTypes = {
-  createNewsLinkBegin: PropTypes.func,
+  createNewslinkBegin: PropTypes.func,
   newsFeedUnmount: PropTypes.func,
   currentUser: PropTypes.object,
   currentGroup: PropTypes.object,
@@ -60,7 +60,7 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = {
-  createNewsLinkBegin,
+  createNewslinkBegin,
   newsFeedUnmount
 };
 

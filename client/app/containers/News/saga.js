@@ -19,7 +19,7 @@ import {
   getNewsItemBegin, getNewsItemSuccess, getNewsItemError,
   createGroupMessageSuccess, createGroupMessageError,
   createGroupMessageCommentError, updateGroupMessageSuccess,
-  createGroupMessageCommentSuccess,
+  createGroupMessageCommentSuccess, createNewslinkBegin,
   createNewslinkSuccess, createNewslinkError, createNewslinkCommentError,
   updateNewslinkSuccess, createNewslinkCommentSuccess
 } from 'containers/News/actions';
@@ -101,6 +101,7 @@ export function* createGroupMessageComment(action) {
 export function* createNewslink(action) {
   try {
     const payload = { news_link : action.payload };
+    console.log(payload);
     const response = yield call(api.newsFeedLinks.create.bind(api.newsFeedLinks), payload);
 
     yield put(createGroupMessageSuccess());

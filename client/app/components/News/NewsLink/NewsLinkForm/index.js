@@ -28,11 +28,23 @@ export function NewsLinkFormInner({ handleSubmit, handleChange, handleBlur, valu
               fullWidth
               disabled={props.isCommitting}
               required
-              id='subject'
-              name='subject'
+              id='url'
+              name='url'
               margin='normal'
-              label={<DiverstFormattedMessage {...messages.subject} />}
-              value={values.subject}
+              label= 'Link URL'
+              value={values.url}
+            />
+            <Field
+              component={TextField}
+              onChange={handleChange}
+              fullWidth
+              disabled={props.isCommitting}
+              required
+              id='title'
+              name='title'
+              margin='normal'
+              label= 'Title'
+              value={values.title}
             />
             <Field
               component={TextField}
@@ -43,11 +55,11 @@ export function NewsLinkFormInner({ handleSubmit, handleChange, handleBlur, valu
               multiline
               rows={4}
               variant='outlined'
-              id='content'
-              name='content'
+              id='description'
+              name='description'
               margin='normal'
-              value={values.content}
-              label={<DiverstFormattedMessage {...messages.content} />}
+              value={values.description}
+              label= 'Description'
             />
           </CardContent>
           <Divider />
