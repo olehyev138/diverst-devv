@@ -13,6 +13,8 @@ import {
 } from '@material-ui/core/index';
 import { withStyles } from '@material-ui/core/styles';
 
+import { injectIntl, intlShape } from 'react-intl';
+
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
@@ -41,9 +43,6 @@ const styles = theme => ({
   menuItem: {
     width: 300,
   },
-  buttonLabel: {
-    'vertical-align': 'middle',
-  },
   floatRight: {
     float: 'right',
     marginBottom: 12,
@@ -56,7 +55,7 @@ const styles = theme => ({
 });
 
 export function GroupMemberList(props) {
-  const { classes } = props;
+  const { classes, intl } = props;
 
   // MENU CODE
   const [anchor, setAnchor] = React.useState(null);
@@ -93,9 +92,9 @@ export function GroupMemberList(props) {
       query_field: '(CASE WHEN users.active = false THEN 3 WHEN groups.pending_users AND accepted_member THEN 2 ELSE 1 END)',
       sorting: true,
       lookup: {
-        active: 'Active',
-        inactive: 'Inactive',
-        pending: 'Pending',
+        active: intl.formatMessage(messages.status.active),
+        inactive: intl.formatMessage(messages.status.inactive),
+        pending: intl.formatMessage(messages.status.pending),
       }
     },
   ];
@@ -135,11 +134,10 @@ export function GroupMemberList(props) {
           justify='space-between'
           align='center'
           alignItems='center'
-          spacing={12}
         >
           <Grid item>
             <Typography align='center' variant='h5' component='h2' color='textPrimary'>
-              Hello World:
+              <DiverstFormattedMessage {...messages.changeScope} />
             </Typography>
           </Grid>
           <Grid item>
@@ -150,7 +148,7 @@ export function GroupMemberList(props) {
               size='large'
               onClick={handleClick}
             >
-              {props.memberType}
+              <DiverstFormattedMessage {...messages.scopes[props.memberType]} />
             </Button>
           </Grid>
         </Grid>
@@ -184,17 +182,29 @@ export function GroupMemberList(props) {
         anchor={anchor}
         setAnchor={setAnchor}
       >
-        <MenuItem onClick={() => handleClose('accepted_users')} style={{ width: 300, textAlign: 'center' }}>
-          Active
+        <MenuItem
+          onClick={() => handleClose('accepted_users')}
+          className={classes.menuItem}
+        >
+          <DiverstFormattedMessage {...messages.scopes.accepted_users} />
         </MenuItem>
-        <MenuItem onClick={() => handleClose('inactive')} classes={classes.menuItem}>
-          Inactive
+        <MenuItem
+          onClick={() => handleClose('inactive')}
+          className={classes.menuItem}
+        >
+          <DiverstFormattedMessage {...messages.scopes.inactive} />
         </MenuItem>
-        <MenuItem onClick={() => handleClose('pending')} classes={classes.menuItem}>
-          Pending
+        <MenuItem
+          onClick={() => handleClose('pending')}
+          className={classes.menuItem}
+        >
+          <DiverstFormattedMessage {...messages.scopes.pending} />
         </MenuItem>
-        <MenuItem onClick={() => handleClose('all')} classes={classes.menuItem}>
-          All
+        <MenuItem
+          onClick={() => handleClose('all')}
+          className={classes.menuItem}
+        >
+          <DiverstFormattedMessage {...messages.scopes.all} />
         </MenuItem>
       </DiverstDropdownMenu>
     </React.Fragment>
@@ -202,6 +212,7 @@ export function GroupMemberList(props) {
 }
 
 GroupMemberList.propTypes = {
+  intl: intlShape.isRequired,
   classes: PropTypes.object,
   deleteMemberBegin: PropTypes.func,
   links: PropTypes.shape({
@@ -223,5 +234,6 @@ GroupMemberList.propTypes = {
 
 export default compose(
   memo,
-  withStyles(styles)
+  withStyles(styles),
+  injectIntl,
 )(GroupMemberList);

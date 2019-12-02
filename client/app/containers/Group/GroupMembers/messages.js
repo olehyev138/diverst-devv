@@ -18,6 +18,48 @@ export default defineMessages({
   delete: {
     id: `${scope}.index.button.delete`,
   },
+  changeScope: {
+    id: `${scope}.index.label.changeScope`,
+  },
+  scopes: {
+    accepted_users: {
+      id: `${scope}.scopes.accepted_users`,
+    },
+    pending: {
+      id: `${scope}.scopes.pending`,
+    },
+    inactive: {
+      id: `${scope}.scopes.inactive`,
+    },
+    all: {
+      id: `${scope}.scopes.all`,
+    },
+  },
+  status: {
+    active: {
+      id: `${scope}.status.active`,
+    },
+    inactive: {
+      id: `${scope}.status.inactive`,
+    },
+    pending: {
+      id: `${scope}.status.pending`,
+    },
+  },
+  columns: {
+    givenName: {
+      id: `${scope}.columns.givenName`,
+    },
+    familyName: {
+      id: `${scope}.columns.familyName`,
+    },
+    status: {
+      id: `${scope}.columns.status`,
+    },
+    actions: {
+      id: `${scope}.columns.actions`,
+    },
+  },
   create: {
     id: `${scope}.form.button.create`,
   },
