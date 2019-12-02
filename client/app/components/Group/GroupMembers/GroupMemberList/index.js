@@ -9,7 +9,7 @@ import { compose } from 'redux';
 import PropTypes from 'prop-types';
 
 import {
-  Button, Box
+  Button, Box, MenuItem
 } from '@material-ui/core/index';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -23,6 +23,7 @@ import AddIcon from '@material-ui/icons/Add';
 import ExportIcon from '@material-ui/icons/SaveAlt';
 
 import DiverstTable from 'components/Shared/DiverstTable';
+import DiverstDropdownMenu from 'components/Shared/DiverstDropdownMenu';
 
 const styles = theme => ({
   errorButton: {
@@ -43,8 +44,27 @@ const styles = theme => ({
   },
 });
 
+const MemberTypes = Object.freeze({
+  active: 0,
+  inactive: 1,
+  pending: 2,
+  all: 3,
+});
+
 export function GroupMemberList(props) {
   const { classes } = props;
+
+  // MENU CODE
+  const [anchor, setAnchor] = React.useState(null);
+  const [memberType, setMemberType] = React.useState(MemberTypes.active)
+
+  const handleClick = (event) => {
+    setAnchor(event.currentTarget);
+  };
+  const handleClose = (type) => {
+    setAnchor(null);
+    setMemberType(type);
+  };
 
   const handleOrderChange = (columnId, orderDir) => {
     props.handleOrdering({
@@ -84,6 +104,11 @@ export function GroupMemberList(props) {
           <DiverstFormattedMessage {...messages.export} />
         </Button>
       </Box>
+      <Box className={classes.floatRight}>
+        <Button onClick={handleClick}>
+          {memberType}
+        </Button>
+      </Box>
       <Box className={classes.floatSpacer} />
       <DiverstTable
         title='Members'
@@ -107,6 +132,23 @@ export function GroupMemberList(props) {
           }
         }]}
       />
+      <DiverstDropdownMenu
+        anchor={anchor}
+        setAnchor={setAnchor}
+      >
+        <MenuItem onClick={() => handleClose(MemberTypes.active)}>
+          Active
+        </MenuItem>
+        <MenuItem onClick={() => handleClose(MemberTypes.inactive)}>
+          Inactive
+        </MenuItem>
+        <MenuItem onClick={() => handleClose(MemberTypes.pending)}>
+          Pending
+        </MenuItem>
+        <MenuItem onClick={() => handleClose(MemberTypes.all)}>
+          All
+        </MenuItem>
+      </DiverstDropdownMenu>
     </React.Fragment>
   );
 }
