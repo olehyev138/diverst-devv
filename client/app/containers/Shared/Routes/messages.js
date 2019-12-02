@@ -110,7 +110,10 @@ export default defineMessages({
       },
       edit: {
         id: `${scope}.group.outcomes.edit`
-      }
+      },
+      show: {
+        id: `${scope}.group.outcomes.show`
+      },
     },
     manage: {
       index: {

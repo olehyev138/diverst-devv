@@ -230,6 +230,9 @@ export const ROUTES = {
       },
       show: {
         path: (groupId = ':group_id', outcomeId = ':outcome_id') => `/groups/${groupId}/outcomes/${outcomeId}`,
+        data: {
+          titleMessage: messages.groups.outcomes.show,
+        }
       },
       new: {
         path: (groupId = ':group_id') => `/groups/${groupId}/outcomes/new`,

@@ -58,6 +58,7 @@
   "diverst.containers.Routes.group.outcomes.index": "Plan",
   "diverst.containers.Routes.group.outcomes.new": "New {outcome}",
   "diverst.containers.Routes.group.outcomes.edit": "Edit {outcome}",
+  "diverst.containers.Routes.group.outcomes.show": "{outcome}",
   "diverst.containers.Routes.group.news.messages.show": "Group Message",
   "diverst.containers.Routes.group.news.messages.new": "New Group Message",
   "diverst.containers.Routes.group.news.messages.edit": "Edit Group Message",
