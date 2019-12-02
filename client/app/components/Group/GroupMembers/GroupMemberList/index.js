@@ -44,26 +44,18 @@ const styles = theme => ({
   },
 });
 
-const MemberTypes = Object.freeze({
-  active: 0,
-  inactive: 1,
-  pending: 2,
-  all: 3,
-});
-
 export function GroupMemberList(props) {
   const { classes } = props;
 
   // MENU CODE
   const [anchor, setAnchor] = React.useState(null);
-  const [memberType, setMemberType] = React.useState(MemberTypes.active)
 
   const handleClick = (event) => {
     setAnchor(event.currentTarget);
   };
   const handleClose = (type) => {
     setAnchor(null);
-    setMemberType(type);
+    props.handleChangeTab(type);
   };
 
   const handleOrderChange = (columnId, orderDir) => {
@@ -106,7 +98,7 @@ export function GroupMemberList(props) {
       </Box>
       <Box className={classes.floatRight}>
         <Button onClick={handleClick}>
-          {memberType}
+          {props.memberType}
         </Button>
       </Box>
       <Box className={classes.floatSpacer} />
@@ -136,16 +128,16 @@ export function GroupMemberList(props) {
         anchor={anchor}
         setAnchor={setAnchor}
       >
-        <MenuItem onClick={() => handleClose(MemberTypes.active)}>
+        <MenuItem onClick={() => handleClose('accepted_users')}>
           Active
         </MenuItem>
-        <MenuItem onClick={() => handleClose(MemberTypes.inactive)}>
+        <MenuItem onClick={() => handleClose('inactive')}>
           Inactive
         </MenuItem>
-        <MenuItem onClick={() => handleClose(MemberTypes.pending)}>
+        <MenuItem onClick={() => handleClose('pending')}>
           Pending
         </MenuItem>
-        <MenuItem onClick={() => handleClose(MemberTypes.all)}>
+        <MenuItem onClick={() => handleClose('all')}>
           All
         </MenuItem>
       </DiverstDropdownMenu>
@@ -165,7 +157,12 @@ GroupMemberList.propTypes = {
   isFetchingMembers: PropTypes.bool,
   groupId: PropTypes.string,
   handlePagination: PropTypes.func,
-  handleOrdering: PropTypes.func
+  handleOrdering: PropTypes.func,
+
+  memberType: PropTypes.string.isRequired,
+  MemberTypes: PropTypes.array.isRequired,
+  setMemberType: PropTypes.func.isRequired,
+  handleChangeTab: PropTypes.func.isRequired,
 };
 
 export default compose(

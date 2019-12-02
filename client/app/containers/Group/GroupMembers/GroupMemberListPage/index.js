@@ -25,6 +25,14 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import GroupMemberList from 'components/Group/GroupMembers/GroupMemberList';
 
+const MemberTypes = Object.freeze([
+  'active',
+  'inactive',
+  'pending',
+  'accepted_users',
+  'all',
+]);
+
 export function GroupMemberListPage(props) {
   useInjectReducer({ key: 'members', reducer });
   useInjectSaga({ key: 'members', saga });
@@ -32,12 +40,38 @@ export function GroupMemberListPage(props) {
   const rs = new RouteService(useContext);
   const groupId = rs.params('group_id')[0];
 
-  const [params, setParams] = useState({
+  const [memberType, setMemberType] = React.useState('accepted_users');
+  const handleChangeTab = (type) => {
+    setMemberType(type);
+    if (MemberTypes.includes(type))
+      handleMemberScopes([type], true);
+
+  };
+
+  const defaultParams = {
     group_id: groupId, count: 10, page: 0,
-    orderBy: 'users.id', order: 'asc'
-  });
+    orderBy: 'users.id', order: 'asc',
+    query_scopes: ['active']
+  };
+
+  const [params, setParams] = useState(defaultParams);
   const links = {
     groupMembersNew: ROUTES.group.members.new.path(groupId),
+  };
+
+  const handleMemberScopes = (scopes, resetParams = false) => {
+    if (resetParams)
+      setParams(defaultParams);
+
+    if (groupId) {
+      const newParams = {
+        ...params,
+        group_id: groupId,
+        query_scopes: scopes
+      };
+      props.getMembersBegin(newParams);
+      setParams(newParams);
+    }
   };
 
   const handlePagination = (payload) => {
@@ -75,6 +109,11 @@ export function GroupMemberListPage(props) {
         params={params}
         handlePagination={handlePagination}
         handleOrdering={handleOrdering}
+
+        memberType={memberType}
+        MemberTypes={MemberTypes}
+        setMemberType={setMemberType}
+        handleChangeTab={handleChangeTab}
       />
     </React.Fragment>
   );

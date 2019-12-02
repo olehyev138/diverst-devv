@@ -11,9 +11,13 @@ class UserGroup < ApplicationRecord
   validates_uniqueness_of :user, scope: [:group], message: 'is already a member of this group'
 
   scope :top_participants, ->(n) { order(total_weekly_points: :desc).limit(n) }
-  scope :active, -> { joins(:user).where(users: { active: true }) }
 
+  scope :active, -> { joins(:user).where(users: { active: true }) }
+  scope :inactive, -> { joins(:user).where(users: { active: false }) }
+
+  scope :pending, -> { active.joins(:group).where(accepted_member: false, groups: {pending_users: 'enabled'})}
   scope :accepted_users, -> { active.joins(:group).where("groups.pending_users = 'disabled' OR (groups.pending_users = 'enabled' AND accepted_member=true)") }
+
   scope :with_answered_survey, -> { where.not(data: nil) }
 
   before_destroy :remove_leader_role
