@@ -160,7 +160,7 @@ export function newsFeedUnmount() {
 
 /* Group Message creating */
 
-export function createNewslinkBegin(payload) {
+export function createNewsLinkBegin(payload) {
   return {
     type: CREATE_NEWSLINK_BEGIN,
     payload,
@@ -183,21 +183,21 @@ export function createNewslinkError(error) {
 
 /* Group Message updating */
 
-export function updateNewslinkBegin(payload) {
+export function updateNewsLinkBegin(payload) {
   return {
     type: UPDATE_NEWSLINK_BEGIN,
     payload,
   };
 }
 
-export function updateNewslinkSuccess(payload) {
+export function updateNewsLinkSuccess(payload) {
   return {
     type: UPDATE_NEWSLINK_SUCCESS,
     payload,
   };
 }
 
-export function updateNewslinkError(error) {
+export function updateNewsLinkError(error) {
   return {
     type: UPDATE_NEWSLINK_ERROR,
     error,
@@ -206,21 +206,21 @@ export function updateNewslinkError(error) {
 
 /* Group Message deleting */
 
-export function deleteNewslinkBegin(payload) {
+export function deleteNewsLinkBegin(payload) {
   return {
     type: DELETE_NEWSLINK_BEGIN,
     payload,
   };
 }
 
-export function deleteNewslinkSuccess(payload) {
+export function deleteNewsLinkSuccess(payload) {
   return {
     type: DELETE_NEWSLINK_SUCCESS,
     payload,
   };
 }
 
-export function deleteNewslinkError(error) {
+export function deleteNewsLinkError(error) {
   return {
     type: DELETE_NEWSLINK_ERROR,
     error,
@@ -229,21 +229,21 @@ export function deleteNewslinkError(error) {
 
 /* Group Message comments */
 
-export function createNewslinkCommentBegin(payload) {
+export function createNewsLinkCommentBegin(payload) {
   return {
     type: CREATE_NEWSLINK_COMMENT_BEGIN,
     payload,
   };
 }
 
-export function createNewslinkCommentSuccess(payload) {
+export function createNewsLinkCommentSuccess(payload) {
   return {
     type: CREATE_NEWSLINK_COMMENT_SUCCESS,
     payload,
   };
 }
 
-export function createNewslinkCommentError(error) {
+export function createNewsLinkCommentError(error) {
   return {
     type: CREATE_NEWSLINK_COMMENT_ERROR,
     error,

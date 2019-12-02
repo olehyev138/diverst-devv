@@ -18,14 +18,13 @@ import { selectIsCommitting } from 'containers/News/selectors';
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
-import { createNewslinkBegin, newsFeedUnmount } from 'containers/News/actions';
+import { createNewsLinkBegin, newsFeedUnmount } from 'containers/News/actions';
 import NewsLinkForm from 'components/News/NewsLink/NewsLinkForm';
 
 export function NewsLinkCreatePage(props) {
   useInjectReducer({ key: 'news', reducer });
   useInjectSaga({ key: 'news', saga });
 
-  const { currentUser, currentGroup } = props;
   const rs = new RouteService(useContext);
   const links = {
     newsFeedIndex: ROUTES.group.news.index.path(rs.params('group_id')),
@@ -33,8 +32,12 @@ export function NewsLinkCreatePage(props) {
 
   useEffect(() => () => props.newsFeedUnmount(), []);
 
+  const { currentUser, currentGroup } = props;
+
+
   return (
     <NewsLinkForm
+      get
       newsLinkAction={props.createNewsLinkBegin}
       buttonText='Create'
       currentUser={currentUser}

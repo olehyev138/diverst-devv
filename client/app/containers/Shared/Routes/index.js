@@ -192,7 +192,7 @@ export default function Routes(props) {
       <GroupLayout {...expandRoute(ROUTES.group.news.messages.edit)} component={GroupMessageEditPage} />
       <GroupLayout exact {...expandRoute(ROUTES.group.news.messages.show)} component={GroupMessagePage} />
       <GroupLayout {...expandRoute(ROUTES.group.news.news_links.new)} component={NewsLinkCreatePage} />
-      <GroupLayout {...expandRoute(ROUTES.group.news.news_links.new)} component={NewsLinkEditPage} />
+      <GroupLayout {...expandRoute(ROUTES.group.news.news_links.edit)} component={NewsLinkEditPage} />
 
       { /* Group Members */ }
       <GroupLayout {...expandRoute(ROUTES.group.members.new)} component={GroupMemberCreatePage} />

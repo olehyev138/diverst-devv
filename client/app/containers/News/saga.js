@@ -19,9 +19,9 @@ import {
   getNewsItemBegin, getNewsItemSuccess, getNewsItemError,
   createGroupMessageSuccess, createGroupMessageError,
   createGroupMessageCommentError, updateGroupMessageSuccess,
-  createGroupMessageCommentSuccess, createNewslinkBegin,
-  createNewslinkSuccess, createNewslinkError, createNewslinkCommentError,
-  updateNewslinkSuccess, createNewslinkCommentSuccess
+  createGroupMessageCommentSuccess, createNewsLinkBegin,
+  createNewsLinkSuccess, createNewslinkError, createNewsLinkCommentError,
+  updateNewsLinkSuccess, createNewsLinkCommentSuccess
 } from 'containers/News/actions';
 
 
@@ -98,7 +98,7 @@ export function* createGroupMessageComment(action) {
   }
 }
 
-export function* createNewslink(action) {
+export function* createNewsLink(action) {
   try {
     const payload = { news_link : action.payload };
     console.log(payload);
@@ -115,7 +115,7 @@ export function* createNewslink(action) {
   }
 }
 
-export function* updateNewslink(action) {
+export function* updateNewsLink(action) {
   try {
     const payload = { news_link: action.payload };
     const response = yield call(api.newsLinks.update.bind(api.newsLinks), payload.news_link.id, payload);
@@ -137,6 +137,6 @@ export default function* newsSaga() {
   yield takeLatest(CREATE_GROUP_MESSAGE_BEGIN, createGroupMessage);
   yield takeLatest(UPDATE_GROUP_MESSAGE_BEGIN, updateGroupMessage);
   yield takeLatest(CREATE_GROUP_MESSAGE_COMMENT_BEGIN, createGroupMessageComment);
-  yield takeLatest(CREATE_NEWSLINK_BEGIN, createNewslink);
-  yield takeLatest(UPDATE_NEWSLINK_BEGIN, updateNewslink);
+  yield takeLatest(CREATE_NEWSLINK_BEGIN, createNewsLink);
+  yield takeLatest(UPDATE_NEWSLINK_BEGIN, updateNewsLink);
 }

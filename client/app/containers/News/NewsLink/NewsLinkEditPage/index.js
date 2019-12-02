@@ -20,11 +20,11 @@ import { selectUser } from 'containers/Shared/App/selectors';
 import { selectNewsItem, selectIsCommitting, selectIsFormLoading } from 'containers/News/selectors';
 
 import {
-  getNewsItemBegin, updateNewslinkBegin,
+  getNewsItemBegin, updateNewsLinkBegin,
   newsFeedUnmount
 } from 'containers/News/actions';
 
-import NewsLinkForm from 'components/News/GroupMessage/GroupMessageForm';
+import NewsLinkForm from 'components/News/NewsLink/NewsLinkForm';
 
 export function NewsLinkEditPage(props) {
   useInjectReducer({ key: 'news', reducer });
@@ -43,11 +43,11 @@ export function NewsLinkEditPage(props) {
   }, []);
 
   const { currentUser, currentGroup, currentNewsItem } = props;
-
+  console.log(currentNewsItem);
   return (
     <NewsLinkForm
       edit
-      newsLinkAction={props.updateNewslinkBegin}
+      newsLinkAction={props.updateNewsLinkBegin}
       buttonText='Update'
       currentUser={currentUser}
       currentGroup={currentGroup}
@@ -61,7 +61,7 @@ export function NewsLinkEditPage(props) {
 
 NewsLinkEditPage.propTypes = {
   getNewsItemBegin: PropTypes.func,
-  updateNewslinkBegin: PropTypes.func,
+  updateNewsLinkBegin: PropTypes.func,
   newsFeedUnmount: PropTypes.func,
   currentUser: PropTypes.object,
   currentGroup: PropTypes.object,
@@ -80,7 +80,7 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = {
   getNewsItemBegin,
-  updateNewslinkBegin,
+  updateNewsLinkBegin,
   newsFeedUnmount
 };
 
