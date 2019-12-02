@@ -13,7 +13,10 @@ import {
   CREATE_GROUP_MESSAGE_COMMENT_BEGIN, CREATE_GROUP_MESSAGE_COMMENT_SUCCESS, CREATE_GROUP_MESSAGE_COMMENT_ERROR,
   NEWS_FEED_UNMOUNT, CREATE_NEWSLINK_BEGIN, CREATE_NEWSLINK_SUCCESS, CREATE_NEWSLINK_ERROR, UPDATE_NEWSLINK_BEGIN,
   UPDATE_NEWSLINK_SUCCESS, UPDATE_NEWSLINK_ERROR, DELETE_NEWSLINK_BEGIN, DELETE_NEWSLINK_SUCCESS,
-  DELETE_NEWSLINK_ERROR, CREATE_NEWSLINK_COMMENT_BEGIN, CREATE_NEWSLINK_COMMENT_SUCCESS, CREATE_NEWSLINK_COMMENT_ERROR
+  DELETE_NEWSLINK_ERROR, CREATE_NEWSLINK_COMMENT_BEGIN, CREATE_NEWSLINK_COMMENT_SUCCESS, CREATE_NEWSLINK_COMMENT_ERROR,
+  CREATE_SOCIALLINK_BEGIN, CREATE_SOCIALLINK_SUCCESS, CREATE_SOCIALLINK_ERROR, UPDATE_SOCIALLINK_BEGIN,
+  UPDATE_SOCIALLINK_SUCCESS, UPDATE_SOCIALLINK_ERROR, CREATE_SOCIALLINK_COMMENT_BEGIN, CREATE_SOCIALLINK_COMMENT_SUCCESS,
+  CREATE_SOCIALLINK_COMMENT_ERROR, DELETE_SOCIALLINK_ERROR, DELETE_SOCIALLINK_BEGIN, DELETE_SOCIALLINK_SUCCESS
 } from 'containers/News/constants';
 
 export function getNewsItemsBegin(payload) {
@@ -167,7 +170,7 @@ export function createNewsLinkBegin(payload) {
   };
 }
 
-export function createNewslinkSuccess(payload) {
+export function createNewsLinkSuccess(payload) {
   return {
     type: CREATE_NEWSLINK_SUCCESS,
     payload,
@@ -249,3 +252,96 @@ export function createNewsLinkCommentError(error) {
     error,
   };
 }
+
+//Social Link Actions
+
+export function createSocialLinkBegin(payload) {
+  return {
+    type: CREATE_SOCIALLINK_BEGIN,
+    payload,
+  };
+}
+
+export function createSocialLinkSuccess(payload) {
+  return {
+    type: CREATE_NEWSLINK_SUCCESS,
+    payload,
+  };
+}
+
+export function createSocialLinkError(error) {
+  return {
+    type: CREATE_SOCIALLINK_ERROR,
+    error,
+  };
+}
+
+/* Group Message updating */
+
+export function updateSocialLinkBegin(payload) {
+  return {
+    type: UPDATE_SOCIALLINK_BEGIN,
+    payload,
+  };
+}
+
+export function updateSocialLinkSuccess(payload) {
+  return {
+    type: UPDATE_SOCIALLINK_SUCCESS,
+    payload,
+  };
+}
+
+export function updateSocialLinkError(error) {
+  return {
+    type: UPDATE_SOCIALLINK_ERROR,
+    error,
+  };
+}
+
+/* Group Message deleting */
+
+export function deleteSocialLinkBegin(payload) {
+  return {
+    type: DELETE_SOCIALLINK_BEGIN,
+    payload,
+  };
+}
+
+export function deleteSocialLinkSuccess(payload) {
+  return {
+    type: DELETE_SOCIALLINK_SUCCESS,
+    payload,
+  };
+}
+
+export function deleteSocialLinkError(error) {
+  return {
+    type: DELETE_SOCIALLINK_ERROR,
+    error,
+  };
+}
+
+/* Group Message comments */
+
+export function createSocialLinkCommentBegin(payload) {
+  return {
+    type: CREATE_SOCIALLINK_COMMENT_BEGIN,
+    payload,
+  };
+}
+
+export function createSocialLinkCommentSuccess(payload) {
+  return {
+    type: CREATE_SOCIALLINK_COMMENT_SUCCESS,
+    payload,
+  };
+}
+
+export function createSocialLinkCommentError(error) {
+  return {
+    type: CREATE_SOCIALLINK_COMMENT_ERROR,
+    error,
+  };
+}
+
