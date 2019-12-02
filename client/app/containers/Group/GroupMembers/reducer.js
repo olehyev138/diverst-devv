@@ -55,7 +55,7 @@ function formatMembers(members) {
    *   { group_id: <>, user: { ... }  } -> { first_name: <>, ... }
    */
   return members.reduce((map, member) => {
-    map.push(member.user);
+    map.push({ user: member.user, status: member.status });
     return map;
   }, []);
 }

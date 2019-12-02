@@ -60,14 +60,33 @@ export function GroupMemberList(props) {
 
   const handleOrderChange = (columnId, orderDir) => {
     props.handleOrdering({
-      orderBy: (columnId === -1) ? 'users.id' : `users.${columns[columnId].field}`,
+      orderBy: (columnId === -1) ? 'users.id' : `${columns[columnId].query_field}`,
       orderDir: (columnId === -1) ? 'asc' : orderDir
     });
   };
 
   const columns = [
-    { title: 'First Name', field: 'first_name' },
-    { title: 'Last Name', field: 'last_name' }
+    {
+      title: 'First Name',
+      field: 'user.first_name',
+      query_field: 'users.first_name'
+    },
+    {
+      title: 'Last Name',
+      field: 'user.last_name',
+      query_field: 'users.last_name'
+    },
+    {
+      title: 'Membership Status',
+      field: 'status',
+      query_field: '(CASE WHEN users.active = false THEN \'inactive\' WHEN groups.pending_users AND accepted_member THEN \'pending\' ELSE \'active\' END)',
+      sorting: true,
+      lookup: {
+        active: 'Active',
+        inactive: 'Inactive',
+        pending: 'Pending',
+      }
+    },
   ];
 
   return (
