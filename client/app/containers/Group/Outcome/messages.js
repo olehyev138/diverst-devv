@@ -33,13 +33,13 @@ export default defineMessages({
   cancel: {
     id: `${scope}.form.button.cancel`,
   },
-  empty: {
-    id: `${scope}.empty`,
-  },
   inputs: {
     name: {
       id: `${scope}.form.input.name`,
     },
+  },
+  empty: {
+    id: `${scope}.empty`,
   },
   pillars: {
     text: {
@@ -47,6 +47,9 @@ export default defineMessages({
     },
     delete: {
       id: `${scope}.Pillar.form.button.delete`,
+    },
+    empty: {
+      id: `${scope}.Pillar.empty`,
     },
     inputs: {
       name: {

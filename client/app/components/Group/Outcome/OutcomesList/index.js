@@ -83,7 +83,7 @@ export function OutcomesList(props, context) {
                   ))}
                   {(!outcome.pillars || outcome.pillars.length <= 0) && (
                     <Typography>
-                      <DiverstFormattedMessage {...messages.empty} />
+                      <DiverstFormattedMessage {...messages.pillars.empty} />
                     </Typography>
                   )}
                 </CardContent>
@@ -118,6 +118,16 @@ export function OutcomesList(props, context) {
               <Box mb={3} />
             </Grid>
           ))}
+          {props.outcomes && props.outcomes.length <= 0 && (
+            <React.Fragment>
+              <Grid item sm>
+                <Box mt={3} />
+                <Typography variant='h6' align='center' color='textSecondary'>
+                  <DiverstFormattedMessage {...messages.empty} />
+                </Typography>
+              </Grid>
+            </React.Fragment>
+          )}
         </Grid>
       </DiverstLoader>
       <DiverstPagination

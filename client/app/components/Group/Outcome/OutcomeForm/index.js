@@ -170,7 +170,7 @@ export function OutcomeFormInner({ handleSubmit, handleChange, handleBlur, value
                   {isAttributesArrayEmpty(pillarsAttributes) && (
                     <Collapse in appear>
                       <Typography color='textSecondary'>
-                        <DiverstFormattedMessage {...messages.empty} />
+                        <DiverstFormattedMessage {...messages.pillars.empty} />
                       </Typography>
                     </Collapse>
                   )}
