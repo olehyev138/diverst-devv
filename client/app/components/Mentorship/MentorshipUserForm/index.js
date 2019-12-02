@@ -31,7 +31,7 @@ export function MentorshipUserFormInner({ handleSubmit, handleChange, handleBlur
   const days = [...Array(7).keys()].map(day => ({ label: props.intl.formatMessage(appMessages.days_of_week[day]), value: day }));
   return (
     <React.Fragment>
-      { props.user && (
+      { props.user && props.globalUser.id === props.user.id && (
         <Card>
           <Form>
             <CardContent>
@@ -111,7 +111,7 @@ export function MentorshipUserFormInner({ handleSubmit, handleChange, handleBlur
                           value={values.accepting_mentor_requests}
                         />
                       )}
-                      label={<DiverstFormattedMessage {...messages.form.acceptMentor} />}
+                      label={<DiverstFormattedMessage {...messages.form.acceptMentorRequest} />}
                     />
                   </FormControl>
                 </Grid>
@@ -136,7 +136,7 @@ export function MentorshipUserFormInner({ handleSubmit, handleChange, handleBlur
                           value={values.accepting_mentee_requests}
                         />
                       )}
-                      label={<DiverstFormattedMessage {...messages.form.acceptMentee} />}
+                      label={<DiverstFormattedMessage {...messages.form.acceptMenteeRequest} />}
                     />
                   </FormControl>
                 </Grid>
@@ -178,7 +178,7 @@ export function MentorshipUserFormInner({ handleSubmit, handleChange, handleBlur
                 margin='normal'
                 label={<DiverstFormattedMessage {...messages.form.interests} />}
                 value={values.mentoring_interest_ids}
-                options={dig(props, 'user', 'interest_options')}
+                options={props.interestOptions}
                 onChange={value => setFieldValue('mentoring_interest_ids', value)}
               />
               {/* Types */}
@@ -190,7 +190,7 @@ export function MentorshipUserFormInner({ handleSubmit, handleChange, handleBlur
                 margin='normal'
                 label={<DiverstFormattedMessage {...messages.form.types} />}
                 value={values.mentoring_type_ids}
-                options={dig(props, 'user', 'type_options')}
+                options={props.typeOptions}
                 onChange={value => setFieldValue('mentoring_type_ids', value)}
               />
             </CardContent>
@@ -249,6 +249,9 @@ MentorshipUserForm.propTypes = {
 MentorshipUserFormInner.propTypes = {
   intl: intlShape.isRequired,
   user: PropTypes.object,
+  globalUser: PropTypes.shape({
+    id: PropTypes.number
+  }).isRequired,
   fieldData: PropTypes.array,
   updateFieldDataBegin: PropTypes.func,
   handleSubmit: PropTypes.func,
@@ -258,6 +261,8 @@ MentorshipUserFormInner.propTypes = {
   buttonText: PropTypes.string,
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
+  interestOptions: PropTypes.array,
+  typeOptions: PropTypes.array,
   links: PropTypes.shape({
     usersIndex: PropTypes.string
   })

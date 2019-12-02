@@ -34,8 +34,29 @@ const selectCustomText = () => createSelector(
   globalState => dig(globalState, 'enterprise', 'custom_text')
 );
 
+const selectMentoringInterests = () => createSelector(
+  selectGlobal,
+  (globalState) => {
+    const mInterests = dig(globalState, 'enterprise', 'mentoring_interests');
+    if (mInterests)
+      return mInterests.map(i => ({ label: i.name, value: i.id }));
+    return [];
+  }
+);
+
+const selectMentoringTypes = () => createSelector(
+  selectGlobal,
+  (globalState) => {
+    const mTypes = dig(globalState, 'enterprise', 'mentoring_types');
+    if (mTypes)
+      return mTypes.map(i => ({ label: i.name, value: i.id }));
+    return [];
+  }
+);
+
 export {
   selectGlobal, selectRouter, selectLocation,
   selectEnterprise, selectToken, selectUserPolicyGroup,
-  selectUser, selectCustomText,
+  selectUser, selectCustomText, selectMentoringInterests,
+  selectMentoringTypes,
 };

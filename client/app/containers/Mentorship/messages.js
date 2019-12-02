@@ -33,10 +33,10 @@ export default defineMessages({
   },
   accepting: {
     mentors: {
-      id: `${scope}.accepting.mentors`,
+      id: `${scope}.accepting.mentorRequests`,
     },
     mentees: {
-      id: `${scope}.accepting.mentees`,
+      id: `${scope}.accepting.menteeRequests`,
     },
   },
   mentee: {
@@ -96,11 +96,11 @@ export default defineMessages({
     mentee: {
       id: `${scope}.form.mentee`
     },
-    acceptMentor: {
-      id: `${scope}.form.acceptMentor`
+    acceptMentorRequest: {
+      id: `${scope}.form.acceptMentorRequests`
     },
-    acceptMentee: {
-      id: `${scope}.form.acceptMentee`
+    acceptMenteeRequest: {
+      id: `${scope}.form.acceptMenteeRequests`
     },
     mentorDescription: {
       id: `${scope}.form.mentorDescription`
@@ -134,8 +134,11 @@ export default defineMessages({
     schedule: {
       id: `${scope}.menu.schedule`
     },
-    upcoming: {
-      id: `${scope}.menu.upcoming`
+    participating: {
+      id: `${scope}.menu.participating`
+    },
+    hosting: {
+      id: `${scope}.menu.hosting`
     },
     feedback: {
       id: `${scope}.menu.feedback`
