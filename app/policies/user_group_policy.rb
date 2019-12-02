@@ -29,7 +29,7 @@ class UserGroupPolicy < ApplicationPolicy
 
     def resolve
       if index?
-        scope.where(groups: {enterprise_id: user.enterprise_id}).all
+        scope.where(groups: { enterprise_id: user.enterprise_id }).all
       else
         scope.none
       end

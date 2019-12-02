@@ -124,6 +124,7 @@ class GroupPolicy < ApplicationPolicy
     return true if @policy_group.groups_manage? && @policy_group.groups_insights_manage?
     # group leader
     return true if has_group_leader_permissions?('groups_insights_manage')
+
     # group member
     is_a_member? && @policy_group.groups_insights_manage?
   end
@@ -136,6 +137,7 @@ class GroupPolicy < ApplicationPolicy
     return true if @policy_group.groups_manage? && @policy_group.groups_layouts_manage?
     # group leader
     return true if has_group_leader_permissions?('groups_layouts_manage')
+
     # group member
     is_a_member? && @policy_group.groups_layouts_manage?
   end
@@ -148,6 +150,7 @@ class GroupPolicy < ApplicationPolicy
     return true if @policy_group.groups_manage? && @policy_group.group_settings_manage?
     # group leader
     return true if has_group_leader_permissions?('group_settings_manage')
+
     # group member
     is_a_member? && @policy_group.group_settings_manage?
   end

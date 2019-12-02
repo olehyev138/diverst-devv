@@ -45,7 +45,6 @@ export function GroupMemberListPage(props) {
     setMemberType(type);
     if (MemberTypes.includes(type))
       handleMemberScopes([type], true);
-
   };
 
   const defaultParams = {

@@ -17,6 +17,7 @@ class UserGroupSerializer < ApplicationRecordSerializer
     if object.group.pending_users == 'enabled' && !object.accepted_member
       return 'pending'
     end
+
     'active'
   end
 end

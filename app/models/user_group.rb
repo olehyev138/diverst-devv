@@ -15,7 +15,7 @@ class UserGroup < ApplicationRecord
   scope :active, -> { joins(:user).where(users: { active: true }) }
   scope :inactive, -> { joins(:user).where(users: { active: false }) }
 
-  scope :pending, -> { active.joins(:group).where(accepted_member: false, groups: {pending_users: 'enabled'})}
+  scope :pending, -> { active.joins(:group).where(accepted_member: false, groups: { pending_users: 'enabled' }) }
   scope :accepted_users, -> { active.joins(:group).where("groups.pending_users = 'disabled' OR (groups.pending_users = 'enabled' AND accepted_member=true)") }
 
   scope :with_answered_survey, -> { where.not(data: nil) }
