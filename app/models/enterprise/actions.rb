@@ -6,6 +6,10 @@ module Enterprise::Actions
   end
 
   module ClassMethods
+    def base_preload
+      [ :theme ]
+    end
+
     def sso_login(diverst_request, params)
       enterprise = find(params[:id])
       settings = enterprise.saml_settings

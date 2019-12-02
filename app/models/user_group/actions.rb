@@ -9,5 +9,9 @@ module UserGroup::Actions
     def base_includes
       [ :user, :group ]
     end
+
+    def base_preloads
+      [ :group, :user, group: Group.base_attributes_preloads, user: User.base_attribute_preloads ]
+    end
   end
 end
