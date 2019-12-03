@@ -30,6 +30,7 @@ export function EventFormInner({
   buttonText, setFieldValue, setFieldTouched, setFieldError,
   ...props
 }) {
+  console.log(props);
   return (
     <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.event}>
       <Card>
@@ -44,7 +45,7 @@ export function EventFormInner({
               id='name'
               name='name'
               margin='normal'
-              label={<DiverstFormattedMessage {...messages.form.name} />}
+              label={<DiverstFormattedMessage {...messages.inputs.name} />}
               value={values.name}
             />
             <Field
@@ -58,7 +59,7 @@ export function EventFormInner({
               rows={4}
               variant='outlined'
               margin='normal'
-              label={<DiverstFormattedMessage {...messages.form.description} />}
+              label={<DiverstFormattedMessage {...messages.inputs.description} />}
               value={values.description}
             />
           </CardContent>
@@ -78,7 +79,7 @@ export function EventFormInner({
                   id='start'
                   name='start'
                   margin='normal'
-                  label={<DiverstFormattedMessage {...messages.form.start} />}
+                  label={<DiverstFormattedMessage {...messages.inputs.start} />}
                 />
               </Grid>
               <Grid item xs md={5}>
@@ -94,7 +95,7 @@ export function EventFormInner({
                   id='end'
                   name='end'
                   margin='normal'
-                  label={<DiverstFormattedMessage {...messages.form.end} />}
+                  label={<DiverstFormattedMessage {...messages.inputs.end} />}
                 />
               </Grid>
             </Grid>
