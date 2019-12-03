@@ -83,6 +83,8 @@ import GroupMessageCreatePage from 'containers/News/GroupMessage/GroupMessageCre
 import GroupMessageEditPage from 'containers/News/GroupMessage/GroupMessageEditPage/Loadable';
 import NewsLinkCreatePage from 'containers/News/NewsLink/NewsLinkCreatePage';
 import NewsLinkEditPage from 'containers/News/NewsLink/NewsLinkEditPage';
+import SocialLinkCreatePage from 'containers/News/SocialLink/SocialLinkCreatePage';
+import SocialLinkEditPage from 'containers/News/SocialLink/SocialLinkEditPage';
 
 /* Group - Outcomes */
 import OutcomeCreatePage from 'containers/Group/Outcome/OutcomeCreatePage/Loadable';
@@ -193,5 +195,7 @@ export {
   UserRoleCreatePage,
   UserRoleEditPage,
   NewsLinkEditPage,
-  NewsLinkCreatePage
+  NewsLinkCreatePage,
+  SocialLinkCreatePage,
+  SocialLinkEditPage
 };

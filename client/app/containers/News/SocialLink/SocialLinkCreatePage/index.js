@@ -36,7 +36,7 @@ export function SocialLinkCreatePage(props) {
 
 
   return (
-    <NewsLinkForm
+    <SocialLinkForm
       get
       socialLinkAction={props.createSocialLinkBegin}
       buttonText='Create'
