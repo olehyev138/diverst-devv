@@ -27,10 +27,10 @@ export function OutcomePage(props) {
 
   const rs = new RouteService(useContext);
   const links = {
-    outcomesIndex: ROUTES.group.outcomes.index.path(rs.params('group_id')),
-    outcomeEdit: ROUTES.group.outcomes.edit.path(rs.params('group_id'), rs.params('outcome_id')),
+    outcomesIndex: ROUTES.group.plan.outcomes.index.path(rs.params('group_id')),
+    outcomeEdit: ROUTES.group.plan.outcomes.edit.path(rs.params('group_id'), rs.params('outcome_id')),
     eventNew: ROUTES.group.events.new.path(rs.params('group_id')),
-    eventManage: eventId => ROUTES.group.events.manage.path(rs.params('group_id'), eventId)
+    eventManage: eventId => ROUTES.group.plan.events.manage.path(rs.params('group_id'), eventId)
   };
 
   useEffect(() => {

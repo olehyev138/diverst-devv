@@ -35,10 +35,10 @@ export function OutcomesPage(props) {
 
   const rs = new RouteService(useContext);
   const links = {
-    outcomesIndex: ROUTES.group.outcomes.index.path(rs.params('group_id')),
-    outcomeShow: id => ROUTES.group.outcomes.show.path(rs.params('group_id'), id),
-    outcomeNew: ROUTES.group.outcomes.new.path(rs.params('group_id')),
-    outcomeEdit: id => ROUTES.group.outcomes.edit.path(rs.params('group_id'), id)
+    outcomesIndex: ROUTES.group.plan.outcomes.index.path(rs.params('group_id')),
+    outcomeShow: id => ROUTES.group.plan.outcomes.show.path(rs.params('group_id'), id),
+    outcomeNew: ROUTES.group.plan.outcomes.new.path(rs.params('group_id')),
+    outcomeEdit: id => ROUTES.group.plan.outcomes.edit.path(rs.params('group_id'), id)
   };
 
   useEffect(() => {

@@ -181,12 +181,11 @@ export default function Routes(props) {
       <GroupLayout exact {...expandRoute(ROUTES.group.members.index)} component={GroupMemberListPage} />
       <GroupLayout exact {...expandRoute(ROUTES.group.events.index)} component={EventsPage} />
       <GroupLayout exact {...expandRoute(ROUTES.group.news.index)} component={NewsFeedPage} />
-      <GroupLayout exact {...expandRoute(ROUTES.group.outcomes.index)} component={OutcomesPage} />
+      <GroupLayout exact {...expandRoute(ROUTES.group.plan.outcomes.index)} component={OutcomesPage} />
 
       { /* Group Events */ }
       <GroupLayout {...expandRoute(ROUTES.group.events.new)} component={EventCreatePage} />
       <GroupLayout {...expandRoute(ROUTES.group.events.edit)} component={EventEditPage} />
-      <GroupLayout {...expandRoute(ROUTES.group.events.manage)} component={EventManagePage} />
       <GroupLayout exact {...expandRoute(ROUTES.group.events.show)} component={EventPage} />
 
       { /* Group News Feed */ }
@@ -198,10 +197,14 @@ export default function Routes(props) {
       { /* Group Members */ }
       <GroupLayout {...expandRoute(ROUTES.group.members.new)} component={GroupMemberCreatePage} />
 
-      { /* Group Outcomes */ }
-      <GroupLayout {...expandRoute(ROUTES.group.outcomes.new)} component={OutcomeCreatePage} />
-      <GroupLayout {...expandRoute(ROUTES.group.outcomes.edit)} component={OutcomeEditPage} />
-      <GroupLayout exact {...expandRoute(ROUTES.group.outcomes.show)} component={OutcomePage} />
+      { /* Group Plan */ }
+      { /* Group Plan - Outcomes */ }
+      <GroupLayout {...expandRoute(ROUTES.group.plan.outcomes.new)} component={OutcomeCreatePage} />
+      <GroupLayout {...expandRoute(ROUTES.group.plan.outcomes.edit)} component={OutcomeEditPage} />
+      <GroupLayout exact {...expandRoute(ROUTES.group.plan.outcomes.show)} component={OutcomePage} />
+
+      { /* Group Plan - Events */ }
+      <GroupLayout {...expandRoute(ROUTES.group.plan.events.manage)} component={EventManagePage} />
 
       { /* Group Manage */ }
       { /* TODO - redirect /manage -> /manage/settings */ }
