@@ -83,7 +83,7 @@ import {
   BrandingHomePage,
   SponsorListPage,
   SponsorCreatePage,
-  SponsorEditPage
+  SponsorEditPage,
   CampaignQuestionShowPage
 } from './templates';
 

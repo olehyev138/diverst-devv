@@ -239,7 +239,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
               <WithStyles(ForwardRef(ListItemText))>
-                Sponsors
+                Campaigns
               </WithStyles(ForwardRef(ListItemText))>
             </WithStyles(ForwardRef(MenuItem))>
             <WithStyles(ForwardRef(MenuItem))
@@ -335,6 +335,24 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
               <WithStyles(ForwardRef(ListItemText))>
                 <Memo(DiverstFormattedMessage)
                   id="diverst.containers.Routes.admin.system.users"
+                />
+              </WithStyles(ForwardRef(ListItemText))>
+            </WithStyles(ForwardRef(MenuItem))>
+            <WithStyles(ForwardRef(MenuItem))
+              component={
+                Object {
+                  "$$typeof": Symbol(react.forward_ref),
+                  "render": [Function],
+                }
+              }
+              to="/admin/system/branding/theme"
+            >
+              <WithStyles(ForwardRef(ListItemIcon))>
+                <ListIcon />
+              </WithStyles(ForwardRef(ListItemIcon))>
+              <WithStyles(ForwardRef(ListItemText))>
+                <Memo(DiverstFormattedMessage)
+                  id="diverst.containers.Routes.admin.system.branding"
                 />
               </WithStyles(ForwardRef(ListItemText))>
             </WithStyles(ForwardRef(MenuItem))>
@@ -607,7 +625,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
               <WithStyles(ForwardRef(ListItemText))>
-                Sponsors
+                Campaigns
               </WithStyles(ForwardRef(ListItemText))>
             </WithStyles(ForwardRef(MenuItem))>
             <WithStyles(ForwardRef(MenuItem))
@@ -703,6 +721,24 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
               <WithStyles(ForwardRef(ListItemText))>
                 <Memo(DiverstFormattedMessage)
                   id="diverst.containers.Routes.admin.system.users"
+                />
+              </WithStyles(ForwardRef(ListItemText))>
+            </WithStyles(ForwardRef(MenuItem))>
+            <WithStyles(ForwardRef(MenuItem))
+              component={
+                Object {
+                  "$$typeof": Symbol(react.forward_ref),
+                  "render": [Function],
+                }
+              }
+              to="/admin/system/branding/theme"
+            >
+              <WithStyles(ForwardRef(ListItemIcon))>
+                <ListIcon />
+              </WithStyles(ForwardRef(ListItemIcon))>
+              <WithStyles(ForwardRef(ListItemText))>
+                <Memo(DiverstFormattedMessage)
+                  id="diverst.containers.Routes.admin.system.branding"
                 />
               </WithStyles(ForwardRef(ListItemText))>
             </WithStyles(ForwardRef(MenuItem))>
