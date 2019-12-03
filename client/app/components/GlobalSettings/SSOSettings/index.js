@@ -111,20 +111,6 @@ export function SSOSettings(props) {
     idp_sso_target_url: { default: '' },
     idp_slo_target_url: { default: '' },
     idp_cert: { default: '' },
-    default_from_email_address: { default: '' },
-    default_from_email_display_name: { default: '' },
-    redirect_email_contact: { default: '' },
-    mentorship_module_enabled: { default: false },
-    disable_likes: { default: false },
-    enable_pending_comments: { default: false },
-    collaborate_module_enabled: { default: false },
-    scope_module_enabled: { default: false },
-    has_enabled_onboarding_email: { default: false },
-    disable_emails: { default: false },
-    enable_rewards: { default: false },
-    enable_social_media: { default: false },
-    plan_module_enabled: { default: false },
-    time_zone: { default: null }
   });
 
   return (
