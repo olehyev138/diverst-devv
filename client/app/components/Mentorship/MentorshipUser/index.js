@@ -61,13 +61,15 @@ export function Profile(props) {
       {(user) ? (
         <React.Fragment>
           { /* BASIC INFO */ }
-          <Paper>
+          <Paper elevation={3}>
             <CardContent>
               <Typography color='primary' variant='h5' component='h2' className={classes.title}>
                 {user.name}
               </Typography>
             </CardContent>
-            <Divider />
+          </Paper>
+          <Box mb={2} />
+          <Paper elevation={3}>
             <CardContent>
               <Typography color='primary' variant='h6' component='h2' className={classes.dataHeaders}>
                 E-mail
@@ -100,7 +102,7 @@ export function Profile(props) {
           </Paper>
           <Box mb={2} />
           { /* MENTORSHIP INFO */ }
-          <Paper>
+          <Paper elevation={3}>
             { user.mentorship_description && (
               <CardContent>
                 <Grid container spacing={1}>
@@ -149,10 +151,10 @@ export function Profile(props) {
               <Grid container spacing={1}>
                 <Grid item xs>
                   <Typography color='primary' variant='h6' component='h2' className={classes.dataHeaders}>
-                    <DiverstFormattedMessage {...mentorMessages.accepting.mentees} />
+                    <DiverstFormattedMessage {...mentorMessages.accepting.mentors} />
                   </Typography>
                   <Typography color='secondary' component='h2' className={classes.data}>
-                    {user.accepting_mentee_requests ? (
+                    {user.accepting_mentor_requests ? (
                       <DiverstFormattedMessage {...appMessages.confirmation.yes} />
                     ) : (
                       <DiverstFormattedMessage {...appMessages.confirmation.no} />
@@ -161,10 +163,10 @@ export function Profile(props) {
                 </Grid>
                 <Grid item xs>
                   <Typography color='primary' variant='h6' component='h2' className={classes.dataHeaders}>
-                    <DiverstFormattedMessage {...mentorMessages.accepting.mentors} />
+                    <DiverstFormattedMessage {...mentorMessages.accepting.mentees} />
                   </Typography>
                   <Typography color='secondary' component='h2' className={classes.data}>
-                    {user.accepting_mentor_requests ? (
+                    {user.accepting_mentee_requests ? (
                       <DiverstFormattedMessage {...appMessages.confirmation.yes} />
                     ) : (
                       <DiverstFormattedMessage {...appMessages.confirmation.no} />

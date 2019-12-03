@@ -18,7 +18,7 @@ import dig from 'object-dig';
 
 import { getUserBegin, userUnmount } from 'containers/Mentorship/actions';
 
-import { selectUser as selectGlobalUser } from 'containers/Shared/App/selectors';
+import { selectMentoringInterests, selectUser as selectGlobalUser } from 'containers/Shared/App/selectors';
 import { selectFormUser, selectUser } from 'containers/Mentorship/selectors';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
@@ -54,13 +54,13 @@ const MentorshipLayout = ({ component: Component, ...rest }) => {
     // const userId = userId1;
     const userId = userId1 || userId2;
 
-    if (userId && dig(other.user, 'id') !== userId)
+    if (userId && dig(rest, 'user', 'id') !== userId)
       other.getUserBegin({ id: userId });
 
     return () => {
       other.userUnmount();
     };
-  }, []);
+  }, [dig(rest, 'globalUser', 'id')]);
 
   return (
     <UserLayout
@@ -70,22 +70,27 @@ const MentorshipLayout = ({ component: Component, ...rest }) => {
       {...other}
       component={matchProps => (
         <React.Fragment>
-          <Grid container>
-            <Grid item xs={3}>
-              <CardContent>
-                <MentorshipMenu
-                  user={user}
-                />
-              </CardContent>
-            </Grid>
-            <Grid item xs={9}>
-              {user && (
+          {user && (
+            <Grid container>
+              <Grid item xs={3}>
                 <CardContent>
-                  <Component user={user} pageTitle={data.titleMessage} {...rest} />
+                  {user && (
+                    <MentorshipMenu
+                      user={user}
+                      globalUser={dig(rest, 'globalUser')}
+                    />
+                  )}
                 </CardContent>
-              )}
+              </Grid>
+              <Grid item xs={9}>
+                {user && (
+                  <CardContent>
+                    <Component user={user} formUser={rest.formUser} pageTitle={data.titleMessage} {...rest} />
+                  </CardContent>
+                )}
+              </Grid>
             </Grid>
-          </Grid>
+          )}
         </React.Fragment>
       )}
     />
@@ -95,6 +100,7 @@ const MentorshipLayout = ({ component: Component, ...rest }) => {
 MentorshipLayout.propTypes = {
   globalUser: PropTypes.object,
   user: PropTypes.object,
+  formUser: PropTypes.object,
   classes: PropTypes.object,
   component: PropTypes.elementType,
   pageTitle: PropTypes.object,
@@ -103,6 +109,7 @@ MentorshipLayout.propTypes = {
 const mapStateToProps = createStructuredSelector({
   globalUser: selectGlobalUser(),
   user: selectUser(),
+  formUser: selectFormUser(),
 });
 
 const mapDispatchToProps = {

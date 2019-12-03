@@ -12,7 +12,6 @@ import { withStyles } from '@material-ui/core/styles';
 import classNames from 'classnames';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
-import { height } from '@material-ui/system';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 
 import messages from 'containers/Mentorship/messages';
@@ -44,6 +43,7 @@ const styles = theme => ({
 
 export function MentorshipMenu(props) {
   const user = dig(props, 'user');
+  const globalUser = dig(props, 'globalUser');
   const { classes } = props;
 
   return (
@@ -61,80 +61,106 @@ export function MentorshipMenu(props) {
                 <DiverstFormattedMessage {...messages.menu.profile} />
               </Button>
             </CardContent>
+            { user.id === globalUser.id && (
+              <CardContent>
+                <Button
+                  to={ROUTES.user.mentorship.edit.path(user.id)}
+                  component={WrappedNavLink}
+                  color='primary'
+                  size='large'
+                >
+                  <DiverstFormattedMessage {...messages.menu.editProfile} />
+                </Button>
+              </CardContent>
+            )}
+            { user.mentee && (
+              <CardContent>
+                <Button
+                  to={ROUTES.user.mentorship.mentors.path(user.id)}
+                  component={WrappedNavLink}
+                  color='primary'
+                  size='large'
+                >
+                  <DiverstFormattedMessage {...messages.menu.mentors} />
+                </Button>
+              </CardContent>
+            )}
+            { user.mentor && (
+              <CardContent>
+                <Button
+                  to={ROUTES.user.mentorship.mentees.path(user.id)}
+                  component={WrappedNavLink}
+                  color='primary'
+                  size='large'
+                >
+                  <DiverstFormattedMessage {...messages.menu.mentees} />
+                </Button>
+              </CardContent>
+            )}
+            { user.id === globalUser.id && (
+              <CardContent>
+                <Button
+                  to={ROUTES.user.mentorship.proposals.path(user.id)}
+                  component={WrappedNavLink}
+                  color='primary'
+                  size='large'
+                >
+                  <DiverstFormattedMessage {...messages.menu.proposals} />
+                </Button>
+              </CardContent>
+            )}
+            { user.id === globalUser.id && (user.accepting_mentor_requests || user.accepting_mentee_requests) && (
+              <CardContent>
+                <Button
+                  to={ROUTES.user.mentorship.requests.path(user.id)}
+                  component={WrappedNavLink}
+                  color='primary'
+                  size='large'
+                >
+                  <DiverstFormattedMessage {...messages.menu.requests} />
+                </Button>
+              </CardContent>
+            )}
             <CardContent>
               <Button
-                to={ROUTES.user.mentorship.edit.path(user.id)}
+                to={ROUTES.user.mentorship.sessions.schedule.path()}
                 component={WrappedNavLink}
                 color='primary'
                 size='large'
-              >
-                <DiverstFormattedMessage {...messages.menu.editProfile} />
-              </Button>
-            </CardContent>
-            <CardContent>
-              <Button
-                to={ROUTES.user.mentorship.mentors.path(user.id)}
-                component={WrappedNavLink}
-                color='primary'
-                size='large'
-              >
-                <DiverstFormattedMessage {...messages.menu.mentors} />
-              </Button>
-            </CardContent>
-            <CardContent>
-              <Button
-                to={ROUTES.user.mentorship.mentees.path(user.id)}
-                component={WrappedNavLink}
-                color='primary'
-                size='large'
-              >
-                <DiverstFormattedMessage {...messages.menu.mentees} />
-              </Button>
-            </CardContent>
-            <CardContent>
-              <Button
-                to={ROUTES.user.mentorship.proposals.path(user.id)}
-                component={WrappedNavLink}
-                color='primary'
-                size='large'
-              >
-                <DiverstFormattedMessage {...messages.menu.proposals} />
-              </Button>
-            </CardContent>
-            <CardContent>
-              <Button
-                to={ROUTES.user.mentorship.requests.path(user.id)}
-                component={WrappedNavLink}
-                color='primary'
-                size='large'
-              >
-                <DiverstFormattedMessage {...messages.menu.requests} />
-              </Button>
-            </CardContent>
-            <CardContent>
-              <Button
-                to={ROUTES.user.mentorship.show.path(user.id)}
-                component={WrappedNavLink}
               >
                 <DiverstFormattedMessage {...messages.menu.schedule} />
               </Button>
             </CardContent>
             <CardContent>
               <Button
-                to={ROUTES.user.mentorship.show.path(user.id)}
+                to={ROUTES.user.mentorship.sessions.hosting.path(user.id)}
                 component={WrappedNavLink}
+                color='primary'
+                size='large'
               >
-                <DiverstFormattedMessage {...messages.menu.upcoming} />
+                <DiverstFormattedMessage {...messages.menu.hosting} />
               </Button>
             </CardContent>
             <CardContent>
               <Button
-                to={ROUTES.user.mentorship.show.path(user.id)}
+                to={ROUTES.user.mentorship.sessions.participating.path(user.id)}
                 component={WrappedNavLink}
+                color='primary'
+                size='large'
               >
-                <DiverstFormattedMessage {...messages.menu.feedback} />
+                <DiverstFormattedMessage {...messages.menu.participating} />
               </Button>
             </CardContent>
+            { false && (
+              <CardContent>
+                <Button
+                  to={ROUTES.user.mentorship.show.path(user.id)}
+                  component={WrappedNavLink}
+                >
+                  <DiverstFormattedMessage {...messages.menu.feedback} />
+                </Button>
+              </CardContent>
+            )}
           </React.Fragment>
         ) : (
           <React.Fragment />
@@ -146,6 +172,9 @@ export function MentorshipMenu(props) {
 
 MentorshipMenu.propTypes = {
   user: PropTypes.object,
+  globalUser: PropTypes.shape({
+    id: PropTypes.number
+  }).isRequired,
   classes: PropTypes.object,
 };
 
