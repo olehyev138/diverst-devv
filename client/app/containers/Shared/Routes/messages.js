@@ -115,11 +115,11 @@ export default defineMessages({
         edit: {
           id: `${scope}.group.plan.outcomes.edit`
         },
-        show: {
-          id: `${scope}.group.plan.outcomes.show`
-        },
       },
       events: {
+        index: {
+          id: `${scope}.group.plan.events.index`
+        },
         manage: {
           id: `${scope}.group.plan.events.manage`
         },

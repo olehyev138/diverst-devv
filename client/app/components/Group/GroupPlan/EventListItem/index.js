@@ -1,6 +1,6 @@
 /**
  *
- * Outcome Event List Item Component
+ * Event List Item Component
  *
  */
 
@@ -32,7 +32,7 @@ const styles = theme => ({
   },
 });
 
-export function OutcomeEventListItem(props) {
+export function EventListItem(props) {
   const { classes, item } = props;
 
   return (
@@ -63,7 +63,7 @@ export function OutcomeEventListItem(props) {
   );
 }
 
-OutcomeEventListItem.propTypes = {
+EventListItem.propTypes = {
   classes: PropTypes.object,
   item: PropTypes.object,
 };
@@ -71,4 +71,4 @@ OutcomeEventListItem.propTypes = {
 export default compose(
   memo,
   withStyles(styles),
-)(OutcomeEventListItem);
+)(EventListItem);

@@ -13,24 +13,25 @@ const styles = theme => ({
   },
 });
 
-const ManagePages = Object.freeze({
-  outcomes: 0,
-  kpi: 1,
-  updates: 2,
-  budgeting: 3,
+const PlanPages = Object.freeze({
+  events: 0,
+  outcomes: 1,
+  kpi: 2,
+  updates: 3,
+  budgeting: 4,
 });
 
 const GroupPlanLayout = ({ component: Component, classes, ...rest }) => {
-  const { currentGroup, location, ...other } = rest;
+  const { location, ...other } = rest;
 
-  /* Get last element of current path, ie: '/group/:id/manage/settings -> settings */
+  /* Get last element of current path, ie: '/group/:id/plan/outcomes -> outcomes */
   const currentPagePath = location.pathname.split('/').pop();
 
-  const [tab, setTab] = useState(ManagePages[currentPagePath]);
+  const [tab, setTab] = useState(PlanPages[currentPagePath]);
 
   useEffect(() => {
-    if (tab !== ManagePages[currentPagePath])
-      setTab(ManagePages[currentPagePath]);
+    if (tab !== PlanPages[currentPagePath])
+      setTab(PlanPages[currentPagePath]);
   }, [currentPagePath]);
 
   return (
@@ -41,7 +42,7 @@ const GroupPlanLayout = ({ component: Component, classes, ...rest }) => {
       />
       <Fade in appear>
         <div className={classes.content}>
-          <Component currentGroup={currentGroup} {...other} />
+          <Component {...other} />
         </div>
       </Fade>
     </React.Fragment>

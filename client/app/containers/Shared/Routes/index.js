@@ -28,10 +28,10 @@ import {
   EventCreatePage,
   EventEditPage,
   EventManagePage,
+  GroupPlanEventsPage,
   GroupMessagePage,
   GroupMessageCreatePage,
   GroupMessageEditPage,
-  OutcomePage,
   OutcomesPage,
   OutcomeCreatePage,
   OutcomeEditPage,
@@ -199,11 +199,12 @@ export default function Routes(props) {
 
       { /* Group Plan */ }
       { /* Group Plan - Outcomes */ }
+      <GroupLayout exact {...expandRoute(ROUTES.group.plan.outcomes.index)} component={OutcomesPage} />
       <GroupLayout {...expandRoute(ROUTES.group.plan.outcomes.new)} component={OutcomeCreatePage} />
       <GroupLayout {...expandRoute(ROUTES.group.plan.outcomes.edit)} component={OutcomeEditPage} />
-      <GroupLayout exact {...expandRoute(ROUTES.group.plan.outcomes.show)} component={OutcomePage} />
 
       { /* Group Plan - Events */ }
+      <GroupLayout exact {...expandRoute(ROUTES.group.plan.events.index)} component={GroupPlanEventsPage} />
       <GroupLayout {...expandRoute(ROUTES.group.plan.events.manage)} component={EventManagePage} />
 
       { /* Group Manage */ }

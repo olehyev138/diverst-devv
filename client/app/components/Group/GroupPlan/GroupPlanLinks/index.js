@@ -28,6 +28,11 @@ export function GroupPlanLinks(props) {
         >
           <Tab
             component={WrappedNavLink}
+            to={ROUTES.group.plan.events.index.path(props.currentGroup.id)}
+            label='Event Management'
+          />
+          <Tab
+            component={WrappedNavLink}
             to={ROUTES.group.plan.outcomes.index.path(props.currentGroup.id)}
             label='Structure'
           />

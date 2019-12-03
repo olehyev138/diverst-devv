@@ -91,7 +91,7 @@ export function OutcomesList(props, context) {
                   <Button
                     component={WrappedNavLink}
                     color='primary'
-                    to={props.links.outcomeShow(outcome.id)}
+                    to={props.links.eventIndex}
                   >
                     <EventIcon className={classes.buttonIcon} />
                     Events
@@ -133,7 +133,7 @@ export function OutcomesList(props, context) {
       <DiverstPagination
         isLoading={props.isLoading}
         rowsPerPage={props.defaultParams.count}
-        count={props.outcomeTotal}
+        count={props.outcomesTotal}
         handlePagination={props.handlePagination}
       />
     </React.Fragment>
@@ -144,7 +144,7 @@ OutcomesList.propTypes = {
   intl: PropTypes.object,
   classes: PropTypes.object,
   outcomes: PropTypes.array,
-  outcomeTotal: PropTypes.number,
+  outcomesTotal: PropTypes.number,
   isLoading: PropTypes.bool,
   defaultParams: PropTypes.object,
   handlePagination: PropTypes.func,

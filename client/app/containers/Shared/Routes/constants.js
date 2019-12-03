@@ -235,12 +235,6 @@ export const ROUTES = {
             titleMessage: messages.groups.plan.outcomes.index,
           }
         },
-        show: {
-          path: (groupId = ':group_id', outcomeId = ':outcome_id') => `/groups/${groupId}/plan/outcomes/${outcomeId}`,
-          data: {
-            titleMessage: messages.groups.plan.outcomes.show,
-          }
-        },
         new: {
           path: (groupId = ':group_id') => `/groups/${groupId}/plan/outcomes/new`,
           data: {
@@ -256,6 +250,12 @@ export const ROUTES = {
         },
       },
       events: {
+        index: {
+          path: (groupId = ':group_id') => `/groups/${groupId}/plan/events`,
+          data: {
+            titleMessage: messages.groups.plan.events.index,
+          }
+        },
         manage: {
           path:
             (groupId = ':group_id', eventId = ':event_id') => `/groups/${groupId}/plan/events/${eventId}/manage`,
