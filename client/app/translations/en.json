@@ -56,7 +56,7 @@
   "diverst.containers.Routes.group.events.edit": "Edit Event",
   "diverst.containers.Routes.group.news.index": "News",
   "diverst.containers.Routes.group.plan.index": "Plan",
-  "diverst.containers.Routes.group.plan.outcomes.index": "{outcome}s",
+  "diverst.containers.Routes.group.plan.outcomes.index": "Structure",
   "diverst.containers.Routes.group.plan.outcomes.new": "New {outcome}",
   "diverst.containers.Routes.group.plan.outcomes.edit": "Edit {outcome}",
   "diverst.containers.Routes.group.plan.outcomes.show": "{outcome}",

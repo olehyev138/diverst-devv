@@ -53,7 +53,7 @@ export function Outcome(props) {
           {outcome.pillars && outcome.pillars.length > 0 && outcome.pillars.map(pillar => (
             <Card key={pillar.id} className={classes.card}>
               <CardContent>
-                <Grid container spacing={2}>
+                <Grid container spacing={2} alignItems='center'>
                   <Grid item xs>
                     <Typography variant='h6'>
                       {pillar.name}

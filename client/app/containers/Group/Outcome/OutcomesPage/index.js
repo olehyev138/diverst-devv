@@ -17,6 +17,7 @@ import { getOutcomesBegin, deleteOutcomeBegin, outcomesUnmount } from 'container
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
+import GroupPlanLayout from 'containers/Layouts/GroupPlanLayout';
 import OutcomesList from 'components/Group/Outcome/OutcomesList';
 
 const defaultParams = Object.freeze({
@@ -60,15 +61,22 @@ export function OutcomesPage(props) {
   };
 
   return (
-    <OutcomesList
-      outcomes={props.outcomes}
-      outcomeTotal={props.outcomeTotal}
-      isLoading={props.isLoading}
-      deleteOutcomeBegin={props.deleteOutcomeBegin}
-      defaultParams={defaultParams}
-      handlePagination={handlePagination}
-      links={links}
-    />
+    <React.Fragment>
+      <GroupPlanLayout
+        component={() => (
+          <OutcomesList
+            outcomes={props.outcomes}
+            outcomeTotal={props.outcomeTotal}
+            isLoading={props.isLoading}
+            deleteOutcomeBegin={props.deleteOutcomeBegin}
+            defaultParams={defaultParams}
+            handlePagination={handlePagination}
+            links={links}
+          />
+        )}
+        {...props}
+      />
+    </React.Fragment>
   );
 }
 
