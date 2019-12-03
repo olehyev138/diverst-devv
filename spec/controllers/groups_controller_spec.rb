@@ -712,7 +712,7 @@ RSpec.describe GroupsController, type: :controller do
     let(:user) { create :user }
     let!(:group) { create :group, enterprise: user.enterprise }
 
-    before { request.env['HTTP_REFERER'] = 'back'}
+    before { request.env['HTTP_REFERER'] = 'back' }
 
     describe 'with logged in user' do
       login_user_from_let
