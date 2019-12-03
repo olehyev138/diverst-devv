@@ -469,7 +469,10 @@ export const ROUTES = {
           },
           edit: {
             path: (campaignId = ':campaign_id', questionId = ':question_id') => `/admin/innovate/campaigns/${campaignId}/questions/${questionId}/edit`,
-          }
+          },
+          show: {
+            path: (campaignId = ':campaign_id', questionId = ':question_id') => `/admin/innovate/campaigns/${campaignId}/questions/${questionId}`,
+          },
         }
       },
       financials: {

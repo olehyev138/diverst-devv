@@ -76,7 +76,7 @@ export function CampaignQuestionsList(props) {
         handlePagination={props.handlePagination}
         isLoading={props.isFetchingQuestions}
         onOrderChange={handleOrderChange}
-        handleRowClick={(_, rowData) => props.handleVisitQuestionEdit(props.campaignId, rowData.id)}
+        handleRowClick={(_, rowData) => props.handleVisitQuestionShow(props.campaignId, rowData.id)}
         dataArray={props.questionList}
         dataTotal={props.questionTotal}
         columns={columns}
@@ -115,6 +115,7 @@ CampaignQuestionsList.propTypes = {
   handlePagination: PropTypes.func,
   handleOrdering: PropTypes.func,
   handleVisitQuestionEdit: PropTypes.func,
+  handleVisitQuestionShow: PropTypes.func,
 };
 
 export default compose(
