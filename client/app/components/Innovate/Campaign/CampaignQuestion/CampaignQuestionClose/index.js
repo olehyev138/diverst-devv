@@ -25,7 +25,7 @@ import { buildValues, mapFields } from 'utils/formHelpers';
 import { DateTime } from 'luxon';
 
 /* eslint-disable object-curly-newline */
-export function CampaignQuestionFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, touched, ...props }) {
+export function CampaignQuestionCloseInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, touched, ...props }) {
   const { links } = props;
 
   return (
@@ -33,48 +33,37 @@ export function CampaignQuestionFormInner({ handleSubmit, handleChange, handleBl
       <Card>
         <Form>
           <CardContent>
-            <Field
-              component={TextField}
-              required
-              onChange={handleChange}
-              fullWidth
-              id='title'
-              name='title'
-              margin='normal'
-              disabled={props.isCommitting}
-              label='* Start by giving a title to your question'
-              placeholder='What do you think of our new strategy for...?'
-              value={values.title}
-            />
-            <Field
-              component={TextField}
-              onChange={handleChange}
-              fullWidth
-              id='description'
-              name='description'
-              multiline
-              rows={4}
-              variant='outlined'
-              margin='normal'
-              disabled={props.isCommitting}
-              label='* Optionally define a description to further explain what you need resolution for'
-              placeholder='We have been hammering at this problem for a very long time, and we need your input on how to...'
-              value={values.description}
-            />
+            <h2>Mark this question as solved</h2>
+            <h4>Mark this question as solved by explaining what the outcome of the discussion has been. This will block further communication on this question.</h4>
+            <Card>
+              <CardContent>
+                <Field
+                  component={TextField}
+                  onChange={handleChange}
+                  fullWidth
+                  id='conclusion'
+                  name='conclusion'
+                  margin='normal'
+                  disabled={props.isCommitting}
+                  placeholder='We have decided to do...'
+                  value={values.conclusion}
+                />
+              </CardContent>
+            </Card>
           </CardContent>
           <Divider />
 
           <Divider />
           <CardActions>
             <DiverstSubmit isCommitting={props.isCommitting}>
-              {buttonText}
+              CLOSE QUESTION
             </DiverstSubmit>
             <Button
               disabled={props.isCommitting}
               to={links.questionsIndex}
               component={WrappedNavLink}
             >
-              <DiverstFormattedMessage {...messages.cancel} />
+              Back to Question List
             </Button>
           </CardActions>
         </Form>
@@ -83,15 +72,18 @@ export function CampaignQuestionFormInner({ handleSubmit, handleChange, handleBl
   );
 }
 
-export function CampaignQuestionForm(props) {
+export function CampaignQuestionClose(props) {
   const { campaignId } = props;
   const { questionId } = props;
+  const [defaultSolvedDate] = useState(DateTime.local());
   const initialValues = buildValues(props.question, {
     // users: { default: [], customKey: 'member_ids' }
     id: { default: '' },
     title: { default: '' },
     description: { default: '' },
     campaign_id: { default: campaignId },
+    conclusion: { default: '' },
+    solved_at: { default: defaultSolvedDate }
   });
 
   return (
@@ -101,24 +93,26 @@ export function CampaignQuestionForm(props) {
       onSubmit={(values, actions) => {
         props.questionAction(values);
       }}
-      render={formikProps => <CampaignQuestionFormInner {...props} {...formikProps} />}
+      render={formikProps => <CampaignQuestionCloseInner {...props} {...formikProps} />}
     />
   );
 }
-CampaignQuestionForm.propTypes = {
+CampaignQuestionClose.propTypes = {
   edit: PropTypes.bool,
-  createQuestionBegin: PropTypes.func,
   campaignId: PropTypes.string,
   questionId: PropTypes.string,
   isCommitting: PropTypes.bool,
   question: PropTypes.object,
   questionAction: PropTypes.func,
+  getQuestionBegin: PropTypes.func,
+  campaignQuestionsUnmount: PropTypes.func,
+  isFormLoading: PropTypes.func,
+  users: PropTypes.array,
 };
 
-CampaignQuestionFormInner.propTypes = {
+CampaignQuestionCloseInner.propTypes = {
   edit: PropTypes.bool,
   question: PropTypes.object,
-  createQuestionBegin: PropTypes.func,
   handleSubmit: PropTypes.func,
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
@@ -139,4 +133,4 @@ CampaignQuestionFormInner.propTypes = {
 
 export default compose(
   memo,
-)(CampaignQuestionForm);
+)(CampaignQuestionClose);
