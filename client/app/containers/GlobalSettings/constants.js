@@ -1,9 +1,0 @@
-export const GET_SSOSETTING_BEGIN = 'app/GlobalSettings/GET_SSOSETTING_BEGIN';
-export const GET_SSOSETTING_SUCCESS = 'app/GlobalSettings/GET_SSOSETTING_SUCCESS';
-export const GET_SSOSETTING_ERROR = 'app/GlobalSettings/GET_SSOSETTING_ERROR';
-
-export const UPDATE_SSOSETTING_BEGIN = 'app/GlobalSettings/UPDATE_SSOSETTING_BEGIN';
-export const UPDATE_SSOSETTING_SUCCESS = 'app/GlobalSettings/UPDATE_SSOSETTING_SUCCESS';
-export const UPDATE_SSOSETTING_ERROR = 'app/GlobalSettings/UPDATE_SSOSETTING_ERROR';
-
-export const SSOSETTING_UNMOUNT = 'app/GlobalSettings/SSOSETTING_UNMOUNT';
