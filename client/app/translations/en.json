@@ -54,6 +54,7 @@
   "diverst.containers.Routes.group.events.show": "Event",
   "diverst.containers.Routes.group.events.new": "New Event",
   "diverst.containers.Routes.group.events.edit": "Edit Event",
+  "diverst.containers.Routes.group.events.manage": "Manage",
   "diverst.containers.Routes.group.news.index": "News",
   "diverst.containers.Routes.group.outcomes.index": "Plan",
   "diverst.containers.Routes.group.outcomes.new": "New {outcome}",

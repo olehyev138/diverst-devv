@@ -190,6 +190,13 @@ export const ROUTES = {
           titleMessage: messages.groups.events.edit,
         }
       },
+      manage: {
+        path:
+          (groupId = ':group_id', eventId = ':event_id') => `/groups/${groupId}/events/${eventId}/manage`,
+        data: {
+          titleMessage: messages.groups.events.manage,
+        }
+      }
     },
     news: {
       index: {

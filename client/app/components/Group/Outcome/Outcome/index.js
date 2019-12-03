@@ -79,7 +79,7 @@ export function Outcome(props) {
                   <Link
                     className={classes.eventLink}
                     component={WrappedNavLink}
-                    to={ROUTES.user.home.path()}
+                    to={props.links.eventManage(initiative.id)}
                   >
                     <CardActionArea>
                       <Grid container>
@@ -111,6 +111,7 @@ Outcome.propTypes = {
   links: PropTypes.shape({
     outcomeEdit: PropTypes.string,
     eventNew: PropTypes.string,
+    eventManage: PropTypes.func,
   })
 };
 

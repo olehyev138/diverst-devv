@@ -27,6 +27,7 @@ import {
   EventPage,
   EventCreatePage,
   EventEditPage,
+  EventManagePage,
   GroupMessagePage,
   GroupMessageCreatePage,
   GroupMessageEditPage,
@@ -185,6 +186,7 @@ export default function Routes(props) {
       { /* Group Events */ }
       <GroupLayout {...expandRoute(ROUTES.group.events.new)} component={EventCreatePage} />
       <GroupLayout {...expandRoute(ROUTES.group.events.edit)} component={EventEditPage} />
+      <GroupLayout {...expandRoute(ROUTES.group.events.manage)} component={EventManagePage} />
       <GroupLayout exact {...expandRoute(ROUTES.group.events.show)} component={EventPage} />
 
       { /* Group News Feed */ }

@@ -30,6 +30,7 @@ export function OutcomePage(props) {
     outcomesIndex: ROUTES.group.outcomes.index.path(rs.params('group_id')),
     outcomeEdit: ROUTES.group.outcomes.edit.path(rs.params('group_id'), rs.params('outcome_id')),
     eventNew: ROUTES.group.events.new.path(rs.params('group_id')),
+    eventManage: eventId => ROUTES.group.events.manage.path(rs.params('group_id'), eventId)
   };
 
   useEffect(() => {

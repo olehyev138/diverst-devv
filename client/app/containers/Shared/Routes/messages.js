@@ -61,6 +61,9 @@ export default defineMessages({
       },
       edit: {
         id: `${scope}.group.events.edit`
+      },
+      manage: {
+        id: `${scope}.group.events.manage`
       }
     },
     resources: {
