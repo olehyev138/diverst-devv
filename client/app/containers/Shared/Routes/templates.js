@@ -55,6 +55,7 @@ import SegmentPage from 'containers/Segment/SegmentPage/Loadable';
 import FieldsPage from 'containers/GlobalSettings/Field/FieldsPage/Loadable';
 import CustomTextEditPage from 'containers/GlobalSettings/CustomText/CustomTextEditPage/Loadable';
 import EnterpriseConfigurationPage from 'containers/GlobalSettings/EnterpriseConfiguration/EnterpriseConfigurationPage/Loadable';
+import SSOSettingsPage from 'containers/GlobalSettings/SSOSettingsPage/Loadable';
 
 /* Admin - System - Branding */
 import BrandingThemePage from 'containers/Branding/BrandingThemePage/Loadable';
@@ -205,4 +206,5 @@ export {
   SponsorListPage,
   SponsorCreatePage,
   SponsorEditPage
+  SSOSettingsPage
 };
