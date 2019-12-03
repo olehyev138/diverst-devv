@@ -14,7 +14,8 @@ const styles = theme => ({});
 const GlobalSettingsPages = Object.freeze({
   fields: 0,
   custom_texts: 1,
-  configuration: 2
+  configuration: 2,
+  sso: 3
 });
 
 const GlobalSettingsLayout = ({ component: Component, ...rest }) => {
