@@ -81,7 +81,7 @@ export function MentorsPage(props) {
       if (tab === Types.current)
         props.getMentorsBegin({ ...params, userId, type: props.type });
       else
-        props.getAvailableMentorsBegin({ ...params, $id: userId, query_scopes: [props.type] });
+        props.getAvailableMentorsBegin({ ...params, $id: userId, type: props.type });
     }
   }
 
@@ -171,6 +171,7 @@ export function MentorsPage(props) {
     <React.Fragment>
       <MentorList
         user={props.user}
+        globalUser={props.globalUser}
         userParams={params}
 
         users={selectUsers()}
@@ -195,6 +196,9 @@ export function MentorsPage(props) {
 MentorsPage.propTypes = {
   type: PropTypes.string,
   user: PropTypes.object,
+  globalUser: PropTypes.shape({
+    id: PropTypes.number
+  }).isRequired,
 
   getMentorsBegin: PropTypes.func.isRequired,
   getAvailableMentorsBegin: PropTypes.func.isRequired,

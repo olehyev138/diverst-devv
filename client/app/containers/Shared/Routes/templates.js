@@ -26,6 +26,9 @@ import MentorshipProfilePage from 'containers/Mentorship/MentorshipProfilePage/L
 import MentorshipEditProfilePage from 'containers/Mentorship/MentorshipEditProfilePage/Loadable';
 import MentorsPage from 'containers/Mentorship/Mentoring/MentorsPage/Loadable';
 import MentorRequestsPage from 'containers/Mentorship/Requests/RequestsPage/Loadable';
+import SessionsPage from 'containers/Mentorship/Session/SessionsPage/Loadable';
+import SessionPage from 'containers/Mentorship/Session/SessionPage/Loadable';
+import SessionsEditPage from 'containers/Mentorship/Session/SessionEditPage/Loadable';
 
 /* Admin - Analyze */
 import GroupDashboardPage from 'containers/Analyze/Dashboards/GroupDashboardPage/Loadable';
@@ -52,7 +55,6 @@ import SegmentPage from 'containers/Segment/SegmentPage/Loadable';
 import FieldsPage from 'containers/GlobalSettings/Field/FieldsPage/Loadable';
 import CustomTextEditPage from 'containers/GlobalSettings/CustomText/CustomTextEditPage/Loadable';
 import EnterpriseConfigurationPage from 'containers/GlobalSettings/EnterpriseConfiguration/EnterpriseConfigurationPage/Loadable';
-import SSOSettingsPage from 'containers/GlobalSettings/SSOSettingsPage/Loadable';
 
 /* Admin - System - User */
 import UsersPage from 'containers/User/UsersPage/Loadable';
@@ -114,17 +116,80 @@ import PlaceholderPage from 'components/Shared/PlaceholderPage/Loadable';
 
 
 export {
-  UserLayout, GroupLayout, AdminLayout, SessionLayout, ErrorLayout, GlobalSettingsLayout, LoginPage, HomePage,
-  UserGroupListPage, AdminGroupListPage, GroupCreatePage, GroupEditPage, SegmentListPage, SegmentPage, FieldsPage,
-  UsersPage, UserCreatePage, UserEditPage, GroupHomePage, EventsPage, NewsFeedPage, OutcomesPage, EventPage,
-  EventCreatePage, EventEditPage, GroupMessagePage, GroupMessageCreatePage, GroupMessageEditPage, OutcomeCreatePage,
-  OutcomeEditPage, GroupMemberListPage, GroupMemberCreatePage, NotFoundPage, PlaceholderPage, GroupDashboardPage,
-  UserDashboardPage, MetricsDashboardListPage, MetricsDashboardCreatePage, MetricsDashboardEditPage, MetricsDashboardPage,
-  CustomGraphCreatePage, CustomGraphEditPage, GroupManageLayout, GroupSettingsPage, CustomTextEditPage,
-  UserNewsLinkPage, UserEventsPage, FoldersPage, FolderCreatePage, FolderEditPage, FolderPage, ResourceCreatePage,
-  ResourceEditPage, UserProfilePage, InnovateLayout, CampaignListPage, CampaignCreatePage, CampaignEditPage, CampaignShowPage,
-  CampaignQuestionListPage, CampaignQuestionCreatePage, CampaignQuestionEditPage, CampaignQuestionShowPage,
-  EnterpriseConfigurationPage, SSOSettingsPage, MentorshipProfilePage, MentorshipLayout, MentorsPage, MentorshipEditProfilePage,
-  MentorRequestsPage, SystemUserLayout, UserRolesListPage, UserRoleCreatePage, UserRoleEditPage
-
+  UserLayout,
+  GroupLayout,
+  AdminLayout,
+  SessionLayout,
+  ErrorLayout,
+  GlobalSettingsLayout,
+  LoginPage,
+  HomePage,
+  UserGroupListPage,
+  AdminGroupListPage,
+  GroupCreatePage,
+  GroupEditPage,
+  SegmentListPage,
+  SegmentPage,
+  FieldsPage,
+  UsersPage,
+  UserCreatePage,
+  UserEditPage,
+  GroupHomePage,
+  EventsPage,
+  NewsFeedPage,
+  OutcomesPage,
+  EventPage,
+  EventCreatePage,
+  EventEditPage,
+  GroupMessagePage,
+  GroupMessageCreatePage,
+  GroupMessageEditPage,
+  OutcomeCreatePage,
+  OutcomeEditPage,
+  GroupMemberListPage,
+  GroupMemberCreatePage,
+  NotFoundPage,
+  PlaceholderPage,
+  GroupDashboardPage,
+  UserDashboardPage,
+  MetricsDashboardListPage,
+  MetricsDashboardCreatePage,
+  MetricsDashboardEditPage,
+  MetricsDashboardPage,
+  CustomGraphCreatePage,
+  CustomGraphEditPage,
+  GroupManageLayout,
+  GroupSettingsPage,
+  CustomTextEditPage,
+  UserNewsLinkPage,
+  UserEventsPage,
+  FoldersPage,
+  FolderCreatePage,
+  FolderEditPage,
+  FolderPage,
+  ResourceCreatePage,
+  ResourceEditPage,
+  UserProfilePage,
+  InnovateLayout,
+  CampaignListPage,
+  CampaignCreatePage,
+  CampaignEditPage,
+  CampaignShowPage,
+  CampaignQuestionListPage,
+  CampaignQuestionCreatePage,
+  CampaignQuestionEditPage,
+  CampaignQuestionShowPage,
+  EnterpriseConfigurationPage,
+  MentorshipProfilePage,
+  MentorshipEditProfilePage,
+  MentorshipLayout,
+  MentorsPage,
+  MentorRequestsPage,
+  SessionsPage,
+  SessionPage,
+  SessionsEditPage,
+  SystemUserLayout,
+  UserRolesListPage,
+  UserRoleCreatePage,
+  UserRoleEditPage
 };

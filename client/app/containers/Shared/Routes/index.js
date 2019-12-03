@@ -3,17 +3,82 @@ import { Switch } from 'react-router';
 
 // Pages
 import {
-  UserLayout, GroupLayout, AdminLayout, SessionLayout, ErrorLayout, GlobalSettingsLayout, LoginPage, HomePage,
-  UserGroupListPage, AdminGroupListPage, GroupCreatePage, GroupEditPage, SegmentListPage, SegmentPage, FieldsPage,
-  UsersPage, UserCreatePage, UserEditPage, GroupHomePage, EventsPage, NewsFeedPage, OutcomesPage, EventPage,
-  EventCreatePage, EventEditPage, GroupMessagePage, GroupMessageCreatePage, GroupMessageEditPage, OutcomeCreatePage,
-  OutcomeEditPage, GroupMemberListPage, GroupMemberCreatePage, NotFoundPage, PlaceholderPage, GroupDashboardPage,
-  UserDashboardPage, MetricsDashboardListPage, MetricsDashboardCreatePage, MetricsDashboardEditPage, MetricsDashboardPage,
-  CustomGraphCreatePage, CustomGraphEditPage, GroupManageLayout, GroupSettingsPage, CustomTextEditPage,
-  UserNewsLinkPage, UserEventsPage, FoldersPage, FolderCreatePage, FolderEditPage, FolderPage, ResourceCreatePage,
-  ResourceEditPage, UserProfilePage, InnovateLayout, CampaignListPage, CampaignCreatePage, CampaignEditPage, CampaignShowPage,
-  CampaignQuestionListPage, CampaignQuestionCreatePage, CampaignQuestionEditPage, CampaignQuestionShowPage, EnterpriseConfigurationPage, MentorshipProfilePage, MentorshipEditProfilePage, MentorshipLayout, MentorsPage,
-  MentorRequestsPage, SystemUserLayout, UserRolesListPage, UserRoleCreatePage, UserRoleEditPage, SSOSettingsPage
+  UserLayout,
+  GroupLayout,
+  AdminLayout,
+  SessionLayout,
+  ErrorLayout,
+  GlobalSettingsLayout,
+  LoginPage,
+  HomePage,
+  UserGroupListPage,
+  AdminGroupListPage,
+  GroupCreatePage,
+  GroupEditPage,
+  SegmentListPage,
+  SegmentPage,
+  FieldsPage,
+  UsersPage,
+  UserCreatePage,
+  UserEditPage,
+  GroupHomePage,
+  EventsPage,
+  NewsFeedPage,
+  OutcomesPage,
+  EventPage,
+  EventCreatePage,
+  EventEditPage,
+  GroupMessagePage,
+  GroupMessageCreatePage,
+  GroupMessageEditPage,
+  OutcomeCreatePage,
+  OutcomeEditPage,
+  GroupMemberListPage,
+  GroupMemberCreatePage,
+  NotFoundPage,
+  PlaceholderPage,
+  GroupDashboardPage,
+  UserDashboardPage,
+  MetricsDashboardListPage,
+  MetricsDashboardCreatePage,
+  MetricsDashboardEditPage,
+  MetricsDashboardPage,
+  CustomGraphCreatePage,
+  CustomGraphEditPage,
+  GroupManageLayout,
+  GroupSettingsPage,
+  CustomTextEditPage,
+  UserNewsLinkPage,
+  UserEventsPage,
+  FoldersPage,
+  FolderCreatePage,
+  FolderEditPage,
+  FolderPage,
+  ResourceCreatePage,
+  ResourceEditPage,
+  UserProfilePage,
+  InnovateLayout,
+  CampaignListPage,
+  CampaignCreatePage,
+  CampaignEditPage,
+  CampaignShowPage,
+  CampaignQuestionListPage,
+  CampaignQuestionCreatePage,
+  CampaignQuestionEditPage,
+  EnterpriseConfigurationPage,
+  MentorshipProfilePage,
+  MentorshipEditProfilePage,
+  MentorshipLayout,
+  MentorsPage,
+  MentorRequestsPage,
+  SessionsPage,
+  SessionPage,
+  SessionsEditPage,
+  SystemUserLayout,
+  UserRolesListPage,
+  UserRoleCreatePage,
+  UserRoleEditPage,
+  CampaignQuestionShowPage
 } from './templates';
 
 // Paths
@@ -43,6 +108,11 @@ export default function Routes(props) {
       <MentorshipLayout {...expandRoute(ROUTES.user.mentorship.mentees)} component={MentorsPage} type='mentees' disableBreadcrumbs />
       <MentorshipLayout {...expandRoute(ROUTES.user.mentorship.proposals)} component={MentorRequestsPage} type='outgoing' disableBreadcrumbs />
       <MentorshipLayout {...expandRoute(ROUTES.user.mentorship.requests)} component={MentorRequestsPage} type='incoming' disableBreadcrumbs />
+      <MentorshipLayout {...expandRoute(ROUTES.user.mentorship.sessions.schedule)} component={SessionsEditPage} type='new' disableBreadcrumbs />
+      <MentorshipLayout {...expandRoute(ROUTES.user.mentorship.sessions.edit)} component={SessionsEditPage} type='edit' disableBreadcrumbs />
+      <MentorshipLayout {...expandRoute(ROUTES.user.mentorship.sessions.hosting)} component={SessionsPage} type='hosting' disableBreadcrumbs />
+      <MentorshipLayout {...expandRoute(ROUTES.user.mentorship.sessions.participating)} component={SessionsPage} type='participating' disableBreadcrumbs />
+      <MentorshipLayout {...expandRoute(ROUTES.user.mentorship.sessions.show)} component={SessionPage} disableBreadcrumbs />
       <MentorshipLayout {...expandRoute(ROUTES.user.mentorship.show)} component={MentorshipProfilePage} disableBreadcrumbs />
       <MentorshipLayout {...expandRoute(ROUTES.user.mentorship.home)} component={MentorshipProfilePage} disableBreadcrumbs />
 
@@ -93,7 +163,6 @@ export default function Routes(props) {
       <GlobalSettingsLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.fields.index)} component={FieldsPage} />
       <GlobalSettingsLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.customText.edit)} component={CustomTextEditPage} />
       <GlobalSettingsLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.enterpriseConfiguration.index)} component={EnterpriseConfigurationPage} />
-      <GlobalSettingsLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.ssoSettings.edit)} component={SSOSettingsPage} />
 
       { /* Admin - System - Users */ }
       <SystemUserLayout exact {...expandRoute(ROUTES.admin.system.users.index)} component={UsersPage} />

@@ -2,6 +2,7 @@ class PageSerializer < ApplicationRecordSerializer
   attributes :total, :type, :items
 
   def items
+    object.items.load
     serializer = @instance_options[:use_serializer] ||
                  ActiveModel::Serializer.serializer_for(object.items.first)
 
