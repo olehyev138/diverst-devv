@@ -55,6 +55,7 @@ import SegmentPage from 'containers/Segment/SegmentPage/Loadable';
 import FieldsPage from 'containers/GlobalSettings/Field/FieldsPage/Loadable';
 import CustomTextEditPage from 'containers/GlobalSettings/CustomText/CustomTextEditPage/Loadable';
 import EnterpriseConfigurationPage from 'containers/GlobalSettings/EnterpriseConfiguration/EnterpriseConfigurationPage/Loadable';
+import SSOSettingsPage from 'containers/GlobalSettings/SSOSettingsPage/Loadable';
 
 /* Admin - System - User */
 import UsersPage from 'containers/User/UsersPage/Loadable';
@@ -195,5 +196,6 @@ export {
   SystemUserLayout,
   UserRolesListPage,
   UserRoleCreatePage,
-  UserRoleEditPage
+  UserRoleEditPage,
+  SSOSettingsPage
 };
