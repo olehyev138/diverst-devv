@@ -84,6 +84,7 @@ import {
   SponsorListPage,
   SponsorCreatePage,
   SponsorEditPage
+  CampaignQuestionShowPage
 } from './templates';
 
 // Paths
@@ -159,6 +160,7 @@ export default function Routes(props) {
       <AdminLayout {...expandRoute(ROUTES.admin.innovate.campaigns.edit)} component={CampaignEditPage} />
       <AdminLayout {...expandRoute(ROUTES.admin.innovate.campaigns.questions.new)} component={CampaignQuestionCreatePage} />
       <AdminLayout {...expandRoute(ROUTES.admin.innovate.campaigns.questions.edit)} component={CampaignQuestionEditPage} />
+      <AdminLayout {...expandRoute(ROUTES.admin.innovate.campaigns.questions.show)} component={CampaignQuestionShowPage} />
       <AdminLayout {...expandRoute(ROUTES.admin.innovate.campaigns.show)} component={CampaignShowPage} />
       <AdminLayout {...expandRoute(ROUTES.admin.innovate.campaigns.index)} component={CampaignListPage} />
       <AdminLayout {...expandRoute(ROUTES.admin.innovate.financials.index)} component={PlaceholderPage} />
