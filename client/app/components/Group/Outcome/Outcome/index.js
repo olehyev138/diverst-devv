@@ -5,9 +5,10 @@ import PropTypes from 'prop-types';
 import dig from 'object-dig';
 
 import {
-  Typography, Card, CardContent, Divider, Link, CardActionArea, Box, Grid
+  Typography, Card, CardContent, Divider, Link, CardActionArea, Box, Grid, Button, CardActions,
 } from '@material-ui/core/index';
 import { withStyles } from '@material-ui/core/styles';
+import AddIcon from '@material-ui/icons/Add';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import messages from 'containers/Group/Outcome/messages';
@@ -52,9 +53,25 @@ export function Outcome(props) {
           {outcome.pillars && outcome.pillars.length > 0 && outcome.pillars.map(pillar => (
             <Card key={pillar.id} className={classes.card}>
               <CardContent>
-                <Typography variant='h6'>
-                  {pillar.name}
-                </Typography>
+                <Grid container spacing={2}>
+                  <Grid item xs>
+                    <Typography variant='h6'>
+                      {pillar.name}
+                    </Typography>
+                  </Grid>
+                  <Grid item>
+                    <Button
+                      variant='contained'
+                      to={props.links.eventNew}
+                      color='primary'
+                      size='large'
+                      component={WrappedNavLink}
+                      startIcon={<AddIcon />}
+                    >
+                      <DiverstFormattedMessage {...messages.pillars.events.new} />
+                    </Button>
+                  </Grid>
+                </Grid>
               </CardContent>
               {pillar.initiatives && pillar.initiatives.length > 0 && pillar.initiatives.map(initiative => (
                 <React.Fragment key={initiative.id}>
@@ -93,6 +110,7 @@ Outcome.propTypes = {
   isFormLoading: PropTypes.bool,
   links: PropTypes.shape({
     outcomeEdit: PropTypes.string,
+    eventNew: PropTypes.string,
   })
 };
 

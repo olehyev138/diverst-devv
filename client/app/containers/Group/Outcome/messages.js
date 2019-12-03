@@ -59,5 +59,10 @@ export default defineMessages({
         id: `${scope}.Pillar.form.input.value`,
       },
     },
+    events: {
+      new: {
+        id: `${scope}.Pillar.Event.button.new`
+      }
+    },
   },
 });

@@ -28,7 +28,8 @@ export function OutcomePage(props) {
   const rs = new RouteService(useContext);
   const links = {
     outcomesIndex: ROUTES.group.outcomes.index.path(rs.params('group_id')),
-    outcomeEdit: ROUTES.group.outcomes.edit.path(rs.params('group_id'), rs.params('outcome_id'))
+    outcomeEdit: ROUTES.group.outcomes.edit.path(rs.params('group_id'), rs.params('outcome_id')),
+    eventNew: ROUTES.group.events.new.path(rs.params('group_id')),
   };
 
   useEffect(() => {
