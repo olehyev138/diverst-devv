@@ -34,33 +34,6 @@ export function SocialLinkFormInner({ handleSubmit, handleChange, handleBlur, va
               label= 'Social Link URL'
               value={values.url}
             />
-            <Field
-              component={TextField}
-              onChange={handleChange}
-              fullWidth
-              disabled={props.isCommitting}
-              required
-              id='title'
-              name='title'
-              margin='normal'
-              label= 'Title'
-              value={values.title}
-            />
-            <Field
-              component={TextField}
-              onChange={handleChange}
-              required
-              fullWidth
-              disabled={props.isCommitting}
-              multiline
-              rows={4}
-              variant='outlined'
-              id='description'
-              name='description'
-              margin='normal'
-              value={values.description}
-              label= 'Description'
-            />
           </CardContent>
           <Divider />
           <CardActions>
@@ -82,9 +55,9 @@ export function SocialLinkFormInner({ handleSubmit, handleChange, handleBlur, va
 }
 
 export function SocialLinkForm(props) {
-  const newsLink = dig(props, 'newsItem', 'social_link');
+  const socialLink = dig(props, 'newsItem', 'social_link');
 
-  const initialValues = buildValues(newsLink, {
+  const initialValues = buildValues(socialLink, {
     id: { default: '' },
     url: { default: '' },
     author_id: { default: dig(props, 'currentUser', 'id') || '' },
@@ -99,7 +72,7 @@ export function SocialLinkForm(props) {
         props.socialLinkAction(values);
       }}
 
-      render={formikProps => <SocialLinkFormInner {...props} {...formikProps} newsLink={newsLink} />}
+      render={formikProps => <SocialLinkFormInner {...props} {...formikProps} socialLink={socialLink} />}
     />
   );
 }

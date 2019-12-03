@@ -9,12 +9,10 @@ import { useInjectReducer } from 'utils/injectReducer';
 
 import reducer from 'containers/News/reducer';
 import saga from 'containers/News/saga';
-
 import { selectGroup } from 'containers/Group/selectors';
 import { selectUser } from 'containers/Shared/App/selectors';
 
 import { selectIsCommitting } from 'containers/News/selectors';
-
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 

@@ -67,7 +67,7 @@ export function NewsFeed(props) {
     {
       icon: <SocialIcon />,
       name: 'Social Link',
-      linkPath: props.links.groupMessageNew,
+      linkPath: props.links.socialLinkNew,
     },
   ];
 
@@ -154,7 +154,9 @@ NewsFeed.propTypes = {
   handlePagination: PropTypes.func,
   isLoading: PropTypes.bool,
   links: PropTypes.shape({
-    groupMessageNew: PropTypes.string
+    groupMessageNew: PropTypes.string,
+    newsLinkNew: PropTypes.string,
+    socialLinkNew: PropTypes.string,
   }),
   readonly: PropTypes.bool,
 };

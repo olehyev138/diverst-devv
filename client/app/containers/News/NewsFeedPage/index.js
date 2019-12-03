@@ -31,6 +31,7 @@ export function NewsFeedPage(props, context) {
   const links = {
     newsFeedIndex: ROUTES.group.news.index.path(rs.params('group_id')),
     newsLinkNew: ROUTES.group.news.news_links.new.path(rs.params('group_id')),
+    socialLinkNew: ROUTES.group.news.social_links.new.path(rs.params('group_id')),
     groupMessageShow: (groupId, id) => ROUTES.group.news.messages.show.path(groupId, id),
     groupMessageNew: ROUTES.group.news.messages.new.path(rs.params('group_id')),
     groupMessageEdit: id => ROUTES.group.news.messages.edit.path(rs.params('group_id'), id)

@@ -177,7 +177,7 @@ export function createNewsLinkSuccess(payload) {
   };
 }
 
-export function createNewslinkError(error) {
+export function createNewsLinkError(error) {
   return {
     type: CREATE_NEWSLINK_ERROR,
     error,
@@ -253,7 +253,7 @@ export function createNewsLinkCommentError(error) {
   };
 }
 
-//Social Link Actions
+// Social Link Actions
 
 export function createSocialLinkBegin(payload) {
   return {
@@ -276,7 +276,7 @@ export function createSocialLinkError(error) {
   };
 }
 
-/* Group Message updating */
+/* Social Link updating */
 
 export function updateSocialLinkBegin(payload) {
   return {
@@ -299,7 +299,7 @@ export function updateSocialLinkError(error) {
   };
 }
 
-/* Group Message deleting */
+/* Social Link deleting */
 
 export function deleteSocialLinkBegin(payload) {
   return {
