@@ -9,11 +9,14 @@ import { compose } from 'redux';
 import PropTypes from 'prop-types';
 
 import {
-  Button, Box, MenuItem, Grid, Typography
+  Button, Box, MenuItem, Grid, Typography, TextField
 } from '@material-ui/core/index';
 import { withStyles } from '@material-ui/core/styles';
 
 import { injectIntl, intlShape } from 'react-intl';
+import { useFormik, Field, Formik, Form } from 'formik';
+import { DiverstDatePicker } from 'components/Shared/Pickers/DiverstDatePicker';
+import { DateTime } from 'luxon';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
@@ -26,6 +29,7 @@ import ExportIcon from '@material-ui/icons/SaveAlt';
 
 import DiverstTable from 'components/Shared/DiverstTable';
 import DiverstDropdownMenu from 'components/Shared/DiverstDropdownMenu';
+import DiverstSubmit from "../../../Shared/DiverstSubmit";
 
 const styles = theme => ({
   errorButton: {
@@ -63,6 +67,7 @@ export function GroupMemberList(props) {
   const handleClick = (event) => {
     setAnchor(event.currentTarget);
   };
+
   const handleClose = (type) => {
     setAnchor(null);
     props.handleChangeTab(type);
@@ -89,7 +94,7 @@ export function GroupMemberList(props) {
     {
       title: 'Membership Status',
       field: 'status',
-      query_field: '(CASE WHEN users.active = false THEN 3 WHEN groups.pending_users AND accepted_member THEN 2 ELSE 1 END)',
+      query_field: '(CASE WHEN users.active = false THEN 3 WHEN groups.pending_users AND NOT accepted_member THEN 2 ELSE 1 END)',
       sorting: true,
       lookup: {
         active: intl.formatMessage(messages.status.active),
@@ -152,6 +157,54 @@ export function GroupMemberList(props) {
             </Button>
           </Grid>
         </Grid>
+      </Box>
+
+      <Box className={classes.floatSpacer} />
+
+      <Box className={classes.floatRight}>
+        <Formik
+          initialValues={{
+            from: props.memberFrom,
+            to: props.memberTo,
+          }}
+          enableReinitialize
+          onSubmit={(values) => {
+            console.log(values);
+            if (!values.from) delete values.from;
+            if (!values.to) delete values.to;
+            props.handleDateFilter(values);
+          }}
+        >
+          {formikProps => (
+            <Form>
+              <Field
+                component={DiverstDatePicker}
+                keyboardMode
+                maxDate={formikProps.touched.to ? formikProps.values.to : new Date()}
+                maxDateMessage='From date cannot be after To date'
+                id='from'
+                name='from'
+                margin='normal'
+                label='FROM'
+              />
+              <Field
+                component={DiverstDatePicker}
+                keyboardMode
+                minDate={formikProps.touched.from ? formikProps.values.from : undefined}
+                maxDate={new Date()}
+                minDateMessage='To date cannot be before From date'
+                maxDateMessage='To date cannot be after Today'
+                id='to'
+                name='to'
+                margin='normal'
+                label='TO'
+              />
+              <DiverstSubmit>
+                Filter
+              </DiverstSubmit>
+            </Form>
+          )}
+        </Formik>
       </Box>
 
       <Box className={classes.floatSpacer} />
@@ -228,8 +281,11 @@ GroupMemberList.propTypes = {
 
   memberType: PropTypes.string.isRequired,
   MemberTypes: PropTypes.array.isRequired,
-  setMemberType: PropTypes.func.isRequired,
   handleChangeTab: PropTypes.func.isRequired,
+
+  memberFrom: PropTypes.instanceOf(DateTime),
+  memberTo: PropTypes.instanceOf(DateTime),
+  handleDateFilter: PropTypes.func.isRequired,
 };
 
 export default compose(

@@ -33,19 +33,21 @@ const MemberTypes = Object.freeze([
   'all',
 ]);
 
+const getCurrentDay = () => {
+  const d = new Date();
+  d.setHours(0);
+  d.setMinutes(0);
+  d.setSeconds(0);
+  d.setMilliseconds(0);
+  return d;
+};
+
 export function GroupMemberListPage(props) {
   useInjectReducer({ key: 'members', reducer });
   useInjectSaga({ key: 'members', saga });
 
   const rs = new RouteService(useContext);
   const groupId = rs.params('group_id')[0];
-
-  const [memberType, setMemberType] = React.useState('accepted_users');
-  const handleChangeTab = (type) => {
-    setMemberType(type);
-    if (MemberTypes.includes(type))
-      handleMemberScopes([type], true);
-  };
 
   const defaultParams = {
     group_id: groupId, count: 10, page: 0,
@@ -54,11 +56,33 @@ export function GroupMemberListPage(props) {
   };
 
   const [params, setParams] = useState(defaultParams);
-  const links = {
-    groupMembersNew: ROUTES.group.members.new.path(groupId),
+  const [type, setType] = React.useState('accepted_users');
+  const [from, setFrom] = React.useState(null);
+  const [to, setTo] = React.useState(null);
+  const [segments, setSegments] = React.useState(null);
+
+  const getScopes = (scopes) => {
+    // eslint-disable-next-line no-param-reassign
+    if (scopes === undefined) scopes = {};
+    if (scopes.type === undefined) scopes.type = type;
+    if (scopes.from === undefined) scopes.from = from;
+    if (scopes.to === undefined) scopes.to = to;
+    if (scopes.segments === undefined) scopes.segments = segments;
+
+    const queryScopes = [];
+    if (scopes.type)
+      queryScopes.push(scopes.type);
+    if (scopes.from)
+      queryScopes.push(scopes.from);
+    if (scopes.to)
+      queryScopes.push(scopes.to);
+    if (scopes.segments)
+      queryScopes.push(scopes.segments);
+
+    return queryScopes;
   };
 
-  const handleMemberScopes = (scopes, resetParams = false) => {
+  const getMembers = (scopes, resetParams = false) => {
     if (resetParams)
       setParams(defaultParams);
 
@@ -73,17 +97,37 @@ export function GroupMemberListPage(props) {
     }
   };
 
+  const handleChangeTab = (type) => {
+    setType(type);
+    if (MemberTypes.includes(type))
+      getMembers(getScopes({ type }), true);
+  };
+
+  const handleDateFilter = (values) => {
+    let from;
+    let to;
+    if (values.from) {
+      from = ['joined_from', values.from];
+      setFrom(from);
+    }
+    if (values.to) {
+      to = ['joined_to', values.to];
+      setTo(to);
+    }
+    getMembers(getScopes({ from, to }, true));
+  };
+
   const handlePagination = (payload) => {
     const newParams = { ...params, count: payload.count, page: payload.page };
 
-    props.getMembersBegin(newParams);
+    getMembers(getScopes({}), false);
     setParams(newParams);
   };
 
   const handleOrdering = (payload) => {
     const newParams = { ...params, orderBy: payload.orderBy, order: payload.orderDir };
 
-    props.getMembersBegin(newParams);
+    getMembers(getScopes({}), false);
     setParams(newParams);
   };
 
@@ -94,6 +138,10 @@ export function GroupMemberListPage(props) {
       props.groupMembersUnmount();
     };
   }, []);
+
+  const links = {
+    groupMembersNew: ROUTES.group.members.new.path(groupId),
+  };
 
   return (
     <React.Fragment>
@@ -109,10 +157,13 @@ export function GroupMemberListPage(props) {
         handlePagination={handlePagination}
         handleOrdering={handleOrdering}
 
-        memberType={memberType}
+        memberType={type}
         MemberTypes={MemberTypes}
-        setMemberType={setMemberType}
         handleChangeTab={handleChangeTab}
+
+        memberFrom={from ? from[1] : null}
+        memberTo={to ? to[1] : null}
+        handleDateFilter={handleDateFilter}
       />
     </React.Fragment>
   );

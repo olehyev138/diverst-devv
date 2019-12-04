@@ -16,7 +16,7 @@ module UserGroup::Actions
           :joined_from,
           :joined_to,
           :for_segment_ids
-      ]
+      ].map { |scope| scope.to_s }
     end
 
     def base_includes
