@@ -29,7 +29,7 @@ import ExportIcon from '@material-ui/icons/SaveAlt';
 
 import DiverstTable from 'components/Shared/DiverstTable';
 import DiverstDropdownMenu from 'components/Shared/DiverstDropdownMenu';
-import DiverstSubmit from "../../../Shared/DiverstSubmit";
+import DiverstSubmit from 'components/Shared/DiverstSubmit';
 
 const styles = theme => ({
   errorButton: {
@@ -169,7 +169,6 @@ export function GroupMemberList(props) {
           }}
           enableReinitialize
           onSubmit={(values) => {
-            console.log(values);
             if (!values.from) delete values.from;
             if (!values.to) delete values.to;
             props.handleDateFilter(values);
