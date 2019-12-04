@@ -182,7 +182,7 @@ export function GroupMemberList(props) {
               <Field
                 component={DiverstDatePicker}
                 keyboardMode
-                maxDate={formikProps.touched.to ? formikProps.values.to : new Date()}
+                maxDate={formikProps.values.to ? formikProps.values.to : new Date()}
                 maxDateMessage='From date cannot be after To date'
                 id='from'
                 name='from'
@@ -192,7 +192,7 @@ export function GroupMemberList(props) {
               <Field
                 component={DiverstDatePicker}
                 keyboardMode
-                minDate={formikProps.touched.from ? formikProps.values.from : undefined}
+                minDate={formikProps.values.from ? formikProps.values.from : undefined}
                 maxDate={new Date()}
                 minDateMessage='To date cannot be before From date'
                 maxDateMessage='To date cannot be after Today'
