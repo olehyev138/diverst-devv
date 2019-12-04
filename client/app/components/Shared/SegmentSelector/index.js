@@ -54,7 +54,7 @@ const SegmentSelector = ({ handleChange, values, segmentField, setFieldValue, la
 
 SegmentSelector.propTypes = {
   segmentField: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
+  label: PropTypes.node.isRequired,
   handleChange: PropTypes.func.isRequired,
   setFieldValue: PropTypes.func.isRequired,
   values: PropTypes.object.isRequired,

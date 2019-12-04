@@ -197,11 +197,11 @@ export function GroupMemberList(props) {
                           keyboardMode
                           fullWidth
                           maxDate={formikProps.values.to ? formikProps.values.to : new Date()}
-                          maxDateMessage='From date cannot be after To date'
+                          maxDateMessage={<DiverstFormattedMessage {...messages.filter.fromMax} />}
                           id='from'
                           name='from'
                           margin='normal'
-                          label='FROM'
+                          label={<DiverstFormattedMessage {...messages.filter.from} />}
                         />
                       </Grid>
                       <Grid item xs={6}>
@@ -211,18 +211,18 @@ export function GroupMemberList(props) {
                           fullWidth
                           minDate={formikProps.values.from ? formikProps.values.from : undefined}
                           maxDate={new Date()}
-                          minDateMessage='To date cannot be before From date'
-                          maxDateMessage='To date cannot be after Today'
+                          minDateMessage={<DiverstFormattedMessage {...messages.filter.toMin} />}
+                          maxDateMessage={<DiverstFormattedMessage {...messages.filter.toMax} />}
                           id='to'
                           name='to'
                           margin='normal'
-                          label='TO'
+                          label={<DiverstFormattedMessage {...messages.filter.to} />}
                         />
                       </Grid>
                     </Grid>
                     <SegmentSelector
                       segmentField='segmentLabels'
-                      label='SEGMENTS'
+                      label={<DiverstFormattedMessage {...messages.filter.segments} />}
                       {...formikProps}
                     />
                     <Button
@@ -231,7 +231,7 @@ export function GroupMemberList(props) {
                       variant='contained'
                       className={classes.actionButton}
                     >
-                      Filter
+                      <DiverstFormattedMessage {...messages.filter.submit} />
                     </Button>
                   </Form>
                 )}

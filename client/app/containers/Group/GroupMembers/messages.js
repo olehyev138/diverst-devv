@@ -46,6 +46,29 @@ export default defineMessages({
       id: `${scope}.status.pending`,
     },
   },
+  filter: {
+    from: {
+      id: `${scope}.filter.from`,
+    },
+    to: {
+      id: `${scope}.filter.to`,
+    },
+    fromMax: {
+      id: `${scope}.filter.fromMax`,
+    },
+    toMax: {
+      id: `${scope}.filter.toMax`,
+    },
+    toMin: {
+      id: `${scope}.filter.toMin`,
+    },
+    segments: {
+      id: `${scope}.filter.segments`,
+    },
+    submit: {
+      id: `${scope}.filter.submit`,
+    }
+  },
   columns: {
     givenName: {
       id: `${scope}.columns.givenName`,
