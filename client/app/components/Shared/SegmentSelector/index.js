@@ -43,7 +43,6 @@ const SegmentSelector = ({ handleChange, values, segmentField, setFieldValue, la
       fullWidth
       options={rest.segments}
       value={values[segmentField]}
-      onMenuOpen={segmentSelectAction}
       onChange={value => setFieldValue(segmentField, value)}
       onInputChange={value => segmentSelectAction(value)}
       hideHelperText
