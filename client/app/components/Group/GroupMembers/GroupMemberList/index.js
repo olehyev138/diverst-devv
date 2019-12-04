@@ -9,7 +9,7 @@ import { compose } from 'redux';
 import PropTypes from 'prop-types';
 
 import {
-  Button, Box, MenuItem, Grid, Typography, TextField
+  Button, Box, MenuItem, Grid, Typography, Card, CardContent
 } from '@material-ui/core/index';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -41,16 +41,26 @@ const styles = theme => ({
     marginBottom: 12,
   },
   staticWidthButton: {
-    width: 300,
+    width: '100%',
     marginLeft: 12,
     marginRight: 12,
   },
   menuItem: {
-    width: 300,
+    width: '300',
   },
   floatRight: {
     float: 'right',
     marginBottom: 12,
+  },
+  floatLeft: {
+    float: 'left',
+    marginBottom: 12,
+  },
+  halfWidth: {
+    width: '400',
+  },
+  dateTime: {
+    width: '50%'
   },
   floatSpacer: {
     display: 'flex',
@@ -134,83 +144,102 @@ export function GroupMemberList(props) {
 
       <Box className={classes.floatSpacer} />
 
-      <Box className={classes.floatRight}>
-        <Grid
-          container
-          justify='space-between'
-          align='center'
-          alignItems='center'
-        >
-          <Grid item>
-            <Typography align='center' variant='h5' component='h2' color='textPrimary'>
-              <DiverstFormattedMessage {...messages.changeScope} />
-            </Typography>
-          </Grid>
-          <Grid item>
-            <Button
-              className={classes.staticWidthButton}
-              variant='contained'
-              color='secondary'
-              size='large'
-              onClick={handleClick}
-            >
-              <DiverstFormattedMessage {...messages.scopes[props.memberType]} />
-            </Button>
-          </Grid>
+      <Grid container spacing={1} alignItems='flex-end'>
+        <Grid item md={4} container alignItems='stretch'>
+          <Card>
+            <CardContent>
+              <Grid
+                container
+                justify='space-between'
+                alignContent='stretch'
+                alignItems='center'
+              >
+                <Grid item md={12}>
+                  <Typography align='left' variant='h5' component='h2' color='textPrimary'>
+                    <DiverstFormattedMessage {...messages.changeScope} />
+                  </Typography>
+                </Grid>
+                <Grid item md={12}>
+                  <Button
+                    variant='contained'
+                    color='secondary'
+                    size='large'
+                    onClick={handleClick}
+                  >
+                    <DiverstFormattedMessage {...messages.scopes[props.memberType]} />
+                  </Button>
+                </Grid>
+              </Grid>
+            </CardContent>
+          </Card>
         </Grid>
-      </Box>
-
-      <Box className={classes.floatSpacer} />
-
-      <Box className={classes.floatRight}>
-        <Formik
-          initialValues={{
-            from: props.memberFrom,
-            to: props.memberTo,
-            segmentLabels: props.segmentLabels,
-          }}
-          enableReinitialize
-          onSubmit={(values) => {
-            values.segmentIds = (values.segmentLabels || []).map(i => i.value);
-            props.handleFilterChange(values);
-          }}
-        >
-          {formikProps => (
-            <Form>
-              <Field
-                component={DiverstDatePicker}
-                keyboardMode
-                maxDate={formikProps.values.to ? formikProps.values.to : new Date()}
-                maxDateMessage='From date cannot be after To date'
-                id='from'
-                name='from'
-                margin='normal'
-                label='FROM'
-              />
-              <Field
-                component={DiverstDatePicker}
-                keyboardMode
-                minDate={formikProps.values.from ? formikProps.values.from : undefined}
-                maxDate={new Date()}
-                minDateMessage='To date cannot be before From date'
-                maxDateMessage='To date cannot be after Today'
-                id='to'
-                name='to'
-                margin='normal'
-                label='TO'
-              />
-              <SegmentSelector
-                segmentField='segmentLabels'
-                label='SEGMENTS'
-                {...formikProps}
-              />
-              <DiverstSubmit>
-                Filter
-              </DiverstSubmit>
-            </Form>
-          )}
-        </Formik>
-      </Box>
+        <Grid item md={8}>
+          <Card>
+            <CardContent>
+              <Formik
+                initialValues={{
+                  from: props.memberFrom,
+                  to: props.memberTo,
+                  segmentLabels: props.segmentLabels,
+                }}
+                enableReinitialize
+                onSubmit={(values) => {
+                  values.segmentIds = (values.segmentLabels || []).map(i => i.value);
+                  props.handleFilterChange(values);
+                }}
+              >
+                {formikProps => (
+                  <Form>
+                    <Grid container>
+                      <Grid item xs={6}>
+                        <Field
+                          component={DiverstDatePicker}
+                          keyboardMode
+                          fullWidth
+                          maxDate={formikProps.values.to ? formikProps.values.to : new Date()}
+                          maxDateMessage='From date cannot be after To date'
+                          id='from'
+                          name='from'
+                          margin='normal'
+                          label='FROM'
+                        />
+                      </Grid>
+                      <Grid item xs={6}>
+                        <Field
+                          component={DiverstDatePicker}
+                          keyboardMode
+                          fullWidth
+                          minDate={formikProps.values.from ? formikProps.values.from : undefined}
+                          maxDate={new Date()}
+                          minDateMessage='To date cannot be before From date'
+                          maxDateMessage='To date cannot be after Today'
+                          id='to'
+                          name='to'
+                          margin='normal'
+                          label='TO'
+                        />
+                      </Grid>
+                    </Grid>
+                    <SegmentSelector
+                      segmentField='segmentLabels'
+                      label='SEGMENTS'
+                      {...formikProps}
+                    />
+                    <Button
+                      color='primary'
+                      type='submit'
+                      variant='contained'
+                      className={classes.actionButton}
+                    >
+                      Filter
+                    </Button>
+                  </Form>
+                )}
+              </Formik>
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
 
       <Box className={classes.floatSpacer} />
 
