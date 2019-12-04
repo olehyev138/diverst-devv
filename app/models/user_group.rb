@@ -20,7 +20,7 @@ class UserGroup < ApplicationRecord
 
   scope :with_answered_survey, -> { where.not(data: nil) }
 
-  scope :for_segment_ids, -> (segment_ids) { joins(user: [:segments]).where('segments.id' => segment_ids).distinct if segments.any? }
+  scope :for_segment_ids, -> (segment_ids) { joins(user: [:segments]).where('segments.id' => segment_ids).distinct if segment_ids.any? }
 
   scope :joined_from, -> (from) { where('user_groups.created_at >= ?', from) }
   scope :joined_to, -> (to) { where('user_groups.created_at <= ?', to) }

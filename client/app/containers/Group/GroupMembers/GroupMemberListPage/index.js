@@ -59,7 +59,8 @@ export function GroupMemberListPage(props) {
   const [type, setType] = React.useState('accepted_users');
   const [from, setFrom] = React.useState(null);
   const [to, setTo] = React.useState(null);
-  const [segments, setSegments] = React.useState(null);
+  const [segmentIds, setSegmentIds] = React.useState(null);
+  const [segmentLabels, setSegmentLabels] = React.useState(null);
 
   const getScopes = (scopes) => {
     // eslint-disable-next-line no-param-reassign
@@ -67,7 +68,7 @@ export function GroupMemberListPage(props) {
     if (scopes.type === undefined) scopes.type = type;
     if (scopes.from === undefined) scopes.from = from;
     if (scopes.to === undefined) scopes.to = to;
-    if (scopes.segments === undefined) scopes.segments = segments;
+    if (scopes.segmentIds === undefined) scopes.segmentIds = segmentIds;
 
     const queryScopes = [];
     if (scopes.type)
@@ -76,9 +77,11 @@ export function GroupMemberListPage(props) {
       queryScopes.push(scopes.from);
     if (scopes.to)
       queryScopes.push(scopes.to);
-    if (scopes.segments)
-      queryScopes.push(scopes.segments);
+    if (scopes.segmentIds && scopes.segmentIds[1].length > 0)
+      queryScopes.push(scopes.segmentIds);
 
+    console.log('API SCOPES');
+    console.log(queryScopes);
     return queryScopes;
   };
 
@@ -103,9 +106,10 @@ export function GroupMemberListPage(props) {
       getMembers(getScopes({ type }), true);
   };
 
-  const handleDateFilter = (values) => {
-    let from;
-    let to;
+  const handleFilterChange = (values) => {
+    let from = null;
+    let to = null;
+    let segmentIds = null;
     if (values.from) {
       from = ['joined_from', values.from];
       setFrom(from);
@@ -114,7 +118,18 @@ export function GroupMemberListPage(props) {
       to = ['joined_to', values.to];
       setTo(to);
     }
-    getMembers(getScopes({ from, to }, true));
+    if (values.segmentIds) {
+      segmentIds = ['for_segment_ids', values.segmentIds];
+      setSegmentIds(segmentIds);
+    }
+    if (values.segmentLabels) {
+      segmentIds = ['for_segment_ids', values.segmentIds];
+      setSegmentIds(segmentIds);
+      setSegmentLabels(values.segmentLabels);
+    }
+    console.log('SCOPE VALUES');
+    console.log({ from, to, segmentIds });
+    getMembers(getScopes({ from, to, segmentIds }, true));
   };
 
   const handlePagination = (payload) => {
@@ -163,7 +178,8 @@ export function GroupMemberListPage(props) {
 
         memberFrom={from ? from[1] : null}
         memberTo={to ? to[1] : null}
-        handleDateFilter={handleDateFilter}
+        segmentLabels={segmentLabels ? segmentLabels : []}
+        handleFilterChange={handleFilterChange}
       />
     </React.Fragment>
   );

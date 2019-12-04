@@ -21,6 +21,7 @@ import { DateTime } from 'luxon';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import SegmentSelector from 'components/Shared/SegmentSelector';
 import messages from 'containers/Group/GroupMembers/messages';
 
 import DeleteIcon from '@material-ui/icons/DeleteOutline';
@@ -166,12 +167,14 @@ export function GroupMemberList(props) {
           initialValues={{
             from: props.memberFrom,
             to: props.memberTo,
+            segmentLabels: props.segmentLabels,
           }}
           enableReinitialize
           onSubmit={(values) => {
-            if (!values.from) delete values.from;
-            if (!values.to) delete values.to;
-            props.handleDateFilter(values);
+            values.segmentIds = values.segmentLabels.map(i => i.value);
+            console.log('SUBMITTED VALUES');
+            console.log(values);
+            props.handleFilterChange(values);
           }}
         >
           {formikProps => (
@@ -198,6 +201,12 @@ export function GroupMemberList(props) {
                 margin='normal'
                 label='TO'
               />
+              <SegmentSelector
+                segmentField='segmentLabels'
+                label='SEGMENTS'
+                {...formikProps}
+              />
+              {console.error(formikProps.values)}
               <DiverstSubmit>
                 Filter
               </DiverstSubmit>
@@ -282,9 +291,10 @@ GroupMemberList.propTypes = {
   MemberTypes: PropTypes.array.isRequired,
   handleChangeTab: PropTypes.func.isRequired,
 
-  memberFrom: PropTypes.instanceOf(DateTime),
-  memberTo: PropTypes.instanceOf(DateTime),
-  handleDateFilter: PropTypes.func.isRequired,
+  memberFrom: PropTypes.instanceOf(Date),
+  memberTo: PropTypes.instanceOf(Date),
+  segmentLabels: PropTypes.array,
+  handleFilterChange: PropTypes.func.isRequired,
 };
 
 export default compose(
