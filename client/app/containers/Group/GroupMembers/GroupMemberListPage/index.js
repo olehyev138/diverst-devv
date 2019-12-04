@@ -80,8 +80,6 @@ export function GroupMemberListPage(props) {
     if (scopes.segmentIds && scopes.segmentIds[1].length > 0)
       queryScopes.push(scopes.segmentIds);
 
-    console.log('API SCOPES');
-    console.log(queryScopes);
     return queryScopes;
   };
 
@@ -127,8 +125,6 @@ export function GroupMemberListPage(props) {
       setSegmentIds(segmentIds);
       setSegmentLabels(values.segmentLabels);
     }
-    console.log('SCOPE VALUES');
-    console.log({ from, to, segmentIds });
     getMembers(getScopes({ from, to, segmentIds }, true));
   };
 
@@ -178,7 +174,7 @@ export function GroupMemberListPage(props) {
 
         memberFrom={from ? from[1] : null}
         memberTo={to ? to[1] : null}
-        segmentLabels={segmentLabels ? segmentLabels : []}
+        segmentLabels={segmentLabels || []}
         handleFilterChange={handleFilterChange}
       />
     </React.Fragment>

@@ -171,9 +171,7 @@ export function GroupMemberList(props) {
           }}
           enableReinitialize
           onSubmit={(values) => {
-            values.segmentIds = values.segmentLabels.map(i => i.value);
-            console.log('SUBMITTED VALUES');
-            console.log(values);
+            values.segmentIds = (values.segmentLabels || []).map(i => i.value);
             props.handleFilterChange(values);
           }}
         >
@@ -206,7 +204,6 @@ export function GroupMemberList(props) {
                 label='SEGMENTS'
                 {...formikProps}
               />
-              {console.error(formikProps.values)}
               <DiverstSubmit>
                 Filter
               </DiverstSubmit>
@@ -291,8 +288,8 @@ GroupMemberList.propTypes = {
   MemberTypes: PropTypes.array.isRequired,
   handleChangeTab: PropTypes.func.isRequired,
 
-  memberFrom: PropTypes.instanceOf(Date),
-  memberTo: PropTypes.instanceOf(Date),
+  memberFrom: PropTypes.instanceOf(DateTime),
+  memberTo: PropTypes.instanceOf(DateTime),
   segmentLabels: PropTypes.array,
   handleFilterChange: PropTypes.func.isRequired,
 };
