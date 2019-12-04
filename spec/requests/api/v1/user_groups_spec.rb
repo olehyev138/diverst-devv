@@ -38,9 +38,9 @@ RSpec.describe "#{model.pluralize}", type: :request do
   end
 
   describe '#create' do
-    it 'creates an item' do
+    it 'tries to create an item (permission denied)' do
       post "/api/v1/#{route}", params: { "#{route.singularize}" => build(route.singularize.to_sym).attributes }, headers: headers
-      expect(response).to have_http_status(201)
+      expect(response).to have_http_status(:bad_request)
     end
 
     it 'captures the error when BadRequestException' do
@@ -48,14 +48,12 @@ RSpec.describe "#{model.pluralize}", type: :request do
       post "/api/v1/#{route}", params: { "#{route.singularize}" => build(route.singularize.to_sym).attributes }, headers: headers
       expect(response).to have_http_status(:bad_request)
     end
-
-    include_examples 'InvalidInputException when creating', model
   end
 
   describe '#update' do
-    it 'updates an item' do
+    it 'tries to update an item (permission denied)' do
       patch "/api/v1/#{route}/#{item.id}", params: { "#{route.singularize}" => item.attributes }, headers: headers
-      expect(response).to have_http_status(:ok)
+      expect(response).to have_http_status(:bad_request)
     end
 
     it 'captures the error when BadRequestException' do
@@ -63,14 +61,12 @@ RSpec.describe "#{model.pluralize}", type: :request do
       patch "/api/v1/#{route}/#{item.id}", params: { "#{route.singularize}" => item.attributes }, headers: headers
       expect(response).to have_http_status(:bad_request)
     end
-
-    include_examples 'InvalidInputException when updating', model
   end
 
   describe '#destroy' do
-    it 'deletes an item' do
+    it 'tries to delete an item (permission denied)' do
       delete "/api/v1/#{route}/#{item.id}", headers: headers
-      expect(response).to have_http_status(:no_content)
+      expect(response).to have_http_status(:bad_request)
     end
 
     it 'captures the error' do
