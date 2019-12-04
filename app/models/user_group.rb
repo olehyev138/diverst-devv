@@ -20,6 +20,11 @@ class UserGroup < ApplicationRecord
 
   scope :with_answered_survey, -> { where.not(data: nil) }
 
+  scope :for_segment_ids, -> (segment_ids) { joins(user: [:segments]).where('segments.id' => segment_ids).distinct if segments.any? }
+
+  scope :joined_from, -> (from) { where('created_at >= ?', from) }
+  scope :joined_to, -> (to) { where('created_at <= ?', to) }
+
   before_destroy :remove_leader_role
 
   after_create { update_mentor_fields(true) }

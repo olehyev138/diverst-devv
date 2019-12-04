@@ -39,9 +39,9 @@ module BaseSearcher
 
         filtered.select { |query_scope|
           if query_scope.kind_of?(String) || query_scope.kind_of?(Symbol)
-            valid_scopes.include?(query_scope)
-          else
-            valid_scopes.include?(query_scope.first)
+            valid_scopes.include?(query_scope.to_s)
+          elsif query_scope.kind_of?(Array)
+            valid_scopes.include?(query_scope.first.to_s)
           end
         }
       else

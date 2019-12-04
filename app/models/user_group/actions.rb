@@ -7,7 +7,16 @@ module UserGroup::Actions
 
   module ClassMethods
     def valid_scopes
-      [:active, :pending, :inactive, :accepted_users, :all].map { |scope| scope.to_s }
+      [
+          :active,
+          :pending,
+          :inactive,
+          :accepted_users,
+          :all,
+          :joined_from,
+          :joined_to,
+          :for_segment_ids
+      ]
     end
 
     def base_includes
