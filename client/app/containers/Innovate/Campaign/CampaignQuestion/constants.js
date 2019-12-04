@@ -2,9 +2,9 @@
 
 export const GET_QUESTIONS_BEGIN = 'app/Innovate/Campaign/CampaignQuestion/GET_QUESTIONS_BEGIN';
 export const GET_QUESTIONS_SUCCESS = 'app/Innovate/Campaign/CampaignQuestion/GET_QUESTIONS_SUCCESS';
-export const GET_QUESTIONS_ERROR = 'app/Innovate/Campaign/GET_QUESTIONS_ERROR';
+export const GET_QUESTIONS_ERROR = 'app/Innovate/Campaign/CampaignQuestion/GET_QUESTIONS_ERROR';
 
-export const GET_QUESTION_BEGIN = 'app/Innovate/CampaignQuestion/GET_QUESTION_BEGIN';
+export const GET_QUESTION_BEGIN = 'app/Innovate/Campaign/CampaignQuestion/GET_QUESTION_BEGIN';
 export const GET_QUESTION_SUCCESS = 'app/Innovate/Campaign/CampaignQuestion/GET_QUESTION_SUCCESS';
 export const GET_QUESTION_ERROR = 'app/Innovate/Campaign/CampaignQuestion/GET_QUESTION_ERROR';
 

@@ -7,19 +7,19 @@ import { createStructuredSelector } from 'reselect/lib';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 
-import reducer from '../reducer';
-import saga from '../saga';
-import { selectFormEnterprise } from '../selectors';
+import reducer from 'containers/GlobalSettings/EnterpriseConfiguration/reducer';
+import saga from 'containers/GlobalSettings/EnterpriseConfiguration/saga';
+import { selectFormEnterprise } from 'containers/GlobalSettings/EnterpriseConfiguration/selectors';
 import {
   getEnterpriseBegin,
   updateEnterpriseBegin,
   configurationUnmount
-} from '../actions';
+} from 'containers/GlobalSettings/EnterpriseConfiguration/actions';
 
 import RouteService from 'utils/routeHelpers';
-import EnterpriseConfiguration from 'components/GlobalSettings/EnterpriseConfiguration';
+import SSOSettings from 'components/GlobalSettings/SSOSettings';
 
-export function EnterpriseConfigurationPage(props) {
+export function SSOSettingsPage(props) {
   useInjectReducer({ key: 'configuration', reducer });
   useInjectSaga({ key: 'configuration', saga });
 
@@ -32,7 +32,7 @@ export function EnterpriseConfigurationPage(props) {
 
   return (
     <React.Fragment>
-      <EnterpriseConfiguration
+      <SSOSettings
         enterpriseAction={props.updateEnterpriseBegin}
         enterprise={props.enterprise}
         buttonText='Update'
@@ -41,7 +41,7 @@ export function EnterpriseConfigurationPage(props) {
   );
 }
 
-EnterpriseConfigurationPage.propTypes = {
+SSOSettingsPage.propTypes = {
   enterprise: PropTypes.object,
   getEnterpriseBegin: PropTypes.func,
   updateEnterpriseBegin: PropTypes.func,
@@ -66,4 +66,4 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(EnterpriseConfigurationPage);
+)(SSOSettingsPage);

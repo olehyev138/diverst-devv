@@ -55,6 +55,7 @@ import SegmentPage from 'containers/Segment/SegmentPage/Loadable';
 import FieldsPage from 'containers/GlobalSettings/Field/FieldsPage/Loadable';
 import CustomTextEditPage from 'containers/GlobalSettings/CustomText/CustomTextEditPage/Loadable';
 import EnterpriseConfigurationPage from 'containers/GlobalSettings/EnterpriseConfiguration/EnterpriseConfigurationPage/Loadable';
+import SSOSettingsPage from 'containers/GlobalSettings/SSOSettingsPage/Loadable';
 
 /* Admin - System - User */
 import UsersPage from 'containers/User/UsersPage/Loadable';
@@ -109,6 +110,7 @@ import CampaignShowPage from 'containers/Innovate/Campaign/CampaignShowPage/Load
 import CampaignQuestionListPage from 'containers/Innovate/Campaign/CampaignQuestion/CampaignQuestionListPage/Loadable';
 import CampaignQuestionCreatePage from 'containers/Innovate/Campaign/CampaignQuestion/CampaignQuestionCreatePage/Loadable';
 import CampaignQuestionEditPage from 'containers/Innovate/Campaign/CampaignQuestion/CampaignQuestionEditPage/Loadable';
+import CampaignQuestionShowPage from 'containers/Innovate/Campaign/CampaignQuestion/CampaignQuestionShowPage/Loadable';
 /* Global */
 import NotFoundPage from 'containers/Shared/NotFoundPage/Loadable';
 import PlaceholderPage from 'components/Shared/PlaceholderPage/Loadable';
@@ -177,6 +179,7 @@ export {
   CampaignQuestionListPage,
   CampaignQuestionCreatePage,
   CampaignQuestionEditPage,
+  CampaignQuestionShowPage,
   EnterpriseConfigurationPage,
   MentorshipProfilePage,
   MentorshipEditProfilePage,
@@ -189,5 +192,6 @@ export {
   SystemUserLayout,
   UserRolesListPage,
   UserRoleCreatePage,
-  UserRoleEditPage
+  UserRoleEditPage,
+  SSOSettingsPage
 };

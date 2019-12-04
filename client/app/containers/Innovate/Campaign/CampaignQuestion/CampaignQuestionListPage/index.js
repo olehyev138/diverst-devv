@@ -73,6 +73,7 @@ export function CampaignQuestionListPage(props) {
         isFetchingQuestions={props.isFetchingQuestions}
         campaignId={campaignId}
         handleVisitQuestionEdit={props.handleVisitQuestionEdit}
+        handleVisitQuestionShow={props.handleVisitQuestionShow}
         deleteQuestionBegin={props.deleteQuestionBegin}
         links={links}
         setParams={params}
@@ -92,6 +93,7 @@ CampaignQuestionListPage.propTypes = {
   questionTotal: PropTypes.number,
   isFetchingQuestions: PropTypes.bool,
   handleVisitQuestionEdit: PropTypes.func,
+  handleVisitQuestionShow: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -105,6 +107,7 @@ const mapDispatchToProps = dispatch => ({
   deleteQuestionBegin: payload => dispatch(deleteQuestionBegin(payload)),
   campaignQuestionsUnmount: () => dispatch(campaignQuestionsUnmount()),
   handleVisitQuestionEdit: (campaignId, id) => dispatch(push(ROUTES.admin.innovate.campaigns.questions.edit.path(campaignId, id))),
+  handleVisitQuestionShow: (campaignId, id) => dispatch(push(ROUTES.admin.innovate.campaigns.questions.show.path(campaignId, id))),
 });
 
 const withConnect = connect(
