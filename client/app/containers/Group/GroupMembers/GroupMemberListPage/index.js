@@ -83,10 +83,7 @@ export function GroupMemberListPage(props) {
     return queryScopes;
   };
 
-  const getMembers = (scopes, resetParams = false) => {
-    if (resetParams)
-      setParams(defaultParams);
-
+  const getMembers = (scopes, params = params) => {
     if (groupId) {
       const newParams = {
         ...params,
@@ -101,7 +98,7 @@ export function GroupMemberListPage(props) {
   const handleChangeTab = (type) => {
     setType(type);
     if (MemberTypes.includes(type))
-      getMembers(getScopes({ type }), true);
+      getMembers(getScopes({ type }), defaultParams);
   };
 
   const handleFilterChange = (values) => {
@@ -125,21 +122,19 @@ export function GroupMemberListPage(props) {
       setSegmentIds(segmentIds);
       setSegmentLabels(values.segmentLabels);
     }
-    getMembers(getScopes({ from, to, segmentIds }, true));
+    getMembers(getScopes({ from, to, segmentIds }, defaultParams));
   };
 
   const handlePagination = (payload) => {
     const newParams = { ...params, count: payload.count, page: payload.page };
 
-    getMembers(getScopes({}), false);
-    setParams(newParams);
+    getMembers(getScopes({}), newParams);
   };
 
   const handleOrdering = (payload) => {
     const newParams = { ...params, orderBy: payload.orderBy, order: payload.orderDir };
 
-    getMembers(getScopes({}), false);
-    setParams(newParams);
+    getMembers(getScopes({}), newParams);
   };
 
   useEffect(() => {
