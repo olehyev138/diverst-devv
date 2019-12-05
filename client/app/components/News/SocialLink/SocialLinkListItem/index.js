@@ -20,12 +20,15 @@ import { withStyles } from '@material-ui/core/styles';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/News/messages';
+import WrappedNavLink from "../../../Shared/WrappedNavLink";
 
 const styles = theme => ({
 });
 
 export function SocialLinkListItem(props) {
   const { socialLink } = props;
+  const { newsItem } = props;
+  const { links } = props;
 
   return (
     <Card>
@@ -45,13 +48,26 @@ export function SocialLinkListItem(props) {
           </React.Fragment>
         ) : <React.Fragment />
         }
+        <CardActions>
+          <Button
+            size='small'
+            color='primary'
+            to={links.socialLinkEdit(newsItem.id)}
+            component={WrappedNavLink}
+          >
+            <DiverstFormattedMessage {...messages.edit} />
+          </Button>
+        </CardActions>
       </CardContent>
     </Card>
   );
 }
 
 SocialLinkListItem.propTypes = {
-  socialLink: PropTypes.object
+  socialLink: PropTypes.object,
+  links: PropTypes.shape({
+    socialLinkEdit: PropTypes.func,
+  })
 };
 
 export default compose(
