@@ -13,7 +13,9 @@ import {
   CREATE_GROUP_MESSAGE_COMMENT_BEGIN, CREATE_NEWSLINK_BEGIN, UPDATE_NEWSLINK_BEGIN,
   CREATE_NEWSLINK_COMMENT_BEGIN,
   CREATE_SOCIALLINK_BEGIN, UPDATE_SOCIALLINK_BEGIN,
-  CREATE_SOCIALLINK_COMMENT_BEGIN
+  CREATE_SOCIALLINK_COMMENT_BEGIN, DELETE_GROUP_MESSAGE_BEGIN, DELETE_GROUP_MESSAGE_SUCCESS,
+  DELETE_GROUP_MESSAGE_ERROR, DELETE_SOCIALLINK_BEGIN, DELETE_SOCIALLINK_SUCCESS, DELETE_SOCIALLINK_ERROR,
+  DELETE_NEWSLINK_BEGIN, DELETE_NEWSLINK_SUCCESS, DELETE_NEWSLINK_ERROR,
 } from 'containers/News/constants';
 
 import {
@@ -24,9 +26,10 @@ import {
   createGroupMessageCommentSuccess, createNewsLinkBegin,
   createNewsLinkSuccess, createNewsLinkError, createNewsLinkCommentError,
   updateNewsLinkSuccess, createNewsLinkCommentSuccess,
-  createSocialLinkBegin,
+  createSocialLinkBegin, deleteGroupMessageBegin, deleteGroupMessageError, deleteGroupMessageSuccess,
   createSocialLinkSuccess, createSocialLinkError, createSocialLinkCommentError,
-  updateSocialLinkSuccess, createSocialLinkCommentSuccess
+  updateSocialLinkSuccess, createSocialLinkCommentSuccess, deleteNewsLinkBegin, deleteNewsLinkError,
+  deleteNewsLinkSuccess, deleteSocialLinkBegin, deleteSocialLinkError, deleteSocialLinkSuccess
 } from 'containers/News/actions';
 
 
@@ -85,6 +88,20 @@ export function* updateGroupMessage(action) {
   }
 }
 
+export function* deleteGroupMessage(action) {
+  try {
+    yield call(api.groupMessages.destroy.bind(api.groupMessages), action.payload.id);
+    yield put(deleteGroupMessageSuccess());
+    yield put(push(ROUTES.group.news.index.path(action.payload.group_id)));
+    yield put(showSnackbar({ message: 'Message deleted', options: { variant: 'success' } }));
+  } catch (err) {
+    yield put(deleteGroupMessageError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to remove message', options: { variant: 'warning' } }));
+  }
+}
+
 export function* createGroupMessageComment(action) {
   // create comment & re-fetch news feed link from server
 
@@ -135,6 +152,20 @@ export function* updateNewsLink(action) {
   }
 }
 
+export function* deleteNewsLink(action) {
+  try {
+    yield call(api.newsLinks.destroy.bind(api.newsLinks), action.payload.id);
+    yield put(deleteNewsLinkSuccess());
+    yield put(push(ROUTES.group.news.index.path(action.payload.group_id)));
+    yield put(showSnackbar({ message: 'News link deleted', options: { variant: 'success' } }));
+  } catch (err) {
+    yield put(deleteNewsLinkError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to remove news link', options: { variant: 'warning' } }));
+  }
+}
+
 export function* createNewsLinkComment(action) {
   // create comment & re-fetch news feed link from server
 
@@ -150,6 +181,20 @@ export function* createNewsLinkComment(action) {
 
     // TODO: intl message
     yield put(showSnackbar({ message: 'Failed to create news link comment', options: { variant: 'warning' } }));
+  }
+}
+
+export function* deleteNewsLinkComment(action) {
+  try {
+    yield call(api.newsLinkComments.destroy.bind(api.newsLinkComments), action.payload.id);
+    yield put(deleteNewsLinkCommentSuccess());
+    yield put(push(ROUTES.group.news.index.path(action.payload.group_id)));
+    yield put(showSnackbar({ message: 'News link comment deleted', options: { variant: 'success' } }));
+  } catch (err) {
+    yield put(deleteNewsLinkCommentError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to remove news link comment', options: { variant: 'warning' } }));
   }
 }
 
@@ -182,6 +227,20 @@ export function* updateSocialLink(action) {
 
     // TODO: intl message
     yield put(showSnackbar({ message: 'Failed to update social link', options: { variant: 'warning' } }));
+  }
+}
+
+export function* deleteSocialLink(action) {
+  try {
+    yield call(api.socialLinks.destroy.bind(api.socialLinks), action.payload.id);
+    yield put(deleteNewsLinkSuccess());
+    yield put(push(ROUTES.group.news.index.path(action.payload.group_id)));
+    yield put(showSnackbar({ message: 'Social link deleted', options: { variant: 'success' } }));
+  } catch (err) {
+    yield put(deleteNewsLinkError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to remove social link', options: { variant: 'warning' } }));
   }
 }
 

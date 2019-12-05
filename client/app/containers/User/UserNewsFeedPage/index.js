@@ -33,6 +33,7 @@ export function NewsFeedPage(props, context) {
     groupMessageShow: (groupId, id) => ROUTES.group.news.messages.show.path(groupId, id),
     newsLinkEdit: id => ROUTES.group.news.news_links.edit.path(rs.params('group_id'), id),
     socialLinkEdit: id => ROUTES.group.news.social_links.edit.path(rs.params('group_id'), id),
+    newsLinkShow: (groupId, id) => ROUTES.group.news.news_links.show.path(rs.params('group_id'), id),
   };
 
   useEffect(() => {

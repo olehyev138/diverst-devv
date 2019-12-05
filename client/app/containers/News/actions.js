@@ -16,8 +16,10 @@ import {
   DELETE_NEWSLINK_ERROR, CREATE_NEWSLINK_COMMENT_BEGIN, CREATE_NEWSLINK_COMMENT_SUCCESS, CREATE_NEWSLINK_COMMENT_ERROR,
   CREATE_SOCIALLINK_BEGIN, CREATE_SOCIALLINK_SUCCESS, CREATE_SOCIALLINK_ERROR, UPDATE_SOCIALLINK_BEGIN,
   UPDATE_SOCIALLINK_SUCCESS, UPDATE_SOCIALLINK_ERROR, CREATE_SOCIALLINK_COMMENT_BEGIN, CREATE_SOCIALLINK_COMMENT_SUCCESS,
-  CREATE_SOCIALLINK_COMMENT_ERROR, DELETE_SOCIALLINK_ERROR, DELETE_SOCIALLINK_BEGIN, DELETE_SOCIALLINK_SUCCESS
+  CREATE_SOCIALLINK_COMMENT_ERROR, DELETE_SOCIALLINK_ERROR, DELETE_SOCIALLINK_BEGIN, DELETE_SOCIALLINK_SUCCESS,
+  DELETE_NEWSLINK_COMMENT_BEGIN, DELETE_NEWSLINK_COMMENT_ERROR, DELETE_NEWSLINK_COMMENT_SUCCESS
 } from 'containers/News/constants';
+
 
 export function getNewsItemsBegin(payload) {
   return {
@@ -207,7 +209,7 @@ export function updateNewsLinkError(error) {
   };
 }
 
-/* Group Message deleting */
+/* News Link deleting */
 
 export function deleteNewsLinkBegin(payload) {
   return {
@@ -341,6 +343,27 @@ export function createSocialLinkCommentSuccess(payload) {
 export function createSocialLinkCommentError(error) {
   return {
     type: CREATE_SOCIALLINK_COMMENT_ERROR,
+    error,
+  };
+}
+
+export function deleteNewsLinkCommentBegin(payload) {
+  return {
+    type: DELETE_NEWSLINK_COMMENT_BEGIN,
+    payload,
+  };
+}
+
+export function deleteNewsLinkCommentSuccess(payload) {
+  return {
+    type: DELETE_NEWSLINK_COMMENT_SUCCESS,
+    payload,
+  };
+}
+
+export function deleteNewsLinkCommentError(error) {
+  return {
+    type: DELETE_NEWSLINK_COMMENT_ERROR,
     error,
   };
 }
