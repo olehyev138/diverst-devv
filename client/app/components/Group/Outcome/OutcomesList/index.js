@@ -90,14 +90,6 @@ export function OutcomesList(props, context) {
                 <CardActions>
                   <Button
                     component={WrappedNavLink}
-                    color='primary'
-                    to={props.links.eventIndex}
-                  >
-                    <EventIcon className={classes.buttonIcon} />
-                    Events
-                  </Button>
-                  <Button
-                    component={WrappedNavLink}
                     color='secondary'
                     to={props.links.outcomeEdit(outcome.id)}
                   >

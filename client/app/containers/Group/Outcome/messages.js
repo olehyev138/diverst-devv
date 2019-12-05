@@ -41,6 +41,9 @@ export default defineMessages({
   empty: {
     id: `${scope}.empty`,
   },
+  editStructure: {
+    id: `${scope}.structure.edit`
+  },
   pillars: {
     text: {
       id: `${scope}.Pillar.text`,
@@ -62,6 +65,9 @@ export default defineMessages({
     events: {
       new: {
         id: `${scope}.Pillar.Event.button.new`
+      },
+      empty: {
+        id: `${scope}.Pillar.Event.empty`
       }
     },
   },
