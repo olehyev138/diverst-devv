@@ -137,9 +137,7 @@ export function* updateNewsLink(action) {
 
 export function* createSocialLink(action) {
   try {
-    console.log(action)
     const payload = { social_link: action.payload };
-    console.log(payload);
     const response = yield call(api.socialLinks.create.bind(api.socialLinks), action.payload);
 
     yield put(createSocialLinkSuccess());

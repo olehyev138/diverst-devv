@@ -27,7 +27,11 @@ const styles = theme => ({
 
 export function NewsLinkListItem(props) {
   const { newsLink } = props;
-
+  const { newsItem } = props;
+  const { links } = props;
+  console.log(newsLink);
+  console.log(newsItem);
+  console.log(links);
   return (
     <Card>
       <CardContent>
@@ -50,13 +54,36 @@ export function NewsLinkListItem(props) {
           </React.Fragment>
         ) : <React.Fragment />
         }
+        <CardActions>
+          <Button
+            size='small'
+            color='primary'
+            to={props.links.newsLinkEdit(newsLink.id)}
+            component={WrappedNavLink}
+          >
+            <DiverstFormattedMessage {...messages.edit} />
+          </Button>
+          {/*<Button*/}
+          {/*  size='small'*/}
+          {/*  to={props.links.groupMessageShow(props.groupId, newsItem.id)}*/}
+          {/*  component={WrappedNavLink}*/}
+          {/*>*/}
+          {/*  Comments*/}
+          {/*</Button>*/}
+        </CardActions>
+
       </CardContent>
     </Card>
   );
 }
 
 NewsLinkListItem.propTypes = {
-  newsLink: PropTypes.object
+  newsLink: PropTypes.object,
+  readonly: PropTypes.bool,
+  newsItem: PropTypes.object,
+  links: PropTypes.shape({
+    newsLinkEdit: PropTypes.string
+  })
 };
 
 export default compose(
