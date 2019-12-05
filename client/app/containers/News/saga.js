@@ -135,6 +135,24 @@ export function* updateNewsLink(action) {
   }
 }
 
+export function* createNewsLinkComment(action) {
+  // create comment & re-fetch news feed link from server
+
+  try {
+    const payload = { news_link_comment: action.payload.attributes };
+    const response = yield call(api.newsLinkComments.create.bind(api.newsLinkComments), payload);
+
+    yield put(createNewsLinkCommentSuccess());
+    yield put(getNewsItemBegin({ id: action.payload.news_feed_link_id }));
+    yield put(showSnackbar({ message: 'News link comment created', options: { variant: 'success' } }));
+  } catch (err) {
+    yield put(createNewsLinkCommentError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to create news link comment', options: { variant: 'warning' } }));
+  }
+}
+
 export function* createSocialLink(action) {
   try {
     const payload = { social_link: action.payload };
@@ -174,6 +192,7 @@ export default function* newsSaga() {
   yield takeLatest(UPDATE_GROUP_MESSAGE_BEGIN, updateGroupMessage);
   yield takeLatest(CREATE_GROUP_MESSAGE_COMMENT_BEGIN, createGroupMessageComment);
   yield takeLatest(CREATE_NEWSLINK_BEGIN, createNewsLink);
+  yield takeLatest(CREATE_NEWSLINK_COMMENT_BEGIN, createNewsLinkComment);
   yield takeLatest(UPDATE_NEWSLINK_BEGIN, updateNewsLink);
   yield takeLatest(CREATE_SOCIALLINK_BEGIN, createSocialLink);
   yield takeLatest(UPDATE_SOCIALLINK_BEGIN, updateSocialLink);

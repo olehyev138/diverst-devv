@@ -29,8 +29,6 @@ export function NewsLinkListItem(props) {
   const { newsItem } = props;
   const newsLink = newsItem.news_link;
   const { links } = props;
-  console.log( newsLink );
-  console.log(newsItem);
   return (
     <Card>
       <CardContent>
@@ -81,6 +79,7 @@ export function NewsLinkListItem(props) {
 NewsLinkListItem.propTypes = {
   newsLink: PropTypes.object,
   readonly: PropTypes.bool,
+  groupId: PropTypes.number,
   newsItem: PropTypes.object,
   links: PropTypes.object,
 };

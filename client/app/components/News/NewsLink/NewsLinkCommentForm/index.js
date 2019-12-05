@@ -59,7 +59,7 @@ export function NewsLinkCommentForm(props) {
 
   const initialValues = {
     author_id: dig(props, 'currentUserId') || undefined,
-    message_id: dig(props, 'newsItem', 'news_link', 'id') || undefined,
+    news_link_id: dig(props, 'newsItem', 'news_link', 'id') || undefined,
     content: '',
   };
 
