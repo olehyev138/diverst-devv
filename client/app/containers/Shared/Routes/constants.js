@@ -107,8 +107,39 @@ export const ROUTES = {
           titleMessage: messages.user.mentorship,
         },
       },
-    }
-    ,
+      sessions: {
+        hosting: {
+          path: (userId = ':user_id') => `/mentorship/${userId}/hostingSessions`,
+          data: {
+            titleMessage: messages.user.mentorship,
+          },
+        },
+        participating: {
+          path: (userId = ':user_id') => `/mentorship/${userId}/participatingSessions`,
+          data: {
+            titleMessage: messages.user.mentorship,
+          },
+        },
+        schedule: {
+          path: () => '/mentorship/sessions/schedule',
+          data: {
+            titleMessage: messages.user.mentorship,
+          },
+        },
+        edit: {
+          path: (sessionId = ':session_id') => `/mentorship/sessions/${sessionId}/edit`,
+          data: {
+            titleMessage: messages.user.mentorship,
+          },
+        },
+        show: {
+          path: (sessionId = ':session_id') => `/mentorship/sessions/${sessionId}`,
+          data: {
+            titleMessage: messages.user.mentorship,
+          },
+        },
+      },
+    },
   },
 
   group: {
@@ -438,7 +469,10 @@ export const ROUTES = {
           },
           edit: {
             path: (campaignId = ':campaign_id', questionId = ':question_id') => `/admin/innovate/campaigns/${campaignId}/questions/${questionId}/edit`,
-          }
+          },
+          show: {
+            path: (campaignId = ':campaign_id', questionId = ':question_id') => `/admin/innovate/campaigns/${campaignId}/questions/${questionId}`,
+          },
         }
       },
       financials: {
@@ -496,6 +530,11 @@ export const ROUTES = {
           index: {
             path: () => '/admin/system/settings/configuration'
           }
+        },
+        ssoSettings: {
+          edit: {
+            path: () => '/admin/system/settings/sso'
+          },
         }
       }
     }

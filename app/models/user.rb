@@ -155,6 +155,8 @@ class User < ApplicationRecord
   scope :active, -> { where(active: true) }
   scope :mentors, -> { where(mentor: true) }
   scope :mentees, -> { where(mentee: true) }
+  scope :accepting_mentor_requests, -> { where(accepting_mentor_requests: true) }
+  scope :accepting_mentee_requests, -> { where(accepting_mentee_requests: true) }
 
   accepts_nested_attributes_for :availabilities, allow_destroy: true
 
@@ -206,6 +208,22 @@ class User < ApplicationRecord
 
   def is_member_of?(group)
     group.user_groups.where(user_id: self.id).any?
+  end
+
+  def is_participating_in?(session)
+    session.mentorship_sessions.pluck(:user_id).include? id
+  end
+
+  def get_mentorship_session(session)
+    # If the association is already loaded, we don't need to re-query the database
+    # Otherwise it will be faster to use the find_by query
+    if session.mentorship_sessions.loaded?
+      session.mentorship_sessions.find do |ms|
+        ms.user_id == id
+      end
+    else
+      session.mentorship_sessions.find_by(user_id: id)
+    end
   end
 
   def is_not_member_of?(group)

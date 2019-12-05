@@ -41,6 +41,11 @@ export function GlobalSettingsLinks(props) {
             to={ROUTES.admin.system.globalSettings.enterpriseConfiguration.index.path()}
             label='Configuration'
           />
+          <Tab
+            component={WrappedNavLink}
+            to={ROUTES.admin.system.globalSettings.ssoSettings.edit.path()}
+            label='SSO'
+          />
         </ResponsiveTabs>
       </Paper>
     </React.Fragment>

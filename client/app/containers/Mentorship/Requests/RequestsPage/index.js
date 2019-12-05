@@ -90,8 +90,6 @@ export function MentorsPage(props) {
       getRequests();
   }, [props.successfulChange]);
 
-  const reload = id => getRequests({ ...params, $id: id });
-
   const handleRequestPagination = (payload) => {
     const oldPageNum = params.page;
     const oldRows = params.count;
@@ -123,6 +121,7 @@ export function MentorsPage(props) {
     <React.Fragment>
       <RequestList
         user={props.user}
+        globalUser={props.globalUser}
         userParams={params}
 
         requests={requests}
@@ -138,7 +137,6 @@ export function MentorsPage(props) {
         acceptRequest={props.acceptRequestBegin}
         rejectRequest={props.rejectRequestBegin}
         deleteRequest={props.deleteRequestBegin}
-        reloadRequest={reload}
       />
     </React.Fragment>
   );
@@ -147,6 +145,9 @@ export function MentorsPage(props) {
 MentorsPage.propTypes = {
   type: PropTypes.string,
   user: PropTypes.object,
+  globalUser: PropTypes.shape({
+    id: PropTypes.number
+  }).isRequired,
 
   getProposalsBegin: PropTypes.func.isRequired,
   getRequestsBegin: PropTypes.func.isRequired,

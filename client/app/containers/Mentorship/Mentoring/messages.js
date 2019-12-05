@@ -47,6 +47,12 @@ export default defineMessages({
     sendRequest: {
       id: `${scope}.actions.sendRequest`
     },
+    mentorWhy: {
+      id: `${scope}.actions.mentorWhy`
+    },
+    menteeWhy: {
+      id: `${scope}.actions.menteeWhy`
+    },
     deleteWarning: {
       id: `${scope}.actions.deleteWarning`
     },

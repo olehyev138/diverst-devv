@@ -25,7 +25,6 @@ export function EnterpriseConfigurationPage(props) {
 
   useEffect(() => {
     props.getEnterpriseBegin();
-
     return () => {
       props.configurationUnmount();
     };

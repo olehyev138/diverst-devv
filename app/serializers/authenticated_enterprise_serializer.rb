@@ -11,6 +11,8 @@ class AuthenticatedEnterpriseSerializer < ApplicationRecordSerializer
              :auto_archive, :theme, :enable_pending_comments, :redirect_email_contact
 
   has_one :custom_text
+  has_many :mentoring_interests
+  has_many :mentoring_types
 
   def theme
     return nil if object.theme.nil?

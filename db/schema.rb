@@ -881,7 +881,7 @@ ActiveRecord::Schema.define(version: 2019_11_26_193046) do
     t.bigint "creator_id", null: false
     t.datetime "start", null: false
     t.datetime "end", null: false
-    t.string "format", null: false
+    t.string "medium", null: false
     t.string "link"
     t.text "access_token"
     t.string "video_room_name"
