@@ -51,7 +51,7 @@ export function NewsLinkListItem(props) {
           </React.Fragment>
         ) : <React.Fragment />
         }
-        {props.links && props.newsItem &&(
+        {props.links && props.newsItem && (
           <CardActions>
             <Button
               size='small'

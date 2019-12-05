@@ -109,7 +109,7 @@ export function* createNewsLink(action) {
     const response = yield call(api.newsLinks.create.bind(api.newsLinks), payload);
 
     yield put(createNewsLinkSuccess());
-    yield put(push(ROUTES.group.news.index.path(action.payload.id)));
+    yield put(push(ROUTES.group.news.index.path(action.payload.group_id)));
     yield put(showSnackbar({ message: 'News link created', options: { variant: 'success' } }));
   } catch (err) {
     yield put(createNewsLinkError(err));
@@ -159,7 +159,7 @@ export function* createSocialLink(action) {
     const response = yield call(api.socialLinks.create.bind(api.socialLinks), action.payload);
 
     yield put(createSocialLinkSuccess());
-    yield put(push(ROUTES.group.news.index.path(action.payload.id)));
+    yield put(push(ROUTES.group.news.index.path(action.payload.group_id)));
     yield put(showSnackbar({ message: 'Social link created', options: { variant: 'success' } }));
   } catch (err) {
     yield put(createSocialLinkError(err));
