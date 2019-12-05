@@ -12,12 +12,13 @@ import reducer from 'containers/News/reducer';
 import saga from 'containers/News/saga';
 
 import { selectPaginatedNewsItems, selectNewsItemsTotal, selectIsLoading } from 'containers/News/selectors';
-import { getNewsItemsBegin, newsFeedUnmount } from 'containers/News/actions';
+import {deleteSocialLinkBegin, getNewsItemsBegin, newsFeedUnmount, deleteNewsLinkBegin, deleteGroupMessageBegin} from 'containers/News/actions';
 
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import NewsFeed from 'components/News/NewsFeed';
+import {push} from 'connected-react-router';
 
 export function NewsFeedPage(props, context) {
   useInjectReducer({ key: 'news', reducer });
@@ -71,6 +72,9 @@ export function NewsFeedPage(props, context) {
         handlePagination={handlePagination}
         links={links}
         readonly={false}
+        deleteGroupMessageBegin={props.deleteGroupMessageBegin}
+        deleteNewsLinkBegin={props.deleteNewsLinkBegin}
+        deleteSocialLinkBegin={props.deleteSocialLinkBegin}
       />
     </React.Fragment>
   );
@@ -81,6 +85,9 @@ NewsFeedPage.propTypes = {
   newsFeedUnmount: PropTypes.func.isRequired,
   newsItems: PropTypes.array,
   newsItemsTotal: PropTypes.number,
+  deleteGroupMessageBegin: PropTypes.func,
+  deleteNewsLinkBegin: PropTypes.func,
+  deleteSocialLinkBegin: PropTypes.func,
   isLoading: PropTypes.bool,
   currentGroup: PropTypes.shape({
     news_feed: PropTypes.shape({
@@ -95,10 +102,18 @@ const mapStateToProps = createStructuredSelector({
   isLoading: selectIsLoading(),
 });
 
-const mapDispatchToProps = {
-  getNewsItemsBegin,
-  newsFeedUnmount,
-};
+// const mapDispatchToProps = {
+//   getNewsItemsBegin,
+//   newsFeedUnmount,
+// };
+
+const mapDispatchToProps = dispatch => ({
+  getNewsItemsBegin: payload => dispatch(getNewsItemsBegin(payload)),
+  deleteGroupMessageBegin: payload => dispatch(deleteGroupMessageBegin(payload)),
+  deleteNewsLinkBegin: payload => dispatch(deleteNewsLinkBegin(payload)),
+  deleteSocialLinkBegin: payload => dispatch(deleteSocialLinkBegin()),
+  newsFeedUnmount: () => dispatch(newsFeedUnmount()),
+});
 
 const withConnect = connect(
   mapStateToProps,

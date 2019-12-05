@@ -63,6 +63,13 @@ export function GroupMessageListItem(props) {
           >
             Comments
           </Button>
+          <Button
+            size='small'
+            onClick={() => props.deleteGroupMessageBegin(props.groupId, newsItem.id)}
+            component={WrappedNavLink}
+          >
+            Delete
+          </Button>
         </CardActions>
       )}
     </Card>
@@ -76,7 +83,7 @@ GroupMessageListItem.propTypes = {
   links: PropTypes.shape({
     groupMessageEdit: PropTypes.func,
     groupMessageShow: PropTypes.func
-  })
+  }),
 };
 
 export default compose(
