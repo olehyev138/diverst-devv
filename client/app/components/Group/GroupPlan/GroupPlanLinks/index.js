@@ -33,22 +33,17 @@ export function GroupPlanLinks(props) {
           />
           <Tab
             component={WrappedNavLink}
-            to={ROUTES.group.plan.outcomes.index.path(props.currentGroup.id)}
-            label='Structure'
-          />
-          <Tab
-            component={WrappedNavLink}
-            to={ROUTES.group.plan.outcomes.index.path(props.currentGroup.id)}
+            to={ROUTES.group.plan.events.index.path(props.currentGroup.id)}
             label='KPI'
           />
           <Tab
             component={WrappedNavLink}
-            to={ROUTES.group.plan.outcomes.index.path(props.currentGroup.id)}
+            to={ROUTES.group.plan.events.index.path(props.currentGroup.id)}
             label='Updates'
           />
           <Tab
             component={WrappedNavLink}
-            to={ROUTES.group.plan.outcomes.index.path(props.currentGroup.id)}
+            to={ROUTES.group.plan.events.index.path(props.currentGroup.id)}
             label='Budgeting'
           />
         </ResponsiveTabs>
@@ -59,7 +54,10 @@ export function GroupPlanLinks(props) {
 
 GroupPlanLinks.propTypes = {
   classes: PropTypes.object,
-  currentTab: PropTypes.number,
+  currentTab: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.bool,
+  ]),
   currentGroup: PropTypes.object
 };
 

@@ -18,7 +18,7 @@ import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
 import ListItemIcon from '@material-ui/icons/Remove';
 import AddIcon from '@material-ui/icons/Add';
-import EventIcon from '@material-ui/icons/Event';
+import BackIcon from '@material-ui/icons/KeyboardBackspaceOutlined';
 
 import DiverstPagination from 'components/Shared/DiverstPagination';
 import DiverstLoader from 'components/Shared/DiverstLoader';
@@ -42,17 +42,33 @@ export function OutcomesList(props, context) {
 
   return (
     <React.Fragment>
-      <Button
-        className={classes.floatRight}
-        variant='contained'
-        to={props.links.outcomeNew}
-        color='primary'
-        size='large'
-        component={WrappedNavLink}
-        startIcon={<AddIcon />}
-      >
-        <DiverstFormattedMessage {...messages.new} />
-      </Button>
+      <Grid container spacing={2} justify='space-between'>
+        <Grid item>
+          <Button
+            variant='contained'
+            to={props.links.eventIndex}
+            color='secondary'
+            size='medium'
+            component={WrappedNavLink}
+            startIcon={<BackIcon />}
+          >
+            <DiverstFormattedMessage {...messages.return} />
+          </Button>
+        </Grid>
+        <Grid item>
+          <Button
+            className={classes.floatRight}
+            variant='contained'
+            to={props.links.outcomeNew}
+            color='primary'
+            size='large'
+            component={WrappedNavLink}
+            startIcon={<AddIcon />}
+          >
+            <DiverstFormattedMessage {...messages.new} />
+          </Button>
+        </Grid>
+      </Grid>
       <DiverstLoader isLoading={props.isLoading}>
         <Grid container>
           { /* eslint-disable-next-line arrow-body-style */}

@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo, useContext, useEffect, useState } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
 
@@ -15,11 +15,17 @@ const styles = theme => ({
 
 const PlanPages = Object.freeze({
   events: 0,
-  outcomes: 1,
-  kpi: 2,
-  updates: 3,
-  budgeting: 4,
+  kpi: 1,
+  updates: 2,
+  budgeting: 3,
 });
+
+const getPageTab = (currentPagePath) => {
+  if (PlanPages[currentPagePath] !== undefined)
+    return PlanPages[currentPagePath];
+
+  return false;
+};
 
 const GroupPlanLayout = ({ component: Component, classes, ...rest }) => {
   const { location, ...other } = rest;
@@ -27,11 +33,11 @@ const GroupPlanLayout = ({ component: Component, classes, ...rest }) => {
   /* Get last element of current path, ie: '/group/:id/plan/outcomes -> outcomes */
   const currentPagePath = location.pathname.split('/').pop();
 
-  const [tab, setTab] = useState(PlanPages[currentPagePath]);
+  const [tab, setTab] = useState(getPageTab(currentPagePath));
 
   useEffect(() => {
-    if (tab !== PlanPages[currentPagePath])
-      setTab(PlanPages[currentPagePath]);
+    if (tab !== getPageTab(currentPagePath))
+      setTab(getPageTab(currentPagePath));
   }, [currentPagePath]);
 
   return (

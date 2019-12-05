@@ -10,17 +10,19 @@ export function ResponsiveTabs(props) {
 
   let variant = 'standard';
   let centered = true;
+  let scrollButtons = 'auto';
 
   if (isWidthDown('sm', width)) {
     variant = 'scrollable';
     centered = false;
+    scrollButtons = 'on';
   }
 
   return (
     <Tabs
       centered={centered}
       variant={variant}
-      scrollButtons='auto'
+      scrollButtons={scrollButtons}
       {...props}
     >
       {props.children}

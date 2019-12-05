@@ -44,6 +44,9 @@ export default defineMessages({
   editStructure: {
     id: `${scope}.structure.edit`
   },
+  return: {
+    id: `${scope}.index.return`
+  },
   pillars: {
     text: {
       id: `${scope}.Pillar.text`,
