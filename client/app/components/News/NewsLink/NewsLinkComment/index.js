@@ -16,12 +16,11 @@ export function NewsLinkComment(props) {
   /* Render a single group message comment */
 
   const { classes, comment } = props;
-
   return (
     <Card className={classes.margin}>
       <CardContent>
         <Typography variant='body1'>{comment.content}</Typography>
-        <Typography variant='body2'>{comment.author.first_name}</Typography>
+        <Typography variant='body2'>{comment.author.name}</Typography>
       </CardContent>
     </Card>
   );

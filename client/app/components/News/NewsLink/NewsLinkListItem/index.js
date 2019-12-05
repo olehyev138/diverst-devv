@@ -46,7 +46,7 @@ export function NewsLinkListItem(props) {
           <React.Fragment>
             <Box mb={2} />
             <Typography variant='body2' color='textSecondary'>
-              {`Submitted by ${newsLink.author.first_name} ${newsLink.owner.last_name}`}
+              {`Submitted by ${newsLink.author.first_name} ${newsLink.author.last_name}`}
             </Typography>
           </React.Fragment>
         ) : <React.Fragment />

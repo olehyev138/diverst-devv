@@ -21,7 +21,6 @@ export function NewsLink(props) {
   const { classes, ...rest } = props;
   const newsItem = dig(props, 'newsItem');
   const newsLink = dig(newsItem, 'news_link');
-
   return (
     <DiverstShowLoader isLoading={props.isFormLoading} isError={!props.isFormLoading && !newsLink}>
       {newsLink && (
