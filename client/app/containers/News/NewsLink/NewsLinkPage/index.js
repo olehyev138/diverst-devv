@@ -28,6 +28,7 @@ export function NewsLinkPage(props) {
   const rs = new RouteService(useContext);
   const links = {
     newsFeedIndex: ROUTES.group.news.index.path(rs.params('group_id')),
+    newsLinkEdit: id => ROUTES.group.news.news_links.edit.path(rs.params('group_id'), id),
   };
 
   useEffect(() => {
@@ -39,7 +40,7 @@ export function NewsLinkPage(props) {
     return () => props.newsFeedUnmount();
   }, []);
 
-  const { currentUser, currentNewsItem } = props;
+  const { currentUser, currentGroup, currentNewsItem } = props;
 
   return (
     <NewsLink

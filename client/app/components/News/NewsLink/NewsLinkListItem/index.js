@@ -26,10 +26,11 @@ const styles = theme => ({
 });
 
 export function NewsLinkListItem(props) {
-  const { newsLink } = props;
   const { newsItem } = props;
+  const newsLink = newsItem.news_link;
   const { links } = props;
-
+  console.log( newsLink );
+  console.log(newsItem);
   return (
     <Card>
       <CardContent>
@@ -52,16 +53,26 @@ export function NewsLinkListItem(props) {
           </React.Fragment>
         ) : <React.Fragment />
         }
-        <CardActions>
-          <Button
-            size='small'
-            color='primary'
-            to={props.links.newsLinkEdit(newsItem.id)}
-            component={WrappedNavLink}
-          >
-            <DiverstFormattedMessage {...messages.edit} />
-          </Button>
-        </CardActions>
+        {props.links && props.newsItem &&(
+          <CardActions>
+            <Button
+              size='small'
+              color='primary'
+              to={props.links.newsLinkEdit(newsItem.id)}
+              component={WrappedNavLink}
+            >
+              <DiverstFormattedMessage {...messages.edit} />
+            </Button>
+            <Button
+              size='small'
+              to={links.newsLinkShow(props.groupId, newsItem.id)}
+              component={WrappedNavLink}
+            >
+              Comments
+            </Button>
+          </CardActions>
+        )}
+
       </CardContent>
     </Card>
   );
