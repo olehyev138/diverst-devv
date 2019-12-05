@@ -86,6 +86,7 @@ import NewsLinkCreatePage from 'containers/News/NewsLink/NewsLinkCreatePage';
 import NewsLinkEditPage from 'containers/News/NewsLink/NewsLinkEditPage';
 import SocialLinkCreatePage from 'containers/News/SocialLink/SocialLinkCreatePage';
 import SocialLinkEditPage from 'containers/News/SocialLink/SocialLinkEditPage';
+import NewsLinkPage from 'containers/News/NewsLink/NewsLinkPage';
 
 /* Group - Outcomes */
 import OutcomeCreatePage from 'containers/Group/Outcome/OutcomeCreatePage/Loadable';
@@ -201,5 +202,6 @@ export {
   NewsLinkCreatePage,
   SocialLinkCreatePage,
   SocialLinkEditPage,
-  SSOSettingsPage
+  SSOSettingsPage,
+  NewsLinkPage
 };

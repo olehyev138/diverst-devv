@@ -56,7 +56,7 @@ export function NewsLinkListItem(props) {
           <Button
             size='small'
             color='primary'
-            to={links.newsLinkEdit(newsItem.id)}
+            to={props.links.newsLinkEdit(newsItem.id)}
             component={WrappedNavLink}
           >
             <DiverstFormattedMessage {...messages.edit} />
@@ -71,9 +71,7 @@ NewsLinkListItem.propTypes = {
   newsLink: PropTypes.object,
   readonly: PropTypes.bool,
   newsItem: PropTypes.object,
-  links: PropTypes.shape({
-    newsLinkEdit: PropTypes.func,
-  })
+  links: PropTypes.object,
 };
 
 export default compose(

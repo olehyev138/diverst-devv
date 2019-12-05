@@ -221,6 +221,10 @@ export const ROUTES = {
         },
       },
       news_links: {
+        show: {
+          path:
+            (groupId = ':group_id', itemId = ':item_id') => `/groups/${groupId}/news/news_links/${itemId}`,
+        },
         new: {
           path:
             (groupId = ':group_id') => `/groups/${groupId}/news/news_links/new`,

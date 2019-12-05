@@ -153,12 +153,7 @@ NewsFeed.propTypes = {
   newsItemsTotal: PropTypes.number,
   handlePagination: PropTypes.func,
   isLoading: PropTypes.bool,
-  links: PropTypes.shape({
-    groupMessageNew: PropTypes.string,
-    newsLinkNew: PropTypes.string,
-    socialLinkNew: PropTypes.string,
-
-  }),
+  links: PropTypes.object,
   readonly: PropTypes.bool,
 };
 

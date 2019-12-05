@@ -80,6 +80,7 @@ import {
   UserRoleEditPage,
   NewsLinkCreatePage,
   NewsLinkEditPage,
+  NewsLinkPage,
   SocialLinkCreatePage,
   SocialLinkEditPage
 } from './templates';
@@ -195,6 +196,7 @@ export default function Routes(props) {
       <GroupLayout exact {...expandRoute(ROUTES.group.news.messages.show)} component={GroupMessagePage} />
       <GroupLayout {...expandRoute(ROUTES.group.news.news_links.new)} component={NewsLinkCreatePage} />
       <GroupLayout {...expandRoute(ROUTES.group.news.news_links.edit)} component={NewsLinkEditPage} />
+      <GroupLayout {...expandRoute(ROUTES.group.news.news_links.show)} component={NewsLinkPage} />
       <GroupLayout {...expandRoute(ROUTES.group.news.social_links.new)} component={SocialLinkCreatePage} />
       <GroupLayout {...expandRoute(ROUTES.group.news.social_links.edit)} component={SocialLinkEditPage} />
 
