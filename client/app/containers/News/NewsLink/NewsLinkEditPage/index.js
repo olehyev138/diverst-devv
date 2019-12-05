@@ -43,7 +43,6 @@ export function NewsLinkEditPage(props) {
   }, []);
 
   const { currentUser, currentGroup, currentNewsItem } = props;
-  console.log(currentNewsItem);
   return (
     <NewsLinkForm
       edit

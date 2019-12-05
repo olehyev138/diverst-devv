@@ -200,7 +200,6 @@ export {
   NewsLinkEditPage,
   NewsLinkCreatePage,
   SocialLinkCreatePage,
-  SocialLinkEditPage
-  UserRoleEditPage,
+  SocialLinkEditPage,
   SSOSettingsPage
 };

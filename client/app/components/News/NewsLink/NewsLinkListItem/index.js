@@ -29,9 +29,7 @@ export function NewsLinkListItem(props) {
   const { newsLink } = props;
   const { newsItem } = props;
   const { links } = props;
-  console.log(newsLink);
-  console.log(newsItem);
-  console.log(links);
+
   return (
     <Card>
       <CardContent>
@@ -58,20 +56,12 @@ export function NewsLinkListItem(props) {
           <Button
             size='small'
             color='primary'
-            to={props.links.newsLinkEdit(newsLink.id)}
+            to={links.newsLinkEdit(newsLink.id)}
             component={WrappedNavLink}
           >
             <DiverstFormattedMessage {...messages.edit} />
           </Button>
-          {/*<Button*/}
-          {/*  size='small'*/}
-          {/*  to={props.links.groupMessageShow(props.groupId, newsItem.id)}*/}
-          {/*  component={WrappedNavLink}*/}
-          {/*>*/}
-          {/*  Comments*/}
-          {/*</Button>*/}
         </CardActions>
-
       </CardContent>
     </Card>
   );
@@ -82,7 +72,7 @@ NewsLinkListItem.propTypes = {
   readonly: PropTypes.bool,
   newsItem: PropTypes.object,
   links: PropTypes.shape({
-    newsLinkEdit: PropTypes.string
+    newsLinkEdit: PropTypes.func,
   })
 };
 

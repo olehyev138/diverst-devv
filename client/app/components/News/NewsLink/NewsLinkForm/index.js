@@ -31,7 +31,7 @@ export function NewsLinkFormInner({ handleSubmit, handleChange, handleBlur, valu
               id='url'
               name='url'
               margin='normal'
-              label= 'Link URL'
+              label='Link URL'
               value={values.url}
             />
             <Field
@@ -43,7 +43,7 @@ export function NewsLinkFormInner({ handleSubmit, handleChange, handleBlur, valu
               id='title'
               name='title'
               margin='normal'
-              label= 'Title'
+              label='Title'
               value={values.title}
             />
             <Field
@@ -59,7 +59,7 @@ export function NewsLinkFormInner({ handleSubmit, handleChange, handleBlur, valu
               name='description'
               margin='normal'
               value={values.description}
-              label= 'Description'
+              label='Description'
             />
           </CardContent>
           <Divider />

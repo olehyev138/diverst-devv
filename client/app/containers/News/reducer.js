@@ -50,7 +50,6 @@ function newsReducer(state = initialState, action) {
         draft.isFormLoading = true;
         break;
       case GET_NEWS_ITEM_SUCCESS:
-        console.log(action.payload.news_feed_link);
         draft.currentNewsItem = action.payload.news_feed_link;
         draft.isFormLoading = false;
         break;
