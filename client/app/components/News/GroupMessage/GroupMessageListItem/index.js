@@ -66,7 +66,10 @@ export function GroupMessageListItem(props) {
           </Button>
           <Button
             size='small'
-            onClick={() => props.deleteGroupMessageBegin(newsItem.group_message.id)}
+            onClick={() => {
+              if (confirm('Delete group message?'))
+                props.deleteGroupMessageBegin(newsItem.group_message)
+            }}
             // component={WrappedNavLink}
           >
             Delete

@@ -64,7 +64,8 @@ export function SocialLinkListItem(props) {
         <Button
           size='small'
           onClick={() => {
-            props.deleteSocialLinkBegin(newsItem.social_link);
+            if (confirm('Delete social link?'))
+              props.deleteSocialLinkBegin(newsItem.social_link);
           }}
         >
           Delete

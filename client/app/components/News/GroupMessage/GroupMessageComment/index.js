@@ -24,7 +24,8 @@ const styles = theme => ({
 export function GroupMessageComment(props) {
   /* Render a single group message comment */
 
-  const { classes, comment, newsItem } = props;
+  const { classes, comment, newsItem, groupMessage} = props;
+  console.log(newsItem.group_message.comments);
   return (
     <Card className={classes.margin}>
       <CardContent>
@@ -34,7 +35,10 @@ export function GroupMessageComment(props) {
       <CardActions>
         <Button
           size='small'
-          onClick={() => props.deleteGroupMessageCommentBegin(comment.id)}
+          onClick={() => {
+            if (confirm('Delete group message?'))
+              props.deleteGroupMessageCommentBegin(comment.id);
+          }}
         >
           Delete
         </Button>

@@ -51,34 +51,35 @@ export function NewsLinkListItem(props) {
           </React.Fragment>
         ) : <React.Fragment />
         }
-        {props.links && props.newsItem && (
-          <CardActions>
-            <Button
-              size='small'
-              color='primary'
-              to={props.links.newsLinkEdit(newsItem.id)}
-              component={WrappedNavLink}
-            >
-              <DiverstFormattedMessage {...messages.edit} />
-            </Button>
-            <Button
-              size='small'
-              to={links.newsLinkShow(props.groupId, newsItem.id)}
-              component={WrappedNavLink}
-            >
-              Comments
-            </Button>
-            <Button
-              size='small'
-              onClick={() => props.deleteNewsLinkBegin(newsItem.news_link.id)}
-              // component={WrappedNavLink}
-            >
-              Delete
-            </Button>
-          </CardActions>
-        )}
-
       </CardContent>
+      {props.links && props.newsItem && (
+        <CardActions>
+          <Button
+            size='small'
+            color='primary'
+            to={props.links.newsLinkEdit(newsItem.id)}
+            component={WrappedNavLink}
+          >
+            <DiverstFormattedMessage {...messages.edit} />
+          </Button>
+          <Button
+            size='small'
+            to={links.newsLinkShow(props.groupId, newsItem.id)}
+            component={WrappedNavLink}
+          >
+            Comments
+          </Button>
+          <Button
+            size='small'
+            onClick={() => {
+              if (confirm('Delete news link?'))
+                props.deleteNewsLinkBegin(newsItem.news_link)}}
+          >
+            Delete
+          </Button>
+        </CardActions>
+      )}
+
     </Card>
   );
 }

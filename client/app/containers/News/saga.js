@@ -93,7 +93,7 @@ export function* updateGroupMessage(action) {
 
 export function* deleteGroupMessage(action) {
   try {
-    yield call(api.groupMessages.destroy.bind(api.groupMessages), action.payload);
+    yield call(api.groupMessages.destroy.bind(api.groupMessages), action.payload.id);
     yield put(deleteGroupMessageSuccess());
     yield put(push(ROUTES.group.news.index.path(action.payload.group_id)));
     yield put(showSnackbar({ message: 'Message deleted', options: { variant: 'success' } }));
@@ -171,7 +171,7 @@ export function* updateNewsLink(action) {
 
 export function* deleteNewsLink(action) {
   try {
-    yield call(api.newsLinks.destroy.bind(api.newsLinks), action.payload);
+    yield call(api.newsLinks.destroy.bind(api.newsLinks), action.payload.id);
     yield put(deleteNewsLinkSuccess());
     yield put(push(ROUTES.group.news.index.path(action.payload.group_id)));
     yield put(showSnackbar({ message: 'News link deleted', options: { variant: 'success' } }));

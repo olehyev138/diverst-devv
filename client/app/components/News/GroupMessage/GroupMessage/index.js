@@ -43,7 +43,13 @@ export function GroupMessage(props) {
           { /* eslint-disable-next-line arrow-body-style */}
           {dig(groupMessage, 'comments') && groupMessage.comments.map((comment, i) => {
             return (
-              <GroupMessageComment key={comment.id} comment={comment} deleteGroupMessageCommentBegin={props.deleteGroupMessageCommentBegin}/>
+              <GroupMessageComment
+                key={comment.id}
+                comment={comment}
+                deleteGroupMessageCommentBegin={props.deleteGroupMessageCommentBegin}
+                newsItem={props.newsItem}
+                groupMessage={props.groupMessage}
+              />
             );
           })}
         </React.Fragment>
@@ -62,6 +68,7 @@ GroupMessage.propTypes = {
     groupMessageEdit: PropTypes.func
   }),
   deleteGroupMessageCommentBegin: PropTypes.func,
+  groupMessage: PropTypes.object,
 };
 
 export default compose(
