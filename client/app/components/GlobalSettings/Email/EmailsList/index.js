@@ -95,14 +95,9 @@ export function EmailsList(props, context) {
                           <hr className={classes.divider} />
                           <Box pt={1} />
                           <Typography color='textSecondary' variant='subtitle2' className={classes.dateText}>
-                            {formatDateTimeString(item.start, DateTime.DATETIME_MED)}
+                            TEMP
                           </Typography>
                         </Grid>
-                        <Hidden xsDown>
-                          <Grid item>
-                            <KeyboardArrowRightIcon className={classes.arrowRight} />
-                          </Grid>
-                        </Hidden>
                       </Grid>
                     </CardContent>
                   </Card>

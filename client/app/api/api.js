@@ -27,6 +27,7 @@ import mentorshipSessions from 'api/mentorship_sessions/mentorship_sessions';
 import mentoringSessions from 'api/mentoring_sessions/mentoring_sessions';
 import answers from 'api/answers/answers';
 import comments from 'api/comments/comments';
+import emails from 'api/emails/emails';
 
 /* Metrics */
 import overviewGraphs from 'api/metrics/overview_graphs';
@@ -65,6 +66,7 @@ const Api = {
   mentoringRequests,
   mentorshipSessions,
   mentoringSessions,
+  emails,
   metrics: {
     overviewGraphs,
     userGraphs,

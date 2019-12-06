@@ -1,10 +1,12 @@
 class Email < ApplicationRecord
   include PublicActivity::Common
+  include Email::Actions
 
   # associations
   belongs_to :enterprise
 
-  has_many :variables, class_name: 'EmailVariable', dependent: :destroy
+  has_many :vars, class_name: 'EmailVariable', dependent: :destroy
+  has_many :variables, class_name: 'EnterpriseEmailVariable', through: :vars, source: :enterprise_email_variable
 
   # validations
   validates_length_of :description, maximum: 191
@@ -48,9 +50,9 @@ class Email < ApplicationRecord
 
   def process_variables(email_variables, hash)
     email_variables.each do |variable|
-      next if hash[variable.enterprise_email_variable[:key].to_sym].nil?
+      next if hash[variable[:key].to_sym].nil?
 
-      hash[variable.enterprise_email_variable[:key].to_sym] = variable.format(hash[variable.enterprise_email_variable[:key].to_sym])
+      hash[variable[:key].to_sym] = variable.format(hash[variable[:key].to_sym])
     end
     hash
   end
@@ -64,10 +66,10 @@ class Email < ApplicationRecord
 
     #
     strings.each do |string|
-      variable = variables.joins(:enterprise_email_variable).find_by(enterprise_email_variables: { key: string })
+      variable = variables.find_by(key: string)
       next if variable.nil?
 
-      replace.merge!({ "#{string}": variable.enterprise_email_variable.example })
+      replace.merge!({ "#{string}": variable.example })
     end
 
     text % replace

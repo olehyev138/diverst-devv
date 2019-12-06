@@ -22,6 +22,8 @@ import {
   deleteEmailSuccess, deleteEmailError,
 } from './actions';
 
+import emails from 'api/emails/emails';
+
 export function* getEmail(action) {
   try {
     const response = { data: 'API CALL' };
@@ -37,7 +39,7 @@ export function* getEmail(action) {
 
 export function* getEmails(action) {
   try {
-    const response = { data: 'API CALL' };
+    const response = yield call(api.emails.all.bind(api.emails), action.payload);
 
     yield put(getEmailsSuccess(response.data.page));
   } catch (err) {
