@@ -8,11 +8,8 @@ import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux/';
 
-import {Button, Card, CardActions, CardContent, Typography} from '@material-ui/core';
+import { Button, Card, CardActions, CardContent, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import WrappedNavLink from "../../../Shared/WrappedNavLink";
-import DiverstFormattedMessage from "../../../Shared/DiverstFormattedMessage";
-import messages from "../../../../containers/News/messages";
 
 const styles = theme => ({
   margin: {
@@ -36,8 +33,9 @@ export function GroupMessageComment(props) {
         <Button
           size='small'
           onClick={() => {
+            /* eslint-disable-next-line no-alert, no-restricted-globals */
             if (confirm('Delete group message?'))
-              props.deleteGroupMessageCommentBegin( {group_id: newsItem.group_message.group_id , id: comment.id} );
+              props.deleteGroupMessageCommentBegin({ group_id: newsItem.group_message.group_id, id: comment.id });
           }}
         >
           Delete

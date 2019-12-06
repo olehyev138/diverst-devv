@@ -12,13 +12,13 @@ import reducer from 'containers/News/reducer';
 import saga from 'containers/News/saga';
 
 import { selectPaginatedNewsItems, selectNewsItemsTotal, selectIsLoading } from 'containers/News/selectors';
-import {deleteSocialLinkBegin, getNewsItemsBegin, newsFeedUnmount, deleteNewsLinkBegin, deleteGroupMessageBegin} from 'containers/News/actions';
+import { deleteSocialLinkBegin, getNewsItemsBegin, newsFeedUnmount, deleteNewsLinkBegin, deleteGroupMessageBegin } from 'containers/News/actions';
 
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import NewsFeed from 'components/News/NewsFeed';
-import {push} from 'connected-react-router';
+import { push } from 'connected-react-router';
 
 export function NewsFeedPage(props, context) {
   useInjectReducer({ key: 'news', reducer });

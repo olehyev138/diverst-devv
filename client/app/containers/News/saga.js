@@ -92,7 +92,6 @@ export function* updateGroupMessage(action) {
 }
 
 export function* deleteGroupMessage(action) {
-
   try {
     yield call(api.groupMessages.destroy.bind(api.groupMessages), action.payload.id);
     yield put(deleteGroupMessageSuccess());
@@ -108,7 +107,6 @@ export function* deleteGroupMessage(action) {
 
 export function* deleteGroupMessageComment(action) {
   try {
-
     yield call(api.groupMessageComments.destroy.bind(api.groupMessageComments), action.payload.id);
     yield put(deleteGroupMessageCommentSuccess());
     yield put(push(ROUTES.group.news.index.path(action.payload.group_id)));
@@ -275,7 +273,7 @@ export default function* newsSaga() {
   yield takeLatest(CREATE_SOCIALLINK_BEGIN, createSocialLink);
   yield takeLatest(UPDATE_SOCIALLINK_BEGIN, updateSocialLink);
   yield takeLatest(DELETE_GROUP_MESSAGE_BEGIN, deleteGroupMessage);
-  yield takeLatest(DELETE_NEWSLINK_BEGIN, deleteNewsLink)
+  yield takeLatest(DELETE_NEWSLINK_BEGIN, deleteNewsLink);
   yield takeLatest(DELETE_NEWSLINK_COMMENT_BEGIN, deleteNewsLinkComment);
   yield takeLatest(DELETE_SOCIALLINK_BEGIN, deleteSocialLink);
   yield takeLatest(DELETE_GROUP_MESSAGE_COMMENT_BEGIN, deleteGroupMessageComment);

@@ -72,8 +72,10 @@ export function NewsLinkListItem(props) {
           <Button
             size='small'
             onClick={() => {
+              /* eslint-disable-next-line no-alert, no-restricted-globals */
               if (confirm('Delete news link?'))
-                props.deleteNewsLinkBegin(newsItem.news_link)}}
+                props.deleteNewsLinkBegin(newsItem.news_link);
+            }}
           >
             Delete
           </Button>

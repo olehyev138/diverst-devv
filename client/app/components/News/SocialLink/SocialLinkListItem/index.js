@@ -64,6 +64,7 @@ export function SocialLinkListItem(props) {
         <Button
           size='small'
           onClick={() => {
+            /* eslint-disable-next-line no-alert, no-restricted-globals */
             if (confirm('Delete social link?'))
               props.deleteSocialLinkBegin(newsItem.social_link);
           }}

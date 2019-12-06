@@ -2,7 +2,7 @@ import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux/';
 
-import {Button, Card, CardContent, Typography} from '@material-ui/core';
+import { Button, Card, CardContent, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
 const styles = theme => ({
@@ -25,6 +25,7 @@ export function NewsLinkComment(props) {
       <Button
         size='small'
         onClick={() => {
+          /* eslint-disable-next-line no-alert, no-restricted-globals */
           if (confirm('Delete news link?'))
             props.deleteNewsLinkCommentBegin({ group_id: newsItem.news_link.group_id, id: comment.id });
         }

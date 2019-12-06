@@ -18,8 +18,6 @@ import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/News/messages';
 import DeleteIcon from '@material-ui/icons/DeleteOutline';
 import { formatDateTimeString } from 'utils/dateTimeHelpers';
-import EditIcon from "@material-ui/core/SvgIcon/SvgIcon";
-import DiverstTable from "../../../Shared/DiverstTable";
 
 const styles = theme => ({
 });
@@ -67,8 +65,9 @@ export function GroupMessageListItem(props) {
           <Button
             size='small'
             onClick={() => {
+              /* eslint-disable-next-line no-alert, no-restricted-globals */
               if (confirm('Delete group message?'))
-                props.deleteGroupMessageBegin(newsItem.group_message)
+                props.deleteGroupMessageBegin(newsItem.group_message);
             }}
             // component={WrappedNavLink}
           >
