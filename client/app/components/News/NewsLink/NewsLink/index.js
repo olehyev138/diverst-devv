@@ -16,7 +16,7 @@ import DiverstShowLoader from 'components/Shared/DiverstShowLoader';
 const styles = theme => ({});
 
 export function NewsLink(props) {
-  /* Render a GroupMessage, its comments & a comment form */
+  /* Render a NewsLink, its comments & a comment form */
 
   const { classes, ...rest } = props;
   const newsItem = dig(props, 'newsItem');
