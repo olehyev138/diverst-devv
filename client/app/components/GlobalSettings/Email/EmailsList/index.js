@@ -81,7 +81,7 @@ export function EmailsList(props, context) {
                   className={classes.emailLink}
                   component={WrappedNavLink}
                   to={{
-                    pathname: '/', //ROUTES.group.emails.show.path(item.owner_group_id, item.id),
+                    pathname: '/', // ROUTES.group.emails.show.path(item.owner_group_id, item.id),
                     state: { id: item.id }
                   }}
                 >
@@ -115,7 +115,8 @@ export function EmailsList(props, context) {
               <Grid item sm>
                 <Box mt={3} />
                 <Typography variant='h6' align='center' color='textSecondary'>
-                  THERE ARE NO EMAILS{/* <DiverstFormattedMessage {...messages.index.emptySection} /> */}
+                  THERE ARE NO EMAILS
+                  {/* <DiverstFormattedMessage {...messages.index.emptySection} /> */}
                 </Typography>
               </Grid>
             </React.Fragment>

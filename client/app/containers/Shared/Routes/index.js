@@ -79,7 +79,8 @@ import {
   UserRoleCreatePage,
   UserRoleEditPage,
   CampaignQuestionShowPage,
-  SSOSettingsPage
+  SSOSettingsPage,
+  EmailsPage,
 } from './templates';
 
 // Paths
@@ -165,6 +166,7 @@ export default function Routes(props) {
       <GlobalSettingsLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.customText.edit)} component={CustomTextEditPage} />
       <GlobalSettingsLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.enterpriseConfiguration.index)} component={EnterpriseConfigurationPage} />
       <GlobalSettingsLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.ssoSettings.edit)} component={SSOSettingsPage} />
+      <GlobalSettingsLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.emails.index)} component={EmailsPage} />
 
       { /* Admin - System - Users */ }
       <SystemUserLayout exact {...expandRoute(ROUTES.admin.system.users.index)} component={UsersPage} />

@@ -56,6 +56,7 @@ import FieldsPage from 'containers/GlobalSettings/Field/FieldsPage/Loadable';
 import CustomTextEditPage from 'containers/GlobalSettings/CustomText/CustomTextEditPage/Loadable';
 import EnterpriseConfigurationPage from 'containers/GlobalSettings/EnterpriseConfiguration/EnterpriseConfigurationPage/Loadable';
 import SSOSettingsPage from 'containers/GlobalSettings/SSOSettingsPage/Loadable';
+import EmailsPage from 'containers/GlobalSettings/Email/Email/EmailsPage/Loadable';
 
 /* Admin - System - User */
 import UsersPage from 'containers/User/UsersPage/Loadable';
@@ -193,5 +194,6 @@ export {
   UserRolesListPage,
   UserRoleCreatePage,
   UserRoleEditPage,
-  SSOSettingsPage
+  SSOSettingsPage,
+  EmailsPage,
 };

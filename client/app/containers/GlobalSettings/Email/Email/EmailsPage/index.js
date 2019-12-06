@@ -37,8 +37,8 @@ const defaultParams = Object.freeze({
 });
 
 export function CustomTextEditPage(props) {
-  useInjectReducer({ key: 'email', reducer });
-  useInjectSaga({ key: 'email', saga });
+  useInjectReducer({ key: 'emails', reducer });
+  useInjectSaga({ key: 'emails', saga });
 
   const rs = new RouteService(useContext);
   const links = {
@@ -50,15 +50,11 @@ export function CustomTextEditPage(props) {
   const [params, setParams] = useState(defaultParams);
 
   const getEmails = (params = params) => {
-    const id = dig(props, 'currentGroup', 'id');
-
-    if (id) {
-      const newParams = {
-        ...params,
-      };
-      props.getEmailsBegin(newParams);
-      setParams(newParams);
-    }
+    const newParams = {
+      ...params,
+    };
+    props.getEmailsBegin(newParams);
+    setParams(newParams);
   };
 
   useEffect(() => {

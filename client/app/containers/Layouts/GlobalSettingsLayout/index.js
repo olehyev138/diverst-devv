@@ -15,7 +15,8 @@ const GlobalSettingsPages = Object.freeze({
   fields: 0,
   custom_texts: 1,
   configuration: 2,
-  sso: 3
+  sso: 3,
+  emails: 4,
 });
 
 const GlobalSettingsLayout = ({ component: Component, ...rest }) => {
