@@ -24,8 +24,8 @@ const styles = theme => ({
 export function GroupMessageComment(props) {
   /* Render a single group message comment */
 
-  const { classes, comment, newsItem, groupMessage} = props;
-  console.log(newsItem.group_message.group_id);
+  const { classes, comment, newsItem } = props;
+
   return (
     <Card className={classes.margin}>
       <CardContent>
@@ -51,6 +51,7 @@ GroupMessageComment.propTypes = {
   classes: PropTypes.object,
   comment: PropTypes.object,
   deleteGroupMessageCommentBegin: PropTypes.func,
+  newsItem: PropTypes.object,
 };
 
 export default compose(

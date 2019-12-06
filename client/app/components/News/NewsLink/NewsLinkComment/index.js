@@ -15,7 +15,7 @@ const styles = theme => ({
 export function NewsLinkComment(props) {
   /* Render a single group message comment */
 
-  const { classes, comment } = props;
+  const { classes, comment, newsItem } = props;
   return (
     <Card className={classes.margin}>
       <CardContent>
@@ -24,7 +24,11 @@ export function NewsLinkComment(props) {
       </CardContent>
       <Button
         size='small'
-        onClick={() => props.deleteNewsLinkCommentBegin(comment.id)}
+        onClick={() => {
+          if (confirm('Delete news link?'))
+            props.deleteNewsLinkCommentBegin({ group_id: newsItem.news_link.group_id, id: comment.id });
+        }
+        }
       >
         Delete
       </Button>
@@ -36,6 +40,7 @@ NewsLinkComment.propTypes = {
   classes: PropTypes.object,
   comment: PropTypes.object,
   deleteNewsLinkCommentBegin: PropTypes.func,
+  newsItem: PropTypes.object,
 };
 
 export default compose(
