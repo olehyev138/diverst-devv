@@ -12,10 +12,6 @@ export const GET_EMAILS_BEGIN = 'app/GlobalSettings/Email/Email/GET_EMAILS_BEGIN
 export const GET_EMAILS_SUCCESS = 'app/GlobalSettings/Email/Email/GET_EMAILS_SUCCESS';
 export const GET_EMAILS_ERROR = 'app/GlobalSettings/Email/Email/GET_EMAILS_ERROR';
 
-export const GET_VARIABLES_BEGIN = 'app/GlobalSettings/Email/Email/GET_VARIABLES_BEGIN';
-export const GET_VARIABLES_SUCCESS = 'app/GlobalSettings/Email/Email/GET_VARIABLES_SUCCESS';
-export const GET_VARIABLES_ERROR = 'app/GlobalSettings/Email/Email/GET_VARIABLES_ERROR';
-
 export const CREATE_EMAIL_BEGIN = 'app/GlobalSettings/Email/Email/CREATE_EMAIL_BEGIN';
 export const CREATE_EMAIL_SUCCESS = 'app/GlobalSettings/Email/Email/CREATE_EMAIL_SUCCESS';
 export const CREATE_EMAIL_ERROR = 'app/GlobalSettings/Email/Email/CREATE_EMAIL_ERROR';

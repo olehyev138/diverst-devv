@@ -23,21 +23,6 @@ const selectIsFetchingEmails = () => createSelector(
   emailState => emailState.isFetchingEmails
 );
 
-const selectPaginatedVariables = () => createSelector(
-  selectEmailDomain,
-  emailState => emailState.variableList
-);
-
-const selectVariablesTotal = () => createSelector(
-  selectEmailDomain,
-  emailState => emailState.variableListTotal
-);
-
-const selectIsFetchingVariables = () => createSelector(
-  selectEmailDomain,
-  emailState => emailState.isFetchingVariables
-);
-
 const selectIsFetchingEmail = () => createSelector(
   selectEmailDomain,
   emailState => emailState.isFetchingEmail
@@ -59,9 +44,6 @@ export {
   selectEmailsTotal,
   selectEmail,
   selectIsFetchingEmails,
-  selectPaginatedVariables,
-  selectVariablesTotal,
-  selectIsFetchingVariables,
   selectIsFetchingEmail,
   selectIsCommitting,
   selectHasChanged,

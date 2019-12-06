@@ -11,9 +11,6 @@ import {
   GET_EMAILS_BEGIN,
   GET_EMAILS_SUCCESS,
   GET_EMAILS_ERROR,
-  GET_VARIABLES_BEGIN,
-  GET_VARIABLES_SUCCESS,
-  GET_VARIABLES_ERROR,
   CREATE_EMAIL_BEGIN,
   CREATE_EMAIL_SUCCESS,
   CREATE_EMAIL_ERROR,
@@ -64,27 +61,6 @@ export function getEmailsSuccess(payload) {
 export function getEmailsError(error) {
   return {
     type: GET_EMAILS_ERROR,
-    error,
-  };
-}
-
-export function getVariablesBegin(payload) {
-  return {
-    type: GET_VARIABLES_BEGIN,
-    payload,
-  };
-}
-
-export function getVariablesSuccess(payload) {
-  return {
-    type: GET_VARIABLES_SUCCESS,
-    payload,
-  };
-}
-
-export function getVariablesError(error) {
-  return {
-    type: GET_VARIABLES_ERROR,
     error,
   };
 }

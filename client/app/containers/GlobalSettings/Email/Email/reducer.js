@@ -12,9 +12,6 @@ import {
   GET_EMAILS_BEGIN,
   GET_EMAILS_SUCCESS,
   GET_EMAILS_ERROR,
-  GET_VARIABLES_BEGIN,
-  GET_VARIABLES_SUCCESS,
-  GET_VARIABLES_ERROR,
   CREATE_EMAIL_BEGIN,
   CREATE_EMAIL_SUCCESS,
   CREATE_EMAIL_ERROR,
@@ -32,11 +29,6 @@ export const initialState = {
   emailListTotal: null,
   currentEmail: null,
   isFetchingEmails: false,
-
-  variableList: [],
-  variableListTotal: null,
-  isFetchingVariables: false,
-
   isFetchingEmail: false,
   isCommitting: false,
   hasChanged: false,
@@ -73,21 +65,6 @@ function emailReducer(state = initialState, action) {
 
       case GET_EMAILS_ERROR:
         draft.isFetchingEmails = false;
-        break;
-
-      case GET_VARIABLES_BEGIN:
-        draft.isFetchingVariables = true;
-        draft.hasChanged = false;
-        break;
-
-      case GET_VARIABLES_SUCCESS:
-        draft.variableList = action.payload.items;
-        draft.variableListTotal = action.payload.total;
-        draft.isFetchingVariables = false;
-        break;
-
-      case GET_VARIABLES_ERROR:
-        draft.isFetchingVariables = false;
         break;
 
       case CREATE_EMAIL_BEGIN:

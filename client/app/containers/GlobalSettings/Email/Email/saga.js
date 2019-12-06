@@ -9,7 +9,6 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import {
   GET_EMAIL_BEGIN,
   GET_EMAILS_BEGIN,
-  GET_VARIABLES_BEGIN,
   CREATE_EMAIL_BEGIN,
   UPDATE_EMAIL_BEGIN,
   DELETE_EMAIL_BEGIN,
@@ -18,7 +17,6 @@ import {
 import {
   getEmailSuccess, getEmailError,
   getEmailsSuccess, getEmailsError,
-  getVariablesSuccess, getVariablesError,
   createEmailSuccess, createEmailError,
   updateEmailSuccess, updateEmailError,
   deleteEmailSuccess, deleteEmailError,
@@ -47,19 +45,6 @@ export function* getEmails(action) {
 
     // TODO: intl message
     yield put(showSnackbar({ message: 'Failed to get emails', options: { variant: 'warning' } }));
-  }
-}
-
-export function* getVariables(action) {
-  try {
-    const response = { data: 'API CALL' };
-
-    yield put(getVariablesSuccess(response.data.page));
-  } catch (err) {
-    yield put(getVariablesError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to get variables', options: { variant: 'warning' } }));
   }
 }
 
@@ -109,7 +94,6 @@ export function* deleteEmail(action) {
 export default function* EmailSaga() {
   yield takeLatest(GET_EMAIL_BEGIN, getEmail);
   yield takeLatest(GET_EMAILS_BEGIN, getEmails);
-  yield takeLatest(GET_VARIABLES_BEGIN, getVariables);
   yield takeLatest(CREATE_EMAIL_BEGIN, createEmail);
   yield takeLatest(UPDATE_EMAIL_BEGIN, updateEmail);
   yield takeLatest(DELETE_EMAIL_BEGIN, deleteEmail);
