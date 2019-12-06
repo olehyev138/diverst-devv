@@ -159,7 +159,6 @@ export function createGroupMessageCommentError(error) {
 }
 
 export function deleteGroupMessageCommentBegin(payload) {
-  console.log(payload);
   return {
     type: DELETE_GROUP_MESSAGE_COMMENT_BEGIN,
     payload,

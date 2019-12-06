@@ -36,7 +36,6 @@ export function GroupMessageComment(props) {
         <Button
           size='small'
           onClick={() => props.deleteGroupMessageCommentBegin(comment.id)}
-          // component={WrappedNavLink}
         >
           Delete
         </Button>

@@ -42,7 +42,7 @@ export function NewsLink(props) {
           { /* eslint-disable-next-line arrow-body-style */}
           {dig(newsLink, 'comments') && newsLink.comments.map((comment, i) => {
             return (
-              <NewsLinkComment key={comment.id} comment={comment} />
+              <NewsLinkComment key={comment.id} comment={comment} deleteNewsLinkCommentBegin={props.deleteNewsLinkCommentBegin} />
             );
           })}
         </React.Fragment>
@@ -59,7 +59,8 @@ NewsLink.propTypes = {
   isFormLoading: PropTypes.bool,
   links: PropTypes.shape({
     newsLinkEdit: PropTypes.func
-  })
+  }),
+  deleteNewsLinkCommentBegin: PropTypes.func,
 };
 
 export default compose(

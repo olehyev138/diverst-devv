@@ -2,7 +2,7 @@ import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux/';
 
-import { Card, CardContent, Typography } from '@material-ui/core';
+import {Button, Card, CardContent, Typography} from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
 const styles = theme => ({
@@ -22,6 +22,12 @@ export function NewsLinkComment(props) {
         <Typography variant='body1'>{comment.content}</Typography>
         <Typography variant='body2'>{comment.author.name}</Typography>
       </CardContent>
+      <Button
+        size='small'
+        onClick={() => props.deleteNewsLinkCommentBegin(comment.id)}
+      >
+        Delete
+      </Button>
     </Card>
   );
 }
@@ -29,6 +35,7 @@ export function NewsLinkComment(props) {
 NewsLinkComment.propTypes = {
   classes: PropTypes.object,
   comment: PropTypes.object,
+  deleteNewsLinkCommentBegin: PropTypes.func,
 };
 
 export default compose(

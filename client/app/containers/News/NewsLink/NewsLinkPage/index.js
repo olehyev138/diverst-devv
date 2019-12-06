@@ -17,7 +17,12 @@ import { selectGroup } from 'containers/Group/selectors';
 import { selectUser } from 'containers/Shared/App/selectors';
 import { selectNewsItem, selectIsCommitting, selectIsFormLoading } from 'containers/News/selectors';
 
-import { getNewsItemBegin, createNewsLinkCommentBegin, newsFeedUnmount } from 'containers/News/actions';
+import {
+  getNewsItemBegin,
+  createNewsLinkCommentBegin,
+  newsFeedUnmount,
+  deleteNewsLinkCommentBegin
+} from 'containers/News/actions';
 
 import NewsLink from 'components/News/NewsLink/NewsLink';
 
@@ -45,6 +50,7 @@ export function NewsLinkPage(props) {
   return (
     <NewsLink
       commentAction={props.createNewsLinkCommentBegin}
+      deleteNewsLinkCommentBegin={props.deleteNewsLinkCommentBegin}
       currentUserId={currentUser.id}
       newsItem={currentNewsItem}
       links={links}
@@ -58,6 +64,7 @@ NewsLinkPage.propTypes = {
   getNewsItemBegin: PropTypes.func,
   updateNewsLinkBegin: PropTypes.func,
   createNewsLinkCommentBegin: PropTypes.func,
+  deleteNewsLinkCommentBegin: PropTypes.func,
   newsFeedUnmount: PropTypes.func,
   currentUser: PropTypes.object,
   currentGroup: PropTypes.object,
@@ -74,11 +81,12 @@ const mapStateToProps = createStructuredSelector({
   isFormLoading: selectIsFormLoading(),
 });
 
-const mapDispatchToProps = {
-  getNewsItemBegin,
-  createNewsLinkCommentBegin,
-  newsFeedUnmount
-};
+const mapDispatchToProps = dispatch => ({
+  getNewsItemBegin: payload => dispatch(getNewsItemBegin(payload)),
+  createNewsLinkCommentBegin: payload => dispatch(createNewsLinkCommentBegin(payload)),
+  deleteNewsLinkCommentBegin: payload => dispatch(deleteNewsLinkCommentBegin(payload)),
+  newsFeedUnmount: () => dispatch(newsFeedUnmount()),
+});
 
 const withConnect = connect(
   mapStateToProps,

@@ -31,7 +31,8 @@ import {
   createSocialLinkSuccess, createSocialLinkError, createSocialLinkCommentError,
   updateSocialLinkSuccess, createSocialLinkCommentSuccess, deleteNewsLinkBegin, deleteNewsLinkError,
   deleteNewsLinkSuccess, deleteSocialLinkBegin, deleteSocialLinkError, deleteSocialLinkSuccess,
-  deleteGroupMessageCommentBegin, deleteGroupMessageCommentError, deleteGroupMessageCommentSuccess
+  deleteGroupMessageCommentBegin, deleteGroupMessageCommentError, deleteGroupMessageCommentSuccess, deleteNewsLinkCommentBegin,
+  deleteNewsLinkCommentError, deleteNewsLinkCommentSuccess
 } from 'containers/News/actions';
 
 
@@ -203,7 +204,7 @@ export function* createNewsLinkComment(action) {
 
 export function* deleteNewsLinkComment(action) {
   try {
-    yield call(api.newsLinkComments.destroy.bind(api.newsLinkComments), action.payload.id);
+    yield call(api.newsLinkComments.destroy.bind(api.newsLinkComments), action.payload);
     yield put(deleteNewsLinkCommentSuccess());
     yield put(push(ROUTES.group.news.index.path(action.payload.group_id)));
     yield put(showSnackbar({ message: 'News link comment deleted', options: { variant: 'success' } }));
