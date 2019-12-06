@@ -24,6 +24,25 @@ class ApplicationRecord < ActiveRecord::Base
   after_commit on: [:update] do update_elasticsearch_index('update') end
   after_commit on: [:destroy] do update_elasticsearch_index('delete') end
 
+  if Rails.env == 'development' || Rails.env == 'testing'
+    def self.preload_test(preload: true, limit: 10, serializer: nil)
+      arr = []
+      if self.respond_to?(:base_preloads) && preload
+        users = self.preload(self.base_preloads).limit(limit)
+        users.load
+        p 'Preloaded'
+      else
+        users = self.limit(limit)
+      end
+      users.each do |user|
+        p "Serializing object with id = #{user.id}"
+        arr << (serializer || ActiveModel::Serializer.serializer_for(user)).new(user).as_json
+      end
+      Clipboard.copy arr.to_json
+      nil
+    end
+  end
+
   protected
 
   def self.sql_where(*args)
