@@ -74,6 +74,7 @@ group :development, :test do
   gem 'shoulda-matchers', '4.0.1'
   gem 'timecop', '~> 0.8.1'
   gem 'clipboard', '~> 1.3', '>= 1.3.3'
+  gem 'awesome_print', '~> 1.8'
 end
 
 group :test do
