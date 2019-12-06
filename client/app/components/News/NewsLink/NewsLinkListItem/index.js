@@ -68,6 +68,13 @@ export function NewsLinkListItem(props) {
             >
               Comments
             </Button>
+            <Button
+              size='small'
+              onClick={() => props.deleteNewsLinkBegin(newsItem.news_link.id)}
+              // component={WrappedNavLink}
+            >
+              Delete
+            </Button>
           </CardActions>
         )}
 
@@ -82,6 +89,7 @@ NewsLinkListItem.propTypes = {
   groupId: PropTypes.number,
   newsItem: PropTypes.object,
   links: PropTypes.object,
+  deleteNewsLinkBegin: PropTypes.func,
 };
 
 export default compose(

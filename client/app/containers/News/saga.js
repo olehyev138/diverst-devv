@@ -15,7 +15,8 @@ import {
   CREATE_SOCIALLINK_BEGIN, UPDATE_SOCIALLINK_BEGIN,
   CREATE_SOCIALLINK_COMMENT_BEGIN, DELETE_GROUP_MESSAGE_BEGIN, DELETE_GROUP_MESSAGE_SUCCESS,
   DELETE_GROUP_MESSAGE_ERROR, DELETE_SOCIALLINK_BEGIN, DELETE_SOCIALLINK_SUCCESS, DELETE_SOCIALLINK_ERROR,
-  DELETE_NEWSLINK_BEGIN, DELETE_NEWSLINK_SUCCESS, DELETE_NEWSLINK_ERROR,
+  DELETE_NEWSLINK_BEGIN, DELETE_NEWSLINK_SUCCESS, DELETE_NEWSLINK_ERROR, DELETE_NEWSLINK_COMMENT_BEGIN,
+  DELETE_GROUP_MESSAGE_COMMENT_SUCCESS, DELETE_GROUP_MESSAGE_COMMENT_ERROR, DELETE_GROUP_MESSAGE_COMMENT_BEGIN
 } from 'containers/News/constants';
 
 import {
@@ -29,7 +30,8 @@ import {
   createSocialLinkBegin, deleteGroupMessageBegin, deleteGroupMessageError, deleteGroupMessageSuccess,
   createSocialLinkSuccess, createSocialLinkError, createSocialLinkCommentError,
   updateSocialLinkSuccess, createSocialLinkCommentSuccess, deleteNewsLinkBegin, deleteNewsLinkError,
-  deleteNewsLinkSuccess, deleteSocialLinkBegin, deleteSocialLinkError, deleteSocialLinkSuccess
+  deleteNewsLinkSuccess, deleteSocialLinkBegin, deleteSocialLinkError, deleteSocialLinkSuccess,
+  deleteGroupMessageCommentBegin, deleteGroupMessageCommentError, deleteGroupMessageCommentSuccess
 } from 'containers/News/actions';
 
 
@@ -90,7 +92,7 @@ export function* updateGroupMessage(action) {
 
 export function* deleteGroupMessage(action) {
   try {
-    yield call(api.groupMessages.destroy.bind(api.groupMessages), action.payload.id);
+    yield call(api.groupMessages.destroy.bind(api.groupMessages), action.payload);
     yield put(deleteGroupMessageSuccess());
     yield put(push(ROUTES.group.news.index.path(action.payload.group_id)));
     yield put(showSnackbar({ message: 'Message deleted', options: { variant: 'success' } }));
@@ -99,6 +101,20 @@ export function* deleteGroupMessage(action) {
 
     // TODO: intl message
     yield put(showSnackbar({ message: 'Failed to remove message', options: { variant: 'warning' } }));
+  }
+}
+
+export function* deleteGroupMessageComment(action) {
+  try {
+    yield call(api.groupMessageComments.destroy.bind(api.groupMessageComments), action.payload.id);
+    yield put(deleteGroupMessageCommentSuccess());
+    yield put(push(ROUTES.group.news.index.path(action.payload.group_id)));
+    yield put(showSnackbar({ message: 'Group message comment deleted', options: { variant: 'success' } }));
+  } catch (err) {
+    yield put(deleteGroupMessageCommentError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to remove group message comment', options: { variant: 'warning' } }));
   }
 }
 
@@ -154,7 +170,7 @@ export function* updateNewsLink(action) {
 
 export function* deleteNewsLink(action) {
   try {
-    yield call(api.newsLinks.destroy.bind(api.newsLinks), action.payload.id);
+    yield call(api.newsLinks.destroy.bind(api.newsLinks), action.payload);
     yield put(deleteNewsLinkSuccess());
     yield put(push(ROUTES.group.news.index.path(action.payload.group_id)));
     yield put(showSnackbar({ message: 'News link deleted', options: { variant: 'success' } }));
@@ -232,7 +248,7 @@ export function* updateSocialLink(action) {
 
 export function* deleteSocialLink(action) {
   try {
-    yield call(api.socialLinks.destroy.bind(api.socialLinks), action.payload.id);
+    yield call(api.socialLinks.destroy.bind(api.socialLinks), action.payload);
     yield put(deleteNewsLinkSuccess());
     yield put(push(ROUTES.group.news.index.path(action.payload.group_id)));
     yield put(showSnackbar({ message: 'Social link deleted', options: { variant: 'success' } }));
@@ -255,4 +271,9 @@ export default function* newsSaga() {
   yield takeLatest(UPDATE_NEWSLINK_BEGIN, updateNewsLink);
   yield takeLatest(CREATE_SOCIALLINK_BEGIN, createSocialLink);
   yield takeLatest(UPDATE_SOCIALLINK_BEGIN, updateSocialLink);
+  yield takeLatest(DELETE_GROUP_MESSAGE_BEGIN, deleteGroupMessage);
+  yield takeLatest(DELETE_NEWSLINK_BEGIN, deleteNewsLink)
+  yield takeLatest(DELETE_NEWSLINK_COMMENT_BEGIN, deleteNewsLinkComment);
+  yield takeLatest(DELETE_SOCIALLINK_BEGIN, deleteSocialLink);
+  yield takeLatest(DELETE_GROUP_MESSAGE_COMMENT_BEGIN, deleteGroupMessageComment);
 }

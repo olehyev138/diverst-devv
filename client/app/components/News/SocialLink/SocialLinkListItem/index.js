@@ -29,7 +29,7 @@ export function SocialLinkListItem(props) {
   const { socialLink } = props;
   const { newsItem } = props;
   const { links } = props;
-
+  console.log(newsItem);
   return (
     <Card>
 
@@ -61,6 +61,14 @@ export function SocialLinkListItem(props) {
           >
             <DiverstFormattedMessage {...messages.edit} />
           </Button>
+          <Button
+            size='small'
+            onClick={() => {
+              props.deleteSocialLinkBegin(newsItem.social_link.id);
+            }}
+          >
+            Delete
+          </Button>
         </CardActions>
       </CardContent>
     </Card>
@@ -73,6 +81,7 @@ SocialLinkListItem.propTypes = {
     socialLinkEdit: PropTypes.func,
   }),
   newsItem: PropTypes.object,
+  deleteSocialLinkBegin: PropTypes.func,
 };
 
 export default compose(

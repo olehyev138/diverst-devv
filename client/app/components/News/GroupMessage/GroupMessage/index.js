@@ -43,7 +43,7 @@ export function GroupMessage(props) {
           { /* eslint-disable-next-line arrow-body-style */}
           {dig(groupMessage, 'comments') && groupMessage.comments.map((comment, i) => {
             return (
-              <GroupMessageComment key={comment.id} comment={comment} />
+              <GroupMessageComment key={comment.id} comment={comment} deleteGroupMessageCommentBegin={props.deleteGroupMessageCommentBegin}/>
             );
           })}
         </React.Fragment>
@@ -60,7 +60,8 @@ GroupMessage.propTypes = {
   isFormLoading: PropTypes.bool,
   links: PropTypes.shape({
     groupMessageEdit: PropTypes.func
-  })
+  }),
+  deleteGroupMessageCommentBegin: PropTypes.func,
 };
 
 export default compose(

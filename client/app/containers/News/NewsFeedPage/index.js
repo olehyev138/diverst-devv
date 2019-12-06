@@ -62,6 +62,8 @@ export function NewsFeedPage(props, context) {
     setParams(newParams);
   };
 
+  console.log(props.deleteGroupMessageBegin);
+
   return (
     <React.Fragment>
       <NewsFeed
@@ -111,7 +113,7 @@ const mapDispatchToProps = dispatch => ({
   getNewsItemsBegin: payload => dispatch(getNewsItemsBegin(payload)),
   deleteGroupMessageBegin: payload => dispatch(deleteGroupMessageBegin(payload)),
   deleteNewsLinkBegin: payload => dispatch(deleteNewsLinkBegin(payload)),
-  deleteSocialLinkBegin: payload => dispatch(deleteSocialLinkBegin()),
+  deleteSocialLinkBegin: payload => dispatch(deleteSocialLinkBegin(payload)),
   newsFeedUnmount: () => dispatch(newsFeedUnmount()),
 });
 

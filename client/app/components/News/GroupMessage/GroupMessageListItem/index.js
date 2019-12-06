@@ -16,8 +16,10 @@ import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/News/messages';
-
+import DeleteIcon from '@material-ui/icons/DeleteOutline';
 import { formatDateTimeString } from 'utils/dateTimeHelpers';
+import EditIcon from "@material-ui/core/SvgIcon/SvgIcon";
+import DiverstTable from "../../../Shared/DiverstTable";
 
 const styles = theme => ({
 });
@@ -25,7 +27,6 @@ const styles = theme => ({
 export function GroupMessageListItem(props) {
   const { newsItem } = props;
   const groupMessage = newsItem.group_message;
-
   return (
     <Card>
       <CardHeader
@@ -65,8 +66,8 @@ export function GroupMessageListItem(props) {
           </Button>
           <Button
             size='small'
-            onClick={() => props.deleteGroupMessageBegin(props.groupId, newsItem.id)}
-            component={WrappedNavLink}
+            onClick={() => props.deleteGroupMessageBegin(newsItem.group_message.id)}
+            // component={WrappedNavLink}
           >
             Delete
           </Button>
@@ -84,6 +85,7 @@ GroupMessageListItem.propTypes = {
     groupMessageEdit: PropTypes.func,
     groupMessageShow: PropTypes.func
   }),
+  deleteGroupMessageBegin: PropTypes.func,
 };
 
 export default compose(
