@@ -92,6 +92,7 @@ export function* updateGroupMessage(action) {
 }
 
 export function* deleteGroupMessage(action) {
+
   try {
     yield call(api.groupMessages.destroy.bind(api.groupMessages), action.payload.id);
     yield put(deleteGroupMessageSuccess());
@@ -107,7 +108,8 @@ export function* deleteGroupMessage(action) {
 
 export function* deleteGroupMessageComment(action) {
   try {
-    yield call(api.groupMessageComments.destroy.bind(api.groupMessageComments), action.payload);
+
+    yield call(api.groupMessageComments.destroy.bind(api.groupMessageComments), action.payload.id);
     yield put(deleteGroupMessageCommentSuccess());
     yield put(push(ROUTES.group.news.index.path(action.payload.group_id)));
     yield put(showSnackbar({ message: 'Group message comment deleted', options: { variant: 'success' } }));
