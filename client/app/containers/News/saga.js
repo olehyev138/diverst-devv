@@ -106,7 +106,6 @@ export function* deleteGroupMessage(action) {
 }
 
 export function* deleteGroupMessageComment(action) {
-  console.log(action);
   try {
     yield call(api.groupMessageComments.destroy.bind(api.groupMessageComments), action.payload);
     yield put(deleteGroupMessageCommentSuccess());
@@ -204,7 +203,7 @@ export function* createNewsLinkComment(action) {
 
 export function* deleteNewsLinkComment(action) {
   try {
-    yield call(api.newsLinkComments.destroy.bind(api.newsLinkComments), action.payload);
+    yield call(api.newsLinkComments.destroy.bind(api.newsLinkComments), action.payload.id);
     yield put(deleteNewsLinkCommentSuccess());
     yield put(push(ROUTES.group.news.index.path(action.payload.group_id)));
     yield put(showSnackbar({ message: 'News link comment deleted', options: { variant: 'success' } }));
@@ -250,7 +249,7 @@ export function* updateSocialLink(action) {
 
 export function* deleteSocialLink(action) {
   try {
-    yield call(api.socialLinks.destroy.bind(api.socialLinks), action.payload);
+    yield call(api.socialLinks.destroy.bind(api.socialLinks), action.payload.id);
     yield put(deleteNewsLinkSuccess());
     yield put(push(ROUTES.group.news.index.path(action.payload.group_id)));
     yield put(showSnackbar({ message: 'Social link deleted', options: { variant: 'success' } }));

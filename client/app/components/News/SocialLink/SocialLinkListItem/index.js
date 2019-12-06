@@ -29,7 +29,6 @@ export function SocialLinkListItem(props) {
   const { socialLink } = props;
   const { newsItem } = props;
   const { links } = props;
-  console.log(newsItem);
   return (
     <Card>
 
@@ -52,25 +51,25 @@ export function SocialLinkListItem(props) {
           </React.Fragment>
         ) : <React.Fragment />
         }
-        <CardActions>
-          <Button
-            size='small'
-            color='primary'
-            to={links.socialLinkEdit(newsItem.id)}
-            component={WrappedNavLink}
-          >
-            <DiverstFormattedMessage {...messages.edit} />
-          </Button>
-          <Button
-            size='small'
-            onClick={() => {
-              props.deleteSocialLinkBegin(newsItem.social_link.id);
-            }}
-          >
-            Delete
-          </Button>
-        </CardActions>
       </CardContent>
+      <CardActions>
+        <Button
+          size='small'
+          color='primary'
+          to={links.socialLinkEdit(newsItem.id)}
+          component={WrappedNavLink}
+        >
+          <DiverstFormattedMessage {...messages.edit} />
+        </Button>
+        <Button
+          size='small'
+          onClick={() => {
+            props.deleteSocialLinkBegin(newsItem.social_link);
+          }}
+        >
+          Delete
+        </Button>
+      </CardActions>
     </Card>
   );
 }

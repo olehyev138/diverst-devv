@@ -326,7 +326,6 @@ export function updateSocialLinkError(error) {
 /* Social Link deleting */
 
 export function deleteSocialLinkBegin(payload) {
-  console.log(payload);
   return {
     type: DELETE_SOCIALLINK_BEGIN,
     payload,

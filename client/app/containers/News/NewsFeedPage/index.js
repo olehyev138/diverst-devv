@@ -62,8 +62,6 @@ export function NewsFeedPage(props, context) {
     setParams(newParams);
   };
 
-  console.log(props.deleteGroupMessageBegin);
-
   return (
     <React.Fragment>
       <NewsFeed
