@@ -30,7 +30,6 @@ export function EventFormInner({
   buttonText, setFieldValue, setFieldTouched, setFieldError,
   ...props
 }) {
-  console.log(props);
   return (
     <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.event}>
       <Card>
