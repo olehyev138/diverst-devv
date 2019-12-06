@@ -105,8 +105,9 @@ export function* deleteGroupMessage(action) {
 }
 
 export function* deleteGroupMessageComment(action) {
+  console.log(action);
   try {
-    yield call(api.groupMessageComments.destroy.bind(api.groupMessageComments), action.payload.id);
+    yield call(api.groupMessageComments.destroy.bind(api.groupMessageComments), action.payload);
     yield put(deleteGroupMessageCommentSuccess());
     yield put(push(ROUTES.group.news.index.path(action.payload.group_id)));
     yield put(showSnackbar({ message: 'Group message comment deleted', options: { variant: 'success' } }));

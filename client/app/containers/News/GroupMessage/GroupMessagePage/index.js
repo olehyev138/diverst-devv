@@ -50,7 +50,7 @@ export function GroupMessagePage(props) {
   return (
     <GroupMessage
       commentAction={props.createGroupMessageCommentBegin}
-      deleteGroupMessageCommentBegin={deleteGroupMessageCommentBegin}
+      deleteGroupMessageCommentBegin={props.deleteGroupMessageCommentBegin}
       currentUserId={currentUser.id}
       newsItem={currentNewsItem}
       links={links}
@@ -81,12 +81,12 @@ const mapStateToProps = createStructuredSelector({
   isFormLoading: selectIsFormLoading(),
 });
 
-const mapDispatchToProps = {
-  getNewsItemBegin,
-  createGroupMessageCommentBegin,
-  deleteGroupMessageCommentBegin,
-  newsFeedUnmount
-};
+const mapDispatchToProps = dispatch => ({
+  getNewsItemBegin: payload => dispatch(getNewsItemBegin(payload)),
+  createGroupMessageCommentBegin: payload => dispatch(createGroupMessageCommentBegin(payload)),
+  deleteGroupMessageCommentBegin: payload => dispatch(deleteGroupMessageCommentBegin(payload)),
+  newsFeedUnmount: () => dispatch(newsFeedUnmount()),
+});
 
 const withConnect = connect(
   mapStateToProps,

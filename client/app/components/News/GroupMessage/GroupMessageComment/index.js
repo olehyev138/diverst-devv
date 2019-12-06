@@ -25,7 +25,7 @@ export function GroupMessageComment(props) {
   /* Render a single group message comment */
 
   const { classes, comment, newsItem } = props;
-
+  console.log(comment.id);
   return (
     <Card className={classes.margin}>
       <CardContent>
