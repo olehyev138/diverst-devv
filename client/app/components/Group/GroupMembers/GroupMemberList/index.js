@@ -9,7 +9,7 @@ import { compose } from 'redux';
 import PropTypes from 'prop-types';
 
 import {
-  Button, Box, MenuItem, Grid, Typography, Card, CardContent
+  Button, Box, MenuItem, Grid, Typography, Card, CardContent, CardActions
 } from '@material-ui/core/index';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -38,6 +38,10 @@ const styles = theme => ({
   },
   actionButton: {
     marginRight: 12,
+    marginBottom: 12,
+  },
+  submitButton: {
+    marginLeft: 12,
     marginBottom: 12,
   },
   staticWidthButton: {
@@ -151,15 +155,16 @@ export function GroupMemberList(props) {
               <Grid
                 container
                 justify='space-between'
+                spacing={3}
                 alignContent='stretch'
                 alignItems='center'
               >
-                <Grid item md={12}>
-                  <Typography align='left' variant='h5' component='h2' color='textPrimary'>
+                <Grid item md='auto'>
+                  <Typography align='left' variant='h6' component='h2' color='primary'>
                     <DiverstFormattedMessage {...messages.changeScope} />
                   </Typography>
                 </Grid>
-                <Grid item md={12}>
+                <Grid item md='auto'>
                   <Button
                     variant='contained'
                     color='secondary'
@@ -175,22 +180,22 @@ export function GroupMemberList(props) {
         </Grid>
         <Grid item md={8}>
           <Card>
-            <CardContent>
-              <Formik
-                initialValues={{
-                  from: props.memberFrom,
-                  to: props.memberTo,
-                  segmentLabels: props.segmentLabels,
-                }}
-                enableReinitialize
-                onSubmit={(values) => {
-                  values.segmentIds = (values.segmentLabels || []).map(i => i.value);
-                  props.handleFilterChange(values);
-                }}
-              >
-                {formikProps => (
-                  <Form>
-                    <Grid container>
+            <Formik
+              initialValues={{
+                from: props.memberFrom,
+                to: props.memberTo,
+                segmentLabels: props.segmentLabels,
+              }}
+              enableReinitialize
+              onSubmit={(values) => {
+                values.segmentIds = (values.segmentLabels || []).map(i => i.value);
+                props.handleFilterChange(values);
+              }}
+            >
+              {formikProps => (
+                <Form>
+                  <CardContent>
+                    <Grid container spacing={2}>
                       <Grid item xs={6}>
                         <Field
                           component={DiverstDatePicker}
@@ -225,18 +230,20 @@ export function GroupMemberList(props) {
                       label={<DiverstFormattedMessage {...messages.filter.segments} />}
                       {...formikProps}
                     />
+                  </CardContent>
+                  <CardActions>
                     <Button
                       color='primary'
                       type='submit'
                       variant='contained'
-                      className={classes.actionButton}
+                      className={classes.submitButton}
                     >
                       <DiverstFormattedMessage {...messages.filter.submit} />
                     </Button>
-                  </Form>
-                )}
-              </Formik>
-            </CardContent>
+                  </CardActions>
+                </Form>
+              )}
+            </Formik>
           </Card>
         </Grid>
       </Grid>
