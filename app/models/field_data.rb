@@ -5,7 +5,7 @@ class FieldData < ApplicationRecord
   def deserialized_data
     case field.type
     when 'SelectField'
-      JSON.parse(data)
+      JSON.parse(data)[0]
     else
       data
     end
