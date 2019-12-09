@@ -103,6 +103,16 @@ after 'development:enterprise' do
             :content => "<p>Hello %{user.name},</p>\r\n\r\n<p>Welcome as a new member of %{group.name}! %{click_here} to check our page often for latest news and messages and look forward to seeing you at our events!.</p>\r\n",
             :description => "Email that goes out to new group members",
             :template => ""
+          },
+          #user_onboarding_mailer
+          {
+            :name => "User Onboarding Mailer", 
+            :mailer_name => "diverst_mailer",
+            :mailer_method => "invitation_instructions",
+            :content => "<p>Welcome to Diverst!</p>\r\n\r\n<p>At Diverst, we embrace our differences. Diversity in all of its forms is key to our firm&rsquo;s open culture and long-term success. We believe that a diverse workforce where varying perspectives and backgrounds collaborate, will ultimately produce better results for our employees, business and investors.</p>\r\n\r\n<p><strong>That is why we are so excited to introduce you to Diverst, a community-based program focused on bringing together our unique experiences, backgrounds and perspectives to impact a greater ONE. While ONE firm, we are made of many distinctive parts that together influence innovation, performance, and thought leadership. Building and maintaining a diverse culture of belonging is a shared responsibility &ndash; from employees to senior leaders. As ONE, we will leverage the firm&rsquo;s full potential by promoting and supporting activities that celebrate diversity and develop an awareness of inclusion throughout our organization.</strong></p>\r\n\r\n<p>Via your Diverst ONE community portal, you can learn about the latest news and events related to inclusion and diversity, as well as participate in our Employee Resource Group program (ERGs).</p>\r\n\r\n<p>%{click_here} to get started by building your profile and checking out all the different ways you can get involved. You can also access your Portal via the link on the top navigation bar of the Intranet Homepage.</p>\r\n\r\n<p>If you have any questions or need assistance, please contact info@diverst.com.</p>\r\n", 
+            :subject => "Invitation Instructions", 
+            :description => "Email that goes out to users after they've been added.",
+            :template => ""
           }
         ]
       )
