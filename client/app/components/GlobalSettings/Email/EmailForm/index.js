@@ -78,6 +78,7 @@ export function EmailForm(props) {
   const email = dig(props, 'email');
 
   const initialValues = buildValues(email, {
+    id: { default: '' },
     subject: { default: '' },
     content: { default: '' },
   });

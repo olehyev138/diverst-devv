@@ -66,9 +66,11 @@ export function* createEmail(action) {
 
 export function* updateEmail(action) {
   try {
-    const response = { data: 'API CALL' };
+    const payload = { email: action.payload };
+    const response = yield call(api.emails.update.bind(api.emails), payload.email.id, payload);
 
     yield put(updateEmailSuccess({}));
+    yield put(push(ROUTES.admin.system.globalSettings.emails.index.path()));
     yield put(showSnackbar({ message: 'Successfully updated email', options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateEmailError(err));
