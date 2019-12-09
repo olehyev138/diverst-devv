@@ -81,7 +81,7 @@ export function EmailsList(props, context) {
                   className={classes.emailLink}
                   component={WrappedNavLink}
                   to={{
-                    pathname: '/', // ROUTES.group.emails.show.path(item.owner_group_id, item.id),
+                    pathname: props.links.emailEdit(item.id), // ROUTES.group.emails.show.path(item.owner_group_id, item.id),
                     state: { id: item.id }
                   }}
                 >
@@ -95,7 +95,7 @@ export function EmailsList(props, context) {
                           <hr className={classes.divider} />
                           <Box pt={1} />
                           <Typography color='textSecondary' variant='subtitle2' className={classes.dateText}>
-                            TEMP
+                            {item.description}
                           </Typography>
                         </Grid>
                       </Grid>

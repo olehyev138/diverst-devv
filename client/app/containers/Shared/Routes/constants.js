@@ -540,6 +540,9 @@ export const ROUTES = {
           index: {
             path: () => '/admin/system/settings/emails'
           },
+          edit: {
+            path: (emailId = ':email_id') => `/admin/system/settings/emails/${emailId}/edit`
+          },
         }
       }
     }

@@ -26,7 +26,7 @@ import emails from 'api/emails/emails';
 
 export function* getEmail(action) {
   try {
-    const response = { data: 'API CALL' };
+    const response = yield call(api.emails.get.bind(api.emails), action.payload.id);
 
     yield put(getEmailSuccess(response.data));
   } catch (err) {

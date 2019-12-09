@@ -42,19 +42,20 @@ export function CustomTextEditPage(props) {
 
   const rs = new RouteService(useContext);
   const links = {
-    emailEdit: () => 'temp'
+    emailEdit: id => ROUTES.admin.system.globalSettings.emails.edit.path(id),
   };
 
   const { currentUser, emails, isFetching } = props;
 
   const [params, setParams] = useState(defaultParams);
 
-  const getEmails = (params = params) => {
-    const newParams = {
+  const getEmails = (newParams = params) => {
+    const updatedParams = {
       ...params,
+      ...newParams,
     };
-    props.getEmailsBegin(newParams);
-    setParams(newParams);
+    props.getEmailsBegin(updatedParams);
+    setParams(updatedParams);
   };
 
   useEffect(() => {
