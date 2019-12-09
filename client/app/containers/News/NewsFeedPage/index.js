@@ -29,7 +29,6 @@ const defaultParams = Object.freeze({
   count: 5,
   page: 0,
   order: 'asc',
-  news_feed_id: -1
 });
 
 export function NewsFeedPage(props, context) {

@@ -1,5 +1,6 @@
 class NewsFeedLink < ApplicationRecord
   include PublicActivity::Common
+  include NewsFeedLink::Actions
 
   belongs_to :news_feed
   belongs_to :group_message, dependent: :delete
