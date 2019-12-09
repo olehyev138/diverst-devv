@@ -241,7 +241,7 @@ module User::Actions
     end
 
     def mentor_lite_includes
-      ['mentoring_interests', 'mentoring_types']
+      [:mentoring_interests, :mentoring_types, :availabilities]
     end
 
     def mentor_includes
