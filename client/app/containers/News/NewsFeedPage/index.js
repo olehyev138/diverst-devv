@@ -25,17 +25,29 @@ const NewsFeedTypes = Object.freeze({
   not_approved: 1,
 });
 
-const defaultParams = Object.freeze({
-  count: 5,
-  page: 0,
-  order: 'asc',
-});
+
+// const defaultParams = {
+//   count: 5,
+//   page: 0,
+//   order: 'asc',
+//   id: news_feed_id,
+// };
 
 export function NewsFeedPage(props, context) {
   useInjectReducer({ key: 'news', reducer });
   useInjectSaga({ key: 'news', saga });
-
   const rs = new RouteService(useContext);
+
+  const groupId = rs.params('group_id');
+
+  const defaultParams = {
+    count: 5,
+    page: 0,
+    order: 'asc',
+    // eslint-disable-next-line react/prop-types
+    news_feed_id: props.currentGroup.id,
+  };
+
   const links = {
     newsFeedIndex: ROUTES.group.news.index.path(rs.params('group_id')),
     groupMessageShow: (groupId, id) => ROUTES.group.news.messages.show.path(groupId, id),
@@ -91,7 +103,7 @@ export function NewsFeedPage(props, context) {
     props.getNewsItemsBegin(newParams);
     setParams(newParams);
   };
-  console.log(props.newsItems);
+
   return (
     <React.Fragment>
       <NewsFeed
