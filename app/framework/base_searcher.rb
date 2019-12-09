@@ -161,7 +161,7 @@ module BaseSearcher
     end
 
     def get_preloads(params)
-      if self.respond_to? :base_includes
+      if self.respond_to? :base_preloads
         self.base_preloads
       else
         []
