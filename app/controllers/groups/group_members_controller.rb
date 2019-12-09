@@ -148,7 +148,7 @@ class Groups::GroupMembersController < ApplicationController
   end
 
   def view_sub_groups
-    authorize [@group], :index?, policy_class: GroupMemberPolicy
+    authorize [@group, current_user], :create?, policy_class: GroupMemberPolicy
     @sub_groups = @group.children
 
     respond_to do |format|
@@ -184,7 +184,7 @@ class Groups::GroupMembersController < ApplicationController
   end
 
   def leave_sub_group
-    authorize [@group], :destroy?, policy_class: GroupMemberPolicy
+    authorize [@group, current_user], :destroy?, policy_class: GroupMemberPolicy
     @group.user_groups.find_by(user_id: current_user.id).destroy
     respond_to do |format|
       format.html { redirect_to :back }
