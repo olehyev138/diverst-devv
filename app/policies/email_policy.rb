@@ -3,8 +3,20 @@ class EmailPolicy < CampaignPolicy
     manage?
   end
 
+  def show?
+    manage?
+  end
+
+  def create?
+    false
+  end
+
   def update?
     manage?
+  end
+
+  def destroy?
+    false
   end
 
   class Scope < Scope

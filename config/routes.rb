@@ -31,7 +31,6 @@ Diverst::Application.routes.draw do
       resources :custom_texts
       resources :devices
       resources :emails
-      resources :email_variables
       resources :enterprises do
         collection do
           get 'get_enterprise', to: 'enterprises#get_enterprise'
@@ -42,7 +41,6 @@ Diverst::Application.routes.draw do
           post '/sso_link',     to: 'enterprises#sso_link'
         end
       end
-      resources :enterprise_email_variables
       resources :expenses
       resources :expense_categories
       resources :fields
@@ -250,5 +248,5 @@ Diverst::Application.routes.draw do
     end
   end
 
-  match '*a', to: 'diverst#routing_error', via: [:get, :post]
+  match '*a', to: 'diverst#routing_error', via: [:get, :post, :delete, :patch, :put]
 end

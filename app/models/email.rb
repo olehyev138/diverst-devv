@@ -5,8 +5,8 @@ class Email < ApplicationRecord
   # associations
   belongs_to :enterprise
 
-  has_many :vars, class_name: 'EmailVariable', dependent: :destroy
-  has_many :variables, class_name: 'EnterpriseEmailVariable', through: :vars, source: :enterprise_email_variable
+  has_many :email_variables, class_name: 'EmailVariable', dependent: :destroy
+  has_many :variables, class_name: 'EnterpriseEmailVariable', through: :email_variables, source: :enterprise_email_variable
 
   # validations
   validates_length_of :description, maximum: 191
@@ -38,21 +38,21 @@ class Email < ApplicationRecord
 
   def process_content(objects)
     hash = process(content, objects)
-    hash = process_variables(variables, hash)
+    hash = process_variables(email_variables, hash)
     content % hash
   end
 
   def process_subject(objects)
     hash = process(subject, objects)
-    hash = process_variables(variables, hash)
+    hash = process_variables(email_variables, hash)
     subject % hash
   end
 
   def process_variables(email_variables, hash)
     email_variables.each do |variable|
-      next if hash[variable[:key].to_sym].nil?
+      next if hash[variable.enterprise_email_variable[:key].to_sym].nil?
 
-      hash[variable[:key].to_sym] = variable.format(hash[variable[:key].to_sym])
+      hash[variable.enterprise_email_variable[:key].to_sym] = variable.format(hash[variable.enterprise_email_variable[:key].to_sym])
     end
     hash
   end

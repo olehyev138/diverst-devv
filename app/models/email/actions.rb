@@ -5,7 +5,7 @@ module Email::Actions
 
   module ClassMethods
     def base_preloads
-      [:vars, :variables]
+      [:email_variables, :variables]
     end
   end
 end
