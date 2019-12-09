@@ -42,7 +42,12 @@ export function NewsLink(props) {
           { /* eslint-disable-next-line arrow-body-style */}
           {dig(newsLink, 'comments') && newsLink.comments.map((comment, i) => {
             return (
-              <NewsLinkComment key={comment.id} comment={comment} deleteNewsLinkCommentBegin={props.deleteNewsLinkCommentBegin} newsItem={props.newsItem} />
+              <NewsLinkComment
+                key={comment.id}
+                comment={comment}
+                deleteNewsLinkCommentBegin={props.deleteNewsLinkCommentBegin}
+                newsItem={props.newsItem}
+              />
             );
           })}
         </React.Fragment>

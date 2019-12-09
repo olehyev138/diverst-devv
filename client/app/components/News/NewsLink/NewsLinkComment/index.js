@@ -27,9 +27,10 @@ export function NewsLinkComment(props) {
         onClick={() => {
           /* eslint-disable-next-line no-alert, no-restricted-globals */
           if (confirm('Delete news link?'))
-            props.deleteNewsLinkCommentBegin({ group_id: newsItem.news_link.group_id, id: comment.id });
-        }
-        }
+            props.deleteNewsLinkCommentBegin({
+              group_id: newsItem.news_link.group_id,
+              id: comment.id });
+        }}
       >
         Delete
       </Button>

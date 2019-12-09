@@ -81,7 +81,6 @@ export function NewsLinkListItem(props) {
           </Button>
         </CardActions>
       )}
-
     </Card>
   );
 }

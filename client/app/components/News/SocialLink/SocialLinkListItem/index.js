@@ -31,12 +31,8 @@ export function SocialLinkListItem(props) {
   const { links } = props;
   return (
     <Card>
-
-
       <CardContent>
         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-
-
         <Link href={socialLink.url} target='_blank'>
           <Typography variant='h6'>
             {socialLink.url}
@@ -49,8 +45,7 @@ export function SocialLinkListItem(props) {
               {`Submitted by ${socialLink.author.first_name} ${socialLink.author.last_name}`}
             </Typography>
           </React.Fragment>
-        ) : <React.Fragment />
-        }
+        ) : <React.Fragment />}
       </CardContent>
       <CardActions>
         <Button

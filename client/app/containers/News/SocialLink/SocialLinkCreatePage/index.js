@@ -29,10 +29,7 @@ export function SocialLinkCreatePage(props) {
   };
 
   useEffect(() => () => props.newsFeedUnmount(), []);
-
   const { currentUser, currentGroup } = props;
-
-
   return (
     <SocialLinkForm
       get
