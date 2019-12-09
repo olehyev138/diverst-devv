@@ -712,7 +712,7 @@ RSpec.describe GroupsController, type: :controller do
     let(:user) { create :user }
     let!(:group) { create :group, enterprise: user.enterprise }
 
-    before { set_referrer }
+    before { request.env['HTTP_REFERER'] = 'back' }
 
     describe 'with logged in user' do
       login_user_from_let
@@ -763,21 +763,7 @@ RSpec.describe GroupsController, type: :controller do
         it 'redirects to correct page' do
           patch_update(group.id, group_attrs)
 
-          expect(response).to redirect_to [:edit, group]
-        end
-
-        it 'redirects to group homepage after updating group in group settings' do
-          request.env['HTTP_REFERER'] = settings_group_url(group)
-          patch_update(group.id, group_attrs)
-
-          expect(response).to redirect_to group
-        end
-
-        it 'stay on group outcomes url after updating plan structure' do
-          request.env['HTTP_REFERER'] = group_outcomes_url(group)
-          patch_update(group.id, group_attrs)
-
-          expect(response).to redirect_to group_outcomes_url(group)
+          expect(response).to redirect_to 'back'
         end
       end
 
