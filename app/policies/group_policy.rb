@@ -44,13 +44,6 @@ class GroupPolicy < ApplicationPolicy
     create?
   end
 
-  def update?
-    return true if @policy_group.groups_manage?
-    return true if @record.owner == @user
-
-    @record.managers.include?(user)
-  end
-
   def manage_all_groups?
     # return true if parent_group_permissions?
     # super admin
@@ -58,7 +51,7 @@ class GroupPolicy < ApplicationPolicy
     return true if basic_group_leader_permission?('groups_manage') && basic_group_leader_permission?('group_settings_manage')
 
     # groups manager
-    return true if @policy_group.groups_manage? && @policy_group.group_settings_manage?
+    @policy_group.groups_manage? && @policy_group.group_settings_manage?
   end
 
   def manage_all_group_budgets?
@@ -68,7 +61,7 @@ class GroupPolicy < ApplicationPolicy
     return true if basic_group_leader_permission?('groups_manage') && basic_group_leader_permission?('groups_budgets_manage')
 
     # groups manager
-    return true if @policy_group.groups_manage? && @policy_group.groups_budgets_manage?
+    @policy_group.groups_manage? && @policy_group.groups_budgets_manage?
   end
 
   def manage?
@@ -95,7 +88,7 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def has_group_leader_permissions?(permission)
-    return false if !is_a_leader?
+    return false unless is_a_leader?
 
     @record.group_leaders.where(user_id: @user.id).where("#{permission} = true").exists?
   end
@@ -131,8 +124,9 @@ class GroupPolicy < ApplicationPolicy
     return true if @policy_group.groups_manage? && @policy_group.groups_insights_manage?
     # group leader
     return true if has_group_leader_permissions?('groups_insights_manage')
+
     # group member
-    return true if is_a_member? && @policy_group.groups_insights_manage?
+    is_a_member? && @policy_group.groups_insights_manage?
   end
 
   def layouts?
@@ -143,8 +137,9 @@ class GroupPolicy < ApplicationPolicy
     return true if @policy_group.groups_manage? && @policy_group.groups_layouts_manage?
     # group leader
     return true if has_group_leader_permissions?('groups_layouts_manage')
+
     # group member
-    return true if is_a_member? && @policy_group.groups_layouts_manage?
+    is_a_member? && @policy_group.groups_layouts_manage?
   end
 
   def settings?
@@ -155,8 +150,9 @@ class GroupPolicy < ApplicationPolicy
     return true if @policy_group.groups_manage? && @policy_group.group_settings_manage?
     # group leader
     return true if has_group_leader_permissions?('group_settings_manage')
+
     # group member
-    return true if is_a_member? && @policy_group.group_settings_manage?
+    is_a_member? && @policy_group.group_settings_manage?
   end
 
   class Scope < Scope

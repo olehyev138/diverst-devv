@@ -75,6 +75,7 @@ group :development, :test do
   gem 'timecop', '~> 0.8.1'
   gem 'clipboard', '~> 1.3', '>= 1.3.3'
   gem 'awesome_print', '~> 1.8'
+  gem 'active_record_query_trace', '>= 1.7'
 end
 
 group :test do

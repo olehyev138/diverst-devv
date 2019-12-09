@@ -40,7 +40,7 @@ module BaseSearcher
         filtered.select { |query_scope|
           if query_scope.kind_of?(String) || query_scope.kind_of?(Symbol)
             valid_scopes.include?(query_scope)
-          else
+          elsif query_scope.kind_of?(Array)
             valid_scopes.include?(query_scope.first)
           end
         }
@@ -112,7 +112,7 @@ module BaseSearcher
         warn(
           '---------------------------------------',
           '! WARNING !',
-          'It is likely that a policy scope was not found for this model. Ensure that a proper Policy and Scope exist, and filter if necessary (by enterprise, etc.)',
+          "It is likely that a policy scope was not found for #{self}. Ensure that a proper Policy and Scope exist, and filter if necessary (by enterprise, etc.)",
           '---------------------------------------'
         )
         @items = self
