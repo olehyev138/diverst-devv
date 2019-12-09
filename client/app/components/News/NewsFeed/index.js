@@ -12,7 +12,7 @@ import { compose } from 'redux';
 
 import {
   Box, Backdrop, Paper, Link,
-  Button, Card, CardActions, CardContent, Grid, Typography,
+  Button, Card, CardActions, CardContent, Grid, Tab, Typography,
 } from '@material-ui/core';
 import { SpeedDial, SpeedDialAction, SpeedDialIcon } from '@material-ui/lab';
 import { withStyles } from '@material-ui/core/styles';
@@ -20,6 +20,8 @@ import { withStyles } from '@material-ui/core/styles';
 import MessageIcon from '@material-ui/icons/Message';
 import NewsIcon from '@material-ui/icons/Description';
 import SocialIcon from '@material-ui/icons/Share';
+
+import ResponsiveTabs from 'components/Shared/ResponsiveTabs';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import GroupMessageListItem from 'components/News/GroupMessage/GroupMessageListItem';
@@ -29,6 +31,8 @@ import SocialLinkListItem from 'components/News/SocialLink/SocialLinkListItem';
 import DiverstPagination from 'components/Shared/DiverstPagination';
 
 import DiverstLoader from 'components/Shared/DiverstLoader';
+import messages from "../../../containers/Event/messages";
+import {customTexts} from "../../../utils/customTextHelpers";
 
 const styles = theme => ({
   newsItem: {
@@ -121,6 +125,17 @@ export function NewsFeed(props) {
               />
             ))}
           </SpeedDial>
+          <Paper>
+            <ResponsiveTabs
+              value={props.currentTab}
+              onChange={props.handleChangeTab}
+              indicatorColor='primary'
+              textColor='primary'
+            >
+              <Tab label='APPROVED' />
+              <Tab label='PENDING APPROVAL' />
+            </ResponsiveTabs>
+          </Paper>
         </React.Fragment>
       )}
       <DiverstLoader isLoading={props.isLoading}>
@@ -148,6 +163,8 @@ export function NewsFeed(props) {
 
 NewsFeed.propTypes = {
   defaultParams: PropTypes.object,
+  currentTab: PropTypes.number,
+  handleChangeTab: PropTypes.func,
   classes: PropTypes.object,
   newsItems: PropTypes.array,
   newsItemsTotal: PropTypes.number,

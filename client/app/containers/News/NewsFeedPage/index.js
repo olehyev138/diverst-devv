@@ -18,14 +18,23 @@ import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import NewsFeed from 'components/News/NewsFeed';
+import EventsList from "../../../components/Event/EventsList";
+
+const NewsFeedTypes = Object.freeze({
+  approved: 0,
+  not_approved: 1,
+});
+
+const defaultParams = Object.freeze({
+  count: 5,
+  page: 0,
+  order: 'asc',
+  news_feed_id: -1
+});
 
 export function NewsFeedPage(props, context) {
   useInjectReducer({ key: 'news', reducer });
   useInjectSaga({ key: 'news', saga });
-
-  const [params, setParams] = useState({
-    count: 5, page: 0, order: 'asc', news_feed_id: -1
-  });
 
   const rs = new RouteService(useContext);
   const links = {
@@ -35,19 +44,47 @@ export function NewsFeedPage(props, context) {
     groupMessageEdit: id => ROUTES.group.news.messages.edit.path(rs.params('group_id'), id)
   };
 
-  useEffect(() => {
-    const id = dig(props, 'currentGroup', 'news_feed', 'id');
+  const [tab, setTab] = useState(NewsFeedTypes.approved);
+  const [params, setParams] = useState(defaultParams);
+
+  const getNewsFeedItems = (scopes, resetParams = false) => {
+    const id = dig(props, 'currentGroup', 'id');
+
+    if (resetParams)
+      setParams(defaultParams);
 
     if (id) {
-      const newParams = { ...params, news_feed_id: id };
+      const newParams = {
+        ...params,
+        group_id: id,
+        query_scopes: scopes
+      };
       props.getNewsItemsBegin(newParams);
       setParams(newParams);
     }
+  };
+
+  useEffect(() => {
+    getNewsFeedItems(['approved']);
 
     return () => {
       props.newsFeedUnmount();
     };
   }, [props.currentGroup]);
+
+  const handleChangeTab = (event, newTab) => {
+    setTab(newTab);
+    switch (newTab) {
+      case NewsFeedTypes.approved:
+        getNewsFeedItems(['approved'], true);
+        break;
+      case NewsFeedTypes.not_approved:
+        getNewsFeedItems(['not_approved'], true);
+        break;
+      default:
+        break;
+    }
+  };
 
   const handlePagination = (payload) => {
     const newParams = { ...params, count: payload.count, page: payload.page };
@@ -55,7 +92,7 @@ export function NewsFeedPage(props, context) {
     props.getNewsItemsBegin(newParams);
     setParams(newParams);
   };
-
+  console.log(props.newsItems);
   return (
     <React.Fragment>
       <NewsFeed
@@ -63,6 +100,8 @@ export function NewsFeedPage(props, context) {
         newsItemsTotal={props.newsItemsTotal}
         isLoading={props.isLoading}
         defaultParams={params}
+        currentTab={tab}
+        handleChangeTab={handleChangeTab}
         handlePagination={handlePagination}
         links={links}
         readonly={false}
