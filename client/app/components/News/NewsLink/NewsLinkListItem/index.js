@@ -27,7 +27,6 @@ const styles = theme => ({
 
 export function NewsLinkListItem(props) {
   const { newsLink } = props;
-
   return (
     <Card>
       <CardContent>
@@ -51,12 +50,22 @@ export function NewsLinkListItem(props) {
         ) : <React.Fragment />
         }
       </CardContent>
+      {/*<CardActions>*/}
+      {/*  {props.newsItem.approved !== true ? (*/}
+      {/*    <Button*/}
+      {/*      size='small'*/}
+      {/*    >*/}
+      {/*      Approve*/}
+      {/*    </Button>*/}
+      {/*  ) : null }*/}
+      {/*</CardActions>*/}
     </Card>
   );
 }
 
 NewsLinkListItem.propTypes = {
-  newsLink: PropTypes.object
+  newsLink: PropTypes.object,
+  newsItem: PropTypes.object,
 };
 
 export default compose(

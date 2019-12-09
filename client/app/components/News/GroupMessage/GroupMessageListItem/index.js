@@ -25,6 +25,7 @@ const styles = theme => ({
 export function GroupMessageListItem(props) {
   const { newsItem } = props;
   const groupMessage = newsItem.group_message;
+  console.log(props);
 
   return (
     <Card>
@@ -63,6 +64,15 @@ export function GroupMessageListItem(props) {
           >
             Comments
           </Button>
+          {props.newsItem.approved !== true ? (
+            <Button
+              size='small'
+              to={props.links.groupMessageShow(props.groupId, newsItem.id)}
+              component={WrappedNavLink}
+            >
+              Approve
+            </Button>
+          ) : null }
         </CardActions>
       )}
     </Card>
