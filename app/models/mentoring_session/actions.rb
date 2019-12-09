@@ -5,7 +5,7 @@ module MentoringSession::Actions
 
   module ClassMethods
     def base_preloads
-      [:creator, :users, creator: User.mentor_includes, users: User.mentor_lite_includes]
+      [:creator, :users, :mentoring_interests, creator: User.mentor_includes, users: User.mentor_lite_includes]
     end
 
     def valid_scopes
