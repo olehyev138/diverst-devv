@@ -1,6 +1,7 @@
 class Segment < ApplicationRecord
   extend Enumerize
   include PublicActivity::Common
+  include Segment::Actions
 
   enumerize :active_users_filter, default: :both_active_and_inactive, in: [
     :both_active_and_inactive,
@@ -64,7 +65,7 @@ class Segment < ApplicationRecord
   end
 
   def all_rules_count
-    field_rules.count + order_rules.count + group_rules.count
+    field_rules.size + order_rules.size + group_rules.size
   end
 
   def general_rules_followed_by?(user)

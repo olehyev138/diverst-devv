@@ -204,6 +204,42 @@ module User::Actions
       %w(active enterprise_mentors mentors mentees accepting_mentee_requests accepting_mentor_requests)
     end
 
+    def base_preloads
+      [
+          :field_data,
+          :enterprise,
+          :user_groups,
+          :user_role,
+          :news_links,
+          {
+              field_data: [
+                  :field,
+                  { field: :enterprise }
+              ]
+          },
+          {
+              enterprise: [
+                  :theme,
+                  :mobile_fields
+              ]
+          }
+      ]
+    end
+
+    def base_attribute_preloads
+      [
+          :user_role,
+          :enterprise,
+          :news_links,
+          {
+              enterprise: [
+                  :theme,
+                  :mobile_fields
+              ]
+          }
+      ]
+    end
+
     def mentor_lite_includes
       [:mentoring_interests, :mentoring_types, :availabilities]
     end
