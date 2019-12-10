@@ -21,19 +21,19 @@ class Campaign < ApplicationRecord
   accepts_nested_attributes_for :questions, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :sponsors, reject_if: :all_blank, allow_destroy: true
 
-  validates_length_of :banner_content_type, maximum: 191
-  validates_length_of :banner_file_name, maximum: 191
-  validates_length_of :image_content_type, maximum: 191
-  validates_length_of :image_file_name, maximum: 191
   validates_length_of :description, maximum: 65535
   validates_length_of :title, maximum: 191
 
-  # Paperclip
-  has_attached_file :image, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: 'private'
-  validates_attachment_content_type :image, content_type: %r{\Aimage\/.*\Z}
+  # ActiveStorage
+  has_one_attached :image
+  validates :image, content_type: AttachmentHelper.common_image_types
 
-  has_attached_file :banner, styles: { medium: '1200x1200>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: 'private'
-  validates_attachment_content_type :banner, content_type: %r{\Aimage\/.*\Z}
+  has_one_attached :banner
+  validates :banner, content_type: AttachmentHelper.common_image_types
+
+  # TODO Remove after Paperclip to ActiveStorage migration
+  has_attached_file :image_paperclip, s3_permissions: 'private'
+  has_attached_file :banner_paperclip, s3_permissions: 'private'
 
   validates :title,       presence: true
   validates :description, presence: true
@@ -52,17 +52,20 @@ class Campaign < ApplicationRecord
   scope :ongoing, -> { where('start < :current_time AND end > :current_time', current_time: Time.current) }
 
   def image_location(expires_in: 3600, default_style: :medium)
-    return nil if !image.presence
+    return nil if !image.attached?
 
-    default_style = :medium if !image.styles.keys.include? default_style
-    image.expiring_url(expires_in, default_style)
+    # default_style = :medium if !image.styles.keys.include? default_style
+    # image.expiring_url(expires_in, default_style)
+
+    Rails.application.routes.url_helpers.url_for(image)
   end
 
   def banner_location(expires_in: 3600, default_style: :medium)
-    return nil if !banner.presence
+    return nil if !banner.attached?
 
-    default_style = :medium if !banner.styles.keys.include? default_style
-    banner.expiring_url(expires_in, default_style)
+    # default_style = :medium if !banner.styles.keys.include? default_style
+    # banner.expiring_url(expires_in, default_style)
+    Rails.application.routes.url_helpers.url_for(banner)
   end
 
   def create_invites

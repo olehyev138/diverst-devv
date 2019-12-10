@@ -68,7 +68,8 @@ class Importers::Users
       email: row['email'],
       biography: (row['biography'].present?) ? row['biography'] : user&.biography,
       active: process_active_column(row['active']),
-      user_role_id: id
+      user_role_id: id,
+      password: Faker::String.random(12),
     }
   end
 

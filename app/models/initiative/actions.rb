@@ -28,7 +28,7 @@ module Initiative::Actions
       }
       enc = Base64.encode64(hash.to_json)
       png = RQRCode::QRCode.new(enc).as_png
-      item.qr_code = png.to_data_url
+      item.qr_code.attach(io: StringIO.new(png.to_s), filename: "#{item.name}_qr_code")
       item.save!
       item
     end

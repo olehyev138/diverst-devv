@@ -22,8 +22,6 @@ class NewsLink < ApplicationRecord
   accepts_nested_attributes_for :photos, allow_destroy: true
   accepts_nested_attributes_for :news_feed_link, allow_destroy: true
 
-  validates_length_of :picture_content_type, maximum: 191
-  validates_length_of :picture_file_name, maximum: 191
   validates_length_of :description, maximum: 65535
   validates_length_of :title, maximum: 191
   validates :group_id,        presence: true
@@ -32,9 +30,12 @@ class NewsLink < ApplicationRecord
   validates :author_id,       presence: true
   validates :url,             length: { maximum: 191 }
 
-  # Paperclip
-  has_attached_file :picture, styles: { medium: '1000x300>', thumb: '100x100>' }, s3_permissions: :private
-  validates_attachment_content_type :picture, content_type: %r{\Aimage\/.*\Z}
+  # ActiveStorage
+  has_one_attached :picture
+  validates :picture, content_type: AttachmentHelper.common_image_types
+
+  # TODO Remove after Paperclip to ActiveStorage migration
+  has_attached_file :picture_paperclip, s3_permissions: 'private'
 
   after_create :build_default_link
   after_destroy :remove_news_feed_link
@@ -49,15 +50,12 @@ class NewsLink < ApplicationRecord
   scope :unapproved, -> { joins(:news_feed_link).where(news_feed_links: { approved: false }) }
   scope :approved, -> { joins(:news_feed_link).where(news_feed_links: { approved: true }) }
 
-  def picture_url=(url)
-    self.picture = URI.parse(url)
-  end
-
   def picture_location(expires_in: 3600, default_style: :medium)
-    return nil if !picture.presence
+    return nil if !picture.attached?
 
-    default_style = :medium if !picture.styles.keys.include? default_style
-    picture.expiring_url(expires_in, default_style)
+    # default_style = :medium if !picture.styles.keys.include? default_style
+    # picture.expiring_url(expires_in, default_style)
+    Rails.application.routes.url_helpers.url_for(picture)
   end
 
   # call back to delete news link segment associations

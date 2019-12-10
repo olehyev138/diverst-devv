@@ -16,14 +16,14 @@ class Resource < ApplicationRecord
 
   accepts_nested_attributes_for :tags
 
-  # Paperclip
-  has_attached_file :file, s3_permissions: 'private'
-  validates_with AttachmentPresenceValidator, attributes: :file, if: Proc.new { |r| r.url.blank? }
-  do_not_validate_attachment_file_type :file
+  # ActiveStorage
+  has_one_attached :file
+  validates :file, attached: true, if: Proc.new { |r| r.url.blank? }
+
+  # TODO Remove after Paperclip to ActiveStorage migration
+  has_attached_file :file_paperclip, s3_permissions: 'private'
 
   validates_length_of :resource_type, maximum: 191
-  validates_length_of :file_content_type, maximum: 191
-  validates_length_of :file_file_name, maximum: 191
   validates_length_of :title, maximum: 191
   validates_presence_of   :title
   validates_presence_of   :url, if: Proc.new { |r| r.file.nil? && r.url.blank? }
@@ -69,20 +69,10 @@ class Resource < ApplicationRecord
     self.tag_ids = Tag.ids_from_tokens(tokens)
   end
 
-  def file_url=(url)
-    self.file = URI.parse(url)
-  end
-
   def file_location
-    return nil if !file.presence
+    return nil if !file.attached?
 
-    file.expiring_url(36000)
-  end
-
-  def file_extension
-    File.extname(file_file_name)[1..-1].downcase
-  rescue
-    ''
+    Rails.application.routes.url_helpers.url_for(file)
   end
 
   def expiration_time

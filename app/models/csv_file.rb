@@ -4,35 +4,37 @@ class CsvFile < ApplicationRecord
   belongs_to :user
   belongs_to :group
 
-  # Paperclip
-  #  has_attached_file :import_file, s3_permissions: 'private'
-  #  has_attached_file :download_file, s3_permissions: 'private',
-  #                                    s3_headers: lambda { |attachment|
-  #                                                  {
-  #                                                      'Content-Type' => 'text/csv',
-  #                                                      'Content-Disposition' => 'attachment',
-  #                                                  }
-  #                                                }
-  #  do_not_validate_attachment_file_type :import_file
-  #  do_not_validate_attachment_file_type :download_file
+  # ActiveStorage
+  has_one_attached :import_file
+  has_one_attached :download_file
+  validates :import_file, attached: true, if: Proc.new { |c| !c.download_file.attached? }
+  validates :download_file, attached: true, if: Proc.new { |c| !c.import_file.attached? }
+
+  # TODO Remove after Paperclip to ActiveStorage migration
+  has_attached_file :import_file_paperclip, s3_permissions: 'private'
+  has_attached_file :download_file_paperclip, s3_permissions: 'private'
+
+  validates_presence_of :download_file_name, if: Proc.new { |c| c.download_file.attached? }
 
   after_commit :schedule_users_import, on: :create
+  before_save :generate_download_file_name, if: Proc.new { |c| c.download_file.attached? }
 
-  scope :download_files, -> { where("download_file_file_name <> ''") }
+  scope :download_files, -> { where("download_file_name <> ''") }
 
   def path_for_csv
-    if File.exist?(self.import_file.path)
-      self.import_file.path
-    else
-      # Paperclip.io_adapters.for(self.import_file).path
-      ''
-    end
+    ActiveStorage::Blob.service.send(:path_for, self.import_file.key)
   end
 
   protected
 
+  def generate_download_file_name
+    return if download_file_name.present?
+
+    download_file_name = download_file.filename.base
+  end
+
   def schedule_users_import
-    return if self.download_file?
+    return if self.download_file.attached?
 
     if group_id
       GroupMemberImportCSVJob.perform_later(self.id)
