@@ -24,8 +24,10 @@ const styles = theme => ({
 
 export function GroupMessageListItem(props) {
   const { newsItem } = props;
+  const newsItemId = newsItem.id;
   const groupMessage = newsItem.group_message;
-  console.log(newsItem);
+  const groupId = groupMessage.group_id;
+  console.log(groupId);
 
   return (
     <Card>
@@ -64,12 +66,12 @@ export function GroupMessageListItem(props) {
           >
             Comments
           </Button>
-          {props.newsItem.approved === true ? (
+          {props.newsItem.approved !== true ? (
             <Button
               size='small'
               onClick={() => {
                 /* eslint-disable-next-line no-alert, no-restricted-globals */
-                props.updateNewsItemBegin( newsItem.approved = true);
+                props.updateNewsItemBegin(  {approved: true, id: newsItemId, group_id: groupId } );
               }}
             >
               Approve

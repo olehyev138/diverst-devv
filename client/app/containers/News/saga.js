@@ -64,6 +64,7 @@ export function* getNewsItem(action) {
 export function* updateNewsItem(action) {
   try {
     const payload = { news_feed_link: action.payload };
+    console.log(payload);
     const response = yield call(api.newsFeedLinks.update.bind(api.newsFeedLinks), payload.news_feed_link.id, payload);
 
     yield put(updateNewsItemSuccess());
