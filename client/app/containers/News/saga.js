@@ -8,7 +8,8 @@ import { RouteContext } from 'containers/Layouts/ApplicationLayout';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import {
-  GET_NEWS_ITEMS_BEGIN, GET_NEWS_ITEM_BEGIN,
+  GET_NEWS_ITEMS_BEGIN, GET_NEWS_ITEM_BEGIN, UPDATE_NEWS_ITEM_BEGIN,
+  UPDATE_NEWS_ITEM_ERROR, UPDATE_NEWS_ITEM_SUCCESS,
   CREATE_GROUP_MESSAGE_BEGIN, UPDATE_GROUP_MESSAGE_BEGIN,
   CREATE_GROUP_MESSAGE_COMMENT_BEGIN, CREATE_NEWSLINK_BEGIN, UPDATE_NEWSLINK_BEGIN,
   CREATE_NEWSLINK_COMMENT_BEGIN,
@@ -22,6 +23,7 @@ import {
 import {
   getNewsItemsSuccess, getNewsItemsError,
   getNewsItemBegin, getNewsItemSuccess, getNewsItemError,
+  updateNewsItemBegin, updateNewsItemError, updateNewsItemSuccess,
   createGroupMessageSuccess, createGroupMessageError,
   createGroupMessageCommentError, updateGroupMessageSuccess,
   createGroupMessageCommentSuccess, createNewsLinkBegin,
@@ -58,6 +60,23 @@ export function* getNewsItem(action) {
     yield put(showSnackbar({ message: 'Failed to load news item', options: { variant: 'warning' } }));
   }
 }
+
+export function* updateNewsItem(action) {
+  try {
+    const payload = { news_feed_link: action.payload };
+    const response = yield call(api.newsFeedLinks.update.bind(api.newsFeedLinks), payload.news_feed_link.id, payload);
+
+    yield put(updateNewsItemSuccess());
+    yield put(push(ROUTES.group.news.index.path(action.payload.group_id)));
+    yield put(showSnackbar({ message: 'News feed link updated', options: { variant: 'success' } }));
+  } catch (err) {
+    yield put(createGroupMessageError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to update news feed link', options: { variant: 'warning' } }));
+  }
+}
+
 
 export function* createGroupMessage(action) {
   try {
@@ -264,6 +283,7 @@ export function* deleteSocialLink(action) {
 export default function* newsSaga() {
   yield takeLatest(GET_NEWS_ITEMS_BEGIN, getNewsItems);
   yield takeLatest(GET_NEWS_ITEM_BEGIN, getNewsItem);
+  yield takeLatest(UPDATE_NEWS_ITEM_BEGIN, updateNewsItem);
   yield takeLatest(CREATE_GROUP_MESSAGE_BEGIN, createGroupMessage);
   yield takeLatest(UPDATE_GROUP_MESSAGE_BEGIN, updateGroupMessage);
   yield takeLatest(CREATE_GROUP_MESSAGE_COMMENT_BEGIN, createGroupMessageComment);

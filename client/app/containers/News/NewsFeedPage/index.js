@@ -13,7 +13,7 @@ import saga from 'containers/News/saga';
 
 import { selectPaginatedNewsItems, selectNewsItemsTotal, selectIsLoading } from 'containers/News/selectors';
 import { deleteSocialLinkBegin, getNewsItemsBegin, newsFeedUnmount, deleteNewsLinkBegin, deleteGroupMessageBegin,
-  updateGroupMessageBegin, updateNewsLinkBegin, updateSocialLinkBegin } from 'containers/News/actions';
+  updateGroupMessageBegin, updateNewsLinkBegin, updateSocialLinkBegin, updateNewsItemBegin } from 'containers/News/actions';
 
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -128,6 +128,7 @@ export function NewsFeedPage(props, context) {
         updateGroupMessageBegin={props.updateGroupMessageBegin}
         updateNewsLinkBegin={props.updateNewsLinkBegin}
         updateSocialLinkBegin={props.updateSocialLinkBegin}
+        updateNewsItemBegin={props.updateNewsItemBegin}
       />
     </React.Fragment>
   );
@@ -144,6 +145,7 @@ NewsFeedPage.propTypes = {
   updateGroupMessageBegin: PropTypes.func,
   updateNewsLinkBegin: PropTypes.func,
   updateSocialLinkBegin: PropTypes.func,
+  updateNewsItemBegin: PropTypes.func,
   isLoading: PropTypes.bool,
   currentGroup: PropTypes.shape({
     news_feed: PropTypes.shape({
@@ -171,6 +173,7 @@ const mapDispatchToProps = dispatch => ({
   updateGroupMessageBegin: payload => dispatch(updateGroupMessageBegin(payload)),
   updateNewsLinkBegin: payload => dispatch(updateNewsLinkBegin(payload)),
   updateSocialLinkBegin: payload => dispatch(updateSocialLinkBegin(payload)),
+  updateNewsItemBegin: payload => dispatch(updateNewsItemBegin(payload)),
   newsFeedUnmount: () => dispatch(newsFeedUnmount()),
 });
 

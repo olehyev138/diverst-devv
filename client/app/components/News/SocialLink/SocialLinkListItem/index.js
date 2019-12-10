@@ -78,6 +78,7 @@ SocialLinkListItem.propTypes = {
   }),
   newsItem: PropTypes.object,
   deleteSocialLinkBegin: PropTypes.func,
+  updateSocialLinkBegin: PropTypes.func,
 };
 
 export default compose(
