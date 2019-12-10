@@ -84,11 +84,40 @@ export function NewsFeed(props) {
   /* Check news_feed_link type & render appropriate list item component */
   const renderNewsItem = (item) => {
     if (item.group_message)
-      return (<GroupMessageListItem links={props.links} newsItem={item} readonly={props.readonly} groupId={item.news_feed.group_id} deleteGroupMessageBegin={props.deleteGroupMessageBegin} />);
+      return (
+        <GroupMessageListItem
+          links={props.links}
+          newsItem={item}
+          readonly={props.readonly}
+          groupId={item.news_feed.group_id}
+          deleteGroupMessageBegin={props.deleteGroupMessageBegin}
+          updateGroupMessageBegin={props.updateGroupMessageBegin}
+        />
+      );
     else if (item.news_link) // eslint-disable-line no-else-return
-      return (<NewsLinkListItem links={props.links} newsLink={item.news_link} newsItem={item} groupId={item.news_feed.group_id} readonly={props.readonly} deleteNewsLinkBegin={props.deleteNewsLinkBegin} />);
+      return (
+        <NewsLinkListItem
+          links={props.links}
+          newsLink={item.news_link}
+          newsItem={item}
+          groupId={item.news_feed.group_id}
+          readonly={props.readonly}
+          deleteNewsLinkBegin={props.deleteNewsLinkBegin}
+          updateNewsLinkBegin={props.updateNewsLinkBegin}
+        />
+      );
     else if (item.social_link)
-      return (<SocialLinkListItem socialLink={item.social_link} links={props.links} newsItem={item} groupId={item.news_feed.group_id} readonly={props.readonly} deleteSocialLinkBegin={props.deleteSocialLinkBegin} />);
+      return (
+        <SocialLinkListItem
+          socialLink={item.social_link}
+          links={props.links}
+          newsItem={item}
+          groupId={item.news_feed.group_id}
+          readonly={props.readonly}
+          deleteSocialLinkBegin={props.deleteSocialLinkBegin}
+          updateSocialLinkBegin={props.updateSocialLinkBegin}
+        />
+      );
 
     return undefined;
   };
@@ -175,6 +204,9 @@ NewsFeed.propTypes = {
   deleteGroupMessageBegin: PropTypes.func,
   deleteNewsLinkBegin: PropTypes.func,
   deleteSocialLinkBegin: PropTypes.func,
+  updateGroupMessageBegin: PropTypes.func,
+  updateNewsLinkBegin: PropTypes.func,
+  updateSocialLinkBegin: PropTypes.func,
 };
 
 export default compose(

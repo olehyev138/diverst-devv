@@ -12,7 +12,8 @@ import reducer from 'containers/News/reducer';
 import saga from 'containers/News/saga';
 
 import { selectPaginatedNewsItems, selectNewsItemsTotal, selectIsLoading } from 'containers/News/selectors';
-import { deleteSocialLinkBegin, getNewsItemsBegin, newsFeedUnmount, deleteNewsLinkBegin, deleteGroupMessageBegin } from 'containers/News/actions';
+import { deleteSocialLinkBegin, getNewsItemsBegin, newsFeedUnmount, deleteNewsLinkBegin, deleteGroupMessageBegin,
+  updateGroupMessageBegin, updateNewsLinkBegin, updateSocialLinkBegin } from 'containers/News/actions';
 
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -124,6 +125,9 @@ export function NewsFeedPage(props, context) {
         deleteGroupMessageBegin={props.deleteGroupMessageBegin}
         deleteNewsLinkBegin={props.deleteNewsLinkBegin}
         deleteSocialLinkBegin={props.deleteSocialLinkBegin}
+        updateGroupMessageBegin={props.updateGroupMessageBegin}
+        updateNewsLinkBegin={props.updateNewsLinkBegin}
+        updateSocialLinkBegin={props.updateSocialLinkBegin}
       />
     </React.Fragment>
   );
@@ -137,6 +141,9 @@ NewsFeedPage.propTypes = {
   deleteGroupMessageBegin: PropTypes.func,
   deleteNewsLinkBegin: PropTypes.func,
   deleteSocialLinkBegin: PropTypes.func,
+  updateGroupMessageBegin: PropTypes.func,
+  updateNewsLinkBegin: PropTypes.func,
+  updateSocialLinkBegin: PropTypes.func,
   isLoading: PropTypes.bool,
   currentGroup: PropTypes.shape({
     news_feed: PropTypes.shape({
@@ -161,6 +168,9 @@ const mapDispatchToProps = dispatch => ({
   deleteGroupMessageBegin: payload => dispatch(deleteGroupMessageBegin(payload)),
   deleteNewsLinkBegin: payload => dispatch(deleteNewsLinkBegin(payload)),
   deleteSocialLinkBegin: payload => dispatch(deleteSocialLinkBegin(payload)),
+  updateGroupMessageBegin: payload => dispatch(updateGroupMessageBegin(payload)),
+  updateNewsLinkBegin: payload => dispatch(updateNewsLinkBegin(payload)),
+  updateSocialLinkBegin: payload => dispatch(updateSocialLinkBegin(payload)),
   newsFeedUnmount: () => dispatch(newsFeedUnmount()),
 });
 
