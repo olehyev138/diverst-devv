@@ -80,8 +80,11 @@ import {
   UserRolesListPage,
   UserRoleCreatePage,
   UserRoleEditPage,
-  CampaignQuestionShowPage,
-  SSOSettingsPage
+  NewsLinkCreatePage,
+  NewsLinkEditPage,
+  NewsLinkPage,
+  SocialLinkCreatePage,
+  SocialLinkEditPage
 } from './templates';
 
 // Paths
@@ -157,7 +160,6 @@ export default function Routes(props) {
       <AdminLayout {...expandRoute(ROUTES.admin.innovate.campaigns.edit)} component={CampaignEditPage} />
       <AdminLayout {...expandRoute(ROUTES.admin.innovate.campaigns.questions.new)} component={CampaignQuestionCreatePage} />
       <AdminLayout {...expandRoute(ROUTES.admin.innovate.campaigns.questions.edit)} component={CampaignQuestionEditPage} />
-      <AdminLayout {...expandRoute(ROUTES.admin.innovate.campaigns.questions.show)} component={CampaignQuestionShowPage} />
       <AdminLayout {...expandRoute(ROUTES.admin.innovate.campaigns.show)} component={CampaignShowPage} />
       <AdminLayout {...expandRoute(ROUTES.admin.innovate.campaigns.index)} component={CampaignListPage} />
       <AdminLayout {...expandRoute(ROUTES.admin.innovate.financials.index)} component={PlaceholderPage} />
@@ -166,7 +168,6 @@ export default function Routes(props) {
       <GlobalSettingsLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.fields.index)} component={FieldsPage} />
       <GlobalSettingsLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.customText.edit)} component={CustomTextEditPage} />
       <GlobalSettingsLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.enterpriseConfiguration.index)} component={EnterpriseConfigurationPage} />
-      <GlobalSettingsLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.ssoSettings.edit)} component={SSOSettingsPage} />
 
       { /* Admin - System - Users */ }
       <SystemUserLayout exact {...expandRoute(ROUTES.admin.system.users.index)} component={UsersPage} />
@@ -195,6 +196,11 @@ export default function Routes(props) {
       <GroupLayout {...expandRoute(ROUTES.group.news.messages.new)} component={GroupMessageCreatePage} />
       <GroupLayout {...expandRoute(ROUTES.group.news.messages.edit)} component={GroupMessageEditPage} />
       <GroupLayout exact {...expandRoute(ROUTES.group.news.messages.show)} component={GroupMessagePage} />
+      <GroupLayout {...expandRoute(ROUTES.group.news.news_links.new)} component={NewsLinkCreatePage} />
+      <GroupLayout {...expandRoute(ROUTES.group.news.news_links.edit)} component={NewsLinkEditPage} />
+      <GroupLayout {...expandRoute(ROUTES.group.news.news_links.show)} component={NewsLinkPage} />
+      <GroupLayout {...expandRoute(ROUTES.group.news.social_links.new)} component={SocialLinkCreatePage} />
+      <GroupLayout {...expandRoute(ROUTES.group.news.social_links.edit)} component={SocialLinkEditPage} />
 
       { /* Group Members */ }
       <GroupLayout {...expandRoute(ROUTES.group.members.new)} component={GroupMemberCreatePage} />

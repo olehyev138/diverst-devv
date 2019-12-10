@@ -8,7 +8,7 @@ import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux/';
 
-import { Card, CardContent, Typography } from '@material-ui/core';
+import { Button, Card, CardActions, CardContent, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
 const styles = theme => ({
@@ -19,7 +19,7 @@ const styles = theme => ({
 });
 
 export function GroupMessageComment(props) {
-  const { classes, comment } = props;
+  const { classes, comment, newsItem } = props;
 
   return (
     <Card className={classes.margin}>
@@ -27,6 +27,18 @@ export function GroupMessageComment(props) {
         <Typography variant='body1'>{comment.content}</Typography>
         <Typography variant='body2'>{comment.author.first_name}</Typography>
       </CardContent>
+      <CardActions>
+        <Button
+          size='small'
+          onClick={() => {
+            /* eslint-disable-next-line no-alert, no-restricted-globals */
+            if (confirm('Delete group message?'))
+              props.deleteGroupMessageCommentBegin({ group_id: newsItem.group_message.group_id, id: comment.id });
+          }}
+        >
+          Delete
+        </Button>
+      </CardActions>
     </Card>
   );
 }
@@ -34,6 +46,8 @@ export function GroupMessageComment(props) {
 GroupMessageComment.propTypes = {
   classes: PropTypes.object,
   comment: PropTypes.object,
+  deleteGroupMessageCommentBegin: PropTypes.func,
+  newsItem: PropTypes.object,
 };
 
 export default compose(

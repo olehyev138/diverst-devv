@@ -7,28 +7,29 @@ import dig from 'object-dig';
 import { Box, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
-import GroupMessageComment from 'components/News/GroupMessage/GroupMessageComment';
-import GroupMessageCommentForm from 'components/News/GroupMessage/GroupMessageCommentForm';
-import GroupMessageListItem from 'components/News/GroupMessage/GroupMessageListItem';
+import NewsLinkComment from 'components/News/NewsLink/NewsLinkComment';
+import NewsLinkCommentForm from 'components/News/NewsLink/NewsLinkCommentForm';
+import NewsLinkListItem from 'components/News/NewsLink/NewsLinkListItem';
 
 import DiverstShowLoader from 'components/Shared/DiverstShowLoader';
 
 const styles = theme => ({});
 
-export function GroupMessage(props) {
+export function NewsLink(props) {
+  /* Render a NewsLink, its comments & a comment form */
+
   const { classes, ...rest } = props;
   const newsItem = dig(props, 'newsItem');
-  const groupMessage = dig(newsItem, 'group_message');
-
+  const newsLink = dig(newsItem, 'news_link');
   return (
-    <DiverstShowLoader isLoading={props.isFormLoading} isError={!props.isFormLoading && !groupMessage}>
-      {groupMessage && (
+    <DiverstShowLoader isLoading={props.isFormLoading} isError={!props.isFormLoading && !newsLink}>
+      {newsLink && (
         <React.Fragment>
-          <GroupMessageListItem
+          <NewsLinkListItem
             newsItem={newsItem}
           />
           <Box mb={4} />
-          <GroupMessageCommentForm
+          <NewsLinkCommentForm
             currentUserId={props.currentUserId}
             newsItem={props.newsItem}
             commentAction={props.commentAction}
@@ -39,14 +40,13 @@ export function GroupMessage(props) {
             Comments
           </Typography>
           { /* eslint-disable-next-line arrow-body-style */}
-          {dig(groupMessage, 'comments') && groupMessage.comments.map((comment, i) => {
+          {dig(newsLink, 'comments') && newsLink.comments.map((comment, i) => {
             return (
-              <GroupMessageComment
+              <NewsLinkComment
                 key={comment.id}
                 comment={comment}
-                deleteGroupMessageCommentBegin={props.deleteGroupMessageCommentBegin}
+                deleteNewsLinkCommentBegin={props.deleteNewsLinkCommentBegin}
                 newsItem={props.newsItem}
-                groupMessage={props.groupMessage}
               />
             );
           })}
@@ -56,20 +56,19 @@ export function GroupMessage(props) {
   );
 }
 
-GroupMessage.propTypes = {
+NewsLink.propTypes = {
   classes: PropTypes.object,
   newsItem: PropTypes.object,
   currentUserId: PropTypes.number,
   commentAction: PropTypes.func,
   isFormLoading: PropTypes.bool,
   links: PropTypes.shape({
-    groupMessageEdit: PropTypes.func
+    newsLinkEdit: PropTypes.func
   }),
-  deleteGroupMessageCommentBegin: PropTypes.func,
-  groupMessage: PropTypes.object,
+  deleteNewsLinkCommentBegin: PropTypes.func,
 };
 
 export default compose(
   memo,
   withStyles(styles)
-)(GroupMessage);
+)(NewsLink);

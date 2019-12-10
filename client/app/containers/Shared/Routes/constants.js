@@ -219,6 +219,27 @@ export const ROUTES = {
             titleMessage: messages.groups.news.messages.edit
           }
         },
+      },
+      news_links: {
+        show: {
+          path:
+            (groupId = ':group_id', itemId = ':item_id') => `/groups/${groupId}/news/news_links/${itemId}`,
+        },
+        new: {
+          path:
+            (groupId = ':group_id') => `/groups/${groupId}/news/news_links/new`,
+        },
+        edit: {
+          path: (groupId = ':group_id', itemId = ':item_id') => `/groups/${groupId}/news/news_links/${itemId}/edit`,
+        },
+      },
+      social_links: {
+        new: {
+          path: (groupId = ':group_id') => `/groups/${groupId}/news/social_links/new`,
+        },
+        edit: {
+          path: (groupId = ':group_id', itemId = ':item_id') => `/groups/${groupId}/news/social_links/${itemId}/edit`,
+        }
       }
     },
     plan: {
