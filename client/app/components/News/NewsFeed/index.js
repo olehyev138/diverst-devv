@@ -66,12 +66,12 @@ export function NewsFeed(props) {
     {
       icon: <NewsIcon />,
       name: 'News Link',
-      linkPath: props.links.groupMessageNew,
+      linkPath: props.links.newsLinkNew,
     },
     {
       icon: <SocialIcon />,
       name: 'Social Link',
-      linkPath: props.links.groupMessageNew,
+      linkPath: props.links.socialLinkNew,
     },
   ];
 
@@ -84,11 +84,11 @@ export function NewsFeed(props) {
   /* Check news_feed_link type & render appropriate list item component */
   const renderNewsItem = (item) => {
     if (item.group_message)
-      return (<GroupMessageListItem links={props.links} newsItem={item} readonly={props.readonly} groupId={item.news_feed.group_id} />);
+      return (<GroupMessageListItem links={props.links} newsItem={item} readonly={props.readonly} groupId={item.news_feed.group_id} deleteGroupMessageBegin={props.deleteGroupMessageBegin} />);
     else if (item.news_link) // eslint-disable-line no-else-return
-      return (<NewsLinkListItem newsLink={item.news_link} readonly={props.readonly} />);
+      return (<NewsLinkListItem links={props.links} newsLink={item.news_link} newsItem={item} groupId={item.news_feed.group_id} readonly={props.readonly} deleteNewsLinkBegin={props.deleteNewsLinkBegin} />);
     else if (item.social_link)
-      return (<SocialLinkListItem socialLink={item.social_link} readonly={props.readonly} />);
+      return (<SocialLinkListItem socialLink={item.social_link} links={props.links} newsItem={item} groupId={item.news_feed.group_id} readonly={props.readonly} deleteSocialLinkBegin={props.deleteSocialLinkBegin} />);
 
     return undefined;
   };
@@ -170,10 +170,11 @@ NewsFeed.propTypes = {
   newsItemsTotal: PropTypes.number,
   handlePagination: PropTypes.func,
   isLoading: PropTypes.bool,
-  links: PropTypes.shape({
-    groupMessageNew: PropTypes.string
-  }),
+  links: PropTypes.object,
   readonly: PropTypes.bool,
+  deleteGroupMessageBegin: PropTypes.func,
+  deleteNewsLinkBegin: PropTypes.func,
+  deleteSocialLinkBegin: PropTypes.func,
 };
 
 export default compose(

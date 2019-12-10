@@ -1,5 +1,7 @@
 class NewsFeedLinkSerializer < ApplicationRecordSerializer
-  attributes :id, :news_feed_id, :news_feed, :news_link, :social_link, :total_views, :total_likes, :approved
+  attributes :id, :news_feed_id, :news_feed, :total_views, :total_likes
 
   belongs_to :group_message
+  belongs_to :news_link
+  belongs_to :social_link
 end

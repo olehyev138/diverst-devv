@@ -16,7 +16,7 @@ import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/News/messages';
-
+import DeleteIcon from '@material-ui/icons/DeleteOutline';
 import { formatDateTimeString } from 'utils/dateTimeHelpers';
 
 const styles = theme => ({
@@ -73,6 +73,17 @@ export function GroupMessageListItem(props) {
               Approve
             </Button>
           ) : null }
+          <Button
+            size='small'
+            onClick={() => {
+              /* eslint-disable-next-line no-alert, no-restricted-globals */
+              if (confirm('Delete group message?'))
+                props.deleteGroupMessageBegin(newsItem.group_message);
+            }}
+            // component={WrappedNavLink}
+          >
+            Delete
+          </Button>
         </CardActions>
       )}
     </Card>
@@ -86,7 +97,8 @@ GroupMessageListItem.propTypes = {
   links: PropTypes.shape({
     groupMessageEdit: PropTypes.func,
     groupMessageShow: PropTypes.func
-  })
+  }),
+  deleteGroupMessageBegin: PropTypes.func,
 };
 
 export default compose(
