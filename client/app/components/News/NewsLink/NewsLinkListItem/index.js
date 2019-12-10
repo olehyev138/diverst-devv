@@ -27,7 +27,9 @@ const styles = theme => ({
 
 export function NewsLinkListItem(props) {
   const { newsItem } = props;
+  const newsItemId = newsItem.id;
   const newsLink = newsItem.news_link;
+  const groupId = newsLink.group_id;
   const { links } = props;
   return (
     <Card>
@@ -69,6 +71,17 @@ export function NewsLinkListItem(props) {
           >
             Comments
           </Button>
+          {props.newsItem.approved !== true ? (
+            <Button
+              size='small'
+              onClick={() => {
+                /* eslint-disable-next-line no-alert, no-restricted-globals */
+                props.updateNewsItemBegin({ approved: true, id: newsItemId, group_id: groupId });
+              }}
+            >
+              Approve
+            </Button>
+          ) : null }
           <Button
             size='small'
             onClick={() => {
@@ -93,6 +106,7 @@ NewsLinkListItem.propTypes = {
   links: PropTypes.object,
   deleteNewsLinkBegin: PropTypes.func,
   updateNewsLinkBegin: PropTypes.func,
+  updateNewsItemBegin: PropTypes.func,
 };
 
 export default compose(

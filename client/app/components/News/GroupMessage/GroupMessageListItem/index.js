@@ -27,7 +27,6 @@ export function GroupMessageListItem(props) {
   const newsItemId = newsItem.id;
   const groupMessage = newsItem.group_message;
   const groupId = groupMessage.group_id;
-  console.log(groupId);
 
   return (
     <Card>
@@ -71,7 +70,7 @@ export function GroupMessageListItem(props) {
               size='small'
               onClick={() => {
                 /* eslint-disable-next-line no-alert, no-restricted-globals */
-                props.updateNewsItemBegin(  {approved: true, id: newsItemId, group_id: groupId } );
+                props.updateNewsItemBegin({ approved: true, id: newsItemId, group_id: groupId });
               }}
             >
               Approve
