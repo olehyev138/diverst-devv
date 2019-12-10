@@ -186,7 +186,7 @@ class Group < ApplicationRecord
   accepts_nested_attributes_for :sponsors, reject_if: :all_blank, allow_destroy: true
 
   def logo_location(expires_in: 3600, default_style: :medium)
-    return nil if !logo.attached?
+    return nil unless logo.attached?
 
     # default_style = :medium if !logo.styles.keys.include? default_style
     # logo.expiring_url(expires_in, default_style)
@@ -194,7 +194,7 @@ class Group < ApplicationRecord
   end
 
   def banner_location
-    return nil if !banner.attached?
+    return nil unless banner.attached?
 
     # banner.expiring_url(36000)
     Rails.application.routes.url_helpers.url_for(banner)
@@ -205,7 +205,7 @@ class Group < ApplicationRecord
   end
 
   def no_expiry_age_set_and_auto_archive_true?
-    return true if auto_archive? && (expiry_age_for_news == 0) && (expiry_age_for_events == 0) && (expiry_age_for_resources == 0)
+    true if auto_archive? && (expiry_age_for_news == 0) && (expiry_age_for_events == 0) && (expiry_age_for_resources == 0)
   end
 
   def archive_switch
@@ -318,6 +318,12 @@ class Group < ApplicationRecord
 
   def file_safe_name
     name.gsub(/[^0-9A-Za-z.\-]/, '_')
+  end
+
+  def logo_expiring_thumb
+    # TODO
+    # return nil if logo.blank?
+    # logo.expiring_url(30, :thumb)
   end
 
   def possible_participating_groups
