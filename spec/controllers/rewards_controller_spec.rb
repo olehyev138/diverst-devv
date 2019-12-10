@@ -74,7 +74,7 @@ RSpec.describe RewardsController, type: :controller do
 
         it 'flashes a notice message' do
           post :create, reward: attributes_for(:reward).merge(responsible_id: user.id)
-          expect(flash[:notice]).to eq 'Your prize was created'
+          expect(flash[:notice]).to eq 'Your reward was created'
         end
 
         it 'redirects to action index' do
@@ -121,7 +121,7 @@ RSpec.describe RewardsController, type: :controller do
 
         it 'flashes an alert message' do
           post :create, reward: attributes_for(:reward, label: '')
-          expect(flash[:alert]).to eq 'Your prize was not created. Please fix the errors'
+          expect(flash[:alert]).to eq 'Your reward was not created. Please fix the errors'
         end
       end
     end
@@ -181,7 +181,7 @@ RSpec.describe RewardsController, type: :controller do
         end
 
         it 'flashes a notice message' do
-          expect(flash[:notice]).to eq 'Your prize was updated'
+          expect(flash[:notice]).to eq 'Your reward was updated'
         end
       end
 
@@ -198,7 +198,7 @@ RSpec.describe RewardsController, type: :controller do
         end
 
         it 'flashes an alert message' do
-          expect(flash[:alert]).to eq 'Your prize was not updated. Please fix the errors'
+          expect(flash[:alert]).to eq 'Your reward was not updated. Please fix the errors'
         end
       end
     end
@@ -226,7 +226,7 @@ RSpec.describe RewardsController, type: :controller do
 
       it 'flahses a notice message' do
         delete :destroy, id: reward.id
-        expect(flash[:notice]).to eq 'Your prize was deleted'
+        expect(flash[:notice]).to eq 'Your reward was deleted'
       end
     end
 
