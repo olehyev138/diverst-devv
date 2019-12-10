@@ -198,14 +198,14 @@ class Group < ApplicationRecord
   end
 
   def logo_location(expires_in: 3600, default_style: :medium)
-    return nil if !logo.presence
+    return nil unless logo.presence
 
-    default_style = :medium if !logo.styles.keys.include? default_style
+    default_style = :medium unless logo.styles.keys.include? default_style
     logo.expiring_url(expires_in, default_style)
   end
 
   def banner_location
-    return nil if !banner.presence
+    return nil unless banner.presence
 
     banner.expiring_url(36000)
   end
@@ -215,7 +215,7 @@ class Group < ApplicationRecord
   end
 
   def no_expiry_age_set_and_auto_archive_true?
-    return true if auto_archive? && (expiry_age_for_news == 0) && (expiry_age_for_events == 0) && (expiry_age_for_resources == 0)
+    true if auto_archive? && (expiry_age_for_news == 0) && (expiry_age_for_events == 0) && (expiry_age_for_resources == 0)
   end
 
   def archive_switch
