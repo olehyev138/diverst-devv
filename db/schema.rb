@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_26_193046) do
+ActiveRecord::Schema.define(version: 2019_12_10_084256) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "name", null: false
@@ -1391,9 +1391,9 @@ ActiveRecord::Schema.define(version: 2019_11_26_193046) do
     t.string "sponsor_media_content_type"
     t.integer "sponsor_media_file_size"
     t.datetime "sponsor_media_updated_at"
-    t.integer "enterprise_id"
-    t.integer "group_id"
-    t.integer "campaign_id"
+    t.string "sponsorable_type"
+    t.bigint "sponsorable_id"
+    t.index ["sponsorable_type", "sponsorable_id"], name: "index_sponsors_on_sponsorable_type_and_sponsorable_id"
   end
 
   create_table "survey_managers", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
