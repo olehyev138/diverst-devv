@@ -26,8 +26,9 @@ const styles = theme => ({
 });
 
 export function NewsLinkListItem(props) {
-  const { newsLink } = props;
-
+  const { newsItem } = props;
+  const newsLink = newsItem.news_link;
+  const { links } = props;
   return (
     <Card>
       <CardContent>
@@ -45,18 +46,52 @@ export function NewsLinkListItem(props) {
           <React.Fragment>
             <Box mb={2} />
             <Typography variant='body2' color='textSecondary'>
-              {`Submitted by ${newsLink.author.first_name} ${newsLink.owner.last_name}`}
+              {`Submitted by ${newsLink.author.first_name} ${newsLink.author.last_name}`}
             </Typography>
           </React.Fragment>
         ) : <React.Fragment />
         }
       </CardContent>
+      {props.links && props.newsItem && (
+        <CardActions>
+          <Button
+            size='small'
+            color='primary'
+            to={props.links.newsLinkEdit(newsItem.id)}
+            component={WrappedNavLink}
+          >
+            <DiverstFormattedMessage {...messages.edit} />
+          </Button>
+          <Button
+            size='small'
+            to={links.newsLinkShow(props.groupId, newsItem.id)}
+            component={WrappedNavLink}
+          >
+            Comments
+          </Button>
+          <Button
+            size='small'
+            onClick={() => {
+              /* eslint-disable-next-line no-alert, no-restricted-globals */
+              if (confirm('Delete news link?'))
+                props.deleteNewsLinkBegin(newsItem.news_link);
+            }}
+          >
+            Delete
+          </Button>
+        </CardActions>
+      )}
     </Card>
   );
 }
 
 NewsLinkListItem.propTypes = {
-  newsLink: PropTypes.object
+  newsLink: PropTypes.object,
+  readonly: PropTypes.bool,
+  groupId: PropTypes.number,
+  newsItem: PropTypes.object,
+  links: PropTypes.object,
+  deleteNewsLinkBegin: PropTypes.func,
 };
 
 export default compose(

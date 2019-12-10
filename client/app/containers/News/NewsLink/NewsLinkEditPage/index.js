@@ -1,4 +1,6 @@
-import React, { memo, useEffect, useContext } from 'react';
+import React, {
+  memo, useEffect, useState, useContext
+} from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
@@ -18,16 +20,13 @@ import { selectUser } from 'containers/Shared/App/selectors';
 import { selectNewsItem, selectIsCommitting, selectIsFormLoading } from 'containers/News/selectors';
 
 import {
-  getNewsItemBegin,
-  createGroupMessageCommentBegin,
-  newsFeedUnmount,
-  getNewsItemsBegin, deleteGroupMessageBegin, deleteNewsLinkBegin, deleteSocialLinkBegin,
-  deleteGroupMessageCommentBegin
+  getNewsItemBegin, updateNewsLinkBegin,
+  newsFeedUnmount
 } from 'containers/News/actions';
 
-import GroupMessage from 'components/News/GroupMessage/GroupMessage';
+import NewsLinkForm from 'components/News/NewsLink/NewsLinkForm';
 
-export function GroupMessagePage(props) {
+export function NewsLinkEditPage(props) {
   useInjectReducer({ key: 'news', reducer });
   useInjectSaga({ key: 'news', saga });
 
@@ -38,20 +37,19 @@ export function GroupMessagePage(props) {
 
   useEffect(() => {
     const newsItemId = rs.params('item_id');
-
-    // get news item & comments specified in path
     props.getNewsItemBegin({ id: newsItemId });
 
     return () => props.newsFeedUnmount();
   }, []);
 
-  const { currentUser, currentNewsItem } = props;
-
+  const { currentUser, currentGroup, currentNewsItem } = props;
   return (
-    <GroupMessage
-      commentAction={props.createGroupMessageCommentBegin}
-      deleteGroupMessageCommentBegin={props.deleteGroupMessageCommentBegin}
-      currentUserId={currentUser.id}
+    <NewsLinkForm
+      edit
+      newsLinkAction={props.updateNewsLinkBegin}
+      buttonText='Update'
+      currentUser={currentUser}
+      currentGroup={currentGroup}
       newsItem={currentNewsItem}
       links={links}
       isCommitting={props.isCommitting}
@@ -60,11 +58,9 @@ export function GroupMessagePage(props) {
   );
 }
 
-GroupMessagePage.propTypes = {
+NewsLinkEditPage.propTypes = {
   getNewsItemBegin: PropTypes.func,
-  updateGroupMessageBegin: PropTypes.func,
-  createGroupMessageCommentBegin: PropTypes.func,
-  deleteGroupMessageCommentBegin: PropTypes.func,
+  updateNewsLinkBegin: PropTypes.func,
   newsFeedUnmount: PropTypes.func,
   currentUser: PropTypes.object,
   currentGroup: PropTypes.object,
@@ -81,12 +77,11 @@ const mapStateToProps = createStructuredSelector({
   isFormLoading: selectIsFormLoading(),
 });
 
-const mapDispatchToProps = dispatch => ({
-  getNewsItemBegin: payload => dispatch(getNewsItemBegin(payload)),
-  createGroupMessageCommentBegin: payload => dispatch(createGroupMessageCommentBegin(payload)),
-  deleteGroupMessageCommentBegin: payload => dispatch(deleteGroupMessageCommentBegin(payload)),
-  newsFeedUnmount: () => dispatch(newsFeedUnmount()),
-});
+const mapDispatchToProps = {
+  getNewsItemBegin,
+  updateNewsLinkBegin,
+  newsFeedUnmount
+};
 
 const withConnect = connect(
   mapStateToProps,
@@ -96,4 +91,4 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(GroupMessagePage);
+)(NewsLinkEditPage);

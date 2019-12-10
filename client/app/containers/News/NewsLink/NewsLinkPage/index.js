@@ -19,21 +19,21 @@ import { selectNewsItem, selectIsCommitting, selectIsFormLoading } from 'contain
 
 import {
   getNewsItemBegin,
-  createGroupMessageCommentBegin,
+  createNewsLinkCommentBegin,
   newsFeedUnmount,
-  getNewsItemsBegin, deleteGroupMessageBegin, deleteNewsLinkBegin, deleteSocialLinkBegin,
-  deleteGroupMessageCommentBegin
+  deleteNewsLinkCommentBegin
 } from 'containers/News/actions';
 
-import GroupMessage from 'components/News/GroupMessage/GroupMessage';
+import NewsLink from 'components/News/NewsLink/NewsLink';
 
-export function GroupMessagePage(props) {
+export function NewsLinkPage(props) {
   useInjectReducer({ key: 'news', reducer });
   useInjectSaga({ key: 'news', saga });
 
   const rs = new RouteService(useContext);
   const links = {
     newsFeedIndex: ROUTES.group.news.index.path(rs.params('group_id')),
+    newsLinkEdit: id => ROUTES.group.news.news_links.edit.path(rs.params('group_id'), id),
   };
 
   useEffect(() => {
@@ -45,12 +45,12 @@ export function GroupMessagePage(props) {
     return () => props.newsFeedUnmount();
   }, []);
 
-  const { currentUser, currentNewsItem } = props;
+  const { currentUser, currentGroup, currentNewsItem } = props;
 
   return (
-    <GroupMessage
-      commentAction={props.createGroupMessageCommentBegin}
-      deleteGroupMessageCommentBegin={props.deleteGroupMessageCommentBegin}
+    <NewsLink
+      commentAction={props.createNewsLinkCommentBegin}
+      deleteNewsLinkCommentBegin={props.deleteNewsLinkCommentBegin}
       currentUserId={currentUser.id}
       newsItem={currentNewsItem}
       links={links}
@@ -60,11 +60,11 @@ export function GroupMessagePage(props) {
   );
 }
 
-GroupMessagePage.propTypes = {
+NewsLinkPage.propTypes = {
   getNewsItemBegin: PropTypes.func,
-  updateGroupMessageBegin: PropTypes.func,
-  createGroupMessageCommentBegin: PropTypes.func,
-  deleteGroupMessageCommentBegin: PropTypes.func,
+  updateNewsLinkBegin: PropTypes.func,
+  createNewsLinkCommentBegin: PropTypes.func,
+  deleteNewsLinkCommentBegin: PropTypes.func,
   newsFeedUnmount: PropTypes.func,
   currentUser: PropTypes.object,
   currentGroup: PropTypes.object,
@@ -83,8 +83,8 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = dispatch => ({
   getNewsItemBegin: payload => dispatch(getNewsItemBegin(payload)),
-  createGroupMessageCommentBegin: payload => dispatch(createGroupMessageCommentBegin(payload)),
-  deleteGroupMessageCommentBegin: payload => dispatch(deleteGroupMessageCommentBegin(payload)),
+  createNewsLinkCommentBegin: payload => dispatch(createNewsLinkCommentBegin(payload)),
+  deleteNewsLinkCommentBegin: payload => dispatch(deleteNewsLinkCommentBegin(payload)),
   newsFeedUnmount: () => dispatch(newsFeedUnmount()),
 });
 
@@ -96,4 +96,4 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(GroupMessagePage);
+)(NewsLinkPage);
