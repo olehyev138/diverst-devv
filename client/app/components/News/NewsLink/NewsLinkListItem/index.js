@@ -3,7 +3,6 @@
  * News Link List Item Component
  *
  */
-
 import React, {
   memo, useRef, useState, useEffect
 } from 'react';

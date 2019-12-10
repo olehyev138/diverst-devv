@@ -3,7 +3,6 @@
  * Social Link List Item Component
  *
  */
-
 import React, {
   memo, useRef, useState, useEffect
 } from 'react';
@@ -31,7 +30,6 @@ export function SocialLinkListItem(props) {
   const { links } = props;
   const newsItemId = newsItem.id;
   const groupId = socialLink.group_id;
-
   return (
     <Card>
       <CardContent>

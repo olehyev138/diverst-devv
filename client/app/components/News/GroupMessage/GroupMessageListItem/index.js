@@ -3,7 +3,6 @@
  * Group Message List Item Component
  *
  */
-
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux/';
@@ -83,7 +82,6 @@ export function GroupMessageListItem(props) {
               if (confirm('Delete group message?'))
                 props.deleteGroupMessageBegin(newsItem.group_message);
             }}
-            // component={WrappedNavLink}
           >
             Delete
           </Button>
