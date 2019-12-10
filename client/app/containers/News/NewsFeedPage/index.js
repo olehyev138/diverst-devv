@@ -17,22 +17,12 @@ import { deleteSocialLinkBegin, getNewsItemsBegin, newsFeedUnmount, deleteNewsLi
 
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
-
 import NewsFeed from 'components/News/NewsFeed';
-import EventsList from "../../../components/Event/EventsList";
 
 const NewsFeedTypes = Object.freeze({
   approved: 0,
   not_approved: 1,
 });
-
-
-// const defaultParams = {
-//   count: 5,
-//   page: 0,
-//   order: 'asc',
-//   id: news_feed_id,
-// };
 
 export function NewsFeedPage(props, context) {
   useInjectReducer({ key: 'news', reducer });
@@ -159,11 +149,6 @@ const mapStateToProps = createStructuredSelector({
   newsItemsTotal: selectNewsItemsTotal(),
   isLoading: selectIsLoading(),
 });
-
-// const mapDispatchToProps = {
-//   getNewsItemsBegin,
-//   newsFeedUnmount,
-// };
 
 const mapDispatchToProps = dispatch => ({
   getNewsItemsBegin: payload => dispatch(getNewsItemsBegin(payload)),

@@ -9,30 +9,22 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
-
 import {
   Box, Backdrop, Paper, Link,
   Button, Card, CardActions, CardContent, Grid, Tab, Typography,
 } from '@material-ui/core';
 import { SpeedDial, SpeedDialAction, SpeedDialIcon } from '@material-ui/lab';
 import { withStyles } from '@material-ui/core/styles';
-
 import MessageIcon from '@material-ui/icons/Message';
 import NewsIcon from '@material-ui/icons/Description';
 import SocialIcon from '@material-ui/icons/Share';
-
 import ResponsiveTabs from 'components/Shared/ResponsiveTabs';
-
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import GroupMessageListItem from 'components/News/GroupMessage/GroupMessageListItem';
 import NewsLinkListItem from 'components/News/NewsLink/NewsLinkListItem';
 import SocialLinkListItem from 'components/News/SocialLink/SocialLinkListItem';
-
 import DiverstPagination from 'components/Shared/DiverstPagination';
-
 import DiverstLoader from 'components/Shared/DiverstLoader';
-import messages from "../../../containers/Event/messages";
-import {customTexts} from "../../../utils/customTextHelpers";
 
 const styles = theme => ({
   newsItem: {
