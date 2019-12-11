@@ -1,7 +1,7 @@
 require: rubocop-performance
 
 AllCops:
-  TargetRubyVersion: 2.3
+  TargetRubyVersion: 2.6.0
   # Rubocop has a ton of cops, disable by default and enable the ones we need
   DisabledByDefault: true
   Exclude:

@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Campaign, type: :model do
   describe 'when validating' do
-    let(:campaign) { build_stubbed(:campaign) }
+    let(:campaign) { build(:campaign) }
 
     it { expect(campaign).to define_enum_for(:status).with([:published, :draft]) }
     it { expect(campaign).to belong_to(:enterprise) }
@@ -29,16 +29,11 @@ RSpec.describe Campaign, type: :model do
     it { expect(campaign).to validate_presence_of(:end) }
     it { expect(campaign).to validate_presence_of(:groups).with_message('Please select at least 1 group') }
 
-    # Paperclip
-    #    describe 'paperclip validation' do
-    #      # paperclip_attributes = [:image, :banner]
-    #      # paperclip_attributes.each do |paperclip_attribute|
-    #        # it { should have_attached_file(paperclip_attribute) }
-    #        it { should validate_attachment_content_type(paperclip_attribute).allowing('image/png', 'image/gif')
-    #            .rejecting('text/plain', 'text/xml')
-    #        }
-    # end
-    # end
+    # ActiveStorage
+    it { expect(campaign).to have_attached_file(:image) }
+    it { expect(campaign).to validate_attachment_content_type(:image, AttachmentHelper.common_image_types) }
+    it { expect(campaign).to have_attached_file(:banner) }
+    it { expect(campaign).to validate_attachment_content_type(:banner, AttachmentHelper.common_image_types) }
 
     it 'is valid' do
       expect(campaign).to be_valid
@@ -47,19 +42,17 @@ RSpec.describe Campaign, type: :model do
 
   describe '#image_location' do
     it 'returns the actual logo location' do
-      campaign = create(:campaign, image: File.new('spec/fixtures/files/verizon_logo.png'))
+      campaign = create(:campaign, image: { io: File.open('spec/fixtures/files/verizon_logo.png'), filename: 'file.png' })
 
       expect(campaign.image_location).to_not be nil
-      expect(campaign.image_location).to_not eq '/assets/missing.png'
     end
   end
 
   describe '#banner_location' do
     it 'returns the actual banner location' do
-      campaign = create(:campaign, banner: File.new('spec/fixtures/files/verizon_logo.png'))
+      campaign = create(:campaign, banner: { io: File.open('spec/fixtures/files/verizon_logo.png'), filename: 'file.png' })
 
       expect(campaign.banner_location).to_not be nil
-      expect(campaign.banner_location).to_not eq '/assets/missing.png'
     end
   end
 

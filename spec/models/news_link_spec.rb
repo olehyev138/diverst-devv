@@ -1,8 +1,9 @@
 require 'rails_helper'
+include ActionDispatch::TestProcess
 
 RSpec.describe NewsLink, type: :model do
   describe 'validations' do
-    let(:news_link) { build_stubbed(:news_link) }
+    let(:news_link) { build(:news_link) }
 
     it { expect(news_link).to validate_presence_of(:group_id) }
     it { expect(news_link).to validate_presence_of(:title) }
@@ -20,12 +21,10 @@ RSpec.describe NewsLink, type: :model do
     it { expect(news_link).to have_many(:news_link_photos).dependent(:destroy) }
     it { expect(news_link).to have_one(:news_feed_link) }
     it { expect(news_link).to accept_nested_attributes_for(:photos).allow_destroy(true) }
-    # Paperclip
-    #    it { expect(news_link).to have_attached_file(:picture) }
-    #    it { expect(news_link).to validate_attachment_content_type(:picture)
-    #        .allowing('image/png', 'image/jpeg', 'image/jpg')
-    #        .rejecting('text/xml', 'text/plain')
-    #    }
+
+    # ActiveStorage
+    it { expect(news_link).to have_attached_file(:picture) }
+    it { expect(news_link).to validate_attachment_content_type(:picture, AttachmentHelper.common_image_types) }
 
     it 'validates url length' do
       expect(build(:news_link, url: 'www.goodurl.com')).to be_valid
@@ -38,21 +37,24 @@ RSpec.describe NewsLink, type: :model do
       user = create(:user)
       group = create(:group, enterprise: user.enterprise)
       request = Request.create_request(user)
-      url = Faker::LoremPixel.image(secure: false)
+
+      picture = fixture_file_upload('spec/fixtures/files/verizon_logo.png', 'image/png')
+      photo_file = fixture_file_upload('spec/fixtures/files/verizon_logo.png', 'image/png')
+
       payload = {
         news_link: {
           title: 'Test',
           group_id: group.id,
           author_id: user.id,
           description: Faker::Lorem.sentence,
-          picture: url,
-          photos_attributes: [{ file: File.open('spec/fixtures/files/verizon_logo.png') }]
+          picture: picture,
+          photos_attributes: [{ file: photo_file }]
         }
       }
       params = ActionController::Parameters.new(payload)
       created = NewsLink.build(request, params.permit!)
 
-      expect(created.picture.presence).to_not be nil
+      expect(created.picture.attached?).to be true
       expect(created.photos.exists?).to_not be false
       expect(created.photos.first.presence).to_not be nil
     end

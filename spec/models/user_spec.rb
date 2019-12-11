@@ -110,11 +110,9 @@ RSpec.describe User do
         it { expect(user).to have_many(:shared_metrics_dashboards) }
       end
 
-      # Paperclip
-      #      context 'validate paperclip' do
-      #        it { expect(user).to have_attached_file(:avatar) }
-      #        it { expect(user).to validate_attachment_content_type(:avatar).allowing('image/png', 'image/gif').rejecting('text/plain', 'text/xml') }
-      #      end
+      # ActiveStorage
+      it { expect(user).to have_attached_file(:avatar) }
+      it { expect(user).to validate_attachment_content_type(:avatar, AttachmentHelper.common_image_types) }
     end
 
     describe 'test callbacks' do
@@ -253,10 +251,9 @@ RSpec.describe User do
 
   describe '#avatar_location' do
     it 'returns the actual avatar location' do
-      user = create(:user, avatar: File.new('spec/fixtures/files/verizon_logo.png'))
+      user = create(:user, avatar: { io: File.open('spec/fixtures/files/verizon_logo.png'), filename: 'file.png' })
 
       expect(user.avatar_location).to_not be nil
-      expect(user.avatar_location).to_not eq '/assets/missing.png'
     end
   end
 
@@ -314,10 +311,13 @@ RSpec.describe User do
   end
 
   describe '#build' do
-    it 'sets the avatar for user from url when creating user' do
+    it 'sets the avatar when creating user' do
       user = create(:user)
       allow(URI).to receive(:parse).and_return(File.open('spec/fixtures/files/verizon_logo.png'))
       request = Request.create_request(user)
+
+      avatar = fixture_file_upload('spec/fixtures/files/verizon_logo.png', 'image/png')
+
       payload = {
         user: {
           first_name: 'Save',
@@ -326,27 +326,13 @@ RSpec.describe User do
           email: 'avatar@gmail.com',
           user_role_id: user.user_role_id,
           password: SecureRandom.hex(8),
-          avatar_url: Faker::LoremPixel.image(secure: false)
+          avatar: avatar
         }
       }
       params = ActionController::Parameters.new(payload)
       created = User.build(request, params.permit!)
 
-      expect(created.avatar.presence).to_not be nil
-    end
-  end
-
-  describe '#avatar_url' do
-    it 'sets the avatar for user from url' do
-      user = create(:user)
-      allow(URI).to receive(:parse).and_return(File.open('spec/fixtures/files/verizon_logo.png'))
-      expect(user.avatar_file_name).to be nil
-
-      user.avatar_url = Faker::LoremPixel.image(secure: false)
-      user.save!
-      user.reload
-
-      expect(user.avatar_file_name).to_not be nil
+      expect(created.avatar.attached?).to be true
     end
   end
 
@@ -375,7 +361,6 @@ RSpec.describe User do
   end
 
   describe '#badges' do
-    # TODO - Paperclip
     before { pending }
 
     let(:user) { build_stubbed(:user, points: 100) }

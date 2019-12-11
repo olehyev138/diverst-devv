@@ -3,6 +3,7 @@ class Enterprise < ApplicationRecord
   include PublicActivity::Common
   include Enterprise::Actions
   include TimeZoneValidation
+  include CustomTextHelpers
 
   extend Enumerize
 
@@ -76,19 +77,11 @@ class Enterprise < ApplicationRecord
   validates_length_of :redirect_email_contact, maximum: 191
   validates_length_of :default_from_email_display_name, maximum: 191
   validates_length_of :default_from_email_address, maximum: 191
-  validates_length_of :onboarding_sponsor_media_content_type, maximum: 191
-  validates_length_of :onboarding_sponsor_media_file_name, maximum: 191
   validates_length_of :company_video_url, maximum: 191
 
-  validates_length_of :xml_sso_config_content_type, maximum: 191
-  validates_length_of :xml_sso_config_file_name, maximum: 191
   validates_length_of :privacy_statement, maximum: 65535
   validates_length_of :home_message, maximum: 65535
-  validates_length_of :banner_content_type, maximum: 191
-  validates_length_of :banner_file_name, maximum: 191
   validates_length_of :cdo_message, maximum: 65535
-  validates_length_of :cdo_picture_content_type, maximum: 191
-  validates_length_of :cdo_picture_file_name, maximum: 191
   validates_length_of :yammer_token, maximum: 191
   validates_length_of :saml_last_name_mapping, maximum: 191
   validates_length_of :saml_first_name_mapping, maximum: 191
@@ -100,20 +93,22 @@ class Enterprise < ApplicationRecord
   validates_length_of :name, maximum: 191
   validates :idp_sso_target_url, url: { allow_blank: true }
 
-  has_attached_file :cdo_picture, styles: { medium: '1000x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: :private
-  validates_attachment_content_type :cdo_picture, content_type: %r{\Aimage\/.*\Z}
+  # ActiveStorage
+  has_one_attached :banner
+  validates :banner, content_type: AttachmentHelper.common_image_types
+  has_one_attached :cdo_picture
+  validates :cdo_picture, content_type: AttachmentHelper.common_image_types
+  has_one_attached :xml_sso_config
+  validates :xml_sso_config, content_type: 'text/xml'
+  has_one_attached :sponsor_media
+  has_one_attached :onboarding_sponsor_media
 
-  has_attached_file :banner
-  validates_attachment_content_type :banner, content_type: /\Aimage\/.*\Z/
-
-  has_attached_file :xml_sso_config
-  validates_attachment_content_type :xml_sso_config, content_type: 'text/xml'
-
-  has_attached_file :sponsor_media, s3_permissions: :private
-  do_not_validate_attachment_file_type :sponsor_media
-
-  has_attached_file :onboarding_sponsor_media, s3_permissions: :private
-  do_not_validate_attachment_file_type :onboarding_sponsor_media
+  # TODO Remove after Paperclip to ActiveStorage migration
+  has_attached_file :banner_paperclip
+  has_attached_file :cdo_picture_paperclip, s3_permissions: 'private'
+  has_attached_file :xml_sso_config_paperclip
+  has_attached_file :sponsor_media_paperclip, s3_permissions: 'private'
+  has_attached_file :onboarding_sponsor_media_paperclip, s3_permissions: 'private'
 
   validates_format_of :redirect_email_contact, with: /\A[^@\s]+@[^@\s]+\z/, allow_blank: true
 
@@ -122,7 +117,7 @@ class Enterprise < ApplicationRecord
   end
 
   def no_expiry_age_set_and_auto_archive_true?
-    return true if auto_archive? && expiry_age_for_resources == 0
+    true if auto_archive? && expiry_age_for_resources == 0
   end
 
   def archive_switch
@@ -157,9 +152,10 @@ class Enterprise < ApplicationRecord
 
   def saml_settings
     # if xml config file is present - take settings from it
-    if xml_sso_config?
+    if xml_sso_config.attached?
+      # ActiveStorage
       idp_metadata_parser = OneLogin::RubySaml::IdpMetadataParser.new
-      file_content = Paperclip.io_adapters.for(xml_sso_config).read
+      file_content = xml_sso_config.download
       settings = idp_metadata_parser.parse(file_content)
     else # otherwise - initialize empty settings
       settings = OneLogin::RubySaml::Settings.new

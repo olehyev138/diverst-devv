@@ -2,8 +2,8 @@ require 'rails_helper'
 
 RSpec.describe NewsLinkSerializer, type: :serializer do
   it 'returns associations' do
-    news_link = create(:news_link, picture: File.new('spec/fixtures/files/verizon_logo.png'))
-    create(:news_link_photo, news_link: news_link, file: File.new('spec/fixtures/files/verizon_logo.png'))
+    news_link = create(:news_link, picture: { io: File.open('spec/fixtures/files/verizon_logo.png'), filename: 'file.png' })
+    create(:news_link_photo, news_link: news_link, file: { io: File.open('spec/fixtures/files/verizon_logo.png'), filename: 'file.png' })
     serializer = NewsLinkSerializer.new(news_link)
 
     expect(serializer.serializable_hash[:group]).to_not be_nil
