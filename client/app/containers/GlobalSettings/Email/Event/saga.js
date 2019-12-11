@@ -28,11 +28,10 @@ export function* getEvent(action) {
 
     yield put(getEventSuccess(response.data));
   } catch (err) {
-    console.log(err);
     yield put(getEventError(err));
 
     // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to get event', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: 'Failed to get mailing event', options: { variant: 'warning' } }));
   }
 }
 
@@ -45,7 +44,7 @@ export function* getEvents(action) {
     yield put(getEventsError(err));
 
     // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to get events', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: 'Failed to get mailing events', options: { variant: 'warning' } }));
   }
 }
 
@@ -54,26 +53,28 @@ export function* createEvent(action) {
     const response = { data: 'API CALL' };
 
     yield put(createEventSuccess({}));
-    yield put(showSnackbar({ message: 'Successfully created event', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: 'Successfully created mailing event', options: { variant: 'success' } }));
   } catch (err) {
     yield put(createEventError(err));
 
     // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to create event', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: 'Failed to create mailing event', options: { variant: 'warning' } }));
   }
 }
 
 export function* updateEvent(action) {
   try {
-    const response = { data: 'API CALL' };
+    const payload = { clockwork_database_event: action.payload };
+    const response = yield call(api.emailEvents.update.bind(api.emailEvents), payload.clockwork_database_event.id, payload);
 
     yield put(updateEventSuccess({}));
-    yield put(showSnackbar({ message: 'Successfully updated event', options: { variant: 'success' } }));
+    yield put(push(ROUTES.admin.system.globalSettings.mailEvents.index.path()));
+    yield put(showSnackbar({ message: 'Successfully updated mailing event', options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateEventError(err));
 
     // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to update event', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: 'Failed to update mailing event', options: { variant: 'warning' } }));
   }
 }
 
@@ -82,12 +83,12 @@ export function* deleteEvent(action) {
     const response = { data: 'API CALL' };
 
     yield put(deleteEventSuccess({}));
-    yield put(showSnackbar({ message: 'Successfully deleted event', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: 'Successfully deleted mailing event', options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteEventError(err));
 
     // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to delete event', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: 'Failed to delete mailing event', options: { variant: 'warning' } }));
   }
 }
 
