@@ -21,7 +21,7 @@ import NewsFeed from 'components/News/NewsFeed';
 
 const NewsFeedTypes = Object.freeze({
   approved: 0,
-  not_approved: 1,
+  pending: 1,
 });
 
 export function NewsFeedPage(props, context) {
@@ -85,8 +85,8 @@ export function NewsFeedPage(props, context) {
       case NewsFeedTypes.approved:
         getNewsFeedItems(['approved'], true);
         break;
-      case NewsFeedTypes.not_approved:
-        getNewsFeedItems(['not_approved'], true);
+      case NewsFeedTypes.pending:
+        getNewsFeedItems(['pending'], true);
         break;
       default:
         break;
@@ -95,7 +95,6 @@ export function NewsFeedPage(props, context) {
 
   const handlePagination = (payload) => {
     const newParams = { ...params, count: payload.count, page: payload.page };
-
     props.getNewsItemsBegin(newParams);
     setParams(newParams);
   };

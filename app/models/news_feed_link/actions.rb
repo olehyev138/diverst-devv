@@ -5,7 +5,7 @@ module NewsFeedLink::Actions
 
   module ClassMethods
     def valid_scopes
-      ['approved', 'not_approved', 'combined_news_links']
+      ['approved', 'pending', 'combined_news_links']
     end
   end
 end
