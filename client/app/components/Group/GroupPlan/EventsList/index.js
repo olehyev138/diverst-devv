@@ -155,6 +155,7 @@ export function EventsList(props) {
         <DiverstPagination
           isLoading={props.isLoading}
           rowsPerPage={props.params.count}
+          rowsPerPageOptions={props.rowsPerPageOptions}
           count={props.outcomesTotal}
           handlePagination={props.handlePagination}
         />
@@ -170,6 +171,7 @@ EventsList.propTypes = {
   isLoading: PropTypes.bool,
   handlePagination: PropTypes.func,
   params: PropTypes.object,
+  rowsPerPageOptions: PropTypes.array,
   links: PropTypes.shape({
     outcomeIndex: PropTypes.string,
     eventNew: PropTypes.string,

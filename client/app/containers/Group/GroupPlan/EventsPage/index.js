@@ -28,7 +28,7 @@ export function EventsPage(props) {
 
   const defaultParams = Object.freeze({
     group_id: rs.params('group_id'),
-    count: 5,
+    count: 2,
     page: 0,
   });
 
@@ -69,6 +69,7 @@ export function EventsPage(props) {
           isLoading={isLoading}
           handlePagination={handlePagination}
           params={params}
+          rowsPerPageOptions={[1, 2, 3, 5]}
         />
       )}
       {...props}
