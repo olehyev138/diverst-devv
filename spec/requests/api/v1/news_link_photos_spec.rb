@@ -2,6 +2,8 @@ require 'rails_helper'
 
 model = 'NewsLinkPhoto'
 RSpec.describe "#{model.pluralize}", type: :request do
+  include ActiveJob::TestHelper
+
   let(:enterprise) { create(:enterprise) }
   let(:api_key) { create(:api_key) }
   let(:user) { create(:user, password: 'password', enterprise: enterprise) }
@@ -39,7 +41,10 @@ RSpec.describe "#{model.pluralize}", type: :request do
 
   describe '#create' do
     it 'creates an item' do
-      post "/api/v1/#{route}", params: { "#{route.singularize}" => build(route.singularize.to_sym).attributes }, headers: headers
+      params = build(route.singularize.to_sym).attributes
+      params[:file] = fixture_file_upload('spec/fixtures/files/verizon_logo.png', 'image/png')
+
+      post "/api/v1/#{route}", params: { "#{route.singularize}" => params }, headers: headers
       expect(response).to have_http_status(201)
     end
 

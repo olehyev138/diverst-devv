@@ -3,15 +3,15 @@ class Reward < ApplicationRecord
 
   belongs_to :enterprise
   belongs_to :responsible, class_name: 'User', foreign_key: 'responsible_id'
-  # Paperclip
-  # has_attached_file :picture,
-  #                    styles: { thumb: '120x120>' },
-  #                    default_url: ActionController::Base.helpers.image_path('/assets/missing.png')
 
-  # validates_attachment_content_type :picture, content_type: %r{\Aimage\/.*\Z}
+  # ActiveStorage
+  has_one_attached :picture
+  validates :picture, content_type: AttachmentHelper.common_image_types
+
+  # TODO Remove after Paperclip to ActiveStorage migration
+  has_attached_file :picture_paperclip
+
   validates_length_of :description, maximum: 65535
-  validates_length_of :picture_content_type, maximum: 191
-  validates_length_of :picture_file_name, maximum: 191
   validates_length_of :label, maximum: 191
   validates :enterprise, presence: true
   validates :points, numericality: { only_integer: true, greater_than_or_equal_to: 0 }, presence: true

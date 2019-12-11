@@ -1,8 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe Initiative, type: :model do
+  include ActiveJob::TestHelper
+
   describe 'when validating' do
-    let(:initiative) { build_stubbed(:initiative) }
+    let(:initiative) { build(:initiative) }
 
     it { expect(initiative).to belong_to(:pillar) }
     it { expect(initiative).to belong_to(:owner).class_name('User') }
@@ -35,9 +37,9 @@ RSpec.describe Initiative, type: :model do
     it { expect(initiative).to have_many(:initiative_users) }
     it { expect(initiative).to have_many(:attendees).through(:initiative_users).source(:user) }
 
-    # Paperclip
-    # it { expect(initiative).to have_attached_file(:picture) }
-    # it { expect(initiative).to validate_attachment_content_type(:picture).allowing('image/png', 'image/gif').rejecting('text/plain', 'text/xml') }
+    # ActiveStorage
+    it { expect(initiative).to have_attached_file(:picture) }
+    it { expect(initiative).to validate_attachment_content_type(:picture, AttachmentHelper.common_image_types) }
 
     it { expect(initiative).to validate_presence_of(:start) }
     it { expect(initiative).to validate_presence_of(:end) }
@@ -71,61 +73,34 @@ RSpec.describe Initiative, type: :model do
   describe '#build' do
     it 'sets the picture for initiative from url when creating initiative' do
       user = create(:user)
-      file = File.open('spec/fixtures/files/verizon_logo.png')
       group = create(:group, enterprise: user.enterprise)
       outcome = create(:outcome, group: group)
       pillar = create(:pillar, outcome: outcome)
+
+      file = fixture_file_upload('spec/fixtures/files/verizon_logo.png', 'image/png')
+
       request = Request.create_request(user)
-      payload = { initiative: { name: 'Save', pillar_id: pillar.id, picture: file, owner_group_id: group.id, owner_id: user.id, start: Date.today, end: Date.tomorrow + 1.day } }
+      payload = { initiative: { name: 'Save', pillar_id: pillar.id, picture: file, owner_group_id: group.id, owner_id: user.id, start: Date.today, end: Date.tomorrow + 1.day, picture: file } }
       params = ActionController::Parameters.new(payload)
       created = Initiative.build(request, params.permit!)
 
-      expect(created.picture.presence).to_not be nil
+      expect(created.picture.attached?).to be true
     end
   end
 
   describe '#picture_location' do
     it 'returns the actual picture location' do
-      initiative = create(:initiative, picture: File.new('spec/fixtures/files/verizon_logo.png'))
+      initiative = create(:initiative, picture: { io: File.open('spec/fixtures/files/verizon_logo.png'), filename: 'file.png' })
 
       expect(initiative.picture_location).to_not be nil
-      expect(initiative.picture_location).to_not eq '/assets/missing.png'
-    end
-  end
-
-  describe '#picture_url' do
-    it 'sets the picture for initiative from url' do
-      initiative = create(:initiative, picture: nil)
-      allow(URI).to receive(:parse).and_return(File.open('spec/fixtures/files/verizon_logo.png'))
-      expect(initiative.picture_file_name).to be nil
-
-      initiative.picture_url = Faker::LoremPixel.image(secure: false)
-      initiative.save!
-      initiative.reload
-
-      expect(initiative.picture_file_name).to_not be nil
     end
   end
 
   describe '#qr_code_location' do
     it 'returns the actual qr_code location' do
-      initiative = create(:initiative, qr_code: File.new('spec/fixtures/files/verizon_logo.png'))
+      initiative = create(:initiative, qr_code: { io: File.open('spec/fixtures/files/verizon_logo.png'), filename: 'file.png' })
 
       expect(initiative.qr_code_location).to_not be nil
-      expect(initiative.qr_code_location).to_not eq '/assets/missing.png'
-    end
-  end
-
-  describe '#qr_code_url' do
-    it 'sets the qr_code for initiative from url' do
-      initiative = create(:initiative, qr_code: nil)
-      expect(initiative.qr_code_file_name).to be nil
-
-      initiative.qr_code_url = Faker::LoremPixel.image(secure: false)
-      initiative.save!
-      initiative.reload
-
-      expect(initiative.qr_code_file_name).to_not be nil
     end
   end
 

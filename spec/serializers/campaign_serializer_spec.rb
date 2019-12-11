@@ -2,7 +2,9 @@ require 'rails_helper'
 
 RSpec.describe CampaignSerializer, type: :serializer do
   it 'returns fields for campaign' do
-    campaign = create(:campaign, image: File.new('spec/fixtures/files/verizon_logo.png'), banner: File.new('spec/fixtures/files/verizon_logo.png'))
+    campaign = create(:campaign,
+                      image: { io: File.open('spec/fixtures/files/verizon_logo.png'), filename: 'file.png' },
+                      banner: { io: File.open('spec/fixtures/files/verizon_logo.png'), filename: 'file.png' })
     create_list(:question, 3, campaign: campaign)
     serializer = CampaignSerializer.new(campaign)
 

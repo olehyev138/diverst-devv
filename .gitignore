@@ -50,4 +50,7 @@ cookbooks/
 #RubyMine files
 /.idea
 
+# ActiveStorage local storage
+/storage
+
 config/application.yml

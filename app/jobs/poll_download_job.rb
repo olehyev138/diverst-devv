@@ -11,9 +11,7 @@ class PollDownloadJob < ActiveJob::Base
     csv = poll.responses_csv
     file = CsvFile.new(user_id: user.id, download_file_name: "#{poll.title}_responses")
 
-    file.download_file = StringIO.new(csv)
-    file.download_file.instance_write(:content_type, 'text/csv')
-    file.download_file.instance_write(:file_name, "#{poll.title}_responses.csv")
+    file.download_file.attach(io: StringIO.new(csv), filename: "#{file.download_file_name}.csv", content_type: 'text/csv')
 
     file.save!
   end

@@ -11,9 +11,7 @@ class GenericGraphsTopResourcesByViewsDownloadJob < ActiveJob::Base
     csv = demo ? enterprise.generic_graphs_demo_top_resources_by_views_csv : enterprise.generic_graphs_non_demo_top_resources_by_views_csv(from_date, to_date, scoped_by_models)
     file = CsvFile.new(user_id: user.id, download_file_name: 'views_per_resource')
 
-    file.download_file = StringIO.new(csv)
-    file.download_file.instance_write(:content_type, 'text/csv')
-    file.download_file.instance_write(:file_name, 'views_per_resource.csv')
+    file.download_file.attach(io: StringIO.new(csv), filename: "#{file.download_file_name}.csv", content_type: 'text/csv')
 
     file.save!
   end

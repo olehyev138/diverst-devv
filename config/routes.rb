@@ -250,5 +250,6 @@ Diverst::Application.routes.draw do
     end
   end
 
-  match '*a', to: 'diverst#routing_error', via: [:get, :post]
+  # Note the contraints that do not provide a routing error if we're looking for `rails/` because of ActiveStorage URLs
+  match '*a', to: 'diverst#routing_error', via: [:get, :post], constraints: lambda { |request| !request.path_parameters[:a].start_with?('rails/') }
 end

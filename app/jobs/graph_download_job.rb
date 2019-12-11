@@ -10,9 +10,7 @@ class GraphDownloadJob < ActiveJob::Base
     csv = graph.graph_csv(date_range, unset_series)
     file = CsvFile.new(user_id: user.id, download_file_name: "graph_#{ graph.id }")
 
-    file.download_file = StringIO.new(csv)
-    file.download_file.instance_write(:content_type, 'text/csv')
-    file.download_file.instance_write(:file_name, "graph_#{ graph.id }.csv")
+    file.download_file.attach(io: StringIO.new(csv), filename: "#{file.download_file_name}.csv", content_type: 'text/csv')
 
     file.save!
   end
