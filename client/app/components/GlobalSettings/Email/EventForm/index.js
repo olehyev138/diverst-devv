@@ -66,7 +66,6 @@ export function EventFormInner({
   ...props
 }) {
   const { intl } = props;
-  console.log(values);
 
   return (
     <React.Fragment>
