@@ -58,6 +58,7 @@ import EnterpriseConfigurationPage from 'containers/GlobalSettings/EnterpriseCon
 import SSOSettingsPage from 'containers/GlobalSettings/SSOSettingsPage/Loadable';
 import EmailsPage from 'containers/GlobalSettings/Email/Email/EmailsPage/Loadable';
 import EmailEditPage from 'containers/GlobalSettings/Email/Email/EmailEditPage/Loadable';
+import EmailEventEditPage from 'containers/GlobalSettings/Email/Event/EventEditPage/Loadable';
 
 /* Admin - System - User */
 import UsersPage from 'containers/User/UsersPage/Loadable';
@@ -198,4 +199,5 @@ export {
   SSOSettingsPage,
   EmailsPage,
   EmailEditPage,
+  EmailEventEditPage,
 };

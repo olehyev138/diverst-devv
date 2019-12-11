@@ -28,6 +28,7 @@ import mentoringSessions from 'api/mentoring_sessions/mentoring_sessions';
 import answers from 'api/answers/answers';
 import comments from 'api/comments/comments';
 import emails from 'api/emails/emails';
+import emailEvents from 'api/clockwork_database_events/clockwork_database_events';
 
 /* Metrics */
 import overviewGraphs from 'api/metrics/overview_graphs';
@@ -67,6 +68,7 @@ const Api = {
   mentorshipSessions,
   mentoringSessions,
   emails,
+  emailEvents,
   metrics: {
     overviewGraphs,
     userGraphs,

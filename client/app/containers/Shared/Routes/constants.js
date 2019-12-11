@@ -543,6 +543,14 @@ export const ROUTES = {
           edit: {
             path: (emailId = ':email_id') => `/admin/system/settings/emails/${emailId}/edit`
           },
+        },
+        mailEvents: {
+          index: {
+            path: () => '/admin/system/settings/emailEvents'
+          },
+          edit: {
+            path: (eventId = ':event_id') => `/admin/system/settings/emailEvents/${eventId}/edit`
+          },
         }
       }
     }
