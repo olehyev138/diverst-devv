@@ -11,15 +11,9 @@ import {
   GET_EMAILS_BEGIN,
   GET_EMAILS_SUCCESS,
   GET_EMAILS_ERROR,
-  CREATE_EMAIL_BEGIN,
-  CREATE_EMAIL_SUCCESS,
-  CREATE_EMAIL_ERROR,
   UPDATE_EMAIL_BEGIN,
   UPDATE_EMAIL_SUCCESS,
   UPDATE_EMAIL_ERROR,
-  DELETE_EMAIL_BEGIN,
-  DELETE_EMAIL_SUCCESS,
-  DELETE_EMAIL_ERROR,
   EMAILS_UNMOUNT,
 } from './constants';
 
@@ -65,27 +59,6 @@ export function getEmailsError(error) {
   };
 }
 
-export function createEmailBegin(payload) {
-  return {
-    type: CREATE_EMAIL_BEGIN,
-    payload,
-  };
-}
-
-export function createEmailSuccess(payload) {
-  return {
-    type: CREATE_EMAIL_SUCCESS,
-    payload,
-  };
-}
-
-export function createEmailError(error) {
-  return {
-    type: CREATE_EMAIL_ERROR,
-    error,
-  };
-}
-
 export function updateEmailBegin(payload) {
   return {
     type: UPDATE_EMAIL_BEGIN,
@@ -103,27 +76,6 @@ export function updateEmailSuccess(payload) {
 export function updateEmailError(error) {
   return {
     type: UPDATE_EMAIL_ERROR,
-    error,
-  };
-}
-
-export function deleteEmailBegin(payload) {
-  return {
-    type: DELETE_EMAIL_BEGIN,
-    payload,
-  };
-}
-
-export function deleteEmailSuccess(payload) {
-  return {
-    type: DELETE_EMAIL_SUCCESS,
-    payload,
-  };
-}
-
-export function deleteEmailError(error) {
-  return {
-    type: DELETE_EMAIL_ERROR,
     error,
   };
 }

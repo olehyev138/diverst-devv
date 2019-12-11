@@ -12,15 +12,9 @@ import {
   GET_EVENTS_BEGIN,
   GET_EVENTS_SUCCESS,
   GET_EVENTS_ERROR,
-  CREATE_EVENT_BEGIN,
-  CREATE_EVENT_SUCCESS,
-  CREATE_EVENT_ERROR,
   UPDATE_EVENT_BEGIN,
   UPDATE_EVENT_SUCCESS,
   UPDATE_EVENT_ERROR,
-  DELETE_EVENT_BEGIN,
-  DELETE_EVENT_SUCCESS,
-  DELETE_EVENT_ERROR,
   EVENTS_UNMOUNT,
 } from './constants';
 
@@ -67,23 +61,17 @@ function eventReducer(state = initialState, action) {
         draft.isFetchingEvents = false;
         break;
 
-      case CREATE_EVENT_BEGIN:
       case UPDATE_EVENT_BEGIN:
-      case DELETE_EVENT_BEGIN:
         draft.isCommitting = true;
         draft.hasChanged = false;
         break;
 
-      case CREATE_EVENT_SUCCESS:
       case UPDATE_EVENT_SUCCESS:
-      case DELETE_EVENT_SUCCESS:
         draft.isCommitting = false;
         draft.hasChanged = true;
         break;
 
-      case CREATE_EVENT_ERROR:
       case UPDATE_EVENT_ERROR:
-      case DELETE_EVENT_ERROR:
         draft.isCommitting = false;
         draft.hasChanged = false;
         break;

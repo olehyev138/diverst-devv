@@ -9,17 +9,13 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import {
   GET_EVENT_BEGIN,
   GET_EVENTS_BEGIN,
-  CREATE_EVENT_BEGIN,
   UPDATE_EVENT_BEGIN,
-  DELETE_EVENT_BEGIN,
 } from './constants';
 
 import {
   getEventSuccess, getEventError,
   getEventsSuccess, getEventsError,
-  createEventSuccess, createEventError,
   updateEventSuccess, updateEventError,
-  deleteEventSuccess, deleteEventError,
 } from './actions';
 
 export function* getEvent(action) {
@@ -44,21 +40,7 @@ export function* getEvents(action) {
     yield put(getEventsError(err));
 
     // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to get mailing events', options: { variant: 'warning' } }));
-  }
-}
-
-export function* createEvent(action) {
-  try {
-    const response = { data: 'API CALL' };
-
-    yield put(createEventSuccess({}));
-    yield put(showSnackbar({ message: 'Successfully created mailing event', options: { variant: 'success' } }));
-  } catch (err) {
-    yield put(createEventError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to create mailing event', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: 'Failed to get mailing event', options: { variant: 'warning' } }));
   }
 }
 
@@ -78,25 +60,9 @@ export function* updateEvent(action) {
   }
 }
 
-export function* deleteEvent(action) {
-  try {
-    const response = { data: 'API CALL' };
-
-    yield put(deleteEventSuccess({}));
-    yield put(showSnackbar({ message: 'Successfully deleted mailing event', options: { variant: 'success' } }));
-  } catch (err) {
-    yield put(deleteEventError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to delete mailing event', options: { variant: 'warning' } }));
-  }
-}
-
 
 export default function* EventSaga() {
   yield takeLatest(GET_EVENT_BEGIN, getEvent);
   yield takeLatest(GET_EVENTS_BEGIN, getEvents);
-  yield takeLatest(CREATE_EVENT_BEGIN, createEvent);
   yield takeLatest(UPDATE_EVENT_BEGIN, updateEvent);
-  yield takeLatest(DELETE_EVENT_BEGIN, deleteEvent);
 }

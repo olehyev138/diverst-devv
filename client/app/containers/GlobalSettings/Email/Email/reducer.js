@@ -12,15 +12,9 @@ import {
   GET_EMAILS_BEGIN,
   GET_EMAILS_SUCCESS,
   GET_EMAILS_ERROR,
-  CREATE_EMAIL_BEGIN,
-  CREATE_EMAIL_SUCCESS,
-  CREATE_EMAIL_ERROR,
   UPDATE_EMAIL_BEGIN,
   UPDATE_EMAIL_SUCCESS,
   UPDATE_EMAIL_ERROR,
-  DELETE_EMAIL_BEGIN,
-  DELETE_EMAIL_SUCCESS,
-  DELETE_EMAIL_ERROR,
   EMAILS_UNMOUNT,
 } from './constants';
 
@@ -67,23 +61,17 @@ function emailReducer(state = initialState, action) {
         draft.isFetchingEmails = false;
         break;
 
-      case CREATE_EMAIL_BEGIN:
       case UPDATE_EMAIL_BEGIN:
-      case DELETE_EMAIL_BEGIN:
         draft.isCommitting = true;
         draft.hasChanged = false;
         break;
 
-      case CREATE_EMAIL_SUCCESS:
       case UPDATE_EMAIL_SUCCESS:
-      case DELETE_EMAIL_SUCCESS:
         draft.isCommitting = false;
         draft.hasChanged = true;
         break;
 
-      case CREATE_EMAIL_ERROR:
       case UPDATE_EMAIL_ERROR:
-      case DELETE_EMAIL_ERROR:
         draft.isCommitting = false;
         draft.hasChanged = false;
         break;
