@@ -21,11 +21,12 @@ import {
   Divider,
   FormControlLabel,
   Switch,
-  FormControl
+  FormControl,
+  Box,
 } from '@material-ui/core';
 
-import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import messages from 'containers/GlobalSettings/Email/Event/messages';
+import globalMessages from 'containers/Shared/App/messages';
 import { buildValues, mapFields } from 'utils/formHelpers';
 
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
@@ -65,6 +66,7 @@ export function EventFormInner({
   ...props
 }) {
   const { intl } = props;
+  console.log(values);
 
   return (
     <React.Fragment>
@@ -106,6 +108,20 @@ export function EventFormInner({
                   label={<DiverstFormattedMessage {...messages.form.disabled} />}
                 />
               </FormControl>
+            </CardContent>
+            <Divider />
+            <CardContent>
+              <Field
+                component={Select}
+                disabled
+                fullWidth
+                id='day'
+                name='day'
+                margin='normal'
+                label={<DiverstFormattedMessage {...messages.form.day} />}
+                value={values.day}
+                options={dig(props, 'event', 'timezones') || []}
+              />
               <Field
                 component={DiverstTimePicker}
                 disabled={props.isCommitting}
@@ -157,6 +173,7 @@ export function EventForm(props) {
     id: { default: '' },
     name: { default: '' },
     disabled: { default: false },
+    day: { default: { label: -1, value: '' } },
     at: { default: '00:00' },
     tz: { default: '' },
   });

@@ -23,6 +23,17 @@ import {
 } from 'containers/GlobalSettings/Email/Event/actions';
 
 import EventForm from 'components/GlobalSettings/Email/EventForm';
+import globalMessages from 'containers/Shared/App/messages';
+import { injectIntl, intlShape } from 'react-intl';
+
+const mapDay = (day, intl) => {
+  if (day.label >= 0)
+    day.label = intl.formatMessage(globalMessages.days_of_week[day.label]);
+  else
+    day.label = '';
+
+  return day;
+};
 
 export function EventEditPage(props) {
   useInjectReducer({ key: 'mailEvents', reducer });
@@ -41,7 +52,9 @@ export function EventEditPage(props) {
     return () => props.eventsUnmount();
   }, []);
 
-  const { currentEvent } = props;
+  const { currentEvent, intl } = props;
+  if (currentEvent)
+    mapDay(currentEvent.day, intl);
 
   return (
     <EventForm
@@ -63,6 +76,8 @@ EventEditPage.propTypes = {
   currentEnterprise: PropTypes.object,
   isCommitting: PropTypes.bool,
   isFormLoading: PropTypes.bool,
+
+  intl: intlShape.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -84,5 +99,6 @@ const withConnect = connect(
 
 export default compose(
   withConnect,
+  injectIntl,
   memo,
 )(EventEditPage);

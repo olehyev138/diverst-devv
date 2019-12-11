@@ -2,6 +2,10 @@ import { createSelector } from 'reselect/lib';
 import { initialState } from './reducer';
 import produce from 'immer';
 
+const weekdays = [
+  'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'
+];
+
 const selectEventDomain = state => state.mailEvents || initialState;
 
 const selectPaginatedEvents = () => createSelector(
@@ -32,6 +36,8 @@ const selectFormEvent = () => createSelector(
             draft.tz = { label: element[1], value: element[0] };
           return { label: element[1], value: element[0] };
         });
+
+        draft.day = { label: weekdays.indexOf(event.day), value: event.day || '' };
       });
     }
 

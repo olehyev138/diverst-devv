@@ -22,6 +22,9 @@ export default defineMessages({
     tz: {
       id: `${scope}.form.tz`,
     },
+    day: {
+      id: `${scope}.form.day`,
+    },
     update: {
       id: `${scope}.form.update`,
     },
