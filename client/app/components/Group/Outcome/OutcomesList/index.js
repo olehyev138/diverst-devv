@@ -106,7 +106,7 @@ export function OutcomesList(props, context) {
                 <CardActions>
                   <Button
                     component={WrappedNavLink}
-                    color='secondary'
+                    color='primary'
                     to={props.links.outcomeEdit(outcome.id)}
                   >
                     Edit
