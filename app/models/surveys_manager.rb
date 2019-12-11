@@ -1,4 +1,6 @@
 class SurveysManager < ApplicationRecord
+  self.table_name = 'survey_managers'
+
   belongs_to :survey
   belongs_to :user
 end

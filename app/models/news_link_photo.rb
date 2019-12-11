@@ -1,23 +1,21 @@
 class NewsLinkPhoto < ApplicationRecord
   belongs_to :news_link
 
-  validates_length_of :file_content_type, maximum: 191
-  validates_length_of :file_file_name, maximum: 191
   validates :news_link, presence: true, on: :update
 
-  # Paperclip
-  has_attached_file :file, styles: { medium: '1000x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing_user.png'), s3_permissions: :private
-  validates_attachment_content_type :file, content_type: %r{\Aimage\/.*\Z}
+  # ActiveStorage
+  has_one_attached :file
+  validates :file, attached: true, content_type: AttachmentHelper.common_image_types
 
-  def file_url=(url)
-    self.file = URI.parse(url)
-  end
+  # TODO Remove after Paperclip to ActiveStorage migration
+  has_attached_file :file_paperclip, s3_permissions: 'private'
 
   def file_location(expires_in: 3600, default_style: :medium)
-    return nil if !file.presence
+    return nil if !file.attached?
 
-    default_style = :medium if !file.styles.keys.include? default_style
-    file.expiring_url(expires_in, default_style)
+    # default_style = :medium if !file.styles.keys.include? default_style
+    # file.expiring_url(expires_in, default_style)
+    Rails.application.routes.url_helpers.url_for(file)
   end
 
   def group
