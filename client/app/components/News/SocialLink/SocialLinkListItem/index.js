@@ -90,7 +90,6 @@ SocialLinkListItem.propTypes = {
   }),
   newsItem: PropTypes.object,
   deleteSocialLinkBegin: PropTypes.func,
-  updateSocialLinkBegin: PropTypes.func,
   updateNewsItemBegin: PropTypes.func,
 };
 

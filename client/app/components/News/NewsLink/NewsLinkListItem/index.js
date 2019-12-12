@@ -1,7 +1,7 @@
 /**
  *
  * News Link List Item Component
- *
+ *updateSocialLinkBegin: PropTypes.func,
  */
 import React, {
   memo, useRef, useState, useEffect
@@ -104,7 +104,6 @@ NewsLinkListItem.propTypes = {
   newsItem: PropTypes.object,
   links: PropTypes.object,
   deleteNewsLinkBegin: PropTypes.func,
-  updateNewsLinkBegin: PropTypes.func,
   updateNewsItemBegin: PropTypes.func,
 };
 

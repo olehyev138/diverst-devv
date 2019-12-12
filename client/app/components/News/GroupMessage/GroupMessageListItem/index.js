@@ -100,7 +100,6 @@ GroupMessageListItem.propTypes = {
     groupMessageShow: PropTypes.func
   }),
   deleteGroupMessageBegin: PropTypes.func,
-  updateGroupMessageBegin: PropTypes.func,
   updateNewsItemBegin: PropTypes.func,
 };
 

@@ -13,7 +13,7 @@ import saga from 'containers/News/saga';
 
 import { selectPaginatedNewsItems, selectNewsItemsTotal, selectIsLoading } from 'containers/News/selectors';
 import { deleteSocialLinkBegin, getNewsItemsBegin, newsFeedUnmount, deleteNewsLinkBegin, deleteGroupMessageBegin,
-  updateGroupMessageBegin, updateNewsLinkBegin, updateSocialLinkBegin, updateNewsItemBegin } from 'containers/News/actions';
+  updateNewsItemBegin } from 'containers/News/actions';
 
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -24,20 +24,17 @@ const NewsFeedTypes = Object.freeze({
   pending: 1,
 });
 
+const defaultParams = Object.freeze({
+  count: 10, // TODO: Make this a constant and use it also in EventsList
+  page: 0,
+  order: 'desc',
+  news_feed_id: -1,
+});
+
 export function NewsFeedPage(props, context) {
   useInjectReducer({ key: 'news', reducer });
   useInjectSaga({ key: 'news', saga });
   const rs = new RouteService(useContext);
-
-  const groupId = rs.params('group_id');
-
-  const defaultParams = {
-    count: 5,
-    page: 0,
-    order: 'asc',
-    // eslint-disable-next-line react/prop-types
-    news_feed_id: props.currentGroup.id,
-  };
 
   const links = {
     newsFeedIndex: ROUTES.group.news.index.path(rs.params('group_id')),
@@ -55,15 +52,15 @@ export function NewsFeedPage(props, context) {
   const [params, setParams] = useState(defaultParams);
 
   const getNewsFeedItems = (scopes, resetParams = false) => {
-    const id = dig(props, 'currentGroup', 'id');
+    const newsFeedId = props.currentGroup.news_feed.id;
 
     if (resetParams)
       setParams(defaultParams);
 
-    if (id) {
+    if (newsFeedId) {
       const newParams = {
         ...params,
-        group_id: id,
+        news_feed_id: newsFeedId,
         query_scopes: scopes
       };
       props.getNewsItemsBegin(newParams);
@@ -114,9 +111,6 @@ export function NewsFeedPage(props, context) {
         deleteGroupMessageBegin={props.deleteGroupMessageBegin}
         deleteNewsLinkBegin={props.deleteNewsLinkBegin}
         deleteSocialLinkBegin={props.deleteSocialLinkBegin}
-        updateGroupMessageBegin={props.updateGroupMessageBegin}
-        updateNewsLinkBegin={props.updateNewsLinkBegin}
-        updateSocialLinkBegin={props.updateSocialLinkBegin}
         updateNewsItemBegin={props.updateNewsItemBegin}
       />
     </React.Fragment>
@@ -131,9 +125,6 @@ NewsFeedPage.propTypes = {
   deleteGroupMessageBegin: PropTypes.func,
   deleteNewsLinkBegin: PropTypes.func,
   deleteSocialLinkBegin: PropTypes.func,
-  updateGroupMessageBegin: PropTypes.func,
-  updateNewsLinkBegin: PropTypes.func,
-  updateSocialLinkBegin: PropTypes.func,
   updateNewsItemBegin: PropTypes.func,
   isLoading: PropTypes.bool,
   currentGroup: PropTypes.shape({
@@ -154,9 +145,6 @@ const mapDispatchToProps = dispatch => ({
   deleteGroupMessageBegin: payload => dispatch(deleteGroupMessageBegin(payload)),
   deleteNewsLinkBegin: payload => dispatch(deleteNewsLinkBegin(payload)),
   deleteSocialLinkBegin: payload => dispatch(deleteSocialLinkBegin(payload)),
-  updateGroupMessageBegin: payload => dispatch(updateGroupMessageBegin(payload)),
-  updateNewsLinkBegin: payload => dispatch(updateNewsLinkBegin(payload)),
-  updateSocialLinkBegin: payload => dispatch(updateSocialLinkBegin(payload)),
   updateNewsItemBegin: payload => dispatch(updateNewsItemBegin(payload)),
   newsFeedUnmount: () => dispatch(newsFeedUnmount()),
 });

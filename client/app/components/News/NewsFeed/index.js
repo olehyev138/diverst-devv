@@ -83,7 +83,6 @@ export function NewsFeed(props) {
           readonly={props.readonly}
           groupId={item.news_feed.group_id}
           deleteGroupMessageBegin={props.deleteGroupMessageBegin}
-          updateGroupMessageBegin={props.updateGroupMessageBegin}
           updateNewsItemBegin={props.updateNewsItemBegin}
         />
       );
@@ -96,7 +95,6 @@ export function NewsFeed(props) {
           groupId={item.news_feed.group_id}
           readonly={props.readonly}
           deleteNewsLinkBegin={props.deleteNewsLinkBegin}
-          updateNewsLinkBegin={props.updateNewsLinkBegin}
           updateNewsItemBegin={props.updateNewsItemBegin}
         />
       );
@@ -109,7 +107,6 @@ export function NewsFeed(props) {
           groupId={item.news_feed.group_id}
           readonly={props.readonly}
           deleteSocialLinkBegin={props.deleteSocialLinkBegin}
-          updateSocialLinkBegin={props.updateSocialLinkBegin}
           updateNewsItemBegin={props.updateNewsItemBegin}
         />
       );
@@ -162,6 +159,7 @@ export function NewsFeed(props) {
           </Paper>
         </React.Fragment>
       )}
+      <br />
       <DiverstLoader isLoading={props.isLoading}>
         <Grid container>
           { /* eslint-disable-next-line arrow-body-style */ }
@@ -199,9 +197,6 @@ NewsFeed.propTypes = {
   deleteGroupMessageBegin: PropTypes.func,
   deleteNewsLinkBegin: PropTypes.func,
   deleteSocialLinkBegin: PropTypes.func,
-  updateGroupMessageBegin: PropTypes.func,
-  updateNewsLinkBegin: PropTypes.func,
-  updateSocialLinkBegin: PropTypes.func,
   updateNewsItemBegin: PropTypes.func,
 };
 
