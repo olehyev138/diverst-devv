@@ -8,7 +8,7 @@ exports[`<ApplicationHeader /> should render and match the snapshot 1`] = `
     <WithStyles(ForwardRef(Toolbar))>
       <WithStyles(ForwardRef(IconButton))
         aria-label="Open drawer"
-        color="inherit"
+        className=""
         edge="start"
         onClick={[Function]}
       >
@@ -64,7 +64,6 @@ exports[`<ApplicationHeader /> should render and match the snapshot 1`] = `
           <div>
             <WithStyles(ForwardRef(IconButton))
               aria-haspopup="true"
-              color="inherit"
               onClick={[Function]}
             >
               <AccountCircleIcon />
