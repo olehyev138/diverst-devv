@@ -35,6 +35,7 @@ import {
   OutcomesPage,
   OutcomeCreatePage,
   OutcomeEditPage,
+  GroupPlanKpiPage,
   GroupMemberListPage,
   GroupMemberCreatePage,
   NotFoundPage,
@@ -206,7 +207,7 @@ export default function Routes(props) {
       <GroupLayout {...expandRoute(ROUTES.group.members.new)} component={GroupMemberCreatePage} />
 
       { /* Group Plan */ }
-      { /* Group Plan - Outcomes */ }
+      { /* Group Plan - Structure/Outcomes */ }
       <GroupLayout exact {...expandRoute(ROUTES.group.plan.outcomes.index)} component={OutcomesPage} />
       <GroupLayout {...expandRoute(ROUTES.group.plan.outcomes.new)} component={OutcomeCreatePage} />
       <GroupLayout {...expandRoute(ROUTES.group.plan.outcomes.edit)} component={OutcomeEditPage} />
@@ -214,6 +215,9 @@ export default function Routes(props) {
       { /* Group Plan - Events */ }
       <GroupLayout exact {...expandRoute(ROUTES.group.plan.events.index)} component={GroupPlanEventsPage} />
       <GroupLayout {...expandRoute(ROUTES.group.plan.events.manage)} component={EventManagePage} />
+
+      { /* Group Plan - KPI */ }
+      <GroupLayout exact {...expandRoute(ROUTES.group.plan.kpi.index)} component={GroupPlanKpiPage} />
 
       { /* Group Manage */ }
       { /* TODO - redirect /manage -> /manage/settings */ }

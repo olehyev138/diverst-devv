@@ -285,6 +285,14 @@ export const ROUTES = {
           }
         },
       },
+      kpi: {
+        index: {
+          path: (groupId = ':group_id') => `/groups/${groupId}/plan/kpi`,
+          data: {
+            titleMessage: messages.groups.plan.kpi.index,
+          }
+        }
+      },
     },
     manage: {
       index: {

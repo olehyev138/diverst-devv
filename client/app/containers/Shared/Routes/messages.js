@@ -124,6 +124,11 @@ export default defineMessages({
           id: `${scope}.group.plan.events.manage`
         },
       },
+      kpi: {
+        index: {
+          id: `${scope}.group.plan.kpi.index`
+        }
+      },
     },
     manage: {
       index: {
