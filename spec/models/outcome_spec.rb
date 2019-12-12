@@ -13,7 +13,7 @@ RSpec.describe Outcome, type: :model do
   end
 
   describe 'default_scope' do
-    let(:outcome) { create(:outcome) }
+    let!(:outcome) { create(:outcome) }
 
     it 'gets the outcome' do
       expect(Outcome.all).to eq [outcome]
