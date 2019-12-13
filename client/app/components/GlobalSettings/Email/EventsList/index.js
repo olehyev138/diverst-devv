@@ -93,18 +93,18 @@ export function EventsList(props, context) {
                           </Typography>
                           <hr className={classes.divider} />
                           <Box pt={1} />
-                          <Grid>
-                            <Grid item>
+                          <Grid container spacing={1} justify='space-between' alignItems='center'>
+                            <Grid item md={4} sm={12}>
                               <Typography color='textSecondary' variant='subtitle2' className={classes.dateText}>
                                 {item.day.label}
                               </Typography>
                             </Grid>
-                            <Grid item>
+                            <Grid item md={4} sm={12}>
                               <Typography color='textSecondary' variant='subtitle2' className={classes.dateText}>
                                 {item.at12}
                               </Typography>
                             </Grid>
-                            <Grid item>
+                            <Grid item md={4} sm={12}>
                               <Typography color='textSecondary' variant='subtitle2' className={classes.dateText}>
                                 {item.tz.label}
                               </Typography>
