@@ -9,24 +9,24 @@ import { compose } from 'redux';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 
-import saga from 'containers/GlobalSettings/Email/Email/saga';
-import reducer from 'containers/GlobalSettings/Email/Email/reducer';
+import saga from 'containers/GlobalSettings/Email/Event/saga';
+import reducer from 'containers/GlobalSettings/Email/Event/reducer';
 
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import {
-  selectPaginatedEmails,
-  selectIsFetchingEmails,
-  selectEmailsTotal
-} from 'containers/GlobalSettings/Email/Email/selectors';
+  selectPaginatedEvents,
+  selectIsFetchingEvents,
+  selectEventsTotal
+} from 'containers/GlobalSettings/Email/Event/selectors';
 import { selectUser } from 'containers/Shared/App/selectors';
 
 import {
-  emailsUnmount, getEmailsBegin,
-} from 'containers/GlobalSettings/Email/Email/actions';
+  eventsUnmount, getEventsBegin,
+} from 'containers/GlobalSettings/Email/Event/actions';
 
-import EmailsList from 'components/GlobalSettings/Email/EmailsList';
+import EventsList from 'components/GlobalSettings/Email/EventsList';
 import dig from 'object-dig';
 
 const defaultParams = Object.freeze({
@@ -37,47 +37,48 @@ const defaultParams = Object.freeze({
 });
 
 export function CustomTextEditPage(props) {
-  useInjectReducer({ key: 'emails', reducer });
-  useInjectSaga({ key: 'emails', saga });
+  useInjectReducer({ key: 'events', reducer });
+  useInjectSaga({ key: 'events', saga });
 
   const rs = new RouteService(useContext);
   const links = {
-    emailEdit: id => ROUTES.admin.system.globalSettings.emails.edit.path(id),
+    eventsIndex: ROUTES.admin.system.globalSettings.mailEvents.index.path(),
+    eventEdit: ROUTES.admin.system.globalSettings.mailEvents.edit.path(rs.params('event_id')),
   };
 
-  const { currentUser, emails, isFetching } = props;
+  const { currentUser, events, isFetching } = props;
 
   const [params, setParams] = useState(defaultParams);
 
-  const getEmails = (newParams = params) => {
+  const getEvents = (newParams = params) => {
     const updatedParams = {
       ...params,
       ...newParams,
     };
-    props.getEmailsBegin(updatedParams);
+    props.getEventsBegin(updatedParams);
     setParams(updatedParams);
   };
 
   useEffect(() => {
-    getEmails();
+    getEvents();
 
     return () => {
-      props.emailsUnmount();
+      props.eventsUnmount();
     };
   }, []);
 
   const handlePagination = (payload) => {
     const newParams = { ...params, count: payload.count, page: payload.page };
 
-    getEmails(newParams);
+    getEvents(newParams);
   };
 
   return (
-    <EmailsList
+    <EventsList
       currentUser={currentUser}
-      emails={emails}
+      events={events}
       handlePagination={handlePagination}
-      emailsTotal={props.emailsTotal}
+      eventsTotal={props.eventsTotal}
       links={links}
       isLoading={isFetching}
     />
@@ -85,24 +86,24 @@ export function CustomTextEditPage(props) {
 }
 
 CustomTextEditPage.propTypes = {
-  getEmailsBegin: PropTypes.func,
-  emailsUnmount: PropTypes.func,
+  getEventsBegin: PropTypes.func,
+  eventsUnmount: PropTypes.func,
   currentUser: PropTypes.object,
-  emails: PropTypes.array,
-  emailsTotal: PropTypes.number,
+  events: PropTypes.array,
+  eventsTotal: PropTypes.number,
   isFetching: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
   currentUser: selectUser(),
-  emails: selectPaginatedEmails(),
-  emailsTotal: selectEmailsTotal(),
-  isFetching: selectIsFetchingEmails(),
+  events: selectPaginatedEvents(),
+  eventsTotal: selectEventsTotal(),
+  isFetching: selectIsFetchingEvents(),
 });
 
 const mapDispatchToProps = {
-  getEmailsBegin,
-  emailsUnmount,
+  getEventsBegin,
+  eventsUnmount,
 };
 
 const withConnect = connect(
