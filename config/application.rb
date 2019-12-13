@@ -4,7 +4,7 @@ require 'active_record/railtie'
 require 'action_controller/railtie'
 require 'action_mailer/railtie'
 require 'active_model/railtie'
-require 'sprockets/railtie'
+require 'active_storage/engine'
 
 if defined?(Bundler)
   # If you precompile assets before deploying to production, use this line
@@ -57,7 +57,7 @@ module Diverst
     config.filter_parameters += [:password]
 
     # Enable the asset pipeline
-    config.assets.enabled = false
+    # config.assets.enabled = true
 
     config.middleware.use ActiveRecord::Migration::CheckPending
     config.middleware.use Rack::Deflater

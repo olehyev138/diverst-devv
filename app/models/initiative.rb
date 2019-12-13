@@ -14,8 +14,6 @@ class Initiative < ApplicationRecord
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
 
   validates_length_of :location, maximum: 191
-  validates_length_of :picture_content_type, maximum: 191
-  validates_length_of :picture_file_name, maximum: 191
   validates_length_of :description, maximum: 65535
   validates_length_of :name, maximum: 191
   validates :end, date: { after: :start, message: 'must be after start' }, on: [:create, :update]
@@ -67,13 +65,17 @@ class Initiative < ApplicationRecord
   # we don't want to run this callback when finish_expenses! is triggered in initiatives_controller.rb, finish_expense action
   before_save { allocate_budget_funds unless skip_allocate_budget_funds }
 
-  # Paperclip
-  has_attached_file :picture, styles: { medium: '1000x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: 'private'
-  validates_attachment_content_type :picture, content_type: %r{\Aimage\/.*\Z}
+  # ActiveStorage
+  has_one_attached :picture
+  validates :picture, content_type: AttachmentHelper.common_image_types
+  has_one_attached :qr_code
+  validates :qr_code, content_type: AttachmentHelper.common_image_types
+  has_one_attached :video
 
-  # Paperclip
-  has_attached_file :qr_code, styles: { medium: '1000x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: 'private'
-  validates_attachment_content_type :qr_code, content_type: %r{\Aimage\/.*\Z}
+  # TODO Remove after Paperclip to ActiveStorage migration
+  has_attached_file :picture_paperclip, s3_permissions: 'private'
+  has_attached_file :qr_code_paperclip, s3_permissions: 'private'
+  has_attached_file :video_paperclip, s3_permissions: 'private'
 
   validates :start, presence: true
   validates :end, presence: true
@@ -121,26 +123,20 @@ class Initiative < ApplicationRecord
     ).merge({ 'created_at' => self.created_at.beginning_of_hour })
   end
 
-  def picture_url=(url)
-    self.picture = URI.parse(url)
-  end
-
   def picture_location(expires_in: 3600, default_style: :medium)
-    return nil if !picture.presence
+    return nil if !picture.attached?
 
-    default_style = :medium if !picture.styles.keys.include? default_style
-    picture.expiring_url(expires_in, default_style)
-  end
-
-  def qr_code_url=(url)
-    self.qr_code = URI.parse(url)
+    # default_style = :medium if !picture.styles.keys.include? default_style
+    # picture.expiring_url(expires_in, default_style)
+    Rails.application.routes.url_helpers.url_for(picture)
   end
 
   def qr_code_location(expires_in: 3600, default_style: :medium)
-    return nil if !qr_code.presence
+    return nil if !qr_code.attached?
 
-    default_style = :medium if !qr_code.styles.keys.include? default_style
-    qr_code.expiring_url(expires_in, default_style)
+    # default_style = :medium if !qr_code.styles.keys.include? default_style
+    # qr_code.expiring_url(expires_in, default_style)
+    Rails.application.routes.url_helpers.url_for(qr_code)
   end
 
   def initiative_date(date_type)

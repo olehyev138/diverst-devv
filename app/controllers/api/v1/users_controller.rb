@@ -66,7 +66,6 @@ class Api::V1::UsersController < DiverstController
       .permit(
         :password,
         :avatar,
-        :avatar_file_name,
         :email,
         :first_name,
         :last_name,

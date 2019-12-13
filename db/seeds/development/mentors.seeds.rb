@@ -70,7 +70,7 @@ after 'development:users' do
           end_date = start_date + 2.hours + (rand(0..30)).minutes
 
           mentoring_session = MentoringSession.new(start: start_date, end: end_date,
-                                                   format: "Video",
+                                                   medium: "Video",
                                                    enterprise_id: enterprise.id,
                                                    creator_id: creator.id)
           mentoring_session.save(validate: false)

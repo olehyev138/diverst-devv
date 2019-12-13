@@ -83,6 +83,9 @@ const styles = theme => ({
   navLinkActive: {
     backgroundColor: 'rgba(0, 0, 0, 0.14)',
   },
+  whiteButton: {
+    color: '#ffffff',
+  }
 });
 
 export class ApplicationHeader extends React.PureComponent {
@@ -187,11 +190,10 @@ export class ApplicationHeader extends React.PureComponent {
             { isAdmin
               ? (
                 <IconButton
-                  color='inherit'
                   aria-label='Open drawer'
                   edge='start'
                   onClick={this.handleDrawerToggle}
-                  className={classes.drawerToggle}
+                  className={classNames(classes.drawerToggle, classes.whiteButton)}
                 >
                   <MenuIcon />
                 </IconButton>
@@ -254,7 +256,7 @@ export class ApplicationHeader extends React.PureComponent {
                     }
                     aria-haspopup='true'
                     onClick={this.handleProfileMenuOpen}
-                    color='inherit'
+                    className={classes.whiteButton}
                   >
                     <AccountCircleIcon />
                   </IconButton>

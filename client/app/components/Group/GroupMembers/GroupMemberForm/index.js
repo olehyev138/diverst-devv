@@ -86,9 +86,9 @@ export function GroupMemberForm(props) {
           attributes: mapFields(values, ['member_ids'])
         });
       }}
-
-      render={formikProps => <GroupMemberFormInner {...props} {...formikProps} />}
-    />
+    >
+      {formikProps => <GroupMemberFormInner {...props} {...formikProps} />}
+    </Formik>
   );
 }
 

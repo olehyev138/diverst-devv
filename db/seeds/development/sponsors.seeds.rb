@@ -1,7 +1,7 @@
 after 'development:groups' do
   # TODO
-  # Paperclip
-  
+  # ActiveStorage
+
 #  spinner = TTY::Spinner.new(":spinner Populating groups and enterprise with sponsors...", format: :spin_2)
 #  spinner.run do |spinner|
 #    enterprise = Enterprise.find_by_name 'Diverst Inc'

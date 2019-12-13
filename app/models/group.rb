@@ -116,12 +116,18 @@ class Group < ApplicationRecord
   belongs_to :group_category
   belongs_to :group_category_type
 
-  # Paperclip
-  # re-add to allow migration file to run
-  # has_attached_file :sponsor_media, s3_permissions: :private
-  # do_not_validate_attachment_file_type :sponsor_media
+  # ActiveStorage
+  has_one_attached :logo
+  validates :logo, content_type: AttachmentHelper.common_image_types
+  has_one_attached :banner
+  validates :banner, content_type: AttachmentHelper.common_image_types
+  has_one_attached :sponsor_media
 
-  has_attached_file :logo, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: :private
+  # TODO Remove after Paperclip to ActiveStorage migration
+  has_attached_file :logo_paperclip, s3_permissions: 'private'
+  has_attached_file :banner_paperclip
+  has_attached_file :sponsor_media_paperclip, s3_permissions: 'private'
+
   validates_length_of :event_attendance_visibility, maximum: 191
   validates_length_of :unit_of_expiry_age, maximum: 191
   validates_length_of :home_message, maximum: 65535
@@ -130,24 +136,14 @@ class Group < ApplicationRecord
   validates_length_of :upcoming_events_visibility, maximum: 191
   validates_length_of :latest_news_visibility, maximum: 191
   validates_length_of :company_video_url, maximum: 191
-  validates_length_of :sponsor_image_content_type, maximum: 191
-  validates_length_of :sponsor_image_file_name, maximum: 191
   validates_length_of :calendar_color, maximum: 191
-  validates_length_of :banner_content_type, maximum: 191
-  validates_length_of :banner_file_name, maximum: 191
   validates_length_of :messages_visibility, maximum: 191
   validates_length_of :members_visibility, maximum: 191
   validates_length_of :pending_users, maximum: 191
   validates_length_of :yammer_group_link, maximum: 191
   validates_length_of :yammer_group_name, maximum: 191
-  validates_length_of :logo_content_type, maximum: 191
-  validates_length_of :logo_file_name, maximum: 191
   validates_length_of :description, maximum: 65535
   validates_length_of :name, maximum: 191
-  validates_attachment_content_type :logo, content_type: %r{\Aimage\/.*\Z}
-
-  has_attached_file :banner
-  validates_attachment_content_type :banner, content_type: /\Aimage\/.*\Z/
 
   validates :name, presence: true, uniqueness: { scope: :enterprise_id }
 
@@ -189,25 +185,19 @@ class Group < ApplicationRecord
   accepts_nested_attributes_for :group_leaders, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :sponsors, reject_if: :all_blank, allow_destroy: true
 
-  def banner_url=(url)
-    self.banner = URI.parse(url)
-  end
-
-  def logo_url=(url)
-    self.logo = URI.parse(url)
-  end
-
   def logo_location(expires_in: 3600, default_style: :medium)
-    return nil unless logo.presence
+    return nil unless logo.attached?
 
-    default_style = :medium unless logo.styles.keys.include? default_style
-    logo.expiring_url(expires_in, default_style)
+    # default_style = :medium if !logo.styles.keys.include? default_style
+    # logo.expiring_url(expires_in, default_style)
+    Rails.application.routes.url_helpers.url_for(logo)
   end
 
   def banner_location
-    return nil unless banner.presence
+    return nil unless banner.attached?
 
-    banner.expiring_url(36000)
+    # banner.expiring_url(36000)
+    Rails.application.routes.url_helpers.url_for(banner)
   end
 
   def resolve_auto_archive_state
@@ -331,9 +321,9 @@ class Group < ApplicationRecord
   end
 
   def logo_expiring_thumb
-    return nil if logo.blank?
-
-    logo.expiring_url(30, :thumb)
+    # TODO
+    # return nil if logo.blank?
+    # logo.expiring_url(30, :thumb)
   end
 
   def possible_participating_groups

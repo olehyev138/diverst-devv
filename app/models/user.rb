@@ -80,13 +80,17 @@ class User < ApplicationRecord
   has_many :metrics_dashboards, foreign_key: :owner_id
   has_many :shared_metrics_dashboards
 
-  has_attached_file :avatar, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing_user.png'), s3_permissions: 'private'
+  # ActiveStorage
+  has_one_attached :avatar
+  validates :avatar, content_type: AttachmentHelper.common_image_types
+
+  # TODO Remove after Paperclip to ActiveStorage migration
+  has_attached_file :avatar_paperclip, s3_permissions: 'private'
+
   validates_length_of :mentorship_description, maximum: 65535
   validates_length_of :unlock_token, maximum: 191
   validates_length_of :time_zone, maximum: 191
   validates_length_of :biography, maximum: 65535
-  validates_length_of :avatar_content_type, maximum: 191
-  validates_length_of :avatar_file_name, maximum: 191
   validates_length_of :linkedin_profile_url, maximum: 191
   validates_length_of :yammer_token, maximum: 191
   validates_length_of :firebase_token, maximum: 191
@@ -103,7 +107,6 @@ class User < ApplicationRecord
   validates_length_of :data, maximum: 65535
   validates_length_of :last_name, maximum: 191
   validates_length_of :first_name, maximum: 191
-  validates_attachment_content_type :avatar, content_type: /\Aimage\/.*\Z/
 
   validates :first_name, presence: true
   validates :last_name, presence: true
@@ -169,15 +172,12 @@ class User < ApplicationRecord
     field_data.to_h { |fd| [fd.field_id, fd.data] }
   end
 
-  def avatar_url=(url)
-    self.avatar = URI.parse(url)
-  end
-
   def avatar_location(expires_in: 3600, default_style: :medium)
-    return nil if !avatar.presence
+    return nil if !avatar.attached?
 
-    default_style = :medium if !avatar.styles.keys.include? default_style
-    avatar.expiring_url(expires_in, default_style)
+    # default_style = :medium if !avatar.styles.keys.include? default_style
+    # avatar.expiring_url(expires_in, default_style)
+    Rails.application.routes.url_helpers.url_for(avatar)
   end
 
   def generate_authentication_token(length = 20)
@@ -197,7 +197,7 @@ class User < ApplicationRecord
   end
 
   def add_to_default_mentor_group
-    if mentor_changed? || mentee_changed?
+    if saved_change_to_mentor? || saved_change_to_mentee?
       DefaultMentorGroupMemberUpdateJob.perform_later(id, mentor, mentee)
     end
   end
@@ -651,8 +651,8 @@ class User < ApplicationRecord
   def delete_linkedin_info
     self.update(
       linkedin_profile_url: nil,
-      avatar_file_name: nil
     )
+    avatar.purge_later
   end
 
   private

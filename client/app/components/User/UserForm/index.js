@@ -137,9 +137,9 @@ export function UserForm(props) {
         payload.redirectPath = props.admin ? props.links.usersIndex : props.links.usersPath(user.id);
         props.userAction(payload);
       }}
-
-      render={formikProps => <UserFormInner {...props} {...formikProps} />}
-    />
+    >
+      {formikProps => <UserFormInner {...props} {...formikProps} />}
+    </Formik>
   );
 }
 

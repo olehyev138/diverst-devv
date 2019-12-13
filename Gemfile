@@ -2,14 +2,16 @@ source 'https://rubygems.org'
 
 ruby '2.6.0'
 
-gem 'actionmailer', '~> 5.0'
-gem 'actionpack', '~> 5.0'
-gem 'active_model_serializers', '~> 0.10.9'
+gem 'active_storage_validations', '~> 0.8.4'
+gem 'mini_magick', '~> 4.9.5'
+gem 'actionmailer', '~> 5.2.3'
+gem 'actionpack', '~> 5.2.3'
+gem 'active_model_serializers', '~> 0.10.10'
 gem 'active_record_union'
-gem 'activerecord', '~> 5.0'
+gem 'activerecord', '~> 5.2.3'
 gem 'activerecord-import', '~> 0.14.0' # Adds a faster way to INSERT multiple rows in the DB
 gem 'autoprefixer-rails', '~> 6.3', '>= 6.3.3.1' # Automatically adds vendor prefixes to CSS declarations
-gem 'aws-sdk', '< 2.0'# The official AWS SDK
+gem 'aws-sdk', '~> 2.0.34' # The official AWS SDK
 gem 'bcrypt'
 gem 'bootsnap', require: false
 gem 'clockwork', '~> 1.2' # Schedule recurring jobs
@@ -34,7 +36,7 @@ gem 'linkedin-oauth2', '~> 1.0' # OAuth for LinkedIn
 gem 'liquid', '~> 3.0', '>= 3.0.6' # Templating engine used for email templates
 gem 'mailgun_rails', '~> 0.8.0'
 gem 'mysql2', '~> 0.5.2'
-gem 'paperclip', '~> 4.3'# Handle attachments for models and forms
+gem 'paperclip', '~> 5.1.0' # TODO Remove after Paperclip to ActiveStorage migration
 gem 'pismo', '~> 0.7.4' # Extracts metadata from an URL
 gem 'public_activity'
 gem 'puma', '~> 3.1' # Better web server than WEBRick
@@ -42,8 +44,8 @@ gem 'pundit', '~> 2.0.0'# Authorization
 gem 'rack-cors', '~> 0.4.0', require: 'rack/cors' # will be used to support mobile
 gem 'rack-rewrite', '~> 1.5' # A rack middleware for enforcing rewrite rules. In many cases you can get away with rack-rewrite instead of writing Apache mod_rewrite rules.
 gem 'rack-timeout', '~> 0.4.2'
-gem 'rails', '~> 5.0'
-gem 'railties', '~> 5.0'
+gem 'rails', '~> 5.2.3'
+gem 'railties', '~> 5.2.3'
 gem 'rollbar', '~> 2.14.1'
 gem 'rqrcode', '~> 0.10.1', require: false
 gem 'ruby-oembed', '~> 0.12', git: 'https://github.com/TeamDiverst/ruby-oembed.git'
@@ -53,7 +55,7 @@ gem 'sidekiq', '~> 5.0.5' # Background jobs
 gem 'thor', '0.20.0' # Expected string default value for '--decorator'; got true (boolean) - setting version removes this message
 gem 'tty-spinner'
 gem 'twilio-ruby', '~> 5.10.0'
-gem 'twitter' # twitter implementation
+gem 'twitter', '~> 6.2.0' # twitter implementation
 gem 'validate_url', '~> 1.0', '>= 1.0.2' # Active Model validation for URLs
 gem 'yam', '~> 2.5' # Yammer ruby SDK
 
@@ -63,7 +65,6 @@ gem 'yam', '~> 2.5' # Yammer ruby SDK
 group :development, :test do
   # The 3 gems above are for livereloading your code
   gem 'byebug', '~> 9.1.0' # Debugger
-  gem 'database_cleaner', '~> 1.6.1' # Necessary to clean the DB between tests
   gem 'pronto', '~> 0.10.0'
   gem 'pronto-eslint_npm', git: 'https://github.com/doits/pronto-eslint_npm.git'
   gem 'pronto-rubocop', '~> 0.10.0'
@@ -80,11 +81,10 @@ end
 
 group :test do
   gem 'clockwork-test', '~> 0.2.0'
-  gem 'hashdiff', '0.3.7'
+  gem 'hashdiff', '1.0.0'
   gem 'rspec_junit_formatter', '~> 0.2.3'
   gem 'simplecov', '~> 0.13.0'
-  gem 'webmock', '~> 3.1.1'
-  gem 'rspec-retry', '~> 0.6.1'
+  gem 'webmock', '~> 3.7.6'
 end
 
 group :development do

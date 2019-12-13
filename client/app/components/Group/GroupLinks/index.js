@@ -213,14 +213,19 @@ export function GroupLinks(props) {
 
           <Button
             component={WrappedNavLink}
-            to={ROUTES.group.outcomes.index.path(rs.params('group_id'))}
             className={classes.navLink}
             activeClassName={classes.navLinkActive}
+            to={ROUTES.group.plan.events.index.path(rs.params('group_id'))}
+            isActive={(match, location) => !!matchPath(location.pathname, {
+              path: ROUTES.group.plan.index.data.pathPrefix(rs.params('group_id')),
+              exact: false,
+              strict: false,
+            })}
           >
             <Hidden smDown>
               <PlanIcon className={classes.navIcon} />
             </Hidden>
-            <DiverstFormattedMessage {...ROUTES.group.outcomes.index.data.titleMessage} />
+            <DiverstFormattedMessage {...ROUTES.group.plan.index.data.titleMessage} />
           </Button>
 
           <Button

@@ -17,7 +17,13 @@ import { selectGroup } from 'containers/Group/selectors';
 import { selectUser } from 'containers/Shared/App/selectors';
 import { selectNewsItem, selectIsCommitting, selectIsFormLoading } from 'containers/News/selectors';
 
-import { getNewsItemBegin, createGroupMessageCommentBegin, newsFeedUnmount } from 'containers/News/actions';
+import {
+  getNewsItemBegin,
+  createGroupMessageCommentBegin,
+  newsFeedUnmount,
+  getNewsItemsBegin, deleteGroupMessageBegin, deleteNewsLinkBegin, deleteSocialLinkBegin,
+  deleteGroupMessageCommentBegin
+} from 'containers/News/actions';
 
 import GroupMessage from 'components/News/GroupMessage/GroupMessage';
 
@@ -44,6 +50,7 @@ export function GroupMessagePage(props) {
   return (
     <GroupMessage
       commentAction={props.createGroupMessageCommentBegin}
+      deleteGroupMessageCommentBegin={props.deleteGroupMessageCommentBegin}
       currentUserId={currentUser.id}
       newsItem={currentNewsItem}
       links={links}
@@ -57,6 +64,7 @@ GroupMessagePage.propTypes = {
   getNewsItemBegin: PropTypes.func,
   updateGroupMessageBegin: PropTypes.func,
   createGroupMessageCommentBegin: PropTypes.func,
+  deleteGroupMessageCommentBegin: PropTypes.func,
   newsFeedUnmount: PropTypes.func,
   currentUser: PropTypes.object,
   currentGroup: PropTypes.object,
@@ -73,11 +81,12 @@ const mapStateToProps = createStructuredSelector({
   isFormLoading: selectIsFormLoading(),
 });
 
-const mapDispatchToProps = {
-  getNewsItemBegin,
-  createGroupMessageCommentBegin,
-  newsFeedUnmount
-};
+const mapDispatchToProps = dispatch => ({
+  getNewsItemBegin: payload => dispatch(getNewsItemBegin(payload)),
+  createGroupMessageCommentBegin: payload => dispatch(createGroupMessageCommentBegin(payload)),
+  deleteGroupMessageCommentBegin: payload => dispatch(deleteGroupMessageCommentBegin(payload)),
+  newsFeedUnmount: () => dispatch(newsFeedUnmount()),
+});
 
 const withConnect = connect(
   mapStateToProps,

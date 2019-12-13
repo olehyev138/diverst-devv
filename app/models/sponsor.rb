@@ -1,24 +1,22 @@
 class Sponsor < ApplicationRecord
   belongs_to :sponsorable, polymorphic: true
 
-  validates_length_of :sponsor_media_content_type, maximum: 191
-  validates_length_of :sponsor_media_file_name, maximum: 191
   validates_length_of :sponsorable_type, maximum: 191
   validates_length_of :sponsor_message, maximum: 65535
   validates_length_of :sponsor_title, maximum: 191
   validates_length_of :sponsor_name, maximum: 191
 
-  has_attached_file :sponsor_media, s3_permissions: :private
-  do_not_validate_attachment_file_type :sponsor_media
+  # ActiveStorage
+  has_one_attached :sponsor_media
 
-  def sponsor_media_url=(url)
-    self.sponsor_media = URI.parse(url)
-  end
+  # TODO Remove after Paperclip to ActiveStorage migration
+  has_attached_file :sponsor_media_paperclip, s3_permissions: 'private'
 
   def sponsor_media_location
-    return nil if !sponsor_media.presence
+    return nil unless sponsor_media.attached?
 
-    sponsor_media.expiring_url(36000)
+    # sponsor_media.expiring_url(36000)
+    Rails.application.routes.url_helpers.url_for(sponsor_media)
   end
 
   def enterprise

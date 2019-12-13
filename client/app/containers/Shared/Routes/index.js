@@ -24,15 +24,18 @@ import {
   GroupHomePage,
   EventsPage,
   NewsFeedPage,
-  OutcomesPage,
   EventPage,
   EventCreatePage,
   EventEditPage,
+  EventManagePage,
+  GroupPlanEventsPage,
   GroupMessagePage,
   GroupMessageCreatePage,
   GroupMessageEditPage,
+  OutcomesPage,
   OutcomeCreatePage,
   OutcomeEditPage,
+  GroupPlanKpiPage,
   GroupMemberListPage,
   GroupMemberCreatePage,
   NotFoundPage,
@@ -85,6 +88,11 @@ import {
   EmailEventsPage,
   EmailEventEditPage,
   EmailLayout,
+  NewsLinkCreatePage,
+  NewsLinkEditPage,
+  NewsLinkPage,
+  SocialLinkCreatePage,
+  SocialLinkEditPage
 } from './templates';
 
 // Paths
@@ -190,7 +198,7 @@ export default function Routes(props) {
       <GroupLayout exact {...expandRoute(ROUTES.group.members.index)} component={GroupMemberListPage} />
       <GroupLayout exact {...expandRoute(ROUTES.group.events.index)} component={EventsPage} />
       <GroupLayout exact {...expandRoute(ROUTES.group.news.index)} component={NewsFeedPage} />
-      <GroupLayout exact {...expandRoute(ROUTES.group.outcomes.index)} component={OutcomesPage} />
+      <GroupLayout exact {...expandRoute(ROUTES.group.plan.outcomes.index)} component={OutcomesPage} />
 
       { /* Group Events */ }
       <GroupLayout {...expandRoute(ROUTES.group.events.new)} component={EventCreatePage} />
@@ -202,13 +210,27 @@ export default function Routes(props) {
       <GroupLayout {...expandRoute(ROUTES.group.news.messages.new)} component={GroupMessageCreatePage} />
       <GroupLayout {...expandRoute(ROUTES.group.news.messages.edit)} component={GroupMessageEditPage} />
       <GroupLayout exact {...expandRoute(ROUTES.group.news.messages.show)} component={GroupMessagePage} />
+      <GroupLayout {...expandRoute(ROUTES.group.news.news_links.new)} component={NewsLinkCreatePage} />
+      <GroupLayout {...expandRoute(ROUTES.group.news.news_links.edit)} component={NewsLinkEditPage} />
+      <GroupLayout {...expandRoute(ROUTES.group.news.news_links.show)} component={NewsLinkPage} />
+      <GroupLayout {...expandRoute(ROUTES.group.news.social_links.new)} component={SocialLinkCreatePage} />
+      <GroupLayout {...expandRoute(ROUTES.group.news.social_links.edit)} component={SocialLinkEditPage} />
 
       { /* Group Members */ }
       <GroupLayout {...expandRoute(ROUTES.group.members.new)} component={GroupMemberCreatePage} />
 
-      { /* Group Outcomes */ }
-      <GroupLayout {...expandRoute(ROUTES.group.outcomes.new)} component={OutcomeCreatePage} />
-      <GroupLayout {...expandRoute(ROUTES.group.outcomes.edit)} component={OutcomeEditPage} />
+      { /* Group Plan */ }
+      { /* Group Plan - Structure/Outcomes */ }
+      <GroupLayout exact {...expandRoute(ROUTES.group.plan.outcomes.index)} component={OutcomesPage} />
+      <GroupLayout {...expandRoute(ROUTES.group.plan.outcomes.new)} component={OutcomeCreatePage} />
+      <GroupLayout {...expandRoute(ROUTES.group.plan.outcomes.edit)} component={OutcomeEditPage} />
+
+      { /* Group Plan - Events */ }
+      <GroupLayout exact {...expandRoute(ROUTES.group.plan.events.index)} component={GroupPlanEventsPage} />
+      <GroupLayout {...expandRoute(ROUTES.group.plan.events.manage)} component={EventManagePage} />
+
+      { /* Group Plan - KPI */ }
+      <GroupLayout exact {...expandRoute(ROUTES.group.plan.kpi.index)} component={GroupPlanKpiPage} />
 
       { /* Group Manage */ }
       { /* TODO - redirect /manage -> /manage/settings */ }

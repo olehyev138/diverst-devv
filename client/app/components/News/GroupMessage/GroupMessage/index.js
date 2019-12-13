@@ -16,8 +16,6 @@ import DiverstShowLoader from 'components/Shared/DiverstShowLoader';
 const styles = theme => ({});
 
 export function GroupMessage(props) {
-  /* Render a GroupMessage, its comments & a comment form */
-
   const { classes, ...rest } = props;
   const newsItem = dig(props, 'newsItem');
   const groupMessage = dig(newsItem, 'group_message');
@@ -43,7 +41,13 @@ export function GroupMessage(props) {
           { /* eslint-disable-next-line arrow-body-style */}
           {dig(groupMessage, 'comments') && groupMessage.comments.map((comment, i) => {
             return (
-              <GroupMessageComment key={comment.id} comment={comment} />
+              <GroupMessageComment
+                key={comment.id}
+                comment={comment}
+                deleteGroupMessageCommentBegin={props.deleteGroupMessageCommentBegin}
+                newsItem={props.newsItem}
+                groupMessage={props.groupMessage}
+              />
             );
           })}
         </React.Fragment>
@@ -60,7 +64,9 @@ GroupMessage.propTypes = {
   isFormLoading: PropTypes.bool,
   links: PropTypes.shape({
     groupMessageEdit: PropTypes.func
-  })
+  }),
+  deleteGroupMessageCommentBegin: PropTypes.func,
+  groupMessage: PropTypes.object,
 };
 
 export default compose(

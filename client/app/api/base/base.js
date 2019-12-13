@@ -2,11 +2,13 @@ import config from '../../app.config';
 import { appendQueryArgs } from 'utils/apiHelpers';
 
 const axios = require('axios');
+
+axios.defaults.baseURL = config.apiUrl || '';
 axios.defaults.headers.common['Diverst-APIKey'] = config.apiKey;
 
 class API {
   constructor(args) {
-    this.baseUrl = '/api/v1/';
+    this.baseUrl = `${axios.defaults.baseURL}/api/v1/`;
     this.controller = args.controller;
     this.url = this.baseUrl + this.controller;
   }
