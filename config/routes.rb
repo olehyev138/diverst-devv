@@ -27,10 +27,10 @@ Diverst::Application.routes.draw do
       resources :campaigns_segments
       resources :checklists
       resources :checklist_items
-      resources :clockwork_database_events
+      resources :clockwork_database_events, only [:index, :update]
       resources :custom_texts
       resources :devices
-      resources :emails
+      resources :emails, only [:index, :update]
       resources :enterprises do
         collection do
           get 'get_enterprise', to: 'enterprises#get_enterprise'
