@@ -11,12 +11,13 @@ import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/Group/Outcome/reducer';
 import saga from 'containers/Group/Outcome/saga';
 
-import { selectPaginatedOutcomes, selectOutcomeTotal, selectIsLoading } from 'containers/Group/Outcome/selectors';
-import { getOutcomesBegin, outcomesUnmount } from 'containers/Group/Outcome/actions';
+import { selectPaginatedOutcomes, selectOutcomesTotal, selectIsLoading } from 'containers/Group/Outcome/selectors';
+import { getOutcomesBegin, deleteOutcomeBegin, outcomesUnmount } from 'containers/Group/Outcome/actions';
 
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
+import GroupPlanLayout from 'containers/Layouts/GroupPlanLayout';
 import OutcomesList from 'components/Group/Outcome/OutcomesList';
 
 const defaultParams = Object.freeze({
@@ -35,9 +36,10 @@ export function OutcomesPage(props) {
 
   const rs = new RouteService(useContext);
   const links = {
-    outcomesIndex: ROUTES.group.outcomes.index.path(rs.params('group_id')),
-    outcomeNew: ROUTES.group.outcomes.new.path(rs.params('group_id')),
-    outcomeEdit: id => ROUTES.group.outcomes.edit.path(rs.params('group_id'), id)
+    outcomesIndex: ROUTES.group.plan.outcomes.index.path(rs.params('group_id')),
+    outcomeNew: ROUTES.group.plan.outcomes.new.path(rs.params('group_id')),
+    outcomeEdit: id => ROUTES.group.plan.outcomes.edit.path(rs.params('group_id'), id),
+    eventIndex: ROUTES.group.plan.events.index.path(rs.params('group_id')),
   };
 
   useEffect(() => {
@@ -59,22 +61,31 @@ export function OutcomesPage(props) {
   };
 
   return (
-    <OutcomesList
-      outcomes={props.outcomes}
-      outcomeTotal={props.outcomeTotal}
-      isLoading={props.isLoading}
-      defaultParams={defaultParams}
-      handlePagination={handlePagination}
-      links={links}
-    />
+    <React.Fragment>
+      <GroupPlanLayout
+        component={() => (
+          <OutcomesList
+            outcomes={props.outcomes}
+            outcomesTotal={props.outcomesTotal}
+            isLoading={props.isLoading}
+            deleteOutcomeBegin={props.deleteOutcomeBegin}
+            defaultParams={defaultParams}
+            handlePagination={handlePagination}
+            links={links}
+          />
+        )}
+        {...props}
+      />
+    </React.Fragment>
   );
 }
 
 OutcomesPage.propTypes = {
   getOutcomesBegin: PropTypes.func.isRequired,
+  deleteOutcomeBegin: PropTypes.func.isRequired,
   outcomesUnmount: PropTypes.func.isRequired,
   outcomes: PropTypes.array,
-  outcomeTotal: PropTypes.number,
+  outcomesTotal: PropTypes.number,
   isLoading: PropTypes.bool,
   currentGroup: PropTypes.shape({
     id: PropTypes.number,
@@ -83,12 +94,13 @@ OutcomesPage.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
   outcomes: selectPaginatedOutcomes(),
-  outcomeTotal: selectOutcomeTotal(),
+  outcomesTotal: selectOutcomesTotal(),
   isLoading: selectIsLoading(),
 });
 
 const mapDispatchToProps = {
   getOutcomesBegin,
+  deleteOutcomeBegin,
   outcomesUnmount,
 };
 

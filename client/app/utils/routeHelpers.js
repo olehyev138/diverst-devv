@@ -43,6 +43,12 @@ export default class RouteService {
     for (const key of keys)
       params.push(dig(this.match, 'params', key));
 
+    if (params.length === 1)
+      return params[0];
+
+    if (params.length === 0)
+      return null;
+
     return params;
   }
 

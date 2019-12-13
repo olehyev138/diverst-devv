@@ -35,3 +35,18 @@ export function buildValues(object, valueSchemas) {
 
   return values;
 }
+
+/*
+ * Checks if the attributes array exists, is empty, or contains *only* destroyed values objects
+ * @attributesArray - the array of values objects to check
+ *
+ * Destroyed values object looks like:
+ *   {
+ *     ...,
+ *     _destroy: 1
+ *   }
+ */
+export function isAttributesArrayEmpty(attributesArray) {
+  /* eslint-disable-next-line no-underscore-dangle */
+  return !attributesArray || attributesArray.length <= 0 || attributesArray.every(item => item._destroy === '1');
+}

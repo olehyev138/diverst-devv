@@ -4,17 +4,16 @@
  *
  */
 
-import React, { memo, useContext, useState } from 'react';
+import React, { memo, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { RouteContext } from 'containers/Layouts/ApplicationLayout';
 import withStyles from '@material-ui/core/styles/withStyles';
 
 import {
-  Box, Tab, Paper, Card, CardContent, Grid, Link, Typography, Button, Hidden,
+  Box, Tab, Paper, Card, CardContent, Grid, Link, Typography, Button, CardActionArea
 } from '@material-ui/core';
 
-import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 import AddIcon from '@material-ui/icons/Add';
 
 import { injectIntl } from 'react-intl';
@@ -25,10 +24,11 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import ResponsiveTabs from 'components/Shared/ResponsiveTabs';
 import DiverstPagination from 'components/Shared/DiverstPagination';
 
-import { formatDateTimeString, DateTime } from 'utils/dateTimeHelpers';
 import DiverstLoader from 'components/Shared/DiverstLoader';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { customTexts } from 'utils/customTextHelpers';
+
+import EventListItem from 'components/Event/EventListItem';
 
 const styles = theme => ({
   eventListItem: {
@@ -44,12 +44,7 @@ const styles = theme => ({
     height: '1px',
   },
   eventLink: {
-    '&:hover': {
-      textDecoration: 'none',
-    },
-    '&:hover h2': {
-      textDecoration: 'underline',
-    },
+    textDecoration: 'none !important',
   },
   dateText: {
     fontWeight: 'bold',
@@ -117,45 +112,23 @@ export function EventsList(props, context) {
           {props.events && Object.values(props.events).map((item, i) => {
             return (
               <Grid item key={item.id} className={classes.eventListItem}>
-                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                <Link
-                  className={classes.eventLink}
-                  component={WrappedNavLink}
-                  to={{
-                    pathname: ROUTES.group.events.show.path(item.owner_group_id, item.id),
-                    state: { id: item.id }
-                  }}
-                >
-                  <Card>
-                    <CardContent>
-                      <Grid container spacing={1} justify='space-between' alignItems='center'>
-                        <Grid item xs>
-                          <Typography color='primary' variant='h6' component='h2'>
-                            {item.name}
-                          </Typography>
-                          <hr className={classes.divider} />
-                          {item.description && (
-                            <React.Fragment>
-                              <Typography color='textSecondary'>
-                                {item.description}
-                              </Typography>
-                              <Box pb={1} />
-                            </React.Fragment>
-                          )}
-                          <Box pt={1} />
-                          <Typography color='textSecondary' variant='subtitle2' className={classes.dateText}>
-                            {formatDateTimeString(item.start, DateTime.DATETIME_MED)}
-                          </Typography>
-                        </Grid>
-                        <Hidden xsDown>
-                          <Grid item>
-                            <KeyboardArrowRightIcon className={classes.arrowRight} />
-                          </Grid>
-                        </Hidden>
-                      </Grid>
-                    </CardContent>
-                  </Card>
-                </Link>
+                <Card>
+                  {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                  <Link
+                    className={classes.eventLink}
+                    component={WrappedNavLink}
+                    to={{
+                      pathname: ROUTES.group.events.show.path(item.owner_group_id, item.id),
+                      state: { id: item.id }
+                    }}
+                  >
+                    <CardActionArea>
+                      <CardContent>
+                        <EventListItem item={item} />
+                      </CardContent>
+                    </CardActionArea>
+                  </Link>
+                </Card>
               </Grid>
             );
           })}
