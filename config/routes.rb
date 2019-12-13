@@ -253,11 +253,7 @@ Rails.application.routes.draw do
           get 'segment_graph'
         end
 
-        resources :comments, only: [:create, :destroy], shallow: true do
-          member do
-            patch 'approve'
-            patch 'disapprove'
-          end
+        resources :comments, only: [:create, :destroy], shallow: true do  
         end
 
         collection do
