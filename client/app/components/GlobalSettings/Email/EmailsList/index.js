@@ -4,30 +4,21 @@
  *
  */
 
-import React, { memo, useContext, useState } from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
-import { RouteContext } from 'containers/Layouts/ApplicationLayout';
 import withStyles from '@material-ui/core/styles/withStyles';
 
 import {
-  Box, Tab, Paper, Card, CardContent, Grid, Link, Typography, Button, Hidden,
+  Box, Card, CardContent, Grid, Link, Typography,
 } from '@material-ui/core';
 
-import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
-import AddIcon from '@material-ui/icons/Add';
-
-import { injectIntl } from 'react-intl';
-// import messages from 'containers/Email/messages';
+import messages from 'containers/GlobalSettings/Email/Email/messages';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
-import { ROUTES } from 'containers/Shared/Routes/constants';
-
 import DiverstPagination from 'components/Shared/DiverstPagination';
 
-import { formatDateTimeString, DateTime } from 'utils/dateTimeHelpers';
 import DiverstLoader from 'components/Shared/DiverstLoader';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
-import { customTexts } from 'utils/customTextHelpers';
 
 const styles = theme => ({
   emailListItem: {
@@ -63,10 +54,8 @@ const styles = theme => ({
   },
 });
 
-export function EmailsList(props, context) {
-  const { classes, intl } = props;
-
-  const routeContext = useContext(RouteContext);
+export function EmailsList(props) {
+  const { classes } = props;
 
   return (
     <React.Fragment>
@@ -81,7 +70,7 @@ export function EmailsList(props, context) {
                   className={classes.emailLink}
                   component={WrappedNavLink}
                   to={{
-                    pathname: props.links.emailEdit(item.id), // ROUTES.group.emails.show.path(item.owner_group_id, item.id),
+                    pathname: props.links.emailEdit(item.id),
                     state: { id: item.id }
                   }}
                 >
@@ -110,8 +99,7 @@ export function EmailsList(props, context) {
               <Grid item sm>
                 <Box mt={3} />
                 <Typography variant='h6' align='center' color='textSecondary'>
-                  THERE ARE NO EMAILS
-                  {/* <DiverstFormattedMessage {...messages.index.emptySection} /> */}
+                  <DiverstFormattedMessage {...messages.index.empty} />
                 </Typography>
               </Grid>
             </React.Fragment>
@@ -130,7 +118,6 @@ export function EmailsList(props, context) {
 }
 
 EmailsList.propTypes = {
-  intl: PropTypes.object,
   classes: PropTypes.object,
   emails: PropTypes.array,
   emailsTotal: PropTypes.number,
@@ -141,7 +128,6 @@ EmailsList.propTypes = {
 };
 
 export default compose(
-  injectIntl,
   withStyles(styles),
   memo,
 )(EmailsList);

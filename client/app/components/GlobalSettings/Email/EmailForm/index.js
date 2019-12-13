@@ -8,14 +8,13 @@ import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import dig from 'object-dig';
-import { DateTime } from 'luxon';
 import Interweave from 'interweave';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { injectIntl, intlShape } from 'react-intl';
 import { Field, Formik, Form } from 'formik';
 import {
-  Typography, Card, CardHeader, CardActions, CardContent, TextField, Grid, Divider, Box
+  Typography, Card, CardHeader, CardActions, CardContent, TextField, Grid, Divider, Box, Button
 } from '@material-ui/core';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
@@ -104,6 +103,16 @@ export function EmailFormInner({
               <DiverstSubmit isCommitting={props.isCommitting}>
                 <DiverstFormattedMessage {...messages.form.update} />
               </DiverstSubmit>
+              <Button
+                component={WrappedNavLink}
+                to={props.links.emailsIndex}
+                variant='contained'
+                size='large'
+                color='primary'
+                className={classes.buttons}
+              >
+                <DiverstFormattedMessage {...messages.form.cancel} />
+              </Button>
             </CardActions>
           </Form>
         </Card>

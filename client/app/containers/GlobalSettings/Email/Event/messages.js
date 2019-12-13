@@ -31,27 +31,13 @@ export default defineMessages({
     update: {
       id: `${scope}.form.update`,
     },
-  },
-  preview: {
-    title: {
-      id: `${scope}.preview.title`,
-    },
-    subTitle: {
-      id: `${scope}.preview.subTitle`,
-    },
-    subject: {
-      id: `${scope}.preview.subject`,
-    },
-    body: {
-      id: `${scope}.preview.body`,
+    cancel: {
+      id: `${scope}.form.cancel`,
     },
   },
-  variables: {
-    title: {
-      id: `${scope}.variables.title`,
-    },
-    subTitle: {
-      id: `${scope}.variables.subTitle`,
+  index: {
+    empty: {
+      id: `${scope}.index.empty`,
     },
   },
 });

@@ -10,12 +10,13 @@ import { withStyles } from '@material-ui/core/styles';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import ResponsiveTabs from 'components/Shared/ResponsiveTabs';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/GlobalSettings/Email/messages';
 
 const styles = theme => ({});
 
 /* eslint-disable react/no-multi-comp */
 export function GlobalSettingsLinks(props) {
-  const { classes } = props;
   const { currentTab } = props;
 
   return (
@@ -29,12 +30,12 @@ export function GlobalSettingsLinks(props) {
           <Tab
             component={WrappedNavLink}
             to={ROUTES.admin.system.globalSettings.emails.index.path()}
-            label='Layouts'
+            label={<DiverstFormattedMessage {...messages.layouts} />}
           />
           <Tab
             component={WrappedNavLink}
             to={ROUTES.admin.system.globalSettings.mailEvents.index.path()}
-            label='Events'
+            label={<DiverstFormattedMessage {...messages.events} />}
           />
         </ResponsiveTabs>
       </Paper>
@@ -45,7 +46,7 @@ export function GlobalSettingsLinks(props) {
 GlobalSettingsLinks.propTypes = {
   classes: PropTypes.object,
   currentTab: PropTypes.number,
-  currentGroup: PropTypes.object
+  currentGroup: PropTypes.object,
 };
 
 export const StyledGroupManageLinks = withStyles(styles)(GlobalSettingsLinks);

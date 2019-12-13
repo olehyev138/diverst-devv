@@ -22,11 +22,10 @@ import {
   FormControlLabel,
   Switch,
   FormControl,
-  Box,
+  Box, Button,
 } from '@material-ui/core';
 
 import messages from 'containers/GlobalSettings/Email/Event/messages';
-import globalMessages from 'containers/Shared/App/messages';
 import { buildValues, mapFields } from 'utils/formHelpers';
 
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
@@ -34,6 +33,7 @@ import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 import { withStyles } from '@material-ui/core/styles';
 import { DiverstTimePicker } from 'components/Shared/Pickers/DiverstTimePicker';
 import Select from 'components/Shared/DiverstSelect';
+import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
 const styles = theme => ({
   padding: {
@@ -157,6 +157,16 @@ export function EventFormInner({
               <DiverstSubmit isCommitting={props.isCommitting}>
                 <DiverstFormattedMessage {...messages.form.update} />
               </DiverstSubmit>
+              <Button
+                component={WrappedNavLink}
+                to={props.links.eventsIndex}
+                variant='contained'
+                size='large'
+                color='primary'
+                className={classes.buttons}
+              >
+                <DiverstFormattedMessage {...messages.form.cancel} />
+              </Button>
             </CardActions>
           </Form>
         </Card>

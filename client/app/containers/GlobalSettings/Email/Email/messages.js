@@ -22,6 +22,9 @@ export default defineMessages({
     update: {
       id: `${scope}.form.update`,
     },
+    cancel: {
+      id: `${scope}.form.cancel`,
+    },
   },
   preview: {
     title: {
@@ -43,6 +46,11 @@ export default defineMessages({
     },
     subTitle: {
       id: `${scope}.variables.subTitle`,
+    },
+  },
+  index: {
+    empty: {
+      id: `${scope}.index.empty`,
     },
   },
 });
