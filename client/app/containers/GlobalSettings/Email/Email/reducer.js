@@ -73,7 +73,6 @@ function emailReducer(state = initialState, action) {
 
       case UPDATE_EMAIL_ERROR:
         draft.isCommitting = false;
-        draft.hasChanged = false;
         break;
 
       case EMAILS_UNMOUNT:

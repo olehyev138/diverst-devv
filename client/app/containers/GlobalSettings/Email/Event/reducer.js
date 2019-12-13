@@ -73,7 +73,6 @@ function eventReducer(state = initialState, action) {
 
       case UPDATE_EVENT_ERROR:
         draft.isCommitting = false;
-        draft.hasChanged = false;
         break;
 
       case EVENTS_UNMOUNT:
