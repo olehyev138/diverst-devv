@@ -3,6 +3,10 @@ class ClockworkDatabaseEventPolicy < EnterprisePolicy
     update?
   end
 
+  def show?
+    update?
+  end
+
   class Scope < Scope
     def index?
       ClockworkDatabaseEventPolicy.new(user, nil).index?

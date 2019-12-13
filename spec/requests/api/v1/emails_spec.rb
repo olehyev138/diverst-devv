@@ -21,7 +21,7 @@ RSpec.describe 'Emails', type: :request do
 
   it 'creates an item' do
     post "/api/v1/#{route}", params: { "#{route.singularize}": build(route.singularize.to_sym).attributes }, headers: headers
-    expect(response).to have_http_status(:bad_request)
+    expect(response).to have_http_status(:forbidden)
   end
 
   it 'updates an item' do
@@ -31,6 +31,6 @@ RSpec.describe 'Emails', type: :request do
 
   it 'deletes an item' do
     delete "/api/v1/#{route}/#{item.id}", headers: headers
-    expect(response).to have_http_status(:bad_request)
+    expect(response).to have_http_status(:forbidden)
   end
 end
