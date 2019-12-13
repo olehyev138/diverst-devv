@@ -253,8 +253,7 @@ Rails.application.routes.draw do
           get 'segment_graph'
         end
 
-        resources :comments, only: [:create, :destroy], shallow: true do  
-        end
+        resources :comments, only: [:create, :destroy], shallow: true
 
         collection do
           get 'calendar_view'
