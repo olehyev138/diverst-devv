@@ -338,6 +338,7 @@
   "diverst.containers.GlobalSettings.Emails.preview.content" : "Email Body",
   "diverst.containers.GlobalSettings.Emails.variables.title" : "Variables",
   "diverst.containers.GlobalSettings.Emails.variables.subTitle" : "The variables below can be used in your templates.",
+  "diverst.containers.GlobalSettings.EmailEvents.everyday" : "Every Day",
   "diverst.containers.GlobalSettings.EmailEvents.form.name" : "Name",
   "diverst.containers.GlobalSettings.EmailEvents.form.disabled" : "Disabled?",
   "diverst.containers.GlobalSettings.EmailEvents.form.at" : "Run At",

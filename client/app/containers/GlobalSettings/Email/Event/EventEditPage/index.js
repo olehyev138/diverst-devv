@@ -23,6 +23,7 @@ import {
 } from 'containers/GlobalSettings/Email/Event/actions';
 
 import EventForm from 'components/GlobalSettings/Email/EventForm';
+import messages from 'containers/GlobalSettings/Email/Event/messages';
 import globalMessages from 'containers/Shared/App/messages';
 import { injectIntl, intlShape } from 'react-intl';
 
@@ -30,7 +31,7 @@ const mapDay = (day, intl) => {
   if (day.label >= 0)
     day.label = intl.formatMessage(globalMessages.days_of_week[day.label]);
   else
-    day.label = '';
+    day.label = intl.formatMessage(messages.everyday);
 
   return day;
 };

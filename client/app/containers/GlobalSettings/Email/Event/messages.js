@@ -9,6 +9,9 @@ import { defineMessages } from 'react-intl';
 export const scope = 'diverst.containers.GlobalSettings.EmailEvents';
 
 export default defineMessages({
+  everyday: {
+    id: `${scope}.everyday`
+  },
   form: {
     name: {
       id: `${scope}.form.name`,
