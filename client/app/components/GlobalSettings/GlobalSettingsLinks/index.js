@@ -10,6 +10,8 @@ import { withStyles } from '@material-ui/core/styles';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import ResponsiveTabs from 'components/Shared/ResponsiveTabs';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/GlobalSettings/messages';
 
 const styles = theme => ({});
 
@@ -29,27 +31,27 @@ export function GlobalSettingsLinks(props) {
           <Tab
             component={WrappedNavLink}
             to={ROUTES.admin.system.globalSettings.fields.index.path()}
-            label='Fields'
+            label={<DiverstFormattedMessage {...messages.fields} />}
           />
           <Tab
             component={WrappedNavLink}
             to={ROUTES.admin.system.globalSettings.customText.edit.path()}
-            label='Custom Texts'
+            label={<DiverstFormattedMessage {...messages.customTexts} />}
           />
           <Tab
             component={WrappedNavLink}
             to={ROUTES.admin.system.globalSettings.enterpriseConfiguration.index.path()}
-            label='Configuration'
+            label={<DiverstFormattedMessage {...messages.configuration} />}
           />
           <Tab
             component={WrappedNavLink}
             to={ROUTES.admin.system.globalSettings.ssoSettings.edit.path()}
-            label='SSO'
+            label={<DiverstFormattedMessage {...messages.sso} />}
           />
           <Tab
             component={WrappedNavLink}
             to={ROUTES.admin.system.globalSettings.emails.index.path()}
-            label='Email'
+            label={<DiverstFormattedMessage {...messages.emails} />}
           />
         </ResponsiveTabs>
       </Paper>
