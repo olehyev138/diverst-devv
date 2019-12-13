@@ -8,6 +8,7 @@ import {
   selectIsCommitting,
   selectHasChanged,
 } from '../selectors';
+import { initialState } from '../reducer';
 
 describe('Email selectors', () => {
   describe('selectEmailDomain', () => {
@@ -16,6 +17,13 @@ describe('Email selectors', () => {
       const selected = selectEmailDomain(mockedState);
 
       expect(selected).toEqual({ email: {} });
+    });
+
+    it('should select initialState', () => {
+      const mockedState = { };
+      const selected = selectEmailDomain(mockedState);
+
+      expect(selected).toEqual(initialState);
     });
   });
 
