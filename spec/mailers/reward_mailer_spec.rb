@@ -30,7 +30,7 @@ RSpec.describe RewardMailer, type: :mailer do
       end
 
       it 'shows a message to user' do
-        expect(mail.body.decoded).to include("The user #{user.name} has requested to redeem a prize #{reward.label}. Please click #{link_to 'here', users_pending_rewards_users_url} to approve or deny the request.
+        expect(mail.body.decoded).to include("The user #{user.name} has requested to redeem a reward #{reward.label}. Please click #{link_to 'here', users_pending_rewards_users_url} to approve or deny the request.
 ".html_safe)
       end
 
