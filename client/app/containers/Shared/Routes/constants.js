@@ -538,10 +538,10 @@ export const ROUTES = {
         },
         emails: {
           index: {
-            path: () => '/admin/system/settings/emails'
+            path: () => '/admin/system/settings/emailLayouts'
           },
           edit: {
-            path: (emailId = ':email_id') => `/admin/system/settings/emails/${emailId}/edit`
+            path: (emailId = ':email_id') => `/admin/system/settings/emailLayouts/${emailId}/edit`
           },
         },
         mailEvents: {

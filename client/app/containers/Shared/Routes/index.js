@@ -82,7 +82,8 @@ import {
   SSOSettingsPage,
   EmailsPage,
   EmailEditPage,
-  EmailEventEditPage
+  EmailEventEditPage,
+  EmailLayout,
 } from './templates';
 
 // Paths
@@ -168,9 +169,10 @@ export default function Routes(props) {
       <GlobalSettingsLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.customText.edit)} component={CustomTextEditPage} />
       <GlobalSettingsLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.enterpriseConfiguration.index)} component={EnterpriseConfigurationPage} />
       <GlobalSettingsLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.ssoSettings.edit)} component={SSOSettingsPage} />
-      <GlobalSettingsLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.emails.index)} component={EmailsPage} />
-      <GlobalSettingsLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.emails.edit)} component={EmailEditPage} />
-      <GlobalSettingsLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.mailEvents.edit)} component={EmailEventEditPage} />
+      <EmailLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.emails.index)} component={EmailsPage} />
+      <EmailLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.emails.edit)} component={EmailEditPage} />
+      <EmailLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.mailEvents.index)} component={NotFoundPage} />
+      <EmailLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.mailEvents.edit)} component={EmailEventEditPage} />
 
       { /* Admin - System - Users */ }
       <SystemUserLayout exact {...expandRoute(ROUTES.admin.system.users.index)} component={UsersPage} />

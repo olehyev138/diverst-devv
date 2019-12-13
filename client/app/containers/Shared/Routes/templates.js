@@ -9,6 +9,7 @@ import GroupManageLayout from 'containers/Layouts/GroupManageLayout/Loadable';
 import MentorshipLayout from 'containers/Layouts/MentorshipLayout/Loadable';
 import InnovateLayout from 'containers/Layouts/InnovateLayout/Loadable';
 import SystemUserLayout from 'containers/Layouts/SystemUsersLayout/Loadable';
+import EmailLayout from 'containers/Layouts/GlobalSettingsLayout/EmailLayout/Loadable';
 
 /* Session */
 import LoginPage from 'containers/Session/LoginPage/Loadable';
@@ -200,4 +201,5 @@ export {
   EmailsPage,
   EmailEditPage,
   EmailEventEditPage,
+  EmailLayout,
 };
