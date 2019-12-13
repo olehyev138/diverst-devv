@@ -27,15 +27,6 @@ import messages from 'containers/GlobalSettings/Email/Event/messages';
 import globalMessages from 'containers/Shared/App/messages';
 import { injectIntl, intlShape } from 'react-intl';
 
-const mapDay = (day, intl) => {
-  if (day.label >= 0)
-    day.label = intl.formatMessage(globalMessages.days_of_week[day.label]);
-  else
-    day.label = intl.formatMessage(messages.everyday);
-
-  return day;
-};
-
 export function EventEditPage(props) {
   useInjectReducer({ key: 'mailEvents', reducer });
   useInjectSaga({ key: 'mailEvents', saga });
@@ -46,6 +37,17 @@ export function EventEditPage(props) {
     eventEdit: ROUTES.admin.system.globalSettings.mailEvents.edit.path(rs.params('event_id')),
   };
 
+  const { currentEvent, intl } = props;
+
+  const mapDay = (day) => {
+    if (day.label >= 0)
+      day.label = intl.formatMessage(globalMessages.days_of_week[day.label]);
+    else
+      day.label = intl.formatMessage(messages.everyday);
+
+    return day;
+  };
+
   useEffect(() => {
     const eventId = rs.params('event_id');
     props.getEventBegin({ id: eventId });
@@ -53,7 +55,6 @@ export function EventEditPage(props) {
     return () => props.eventsUnmount();
   }, []);
 
-  const { currentEvent, intl } = props;
   if (currentEvent)
     mapDay(currentEvent.day, intl);
 

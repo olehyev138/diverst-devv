@@ -65,7 +65,6 @@ const styles = theme => ({
 
 export function EventsList(props, context) {
   const { classes, intl } = props;
-
   const routeContext = useContext(RouteContext);
 
   return (
@@ -102,7 +101,7 @@ export function EventsList(props, context) {
                             </Grid>
                             <Grid item>
                               <Typography color='textSecondary' variant='subtitle2' className={classes.dateText}>
-                                {item.at}
+                                {item.at12}
                               </Typography>
                             </Grid>
                             <Grid item>

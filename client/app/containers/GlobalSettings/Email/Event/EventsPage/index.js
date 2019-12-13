@@ -27,7 +27,9 @@ import {
 } from 'containers/GlobalSettings/Email/Event/actions';
 
 import EventsList from 'components/GlobalSettings/Email/EventsList';
-import dig from 'object-dig';
+import globalMessages from 'containers/Shared/App/messages';
+import messages from 'containers/GlobalSettings/Email/Event/messages';
+import { injectIntl, intlShape } from 'react-intl';
 
 const defaultParams = Object.freeze({
   count: 10, // TODO: Make this a constant and use it also in EventsList
@@ -37,16 +39,25 @@ const defaultParams = Object.freeze({
 });
 
 export function CustomTextEditPage(props) {
-  useInjectReducer({ key: 'events', reducer });
-  useInjectSaga({ key: 'events', saga });
+  useInjectReducer({ key: 'mailEvents', reducer });
+  useInjectSaga({ key: 'mailEvents', saga });
 
   const rs = new RouteService(useContext);
   const links = {
     eventsIndex: ROUTES.admin.system.globalSettings.mailEvents.index.path(),
-    eventEdit: ROUTES.admin.system.globalSettings.mailEvents.edit.path(rs.params('event_id')),
+    eventEdit: id => ROUTES.admin.system.globalSettings.mailEvents.edit.path(id),
   };
 
-  const { currentUser, events, isFetching } = props;
+  const { currentUser, events, isFetching, intl } = props;
+
+  const mapDay = (event) => {
+    if (event.day.label >= 0)
+      event.day.label = intl.formatMessage(globalMessages.days_of_week[event.day.label]);
+    else
+      event.day.label = intl.formatMessage(messages.everyday);
+
+    return event;
+  };
 
   const [params, setParams] = useState(defaultParams);
 
@@ -76,7 +87,7 @@ export function CustomTextEditPage(props) {
   return (
     <EventsList
       currentUser={currentUser}
-      events={events}
+      events={events.map(event => mapDay(event))}
       handlePagination={handlePagination}
       eventsTotal={props.eventsTotal}
       links={links}
@@ -92,6 +103,8 @@ CustomTextEditPage.propTypes = {
   events: PropTypes.array,
   eventsTotal: PropTypes.number,
   isFetching: PropTypes.bool,
+
+  intl: intlShape.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -113,5 +126,6 @@ const withConnect = connect(
 
 export default compose(
   withConnect,
+  injectIntl,
   memo,
 )(CustomTextEditPage);
