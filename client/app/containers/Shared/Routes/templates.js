@@ -88,9 +88,16 @@ import SocialLinkCreatePage from 'containers/News/SocialLink/SocialLinkCreatePag
 import SocialLinkEditPage from 'containers/News/SocialLink/SocialLinkEditPage';
 import NewsLinkPage from 'containers/News/NewsLink/NewsLinkPage';
 
-/* Group - Outcomes */
+/* Group - Plan - Events */
+import GroupPlanEventsPage from 'containers/Group/GroupPlan/EventsPage/Loadable';
+import EventManagePage from 'containers/Event/EventManagePage/Loadable';
+
+/* Group - Plan - Outcomes */
 import OutcomeCreatePage from 'containers/Group/Outcome/OutcomeCreatePage/Loadable';
 import OutcomeEditPage from 'containers/Group/Outcome/OutcomeEditPage/Loadable';
+
+/* Group - Plan - KPI */
+import GroupPlanKpiPage from 'containers/Group/GroupPlan/KpiPage/Loadable';
 
 /* Group - Members */
 import GroupMemberListPage from 'containers/Group/GroupMembers/GroupMemberListPage/Loadable';
@@ -143,15 +150,18 @@ export {
   GroupHomePage,
   EventsPage,
   NewsFeedPage,
-  OutcomesPage,
   EventPage,
   EventCreatePage,
   EventEditPage,
+  EventManagePage,
+  GroupPlanEventsPage,
   GroupMessagePage,
   GroupMessageCreatePage,
   GroupMessageEditPage,
+  OutcomesPage,
   OutcomeCreatePage,
   OutcomeEditPage,
+  GroupPlanKpiPage,
   GroupMemberListPage,
   GroupMemberCreatePage,
   NotFoundPage,

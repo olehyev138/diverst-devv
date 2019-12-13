@@ -65,7 +65,6 @@ gem 'yam', '~> 2.5' # Yammer ruby SDK
 group :development, :test do
   # The 3 gems above are for livereloading your code
   gem 'byebug', '~> 9.1.0' # Debugger
-  gem 'database_cleaner', '~> 1.6.1' # Necessary to clean the DB between tests
   gem 'pronto', '~> 0.10.0'
   gem 'pronto-eslint_npm', git: 'https://github.com/doits/pronto-eslint_npm.git'
   gem 'pronto-rubocop', '~> 0.10.0'
@@ -81,7 +80,7 @@ end
 
 group :test do
   gem 'clockwork-test', '~> 0.2.0'
-  gem 'hashdiff', '0.4.0'
+  gem 'hashdiff', '1.0.0'
   gem 'rspec_junit_formatter', '~> 0.2.3'
   gem 'simplecov', '~> 0.13.0'
   gem 'webmock', '~> 3.7.6'

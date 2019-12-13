@@ -43,6 +43,7 @@ exports[`<EnterpriseForm /> <EnterpriseFormInner /> Should render and match the 
                 "children": [Function],
                 "className": [Function],
                 "classes": [Function],
+                "color": [Function],
                 "defaultValue": [Function],
                 "disabled": [Function],
                 "error": [Function],
@@ -70,6 +71,7 @@ exports[`<EnterpriseForm /> <EnterpriseFormInner /> Should render and match the 
               },
               "render": [Function],
             },
+            "defaultProps": undefined,
             "displayName": "WithStyles(ForwardRef(TextField))",
             "options": Object {
               "defaultTheme": Object {

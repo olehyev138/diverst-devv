@@ -101,8 +101,9 @@ export function CampaignQuestionForm(props) {
       onSubmit={(values, actions) => {
         props.questionAction(values);
       }}
-      render={formikProps => <CampaignQuestionFormInner {...props} {...formikProps} />}
-    />
+    >
+      {formikProps => <CampaignQuestionFormInner {...props} {...formikProps} />}
+    </Formik>
   );
 }
 CampaignQuestionForm.propTypes = {

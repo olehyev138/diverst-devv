@@ -19,8 +19,6 @@ const styles = theme => ({
 });
 
 export function GroupMessageComment(props) {
-  /* Render a single group message comment */
-
   const { classes, comment, newsItem } = props;
 
   return (

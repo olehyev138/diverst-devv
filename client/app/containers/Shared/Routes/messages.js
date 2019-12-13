@@ -61,7 +61,7 @@ export default defineMessages({
       },
       edit: {
         id: `${scope}.group.events.edit`
-      }
+      },
     },
     resources: {
       index: {
@@ -101,16 +101,34 @@ export default defineMessages({
         }
       },
     },
-    outcomes: {
+    plan: {
       index: {
-        id: `${scope}.group.outcomes.index`
+        id: `${scope}.group.plan.index`
       },
-      new: {
-        id: `${scope}.group.outcomes.new`
+      outcomes: {
+        index: {
+          id: `${scope}.group.plan.outcomes.index`
+        },
+        new: {
+          id: `${scope}.group.plan.outcomes.new`
+        },
+        edit: {
+          id: `${scope}.group.plan.outcomes.edit`
+        },
       },
-      edit: {
-        id: `${scope}.group.outcomes.edit`
-      }
+      events: {
+        index: {
+          id: `${scope}.group.plan.events.index`
+        },
+        manage: {
+          id: `${scope}.group.plan.events.manage`
+        },
+      },
+      kpi: {
+        index: {
+          id: `${scope}.group.plan.kpi.index`
+        }
+      },
     },
     manage: {
       index: {

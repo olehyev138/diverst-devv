@@ -15,7 +15,7 @@ import {
   createOutcomeSuccess, createOutcomeError,
   getOutcomeSuccess, getOutcomeError,
   updateOutcomeSuccess, updateOutcomeError,
-  deleteOutcomeError
+  deleteOutcomeError, deleteOutcomeSuccess
 } from 'containers/Group/Outcome/actions';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -53,7 +53,7 @@ export function* createOutcome(action) {
     const response = yield call(api.outcomes.create.bind(api.outcomes), payload);
 
     yield put(createOutcomeSuccess());
-    yield put(push(ROUTES.admin.manage.outcomes.index.path()));
+    yield put(push(ROUTES.group.plan.outcomes.index.path(action.payload.group_id)));
     yield put(showSnackbar({ message: 'Outcome created', options: { variant: 'success' } }));
   } catch (err) {
     yield put(createOutcomeError(err));
@@ -69,7 +69,7 @@ export function* updateOutcome(action) {
     const response = yield call(api.outcomes.update.bind(api.outcomes), payload.outcome.id, payload);
 
     yield put(updateOutcomeSuccess());
-    yield put(push(ROUTES.admin.manage.outcomes.index.path()));
+    yield put(push(ROUTES.group.plan.outcomes.index.path(action.payload.group_id)));
     yield put(showSnackbar({ message: 'Outcome updated', options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateOutcomeError(err));
@@ -81,8 +81,10 @@ export function* updateOutcome(action) {
 
 export function* deleteOutcome(action) {
   try {
-    yield call(api.outcomes.destroy.bind(api.outcomes), action.payload);
-    yield put(push(ROUTES.admin.manage.outcomes.index.path()));
+    yield call(api.outcomes.destroy.bind(api.outcomes), action.payload.id);
+
+    yield put(deleteOutcomeSuccess());
+    yield put(push(ROUTES.group.plan.outcomes.index.path(action.payload.group_id)));
     yield put(showSnackbar({ message: 'Outcome deleted', options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteOutcomeError(err));

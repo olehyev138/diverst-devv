@@ -47,7 +47,7 @@ export default defineMessages({
       id: `${scope}.index.tabs.all`
     },
   },
-  form: {
+  inputs: {
     name: {
       id: `${scope}.form.input.name`,
     },

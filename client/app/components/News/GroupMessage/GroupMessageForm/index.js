@@ -93,9 +93,9 @@ export function GroupMessageForm(props) {
       onSubmit={(values, actions) => {
         props.groupMessageAction(values);
       }}
-
-      render={formikProps => <GroupMessageFormInner {...props} {...formikProps} groupMessage={groupMessage} />}
-    />
+    >
+      {formikProps => <GroupMessageFormInner {...props} {...formikProps} groupMessage={groupMessage} />}
+    </Formik>
   );
 }
 
