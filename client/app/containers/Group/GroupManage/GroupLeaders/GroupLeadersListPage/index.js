@@ -64,7 +64,6 @@ export function GroupLeadersListPage(props) {
       props.groupLeadersUnmount();
     };
   }, []);
-  console.log(props.groupLeaderList);
   return (
     props.groupLeaderList && (
       <React.Fragment>

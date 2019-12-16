@@ -1,5 +1,5 @@
 class GroupLeaderSerializer < ApplicationRecordSerializer
-  attributes :group, :user_role
+  attributes :group, :user_role, :position_name
 
   belongs_to :user
 

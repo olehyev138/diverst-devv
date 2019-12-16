@@ -46,7 +46,7 @@ export function* getGroupLeader(action) {
 
 export function* createGroupLeaders(action) {
   try {
-    const payload = { groupLeader: action.payload };
+    const payload = { group_leader: action.payload };
     const response = yield call(api.groupLeaders.create.bind(api.groupLeaders), payload);
 
     yield put(createGroupLeaderSuccess());

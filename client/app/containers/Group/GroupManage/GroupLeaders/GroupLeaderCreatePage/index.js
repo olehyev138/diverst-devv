@@ -32,6 +32,9 @@ export function GroupLeaderCreatePage(props) {
   useInjectReducer({ key: 'users', reducer: userReducer });
   useInjectSaga({ key: 'users', saga: userSaga });
 
+  const rs = new RouteService(useContext);
+  const groupId = rs.params('group_id');
+
   const links = {
     GroupLeadersIndex: ROUTES.group.manage.leaders.index.path(),
   };
@@ -42,6 +45,7 @@ export function GroupLeaderCreatePage(props) {
     <GroupLeaderForm
       groupLeaderAction={props.createGroupLeaderBegin}
       buttonText='Create'
+      groupId={groupId[0]}
       getUsersBegin={props.getUsersBegin}
       selectUsers={props.users}
       isCommitting={props.isCommitting}

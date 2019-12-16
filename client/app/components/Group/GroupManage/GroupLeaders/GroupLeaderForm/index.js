@@ -39,7 +39,7 @@ export function GroupLeaderFormInner({ handleSubmit, handleChange, handleBlur, v
   //     count:
   //   })
   // }
-
+console.log(props);
   return (
     <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.groupLeader}>
       <Card>
@@ -82,13 +82,13 @@ export function GroupLeaderFormInner({ handleSubmit, handleChange, handleBlur, v
 }
 
 export function GroupLeaderForm(props) {
-
   const initialValues = buildValues(props.groupLeader, {
     // users: { default: [], customKey: 'member_ids' }
     id: { default: '' },
     user_id: { default: '' },
-    group_id: { default: '' },
-    description: { default: '' },
+    group_id: { default: props.groupId },
+    position_name: { default: 'Group Leader' },
+    user_role_id: { default: '4' },
     users: { default: [], customKey: 'user_ids' },
   });
 
