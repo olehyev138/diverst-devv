@@ -69,7 +69,7 @@ export function GroupLeadersListPage(props) {
   }, []);
 
   return (
-    props.currentGroup && (
+    props && (
       <React.Fragment>
         <GroupLeadersList
           group={props.currentGroup}

@@ -50,7 +50,7 @@ export function GroupLeaderCreatePage(props) {
   );
 }
 
-CampaignCreatePage.propTypes = {
+GroupLeaderCreatePage.propTypes = {
   createGroupLeaderBegin: PropTypes.func,
   groupLeadersUnmount: PropTypes.func,
   getUsersBegin: PropTypes.func,

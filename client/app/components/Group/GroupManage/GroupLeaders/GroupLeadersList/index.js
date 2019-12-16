@@ -52,7 +52,7 @@ export function GroupLeadersList(props) {
   };
 
   const columns = [
-    { title: 'GroupLeader', field: 'id' },
+    { title: 'GroupLeader', field: 'user.name' },
     { title: 'Position', field: 'position_name' }
   ];
 
