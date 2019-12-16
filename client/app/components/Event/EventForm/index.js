@@ -23,6 +23,7 @@ import { buildValues } from 'utils/formHelpers';
 import DiverstDateTimePicker from 'components/Shared/Pickers/DiverstDateTimePicker';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
+import DiverstFileInput from 'components/Shared/DiverstFileInput';
 
 /* eslint-disable object-curly-newline */
 export function EventFormInner({
@@ -100,6 +101,20 @@ export function EventFormInner({
             </Grid>
           </CardContent>
           <Divider />
+          <CardContent>
+            <Field
+              component={DiverstFileInput}
+              onChange={value => setFieldValue('picture', value.target.files[0])}
+              disabled={props.isCommitting}
+              fullWidth
+              id='picture'
+              name='picture'
+              margin='normal'
+              label={<DiverstFormattedMessage {...messages.inputs.picture} />}
+              value={values.picture}
+            />
+          </CardContent>
+          <Divider />
           <CardActions>
             <DiverstSubmit isCommitting={props.isCommitting}>
               {buttonText}
@@ -127,6 +142,7 @@ export function EventForm(props) {
     description: { default: '' },
     start: { default: DateTime.local().plus({ hour: 1 }) },
     end: { default: DateTime.local().plus({ hour: 2 }) },
+    picture: { default: null },
     max_attendees: { default: '' },
     location: { default: '' },
     annual_budget_id: { default: '' },

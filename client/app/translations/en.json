@@ -311,6 +311,7 @@
   "diverst.containers.Event.form.input.description": "Description",
   "diverst.containers.Event.form.input.start": "Start Date",
   "diverst.containers.Event.form.input.end": "End Date",
+  "diverst.containers.Event.form.input.picture": "Picture",
   "diverst.containers.Event.show.date_and_time": "Date & Time",
   "diverst.containers.MetricsDashboard.index.button.new": "New Dashboard",
   "diverst.containers.MetricsDashboard.index.button.edit": "Edit",
