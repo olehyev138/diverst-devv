@@ -41,8 +41,7 @@ export function GroupLeadersListPage(props) {
     orderBy: 'id', order: 'asc'
   });
   const links = {
-    groupLeaderNew: ROUTES.group.manage.leaders.new.path(),
-    groupLeaderEdit: id => ROUTES.group.manage.leaders.edit.path(id),
+    groupLeaderNew: ROUTES.group.manage.leaders.new.path(rs.params('group_id')),
   };
 
   const handlePagination = (payload) => {
