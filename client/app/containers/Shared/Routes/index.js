@@ -225,9 +225,9 @@ export default function Routes(props) {
       { /* Group Manage */ }
       { /* TODO - redirect /manage -> /manage/settings */ }
       <GroupLayout {...expandRoute(ROUTES.group.manage.settings.index)} component={GroupSettingsPage} />
-      <GroupLayout {...expandRoute(ROUTES.group.manage.leaders.index)} component={GroupLeadersListPage} />
       <GroupLayout {...expandRoute(ROUTES.group.manage.leaders.new)} component={GroupLeaderCreatePage} />
       <GroupLayout {...expandRoute(ROUTES.group.manage.leaders.edit)} component={GroupLeaderEditPage} />
+      <GroupLayout {...expandRoute(ROUTES.group.manage.leaders.index)} component={GroupLeadersListPage} />
 
       { /* Group Resources */ }
       <GroupLayout {...expandRoute(ROUTES.group.resources.new)} component={ResourceCreatePage} />

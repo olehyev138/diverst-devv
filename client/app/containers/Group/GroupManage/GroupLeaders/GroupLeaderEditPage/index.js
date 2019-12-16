@@ -21,7 +21,7 @@ import {
   selectGroupLeaderTotal, selectIsCommitting, selectFormGroupLeader,
 } from 'containers/Group/GroupManage/GroupLeaders/selectors';
 import { getUsersBegin } from 'containers/User/actions';
-import { selectPaginatedUsers, selectFormUser } from 'containers/User/selectors';
+import { selectPaginatedUsers, selectPaginatedSelectUsers, selectFormUser } from 'containers/User/selectors';
 
 
 import GroupLeaderForm from 'components/Group/GroupManage/GroupLeaders/GroupLeaderForm';
@@ -33,7 +33,7 @@ export function GroupLeaderEditPage(props) {
   useInjectSaga({ key: 'users', saga: userSaga });
 
   const links = {
-    GroupLeadersIndex: ROUTES.groups.manage.leaders.index.path(),
+    GroupLeadersIndex: ROUTES.group.manage.leaders.index.path(),
   };
 
   useEffect(() => () => props.groupLeadersUnmount(), []);
@@ -69,7 +69,7 @@ GroupLeaderEditPage.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
-  users: selectPaginatedUsers(),
+  users: selectPaginatedSelectUsers(),
   isCommitting: selectIsCommitting(),
   user: selectFormUser(),
   groupLeader: selectFormGroupLeader()

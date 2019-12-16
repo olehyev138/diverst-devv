@@ -47,7 +47,6 @@ const styles = theme => ({
 export function GroupLeadersList(props) {
   const { classes } = props;
   const { links } = props;
-
   const handleOrderChange = (columnId, orderDir) => {
   };
 
@@ -87,7 +86,8 @@ export function GroupLeadersList(props) {
               icon: () => <EditIcon />,
               tooltip: 'Edit Group Leader',
               onClick: (_, rowData) => {
-                props.handleVisitGroupLeaderEdit(rowData.id);
+                console.log(rowData);
+                props.handleVisitGroupLeaderEdit(rowData.group_id, rowData.id);
               }
             },
             {

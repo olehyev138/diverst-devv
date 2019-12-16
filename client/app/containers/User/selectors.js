@@ -5,12 +5,25 @@ import dig from 'object-dig';
 
 import { initialState } from 'containers/User/reducer';
 import { deserializeDatum, deserializeOptionsText } from 'utils/customFieldHelpers';
+import {selectGroupsDomain} from "../Group/selectors";
 
 const selectUsersDomain = state => state.users || initialState;
 
 const selectPaginatedUsers = () => createSelector(
   selectUsersDomain,
   usersState => usersState.userList
+);
+
+/* Select user list & format it for a select
+ *  looks like: [ { value: <>, label: <> } ... ]
+ */
+const selectPaginatedSelectUsers = () => createSelector(
+  selectUsersDomain,
+  usersState => (
+    Object
+      .values(usersState.userList)
+      .map(user => ({ value: user.id, label: user.name }))
+  )
 );
 
 const selectUserTotal = () => createSelector(
@@ -108,7 +121,7 @@ const selectFieldData = () => createSelector(
 );
 
 export {
-  selectUsersDomain, selectPaginatedUsers,
+  selectUsersDomain, selectPaginatedUsers, selectPaginatedSelectUsers,
   selectUserTotal, selectUser, selectFieldData,
   selectIsFetchingUsers, selectIsLoadingPosts,
   selectIsLoadingEvents, selectFormUser,

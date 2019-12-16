@@ -61,15 +61,13 @@ export function GroupLeadersListPage(props) {
 
   useEffect(() => {
     props.getGroupLeadersBegin(params);
-    console.log(props);
-
     return () => {
       props.groupLeadersUnmount();
     };
   }, []);
-
+  console.log(props.groupLeaderList);
   return (
-    props && (
+    props.groupLeaderList && (
       <React.Fragment>
         <GroupLeadersList
           group={props.currentGroup}
@@ -78,7 +76,6 @@ export function GroupLeadersListPage(props) {
           isFetchingGroupLeaders={props.isFetchingGroupLeaders}
           deleteGroupLeaderBegin={props.deleteGroupLeaderBegin}
           handleVisitGroupLeaderEdit={props.handleVisitGroupLeaderEdit}
-          handleVisitGroupLeaderShow={props.handleVisitGroupLeaderShow}
           links={links}
           setParams={params}
           params={params}
@@ -113,7 +110,8 @@ const mapDispatchToProps = dispatch => ({
   getGroupLeadersBegin: payload => dispatch(getGroupLeadersBegin(payload)),
   deleteGroupLeaderBegin: payload => dispatch(deleteGroupLeaderBegin(payload)),
   groupLeadersUnmount: () => dispatch(groupLeadersUnmount()),
-  handleVisitGroupLeaderEdit: id => dispatch(push(ROUTES.groups.manage.leaders.edit.path(id))),
+  //handleVisitGroupLeaderEdit: id => dispatch(push(ROUTES.group.manage.leaders.edit.path(id))),
+  handleVisitGroupLeaderEdit: (groupId, id) => dispatch(push(ROUTES.group.manage.leaders.edit.path(groupId, id))),
 });
 
 const withConnect = connect(

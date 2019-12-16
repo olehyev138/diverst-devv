@@ -21,7 +21,7 @@ import {
   selectGroupLeaderTotal, selectIsCommitting
 } from 'containers/Group/GroupManage/GroupLeaders/selectors';
 import { getUsersBegin } from 'containers/User/actions';
-import { selectPaginatedUsers } from 'containers/User/selectors';
+import { selectPaginatedSelectUsers } from 'containers/User/selectors';
 
 
 import GroupLeaderForm from 'components/Group/GroupManage/GroupLeaders/GroupLeaderForm';
@@ -33,7 +33,7 @@ export function GroupLeaderCreatePage(props) {
   useInjectSaga({ key: 'users', saga: userSaga });
 
   const links = {
-    GroupLeadersIndex: ROUTES.groups.manage.leaders.index.path(),
+    GroupLeadersIndex: ROUTES.group.manage.leaders.index.path(),
   };
 
   useEffect(() => () => props.groupLeadersUnmount(), []);
@@ -60,7 +60,7 @@ GroupLeaderCreatePage.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
-  groups: selectPaginatedUsers(),
+  users: selectPaginatedSelectUsers(),
   isCommitting: selectIsCommitting(),
 });
 
