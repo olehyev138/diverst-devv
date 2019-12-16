@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
 
-import { compose } from 'redux/';
+import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import dig from 'object-dig';
 
@@ -48,8 +48,6 @@ const styles = theme => ({
 });
 
 export function Event(props) {
-  /* Render an Event */
-
   const { classes } = props;
   const event = dig(props, 'event');
 

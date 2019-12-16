@@ -80,7 +80,7 @@ RSpec.describe Initiative, type: :model do
       file = fixture_file_upload('spec/fixtures/files/verizon_logo.png', 'image/png')
 
       request = Request.create_request(user)
-      payload = { initiative: { name: 'Save', pillar_id: pillar.id, picture: file, owner_group_id: group.id, owner_id: user.id, start: Date.today, end: Date.tomorrow + 1.day, picture: file } }
+      payload = { initiative: { name: 'Save', pillar_id: pillar.id, picture: file, owner_group_id: group.id, owner_id: user.id, start: Date.today, end: Date.tomorrow + 1.day } }
       params = ActionController::Parameters.new(payload)
       created = Initiative.build(request, params.permit!)
 

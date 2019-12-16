@@ -1,5 +1,4 @@
 /* eslint consistent-return:0 import/order:0 */
-require('dotenv').config();
 const express = require('express');
 const logger = require('./logger');
 
@@ -13,13 +12,6 @@ const ngrok =
   false;
 const { resolve } = require('path');
 const app = express();
-const proxy = require('http-proxy-middleware');
-const apiProxy = proxy('/api', {
-  target: process.env.API_URL,
-  logLevel: 'debug',
-  secure: false
-});
-app.use('/api', apiProxy);
 
 // If you need a backend, e.g. an API, add your custom backend-specific middleware here
 // app.use('/api', myApi);

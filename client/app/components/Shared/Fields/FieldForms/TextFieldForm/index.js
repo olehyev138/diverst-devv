@@ -70,9 +70,9 @@ export function TextFieldForm(props) {
       onSubmit={(values, actions) => {
         props.fieldAction(values);
       }}
-
-      render={formikProps => <TextFieldFormInner {...props} {...formikProps} />}
-    />
+    >
+      {formikProps => <TextFieldFormInner {...props} {...formikProps} />}
+    </Formik>
   );
 }
 

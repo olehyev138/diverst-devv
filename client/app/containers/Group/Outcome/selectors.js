@@ -1,4 +1,4 @@
-import { createSelector } from 'reselect/lib/index';
+import { createSelector } from 'reselect';
 import { initialState } from 'containers/Group/Outcome/reducer';
 
 const selectOutcomesDomain = state => state.outcomes || initialState;
@@ -8,9 +8,9 @@ const selectPaginatedOutcomes = () => createSelector(
   outcomesState => outcomesState.outcomes
 );
 
-const selectOutcomeTotal = () => createSelector(
+const selectOutcomesTotal = () => createSelector(
   selectOutcomesDomain,
-  outcomesState => outcomesState.outcomeTotal
+  outcomesState => outcomesState.outcomesTotal
 );
 
 const selectOutcome = () => createSelector(
@@ -33,4 +33,4 @@ const selectIsCommitting = () => createSelector(
   outcomesState => outcomesState.isCommitting
 );
 
-export { selectPaginatedOutcomes, selectOutcomeTotal, selectOutcome, selectIsLoading, selectIsCommitting, selectIsFormLoading };
+export { selectPaginatedOutcomes, selectOutcomesTotal, selectOutcome, selectIsLoading, selectIsCommitting, selectIsFormLoading };
