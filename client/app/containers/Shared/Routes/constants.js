@@ -315,7 +315,13 @@ export const ROUTES = {
           data: {
             titleMessage: messages.groups.manage.leaders.index
           }
-        }
+        },
+        new: {
+          path: (groupId = ':group_id') => `/groups/${groupId}/manage/leaders/new`,
+        },
+        edit: {
+          path: (groupId = ':group_id', groupLeaderId = ':group_leader_id') => `/groups/${groupId}/manage/leaders/${groupLeaderId}/edit`,
+        },
       }
     },
     resources: {

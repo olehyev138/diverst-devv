@@ -1,5 +1,7 @@
 class GroupLeaderSerializer < ApplicationRecordSerializer
-  attributes :group, :user, :user_role
+  attributes :group, :user_role
+
+  belongs_to :user
 
   def serialize_all_fields
     true
