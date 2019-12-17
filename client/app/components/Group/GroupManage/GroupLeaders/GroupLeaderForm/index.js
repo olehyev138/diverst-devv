@@ -35,11 +35,6 @@ export function GroupLeaderFormInner({ handleSubmit, handleChange, handleBlur, v
     });
   };
 
-  // const getCampaignBeginAction = (searchKey = '') => {
-  //   props.getCampaignBegin({
-  //     count:
-  //   })
-  // }
   console.log(values);
   return (
     <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.groupLeaders}>
@@ -71,7 +66,7 @@ export function GroupLeaderFormInner({ handleSubmit, handleChange, handleBlur, v
                     onBlur={() => setFieldTouched(`[${i}].user_id`, true)}
                   />
                 </React.Fragment>
-              ) : <React.Fragment />
+              ) : <React.Fragment key={i} />
             ))}
           </CardContent>
           <Divider />

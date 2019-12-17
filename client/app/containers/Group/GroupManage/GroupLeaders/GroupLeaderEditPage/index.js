@@ -32,14 +32,15 @@ export function GroupLeaderEditPage(props) {
   useInjectReducer({ key: 'users', reducer: userReducer });
   useInjectSaga({ key: 'users', saga: userSaga });
 
+  const rs = new RouteService(useContext);
+
   const links = {
-    GroupLeadersIndex: ROUTES.group.manage.leaders.index.path(),
+    GroupLeadersIndex: ROUTES.group.manage.leaders.index.path(rs.params('group_id')),
   };
 
-  const rs = new RouteService(useContext);
   useEffect(() => {
     const groupId = rs.params('group_id');
-    props.getGroupLeadersBegin({ group_id: groupId });
+    props.getGroupLeadersBegin({ group_id: groupId, count: 500 });
 
     return () => props.groupLeadersUnmount();
   }, []);
