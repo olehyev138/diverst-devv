@@ -105,12 +105,12 @@ export function GroupLeaderForm(props) {
     user_role_id: { default: '4' },
     visible: { default: true },
     pending_member_notifications_enabled: { default: false },
-    pending_comment_notifications_enabled: { default: false },
+    pending_comments_notifications_enabled: { default: false },
     pending_posts_notifications_enabled: { default: false },
     default_group_contact: { default: false },
   };
 
-  const leaders = dig(props, 'groupLeaders') || [];
+  const leaders = dig(props, 'groupLeaders') || [null];
   const leaderValues = leaders.map(leader => buildValues(leader, baseValues));
   const initialValues = Object.assign({}, leaderValues);
 
@@ -119,9 +119,13 @@ export function GroupLeaderForm(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        props.groupLeadersAction(mapFields(values, ['user_ids']));
+        props.groupLeadersAction(mapFields({
+          groupId: props.groupId,
+          group_leaders: {
+            values
+          }
+        }, ['user_ids']));
       }}
-
       render={formikProps => <GroupLeaderFormInner {...props} {...formikProps} baseValues={baseValues} />}
     />
   );
@@ -132,7 +136,7 @@ GroupLeaderForm.propTypes = {
   createGroupLeaderBegin: PropTypes.func,
   updateGroupLeaderBegin: PropTypes.func,
   group: PropTypes.object,
-  groupId: PropTypes.string,
+  groupId: PropTypes.number,
   isCommitting: PropTypes.bool,
   groupLeaders: PropTypes.array,
   groupLeadersAction: PropTypes.func,

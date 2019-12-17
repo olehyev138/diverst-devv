@@ -77,6 +77,7 @@ export function* deleteGroupLeaders(action) {
 export function* updateGroupLeader(action) {
   try {
     const payload = { group: action.payload };
+    console.log(payload);
     const response = yield call(api.groups.assignLeaders.bind(api.groups), payload.group.groupId, payload);
 
     yield put(updateGroupLeaderSuccess());
