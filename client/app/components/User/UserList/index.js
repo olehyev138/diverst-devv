@@ -46,9 +46,29 @@ export function UserList(props, context) {
 
   const [userForm, setUserForm] = useState(undefined);
 
+  const handleOrderChange = (columnId, orderDir) => {
+    props.handleOrdering({
+      orderBy: (columnId === -1) ? 'id' : `${columns[columnId].query_field}`,
+      orderDir: (columnId === -1) ? 'asc' : orderDir
+    });
+  };
+
   const columns = [
-    { title: 'First Name', field: 'first_name' },
-    { title: 'Last Name', field: 'last_name' }
+    {
+      title: 'First Name',
+      field: 'first_name',
+      query_field: 'first_name'
+    },
+    {
+      title: 'Last Name',
+      field: 'last_name',
+      query_field: 'last_name'
+    },
+    {
+      title: 'Email',
+      field: 'email',
+      query_field: 'last_name'
+    },
   ];
 
   return (
