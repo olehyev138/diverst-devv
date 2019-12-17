@@ -21,7 +21,7 @@ class Groups::SocialLinksController < ApplicationController
   def create
     @social_link = @group.social_links.new(social_link_params)
     @social_link.author = current_user
-    @links = SocialMedia::Importer.oembed_link
+    @links = SocialMedia::Importer.oembed_link_short
 
     if @social_link.save
       track_activity(@social_link, :create)
