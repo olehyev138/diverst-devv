@@ -15,7 +15,7 @@ class Groups::SocialLinksController < ApplicationController
 
   def new
     @social_link = @group.social_links.new
-    @links = SocialMedia::Importer.oembed_link
+    @links = SocialMedia::Importer.oembed_link_short
   end
 
   def create
