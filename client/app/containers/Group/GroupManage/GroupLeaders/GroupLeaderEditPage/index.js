@@ -16,7 +16,7 @@ import saga from 'containers/Group/GroupManage/GroupLeaders/saga';
 import userReducer from 'containers/User/reducer';
 import userSaga from 'containers/User/saga';
 
-import { getGroupLeaderBegin, updateGroupLeaderBegin, groupLeadersUnmount } from 'containers/Group/GroupManage/GroupLeaders/actions';
+import { getGroupLeadersBegin, updateGroupLeaderBegin, groupLeadersUnmount } from 'containers/Group/GroupManage/GroupLeaders/actions';
 import {
   selectGroupLeaderTotal, selectIsCommitting, selectFormGroupLeader,
 } from 'containers/Group/GroupManage/GroupLeaders/selectors';
@@ -36,12 +36,20 @@ export function GroupLeaderEditPage(props) {
     GroupLeadersIndex: ROUTES.group.manage.leaders.index.path(),
   };
 
-  useEffect(() => () => props.groupLeadersUnmount(), []);
+  const rs = new RouteService(useContext);
+  useEffect(() => {
+    const groupId = rs.params('group_id');
+    props.getGroupLeadersBegin({ group_id: groupId });
+
+    return () => props.groupLeadersUnmount();
+  }, []);
+
+  console.log(props);
 
   return (
     <GroupLeaderForm
       edit
-      getGroupLeaderBegin={props.getGroupLeaderBegin}
+      getGroupLeaderBegin={props.getGroupLeadersBegin}
       groupLeaderAction={props.updateGroupLeaderBegin}
       getUsersBegin={props.getUsersBegin}
       selectUsers={props.users}
@@ -56,7 +64,7 @@ export function GroupLeaderEditPage(props) {
 }
 
 GroupLeaderEditPage.propTypes = {
-  getGroupLeaderBegin: PropTypes.func,
+  getGroupLeadersBegin: PropTypes.func,
   updateGroupLeaderBegin: PropTypes.func,
   groupLeadersUnmount: PropTypes.func,
   getUsersBegin: PropTypes.func,
@@ -72,12 +80,12 @@ const mapStateToProps = createStructuredSelector({
   users: selectPaginatedSelectUsers(),
   isCommitting: selectIsCommitting(),
   user: selectFormUser(),
-  groupLeader: selectFormGroupLeader()
+  groupLeaders: selectFormGroupLeaders()
 });
 
 const mapDispatchToProps = {
   updateGroupLeaderBegin,
-  getGroupLeaderBegin,
+  getGroupLeadersBegin,
   groupLeadersUnmount,
   getUsersBegin,
 };

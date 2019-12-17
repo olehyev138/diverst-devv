@@ -16,7 +16,8 @@ export const initialState = {
   isCommitting: false,
   groupLeaderList: [],
   groupLeaderTotal: null,
-  isFetchingGroupLeaders: true
+  isFetchingGroupLeaders: true,
+  currentGroupLeader: null,
 };
 
 /* eslint-disable default-case, no-param-reassign, consistent-return  */

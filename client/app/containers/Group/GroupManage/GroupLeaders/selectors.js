@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect/lib';
 import { initialState } from './reducer';
+import produce from "immer";
 
 const selectGroupLeadersDomain = state => state.groupLeaders || initialState;
 
@@ -23,6 +24,11 @@ const selectPaginatedGroupLeaders = () => createSelector(
 //   )
 // );
 
+const selectPaginatedFormGroupLeaders = () => createSelector(
+  selectGroupLeadersDomain,
+  groupLeadersState => groupLeadersState.groupLeaderList.map(leader => mapForm(leader))
+);
+
 const selectGroupLeaderTotal = () => createSelector(
   selectGroupLeadersDomain,
   groupLeadersState => groupLeadersState.groupLeaderTotal
@@ -45,21 +51,16 @@ const selectIsCommitting = () => createSelector(
 
 const selectFormGroupLeader = () => createSelector(
   selectGroupLeadersDomain,
-  (groupLeadersState) => {
-    const { currentGroupLeader } = groupLeadersState;
-    if (!currentGroupLeader) return null;
-
-    // clone group before making mutations on it
-    const selectGroupLeader = Object.assign({}, currentGroupLeader);
-
-    selectGroupLeader.groups = selectGroupLeader.groups.map(group => ({
-      value: group.id,
-      label: group.name
-    }));
-
-    return selectGroupLeader;
-  }
+  groupLeadersState => mapForm(groupLeadersState.currentGroupLeader)
 );
+
+function mapForm(leader) {
+  if (!leader) return null;
+  return produce(leader, (draft) => {
+    draft.user = { value: leader.id, label: leader.name };
+  });
+}
+
 
 export {
   selectGroupLeadersDomain, selectPaginatedGroupLeaders, selectGroupLeader,
