@@ -28,7 +28,11 @@ class ApplicationRecord < ActiveRecord::Base
     def self.preload_test(preload: true, limit: 10, serializer: nil)
       arr = []
       if self.respond_to?(:base_preloads) && preload
-        users = self.preload(self.base_preloads).limit(limit)
+        users = self.preload(self.base_preloads)
+        if self.respond_to?(:preload_attachments)
+          users = users.send_chain(self.preload_attachments.map {|field| "with_attached_#{field}"})
+        end
+        users = users.limit(limit)
         users.load
         p 'Preloaded'
       else

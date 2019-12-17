@@ -207,6 +207,10 @@ module User::Actions
           accepting_mentor_requests saml inactive invitation_sent)
     end
 
+    def preload_attachments
+      [:avatar]
+    end
+
     def base_preloads
       [
           :field_data,
