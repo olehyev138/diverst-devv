@@ -7,6 +7,7 @@
 import React, { memo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
+import dig from 'object-dig';
 
 import {
   Button, Card, CardActions, CardContent, Divider, Grid, TextField
@@ -39,31 +40,47 @@ export function GroupLeaderFormInner({ handleSubmit, handleChange, handleBlur, v
   //     count:
   //   })
   // }
-console.log(props);
+  console.log(values);
   return (
     <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.groupLeader}>
       <Card>
         <Form>
           <CardContent>
-            <Field
-              component={Select}
-              fullWidth
-              id='user_ids'
-              name='user_ids'
-              label='Select User'
-              isMulti
-              margin='normal'
-              disabled={props.isCommitting}
-              value={values.users}
-              options={props.selectUsers}
-              onMenuOpen={userSelectAction}
-              onChange={value => setFieldValue('user_ids', value)}
-              onInputChange={value => userSelectAction(value)}
-              onBlur={() => setFieldTouched('user_ids', true)}
-            />
+            {Object.entries(values).map((i, _) => (
+              // eslint-disable-next-line no-underscore-dangle
+              !values[i]._destroy ? (
+                <React.Fragment>
+                  <Button
+                    onCLick={setFieldValue(`[${i}]._destroy`, true)}
+                  >
+                    X
+                  </Button>
+                  <Field
+                    component={Select}
+                    fullWidth
+                    id={`[${i}].user_ids`}
+                    name={`[${i}].user_ids`}
+                    label='Select User'
+                    margin='normal'
+                    disabled={props.isCommitting}
+                    value={values.users}
+                    options={props.selectUsers}
+                    onMenuOpen={userSelectAction}
+                    onChange={value => setFieldValue(`[${i}].user_ids`, value)}
+                    onInputChange={value => userSelectAction(value)}
+                    onBlur={() => setFieldTouched(`[${i}].user_ids`, true)}
+                  />
+                </React.Fragment>
+              ) : <React.Fragment />
+            ))}
           </CardContent>
           <Divider />
           <CardActions>
+            <Button
+              onClick={setFieldValue(`[${Object.keys(values).length}]`, props.baseValues)}
+            >
+              Add
+            </Button>
             <DiverstSubmit isCommitting={props.isCommitting}>
               {buttonText}
             </DiverstSubmit>
@@ -80,17 +97,27 @@ console.log(props);
     </DiverstFormLoader>
   );
 }
+// const baseValues = buildValues(props.groupLeader, {
 
 export function GroupLeaderForm(props) {
-  const initialValues = buildValues(props.groupLeader, {
+  const baseValues = {
     // users: { default: [], customKey: 'member_ids' }
     id: { default: '' },
+    _destroy: false,
     user_id: { default: '' },
     group_id: { default: props.groupId },
     position_name: { default: 'Group Leader' },
     user_role_id: { default: '4' },
-    users: { default: [], customKey: 'user_ids' },
-  });
+    visible: true,
+    pending_member_notifications_enabled: false,
+    pending_comment_notifications_enabled: false,
+    pending_posts_notifications_enabled: false,
+    default_group_contact: false,
+  };
+
+  const leaders = dig(props, 'groupLeaders') || [];
+  const leaderValues = leaders.map(leader => buildValues(leader, baseValues));
+  const initialValues = Object.assign({}, leaderValues);
 
   return (
     <Formik
@@ -100,7 +127,7 @@ export function GroupLeaderForm(props) {
         props.groupLeaderAction(mapFields(values, ['user_ids']));
       }}
 
-      render={formikProps => <GroupLeaderFormInner {...props} {...formikProps} />}
+      render={formikProps => <GroupLeaderFormInner {...props} {...formikProps} baseValues={baseValues} />}
     />
   );
 }
@@ -112,6 +139,7 @@ GroupLeaderForm.propTypes = {
   group: PropTypes.object,
   groupId: PropTypes.string,
   isCommitting: PropTypes.bool,
+  groupLeaders: PropTypes.array,
   groupLeader: PropTypes.object,
   groupLeaderAction: PropTypes.func,
 };
@@ -132,6 +160,7 @@ GroupLeaderFormInner.propTypes = {
   touched: PropTypes.object,
   isCommitting: PropTypes.bool,
   isFormLoading: PropTypes.bool,
+  baseValues: PropTypes.object,
   links: PropTypes.shape({
     groupLeadersIndex: PropTypes.string
   }),
