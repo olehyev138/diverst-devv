@@ -177,7 +177,7 @@ module BaseSearcher
 
     def get_attachments(params)
       if self.respond_to? :preload_attachments
-        self.preload_attachments.map {|field| "with_attached_#{field.to_s}"}
+        self.preload_attachments.map { |field| "with_attached_#{field}" }
       else
         []
       end

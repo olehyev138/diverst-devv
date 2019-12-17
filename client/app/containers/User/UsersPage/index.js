@@ -40,7 +40,6 @@ import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import UserList from 'components/User/UserList';
-import GroupMemberList from "../../../components/Group/GroupMembers/GroupMemberList";
 
 const UserTypes = Object.freeze([
   'all',

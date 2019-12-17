@@ -30,7 +30,7 @@ class ApplicationRecord < ActiveRecord::Base
       if self.respond_to?(:base_preloads) && preload
         users = self.preload(self.base_preloads)
         if self.respond_to?(:preload_attachments)
-          users = users.send_chain(self.preload_attachments.map {|field| "with_attached_#{field}"})
+          users = users.send_chain(self.preload_attachments.map { |field| "with_attached_#{field}" })
         end
         users = users.limit(limit)
         users.load
