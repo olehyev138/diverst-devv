@@ -18,7 +18,7 @@ import userSaga from 'containers/User/saga';
 
 import { getGroupLeadersBegin, updateGroupLeaderBegin, groupLeadersUnmount } from 'containers/Group/GroupManage/GroupLeaders/actions';
 import {
-  selectGroupLeaderTotal, selectIsCommitting, selectFormGroupLeader,
+  selectGroupLeaderTotal, selectIsCommitting, selectFormGroupLeaders,
 } from 'containers/Group/GroupManage/GroupLeaders/selectors';
 import { getUsersBegin } from 'containers/User/actions';
 import { selectPaginatedUsers, selectPaginatedSelectUsers, selectFormUser } from 'containers/User/selectors';
@@ -44,17 +44,15 @@ export function GroupLeaderEditPage(props) {
     return () => props.groupLeadersUnmount();
   }, []);
 
-  console.log(props);
-
   return (
     <GroupLeaderForm
       edit
       getGroupLeaderBegin={props.getGroupLeadersBegin}
-      groupLeaderAction={props.updateGroupLeaderBegin}
+      groupLeadersAction={props.updateGroupLeaderBegin}
       getUsersBegin={props.getUsersBegin}
       selectUsers={props.users}
       user={props.user}
-      groupLeader={props.groupLeader}
+      groupLeaders={props.groupLeaders}
       isCommitting={props.isCommitting}
       isFormLoading={props.isFormLoading}
       buttonText='Update'

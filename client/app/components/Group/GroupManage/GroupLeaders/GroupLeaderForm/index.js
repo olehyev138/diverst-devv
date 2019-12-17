@@ -42,33 +42,33 @@ export function GroupLeaderFormInner({ handleSubmit, handleChange, handleBlur, v
   // }
   console.log(values);
   return (
-    <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.groupLeader}>
+    <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.groupLeaders}>
       <Card>
         <Form>
           <CardContent>
-            {Object.entries(values).map((i, _) => (
+            {Object.entries(values).map(([i, _]) => (
               // eslint-disable-next-line no-underscore-dangle
               !values[i]._destroy ? (
-                <React.Fragment>
+                <React.Fragment key={i}>
                   <Button
-                    onCLick={setFieldValue(`[${i}]._destroy`, true)}
+                    onClick={() => setFieldValue(`[${i}]._destroy`, true)}
                   >
                     X
                   </Button>
                   <Field
                     component={Select}
                     fullWidth
-                    id={`[${i}].user_ids`}
-                    name={`[${i}].user_ids`}
+                    id={`[${i}].user_id`}
+                    name={`[${i}].user_id`}
                     label='Select User'
                     margin='normal'
                     disabled={props.isCommitting}
-                    value={values.users}
+                    value={values[i].user}
                     options={props.selectUsers}
                     onMenuOpen={userSelectAction}
-                    onChange={value => setFieldValue(`[${i}].user_ids`, value)}
+                    onChange={value => setFieldValue(`[${i}].user_id`, value)}
                     onInputChange={value => userSelectAction(value)}
-                    onBlur={() => setFieldTouched(`[${i}].user_ids`, true)}
+                    onBlur={() => setFieldTouched(`[${i}].user_id`, true)}
                   />
                 </React.Fragment>
               ) : <React.Fragment />
@@ -77,7 +77,7 @@ export function GroupLeaderFormInner({ handleSubmit, handleChange, handleBlur, v
           <Divider />
           <CardActions>
             <Button
-              onClick={setFieldValue(`[${Object.keys(values).length}]`, props.baseValues)}
+              onClick={() => setFieldValue(`[${Object.keys(values).length}]`, buildValues(null, props.baseValues))}
             >
               Add
             </Button>
@@ -97,22 +97,22 @@ export function GroupLeaderFormInner({ handleSubmit, handleChange, handleBlur, v
     </DiverstFormLoader>
   );
 }
-// const baseValues = buildValues(props.groupLeader, {
+// const baseValues = buildValues(props.groupLeaders, {
 
 export function GroupLeaderForm(props) {
   const baseValues = {
     // users: { default: [], customKey: 'member_ids' }
     id: { default: '' },
-    _destroy: false,
-    user_id: { default: '' },
+    _destroy: { default: false },
+    user: { default: '', customKey: 'user_id' },
     group_id: { default: props.groupId },
     position_name: { default: 'Group Leader' },
     user_role_id: { default: '4' },
-    visible: true,
-    pending_member_notifications_enabled: false,
-    pending_comment_notifications_enabled: false,
-    pending_posts_notifications_enabled: false,
-    default_group_contact: false,
+    visible: { default: true },
+    pending_member_notifications_enabled: { default: false },
+    pending_comment_notifications_enabled: { default: false },
+    pending_posts_notifications_enabled: { default: false },
+    default_group_contact: { default: false },
   };
 
   const leaders = dig(props, 'groupLeaders') || [];
@@ -124,7 +124,7 @@ export function GroupLeaderForm(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        props.groupLeaderAction(mapFields(values, ['user_ids']));
+        props.groupLeadersAction(mapFields(values, ['user_ids']));
       }}
 
       render={formikProps => <GroupLeaderFormInner {...props} {...formikProps} baseValues={baseValues} />}
@@ -140,13 +140,12 @@ GroupLeaderForm.propTypes = {
   groupId: PropTypes.string,
   isCommitting: PropTypes.bool,
   groupLeaders: PropTypes.array,
-  groupLeader: PropTypes.object,
-  groupLeaderAction: PropTypes.func,
+  groupLeadersAction: PropTypes.func,
 };
 
 GroupLeaderFormInner.propTypes = {
   edit: PropTypes.bool,
-  groupLeader: PropTypes.object,
+  groupLeaders: PropTypes.array,
   createGroupLeaderBegin: PropTypes.func,
   handleSubmit: PropTypes.func,
   handleChange: PropTypes.func,

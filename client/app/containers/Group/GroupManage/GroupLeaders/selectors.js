@@ -24,7 +24,7 @@ const selectPaginatedGroupLeaders = () => createSelector(
 //   )
 // );
 
-const selectPaginatedFormGroupLeaders = () => createSelector(
+const selectFormGroupLeaders = () => createSelector(
   selectGroupLeadersDomain,
   groupLeadersState => groupLeadersState.groupLeaderList.map(leader => mapForm(leader))
 );
@@ -57,13 +57,13 @@ const selectFormGroupLeader = () => createSelector(
 function mapForm(leader) {
   if (!leader) return null;
   return produce(leader, (draft) => {
-    draft.user = { value: leader.id, label: leader.name };
+    draft.user = { value: leader.user.id, label: leader.user.name };
   });
 }
 
 
 export {
-  selectGroupLeadersDomain, selectPaginatedGroupLeaders, selectGroupLeader,
+  selectFormGroupLeaders, selectGroupLeadersDomain, selectPaginatedGroupLeaders, selectGroupLeader,
   selectGroupLeaderTotal, selectIsFetchingGroupLeaders, selectIsCommitting,
   selectFormGroupLeader,
 };
