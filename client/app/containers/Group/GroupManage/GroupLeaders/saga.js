@@ -50,7 +50,7 @@ export function* createGroupLeaders(action) {
     const response = yield call(api.groupLeaders.create.bind(api.groupLeaders), payload);
 
     yield put(createGroupLeaderSuccess());
-    yield put(push(ROUTES.admin.innovate.groupLeaders.index.path()));
+    yield put(push(ROUTES.admin.groupLeaders.index.path()));
     yield put(showSnackbar({ message: 'GroupLeader created', options: { variant: 'success' } }));
   } catch (err) {
     yield put(createGroupLeaderError(err));
@@ -64,7 +64,7 @@ export function* deleteGroupLeaders(action) {
   try {
     yield call(api.groupLeaders.destroy.bind(api.groupLeaders), action.payload.id);
     yield put(deleteGroupLeaderSuccess());
-    yield put(push(ROUTES.admin.innovate.groupLeaders.index.path(action.payload.id)));
+    yield put(push(ROUTES.admin.groupLeaders.index.path(action.payload.id)));
     yield put(showSnackbar({ message: 'User deleted', options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteGroupLeaderError(err));
@@ -76,23 +76,17 @@ export function* deleteGroupLeaders(action) {
 
 export function* updateGroupLeader(action) {
   try {
-    const payload = { groupLeader: action.payload };
-    const response = yield call(api.groupLeaders.update.bind(api.groupLeaders), payload.groupLeader.id, payload);
+    const payload = { group: action.payload };
+    const response = yield call(api.groups.assignLeaders.bind(api.groups), payload.group.groupId, payload);
 
     yield put(updateGroupLeaderSuccess());
-    yield put(push(ROUTES.admin.innovate.groupLeaders.index.path()));
-    yield put(showSnackbar({
-      message: 'GroupLeader updated',
-      options: { variant: 'success' }
-    }));
+    yield put(push(ROUTES.admin.groupLeaders.index.path()));
+    yield put(showSnackbar({ message: 'Group Leaders Updated', options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateGroupLeaderError(err));
 
     // TODO: intl message
-    yield put(showSnackbar({
-      message: 'Failed to update groupLeader',
-      options: { variant: 'warning' }
-    }));
+    yield put(showSnackbar({ message: 'Failed to update group leaders', options: { variant: 'warning' } }));
   }
 }
 

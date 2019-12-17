@@ -59,7 +59,11 @@ Diverst::Application.routes.draw do
       resources :folder_shares
       resources :frequency_periods
       resources :graphs
-      resources :groups
+      resources :groups do
+        member do
+          put '/assign_leaders', to: 'groups#assign_leaders'
+        end
+      end
       resources :group_categories
       resources :group_category_types
       resources :group_leaders
