@@ -15,7 +15,7 @@ class User < ApplicationRecord
 
   scope :active,                  -> { where(active: true).distinct }
   scope :inactive,                -> { where(active: false).distinct }
-  scope :invitation_not_accepted, -> { where.not(invitation_token: nil).distinct }
+  scope :invitation_sent,         -> { where.not(invitation_token: nil).distinct }
   scope :saml,                    -> { where(auth_source: 'saml').distinct }
 
   belongs_to  :enterprise

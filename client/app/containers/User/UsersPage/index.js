@@ -40,20 +40,45 @@ import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import UserList from 'components/User/UserList';
+import GroupMemberList from "../../../components/Group/GroupMembers/GroupMemberList";
+
+const UserTypes = Object.freeze([
+  'all',
+  'inactive',
+  'invitation_sent',
+  'saml',
+]);
 
 export function UserListPage(props) {
   useInjectReducer({ key: 'users', reducer });
   useInjectSaga({ key: 'users', saga });
 
   const [params, setParams] = useState({ count: 5, page: 0, order: 'asc' });
+  const [type, setType] = React.useState('all');
+
+  const getUsers = (scope, params = params) => {
+    const newParams = {
+      ...params,
+      query_scopes: [scope]
+    };
+    props.getUsersBegin(newParams);
+    setParams(newParams);
+  };
 
   useEffect(() => {
-    props.getUsersBegin(params);
+    getUsers('all');
 
     return () => {
       props.userUnmount();
     };
   }, []);
+
+  const handleChangeScope = (newScope) => {
+    if (UserTypes.includes(newScope)) {
+      setType(newScope);
+      getUsers(newScope, params);
+    }
+  };
 
   const rs = new RouteService(useContext);
   const links = {
@@ -85,7 +110,11 @@ export function UserListPage(props) {
         handlePagination={handlePagination}
         handleOrdering={handleOrdering}
         handleVisitUserEdit={props.handleVisitUserEdit}
+        handleChangeScope={handleChangeScope}
         links={links}
+
+        userType={type}
+        UserTypes={UserTypes}
       />
     </React.Fragment>
   );

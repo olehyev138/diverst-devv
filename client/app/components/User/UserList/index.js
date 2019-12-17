@@ -13,7 +13,7 @@ import { compose } from 'redux';
 
 import {
   Button, Card, CardContent, CardActions,
-  Typography, Grid, Link, TablePagination, Collapse, Box,
+  Typography, Grid, Link, TablePagination, Collapse, Box, MenuItem,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -26,6 +26,7 @@ import DeleteIcon from '@material-ui/icons/DeleteOutline';
 import EditIcon from '@material-ui/icons/Edit';
 
 import DiverstTable from 'components/Shared/DiverstTable';
+import DiverstDropdownMenu from 'components/Shared/DiverstDropdownMenu';
 
 
 const styles = theme => ({
@@ -45,6 +46,17 @@ export function UserList(props, context) {
   const [expandedUsers, setExpandedUsers] = useState({});
 
   const [userForm, setUserForm] = useState(undefined);
+
+  const [anchor, setAnchor] = React.useState(null);
+
+  const handleClick = (event) => {
+    setAnchor(event.currentTarget);
+  };
+
+  const handleClose = (type) => {
+    setAnchor(null);
+    props.handleChangeScope(type);
+  };
 
   const handleOrderChange = (columnId, orderDir) => {
     props.handleOrdering({
@@ -73,18 +85,32 @@ export function UserList(props, context) {
 
   return (
     <React.Fragment>
-      <Grid container spacing={3} justify='flex-end'>
-        <Grid item>
+      <Grid container>
+        <Grid item md={6}>
           <Button
             variant='contained'
-            color='primary'
+            color='secondary'
             size='large'
-            to={props.links.userNew}
-            component={WrappedNavLink}
-            startIcon={<AddIcon />}
+            onClick={handleClick}
           >
-            <DiverstFormattedMessage {...messages.new} />
+            <DiverstFormattedMessage {...messages.scopes[props.userType]} />
           </Button>
+        </Grid>
+        <Grid item md={6}>
+          <Grid container spacing={3} justify='flex-end'>
+            <Grid item>
+              <Button
+                variant='contained'
+                color='primary'
+                size='large'
+                to={props.links.userNew}
+                component={WrappedNavLink}
+                startIcon={<AddIcon />}
+              >
+                <DiverstFormattedMessage {...messages.new} />
+              </Button>
+            </Grid>
+          </Grid>
         </Grid>
       </Grid>
       <Box mb={1} />
@@ -117,6 +143,35 @@ export function UserList(props, context) {
           />
         </Grid>
       </Grid>
+      <DiverstDropdownMenu
+        anchor={anchor}
+        setAnchor={setAnchor}
+      >
+        <MenuItem
+          onClick={() => handleClose('all')}
+          className={classes.menuItem}
+        >
+          <DiverstFormattedMessage {...messages.scopes.all} />
+        </MenuItem>
+        <MenuItem
+          onClick={() => handleClose('inactive')}
+          className={classes.menuItem}
+        >
+          <DiverstFormattedMessage {...messages.scopes.inactive} />
+        </MenuItem>
+        <MenuItem
+          onClick={() => handleClose('invitation_sent')}
+          className={classes.menuItem}
+        >
+          <DiverstFormattedMessage {...messages.scopes.invitation_sent} />
+        </MenuItem>
+        <MenuItem
+          onClick={() => handleClose('saml')}
+          className={classes.menuItem}
+        >
+          <DiverstFormattedMessage {...messages.scopes.saml} />
+        </MenuItem>
+      </DiverstDropdownMenu>
     </React.Fragment>
   );
 }
@@ -130,6 +185,8 @@ UserList.propTypes = {
   handlePagination: PropTypes.func,
   handleOrdering: PropTypes.func,
   handleVisitUserEdit: PropTypes.func,
+  handleChangeScope: PropTypes.func,
+  userType: PropTypes.string,
   links: PropTypes.shape({
     userNew: PropTypes.string,
     userEdit: PropTypes.func
