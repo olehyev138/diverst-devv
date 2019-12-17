@@ -184,7 +184,7 @@ RSpec.describe Importers::Users do
     end
   end
 
-    context 'when spreadsheet have email that already exists in database' do
+  context 'when spreadsheet have email that already exists in database' do
     let(:is_active_false) { [false, 'false', 'FALSE', 'no', 'NO'].sample }
     let!(:user) do
       user = build(:user, :with_notifications_email, enterprise: enterprise, user_role_id: admin_role.id)
