@@ -24,8 +24,10 @@ export function GroupLeaderFormInner({ handleSubmit, handleChange, handleBlur, v
   const { links } = props;
   const membersSelectAction = (searchKey = '') => {
     props.getMembersBegin({
-      count: 10, page: 0, order: 'asc',
+      count: 500, page: 0, order: 'asc',
       search: searchKey,
+      group_id: props.groupId,
+      query_scopes: ['active']
     });
   };
   return (
@@ -114,6 +116,7 @@ GroupLeaderFormInner.propTypes = {
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
   values: PropTypes.object,
+  groupId: PropTypes.number,
   buttonText: PropTypes.string,
   selectMembers: PropTypes.array,
   getMembersBegin: PropTypes.func,
