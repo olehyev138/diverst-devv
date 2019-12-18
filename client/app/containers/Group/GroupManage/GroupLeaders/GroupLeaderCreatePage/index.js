@@ -9,21 +9,19 @@ import { compose } from 'redux';
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
-import useInjectSaga from 'utils/injectSaga';
-import useInjectReducer from 'utils/injectReducer';
+import { useInjectSaga } from 'utils/injectSaga';
+import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/Group/GroupManage/GroupLeaders/reducer';
 import saga from 'containers/Group/GroupManage/GroupLeaders/saga';
 import userReducer from 'containers/User/reducer';
 import userSaga from 'containers/User/saga';
-import membersReducer from 'containers/Group/GroupMembers/reducer';
+import memberReducer from 'containers/Group/GroupMembers/reducer';
 import memberSaga from 'containers/Group/GroupMembers/saga';
 
 import { createGroupLeaderBegin, groupLeadersUnmount } from 'containers/Group/GroupManage/GroupLeaders/actions';
 import {
   selectGroupLeaderTotal, selectIsCommitting
 } from 'containers/Group/GroupManage/GroupLeaders/selectors';
-import { getUsersBegin } from 'containers/User/actions';
-import { selectPaginatedSelectUsers } from 'containers/User/selectors';
 import { selectPaginatedSelectMembers, selectMemberTotal,
   selectIsFetchingMembers
 } from 'containers/Group/GroupMembers/selectors';
@@ -35,21 +33,13 @@ import {
 
 import GroupLeaderForm from 'components/Group/GroupManage/GroupLeaders/GroupLeaderForm';
 
-const MemberTypes = Object.freeze([
-  'active',
-  'inactive',
-  'pending',
-  'accepted_users',
-  'all',
-]);
-
-
+const MEMBER_SCOPES = 'active'
 
 export function GroupLeaderCreatePage(props) {
   useInjectReducer({ key: 'groupLeaders', reducer });
   useInjectSaga({ key: 'groupLeaders', saga });
-  useInjectReducer({ key: 'members', membersReducer });
-  useInjectSaga({ key: 'members', memberSaga });
+  useInjectReducer({ key: 'members', reducer: memberReducer });
+  useInjectSaga({ key: 'members', saga: memberSaga });
 
   const rs = new RouteService(useContext);
   const groupId = rs.params('group_id');
@@ -60,12 +50,10 @@ export function GroupLeaderCreatePage(props) {
 
   const defaultParams = {
     group_id: groupId,
-    query_scopes: ['active']
+    query_scopes: [MEMBER_SCOPES]
   };
 
   const [params, setParams] = useState(defaultParams);
-  const [type, setType] = React.useState('accepted_users');
-  const [segmentIds, setSegmentIds] = React.useState(null);
 
   const getScopes = (scopes) => {
     // eslint-disable-next-line no-param-reassign
@@ -92,21 +80,15 @@ export function GroupLeaderCreatePage(props) {
     }
   };
 
-  useEffect(() => {
-    props.getMembersBegin(params);
-
-    return () => {
-      props.groupMembersUnmount();
-    };
-  }, []);
+  useEffect(() => () => props.groupLeadersUnmount(), []);
   console.log(props);
   return (
     <GroupLeaderForm
       groupLeaderAction={props.createGroupLeaderBegin}
       buttonText='Create'
       groupId={groupId[0]}
-      getUsersBegin={props.getMembersBegin}
-      selectUsers={props.members}
+      getMembersBegin={props.getMembersBegin}
+      selectMembers={props.members}
       isCommitting={props.isCommitting}
       links={links}
       isFetchingMembers={props.isFetchingMembers}

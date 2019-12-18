@@ -3,11 +3,9 @@
  * Group Leader Form Component
  *
  */
-
 import React, { memo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
-
 import {
   Button, Card, CardActions, CardContent, Divider, Grid, TextField
 } from '@material-ui/core';
@@ -15,25 +13,21 @@ import Select from 'components/Shared/DiverstSelect';
 import DiverstDateTimePicker from 'components/Shared/Pickers/DiverstDateTimePicker';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { Field, Formik, Form } from 'formik';
-
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 import messages from 'containers/Group/GroupMembers/messages';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
-
 import { buildValues, mapFields } from 'utils/formHelpers';
 import { DateTime } from 'luxon';
-
 /* eslint-disable object-curly-newline */
 export function GroupLeaderFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, touched, ...props }) {
   const { links } = props;
-  const usersSelectAction = (searchKey = '') => {
-    props.getUsersBegin({
+  const membersSelectAction = (searchKey = '') => {
+    props.getMembersBegin({
       count: 10, page: 0, order: 'asc',
       search: searchKey,
     });
   };
-
   return (
     <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.groupLeader}>
       <Card>
@@ -45,15 +39,15 @@ export function GroupLeaderFormInner({ handleSubmit, handleChange, handleBlur, v
               fullWidth
               id='user_ids'
               name='user_ids'
-              label='Select User'
+              label='Select Member'
               isMulti
               margin='normal'
               disabled={props.isCommitting}
               value={values.users}
-              options={props.selectUsers}
-              onMenuOpen={usersSelectAction}
+              options={props.selectMembers}
+              onMenuOpen={membersSelectAction}
               onChange={value => setFieldValue('user_ids', value)}
-              onInputChange={value => usersSelectAction(value)}
+              onInputChange={value => membersSelectAction(value)}
               onBlur={() => setFieldTouched('user_ids', true)}
             />
           </CardContent>
@@ -75,7 +69,6 @@ export function GroupLeaderFormInner({ handleSubmit, handleChange, handleBlur, v
     </DiverstFormLoader>
   );
 }
-
 export function GroupLeaderForm(props) {
   const initialValues = buildValues(props.groupLeader, {
     // users: { default: [], customKey: 'member_ids' }
@@ -90,7 +83,6 @@ export function GroupLeaderForm(props) {
     pending_posts_notifications_enabled: { default: false },
     default_group_contact: { default: false },
   });
-
   return (
     <Formik
       initialValues={initialValues}
@@ -98,17 +90,15 @@ export function GroupLeaderForm(props) {
       onSubmit={(values, actions) => {
         props.groupLeadersAction(mapFields(values, ['user_ids']));
       }}
-
       render={formikProps => <GroupLeaderFormInner {...props} {...formikProps} />}
     />
   );
 }
-
 GroupLeaderForm.propTypes = {
   edit: PropTypes.bool,
   createGroupLeaderBegin: PropTypes.func,
   updateGroupLeaderBegin: PropTypes.func,
-  getUsersBegin: PropTypes.func,
+  getMembersBegin: PropTypes.func,
   group: PropTypes.object,
   groupId: PropTypes.string,
   isCommitting: PropTypes.bool,
@@ -125,8 +115,8 @@ GroupLeaderFormInner.propTypes = {
   handleBlur: PropTypes.func,
   values: PropTypes.object,
   buttonText: PropTypes.string,
-  selectUsers: PropTypes.array,
-  getUsersBegin: PropTypes.func,
+  selectMembers: PropTypes.array,
+  getMembersBegin: PropTypes.func,
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
   touched: PropTypes.object,
@@ -136,7 +126,6 @@ GroupLeaderFormInner.propTypes = {
     groupLeadersIndex: PropTypes.string
   }),
 };
-
 export default compose(
   memo,
 )(GroupLeaderForm);
