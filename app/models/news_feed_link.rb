@@ -21,20 +21,53 @@ class NewsFeedLink < BaseClass
   delegate :segment,  to: :news_feed_link_segment, allow_nil: true
 
   scope :approved,        -> { where(approved: true).order(created_at: :desc) }
-  scope :not_approved,    -> { where(approved: false).order(created_at: :desc) }
-  scope :combined_news_links, -> (news_feed_id) {
-    joins('LEFT OUTER JOIN shared_news_feed_links ON shared_news_feed_links.news_feed_link_id = news_feed_links.id')
-      .where("shared_news_feed_links.news_feed_id = #{news_feed_id} OR news_feed_links.news_feed_id = #{news_feed_id} AND news_feed_links.approved = 1").distinct
+  scope :not_approved,    -> (news_feed_id) {
+    where(approved: false).where("`news_feed_links`.`news_feed_id` = ?", news_feed_id).order(created_at: :desc)
   }
 
-  scope :combined_news_links_with_segments, -> (news_feed_id, segment_ids) {
-    includes(:social_link, :news_link, :group_message)
-      .joins("LEFT OUTER JOIN news_feed_link_segments ON news_feed_link_segments.news_feed_link_id = news_feed_links.id
-              LEFT OUTER JOIN shared_news_feed_links ON shared_news_feed_links.news_feed_link_id = news_feed_links.id
-              WHERE shared_news_feed_links.news_feed_id = #{news_feed_id}
-                OR news_feed_links.news_feed_id = #{news_feed_id} AND approved = 1
-                OR news_feed_link_segments.segment_id IS NULL
-                OR news_feed_link_segments.segment_id IN (#{ segment_ids.join(",") })").distinct
+  scope :active, -> {
+    where(archived_at: nil)
+  }
+
+  scope :select_source, -> (news_feed_id) {
+    select(
+        "`news_feed_links`.`*`, CASE WHEN `news_feed_links`.`news_feed_id` = #{sanitize(news_feed_id)} THEN 'self' "\
+        "WHEN `shared_news_feed_links`.`news_feed_id` = #{sanitize(news_feed_id)} THEN 'shared' ELSE 'unknown' END as `source`,  "\
+    )
+  }
+
+  scope :combined_news_links, -> (news_feed_id, segment_ids=[]) {
+    if segment_ids.empty?
+      left_joins(:shared_news_feed_links)
+          .where('shared_news_feed_links.news_feed_id = ?'\
+                 ' OR news_feed_links.news_feed_id = ?',
+                 news_feed_id, news_feed_id
+          ).distinct
+    else
+      left_joins(:shared_news_feed_links, :news_feed_link_segments)
+          .where('shared_news_feed_links.news_feed_id = ?'\
+                 ' OR news_feed_links.news_feed_id = ?'\
+                 ' OR news_feed_link_segments.segment_id IS NULL'\
+                 ' OR news_feed_link_segments.segment_id IN ?',
+                 news_feed_id, news_feed_id, segment_ids
+          ).distinct
+    end
+  }
+
+  scope :include_posts, -> (social_enabled: false) {
+    if social_enabled
+      includes(:news_link, :group_message, :social_link)
+    else
+      includes(:news_link, :group_message)
+    end
+  }
+
+  scope :filter_posts, -> (social_enabled: false) {
+    if social_enabled
+      where('group_message_id IS NOT NULL OR news_link_id IS NOT NULL OR social_link_id IS NOT NULL')
+    else
+      where('group_message_id IS NOT NULL OR news_link_id IS NOT NULL')
+    end
   }
 
   validates :news_feed_id, presence: true
@@ -54,9 +87,7 @@ class NewsFeedLink < BaseClass
   end
 
   def link
-    return group_message if group_message
-    return news_link if news_link
-    return social_link if social_link
+    group_message || news_link || social_link
   end
 
   # View Count methods

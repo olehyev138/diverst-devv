@@ -10,7 +10,7 @@
               /
               <%= link_to pending_group_posts_path(@group) do %>
                <button class="btn btn-sm btn-primary">
-                 Pending (<%= @pending_posts.count %>)
+                 Pending (<%= @pending_posts_count %>)
                </button>
              <% end %>
             </span>
@@ -39,7 +39,7 @@
     <h1>Posts (<span id="posts_count"><%= @count %></span>)/
       <%= link_to pending_group_posts_path(@group) do %>
         <button class="btn btn--primary">
-          Pending(<%= @pending_posts.count %>)
+          Pending(<%= @pending_posts_count %>)
         </button>
       <% end %>
     </h1>

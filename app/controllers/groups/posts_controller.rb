@@ -21,13 +21,10 @@ class Groups::PostsController < ApplicationController
       @posts = []
     end
 
-    if @group.enterprise.enable_social_media?
-      @pending_posts = @group.news_feed_links.includes(:news_link, :group_message, :social_link).where(approved: false, archived_at: nil).order(created_at: :desc)
-      filter_posts(@posts.includes(:news_link, :group_message, :social_link).where(approved: true, archived_at: nil))
-    else
-      @pending_posts = @group.news_feed_links.includes(:news_link, :group_message).where(approved: false, archived_at: nil).order(created_at: :desc)
-      filter_posts(@posts.includes(:news_link, :group_message).where(approved: true, archived_at: nil))
-    end
+    filter_posts
+    @pending_posts_count = @posts.not_approved(@group.news_feed.id).count
+    prune_posts
+    @posts = @posts.approved
   end
 
   def pending
@@ -40,14 +37,10 @@ class Groups::PostsController < ApplicationController
       @posts = []
     end
 
-
-    if @group.enterprise.enable_social_media?
-      @pending_posts = @group.news_feed_links.includes(:news_link, :group_message, :social_link).where(approved: false, archived_at: nil).order(created_at: :desc)
-      filter_posts(@posts.includes(:news_link, :group_message, :social_link).where(approved: true, archived_at: nil))
-    else
-      @pending_posts = @group.news_feed_links.includes(:news_link, :group_message).where(approved: false, archived_at: nil).order(created_at: :desc)
-      filter_posts(@posts.includes(:news_link, :group_message).where(approved: true, archived_at: nil))
-    end
+    filter_posts
+    @posts_count = @posts.approved.count
+    prune_posts
+    @pending_posts = @posts.not_approved(@group.news_feed.id)
   end
 
   def approve
@@ -98,8 +91,7 @@ class Groups::PostsController < ApplicationController
   end
 
   def without_segments
-    @posts = NewsFeed.all_links_without_segments(@group.news_feed.id, @group.enterprise)
-    prune_posts
+    @posts = @group.news_feed.all_links([])
   end
 
   def with_segments
@@ -107,8 +99,7 @@ class Groups::PostsController < ApplicationController
 
     return without_segments if segment_ids.empty?
 
-    @posts = NewsFeed.all_links(@group.news_feed.id, segment_ids, @group.enterprise)
-    prune_posts
+    @posts = @group.news_feed.all_links(segment_ids, @group.enterprise)
   end
 
   def prune_posts
@@ -116,15 +107,14 @@ class Groups::PostsController < ApplicationController
     if search_terms.present?
       @posts = @posts.search(search_terms)
     end
-    @count = @posts.size
+    @count = @posts.count
     @posts = @posts.order(is_pinned: :desc, created_at: :desc)
                .limit(@limit)
   end
 
-  def filter_posts(posts)
-    @posts = posts.includes([:news_link, :group_message, :social_link]).select { |news|
-      news.news_link || news.group_message || news.social_link
-    }
+  def filter_posts
+    @posts = @posts.include_posts(social_enabled: @group.enterprise.enable_social_media?)
+    @posts = @posts.filter_posts(social_enabled: @group.enterprise.enable_social_media?)
   end
 
   def set_group
