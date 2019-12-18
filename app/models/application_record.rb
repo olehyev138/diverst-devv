@@ -28,17 +28,17 @@ class ApplicationRecord < ActiveRecord::Base
     def self.preload_test(preload: true, limit: 10, serializer: nil)
       arr = []
       if self.respond_to?(:base_preloads) && preload
-        users = self.preload(self.base_preloads)
+        items = self.preload(self.base_preloads)
         if self.respond_to?(:preload_attachments)
-          users = users.send_chain(self.preload_attachments.map { |field| "with_attached_#{field}" })
+          items = items.send_chain(self.preload_attachments.map { |field| "with_attached_#{field}" })
         end
-        users = users.limit(limit)
-        users.load
+        items = items.limit(limit)
+        items.load
         p 'Preloaded'
       else
-        users = self.limit(limit)
+        items = self.limit(limit)
       end
-      users.each do |user|
+      items.each do |user|
         p "Serializing object with id = #{user.id}"
         arr << (serializer || ActiveModel::Serializer.serializer_for(user)).new(user).as_json
       end
