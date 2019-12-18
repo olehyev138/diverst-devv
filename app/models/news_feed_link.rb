@@ -22,7 +22,7 @@ class NewsFeedLink < BaseClass
 
   scope :approved,        -> { where(approved: true).order(created_at: :desc) }
   scope :not_approved,    -> (news_feed_id) {
-    where(approved: false).where("`news_feed_links`.`news_feed_id` = ?", news_feed_id).order(created_at: :desc)
+    where(approved: false).where('`news_feed_links`.`news_feed_id` = ?', news_feed_id).order(created_at: :desc)
   }
 
   scope :active, -> {
@@ -33,10 +33,10 @@ class NewsFeedLink < BaseClass
     select(
         "`news_feed_links`.`*`, CASE WHEN `news_feed_links`.`news_feed_id` = #{sanitize(news_feed_id)} THEN 'self' "\
         "WHEN `shared_news_feed_links`.`news_feed_id` = #{sanitize(news_feed_id)} THEN 'shared' ELSE 'unknown' END as `source`,  "\
-    )
+      )
   }
 
-  scope :combined_news_links, -> (news_feed_id, segment_ids=[]) {
+  scope :combined_news_links, -> (news_feed_id, segment_ids = []) {
     if segment_ids.empty?
       left_joins(:shared_news_feed_links)
           .where('shared_news_feed_links.news_feed_id = ?'\

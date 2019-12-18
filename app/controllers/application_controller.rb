@@ -10,111 +10,111 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
-  #rescue_from Pundit::NotAuthorizedError do |e|
-  #  Rollbar.error(e)
-  #  user_not_authorized
-  #end
-  #
-  #rescue_from ActionController::UnknownFormat do |e|
-  #  Rails.logger.warn('UnknownFormat: ' + e.message)
-  #  Rollbar.error(e)
-  #  render status: 400, json: { error: e.message }
-  #end
-  #
-  #rescue_from ActionView::MissingTemplate do |e|
-  #  flash[:alert] = 'Sorry, the resource you are looking for does not exist.' if Rails.env.production?
-  #  flash[:alert] = e.message if Rails.env.development? || Rails.env.test?
-  #  Rails.logger.warn('MissingTemplate: ' + e.message)
-  #  Rollbar.error(e)
-  #  redirect_on_error
-  #end
-  #
-  #rescue_from ActionView::Template::Error do |e|
-  #  flash[:alert] = 'Sorry, the resource you are looking for does not exist.' if Rails.env.production?
-  #  flash[:alert] = e.message if Rails.env.development? || Rails.env.test?
-  #  Rollbar.error(e)
-  #  redirect_on_error
-  #end
-  #
-  #rescue_from Pundit::AuthorizationNotPerformedError do |e|
-  #  flash[:alert] = 'Sorry, the resource you are looking for does not exist.' if Rails.env.production?
-  #  flash[:alert] = e.message if Rails.env.development? || Rails.env.test?
-  #  Rails.logger.warn('Template::Error: ' + e.message)
-  #  Rollbar.error(e)
-  #  redirect_on_error
-  #end
-  #
-  #rescue_from ActionController::BadRequest do |e|
-  #  flash[:alert] = 'Sorry, the resource you are looking for does not exist.' if Rails.env.production?
-  #  flash[:alert] = e.message if Rails.env.development? || Rails.env.test?
-  #  Rails.logger.warn('BadRequest: ' + e.message)
-  #  Rollbar.error(e)
-  #  redirect_on_error
-  #end
-  #
-  #rescue_from ActiveRecord::RecordInvalid do |e|
-  #  flash[:alert] = 'Sorry, the resource you are looking for does not exist.' if Rails.env.production?
-  #  flash[:alert] = e.message if Rails.env.development? || Rails.env.test?
-  #  Rails.logger.warn('RecordInvalid: ' + e.message)
-  #  Rollbar.error(e)
-  #  redirect_on_error
-  #end
-  #
-  #rescue_from BadRequestException do |e|
-  #  flash[:alert] = 'Sorry, the resource you are looking for does not exist.' if Rails.env.production?
-  #  flash[:alert] = e.message if Rails.env.development? || Rails.env.test?
-  #  Rails.logger.warn('BadRequestException: ' + e.message)
-  #  Rollbar.error(e)
-  #  redirect_on_error
-  #end
-  #
-  #rescue_from Pundit::NotDefinedError do |e|
-  #  flash[:alert] = 'Sorry, the resource you are looking for does not exist.' if Rails.env.production?
-  #  flash[:alert] = e.message if Rails.env.development? || Rails.env.test?
-  #  Rollbar.error(e)
-  #  redirect_on_error
-  #end
-  #
-  #rescue_from ActionController::RoutingError do |e|
-  #  flash[:alert] = e.message
-  #  Rails.logger.warn('RoutingError: ' + e.message)
-  #  Rollbar.error(e)
-  #  redirect_on_error
-  #end
-  #
-  #rescue_from ActiveRecord::RecordNotFound do |e|
-  #  flash[:alert] = 'Sorry, the resource you are looking for does not exist.' if Rails.env.production?
-  #  flash[:alert] = e.message if Rails.env.development? || Rails.env.test?
-  #  Rails.logger.warn('RecordNotFound: ' + e.message)
-  #  Rollbar.error(e)
-  #  redirect_on_error
-  #end
-  #
-  #rescue_from ActiveRecord::StatementInvalid do |e|
-  #  flash[:alert] = e.message
-  #  Rails.logger.warn('StatementInvalid: ' + e.message)
-  #  Rollbar.error(e)
-  #  redirect_on_error
-  #end
-  #
-  #rescue_from ActionController::ParameterMissing do |e|
-  #  flash[:alert] = e.message
-  #  Rails.logger.warn('ParameterMissing: ' + e.message)
-  #  Rollbar.error(e)
-  #  redirect_on_error
-  #end
-  #
-  #rescue_from ActionController::InvalidAuthenticityToken do |e|
-  #  flash[:alert] = e.message
-  #  Rollbar.warn(e)
-  #  redirect_on_error
-  #end
-  #
-  #rescue_from NoMethodError do |e|
-  #  flash[:alert] = e.message
-  #  Rollbar.warn(e)
-  #  redirect_on_error
-  #end
+  rescue_from Pundit::NotAuthorizedError do |e|
+    Rollbar.error(e)
+    user_not_authorized
+  end
+
+  rescue_from ActionController::UnknownFormat do |e|
+    Rails.logger.warn('UnknownFormat: ' + e.message)
+    Rollbar.error(e)
+    render status: 400, json: { error: e.message }
+  end
+
+  rescue_from ActionView::MissingTemplate do |e|
+    flash[:alert] = 'Sorry, the resource you are looking for does not exist.' if Rails.env.production?
+    flash[:alert] = e.message if Rails.env.development? || Rails.env.test?
+    Rails.logger.warn('MissingTemplate: ' + e.message)
+    Rollbar.error(e)
+    redirect_on_error
+  end
+
+  rescue_from ActionView::Template::Error do |e|
+    flash[:alert] = 'Sorry, the resource you are looking for does not exist.' if Rails.env.production?
+    flash[:alert] = e.message if Rails.env.development? || Rails.env.test?
+    Rollbar.error(e)
+    redirect_on_error
+  end
+
+  rescue_from Pundit::AuthorizationNotPerformedError do |e|
+    flash[:alert] = 'Sorry, the resource you are looking for does not exist.' if Rails.env.production?
+    flash[:alert] = e.message if Rails.env.development? || Rails.env.test?
+    Rails.logger.warn('Template::Error: ' + e.message)
+    Rollbar.error(e)
+    redirect_on_error
+  end
+
+  rescue_from ActionController::BadRequest do |e|
+    flash[:alert] = 'Sorry, the resource you are looking for does not exist.' if Rails.env.production?
+    flash[:alert] = e.message if Rails.env.development? || Rails.env.test?
+    Rails.logger.warn('BadRequest: ' + e.message)
+    Rollbar.error(e)
+    redirect_on_error
+  end
+
+  rescue_from ActiveRecord::RecordInvalid do |e|
+    flash[:alert] = 'Sorry, the resource you are looking for does not exist.' if Rails.env.production?
+    flash[:alert] = e.message if Rails.env.development? || Rails.env.test?
+    Rails.logger.warn('RecordInvalid: ' + e.message)
+    Rollbar.error(e)
+    redirect_on_error
+  end
+
+  rescue_from BadRequestException do |e|
+    flash[:alert] = 'Sorry, the resource you are looking for does not exist.' if Rails.env.production?
+    flash[:alert] = e.message if Rails.env.development? || Rails.env.test?
+    Rails.logger.warn('BadRequestException: ' + e.message)
+    Rollbar.error(e)
+    redirect_on_error
+  end
+
+  rescue_from Pundit::NotDefinedError do |e|
+    flash[:alert] = 'Sorry, the resource you are looking for does not exist.' if Rails.env.production?
+    flash[:alert] = e.message if Rails.env.development? || Rails.env.test?
+    Rollbar.error(e)
+    redirect_on_error
+  end
+
+  rescue_from ActionController::RoutingError do |e|
+    flash[:alert] = e.message
+    Rails.logger.warn('RoutingError: ' + e.message)
+    Rollbar.error(e)
+    redirect_on_error
+  end
+
+  rescue_from ActiveRecord::RecordNotFound do |e|
+    flash[:alert] = 'Sorry, the resource you are looking for does not exist.' if Rails.env.production?
+    flash[:alert] = e.message if Rails.env.development? || Rails.env.test?
+    Rails.logger.warn('RecordNotFound: ' + e.message)
+    Rollbar.error(e)
+    redirect_on_error
+  end
+
+  rescue_from ActiveRecord::StatementInvalid do |e|
+    flash[:alert] = e.message
+    Rails.logger.warn('StatementInvalid: ' + e.message)
+    Rollbar.error(e)
+    redirect_on_error
+  end
+
+  rescue_from ActionController::ParameterMissing do |e|
+    flash[:alert] = e.message
+    Rails.logger.warn('ParameterMissing: ' + e.message)
+    Rollbar.error(e)
+    redirect_on_error
+  end
+
+  rescue_from ActionController::InvalidAuthenticityToken do |e|
+    flash[:alert] = e.message
+    Rollbar.warn(e)
+    redirect_on_error
+  end
+
+  rescue_from NoMethodError do |e|
+    flash[:alert] = e.message
+    Rollbar.warn(e)
+    redirect_on_error
+  end
 
   around_action :user_time_zone, if: :current_user
 
