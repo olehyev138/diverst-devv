@@ -421,7 +421,7 @@ class GroupsController < ApplicationController
   end
 
   def without_segments
-    @group.news_feed  .all_links_without_segments
+    @group.news_feed.all_links_without_segments
         .approved
         .active
         .include_posts(social_enabled: @group.enterprise.enable_social_media?)
