@@ -12,10 +12,8 @@
       <% end %>
       <p style="font-style: italic;"><%= comment.content %></p>
       <p><%= time_ago_in_words(comment.created_at) %> ago</p>
-      <% if InitiativeCommentPolicy.new(current_user, comment).erg_leader? %>
-      <%= link_to "Approve", approve_comment_url(comment), method: :patch, class: "btn btn--primary" unless comment.approved? %>
-      <%= link_to "Disapprove", disapprove_comment_url(comment), method: :patch, class: "btn btn--secondary" unless comment.disapproved? %>
-      <%= link_to "Delete", comment_path(comment), method: :delete, data: { confirm: "Are you sure you want to delete this comment?" }, class: "btn btn--danger" %>
+      <% if InitiativeCommentPolicy.new(current_user, comment).manage_comments? %>
+        <%= link_to "Delete", comment_path(comment), method: :delete, data: { confirm: "Are you sure you want to delete this comment?" }, class: "btn btn--danger" %>
       <% end %>
     </div>
   </div>
