@@ -4,6 +4,7 @@ class PollResponse < ApplicationRecord
 
   belongs_to :poll
   belongs_to :user
+  has_many :field_data, class_name: 'FieldData', as: :fieldable
 
   has_many :user_reward_actions, dependent: :destroy
 

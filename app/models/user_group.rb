@@ -5,6 +5,7 @@ class UserGroup < ApplicationRecord
   # associations
   belongs_to :user
   belongs_to :group
+  has_many :field_data, as: :fieldable
 
   # validations
   validates_length_of :data, maximum: 65535

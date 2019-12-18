@@ -2,6 +2,7 @@ class InitiativeUpdate < ApplicationRecord
   include ContainsFields
 
   belongs_to :owner, class_name: 'User'
+  has_many :field_data, as: :fieldable
   belongs_to :initiative
 
   validates_length_of :comments, maximum: 65535

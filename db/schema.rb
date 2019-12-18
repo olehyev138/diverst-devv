@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_10_084256) do
+ActiveRecord::Schema.define(version: 2019_12_18_212443) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "name", null: false
@@ -431,13 +431,14 @@ ActiveRecord::Schema.define(version: 2019_12_10_084256) do
   end
 
   create_table "field_data", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
-    t.bigint "user_id"
+    t.bigint "fieldable_id"
+    t.string "fieldable_type"
     t.bigint "field_id"
     t.string "data"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["field_id"], name: "index_field_data_on_field_id"
-    t.index ["user_id"], name: "index_field_data_on_user_id"
+    t.index ["fieldable_id", "fieldable_type"], name: "index_field_data_on_fieldable_id_and_fieldable_type"
   end
 
   create_table "fields", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
