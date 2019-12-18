@@ -2,7 +2,8 @@ require 'rails_helper'
 
 RSpec.describe Email do
   it { expect(subject).to belong_to :enterprise }
-  it { expect(subject).to have_many(:variables).class_name('EmailVariable') }
+  it { expect(subject).to have_many(:email_variables).class_name('EmailVariable') }
+  it { expect(subject).to have_many(:variables).class_name('EnterpriseEmailVariable') }
   it { expect(subject).to validate_presence_of(:name) }
   it { expect(subject).to validate_presence_of(:subject) }
 

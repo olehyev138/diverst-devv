@@ -587,6 +587,22 @@ export const ROUTES = {
           edit: {
             path: () => '/admin/system/settings/sso'
           },
+        },
+        emails: {
+          index: {
+            path: () => '/admin/system/settings/emailLayouts'
+          },
+          edit: {
+            path: (emailId = ':email_id') => `/admin/system/settings/emailLayouts/${emailId}/edit`
+          },
+        },
+        mailEvents: {
+          index: {
+            path: () => '/admin/system/settings/emailEvents'
+          },
+          edit: {
+            path: (eventId = ':event_id') => `/admin/system/settings/emailEvents/${eventId}/edit`
+          },
         }
       }
     }
