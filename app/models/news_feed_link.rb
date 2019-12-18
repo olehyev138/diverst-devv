@@ -21,8 +21,12 @@ class NewsFeedLink < BaseClass
   delegate :segment,  to: :news_feed_link_segment, allow_nil: true
 
   scope :approved,        -> { where(approved: true).order(created_at: :desc) }
-  scope :not_approved,    -> (news_feed_id) {
-    where(approved: false).where('`news_feed_links`.`news_feed_id` = ?', news_feed_id).order(created_at: :desc)
+  scope :not_approved,    -> (news_feed_id = nil) {
+    if news_feed_id.present?
+      where(approved: false).where('`news_feed_links`.`news_feed_id` = ?', news_feed_id).order(created_at: :desc)
+    else
+      where(approved: false).order(created_at: :desc)
+    end
   }
 
   scope :active, -> {
@@ -36,22 +40,31 @@ class NewsFeedLink < BaseClass
       )
   }
 
-  scope :combined_news_links, -> (news_feed_id, segment_ids = []) {
-    if segment_ids.empty?
+  scope :combined_news_links, -> (news_feed_id, enterprise, segment_ids: [], without_segments: false) {
+    if without_segments
       left_joins(:shared_news_feed_links)
           .where('shared_news_feed_links.news_feed_id = ?'\
                  ' OR news_feed_links.news_feed_id = ?',
                  news_feed_id, news_feed_id
           ).distinct
     else
-      left_joins(:shared_news_feed_links, :news_feed_link_segments)
-          .where('shared_news_feed_links.news_feed_id = ?'\
+      if segment_ids.empty?
+        left_joins(:shared_news_feed_links, :news_feed_link_segments)
+            .where('shared_news_feed_links.news_feed_id = ?'\
+                 ' OR news_feed_links.news_feed_id = ?'\
+                 ' OR news_feed_link_segments.segment_id IS NULL',
+                   news_feed_id, news_feed_id
+            ).distinct
+      else
+        left_joins(:shared_news_feed_links, :news_feed_link_segments)
+            .where('shared_news_feed_links.news_feed_id = ?'\
                  ' OR news_feed_links.news_feed_id = ?'\
                  ' OR news_feed_link_segments.segment_id IS NULL'\
-                 ' OR news_feed_link_segments.segment_id IN ?',
-                 news_feed_id, news_feed_id, segment_ids
-          ).distinct
-    end
+                 ' OR news_feed_link_segments.segment_id IN (?)',
+                   news_feed_id, news_feed_id, segment_ids
+            ).distinct
+      end
+    end.filter_posts(social_enabled: enterprise.enable_social_media?)
   }
 
   scope :include_posts, -> (social_enabled: false) {

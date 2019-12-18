@@ -21,10 +21,10 @@ class Groups::PostsController < ApplicationController
       @posts = []
     end
 
-    filter_posts
+    @posts = @posts.include_posts(social_enabled: @group.enterprise.enable_social_media?)
     @pending_posts_count = @posts.not_approved(@group.news_feed.id).count
-    prune_posts
     @posts = @posts.approved
+    prune_posts
   end
 
   def pending
@@ -37,10 +37,10 @@ class Groups::PostsController < ApplicationController
       @posts = []
     end
 
-    filter_posts
+    @posts = @posts.include_posts(social_enabled: @group.enterprise.enable_social_media?)
     @posts_count = @posts.approved.count
-    prune_posts
     @pending_posts = @posts.not_approved(@group.news_feed.id)
+    prune_posts
   end
 
   def approve
@@ -91,14 +91,11 @@ class Groups::PostsController < ApplicationController
   end
 
   def without_segments
-    @posts = @group.news_feed.all_links([])
+    @posts = @group.news_feed.all_links_without_segments
   end
 
   def with_segments
     segment_ids = current_user.segment_ids
-
-    return without_segments if segment_ids.empty?
-
     @posts = @group.news_feed.all_links(segment_ids, @group.enterprise)
   end
 
@@ -112,9 +109,8 @@ class Groups::PostsController < ApplicationController
                .limit(@limit)
   end
 
-  def filter_posts
+  def include_posts
     @posts = @posts.include_posts(social_enabled: @group.enterprise.enable_social_media?)
-    @posts = @posts.filter_posts(social_enabled: @group.enterprise.enable_social_media?)
   end
 
   def set_group

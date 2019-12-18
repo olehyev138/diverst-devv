@@ -421,10 +421,9 @@ class GroupsController < ApplicationController
   end
 
   def without_segments
-    @group.news_feed.all_links([])
+    @group.news_feed  .all_links_without_segments
         .approved
         .active
-        .filter_posts(social_enabled: @group.enterprise.enable_social_media?)
         .include_posts(social_enabled: @group.enterprise.enable_social_media?)
         .order(is_pinned: :desc, created_at: :desc)
         .limit(5)
@@ -436,7 +435,6 @@ class GroupsController < ApplicationController
       @group.news_feed.all_links(segment_ids)
           .approved
           .active
-          .filter_posts(social_enabled: @group.enterprise.enable_social_media?)
           .include_posts(social_enabled: @group.enterprise.enable_social_media?)
           .order(is_pinned: :desc, created_at: :desc)
           .limit(5)

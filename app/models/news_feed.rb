@@ -9,7 +9,11 @@ class NewsFeed < BaseClass
   validates :group_id, presence: true
 
   def all_links(segment_ids)
-    NewsFeedLink.combined_news_links(id, segment_ids).active
+    NewsFeedLink.combined_news_links(id, group.enterprise, segment_ids: segment_ids).active
+  end
+
+  def all_links_without_segments
+    NewsFeedLink.combined_news_links(id, group.enterprise, without_segments: true).active
   end
 
   def self.archived_posts(enterprise)
