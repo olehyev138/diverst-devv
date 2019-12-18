@@ -11,26 +11,26 @@ RSpec.describe 'EmailVariables', type: :request do
 
   it 'gets all items' do
     get "/api/v1/#{route}", headers: headers
-    expect(response).to have_http_status(:ok)
+    expect(response).to have_http_status(:forbidden)
   end
 
   it 'gets a item' do
     get "/api/v1/#{route}/#{item.id}", headers: headers
-    expect(response).to have_http_status(:ok)
+    expect(response).to have_http_status(:forbidden)
   end
 
   it 'creates an item' do
     post "/api/v1/#{route}", params: { "#{route.singularize}": build(route.singularize.to_sym).attributes }, headers: headers
-    expect(response).to have_http_status(201)
+    expect(response).to have_http_status(:forbidden)
   end
 
   it 'updates an item' do
     patch "/api/v1/#{route}/#{item.id}", params: { "#{route.singularize}": item.attributes }, headers: headers
-    expect(response).to have_http_status(:ok)
+    expect(response).to have_http_status(:forbidden)
   end
 
   it 'deletes an item' do
     delete "/api/v1/#{route}/#{item.id}", headers: headers
-    expect(response).to have_http_status(:no_content)
+    expect(response).to have_http_status(:forbidden)
   end
 end

@@ -28,7 +28,7 @@ const EventTypes = Object.freeze({
 const defaultParams = Object.freeze({
   count: 10, // TODO: Make this a constant and use it also in EventsList
   page: 0,
-  order: 'desc',
+  order: 'asc',
   orderBy: 'start',
 });
 
