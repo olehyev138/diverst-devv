@@ -39,7 +39,7 @@ class UserMentorshipSerializer < ApplicationRecordSerializer
 
   def availabilities
     object.availabilities.map do |ava|
-      MentorshipAvailabilitySerializer.new(ava, time_zone: scope&.(:current_user)&.time_zone).as_json
+      MentorshipAvailabilitySerializer.new(ava, time_zone: scope.dig(:current_user)&.time_zone).as_json
     end
   end
 end

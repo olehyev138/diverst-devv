@@ -1,0 +1,2 @@
+class EnterpriseEmailVariableSerializer < ApplicationRecordSerializer
+end

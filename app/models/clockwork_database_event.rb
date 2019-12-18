@@ -1,5 +1,6 @@
 class ClockworkDatabaseEvent < ApplicationRecord
   include PublicActivity::Common
+  include ClockworkDatabaseEvent::Actions
   include TimeZoneValidation
   time_zone_attribute :tz
 
@@ -35,7 +36,7 @@ class ClockworkDatabaseEvent < ApplicationRecord
   def valid_job
     if job_name.present? && method_name.present?
       begin
-        if not job_name.constantize.respond_to? method_name.to_sym
+        unless job_name.constantize.respond_to? method_name.to_sym
           errors.add(:method_name, 'does not exist')
           return false
         end

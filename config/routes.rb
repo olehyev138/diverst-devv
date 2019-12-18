@@ -27,11 +27,10 @@ Diverst::Application.routes.draw do
       resources :campaigns_segments
       resources :checklists
       resources :checklist_items
-      resources :clockwork_database_events
+      resources :clockwork_database_events, only: [:index, :update, :show]
       resources :custom_texts
       resources :devices
-      resources :emails
-      resources :email_variables
+      resources :emails, only: [:index, :update, :show]
       resources :enterprises do
         collection do
           get 'get_enterprise', to: 'enterprises#get_enterprise'
@@ -42,7 +41,6 @@ Diverst::Application.routes.draw do
           post '/sso_link',     to: 'enterprises#sso_link'
         end
       end
-      resources :enterprise_email_variables
       resources :expenses
       resources :expense_categories
       resources :fields
@@ -251,5 +249,5 @@ Diverst::Application.routes.draw do
   end
 
   # Note the contraints that do not provide a routing error if we're looking for `rails/` because of ActiveStorage URLs
-  match '*a', to: 'diverst#routing_error', via: [:get, :post], constraints: lambda { |request| !request.path_parameters[:a].start_with?('rails/') }
+  match '*a', to: 'diverst#routing_error', via: [:get, :post, :delete, :patch, :put], constraints: lambda { |request| !request.path_parameters[:a].start_with?('rails/') }
 end
