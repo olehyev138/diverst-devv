@@ -7,7 +7,6 @@
 import React, { memo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
-import dig from 'object-dig';
 
 import {
   Button, Card, CardActions, CardContent, Divider, Grid, TextField
@@ -28,54 +27,38 @@ import { DateTime } from 'luxon';
 /* eslint-disable object-curly-newline */
 export function GroupLeaderFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, touched, ...props }) {
   const { links } = props;
-  const userSelectAction = (searchKey = '') => {
+  const usersSelectAction = (searchKey = '') => {
     props.getUsersBegin({
       count: 10, page: 0, order: 'asc',
       search: searchKey,
     });
   };
 
-  console.log(values);
   return (
-    <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.groupLeaders}>
+    <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.groupLeader}>
       <Card>
         <Form>
+          <Divider />
           <CardContent>
-            {Object.entries(values).map(([i, _]) => (
-              // eslint-disable-next-line no-underscore-dangle
-              !values[i]._destroy ? (
-                <React.Fragment key={i}>
-                  <Button
-                    onClick={() => setFieldValue(`[${i}]._destroy`, true)}
-                  >
-                    X
-                  </Button>
-                  <Field
-                    component={Select}
-                    fullWidth
-                    id={`[${i}].user_id`}
-                    name={`[${i}].user_id`}
-                    label='Select User'
-                    margin='normal'
-                    disabled={props.isCommitting}
-                    value={values[i].user}
-                    options={props.selectUsers}
-                    onMenuOpen={userSelectAction}
-                    onChange={value => setFieldValue(`[${i}].user_id`, value)}
-                    onInputChange={value => userSelectAction(value)}
-                    onBlur={() => setFieldTouched(`[${i}].user_id`, true)}
-                  />
-                </React.Fragment>
-              ) : <React.Fragment key={i} />
-            ))}
+            <Field
+              component={Select}
+              fullWidth
+              id='user_ids'
+              name='user_ids'
+              label='Select User'
+              isMulti
+              margin='normal'
+              disabled={props.isCommitting}
+              value={values.users}
+              options={props.selectUsers}
+              onMenuOpen={usersSelectAction}
+              onChange={value => setFieldValue('user_ids', value)}
+              onInputChange={value => usersSelectAction(value)}
+              onBlur={() => setFieldTouched('user_ids', true)}
+            />
           </CardContent>
           <Divider />
           <CardActions>
-            <Button
-              onClick={() => setFieldValue(`[${Object.keys(values).length}]`, buildValues(null, props.baseValues))}
-            >
-              Add
-            </Button>
             <DiverstSubmit isCommitting={props.isCommitting}>
               {buttonText}
             </DiverstSubmit>
@@ -92,13 +75,11 @@ export function GroupLeaderFormInner({ handleSubmit, handleChange, handleBlur, v
     </DiverstFormLoader>
   );
 }
-// const baseValues = buildValues(props.groupLeaders, {
 
 export function GroupLeaderForm(props) {
-  const baseValues = {
+  const initialValues = buildValues(props.groupLeader, {
     // users: { default: [], customKey: 'member_ids' }
     id: { default: '' },
-    _destroy: { default: false },
     user: { default: '', customKey: 'user_id' },
     group_id: { default: props.groupId },
     position_name: { default: 'Group Leader' },
@@ -108,25 +89,17 @@ export function GroupLeaderForm(props) {
     pending_comments_notifications_enabled: { default: false },
     pending_posts_notifications_enabled: { default: false },
     default_group_contact: { default: false },
-  };
-
-  const leaders = dig(props, 'groupLeaders') || [null];
-  const leaderValues = leaders.map(leader => buildValues(leader, baseValues));
-  const initialValues = Object.assign({}, leaderValues);
+  });
 
   return (
     <Formik
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        props.groupLeadersAction(mapFields({
-          groupId: props.groupId,
-          group_leaders: {
-            values
-          }
-        }, ['user_ids']));
+        props.groupLeadersAction(mapFields(values, ['user_ids']));
       }}
-      render={formikProps => <GroupLeaderFormInner {...props} {...formikProps} baseValues={baseValues} />}
+
+      render={formikProps => <GroupLeaderFormInner {...props} {...formikProps} />}
     />
   );
 }
@@ -135,8 +108,9 @@ GroupLeaderForm.propTypes = {
   edit: PropTypes.bool,
   createGroupLeaderBegin: PropTypes.func,
   updateGroupLeaderBegin: PropTypes.func,
+  getUsersBegin: PropTypes.func,
   group: PropTypes.object,
-  groupId: PropTypes.number,
+  groupId: PropTypes.string,
   isCommitting: PropTypes.bool,
   groupLeaders: PropTypes.array,
   groupLeadersAction: PropTypes.func,
@@ -158,7 +132,6 @@ GroupLeaderFormInner.propTypes = {
   touched: PropTypes.object,
   isCommitting: PropTypes.bool,
   isFormLoading: PropTypes.bool,
-  baseValues: PropTypes.object,
   links: PropTypes.shape({
     groupLeadersIndex: PropTypes.string
   }),
