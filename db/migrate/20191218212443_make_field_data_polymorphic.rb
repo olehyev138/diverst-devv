@@ -38,6 +38,9 @@ class MakeFieldDataPolymorphic < ActiveRecord::Migration[5.2]
 
   def down
     transaction do
+      add_column :field_data, :user_id, :bigint, first: true
+      add_index :field_data, :user_id
+
       FieldData.destroy_all
       ActiveRecord::Base.connection.execute("TRUNCATE field_data")
       User.all.each do |user|
