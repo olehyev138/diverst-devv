@@ -29,7 +29,7 @@ const selectPaginatedSelectMembersLeaderForm = () => createSelector(
     Object
       .values(membersState.memberList)
       .map(user => ({
-        value: user.id,
+        value: user.user.id,
         // label: `${user.first_name} ${user.last_name}`
         label: `${user.user.name}`
       }))

@@ -72,6 +72,7 @@ export function GroupLeadersListPage(props) {
           groupLeaderList={props.groupLeaderList}
           groupLeaderTotal={props.groupLeaderTotal}
           isFetchingGroupLeaders={props.isFetchingGroupLeaders}
+          groupLeader={props.groupLeader}
           deleteGroupLeaderBegin={props.deleteGroupLeaderBegin}
           handleVisitGroupLeaderEdit={props.handleVisitGroupLeaderEdit}
           links={links}

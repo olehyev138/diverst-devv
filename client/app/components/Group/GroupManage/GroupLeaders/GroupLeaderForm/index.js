@@ -40,18 +40,17 @@ export function GroupLeaderFormInner({ handleSubmit, handleChange, handleBlur, v
               <Field
                 component={Select}
                 fullWidth
-                id='user_ids'
-                name='user_ids'
+                id='user_id'
+                name='user_id'
                 label='Select Member'
-                isMulti
                 margin='normal'
                 disabled={props.isCommitting}
-                value={values.users}
+                value={values.user_id}
                 options={props.selectMembers}
                 onMenuOpen={membersSelectAction}
-                onChange={value => setFieldValue('user_ids', value)}
+                onChange={value => setFieldValue('user_id', value)}
                 onInputChange={value => membersSelectAction(value)}
-                onBlur={() => setFieldTouched('user_ids', true)}
+                onBlur={() => setFieldTouched('user_id', true)}
               />
             </CardContent>
             <Divider />
@@ -92,7 +91,7 @@ export function GroupLeaderForm(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        props.groupLeadersAction(mapFields(values, ['user_ids']));
+        props.groupLeaderAction(mapFields(values, ['user_id']));
       }}
       render={formikProps => <GroupLeaderFormInner {...props} {...formikProps} />}
     />
@@ -105,9 +104,11 @@ GroupLeaderForm.propTypes = {
   getMembersBegin: PropTypes.func,
   group: PropTypes.object,
   groupId: PropTypes.string,
+  groupLeaderId: PropTypes.string,
   isCommitting: PropTypes.bool,
   groupLeaders: PropTypes.array,
-  groupLeadersAction: PropTypes.func,
+  groupLeader: PropTypes.object,
+  groupLeaderAction: PropTypes.func,
 };
 
 GroupLeaderFormInner.propTypes = {
@@ -118,6 +119,7 @@ GroupLeaderFormInner.propTypes = {
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
   values: PropTypes.object,
+  groupLeader: PropTypes.object,
   groupId: PropTypes.number,
   buttonText: PropTypes.string,
   selectMembers: PropTypes.array,
