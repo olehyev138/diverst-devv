@@ -81,6 +81,22 @@ class SocialMedia::Importer
     }
   end
 
+  def self.oembed_link_short
+    {
+        Youtube: %w(https://*.youtube.com/* https://*.youtu.be/*),
+        Facebook: %w( https://www.facebook.com/*/posts/* https://www.facebook.com/*/activity/* https://www.facebook.com/photo*
+                      https://www.facebook.com/photos* https://www.facebook.com/*/photos* https://www.facebook.com/permalink*
+                      https://www.facebook.com/media* https://www.facebook.com/questions* https://www.facebook.com/notes*
+                      https://www.facebook.com/*/videos/* https://www.facebook.com/video*),
+        Twitter: [ 'https://*.twitter.com/*/status/*' ],
+        Instagram: %w(https://instagr.am/p/* https://instagram.com/p/* https://www.instagram.com/p/*),
+        Tumblr: [ 'https://*.tumblr.com/post/*' ],
+        Vimeo: [ 'https://*.vimeo.com/*' ],
+        Imgur: [ 'https://*.imgur.com/gallery/*' ],
+        SoundCloud: [ 'https://*.soundcloud.com/*' ],
+    }
+  end
+
   protected
 
   def self.set_up_providers
