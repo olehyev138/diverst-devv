@@ -23,6 +23,19 @@ const selectPaginatedSelectMembers = () => createSelector(
   )
 );
 
+const selectPaginatedSelectMembersLeaderForm = () => createSelector(
+  selectMembersDomain,
+  membersState => (
+    Object
+      .values(membersState.memberList)
+      .map(user => ({
+        value: user.id,
+        // label: `${user.first_name} ${user.last_name}`
+        label: `${user.user.name}`
+      }))
+  )
+);
+
 const selectMemberTotal = () => createSelector(
   selectMembersDomain,
   membersState => membersState.memberTotal
@@ -40,5 +53,6 @@ const selectIsCommitting = () => createSelector(
 
 export {
   selectMembersDomain, selectPaginatedMembers, selectPaginatedSelectMembers,
+  selectPaginatedSelectMembersLeaderForm,
   selectMemberTotal, selectIsFetchingMembers, selectIsCommitting
 };

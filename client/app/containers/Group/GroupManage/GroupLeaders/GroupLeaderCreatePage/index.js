@@ -22,7 +22,7 @@ import { createGroupLeaderBegin, groupLeadersUnmount } from 'containers/Group/Gr
 import {
   selectGroupLeaderTotal, selectIsCommitting
 } from 'containers/Group/GroupManage/GroupLeaders/selectors';
-import { selectPaginatedSelectMembers, selectMemberTotal,
+import { selectPaginatedSelectMembersLeaderForm, selectMemberTotal,
   selectIsFetchingMembers
 } from 'containers/Group/GroupMembers/selectors';
 import {
@@ -109,7 +109,7 @@ GroupLeaderCreatePage.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
-  members: selectPaginatedSelectMembers(),
+  members: selectPaginatedSelectMembersLeaderForm(),
   isCommitting: selectIsCommitting(),
   memberTotal: selectMemberTotal(),
   isFetchingMembers: selectIsFetchingMembers()

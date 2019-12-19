@@ -31,44 +31,46 @@ export function GroupLeaderFormInner({ handleSubmit, handleChange, handleBlur, v
     });
   };
   return (
-    <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.groupLeader}>
-      <Card>
-        <Form>
-          <Divider />
-          <CardContent>
-            <Field
-              component={Select}
-              fullWidth
-              id='user_ids'
-              name='user_ids'
-              label='Select Member'
-              isMulti
-              margin='normal'
-              disabled={props.isCommitting}
-              value={values.users}
-              options={props.selectMembers}
-              onMenuOpen={membersSelectAction}
-              onChange={value => setFieldValue('user_ids', value)}
-              onInputChange={value => membersSelectAction(value)}
-              onBlur={() => setFieldTouched('user_ids', true)}
-            />
-          </CardContent>
-          <Divider />
-          <CardActions>
-            <DiverstSubmit isCommitting={props.isCommitting}>
-              {buttonText}
-            </DiverstSubmit>
-            <Button
-              disabled={props.isCommitting}
-              to={links.GroupLeadersIndex}
-              component={WrappedNavLink}
-            >
-              <DiverstFormattedMessage {...messages.cancel} />
-            </Button>
-          </CardActions>
-        </Form>
-      </Card>
-    </DiverstFormLoader>
+    props.selectMembers && (
+      <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.groupLeader}>
+        <Card>
+          <Form>
+            <Divider />
+            <CardContent>
+              <Field
+                component={Select}
+                fullWidth
+                id='user_ids'
+                name='user_ids'
+                label='Select Member'
+                isMulti
+                margin='normal'
+                disabled={props.isCommitting}
+                value={values.users}
+                options={props.selectMembers}
+                onMenuOpen={membersSelectAction}
+                onChange={value => setFieldValue('user_ids', value)}
+                onInputChange={value => membersSelectAction(value)}
+                onBlur={() => setFieldTouched('user_ids', true)}
+              />
+            </CardContent>
+            <Divider />
+            <CardActions>
+              <DiverstSubmit isCommitting={props.isCommitting}>
+                {buttonText}
+              </DiverstSubmit>
+              <Button
+                disabled={props.isCommitting}
+                to={links.GroupLeadersIndex}
+                component={WrappedNavLink}
+              >
+                <DiverstFormattedMessage {...messages.cancel} />
+              </Button>
+            </CardActions>
+          </Form>
+        </Card>
+      </DiverstFormLoader>
+    )
   );
 }
 export function GroupLeaderForm(props) {
