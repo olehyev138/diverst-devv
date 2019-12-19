@@ -29,7 +29,7 @@ RSpec.describe CacheSegmentMembersJob, type: :job do
     create(:segment_field_rule, segment: segment, field: select_field, operator: Field::OPERATORS[:equals_any_of], data: ['Female'].to_json)
 
     user = create(:user, enterprise: enterprise, active: true)
-    create(:field_data, user_id: user.id, field_id: select_field.id, data: ['Female'].to_json)
+    create(:field_data, fieldable: user, field_id: select_field.id, data: ['Female'].to_json)
 
     expect(segment.members.count).to eq(0)
 

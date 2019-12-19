@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_18_231058) do
+ActiveRecord::Schema.define(version: 2019_12_18_212443) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "name", null: false
@@ -623,8 +623,6 @@ ActiveRecord::Schema.define(version: 2019_12_18_231058) do
     t.bigint "group_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "field_data"
-    t.index ["field_data"], name: "index_group_updates_on_field_data"
     t.index ["group_id"], name: "index_group_updates_on_group_id"
     t.index ["owner_id"], name: "index_group_updates_on_owner_id"
   end
@@ -762,8 +760,6 @@ ActiveRecord::Schema.define(version: 2019_12_18_231058) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "report_date"
-    t.bigint "field_data"
-    t.index ["field_data"], name: "index_initiative_updates_on_field_data"
     t.index ["initiative_id"], name: "index_initiative_updates_on_initiative_id"
     t.index ["owner_id"], name: "index_initiative_updates_on_owner_id"
   end
@@ -1235,8 +1231,6 @@ ActiveRecord::Schema.define(version: 2019_12_18_231058) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "anonymous", default: false
-    t.bigint "field_data"
-    t.index ["field_data"], name: "index_poll_responses_on_field_data"
     t.index ["poll_id"], name: "index_poll_responses_on_poll_id"
     t.index ["user_id"], name: "index_poll_responses_on_user_id"
   end
@@ -1521,8 +1515,6 @@ ActiveRecord::Schema.define(version: 2019_12_18_231058) do
     t.boolean "accepted_member", default: false
     t.integer "total_weekly_points", default: 0
     t.text "data", collation: "utf8mb4_unicode_ci"
-    t.bigint "field_data"
-    t.index ["field_data"], name: "index_user_groups_on_field_data"
     t.index ["group_id"], name: "index_user_groups_on_group_id"
     t.index ["user_id"], name: "index_user_groups_on_user_id"
   end
