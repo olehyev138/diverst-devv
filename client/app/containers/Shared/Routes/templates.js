@@ -104,7 +104,7 @@ import OutcomeCreatePage from 'containers/Group/Outcome/OutcomeCreatePage/Loadab
 import OutcomeEditPage from 'containers/Group/Outcome/OutcomeEditPage/Loadable';
 
 /* Group - Plan - KPI */
-import GroupPlanKpiPage from 'containers/Group/GroupPlan/KpiPage/Loadable';
+import GroupPlanKpiPage from 'containers/Group/GroupPlan/KPI/KpiPage/Loadable';
 
 /* Group - Members */
 import GroupMemberListPage from 'containers/Group/GroupMembers/GroupMemberListPage/Loadable';
