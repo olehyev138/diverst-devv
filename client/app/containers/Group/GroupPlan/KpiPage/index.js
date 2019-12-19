@@ -6,7 +6,7 @@ import { compose } from 'redux';
 
 import KPILayout from 'containers/Layouts/GroupPlanLayout/KPILayout';
 
-import Kpi from 'components/Group/GroupPlan/Kpi';
+import Kpi from 'components/Group/GroupPlan/KpiMetrics';
 
 export function KpiPage(props) {
   const links = {};
