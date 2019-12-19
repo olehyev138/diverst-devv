@@ -65,7 +65,7 @@ export function* deleteGroupLeaders(action) {
   try {
     yield call(api.groupLeaders.destroy.bind(api.groupLeaders), action.payload.id);
     yield put(deleteGroupLeaderSuccess());
-    yield put(push(ROUTES.admin.groupLeaders.index.path(action.payload.id)));
+    yield put(push(ROUTES.group.manage.leaders.index.path(action.payload.group_id)));
     yield put(showSnackbar({ message: 'User deleted', options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteGroupLeaderError(err));

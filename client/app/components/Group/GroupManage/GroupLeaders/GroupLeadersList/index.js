@@ -96,7 +96,7 @@ export function GroupLeadersList(props) {
               onClick: (_, rowData) => {
                 /* eslint-disable-next-line no-alert, no-restricted-globals */
                 if (confirm('Delete group leader?'))
-                  props.deleteGroupLeaderBegin({ id: rowData.id });
+                  props.deleteGroupLeaderBegin({ group_id: rowData.group_id, id: rowData.id });
               }
             }]}
         />
