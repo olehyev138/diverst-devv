@@ -50,7 +50,7 @@ export function* createGroupLeaders(action) {
     console.log(payload);
     const response = yield call(api.groupLeaders.create.bind(api.groupLeaders), payload);
     yield put(createGroupLeaderSuccess());
-    yield put(push(ROUTES.group.manage.leaders.index.path()));
+    yield put(push(ROUTES.group.manage.leaders.index.path(action.payload.group_id)));
     yield put(showSnackbar({ message: 'GroupLeader created', options: { variant: 'success' } }));
     // yield put(showSnackbar({ message: 'GroupLeader created', options: { variant: 'success' } }));
   } catch (err) {
