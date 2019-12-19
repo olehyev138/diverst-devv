@@ -82,6 +82,7 @@ import OutcomesPage from 'containers/Group/Outcome/OutcomesPage/Loadable';
 import EventPage from 'containers/Event/EventPage/Loadable';
 import EventCreatePage from 'containers/Event/EventCreatePage/Loadable';
 import EventEditPage from 'containers/Event/EventEditPage/Loadable';
+import EventManageMetricsPage from 'containers/Event/EventManage/MetricsPage/Loadable';
 
 /* Group - News Feed */
 import GroupMessagePage from 'containers/News/GroupMessage/GroupMessagePage/Loadable';
@@ -95,7 +96,6 @@ import NewsLinkPage from 'containers/News/NewsLink/NewsLinkPage';
 
 /* Group - Plan - Events */
 import GroupPlanEventsPage from 'containers/Group/GroupPlan/EventsPage/Loadable';
-import EventManagePage from 'containers/Event/EventManagePage/Loadable';
 
 /* Group - Plan - Outcomes */
 import OutcomeCreatePage from 'containers/Group/Outcome/OutcomeCreatePage/Loadable';
@@ -158,7 +158,7 @@ export {
   EventPage,
   EventCreatePage,
   EventEditPage,
-  EventManagePage,
+  EventManageMetricsPage,
   GroupPlanEventsPage,
   GroupMessagePage,
   GroupMessageCreatePage,
