@@ -37,7 +37,11 @@ module BaseBuilder
       raise BadRequestException.new "#{self.name.titleize} ID required" if params[:id].nil?
 
       # get the item
-      item = find(params[:id])
+      if respond_to? 'base_preloads'
+        item = preload(base_preloads).find(params[:id])
+      else
+        item = find(params[:id])
+      end
 
       # check if the user can read it
 

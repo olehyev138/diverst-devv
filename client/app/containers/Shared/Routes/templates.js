@@ -9,6 +9,7 @@ import GroupManageLayout from 'containers/Layouts/GroupManageLayout/Loadable';
 import MentorshipLayout from 'containers/Layouts/MentorshipLayout/Loadable';
 import InnovateLayout from 'containers/Layouts/InnovateLayout/Loadable';
 import SystemUserLayout from 'containers/Layouts/SystemUsersLayout/Loadable';
+import EmailLayout from 'containers/Layouts/GlobalSettingsLayout/EmailLayout/Loadable';
 
 /* Session */
 import LoginPage from 'containers/Session/LoginPage/Loadable';
@@ -56,6 +57,10 @@ import FieldsPage from 'containers/GlobalSettings/Field/FieldsPage/Loadable';
 import CustomTextEditPage from 'containers/GlobalSettings/CustomText/CustomTextEditPage/Loadable';
 import EnterpriseConfigurationPage from 'containers/GlobalSettings/EnterpriseConfiguration/EnterpriseConfigurationPage/Loadable';
 import SSOSettingsPage from 'containers/GlobalSettings/SSOSettingsPage/Loadable';
+import EmailsPage from 'containers/GlobalSettings/Email/Email/EmailsPage/Loadable';
+import EmailEditPage from 'containers/GlobalSettings/Email/Email/EmailEditPage/Loadable';
+import EmailEventsPage from 'containers/GlobalSettings/Email/Event/EventsPage/Loadable';
+import EmailEventEditPage from 'containers/GlobalSettings/Email/Event/EventEditPage/Loadable';
 
 /* Admin - System - User */
 import UsersPage from 'containers/User/UsersPage/Loadable';
@@ -208,10 +213,15 @@ export {
   UserRolesListPage,
   UserRoleCreatePage,
   UserRoleEditPage,
+  SSOSettingsPage,
+  EmailsPage,
+  EmailEditPage,
+  EmailEventsPage,
+  EmailEventEditPage,
+  EmailLayout,
   NewsLinkEditPage,
   NewsLinkCreatePage,
   SocialLinkCreatePage,
   SocialLinkEditPage,
-  SSOSettingsPage,
   NewsLinkPage
 };
