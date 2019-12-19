@@ -49,6 +49,8 @@ import {
   CustomGraphCreatePage,
   CustomGraphEditPage,
   GroupManageLayout,
+  GroupPlanLayout,
+  GroupKPILayout,
   GroupSettingsPage,
   CustomTextEditPage,
   UserNewsLinkPage,

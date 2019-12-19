@@ -6,6 +6,8 @@ import SessionLayout from 'containers/Layouts/SessionLayout/Loadable';
 import ErrorLayout from 'containers/Layouts/ErrorLayout/Loadable';
 import GlobalSettingsLayout from 'containers/Layouts/GlobalSettingsLayout/Loadable';
 import GroupManageLayout from 'containers/Layouts/GroupManageLayout/Loadable';
+import GroupPlanLayout from 'containers/Layouts/GroupPlanLayout/Loadable';
+import GroupKPILayout from 'containers/Layouts/GroupPlanLayout/KPILayout/Loadable';
 import MentorshipLayout from 'containers/Layouts/MentorshipLayout/Loadable';
 import InnovateLayout from 'containers/Layouts/InnovateLayout/Loadable';
 import SystemUserLayout from 'containers/Layouts/SystemUsersLayout/Loadable';
@@ -180,6 +182,8 @@ export {
   CustomGraphCreatePage,
   CustomGraphEditPage,
   GroupManageLayout,
+  GroupPlanLayout,
+  GroupKPILayout,
   GroupSettingsPage,
   CustomTextEditPage,
   UserNewsLinkPage,

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 
-import GroupPlanLayout from 'containers/Layouts/GroupPlanLayout';
+import KPILayout from 'containers/Layouts/GroupPlanLayout/KPILayout';
 
 import Kpi from 'components/Group/GroupPlan/Kpi';
 
@@ -14,7 +14,7 @@ export function KpiPage(props) {
   const { isLoading } = props;
 
   return (
-    <GroupPlanLayout
+    <KPILayout
       component={() => (
         <Kpi />
       )}
