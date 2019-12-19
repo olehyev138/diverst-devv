@@ -47,7 +47,7 @@ function groupLeadersReducer(state = initialState, action) {
         console.log(action.payload);
         break;
       case GET_GROUP_LEADER_SUCCESS:
-        draft.currentGroupLeader = action.payload.groupLeader;
+        draft.currentGroupLeader = action.payload.group_leader;
         draft.isFormLoading = false;
         break;
       case GET_GROUP_LEADER_ERROR:

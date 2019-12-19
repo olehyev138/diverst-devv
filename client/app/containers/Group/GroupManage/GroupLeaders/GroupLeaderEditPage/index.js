@@ -59,7 +59,7 @@ export function GroupLeaderEditPage(props) {
       groupLeader={props.groupLeader}
       groupLeaderId={rs.params('group_leader_id'[0])}
       groupLeaderAction={props.updateGroupLeaderBegin}
-      getMembersBegin={props.getGroupMembersBegin}
+      getMembersBegin={props.getMembersBegin}
       selectMembers={props.members}
       member={props.member}
       groupId={groupId[0]}
