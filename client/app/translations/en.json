@@ -175,7 +175,7 @@
   "diverst.containers.User.profile.privacy": "Only D&I Management can see hidden fields",
   "diverst.containers.User.scope.all": "All",
   "diverst.containers.User.scope.inactive": "Inactive Users",
-  "diverst.containers.User.scope.invitation_sent": "Invitation Sent",
+  "diverst.containers.User.scope.invitation_sent": "Pending Invitations",
   "diverst.containers.User.scope.saml": "SAML Users",
   "diverst.containers.UserRole.index.button.new":"Add user role",
   "diverst.containers.UserRole.index.button.edit": "Edit",
