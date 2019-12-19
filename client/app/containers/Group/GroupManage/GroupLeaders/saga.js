@@ -47,7 +47,6 @@ export function* getGroupLeader(action) {
 export function* createGroupLeaders(action) {
   try {
     const payload = { group_leader: action.payload };
-    console.log(payload);
     const response = yield call(api.groupLeaders.create.bind(api.groupLeaders), payload);
     yield put(createGroupLeaderSuccess());
     yield put(push(ROUTES.group.manage.leaders.index.path(action.payload.group_id)));
@@ -78,7 +77,6 @@ export function* deleteGroupLeaders(action) {
 export function* updateGroupLeader(action) {
   try {
     const payload = { group: action.payload };
-    console.log(payload);
     const response = yield call(api.groups.assignLeaders.bind(api.groups), payload.group.groupId, payload);
 
     yield put(updateGroupLeaderSuccess());

@@ -30,8 +30,9 @@ export function GroupLeaderFormInner({ handleSubmit, handleChange, handleBlur, v
       query_scopes: ['active']
     });
   };
+  console.log(props);
   return (
-    props.selectMembers && (
+    props.selectMembers && props.getGroupLeaderBegin && (
       <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.groupLeader}>
         <Card>
           <Form>
@@ -99,6 +100,7 @@ export function GroupLeaderForm(props) {
 }
 GroupLeaderForm.propTypes = {
   edit: PropTypes.bool,
+  getGroupLeaderBegin: PropTypes.func,
   createGroupLeaderBegin: PropTypes.func,
   updateGroupLeaderBegin: PropTypes.func,
   getMembersBegin: PropTypes.func,
@@ -114,13 +116,14 @@ GroupLeaderForm.propTypes = {
 GroupLeaderFormInner.propTypes = {
   edit: PropTypes.bool,
   groupLeaders: PropTypes.array,
+  getGroupLeaderBegin: PropTypes.func,
   createGroupLeaderBegin: PropTypes.func,
   handleSubmit: PropTypes.func,
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
   values: PropTypes.object,
   groupLeader: PropTypes.object,
-  groupId: PropTypes.number,
+  groupId: PropTypes.string,
   buttonText: PropTypes.string,
   selectMembers: PropTypes.array,
   getMembersBegin: PropTypes.func,

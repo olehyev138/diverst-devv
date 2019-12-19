@@ -12,17 +12,18 @@ const selectPaginatedGroupLeaders = () => createSelector(
 /* Select user list & format it for a select
  *  looks like: [ { value: <>, label: <> } ... ]
  */
-// const selectPaginatedSelectGroupLeaders = () => createSelector(
-//   selectGroupLeadersDomain,
-//   groupLeadersState => (
-//     Object
-//       .values(groupLeadersState.groupLeaderList)
-//       .map(user => ({
-//         value: user.id,
-//         label: `${user.first_name} ${user.last_name}`
-//       }))
-//   )
-// );
+const selectPaginatedSelectGroupLeaders = () => createSelector(
+  selectGroupLeadersDomain,
+  groupLeadersState => (
+    Object
+      .values(groupLeadersState.groupLeaderList)
+      .map(user => ({
+        value: user.id,
+        label: `${user.name}`
+        // label: `${user.first_name} ${user.last_name}`
+      }))
+  )
+);
 
 const selectFormGroupLeaders = () => createSelector(
   selectGroupLeadersDomain,
@@ -65,5 +66,5 @@ function mapForm(leader) {
 export {
   selectFormGroupLeaders, selectGroupLeadersDomain, selectPaginatedGroupLeaders, selectGroupLeader,
   selectGroupLeaderTotal, selectIsFetchingGroupLeaders, selectIsCommitting,
-  selectFormGroupLeader,
+  selectFormGroupLeader, selectPaginatedSelectGroupLeaders,
 };

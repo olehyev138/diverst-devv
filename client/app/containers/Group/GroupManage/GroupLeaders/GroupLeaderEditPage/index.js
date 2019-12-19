@@ -22,16 +22,13 @@ import { selectPaginatedSelectMembersLeaderForm, selectMemberTotal,
 } from 'containers/Group/GroupMembers/selectors';
 import {
   getMembersBegin,
-  groupMembersUnmount
 } from 'containers/Group/GroupMembers/actions';
 
 
 import { getGroupLeaderBegin, updateGroupLeaderBegin, groupLeadersUnmount } from 'containers/Group/GroupManage/GroupLeaders/actions';
 import {
-  selectGroupLeaderTotal, selectIsCommitting, selectFormGroupLeaders,
+  selectGroupLeaderTotal, selectPaginatedSelectGroupLeaders, selectIsCommitting, selectFormGroupLeaders, selectFormGroupLeader
 } from 'containers/Group/GroupManage/GroupLeaders/selectors';
-import { getUsersBegin } from 'containers/User/actions';
-import { selectPaginatedUsers, selectPaginatedSelectUsers, selectFormUser } from 'containers/User/selectors';
 
 
 import GroupLeaderForm from 'components/Group/GroupManage/GroupLeaders/GroupLeaderForm';
@@ -39,23 +36,22 @@ import GroupLeaderForm from 'components/Group/GroupManage/GroupLeaders/GroupLead
 export function GroupLeaderEditPage(props) {
   useInjectReducer({ key: 'groupLeaders', reducer });
   useInjectSaga({ key: 'groupLeaders', saga });
-  useInjectReducer({ key: 'users', reducer: userReducer });
-  useInjectSaga({ key: 'users', saga: userSaga });
+  useInjectReducer({ key: 'members', reducer: memberReducer });
+  useInjectSaga({ key: 'members', saga: memberSaga });
 
   const rs = new RouteService(useContext);
   const groupId = rs.params('group_id');
   const groupLeaderId = rs.params('group_leader_id');
-  console.log(groupLeaderId);
   const links = {
     GroupLeadersIndex: ROUTES.group.manage.leaders.index.path(rs.params('group_id')),
   };
 
   useEffect(() => {
     props.getGroupLeaderBegin({ group_id: groupId, id: groupLeaderId });
-    // props.getGroupMembersBegin({ group_id: groupId, count: 500 });
+    props.getMembersBegin({ group_id: groupId, count: 500, query_scopes: ['active'] });
     return () => props.groupLeadersUnmount();
   }, []);
-
+  console.log(props);
   return (
     <GroupLeaderForm
       edit
@@ -67,7 +63,6 @@ export function GroupLeaderEditPage(props) {
       selectMembers={props.members}
       member={props.member}
       groupId={groupId[0]}
-      // groupId={Number(rs.params('group_id'))}
       groupMembers={props.members}
       groupLeaders={props.groupLeaders}
       isCommitting={props.isCommitting}
@@ -95,8 +90,10 @@ GroupLeaderEditPage.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
   members: selectPaginatedSelectMembersLeaderForm(),
+  groupLeaders: selectPaginatedSelectGroupLeaders(),
   isCommitting: selectIsCommitting(),
-  groupLeaders: selectFormGroupLeaders()
+  groupLeader: selectFormGroupLeader(),
+  // groupLeaders: selectFormGroupLeaders()
 });
 
 const mapDispatchToProps = {
