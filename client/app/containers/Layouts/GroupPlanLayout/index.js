@@ -6,8 +6,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Fade from '@material-ui/core/Fade';
 
 import GroupPlanLinks from 'components/Group/GroupPlan/GroupPlanLinks';
-import GroupLayout from "../GroupLayout";
-import Box from "@material-ui/core/Box";
+import GroupLayout from '../GroupLayout';
 
 const styles = theme => ({
   content: {

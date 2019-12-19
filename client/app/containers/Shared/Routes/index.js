@@ -49,8 +49,6 @@ import {
   CustomGraphCreatePage,
   CustomGraphEditPage,
   GroupManageLayout,
-  GroupPlanLayout,
-  GroupKPILayout,
   GroupSettingsPage,
   CustomTextEditPage,
   UserNewsLinkPage,
@@ -228,11 +226,11 @@ export default function Routes(props) {
       <GroupLayout {...expandRoute(ROUTES.group.plan.outcomes.edit)} component={OutcomeEditPage} />
 
       { /* Group Plan - Events */ }
-      <GroupPlanLayout exact {...expandRoute(ROUTES.group.plan.events.index)} component={GroupPlanEventsPage} />
-      <GroupPlanLayout {...expandRoute(ROUTES.group.plan.events.manage.metrics)} component={EventManageMetricsPage} />
+      <GroupLayout exact {...expandRoute(ROUTES.group.plan.events.index)} component={GroupPlanEventsPage} />
+      <GroupLayout {...expandRoute(ROUTES.group.plan.events.manage.metrics)} component={EventManageMetricsPage} />
 
       { /* Group Plan - KPI */ }
-      <GroupKPILayout exact {...expandRoute(ROUTES.group.plan.kpi.index)} component={GroupPlanKpiPage} />
+      <GroupLayout exact {...expandRoute(ROUTES.group.plan.kpi.index)} component={GroupPlanKpiPage} />
 
       { /* Group Manage */ }
       { /* TODO - redirect /manage -> /manage/settings */ }
