@@ -6,6 +6,8 @@ import { withStyles } from '@material-ui/core/styles';
 import Fade from '@material-ui/core/Fade';
 
 import GroupPlanLinks from 'components/Group/GroupPlan/GroupPlanLinks';
+import GroupLayout from "../GroupLayout";
+import Box from "@material-ui/core/Box";
 
 const styles = theme => ({
   content: {
@@ -42,15 +44,23 @@ const GroupPlanLayout = ({ component: Component, classes, ...rest }) => {
 
   return (
     <React.Fragment>
-      <GroupPlanLinks
-        currentTab={tab}
+      <GroupLayout
         {...rest}
+        component={matchProps => (
+          <React.Fragment>
+            <GroupPlanLinks
+              currentTab={tab}
+              {...rest}
+              {...matchProps}
+            />
+            <Fade in appear>
+              <div className={classes.content}>
+                <Component {...rest} {...matchProps} />
+              </div>
+            </Fade>
+          </React.Fragment>
+        )}
       />
-      <Fade in appear>
-        <div className={classes.content}>
-          <Component {...other} />
-        </div>
-      </Fade>
     </React.Fragment>
   );
 };

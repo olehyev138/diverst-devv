@@ -14,12 +14,7 @@ export function KpiPage(props) {
   const { isLoading } = props;
 
   return (
-    <KPILayout
-      component={() => (
-        <Kpi />
-      )}
-      {...props}
-    />
+    <Kpi />
   );
 }
 

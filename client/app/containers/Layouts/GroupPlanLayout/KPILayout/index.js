@@ -16,7 +16,7 @@ const EmailPages = Object.freeze({
   emailEvents: 1
 });
 
-const EmailLayout = ({ component: Component, ...rest }) => {
+const KPILayout = ({ component: Component, ...rest }) => {
   const { classes, data, location, ...other } = rest;
 
   /* Get get first key that is in the path, ie: '/admin/system/settings/emails/1/edit/ -> emails */
@@ -49,7 +49,7 @@ const EmailLayout = ({ component: Component, ...rest }) => {
   );
 };
 
-EmailLayout.propTypes = {
+KPILayout.propTypes = {
   classes: PropTypes.object,
   component: PropTypes.elementType,
   pageTitle: PropTypes.object,
@@ -59,4 +59,4 @@ EmailLayout.propTypes = {
 export default compose(
   memo,
   withStyles(styles),
-)(EmailLayout);
+)(KPILayout);

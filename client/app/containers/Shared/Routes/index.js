@@ -228,11 +228,11 @@ export default function Routes(props) {
       <GroupLayout {...expandRoute(ROUTES.group.plan.outcomes.edit)} component={OutcomeEditPage} />
 
       { /* Group Plan - Events */ }
-      <GroupLayout exact {...expandRoute(ROUTES.group.plan.events.index)} component={GroupPlanEventsPage} />
-      <GroupLayout {...expandRoute(ROUTES.group.plan.events.manage.metrics)} component={EventManageMetricsPage} />
+      <GroupPlanLayout exact {...expandRoute(ROUTES.group.plan.events.index)} component={GroupPlanEventsPage} />
+      <GroupPlanLayout {...expandRoute(ROUTES.group.plan.events.manage.metrics)} component={EventManageMetricsPage} />
 
       { /* Group Plan - KPI */ }
-      <GroupLayout exact {...expandRoute(ROUTES.group.plan.kpi.index)} component={GroupPlanKpiPage} />
+      <GroupKPILayout exact {...expandRoute(ROUTES.group.plan.kpi.index)} component={GroupPlanKpiPage} />
 
       { /* Group Manage */ }
       { /* TODO - redirect /manage -> /manage/settings */ }
