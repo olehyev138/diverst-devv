@@ -1,4 +1,4 @@
-class InitiativeCommentPolicy < GroupBasePolicy  
+class InitiativeCommentPolicy < GroupBasePolicy
   def destroy?
     manage_comments?
   end
