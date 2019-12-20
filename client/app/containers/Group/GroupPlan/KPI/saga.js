@@ -115,8 +115,9 @@ export function* getField(action) {
 
 export function* getFields(action) {
   try {
-    const response = { data: 'API CALL' };
-
+    const { payload } = action;
+    payload.field_type = 'regular';
+    const response = yield call(api.fields.all.bind(api.fields), payload);
     yield put(getFieldsSuccess(response.data.page));
   } catch (err) {
     yield put(getFieldsError(err));

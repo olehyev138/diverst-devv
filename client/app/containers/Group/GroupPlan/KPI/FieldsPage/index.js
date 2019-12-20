@@ -26,8 +26,8 @@ import { useInjectSaga } from 'utils/injectSaga';
 import saga from '../saga';
 
 export function KpiPage(props) {
-  useInjectReducer({ key: 'questions', reducer });
-  useInjectSaga({ key: 'questions', saga });
+  useInjectReducer({ key: 'kpi', reducer });
+  useInjectSaga({ key: 'kpi', saga });
   const rs = new RouteService(useContext);
   const links = {};
 
