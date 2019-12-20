@@ -53,7 +53,7 @@ export function GroupLeaderFormInner({ handleSubmit, handleChange, handleBlur, v
                 disabled={props.isCommitting}
                 value={values.user_id}
                 options={props.selectMembers}
-                onMenuOpen={membersSelectAction}
+                // onMenuOpen={membersSelectAction}
                 onChange={value => setFieldValue('user_id', value)}
                 onInputChange={value => membersSelectAction(value)}
                 onBlur={() => setFieldTouched('user_id', true)}
@@ -73,7 +73,6 @@ export function GroupLeaderFormInner({ handleSubmit, handleChange, handleBlur, v
                 value={values.user_role}
                 options={roleOptions}
                 onChange={setFieldValue}
-                // onInputChange={value => roleSelectAction(value)}
                 onBlur={() => setFieldTouched}
               />
             </CardContent>
@@ -103,7 +102,7 @@ export function GroupLeaderForm(props) {
     user: { default: '', customKey: 'user_id' },
     group_id: { default: props.groupId },
     position_name: { default: 'Group Leader' },
-    user_role_id: { default: '4' },
+    user_role_id: { default: '' },
     visible: { default: true },
     pending_member_notifications_enabled: { default: false },
     pending_comments_notifications_enabled: { default: false },

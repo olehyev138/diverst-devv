@@ -65,7 +65,7 @@ export function* deleteGroupLeaders(action) {
     yield call(api.groupLeaders.destroy.bind(api.groupLeaders), action.payload.id);
     yield put(deleteGroupLeaderSuccess());
     yield put(push(ROUTES.group.manage.leaders.index.path(action.payload.group_id)));
-    yield put(showSnackbar({ message: 'User deleted', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: 'Group leader deleted', options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteGroupLeaderError(err));
 
@@ -93,16 +93,15 @@ export function* deleteGroupLeaders(action) {
 export function* updateGroupLeader(action) {
   try {
     const payload = { group_leader: action.payload };
-    console.log(payload);
     const response = yield call(api.groupLeaders.update.bind(api.groupLeaders), payload.group_leader.id, payload);
-    console.log(response);
     yield put(updateGroupLeaderSuccess());
-    yield put(push(ROUTES.admin.innovate.groupLeaders.index.path()));
+    yield put(push(ROUTES.group.manage.leaders.index.path(action.payload.group_id)));
     yield put(showSnackbar({
       message: 'GroupLeader updated',
       options: { variant: 'success' }
     }));
   } catch (err) {
+    console.log(err);
     yield put(updateGroupLeaderError(err));
 
     // TODO: intl message

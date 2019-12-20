@@ -30,10 +30,7 @@ import {
   groupMembersUnmount
 } from 'containers/Group/GroupMembers/actions';
 
-
 import GroupLeaderForm from 'components/Group/GroupManage/GroupLeaders/GroupLeaderForm';
-
-const MEMBER_SCOPES = 'active'
 
 export function GroupLeaderCreatePage(props) {
   useInjectReducer({ key: 'groupLeaders', reducer });
@@ -48,40 +45,7 @@ export function GroupLeaderCreatePage(props) {
     GroupLeadersIndex: ROUTES.group.manage.leaders.index.path(),
   };
 
-  const defaultParams = {
-    group_id: groupId,
-    query_scopes: [MEMBER_SCOPES]
-  };
-
-  const [params, setParams] = useState(defaultParams);
-
-  const getScopes = (scopes) => {
-    // eslint-disable-next-line no-param-reassign
-    if (scopes === undefined) scopes = {};
-    if (scopes.type === undefined) scopes.type = type;
-
-    const queryScopes = [];
-    if (scopes.type)
-      queryScopes.push(scopes.type);
-    if (scopes.segmentIds && scopes.segmentIds[1].length > 0)
-
-      return queryScopes;
-  };
-
-  const getMembers = (scopes, params = params) => {
-    if (groupId) {
-      const newParams = {
-        ...params,
-        group_id: groupId,
-        query_scopes: scopes
-      };
-      props.getMembersBegin(newParams);
-      setParams(newParams);
-    }
-  };
-
   useEffect(() => () => props.groupLeadersUnmount(), []);
-  console.log(props);
   return (
     <GroupLeaderForm
       groupLeaderAction={props.createGroupLeaderBegin}
