@@ -38,6 +38,7 @@ import {
   GroupPlanLayout,
   GroupKPILayout,
   GroupPlanKpiPage,
+  GroupPlanFieldsPage,
   GroupMemberListPage,
   GroupMemberCreatePage,
   NotFoundPage,
@@ -233,7 +234,7 @@ export default function Routes(props) {
 
       { /* Group Plan - KPI */ }
       <GroupKPILayout exact {...expandRoute(ROUTES.group.plan.kpi.metrics)} component={GroupPlanKpiPage} />
-      <GroupKPILayout exact {...expandRoute(ROUTES.group.plan.kpi.fields)} component={NotFoundPage} />
+      <GroupKPILayout exact {...expandRoute(ROUTES.group.plan.kpi.fields)} component={GroupPlanFieldsPage} />
       <GroupKPILayout exact {...expandRoute(ROUTES.group.plan.kpi.updates)} component={NotFoundPage} />
 
       { /* Group Manage */ }

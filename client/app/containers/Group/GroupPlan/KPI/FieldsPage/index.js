@@ -1,4 +1,4 @@
-import React, {memo, useContext, useEffect} from 'react';
+import React, { memo, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -17,17 +17,19 @@ import {
   selectIsCommittingField,
 } from '../selectors';
 
-
 import Kpi from 'components/Group/GroupPlan/KpiMetrics';
 import RouteService from 'utils/routeHelpers';
 
+import { useInjectReducer } from 'utils/injectReducer';
+import reducer from '../reducer';
+import { useInjectSaga } from 'utils/injectSaga';
+import saga from '../saga';
+
 export function KpiPage(props) {
+  useInjectReducer({ key: 'questions', reducer });
+  useInjectSaga({ key: 'questions', saga });
   const rs = new RouteService(useContext);
   const links = {};
-
-  const {
-    currentGroup,
-  } = props;
 
   useEffect(() => {
     const groupId = rs.params('group_id');
