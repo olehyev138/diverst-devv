@@ -1,5 +1,5 @@
 class UserGroup < BaseClass
-  include ContainsFields
+  include ContainsFieldData
 
   # associations
   belongs_to :user

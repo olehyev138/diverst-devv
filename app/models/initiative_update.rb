@@ -1,5 +1,5 @@
 class InitiativeUpdate < BaseClass
-  include ContainsFields
+  include ContainsFieldData
 
   belongs_to :owner, class_name: 'User'
   belongs_to :initiative
