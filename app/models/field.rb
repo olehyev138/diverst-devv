@@ -3,6 +3,7 @@ class Field < ApplicationRecord
   belongs_to :group
   belongs_to :poll
   belongs_to :initiative
+  belongs_to :field_definer, polymorphic: true
 
   has_many :field_data, class_name: 'FieldData'
 
@@ -129,9 +130,8 @@ class Field < ApplicationRecord
   end
 
   def enterprise
-    return association(:enterprise).reader if enterprise_id.present?
-    return group.enterprise if group_id.present?
-    return poll.enterprise if poll_id.present?
-    return initiative.enterprise if initiative_id.present?
+    return association(:field_definer).reader if field_definer_type == 'Enterprise'
+
+    association(:field_definer).reader.enterprise
   end
 end

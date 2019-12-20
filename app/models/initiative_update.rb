@@ -11,6 +11,18 @@ class InitiativeUpdate < ApplicationRecord
     report_date || created_at
   end
 
+  def fields
+    field_holder.fields
+  end
+
+  def field_holder
+    self.initiative
+  end
+
+  def field_holder_id
+    self.initiative_id
+  end
+
   # Returns the delta with another update relative to this other update for a particular field (+23%, -12%, etc.)
   def variance_with(other_update:, field:)
     value = self.info[field]

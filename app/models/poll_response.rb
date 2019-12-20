@@ -12,6 +12,18 @@ class PollResponse < ApplicationRecord
   validates_presence_of :user
   validates_length_of   :data, maximum: 65535
 
+  def fields
+    field_holder.fields
+  end
+
+  def field_holder
+    self.poll
+  end
+
+  def field_holder_id
+    self.poll_id
+  end
+
   def group
     poll.try(:initiative).try(:group)
   end

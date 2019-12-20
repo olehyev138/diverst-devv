@@ -100,8 +100,10 @@ class Group < ApplicationRecord
   has_many :twitter_accounts, class_name: 'TwitterAccount', dependent: :destroy
 
   has_many :fields, -> { where field_type: 'regular' },
+           as: :field_definer,
            dependent: :delete_all
   has_many :survey_fields, -> { where field_type: 'group_survey' },
+           as: :field_definer,
            class_name: 'Field',
            dependent: :delete_all
 

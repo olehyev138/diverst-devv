@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_18_212443) do
+ActiveRecord::Schema.define(version: 2019_12_20_180259) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "name", null: false
@@ -442,6 +442,8 @@ ActiveRecord::Schema.define(version: 2019_12_18_212443) do
   end
 
   create_table "fields", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.bigint "field_definer_id"
+    t.string "field_definer_type"
     t.string "type", collation: "utf8mb4_unicode_ci"
     t.string "title", collation: "utf8mb4_unicode_ci"
     t.integer "gamification_value", default: 1
@@ -460,14 +462,7 @@ ActiveRecord::Schema.define(version: 2019_12_18_212443) do
     t.boolean "elasticsearch_only", default: false
     t.boolean "required", default: false
     t.string "field_type", collation: "utf8mb4_unicode_ci"
-    t.bigint "enterprise_id"
-    t.bigint "group_id"
-    t.bigint "poll_id"
-    t.bigint "initiative_id"
-    t.index ["enterprise_id"], name: "index_fields_on_enterprise_id"
-    t.index ["group_id"], name: "index_fields_on_group_id"
-    t.index ["initiative_id"], name: "index_fields_on_initiative_id"
-    t.index ["poll_id"], name: "index_fields_on_poll_id"
+    t.index ["field_definer_id", "field_definer_type"], name: "index_fields_on_field_definer_id_and_field_definer_type"
   end
 
   create_table "folder_shares", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|

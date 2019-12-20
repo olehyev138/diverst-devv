@@ -90,8 +90,20 @@ class UserGroup < ApplicationRecord
     })
   end
 
+  def fields
+    field_holder.fields
+  end
+
+  def field_holder
+    self.group
+  end
+
+  def field_holder_id
+    self.group_id
+  end
+
   # For use by ES indexing - method has to be defined in same class
-  def field_data
+  def user_field_data
     user.indexed_field_data
   end
 

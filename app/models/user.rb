@@ -163,7 +163,15 @@ class User < ApplicationRecord
   # All user fields for the users enterprise
   # TODO: filter on type: 'user'
   def fields
-    self.enterprise.fields
+    field_holder.fields
+  end
+
+  def field_holder
+    self.enterprise
+  end
+
+  def field_holder_id
+    self.enterprise_id
   end
 
   # Format users field data for a ES index

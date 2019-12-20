@@ -10,6 +10,18 @@ class GroupUpdate < ApplicationRecord
   validates_length_of :data, maximum: 65535
   validates :created_at, presence: true# , :on => :update
 
+  def fields
+    field_holder.fields
+  end
+
+  def field_holder
+    self.group
+  end
+
+  def field_holder_id
+    self.group_id
+  end
+
   # Returns the delta with another update relative to this other update for a particular field (+23%, -12%, etc.)
   def variance_with(other_update:, field:)
     value = self.info[field]
