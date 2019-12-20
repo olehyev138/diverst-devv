@@ -17,9 +17,9 @@ import {
 } from 'containers/Innovate/Campaign/actions';
 
 import {
-  selectPaginatedGroupLeaders, selectGroupLeaderTotal,
-  selectIsFetchingGroupLeaders, selectFormGroupLeader,
-} from 'containers/Group/GroupManage/GroupLeaders/selectors';
+  selectPaginatedCampaigns, selectCampaignTotal,
+  selectIsFetchingCampaigns, selectFormCampaign,
+} from 'containers/Innovate/Campaign/selectors';
 
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';

@@ -51,7 +51,6 @@ export function GroupLeaderEditPage(props) {
     props.getMembersBegin({ group_id: groupId, count: 500, query_scopes: ['active'] });
     return () => props.groupLeadersUnmount();
   }, []);
-  console.log(props);
   return (
     <GroupLeaderForm
       edit

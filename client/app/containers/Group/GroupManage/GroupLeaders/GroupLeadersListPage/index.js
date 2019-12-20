@@ -109,7 +109,6 @@ const mapDispatchToProps = dispatch => ({
   getGroupLeadersBegin: payload => dispatch(getGroupLeadersBegin(payload)),
   deleteGroupLeaderBegin: payload => dispatch(deleteGroupLeaderBegin(payload)),
   groupLeadersUnmount: () => dispatch(groupLeadersUnmount()),
-  //handleVisitGroupLeaderEdit: id => dispatch(push(ROUTES.group.manage.leaders.edit.path(id))),
   handleVisitGroupLeaderEdit: (groupId, id) => dispatch(push(ROUTES.group.manage.leaders.edit.path(groupId, id))),
 });
 

@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect/lib';
 import { initialState } from './reducer';
-import produce from "immer";
+import produce from 'immer';
 
 const selectGroupLeadersDomain = state => state.groupLeaders || initialState;
 

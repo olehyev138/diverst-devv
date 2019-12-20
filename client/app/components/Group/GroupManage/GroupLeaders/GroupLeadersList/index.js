@@ -86,7 +86,6 @@ export function GroupLeadersList(props) {
               icon: () => <EditIcon />,
               tooltip: 'Edit Group Leader',
               onClick: (_, rowData) => {
-                console.log(rowData);
                 props.handleVisitGroupLeaderEdit(rowData.group_id, rowData.id);
               }
             },

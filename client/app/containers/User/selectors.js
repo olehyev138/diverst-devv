@@ -5,7 +5,7 @@ import dig from 'object-dig';
 
 import { initialState } from 'containers/User/reducer';
 import { deserializeDatum, deserializeOptionsText } from 'utils/customFieldHelpers';
-import {selectGroupsDomain} from "../Group/selectors";
+import { selectGroupsDomain } from '../Group/selectors';
 
 const selectUsersDomain = state => state.users || initialState;
 
