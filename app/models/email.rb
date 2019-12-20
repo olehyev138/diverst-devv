@@ -1,10 +1,12 @@
 class Email < ApplicationRecord
   include PublicActivity::Common
+  include Email::Actions
 
   # associations
   belongs_to :enterprise
 
-  has_many :variables, class_name: 'EmailVariable', dependent: :destroy
+  has_many :email_variables, class_name: 'EmailVariable', dependent: :destroy
+  has_many :variables, class_name: 'EnterpriseEmailVariable', through: :email_variables, source: :enterprise_email_variable
 
   # validations
   validates_length_of :description, maximum: 191
@@ -36,13 +38,13 @@ class Email < ApplicationRecord
 
   def process_content(objects)
     hash = process(content, objects)
-    hash = process_variables(variables, hash)
+    hash = process_variables(email_variables, hash)
     content % hash
   end
 
   def process_subject(objects)
     hash = process(subject, objects)
-    hash = process_variables(variables, hash)
+    hash = process_variables(email_variables, hash)
     subject % hash
   end
 
@@ -64,10 +66,10 @@ class Email < ApplicationRecord
 
     #
     strings.each do |string|
-      variable = variables.joins(:enterprise_email_variable).find_by(enterprise_email_variables: { key: string })
+      variable = variables.find_by(key: string)
       next if variable.nil?
 
-      replace.merge!({ "#{string}": variable.enterprise_email_variable.example })
+      replace.merge!({ "#{string}": variable.example })
     end
 
     text % replace

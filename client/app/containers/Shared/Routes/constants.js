@@ -278,11 +278,13 @@ export const ROUTES = {
           }
         },
         manage: {
-          path:
-            (groupId = ':group_id', eventId = ':event_id') => `/groups/${groupId}/plan/events/${eventId}/manage`,
-          data: {
-            titleMessage: messages.groups.plan.events.manage,
-          }
+          metrics: {
+            path:
+              (groupId = ':group_id', eventId = ':event_id') => `/groups/${groupId}/plan/events/${eventId}/manage/metrics`,
+            data: {
+              titleMessage: messages.groups.plan.events.manage,
+            },
+          },
         },
       },
       kpi: {
@@ -592,6 +594,22 @@ export const ROUTES = {
         ssoSettings: {
           edit: {
             path: () => '/admin/system/settings/sso'
+          },
+        },
+        emails: {
+          index: {
+            path: () => '/admin/system/settings/emailLayouts'
+          },
+          edit: {
+            path: (emailId = ':email_id') => `/admin/system/settings/emailLayouts/${emailId}/edit`
+          },
+        },
+        mailEvents: {
+          index: {
+            path: () => '/admin/system/settings/emailEvents'
+          },
+          edit: {
+            path: (eventId = ':event_id') => `/admin/system/settings/emailEvents/${eventId}/edit`
           },
         }
       }
