@@ -35,7 +35,7 @@ export function EventsPage(props) {
   const links = {
     outcomeIndex: ROUTES.group.plan.outcomes.index.path(rs.params('group_id')),
     eventNew: ROUTES.group.events.new.path(rs.params('group_id')),
-    eventManage: eventId => ROUTES.group.plan.events.manage.path(rs.params('group_id'), eventId)
+    eventManage: eventId => ROUTES.group.plan.events.manage.metrics.path(rs.params('group_id'), eventId)
   };
 
   const [params, setParams] = useState(defaultParams);

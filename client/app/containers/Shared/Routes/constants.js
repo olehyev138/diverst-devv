@@ -278,11 +278,13 @@ export const ROUTES = {
           }
         },
         manage: {
-          path:
-            (groupId = ':group_id', eventId = ':event_id') => `/groups/${groupId}/plan/events/${eventId}/manage`,
-          data: {
-            titleMessage: messages.groups.plan.events.manage,
-          }
+          metrics: {
+            path:
+              (groupId = ':group_id', eventId = ':event_id') => `/groups/${groupId}/plan/events/${eventId}/manage/metrics`,
+            data: {
+              titleMessage: messages.groups.plan.events.manage,
+            },
+          },
         },
       },
       kpi: {
