@@ -1,6 +1,7 @@
 class PollResponse < ApplicationRecord
+  @@fields_holder_name = 'poll'
   include PollResponse::Actions
-  include ContainsFields
+  include ContainsFieldData
 
   belongs_to :poll
   belongs_to :user
@@ -12,16 +13,8 @@ class PollResponse < ApplicationRecord
   validates_presence_of :user
   validates_length_of   :data, maximum: 65535
 
-  def fields
-    field_holder.fields
-  end
-
-  def field_holder
-    self.poll
-  end
-
-  def field_holder_id
-    self.poll_id
+  def self.fields_holder_name
+    @@fields_holder_name
   end
 
   def group

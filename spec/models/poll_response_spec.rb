@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe PollResponse do
+  it_behaves_like 'it Contains Field Data'
+
   describe 'test associations' do
     let!(:poll_response) { build_stubbed(:poll_response) }
 

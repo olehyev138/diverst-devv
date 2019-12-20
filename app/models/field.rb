@@ -17,7 +17,7 @@ class Field < ApplicationRecord
   validates :title, presence: true
   validates :type,  presence: true
   validates_inclusion_of :type, in: ['SelectField', 'TextField', 'SegmentsField', 'NumericField', 'GroupsField', 'CheckboxField', 'DateField']
-  validates :title, uniqueness: { scope: :enterprise_id },
+  validates :title, uniqueness: { scope: [:field_definer_id, :field_definer_type] },
                     unless: Proc.new { |object| (object.type == 'SegmentsField' || object.type == 'GroupsField') }, if: :container_type_is_enterprise?
 
   # Operators
@@ -79,7 +79,7 @@ class Field < ApplicationRecord
   end
 
   def container_type_is_enterprise?
-    enterprise_id.present?
+    field_definer_type == 'Enterprise'
   end
 
   # The typical field value flow would look like this:

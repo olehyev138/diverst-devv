@@ -1,6 +1,7 @@
 class GroupUpdate < ApplicationRecord
+  @@fields_holder_name = 'group'
   include PublicActivity::Common
-  include ContainsFields
+  include ContainsFieldData
 
   belongs_to :owner, class_name: 'User'
   has_many :field_data, as: :fieldable
@@ -10,16 +11,8 @@ class GroupUpdate < ApplicationRecord
   validates_length_of :data, maximum: 65535
   validates :created_at, presence: true# , :on => :update
 
-  def fields
-    field_holder.fields
-  end
-
-  def field_holder
-    self.group
-  end
-
-  def field_holder_id
-    self.group_id
+  def self.fields_holder_name
+    @@fields_holder_name
   end
 
   # Returns the delta with another update relative to this other update for a particular field (+23%, -12%, etc.)

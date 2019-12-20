@@ -1,5 +1,6 @@
 class InitiativeUpdate < ApplicationRecord
-  include ContainsFields
+  @@fields_holder_name = 'initiative'
+  include ContainsFieldData
 
   belongs_to :owner, class_name: 'User'
   has_many :field_data, as: :fieldable
@@ -11,16 +12,8 @@ class InitiativeUpdate < ApplicationRecord
     report_date || created_at
   end
 
-  def fields
-    field_holder.fields
-  end
-
-  def field_holder
-    self.initiative
-  end
-
-  def field_holder_id
-    self.initiative_id
+  def self.fields_holder_name
+    @@fields_holder_name
   end
 
   # Returns the delta with another update relative to this other update for a particular field (+23%, -12%, etc.)

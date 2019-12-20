@@ -1,9 +1,10 @@
 class User < ApplicationRecord
-  has_secure_password
+  @@fields_holder_name = 'enterprise'
 
+  has_secure_password
   include PublicActivity::Common
   include User::Actions
-  include ContainsFields
+  include ContainsFieldData
   include TimeZoneValidation
 
   enum groups_notifications_frequency: [:hourly, :daily, :weekly, :disabled]
@@ -160,18 +161,8 @@ class User < ApplicationRecord
 
   accepts_nested_attributes_for :availabilities, allow_destroy: true
 
-  # All user fields for the users enterprise
-  # TODO: filter on type: 'user'
-  def fields
-    field_holder.fields
-  end
-
-  def field_holder
-    self.enterprise
-  end
-
-  def field_holder_id
-    self.enterprise_id
+  def self.fields_holder_name
+    @@fields_holder_name
   end
 
   # Format users field data for a ES index
