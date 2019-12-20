@@ -118,7 +118,6 @@ const mapStateToProps = createStructuredSelector({
 const mapDispatchToProps = {
   createGroupLeaderBegin,
   groupLeadersUnmount,
-  groupMembersUnmount,
   getMembersBegin,
 };
 

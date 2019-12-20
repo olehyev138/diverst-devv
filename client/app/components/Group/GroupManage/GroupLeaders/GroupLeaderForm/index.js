@@ -30,9 +30,14 @@ export function GroupLeaderFormInner({ handleSubmit, handleChange, handleBlur, v
       query_scopes: ['active']
     });
   };
-  console.log(props);
+
+  const roleOptions = [
+    { value: 4, label: 'Group Leader' },
+    { value: 5, label: 'Group Treasurer' },
+    { value: 6, label: 'Group Content Creator' }
+  ];
   return (
-    props.selectMembers && props.getGroupLeaderBegin && (
+    props.selectMembers && (
       <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.groupLeader}>
         <Card>
           <Form>
@@ -52,6 +57,24 @@ export function GroupLeaderFormInner({ handleSubmit, handleChange, handleBlur, v
                 onChange={value => setFieldValue('user_id', value)}
                 onInputChange={value => membersSelectAction(value)}
                 onBlur={() => setFieldTouched('user_id', true)}
+              />
+            </CardContent>
+            <Divider />
+            <Divider />
+            <CardContent>
+              <Field
+                component={Select}
+                fullWidth
+                id='user_role'
+                name='user_role'
+                label='Group Role'
+                margin='normal'
+                disabled={props.isCommitting}
+                value={values.user_role}
+                options={roleOptions}
+                onChange={setFieldValue}
+                // onInputChange={value => roleSelectAction(value)}
+                onBlur={() => setFieldTouched}
               />
             </CardContent>
             <Divider />

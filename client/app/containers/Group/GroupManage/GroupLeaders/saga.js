@@ -74,19 +74,42 @@ export function* deleteGroupLeaders(action) {
   }
 }
 
+// export function* updateGroupLeader(action) {
+//   try {
+//     const payload = { group: action.payload };
+//     const response = yield call(api.groups.assignLeaders.bind(api.groups), payload.group.groupId, payload);
+//
+//     yield put(updateGroupLeaderSuccess());
+//     yield put(push(ROUTES.admin.groupLeaders.index.path()));
+//     yield put(showSnackbar({ message: 'Group Leaders Updated', options: { variant: 'success' } }));
+//   } catch (err) {
+//     yield put(updateGroupLeaderError(err));
+//
+//     // TODO: intl message
+//     yield put(showSnackbar({ message: 'Failed to update group leaders', options: { variant: 'warning' } }));
+//   }
+// }
+
 export function* updateGroupLeader(action) {
   try {
-    const payload = { group: action.payload };
-    const response = yield call(api.groups.assignLeaders.bind(api.groups), payload.group.groupId, payload);
-
+    const payload = { group_leader: action.payload };
+    console.log(payload);
+    const response = yield call(api.groupLeaders.update.bind(api.groupLeaders), payload.group_leader.id, payload);
+    console.log(response);
     yield put(updateGroupLeaderSuccess());
-    yield put(push(ROUTES.admin.groupLeaders.index.path()));
-    yield put(showSnackbar({ message: 'Group Leaders Updated', options: { variant: 'success' } }));
+    yield put(push(ROUTES.admin.innovate.groupLeaders.index.path()));
+    yield put(showSnackbar({
+      message: 'GroupLeader updated',
+      options: { variant: 'success' }
+    }));
   } catch (err) {
     yield put(updateGroupLeaderError(err));
 
     // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to update group leaders', options: { variant: 'warning' } }));
+    yield put(showSnackbar({
+      message: 'Failed to update groupLeader',
+      options: { variant: 'warning' }
+    }));
   }
 }
 
