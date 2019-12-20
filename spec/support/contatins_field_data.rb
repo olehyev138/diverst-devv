@@ -9,7 +9,7 @@ RSpec.shared_examples 'it Contains Field Data' do |*input|
   end
 
   describe 'field holder getters' do
-    let(:fields) { create_list :field , 3}
+    let(:fields) { create_list :field, 3 }
     let(:parent) { create described_class.fields_holder_name.to_sym, fields: fields }
     let(:child) { create described_class.model_name.param_key, described_class.fields_holder_name.to_sym => parent }
 
