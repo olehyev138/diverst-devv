@@ -27,7 +27,7 @@ import {
   EventPage,
   EventCreatePage,
   EventEditPage,
-  EventManagePage,
+  EventManageMetricsPage,
   GroupPlanEventsPage,
   GroupMessagePage,
   GroupMessageCreatePage,
@@ -227,7 +227,7 @@ export default function Routes(props) {
 
       { /* Group Plan - Events */ }
       <GroupLayout exact {...expandRoute(ROUTES.group.plan.events.index)} component={GroupPlanEventsPage} />
-      <GroupLayout {...expandRoute(ROUTES.group.plan.events.manage)} component={EventManagePage} />
+      <GroupLayout {...expandRoute(ROUTES.group.plan.events.manage.metrics)} component={EventManageMetricsPage} />
 
       { /* Group Plan - KPI */ }
       <GroupLayout exact {...expandRoute(ROUTES.group.plan.kpi.index)} component={GroupPlanKpiPage} />
