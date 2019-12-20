@@ -21,19 +21,6 @@ RSpec.describe UserMessagePolicy, type: :policy do
       it { is_expected.to permit_actions([:update, :destroy]) }
     end
 
-    context 'user has basic group leader permission, group_messages_index is true and current user is not author' do
-      before do
-        group_message.author = create(:user)
-        user_role = create(:user_role, enterprise: enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
-        user_role.policy_group_template.update group_messages_index: true
-        group = create(:group, enterprise: enterprise)
-        create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-                              user_role_id: user_role.id)
-      end
-
-      it { is_expected.to permit_actions([:index, :show]) }
-    end
-
     context 'group_message_index is true and current user IS NOT author' do
       before do
         group_message.author = create(:user)
@@ -52,36 +39,10 @@ RSpec.describe UserMessagePolicy, type: :policy do
       it { is_expected.to permit_actions([:index, :show, :create]) }
     end
 
-    context 'user has basic group leader permission, group_messages_create is true and current user is not author' do
-      before do
-        group_message.author = create(:user)
-        user_role = create(:user_role, enterprise: enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
-        user_role.policy_group_template.update group_messages_create: true
-        group = create(:group, enterprise: enterprise)
-        create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-                              user_role_id: user_role.id)
-      end
-
-      it { is_expected.to permit_actions([:index, :show, :create]) }
-    end
-
     context 'group_messages_manage is true and current user IS NOT author' do
       before do
         group_message.author = create(:user)
         user.policy_group.update group_messages_manage: true
-      end
-
-      it { is_expected.to permit_actions([:index, :show, :create, :update, :destroy]) }
-    end
-
-    context 'user has basic group leader permission, group_messages_manage is true and current user IS NOT author' do
-      before do
-        group_message.author = create(:user)
-        user_role = create(:user_role, enterprise: enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
-        user_role.policy_group_template.update group_messages_manage: true
-        group = create(:group, enterprise: enterprise)
-        create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-                              user_role_id: user_role.id)
       end
 
       it { is_expected.to permit_actions([:index, :show, :create, :update, :destroy]) }
