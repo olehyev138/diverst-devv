@@ -7,25 +7,26 @@ import Box from '@material-ui/core/Box';
 import Fade from '@material-ui/core/Fade';
 
 import GroupPlanLayout from '..';
-import EmailLinks from 'components/GlobalSettings/EmailLinks';
+import KPILinks from 'components/Group/GroupPlan/KPILinks';
 
 const styles = theme => ({});
 
-const EmailPages = Object.freeze({
-  emailLayouts: 0,
-  emailEvents: 1
+const KPIPages = Object.freeze({
+  metrics: 0,
+  fields: 1,
+  updates: 2,
 });
 
 const KPILayout = ({ component: Component, ...rest }) => {
   const { classes, data, location, ...other } = rest;
 
-  /* Get get first key that is in the path, ie: '/admin/system/settings/emails/1/edit/ -> emails */
-  const currentPage = Object.keys(EmailPages).find(page => location.pathname.includes(page));
-  const [tab, setTab] = useState(EmailPages[currentPage]);
+  /* Get get first key that is in the path, ie: '/admin/system/settings/kpis/1/edit/ -> kpis */
+  const currentPage = Object.keys(KPIPages).find(page => location.pathname.includes(page));
+  const [tab, setTab] = useState(KPIPages[currentPage]);
 
   useEffect(() => {
-    if (tab !== EmailPages[currentPage])
-      setTab(EmailPages[currentPage]);
+    if (tab !== KPIPages[currentPage])
+      setTab(KPIPages[currentPage]);
   }, [currentPage]);
 
   return (
@@ -33,7 +34,7 @@ const KPILayout = ({ component: Component, ...rest }) => {
       {...rest}
       component={matchProps => (
         <React.Fragment>
-          <EmailLinks
+          <KPILinks
             currentTab={tab}
             {...matchProps}
           />

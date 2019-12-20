@@ -32,14 +32,14 @@ const GroupPlanLayout = ({ component: Component, classes, ...rest }) => {
   const { location, ...other } = rest;
 
   /* Get last element of current path, ie: '/group/:id/plan/outcomes -> outcomes */
-  const currentPagePath = location.pathname.split('/').pop();
+  const currentPage = Object.keys(PlanPages).find(page => location.pathname.includes(page));
 
-  const [tab, setTab] = useState(getPageTab(currentPagePath));
+  const [tab, setTab] = useState(PlanPages[currentPage]);
 
   useEffect(() => {
-    if (tab !== getPageTab(currentPagePath))
-      setTab(getPageTab(currentPagePath));
-  }, [currentPagePath]);
+    if (tab !== PlanPages[currentPage])
+      setTab(PlanPages[currentPage]);
+  }, [currentPage]);
 
   return (
     <React.Fragment>
