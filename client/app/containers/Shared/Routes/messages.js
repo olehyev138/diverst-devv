@@ -125,9 +125,15 @@ export default defineMessages({
         },
       },
       kpi: {
-        index: {
-          id: `${scope}.group.plan.kpi.index`
-        }
+        metrics: {
+          id: `${scope}.group.plan.kpi.metrics`
+        },
+        fields: {
+          id: `${scope}.group.plan.kpi.fields`
+        },
+        updates: {
+          id: `${scope}.group.plan.kpi.updates`
+        },
       },
     },
     manage: {

@@ -288,12 +288,24 @@ export const ROUTES = {
         },
       },
       kpi: {
-        index: {
-          path: (groupId = ':group_id') => `/groups/${groupId}/plan/kpi`,
+        metrics: {
+          path: (groupId = ':group_id') => `/groups/${groupId}/plan/kpi/metrics`,
           data: {
-            titleMessage: messages.groups.plan.kpi.index,
+            titleMessage: messages.groups.plan.kpi.metrics,
           }
-        }
+        },
+        fields: {
+          path: (groupId = ':group_id') => `/groups/${groupId}/plan/kpi/fields`,
+          data: {
+            titleMessage: messages.groups.plan.kpi.metrics,
+          }
+        },
+        updates: {
+          path: (groupId = ':group_id') => `/groups/${groupId}/plan/kpi/updates`,
+          data: {
+            titleMessage: messages.groups.plan.kpi.metrics,
+          }
+        },
       },
     },
     manage: {
