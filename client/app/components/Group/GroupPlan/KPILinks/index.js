@@ -16,7 +16,7 @@ import messages from 'containers/Group/GroupPlan/KPI/messages';
 const styles = theme => ({});
 
 /* eslint-disable react/no-multi-comp */
-export function GlobalSettingsLinks(props) {
+export function KPILinks(props) {
   const { currentTab } = props;
 
   return (
@@ -29,17 +29,17 @@ export function GlobalSettingsLinks(props) {
         >
           <Tab
             component={WrappedNavLink}
-            to={ROUTES.group.plan.kpi.metrics.path()}
+            to={ROUTES.group.plan.kpi.metrics.path(props.currentGroup.id)}
             label={<DiverstFormattedMessage {...messages.links.metrics} />}
           />
           <Tab
             component={WrappedNavLink}
-            to={ROUTES.group.plan.kpi.fields.path()}
+            to={ROUTES.group.plan.kpi.fields.path(props.currentGroup.id)}
             label={<DiverstFormattedMessage {...messages.links.fields} />}
           />
           <Tab
             component={WrappedNavLink}
-            to={ROUTES.group.plan.kpi.updates.path()}
+            to={ROUTES.group.plan.kpi.updates.path(props.currentGroup.id)}
             label={<DiverstFormattedMessage {...messages.links.updates} />}
           />
         </ResponsiveTabs>
@@ -48,15 +48,15 @@ export function GlobalSettingsLinks(props) {
   );
 }
 
-GlobalSettingsLinks.propTypes = {
+KPILinks.propTypes = {
   classes: PropTypes.object,
   currentTab: PropTypes.number,
   currentGroup: PropTypes.object,
 };
 
-export const StyledGroupManageLinks = withStyles(styles)(GlobalSettingsLinks);
+export const StyledGroupManageLinks = withStyles(styles)(KPILinks);
 
 export default compose(
   withStyles(styles),
   memo,
-)(GlobalSettingsLinks);
+)(KPILinks);
