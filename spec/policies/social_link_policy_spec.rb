@@ -83,7 +83,7 @@ RSpec.describe SocialLinkPolicy, type: :policy do
       context 'and social_links_index is true' do
         before { user_role.policy_group_template.update social_links_index: true }
 
-        it { is_expected.to forbid_action :index  }
+        it { is_expected.to forbid_action :index }
       end
 
       context 'and social_links_create is true' do

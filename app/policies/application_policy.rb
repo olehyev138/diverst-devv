@@ -44,10 +44,10 @@ class ApplicationPolicy
   def basic_group_leader_permission?(permission)
     if record&.is_a?(Group)
       @group_leader_role_id = GroupLeader.find_by(user_id: user&.id, group_id: record.id)&.user_role_id
-    elsif record&.respond_to?(:group) #find the group of the record, eg. social link and check if user is group leader of group
+    elsif record&.respond_to?(:group) # find the group of the record, eg. social link and check if user is group leader of group
       @group_leader_role_id = GroupLeader.find_by(user_id: user&.id, group_id: record.group_id)&.user_role_id
     end
-    
+
     PolicyGroupTemplate.where(user_role_id: group_leader_role_id).where("#{permission} = true").exists?
   end
 
