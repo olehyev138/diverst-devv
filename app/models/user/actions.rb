@@ -203,7 +203,12 @@ module User::Actions
     end
 
     def valid_scopes
-      %w(active enterprise_mentors mentors mentees accepting_mentee_requests accepting_mentor_requests)
+      %w( active enterprise_mentors mentors mentees accepting_mentee_requests
+          accepting_mentor_requests saml inactive invitation_sent)
+    end
+
+    def preload_attachments
+      [:avatar]
     end
 
     def base_preloads
