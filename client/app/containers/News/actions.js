@@ -7,6 +7,7 @@
 import {
   GET_NEWS_ITEMS_BEGIN, GET_NEWS_ITEMS_SUCCESS, GET_NEWS_ITEMS_ERROR,
   GET_NEWS_ITEM_BEGIN, GET_NEWS_ITEM_SUCCESS, GET_NEWS_ITEM_ERROR,
+  UPDATE_NEWS_ITEM_BEGIN, UPDATE_NEWS_ITEM_SUCCESS, UPDATE_NEWS_ITEM_ERROR,
   CREATE_GROUP_MESSAGE_BEGIN, CREATE_GROUP_MESSAGE_SUCCESS, CREATE_GROUP_MESSAGE_ERROR,
   UPDATE_GROUP_MESSAGE_BEGIN, UPDATE_GROUP_MESSAGE_SUCCESS, UPDATE_GROUP_MESSAGE_ERROR,
   DELETE_GROUP_MESSAGE_BEGIN, DELETE_GROUP_MESSAGE_SUCCESS, DELETE_GROUP_MESSAGE_ERROR,
@@ -66,6 +67,26 @@ export function getNewsItemError(error) {
   };
 }
 
+export function updateNewsItemBegin(payload) {
+  return {
+    type: UPDATE_NEWS_ITEM_BEGIN,
+    payload
+  };
+}
+
+export function updateNewsItemSuccess(payload) {
+  return {
+    type: UPDATE_NEWS_ITEM_SUCCESS,
+    payload
+  };
+}
+
+export function updateNewsItemError(error) {
+  return {
+    type: UPDATE_NEWS_ITEM_ERROR,
+    error,
+  };
+}
 /* Group Message creating */
 
 export function createGroupMessageBegin(payload) {

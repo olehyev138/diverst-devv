@@ -3,7 +3,6 @@
  * Social Link List Item Component
  *
  */
-
 import React, {
   memo, useRef, useState, useEffect
 } from 'react';
@@ -29,6 +28,8 @@ export function SocialLinkListItem(props) {
   const { socialLink } = props;
   const { newsItem } = props;
   const { links } = props;
+  const newsItemId = newsItem.id;
+  const groupId = socialLink.group_id;
   return (
     <Card>
       <CardContent>
@@ -56,6 +57,17 @@ export function SocialLinkListItem(props) {
         >
           <DiverstFormattedMessage {...messages.edit} />
         </Button>
+        {props.newsItem.approved !== true ? (
+          <Button
+            size='small'
+            onClick={() => {
+              /* eslint-disable-next-line no-alert, no-restricted-globals */
+              props.updateNewsItemBegin({ approved: true, id: newsItemId, group_id: groupId });
+            }}
+          >
+            Approve
+          </Button>
+        ) : null }
         <Button
           size='small'
           onClick={() => {
@@ -78,6 +90,7 @@ SocialLinkListItem.propTypes = {
   }),
   newsItem: PropTypes.object,
   deleteSocialLinkBegin: PropTypes.func,
+  updateNewsItemBegin: PropTypes.func,
 };
 
 export default compose(

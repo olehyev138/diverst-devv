@@ -47,7 +47,7 @@ class ApplicationPolicy
   end
 
   def basic_group_leader_permission?(permission)
-    PolicyGroupTemplate.where(user_role_id: @group_leader_role_ids).where("#{permission} = true").exists?
+    PolicyGroupTemplate.where(user_role_id: @group_leader_role_ids).where(permission.to_sym => true).exists?
   end
 
   def scope
