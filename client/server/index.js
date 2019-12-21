@@ -8,8 +8,8 @@ const setup = require('./middlewares/frontendMiddleware');
 const isDev = process.env.NODE_ENV !== 'production';
 const ngrok =
   (isDev && process.env.ENABLE_TUNNEL) || argv.tunnel ?
-  require('ngrok') :
-  false;
+    require('ngrok') :
+    false;
 const { resolve } = require('path');
 const app = express();
 

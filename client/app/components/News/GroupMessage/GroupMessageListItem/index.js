@@ -3,7 +3,6 @@
  * Group Message List Item Component
  *
  */
-
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux/';
@@ -24,7 +23,10 @@ const styles = theme => ({
 
 export function GroupMessageListItem(props) {
   const { newsItem } = props;
+  const newsItemId = newsItem.id;
   const groupMessage = newsItem.group_message;
+  const groupId = groupMessage.group_id;
+
   return (
     <Card>
       <CardHeader
@@ -62,6 +64,17 @@ export function GroupMessageListItem(props) {
           >
             Comments
           </Button>
+          {props.newsItem.approved !== true ? (
+            <Button
+              size='small'
+              onClick={() => {
+                /* eslint-disable-next-line no-alert, no-restricted-globals */
+                props.updateNewsItemBegin({ approved: true, id: newsItemId, group_id: groupId });
+              }}
+            >
+              Approve
+            </Button>
+          ) : null }
           <Button
             size='small'
             onClick={() => {
@@ -69,7 +82,6 @@ export function GroupMessageListItem(props) {
               if (confirm('Delete group message?'))
                 props.deleteGroupMessageBegin(newsItem.group_message);
             }}
-            // component={WrappedNavLink}
           >
             Delete
           </Button>
@@ -88,6 +100,7 @@ GroupMessageListItem.propTypes = {
     groupMessageShow: PropTypes.func
   }),
   deleteGroupMessageBegin: PropTypes.func,
+  updateNewsItemBegin: PropTypes.func,
 };
 
 export default compose(
