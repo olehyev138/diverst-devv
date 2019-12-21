@@ -4,7 +4,8 @@ RSpec.describe SocialLinkPolicy, type: :policy do
   let(:enterprise) { create(:enterprise) }
   let(:no_access) { create(:user, enterprise: enterprise) }
   let(:user) { no_access }
-  let(:social_link) { create(:social_link, author: user) }
+  let(:group) { create(:group, enterprise: enterprise) }
+  let(:social_link) { create(:social_link, group: group, author: user) }
   let(:noshow_social_link) { create(:social_link, author: create(:user)) }
   let(:policy_scope) { SocialLinkPolicy::Scope.new(user, SocialLink).resolve }
 
@@ -65,6 +66,67 @@ RSpec.describe SocialLinkPolicy, type: :policy do
         end
 
         it { is_expected.to permit_actions([:index, :create, :update, :destroy]) }
+      end
+    end
+
+    context 'when user is a group leader of another group to which social link belongs' do
+      let!(:user_role) { create(:user_role, enterprise: enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3) }
+      let!(:another_user) { create(:user, enterprise: enterprise) }
+
+      before do
+        social_link.author = another_user
+        social_link.group = create(:group, enterprise: enterprise)
+        create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
+                              user_role_id: user_role.id)
+      end
+
+      context 'and social_links_index is true' do
+        before { user_role.policy_group_template.update social_links_index: true }
+
+        it { is_expected.to forbid_action :index  }
+      end
+
+      context 'and social_links_create is true' do
+        before { user_role.policy_group_template.update social_links_create: true }
+
+        it { is_expected.to forbid_action :create }
+      end
+
+      context 'and social_links_manage is true' do
+        before { user_role.policy_group_template.update social_links_manage: true }
+
+        it { is_expected.to forbid_actions ([:index, :create, :update, :destroy]) }
+      end
+    end
+
+    context 'when user is group leader of group to which social link belongs' do
+      let!(:user_role) { create(:user_role, enterprise: enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3) }
+      let!(:another_user) { create(:user, enterprise: enterprise) }
+
+      before do
+        social_link.author = another_user
+        create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
+                              user_role_id: user_role.id)
+      end
+
+      context 'and social_links_index is true' do
+        before { user_role.policy_group_template.update social_links_index: true }
+
+        it { is_expected.to permit_action :index }
+        it { is_expected.to forbid_actions([:update, :destroy]) }
+      end
+
+      context 'and social_links_create is true' do
+        before { user_role.policy_group_template.update social_links_create: true }
+
+        it { is_expected.to permit_action :create }
+        it { is_expected.to forbid_actions([:index, :update, :destroy]) }
+      end
+
+      context 'and social_links_manage is true' do
+        before { user_role.policy_group_template.update social_links_manage: true }
+
+        it { is_expected.to permit_actions ([:index, :create, :update, :destroy]) }
       end
     end
   end
