@@ -1,9 +1,9 @@
 class UserGroupPolicy < ApplicationPolicy
   def index?
-    return true if create?
-    return true if basic_group_leader_permission?('groups_index')
+    return true if manage_all?
+    return true if basic_group_leader_permission?('groups_members_index')
 
-    @policy_group.groups_index?
+    @policy_group.groups_members_index?
   end
 
   def show?

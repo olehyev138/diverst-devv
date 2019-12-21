@@ -9,6 +9,7 @@ import GroupManageLayout from 'containers/Layouts/GroupManageLayout/Loadable';
 import MentorshipLayout from 'containers/Layouts/MentorshipLayout/Loadable';
 import InnovateLayout from 'containers/Layouts/InnovateLayout/Loadable';
 import SystemUserLayout from 'containers/Layouts/SystemUsersLayout/Loadable';
+import EmailLayout from 'containers/Layouts/GlobalSettingsLayout/EmailLayout/Loadable';
 
 /* Session */
 import LoginPage from 'containers/Session/LoginPage/Loadable';
@@ -56,6 +57,10 @@ import FieldsPage from 'containers/GlobalSettings/Field/FieldsPage/Loadable';
 import CustomTextEditPage from 'containers/GlobalSettings/CustomText/CustomTextEditPage/Loadable';
 import EnterpriseConfigurationPage from 'containers/GlobalSettings/EnterpriseConfiguration/EnterpriseConfigurationPage/Loadable';
 import SSOSettingsPage from 'containers/GlobalSettings/SSOSettingsPage/Loadable';
+import EmailsPage from 'containers/GlobalSettings/Email/Email/EmailsPage/Loadable';
+import EmailEditPage from 'containers/GlobalSettings/Email/Email/EmailEditPage/Loadable';
+import EmailEventsPage from 'containers/GlobalSettings/Email/Event/EventsPage/Loadable';
+import EmailEventEditPage from 'containers/GlobalSettings/Email/Event/EventEditPage/Loadable';
 
 /* Admin - System - User */
 import UsersPage from 'containers/User/UsersPage/Loadable';
@@ -77,6 +82,7 @@ import OutcomesPage from 'containers/Group/Outcome/OutcomesPage/Loadable';
 import EventPage from 'containers/Event/EventPage/Loadable';
 import EventCreatePage from 'containers/Event/EventCreatePage/Loadable';
 import EventEditPage from 'containers/Event/EventEditPage/Loadable';
+import EventManageMetricsPage from 'containers/Event/EventManage/MetricsPage/Loadable';
 
 /* Group - News Feed */
 import GroupMessagePage from 'containers/News/GroupMessage/GroupMessagePage/Loadable';
@@ -90,7 +96,6 @@ import NewsLinkPage from 'containers/News/NewsLink/NewsLinkPage';
 
 /* Group - Plan - Events */
 import GroupPlanEventsPage from 'containers/Group/GroupPlan/EventsPage/Loadable';
-import EventManagePage from 'containers/Event/EventManagePage/Loadable';
 
 /* Group - Plan - Outcomes */
 import OutcomeCreatePage from 'containers/Group/Outcome/OutcomeCreatePage/Loadable';
@@ -153,7 +158,7 @@ export {
   EventPage,
   EventCreatePage,
   EventEditPage,
-  EventManagePage,
+  EventManageMetricsPage,
   GroupPlanEventsPage,
   GroupMessagePage,
   GroupMessageCreatePage,
@@ -208,10 +213,15 @@ export {
   UserRolesListPage,
   UserRoleCreatePage,
   UserRoleEditPage,
+  SSOSettingsPage,
+  EmailsPage,
+  EmailEditPage,
+  EmailEventsPage,
+  EmailEventEditPage,
+  EmailLayout,
   NewsLinkEditPage,
   NewsLinkCreatePage,
   SocialLinkCreatePage,
   SocialLinkEditPage,
-  SSOSettingsPage,
   NewsLinkPage
 };

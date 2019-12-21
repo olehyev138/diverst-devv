@@ -15,21 +15,21 @@ const GlobalSettingsPages = Object.freeze({
   fields: 0,
   custom_texts: 1,
   configuration: 2,
-  sso: 3
+  sso: 3,
+  email: 4,
 });
 
 const GlobalSettingsLayout = ({ component: Component, ...rest }) => {
   const { classes, data, location, ...other } = rest;
 
-  /* Get last element of current path, ie: '/group/:id/manage/settings -> settings */
-  const currentPagePath = location.pathname.split('/').pop();
-
-  const [tab, setTab] = useState(GlobalSettingsPages[currentPagePath]);
+  /* Get get first key that is in the path, ie: '/admin/system/settings/emails/1/edit/ -> emails */
+  const currentPage = Object.keys(GlobalSettingsPages).find(page => location.pathname.includes(page));
+  const [tab, setTab] = useState(GlobalSettingsPages[currentPage]);
 
   useEffect(() => {
-    if (tab !== GlobalSettingsPages[currentPagePath])
-      setTab(GlobalSettingsPages[currentPagePath]);
-  }, [currentPagePath]);
+    if (tab !== GlobalSettingsPages[currentPage])
+      setTab(GlobalSettingsPages[currentPage]);
+  }, [currentPage]);
 
   return (
     <AdminLayout

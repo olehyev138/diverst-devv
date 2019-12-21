@@ -9,12 +9,14 @@ class User < ApplicationRecord
   enum groups_notifications_frequency: [:hourly, :daily, :weekly, :disabled]
   enum groups_notifications_date: [:sunday, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday]
 
-  scope :active,              -> { where(active: true).distinct }
   scope :enterprise_mentors,  -> (user_ids = []) { where(mentor: true).where.not(id: user_ids).where.not(accepting_mentor_requests: false) }
   scope :enterprise_mentees,  -> (user_ids = []) { where(mentee: true).where.not(id: user_ids).where.not(accepting_mentee_requests: false) }
   scope :mentors_and_mentees, -> { where('mentor = true OR mentee = true').distinct }
-  scope :inactive,            -> { where(active: false).distinct }
 
+  scope :active,                  -> { where(active: true).distinct }
+  scope :inactive,                -> { where(active: false).distinct }
+  scope :invitation_sent,         -> { where.not(invitation_token: nil).distinct }
+  scope :saml,                    -> { where(auth_source: 'saml').distinct }
 
   belongs_to  :enterprise
   belongs_to  :user_role

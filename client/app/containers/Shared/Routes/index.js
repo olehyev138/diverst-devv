@@ -27,7 +27,7 @@ import {
   EventPage,
   EventCreatePage,
   EventEditPage,
-  EventManagePage,
+  EventManageMetricsPage,
   GroupPlanEventsPage,
   GroupMessagePage,
   GroupMessageCreatePage,
@@ -81,6 +81,13 @@ import {
   UserRolesListPage,
   UserRoleCreatePage,
   UserRoleEditPage,
+  CampaignQuestionShowPage,
+  SSOSettingsPage,
+  EmailsPage,
+  EmailEditPage,
+  EmailEventsPage,
+  EmailEventEditPage,
+  EmailLayout,
   NewsLinkCreatePage,
   NewsLinkEditPage,
   NewsLinkPage,
@@ -161,6 +168,7 @@ export default function Routes(props) {
       <AdminLayout {...expandRoute(ROUTES.admin.innovate.campaigns.edit)} component={CampaignEditPage} />
       <AdminLayout {...expandRoute(ROUTES.admin.innovate.campaigns.questions.new)} component={CampaignQuestionCreatePage} />
       <AdminLayout {...expandRoute(ROUTES.admin.innovate.campaigns.questions.edit)} component={CampaignQuestionEditPage} />
+      <AdminLayout {...expandRoute(ROUTES.admin.innovate.campaigns.questions.show)} component={CampaignQuestionShowPage} />
       <AdminLayout {...expandRoute(ROUTES.admin.innovate.campaigns.show)} component={CampaignShowPage} />
       <AdminLayout {...expandRoute(ROUTES.admin.innovate.campaigns.index)} component={CampaignListPage} />
       <AdminLayout {...expandRoute(ROUTES.admin.innovate.financials.index)} component={PlaceholderPage} />
@@ -169,6 +177,11 @@ export default function Routes(props) {
       <GlobalSettingsLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.fields.index)} component={FieldsPage} />
       <GlobalSettingsLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.customText.edit)} component={CustomTextEditPage} />
       <GlobalSettingsLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.enterpriseConfiguration.index)} component={EnterpriseConfigurationPage} />
+      <GlobalSettingsLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.ssoSettings.edit)} component={SSOSettingsPage} />
+      <EmailLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.emails.index)} component={EmailsPage} />
+      <EmailLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.emails.edit)} component={EmailEditPage} />
+      <EmailLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.mailEvents.index)} component={EmailEventsPage} />
+      <EmailLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.mailEvents.edit)} component={EmailEventEditPage} />
 
       { /* Admin - System - Users */ }
       <SystemUserLayout exact {...expandRoute(ROUTES.admin.system.users.index)} component={UsersPage} />
@@ -214,7 +227,7 @@ export default function Routes(props) {
 
       { /* Group Plan - Events */ }
       <GroupLayout exact {...expandRoute(ROUTES.group.plan.events.index)} component={GroupPlanEventsPage} />
-      <GroupLayout {...expandRoute(ROUTES.group.plan.events.manage)} component={EventManagePage} />
+      <GroupLayout {...expandRoute(ROUTES.group.plan.events.manage.metrics)} component={EventManageMetricsPage} />
 
       { /* Group Plan - KPI */ }
       <GroupLayout exact {...expandRoute(ROUTES.group.plan.kpi.index)} component={GroupPlanKpiPage} />
