@@ -39,7 +39,7 @@ module ContainsFieldData
                        .where(
                            'lower(fields.title) = ?',
                            method_name[0...-1].to_s.downcase.gsub('_', ' ')
-                       ).limit(1)
+                         ).limit(1)
       if field_data.present?
         pp arg[1]
         field_data[0].data = arg[0].to_json
@@ -54,7 +54,7 @@ module ContainsFieldData
                        .where(
                            'lower(fields.title) = ?',
                            method_name.to_s.downcase.gsub('_', ' ')
-                       ).limit(1)
+                         ).limit(1)
       if field_data.present?
         field_data[0].deserialized_data
       else
