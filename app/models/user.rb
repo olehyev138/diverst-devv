@@ -23,7 +23,7 @@ class User < ApplicationRecord
   has_one :policy_group,  dependent: :destroy, inverse_of: :user
   has_one :device,        dependent: :destroy, inverse_of: :user
 
-  has_many :field_data, class_name: 'FieldData', as: :fieldable
+  has_many :field_data, class_name: 'FieldData', as: :fieldable, dependent: :destroy
 
   # sessions
   has_many :sessions, dependent: :destroy
@@ -131,7 +131,7 @@ class User < ApplicationRecord
   before_validation :generate_password_if_saml
   before_validation :set_provider
   before_validation :set_uid
-  before_destroy :check_lifespan_of_user
+  #before_destroy :check_lifespan_of_user
 
   # after_create :assign_firebase_token
   after_create :set_default_policy_group

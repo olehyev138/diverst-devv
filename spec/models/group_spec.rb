@@ -311,7 +311,7 @@ RSpec.describe Group, type: :model do
   describe '#survey_answers_csv' do
     it 'returns a csv file' do
       group = create(:group)
-      field = create(:field, field_type: 'group_survey', group: group)
+      field = create(:field, field_type: 'group_survey', field_definer: group)
       user = create(:user)
       user_group = create(:user_group, user: user, group: group, data: '{"13":"test"}')
 
@@ -782,8 +782,8 @@ RSpec.describe Group, type: :model do
       campaigns_group = create(:campaigns_group, group: group)
       outcome = create(:outcome, group: group)
       group_update = create(:group_update, group: group)
-      field = create(:field, group: group, field_type: 'regular')
-      survey_field = create(:field, group: group, field_type: 'group_survey')
+      field = create(:field, field_definer: group, field_type: 'regular')
+      survey_field = create(:field, field_definer: group, field_type: 'group_survey')
       user = create(:user, enterprise: group.enterprise)
       create(:user_group, user: user, group: group, accepted_member: true)
       group_leader = create(:group_leader, group: group, user: user)

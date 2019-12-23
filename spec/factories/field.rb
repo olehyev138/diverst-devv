@@ -39,7 +39,7 @@ FactoryBot.define do
     match_weight 1
 
     factory :enterprise_field do
-      association :enterprise, factory: :enterprise
+      association :field_definer, factory: :enterprise
     end
   end
 end

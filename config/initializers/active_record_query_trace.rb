@@ -1,4 +1,4 @@
 if Rails.env.development?
-  ActiveRecordQueryTrace.enabled = false
+  ActiveRecordQueryTrace.enabled = true
   # Optional: other gem config options go here
 end

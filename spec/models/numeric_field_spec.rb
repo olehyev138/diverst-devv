@@ -51,7 +51,7 @@ RSpec.describe NumericField, type: :model do
   describe '#match_score_between' do
     it 'returns 0.0' do
       enterprise = create(:enterprise)
-      numeric_field = NumericField.new(type: 'NumericField', title: 'Seniority (in years)', min: 0, max: 40, enterprise: enterprise)
+      numeric_field = NumericField.new(type: 'NumericField', title: 'Seniority (in years)', min: 0, max: 40, field_definer: enterprise)
       numeric_field.save!
       user_1 = create(:user, data: "{\"#{numeric_field.id}\":2}", enterprise: enterprise)
       user_2 = create(:user, data: "{\"#{numeric_field.id}\":2}", enterprise: enterprise)

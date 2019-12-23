@@ -164,8 +164,8 @@ RSpec.describe Poll, type: :model do
 
       it 'deletes associated fields if any' do
         poll.save
-        create(:field, poll_id: poll.id)
-        expect { poll.reload.destroy }.to change(Field.where(poll_id: poll.id), :count).by(-2)
+        create(:field, field_definer: poll)
+        expect { poll.reload.destroy }.to change(Field.where(field_definer: poll), :count).by(-2)
       end
     end
   end
@@ -223,7 +223,7 @@ RSpec.describe Poll, type: :model do
       enterprise = create(:enterprise)
       user = build(:user)
       poll = create(:poll, enterprise: enterprise, owner: user)
-      select_field = SelectField.new(type: 'SelectField', title: 'What is 1 + 1?', options_text: "1\r\n2\r\n3\r\n4\r\n5\r\n6\r\n7", poll: poll)
+      select_field = SelectField.new(type: 'SelectField', title: 'What is 1 + 1?', options_text: "1\r\n2\r\n3\r\n4\r\n5\r\n6\r\n7", field_definer: poll)
       select_field.save!
       create(:poll_response, poll: poll, user: user, data: "{\"#{select_field.id}\":[\"4\"]}")
 
@@ -254,7 +254,7 @@ RSpec.describe Poll, type: :model do
   describe '#destroy_callbacks' do
     it 'removes the child objects', skip: 'this spec will pass when PR 1245 is merged to master' do
       poll = create(:poll)
-      field = create(:field, poll: poll)
+      field = create(:field, field_definer: poll)
       response = create(:poll_response, poll: poll)
       graph = create(:graph, poll: poll)
       polls_segment = create(:polls_segment, poll: poll)

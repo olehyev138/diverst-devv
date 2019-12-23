@@ -2,8 +2,8 @@ require 'rails_helper'
 
 RSpec.describe Field do
   describe 'when validating' do
-    let(:field) { build(:field, enterprise: build(:enterprise)) }
-    let(:field1) { build(:field, enterprise: build(:enterprise)) }
+    let(:field) { build(:field, field_definer: build(:enterprise)) }
+    let(:field1) { build(:field, field_definer: build(:enterprise)) }
 
     context 'validate presence of title for field' do
       it 'valid if title is present' do
@@ -73,7 +73,7 @@ RSpec.describe Field do
   end
 
   describe 'when describing callbacks' do
-    let!(:field) { create(:field, enterprise: create(:enterprise)) }
+    let!(:field) { create(:field, field_definer: create(:enterprise)) }
 
     it 'should reindex users on elasticsearch after update', skip: true do
       TestAfterCommit.with_commits(true) do

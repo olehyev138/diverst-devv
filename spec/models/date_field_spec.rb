@@ -78,7 +78,7 @@ RSpec.describe DateField, type: :model do
   describe '#match_score_between' do
     it 'returns nil' do
       enterprise = create(:enterprise)
-      date_field = DateField.new(type: 'DateField', title: 'Date of birth', enterprise: enterprise)
+      date_field = DateField.new(type: 'DateField', title: 'Date of birth', field_definer: enterprise)
       date_field.save!
       user_1 = create(:user, data: "{\"#{date_field.id}\":-1641600}", enterprise: enterprise)
       user_2 = create(:user, data: "{\"#{date_field.id}\":-1641600}", enterprise: enterprise)

@@ -14,12 +14,12 @@ class Enterprise < ApplicationRecord
   ]
 
   has_many :users, inverse_of: :enterprise, dependent: :destroy
-  has_many :graph_fields, class_name: 'Field', dependent: :destroy
+  has_many :graph_fields, as: :field_definer, class_name: 'Field', dependent: :destroy
   has_many :fields, -> { where elasticsearch_only: false }, as: :field_definer, dependent: :destroy
   has_many :topics, inverse_of: :enterprise, dependent: :destroy
   has_many :segments, inverse_of: :enterprise, dependent: :destroy
   has_many :groups, inverse_of: :enterprise, dependent: :destroy
-  has_many :initiatives, through: :groups
+  has_many :initiatives, through: :groupsF
   has_many :folders, dependent: :destroy
   has_many :folder_shares, dependent: :destroy
   has_many :shared_folders, through: :folder_shares, source: 'folder'

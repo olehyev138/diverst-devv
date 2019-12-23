@@ -339,7 +339,7 @@ RSpec.describe Initiative, type: :model do
       annual_budget = create(:annual_budget, amount: group.annual_budget)
       initiative = create(:initiative, owner_group_id: group.id, annual_budget_id: annual_budget.id)
       initiative_update = create(:initiative_update, initiative: initiative)
-      field = create(:field, initiative: initiative)
+      field = create(:field, field_definer: initiative)
       initiative_expense = create(:initiative_expense, initiative: initiative, annual_budget_id: annual_budget.id)
       checklist = create(:checklist, initiative: initiative)
       resource = create(:resource, initiative: initiative)
@@ -418,7 +418,7 @@ RSpec.describe Initiative, type: :model do
     }
     let!(:expense) { create(:initiative_expense, initiative_id: initiative.id, annual_budget_id: annual_budget.id, amount: 50) }
 
-    let!(:field) { create(:field, initiative_id: initiative.id, title: 'Attendance') }
+    let!(:field) { create(:field, field_definer: initiative, title: 'Attendance') }
     let!(:update) { create(:initiative_update, initiative_id: initiative.id, data: "{\"#{field.id}\":105}") }
 
 

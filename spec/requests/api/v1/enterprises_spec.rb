@@ -64,6 +64,7 @@ RSpec.describe "#{model.pluralize}", type: :request do
   describe '#destroy' do
     it 'deletes an item' do
       delete "/api/v1/#{route}/#{item.id}", headers: headers
+      Clipboard.copy response.parsed_body.to_json
       expect(response).to have_http_status(:no_content)
     end
 

@@ -130,6 +130,7 @@ class Field < ApplicationRecord
   end
 
   def enterprise
+    return nil if field_definer == nil
     return association(:field_definer).reader if field_definer_type == 'Enterprise'
 
     association(:field_definer).reader.enterprise
