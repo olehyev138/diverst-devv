@@ -15,6 +15,10 @@ class EnterprisePolicy < ApplicationPolicy
     update?
   end
 
+  def fields?
+    update?
+  end
+
   def edit_auth?
     return true if manage_all?
     return true if basic_group_leader_permission?('sso_manage')

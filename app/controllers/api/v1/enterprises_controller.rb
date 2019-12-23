@@ -23,6 +23,18 @@ class Api::V1::EnterprisesController < DiverstController
     raise BadRequestException.new(e.message)
   end
 
+  def fields
+    # Authorize with policy, only if policy exists
+    # TODO: Don't only authorize if policy exists as every model should have a policy.
+    # TODO: This is temporary to allow API calls to work properly without a policy during development.
+    item = klass.find(params[:id])
+    base_authorize(item)
+
+    render status: 200, json: klass.pager_with_query(item.fields, params.permit!)
+  rescue => e
+    raise BadRequestException.new(e.message)
+  end
+
   def update_enterprise
     params[klass.symbol] = payload
 
