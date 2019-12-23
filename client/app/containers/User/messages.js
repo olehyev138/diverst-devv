@@ -60,4 +60,18 @@ export default defineMessages({
   fields_save: {
     id: `${scope}.profile.fields.form.save`
   },
+  scopes: {
+    all: {
+      id: `${scope}.scope.all`,
+    },
+    inactive: {
+      id: `${scope}.scope.inactive`
+    },
+    invitation_sent: {
+      id: `${scope}.scope.invitation_sent`
+    },
+    saml: {
+      id: `${scope}.scope.saml`
+    },
+  }
 });
