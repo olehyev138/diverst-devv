@@ -77,6 +77,6 @@ class Api::V1::EnterprisesController < DiverstController
             :options_text,
             :min,
             :max,
-            )
+          )
   end
 end
