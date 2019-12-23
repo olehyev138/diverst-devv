@@ -23,7 +23,7 @@ import DiverstSubmit from 'components/Shared/DiverstSubmit';
 const FIELD_TYPE = 'CheckboxField';
 
 /* eslint-disable object-curly-newline */
-export function TextFieldFormInner({ handleSubmit, handleChange, handleBlur, values, setFieldValue, setFieldTouched, ...props }) {
+export function CheckboxFieldFormInner({ handleSubmit, handleChange, handleBlur, values, setFieldValue, setFieldTouched, ...props }) {
   return (
     <Card>
       <Form>
@@ -73,7 +73,7 @@ export function TextFieldFormInner({ handleSubmit, handleChange, handleBlur, val
   );
 }
 
-export function TextFieldForm(props) {
+export function CheckboxFieldForm(props) {
   const initialValues = {
     title: dig(props, 'field', 'title') || '',
     options_text: dig(props, 'field', 'options_text') || '',
@@ -89,18 +89,18 @@ export function TextFieldForm(props) {
         props.fieldAction(values);
       }}
     >
-      {formikProps => <TextFieldFormInner {...props} {...formikProps} />}
+      {formikProps => <CheckboxFieldFormInner {...props} {...formikProps} />}
     </Formik>
   );
 }
 
-TextFieldForm.propTypes = {
+CheckboxFieldForm.propTypes = {
   fieldAction: PropTypes.func,
   field: PropTypes.object,
   isCommitting: PropTypes.bool,
 };
 
-TextFieldFormInner.propTypes = {
+CheckboxFieldFormInner.propTypes = {
   handleSubmit: PropTypes.func,
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
@@ -116,4 +116,4 @@ TextFieldFormInner.propTypes = {
 
 export default compose(
   memo,
-)(TextFieldForm);
+)(CheckboxFieldForm);

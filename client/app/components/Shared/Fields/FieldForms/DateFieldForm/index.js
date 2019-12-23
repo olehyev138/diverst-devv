@@ -23,7 +23,7 @@ import DiverstSubmit from 'components/Shared/DiverstSubmit';
 const FIELD_TYPE = 'DateField';
 
 /* eslint-disable object-curly-newline */
-export function TextFieldFormInner({ handleSubmit, handleChange, handleBlur, values, setFieldValue, setFieldTouched, ...props }) {
+export function DareFieldFormInner({ handleSubmit, handleChange, handleBlur, values, setFieldValue, setFieldTouched, ...props }) {
   return (
     <Card>
       <Form>
@@ -61,7 +61,7 @@ export function TextFieldFormInner({ handleSubmit, handleChange, handleBlur, val
   );
 }
 
-export function TextFieldForm(props) {
+export function DareFieldForm(props) {
   const initialValues = {
     title: dig(props, 'field', 'title') || '',
     id: dig(props, 'field', 'id') || '',
@@ -76,18 +76,18 @@ export function TextFieldForm(props) {
         props.fieldAction(values);
       }}
     >
-      {formikProps => <TextFieldFormInner {...props} {...formikProps} />}
+      {formikProps => <DareFieldFormInner {...props} {...formikProps} />}
     </Formik>
   );
 }
 
-TextFieldForm.propTypes = {
+DareFieldForm.propTypes = {
   fieldAction: PropTypes.func,
   field: PropTypes.object,
   isCommitting: PropTypes.bool,
 };
 
-TextFieldFormInner.propTypes = {
+DareFieldFormInner.propTypes = {
   handleSubmit: PropTypes.func,
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
@@ -103,4 +103,4 @@ TextFieldFormInner.propTypes = {
 
 export default compose(
   memo,
-)(TextFieldForm);
+)(DareFieldForm);

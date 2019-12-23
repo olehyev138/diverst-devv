@@ -23,7 +23,7 @@ import DiverstSubmit from 'components/Shared/DiverstSubmit';
 const FIELD_TYPE = 'NumericField';
 
 /* eslint-disable object-curly-newline */
-export function TextFieldFormInner({ handleSubmit, handleChange, handleBlur, values, setFieldValue, setFieldTouched, ...props }) {
+export function NumericFieldFormInner({ handleSubmit, handleChange, handleBlur, values, setFieldValue, setFieldTouched, ...props }) {
   return (
     <Card>
       <Form>
@@ -51,7 +51,6 @@ export function TextFieldFormInner({ handleSubmit, handleChange, handleBlur, val
                 label={<DiverstFormattedMessage {...messages.min} />}
                 value={values.min}
                 onChange={value => setFieldValue('min', value.target.value)}
-                {...props}
               />
             </Grid>
             <Grid item xs={6} md={6}>
@@ -64,7 +63,6 @@ export function TextFieldFormInner({ handleSubmit, handleChange, handleBlur, val
                 label={<DiverstFormattedMessage {...messages.max} />}
                 value={values.max}
                 onChange={value => setFieldValue('max', value.target.value)}
-                {...props}
               />
             </Grid>
           </Grid>
@@ -90,7 +88,7 @@ export function TextFieldFormInner({ handleSubmit, handleChange, handleBlur, val
   );
 }
 
-export function TextFieldForm(props) {
+export function NumericFieldForm(props) {
   const initialValues = {
     title: dig(props, 'field', 'title') || '',
     min: dig(props, 'field', 'min') || '',
@@ -107,18 +105,18 @@ export function TextFieldForm(props) {
         props.fieldAction(values);
       }}
     >
-      {formikProps => <TextFieldFormInner {...props} {...formikProps} />}
+      {formikProps => <NumericFieldFormInner {...props} {...formikProps} />}
     </Formik>
   );
 }
 
-TextFieldForm.propTypes = {
+NumericFieldForm.propTypes = {
   fieldAction: PropTypes.func,
   field: PropTypes.object,
   isCommitting: PropTypes.bool,
 };
 
-TextFieldFormInner.propTypes = {
+NumericFieldFormInner.propTypes = {
   handleSubmit: PropTypes.func,
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
@@ -134,4 +132,4 @@ TextFieldFormInner.propTypes = {
 
 export default compose(
   memo,
-)(TextFieldForm);
+)(NumericFieldForm);

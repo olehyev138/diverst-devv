@@ -58,7 +58,31 @@ export function FieldList(props, context) {
         type: 'TextField',
       },
       action: props.createFieldBegin,
-    }
+    },
+    check: {
+      field: {
+        type: 'CheckboxField',
+      },
+      action: props.createFieldBegin,
+    },
+    select: {
+      field: {
+        type: 'SelectField',
+      },
+      action: props.createFieldBegin,
+    },
+    date: {
+      field: {
+        type: 'DateField',
+      },
+      action: props.createFieldBegin,
+    },
+    number: {
+      field: {
+        type: 'NumericField',
+      },
+      action: props.createFieldBegin,
+    },
   };
 
   const [expandedFields, setExpandedFields] = useState({});
@@ -100,6 +124,50 @@ export function FieldList(props, context) {
             startIcon={<AddIcon />}
           >
             <DiverstFormattedMessage {...messages.newTextField} />
+          </Button>
+        </Grid>
+        <Grid item>
+          <Button
+            variant='contained'
+            color='primary'
+            size='large'
+            onClick={() => renderFieldForm('select')}
+            startIcon={<AddIcon />}
+          >
+            <DiverstFormattedMessage {...messages.newSelectField} />
+          </Button>
+        </Grid>
+        <Grid item>
+          <Button
+            variant='contained'
+            color='primary'
+            size='large'
+            onClick={() => renderFieldForm('check')}
+            startIcon={<AddIcon />}
+          >
+            <DiverstFormattedMessage {...messages.newCheckBoxField} />
+          </Button>
+        </Grid>
+        <Grid item>
+          <Button
+            variant='contained'
+            color='primary'
+            size='large'
+            onClick={() => renderFieldForm('date')}
+            startIcon={<AddIcon />}
+          >
+            <DiverstFormattedMessage {...messages.newDateField} />
+          </Button>
+        </Grid>
+        <Grid item>
+          <Button
+            variant='contained'
+            color='primary'
+            size='large'
+            onClick={() => renderFieldForm('number')}
+            startIcon={<AddIcon />}
+          >
+            <DiverstFormattedMessage {...messages.newNumericField} />
           </Button>
         </Grid>
         <Collapse
