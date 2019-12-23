@@ -131,7 +131,7 @@ class User < ApplicationRecord
   before_validation :generate_password_if_saml
   before_validation :set_provider
   before_validation :set_uid
-  #before_destroy :check_lifespan_of_user
+  before_destroy :check_lifespan_of_user
 
   # after_create :assign_firebase_token
   after_create :set_default_policy_group
