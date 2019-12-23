@@ -5,7 +5,7 @@ class MakeFieldPolymorphic < ActiveRecord::Migration[5.2]
     add_index :fields, [:field_definer_id, :field_definer_type]
 
     Field.find_each do |field|
-      field.field_definer = field.group || field.enterprise || field.poll || field.initiative
+      field.field_definer = field.group || field.poll || field.initiative || field.enterprise
       field.save!
     end
 
