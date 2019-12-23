@@ -18,6 +18,7 @@ import {
   selectPaginatedSegmentMembers, selectSegmentMemberTotal,
   selectIsFetchingSegmentMembers, selectIsSegmentBuilding
 } from 'containers/Segment/selectors';
+import { selectEnterprise } from 'containers/Shared/App/selectors';
 
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -29,7 +30,8 @@ export function SegmentMemberListPage(props) {
   useInjectSaga({ key: 'segments', saga });
 
   const rs = new RouteService(useContext);
-  const segmentId = rs.params('segment_id')[0];
+  const segmentIds = rs.params('segment_id');
+  const segmentId = segmentIds ? segmentIds[0] : null;
 
   const [params, setParams] = useState({
     segment_id: segmentId, count: 5, page: 0, order: 'asc'
@@ -68,6 +70,7 @@ export function SegmentMemberListPage(props) {
         params={params}
         handlePagination={handlePagination}
         handleOrdering={handleOrdering}
+        currentEnterprise={props.currentEnterprise}
       />
     </React.Fragment>
   );
@@ -78,13 +81,17 @@ SegmentMemberListPage.propTypes = {
   segmentUnmount: PropTypes.func,
   memberList: PropTypes.array,
   memberTotal: PropTypes.number,
-  isFetchingMembers: PropTypes.bool
+  isFetchingMembers: PropTypes.bool,
+  currentEnterprise: PropTypes.shape({
+    id: PropTypes.number,
+  })
 };
 
 const mapStateToProps = createStructuredSelector({
   memberList: selectPaginatedSegmentMembers(),
   memberTotal: selectSegmentMemberTotal(),
-  isFetchingMembers: selectIsFetchingSegmentMembers()
+  isFetchingMembers: selectIsFetchingSegmentMembers(),
+  currentEnterprise: selectEnterprise(),
 });
 
 const mapDispatchToProps = {

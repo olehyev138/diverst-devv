@@ -25,6 +25,7 @@ import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import CustomGraphForm from 'components/Analyze/Dashboards/MetricsDashboard/CustomGraph/CustomGraphForm';
+import { selectEnterprise } from 'containers/Shared/App/selectors';
 
 export function CustomGraphCreatePage(props) {
   useInjectReducer({ key: 'customMetrics', reducer });
@@ -61,11 +62,13 @@ CustomGraphCreatePage.propTypes = {
   segments: PropTypes.array,
   customGraphUnmount: PropTypes.func,
   isCommitting: PropTypes.bool,
+  currentEnterprise: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
   fields: selectPaginatedSelectFields(),
   isCommitting: selectIsCommitting(),
+  currentEnterprise: selectEnterprise(),
 });
 
 const mapDispatchToProps = {

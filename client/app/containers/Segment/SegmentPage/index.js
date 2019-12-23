@@ -33,6 +33,7 @@ import RouteService from 'utils/routeHelpers';
 
 import SegmentForm from 'components/Segment/SegmentForm';
 import SegmentMemberListPage from 'containers/Segment/SegmentMemberListPage';
+import { selectEnterprise } from 'containers/Shared/App/selectors';
 
 export function SegmentPage(props) {
   useInjectReducer({ key: 'segments', reducer });
@@ -43,14 +44,15 @@ export function SegmentPage(props) {
   useInjectSaga({ key: 'fields', saga: fieldsSaga });
 
   const rs = new RouteService(useContext);
-  const segmentId = rs.params('segment_id');
+  const segmentIds = rs.params('segment_id');
+  const segmentId = segmentIds ? segmentIds[0] : null;
 
   const params = {
     segment_id: segmentId, count: 5, page: 0, order: 'asc'
   };
 
   useEffect(() => {
-    if (segmentId[0])
+    if (segmentId)
       props.getSegmentBegin({ id: rs.params('segment_id') });
 
     return () => {
@@ -62,7 +64,7 @@ export function SegmentPage(props) {
     <React.Fragment>
       <SegmentForm
         edit={props.edit}
-        segmentAction={segmentId[0] ? props.updateSegmentBegin : props.createSegmentBegin}
+        segmentAction={segmentId ? props.updateSegmentBegin : props.createSegmentBegin}
         segment={props.segment}
         ruleProps={{
           getGroupsBegin: props.getGroupsBegin,
@@ -71,9 +73,10 @@ export function SegmentPage(props) {
           selectFields: props.selectFields,
           fields: props.fields
         }}
-        buttonText={segmentId[0] ? 'Update' : 'Create'}
+        buttonText={segmentId ? 'Update' : 'Create'}
         isCommitting={props.isCommitting}
         isFormLoading={props.edit ? props.isFormLoading : undefined}
+        currentEnterprise={props.currentEnterprise}
       />
       <Box mb={4} />
       <Divider />
@@ -98,6 +101,9 @@ SegmentPage.propTypes = {
   segmentUnmount: PropTypes.func,
   isCommitting: PropTypes.bool,
   isFormLoading: PropTypes.bool,
+  currentEnterprise: PropTypes.shape({
+    id: PropTypes.number,
+  })
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -107,6 +113,7 @@ const mapStateToProps = createStructuredSelector({
   fields: selectPaginatedFields(),
   isCommitting: selectIsCommitting(),
   isFormLoading: selectIsFormLoading(),
+  currentEnterprise: selectEnterprise(),
 });
 
 const mapDispatchToProps = {

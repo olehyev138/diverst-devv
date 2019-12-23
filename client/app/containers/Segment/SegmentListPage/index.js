@@ -23,6 +23,7 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { selectPaginatedSegments, selectSegmentTotal, selectIsLoading } from 'containers/Segment/selectors';
 import { getSegmentsBegin, segmentUnmount, deleteSegmentBegin } from 'containers/Segment/actions';
+import { selectEnterprise } from 'containers/Shared/App/selectors';
 
 import SegmentList from 'components/Segment/SegmentList';
 
@@ -62,6 +63,7 @@ export function SegmentListPage(props) {
         deleteSegmentBegin={props.deleteSegmentBegin}
         handlePagination={handlePagination}
         links={links}
+        currentEnterprise={props.currentEnterprise}
       />
     </React.Fragment>
   );
@@ -74,12 +76,16 @@ SegmentListPage.propTypes = {
   segmentTotal: PropTypes.number,
   deleteSegmentBegin: PropTypes.func,
   isLoading: PropTypes.bool,
+  currentEnterprise: PropTypes.shape({
+    id: PropTypes.number,
+  })
 };
 
 const mapStateToProps = createStructuredSelector({
   segments: selectPaginatedSegments(),
   segmentTotal: selectSegmentTotal(),
   isLoading: selectIsLoading(),
+  currentEnterprise: selectEnterprise(),
 });
 
 const mapDispatchToProps = {

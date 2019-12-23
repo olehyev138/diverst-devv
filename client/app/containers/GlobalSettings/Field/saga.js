@@ -21,7 +21,8 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 export function* getFields(action) {
   try {
-    const response = yield call(api.fields.all.bind(api.fields), action.payload);
+    const { enterpriseId, ...rest } = action.payload;
+    const response = yield call(api.enterprises.fields.bind(api.enterprises), enterpriseId, rest);
     yield put(getFieldsSuccess(response.data.page));
   } catch (err) {
     yield put(getFieldsError(err));

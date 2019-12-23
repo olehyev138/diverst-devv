@@ -140,7 +140,10 @@ SegmentRules.propTypes = {
   updateSegmentBegin: PropTypes.func,
   values: PropTypes.object,
   classes: PropTypes.object,
-  formik: PropTypes.object
+  formik: PropTypes.object,
+  currentEnterprise: PropTypes.shape({
+    id: PropTypes.number,
+  })
 };
 
 

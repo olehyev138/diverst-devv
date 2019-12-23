@@ -15,6 +15,7 @@
 import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import dig from 'object-dig';
 
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
@@ -38,12 +39,21 @@ import reducer from 'containers/GlobalSettings/Field/reducer';
 import saga from 'containers/GlobalSettings/Field/saga';
 
 import FieldList from 'components/GlobalSettings/Field/FieldList';
+import { selectEnterprise } from 'containers/Shared/App/selectors';
 
 export function FieldListPage(props) {
   useInjectReducer({ key: 'fields', reducer });
   useInjectSaga({ key: 'fields', saga });
 
-  const [params, setParams] = useState({ count: 5, page: 0, order: 'asc' });
+  const [params, setParams] = useState(
+    {
+      count: 5,
+      page: 0,
+      order: 'asc',
+      orderBy: 'fields.id',
+      enterpriseId: dig(props, 'currentEnterprise', 'id')
+    }
+  );
 
   useEffect(() => {
     props.getFieldsBegin(params);
@@ -88,6 +98,9 @@ FieldListPage.propTypes = {
   fieldUnmount: PropTypes.func.isRequired,
   isCommitting: PropTypes.bool,
   commitSuccess: PropTypes.bool,
+  currentEnterprise: PropTypes.shape({
+    id: PropTypes.number
+  })
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -96,6 +109,7 @@ const mapStateToProps = createStructuredSelector({
   isLoading: selectIsLoading(),
   isCommitting: selectIsCommitting(),
   commitSuccess: selectCommitSuccess(),
+  currentEnterprise: selectEnterprise(),
 });
 
 const mapDispatchToProps = {
