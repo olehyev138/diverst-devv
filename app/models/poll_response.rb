@@ -1,5 +1,5 @@
 class PollResponse < BaseClass
-  include ContainsFieldData
+  include ContainsFields
 
   belongs_to :poll
   belongs_to :user
