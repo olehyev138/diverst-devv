@@ -1,4 +1,4 @@
-module ContainsFieldData
+module ContainsFields
   extend ActiveSupport::Concern
 
   included do

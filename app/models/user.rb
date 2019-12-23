@@ -4,7 +4,7 @@ class User < BaseClass
 
   include PublicActivity::Common
   include DeviseTokenAuth::Concerns::User
-  include ContainsFieldData
+  include ContainsFields
 
   @@fb_token_generator = Firebase::FirebaseTokenGenerator.new(ENV['FIREBASE_SECRET'].to_s)
 
