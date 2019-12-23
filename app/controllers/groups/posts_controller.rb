@@ -18,7 +18,7 @@ class Groups::PostsController < ApplicationController
       with_segments
     else
       @count = 0
-      @posts = []
+      @posts = NewsFeedLink.none
     end
 
     @posts = @posts.include_posts(social_enabled: @group.enterprise.enable_social_media?)
@@ -34,7 +34,7 @@ class Groups::PostsController < ApplicationController
       with_segments
     else
       @count = 0
-      @posts = []
+      @posts = NewsFeedLink.none
     end
 
     @posts = @posts.include_posts(social_enabled: @group.enterprise.enable_social_media?)
