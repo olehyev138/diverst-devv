@@ -15,6 +15,8 @@ class Api::V1::FieldsController < DiverstController
         :type,
         :title,
         :options_text,
+        :min,
+        :max,
       )
   end
 end

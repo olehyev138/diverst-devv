@@ -160,6 +160,8 @@
   "diverst.containers.Field.form.button.cancel": "Cancel",
   "diverst.containers.Field.form.input.title": "Title",
   "diverst.containers.Field.form.input.options": "Options (one per line)",
+  "diverst.containers.Field.form.input.min": "Minimum",
+  "diverst.containers.Field.form.input.max": "Maximum",
   "diverst.containers.User.index.button.new":"Add new user",
   "diverst.containers.User.index.button.edit": "Edit",
   "diverst.containers.User.index.button.delete": "Delete",

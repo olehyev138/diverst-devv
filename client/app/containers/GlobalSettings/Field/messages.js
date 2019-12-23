@@ -45,4 +45,10 @@ export default defineMessages({
   options: {
     id: `${scope}.form.input.options`,
   },
+  min: {
+    id: `${scope}.form.input.min`,
+  },
+  max: {
+    id: `${scope}.form.input.max`,
+  },
 });
