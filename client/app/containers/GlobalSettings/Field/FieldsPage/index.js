@@ -82,6 +82,7 @@ export function FieldListPage(props) {
         handlePagination={handlePagination}
         isCommitting={props.isCommitting}
         commitSuccess={props.commitSuccess}
+        currentEnterprise={props.currentEnterprise}
       />
     </React.Fragment>
   );

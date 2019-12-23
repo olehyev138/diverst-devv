@@ -46,9 +46,10 @@ export function* getField(action) {
 
 export function* createField(action) {
   try {
-    const payload = { field: action.payload };
+    const { enterpriseId, ...rest } = action.payload;
+    const payload = { field: rest };
 
-    const response = yield call(api.fields.create.bind(api.fields), payload);
+    const response = yield call(api.enterprises.createFields.bind(api.enterprises), enterpriseId, payload);
 
     yield put(createFieldSuccess());
     yield put(showSnackbar({ message: 'Field created', options: { variant: 'success' } }));

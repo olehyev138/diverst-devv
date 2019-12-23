@@ -89,6 +89,7 @@ export function FieldList(props, context) {
       <Collapse in={form}>
         <FieldForm
           edit
+          currentEnterprise={props.currentEnterprise}
           field={field}
           fieldAction={props.updateFieldBegin}
           cancelAction={() => setForm(false)}
@@ -107,6 +108,7 @@ FieldList.propTypes = {
   deleteFieldBegin: PropTypes.func,
   isCommitting: PropTypes.bool,
   commitSuccess: PropTypes.bool,
+  currentEnterprise: PropTypes.object,
 };
 
 export default compose(

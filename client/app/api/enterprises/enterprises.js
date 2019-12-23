@@ -16,6 +16,9 @@ Object.assign(Enterprises, {
   },
   fields(id, payload) {
     return axios.get(appendQueryArgs(`${this.url}/${id}/fields`, payload));
+  },
+  createFields(id, payload) {
+    return axios.post(`${this.url}/${id}/create_field`, payload);
   }
 });
 

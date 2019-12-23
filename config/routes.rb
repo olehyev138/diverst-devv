@@ -40,6 +40,7 @@ Diverst::Application.routes.draw do
           post '/sso_login',    to: 'enterprises#sso_login'
           post '/sso_link',     to: 'enterprises#sso_link'
           get  '/fields',       to: 'enterprises#fields'
+          post '/create_field', to: 'enterprises#create_field'
         end
       end
       resources :expenses

@@ -179,6 +179,7 @@ export function FieldList(props, context) {
           <div className={enableFieldForm ? classes.fieldFormContainer : undefined}>
             {enableFieldForm && (
               <FieldForm
+                currentEnterprise={props.currentEnterprise}
                 field={FIELDS[fieldFormType].field}
                 fieldAction={FIELDS[fieldFormType].action}
                 cancelAction={hideFieldForm}
@@ -195,6 +196,7 @@ export function FieldList(props, context) {
           {props.fields && Object.values(props.fields).map((field, i) => {
             return (
               <Field
+                currentEnterprise={props.currentEnterprise}
                 updateFieldBegin={props.updateFieldBegin}
                 field={field}
                 key={field.id}
@@ -224,6 +226,7 @@ FieldList.propTypes = {
   handlePagination: PropTypes.func,
   isCommitting: PropTypes.bool,
   commitSuccess: PropTypes.bool,
+  currentEnterprise: PropTypes.object,
 };
 
 export default compose(
