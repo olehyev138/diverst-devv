@@ -30,4 +30,18 @@ module ContainsFieldData
   def fields_holder_id
     send("#{self.class.fields_holder_name}_id")
   end
+
+  def method_missing(method_name)
+    field_data = self.field_data
+                     .eager_load(:field)
+                     .where(
+                         'lower(fields.title) = ?',
+                         method_name.to_s.downcase.gsub('_', ' ')
+                     ).limit(1)
+    if field_data.present?
+      field_data[0].deserialized_data
+    else
+      super
+    end
+  end
 end
