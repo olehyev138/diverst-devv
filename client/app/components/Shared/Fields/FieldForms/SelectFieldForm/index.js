@@ -12,7 +12,7 @@ import dig from 'object-dig';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { Field, Formik, Form } from 'formik';
 import {
-  Button, Card, CardActions, CardContent, TextField, Divider
+  Button, Card, CardActions, CardContent, TextField, Divider, Box
 } from '@material-ui/core';
 
 
@@ -20,7 +20,7 @@ import messages from 'containers/GlobalSettings/Field/messages';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 
 /* Important constant for each field form - tells backend which field subclass to load */
-const FIELD_TYPE = 'DateField';
+const FIELD_TYPE = 'SelectField';
 
 /* eslint-disable object-curly-newline */
 export function TextFieldFormInner({ handleSubmit, handleChange, handleBlur, values, setFieldValue, setFieldTouched, ...props }) {
@@ -38,6 +38,18 @@ export function TextFieldFormInner({ handleSubmit, handleChange, handleBlur, val
             name={`title:${values.id}`}
             value={values.title}
             label={<DiverstFormattedMessage {...messages.title} />}
+          />
+          <Box mb={2} />
+          <Field
+            component={TextField}
+            onChange={value => setFieldValue('options_text', value.target.value)}
+            fullWidth
+            multiline
+            disabled={props.isCommitting}
+            id={`options_text:${values.id}`}
+            name={`options_text:${values.id}`}
+            value={values.options_text}
+            label={<DiverstFormattedMessage {...messages.options} />}
           />
         </CardContent>
         <Divider />
@@ -64,6 +76,7 @@ export function TextFieldFormInner({ handleSubmit, handleChange, handleBlur, val
 export function TextFieldForm(props) {
   const initialValues = {
     title: dig(props, 'field', 'title') || '',
+    options_text: dig(props, 'field', 'options_text') || '',
     id: dig(props, 'field', 'id') || '',
     type: FIELD_TYPE
   };

@@ -13,7 +13,8 @@ class Api::V1::FieldsController < DiverstController
       .require(:field)
       .permit(
         :type,
-        :title
+        :title,
+        :options_text,
       )
   end
 end

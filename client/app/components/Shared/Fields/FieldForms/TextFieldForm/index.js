@@ -32,6 +32,7 @@ export function TextFieldFormInner({ handleSubmit, handleChange, handleBlur, val
             component={TextField}
             onChange={value => setFieldValue('title', value.target.value)}
             fullWidth
+            required
             disabled={props.isCommitting}
             id={`title:${values.id}`}
             name={`title:${values.id}`}

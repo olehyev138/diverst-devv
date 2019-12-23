@@ -42,4 +42,7 @@ export default defineMessages({
   title: {
     id: `${scope}.form.input.title`,
   },
+  options: {
+    id: `${scope}.form.input.options`,
+  },
 });
