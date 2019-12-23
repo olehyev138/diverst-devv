@@ -64,14 +64,13 @@
     <div class="grid-item-a">
       List of Valid URLS (* can be replaced with anything)
     </div>
-    <% links.each do |name, provider| %>
+    <% links.each do |name, urls| %>
       <div class="dropdownclick">
         <button class="btn btn-sm btn-primary btn-block grid-item dropbtn" onclick="showContent(<%= "\"#{name}\"" %>)">
-          <%= inline_svg("icons/#{provider[:icon]}", class: "icon nav__icon") %>
           <%= name %>
         </button>
         <div id="<%= name %>" class="dropdownclick-content">
-          <% provider[:links].each do |url| %>
+          <% urls.each do |url| %>
             <strong>
               <%= url %>
             </strong>
