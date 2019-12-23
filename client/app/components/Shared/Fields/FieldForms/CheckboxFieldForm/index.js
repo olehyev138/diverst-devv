@@ -1,6 +1,6 @@
 /**
  *
- *  SelectField Form Component
+ *  CheckboxField Form Component
  *
  */
 
@@ -20,7 +20,7 @@ import messages from 'containers/GlobalSettings/Field/messages';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 
 /* Important constant for each field form - tells backend which field subclass to load */
-const FIELD_TYPE = 'SelectField';
+const FIELD_TYPE = 'CheckboxField';
 
 /* eslint-disable object-curly-newline */
 export function TextFieldFormInner({ handleSubmit, handleChange, handleBlur, values, setFieldValue, setFieldTouched, ...props }) {

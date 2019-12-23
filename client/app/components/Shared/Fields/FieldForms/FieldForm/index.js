@@ -14,6 +14,7 @@ import PropTypes from 'prop-types';
 import TextFieldForm from 'components/Shared/Fields/FieldForms/TextFieldForm';
 import DateFieldForm from 'components/Shared/Fields/FieldForms/DateFieldForm';
 import SelectFieldForm from 'components/Shared/Fields/FieldForms/SelectFieldForm';
+import CheckboxFieldForm from 'components/Shared/Fields/FieldForms/CheckboxFieldForm';
 
 const FieldForm = ({ field, ...props }) => {
   const renderField = (field) => {
@@ -24,6 +25,8 @@ const FieldForm = ({ field, ...props }) => {
         return (<DateFieldForm {...props} field={field} />);
       case 'SelectField':
         return (<SelectFieldForm {...props} field={field} />);
+      case 'CheckboxField':
+        return (<CheckboxFieldForm {...props} field={field} />);
       default:
         return (<p>{field.type}</p>);
     }
