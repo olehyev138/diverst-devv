@@ -30,11 +30,11 @@ export function TextFieldFormInner({ handleSubmit, handleChange, handleBlur, val
         <CardContent>
           <Field
             component={TextField}
-            onChange={handleChange}
+            onChange={value => setFieldValue('title', value.target.value)}
             fullWidth
             disabled={props.isCommitting}
-            id='title'
-            name='title'
+            id={`title:${values.id}`}
+            name={`title:${values.id}`}
             value={values.title}
             label={<DiverstFormattedMessage {...messages.title} />}
           />
@@ -42,7 +42,11 @@ export function TextFieldFormInner({ handleSubmit, handleChange, handleBlur, val
         <Divider />
         <CardActions>
           <DiverstSubmit isCommitting={props.isCommitting}>
-            <DiverstFormattedMessage {...messages.create} />
+            {
+              props.edit
+                ? (<DiverstFormattedMessage {...messages.update} />)
+                : (<DiverstFormattedMessage {...messages.create} />)
+            }
           </DiverstSubmit>
           <Button
             onClick={props.cancelAction}
@@ -91,6 +95,7 @@ TextFieldFormInner.propTypes = {
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
   isCommitting: PropTypes.bool,
+  edit: PropTypes.bool,
   links: PropTypes.shape({
   })
 };

@@ -22,6 +22,7 @@ import messages from 'containers/GlobalSettings/Field/messages';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
 import FieldForm from 'components/Shared/Fields/FieldForms/FieldForm';
+import Field from 'components/Shared/Fields/FieldIndexItem';
 
 import DiverstPagination from 'components/Shared/DiverstPagination';
 import DiverstLoader from 'components/Shared/DiverstLoader';
@@ -125,45 +126,11 @@ export function FieldList(props, context) {
           { /* eslint-disable-next-line arrow-body-style */ }
           {props.fields && Object.values(props.fields).map((field, i) => {
             return (
-              <Grid item key={field.id} className={classes.fieldListItem}>
-                <Card>
-                  <CardContent>
-                    <Button
-                      className={classes.fieldTitleButton}
-                      color='primary'
-                      onClick={() => {
-                        renderFieldForm(field, props.updateFieldBegin);
-                        window.scrollTo(0, 0);
-                      }}
-                    >
-                      <Typography variant='h5' component='h2' display='inline'>
-                        {field.title}
-                      </Typography>
-                    </Button>
-                  </CardContent>
-                  <CardActions>
-                    <Button
-                      color='primary'
-                      size='small'
-                      to='#'
-                      component={WrappedNavLink}
-                    >
-                      <DiverstFormattedMessage {...messages.edit} />
-                    </Button>
-                    <Button
-                      size='small'
-                      className={classes.errorButton}
-                      onClick={() => {
-                        /* eslint-disable-next-line no-alert, no-restricted-globals */
-                        if (confirm('Delete field?'))
-                          props.deleteFieldBegin(field.id);
-                      }}
-                    >
-                      <DiverstFormattedMessage {...messages.delete} />
-                    </Button>
-                  </CardActions>
-                </Card>
-              </Grid>
+              <Field
+                updateFieldBegin={props.updateFieldBegin}
+                field={field}
+                key={field.id}
+              />
             );
           })}
         </Grid>
