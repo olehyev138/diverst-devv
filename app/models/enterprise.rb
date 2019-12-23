@@ -19,7 +19,7 @@ class Enterprise < ApplicationRecord
   has_many :topics, inverse_of: :enterprise, dependent: :destroy
   has_many :segments, inverse_of: :enterprise, dependent: :destroy
   has_many :groups, inverse_of: :enterprise, dependent: :destroy
-  has_many :initiatives, through: :groupsF
+  has_many :initiatives, through: :groups
   has_many :folders, dependent: :destroy
   has_many :folder_shares, dependent: :destroy
   has_many :shared_folders, through: :folder_shares, source: 'folder'
