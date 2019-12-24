@@ -3,6 +3,9 @@ module ContainsFieldData
 
   included do
     before_validation :transfer_info_to_data
+    if Rails.env.development?
+      after_initialize :load_field_data
+    end
   end
 
   def info
@@ -31,34 +34,15 @@ module ContainsFieldData
     send("#{self.class.fields_holder_name}_id")
   end
 
-  def method_missing(method_name, *arg)
-    if method_name[-1] == '='
-      field_data = self.field_data
-                       .includes(:field)
-                       .references(:field)
-                       .where(
-                           'lower(fields.title) = ?',
-                           method_name[0...-1].to_s.downcase.gsub('_', ' ')
-                         ).limit(1)
-      if field_data.present?
-        pp arg[1]
-        field_data[0].data = arg[0].to_json
-        field_data[0].save!
-      else
-        super
+  def load_field_data
+    field_data.includes(:field).find_each do |fd|
+      singleton_class.send(:define_method, fd.field.title.gsub(' ', '_').downcase) do
+        fd.deserialized_data
       end
-    else
-      field_data = self.field_data
-                       .includes(:field)
-                       .references(:field)
-                       .where(
-                           'lower(fields.title) = ?',
-                           method_name.to_s.downcase.gsub('_', ' ')
-                         ).limit(1)
-      if field_data.present?
-        field_data[0].deserialized_data
-      else
-        super
+
+      singleton_class.send(:define_method, "#{fd.field.title.gsub(' ', '_').downcase}=") do |*args|
+        fd.data = args[0].to_json
+        fd.save!
       end
     end
   end
