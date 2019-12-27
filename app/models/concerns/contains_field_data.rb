@@ -4,7 +4,7 @@ module ContainsFieldData
   included do
     before_validation :transfer_info_to_data
     if Rails.env.development?
-      after_initialize :load_field_data
+      after_find :load_field_data
     end
   end
 

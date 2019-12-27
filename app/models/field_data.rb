@@ -1,4 +1,6 @@
 class FieldData < ApplicationRecord
+  include FieldData::Actions
+
   belongs_to :fieldable, polymorphic: true
   belongs_to :field
 

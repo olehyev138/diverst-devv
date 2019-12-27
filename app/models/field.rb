@@ -1,4 +1,6 @@
 class Field < ApplicationRecord
+  include Field::Actions
+
   belongs_to :enterprise
   belongs_to :group
   belongs_to :poll
