@@ -40,7 +40,7 @@ export function NumericFieldFormInner({ handleSubmit, handleChange, handleBlur, 
             label={<DiverstFormattedMessage {...messages.title} />}
           />
           <Box mb={2} />
-          <Grid container>
+          <Grid container spacing={2}>
             <Grid item xs={6} md={6}>
               <TextField
                 id={`min:${values.id}`}
