@@ -14,7 +14,7 @@ module BasePager
     def get_params(params)
       item_page = params[:page].present? ? params[:page].to_i : @page
       item_count = params[:count].present? ? params[:count].to_i : @count
-      offset = item_page * item_countk
+      offset = item_page * item_count
       orderBy = params[:orderBy].presence || @default_order_by
       order = params[:order].presence || @default_order
 
