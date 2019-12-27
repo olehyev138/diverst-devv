@@ -1,5 +1,6 @@
 class NewsLink < ApplicationRecord
   include PublicActivity::Common
+  include NewsLink::Actions
 
   belongs_to :group
   belongs_to :author, class_name: 'User'
