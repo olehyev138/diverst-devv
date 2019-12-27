@@ -47,6 +47,7 @@ module ContainsFieldData
 
   module ClassMethods
     def load_field_data
+      # rubocop:disable Rails/FindEach
       includes(:field_data, field_data: :field).each do |u|
         u.field_data.each do |fd|
           u.singleton_class.send(:define_method, fd.field.title.gsub(' ', '_').downcase) do
@@ -59,6 +60,7 @@ module ContainsFieldData
           end
         end
       end
+      # rubocop:enable Rails/FindEach
     end
   end
 end
