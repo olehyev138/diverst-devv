@@ -50,6 +50,7 @@ module User::Actions
 
     # get the news_feed_links
     base_nfls = NewsFeedLink
+                  .preload(NewsFeedLink.base_preloads)
                   .joins(:news_feed)
                   .left_joins(:news_feed_link_segments, :shared_news_feed_links)
                   .includes(:group_message, :news_link, :social_link)
