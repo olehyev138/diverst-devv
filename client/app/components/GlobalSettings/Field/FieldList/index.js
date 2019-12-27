@@ -198,6 +198,7 @@ export function FieldList(props, context) {
               <Field
                 currentEnterprise={props.currentEnterprise}
                 updateFieldBegin={props.updateFieldBegin}
+                deleteFieldBegin={props.deleteFieldBegin}
                 field={field}
                 key={field.id}
               />
