@@ -219,18 +219,15 @@ module User::Actions
           :user_groups,
           :user_role,
           :news_links,
-          {
-              field_data: [
+          :avatar_attachment,
+          field_data: [
                   :field,
                   { field: Field.base_preloads }
-              ]
-          },
-          {
-              enterprise: [
+              ],
+          enterprise: [
                   :theme,
                   :mobile_fields
               ]
-          }
       ]
     end
 

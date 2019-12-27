@@ -24,10 +24,6 @@ module BaseSearcher
       []
     end
 
-    def preload_attachments
-      []
-    end
-
     def set_query_scopes(params)
       if params[:query_scopes].presence
         case params[:query_scopes].class.name
@@ -93,7 +89,6 @@ module BaseSearcher
       # get the base includes/joins and base query
       includes = get_includes(params)
       preloads = get_preloads(params)
-      attachment_preloads = get_attachments(params)
       joins = get_joins
       query = get_base_query
 
@@ -127,7 +122,6 @@ module BaseSearcher
       if searchValue.present?
         @items
             .joins(joins)
-            .send_chain(attachment_preloads)
             .includes(includes)
             .preload(preloads)
             .send_chain(query_scopes)
@@ -139,7 +133,6 @@ module BaseSearcher
       else
         @items
             .joins(joins)
-            .send_chain(attachment_preloads)
             .includes(includes)
             .preload(preloads)
             .send_chain(query_scopes)
@@ -170,14 +163,6 @@ module BaseSearcher
     def get_preloads(params)
       if self.respond_to? :base_preloads
         self.base_preloads
-      else
-        []
-      end
-    end
-
-    def get_attachments(params)
-      if self.respond_to? :preload_attachments
-        self.preload_attachments.map { |field| "with_attached_#{field}" }
       else
         []
       end
