@@ -128,7 +128,7 @@ class Field < ApplicationRecord
   end
 
   def enterprise
-    return nil if field_definer == nil
+    return nil if field_definer_id == nil
     return association(:field_definer).reader if container_type_is_enterprise?
 
     association(:field_definer).reader.enterprise

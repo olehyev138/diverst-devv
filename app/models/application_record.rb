@@ -38,9 +38,9 @@ class ApplicationRecord < ActiveRecord::Base
       else
         items = self.limit(limit)
       end
-      items.each do |user|
-        p "Serializing object with id = #{user.id}"
-        arr << (serializer || ActiveModel::Serializer.serializer_for(user)).new(user).as_json
+      items.each do |item|
+        p "Serializing object with id = #{item.id}"
+        arr << (serializer || ActiveModel::Serializer.serializer_for(item)).new(item).as_json
       end
       Clipboard.copy arr.to_json
       nil
