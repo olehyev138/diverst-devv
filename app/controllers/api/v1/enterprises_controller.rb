@@ -46,7 +46,7 @@ class Api::V1::EnterprisesController < DiverstController
     item = klass.find(params[:id])
     base_authorize(item)
 
-    render status: 200, json: klass.pager_with_query(item.fields, params.permit!)
+    render status: 200, json: Field.index(self.diverst_request, params.except(:id).permit!)
   rescue => e
     raise BadRequestException.new(e.message)
   end
