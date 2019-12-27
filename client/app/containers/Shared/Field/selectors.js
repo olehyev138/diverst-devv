@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect/lib';
-import { initialState } from 'containers/GlobalSettings/Field/reducer';
+import { initialState } from 'containers/Shared/Field/reducer';
 
 const selectFieldsDomain = state => state.fields || initialState;
 

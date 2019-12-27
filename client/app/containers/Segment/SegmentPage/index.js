@@ -12,10 +12,10 @@ import reducer from 'containers/Segment/reducer';
 import groupSaga from 'containers/Group/saga';
 import groupReducer from 'containers/Group/reducer';
 import fieldsSaga from 'containers/GlobalSettings/Field/saga';
-import fieldReducer from 'containers/GlobalSettings/Field/reducer';
+import fieldReducer from 'containers/Shared/Field/reducer';
 
 import { getGroupsBegin } from 'containers/Group/actions';
-import { getFieldsBegin } from 'containers/GlobalSettings/Field/actions';
+import { getFieldsBegin } from 'containers/Shared/Field/actions';
 import {
   getSegmentBegin, createSegmentBegin, getSegmentMembersBegin,
   updateSegmentBegin, segmentUnmount
@@ -25,7 +25,7 @@ import { selectIsCommitting, selectSegmentWithRules, selectIsFormLoading } from 
 import { selectPaginatedSelectGroups } from 'containers/Group/selectors';
 import {
   selectPaginatedFields, selectPaginatedSelectFields
-} from 'containers/GlobalSettings/Field/selectors';
+} from 'containers/Shared/Field/selectors';
 
 import { Divider, Box } from '@material-ui/core';
 

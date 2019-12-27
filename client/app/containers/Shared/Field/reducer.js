@@ -12,7 +12,7 @@ import {
   CREATE_FIELD_BEGIN, CREATE_FIELD_SUCCESS, CREATE_FIELD_ERROR,
   UPDATE_FIELD_BEGIN, UPDATE_FIELD_SUCCESS, UPDATE_FIELD_ERROR,
   DELETE_FIELD_BEGIN, DELETE_FIELD_SUCCESS, DELETE_FIELD_ERROR,
-} from 'containers/GlobalSettings/Field/constants';
+} from 'containers/Shared/Field/constants';
 
 export const initialState = {
   isLoading: true,

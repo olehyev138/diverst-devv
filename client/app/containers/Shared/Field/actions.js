@@ -11,7 +11,7 @@ import {
   UPDATE_FIELD_BEGIN, UPDATE_FIELD_SUCCESS, UPDATE_FIELD_ERROR,
   DELETE_FIELD_BEGIN, DELETE_FIELD_SUCCESS, DELETE_FIELD_ERROR,
   FIELD_LIST_UNMOUNT, FIELD_FORM_UNMOUNT
-} from 'containers/GlobalSettings/Field/constants';
+} from 'containers/Shared/Field/constants';
 
 /* Field listing */
 

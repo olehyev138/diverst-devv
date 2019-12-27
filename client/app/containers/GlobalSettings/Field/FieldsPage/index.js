@@ -30,16 +30,16 @@ import {
   selectIsCommitting,
   selectCommitSuccess,
   selectHasChanged,
-} from 'containers/GlobalSettings/Field/selectors';
+} from 'containers/Shared/Field/selectors';
 import {
   getFieldsBegin, createFieldBegin, updateFieldBegin,
   fieldUnmount, deleteFieldBegin
-} from 'containers/GlobalSettings/Field/actions';
+} from 'containers/Shared/Field/actions';
 
-import reducer from 'containers/GlobalSettings/Field/reducer';
+import reducer from 'containers/Shared/Field/reducer';
 import saga from 'containers/GlobalSettings/Field/saga';
 
-import FieldList from 'components/GlobalSettings/Field/FieldList';
+import FieldList from 'components/Shared/Fields/FieldList';
 import { selectEnterprise } from 'containers/Shared/App/selectors';
 
 export function FieldListPage(props) {

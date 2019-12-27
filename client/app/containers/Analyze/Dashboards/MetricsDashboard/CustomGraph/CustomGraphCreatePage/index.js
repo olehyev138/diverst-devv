@@ -10,16 +10,16 @@ import { useInjectReducer } from 'utils/injectReducer';
 // reducers & sagas
 import reducer from 'containers/Analyze/Dashboards/MetricsDashboard/reducer';
 import saga from 'containers/Analyze/Dashboards/MetricsDashboard/saga';
-import fieldReducer from 'containers/GlobalSettings/Field/reducer';
+import fieldReducer from 'containers/Shared/Field/reducer';
 import fieldSaga from 'containers/GlobalSettings/Field/saga';
 
 // actions
 import { createCustomGraphBegin, customGraphUnmount } from '../actions';
-import { getFieldsBegin } from 'containers/GlobalSettings/Field/actions';
+import { getFieldsBegin } from 'containers/Shared/Field/actions';
 
 // selectors
 import { selectIsCommitting } from 'containers/Analyze/Dashboards/MetricsDashboard/selectors';
-import { selectPaginatedSelectFields } from 'containers/GlobalSettings/Field/selectors';
+import { selectPaginatedSelectFields } from 'containers/Shared/Field/selectors';
 
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';

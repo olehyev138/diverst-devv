@@ -16,7 +16,7 @@ import {
 } from '@material-ui/core';
 
 
-import messages from 'containers/GlobalSettings/Field/messages';
+import messages from 'containers/Shared/Field/messages';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 
 /* Important constant for each field form - tells backend which field subclass to load */
