@@ -17,7 +17,8 @@ module NewsFeedLink::Actions
           :views,
           :likes,
           group_message: GroupMessage.base_preloads,
-          news_link: NewsLink.base_preloads
+          news_link: NewsLink.base_preloads,
+          social_link: SocialLink.base_preloads
       ]
     end
   end
