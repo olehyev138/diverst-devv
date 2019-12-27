@@ -1,5 +1,5 @@
 class NewsLinkSerializer < ApplicationRecordSerializer
-  attributes :group, :author, :photos, :picture_location
+  attributes :author, :photos, :picture_location
   has_many :comments
 
   def picture_location
