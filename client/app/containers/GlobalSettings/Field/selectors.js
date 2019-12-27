@@ -63,8 +63,13 @@ const selectCommitSuccess = () => createSelector(
   fieldsState => fieldsState.commitSuccess
 );
 
+const selectHasChanged = () => createSelector(
+  selectFieldsDomain,
+  fieldsState => fieldsState.hasChanged
+);
+
 export {
   selectFieldsDomain, selectPaginatedFields, selectPaginatedSelectFields,
   selectFieldTotal, selectField, selectFormField, selectIsLoading, selectIsCommitting,
-  selectCommitSuccess
+  selectCommitSuccess, selectHasChanged
 };

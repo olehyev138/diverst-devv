@@ -14,7 +14,7 @@ import {
   createFieldSuccess, createFieldError,
   getFieldSuccess, getFieldError,
   updateFieldSuccess, updateFieldError,
-  deleteFieldError
+  deleteFieldError, deleteFieldSuccess
 } from 'containers/GlobalSettings/Field/actions';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -80,7 +80,7 @@ export function* deleteField(action) {
   try {
     yield call(api.fields.destroy.bind(api.fields), action.payload);
 
-    yield put(push(ROUTES.admin.system.globalSettings.fields.index.path()));
+    yield put(deleteFieldSuccess());
     yield put(showSnackbar({ message: 'Field deleted', options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteFieldError(err));

@@ -28,7 +28,8 @@ import {
   selectFieldTotal,
   selectIsLoading,
   selectIsCommitting,
-  selectCommitSuccess
+  selectCommitSuccess,
+  selectHasChanged,
 } from 'containers/GlobalSettings/Field/selectors';
 import {
   getFieldsBegin, createFieldBegin, updateFieldBegin,
@@ -62,6 +63,15 @@ export function FieldListPage(props) {
       props.fieldUnmount();
     };
   }, []);
+
+  useEffect(() => {
+    if (props.hasChanged)
+      props.getFieldsBegin(params);
+
+    return () => {
+      props.fieldUnmount();
+    };
+  }, [props.hasChanged]);
 
   const handlePagination = (payload) => {
     const newParams = { ...params, count: payload.count, page: payload.page };
@@ -99,6 +109,7 @@ FieldListPage.propTypes = {
   fieldUnmount: PropTypes.func.isRequired,
   isCommitting: PropTypes.bool,
   commitSuccess: PropTypes.bool,
+  hasChanged: PropTypes.bool,
   currentEnterprise: PropTypes.shape({
     id: PropTypes.number
   })
@@ -111,6 +122,7 @@ const mapStateToProps = createStructuredSelector({
   isCommitting: selectIsCommitting(),
   commitSuccess: selectCommitSuccess(),
   currentEnterprise: selectEnterprise(),
+  hasChanged: selectHasChanged(),
 });
 
 const mapDispatchToProps = {
