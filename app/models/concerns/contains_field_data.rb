@@ -3,9 +3,7 @@ module ContainsFieldData
 
   included do
     before_validation :transfer_info_to_data
-    if Rails.env.development?
-      after_find :load_field_data
-    end
+    extend ClassMethods
   end
 
   def info
@@ -43,6 +41,23 @@ module ContainsFieldData
       singleton_class.send(:define_method, "#{fd.field.title.gsub(' ', '_').downcase}=") do |*args|
         fd.data = args[0].to_json
         fd.save!
+      end
+    end
+  end
+
+  module ClassMethods
+    def load_field_data
+      includes(:field_data, field_data: :field).each do |u|
+        u.field_data.each do |fd|
+          u.singleton_class.send(:define_method, fd.field.title.gsub(' ', '_').downcase) do
+            fd.deserialized_data
+          end
+
+          u.singleton_class.send(:define_method, "#{fd.field.title.gsub(' ', '_').downcase}=") do |*args|
+            fd.data = args[0].to_json
+            fd.save!
+          end
+        end
       end
     end
   end
