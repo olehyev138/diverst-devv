@@ -59,7 +59,7 @@ export function FieldList(props, context) {
     <Grid item key={field.id} className={classes.fieldListItem}>
       <Card>
         <CardContent>
-          <Typography variant='h5' component='h2' display='inline'>
+          <Typography variant='h5' component='h2' display='inline' color='primary'>
             {field.title}
           </Typography>
         </CardContent>
