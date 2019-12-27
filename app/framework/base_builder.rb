@@ -10,8 +10,8 @@ module BaseBuilder
   end
 
   module ClassMethods
-    def index(diverst_request, params, search_method = :lookup)
-      pager(diverst_request, params, search_method)
+    def index(diverst_request, params, search_method = :lookup, base:)
+      pager(diverst_request, params, search_method, base: base)
     end
 
     def build(diverst_request, params)

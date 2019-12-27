@@ -40,13 +40,10 @@ class Api::V1::EnterprisesController < DiverstController
   end
 
   def fields
-    # Authorize with policy, only if policy exists
-    # TODO: Don't only authorize if policy exists as every model should have a policy.
-    # TODO: This is temporary to allow API calls to work properly without a policy during development.
     item = klass.find(params[:id])
     base_authorize(item)
 
-    render status: 200, json: Field.index(self.diverst_request, params.except(:id).permit!)
+    render status: 200, json: Field.index(self.diverst_request, params.except(:id).permit!, base: item.fields)
   rescue => e
     raise BadRequestException.new(e.message)
   end

@@ -14,14 +14,14 @@ module BasePager
     def get_params(params)
       item_page = params[:page].present? ? params[:page].to_i : @page
       item_count = params[:count].present? ? params[:count].to_i : @count
-      offset = item_page * item_count
+      offset = item_page * item_countk
       orderBy = params[:orderBy].presence || @default_order_by
       order = params[:order].presence || @default_order
 
       [item_page, item_count, offset, orderBy, order]
     end
 
-    def pager(diverst_request, params = {}, search_method = :lookup)
+    def pager(diverst_request, params = {}, search_method = :lookup, base:)
       return elasticsearch(diverst_request, params) if params[:elasticsearch]
 
       set_defaults
@@ -36,8 +36,8 @@ module BasePager
       search_method_obj = self.method(search_method)
 
       # search
-      total = search_method_obj.call(params, diverst_request).count
-      items = search_method_obj.call(params, diverst_request)
+      total = search_method_obj.call(params, diverst_request, base: base).count
+      items = search_method_obj.call(params, diverst_request, base: base)
                         .order("#{orderBy} #{order}")
                         .limit(item_count)
                         .offset(offset)
