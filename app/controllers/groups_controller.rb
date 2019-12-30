@@ -421,22 +421,23 @@ class GroupsController < ApplicationController
   end
 
   def without_segments
-    NewsFeed.all_links_without_segments(@group.news_feed.id, @group.enterprise)
-                        .includes(:news_link, :group_message, :social_link)
-                        .order(is_pinned: :desc, created_at: :desc)
-                        .limit(5)
+    @group.news_feed.all_links_without_segments
+        .approved
+        .active
+        .include_posts(social_enabled: @group.enterprise.enable_social_media?)
+        .order(is_pinned: :desc, created_at: :desc)
+        .limit(5)
   end
 
   def with_segments
     if GroupPostsPolicy.new(current_user, [@group]).view_latest_news?
-      segment_ids = current_user.segments.ids
-      if not segment_ids.empty?
-        NewsFeed.all_links(@group.news_feed.id, segment_ids, @group.enterprise)
-            .order(is_pinned: :desc, created_at: :desc)
-            .limit(5)
-      else
-        return without_segments
-      end
+      segment_ids = current_user.segment_ids
+      @group.news_feed.all_links(segment_ids)
+          .approved
+          .active
+          .include_posts(social_enabled: @group.enterprise.enable_social_media?)
+          .order(is_pinned: :desc, created_at: :desc)
+          .limit(5)
     else
       []
     end

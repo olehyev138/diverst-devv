@@ -26,14 +26,14 @@ RSpec.describe NewsFeed, type: :model do
                                                               news_link_id: news_link.id)
         }
         it 'returns news_feed_links' do
-          expect(described_class.all_links(group.news_feed.id, [segment].map(&:id), enterprise).count)
+          expect(group.news_feed.all_links([segment].map(&:id)).count)
           .to eq(2)
         end
       end
 
       context 'when segment are absent' do
         it 'returns news_feed_links' do
-          expect(described_class.all_links(group.news_feed.id, [], group.enterprise).count)
+          expect(group.news_feed.all_links_without_segments.count)
           .to eq(2)
         end
       end
@@ -41,17 +41,20 @@ RSpec.describe NewsFeed, type: :model do
 
     describe '.all_links_without_segments' do
       context 'when social media is enabled' do
-        before { enterprise.update(enable_social_media: true) }
+        before {
+          enterprise.update_column(:enable_social_media, true)
+          group.reload
+        }
 
         it 'returns all links without segments' do
-          expect(described_class.all_links_without_segments(group.news_feed.id, enterprise).count)
+          expect(group.news_feed.all_links_without_segments.count)
           .to eq(3)
         end
       end
 
       context 'when social media is disabled' do
         it 'returns all links without segments' do
-          expect(described_class.all_links_without_segments(group.news_feed.id, enterprise).count)
+          expect(group.news_feed.all_links_without_segments.count)
           .to eq(2)
         end
       end

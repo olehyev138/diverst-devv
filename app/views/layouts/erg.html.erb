@@ -57,11 +57,11 @@
         <% if GroupPostsPolicy.new(current_user, [@group]).view_latest_news? %>
           <% if GroupPolicy.new(current_user, @group).manage? || current_user.segment_ids.empty? %>
             <li>
-              <%= active_link_to "News Feed (#{NewsFeed.all_links_without_segments(@group.news_feed.id, @group.enterprise).count})", group_posts_path(@group) %>
+              <%= active_link_to "News Feed (#{@group.news_feed.all_links_without_segments.active.count})", group_posts_path(@group) %>
             </li>
           <% else %>
             <li>
-              <%= active_link_to "News Feed (#{NewsFeed.all_links(@group.news_feed.id, current_user.segment_ids, @group.enterprise).count})", group_posts_path(@group) %>
+              <%= active_link_to "News Feed (#{@group.news_feed.all_links(current_user.segment_ids).active.count})", group_posts_path(@group) %>
             </li>
           <% end %>
         <% end %>
