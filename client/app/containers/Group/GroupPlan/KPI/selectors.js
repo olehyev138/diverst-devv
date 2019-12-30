@@ -1,92 +1,50 @@
 import { createSelector } from 'reselect/lib';
 import { initialState } from './reducer';
 
-const selectKpiDomain = state => state.kpi || initialState;
+const selectUpdateDomain = state => state.updates || initialState;
 
 const selectPaginatedUpdates = () => createSelector(
-  selectKpiDomain,
+  selectUpdateDomain,
   kpiState => kpiState.updateList
 );
 
-const selectUpdatesTotal = () => createSelector(
-  selectKpiDomain,
+const selectUpdateTotal = () => createSelector(
+  selectUpdateDomain,
   kpiState => kpiState.updateListTotal
 );
 
 const selectUpdate = () => createSelector(
-  selectKpiDomain,
+  selectUpdateDomain,
   kpiState => kpiState.currentUpdate
 );
 
 const selectIsFetchingUpdates = () => createSelector(
-  selectKpiDomain,
+  selectUpdateDomain,
   kpiState => kpiState.isFetchingUpdates
 );
 
-const selectIsFetchingUpdate = () => createSelector(
-  selectKpiDomain,
+const selectIsFetchingKpi = () => createSelector(
+  selectUpdateDomain,
   kpiState => kpiState.isFetchingUpdate
 );
 
-const selectIsCommittingUpdate = () => createSelector(
-  selectKpiDomain,
-  kpiState => kpiState.isCommittingUpdate
+const selectIsCommitting = () => createSelector(
+  selectUpdateDomain,
+  kpiState => kpiState.isCommitting
 );
 
-const selectHasChangedUpdate = () => createSelector(
-  selectKpiDomain,
-  kpiState => kpiState.hasChangedUpdate
-);
-
-const selectPaginatedFields = () => createSelector(
-  selectKpiDomain,
-  kpiState => kpiState.fieldList
-);
-
-const selectFieldsTotal = () => createSelector(
-  selectKpiDomain,
-  kpiState => kpiState.fieldListTotal
-);
-
-const selectField = () => createSelector(
-  selectKpiDomain,
-  kpiState => kpiState.currentField
-);
-
-const selectIsFetchingFields = () => createSelector(
-  selectKpiDomain,
-  kpiState => kpiState.isFetchingFields
-);
-
-const selectIsFetchingField = () => createSelector(
-  selectKpiDomain,
-  kpiState => kpiState.isFetchingField
-);
-
-const selectIsCommittingField = () => createSelector(
-  selectKpiDomain,
-  kpiState => kpiState.isCommittingField
-);
-
-const selectHasChangedField = () => createSelector(
-  selectKpiDomain,
-  kpiState => kpiState.hasChangedField
+const selectHasChanged = () => createSelector(
+  selectUpdateDomain,
+  kpiState => kpiState.hasChanged
 );
 
 export {
-  selectKpiDomain,
+  selectUpdateDomain,
   selectPaginatedUpdates,
-  selectUpdatesTotal,
+  selectUpdateTotal,
   selectUpdate,
   selectIsFetchingUpdates,
-  selectIsFetchingUpdate,
-  selectIsCommittingUpdate,
-  selectHasChangedUpdate,
-  selectPaginatedFields,
-  selectFieldsTotal,
-  selectField,
-  selectIsFetchingFields,
-  selectIsFetchingField,
-  selectIsCommittingField,
-  selectHasChangedField,
+  selectIsFetchingKpi,
+  selectIsCommitting,
+  selectHasChanged,
 };

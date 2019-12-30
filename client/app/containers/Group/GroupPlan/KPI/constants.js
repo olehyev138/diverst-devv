@@ -24,24 +24,4 @@ export const DELETE_UPDATE_BEGIN = 'app/Group/GroupPlan/KPI/DELETE_UPDATE_BEGIN'
 export const DELETE_UPDATE_SUCCESS = 'app/Group/GroupPlan/KPI/DELETE_UPDATE_SUCCESS';
 export const DELETE_UPDATE_ERROR = 'app/Group/GroupPlan/KPI/DELETE_UPDATE_ERROR';
 
-export const GET_FIELD_BEGIN = 'app/Group/GroupPlan/KPI/GET_FIELD_BEGIN';
-export const GET_FIELD_SUCCESS = 'app/Group/GroupPlan/KPI/GET_FIELD_SUCCESS';
-export const GET_FIELD_ERROR = 'app/Group/GroupPlan/KPI/GET_FIELD_ERROR';
-
-export const GET_FIELDS_BEGIN = 'app/Group/GroupPlan/KPI/GET_FIELDS_BEGIN';
-export const GET_FIELDS_SUCCESS = 'app/Group/GroupPlan/KPI/GET_FIELDS_SUCCESS';
-export const GET_FIELDS_ERROR = 'app/Group/GroupPlan/KPI/GET_FIELDS_ERROR';
-
-export const CREATE_FIELD_BEGIN = 'app/Group/GroupPlan/KPI/CREATE_FIELD_BEGIN';
-export const CREATE_FIELD_SUCCESS = 'app/Group/GroupPlan/KPI/CREATE_FIELD_SUCCESS';
-export const CREATE_FIELD_ERROR = 'app/Group/GroupPlan/KPI/CREATE_FIELD_ERROR';
-
-export const UPDATE_FIELD_BEGIN = 'app/Group/GroupPlan/KPI/FIELD_FIELD_BEGIN';
-export const UPDATE_FIELD_SUCCESS = 'app/Group/GroupPlan/KPI/FIELD_FIELD_SUCCESS';
-export const UPDATE_FIELD_ERROR = 'app/Group/GroupPlan/KPI/FIELD_FIELD_ERROR';
-
-export const DELETE_FIELD_BEGIN = 'app/Group/GroupPlan/KPI/DELETE_FIELD_BEGIN';
-export const DELETE_FIELD_SUCCESS = 'app/Group/GroupPlan/KPI/DELETE_FIELD_SUCCESS';
-export const DELETE_FIELD_ERROR = 'app/Group/GroupPlan/KPI/DELETE_FIELD_ERROR';
-
 export const FIELDS_UNMOUNT = 'app/Group/GroupPlan/KPI/FIELDS_UNMOUNT';
