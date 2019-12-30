@@ -21,7 +21,7 @@ import {
   DELETE_UPDATE_BEGIN,
   DELETE_UPDATE_SUCCESS,
   DELETE_UPDATE_ERROR,
-  FIELDS_UNMOUNT,
+  UPDATES_UNMOUNT,
 } from './constants';
 
 export const initialState = {
@@ -87,7 +87,7 @@ function kpiReducer(state = initialState, action) {
         draft.isCommitting = false;
         break;
 
-      case FIELDS_UNMOUNT:
+      case UPDATES_UNMOUNT:
         return initialState;
     }
   });

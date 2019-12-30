@@ -24,4 +24,4 @@ export const DELETE_UPDATE_BEGIN = 'app/Group/GroupPlan/KPI/DELETE_UPDATE_BEGIN'
 export const DELETE_UPDATE_SUCCESS = 'app/Group/GroupPlan/KPI/DELETE_UPDATE_SUCCESS';
 export const DELETE_UPDATE_ERROR = 'app/Group/GroupPlan/KPI/DELETE_UPDATE_ERROR';
 
-export const FIELDS_UNMOUNT = 'app/Group/GroupPlan/KPI/FIELDS_UNMOUNT';
+export const UPDATES_UNMOUNT = 'app/Group/GroupPlan/KPI/UPDATES_UNMOUNT';

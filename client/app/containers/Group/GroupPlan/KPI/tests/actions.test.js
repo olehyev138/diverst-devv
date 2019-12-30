@@ -14,7 +14,7 @@ import {
   DELETE_UPDATE_BEGIN,
   DELETE_UPDATE_SUCCESS,
   DELETE_UPDATE_ERROR,
-  FIELDS_UNMOUNT,
+  UPDATES_UNMOUNT,
 } from '../constants';
 
 import {
@@ -33,7 +33,7 @@ import {
   deleteUpdateBegin,
   deleteUpdateSuccess,
   deleteUpdateError,
-  fieldsUnmount,
+  updatesUnmount,
 } from '../actions';
 
 describe('kpi actions', () => {
@@ -213,13 +213,13 @@ describe('kpi actions', () => {
   });
 
   describe('State cleaning actions', () => {
-    describe('fieldsUnmount', () => {
-      it('has a type of FIELDS_UNMOUNT', () => {
+    describe('updatesUnmount', () => {
+      it('has a type of UPDATES_UNMOUNT', () => {
         const expected = {
-          type: FIELDS_UNMOUNT,
+          type: UPDATES_UNMOUNT,
         };
 
-        expect(fieldsUnmount()).toEqual(expected);
+        expect(updatesUnmount()).toEqual(expected);
       });
     });
   });

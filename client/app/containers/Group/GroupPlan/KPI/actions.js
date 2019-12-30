@@ -20,7 +20,7 @@ import {
   DELETE_UPDATE_BEGIN,
   DELETE_UPDATE_SUCCESS,
   DELETE_UPDATE_ERROR,
-  FIELDS_UNMOUNT,
+  UPDATES_UNMOUNT,
 } from './constants';
 
 export function getUpdateBegin(payload) {
@@ -128,9 +128,9 @@ export function deleteUpdateError(error) {
   };
 }
 
-export function fieldsUnmount(payload) {
+export function updatesUnmount(payload) {
   return {
-    type: FIELDS_UNMOUNT,
+    type: UPDATES_UNMOUNT,
     payload,
   };
 }
