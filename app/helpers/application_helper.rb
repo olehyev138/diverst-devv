@@ -1,4 +1,7 @@
 module ApplicationHelper
+  class MissingKeyError < StandardError
+  end
+
   def linkedin_logo_for_connected_users(user)
     inline_svg('icons/linkedin', size: '17px*17px') if user.linkedin_profile_url.present?
   end

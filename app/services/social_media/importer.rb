@@ -3,13 +3,19 @@ require 'embedly'
 require 'json'
 
 class SocialMedia::Importer
+  include ApplicationHelper
+
   MEDIA_MAX_WIDTH = 380
 
   SMALL_MEDIA_OPTIONS = {
     maxwidth: MEDIA_MAX_WIDTH
   }
 
-  @@embedly_api = Embedly::API.new  :key => 'a29be9ee0d72434cb68eb64bddb36ac1',
+  if ENV['EMBEDLY_KEY'].blank?
+    e = ApplicationHelper::MissingKeyError.new 'EMBEDLY_KEY'
+    Rollbar.warn(e)
+  end
+  @@embedly_api = Embedly::API.new  :key => ENV['EMBEDLY_KEY'],
                                     :user_agent => 'Mozilla/5.0 (compatible; mytestapp/1.0; my@email.com)'
 
   def self.url_to_embed(url, small: false)
