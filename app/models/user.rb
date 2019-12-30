@@ -1,6 +1,7 @@
 class User < ApplicationRecord
   @@fields_holder_name = 'enterprise'
   @@field_association_name = 'fields'
+  mattr_reader :field_association_name, :fields_holder_name
 
   has_secure_password
   include PublicActivity::Common
@@ -163,14 +164,6 @@ class User < ApplicationRecord
   scope :accepting_mentee_requests, -> { where(accepting_mentee_requests: true) }
 
   accepts_nested_attributes_for :availabilities, allow_destroy: true
-
-  def self.fields_holder_name
-    @@fields_holder_name
-  end
-
-  def self.field_association_name
-    @@field_association_name
-  end
 
   # Format users field data for a ES index
   # Returns { <field_data.id> => <field_data.data } }

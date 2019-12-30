@@ -3,7 +3,7 @@ class Poll < ApplicationRecord
   include DefinesFields
 
   @@field_users = [:responses]
-  mattr_accessor :field_users
+  mattr_reader :field_users
 
   enum status: [:published, :draft]
 

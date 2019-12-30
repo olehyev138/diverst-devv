@@ -1,6 +1,7 @@
 class PollResponse < ApplicationRecord
   @@fields_holder_name = 'poll'
   @@field_association_name = 'fields'
+  mattr_reader :field_association_name, :fields_holder_name
 
   include PollResponse::Actions
   include ContainsFieldData
@@ -14,14 +15,6 @@ class PollResponse < ApplicationRecord
   validates_presence_of :poll
   validates_presence_of :user
   validates_length_of   :data, maximum: 65535
-
-  def self.fields_holder_name
-    @@fields_holder_name
-  end
-
-  def self.field_association_name
-    @@field_association_name
-  end
 
   def group
     poll.try(:initiative).try(:group)

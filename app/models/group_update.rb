@@ -1,6 +1,7 @@
 class GroupUpdate < ApplicationRecord
   @@fields_holder_name = 'group'
   @@field_association_name = 'fields'
+  mattr_reader :field_association_name, :fields_holder_name
 
   include PublicActivity::Common
   include ContainsFieldData
@@ -11,15 +12,6 @@ class GroupUpdate < ApplicationRecord
 
   validates_length_of :comments, maximum: 65535
   validates_length_of :data, maximum: 65535
-  validates :created_at, presence: true# , :on => :update
-
-  def self.fields_holder_name
-    @@fields_holder_name
-  end
-
-  def self.field_association_name
-    @@field_association_name
-  end
 
   # Returns the delta with another update relative to this other update for a particular field (+23%, -12%, etc.)
   def variance_with(other_update:, field:)

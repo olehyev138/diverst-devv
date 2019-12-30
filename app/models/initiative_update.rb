@@ -1,6 +1,7 @@
 class InitiativeUpdate < ApplicationRecord
   @@fields_holder_name = 'initiative'
   @@field_association_name = 'fields'
+  mattr_reader :field_association_name, :fields_holder_name
 
   include ContainsFieldData
 
@@ -12,14 +13,6 @@ class InitiativeUpdate < ApplicationRecord
   validates_length_of :data, maximum: 65535
   def reported_for_date
     report_date || created_at
-  end
-
-  def self.fields_holder_name
-    @@fields_holder_name
-  end
-
-  def self.field_association_name
-    @@field_association_name
   end
 
   # Returns the delta with another update relative to this other update for a particular field (+23%, -12%, etc.)

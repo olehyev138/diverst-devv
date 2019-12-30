@@ -1,6 +1,7 @@
 class UserGroup < ApplicationRecord
   @@fields_holder_name = 'group'
   @@field_association_name = 'survey_fields'
+  mattr_reader :field_association_name, :fields_holder_name
 
   include ContainsFieldData
   include UserGroup::Actions
@@ -91,14 +92,6 @@ class UserGroup < ApplicationRecord
         'created_at' => self.user.created_at.beginning_of_hour,
       }
     })
-  end
-
-  def self.fields_holder_name
-    @@fields_holder_name
-  end
-
-  def self.field_association_name
-    @@field_association_name
   end
 
   # For use by ES indexing - method has to be defined in same class

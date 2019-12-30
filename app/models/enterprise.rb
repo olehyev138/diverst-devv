@@ -9,7 +9,7 @@ class Enterprise < ApplicationRecord
   extend Enumerize
 
   @@field_users = [:users]
-  mattr_accessor :field_users
+  mattr_reader :field_users
 
   enumerize :unit_of_expiry_age, default: :months, in: [
     :weeks,
