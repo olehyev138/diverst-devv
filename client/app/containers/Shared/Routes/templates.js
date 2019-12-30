@@ -16,7 +16,6 @@ import EmailLayout from 'containers/Layouts/GlobalSettingsLayout/EmailLayout/Loa
 /* Session */
 import LoginPage from 'containers/Session/LoginPage/Loadable';
 
-
 /* User */
 import HomePage from 'containers/User/HomePage/Loadable';
 import UserGroupListPage from 'containers/Group/UserGroupListPage/Loadable';
@@ -106,6 +105,7 @@ import OutcomeEditPage from 'containers/Group/Outcome/OutcomeEditPage/Loadable';
 /* Group - Plan - KPI */
 import GroupPlanKpiPage from 'containers/Group/GroupPlan/KPI/KpiPage/Loadable';
 import GroupPlanFieldsPage from 'containers/Group/GroupPlan/KPI/FieldsPage/Loadable';
+import GroupPlanUpdatesPage from 'containers/Group/GroupPlan/KPI/UpdatesPage/Loadable';
 
 /* Group - Members */
 import GroupMemberListPage from 'containers/Group/GroupMembers/GroupMemberListPage/Loadable';
@@ -171,6 +171,7 @@ export {
   OutcomeEditPage,
   GroupPlanKpiPage,
   GroupPlanFieldsPage,
+  GroupPlanUpdatesPage,
   GroupMemberListPage,
   GroupMemberCreatePage,
   NotFoundPage,
