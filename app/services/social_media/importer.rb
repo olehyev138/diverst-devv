@@ -99,7 +99,6 @@ class SocialMedia::Importer
         },
         Tumblr: { links: [ 'https://*.tumblr.com/post/*' ], icon: 'tumblr_icon.svg' },
         Vimeo: { links: [ 'https://*.vimeo.com/*' ], icon: 'vimeo_icon.svg' },
-        Imgur: { links: [ 'https://*.imgur.com/gallery/*' ], icon: 'imgur_icon.svg' },
         SoundCloud: { links: [ 'https://*.soundcloud.com/*' ], icon: 'soundcloud_icon.svg' },
     }
   end
