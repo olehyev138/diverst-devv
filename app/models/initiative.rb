@@ -1,8 +1,12 @@
 class Initiative < ApplicationRecord
   include PublicActivity::Common
   include Initiative::Actions
+  include DefinesFields
 
-  attr_accessor :associated_budget_id, :skip_allocate_budget_funds, :from, :to
+  @@field_users = [:initiative_updates]
+  mattr_accessor :field_users
+
+  attr_accessor :associated_budget_id, :skip_allocate_budget_funds, :from, :to,
 
   belongs_to :pillar
   belongs_to :owner, class_name: 'User'

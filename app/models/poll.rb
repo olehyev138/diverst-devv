@@ -1,5 +1,9 @@
 class Poll < ApplicationRecord
   include PublicActivity::Common
+  include DefinesFields
+
+  @@field_users = [:responses]
+  mattr_accessor :field_users
 
   enum status: [:published, :draft]
 

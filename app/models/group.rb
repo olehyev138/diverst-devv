@@ -2,8 +2,12 @@ class Group < ApplicationRecord
   include PublicActivity::Common
   include CustomTextHelpers
   include Group::Actions
+  include DefinesFields
 
   extend Enumerize
+
+  @@field_users = [:user_groups, :group_updates]
+  mattr_accessor :field_users
 
   enumerize :layout, default: :layout_0, in: [
     :layout_0,

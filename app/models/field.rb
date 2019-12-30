@@ -7,7 +7,7 @@ class Field < ApplicationRecord
   belongs_to :initiative
   belongs_to :field_definer, polymorphic: true
 
-  has_many :field_data, class_name: 'FieldData'
+  has_many :field_data, class_name: 'FieldData', dependent: :destroy
 
   has_many :yammer_field_mappings, foreign_key: :diverst_field_id, dependent: :delete_all
 
@@ -21,6 +21,8 @@ class Field < ApplicationRecord
   validates_inclusion_of :type, in: ['SelectField', 'TextField', 'SegmentsField', 'NumericField', 'GroupsField', 'CheckboxField', 'DateField']
   validates :title, uniqueness: { scope: [:field_definer_id, :field_definer_type] },
                     unless: Proc.new { |object| (object.type == 'SegmentsField' || object.type == 'GroupsField') }, if: :container_type_is_enterprise?
+
+  after_create -> { UpdateMissingFieldDataJob.perform_later(id) }
 
   # Operators
   #  - equals_any_of:

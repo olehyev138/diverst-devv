@@ -4,8 +4,12 @@ class Enterprise < ApplicationRecord
   include Enterprise::Actions
   include TimeZoneValidation
   include CustomTextHelpers
+  include DefinesFields
 
   extend Enumerize
+
+  @@field_users = [:users]
+  mattr_accessor :field_users
 
   enumerize :unit_of_expiry_age, default: :months, in: [
     :weeks,
