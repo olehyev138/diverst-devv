@@ -6,6 +6,44 @@ class Api::V1::GroupsController < DiverstController
     super
   end
 
+  def fields
+    item = klass.find(params[:id])
+    base_authorize(item)
+
+    render status: 200, json: Field.index(self.diverst_request, params.except(:id).permit!, base: item.fields)
+  rescue => e
+    raise BadRequestException.new(e.message)
+  end
+
+  def create_field
+    params[:field] = field_payload
+    base_authorize(klass)
+    item = klass.find(params[:id])
+    new_field = Field.build(self.diverst_request, params)
+    item.fields << new_field
+
+    render status: 201, json: new_field
+  rescue => e
+    case e
+    when InvalidInputException
+      raise
+    else
+      raise BadRequestException.new(e.message)
+    end
+  end
+
+  def field_payload
+    params
+        .require(:field)
+        .permit(
+            :type,
+            :title,
+            :options_text,
+            :min,
+            :max,
+            )
+  end
+
   def payload
     params
     .require(klass.symbol)

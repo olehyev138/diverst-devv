@@ -59,7 +59,12 @@ Diverst::Application.routes.draw do
       resources :folder_shares
       resources :frequency_periods
       resources :graphs
-      resources :groups
+      resources :groups do
+        member do
+          get  '/fields',       to: 'groups#fields'
+          post '/create_field', to: 'groups#create_field'
+        end
+      end
       resources :group_categories
       resources :group_category_types
       resources :group_leaders
