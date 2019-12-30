@@ -70,6 +70,8 @@ gem 'jbuilder', '~> 2.6'
 gem 'public_activity', '~> 1.5'
 gem 'rollbar', '~> 2.14.1'
 gem 'ruby-oembed', '~> 0.12', git: 'https://github.com/TeamDiverst/ruby-oembed.git'
+gem 'embedly', '~> 1.9.1'
+gem 'querystring'
 gem 'julia_builder', '~> 0.2.0'
 gem 'date_validator', '~> 0.9.0'
 gem 'thor', '0.20.0'# Expected string default value for '--decorator'; got true (boolean) - setting version removes this message
