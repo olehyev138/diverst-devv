@@ -37,7 +37,7 @@ export function* getUpdate(action) {
 
 export function* getUpdates(action) {
   try {
-    const response = { data: 'API CALL' };
+    const response = yield call(api.groupUpdates.all.bind(api.groupUpdates), action.payload);
 
     yield put(getUpdatesSuccess(response.data.page));
   } catch (err) {
