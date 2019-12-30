@@ -86,7 +86,7 @@ export function CheckboxFieldForm(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        props.fieldAction({ ...values, enterpriseId: props.currentEnterprise.id });
+        props.fieldAction(values);
       }}
     >
       {formikProps => <CheckboxFieldFormInner {...props} {...formikProps} />}

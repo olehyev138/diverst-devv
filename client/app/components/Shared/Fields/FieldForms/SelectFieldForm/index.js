@@ -86,7 +86,7 @@ export function SelectFormForm(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        props.fieldAction({ ...values, enterpriseId: props.currentEnterprise.id });
+        props.fieldAction(values);
       }}
     >
       {formikProps => <SelectFormFormInner {...props} {...formikProps} />}

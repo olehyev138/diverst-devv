@@ -73,7 +73,7 @@ export function DareFieldForm(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        props.fieldAction({ ...values, enterpriseId: props.currentEnterprise.id });
+        props.fieldAction(values);
       }}
     >
       {formikProps => <DareFieldFormInner {...props} {...formikProps} />}

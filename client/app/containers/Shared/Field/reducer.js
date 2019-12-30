@@ -60,6 +60,7 @@ function fieldsReducer(state = initialState, action) {
       case CREATE_FIELD_SUCCESS:
         draft.isCommitting = false;
         draft.commitSuccess = true;
+        draft.hasChanged = true;
         break;
       case UPDATE_FIELD_SUCCESS:
       case DELETE_FIELD_SUCCESS:

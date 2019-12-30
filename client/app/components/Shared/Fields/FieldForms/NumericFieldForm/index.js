@@ -91,8 +91,8 @@ export function NumericFieldFormInner({ handleSubmit, handleChange, handleBlur, 
 export function NumericFieldForm(props) {
   const initialValues = {
     title: dig(props, 'field', 'title') || '',
-    min: dig(props, 'field', 'min') || '',
-    max: dig(props, 'field', 'max') || '',
+    min: typeof dig(props, 'field', 'min') === 'number' ? dig(props, 'field', 'min') : '',
+    max: typeof dig(props, 'field', 'max') === 'number' ? dig(props, 'field', 'max') : '',
     id: dig(props, 'field', 'id') || '',
     type: FIELD_TYPE
   };
@@ -102,7 +102,7 @@ export function NumericFieldForm(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        props.fieldAction({ ...values, enterpriseId: props.currentEnterprise.id });
+        props.fieldAction(values);
       }}
     >
       {formikProps => <NumericFieldFormInner {...props} {...formikProps} />}
