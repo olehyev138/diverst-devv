@@ -123,7 +123,6 @@ class SocialMedia::Importer
     OEmbed::Providers.register_all
     OEmbed::Providers.register_fallback(
       OEmbed::ProviderDiscovery,
-      OEmbed::Providers::Noembed,
       OEmbed::Providers::Embedly,
     )
   end
