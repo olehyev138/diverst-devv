@@ -3,6 +3,7 @@ module ContainsFieldData
 
   included do
     before_validation :transfer_info_to_data
+    after_create :create_missing_field_data
     extend ClassMethods
   end
 
@@ -42,6 +43,16 @@ module ContainsFieldData
         fd.data = args[0].to_json
         fd.save!
       end
+    end
+  end
+
+  def create_missing_field_data
+    from_field_holder = fields
+    from_field_data = field_data.includes(:field).map(&:field)
+
+    missing = from_field_holder - from_field_data
+    missing.each do |fld|
+      field_data << FieldData.new(fieldable: self, field: fld)
     end
   end
 
