@@ -8,9 +8,9 @@
       <%= stylesheet_link_tag "application", media: 'all', 'data-turbolinks-track' => true %>
     <% end %>
 
-    <%= javascript_include_tag 'https://platform.twitter.com/widgets.js' %>
-    <%= javascript_include_tag 'http://www.instagram.com/embed.js' %>
-    <script async src="//cdn.embedly.com/widgets/platform.js" charset="UTF-8"></script>
+    <%= javascript_include_tag 'https://platform.twitter.com/widgets.js', 'data-turbolinks-track' => true %>
+    <%= javascript_include_tag 'http://www.instagram.com/embed.js', 'data-turbolinks-track' => true %>
+    <%= javascript_include_tag '//cdn.embedly.com/widgets/platform.js', 'data-turbolinks-track' => true %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
     <%= csrf_meta_tags %>
     <link rel="icon" type="image/png" href="/favicon.png">
