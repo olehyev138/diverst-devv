@@ -27,7 +27,7 @@ class GroupPolicy < ApplicationPolicy
     create?
   end
 
-  def create_fields?
+  def create_field?
     create?
   end
 

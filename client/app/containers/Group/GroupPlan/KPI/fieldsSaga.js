@@ -19,7 +19,6 @@ import {
 
 export function* getFields(action) {
   try {
-    console.log(action);
     const { groupId, ...rest } = action.payload;
     const response = yield call(api.groups.fields.bind(api.groups), groupId, rest);
     yield put(getFieldsSuccess(response.data.page));

@@ -39,6 +39,7 @@ class Api::V1::GroupsController < DiverstController
             :type,
             :title,
             :options_text,
+            :field_type,
             :min,
             :max,
             )
