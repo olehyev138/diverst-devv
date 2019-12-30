@@ -9,7 +9,7 @@ class Groups::CommentsController < ApplicationController
   layout 'erg'
 
   def create
-    authorize [@group], :destroy?, policy_class: InitiativeCommentPolicy
+    authorize [@group], :create?, policy_class: InitiativeCommentPolicy
 
     @comment = @event.comments.new(comment_params)
     @comment.user = current_user

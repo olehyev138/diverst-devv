@@ -1,5 +1,9 @@
 class InitiativeCommentPolicy < GroupBasePolicy
-  def destroy?
+  def create? 
     manage_comments?
+  end
+
+  def destroy?
+    create?
   end
 end
