@@ -6,7 +6,7 @@ class Initiative < ApplicationRecord
   @@field_users = [:initiative_updates]
   mattr_accessor :field_users
 
-  attr_accessor :associated_budget_id, :skip_allocate_budget_funds, :from, :to,
+  attr_accessor :associated_budget_id, :skip_allocate_budget_funds, :from, :to
 
   belongs_to :pillar
   belongs_to :owner, class_name: 'User'

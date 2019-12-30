@@ -6,4 +6,3 @@ class UpdateMissingFieldDataJob < ActiveJob::Base
     field.field_definer.create_missing_field_data
   end
 end
-
