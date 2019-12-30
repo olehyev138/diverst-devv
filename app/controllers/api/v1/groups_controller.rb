@@ -42,7 +42,7 @@ class Api::V1::GroupsController < DiverstController
             :field_type,
             :min,
             :max,
-            )
+          )
   end
 
   def payload
