@@ -23,6 +23,14 @@ class GroupPolicy < ApplicationPolicy
     @policy_group.groups_create?
   end
 
+  def fields?
+    create?
+  end
+
+  def create_fields?
+    create?
+  end
+
   def update_all_sub_groups?
     create?
   end

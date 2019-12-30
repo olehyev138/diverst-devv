@@ -1,74 +1,138 @@
-import React, { memo, useContext, useEffect } from 'react';
+/**
+ *
+ * FieldsPage
+ *
+ *  - lists all enterprise custom fields
+ *  - renders forms for creating & editing custom fields
+ *
+ *  - function:
+ *    - get fields from server
+ *    - on edit - render respective form with field data
+ *    - on new - render respective empty form
+ *    - on save - create/update field
+ */
+
+import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
+import dig from 'object-dig';
+
+import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
 
-import KPILayout from 'containers/Layouts/GroupPlanLayout/KPILayout';
-import {
-  getFieldsBegin,
-  fieldsUnmount
-} from '../actions';
+import { useInjectSaga } from 'utils/injectSaga';
+import { useInjectReducer } from 'utils/injectReducer';
+
 import {
   selectPaginatedFields,
-  selectFieldsTotal,
-  selectHasChangedField,
-  selectIsFetchingFields,
-  selectIsCommittingField,
-} from '../selectors';
+  selectFieldTotal,
+  selectIsLoading,
+  selectIsCommitting,
+  selectCommitSuccess,
+  selectHasChanged,
+} from 'containers/Shared/Field/selectors';
+import {
+  getFieldsBegin, createFieldBegin, updateFieldBegin,
+  fieldUnmount, deleteFieldBegin
+} from 'containers/Shared/Field/actions';
 
-import Kpi from 'components/Group/GroupPlan/KpiMetrics';
-import RouteService from 'utils/routeHelpers';
+import reducer from 'containers/Shared/Field/reducer';
+import saga from '../fieldsSaga';
 
-import { useInjectReducer } from 'utils/injectReducer';
-import reducer from '../reducer';
-import { useInjectSaga } from 'utils/injectSaga';
-import saga from '../saga';
+import FieldList from 'components/Shared/Fields/FieldList';
+import { selectGroup } from 'containers/Group/selectors';
 
-export function KpiPage(props) {
-  useInjectReducer({ key: 'kpi', reducer });
-  useInjectSaga({ key: 'kpi', saga });
-  const rs = new RouteService(useContext);
-  const links = {};
+export function FieldListPage(props) {
+  useInjectReducer({ key: 'fields', reducer });
+  useInjectSaga({ key: 'fields', saga });
+
+  const [params, setParams] = useState(
+    {
+      count: 5,
+      page: 0,
+      order: 'asc',
+      orderBy: 'fields.id',
+      groupId: dig(props, 'currentGroup', 'id')
+    }
+  );
 
   useEffect(() => {
-    const groupId = rs.params('group_id');
-    props.getFieldsBegin({ group_id: groupId });
+    props.getFieldsBegin(params);
 
-    return () => props.fieldsUnmount();
+    return () => {
+      props.fieldUnmount();
+    };
   }, []);
 
+  useEffect(() => {
+    if (props.hasChanged)
+      props.getFieldsBegin(params);
+
+    return () => {
+      props.fieldUnmount();
+    };
+  }, [props.hasChanged]);
+
+  const handlePagination = (payload) => {
+    const newParams = { ...params, count: payload.count, page: payload.page };
+
+    props.getFieldsBegin(newParams);
+    setParams(newParams);
+  };
+
   return (
-    <Kpi />
+    <React.Fragment>
+      <FieldList
+        fields={props.fields}
+        fieldTotal={props.fieldTotal}
+        isLoading={props.isLoading}
+        createFieldBegin={props.createFieldBegin}
+        updateFieldBegin={props.updateFieldBegin}
+        deleteFieldBegin={props.deleteFieldBegin}
+        handlePagination={handlePagination}
+        isCommitting={props.isCommitting}
+        commitSuccess={props.commitSuccess}
+        currentGroup={props.currentGroup}
+
+        numberField
+      />
+    </React.Fragment>
   );
 }
 
-KpiPage.propTypes = {
-  currentGroup: PropTypes.shape({
-    id: PropTypes.number,
-  }),
-
-  getFieldsBegin: PropTypes.func,
-  fieldsUnmount: PropTypes.func,
-
-  fields: PropTypes.array,
-  fieldsTotal: PropTypes.number,
-  hasChanged: PropTypes.bool,
+FieldListPage.propTypes = {
+  getFieldsBegin: PropTypes.func.isRequired,
+  createFieldBegin: PropTypes.func.isRequired,
+  updateFieldBegin: PropTypes.func.isRequired,
+  fields: PropTypes.object,
+  fieldTotal: PropTypes.number,
   isLoading: PropTypes.bool,
+  deleteFieldBegin: PropTypes.func,
+  fieldUnmount: PropTypes.func.isRequired,
   isCommitting: PropTypes.bool,
+  commitSuccess: PropTypes.bool,
+  hasChanged: PropTypes.bool,
+  currentGroup: PropTypes.shape({
+    id: PropTypes.number
+  })
 };
 
 const mapStateToProps = createStructuredSelector({
   fields: selectPaginatedFields(),
-  fieldsTotal: selectFieldsTotal(),
-  hasChanged: selectHasChangedField(),
-  isLoading: selectIsFetchingFields(),
-  isCommitting: selectIsCommittingField(),
+  fieldTotal: selectFieldTotal(),
+  isLoading: selectIsLoading(),
+  isCommitting: selectIsCommitting(),
+  commitSuccess: selectCommitSuccess(),
+  currentGroup: selectGroup(),
+  hasChanged: selectHasChanged(),
 });
 
 const mapDispatchToProps = {
   getFieldsBegin,
-  fieldsUnmount,
+  createFieldBegin,
+  updateFieldBegin,
+  deleteFieldBegin,
+  fieldUnmount
 };
 
 const withConnect = connect(
@@ -79,4 +143,4 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(KpiPage);
+)(FieldListPage);
