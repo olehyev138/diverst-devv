@@ -15,8 +15,7 @@ class SocialMedia::Importer
     e = ApplicationHelper::MissingKeyError.new 'EMBEDLY_KEY'
     Rollbar.warn(e)
   end
-  @@embedly_api = Embedly::API.new  :key => ENV['EMBEDLY_KEY'],
-                                    :user_agent => 'Mozilla/5.0 (compatible; mytestapp/1.0; my@email.com)'
+  @@embedly_api = Embedly::API.new  :key => ENV['EMBEDLY_KEY']
 
   def self.url_to_embed(url, small: false)
     set_up_providers
