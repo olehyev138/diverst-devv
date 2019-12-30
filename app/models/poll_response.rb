@@ -1,5 +1,7 @@
 class PollResponse < ApplicationRecord
   @@fields_holder_name = 'poll'
+  @@field_association_name = 'fields'
+
   include PollResponse::Actions
   include ContainsFieldData
 
@@ -15,6 +17,10 @@ class PollResponse < ApplicationRecord
 
   def self.fields_holder_name
     @@fields_holder_name
+  end
+
+  def self.field_association_name
+    @@field_association_name
   end
 
   def group

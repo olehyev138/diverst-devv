@@ -1,5 +1,7 @@
 class GroupUpdate < ApplicationRecord
   @@fields_holder_name = 'group'
+  @@field_association_name = 'fields'
+
   include PublicActivity::Common
   include ContainsFieldData
 
@@ -13,6 +15,10 @@ class GroupUpdate < ApplicationRecord
 
   def self.fields_holder_name
     @@fields_holder_name
+  end
+
+  def self.field_association_name
+    @@field_association_name
   end
 
   # Returns the delta with another update relative to this other update for a particular field (+23%, -12%, etc.)

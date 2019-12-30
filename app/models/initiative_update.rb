@@ -1,5 +1,7 @@
 class InitiativeUpdate < ApplicationRecord
   @@fields_holder_name = 'initiative'
+  @@field_association_name = 'fields'
+
   include ContainsFieldData
 
   belongs_to :owner, class_name: 'User'
@@ -14,6 +16,10 @@ class InitiativeUpdate < ApplicationRecord
 
   def self.fields_holder_name
     @@fields_holder_name
+  end
+
+  def self.field_association_name
+    @@field_association_name
   end
 
   # Returns the delta with another update relative to this other update for a particular field (+23%, -12%, etc.)

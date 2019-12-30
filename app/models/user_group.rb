@@ -1,5 +1,7 @@
 class UserGroup < ApplicationRecord
   @@fields_holder_name = 'group'
+  @@field_association_name = 'survey_fields'
+
   include ContainsFieldData
   include UserGroup::Actions
 
@@ -93,6 +95,10 @@ class UserGroup < ApplicationRecord
 
   def self.fields_holder_name
     @@fields_holder_name
+  end
+
+  def self.field_association_name
+    @@field_association_name
   end
 
   # For use by ES indexing - method has to be defined in same class

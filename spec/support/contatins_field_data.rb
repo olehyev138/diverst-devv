@@ -4,7 +4,9 @@ RSpec.shared_examples 'it Contains Field Data' do |*input|
   }
   it 'has a fields_holder_name' do
     expect(described_class.class_variable_get(:@@fields_holder_name)).to be_a(String)
+    expect(described_class.class_variable_get(:@@field_association_name)).to be_a(String)
     expect(described_class).to respond_to(:fields_holder_name)
+    expect(described_class).to respond_to(:field_association_name)
     expect(described_class.fields_holder_name).to be_a(String)
   end
 
@@ -24,7 +26,7 @@ RSpec.shared_examples 'it Contains Field Data' do |*input|
     end
 
     it 'fields_holder has fields' do
-      expect(child.fields_holder.fields).to all(be_a(Field))
+      expect(child.fields).to all(be_a(Field))
     end
   end
 end

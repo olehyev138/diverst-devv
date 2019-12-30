@@ -21,7 +21,7 @@ module ContainsFieldData
   end
 
   def fields
-    fields_holder.fields
+    fields_holder.send(self.class.field_association_name)
   end
 
   def fields_holder

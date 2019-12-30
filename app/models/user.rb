@@ -1,5 +1,6 @@
 class User < ApplicationRecord
   @@fields_holder_name = 'enterprise'
+  @@field_association_name = 'fields'
 
   has_secure_password
   include PublicActivity::Common
@@ -165,6 +166,10 @@ class User < ApplicationRecord
 
   def self.fields_holder_name
     @@fields_holder_name
+  end
+
+  def self.field_association_name
+    @@field_association_name
   end
 
   # Format users field data for a ES index
