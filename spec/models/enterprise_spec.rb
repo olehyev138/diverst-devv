@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Enterprise, type: :model do
+  it_behaves_like 'it Defines Fields'
+
   describe 'when validating' do
     let(:enterprise) { build(:enterprise) }
 

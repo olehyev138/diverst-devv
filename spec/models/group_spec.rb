@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Group, type: :model do
   include ActiveJob::TestHelper
+  it_behaves_like 'it Defines Fields'
 
   describe 'validations' do
     let(:group) { build(:group) }

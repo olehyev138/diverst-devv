@@ -3,7 +3,7 @@ class Initiative < ApplicationRecord
   include Initiative::Actions
   include DefinesFields
 
-  @@field_users = [:initiative_updates]
+  @@field_users = [:updates]
   mattr_reader :field_users
 
   attr_accessor :associated_budget_id, :skip_allocate_budget_funds, :from, :to

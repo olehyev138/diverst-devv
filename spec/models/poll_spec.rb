@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Poll, type: :model do
+  it_behaves_like 'it Defines Fields'
+
   describe 'when validating' do
     let(:poll) { build_stubbed(:poll) }
 

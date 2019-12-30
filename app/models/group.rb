@@ -6,7 +6,7 @@ class Group < ApplicationRecord
 
   extend Enumerize
 
-  @@field_users = [:user_groups, :group_updates]
+  @@field_users = [:user_groups, :updates]
   mattr_reader :field_users
 
   enumerize :layout, default: :layout_0, in: [

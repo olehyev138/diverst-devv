@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Initiative, type: :model do
   include ActiveJob::TestHelper
+  it_behaves_like 'it Defines Fields'
 
   describe 'when validating' do
     let(:initiative) { build(:initiative) }
