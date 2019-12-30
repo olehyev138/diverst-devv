@@ -93,6 +93,12 @@ export function FieldListPage(props) {
         isCommitting={props.isCommitting}
         commitSuccess={props.commitSuccess}
         currentEnterprise={props.currentEnterprise}
+
+        textField
+        selectField
+        checkboxField
+        dateField
+        numberField
       />
     </React.Fragment>
   );

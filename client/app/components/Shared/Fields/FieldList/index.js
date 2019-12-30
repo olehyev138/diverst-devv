@@ -112,64 +112,76 @@ export function FieldList(props, context) {
     setFieldFormType(undefined);
   };
 
+  const { textField, selectField, checkboxField, dateField, numberField } = props;
+
   return (
     <React.Fragment>
       <Grid container spacing={3} justify='flex-end'>
-        <Grid item>
-          <Button
-            variant='contained'
-            color='primary'
-            size='large'
-            onClick={() => renderFieldForm('text')}
-            startIcon={<AddIcon />}
-          >
-            <DiverstFormattedMessage {...messages.newTextField} />
-          </Button>
-        </Grid>
-        <Grid item>
-          <Button
-            variant='contained'
-            color='primary'
-            size='large'
-            onClick={() => renderFieldForm('select')}
-            startIcon={<AddIcon />}
-          >
-            <DiverstFormattedMessage {...messages.newSelectField} />
-          </Button>
-        </Grid>
-        <Grid item>
-          <Button
-            variant='contained'
-            color='primary'
-            size='large'
-            onClick={() => renderFieldForm('check')}
-            startIcon={<AddIcon />}
-          >
-            <DiverstFormattedMessage {...messages.newCheckBoxField} />
-          </Button>
-        </Grid>
-        <Grid item>
-          <Button
-            variant='contained'
-            color='primary'
-            size='large'
-            onClick={() => renderFieldForm('date')}
-            startIcon={<AddIcon />}
-          >
-            <DiverstFormattedMessage {...messages.newDateField} />
-          </Button>
-        </Grid>
-        <Grid item>
-          <Button
-            variant='contained'
-            color='primary'
-            size='large'
-            onClick={() => renderFieldForm('number')}
-            startIcon={<AddIcon />}
-          >
-            <DiverstFormattedMessage {...messages.newNumericField} />
-          </Button>
-        </Grid>
+        { textField && (
+          <Grid item>
+            <Button
+              variant='contained'
+              color='primary'
+              size='large'
+              onClick={() => renderFieldForm('text')}
+              startIcon={<AddIcon />}
+            >
+              <DiverstFormattedMessage {...messages.newTextField} />
+            </Button>
+          </Grid>
+        )}
+        { selectField && (
+          <Grid item>
+            <Button
+              variant='contained'
+              color='primary'
+              size='large'
+              onClick={() => renderFieldForm('select')}
+              startIcon={<AddIcon />}
+            >
+              <DiverstFormattedMessage {...messages.newSelectField} />
+            </Button>
+          </Grid>
+        )}
+        { checkboxField && (
+          <Grid item>
+            <Button
+              variant='contained'
+              color='primary'
+              size='large'
+              onClick={() => renderFieldForm('check')}
+              startIcon={<AddIcon />}
+            >
+              <DiverstFormattedMessage {...messages.newCheckBoxField} />
+            </Button>
+          </Grid>
+        )}
+        { dateField && (
+          <Grid item>
+            <Button
+              variant='contained'
+              color='primary'
+              size='large'
+              onClick={() => renderFieldForm('date')}
+              startIcon={<AddIcon />}
+            >
+              <DiverstFormattedMessage {...messages.newDateField} />
+            </Button>
+          </Grid>
+        )}
+        { numberField && (
+          <Grid item>
+            <Button
+              variant='contained'
+              color='primary'
+              size='large'
+              onClick={() => renderFieldForm('number')}
+              startIcon={<AddIcon />}
+            >
+              <DiverstFormattedMessage {...messages.newNumericField} />
+            </Button>
+          </Grid>
+        )}
         <Collapse
           className={classes.fieldFormCollapse}
           in={showFieldForm}
@@ -228,6 +240,12 @@ FieldList.propTypes = {
   isCommitting: PropTypes.bool,
   commitSuccess: PropTypes.bool,
   currentEnterprise: PropTypes.object,
+
+  textField: PropTypes.bool,
+  selectField: PropTypes.bool,
+  checkboxField: PropTypes.bool,
+  dateField: PropTypes.bool,
+  numberField: PropTypes.bool,
 };
 
 export default compose(
