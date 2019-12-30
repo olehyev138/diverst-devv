@@ -1,11 +1,21 @@
 require 'oembed'
+require 'embedly'
+require 'json'
 
 class SocialMedia::Importer
+  include ApplicationHelper
+
   MEDIA_MAX_WIDTH = 380
 
   SMALL_MEDIA_OPTIONS = {
     maxwidth: MEDIA_MAX_WIDTH
   }
+
+  if ENV['EMBEDLY_KEY'].blank?
+    e = ApplicationHelper::MissingKeyError.new 'EMBEDLY_KEY'
+    Rollbar.warn(e)
+  end
+  @@embedly_api = Embedly::API.new  :key => ENV['EMBEDLY_KEY']
 
   def self.url_to_embed(url, small: false)
     set_up_providers
@@ -20,13 +30,17 @@ class SocialMedia::Importer
       end
     end
 
-    case resource.type
-    when 'rich', 'video'
-      resource.html
-    when 'photo'
-      '<img src="#{resource.url}">'
+    if resource.is_a? String
+      resource
     else
-      resource&.html || url
+      case resource.type
+      when 'rich', 'video'
+        resource.html
+      when 'photo'
+        "<img src=\"#{resource.url}\">"
+      else
+        resource&.html || url
+      end
     end
   end
 
@@ -99,7 +113,6 @@ class SocialMedia::Importer
         },
         Tumblr: { links: [ 'https://*.tumblr.com/post/*' ], icon: 'tumblr_icon.svg' },
         Vimeo: { links: [ 'https://*.vimeo.com/*' ], icon: 'vimeo_icon.svg' },
-        Imgur: { links: [ 'https://*.imgur.com/gallery/*' ], icon: 'imgur_icon.svg' },
         SoundCloud: { links: [ 'https://*.soundcloud.com/*' ], icon: 'soundcloud_icon.svg' },
     }
   end
@@ -110,14 +123,25 @@ class SocialMedia::Importer
     OEmbed::Providers.register_all
     OEmbed::Providers.register_fallback(
       OEmbed::ProviderDiscovery,
-      OEmbed::Providers::Noembed
+      OEmbed::Providers::Embedly,
     )
   end
 
   def self.fetch_resource(url, options = {})
     url = url[0...-1] if url[-1] == '/'
-    resource = OEmbed::Providers.get(url, options)
-  rescue
-    nil
+    begin
+      resource = OEmbed::Providers.get(url, options)
+    rescue
+      options[:url] = url
+      obj = (@@embedly_api.extract options)[0]
+
+      if obj.dig(:error_message).present?
+        nil
+      else
+        "<a href=#{obj.url} class=\"embedly-card\">#{obj.title}</a>"
+      end
+    rescue
+      nil
+    end
   end
 end

@@ -241,6 +241,10 @@ GEM
     em-websocket (0.5.1)
       eventmachine (>= 0.12.9)
       http_parser.rb (~> 0.6.0)
+    embedly (1.9.1)
+      json
+      oauth
+      querystring
     enumerize (2.2.2)
       activesupport (>= 3.2)
     equalizer (0.0.11)
@@ -566,6 +570,7 @@ GEM
     notiffany (0.1.1)
       nenv (~> 0.1)
       shellany (~> 0.0)
+    oauth (0.5.4)
     oauth2 (1.4.1)
       faraday (>= 0.8, < 0.16.0)
       jwt (>= 1.0, < 3.0)
@@ -629,6 +634,7 @@ GEM
       activesupport (>= 3.0.0)
     pundit-matchers (1.6.0)
       rspec-rails (>= 3.0.0)
+    querystring (0.1.0)
     quiet_assets (1.1.0)
       railties (>= 3.1, < 5.0)
     rack (1.6.11)
@@ -930,6 +936,7 @@ DEPENDENCIES
   elasticsearch-extensions (~> 0.0.30)
   elasticsearch-model (~> 6.0.0)
   elasticsearch-rails (~> 6.0.0)
+  embedly (~> 1.9.1)
   enumerize (~> 2.0)
   factory_bot_rails (~> 4.8.0)
   faker (~> 1.6, >= 1.6.3)
@@ -975,6 +982,7 @@ DEPENDENCIES
   puma (~> 3.1)
   pundit (~> 2.0.0)
   pundit-matchers (~> 1.6.0)
+  querystring
   quiet_assets (~> 1.1.0)
   rack-livereload (~> 0.3.16)
   rack-timeout (~> 0.4.2)
