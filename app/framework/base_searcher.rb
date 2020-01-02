@@ -76,7 +76,7 @@ module BaseSearcher
       end
     end
 
-    def lookup(params = {}, diverst_request = nil, base: nil)
+    def lookup(params = {}, diverst_request = nil, base: self)
       # get the search value
       searchValue = params[:search]
 
@@ -110,7 +110,7 @@ module BaseSearcher
         raise NameError if policy_scope.parent != policy_name.constantize
 
         # Apply the associated policy scope for the model to filter based on authorization
-        @items = policy_scope.new(current_user, base || self).resolve
+        @items = policy_scope.new(current_user, base).resolve
       rescue NameError
         # TODO: Uncomment this when we have more policies defined. Commenting now to pass tests early.
         # raise PolicyScopeNotFoundException

@@ -53,7 +53,7 @@ class Api::V1::EnterprisesController < DiverstController
     base_authorize(klass)
     item = klass.find(params[:id])
 
-    render status: 201, json: Field.build(item.fields, self.diverst_request, params)
+    render status: 201, json: Field.build(self.diverst_request, params, base: item.fields)
   rescue => e
     case e
     when InvalidInputException

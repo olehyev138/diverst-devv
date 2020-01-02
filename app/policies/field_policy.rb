@@ -3,6 +3,23 @@ class FieldPolicy < ApplicationPolicy
     true
   end
 
+  def parent_update?
+    policy = "#{record.field_definer_type}Policy".constantize rescue nil
+    policy ? policy.new(user, record.field_definer).update? : false
+  end
+
+  def show?
+    parent_update?
+  end
+
+  def update?
+    parent_update?
+  end
+
+  def delete?
+    parent_update?
+  end
+
   class Scope < Scope
     def index?
       FieldPolicy.new(user, nil).index?
