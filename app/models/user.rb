@@ -135,10 +135,6 @@ class User < BaseClass
 
   after_update :add_to_default_mentor_group
 
-  def blah
-    'blah'
-  end
-
   scope :for_segments, -> (segments) { joins(:segments).where('segments.id' => segments.map(&:id)).distinct if segments.any? }
   scope :for_groups, -> (groups) { joins(:groups).where('groups.id' => groups.map(&:id)).distinct if groups.any? }
   scope :answered_poll, -> (poll) { joins(:poll_responses).where(poll_responses: { poll_id: poll.id }) }
