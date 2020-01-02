@@ -113,25 +113,34 @@ export function DiverstFileInput(props) {
                       case 'waiting':
                         return (
                           <Typography variant='h6' className={classes.fileName} color='textSecondary' key={upload.id}>
-                            Waiting to upload {upload.file.name}
+                            <span>Waiting to upload </span>
+                            {upload.file.name}
                           </Typography>
                         );
                       case 'uploading':
                         return (
                           <Typography variant='h6' className={classes.fileName} color='textSecondary' key={upload.id}>
-                            Uploading {upload.file.name}: {upload.progress}%
+                            <span>Uploading </span>
+                            {upload.file.name}
+                            <span>: </span>
+                            {upload.progress}
+                            <span>%</span>
                           </Typography>
                         );
                       case 'error':
                         return (
                           <Typography variant='h6' className={classes.fileName} color='textSecondary' key={upload.id}>
-                            Error uploading {upload.file.name}: {upload.error}
+                            <span>Error uploading </span>
+                            {upload.file.name}
+                            <span>: </span>
+                            {upload.error}
                           </Typography>
                         );
                       case 'finished':
                         return (
                           <Typography variant='h6' className={classes.fileName} color='textSecondary' key={upload.id}>
-                            Finished uploading {upload.file.name}
+                            <span>Finished uploading </span>
+                            {upload.file.name}
                           </Typography>
                         );
                       default:
