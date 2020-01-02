@@ -21,7 +21,7 @@ module Field::Actions
 
       # save the item
       unless item.save
-        raise InvalidInputException.new({message: item.errors.full_messages.first, attribute: item.errors.messages.first.first})
+        raise InvalidInputException.new({ message: item.errors.full_messages.first, attribute: item.errors.messages.first.first })
       end
 
       item
