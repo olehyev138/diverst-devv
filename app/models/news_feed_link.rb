@@ -1,5 +1,6 @@
 class NewsFeedLink < ApplicationRecord
   include PublicActivity::Common
+  include NewsFeedLink::Actions
 
   belongs_to :news_feed
   belongs_to :group_message, dependent: :delete
@@ -17,8 +18,8 @@ class NewsFeedLink < ApplicationRecord
   delegate :group,    to: :news_feed
   delegate :segment,  to: :news_feed_link_segment, allow_nil: true
 
-  scope :approved,        -> { where(approved: true).order(created_at: :desc) }
-  scope :not_approved,    -> { where(approved: false).order(created_at: :desc) }
+  scope :approved, -> { where(approved: true).order(created_at: :desc) }
+  scope :pending, -> { where(approved: false).order(created_at: :desc) }
   scope :combined_news_links, -> (news_feed_id) {
     joins('LEFT OUTER JOIN shared_news_feed_links ON shared_news_feed_links.news_feed_link_id = news_feed_links.id')
       .where("shared_news_feed_links.news_feed_id = #{news_feed_id} OR news_feed_links.news_feed_id = #{news_feed_id} AND news_feed_links.approved = 1").distinct
