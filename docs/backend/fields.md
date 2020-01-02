@@ -187,3 +187,49 @@ By including `DefinesFields`, you gain access to the following functions:
 The purpose behind the `after_add` callback is to make sure that field_users are being left behind,
 while at the same time, considering an Enterprise can have 10000+ users, waiting for it to finish will
 clog up the requests, so it is moved to a background job.
+
+## The Fields Controllers and Actions
+Though not fully implemented yet, ideally, we want to not query fields on the fields controller directly
+but instead query of the definer's controller. This has two benefits (for index, and create):
+1. Policies can be defined by the permissions of the definer
+2. Less likely to mis-assign an association, and prevents exposing the implementation of polymorphism
+
+To this, let's look at how field "index" and "create" are handled in the enterprise controller
+
+```ruby
+  def fields
+    item = klass.find(params[:id])
+    base_authorize(item)
+
+    render status: 200, json: Field.index(self.diverst_request, params.except(:id).permit!, base: item.fields)
+  rescue => e
+    raise BadRequestException.new(e.message)
+  end
+
+  def create_field
+    params[:field] = field_payload
+    base_authorize(klass)
+    item = klass.find(params[:id])
+
+    render status: 201, json: Field.build(self.diverst_request, params, base: item.fields)
+  rescue => e
+    case e
+    when InvalidInputException
+      raise
+    else
+      raise BadRequestException.new(e.message)
+    end
+  end
+```
+
+If you notice, these are essentially identical to the regular index and create controller methods, with 4 differences:
+1. You first obtain a copy of the enterprise first
+2. Instead of doing `klass.index` or `klass.build`, you call `Field.index` and `Field.build`
+3. in the `index` and `build` function call, you'll notice the argument `base:`. If defined, it will take the place of what
+would be the `klass/self`
+    - ex1: `Field.new` => `enterprise.fields.new`
+    - ex2: `@items = policy_scope.new(current_user, Field).resolve` 
+    => `@items = policy_scope.new(current_user, enterprise.fields).resolve`
+4. Create has it's own payload, and you have to explicitly assign it to `params[:field]`
+
+For show, update and delete Policies, they will all check the `update?` policy of their `field_definer`
