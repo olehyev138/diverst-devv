@@ -50,7 +50,7 @@ RSpec.describe Group, type: :model do
     it { expect(group).to have_many(:initiatives).through(:pillars) }
     it { expect(group).to have_many(:updates).class_name('GroupUpdate').dependent(:destroy) }
     it { expect(group).to have_many(:fields) }
-    it { expect(group).to have_many(:survey_fields).class_name('Field').dependent(:delete_all) }
+    it { expect(group).to have_many(:survey_fields).class_name('Field').dependent(:destroy) }
     it { expect(group).to have_many(:group_leaders) }
     it { expect(group).to have_many(:leaders).through(:group_leaders).source(:user) }
     it { expect(group).to have_many(:sponsors) }
@@ -789,6 +789,9 @@ RSpec.describe Group, type: :model do
       create(:user_group, user: user, group: group, accepted_member: true)
       group_leader = create(:group_leader, group: group, user: user)
       child = create(:group, parent: group)
+
+      group.fields.reload
+      group.survey_fields.reload
 
       group.destroy!
 

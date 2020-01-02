@@ -10,7 +10,7 @@ module BaseBuilder
   end
 
   module ClassMethods
-    def index(diverst_request, params, search_method = :lookup, base: nil)
+    def index(diverst_request, params, search_method = :lookup, base: self)
       pager(diverst_request, params, search_method, base: base)
     end
 
@@ -27,7 +27,7 @@ module BaseBuilder
 
       # save the item
       unless item.save
-        raise InvalidInputException.new({message: item.errors.full_messages.first, attribute: item.errors.messages.first.first})
+        raise InvalidInputException.new({ message: item.errors.full_messages.first, attribute: item.errors.messages.first.first })
       end
 
       item

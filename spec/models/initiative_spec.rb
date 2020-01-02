@@ -10,7 +10,7 @@ RSpec.describe Initiative, type: :model do
     it { expect(initiative).to belong_to(:pillar) }
     it { expect(initiative).to belong_to(:owner).class_name('User') }
     it { expect(initiative).to have_many(:updates).class_name('InitiativeUpdate').dependent(:destroy) }
-    it { expect(initiative).to have_many(:fields).dependent(:delete_all) }
+    it { expect(initiative).to have_many(:fields).dependent(:destroy) }
     it { expect(initiative).to have_many(:expenses).dependent(:destroy).class_name('InitiativeExpense') }
 
     it { expect(initiative).to accept_nested_attributes_for(:fields).allow_destroy(true) }
@@ -350,6 +350,8 @@ RSpec.describe Initiative, type: :model do
       initiative_invitee = create(:initiative_invitee, initiative: initiative)
       initiative_comment = create(:initiative_comment, initiative: initiative)
       initiative_user = create(:initiative_user, initiative: initiative)
+
+      pp initiative.reload
 
       initiative.destroy!
 
