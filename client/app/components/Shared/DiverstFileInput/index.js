@@ -30,6 +30,10 @@ const apiURL = new URL(config.apiUrl);
 export function DiverstFileInput(props) {
   const { classes, form, handleUploadSuccess, handleUploadError, ...rest } = props;
 
+  /* eslint-disable-next-line prefer-destructuring */
+  const apiKey = config.apiKey;
+  const userToken = AuthService.getJwt();
+
   // Form Control props
   const {
     disabled,
@@ -54,8 +58,14 @@ export function DiverstFileInput(props) {
           protocol: apiURL.protocol.slice(0, -1),
         }}
         headers={{
-          'Diverst-APIKey': config.apiKey,
-          'Diverst-UserToken': AuthService.getJwt(),
+          'Diverst-APIKey': apiKey,
+          'Diverst-UserToken': userToken,
+        }}
+        onBeforeStorageRequest={({ id, file, xhr }) => {
+          // Necessary as the `headers` prop doesn't seem to pass the headers for the storage request
+          // See: https://github.com/cbothner/react-activestorage-provider/issues/50
+          xhr.setRequestHeader('Diverst-APIKey', apiKey);
+          xhr.setRequestHeader('Diverst-UserToken', userToken);
         }}
         onSuccess={(object) => {
           if (multiple)
@@ -63,7 +73,8 @@ export function DiverstFileInput(props) {
           else
             form.setFieldValue(props.id, object.pop());
 
-          handleUploadSuccess(object);
+          if (handleUploadSuccess)
+            handleUploadSuccess(object);
         }}
         onError={handleUploadError}
         render={({ handleUpload, uploads, ready }) => (
