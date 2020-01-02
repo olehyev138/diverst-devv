@@ -11,6 +11,11 @@ class SocialMedia::Importer
     maxwidth: MEDIA_MAX_WIDTH
   }
 
+  OEmbed::Providers.register_all
+  OEmbed::Providers.register_fallback(
+      OEmbed::ProviderDiscovery
+  )
+
   if ENV['EMBEDLY_KEY'].blank?
     e = ApplicationHelper::MissingKeyError.new 'EMBEDLY_KEY'
     Rollbar.warn(e)
@@ -18,9 +23,13 @@ class SocialMedia::Importer
   @@embedly_api = Embedly::API.new  :key => ENV['EMBEDLY_KEY']
 
   def self.url_to_embed(url, small: false)
-    set_up_providers
     options = small ? SMALL_MEDIA_OPTIONS : {}
-    resource = fetch_resource(url, options)
+
+    if matches_url? url
+      resource = fetch_oembed_resource(url, options)
+    else
+      resource = fetch_embedly_resource(url, options)
+    end
 
     unless !!resource
       if matches_url? url
@@ -97,6 +106,7 @@ class SocialMedia::Importer
 
   def self.oembed_link_short
     {
+        LinkedIn: { links: %w(https://*.linkedin.com/posts/*), icon: 'linkedin_icon.svg' },
         Youtube: { links: %w(https://*.youtube.com/* https://*.youtu.be/*), icon: 'youtube_icon.svg' },
         Facebook: {
             links:
@@ -119,19 +129,20 @@ class SocialMedia::Importer
 
   protected
 
-  def self.set_up_providers
-    OEmbed::Providers.register_all
-    OEmbed::Providers.register_fallback(
-      OEmbed::ProviderDiscovery,
-      OEmbed::Providers::Embedly,
-    )
-  end
-
-  def self.fetch_resource(url, options = {})
+  def self.fetch_oembed_resource(url, options = {})
     url = url[0...-1] if url[-1] == '/'
     begin
+      p 'hello'
       resource = OEmbed::Providers.get(url, options)
     rescue
+      nil
+    end
+  end
+
+  def self.fetch_embedly_resource(url, options = {})
+    url = url[0...-1] if url[-1] == '/'
+    begin
+      p 'goodbye'
       options[:url] = url
       obj = (@@embedly_api.extract options)[0]
 
