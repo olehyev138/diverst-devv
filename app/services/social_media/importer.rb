@@ -138,7 +138,8 @@ class SocialMedia::Importer
       if obj.dig(:error_message).present?
         nil
       else
-        "<a href=#{obj.url} class=\"embedly-card\">#{obj.title}</a>"
+        "<blockquote class=\"embedly-card\" data-card-key=\"#{ENV['EMBEDLY_KEY']}\" data-card-branding=\"0\" data-card-type=\"article\">
+<h4><a href=#{obj.url}>#{obj.title}</a></h4><p>#{obj.description}</p></blockquote>"
       end
     rescue
       nil
