@@ -20,7 +20,7 @@ class FieldData < ApplicationRecord
   private
 
   def same_parent
-    unless field.field_definer_id == fieldable.fields_holder_id
+    unless field.field_definer_id == fieldable.field_definer_id
       errors.add(:field, 'Field and Fieldable must have same parent')
     end
   end

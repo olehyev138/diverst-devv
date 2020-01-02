@@ -1,7 +1,7 @@
 class UserGroup < ApplicationRecord
-  @@fields_holder_name = 'group'
+  @@field_definer_name = 'group'
   @@field_association_name = 'survey_fields'
-  mattr_reader :field_association_name, :fields_holder_name
+  mattr_reader :field_association_name, :field_definer_name
 
   include ContainsFieldData
   include UserGroup::Actions

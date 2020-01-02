@@ -1,7 +1,7 @@
 class InitiativeUpdate < ApplicationRecord
-  @@fields_holder_name = 'initiative'
+  @@field_definer_name = 'initiative'
   @@field_association_name = 'fields'
-  mattr_reader :field_association_name, :fields_holder_name
+  mattr_reader :field_association_name, :field_definer_name
 
   include ContainsFieldData
 

@@ -22,15 +22,15 @@ module ContainsFieldData
   end
 
   def fields
-    fields_holder.send(self.class.field_association_name) if fields_holder
+    field_definer.send(self.class.field_association_name) if field_definer
   end
 
-  def fields_holder
-    send(self.class.fields_holder_name)
+  def field_definer
+    send(self.class.field_definer_name)
   end
 
-  def fields_holder_id
-    send("#{self.class.fields_holder_name}_id")
+  def field_definer_id
+    send("#{self.class.field_definer_name}_id")
   end
 
   def load_field_data
@@ -47,7 +47,7 @@ module ContainsFieldData
   end
 
   def create_missing_field_data(*ids)
-    from_field_holder = ids.present? ? Field.find(ids) : fields || []
+    from_field_holder = ids.present? ? fields.where(fields: {id: ids}) : fields || []
     from_field_data = field_data.includes(:field).map(&:field)
 
     missing = from_field_holder - from_field_data

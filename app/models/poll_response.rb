@@ -1,7 +1,7 @@
 class PollResponse < ApplicationRecord
-  @@fields_holder_name = 'poll'
+  @@field_definer_name = 'poll'
   @@field_association_name = 'fields'
-  mattr_reader :field_association_name, :fields_holder_name
+  mattr_reader :field_association_name, :field_definer_name
 
   include PollResponse::Actions
   include ContainsFieldData

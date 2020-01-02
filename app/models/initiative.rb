@@ -13,7 +13,7 @@ class Initiative < ApplicationRecord
   has_many :updates, class_name: 'InitiativeUpdate', dependent: :destroy
   has_many :fields,
            as: :field_definer,
-           dependent: :delete_all,
+           dependent: :destroy_all,
            after_add: :add_missing_field_background_job
   has_many :expenses, dependent: :destroy, class_name: 'InitiativeExpense'
   has_many :user_reward_actions

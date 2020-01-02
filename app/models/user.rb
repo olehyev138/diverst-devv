@@ -1,7 +1,7 @@
 class User < ApplicationRecord
-  @@fields_holder_name = 'enterprise'
+  @@field_definer_name = 'enterprise'
   @@field_association_name = 'fields'
-  mattr_reader :field_association_name, :fields_holder_name
+  mattr_reader :field_association_name, :field_definer_name
 
   has_secure_password
   include PublicActivity::Common
