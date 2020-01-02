@@ -68,6 +68,9 @@ export function DiverstFileInput(props) {
           xhr.setRequestHeader('Diverst-UserToken', userToken);
         }}
         onSuccess={(object) => {
+          if (!object || object.length <= 0)
+            return;
+
           if (multiple)
             form.setFieldValue(props.id, object);
           else
