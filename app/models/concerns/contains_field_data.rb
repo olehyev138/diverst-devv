@@ -22,7 +22,7 @@ module ContainsFieldData
   end
 
   def fields
-    fields_holder.send(self.class.field_association_name)
+    fields_holder.send(self.class.field_association_name) if fields_holder
   end
 
   def fields_holder
@@ -46,8 +46,8 @@ module ContainsFieldData
     end
   end
 
-  def create_missing_field_data
-    from_field_holder = fields
+  def create_missing_field_data(*ids)
+    from_field_holder = ids.present? ? Field.find(ids) : fields || []
     from_field_data = field_data.includes(:field).map(&:field)
 
     missing = from_field_holder - from_field_data

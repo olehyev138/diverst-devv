@@ -22,8 +22,6 @@ class Field < ApplicationRecord
   validates :title, uniqueness: { scope: [:field_definer_id, :field_definer_type] },
                     unless: Proc.new { |object| (object.type == 'SegmentsField' || object.type == 'GroupsField') }, if: :container_type_is_enterprise?
 
-  after_create -> { UpdateMissingFieldDataJob.perform_later(id) }
-
   # Operators
   #  - equals_any_of:
   #     - evaluate if singular value (v1) is in an array (v2) - non commutative

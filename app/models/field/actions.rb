@@ -8,7 +8,7 @@ module Field::Actions
       [:field_definer]
     end
 
-    def build(base, diverst_request, params)
+    def build(base = Field, diverst_request, params)
       raise BadRequestException.new "#{self.name.titleize} required" if params[symbol].nil?
 
       # create the new item
@@ -20,8 +20,8 @@ module Field::Actions
       end
 
       # save the item
-      if not item.save
-        raise InvalidInputException.new({ message: item.errors.full_messages.first, attribute: item.errors.messages.first.first })
+      unless item.save
+        raise InvalidInputException.new({message: item.errors.full_messages.first, attribute: item.errors.messages.first.first})
       end
 
       item

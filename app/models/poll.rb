@@ -7,7 +7,10 @@ class Poll < ApplicationRecord
 
   enum status: [:published, :draft]
 
-  has_many :fields, as: :field_definer, dependent: :destroy
+  has_many :fields,
+           as: :field_definer,
+           dependent: :destroy,
+           after_add: :add_missing_field_background_job
   has_many :responses, class_name: 'PollResponse', inverse_of: :poll, dependent: :destroy
   has_many :graphs, dependent: :destroy
   has_many :polls_segments, dependent: :destroy

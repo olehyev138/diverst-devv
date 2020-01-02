@@ -18,8 +18,15 @@ class Enterprise < ApplicationRecord
   ]
 
   has_many :users, inverse_of: :enterprise, dependent: :destroy
-  has_many :graph_fields, as: :field_definer, class_name: 'Field', dependent: :destroy
-  has_many :fields, -> { where elasticsearch_only: false }, as: :field_definer, dependent: :destroy
+  has_many :graph_fields,
+           as: :field_definer,
+           class_name: 'Field',
+           dependent: :destroy,
+           after_add: :add_missing_field_background_job
+  has_many :fields, -> { where elasticsearch_only: false },
+           as: :field_definer,
+           dependent: :destroy,
+           after_add: :add_missing_field_background_job
   has_many :topics, inverse_of: :enterprise, dependent: :destroy
   has_many :segments, inverse_of: :enterprise, dependent: :destroy
   has_many :groups, inverse_of: :enterprise, dependent: :destroy
