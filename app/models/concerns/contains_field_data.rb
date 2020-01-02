@@ -47,7 +47,7 @@ module ContainsFieldData
   end
 
   def create_missing_field_data(*ids)
-    from_field_holder = ids.present? ? fields.where(fields: {id: ids}) : fields || []
+    from_field_holder = ids.present? ? fields.where(fields: { id: ids }) : fields || []
     from_field_data = field_data.includes(:field).map(&:field)
 
     missing = from_field_holder - from_field_data
