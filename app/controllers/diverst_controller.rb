@@ -1,21 +1,17 @@
 class DiverstController < ApplicationController
   include Pundit
   include BaseController
+  include BaseAuthentication
   include ActionController::Serialization
 
   serialization_scope :get_serialization_scope
 
-  # verification filters
   before_action :init_response
   before_action :verify_api_key
   before_action :verify_jwt_token
 
   # skip filter for routing errors
   skip_before_action :verify_jwt_token, only: [:routing_error]
-
-  # accessors
-  attr_accessor :current_user
-  attr_accessor :diverst_request
 
   rescue_from UnprocessableException do |e|
     render status: :unprocessable_entity, json: [e.resource.errors.full_messages.first]
@@ -119,55 +115,5 @@ class DiverstController < ApplicationController
       controller: self.diverst_request.controller,
       action: self.diverst_request.action
     }
-  end
-
-  # verify the JWT token, load the user and abilities
-  def verify_jwt_token
-    token = request.headers['Diverst-UserToken']
-
-    if not token
-      token = params['Diverst-UserToken']
-    end
-
-    if not token
-      render status: 401, json: { message: 'Invalid User Token' }
-      return
-    end
-
-    begin
-      # get the user from the token
-      self.current_user = UserTokenService.verify_jwt_token token
-      # add the remaining data to the response
-      self.diverst_request.user = current_user
-      self.diverst_request.policy_group = current_user.policy_group
-    rescue => e
-      render status: :unauthorized, json: { message: e.message }
-    end
-  end
-
-  # verify there is an api key in the request
-  def verify_api_key
-    api_key = request.headers['Diverst-APIKey']
-
-    if api_key.nil?
-      api_key = params[:api_key]
-      if api_key.nil?
-        render status: 403, json: { message: 'Invalid API Key' }
-        return
-      end
-    end
-
-    api_key_object = ApiKey.find_by_key(api_key)
-
-    if api_key_object.nil?
-      render status: 403, json: { message: 'Invalid API Key' }
-      return
-    end
-  end
-
-  def init_response
-    self.diverst_request = Request.new
-    self.diverst_request.controller = controller_name
-    self.diverst_request.action = action_name
   end
 end
