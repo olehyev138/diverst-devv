@@ -47,4 +47,6 @@ module Clockwork
   every(1.day, 'Archive expired events', at: '00:00') { Group.find_each { |group| Initiative.archive_expired_events(group) } }
 
   every(30.minutes, 'Delete expired files') { ClearExpiredFilesJob.perform_later }
+
+  every(2.hours, 'Clean up unused ActiveStorage blobs & files') { ActiveStorageCleanupJob.perform_later }
 end
