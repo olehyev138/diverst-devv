@@ -105,12 +105,12 @@ class Group < ApplicationRecord
 
   has_many :fields, -> { where field_type: 'regular' },
            as: :field_definer,
-           dependent: :destroy_all,
+           dependent: :destroy,
            after_add: :add_missing_field_background_job
   has_many :survey_fields, -> { where field_type: 'group_survey' },
            as: :field_definer,
            class_name: 'Field',
-           dependent: :destroy_all,
+           dependent: :destroy,
            after_add: :add_missing_field_background_job
 
   has_many :group_leaders, -> { order(position: :asc) }, dependent: :destroy

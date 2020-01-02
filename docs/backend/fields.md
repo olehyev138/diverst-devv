@@ -151,7 +151,7 @@ Each model which would contain FieldData, needs these 4 thing in order to functi
 - a `has_many` association to fields with the options
     - as: :field_definer
     - class_name: 'Field' (if association isn't called `fields`)
-    - dependent: :destroy_all
+    - dependent: :destroy
     - after_add: :add_missing_field_background_job
 
 for example, here is a snippet from `Group`:
@@ -166,12 +166,12 @@ class Group < ApplicationRecord
   # ...
   has_many :fields, -> { where field_type: 'regular' },
              as: :field_definer,
-             dependent: :destroy_all,
+             dependent: :destroy,
              after_add: :add_missing_field_background_job
   has_many :survey_fields, -> { where field_type: 'group_survey' },
              as: :field_definer,
              class_name: 'Field',
-             dependent: :destroy_all,
+             dependent: :destroy,
              after_add: :add_missing_field_background_job
   # ...
 end 
