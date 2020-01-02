@@ -96,7 +96,7 @@ class Groups::PostsController < ApplicationController
 
   def with_segments
     segment_ids = current_user.segment_ids
-    @posts = @group.news_feed.all_links(segment_ids, @group.enterprise)
+    @posts = @group.news_feed.all_links(segment_ids)
   end
 
   def prune_posts
