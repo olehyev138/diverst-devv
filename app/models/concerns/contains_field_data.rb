@@ -1,3 +1,4 @@
+# Module to include Models which user FieldData containing needed functions
 module ContainsFieldData
   extend ActiveSupport::Concern
 
@@ -21,18 +22,64 @@ module ContainsFieldData
     self.data = JSON.generate @info unless @info.nil?
   end
 
+  # Returns the fields a field_user can use
+  #
+  # @author Alex Oxorn
+  #
+  # @return [Field::ActiveRecord_Associations_CollectionProxy] List of Fields
+  # @return [Field::ActiveRecord_Relation] Field.none if +field_definer+ doesn't exist
+  #
+  # @example
+  #    u = User.first
+  #    u.fields #=> [< Gender Field >, < D.O.B. Field > ...]
   def fields
-    field_definer.send(self.class.field_association_name) if field_definer
+    field_definer ? field_definer.send(self.class.field_association_name) : Field.none
   end
 
+  # Returns the object which defines the fields a field_user can use
+  #
+  # @author Alex Oxorn
+  #
+  # @return [FieldDefiner] The FieldDefiner of a FieldUser
+  # @return [NilClass] if there is no field_definer
+  #
+  # @example
+  #    u = User.first  #=> < #User enterprise_id: 1>
+  #    u.field_definer #=> < #Enterprise id: 1 >
   def field_definer
     send(self.class.field_definer_name)
   end
 
+  # Returns the id of the field_definer which defines the fields a field_user can use
+  #
+  # @author Alex Oxorn
+  #
+  # @return [Integer] The FieldDefiner's id
+  # @return [NilClass] if there is no field_definer
+  #
+  # @example
+  #    u = User.first #=> < #User enterprise_id: 1>
+  #    u.field_definer #=> 1
   def field_definer_id
     send("#{self.class.field_definer_name}_id")
   end
 
+  # Creates getter and setter methods on a singleton of a +field_user+ for its +field_data+
+  #
+  # @author Alex Oxorn
+  #
+  # @return [NilClass]
+  #
+  # @example
+  #   u = User.first
+  #   u.gender #=> raises < #NoMethodError >
+  #
+  #   u.load_field_data
+  #   u.gender #=> 'Male'
+  #
+  #   u.gender = ['Female']
+  #   # Writes to Database
+  #   u.gender #=> 'Female'
   def load_field_data
     field_data.includes(:field).find_each do |fd|
       singleton_class.send(:define_method, fd.field.title.gsub(' ', '_').downcase) do
@@ -46,6 +93,43 @@ module ContainsFieldData
     end
   end
 
+  # Checks if there any +fields+ that a field user can use, and creates +field_data+
+  # for field users were where they do not have +field_data+ for that +field+
+  #
+  # @author Alex Oxorn
+  # @return [NilClass]
+  #
+  # @overload create_missing_field_data(*ids)
+  #   Checks if there any +fields+ that a field user can use from the provided fields, and creates +field_data+
+  #   for field users were where they do not have +field_data+ for that +field+
+  #   @param *ids [Array<Integer>] ids to check
+  #
+  #   @example
+  #     u = User.new(enterprise_id: 1)
+  #     u.skip_some_callbacks = true
+  #     u.save
+  #
+  #     u.field_data #=> []
+  #
+  #     f = Field.create(field_definer: Enterprise.find(1), title: 'new field')
+  #     u.create_missing_field_data(f.id)
+  #
+  #     u.field_data #=> [< FieldData {new_field => nil} >]
+  #
+  # @overload create_missing_field_data()
+  #   Checks if there any +fields+ that a field user can use from all field_definer's fields, and creates +field_data+
+  #   for field users were where they do not have +field_data+ for that +field+
+  #
+  #   @example
+  #     u = User.new(enterprise_id: 1)
+  #     u.skip_some_callbacks = true
+  #     u.save
+  #
+  #     u.field_data #=> []
+  #
+  #     u.create_missing_field_data
+  #
+  #     u.field_data #=> [< FieldData {gender => nil} >, < FieldData {DOB => nil} >, ... ]
   def create_missing_field_data(*ids)
     from_field_holder = ids.present? ? fields.where(fields: { id: ids }) : fields || []
     from_field_data = field_data.includes(:field).map(&:field)
@@ -56,7 +140,19 @@ module ContainsFieldData
     end
   end
 
-  module ClassMethods
+  # Class Methods for FieldData Models
+  module ClassMethods # :nodoc:
+    # Evaluates an +ActiveRecord+ query of a +field_user+ and creates getter and setter
+    # methods on the singletons of each +field_user+ for its +field_data+
+    #
+    # @author Alex Oxorn
+    #
+    # @return [Array<self>]
+    #
+    # @example
+    #   us = User.where('id < 10').load_field_data
+    #
+    #   us.map(&:gender) #=> ['Male', 'Male', 'Female', ...]
     def load_field_data
       # rubocop:disable Rails/FindEach
       includes(:field_data, field_data: :field).each do |u|

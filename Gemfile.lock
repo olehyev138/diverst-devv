@@ -663,6 +663,7 @@ GEM
       oauth2-client (~> 2.0)
       oj (~> 2.14)
       rest-client (~> 1.8)
+    yard (0.8.7.6)
 
 PLATFORMS
   ruby
@@ -764,6 +765,7 @@ DEPENDENCIES
   validate_url (~> 1.0, >= 1.0.2)
   webmock (~> 3.7.6)
   yam (~> 2.5)
+  yard (~> 0.8.7.6)
 
 RUBY VERSION
    ruby 2.6.0p0
