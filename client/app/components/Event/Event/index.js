@@ -93,24 +93,37 @@ export function Event(props) {
             </Grid>
           </Grid>
           <Paper className={classes.padding}>
-            <Typography className={classes.dataHeaders}>
-              <DiverstFormattedMessage {...messages.show.dateAndTime} />
-            </Typography>
-            <Typography variant='overline'>From</Typography>
-            <Typography color='textSecondary'>{formatDateTimeString(event.start, DateTime.DATETIME_FULL)}</Typography>
-            <Typography variant='overline'>To</Typography>
-            <Typography color='textSecondary' className={classes.data}>{formatDateTimeString(event.end, DateTime.DATETIME_FULL)}</Typography>
-
-            {event.description && (
-              <React.Fragment>
+            <Grid container spacing={2}>
+              <Grid item xs>
                 <Typography className={classes.dataHeaders}>
-                  <DiverstFormattedMessage {...messages.form.description} />
+                  <DiverstFormattedMessage {...messages.show.dateAndTime} />
                 </Typography>
-                <Typography color='textSecondary' className={classes.data}>
-                  {event.description}
-                </Typography>
-              </React.Fragment>
-            )}
+                <Typography variant='overline'>From</Typography>
+                <Typography color='textSecondary'>{formatDateTimeString(event.start, DateTime.DATETIME_FULL)}</Typography>
+                <Typography variant='overline'>To</Typography>
+                <Typography color='textSecondary' className={classes.data}>{formatDateTimeString(event.end, DateTime.DATETIME_FULL)}</Typography>
+
+                {event.description && (
+                  <React.Fragment>
+                    <Typography className={classes.dataHeaders}>
+                      <DiverstFormattedMessage {...messages.inputs.description} />
+                    </Typography>
+                    <Typography color='textSecondary' className={classes.data}>
+                      {event.description}
+                    </Typography>
+                  </React.Fragment>
+                )}
+              </Grid>
+              <Grid item>
+                <img
+                  src={`data:image/jpeg;base64,${event.picture_data}`}
+                  style={{
+                    maxHeight: '350px',
+                    maxWidth: '350px',
+                  }}
+                />
+              </Grid>
+            </Grid>
           </Paper>
         </React.Fragment>
       )}
