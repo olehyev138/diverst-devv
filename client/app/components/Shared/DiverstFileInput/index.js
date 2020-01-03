@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { memo, useState, useEffect } from 'react';
 import { compose } from 'redux';
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 
-import { Button, FormControl, FormHelperText, FormLabel, Grid, Typography } from '@material-ui/core';
+import { Button, FormControl, FormHelperText, FormLabel, Grid, Typography, Box, CircularProgress } from '@material-ui/core';
+import UploadIcon from '@material-ui/icons/CloudUpload';
 
 import { DirectUploadProvider } from 'react-activestorage-provider';
 
@@ -15,11 +16,42 @@ const styles = theme => ({
     display: 'none',
   },
   uploadSection: {
-    paddingTop: 8,
+    paddingTop: 12,
   },
-  fileName: {
+  fileInfo: {
     fontSize: 16,
     verticalAlign: 'middle',
+  },
+  fileName: {
+    color: theme.palette.grey.A700,
+  },
+  uploadButton: {
+
+  },
+  fileInfoBox: {
+    minWidth: 64,
+    display: 'inline-block',
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: '#BBBBBB',
+    borderStyle: 'solid',
+    borderBottom: 'none !important',
+    paddingTop: 4,
+    paddingBottom: 3,
+    paddingLeft: 16,
+    paddingRight: 16,
+    boxShadow: '0px 3px 1px -2px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 1px 5px 0px rgba(0,0,0,0.12)',
+    '& *': {
+      lineHeight: 1.75,
+    },
+  },
+  uploadProgress: {
+    marginLeft: 8,
+    verticalAlign: 'middle',
+  },
+  uploadProgressPercent: {
+    marginLeft: 6,
+    color: theme.palette.primary.main,
   },
 });
 
@@ -28,7 +60,15 @@ const inputRef = React.createRef();
 const apiURL = new URL(config.apiUrl);
 
 export function DiverstFileInput(props) {
-  const { classes, form, handleUploadSuccess, handleUploadError, ...rest } = props;
+  const { classes, form, handleUploadBegin, handleUploadSuccess, handleUploadError, ...rest } = props;
+
+  const [uploadedFile, setUploadedFile] = useState(null);
+
+  // Note: the fileName prop is only used for edit forms to show the existing file name
+  useEffect(() => {
+    if (props.fileName)
+      setUploadedFile(props.fileName);
+  }, [props.fileName]);
 
   /* eslint-disable-next-line prefer-destructuring */
   const apiKey = config.apiKey;
@@ -45,7 +85,7 @@ export function DiverstFileInput(props) {
     variant,
     value,
     multiple,
-    ...inputProps
+    inputProps,
   } = rest;
 
   return (
@@ -83,7 +123,6 @@ export function DiverstFileInput(props) {
         render={({ handleUpload, uploads, ready }) => (
           <React.Fragment>
             <FormControl
-              disabled={disabled || !ready}
               error={error}
               fullWidth={fullWidth}
               hiddenLabel={hiddenLabel}
@@ -93,7 +132,6 @@ export function DiverstFileInput(props) {
             >
               <FormLabel
                 htmlFor={props.id}
-                disabled={disabled || !ready}
                 error={error}
                 required={required}
               >
@@ -106,73 +144,98 @@ export function DiverstFileInput(props) {
                 className={classes.fileInput}
                 ref={inputRef}
                 disabled={disabled || !ready}
-                onChange={e => handleUpload(e.currentTarget.files)}
+                onChange={(e) => {
+                  if (handleUploadBegin)
+                    handleUploadBegin(e);
+
+                  handleUpload(e.currentTarget.files);
+                }}
                 {...inputProps}
               />
-              <Grid container spacing={2} className={classes.uploadSection} alignItems='center'>
+              <Grid container spacing={1} className={classes.uploadSection} alignItems='center'>
                 <Grid item>
                   <Button
+                    className={classes.uploadButton}
+                    color='primary'
                     component='span'
-                    color='secondary'
                     variant='contained'
                     onClick={() => inputRef.current.click()}
                     disabled={disabled || !ready}
+                    startIcon={<UploadIcon />}
                   >
-                    Upload File
+                    {value ? 'Replace File' : 'Choose File'}
                   </Button>
                 </Grid>
-                <Grid item xs>
-                  {uploads.map((upload) => {
-                    switch (upload.state) {
-                      case 'waiting':
-                        return (
-                          <Typography variant='h6' className={classes.fileName} color='textSecondary' key={upload.id}>
-                            <span>Waiting to upload </span>
-                            {upload.file.name}
-                          </Typography>
-                        );
-                      case 'uploading':
-                        return (
-                          <Typography variant='h6' className={classes.fileName} color='textSecondary' key={upload.id}>
-                            <span>Uploading </span>
-                            {upload.file.name}
-                            <span>: </span>
-                            {upload.progress}
-                            <span>%</span>
-                          </Typography>
-                        );
-                      case 'error':
-                        return (
-                          <Typography variant='h6' className={classes.fileName} color='textSecondary' key={upload.id}>
-                            <span>Error uploading </span>
-                            {upload.file.name}
-                            <span>: </span>
-                            {upload.error}
-                          </Typography>
-                        );
-                      case 'finished':
-                        return (
-                          <Typography variant='h6' className={classes.fileName} color='textSecondary' key={upload.id}>
-                            <span>Finished uploading </span>
-                            {upload.file.name}
-                          </Typography>
-                        );
-                      default:
-                        return (<React.Fragment />);
-                    }
-                  })}
+                <Grid item>
+                  <Box className={classes.fileInfoBox}>
+                    {uploads.map((upload) => {
+                      switch (upload.state) {
+                        case 'waiting':
+                          return (
+                            <Typography variant='h6' className={classes.fileInfo} color='textSecondary' key={upload.id}>
+                              <span>Waiting to upload </span>
+                              <span className={classes.fileName}>{upload.file.name}</span>
+                              <CircularProgress
+                                className={classes.uploadProgress}
+                                size={20}
+                              />
+                            </Typography>
+                          );
+                        case 'uploading':
+                          return (
+                            <Typography variant='h6' className={classes.fileInfo} color='textSecondary' key={upload.id}>
+                              <span>Uploading </span>
+                              <span className={classes.fileName}>{upload.file.name}</span>
+                              <CircularProgress
+                                variant='determinate'
+                                className={classes.uploadProgress}
+                                size={20}
+                                value={Math.round(upload.progress)}
+                              />
+                              <span className={classes.uploadProgressPercent}>
+                                {Math.round(upload.progress)}
+                                <span>%</span>
+                              </span>
+                            </Typography>
+                          );
+                        case 'error':
+                          return (
+                            <Typography variant='h6' className={classes.fileInfo} color='error' key={upload.id}>
+                              <span>Error uploading </span>
+                              {upload.file.name}
+                            </Typography>
+                          );
+                        case 'finished':
+                          setUploadedFile(upload.file.name);
+                          return (
+                            <Typography variant='h6' className={classes.fileInfo} color='textSecondary' key={upload.id}>
+                              <span>Finished uploading </span>
+                              <span className={classes.fileName}>{upload.file.name}</span>
+                              <CircularProgress
+                                variant='determinate'
+                                className={classes.uploadProgress}
+                                size={20}
+                                value={100}
+                              />
+                            </Typography>
+                          );
+                        default:
+                          return (<React.Fragment />);
+                      }
+                    })}
 
-                  {value && (
-                    <Typography variant='h6' className={classes.fileName}>
-                      File has been uploaded
-                    </Typography>
-                  )}
+                    {value && ready && (
+                      <Typography variant='h6' className={classes.fileInfo} color='primary'>
+                        {uploadedFile}
+                      </Typography>
+                    )}
 
-                  {!value && (
-                    <Typography variant='h6' className={classes.fileName}>
-                      Nothing attached
-                    </Typography>
-                  )}
+                    {!value && ready && (
+                      <Typography variant='h6' className={classes.fileInfo} color='textSecondary'>
+                        No file selected
+                      </Typography>
+                    )}
+                  </Box>
                 </Grid>
               </Grid>
               {props.showHelperText && (
@@ -204,10 +267,14 @@ DiverstFileInput.propTypes = {
   value: PropTypes.any,
   helperText: PropTypes.node,
   showHelperText: PropTypes.bool,
+  handleUploadBegin: PropTypes.func,
   handleUploadSuccess: PropTypes.func,
   handleUploadError: PropTypes.func,
+  fileName: PropTypes.string,
+  inputProps: PropTypes.object,
 };
 
 export default compose(
   withStyles(styles),
+  memo,
 )(DiverstFileInput);
