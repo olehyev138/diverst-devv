@@ -55,6 +55,5 @@ export default function* fieldsSaga() {
   yield takeLatest(GET_FIELD_BEGIN, getField);
   yield takeLatest(CREATE_FIELD_BEGIN, createField);
   yield takeLatest(UPDATE_FIELD_BEGIN, updateField);
-
   yield takeLatest(DELETE_FIELD_BEGIN, deleteField);
 }
