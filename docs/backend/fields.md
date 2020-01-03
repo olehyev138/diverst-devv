@@ -30,6 +30,16 @@ In the following diagram, A <- B, means A has many B, and B belongs to A
 
 As an example, let's consider Custom Fields for users.
 
+In this case:
+- The `FieldDefiner` is the Enterprise, as it is what defines what custom field users can have.
+- The `FieldUser` is the User, as it uses the fields defined by the Definer (its Enterprise).
+
+Likewise, in this case:
+- `user.field_definer` == `user.enterprise`
+- unfortunately, this inverse isn't true, as a definer can have multiple types of users, so instead
+`definer.field_users` returns a list of association names for its field users
+    - `enterprise.field_users => [:users]`
+
 An `Enterprise` defines the following custom fields to use for `Users`:
 - Gender with options [Male, Female, Other]
 - Date of Birth
