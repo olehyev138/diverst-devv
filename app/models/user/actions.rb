@@ -221,7 +221,7 @@ module User::Actions
           {
               field_data: [
                   :field,
-                  { field: :field_definer }
+                  { field: Field.base_preloads }
               ]
           },
           {
