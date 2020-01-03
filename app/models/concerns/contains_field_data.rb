@@ -81,11 +81,14 @@ module ContainsFieldData
   #   # Writes to Database
   #   u.gender #=> 'Female'
   def load_field_data
+    # For each FieldData
     field_data.includes(:field).find_each do |fd|
+      # Define a getter, that gets the field_data, called that field's title, on self's singleton
       singleton_class.send(:define_method, fd.field.title.gsub(' ', '_').downcase) do
         fd.deserialized_data
       end
 
+      # Define a setter, that sets the field_data, called that field's title =, on self's singleton
       singleton_class.send(:define_method, "#{fd.field.title.gsub(' ', '_').downcase}=") do |*args|
         fd.data = args[0].to_json
         fd.save!
@@ -155,12 +158,16 @@ module ContainsFieldData
     #   us.map(&:gender) #=> ['Male', 'Male', 'Female', ...]
     def load_field_data
       # rubocop:disable Rails/FindEach
+      # for each field field_user
       includes(:field_data, field_data: :field).each do |u|
+        # for each field_data
         u.field_data.each do |fd|
+          # Define a getter, that gets the field_data, called that field's title, on that field_user's singleton
           u.singleton_class.send(:define_method, fd.field.title.gsub(' ', '_').downcase) do
             fd.deserialized_data
           end
 
+          # Define a setter, that sets the field_data, called that field's title =, on that field_user's singleton
           u.singleton_class.send(:define_method, "#{fd.field.title.gsub(' ', '_').downcase}=") do |*args|
             fd.data = args[0].to_json
             fd.save!
