@@ -52,7 +52,7 @@ module ContainsFieldData
 
     missing = from_field_holder - from_field_data
     missing.each do |fld|
-      field_data << FieldData.new(fieldable: self, field: fld)
+      field_data << FieldData.new(field_user: self, field: fld)
     end
   end
 

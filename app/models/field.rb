@@ -1,10 +1,6 @@
 class Field < ApplicationRecord
   include Field::Actions
 
-  belongs_to :enterprise
-  belongs_to :group
-  belongs_to :poll
-  belongs_to :initiative
   belongs_to :field_definer, polymorphic: true
 
   has_many :field_data, class_name: 'FieldData', dependent: :destroy

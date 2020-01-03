@@ -9,7 +9,7 @@ class UserGroup < ApplicationRecord
   # associations
   belongs_to :user
   belongs_to :group
-  has_many :field_data, class_name: 'FieldData', as: :fieldable, dependent: :destroy
+  has_many :field_data, class_name: 'FieldData', as: :field_user, dependent: :destroy
 
   # validations
   validates_length_of :data, maximum: 65535

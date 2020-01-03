@@ -5,8 +5,18 @@ class MakeFieldPolymorphic < ActiveRecord::Migration[5.2]
     add_index :fields, [:field_definer_id, :field_definer_type]
 
     Field.find_each do |field|
-      field.field_definer = field.group || field.poll || field.initiative || field.enterprise
-      field.save!
+      field.field_definer_id = field.group_id || field.poll_id || field.initiative_id || field.enterprise_id
+      field.field_definer_type =
+          if field.group_id
+            'Group'
+          elsif field.poll_id
+            'Poll'
+          elsif field.initiative_id
+            'Initiative'
+          elsif field.enterprise_id
+            'Enterprise'
+          end
+      field.save!(validate: false)
     end
 
     remove_index :fields, column: [:enterprise_id]
@@ -46,7 +56,7 @@ class MakeFieldPolymorphic < ActiveRecord::Migration[5.2]
         # type code here
       end
 
-      field.save!
+      field.save!(validate: false)
     end
 
     remove_index :fields, [:field_definer_id, :field_definer_type]

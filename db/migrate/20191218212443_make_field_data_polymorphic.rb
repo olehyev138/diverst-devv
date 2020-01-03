@@ -1,13 +1,14 @@
 class MakeFieldDataPolymorphic < ActiveRecord::Migration[5.2]
   def up
     transaction do
-      add_column :field_data, :fieldable_id, :bigint, first: true
-      add_column :field_data, :fieldable_type, :string, after: :fieldable_id
-      add_index :field_data, [:fieldable_id, :fieldable_type]
+      add_column :field_data, :field_user_id, :bigint, first: true
+      add_column :field_data, :field_user_type, :string, after: :field_user_id
+      add_index :field_data, [:field_user_id, :field_user_type]
 
       FieldData.find_each do |fd|
-        fd.fieldable = fd.user
-        fd.save!
+        fd.field_user_id = fd.user_id
+        fd.field_user_type = 'User'
+        fd.save!(validate: false)
       end
 
       [InitiativeUpdate, GroupUpdate, UserGroup, PollResponse].each do |model|
@@ -21,12 +22,12 @@ class MakeFieldDataPolymorphic < ActiveRecord::Migration[5.2]
 
             # Create new FieldData object associated to current user & current field
             field_data = FieldData.new(
-                fieldable: item,
+                field_user: item,
                 field_id: field_id,
                 data: data_str
             )
 
-            field_data.save!
+            field_data.save!(validate: false)
           end
         end
       end
@@ -59,13 +60,13 @@ class MakeFieldDataPolymorphic < ActiveRecord::Migration[5.2]
               data: data_str
           )
 
-          field_data.save!
+          field_data.save!(validate: false)
         end
       end
 
-      remove_index :field_data, name: 'index_field_data_on_fieldable_id_and_fieldable_type'
-      remove_column :field_data, :fieldable_id
-      remove_column :field_data, :fieldable_type
+      remove_index :field_data, name: 'index_field_data_on_field_user_id_and_field_user_type'
+      remove_column :field_data, :field_user_id
+      remove_column :field_data, :field_user_type
     end
   end
 end

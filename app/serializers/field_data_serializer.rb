@@ -1,5 +1,5 @@
 class FieldDataSerializer < ApplicationRecordSerializer
-  attributes :data, :id, :field_id, :fieldable_id, :fieldable_type
+  attributes :data, :id, :field_id, :field_user_id, :field_user_type
 
   belongs_to :field
 end
