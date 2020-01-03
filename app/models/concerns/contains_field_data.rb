@@ -1,4 +1,4 @@
-# Module to include Models which user FieldData containing needed functions
+# Module to include Models which uses FieldData, containing needed functions and callbacks
 module ContainsFieldData
   extend ActiveSupport::Concern
 
@@ -41,7 +41,7 @@ module ContainsFieldData
   # @author Alex Oxorn
   #
   # @return [FieldDefiner] The FieldDefiner of a FieldUser
-  # @return [NilClass] if there is no field_definer
+  # @return [nil] if there is no field_definer
   #
   # @example
   #    u = User.first  #=> < #User enterprise_id: 1>
@@ -55,7 +55,7 @@ module ContainsFieldData
   # @author Alex Oxorn
   #
   # @return [Integer] The FieldDefiner's id
-  # @return [NilClass] if there is no field_definer
+  # @return [nil] if there is no field_definer
   #
   # @example
   #    u = User.first #=> < #User enterprise_id: 1>
@@ -68,7 +68,7 @@ module ContainsFieldData
   #
   # @author Alex Oxorn
   #
-  # @return [NilClass]
+  # @return [void]
   #
   # @example
   #   u = User.first
@@ -97,7 +97,7 @@ module ContainsFieldData
   # for field users were where they do not have +field_data+ for that +field+
   #
   # @author Alex Oxorn
-  # @return [NilClass]
+  # @return [void]
   #
   # @overload create_missing_field_data(*ids)
   #   Checks if there any +fields+ that a field user can use from the provided fields, and creates +field_data+
@@ -141,7 +141,7 @@ module ContainsFieldData
   end
 
   # Class Methods for FieldData Models
-  module ClassMethods # :nodoc:
+  module ClassMethods
     # Evaluates an +ActiveRecord+ query of a +field_user+ and creates getter and setter
     # methods on the singletons of each +field_user+ for its +field_data+
     #
