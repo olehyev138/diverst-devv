@@ -104,6 +104,7 @@ export function EventFormInner({
           <CardContent>
             <Field
               component={DiverstFileInput}
+              fileName={props.event && props.event.picture_file_name}
               disabled={props.isCommitting}
               fullWidth
               id='picture'
