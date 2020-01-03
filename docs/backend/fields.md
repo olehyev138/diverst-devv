@@ -9,7 +9,7 @@ In the following diagram, A <- B, means A has many B, and B belongs to A
     - An object which holds the definition of custom fields
 - Fields:
     - The actual custom fields
-- Field Users: (currently called fieldable)
+- Field Users:
     - The objects which contains field data objects
 - Field Data
     - Holds the actual data for each Field User, Field pair
@@ -40,7 +40,7 @@ Now when a `User` is modifying their profile, they can now fill in data for the 
 
 So now, a user, like Alex, can set his gender as Male, his DOB as June 6th, and his spoken languages as English 
 and Pig Latin.
-These Data are then stored in Field Data, so there will be an entry in FieldData with `fieldable = Alex`,
+These Data are then stored in Field Data, so there will be an entry in FieldData with `field_user = Alex`,
 `field = gender`, and `data = 'Male'`
 
 ## Existing Field Users and Definers
@@ -67,7 +67,7 @@ field definer and its fields
 - a model attribute readers for said variables `mattr_reader :field_association_name, :field_definer_name`
 - include the `ContainsFieldData` module
 - a `has_many` association to fields called `field_data` with the options
-    - as: :fieldable,
+    - as: :field_user,
     - dependent: :destroy
 
 for example, here is a snippet from `UserGroup`:
@@ -79,7 +79,7 @@ class UserGroup < ApplicationRecord
 
   include ContainsFieldData
   # ...
-  has_many :field_data, class_name: 'FieldData', as: :fieldable, dependent: :destroy
+  has_many :field_data, class_name: 'FieldData', as: :field_user, dependent: :destroy
   # ...
 end 
 ```
@@ -107,7 +107,7 @@ By including `ContainsFieldData`, you gain access to the following functions:
     - :load_field_data, creates getters and setters for the field data
         - ``` 
           u.load_field_data
-            FieldData Load (1.1ms)  SELECT  `field_data`.* FROM `field_data` WHERE `field_data`.`fieldable_id` = 1 AND `field_data`.`fieldable_type` = 'User' ORDER BY `field_data`.`id` ASC LIMIT 1000
+            FieldData Load (1.1ms)  SELECT  `field_data`.* FROM `field_data` WHERE `field_data`.`field_user_id` = 1 AND `field_data`.`field_user_type` = 'User' ORDER BY `field_data`.`id` ASC LIMIT 1000
             Field Load (0.5ms)  SELECT `fields`.* FROM `fields` WHERE `fields`.`id` IN (5, 15, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16, 17, 18, 19, 20, 21, 22, 23, 58, 73)
           
           u.gender
@@ -129,7 +129,7 @@ By including `ContainsFieldData`, you gain access to the following functions:
     - ``` 
       us = User.where('id < 10').load_field_data
           User Load (0.8ms)  SELECT `users`.* FROM `users` WHERE (id < 10)
-          FieldData Load (1.4ms)  SELECT `field_data`.* FROM `field_data` WHERE `field_data`.`fieldable_type` = 'User' AND `field_data`.`fieldable_id` IN (1, 2, 3, 4, 5, 6, 7, 8, 9)
+          FieldData Load (1.4ms)  SELECT `field_data`.* FROM `field_data` WHERE `field_data`.`field_user_type` = 'User' AND `field_data`.`field_user_id` IN (1, 2, 3, 4, 5, 6, 7, 8, 9)
           Field Load (0.4ms)  SELECT `fields`.* FROM `fields` WHERE `fields`.`id` IN (5, 15, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16, 17, 18, 19, 20, 21, 22, 23, 58, 73)
       => [ #<User:0x000055c39596f380>, ... ]
       
