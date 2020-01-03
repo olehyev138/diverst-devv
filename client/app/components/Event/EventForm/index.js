@@ -104,7 +104,6 @@ export function EventFormInner({
           <CardContent>
             <Field
               component={DiverstFileInput}
-              onChange={value => setFieldValue('picture', value.target.files[0])}
               disabled={props.isCommitting}
               fullWidth
               id='picture'
@@ -148,8 +147,8 @@ export function EventForm(props) {
     annual_budget_id: { default: '' },
     budget_item_id: { default: '' },
     pillar_id: { default: '' },
-    owner_id: { default: dig(props, 'currentUser', 'id') || '' },
-    owner_group_id: { default: dig(props, 'currentGroup', 'id') || '' }
+    owner_id: { default: '' },
+    owner_group_id: { default: '' }
   });
 
   return (
