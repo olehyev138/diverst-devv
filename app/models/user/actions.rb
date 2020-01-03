@@ -221,7 +221,7 @@ module User::Actions
           {
               field_data: [
                   :field,
-                  { field: :enterprise }
+                  { field: :field_definer }
               ]
           },
           {
