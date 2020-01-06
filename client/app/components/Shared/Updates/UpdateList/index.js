@@ -95,7 +95,7 @@ export function UpdateList(props, context) {
             onClick={() => console.log('click')}
             startIcon={<AddIcon />}
           >
-            <DiverstFormattedMessage {...messages.newUpdate} />
+            <DiverstFormattedMessage {...messages.new} />
           </Button>
         </Grid>
       </Grid>
@@ -112,6 +112,7 @@ export function UpdateList(props, context) {
                   update={update}
                   key={update.id}
                   className={classes.eventListItem}
+                  links={props.links}
                 />
               </Grid>
             );
@@ -146,6 +147,7 @@ UpdateList.propTypes = {
   checkboxUpdate: PropTypes.bool,
   dateUpdate: PropTypes.bool,
   numberUpdate: PropTypes.bool,
+  links: PropTypes.object,
 };
 
 export default compose(

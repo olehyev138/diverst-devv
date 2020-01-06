@@ -1,6 +1,6 @@
 /**
  *
- * Field Component
+ * Update Component
  *
  *
  */
@@ -11,48 +11,48 @@ import { compose } from 'redux';
 
 import {
   Button, Card, CardContent, CardActions,
-  Typography, Grid, Collapse, Box, Hidden, Link, CardActionArea
+  Typography, Grid, Collapse, Box, Hidden, Link, CardActionArea, Divider
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
 import AddIcon from '@material-ui/icons/Add';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
-import messages from 'containers/Shared/Field/messages';
+import messages from 'containers/Shared/Update/messages';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
-import FieldForm from 'components/Shared/Fields/FieldForms/FieldForm';
 
-import DiverstPagination from 'components/Shared/DiverstPagination';
-import DiverstLoader from 'components/Shared/DiverstLoader';
-import {DateTime, formatDateTimeString} from "../../../../utils/dateTimeHelpers";
-import KeyboardArrowRightIcon from "@material-ui/icons/KeyboardArrowRight";
-import {ROUTES} from "../../../../containers/Shared/Routes/constants";
-import EventListItem from "../../../Event/EventListItem";
+import {DateTime, formatDateTimeString} from "utils/dateTimeHelpers";
+import {ROUTES} from "containers/Shared/Routes/constants";
+import classNames from "classnames";
+
 
 const styles = theme => ({
-  fieldListItem: {
+  updateListItem: {
     width: '100%',
   },
-  fieldListItemDescription: {
+  updateListItemDescription: {
     paddingTop: 8,
   },
   errorButton: {
     color: theme.palette.error.main,
   },
-  fieldTitleButton: {
+  updateTitleButton: {
     textTransform: 'none',
   },
-  fieldFormCollapse: {
+  updateFormCollapse: {
     width: '100%',
   },
-  fieldFormContainer: {
+  updateFormContainer: {
     width: '100%',
     padding: theme.spacing(1.5),
   },
+  deleteButton: {
+    color: theme.palette.error.main,
+  },
 });
 
-export function FieldList(props, context) {
+export function UpdateList(props, context) {
   const { classes, ...rest } = props;
 
   const { update } = props;
@@ -77,35 +77,51 @@ export function FieldList(props, context) {
                 {formatDateTimeString(update.report_date, DateTime.DATE_MED) + (update.comments ? `: ${update.short_comment}` : '')}
               </Typography>
             </Link>
-            <hr className={classes.divider} />
-            {update.comments && (
-              <React.Fragment>
-                <Typography color='textSecondary'>
-                  {update.comments}
-                </Typography>
-                <Box pb={1} />
-              </React.Fragment>
-            )}
           </Grid>
         </Grid>
       </CardContent>
+      <Divider />
+      <CardActions>
+        <Button
+          color='primary'
+          className={classes.folderLink}
+          component={WrappedNavLink}
+          to={props.links.edit(update.id)}
+        >
+          <DiverstFormattedMessage {...(messages.edit)} />
+        </Button>
+      </CardActions>
+      <CardActions>
+        <Button
+          className={classNames(classes.folderLink, classes.deleteButton)}
+          onClick={() => {
+            // eslint-disable-next-line no-restricted-globals
+            if (confirm('DELETE? TODO')) {
+              props.deleteUpdateBegin(update.id);
+            }
+          }}
+        >
+          <DiverstFormattedMessage {...(messages.delete)} />
+        </Button>
+      </CardActions>
     </Card>
 
   );
 }
 
-FieldList.propTypes = {
+UpdateList.propTypes = {
   classes: PropTypes.object,
   update: PropTypes.object,
   isLoading: PropTypes.bool,
-  updateFieldBegin: PropTypes.func,
-  deleteFieldBegin: PropTypes.func,
+  updateUpdateBegin: PropTypes.func,
+  deleteUpdateBegin: PropTypes.func,
   isCommitting: PropTypes.bool,
   commitSuccess: PropTypes.bool,
   currentEnterprise: PropTypes.object,
+  links: PropTypes.object,
 };
 
 export default compose(
   memo,
   withStyles(styles),
-)(FieldList);
+)(UpdateList);

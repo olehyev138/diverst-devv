@@ -41,6 +41,8 @@ import saga from '../updatesSaga';
 import { selectGroup } from 'containers/Group/selectors';
 import UpdateList from 'components/Shared/Updates/UpdateList';
 
+import { ROUTES } from 'containers/Shared/Routes/constants';
+
 export function UpdateListPage(props) {
   useInjectReducer({ key: 'updates', reducer });
   useInjectSaga({ key: 'updates', saga });
@@ -54,6 +56,13 @@ export function UpdateListPage(props) {
       groupId: dig(props, 'currentGroup', 'id'),
     }
   );
+
+  const partialLink = ROUTES.group.plan.kpi.updates;
+  const links = {
+    new: partialLink.new.path(dig(props, 'currentGroup', 'id')),
+    edit: id => partialLink.edit.path(dig(props, 'currentGroup', 'id'), id),
+    show: id => partialLink.show.path(dig(props, 'currentGroup', 'id'), id),
+  };
 
   useEffect(() => {
     props.getUpdatesBegin(params);
@@ -85,10 +94,9 @@ export function UpdateListPage(props) {
         updates={props.updates}
         updateTotal={props.total}
         isFetching={props.isFetching}
+        links={links}
 
         handlePagination={handlePagination}
-
-        currentGroup={props.currentGroup}
       />
     </React.Fragment>
   );
