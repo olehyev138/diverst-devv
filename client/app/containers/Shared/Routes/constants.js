@@ -301,9 +301,29 @@ export const ROUTES = {
           }
         },
         updates: {
-          path: (groupId = ':group_id') => `/groups/${groupId}/plan/kpi/updates`,
-          data: {
-            titleMessage: messages.groups.plan.kpi.metrics,
+          index: {
+            path: (groupId = ':group_id') => `/groups/${groupId}/plan/kpi/updates`,
+            data: {
+              titleMessage: messages.groups.plan.kpi.metrics,
+            }
+          },
+          show: {
+            path: (groupId = ':group_id', updateId = ':update_id') => `/groups/${groupId}/plan/kpi/updates/${updateId}`,
+            data: {
+              titleMessage: messages.groups.plan.kpi.metrics,
+            }
+          },
+          edit: {
+            path: (groupId = ':group_id', updateId = ':update_id') => `/groups/${groupId}/plan/kpi/updates/${updateId}/edit`,
+            data: {
+              titleMessage: messages.groups.plan.kpi.metrics,
+            }
+          },
+          new: {
+            path: (groupId = ':group_id') => `/groups/${groupId}/plan/kpi/updates/new`,
+            data: {
+              titleMessage: messages.groups.plan.kpi.metrics,
+            }
           }
         },
       },

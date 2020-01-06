@@ -236,7 +236,7 @@ export default function Routes(props) {
       { /* Group Plan - KPI */ }
       <GroupKPILayout exact {...expandRoute(ROUTES.group.plan.kpi.metrics)} component={GroupPlanKpiPage} />
       <GroupKPILayout exact {...expandRoute(ROUTES.group.plan.kpi.fields)} component={GroupPlanFieldsPage} />
-      <GroupKPILayout exact {...expandRoute(ROUTES.group.plan.kpi.updates)} component={GroupPlanUpdatesPage} />
+      <GroupKPILayout exact {...expandRoute(ROUTES.group.plan.kpi.updates.index)} component={GroupPlanUpdatesPage} />
 
       { /* Group Manage */ }
       { /* TODO - redirect /manage -> /manage/settings */ }
