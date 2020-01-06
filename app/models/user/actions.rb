@@ -236,6 +236,7 @@ module User::Actions
           :user_role,
           :enterprise,
           :news_links,
+          :avatar_attachment,
           {
               enterprise: [
                   :theme,
