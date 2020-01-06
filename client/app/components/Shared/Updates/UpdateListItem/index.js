@@ -22,9 +22,9 @@ import messages from 'containers/Shared/Update/messages';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
 
-import {DateTime, formatDateTimeString} from "utils/dateTimeHelpers";
-import {ROUTES} from "containers/Shared/Routes/constants";
-import classNames from "classnames";
+import { DateTime, formatDateTimeString } from 'utils/dateTimeHelpers';
+import { ROUTES } from 'containers/Shared/Routes/constants';
+import classNames from 'classnames';
 
 
 const styles = theme => ({
@@ -96,7 +96,7 @@ export function UpdateList(props, context) {
         <Button
           className={classNames(classes.folderLink, classes.deleteButton)}
           onClick={() => {
-            // eslint-disable-next-line no-restricted-globals
+            // eslint-disable-next-line no-restricted-globals,no-alert
             if (confirm('DELETE? TODO'))
               props.deleteUpdateBegin(update.id);
           }}

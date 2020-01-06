@@ -92,7 +92,10 @@ export function UpdateList(props, context) {
             variant='contained'
             color='primary'
             size='large'
-            onClick={() => console.log('click')}
+            onClick={() => {
+              /* eslint-disable-next-line no-console */
+              console.log('click');
+            }}
             startIcon={<AddIcon />}
           >
             <DiverstFormattedMessage {...messages.new} />

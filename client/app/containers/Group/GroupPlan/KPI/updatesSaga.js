@@ -30,7 +30,6 @@ export function* getUpdates(action) {
 
     yield put(getUpdatesSuccess(response.data.page));
   } catch (err) {
-    console.log(err);
     yield put(getUpdatesError(err));
 
     // TODO: intl message
