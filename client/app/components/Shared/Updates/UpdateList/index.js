@@ -156,7 +156,7 @@ export function UpdateList(props, context) {
 
 UpdateList.propTypes = {
   classes: PropTypes.object,
-  updates: PropTypes.object,
+  updates: PropTypes.array,
   updateTotal: PropTypes.number,
   isLoading: PropTypes.bool,
   createUpdateBegin: PropTypes.func,

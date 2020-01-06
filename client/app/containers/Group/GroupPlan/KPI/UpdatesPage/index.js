@@ -1,15 +1,15 @@
 /**
  *
- * FieldsPage
+ * UpdatesPage
  *
- *  - lists all enterprise custom fields
- *  - renders forms for creating & editing custom fields
+ *  - lists all enterprise custom updates
+ *  - renders forms for creating & editing custom updates
  *
  *  - function:
- *    - get fields from server
- *    - on edit - render respective form with field data
+ *    - get updates from server
+ *    - on edit - render respective form with update data
  *    - on new - render respective empty form
- *    - on save - create/update field
+ *    - on save - create/update update
  */
 
 import React, { memo, useEffect, useState } from 'react';
@@ -39,9 +39,9 @@ import reducer from 'containers/Shared/Update/reducer';
 import saga from '../updatesSaga';
 
 import { selectGroup } from 'containers/Group/selectors';
-import NotFoundPage from 'containers/Shared/NotFoundPage';
+import UpdateList from 'components/Shared/Updates/UpdateList';
 
-export function FieldListPage(props) {
+export function UpdateListPage(props) {
   useInjectReducer({ key: 'updates', reducer });
   useInjectSaga({ key: 'updates', saga });
 
@@ -81,7 +81,7 @@ export function FieldListPage(props) {
 
   return (
     <React.Fragment>
-      <NotFoundPage
+      <UpdateList
         updates={props.updates}
         total={props.total}
         isFetching={props.isFetching}
@@ -89,19 +89,17 @@ export function FieldListPage(props) {
         handlePagination={handlePagination}
 
         currentGroup={props.currentGroup}
-
-        numberField
       />
     </React.Fragment>
   );
 }
 
-FieldListPage.propTypes = {
+UpdateListPage.propTypes = {
   getUpdatesBegin: PropTypes.func.isRequired,
   deleteUpdateBegin: PropTypes.func,
   updatesUnmount: PropTypes.func.isRequired,
 
-  updates: PropTypes.object,
+  updates: PropTypes.array,
   total: PropTypes.number,
   isFetching: PropTypes.bool,
   hasChanged: PropTypes.bool,
@@ -133,4 +131,4 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(FieldListPage);
+)(UpdateListPage);
