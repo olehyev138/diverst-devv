@@ -86,7 +86,11 @@ export function FieldListPage(props) {
         fields={props.fields}
         fieldTotal={props.fieldTotal}
         isLoading={props.isLoading}
-        createFieldBegin={payload => props.createFieldBegin(payload, dig(props, 'currentGroup', 'id'))}
+        createFieldBegin={payload => props.createFieldBegin({
+          ...payload,
+          groupId: dig(props, 'currentGroup', 'id'),
+          field_type: 'regular'
+        })}
         updateFieldBegin={props.updateFieldBegin}
         deleteFieldBegin={props.deleteFieldBegin}
         handlePagination={handlePagination}
@@ -127,19 +131,13 @@ const mapStateToProps = createStructuredSelector({
   hasChanged: selectHasChanged(),
 });
 
-const mapDispatchToProps = dispatch => ({
-  getFieldsBegin: id => dispatch(getFieldsBegin(id)),
-  createFieldBegin: (payload, groupId) => {
-    dispatch(createFieldBegin({
-      ...payload,
-      field_type: 'regular',
-      groupId
-    }));
-  },
-  updateFieldBegin: payload => dispatch(updateFieldBegin(payload)),
-  deleteFieldBegin: id => dispatch(deleteFieldBegin(id)),
-  fieldUnmount: () => dispatch(fieldUnmount()),
-});
+const mapDispatchToProps = {
+  getFieldsBegin,
+  createFieldBegin,
+  updateFieldBegin,
+  deleteFieldBegin,
+  fieldUnmount,
+};
 
 const withConnect = connect(
   mapStateToProps,
