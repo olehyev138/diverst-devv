@@ -1,6 +1,6 @@
 /*
  *
- * Kpi actions
+ * Update actions
  *
  */
 

@@ -5,46 +5,46 @@ const selectUpdateDomain = state => state.updates || initialState;
 
 const selectPaginatedUpdates = () => createSelector(
   selectUpdateDomain,
-  kpiState => kpiState.updateList
+  updateState => updateState.updateList
 );
 
-const selectUpdateTotal = () => createSelector(
+const selectUpdatesTotal = () => createSelector(
   selectUpdateDomain,
-  kpiState => kpiState.updateListTotal
+  updateState => updateState.updateListTotal
 );
 
 const selectUpdate = () => createSelector(
   selectUpdateDomain,
-  kpiState => kpiState.currentUpdate
+  updateState => updateState.currentUpdate
 );
 
 const selectIsFetchingUpdates = () => createSelector(
   selectUpdateDomain,
-  kpiState => kpiState.isFetchingUpdates
+  updateState => updateState.isFetchingUpdates
 );
 
-const selectIsFetchingKpi = () => createSelector(
+const selectIsFetchingUpdate = () => createSelector(
   selectUpdateDomain,
-  kpiState => kpiState.isFetchingUpdate
+  updateState => updateState.isFetchingUpdate
 );
 
 const selectIsCommitting = () => createSelector(
   selectUpdateDomain,
-  kpiState => kpiState.isCommitting
+  updateState => updateState.isCommitting
 );
 
 const selectHasChanged = () => createSelector(
   selectUpdateDomain,
-  kpiState => kpiState.hasChanged
+  updateState => updateState.hasChanged
 );
 
 export {
   selectUpdateDomain,
   selectPaginatedUpdates,
-  selectUpdateTotal,
+  selectUpdatesTotal,
   selectUpdate,
   selectIsFetchingUpdates,
-  selectIsFetchingKpi,
+  selectIsFetchingUpdate,
   selectIsCommitting,
   selectHasChanged,
 };

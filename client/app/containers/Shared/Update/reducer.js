@@ -1,6 +1,6 @@
 /*
  *
- * Kpi reducer
+ * Update reducer
  *
  */
 
@@ -35,7 +35,7 @@ export const initialState = {
 };
 
 /* eslint-disable-next-line default-case, no-param-reassign */
-function kpiReducer(state = initialState, action) {
+function updateReducer(state = initialState, action) {
   /* eslint-disable consistent-return */
   return produce(state, (draft) => {
     switch (action.type) {
@@ -44,7 +44,7 @@ function kpiReducer(state = initialState, action) {
         break;
 
       case GET_UPDATE_SUCCESS:
-        draft.currentUpdate = action.payload.kpi;
+        draft.currentUpdate = action.payload.update;
         draft.isFetchingUpdate = false;
         break;
 
@@ -92,4 +92,4 @@ function kpiReducer(state = initialState, action) {
     }
   });
 }
-export default kpiReducer;
+export default updateReducer;

@@ -25,17 +25,17 @@ import { useInjectReducer } from 'utils/injectReducer';
 
 import {
   selectPaginatedUpdates,
-  selectUpdateTotal,
+  selectUpdatesTotal,
   selectIsFetchingUpdates,
   selectHasChanged,
-} from '../selectors';
+} from 'containers/Shared/Update/selectors';
 import {
   getUpdatesBegin,
   deleteUpdateBegin,
   updatesUnmount,
-} from '../actions';
+} from 'containers/Shared/Update/actions';
 
-import reducer from '../reducer';
+import reducer from 'containers/Shared/Update/reducer';
 import saga from '../updatesSaga';
 
 import { selectGroup } from 'containers/Group/selectors';
@@ -112,7 +112,7 @@ FieldListPage.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
   updates: selectPaginatedUpdates(),
-  total: selectUpdateTotal(),
+  total: selectUpdatesTotal(),
   isFetching: selectIsFetchingUpdates(),
   hasChanged: selectHasChanged(),
   currentGroup: selectGroup(),

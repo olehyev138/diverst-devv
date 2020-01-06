@@ -12,28 +12,16 @@ import {
   CREATE_UPDATE_BEGIN,
   UPDATE_UPDATE_BEGIN,
   DELETE_UPDATE_BEGIN,
-} from './constants';
+} from 'containers/Shared/Update/constants';
 
 import {
-  getUpdateSuccess, getUpdateError,
   getUpdatesSuccess, getUpdatesError,
   createUpdateSuccess, createUpdateError,
-  updateUpdateSuccess, updateUpdateError,
-  deleteUpdateSuccess, deleteUpdateError,
-} from './actions';
+} from 'containers/Shared/Update/actions';
 
-export function* getUpdate(action) {
-  try {
-    const response = { data: 'API CALL' };
-
-    yield put(getUpdateSuccess(response.data));
-  } catch (err) {
-    yield put(getUpdateError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to get update', options: { variant: 'warning' } }));
-  }
-}
+import {
+  getUpdate, updateUpdate, deleteUpdate
+} from 'containers/Shared/Update/saga';
 
 export function* getUpdates(action) {
   try {
@@ -61,35 +49,6 @@ export function* createUpdate(action) {
     yield put(showSnackbar({ message: 'Failed to create update', options: { variant: 'warning' } }));
   }
 }
-
-export function* updateUpdate(action) {
-  try {
-    const response = { data: 'API CALL' };
-
-    yield put(updateUpdateSuccess({}));
-    yield put(showSnackbar({ message: 'Successfully updated update', options: { variant: 'success' } }));
-  } catch (err) {
-    yield put(updateUpdateError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to update update', options: { variant: 'warning' } }));
-  }
-}
-
-export function* deleteUpdate(action) {
-  try {
-    const response = { data: 'API CALL' };
-
-    yield put(deleteUpdateSuccess({}));
-    yield put(showSnackbar({ message: 'Successfully deleted update', options: { variant: 'success' } }));
-  } catch (err) {
-    yield put(deleteUpdateError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to delete update', options: { variant: 'warning' } }));
-  }
-}
-
 
 export default function* KpiSaga() {
   yield takeLatest(GET_UPDATE_BEGIN, getUpdate);
