@@ -24,6 +24,10 @@ class EmailsController < ApplicationController
     end
   end
 
+  def new_custom
+    
+  end
+
   protected
 
   def set_email

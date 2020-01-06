@@ -709,7 +709,12 @@ Rails.application.routes.draw do
   resources :shared_news_feed_links
 
   resources :policy_group_templates
-  resources :emails
+  resources :emails do
+    collection do
+      get 'new_custom'
+    end
+  end
+
   resources :custom_texts, only: [:edit, :update]
 
   resources :likes, only: [:create, :unlike]
