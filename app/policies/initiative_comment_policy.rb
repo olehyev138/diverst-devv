@@ -1,5 +1,5 @@
 class InitiativeCommentPolicy < GroupBasePolicy
-  def create? 
+  def create?
     manage_comments?
   end
 
