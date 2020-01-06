@@ -42,7 +42,7 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import RouteService from "utils/routeHelpers";
 import {NotFoundPage} from "containers/Shared/NotFoundPage";
 
-export function UpdateListPage(props) {
+export function UpdateEditPage(props) {
   useInjectReducer({ key: 'updates', reducer });
   useInjectSaga({ key: 'updates', saga });
 
@@ -59,8 +59,9 @@ export function UpdateListPage(props) {
   const update = props.currentUpdate || location.update;
 
   useEffect(() => {
-    if (!update || update.id !== rs.params('update_id')[0])
+    if (!update || update.id !== rs.params('update_id')[0]){
       props.getUpdateBegin();
+    }
 
     return () => {
       props.updatesUnmount();
@@ -68,17 +69,13 @@ export function UpdateListPage(props) {
   }, []);
 
   return (
-    <React.Fragment>
-      <NotFoundPage
-        updates={update}
-        isFetching={props.isFetching}
-        links={links}
-      />
-    </React.Fragment>
+    <h1>
+      {`EDIT ITEM ${dig(update, 'id')}`}
+    </h1>
   );
 }
 
-UpdateListPage.propTypes = {
+UpdateEditPage.propTypes = {
   getUpdateBegin: PropTypes.func.isRequired,
   deleteUpdateBegin: PropTypes.func.isRequired,
   updatesUnmount: PropTypes.func.isRequired,
@@ -98,6 +95,8 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = {
+  getUpdateBegin,
+  updateUpdateBegin,
   deleteUpdateBegin,
   updatesUnmount,
 };
@@ -110,4 +109,4 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(UpdateListPage);
+)(UpdateEditPage);

@@ -38,6 +38,7 @@ import {
 import reducer from 'containers/Shared/Update/reducer';
 import saga from '../updatesSaga';
 
+import { selectGroup } from 'containers/Group/selectors';
 import UpdateList from 'components/Shared/Updates/UpdateList';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -88,16 +89,14 @@ export function UpdateListPage(props) {
   };
 
   return (
-    <React.Fragment>
-      <UpdateList
-        updates={props.updates}
-        updateTotal={props.total}
-        isFetching={props.isFetching}
-        links={links}
+    <UpdateList
+      updates={props.updates}
+      updateTotal={props.total}
+      isFetching={props.isFetching}
+      links={links}
 
-        handlePagination={handlePagination}
-      />
-    </React.Fragment>
+      handlePagination={handlePagination}
+    />
   );
 }
 
@@ -121,6 +120,7 @@ const mapStateToProps = createStructuredSelector({
   total: selectUpdatesTotal(),
   isFetching: selectIsFetchingUpdates(),
   hasChanged: selectHasChanged(),
+  currentGroup: selectGroup(),
 });
 
 const mapDispatchToProps = {
