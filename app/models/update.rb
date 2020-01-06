@@ -4,6 +4,7 @@ class Update < ApplicationRecord
   mattr_reader :field_association_name, :field_definer_name
 
   include ContainsFieldData
+  include Update::Actions
 
   belongs_to :owner, class_name: 'User'
   belongs_to :updatable, polymorphic: true
