@@ -1,6 +1,6 @@
 /**
  *
- * UpdatesPage
+ * UpdatePage
  *
  *  - lists all enterprise custom updates
  *  - renders forms for creating & editing custom updates
@@ -12,7 +12,7 @@
  *    - on save - create/update update
  */
 
-import React, { memo, useEffect, useState } from 'react';
+import React, {memo, useContext, useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import dig from 'object-dig';
@@ -24,37 +24,30 @@ import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 
 import {
-  selectPaginatedUpdates,
-  selectUpdatesTotal,
+  selectUpdate,
   selectIsFetchingUpdates,
   selectHasChanged,
 } from 'containers/Shared/Update/selectors';
 import {
-  getUpdatesBegin,
+  getUpdateBegin,
   deleteUpdateBegin,
   updatesUnmount,
+  updateUpdateBegin,
 } from 'containers/Shared/Update/actions';
 
 import reducer from 'containers/Shared/Update/reducer';
 import saga from '../updatesSaga';
 
-import UpdateList from 'components/Shared/Updates/UpdateList';
-
 import { ROUTES } from 'containers/Shared/Routes/constants';
+import RouteService from "utils/routeHelpers";
+import {NotFoundPage} from "containers/Shared/NotFoundPage";
 
 export function UpdateListPage(props) {
   useInjectReducer({ key: 'updates', reducer });
   useInjectSaga({ key: 'updates', saga });
 
-  const [params, setParams] = useState(
-    {
-      count: 5,
-      page: 0,
-      order: 'asc',
-      orderBy: 'report_date',
-      groupId: dig(props, 'currentGroup', 'id'),
-    }
-  );
+  const rs = new RouteService(useContext);
+  const { location } = rs;
 
   const partialLink = ROUTES.group.plan.kpi.updates;
   const links = {
@@ -63,53 +56,36 @@ export function UpdateListPage(props) {
     show: id => partialLink.show.path(dig(props, 'currentGroup', 'id'), id),
   };
 
+  const update = props.currentUpdate || location.update;
+
   useEffect(() => {
-    props.getUpdatesBegin(params);
+    if (!update || update.id !== rs.params('update_id')[0])
+      props.getUpdateBegin();
 
     return () => {
       props.updatesUnmount();
     };
   }, []);
 
-  useEffect(() => {
-    if (props.hasChanged)
-      props.getUpdatesBegin(params);
-
-    return () => {
-      props.updatesUnmount();
-    };
-  }, [props.hasChanged]);
-
-  const handlePagination = (payload) => {
-    const newParams = { ...params, count: payload.count, page: payload.page };
-
-    props.getUpdatesBegin(newParams);
-    setParams(newParams);
-  };
-
   return (
     <React.Fragment>
-      <UpdateList
-        updates={props.updates}
-        updateTotal={props.total}
+      <NotFoundPage
+        updates={update}
         isFetching={props.isFetching}
         links={links}
-
-        handlePagination={handlePagination}
       />
     </React.Fragment>
   );
 }
 
 UpdateListPage.propTypes = {
-  getUpdatesBegin: PropTypes.func.isRequired,
-  deleteUpdateBegin: PropTypes.func,
+  getUpdateBegin: PropTypes.func.isRequired,
+  deleteUpdateBegin: PropTypes.func.isRequired,
   updatesUnmount: PropTypes.func.isRequired,
+  updateUpdateBegin: PropTypes.func.isRequired,
 
-  updates: PropTypes.array,
-  total: PropTypes.number,
+  currentUpdate: PropTypes.object,
   isFetching: PropTypes.bool,
-  hasChanged: PropTypes.bool,
 
   currentGroup: PropTypes.shape({
     id: PropTypes.number
@@ -117,14 +93,11 @@ UpdateListPage.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
-  updates: selectPaginatedUpdates(),
-  total: selectUpdatesTotal(),
+  currentUpdate: selectUpdate(),
   isFetching: selectIsFetchingUpdates(),
-  hasChanged: selectHasChanged(),
 });
 
 const mapDispatchToProps = {
-  getUpdatesBegin,
   deleteUpdateBegin,
   updatesUnmount,
 };

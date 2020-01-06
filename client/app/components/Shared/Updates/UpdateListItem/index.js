@@ -68,7 +68,10 @@ export function UpdateList(props, context) {
             <Link
               className={classes.eventLink}
               component={WrappedNavLink}
-              to={props.links.show(update.id)}
+              to={{
+                pathname: props.links.show(update.id),
+                state: { update }
+              }}
             >
               <Typography color='primary' variant='h6' component='h2'>
                 {formatDateTimeString(update.report_date, DateTime.DATE_MED) + (update.comments ? `: ${update.short_comment}` : '')}
@@ -83,7 +86,10 @@ export function UpdateList(props, context) {
           color='primary'
           className={classes.folderLink}
           component={WrappedNavLink}
-          to={props.links.edit(update.id)}
+          to={{
+            pathname: props.links.edit(update.id),
+            update
+          }}
         >
           <DiverstFormattedMessage {...(messages.edit)} />
         </Button>
