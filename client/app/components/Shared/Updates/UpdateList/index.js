@@ -105,12 +105,15 @@ export function UpdateList(props, context) {
           { /* eslint-disable-next-line arrow-body-style */ }
           {props.updates && Object.values(props.updates).map((update, i) => {
             return (
-              <Update
-                updateUpdateBegin={props.updateUpdateBegin}
-                deleteUpdateBegin={props.deleteUpdateBegin}
-                update={update}
-                key={update.id}
-              />
+              <Grid item key={update.id} className={classes.updateListItem}>
+                <Update
+                  updateUpdateBegin={props.updateUpdateBegin}
+                  deleteUpdateBegin={props.deleteUpdateBegin}
+                  update={update}
+                  key={update.id}
+                  className={classes.eventListItem}
+                />
+              </Grid>
             );
           })}
         </Grid>

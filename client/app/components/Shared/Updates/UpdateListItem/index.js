@@ -11,7 +11,7 @@ import { compose } from 'redux';
 
 import {
   Button, Card, CardContent, CardActions,
-  Typography, Grid, Collapse, Box, Hidden
+  Typography, Grid, Collapse, Box, Hidden, Link, CardActionArea
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -27,6 +27,8 @@ import DiverstPagination from 'components/Shared/DiverstPagination';
 import DiverstLoader from 'components/Shared/DiverstLoader';
 import {DateTime, formatDateTimeString} from "../../../../utils/dateTimeHelpers";
 import KeyboardArrowRightIcon from "@material-ui/icons/KeyboardArrowRight";
+import {ROUTES} from "../../../../containers/Shared/Routes/constants";
+import EventListItem from "../../../Event/EventListItem";
 
 const styles = theme => ({
   fieldListItem: {
@@ -58,22 +60,37 @@ export function FieldList(props, context) {
   const [form, setForm] = useState(false);
 
   return (
-    <Grid container spacing={1} justify='space-between' alignItems='center'>
-      <Grid item xs>
-        <Typography color='primary' variant='h6' component='h2'>
-          {formatDateTimeString(update.report_date, DateTime.DATE_MED)}
-        </Typography>
-        <hr className={classes.divider} />
-        {update.comments && (
-          <React.Fragment>
-            <Typography color='textSecondary'>
-              {update.comments}
-            </Typography>
-            <Box pb={1} />
-          </React.Fragment>
-        )}
-      </Grid>
-    </Grid>
+    <Card>
+      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+      <CardContent>
+        <Grid container spacing={1} justify='space-between' alignItems='center'>
+          <Grid item xs>
+            <Link
+              className={classes.eventLink}
+              component={WrappedNavLink}
+              to={{
+                pathname: ROUTES.group.events.show.path(update.owner_group_id, update.id),
+                state: { id: update.id }
+              }}
+            >
+              <Typography color='primary' variant='h6' component='h2'>
+                {formatDateTimeString(update.report_date, DateTime.DATE_MED) + (update.comments ? `: ${update.short_comment}` : '')}
+              </Typography>
+            </Link>
+            <hr className={classes.divider} />
+            {update.comments && (
+              <React.Fragment>
+                <Typography color='textSecondary'>
+                  {update.comments}
+                </Typography>
+                <Box pb={1} />
+              </React.Fragment>
+            )}
+          </Grid>
+        </Grid>
+      </CardContent>
+    </Card>
+
   );
 }
 
