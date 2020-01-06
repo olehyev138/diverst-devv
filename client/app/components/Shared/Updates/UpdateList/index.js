@@ -84,35 +84,6 @@ export function UpdateList(props, context) {
     },
   };
 
-  const [expandedUpdates, setExpandedUpdates] = useState({});
-
-  const [showUpdateForm, setShowUpdateForm] = useState(false);
-  const [enableUpdateForm, setEnableUpdateForm] = useState(showUpdateForm);
-  const [updateFormType, setUpdateFormType] = useState(undefined);
-
-  useEffect(() => {
-    if (showUpdateForm && props.commitSuccess)
-      hideUpdateForm();
-  }, [props.commitSuccess]);
-
-  const renderUpdateForm = (type) => {
-    setUpdateFormType(type);
-    setEnableUpdateForm(true);
-    setShowUpdateForm(true);
-  };
-
-  // Done to allow the collapse to transition out before clearing the update form
-  const hideUpdateForm = () => {
-    setShowUpdateForm(false);
-  };
-
-  const disableUpdateForm = () => {
-    setEnableUpdateForm(false);
-    setUpdateFormType(undefined);
-  };
-
-  const { textUpdate, selectUpdate, checkboxUpdate, dateUpdate, numberUpdate } = props;
-
   return (
     <React.Fragment>
       <Grid container spacing={3} justify='flex-end'>

@@ -83,7 +83,7 @@ export function UpdateListPage(props) {
     <React.Fragment>
       <UpdateList
         updates={props.updates}
-        total={props.total}
+        updateTotal={props.total}
         isFetching={props.isFetching}
 
         handlePagination={handlePagination}
