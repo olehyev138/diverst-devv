@@ -95,6 +95,7 @@ module User::Actions
     # get the events
     # order the event
     ordered = initiatives
+                .preload(Initiative.base_preloads)
                 .send_chain(query_scopes)
                 .order(order_by => order)
                 .distinct
@@ -144,6 +145,7 @@ module User::Actions
     valid_ors << User.sql_where("(#{ group_ors.join(' OR ')}) AND (#{ segment_ors.join(' OR ')})")
 
     ordered = Initiative
+                .preload(Initiative.base_preloads)
                 .left_joins(:initiative_segments, :initiative_participating_groups, :initiative_invitees)
                 .send_chain(query_scopes)
                 .where(valid_ors.join(' OR '))
