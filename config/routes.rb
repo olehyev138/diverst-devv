@@ -162,6 +162,7 @@ Diverst::Application.routes.draw do
       resources :topics
       resources :topic_feedbacks
       resources :twitter_accounts
+      resources :updates, only: [:show, :update, :delete]
       resources :user_rewards
       resources :user_reward_actions
       resources :user, only: [] do

@@ -6,6 +6,30 @@ class Api::V1::GroupsController < DiverstController
     super
   end
 
+  def updates
+    item = klass.find(params[:id])
+    base_authorize(item)
+
+    render status: 200, json: Update.index(self.diverst_request, params.except(:id).permit!, base: item.updates)
+  rescue => e
+    raise BadRequestException.new(e.message)
+  end
+
+  def create_update
+    params[:update] = field_payload
+    base_authorize(klass)
+    item = klass.find(params[:id])
+
+    render status: 201, json: Update.build(self.diverst_request, params, base: item.updates)
+  rescue => e
+    case e
+    when InvalidInputException
+      raise
+    else
+      raise BadRequestException.new(e.message)
+    end
+  end
+
   def fields
     item = klass.find(params[:id])
     base_authorize(item)
