@@ -13,9 +13,12 @@ export default defineMessages({
     id: `${scope}.index.button.new`,
   },
   edit: {
-    id: `${scope}.index.button.new`,
+    id: `${scope}.index.button.edit`,
   },
   delete: {
-    id: `${scope}.index.button.new`,
+    id: `${scope}.index.button.delete`,
+  },
+  deleteConfirmation: {
+    id: `${scope}.index.button.deleteConfirmation`,
   },
 });

@@ -68,10 +68,7 @@ export function UpdateList(props, context) {
             <Link
               className={classes.eventLink}
               component={WrappedNavLink}
-              to={{
-                pathname: ROUTES.group.events.show.path(update.owner_group_id, update.id),
-                state: { id: update.id }
-              }}
+              to={props.links.show(update.id)}
             >
               <Typography color='primary' variant='h6' component='h2'>
                 {formatDateTimeString(update.report_date, DateTime.DATE_MED) + (update.comments ? `: ${update.short_comment}` : '')}
@@ -90,15 +87,12 @@ export function UpdateList(props, context) {
         >
           <DiverstFormattedMessage {...(messages.edit)} />
         </Button>
-      </CardActions>
-      <CardActions>
         <Button
           className={classNames(classes.folderLink, classes.deleteButton)}
           onClick={() => {
             // eslint-disable-next-line no-restricted-globals
-            if (confirm('DELETE? TODO')) {
+            if (confirm('DELETE? TODO'))
               props.deleteUpdateBegin(update.id);
-            }
           }}
         >
           <DiverstFormattedMessage {...(messages.delete)} />
