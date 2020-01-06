@@ -24,7 +24,7 @@ import {
 
 export function* getUpdate(action) {
   try {
-    const response = { data: 'API CALL' };
+    const response = yield call(api.updates.get.bind(api.updates), action.payload);
 
     yield put(getUpdateSuccess(response.data));
   } catch (err) {

@@ -12,7 +12,7 @@
  *    - on save - create/update update
  */
 
-import React, {memo, useContext, useEffect, useState} from 'react';
+import React, { memo, useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import dig from 'object-dig';
@@ -39,8 +39,7 @@ import reducer from 'containers/Shared/Update/reducer';
 import saga from '../updatesSaga';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
-import RouteService from "utils/routeHelpers";
-import {NotFoundPage} from "containers/Shared/NotFoundPage";
+import RouteService from 'utils/routeHelpers';
 
 export function UpdateEditPage(props) {
   useInjectReducer({ key: 'updates', reducer });
@@ -59,9 +58,9 @@ export function UpdateEditPage(props) {
   const update = props.currentUpdate || location.update;
 
   useEffect(() => {
-    if (!update || update.id !== rs.params('update_id')[0]){
-      props.getUpdateBegin();
-    }
+    const [id] = rs.params('update_id');
+    if (!update || update.id !== id)
+      props.getUpdateBegin(id);
 
     return () => {
       props.updatesUnmount();
