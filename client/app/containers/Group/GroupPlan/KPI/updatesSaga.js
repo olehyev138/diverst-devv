@@ -25,10 +25,12 @@ import {
 
 export function* getUpdates(action) {
   try {
-    const response = yield call(api.groupUpdates.all.bind(api.groupUpdates), action.payload);
+    const { groupId, ...payload } = action.payload;
+    const response = yield call(api.groups.updates.bind(api.groups), groupId, payload);
 
     yield put(getUpdatesSuccess(response.data.page));
   } catch (err) {
+    console.log(err);
     yield put(getUpdatesError(err));
 
     // TODO: intl message

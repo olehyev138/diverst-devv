@@ -10,6 +10,13 @@ Object.assign(Groups, {
   },
   createFields(id, payload) {
     return axios.post(`${this.url}/${id}/create_field`, payload);
+  },
+
+  updates(id, payload) {
+    return axios.get(appendQueryArgs(`${this.url}/${id}/updates`, payload));
+  },
+  createUpdates(id, payload) {
+    return axios.post(`${this.url}/${id}/create_update`, payload);
   }
 });
 
