@@ -24,11 +24,19 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def fields?
-    create?
+    update?
   end
 
   def create_field?
-    create?
+    update?
+  end
+
+  def updates?
+    update?
+  end
+
+  def create_update?
+    update?
   end
 
   def update_all_sub_groups?

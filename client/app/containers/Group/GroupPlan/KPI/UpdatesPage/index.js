@@ -51,6 +51,7 @@ export function FieldListPage(props) {
       page: 0,
       order: 'asc',
       orderBy: 'id',
+      groupId: dig(props, 'currentGroup', 'id'),
     }
   );
 
