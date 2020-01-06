@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_20_180259) do
+ActiveRecord::Schema.define(version: 2020_01_06_160746) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "name", null: false
@@ -1500,6 +1500,20 @@ ActiveRecord::Schema.define(version: 2019_12_20_180259) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["group_id"], name: "index_twitter_accounts_on_group_id"
+  end
+
+  create_table "updates", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+    t.text "data"
+    t.text "comments"
+    t.date "report_date"
+    t.bigint "owner_id"
+    t.string "updatable_type"
+    t.bigint "updatable_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["owner_id"], name: "index_updates_on_owner_id"
+    t.index ["report_date"], name: "index_updates_on_report_date"
+    t.index ["updatable_type", "updatable_id"], name: "index_updates_on_updatable_type_and_updatable_id"
   end
 
   create_table "user_groups", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
