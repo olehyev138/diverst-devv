@@ -222,7 +222,7 @@ class Initiative < ApplicationRecord
   def current_expences_sum
     annual_budget = self.annual_budget
     if association(:expenses).loaded?
-      expenses.inject(0) {|sum, ex| ex.annual_budget_id == annual_budget&.id ? sum + ex.amount : sum}
+      expenses.inject(0) { |sum, ex| ex.annual_budget_id == annual_budget&.id ? sum + ex.amount : sum }
     else
       expenses.where(annual_budget_id: annual_budget&.id).sum(:amount) || 0
     end

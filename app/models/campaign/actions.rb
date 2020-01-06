@@ -9,4 +9,3 @@ module Campaign::Actions
     end
   end
 end
-

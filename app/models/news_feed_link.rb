@@ -72,7 +72,7 @@ class NewsFeedLink < ApplicationRecord
   end
 
   def total_likes
-   likes.size
+    likes.size
   end
 
   def create_view_if_none(user)
