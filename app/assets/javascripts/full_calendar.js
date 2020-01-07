@@ -13,6 +13,12 @@ $(document).on('ready page:load', function(){
         center: 'month,agendaWeek',
         right:  'prev,today,next'
       },
+
+      eventMouseover: function(event, jsEvent, view) {
+        var groupName = event.group_name;
+        $(jsEvent.target.closest('.fc-event').setAttribute("title", groupName)).tooltip("show");
+      },
+
       buttonIcons: false,
       eventSources: [
         {
