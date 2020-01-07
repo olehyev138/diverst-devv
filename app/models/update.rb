@@ -3,7 +3,6 @@ class Update < ApplicationRecord
   @@field_association_name = 'fields'
   mattr_reader :field_association_name, :field_definer_name
 
-  include ContainsFieldData
   include Update::Actions
 
   belongs_to :owner, class_name: 'User'
@@ -11,6 +10,7 @@ class Update < ApplicationRecord
   has_many :field_data, class_name: 'FieldData', as: :field_user, dependent: :destroy
 
   accepts_nested_attributes_for :field_data
+  include ContainsFieldData
 
   validates_length_of :comments, maximum: 65535
   validates_length_of :data, maximum: 65535

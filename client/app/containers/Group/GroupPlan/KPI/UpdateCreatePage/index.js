@@ -84,8 +84,13 @@ export function UpdateEditPage(props) {
       isCommitting={props.isCommitting || props.isCommittingFieldData}
       links={links}
       buttonText='Create Update'
-      updateAction={props.createUpdateBegin}
+      updateAction={payload => props.createUpdateBegin({
+        ...payload,
+        groupId: dig(props, 'currentGroup', 'id')
+      })}
       updateFieldDataBegin={props.updateFieldDataBegin}
+
+      edit
     />
   );
 }

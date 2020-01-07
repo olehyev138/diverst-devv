@@ -25,10 +25,12 @@ import FieldInputForm from 'components/Shared/Fields/FieldInputForm/Loadable';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 import { DiverstDatePicker } from 'components/Shared/Pickers/DiverstDatePicker';
+import {serializeFieldDataWithFieldId} from "utils/customFieldHelpers";
 
 /* eslint-disable object-curly-newline */
 export function UpdateFormInner({ formikProps, buttonText, ...props }) {
   const { handleSubmit, handleChange, handleBlur, values, setFieldValue, setFieldTouched } = formikProps;
+  console.log(values);
   return (
     <React.Fragment>
       <DiverstFormLoader isLoading={props.isFetching} isError={props.edit && !props.update}>
@@ -98,7 +100,7 @@ export function UpdateForm(props) {
     report_date: {default: DateTime.local()},
     comments: {default: ''},
     id: {default: ''},
-    field_data: {defualt: [], customKey: 'fieldData'}
+    field_data: {default: [], customKey: 'fieldData'}
   });
 
   return (
@@ -107,7 +109,12 @@ export function UpdateForm(props) {
       enableReinitialize
       onSubmit={(values, actions) => {
         values.redirectPath = props.links.index;
-        props.updateAction(values);
+        const payload = {
+          ...values,
+          field_data_attributes: serializeFieldDataWithFieldId(values.fieldData)
+        };
+        delete payload.fieldData;
+        props.updateAction(payload);
       }}
     >
       {formikProps => <UpdateFormInner {...props} formikProps={formikProps} />}

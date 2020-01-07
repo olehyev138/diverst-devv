@@ -25,7 +25,7 @@ class Api::V1::GroupsController < DiverstController
   end
 
   def create_update
-    params[:update] = field_payload
+    params[:update] = update_payload
     base_authorize(klass)
     item = klass.find(params[:id])
 
@@ -73,6 +73,20 @@ class Api::V1::GroupsController < DiverstController
             :field_type,
             :min,
             :max,
+          )
+  end
+
+  def update_payload
+    params
+        .require(:update)
+        .permit(
+            :report_date,
+            :comments,
+            field_data_attributes: [
+                :id,
+                :data,
+                :field_id,
+            ],
           )
   end
 
