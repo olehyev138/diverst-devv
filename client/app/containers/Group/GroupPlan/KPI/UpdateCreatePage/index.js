@@ -34,10 +34,7 @@ import {
 } from 'containers/Shared/FieldData/selectors';
 
 import {
-  getUpdateBegin,
-  deleteUpdateBegin,
-  updatesUnmount,
-  updateUpdateBegin,
+  createUpdateBegin,
 } from 'containers/Shared/Update/actions';
 
 import {
@@ -63,44 +60,26 @@ export function UpdateEditPage(props) {
   useInjectSaga({ key: 'field_data', saga: fieldDataSaga });
 
   const rs = new RouteService(useContext);
-  const { location } = rs;
 
   const partialLink = ROUTES.group.plan.kpi.updates;
   const links = {
     index: partialLink.index.path(dig(props, 'currentGroup', 'id')),
   };
 
-  const update = props.currentUpdate || location.update;
-
-  useEffect(() => {
-    const [id] = rs.params('update_id');
-    if (!update || update.id !== id)
-      props.getUpdateBegin(id);
-
-    return () => {
-      props.updatesUnmount();
-    };
-  }, []);
-
   return (
     <UpdateForm
       update={props.currentUpdate}
       isCommitting={props.isCommitting || props.isCommittingFieldData}
       links={links}
-      buttonText='Update'
-      updateAction={props.updateUpdateBegin}
+      buttonText='Create Update'
+      updateAction={props.createUpdateBegin}
       updateFieldDataBegin={props.updateFieldDataBegin}
-
-      edit
     />
   );
 }
 
 UpdateEditPage.propTypes = {
-  getUpdateBegin: PropTypes.func.isRequired,
-  deleteUpdateBegin: PropTypes.func.isRequired,
-  updatesUnmount: PropTypes.func.isRequired,
-  updateUpdateBegin: PropTypes.func.isRequired,
+  createUpdateBegin: PropTypes.func.isRequired,
   updateFieldDataBegin: PropTypes.func.isRequired,
 
   currentUpdate: PropTypes.object,
@@ -122,10 +101,7 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = {
-  getUpdateBegin,
-  updateUpdateBegin,
-  deleteUpdateBegin,
-  updatesUnmount,
+  createUpdateBegin,
   updateFieldDataBegin,
 };
 

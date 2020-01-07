@@ -71,25 +71,26 @@ export function UpdateFormInner({ handleSubmit, handleChange, handleBlur, values
             </CardActions>
           </Form>
         </Card>
-      </DiverstFormLoader>
-      <Box mb={2} />
-      <FieldInputForm
-        fieldData={dig(props, 'update', 'field_data') || []}
-        updateFieldDataBegin={props.updateFieldDataBegin}
-        isCommitting={props.isCommitting}
-        isFetching={props.isFetching}
+        {props.edit && (
+          <React.Fragment>
+            <Box mb={2} />
+            <FieldInputForm
+              fieldData={dig(props, 'update', 'field_data') || []}
+              updateFieldDataBegin={props.updateFieldDataBegin}
+              isCommitting={props.isCommitting}
+              isFetching={props.isFetching}
 
-        messages={messages}
-      />
+              messages={messages}
+            />
+          </React.Fragment>
+        )}
+      </DiverstFormLoader>
     </React.Fragment>
   );
 }
 
 export function UpdateForm(props) {
   const update = dig(props, 'update');
-
-  if (update)
-    console.log(update.field_data);
 
   const initialValues = buildValues(update, {
     report_date: {default: DateTime.local()},
@@ -116,6 +117,7 @@ UpdateForm.propTypes = {
   update: PropTypes.object,
   isCommitting: PropTypes.bool,
   isFetching: PropTypes.bool,
+  edit: PropTypes.bool,
   links: PropTypes.shape({
     index: PropTypes.string,
   }).isRequired
