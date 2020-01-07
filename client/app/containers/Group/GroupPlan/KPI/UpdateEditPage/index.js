@@ -47,6 +47,9 @@ import {
 import reducer from 'containers/Shared/Update/reducer';
 import saga from '../updatesSaga';
 
+import fieldDataReducer from 'containers/Shared/FieldData/reducer';
+import fieldDataSaga from 'containers/Shared/FieldData/saga';
+
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import RouteService from 'utils/routeHelpers';
 
@@ -56,6 +59,8 @@ import { selectGroup } from 'containers/Group/selectors';
 export function UpdateEditPage(props) {
   useInjectReducer({ key: 'updates', reducer });
   useInjectSaga({ key: 'updates', saga });
+  useInjectReducer({ key: 'field_data', reducer: fieldDataReducer });
+  useInjectSaga({ key: 'field_data', saga: fieldDataSaga });
 
   const rs = new RouteService(useContext);
   const { location } = rs;

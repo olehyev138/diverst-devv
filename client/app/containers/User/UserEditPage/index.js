@@ -20,10 +20,14 @@ import { selectFormUser, selectFieldData, selectIsCommitting, selectIsFormLoadin
 
 import saga from 'containers/User/saga';
 import UserForm from 'components/User/UserForm';
+import fieldDataReducer from 'containers/Shared/FieldData/reducer';
+import fieldDataSaga from 'containers/Shared/FieldData/saga';
 
 export function UserEditPage(props) {
   useInjectReducer({ key: 'users', reducer });
   useInjectSaga({ key: 'users', saga });
+  useInjectReducer({ key: 'field_data', reducer: fieldDataReducer });
+  useInjectSaga({ key: 'field_data', saga: fieldDataSaga });
 
   const rs = new RouteService(useContext);
   const links = {
