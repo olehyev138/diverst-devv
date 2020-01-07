@@ -5,13 +5,13 @@ import PropTypes from 'prop-types';
 // This component is intended for rendering images from a base64 string,
 // likely image data encoded in base64 received from a serializer.
 export function DiverstImg(props) {
-  const { classes, imgData, maxWidth, maxHeight, alt, styles, imgProps, ...rest } = props;
+  const { classes, data, maxWidth, maxHeight, alt, styles, imgProps, ...rest } = props;
 
   return (
     <React.Fragment>
-      {imgData && (
+      {data && (
         <img
-          src={`data:image/jpeg;base64,${imgData}`}
+          src={`data:image/jpeg;base64,${data}`}
           alt={alt}
           style={{
             maxWidth: `${maxWidth}px`,
@@ -26,7 +26,7 @@ export function DiverstImg(props) {
 
 DiverstImg.propTypes = {
   classes: PropTypes.object,
-  imgData: PropTypes.string.isRequired,
+  data: PropTypes.string.isRequired,
   maxWidth: PropTypes.number,
   maxHeight: PropTypes.number,
   alt: PropTypes.string,
