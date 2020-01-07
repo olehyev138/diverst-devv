@@ -32,6 +32,7 @@ import {
   GroupMessagePage,
   GroupMessageCreatePage,
   GroupMessageEditPage,
+  GroupPlanUpdateCreatePage,
   OutcomesPage,
   OutcomeCreatePage,
   OutcomeEditPage,
@@ -238,6 +239,7 @@ export default function Routes(props) {
       <GroupKPILayout exact {...expandRoute(ROUTES.group.plan.kpi.metrics)} component={GroupPlanKpiPage} />
       <GroupKPILayout exact {...expandRoute(ROUTES.group.plan.kpi.fields)} component={GroupPlanFieldsPage} />
       <GroupKPILayout exact {...expandRoute(ROUTES.group.plan.kpi.updates.edit)} component={GroupPlanUpdateEditPage} />
+      <GroupKPILayout exact {...expandRoute(ROUTES.group.plan.kpi.updates.new)} component={GroupPlanUpdateCreatePage} />
       <GroupKPILayout exact {...expandRoute(ROUTES.group.plan.kpi.updates.index)} component={GroupPlanUpdatesPage} />
 
       { /* Group Manage */ }

@@ -92,10 +92,8 @@ export function UpdateList(props, context) {
             variant='contained'
             color='primary'
             size='large'
-            onClick={() => {
-              /* eslint-disable-next-line no-console */
-              console.log('click');
-            }}
+            component={WrappedNavLink}
+            to={props.links.new}
             startIcon={<AddIcon />}
           >
             <DiverstFormattedMessage {...messages.new} />
