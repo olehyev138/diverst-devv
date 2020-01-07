@@ -8,6 +8,10 @@ export const GET_UPDATE_BEGIN = 'app/Shared/Update/GET_UPDATE_BEGIN';
 export const GET_UPDATE_SUCCESS = 'app/Shared/Update/GET_UPDATE_SUCCESS';
 export const GET_UPDATE_ERROR = 'app/Shared/Update/GET_UPDATE_ERROR';
 
+export const GET_UPDATE_PROTOTYPE_BEGIN = 'app/Shared/Update/GET_UPDATE_PROTOTYPE_BEGIN';
+export const GET_UPDATE_PROTOTYPE_SUCCESS = 'app/Shared/Update/GET_UPDATE_PROTOTYPE_SUCCESS';
+export const GET_UPDATE_PROTOTYPE_ERROR = 'app/Shared/Update/GET_UPDATE_PROTOTYPE_ERROR';
+
 export const GET_UPDATES_BEGIN = 'app/Shared/Update/GET_UPDATES_BEGIN';
 export const GET_UPDATES_SUCCESS = 'app/Shared/Update/GET_UPDATES_SUCCESS';
 export const GET_UPDATES_ERROR = 'app/Shared/Update/GET_UPDATES_ERROR';

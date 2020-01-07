@@ -9,6 +9,9 @@ import {
   GET_UPDATE_BEGIN,
   GET_UPDATE_SUCCESS,
   GET_UPDATE_ERROR,
+  GET_UPDATE_PROTOTYPE_BEGIN,
+  GET_UPDATE_PROTOTYPE_SUCCESS,
+  GET_UPDATE_PROTOTYPE_ERROR,
   GET_UPDATES_BEGIN,
   GET_UPDATES_SUCCESS,
   GET_UPDATES_ERROR,
@@ -40,15 +43,18 @@ function updateReducer(state = initialState, action) {
   return produce(state, (draft) => {
     switch (action.type) {
       case GET_UPDATE_BEGIN:
+      case GET_UPDATE_PROTOTYPE_BEGIN:
         draft.isFetchingUpdate = true;
         break;
 
       case GET_UPDATE_SUCCESS:
+      case GET_UPDATE_PROTOTYPE_SUCCESS:
         draft.currentUpdate = action.payload.update;
         draft.isFetchingUpdate = false;
         break;
 
       case GET_UPDATE_ERROR:
+      case GET_UPDATE_PROTOTYPE_ERROR:
         draft.isFetchingUpdate = false;
         break;
 

@@ -12,11 +12,13 @@ import {
   CREATE_UPDATE_BEGIN,
   UPDATE_UPDATE_BEGIN,
   DELETE_UPDATE_BEGIN,
+  GET_UPDATE_PROTOTYPE_BEGIN
 } from 'containers/Shared/Update/constants';
 
 import {
   getUpdatesSuccess, getUpdatesError,
   createUpdateSuccess, createUpdateError,
+  getUpdatePrototypeSuccess, getUpdatePrototypeError,
 } from 'containers/Shared/Update/actions';
 
 import {
@@ -34,6 +36,19 @@ export function* getUpdates(action) {
 
     // TODO: intl message
     yield put(showSnackbar({ message: 'Failed to get updates', options: { variant: 'warning' } }));
+  }
+}
+
+export function* getUpdatePrototype(action) {
+  try {
+    const response = { data: 'API CALL' };
+
+    yield put(getUpdatePrototypeSuccess(response.data));
+  } catch (err) {
+    yield put(getUpdatePrototypeError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to get update', options: { variant: 'warning' } }));
   }
 }
 
@@ -57,4 +72,5 @@ export default function* KpiSaga() {
   yield takeLatest(CREATE_UPDATE_BEGIN, createUpdate);
   yield takeLatest(UPDATE_UPDATE_BEGIN, updateUpdate);
   yield takeLatest(DELETE_UPDATE_BEGIN, deleteUpdate);
+  yield takeLatest(GET_UPDATE_PROTOTYPE_BEGIN, getUpdatePrototype);
 }
