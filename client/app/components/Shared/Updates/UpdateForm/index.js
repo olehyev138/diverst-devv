@@ -25,7 +25,7 @@ import FieldInputForm from 'components/Shared/Fields/FieldInputForm/Loadable';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 import { DiverstDatePicker } from 'components/Shared/Pickers/DiverstDatePicker';
-import {serializeFieldDataWithFieldId} from "utils/customFieldHelpers";
+import { serializeFieldDataWithFieldId } from 'utils/customFieldHelpers';
 
 /* eslint-disable object-curly-newline */
 export function UpdateFormInner({ formikProps, buttonText, ...props }) {
@@ -96,10 +96,10 @@ export function UpdateForm(props) {
   const update = dig(props, 'update');
 
   const initialValues = buildValues(update, {
-    report_date: {default: DateTime.local()},
-    comments: {default: ''},
-    id: {default: ''},
-    field_data: {default: [], customKey: 'fieldData'}
+    report_date: { default: DateTime.local() },
+    comments: { default: '' },
+    id: { default: '' },
+    field_data: { default: [], customKey: 'fieldData' }
   });
 
   return (

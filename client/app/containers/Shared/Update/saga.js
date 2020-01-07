@@ -45,7 +45,6 @@ export function* updateUpdate(action) {
     yield put(push(redirectPath));
     yield put(showSnackbar({ message: 'Successfully updated update', options: { variant: 'success' } }));
   } catch (err) {
-    console.log(err);
     yield put(updateUpdateError(err));
 
     // TODO: intl message

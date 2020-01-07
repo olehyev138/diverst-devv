@@ -64,9 +64,9 @@ Diverst::Application.routes.draw do
           get  '/fields',       to: 'groups#fields'
           post '/create_field', to: 'groups#create_field'
 
-          get  '/updates',           to: 'groups#updates'
+          get  '/updates', to: 'groups#updates'
           get  '/update_prototype', to: 'groups#update_prototype'
-          post '/create_update',     to: 'groups#create_update'
+          post '/create_update', to: 'groups#create_update'
         end
       end
       resources :group_categories
