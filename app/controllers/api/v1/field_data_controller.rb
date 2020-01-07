@@ -15,11 +15,11 @@ class Api::V1::FieldDataController < DiverstController
                                             message: field_datum.errors.full_messages.first,
                                             attribute: field_datum.errors.messages.first.first
                                         })
+      end
     end
 
     # if we made it here - were good
     render status: 204, json: {}
-    end
   end
 
   private
