@@ -40,11 +40,18 @@ import {
   updateUpdateBegin,
 } from 'containers/Shared/Update/actions';
 
+import {
+  updateFieldDataBegin
+} from 'containers/Shared/FieldData/actions';
+
 import reducer from 'containers/Shared/Update/reducer';
 import saga from '../updatesSaga';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import RouteService from 'utils/routeHelpers';
+
+import UpdateForm from 'components/Shared/Updates/UpdateForm';
+import { selectGroup } from 'containers/Group/selectors';
 
 export function UpdateEditPage(props) {
   useInjectReducer({ key: 'updates', reducer });
@@ -55,9 +62,7 @@ export function UpdateEditPage(props) {
 
   const partialLink = ROUTES.group.plan.kpi.updates;
   const links = {
-    new: partialLink.new.path(dig(props, 'currentGroup', 'id')),
-    edit: id => partialLink.edit.path(dig(props, 'currentGroup', 'id'), id),
-    show: id => partialLink.show.path(dig(props, 'currentGroup', 'id'), id),
+    index: partialLink.index.path(dig(props, 'currentGroup', 'id')),
   };
 
   const update = props.currentUpdate || location.update;
@@ -73,9 +78,14 @@ export function UpdateEditPage(props) {
   }, []);
 
   return (
-    <h1>
-      {`EDIT ITEM ${dig(update, 'id')}`}
-    </h1>
+    <UpdateForm
+      update={props.currentUpdate}
+      isCommitting={props.isCommitting || props.isCommittingFieldData}
+      links={links}
+      buttonText='Update'
+      updateAction={props.updateUpdateBegin}
+      updateFieldDataBegin={props.updateFieldDataBegin}
+    />
   );
 }
 
@@ -84,6 +94,7 @@ UpdateEditPage.propTypes = {
   deleteUpdateBegin: PropTypes.func.isRequired,
   updatesUnmount: PropTypes.func.isRequired,
   updateUpdateBegin: PropTypes.func.isRequired,
+  updateFieldDataBegin: PropTypes.func.isRequired,
 
   currentUpdate: PropTypes.object,
   isFetching: PropTypes.bool,
@@ -97,6 +108,7 @@ UpdateEditPage.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
   currentUpdate: selectUpdate(),
+  currentGroup: selectGroup(),
   isFetching: selectIsFetchingUpdate(),
   isCommitting: selectIsCommitting(),
   isCommittingFieldData: selectIsCommittingFieldData(),
@@ -107,6 +119,7 @@ const mapDispatchToProps = {
   updateUpdateBegin,
   deleteUpdateBegin,
   updatesUnmount,
+  updateFieldDataBegin,
 };
 
 const withConnect = connect(

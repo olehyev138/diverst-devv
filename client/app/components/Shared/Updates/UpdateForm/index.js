@@ -1,6 +1,6 @@
 /**
  *
- * User Form Component
+ * Update Form Component
  *
  */
 
@@ -8,6 +8,7 @@ import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import dig from 'object-dig';
+import { DateTime } from 'luxon';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { Field, Formik, Form } from 'formik';
@@ -16,21 +17,21 @@ import {
   Divider, Typography, Box
 } from '@material-ui/core';
 
-import Select from 'components/Shared/DiverstSelect';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
-import messages from 'containers/User/messages';
 import { buildValues, mapFields } from 'utils/formHelpers';
+import messages from 'containers/Shared/Update/messages';
 
-import FieldInputForm from 'components/User/FieldInputForm/Loadable';
+import FieldInputForm from 'components/Shared/Fields/FieldInputForm/Loadable';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 import { DiverstDatePicker } from 'components/Shared/Pickers/DiverstDatePicker';
 
 /* eslint-disable object-curly-newline */
-export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
+export function UpdateFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
+  console.log(values);
   return (
     <React.Fragment>
-      <DiverstFormLoader isLoading={props.isFetching} isError={props.edit && !props.user}>
+      <DiverstFormLoader isLoading={props.isFetching} isError={props.edit && !props.update}>
         <Card>
           <Form>
             <CardContent>
@@ -65,7 +66,7 @@ export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, 
                 to={props.links.index}
                 component={WrappedNavLink}
               >
-                <DiverstFormattedMessage {...messages.cancel} />
+                <DiverstFormattedMessage {...messages.form.button.cancel} />
               </Button>
             </CardActions>
           </Form>
@@ -73,25 +74,27 @@ export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, 
       </DiverstFormLoader>
       <Box mb={2} />
       <FieldInputForm
-        fieldData={props.fieldData}
+        fieldData={dig(props, 'update', 'field_data') || []}
         updateFieldDataBegin={props.updateFieldDataBegin}
-        admin={props.admin}
         isCommitting={props.isCommitting}
         isFetching={props.isFetching}
+
+        messages={messages}
       />
     </React.Fragment>
   );
 }
 
-export function UserForm(props) {
-  const user = dig(props, 'user');
+export function UpdateForm(props) {
+  const update = dig(props, 'update');
 
-  const initialValues = buildValues(user, {
-    first_name: { default: '' },
-    last_name: { default: '' },
-    biography: { default: '' },
-    time_zone: { default: null },
-    id: { default: undefined },
+  if (update)
+    console.log(update.field_data);
+
+  const initialValues = buildValues(update, {
+    report_date: {default: DateTime.local()},
+    comments: {default: ''},
+    id: {default: ''},
   });
 
   return (
@@ -100,36 +103,33 @@ export function UserForm(props) {
       enableReinitialize
       onSubmit={(values, actions) => {
         values.redirectPath = props.links.index;
-        props.userAction(values);
+        props.updateAction(values);
       }}
     >
-      {formikProps => <UserFormInner {...props} {...formikProps} />}
+      {formikProps => <UpdateFormInner {...props} {...formikProps} />}
     </Formik>
   );
 }
 
-UserForm.propTypes = {
-  userAction: PropTypes.func,
-  user: PropTypes.object,
-  currentUser: PropTypes.object,
-  admin: PropTypes.bool,
-  edit: PropTypes.bool,
+UpdateForm.propTypes = {
+  updateAction: PropTypes.func.isRequired,
+  update: PropTypes.object,
   isCommitting: PropTypes.bool,
   isFetching: PropTypes.bool,
   links: PropTypes.shape({
     index: PropTypes.string,
-  })
+  }).isRequired
 };
 
-UserFormInner.propTypes = {
-  user: PropTypes.object,
+UpdateFormInner.propTypes = {
+  update: PropTypes.object,
   fieldData: PropTypes.array,
-  updateFieldDataBegin: PropTypes.func,
+  updateFieldDataBegin: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func,
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
   values: PropTypes.object,
-  buttonText: PropTypes.string,
+  buttonText: PropTypes.string.isRequired,
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
   admin: PropTypes.bool,
@@ -143,4 +143,4 @@ UserFormInner.propTypes = {
 
 export default compose(
   memo,
-)(UserForm);
+)(UpdateForm);

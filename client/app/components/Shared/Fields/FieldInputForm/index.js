@@ -17,7 +17,6 @@ import {
   TextField, Typography
 } from '@material-ui/core';
 
-import messages from 'containers/User/messages';
 import { buildValues } from 'utils/formHelpers';
 
 import { serializeFieldData } from 'utils/customFieldHelpers';
@@ -33,7 +32,7 @@ const styles = theme => ({
 });
 
 /* eslint-disable-next-line object-curly-newline */
-export function FieldInputFormInner({ formikProps, ...props }) {
+export function FieldInputFormInner({ formikProps, messages, ...props }) {
   const { values } = formikProps;
 
   return (
@@ -107,6 +106,15 @@ FieldInputForm.propTypes = {
   fieldData: PropTypes.array,
   isCommitting: PropTypes.bool,
   isFormLoading: PropTypes.bool,
+};
+
+FieldInputFormInner.propTypes = {
+  edit: PropTypes.bool,
+  fieldData: PropTypes.array,
+  formikProps: PropTypes.object,
+  classes: PropTypes.object,
+  isCommitting: PropTypes.bool,
+  isFormLoading: PropTypes.bool,
   messages: PropTypes.shape({
     fields: PropTypes.shape({
       id: PropTypes.string
@@ -118,15 +126,6 @@ FieldInputForm.propTypes = {
       id: PropTypes.string
     }),
   }).isRequired
-};
-
-FieldInputFormInner.propTypes = {
-  edit: PropTypes.bool,
-  fieldData: PropTypes.array,
-  formikProps: PropTypes.object,
-  classes: PropTypes.object,
-  isCommitting: PropTypes.bool,
-  isFormLoading: PropTypes.bool,
 };
 
 export default compose(

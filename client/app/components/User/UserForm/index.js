@@ -110,6 +110,7 @@ export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, 
             admin={props.admin}
             isCommitting={props.isCommitting}
             isFormLoading={props.isFormLoading}
+            messages={messages}
           />
         </React.Fragment>
       )}

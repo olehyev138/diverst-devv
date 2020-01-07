@@ -21,12 +21,32 @@ export default defineMessages({
   deleteConfirmation: {
     id: `${scope}.index.button.deleteConfirmation`,
   },
+  fields: {
+    id: `${scope}.fields`,
+  },
+  preface: {
+    id: `${scope}.preface`,
+  },
+  fields_save: {
+    id: `${scope}.fields_save`,
+  },
   form: {
     dateOfUpdate: {
       id: `${scope}.index.form.dateOfUpdate`,
     },
     comments: {
       id: `${scope}.index.form.comments`,
+    },
+    button: {
+      create: {
+        id: `${scope}.index.form.button.create`,
+      },
+      update: {
+        id: `${scope}.index.form.button.update`,
+      },
+      cancel: {
+        id: `${scope}.index.form.button.cancel`,
+      },
     },
   }
 });
