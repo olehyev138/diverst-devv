@@ -82,6 +82,7 @@ export function UpdateEditPage(props) {
     <UpdateForm
       update={props.currentUpdate}
       isCommitting={props.isCommitting || props.isCommittingFieldData}
+      isFetching={props.isFetching}
       links={links}
       buttonText='Create Update'
       updateAction={payload => props.createUpdateBegin({

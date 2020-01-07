@@ -37,11 +37,15 @@ export function* getUpdate(action) {
 
 export function* updateUpdate(action) {
   try {
-    const response = { data: 'API CALL' };
+    const { redirectPath, ...rest } = action.payload;
+    const payload = { update: rest };
+    const response = yield call(api.updates.update.bind(api.updates), payload.update.id, payload);
 
     yield put(updateUpdateSuccess({}));
+    yield put(push(redirectPath));
     yield put(showSnackbar({ message: 'Successfully updated update', options: { variant: 'success' } }));
   } catch (err) {
+    console.log(err);
     yield put(updateUpdateError(err));
 
     // TODO: intl message

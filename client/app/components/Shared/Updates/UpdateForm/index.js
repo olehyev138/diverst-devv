@@ -30,7 +30,6 @@ import {serializeFieldDataWithFieldId} from "utils/customFieldHelpers";
 /* eslint-disable object-curly-newline */
 export function UpdateFormInner({ formikProps, buttonText, ...props }) {
   const { handleSubmit, handleChange, handleBlur, values, setFieldValue, setFieldTouched } = formikProps;
-  console.log(values);
   return (
     <React.Fragment>
       <DiverstFormLoader isLoading={props.isFetching} isError={props.edit && !props.update}>

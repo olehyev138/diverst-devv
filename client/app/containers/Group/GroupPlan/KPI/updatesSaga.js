@@ -57,7 +57,6 @@ export function* createUpdate(action) {
   try {
     const { groupId, redirectPath, ...rest } = action.payload;
     const payload = { update: rest };
-
     const response = yield call(api.groups.createUpdates.bind(api.groups), groupId, payload);
 
     yield put(createUpdateSuccess({}));
