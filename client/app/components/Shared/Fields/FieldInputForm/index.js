@@ -44,7 +44,7 @@ export function FieldInputFormInner({ formikProps, ...props }) {
             <DiverstFormattedMessage {...messages.fields} />
           </Typography>
           <Typography color='secondary' component='h2'>
-            <DiverstFormattedMessage {...messages.privacy} />
+            <DiverstFormattedMessage {...messages.preface} />
           </Typography>
         </CardContent>
         <Form>
@@ -107,6 +107,17 @@ FieldInputForm.propTypes = {
   fieldData: PropTypes.array,
   isCommitting: PropTypes.bool,
   isFormLoading: PropTypes.bool,
+  messages: PropTypes.shape({
+    fields: PropTypes.shape({
+      id: PropTypes.string
+    }),
+    preface: PropTypes.shape({
+      id: PropTypes.string
+    }),
+    fields_save: PropTypes.shape({
+      id: PropTypes.string
+    }),
+  }).isRequired
 };
 
 FieldInputFormInner.propTypes = {
