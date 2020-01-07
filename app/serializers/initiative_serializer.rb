@@ -8,15 +8,15 @@ class InitiativeSerializer < ApplicationRecordSerializer
   end
 
   def picture
-    object.picture.signed_id if object.picture.attached?
+    AttachmentHelper.attachment_signed_id(object.picture)
   end
 
   def picture_file_name
-    object.picture.filename.to_s if object.picture.attached?
+    AttachmentHelper.attachment_file_name(object.picture)
   end
 
   def picture_data
-    Base64.encode64(object.picture.download) if object.picture.attached?
+    AttachmentHelper.attachment_data_string(object.picture)
   end
 
   def qr_code_location
