@@ -10,6 +10,8 @@ class Update < ApplicationRecord
   belongs_to :updatable, polymorphic: true
   has_many :field_data, class_name: 'FieldData', as: :field_user, dependent: :destroy
 
+  accepts_nested_attributes_for :field_data
+
   validates_length_of :comments, maximum: 65535
   validates_length_of :data, maximum: 65535
   validates_presence_of :report_date

@@ -15,6 +15,15 @@ class Api::V1::GroupsController < DiverstController
     raise BadRequestException.new(e.message)
   end
 
+  def update_prototype
+    item = klass.find(params[:id])
+    base_authorize(item)
+
+    render status: 200, json: Update.create_prototype(item)
+  rescue => e
+    raise BadRequestException.new(e.message)
+  end
+
   def create_update
     params[:update] = field_payload
     base_authorize(klass)

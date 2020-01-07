@@ -35,6 +35,10 @@ class GroupPolicy < ApplicationPolicy
     update?
   end
 
+  def updates_prototype?
+    updates?
+  end
+
   def create_update?
     update?
   end
