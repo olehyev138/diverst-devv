@@ -36,11 +36,32 @@ class CreateUpdates < ActiveRecord::Migration[5.2]
 
   def down
     Update.find_each do |u|
-      field_data.update do |fd|
+      u.field_data.find_each do |fd|
         if u.updatable_type == 'Initiative'
-          fd.field_user = InitiativeUpdate.find(fd.field_user_id)
+          if InitiativeUpdate.where(id: fd.field_user_id).any?
+            fd.field_user = InitiativeUpdate.find(fd.field_user_id)
+          else
+            fd.field_user = InitiativeUpdate.create do |i_up|
+              i_up.data = u.data
+              i_up.comments = u.data
+              i_up.owner = u.owner
+              i_up.created_at = u.created_at
+              i_up.report_date = u.report_date
+              i_up.initiative = u.updatable
+            end
+          end
         elsif u.updatable_type == 'Group'
-          fd.field_user = GroupUpdate.find(fd.field_user_id)
+          if GroupUpdate.where(id: fd.field_user_id).any?
+            fd.field_user = GroupUpdate.find(fd.field_user_id)
+          else
+            fd.field_user = GroupUpdate.create do |g_up|
+              g_up.data = u.data
+              g_up.comments = u.data
+              g_up.owner = u.owner
+              g_up.created_at = u.report_date
+              g_up.group = u.updatable
+            end
+          end
         end
         fd.save
       end
