@@ -12,15 +12,17 @@ class UpdateSerializer < ApplicationRecordSerializer
   end
 
   def short_comment
-    out = ''
-    object.comments.split(' ').each do |word|
-      out += word + ' '
-      if out.length > 20
-        out.strip
-        out += '...'
-        break
+    if object.comments.present?
+      out = ''
+      object.comments.split(' ').each do |word|
+        out += word + ' '
+        if out.length > 20
+          out.strip
+          out += '...'
+          break
+        end
       end
+      out.strip
     end
-    out.strip
   end
 end

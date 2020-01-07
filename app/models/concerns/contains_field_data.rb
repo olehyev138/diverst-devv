@@ -143,6 +143,18 @@ module ContainsFieldData
     end
   end
 
+  def missing_field_prototypes
+    from_field_holder = fields || []
+
+    missing = from_field_holder
+    field_data = []
+    missing.each do |fld|
+      field_data << FieldData.new(field: fld)
+    end
+
+    field_data
+  end
+
   # Class Methods for FieldData Models
   module ClassMethods
     # Evaluates an +ActiveRecord+ query of a +field_user+ and creates getter and setter
@@ -177,6 +189,12 @@ module ContainsFieldData
         end
       end
       # rubocop:enable Rails/FindEach
+    end
+
+    def create_prototype(field_definer)
+      new = self.new(field_definer_name.to_sym => field_definer)
+      new.field_data = new.missing_field_prototypes
+      new
     end
   end
 end
