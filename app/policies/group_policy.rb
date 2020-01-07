@@ -35,7 +35,7 @@ class GroupPolicy < ApplicationPolicy
     update?
   end
 
-  def updates_prototype?
+  def update_prototype?
     updates?
   end
 

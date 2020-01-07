@@ -71,19 +71,17 @@ export function UpdateFormInner({ handleSubmit, handleChange, handleBlur, values
             </CardActions>
           </Form>
         </Card>
-        {props.edit && (
-          <React.Fragment>
-            <Box mb={2} />
-            <FieldInputForm
-              fieldData={dig(props, 'update', 'field_data') || []}
-              updateFieldDataBegin={props.updateFieldDataBegin}
-              isCommitting={props.isCommitting}
-              isFetching={props.isFetching}
+        <React.Fragment>
+          <Box mb={2} />
+          <FieldInputForm
+            fieldData={dig(props, 'update', 'field_data') || []}
+            updateFieldDataBegin={props.updateFieldDataBegin}
+            isCommitting={props.isCommitting}
+            isFetching={props.isFetching}
 
-              messages={messages}
-            />
-          </React.Fragment>
-        )}
+            messages={messages}
+          />
+        </React.Fragment>
       </DiverstFormLoader>
     </React.Fragment>
   );

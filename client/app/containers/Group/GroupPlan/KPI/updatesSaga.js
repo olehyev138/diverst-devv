@@ -41,7 +41,8 @@ export function* getUpdates(action) {
 
 export function* getUpdatePrototype(action) {
   try {
-    const response = { data: 'API CALL' };
+    const { groupId, ...payload } = action.payload;
+    const response = yield call(api.groups.updatePrototype.bind(api.groups), groupId, payload);
 
     yield put(getUpdatePrototypeSuccess(response.data));
   } catch (err) {

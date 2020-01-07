@@ -16,7 +16,7 @@ Object.assign(Groups, {
     return axios.get(appendQueryArgs(`${this.url}/${id}/updates`, payload));
   },
   updatePrototype(id, payload) {
-    return axios.get(appendQueryArgs(`${this.url}/${id}/updates_prototype`, payload));
+    return axios.get(appendQueryArgs(`${this.url}/${id}/update_prototype`, payload));
   },
   createUpdates(id, payload) {
     return axios.post(`${this.url}/${id}/create_update`, payload);

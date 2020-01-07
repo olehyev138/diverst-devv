@@ -90,8 +90,6 @@ export function UpdateEditPage(props) {
       buttonText='Update'
       updateAction={props.updateUpdateBegin}
       updateFieldDataBegin={props.updateFieldDataBegin}
-
-      edit
     />
   );
 }

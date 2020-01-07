@@ -35,6 +35,8 @@ import {
 
 import {
   createUpdateBegin,
+  updatesUnmount,
+  getUpdatePrototypeBegin,
 } from 'containers/Shared/Update/actions';
 
 import {
@@ -61,6 +63,16 @@ export function UpdateEditPage(props) {
 
   const rs = new RouteService(useContext);
 
+  useEffect(() => {
+    const groupId = dig(props, 'currentGroup', 'id');
+    if (groupId)
+      props.getUpdatePrototypeBegin({ groupId });
+
+    return () => {
+      props.updatesUnmount();
+    };
+  }, []);
+
   const partialLink = ROUTES.group.plan.kpi.updates;
   const links = {
     index: partialLink.index.path(dig(props, 'currentGroup', 'id')),
@@ -79,8 +91,10 @@ export function UpdateEditPage(props) {
 }
 
 UpdateEditPage.propTypes = {
+  getUpdatePrototypeBegin: PropTypes.func.isRequired,
   createUpdateBegin: PropTypes.func.isRequired,
   updateFieldDataBegin: PropTypes.func.isRequired,
+  updatesUnmount: PropTypes.func.isRequired,
 
   currentUpdate: PropTypes.object,
   isFetching: PropTypes.bool,
@@ -101,8 +115,10 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = {
+  getUpdatePrototypeBegin,
   createUpdateBegin,
   updateFieldDataBegin,
+  updatesUnmount,
 };
 
 const withConnect = connect(
