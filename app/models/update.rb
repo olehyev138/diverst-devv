@@ -14,6 +14,7 @@ class Update < ApplicationRecord
   validates_length_of :data, maximum: 65535
   validates_presence_of :report_date
   validates_presence_of :updatable
+  validates_uniqueness_of :report_date, scope: :updatable
 
   def reported_for_date
     report_date || created_at
@@ -39,11 +40,11 @@ class Update < ApplicationRecord
 
   # The next update in chronological order
   def next
-    self.class.where(updatable: self.updatable).where('created_at > ?', self.report_date).order(report_date: :asc).first
+    self.class.where(updatable: updatable).where('report_date > ?', report_date).order(report_date: :asc).first
   end
 
   # The previous update in chronological order
   def previous
-    self.class.where(updatable: self.updatable).where('created_at < ?', self.report_date).order(report_date: :asc).last
+    self.class.where(updatable: updatable).where('report_date < ?', report_date).order(report_date: :asc).last
   end
 end

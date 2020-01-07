@@ -14,4 +14,11 @@ FactoryBot.define do
       association :updatable, factory: :group
     end
   end
+
+  factory :updatable, class: 'Group' do
+    id { Faker::Number.between(1, 10000000) }
+    name { Faker::Lorem.sentence(3) }
+
+    enterprise
+  end
 end

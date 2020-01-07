@@ -48,7 +48,7 @@ RSpec.describe Group, type: :model do
     it { expect(group).to have_many(:outcomes) }
     it { expect(group).to have_many(:pillars).through(:outcomes) }
     it { expect(group).to have_many(:initiatives).through(:pillars) }
-    it { expect(group).to have_many(:updates).class_name('GroupUpdate').dependent(:destroy) }
+    it { expect(group).to have_many(:updates).class_name('Update').dependent(:destroy) }
     it { expect(group).to have_many(:fields) }
     it { expect(group).to have_many(:survey_fields).class_name('Field').dependent(:destroy) }
     it { expect(group).to have_many(:group_leaders) }
@@ -594,7 +594,7 @@ RSpec.describe Group, type: :model do
     it 'returns highcharts_history' do
       group = create(:group)
       field = create(:field)
-      create(:group_update, group: group, created_at: 30.days.ago)
+      create(:update, updatable: group, report_date: 30.days.ago)
       data = group.highcharts_history(field: field)
       expect(data.length).to eq(1)
     end
@@ -782,7 +782,7 @@ RSpec.describe Group, type: :model do
       folder_share = create(:folder_share, group: group)
       campaigns_group = create(:campaigns_group, group: group)
       outcome = create(:outcome, group: group)
-      group_update = create(:group_update, group: group)
+      group_update = create(:update, updatable: group)
       field = create(:field, field_definer: group, field_type: 'regular')
       survey_field = create(:field, field_definer: group, field_type: 'group_survey')
       user = create(:user, enterprise: group.enterprise)
@@ -810,7 +810,7 @@ RSpec.describe Group, type: :model do
       expect { FolderShare.find(folder_share.id) }.to raise_error(ActiveRecord::RecordNotFound)
       expect { CampaignsGroup.find(campaigns_group.id) }.to raise_error(ActiveRecord::RecordNotFound)
       expect { Outcome.find(outcome.id) }.to raise_error(ActiveRecord::RecordNotFound)
-      expect { GroupUpdate.find(group_update.id) }.to raise_error(ActiveRecord::RecordNotFound)
+      expect { Update.find(group_update.id) }.to raise_error(ActiveRecord::RecordNotFound)
       expect { Field.find(field.id) }.to raise_error(ActiveRecord::RecordNotFound)
       expect { Field.find(survey_field.id) }.to raise_error(ActiveRecord::RecordNotFound)
       expect { GroupLeader.find(group_leader.id) }.to raise_error(ActiveRecord::RecordNotFound)

@@ -9,7 +9,7 @@ RSpec.describe Initiative, type: :model do
 
     it { expect(initiative).to belong_to(:pillar) }
     it { expect(initiative).to belong_to(:owner).class_name('User') }
-    it { expect(initiative).to have_many(:updates).class_name('InitiativeUpdate').dependent(:destroy) }
+    it { expect(initiative).to have_many(:updates).class_name('Update').dependent(:destroy) }
     it { expect(initiative).to have_many(:fields).dependent(:destroy) }
     it { expect(initiative).to have_many(:expenses).dependent(:destroy).class_name('InitiativeExpense') }
 
@@ -291,7 +291,7 @@ RSpec.describe Initiative, type: :model do
       initiative = build(:initiative, start: Date.today, end: Date.today + 1.hour)
       field = build(:field)
       create(:initiative_field, initiative: initiative, field: field)
-      create(:initiative_update, initiative: initiative)
+      create(:update, updatable: initiative)
 
       data = initiative.highcharts_history(field: field)
       expect(data.empty?).to be(false) # this example says "returns data" and yet we expect data to be empty???
@@ -339,7 +339,7 @@ RSpec.describe Initiative, type: :model do
       group = create(:group, annual_budget: 10000)
       annual_budget = create(:annual_budget, amount: group.annual_budget)
       initiative = create(:initiative, owner_group_id: group.id, annual_budget_id: annual_budget.id)
-      initiative_update = create(:initiative_update, initiative: initiative)
+      initiative_update = create(:update, updatable: initiative)
       field = create(:field, field_definer: initiative)
       initiative_expense = create(:initiative_expense, initiative: initiative, annual_budget_id: annual_budget.id)
       checklist = create(:checklist, initiative: initiative)
@@ -351,12 +351,11 @@ RSpec.describe Initiative, type: :model do
       initiative_comment = create(:initiative_comment, initiative: initiative)
       initiative_user = create(:initiative_user, initiative: initiative)
 
-      pp initiative.reload
-
+      initiative.reload
       initiative.destroy!
 
       expect { Initiative.find(initiative.id) }.to raise_error(ActiveRecord::RecordNotFound)
-      expect { InitiativeUpdate.find(initiative_update.id) }.to raise_error(ActiveRecord::RecordNotFound)
+      expect { Update.find(initiative_update.id) }.to raise_error(ActiveRecord::RecordNotFound)
       expect { Field.find(field.id) }.to raise_error(ActiveRecord::RecordNotFound)
       expect { InitiativeExpense.find(initiative_expense.id) }.to raise_error(ActiveRecord::RecordNotFound)
       expect { Checklist.find(checklist.id) }.to raise_error(ActiveRecord::RecordNotFound)
@@ -422,7 +421,7 @@ RSpec.describe Initiative, type: :model do
     let!(:expense) { create(:initiative_expense, initiative_id: initiative.id, annual_budget_id: annual_budget.id, amount: 50) }
 
     let!(:field) { create(:field, field_definer: initiative, title: 'Attendance') }
-    let!(:update) { create(:initiative_update, initiative_id: initiative.id, data: "{\"#{field.id}\":105}") }
+    let!(:update) { create(:update, updatable: initiative, data: "{\"#{field.id}\":105}") }
 
 
     it 'returns csv for initiative export' do
