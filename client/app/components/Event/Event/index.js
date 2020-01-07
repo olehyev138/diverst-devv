@@ -21,6 +21,8 @@ import DiverstShowLoader from 'components/Shared/DiverstShowLoader';
 
 import { formatDateTimeString, DateTime } from 'utils/dateTimeHelpers';
 
+import DiverstImg from 'components/Shared/DiverstImg';
+
 const styles = theme => ({
   padding: {
     padding: theme.spacing(3, 2),
@@ -115,12 +117,9 @@ export function Event(props) {
                 )}
               </Grid>
               <Grid item>
-                <img
-                  src={`data:image/jpeg;base64,${event.picture_data}`}
-                  style={{
-                    maxHeight: '350px',
-                    maxWidth: '350px',
-                  }}
+                <DiverstImg
+                  data={event.picture_data}
+                  alt='Event Image'
                 />
               </Grid>
             </Grid>
