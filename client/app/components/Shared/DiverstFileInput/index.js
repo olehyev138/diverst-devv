@@ -167,75 +167,77 @@ export function DiverstFileInput(props) {
                   </Button>
                 </Grid>
                 <Grid item>
-                  <Box className={classes.fileInfoBox}>
-                    {uploads.map((upload) => {
-                      switch (upload.state) {
-                        case 'waiting':
-                          return (
-                            <Typography variant='h6' className={classes.fileInfo} color='textSecondary' key={upload.id}>
-                              <span>Waiting to upload </span>
-                              <span className={classes.fileName}>{upload.file.name}</span>
-                              <CircularProgress
-                                className={classes.uploadProgress}
-                                size={20}
-                              />
-                            </Typography>
-                          );
-                        case 'uploading':
-                          return (
-                            <Typography variant='h6' className={classes.fileInfo} color='textSecondary' key={upload.id}>
-                              <span>Uploading </span>
-                              <span className={classes.fileName}>{upload.file.name}</span>
-                              <CircularProgress
-                                variant='determinate'
-                                className={classes.uploadProgress}
-                                size={20}
-                                value={Math.round(upload.progress)}
-                              />
-                              <span className={classes.uploadProgressPercent}>
-                                {Math.round(upload.progress)}
-                                <span>%</span>
-                              </span>
-                            </Typography>
-                          );
-                        case 'error':
-                          return (
-                            <Typography variant='h6' className={classes.fileInfo} color='error' key={upload.id}>
-                              <span>Error uploading </span>
-                              {upload.file.name}
-                            </Typography>
-                          );
-                        case 'finished':
-                          setUploadedFile(upload.file.name);
-                          return (
-                            <Typography variant='h6' className={classes.fileInfo} color='textSecondary' key={upload.id}>
-                              <span>Finished uploading </span>
-                              <span className={classes.fileName}>{upload.file.name}</span>
-                              <CircularProgress
-                                variant='determinate'
-                                className={classes.uploadProgress}
-                                size={20}
-                                value={100}
-                              />
-                            </Typography>
-                          );
-                        default:
-                          return (<React.Fragment />);
-                      }
-                    })}
+                  {!disabled && (
+                    <Box className={classes.fileInfoBox}>
+                      {uploads.map((upload) => {
+                        switch (upload.state) {
+                          case 'waiting':
+                            return (
+                              <Typography variant='h6' className={classes.fileInfo} color='textSecondary' key={upload.id}>
+                                <span>Waiting to upload </span>
+                                <span className={classes.fileName}>{upload.file.name}</span>
+                                <CircularProgress
+                                  className={classes.uploadProgress}
+                                  size={20}
+                                />
+                              </Typography>
+                            );
+                          case 'uploading':
+                            return (
+                              <Typography variant='h6' className={classes.fileInfo} color='textSecondary' key={upload.id}>
+                                <span>Uploading </span>
+                                <span className={classes.fileName}>{upload.file.name}</span>
+                                <CircularProgress
+                                  variant='determinate'
+                                  className={classes.uploadProgress}
+                                  size={20}
+                                  value={Math.round(upload.progress)}
+                                />
+                                <span className={classes.uploadProgressPercent}>
+                                  {Math.round(upload.progress)}
+                                  <span>%</span>
+                                </span>
+                              </Typography>
+                            );
+                          case 'error':
+                            return (
+                              <Typography variant='h6' className={classes.fileInfo} color='error' key={upload.id}>
+                                <span>Error uploading </span>
+                                {upload.file.name}
+                              </Typography>
+                            );
+                          case 'finished':
+                            setUploadedFile(upload.file.name);
+                            return (
+                              <Typography variant='h6' className={classes.fileInfo} color='textSecondary' key={upload.id}>
+                                <span>Finished uploading </span>
+                                <span className={classes.fileName}>{upload.file.name}</span>
+                                <CircularProgress
+                                  variant='determinate'
+                                  className={classes.uploadProgress}
+                                  size={20}
+                                  value={100}
+                                />
+                              </Typography>
+                            );
+                          default:
+                            return (<React.Fragment />);
+                        }
+                      })}
 
-                    {value && ready && (
-                      <Typography variant='h6' className={classes.fileInfo} color='primary'>
-                        {uploadedFile}
-                      </Typography>
-                    )}
+                      {value && ready && (
+                        <Typography variant='h6' className={classes.fileInfo} color='primary'>
+                          {uploadedFile}
+                        </Typography>
+                      )}
 
-                    {!value && ready && (
-                      <Typography variant='h6' className={classes.fileInfo} color='textSecondary'>
-                        No file selected
-                      </Typography>
-                    )}
-                  </Box>
+                      {!value && ready && (
+                        <Typography variant='h6' className={classes.fileInfo} color='textSecondary'>
+                          No file selected
+                        </Typography>
+                      )}
+                    </Box>
+                  )}
                 </Grid>
               </Grid>
               {props.showHelperText && (
