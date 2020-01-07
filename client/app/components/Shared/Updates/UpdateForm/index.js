@@ -27,13 +27,13 @@ import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 import { DiverstDatePicker } from 'components/Shared/Pickers/DiverstDatePicker';
 
 /* eslint-disable object-curly-newline */
-export function UpdateFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
-  console.log(values);
+export function UpdateFormInner({ formikProps, buttonText, ...props }) {
+  const { handleSubmit, handleChange, handleBlur, values, setFieldValue, setFieldTouched } = formikProps;
   return (
     <React.Fragment>
       <DiverstFormLoader isLoading={props.isFetching} isError={props.edit && !props.update}>
-        <Card>
-          <Form>
+        <Form>
+          <Card>
             <CardContent>
               <Field
                 component={DiverstDatePicker}
@@ -56,6 +56,21 @@ export function UpdateFormInner({ handleSubmit, handleChange, handleBlur, values
                 label={<DiverstFormattedMessage {...messages.form.comments} />}
               />
             </CardContent>
+          </Card>
+          <Box mb={2} />
+          <Card>
+            <FieldInputForm
+              fieldData={dig(props, 'update', 'field_data') || []}
+              updateFieldDataBegin={props.updateFieldDataBegin}
+              isCommitting={props.isCommitting}
+              isFetching={props.isFetching}
+
+              messages={messages}
+              formikProps={formikProps}
+
+              join
+              noCard
+            />
             <Divider />
             <CardActions>
               <DiverstSubmit isCommitting={props.isCommitting}>
@@ -69,19 +84,8 @@ export function UpdateFormInner({ handleSubmit, handleChange, handleBlur, values
                 <DiverstFormattedMessage {...messages.form.button.cancel} />
               </Button>
             </CardActions>
-          </Form>
-        </Card>
-        <React.Fragment>
-          <Box mb={2} />
-          <FieldInputForm
-            fieldData={dig(props, 'update', 'field_data') || []}
-            updateFieldDataBegin={props.updateFieldDataBegin}
-            isCommitting={props.isCommitting}
-            isFetching={props.isFetching}
-
-            messages={messages}
-          />
-        </React.Fragment>
+          </Card>
+        </Form>
       </DiverstFormLoader>
     </React.Fragment>
   );
@@ -94,6 +98,7 @@ export function UpdateForm(props) {
     report_date: {default: DateTime.local()},
     comments: {default: ''},
     id: {default: ''},
+    field_data: {defualt: [], customKey: 'fieldData'}
   });
 
   return (
@@ -105,7 +110,7 @@ export function UpdateForm(props) {
         props.updateAction(values);
       }}
     >
-      {formikProps => <UpdateFormInner {...props} {...formikProps} />}
+      {formikProps => <UpdateFormInner {...props} formikProps={formikProps} />}
     </Formik>
   );
 }
@@ -124,14 +129,9 @@ UpdateForm.propTypes = {
 UpdateFormInner.propTypes = {
   update: PropTypes.object,
   fieldData: PropTypes.array,
+  formikProps: PropTypes.object,
   updateFieldDataBegin: PropTypes.func.isRequired,
-  handleSubmit: PropTypes.func,
-  handleChange: PropTypes.func,
-  handleBlur: PropTypes.func,
-  values: PropTypes.object,
   buttonText: PropTypes.string.isRequired,
-  setFieldValue: PropTypes.func,
-  setFieldTouched: PropTypes.func,
   admin: PropTypes.bool,
   edit: PropTypes.bool,
   isCommitting: PropTypes.bool,
