@@ -21,4 +21,12 @@ export default defineMessages({
   deleteConfirmation: {
     id: `${scope}.index.button.deleteConfirmation`,
   },
+  form: {
+    dateOfUpdate: {
+      id: `${scope}.index.form.dateOfUpdate`,
+    },
+    comments: {
+      id: `${scope}.index.form.comments`,
+    },
+  }
 });

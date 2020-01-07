@@ -25,9 +25,14 @@ import { useInjectReducer } from 'utils/injectReducer';
 
 import {
   selectUpdate,
-  selectIsFetchingUpdates,
-  selectHasChanged,
+  selectIsFetchingUpdate,
+  selectIsCommitting,
 } from 'containers/Shared/Update/selectors';
+
+import {
+  selectIsCommitting as selectIsCommittingFieldData,
+} from 'containers/Shared/FieldData/selectors';
+
 import {
   getUpdateBegin,
   deleteUpdateBegin,
@@ -82,6 +87,8 @@ UpdateEditPage.propTypes = {
 
   currentUpdate: PropTypes.object,
   isFetching: PropTypes.bool,
+  isCommitting: PropTypes.bool,
+  isCommittingFieldData: PropTypes.bool,
 
   currentGroup: PropTypes.shape({
     id: PropTypes.number
@@ -90,7 +97,9 @@ UpdateEditPage.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
   currentUpdate: selectUpdate(),
-  isFetching: selectIsFetchingUpdates(),
+  isFetching: selectIsFetchingUpdate(),
+  isCommitting: selectIsCommitting(),
+  isCommittingFieldData: selectIsCommittingFieldData(),
 });
 
 const mapDispatchToProps = {
