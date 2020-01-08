@@ -80,7 +80,7 @@ export function UpdateEditPage(props) {
     if (!update || update.id != id)
       props.getUpdateBegin(id);
     else
-      props.getUpdateSuccess({update});
+      props.getUpdateSuccess({ update });
 
     return () => {
       props.updatesUnmount();
