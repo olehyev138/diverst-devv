@@ -18,7 +18,7 @@ class GenerateFieldData < ActiveRecord::Migration[5.1]
           data: data_str
         )
 
-        field_data.save!
+        field_data.save!(validate: false)
       end
     end
   end

@@ -6,7 +6,7 @@ class MakeFieldPolymorphic < ActiveRecord::Migration[5.2]
   end
 
   def remove_poly
-    remove_index :fields, [:field_definer_id, :field_definer_type]
+    remove_index :fields, [:field_definer_id, :field_definer_type] if index_exists?(:fields, [:field_definer_id, :field_definer_type])
     remove_column :fields, :field_definer_id
     remove_column :fields, :field_definer_type
   end
@@ -24,10 +24,11 @@ class MakeFieldPolymorphic < ActiveRecord::Migration[5.2]
   end
 
   def remove_individual
-    remove_index :fields, column: [:enterprise_id]
-    remove_index :fields, column: [:group_id]
-    remove_index :fields, column: [:initiative_id]
-    remove_index :fields, column: [:poll_id]
+    remove_index :fields, column: [:enterprise_id] if index_exists?(:fields, :enterprise_id)
+    remove_index :fields, column: [:group_id] if index_exists?(:fields, :group_id)
+    remove_index :fields, column: [:initiative_id] if index_exists?(:fields, :initiative_id)
+    remove_index :fields, column: [:poll_id] if index_exists?(:fields, :poll_id)
+
     remove_column :fields, :enterprise_id
     remove_column :fields, :group_id
     remove_column :fields, :initiative_id

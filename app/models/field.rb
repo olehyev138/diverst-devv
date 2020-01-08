@@ -77,7 +77,7 @@ class Field < ApplicationRecord
   end
 
   def container_type_is_enterprise?
-    field_definer_type == 'Enterprise'
+    field_definer_type == 'Enterprise' rescue false
   end
 
   # The typical field value flow would look like this:
@@ -132,5 +132,7 @@ class Field < ApplicationRecord
     return association(:field_definer).reader if container_type_is_enterprise?
 
     association(:field_definer).reader.enterprise
+  rescue
+    nil
   end
 end
