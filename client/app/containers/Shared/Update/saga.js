@@ -8,16 +8,12 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import {
   GET_UPDATE_BEGIN,
-  GET_UPDATES_BEGIN,
-  CREATE_UPDATE_BEGIN,
   UPDATE_UPDATE_BEGIN,
   DELETE_UPDATE_BEGIN,
 } from './constants';
 
 import {
   getUpdateSuccess, getUpdateError,
-  getUpdatesSuccess, getUpdatesError,
-  createUpdateSuccess, createUpdateError,
   updateUpdateSuccess, updateUpdateError,
   deleteUpdateSuccess, deleteUpdateError,
 } from './actions';
@@ -54,7 +50,8 @@ export function* updateUpdate(action) {
 
 export function* deleteUpdate(action) {
   try {
-    const response = { data: 'API CALL' };
+    const { payload } = action;
+    const response = yield call(api.updates.destroy.bind(api.updates), payload);
 
     yield put(deleteUpdateSuccess({}));
     yield put(showSnackbar({ message: 'Successfully deleted update', options: { variant: 'success' } }));

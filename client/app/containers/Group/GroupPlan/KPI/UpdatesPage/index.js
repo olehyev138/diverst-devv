@@ -95,6 +95,7 @@ export function UpdateListPage(props) {
       isFetching={props.isFetching}
       links={links}
 
+      deleteUpdateBegin={props.deleteUpdateBegin}
       handlePagination={handlePagination}
     />
   );

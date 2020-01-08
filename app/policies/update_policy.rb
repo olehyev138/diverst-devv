@@ -1,7 +1,7 @@
 class UpdatePolicy < ApplicationPolicy
   def parent_member_policy?(action)
-    policy = "#{record.updatable_type}UpdatePolicy".constantize rescue nil
-    policy ? policy.new(user, record).send(action) : false
+    policy = "#{record.updatable_type}Policy".constantize rescue nil
+    policy ? policy.new(user, record.updatable_type).send(action) : false
   end
 
   def parent_collection_policy?(action)
@@ -21,11 +21,11 @@ class UpdatePolicy < ApplicationPolicy
   end
 
   def destroy?
-    parent_member_policy?(:destroy?)
+    parent_member_policy?(:update?)
   end
 
   def show?
-    parent_member_policy?(:show?)
+    parent_member_policy?(:update?)
   end
 
   class Scope < Scope
