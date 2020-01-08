@@ -2,7 +2,7 @@ version: 2.1
 executors:
   primary-image:
     docker:
-      - image: circleci/build-image:ubuntu-14.04-XXL-upstart-1189-5614f37
+      - image: circleci/ruby:2.6.0
 jobs:
   lint:
     working_directory: ~/TeamDiverst/diverst-development
@@ -20,7 +20,7 @@ jobs:
             - v1-dep-
       - run: gem install bundler
       - run: 'bundle install --path=vendor/bundle --jobs=4 --retry=3'
-      - run: nvm install 10.16.0 && nvm alias default 10.16.0
+      - run: curl -sL https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.2/install.sh -o install_nvm.sh && bash install_nvm.sh && source ~/.profile && nvm install 10.16.0 && nvm alias default 10.16.0
       - run: cd client/ && npm install
       - save_cache:
           key: v1-dep-{{ .Branch }}-{{ epoch }}
@@ -139,7 +139,7 @@ jobs:
             # Any branch if there are none on the default branch - this should be unnecessary if you have your default branch configured correctly
             - v1-dep-
       # Install nvm & frontend libraries
-      - run: nvm install 10.16.0 && nvm alias default 10.16.0
+      - run: curl -sL https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.2/install.sh -o install_nvm.sh && bash install_nvm.sh && source ~/.profile && nvm install 10.16.0 && nvm alias default 10.16.0
       - run: cd client/ && npm install
       - run: sudo rm -rf /etc/apt/sources.list.d/circleci_trusty.list && sudo rm -rf /etc/apt/sources.list.d/github_git-lfs.list  && sudo rm -rf /etc/apt/sources.list.d/neo4j.list && sudo rm -rf /etc/apt/sources.list.d/mysql.list && sudo rm -rf /etc/apt/sources.list.d/basho_riak.list
       - save_cache:
