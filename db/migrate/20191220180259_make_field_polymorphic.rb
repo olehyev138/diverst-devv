@@ -57,7 +57,16 @@ class MakeFieldPolymorphic < ActiveRecord::Migration[5.2]
             remove_poly
             abort('No ID')
           end
-      field.save!
+      unless field.save
+        pp field.error.to_json
+        remove_poly
+        abort('validation error')
+      end
+
+      if Field.find(field.id).field_definer == nil
+        remove_poly
+        abort('WHY')
+      end
     end
 
     remove_individual
