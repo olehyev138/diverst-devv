@@ -37,6 +37,21 @@ Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 # If you are not using ActiveRecord, you can remove this line.
 ActiveRecord::Migration.maintain_test_schema!
 
+def check_for_leftovers
+  tables = ActiveRecord::Base.connection.select_values('show tables')
+  leftovers = {}
+  tables.each do |table|
+    next if %w(schema_migrations vanity_experiments).include? table
+
+    count = ActiveRecord::Base.connection.select_value("select count(*) from #{table}")
+    leftovers[table] = count if count > 0
+  end
+
+  if leftovers.any?
+    raise "LEFTOVERS in\n#{leftovers.map { |k, v| "#{k}: #{v}" }.join("\n")}"
+  end
+end
+
 RSpec.configure do |config|
   config.include(Shoulda::Matchers::ActiveRecord, type: :model)
   config.include ReferrerHelpers, type: :controller
@@ -75,6 +90,14 @@ RSpec.configure do |config|
   # reach its max and throw an error
   config.before(:each) do
     Faker::UniqueGenerator.clear
+  end
+
+  config.after(:all) do |x|
+    check_for_leftovers
+  rescue
+    print "\n#{x.class}\n"
+    DatabaseCleaner.clean_with :truncation
+    raise
   end
 
   Shoulda::Matchers.configure do |confi|
