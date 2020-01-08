@@ -1,74 +1,76 @@
 <div class="content__main">
   <% if GroupPolicy.new(current_user, nil).index? || SegmentPolicy.new(current_user, nil).index? %>
-    <%= search_form_for @q, url: @q_form_submit_path, builder: SimpleForm::FormBuilder do |f| %>
-      <div class="card">
-        <div class="card__section card__section--border calendar-filters">
-          <div class="row">
-            <% if GroupPolicy.new(current_user, nil).index? %>
-              <div class="col-xs-5">
-                <%= f.input :initiative_participating_groups_group_id_in,
-                      as: :select,
-                      input_html: { class: "select2-field-groups", id: "select2-field-groups", multiple: true, autofocus: true },
-                      label: "Filter by #{ c_t(:erg) }",
-                      required: false
-                %>
-              </div>
-            <% end %>
-            <% if SegmentPolicy.new(current_user, nil).index? %>
-              <div class="col-xs-5">
-                <%= f.input :initiative_segments_segment_id_in,
-                      as: :select,
-                      input_html: { class: "select2-field-segments", id: "select2-field-segments", multiple: true },
-                      label: "Filter by #{ c_t(:segment) }",
-                      required: false
-                %>
-              </div>
-            <% end %>
-            <div class="col-xs-2" style="padding-top: 15px;">
-              <%= f.button :submit, value: "Filter" %>
-            </div>
-          </div>
-          <div class="row">
-            <% if GroupPolicy.new(current_user, nil).index? %>
-              <div class="col-xs-5">
-                <small class="form-text text-muted">
-                  <%= c_t(:erg) %> chapters are not included in the default view. To include all <%= c_t(:erg) %> and associated chapter events, click 'Select All' under Filter by <%= c_t(:erg) %>
-                </small>
-                <a href="#" class="select2-select-all" data-select-id="select2-field-groups" data-select-all-path="<%= get_all_groups_groups_path %>">Select All</a> |
-                <a href="#" class="select2-clear-all" data-select-id="select2-field-groups">Clear Selection</a>
-              </div>
-            <% end %>
-            <% if SegmentPolicy.new(current_user, nil).index? %>
-              <div class="col-xs-5">
-                <a href="#" class="select2-select-all" data-select-id="select2-field-segments" data-select-all-path="<%= get_all_segments_segments_path %>">Select All</a> |
-                <a href="#" class="select2-clear-all" data-select-id="select2-field-segments">Clear Selection</a>
-              </div>
-            <% end %>
-          </div>
+  <%= search_form_for @q, url: @q_form_submit_path, builder: SimpleForm::FormBuilder do |f| %>
+  <div class="card">
+    <div class="card__section card__section--border calendar-filters">
+      <div class="row">
+        <% if GroupPolicy.new(current_user, nil).index? %>
+        <div class="col-xs-5">
+          <%= f.input :initiative_participating_groups_group_id_in,
+          as: :select,
+          input_html: { class: "select2-field-groups", id: "select2-field-groups", multiple: true, autofocus: true },
+          label: "Filter by #{ c_t(:erg) }",
+          required: false
+          %>
+        </div>
+        <% end %>
+        <% if SegmentPolicy.new(current_user, nil).index? %>
+        <div class="col-xs-5">
+          <%= f.input :initiative_segments_segment_id_in,
+          as: :select,
+          input_html: { class: "select2-field-segments", id: "select2-field-segments", multiple: true },
+          label: "Filter by #{ c_t(:segment) }",
+          required: false
+          %>
+        </div>
+        <% end %>
+        <div class="col-xs-2" style="padding-top: 15px;">
+          <%= f.button :submit, value: "Filter" %>
         </div>
       </div>
-    <% end %>
-  <% end %>
+      <div class="row">
+        <% if GroupPolicy.new(current_user, nil).index? %>
+        <div class="col-xs-5">
+          <small class="form-text text-muted">
+            The default view will show events for <%= c_t(:erg).pluralize %> and <%= c_t(:sub_erg).pluralize %>.
+            To focus on a specific <%= c_t(:erg) %> or <%= c_t(:sub_erg) %>, click 'Select'.
+          </small>
+          <button type="button" class="btn btn--primary btn--small" data-toggle="modal"
+          data-target="#group-scope-selector">Select</button>
+        </div>
 
+        <% end %>
+        <% if SegmentPolicy.new(current_user, nil).index? %>
+        <div class="col-xs-5">
+          <a href="#" class="select2-select-all" data-select-id="select2-field-segments" data-select-all-path="<%= get_all_segments_segments_path %>">Select All</a> |
+          <a href="#" class="select2-clear-all" data-select-id="select2-field-segments">Clear Selection</a>
+        </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <% end %>
+  <% end %>
+  
   <div class="card">
     <strong> Legend </strong>
     <br/>
     <% @groups.each do |group| %>
-      <% if group.is_parent_group? %>
-        <span class="" style="color: #<%= group.calendar_color %>;">
-          <%= group.name %>
-          <% unless group == @groups.last %>
-            -
-          <% end %>
-        </span>
-      <% elsif group.is_standard_group? %>
-        <span class="" style="color: #<%= group.calendar_color %>;">
-          <%= group.name %>
-          <% unless group == @groups.last %>
-            -
-          <% end %>
-        </span>
+    <% if group.is_parent_group? %>
+    <span class="" style="color: #<%= group.calendar_color %>;">
+      <%= group.name %>
+      <% unless group == @groups.last %>
+      -
       <% end %>
+    </span>
+    <% elsif group.is_standard_group? %>
+    <span class="" style="color: #<%= group.calendar_color %>;">
+      <%= group.name %>
+      <% unless group == @groups.last %>
+      -
+      <% end %>
+    </span>
+    <% end %>
     <% end %>
   </div>
 </div>
@@ -78,3 +80,55 @@
 <div id="calendar" data-calendar-data-url="<%= calendar_data_groups_path(token: params[:token], q: params[:q]) %>"></div>
 
 <%= render partial: 'shared/select2_ajax_search.js.erb' %>
+<%= render partial: 'components/group_selector', locals: {id: "group-scope-selector", multiselect: true} %>
+
+<script>
+  $(document).on('page:change', function () {
+    $(".group-selector").on('saveGroups', function (e, selectedGroups) {
+      let ids = $.map(selectedGroups, function (item, key) {
+        return { id: item.id, text: item.text };
+      });
+      
+      let groupTexts = $.map(selectedGroups, function (item, key) {
+        return "<span class='group-selected-text'>" + item.text + "</span>";
+      });
+      
+      if (selectedGroups.length > 0)
+      $(".groups-list").html(groupTexts.join(" "));
+      else
+      $(".groups-list").html("<h4>No filter</h4>");
+      
+      scoped_by_models = ids;   
+      
+      selectField = document.getElementById('select2-field-groups');
+      // console.log($(selectField).val([$(selectField).val(), ids]));
+      
+      function groupSelect(groupObjs) {
+        $.each(groupObjs, function(index, item) {
+          // Find the option if it already exists
+          if ($(selectField).find("option[value='" + item.id + "']").length)
+          {
+            // If the list of selected items is an array, select it with the other options
+            if ($.isArray($(selectField).val()))
+            $(selectField).val($(selectField).val().concat(item.id));
+            // If the list of the selected items is a single item, create an array with the old item and new item
+            else if ($(selectField).val() != undefined && $(selectField).val() != null)
+            $(selectField).val([$(selectField).val(), item.id]);
+            // If the list of selected items is empty, create an array with the new item
+            else
+            $(selectField).val([item.id]);
+          }
+          // If the option doesn't exist, create it and start selected
+          else
+          $(selectField).append(new Option(item.text, item.id, false, true));
+        });
+
+        // Update the select
+        $(selectField).trigger('change');
+      }
+      
+      groupSelect(ids);
+    });
+    
+  });
+</script>
