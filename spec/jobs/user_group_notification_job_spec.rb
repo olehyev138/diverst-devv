@@ -9,7 +9,7 @@ RSpec.describe UserGroupNotificationJob, type: :job do
   let!(:second_group) { create(:group, pending_users: 'disabled') }
 
   context '#get_users_to_mail' do
-    before(:all) do
+    before do
       @enterprise = create(:enterprise, enable_social_media: true)
 
       users = create_list(:user, 500, enterprise: @enterprise, groups_notifications_frequency: 'weekly')
