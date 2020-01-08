@@ -14,7 +14,9 @@ describe('configureStore', () => {
 
   describe('injectedReducers', () => {
     it('should contain an object for reducers', () => {
-      expect(typeof store.injectedReducers).toBe('object');
+      // expect(typeof store.injectedReducers).toBe('object');
+      // Purposely fail the test temporarily to test CircleCI
+      expect(typeof store.injectedReducers).toBe(null);
     });
   });
 
