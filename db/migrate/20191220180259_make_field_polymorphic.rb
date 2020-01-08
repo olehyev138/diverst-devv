@@ -1,26 +1,26 @@
 class MakeFieldPolymorphic < ActiveRecord::Migration[5.2]
   def add_poly
-    add_column :fields, :field_definer_id, :bigint, first: true
-    add_column :fields, :field_definer_type, :string, after: :field_definer_id
-    add_index :fields, [:field_definer_id, :field_definer_type]
+    add_column :fields, :field_definer_id, :bigint, first: true unless column_exists? :fields, :field_definer_id
+    add_column :fields, :field_definer_type, :string, after: :field_definer_id unless column_exists? :fields, :field_definer_type
+    add_index :fields, [:field_definer_id, :field_definer_type] unless index_exists? :fields, [:field_definer_id, :field_definer_type]
   end
 
   def remove_poly
     remove_index :fields, [:field_definer_id, :field_definer_type] if index_exists?(:fields, [:field_definer_id, :field_definer_type])
-    remove_column :fields, :field_definer_id
-    remove_column :fields, :field_definer_type
+    remove_column :fields, :field_definer_id if column_exists? :fields, :field_definer_id
+    remove_column :fields, :field_definer_type if column_exists? :fields, :field_definer_type
   end
 
   def add_individual
-    add_column :fields, :poll_id, :bigint, first: true
-    add_column :fields, :initiative_id, :bigint, first: true
-    add_column :fields, :group_id, :bigint, first: true
-    add_column :fields, :enterprise_id, :bigint, first: true
+    add_column :fields, :poll_id, :bigint, first: true unless column_exists? :fields, :poll_id
+    add_column :fields, :initiative_id, :bigint, first: true unless column_exists? :fields, :initiative_id
+    add_column :fields, :group_id, :bigint, first: true unless column_exists? :fields, :group_id
+    add_column :fields, :enterprise_id, :bigint, first: true unless column_exists? :fields, :enterprise_id
 
-    add_index :fields, [:enterprise_id]
-    add_index :fields, [:group_id]
-    add_index :fields, [:initiative_id]
-    add_index :fields, [:poll_id]
+    add_index :fields, [:enterprise_id] unless index_exists?(:fields, :enterprise_id)
+    add_index :fields, [:group_id] unless index_exists?(:fields, :group_id)
+    add_index :fields, [:initiative_id] unless index_exists?(:fields, :initiative_id)
+    add_index :fields, [:poll_id] unless index_exists?(:fields, :poll_id)
   end
 
   def remove_individual
@@ -29,10 +29,10 @@ class MakeFieldPolymorphic < ActiveRecord::Migration[5.2]
     remove_index :fields, column: [:initiative_id] if index_exists?(:fields, :initiative_id)
     remove_index :fields, column: [:poll_id] if index_exists?(:fields, :poll_id)
 
-    remove_column :fields, :enterprise_id
-    remove_column :fields, :group_id
-    remove_column :fields, :initiative_id
-    remove_column :fields, :poll_id
+    remove_column :fields, :enterprise_id if column_exists? :fields, :enterprise_id
+    remove_column :fields, :group_id if column_exists? :fields, :group_id
+    remove_column :fields, :initiative_id if column_exists? :fields, :initiative_id
+    remove_column :fields, :poll_id if column_exists? :fields, :poll_id
   end
 
   def up
