@@ -70,7 +70,7 @@ export function UpdateList(props, context) {
               component={WrappedNavLink}
               to={{
                 pathname: props.links.show(update.id),
-                state: { update }
+                update
               }}
             >
               <Typography color='primary' variant='h6' component='h2'>

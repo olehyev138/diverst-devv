@@ -106,6 +106,7 @@ import OutcomeEditPage from 'containers/Group/Outcome/OutcomeEditPage/Loadable';
 import GroupPlanKpiPage from 'containers/Group/GroupPlan/KPI/KpiPage/Loadable';
 import GroupPlanFieldsPage from 'containers/Group/GroupPlan/KPI/FieldsPage/Loadable';
 import GroupPlanUpdatesPage from 'containers/Group/GroupPlan/KPI/UpdatesPage/Loadable';
+import GroupPlanUpdatePage from 'containers/Group/GroupPlan/KPI/UpdatePage/Loadable';
 import GroupPlanUpdateEditPage from 'containers/Group/GroupPlan/KPI/UpdateEditPage/Loadable';
 import GroupPlanUpdateCreatePage from 'containers/Group/GroupPlan/KPI/UpdateCreatePage/Loadable';
 
@@ -174,6 +175,7 @@ export {
   GroupPlanKpiPage,
   GroupPlanFieldsPage,
   GroupPlanUpdatesPage,
+  GroupPlanUpdatePage,
   GroupPlanUpdateEditPage,
   GroupPlanUpdateCreatePage,
   GroupMemberListPage,

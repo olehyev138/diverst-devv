@@ -84,17 +84,9 @@ export function UpdateEditPage(props) {
   }, []);
 
   return (
-    <UpdateForm
-      update={update}
-      isCommitting={props.isCommitting || props.isCommittingFieldData}
-      isFetching={props.isFetching}
-      links={links}
-      buttonText='Update'
-      updateAction={props.updateUpdateBegin}
-      updateFieldDataBegin={props.updateFieldDataBegin}
-
-      edit
-    />
+    <h2>
+      {`Showing Update ${dig(update, 'id')}`}
+    </h2>
   );
 }
 
