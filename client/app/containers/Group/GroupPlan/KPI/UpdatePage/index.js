@@ -35,6 +35,7 @@ import {
 
 import {
   getUpdateBegin,
+  getUpdateSuccess,
   deleteUpdateBegin,
   updatesUnmount,
   updateUpdateBegin,
@@ -53,7 +54,7 @@ import fieldDataSaga from 'containers/Shared/FieldData/saga';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import RouteService from 'utils/routeHelpers';
 
-import UpdateForm from 'components/Shared/Updates/UpdateForm';
+import Update from 'components/Shared/Updates/Update';
 import { selectGroup } from 'containers/Group/selectors';
 
 export function UpdateEditPage(props) {
@@ -68,6 +69,7 @@ export function UpdateEditPage(props) {
   const partialLink = ROUTES.group.plan.kpi.updates;
   const links = {
     index: partialLink.index.path(dig(props, 'currentGroup', 'id')),
+    edit: id => partialLink.edit.path(dig(props, 'currentGroup', 'id'), id),
   };
 
   const update = props.currentUpdate || location.update;
@@ -77,6 +79,8 @@ export function UpdateEditPage(props) {
     // eslint-disable-next-line eqeqeq
     if (!update || update.id != id)
       props.getUpdateBegin(id);
+    else
+      props.getUpdateSuccess({update});
 
     return () => {
       props.updatesUnmount();
@@ -84,14 +88,17 @@ export function UpdateEditPage(props) {
   }, []);
 
   return (
-    <h2>
-      {`Showing Update ${dig(update, 'id')}`}
-    </h2>
+    <Update
+      update={update}
+      links={links}
+      isFetching={props.isFetching}
+    />
   );
 }
 
 UpdateEditPage.propTypes = {
   getUpdateBegin: PropTypes.func.isRequired,
+  getUpdateSuccess: PropTypes.func.isRequired,
   deleteUpdateBegin: PropTypes.func.isRequired,
   updatesUnmount: PropTypes.func.isRequired,
   updateUpdateBegin: PropTypes.func.isRequired,
@@ -117,6 +124,7 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = {
   getUpdateBegin,
+  getUpdateSuccess,
   updateUpdateBegin,
   deleteUpdateBegin,
   updatesUnmount,

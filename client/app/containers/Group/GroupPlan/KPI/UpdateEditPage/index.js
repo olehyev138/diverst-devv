@@ -35,6 +35,7 @@ import {
 
 import {
   getUpdateBegin,
+  getUpdateSuccess,
   deleteUpdateBegin,
   updatesUnmount,
   updateUpdateBegin,
@@ -77,6 +78,8 @@ export function UpdateEditPage(props) {
     // eslint-disable-next-line eqeqeq
     if (!update || update.id != id)
       props.getUpdateBegin(id);
+    else
+      props.getUpdateSuccess({update});
 
     return () => {
       props.updatesUnmount();
@@ -100,6 +103,7 @@ export function UpdateEditPage(props) {
 
 UpdateEditPage.propTypes = {
   getUpdateBegin: PropTypes.func.isRequired,
+  getUpdateSuccess: PropTypes.func.isRequired,
   deleteUpdateBegin: PropTypes.func.isRequired,
   updatesUnmount: PropTypes.func.isRequired,
   updateUpdateBegin: PropTypes.func.isRequired,
@@ -125,6 +129,7 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = {
   getUpdateBegin,
+  getUpdateSuccess,
   updateUpdateBegin,
   deleteUpdateBegin,
   updatesUnmount,
