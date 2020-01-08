@@ -66,6 +66,7 @@ group :development, :test do
   # The 3 gems above are for livereloading your code
   gem 'byebug', '~> 9.1.0' # Debugger
   gem 'pronto', '~> 0.10.0'
+  gem 'database_cleaner', '~> 1.6.1' # Necessary to clean the DB between tests
   gem 'pronto-eslint_npm', git: 'https://github.com/doits/pronto-eslint_npm.git'
   gem 'pronto-rubocop', '~> 0.10.0'
   gem 'pundit-matchers', '~> 1.6.0'
