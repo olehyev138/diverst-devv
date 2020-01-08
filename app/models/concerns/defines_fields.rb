@@ -21,6 +21,10 @@ module DefinesFields
   # @param field [Field] field to add +field_data+ for
   # @return [void]
   def add_missing_field_background_job(field)
-    UpdateMissingFieldDataJob.perform_later(model_name.name, id, field.id) if id.present?
+    if id.present? && field.id.present?
+      UpdateMissingFieldDataJob.perform_later(model_name.name, id, field.id)
+    elsif id.present?
+      UpdateMissingFieldDataJob.perform_later(model_name.name, id)
+    end
   end
 end

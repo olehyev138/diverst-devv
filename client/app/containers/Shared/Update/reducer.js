@@ -73,22 +73,16 @@ function updateReducer(state = initialState, action) {
         draft.isFetchingUpdates = false;
         break;
 
-      case CREATE_UPDATE_BEGIN:
-      case UPDATE_UPDATE_BEGIN:
       case DELETE_UPDATE_BEGIN:
         draft.isCommitting = true;
         draft.hasChanged = false;
         break;
 
-      case CREATE_UPDATE_SUCCESS:
-      case UPDATE_UPDATE_SUCCESS:
       case DELETE_UPDATE_SUCCESS:
         draft.isCommitting = false;
         draft.hasChanged = true;
         break;
 
-      case CREATE_UPDATE_ERROR:
-      case UPDATE_UPDATE_ERROR:
       case DELETE_UPDATE_ERROR:
         draft.isCommitting = false;
         break;
