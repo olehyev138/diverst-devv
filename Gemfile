@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 ruby '2.6.0'
 
 gem 'active_storage_validations', '~> 0.8.4'
-gem 'mini_magick', '~> 4.9.5'
+gem 'mini_magick', '~> 4.10.1'
 gem 'actionmailer', '~> 5.2.3'
 gem 'actionpack', '~> 5.2.3'
 gem 'active_model_serializers', '~> 0.10.10'
@@ -29,6 +29,7 @@ gem 'fog', '~> 1.37' # AWS SDK
 gem 'http'
 gem 'httparty', '~> 0.13' # HTTP request library
 gem 'inline_svg', '~> 0.6.2' # Extract SVG files' content into the HTML
+gem 'image_processing', '~> 1.10.1'
 gem 'jquery-ui-rails', '~> 6.0.1'
 gem 'julia_builder', '~> 0.2.0'
 gem 'jwt', '~> 2.1.0', require: false
