@@ -36,64 +36,74 @@ class MakeFieldPolymorphic < ActiveRecord::Migration[5.2]
   end
 
   def up
-    add_poly
+    transaction do
+      add_poly
 
-    Field.find_each do |field|
-      field.field_definer_id = field.group_id || field.poll_id || field.initiative_id || field.enterprise_id
-      unless field.field_definer_id.present?
-        remove_poly
-        abort('No ID')
-      end
-      field.field_definer_type =
-          if field.group_id
-            'Group'
-          elsif field.poll_id
-            'Poll'
-          elsif field.initiative_id
-            'Initiative'
-          elsif field.enterprise_id
-            'Enterprise'
-          else
-            remove_poly
-            abort('No ID')
-          end
-      unless field.save
-        pp field.error.to_json
-        remove_poly
-        abort('validation error')
+      Field.connection.schema_cache.clear!
+      Field.reset_column_information
+      Field.find_each do |field|
+        field_definer_id = field.group_id || field.poll_id || field.initiative_id || field.enterprise_id
+        unless field_definer_id.present?
+          remove_poly
+          abort('No ID')
+        end
+
+        field_definer_type =
+            if field.group_id
+              'Group'
+            elsif field.poll_id
+              'Poll'
+            elsif field.initiative_id
+              'Initiative'
+            elsif field.enterprise_id
+              'Enterprise'
+            else
+              remove_poly
+              abort('No ID')
+            end
+
+        field.update_attributes(field_definer_type: field_definer_type, field_definer_id: field_definer_id)
+
+        if Field.find(field.id).field_definer == nil
+          remove_poly
+          abort('WHY')
+        end
       end
 
-      if Field.find(field.id).field_definer == nil
-        remove_poly
-        abort('WHY')
-      end
+      remove_individual
+    rescue => e
+      abort(e.message)
     end
-
-    remove_individual
   end
 
 
   def down
-    add_individual
+    transaction do
+      add_individual
 
-    Field.find_each do |field|
-      case field.field_definer_type
-      when 'Enterprise'
-        field.enterprise_id = field.field_definer_id
-      when 'Group'
-        field.group_id = field.field_definer_id
-      when 'Poll'
-        field.poll_id = field.field_definer_id
-      when 'Initiative'
-        field.initiative_id = field.field_definer_id
-      else
-        remove_individual
-        abort('invalid field_definer type')
+      Field.connection.schema_cache.clear!
+      Field.reset_column_information
+      Field.find_each do |field|
+        case field.field_definer_type
+        when 'Enterprise'
+          field.enterprise_id = field.field_definer_id
+        when 'Group'
+          field.group_id = field.field_definer_id
+        when 'Poll'
+          field.poll_id = field.field_definer_id
+        when 'Initiative'
+          field.initiative_id = field.field_definer_id
+        else
+          remove_individual
+          abort('invalid field_definer type')
+        end
+
+        field.save!(validate: false)
       end
 
-      field.save!(validate: false)
+      remove_poly
+    rescue => e
+      abort(e.message)
     end
-
-    remove_poly
   end
 end
