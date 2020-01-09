@@ -41,9 +41,12 @@ def base
   @base ||= {}
 end
 
+# rubocop:disable Style/TrivialAccessors
+# attr_writer does not exists in main:Object
 def base=(arg)
   @base = arg
 end
+# rubocop:enable Style/TrivialAccessors
 
 def check_for_leftovers
   tables = ActiveRecord::Base.connection.select_values('show tables')

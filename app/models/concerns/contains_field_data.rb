@@ -158,6 +158,8 @@ module ContainsFieldData
     #   us.map(&:gender) #=> ['Male', 'Male', 'Female', ...]
     def load_field_data
       # rubocop:disable Rails/FindEach
+      # find each doesn't return the list of objects which I want
+
       # for each field field_user
       includes(:field_data, field_data: :field).each do |u|
         # for each field_data
