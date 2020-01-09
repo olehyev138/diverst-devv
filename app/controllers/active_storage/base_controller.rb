@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # The base class for all Active Storage controllers.
 class ActiveStorage::BaseController < ActionController::Base
   include BaseAuthentication
