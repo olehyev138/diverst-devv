@@ -41,6 +41,10 @@ def base
   @base ||= {}
 end
 
+def base=(arg)
+  @base = arg
+end
+
 def check_for_leftovers
   tables = ActiveRecord::Base.connection.select_values('show tables')
   leftovers = {}
