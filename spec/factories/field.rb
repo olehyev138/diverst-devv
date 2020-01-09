@@ -42,7 +42,7 @@ FactoryBot.define do
     factory :enterprise_field do
       association :field_definer, factory: :enterprise
     end
-    factory :group_field do
+    factory :field_defined_by_group do
       association :field_definer, factory: :group
     end
     factory :poll_field do
