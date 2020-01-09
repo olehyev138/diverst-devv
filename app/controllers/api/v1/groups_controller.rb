@@ -1,4 +1,6 @@
 class Api::V1::GroupsController < DiverstController
+  include Api::V1::Concerns::DefinesFields
+
   def index
     authorize klass, :index?
 
