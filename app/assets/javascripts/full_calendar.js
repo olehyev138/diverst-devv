@@ -16,8 +16,17 @@ $(document).on('ready page:load', function(){
 
       eventMouseover: function(event, jsEvent, view) {
         var groupName = event.group_name;
-        $(jsEvent.target.closest('.fc-event').setAttribute("title", groupName)).tooltip("show");
+
+        $(this).popover({
+          html: true,
+          title: groupName,
+          placement: 'top',
+          trigger: 'hover',
+          content: event.description,
+          container: '#calendar'
+      }).popover('toggle');
       },
+
 
       buttonIcons: false,
       eventSources: [
