@@ -5,6 +5,7 @@ FactoryBot.define do
     gamification_value 1
     show_on_vcard false
     saml_attribute nil
+    association :field_definer, factory: :enterprise
 
     factory :checkbox_field do
       type 'CheckboxField'
@@ -40,6 +41,15 @@ FactoryBot.define do
 
     factory :enterprise_field do
       association :field_definer, factory: :enterprise
+    end
+    factory :group_field do
+      association :field_definer, factory: :group
+    end
+    factory :poll_field do
+      association :field_definer, factory: :poll
+    end
+    factory :initiative_field do
+      association :field_definer, factory: :initiative
     end
   end
 end
