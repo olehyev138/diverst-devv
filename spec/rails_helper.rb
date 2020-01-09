@@ -37,8 +37,9 @@ Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 # If you are not using ActiveRecord, you can remove this line.
 ActiveRecord::Migration.maintain_test_schema!
 
-@base
-attr_accessor :base
+def base
+  @base ||= {}
+end
 
 def check_for_leftovers
   tables = ActiveRecord::Base.connection.select_values('show tables')
