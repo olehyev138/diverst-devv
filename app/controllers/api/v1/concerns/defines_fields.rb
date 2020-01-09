@@ -34,6 +34,6 @@ module Api::V1::Concerns::DefinesFields
             :options_text,
             :min,
             :max,
-            )
+          )
   end
 end
