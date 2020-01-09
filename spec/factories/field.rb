@@ -45,10 +45,10 @@ FactoryBot.define do
     factory :field_defined_by_group do
       association :field_definer, factory: :group
     end
-    factory :poll_field do
+    factory :field_defined_by_poll do
       association :field_definer, factory: :poll
     end
-    factory :initiative_field do
+    factory :field_defined_by_initiative do
       association :field_definer, factory: :initiative
     end
   end
