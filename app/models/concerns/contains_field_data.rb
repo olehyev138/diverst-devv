@@ -157,6 +157,12 @@ module ContainsFieldData
     field_data
   end
 
+  def get_field_data(field)
+    field_data.loaded? ?
+        field_data.to_a.find {|fd| fd.field == field} :
+        field_data.find_by(field: field)
+  end
+
   # Class Methods for FieldData Models
   module ClassMethods
     # Evaluates an +ActiveRecord+ query of a +field_user+ and creates getter and setter
