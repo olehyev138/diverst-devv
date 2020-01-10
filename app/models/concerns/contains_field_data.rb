@@ -159,7 +159,7 @@ module ContainsFieldData
 
   def get_field_data(field)
     field_data.loaded? ?
-        field_data.to_a.find {|fd| fd.field == field} :
+        field_data.to_a.find { |fd| fd.field == field } :
         field_data.find_by(field: field)
   end
 
