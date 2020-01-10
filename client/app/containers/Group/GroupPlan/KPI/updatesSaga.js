@@ -46,8 +46,9 @@ export function* getMetrics(action) {
     const { groupId, ...payload } = action.payload;
     const response = yield call(api.groups.metrics.bind(api.groups), groupId, payload);
 
-    yield put(getMetricsSuccess(response.data.page));
+    yield put(getMetricsSuccess(response.data));
   } catch (err) {
+    console.log(err);
     yield put(getMetricsError(err));
 
     // TODO: intl message

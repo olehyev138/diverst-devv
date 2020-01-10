@@ -33,9 +33,9 @@ module Update::Actions
 
 
       fields = updatable.fields
-      fields_hash = fields.reduce({ updates: [] }) { |sum, n| sum[n.title] = []; sum }
+      fields_hash = fields.reduce({ __updates__: [] }) { |sum, n| sum[n.title] = []; sum }
       items.reverse_each do |update|
-        fields_hash[:updates].append(update.as_json)
+        fields_hash[:__updates__].append(update.as_json)
         update.field_data.each do |fd|
           abs_var, rel_var = update.variance_from_previous(fd.field)
           fields_hash[fd.field.title].append({
