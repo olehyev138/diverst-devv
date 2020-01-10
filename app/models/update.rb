@@ -6,7 +6,7 @@ class Update < ApplicationRecord
   include Update::Actions
 
   after_save -> { UpdateNextAndPreviousUpdateJob.perform_now(id) }
-  after_destroy -> { UpdateNextAndPreviousUpdateJob.perform_now(self.next.id) }
+  after_destroy -> { UpdateNextAndPreviousUpdateJob.perform_now(self.next.id) if self.next.present? }
 
   belongs_to :owner, class_name: 'User'
   belongs_to :updatable, polymorphic: true
