@@ -26,7 +26,6 @@ export function KPI(props) {
   const { classes, metrics } = props;
 
   const { __updates__, ...data } = metrics;
-  console.log(__updates__);
 
   return (
     Object.keys(metrics).length ? (

@@ -48,7 +48,6 @@ export function* getMetrics(action) {
 
     yield put(getMetricsSuccess(response.data));
   } catch (err) {
-    console.log(err);
     yield put(getMetricsError(err));
 
     // TODO: intl message
