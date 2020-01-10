@@ -38,7 +38,10 @@ module Update::Actions
         fields_hash[:updates].append(update.as_json)
         update.field_data.each do |fd|
           abs_var, rel_var = update.variance_from_previous(fd.field)
-          fields_hash[fd.field.title].append({ value: fd.deserialized_data, variance_with_prev: rel_var })
+          fields_hash[fd.field.title].append({
+                                                 value: fd.deserialized_data,
+                                                 variance_with_prev: ("#{rel_var.round(3) * 100}%" rescue nil)
+                                             })
         end
       end
 

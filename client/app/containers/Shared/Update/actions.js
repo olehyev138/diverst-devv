@@ -8,6 +8,9 @@ import {
   GET_UPDATE_BEGIN,
   GET_UPDATE_SUCCESS,
   GET_UPDATE_ERROR,
+  GET_METRICS_BEGIN,
+  GET_METRICS_SUCCESS,
+  GET_METRICS_ERROR,
   GET_UPDATE_PROTOTYPE_BEGIN,
   GET_UPDATE_PROTOTYPE_SUCCESS,
   GET_UPDATE_PROTOTYPE_ERROR,
@@ -43,6 +46,27 @@ export function getUpdateSuccess(payload) {
 export function getUpdateError(error) {
   return {
     type: GET_UPDATE_ERROR,
+    error,
+  };
+}
+
+export function getMetricsBegin(payload) {
+  return {
+    type: GET_METRICS_BEGIN,
+    payload,
+  };
+}
+
+export function getMetricsSuccess(payload) {
+  return {
+    type: GET_METRICS_SUCCESS,
+    payload,
+  };
+}
+
+export function getMetricsError(error) {
+  return {
+    type: GET_METRICS_ERROR,
     error,
   };
 }

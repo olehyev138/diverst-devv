@@ -9,6 +9,7 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import {
   GET_UPDATE_BEGIN,
   GET_UPDATES_BEGIN,
+  GET_METRICS_BEGIN,
   CREATE_UPDATE_BEGIN,
   UPDATE_UPDATE_BEGIN,
   DELETE_UPDATE_BEGIN,
@@ -17,6 +18,7 @@ import {
 
 import {
   getUpdatesSuccess, getUpdatesError,
+  getMetricsSuccess, getMetricsError,
   createUpdateSuccess, createUpdateError,
   getUpdatePrototypeSuccess, getUpdatePrototypeError,
 } from 'containers/Shared/Update/actions';
@@ -38,6 +40,20 @@ export function* getUpdates(action) {
     yield put(showSnackbar({ message: 'Failed to get updates', options: { variant: 'warning' } }));
   }
 }
+
+export function* getMetrics(action) {
+  try {
+    const response = { data: 'API CALL' };
+
+    yield put(getMetricsSuccess(response.data.page));
+  } catch (err) {
+    yield put(getMetricsError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to get metrics', options: { variant: 'warning' } }));
+  }
+}
+
 
 export function* getUpdatePrototype(action) {
   try {
@@ -73,6 +89,7 @@ export function* createUpdate(action) {
 export default function* KpiSaga() {
   yield takeLatest(GET_UPDATE_BEGIN, getUpdate);
   yield takeLatest(GET_UPDATES_BEGIN, getUpdates);
+  yield takeLatest(GET_METRICS_BEGIN, getMetrics);
   yield takeLatest(CREATE_UPDATE_BEGIN, createUpdate);
   yield takeLatest(UPDATE_UPDATE_BEGIN, updateUpdate);
   yield takeLatest(DELETE_UPDATE_BEGIN, deleteUpdate);

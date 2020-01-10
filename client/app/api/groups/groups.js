@@ -15,6 +15,9 @@ Object.assign(Groups, {
   updates(id, payload) {
     return axios.get(appendQueryArgs(`${this.url}/${id}/updates`, payload));
   },
+  metrics(id, payload) {
+    return axios.get(appendQueryArgs(`${this.url}/${id}/metrics`, payload));
+  },
   updatePrototype(id, payload) {
     return axios.get(appendQueryArgs(`${this.url}/${id}/update_prototype`, payload));
   },
