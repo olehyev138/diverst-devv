@@ -13,6 +13,16 @@ const selectUpdatesTotal = () => createSelector(
   updateState => updateState.updateListTotal
 );
 
+const selectPaginatedMetrics = () => createSelector(
+  selectUpdateDomain,
+  updateState => updateState.metricsList
+);
+
+const selectMetricsTotal = () => createSelector(
+  selectUpdateDomain,
+  updateState => updateState.metricsListTotal
+);
+
 const selectUpdate = () => createSelector(
   selectUpdateDomain,
   updateState => updateState.currentUpdate
@@ -21,6 +31,11 @@ const selectUpdate = () => createSelector(
 const selectIsFetchingUpdates = () => createSelector(
   selectUpdateDomain,
   updateState => updateState.isFetchingUpdates
+);
+
+const selectIsFetchingMetrics = () => createSelector(
+  selectUpdateDomain,
+  updateState => updateState.isFetchingMetrics
 );
 
 const selectIsFetchingUpdate = () => createSelector(
@@ -42,8 +57,11 @@ export {
   selectUpdateDomain,
   selectPaginatedUpdates,
   selectUpdatesTotal,
+  selectPaginatedMetrics,
+  selectMetricsTotal,
   selectUpdate,
   selectIsFetchingUpdates,
+  selectIsFetchingMetrics,
   selectIsFetchingUpdate,
   selectIsCommitting,
   selectHasChanged,

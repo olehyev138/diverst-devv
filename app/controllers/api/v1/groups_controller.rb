@@ -12,7 +12,7 @@ class Api::V1::GroupsController < DiverstController
     item = klass.find(params[:id])
     base_authorize(item)
 
-    render status: 200, json: Update.index(self.diverst_request, params.except(:id).permit!, base: item.updates)
+    render status: 200, json: item.updates.index(self.diverst_request, params.except(:id).permit!)
   rescue => e
     raise BadRequestException.new(e.message)
   end
@@ -31,7 +31,7 @@ class Api::V1::GroupsController < DiverstController
     base_authorize(klass)
     item = klass.find(params[:id])
 
-    render status: 201, json: Update.build(self.diverst_request, params, base: item.updates)
+    render status: 201, json: item.updates.build(self.diverst_request, params)
   rescue => e
     case e
     when InvalidInputException
@@ -45,7 +45,7 @@ class Api::V1::GroupsController < DiverstController
     item = klass.find(params[:id])
     base_authorize(item)
 
-    render status: 200, json: item.updates.index(self.diverst_request, params.except(:id).permit!, updatable: item)
+    render status: 200, json: item.updates.metrics_index(self.diverst_request, params.except(:id).permit!, updatable: item)
   rescue => e
     raise BadRequestException.new(e.message)
   end

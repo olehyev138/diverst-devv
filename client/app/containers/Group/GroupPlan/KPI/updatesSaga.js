@@ -43,7 +43,8 @@ export function* getUpdates(action) {
 
 export function* getMetrics(action) {
   try {
-    const response = { data: 'API CALL' };
+    const { groupId, ...payload } = action.payload;
+    const response = yield call(api.groups.metrics.bind(api.groups), groupId, payload);
 
     yield put(getMetricsSuccess(response.data.page));
   } catch (err) {
