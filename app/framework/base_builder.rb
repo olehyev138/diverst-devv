@@ -10,10 +10,12 @@ module BaseBuilder
   end
 
   module ClassMethods
+    # @param base [ActiveRecord], partial query
     def index(diverst_request, params, search_method = :lookup, base: self)
       pager(diverst_request, params, search_method, base: base)
     end
 
+    # @param base [ActiveRecord::Association], association to create a new object from
     def build(diverst_request, params, base: self)
       raise BadRequestException.new "#{self.name.titleize} required" if params[symbol].nil?
 

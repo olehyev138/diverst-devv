@@ -8,6 +8,7 @@ module ContainsFieldData
     extend ClassMethods
   end
 
+  # LEGACY: POSSIBLY DEPRECATED
   def info
     return @info unless @info.nil?
 
@@ -17,6 +18,7 @@ module ContainsFieldData
     @info.extend(FieldDataDeprecated)
   end
 
+  # LEGACY: POSSIBLY DEPRECATED
   # Called before validation to presist the (maybe) edited info object in the DB
   def transfer_info_to_data
     self.data = JSON.generate @info unless @info.nil?
@@ -84,12 +86,12 @@ module ContainsFieldData
     # For each FieldData
     field_data.includes(:field).find_each do |fd|
       # Define a getter, that gets the field_data, called that field's title, on self's singleton
-      singleton_class.send(:define_method, fd.field.title.gsub(' ', '_').downcase) do
+      singleton_class.send(:define_method, fd.field.title.gsub(' ', '_').gsub(/[^0-9a-z_]/i, '').downcase) do
         fd.deserialized_data
       end
 
       # Define a setter, that sets the field_data, called that field's title =, on self's singleton
-      singleton_class.send(:define_method, "#{fd.field.title.gsub(' ', '_').downcase}=") do |*args|
+      singleton_class.send(:define_method, "#{fd.field.title.gsub(' ', '_').gsub(/[^0-9a-z_]/i, '').downcase}=") do |*args|
         fd.data = args[0].to_json
         fd.save!
       end
@@ -177,12 +179,12 @@ module ContainsFieldData
         # for each field_data
         u.field_data.each do |fd|
           # Define a getter, that gets the field_data, called that field's title, on that field_user's singleton
-          u.singleton_class.send(:define_method, fd.field.title.gsub(' ', '_').downcase) do
+          u.singleton_class.send(:define_method, fd.field.title.gsub(' ', '_').gsub(/[^0-9a-z_]/i, '').downcase) do
             fd.deserialized_data
           end
 
           # Define a setter, that sets the field_data, called that field's title =, on that field_user's singleton
-          u.singleton_class.send(:define_method, "#{fd.field.title.gsub(' ', '_').downcase}=") do |*args|
+          u.singleton_class.send(:define_method, "#{fd.field.title.gsub(' ', '_').gsub(/[^0-9a-z_]/i, '').downcase}=") do |*args|
             fd.data = args[0].to_json
             fd.save!
           end
