@@ -33,7 +33,7 @@ import {
 export const initialState = {
   updateList: [],
   updateListTotal: null,
-  metricsList: [],
+  metricsList: {},
   metricsListTotal: null,
   currentUpdate: null,
   isFetchingUpdates: false,

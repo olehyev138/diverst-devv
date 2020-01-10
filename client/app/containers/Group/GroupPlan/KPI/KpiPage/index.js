@@ -44,8 +44,8 @@ import KPI from 'components/Group/GroupPlan/KPIMetrics';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 export function KPIPage(props) {
-  useInjectReducer({ key: 'metrics', reducer });
-  useInjectSaga({ key: 'metrics', saga });
+  useInjectReducer({ key: 'updates', reducer });
+  useInjectSaga({ key: 'updates', saga });
 
   const [params, setParams] = useState(
     {
@@ -70,8 +70,14 @@ export function KPIPage(props) {
     setParams(newParams);
   };
 
+
   return (
-    <React.Fragment />
+    <KPI
+      metrics={props.metrics}
+      isFetching={props.isFetching}
+      count={props.total}
+      handlePagination={handlePagination}
+    />
   );
 }
 
@@ -80,7 +86,7 @@ KPIPage.propTypes = {
   deleteUpdateBegin: PropTypes.func,
   updatesUnmount: PropTypes.func.isRequired,
 
-  metrics: PropTypes.array,
+  metrics: PropTypes.object,
   total: PropTypes.number,
   isFetching: PropTypes.bool,
   hasChanged: PropTypes.bool,

@@ -49,7 +49,7 @@ class Api::V1::GroupsController < DiverstController
         self.diverst_request, params.except(:id).permit!,
         base: item.updates,
         updatable: item
-    )
+      )
   rescue => e
     raise BadRequestException.new(e.message)
   end
