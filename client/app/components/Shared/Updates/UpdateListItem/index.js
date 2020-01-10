@@ -74,7 +74,7 @@ export function UpdateList(props, context) {
               }}
             >
               <Typography color='primary' variant='h6' component='h2'>
-                {formatDateTimeString(update.report_date, DateTime.DATE_MED) + (update.comments ? `: ${update.short_comment}` : '')}
+                {formatDateTimeString(update.report_date, DateTime.DATE_MED) + (update.comments ? `: ${update.comments}` : '')}
               </Typography>
             </Link>
           </Grid>

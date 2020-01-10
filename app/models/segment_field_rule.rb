@@ -31,6 +31,8 @@ class SegmentFieldRule < ApplicationRecord
     when 'SelectField'
       # TODO: multi select - assume single element array for now
       JSON.parse(data)
+    when 'NumericField'
+      data.to_i
     else
       data
     end
