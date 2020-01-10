@@ -12,7 +12,7 @@ RSpec.describe Update, type: :model do
 
   describe 'test instance methods' do
     let!(:group) { build(:group) }
-    let!(:update) { build(:update, updatable: group, report_date: DateTime.now) }
+    let!(:update) { create(:update, updatable: group, report_date: DateTime.now) }
     let!(:previous_update) { create(:update, updatable: group, report_date: DateTime.now - 2.days) }
     let!(:next_update) { create(:update, updatable: group, report_date: DateTime.now + 2.days) }
 
