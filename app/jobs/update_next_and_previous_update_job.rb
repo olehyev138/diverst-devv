@@ -3,24 +3,22 @@ class UpdateNextAndPreviousUpdateJob < ActiveJob::Base
 
   def perform(*update_ids)
     Update.transaction do
-      begin
-        if update_ids.present?
-          Update.where(id: update_ids).lock('FOR UPDATE').each do |u|
-            set_locals(u)
-            assert_proper_order
-            if swap?
-              swap(u)
-            else
-              insert(u)
-            end
+      if update_ids.present?
+        Update.where(id: update_ids).lock('FOR UPDATE').each do |u|
+          set_locals(u)
+          assert_proper_order
+          if swap?
+            swap(u)
+          else
+            insert(u)
           end
-        else
-          raise StandardError
         end
-      rescue
-        Update.lock('FOR UPDATE').each do |u|
-          plane_insertion(u)
-        end
+      else
+        raise StandardError
+      end
+    rescue
+      Update.lock('FOR UPDATE').each do |u|
+        plane_insertion(u)
       end
     end
   end
