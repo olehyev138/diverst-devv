@@ -11,6 +11,10 @@ class CreateUpdates < ActiveRecord::Migration[5.2]
       t.timestamps
     end
 
+    GroupUpdate.connection.schema_cache.clear!
+    InitiativeUpdate.connection.schema_cache.clear!
+    GroupUpdate.reset_column_information
+    InitiativeUpdate.reset_column_information
     [GroupUpdate, InitiativeUpdate].each do |klass|
       klass.find_each do |old_u|
         Update.create do |new_u|
@@ -35,6 +39,8 @@ class CreateUpdates < ActiveRecord::Migration[5.2]
   end
 
   def down
+    Update.connection.schema_cache.clear!
+    Update.reset_column_information
     Update.find_each do |u|
       u.field_data.find_each do |fd|
         if u.updatable_type == 'Initiative'
@@ -43,7 +49,7 @@ class CreateUpdates < ActiveRecord::Migration[5.2]
           else
             fd.field_user = InitiativeUpdate.create do |i_up|
               i_up.data = u.data
-              i_up.comments = u.data
+              i_up.comments = u.comments
               i_up.owner = u.owner
               i_up.created_at = u.created_at
               i_up.report_date = u.report_date
@@ -56,7 +62,7 @@ class CreateUpdates < ActiveRecord::Migration[5.2]
           else
             fd.field_user = GroupUpdate.create do |g_up|
               g_up.data = u.data
-              g_up.comments = u.data
+              g_up.comments = u.comments
               g_up.owner = u.owner
               g_up.created_at = u.report_date
               g_up.group = u.updatable
