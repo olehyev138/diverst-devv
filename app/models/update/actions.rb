@@ -15,7 +15,7 @@ module Update::Actions
       @count = 5
     end
 
-    def metrics_index(diverst_request, params, updatable:)
+    def metrics_index(diverst_request, params, updatable:, base: self)
       set_progress_defaults
 
       raise Exception.new if @default_order_by.blank?
@@ -25,8 +25,8 @@ module Update::Actions
       item_page, item_count, offset, order_by, order = get_params(params)
 
       # search
-      total = self.count
-      items = self
+      total = base.count
+      items = base
                   .order("#{self.table_name}.report_date desc")
                   .limit(item_count)
                   .offset(offset)
