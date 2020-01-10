@@ -5,8 +5,13 @@ class Update < ApplicationRecord
 
   include Update::Actions
 
+  after_save -> {UpdateNextAndPreviousUpdateJob.perform_now(id)}
+  after_destroy -> {UpdateNextAndPreviousUpdateJob.perform_now(self.next.id)}
+
   belongs_to :owner, class_name: 'User'
   belongs_to :updatable, polymorphic: true
+  belongs_to :previous, class_name: 'Update', inverse_of: :next
+  has_one :next, class_name: 'Update', foreign_key: 'previous_id', inverse_of: :previous
   has_many :field_data, class_name: 'FieldData', as: :field_user, dependent: :destroy
 
   accepts_nested_attributes_for :field_data
@@ -41,12 +46,16 @@ class Update < ApplicationRecord
   end
 
   # The next update in chronological order
-  def next
+  def raw_next
     self.class.where(updatable: updatable).where('report_date > ?', report_date).order(report_date: :asc).first
   end
 
   # The previous update in chronological order
-  def previous
+  def raw_previous
     self.class.where(updatable: updatable).where('report_date < ?', report_date).order(report_date: :asc).last
+  end
+
+  def update_prev_and_next
+    UpdateNextAndPreviousUpdateJob(id, update_next: true)
   end
 end
