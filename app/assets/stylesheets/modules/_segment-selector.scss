@@ -1,0 +1,104 @@
+.segment-selector .search-container {
+    padding: 12px;
+  }
+  
+  .segment-selector .search-container .search-input {
+    padding: 0.4em;
+    font-size: 14px;
+  }
+  
+  .segment-selector .pagination-row .current-page-input {
+    padding: 0.4em 1px 0.4em 2px;
+    font-size: 14px;
+    width: 30px;
+  }
+  
+  .segment-selector .search-container .search-btn {
+    padding: 0.5em 10px;
+  }
+  
+  .segment-selector .search-container .clear-search-btn {
+    font-size: 1em;
+  }
+  
+  .segment-selector .pagination-row {
+      padding-bottom: 10px;
+      text-align: center;
+  }
+  
+  .segment-selector .helper-row {
+      padding-top: 10px;
+  }
+  
+  .segment-selector .pagination-row .col {
+      float: none;
+      display: inline-block;
+  }
+  
+  .segment-selector .pagination-row .col .pagination-text {
+      font-weight: bold;
+  }
+  
+  .segment-selector .pagination-row .col .pagination-button {
+      font-weight: 500;
+      font-size: 1.7em;
+      padding: 0 8px;
+      line-height: 1.2;
+  }
+  
+  .segment-selector .modal-body {
+    padding: 0;
+  }
+  
+  .segment-selector .segments-content {
+    padding: 0 15px;
+  }
+  
+  .segment-selector .segments-content .parent,
+  .segment-selector .segments-content .child {
+      cursor: pointer;
+      padding: 8px 12px;
+  }
+  
+  .segment-selector .segments-content .segment-logo-container {
+      padding: 0 !important;
+  }
+  
+  .segment-selector .segments-content .col {
+      padding-top: 0;
+      padding-bottom: 0;
+      display: flex;
+      height: 48px;
+      align-items: center;
+  }
+  
+  .segment-selector .segments-content .child-indicator {
+      margin: 11px 0;
+      height: 2px;
+      width: 20px;
+      background-color: #999999;
+  }
+  
+  .segment-selector .segments-content .expand-group-btn {
+      line-height: 1.1;
+      padding: 0 6px;
+      font-size: 1.7em;
+      font-weight: 500;
+      min-width: 30px;
+  }
+  
+  .segment-selector .segments-content .expand-group-btn.expanded {
+      line-height: 1.1;
+  }
+  
+  .segments-list {
+    line-height: 32px;
+  }
+  
+  .segments-list > span {
+    background-color: #555555;
+    color: white;
+    border-radius: 4px;
+    padding: 4px;
+    white-space: nowrap;
+  }

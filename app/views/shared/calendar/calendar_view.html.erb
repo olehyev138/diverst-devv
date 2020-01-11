@@ -42,8 +42,8 @@
         <% end %>
         <% if SegmentPolicy.new(current_user, nil).index? %>
         <div class="col-xs-5">
-          <a href="#" class="select2-select-all" data-select-id="select2-field-segments" data-select-all-path="<%= get_all_segments_segments_path %>">Select All</a> |
-          <a href="#" class="select2-clear-all" data-select-id="select2-field-segments">Clear Selection</a>
+          <button type="button" class="btn btn--primary btn--small" data-toggle="modal"
+          data-target="#segment-scope-selector">Select</button>
         </div>
         <% end %>
       </div>
@@ -80,10 +80,56 @@
 <div id="calendar" data-calendar-data-url="<%= calendar_data_groups_path(token: params[:token], q: params[:q]) %>"></div>
 
 <%= render partial: 'shared/select2_ajax_search.js.erb' %>
+<%= render partial: 'components/segment_selector', locals: {id: "segment-scope-selector", multiselect: true} %>
 <%= render partial: 'components/group_selector', locals: {id: "group-scope-selector", multiselect: true} %>
-
 <script>
   $(document).on('page:change', function () {
+    $(".segment-selector").on('saveSegments', function (e, selectedSegments) {
+      let ids = $.map(selectedSegments, function (item, key) {
+        return { id: item.id, text: item.text };
+      });
+      
+      let segmentTexts = $.map(selectedSegments, function (item, key) {
+        return "<span class='segment-selected-text'>" + item.text + "</span>";
+      });
+      
+      if (selectedSegments.length > 0)
+      $(".segments-list").html(segmentTexts.join(" "));
+      else
+      $(".segments-list").html("<h4>No filter</h4>");
+      
+      scoped_by_models = ids;   
+      
+      selectField = document.getElementById('select2-field-segments');
+      // console.log($(selectField).val([$(selectField).val(), ids]));
+      
+      function segmentSelect(segmentObjs) {
+        $.each(segmentObjs, function(index, item) {
+          // Find the option if it already exists
+          if ($(selectField).find("option[value='" + item.id + "']").length)
+          {
+            // If the list of selected items is an array, select it with the other options
+            if ($.isArray($(selectField).val()))
+            $(selectField).val($(selectField).val().concat(item.id));
+            // If the list of the selected items is a single item, create an array with the old item and new item
+            else if ($(selectField).val() != undefined && $(selectField).val() != null)
+            $(selectField).val([$(selectField).val(), item.id]);
+            // If the list of selected items is empty, create an array with the new item
+            else
+            $(selectField).val([item.id]);
+          }
+          // If the option doesn't exist, create it and start selected
+          else
+          $(selectField).append(new Option(item.text, item.id, false, true));
+        });
+
+        // Update the select
+        $(selectField).trigger('change');
+      }
+      
+      segmentSelect(ids);
+    });
+
     $(".group-selector").on('saveGroups', function (e, selectedGroups) {
       let ids = $.map(selectedGroups, function (item, key) {
         return { id: item.id, text: item.text };
