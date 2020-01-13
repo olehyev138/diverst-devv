@@ -4,7 +4,9 @@ import { compose } from 'redux';
 import PropTypes from 'prop-types';
 
 import { withStyles } from '@material-ui/core/styles';
-import { DiverstPagination } from '../../../Shared/DiverstPagination';
+import {Card, CardHeader, Grid} from '@material-ui/core';
+import KPIMetricCell from '../KPIMetricCell';
+import DiverstPagination from 'components/Shared/DiverstPagination';
 import DiverstLoader from 'components/Shared/DiverstLoader';
 
 const styles = theme => ({
@@ -31,40 +33,49 @@ export function KPI(props) {
     Object.keys(metrics).length ? (
       <React.Fragment>
         <DiverstLoader isLoading={props.isFetching}>
-          <table>
-            <thead>
-              <tr>
-                <th>Metrics</th>
-                {__updates__.map(update => (
-                  <th>
-                    {update.comments}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {Object.keys(data).map(key => (
-                <tr>
-                  <td>
-                    {key}
-                  </td>
-                  { data[key].map(value => (
-                    <td>
-                      {`${value.value}, ${value.variance_with_prev}`}
-                    </td>
-                  ))}
-                </tr>
+          <Grid container spacing={1}>
+            <Grid item md={2}>
+              <Card>
+                <CardHeader
+                  title='Metrics'
+                />
+              </Card>
+            </Grid>
+            {__updates__.map(update => (
+              <Grid item md={2} key={update.id}>
+                <KPIMetricCell
+                  update={update}
+                  type='update'
+                />
+              </Grid>
+            ))}
+          </Grid>
+          {Object.keys(data).map(key => (
+            <Grid container spacing={1}>
+              <Grid item md={2} key={key}>
+                <KPIMetricCell
+                  field={key}
+                  type='field'
+                />
+              </Grid>
+              { data[key].map(value => (
+                <Grid item md={2} key={data.update_id}>
+                  <KPIMetricCell
+                    data={value}
+                    type='data'
+                  />
+                </Grid>
               ))}
-            </tbody>
-          </table>
+            </Grid>
+          ))}
         </DiverstLoader>
         {Object.keys(metrics).length > 0 && (
-          5
-          // <DiverstPagination
-          //   isLoading={props.isFetching}
-          //   count={props.count}
-          //   handlePagination={props.handlePagination}
-          // />
+          <DiverstPagination
+            isLoading={props.isFetching}
+            count={props.count}
+            rowsPerPage={5}
+            handlePagination={props.handlePagination}
+          />
         )}
       </React.Fragment>
     ) : (

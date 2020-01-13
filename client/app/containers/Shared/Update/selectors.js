@@ -18,9 +18,9 @@ const selectPaginatedMetrics = () => createSelector(
   updateState => updateState.metricsList
 );
 
-const selectMetricsTotal = () => createSelector(
+const selectFieldsTotal = () => createSelector(
   selectUpdateDomain,
-  updateState => updateState.metricsListTotal
+  updateState => updateState.fieldsListTotal
 );
 
 const selectUpdate = () => createSelector(
@@ -58,7 +58,7 @@ export {
   selectPaginatedUpdates,
   selectUpdatesTotal,
   selectPaginatedMetrics,
-  selectMetricsTotal,
+  selectFieldsTotal,
   selectUpdate,
   selectIsFetchingUpdates,
   selectIsFetchingMetrics,

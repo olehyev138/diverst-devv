@@ -88,7 +88,7 @@ module Update::Actions
                                                  update_id: update.id,
                                                  prev_id: update.previous_id,
                                                  value: fd.deserialized_data,
-                                                 variance_with_prev: ("#{rel_var.round(3) * 100}%" rescue nil)
+                                                 variance_with_prev: ("#{(rel_var * 100).round(1)}%" rescue nil)
                                              })
         end
       end

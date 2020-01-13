@@ -25,7 +25,8 @@ import { useInjectReducer } from 'utils/injectReducer';
 
 import {
   selectPaginatedMetrics,
-  selectMetricsTotal,
+  selectFieldsTotal,
+  selectUpdatesTotal,
   selectIsFetchingMetrics,
   selectHasChanged,
 } from 'containers/Shared/Update/selectors';
@@ -98,7 +99,7 @@ KPIPage.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
   metrics: selectPaginatedMetrics(),
-  total: selectMetricsTotal(),
+  total: selectUpdatesTotal(),
   isFetching: selectIsFetchingMetrics(),
   hasChanged: selectHasChanged(),
   currentGroup: selectGroup(),
