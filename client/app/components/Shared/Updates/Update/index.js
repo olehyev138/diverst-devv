@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import dig from 'object-dig';
 
 import {
-  Paper, Typography, Grid, Button, Divider, CardContent, Card
+  Paper, Typography, Grid, Button, Divider, CardContent, Card, Link
 } from '@material-ui/core/index';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -35,6 +35,12 @@ const styles = theme => ({
     '&:not(:last-of-type)': { // Prevent last data item from adding bottom padding
       paddingBottom: theme.spacing(3),
     },
+  },
+  errorData: {
+    '&:not(:last-of-type)': { // Prevent last data item from adding bottom padding
+      paddingBottom: theme.spacing(3),
+    },
+    color: theme.palette.error.main,
   },
   buttons: {
     marginLeft: 20,
@@ -81,11 +87,33 @@ export function Profile(props) {
             {fieldData && fieldData.map((fieldDatum, i) => (
               <div key={fieldDatum.id}>
                 <CardContent>
-                  <Grid item>
-                    <CustomFieldShow
-                      fieldDatum={fieldDatum}
-                      fieldDatumIndex={i}
-                    />
+                  <Grid container>
+                    <Grid item md={6}>
+                      <CustomFieldShow
+                        fieldDatum={fieldDatum}
+                        fieldDatumIndex={i}
+                      />
+                    </Grid>
+                    {fieldDatum.percent_var_with_prev && (
+                      <Grid item md={6}>
+                        <Typography color='primary' variant='h6' component='h2' className={classes.dataHeaders}>
+                          <Link
+                            className={classes.eventLink}
+                            component={WrappedNavLink}
+                            to={props.links.show(update.previous_id)}
+                          >
+                            Variance With Previous
+                          </Link>
+                        </Typography>
+                        <Typography
+                          color='secondary'
+                          component='h2'
+                          className={fieldDatum.percent_var_with_prev[0] === '-' ? classes.errorData : classes.data}
+                        >
+                          {fieldDatum.percent_var_with_prev}
+                        </Typography>
+                      </Grid>
+                    )}
                   </Grid>
                 </CardContent>
                 <Divider />
@@ -106,6 +134,7 @@ Profile.propTypes = {
   isFetching: PropTypes.bool,
   links: PropTypes.shape({
     edit: PropTypes.func,
+    show: PropTypes.func,
   })
 };
 

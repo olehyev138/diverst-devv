@@ -70,12 +70,13 @@ export function UpdateEditPage(props) {
   const links = {
     index: partialLink.index.path(dig(props, 'currentGroup', 'id')),
     edit: id => partialLink.edit.path(dig(props, 'currentGroup', 'id'), id),
+    show: id => partialLink.show.path(dig(props, 'currentGroup', 'id'), id),
   };
 
   const update = props.currentUpdate || location.update;
 
   useEffect(() => {
-    const [id] = rs.params('update_id');
+    const id = rs.params('update_id');
     // eslint-disable-next-line eqeqeq
     if (!update || update.id != id)
       props.getUpdateBegin(id);
