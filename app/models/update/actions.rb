@@ -5,7 +5,7 @@ module Update::Actions
 
   module ClassMethods
     def base_preloads
-      [ :field_data, :previous, field_data: FieldData.base_preloads, previous: lesser_preloads ]
+      [ :field_data, :previous, :next, field_data: FieldData.base_preloads, previous: lesser_preloads ]
     end
 
     def lesser_preloads

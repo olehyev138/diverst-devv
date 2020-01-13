@@ -1,8 +1,12 @@
 class UpdateSerializer < ApplicationRecordSerializer
-  attributes :field_data
+  attributes :field_data, :next_id
 
   def serialize_all_fields
     true
+  end
+
+  def next_id
+    object.next.id
   end
 
   def field_data
