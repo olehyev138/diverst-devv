@@ -9,13 +9,21 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import {
   GET_UPDATE_BEGIN,
   UPDATE_UPDATE_BEGIN,
-  DELETE_UPDATE_BEGIN,
+  DELETE_UPDATE_BEGIN, GET_UPDATES_BEGIN, GET_METRICS_BEGIN, CREATE_UPDATE_BEGIN, GET_UPDATE_PROTOTYPE_BEGIN,
 } from './constants';
 
 import {
-  getUpdateSuccess, getUpdateError,
-  updateUpdateSuccess, updateUpdateError,
-  deleteUpdateSuccess, deleteUpdateError,
+  getUpdateSuccess,
+  getUpdateError,
+  updateUpdateSuccess,
+  updateUpdateError,
+  deleteUpdateSuccess,
+  deleteUpdateError,
+  getUpdatesSuccess,
+  getUpdatesError,
+  getMetricsSuccess,
+  getMetricsError,
+  getUpdatePrototypeSuccess, getUpdatePrototypeError, createUpdateSuccess, createUpdateError,
 } from './actions';
 
 export function* getUpdate(action) {
@@ -63,6 +71,65 @@ export function* deleteUpdate(action) {
   }
 }
 
+export function* getUpdates(action, updatableApi) {
+  try {
+    const { updatableId, ...payload } = action.payload;
+    const response = yield call(updatableApi.updates.bind(updatableApi), updatableId, payload);
+
+    yield put(getUpdatesSuccess(response.data.page));
+  } catch (err) {
+    yield put(getUpdatesError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to get updates', options: { variant: 'warning' } }));
+  }
+}
+
+export function* getMetrics(action, updatableApi) {
+  try {
+    const { updatableId, ...payload } = action.payload;
+    const response = yield call(updatableApi.metrics.bind(updatableApi), updatableId, payload);
+
+    yield put(getMetricsSuccess(response.data));
+  } catch (err) {
+    yield put(getMetricsError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to get metrics', options: { variant: 'warning' } }));
+  }
+}
+
+
+export function* getUpdatePrototype(action, updatableApi) {
+  try {
+    const { updatableId, ...payload } = action.payload;
+    const response = yield call(updatableApi.updatePrototype.bind(updatableApi), updatableId, payload);
+
+    yield put(getUpdatePrototypeSuccess(response.data));
+  } catch (err) {
+    yield put(getUpdatePrototypeError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to get update', options: { variant: 'warning' } }));
+  }
+}
+
+export function* createUpdate(action, updatableApi) {
+  try {
+    const { updatableId, redirectPath, ...rest } = action.payload;
+    const payload = { update: rest };
+    const response = yield call(updatableApi.createUpdates.bind(updatableApi), updatableId, payload);
+
+    yield put(createUpdateSuccess({}));
+    yield put(push(redirectPath));
+    yield put(showSnackbar({ message: 'Successfully created update', options: { variant: 'success' } }));
+  } catch (err) {
+    yield put(createUpdateError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to create update', options: { variant: 'warning' } }));
+  }
+}
 
 export default function* UpdateSaga() {
   yield takeLatest(GET_UPDATE_BEGIN, getUpdate);

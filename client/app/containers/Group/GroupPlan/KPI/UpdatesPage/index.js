@@ -53,7 +53,7 @@ export function UpdateListPage(props) {
       page: 0,
       order: 'asc',
       orderBy: 'report_date',
-      groupId: dig(props, 'currentGroup', 'id'),
+      updatableId: dig(props, 'currentGroup', 'id'),
     }
   );
 

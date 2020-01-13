@@ -64,9 +64,9 @@ export function UpdateEditPage(props) {
   const rs = new RouteService(useContext);
 
   useEffect(() => {
-    const groupId = dig(props, 'currentGroup', 'id');
-    if (groupId)
-      props.getUpdatePrototypeBegin({ groupId });
+    const updatableId = dig(props, 'currentGroup', 'id');
+    if (updatableId)
+      props.getUpdatePrototypeBegin({ updatableId });
 
     return () => {
       props.updatesUnmount();
@@ -87,7 +87,7 @@ export function UpdateEditPage(props) {
       buttonText='Create Update'
       updateAction={payload => props.createUpdateBegin({
         ...payload,
-        groupId: dig(props, 'currentGroup', 'id')
+        updatableId: dig(props, 'currentGroup', 'id')
       })}
       updateFieldDataBegin={props.updateFieldDataBegin}
 

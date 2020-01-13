@@ -52,7 +52,7 @@ export function KPIPage(props) {
     {
       update_count: 5,
       update_page: 0,
-      groupId: dig(props, 'currentGroup', 'id'),
+      updatableId: dig(props, 'currentGroup', 'id'),
     }
   );
 
