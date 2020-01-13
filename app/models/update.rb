@@ -33,11 +33,10 @@ class Update < ApplicationRecord
     value_to_compare = other_update.get_field_data(field).deserialized_data
 
     return nil unless value_to_compare
+    return nil unless value_to_compare != 0
 
     abs_variance = value - value_to_compare
-    rel_variance = abs_variance.to_f / value_to_compare
-
-    [abs_variance, rel_variance]
+    abs_variance.to_f / value_to_compare
   end
 
   # Returns the delta (just like `variance_with`) with the last update for the specified field

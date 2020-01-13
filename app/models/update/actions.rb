@@ -83,7 +83,7 @@ module Update::Actions
       items.each do |update|
         fields_hash[:__updates__].append(update.as_json)
         update.field_data.select { |fd| field_ids.include? fd.field_id }.each do |fd|
-          abs_var, rel_var = update.variance_from_previous(fd.field)
+          rel_var = update.variance_from_previous(fd.field)
           fields_hash[fd.field.title].append({
                                                  update_id: update.id,
                                                  prev_id: update.previous_id,
