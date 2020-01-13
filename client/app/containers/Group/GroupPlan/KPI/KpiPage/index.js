@@ -40,7 +40,7 @@ import reducer from 'containers/Shared/Update/reducer';
 import saga from '../updatesSaga';
 
 import { selectGroup } from 'containers/Group/selectors';
-import KPI from 'components/Group/GroupPlan/KPIMetrics';
+import KPI from 'components/Shared/Updates/KPIMetrics';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
