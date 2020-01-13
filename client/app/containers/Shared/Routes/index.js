@@ -205,7 +205,6 @@ export default function Routes(props) {
       <GroupLayout exact {...expandRoute(ROUTES.group.members.index)} component={GroupMemberListPage} />
       <GroupLayout exact {...expandRoute(ROUTES.group.events.index)} component={EventsPage} />
       <GroupLayout exact {...expandRoute(ROUTES.group.news.index)} component={NewsFeedPage} />
-      <GroupLayout exact {...expandRoute(ROUTES.group.plan.outcomes.index)} component={OutcomesPage} />
 
       { /* Group Events */ }
       <GroupLayout {...expandRoute(ROUTES.group.events.new)} component={EventCreatePage} />
@@ -228,9 +227,9 @@ export default function Routes(props) {
 
       { /* Group Plan */ }
       { /* Group Plan - Structure/Outcomes */ }
-      <GroupLayout exact {...expandRoute(ROUTES.group.plan.outcomes.index)} component={OutcomesPage} />
-      <GroupLayout {...expandRoute(ROUTES.group.plan.outcomes.new)} component={OutcomeCreatePage} />
-      <GroupLayout {...expandRoute(ROUTES.group.plan.outcomes.edit)} component={OutcomeEditPage} />
+      <GroupPlanLayout exact {...expandRoute(ROUTES.group.plan.outcomes.index)} component={OutcomesPage} />
+      <GroupPlanLayout {...expandRoute(ROUTES.group.plan.outcomes.new)} component={OutcomeCreatePage} />
+      <GroupPlanLayout {...expandRoute(ROUTES.group.plan.outcomes.edit)} component={OutcomeEditPage} />
 
       { /* Group Plan - Events */ }
       <GroupPlanLayout exact {...expandRoute(ROUTES.group.plan.events.index)} component={GroupPlanEventsPage} />

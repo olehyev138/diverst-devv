@@ -32,7 +32,9 @@ const GroupPlanLayout = ({ component: Component, classes, ...rest }) => {
   const { location, ...other } = rest;
 
   /* Get last element of current path, ie: '/group/:id/plan/outcomes -> outcomes */
-  const currentPage = Object.keys(PlanPages).find(page => location.pathname.includes(page));
+  let currentPage = Object.keys(PlanPages).find(page => location.pathname.includes(page));
+  if (!currentPage && location.pathname.includes('outcomes'))
+    currentPage = 'events';
 
   const [tab, setTab] = useState(PlanPages[currentPage]);
 
