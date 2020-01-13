@@ -84,7 +84,7 @@ RSpec.describe SelectField, type: :model do
       enterprise = create(:enterprise)
       user = create(:user)
       poll = create(:poll, enterprise: enterprise, owner: user)
-      select_field = SelectField.new(type: 'SelectField', title: 'What is 1 + 1?', options_text: "1\r\n2\r\n3\r\n4\r\n5\r\n6\r\n7", field_definer: poll)
+      select_field = poll.fields.find_by(title: 'What is 1 + 1?')
       select_field.save!
       create(:poll_response, poll: poll, user: user, data: "{\"#{select_field.id}\":[\"4\"]}")
 
