@@ -1,8 +1,18 @@
 class UpdateSerializer < ApplicationRecordSerializer
-  has_many :field_data
+  attributes :field_data
 
   def serialize_all_fields
     true
+  end
+
+  def field_data
+    object.field_data.map do |fd|
+      fd_hash = FieldDataSerializer.new(fd).as_json
+      variance = object.variance_from_previous(fd.field)
+      fd_hash[:var_with_prev] = variance
+      fd_hash[:percent_var_with_prev] = variance ? "#{(variance * 100).round(1)}%" : nil
+      fd_hash
+    end
   end
 
   def excluded_keys
