@@ -11,7 +11,9 @@ import {
 import {
   getFieldSuccess, getFieldError,
   updateFieldSuccess, updateFieldError,
-  deleteFieldError, deleteFieldSuccess
+  deleteFieldError, deleteFieldSuccess,
+  getFieldsSuccess, getFieldsError,
+  createFieldSuccess, createFieldError
 } from 'containers/Shared/Field/actions';
 
 export function* getField(action) {
@@ -51,6 +53,36 @@ export function* deleteField(action) {
 
     // TODO: intl message
     yield put(showSnackbar({ message: 'Failed to update field', options: { variant: 'warning' } }));
+  }
+}
+
+export function* getFields(action, fieldDefinerApi) {
+  try {
+    const { fieldDefinerId, ...rest } = action.payload;
+    const response = yield call(fieldDefinerApi.fields.bind(fieldDefinerApi), fieldDefinerId, rest);
+    yield put(getFieldsSuccess(response.data.page));
+  } catch (err) {
+    yield put(getFieldsError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to load fields', options: { variant: 'warning' } }));
+  }
+}
+
+export function* createField(action, fieldDefinerApi) {
+  try {
+    const { fieldDefinerId, ...rest } = action.payload;
+    const payload = { field: rest };
+
+    const response = yield call(fieldDefinerApi.createFields.bind(fieldDefinerApi), fieldDefinerId, payload);
+
+    yield put(createFieldSuccess());
+    yield put(showSnackbar({ message: 'Field created', options: { variant: 'success' } }));
+  } catch (err) {
+    yield put(createFieldError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to create field', options: { variant: 'warning' } }));
   }
 }
 

@@ -52,7 +52,7 @@ export function FieldListPage(props) {
       page: 0,
       order: 'asc',
       orderBy: 'fields.id',
-      groupId: dig(props, 'currentGroup', 'id')
+      fieldDefinerId: dig(props, 'currentGroup', 'id')
     }
   );
 
