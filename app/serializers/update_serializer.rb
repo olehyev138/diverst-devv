@@ -6,7 +6,7 @@ class UpdateSerializer < ApplicationRecordSerializer
   end
 
   def next_id
-    object.next.id
+    object.next&.id
   end
 
   def field_data

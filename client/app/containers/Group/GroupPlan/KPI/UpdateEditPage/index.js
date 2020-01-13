@@ -74,7 +74,7 @@ export function UpdateEditPage(props) {
   const update = props.currentUpdate || location.update;
 
   useEffect(() => {
-    const [id] = rs.params('update_id');
+    const id = rs.params('update_id');
     // eslint-disable-next-line eqeqeq
     if (!update || update.id != id)
       props.getUpdateBegin(id);

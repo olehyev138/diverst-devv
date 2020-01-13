@@ -10,6 +10,8 @@ import {
 import { withStyles } from '@material-ui/core/styles';
 
 import EditIcon from '@material-ui/icons/Edit';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import messages from 'containers/Shared/Update/messages';
@@ -81,6 +83,32 @@ export function Profile(props) {
               >
                 <DiverstFormattedMessage {...messages.edit} />
               </Button>
+              { update.next_id && (
+                <Button
+                  component={WrappedNavLink}
+                  to={props.links.show(update.next_id)}
+                  variant='contained'
+                  size='large'
+                  color='primary'
+                  className={classes.buttons}
+                  startIcon={<ArrowForwardIcon />}
+                >
+                  NEXT
+                </Button>
+              )}
+              { update.previous_id && (
+                <Button
+                  component={WrappedNavLink}
+                  to={props.links.show(update.previous_id)}
+                  variant='contained'
+                  size='large'
+                  color='primary'
+                  className={classes.buttons}
+                  startIcon={<ArrowBackIcon />}
+                >
+                  PREVIOUS
+                </Button>
+              )}
             </Grid>
           </Grid>
           <Paper>
