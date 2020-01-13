@@ -89,7 +89,6 @@ export function FieldListPage(props) {
         createFieldBegin={payload => props.createFieldBegin({
           ...payload,
           groupId: dig(props, 'currentGroup', 'id'),
-          field_type: 'regular'
         })}
         updateFieldBegin={props.updateFieldBegin}
         deleteFieldBegin={props.deleteFieldBegin}
