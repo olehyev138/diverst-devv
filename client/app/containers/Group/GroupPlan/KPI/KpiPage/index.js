@@ -49,8 +49,8 @@ export function KPIPage(props) {
 
   const [params, setParams] = useState(
     {
-      count: 5,
-      page: 0,
+      update_count: 5,
+      update_page: 0,
       groupId: dig(props, 'currentGroup', 'id'),
     }
   );
@@ -64,7 +64,7 @@ export function KPIPage(props) {
   }, []);
 
   const handlePagination = (payload) => {
-    const newParams = { ...params, count: payload.count, page: payload.page };
+    const newParams = { ...params, update_count: payload.count, update_page: payload.page };
 
     props.getMetricsBegin(newParams);
     setParams(newParams);

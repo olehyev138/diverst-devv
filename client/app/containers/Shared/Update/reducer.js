@@ -34,7 +34,8 @@ export const initialState = {
   updateList: [],
   updateListTotal: null,
   metricsList: {},
-  metricsListTotal: null,
+  updatesListTotal: null,
+  fieldsListTotal: null,
   currentUpdate: null,
   isFetchingUpdates: false,
   isFetchingMetrics: false,
@@ -75,7 +76,8 @@ function updateReducer(state = initialState, action) {
 
       case GET_METRICS_SUCCESS:
         draft.metricsList = action.payload.items;
-        draft.metricsListTotal = action.payload.total;
+        draft.updatesListTotal = action.payload.updates_total;
+        draft.fieldsListTotal = action.payload.fields_total;
         draft.isFetchingMetrics = false;
         break;
 
