@@ -4,7 +4,7 @@ import { compose } from 'redux';
 import PropTypes from 'prop-types';
 
 import { withStyles } from '@material-ui/core/styles';
-import {Card, CardHeader, Grid} from '@material-ui/core';
+import { Card, CardHeader, Grid } from '@material-ui/core';
 import KPIMetricCell from '../KPIMetricCell';
 import DiverstPagination from 'components/Shared/DiverstPagination';
 import DiverstLoader from 'components/Shared/DiverstLoader';
