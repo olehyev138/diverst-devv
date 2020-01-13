@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Initiative, type: :model do
   include ActiveJob::TestHelper
+  it_behaves_like 'it Defines Fields'
 
   describe 'when validating' do
     let(:initiative) { build(:initiative) }
@@ -9,7 +10,7 @@ RSpec.describe Initiative, type: :model do
     it { expect(initiative).to belong_to(:pillar) }
     it { expect(initiative).to belong_to(:owner).class_name('User') }
     it { expect(initiative).to have_many(:updates).class_name('InitiativeUpdate').dependent(:destroy) }
-    it { expect(initiative).to have_many(:fields).dependent(:delete_all) }
+    it { expect(initiative).to have_many(:fields).dependent(:destroy) }
     it { expect(initiative).to have_many(:expenses).dependent(:destroy).class_name('InitiativeExpense') }
 
     it { expect(initiative).to accept_nested_attributes_for(:fields).allow_destroy(true) }
@@ -339,7 +340,7 @@ RSpec.describe Initiative, type: :model do
       annual_budget = create(:annual_budget, amount: group.annual_budget)
       initiative = create(:initiative, owner_group_id: group.id, annual_budget_id: annual_budget.id)
       initiative_update = create(:initiative_update, initiative: initiative)
-      field = create(:field, initiative: initiative)
+      field = create(:field, field_definer: initiative)
       initiative_expense = create(:initiative_expense, initiative: initiative, annual_budget_id: annual_budget.id)
       checklist = create(:checklist, initiative: initiative)
       resource = create(:resource, initiative: initiative)
@@ -350,6 +351,7 @@ RSpec.describe Initiative, type: :model do
       initiative_comment = create(:initiative_comment, initiative: initiative)
       initiative_user = create(:initiative_user, initiative: initiative)
 
+      initiative.reload
       initiative.destroy!
 
       expect { Initiative.find(initiative.id) }.to raise_error(ActiveRecord::RecordNotFound)
@@ -418,7 +420,7 @@ RSpec.describe Initiative, type: :model do
     }
     let!(:expense) { create(:initiative_expense, initiative_id: initiative.id, annual_budget_id: annual_budget.id, amount: 50) }
 
-    let!(:field) { create(:field, initiative_id: initiative.id, title: 'Attendance') }
+    let!(:field) { create(:field, field_definer: initiative, title: 'Attendance') }
     let!(:update) { create(:initiative_update, initiative_id: initiative.id, data: "{\"#{field.id}\":105}") }
 
 

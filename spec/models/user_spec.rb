@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe User do
   include ActiveJob::TestHelper
+  it_behaves_like 'it Contains Field Data'
 
   describe 'when validating' do
     let(:user) { build(:user) }

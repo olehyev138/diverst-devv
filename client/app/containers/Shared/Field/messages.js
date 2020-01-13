@@ -12,6 +12,18 @@ export default defineMessages({
   newTextField: {
     id: `${scope}.index.button.textField.new`,
   },
+  newCheckBoxField: {
+    id: `${scope}.index.button.checkboxField.new`,
+  },
+  newSelectField: {
+    id: `${scope}.index.button.selectField.new`,
+  },
+  newDateField: {
+    id: `${scope}.index.button.dateField.new`,
+  },
+  newNumericField: {
+    id: `${scope}.index.button.numericField.new`,
+  },
   edit: {
     id: `${scope}.index.button.edit`,
   },
@@ -34,12 +46,21 @@ export default defineMessages({
     id: `${scope}.form.button.create`,
   },
   update: {
-    id: `${scope}.form.button.edit`,
+    id: `${scope}.form.button.update`,
   },
   cancel: {
     id: `${scope}.form.button.cancel`,
   },
   title: {
     id: `${scope}.form.input.title`,
+  },
+  options: {
+    id: `${scope}.form.input.options`,
+  },
+  min: {
+    id: `${scope}.form.input.min`,
+  },
+  max: {
+    id: `${scope}.form.input.max`,
   },
 });

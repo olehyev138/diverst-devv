@@ -54,7 +54,7 @@ export default defineMessages({
   fields: {
     id: `${scope}.profile.fields`
   },
-  privacy: {
+  preface: {
     id: `${scope}.profile.privacy`
   },
   fields_save: {

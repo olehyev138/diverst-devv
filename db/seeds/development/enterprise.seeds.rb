@@ -83,7 +83,7 @@ spinner.run do |spinner|
       match_exclude: false,
       match_polarity: true,
       match_weight: 0.2,
-      enterprise: enterprise,
+      field_definer: enterprise,
       options_text: "Male
 Female"
     )
@@ -96,7 +96,7 @@ Female"
       match_exclude: false,
       match_polarity: true,
       match_weight: 0.2,
-      enterprise: enterprise
+      field_definer: enterprise
     )
 
     SelectField.create(
@@ -107,7 +107,7 @@ Female"
       match_exclude: false,
       match_polarity: true,
       match_weight: 0.2,
-      enterprise: enterprise,
+      field_definer: enterprise,
       options_text: "Yes
 No"
     )
@@ -120,7 +120,7 @@ No"
       match_exclude: false,
       match_polarity: true,
       match_weight: 0.2,
-      enterprise: enterprise,
+      field_definer: enterprise,
       options_text: "Afghanistan
 Albania
 Algeria
@@ -395,7 +395,7 @@ Zimbabwe
       match_exclude: false,
       match_polarity: true,
       match_weight: 0.2,
-      enterprise: enterprise,
+      field_definer: enterprise,
       options_text: "Atheism
 Christianity
 Islam
@@ -415,7 +415,7 @@ Other"
       match_exclude: false,
       match_polarity: true,
       match_weight: 0.2,
-      enterprise: enterprise,
+      field_definer: enterprise,
       alternative_layout: true,
       options_text: "English
 Mandarin
@@ -452,7 +452,7 @@ Yue (Cantonese)"
       match_exclude: false,
       match_polarity: true,
       match_weight: 0.2,
-      enterprise: enterprise,
+      field_definer: enterprise,
       options_text: "Caucasian
 Hispanic
 Latino
@@ -473,7 +473,7 @@ Other"
       match_exclude: false,
       match_polarity: true,
       match_weight: 0.2,
-      enterprise: enterprise,
+      field_definer: enterprise,
       options_text: "Single
 In a relationship
 Married
@@ -488,7 +488,7 @@ Single parent"
       match_exclude: false,
       match_polarity: true,
       match_weight: 0.2,
-      enterprise: enterprise,
+      field_definer: enterprise,
       options_text: "Yes
 No"
     )
@@ -502,7 +502,7 @@ No"
       match_polarity: true,
       match_weight: 0.2,
       alternative_layout: true,
-      enterprise: enterprise,
+      field_definer: enterprise,
       options_text: "3D printing
 Amateur radio
 Acting
@@ -791,7 +791,7 @@ Traveling"
       match_exclude: false,
       match_polarity: true,
       match_weight: 0.2,
-      enterprise: enterprise
+      field_definer: enterprise
     )
 
     SelectField.create(
@@ -802,7 +802,7 @@ Traveling"
       match_exclude: false,
       match_polarity: true,
       match_weight: 0.2,
-      enterprise: enterprise,
+      field_definer: enterprise,
       options_text: "High School
 Bachelor's degree
 Master's degree
@@ -817,7 +817,7 @@ PhD"
       match_exclude: false,
       match_polarity: true,
       match_weight: 0.2,
-      enterprise: enterprise,
+      field_definer: enterprise,
       options_text: "Microsoft Certified Partner
 Google Partner
 Apple Genius"
@@ -833,7 +833,7 @@ Apple Genius"
       match_weight: 0.2,
       min: 0,
       max: 100,
-      enterprise: enterprise
+      field_definer: enterprise
     )
 
     CheckboxField.create(
@@ -844,7 +844,7 @@ Apple Genius"
       match_exclude: false,
       match_polarity: true,
       match_weight: 0.2,
-      enterprise: enterprise,
+      field_definer: enterprise,
       alternative_layout: true,
       options_text: "Afghanistan
 Albania
@@ -1120,7 +1120,7 @@ Zimbabwe
       match_exclude: false,
       match_polarity: true,
       match_weight: 0.2,
-      enterprise: enterprise,
+      field_definer: enterprise,
       options_text: "Yes
 No"
     )
@@ -1133,7 +1133,7 @@ No"
       match_exclude: false,
       match_polarity: true,
       match_weight: 0.2,
-      enterprise: enterprise,
+      field_definer: enterprise,
       options_text: "NA
 EU
 CN
@@ -1148,7 +1148,7 @@ JP"
       match_exclude: false,
       match_polarity: true,
       match_weight: 0.2,
-      enterprise: enterprise,
+      field_definer: enterprise,
       options_text: "Atlanta
 Boston
 Montreal
@@ -1167,7 +1167,7 @@ Washington"
       match_weight: 0.2,
       min: 0,
       max: 40,
-      enterprise: enterprise
+      field_definer: enterprise
     )
   end
   spinner.success("[DONE]")

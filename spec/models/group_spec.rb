@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Group, type: :model do
   include ActiveJob::TestHelper
+  it_behaves_like 'it Defines Fields'
 
   describe 'validations' do
     let(:group) { build(:group) }
@@ -49,7 +50,7 @@ RSpec.describe Group, type: :model do
     it { expect(group).to have_many(:initiatives).through(:pillars) }
     it { expect(group).to have_many(:updates).class_name('GroupUpdate').dependent(:destroy) }
     it { expect(group).to have_many(:fields) }
-    it { expect(group).to have_many(:survey_fields).class_name('Field').dependent(:delete_all) }
+    it { expect(group).to have_many(:survey_fields).class_name('Field').dependent(:destroy) }
     it { expect(group).to have_many(:group_leaders) }
     it { expect(group).to have_many(:leaders).through(:group_leaders).source(:user) }
     it { expect(group).to have_many(:sponsors) }
@@ -311,7 +312,7 @@ RSpec.describe Group, type: :model do
   describe '#survey_answers_csv' do
     it 'returns a csv file' do
       group = create(:group)
-      field = create(:field, field_type: 'group_survey', group: group)
+      field = create(:field, field_type: 'group_survey', field_definer: group)
       user = create(:user)
       user_group = create(:user_group, user: user, group: group, data: '{"13":"test"}')
 
@@ -782,12 +783,15 @@ RSpec.describe Group, type: :model do
       campaigns_group = create(:campaigns_group, group: group)
       outcome = create(:outcome, group: group)
       group_update = create(:group_update, group: group)
-      field = create(:field, group: group, field_type: 'regular')
-      survey_field = create(:field, group: group, field_type: 'group_survey')
+      field = create(:field, field_definer: group, field_type: 'regular')
+      survey_field = create(:field, field_definer: group, field_type: 'group_survey')
       user = create(:user, enterprise: group.enterprise)
       create(:user_group, user: user, group: group, accepted_member: true)
       group_leader = create(:group_leader, group: group, user: user)
       child = create(:group, parent: group)
+
+      group.fields.reload
+      group.survey_fields.reload
 
       group.destroy!
 

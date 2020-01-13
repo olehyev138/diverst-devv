@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect/lib';
-import { initialState } from 'containers/GlobalSettings/Field/reducer';
+import { initialState } from 'containers/Shared/Field/reducer';
 
 const selectFieldsDomain = state => state.fields || initialState;
 
@@ -63,8 +63,13 @@ const selectCommitSuccess = () => createSelector(
   fieldsState => fieldsState.commitSuccess
 );
 
+const selectHasChanged = () => createSelector(
+  selectFieldsDomain,
+  fieldsState => fieldsState.hasChanged
+);
+
 export {
   selectFieldsDomain, selectPaginatedFields, selectPaginatedSelectFields,
   selectFieldTotal, selectField, selectFormField, selectIsLoading, selectIsCommitting,
-  selectCommitSuccess
+  selectCommitSuccess, selectHasChanged
 };

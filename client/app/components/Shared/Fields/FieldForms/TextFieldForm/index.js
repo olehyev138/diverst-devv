@@ -16,7 +16,7 @@ import {
 } from '@material-ui/core';
 
 
-import messages from 'containers/GlobalSettings/Field/messages';
+import messages from 'containers/Shared/Field/messages';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 
 /* Important constant for each field form - tells backend which field subclass to load */
@@ -30,11 +30,12 @@ export function TextFieldFormInner({ handleSubmit, handleChange, handleBlur, val
         <CardContent>
           <Field
             component={TextField}
-            onChange={handleChange}
+            onChange={value => setFieldValue('title', value.target.value)}
             fullWidth
+            required
             disabled={props.isCommitting}
-            id='title'
-            name='title'
+            id={`title:${values.id}`}
+            name={`title:${values.id}`}
             value={values.title}
             label={<DiverstFormattedMessage {...messages.title} />}
           />
@@ -42,7 +43,11 @@ export function TextFieldFormInner({ handleSubmit, handleChange, handleBlur, val
         <Divider />
         <CardActions>
           <DiverstSubmit isCommitting={props.isCommitting}>
-            <DiverstFormattedMessage {...messages.create} />
+            {
+              props.edit
+                ? (<DiverstFormattedMessage {...messages.update} />)
+                : (<DiverstFormattedMessage {...messages.create} />)
+            }
           </DiverstSubmit>
           <Button
             onClick={props.cancelAction}
@@ -80,6 +85,7 @@ TextFieldForm.propTypes = {
   fieldAction: PropTypes.func,
   field: PropTypes.object,
   isCommitting: PropTypes.bool,
+  currentEnterprise: PropTypes.object,
 };
 
 TextFieldFormInner.propTypes = {
@@ -91,6 +97,7 @@ TextFieldFormInner.propTypes = {
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
   isCommitting: PropTypes.bool,
+  edit: PropTypes.bool,
   links: PropTypes.shape({
   })
 };

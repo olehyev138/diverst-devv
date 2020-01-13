@@ -6,4 +6,4 @@
 
 import loadable from 'utils/loadable';
 
-export default loadable(() => import('components/User/FieldInputForm/index'));
+export default loadable(() => import('components/Shared/Fields/FieldInputForm/index'));

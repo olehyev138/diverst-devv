@@ -4,8 +4,12 @@ class Enterprise < ApplicationRecord
   include Enterprise::Actions
   include TimeZoneValidation
   include CustomTextHelpers
+  include DefinesFields
 
   extend Enumerize
+
+  @@field_users = [:users]
+  mattr_reader :field_users
 
   enumerize :unit_of_expiry_age, default: :months, in: [
     :weeks,
@@ -14,8 +18,15 @@ class Enterprise < ApplicationRecord
   ]
 
   has_many :users, inverse_of: :enterprise, dependent: :destroy
-  has_many :graph_fields, class_name: 'Field', dependent: :destroy
-  has_many :fields, -> { where elasticsearch_only: false }, dependent: :destroy
+  has_many :graph_fields,
+           as: :field_definer,
+           class_name: 'Field',
+           dependent: :destroy,
+           after_add: :add_missing_field_background_job
+  has_many :fields, -> { where elasticsearch_only: false },
+           as: :field_definer,
+           dependent: :destroy,
+           after_add: :add_missing_field_background_job
   has_many :topics, inverse_of: :enterprise, dependent: :destroy
   has_many :segments, inverse_of: :enterprise, dependent: :destroy
   has_many :groups, inverse_of: :enterprise, dependent: :destroy

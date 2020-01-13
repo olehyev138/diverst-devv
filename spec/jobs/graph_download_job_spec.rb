@@ -5,9 +5,9 @@ RSpec.describe GraphDownloadJob, type: :job do
   let(:user) { create(:user, enterprise: enterprise) }
   let(:metrics_dashboard) { create(:metrics_dashboard, enterprise_id: enterprise.id) }
   let(:poll) { create(:poll, enterprise_id: enterprise.id) }
-  let(:field1) { create(:field, type: 'NumericField', poll: poll) }
-  let(:field2) { create(:field, type: 'NumericField', poll: poll) }
-  let(:field3) { create(:field, type: 'CheckboxField', poll: poll) }
+  let(:field1) { create(:field, type: 'NumericField', field_definer: poll) }
+  let(:field2) { create(:field, type: 'NumericField', field_definer: poll) }
+  let(:field3) { create(:field, type: 'CheckboxField', field_definer: poll) }
   let(:metrics_graph) { create(:graph_with_metrics_dashboard, metrics_dashboard: metrics_dashboard, field: field1) }
   let(:poll_graph) { create(:graph_with_metrics_dashboard, poll: poll, field: field2) }
 
