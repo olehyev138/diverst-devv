@@ -14,7 +14,6 @@ import PropTypes from 'prop-types';
 import dig from 'object-dig';
 
 import { compose } from 'redux/';
-import { TextField } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import CustomText from 'components/Shared/Fields/FieldDisplays/TextField';
 import CustomDate from 'components/Shared/Fields/FieldDisplays/DateField';
