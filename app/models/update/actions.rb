@@ -5,12 +5,16 @@ module Update::Actions
 
   module ClassMethods
     def base_preloads
-      [ :field_data, :previous, field_data: FieldData.base_preloads ]
+      [ :field_data, :previous, field_data: FieldData.base_preloads, previous: lesser_preloads ]
+    end
+
+    def lesser_preloads
+      [ :field_data, field_data: FieldData.base_preloads ]
     end
 
     def set_fields_defaults
       @f_default_order = :asc
-      @f_default_order_by = "fields.id"
+      @f_default_order_by = 'fields.id'
       @f_page = 0
       @f_count = 5
     end
@@ -24,15 +28,15 @@ module Update::Actions
 
     def get_metrics_params(params, type)
       item_page = if params["#{type}_page"].present?
-                    params["#{type}_page"].to_i
-                  else
-                    'update' ? @u_page : @f_page
-                  end
+        params["#{type}_page"].to_i
+      else
+        type == 'update' ? @u_page : @f_page
+      end
       item_count = if params["#{type}_count"].present?
-                     params["#{type}_count"].to_i
-                   else
-                     'update' ? @u_count : @f_count
-                   end
+        params["#{type}_count"].to_i
+      else
+        type == 'update' ? @u_count : @f_count
+      end
       offset = item_page * item_count
       order_by = type == 'update' ? @u_default_order_by : @f_default_order_by
       order = type == 'update' ? @u_default_order : @f_default_order
@@ -41,6 +45,8 @@ module Update::Actions
     end
 
     def metrics_index(diverst_request, params, updatable:, base: self)
+      updatable
+
       set_fields_defaults
       set_updates_defaults
 
@@ -56,23 +62,27 @@ module Update::Actions
       # search
       total = base.count
       items = base
-                  .preload(base_preloads)
+                  .preload(base_preloads || [])
                   .order("#{u_order_by} #{u_order}")
                   .limit(u_item_count)
                   .offset(u_offset)
 
       fields_total = updatable.fields.count
       fields = updatable.fields
-                   .preload(Field.base_preloads)
+                   .preload(Field.base_preloads || [])
                    .order("#{f_order_by} #{f_order}")
                    .limit(f_item_count)
                    .offset(f_offset)
+
+      fields.load
+      field_ids = fields.ids
+      items.load
 
       fields_hash = fields.reduce({ __updates__: [] }) { |sum, n| sum[n.title] = []; sum }
 
       items.each do |update|
         fields_hash[:__updates__].append(update.as_json)
-        update.field_data.where(field_id: fields.ids).each do |fd|
+        update.field_data.select { |fd| field_ids.include? fd.field_id }.each do |fd|
           abs_var, rel_var = update.variance_from_previous(fd.field)
           fields_hash[fd.field.title].append({
                                                  update_id: update.id,
