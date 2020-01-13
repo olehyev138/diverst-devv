@@ -28,15 +28,15 @@ module Update::Actions
 
     def get_metrics_params(params, type)
       item_page = if params["#{type}_page"].present?
-                    params["#{type}_page"].to_i
-                  else
-                    type == 'update' ? @u_page : @f_page
-                  end
+        params["#{type}_page"].to_i
+      else
+        type == 'update' ? @u_page : @f_page
+      end
       item_count = if params["#{type}_count"].present?
-                     params["#{type}_count"].to_i
-                   else
-                     type == 'update' ? @u_count : @f_count
-                   end
+        params["#{type}_count"].to_i
+      else
+        type == 'update' ? @u_count : @f_count
+      end
       offset = item_page * item_count
       order_by = type == 'update' ? @u_default_order_by : @f_default_order_by
       order = type == 'update' ? @u_default_order : @f_default_order

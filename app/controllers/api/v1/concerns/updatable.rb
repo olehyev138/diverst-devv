@@ -42,7 +42,7 @@ module Api::V1::Concerns::Updatable
         self.diverst_request, params.except(:id).permit!,
         base: item.updates,
         updatable: item
-    )
+      )
   rescue => e
     raise BadRequestException.new(e.message)
   end
@@ -58,6 +58,6 @@ module Api::V1::Concerns::Updatable
                 :data,
                 :field_id,
             ],
-            )
+          )
   end
 end
