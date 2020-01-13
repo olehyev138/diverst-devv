@@ -3,7 +3,6 @@ class Group < ApplicationRecord
   include CustomTextHelpers
   include Group::Actions
   include DefinesFields
-  include Updatable
 
   extend Enumerize
 

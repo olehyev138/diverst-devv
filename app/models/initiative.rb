@@ -2,7 +2,6 @@ class Initiative < ApplicationRecord
   include PublicActivity::Common
   include Initiative::Actions
   include DefinesFields
-  include Updatable
 
   @@field_users = [:updates]
   mattr_reader :field_users
