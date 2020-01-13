@@ -9,7 +9,7 @@ module Segment::Actions
     end
 
     def base_preloads
-      [:field_rules, :order_rules, :group_rules, field_rules: [:field, field: [:enterprise]]]
+      [:field_rules, :order_rules, :group_rules, field_rules: [:field, field: Field.base_preloads]]
     end
   end
 end
