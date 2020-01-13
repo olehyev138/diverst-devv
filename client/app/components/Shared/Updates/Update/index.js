@@ -93,7 +93,7 @@ export function Profile(props) {
                   className={classes.buttons}
                   startIcon={<ArrowForwardIcon />}
                 >
-                  NEXT
+                  <DiverstFormattedMessage {...messages.show.next} />
                 </Button>
               )}
               { update.previous_id && (
@@ -106,7 +106,7 @@ export function Profile(props) {
                   className={classes.buttons}
                   startIcon={<ArrowBackIcon />}
                 >
-                  PREVIOUS
+                  <DiverstFormattedMessage {...messages.show.previous} />
                 </Button>
               )}
             </Grid>
@@ -130,7 +130,7 @@ export function Profile(props) {
                             component={WrappedNavLink}
                             to={props.links.show(update.previous_id)}
                           >
-                            Variance With Previous
+                            <DiverstFormattedMessage {...(messages.show.variance)} />
                           </Link>
                         </Typography>
                         <Typography

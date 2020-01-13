@@ -23,8 +23,8 @@ import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
 
 import { DateTime, formatDateTimeString } from 'utils/dateTimeHelpers';
-import { ROUTES } from 'containers/Shared/Routes/constants';
 import classNames from 'classnames';
+import { injectIntl, intlShape } from 'react-intl';
 
 
 const styles = theme => ({
@@ -97,7 +97,7 @@ export function UpdateList(props, context) {
           className={classNames(classes.folderLink, classes.deleteButton)}
           onClick={() => {
             // eslint-disable-next-line no-restricted-globals,no-alert
-            if (confirm('DELETE? TODO'))
+            if (confirm(props.intl.formatMessage(messages.deleteConfirmation)))
               props.deleteUpdateBegin(update.id);
           }}
         >
@@ -110,6 +110,8 @@ export function UpdateList(props, context) {
 }
 
 UpdateList.propTypes = {
+  intl: intlShape.isRequired,
+
   classes: PropTypes.object,
   update: PropTypes.object,
   isLoading: PropTypes.bool,
@@ -123,5 +125,6 @@ UpdateList.propTypes = {
 
 export default compose(
   memo,
+  injectIntl,
   withStyles(styles),
 )(UpdateList);

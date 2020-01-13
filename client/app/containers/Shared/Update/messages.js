@@ -30,6 +30,17 @@ export default defineMessages({
   fields_save: {
     id: `${scope}.fields_save`,
   },
+  show: {
+    previous: {
+      id: `${scope}.show.previous`,
+    },
+    next: {
+      id: `${scope}.show.next`,
+    },
+    variance: {
+      id: `${scope}.show.variance`
+    }
+  },
   form: {
     dateOfUpdate: {
       id: `${scope}.index.form.dateOfUpdate`,
