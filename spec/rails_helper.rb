@@ -111,7 +111,7 @@ RSpec.configure do |config|
   # config.filter_gems_from_backtrace("gem name")
 
 
-  config.before(:suite) do |x|
+  config.before(:all) do |x|
     set_leftovers
   end
 
