@@ -88,7 +88,7 @@ export function FieldListPage(props) {
         isLoading={props.isLoading}
         createFieldBegin={payload => props.createFieldBegin({
           ...payload,
-          groupId: dig(props, 'currentGroup', 'id'),
+          fieldDefinerId: dig(props, 'currentGroup', 'id'),
         })}
         updateFieldBegin={props.updateFieldBegin}
         deleteFieldBegin={props.deleteFieldBegin}
