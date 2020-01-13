@@ -3,12 +3,14 @@ import { appendQueryArgs } from 'utils/apiHelpers';
 
 const axios = require('axios');
 
+const API_PATH = '/api/v1/';
+
 axios.defaults.baseURL = config.apiUrl || '';
 axios.defaults.headers.common['Diverst-APIKey'] = config.apiKey;
 
 class API {
   constructor(args) {
-    this.baseUrl = `${axios.defaults.baseURL}/api/v1/`;
+    this.baseUrl = axios.defaults.baseURL + API_PATH;
     this.controller = args.controller;
     this.url = this.baseUrl + this.controller;
   }

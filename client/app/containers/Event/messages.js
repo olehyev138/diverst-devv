@@ -60,6 +60,9 @@ export default defineMessages({
     end: {
       id: `${scope}.form.input.end`,
     },
+    picture: {
+      id: `${scope}.form.input.picture`
+    }
   },
   show: {
     dateAndTime: {

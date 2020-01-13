@@ -59,7 +59,12 @@ Diverst::Application.routes.draw do
       resources :folder_shares
       resources :frequency_periods
       resources :graphs
-      resources :groups
+      resources :groups do
+        member do
+          get  '/fields',       to: 'groups#fields'
+          post '/create_field', to: 'groups#create_field'
+        end
+      end
       resources :group_categories
       resources :group_category_types
       resources :group_leaders
@@ -78,6 +83,8 @@ Diverst::Application.routes.draw do
       resources :initiatives do
         member do
           post '/qrcode', to: 'initiatives#generate_qr_code'
+          get  '/fields',       to: 'initiatives#fields'
+          post '/create_field', to: 'initiatives#create_field'
         end
       end
       resources :initiative_comments
@@ -132,7 +139,10 @@ Diverst::Application.routes.draw do
       resources :pillars
       resources :policy_groups
       resources :policy_group_templates
-      resources :polls
+      resources :polls do
+        get  '/fields',       to: 'polls#fields'
+        post '/create_field', to: 'polls#create_field'
+      end
       resources :poll_responses
       resources :polls_segments
       resources :questions
@@ -251,5 +261,5 @@ Diverst::Application.routes.draw do
   end
 
   # Note the contraints that do not provide a routing error if we're looking for `rails/` because of ActiveStorage URLs
-  match '*a', to: 'diverst#routing_error', via: [:get, :post, :delete, :patch, :put], constraints: lambda { |request| !request.path_parameters[:a].start_with?('rails/') }
+  match '*a', to: 'diverst#routing_error', via: :all, constraints: lambda { |request| !request.path_parameters[:a].start_with?('rails/') }
 end

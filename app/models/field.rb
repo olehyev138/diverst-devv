@@ -14,6 +14,7 @@ class Field < ApplicationRecord
   validates_length_of :type, maximum: 191
   validates :title, presence: true
   validates :type,  presence: true
+  validates_presence_of :field_definer
   validates_inclusion_of :type, in: ['SelectField', 'TextField', 'SegmentsField', 'NumericField', 'GroupsField', 'CheckboxField', 'DateField']
   validates :title, uniqueness: { scope: [:field_definer_id, :field_definer_type] },
                     unless: Proc.new { |object| (object.type == 'SegmentsField' || object.type == 'GroupsField') }, if: :container_type_is_enterprise?
@@ -77,7 +78,7 @@ class Field < ApplicationRecord
   end
 
   def container_type_is_enterprise?
-    field_definer_type == 'Enterprise'
+    field_definer_type == 'Enterprise' rescue false
   end
 
   # The typical field value flow would look like this:
@@ -132,5 +133,7 @@ class Field < ApplicationRecord
     return association(:field_definer).reader if container_type_is_enterprise?
 
     association(:field_definer).reader.enterprise
+  rescue
+    nil
   end
 end

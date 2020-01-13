@@ -351,8 +351,7 @@ RSpec.describe Initiative, type: :model do
       initiative_comment = create(:initiative_comment, initiative: initiative)
       initiative_user = create(:initiative_user, initiative: initiative)
 
-      pp initiative.reload
-
+      initiative.reload
       initiative.destroy!
 
       expect { Initiative.find(initiative.id) }.to raise_error(ActiveRecord::RecordNotFound)

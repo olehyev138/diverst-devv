@@ -143,7 +143,7 @@ class Poll < ApplicationRecord
   end
 
   def at_least_one_field
-    errors[:base] << 'Survey is invalid without any field' unless fields.any?
+    errors[:base] << 'Survey is invalid without any field' unless fields.any? rescue nil
   end
 
   private
