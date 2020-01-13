@@ -27,11 +27,12 @@ export function KPILinks(props) {
           indicatorColor='primary'
           textColor='primary'
         >
-          <Tab
-            component={WrappedNavLink}
-            to={ROUTES.group.plan.kpi.metrics.path(props.currentGroup.id)}
-            label={<DiverstFormattedMessage {...messages.links.metrics} />}
-          />
+          {/* NOT IMPLEMENTED YET */}
+          {/* <Tab */}
+          {/*  component={WrappedNavLink} */}
+          {/*  to={ROUTES.group.plan.kpi.metrics.path(props.currentGroup.id)} */}
+          {/*  label={<DiverstFormattedMessage {...messages.links.metrics} />} */}
+          {/* /> */}
           <Tab
             component={WrappedNavLink}
             to={ROUTES.group.plan.kpi.fields.path(props.currentGroup.id)}

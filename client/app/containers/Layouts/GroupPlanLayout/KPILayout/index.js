@@ -12,9 +12,9 @@ import KPILinks from 'components/Group/GroupPlan/KPILinks';
 const styles = theme => ({});
 
 const KPIPages = Object.freeze({
-  metrics: 0,
-  fields: 1,
-  updates: 2,
+  // metrics: 0, NOT IMPLEMENTED YET
+  fields: 0,
+  updates: 1,
 });
 
 const KPILayout = ({ component: Component, ...rest }) => {
