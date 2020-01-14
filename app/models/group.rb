@@ -99,7 +99,7 @@ class Group < ApplicationRecord
   has_many :outcomes, dependent: :destroy
   has_many :pillars, through: :outcomes
   has_many :initiatives, through: :pillars
-  has_many :updates, class_name: 'GroupUpdate', dependent: :destroy
+  has_many :updates, as: :updatable, dependent: :destroy
   has_many :views, dependent: :destroy
   has_many :twitter_accounts, class_name: 'TwitterAccount', dependent: :destroy
 

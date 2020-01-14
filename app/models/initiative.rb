@@ -10,7 +10,7 @@ class Initiative < ApplicationRecord
 
   belongs_to :pillar
   belongs_to :owner, class_name: 'User'
-  has_many :updates, class_name: 'InitiativeUpdate', dependent: :destroy
+  has_many :updates, as: :updatable, dependent: :destroy
   has_many :fields,
            as: :field_definer,
            dependent: :destroy,

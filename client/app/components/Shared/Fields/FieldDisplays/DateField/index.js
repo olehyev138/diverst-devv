@@ -36,4 +36,4 @@ CustomDate.propTypes = {
   fieldDatumIndex: PropTypes.number,
 };
 
-export default connect(CustomDate);
+export default CustomDate;

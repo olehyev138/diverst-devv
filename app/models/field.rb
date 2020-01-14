@@ -17,7 +17,7 @@ class Field < ApplicationRecord
   validates_presence_of :field_definer
   validates_inclusion_of :type, in: ['SelectField', 'TextField', 'SegmentsField', 'NumericField', 'GroupsField', 'CheckboxField', 'DateField']
   validates :title, uniqueness: { scope: [:field_definer_id, :field_definer_type] },
-                    unless: Proc.new { |object| (object.type == 'SegmentsField' || object.type == 'GroupsField') }, if: :container_type_is_enterprise?
+                    unless: Proc.new { |object| (object.type == 'SegmentsField' || object.type == 'GroupsField') }
 
   # Operators
   #  - equals_any_of:
