@@ -23,9 +23,7 @@ import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 
 import {
-  selectPaginatedMetrics,
   selectUpdatesTotal,
-  selectIsFetchingMetrics,
   selectHasChanged,
 } from 'containers/Shared/Update/selectors';
 import {

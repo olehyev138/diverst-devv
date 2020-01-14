@@ -78,21 +78,6 @@ export function* getUpdates(action, updatableApi) {
   }
 }
 
-export function* getMetrics(action, updatableApi) {
-  try {
-    const { updatableId, ...payload } = action.payload;
-    const response = yield call(updatableApi.metrics.bind(updatableApi), updatableId, payload);
-
-    yield put(getMetricsSuccess(response.data));
-  } catch (err) {
-    yield put(getMetricsError(err));
-
-    // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to get metrics', options: { variant: 'warning' } }));
-  }
-}
-
-
 export function* getUpdatePrototype(action, updatableApi) {
   try {
     const { updatableId, ...payload } = action.payload;
