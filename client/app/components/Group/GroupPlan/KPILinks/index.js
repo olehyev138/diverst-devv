@@ -37,11 +37,13 @@ export function KPILinks(props) {
             component={WrappedNavLink}
             to={ROUTES.group.plan.kpi.fields.path(props.currentGroup.id)}
             label={<DiverstFormattedMessage {...messages.links.fields} />}
+            value='fields'
           />
           <Tab
             component={WrappedNavLink}
             to={ROUTES.group.plan.kpi.updates.index.path(props.currentGroup.id)}
             label={<DiverstFormattedMessage {...messages.links.updates} />}
+            value='updates'
           />
         </ResponsiveTabs>
       </Paper>
