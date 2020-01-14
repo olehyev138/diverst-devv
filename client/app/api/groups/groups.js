@@ -5,6 +5,9 @@ const axios = require('axios');
 const Groups = new API({ controller: 'groups' });
 
 Object.assign(Groups, {
+  initiatives(id, payload) {
+    return axios.get(appendQueryArgs(`${this.url}/${id}/initiatives`, payload));
+  },
   fields(id, payload) {
     return axios.get(appendQueryArgs(`${this.url}/${id}/fields`, payload));
   },

@@ -64,6 +64,7 @@ Diverst::Application.routes.draw do
           get  '/fields',       to: 'groups#fields'
           post '/create_field', to: 'groups#create_field'
 
+          get  '/initiatives', to: 'groups#initiatives'
           get  '/updates', to: 'groups#updates'
           get  '/metrics', to: 'groups#metrics_index'
           get  '/update_prototype', to: 'groups#update_prototype'

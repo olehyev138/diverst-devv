@@ -11,7 +11,11 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def show?
-    index?
+    index? || is_an_accepted_member?
+  end
+
+  def initiatives?
+    show?
   end
 
   def create?

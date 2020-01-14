@@ -22,7 +22,15 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 export function* getEvents(action) {
   try {
-    const response = yield call(api.initiatives.all.bind(api.initiatives), action.payload);
+    const { payload } = action;
+    let response;
+    if (payload.group_id) {
+      // eslint-disable-next-line camelcase
+      const { group_id, ...rest } = payload;
+      response = yield call(api.groups.initiatives.bind(api.groups), group_id, action.payload);
+    } else
+      response = yield call(api.initiatives.all.bind(api.initiatives), action.payload);
+
 
     yield (put(getEventsSuccess(response.data.page)));
   } catch (err) {
