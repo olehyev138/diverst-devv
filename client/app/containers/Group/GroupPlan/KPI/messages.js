@@ -11,7 +11,7 @@ export const scope = 'diverst.containers.Group.GroupPlan.KPI';
 export default defineMessages({
   links: {
     metrics: {
-      id: `${scope}.tabs.links`,
+      id: `${scope}.tabs.metrics`,
     },
     fields: {
       id: `${scope}.tabs.fields`,

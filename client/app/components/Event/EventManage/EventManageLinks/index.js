@@ -11,6 +11,8 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import ResponsiveTabs from 'components/Shared/ResponsiveTabs';
 
 import RouteService from 'utils/routeHelpers';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/Event/EventManage/messages';
 
 /* eslint-disable react/no-multi-comp */
 export function EventManageLinks(props) {
@@ -35,31 +37,31 @@ export function EventManageLinks(props) {
           <Tab
             component={WrappedNavLink}
             to={ROUTES.group.plan.events.manage.metrics.path(groupId, event.id)}
-            label='Metrics'
+            label={<DiverstFormattedMessage {...messages.links.metrics} />}
             value='metrics'
           />
           <Tab
             component={WrappedNavLink}
             to={ROUTES.group.plan.events.manage.fields.path(groupId, event.id)}
-            label='Fields'
+            label={<DiverstFormattedMessage {...messages.links.fields} />}
             value='fields'
           />
           <Tab
             component={WrappedNavLink}
             to={ROUTES.group.plan.events.manage.updates.index.path(groupId, event.id)}
-            label='Updates'
+            label={<DiverstFormattedMessage {...messages.links.updates} />}
             value='updates'
           />
           <Tab
             component={WrappedNavLink}
             to={ROUTES.group.plan.events.manage.metrics.path(groupId, event.id)}
-            label='Resources'
+            label={<DiverstFormattedMessage {...messages.links.resources} />}
             value='resources'
           />
           <Tab
             component={WrappedNavLink}
             to={ROUTES.group.plan.events.manage.metrics.path(groupId, event.id)}
-            label='Expenses'
+            label={<DiverstFormattedMessage {...messages.links.expenses} />}
             value='expenses'
           />
         </ResponsiveTabs>
