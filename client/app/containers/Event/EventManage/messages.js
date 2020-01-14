@@ -25,5 +25,8 @@ export default defineMessages({
     expenses: {
       id: `${scope}.tabs.expenses`,
     },
-  }
+  },
+  return: {
+    id: `${scope}.return`,
+  },
 });

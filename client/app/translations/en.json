@@ -121,6 +121,7 @@
   "diverst.containers.Event.EventManage.tabs.updates": "Updates",
   "diverst.containers.Event.EventManage.tabs.expenses": "Expenses",
   "diverst.containers.Event.EventManage.tabs.resources": "Resources",
+  "diverst.containers.Event.EventManage.return": "Back to Event Management",
   "diverst.containers.Members.index.button.new": "Add new members",
   "diverst.containers.Members.index.button.export": "Export {erg} members",
   "diverst.containers.Members.index.button.delete": "Delete",

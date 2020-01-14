@@ -49,7 +49,7 @@ function updateReducer(state = initialState, action) {
 
       case GET_UPDATE_SUCCESS:
       case GET_UPDATE_PROTOTYPE_SUCCESS:
-        draft.currentUpdate = action.payload.update;
+        draft.currentUpdate = formatUpdate(action.payload.update);
         draft.isFetchingUpdate = false;
         break;
 
@@ -64,7 +64,7 @@ function updateReducer(state = initialState, action) {
         break;
 
       case GET_UPDATES_SUCCESS:
-        draft.updateList = action.payload.items;
+        draft.updateList = action.payload.items.map(formatUpdate);
         draft.updateListTotal = action.payload.total;
         draft.isFetchingUpdates = false;
         break;
@@ -93,3 +93,14 @@ function updateReducer(state = initialState, action) {
   });
 }
 export default updateReducer;
+
+const formatUpdate = (update) => {
+  if (!update)
+    return null;
+  return produce(update, (uDraft) => {
+    uDraft.field_data = update.field_data.map(fd => produce(fd, (draft) => {
+      if (fd.data === null)
+        draft.data = '';
+    }));
+  });
+};
