@@ -1,3 +1,4 @@
+# A Module to define controller actions for Models with `has_many :updates`
 module Api::V1::Concerns::Updatable
   extend ActiveSupport::Concern
 
@@ -32,19 +33,6 @@ module Api::V1::Concerns::Updatable
     else
       raise BadRequestException.new(e.message)
     end
-  end
-
-  def metrics_index
-    item = klass.find(params[:id])
-    base_authorize(item)
-
-    render status: 200, json: Update.metrics_index(
-        self.diverst_request, params.except(:id).permit!,
-        base: item.updates,
-        updatable: item
-      )
-  rescue => e
-    raise BadRequestException.new(e.message)
   end
 
   def update_payload

@@ -39,10 +39,6 @@ class GroupPolicy < ApplicationPolicy
     update?
   end
 
-  def metrics_index?
-    update?
-  end
-
   def update_prototype?
     updates?
   end

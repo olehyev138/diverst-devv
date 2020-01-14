@@ -66,7 +66,6 @@ Diverst::Application.routes.draw do
 
           get  '/initiatives', to: 'groups#initiatives'
           get  '/updates', to: 'groups#updates'
-          get  '/metrics', to: 'groups#metrics_index'
           get  '/update_prototype', to: 'groups#update_prototype'
           post '/create_update', to: 'groups#create_update'
         end

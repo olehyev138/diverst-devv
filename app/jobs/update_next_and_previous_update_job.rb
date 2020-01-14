@@ -1,3 +1,5 @@
+# To be called whenever an update is updated
+# Modifies the :previous_id column of updates to ensure that they are correctly ordered by report date
 class UpdateNextAndPreviousUpdateJob < ActiveJob::Base
   queue_as :default
 
