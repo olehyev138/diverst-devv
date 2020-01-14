@@ -8,6 +8,7 @@ class EmailsController < ApplicationController
   def index
     @enterprise = current_user.enterprise
     @emails = @enterprise.emails
+    @custom_emails = @enterprise.custom_emails
   end
 
   def edit
