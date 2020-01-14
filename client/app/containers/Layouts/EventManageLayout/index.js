@@ -18,6 +18,8 @@ import { selectEvent } from 'containers/Event/selectors';
 import { getEventBegin, eventsUnmount } from 'containers/Event/actions';
 
 import EventManageLinks from 'components/Event/EventManage/EventManageLinks';
+import Box from "@material-ui/core/Box";
+import GroupPlanLayout from "../GroupPlanLayout";
 
 const styles = theme => ({
   content: {
@@ -33,13 +35,13 @@ const EventManagePages = Object.freeze([
   'expenses',
 ]);
 
-const EventManageLayout = ({ component: Component, classes, ...props }) => {
+const EventManageLayout = ({ component: Component, ...rest }) => {
   useInjectReducer({ key: 'events', reducer });
   useInjectSaga({ key: 'events', saga });
 
-  const rs = new RouteService(useContext);
+  const { computedMatch, location, data, classes, ...other } = rest;
 
-  const { computedMatch, location, event, ...rest } = props;
+  const rs = new RouteService({ computedMatch, location });
 
   /* Get last element of current path, ie: '/group/:id/plan/outcomes -> outcomes */
   const currentPage = EventManagePages.find(page => location.pathname.includes(page));
@@ -52,30 +54,33 @@ const EventManageLayout = ({ component: Component, classes, ...props }) => {
 
   useEffect(() => {
     const eventId = rs.params('event_id');
-    props.getEventBegin({ id: eventId });
+    rest.getEventBegin({ id: eventId });
 
     return () => {
-      props.eventsUnmount();
+      rest.eventsUnmount();
     };
   }, []);
 
   return (
-    <React.Fragment>
-      {event && (
-        <React.Fragment>
-          <EventManageLinks
-            currentTab={tab}
-            event={event}
-            {...rest}
-          />
-          <Fade in appear>
-            <div className={classes.content}>
-              <Component {...rest} event={event} />
-            </div>
-          </Fade>
-        </React.Fragment>
+    <GroupPlanLayout
+      {...rest}
+      component={matchProps => (
+        other.event && (
+          <React.Fragment>
+            <EventManageLinks
+              currentTab={tab}
+              {...matchProps}
+            />
+            <Box mb={3} />
+            <Fade in appear>
+              <div>
+                <Component {...other} />
+              </div>
+            </Fade>
+          </React.Fragment>
+        )
       )}
-    </React.Fragment>
+    />
   );
 };
 
