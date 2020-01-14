@@ -33,13 +33,6 @@ const EventManagePages = Object.freeze([
   'expenses',
 ]);
 
-const getPageTab = (currentPagePath) => {
-  if (EventManagePages[currentPagePath] !== undefined)
-    return EventManagePages[currentPagePath];
-
-  return false;
-};
-
 const EventManageLayout = ({ component: Component, classes, ...props }) => {
   useInjectReducer({ key: 'events', reducer });
   useInjectSaga({ key: 'events', saga });
