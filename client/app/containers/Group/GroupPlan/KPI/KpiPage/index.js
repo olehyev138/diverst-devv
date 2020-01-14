@@ -63,9 +63,7 @@ KPIPage.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
-  metrics: selectPaginatedMetrics(),
   total: selectUpdatesTotal(),
-  isFetching: selectIsFetchingMetrics(),
   hasChanged: selectHasChanged(),
   currentGroup: selectGroup(),
 });
