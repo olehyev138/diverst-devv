@@ -10,7 +10,12 @@ class Api::V1::FieldDataController < DiverstController
     payload[:field_data].each do |field_datum_attrs|
       field_datum = FieldData.find(field_datum_attrs[:id])
 
-      raise InvalidInputException unless field_datum.update_attributes(field_datum_attrs)
+      unless field_datum.update_attributes(field_datum_attrs)
+        raise InvalidInputException.new({
+                                            message: field_datum.errors.full_messages.first,
+                                            attribute: field_datum.errors.messages.first.first
+                                        })
+      end
     end
 
     # if we made it here - were good

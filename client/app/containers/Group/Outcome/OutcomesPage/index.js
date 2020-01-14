@@ -61,22 +61,15 @@ export function OutcomesPage(props) {
   };
 
   return (
-    <React.Fragment>
-      <GroupPlanLayout
-        component={() => (
-          <OutcomesList
-            outcomes={props.outcomes}
-            outcomesTotal={props.outcomesTotal}
-            isLoading={props.isLoading}
-            deleteOutcomeBegin={props.deleteOutcomeBegin}
-            defaultParams={defaultParams}
-            handlePagination={handlePagination}
-            links={links}
-          />
-        )}
-        {...props}
-      />
-    </React.Fragment>
+    <OutcomesList
+      outcomes={props.outcomes}
+      outcomesTotal={props.outcomesTotal}
+      isLoading={props.isLoading}
+      deleteOutcomeBegin={props.deleteOutcomeBegin}
+      defaultParams={defaultParams}
+      handlePagination={handlePagination}
+      links={links}
+    />
   );
 }
 

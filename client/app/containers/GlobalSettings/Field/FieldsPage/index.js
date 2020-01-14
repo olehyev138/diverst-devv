@@ -52,7 +52,7 @@ export function FieldListPage(props) {
       page: 0,
       order: 'asc',
       orderBy: 'fields.id',
-      enterpriseId: dig(props, 'currentEnterprise', 'id')
+      fieldDefinerId: dig(props, 'currentEnterprise', 'id')
     }
   );
 
@@ -86,12 +86,10 @@ export function FieldListPage(props) {
         fields={props.fields}
         fieldTotal={props.fieldTotal}
         isLoading={props.isLoading}
-        createFieldBegin={payload => props.createFieldBegin(
-          {
-            ...payload,
-            enterpriseId: dig(props, 'currentEnterprise', 'id')
-          }
-        )}
+        createFieldBegin={payload => props.createFieldBegin({
+          ...payload,
+          fieldDefinerId: dig(props, 'currentEnterprise', 'id')
+        })}
         updateFieldBegin={props.updateFieldBegin}
         deleteFieldBegin={props.deleteFieldBegin}
         handlePagination={handlePagination}

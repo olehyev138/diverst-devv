@@ -289,11 +289,49 @@ export const ROUTES = {
       },
       kpi: {
         index: {
-          path: (groupId = ':group_id') => `/groups/${groupId}/plan/kpi`,
           data: {
-            titleMessage: messages.groups.plan.kpi.index,
+            pathPrefix: (groupId = ':group_id') => `/groups/${groupId}/plan/kpi`,
+            titleMessage: messages.groups.plan.kpi.index
+          },
+        },
+        metrics: {
+          path: (groupId = ':group_id') => `/groups/${groupId}/plan/kpi/metrics`,
+          data: {
+            titleMessage: messages.groups.plan.kpi.metrics,
           }
-        }
+        },
+        fields: {
+          path: (groupId = ':group_id') => `/groups/${groupId}/plan/kpi/fields`,
+          data: {
+            titleMessage: messages.groups.plan.kpi.fields,
+          }
+        },
+        updates: {
+          index: {
+            path: (groupId = ':group_id') => `/groups/${groupId}/plan/kpi/updates`,
+            data: {
+              titleMessage: messages.groups.plan.kpi.updates.index,
+            }
+          },
+          show: {
+            path: (groupId = ':group_id', updateId = ':update_id') => `/groups/${groupId}/plan/kpi/updates/${updateId}`,
+            data: {
+              titleMessage: messages.groups.plan.kpi.updates.show,
+            }
+          },
+          edit: {
+            path: (groupId = ':group_id', updateId = ':update_id') => `/groups/${groupId}/plan/kpi/updates/${updateId}/edit`,
+            data: {
+              titleMessage: messages.groups.plan.kpi.updates.edit,
+            }
+          },
+          new: {
+            path: (groupId = ':group_id') => `/groups/${groupId}/plan/kpi/updates/new`,
+            data: {
+              titleMessage: messages.groups.plan.kpi.updates.new,
+            }
+          }
+        },
       },
     },
     manage: {

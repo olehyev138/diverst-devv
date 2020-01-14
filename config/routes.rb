@@ -63,6 +63,10 @@ Diverst::Application.routes.draw do
         member do
           get  '/fields',       to: 'groups#fields'
           post '/create_field', to: 'groups#create_field'
+
+          get  '/updates', to: 'groups#updates'
+          get  '/update_prototype', to: 'groups#update_prototype'
+          post '/create_update', to: 'groups#create_update'
         end
       end
       resources :group_categories
@@ -167,6 +171,7 @@ Diverst::Application.routes.draw do
       resources :topics
       resources :topic_feedbacks
       resources :twitter_accounts
+      resources :updates, only: [:show, :update, :destroy]
       resources :user_rewards
       resources :user_reward_actions
       resources :user, only: [] do

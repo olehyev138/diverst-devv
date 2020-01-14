@@ -145,6 +145,49 @@ module ContainsFieldData
     end
   end
 
+  # Creates (but not saves) FieldData
+  # for the purposes of creating a Prototype
+  #
+  # @author Alex Oxorn
+  #
+  # @return [Array<FieldData>]
+  #
+  # @example
+  #   u = User.new
+  #   u.prototype_fields
+  #   u.field_data.first => <# FieldData ...>
+  def prototype_fields
+    from_field_holder = fields || []
+
+    missing = from_field_holder
+    field_data = []
+    missing.each do |fld|
+      field_data << FieldData.new(field: fld)
+    end
+
+    field_data
+  end
+
+  # Given a field, find the fieldData which
+  # holds the data for said field
+  #
+  # @author Alex Oxorn
+  #
+  # @param field [Field] field to find data for
+  #
+  # @return [Array<FieldData>]
+  #
+  # @example
+  #   u = User.first
+  #   f = u.fields.first
+  #
+  #   u.get_field_data(f) => <#FieldData>
+  def get_field_data(field)
+    field_data.loaded? ?
+        field_data.to_a.find { |fd| fd.field == field } :
+        field_data.find_by(field: field)
+  end
+
   # Class Methods for FieldData Models
   module ClassMethods
     # Evaluates an +ActiveRecord+ query of a +field_user+ and creates getter and setter
@@ -179,6 +222,27 @@ module ContainsFieldData
         end
       end
       # rubocop:enable Rails/FindEach
+    end
+
+    # Creates A Prototype
+    # And instance of a class with no data, and is not saved int the database
+    # the main use case is to serialize and return form the API so that the front end
+    # can have a skeleton for which fields to render a form for
+    #
+    # @author Alex Oxorn
+    #
+    # @param field_definer [FieldDefiner] the field_definer for this hypothetical object
+    #
+    # @return [Array<FieldData>]
+    #
+    # @example
+    #   u = User.create_prototype(Enterprise.first)
+    #   u.first_name = ""
+    #   u.field_data.first.data = ""
+    def create_prototype(field_definer)
+      new = self.new(field_definer_name.to_sym => field_definer)
+      new.field_data = new.prototype_fields
+      new
     end
   end
 end

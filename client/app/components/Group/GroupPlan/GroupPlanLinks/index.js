@@ -33,7 +33,7 @@ export function GroupPlanLinks(props) {
           />
           <Tab
             component={WrappedNavLink}
-            to={ROUTES.group.plan.kpi.index.path(props.currentGroup.id)}
+            to={ROUTES.group.plan.kpi.updates.index.path(props.currentGroup.id)}
             label='KPI'
           />
           <Tab

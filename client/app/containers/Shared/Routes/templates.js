@@ -6,6 +6,8 @@ import SessionLayout from 'containers/Layouts/SessionLayout/Loadable';
 import ErrorLayout from 'containers/Layouts/ErrorLayout/Loadable';
 import GlobalSettingsLayout from 'containers/Layouts/GlobalSettingsLayout/Loadable';
 import GroupManageLayout from 'containers/Layouts/GroupManageLayout/Loadable';
+import GroupPlanLayout from 'containers/Layouts/GroupPlanLayout/Loadable';
+import GroupKPILayout from 'containers/Layouts/GroupPlanLayout/KPILayout/Loadable';
 import MentorshipLayout from 'containers/Layouts/MentorshipLayout/Loadable';
 import InnovateLayout from 'containers/Layouts/InnovateLayout/Loadable';
 import SystemUserLayout from 'containers/Layouts/SystemUsersLayout/Loadable';
@@ -13,7 +15,6 @@ import EmailLayout from 'containers/Layouts/GlobalSettingsLayout/EmailLayout/Loa
 
 /* Session */
 import LoginPage from 'containers/Session/LoginPage/Loadable';
-
 
 /* User */
 import HomePage from 'containers/User/HomePage/Loadable';
@@ -102,7 +103,12 @@ import OutcomeCreatePage from 'containers/Group/Outcome/OutcomeCreatePage/Loadab
 import OutcomeEditPage from 'containers/Group/Outcome/OutcomeEditPage/Loadable';
 
 /* Group - Plan - KPI */
-import GroupPlanKpiPage from 'containers/Group/GroupPlan/KpiPage/Loadable';
+import GroupPlanKpiPage from 'containers/Group/GroupPlan/KPI/KpiPage/Loadable';
+import GroupPlanFieldsPage from 'containers/Group/GroupPlan/KPI/FieldsPage/Loadable';
+import GroupPlanUpdatesPage from 'containers/Group/GroupPlan/KPI/UpdatesPage/Loadable';
+import GroupPlanUpdatePage from 'containers/Group/GroupPlan/KPI/UpdatePage/Loadable';
+import GroupPlanUpdateEditPage from 'containers/Group/GroupPlan/KPI/UpdateEditPage/Loadable';
+import GroupPlanUpdateCreatePage from 'containers/Group/GroupPlan/KPI/UpdateCreatePage/Loadable';
 
 /* Group - Members */
 import GroupMemberListPage from 'containers/Group/GroupMembers/GroupMemberListPage/Loadable';
@@ -167,6 +173,11 @@ export {
   OutcomeCreatePage,
   OutcomeEditPage,
   GroupPlanKpiPage,
+  GroupPlanFieldsPage,
+  GroupPlanUpdatesPage,
+  GroupPlanUpdatePage,
+  GroupPlanUpdateEditPage,
+  GroupPlanUpdateCreatePage,
   GroupMemberListPage,
   GroupMemberCreatePage,
   NotFoundPage,
@@ -180,6 +191,8 @@ export {
   CustomGraphCreatePage,
   CustomGraphEditPage,
   GroupManageLayout,
+  GroupPlanLayout,
+  GroupKPILayout,
   GroupSettingsPage,
   CustomTextEditPage,
   UserNewsLinkPage,
