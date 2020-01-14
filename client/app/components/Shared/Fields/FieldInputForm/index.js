@@ -27,45 +27,37 @@ const styles = theme => ({
 export function FieldInputForm({ formikProps, messages, ...props }) {
   const { values } = formikProps;
 
-  const arrayForm = (
-    <FieldArray
-      name='fields'
-      render={_ => (
-        <React.Fragment>
-          {values.fieldData.map((fieldDatum, i) => (
-            <div key={fieldDatum.id} className={props.classes.fieldInput}>
-              <Divider />
-              <CardContent>
-                {Object.entries(fieldDatum).length !== 0 && (
-                  <CustomField
-                    fieldDatum={fieldDatum}
-                    fieldDatumIndex={i}
-                    disabled={props.isCommitting}
-                  />
-                )}
-              </CardContent>
-            </div>
-          ))}
-        </React.Fragment>
-      )}
-    />
-  );
-
-  const header = (
-    <CardContent>
-      <Typography component='h6'>
-        <DiverstFormattedMessage {...messages.fields} />
-      </Typography>
-      <Typography color='secondary' component='h2'>
-        <DiverstFormattedMessage {...messages.preface} />
-      </Typography>
-    </CardContent>
-  );
-
   return (
     <React.Fragment>
-      {header}
-      {arrayForm}
+      <CardContent>
+        <Typography component='h6'>
+          <DiverstFormattedMessage {...messages.fields} />
+        </Typography>
+        <Typography color='secondary' component='h2'>
+          <DiverstFormattedMessage {...messages.preface} />
+        </Typography>
+      </CardContent>
+      <FieldArray
+        name='fields'
+        render={_ => (
+          <React.Fragment>
+            {values.fieldData.map((fieldDatum, i) => (
+              <div key={fieldDatum.id} className={props.classes.fieldInput}>
+                <Divider />
+                <CardContent>
+                  {Object.entries(fieldDatum).length !== 0 && (
+                    <CustomField
+                      fieldDatum={fieldDatum}
+                      fieldDatumIndex={i}
+                      disabled={props.isCommitting}
+                    />
+                  )}
+                </CardContent>
+              </div>
+            ))}
+          </React.Fragment>
+        )}
+      />
     </React.Fragment>
   );
 }

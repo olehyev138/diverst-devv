@@ -34,48 +34,28 @@ const styles = theme => ({
 export function FieldInputFormInner({ formikProps, messages, ...props }) {
   const { isFormLoading, edit, fieldData } = props;
 
-  const submitButton = (
-    <React.Fragment>
-      <Divider />
-      <CardActions>
-        <DiverstSubmit isCommitting={props.isCommitting}>
-          <DiverstFormattedMessage {...messages.fields_save} />
-        </DiverstSubmit>
-      </CardActions>
-    </React.Fragment>
-  );
-
-  const cardWrapper = component => (
-    <Card>
-      {component}
-    </Card>
-  );
-
-  const formWrapper = component => (
-    <Form>
-      {component}
-    </Form>
-  );
-
-  const loaderWrapper = component => (
+  return (
     <DiverstFormLoader isLoading={isFormLoading} isError={edit && !fieldData}>
-      {component}
+      <Card>
+        <Form>
+          <React.Fragment>
+            <FieldInputForm
+              formikProps={formikProps}
+              messages={messages}
+              {...props}
+            />
+            <React.Fragment>
+              <Divider />
+              <CardActions>
+                <DiverstSubmit isCommitting={props.isCommitting}>
+                  <DiverstFormattedMessage {...messages.fields_save} />
+                </DiverstSubmit>
+              </CardActions>
+            </React.Fragment>
+          </React.Fragment>
+        </Form>
+      </Card>
     </DiverstFormLoader>
-  );
-
-  return loaderWrapper(
-    cardWrapper(
-      formWrapper(
-        <React.Fragment>
-          <FieldInputForm
-            formikProps={formikProps}
-            messages={messages}
-            {...props}
-          />
-          {submitButton}
-        </React.Fragment>
-      )
-    )
   );
 }
 
