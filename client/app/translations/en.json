@@ -398,7 +398,7 @@
   "diverst.containers.Group.Outcome.index.return": "Back to Event Management",
   "diverst.containers.Group.Outcome.form.button.cancel": "Cancel",
   "diverst.containers.Group.Outcome.form.input.name": "Name",
-  "diverst.containers.Group.Outcome.empty": "There are no outcomes yet.",
+  "diverst.containers.Group.Outcome.empty": "There are no {outcome}s yet.",
   "diverst.containers.Group.Outcome.structure.edit": "Edit Structure",
   "diverst.containers.Group.Outcome.Pillar.empty": "There are no {program}s for this {outcome} yet.",
   "diverst.containers.Group.Outcome.Pillar.text": "{program}s",
