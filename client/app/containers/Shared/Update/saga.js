@@ -4,26 +4,19 @@ import { push } from 'connected-react-router';
 
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
 
-import { ROUTES } from 'containers/Shared/Routes/constants';
-
 import {
   GET_UPDATE_BEGIN,
   UPDATE_UPDATE_BEGIN,
-  DELETE_UPDATE_BEGIN, GET_UPDATES_BEGIN, GET_METRICS_BEGIN, CREATE_UPDATE_BEGIN, GET_UPDATE_PROTOTYPE_BEGIN,
+  DELETE_UPDATE_BEGIN
 } from './constants';
 
 import {
-  getUpdateSuccess,
-  getUpdateError,
-  updateUpdateSuccess,
-  updateUpdateError,
-  deleteUpdateSuccess,
-  deleteUpdateError,
-  getUpdatesSuccess,
-  getUpdatesError,
-  getMetricsSuccess,
-  getMetricsError,
-  getUpdatePrototypeSuccess, getUpdatePrototypeError, createUpdateSuccess, createUpdateError,
+  getUpdateSuccess, getUpdateError,
+  updateUpdateSuccess, updateUpdateError,
+  deleteUpdateSuccess, deleteUpdateError,
+  getUpdatesSuccess, getUpdatesError,
+  getUpdatePrototypeSuccess, getUpdatePrototypeError,
+  createUpdateSuccess, createUpdateError,
 } from './actions';
 
 export function* getUpdate(action) {

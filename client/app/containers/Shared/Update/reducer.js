@@ -9,9 +9,6 @@ import {
   GET_UPDATE_BEGIN,
   GET_UPDATE_SUCCESS,
   GET_UPDATE_ERROR,
-  GET_METRICS_BEGIN,
-  GET_METRICS_SUCCESS,
-  GET_METRICS_ERROR,
   GET_UPDATE_PROTOTYPE_BEGIN,
   GET_UPDATE_PROTOTYPE_SUCCESS,
   GET_UPDATE_PROTOTYPE_ERROR,
@@ -33,11 +30,8 @@ import {
 export const initialState = {
   updateList: [],
   updateListTotal: null,
-  metricsList: {},
-  fieldsListTotal: null,
   currentUpdate: null,
   isFetchingUpdates: false,
-  isFetchingMetrics: false,
   isFetchingUpdate: false,
   isCommitting: false,
   hasChanged: false,
@@ -64,30 +58,15 @@ function updateReducer(state = initialState, action) {
         draft.isFetchingUpdate = false;
         break;
 
-      case GET_METRICS_BEGIN:
-        draft.isFetchingMetrics = true;
-        break;
-
       case GET_UPDATES_BEGIN:
         draft.isFetchingUpdates = true;
         draft.hasChanged = false;
-        break;
-
-      case GET_METRICS_SUCCESS:
-        draft.metricsList = action.payload.items;
-        draft.updateListTotal = action.payload.updates_total;
-        draft.fieldsListTotal = action.payload.fields_total;
-        draft.isFetchingMetrics = false;
         break;
 
       case GET_UPDATES_SUCCESS:
         draft.updateList = action.payload.items;
         draft.updateListTotal = action.payload.total;
         draft.isFetchingUpdates = false;
-        break;
-
-      case GET_METRICS_ERROR:
-        draft.isFetchingMetrics = false;
         break;
 
       case GET_UPDATES_ERROR:
