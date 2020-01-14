@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
-import { Tab, Paper } from '@material-ui/core';
+import { Tab, Paper, Typography } from '@material-ui/core';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
@@ -22,26 +22,45 @@ export function EventManageLinks(props) {
 
   return (
     <React.Fragment>
+      <Typography variant='h4' component='h6' align='center' color='primary'>
+        <strong>{props.event.name}</strong>
+      </Typography>
       <Paper>
         <ResponsiveTabs
           value={currentTab}
           indicatorColor='primary'
           textColor='primary'
         >
+          {/* NOT IMPLEMENTED YET */}
           <Tab
             component={WrappedNavLink}
             to={ROUTES.group.plan.events.manage.metrics.path(groupId, event.id)}
             label='Metrics'
+            value='metrics'
+          />
+          <Tab
+            component={WrappedNavLink}
+            to={ROUTES.group.plan.events.manage.metrics.path(groupId, event.id)}
+            label='Fields'
+            value='fields'
+          />
+          <Tab
+            component={WrappedNavLink}
+            to={ROUTES.group.plan.events.manage.metrics.path(groupId, event.id)}
+            label='Updates'
+            value='updates'
           />
           <Tab
             component={WrappedNavLink}
             to={ROUTES.group.plan.events.manage.metrics.path(groupId, event.id)}
             label='Resources'
+            value='resources'
           />
           <Tab
             component={WrappedNavLink}
             to={ROUTES.group.plan.events.manage.metrics.path(groupId, event.id)}
             label='Expenses'
+            value='expenses'
           />
         </ResponsiveTabs>
       </Paper>

@@ -25,11 +25,13 @@ const styles = theme => ({
   },
 });
 
-const EventManagePages = Object.freeze({
-  metrics: 0,
-  resources: 1,
-  expenses: 2,
-});
+const EventManagePages = Object.freeze([
+  'metrics', // NOT IMPLEMENTED
+  'fields',
+  'updates',
+  'resources',
+  'expenses',
+]);
 
 const getPageTab = (currentPagePath) => {
   if (EventManagePages[currentPagePath] !== undefined)
@@ -47,13 +49,13 @@ const EventManageLayout = ({ component: Component, classes, ...props }) => {
   const { computedMatch, location, event, ...rest } = props;
 
   /* Get last element of current path, ie: '/group/:id/plan/outcomes -> outcomes */
-  const currentPagePath = location.pathname.split('/').pop();
-  const [tab, setTab] = useState(getPageTab(currentPagePath));
+  const currentPage = EventManagePages.find(page => location.pathname.includes(page));
+  const [tab, setTab] = useState(currentPage);
 
   useEffect(() => {
-    if (tab !== getPageTab(currentPagePath))
-      setTab(getPageTab(currentPagePath));
-  }, [currentPagePath]);
+    if (tab !== currentPage)
+      setTab(currentPage);
+  }, [currentPage]);
 
   useEffect(() => {
     const eventId = rs.params('event_id');
