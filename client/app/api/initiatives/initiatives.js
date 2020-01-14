@@ -1,5 +1,5 @@
 import API from 'api/base/base';
-import {appendQueryArgs} from "utils/apiHelpers";
+import { appendQueryArgs } from 'utils/apiHelpers';
 
 const axios = require('axios');
 

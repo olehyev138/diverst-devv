@@ -18,8 +18,8 @@ import { selectEvent } from 'containers/Event/selectors';
 import { getEventBegin, eventsUnmount } from 'containers/Event/actions';
 
 import EventManageLinks from 'components/Event/EventManage/EventManageLinks';
-import Box from "@material-ui/core/Box";
-import GroupPlanLayout from "../GroupPlanLayout";
+import Box from '@material-ui/core/Box';
+import GroupPlanLayout from '../GroupPlanLayout';
 
 const styles = theme => ({
   content: {
