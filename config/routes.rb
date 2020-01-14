@@ -89,8 +89,13 @@ Diverst::Application.routes.draw do
       resources :initiatives do
         member do
           post '/qrcode', to: 'initiatives#generate_qr_code'
+
           get  '/fields',       to: 'initiatives#fields'
           post '/create_field', to: 'initiatives#create_field'
+
+          get  '/updates', to: 'initiatives#updates'
+          get  '/update_prototype', to: 'initiatives#update_prototype'
+          post '/create_update', to: 'initiatives#create_update'
         end
       end
       resources :initiative_comments

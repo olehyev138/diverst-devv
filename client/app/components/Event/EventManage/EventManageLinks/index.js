@@ -40,13 +40,13 @@ export function EventManageLinks(props) {
           />
           <Tab
             component={WrappedNavLink}
-            to={ROUTES.group.plan.events.manage.metrics.path(groupId, event.id)}
+            to={ROUTES.group.plan.events.manage.fields.path(groupId, event.id)}
             label='Fields'
             value='fields'
           />
           <Tab
             component={WrappedNavLink}
-            to={ROUTES.group.plan.events.manage.metrics.path(groupId, event.id)}
+            to={ROUTES.group.plan.events.manage.updates.index.path(groupId, event.id)}
             label='Updates'
             value='updates'
           />

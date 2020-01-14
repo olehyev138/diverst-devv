@@ -39,6 +39,7 @@ import reducer from 'containers/Shared/Update/reducer';
 import saga from '../updatesSaga';
 
 import { selectEvent } from 'containers/Event/selectors';
+import { selectGroup } from 'containers/Group/selectors';
 import UpdateList from 'components/Shared/Updates/UpdateList';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -57,11 +58,11 @@ export function UpdateListPage(props) {
     }
   );
 
-  const partialLink = ROUTES.group.plan.event.updates;
+  const partialLink = ROUTES.group.plan.events.manage.updates;
   const links = {
-    new: partialLink.new.path(dig(props, 'currentEvent', 'id')),
-    edit: id => partialLink.edit.path(dig(props, 'currentEvent', 'id'), id),
-    show: id => partialLink.show.path(dig(props, 'currentEvent', 'id'), id),
+    new: partialLink.new.path(dig(props, 'currentGroup', 'id'), dig(props, 'currentEvent', 'id')),
+    edit: id => partialLink.edit.path(dig(props, 'currentGroup', 'id'), dig(props, 'currentEvent', 'id'), id),
+    show: id => partialLink.show.path(dig(props, 'currentGroup', 'id'), dig(props, 'currentEvent', 'id'), id),
   };
 
   useEffect(() => {
@@ -113,6 +114,9 @@ UpdateListPage.propTypes = {
 
   currentEvent: PropTypes.shape({
     id: PropTypes.number
+  }),
+  currentGroup: PropTypes.shape({
+    id: PropTypes.number
   })
 };
 
@@ -122,6 +126,7 @@ const mapStateToProps = createStructuredSelector({
   isFetching: selectIsFetchingUpdates(),
   hasChanged: selectHasChanged(),
   currentEvent: selectEvent(),
+  currentGroup: selectGroup(),
 });
 
 const mapDispatchToProps = {

@@ -41,6 +41,7 @@ import saga from '../fieldsSaga';
 
 import FieldList from 'components/Shared/Fields/FieldList';
 import { selectEvent } from 'containers/Event/selectors';
+import { selectGroup } from 'containers/Group/selectors';
 
 export function FieldListPage(props) {
   useInjectReducer({ key: 'fields', reducer });
@@ -117,6 +118,9 @@ FieldListPage.propTypes = {
   hasChanged: PropTypes.bool,
   currentEvent: PropTypes.shape({
     id: PropTypes.number
+  }),
+  currentGroup: PropTypes.shape({
+    id: PropTypes.number
   })
 };
 
@@ -127,6 +131,7 @@ const mapStateToProps = createStructuredSelector({
   isCommitting: selectIsCommitting(),
   commitSuccess: selectCommitSuccess(),
   currentEvent: selectEvent(),
+  currentGroup: selectGroup(),
   hasChanged: selectHasChanged(),
 });
 

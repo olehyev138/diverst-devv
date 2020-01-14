@@ -56,6 +56,7 @@ import RouteService from 'utils/routeHelpers';
 
 import UpdateForm from 'components/Shared/Updates/UpdateForm';
 import { selectEvent } from 'containers/Event/selectors';
+import { selectGroup } from 'containers/Group/selectors';
 
 export function UpdateEditPage(props) {
   useInjectReducer({ key: 'updates', reducer });
@@ -66,9 +67,9 @@ export function UpdateEditPage(props) {
   const rs = new RouteService(useContext);
   const { location } = rs;
 
-  const partialLink = ROUTES.group.plan.event.updates;
+  const partialLink = ROUTES.group.plan.events.manage.updates;
   const links = {
-    index: partialLink.index.path(dig(props, 'currentEvent', 'id')),
+    index: partialLink.index.path(dig(props, 'currentGroup', 'id'), dig(props, 'currentEvent', 'id')),
   };
 
   const update = props.currentUpdate || location.update;
@@ -116,12 +117,16 @@ UpdateEditPage.propTypes = {
 
   currentEvent: PropTypes.shape({
     id: PropTypes.number
+  }),
+  currentGroup: PropTypes.shape({
+    id: PropTypes.number
   })
 };
 
 const mapStateToProps = createStructuredSelector({
   currentUpdate: selectUpdate(),
   currentEvent: selectEvent(),
+  currentGroup: selectGroup(),
   isFetching: selectIsFetchingUpdate(),
   isCommitting: selectIsCommitting(),
   isCommittingFieldData: selectIsCommittingFieldData(),

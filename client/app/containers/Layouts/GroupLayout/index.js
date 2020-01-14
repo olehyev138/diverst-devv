@@ -45,7 +45,7 @@ const GroupLayout = ({ component: Component, classes, ...rest }) => {
   const rs = new RouteService({ computedMatch, location });
 
   useEffect(() => {
-    const [groupId] = rs.params('group_id');
+    const groupId = rs.params('group_id');
 
     if (groupId && dig(other.currentGroup, 'id') !== groupId)
       other.getGroupBegin({ id: groupId });
