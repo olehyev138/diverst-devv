@@ -53,7 +53,7 @@ export function KPILinks(props) {
 
 KPILinks.propTypes = {
   classes: PropTypes.object,
-  currentTab: PropTypes.number,
+  currentTab: PropTypes.string,
   currentGroup: PropTypes.object,
 };
 
