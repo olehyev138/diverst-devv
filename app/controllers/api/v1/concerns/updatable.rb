@@ -1,3 +1,4 @@
+# A Module to define controller actions for Models with `has_many :updates`
 module Api::V1::Concerns::Updatable
   extend ActiveSupport::Concern
 
