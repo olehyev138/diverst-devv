@@ -71,7 +71,7 @@ export function EventManageLinks(props) {
 EventManageLinks.propTypes = {
   classes: PropTypes.object,
   currentTab: PropTypes.oneOfType([
-    PropTypes.number,
+    PropTypes.string,
     PropTypes.bool,
   ]),
   event: PropTypes.object,
