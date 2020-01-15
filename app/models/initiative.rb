@@ -400,7 +400,7 @@ class Initiative < ApplicationRecord
 
     if budget.present?
 
-      if budget.group_id != group.id
+      if budget.group != group
         # make sure noone is trying to put incorrect budget value
         errors.add(:budget, 'You are providing wrong budget')
         return false

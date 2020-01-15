@@ -2,10 +2,10 @@ class Budget < ApplicationRecord
   include PublicActivity::Common
   # include Budget::Actions
 
-  belongs_to :group
+  belongs_to :annual_budget
   belongs_to :approver, class_name: 'User', foreign_key: 'approver_id'
   belongs_to :requester, class_name: 'User', foreign_key: 'requester_id'
-  has_one :annual_budget, through: :group
+  has_one :group, through: :annual_budget
 
   has_many :checklists, dependent: :destroy
   has_many :budget_items, dependent: :destroy
