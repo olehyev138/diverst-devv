@@ -121,7 +121,29 @@ export default defineMessages({
           id: `${scope}.group.plan.events.index`
         },
         manage: {
-          id: `${scope}.group.plan.events.manage`
+          index: {
+            id: `${scope}.group.plan.events.manage.index`
+          },
+          metrics: {
+            id: `${scope}.group.plan.events.manage.metrics`
+          },
+          fields: {
+            id: `${scope}.group.plan.events.manage.fields`
+          },
+          updates: {
+            index: {
+              id: `${scope}.group.plan.events.manage.updates.index`
+            },
+            show: {
+              id: `${scope}.group.plan.events.manage.updates.show`
+            },
+            edit: {
+              id: `${scope}.group.plan.events.manage.updates.edit`
+            },
+            new: {
+              id: `${scope}.group.plan.events.manage.updates.new`
+            },
+          },
         },
       },
       kpi: {

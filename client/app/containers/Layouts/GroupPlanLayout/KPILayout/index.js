@@ -11,22 +11,22 @@ import KPILinks from 'components/Group/GroupPlan/KPILinks';
 
 const styles = theme => ({});
 
-const KPIPages = Object.freeze({
-  // metrics: 0, NOT IMPLEMENTED YET
-  fields: 0,
-  updates: 1,
-});
+const KPIPages = Object.freeze([
+  // 'metrics', // NOT IMPLEMENTED YET
+  'fields',
+  'updates',
+]);
 
 const KPILayout = ({ component: Component, ...rest }) => {
   const { classes, data, location, ...other } = rest;
 
   /* Get get first key that is in the path, ie: '/admin/system/settings/kpis/1/edit/ -> kpis */
-  const currentPage = Object.keys(KPIPages).find(page => location.pathname.includes(page));
-  const [tab, setTab] = useState(KPIPages[currentPage]);
+  const currentPage = KPIPages.find(page => location.pathname.includes(page));
+  const [tab, setTab] = useState(currentPage);
 
   useEffect(() => {
-    if (tab !== KPIPages[currentPage])
-      setTab(KPIPages[currentPage]);
+    if (tab !== currentPage)
+      setTab(currentPage);
   }, [currentPage]);
 
   return (

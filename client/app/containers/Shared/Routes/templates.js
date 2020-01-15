@@ -84,6 +84,12 @@ import EventPage from 'containers/Event/EventPage/Loadable';
 import EventCreatePage from 'containers/Event/EventCreatePage/Loadable';
 import EventEditPage from 'containers/Event/EventEditPage/Loadable';
 import EventManageMetricsPage from 'containers/Event/EventManage/MetricsPage/Loadable';
+import EventManageLayout from 'containers/Layouts/EventManageLayout/Loadable';
+import EventManageFieldsPage from 'containers/Event/EventManage/FieldsPage/Loadable';
+import EventManageUpdatesPage from 'containers/Event/EventManage/UpdatesPage/Loadable';
+import EventManageUpdatePage from 'containers/Event/EventManage/UpdatePage/Loadable';
+import EventManageUpdateEditPage from 'containers/Event/EventManage/UpdateEditPage/Loadable';
+import EventManageUpdateCreatePage from 'containers/Event/EventManage/UpdateCreatePage/Loadable';
 
 /* Group - News Feed */
 import GroupMessagePage from 'containers/News/GroupMessage/GroupMessagePage/Loadable';
@@ -180,6 +186,12 @@ export {
   GroupPlanUpdateCreatePage,
   GroupMemberListPage,
   GroupMemberCreatePage,
+  EventManageLayout,
+  EventManageFieldsPage,
+  EventManageUpdatesPage,
+  EventManageUpdatePage,
+  EventManageUpdateEditPage,
+  EventManageUpdateCreatePage,
   NotFoundPage,
   PlaceholderPage,
   GroupDashboardPage,

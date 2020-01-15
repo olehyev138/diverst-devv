@@ -17,15 +17,10 @@ export function MetricsPage(props) {
   const { currentUser } = props;
 
   return (
-    <EventManageLayout
-      component={() => (
-        <Metrics
-          currentUserId={currentUser.id}
-          deleteEventBegin={props.deleteEventBegin}
-          isFormLoading={props.isFormLoading}
-        />
-      )}
-      {...props}
+    <Metrics
+      currentUserId={currentUser.id}
+      deleteEventBegin={props.deleteEventBegin}
+      isFormLoading={props.isFormLoading}
     />
   );
 }

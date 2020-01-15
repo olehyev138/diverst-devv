@@ -9,6 +9,16 @@ class Api::V1::GroupsController < DiverstController
     super
   end
 
+  def initiatives
+    item = klass.find(params[:id])
+    base_authorize(item)
+
+    render status: 200, json: Initiative.index(
+        self.diverst_request,
+        params.except(:id).permit!,
+        base: item.initiatives.union(item.participating_initiatives))
+  end
+
   def create_field
     params[:field] = field_payload
     params[:field][:field_type] = 'regular'
