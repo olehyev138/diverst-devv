@@ -1,6 +1,7 @@
 class EmailsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_email, only: [:edit, :update, :show]
+  before_action :set_custom_email, only: [:edit_custom]
   after_action :visit_page, only: [:index, :edit]
 
   layout 'global_settings'
@@ -26,13 +27,20 @@ class EmailsController < ApplicationController
   end
 
   def new_custom
-    
+    @custom_email = current_user.enterprise.custom_emails.new
+  end
+
+  def edit_custom
   end
 
   protected
 
   def set_email
     @email = current_user.enterprise.emails.find(params[:id])
+  end
+
+  def set_custom_email
+    @custom_email = current_user.enterprise.custom_emails.find(params[:id])
   end
 
   def email_params
