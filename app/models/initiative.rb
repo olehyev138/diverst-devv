@@ -32,6 +32,7 @@ class Initiative < ApplicationRecord
 
   belongs_to :budget_item
   has_one :budget, through: :budget_item
+  has_one :annual_budget, through: :budget
 
   has_many :checklists, dependent: :destroy
   has_many :resources, dependent: :destroy
@@ -40,7 +41,6 @@ class Initiative < ApplicationRecord
   accepts_nested_attributes_for :checklist_items, reject_if: :all_blank, allow_destroy: true
 
   belongs_to :owner_group, class_name: 'Group'
-  belongs_to :annual_budget
 
   has_many :initiative_segments, dependent: :destroy
   has_many :segments, through: :initiative_segments
