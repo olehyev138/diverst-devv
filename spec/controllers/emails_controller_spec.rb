@@ -44,7 +44,7 @@ RSpec.describe EmailsController, type: :controller do
         expect(assigns[:enterprise]).to eq user.enterprise
       end
 
-      it 'returns customemails belonging to enterprise' do
+      it 'returns custom emails belonging to enterprise' do
         2.times { create(:custom_email, enterprise: enterprise) }
         expect(assigns[:enterprise].custom_emails.count).to eq 2
       end
@@ -112,7 +112,7 @@ RSpec.describe EmailsController, type: :controller do
           expect(flash[:alert]).to eq 'Your email was not updated. Please fix the errors'
         end
 
-        it 'renders edit template' do
+        it 'renders edit template for system email' do
           expect(response).to render_template :edit
         end
       end

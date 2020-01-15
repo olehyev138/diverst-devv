@@ -1,7 +1,10 @@
 class EmailsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_email, only: [:edit, :update, :show]
+
+  before_action :set_email, only: [:edit, :show]
   before_action :set_custom_email, only: [:edit_custom]
+  before_action :set_email_from_system_or_custom, only: [:update]
+
   after_action :visit_page, only: [:index, :edit]
 
   layout 'global_settings'
@@ -22,11 +25,17 @@ class EmailsController < ApplicationController
       redirect_to action: :index
     else
       flash[:alert] = 'Your email was not updated. Please fix the errors'
-      render :edit
+
+      if @email.custom?
+        render :edit_custom
+      else
+        render :edit
+      end
     end
   end
 
   def new_custom
+    @enterprise = current_user.enterprise
     @custom_email = current_user.enterprise.custom_emails.new
   end
 
@@ -41,6 +50,11 @@ class EmailsController < ApplicationController
 
   def set_custom_email
     @custom_email = current_user.enterprise.custom_emails.find(params[:id])
+  end
+
+  def set_email_from_system_or_custom
+    @email = current_user.enterprise.emails.find_by_id(params[:id]) ||
+             current_user.enterprise.custom_emails.find(params[:id])
   end
 
   def email_params

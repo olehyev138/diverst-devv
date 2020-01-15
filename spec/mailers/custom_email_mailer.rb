@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe CampaignMailer, type: :mailer do
+RSpec.describe CustomEmailMailer, type: :mailer do
   describe '#custom' do
    xit 'implement me'
 
