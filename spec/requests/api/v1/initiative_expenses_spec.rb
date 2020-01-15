@@ -7,8 +7,8 @@ RSpec.describe "#{model.pluralize}", type: :request do
   let(:user) { create(:user, password: 'password', enterprise: enterprise) }
   let!(:group) { create(:group, name: 'gerlinmasd', annual_budget: 10000, enterprise: enterprise) }
   let(:annual_budget) { create(:annual_budget, group: group) }
-  let(:initiative) { create(:initiative, owner_group_id: group.id) }
-  let!(:item) { create(model.constantize.table_name.singularize.to_sym, initiative: initiative, annual_budget: annual_budget) }
+  let(:initiative) { create(:initiative, :with_budget_item, owner_group_id: group.id) }
+  let!(:item) { create(model.constantize.table_name.singularize.to_sym, initiative: initiative) }
   let(:route) { model.constantize.table_name }
   let(:jwt) { UserTokenService.create_jwt(user) }
   let(:headers) { { 'HTTP_DIVERST_APIKEY' => api_key.key, 'Diverst-UserToken' => jwt } }

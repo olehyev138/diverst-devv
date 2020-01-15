@@ -124,7 +124,7 @@ RSpec.describe Budget, type: :model do
   end
 
   describe 'status_title' do
-    let(:budget) { build_stubbed(:budget) }
+    let(:budget) { build(:budget) }
 
     it 'returns Pending' do
       expect(budget.status_title).to eq('Pending')

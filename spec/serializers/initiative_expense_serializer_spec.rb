@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe InitiativeExpenseSerializer, type: :serializer do
   it 'returns associations' do
     group = create(:group, annual_budget: 1000)
-    initiative = create(:initiative, owner_group_id: group.id)
+    initiative = create(:initiative, :with_budget_item, owner_group_id: group.id)
     initiative_expense = create(:initiative_expense, initiative: initiative)
 
     serializer = InitiativeExpenseSerializer.new(initiative_expense)
