@@ -1,8 +1,0 @@
-[webserver]
-[worker]
-[app:children]
-webserver
-worker
-
-[bigbrother]
-bigbrother.diverst.com

@@ -1,7 +1,0 @@
-# Monit configuration for Clockwork
-# Service name: {{ monit_app_prefix }}clockwork
-#
-check process {{ monit_app_prefix }}clockwork
-  with pidfile "{{ monit_app_root }}{{ monit_clockwork_pid_path }}"
-  start program = "{{ monit_clockwork_start_command }}"
-  stop program = "{{ monit_clockwork_stop_command }}"
