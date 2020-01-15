@@ -1,9 +1,9 @@
 class AnnualBudget < ApplicationRecord
   belongs_to :group
   belongs_to :enterprise
-  has_many :initiatives
-  has_many :initiative_expenses
-  has_many :budgets
+  has_many :initiatives, through: :group
+  has_many :initiative_expenses, through: :initiatives
+  has_many :budgets, dependent: :destroy
 
   # same as available_budget
   def approved_budget_leftover

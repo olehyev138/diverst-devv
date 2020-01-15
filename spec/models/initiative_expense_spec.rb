@@ -6,7 +6,7 @@ RSpec.describe InitiativeExpense, type: :model do
 
     it { expect(initiative_expense).to belong_to(:initiative) }
     it { expect(initiative_expense).to belong_to(:owner).class_name('User') }
-    it { expect(initiative_expense).to belong_to(:annual_budget) }
+    it { expect(initiative_expense).to have_one(:annual_budget) }
     it { expect(initiative_expense).to validate_presence_of(:initiative) }
     it { expect(initiative_expense).to validate_presence_of(:owner) }
     it { expect(initiative_expense).to validate_presence_of(:amount) }

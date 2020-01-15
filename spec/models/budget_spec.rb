@@ -5,7 +5,7 @@ RSpec.describe Budget, type: :model do
     let(:budget) { build(:budget) }
     let(:approved_budget) { build :approved_budget }
 
-    it { expect(budget).to belong_to(:group) }
+    it { expect(budget).to have_one(:group) }
     it { expect(budget).to belong_to(:approver).class_name('User').with_foreign_key('approver_id') }
     it { expect(budget).to belong_to(:requester).class_name('User').with_foreign_key('requester_id') }
     it { expect(budget).to have_many(:checklists) }
