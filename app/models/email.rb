@@ -7,6 +7,8 @@ class Email < BaseClass
   # associations
   belongs_to :enterprise
 
+  attr_accessor :receivers
+
   has_many :variables, class_name: 'EmailVariable', dependent: :destroy
 
   before_validation :assign_mailer_for_custom_email, if: :custom?

@@ -2,7 +2,7 @@ class EmailsController < ApplicationController
   before_action :authenticate_user!
 
   before_action :set_email, only: [:edit, :show]
-  before_action :set_custom_email, only: [:edit_custom]
+  before_action :set_custom_email, only: [:edit_custom, :prepare_for_sending, :send]
   before_action :set_email_from_system_or_custom, only: [:update]
 
   after_action :visit_page, only: [:index, :edit]
@@ -58,6 +58,15 @@ class EmailsController < ApplicationController
   def edit_custom
   end
 
+  def prepare_for_sending
+  end
+
+  def send_custom
+    emails = custom_email_params[:receivers].split(',').map{|i| i.strip}
+
+    
+  end
+
   protected
 
   def set_email
@@ -89,7 +98,8 @@ class EmailsController < ApplicationController
         :name,
         :description,
         :content,
-        :subject
+        :subject,
+        :receivers
       )
   end
 
