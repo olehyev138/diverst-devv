@@ -449,7 +449,11 @@ class Group < ApplicationRecord
   end
 
   def title_with_leftover_amount
-    "Create event from #{name} leftover ($#{leftover_money == 0 ? 0.0 : available_budget})"
+    if annual_budget == leftover_money
+      "Create event from #{name} ($#{available_budget})"
+    else
+      "Create event from #{name} leftover ($#{leftover_money == 0 ? 0.0 : available_budget})"
+    end
   end
 
   def pending_comments_count
