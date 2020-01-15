@@ -713,6 +713,9 @@ Rails.application.routes.draw do
     collection do
       get 'new_custom'
     end
+    member do
+      get 'edit_custom'
+    end
   end
 
   resources :custom_texts, only: [:edit, :update]
