@@ -152,11 +152,11 @@ RSpec.describe AnnualBudgetManager, type: :service do
       # the second annual_budget is gotten from calling carry_over on AnnualBudgetManager
       let!(:annual_budget1) { group.annual_budgets.find_by(closed: false) }
       let!(:budget1) { create(:approved_budget, group_id: group.id, annual_budget_id: annual_budget1.id) }
-      let!(:initiative1) { create(:initiative, owner_group: group, annual_budget_id: annual_budget.id, estimated_funding: budget1.budget_items.first.available_amount,
+      let!(:initiative1) { create(:initiative, owner_group: group, estimated_funding: budget1.budget_items.first.available_amount,
                                                budget_item_id: budget1.budget_items.first.id)
       }
 
-      it 're-assign annual budget for initiative' do
+      it 're-assign annual budget for initiative', skip: 'AnnualBudget is not determined by BudgetItem' do
         expect(initiative1.annual_budget).not_to eq budget1.annual_budget
 
         AnnualBudgetManager.new(group).re_assign_annual_budget(budget1.budget_items.first.id, initiative1.id)

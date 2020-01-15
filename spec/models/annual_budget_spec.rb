@@ -16,10 +16,10 @@ RSpec.describe AnnualBudget, type: :model do
       let!(:annual_budget) { create(:annual_budget, group: group, enterprise: enterprise, amount: group.annual_budget) }
       let!(:budget) { create(:approved_budget, annual_budget: annual_budget, group: group) }
       let!(:selected_budget) { budget.budget_items.first }
-      let!(:initiative) { create(:initiative, owner_group: group, annual_budget: annual_budget, estimated_funding: selected_budget.available_amount,
+      let!(:initiative) { create(:initiative, :with_budget_item, owner_group: group, estimated_funding: selected_budget.available_amount,
                                               budget_item_id: selected_budget.id)
       }
-      let!(:expense) { create(:initiative_expense, initiative: initiative, amount: 10, annual_budget: annual_budget) }
+      let!(:expense) { create(:initiative_expense, initiative: initiative, amount: 10) }
 
       it 'returns approved_budget_leftover which is the same as available_budget' do
         annual_budget.reload
