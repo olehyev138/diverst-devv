@@ -1,10 +1,15 @@
 class Email < BaseClass
   include PublicActivity::Common
 
+  CUSTOM_MAILER_METHOD_NAME = 'custom'
+  CUSTOM_MAILER_MAILER_NAME = 'custom_email_mailer'
+
   # associations
   belongs_to :enterprise
 
   has_many :variables, class_name: 'EmailVariable', dependent: :destroy
+
+  before_validation :assign_mailer_for_custom_email, if: :custom?
 
   # validations
   validates_length_of :description, maximum: 191
@@ -71,5 +76,14 @@ class Email < BaseClass
     end
 
     text % replace
+  end
+
+  protected
+
+  def assign_mailer_for_custom_email
+    return unless self.custom?
+
+    self.mailer_name = Email::CUSTOM_MAILER_MAILER_NAME
+    self.mailer_method = Email::CUSTOM_MAILER_METHOD_NAME
   end
 end

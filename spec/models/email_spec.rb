@@ -19,6 +19,33 @@ RSpec.describe Email do
   it { expect(subject).to validate_length_of(:subject).is_at_most(191) }
   it { expect(subject).to validate_length_of(:name).is_at_most(191) }
 
+  describe 'custom email logic' do
+    let(:custom_email) { build_stubbed :custom_email, mailer_name: nil, mailer_method: nil}
+    let(:system_email) { build_stubbed :email }
+
+    before do
+      custom_email.valid?
+      system_email.valid?
+    end
+
+    it 'considers custom mailer valid' do
+      expect(custom_email).to be_valid
+    end
+
+    it 'assigns proper mailer_name before validation' do
+      expect(custom_email.mailer_name).to eq Email::CUSTOM_MAILER_MAILER_NAME
+    end
+
+    it 'assigns proper mailer_method before validation' do
+      expect(custom_email.mailer_method).to eq Email::CUSTOM_MAILER_METHOD_NAME
+    end 
+
+    it 'does not assign mailer_method or mailer_name for non-custom emails' do
+      expect(system_email.mailer_name).to_not eq Email::CUSTOM_MAILER_MAILER_NAME
+      expect(system_email.mailer_method).to_not eq Email::CUSTOM_MAILER_METHOD_NAME
+    end
+  end
+
   describe '#destroy_callbacks' do
     it 'removes the child objects' do
       email = create(:email)
