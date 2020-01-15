@@ -1,7 +1,0 @@
----
-metrics_extra_tags:
-  InstanceID: '{{ ansible_ec2_instance_id }}'
-  Instance: '{{ application_instance }}'
-
-metrics_influxdb_host: 'http://localhost:8086'
-metrics_influxdb_database: 'telegraf'

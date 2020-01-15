@@ -1,0 +1,26 @@
+FROM ruby:2.6
+
+ENV APP_DIR /webapp
+RUN mkdir $APP_DIR
+
+RUN apt-get update && apt-get install -y build-essential mariadb-client nodejs git --no-install-recommends && rm -rf /var/lib/apt/lists/*
+
+ENV RAILS_ENV production
+ENV RAILS_LOG_TO_STDOUT true
+
+COPY Gemfile $APP_DIR/
+COPY Gemfile.lock $APP_DIR/
+
+WORKDIR $APP_DIR
+
+ENV BUNDLER_VERSION='2.0.2'
+RUN gem install bundler --no-document -v '2.0.2'
+RUN bundler config --global frozen 1
+RUN bundler install --without development test
+
+COPY . $APP_DIR
+
+EXPOSE 3000
+
+CMD ["rails", "server", "-b", "0.0.0.0"]
+

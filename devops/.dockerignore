@@ -1,0 +1,10 @@
+.git
+.dockerignore
+tmp/*
+log/*
+Dockerfile
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+.git
+.gitignore
+client/*
