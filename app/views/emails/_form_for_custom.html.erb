@@ -5,6 +5,8 @@
         <div class="card__section">
           <h3><%= @custom_email.name %></h3>
           <%= simple_form_for @custom_email do |f| %>
+            <%= f.input :name %>
+            <%= f.input :description %>
             <%= f.input :subject %>
             <%= f.input :content, as: :ckeditor %>
             <%= f.button :submit, 'Save' %>
