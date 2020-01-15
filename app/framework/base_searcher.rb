@@ -119,7 +119,7 @@ module BaseSearcher
           '! WARNING !',
           "It is likely that a policy scope was not found for #{self}. Ensure that a proper Policy and Scope exist, and filter if necessary (by enterprise, etc.)",
           '---------------------------------------'
-        )
+        ) unless Rails.env.test?
         @items = self
       end
 

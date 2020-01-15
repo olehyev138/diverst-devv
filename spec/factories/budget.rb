@@ -1,6 +1,7 @@
 FactoryBot.define do
   factory :budget do
     description { Faker::Lorem.sentence }
+    association :annual_budget, factory: :annual_budget
     association :group, factory: :group
     factory :approved_budget do
       after(:create) do |budget|

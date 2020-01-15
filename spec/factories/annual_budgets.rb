@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :annual_budget do
-    group
+    association :group, factory: :group
     closed false
 
     after(:create) do |annual_budget|
