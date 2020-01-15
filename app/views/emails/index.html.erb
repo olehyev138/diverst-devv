@@ -11,12 +11,14 @@
         <thead>
           <th>Name</th>
           <th>Last update</th>
+          <th>Actions</th>
         </thead>
         <tbody>
           <% @custom_emails.each do |email| %>
             <tr>
               <td><%= link_to email.name, edit_custom_email_path(email) %></td>
               <td><%= time_ago_in_words(email.updated_at) %> ago</td>
+              <td><%= link_to 'Prepare for sending', prepare_for_sending_email_path(email) %></td>
             </tr>
           <% end %>
         </tbody>

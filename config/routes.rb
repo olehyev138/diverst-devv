@@ -715,6 +715,7 @@ Rails.application.routes.draw do
     end
     member do
       get 'edit_custom'
+      get 'prepare_for_sending'
     end
   end
 
