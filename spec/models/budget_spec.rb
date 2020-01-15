@@ -107,8 +107,9 @@ RSpec.describe Budget, type: :model do
 
     describe 'pre_approved_events_for_select' do
       let!(:group) { create(:group) }
-      let!(:related_budgets) { create_list(:budget, 3, group: group, is_approved: true) }
-      let!(:approved_budget) { create :approved_budget, group: group }
+      let!(:annual_budget) { create(:annual_budget, group: group) }
+      let!(:related_budgets) { create_list(:budget, 3, annual_budget: annual_budget, is_approved: true) }
+      let!(:approved_budget) { create :approved_budget, annual_budget: annual_budget }
 
       subject { described_class }
 

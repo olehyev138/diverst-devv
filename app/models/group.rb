@@ -76,7 +76,6 @@ class Group < ApplicationRecord
   has_many :initiative_participating_groups
   has_many :participating_initiatives, through: :initiative_participating_groups, source: :initiative
 
-  has_many :budgets, dependent: :destroy
   has_many :messages, class_name: 'GroupMessage', dependent: :destroy
   has_many :message_comments, through: :messages, class_name: 'GroupMessageComment', source: :comments
   has_many :news_links, dependent: :destroy
@@ -119,6 +118,7 @@ class Group < ApplicationRecord
 
   has_many :children, class_name: 'Group', foreign_key: :parent_id, dependent: :destroy
   has_many :annual_budgets, dependent: :destroy
+  has_many :budgets, dependent: :destroy, through: :annual_budgets
 
   belongs_to :parent, class_name: 'Group', foreign_key: :parent_id
   belongs_to :group_category
