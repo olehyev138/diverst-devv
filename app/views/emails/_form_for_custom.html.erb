@@ -1,0 +1,32 @@
+<div class="content__main">
+  <div class="row">
+    <div class="col sm-12">
+      <div class="card">
+        <div class="card__section">
+          <h3><%= @custom_email.name %></h3>
+          <%= simple_form_for @custom_email do |f| %>
+            <%= f.input :name %>
+            <%= f.input :description %>
+            <%= f.input :subject %>
+            <%= f.input :content, as: :ckeditor %>
+            <%= f.button :submit, 'Save' %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+    <div class="col sm-12">
+      <div class="card card--secondary">
+        <div class="card__section card__section--border">
+          <h4>Email Preview</h4>
+          <p class="text-center">Here is a preview of what this email will look like when sent out(save to update)</p>
+        </div>
+        <div class="card__section card__section--border">
+          <p><strong>Subject:</strong> <%= raw @custom_email.process_example(@custom_email.subject) %></p>
+        </div>
+        <div class="card__section card__section--border">
+          <p><strong>Email Body:</strong> <%= raw @custom_email.process_example(@custom_email.content) %></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

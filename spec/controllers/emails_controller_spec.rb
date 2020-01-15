@@ -31,6 +31,31 @@ RSpec.describe EmailsController, type: :controller do
     end
   end
 
+  describe 'GET#new_custom' do
+    context 'with logged in user' do
+      login_user_from_let
+      before { get :new_custom }
+
+      it 'render correct template' do
+        expect(response).to render_template :new_custom
+      end
+
+      it 'return enterprise of current user' do
+        expect(assigns[:enterprise]).to eq user.enterprise
+      end
+
+      it 'returns custom emails belonging to enterprise' do
+        2.times { create(:custom_email, enterprise: enterprise) }
+        expect(assigns[:enterprise].custom_emails.count).to eq 2
+      end
+    end
+
+    context 'without a logged in user' do
+      before { get :index }
+      it_behaves_like 'redirect user to users/sign_in path'
+    end
+  end
+
   describe 'PATCH#update' do
     let(:email) { create(:email, enterprise: enterprise) }
 
@@ -87,7 +112,7 @@ RSpec.describe EmailsController, type: :controller do
           expect(flash[:alert]).to eq 'Your email was not updated. Please fix the errors'
         end
 
-        it 'renders edit template' do
+        it 'renders edit template for system email' do
           expect(response).to render_template :edit
         end
       end

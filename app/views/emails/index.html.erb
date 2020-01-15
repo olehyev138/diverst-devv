@@ -1,5 +1,38 @@
 <div class="content__header">
-  <h1>Emails</h1>
+  <h1>Custom Emails</h1>
+  <%= link_to "New Custom Email", new_custom_emails_path, class: "btn btn--primary" %>
+</div>
+
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+    <% if @custom_emails.any? %>
+      <table class="table--has-border" id="custom-emails-table">
+        <thead>
+          <th>Name</th>
+          <th>Last update</th>
+          <th>Actions</th>
+        </thead>
+        <tbody>
+          <% @custom_emails.each do |email| %>
+            <tr>
+              <td><%= link_to email.name, edit_custom_email_path(email) %></td>
+              <td><%= time_ago_in_words(email.updated_at) %> ago</td>
+              <td><%= link_to 'Prepare for sending', prepare_for_sending_email_path(email) %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <% else %>
+        No custom emails yet. You can <%= link_to('create one', new_custom_emails_path) %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+
+<div class="content__header">
+  <h1>System Emails</h1>
 </div>
 
 <div class="content__main">
@@ -28,6 +61,10 @@
     $(document).off('page:change');
 
     $('#emails-table').dataTable(Utility.mergeWithDTDefaults({
+      order: [[2, "desc"]]
+    }));
+
+    $('#custom-emails-table').dataTable(Utility.mergeWithDTDefaults({
       order: [[2, "desc"]]
     }));
   });

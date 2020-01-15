@@ -89,6 +89,31 @@ RSpec.describe Enterprise, type: :model do
     it { expect(enterprise).not_to allow_value('bademail.com').for(:redirect_email_contact) }
   end
 
+  describe 'Enterprise emails' do
+    let(:enterprise) { create :enterprise }
+    let!(:system_email) { create :email, enterprise: enterprise }
+    let!(:custom_email) { create :custom_email, enterprise: enterprise }
+
+    context 'system emails' do
+      it 'are only fetched in #emails relation' do
+        expect(enterprise.emails).to include(system_email)
+      end
+      it 'does not include custom emails' do
+        expect(enterprise.emails).to_not include(custom_email)
+      end
+    end
+
+    context 'custom emails' do
+      it 'is only fethed in #custom_emails relation' do
+        expect(enterprise.custom_emails).to include(custom_email)
+      end
+
+      it 'does not include system emails' do
+        expect(enterprise.custom_emails).to_not include(system_email)
+      end
+    end
+  end
+
   describe 'Enterprise::Enumerize' do
     let!(:enterprise) { create(:enterprise) }
 
