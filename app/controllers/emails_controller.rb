@@ -50,11 +50,6 @@ class EmailsController < ApplicationController
     end
   end
 
-  def new_custom
-    @enterprise = current_user.enterprise
-    @custom_email = current_user.enterprise.custom_emails.new
-  end
-
   def edit_custom
   end
 

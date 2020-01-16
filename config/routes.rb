@@ -710,15 +710,18 @@ Rails.application.routes.draw do
 
   resources :policy_group_templates
   resources :emails do
+    # TODO remove
     collection do
-      get 'new_custom'
+      #get 'new_custom'
     end
     member do
-      get 'edit_custom'
-      get 'prepare_for_sending'
-      post 'send_custom'
+      #et 'edit_custom'
+      #get 'prepare_for_sending'
+      #post 'send_custom'
     end
   end
+
+  resources :custom_emails
 
   resources :custom_texts, only: [:edit, :update]
 

@@ -1,6 +1,6 @@
 <div class="content__header">
   <h1>Custom Emails</h1>
-  <%= link_to "New Custom Email", new_custom_emails_path, class: "btn btn--primary" %>
+  <%= link_to "New Custom Email", new_custom_email_path, class: "btn btn--primary" %>
 </div>
 
 <div class="content__main">
@@ -18,13 +18,13 @@
             <tr>
               <td><%= link_to email.name, edit_custom_email_path(email) %></td>
               <td><%= time_ago_in_words(email.updated_at) %> ago</td>
-              <td><%= link_to 'Prepare for sending', prepare_for_sending_email_path(email) %></td>
+              <td><%= link_to 'Prepare for sending', custom_email_path(email) %></td>
             </tr>
           <% end %>
         </tbody>
       </table>
       <% else %>
-        No custom emails yet. You can <%= link_to('create one', new_custom_emails_path) %>
+        No custom emails yet. You can <%= link_to('create one', new_custom_email_path) %>
       <% end %>
     </div>
   </div>
