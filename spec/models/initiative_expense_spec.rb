@@ -20,10 +20,11 @@ RSpec.describe InitiativeExpense, type: :model do
     let!(:budget) { create(:approved_budget, group: group1, annual_budget_id: annual_budget1.id) }
     let!(:outcome) { create :outcome, group_id: group1.id }
     let!(:pillar) { create :pillar, outcome_id: outcome.id }
-    let!(:initiative) { create(:initiative, owner_group_id: group1.id, annual_budget_id: annual_budget1.id, pillar: pillar,
-                                            estimated_funding: budget.budget_items.first.available_amount, budget_item_id: budget.budget_items.first.id)
+    let!(:initiative) { create(:initiative, owner_group_id: group1.id, apillar: pillar,
+                               estimated_funding: budget.budget_items.first.available_amount,
+                               budget_item_id: budget.budget_items.first.id)
     }
-    let!(:expense) { create(:initiative_expense, initiative_id: initiative.id, amount: 10, annual_budget_id: annual_budget1.id) }
+    let!(:expense) { create(:initiative_expense, initiative_id: initiative.id, amount: 10) }
 
     it 'after_save, #update_annual_budget' do
       expect(expense).to receive(:update_annual_budget)

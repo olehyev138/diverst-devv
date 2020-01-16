@@ -302,8 +302,10 @@ RSpec.describe Initiative, type: :model do
     it 'returns data' do
       group = create(:group, annual_budget: 10000)
       annual_budget = create(:annual_budget, amount: group.annual_budget)
-      initiative = create(:initiative, owner_group: group, annual_budget_id: annual_budget.id, start: Date.today, end: Date.today + 1.hour)
-      create_list(:initiative_expense, 5, initiative: initiative, annual_budget_id: annual_budget.id)
+      budget = create(:approved_budget, annual_budget: annual_budget)
+      initiative = create(:initiative, :with_budget_item, owner_group: group, budget_item: budget.budget_items.first,
+                          start: Date.today, end: Date.today + 1.hour)
+      create_list(:initiative_expense, 5, initiative: initiative)
 
       data = initiative.expenses_highcharts_history
       expect(data.empty?).to be(false)
@@ -338,10 +340,11 @@ RSpec.describe Initiative, type: :model do
     it 'removes the child objects' do
       group = create(:group, annual_budget: 10000)
       annual_budget = create(:annual_budget, amount: group.annual_budget)
-      initiative = create(:initiative, owner_group_id: group.id, annual_budget_id: annual_budget.id)
+      budget = create(:approved_budget, annual_budget: annual_budget)
+      initiative = create(:initiative, owner_group_id: group.id, budget_item: budget.budget_items.first)
       initiative_update = create(:update, updatable: initiative)
       field = create(:field, field_definer: initiative)
-      initiative_expense = create(:initiative_expense, initiative: initiative, annual_budget_id: annual_budget.id)
+      initiative_expense = create(:initiative_expense, initiative: initiative)
       checklist = create(:checklist, initiative: initiative)
       resource = create(:resource, initiative: initiative)
       checklist_item = create(:checklist_item, initiative: initiative)
@@ -414,11 +417,10 @@ RSpec.describe Initiative, type: :model do
     let!(:pillar) { create :pillar, outcome_id: outcome.id }
     let!(:initiative) { create(:initiative, pillar: pillar,
                                             owner_group: group,
-                                            annual_budget_id: annual_budget.id,
                                             estimated_funding: budget.budget_items.first.available_amount,
                                             budget_item_id: budget.budget_items.first.id)
     }
-    let!(:expense) { create(:initiative_expense, initiative_id: initiative.id, annual_budget_id: annual_budget.id, amount: 50) }
+    let!(:expense) { create(:initiative_expense, initiative_id: initiative.id, amount: 50) }
 
     let!(:field) { create(:field, field_definer: initiative, title: 'Attendance') }
     let!(:update) { create(:update, updatable: initiative, data: "{\"#{field.id}\":105}") }

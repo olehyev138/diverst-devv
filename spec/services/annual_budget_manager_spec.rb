@@ -20,10 +20,10 @@ RSpec.describe AnnualBudgetManager, type: :service do
 
     context 'when an initiative with estimated funding and expenses made exists' do
       let!(:budget) { create(:approved_budget, group_id: group.id, annual_budget_id: annual_budget.id) }
-      let!(:initiative) { create(:initiative, owner_group: group, annual_budget_id: annual_budget.id, estimated_funding: budget.budget_items.first.available_amount,
+      let!(:initiative) { create(:initiative, owner_group: group, estimated_funding: budget.budget_items.first.available_amount,
                                               budget_item_id: budget.budget_items.first.id)
       }
-      let!(:expense) { create(:initiative_expense, initiative_id: initiative.id, annual_budget_id: annual_budget.id, amount: 50) }
+      let!(:expense) { create(:initiative_expense, initiative_id: initiative.id, amount: 50) }
 
       it 'closes existing annual budget and opens a new annual budget' do
         expect(group.annual_budgets.count).to eq 1
@@ -114,10 +114,10 @@ RSpec.describe AnnualBudgetManager, type: :service do
 
     context 'when existing annual_budget has leftover' do
       let!(:budget) { create(:approved_budget, group_id: group.id, annual_budget_id: annual_budget.id) }
-      let!(:initiative) { create(:initiative, owner_group: group, annual_budget_id: annual_budget.id, estimated_funding: budget.budget_items.first.available_amount,
+      let!(:initiative) { create(:initiative, owner_group: group, estimated_funding: budget.budget_items.first.available_amount,
                                               budget_item_id: budget.budget_items.first.id)
       }
-      let!(:expense) { create(:initiative_expense, initiative_id: initiative.id, annual_budget_id: annual_budget.id, amount: 50) }
+      let!(:expense) { create(:initiative_expense, initiative_id: initiative.id, amount: 50) }
 
 
       it 'carry over leftover in existing annual budget into new one' do
@@ -138,10 +138,10 @@ RSpec.describe AnnualBudgetManager, type: :service do
 
   describe '#re_assign_annual_budget' do
     let!(:budget) { create(:approved_budget, group_id: group.id, annual_budget_id: annual_budget.id) }
-    let!(:initiative) { create(:initiative, owner_group: group, annual_budget_id: annual_budget.id, estimated_funding: budget.budget_items.first.available_amount,
+    let!(:initiative) { create(:initiative, owner_group: group, estimated_funding: budget.budget_items.first.available_amount,
                                             budget_item_id: budget.budget_items.first.id)
     }
-    let!(:expense) { create(:initiative_expense, initiative_id: initiative.id, annual_budget_id: annual_budget.id, amount: 50) }
+    let!(:expense) { create(:initiative_expense, initiative_id: initiative.id, amount: 50) }
 
     before do
       initiative.finish_expenses!
