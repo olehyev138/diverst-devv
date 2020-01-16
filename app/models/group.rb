@@ -154,7 +154,7 @@ class Group < ApplicationRecord
 
   def annual_budget=(new_budget)
     ab = current_annual_budget
-    ab.amount=new_budget
+    ab.amount = new_budget
     ab.save
   end
 

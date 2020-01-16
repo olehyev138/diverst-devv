@@ -437,12 +437,12 @@ class Initiative < ApplicationRecord
       errors.add(:budget_item_id, "sorry, this budget doesn't have the sufficient funds")
       false
     elsif funded_by_leftover?
-      errors.add(:budget_item_id, "TEMPORARILY UNSUPPORTED")
+      errors.add(:budget_item_id, 'TEMPORARILY UNSUPPORTED')
       false
     end
 
     # DEPRECATED
-    #if budget_item.present?
+    # if budget_item.present?
     #  # If user tries to allocate all the money from the budget
     #  # mark this budget item as used up
     #  if self.finished_expenses?
@@ -460,7 +460,7 @@ class Initiative < ApplicationRecord
     #  end
     #
     #  #budget_item.save
-    #elsif funded_by_leftover?
+    # elsif funded_by_leftover?
     #  if self.estimated_funding >= owner_group.leftover_money
     #    self.estimated_funding = owner_group.leftover_money
     #  else
@@ -468,10 +468,10 @@ class Initiative < ApplicationRecord
     #  end
     #
     #  owner_group.save
-    #else
+    # else
     #  # Else there is no source for money, so set funding to zero
     #  self.estimated_funding = 0
-    #end
+    # end
   end
 
   def self.archived_initiatives(enterprise)
