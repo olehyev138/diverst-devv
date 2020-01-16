@@ -70,7 +70,7 @@ class Initiative < ApplicationRecord
   scope :order_recent, -> { order(start: :desc) }
 
   # we don't want to run this callback when finish_expenses! is triggered in initiatives_controller.rb, finish_expense action
-  before_save { allocate_budget_funds unless skip_allocate_budget_funds }
+  validate :allocate_budget_funds unless skip_allocate_budget_funds
 
   after_destroy :update_annual_budget
 
@@ -428,6 +428,10 @@ class Initiative < ApplicationRecord
 
   def allocate_budget_funds
     self.estimated_funding = 0.0 if self.estimated_funding.nil?
+
+    temp = estimated_funding
+    update_column(:estimated_funding, 0)
+    estimated_funding = temp
 
     if budget_item.present? && estimated_funding > budget_item.available_amount
       errors.add(:budget_item_id, "sorry, this budget doesn't have the sufficient funds")
