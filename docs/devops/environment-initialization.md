@@ -53,6 +53,12 @@ Create a new client environment terraform module, by copying from `docs/devops/s
 
 `mv devops/terraform/envs/prod/<client-name>/client.tfvars devops/terraform/envs/prod/<client-name>/<client-name>.tfvars`
 
+#### D) Run Terraform
+
+To run terraform, one simply needs to `cd` into the new environment module, run terraform and pass it the `tfvars` file.
+
+`terraform apply -var-file='<client-name>.tfvars`
+
 Fill out the properties `<client-name>.tfvars` & `main.tf` with the values from the previous steps
 
 ## 2) Database initialization
