@@ -3,7 +3,7 @@ provider "aws" {
   region	= "us-west-2"
 }
 
-
 module "frontend" {
-  source = "../../../modules/services/frontend"
+  source    = "../../../modules/services/frontend"
+  env_name  = "test"
 }

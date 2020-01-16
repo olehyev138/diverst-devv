@@ -57,5 +57,18 @@ To deploy a given application version, run the `deploy-app-version` script as fo
 
 ### Frontend
 
-_TODO_
+The Diverst frontend is a React application hosted statically through S3.
 
+Terraform manages & creates a bucket for static web hosting with a name in the form: `<client-name>-frontend-<random-postfix`
+
+We use a random postfix to avoid name conflicts, as S3 operates in a global namespace.
+
+To deploy the frontend, we simply need to build the frontend and then upload it to the S3 bucket. This process is managed & automated with the `deploy-frontend` script.
+
+To deploy the frontend, run the `deploy-frontend` script as follows: 
+
+- `aws-profile` is how we authenticate with AWS. This should be defined in your credentials file and should assume the role in the environment account.
+
+- `frontend-bucket` - name of the frontend bucket created by Terraform.
+
+`./create-app-version <aws-profile> <frontend-bucket>`
