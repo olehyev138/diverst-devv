@@ -2,7 +2,7 @@ const STARTING_PAGE = 1;
 const LIMIT = 8;
 const MULTISELECT_DEFAULT = false;
 
-const CLASSES = {
+const GROUP_CLASSES = {
     CONTENT: 'groups-content',
     HEADER: 'modal-header',
     FOOTER: 'modal-footer',
@@ -67,7 +67,7 @@ class GroupSelector {
         // allDataUrl is the URL that the group selector 'Select All' fetches from
         this.allDataUrl = this.$element.data('all-url');
         // groupsElement is the jQuery object where group data will be inserted
-        this.groupsElement = $("." + CLASSES.CONTENT, this.$element);
+        this.groupsElement = $("." + GROUP_CLASSES.CONTENT, this.$element);
         // preselectedGroups is an optional array of group IDs to pre-select
         this.preselectedGroups = this.$element.data('preselected-groups') || [];
 
@@ -86,24 +86,24 @@ class GroupSelector {
         let self = this;
 
         // Add pagination html
-        $("." + CLASSES.FOOTER + " > .row." + CLASSES.PAGINATION_ROW, this.$element).html(this.buildPaginationHtml());
+        $("." + GROUP_CLASSES.FOOTER + " > .row." + GROUP_CLASSES.PAGINATION_ROW, this.$element).html(this.buildPaginationHtml());
 
         // Add selector helper html
-        $("." + CLASSES.FOOTER + " > .row." + CLASSES.HELPER_ROW, this.$element).append(this.buildHelperHtml());
+        $("." + GROUP_CLASSES.FOOTER + " > .row." + GROUP_CLASSES.HELPER_ROW, this.$element).append(this.buildHelperHtml());
 
         // Add initial click event listeners
-        $("." + CLASSES.SAVE_BUTTON, this.$element).click({ self: self }, self.saveHandler);
-        $("." + CLASSES.SELECT_ALL_BUTTON, this.$element).click({ self: self }, self.selectAllHandler);
-        $("." + CLASSES.CLEAR_BUTTON, this.$element).click({ self: self }, self.clearHandler);
-        $("." + CLASSES.PREVIOUS_PAGE_BUTTON, this.$element).click({ self: self }, self.previousPageHandler);
-        $("." + CLASSES.NEXT_PAGE_BUTTON, this.$element).click({ self: self }, self.nextPageHandler);
-        $("." + CLASSES.FIRST_PAGE_BUTTON, this.$element).click({ self: self }, self.firstPageHandler);
-        $("." + CLASSES.LAST_PAGE_BUTTON, this.$element).click({ self: self }, self.lastPageHandler);
-        $("." + CLASSES.SEARCH_BUTTON, this.$element).click({ self: self }, self.searchHandler);
-        $("." + CLASSES.CLEAR_SEARCH_BUTTON, this.$element).click({ self: self }, self.clearSearchHandler);
+        $("." + GROUP_CLASSES.SAVE_BUTTON, this.$element).click({ self: self }, self.saveHandler);
+        $("." + GROUP_CLASSES.SELECT_ALL_BUTTON, this.$element).click({ self: self }, self.selectAllHandler);
+        $("." + GROUP_CLASSES.CLEAR_BUTTON, this.$element).click({ self: self }, self.clearHandler);
+        $("." + GROUP_CLASSES.PREVIOUS_PAGE_BUTTON, this.$element).click({ self: self }, self.previousPageHandler);
+        $("." + GROUP_CLASSES.NEXT_PAGE_BUTTON, this.$element).click({ self: self }, self.nextPageHandler);
+        $("." + GROUP_CLASSES.FIRST_PAGE_BUTTON, this.$element).click({ self: self }, self.firstPageHandler);
+        $("." + GROUP_CLASSES.LAST_PAGE_BUTTON, this.$element).click({ self: self }, self.lastPageHandler);
+        $("." + GROUP_CLASSES.SEARCH_BUTTON, this.$element).click({ self: self }, self.searchHandler);
+        $("." + GROUP_CLASSES.CLEAR_SEARCH_BUTTON, this.$element).click({ self: self }, self.clearSearchHandler);
 
         // Search input on 'Enter' event listener
-        $("." + CLASSES.SEARCH_INPUT, this.$element).keypress({ self: self }, function(e) {
+        $("." + GROUP_CLASSES.SEARCH_INPUT, this.$element).keypress({ self: self }, function(e) {
             if (e.keyCode === 10 || e.keyCode === 13) {
               e.preventDefault();
               self.searchHandler(e);
@@ -111,7 +111,7 @@ class GroupSelector {
         });
 
         // Current page input on 'Enter' event listener
-        $("." + CLASSES.CURRENT_PAGE_INPUT, this.$element).keypress({ self: self }, function(e) {
+        $("." + GROUP_CLASSES.CURRENT_PAGE_INPUT, this.$element).keypress({ self: self }, function(e) {
             if (e.keyCode === 10 || e.keyCode === 13) {
               e.preventDefault();
               self.currentPageHandler(e);
@@ -167,7 +167,7 @@ class GroupSelector {
 
             self.groupsElement.append(html);
 
-            $("." + CLASSES.GROUP_CONTAINER_PREFIX + group.id, self.groupsElement).find("." + CLASSES.EXPAND_BUTTON).click();
+            $("." + GROUP_CLASSES.GROUP_CONTAINER_PREFIX + group.id, self.groupsElement).find("." + GROUP_CLASSES.EXPAND_BUTTON).click();
         });
 
         // Post data calls
@@ -176,16 +176,16 @@ class GroupSelector {
         this.updatePaginationButtons();
 
         // Add title html
-        $("." + CLASSES.TITLE_CONTAINER, this.$element).html(this.buildTitleHtml());
+        $("." + GROUP_CLASSES.TITLE_CONTAINER, this.$element).html(this.buildTitleHtml());
 
         // Set the total pages count
-        $("." + CLASSES.TOTAL_PAGES_TEXT, this.$element).text(self.totalPages);
+        $("." + GROUP_CLASSES.TOTAL_PAGES_TEXT, this.$element).text(self.totalPages);
     }
 
     // ************* HTML Builders *************
 
     buildGroupHtml(group, renderLogo = true, lastParentGroup = false) {
-        var containerClass = CLASSES.CHILD_GROUP;
+        var containerClass = GROUP_CLASSES.CHILD_GROUP;
         var childIndicatorHtml = "";
         var groupLogoHtml = "";
         var expandButtonHtml = "";
@@ -195,16 +195,16 @@ class GroupSelector {
         if (!$.isNumeric(group.parent_id)) {
             // Don't put a border on the last parent
             if (lastParentGroup)
-                containerClass = CLASSES.PARENT_GROUP;
+                containerClass = GROUP_CLASSES.PARENT_GROUP;
             else
-                containerClass = CLASSES.PARENT_GROUP + " card__section--border";
+                containerClass = GROUP_CLASSES.PARENT_GROUP + " card__section--border";
 
             // The group is a parent with children
             if (group.children != undefined && group.children.length > 0) {
                 // Add the expand/collapse button
                 expandButtonHtml = `
                     <div class="col pull-right">
-                        <button type="button" class="${CLASSES.EXPAND_BUTTON} btn btn--tertiary btn--small" data-group-id="${group.id}">${EXPAND_BUTTON_TEXT.EXPAND}</button>
+                        <button type="button" class="${GROUP_CLASSES.EXPAND_BUTTON} btn btn--tertiary btn--small" data-group-id="${group.id}">${EXPAND_BUTTON_TEXT.EXPAND}</button>
                     </div>
                 `;
             }
@@ -236,20 +236,20 @@ class GroupSelector {
 
         if (this.multiselect === true) {
             booleanHtml = `
-                <input value="0" type="hidden" class="${CLASSES.GROUP_PREFIX}${group.id}" name="${CLASSES.GROUP_PREFIX}${group.id}">
-                <input type="checkbox" class="control__input boolean optional ${CLASSES.GROUP_PREFIX}${group.id}" name="${CLASSES.GROUP_PREFIX}${group.id}" data-group-id="${group.id}" data-group-name="${group.name}">
+                <input value="0" type="hidden" class="${GROUP_CLASSES.GROUP_PREFIX}${group.id}" name="${GROUP_CLASSES.GROUP_PREFIX}${group.id}">
+                <input type="checkbox" class="control__input boolean optional ${GROUP_CLASSES.GROUP_PREFIX}${group.id}" name="${GROUP_CLASSES.GROUP_PREFIX}${group.id}" data-group-id="${group.id}" data-group-name="${group.name}">
                 <span class="control__indicator control__indicator--checkbox"></span>
             `;
         }
         else {
             booleanHtml = `
-                <input type="radio" class="control__input radio ${CLASSES.GROUP_PREFIX}${group.id}" name="groups" value="${group.id}" data-group-id="${group.id}" data-group-name="${group.name}">
+                <input type="radio" class="control__input radio ${GROUP_CLASSES.GROUP_PREFIX}${group.id}" name="groups" value="${group.id}" data-group-id="${group.id}" data-group-name="${group.name}">
                 <span class="control__indicator control__indicator--radio"></span>
             `;
         }
 
         let groupHtml = `
-            <div class="${containerClass} card__section ${CLASSES.GROUP_CONTAINER_PREFIX}${group.id}" data-group-id="${group.id}" data-group-name="${group.name}">
+            <div class="${containerClass} card__section ${GROUP_CLASSES.GROUP_CONTAINER_PREFIX}${group.id}" data-group-id="${group.id}" data-group-name="${group.name}">
                 <div class="row">
                     ${childIndicatorHtml}
                     ${groupLogoHtml}
@@ -270,7 +270,7 @@ class GroupSelector {
         if ($.isNumeric(group.parent_id)) {
             // Return collapsed HTML
             return `
-                  <div class="${CLASSES.COLLAPSE_CONTAINER} collapse card__section--border">
+                  <div class="${GROUP_CLASSES.COLLAPSE_CONTAINER} collapse card__section--border">
                       ${groupHtml}
                   </div>
             `;
@@ -308,21 +308,21 @@ class GroupSelector {
     buildPaginationHtml() {
         var html = `
             <div class="col">
-                <button type="button" class="btn btn--tertiary btn--extra--small ${CLASSES.PAGINATION_BUTTON} ${CLASSES.FIRST_PAGE_BUTTON}">${PAGINATION_TEXT.FIRST}</button>
+                <button type="button" class="btn btn--tertiary btn--extra--small ${GROUP_CLASSES.PAGINATION_BUTTON} ${GROUP_CLASSES.FIRST_PAGE_BUTTON}">${PAGINATION_TEXT.FIRST}</button>
             </div>
             <div class="col">
-                <button type="button" class="btn btn--tertiary btn--extra--small ${CLASSES.PAGINATION_BUTTON} ${CLASSES.PREVIOUS_PAGE_BUTTON}">${PAGINATION_TEXT.PREVIOUS}</button>
+                <button type="button" class="btn btn--tertiary btn--extra--small ${GROUP_CLASSES.PAGINATION_BUTTON} ${GROUP_CLASSES.PREVIOUS_PAGE_BUTTON}">${PAGINATION_TEXT.PREVIOUS}</button>
             </div>
             <div class="col">
-                <div class="${CLASSES.PAGINATION_TEXT}">
-                    <input type="text" class="field__input ${CLASSES.CURRENT_PAGE_INPUT}" value="${this.currentPage}"> / <span class="${CLASSES.TOTAL_PAGES_TEXT}">${STARTING_PAGE}</span>
+                <div class="${GROUP_CLASSES.PAGINATION_TEXT}">
+                    <input type="text" class="field__input ${GROUP_CLASSES.CURRENT_PAGE_INPUT}" value="${this.currentPage}"> / <span class="${GROUP_CLASSES.TOTAL_PAGES_TEXT}">${STARTING_PAGE}</span>
                 </div>
             </div>
             <div class="col">
-                <button type="button" class="btn btn--tertiary btn--extra--small ${CLASSES.PAGINATION_BUTTON} ${CLASSES.NEXT_PAGE_BUTTON}">${PAGINATION_TEXT.NEXT}</button>
+                <button type="button" class="btn btn--tertiary btn--extra--small ${GROUP_CLASSES.PAGINATION_BUTTON} ${GROUP_CLASSES.NEXT_PAGE_BUTTON}">${PAGINATION_TEXT.NEXT}</button>
             </div>
             <div class="col">
-                <button type="button" class="btn btn--tertiary btn--extra--small ${CLASSES.PAGINATION_BUTTON} ${CLASSES.LAST_PAGE_BUTTON}">${PAGINATION_TEXT.LAST}</button>
+                <button type="button" class="btn btn--tertiary btn--extra--small ${GROUP_CLASSES.PAGINATION_BUTTON} ${GROUP_CLASSES.LAST_PAGE_BUTTON}">${PAGINATION_TEXT.LAST}</button>
             </div>
         `;
 
@@ -335,14 +335,14 @@ class GroupSelector {
         if (this.allDataUrl && this.multiselect) {
           helperHtml += `
             <div class="col">
-                <button type="button" class="btn btn--tertiary btn--small ${CLASSES.SELECT_ALL_BUTTON}">Select All</button>
+                <button type="button" class="btn btn--tertiary btn--small ${GROUP_CLASSES.SELECT_ALL_BUTTON}">Select All</button>
             </div>
           `;
         }
 
         helperHtml += `
             <div class="col">
-                <button type="button" class="btn btn--tertiary btn--small ${CLASSES.CLEAR_BUTTON}">Clear</button>
+                <button type="button" class="btn btn--tertiary btn--small ${GROUP_CLASSES.CLEAR_BUTTON}">Clear</button>
             </div>
         `;
 
@@ -361,16 +361,16 @@ class GroupSelector {
 
         // Toggle the collapse for each child of the parent group
         $.each(children, function(index, child) {
-            self.toggleCollapse($("." + CLASSES.GROUP_CONTAINER_PREFIX + child.id, self.groupsElement).closest("." + CLASSES.COLLAPSE_CONTAINER));
+            self.toggleCollapse($("." + GROUP_CLASSES.GROUP_CONTAINER_PREFIX + child.id, self.groupsElement).closest("." + GROUP_CLASSES.COLLAPSE_CONTAINER));
         });
 
-        var lastParentElement = $("." + CLASSES.PARENT_GROUP + ":last-of-type", this.groupsElement);
+        var lastParentElement = $("." + GROUP_CLASSES.PARENT_GROUP + ":last-of-type", this.groupsElement);
         lastParentElement.hasClass("card__section--border") ? lastParentElement.removeClass("card__section--border") : lastParentElement.addClass("card__section--border");
         
         // Toggle the expand/collapse button text
         $(button).html() == EXPAND_BUTTON_TEXT.EXPAND ? $(button).html(EXPAND_BUTTON_TEXT.COLLAPSE) : $(button).html(EXPAND_BUTTON_TEXT.EXPAND);
 
-        // Toggle the expand/collapse button classes
+        // Toggle the expand/collapse button group_classes
         $(button).hasClass("expanded") ? $(button).removeClass("expanded") : $(button).addClass("expanded");
     }
 
@@ -454,7 +454,7 @@ class GroupSelector {
 
     currentPageHandler(e) {
         let self = e.data.self;
-        let newPage = $("." + CLASSES.CURRENT_PAGE_INPUT, this.$element).val();
+        let newPage = $("." + GROUP_CLASSES.CURRENT_PAGE_INPUT, this.$element).val();
 
         if ($.isNumeric(newPage) && newPage >= STARTING_PAGE && newPage <= self.totalPages) {
             self.currentPage = newPage;
@@ -468,7 +468,7 @@ class GroupSelector {
     searchHandler(e) {
       let self = e.data.self;
 
-      self.searchTerm = $("." + CLASSES.SEARCH_INPUT, self.$element).val().toLowerCase();
+      self.searchTerm = $("." + GROUP_CLASSES.SEARCH_INPUT, self.$element).val().toLowerCase();
       self.updateData();
     }
 
@@ -476,7 +476,7 @@ class GroupSelector {
       let self = e.data.self;
 
       self.searchTerm = "";
-      $("." + CLASSES.SEARCH_INPUT).val("");
+      $("." + GROUP_CLASSES.SEARCH_INPUT).val("");
       self.updateData();
     }
 
@@ -489,16 +489,16 @@ class GroupSelector {
         let self = this;
 
         // Add event listener for the expand buttons
-        $("." + CLASSES.EXPAND_BUTTON, this.groupsElement).each(function() {
+        $("." + GROUP_CLASSES.EXPAND_BUTTON, this.groupsElement).each(function() {
             $(this).on('click', { self: self, button: this }, self.expandGroupHandler);
 
             // Enable expand/collapse button when expand/collapse is complete
             var button = this;
-            $(button).closest("." + CLASSES.PARENT_GROUP).siblings("." + CLASSES.COLLAPSE_CONTAINER).on('shown.bs.collapse', function () {
+            $(button).closest("." + GROUP_CLASSES.PARENT_GROUP).siblings("." + GROUP_CLASSES.COLLAPSE_CONTAINER).on('shown.bs.collapse', function () {
                 $(button).removeAttr("disabled");
             });
 
-            $(button).closest("." + CLASSES.PARENT_GROUP).siblings("." + CLASSES.COLLAPSE_CONTAINER).on('hidden.bs.collapse', function () {
+            $(button).closest("." + GROUP_CLASSES.PARENT_GROUP).siblings("." + GROUP_CLASSES.COLLAPSE_CONTAINER).on('hidden.bs.collapse', function () {
                 $(button).removeAttr("disabled");
             });
         });
@@ -506,9 +506,9 @@ class GroupSelector {
         // *************** Single select Event Listeners ***************
 
         // Enable the group radio button if the row is clicked
-        $("." + CLASSES.PARENT_GROUP + ", ." + CLASSES.CHILD_GROUP, this.groupsElement).click(function (e) {
+        $("." + GROUP_CLASSES.PARENT_GROUP + ", ." + GROUP_CLASSES.CHILD_GROUP, this.groupsElement).click(function (e) {
           let radio = $(this).find(".radio");
-          if (!radio.length || $(e.target).hasClass(CLASSES.EXPAND_BUTTON) || $(e.target).hasClass('radio') || $(e.target).hasClass('control__indicator--radio'))
+          if (!radio.length || $(e.target).hasClass(GROUP_CLASSES.EXPAND_BUTTON) || $(e.target).hasClass('radio') || $(e.target).hasClass('control__indicator--radio'))
             return;
 
           radio.prop("checked", true);
@@ -523,9 +523,9 @@ class GroupSelector {
         // *************** Multiselect Event Listeners ***************
 
         // Enable the group checkbox if the row is clicked
-        $("." + CLASSES.PARENT_GROUP + ", ." + CLASSES.CHILD_GROUP, this.groupsElement).click(function (e) {
+        $("." + GROUP_CLASSES.PARENT_GROUP + ", ." + GROUP_CLASSES.CHILD_GROUP, this.groupsElement).click(function (e) {
             let checkbox = $(this).find(".boolean");
-            if (!checkbox.length ||  $(e.target).hasClass(CLASSES.EXPAND_BUTTON) || $(e.target).hasClass('boolean') || $(e.target).hasClass('control__indicator--checkbox'))
+            if (!checkbox.length ||  $(e.target).hasClass(GROUP_CLASSES.EXPAND_BUTTON) || $(e.target).hasClass('boolean') || $(e.target).hasClass('control__indicator--checkbox'))
                 return;
 
             checkbox.prop("checked", !checkbox.prop("checked"));
@@ -545,8 +545,8 @@ class GroupSelector {
         });
 
         // Enable parent and all child group checkboxes if the row is double clicked
-        $("." + CLASSES.PARENT_GROUP, this.groupsElement).dblclick(function(e) {
-            if ($(e.target).hasClass(CLASSES.EXPAND_BUTTON))
+        $("." + GROUP_CLASSES.PARENT_GROUP, this.groupsElement).dblclick(function(e) {
+            if ($(e.target).hasClass(GROUP_CLASSES.EXPAND_BUTTON))
                 return;
 
             let parentCheckbox = $(this).find(".boolean");
@@ -572,7 +572,7 @@ class GroupSelector {
                     self.removeElementAsSelectedGroup(childCheckbox);
             });
 
-            let expandButton = $(this).find("." + CLASSES.EXPAND_BUTTON);
+            let expandButton = $(this).find("." + GROUP_CLASSES.EXPAND_BUTTON);
             if (expandButton.html() === EXPAND_BUTTON_TEXT.EXPAND && parentCheckbox.prop("checked"))
                 expandButton.click();
         });
@@ -591,21 +591,21 @@ class GroupSelector {
 
     updatePaginationButtons() {
         if (this.currentPage <= STARTING_PAGE) {
-            $("." + CLASSES.PREVIOUS_PAGE_BUTTON, this.$element).attr("disabled", true);
-            $("." + CLASSES.FIRST_PAGE_BUTTON, this.$element).attr("disabled", true);
+            $("." + GROUP_CLASSES.PREVIOUS_PAGE_BUTTON, this.$element).attr("disabled", true);
+            $("." + GROUP_CLASSES.FIRST_PAGE_BUTTON, this.$element).attr("disabled", true);
         }
         else {
-            $("." + CLASSES.PREVIOUS_PAGE_BUTTON, this.$element).attr("disabled", false);
-            $("." + CLASSES.FIRST_PAGE_BUTTON, this.$element).attr("disabled", false);
+            $("." + GROUP_CLASSES.PREVIOUS_PAGE_BUTTON, this.$element).attr("disabled", false);
+            $("." + GROUP_CLASSES.FIRST_PAGE_BUTTON, this.$element).attr("disabled", false);
         }
 
         if (this.currentPage >= this.totalPages) {
-            $("." + CLASSES.NEXT_PAGE_BUTTON, this.$element).attr("disabled", true);
-            $("." + CLASSES.LAST_PAGE_BUTTON, this.$element).attr("disabled", true);
+            $("." + GROUP_CLASSES.NEXT_PAGE_BUTTON, this.$element).attr("disabled", true);
+            $("." + GROUP_CLASSES.LAST_PAGE_BUTTON, this.$element).attr("disabled", true);
         }
         else {
-            $("." + CLASSES.NEXT_PAGE_BUTTON, this.$element).attr("disabled", false);
-            $("." + CLASSES.LAST_PAGE_BUTTON, this.$element).attr("disabled", false);
+            $("." + GROUP_CLASSES.NEXT_PAGE_BUTTON, this.$element).attr("disabled", false);
+            $("." + GROUP_CLASSES.LAST_PAGE_BUTTON, this.$element).attr("disabled", false);
         }
     }
 
@@ -613,7 +613,7 @@ class GroupSelector {
     updateCurrentPageText() {
         let self = this;
     
-        $("." + CLASSES.CURRENT_PAGE_INPUT).val(self.currentPage);
+        $("." + GROUP_CLASSES.CURRENT_PAGE_INPUT).val(self.currentPage);
     }
 
     // Selects and triggers a save on preselected groups
@@ -683,7 +683,7 @@ class GroupSelector {
     // group_id is the ID of a group
     // Returns the element relating to the group ID
     getElementFromGroupId(group_id) {
-      return $(".boolean." + CLASSES.GROUP_PREFIX + group_id, this.groupsElement);
+      return $(".boolean." + GROUP_CLASSES.GROUP_PREFIX + group_id, this.groupsElement);
     }
 
     // element is a DOM element that has 'group-id'

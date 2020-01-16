@@ -14,13 +14,13 @@ class SocialMedia::Importer
   OEmbed::Providers.register_all
   OEmbed::Providers.register_fallback(
       OEmbed::ProviderDiscovery
-  )
+    )
 
   if ENV['EMBEDLY_KEY'].blank?
     e = ApplicationHelper::MissingKeyError.new 'EMBEDLY_KEY'
     Rollbar.warn(e)
   end
-  @@embedly_api = Embedly::API.new  :key => ENV['EMBEDLY_KEY']
+  @@embedly_api = Embedly::API.new  key: ENV['EMBEDLY_KEY']
 
   def self.url_to_embed(url, small: false)
     options = small ? SMALL_MEDIA_OPTIONS : {}

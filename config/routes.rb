@@ -438,6 +438,7 @@ Rails.application.routes.draw do
     collection do
       get 'enterprise_segments'
       get 'get_all_segments'
+      get 'get_paginated_segments'
     end
     resources :sub_segments
 
