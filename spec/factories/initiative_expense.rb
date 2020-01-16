@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :initiative_expense do
-    association :initiative
+    initiative { FactoryBot.create(:initiative, :with_budget_item) }
     association :owner, factory: :user
     amount 0
   end
