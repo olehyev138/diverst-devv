@@ -46,7 +46,7 @@ class Budget < ApplicationRecord
 
   def self.pre_approved_events(group, user = nil)
     related_budgets = self.joins(:group)
-                          .where(annual_budgets: {group: group})
+                          .where(annual_budgets: { group: group })
                           .approved
                           .includes(:budget_items)
 

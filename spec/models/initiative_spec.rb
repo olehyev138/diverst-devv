@@ -304,7 +304,7 @@ RSpec.describe Initiative, type: :model do
       annual_budget = create(:annual_budget, amount: group.annual_budget)
       budget = create(:approved_budget, annual_budget: annual_budget)
       initiative = create(:initiative, :with_budget_item, owner_group: group, budget_item: budget.budget_items.first,
-                          start: Date.today, end: Date.today + 1.hour)
+                                                          start: Date.today, end: Date.today + 1.hour)
       create_list(:initiative_expense, 5, initiative: initiative)
 
       data = initiative.expenses_highcharts_history

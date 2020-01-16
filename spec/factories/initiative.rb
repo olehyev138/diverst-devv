@@ -12,7 +12,7 @@ FactoryBot.define do
     trait :with_budget_item do
       association :budget_item, factory: :budget_item
       owner_group { budget_item.budget.group }
-      #estimated_funding { rand(1..budget_item.available_amount) }
+      # estimated_funding { rand(1..budget_item.available_amount) }
     end
   end
 end

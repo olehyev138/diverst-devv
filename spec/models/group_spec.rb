@@ -471,8 +471,8 @@ RSpec.describe Group, type: :model do
       annual_budget = create(:annual_budget, group: group, closed: false, amount: group.annual_budget)
       budget = create(:approved_budget, group_id: group.id, annual_budget_id: annual_budget.id)
       initiative = create(:initiative, owner_group: group,
-                          estimated_funding: budget.budget_items.first.available_amount,
-                          budget_item_id: budget.budget_items.first.id)
+                                       estimated_funding: budget.budget_items.first.available_amount,
+                                       budget_item_id: budget.budget_items.first.id)
       expense = create(:initiative_expense, initiative_id: initiative.id, amount: 10)
       initiative.finish_expenses!
 

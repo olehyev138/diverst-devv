@@ -21,8 +21,8 @@ RSpec.describe InitiativeExpense, type: :model do
     let!(:outcome) { create :outcome, group_id: group1.id }
     let!(:pillar) { create :pillar, outcome_id: outcome.id }
     let!(:initiative) { create(:initiative, owner_group_id: group1.id, apillar: pillar,
-                               estimated_funding: budget.budget_items.first.available_amount,
-                               budget_item_id: budget.budget_items.first.id)
+                                            estimated_funding: budget.budget_items.first.available_amount,
+                                            budget_item_id: budget.budget_items.first.id)
     }
     let!(:expense) { create(:initiative_expense, initiative_id: initiative.id, amount: 10) }
 
