@@ -53,7 +53,7 @@ To deploy a given application version, run the `deploy-app-version` script as fo
 
 - `app-version-label` is the label of the app version that we want to deploy.
 
-`Usage: ./deploy-app-version <aws-profile> <eb-env-name> <app-version-label>`
+`./deploy-app-version <aws-profile> <eb-env-name> <app-version-label>`
 
 ### Frontend
 

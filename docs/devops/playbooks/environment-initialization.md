@@ -10,7 +10,7 @@ _TODO_
 
 ##### Base resources
 
-- Run script `boostrap-backend`: `./devops/scripts/bootstrap-backend <aws-profile> <client-name>`
+- Run script `boostrap-backend`: `./devops/scripts/devops/scripts/bootstrap-backend <aws-profile> <client-name>`
 
 - Create ssh keypair: `ssh-keygen -qt rsa -N '' -f ~/.ssh/<client-name>`
                       
@@ -30,4 +30,4 @@ _TODO_
 
 - Run the `deployment` playbook
 
-- Run script `init-db`: `./init-db <bastion-url> <eb-url> <key-path>`
+- Run script `init-db`: `./devops/scripts/init-db <bastion-url> <eb-url> <key-path>`
