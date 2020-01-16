@@ -1,11 +1,15 @@
 class BudgetItem < ApplicationRecord
   LEFTOVER_BUDGET_ITEM_ID = -1
   belongs_to :budget
+
   has_many :initiatives
   has_many :expenses, through: :initiatives
 
   has_many :finalized_initiatives, -> { where(finished_expenses: true) }, class_name: 'Initiative'
   has_many :finalized_expenses, through: :finalized_initiatives, source: :expenses, class_name: 'InitiativeExpense'
+
+  has_many :unfinished_initiatives, -> { where(finished_expenses: false) }, class_name: 'Initiative'
+  has_many :unfinished_expenses, through: :unfinished_initiatives, source: :expenses, class_name: 'InitiativeExpense'
 
   validates_length_of :title, maximum: 191
   validates :title, presence: true, length: { minimum: 2 }
@@ -25,7 +29,7 @@ class BudgetItem < ApplicationRecord
   end
 
   def reserved
-    initiatives.sum('estimated_funding')
+    unfinished_initiatives.sum('estimated_funding') + finalized_expenditure
   end
 
   def available_amount

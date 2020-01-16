@@ -146,6 +146,7 @@ class Group < ApplicationRecord
   delegate :approved_budget, to: :current_annual_budget
   delegate :spent_budget, to: :current_annual_budget
   delegate :available_budget, to: :current_annual_budget
+  delegate :finalized_expenditure, to: :current_annual_budget
 
   def annual_budget
     current_annual_budget.amount
