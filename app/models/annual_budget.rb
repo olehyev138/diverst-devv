@@ -7,6 +7,6 @@ class AnnualBudget < ApplicationRecord
 
   # same as available_budget
   def approved_budget_leftover
-    approved_budget - (initiatives.where(annual_budget_id: self.id).map { |i| i.current_expences_sum || 0 }).reduce(0, :+)
+    approved_budget - (initiatives.reduce(0) { |sum, i| sum + (i.current_expences_sum || 0) })
   end
 end
