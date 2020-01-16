@@ -299,6 +299,7 @@ class Group < ApplicationRecord
   def spent_budget
     annual_budget = annual_budgets.find_by(closed: false)
     return 0 if annual_budget.nil?
+
     initiatives.joins(:annual_budget).where('annual_budgets.id = ?', annual_budget.id).reduce(0) { |sum, i| sum + (i.current_expences_sum || 0) }
   end
 
