@@ -230,10 +230,10 @@ class Enterprise < ApplicationRecord
     CSV.generate do |csv|
       csv << ['Group name', 'Annual budget', 'Leftover money', 'Approved budget']
       self.groups.includes(:children).all_parents.each do |group|
-        csv << [group.name, group.annual_budget.presence || 'Not set', group.leftover_money, group.approved_budget]
+        csv << [group.name, group.annual_budget.presence || 'Not set', group.unspent, group.approved_budget]
 
         group.children.each do |child|
-          csv << [child.name, child.annual_budget.presence || 'Not set', child.leftover_money, child.approved_budget]
+          csv << [child.name, child.annual_budget.presence || 'Not set', child.unspent, child.approved_budget]
         end
       end
     end

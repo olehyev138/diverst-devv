@@ -1,12 +1,45 @@
 class AnnualBudget < ApplicationRecord
   belongs_to :group
   belongs_to :enterprise
+
   has_many :initiatives, through: :group
   has_many :initiative_expenses, through: :initiatives, source: :expenses
+
   has_many :budgets, dependent: :destroy
+  has_many :approved_budgets, -> { approved }, class_name: 'Budget'
+
+  has_many :budget_items, through: :budgets
+  has_many :approved_budget_items, through: :approved_budgets, source: :budget_items
 
   # same as available_budget
-  def approved_budget_leftover
-    approved_budget - (initiatives.reduce(0) { |sum, i| sum + (i.current_expences_sum || 0) })
+  def approved_budget
+    approved_budget_items
+        .sum('estimated_amount')
+  end
+
+  def reserved_budget
+    initiatives
+        .sum('estimated_funding')
+  end
+
+  def spent_budget
+    initiative_expenses
+        .sum('amount')
+  end
+
+  def available_budget
+    approved_budget - spent_budget
+  end
+
+  def unspent
+    amount - spent_budget
+  end
+
+  def free
+    amount - reserved_budget
+  end
+
+  def leftover
+    amount - approved_budget
   end
 end

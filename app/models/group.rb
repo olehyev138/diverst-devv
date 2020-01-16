@@ -131,6 +131,32 @@ class Group < ApplicationRecord
   validates :banner, content_type: AttachmentHelper.common_image_types
   has_one_attached :sponsor_media
 
+  def current_annual_budget
+    annual_budgets.where(closed: false).last
+  end
+
+  def current_annual_budget=(annual_budget)
+    annual_budgets.update_all(closed: true)
+    annual_budget.update_attributes(closed: true)
+  end
+
+  delegate :unspent, to: :current_annual_budget
+  delegate :free, to: :current_annual_budget
+  delegate :leftover, to: :current_annual_budget
+  delegate :approved_budget, to: :current_annual_budget
+  delegate :spent_budget, to: :current_annual_budget
+  delegate :available_budget, to: :current_annual_budget
+
+  def annual_budget
+    current_annual_budget.amount
+  end
+
+  def annual_budget=(new_budget)
+    ab = current_annual_budget
+    ab.amount=new_budget
+    ab.save
+  end
+
   # TODO Remove after Paperclip to ActiveStorage migration
   has_attached_file :logo_paperclip, s3_permissions: 'private'
   has_attached_file :banner_paperclip
@@ -283,24 +309,6 @@ class Group < ApplicationRecord
 
   def calendar_color
     self[:calendar_color] || enterprise.try(:theme).try(:primary_color) || 'cccccc'
-  end
-
-  def approved_budget
-    annual_budget = annual_budgets.find_by(closed: false)
-    return 0 if annual_budget.nil?
-
-    (budgets.where(annual_budget_id: annual_budget.id).approved.map { |b| b.requested_amount || 0 }).reduce(0, :+)
-  end
-
-  def available_budget
-    approved_budget - spent_budget
-  end
-
-  def spent_budget
-    annual_budget = annual_budgets.find_by(closed: false)
-    return 0 if annual_budget.nil?
-
-    initiatives.joins(:annual_budget).where('annual_budgets.id = ?', annual_budget.id).reduce(0) { |sum, i| sum + (i.current_expences_sum || 0) }
   end
 
   def active_members

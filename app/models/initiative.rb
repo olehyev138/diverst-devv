@@ -429,36 +429,45 @@ class Initiative < ApplicationRecord
   def allocate_budget_funds
     self.estimated_funding = 0.0 if self.estimated_funding.nil?
 
-    if budget_item.present?
-      # If user tries to allocate all the money from the budget
-      # mark this budget item as used up
-      if self.finished_expenses?
-        errors.add(:budget_item_id, "sorry, can't choose another budget item")
-        return false
-      end
-
-      if self.estimated_funding == 0.0 || self.estimated_funding >= budget_item.available_amount
-        self.estimated_funding = budget_item.available_amount
-        budget_item.available_amount = 0
-        budget_item.is_done = true
-      else
-        # otherwise just subtract
-        budget_item.available_amount -= self.estimated_funding
-      end
-
-      budget_item.save
+    if budget_item.present? && estimated_funding > budget_item.available_amount
+      errors.add(:budget_item_id, "sorry, this budget doesn't have the sufficient funds")
+      false
     elsif funded_by_leftover?
-      if self.estimated_funding >= owner_group.leftover_money
-        self.estimated_funding = owner_group.leftover_money
-      else
-        owner_group.leftover_money -= self.estimated_funding
-      end
-
-      owner_group.save
-    else
-      # Else there is no source for money, so set funding to zero
-      self.estimated_funding = 0
+      errors.add(:budget_item_id, "TEMPORARILY UNSUPPORTED")
+      false
     end
+
+    # DEPRECATED
+    #if budget_item.present?
+    #  # If user tries to allocate all the money from the budget
+    #  # mark this budget item as used up
+    #  if self.finished_expenses?
+    #    errors.add(:budget_item_id, "sorry, can't choose another budget item")
+    #    return false
+    #  end
+    #
+    #  if self.estimated_funding == 0.0 || self.estimated_funding >= budget_item.available_amount
+    #    self.estimated_funding = budget_item.available_amount
+    #     budget_item.available_amount = 0
+    #     budget_item.is_done = true
+    #  else
+    #    # otherwise just subtract
+    #    budget_item.available_amount -= self.estimated_funding
+    #  end
+    #
+    #  #budget_item.save
+    #elsif funded_by_leftover?
+    #  if self.estimated_funding >= owner_group.leftover_money
+    #    self.estimated_funding = owner_group.leftover_money
+    #  else
+    #    owner_group.leftover_money -= self.estimated_funding
+    #  end
+    #
+    #  owner_group.save
+    #else
+    #  # Else there is no source for money, so set funding to zero
+    #  self.estimated_funding = 0
+    #end
   end
 
   def self.archived_initiatives(enterprise)
