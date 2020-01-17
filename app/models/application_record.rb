@@ -63,8 +63,4 @@ class ApplicationRecord < ActiveRecord::Base
       Rails.cache.write(key(name), block.call, expires_in: expires_in)
     end
   end
-
-  def key(name)
-    "#{self.model_name.name}::#{id}::#{name}"
-  end
 end

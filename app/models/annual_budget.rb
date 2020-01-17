@@ -1,4 +1,6 @@
 class AnnualBudget < ApplicationRecord
+  include CachedMethods
+
   belongs_to :group
   has_one :enterprise, through: :group
 
@@ -16,6 +18,9 @@ class AnnualBudget < ApplicationRecord
 
   has_many :budget_items, through: :budgets
   has_many :approved_budget_items, through: :approved_budgets, source: :budget_items
+
+  cache :approved_budget, :reserved, :spent_budget, :finalized_expenditure, :available_budget,
+        :unspent, :free, :leftover
 
   def close!
     update_column(:closed, true)
