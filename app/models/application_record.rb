@@ -57,7 +57,7 @@ class ApplicationRecord < ActiveRecord::Base
 
   def self.cached_method(name, expires_in: nil, &block)
     define_method(name) do
-      Rails.cache.fetch(key(name), expires_in: expires_in) &block
+      Rails.cache.fetch(key(name), expires_in: expires_in, &block)
     end
     define_method("#{name}!") do
       Rails.cache.write(key(name), block.call, expires_in: expires_in)
