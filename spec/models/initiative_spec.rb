@@ -228,7 +228,7 @@ RSpec.describe Initiative, type: :model do
         before do
           group.annual_budget = 2000
           annual_budget = group.current_annual_budget
-          budget = FactoryBot.create(:approved_budget, annual_budget: annual_budget)
+          budget = FactoryBot.create(:approved, annual_budget: annual_budget)
           budget_item = budget.budget_items.first
           budget_item.update(estimated_amount: 1000)
         end
@@ -308,7 +308,7 @@ RSpec.describe Initiative, type: :model do
     it 'returns data' do
       group = create(:group, annual_budget: 10000)
       annual_budget = create(:annual_budget, amount: group.annual_budget)
-      budget = create(:approved_budget, annual_budget: annual_budget)
+      budget = create(:approved, annual_budget: annual_budget)
       initiative = create(:initiative, :with_budget_item, owner_group: group, budget_item: budget.budget_items.first,
                                                           start: Date.today, end: Date.today + 1.hour)
       create_list(:initiative_expense, 5, initiative: initiative)
@@ -346,7 +346,7 @@ RSpec.describe Initiative, type: :model do
     it 'removes the child objects' do
       group = create(:group, annual_budget: 10000)
       annual_budget = create(:annual_budget, amount: group.annual_budget)
-      budget = create(:approved_budget, annual_budget: annual_budget)
+      budget = create(:approved, annual_budget: annual_budget)
       initiative = create(:initiative, owner_group_id: group.id, budget_item: budget.budget_items.first)
       initiative_update = create(:update, updatable: initiative)
       field = create(:field, field_definer: initiative)
@@ -418,7 +418,7 @@ RSpec.describe Initiative, type: :model do
     let!(:enterprise) { create(:enterprise) }
     let!(:group) { create :group, :without_outcomes, enterprise: enterprise, annual_budget: 10000 }
     let!(:annual_budget) { create(:annual_budget, group: group, amount: group.annual_budget, enterprise_id: enterprise.id) }
-    let!(:budget) { create(:approved_budget, group_id: group.id, annual_budget_id: annual_budget.id) }
+    let!(:budget) { create(:approved, group_id: group.id, annual_budget_id: annual_budget.id) }
     let!(:outcome) { create :outcome, group_id: group.id }
     let!(:pillar) { create :pillar, outcome_id: outcome.id }
     let!(:initiative) { create(:initiative, pillar: pillar,

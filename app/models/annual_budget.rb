@@ -5,10 +5,10 @@ class AnnualBudget < ApplicationRecord
   has_one :enterprise, through: :group
 
   has_many :budgets, dependent: :destroy
-  has_many :approved_budgets, -> { approved }, class_name: 'Budget'
+  has_many :approveds, -> { approved }, class_name: 'Budget'
 
   has_many :budget_items, through: :budgets
-  has_many :approved_budget_items, through: :approved_budgets, source: :budget_items
+  has_many :approved_items, through: :approveds, source: :budget_items
 
   has_many :initiatives, through: :budget_items
   has_many :initiative_expenses, through: :initiatives, source: :expenses
@@ -19,24 +19,24 @@ class AnnualBudget < ApplicationRecord
   has_many :unfinished_initiatives, -> { where(finished_expenses: false) }, through: :budget_items, source: :initiatives, class_name: 'Initiative'
   has_many :unfinished_expenses, through: :unfinished_initiatives, source: :expenses, class_name: 'InitiativeExpense'
 
-  cache :approved_budget, :reserved, :spent_budget, :finalized_expenditure, :available_budget,
-        :unspent, :free, :leftover
+  cache :approved, :reserved, :spent, :finalized_expenditure, :available,
+        :unspent, :remaining, :leftover
 
   def close!
     update_column(:closed, true)
   end
 
-  # same as available_budget
-  def approved_budget
-    approved_budget_items
+  # same as available
+  def approved
+    approved_items
         .sum('estimated_amount')
   end
 
   def reserved
-    unfinished_initiatives.sum('estimated_funding') + finalized_expenditure
+    initiatives.sum('estimated_funding')
   end
 
-  def spent_budget
+  def spent
     initiative_expenses
         .sum('amount')
   end
@@ -45,24 +45,24 @@ class AnnualBudget < ApplicationRecord
     finalized_expenses.sum('amount')
   end
 
-  def available_budget
-    approved_budget - reserved
+  def available
+    approved - reserved
   end
 
-  def unspent
-    amount - spent_budget
-  end
-
-  def free
-    amount - reserved_budget
+  def remaining
+    approved - spent
   end
 
   def leftover
-    amount - approved_budget
+    amount - spent
+  end
+
+  def free
+    amount - approved
   end
 
   def can_be_reset?
-    unfinished_initiatives.empty?
+    unfinished_initiatives.empty? && approved_items.where(is_done: false).empty?
   end
 
   def reset!

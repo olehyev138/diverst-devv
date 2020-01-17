@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Budget, type: :model do
   describe 'when validating' do
     let(:budget) { build(:budget) }
-    let(:approved_budget) { build :approved_budget }
+    let(:approved) { build :approved }
 
     it { expect(budget).to have_one(:group) }
     it { expect(budget).to belong_to(:approver).class_name('User').with_foreign_key('approver_id') }
@@ -15,7 +15,7 @@ RSpec.describe Budget, type: :model do
   end
 
   describe 'amounts' do
-    let!(:budget) { create :approved_budget }
+    let!(:budget) { create :approved }
     let(:requested_amount) { budget.budget_items.sum(:estimated_amount) }
 
     before { budget.budget_items.first.update(is_done: true) }
@@ -87,19 +87,19 @@ RSpec.describe Budget, type: :model do
     describe 'pre_approved_events' do
       let(:group) { create :group }
       let!(:budget) { create :budget, group: group }
-      let!(:approved_budget) { create :approved_budget, group: group }
+      let!(:approved) { create :approved, group: group }
 
       subject { described_class.pre_approved_events(group) }
 
       it 'contain items only from approved budgets' do
-        expect(subject).to include approved_budget.budget_items.first
+        expect(subject).to include approved.budget_items.first
         expect(subject).to_not include budget.budget_items.first
       end
 
       it 'contain only items that are not done yet' do
-        approved_budget.budget_items.first.update(is_done: true)
+        approved.budget_items.first.update(is_done: true)
 
-        expect(subject).to_not include approved_budget.budget_items.first
+        expect(subject).to_not include approved.budget_items.first
       end
 
       it 'contain Leftover item'
@@ -109,7 +109,7 @@ RSpec.describe Budget, type: :model do
       let!(:group) { create(:group) }
       let!(:annual_budget) { create(:annual_budget, group: group) }
       let!(:related_budgets) { create_list(:budget, 3, annual_budget: annual_budget, is_approved: true) }
-      let!(:approved_budget) { create :approved_budget, annual_budget: annual_budget }
+      let!(:approved) { create :approved, annual_budget: annual_budget }
 
       subject { described_class }
 
@@ -164,14 +164,14 @@ RSpec.describe Budget, type: :model do
     it 'deducts approved budget from annual budget when budget is destroyed' do
       annual_budget = create(:annual_budget, group: group, amount: group.annual_budget)
       budget.update(is_approved: true, annual_budget: annual_budget)
-      annual_budget.update(approved_budget: group.annual_budget_approved_budget, available_budget: group.annual_budget_available_budget)
+      annual_budget.update(approved: group.annual_budget_approved, available: group.annual_budget_available)
 
-      expect(annual_budget.approved_budget).to eq group.annual_budget_approved_budget
+      expect(annual_budget.approved).to eq group.annual_budget_approved
 
       budget.destroy
 
-      expect(group.annual_budget_approved_budget).to eq 0
-      expect(annual_budget.reload.approved_budget).to eq 0
+      expect(group.annual_budget_approved).to eq 0
+      expect(annual_budget.reload.approved).to eq 0
     end
   end
 end

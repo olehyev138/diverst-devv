@@ -20,7 +20,7 @@ RSpec.describe AnnualBudgetManager, type: :service, skip: 'DEPRECATED' do
     end
 
     context 'when an initiative with estimated funding and expenses made exists' do
-      let!(:budget) { create(:approved_budget, group_id: group.id, annual_budget_id: annual_budget.id) }
+      let!(:budget) { create(:approved, group_id: group.id, annual_budget_id: annual_budget.id) }
       let!(:initiative) { create(:initiative, owner_group: group, estimated_funding: budget.budget_items.first.available_amount,
                                               budget_item_id: budget.budget_items.first.id)
       }
@@ -92,15 +92,15 @@ RSpec.describe AnnualBudgetManager, type: :service, skip: 'DEPRECATED' do
   end
 
   describe '#approve' do
-    let!(:budget) { create(:approved_budget, group_id: group.id, annual_budget_id: annual_budget.id) }
+    let!(:budget) { create(:approved, group_id: group.id, annual_budget_id: annual_budget.id) }
 
-    it 'sets approved_budget in annual_budget object' do
-      expect(annual_budget.approved_budget).to eq 0
+    it 'sets approved in annual_budget object' do
+      expect(annual_budget.approved).to eq 0
 
       AnnualBudgetManager.new(group).approve
 
-      approved_budget = budget.budget_items.sum(:available_amount)
-      expect(annual_budget.reload.approved_budget).to eq approved_budget
+      approved = budget.budget_items.sum(:available_amount)
+      expect(annual_budget.reload.approved).to eq approved
     end
   end
 
@@ -114,7 +114,7 @@ RSpec.describe AnnualBudgetManager, type: :service, skip: 'DEPRECATED' do
     end
 
     context 'when existing annual_budget has leftover' do
-      let!(:budget) { create(:approved_budget, group_id: group.id, annual_budget_id: annual_budget.id) }
+      let!(:budget) { create(:approved, group_id: group.id, annual_budget_id: annual_budget.id) }
       let!(:initiative) { create(:initiative, owner_group: group, estimated_funding: budget.budget_items.first.available_amount,
                                               budget_item_id: budget.budget_items.first.id)
       }
@@ -124,9 +124,9 @@ RSpec.describe AnnualBudgetManager, type: :service, skip: 'DEPRECATED' do
       it 'carry over leftover in existing annual budget into new one' do
         annual_budget.reload
         initiative.finish_expenses!
-        expect(group.annual_budget_leftover).not_to eq 0
+        expect(group.annual_budget_remaining).not_to eq 0
         expect(group.annual_budgets.count).to eq 1
-        expect(annual_budget.leftover_money).to eq group.annual_budget_leftover
+        expect(annual_budget.leftover_money).to eq group.annual_budget_remaining
 
         AnnualBudgetManager.new(group).carry_over!
 
@@ -138,7 +138,7 @@ RSpec.describe AnnualBudgetManager, type: :service, skip: 'DEPRECATED' do
   end
 
   describe '#re_assign_annual_budget' do
-    let!(:budget) { create(:approved_budget, group_id: group.id, annual_budget_id: annual_budget.id) }
+    let!(:budget) { create(:approved, group_id: group.id, annual_budget_id: annual_budget.id) }
     let!(:initiative) { create(:initiative, owner_group: group, estimated_funding: budget.budget_items.first.available_amount,
                                             budget_item_id: budget.budget_items.first.id)
     }
@@ -152,7 +152,7 @@ RSpec.describe AnnualBudgetManager, type: :service, skip: 'DEPRECATED' do
     context 'when initiative annual_budget is not equal to annual_budget of selected budget_item' do
       # the second annual_budget is gotten from calling carry_over on AnnualBudgetManager
       let!(:annual_budget1) { group.annual_budgets.find_by(closed: false) }
-      let!(:budget1) { create(:approved_budget, group_id: group.id, annual_budget_id: annual_budget1.id) }
+      let!(:budget1) { create(:approved, group_id: group.id, annual_budget_id: annual_budget1.id) }
       let!(:initiative1) { create(:initiative, owner_group: group, estimated_funding: budget1.budget_items.first.available_amount,
                                                budget_item_id: budget1.budget_items.first.id)
       }

@@ -459,10 +459,10 @@ class Initiative < ApplicationRecord
     #
     #  #budget_item.save
     # elsif funded_by_leftover?
-    #  if self.estimated_funding >= owner_group.annual_budget_leftover
-    #    self.estimated_funding = owner_group.annual_budget_leftover
+    #  if self.estimated_funding >= owner_group.annual_budget_remaining
+    #    self.estimated_funding = owner_group.annual_budget_remaining
     #  else
-    #    owner_group.annual_budget_leftover -= self.estimated_funding
+    #    owner_group.annual_budget_remaining -= self.estimated_funding
     #  end
     #
     #  owner_group.save
@@ -490,11 +490,11 @@ class Initiative < ApplicationRecord
     annual_budget = AnnualBudget.find_or_create_by(closed: false, group_id: group.id)
     return if annual_budget.nil?
 
-    leftover_of_annual_budget = ((group.annual_budget || annual_budget.amount) - group.annual_budget_approved_budget) + group.annual_budget_available_budget
+    leftover_of_annual_budget = ((group.annual_budget || annual_budget.amount) - group.annual_budget_approved) + group.annual_budget_available
 
     group.update(leftover_money: leftover_of_annual_budget, annual_budget: annual_budget.amount)
-    annual_budget.update(amount: group.annual_budget, available_budget: group.annual_budget_available_budget,
-                         leftover_money: group.annual_budget_leftover, expenses: group.annual_budget_spent_budget,
-                         approved_budget: group.annual_budget_approved_budget)
+    annual_budget.update(amount: group.annual_budget, available: group.annual_budget_available,
+                         leftover_money: group.annual_budget_remaining, expenses: group.annual_budget_spent,
+                         approved: group.annual_budget_approved)
   end
 end

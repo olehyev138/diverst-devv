@@ -3,8 +3,8 @@ class CreationOfAnnualBudgetsAndMigrateBudgetDataToNewBudgetModel < ActiveRecord
     create_table :annual_budgets do |t|
       t.decimal :amount, default: 0.0
       t.boolean :closed, default: false
-      t.decimal :available_budget, default: 0.0
-      t.decimal :approved_budget, default: 0.0
+      t.decimal :available, default: 0.0
+      t.decimal :approved, default: 0.0
       t.decimal :expenses, default: 0.0
       t.decimal :leftover_money, default: 0.0
 
@@ -32,10 +32,10 @@ class CreationOfAnnualBudgetsAndMigrateBudgetDataToNewBudgetModel < ActiveRecord
 
         annual_budget = AnnualBudget.create(amount: group.annual_budget,
                                             closed: false,
-                                            approved_budget: group.annual_budget_approved_budget,
-                                            available_budget: group.annual_budget_available_budget,
-                                            expenses: group.annual_budget_spent_budget,
-                                            leftover_money: group.annual_budget_leftover,
+                                            approved: group.annual_budget_approved,
+                                            available: group.annual_budget_available,
+                                            expenses: group.annual_budget_spent,
+                                            leftover_money: group.annual_budget_remaining,
                                             group_id: group.id,
                                             enterprise_id: group.enterprise_id)
 

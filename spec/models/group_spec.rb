@@ -1,5 +1,10 @@
 require 'rails_helper'
 
+ANNUAL_BUDGET = 10000
+BUDGET_ITEM_AMOUNT = 5000
+INITIATIVE_ESTIMATE = 2500
+EXPENSE_AMOUNT = 1250
+
 RSpec.describe Group, type: :model do
   include ActiveJob::TestHelper
   it_behaves_like 'it Defines Fields'
@@ -428,10 +433,10 @@ RSpec.describe Group, type: :model do
     end
   end
 
-  describe '#approved_budget' do
+  describe '#approved' do
     it 'returns 0' do
       group = build(:group)
-      expect(group.annual_budget_approved_budget).to eq(0)
+      expect(group.annual_budget_approved).to eq(0)
     end
 
     it 'returns approved budget' do
@@ -440,43 +445,43 @@ RSpec.describe Group, type: :model do
       budget = create(:budget, group: group, is_approved: true, annual_budget_id: annual_budget.id)
       budget.budget_items.update_all(estimated_amount: 500, is_done: true)
 
-      expect(group.annual_budget_approved_budget).to eq 1500
+      expect(group.annual_budget_approved).to eq 1500
     end
   end
 
-  describe '#available_budget' do
+  describe '#available' do
     it 'returns 0' do
       group = build(:group)
-      expect(group.annual_budget_available_budget).to eq(0)
+      expect(group.annual_budget_available).to eq(0)
     end
 
     it 'returns available budget' do
-      group = create(:group, annual_budget: 10000)
+      group = create(:group, annual_budget: ANNUAL_BUDGET)
       budget = create(:budget, group: group, is_approved: true)
-      create(:budget_item, budget: budget, estimated_amount: 1000)
+      create(:budget_item, budget: budget, estimated_amount: 5000)
 
-      expect(group.annual_budget_available_budget).to eq(group.annual_budget_approved_budget - group.annual_budget_spent_budget)
+      expect(group.annual_budget_available).to eq(group.annual_budget_approved - group.annual_budget_spent)
     end
   end
 
 
-  describe '#spent_budget' do
+  describe '#spent' do
     it 'returns 0' do
       group = build(:group)
-      expect(group.annual_budget_spent_budget).to eq(0)
+      expect(group.annual_budget_spent).to eq(0)
     end
 
     it 'returns spent budget' do
       group = create(:group, annual_budget: 10000)
       annual_budget = create(:annual_budget, group: group, closed: false, amount: group.annual_budget)
-      budget = create(:approved_budget, group_id: group.id, annual_budget_id: annual_budget.id)
+      budget = create(:approved, group_id: group.id, annual_budget_id: annual_budget.id)
       initiative = create(:initiative, owner_group: group,
                                        estimated_funding: budget.budget_items.first.available_amount,
                                        budget_item_id: budget.budget_items.first.id)
       expense = create(:initiative_expense, initiative_id: initiative.id, amount: 10)
       initiative.finish_expenses!
 
-      expect(group.annual_budget_spent_budget).to eq 10
+      expect(group.annual_budget_spent).to eq 10
     end
   end
 
@@ -603,8 +608,16 @@ RSpec.describe Group, type: :model do
 
   describe '#title_with_leftover_amount' do
     it 'returns title_with_leftover_amount' do
-      group = build(:group)
-      expect(group.title_with_leftover_amount).to eq("Create event from #{group.name} leftover ($#{group.annual_budget_leftover})")
+      group = create(:group)
+      annual_budget = create(:annual_budget, group: group, amount: ANNUAL_BUDGET)
+      budget = create(:approved, :zero_budget, annual_budget: annual_budget)
+      budget_item = budget.budget_items.first
+      budget_item.update(estimated_amount: BUDGET_ITEM_AMOUNT)
+      initiative = create(:initiative, owner_group: group, budget_item: budget.budget_items.first, estimated_funding: INITIATIVE_ESTIMATE)
+      build(:initiative_expense, initiative: initiative, amount: EXPENSE_AMOUNT )
+
+
+      expect(group.title_with_leftover_amount).to eq("Create event from #{group.name} leftover ($%.2f)" % (BUDGET_ITEM_AMOUNT - INITIATIVE_ESTIMATE).round(2))
     end
   end
 

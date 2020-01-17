@@ -11,14 +11,14 @@ class AnnualBudgetManager
     return if group.annual_budget == 0 || group.annual_budget.nil?
 
     # at this point, group.annual_budget != 0 so we either find or create annual budget and update with group annual budget values
-    # i.e annual budget, spent_budget, approved_budget and leftover_money
+    # i.e annual budget, spent, approved and leftover_money
     find_or_create_annual_budget_and_update
     annual_budget = group.annual_budgets.where(closed: false, enterprise_id: group.enterprise_id).where.not(amount: 0).last
 
     # if no initiatives are present, then set annual budget values to 0
     if no_initiatives_present?
       group.update({ annual_budget: 0, leftover_money: 0 })
-      annual_budget.update(amount: 0, expenses: 0, available_budget: 0, approved_budget: 0, leftover_money: 0, enterprise_id: group.enterprise_id)
+      annual_budget.update(amount: 0, expenses: 0, available: 0, approved: 0, leftover_money: 0, enterprise_id: group.enterprise_id)
       return true
     end
 
@@ -31,7 +31,7 @@ class AnnualBudgetManager
   def edit(annual_budget_params)
     return if annual_budget_params['annual_budget'].to_i == 0
 
-    annual_budget_params['leftover_money'] = (annual_budget_params['annual_budget'].to_f - group.annual_budget_approved_budget.to_f) + group.annual_budget_available_budget.to_f
+    annual_budget_params['leftover_money'] = (annual_budget_params['annual_budget'].to_f - group.annual_budget_approved.to_f) + group.annual_budget_available.to_f
 
     group.update(annual_budget_params) unless annual_budget_params.empty?
     find_or_create_annual_budget_and_update
@@ -43,7 +43,7 @@ class AnnualBudgetManager
 
   def carry_over!
     # no point in carrying over zero amount in leftover money
-    return if group.annual_budget_leftover == 0 || group.annual_budget_leftover.nil?
+    return if group.annual_budget_remaining == 0 || group.annual_budget_remaining.nil?
 
     # find an opened annual budget with a non-zero leftover money
     annual_budget = group.annual_budgets.where(closed: false, enterprise_id: group.enterprise_id).where.not(leftover_money: 0).last
@@ -56,7 +56,7 @@ class AnnualBudgetManager
     new_annual_budget = AnnualBudget.find_or_create_by(closed: false, group_id: group.id, enterprise_id: group.enterprise_id)
     new_annual_budget.update(amount: annual_budget.leftover_money)
 
-    return true if group.update({ annual_budget: group.annual_budget_leftover, leftover_money: 0 })
+    return true if group.update({ annual_budget: group.annual_budget_remaining, leftover_money: 0 })
   end
 
   # this method to resolve inconsistencies where the annual budget of an initiative is not equal to annual budget of selected budget item
@@ -79,9 +79,9 @@ class AnnualBudgetManager
 
   def find_or_create_annual_budget_and_update
     annual_budget = AnnualBudget.find_or_create_by(closed: false, group_id: group.id, enterprise_id: group.enterprise_id)
-    annual_budget.update(amount: group.annual_budget, available_budget: group.annual_budget_available_budget,
-                         leftover_money: group.annual_budget_leftover, expenses: group.annual_budget_spent_budget,
-                         approved_budget: group.annual_budget_approved_budget, enterprise_id: group.enterprise_id)
+    annual_budget.update(amount: group.annual_budget, available: group.annual_budget_available,
+                         leftover_money: group.annual_budget_remaining, expenses: group.annual_budget_spent,
+                         approved: group.annual_budget_approved, enterprise_id: group.enterprise_id)
   end
 
   def create_new_annual_budget
