@@ -83,7 +83,7 @@ export function GroupLeaderFormInner({ handleSubmit, handleChange, handleBlur, v
               </DiverstSubmit>
               <Button
                 disabled={props.isCommitting}
-                to={links.GroupLeadersIndex}
+                to={links.index}
                 component={WrappedNavLink}
               >
                 <DiverstFormattedMessage {...messages.cancel} />
@@ -155,7 +155,7 @@ GroupLeaderFormInner.propTypes = {
   isCommitting: PropTypes.bool,
   isFormLoading: PropTypes.bool,
   links: PropTypes.shape({
-    groupLeadersIndex: PropTypes.string
+    index: PropTypes.string
   }),
 };
 export default compose(

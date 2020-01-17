@@ -43,7 +43,7 @@ export function GroupLeaderEditPage(props) {
   const groupId = rs.params('group_id');
   const groupLeaderId = rs.params('group_leader_id');
   const links = {
-    GroupLeadersIndex: ROUTES.group.manage.leaders.index.path(rs.params('group_id')),
+    index: ROUTES.group.manage.leaders.index.path(rs.params('group_id')),
   };
 
   useEffect(() => {
