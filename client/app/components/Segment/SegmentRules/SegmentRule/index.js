@@ -37,7 +37,10 @@ const SegmentRule = (props) => {
 };
 
 SegmentRule.propTypes = {
-  ruleName: PropTypes.string
+  ruleName: PropTypes.string,
+  currentEnterprise: PropTypes.shape({
+    id: PropTypes.number,
+  }).isRequired
 };
 
 export default SegmentRule;

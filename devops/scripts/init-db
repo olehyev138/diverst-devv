@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# Initialize database on a new client's backend
+# Usage: ./init-db <bastion-url> <eb-url> <key-path>
+
+USER=ec2-user
+BASTION_URL=$1
+EB_URL=$2
+SSH_KEY=$3
+
+# Setup ssh key forwarding so we can authenticate with the private instance
+eval "$(ssh-agent -s)"
+ssh-add "$SSH_KEY"
+
+ssh -A -i "$SSH_KEY" -J "$USER@$BASTION_URL" "$USER@$EB_URL" -o ConnectTimeout=1800 -T << "EOF"
+  EB_DEPLOY_DIR=$(sudo /opt/elasticbeanstalk/bin/get-config container -k app_deploy_dir)
+  cd $EB_DEPLOY_DIR
+
+  rails db:schema:load
+  rails db:migrate
+  rails db:seed
+EOF

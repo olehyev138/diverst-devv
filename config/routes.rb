@@ -39,6 +39,8 @@ Diverst::Application.routes.draw do
         member do
           post '/sso_login',    to: 'enterprises#sso_login'
           post '/sso_link',     to: 'enterprises#sso_link'
+          get  '/fields',       to: 'enterprises#fields'
+          post '/create_field', to: 'enterprises#create_field'
         end
       end
       resources :expenses
@@ -59,6 +61,14 @@ Diverst::Application.routes.draw do
       resources :graphs
       resources :groups do
         member do
+          get  '/fields',       to: 'groups#fields'
+          post '/create_field', to: 'groups#create_field'
+
+          get  '/initiatives', to: 'groups#initiatives'
+          get  '/updates', to: 'groups#updates'
+          get  '/update_prototype', to: 'groups#update_prototype'
+          post '/create_update', to: 'groups#create_update'
+
           put '/assign_leaders', to: 'groups#assign_leaders'
         end
       end
@@ -80,6 +90,13 @@ Diverst::Application.routes.draw do
       resources :initiatives do
         member do
           post '/qrcode', to: 'initiatives#generate_qr_code'
+
+          get  '/fields',       to: 'initiatives#fields'
+          post '/create_field', to: 'initiatives#create_field'
+
+          get  '/updates', to: 'initiatives#updates'
+          get  '/update_prototype', to: 'initiatives#update_prototype'
+          post '/create_update', to: 'initiatives#create_update'
         end
       end
       resources :initiative_comments
@@ -134,7 +151,10 @@ Diverst::Application.routes.draw do
       resources :pillars
       resources :policy_groups
       resources :policy_group_templates
-      resources :polls
+      resources :polls do
+        get  '/fields',       to: 'polls#fields'
+        post '/create_field', to: 'polls#create_field'
+      end
       resources :poll_responses
       resources :polls_segments
       resources :questions
@@ -159,6 +179,7 @@ Diverst::Application.routes.draw do
       resources :topics
       resources :topic_feedbacks
       resources :twitter_accounts
+      resources :updates, only: [:show, :update, :destroy]
       resources :user_rewards
       resources :user_reward_actions
       resources :user, only: [] do
@@ -253,5 +274,5 @@ Diverst::Application.routes.draw do
   end
 
   # Note the contraints that do not provide a routing error if we're looking for `rails/` because of ActiveStorage URLs
-  match '*a', to: 'diverst#routing_error', via: [:get, :post, :delete, :patch, :put], constraints: lambda { |request| !request.path_parameters[:a].start_with?('rails/') }
+  match '*a', to: 'diverst#routing_error', via: :all, constraints: lambda { |request| !request.path_parameters[:a].start_with?('rails/') }
 end

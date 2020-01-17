@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Enterprise, type: :model do
+  it_behaves_like 'it Defines Fields'
+
   describe 'when validating' do
     let(:enterprise) { build(:enterprise) }
 
@@ -146,7 +148,7 @@ RSpec.describe Enterprise, type: :model do
     it 'removes the child objects', skip: 'this spec will pass when PR 1245 is merged to master' do
       enterprise = create(:enterprise)
       user = create(:user, enterprise: enterprise)
-      field = create(:field, enterprise: enterprise)
+      field = create(:field, field_definer: enterprise)
       topic = create(:topic, enterprise: enterprise)
       segment = create(:segment, enterprise: enterprise)
       group = create(:group, enterprise: enterprise)

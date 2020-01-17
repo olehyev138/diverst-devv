@@ -5,7 +5,7 @@ RSpec.describe InitiativeFieldTimeSeriesDownloadJob, type: :job do
   let(:user) { create(:user, enterprise: enterprise) }
   let(:group) { create(:group, enterprise: enterprise) }
   let(:initiative) { initiative_of_group(group) }
-  let(:field) { create :field, initiative: initiative, elasticsearch_only: false }
+  let(:field) { create(:field, field_definer: initiative, elasticsearch_only: false) }
   let(:initiative_field) { create :initiative_field, initiative: initiative, field: field }
 
   describe '#perform' do

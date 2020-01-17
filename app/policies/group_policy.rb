@@ -11,7 +11,11 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def show?
-    index?
+    index? || is_an_accepted_member?
+  end
+
+  def initiatives?
+    show?
   end
 
   def create?
@@ -21,6 +25,26 @@ class GroupPolicy < ApplicationPolicy
     return true if basic_group_leader_permission?('groups_create')
 
     @policy_group.groups_create?
+  end
+
+  def fields?
+    update?
+  end
+
+  def create_field?
+    update?
+  end
+
+  def updates?
+    update?
+  end
+
+  def update_prototype?
+    updates?
+  end
+
+  def create_update?
+    update?
   end
 
   def update_all_sub_groups?

@@ -1,13 +1,20 @@
 class Initiative < ApplicationRecord
   include PublicActivity::Common
   include Initiative::Actions
+  include DefinesFields
+
+  @@field_users = [:updates]
+  mattr_reader :field_users
 
   attr_accessor :associated_budget_id, :skip_allocate_budget_funds, :from, :to
 
   belongs_to :pillar
   belongs_to :owner, class_name: 'User'
-  has_many :updates, class_name: 'InitiativeUpdate', dependent: :destroy
-  has_many :fields, dependent: :delete_all
+  has_many :updates, as: :updatable, dependent: :destroy
+  has_many :fields,
+           as: :field_definer,
+           dependent: :destroy,
+           after_add: :add_missing_field_background_job
   has_many :expenses, dependent: :destroy, class_name: 'InitiativeExpense'
   has_many :user_reward_actions
 
@@ -124,7 +131,7 @@ class Initiative < ApplicationRecord
   end
 
   def picture_location(expires_in: 3600, default_style: :medium)
-    return nil if !picture.attached?
+    return nil unless picture.attached?
 
     # default_style = :medium if !picture.styles.keys.include? default_style
     # picture.expiring_url(expires_in, default_style)
@@ -132,7 +139,7 @@ class Initiative < ApplicationRecord
   end
 
   def qr_code_location(expires_in: 3600, default_style: :medium)
-    return nil if !qr_code.attached?
+    return nil unless qr_code.attached?
 
     # default_style = :medium if !qr_code.styles.keys.include? default_style
     # qr_code.expiring_url(expires_in, default_style)

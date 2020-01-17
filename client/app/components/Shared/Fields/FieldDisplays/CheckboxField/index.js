@@ -8,8 +8,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import dig from 'object-dig';
-import { connect, Field, getIn } from 'formik';
-
 import { List, ListItem, Typography, ListItemIcon } from '@material-ui/core';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 
@@ -57,4 +55,4 @@ CustomCheckbox.propTypes = {
   dataLocation: PropTypes.string,
 };
 
-export default connect(CustomCheckbox);
+export default CustomCheckbox;

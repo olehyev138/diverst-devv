@@ -4,7 +4,7 @@ RSpec.describe GroupFieldTimeSeriesDownloadJob, type: :job do
   let(:enterprise) { create(:enterprise) }
   let(:user) { create(:user, enterprise: enterprise) }
   let!(:group) { create(:group, enterprise: enterprise) }
-  let!(:field) { create(:field, type: 'NumericField', group: group, field_type: 'regular') }
+  let!(:field) { create(:field, type: 'NumericField', field_definer: group, field_type: 'regular') }
 
   describe '#perform' do
     it 'creates a downloadable csv file' do

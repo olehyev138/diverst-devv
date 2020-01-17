@@ -48,7 +48,8 @@ const MentorshipLayout = ({ component: Component, ...rest }) => {
   const rs = new RouteService({ computedMatch, location });
 
   useEffect(() => {
-    const [userId1] = rs.params('user_id');
+    const userId1A = rs.params('user_id');
+    const userId1 = userId1A ? userId1A[0] : null;
     const userId2 = dig(rest, 'globalUser', 'id');
 
     // const userId = userId1;

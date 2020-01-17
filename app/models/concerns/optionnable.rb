@@ -12,7 +12,8 @@ module Optionnable
     return if options_text.nil?
 
     options_array = options_text.split(/\n+/)
-    self.options_text = options_array.reduce('') { |options, s| options + "#{s.strip}\n" }
+    trimmed_strings = options_array.map { |s| "#{s.strip}" }
+    self.options_text = trimmed_strings.join("\n")
     options_text.delete!("\t\r")
   end
 

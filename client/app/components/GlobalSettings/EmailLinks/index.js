@@ -16,7 +16,7 @@ import messages from 'containers/GlobalSettings/Email/messages';
 const styles = theme => ({});
 
 /* eslint-disable react/no-multi-comp */
-export function GlobalSettingsLinks(props) {
+export function EmailLinks(props) {
   const { currentTab } = props;
 
   return (
@@ -43,15 +43,15 @@ export function GlobalSettingsLinks(props) {
   );
 }
 
-GlobalSettingsLinks.propTypes = {
+EmailLinks.propTypes = {
   classes: PropTypes.object,
   currentTab: PropTypes.number,
   currentGroup: PropTypes.object,
 };
 
-export const StyledGroupManageLinks = withStyles(styles)(GlobalSettingsLinks);
+export const StyledGroupManageLinks = withStyles(styles)(EmailLinks);
 
 export default compose(
   withStyles(styles),
   memo,
-)(GlobalSettingsLinks);
+)(EmailLinks);

@@ -7,7 +7,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { connect, getIn } from 'formik';
 import dig from 'object-dig';
 
 import { TextField, Typography } from '@material-ui/core';
@@ -16,7 +15,6 @@ const CustomText = (props) => {
   const { classes } = props;
 
   const fieldDatum = dig(props, 'fieldDatum');
-  const fieldDatumIndex = dig(props, 'fieldDatumIndex');
 
   return (
     <div className={classes.cell}>
@@ -37,4 +35,4 @@ CustomText.propTypes = {
   inputType: PropTypes.string,
 };
 
-export default connect(CustomText);
+export default CustomText;

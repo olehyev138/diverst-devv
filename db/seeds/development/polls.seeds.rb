@@ -22,9 +22,8 @@ after 'development:segments' do
         match_exclude: true,
         match_polarity: true,
         match_weight: 0.2,
-        enterprise: enterprise,
         options_text: "Yes
-    No"
+No"
       )
 
       p.fields.new(
@@ -36,11 +35,10 @@ after 'development:segments' do
         match_exclude: true,
         match_polarity: true,
         match_weight: 0.2,
-        enterprise: enterprise,
         options_text: "I wouldn't pay more
-    $1 - $5
-    $5 - $10
-    $10 - $15"
+$1 - $5
+$5 - $10
+$10 - $15"
       )
 
       p.fields.new(
@@ -52,14 +50,13 @@ after 'development:segments' do
         match_exclude: true,
         match_polarity: true,
         match_weight: 0.2,
-        enterprise: enterprise,
         alternative_layout: true, # Select2
         options_text: "Taco
-    Nacho
-    Churro
-    Ice cream
-    Pizza
-    Hot Dog"
+Nacho
+Churro
+Ice cream
+Pizza
+Hot Dog"
       )
 
       p.fields.new(
@@ -71,7 +68,6 @@ after 'development:segments' do
         match_exclude: true,
         match_polarity: true,
         match_weight: 0.2,
-        enterprise: enterprise,
         alternative_layout: true # Multiline
       )
 

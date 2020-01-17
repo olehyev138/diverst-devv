@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe InitiativeUpdate, type: :model do
+  it_behaves_like 'it Contains Field Data'
+
   describe 'test associations' do
     let!(:initiative_update) { build_stubbed(:initiative_update) }
 

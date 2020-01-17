@@ -8,8 +8,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import dig from 'object-dig';
-import { connect, Field, getIn } from 'formik';
-
 import Select from 'components/Shared/DiverstSelect';
 import { Typography } from '@material-ui/core';
 
@@ -38,4 +36,4 @@ CustomSelect.propTypes = {
   dataLocation: PropTypes.string,
 };
 
-export default connect(CustomSelect);
+export default CustomSelect;

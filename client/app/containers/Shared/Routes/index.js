@@ -32,10 +32,23 @@ import {
   GroupMessagePage,
   GroupMessageCreatePage,
   GroupMessageEditPage,
+  GroupPlanUpdateCreatePage,
   OutcomesPage,
   OutcomeCreatePage,
   OutcomeEditPage,
+  GroupPlanLayout,
+  GroupKPILayout,
   GroupPlanKpiPage,
+  GroupPlanFieldsPage,
+  GroupPlanUpdatesPage,
+  GroupPlanUpdatePage,
+  EventManageLayout,
+  EventManageFieldsPage,
+  EventManageUpdatesPage,
+  EventManageUpdatePage,
+  EventManageUpdateEditPage,
+  EventManageUpdateCreatePage,
+  GroupPlanUpdateEditPage,
   GroupMemberListPage,
   GroupMemberCreatePage,
   NotFoundPage,
@@ -201,7 +214,6 @@ export default function Routes(props) {
       <GroupLayout exact {...expandRoute(ROUTES.group.members.index)} component={GroupMemberListPage} />
       <GroupLayout exact {...expandRoute(ROUTES.group.events.index)} component={EventsPage} />
       <GroupLayout exact {...expandRoute(ROUTES.group.news.index)} component={NewsFeedPage} />
-      <GroupLayout exact {...expandRoute(ROUTES.group.plan.outcomes.index)} component={OutcomesPage} />
 
       { /* Group Events */ }
       <GroupLayout {...expandRoute(ROUTES.group.events.new)} component={EventCreatePage} />
@@ -224,16 +236,26 @@ export default function Routes(props) {
 
       { /* Group Plan */ }
       { /* Group Plan - Structure/Outcomes */ }
-      <GroupLayout exact {...expandRoute(ROUTES.group.plan.outcomes.index)} component={OutcomesPage} />
-      <GroupLayout {...expandRoute(ROUTES.group.plan.outcomes.new)} component={OutcomeCreatePage} />
-      <GroupLayout {...expandRoute(ROUTES.group.plan.outcomes.edit)} component={OutcomeEditPage} />
+      <GroupPlanLayout exact {...expandRoute(ROUTES.group.plan.outcomes.index)} component={OutcomesPage} />
+      <GroupPlanLayout {...expandRoute(ROUTES.group.plan.outcomes.new)} component={OutcomeCreatePage} />
+      <GroupPlanLayout {...expandRoute(ROUTES.group.plan.outcomes.edit)} component={OutcomeEditPage} />
 
       { /* Group Plan - Events */ }
-      <GroupLayout exact {...expandRoute(ROUTES.group.plan.events.index)} component={GroupPlanEventsPage} />
-      <GroupLayout {...expandRoute(ROUTES.group.plan.events.manage.metrics)} component={EventManageMetricsPage} />
+      <GroupPlanLayout exact {...expandRoute(ROUTES.group.plan.events.index)} component={GroupPlanEventsPage} />
+      <EventManageLayout exact {...expandRoute(ROUTES.group.plan.events.manage.metrics)} component={EventManageMetricsPage} />
+      <EventManageLayout exact {...expandRoute(ROUTES.group.plan.events.manage.fields)} component={EventManageFieldsPage} />
+      <EventManageLayout exact {...expandRoute(ROUTES.group.plan.events.manage.updates.edit)} component={EventManageUpdateEditPage} />
+      <EventManageLayout exact {...expandRoute(ROUTES.group.plan.events.manage.updates.new)} component={EventManageUpdateCreatePage} />
+      <EventManageLayout exact {...expandRoute(ROUTES.group.plan.events.manage.updates.show)} component={EventManageUpdatePage} />
+      <EventManageLayout exact {...expandRoute(ROUTES.group.plan.events.manage.updates.index)} component={EventManageUpdatesPage} />
 
       { /* Group Plan - KPI */ }
-      <GroupLayout exact {...expandRoute(ROUTES.group.plan.kpi.index)} component={GroupPlanKpiPage} />
+      <GroupKPILayout exact {...expandRoute(ROUTES.group.plan.kpi.metrics)} component={GroupPlanKpiPage} />
+      <GroupKPILayout exact {...expandRoute(ROUTES.group.plan.kpi.fields)} component={GroupPlanFieldsPage} />
+      <GroupKPILayout exact {...expandRoute(ROUTES.group.plan.kpi.updates.edit)} component={GroupPlanUpdateEditPage} />
+      <GroupKPILayout exact {...expandRoute(ROUTES.group.plan.kpi.updates.new)} component={GroupPlanUpdateCreatePage} />
+      <GroupKPILayout exact {...expandRoute(ROUTES.group.plan.kpi.updates.show)} component={GroupPlanUpdatePage} />
+      <GroupKPILayout exact {...expandRoute(ROUTES.group.plan.kpi.updates.index)} component={GroupPlanUpdatesPage} />
 
       { /* Group Manage */ }
       { /* TODO - redirect /manage -> /manage/settings */ }

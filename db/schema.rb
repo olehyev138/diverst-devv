@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_10_084256) do
+ActiveRecord::Schema.define(version: 2020_01_10_153452) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "name", null: false
@@ -431,16 +431,19 @@ ActiveRecord::Schema.define(version: 2019_12_10_084256) do
   end
 
   create_table "field_data", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
-    t.bigint "user_id"
+    t.bigint "field_user_id"
+    t.string "field_user_type"
     t.bigint "field_id"
     t.string "data"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["field_id"], name: "index_field_data_on_field_id"
-    t.index ["user_id"], name: "index_field_data_on_user_id"
+    t.index ["field_user_id", "field_user_type"], name: "index_field_data_on_field_user_id_and_field_user_type"
   end
 
   create_table "fields", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.bigint "field_definer_id"
+    t.string "field_definer_type"
     t.string "type", collation: "utf8mb4_unicode_ci"
     t.string "title", collation: "utf8mb4_unicode_ci"
     t.integer "gamification_value", default: 1
@@ -459,14 +462,7 @@ ActiveRecord::Schema.define(version: 2019_12_10_084256) do
     t.boolean "elasticsearch_only", default: false
     t.boolean "required", default: false
     t.string "field_type", collation: "utf8mb4_unicode_ci"
-    t.bigint "enterprise_id"
-    t.bigint "group_id"
-    t.bigint "poll_id"
-    t.bigint "initiative_id"
-    t.index ["enterprise_id"], name: "index_fields_on_enterprise_id"
-    t.index ["group_id"], name: "index_fields_on_group_id"
-    t.index ["initiative_id"], name: "index_fields_on_initiative_id"
-    t.index ["poll_id"], name: "index_fields_on_poll_id"
+    t.index ["field_definer_id", "field_definer_type"], name: "index_fields_on_field_definer_id_and_field_definer_type"
   end
 
   create_table "folder_shares", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
@@ -1504,6 +1500,22 @@ ActiveRecord::Schema.define(version: 2019_12_10_084256) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["group_id"], name: "index_twitter_accounts_on_group_id"
+  end
+
+  create_table "updates", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+    t.text "data"
+    t.text "comments"
+    t.date "report_date"
+    t.bigint "owner_id"
+    t.string "updatable_type"
+    t.bigint "updatable_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "previous_id"
+    t.index ["owner_id"], name: "index_updates_on_owner_id"
+    t.index ["previous_id"], name: "index_updates_on_previous_id"
+    t.index ["report_date"], name: "index_updates_on_report_date"
+    t.index ["updatable_type", "updatable_id"], name: "index_updates_on_updatable_type_and_updatable_id"
   end
 
   create_table "user_groups", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|

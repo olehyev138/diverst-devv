@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe GroupUpdate, type: :model do
+  it_behaves_like 'it Contains Field Data'
+
   describe 'when validating' do
     let(:group_update) { build_stubbed(:group_update) }
 

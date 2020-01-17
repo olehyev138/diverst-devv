@@ -6,6 +6,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Fade from '@material-ui/core/Fade';
 
 import GroupPlanLinks from 'components/Group/GroupPlan/GroupPlanLinks';
+import GroupLayout from '../GroupLayout';
 
 const styles = theme => ({
   content: {
@@ -31,26 +32,36 @@ const GroupPlanLayout = ({ component: Component, classes, ...rest }) => {
   const { location, ...other } = rest;
 
   /* Get last element of current path, ie: '/group/:id/plan/outcomes -> outcomes */
-  const currentPagePath = location.pathname.split('/').pop();
+  let currentPage = Object.keys(PlanPages).find(page => location.pathname.includes(page));
+  if (!currentPage && location.pathname.includes('outcomes'))
+    currentPage = 'events';
 
-  const [tab, setTab] = useState(getPageTab(currentPagePath));
+  const [tab, setTab] = useState(PlanPages[currentPage]);
 
   useEffect(() => {
-    if (tab !== getPageTab(currentPagePath))
-      setTab(getPageTab(currentPagePath));
-  }, [currentPagePath]);
+    if (tab !== PlanPages[currentPage])
+      setTab(PlanPages[currentPage]);
+  }, [currentPage]);
 
   return (
     <React.Fragment>
-      <GroupPlanLinks
-        currentTab={tab}
+      <GroupLayout
         {...rest}
+        component={matchProps => (
+          <React.Fragment>
+            <GroupPlanLinks
+              currentTab={tab}
+              {...rest}
+              {...matchProps}
+            />
+            <Fade in appear>
+              <div className={classes.content}>
+                <Component {...rest} {...matchProps} />
+              </div>
+            </Fade>
+          </React.Fragment>
+        )}
       />
-      <Fade in appear>
-        <div className={classes.content}>
-          <Component {...other} />
-        </div>
-      </Fade>
     </React.Fragment>
   );
 };

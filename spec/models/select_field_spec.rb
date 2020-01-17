@@ -48,7 +48,7 @@ RSpec.describe SelectField, type: :model do
   describe '#popularity_for_value' do
     it 'returns 1' do
       enterprise = create(:enterprise)
-      select_field = SelectField.new(type: 'SelectField', title: 'Gender', options_text: "Male\nFemale", enterprise: enterprise)
+      select_field = SelectField.new(type: 'SelectField', title: 'Gender', options_text: "Male\nFemale", field_definer: enterprise)
       select_field.save!
       user = create(:user, data: "{\"#{select_field.id}\":[\"Female\"]}")
       popularity = select_field.popularity_for_value('Female', [user])
@@ -57,7 +57,7 @@ RSpec.describe SelectField, type: :model do
 
     it 'returns 0.5' do
       enterprise = create(:enterprise)
-      select_field = SelectField.new(type: 'SelectField', title: 'Gender', options_text: "Male\nFemale", enterprise: enterprise)
+      select_field = SelectField.new(type: 'SelectField', title: 'Gender', options_text: "Male\nFemale", field_definer: enterprise)
       select_field.save!
       user_1 = create(:user, data: "{\"#{select_field.id}\":[\"Female\"]}")
       user_2 = create(:user, data: "{\"#{select_field.id}\":[\"Male\"]}")
@@ -69,7 +69,7 @@ RSpec.describe SelectField, type: :model do
   describe '#match_score_between' do
     it 'returns 0.5' do
       enterprise = create(:enterprise)
-      select_field = SelectField.new(type: 'SelectField', title: 'Gender', options_text: "Male\nFemale", enterprise: enterprise)
+      select_field = SelectField.new(type: 'SelectField', title: 'Gender', options_text: "Male\nFemale", field_definer: enterprise)
       select_field.save!
       user_1 = create(:user, data: "{\"#{select_field.id}\":[\"Female\"]}", enterprise: enterprise)
       user_2 = create(:user, data: "{\"#{select_field.id}\":[\"Male\"]}", enterprise: enterprise)
@@ -84,7 +84,7 @@ RSpec.describe SelectField, type: :model do
       enterprise = create(:enterprise)
       user = create(:user)
       poll = create(:poll, enterprise: enterprise, owner: user)
-      select_field = SelectField.new(type: 'SelectField', title: 'What is 1 + 1?', options_text: "1\r\n2\r\n3\r\n4\r\n5\r\n6\r\n7", poll: poll)
+      select_field = poll.fields.find_by(title: 'What is 1 + 1?')
       select_field.save!
       create(:poll_response, poll: poll, user: user, data: "{\"#{select_field.id}\":[\"4\"]}")
 

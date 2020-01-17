@@ -60,19 +60,14 @@ export function EventsPage(props) {
   const { outcomes, outcomesTotal, isLoading } = props;
 
   return (
-    <GroupPlanLayout
-      component={() => (
-        <EventsList
-          outcomes={outcomes}
-          outcomesTotal={outcomesTotal}
-          links={links}
-          isLoading={isLoading}
-          handlePagination={handlePagination}
-          params={params}
-          rowsPerPageOptions={[1, 2, 3, 5]}
-        />
-      )}
-      {...props}
+    <EventsList
+      outcomes={outcomes}
+      outcomesTotal={outcomesTotal}
+      links={links}
+      isLoading={isLoading}
+      handlePagination={handlePagination}
+      params={params}
+      rowsPerPageOptions={[1, 2, 3, 5]}
     />
   );
 }

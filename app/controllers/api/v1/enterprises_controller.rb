@@ -1,6 +1,7 @@
 class Api::V1::EnterprisesController < DiverstController
   skip_before_action :verify_api_key, only: [:sso_login, :sso_link]
   skip_before_action :verify_jwt_token, only: [:sso_login, :sso_link]
+  include Api::V1::Concerns::DefinesFields
 
   def sso_login
     redirect_to klass.sso_login(self.diverst_request, params)

@@ -1,9 +1,12 @@
 class User < ApplicationRecord
-  has_secure_password
+  @@field_definer_name = 'enterprise'
+  @@field_association_name = 'fields'
+  mattr_reader :field_association_name, :field_definer_name
 
+  has_secure_password
   include PublicActivity::Common
   include User::Actions
-  include ContainsFields
+  include ContainsFieldData
   include TimeZoneValidation
 
   enum groups_notifications_frequency: [:hourly, :daily, :weekly, :disabled]
@@ -24,7 +27,7 @@ class User < ApplicationRecord
   has_one :policy_group,  dependent: :destroy, inverse_of: :user
   has_one :device,        dependent: :destroy, inverse_of: :user
 
-  has_many :field_data, class_name: 'FieldData'
+  has_many :field_data, class_name: 'FieldData', as: :field_user, dependent: :destroy
 
   # sessions
   has_many :sessions, dependent: :destroy
@@ -161,12 +164,6 @@ class User < ApplicationRecord
   scope :accepting_mentee_requests, -> { where(accepting_mentee_requests: true) }
 
   accepts_nested_attributes_for :availabilities, allow_destroy: true
-
-  # All user fields for the users enterprise
-  # TODO: filter on type: 'user'
-  def fields
-    self.enterprise.fields
-  end
 
   # Format users field data for a ES index
   # Returns { <field_data.id> => <field_data.data } }

@@ -15,6 +15,7 @@
 import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import dig from 'object-dig';
 
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
@@ -27,23 +28,33 @@ import {
   selectFieldTotal,
   selectIsLoading,
   selectIsCommitting,
-  selectCommitSuccess
-} from 'containers/GlobalSettings/Field/selectors';
+  selectCommitSuccess,
+  selectHasChanged,
+} from 'containers/Shared/Field/selectors';
 import {
   getFieldsBegin, createFieldBegin, updateFieldBegin,
   fieldUnmount, deleteFieldBegin
-} from 'containers/GlobalSettings/Field/actions';
+} from 'containers/Shared/Field/actions';
 
-import reducer from 'containers/GlobalSettings/Field/reducer';
+import reducer from 'containers/Shared/Field/reducer';
 import saga from 'containers/GlobalSettings/Field/saga';
 
-import FieldList from 'components/GlobalSettings/Field/FieldList';
+import FieldList from 'components/Shared/Fields/FieldList';
+import { selectEnterprise } from 'containers/Shared/App/selectors';
 
 export function FieldListPage(props) {
   useInjectReducer({ key: 'fields', reducer });
   useInjectSaga({ key: 'fields', saga });
 
-  const [params, setParams] = useState({ count: 5, page: 0, order: 'asc' });
+  const [params, setParams] = useState(
+    {
+      count: 5,
+      page: 0,
+      order: 'asc',
+      orderBy: 'fields.id',
+      fieldDefinerId: dig(props, 'currentEnterprise', 'id')
+    }
+  );
 
   useEffect(() => {
     props.getFieldsBegin(params);
@@ -52,6 +63,15 @@ export function FieldListPage(props) {
       props.fieldUnmount();
     };
   }, []);
+
+  useEffect(() => {
+    if (props.hasChanged)
+      props.getFieldsBegin(params);
+
+    return () => {
+      props.fieldUnmount();
+    };
+  }, [props.hasChanged]);
 
   const handlePagination = (payload) => {
     const newParams = { ...params, count: payload.count, page: payload.page };
@@ -66,12 +86,22 @@ export function FieldListPage(props) {
         fields={props.fields}
         fieldTotal={props.fieldTotal}
         isLoading={props.isLoading}
-        createFieldBegin={props.createFieldBegin}
+        createFieldBegin={payload => props.createFieldBegin({
+          ...payload,
+          fieldDefinerId: dig(props, 'currentEnterprise', 'id')
+        })}
         updateFieldBegin={props.updateFieldBegin}
         deleteFieldBegin={props.deleteFieldBegin}
         handlePagination={handlePagination}
         isCommitting={props.isCommitting}
         commitSuccess={props.commitSuccess}
+        currentEnterprise={props.currentEnterprise}
+
+        textField
+        selectField
+        checkboxField
+        dateField
+        numberField
       />
     </React.Fragment>
   );
@@ -88,6 +118,10 @@ FieldListPage.propTypes = {
   fieldUnmount: PropTypes.func.isRequired,
   isCommitting: PropTypes.bool,
   commitSuccess: PropTypes.bool,
+  hasChanged: PropTypes.bool,
+  currentEnterprise: PropTypes.shape({
+    id: PropTypes.number
+  })
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -96,6 +130,8 @@ const mapStateToProps = createStructuredSelector({
   isLoading: selectIsLoading(),
   isCommitting: selectIsCommitting(),
   commitSuccess: selectCommitSuccess(),
+  currentEnterprise: selectEnterprise(),
+  hasChanged: selectHasChanged(),
 });
 
 const mapDispatchToProps = {
@@ -103,7 +139,7 @@ const mapDispatchToProps = {
   createFieldBegin,
   updateFieldBegin,
   deleteFieldBegin,
-  fieldUnmount
+  fieldUnmount,
 };
 
 const withConnect = connect(
