@@ -55,7 +55,7 @@ class Api::V1::GroupsController < DiverstController
         .require(klass.symbol)
         .permit(
             leaders_ids: [],
-        )
+          )
   end
 
   def payload
