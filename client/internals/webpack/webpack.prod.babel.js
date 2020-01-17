@@ -7,6 +7,7 @@ const { HashedModuleIdsPlugin } = require('webpack');
 const TerserPlugin = require('terser-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 const webpack = require('webpack');
+const Dotenv = require('dotenv-webpack');
 
 module.exports = require('./webpack.base.babel')({
   mode: 'production',
@@ -67,9 +68,8 @@ module.exports = require('./webpack.base.babel')({
   },
 
   plugins: [
-    new webpack.EnvironmentPlugin({
-      API_URL: 'https://react.diverst.com',
-      API_KEY: '3B7CZ9t1hrLNslbbXrQWEQtt'
+    new Dotenv({
+      path: path.resolve(__dirname, '../../.env')
     }),
     // Minify and optimize the index.html
     new HtmlWebpackPlugin({

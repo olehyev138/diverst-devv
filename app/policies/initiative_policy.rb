@@ -34,6 +34,30 @@ class InitiativePolicy < ApplicationPolicy
     update?
   end
 
+  def fields?
+    update?
+  end
+
+  def create_field?
+    update?
+  end
+
+  def updates?
+    update?
+  end
+
+  def metrics_index?
+    update?
+  end
+
+  def update_prototype?
+    updates?
+  end
+
+  def create_update?
+    update?
+  end
+
   # todo: fix and test
   def show_calendar?
     return true if @record.segments.empty?

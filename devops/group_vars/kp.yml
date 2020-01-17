@@ -1,4 +1,0 @@
----
-application_yml: configs/kp/application.yml.j2
-application_instance: kp
-application_sidekiq_concurrency: 2

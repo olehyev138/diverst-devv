@@ -278,12 +278,52 @@ export const ROUTES = {
           }
         },
         manage: {
+          index: {
+            data: {
+              pathPrefix: (groupId = ':group_id', eventId = ':event_id') => `/groups/${groupId}/plan/events/${eventId}/manage`,
+              titleMessage: messages.groups.plan.events.manage.index
+            },
+          },
           metrics: {
             path:
               (groupId = ':group_id', eventId = ':event_id') => `/groups/${groupId}/plan/events/${eventId}/manage/metrics`,
             data: {
-              titleMessage: messages.groups.plan.events.manage,
+              titleMessage: messages.groups.plan.events.manage.metrics,
             },
+          },
+          fields: {
+            path: (groupId = ':group_id', eventId = ':event_id') => `/groups/${groupId}/plan/events/${eventId}/manage/fields`,
+            data: {
+              titleMessage: messages.groups.plan.events.manage.fields,
+            }
+          },
+          updates: {
+            index: {
+              path: (groupId = ':group_id', eventId = ':event_id') => `/groups/${groupId}/plan/events/${eventId}/manage/updates`,
+              data: {
+                titleMessage: messages.groups.plan.events.manage.updates.index,
+              }
+            },
+            show: {
+              path:
+                (groupId = ':group_id', eventId = ':event_id', updateId = ':update_id') => `/groups/${groupId}/plan/events/${eventId}/manage/updates/${updateId}`,
+              data: {
+                titleMessage: messages.groups.plan.events.manage.updates.show,
+              }
+            },
+            edit: {
+              path:
+                (groupId = ':group_id', eventId = ':event_id', updateId = ':update_id') => `/groups/${groupId}/plan/events/${eventId}/manage/updates/${updateId}/edit`,
+              data: {
+                titleMessage: messages.groups.plan.events.manage.updates.edit,
+              }
+            },
+            new: {
+              path: (groupId = ':group_id', eventId = ':event_id') => `/groups/${groupId}/plan/events/${eventId}/manage/updates/new`,
+              data: {
+                titleMessage: messages.groups.plan.events.manage.updates.new,
+              }
+            }
           },
         },
       },

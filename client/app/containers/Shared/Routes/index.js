@@ -42,6 +42,12 @@ import {
   GroupPlanFieldsPage,
   GroupPlanUpdatesPage,
   GroupPlanUpdatePage,
+  EventManageLayout,
+  EventManageFieldsPage,
+  EventManageUpdatesPage,
+  EventManageUpdatePage,
+  EventManageUpdateEditPage,
+  EventManageUpdateCreatePage,
   GroupPlanUpdateEditPage,
   GroupMemberListPage,
   GroupMemberCreatePage,
@@ -233,7 +239,12 @@ export default function Routes(props) {
 
       { /* Group Plan - Events */ }
       <GroupPlanLayout exact {...expandRoute(ROUTES.group.plan.events.index)} component={GroupPlanEventsPage} />
-      <GroupPlanLayout {...expandRoute(ROUTES.group.plan.events.manage.metrics)} component={EventManageMetricsPage} />
+      <EventManageLayout exact {...expandRoute(ROUTES.group.plan.events.manage.metrics)} component={EventManageMetricsPage} />
+      <EventManageLayout exact {...expandRoute(ROUTES.group.plan.events.manage.fields)} component={EventManageFieldsPage} />
+      <EventManageLayout exact {...expandRoute(ROUTES.group.plan.events.manage.updates.edit)} component={EventManageUpdateEditPage} />
+      <EventManageLayout exact {...expandRoute(ROUTES.group.plan.events.manage.updates.new)} component={EventManageUpdateCreatePage} />
+      <EventManageLayout exact {...expandRoute(ROUTES.group.plan.events.manage.updates.show)} component={EventManageUpdatePage} />
+      <EventManageLayout exact {...expandRoute(ROUTES.group.plan.events.manage.updates.index)} component={EventManageUpdatesPage} />
 
       { /* Group Plan - KPI */ }
       <GroupKPILayout exact {...expandRoute(ROUTES.group.plan.kpi.metrics)} component={GroupPlanKpiPage} />
