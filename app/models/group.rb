@@ -148,20 +148,18 @@ class Group < ApplicationRecord
     annual_budget.update_attributes(closed: true)
   end
 
-  def budget_delegate_options
-    { to: :current_annual_budget, allow_nil: true, prefix: true }
-  end
+  BUDGET_DELEGATE_OPTIONS = { to: :current_annual_budget, allow_nil: true, prefix: true }
 
-  delegate :unspent, budget_delegate_options
-  delegate :free, budget_delegate_options
-  delegate :leftover, budget_delegate_options
-  delegate :approved_budget, budget_delegate_options
-  delegate :spent_budget, budget_delegate_options
-  delegate :available_budget, budget_delegate_options
-  delegate :finalized_expenditure, budget_delegate_options
+  delegate :unspent, BUDGET_DELEGATE_OPTIONS
+  delegate :free, BUDGET_DELEGATE_OPTIONS
+  delegate :leftover, BUDGET_DELEGATE_OPTIONS
+  delegate :approved_budget, BUDGET_DELEGATE_OPTIONS
+  delegate :spent_budget, BUDGET_DELEGATE_OPTIONS
+  delegate :available_budget, BUDGET_DELEGATE_OPTIONS
+  delegate :finalized_expenditure, BUDGET_DELEGATE_OPTIONS
 
-  delegate :carry_over!, budget_delegate_options
-  delegate :reset!, budget_delegate_options
+  delegate :carry_over!, BUDGET_DELEGATE_OPTIONS
+  delegate :reset!, BUDGET_DELEGATE_OPTIONS
 
   def annual_budget
     current_annual_budget!.amount
