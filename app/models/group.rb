@@ -148,7 +148,7 @@ class Group < ApplicationRecord
     annual_budget.update_attributes(closed: true)
   end
 
-  BUDGET_DELEGATE_OPTIONS = { to: :current_annual_budget, allow_nil: true, prefix: true }
+  BUDGET_DELEGATE_OPTIONS = { to: :current_annual_budget, allow_nil: true, prefix: 'annual_budget' }
 
   delegate :unspent, BUDGET_DELEGATE_OPTIONS
   delegate :free, BUDGET_DELEGATE_OPTIONS
