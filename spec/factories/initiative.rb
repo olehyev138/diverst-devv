@@ -10,7 +10,7 @@ FactoryBot.define do
     f.pillar { owner_group.try(:pillars).try(:first) }
     f.owner { FactoryBot.create(:user) }
     trait :with_budget_item do
-      association :budget_item, factory: :budget_item
+      budget_item { estimated_funding ? FactoryBot.create(:budget_item, estimated_amount: estimated_funding) : FactoryBot.create(:budget_item) }
       owner_group { budget_item.budget.group }
       estimated_funding { rand(1..budget_item.available_amount) }
     end

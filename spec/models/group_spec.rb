@@ -614,7 +614,7 @@ RSpec.describe Group, type: :model do
       budget_item = budget.budget_items.first
       budget_item.update(estimated_amount: BUDGET_ITEM_AMOUNT)
       initiative = create(:initiative, owner_group: group, budget_item: budget.budget_items.first, estimated_funding: INITIATIVE_ESTIMATE)
-      build(:initiative_expense, initiative: initiative, amount: EXPENSE_AMOUNT )
+      build(:initiative_expense, initiative: initiative, amount: EXPENSE_AMOUNT)
 
 
       expect(group.title_with_leftover_amount).to eq("Create event from #{group.name} leftover ($%.2f)" % (BUDGET_ITEM_AMOUNT - INITIATIVE_ESTIMATE).round(2))

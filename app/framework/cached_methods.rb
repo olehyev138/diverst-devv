@@ -1,5 +1,4 @@
 module CachedMethods
-
   def self.included(klass)
     klass.extend ClassMethods
   end
@@ -14,7 +13,7 @@ module CachedMethods
         proxy = Module.new do
           define_method(m) do |*args|
             Rails.cache.fetch(key(m, args)) do
-              super *args
+              super(*args)
             end
           end
 

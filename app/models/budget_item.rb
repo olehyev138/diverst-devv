@@ -34,7 +34,7 @@ class BudgetItem < ApplicationRecord
   end
 
   def available_amount
-    return 0 unless budget.present?
+    return 0 if budget.blank?
     return 0 if is_done || !(budget.is_approved?)
 
     estimated_amount - reserved

@@ -3,8 +3,9 @@ class Group < ApplicationRecord
   include CustomTextHelpers
   include Group::Actions
   include DefinesFields
-
   extend Enumerize
+  BUDGET_DELEGATE_OPTIONS = { to: :current_annual_budget, allow_nil: true, prefix: 'annual_budget' }
+
 
   @@field_users = [:user_groups, :updates]
   mattr_reader :field_users
@@ -148,7 +149,6 @@ class Group < ApplicationRecord
     annual_budget.update_attributes(closed: true)
   end
 
-  BUDGET_DELEGATE_OPTIONS = { to: :current_annual_budget, allow_nil: true, prefix: 'annual_budget' }
 
   delegate :unspent, BUDGET_DELEGATE_OPTIONS
   delegate :leftover, BUDGET_DELEGATE_OPTIONS
