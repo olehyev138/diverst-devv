@@ -32,10 +32,10 @@ class CreationOfAnnualBudgetsAndMigrateBudgetDataToNewBudgetModel < ActiveRecord
 
         annual_budget = AnnualBudget.create(amount: group.annual_budget,
                                             closed: false,
-                                            approved_budget: group.approved_budget,
-                                            available_budget: group.available_budget,
-                                            expenses: group.spent_budget,
-                                            leftover_money: group.leftover_money,
+                                            approved_budget: group.annual_budget_approved_budget,
+                                            available_budget: group.annual_budget_available_budget,
+                                            expenses: group.annual_budget_spent_budget,
+                                            leftover_money: group.annual_budget_leftover,
                                             group_id: group.id,
                                             enterprise_id: group.enterprise_id)
 

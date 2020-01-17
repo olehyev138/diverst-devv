@@ -215,9 +215,7 @@ class Initiative < ApplicationRecord
   def finish_expenses!
     return false if finished_expenses?
 
-    leftover_of_annual_budget = (owner_group.annual_budget - owner_group.approved_budget) + owner_group.available_budget
-    group.leftover_money = leftover_of_annual_budget
-    group.save
+    estimated_amount = current_expences_sum
     self.update(finished_expenses: true)
   end
 
@@ -461,10 +459,10 @@ class Initiative < ApplicationRecord
     #
     #  #budget_item.save
     # elsif funded_by_leftover?
-    #  if self.estimated_funding >= owner_group.leftover_money
-    #    self.estimated_funding = owner_group.leftover_money
+    #  if self.estimated_funding >= owner_group.annual_budget_leftover
+    #    self.estimated_funding = owner_group.annual_budget_leftover
     #  else
-    #    owner_group.leftover_money -= self.estimated_funding
+    #    owner_group.annual_budget_leftover -= self.estimated_funding
     #  end
     #
     #  owner_group.save
@@ -492,11 +490,11 @@ class Initiative < ApplicationRecord
     annual_budget = AnnualBudget.find_or_create_by(closed: false, group_id: group.id)
     return if annual_budget.nil?
 
-    leftover_of_annual_budget = ((group.annual_budget || annual_budget.amount) - group.approved_budget) + group.available_budget
+    leftover_of_annual_budget = ((group.annual_budget || annual_budget.amount) - group.annual_budget_approved_budget) + group.annual_budget_available_budget
 
     group.update(leftover_money: leftover_of_annual_budget, annual_budget: annual_budget.amount)
-    annual_budget.update(amount: group.annual_budget, available_budget: group.available_budget,
-                         leftover_money: group.leftover_money, expenses: group.spent_budget,
-                         approved_budget: group.approved_budget)
+    annual_budget.update(amount: group.annual_budget, available_budget: group.annual_budget_available_budget,
+                         leftover_money: group.annual_budget_leftover, expenses: group.annual_budget_spent_budget,
+                         approved_budget: group.annual_budget_approved_budget)
   end
 end

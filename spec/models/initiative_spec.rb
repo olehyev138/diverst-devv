@@ -224,8 +224,14 @@ RSpec.describe Initiative, type: :model do
         end
       end
 
-      context 'with leftover money' do
-        before { group.leftover_money = 1000 }
+      context 'with leftover money', skip: 'Temporarily Disabled Use of leftover money' do
+        before do
+          group.annual_budget = 2000
+          annual_budget = group.current_annual_budget
+          budget = FactoryBot.create(:approved_budget, annual_budget: annual_budget)
+          budget_item = budget.budget_items.first
+          budget_item.update(estimated_amount: 1000)
+        end
 
         let(:initiative) { build :initiative, budget_item_id: -1 }
 

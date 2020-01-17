@@ -431,7 +431,7 @@ RSpec.describe Group, type: :model do
   describe '#approved_budget' do
     it 'returns 0' do
       group = build(:group)
-      expect(group.approved_budget).to eq(0)
+      expect(group.annual_budget_approved_budget).to eq(0)
     end
 
     it 'returns approved budget' do
@@ -440,14 +440,14 @@ RSpec.describe Group, type: :model do
       budget = create(:budget, group: group, is_approved: true, annual_budget_id: annual_budget.id)
       budget.budget_items.update_all(estimated_amount: 500, is_done: true)
 
-      expect(group.approved_budget).to eq 1500
+      expect(group.annual_budget_approved_budget).to eq 1500
     end
   end
 
   describe '#available_budget' do
     it 'returns 0' do
       group = build(:group)
-      expect(group.available_budget).to eq(0)
+      expect(group.annual_budget_available_budget).to eq(0)
     end
 
     it 'returns available budget' do
@@ -455,7 +455,7 @@ RSpec.describe Group, type: :model do
       budget = create(:budget, group: group, is_approved: true)
       create(:budget_item, budget: budget, estimated_amount: 1000)
 
-      expect(group.available_budget).to eq(group.approved_budget - group.spent_budget)
+      expect(group.annual_budget_available_budget).to eq(group.annual_budget_approved_budget - group.annual_budget_spent_budget)
     end
   end
 
@@ -463,7 +463,7 @@ RSpec.describe Group, type: :model do
   describe '#spent_budget' do
     it 'returns 0' do
       group = build(:group)
-      expect(group.spent_budget).to eq(0)
+      expect(group.annual_budget_spent_budget).to eq(0)
     end
 
     it 'returns spent budget' do
@@ -476,7 +476,7 @@ RSpec.describe Group, type: :model do
       expense = create(:initiative_expense, initiative_id: initiative.id, amount: 10)
       initiative.finish_expenses!
 
-      expect(group.spent_budget).to eq 10
+      expect(group.annual_budget_spent_budget).to eq 10
     end
   end
 
@@ -604,7 +604,7 @@ RSpec.describe Group, type: :model do
   describe '#title_with_leftover_amount' do
     it 'returns title_with_leftover_amount' do
       group = build(:group)
-      expect(group.title_with_leftover_amount).to eq("Create event from #{group.name} leftover ($#{group.leftover_money})")
+      expect(group.title_with_leftover_amount).to eq("Create event from #{group.name} leftover ($#{group.annual_budget_leftover})")
     end
   end
 

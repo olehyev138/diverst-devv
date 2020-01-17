@@ -31,7 +31,7 @@ class AnnualBudgetManager
   def edit(annual_budget_params)
     return if annual_budget_params['annual_budget'].to_i == 0
 
-    annual_budget_params['leftover_money'] = (annual_budget_params['annual_budget'].to_f - group.approved_budget.to_f) + group.available_budget.to_f
+    annual_budget_params['leftover_money'] = (annual_budget_params['annual_budget'].to_f - group.annual_budget_approved_budget.to_f) + group.annual_budget_available_budget.to_f
 
     group.update(annual_budget_params) unless annual_budget_params.empty?
     find_or_create_annual_budget_and_update
@@ -43,7 +43,7 @@ class AnnualBudgetManager
 
   def carry_over!
     # no point in carrying over zero amount in leftover money
-    return if group.leftover_money == 0 || group.leftover_money.nil?
+    return if group.annual_budget_leftover == 0 || group.annual_budget_leftover.nil?
 
     # find an opened annual budget with a non-zero leftover money
     annual_budget = group.annual_budgets.where(closed: false, enterprise_id: group.enterprise_id).where.not(leftover_money: 0).last
@@ -56,7 +56,7 @@ class AnnualBudgetManager
     new_annual_budget = AnnualBudget.find_or_create_by(closed: false, group_id: group.id, enterprise_id: group.enterprise_id)
     new_annual_budget.update(amount: annual_budget.leftover_money)
 
-    return true if group.update({ annual_budget: group.leftover_money, leftover_money: 0 })
+    return true if group.update({ annual_budget: group.annual_budget_leftover, leftover_money: 0 })
   end
 
   # this method to resolve inconsistencies where the annual budget of an initiative is not equal to annual budget of selected budget item
@@ -79,9 +79,9 @@ class AnnualBudgetManager
 
   def find_or_create_annual_budget_and_update
     annual_budget = AnnualBudget.find_or_create_by(closed: false, group_id: group.id, enterprise_id: group.enterprise_id)
-    annual_budget.update(amount: group.annual_budget, available_budget: group.available_budget,
-                         leftover_money: group.leftover_money, expenses: group.spent_budget,
-                         approved_budget: group.approved_budget, enterprise_id: group.enterprise_id)
+    annual_budget.update(amount: group.annual_budget, available_budget: group.annual_budget_available_budget,
+                         leftover_money: group.annual_budget_leftover, expenses: group.annual_budget_spent_budget,
+                         approved_budget: group.annual_budget_approved_budget, enterprise_id: group.enterprise_id)
   end
 
   def create_new_annual_budget

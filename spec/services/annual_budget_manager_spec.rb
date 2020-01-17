@@ -124,9 +124,9 @@ RSpec.describe AnnualBudgetManager, type: :service, skip: 'DEPRECATED' do
       it 'carry over leftover in existing annual budget into new one' do
         annual_budget.reload
         initiative.finish_expenses!
-        expect(group.leftover_money).not_to eq 0
+        expect(group.annual_budget_leftover).not_to eq 0
         expect(group.annual_budgets.count).to eq 1
-        expect(annual_budget.leftover_money).to eq group.leftover_money
+        expect(annual_budget.leftover_money).to eq group.annual_budget_leftover
 
         AnnualBudgetManager.new(group).carry_over!
 

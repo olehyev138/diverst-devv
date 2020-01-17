@@ -61,7 +61,16 @@ class AnnualBudget < ApplicationRecord
     amount - approved_budget
   end
 
+  def can_be_reset?
+    unfinished_initiatives.empty?
+  end
+
   def reset!
+    unless can_be_reset?
+      errors.add(:initiatives, 'There cannot be any initiatives with an open expense')
+      return
+    end
+
     # no need to reset annual budget because it is already set to 0
     return if amount == 0
 
@@ -71,6 +80,11 @@ class AnnualBudget < ApplicationRecord
   end
 
   def carry_over!
+    unless can_be_reset?
+      errors.add(:initiatives, 'There cannot be any initiatives with an open expense')
+      return
+    end
+
     # no point in carrying over zero amount in leftover money
     return if leftover == 0 || leftover.nil?
 

@@ -15,9 +15,9 @@ RSpec.describe InitiativeExpense, type: :model do
 
   describe 'test after_save and after_destroy callbacks' do
     let!(:enterprise) { create(:enterprise) }
-    let!(:group1) { create(:group, enterprise_id: enterprise.id, annual_budget: 10000) }
-    let!(:annual_budget1) { create(:annual_budget, amount: group1.annual_budget, group_id: group1.id, enterprise_id: enterprise.id) }
-    let!(:budget) { create(:approved_budget, group: group1, annual_budget_id: annual_budget1.id) }
+    let!(:group1) { create(:group, :with_annual_budget, enterprise_id: enterprise.id, amount: 10000) }
+    let!(:annual_budget1) { group1.current_annual_budget }
+    let!(:budget) { create(:approved_budget, annual_budget_id: annual_budget1.id) }
     let!(:outcome) { create :outcome, group_id: group1.id }
     let!(:pillar) { create :pillar, outcome_id: outcome.id }
     let!(:initiative) { create(:initiative, owner_group_id: group1.id, pillar: pillar,
