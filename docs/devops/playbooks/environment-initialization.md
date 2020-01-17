@@ -20,9 +20,13 @@ _TODO_
 
 - Rename `tfvars` file: `mv devops/terraform/envs/prod/<client-name>/client.tfvars devops/terraform/envs/prod/<client-name>/<client-name>.tfvars`
 
-- Fill out values in files marked with `<>`
+- Fill out values in files marked with `<>` inside `main.tf` & `<client>.tfvars`
 
 ##### Run Terraform
+
+- Change directory into the new environment module
+
+- Initialize terraform: `terraform init`
 
 - Run terraform with the `tfvars` file: `terraform apply -var-file='<client-name>.tfvars`
 
