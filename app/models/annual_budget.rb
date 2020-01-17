@@ -1,6 +1,6 @@
 class AnnualBudget < ApplicationRecord
   belongs_to :group
-  belongs_to :enterprise
+  has_one :enterprise, through: :group
 
   has_many :initiatives, through: :group
   has_many :initiative_expenses, through: :initiatives, source: :expenses
@@ -16,6 +16,10 @@ class AnnualBudget < ApplicationRecord
 
   has_many :budget_items, through: :budgets
   has_many :approved_budget_items, through: :approved_budgets, source: :budget_items
+
+  def close!
+    update_column(:closed, true)
+  end
 
   # same as available_budget
   def approved_budget
