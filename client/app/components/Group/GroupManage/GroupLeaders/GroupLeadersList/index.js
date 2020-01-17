@@ -8,20 +8,16 @@ import React, { memo } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
 
-import {
-  Button, Box
-} from '@material-ui/core/index';
+import { Box, Button, Grid } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
-import messages from 'containers/Group/GroupMembers/messages';
-import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
+import messages from 'containers/Group/GroupManage/GroupLeaders/messages';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/DeleteOutline';
 import AddIcon from '@material-ui/icons/Add';
-import ExportIcon from '@material-ui/icons/SaveAlt';
 
 import DiverstTable from 'components/Shared/DiverstTable';
 
@@ -29,38 +25,21 @@ const styles = theme => ({
   errorButton: {
     color: theme.palette.error.main,
   },
-  actionButton: {
-    marginRight: 12,
-    marginBottom: 12,
-  },
-  floatRight: {
-    float: 'right',
-    marginBottom: 12,
-  },
-  floatSpacer: {
-    display: 'flex',
-    width: '100%',
-    marginBottom: 24,
-  },
 });
 
 export function GroupLeadersList(props) {
-  const { classes } = props;
-  const { links } = props;
-  const handleOrderChange = (columnId, orderDir) => {
-  };
+  const { classes, links } = props;
 
   const columns = [
-    { title: 'GroupLeader', field: 'user.name' },
+    { title: 'Group Leader', field: 'user.name' },
     { title: 'Position', field: 'position_name' }
   ];
 
   return (
-    <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.groupLeaderList}>
-      <React.Fragment>
-        <Box className={classes.floatRight}>
+    <React.Fragment>
+      <Grid container spacing={3} justify='flex-end'>
+        <Grid item>
           <Button
-            className={classes.actionButton}
             variant='contained'
             to={links.groupLeaderNew}
             color='primary'
@@ -70,37 +49,40 @@ export function GroupLeadersList(props) {
           >
             NEW GROUP LEADER
           </Button>
-        </Box>
-        <Box className={classes.floatSpacer} />
-        <DiverstTable
-          title='Group Leaders'
-          handlePagination={props.handlePagination}
-          isLoading={props.isFetchingGroupLeaders}
-          onOrderChange={handleOrderChange}
-          dataArray={props.groupLeaderList}
-          dataTotal={props.groupLeaderTotal}
-          columns={columns}
-          rowsPerPage={props.params.count}
-          actions={[
-            {
-              icon: () => <EditIcon />,
-              tooltip: 'Edit Group Leader',
-              onClick: (_, rowData) => {
-                props.handleVisitGroupLeaderEdit(rowData.group_id, rowData.id);
-              }
-            },
-            {
-              icon: () => <DeleteIcon />,
-              tooltip: 'Delete Group Leader',
-              onClick: (_, rowData) => {
-                /* eslint-disable-next-line no-alert, no-restricted-globals */
-                if (confirm('Delete group leader?'))
-                  props.deleteGroupLeaderBegin({ group_id: rowData.group_id, id: rowData.id });
-              }
-            }]}
-        />
-      </React.Fragment>
-    </DiverstFormLoader>
+        </Grid>
+      </Grid>
+      <Box mb={1} />
+      <Grid container spacing={3}>
+        <Grid item xs>
+          <DiverstTable
+            title='Group Leaders'
+            handlePagination={props.handlePagination}
+            isLoading={props.isFetchingGroupLeaders}
+            dataArray={props.groupLeaderList}
+            dataTotal={props.groupLeaderTotal}
+            columns={columns}
+            rowsPerPage={props.params.count}
+            actions={[
+              {
+                icon: () => <EditIcon />,
+                tooltip: 'Edit Group Leader',
+                onClick: (_, rowData) => {
+                  props.handleVisitGroupLeaderEdit(rowData.group_id, rowData.id);
+                }
+              },
+              {
+                icon: () => <DeleteIcon />,
+                tooltip: 'Delete Group Leader',
+                onClick: (_, rowData) => {
+                  /* eslint-disable-next-line no-alert, no-restricted-globals */
+                  if (confirm('Are you sure you want to delete this group leader?'))
+                    props.deleteGroupLeaderBegin({ group_id: rowData.group_id, id: rowData.id });
+                }
+              }]}
+          />
+        </Grid>
+      </Grid>
+    </React.Fragment>
   );
 }
 

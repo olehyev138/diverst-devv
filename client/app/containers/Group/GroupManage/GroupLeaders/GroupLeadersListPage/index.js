@@ -25,6 +25,7 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import GroupLeadersList from 'components/Group/GroupManage/GroupLeaders/GroupLeadersList';
 import { push } from 'connected-react-router';
+import GroupManageLayout from 'containers/Layouts/GroupManageLayout';
 
 export function GroupLeadersListPage(props) {
   useInjectReducer({ key: 'groupLeaders', reducer });
@@ -34,12 +35,18 @@ export function GroupLeadersListPage(props) {
 
   const groupId = rs.params('group_id')[0];
 
-  const groupLeaderId = rs.params('group_leader_id');
-
   const [params, setParams] = useState({
     group_id: groupId, count: 10, page: 0,
     orderBy: 'id', order: 'asc'
   });
+
+  useEffect(() => {
+    props.getGroupLeadersBegin(params);
+    return () => {
+      props.groupLeadersUnmount();
+    };
+  }, []);
+
   const links = {
     groupLeaderNew: ROUTES.group.manage.leaders.new.path(rs.params('group_id')),
   };
@@ -58,31 +65,27 @@ export function GroupLeadersListPage(props) {
     setParams(newParams);
   };
 
-  useEffect(() => {
-    props.getGroupLeadersBegin(params);
-    return () => {
-      props.groupLeadersUnmount();
-    };
-  }, []);
   return (
-    props.groupLeaderList && (
-      <React.Fragment>
-        <GroupLeadersList
-          group={props.currentGroup}
-          groupLeaderList={props.groupLeaderList}
-          groupLeaderTotal={props.groupLeaderTotal}
-          isFetchingGroupLeaders={props.isFetchingGroupLeaders}
-          groupLeader={props.groupLeader}
-          deleteGroupLeaderBegin={props.deleteGroupLeaderBegin}
-          handleVisitGroupLeaderEdit={props.handleVisitGroupLeaderEdit}
-          links={links}
-          setParams={params}
-          params={params}
-          handlePagination={handlePagination}
-          handleOrdering={handleOrdering}
-        />
-      </React.Fragment>
-    )
+    <React.Fragment>
+      <GroupManageLayout
+        component={() => (
+          <GroupLeadersList
+            group={props.currentGroup}
+            groupLeaderList={props.groupLeaderList}
+            groupLeaderTotal={props.groupLeaderTotal}
+            isFetchingGroupLeaders={props.isFetchingGroupLeaders}
+            deleteGroupLeaderBegin={props.deleteGroupLeaderBegin}
+            handleVisitGroupLeaderEdit={props.handleVisitGroupLeaderEdit}
+            links={links}
+            setParams={params}
+            params={params}
+            handlePagination={handlePagination}
+            handleOrdering={handleOrdering}
+          />
+        )}
+        {...props}
+      />
+    </React.Fragment>
   );
 }
 
@@ -93,7 +96,6 @@ GroupLeadersListPage.propTypes = {
   groupLeaderList: PropTypes.array,
   groupLeaderTotal: PropTypes.number,
   isFetchingGroupLeaders: PropTypes.bool,
-  groupLeader: PropTypes.object,
   handleVisitGroupLeaderEdit: PropTypes.func,
   group: PropTypes.object,
 };
@@ -102,7 +104,6 @@ const mapStateToProps = createStructuredSelector({
   groupLeaderList: selectPaginatedGroupLeaders(),
   groupLeaderTotal: selectGroupLeaderTotal(),
   isFetchingGroupLeaders: selectIsFetchingGroupLeaders(),
-  groupLeader: selectFormGroupLeader(),
 });
 
 const mapDispatchToProps = dispatch => ({
