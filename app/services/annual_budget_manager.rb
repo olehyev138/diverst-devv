@@ -1,3 +1,4 @@
+# TO BE DEPRECATED
 class AnnualBudgetManager
   attr_reader :group
 

@@ -55,4 +55,26 @@ class AnnualBudget < ApplicationRecord
   def leftover
     amount - approved_budget
   end
+
+  def reset!
+    # no need to reset annual budget because it is already set to 0
+    return if amount == 0
+
+    # close annual_budget and create a new one for which new budget-related calculations can be made. New annual budget
+    # has values set to 0
+    annual_budget.update(closed: true) && group.create_annual_budget
+  end
+
+  def carry_over!
+    # no point in carrying over zero amount in leftover money
+    return if leftover == 0 || leftover.nil?
+
+    update(closed: true)
+
+    # update new annual budget with leftover money
+    new_annual_budget = group.create_annual_budget
+    return false unless new_annual_budget.update(amount: leftover)
+
+    new_annual_budget
+  end
 end
