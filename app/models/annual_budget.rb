@@ -37,7 +37,7 @@ class AnnualBudget < ApplicationRecord
   end
 
   def available_budget
-    approved_budget - spent_budget
+    approved_budget - reserved
   end
 
   def unspent

@@ -10,7 +10,7 @@ RSpec.describe AnnualBudget, type: :model do
     it { expect(annual_budget).to have_many(:budgets) }
     it { expect(annual_budget).to have_many(:initiative_expenses).through(:initiatives) }
 
-    describe '#approved_budget_leftover' do
+    describe '#available_budget' do
       let!(:enterprise) { create(:enterprise) }
       let!(:group) { create(:group, enterprise: enterprise, annual_budget: 2000) }
       let!(:annual_budget) { create(:annual_budget, group: group, enterprise: enterprise, amount: group.annual_budget) }
@@ -21,10 +21,10 @@ RSpec.describe AnnualBudget, type: :model do
       }
       let!(:expense) { create(:initiative_expense, initiative: initiative, amount: 10) }
 
-      it 'returns approved_budget_leftover which is the same as available_budget' do
+      it 'returns available_budget which is the same as available_budget' do
         annual_budget.reload
-        expect(annual_budget.approved_budget_leftover).not_to eq nil
-        expect(annual_budget.approved_budget_leftover).to eq annual_budget.available_budget
+        expect(annual_budget.available_budget).not_to eq nil
+        expect(annual_budget.available_budget).to eq annual_budget.available_budget
       end
     end
   end

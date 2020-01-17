@@ -12,12 +12,13 @@ class BudgetItem < ApplicationRecord
   has_many :unfinished_expenses, through: :unfinished_initiatives, source: :expenses, class_name: 'InitiativeExpense'
 
   validates_length_of :title, maximum: 191
+  validates_presence_of :budget
   validates :title, presence: true, length: { minimum: 2 }
   validates :estimated_amount, numericality: { less_than_or_equal_to: 999999, message: 'number of digits must not exceed 6' }
   validates :available_amount, numericality: { less_than_or_equal_to: :estimated_amount },
                                allow_nil: true, unless: -> { estimated_amount.blank? }
 
-  scope :available, -> { where(is_done: false) }
+  scope :available, -> { joins(:budget).where(is_done: false).where('budgets.is_approved = TRUE') }
   scope :allocated, -> { where(is_done: true) }
 
   def title_with_amount
@@ -33,7 +34,8 @@ class BudgetItem < ApplicationRecord
   end
 
   def available_amount
-    return 0 if is_done || !budget.is_approved
+    return 0 unless budget.present?
+    return 0 if is_done || !(budget.is_approved?)
 
     estimated_amount - reserved
   end

@@ -131,8 +131,16 @@ class Group < ApplicationRecord
   validates :banner, content_type: AttachmentHelper.common_image_types
   has_one_attached :sponsor_media
 
+  def create_annual_budget
+    AnnualBudget.create(group: self, closed: false)
+  end
+
   def current_annual_budget
-    annual_budgets.where(closed: false).last
+    annual_budgets.where(closed: false).last || create_annual_budget
+  end
+
+  def current_annual_budget!
+    current_annual_budget || create_annual_budget
   end
 
   def current_annual_budget=(annual_budget)
@@ -149,13 +157,13 @@ class Group < ApplicationRecord
   delegate :finalized_expenditure, to: :current_annual_budget
 
   def annual_budget
-    current_annual_budget.amount
+    current_annual_budget!.amount
   end
 
   def annual_budget=(new_budget)
-    ab = current_annual_budget
-    ab.amount = new_budget
-    ab.save
+    ab = current_annual_budget!
+    ab&.amount = new_budget
+    ab&.save
   end
 
   # TODO Remove after Paperclip to ActiveStorage migration
