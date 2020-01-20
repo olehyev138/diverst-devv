@@ -21,9 +21,9 @@ class BudgetItem < ApplicationRecord
   scope :pending, -> { joins(:budget).where(budgets: { is_approved: nil }) }
 
   delegate :finalized, to: :initiatives, prefix: true
-  delegate :finalized, to: :initiatives_expenses, prefix: true
+  delegate :finalized, to: :initiatives_expenses, prefix: 'expenses'
   delegate :active, to: :initiatives, prefix: true
-  delegate :active, to: :initiatives_expenses, prefix: true
+  delegate :active, to: :initiatives_expenses, prefix: 'expenses'
 
   def title_with_amount
     "#{title} ($#{available_amount})"
