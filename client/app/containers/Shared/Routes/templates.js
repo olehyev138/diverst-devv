@@ -36,6 +36,9 @@ import SessionsEditPage from 'containers/Mentorship/Session/SessionEditPage/Load
 import GroupDashboardPage from 'containers/Analyze/Dashboards/GroupDashboardPage/Loadable';
 import UserDashboardPage from 'containers/Analyze/Dashboards/UserDashboardPage/Loadable';
 
+/* Admin - Plan */
+import AdminAnnualBudgetPage from 'containers/Group/AdminPlanAnnualBudgetPage/Loadable';
+
 /* Admin - Analyze - Custom */
 import MetricsDashboardListPage from 'containers/Analyze/Dashboards/MetricsDashboard/MetricsDashboardListPage/Loadable';
 import MetricsDashboardCreatePage from 'containers/Analyze/Dashboards/MetricsDashboard/MetricsDashboardCreatePage/Loadable';
@@ -186,6 +189,7 @@ export {
   GroupPlanUpdateCreatePage,
   GroupMemberListPage,
   GroupMemberCreatePage,
+  AdminAnnualBudgetPage,
   EventManageLayout,
   EventManageFieldsPage,
   EventManageUpdatesPage,

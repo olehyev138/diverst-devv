@@ -1,6 +1,6 @@
 /**
  *
- * AdminGroupListPage
+ * AdminAnnualBudgetPage
  *
  */
 
@@ -19,9 +19,9 @@ import reducer from 'containers/Group/reducer';
 
 import { getAnnualBudgetsBegin, groupListUnmount } from 'containers/Group/actions';
 
-import GroupList from 'components/Group/AdminGroupList';
+import AnnualBudgetList from 'components/Group/AnnualBudgetList';
 
-export function AdminGroupListPage(props) {
+export function AdminAnnualBudgetPage(props) {
   useInjectReducer({ key: 'groups', reducer });
   useInjectSaga({ key: 'groups', saga });
 
@@ -41,20 +41,17 @@ export function AdminGroupListPage(props) {
   };
 
   return (
-    <React.Fragment>
-      <GroupList
-        isLoading={props.isLoading}
-        groups={props.groups}
-        groupTotal={props.groupTotal}
-        defaultParams={params}
-        deleteGroupBegin={props.deleteGroupBegin}
-        handlePagination={handlePagination}
-      />
-    </React.Fragment>
+    <AnnualBudgetList
+      isLoading={props.isLoading}
+      annualBudgets={props.groups}
+      annualBudgetTotal={props.groupTotal}
+      defaultParams={params}
+      handlePagination={handlePagination}
+    />
   );
 }
 
-AdminGroupListPage.propTypes = {
+AdminAnnualBudgetPage.propTypes = {
   getAnnualBudgetsBegin: PropTypes.func.isRequired,
   groupListUnmount: PropTypes.func.isRequired,
   isLoading: PropTypes.bool,
@@ -82,4 +79,4 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(AdminGroupListPage);
+)(AdminAnnualBudgetPage);

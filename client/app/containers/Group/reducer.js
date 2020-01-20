@@ -133,9 +133,9 @@ function flattenChildrenGroups(groups) {
    */
   return groups.reduce((map, group) => {
     map.push(group);
-    map.concat(flattenChildrenGroups(group.children));
+    const con = map.concat(flattenChildrenGroups(group.children || []));
     delete group.children;
-    return map;
+    return con;
   }, []);
 }
 

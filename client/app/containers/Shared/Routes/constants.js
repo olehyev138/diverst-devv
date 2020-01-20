@@ -576,6 +576,24 @@ export const ROUTES = {
         },
       }
     },
+    plan: {
+      index: {
+        data: {
+          pathPrefix: '/admin/plan',
+          titleMessage: messages.admin.manage.index
+        }
+      },
+      budgeting: {
+        pathPrefix: '/admin/plan/budgeting',
+        index: {
+          path: () => '/admin/plan/budgeting',
+          data: {
+            permission: 'groups_index',
+            titleMessage: messages.admin.manage.groups,
+          }
+        },
+      },
+    },
     innovate: {
       index: {
         data: {

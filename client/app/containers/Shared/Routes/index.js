@@ -62,6 +62,7 @@ import {
   CustomGraphCreatePage,
   CustomGraphEditPage,
   GroupManageLayout,
+  AdminAnnualBudgetPage,
   GroupSettingsPage,
   CustomTextEditPage,
   UserNewsLinkPage,
@@ -175,6 +176,9 @@ export default function Routes(props) {
       <AdminLayout {...expandRoute(ROUTES.admin.manage.resources.folders.new)} component={FolderCreatePage} />
       <AdminLayout {...expandRoute(ROUTES.admin.manage.resources.folders.show)} component={FolderPage} />
       <AdminLayout {...expandRoute(ROUTES.admin.manage.resources.index)} component={FoldersPage} />
+
+      { /* Admin - Plan - Budget */ }
+      <AdminLayout {...expandRoute(ROUTES.admin.plan.budgeting.index)} component={AdminAnnualBudgetPage} />
 
       { /* Admin - Innovate */ }
       <AdminLayout {...expandRoute(ROUTES.admin.innovate.campaigns.new)} component={CampaignCreatePage} />

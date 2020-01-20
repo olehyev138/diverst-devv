@@ -6,6 +6,10 @@ class GroupPolicy < ApplicationPolicy
     @policy_group.groups_index?
   end
 
+  def annual_budgets?
+    index?
+  end
+
   def new?
     create?
   end
