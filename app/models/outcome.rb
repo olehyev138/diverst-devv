@@ -8,7 +8,7 @@ class Outcome < ApplicationRecord
 
   # Gets all initiatives for outcome
   def get_initiatives
-    pillars.map { |p| p.initiatives.map { |i| i } }.flatten
+    pillars.map { |p| p.initiatives.to_a }.flatten
   end
 
   # Gets all initiatives for a collection of outcomes

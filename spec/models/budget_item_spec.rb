@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe BudgetItem, type: :model do
   describe 'factory' do
-    let(:budget_item) { build_stubbed(:budget_item) }
+    let(:budget_item) { build(:budget_item) }
 
     it 'is valid' do
       expect(budget_item).to be_valid

@@ -3,8 +3,9 @@ class Group < ApplicationRecord
   include CustomTextHelpers
   include Group::Actions
   include DefinesFields
-
   extend Enumerize
+  BUDGET_DELEGATE_OPTIONS = { to: :current_annual_budget, allow_nil: true, prefix: 'annual_budget' }
+
 
   @@field_users = [:user_groups, :updates]
   mattr_reader :field_users
@@ -76,7 +77,6 @@ class Group < ApplicationRecord
   has_many :initiative_participating_groups
   has_many :participating_initiatives, through: :initiative_participating_groups, source: :initiative
 
-  has_many :budgets, dependent: :destroy
   has_many :messages, class_name: 'GroupMessage', dependent: :destroy
   has_many :message_comments, through: :messages, class_name: 'GroupMessageComment', source: :comments
   has_many :news_links, dependent: :destroy
@@ -119,6 +119,7 @@ class Group < ApplicationRecord
 
   has_many :children, class_name: 'Group', foreign_key: :parent_id, dependent: :destroy
   has_many :annual_budgets, dependent: :destroy
+  has_many :budgets, dependent: :destroy, through: :annual_budgets
 
   belongs_to :parent, class_name: 'Group', foreign_key: :parent_id
   belongs_to :group_category
@@ -130,6 +131,45 @@ class Group < ApplicationRecord
   has_one_attached :banner
   validates :banner, content_type: AttachmentHelper.common_image_types
   has_one_attached :sponsor_media
+
+  def create_annual_budget
+    AnnualBudget.create(group: self, closed: false)
+  end
+
+  def current_annual_budget
+    annual_budgets.where(closed: false).last || create_annual_budget
+  end
+
+  def current_annual_budget!
+    current_annual_budget || create_annual_budget
+  end
+
+  def current_annual_budget=(annual_budget)
+    annual_budgets.update_all(closed: true)
+    annual_budget.update_attributes(closed: true)
+  end
+
+
+  delegate :unspent, BUDGET_DELEGATE_OPTIONS
+  delegate :leftover, BUDGET_DELEGATE_OPTIONS
+  delegate :remaining, BUDGET_DELEGATE_OPTIONS
+  delegate :approved, BUDGET_DELEGATE_OPTIONS
+  delegate :expenses, BUDGET_DELEGATE_OPTIONS
+  delegate :available, BUDGET_DELEGATE_OPTIONS
+  delegate :finalized_expenditure, BUDGET_DELEGATE_OPTIONS
+
+  delegate :carry_over!, BUDGET_DELEGATE_OPTIONS
+  delegate :reset!, BUDGET_DELEGATE_OPTIONS
+
+  def annual_budget
+    current_annual_budget!.amount
+  end
+
+  def annual_budget=(new_budget)
+    ab = current_annual_budget!
+    ab&.amount = new_budget
+    ab&.save
+  end
 
   # TODO Remove after Paperclip to ActiveStorage migration
   has_attached_file :logo_paperclip, s3_permissions: 'private'
@@ -285,24 +325,6 @@ class Group < ApplicationRecord
     self[:calendar_color] || enterprise.try(:theme).try(:primary_color) || 'cccccc'
   end
 
-  def approved_budget
-    annual_budget = annual_budgets.find_by(closed: false)
-    return 0 if annual_budget.nil?
-
-    (budgets.where(annual_budget_id: annual_budget.id).approved.map { |b| b.requested_amount || 0 }).reduce(0, :+)
-  end
-
-  def available_budget
-    approved_budget - spent_budget
-  end
-
-  def spent_budget
-    annual_budget = annual_budgets.find_by(closed: false)
-    return 0 if annual_budget.nil?
-
-    (initiatives.where(annual_budget_id: annual_budget.id).map { |i| i.current_expences_sum || 0 }).reduce(0, :+)
-  end
-
   def active_members
     if pending_users.enabled?
       filter_by_membership(true).active
@@ -449,7 +471,11 @@ class Group < ApplicationRecord
   end
 
   def title_with_leftover_amount
-    "Create event from #{name} leftover ($#{leftover_money == 0 ? 0.0 : available_budget})"
+    if annual_budget_expenses > 0
+      "Create event from #{name} ($#{annual_budget_available})"
+    else
+      "Create event from #{name} leftover ($%.2f)" % (annual_budget_remaining == 0 ? 0 : annual_budget_available).round(2)
+    end
   end
 
   def pending_comments_count
