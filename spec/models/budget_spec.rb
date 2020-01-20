@@ -159,7 +159,6 @@ RSpec.describe Budget, type: :model do
     it 'deducts approved budget from annual budget when budget is destroyed' do
       annual_budget = create(:annual_budget, group: group, amount: group.annual_budget)
       budget.update(is_approved: true, annual_budget: annual_budget)
-      annual_budget.update(approved: group.annual_budget_approved, available: group.annual_budget_available)
 
       expect(annual_budget.approved).to eq group.annual_budget_approved
 

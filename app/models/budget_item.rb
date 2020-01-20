@@ -27,7 +27,7 @@ class BudgetItem < ApplicationRecord
     "#{title} ($#{available_amount})"
   end
 
-  def spent
+  def expenses
     expenses.sum('amount')
   end
 
@@ -43,7 +43,7 @@ class BudgetItem < ApplicationRecord
   end
 
   def unspent
-    estimated_amount - spent
+    estimated_amount - expenses
   end
 
   def finalized_expenditure

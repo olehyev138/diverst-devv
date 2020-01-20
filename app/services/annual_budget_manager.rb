@@ -11,7 +11,7 @@ class AnnualBudgetManager
     return if group.annual_budget == 0 || group.annual_budget.nil?
 
     # at this point, group.annual_budget != 0 so we either find or create annual budget and update with group annual budget values
-    # i.e annual budget, spent, approved and leftover_money
+    # i.e annual budget, expenses, approved and leftover_money
     find_or_create_annual_budget_and_update
     annual_budget = group.annual_budgets.where(closed: false, enterprise_id: group.enterprise_id).where.not(amount: 0).last
 
@@ -80,7 +80,7 @@ class AnnualBudgetManager
   def find_or_create_annual_budget_and_update
     annual_budget = AnnualBudget.find_or_create_by(closed: false, group_id: group.id, enterprise_id: group.enterprise_id)
     annual_budget.update(amount: group.annual_budget, available: group.annual_budget_available,
-                         leftover_money: group.annual_budget_remaining, expenses: group.annual_budget_spent,
+                         leftover_money: group.annual_budget_remaining, expenses: group.annual_budget_expenses,
                          approved: group.annual_budget_approved, enterprise_id: group.enterprise_id)
   end
 

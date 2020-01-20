@@ -154,7 +154,7 @@ class Group < ApplicationRecord
   delegate :leftover, BUDGET_DELEGATE_OPTIONS
   delegate :remaining, BUDGET_DELEGATE_OPTIONS
   delegate :approved, BUDGET_DELEGATE_OPTIONS
-  delegate :spent, BUDGET_DELEGATE_OPTIONS
+  delegate :expenses, BUDGET_DELEGATE_OPTIONS
   delegate :available, BUDGET_DELEGATE_OPTIONS
   delegate :finalized_expenditure, BUDGET_DELEGATE_OPTIONS
 
@@ -471,7 +471,7 @@ class Group < ApplicationRecord
   end
 
   def title_with_leftover_amount
-    if annual_budget_spent > 0
+    if annual_budget_expenses > 0
       "Create event from #{name} ($#{annual_budget_available})"
     else
       "Create event from #{name} leftover ($%.2f)" % (annual_budget_remaining == 0 ? 0 : annual_budget_available).round(2)

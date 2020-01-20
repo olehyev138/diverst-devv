@@ -19,7 +19,7 @@ class AnnualBudget < ApplicationRecord
   has_many :unfinished_initiatives, -> { where(finished_expenses: false) }, through: :budget_items, source: :initiatives, class_name: 'Initiative'
   has_many :unfinished_expenses, through: :unfinished_initiatives, source: :expenses, class_name: 'InitiativeExpense'
 
-  cache :approved, :reserved, :spent, :finalized_expenditure, :available,
+  cache :approved, :reserved, :expenses, :finalized_expenditure, :available,
         :unspent, :remaining, :leftover
 
   def close!
@@ -36,7 +36,7 @@ class AnnualBudget < ApplicationRecord
     initiatives.sum('estimated_funding')
   end
 
-  def spent
+  def expenses
     initiative_expenses
         .sum('amount')
   end
@@ -50,11 +50,11 @@ class AnnualBudget < ApplicationRecord
   end
 
   def remaining
-    approved - spent
+    approved - expenses
   end
 
   def leftover
-    amount - spent
+    amount - expenses
   end
 
   def free
