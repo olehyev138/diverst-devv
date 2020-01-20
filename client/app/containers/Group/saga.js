@@ -4,38 +4,34 @@ import { push } from 'connected-react-router';
 
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
 
-import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import {
-  GET_GROUPS_BEGIN,
-  GET_ANNUAL_BUDGETS_BEGIN,
-  GET_GROUP_BEGIN,
-  CREATE_GROUP_BEGIN,
-  UPDATE_GROUP_BEGIN,
-  UPDATE_GROUP_SETTINGS_BEGIN,
-  DELETE_GROUP_BEGIN,
-} from './constants';
+  GET_GROUPS_BEGIN, CREATE_GROUP_BEGIN,
+  GET_GROUP_BEGIN, UPDATE_GROUP_BEGIN,
+  UPDATE_GROUP_SETTINGS_BEGIN, DELETE_GROUP_BEGIN
+} from 'containers/Group/constants';
 
 import {
   getGroupsSuccess, getGroupsError,
-  getAnnualBudgetsSuccess, getAnnualBudgetsError,
-  getGroupSuccess, getGroupError,
   createGroupSuccess, createGroupError,
+  getGroupSuccess, getGroupError,
   updateGroupSuccess, updateGroupError,
   updateGroupSettingsSuccess, updateGroupSettingsError,
-  deleteGroupSuccess, deleteGroupError,
-} from './actions';
+  deleteGroupError, getAnnualBudgetsSuccess, getAnnualBudgetsError
+} from 'containers/Group/actions';
+
+import { ROUTES } from 'containers/Shared/Routes/constants';
 
 export function* getGroups(action) {
   try {
-    const response = { data: 'API CALL' };
+    const response = yield call(api.groups.all.bind(api.groups), action.payload);
 
     yield put(getGroupsSuccess(response.data.page));
   } catch (err) {
     yield put(getGroupsError(err));
 
     // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to get groups', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: 'Failed to load groups', options: { variant: 'warning' } }));
   }
 }
 
@@ -54,23 +50,26 @@ export function* getAnnualBudgets(action) {
 
 export function* getGroup(action) {
   try {
-    const response = { data: 'API CALL' };
-
+    const response = yield call(api.groups.get.bind(api.groups), action.payload.id);
     yield put(getGroupSuccess(response.data));
   } catch (err) {
-    yield put(getGroupError(err));
-
     // TODO: intl message
+    yield put(getGroupError(err));
     yield put(showSnackbar({ message: 'Failed to get group', options: { variant: 'warning' } }));
   }
 }
 
+
 export function* createGroup(action) {
   try {
-    const response = { data: 'API CALL' };
+    const payload = { group: action.payload };
 
-    yield put(createGroupSuccess({}));
-    yield put(showSnackbar({ message: 'Successfully created group', options: { variant: 'success' } }));
+    // TODO: use bind here or no?
+    const response = yield call(api.groups.create.bind(api.groups), payload);
+
+    yield put(createGroupSuccess());
+    yield put(push(ROUTES.admin.manage.groups.index.path()));
+    yield put(showSnackbar({ message: 'Group created', options: { variant: 'success' } }));
   } catch (err) {
     yield put(createGroupError(err));
 
@@ -81,10 +80,12 @@ export function* createGroup(action) {
 
 export function* updateGroup(action) {
   try {
-    const response = { data: 'API CALL' };
+    const payload = { group: action.payload };
+    const response = yield call(api.groups.update.bind(api.groups), payload.group.id, payload);
 
-    yield put(updateGroupSuccess({}));
-    yield put(showSnackbar({ message: 'Successfully updated group', options: { variant: 'success' } }));
+    yield put(updateGroupSuccess());
+    yield put(push(ROUTES.admin.manage.groups.index.path()));
+    yield put(showSnackbar({ message: 'Group updated', options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateGroupError(err));
 
@@ -95,24 +96,30 @@ export function* updateGroup(action) {
 
 export function* updateGroupSettings(action) {
   try {
-    const response = { data: 'API CALL' };
+    const payload = { group: action.payload };
+    const response = yield call(api.groups.update.bind(api.groups), payload.group.id, payload);
 
-    yield put(updateGroupSettingsSuccess({}));
-    yield put(showSnackbar({ message: 'Successfully updated group settings', options: { variant: 'success' } }));
+    yield put(updateGroupSettingsSuccess());
+    yield put(showSnackbar({
+      message: 'Group settings updated',
+      options: { variant: 'success' }
+    }));
   } catch (err) {
     yield put(updateGroupSettingsError(err));
 
     // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to update group settings', options: { variant: 'warning' } }));
+    yield put(showSnackbar({
+      message: 'Failed to update group settings',
+      options: { variant: 'warning' }
+    }));
   }
 }
 
 export function* deleteGroup(action) {
   try {
-    const response = { data: 'API CALL' };
-
-    yield put(deleteGroupSuccess({}));
-    yield put(showSnackbar({ message: 'Successfully deleted group', options: { variant: 'success' } }));
+    yield call(api.groups.destroy.bind(api.groups), action.payload);
+    yield put(push(ROUTES.admin.manage.groups.index.path()));
+    yield put(showSnackbar({ message: 'Group deleted', options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteGroupError(err));
 
@@ -121,10 +128,8 @@ export function* deleteGroup(action) {
   }
 }
 
-
-export default function* GroupSaga() {
+export default function* groupsSaga() {
   yield takeLatest(GET_GROUPS_BEGIN, getGroups);
-  yield takeLatest(GET_ANNUAL_BUDGETS_BEGIN, getAnnualBudgets);
   yield takeLatest(GET_GROUP_BEGIN, getGroup);
   yield takeLatest(CREATE_GROUP_BEGIN, createGroup);
   yield takeLatest(UPDATE_GROUP_BEGIN, updateGroup);
