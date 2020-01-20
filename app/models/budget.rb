@@ -80,6 +80,19 @@ class Budget < ApplicationRecord
     select_items << [ group.title_with_leftover_amount, BudgetItem::LEFTOVER_BUDGET_ITEM_ID ]
   end
 
+  def approve(approver)
+    budget_items.each do |bi|
+      bi.approve!
+    end
+    update(approver: approver, is_approved: true)
+    BudgetMailer.budget_approved(self).deliver_later if requester
+  end
+
+  def decline(approver)
+    update(approver: approver, is_approved: false)
+    BudgetMailer.budget_declined(self).deliver_later if requester
+  end
+
   private
 
   def send_email_notification
