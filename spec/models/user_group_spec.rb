@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe UserGroup do
+  it_behaves_like 'it Contains Field Data'
+
   describe 'when validating' do
     let(:user_group) { build_stubbed(:user_group) }
 
@@ -95,10 +97,10 @@ RSpec.describe UserGroup do
   end
 
   describe '#string_for_field' do
+    let!(:select_field) { create(:select_field, title: 'Gender', options_text: "Male\nFemale") }
+    let!(:user_group) { create(:user_group, data: "{\"#{select_field.id}\":[\"Female\"]}") }
+
     it 'returns the string field' do
-      select_field = SelectField.new(type: 'SelectField', title: 'Gender', options_text: "Male\nFemale")
-      select_field.save!
-      user_group = create(:user_group, data: "{\"#{select_field.id}\":[\"Female\"]}")
       expect(user_group.string_for_field(select_field)).to eq('Female')
     end
   end

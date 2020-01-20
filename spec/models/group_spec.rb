@@ -2,9 +2,10 @@ require 'rails_helper'
 
 RSpec.describe Group, type: :model do
   include ActiveJob::TestHelper
+  it_behaves_like 'it Defines Fields'
 
   describe 'validations' do
-    let(:group) { build_stubbed(:group) }
+    let(:group) { build(:group) }
 
     it { expect(group).to validate_presence_of(:name) }
 
@@ -47,9 +48,9 @@ RSpec.describe Group, type: :model do
     it { expect(group).to have_many(:outcomes) }
     it { expect(group).to have_many(:pillars).through(:outcomes) }
     it { expect(group).to have_many(:initiatives).through(:pillars) }
-    it { expect(group).to have_many(:updates).class_name('GroupUpdate').dependent(:destroy) }
+    it { expect(group).to have_many(:updates).class_name('Update').dependent(:destroy) }
     it { expect(group).to have_many(:fields) }
-    it { expect(group).to have_many(:survey_fields).class_name('Field').dependent(:delete_all) }
+    it { expect(group).to have_many(:survey_fields).class_name('Field').dependent(:destroy) }
     it { expect(group).to have_many(:group_leaders) }
     it { expect(group).to have_many(:leaders).through(:group_leaders).source(:user) }
     it { expect(group).to have_many(:sponsors) }
@@ -60,14 +61,11 @@ RSpec.describe Group, type: :model do
     it { expect(group).to belong_to(:group_category) }
     it { expect(group).to belong_to(:group_category_type) }
 
-    # Paperclip
-    #    [:logo, :banner].each do |attribute|
-    #      it { expect(group).to have_attached_file(attribute) }
-    #    end
-
-    #    [:logo, :banner].each do |attribute|
-    #      it { expect(group).to validate_attachment_content_type(attribute).allowing('image/png', 'image/gif').rejecting('text/plain', 'text/xml') }
-    #    end
+    # ActiveStorage
+    [:logo, :banner].each do |attribute|
+      it { expect(group).to have_attached_file(attribute) }
+      it { expect(group).to validate_attachment_content_type(attribute, AttachmentHelper.common_image_types) }
+    end
 
     [:outcomes, :fields, :survey_fields, :group_leaders, :sponsors].each do |attribute|
       it { expect(group).to accept_nested_attributes_for(attribute).allow_destroy(true) }
@@ -163,19 +161,17 @@ RSpec.describe Group, type: :model do
 
   describe '#logo_location' do
     it 'returns the actual logo location' do
-      group = create(:group, logo: File.new('spec/fixtures/files/verizon_logo.png'))
+      group = create(:group, logo: { io: File.open('spec/fixtures/files/verizon_logo.png'), filename: 'file.png' })
 
       expect(group.logo_location).to_not be nil
-      expect(group.logo_location).to_not eq '/assets/missing.png'
     end
   end
 
   describe '#banner_location' do
     it 'returns the actual banner location' do
-      group = create(:group, banner: File.new('spec/fixtures/files/verizon_logo.png'))
+      group = create(:group, banner: { io: File.open('spec/fixtures/files/verizon_logo.png'), filename: 'file.png' })
 
       expect(group.banner_location).to_not be nil
-      expect(group.banner_location).to_not eq '/assets/missing.png'
     end
   end
 
@@ -224,20 +220,6 @@ RSpec.describe Group, type: :model do
 
       expect(created.banner.presence).to_not be nil
       expect(created.logo.presence).to_not be nil
-    end
-  end
-
-  describe '#logo_url' do
-    it 'sets the logo for group from url' do
-      group = create(:group)
-      allow(URI).to receive(:parse).and_return(File.open('spec/fixtures/files/verizon_logo.png'))
-      expect(group.logo_file_name).to be nil
-
-      group.logo_url = Faker::LoremPixel.image(secure: false)
-      group.save!
-      group.reload
-
-      expect(group.logo_file_name).to_not be nil
     end
   end
 
@@ -330,7 +312,7 @@ RSpec.describe Group, type: :model do
   describe '#survey_answers_csv' do
     it 'returns a csv file' do
       group = create(:group)
-      field = create(:field, field_type: 'group_survey', group: group)
+      field = create(:field, field_type: 'group_survey', field_definer: group)
       user = create(:user)
       user_group = create(:user_group, user: user, group: group, data: '{"13":"test"}')
 
@@ -612,7 +594,7 @@ RSpec.describe Group, type: :model do
     it 'returns highcharts_history' do
       group = create(:group)
       field = create(:field)
-      create(:group_update, group: group, created_at: 30.days.ago)
+      create(:update, updatable: group, report_date: 30.days.ago)
       data = group.highcharts_history(field: field)
       expect(data.length).to eq(1)
     end
@@ -800,13 +782,16 @@ RSpec.describe Group, type: :model do
       folder_share = create(:folder_share, group: group)
       campaigns_group = create(:campaigns_group, group: group)
       outcome = create(:outcome, group: group)
-      group_update = create(:group_update, group: group)
-      field = create(:field, group: group, field_type: 'regular')
-      survey_field = create(:field, group: group, field_type: 'group_survey')
+      group_update = create(:update, updatable: group)
+      field = create(:field, field_definer: group, field_type: 'regular')
+      survey_field = create(:field, field_definer: group, field_type: 'group_survey')
       user = create(:user, enterprise: group.enterprise)
       create(:user_group, user: user, group: group, accepted_member: true)
       group_leader = create(:group_leader, group: group, user: user)
       child = create(:group, parent: group)
+
+      group.fields.reload
+      group.survey_fields.reload
 
       group.destroy!
 
@@ -825,7 +810,7 @@ RSpec.describe Group, type: :model do
       expect { FolderShare.find(folder_share.id) }.to raise_error(ActiveRecord::RecordNotFound)
       expect { CampaignsGroup.find(campaigns_group.id) }.to raise_error(ActiveRecord::RecordNotFound)
       expect { Outcome.find(outcome.id) }.to raise_error(ActiveRecord::RecordNotFound)
-      expect { GroupUpdate.find(group_update.id) }.to raise_error(ActiveRecord::RecordNotFound)
+      expect { Update.find(group_update.id) }.to raise_error(ActiveRecord::RecordNotFound)
       expect { Field.find(field.id) }.to raise_error(ActiveRecord::RecordNotFound)
       expect { Field.find(survey_field.id) }.to raise_error(ActiveRecord::RecordNotFound)
       expect { GroupLeader.find(group_leader.id) }.to raise_error(ActiveRecord::RecordNotFound)

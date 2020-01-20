@@ -27,7 +27,9 @@ import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 export function CustomGraphFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
   const fieldSelectAction = (searchKey = '') => {
     props.getFieldsBegin({
+      enterpriseId: props.currentEnterprise.id,
       count: 10, page: 0, order: 'asc',
+      orderBy: 'fields.id',
       search: searchKey,
     });
   };
@@ -104,9 +106,9 @@ export function CustomGraphForm(props) {
       onSubmit={(values, actions) => {
         props.customGraphAction(mapFields(values, ['field_id', 'aggregation_id']));
       }}
-
-      render={formikProps => <CustomGraphFormInner {...formikProps} {...props} />}
-    />
+    >
+      {formikProps => <CustomGraphFormInner {...formikProps} {...props} />}
+    </Formik>
   );
 }
 
@@ -134,6 +136,9 @@ CustomGraphFormInner.propTypes = {
   fields: PropTypes.array,
   isCommitting: PropTypes.bool,
   isFormLoading: PropTypes.bool,
+  currentEnterprise: PropTypes.shape({
+    id: PropTypes.number
+  }),
   links: PropTypes.shape({
     metricsDashboardShow: PropTypes.string,
   })

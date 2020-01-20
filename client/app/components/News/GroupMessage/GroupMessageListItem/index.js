@@ -3,7 +3,6 @@
  * Group Message List Item Component
  *
  */
-
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux/';
@@ -16,7 +15,7 @@ import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/News/messages';
-
+import DeleteIcon from '@material-ui/icons/DeleteOutline';
 import { formatDateTimeString } from 'utils/dateTimeHelpers';
 
 const styles = theme => ({
@@ -24,7 +23,9 @@ const styles = theme => ({
 
 export function GroupMessageListItem(props) {
   const { newsItem } = props;
+  const newsItemId = newsItem.id;
   const groupMessage = newsItem.group_message;
+  const groupId = groupMessage.group_id;
 
   return (
     <Card>
@@ -63,6 +64,27 @@ export function GroupMessageListItem(props) {
           >
             Comments
           </Button>
+          {props.newsItem.approved !== true ? (
+            <Button
+              size='small'
+              onClick={() => {
+                /* eslint-disable-next-line no-alert, no-restricted-globals */
+                props.updateNewsItemBegin({ approved: true, id: newsItemId, group_id: groupId });
+              }}
+            >
+              Approve
+            </Button>
+          ) : null }
+          <Button
+            size='small'
+            onClick={() => {
+              /* eslint-disable-next-line no-alert, no-restricted-globals */
+              if (confirm('Delete group message?'))
+                props.deleteGroupMessageBegin(newsItem.group_message);
+            }}
+          >
+            Delete
+          </Button>
         </CardActions>
       )}
     </Card>
@@ -76,7 +98,9 @@ GroupMessageListItem.propTypes = {
   links: PropTypes.shape({
     groupMessageEdit: PropTypes.func,
     groupMessageShow: PropTypes.func
-  })
+  }),
+  deleteGroupMessageBegin: PropTypes.func,
+  updateNewsItemBegin: PropTypes.func,
 };
 
 export default compose(

@@ -1,13 +1,16 @@
 require 'rails_helper'
 
 RSpec.describe Initiative, type: :model do
+  include ActiveJob::TestHelper
+  it_behaves_like 'it Defines Fields'
+
   describe 'when validating' do
-    let(:initiative) { build_stubbed(:initiative) }
+    let(:initiative) { build(:initiative) }
 
     it { expect(initiative).to belong_to(:pillar) }
     it { expect(initiative).to belong_to(:owner).class_name('User') }
-    it { expect(initiative).to have_many(:updates).class_name('InitiativeUpdate').dependent(:destroy) }
-    it { expect(initiative).to have_many(:fields).dependent(:delete_all) }
+    it { expect(initiative).to have_many(:updates).class_name('Update').dependent(:destroy) }
+    it { expect(initiative).to have_many(:fields).dependent(:destroy) }
     it { expect(initiative).to have_many(:expenses).dependent(:destroy).class_name('InitiativeExpense') }
 
     it { expect(initiative).to accept_nested_attributes_for(:fields).allow_destroy(true) }
@@ -35,9 +38,9 @@ RSpec.describe Initiative, type: :model do
     it { expect(initiative).to have_many(:initiative_users) }
     it { expect(initiative).to have_many(:attendees).through(:initiative_users).source(:user) }
 
-    # Paperclip
-    # it { expect(initiative).to have_attached_file(:picture) }
-    # it { expect(initiative).to validate_attachment_content_type(:picture).allowing('image/png', 'image/gif').rejecting('text/plain', 'text/xml') }
+    # ActiveStorage
+    it { expect(initiative).to have_attached_file(:picture) }
+    it { expect(initiative).to validate_attachment_content_type(:picture, AttachmentHelper.common_image_types) }
 
     it { expect(initiative).to validate_presence_of(:start) }
     it { expect(initiative).to validate_presence_of(:end) }
@@ -71,61 +74,34 @@ RSpec.describe Initiative, type: :model do
   describe '#build' do
     it 'sets the picture for initiative from url when creating initiative' do
       user = create(:user)
-      file = File.open('spec/fixtures/files/verizon_logo.png')
       group = create(:group, enterprise: user.enterprise)
       outcome = create(:outcome, group: group)
       pillar = create(:pillar, outcome: outcome)
+
+      file = fixture_file_upload('spec/fixtures/files/verizon_logo.png', 'image/png')
+
       request = Request.create_request(user)
       payload = { initiative: { name: 'Save', pillar_id: pillar.id, picture: file, owner_group_id: group.id, owner_id: user.id, start: Date.today, end: Date.tomorrow + 1.day } }
       params = ActionController::Parameters.new(payload)
       created = Initiative.build(request, params.permit!)
 
-      expect(created.picture.presence).to_not be nil
+      expect(created.picture.attached?).to be true
     end
   end
 
   describe '#picture_location' do
     it 'returns the actual picture location' do
-      initiative = create(:initiative, picture: File.new('spec/fixtures/files/verizon_logo.png'))
+      initiative = create(:initiative, picture: { io: File.open('spec/fixtures/files/verizon_logo.png'), filename: 'file.png' })
 
       expect(initiative.picture_location).to_not be nil
-      expect(initiative.picture_location).to_not eq '/assets/missing.png'
-    end
-  end
-
-  describe '#picture_url' do
-    it 'sets the picture for initiative from url' do
-      initiative = create(:initiative, picture: nil)
-      allow(URI).to receive(:parse).and_return(File.open('spec/fixtures/files/verizon_logo.png'))
-      expect(initiative.picture_file_name).to be nil
-
-      initiative.picture_url = Faker::LoremPixel.image(secure: false)
-      initiative.save!
-      initiative.reload
-
-      expect(initiative.picture_file_name).to_not be nil
     end
   end
 
   describe '#qr_code_location' do
     it 'returns the actual qr_code location' do
-      initiative = create(:initiative, qr_code: File.new('spec/fixtures/files/verizon_logo.png'))
+      initiative = create(:initiative, qr_code: { io: File.open('spec/fixtures/files/verizon_logo.png'), filename: 'file.png' })
 
       expect(initiative.qr_code_location).to_not be nil
-      expect(initiative.qr_code_location).to_not eq '/assets/missing.png'
-    end
-  end
-
-  describe '#qr_code_url' do
-    it 'sets the qr_code for initiative from url' do
-      initiative = create(:initiative, qr_code: nil)
-      expect(initiative.qr_code_file_name).to be nil
-
-      initiative.qr_code_url = Faker::LoremPixel.image(secure: false)
-      initiative.save!
-      initiative.reload
-
-      expect(initiative.qr_code_file_name).to_not be nil
     end
   end
 
@@ -315,7 +291,7 @@ RSpec.describe Initiative, type: :model do
       initiative = build(:initiative, start: Date.today, end: Date.today + 1.hour)
       field = build(:field)
       create(:initiative_field, initiative: initiative, field: field)
-      create(:initiative_update, initiative: initiative)
+      create(:update, updatable: initiative)
 
       data = initiative.highcharts_history(field: field)
       expect(data.empty?).to be(false) # this example says "returns data" and yet we expect data to be empty???
@@ -363,8 +339,8 @@ RSpec.describe Initiative, type: :model do
       group = create(:group, annual_budget: 10000)
       annual_budget = create(:annual_budget, amount: group.annual_budget)
       initiative = create(:initiative, owner_group_id: group.id, annual_budget_id: annual_budget.id)
-      initiative_update = create(:initiative_update, initiative: initiative)
-      field = create(:field, initiative: initiative)
+      initiative_update = create(:update, updatable: initiative)
+      field = create(:field, field_definer: initiative)
       initiative_expense = create(:initiative_expense, initiative: initiative, annual_budget_id: annual_budget.id)
       checklist = create(:checklist, initiative: initiative)
       resource = create(:resource, initiative: initiative)
@@ -375,10 +351,11 @@ RSpec.describe Initiative, type: :model do
       initiative_comment = create(:initiative_comment, initiative: initiative)
       initiative_user = create(:initiative_user, initiative: initiative)
 
+      initiative.reload
       initiative.destroy!
 
       expect { Initiative.find(initiative.id) }.to raise_error(ActiveRecord::RecordNotFound)
-      expect { InitiativeUpdate.find(initiative_update.id) }.to raise_error(ActiveRecord::RecordNotFound)
+      expect { Update.find(initiative_update.id) }.to raise_error(ActiveRecord::RecordNotFound)
       expect { Field.find(field.id) }.to raise_error(ActiveRecord::RecordNotFound)
       expect { InitiativeExpense.find(initiative_expense.id) }.to raise_error(ActiveRecord::RecordNotFound)
       expect { Checklist.find(checklist.id) }.to raise_error(ActiveRecord::RecordNotFound)
@@ -443,8 +420,8 @@ RSpec.describe Initiative, type: :model do
     }
     let!(:expense) { create(:initiative_expense, initiative_id: initiative.id, annual_budget_id: annual_budget.id, amount: 50) }
 
-    let!(:field) { create(:field, initiative_id: initiative.id, title: 'Attendance') }
-    let!(:update) { create(:initiative_update, initiative_id: initiative.id, data: "{\"#{field.id}\":105}") }
+    let!(:field) { create(:field, field_definer: initiative, title: 'Attendance') }
+    let!(:update) { create(:update, updatable: initiative, data: "{\"#{field.id}\":105}") }
 
 
     it 'returns csv for initiative export' do

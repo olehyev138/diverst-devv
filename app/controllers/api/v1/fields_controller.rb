@@ -12,8 +12,13 @@ class Api::V1::FieldsController < DiverstController
     params
       .require(:field)
       .permit(
+        :field_definer_id,
+        :field_definer_type,
         :type,
-        :title
+        :title,
+        :options_text,
+        :min,
+        :max,
       )
   end
 end

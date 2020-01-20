@@ -125,9 +125,9 @@ export function MetricsDashboardForm(props) {
       onSubmit={(values, actions) => {
         props.metricsDashboardAction(mapFields(values, ['group_ids', 'segment_ids']));
       }}
-
-      render={formikProps => <MetricsDashboardFormInner {...props} {...formikProps} />}
-    />
+    >
+      {formikProps => <MetricsDashboardFormInner {...props} {...formikProps} />}
+    </Formik>
   );
 }
 

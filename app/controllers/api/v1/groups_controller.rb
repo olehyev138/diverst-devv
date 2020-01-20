@@ -1,9 +1,38 @@
 class Api::V1::GroupsController < DiverstController
+  include Api::V1::Concerns::DefinesFields
+  include Api::V1::Concerns::Updatable
+
   def index
     authorize klass, :index?
 
     params.permit![:parent_id] = nil
     super
+  end
+
+  def initiatives
+    item = klass.find(params[:id])
+    base_authorize(item)
+
+    render status: 200, json: Initiative.index(
+        self.diverst_request,
+        params.except(:id).permit!,
+        base: item.initiatives.union(item.participating_initiatives))
+  end
+
+  def create_field
+    params[:field] = field_payload
+    params[:field][:field_type] = 'regular'
+    base_authorize(klass)
+    item = klass.find(params[:id])
+
+    render status: 201, json: Field.build(self.diverst_request, params, base: item.fields)
+  rescue => e
+    case e
+    when InvalidInputException
+      raise
+    else
+      raise BadRequestException.new(e.message)
+    end
   end
 
   def payload
@@ -41,8 +70,6 @@ class Api::V1::GroupsController < DiverstController
       :expiry_age_for_resources,
       :expiry_age_for_events,
       :unit_of_expiry_age,
-      :banner_url,
-      :logo_url,
       manager_ids: [],
       child_ids: [],
       member_ids: [],

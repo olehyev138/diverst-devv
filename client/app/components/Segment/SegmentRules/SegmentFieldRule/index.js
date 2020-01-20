@@ -72,7 +72,9 @@ const SegmentFieldRule = (props) => {
   // callback to fetch fields from backend
   const fieldSelectAction = (searchKey = '') => {
     props.getFieldsBegin({
+      enterpriseId: props.currentEnterprise.id,
       count: 10, page: 0, order: 'asc',
+      orderBy: 'fields.id',
       search: searchKey,
     });
   };
@@ -143,7 +145,10 @@ SegmentFieldRule.propTypes = {
   getFieldsBegin: PropTypes.func,
   selectFields: PropTypes.array,
   fields: PropTypes.object,
-  formik: PropTypes.object
+  formik: PropTypes.object,
+  currentEnterprise: PropTypes.shape({
+    id: PropTypes.number,
+  }).isRequired
 };
 
 export default connect(SegmentFieldRule);

@@ -47,7 +47,7 @@ export default defineMessages({
       id: `${scope}.index.tabs.all`
     },
   },
-  form: {
+  inputs: {
     name: {
       id: `${scope}.form.input.name`,
     },
@@ -60,6 +60,9 @@ export default defineMessages({
     end: {
       id: `${scope}.form.input.end`,
     },
+    picture: {
+      id: `${scope}.form.input.picture`
+    }
   },
   show: {
     dateAndTime: {

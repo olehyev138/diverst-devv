@@ -68,6 +68,7 @@ export function SegmentFormInner({ handleSubmit, handleChange, handleBlur, value
           values={values}
           classes={props.classes}
           {...props.ruleProps}
+          currentEnterprise={props.currentEnterprise}
         />
       </DiverstFormLoader>
     </React.Fragment>
@@ -90,8 +91,9 @@ export function SegmentForm(props) {
       onSubmit={(values, actions) => {
         props.segmentAction(serializeSegment(values));
       }}
-      render={formikProps => <SegmentFormInner {...props} {...formikProps} />}
-    />
+    >
+      {formikProps => <SegmentFormInner {...props} {...formikProps} />}
+    </Formik>
   );
 }
 
@@ -101,6 +103,9 @@ SegmentForm.propTypes = {
   segment: PropTypes.object,
   isCommitting: PropTypes.bool,
   isFormLoading: PropTypes.bool,
+  currentEnterprise: PropTypes.shape({
+    id: PropTypes.number
+  }).isRequired
 };
 
 SegmentFormInner.propTypes = {
@@ -118,6 +123,9 @@ SegmentFormInner.propTypes = {
   ruleProps: PropTypes.object,
   isCommitting: PropTypes.bool,
   isFormLoading: PropTypes.bool,
+  currentEnterprise: PropTypes.shape({
+    id: PropTypes.number
+  }).isRequired
 };
 
 export default compose(

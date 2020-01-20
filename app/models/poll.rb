@@ -1,9 +1,16 @@
 class Poll < ApplicationRecord
   include PublicActivity::Common
+  include DefinesFields
+
+  @@field_users = [:responses]
+  mattr_reader :field_users
 
   enum status: [:published, :draft]
 
-  has_many :fields, dependent: :destroy
+  has_many :fields,
+           as: :field_definer,
+           dependent: :destroy,
+           after_add: :add_missing_field_background_job
   has_many :responses, class_name: 'PollResponse', inverse_of: :poll, dependent: :destroy
   has_many :graphs, dependent: :destroy
   has_many :polls_segments, dependent: :destroy
@@ -136,7 +143,7 @@ class Poll < ApplicationRecord
   end
 
   def at_least_one_field
-    errors[:base] << 'Survey is invalid without any field' unless fields.any?
+    errors[:base] << 'Survey is invalid without any field' unless fields.any? rescue nil
   end
 
   private

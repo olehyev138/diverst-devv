@@ -27,7 +27,7 @@ export function OutcomeCreatePage(props) {
   const { currentUser, currentGroup } = props;
   const rs = new RouteService(useContext);
   const links = {
-    outcomesIndex: ROUTES.group.outcomes.index.path(rs.params('group_id')),
+    outcomesIndex: ROUTES.group.plan.outcomes.index.path(rs.params('group_id')),
   };
 
   useEffect(() => () => props.outcomesUnmount(), []);

@@ -1,0 +1,33 @@
+#!/bin/bash
+
+# Bundle API, upload to S3 & create a EB app version
+# Usage: ./create-app-version <aws-profile> <eb-app-name> <app-version-label> <bucket-name>
+
+# TODO: define workflow, process for labeling the app version
+
+PROFILE=$1
+EB_APP_NAME=$2
+EB_VERSION_LABEL=$3
+BUNDLE_BUCKET_NAME=$4
+
+# Exit on error
+set -e
+
+if [ ! -d '.git' ]; then
+  echo 'Error - not in app root'
+  exit 1
+fi
+
+# Create app bundle
+# TODO: switch to `git archive`
+zip ../diverst-development.zip -r ./* .[^.]* -x client/**\* -x devops/**\* -x tmp/**\* -x .git/**\* spec/**\*
+
+# Copy app bundle to S3 - assumes bucket exists - should be created by bootstrap-backend
+aws s3 cp ../diverst-development.zip "s3://$BUNDLE_BUCKET_NAME" --profile "$PROFILE"
+
+# Create app version
+aws elasticbeanstalk create-application-version \
+  --profile "$PROFILE" \
+  --application-name "$EB_APP_NAME" \
+  --version-label "$EB_VERSION_LABEL" \
+  --source-bundle S3Bucket="$BUNDLE_BUCKET_NAME",S3Key='diverst-development.zip'

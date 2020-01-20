@@ -32,9 +32,11 @@ module User::Actions
     self
   end
 
-  def invite!
-    regenerate_access_token
-    UserMailer.delay(queue: 'mailers').send_invitation(self)
+  def invite!(manager = nil)
+    # TODO Fix this, it seemed to work using Devise previously so not sure where "UserMailer"
+    # TODO or "regenerate_access_token" are (they aren't in react or development)
+    # regenerate_access_token
+    # UserMailer.delay(queue: 'mailers').send_invitation(self)
   end
 
   def posts(params)
@@ -201,7 +203,12 @@ module User::Actions
     end
 
     def valid_scopes
-      %w(active enterprise_mentors mentors mentees accepting_mentee_requests accepting_mentor_requests)
+      %w( active enterprise_mentors mentors mentees accepting_mentee_requests
+          accepting_mentor_requests saml inactive invitation_sent)
+    end
+
+    def preload_attachments
+      [:avatar]
     end
 
     def base_preloads
@@ -214,7 +221,7 @@ module User::Actions
           {
               field_data: [
                   :field,
-                  { field: :enterprise }
+                  { field: Field.base_preloads }
               ]
           },
           {

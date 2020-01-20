@@ -1,5 +1,5 @@
 class PillarSerializer < ApplicationRecordSerializer
-  attributes :outcome
+  has_many :initiatives
 
   def serialize_all_fields
     true

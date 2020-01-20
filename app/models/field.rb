@@ -1,10 +1,9 @@
 class Field < ApplicationRecord
-  belongs_to :enterprise
-  belongs_to :group
-  belongs_to :poll
-  belongs_to :initiative
+  include Field::Actions
 
-  has_many :field_data, class_name: 'FieldData'
+  belongs_to :field_definer, polymorphic: true
+
+  has_many :field_data, class_name: 'FieldData', dependent: :destroy
 
   has_many :yammer_field_mappings, foreign_key: :diverst_field_id, dependent: :delete_all
 
@@ -15,9 +14,10 @@ class Field < ApplicationRecord
   validates_length_of :type, maximum: 191
   validates :title, presence: true
   validates :type,  presence: true
+  validates_presence_of :field_definer
   validates_inclusion_of :type, in: ['SelectField', 'TextField', 'SegmentsField', 'NumericField', 'GroupsField', 'CheckboxField', 'DateField']
-  validates :title, uniqueness: { scope: :enterprise_id },
-                    unless: Proc.new { |object| (object.type == 'SegmentsField' || object.type == 'GroupsField') }, if: :container_type_is_enterprise?
+  validates :title, uniqueness: { scope: [:field_definer_id, :field_definer_type] },
+                    unless: Proc.new { |object| (object.type == 'SegmentsField' || object.type == 'GroupsField') }
 
   # Operators
   #  - equals_any_of:
@@ -78,7 +78,7 @@ class Field < ApplicationRecord
   end
 
   def container_type_is_enterprise?
-    enterprise_id.present?
+    field_definer_type == 'Enterprise' rescue false
   end
 
   # The typical field value flow would look like this:
@@ -129,9 +129,11 @@ class Field < ApplicationRecord
   end
 
   def enterprise
-    return association(:enterprise).reader if enterprise_id.present?
-    return group.enterprise if group_id.present?
-    return poll.enterprise if poll_id.present?
-    return initiative.enterprise if initiative_id.present?
+    return nil if field_definer == nil
+    return association(:field_definer).reader if container_type_is_enterprise?
+
+    association(:field_definer).reader.enterprise
+  rescue
+    nil
   end
 end

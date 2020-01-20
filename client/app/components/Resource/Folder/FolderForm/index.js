@@ -159,9 +159,9 @@ export function FolderForm(props) {
         const payload = mapFields(values, ['parent_id']);
         props.folderAction(payload);
       }}
-
-      render={formikProps => <FolderFormInner {...props} {...formikProps} />}
-    />
+    >
+      {formikProps => <FolderFormInner {...props} {...formikProps} />}
+    </Formik>
   );
 }
 

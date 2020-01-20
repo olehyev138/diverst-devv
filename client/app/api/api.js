@@ -14,6 +14,7 @@ import policyGroups from 'api/policy_groups/policy_groups';
 import groupMessages from 'api/group_messages/group_messages';
 import groupMessageComments from 'api/group_message_comments/group_message_comments';
 import groupMembers from 'api/group_members/group_members';
+import updates from 'api/updates/updates';
 import outcomes from 'api/outcomes/outcomes';
 import customText from 'api/custom_text/custom_text';
 import user from 'api/user/user';
@@ -28,6 +29,11 @@ import mentorshipSessions from 'api/mentorship_sessions/mentorship_sessions';
 import mentoringSessions from 'api/mentoring_sessions/mentoring_sessions';
 import answers from 'api/answers/answers';
 import comments from 'api/comments/comments';
+import emails from 'api/emails/emails';
+import emailEvents from 'api/clockwork_database_events/clockwork_database_events';
+import newsLinks from 'api/newslinks/newslinks';
+import newsLinkComments from 'api/news_link_comments/news_link_comments';
+import socialLinks from 'api/sociallinks/sociallinks';
 
 /* Metrics */
 import overviewGraphs from 'api/metrics/overview_graphs';
@@ -50,9 +56,13 @@ const Api = {
   segments,
   initiatives,
   newsFeedLinks,
+  newsLinks,
+  newsLinkComments,
+  socialLinks,
   groupMessages,
   groupMessageComments,
   groupMembers,
+  updates,
   policyGroups,
   outcomes,
   customText,
@@ -67,6 +77,8 @@ const Api = {
   mentoringRequests,
   mentorshipSessions,
   mentoringSessions,
+  emails,
+  emailEvents,
   metrics: {
     overviewGraphs,
     userGraphs,

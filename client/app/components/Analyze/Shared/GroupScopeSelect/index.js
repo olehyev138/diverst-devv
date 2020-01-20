@@ -75,8 +75,9 @@ export function GroupScopeSelect(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => props.updateScope(values)}
-      render={formikProps => <GroupScopeSelectInner {...props} {...formikProps} />}
-    />
+    >
+      {formikProps => <GroupScopeSelectInner {...props} {...formikProps} />}
+    </Formik>
   );
 }
 

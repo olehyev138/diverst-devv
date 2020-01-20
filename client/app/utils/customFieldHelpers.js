@@ -26,6 +26,20 @@ function serializeFieldData(fieldData) {
   return serializedFieldData;
 }
 
+function serializeFieldDataWithFieldId(fieldData) {
+  const serializedFieldData = [];
+
+  fieldData.forEach((fieldDatum) => {
+    serializedFieldData.push({
+      id: fieldDatum.id,
+      data: serializeDatum(fieldDatum),
+      field_id: fieldDatum.field_id
+    });
+  });
+
+  return serializedFieldData;
+}
+
 function serializeDatum(fieldDatum) {
   const datum = fieldDatum.data;
   const type = dig(fieldDatum, 'field', 'type');
@@ -111,5 +125,6 @@ function serializeSegment(segment) {
 export {
   serializeFieldData, serializeDatum,
   deserializeDatum, deserializeOptionsText,
-  serializeSegment
+  serializeSegment,
+  serializeFieldDataWithFieldId
 };

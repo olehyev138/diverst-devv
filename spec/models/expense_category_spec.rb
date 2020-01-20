@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe ExpenseCategory, type: :model do
   describe 'validations' do
-    let(:expense_category) { build_stubbed(:expense_category) }
+    let(:expense_category) { build(:expense_category) }
 
     it { expect(expense_category).to validate_presence_of(:name) }
     it { expect(expense_category).to validate_presence_of(:enterprise) }
@@ -11,9 +11,9 @@ RSpec.describe ExpenseCategory, type: :model do
 
     it { expect(expense_category).to have_many(:expenses).dependent(:destroy).with_foreign_key(:category_id) }
 
-    # Paperclip
-    # it { expect(expense_category).to have_attached_file(:icon) }
-    # it { expect(expense_category).to validate_attachment_content_type(:icon).allowing('image/png', 'image/gif').rejecting('text/plain', 'text/xml') }
+    # ActiveStorage
+    it { expect(expense_category).to have_attached_file(:icon) }
+    it { expect(expense_category).to validate_attachment_content_type(:icon, AttachmentHelper.common_image_types) }
   end
 
   describe '#destroy_callbacks' do

@@ -21,7 +21,7 @@ import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import messages from 'containers/User/messages';
 import { buildValues, mapFields } from 'utils/formHelpers';
 
-import FieldInputForm from 'components/User/FieldInputForm/Loadable';
+import UserFieldInputForm from 'components/User/UserFieldInputForm/Loadable';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 
@@ -102,7 +102,7 @@ export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, 
       {props.edit && (
         <React.Fragment>
           <Box mb={2} />
-          <FieldInputForm
+          <UserFieldInputForm
             edit
             user={props.user}
             fieldData={props.fieldData}
@@ -110,6 +110,7 @@ export function UserFormInner({ handleSubmit, handleChange, handleBlur, values, 
             admin={props.admin}
             isCommitting={props.isCommitting}
             isFormLoading={props.isFormLoading}
+            messages={messages}
           />
         </React.Fragment>
       )}
@@ -137,9 +138,9 @@ export function UserForm(props) {
         payload.redirectPath = props.admin ? props.links.usersIndex : props.links.usersPath(user.id);
         props.userAction(payload);
       }}
-
-      render={formikProps => <UserFormInner {...props} {...formikProps} />}
-    />
+    >
+      {formikProps => <UserFormInner {...props} {...formikProps} />}
+    </Formik>
   );
 }
 

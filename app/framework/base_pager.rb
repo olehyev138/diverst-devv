@@ -4,43 +4,41 @@ module BasePager
   end
 
   module ClassMethods
-    attr_accessor :user, :default_order, :default_order_by, :page, :count
-
     def set_defaults
-      self.default_order = :desc
-      self.default_order_by = "#{self.table_name}.id"
-      self.page = 0
-      self.count = 10
+      @default_order = :desc
+      @default_order_by = "#{self.table_name}.id"
+      @page = 0
+      @count = 10
     end
 
     def get_params(params)
-      item_page = params[:page].present? ? params[:page].to_i : page
-      item_count = params[:count].present? ? params[:count].to_i : count
+      item_page = params[:page].present? ? params[:page].to_i : @page
+      item_count = params[:count].present? ? params[:count].to_i : @count
       offset = item_page * item_count
-      orderBy = params[:orderBy].presence || default_order_by
-      order = params[:order].presence || default_order
+      order_by = params[:orderBy].presence || @default_order_by
+      order = params[:order].presence || @default_order
 
-      [item_page, item_count, offset, orderBy, order]
+      [item_page, item_count, offset, order_by, order]
     end
 
-    def pager(diverst_request, params = {}, search_method = :lookup)
+    def pager(diverst_request, params = {}, search_method = :lookup, base: self)
       return elasticsearch(diverst_request, params) if params[:elasticsearch]
 
       set_defaults
 
-      raise Exception.new if default_order_by.blank?
-      raise Exception.new if default_order.blank?
+      raise Exception.new if @default_order_by.blank?
+      raise Exception.new if @default_order.blank?
 
       # set the parameters
-      item_page, item_count, offset, orderBy, order = get_params(params)
+      item_page, item_count, offset, order_by, order = get_params(params)
 
       # get the search method
       search_method_obj = self.method(search_method)
 
       # search
-      total = search_method_obj.call(params, diverst_request).count
-      items = search_method_obj.call(params, diverst_request)
-                        .order("#{orderBy} #{order}")
+      total = search_method_obj.call(params, diverst_request, base: base).count
+      items = search_method_obj.call(params, diverst_request, base: base)
+                        .order("#{order_by} #{order}")
                         .limit(item_count)
                         .offset(offset)
 
@@ -51,16 +49,16 @@ module BasePager
     def pager_with_query(query, params = {})
       set_defaults
 
-      raise Exception.new if default_order_by.blank?
-      raise Exception.new if default_order.blank?
+      raise Exception.new if @default_order_by.blank?
+      raise Exception.new if @default_order.blank?
 
       # set the parameters
-      item_page, item_count, offset, orderBy, order = get_params(params)
+      item_page, item_count, offset, order_by, order = get_params(params)
 
       # search
       total = query.count
       items = query
-                .order("#{orderBy} #{order}")
+                .order("#{order_by} #{order}")
                 .limit(item_count)
                 .offset(offset)
 

@@ -61,7 +61,7 @@ export default defineMessages({
       },
       edit: {
         id: `${scope}.group.events.edit`
-      }
+      },
     },
     resources: {
       index: {
@@ -101,16 +101,76 @@ export default defineMessages({
         }
       },
     },
-    outcomes: {
+    plan: {
       index: {
-        id: `${scope}.group.outcomes.index`
+        id: `${scope}.group.plan.index`
       },
-      new: {
-        id: `${scope}.group.outcomes.new`
+      outcomes: {
+        index: {
+          id: `${scope}.group.plan.outcomes.index`
+        },
+        new: {
+          id: `${scope}.group.plan.outcomes.new`
+        },
+        edit: {
+          id: `${scope}.group.plan.outcomes.edit`
+        },
       },
-      edit: {
-        id: `${scope}.group.outcomes.edit`
-      }
+      events: {
+        index: {
+          id: `${scope}.group.plan.events.index`
+        },
+        manage: {
+          index: {
+            id: `${scope}.group.plan.events.manage.index`
+          },
+          metrics: {
+            id: `${scope}.group.plan.events.manage.metrics`
+          },
+          fields: {
+            id: `${scope}.group.plan.events.manage.fields`
+          },
+          updates: {
+            index: {
+              id: `${scope}.group.plan.events.manage.updates.index`
+            },
+            show: {
+              id: `${scope}.group.plan.events.manage.updates.show`
+            },
+            edit: {
+              id: `${scope}.group.plan.events.manage.updates.edit`
+            },
+            new: {
+              id: `${scope}.group.plan.events.manage.updates.new`
+            },
+          },
+        },
+      },
+      kpi: {
+        index: {
+          id: `${scope}.group.plan.kpi.index`
+        },
+        metrics: {
+          id: `${scope}.group.plan.kpi.metrics`
+        },
+        fields: {
+          id: `${scope}.group.plan.kpi.fields`
+        },
+        updates: {
+          index: {
+            id: `${scope}.group.plan.kpi.updates.index`
+          },
+          show: {
+            id: `${scope}.group.plan.kpi.updates.show`
+          },
+          edit: {
+            id: `${scope}.group.plan.kpi.updates.edit`
+          },
+          new: {
+            id: `${scope}.group.plan.kpi.updates.new`
+          },
+        },
+      },
     },
     manage: {
       index: {

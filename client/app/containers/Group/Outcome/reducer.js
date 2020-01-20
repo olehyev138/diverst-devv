@@ -17,7 +17,7 @@ export const initialState = {
   isFormLoading: true,
   isCommitting: false,
   outcomes: [],
-  outcomeTotal: null,
+  outcomesTotal: null,
   currentOutcome: null,
 };
 
@@ -31,7 +31,7 @@ function outcomesReducer(state = initialState, action) {
         break;
       case GET_OUTCOMES_SUCCESS:
         draft.outcomes = action.payload.items;
-        draft.outcomeTotal = action.payload.total;
+        draft.outcomesTotal = action.payload.total;
         draft.isLoading = false;
         break;
       case GET_OUTCOMES_ERROR:

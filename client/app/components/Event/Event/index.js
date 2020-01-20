@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
 
-import { compose } from 'redux/';
+import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import dig from 'object-dig';
 
@@ -20,6 +20,8 @@ import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import DiverstShowLoader from 'components/Shared/DiverstShowLoader';
 
 import { formatDateTimeString, DateTime } from 'utils/dateTimeHelpers';
+
+import DiverstImg from 'components/Shared/DiverstImg';
 
 const styles = theme => ({
   padding: {
@@ -48,8 +50,6 @@ const styles = theme => ({
 });
 
 export function Event(props) {
-  /* Render an Event */
-
   const { classes } = props;
   const event = dig(props, 'event');
 
@@ -95,24 +95,34 @@ export function Event(props) {
             </Grid>
           </Grid>
           <Paper className={classes.padding}>
-            <Typography className={classes.dataHeaders}>
-              <DiverstFormattedMessage {...messages.show.dateAndTime} />
-            </Typography>
-            <Typography variant='overline'>From</Typography>
-            <Typography color='textSecondary'>{formatDateTimeString(event.start, DateTime.DATETIME_FULL)}</Typography>
-            <Typography variant='overline'>To</Typography>
-            <Typography color='textSecondary' className={classes.data}>{formatDateTimeString(event.end, DateTime.DATETIME_FULL)}</Typography>
-
-            {event.description && (
-              <React.Fragment>
+            <Grid container spacing={2}>
+              <Grid item xs>
                 <Typography className={classes.dataHeaders}>
-                  <DiverstFormattedMessage {...messages.form.description} />
+                  <DiverstFormattedMessage {...messages.show.dateAndTime} />
                 </Typography>
-                <Typography color='textSecondary' className={classes.data}>
-                  {event.description}
-                </Typography>
-              </React.Fragment>
-            )}
+                <Typography variant='overline'>From</Typography>
+                <Typography color='textSecondary'>{formatDateTimeString(event.start, DateTime.DATETIME_FULL)}</Typography>
+                <Typography variant='overline'>To</Typography>
+                <Typography color='textSecondary' className={classes.data}>{formatDateTimeString(event.end, DateTime.DATETIME_FULL)}</Typography>
+
+                {event.description && (
+                  <React.Fragment>
+                    <Typography className={classes.dataHeaders}>
+                      <DiverstFormattedMessage {...messages.inputs.description} />
+                    </Typography>
+                    <Typography color='textSecondary' className={classes.data}>
+                      {event.description}
+                    </Typography>
+                  </React.Fragment>
+                )}
+              </Grid>
+              <Grid item>
+                <DiverstImg
+                  data={event.picture_data}
+                  alt='Event Image'
+                />
+              </Grid>
+            </Grid>
           </Paper>
         </React.Fragment>
       )}

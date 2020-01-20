@@ -51,3 +51,11 @@ cookbooks/
 /.idea
 
 config/application.yml
+
+# Ignore Terraform plugins & internal or state files
+.terraform/
+terraform.tfstate*
+
+# ActiveStorage local storage
+/storage
+

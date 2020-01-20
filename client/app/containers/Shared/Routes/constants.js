@@ -219,27 +219,159 @@ export const ROUTES = {
             titleMessage: messages.groups.news.messages.edit
           }
         },
+      },
+      news_links: {
+        show: {
+          path:
+            (groupId = ':group_id', itemId = ':item_id') => `/groups/${groupId}/news/news_links/${itemId}`,
+        },
+        new: {
+          path:
+            (groupId = ':group_id') => `/groups/${groupId}/news/news_links/new`,
+        },
+        edit: {
+          path: (groupId = ':group_id', itemId = ':item_id') => `/groups/${groupId}/news/news_links/${itemId}/edit`,
+        },
+      },
+      social_links: {
+        new: {
+          path: (groupId = ':group_id') => `/groups/${groupId}/news/social_links/new`,
+        },
+        edit: {
+          path: (groupId = ':group_id', itemId = ':item_id') => `/groups/${groupId}/news/social_links/${itemId}/edit`,
+        }
       }
     },
-    outcomes: {
+    plan: {
       index: {
-        path: (groupId = ':group_id') => `/groups/${groupId}/outcomes`,
         data: {
-          titleMessage: messages.groups.outcomes.index,
-        }
+          pathPrefix: (groupId = ':group_id') => `/groups/${groupId}/plan`,
+          titleMessage: messages.groups.plan.index
+        },
       },
-      new: {
-        path: (groupId = ':group_id') => `/groups/${groupId}/outcomes/new`,
-        data: {
-          titleMessage: messages.groups.outcomes.new,
-        }
+      outcomes: {
+        index: {
+          path: (groupId = ':group_id') => `/groups/${groupId}/plan/outcomes`,
+          data: {
+            titleMessage: messages.groups.plan.outcomes.index,
+          }
+        },
+        new: {
+          path: (groupId = ':group_id') => `/groups/${groupId}/plan/outcomes/new`,
+          data: {
+            titleMessage: messages.groups.plan.outcomes.new,
+          }
+        },
+        edit: {
+          path:
+            (groupId = ':group_id', outcomeId = ':outcome_id') => `/groups/${groupId}/plan/outcomes/${outcomeId}/edit`,
+          data: {
+            titleMessage: messages.groups.plan.outcomes.edit
+          }
+        },
       },
-      edit: {
-        path:
-          (groupId = ':group_id', outcomeId = ':outcome_id') => `/groups/${groupId}/outcomes/${outcomeId}/edit`,
-        data: {
-          titleMessage: messages.groups.outcomes.edit
-        }
+      events: {
+        index: {
+          path: (groupId = ':group_id') => `/groups/${groupId}/plan/events`,
+          data: {
+            titleMessage: messages.groups.plan.events.index,
+          }
+        },
+        manage: {
+          index: {
+            data: {
+              pathPrefix: (groupId = ':group_id', eventId = ':event_id') => `/groups/${groupId}/plan/events/${eventId}/manage`,
+              titleMessage: messages.groups.plan.events.manage.index
+            },
+          },
+          metrics: {
+            path:
+              (groupId = ':group_id', eventId = ':event_id') => `/groups/${groupId}/plan/events/${eventId}/manage/metrics`,
+            data: {
+              titleMessage: messages.groups.plan.events.manage.metrics,
+            },
+          },
+          fields: {
+            path: (groupId = ':group_id', eventId = ':event_id') => `/groups/${groupId}/plan/events/${eventId}/manage/fields`,
+            data: {
+              titleMessage: messages.groups.plan.events.manage.fields,
+            }
+          },
+          updates: {
+            index: {
+              path: (groupId = ':group_id', eventId = ':event_id') => `/groups/${groupId}/plan/events/${eventId}/manage/updates`,
+              data: {
+                titleMessage: messages.groups.plan.events.manage.updates.index,
+              }
+            },
+            show: {
+              path:
+                (groupId = ':group_id', eventId = ':event_id', updateId = ':update_id') => `/groups/${groupId}/plan/events/${eventId}/manage/updates/${updateId}`,
+              data: {
+                titleMessage: messages.groups.plan.events.manage.updates.show,
+              }
+            },
+            edit: {
+              path:
+                (groupId = ':group_id', eventId = ':event_id', updateId = ':update_id') => `/groups/${groupId}/plan/events/${eventId}/manage/updates/${updateId}/edit`,
+              data: {
+                titleMessage: messages.groups.plan.events.manage.updates.edit,
+              }
+            },
+            new: {
+              path: (groupId = ':group_id', eventId = ':event_id') => `/groups/${groupId}/plan/events/${eventId}/manage/updates/new`,
+              data: {
+                titleMessage: messages.groups.plan.events.manage.updates.new,
+              }
+            }
+          },
+        },
+      },
+      kpi: {
+        index: {
+          data: {
+            pathPrefix: (groupId = ':group_id') => `/groups/${groupId}/plan/kpi`,
+            titleMessage: messages.groups.plan.kpi.index
+          },
+        },
+        metrics: {
+          path: (groupId = ':group_id') => `/groups/${groupId}/plan/kpi/metrics`,
+          data: {
+            titleMessage: messages.groups.plan.kpi.metrics,
+          }
+        },
+        fields: {
+          path: (groupId = ':group_id') => `/groups/${groupId}/plan/kpi/fields`,
+          data: {
+            titleMessage: messages.groups.plan.kpi.fields,
+          }
+        },
+        updates: {
+          index: {
+            path: (groupId = ':group_id') => `/groups/${groupId}/plan/kpi/updates`,
+            data: {
+              titleMessage: messages.groups.plan.kpi.updates.index,
+            }
+          },
+          show: {
+            path: (groupId = ':group_id', updateId = ':update_id') => `/groups/${groupId}/plan/kpi/updates/${updateId}`,
+            data: {
+              titleMessage: messages.groups.plan.kpi.updates.show,
+            }
+          },
+          edit: {
+            path: (groupId = ':group_id', updateId = ':update_id') => `/groups/${groupId}/plan/kpi/updates/${updateId}/edit`,
+            data: {
+              titleMessage: messages.groups.plan.kpi.updates.edit,
+            }
+          },
+          new: {
+            path: (groupId = ':group_id') => `/groups/${groupId}/plan/kpi/updates/new`,
+            data: {
+              titleMessage: messages.groups.plan.kpi.updates.new,
+            }
+          }
+        },
       },
     },
     manage: {
@@ -534,6 +666,22 @@ export const ROUTES = {
         ssoSettings: {
           edit: {
             path: () => '/admin/system/settings/sso'
+          },
+        },
+        emails: {
+          index: {
+            path: () => '/admin/system/settings/emailLayouts'
+          },
+          edit: {
+            path: (emailId = ':email_id') => `/admin/system/settings/emailLayouts/${emailId}/edit`
+          },
+        },
+        mailEvents: {
+          index: {
+            path: () => '/admin/system/settings/emailEvents'
+          },
+          edit: {
+            path: (eventId = ':event_id') => `/admin/system/settings/emailEvents/${eventId}/edit`
           },
         }
       },

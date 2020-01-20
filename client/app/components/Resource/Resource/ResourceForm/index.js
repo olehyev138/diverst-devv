@@ -160,9 +160,9 @@ export function ResourceForm(props) {
         const payload = mapFields(values, ['folder_id']);
         props.resourceAction(payload);
       }}
-
-      render={formikProps => <ResourceFormInner {...props} {...formikProps} />}
-    />
+    >
+      {formikProps => <ResourceFormInner {...props} {...formikProps} />}
+    </Formik>
   );
 }
 

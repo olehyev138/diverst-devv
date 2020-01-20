@@ -23,7 +23,7 @@ Diverst::Application.configure do
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
 
-  config.assets.enabled = false
+  # config.assets.enabled = false
 
   # Raises error for missing translations
   config.action_view.raise_on_missing_translations = true
@@ -46,4 +46,7 @@ Diverst::Application.configure do
   config.public_file_server.enabled = true
 
   config.eager_load = false
+
+  # Save ActiveStorage attachments locally
+  config.active_storage.service = :local
 end

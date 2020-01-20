@@ -1,8 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe Enterprise, type: :model do
+  it_behaves_like 'it Defines Fields'
+
   describe 'when validating' do
-    let(:enterprise) { build_stubbed(:enterprise) }
+    let(:enterprise) { build(:enterprise) }
 
     it { expect(enterprise).to have_many(:users).inverse_of(:enterprise) }
     it { expect(enterprise).to have_many(:graph_fields).class_name('Field') }
@@ -44,13 +46,13 @@ RSpec.describe Enterprise, type: :model do
     end
 
     [:cdo_picture, :banner, :xml_sso_config, :onboarding_sponsor_media].each do |attribute|
-      # Paperclip
-      xit { expect(enterprise).to have_attached_file(attribute) }
+      # ActiveStorage
+      it { expect(enterprise).to have_attached_file(attribute) }
     end
 
-    # it { expect(enterprise).to validate_attachment_content_type(:cdo_picture).allowing('image/png', 'image/gif').rejecting('text/plain', 'text/xml') }
-    # it { expect(enterprise).to validate_attachment_content_type(:banner).allowing('image/png', 'image/gif').rejecting('text/plain', 'text/xml') }
-    # it { expect(enterprise).to validate_attachment_content_type(:xml_sso_config).allowing('text/xml').rejecting('image/png', 'image/gif') }
+    it { expect(enterprise).to validate_attachment_content_type(:cdo_picture, AttachmentHelper.common_image_types) }
+    it { expect(enterprise).to validate_attachment_content_type(:banner, AttachmentHelper.common_image_types) }
+    it { expect(enterprise).to validate_attachment_content_type(:xml_sso_config, [AttachmentHelper::COMMON_CONTENT_TYPES[:XML]]) }
   end
 
   describe 'testing callbacks' do
@@ -146,7 +148,7 @@ RSpec.describe Enterprise, type: :model do
     it 'removes the child objects', skip: 'this spec will pass when PR 1245 is merged to master' do
       enterprise = create(:enterprise)
       user = create(:user, enterprise: enterprise)
-      field = create(:field, enterprise: enterprise)
+      field = create(:field, field_definer: enterprise)
       topic = create(:topic, enterprise: enterprise)
       segment = create(:segment, enterprise: enterprise)
       group = create(:group, enterprise: enterprise)

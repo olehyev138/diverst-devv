@@ -1,9 +1,0 @@
----
-influxdb_docker_image: 'influxdb:1.6'
-influxdb_container_name: 'influxdb'
-influxdb_volume_name: 'influxdb'
-
-grafana_docker_image: 'grafana/grafana:latest'
-grafana_container_name: 'grafana'
-grafana_admin_password: 'ajUY5PS9xPPMuMr8Zsknh9TL3'
-grafana_binding_port: 3000

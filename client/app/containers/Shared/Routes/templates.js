@@ -6,10 +6,13 @@ import SessionLayout from 'containers/Layouts/SessionLayout/Loadable';
 import ErrorLayout from 'containers/Layouts/ErrorLayout/Loadable';
 import GlobalSettingsLayout from 'containers/Layouts/GlobalSettingsLayout/Loadable';
 import GroupManageLayout from 'containers/Layouts/GroupManageLayout/Loadable';
+import GroupPlanLayout from 'containers/Layouts/GroupPlanLayout/Loadable';
+import GroupKPILayout from 'containers/Layouts/GroupPlanLayout/KPILayout/Loadable';
 import MentorshipLayout from 'containers/Layouts/MentorshipLayout/Loadable';
 import InnovateLayout from 'containers/Layouts/InnovateLayout/Loadable';
 import SystemUserLayout from 'containers/Layouts/SystemUsersLayout/Loadable';
 import BrandingLayout from 'containers/Layouts/BrandingLayout/Loadable';
+import EmailLayout from 'containers/Layouts/GlobalSettingsLayout/EmailLayout/Loadable';
 
 /* Session */
 import LoginPage from 'containers/Session/LoginPage/Loadable';
@@ -56,6 +59,10 @@ import FieldsPage from 'containers/GlobalSettings/Field/FieldsPage/Loadable';
 import CustomTextEditPage from 'containers/GlobalSettings/CustomText/CustomTextEditPage/Loadable';
 import EnterpriseConfigurationPage from 'containers/GlobalSettings/EnterpriseConfiguration/EnterpriseConfigurationPage/Loadable';
 import SSOSettingsPage from 'containers/GlobalSettings/SSOSettingsPage/Loadable';
+import EmailsPage from 'containers/GlobalSettings/Email/Email/EmailsPage/Loadable';
+import EmailEditPage from 'containers/GlobalSettings/Email/Email/EmailEditPage/Loadable';
+import EmailEventsPage from 'containers/GlobalSettings/Email/Event/EventsPage/Loadable';
+import EmailEventEditPage from 'containers/GlobalSettings/Email/Event/EventEditPage/Loadable';
 
 /* Admin - System - Branding */
 import BrandingThemePage from 'containers/Branding/BrandingThemePage/Loadable';
@@ -84,15 +91,38 @@ import OutcomesPage from 'containers/Group/Outcome/OutcomesPage/Loadable';
 import EventPage from 'containers/Event/EventPage/Loadable';
 import EventCreatePage from 'containers/Event/EventCreatePage/Loadable';
 import EventEditPage from 'containers/Event/EventEditPage/Loadable';
+import EventManageMetricsPage from 'containers/Event/EventManage/MetricsPage/Loadable';
+import EventManageLayout from 'containers/Layouts/EventManageLayout/Loadable';
+import EventManageFieldsPage from 'containers/Event/EventManage/FieldsPage/Loadable';
+import EventManageUpdatesPage from 'containers/Event/EventManage/UpdatesPage/Loadable';
+import EventManageUpdatePage from 'containers/Event/EventManage/UpdatePage/Loadable';
+import EventManageUpdateEditPage from 'containers/Event/EventManage/UpdateEditPage/Loadable';
+import EventManageUpdateCreatePage from 'containers/Event/EventManage/UpdateCreatePage/Loadable';
 
 /* Group - News Feed */
 import GroupMessagePage from 'containers/News/GroupMessage/GroupMessagePage/Loadable';
 import GroupMessageCreatePage from 'containers/News/GroupMessage/GroupMessageCreatePage/Loadable';
 import GroupMessageEditPage from 'containers/News/GroupMessage/GroupMessageEditPage/Loadable';
+import NewsLinkCreatePage from 'containers/News/NewsLink/NewsLinkCreatePage';
+import NewsLinkEditPage from 'containers/News/NewsLink/NewsLinkEditPage';
+import SocialLinkCreatePage from 'containers/News/SocialLink/SocialLinkCreatePage';
+import SocialLinkEditPage from 'containers/News/SocialLink/SocialLinkEditPage';
+import NewsLinkPage from 'containers/News/NewsLink/NewsLinkPage';
 
-/* Group - Outcomes */
+/* Group - Plan - Events */
+import GroupPlanEventsPage from 'containers/Group/GroupPlan/EventsPage/Loadable';
+
+/* Group - Plan - Outcomes */
 import OutcomeCreatePage from 'containers/Group/Outcome/OutcomeCreatePage/Loadable';
 import OutcomeEditPage from 'containers/Group/Outcome/OutcomeEditPage/Loadable';
+
+/* Group - Plan - KPI */
+import GroupPlanKpiPage from 'containers/Group/GroupPlan/KPI/KpiPage/Loadable';
+import GroupPlanFieldsPage from 'containers/Group/GroupPlan/KPI/FieldsPage/Loadable';
+import GroupPlanUpdatesPage from 'containers/Group/GroupPlan/KPI/UpdatesPage/Loadable';
+import GroupPlanUpdatePage from 'containers/Group/GroupPlan/KPI/UpdatePage/Loadable';
+import GroupPlanUpdateEditPage from 'containers/Group/GroupPlan/KPI/UpdateEditPage/Loadable';
+import GroupPlanUpdateCreatePage from 'containers/Group/GroupPlan/KPI/UpdateCreatePage/Loadable';
 
 /* Group - Members */
 import GroupMemberListPage from 'containers/Group/GroupMembers/GroupMemberListPage/Loadable';
@@ -145,17 +175,31 @@ export {
   GroupHomePage,
   EventsPage,
   NewsFeedPage,
-  OutcomesPage,
   EventPage,
   EventCreatePage,
   EventEditPage,
+  EventManageMetricsPage,
+  GroupPlanEventsPage,
   GroupMessagePage,
   GroupMessageCreatePage,
   GroupMessageEditPage,
+  OutcomesPage,
   OutcomeCreatePage,
   OutcomeEditPage,
+  GroupPlanKpiPage,
+  GroupPlanFieldsPage,
+  GroupPlanUpdatesPage,
+  GroupPlanUpdatePage,
+  GroupPlanUpdateEditPage,
+  GroupPlanUpdateCreatePage,
   GroupMemberListPage,
   GroupMemberCreatePage,
+  EventManageLayout,
+  EventManageFieldsPage,
+  EventManageUpdatesPage,
+  EventManageUpdatePage,
+  EventManageUpdateEditPage,
+  EventManageUpdateCreatePage,
   NotFoundPage,
   PlaceholderPage,
   GroupDashboardPage,
@@ -167,6 +211,8 @@ export {
   CustomGraphCreatePage,
   CustomGraphEditPage,
   GroupManageLayout,
+  GroupPlanLayout,
+  GroupKPILayout,
   GroupSettingsPage,
   CustomTextEditPage,
   UserNewsLinkPage,
@@ -207,4 +253,14 @@ export {
   SponsorCreatePage,
   SponsorEditPage
   SSOSettingsPage
+  EmailsPage,
+  EmailEditPage,
+  EmailEventsPage,
+  EmailEventEditPage,
+  EmailLayout,
+  NewsLinkEditPage,
+  NewsLinkCreatePage,
+  SocialLinkCreatePage,
+  SocialLinkEditPage,
+  NewsLinkPage
 };

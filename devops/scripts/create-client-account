@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# TODO
+
+# Create account
+aws organizations create-account \
+  --email mattb1397+es@protonmail.com \
+  --account-name "prod-ec" \
+  --output json \
+  --query '{Status:CreateAccountStatus.Id}'
+
+# Create policy for admin user for assumption of OrganizationAccountAccessRole
+
+# Assume OrganizationAccountAccessRole for new account
+# Create role for assumption by Ops account - prefix name with client name
+
+# Authenticate into Ops account
+# Create policy to allow use of new role in new client account

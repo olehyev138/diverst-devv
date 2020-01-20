@@ -37,8 +37,50 @@ Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 # If you are not using ActiveRecord, you can remove this line.
 ActiveRecord::Migration.maintain_test_schema!
 
+def base
+  @base ||= {}
+end
+
+# rubocop:disable Style/TrivialAccessors
+# attr_writer does not exists in main:Object
+def base=(arg)
+  @base = arg
+end
+# rubocop:enable Style/TrivialAccessors
+
+def check_for_leftovers
+  tables = ActiveRecord::Base.connection.select_values('show tables')
+  leftovers = {}
+  tables.each do |table|
+    next if %w(schema_migrations vanity_experiments).include? table
+
+    count = ActiveRecord::Base.connection.select_value("select count(*) from #{table}")
+    leftovers[table] = count if count > 0
+  end
+
+  if leftovers != base
+    raise "LEFTOVERS in\n#{leftovers.map { |k, v| "#{k}: #{v}" }.join("\n")}"
+  end
+end
+
+def set_leftovers
+  tables = ActiveRecord::Base.connection.select_values('show tables')
+  leftovers = {}
+  tables.each do |table|
+    next if %w(schema_migrations vanity_experiments).include? table
+
+    count = ActiveRecord::Base.connection.select_value("select count(*) from #{table}")
+    leftovers[table] = count if count > 0
+  end
+
+  self.base = leftovers
+end
+
 RSpec.configure do |config|
   config.include(Shoulda::Matchers::ActiveRecord, type: :model)
+  config.include ReferrerHelpers, type: :controller
+  config.include CsvHelpers
+  config.include ModelHelpers
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
@@ -46,7 +88,7 @@ RSpec.configure do |config|
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
   # instead of true.
-  config.use_transactional_fixtures = false
+  config.use_transactional_fixtures = true
 
   # RSpec Rails can automatically mix in different behaviours to your tests
   # based on their file location, for example enabling you to call `get` and
@@ -68,30 +110,23 @@ RSpec.configure do |config|
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
 
+
+  config.before(:all) do |x|
+    set_leftovers
+  end
+
   # Faker - clear random generator before each test, otherwise it will
   # reach its max and throw an error
   config.before(:each) do
     Faker::UniqueGenerator.clear
   end
 
-  config.before(:suite) do
-    DatabaseCleaner.clean_with(:deletion)
-  end
-
-  config.before(:each) do
-    DatabaseCleaner.strategy = :transaction
-  end
-
-  config.before(:each, js: true) do
-    DatabaseCleaner.strategy = :deletion
-  end
-
-  config.before(:each) do
-    DatabaseCleaner.start
-  end
-
-  config.after(:each) do
-    DatabaseCleaner.clean
+  config.after(:all) do |x|
+    check_for_leftovers
+  rescue
+    print "\n#{x.class}\n"
+    DatabaseCleaner.clean_with :truncation
+    raise
   end
 
   Shoulda::Matchers.configure do |confi|

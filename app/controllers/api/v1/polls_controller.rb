@@ -1,4 +1,6 @@
 class Api::V1::PollsController < DiverstController
+  include Api::V1::Concerns::DefinesFields
+
   def payload
     params.require(klass.symbol).permit(
       :title,
