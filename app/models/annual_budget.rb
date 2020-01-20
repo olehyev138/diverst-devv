@@ -19,9 +19,6 @@ class AnnualBudget < ApplicationRecord
   has_many :unfinished_initiatives, -> { where(finished_expenses: false) }, through: :budget_items, source: :initiatives, class_name: 'Initiative'
   has_many :unfinished_expenses, through: :unfinished_initiatives, source: :expenses, class_name: 'InitiativeExpense'
 
-  cache :approved, :reserved, :expenses, :finalized_expenditure, :available,
-        :unspent, :remaining, :leftover
-
   def close!
     update_column(:closed, true)
   end
