@@ -8,7 +8,7 @@ import { showSnackbar } from 'containers/Shared/Notifier/actions';
 import {
   GET_GROUPS_BEGIN, CREATE_GROUP_BEGIN,
   GET_GROUP_BEGIN, UPDATE_GROUP_BEGIN,
-  UPDATE_GROUP_SETTINGS_BEGIN, DELETE_GROUP_BEGIN
+  UPDATE_GROUP_SETTINGS_BEGIN, DELETE_GROUP_BEGIN, GET_ANNUAL_BUDGETS_BEGIN
 } from 'containers/Group/constants';
 
 import {
@@ -17,7 +17,8 @@ import {
   getGroupSuccess, getGroupError,
   updateGroupSuccess, updateGroupError,
   updateGroupSettingsSuccess, updateGroupSettingsError,
-  deleteGroupError, getAnnualBudgetsSuccess, getAnnualBudgetsError
+  deleteGroupError,
+  getAnnualBudgetsSuccess, getAnnualBudgetsError
 } from 'containers/Group/actions';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -37,7 +38,7 @@ export function* getGroups(action) {
 
 export function* getAnnualBudgets(action) {
   try {
-    const response = { data: 'API CALL' };
+    const response = yield call(api.groups.annualBudgets.bind(api.groups), action.payload);
 
     yield put(getAnnualBudgetsSuccess(response.data.page));
   } catch (err) {
@@ -130,6 +131,7 @@ export function* deleteGroup(action) {
 
 export default function* groupsSaga() {
   yield takeLatest(GET_GROUPS_BEGIN, getGroups);
+  yield takeLatest(GET_ANNUAL_BUDGETS_BEGIN, getAnnualBudgets);
   yield takeLatest(GET_GROUP_BEGIN, getGroup);
   yield takeLatest(CREATE_GROUP_BEGIN, createGroup);
   yield takeLatest(UPDATE_GROUP_BEGIN, updateGroup);
