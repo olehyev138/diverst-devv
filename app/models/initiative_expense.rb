@@ -9,6 +9,6 @@ class InitiativeExpense < ApplicationRecord
   validates :owner, presence: true
   validates :amount, presence: true, numericality: { greater_than_or_equal_to: 0 }
 
-  scope :finalized, -> { joins(:initiative).where(initiatives: {finished_expenses: true}) }
-  scope :active, -> { joins(:initiative).where(initiatives: {finished_expenses: false}) }
+  scope :finalized, -> { joins(:initiative).where(initiatives: { finished_expenses: true }) }
+  scope :active, -> { joins(:initiative).where(initiatives: { finished_expenses: false }) }
 end

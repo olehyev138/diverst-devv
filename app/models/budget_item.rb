@@ -16,9 +16,9 @@ class BudgetItem < ApplicationRecord
 
   scope :available, -> { joins(:budget).where(is_done: false).where('budgets.is_approved = TRUE') }
   scope :allocated, -> { where(is_done: true) }
-  scope :approved, -> { joins(:budget).where(budgets: {is_approved: true}) }
-  scope :not_approved, -> { joins(:budget).where(budgets: {is_approved: false}) }
-  scope :pending, -> { joins(:budget).where(budgets: {is_approved: nil}) }
+  scope :approved, -> { joins(:budget).where(budgets: { is_approved: true }) }
+  scope :not_approved, -> { joins(:budget).where(budgets: { is_approved: false }) }
+  scope :pending, -> { joins(:budget).where(budgets: { is_approved: nil }) }
 
   delegate :finalized, to: :initiatives, prefix: true
   delegate :finalized, to: :expenses, prefix: true
