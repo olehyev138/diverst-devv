@@ -5,7 +5,7 @@ class BudgetItem < ApplicationRecord
   has_one :group, through: :annual_budget
 
   has_many :initiatives
-  has_many :expenses, through: :initiatives
+  has_many :initiatives_expenses, through: :initiatives, source: :expenses
 
   validates_length_of :title, maximum: 191
   validates_presence_of :budget
@@ -21,16 +21,16 @@ class BudgetItem < ApplicationRecord
   scope :pending, -> { joins(:budget).where(budgets: { is_approved: nil }) }
 
   delegate :finalized, to: :initiatives, prefix: true
-  delegate :finalized, to: :expenses, prefix: true
+  delegate :finalized, to: :initiatives_expenses, prefix: true
   delegate :active, to: :initiatives, prefix: true
-  delegate :active, to: :expenses, prefix: true
+  delegate :active, to: :initiatives_expenses, prefix: true
 
   def title_with_amount
     "#{title} ($#{available_amount})"
   end
 
   def expenses
-    expenses.sum('amount')
+    initiatives_expenses.sum('amount')
   end
 
   def reserved
