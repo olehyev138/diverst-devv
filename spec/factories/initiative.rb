@@ -14,7 +14,7 @@ FactoryBot.define do
         estimate_funding = initiative.estimated_funding
 
         if estimate_funding
-          initiative.budget_item = create(:budget_item, estimated_amount: 2 * estimate_funding)
+          initiative.budget_item = create(:budget_item, estimated_amount: estimate_funding)
         else
           initiative.budget_item = create(:budget_item)
           initiative.estimated_funding = rand(1..initiative.budget_item.available_amount)
