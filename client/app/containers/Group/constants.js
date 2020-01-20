@@ -8,6 +8,10 @@ export const GET_GROUPS_BEGIN = 'app/Group/GET_GROUPS_BEGIN';
 export const GET_GROUPS_SUCCESS = 'app/Group/GET_GROUPS_SUCCESS';
 export const GET_GROUPS_ERROR = 'app/Group/GET_GROUPS_ERROR';
 
+export const GET_ANNUAL_BUDGETS_BEGIN = 'app/Group/GET_ANNUAL_BUDGETS_BEGIN';
+export const GET_ANNUAL_BUDGETS_SUCCESS = 'app/Group/GET_ANNUAL_BUDGETS_SUCCESS';
+export const GET_ANNUAL_BUDGETS_ERROR = 'app/Group/GET_ANNUAL_BUDGETS_ERROR';
+
 export const GET_GROUP_BEGIN = 'app/Group/GET_GROUP_BEGIN';
 export const GET_GROUP_SUCCESS = 'app/Group/GET_GROUP_SUCCESS';
 export const GET_GROUP_ERROR = 'app/Group/GET_GROUP_ERROR';

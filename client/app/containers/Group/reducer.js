@@ -6,23 +6,39 @@
 
 import produce from 'immer/dist/immer';
 import {
-  GET_GROUPS_ERROR, GET_GROUPS_SUCCESS,
-  GET_GROUP_ERROR, GET_GROUP_SUCCESS,
-  GROUP_LIST_UNMOUNT, GROUP_FORM_UNMOUNT,
-  GET_GROUPS_BEGIN, CREATE_GROUP_BEGIN,
-  CREATE_GROUP_SUCCESS, CREATE_GROUP_ERROR,
-  UPDATE_GROUP_BEGIN, UPDATE_GROUP_SUCCESS,
-  UPDATE_GROUP_ERROR, UPDATE_GROUP_SETTINGS_BEGIN,
-  UPDATE_GROUP_SETTINGS_SUCCESS, UPDATE_GROUP_SETTINGS_ERROR, GET_GROUP_BEGIN,
-} from 'containers/Group/constants';
+  GET_GROUPS_BEGIN,
+  GET_GROUPS_SUCCESS,
+  GET_GROUPS_ERROR,
+  GET_ANNUAL_BUDGETS_BEGIN,
+  GET_ANNUAL_BUDGETS_SUCCESS,
+  GET_ANNUAL_BUDGETS_ERROR,
+  GET_GROUP_BEGIN,
+  GET_GROUP_SUCCESS,
+  GET_GROUP_ERROR,
+  CREATE_GROUP_BEGIN,
+  CREATE_GROUP_SUCCESS,
+  CREATE_GROUP_ERROR,
+  UPDATE_GROUP_BEGIN,
+  UPDATE_GROUP_SUCCESS,
+  UPDATE_GROUP_ERROR,
+  UPDATE_GROUP_SETTINGS_BEGIN,
+  UPDATE_GROUP_SETTINGS_SUCCESS,
+  UPDATE_GROUP_SETTINGS_ERROR,
+  DELETE_GROUP_BEGIN,
+  DELETE_GROUP_SUCCESS,
+  DELETE_GROUP_ERROR,
+  GROUP_LIST_UNMOUNT,
+  GROUP_FORM_UNMOUNT,
+} from './constants';
 
 export const initialState = {
-  isLoading: true,
-  isFormLoading: true,
-  isCommitting: false,
-  groupList: {},
-  groupTotal: null,
+  groupList: [],
+  groupListTotal: null,
   currentGroup: null,
+  isLoading: false,
+  isFormLoading: false,
+  isCommitting: false,
+  hasChanged: false,
 };
 
 /* eslint-disable default-case, no-param-reassign */
@@ -33,39 +49,57 @@ function groupsReducer(state = initialState, action) {
       case GET_GROUP_BEGIN:
         draft.isFormLoading = true;
         break;
+
       case GET_GROUP_SUCCESS:
         draft.currentGroup = action.payload.group;
         draft.isFormLoading = false;
         break;
+
       case GET_GROUP_ERROR:
         draft.isFormLoading = false;
         break;
+
       case GET_GROUPS_BEGIN:
+      case GET_ANNUAL_BUDGETS_BEGIN:
         draft.isLoading = true;
         break;
+
       case GET_GROUPS_SUCCESS:
+      case GET_ANNUAL_BUDGETS_SUCCESS:
         draft.groupList = formatGroups(action.payload.items);
         draft.groupTotal = action.payload.total;
         draft.isLoading = false;
         break;
+
       case GET_GROUPS_ERROR:
+      case GET_ANNUAL_BUDGETS_ERROR:
         draft.isLoading = false;
         break;
+
       case CREATE_GROUP_BEGIN:
       case UPDATE_GROUP_BEGIN:
       case UPDATE_GROUP_SETTINGS_BEGIN:
+      case DELETE_GROUP_BEGIN:
         draft.isCommitting = true;
+        draft.hasChanged = false;
         break;
+
       case CREATE_GROUP_SUCCESS:
       case UPDATE_GROUP_SUCCESS:
       case UPDATE_GROUP_SETTINGS_SUCCESS:
+      case DELETE_GROUP_SUCCESS:
+        draft.isCommitting = false;
+        draft.hasChanged = true;
+        break;
+
       case CREATE_GROUP_ERROR:
       case UPDATE_GROUP_ERROR:
       case UPDATE_GROUP_SETTINGS_ERROR:
+      case DELETE_GROUP_ERROR:
         draft.isCommitting = false;
         break;
+
       case GROUP_LIST_UNMOUNT:
-        return initialState;
       case GROUP_FORM_UNMOUNT:
         return initialState;
     }

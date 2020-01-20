@@ -5,28 +5,42 @@
  */
 
 import {
-  GET_GROUPS_BEGIN, GET_GROUPS_SUCCESS, GET_GROUPS_ERROR,
-  GET_GROUP_BEGIN, GET_GROUP_SUCCESS, GET_GROUP_ERROR,
-  CREATE_GROUP_BEGIN, CREATE_GROUP_SUCCESS, CREATE_GROUP_ERROR,
-  UPDATE_GROUP_BEGIN, UPDATE_GROUP_SUCCESS, UPDATE_GROUP_ERROR,
-  UPDATE_GROUP_SETTINGS_BEGIN, UPDATE_GROUP_SETTINGS_SUCCESS, UPDATE_GROUP_SETTINGS_ERROR,
-  DELETE_GROUP_BEGIN, DELETE_GROUP_SUCCESS, DELETE_GROUP_ERROR,
-  GROUP_LIST_UNMOUNT, GROUP_FORM_UNMOUNT
-} from 'containers/Group/constants';
-
-/* Group listing */
+  GET_GROUPS_BEGIN,
+  GET_GROUPS_SUCCESS,
+  GET_GROUPS_ERROR,
+  GET_ANNUAL_BUDGETS_BEGIN,
+  GET_ANNUAL_BUDGETS_SUCCESS,
+  GET_ANNUAL_BUDGETS_ERROR,
+  GET_GROUP_BEGIN,
+  GET_GROUP_SUCCESS,
+  GET_GROUP_ERROR,
+  CREATE_GROUP_BEGIN,
+  CREATE_GROUP_SUCCESS,
+  CREATE_GROUP_ERROR,
+  UPDATE_GROUP_BEGIN,
+  UPDATE_GROUP_SUCCESS,
+  UPDATE_GROUP_ERROR,
+  UPDATE_GROUP_SETTINGS_BEGIN,
+  UPDATE_GROUP_SETTINGS_SUCCESS,
+  UPDATE_GROUP_SETTINGS_ERROR,
+  DELETE_GROUP_BEGIN,
+  DELETE_GROUP_SUCCESS,
+  DELETE_GROUP_ERROR,
+  GROUP_LIST_UNMOUNT,
+  GROUP_FORM_UNMOUNT,
+} from './constants';
 
 export function getGroupsBegin(payload) {
   return {
     type: GET_GROUPS_BEGIN,
-    payload
+    payload,
   };
 }
 
 export function getGroupsSuccess(payload) {
   return {
     type: GET_GROUPS_SUCCESS,
-    payload
+    payload,
   };
 }
 
@@ -37,7 +51,26 @@ export function getGroupsError(error) {
   };
 }
 
-/* Getting specific group */
+export function getAnnualBudgetsBegin(payload) {
+  return {
+    type: GET_ANNUAL_BUDGETS_BEGIN,
+    payload,
+  };
+}
+
+export function getAnnualBudgetsSuccess(payload) {
+  return {
+    type: GET_ANNUAL_BUDGETS_SUCCESS,
+    payload,
+  };
+}
+
+export function getAnnualBudgetsError(error) {
+  return {
+    type: GET_ANNUAL_BUDGETS_ERROR,
+    error,
+  };
+}
 
 export function getGroupBegin(payload) {
   return {
