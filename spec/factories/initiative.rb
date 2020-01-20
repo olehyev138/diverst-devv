@@ -13,6 +13,15 @@ FactoryBot.define do
       budget_item { estimated_funding ? FactoryBot.create(:budget_item, estimated_amount: estimated_funding) : FactoryBot.create(:budget_item) }
       owner_group { budget_item.budget.group }
       estimated_funding { rand(1..budget_item.available_amount) }
+      after(:create) do |initiative, evaluator|
+        if initiative.estimated_funding
+          initiative.budget_item = create(:budget_item, estimated_amount: initiative.estimated_funding)
+        else
+          initiative.budget_item = create(:budget_item)
+          initiative.estimated_funding = rand(1..initiative.budget_item.available_amount)
+        end
+        initiative.save
+      end
     end
   end
 end
