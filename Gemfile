@@ -17,7 +17,6 @@ gem 'bootsnap', require: false
 gem 'clockwork', '~> 1.2' # Schedule recurring jobs
 gem 'daemons', '~> 1.2', '>= 1.2.3' # For capistrano-clockwork
 gem 'date_validator', '~> 0.9.0'
-gem 'draper', '~> 3.1.0'
 gem 'elasticsearch-model', '~> 6.0.0'
 gem 'elasticsearch-rails', '~> 6.0.0'
 gem 'enumerize', '~> 2.0'
@@ -25,20 +24,15 @@ gem 'factory_bot_rails', '~> 4.8.0' # Create mock objects for testing
 gem 'faker', '~> 1.6'
 gem 'fcm', '~> 0.0.6'
 gem 'figaro', '~> 1.1', '>= 1.1.1' # Inject ENV from application.yml
-gem 'fog', '~> 1.37' # AWS SDK
 gem 'http'
 gem 'httparty', '~> 0.13' # HTTP request library
-gem 'inline_svg', '~> 0.6.2' # Extract SVG files' content into the HTML
 gem 'image_processing', '~> 1.10.1'
-gem 'jquery-ui-rails', '~> 6.0.1'
 gem 'julia_builder', '~> 0.2.0'
 gem 'jwt', '~> 2.1.0', require: false
 gem 'linkedin-oauth2', '~> 1.0' # OAuth for LinkedIn
-gem 'liquid', '~> 3.0', '>= 3.0.6' # Templating engine used for email templates
 gem 'mailgun_rails', '~> 0.8.0'
 gem 'mysql2', '~> 0.5.2'
 gem 'paperclip', '~> 5.1.0' # TODO Remove after Paperclip to ActiveStorage migration
-gem 'pismo', '~> 0.7.4' # Extracts metadata from an URL
 gem 'public_activity'
 gem 'puma', '~> 3.1' # Better web server than WEBRick
 gem 'pundit', '~> 2.0.0'# Authorization
@@ -49,7 +43,6 @@ gem 'rails', '~> 5.2.3'
 gem 'railties', '~> 5.2.3'
 gem 'rollbar', '~> 2.14.1'
 gem 'rqrcode', '~> 0.10.1', require: false
-gem 'ruby-oembed', '~> 0.12', git: 'https://github.com/TeamDiverst/ruby-oembed.git'
 gem 'ruby-saml', '>= 1.7.0'
 gem 'sanitize_email', '~> 1.2.2'
 gem 'sidekiq', '~> 5.0.5' # Background jobs
@@ -113,7 +106,6 @@ end
 group :staging, :production do
   gem 'influxdb-rails', git: 'https://github.com/Kukunin/influxdb-rails.git', branch: 'tags_middleware' # Rails metrics to InfluxDB
   gem 'lograge', '~> 0.3'
-  gem 'newrelic_rpm', '~> 4.5.0'
   gem 'sidekiq-influxdb', '~> 1.1.0' # Sidekiq metrics to InfluxDB
   gem 'syslogger', '~> 1.6.0' # Log to syslog, which is then sent to Loggly
 end
