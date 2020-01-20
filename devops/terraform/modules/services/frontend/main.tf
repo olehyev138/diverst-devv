@@ -6,9 +6,10 @@ resource "random_string" "bucket-postfix" {
 }
 
 resource "aws_s3_bucket" "bucket-frontend" {
-  bucket  = "${var.env_name}-frontend-${random_string.bucket-postfix.result}"
-  policy  = templatefile("${path.module}/policy.tmpl", { client_name = "${var.env_name}-frontend-${random_string.bucket-postfix.result}" })
-  acl     = "public-read"
+  bucket        = "${var.env_name}-frontend-${random_string.bucket-postfix.result}"
+  policy        = templatefile("${path.module}/policy.tmpl", { client_name = "${var.env_name}-frontend-${random_string.bucket-postfix.result}" })
+  acl           = "public-read"
+  force_destroy = true
 
   website {
     index_document = "index.html"
