@@ -777,7 +777,7 @@ DEPENDENCIES
   yard (~> 0.8.7.6)
 
 RUBY VERSION
-   ruby 2.6.0p0
+   ruby 2.6.5p114
 
 BUNDLED WITH
    2.0.2
