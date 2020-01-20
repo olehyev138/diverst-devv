@@ -1,23 +1,18 @@
 class AnnualBudget < ApplicationRecord
-  include CachedMethods
-
   belongs_to :group
   has_one :enterprise, through: :group
 
   has_many :budgets, dependent: :destroy
-  has_many :approveds, -> { approved }, class_name: 'Budget'
-
   has_many :budget_items, through: :budgets
-  has_many :approved_items, through: :approveds, source: :budget_items
-
   has_many :initiatives, through: :budget_items
   has_many :initiative_expenses, through: :initiatives, source: :expenses
 
-  has_many :finalized_initiatives, -> { where(finished_expenses: true) }, through: :budget_items, source: :initiatives, class_name: 'Initiative'
-  has_many :finalized_expenses, through: :finalized_initiatives, source: :expenses, class_name: 'InitiativeExpense'
-
-  has_many :unfinished_initiatives, -> { where(finished_expenses: false) }, through: :budget_items, source: :initiatives, class_name: 'Initiative'
-  has_many :unfinished_expenses, through: :unfinished_initiatives, source: :expenses, class_name: 'InitiativeExpense'
+  delegate :finalized, to: :initiatives, prefix: true
+  delegate :finalized, to: :initiative_expenses, prefix: 'expenses'
+  delegate :active, to: :initiatives, prefix: true
+  delegate :active, to: :initiative_expenses, prefix: 'expenses'
+  delegate :approved, to: :budgets, prefix: true
+  delegate :approved, to: :budget_items, prefix: 'items'
 
   def close!
     update_column(:closed, true)
@@ -25,7 +20,7 @@ class AnnualBudget < ApplicationRecord
 
   # same as available
   def approved
-    approved_items
+    items_approved
         .sum('estimated_amount')
   end
 
@@ -39,7 +34,7 @@ class AnnualBudget < ApplicationRecord
   end
 
   def finalized_expenditure
-    finalized_expenses.sum('amount')
+    expenses_finalized.sum('amount')
   end
 
   def available
@@ -59,7 +54,7 @@ class AnnualBudget < ApplicationRecord
   end
 
   def can_be_reset?
-    unfinished_initiatives.empty? && approved_items.where(is_done: false).empty?
+    initiatives_active.empty? && items_approved.where(is_done: false).empty?
   end
 
   def reset!

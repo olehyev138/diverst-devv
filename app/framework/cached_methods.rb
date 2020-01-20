@@ -1,3 +1,5 @@
+# INCOMPLETE PROTOTYPE
+# DO NOT USE
 module CachedMethods
   def self.included(klass)
     klass.extend ClassMethods

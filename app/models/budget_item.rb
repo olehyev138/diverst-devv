@@ -7,12 +7,6 @@ class BudgetItem < ApplicationRecord
   has_many :initiatives
   has_many :expenses, through: :initiatives
 
-  has_many :finalized_initiatives, -> { where(finished_expenses: true) }, class_name: 'Initiative'
-  has_many :finalized_expenses, through: :finalized_initiatives, source: :expenses, class_name: 'InitiativeExpense'
-
-  has_many :unfinished_initiatives, -> { where(finished_expenses: false) }, class_name: 'Initiative'
-  has_many :unfinished_expenses, through: :unfinished_initiatives, source: :expenses, class_name: 'InitiativeExpense'
-
   validates_length_of :title, maximum: 191
   validates_presence_of :budget
   validates :title, presence: true, length: { minimum: 2 }
@@ -22,6 +16,14 @@ class BudgetItem < ApplicationRecord
 
   scope :available, -> { joins(:budget).where(is_done: false).where('budgets.is_approved = TRUE') }
   scope :allocated, -> { where(is_done: true) }
+  scope :approved, -> { joins(:budget).where(budgets: {is_approved: true}) }
+  scope :not_approved, -> { joins(:budget).where(budgets: {is_approved: false}) }
+  scope :pending, -> { joins(:budget).where(budgets: {is_approved: nil}) }
+
+  delegate :finalized, to: :initiatives, prefix: true
+  delegate :finalized, to: :expenses, prefix: true
+  delegate :active, to: :initiatives, prefix: true
+  delegate :active, to: :expenses, prefix: true
 
   def title_with_amount
     "#{title} ($#{available_amount})"
@@ -32,7 +34,7 @@ class BudgetItem < ApplicationRecord
   end
 
   def reserved
-    unfinished_initiatives.sum('estimated_funding') + finalized_expenditure
+    initiatives_active.sum('estimated_funding') + finalized_expenditure
   end
 
   def available_amount
@@ -47,7 +49,7 @@ class BudgetItem < ApplicationRecord
   end
 
   def finalized_expenditure
-    finalized_expenses.sum('amount')
+    expenses_finalized.sum('amount')
   end
 
   def approve!
