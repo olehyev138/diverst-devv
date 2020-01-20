@@ -16,6 +16,39 @@ class SegmentsController < ApplicationController
     end
   end
 
+  def get_paginated_segments
+    authorize Segment, :index? 
+
+    respond_to do |format|
+      format.json { 
+        segments = current_user.enterprise.segments.all_parents
+                     .order(:id)
+                     .joins('LEFT JOIN groups as children ON segments.id = children.parent_id')
+                     .uniq
+                     .where('LOWER(segments.name) like ? OR LOWER(children.name) like ?', "%#{search_params[:term]}%", "%#{search_params[:term]}%")
+                     .page(search_params[:page])
+                     .per(search_params[:limit])
+                     .includes(:children)
+
+        segments_hash = segments.as_json(
+          only: [:id, :name, :parent_id],
+          include: {
+            children: {
+              only: [:id, :name, :parent_id]
+            }
+          }
+        )
+
+        render json: {
+          total_pages: segments.total_pages, 
+          segment_text: c_t(:segment),
+          segment_text_pluralized: c_t(:segment).pluralize,
+          segments: segments_hash
+        }
+      }
+    end
+  end
+
   def get_all_segments
     authorize Segment, :index?
 
@@ -125,6 +158,10 @@ class SegmentsController < ApplicationController
 
   def set_segments
     @segments = policy_scope(Segment).all_parents
+  end
+
+  def search_params
+    params.permit(:page, :limit, :term, ids: [])
   end
 
   def segment_params

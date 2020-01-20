@@ -1,0 +1,19 @@
+<%= simple_form_for @custom_email, url: send_custom_email_path(@custom_email), method: :post do |f| %>
+<div class="content__main">
+    <div class="card card--secondary">
+        <%= f.input :receivers, as: :text %>
+        <%= f.button :submit, 'Send' %>
+    </div>
+    <div class="card card--secondary">
+        <div class="card__section card__section--border">
+          <h4>Email Preview</h4>
+        </div>
+        <div class="card__section card__section--border">
+          <p><strong>Subject:</strong> <%= raw @custom_email.process_example(@custom_email.subject) %></p>
+        </div>
+        <div class="card__section card__section--border">
+          <p><strong>Email Body:</strong> <%= raw @custom_email.process_example(@custom_email.content) %></p>
+        </div>
+      </div>
+</div>
+<% end %>

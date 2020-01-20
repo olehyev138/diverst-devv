@@ -119,6 +119,9 @@ class GroupsController < ApplicationController
 
     not_found! if enterprise.nil?
 
+    # this is a hack to return all initiatives as it happens when you filter with no inputs
+    params[:q] = { initiative_participating_groups_group_id_in: '', initiative_segments_segment_id_in: '' } if params[:q].nil?
+
     @events = enterprise.initiatives.includes(:initiative_participating_groups).where(groups: { parent_id: nil })
         .ransack(
           initiative_participating_groups_group_id_in: params[:q]&.dig(:initiative_participating_groups_group_id_in),

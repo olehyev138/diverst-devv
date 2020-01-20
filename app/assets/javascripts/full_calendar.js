@@ -13,6 +13,21 @@ $(document).on('ready page:load', function(){
         center: 'month,agendaWeek',
         right:  'prev,today,next'
       },
+
+      eventMouseover: function(event, jsEvent, view) {
+        var groupName = event.group_name;
+
+        $(this).popover({
+          html: true,
+          title: groupName,
+          placement: 'top',
+          trigger: 'hover',
+          content: event.description,
+          container: '#calendar'
+      }).popover('toggle');
+      },
+
+
       buttonIcons: false,
       eventSources: [
         {
