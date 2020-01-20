@@ -12,7 +12,7 @@ Diverst::Application.configure do
   # preloads Rails for running tests, you may have to set it to true.
   config.eager_load = false
 
-  # This hopefully prevents caching when using the caching method
+  # This prevents caching when using the caching method
   Rails.application.configure do
     config.cache_store = :null_store
   end

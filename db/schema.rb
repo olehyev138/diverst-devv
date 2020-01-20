@@ -55,8 +55,8 @@ ActiveRecord::Schema.define(version: 2020_01_10_153452) do
   create_table "annual_budgets", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.decimal "amount", precision: 10, default: "0"
     t.boolean "closed", default: false
-    t.decimal "available", precision: 10, default: "0"
-    t.decimal "approved", precision: 10, default: "0"
+    t.decimal "available_budget", precision: 10, default: "0"
+    t.decimal "approved_budget", precision: 10, default: "0"
     t.decimal "expenses", precision: 10, default: "0"
     t.decimal "leftover_money", precision: 10, default: "0"
     t.datetime "created_at", null: false

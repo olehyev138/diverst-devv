@@ -233,7 +233,7 @@ class Enterprise < ApplicationRecord
         csv << [group.name, group.annual_budget.presence || 'Not set', group.annual_budget_unspent, group.annual_budget_approved]
 
         group.children.each do |child|
-          csv << [child.name, child.annual_budget.presence || 'Not set', child.unspent, child.approved]
+          csv << [child.name, child.annual_budget.presence || 'Not set', child.annual_budget_unspent, child.annual_budget_approved]
         end
       end
     end
