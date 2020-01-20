@@ -74,7 +74,7 @@ class Budget < ApplicationRecord
     end
 
     if initiative&.persisted?
-      return select_items if initiative&.current_expences_sum.to_f > initiative&.estimated_funding.to_f
+      return select_items if initiative&.current_expenses_sum.to_f > initiative&.estimated_funding.to_f
     end
 
     select_items << [ group.title_with_leftover_amount, BudgetItem::LEFTOVER_BUDGET_ITEM_ID ]

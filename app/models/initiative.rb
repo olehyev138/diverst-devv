@@ -213,7 +213,7 @@ class Initiative < ApplicationRecord
   def finish_expenses!
     return false if finished_expenses?
 
-    estimated_amount = current_expences_sum
+    estimated_amount = current_expenses_sum
     self.update(finished_expenses: true)
   end
 
@@ -221,7 +221,7 @@ class Initiative < ApplicationRecord
     (self.end < Time.current) && !finished_expenses?
   end
 
-  def current_expences_sum
+  def current_expenses_sum
     expenses.sum(:amount) || 0
   end
 
@@ -230,7 +230,7 @@ class Initiative < ApplicationRecord
   end
 
   def leftover
-    estimated_funding - current_expences_sum
+    estimated_funding - current_expenses_sum
   end
 
   def title
