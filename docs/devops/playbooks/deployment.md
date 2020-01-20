@@ -1,4 +1,4 @@
-# Deployment Initialization Playbook
+# Deployment Playbook
 
 ## Backend
 
