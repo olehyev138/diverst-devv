@@ -137,7 +137,10 @@ class Group < ApplicationRecord
   end
 
   def current_annual_budget
-    annual_budgets.where(closed: false).last || create_annual_budget
+    unless annual_budgets.loaded?
+      annual_budgets.load
+    end
+    annual_budgets.find {|ab| ab.closed == false }
   end
 
   def current_annual_budget!
@@ -150,7 +153,6 @@ class Group < ApplicationRecord
   end
 
 
-  delegate :unspent, BUDGET_DELEGATE_OPTIONS
   delegate :leftover, BUDGET_DELEGATE_OPTIONS
   delegate :remaining, BUDGET_DELEGATE_OPTIONS
   delegate :approved, BUDGET_DELEGATE_OPTIONS
