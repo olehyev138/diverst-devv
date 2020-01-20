@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# Build & deploy frontend
+# Must be run from app root
+# Usage: ./create-app-version <aws-profile> <frontend-bucket>
+
+PROFILE=$1
+FRONTEND_BUCKET=$2
+
+# Exit on error
+set -e
+
+if [ ! -d '.git' ]; then
+  echo 'Error - not in app root'
+  exit 1
+fi
+
+cd client/
+
+# Build frontend
+npm run build
+
+aws s3 sync build/ "s3://$FRONTEND_BUCKET" --profile "$PROFILE"
