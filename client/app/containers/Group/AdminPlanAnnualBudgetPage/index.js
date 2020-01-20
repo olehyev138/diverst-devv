@@ -17,7 +17,7 @@ import { selectPaginatedGroups, selectGroupTotal, selectGroupIsLoading } from 'c
 import saga from 'containers/Group/saga';
 import reducer from 'containers/Group/reducer';
 
-import { getGroupsBegin, groupListUnmount, deleteGroupBegin } from 'containers/Group/actions';
+import { getAnnualBudgetsBegin, groupListUnmount } from 'containers/Group/actions';
 
 import GroupList from 'components/Group/AdminGroupList';
 
@@ -28,7 +28,7 @@ export function AdminGroupListPage(props) {
   const [params, setParams] = useState({ count: 5, page: 0, order: 'asc' });
 
   useEffect(() => {
-    props.getGroupsBegin(params);
+    props.getAnnualBudgetsBegin(params);
 
     return () => props.groupListUnmount();
   }, []);
@@ -36,7 +36,7 @@ export function AdminGroupListPage(props) {
   const handlePagination = (payload) => {
     const newParams = { ...params, count: payload.count, page: payload.page };
 
-    props.getGroupsBegin(newParams);
+    props.getAnnualBudgetsBegin(newParams);
     setParams(newParams);
   };
 
@@ -55,7 +55,7 @@ export function AdminGroupListPage(props) {
 }
 
 AdminGroupListPage.propTypes = {
-  getGroupsBegin: PropTypes.func.isRequired,
+  getAnnualBudgetsBegin: PropTypes.func.isRequired,
   groupListUnmount: PropTypes.func.isRequired,
   isLoading: PropTypes.bool,
   groups: PropTypes.object,
@@ -70,9 +70,8 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = {
-  getGroupsBegin,
+  getAnnualBudgetsBegin,
   groupListUnmount,
-  deleteGroupBegin
 };
 
 const withConnect = connect(

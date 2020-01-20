@@ -32,7 +32,7 @@ import {
 } from './constants';
 
 export const initialState = {
-  groupList: [],
+  groupList: {},
   groupListTotal: null,
   currentGroup: null,
   isLoading: false,
@@ -65,8 +65,13 @@ function groupsReducer(state = initialState, action) {
         break;
 
       case GET_GROUPS_SUCCESS:
-      case GET_ANNUAL_BUDGETS_SUCCESS:
         draft.groupList = formatGroups(action.payload.items);
+        draft.groupTotal = action.payload.total;
+        draft.isLoading = false;
+        break;
+
+      case GET_ANNUAL_BUDGETS_SUCCESS:
+        draft.groupList = formatGroups(flattenChildrenGroups(action.payload.items));
         draft.groupTotal = action.payload.total;
         draft.isLoading = false;
         break;
@@ -118,6 +123,20 @@ function formatGroups(groups) {
     map[group.id] = group;
     return map;
   }, {});
+}
+
+function flattenChildrenGroups(groups) {
+  /* eslint-disable no-return-assign */
+
+  /* Format groups to hash by id:
+   *   { <id>: { name: group_01, ... } }
+   */
+  return groups.reduce((map, group) => {
+    map.push(group);
+    map.concat(flattenChildrenGroups(group.children));
+    delete group.children;
+    return map;
+  }, []);
 }
 
 export default groupsReducer;
