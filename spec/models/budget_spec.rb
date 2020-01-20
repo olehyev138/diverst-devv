@@ -148,11 +148,6 @@ RSpec.describe Budget, type: :model do
     let!(:checklist) { create(:checklist, budget: budget) }
     let!(:budget_item) { create(:budget_item, budget: budget) }
 
-    it 'after_destroy, #update_annual_budget' do
-      expect(budget).to receive(:update_annual_budget)
-      budget.run_callbacks(:destroy)
-    end
-
     it 'removes the child objects' do
       budget.destroy
 

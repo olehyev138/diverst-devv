@@ -1,6 +1,8 @@
 class BudgetItem < ApplicationRecord
   LEFTOVER_BUDGET_ITEM_ID = -1
   belongs_to :budget
+  has_one :annual_budget, through: :budget
+  has_one :group, through: :annual_budget
 
   has_many :initiatives
   has_many :expenses, through: :initiatives

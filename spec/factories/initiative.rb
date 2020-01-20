@@ -10,17 +10,17 @@ FactoryBot.define do
     f.pillar { owner_group.try(:pillars).try(:first) }
     f.owner { FactoryBot.create(:user) }
     trait :with_budget_item do
-      budget_item { estimated_funding ? FactoryBot.create(:budget_item, estimated_amount: estimated_funding) : FactoryBot.create(:budget_item) }
-      owner_group { budget_item.budget.group }
-      estimated_funding { rand(1..budget_item.available_amount) }
-      after(:create) do |initiative, evaluator|
-        if initiative.estimated_funding
-          initiative.budget_item = create(:budget_item, estimated_amount: initiative.estimated_funding)
+      before(:create) do |initiative, evaluator|
+        estimate_funding = initiative.estimated_funding
+
+        if estimate_funding
+          initiative.budget_item = create(:budget_item, estimated_amount: 2 * estimate_funding)
         else
           initiative.budget_item = create(:budget_item)
           initiative.estimated_funding = rand(1..initiative.budget_item.available_amount)
         end
-        initiative.save
+
+        initiative.owner_group = initiative.budget_item.group
       end
     end
   end

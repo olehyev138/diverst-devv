@@ -72,8 +72,6 @@ class Initiative < ApplicationRecord
   # we don't want to run this callback when finish_expenses! is triggered in initiatives_controller.rb, finish_expense action
   validate -> { allocate_budget_funds unless skip_allocate_budget_funds }
 
-  after_destroy :update_annual_budget
-
   # ActiveStorage
   has_one_attached :picture
   validates :picture, content_type: AttachmentHelper.common_image_types
@@ -483,18 +481,5 @@ class Initiative < ApplicationRecord
     initiatives = group.initiatives.where('end < ?', expiry_date).where(archived_at: nil)
 
     initiatives.update_all(archived_at: DateTime.now) if initiatives.any?
-  end
-
-  def update_annual_budget
-    group = owner_group
-    annual_budget = AnnualBudget.find_or_create_by(closed: false, group_id: group.id)
-    return if annual_budget.nil?
-
-    leftover_of_annual_budget = ((group.annual_budget || annual_budget.amount) - group.annual_budget_approved) + group.annual_budget_available
-
-    group.update(leftover_money: leftover_of_annual_budget, annual_budget: annual_budget.amount)
-    annual_budget.update(amount: group.annual_budget, available: group.annual_budget_available,
-                         leftover_money: group.annual_budget_remaining, expenses: group.annual_budget_spent,
-                         approved: group.annual_budget_approved)
   end
 end

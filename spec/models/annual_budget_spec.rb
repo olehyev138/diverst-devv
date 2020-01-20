@@ -6,7 +6,8 @@ RSpec.describe AnnualBudget, type: :model do
   describe 'associations' do
     it { expect(annual_budget).to belong_to(:group) }
     it { expect(annual_budget).to have_one(:enterprise) }
-    it { expect(annual_budget).to have_many(:initiatives).through(:group) }
+    it { expect(annual_budget).to have_many(:budget_items).through(:budgets) }
+    it { expect(annual_budget).to have_many(:initiatives).through(:budget_items) }
     it { expect(annual_budget).to have_many(:budgets) }
     it { expect(annual_budget).to have_many(:initiative_expenses).through(:initiatives) }
 

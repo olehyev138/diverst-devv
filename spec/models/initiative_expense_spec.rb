@@ -26,16 +26,6 @@ RSpec.describe InitiativeExpense, type: :model do
     }
     let!(:expense) { create(:initiative_expense, initiative_id: initiative.id, amount: 10) }
 
-    it 'after_save, #update_annual_budget' do
-      expect(expense).to receive(:update_annual_budget)
-      expense.run_callbacks(:save)
-    end
-
-    it 'after_destroy, #update_annual_budget' do
-      expect(expense).to receive(:update_annual_budget)
-      expense.run_callbacks(:destroy)
-    end
-
     it 'sets expenses on annual_budget to 0 when expense is destroyed' do
       expense.reload
       annual_budget1.reload
