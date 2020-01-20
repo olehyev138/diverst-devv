@@ -12,7 +12,7 @@ class Api::V1::GroupsController < DiverstController
   def annual_budgets
     base_authorize(klass)
     params.permit![:parent_id] = nil
-    render status: 200, json: klass.index(self.diverst_request, params.permit!), use_serializer: GroupWithBudgetSerializer
+    render status: 200, json: klass.index(self.diverst_request, params.permit!), use_serializer: GroupWithBudgetWithChildrenSerializer
   rescue => e
     raise BadRequestException.new(e.message)
   end
