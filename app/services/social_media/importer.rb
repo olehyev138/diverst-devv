@@ -132,7 +132,6 @@ class SocialMedia::Importer
   def self.fetch_oembed_resource(url, options = {})
     url = url[0...-1] if url[-1] == '/'
     begin
-      p 'hello'
       resource = OEmbed::Providers.get(url, options)
     rescue
       nil
@@ -142,7 +141,6 @@ class SocialMedia::Importer
   def self.fetch_embedly_resource(url, options = {})
     url = url[0...-1] if url[-1] == '/'
     begin
-      p 'goodbye'
       options[:url] = url
       obj = (@@embedly_api.extract options)[0]
 
