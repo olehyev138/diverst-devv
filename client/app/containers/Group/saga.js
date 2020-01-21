@@ -38,12 +38,10 @@ export function* getGroups(action) {
 
 export function* getAnnualBudgets(action) {
   try {
-    console.log(action);
     const response = yield call(api.groups.annualBudgets.bind(api.groups), action.payload);
 
     yield put(getAnnualBudgetsSuccess(response.data.page));
   } catch (err) {
-    console.log(err);
     yield put(getAnnualBudgetsError(err));
 
     // TODO: intl message
