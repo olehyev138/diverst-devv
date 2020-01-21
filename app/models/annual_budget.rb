@@ -22,35 +22,51 @@ class AnnualBudget < ApplicationRecord
   def approved
     @approved ||= items_approved
                       .sum('estimated_amount')
+  rescue
+    nil
   end
 
   def reserved
     @reserved ||= initiatives.sum('estimated_funding')
+  rescue
+    nil
   end
 
   def expenses
     @expenses ||= initiative_expenses
                    .sum('amount')
+  rescue
+    nil
   end
 
   def finalized_expenditure
     @finalized_expenditure ||= expenses_finalized.sum('amount')
+  rescue
+    nil
   end
 
   def available
     @available ||= (approved - reserved)
+  rescue
+    nil
   end
 
   def remaining
     @remaining ||= (approved - expenses)
+  rescue
+    nil
   end
 
   def leftover
     @leftover ||= (amount - expenses)
+  rescue
+    nil
   end
 
   def free
     @free ||= amount - approved
+  rescue
+    nil
   end
 
   def can_be_reset?
@@ -92,9 +108,9 @@ class AnnualBudget < ApplicationRecord
   def self.load_sums
     select(
         '`annual_budgets`.`*`,'\
-        ' Sum(coalesce(`initiative_expenses`.`amount`, 0)) as `expenses_sum`,'\
-        ' Sum(coalesce(`budget_items`.`estimated_amount`, 0)) as `approved_sum`,'\
-        ' Sum(coalesce(`initiatives`.`estimated_funding`, 0)) as `reserved_sum`')
+        ' Sum(`initiative_expenses`.`amount`) as `expenses_sum`,'\
+        ' Sum(`budget_items`.`estimated_amount`) as `approved_sum`,'\
+        ' Sum(`initiatives`.`estimated_funding`) as `reserved_sum`')
         .left_joins(:initiative_expenses)
         .group(AnnualBudget.column_names).each do |ab|
       ab.instance_variable_set(:@expenses, ab.expenses_sum)
