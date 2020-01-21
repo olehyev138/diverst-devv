@@ -168,7 +168,9 @@ module BaseSearcher
     end
 
     def get_preloads(params)
-      if self.respond_to? :base_preloads
+      if params[:preload].present? && (self.respond_to? "base_preloads_#{params[:preload]}")
+        self.send("base_preloads_#{params[:preload]}")
+      elsif self.respond_to? :base_preloads
         self.base_preloads
       else
         []
