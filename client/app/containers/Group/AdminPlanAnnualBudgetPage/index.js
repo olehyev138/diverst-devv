@@ -25,7 +25,15 @@ export function AdminAnnualBudgetPage(props) {
   useInjectReducer({ key: 'groups', reducer });
   useInjectSaga({ key: 'groups', saga });
 
-  const [params, setParams] = useState({ count: 5, page: 0, order: 'asc' });
+  const [params, setParams] = useState({ count: 10, page: 0, order: 'asc' });
+
+  const handleOrdering = (payload) => {
+    const newParams = { ...params, orderBy: payload.orderBy, order: payload.orderDir };
+
+    props.getAnnualBudgetsBegin(newParams);
+    setParams(newParams);
+  };
+
 
   useEffect(() => {
     props.getAnnualBudgetsBegin(params);
@@ -47,6 +55,7 @@ export function AdminAnnualBudgetPage(props) {
       annualBudgetTotal={props.groupTotal}
       defaultParams={params}
       handlePagination={handlePagination}
+      handleOrdering={handleOrdering}
     />
   );
 }

@@ -17,8 +17,8 @@ import {
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
-import AddIcon from '@material-ui/icons/Add';
-import DeleteIcon from '@material-ui/icons/DeleteOutline';
+import LoopIcon from '@material-ui/icons/Loop';
+import RedoIcon from '@material-ui/icons/Redo';
 import EditIcon from '@material-ui/icons/Edit';
 
 import DiverstTable from 'components/Shared/DiverstTable';
@@ -51,22 +51,22 @@ export function AnnualBudgetList(props, context) {
     {
       title: 'Group Name',
       field: 'name',
-      query_field: 'group_name'
+      query_field: 'name'
     },
     {
       title: 'Annual Budget',
       field: 'annual_budget',
-      query_field: 'last_name'
+      sorting: false
     },
     {
       title: 'Leftover Money',
       field: 'annual_budget_leftover',
-      query_field: ''
+      sorting: false
     },
     {
       title: 'Approved Budget',
       field: 'annual_budget_approved',
-      query_field: ''
+      sorting: false
     },
   ];
 
@@ -82,7 +82,7 @@ export function AnnualBudgetList(props, context) {
   });
 
   actions.push({
-    icon: () => <DeleteIcon />,
+    icon: () => <RedoIcon />,
     tooltip: 'Carry Over',
     onClick: (_, rowData) => {
       // eslint-disable-next-line no-alert
@@ -91,7 +91,7 @@ export function AnnualBudgetList(props, context) {
   });
 
   actions.push({
-    icon: () => <DeleteIcon />,
+    icon: () => <LoopIcon />,
     tooltip: 'Reset Budget',
     onClick: (_, rowData) => {
       // eslint-disable-next-line no-alert
@@ -104,11 +104,11 @@ export function AnnualBudgetList(props, context) {
       <Grid container spacing={3}>
         <Grid item xs>
           <DiverstTable
-            title='Members'
+            title='Annual Budgets'
             handlePagination={props.handlePagination}
-            handleOrdering={props.handleOrdering}
+            onOrderChange={handleOrderChange}
             isLoading={props.isFetchingAnnualBudgets}
-            rowsPerPage={5}
+            rowsPerPage={10}
             dataArray={Object.values(props.annualBudgets)}
             dataTotal={props.annualBudgetTotal}
             columns={columns}
