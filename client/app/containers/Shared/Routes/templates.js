@@ -251,8 +251,8 @@ export {
   BrandingHomePage,
   SponsorListPage,
   SponsorCreatePage,
-  SponsorEditPage
-  SSOSettingsPage
+  SponsorEditPage,
+  SSOSettingsPage,
   EmailsPage,
   EmailEditPage,
   EmailEventsPage,
