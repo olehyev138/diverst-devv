@@ -37,7 +37,7 @@ import GroupDashboardPage from 'containers/Analyze/Dashboards/GroupDashboardPage
 import UserDashboardPage from 'containers/Analyze/Dashboards/UserDashboardPage/Loadable';
 
 /* Admin - Plan */
-import AdminAnnualBudgetPage from 'containers/Group/AdminPlanAnnualBudgetPage/Loadable';
+import AdminAnnualBudgetPage from 'containers/Group/GroupPlan/AdminPlanAnnualBudgetPage/Loadable';
 
 /* Admin - Analyze - Custom */
 import MetricsDashboardListPage from 'containers/Analyze/Dashboards/MetricsDashboard/MetricsDashboardListPage/Loadable';

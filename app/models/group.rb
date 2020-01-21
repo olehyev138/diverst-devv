@@ -178,9 +178,9 @@ class Group < ApplicationRecord
   def self.load_sums
     select(
         '`groups`.`*`,'\
-        ' Sum(`initiative_expenses`.`amount`) as `expenses_sum`,'\
-        ' Sum(`budget_items`.`estimated_amount`) as `approved_sum`,'\
-        ' Sum(`initiatives`.`estimated_funding`) as `reserved_sum`')
+        ' Sum(coalesce(`initiative_expenses`.`amount`, 0)) as `expenses_sum`,'\
+        ' Sum(coalesce(`budget_items`.`estimated_amount`, 0)) as `approved_sum`,'\
+        ' Sum(coalesce(`initiatives`.`estimated_funding`, 0)) as `reserved_sum`')
         .left_joins(:initiative_expenses)
         .group(Group.column_names).each do |g|
       g.current_annual_budget.instance_variable_set(:@expenses, g.expenses_sum)

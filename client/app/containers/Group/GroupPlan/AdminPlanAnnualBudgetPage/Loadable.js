@@ -6,4 +6,4 @@
 
 import loadable from 'utils/loadable';
 
-export default loadable(() => import('containers/Group/AdminPlanAnnualBudgetPage/index'));
+export default loadable(() => import('containers/Group/GroupPlan/AdminPlanAnnualBudgetPage/index'));
