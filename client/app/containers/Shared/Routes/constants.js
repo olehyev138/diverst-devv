@@ -373,6 +373,20 @@ export const ROUTES = {
           }
         },
       },
+      budget: {
+        index: {
+          data: {
+            pathPrefix: (groupId = ':group_id') => `/groups/${groupId}/plan/budgeting`,
+            titleMessage: messages.groups.plan.budget.index
+          },
+        },
+        editAnnualBudget: {
+          path: (groupId = ':group_id') => `/groups/${groupId}/plan/budgeting/edit_annual_budget`,
+          data: {
+            titleMessage: messages.groups.plan.budget.editAnnualBudget,
+          }
+        },
+      },
     },
     manage: {
       index: {

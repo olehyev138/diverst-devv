@@ -171,6 +171,14 @@ export default defineMessages({
           },
         },
       },
+      budget: {
+        index: {
+          id: `${scope}.group.plan.budget.index`
+        },
+        editAnnualBudget: {
+          id: `${scope}.group.plan.budget.editAnnualBudget`
+        },
+      },
     },
     manage: {
       index: {

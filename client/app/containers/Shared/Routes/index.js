@@ -63,6 +63,7 @@ import {
   CustomGraphEditPage,
   GroupManageLayout,
   AdminAnnualBudgetPage,
+  AnnualBudgetEditPage,
   GroupSettingsPage,
   CustomTextEditPage,
   UserNewsLinkPage,
@@ -257,6 +258,9 @@ export default function Routes(props) {
       <GroupKPILayout exact {...expandRoute(ROUTES.group.plan.kpi.updates.new)} component={GroupPlanUpdateCreatePage} />
       <GroupKPILayout exact {...expandRoute(ROUTES.group.plan.kpi.updates.show)} component={GroupPlanUpdatePage} />
       <GroupKPILayout exact {...expandRoute(ROUTES.group.plan.kpi.updates.index)} component={GroupPlanUpdatesPage} />
+
+      { /* Group Plan - Budget */ }
+      <GroupPlanLayout exact {...expandRoute(ROUTES.group.plan.budget.editAnnualBudget)} component={AnnualBudgetEditPage} />
 
       { /* Group Manage */ }
       { /* TODO - redirect /manage -> /manage/settings */ }

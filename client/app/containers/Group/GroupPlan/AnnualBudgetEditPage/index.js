@@ -1,4 +1,5 @@
 import React, { memo, useEffect, useContext } from 'react';
+import dig from 'object-dig';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
@@ -11,13 +12,14 @@ import reducer from 'containers/Group/reducer';
 
 import RouteService from 'utils/routeHelpers';
 
-import { selectFormGroup, selectGroupIsCommitting, selectPaginatedSelectGroups, selectGroupIsFormLoading } from 'containers/Group/selectors';
+import {
+  selectGroupIsCommitting,
+  selectGroup
+} from 'containers/Group/selectors';
 import {
   getGroupBegin, getGroupsBegin,
   updateGroupBegin, groupFormUnmount
 } from 'containers/Group/actions';
-
-import GroupForm from 'components/Group/GroupForm';
 
 export function GroupEditPage(props) {
   useInjectReducer({ key: 'groups', reducer });
@@ -25,46 +27,24 @@ export function GroupEditPage(props) {
 
   const rs = new RouteService(useContext);
 
-  useEffect(() => {
-    props.getGroupBegin({ id: rs.params('group_id') });
-
-    return () => {
-      props.groupFormUnmount();
-    };
-  }, []);
-
   return (
     <React.Fragment>
-      <GroupForm
-        edit
-        groupAction={props.updateGroupBegin}
-        getGroupsBegin={props.getGroupsBegin}
-        selectGroups={props.groups}
-        group={props.group}
-        buttonText='Update'
-        isCommitting={props.isCommitting}
-        isFormLoading={props.isFormLoading}
-      />
+      <h1>
+        {dig(props, 'currentGroup', 'id')}
+      </h1>
     </React.Fragment>
   );
 }
 
 GroupEditPage.propTypes = {
-  group: PropTypes.object,
-  groups: PropTypes.array,
-  getGroupBegin: PropTypes.func,
-  getGroupsBegin: PropTypes.func,
+  currentGroup: PropTypes.object,
   updateGroupBegin: PropTypes.func,
-  groupFormUnmount: PropTypes.func,
   isCommitting: PropTypes.bool,
-  isFormLoading: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
-  group: selectFormGroup(),
-  groups: selectPaginatedSelectGroups(),
+  currentGroup: selectGroup(),
   isCommitting: selectGroupIsCommitting(),
-  isFormLoading: selectGroupIsFormLoading(),
 });
 
 const mapDispatchToProps = {

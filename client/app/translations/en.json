@@ -75,6 +75,8 @@
   "diverst.containers.Routes.group.plan.events.manage.updates.show": "Update",
   "diverst.containers.Routes.group.plan.events.manage.updates.new": "New Update",
   "diverst.containers.Routes.group.plan.events.manage.updates.edit": "Update Edit",
+  "diverst.containers.Routes.group.plan.budget.index": "Budgeting",
+  "diverst.containers.Routes.group.plan.budget.editAnnualBudget": "Edit Annual Budget",
   "diverst.containers.Routes.group.news.messages.show": "Group Message",
   "diverst.containers.Routes.group.news.messages.new": "New Group Message",
   "diverst.containers.Routes.group.news.messages.edit": "Edit Group Message",

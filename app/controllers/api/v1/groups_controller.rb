@@ -20,15 +20,6 @@ class Api::V1::GroupsController < DiverstController
     raise BadRequestException.new(e.message)
   end
 
-  def annual_budget
-    item = klass.find(params[:id])
-    base_authorize(item)
-
-    render status: 200, json: klass.show(self.diverst_request, params), serializer: GroupWithBudgetSerializer
-  rescue => e
-    raise BadRequestException.new(e.message)
-  end
-
   def initiatives
     item = klass.find(params[:id])
     base_authorize(item)
