@@ -56,17 +56,20 @@ export function AnnualBudgetList(props, context) {
     {
       title: 'Annual Budget',
       field: 'annual_budget',
-      sorting: false
+      sorting: false,
+      render: rowData => rowData.annual_budget || 'Not Set'
     },
     {
       title: 'Leftover Money',
       field: 'annual_budget_leftover',
-      sorting: false
+      sorting: false,
+      render: rowData => rowData.annual_budget_leftover || '$0.00'
     },
     {
       title: 'Approved Budget',
       field: 'annual_budget_approved',
-      sorting: false
+      sorting: false,
+      render: rowData => rowData.annual_budget_approved || '$0.00'
     },
   ];
 
