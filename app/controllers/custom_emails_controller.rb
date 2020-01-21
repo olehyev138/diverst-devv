@@ -1,7 +1,7 @@
 class CustomEmailsController < ApplicationController
   before_action :authenticate_user!
 
-  before_action :set_custom_email, only: [:edit, :show, :update]
+  before_action :set_custom_email, only: [:edit, :show, :update, :destroy]
 
   layout 'global_settings'
 
@@ -51,6 +51,19 @@ class CustomEmailsController < ApplicationController
       flash[:alert] = 'Your custom email was not updated. Please fix the errors'
       render :edit
     end
+  end
+
+  def destroy
+    # TODO check permission
+    # TODO track activity
+
+    # oOnly custom emails can be destroyed by userss
+    if @custom_email.custom? && @custom_email.destroy
+      flash[:notice] = 'Your custom email was deleted'
+    else
+      flash[:alert] = 'Your custom email could not be deleted.'
+    end
+    redirect_to emails_path
   end
 
   protected

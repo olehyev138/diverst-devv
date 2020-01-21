@@ -173,5 +173,40 @@ RSpec.describe CustomEmailsController, type: :controller do
     end
   end
 
-  describe 'POST#de'
+  describe 'DELETE #destroy' do
+    def delete_destroy(email_id = -1)
+      request.env['HTTP_REFERER'] = 'back'
+      delete :destroy, id: email_id
+    end
+
+    let(:user) { create :user }
+    let!(:email) { create :custom_email, enterprise: user.enterprise }
+
+    context 'with logged in user' do
+      login_user_from_let
+
+      context 'with custom email' do
+        it 'deletes email' do
+          expect{
+            delete_destroy(email.id)
+          }.to change(Email, :count).by(-1)
+        end
+
+        it 'flashes a notice message' do
+          delete_destroy(email.id)
+          expect(flash[:notice]).to eq 'Your custom email was deleted'
+        end
+
+        it 'redirects to correct action' do
+          delete_destroy(email.id)
+          expect(response).to redirect_to emails_path
+        end
+      end
+    end
+
+    context 'without logged in user' do
+      before { delete_destroy(email.id) }
+      it_behaves_like 'redirect user to users/sign_in path'
+    end
+  end
 end
