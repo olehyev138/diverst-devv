@@ -14,6 +14,8 @@ import { Field, Formik, Form, getIn } from 'formik';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { withStyles } from '@material-ui/core/styles';
 
+import { floatRound } from 'utils/floatRound';
+
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
@@ -23,7 +25,7 @@ import { buildValues, mapFields } from 'utils/formHelpers';
 
 import {
   Button, Card, CardActions, CardContent, Grid, Paper,
-  TextField, InputAdornment, Input, Divider, Switch, FormControlLabel,
+  TextField, InputAdornment, Input, FormControl, InputLabel, Typography,
 } from '@material-ui/core';
 
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
@@ -37,29 +39,73 @@ const styles = theme => ({
 });
 
 /* eslint-disable object-curly-newline */
-export function AnnualBudgetFormInner({ classes, handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, intl, ...props }) {
+export function AnnualBudgetFormInner(
+  { classes, handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, intl, group, ...props }
+) {
   return (
     <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.group}>
       <Card>
         <Form>
           <CardContent>
-            <Input
-              required
-              onChange={handleChange}
-              type='number'
-              name='amount'
-              id='amount'
-              margin='dense'
-              fullWidth
-              disabled={props.isCommitting}
-              label={<DiverstFormattedMessage {...messages.name} />}
-              value={values.amount}
-              startAdornment={(
-                <InputAdornment position={intl.formatMessage(appMessages.currency.placement)}>
-                  {intl.formatMessage(appMessages.currency.defaultSymbol)}
-                </InputAdornment>
-              )}
-            />
+            <FormControl fullWidth className={classes.margin}>
+              <InputLabel htmlFor='standard-adornment-amount'>
+                Enter the amount of money this group can spend annually
+              </InputLabel>
+              <Input
+                required
+                onChange={handleChange}
+                type='number'
+                name='amount'
+                id='amount'
+                margin='dense'
+                fullWidth
+                disabled={props.isCommitting}
+                value={values.amount}
+                startAdornment={(
+                  <InputAdornment position={intl.formatMessage(appMessages.currency.placement)}>
+                    {intl.formatMessage(appMessages.currency.defaultSymbol)}
+                  </InputAdornment>
+                )}
+              />
+            </FormControl>
+          </CardContent>
+          <CardContent>
+            <Grid
+              container
+              justify='space-between'
+              spacing={3}
+              alignContent='stretch'
+              alignItems='center'
+            >
+              <Grid item sm={6}>
+                <Typography color='primary' variant='h6' component='h2'>
+                  Leftover Money
+                </Typography>
+              </Grid>
+              <Grid item sm={6}>
+                <Typography color='primary' variant='h6' component='h2'>
+                  Approved Budget
+                </Typography>
+              </Grid>
+            </Grid>
+            <Grid
+              container
+              justify='space-between'
+              spacing={3}
+              alignContent='stretch'
+              alignItems='center'
+            >
+              <Grid item sm={6}>
+                <Typography color='secondary' variant='body1' component='h3'>
+                  {`$${floatRound(group.annual_budget_leftover, 2)}`}
+                </Typography>
+              </Grid>
+              <Grid item sm={6}>
+                <Typography color='secondary' variant='body1' component='h3'>
+                  {`$${floatRound(group.annual_budget_approved, 2)}`}
+                </Typography>
+              </Grid>
+            </Grid>
           </CardContent>
           <CardActions>
             <DiverstSubmit isCommitting={props.isCommitting}>
