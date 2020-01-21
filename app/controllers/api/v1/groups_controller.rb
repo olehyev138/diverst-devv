@@ -13,7 +13,9 @@ class Api::V1::GroupsController < DiverstController
     base_authorize(klass)
     params.permit![:parent_id] = nil
     params.permit![:preload] = 'budget'
-    render status: 200, json: klass.index(self.diverst_request, params.permit!), use_serializer: GroupWithBudgetWithChildrenSerializer
+    page = klass.index(self.diverst_request, params.permit!)
+    page.items = page.items.load_sums
+    render status: 200, json: page, use_serializer: GroupWithBudgetSerializer
   rescue => e
     raise BadRequestException.new(e.message)
   end

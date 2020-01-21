@@ -127,7 +127,6 @@ module BaseSearcher
       if searchValue.present?
         @items
             .joins(joins)
-            .send_chain(attachment_preloads)
             .includes(includes)
             .preload(preloads)
             .send_chain(query_scopes)
@@ -139,7 +138,6 @@ module BaseSearcher
       else
         @items
             .joins(joins)
-            .send_chain(attachment_preloads)
             .includes(includes)
             .preload(preloads)
             .send_chain(query_scopes)
