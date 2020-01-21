@@ -4,7 +4,7 @@
       <div class="card">
         <div class="card__section">
           <h3><%= @custom_email.name %></h3>
-          <%= simple_form_for @custom_email do |f| %>
+          <%= simple_form_for @custom_email, url: @submit_url, method: @submit_method  do |f| %>
             <%= f.input :name %>
             <%= f.input :description %>
             <%= f.input :subject %>

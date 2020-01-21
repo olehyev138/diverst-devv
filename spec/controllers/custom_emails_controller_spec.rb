@@ -23,6 +23,11 @@ RSpec.describe CustomEmailsController, type: :controller do
         2.times { create(:custom_email, enterprise: enterprise) }
         expect(assigns[:enterprise].custom_emails.count).to eq 2
       end
+
+      it 'sets submit url path correctly' do
+        expect(assigns[:submit_url]).to eq custom_emails_path
+        expect(assigns[:submit_method]).to eq 'post'
+      end
     end
 
     context 'without a logged in user' do
@@ -42,25 +47,91 @@ RSpec.describe CustomEmailsController, type: :controller do
         expect(response).to render_template :edit
       end
 
-      it 'return enterprise of current user' do
-        expect(assigns[:enterprise]).to eq user.enterprise
-      end
-
       it 'assigns correct email' do
         expect(assigns[:custom_email]).to eq custom_email
+      end
+
+      it 'assigns correct submit path' do
+        expect(assigns[:submit_url]).to eq custom_email_path(custom_email)
+        expect(assigns[:submit_method]).to eq 'patch'
       end
     end
 
     context 'without a logged in user' do
-      before { get :index }
+      before { get :edit, id: custom_email.id }
       it_behaves_like 'redirect user to users/sign_in path'
     end
   end
 
-  describe 'POST#create'
+  describe 'POST #create' do
+    let(:params) { attributes_for :custom_email, enterprise: enterprise }
+
+    def post_create(params = { a: 1 })
+      post :create, email: params
+    end
+
+    describe 'with logged in user' do
+      let(:user) { create :user }
+      let(:email_attrs) { attributes_for :custom_email }
+
+      login_user_from_let
+
+      context 'with correct params' do
+        it 'creates new email' do
+          expect {
+            post_create(email_attrs)
+          }.to change(Email, :count).by(1)
+        end
+
+        it 'creates custom email' do
+          post_create(email_attrs)
+          expect(Email.last.custom?).to eq true
+        end
+
+        it 'flashes a notice message' do
+          post_create(email_attrs)
+          expect(flash[:notice]).to eq 'Your custom email was created'
+        end
+
+        it 'redirects to correct path' do
+          post_create(email_attrs)
+          expect(response).to redirect_to emails_path
+        end
+      end
+
+      context 'with incorrect params' do
+        it 'does not save the new email' do
+          expect { post_create() }
+            .to_not change(Email, :count)
+        end
+
+        it 'flashes an alert message' do
+          post_create
+          expect(flash[:alert]).to eq 'Your custom email was not created, please fix errors'
+        end
+
+        it 'renders new view' do
+          post_create
+          expect(response).to render_template :new
+        end
+
+        it 'shows error' do
+          post_create
+          custom_email = assigns(:custom_email)
+
+          expect(custom_email.errors).to_not be_empty
+        end
+      end
+    end
+
+    describe 'without logged in user' do
+      before { post_create }
+      it_behaves_like 'redirect user to users/sign_in path'
+    end
+  end
 
   describe 'PATCH#update' do
-    let(:custom_email) { create(:custom_email, enterprise: enterprise) }
+    let(:email) { create(:custom_email, enterprise: enterprise) }
 
     describe 'with logged in user' do
       login_user_from_let
@@ -78,31 +149,7 @@ RSpec.describe CustomEmailsController, type: :controller do
         end
 
         it 'flashes a notice message' do
-          expect(flash[:notice]).to eq 'Your email was updated'
-        end
-
-        describe 'public activity' do
-          enable_public_activity
-
-          it 'creates public activity record' do
-            perform_enqueued_jobs do
-              expect { patch :update, id: email.id, email: { subject: 'updated' } }.to change(PublicActivity::Activity, :count).by(1)
-            end
-          end
-
-          describe 'activity record' do
-            let(:model) { Email.last }
-            let(:owner) { user }
-            let(:key) { 'email.update' }
-
-            before {
-              perform_enqueued_jobs do
-                patch :update, id: email.id, email: { subject: 'updated' }
-              end
-            }
-
-            include_examples 'correct public activity'
-          end
+          expect(flash[:notice]).to eq 'Your custom email was updated'
         end
       end
 
@@ -111,7 +158,7 @@ RSpec.describe CustomEmailsController, type: :controller do
 
         it 'flashes an alert message' do
           email.reload
-          expect(flash[:alert]).to eq 'Your email was not updated. Please fix the errors'
+          expect(flash[:alert]).to eq 'Your custom email was not updated. Please fix the errors'
         end
 
         it 'renders edit template for system email' do
