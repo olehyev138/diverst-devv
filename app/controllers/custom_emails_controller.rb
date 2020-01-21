@@ -1,7 +1,7 @@
 class CustomEmailsController < ApplicationController
   before_action :authenticate_user!
 
-  before_action :set_custom_email, only: [:edit, :show, :update, :destroy]
+  before_action :set_custom_email, only: [:edit, :show, :update, :destroy, :send]
 
   layout 'global_settings'
 
@@ -64,6 +64,17 @@ class CustomEmailsController < ApplicationController
       flash[:alert] = 'Your custom email could not be deleted.'
     end
     redirect_to emails_path
+  end
+
+  def send
+    # TODO authenticate
+
+    emails = custom_email_params[:receivers].split(',').map{ |i| i.strip }
+
+    CustomEmailMailer.custom(@custom_email, emails).deliver_later
+
+    flash[:notice] = "Your email has been sent to #{emails.count} user(s)."
+    redirect_to action: :index
   end
 
   protected

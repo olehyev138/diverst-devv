@@ -709,19 +709,13 @@ Rails.application.routes.draw do
   resources :shared_news_feed_links
 
   resources :policy_group_templates
-  resources :emails do
-    # TODO remove
-    collection do
-      #get 'new_custom'
-    end
+  resources :emails
+
+  resources :custom_emails do
     member do
-      #et 'edit_custom'
-      #get 'prepare_for_sending'
-      #post 'send_custom'
+      post :send
     end
   end
-
-  resources :custom_emails
 
   resources :custom_texts, only: [:edit, :update]
 
