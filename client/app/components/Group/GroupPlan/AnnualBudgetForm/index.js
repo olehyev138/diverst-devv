@@ -47,13 +47,13 @@ export function AnnualBudgetFormInner({ classes, handleSubmit, handleChange, han
               required
               onChange={handleChange}
               type='number'
-              name='annual_budget'
-              id='annual_budget'
+              name='amount'
+              id='amount'
               margin='dense'
               fullWidth
               disabled={props.isCommitting}
               label={<DiverstFormattedMessage {...messages.name} />}
-              value={values.annual_budget}
+              value={values.amount}
               startAdornment={(
                 <InputAdornment position={intl.formatMessage(appMessages.currency.placement)}>
                   {intl.formatMessage(appMessages.currency.defaultSymbol)}
@@ -82,7 +82,7 @@ export function AnnualBudgetFormInner({ classes, handleSubmit, handleChange, han
 export function AnnualBudgetForm(props) {
   const initialValues = buildValues(props.annualBudget, {
     id: { default: '' },
-    annual_budget: { default: '' },
+    amount: { default: '' },
   });
 
   return (
@@ -100,11 +100,11 @@ export function AnnualBudgetForm(props) {
 
 AnnualBudgetForm.propTypes = {
   annualBudgetAction: PropTypes.func,
-  groupId: PropTypes.string,
+  group: PropTypes.object,
+  annualBudget: PropTypes.object,
   enterpriseId: PropTypes.number,
   isCommitting: PropTypes.bool,
   isFormLoading: PropTypes.bool,
-  annualBudget: PropTypes.object,
 };
 
 AnnualBudgetFormInner.propTypes = {
