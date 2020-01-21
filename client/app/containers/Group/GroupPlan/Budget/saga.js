@@ -22,7 +22,8 @@ import {
 
 export function* updateAnnualBudget(action) {
   try {
-    const response = { data: 'API CALL' };
+    const payload = { annual_budget: action.payload };
+    const response = yield call(api.annualBudgets.update.bind(api.annualBudgets), payload.annual_budget.id, payload);
 
     yield put(updateAnnualBudgetSuccess({}));
     yield put(showSnackbar({ message: 'Successfully updated annual budget', options: { variant: 'success' } }));

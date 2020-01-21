@@ -8,6 +8,7 @@ import { createStructuredSelector } from 'reselect/lib';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import saga from 'containers/Group/saga';
+import budgetSaga from '../saga';
 import reducer from 'containers/Group/reducer';
 
 import RouteService from 'utils/routeHelpers';
@@ -24,6 +25,7 @@ import {
 export function GroupEditPage(props) {
   useInjectReducer({ key: 'groups', reducer });
   useInjectSaga({ key: 'groups', saga });
+  useInjectSaga({ key: 'budgets', saga: budgetSaga });
 
   const rs = new RouteService(useContext);
 
