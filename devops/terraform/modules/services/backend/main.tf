@@ -6,6 +6,22 @@
 #  - sn_app     - subnet for ec2 instances
 #  - sg_app     - security group for ec2 instances
 
+resource "aws_iam_instance_profile" "eb_instance_profile" {
+  name  = "eb_instance_profile"
+  role  = aws_iam_role.role.name
+}
+
+resource "aws_iam_role" "role" {
+  name                = "eb_role"
+  assume_role_policy  = file("${path.module}/assume_policy.json")
+}
+
+resource "aws_iam_role_policy" "policy" {
+  name    = "s3_access_policy"
+  role    = aws_iam_role.role.id
+  policy  = file("${path.module}/policy.json")
+}
+
 resource "aws_elastic_beanstalk_application" "eb_app" {
   name		    = var.env_name
   description	= "Backend for ${var.env_name}"
@@ -15,6 +31,14 @@ resource "aws_elastic_beanstalk_environment" "diverst-env" {
   name			      = "${var.env_name}-env"
   application		  = aws_elastic_beanstalk_application.eb_app.name
   solution_stack_name = "64bit Amazon Linux 2018.03 v2.11.1 running Ruby 2.6 (Puma)"
+  tier                = "WebServer"
+
+  # Instance Profile
+  setting {
+    namespace = "aws:autoscaling:launchconfiguration"
+    name      = "IamInstanceProfile"
+    value     = aws_iam_instance_profile.eb_instance_profile.arn
+  }
 
   # VPC
   setting {
@@ -73,7 +97,7 @@ resource "aws_elastic_beanstalk_environment" "diverst-env" {
   setting {
     namespace   = "aws:elasticbeanstalk:application:environment"
     name        = "RAILS_SKIP_MIGRATIONS"
-    value       = "false"
+    value       = "true"
   }
 
   setting {
@@ -93,6 +117,18 @@ resource "aws_elastic_beanstalk_environment" "diverst-env" {
     namespace   = "aws:elasticbeanstalk:application:environment"
     name        = "SECRET_KEY_BASE"
     value        = "a30d30bed8c1479a8d57cca5173b43f9f918fa64e2f2fffa7a1e910bbeae3dcfd95123e88294579b379828e5f26f29646387b6441db9900c172bc3a570a53de3"
+  }
+
+  setting {
+    namespace   = "aws:elasticbeanstalk:application:environment"
+    name        = "S3_BUCKET_NAME"
+    value        = var.filestorage_bucket_id
+  }
+
+  setting {
+    namespace   = "aws:elasticbeanstalk:application:environment"
+    name        = "S3_REGION"
+    value        = "us-east-1"
   }
 
   setting {

@@ -11,7 +11,8 @@ gem 'active_record_union'
 gem 'activerecord', '~> 5.2.3'
 gem 'activerecord-import', '~> 0.14.0' # Adds a faster way to INSERT multiple rows in the DB
 gem 'autoprefixer-rails', '~> 6.3', '>= 6.3.3.1' # Automatically adds vendor prefixes to CSS declarations
-gem 'aws-sdk', '~> 2.0.34' # The official AWS SDK
+gem 'aws-sdk'
+gem 'aws-sdk-s3', require: false
 gem 'bcrypt'
 gem 'bootsnap', require: false
 gem 'clockwork', '~> 1.2' # Schedule recurring jobs
@@ -49,7 +50,7 @@ gem 'rails', '~> 5.2.3'
 gem 'railties', '~> 5.2.3'
 gem 'rollbar', '~> 2.14.1'
 gem 'rqrcode', '~> 0.10.1', require: false
-gem 'ruby-oembed', '~> 0.12', git: 'https://github.com/TeamDiverst/ruby-oembed.git'
+gem 'ruby-oembed', '~> 0.12'
 gem 'ruby-saml', '>= 1.7.0'
 gem 'sanitize_email', '~> 1.2.2'
 gem 'sidekiq', '~> 5.0.5' # Background jobs
@@ -111,7 +112,7 @@ group :development do
 end
 
 group :staging, :production do
-  gem 'influxdb-rails', git: 'https://github.com/Kukunin/influxdb-rails.git', branch: 'tags_middleware' # Rails metrics to InfluxDB
+  gem 'influxdb-rails'
   gem 'lograge', '~> 0.3'
   gem 'newrelic_rpm', '~> 4.5.0'
   gem 'sidekiq-influxdb', '~> 1.1.0' # Sidekiq metrics to InfluxDB
