@@ -11,6 +11,7 @@ import saga from 'containers/Group/saga';
 import reducer from 'containers/Group/reducer';
 
 import RouteService from 'utils/routeHelpers';
+import AnnualBudgetForm from 'components/Group/GroupPlan/AnnualBudgetForm';
 
 import {
   selectGroupIsCommitting,
@@ -28,11 +29,11 @@ export function GroupEditPage(props) {
   const rs = new RouteService(useContext);
 
   return (
-    <React.Fragment>
-      <h1>
-        {dig(props, 'currentGroup', 'id')}
-      </h1>
-    </React.Fragment>
+    <AnnualBudgetForm
+      annualBudgetAction={props.updateGroupBegin}
+      group={props.currentGroup}
+      isCommitting={props.isCommitting}
+    />
   );
 }
 

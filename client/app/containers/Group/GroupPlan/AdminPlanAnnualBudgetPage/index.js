@@ -19,7 +19,7 @@ import reducer from 'containers/Group/reducer';
 
 import { getAnnualBudgetsBegin, groupListUnmount } from 'containers/Group/actions';
 
-import AnnualBudgetList from 'components/Group/AnnualBudgetList';
+import AnnualBudgetList from 'components/Group/GroupPlan/AnnualBudgetList';
 
 export function AdminAnnualBudgetPage(props) {
   useInjectReducer({ key: 'groups', reducer });
