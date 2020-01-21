@@ -18,9 +18,8 @@ import {
   selectGroup
 } from 'containers/Group/selectors';
 import {
-  getGroupBegin, getGroupsBegin,
-  updateGroupBegin, groupFormUnmount
-} from 'containers/Group/actions';
+  updateAnnualBudgetBegin
+} from '../actions';
 
 export function GroupEditPage(props) {
   useInjectReducer({ key: 'groups', reducer });
@@ -30,8 +29,9 @@ export function GroupEditPage(props) {
 
   return (
     <AnnualBudgetForm
-      annualBudgetAction={props.updateGroupBegin}
+      annualBudgetAction={props.updateAnnualBudgetBegin}
       group={props.currentGroup}
+      annualBudget={props.currentGroup.current_annual_budget}
       isCommitting={props.isCommitting}
     />
   );
@@ -39,7 +39,7 @@ export function GroupEditPage(props) {
 
 GroupEditPage.propTypes = {
   currentGroup: PropTypes.object,
-  updateGroupBegin: PropTypes.func,
+  updateAnnualBudgetBegin: PropTypes.func,
   isCommitting: PropTypes.bool,
 };
 
@@ -49,10 +49,7 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = {
-  getGroupBegin,
-  getGroupsBegin,
-  updateGroupBegin,
-  groupFormUnmount
+  updateAnnualBudgetBegin,
 };
 
 const withConnect = connect(
