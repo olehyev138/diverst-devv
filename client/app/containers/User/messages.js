@@ -73,5 +73,10 @@ export default defineMessages({
     saml: {
       id: `${scope}.scope.saml`
     },
-  }
+  },
+  downloads: {
+    title: {
+      id: `${scope}.downloads.title`
+    },
+  },
 });

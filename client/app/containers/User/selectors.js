@@ -66,6 +66,16 @@ const selectEventsTotal = () => createSelector(
   userState => userState.eventsTotal
 );
 
+const selectPaginatedDownloads = () => createSelector(
+  selectUsersDomain,
+  userState => userState.downloads
+);
+
+const selectDownloadsTotal = () => createSelector(
+  selectUsersDomain,
+  userState => userState.downloadsTotal
+);
+
 const selectIsLoadingPosts = () => createSelector(
   selectUsersDomain,
   userState => userState.isLoadingPosts
@@ -74,6 +84,11 @@ const selectIsLoadingPosts = () => createSelector(
 const selectIsLoadingEvents = () => createSelector(
   selectUsersDomain,
   userState => userState.isLoadingEvents
+);
+
+const selectIsLoadingDownloads = () => createSelector(
+  selectUsersDomain,
+  userState => userState.isLoadingDownloads
 );
 
 const selectIsFormLoading = () => createSelector(
@@ -114,5 +129,7 @@ export {
   selectIsLoadingEvents, selectFormUser,
   selectPaginatedPosts, selectPostsTotal,
   selectPaginatedEvents, selectEventsTotal,
-  selectIsCommitting, selectIsFormLoading
+  selectIsCommitting, selectIsFormLoading,
+  selectPaginatedDownloads, selectDownloadsTotal,
+  selectIsLoadingDownloads,
 };

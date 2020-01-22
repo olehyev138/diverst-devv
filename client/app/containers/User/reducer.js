@@ -12,12 +12,15 @@ import {
   GET_USER_EVENTS_SUCCESS, GET_USER_POSTS_BEGIN,
   CREATE_USER_BEGIN, CREATE_USER_SUCCESS, CREATE_USER_ERROR,
   UPDATE_USER_BEGIN, UPDATE_USER_SUCCESS, UPDATE_USER_ERROR,
-  UPDATE_FIELD_DATA_BEGIN, UPDATE_FIELD_DATA_SUCCESS, UPDATE_FIELD_DATA_ERROR, GET_USER_BEGIN, GET_USER_ERROR,
+  UPDATE_FIELD_DATA_BEGIN, UPDATE_FIELD_DATA_SUCCESS, UPDATE_FIELD_DATA_ERROR,
+  GET_USER_BEGIN, GET_USER_ERROR, GET_USER_DOWNLOADS_BEGIN, GET_USER_DOWNLOADS_SUCCESS,
+  GET_USER_DOWNLOADS_ERROR,
 } from 'containers/User/constants';
 
 export const initialState = {
   isLoadingPosts: true,
   isLoadingEvents: true,
+  isLoadingDownloads: true,
   isFormLoading: true,
   isCommitting: false,
   userList: {},
@@ -28,6 +31,8 @@ export const initialState = {
   postsTotal: null,
   events: [],
   eventsTotal: null,
+  downloads: [],
+  downloadsTotal: null,
 };
 
 /* eslint-disable-next-line default-case, no-param-reassign */
@@ -71,6 +76,14 @@ function usersReducer(state = initialState, action) {
         draft.events = action.payload.items;
         draft.eventsTotal = action.payload.total;
         draft.isLoadingEvents = false;
+        break;
+      case GET_USER_DOWNLOADS_BEGIN:
+        draft.isLoadingDownloads = true;
+        break;
+      case GET_USER_DOWNLOADS_SUCCESS:
+        draft.downloads = action.payload.items;
+        draft.downloadsTotal = action.payload.total;
+        draft.isLoadingDownloads = false;
         break;
       case CREATE_USER_BEGIN:
       case UPDATE_USER_BEGIN:

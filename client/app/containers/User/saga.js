@@ -8,7 +8,7 @@ import {
   GET_USERS_BEGIN, CREATE_USER_BEGIN,
   GET_USER_BEGIN, UPDATE_USER_BEGIN, DELETE_USER_BEGIN,
   UPDATE_FIELD_DATA_BEGIN, GET_USER_POSTS_BEGIN,
-  GET_USER_EVENTS_BEGIN
+  GET_USER_EVENTS_BEGIN, GET_USER_DOWNLOADS_BEGIN,
 } from 'containers/User/constants';
 
 import {
@@ -16,9 +16,11 @@ import {
   createUserSuccess, createUserError,
   getUserSuccess, getUserError,
   updateUserSuccess, updateUserError,
-  deleteUserError,
+  deleteUserSuccess, deleteUserError,
   getUserPostsSuccess, getUserPostsError,
-  getUserEventsSuccess, getUserEventsError, deleteUserSuccess, updateFieldDataSuccess,
+  getUserEventsSuccess, getUserEventsError,
+  updateFieldDataSuccess, getUserDownloadsSuccess,
+  getUserDownloadsError
 } from 'containers/User/actions';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -71,6 +73,18 @@ export function* getUserEvents(action) {
 
     // TODO: intl message
     yield put(showSnackbar({ message: 'Failed to load events', options: { variant: 'warning' } }));
+  }
+}
+
+export function* getUserDownloads(action) {
+  try {
+    const response = yield call(api.user.getDownloads.bind(api.user), action.payload);
+    yield put(getUserDownloadsSuccess(response.data.page));
+  } catch (err) {
+    yield put(getUserDownloadsError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to retrieve downloads', options: { variant: 'warning' } }));
   }
 }
 
@@ -146,5 +160,6 @@ export default function* usersSaga() {
   yield takeLatest(DELETE_USER_BEGIN, deleteUser);
   yield takeLatest(GET_USER_POSTS_BEGIN, getUserPosts);
   yield takeLatest(GET_USER_EVENTS_BEGIN, getUserEvents);
+  yield takeLatest(GET_USER_DOWNLOADS_BEGIN, getUserDownloads);
   yield takeLatest(UPDATE_FIELD_DATA_BEGIN, updateFieldData);
 }
