@@ -1,7 +1,7 @@
 class CustomEmailsController < ApplicationController
   before_action :authenticate_user!
 
-  before_action :set_custom_email, only: [:edit, :show, :update, :destroy, :send]
+  before_action :set_custom_email, only: [:edit, :show, :update, :destroy, :deliver]
 
   layout 'global_settings'
 
