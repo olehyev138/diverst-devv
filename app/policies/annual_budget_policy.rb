@@ -17,11 +17,7 @@ class AnnualBudgetPolicy < GroupBasePolicy
     end
 
     def resolve
-      if index?
-        scope.joins(:enterprise).where('enterprises.id = ?', user.enterprise_id)
-      else
-        scope.none
-      end
+      super('groups_budgets_index')
     end
   end
 end

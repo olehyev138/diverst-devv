@@ -1,4 +1,4 @@
-class GroupBasePolicy < Struct.new(:user, :context)
+class GroupBasePolicy < ApplicationPolicy
   attr_accessor :user, :group, :record, :group_leader_role_ids
 
   def initialize(user, context, params = nil)
@@ -12,7 +12,7 @@ class GroupBasePolicy < Struct.new(:user, :context)
     elsif context.is_a?(Class) # Class
       # Set group using params if context is a class as this will be for
       # nested model actions such as index and create, which require a group
-      self.group = ::Group.find(params[:group_id] || params.dig(context.model_name.param_key.to_sym, :group_id))
+      self.group = ::Group.find(params[:group_id] || params.dig(context.model_name.param_key.to_sym, :group_id)) rescue nil
     else # Record
       self.group = context.group
       self.record = context
@@ -137,5 +137,57 @@ class GroupBasePolicy < Struct.new(:user, :context)
   end
 
   def base_manage_permission
+  end
+
+  class Scope < Scope
+    def quote_string(v)
+      v.to_s.gsub(/\\/, '\&\&').gsub(/'/, "''")
+    end
+
+    def manage_all
+      '(policy_groups.manage_all = true)'
+    end
+
+    def policy_group(permission)
+      "policy_groups.#{quote_string(permission)} = true"
+    end
+
+    def group_manage(permission)
+      "(policy_groups.groups_manage = true AND #{policy_group(permission)})"
+    end
+
+    def is_member(permission)
+      "(user_groups.user_id = #{quote_string(user.id)} AND #{policy_group(permission)})"
+    end
+
+    def leader_policy(permission)
+      "group_leaders.#{quote_string(permission)} = true"
+    end
+
+    def is_leader(permission)
+      if group_has_permission(permission)
+        "(group_leaders.user_id = #{quote_string(user.id)} AND #{leader_policy(permission)})"
+      else
+        'false'
+      end
+    end
+
+    def group_has_permission(permission)
+      GroupLeader.attribute_names.include?(permission)
+    end
+
+    def resolve(permission)
+      if scope <= Group
+        scoped = scope.left_joins(:enterprise, :group_leaders, :user_groups)
+      elsif scope.instance_methods.include?(:group)
+        scoped = scope.left_joins(group: [:enterprise, :group_leaders, :user_groups])
+      else
+        scoped = scope.none
+      end
+      scoped
+          .joins("JOIN policy_groups ON policy_groups.user_id = #{quote_string(user.id)}")
+          .where('enterprises.id = ?', user.enterprise_id)
+          .where([manage_all, group_manage(permission), is_member(permission), is_leader(permission)].join(' OR '))
+    end
   end
 end
