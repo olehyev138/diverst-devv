@@ -12,8 +12,7 @@ class Api::V1::GroupsController < DiverstController
     params[:parent_id] = nil
     params[:preload] = 'budget'
     page = klass.budget_index(self.diverst_request, params.permit!)
-    page.items = page.items.load_sums
-    render status: 200, json: page, use_serializer: GroupWithBudgetSerializer
+    render status: 200, json: load_sums(page), use_serializer: GroupWithBudgetSerializer
   rescue => e
     raise BadRequestException.new(e.message)
   end
@@ -40,6 +39,13 @@ class Api::V1::GroupsController < DiverstController
   def create_field
     params[:field][:field_type] = 'regular'
     super
+  end
+
+  private
+
+  def load_sums(result)
+    result.items = result.items.load_sums
+    result
   end
 
   def payload

@@ -63,8 +63,8 @@ class GroupBasePolicy < Struct.new(:user, :context)
   end
 
   def has_group_leader_permissions?(permission)
-    return false if !is_a_leader?
-    return false if !GroupLeader.attribute_names.include?(permission)
+    return false unless is_a_leader?
+    return false unless GroupLeader.attribute_names.include?(permission)
 
     group.group_leaders.where(user_id: user.id).where("#{permission} = true").exists?
   end
