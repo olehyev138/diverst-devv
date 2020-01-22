@@ -24,7 +24,7 @@ import {
   updateAnnualBudgetBegin, getCurrentAnnualBudgetBegin, annualBudgetsUnmount
 } from '../actions';
 
-export function GroupEditPage(props) {
+export function AnnualBudgetEditPage(props) {
   useInjectReducer({ key: 'annualBudgets', reducer });
   useInjectSaga({ key: 'annualBudgets', saga });
 
@@ -48,7 +48,7 @@ export function GroupEditPage(props) {
   );
 }
 
-GroupEditPage.propTypes = {
+AnnualBudgetEditPage.propTypes = {
   currentGroup: PropTypes.object,
   currentAnnualBudget: PropTypes.object,
   updateAnnualBudgetBegin: PropTypes.func,
@@ -79,4 +79,4 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(GroupEditPage);
+)(AnnualBudgetEditPage);
