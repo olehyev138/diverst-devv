@@ -18,22 +18,6 @@ class EmailsController < ApplicationController
   def edit
   end
 
-  # WARNING - only allows to create custom email.
-  # System emails are not allowed for users to be created
-  def create
-    #TODO authorize user
-    @custom_email = current_user.enterprise.custom_emails.new(custom_email_params)
-
-    if @custom_email.save
-      # TODO track activity
-      flash[:notice] = 'Your custom email was created'
-      redirect_to action: :index
-    else
-      flash.now[:alert] ='Your custom email was not created, please fix errors'
-      render :new_custom
-    end
-  end
-
   def update
     if @email.update(email_params)
       flash[:notice] = 'Your email was updated'
@@ -41,18 +25,8 @@ class EmailsController < ApplicationController
       redirect_to action: :index
     else
       flash[:alert] = 'Your email was not updated. Please fix the errors'
-
-      if @email.custom?
-        redirect_to action: :edit_custom
-      else
-        render :edit
-      end
+      render :edit
     end
-  end
-
-  def new_custom
-    @enterprise = current_user.enterprise
-    @custom_email = current_user.enterprise.custom_emails.new
   end
 
   def edit_custom
@@ -91,18 +65,6 @@ class EmailsController < ApplicationController
       .permit(
         :content,
         :subject
-      )
-  end
-
-  def custom_email_params
-    params
-      .require(:email)
-      .permit(
-        :name,
-        :description,
-        :content,
-        :subject,
-        :receivers
       )
   end
 
