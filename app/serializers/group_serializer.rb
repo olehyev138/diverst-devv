@@ -11,10 +11,6 @@ class GroupSerializer < ApplicationRecordSerializer
     object.logo_location(default_style: instance_options.dig(:scope, :image_size)&.to_sym)
   end
 
-  def current_annual_budget
-    object.current_annual_budget!
-  end
-
   def current_user_is_member
     scope&.dig(:current_user)&.is_member_of?(object)
   end

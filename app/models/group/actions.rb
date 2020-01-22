@@ -27,7 +27,11 @@ module Group::Actions
   end
 
   module ControllerMethods
-    def pager(diverst_request, params = {}, search_method = :lookup, base: self)
+    def budget_index(diverst_request, params, base: self)
+      budget_pager(diverst_request, params, base: base)
+    end
+
+    def budget_pager(diverst_request, params = {}, base: self)
       return elasticsearch(diverst_request, params) if params[:elasticsearch]
 
       set_defaults
