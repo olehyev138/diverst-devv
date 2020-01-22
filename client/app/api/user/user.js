@@ -15,6 +15,10 @@ Object.assign(User, {
 
   getAllEvents(payload) {
     return axios.get(appendQueryArgs(`${this.url}/all_events`, payload));
+  },
+
+  getDownloads(payload) {
+    return axios.get(appendQueryArgs(`${this.url}/downloads`, payload));
   }
 });
 
