@@ -54,6 +54,7 @@ gem 'twilio-ruby', '~> 5.10.0'
 gem 'twitter', '~> 6.2.0' # twitter implementation
 gem 'validate_url', '~> 1.0', '>= 1.0.2' # Active Model validation for URLs
 gem 'yam', '~> 2.5' # Yammer ruby SDK
+gem 'seedbank', '~> 0.3.0' # Support for multiple seed files and their ordering
 
 # gem 'omniauth-linkedin-oauth2', '~> 0.1.5' # OAuth for LinkedIn
 # gem 'omniauth-oauth2', '1.3.1' # Temporary fix to address: https://github.com/decioferreira/omniauth-linkedin-oauth2/issues/28
@@ -102,12 +103,11 @@ group :development do
   gem 'capistrano3-puma', '~> 3.1.1'
   gem 'ed25519', '~> 1.2.4'
   gem 'rufo', '~> 0.1.0'
-  gem 'seedbank', '~> 0.3.0' # Support for multiple seed files and their ordering
 end
 
 group :staging, :production do
-  gem 'influxdb-rails'
+  #gem 'influxdb-rails'
   gem 'lograge', '~> 0.3'
-  gem 'sidekiq-influxdb', '~> 1.1.0' # Sidekiq metrics to InfluxDB
+  #gem 'sidekiq-influxdb', '~> 1.1.0' # Sidekiq metrics to InfluxDB
   gem 'syslogger', '~> 1.6.0' # Log to syslog, which is then sent to Loggly
 end

@@ -59,3 +59,6 @@ terraform.tfstate*
 # ActiveStorage local storage
 /storage
 
+
+# Ignore master key for decrypting credentials and more.
+/config/master.key
