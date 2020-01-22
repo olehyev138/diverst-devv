@@ -1,4 +1,6 @@
 class AnnualBudget < ApplicationRecord
+  include AnnualBudget::Actions
+
   belongs_to :group
   has_one :enterprise, through: :group
 

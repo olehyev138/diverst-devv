@@ -40,19 +40,8 @@ class Api::V1::GroupsController < DiverstController
   end
 
   def create_field
-    params[:field] = field_payload
     params[:field][:field_type] = 'regular'
-    base_authorize(klass)
-    item = klass.find(params[:id])
-
-    render status: 201, json: Field.build(self.diverst_request, params, base: item.fields)
-  rescue => e
-    case e
-    when InvalidInputException
-      raise
-    else
-      raise BadRequestException.new(e.message)
-    end
+    super
   end
 
   def payload

@@ -21,6 +21,10 @@ module BasePager
       [item_page, item_count, offset, order_by, order]
     end
 
+    def order_string(order_by, order)
+      "#{order_by} #{order}"
+    end
+
     def pager(diverst_request, params = {}, search_method = :lookup, base: self)
       return elasticsearch(diverst_request, params) if params[:elasticsearch]
 
@@ -38,7 +42,7 @@ module BasePager
       # search
       total = search_method_obj.call(params, diverst_request, base: base).count
       items = search_method_obj.call(params, diverst_request, base: base)
-                        .order("#{order_by} #{order}")
+                        .order(order_string(order_by, order))
                         .limit(item_count)
                         .offset(offset)
 
