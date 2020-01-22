@@ -6,7 +6,7 @@ class Notifiers::PollNotifier
 
   def notify!
     if should_notify?
-      targeted_users.each do |user|
+      targeted_users.find_each do |user|
         PollMailer.invitation(@poll, user).deliver_later
       end
       @poll.update(email_sent: true)
