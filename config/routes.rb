@@ -713,7 +713,7 @@ Rails.application.routes.draw do
 
   resources :custom_emails do
     member do
-      post :send
+      post :deliver
     end
   end
 

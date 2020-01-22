@@ -66,7 +66,7 @@ class CustomEmailsController < ApplicationController
     redirect_to emails_path
   end
 
-  def send
+  def deliver
     # TODO authenticate
 
     emails = custom_email_params[:receivers].split(',').map{ |i| i.strip }
@@ -74,7 +74,7 @@ class CustomEmailsController < ApplicationController
     CustomEmailMailer.custom(@custom_email, emails).deliver_later
 
     flash[:notice] = "Your email has been sent to #{emails.count} user(s)."
-    redirect_to action: :index
+    redirect_to emails_path
   end
 
   protected

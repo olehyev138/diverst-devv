@@ -1,4 +1,4 @@
-<%= simple_form_for @custom_email, url: send_custom_email_path(@custom_email) do |f| %>
+<%= simple_form_for @custom_email, url: deliver_custom_email_path(@custom_email), method: :post do |f| %>
 <div class="content__main">
     <div class="card card--secondary">
         <%= f.input :receivers, as: :text %>
