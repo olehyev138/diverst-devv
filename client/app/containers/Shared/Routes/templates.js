@@ -37,7 +37,7 @@ import GroupDashboardPage from 'containers/Analyze/Dashboards/GroupDashboardPage
 import UserDashboardPage from 'containers/Analyze/Dashboards/UserDashboardPage/Loadable';
 
 /* Admin - Plan */
-import AdminAnnualBudgetPage from 'containers/Group/GroupPlan/Budget/AdminPlanAnnualBudgetPage/Loadable';
+import AdminAnnualBudgetPage from 'containers/Group/GroupPlan/AnnualBudget/AdminPlanAnnualBudgetPage/Loadable';
 
 /* Admin - Analyze - Custom */
 import MetricsDashboardListPage from 'containers/Analyze/Dashboards/MetricsDashboard/MetricsDashboardListPage/Loadable';
@@ -120,7 +120,7 @@ import GroupPlanUpdateEditPage from 'containers/Group/GroupPlan/KPI/UpdateEditPa
 import GroupPlanUpdateCreatePage from 'containers/Group/GroupPlan/KPI/UpdateCreatePage/Loadable';
 
 /* Group - Plan - Budget */
-import AnnualBudgetEditPage from 'containers/Group/GroupPlan/Budget/AnnualBudgetEditPage/Loadable';
+import AnnualBudgetEditPage from 'containers/Group/GroupPlan/AnnualBudget/AnnualBudgetEditPage/Loadable';
 
 /* Group - Members */
 import GroupMemberListPage from 'containers/Group/GroupMembers/GroupMemberListPage/Loadable';

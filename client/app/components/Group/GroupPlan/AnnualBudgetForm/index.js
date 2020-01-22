@@ -40,10 +40,10 @@ const styles = theme => ({
 
 /* eslint-disable object-curly-newline */
 export function AnnualBudgetFormInner(
-  { classes, handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, intl, group, ...props }
+  { classes, handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, intl, annualBudget, ...props }
 ) {
   return (
-    <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.group}>
+    <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !annualBudget}>
       <Card>
         <Form>
           <CardContent>
@@ -69,44 +69,46 @@ export function AnnualBudgetFormInner(
               />
             </FormControl>
           </CardContent>
-          <CardContent>
-            <Grid
-              container
-              justify='space-between'
-              spacing={3}
-              alignContent='stretch'
-              alignItems='center'
-            >
-              <Grid item sm={6}>
-                <Typography color='primary' variant='h6' component='h2'>
-                  Leftover Money
-                </Typography>
+          { annualBudget && (
+            <CardContent>
+              <Grid
+                container
+                justify='space-between'
+                spacing={3}
+                alignContent='stretch'
+                alignItems='center'
+              >
+                <Grid item sm={6}>
+                  <Typography color='primary' variant='h6' component='h2'>
+                    Leftover Money
+                  </Typography>
+                </Grid>
+                <Grid item sm={6}>
+                  <Typography color='primary' variant='h6' component='h2'>
+                    Approved Budget
+                  </Typography>
+                </Grid>
               </Grid>
-              <Grid item sm={6}>
-                <Typography color='primary' variant='h6' component='h2'>
-                  Approved Budget
-                </Typography>
+              <Grid
+                container
+                justify='space-between'
+                spacing={3}
+                alignContent='stretch'
+                alignItems='center'
+              >
+                <Grid item sm={6}>
+                  <Typography color='secondary' variant='body1' component='h3'>
+                    {`$${floatRound(annualBudget.leftover, 2)}`}
+                  </Typography>
+                </Grid>
+                <Grid item sm={6}>
+                  <Typography color='secondary' variant='body1' component='h3'>
+                    {`$${floatRound(annualBudget.approved, 2)}`}
+                  </Typography>
+                </Grid>
               </Grid>
-            </Grid>
-            <Grid
-              container
-              justify='space-between'
-              spacing={3}
-              alignContent='stretch'
-              alignItems='center'
-            >
-              <Grid item sm={6}>
-                <Typography color='secondary' variant='body1' component='h3'>
-                  {`$${floatRound(group.annual_budget_leftover, 2)}`}
-                </Typography>
-              </Grid>
-              <Grid item sm={6}>
-                <Typography color='secondary' variant='body1' component='h3'>
-                  {`$${floatRound(group.annual_budget_approved, 2)}`}
-                </Typography>
-              </Grid>
-            </Grid>
-          </CardContent>
+            </CardContent>
+          )}
           <CardActions>
             <DiverstSubmit isCommitting={props.isCommitting}>
               <DiverstFormattedMessage {...messages.setAnnualBudget} />

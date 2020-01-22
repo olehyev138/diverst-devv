@@ -10,6 +10,10 @@ class GroupPolicy < ApplicationPolicy
     index?
   end
 
+  def current_annual_budget?
+    update?
+  end
+
   def annual_budgets?
     update?
   end

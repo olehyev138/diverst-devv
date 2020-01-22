@@ -3,7 +3,7 @@ export function floatRound(number, rounding) {
     // eslint-disable-next-line no-param-reassign
     number = parseFloat(number);
   else if (typeof number !== 'number')
-    throw new Error('Not a Number');
+    throw new Error(`Not a Number (${number})`);
 
   return number.toFixed(rounding);
 }

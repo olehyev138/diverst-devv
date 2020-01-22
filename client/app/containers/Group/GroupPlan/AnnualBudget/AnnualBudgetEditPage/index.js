@@ -7,9 +7,8 @@ import { createStructuredSelector } from 'reselect/lib';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
-import saga from 'containers/Group/saga';
-import budgetSaga from '../saga';
-import reducer from 'containers/Group/reducer';
+import saga from '../saga';
+import reducer from '../reducer';
 
 import RouteService from 'utils/routeHelpers';
 import AnnualBudgetForm from 'components/Group/GroupPlan/AnnualBudgetForm';
@@ -19,39 +18,57 @@ import {
   selectGroup
 } from 'containers/Group/selectors';
 import {
-  updateAnnualBudgetBegin
+  selectAnnualBudget, selectIsFetchingAnnualBudget
+} from '../selectors';
+import {
+  updateAnnualBudgetBegin, getCurrentAnnualBudgetBegin, annualBudgetsUnmount
 } from '../actions';
 
 export function GroupEditPage(props) {
-  useInjectReducer({ key: 'groups', reducer });
-  useInjectSaga({ key: 'groups', saga });
-  useInjectSaga({ key: 'budgets', saga: budgetSaga });
+  useInjectReducer({ key: 'annualBudgets', reducer });
+  useInjectSaga({ key: 'annualBudgets', saga });
 
   const rs = new RouteService(useContext);
+
+  useEffect(() => {
+    const groupId = dig(props, 'currentGroup', 'id') || rs.params('group_id');
+    props.getCurrentAnnualBudgetBegin({ groupId });
+
+    return () => props.annualBudgetsUnmount();
+  }, []);
 
   return (
     <AnnualBudgetForm
       annualBudgetAction={props.updateAnnualBudgetBegin}
       group={props.currentGroup}
-      annualBudget={props.currentGroup.current_annual_budget}
+      annualBudget={props.currentAnnualBudget}
       isCommitting={props.isCommitting}
+      isFormLoading={props.isFetchingAnnualBudget}
     />
   );
 }
 
 GroupEditPage.propTypes = {
   currentGroup: PropTypes.object,
+  currentAnnualBudget: PropTypes.object,
   updateAnnualBudgetBegin: PropTypes.func,
+  getCurrentAnnualBudgetBegin: PropTypes.func,
+  annualBudgetsUnmount: PropTypes.func,
   isCommitting: PropTypes.bool,
+  isFetchingAnnualBudget: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
   currentGroup: selectGroup(),
+  currentAnnualBudget: selectAnnualBudget(),
+  isFetchingAnnualBudget: selectIsFetchingAnnualBudget(),
   isCommitting: selectGroupIsCommitting(),
 });
 
 const mapDispatchToProps = {
   updateAnnualBudgetBegin,
+  getCurrentAnnualBudgetBegin,
+  annualBudgetsUnmount,
 };
 
 const withConnect = connect(
