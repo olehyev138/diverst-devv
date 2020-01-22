@@ -1,3 +1,4 @@
+# DEPRECATED
 class BudgetManager
   def initialize(budget)
     @budget = budget
