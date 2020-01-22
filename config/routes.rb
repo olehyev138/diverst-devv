@@ -61,16 +61,18 @@ Diverst::Application.routes.draw do
       resources :graphs
       resources :groups do
         collection do
-          get '/annual_budgets', to: 'groups#annual_budgets'
+          get '/annual_budgets', to: 'groups#current_annual_budgets'
         end
         member do
-          get  '/fields',       to: 'groups#fields'
-          post '/create_field', to: 'groups#create_field'
+            get  '/fields',       to: 'groups#fields'
+            post '/create_field', to: 'groups#create_field'
 
           get  '/initiatives', to: 'groups#initiatives'
           get  '/updates', to: 'groups#updates'
           get  '/update_prototype', to: 'groups#update_prototype'
           post '/create_update', to: 'groups#create_update'
+
+          get '/annual_budget', to: 'groups#current_annual_budget'
         end
       end
       resources :group_categories

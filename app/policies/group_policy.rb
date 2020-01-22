@@ -6,8 +6,12 @@ class GroupPolicy < ApplicationPolicy
     @policy_group.groups_index?
   end
 
-  def annual_budgets?
+  def current_annual_budgets?
     index?
+  end
+
+  def annual_budgets?
+    update?
   end
 
   def new?

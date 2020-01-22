@@ -50,6 +50,7 @@ module Group::Actions
                   .where(parent_id: items.ids)
 
       items = items.union(children)
+      items = items.where(annual_budgets: {closed: false})
       items = items.preload(base_preloads_budget)
 
       # return the page

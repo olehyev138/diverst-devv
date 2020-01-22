@@ -9,13 +9,22 @@ class Api::V1::GroupsController < DiverstController
     super
   end
 
-  def annual_budgets
+  def current_annual_budgets
     base_authorize(klass)
     params.permit![:parent_id] = nil
     params.permit![:preload] = 'budget'
     page = klass.index(self.diverst_request, params.permit!)
     page.items = page.items.load_sums
     render status: 200, json: page, use_serializer: GroupWithBudgetSerializer
+  rescue => e
+    raise BadRequestException.new(e.message)
+  end
+
+  def current_annual_budget
+    item = klass.find(params[:id])
+    base_authorize(item)
+
+    render status: 200, json: item.current_annual_budget!
   rescue => e
     raise BadRequestException.new(e.message)
   end
