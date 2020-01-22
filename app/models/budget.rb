@@ -2,10 +2,10 @@ class Budget < ApplicationRecord
   include PublicActivity::Common
   # include Budget::Actions
 
-  belongs_to :group
+  belongs_to :annual_budget
   belongs_to :approver, class_name: 'User', foreign_key: 'approver_id'
   belongs_to :requester, class_name: 'User', foreign_key: 'requester_id'
-  belongs_to :annual_budget
+  has_one :group, through: :annual_budget
 
   has_many :checklists, dependent: :destroy
   has_many :budget_items, dependent: :destroy
@@ -18,7 +18,6 @@ class Budget < ApplicationRecord
   # scope :with_available_funds, -> { where('available_amount > 0')}
 
   after_save :send_email_notification
-  after_destroy :update_annual_budget
 
   validates_length_of :decline_reason, maximum: 191
   validates_length_of :comments, maximum: 65535
@@ -45,7 +44,8 @@ class Budget < ApplicationRecord
   end
 
   def self.pre_approved_events(group, user = nil)
-    related_budgets = self.where(group_id: group.id)
+    related_budgets = self.joins(:group)
+                          .where(annual_budgets: { group: group })
                           .approved
                           .includes(:budget_items)
 
@@ -66,28 +66,34 @@ class Budget < ApplicationRecord
     flattened_items
   end
 
-  def self.pre_approved_events_for_select(group, user = nil)
+  def self.pre_approved_events_for_select(group, user = nil, initiative = nil)
     budget_items = self.pre_approved_events(group, user)
 
     select_items = budget_items.map do |bi|
       [ bi.title_with_amount, bi.id ]
     end
 
+    if initiative&.persisted?
+      return select_items if initiative&.current_expenses_sum.to_f > initiative&.estimated_funding.to_f
+    end
+
     select_items << [ group.title_with_leftover_amount, BudgetItem::LEFTOVER_BUDGET_ITEM_ID ]
   end
 
-  private
-
-  def update_annual_budget
-    annual_budget = AnnualBudget.find_or_create_by(closed: false, group_id: group.id)
-    return if annual_budget.nil?
-
-    leftover_of_annual_budget = (group.annual_budget - group.approved_budget) + group.available_budget
-    group.update(leftover_money: leftover_of_annual_budget)
-    annual_budget.update(amount: group.annual_budget, available_budget: group.available_budget,
-                         leftover_money: group.leftover_money, expenses: group.spent_budget,
-                         approved_budget: group.approved_budget)
+  def approve(approver)
+    budget_items.each do |bi|
+      bi.approve!
+    end
+    update(approver: approver, is_approved: true)
+    BudgetMailer.budget_approved(self).deliver_later if requester
   end
+
+  def decline(approver)
+    update(approver: approver, is_approved: false)
+    BudgetMailer.budget_declined(self).deliver_later if requester
+  end
+
+  private
 
   def send_email_notification
     case is_approved
