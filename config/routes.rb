@@ -64,8 +64,8 @@ Diverst::Application.routes.draw do
           get '/annual_budgets', to: 'groups#current_annual_budgets'
         end
         member do
-            get  '/fields',       to: 'groups#fields'
-            post '/create_field', to: 'groups#create_field'
+          get  '/fields', to: 'groups#fields'
+          post '/create_field', to: 'groups#create_field'
 
           get  '/initiatives', to: 'groups#initiatives'
           get  '/updates', to: 'groups#updates'
