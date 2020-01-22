@@ -8,6 +8,7 @@ import GlobalSettingsLayout from 'containers/Layouts/GlobalSettingsLayout/Loadab
 import GroupManageLayout from 'containers/Layouts/GroupManageLayout/Loadable';
 import GroupPlanLayout from 'containers/Layouts/GroupPlanLayout/Loadable';
 import GroupKPILayout from 'containers/Layouts/GroupPlanLayout/KPILayout/Loadable';
+import GroupBudgetLayout from 'containers/Layouts/GroupPlanLayout/BudgetingLayout/Loadable';
 import MentorshipLayout from 'containers/Layouts/MentorshipLayout/Loadable';
 import InnovateLayout from 'containers/Layouts/InnovateLayout/Loadable';
 import SystemUserLayout from 'containers/Layouts/SystemUsersLayout/Loadable';
@@ -213,6 +214,7 @@ export {
   GroupManageLayout,
   GroupPlanLayout,
   GroupKPILayout,
+  GroupBudgetLayout,
   GroupSettingsPage,
   CustomTextEditPage,
   UserNewsLinkPage,

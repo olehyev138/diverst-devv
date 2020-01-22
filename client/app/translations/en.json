@@ -122,6 +122,7 @@
   "diverst.containers.Group.GroupPlan.KPI.tabs.metrics": "Metrics",
   "diverst.containers.Group.GroupPlan.KPI.tabs.fields": "Fields",
   "diverst.containers.Group.GroupPlan.KPI.tabs.updates": "Updates",
+  "diverst.containers.Group.GroupPlan.Budget.tabs.editAnnualBudget": "Edit Annual Budget",
   "diverst.containers.Event.EventManage.tabs.metrics": "Metrics",
   "diverst.containers.Event.EventManage.tabs.fields": "Fields",
   "diverst.containers.Event.EventManage.tabs.updates": "Updates",
