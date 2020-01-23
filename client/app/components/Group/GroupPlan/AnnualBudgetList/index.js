@@ -1,147 +1,179 @@
 /**
  *
- * AnnualBudgetList Component
- *
+ * Budget Overview Form Component
  *
  */
 
 import React, {
-  memo
+  memo, useRef, useState, useEffect
 } from 'react';
-import PropTypes from 'prop-types';
 import { compose } from 'redux';
-
-import {
-  Button, Card, CardContent, CardActions,
-  Typography, Grid, Link, TablePagination, Collapse, Box, MenuItem,
-} from '@material-ui/core';
+import PropTypes from 'prop-types';
+import Select from 'components/Shared/DiverstSelect';
+import { Field, Formik, Form, getIn } from 'formik';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { withStyles } from '@material-ui/core/styles';
 
-import LoopIcon from '@material-ui/icons/Loop';
-import RedoIcon from '@material-ui/icons/Redo';
-import EditIcon from '@material-ui/icons/Edit';
+import { floatRound } from 'utils/floatRound';
 
-import DiverstTable from 'components/Shared/DiverstTable';
-import DiverstDropdownMenu from 'components/Shared/DiverstDropdownMenu';
+import WrappedNavLink from 'components/Shared/WrappedNavLink';
+import { ROUTES } from 'containers/Shared/Routes/constants';
 
+import messages from 'containers/Group/messages';
+import appMessages from 'containers/Shared/App/messages';
+import { buildValues, mapFields } from 'utils/formHelpers';
+
+import {
+  Button, Card, CardActions, CardContent, Grid, Paper,
+  TextField, InputAdornment, Input, FormControl, InputLabel, Typography,
+} from '@material-ui/core';
+
+import DiverstSubmit from 'components/Shared/DiverstSubmit';
+import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
+import { injectIntl, intlShape } from 'react-intl';
 
 const styles = theme => ({
-  annualBudgetListItem: {
-    width: '100%',
-  },
-  annualBudgetListItemDescription: {
-    paddingTop: 8,
-  },
-  errorButton: {
-    color: theme.palette.error.main,
+  noBottomPadding: {
+    paddingBottom: '0 !important',
   },
 });
 
-export function AnnualBudgetList(props, context) {
-  const { classes } = props;
-
-  const handleOrderChange = (columnId, orderDir) => {
-    props.handleOrdering({
-      orderBy: (columnId === -1) ? 'id' : `${columns[columnId].query_field}`,
-      orderDir: (columnId === -1) ? 'asc' : orderDir
-    });
-  };
-
-  const columns = [
-    {
-      title: 'Group Name',
-      field: 'name',
-      query_field: 'name'
-    },
-    {
-      title: 'Annual Budget',
-      field: 'annual_budget',
-      sorting: false,
-      render: rowData => rowData.annual_budget || 'Not Set'
-    },
-    {
-      title: 'Leftover Money',
-      field: 'annual_budget_leftover',
-      sorting: false,
-      render: rowData => rowData.annual_budget_leftover || '$0.00'
-    },
-    {
-      title: 'Approved Budget',
-      field: 'annual_budget_approved',
-      sorting: false,
-      render: rowData => rowData.annual_budget_approved || '$0.00'
-    },
-  ];
-
-  const actions = [];
-
-  actions.push({
-    icon: () => <EditIcon />,
-    tooltip: 'Edit Budget',
-    onClick: (_, rowData) => {
-      // eslint-disable-next-line no-alert
-      alert('Not Implemented Yet');
-    }
-  });
-
-  actions.push({
-    icon: () => <RedoIcon />,
-    tooltip: 'Carry Over',
-    onClick: (_, rowData) => {
-      // eslint-disable-next-line no-alert
-      alert('Not Implemented Yet');
-    }
-  });
-
-  actions.push({
-    icon: () => <LoopIcon />,
-    tooltip: 'Reset Budget',
-    onClick: (_, rowData) => {
-      // eslint-disable-next-line no-alert
-      alert('Not Implemented Yet');
-    }
-  });
-
+/* eslint-disable object-curly-newline */
+export function AnnualBudgetFormInner(
+  { classes, handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, intl, annualBudget, ...props }
+) {
   return (
-    <React.Fragment>
-      <Grid container spacing={3}>
-        <Grid item xs>
-          <DiverstTable
-            title='Annual Budgets'
-            handlePagination={props.handlePagination}
-            onOrderChange={handleOrderChange}
-            isLoading={props.isFetchingAnnualBudgets}
-            rowsPerPage={10}
-            dataArray={Object.values(props.annualBudgets)}
-            dataTotal={props.annualBudgetTotal}
-            columns={columns}
-            actions={actions}
-            parentChildData={(row, rows) => rows.find(a => a.id === row.parent_id)}
-          />
-        </Grid>
-      </Grid>
-    </React.Fragment>
+    <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !annualBudget}>
+      <Card>
+        <Form>
+          <CardContent>
+            <FormControl fullWidth className={classes.margin}>
+              <InputLabel htmlFor='standard-adornment-amount'>
+                Enter the amount of money this group can spend annually
+              </InputLabel>
+              <Input
+                required
+                onChange={handleChange}
+                type='number'
+                name='amount'
+                id='amount'
+                margin='dense'
+                fullWidth
+                disabled={props.isCommitting}
+                value={values.amount}
+                startAdornment={(
+                  <InputAdornment position={intl.formatMessage(appMessages.currency.placement)}>
+                    {intl.formatMessage(appMessages.currency.defaultSymbol)}
+                  </InputAdornment>
+                )}
+              />
+            </FormControl>
+          </CardContent>
+          { annualBudget && (
+            <CardContent>
+              <Grid
+                container
+                justify='space-between'
+                spacing={3}
+                alignContent='stretch'
+                alignItems='center'
+              >
+                <Grid item sm={6}>
+                  <Typography color='primary' variant='h6' component='h2'>
+                    Leftover Money
+                  </Typography>
+                </Grid>
+                <Grid item sm={6}>
+                  <Typography color='primary' variant='h6' component='h2'>
+                    Approved Budget
+                  </Typography>
+                </Grid>
+              </Grid>
+              <Grid
+                container
+                justify='space-between'
+                spacing={3}
+                alignContent='stretch'
+                alignItems='center'
+              >
+                <Grid item sm={6}>
+                  <Typography color='secondary' variant='body1' component='h3'>
+                    {`$${floatRound(annualBudget.leftover, 2)}`}
+                  </Typography>
+                </Grid>
+                <Grid item sm={6}>
+                  <Typography color='secondary' variant='body1' component='h3'>
+                    {`$${floatRound(annualBudget.approved, 2)}`}
+                  </Typography>
+                </Grid>
+              </Grid>
+            </CardContent>
+          )}
+          <CardActions>
+            <DiverstSubmit isCommitting={props.isCommitting}>
+              <DiverstFormattedMessage {...messages.setAnnualBudget} />
+            </DiverstSubmit>
+            <Button
+              disabled={props.isCommitting}
+              to={ROUTES.admin.manage.groups.index.path()}
+              component={WrappedNavLink}
+            >
+              <DiverstFormattedMessage {...messages.cancel} />
+            </Button>
+          </CardActions>
+        </Form>
+      </Card>
+    </DiverstFormLoader>
   );
 }
 
-AnnualBudgetList.propTypes = {
+export function AnnualBudgetForm(props) {
+  const initialValues = buildValues(props.annualBudget, {
+    id: { default: '' },
+    amount: { default: '' },
+  });
+
+  return (
+    <Formik
+      initialValues={initialValues}
+      enableReinitialize
+      onSubmit={(values, actions) => {
+        props.annualBudgetAction(values);
+      }}
+    >
+      {formikProps => <AnnualBudgetFormInner {...props} {...formikProps} />}
+    </Formik>
+  );
+}
+
+AnnualBudgetForm.propTypes = {
+  annualBudgetAction: PropTypes.func,
+  group: PropTypes.object,
+  annualBudget: PropTypes.object,
+  enterpriseId: PropTypes.number,
+  isCommitting: PropTypes.bool,
+  isFormLoading: PropTypes.bool,
+};
+
+AnnualBudgetFormInner.propTypes = {
+  intl: intlShape.isRequired,
+  edit: PropTypes.bool,
+  group: PropTypes.object,
+  annualBudget: PropTypes.object,
   classes: PropTypes.object,
-  annualBudgets: PropTypes.object,
-  annualBudgetTotal: PropTypes.number,
-  isFetchingAnnualBudgets: PropTypes.bool,
-  deleteAnnualBudgetBegin: PropTypes.func,
-  handlePagination: PropTypes.func,
-  handleOrdering: PropTypes.func,
-  handleVisitAnnualBudgetEdit: PropTypes.func,
-  handleChangeScope: PropTypes.func,
-  annualBudgetType: PropTypes.string,
-  links: PropTypes.shape({
-    annualBudgetNew: PropTypes.string,
-    annualBudgetEdit: PropTypes.func
-  })
+  handleSubmit: PropTypes.func,
+  handleChange: PropTypes.func,
+  handleBlur: PropTypes.func,
+  values: PropTypes.object,
+  buttonText: PropTypes.string,
+  setFieldValue: PropTypes.func,
+  setFieldTouched: PropTypes.func,
+  isCommitting: PropTypes.bool,
+  isFormLoading: PropTypes.bool,
 };
 
 export default compose(
+  injectIntl,
   memo,
-  withStyles(styles),
-)(AnnualBudgetList);
+  withStyles(styles)
+)(AnnualBudgetForm);

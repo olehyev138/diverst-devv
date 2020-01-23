@@ -23,6 +23,8 @@ import {
   getAnnualBudgetsBegin, annualBudgetsUnmount
 } from '../actions';
 
+import AnnualBudgetListItem from 'components/Group/GroupPlan/AnnualBudgetListItem';
+
 export function AnnualBudgetsPage(props) {
   useInjectReducer({ key: 'annualBudgets', reducer });
   useInjectSaga({ key: 'annualBudgets', saga });
@@ -39,9 +41,9 @@ export function AnnualBudgetsPage(props) {
   return (
     <React.Fragment>
       {props.annualBudgets.map(ab => (
-        <p>
-          {ab.id}
-        </p>
+        <AnnualBudgetListItem
+          item={ab}
+        />
       ))}
     </React.Fragment>
   );

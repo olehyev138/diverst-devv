@@ -6,4 +6,4 @@
 
 import loadable from 'utils/loadable';
 
-export default loadable(() => import('components/Group/GroupPlan/AnnualBudgetForm'));
+export default loadable(() => import('components/Group/GroupPlan/AdminAnnualBudgetList'));
