@@ -5,7 +5,7 @@ import {
   selectGroupTotal,
   selectGroup,
   selectGroupIsLoading,
-  selectIsFormLoading,
+  selectGroupIsFormLoading,
   selectGroupIsCommitting,
   selectFormGroup,
   selectHasChanged,
@@ -75,12 +75,12 @@ describe('Group selectors', () => {
     });
   });
 
-  describe('selectIsFormLoading', () => {
-    it('should select the \'is form loading\' flag', () => {
-      const mockedState = { isFormLoading: false };
-      const selected = selectIsFormLoading().resultFunc(mockedState);
+  describe('selectGroupIsFormLoading', () => {
+    it('should select the group is form loading', () => {
+      const mockedState = { isFormLoading: { id: 60, __dummy: '60' } };
+      const selected = selectGroupIsFormLoading().resultFunc(mockedState);
 
-      expect(selected).toEqual(false);
+      expect(selected).toEqual({ id: 60, __dummy: '60' });
     });
   });
 
