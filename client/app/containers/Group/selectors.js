@@ -1,5 +1,5 @@
-import { createSelector } from 'reselect/lib/index';
-import { initialState } from 'containers/Group/reducer';
+import { createSelector } from 'reselect/lib';
+import { initialState } from './reducer';
 
 const selectGroupsDomain = state => state.groups || initialState;
 
@@ -30,17 +30,17 @@ const selectGroup = () => createSelector(
   groupsState => groupsState.currentGroup
 );
 
-const selectGroupIsLoading = () => createSelector(
+const selectIsLoading = () => createSelector(
   selectGroupsDomain,
   groupsState => groupsState.isLoading
 );
 
-const selectGroupIsFormLoading = () => createSelector(
+const selectIsFormLoading = () => createSelector(
   selectGroupsDomain,
   groupsState => groupsState.isFormLoading
 );
 
-const selectGroupIsCommitting = () => createSelector(
+const selectIsCommitting = () => createSelector(
   selectGroupsDomain,
   groupsState => groupsState.isCommitting
 );
@@ -62,9 +62,20 @@ const selectFormGroup = () => createSelector(
     return selectGroup;
   }
 );
+const selectHasChanged = () => createSelector(
+  selectGroupsDomain,
+  groupsState => groupsState.hasChanged
+);
 
 export {
-  selectGroupsDomain, selectPaginatedGroups, selectPaginatedSelectGroups,
-  selectGroupTotal, selectGroup, selectFormGroup, selectGroupIsLoading,
-  selectGroupIsCommitting, selectGroupIsFormLoading
+  selectGroupsDomain,
+  selectPaginatedSelectGroups,
+  selectPaginatedGroups,
+  selectGroupTotal,
+  selectGroup,
+  selectFormGroup,
+  selectIsLoading,
+  selectIsFormLoading,
+  selectIsCommitting,
+  selectHasChanged,
 };

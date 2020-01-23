@@ -33,10 +33,10 @@ import {
 
 export const initialState = {
   groupList: {},
-  groupListTotal: null,
+  groupTotal: null,
   currentGroup: null,
-  isLoading: false,
-  isFormLoading: false,
+  isLoading: true,
+  isFormLoading: true,
   isCommitting: false,
   hasChanged: false,
 };

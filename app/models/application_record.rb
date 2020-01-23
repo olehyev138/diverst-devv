@@ -26,7 +26,7 @@ class ApplicationRecord < ActiveRecord::Base
 
   def self.to_query(*args)
     if args.present?
-      args.map {|arg| arg.all }
+      args.map { |arg| arg.all }
     else
       self.all
     end
