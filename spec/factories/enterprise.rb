@@ -5,6 +5,7 @@ FactoryBot.define do
     time_zone 'UTC'
     theme nil
     mentorship_module_enabled false
+    iframe_calendar_token { SecureRandom.urlsafe_base64 }
 
     after(:create) do |enterprise|
       create(:user_role, role_name: 'admin',        role_type: 'admin', enterprise: enterprise, priority: 0)
