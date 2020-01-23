@@ -8,7 +8,6 @@ class Initiative < ApplicationRecord
 
   attr_accessor :associated_budget_id, :skip_allocate_budget_funds, :from, :to
 
-  belongs_to :pillar
   belongs_to :owner, class_name: 'User'
   has_many :updates, as: :updatable, dependent: :destroy
   has_many :fields,
@@ -40,8 +39,6 @@ class Initiative < ApplicationRecord
   has_many :checklist_items, dependent: :destroy
   accepts_nested_attributes_for :checklist_items, reject_if: :all_blank, allow_destroy: true
 
-  belongs_to :owner_group, class_name: 'Group'
-
   has_many :initiative_segments, dependent: :destroy
   has_many :segments, through: :initiative_segments
   has_many :initiative_participating_groups, dependent: :destroy
@@ -54,7 +51,10 @@ class Initiative < ApplicationRecord
   has_many :initiative_users, dependent: :destroy
   has_many :attendees, through: :initiative_users, source: :user
 
+  belongs_to :owner_group, class_name: 'Group'
+  belongs_to :pillar
   has_one :outcome, through: :pillar
+  has_one :group, through: :outcome
 
   scope :starts_between, ->(from, to) { where('start >= ? AND start <= ?', from, to) }
   scope :past, -> { where('end < ?', Time.current).order(start: :desc) }
@@ -157,10 +157,6 @@ class Initiative < ApplicationRecord
     return '' unless ['start', 'end'].include?(date_type)
 
     self.send(date_type).blank? ? '' : self.send(date_type).to_s(:reversed_slashes)
-  end
-
-  def group
-    owner_group || pillar.outcome.group
   end
 
   def enterprise

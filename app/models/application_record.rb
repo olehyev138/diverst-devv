@@ -24,6 +24,38 @@ class ApplicationRecord < ActiveRecord::Base
   after_commit on: [:update] do update_elasticsearch_index('update') end
   after_commit on: [:destroy] do update_elasticsearch_index('delete') end
 
+  def self.to_query(*args)
+    if args.present?
+      args.map {|arg| arg.all }
+    else
+      self.all
+    end
+  end
+
+  def self.merge_clauses(record)
+    to_return, record = to_query(self, record)
+    to_return.where_clause += record.where_clause
+    to_return.having_clause += record.having_clause
+    to_return.from_clause = record.from_clause
+    to_return
+  end
+
+  def self.merge_values(record)
+    to_return, record = to_query(self, record)
+    to_return.order_values += record.order_values
+    to_return.select_values += record.select_values
+    to_return.group_values += record.group_values
+    to_return.includes_values += record.includes_values
+    to_return.eager_load_values += record.eager_load_values
+    to_return.preload_values += record.preload_values
+    to_return.references_values += record.references_values
+    to_return.unscope_values += record.unscope_values
+    to_return.joins_values += record.joins_values
+    to_return.left_outer_joins_values += record.left_outer_joins_values
+    to_return.extending_values += record.extending_values
+    to_return
+  end
+
   if Rails.env == 'development' || Rails.env == 'testing'
     def self.preload_test(preload: true, limit: 10, serializer: nil)
       arr = []

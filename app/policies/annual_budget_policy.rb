@@ -12,12 +12,12 @@ class AnnualBudgetPolicy < GroupBasePolicy
   end
 
   class Scope < Scope
-    def index?
-      AnnualBudgetPolicy.new(user, nil).index?
+    def group_base
+      group.annual_budgets
     end
 
     def resolve
-      super('groups_budgets_index')
+      super(policy.base_index_permission)
     end
   end
 end

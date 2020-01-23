@@ -1,7 +1,7 @@
 class GroupBasePolicy < ApplicationPolicy
   attr_accessor :user, :group, :record, :group_leader_role_ids
 
-  def initialize(user, context, params = nil)
+  def initialize(user, context, params = {})
     self.user = user
     self.group_leader_role_ids = user.group_leaders.pluck(:user_role_id)
 
@@ -13,9 +13,9 @@ class GroupBasePolicy < ApplicationPolicy
       # Set group using params if context is a class as this will be for
       # nested model actions such as index and create, which require a group
       self.group = ::Group.find(params[:group_id] || params.dig(context.model_name.param_key.to_sym, :group_id)) rescue nil
-    else # Record
+    elsif context.present?
       self.group = context.group
-      self.record = context
+      self.record = context    else # Record
     end
   end
 
@@ -51,7 +51,7 @@ class GroupBasePolicy < ApplicationPolicy
   end
 
   def is_a_guest?
-    !is_a_member?
+    !is_a_member? || is_a_pending_member?
   end
 
   def is_a_pending_member?
@@ -176,18 +176,36 @@ class GroupBasePolicy < ApplicationPolicy
       GroupLeader.attribute_names.include?(permission)
     end
 
+    delegate :index?, to: :policy
+    delegate :group, to: :policy
+
+    def group_base
+      group.send(scope.all.klass.model_name.collection)
+    end
+
     def resolve(permission)
-      if scope <= Group
-        scoped = scope.left_joins(:enterprise, :group_leaders, :user_groups)
-      elsif scope.instance_methods.include?(:group)
-        scoped = scope.left_joins(group: [:enterprise, :group_leaders, :user_groups])
+      if group
+        if index?
+          to_return = group_base
+          to_return.merge_clauses(scope)
+          to_return.merge_values(scope)
+          to_return
+        else
+          scope.none
+        end
       else
-        scoped = scope.none
-      end
-      scoped
-          .joins("JOIN policy_groups ON policy_groups.user_id = #{quote_string(user.id)}")
-          .where('enterprises.id = ?', user.enterprise_id)
-          .where([manage_all, group_manage(permission), is_member(permission), is_leader(permission)].join(' OR '))
+        if scope <= Group
+          scoped = scope.left_joins(:enterprise, :group_leaders, :user_groups)
+        elsif scope.instance_methods.include?(:group)
+          scoped = scope.left_joins(group: [:enterprise, :group_leaders, :user_groups])
+        else
+          scoped = scope.none
+        end
+        scoped
+            .joins("JOIN policy_groups ON policy_groups.user_id = #{quote_string(user.id)}")
+            .where('enterprises.id = ?', user.enterprise_id)
+            .where([manage_all, group_manage(permission), is_member(permission), is_leader(permission)].join(' OR '))
+        end
     end
   end
 end
