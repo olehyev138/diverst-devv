@@ -6,7 +6,7 @@ import {
   selectGroup,
   selectIsLoading,
   selectIsFormLoading,
-  selectIsCommitting,
+  selectGroupIsCommitting,
   selectFormGroup,
   selectHasChanged,
 } from '../selectors';
@@ -84,12 +84,12 @@ describe('Group selectors', () => {
     });
   });
 
-  describe('selectIsCommitting', () => {
-    it('should select the \'is committing\' flag', () => {
-      const mockedState = { isCommitting: true };
-      const selected = selectIsCommitting().resultFunc(mockedState);
+  describe('selectGroupIsCommitting', () => {
+    it('should select the group is committing', () => {
+      const mockedState = { isCommitting: { id: 893, __dummy: '893' } };
+      const selected = selectGroupIsCommitting().resultFunc(mockedState);
 
-      expect(selected).toEqual(true);
+      expect(selected).toEqual({ id: 893, __dummy: '893' });
     });
   });
 
