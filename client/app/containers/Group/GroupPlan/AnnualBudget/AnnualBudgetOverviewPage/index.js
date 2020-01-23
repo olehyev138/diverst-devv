@@ -11,7 +11,6 @@ import saga from '../saga';
 import reducer from '../reducer';
 
 import RouteService from 'utils/routeHelpers';
-import AnnualBudgetForm from 'components/Group/GroupPlan/AnnualBudgetForm';
 
 import {
   selectGroupIsCommitting,
@@ -32,7 +31,7 @@ export function AnnualBudgetsPage(props) {
 
   useEffect(() => {
     const groupId = dig(props, 'currentGroup', 'id') || rs.params('group_id');
-    props.getAnnualBudgetsBegin({ groupId });
+    props.getAnnualBudgetsBegin({ group_id: groupId });
 
     return () => props.annualBudgetsUnmount();
   }, []);
@@ -41,7 +40,7 @@ export function AnnualBudgetsPage(props) {
     <React.Fragment>
       {props.annualBudgets.map(ab => (
         <p>
-          ab.id
+          {ab.id}
         </p>
       ))}
     </React.Fragment>

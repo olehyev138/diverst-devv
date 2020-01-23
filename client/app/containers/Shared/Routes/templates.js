@@ -122,6 +122,7 @@ import GroupPlanUpdateCreatePage from 'containers/Group/GroupPlan/KPI/UpdateCrea
 
 /* Group - Plan - Budget */
 import AnnualBudgetEditPage from 'containers/Group/GroupPlan/AnnualBudget/AnnualBudgetEditPage/Loadable';
+import AnnualBudgetsPage from 'containers/Group/GroupPlan/AnnualBudget/AnnualBudgetOverviewPage/Loadable';
 
 /* Group - Members */
 import GroupMemberListPage from 'containers/Group/GroupMembers/GroupMemberListPage/Loadable';
@@ -195,6 +196,7 @@ export {
   GroupMemberCreatePage,
   AdminAnnualBudgetPage,
   AnnualBudgetEditPage,
+  AnnualBudgetsPage,
   EventManageLayout,
   EventManageFieldsPage,
   EventManageUpdatesPage,

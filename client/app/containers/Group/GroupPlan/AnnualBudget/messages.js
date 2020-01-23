@@ -13,5 +13,8 @@ export default defineMessages({
     editAnnualBudget: {
       id: `${scope}.tabs.editAnnualBudget`,
     },
+    overview: {
+      id: `${scope}.tabs.overview`,
+    },
   }
 });

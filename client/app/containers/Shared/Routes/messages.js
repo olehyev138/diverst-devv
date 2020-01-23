@@ -178,6 +178,9 @@ export default defineMessages({
         editAnnualBudget: {
           id: `${scope}.group.plan.budget.editAnnualBudget`
         },
+        overview: {
+          id: `${scope}.group.plan.budget.overview`
+        },
       },
     },
     manage: {

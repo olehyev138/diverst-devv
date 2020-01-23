@@ -29,6 +29,12 @@ export function BudgetLinks(props) {
         >
           <Tab
             component={WrappedNavLink}
+            to={ROUTES.group.plan.budget.overview.path(props.currentGroup.id)}
+            label={<DiverstFormattedMessage {...messages.links.overview} />}
+            value='overview'
+          />
+          <Tab
+            component={WrappedNavLink}
             to={ROUTES.group.plan.budget.editAnnualBudget.path(props.currentGroup.id)}
             label={<DiverstFormattedMessage {...messages.links.editAnnualBudget} />}
             value='annual_budget'
