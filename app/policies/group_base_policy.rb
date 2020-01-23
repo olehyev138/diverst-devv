@@ -15,7 +15,7 @@ class GroupBasePolicy < ApplicationPolicy
       self.group = ::Group.find(params[:group_id] || params.dig(context.model_name.param_key.to_sym, :group_id)) rescue nil
     elsif context.present?
       self.group = context.group
-      self.record = context    else # Record
+      self.record = context else # Record
     end
   end
 
@@ -205,7 +205,7 @@ class GroupBasePolicy < ApplicationPolicy
             .joins("JOIN policy_groups ON policy_groups.user_id = #{quote_string(user.id)}")
             .where('enterprises.id = ?', user.enterprise_id)
             .where([manage_all, group_manage(permission), is_member(permission), is_leader(permission)].join(' OR '))
-        end
+      end
     end
   end
 end
