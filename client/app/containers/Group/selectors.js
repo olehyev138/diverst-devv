@@ -30,7 +30,7 @@ const selectGroup = () => createSelector(
   groupsState => groupsState.currentGroup
 );
 
-const selectIsLoading = () => createSelector(
+const selectGroupIsLoading = () => createSelector(
   selectGroupsDomain,
   groupsState => groupsState.isLoading
 );
@@ -74,7 +74,7 @@ export {
   selectGroupTotal,
   selectGroup,
   selectFormGroup,
-  selectIsLoading,
+  selectGroupIsLoading,
   selectIsFormLoading,
   selectGroupIsCommitting,
   selectHasChanged,
