@@ -30,21 +30,19 @@ export function GroupPlanLinks(props) {
             component={WrappedNavLink}
             to={ROUTES.group.plan.events.index.path(props.currentGroup.id)}
             label='Event Management'
+            value='events'
           />
           <Tab
             component={WrappedNavLink}
             to={ROUTES.group.plan.kpi.updates.index.path(props.currentGroup.id)}
             label='KPI'
-          />
-          <Tab
-            component={WrappedNavLink}
-            to={ROUTES.group.plan.events.index.path(props.currentGroup.id)}
-            label='Updates'
+            value='kpi'
           />
           <Tab
             component={WrappedNavLink}
             to={ROUTES.group.plan.budget.editAnnualBudget.path(props.currentGroup.id)}
             label='Budgeting'
+            value='budgeting'
           />
         </ResponsiveTabs>
       </Paper>
@@ -54,10 +52,7 @@ export function GroupPlanLinks(props) {
 
 GroupPlanLinks.propTypes = {
   classes: PropTypes.object,
-  currentTab: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.bool,
-  ]),
+  currentTab: PropTypes.string,
   currentGroup: PropTypes.object
 };
 

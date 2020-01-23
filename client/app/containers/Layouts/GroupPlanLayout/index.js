@@ -14,12 +14,12 @@ const styles = theme => ({
   },
 });
 
-const PlanPages = Object.freeze({
-  events: 0,
-  kpi: 1,
-  updates: 2,
-  budgeting: 3,
-});
+const PlanPages = Object.freeze([
+  'events',
+  'kpi',
+  'updates',
+  'budgeting',
+]);
 
 const getPageTab = (currentPagePath) => {
   if (PlanPages[currentPagePath] !== undefined)
@@ -32,15 +32,15 @@ const GroupPlanLayout = ({ component: Component, classes, ...rest }) => {
   const { location, ...other } = rest;
 
   /* Get last element of current path, ie: '/group/:id/plan/outcomes -> outcomes */
-  let currentPage = Object.keys(PlanPages).find(page => location.pathname.includes(page));
+  let currentPage = PlanPages.find(page => location.pathname.includes(page));
   if (!currentPage && location.pathname.includes('outcomes'))
     currentPage = 'events';
 
-  const [tab, setTab] = useState(PlanPages[currentPage]);
+  const [tab, setTab] = useState(currentPage);
 
   useEffect(() => {
-    if (tab !== PlanPages[currentPage])
-      setTab(PlanPages[currentPage]);
+    if (tab !== currentPage)
+      setTab(currentPage);
   }, [currentPage]);
 
   return (
