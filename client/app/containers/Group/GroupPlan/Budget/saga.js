@@ -26,7 +26,7 @@ import {
 
 export function* getBudget(action) {
   try {
-    const response = { data: 'API CALL' };
+    const response = yield call(api.budgets.get.bind(api.budgets), action.payload.id);
 
     yield put(getBudgetSuccess(response.data));
   } catch (err) {
@@ -39,7 +39,7 @@ export function* getBudget(action) {
 
 export function* getBudgets(action) {
   try {
-    const response = { data: 'API CALL' };
+    const response = yield call(api.budgets.all.bind(api.budgets), action.payload);
 
     yield put(getBudgetsSuccess(response.data.page));
   } catch (err) {
@@ -52,7 +52,8 @@ export function* getBudgets(action) {
 
 export function* createBudgetRequest(action) {
   try {
-    const response = { data: 'API CALL' };
+    const payload = { budget: action.payload };
+    const response = yield call(api.budgets.update.bind(api.budgets), payload.budget.id, payload);
 
     yield put(createBudgetRequestSuccess({}));
     yield put(showSnackbar({ message: 'Successfully created budget request', options: { variant: 'success' } }));

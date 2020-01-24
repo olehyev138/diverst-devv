@@ -15,6 +15,7 @@ import groupMessages from 'api/group_messages/group_messages';
 import groupMessageComments from 'api/group_message_comments/group_message_comments';
 import groupMembers from 'api/group_members/group_members';
 import annualBudgets from 'api/annual_budgets/annual_budgets';
+import budgets from 'api/budgets/budgets';
 import updates from 'api/updates/updates';
 import outcomes from 'api/outcomes/outcomes';
 import customText from 'api/custom_text/custom_text';
@@ -63,6 +64,7 @@ const Api = {
   groupMessageComments,
   groupMembers,
   annualBudgets,
+  budgets,
   updates,
   policyGroups,
   outcomes,

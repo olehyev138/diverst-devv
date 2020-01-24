@@ -1,6 +1,6 @@
 class Budget < ApplicationRecord
   include PublicActivity::Common
-  # include Budget::Actions
+  include Budget::Actions
 
   belongs_to :annual_budget
   belongs_to :approver, class_name: 'User', foreign_key: 'approver_id'
@@ -23,8 +23,17 @@ class Budget < ApplicationRecord
   validates_length_of :comments, maximum: 65535
   validates_length_of :description, maximum: 65535
 
+  validates -> { annual_budget_set? }
+  validates -> { annual_budget_open? }
+  validates -> { request_surplus? }
+
   def requested_amount
-    budget_items.sum(:estimated_amount)
+    @requested_amount ||= budget_items.sum(:estimated_amount)
+  end
+
+  def reload
+    @requested_amount = nil
+    super
   end
 
   def available_amount
@@ -80,17 +89,22 @@ class Budget < ApplicationRecord
     select_items << [ group.title_with_leftover_amount, BudgetItem::LEFTOVER_BUDGET_ITEM_ID ]
   end
 
-  def approve(approver)
-    budget_items.each do |bi|
-      bi.approve!
+  def annual_budget_set?
+    unless (annual_budget&.amount || 0) > 0
+      errors[:annual_budget] << 'please set an annual budget for this group'
     end
-    update(approver: approver, is_approved: true)
-    BudgetMailer.budget_approved(self).deliver_later if requester
   end
 
-  def decline(approver)
-    update(approver: approver, is_approved: false)
-    BudgetMailer.budget_declined(self).deliver_later if requester
+  def annual_budget_open?
+    unless annual_budget.present? && !annual_budget.closed
+      errors[:annual_budget] << 'Annual Budget is Closed'
+    end
+  end
+
+  def request_surplus?
+    unless requested_amount.present? && requested_amount < annual_budget.amount
+      errors[:budget_items] << 'This budget exceeds the annual budget'
+    end
   end
 
   private

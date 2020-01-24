@@ -4,13 +4,26 @@ module Budget::Actions
   end
 
   module ClassMethods
-    def build(diverst_request, params)
-      item = super
-      annual_budget = diverst_request.user.enterprise.annual_budgets.find_or_create_by(closed: false, group_id: item.group_id)
-      item.annual_budget_id = annual_budget.id
-      item.save!
+    def approve(approver)
+      budget_items.each do |bi|
+        bi.approve!
+      end
+      unless update(approver: approver, is_approved: true)
+        raise InvalidInputException.new({ message: item.errors.full_messages.first, attribute: item.errors.messages.first.first })
+      end
 
-      item
+      BudgetMailer.budget_approved(self).deliver_later if requester
+      self
+    end
+
+    def decline(approver, reason)
+      assign_attributes(approver: approver, is_approved: false, decline_reason: reason)
+      unless save(validate: false)
+        raise InvalidInputException.new({ message: item.errors.full_messages.first, attribute: item.errors.messages.first.first })
+      end
+
+      BudgetMailer.budget_declined(self).deliver_later if requester
+      self
     end
   end
 end

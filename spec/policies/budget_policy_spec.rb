@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe GroupBudgetPolicy, type: :policy do
+RSpec.describe BudgetPolicy, type: :policy do
   let(:enterprise) { create(:enterprise) }
   let(:group) { create(:group, enterprise: enterprise) }
   let(:no_access) { create(:user) }
