@@ -1,7 +1,7 @@
 after 'production:enterprise' do
   spinner = TTY::Spinner.new(":spinner Creating tech admin user...", format: :spin_2)
   spinner.run do |spinner|
-    Enterprise.all.each do |field_definer|
+    Enterprise.all.each do |enterprise|
       # Create default enterprise user roles
       enterprise.user_roles.create!(
           [

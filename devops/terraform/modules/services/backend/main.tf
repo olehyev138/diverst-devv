@@ -30,7 +30,7 @@ resource "aws_elastic_beanstalk_application" "eb_app" {
 resource "aws_elastic_beanstalk_environment" "diverst-env" {
   name			      = "${var.env_name}-env"
   application		  = aws_elastic_beanstalk_application.eb_app.name
-  solution_stack_name = "64bit Amazon Linux 2018.03 v2.11.1 running Ruby 2.6 (Puma)"
+  solution_stack_name = "64bit Amazon Linux 2018.03 v2.11.2 running Ruby 2.6 (Puma)"
   tier                = "WebServer"
 
   # Instance Profile
@@ -115,8 +115,8 @@ resource "aws_elastic_beanstalk_environment" "diverst-env" {
   # TODO: generate this & store somewhere proper
   setting {
     namespace   = "aws:elasticbeanstalk:application:environment"
-    name        = "SECRET_KEY_BASE"
-    value        = "a30d30bed8c1479a8d57cca5173b43f9f918fa64e2f2fffa7a1e910bbeae3dcfd95123e88294579b379828e5f26f29646387b6441db9900c172bc3a570a53de3"
+    name        = "RAILS_MASTER_KEY"
+    value        = "0cd095760c9ff9a780b97332b683bc3a"
   }
 
   setting {
@@ -128,7 +128,7 @@ resource "aws_elastic_beanstalk_environment" "diverst-env" {
   setting {
     namespace   = "aws:elasticbeanstalk:application:environment"
     name        = "S3_REGION"
-    value        = "us-east-1"
+    value        = "us-east-2"
   }
 
   setting {

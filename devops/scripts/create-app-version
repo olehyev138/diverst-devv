@@ -20,7 +20,7 @@ fi
 
 # Create app bundle
 # TODO: switch to `git archive`
-zip ../diverst-development.zip -r ./* .[^.]* -x client/**\* -x devops/**\* -x tmp/**\* -x .git/**\* spec/**\*
+zip ../diverst-development.zip -r ./* .[^.]* -x client/**\* -x devops/**\* -x tmp/**\* -x .git/**\* spec/models/**\* spec/controllers/**\*
 
 # Copy app bundle to S3 - assumes bucket exists - should be created by bootstrap-backend
 aws s3 cp ../diverst-development.zip "s3://$BUNDLE_BUCKET_NAME" --profile "$PROFILE"
