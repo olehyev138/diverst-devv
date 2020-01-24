@@ -7,7 +7,7 @@ Object.assign(Budgets, {
   accept(id) {
     return axios.post(`${this.url}/${id}/accept`);
   },
-  rejectRequest(id, payload) {
+  reject(id, payload) {
     return axios.post(`${this.url}/${id}/reject`, payload);
   },
 });
