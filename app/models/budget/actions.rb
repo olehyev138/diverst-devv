@@ -16,7 +16,7 @@ module Budget::Actions
     self
   end
 
-  def decline(approver, reason)
+  def decline(approver, reason = nil)
     assign_attributes(approver: approver, is_approved: false, decline_reason: reason)
     raise InvalidInputException.new({ message: item.errors.full_messages.first, attribute: item.errors.messages.first.first }) unless save(validate: false)
 
