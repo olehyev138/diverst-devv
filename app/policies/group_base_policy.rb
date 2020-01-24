@@ -2,7 +2,7 @@ class GroupBasePolicy < ApplicationPolicy
   attr_accessor :user, :group, :record, :group_leader_role_ids
 
   def initialize(user, context, params = {})
-    self.user = user
+    super(user, context, params)
     self.group_leader_role_ids = user.group_leaders.pluck(:user_role_id)
 
     # Check if it's a collection, a record, or a class
@@ -30,16 +30,16 @@ class GroupBasePolicy < ApplicationPolicy
   def is_a_manager?(permission)
     return true if is_admin_manager?(permission)
 
-    # return true if is_a_leader? &&  user.policy_group[permission]
+    # return true if is_a_leader? &&  policy_group[permission]
     has_group_leader_permissions?(permission)
   end
 
   def is_admin_manager?(permission)
     # super admin
-    return true if user.policy_group.manage_all?
+    return true if manage_all?
 
     # groups manager
-    user.policy_group.groups_manage? && user.policy_group[permission]
+    policy_group.groups_manage? && policy_group[permission]
   end
 
   def is_a_leader?
@@ -64,35 +64,48 @@ class GroupBasePolicy < ApplicationPolicy
 
   def has_group_leader_permissions?(permission)
     return false unless is_a_leader?
-    return false unless GroupLeader.attribute_names.include?(permission)
 
-    group.group_leaders.where(user_id: user.id).where("#{permission} = true").exists?
+    gl_permission = GroupLeader.attribute_names.include?(permission)
+    pgt_permission = PolicyGroupTemplate.attribute_names.include?(permission)
+
+    leaders = group.group_leaders.where(user_id: user.id)
+    leaders = leaders.joins(:policy_group_template) if pgt_permission
+
+    conditions = []
+    conditions.append "(group_leaders.#{permission} = true)" if gl_permission
+    conditions.append "(policy_group_templates.#{permission} = true)" if pgt_permission
+
+    leaders.where(conditions.join(' OR ') || '(TRUE)').exists?
   end
 
   def view_group_resource(permission)
     return true if manage_group_resource(permission)
 
     # super admin
-    return true if user.policy_group.manage_all?
+    return true if manage_all?
     # groups manager
-    return true if user.policy_group.groups_manage? && user.policy_group[permission]
+    return true if policy_group.groups_manage? && policy_group[permission]
     # group leader
-    return true if is_a_leader? &&  user.policy_group[permission]
+    return true if is_a_leader? &&  policy_group[permission]
     # group member
-    return true if is_a_member? &&  user.policy_group[permission]
+    return true if is_a_member? &&  policy_group[permission]
 
     false
   end
 
+  def manage?
+    manage_group_resource(base_manage_permission)
+  end
+
   def manage_group_resource(permission)
     # super admin
-    return true if user.policy_group.manage_all?
+    return true if manage_all?
     # groups manager
-    return true if user.policy_group.groups_manage? && user.policy_group[permission]
+    return true if policy_group.groups_manage? && policy_group[permission]
     # group leader
     return true if has_group_leader_permissions?(permission)
     # group member
-    return true if is_a_member? && user.policy_group[permission]
+    return true if is_a_member? && policy_group[permission]
 
     false
   end

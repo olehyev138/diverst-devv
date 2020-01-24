@@ -2,6 +2,7 @@ class GroupLeader < ApplicationRecord
   belongs_to :group
   belongs_to :user
   belongs_to :user_role
+  has_one :policy_group_template, through: :user_role
 
   validates_length_of :position_name, maximum: 191
   validates_presence_of :position_name

@@ -11,6 +11,10 @@ class InitiativePolicy < GroupBasePolicy
     'initiatives_manage'
   end
 
+  def update?
+    record.owner == user || super
+  end
+
   def fields?
     update?
   end
