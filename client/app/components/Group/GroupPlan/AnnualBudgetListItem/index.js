@@ -17,9 +17,7 @@ import {
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 
 import { formatDateTimeString, DateTime } from 'utils/dateTimeHelpers';
-import WrappedNavLink from "../../../Shared/WrappedNavLink";
-import DiverstFormattedMessage from "../../../Shared/DiverstFormattedMessage";
-import messages from "../../../../containers/Shared/Update/messages";
+import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
 const styles = theme => ({
   arrowRight: {
