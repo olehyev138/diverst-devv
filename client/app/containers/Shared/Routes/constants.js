@@ -392,6 +392,14 @@ export const ROUTES = {
             titleMessage: messages.groups.plan.budget.overview,
           }
         },
+        budgets: {
+          index: {
+            path: (groupId = ':group_id', annualBudgetId = ':annual_budget_id') => `/groups/${groupId}/plan/budgeting/${annualBudgetId}/budgets`,
+            data: {
+              titleMessage: messages.groups.plan.budget.budgets.index,
+            }
+          },
+        },
       },
     },
     manage: {

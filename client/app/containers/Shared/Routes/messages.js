@@ -181,6 +181,11 @@ export default defineMessages({
         overview: {
           id: `${scope}.group.plan.budget.overview`
         },
+        budgets: {
+          index: {
+            id: `${scope}.group.plan.budget.budget.index`
+          },
+        },
       },
     },
     manage: {

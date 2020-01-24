@@ -66,6 +66,7 @@ import {
   AdminAnnualBudgetPage,
   AnnualBudgetEditPage,
   AnnualBudgetsPage,
+  BudgetsPage,
   GroupSettingsPage,
   CustomTextEditPage,
   UserNewsLinkPage,
@@ -264,6 +265,7 @@ export default function Routes(props) {
       { /* Group Plan - Budget */ }
       <GroupBudgetLayout exact {...expandRoute(ROUTES.group.plan.budget.editAnnualBudget)} component={AnnualBudgetEditPage} />
       <GroupBudgetLayout exact {...expandRoute(ROUTES.group.plan.budget.overview)} component={AnnualBudgetsPage} />
+      <GroupBudgetLayout exact {...expandRoute(ROUTES.group.plan.budget.budgets.index)} component={BudgetsPage} />
 
       { /* Group Manage */ }
       { /* TODO - redirect /manage -> /manage/settings */ }

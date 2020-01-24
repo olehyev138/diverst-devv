@@ -24,6 +24,7 @@ import {
 } from '../actions';
 
 import AnnualBudgetListItem from 'components/Group/GroupPlan/AnnualBudgetListItem';
+import { ROUTES } from 'containers/Shared/Routes/constants';
 
 export function AnnualBudgetsPage(props) {
   useInjectReducer({ key: 'annualBudgets', reducer });
@@ -31,18 +32,24 @@ export function AnnualBudgetsPage(props) {
 
   const rs = new RouteService(useContext);
 
+  const groupId = dig(props, 'currentGroup', 'id') || rs.params('group_id');
+
   useEffect(() => {
-    const groupId = dig(props, 'currentGroup', 'id') || rs.params('group_id');
     props.getAnnualBudgetsBegin({ group_id: groupId });
 
     return () => props.annualBudgetsUnmount();
   }, []);
+
+  const links = {
+    budgetsIndex: id => ROUTES.group.plan.budget.budgets.index.path(groupId, id)
+  };
 
   return (
     <React.Fragment>
       {props.annualBudgets.map(ab => (
         <AnnualBudgetListItem
           item={ab}
+          links={links}
         />
       ))}
     </React.Fragment>

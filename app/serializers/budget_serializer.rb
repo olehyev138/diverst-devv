@@ -1,5 +1,5 @@
 class BudgetSerializer < ApplicationRecordSerializer
-  attributes :approver, :requester, :group
+  attributes :approver, :requested_amount, :available_amount
 
   def serialize_all_fields
     true

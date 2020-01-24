@@ -3,7 +3,6 @@ class GroupBasePolicy < ApplicationPolicy
 
   def initialize(user, context, params = {})
     super(user, context, params)
-    self.group_leader_role_ids = user.group_leaders.pluck(:user_role_id)
 
     # Check if it's a collection, a record, or a class
     if context.is_a?(Enumerable) # Collection/Enumerable
@@ -13,6 +12,7 @@ class GroupBasePolicy < ApplicationPolicy
       # Set group using params if context is a class as this will be for
       # nested model actions such as index and create, which require a group
       self.group = ::Group.find(params[:group_id] || params.dig(context.model_name.param_key.to_sym, :group_id)) rescue nil
+      params.delete(:group_id)
     elsif context.present?
       self.group = context.group
       self.record = context else # Record
