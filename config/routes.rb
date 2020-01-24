@@ -404,7 +404,7 @@ Rails.application.routes.draw do
     end
 
     scope module: 'polls' do
-      resources :graphs, only: [:new, :create, :edit]
+      resources :graphs, only: [:new, :create, :edit, :update]
     end
   end
 
