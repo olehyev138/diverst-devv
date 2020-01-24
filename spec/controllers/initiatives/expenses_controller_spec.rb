@@ -38,14 +38,6 @@ RSpec.describe Initiatives::ExpensesController, type: :controller do
       it 'renders index template' do
         expect(response).to render_template :index
       end
-
-      context 'when estimated_funding is not set' do
-        let!(:initiative1) { create(:initiative, owner_group: group, finished_expenses: false, annual_budget_id: annual_budget.id) }
-        it 'redirect to previous page' do
-          get :index, group_id: group.id, initiative_id: initiative1.id
-          expect(response).to redirect_to 'back'
-        end
-      end
     end
 
     describe 'without user logged in' do
@@ -102,15 +94,6 @@ RSpec.describe Initiatives::ExpensesController, type: :controller do
         it 'redirects to action index' do
           post :create, group_id: group.id, initiative_id: initiative.id, initiative_expense: { amount: 10, description: 'description' }
           expect(response).to redirect_to action: :index
-        end
-      end
-
-      context 'no estimated_funding is set for initiative' do
-        let!(:initiative1) { create(:initiative, owner_group: group, finished_expenses: false, annual_budget_id: annual_budget.id) }
-
-        it 'does not creates the initiative_expense object' do
-          expect { post :create, group_id: group.id, initiative_id: initiative1.id, initiative_expense: { amount: 10, description: 'description' } }
-          .to change(InitiativeExpense, :count).by(0)
         end
       end
     end
