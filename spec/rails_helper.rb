@@ -162,7 +162,7 @@ RSpec.configure do |config|
   config.before(:each) do
     DatabaseCleaner.start
   end
-  
+
   config.before(:each) do
     set_leftovers
   end
