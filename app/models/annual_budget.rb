@@ -95,7 +95,7 @@ class AnnualBudget < ApplicationRecord
     select(
         '`annual_budgets`.`*`,'\
         ' Sum(coalesce(`initiative_expenses`.`amount`, 0)) as `expenses_sum`,'\
-        ' Sum(coalesce(`budget_items`.`estimated_amount`, 0)) as `approved_sum`,'\
+        ' Sum(CASE WHEN `budgets`.`is_approved` = TRUE THEN coalesce(`budget_items`.`estimated_amount`, 0) ELSE 0 END) as `approved_sum`,'\
         ' Sum(coalesce(`initiatives`.`estimated_funding`, 0)) as `reserved_sum`')
         .left_joins(:initiative_expenses)
         .group(AnnualBudget.column_names).each do |ab|

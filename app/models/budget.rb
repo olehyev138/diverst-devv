@@ -27,15 +27,16 @@ class Budget < ApplicationRecord
     @requested_amount ||= budget_items.sum(:estimated_amount)
   end
 
-  def reload
-    @requested_amount = nil
-    super
-  end
-
   def available_amount
     return 0 unless is_approved
 
-    budget_items.available.sum(:available_amount)
+    @available_amount ||= budget_items.available.sum(:available_amount)
+  end
+
+  def reload
+    @requested_amount = nil
+    @available_amount = nil
+    super
   end
 
   def status_title
