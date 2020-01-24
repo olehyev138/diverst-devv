@@ -104,4 +104,11 @@ class AnnualBudget < ApplicationRecord
       ab.instance_variable_set(:@reserved, ab.reserved_sum)
     end
   end
+
+  def reload
+    @expenses = nil
+    @approved = nil
+    @reserved = nil
+    super
+  end
 end

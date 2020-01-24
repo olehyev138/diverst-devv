@@ -154,6 +154,10 @@ class Group < ApplicationRecord
     annual_budget.update_attributes(closed: true)
   end
 
+  def reload
+    @current_annual_budget = nil
+    super
+  end
 
   delegate :leftover, BUDGET_DELEGATE_OPTIONS
   delegate :remaining, BUDGET_DELEGATE_OPTIONS
