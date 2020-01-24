@@ -23,10 +23,6 @@ class Budget < ApplicationRecord
   validates_length_of :comments, maximum: 65535
   validates_length_of :description, maximum: 65535
 
-  validates -> { annual_budget_set? }
-  validates -> { annual_budget_open? }
-  validates -> { request_surplus? }
-
   def requested_amount
     @requested_amount ||= budget_items.sum(:estimated_amount)
   end
@@ -91,19 +87,20 @@ class Budget < ApplicationRecord
 
   def annual_budget_set?
     unless (annual_budget&.amount || 0) > 0
-      errors[:annual_budget] << 'please set an annual budget for this group'
+      'Please set an annual budget for this group'
     end
   end
 
   def annual_budget_open?
     unless annual_budget.present? && !annual_budget.closed
-      errors[:annual_budget] << 'Annual Budget is Closed'
+      'Annual Budget is Closed'
     end
   end
 
   def request_surplus?
-    unless requested_amount.present? && requested_amount < annual_budget.amount
-      errors[:budget_items] << 'This budget exceeds the annual budget'
+    unless requested_amount.present? && requested_amount < annual_budget&.amount
+
+      'This budget exceeds the annual budget'
     end
   end
 
