@@ -47,7 +47,7 @@ gem 'rqrcode', '~> 0.10.1', require: false
 gem 'ruby-oembed', '~> 0.12'
 gem 'ruby-saml', '>= 1.7.0'
 gem 'sanitize_email', '~> 1.2.2'
-gem 'sidekiq', '~> 5.0.5' # Background jobs
+gem 'sidekiq', '~> 6.0.4' # Background jobs
 gem 'thor', '0.20.0' # Expected string default value for '--decorator'; got true (boolean) - setting version removes this message
 gem 'tty-spinner'
 gem 'twilio-ruby', '~> 5.10.0'

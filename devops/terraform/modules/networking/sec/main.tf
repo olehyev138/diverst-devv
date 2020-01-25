@@ -102,6 +102,17 @@ resource "aws_security_group_rule" "sg-db-ing-allow-dmz" {
   security_group_id = aws_security_group.sg-db.id
 }
 
+# Allow Redis traffic from anywhere
+resource "aws_security_group_rule" "sg-db-ing-allow-redis" {
+  type            = "ingress"
+  from_port       = 0
+  to_port         = 6379
+  protocol        = "tcp"
+  cidr_blocks = ["0.0.0.0/0"]
+
+  security_group_id = aws_security_group.sg-db.id
+}
+
 resource "aws_security_group_rule" "sg-db-egr-allow-all" {
   type        = "egress"
   from_port   = 0
