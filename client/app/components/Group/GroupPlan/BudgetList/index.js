@@ -107,7 +107,7 @@ export function BudgeList(props, context) {
       <Grid container spacing={3}>
         <Grid item xs>
           <DiverstTable
-            title='Annual Budgets'
+            title='Budgets'
             handlePagination={props.handlePagination}
             onOrderChange={handleOrderChange}
             isLoading={props.isFetchingBudges}
