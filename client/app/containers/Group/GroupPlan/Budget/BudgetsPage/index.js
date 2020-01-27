@@ -83,7 +83,7 @@ export function BudgetsPage(props) {
   return (
     <React.Fragment>
       <BudgetList
-        budgets={props.budgets}
+        budgets={props.budgets || {}}
         budgetTotal={props.budgetTotal}
         isFetchingBudgets={props.isLoading}
         deleteBudgetBegin={props.deleteBudgetBegin}
