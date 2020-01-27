@@ -57,7 +57,7 @@ export function BudgetItemFormInner({ formikProps, arrayHelpers, ...props }) {
             alignItems='space-between'
           >
             <Grid item align='left' xs={6}>
-              <Typography color='primary' variant='body1' component='h2' align='left'>
+              <Typography color='secondary' variant='body1' component='h2' align='left'>
                 Specify list of events you plan to organize with this budget
               </Typography>
             </Grid>
@@ -105,7 +105,6 @@ export function BudgetItemFormInner({ formikProps, arrayHelpers, ...props }) {
                 </Grid>
                 <Grid item md={2} xs={4}>
                   <TextField
-                    autoFocus
                     fullWidth
                     margin='dense'
                     disabled={props.isCommitting}
@@ -188,7 +187,7 @@ export function BudgetFormInner({ formikProps, buttonText, ...props }) {
     <React.Fragment>
       <Paper>
         <CardContent>
-          <Typography color='primary' variant='body1' component='h2'>
+          <Typography color='secondary' variant='body1' component='h2'>
             Your request will be sent to the group financial manager for approval
           </Typography>
           <TextField
@@ -207,7 +206,7 @@ export function BudgetFormInner({ formikProps, buttonText, ...props }) {
       <Box mb={2} />
       <Paper>
         <CardContent>
-          <Typography color='primary' variant='body1' component='h2'>
+          <Typography color='secondary' variant='body1' component='h2'>
             You may notify an approval manager for them to review and accept your budget request faster.
           </Typography>
           <Field
