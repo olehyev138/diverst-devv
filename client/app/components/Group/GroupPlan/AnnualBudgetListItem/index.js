@@ -80,7 +80,10 @@ export function AnnualBudgetListItem(props) {
             <Link
               className={classes.eventLink}
               component={WrappedNavLink}
-              to={props.links.budgetsIndex(item.id)}
+              to={{
+                pathname: props.links.budgetsIndex(item.id),
+                annualBudget: item
+              }}
             >
               <Typography color='primary' variant='body1' component='h2'>
                 View Budget Requests
@@ -96,7 +99,10 @@ export function AnnualBudgetListItem(props) {
                 <Link
                   className={classes.eventLink}
                   component={WrappedNavLink}
-                  to='/'
+                  to={{
+                    pathname: props.links.newRequest(item.id),
+                    annualBudget: item
+                  }}
                 >
                   <Typography color='primary' variant='body1' component='h2'>
                     Create Budget Request

@@ -38,7 +38,7 @@ export function* getCurrentAnnualBudget(action) {
 
 export function* getAnnualBudget(action) {
   try {
-    const response = { data: 'API CALL' };
+    const response = yield call(api.annualBudgets.get.bind(api.annualBudgets), action.payload.id);
 
     yield put(getAnnualBudgetSuccess(response.data));
   } catch (err) {

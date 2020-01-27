@@ -185,6 +185,12 @@ export default defineMessages({
           index: {
             id: `${scope}.group.plan.budget.budget.index`
           },
+          show: {
+            id: `${scope}.group.plan.budget.budget.show`
+          },
+          new: {
+            id: `${scope}.group.plan.budget.budget.new`
+          },
         },
       },
     },

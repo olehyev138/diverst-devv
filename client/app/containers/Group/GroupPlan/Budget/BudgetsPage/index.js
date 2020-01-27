@@ -13,26 +13,35 @@ import { compose } from 'redux';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import { selectPaginatedBudgets, selectBudgetsTotal, selectIsFetchingBudgets } from 'containers/Group/GroupPlan/Budget/selectors';
+import { selectAnnualBudget } from 'containers/Group/GroupPlan/AnnualBudget/selectors';
 
 import saga from 'containers/Group/GroupPlan/Budget/saga';
 import reducer from 'containers/Group/GroupPlan/Budget/reducer';
+import annualSaga from 'containers/Group/GroupPlan/AnnualBudget/saga';
+import annualReducer from 'containers/Group/GroupPlan/AnnualBudget/reducer';
 
 import { getBudgetsBegin, budgetsUnmount, deleteBudgetBegin } from 'containers/Group/GroupPlan/Budget/actions';
+import { getAnnualBudgetBegin, getAnnualBudgetSuccess } from 'containers/Group/GroupPlan/AnnualBudget/actions';
 import { Button } from '@material-ui/core';
 import RouteService from 'utils/routeHelpers';
 
 import BudgetList from 'components/Group/GroupPlan/BudgetList';
-import { ROUTES } from "containers/Shared/Routes/constants";
+import { ROUTES } from 'containers/Shared/Routes/constants';
 
 export function BudgetsPage(props) {
   useInjectReducer({ key: 'budgets', reducer });
   useInjectSaga({ key: 'budgets', saga });
+  useInjectReducer({ key: 'annualBudgets', reducer: annualReducer });
+  useInjectSaga({ key: 'annualBudgets', saga: annualSaga });
 
   const [params, setParams] = useState({ count: 5, page: 0, order: 'asc' });
 
   const rs = new RouteService(useContext);
   const groupID = rs.params('group_id');
   const annualId = rs.params('annual_budget_id');
+
+  const { location } = rs;
+  const annualBudget = props.currentAnnualBudget || location.update;
 
   const getBudget = (params) => {
     props.getBudgetsBegin({
@@ -42,11 +51,16 @@ export function BudgetsPage(props) {
   };
 
   const links = {
-    newRequest: ROUTES.group.plan.budget.budgets.index.path(groupID, annualId),
+    newRequest: ROUTES.group.plan.budget.budgets.new.path(groupID, annualId),
     requestDetails: id => ROUTES.group.plan.budget.budgets.index.path(groupID, annualId)
   };
 
   useEffect(() => {
+    // eslint-disable-next-line eqeqeq
+    if (!annualBudget || annualBudget.id != annualId)
+      props.getAnnualBudgetBegin({ id: annualId });
+    else
+      props.getAnnualBudgetSuccess({ annual_budget: annualBudget });
     getBudget(params);
 
     return () => props.budgetsUnmount();
@@ -68,23 +82,14 @@ export function BudgetsPage(props) {
 
   return (
     <React.Fragment>
-      {props.budgets.map(bud => (
-        <div key={bud.id}>
-          {bud.requested_amount}
-        </div>
-      ))}
-      <Button
-        onClick={() => getBudget({})}
-      >
-        RELOAD
-      </Button>
       <BudgetList
-        budges={props.budgets}
-        budgeTotal={props.budgetTotal}
-        isFetchingBudges={props.isLoading}
-        deleteBudgeBegin={props.deleteBudgetBegin}
+        budgets={props.budgets}
+        budgetTotal={props.budgetTotal}
+        isFetchingBudgets={props.isLoading}
+        deleteBudgetBegin={props.deleteBudgetBegin}
         handlePagination={handlePagination}
         handleOrdering={handleOrdering}
+        annualBudget={props.currentAnnualBudget}
         links={links}
       />
     </React.Fragment>
@@ -94,7 +99,10 @@ export function BudgetsPage(props) {
 BudgetsPage.propTypes = {
   getBudgetsBegin: PropTypes.func.isRequired,
   budgetsUnmount: PropTypes.func.isRequired,
+  getAnnualBudgetBegin: PropTypes.func.isRequired,
+  getAnnualBudgetSuccess: PropTypes.func.isRequired,
   isLoading: PropTypes.bool,
+  currentAnnualBudget: PropTypes.object,
   budgets: PropTypes.array,
   budgetTotal: PropTypes.number,
   deleteBudgetBegin: PropTypes.func
@@ -104,12 +112,15 @@ const mapStateToProps = createStructuredSelector({
   isLoading: selectIsFetchingBudgets(),
   budgets: selectPaginatedBudgets(),
   budgetTotal: selectBudgetsTotal(),
+  currentAnnualBudget: selectAnnualBudget(),
 });
 
 const mapDispatchToProps = {
   getBudgetsBegin,
   budgetsUnmount,
-  deleteBudgetBegin
+  deleteBudgetBegin,
+  getAnnualBudgetBegin,
+  getAnnualBudgetSuccess,
 };
 
 const withConnect = connect(

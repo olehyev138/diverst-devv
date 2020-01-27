@@ -41,7 +41,8 @@ export function AnnualBudgetsPage(props) {
   }, []);
 
   const links = {
-    budgetsIndex: id => ROUTES.group.plan.budget.budgets.index.path(groupId, id)
+    budgetsIndex: id => ROUTES.group.plan.budget.budgets.index.path(groupId, id),
+    newRequest: id => ROUTES.group.plan.budget.budgets.new.path(groupId, id)
   };
 
   return (

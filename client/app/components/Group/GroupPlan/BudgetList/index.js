@@ -1,6 +1,6 @@
 /**
  *
- * BudgeList Component
+ * BudgetList Component
  *
  *
  */
@@ -22,13 +22,16 @@ import DetailsIcon from '@material-ui/icons/Details';
 
 import DiverstTable from 'components/Shared/DiverstTable';
 import DiverstDropdownMenu from 'components/Shared/DiverstDropdownMenu';
-import {DateTime, formatDateTimeString} from "../../../../utils/dateTimeHelpers";
+import { DateTime, formatDateTimeString } from 'utils/dateTimeHelpers';
+import WrappedNavLink from 'components/Shared/WrappedNavLink';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/News/messages';
 
 const styles = theme => ({
-  budgeListItem: {
+  budgetListItem: {
     width: '100%',
   },
-  budgeListItemDescription: {
+  budgetListItemDescription: {
     paddingTop: 8,
   },
   errorButton: {
@@ -36,7 +39,7 @@ const styles = theme => ({
   },
 });
 
-export function BudgeList(props, context) {
+export function BudgetList(props, context) {
   const { classes } = props;
 
   const handleOrderChange = (columnId, orderDir) => {
@@ -104,18 +107,44 @@ export function BudgeList(props, context) {
 
   return (
     <React.Fragment>
+      <CardContent>
+        <Grid
+          container
+          alignContent='flex-end'
+          alignItems='flex-end'
+          justify='flex-end'
+        >
+          <Grid item>
+            <Button
+              color='primary'
+              variant={props.annualBudget && !props.annualBudget.closed ? 'contained' : 'disabled' }
+              to={props.links.newRequest}
+              component={WrappedNavLink}
+            >
+              New Budget Request
+            </Button>
+          </Grid>
+        </Grid>
+      </CardContent>
       <Grid container spacing={3}>
         <Grid item xs>
           <DiverstTable
             title='Budgets'
             handlePagination={props.handlePagination}
             onOrderChange={handleOrderChange}
-            isLoading={props.isFetchingBudges}
+            isLoading={props.isFetchingBudgets}
             rowsPerPage={5}
-            dataArray={Object.values(props.budges)}
-            dataTotal={props.budgeTotal}
+            dataArray={Object.values(props.budgets)}
+            dataTotal={props.budgetTotal}
             columns={columns}
             actions={actions}
+            editable={{
+              onRowAdd: newData => alert('YO YO'),
+            }}
+            my_options={{
+              search: false,
+              exportButton: true
+            }}
           />
         </Grid>
       </Grid>
@@ -123,24 +152,26 @@ export function BudgeList(props, context) {
   );
 }
 
-BudgeList.propTypes = {
+BudgetList.propTypes = {
   classes: PropTypes.object,
-  budges: PropTypes.object,
-  budgeTotal: PropTypes.number,
-  isFetchingBudges: PropTypes.bool,
-  deleteBudgeBegin: PropTypes.func,
+  annualBudget: PropTypes.object,
+  currentGroup: PropTypes.object,
+  budgets: PropTypes.object,
+  budgetTotal: PropTypes.number,
+  isFetchingBudgets: PropTypes.bool,
+  deleteBudgetBegin: PropTypes.func,
   handlePagination: PropTypes.func,
   handleOrdering: PropTypes.func,
-  handleVisitBudgeEdit: PropTypes.func,
+  handleVisitBudgetEdit: PropTypes.func,
   handleChangeScope: PropTypes.func,
-  budgeType: PropTypes.string,
+  budgetType: PropTypes.string,
   links: PropTypes.shape({
-    budgeNew: PropTypes.string,
-    budgeEdit: PropTypes.func
+    newRequest: PropTypes.string,
+    requestDetails: PropTypes.func
   })
 };
 
 export default compose(
   memo,
   withStyles(styles),
-)(BudgeList);
+)(BudgetList);
