@@ -32,8 +32,8 @@ export function AnswerListPage(props) {
   useInjectSaga({ key: 'answers', saga });
 
   const rs = new RouteService(useContext);
-  const questionId = rs.params('question_id')[0];
-  const campaignId = rs.params('campaign_id')[0];
+  const questionId = rs.params('question_id');
+  const campaignId = rs.params('campaign_id');
 
   const [params, setParams] = useState({
     question_id: questionId, count: 5, page: 0,

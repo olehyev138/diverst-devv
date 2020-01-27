@@ -38,7 +38,7 @@ export function FolderCreatePage(props) {
   const type = props.path.startsWith('/groups') ? 'group' : 'admin';
 
   const links = {
-    cancelLink: location.fromFolder ? getFolderShowPath(location.fromFolder.folder) : getFolderIndexPath(type, rs.params('group_id')[0])
+    cancelLink: location.fromFolder ? getFolderShowPath(location.fromFolder.folder) : getFolderIndexPath(type, rs.params('group_id'))
   };
 
   useEffect(() => {
