@@ -49,6 +49,14 @@ class Budget < ApplicationRecord
     end
   end
 
+  def item_count
+    budget_items.size
+  end
+
+  def requested_at
+    created_at
+  end
+
   def self.pre_approved_events(group, user = nil)
     related_budgets = self.joins(:group)
                           .where(annual_budgets: { group: group })

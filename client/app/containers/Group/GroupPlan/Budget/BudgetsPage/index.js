@@ -21,7 +21,8 @@ import { getBudgetsBegin, budgetsUnmount, deleteBudgetBegin } from 'containers/G
 import { Button } from '@material-ui/core';
 import RouteService from 'utils/routeHelpers';
 
-// import BudgetList from 'components/Group/GroupPlan/Budget/GroupPlan/Budgets';
+import BudgetList from 'components/Group/GroupPlan/BudgetList';
+import { ROUTES } from "containers/Shared/Routes/constants";
 
 export function BudgetsPage(props) {
   useInjectReducer({ key: 'budgets', reducer });
@@ -30,14 +31,19 @@ export function BudgetsPage(props) {
   const [params, setParams] = useState({ count: 5, page: 0, order: 'asc' });
 
   const rs = new RouteService(useContext);
+  const groupID = rs.params('group_id');
+  const annualId = rs.params('annual_budget_id');
 
   const getBudget = (params) => {
-    const annualId = rs.params('annual_budget_id');
-    const groupID = rs.params('group_id');
     props.getBudgetsBegin({
       ...params,
       annual_budget_id: annualId,
     });
+  };
+
+  const links = {
+    newRequest: ROUTES.group.plan.budget.budgets.index.path(groupID, annualId),
+    requestDetails: id => ROUTES.group.plan.budget.budgets.index.path(groupID, annualId)
   };
 
   useEffect(() => {
@@ -48,6 +54,13 @@ export function BudgetsPage(props) {
 
   const handlePagination = (payload) => {
     const newParams = { ...params, count: payload.count, page: payload.page };
+
+    getBudget(newParams);
+    setParams(newParams);
+  };
+
+  const handleOrdering = (payload) => {
+    const newParams = { ...params, orderBy: payload.orderBy, order: payload.orderDir };
 
     getBudget(newParams);
     setParams(newParams);
@@ -65,6 +78,15 @@ export function BudgetsPage(props) {
       >
         RELOAD
       </Button>
+      <BudgetList
+        budges={props.budgets}
+        budgeTotal={props.budgetTotal}
+        isFetchingBudges={props.isLoading}
+        deleteBudgeBegin={props.deleteBudgetBegin}
+        handlePagination={handlePagination}
+        handleOrdering={handleOrdering}
+        links={links}
+      />
     </React.Fragment>
   );
 }
