@@ -30,7 +30,7 @@ class CsvFile < ApplicationRecord
   def path_for_download
     return nil unless self.download_file.attached?
 
-    ActiveStorage::Blob.service.send(:path_for, self.download_file.key)
+    Rails.application.routes.url_helpers.rails_blob_path(self.download_file, only_path: true, disposition: 'attachment')
   end
 
   protected
