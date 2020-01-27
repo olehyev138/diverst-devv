@@ -24,7 +24,7 @@ export function GroupMemberCreatePage(props) {
   useInjectSaga({ key: 'members', saga });
 
   const rs = new RouteService(useContext);
-  const groupId = rs.params('group_id')[0];
+  const groupId = rs.params('group_id');
   const links = {
     groupMembersIndex: ROUTES.group.members.index.path(groupId),
   };
