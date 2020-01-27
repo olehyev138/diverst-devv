@@ -10,11 +10,16 @@ import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/User/reducer';
 import saga from 'containers/User/saga';
 
-import { selectPaginatedDownloads, selectDownloadsTotal, selectIsLoadingDownloads } from 'containers/User/selectors';
-import { getUserDownloadsBegin, userUnmount } from 'containers/User/actions';
+import {
+  selectPaginatedDownloads,
+  selectDownloadsTotal,
+  selectIsLoadingDownloads,
+  selectIsDownloadingData,
+  selectDownloadData,
+} from 'containers/User/selectors';
+import { getUserDownloadsBegin, getUserDownloadDataBegin, userUnmount } from 'containers/User/actions';
 
 import RouteService from 'utils/routeHelpers';
-import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import DownloadsList from 'components/User/DownloadsList';
 
@@ -52,6 +57,9 @@ export function UserDownloadsPage(props) {
     <DownloadsList
       downloads={props.downloads}
       downloadsTotal={props.downloadsTotal}
+      getUserDownloadDataBegin={props.getUserDownloadDataBegin}
+      downloadData={props.downloadData}
+      isDownloadingData={props.isDownloadingData}
       handlePagination={handlePagination}
       isLoading={props.isLoading}
       links={links}
@@ -61,10 +69,13 @@ export function UserDownloadsPage(props) {
 
 UserDownloadsPage.propTypes = {
   getUserDownloadsBegin: PropTypes.func.isRequired,
+  getUserDownloadDataBegin: PropTypes.func.isRequired,
   userUnmount: PropTypes.func.isRequired,
   downloads: PropTypes.array,
   downloadsTotal: PropTypes.number,
+  downloadData: PropTypes.object,
   isLoading: PropTypes.bool,
+  isDownloadingData: PropTypes.bool,
   currentGroup: PropTypes.shape({
     id: PropTypes.number,
   }),
@@ -74,10 +85,13 @@ const mapStateToProps = createStructuredSelector({
   downloads: selectPaginatedDownloads(),
   downloadsTotal: selectDownloadsTotal(),
   isLoading: selectIsLoadingDownloads(),
+  isDownloadingData: selectIsDownloadingData(),
+  downloadData: selectDownloadData(),
 });
 
 const mapDispatchToProps = {
   getUserDownloadsBegin,
+  getUserDownloadDataBegin,
   userUnmount,
 };
 
