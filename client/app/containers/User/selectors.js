@@ -101,6 +101,16 @@ const selectIsCommitting = () => createSelector(
   userState => userState.isCommitting
 );
 
+const selectIsDownloadingData = () => createSelector(
+  selectUsersDomain,
+  userState => userState.isDownloadingData
+);
+
+const selectDownloadData = () => createSelector(
+  selectUsersDomain,
+  userState => userState.downloadData
+);
+
 /*
  * - Select fieldData objects out of user
  *   - parse field_data.data strings
@@ -131,5 +141,6 @@ export {
   selectPaginatedEvents, selectEventsTotal,
   selectIsCommitting, selectIsFormLoading,
   selectPaginatedDownloads, selectDownloadsTotal,
-  selectIsLoadingDownloads,
+  selectIsLoadingDownloads, selectIsDownloadingData,
+  selectDownloadData,
 };
