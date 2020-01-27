@@ -38,7 +38,7 @@ import { getUsersBegin } from 'containers/User/actions';
 import reducer from 'containers/User/reducer';
 import saga from 'containers/User/saga';
 
-export function BudgetItemFormInner({ formikProps, arrayHelpers, buttonText, ...props }) {
+export function BudgetItemFormInner({ formikProps, arrayHelpers, ...props }) {
   const { handleSubmit, handleChange, handleBlur, values, setFieldValue, setFieldTouched } = formikProps;
   const { remove, insert, push } = arrayHelpers;
 
@@ -172,7 +172,7 @@ export function BudgetItemFormInner({ formikProps, arrayHelpers, buttonText, ...
 }
 
 /* eslint-disable object-curly-newline */
-export function BudgetFormInner({ formikProps, ...props }) {
+export function BudgetFormInner({ formikProps, buttonText, ...props }) {
   const { handleSubmit, handleChange, handleBlur, values, setFieldValue, setFieldTouched } = formikProps;
   useInjectReducer({ key: 'users', reducer });
   useInjectSaga({ key: 'users', saga });
