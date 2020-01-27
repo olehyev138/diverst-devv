@@ -23,6 +23,10 @@ class Budget < ApplicationRecord
   validates_length_of :comments, maximum: 65535
   validates_length_of :description, maximum: 65535
 
+  def group_id
+    group.id
+  end
+
   def requested_amount
     @requested_amount ||= budget_items.sum(:estimated_amount)
   end

@@ -1,5 +1,6 @@
 class BudgetSerializer < ApplicationRecordSerializer
-  attributes :approver, :requested_amount, :available_amount, :status, :requested_at, :item_count, :description
+  attributes :approver, :requested_amount, :available_amount, :group_id,
+             :status, :requested_at, :item_count, :description, :requester
 
   def status
     object.approver.present? ? "#{object.status_title} by #{object.approver.name}" : object.status_title
