@@ -22,7 +22,6 @@ class CreationOfAnnualBudgetsAndMigrateBudgetDataToNewBudgetModel < ActiveRecord
 
     say 'Created AnnualBudgets table'
 
-
     say 'Begin data migration into new AnnualBudget model...'
 
     # NOTE: this script does not need to be reversed in the down method since no data is being permanently moved
@@ -32,16 +31,10 @@ class CreationOfAnnualBudgetsAndMigrateBudgetDataToNewBudgetModel < ActiveRecord
 
         annual_budget = AnnualBudget.create(amount: group.annual_budget,
                                             closed: false,
-                                            approved_budget: group.approved_budget,
-                                            available_budget: group.available_budget,
-                                            expenses: group.spent_budget,
-                                            leftover_money: group.leftover_money,
-                                            group_id: group.id,
-                                            enterprise_id: group.enterprise_id)
+                                            group_id: group.id)
 
-        annual_budget.budgets << group.budgets
+        annual_budget.budgets << Budgets.where(group_id: group.id)
         group.initiatives.update_all(annual_budget_id: annual_budget.id)
-        annual_budget.initiative_expenses << InitiativeExpense.where(initiative_id: group.initiative_ids)
       end
     end
   end

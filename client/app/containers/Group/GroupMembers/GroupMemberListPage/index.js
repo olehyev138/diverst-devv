@@ -47,7 +47,7 @@ export function GroupMemberListPage(props) {
   useInjectSaga({ key: 'members', saga });
 
   const rs = new RouteService(useContext);
-  const groupId = rs.params('group_id')[0];
+  const groupId = rs.params('group_id');
 
   const defaultParams = {
     group_id: groupId, count: 10, page: 0,

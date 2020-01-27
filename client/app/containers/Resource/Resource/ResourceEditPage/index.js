@@ -47,13 +47,13 @@ export function FolderEditPage(props) {
   const { currentUser, currentGroup, currentFolder, currentEnterprise, currentResource } = props;
 
   const links = {
-    cancelPath: getFolderShowPath(currentFolder) || getFolderIndexPath(type, rs.params('group_id')[0]),
+    cancelPath: getFolderShowPath(currentFolder) || getFolderIndexPath(type, rs.params('group_id')),
   };
 
   useEffect(() => {
-    const resourceId = rs.params('item_id')[0];
-    const folderId = rs.params('folder_id')[0];
-    const groupId = rs.params('group_id')[0];
+    const resourceId = rs.params('item_id');
+    const folderId = rs.params('folder_id');
+    const groupId = rs.params('group_id');
     props.getFolderBegin({ id: folderId });
     props.getResourceBegin({ id: resourceId });
     if (type === 'group')
