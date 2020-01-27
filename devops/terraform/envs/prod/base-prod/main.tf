@@ -30,6 +30,14 @@ module "db" {
   sg_db         = module.sec.sg_db
 }
 
+module "job_store" {
+  source = "../../../modules/data/job_store"
+
+  sn_ec       = module.vpc.sn_db
+  sg_ec       = module.sec.sg_db
+  node_type   = "cache.t2.micro"
+}
+
 module "backend" {
   source = "../../../modules/services/backend"
 
@@ -45,6 +53,8 @@ module "backend" {
   db_port     = module.db.db_port
   db_username = var.db_username
   db_password = var.db_password
+
+  job_store_endpoint = module.job_store.endpoint
 
   filestorage_bucket_id = module.filestorage.filestorage_bucket_id
   ssh_key_name = var.ssh_key_name

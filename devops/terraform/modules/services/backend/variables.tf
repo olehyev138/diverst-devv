@@ -12,6 +12,8 @@ variable "db_username" {}
 variable "db_password" {}
 variable "db_port" {}
 
+variable "job_store_endpoint" {}
+
 variable "filestorage_bucket_id" {}
 
 variable "ssh_key_name" {}

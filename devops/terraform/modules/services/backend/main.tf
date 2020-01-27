@@ -112,8 +112,6 @@ resource "aws_elastic_beanstalk_environment" "diverst-env" {
     value        = "80"
   }
 
-
-  # EOS - TEMP - DEBUG
   setting {
     namespace   = "aws:elasticbeanstalk:application:environment"
     name        = "REDIS_PROVIDER"
@@ -123,28 +121,22 @@ resource "aws_elastic_beanstalk_environment" "diverst-env" {
   setting {
     namespace   = "aws:elasticbeanstalk:application:environment"
     name        = "REDIS_URL"
-    value        = "redis://test-cache.w44afa.ng.0001.use2.cache.amazonaws.com:6379/0"
+    value       = "redis://${var.job_store_endpoint}:6379/0"
   }
 
-  setting {
-    namespace   = "aws:elasticbeanstalk:application:environment"
-    name        = "REDIS_PORT"
-    value        = "6379"
-  }
-
+  # TODO: use vars & secrets
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
     name = "SIDEKIQ_DASHBOARD_USERNAME"
     value = "admin"
   }
 
+  # TODO: use vars & secrets
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
     name = "SIDEKIQ_DASHBOARD_PASSWORD"
     value = "admin"
   }
-
-  ### EOS TEMP - DEBUG
 
   # TODO: generate this & store somewhere proper
   setting {
