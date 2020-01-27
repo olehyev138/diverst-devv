@@ -32,7 +32,7 @@
         <% if GroupPolicy.new(current_user, nil).index? %>
         <div class="col-xs-5">
           <small class="form-text text-muted">
-            The default view will show events for <%= c_t(:erg).pluralize %> and <%= c_t(:sub_erg).pluralize %>.
+            The default view will show events for <%= c_t(:erg).pluralize %>.
             To focus on a specific <%= c_t(:erg) %> or <%= c_t(:sub_erg) %>, click 'Select'.
           </small>
           <button type="button" class="btn btn--primary btn--small" data-toggle="modal"
