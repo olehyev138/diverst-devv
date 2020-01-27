@@ -13,30 +13,33 @@ import { connect } from 'react-redux';
 import { useInjectSaga } from '../../../../utils/injectSaga';
 import { useInjectReducer } from '../../../../utils/injectReducer';
 import { DateTime } from 'luxon';
-
-import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
-import { Field, Formik, Form, FieldArray } from 'formik';
+import { Field, FieldArray, Form, Formik } from 'formik';
 import {
-  Button, Card, CardActions, CardContent, TextField, IconButton,
-  Divider, Typography, Box, Paper, Grid, FormControlLabel, Switch, FormControl
+  Box,
+  Button,
+  CardContent,
+  Divider,
+  FormControl,
+  FormControlLabel,
+  Grid,
+  IconButton,
+  Paper,
+  Switch,
+  TextField,
+  Typography
 } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/DeleteOutline';
-
-import WrappedNavLink from 'components/Shared/WrappedNavLink';
-import { buildValues, mapFields } from 'utils/formHelpers';
-// import messages from 'containers/Shared/Budget/messages';
-
-import FieldInputForm from 'components/Shared/Fields/FieldInputForm/Loadable';
+import { buildValues } from 'utils/formHelpers';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
-import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 import { DiverstDatePicker } from 'components/Shared/Pickers/DiverstDatePicker';
-import { serializeFieldDataWithFieldId } from 'utils/customFieldHelpers';
 import Select from 'components/Shared/DiverstSelect';
 
 import { selectPaginatedUsers } from 'containers/User/selectors';
 import { getUsersBegin } from 'containers/User/actions';
 import reducer from 'containers/User/reducer';
 import saga from 'containers/User/saga';
+
+// import messages from 'containers/Shared/Budget/messages';
 
 export function BudgetItemFormInner({ formikProps, arrayHelpers, ...props }) {
   const { handleSubmit, handleChange, handleBlur, values, setFieldValue, setFieldTouched } = formikProps;
@@ -68,7 +71,7 @@ export function BudgetItemFormInner({ formikProps, arrayHelpers, ...props }) {
                   title: '',
                   estimated_amount: 0,
                   estimated_date: DateTime.local(),
-                  private: false,
+                  is_private: false,
                 })}
               >
                 + Add Event
@@ -185,58 +188,64 @@ export function BudgetFormInner({ formikProps, buttonText, ...props }) {
 
   return (
     <React.Fragment>
-      <Paper>
-        <CardContent>
-          <Typography color='secondary' variant='body1' component='h2'>
-            Your request will be sent to the group financial manager for approval
-          </Typography>
-          <TextField
-            autoFocus
-            fullWidth
-            margin='dense'
-            id='description'
-            name='description'
-            type='text'
-            onChange={handleChange}
-            value={values.description}
-            label='Description'
-          />
-        </CardContent>
-      </Paper>
-      <Box mb={2} />
-      <Paper>
-        <CardContent>
-          <Typography color='secondary' variant='body1' component='h2'>
-            You may notify an approval manager for them to review and accept your budget request faster.
-          </Typography>
-          <Field
-            component={Select}
-            fullWidth
-            required
-            name='approver_id'
-            id='approver_id'
-            label='Approver'
-            margin='normal'
-            disabled={props.isCommitting}
-            value={values.approver_id}
-            options={Object.values(props.approvers)}
-            onMenuOpen={approverSelectAction}
-            onChange={value => setFieldValue('field_id', value)}
-            onInputChange={value => approverSelectAction(value)}
-            onBlur={() => setFieldTouched('field_id', true)}
-          />
-        </CardContent>
-      </Paper>
-      <Box mb={2} />
-      <FieldArray
-        name='budget_items'
-        render={arrayHelpers => (
-          <BudgetItemFormInner
-            formikProps={formikProps}
-            arrayHelpers={arrayHelpers}
-          />
-        )}
-      />
+      <Form>
+        <Paper>
+          <CardContent>
+            <Typography color='secondary' variant='body1' component='h2'>
+              Your request will be sent to the group financial manager for approval
+            </Typography>
+            <TextField
+              autoFocus
+              fullWidth
+              required
+              margin='dense'
+              id='description'
+              name='description'
+              type='text'
+              onChange={handleChange}
+              value={values.description}
+              label='Description'
+            />
+          </CardContent>
+        </Paper>
+        <Box mb={2} />
+        <Paper>
+          <CardContent>
+            <Typography color='secondary' variant='body1' component='h2'>
+              You may notify an approval manager for them to review and accept your budget request faster.
+            </Typography>
+            <Field
+              component={Select}
+              fullWidth
+              name='approver_id'
+              id='approver_id'
+              label='Approver'
+              margin='normal'
+              disabled={props.isCommitting}
+              value={values.approver_id}
+              options={Object.values(props.approvers)}
+              onMenuOpen={approverSelectAction}
+              onChange={value => setFieldValue('field_id', value)}
+              onInputChange={value => approverSelectAction(value)}
+              onBlur={() => setFieldTouched('field_id', true)}
+            />
+          </CardContent>
+        </Paper>
+        <Box mb={2} />
+        <FieldArray
+          name='budget_items'
+          render={arrayHelpers => (
+            <BudgetItemFormInner
+              formikProps={formikProps}
+              arrayHelpers={arrayHelpers}
+            />
+          )}
+        />
+        <Box mb={2} />
+        <DiverstSubmit isCommitting={props.isCommitting} variant='contained'>
+          {buttonText}
+        </DiverstSubmit>
+      </Form>
     </React.Fragment>
   );
 }
@@ -255,13 +264,7 @@ export function BudgetForm(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        values.redirectPath = props.links.index;
-        const payload = {
-          ...values,
-          field_data_attributes: serializeFieldDataWithFieldId(values.fieldData)
-        };
-        delete payload.fieldData;
-        props.budgetAction(payload);
+        props.budgetAction({ annual_budget_id: 1, ...values });
       }}
     >
       {formikProps => <BudgetFormInner {...props} formikProps={formikProps} />}
@@ -271,6 +274,7 @@ export function BudgetForm(props) {
 
 BudgetForm.propTypes = {
   budgetAction: PropTypes.func.isRequired,
+  annualBudgetId: PropTypes.number,
   isCommitting: PropTypes.bool,
   isFetching: PropTypes.bool,
   edit: PropTypes.bool,

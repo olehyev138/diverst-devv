@@ -10,6 +10,7 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
+import { floatRound } from 'utils/floatRound';
 
 import {
   Button, Card, CardContent, CardActions,
@@ -54,13 +55,13 @@ export function BudgetList(props, context) {
       title: 'Requested Amount',
       field: 'requested_amount',
       sorting: false,
-      render: rowData => rowData.requested_amount || '$0.00',
+      render: rowData => rowData.requested_amount ? `$${floatRound(rowData.requested_amount, 2)}` : '$0.00',
     },
     {
       title: 'Available Amount',
       field: 'available_amount',
       sorting: false,
-      render: rowData => rowData.available_amount || 'Not Set'
+      render: rowData => rowData.available_amount ? `$${floatRound(rowData.available_amount, 2)}` : '$0.00',
     },
     {
       title: 'Status',

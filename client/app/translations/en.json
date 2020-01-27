@@ -81,6 +81,8 @@
   "diverst.containers.Routes.group.plan.budget.index": "Budgeting",
   "diverst.containers.Routes.group.plan.budget.editAnnualBudget": "Edit Annual Budget",
   "diverst.containers.Routes.group.plan.budget.overview": "Annual Budgets Overview",
+  "diverst.containers.Routes.group.plan.budget.budget.index": "Budgets",
+  "diverst.containers.Routes.group.plan.budget.budget.new": "New Budget Request",
   "diverst.containers.Routes.group.news.messages.show": "Group Message",
   "diverst.containers.Routes.group.news.messages.new": "New Group Message",
   "diverst.containers.Routes.group.news.messages.edit": "Edit Group Message",

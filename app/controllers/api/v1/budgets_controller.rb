@@ -7,12 +7,19 @@ class Api::V1::BudgetsController < DiverstController
             :approver_id,
             :annual_budget_id,
             :requester_id,
-            budget_item: [
+            budget_items_attributes: [
                 :title,
                 :estimated_amount,
                 :estimated_date,
+                :private,
             ],
           )
+  end
+
+  def create
+    params[:budget][:budget_items_attributes] = params[:budget][:budget_items]
+    params[:budget].delete(:budget_items)
+    super
   end
 
   def approve
