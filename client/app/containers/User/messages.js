@@ -78,5 +78,14 @@ export default defineMessages({
     title: {
       id: `${scope}.downloads.title`
     },
+    empty: {
+      id: `${scope}.downloads.empty`
+    },
+    expireInfo: {
+      id: `${scope}.downloads.expireInfo`
+    },
+    downloadButton: {
+      id: `${scope}.downloads.downloadButton`
+    },
   },
 });
