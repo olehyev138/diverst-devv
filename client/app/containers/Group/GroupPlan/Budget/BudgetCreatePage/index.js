@@ -12,7 +12,7 @@ import saga from 'containers/Group/saga';
 import { createBudgetRequestBegin } from 'containers/Group/GroupPlan/Budget/actions';
 import { selectGroupIsCommitting } from 'containers/Group/selectors';
 
-import GroupForm from 'components/Group/GroupForm';
+import RequestForm from 'components/Group/GroupPlan/BudgetRequestForm';
 
 export function GroupCreatePage(props) {
   useInjectReducer({ key: 'budgets', reducer });
@@ -21,9 +21,11 @@ export function GroupCreatePage(props) {
   useEffect(() => () => {}, []);
 
   return (
-    <h1>
-      THIS IS A FORM
-    </h1>
+    <RequestForm
+      budgetAction={createBudgetRequestBegin}
+      isCommitting={props.isCommitting}
+      buttonText='Create'
+    />
   );
 }
 
