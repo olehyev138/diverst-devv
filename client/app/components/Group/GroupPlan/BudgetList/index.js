@@ -117,7 +117,7 @@ export function BudgetList(props, context) {
           <Grid item>
             <Button
               color='primary'
-              variant={props.annualBudget && !props.annualBudget.closed ? 'contained' : 'disabled' }
+              variant={props.annualBudget && !props.annualBudget.closed ? 'contained' : 'disabled'}
               to={props.links.newRequest}
               component={WrappedNavLink}
             >
@@ -138,12 +138,8 @@ export function BudgetList(props, context) {
             dataTotal={props.budgetTotal}
             columns={columns}
             actions={actions}
-            editable={{
-              onRowAdd: newData => alert('YO YO'),
-            }}
             my_options={{
               search: false,
-              exportButton: true
             }}
           />
         </Grid>
