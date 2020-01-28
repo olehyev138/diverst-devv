@@ -107,7 +107,11 @@ Diverst::Application.routes.draw do
       resources :initiative_updates
       resources :initiative_users
       resources :invitation_segments_groups
-      resources :likes
+      resources :likes, only: [:create] do
+        collection do
+          post '/unlike', to: 'likes#unlike'
+        end
+      end
       resources :mentorings do
         collection do
           post 'delete_mentorship'

@@ -47,7 +47,14 @@ import {
   DELETE_SOCIALLINK_SUCCESS,
   UPDATE_NEWS_ITEM_BEGIN,
   UPDATE_NEWS_ITEM_SUCCESS,
-  UPDATE_NEWS_ITEM_ERROR
+  UPDATE_NEWS_ITEM_ERROR,
+
+  LIKE_NEWS_ITEM_BEGIN,
+  LIKE_NEWS_ITEM_SUCCESS,
+  LIKE_NEWS_ITEM_ERROR,
+  UNLIKE_NEWS_ITEM_BEGIN,
+  UNLIKE_NEWS_ITEM_SUCCESS,
+  UNLIKE_NEWS_ITEM_ERROR
 } from 'containers/News/constants';
 
 export const initialState = {
@@ -56,7 +63,8 @@ export const initialState = {
   isCommitting: false,
   newsItems: [],
   newsItemsTotal: null,
-  currentNewsItem: null
+  currentNewsItem: null,
+  likeRequestSuccess: false
 };
 
 /* eslint-disable default-case, no-param-reassign */
@@ -64,6 +72,25 @@ function newsReducer(state = initialState, action) {
   /* eslint-disable consistent-return */
   return produce(state, (draft) => {
     switch (action.type) {
+      case LIKE_NEWS_ITEM_BEGIN:
+        draft.likeRequestSuccess = false;
+        break;
+      case LIKE_NEWS_ITEM_SUCCESS:
+        draft.likeRequestSuccess = true;
+        break;
+      case LIKE_NEWS_ITEM_ERROR:
+        draft.likeRequestSuccess = false;
+        break;
+      case UNLIKE_NEWS_ITEM_BEGIN:
+        draft.likeRequestSuccess = true;
+        break;
+      case UNLIKE_NEWS_ITEM_SUCCESS:
+        draft.likeRequestSuccess = false;
+        break;
+      case UNLIKE_NEWS_ITEM_ERROR:
+        draft.likeRequestSuccess = true;
+        break;
+
       case GET_NEWS_ITEMS_BEGIN:
         draft.isLoading = true;
         break;

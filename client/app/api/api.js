@@ -33,6 +33,7 @@ import emailEvents from 'api/clockwork_database_events/clockwork_database_events
 import newsLinks from 'api/newslinks/newslinks';
 import newsLinkComments from 'api/news_link_comments/news_link_comments';
 import socialLinks from 'api/sociallinks/sociallinks';
+import likes from 'api/likes/likes';
 
 /* Metrics */
 import overviewGraphs from 'api/metrics/overview_graphs';
@@ -77,6 +78,7 @@ const Api = {
   mentoringSessions,
   emails,
   emailEvents,
+  likes,
   metrics: {
     overviewGraphs,
     userGraphs,

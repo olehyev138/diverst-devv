@@ -3,6 +3,13 @@
  * News constants
  *
  */
+export const LIKE_NEWS_ITEM_BEGIN = 'app/News/LIKE_NEWS_ITEM_BEGIN';
+export const LIKE_NEWS_ITEM_SUCCESS = 'app/News/LIKE_NEWS_ITEM_SUCCESS';
+export const LIKE_NEWS_ITEM_ERROR = 'app/News/LIKE_NEWS_ITEM_ERROR';
+
+export const UNLIKE_NEWS_ITEM_BEGIN = 'app/News/UNLIKE_NEWS_ITEM_BEGIN';
+export const UNLIKE_NEWS_ITEM_SUCCESS = 'app/News/UNLIKE_NEWS_ITEM_SUCCESS';
+export const UNLIKE_NEWS_ITEM_ERROR = 'app/News/UNLIKE_NEWS_ITEM_ERROR';
 
 export const GET_NEWS_ITEMS_BEGIN = 'app/News/GET_NEWS_ITEMS_BEGIN';
 export const GET_NEWS_ITEMS_SUCCESS = 'app/News/GET_NEWS_ITEMS_SUCCESS';

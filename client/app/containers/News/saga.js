@@ -17,7 +17,9 @@ import {
   CREATE_SOCIALLINK_COMMENT_BEGIN, DELETE_GROUP_MESSAGE_BEGIN, DELETE_GROUP_MESSAGE_SUCCESS,
   DELETE_GROUP_MESSAGE_ERROR, DELETE_SOCIALLINK_BEGIN, DELETE_SOCIALLINK_SUCCESS, DELETE_SOCIALLINK_ERROR,
   DELETE_NEWSLINK_BEGIN, DELETE_NEWSLINK_SUCCESS, DELETE_NEWSLINK_ERROR, DELETE_NEWSLINK_COMMENT_BEGIN,
-  DELETE_GROUP_MESSAGE_COMMENT_SUCCESS, DELETE_GROUP_MESSAGE_COMMENT_ERROR, DELETE_GROUP_MESSAGE_COMMENT_BEGIN
+  DELETE_GROUP_MESSAGE_COMMENT_SUCCESS, DELETE_GROUP_MESSAGE_COMMENT_ERROR, DELETE_GROUP_MESSAGE_COMMENT_BEGIN,
+  LIKE_NEWS_ITEM_BEGIN, LIKE_NEWS_ITEM_SUCCESS, LIKE_NEWS_ITEM_ERROR,
+  UNLIKE_NEWS_ITEM_BEGIN, UNLIKE_NEWS_ITEM_SUCCESS, UNLIKE_NEWS_ITEM_ERROR
 } from 'containers/News/constants';
 
 import {
@@ -34,8 +36,31 @@ import {
   updateSocialLinkSuccess, createSocialLinkCommentSuccess, deleteNewsLinkBegin, deleteNewsLinkError,
   deleteNewsLinkSuccess, deleteSocialLinkBegin, deleteSocialLinkError, deleteSocialLinkSuccess,
   deleteGroupMessageCommentBegin, deleteGroupMessageCommentError, deleteGroupMessageCommentSuccess, deleteNewsLinkCommentBegin,
-  deleteNewsLinkCommentError, deleteNewsLinkCommentSuccess
+  deleteNewsLinkCommentError, deleteNewsLinkCommentSuccess,
+  likeNewsItemBegin, likeNewsItemSuccess, likeNewsItemError,
+  unlikeNewsItemBegin, unlikeNewsItemSuccess, unlikeNewsItemError
 } from 'containers/News/actions';
+
+export function* likeNewsItem(action) {
+  try {
+    const response = yield call(api.likes.create.bind(api.likes), action.payload);
+    yield put(likeNewsItemSuccess(response.data));
+  } catch (err) {
+    // TODO: intl message
+    yield put(likeNewsItemError(err));
+    yield put(showSnackbar({ message: 'Failed to load news item', options: { variant: 'warning' } }));
+  }
+}
+export function* unlikeNewsItem(action) {
+  try {
+    const response = yield call(api.likes.unlike.bind(api.likes), action.payload);
+    yield put(unlikeNewsItemSuccess(response.data));
+  } catch (err) {
+    // TODO: intl message
+    yield put(unlikeNewsItemError(err));
+    yield put(showSnackbar({ message: 'Failed to load news item', options: { variant: 'warning' } }));
+  }
+}
 
 
 export function* getNewsItems(action) {
@@ -280,6 +305,8 @@ export function* deleteSocialLink(action) {
 }
 
 export default function* newsSaga() {
+  yield takeLatest(LIKE_NEWS_ITEM_BEGIN, likeNewsItem);
+  yield takeLatest(UNLIKE_NEWS_ITEM_BEGIN, unlikeNewsItem);
   yield takeLatest(GET_NEWS_ITEMS_BEGIN, getNewsItems);
   yield takeLatest(GET_NEWS_ITEM_BEGIN, getNewsItem);
   yield takeLatest(UPDATE_NEWS_ITEM_BEGIN, updateNewsItem);
