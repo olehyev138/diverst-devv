@@ -116,7 +116,7 @@ AUTHORS text
 /docker                     export-ignore
 /docs                       export-ignore
 /tmp                        export-ignore
-/db/archive                 export-ignore
+/db/archived                export-ignore
 /.circleci                  export-ignore
 Dockerfile                  export-ignore
 README.md                   export-ignore
