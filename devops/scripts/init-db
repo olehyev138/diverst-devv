@@ -2,7 +2,7 @@
 
 # Initialize database on a new client's backend
 #  - SSH's into one of the ec2 instances, jumping through the bastion host,
-#    we are running rails commands on the database, so which specific ec2 instance & the
+#    we are running rails commands on the database, so which ec2 instance & the
 #    fact that they are ephemeral is irrelevant
 # Usage: ./init-db <bastion-url> <eb-url> <key-path>
 
