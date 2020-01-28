@@ -18,4 +18,19 @@ class PolicyGroup < ApplicationRecord
   def self.all_permission_fields
     PolicyGroup.columns_hash.select { |k, v| v.type.to_s === 'boolean' }.map { |field| field.first }
   end
+
+  def random_assignment
+    attr = PolicyGroup.attribute_names - %w(manage_all created_at updated_at user_id id)
+    PolicyGroup.where('user_id > 1').find_each do |pg|
+      attr.each do |att|
+        if att.include? 'index'
+          pg.update_column att, rand(12) < 6
+        elsif att.include? 'create'
+          pg.update_column att, rand(12) < 4
+        else
+          pg.update_column att, rand(12) < 2
+        end
+      end
+    end
+  end
 end

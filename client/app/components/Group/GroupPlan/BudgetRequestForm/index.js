@@ -29,12 +29,12 @@ import {
   Typography
 } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/DeleteOutline';
-import { buildValues } from 'utils/formHelpers';
+import {buildValues, mapFields} from 'utils/formHelpers';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import { DiverstDatePicker } from 'components/Shared/Pickers/DiverstDatePicker';
 import Select from 'components/Shared/DiverstSelect';
 
-import { selectPaginatedUsers } from 'containers/User/selectors';
+import { selectPaginatedSelectUsers } from 'containers/User/selectors';
 import { getUsersBegin } from 'containers/User/actions';
 import reducer from 'containers/User/reducer';
 import saga from 'containers/User/saga';
@@ -57,7 +57,6 @@ export function BudgetItemFormInner({ formikProps, arrayHelpers, ...props }) {
             container
             spacing={2}
             alignContent='space-between'
-            alignItems='space-between'
           >
             <Grid item align='left' xs={6}>
               <Typography color='secondary' variant='body1' component='h2' align='left'>
@@ -183,6 +182,8 @@ export function BudgetFormInner({ formikProps, buttonText, ...props }) {
     props.getUsersBegin({
       count: 10, page: 0, order: 'asc',
       search: searchKey,
+      group_id: props.currentGroup.id,
+      type: 'budget_approval',
     });
   };
 
@@ -221,13 +222,13 @@ export function BudgetFormInner({ formikProps, buttonText, ...props }) {
               id='approver_id'
               label='Approver'
               margin='normal'
-              disabled={props.isCommitting}
+              disabled={props.isCommitting || !props.currentGroup}
               value={values.approver_id}
               options={Object.values(props.approvers)}
               onMenuOpen={approverSelectAction}
-              onChange={value => setFieldValue('field_id', value)}
+              onChange={value => setFieldValue('approver_id', value)}
               onInputChange={value => approverSelectAction(value)}
-              onBlur={() => setFieldTouched('field_id', true)}
+              onBlur={() => setFieldTouched('approver_id', true)}
             />
           </CardContent>
         </Paper>
@@ -264,7 +265,8 @@ export function BudgetForm(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        props.budgetAction({ annual_budget_id: 1, ...values });
+        const payload = mapFields(values, ['approver_id']);
+        props.budgetAction({ annual_budget_id: 1, ...payload });
       }}
     >
       {formikProps => <BudgetFormInner {...props} formikProps={formikProps} />}
@@ -285,10 +287,10 @@ BudgetForm.propTypes = {
 
 BudgetFormInner.propTypes = {
   budget: PropTypes.object,
-  approvers: PropTypes.object,
+  approvers: PropTypes.array,
+  currentGroup: PropTypes.object,
 
   formikProps: PropTypes.object,
-  budgetFieldDataBegin: PropTypes.func.isRequired,
 
   buttonText: PropTypes.string.isRequired,
 
@@ -309,7 +311,7 @@ BudgetItemFormInner.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
-  approvers: selectPaginatedUsers(),
+  approvers: selectPaginatedSelectUsers(),
 });
 
 const mapDispatchToProps = {

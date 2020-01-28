@@ -13,6 +13,11 @@ const selectPaginatedUsers = () => createSelector(
   usersState => usersState.userList
 );
 
+const selectPaginatedSelectUsers = () => createSelector(
+  selectUsersDomain,
+  usersState => Object.values(usersState.userList).map(user => ({ label: user.name, value: user.id }))
+);
+
 const selectUserTotal = () => createSelector(
   selectUsersDomain,
   usersState => usersState.userTotal
@@ -134,6 +139,7 @@ const selectFieldData = () => createSelector(
 
 export {
   selectUsersDomain, selectPaginatedUsers,
+  selectPaginatedSelectUsers,
   selectUserTotal, selectUser, selectFieldData,
   selectIsFetchingUsers, selectIsLoadingPosts,
   selectIsLoadingEvents, selectFormUser,

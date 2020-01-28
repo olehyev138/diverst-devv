@@ -27,6 +27,7 @@ import RouteService from 'utils/routeHelpers';
 
 import BudgetList from 'components/Group/GroupPlan/BudgetList';
 import { ROUTES } from 'containers/Shared/Routes/constants';
+import { selectGroup } from 'containers/Group/selectors';
 
 export function BudgetsPage(props) {
   useInjectReducer({ key: 'budgets', reducer });
@@ -91,6 +92,7 @@ export function BudgetsPage(props) {
         handlePagination={handlePagination}
         handleOrdering={handleOrdering}
         annualBudget={props.currentAnnualBudget}
+        currentGroup={props.currentGroup}
         links={links}
       />
     </React.Fragment>
@@ -104,6 +106,7 @@ BudgetsPage.propTypes = {
   getAnnualBudgetSuccess: PropTypes.func.isRequired,
   isLoading: PropTypes.bool,
   currentAnnualBudget: PropTypes.object,
+  currentGroup: PropTypes.object,
   budgets: PropTypes.array,
   budgetTotal: PropTypes.number,
   deleteBudgetBegin: PropTypes.func
@@ -114,6 +117,7 @@ const mapStateToProps = createStructuredSelector({
   budgets: selectPaginatedBudgets(),
   budgetTotal: selectBudgetsTotal(),
   currentAnnualBudget: selectAnnualBudget(),
+  currentGroup: selectGroup(),
 });
 
 const mapDispatchToProps = {

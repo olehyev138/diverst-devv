@@ -164,7 +164,7 @@ BudgetList.propTypes = {
   classes: PropTypes.object,
   annualBudget: PropTypes.object,
   currentGroup: PropTypes.object,
-  budgets: PropTypes.object,
+  budgets: PropTypes.array,
   budgetTotal: PropTypes.number,
   isFetchingBudgets: PropTypes.bool,
   deleteBudgetBegin: PropTypes.func,

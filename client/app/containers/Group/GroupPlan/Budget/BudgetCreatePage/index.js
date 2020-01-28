@@ -10,12 +10,13 @@ import reducer from 'containers/Group/GroupPlan/Budget/reducer';
 import saga from 'containers/Group/GroupPlan/Budget/saga';
 
 import { createBudgetRequestBegin } from 'containers/Group/GroupPlan/Budget/actions';
-import { selectGroupIsCommitting } from 'containers/Group/selectors';
+import { selectGroup } from 'containers/Group/selectors';
+import { selectIsCommitting } from 'containers/Group/GroupPlan/Budget/selectors';
 
 import RequestForm from 'components/Group/GroupPlan/BudgetRequestForm';
 import RouteService from 'utils/routeHelpers';
 
-export function GroupCreatePage(props) {
+export function BudgetCreatePage(props) {
   useInjectReducer({ key: 'budgets', reducer });
   useInjectSaga({ key: 'budgets', saga });
 
@@ -29,21 +30,24 @@ export function GroupCreatePage(props) {
       budgetAction={props.createBudgetRequestBegin}
       isCommitting={props.isCommitting}
       buttonText='Create'
-      annualBudgetId={annualBudgetId}
+      annualBudgetId={parseInt(annualBudgetId, 10)}
+      currentGroup={props.currentGroup}
+      links={{}}
     />
   );
 }
 
-GroupCreatePage.propTypes = {
+BudgetCreatePage.propTypes = {
   createBudgetRequestBegin: PropTypes.func,
   getGroupsBegin: PropTypes.func,
   groupFormUnmount: PropTypes.func,
-  groups: PropTypes.array,
+  currentGroup: PropTypes.object,
   isCommitting: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
-  isCommitting: selectGroupIsCommitting(),
+  isCommitting: selectIsCommitting(),
+  currentGroup: selectGroup(),
 });
 
 const mapDispatchToProps = {
@@ -58,4 +62,4 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(GroupCreatePage);
+)(BudgetCreatePage);
