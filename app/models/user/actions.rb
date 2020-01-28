@@ -79,7 +79,7 @@ module User::Actions
     { page: {
       items: serialized,
       total: total,
-      type: 'newsfeedlink'
+      type: 'news_feed_link'
     } }
   end
 
@@ -107,7 +107,7 @@ module User::Actions
     { page: {
       items: serialized,
       total: total,
-      type: 'initiatives'
+      type: 'initiative'
     } }
   end
 
@@ -158,7 +158,33 @@ module User::Actions
     { page: {
       items: serialized,
       total: total,
-      type: 'initiatives'
+      type: 'initiative'
+    } }
+  end
+
+  def downloads(params)
+    count = (params[:count] || 10).to_i
+    page = (params[:page] || 0).to_i
+    order = params[:order].to_sym rescue :desc
+    order_by = params[:order_by].to_sym rescue :created_at
+
+    query_scopes = CsvFile.set_query_scopes(params)
+
+    ordered = csv_files
+                  .download_files
+                  .send_chain(query_scopes)
+                  .order(order_by => order)
+                  .distinct
+
+    total = ordered.size
+    paged = ordered.limit(count).offset(page * count)
+
+    serialized = paged.map { |nfl| CsvFileSerializer.new(nfl).to_h }
+
+    { page: {
+        items: serialized,
+        total: total,
+        type: 'csv_file'
     } }
   end
 
@@ -192,7 +218,7 @@ module User::Actions
     { page: {
       items: serialized,
       total: total,
-      type: 'initiatives'
+      type: 'initiative'
     } }
   end
 
