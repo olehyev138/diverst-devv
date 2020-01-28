@@ -91,7 +91,8 @@ export function Budget(props) {
                   color='primary'
                   variant='contained'
                   onClick={() => {
-                    alert('test');
+                    // eslint-disable-next-line no-alert
+                    alert('Not Implemented Yet');
                   }}
                 >
                   <Typography variant='h6' component='h2'>
@@ -104,7 +105,8 @@ export function Budget(props) {
                   className={classes.errorButton}
                   variant='contained'
                   onClick={() => {
-                    alert('test');
+                    // eslint-disable-next-line no-alert
+                    alert('Not Implemented Yet');
                   }}
                 >
                   <Typography variant='h6' component='h2'>
