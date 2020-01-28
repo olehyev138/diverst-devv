@@ -28,6 +28,7 @@ import RouteService from 'utils/routeHelpers';
 import BudgetList from 'components/Group/GroupPlan/BudgetList';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import { selectGroup } from 'containers/Group/selectors';
+import { push } from 'connected-react-router';
 
 export function BudgetsPage(props) {
   useInjectReducer({ key: 'budgets', reducer });
@@ -54,7 +55,7 @@ export function BudgetsPage(props) {
   const links = {
     annualBudgetOverview: ROUTES.group.plan.budget.overview.path(groupId),
     newRequest: ROUTES.group.plan.budget.budgets.new.path(groupId, annualId),
-    requestDetails: id => ROUTES.group.plan.budget.budgets.index.path(groupId, annualId)
+    requestDetails: id => ROUTES.group.plan.budget.budgets.index.path(groupId, annualId, id)
   };
 
   useEffect(() => {
@@ -93,6 +94,7 @@ export function BudgetsPage(props) {
         handleOrdering={handleOrdering}
         annualBudget={props.currentAnnualBudget}
         currentGroup={props.currentGroup}
+        handleVisitBudgetShow={props.handleVisitBudgetShow}
         links={links}
       />
     </React.Fragment>
@@ -109,7 +111,8 @@ BudgetsPage.propTypes = {
   currentGroup: PropTypes.object,
   budgets: PropTypes.array,
   budgetTotal: PropTypes.number,
-  deleteBudgetBegin: PropTypes.func
+  deleteBudgetBegin: PropTypes.func,
+  handleVisitBudgetShow: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -120,17 +123,18 @@ const mapStateToProps = createStructuredSelector({
   currentGroup: selectGroup(),
 });
 
-const mapDispatchToProps = {
-  getBudgetsBegin,
-  budgetsUnmount,
-  deleteBudgetBegin,
-  getAnnualBudgetBegin,
-  getAnnualBudgetSuccess,
-};
+const mapPushDispatchToProps = dispatch => ({
+  handleVisitBudgetShow: (groupId, annualId, id) => dispatch(push(ROUTES.group.plan.budget.budgets.show.path(groupId, annualId, id))),
+  getBudgetsBegin: payload => dispatch(getBudgetsBegin(payload)),
+  budgetsUnmount: () => dispatch(budgetsUnmount()),
+  deleteBudgetBegin: payload => dispatch(deleteBudgetBegin(payload)),
+  getAnnualBudgetBegin: payload => dispatch(getAnnualBudgetBegin(payload)),
+  getAnnualBudgetSuccess: payload => dispatch(getAnnualBudgetSuccess(payload)),
+});
 
 const withConnect = connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapPushDispatchToProps,
 );
 
 export default compose(

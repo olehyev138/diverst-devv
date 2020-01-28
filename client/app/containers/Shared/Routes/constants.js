@@ -405,6 +405,12 @@ export const ROUTES = {
               titleMessage: messages.groups.plan.budget.budgets.new,
             }
           },
+          show: {
+            path: (groupId = ':group_id', annualBudgetId = ':annual_budget_id', budgetId = ':budget_id') => `/groups/${groupId}/plan/budgeting/${annualBudgetId}/budgets/${budgetId}`,
+            data: {
+              titleMessage: messages.groups.plan.budget.budgets.show,
+            }
+          },
         },
       },
     },

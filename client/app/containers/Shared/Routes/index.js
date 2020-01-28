@@ -67,6 +67,7 @@ import {
   AnnualBudgetEditPage,
   AnnualBudgetsPage,
   BudgetsPage,
+  BudgetPage,
   BudgetRequestPage,
   GroupSettingsPage,
   CustomTextEditPage,
@@ -117,6 +118,7 @@ import {
 
 // Paths
 import { ROUTES } from 'containers/Shared/Routes/constants';
+import {getBudgetsBegin} from "../../Group/GroupPlan/Budget/actions";
 
 export default function Routes(props) {
   const expandRoute = route => ({ path: route.path(), data: route.data || {} });
@@ -268,6 +270,7 @@ export default function Routes(props) {
       <GroupBudgetLayout exact {...expandRoute(ROUTES.group.plan.budget.editAnnualBudget)} component={AnnualBudgetEditPage} />
       <GroupBudgetLayout exact {...expandRoute(ROUTES.group.plan.budget.overview)} component={AnnualBudgetsPage} />
       <GroupPlanLayout exact {...expandRoute(ROUTES.group.plan.budget.budgets.new)} component={BudgetRequestPage} />
+      <GroupPlanLayout exact {...expandRoute(ROUTES.group.plan.budget.budgets.show)} component={BudgetPage} />
       <GroupPlanLayout exact {...expandRoute(ROUTES.group.plan.budget.budgets.index)} component={BudgetsPage} />
 
       { /* Group Manage */ }

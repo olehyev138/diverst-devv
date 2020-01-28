@@ -93,7 +93,7 @@ export function BudgetList(props, context) {
     tooltip: 'Details',
     onClick: (_, rowData) => {
       // eslint-disable-next-line no-alert
-      alert('Not Implemented Yet');
+      props.handleVisitBudgetShow(props.currentGroup.id, props.annualBudget.id, rowData.id);
     }
   });
 
@@ -173,6 +173,7 @@ BudgetList.propTypes = {
   handleVisitBudgetEdit: PropTypes.func,
   handleChangeScope: PropTypes.func,
   budgetType: PropTypes.string,
+  handleVisitBudgetShow: PropTypes.func,
   links: PropTypes.shape({
     newRequest: PropTypes.string,
     annualBudgetOverview: PropTypes.string,
