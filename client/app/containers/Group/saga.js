@@ -86,7 +86,8 @@ export function* updateGroupSettings(action) {
     const payload = { group: action.payload };
     const response = yield call(api.groups.update.bind(api.groups), payload.group.id, payload);
 
-    yield put(updateGroupSettingsSuccess());
+    yield put(updateGroupSettingsSuccess({group: response.data.group}));
+    yield put(push(ROUTES.group.home.path(response.data.group.id)));
     yield put(showSnackbar({
       message: 'Group settings updated',
       options: { variant: 'success' }

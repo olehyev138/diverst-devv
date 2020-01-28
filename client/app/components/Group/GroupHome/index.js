@@ -20,7 +20,7 @@ export function GroupHome(props) {
     <React.Fragment>
       {props.group && (
         <React.Fragment>
-          <Grid container alignItems="stretch" direction="column" justify="center">
+          <Grid container alignItems="stretch" direction="column" justify="flex-start">
             <Grid item>
               <Typography variant='h4' align='center' color='primary'>
                 <span>Welcome to the </span>
@@ -32,6 +32,8 @@ export function GroupHome(props) {
               <DiverstImg
                 data={props.group.banner_data}
                 alt=''
+                maxWidth='100%'
+                minWidth='100%'
               />
             </Grid>
           </Grid>
