@@ -106,8 +106,8 @@ group :development do
 end
 
 group :staging, :production do
-  #gem 'influxdb-rails'
+  gem 'influxdb-rails'
   gem 'lograge', '~> 0.3'
-  #gem 'sidekiq-influxdb', '~> 1.1.0' # Sidekiq metrics to InfluxDB
+  gem 'sidekiq-influxdb', '~> 1.1.0' # Sidekiq metrics to InfluxDB
   gem 'syslogger', '~> 1.6.0' # Log to syslog, which is then sent to Loggly
 end
