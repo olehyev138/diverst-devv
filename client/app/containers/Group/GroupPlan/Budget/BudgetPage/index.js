@@ -15,6 +15,7 @@ import { selectGroup } from 'containers/Group/selectors';
 import { selectIsFetchingBudget, selectBudget } from 'containers/Group/GroupPlan/Budget/selectors';
 
 import RouteService from 'utils/routeHelpers';
+import Budget from 'components/Group/GroupPlan/Budget';
 
 export function BudgetCreatePage(props) {
   useInjectReducer({ key: 'budgets', reducer });
@@ -37,9 +38,9 @@ export function BudgetCreatePage(props) {
   }, []);
 
   return (
-    <h1>
-      {`Budget with id ${dig(props, 'budget', 'id')}`}
-    </h1>
+    <Budget
+      budget={props.budget}
+    />
   );
 }
 

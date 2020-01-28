@@ -29,5 +29,8 @@ module Budget::Actions
   end
 
   module ClassMethods
+    def base_includes
+      [ :budget_items ]
+    end
   end
 end

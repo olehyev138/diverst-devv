@@ -48,10 +48,12 @@ export function AnnualBudgetsPage(props) {
   return (
     <React.Fragment>
       {props.annualBudgets.map(ab => (
-        <AnnualBudgetListItem
-          item={ab}
-          links={links}
-        />
+        <div key={ab.id}>
+          <AnnualBudgetListItem
+            item={ab}
+            links={links}
+          />
+        </div>
       ))}
     </React.Fragment>
   );

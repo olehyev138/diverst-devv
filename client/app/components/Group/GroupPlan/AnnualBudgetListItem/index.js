@@ -63,8 +63,8 @@ export function AnnualBudgetListItem(props) {
         </Typography>
         <Box mb={2} />
         <Grid
-          alignItems='left'
-          justify='left'
+          alignItems='flex-start'
+          justify='flex-start'
           container
           spacing={1}
         >
