@@ -29,7 +29,7 @@ import {
   Typography
 } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/DeleteOutline';
-import {buildValues, mapFields} from 'utils/formHelpers';
+import { buildValues, mapFields } from 'utils/formHelpers';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import { DiverstDatePicker } from 'components/Shared/Pickers/DiverstDatePicker';
 import Select from 'components/Shared/DiverstSelect';
