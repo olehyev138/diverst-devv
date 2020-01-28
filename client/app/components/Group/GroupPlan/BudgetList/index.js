@@ -111,11 +111,22 @@ export function BudgetList(props, context) {
       <CardContent>
         <Grid
           container
-          alignContent='flex-end'
+          alignContent='space-between'
+          spacing={2}
           alignItems='flex-end'
           justify='flex-end'
         >
-          <Grid item>
+          <Grid item xs>
+            <Button
+              color='primary'
+              variant={props.annualBudget && !props.annualBudget.closed ? 'contained' : 'disabled'}
+              to={props.links.annualBudgetOverview}
+              component={WrappedNavLink}
+            >
+              Annual Budgets Overview
+            </Button>
+          </Grid>
+          <Grid item xs align='right'>
             <Button
               color='primary'
               variant={props.annualBudget && !props.annualBudget.closed ? 'contained' : 'disabled'}
@@ -164,6 +175,7 @@ BudgetList.propTypes = {
   budgetType: PropTypes.string,
   links: PropTypes.shape({
     newRequest: PropTypes.string,
+    annualBudgetOverview: PropTypes.string,
     requestDetails: PropTypes.func
   })
 };

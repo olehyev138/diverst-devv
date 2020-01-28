@@ -37,7 +37,7 @@ export function BudgetsPage(props) {
   const [params, setParams] = useState({ count: 5, page: 0, order: 'asc' });
 
   const rs = new RouteService(useContext);
-  const groupID = rs.params('group_id');
+  const groupId = rs.params('group_id');
   const annualId = rs.params('annual_budget_id');
 
   const { location } = rs;
@@ -51,8 +51,9 @@ export function BudgetsPage(props) {
   };
 
   const links = {
-    newRequest: ROUTES.group.plan.budget.budgets.new.path(groupID, annualId),
-    requestDetails: id => ROUTES.group.plan.budget.budgets.index.path(groupID, annualId)
+    annualBudgetOverview: ROUTES.group.plan.budget.overview.path(groupId),
+    newRequest: ROUTES.group.plan.budget.budgets.new.path(groupId, annualId),
+    requestDetails: id => ROUTES.group.plan.budget.budgets.index.path(groupId, annualId)
   };
 
   useEffect(() => {
