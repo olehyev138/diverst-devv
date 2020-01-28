@@ -13,6 +13,8 @@ import {
   UPDATE_FIELD_DATA_BEGIN, UPDATE_FIELD_DATA_SUCCESS, UPDATE_FIELD_DATA_ERROR,
   USER_UNMOUNT, GET_USER_POSTS_BEGIN, GET_USER_POSTS_SUCCESS, GET_USER_POSTS_ERROR,
   GET_USER_EVENTS_BEGIN, GET_USER_EVENTS_SUCCESS, GET_USER_EVENTS_ERROR,
+  GET_USER_DOWNLOADS_BEGIN, GET_USER_DOWNLOADS_SUCCESS, GET_USER_DOWNLOADS_ERROR,
+  GET_USER_DOWNLOAD_DATA_BEGIN, GET_USER_DOWNLOAD_DATA_SUCCESS, GET_USER_DOWNLOAD_DATA_ERROR
 } from 'containers/User/constants';
 
 /* User listing */
@@ -99,6 +101,27 @@ export function getUserEventsSuccess(payload) {
 export function getUserEventsError(error) {
   return {
     type: GET_USER_EVENTS_ERROR,
+    error,
+  };
+}
+
+export function getUserDownloadsBegin(payload) {
+  return {
+    type: GET_USER_DOWNLOADS_BEGIN,
+    payload,
+  };
+}
+
+export function getUserDownloadsSuccess(payload) {
+  return {
+    type: GET_USER_DOWNLOADS_SUCCESS,
+    payload,
+  };
+}
+
+export function getUserDownloadsError(error) {
+  return {
+    type: GET_USER_DOWNLOADS_ERROR,
     error,
   };
 }
@@ -191,6 +214,28 @@ export function updateFieldDataSuccess(payload) {
 export function updateFieldDataError(error) {
   return {
     type: UPDATE_FIELD_DATA_ERROR,
+    error,
+  };
+}
+
+
+export function getUserDownloadDataBegin(payload) {
+  return {
+    type: GET_USER_DOWNLOAD_DATA_BEGIN,
+    payload,
+  };
+}
+
+export function getUserDownloadDataSuccess(payload) {
+  return {
+    type: GET_USER_DOWNLOAD_DATA_SUCCESS,
+    payload,
+  };
+}
+
+export function getUserDownloadDataError(error) {
+  return {
+    type: GET_USER_DOWNLOAD_DATA_ERROR,
     error,
   };
 }
