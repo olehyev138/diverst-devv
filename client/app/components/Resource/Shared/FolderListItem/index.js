@@ -104,7 +104,10 @@ export function FolderListItem(props) {
                 className={classes.folderLink}
                 color='primary'
                 onClick={() => {
-                  alert("click")
+                  // alert("click");
+                  props.archiveResourceBegin({
+                    id: item.id,
+                  });
                 }}
               >
                 <DiverstFormattedMessage {...resourceMessages.archive} />
@@ -137,6 +140,7 @@ FolderListItem.propTypes = {
   item: PropTypes.object,
   isResource: PropTypes.bool,
   deleteAction: PropTypes.func,
+  archiveResourceBegin: PropTypes.func,
   intl: intlShape.isRequired,
   links: PropTypes.shape({
     folderShow: PropTypes.func,

@@ -12,6 +12,7 @@ import {
   CREATE_RESOURCE_BEGIN, UPDATE_RESOURCE_BEGIN,
   DELETE_RESOURCE_BEGIN,
   VALIDATE_FOLDER_PASSWORD_BEGIN,
+  ARCHIVE_RESOURCE_BEGIN
 } from 'containers/Resource/constants';
 
 import {
@@ -26,6 +27,7 @@ import {
   updateResourceSuccess, updateResourceError,
   deleteResourceError,
   validateFolderPasswordSuccess, validateFolderPasswordError, deleteFolderSuccess, deleteResourceSuccess,
+  archiveResourceError
 } from 'containers/Resource/actions';
 
 import {
@@ -225,6 +227,25 @@ export function* deleteResource(action) {
   }
 }
 
+export function* archiveResource(action) {
+//TODO actual attempt to query & update the database
+  try {
+    const payload = { resource: action.payload };
+    const response = yield call(api.resources.archive.bind(api.resources), payload.resource.id, payload);
+    yield put(showSnackbar({
+      message: 'Successfully archived resource',
+      options: { variant: 'success' }
+    }));
+  } catch (err) {
+    // TODO: intl message
+    yield put(archiveResourceError(err));
+    yield put(showSnackbar({
+      message: 'Failed to archive resource',
+      options: { variant: 'warning' }
+    }));
+  }
+}
+
 export function* validateFolderPassword(action) {
   try {
     const response = yield call(api.folders.validatePassword.bind(api.folders), action.payload);
@@ -251,4 +272,5 @@ export default function* foldersSaga() {
   yield takeLatest(UPDATE_RESOURCE_BEGIN, updateResource);
   yield takeLatest(DELETE_RESOURCE_BEGIN, deleteResource);
   yield takeLatest(VALIDATE_FOLDER_PASSWORD_BEGIN, validateFolderPassword);
+  yield takeLatest(ARCHIVE_RESOURCE_BEGIN, archiveResource);
 }

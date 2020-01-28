@@ -156,7 +156,11 @@ Diverst::Application.routes.draw do
       resources :poll_responses
       resources :polls_segments
       resources :questions
-      resources :resources
+      resources :resources do
+        member do
+          post 'archive'
+        end
+      end
       resources :rewards
       resources :reward_actions
       resources :segment_group_scope_rules

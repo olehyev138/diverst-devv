@@ -25,6 +25,7 @@ import {
   validateFolderPasswordBegin,
   getResourcesBegin,
   deleteResourceBegin,
+  archiveResourceBegin,
 } from 'containers/Resource/actions';
 
 import Folder from 'components/Resource/Folder/Folder';
@@ -206,6 +207,7 @@ export function FolderPage(props) {
           resourcesTotal={props.resourcesTotal}
           handleResourcePagination={handleResourcePagination}
           handleFolderPagination={handleFolderPagination}
+          archiveResourceBegin={props.archiveResourceBegin}
           resources={resources}
           isLoading={props.isLoading}
           isFormLoading={props.isFormLoading}
@@ -224,6 +226,7 @@ FolderPage.propTypes = {
   deleteResourceBegin: PropTypes.func,
   validateFolderPasswordBegin: PropTypes.func,
   getResourcesBegin: PropTypes.func,
+  archiveResourceBegin: PropTypes.func,
   foldersUnmount: PropTypes.func,
   currentUser: PropTypes.object,
   currentGroup: PropTypes.object,
@@ -259,6 +262,7 @@ const mapDispatchToProps = {
   validateFolderPasswordBegin,
   getResourcesBegin,
   deleteResourceBegin,
+  archiveResourceBegin,
 };
 
 const withConnect = connect(
