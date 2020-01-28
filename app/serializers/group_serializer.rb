@@ -11,10 +11,6 @@ class GroupSerializer < ApplicationRecordSerializer
     object.logo_location(default_style: instance_options.dig(:scope, :image_size)&.to_sym)
   end
 
-  #def banner_location
-  #  object.banner_location(default_style: instance_options.dig(:scope, :image_size)&.to_sym)
-  #end
-
   def banner
     AttachmentHelper.attachment_signed_id(object.banner)
   end

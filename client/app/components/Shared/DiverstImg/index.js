@@ -14,10 +14,10 @@ export function DiverstImg(props) {
           src={`data:image/jpeg;base64,${data}`}
           alt={alt}
           style={{
-            maxWidth: maxWidth,
-            maxHeight: maxHeight,
-            minWidth: minWidth,
-            minHeight: minHeight,
+            maxWidth,
+            maxHeight,
+            minWidth,
+            minHeight,
             ...styles,
           }}
         />

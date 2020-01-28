@@ -24,7 +24,7 @@ import {
 
 import DiverstColorPicker from 'components/Shared/DiverstColorPicker';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
-import DiverstFileInput from "components/Shared/DiverstFileInput";
+import DiverstFileInput from 'components/Shared/DiverstFileInput';
 
 const styles = theme => ({
   noBottomPadding: {
