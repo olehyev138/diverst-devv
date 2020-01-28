@@ -8,7 +8,6 @@ module "sec" {
   source = "../../../modules/networking/sec"
 
   vpc_id  = module.vpc.vpc.id
-  sn_app  = module.vpc.sn_app[0]
 }
 
 module "bastion" {
@@ -22,7 +21,7 @@ module "bastion" {
 module "db" {
   source = "../../../modules/data/db"
 
-  db_name       = var.db_name
+  db_name       = "diverst_production"
   db_username   = var.db_username
   db_password   = var.db_password
 

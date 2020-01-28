@@ -15,7 +15,9 @@
 #  - sg_bn      - sg for bastion instance
 
 
-# DMZ SG & rules
+#
+## DMZ SG & rules
+#
 
 resource "aws_security_group" "sg-dmz" {
   name          = "sg_dmz"
@@ -43,7 +45,9 @@ resource "aws_security_group_rule" "sg-dmz-egr-allow-all" {
   security_group_id = aws_security_group.sg-dmz.id
 }
 
-# App SG & rules
+#
+## App SG & rules
+#
 
 resource "aws_security_group" "sg-app" {
   name          = "sg_app"
@@ -83,7 +87,9 @@ resource "aws_security_group_rule" "sg-app-egr-allow-all" {
   security_group_id = aws_security_group.sg-app.id
 }
 
-# DB SG & rules
+#
+## DB SG & rules
+#
 
 resource "aws_security_group" "sg-db" {
   name          = "sg_db"
@@ -123,7 +129,9 @@ resource "aws_security_group_rule" "sg-db-egr-allow-all" {
   security_group_id = aws_security_group.sg-db.id
 }
 
-# Bastion SG & rules
+#
+## Bastion SG & rules
+#
 
 resource "aws_security_group" "sg-bn" {
   name          = "sg_bn"
@@ -143,14 +151,13 @@ resource "aws_security_group_rule" "sg-bn-ing-allow-ssh" {
   security_group_id = aws_security_group.sg-bn.id
 }
 
-# Allow egress SSH traffic to app subnet
+# Allow egress SSH traffic to app subnets
 resource "aws_security_group_rule" "sg-bn-egr-allow-app" {
   type = "egress"
   from_port = 22
   to_port = 22
   protocol = "tcp"
-  cidr_blocks = [
-    var.sn_app.cidr_block]
+  source_security_group_id = aws_security_group.sg-app.id
 
   security_group_id = aws_security_group.sg-bn.id
 }
