@@ -56,9 +56,12 @@ function groupsReducer(state = initialState, action) {
       case UPDATE_GROUP_SETTINGS_BEGIN:
         draft.isCommitting = true;
         break;
+      case UPDATE_GROUP_SETTINGS_SUCCESS:
+        draft.currentGroup = action.payload.group;
+        draft.isCommitting = false;
+        break;
       case CREATE_GROUP_SUCCESS:
       case UPDATE_GROUP_SUCCESS:
-      case UPDATE_GROUP_SETTINGS_SUCCESS:
       case CREATE_GROUP_ERROR:
       case UPDATE_GROUP_ERROR:
       case UPDATE_GROUP_SETTINGS_ERROR:
