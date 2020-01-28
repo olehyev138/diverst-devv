@@ -109,12 +109,20 @@ AUTHORS text
 ## Ignores for git-archive
 #
 
-/client             export-ignore
-/coverage           export-ignore
-/spec               export-ignore
-/devops             export-ignore
-/docker             export-ignore
-/docs               export-ignore
-/tmp                export-ignore
-Dockerfile          export-ignore
-./README.md         export-ignore
+/client                     export-ignore
+/coverage                   export-ignore
+/spec                       export-ignore
+/devops                     export-ignore
+/docker                     export-ignore
+/docs                       export-ignore
+/tmp                        export-ignore
+/db/archive                 export-ignore
+/.circleci                  export-ignore
+Dockerfile                  export-ignore
+README.md                   export-ignore
+.pronto_eslint_npm.yml      export-ignore
+.rubocop.yml                export-ignore
+.rspec.yml                  export-ignore
+.generators                 export-ignore
+.gitignore                  export-ignore
+.gitattributes              export-ignore
