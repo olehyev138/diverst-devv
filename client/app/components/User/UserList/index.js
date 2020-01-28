@@ -79,7 +79,7 @@ export function UserList(props, context) {
     {
       title: 'Email',
       field: 'email',
-      query_field: 'last_name'
+      query_field: 'email'
     },
   ];
 
@@ -113,6 +113,7 @@ export function UserList(props, context) {
           </Grid>
         </Grid>
       </Grid>
+
       <Box mb={1} />
       <Grid container spacing={3}>
         <Grid item xs>
