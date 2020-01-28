@@ -444,6 +444,7 @@
   "diverst.containers.Resource.index.button.new": "New Resource",
   "diverst.containers.Resource.index.button.edit": "Edit",
   "diverst.containers.Resource.index.button.delete": "Delete",
+  "diverst.containers.Resource.index.button.archive": "Archive",
   "diverst.containers.Resource.index.button.confirm_delete": "Delete Resource?",
   "diverst.containers.Resource.form.button.create": "Create",
   "diverst.containers.Resource.form.button.update": "Update",

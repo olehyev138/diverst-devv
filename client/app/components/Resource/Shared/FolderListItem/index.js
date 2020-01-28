@@ -53,7 +53,6 @@ export function FolderListItem(props) {
     to: props.links.folderShow(item),
     className: classes.folderLink,
   };
-
   return (
     <React.Fragment>
       {item && (
@@ -100,7 +99,17 @@ export function FolderListItem(props) {
             >
               <DiverstFormattedMessage {...(isResource ? resourceMessages.edit : folderMessages.edit)} />
             </Button>
-
+            {(isResource) && (
+              <Button
+                className={classes.folderLink}
+                color='primary'
+                onClick={() => {
+                  alert("click")
+                }}
+              >
+                <DiverstFormattedMessage {...resourceMessages.archive} />
+              </Button>
+)}
             {(isResource || !item.password_protected) && (
               <Button
                 className={classNames(classes.folderLink, classes.deleteButton)}
