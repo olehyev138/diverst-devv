@@ -23,10 +23,9 @@ import AddIcon from '@material-ui/icons/Add';
 
 import DiverstLoader from 'components/Shared/DiverstLoader';
 import DiverstPagination from 'components/Shared/DiverstPagination';
-import EditIcon from "@material-ui/icons/Edit";
-import DeleteIcon from "@material-ui/icons/DeleteOutline";
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/DeleteOutline';
 import DiverstTable from 'components/Shared/DiverstTable';
-import {UserList} from "../../User/UserList";
 
 
 const styles = theme => ({

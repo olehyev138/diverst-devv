@@ -26,7 +26,7 @@ import { getSegmentsBegin, segmentUnmount, deleteSegmentBegin } from 'containers
 import { selectEnterprise } from 'containers/Shared/App/selectors';
 
 import SegmentList from 'components/Segment/SegmentList';
-import {push} from "connected-react-router";
+import { push } from 'connected-react-router';
 
 export function SegmentListPage(props) {
   useInjectReducer({ key: 'segments', reducer });
