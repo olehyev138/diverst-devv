@@ -104,7 +104,6 @@ export function FolderListItem(props) {
                 className={classes.folderLink}
                 color='primary'
                 onClick={() => {
-                  // alert("click");
                   props.archiveResourceBegin({
                     id: item.id,
                   });
@@ -112,7 +111,7 @@ export function FolderListItem(props) {
               >
                 <DiverstFormattedMessage {...resourceMessages.archive} />
               </Button>
-)}
+            )}
             {(isResource || !item.password_protected) && (
               <Button
                 className={classNames(classes.folderLink, classes.deleteButton)}

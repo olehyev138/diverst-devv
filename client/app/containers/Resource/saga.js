@@ -27,7 +27,7 @@ import {
   updateResourceSuccess, updateResourceError,
   deleteResourceError,
   validateFolderPasswordSuccess, validateFolderPasswordError, deleteFolderSuccess, deleteResourceSuccess,
-  archiveResourceError
+  archiveResourceError, archiveResourceSuccess
 } from 'containers/Resource/actions';
 
 import {
@@ -228,10 +228,10 @@ export function* deleteResource(action) {
 }
 
 export function* archiveResource(action) {
-//TODO actual attempt to query & update the database
   try {
     const payload = { resource: action.payload };
     const response = yield call(api.resources.archive.bind(api.resources), payload.resource.id, payload);
+    yield put(archiveResourceSuccess());
     yield put(showSnackbar({
       message: 'Successfully archived resource',
       options: { variant: 'success' }

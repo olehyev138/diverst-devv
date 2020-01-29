@@ -1,5 +1,6 @@
 class Resource < ApplicationRecord
   include PublicActivity::Common
+  include Resource::Actions
 
   EXPIRATION_TIME = 6.months.to_i
 
@@ -91,10 +92,6 @@ class Resource < ApplicationRecord
 
   def total_views
     views.count
-  end
-
-  def archive!
-    'TO DO LATER'
   end
 
   def self.archive_expired_resources(group)

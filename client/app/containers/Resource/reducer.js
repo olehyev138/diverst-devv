@@ -32,6 +32,9 @@ import {
   GET_FOLDERS_ERROR,
   GET_RESOURCE_ERROR,
   GET_RESOURCES_ERROR,
+  ARCHIVE_RESOURCE_BEGIN,
+  ARCHIVE_RESOURCE_SUCCESS,
+  ARCHIVE_RESOURCE_ERROR
 } from './constants';
 
 export const initialState = {
@@ -44,6 +47,7 @@ export const initialState = {
   resourcesTotal: null,
   currentFolder: null,
   currentResource: null,
+  hasChanged: false,
   valid: true,
 };
 
@@ -95,7 +99,9 @@ function resourcesReducer(state = initialState, action) {
       case CREATE_RESOURCE_BEGIN:
       case UPDATE_FOLDER_BEGIN:
       case UPDATE_RESOURCE_BEGIN:
+      case ARCHIVE_RESOURCE_BEGIN:
         draft.isCommitting = true;
+        draft.hasChanged = false;
         break;
       case CREATE_FOLDER_SUCCESS:
       case CREATE_FOLDER_ERROR:
@@ -105,6 +111,7 @@ function resourcesReducer(state = initialState, action) {
       case UPDATE_FOLDER_ERROR:
       case UPDATE_RESOURCE_SUCCESS:
       case UPDATE_RESOURCE_ERROR:
+      case ARCHIVE_RESOURCE_ERROR:
         draft.isCommitting = false;
         break;
       case RESOURCES_UNMOUNT:
@@ -113,6 +120,11 @@ function resourcesReducer(state = initialState, action) {
         return initialState;
       case VALIDATE_FOLDER_PASSWORD_SUCCESS:
         draft.valid = true;
+        break;
+      case ARCHIVE_RESOURCE_SUCCESS:
+        draft.hasChanged = true;
+        draft.isCommitting = false;
+        break;
     }
   });
 }

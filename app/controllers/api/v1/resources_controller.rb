@@ -19,6 +19,6 @@ class Api::V1::ResourcesController < DiverstController
     params.require(klass.symbol).permit(
         :id,
         :archived_at
-    )
+      )
   end
 end

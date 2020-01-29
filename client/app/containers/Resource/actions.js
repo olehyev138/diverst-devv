@@ -304,21 +304,21 @@ export function resourcesUnmount() {
   };
 }
 
-export function archiveResourceBegin(payload){
+export function archiveResourceBegin(payload) {
   return {
     type: ARCHIVE_RESOURCE_BEGIN,
     payload,
   };
 }
 
-export function archiveResourceSuccess(payload){
+export function archiveResourceSuccess(payload) {
   return {
     type: ARCHIVE_RESOURCE_SUCCESS,
     payload,
   };
 }
 
-export function archiveResourceError(error){
+export function archiveResourceError(error) {
   return {
     type: ARCHIVE_RESOURCE_ERROR,
     error,
