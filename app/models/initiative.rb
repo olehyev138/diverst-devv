@@ -32,6 +32,7 @@ class Initiative < ApplicationRecord
 
   belongs_to :budget_item
   has_one :budget, through: :budget_item
+  has_one :annual_budget, through: :budget
 
   has_many :checklists, dependent: :destroy
   has_many :resources, dependent: :destroy
@@ -40,7 +41,6 @@ class Initiative < ApplicationRecord
   accepts_nested_attributes_for :checklist_items, reject_if: :all_blank, allow_destroy: true
 
   belongs_to :owner_group, class_name: 'Group'
-  belongs_to :annual_budget
 
   has_many :initiative_segments, dependent: :destroy
   has_many :segments, through: :initiative_segments
@@ -69,8 +69,11 @@ class Initiative < ApplicationRecord
   }
   scope :order_recent, -> { order(start: :desc) }
 
+  scope :finalized, -> { where(finished_expenses: false) }
+  scope :active, -> { where(finished_expenses: false) }
+
   # we don't want to run this callback when finish_expenses! is triggered in initiatives_controller.rb, finish_expense action
-  before_save { allocate_budget_funds unless skip_allocate_budget_funds }
+  validate -> { allocate_budget_funds unless skip_allocate_budget_funds }
 
   # ActiveStorage
   has_one_attached :picture
@@ -110,6 +113,10 @@ class Initiative < ApplicationRecord
         end
       end
     end
+  end
+
+  def ended?
+    self.end < Time.now
   end
 
   def archived?
@@ -209,9 +216,7 @@ class Initiative < ApplicationRecord
   def finish_expenses!
     return false if finished_expenses?
 
-    leftover_of_annual_budget = (owner_group.annual_budget - owner_group.approved_budget) + owner_group.available_budget
-    group.leftover_money = leftover_of_annual_budget
-    group.save
+    estimated_amount = current_expenses_sum
     self.update(finished_expenses: true)
   end
 
@@ -220,11 +225,10 @@ class Initiative < ApplicationRecord
   end
 
   def current_expences_sum
-    annual_budget = self.annual_budget
     if association(:expenses).loaded?
-      expenses.inject(0) { |sum, ex| ex.annual_budget_id == annual_budget&.id ? sum + ex.amount : sum }
+      expenses.to_a.sum(&:amount)
     else
-      expenses.where(annual_budget_id: annual_budget&.id).sum(:amount) || 0
+      expenses.sum(:amount) || 0
     end
   end
 
@@ -233,7 +237,7 @@ class Initiative < ApplicationRecord
   end
 
   def leftover
-    estimated_funding - current_expences_sum
+    estimated_funding - current_expenses_sum
   end
 
   def title
@@ -398,7 +402,7 @@ class Initiative < ApplicationRecord
 
     if budget.present?
 
-      if budget.group_id != group.id
+      if budget.group != group
         # make sure noone is trying to put incorrect budget value
         errors.add(:budget, 'You are providing wrong budget')
         return false
@@ -428,35 +432,16 @@ class Initiative < ApplicationRecord
   def allocate_budget_funds
     self.estimated_funding = 0.0 if self.estimated_funding.nil?
 
-    if budget_item.present?
-      # If user tries to allocate all the money from the budget
-      # mark this budget item as used up
-      if self.finished_expenses?
-        errors.add(:budget_item_id, "sorry, can't choose another budget item")
-        return false
-      end
+    temp = estimated_funding
+    update_column(:estimated_funding, 0) unless new_record?
+    estimated_funding = temp
 
-      if self.estimated_funding == 0.0 || self.estimated_funding >= budget_item.available_amount
-        self.estimated_funding = budget_item.available_amount
-        budget_item.available_amount = 0
-        budget_item.is_done = true
-      else
-        # otherwise just subtract
-        budget_item.available_amount -= self.estimated_funding
-      end
-
-      budget_item.save
+    if budget_item.present? && estimated_funding > budget_item.available_amount
+      errors.add(:budget_item_id, 'sorry, this budget doesn\'t have the sufficient funds')
+      false
     elsif funded_by_leftover?
-      if self.estimated_funding >= owner_group.leftover_money
-        self.estimated_funding = owner_group.leftover_money
-      else
-        owner_group.leftover_money -= self.estimated_funding
-      end
-
-      owner_group.save
-    else
-      # Else there is no source for money, so set funding to zero
-      self.estimated_funding = 0
+      errors.add(:budget_item_id, 'TEMPORARILY UNSUPPORTED')
+      false
     end
   end
 

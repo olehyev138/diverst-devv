@@ -3,6 +3,8 @@
 # Bundle API, upload to S3 & create a EB app version
 # Usage: ./create-app-version <aws-profile> <eb-app-name> <app-version-label> <bucket-name>
 
+# TODO: define workflow, process for labeling the app version
+
 PROFILE=$1
 EB_APP_NAME=$2
 EB_VERSION_LABEL=$3

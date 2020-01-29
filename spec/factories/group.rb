@@ -18,6 +18,16 @@ FactoryBot.define do
       no_outcomes { true }
     end
 
+    trait :with_annual_budget do
+      transient do
+        amount 0
+      end
+
+      after(:create) do |group, evaluator|
+        create_list(:annual_budget, 1, group: group, amount: evaluator.amount)
+      end
+    end
+
     factory :group_with_users do
       transient do
         users_count 10

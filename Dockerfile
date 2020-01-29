@@ -1,41 +1,20 @@
-FROM ruby:2.3.0
+FROM ruby:2.6
 
-RUN apt-get update && apt-get install -y \
-  build-essential libpq-dev nodejs npm mysql-client git default-jdk
+ENV APP_DIR /webapp
+RUN mkdir $APP_DIR
 
-RUN ln -s /usr/bin/nodejs /usr/bin/node
+RUN apt-get update && apt-get install -y build-essential cmake mariadb-client nodejs git --no-install-recommends && rm -rf /var/lib/apt/lists/*
 
-RUN groupadd -r nonadmin && useradd --no-log-init -r -g nonadmin nonadmin
+ENV RAILS_LOG_TO_STDOUT true
 
-RUN mkdir -p /home/nonadmin
+COPY Gemfile Gemfile.lock $APP_DIR/
 
-WORKDIR /home/nonadmin
+WORKDIR $APP_DIR
 
-RUN mkdir -p diverst
-
-WORKDIR /home/nonadmin/diverst
-
-COPY Gemfile Gemfile
-
-RUN mkdir -p /home/nonadmin/bundle
-
-RUN gem install bundler
-RUN bundle install --jobs 20 --retry 5 --path /home/nonadmin/bundle
-RUN bundle config local.simple_form_fancy_uploads /home/nonadmin/simple_form_fancy_uploads
-
-COPY . .
-
-RUN npm install -g phantomjs
-RUN npm install
-RUN rake bower:install['--allow-root']
+ENV BUNDLER_VERSION='2.0.2'
+RUN gem install bundler -v '2.0.2'
+RUN bundler install
 
 EXPOSE 3000
 
-RUN chown -R nonadmin:nonadmin /home/nonadmin
-
-RUN usermod -u 1000 nonadmin
-RUN usermod -G staff nonadmin
-
-USER nonadmin
-
-CMD rails server -b 0.0.0.0
+CMD ["rails", "server", "-b", "0.0.0.0"]

@@ -31,7 +31,7 @@ export function CampaignQuestionListPage(props) {
   useInjectSaga({ key: 'questions', saga });
 
   const rs = new RouteService(useContext);
-  const campaignId = rs.params('campaign_id')[0];
+  const campaignId = rs.params('campaign_id');
 
   const [params, setParams] = useState({
     campaign_id: campaignId, count: 10, page: 0,

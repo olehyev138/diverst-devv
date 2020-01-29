@@ -22,7 +22,15 @@ class CsvFile < ApplicationRecord
   scope :download_files, -> { where("download_file_name <> ''") }
 
   def path_for_csv
+    return nil unless self.import_file.attached?
+
     ActiveStorage::Blob.service.send(:path_for, self.import_file.key)
+  end
+
+  def path_for_download
+    return nil unless self.download_file.attached?
+
+    Rails.application.routes.url_helpers.rails_blob_path(self.download_file, only_path: true, disposition: 'attachment')
   end
 
   protected
