@@ -10,9 +10,9 @@ import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/Group/GroupPlan/Budget/reducer';
 import saga from 'containers/Group/GroupPlan/Budget/saga';
 
-import { getBudgetBegin, budgetsUnmount } from 'containers/Group/GroupPlan/Budget/actions';
+import { getBudgetBegin, budgetsUnmount, approveBudgetBegin, declineBudgetBegin } from 'containers/Group/GroupPlan/Budget/actions';
 import { selectGroup } from 'containers/Group/selectors';
-import { selectIsFetchingBudget, selectBudget } from 'containers/Group/GroupPlan/Budget/selectors';
+import { selectIsFetchingBudget, selectBudget, selectIsCommitting } from 'containers/Group/GroupPlan/Budget/selectors';
 
 import RouteService from 'utils/routeHelpers';
 import Budget from 'components/Group/GroupPlan/Budget';
@@ -40,6 +40,9 @@ export function BudgetCreatePage(props) {
   return (
     <Budget
       budget={props.budget}
+      approveAction={props.approveBudgetBegin}
+      declineAction={props.declineBudgetBegin}
+      isCommitting={props.isCommitting}
     />
   );
 }
@@ -47,14 +50,19 @@ export function BudgetCreatePage(props) {
 BudgetCreatePage.propTypes = {
   getBudgetBegin: PropTypes.func,
   budgetsUnmount: PropTypes.func,
+  approveBudgetBegin: PropTypes.func,
+  declineBudgetBegin: PropTypes.func,
 
   currentGroup: PropTypes.object,
   budget: PropTypes.object,
+
   isLoading: PropTypes.bool,
+  isCommitting: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
   isLoading: selectIsFetchingBudget(),
+  isCommitting: selectIsCommitting(),
   budget: selectBudget(),
   currentGroup: selectGroup(),
 });
@@ -62,6 +70,8 @@ const mapStateToProps = createStructuredSelector({
 const mapDispatchToProps = {
   getBudgetBegin,
   budgetsUnmount,
+  approveBudgetBegin,
+  declineBudgetBegin,
 };
 
 const withConnect = connect(

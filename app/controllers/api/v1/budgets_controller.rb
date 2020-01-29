@@ -40,7 +40,7 @@ class Api::V1::BudgetsController < DiverstController
     item = klass.find(params[:id])
     base_authorize(item)
 
-    decline_reason = params[:decline_reason]
+    decline_reason = params[:budget][:decline_reason]
     render status: 200, json: item.decline(current_user, decline_reason)
   rescue => e
     case e

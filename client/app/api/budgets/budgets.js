@@ -4,11 +4,11 @@ const axios = require('axios');
 const Budgets = new API({ controller: 'budgets' });
 
 Object.assign(Budgets, {
-  accept(id) {
-    return axios.post(`${this.url}/${id}/accept`);
+  approve(id) {
+    return axios.post(`${this.url}/${id}/approve`);
   },
   reject(id, payload) {
-    return axios.post(`${this.url}/${id}/reject`, payload);
+    return axios.post(`${this.url}/${id}/decline`, payload);
   },
 });
 

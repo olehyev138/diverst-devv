@@ -20,8 +20,8 @@ Diverst::Application.routes.draw do
       resources :badges
       resources :budgets, except: [:update] do
         member do
-          post '/accept', to: 'budget#accept'
-          post '/decline', to: 'budget#decline'
+          post 'approve'
+          post 'decline'
         end
       end
       resources :budget_items

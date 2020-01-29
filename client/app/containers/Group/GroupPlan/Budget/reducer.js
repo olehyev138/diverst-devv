@@ -78,9 +78,14 @@ function budgetReducer(state = initialState, action) {
         draft.hasChanged = false;
         break;
 
-      case CREATE_BUDGET_REQUEST_SUCCESS:
       case APPROVE_BUDGET_SUCCESS:
       case DECLINE_BUDGET_SUCCESS:
+        draft.isCommitting = false;
+        draft.hasChanged = true;
+        draft.currentBudget = action.payload.budget;
+        break;
+
+      case CREATE_BUDGET_REQUEST_SUCCESS:
       case DELETE_BUDGET_SUCCESS:
         draft.isCommitting = false;
         draft.hasChanged = true;

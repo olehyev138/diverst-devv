@@ -68,9 +68,9 @@ export function* createBudgetRequest(action) {
 export function* approveBudget(action) {
   try {
     const { id } = action.payload;
-    const response = yield call(api.budgets.accept.bind(api.budgets), id);
+    const response = yield call(api.budgets.approve.bind(api.budgets), id);
 
-    yield put(approveBudgetSuccess({}));
+    yield put(approveBudgetSuccess(response.data));
     yield put(showSnackbar({ message: 'Successfully approved budget', options: { variant: 'success' } }));
   } catch (err) {
     yield put(approveBudgetError(err));
@@ -85,7 +85,7 @@ export function* declineBudget(action) {
     const payload = { budget: action.payload };
     const response = yield call(api.budgets.reject.bind(api.budgets), payload.budget.id, payload);
 
-    yield put(declineBudgetSuccess({}));
+    yield put(declineBudgetSuccess(response.data));
     yield put(showSnackbar({ message: 'Successfully declined budget', options: { variant: 'success' } }));
   } catch (err) {
     yield put(declineBudgetError(err));

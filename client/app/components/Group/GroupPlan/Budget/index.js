@@ -5,19 +5,33 @@
  */
 
 import React, { memo } from 'react';
+import dig from 'object-dig';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { lighten, makeStyles, withStyles } from '@material-ui/core/styles';
 import { floatRound, percent } from 'utils/floatRound';
 
 import {
-  Box, Grid, Typography, Divider, Card, CardContent, LinearProgress, CardHeader, Button, Link
+  Box,
+  Grid,
+  Typography,
+  Divider,
+  Card,
+  CardContent,
+  LinearProgress,
+  CardHeader,
+  Button,
+  Link,
+  DialogTitle,
+  DialogContent, DialogContentText, TextField, DialogActions, Dialog
 } from '@material-ui/core';
 
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 
 import { formatDateTimeString, DateTime } from 'utils/dateTimeHelpers';
 import DiverstTable from 'components/Shared/DiverstTable';
+import { useFormik } from 'formik';
+import DiverstSubmit from 'components/Shared/DiverstSubmit';
 
 const styles = theme => ({
   arrowRight: {
@@ -38,7 +52,7 @@ const styles = theme => ({
 });
 
 export function Budget(props) {
-  const { classes, budget } = props;
+  const { classes, budget, approveAction, declineAction, isCommitting } = props;
   const { description, is_approved: isApproved, decline_reason: declineReason, budget_items: budgetItems } = (budget || {});
 
   const columns = [
@@ -66,7 +80,7 @@ export function Budget(props) {
       title: 'Date',
       field: 'estimated_date',
       query_field: 'budget_items.estimated_date',
-      render: rowData => rowData.estimated_date ? formatDateTimeString(rowData.estimated_date, DateTime.DATETIME_MED) : 'Not Set'
+      render: rowData => rowData.estimated_date ? formatDateTimeString(rowData.estimated_date, DateTime.DATE_MED) : 'Not Set'
     },
     {
       title: 'Private',
@@ -79,6 +93,63 @@ export function Budget(props) {
     },
   ];
 
+  const [formOpen, setFormOpen] = React.useState(false);
+
+  const formik = useFormik({
+    initialValues: {
+      decline_reason: '',
+    },
+    onSubmit: (values) => {
+      declineAction({ id: dig(budget, 'id'), ...values });
+      handleFormClose();
+    },
+  });
+
+  const handleFormClickOpen = () => {
+    setFormOpen(true);
+  };
+
+  const handleFormClose = () => {
+    setFormOpen(false);
+  };
+
+  const rejectDialog = (
+    <Dialog open={formOpen} onClose={handleFormClose} aria-labelledby='form-dialog-title'>
+      <form onSubmit={formik.handleSubmit}>
+        <DialogTitle id='form-dialog-title'>
+          Mentorship Request
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Reason for declining budget request (Optional)
+          </DialogContentText>
+
+          <TextField
+            autoFocus
+            fullWidth
+            margin='dense'
+            id='decline_reason'
+            name='decline_reason'
+            type='text'
+            onChange={formik.handleChange}
+            value={formik.values.decline_reason}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => handleFormClose()}
+            color='primary'
+          >
+            Cancel
+          </Button>
+          <DiverstSubmit isCommitting={isCommitting}>
+            Submit
+          </DiverstSubmit>
+        </DialogActions>
+      </form>
+    </Dialog>
+  );
+
   const footer = () => {
     switch (isApproved) {
       case null:
@@ -90,10 +161,7 @@ export function Budget(props) {
                 <Button
                   color='primary'
                   variant='contained'
-                  onClick={() => {
-                    // eslint-disable-next-line no-alert
-                    alert('Not Implemented Yet');
-                  }}
+                  onClick={() => approveAction({ id: dig(budget, 'id') })}
                 >
                   <Typography variant='h6' component='h2'>
                     Approve
@@ -104,10 +172,7 @@ export function Budget(props) {
                 <Button
                   className={classes.errorButton}
                   variant='contained'
-                  onClick={() => {
-                    // eslint-disable-next-line no-alert
-                    alert('Not Implemented Yet');
-                  }}
+                  onClick={handleFormClickOpen}
                 >
                   <Typography variant='h6' component='h2'>
                     Decline
@@ -115,6 +180,7 @@ export function Budget(props) {
                 </Button>
               </Grid>
             </Grid>
+            { rejectDialog }
           </React.Fragment>
         );
       case false:
@@ -127,7 +193,7 @@ export function Budget(props) {
                   Reason why this request was declined
                 </Typography>
                 <Typography variant='body1' component='h2' color='secondary'>
-                  {description}
+                  {declineReason || 'Non Given'}
                 </Typography>
               </CardContent>
             </Card>
@@ -178,6 +244,11 @@ Budget.propTypes = {
   classes: PropTypes.object,
   budget: PropTypes.object,
   links: PropTypes.object,
+
+  isCommitting: PropTypes.bool,
+
+  approveAction: PropTypes.func,
+  declineAction: PropTypes.func,
 };
 
 export default compose(
