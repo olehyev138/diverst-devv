@@ -14,7 +14,7 @@ resource "aws_db_subnet_group" "sn_db_group" {
   }
 }
 
-resource "aws_db_instance" "demo-db" {
+resource "aws_db_instance" "db" {
   instance_class            = "db.t2.micro"
   engine                    = "mariadb"
   allocated_storage         = 20

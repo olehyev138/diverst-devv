@@ -70,3 +70,21 @@ module "filestorage" {
 
   env_name = var.env_name
 }
+
+data "aws_instance" "bastion" {
+  depends_on = [module.bastion]
+
+  filter {
+    name    = "tag:Name"
+    values  = ["bastion"]
+  }
+}
+
+data "aws_instance" "app" {
+  depends_on = [module.backend]
+
+  filter {
+    name    = "tag:Name"
+    values  = ["${var.env_name}-env"]
+  }
+}

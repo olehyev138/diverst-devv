@@ -27,7 +27,7 @@ resource "aws_elastic_beanstalk_application" "eb_app" {
   description	= "Backend for ${var.env_name}"
 }
 
-resource "aws_elastic_beanstalk_environment" "diverst-env" {
+resource "aws_elastic_beanstalk_environment" "eb_app_env" {
   name			      = "${var.env_name}-env"
   application		  = aws_elastic_beanstalk_application.eb_app.name
   solution_stack_name = "64bit Amazon Linux 2018.03 v2.11.2 running Ruby 2.6 (Puma)"
