@@ -111,7 +111,24 @@ AUTHORS text
 
 /client                     export-ignore
 /coverage                   export-ignore
-/spec                       export-ignore
+/spec/controllers           export-ignore
+/spec/exceptions            export-ignore
+/spec/features              export-ignore
+/spec/fixtures              export-ignore
+/spec/framework             export-ignore
+/spec/jobs                  export-ignore
+/spec/lib                   export-ignore
+/spec/models                export-ignore
+/spec/policies              export-ignore
+/spec/requests              export-ignore
+/spec/serializers           export-ignore
+/spec/services              export-ignore
+/spec/support               export-ignore
+/spec/clock_spec.rb         export-ignore
+/spec/factory_spec.rb       export-ignore
+/spec/rails_helper.rb       export-ignore
+/spec/spec_helper.rb        export-ignore
+/spec/examples.rb           export-ignore
 /devops                     export-ignore
 /docker                     export-ignore
 /docs                       export-ignore
