@@ -534,6 +534,9 @@ export const ROUTES = {
         show: {
           path: (segmentId = ':segment_id') => `/admin/manage/segments/${segmentId}`,
         },
+        edit: {
+          path: (segmentId = ':segment_id') => `/admin/manage/segments/${segmentId}/edit`,
+        },
       },
       resources: {
         index: {
