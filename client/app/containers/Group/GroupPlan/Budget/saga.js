@@ -52,10 +52,12 @@ export function* getBudgets(action) {
 
 export function* createBudgetRequest(action) {
   try {
-    const payload = { budget: action.payload };
+    const { path, ...rest } = action.payload;
+    const payload = { budget: rest };
     const response = yield call(api.budgets.create.bind(api.budgets), payload);
 
     yield put(createBudgetRequestSuccess({}));
+    yield put(push(path));
     yield put(showSnackbar({ message: 'Successfully created budget request', options: { variant: 'success' } }));
   } catch (err) {
     yield put(createBudgetRequestError(err));

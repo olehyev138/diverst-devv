@@ -38,6 +38,7 @@ import { selectPaginatedSelectUsers } from 'containers/User/selectors';
 import { getUsersBegin } from 'containers/User/actions';
 import reducer from 'containers/User/reducer';
 import saga from 'containers/User/saga';
+import WrappedNavLink from "components/Shared/WrappedNavLink";
 
 // import messages from 'containers/Shared/Budget/messages';
 
@@ -243,9 +244,23 @@ export function BudgetFormInner({ formikProps, buttonText, ...props }) {
           )}
         />
         <Box mb={2} />
-        <DiverstSubmit isCommitting={props.isCommitting} variant='contained'>
-          {buttonText}
-        </DiverstSubmit>
+        <Grid container spacing={2}>
+          <Grid item>
+            <DiverstSubmit isCommitting={props.isCommitting} variant='contained'>
+              {buttonText}
+            </DiverstSubmit>
+          </Grid>
+          <Grid item>
+            <Button
+              component={WrappedNavLink}
+              to={props.links.index}
+              disabled={props.isCommitting}
+              variant='contained'
+            >
+              Cancel
+            </Button>
+          </Grid>
+        </Grid>
       </Form>
     </React.Fragment>
   );
@@ -266,7 +281,7 @@ export function BudgetForm(props) {
       enableReinitialize
       onSubmit={(values, actions) => {
         const payload = mapFields(values, ['approver_id']);
-        props.budgetAction({ annual_budget_id: 1, ...payload });
+        props.budgetAction({ path: props.links.index, annual_budget_id: props.annualBudgetId, ...payload });
       }}
     >
       {formikProps => <BudgetFormInner {...props} formikProps={formikProps} />}

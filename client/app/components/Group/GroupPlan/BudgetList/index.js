@@ -102,7 +102,7 @@ export function BudgetList(props, context) {
     tooltip: 'Delete',
     onClick: (_, rowData) => {
       // eslint-disable-next-line no-alert
-      alert('Not Implemented Yet');
+      props.deleteBudgetBegin({ id: rowData.id });
     }
   });
 

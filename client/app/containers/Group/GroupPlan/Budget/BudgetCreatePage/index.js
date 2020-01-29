@@ -15,6 +15,7 @@ import { selectIsCommitting } from 'containers/Group/GroupPlan/Budget/selectors'
 
 import RequestForm from 'components/Group/GroupPlan/BudgetRequestForm';
 import RouteService from 'utils/routeHelpers';
+import { ROUTES } from 'containers/Shared/Routes/constants';
 
 export function BudgetCreatePage(props) {
   useInjectReducer({ key: 'budgets', reducer });
@@ -23,7 +24,12 @@ export function BudgetCreatePage(props) {
   useEffect(() => () => {}, []);
 
   const rs = new RouteService(useContext);
+  const groupId = rs.params('group_id');
   const annualBudgetId = rs.params('annual_budget_id');
+
+  const links = {
+    index: ROUTES.group.plan.budget.budgets.index.path(groupId, annualBudgetId)
+  };
 
   return (
     <RequestForm
@@ -32,7 +38,7 @@ export function BudgetCreatePage(props) {
       buttonText='Create'
       annualBudgetId={parseInt(annualBudgetId, 10)}
       currentGroup={props.currentGroup}
-      links={{}}
+      links={links}
     />
   );
 }

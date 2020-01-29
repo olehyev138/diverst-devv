@@ -12,7 +12,12 @@ import { compose } from 'redux';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
-import { selectPaginatedBudgets, selectBudgetsTotal, selectIsFetchingBudgets } from 'containers/Group/GroupPlan/Budget/selectors';
+import {
+  selectPaginatedBudgets,
+  selectBudgetsTotal,
+  selectIsFetchingBudgets,
+  selectHasChanged
+} from 'containers/Group/GroupPlan/Budget/selectors';
 import { selectAnnualBudget } from 'containers/Group/GroupPlan/AnnualBudget/selectors';
 
 import saga from 'containers/Group/GroupPlan/Budget/saga';
@@ -69,6 +74,11 @@ export function BudgetsPage(props) {
     return () => props.budgetsUnmount();
   }, []);
 
+  useEffect(() => {
+    if (props.hasChanged)
+      props.getBudgetsBegin({ annual_budget_id: annualId });
+  }, [props.hasChanged]);
+
   const handlePagination = (payload) => {
     const newParams = { ...params, count: payload.count, page: payload.page };
 
@@ -107,6 +117,7 @@ BudgetsPage.propTypes = {
   getAnnualBudgetBegin: PropTypes.func.isRequired,
   getAnnualBudgetSuccess: PropTypes.func.isRequired,
   isLoading: PropTypes.bool,
+  hasChanged: PropTypes.bool,
   currentAnnualBudget: PropTypes.object,
   currentGroup: PropTypes.object,
   budgets: PropTypes.array,
@@ -117,6 +128,7 @@ BudgetsPage.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
   isLoading: selectIsFetchingBudgets(),
+  hasChanged: selectHasChanged(),
   budgets: selectPaginatedBudgets(),
   budgetTotal: selectBudgetsTotal(),
   currentAnnualBudget: selectAnnualBudget(),

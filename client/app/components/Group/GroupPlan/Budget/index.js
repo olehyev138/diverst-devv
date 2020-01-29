@@ -227,19 +227,18 @@ export function Budget(props) {
               component={WrappedNavLink}
               to={links.back}
             >
-              <Typography variant='body1' component='h3'>
-                Back to Annual Budget
-              </Typography>
+              Back to Annual Budget
             </Button>
           </Grid>
         </Grid>
         <Box mb={2} />
         <Card>
-          <CardHeader
-            title='Description'
-          />
           <CardContent>
-            <Typography variant='body1' component='h2'>
+            <Typography variant='h6' component='h2'>
+              Budget Details
+            </Typography>
+            <Box mb={1} />
+            <Typography variant='body1' component='h3' color='secondary'>
               {description}
             </Typography>
           </CardContent>
