@@ -38,7 +38,7 @@ import { selectPaginatedSelectUsers } from 'containers/User/selectors';
 import { getUsersBegin } from 'containers/User/actions';
 import reducer from 'containers/User/reducer';
 import saga from 'containers/User/saga';
-import WrappedNavLink from "components/Shared/WrappedNavLink";
+import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
 // import messages from 'containers/Shared/Budget/messages';
 
