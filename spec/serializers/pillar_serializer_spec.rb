@@ -11,6 +11,5 @@ RSpec.describe PillarSerializer, type: :serializer do
 
     expect(serializer.serializable_hash[:id]).to eq(pillar.id)
     expect(serializer.serializable_hash[:outcome_id]).to eq(outcome.id)
-    expect(serializer.serializable_hash[:initiatives][0][:id]).to eq(initiative.id)
   end
 end
