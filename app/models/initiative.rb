@@ -224,7 +224,7 @@ class Initiative < ApplicationRecord
     (self.end < Time.current) && !finished_expenses?
   end
 
-  def current_expences_sum
+  def current_expenses_sum
     if association(:expenses).loaded?
       expenses.to_a.sum(&:amount)
     else
