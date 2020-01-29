@@ -1,5 +1,5 @@
 class BudgetSerializer < ApplicationRecordSerializer
-  attributes :approver, :requested_amount, :available_amount, :group_id,
+  attributes :approver, :requested_amount, :available_amount, :group_id, :annual_budget_id,
              :status, :requested_at, :item_count, :description, :requester
 
   has_many :budget_items

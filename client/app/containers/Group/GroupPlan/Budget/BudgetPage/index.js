@@ -15,15 +15,21 @@ import { selectGroup } from 'containers/Group/selectors';
 import { selectIsFetchingBudget, selectBudget, selectIsCommitting } from 'containers/Group/GroupPlan/Budget/selectors';
 
 import RouteService from 'utils/routeHelpers';
+import { ROUTES } from 'containers/Shared/Routes/constants';
 import Budget from 'components/Group/GroupPlan/Budget';
 
 export function BudgetCreatePage(props) {
   useInjectReducer({ key: 'budgets', reducer });
   useInjectSaga({ key: 'budgets', saga });
 
+  const groupId = dig(props, 'budget', 'group_id');
+  const annualBudgetId = dig(props, 'budget', 'annual_budget_id');
+
+  const links = {
+    back: ROUTES.group.plan.budget.budgets.index.path(groupId, annualBudgetId)
+  };
 
   const rs = new RouteService(useContext);
-  const annualBudgetId = rs.params('annual_budget_id');
   const budget = dig(props, 'budget') || rs.location.budget;
 
   useEffect(() => {
@@ -43,6 +49,7 @@ export function BudgetCreatePage(props) {
       approveAction={props.approveBudgetBegin}
       declineAction={props.declineBudgetBegin}
       isCommitting={props.isCommitting}
+      links={links}
     />
   );
 }

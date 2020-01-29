@@ -32,6 +32,7 @@ import { formatDateTimeString, DateTime } from 'utils/dateTimeHelpers';
 import DiverstTable from 'components/Shared/DiverstTable';
 import { useFormik } from 'formik';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
+import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
 const styles = theme => ({
   arrowRight: {
@@ -52,7 +53,7 @@ const styles = theme => ({
 });
 
 export function Budget(props) {
-  const { classes, budget, approveAction, declineAction, isCommitting } = props;
+  const { classes, budget, approveAction, declineAction, isCommitting, links } = props;
   const { description, is_approved: isApproved, decline_reason: declineReason, budget_items: budgetItems } = (budget || {});
 
   const columns = [
@@ -207,9 +208,31 @@ export function Budget(props) {
   return (
     budget && (
       <React.Fragment>
-        <Typography variant='h4' component='h2'>
-          Budget Details
-        </Typography>
+        <Grid
+          container
+          alignContent='space-between'
+          spacing={2}
+          alignItems='flex-end'
+          justify='flex-end'
+        >
+          <Grid item xs>
+            <Typography variant='h4' component='h2'>
+              Budget Details
+            </Typography>
+          </Grid>
+          <Grid item xs align='right'>
+            <Button
+              color='primary'
+              variant='contained'
+              component={WrappedNavLink}
+              to={links.back}
+            >
+              <Typography variant='body1' component='h3'>
+                Back to Annual Budget
+              </Typography>
+            </Button>
+          </Grid>
+        </Grid>
         <Box mb={2} />
         <Card>
           <CardHeader
