@@ -1,5 +1,7 @@
 class BudgetItem < ApplicationRecord
+  include BudgetItem::Actions
   LEFTOVER_BUDGET_ITEM_ID = -1
+
   belongs_to :budget
   has_one :annual_budget, through: :budget
   has_one :group, through: :annual_budget
@@ -26,7 +28,7 @@ class BudgetItem < ApplicationRecord
   delegate :active, to: :initiatives_expenses, prefix: 'expenses'
 
   def title_with_amount
-    "#{title} ($#{available_amount})"
+    "#{title} ($%.2f)" % available_amount
   end
 
   def expenses

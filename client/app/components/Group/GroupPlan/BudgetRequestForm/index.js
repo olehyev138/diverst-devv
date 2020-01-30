@@ -10,8 +10,8 @@ import { compose } from 'redux';
 import dig from 'object-dig';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
-import { useInjectSaga } from '../../../../utils/injectSaga';
-import { useInjectReducer } from '../../../../utils/injectReducer';
+import { useInjectSaga } from 'utils/injectSaga';
+import { useInjectReducer } from 'utils/injectReducer';
 import { DateTime } from 'luxon';
 import { Field, FieldArray, Form, Formik } from 'formik';
 import {

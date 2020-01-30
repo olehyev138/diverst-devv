@@ -4,7 +4,7 @@
  *
  */
 
-import React, { memo } from 'react';
+import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import dig from 'object-dig';
@@ -18,7 +18,7 @@ import {
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import messages from 'containers/Event/messages';
-import { buildValues } from 'utils/formHelpers';
+import { buildValues, mapFields } from 'utils/formHelpers';
 
 import DiverstDateTimePicker from 'components/Shared/Pickers/DiverstDateTimePicker';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
@@ -29,9 +29,17 @@ import { getPillarsBegin } from 'containers/Group/Pillar/actions';
 import { getBudgetItemsBegin } from 'containers/Group/GroupPlan/BudgetItem/actions';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
-import { selectPaginatedSelectPillars } from '../../../containers/Group/Pillar/selectors';
-import { selectPaginatedSelectBudgetItems } from '../../../containers/Group/GroupPlan/BudgetItem/selectors';
-import Select from "../../Shared/DiverstSelect";
+import { selectPaginatedSelectPillars } from 'containers/Group/Pillar/selectors';
+import { selectPaginatedSelectBudgetItems } from 'containers/Group/GroupPlan/BudgetItem/selectors';
+import Select from 'components/Shared/DiverstSelect';
+import { useInjectReducer } from 'utils/injectReducer';
+import { useInjectSaga } from 'utils/injectSaga';
+import pillarReducer from 'containers/Group/Pillar/reducer';
+import pillarSaga from 'containers/Group/Pillar/saga';
+import budgetItemReducer from 'containers/Group/GroupPlan/BudgetItem/reducer';
+import budgetItemSaga from 'containers/Group/GroupPlan/BudgetItem/saga';
+
+const freeEvent = { label: 'Create new free event ($0.00)', value: null, available: 0 };
 
 /* eslint-disable object-curly-newline */
 export function EventFormInner({
@@ -39,11 +47,16 @@ export function EventFormInner({
   buttonText, setFieldValue, setFieldTouched, setFieldError,
   ...props
 }) {
+  useInjectReducer({ key: 'pillars', reducer: pillarReducer });
+  useInjectSaga({ key: 'pillars', saga: pillarSaga });
+  useInjectReducer({ key: 'budgetItems', reducer: budgetItemReducer });
+  useInjectSaga({ key: 'budgetItems', saga: budgetItemSaga });
+
   const pillarSelectAction = (searchKey = '') => {
     props.getPillarsBegin({
       count: 10, page: 0, order: 'asc',
       search: searchKey,
-      group_id: dig(props, 'currentGroup', 'id'),
+      group_id: props.currentGroup.id,
     });
   };
 
@@ -51,7 +64,8 @@ export function EventFormInner({
     props.getBudgetItemsBegin({
       count: 10, page: 0, order: 'asc',
       search: searchKey,
-      group_id: dig(props, 'currentGroup', 'id'),
+      group_id: props.currentGroup.id,
+      query_scopes: ['approved']
     });
   };
 
@@ -125,10 +139,13 @@ export function EventFormInner({
                   margin='normal'
                   disabled={props.isCommitting || values.finished_expenses}
                   value={values.budget_item_id}
-                  options={props.budgetItems}
-                  onMenuOpen={pillarSelectAction}
-                  onChange={value => setFieldValue('budget_item_id', value)}
-                  onInputChange={value => pillarSelectAction(value)}
+                  options={[freeEvent, ...props.budgetItems]}
+                  onMenuOpen={budgetSelectAction}
+                  onChange={(value) => {
+                    setFieldValue('budget_item_id', value);
+                    setFieldValue('estimated_funding', value.available);
+                  }}
+                  onInputChange={value => budgetSelectAction(value)}
                   onBlur={() => setFieldTouched('budget_item_id', true)}
                 />
               </Grid>
@@ -143,6 +160,7 @@ export function EventFormInner({
                   onChange={handleChange}
                   value={values.estimated_funding}
                   label='Specify amount to deduct from budget'
+                  inputProps={{ min: 0, max: values.budget_item_id.available, step: 1 }}
                 />
               </Grid>
             </Grid>
@@ -217,25 +235,33 @@ export function EventFormInner({
   );
 }
 
+let start = null;
+let end = null;
+
 export function EventForm(props) {
   const event = dig(props, 'event');
+
+  useEffect(() => {
+    start = DateTime.local().plus({ hour: 1 });
+    end = DateTime.local().plus({ hour: 2 });
+  }, []);
 
   const initialValues = buildValues(event, {
     id: { default: '' },
     name: { default: '' },
     description: { default: '' },
-    start: { default: DateTime.local().plus({ hour: 1 }) },
-    end: { default: DateTime.local().plus({ hour: 2 }) },
+    start: { default: start },
+    end: { default: end },
     picture: { default: null },
     max_attendees: { default: '' },
     location: { default: '' },
     annual_budget_id: { default: '' },
-    budget_item_id: { default: '' },
+    budget_item_id: { default: freeEvent },
     estimated_funding: { default: 0 },
     finished_expenses: { default: false },
     pillar_id: { default: '' },
     owner_id: { default: '' },
-    owner_group_id: { default: '' }
+    owner_group_id: { default: props.currentGroup.id }
   });
 
   return (
@@ -243,7 +269,8 @@ export function EventForm(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        props.eventAction(values);
+        const payload = mapFields(values, ['budget_item_id', 'pillar_id']);
+        props.eventAction(payload);
       }}
     >
       {formikProps => <EventFormInner {...props} {...formikProps} />}
@@ -276,6 +303,7 @@ EventFormInner.propTypes = {
 
   getPillarsBegin: PropTypes.func.isRequired,
   getBudgetItemsBegin: PropTypes.func.isRequired,
+  currentGroup: PropTypes.object.isRequired,
   pillars: PropTypes.array.isRequired,
   budgetItems: PropTypes.array.isRequired,
 

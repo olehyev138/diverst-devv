@@ -18,7 +18,7 @@ import {
 
 export function* getBudgetItem(action) {
   try {
-    const response = { data: 'API CALL' };
+    const response = yield call(api.budgetItems.get.bind(api.budgetItems), action.payload.id);
 
     yield put(getBudgetItemSuccess(response.data));
   } catch (err) {
@@ -31,7 +31,7 @@ export function* getBudgetItem(action) {
 
 export function* getBudgetItems(action) {
   try {
-    const response = { data: 'API CALL' };
+    const response = yield call(api.budgetItems.all.bind(api.budgetItems), action.payload);
 
     yield put(getBudgetItemsSuccess(response.data.page));
   } catch (err) {

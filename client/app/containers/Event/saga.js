@@ -65,7 +65,7 @@ export function* createEvent(action) {
     const response = yield call(api.initiatives.create.bind(api.initiatives), payload);
 
     yield put(createEventSuccess());
-    yield put(push(ROUTES.group.events.index.path(payload.initiative.group_id)));
+    yield put(push(ROUTES.group.events.index.path(payload.initiative.owner_group_id)));
     yield put(showSnackbar({
       message: 'Event created',
       options: { variant: 'success' }

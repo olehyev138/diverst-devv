@@ -25,7 +25,7 @@ class PillarPolicy < GroupBasePolicy
 
   class Scope < Scope
     def group_base
-      group.current_budget_items
+      group.pillars
     end
 
     def resolve

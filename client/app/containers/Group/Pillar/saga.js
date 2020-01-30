@@ -24,7 +24,7 @@ import {
 
 export function* getPillar(action) {
   try {
-    const response = { data: 'API CALL' };
+    const response = yield call(api.pillars.get.bind(api.pillars), action.payload.id);
 
     yield put(getPillarSuccess(response.data));
   } catch (err) {
@@ -37,7 +37,7 @@ export function* getPillar(action) {
 
 export function* getPillars(action) {
   try {
-    const response = { data: 'API CALL' };
+    const response = yield call(api.pillars.all.bind(api.pillars), action.payload);
 
     yield put(getPillarsSuccess(response.data.page));
   } catch (err) {
