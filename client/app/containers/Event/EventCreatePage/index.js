@@ -10,6 +10,11 @@ import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/Event/reducer';
 import saga from 'containers/Event/saga';
 
+import pillarReducer from 'containers/Group/Pillar/reducer';
+import pillarSaga from 'containers/Group/Pillar/saga';
+import budgetItemReducer from 'containers/Group/GroupPlan/BudgetItem/reducer';
+import budgetItemSaga from 'containers/Group/GroupPlan/BudgetItem/saga';
+
 import { selectGroup } from 'containers/Group/selectors';
 import { selectUser } from 'containers/Shared/App/selectors';
 
@@ -23,6 +28,10 @@ import { selectIsCommitting } from 'containers/Event/selectors';
 export function EventCreatePage(props) {
   useInjectReducer({ key: 'events', reducer });
   useInjectSaga({ key: 'events', saga });
+  useInjectReducer({ key: 'pillars', reducer: pillarReducer });
+  useInjectSaga({ key: 'pillars', saga: pillarSaga });
+  useInjectReducer({ key: 'budgetItems', reducer: budgetItemReducer });
+  useInjectSaga({ key: 'budgetItems', saga: budgetItemSaga });
 
   const { currentUser, currentGroup } = props;
   const rs = new RouteService(useContext);

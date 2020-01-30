@@ -25,12 +25,35 @@ import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 import DiverstFileInput from 'components/Shared/DiverstFileInput';
 
+import { getPillarsBegin } from 'containers/Group/Pillar/actions';
+import { getBudgetItemsBegin } from 'containers/Group/GroupPlan/BudgetItem/actions';
+import { createStructuredSelector } from 'reselect';
+import { connect } from 'react-redux';
+import { selectPaginatedSelectPillars } from '../../../containers/Group/Pillar/selectors';
+import { selectPaginatedSelectBudgetItems } from '../../../containers/Group/GroupPlan/BudgetItem/selectors';
+
 /* eslint-disable object-curly-newline */
 export function EventFormInner({
   handleSubmit, handleChange, handleBlur, values, touched, errors,
   buttonText, setFieldValue, setFieldTouched, setFieldError,
   ...props
 }) {
+  const pillarSelectAction = (searchKey = '') => {
+    props.getPillarsBegin({
+      count: 10, page: 0, order: 'asc',
+      search: searchKey,
+      group_id: dig(props, 'currentGroup', 'id'),
+    });
+  };
+
+  const budgetSelectAction = (searchKey = '') => {
+    props.getBudgetItemsBegin({
+      count: 10, page: 0, order: 'asc',
+      search: searchKey,
+      group_id: dig(props, 'currentGroup', 'id'),
+    });
+  };
+
   return (
     <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.event}>
       <Card>
@@ -187,6 +210,11 @@ EventFormInner.propTypes = {
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
   setFieldError: PropTypes.func,
+
+  getPillarsBegin: PropTypes.func.isRequired,
+  getBudgetItemsBegin: PropTypes.func.isRequired,
+  groupId: PropTypes.number.isRequired,
+
   isCommitting: PropTypes.bool,
   isFormLoading: PropTypes.bool,
   links: PropTypes.shape({
@@ -195,6 +223,22 @@ EventFormInner.propTypes = {
   })
 };
 
+const mapStateToProps = createStructuredSelector({
+  pillars: selectPaginatedSelectPillars(),
+  budgetItems: selectPaginatedSelectBudgetItems(),
+});
+
+const mapDispatchToProps = {
+  getPillarsBegin,
+  getBudgetItemsBegin,
+};
+
+const withConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
+
 export default compose(
+  withConnect,
   memo,
 )(EventForm);

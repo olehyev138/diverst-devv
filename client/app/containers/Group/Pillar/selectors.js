@@ -46,6 +46,7 @@ const selectHasChanged = () => createSelector(
 export {
   selectPillarDomain,
   selectPaginatedPillars,
+  selectPaginatedSelectPillars,
   selectPillarsTotal,
   selectPillar,
   selectIsFetchingPillars,
