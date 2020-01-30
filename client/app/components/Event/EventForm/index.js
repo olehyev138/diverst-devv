@@ -31,6 +31,7 @@ import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import { selectPaginatedSelectPillars } from '../../../containers/Group/Pillar/selectors';
 import { selectPaginatedSelectBudgetItems } from '../../../containers/Group/GroupPlan/BudgetItem/selectors';
+import Select from "../../Shared/DiverstSelect";
 
 /* eslint-disable object-curly-newline */
 export function EventFormInner({
@@ -85,6 +86,66 @@ export function EventFormInner({
               label={<DiverstFormattedMessage {...messages.inputs.description} />}
               value={values.description}
             />
+          </CardContent>
+          <Divider />
+          <CardContent>
+            <Field
+              component={Select}
+              fullWidth
+              required
+              id='pillar_id'
+              name='pillar_id'
+              label='Choosing which #Goal# this event will participate in'
+              margin='normal'
+              disabled={props.isCommitting}
+              value={values.pillar_id}
+              options={props.pillars}
+              onMenuOpen={pillarSelectAction}
+              onChange={value => setFieldValue('pillar_id', value)}
+              onInputChange={value => pillarSelectAction(value)}
+              onBlur={() => setFieldTouched('pillar_id', true)}
+            />
+          </CardContent>
+          <Divider />
+          <CardContent>
+            <Grid
+              container
+              spacing={3}
+              alignContent='center'
+              alignItems='center'
+            >
+              <Grid item xs={12} md={6}>
+                <Field
+                  component={Select}
+                  fullWidth
+                  required
+                  id='budget_item_id'
+                  name='budget_item_id'
+                  label='Attach a budget to the event.'
+                  margin='normal'
+                  disabled={props.isCommitting || values.finished_expenses}
+                  value={values.budget_item_id}
+                  options={props.budgetItems}
+                  onMenuOpen={pillarSelectAction}
+                  onChange={value => setFieldValue('budget_item_id', value)}
+                  onInputChange={value => pillarSelectAction(value)}
+                  onBlur={() => setFieldTouched('budget_item_id', true)}
+                />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <TextField
+                  fullWidth
+                  margin='dense'
+                  disabled={props.isCommitting || values.finished_expenses}
+                  id='estimated_funding'
+                  name='estimated_funding'
+                  type='number'
+                  onChange={handleChange}
+                  value={values.estimated_funding}
+                  label='Specify amount to deduct from budget'
+                />
+              </Grid>
+            </Grid>
           </CardContent>
           <Divider />
           <CardContent>
@@ -170,6 +231,8 @@ export function EventForm(props) {
     location: { default: '' },
     annual_budget_id: { default: '' },
     budget_item_id: { default: '' },
+    estimated_funding: { default: 0 },
+    finished_expenses: { default: false },
     pillar_id: { default: '' },
     owner_id: { default: '' },
     owner_group_id: { default: '' }
@@ -213,7 +276,8 @@ EventFormInner.propTypes = {
 
   getPillarsBegin: PropTypes.func.isRequired,
   getBudgetItemsBegin: PropTypes.func.isRequired,
-  groupId: PropTypes.number.isRequired,
+  pillars: PropTypes.array.isRequired,
+  budgetItems: PropTypes.array.isRequired,
 
   isCommitting: PropTypes.bool,
   isFormLoading: PropTypes.bool,
