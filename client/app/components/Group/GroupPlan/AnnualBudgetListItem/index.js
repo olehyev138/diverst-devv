@@ -176,7 +176,7 @@ export function AnnualBudgetListItem(props) {
           </Grid>
           <Grid item xs={4}>
             <Typography color='secondary' variant='body2' component='h2' align='center'>
-              {`$${floatRound(remaining, 2)}`}
+              {`$${floatRound(available, 2)}`}
             </Typography>
           </Grid>
         </Grid>

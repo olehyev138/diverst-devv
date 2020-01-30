@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect';
 import { initialState } from './reducer';
+import produce from 'immer/dist/immer';
 
 const selectEventsDomain = state => state.events || initialState;
 
@@ -18,6 +19,16 @@ const selectEvent = () => createSelector(
   eventsState => eventsState.currentEvent
 );
 
+const selectFormEvent = () => createSelector(
+  selectEventsDomain,
+  eventsState => produce(eventsState.currentEvent, (draft) => {
+    if (draft) {
+      draft.pillar = { label: draft.pillar.name, value: draft.pillar.id };
+      draft.budget_item = { label: draft.budget_item.title_with_amount, value: draft.budget_item.id, available: draft.available };
+    }
+  })
+);
+
 const selectIsLoading = () => createSelector(
   selectEventsDomain,
   eventsState => eventsState.isLoading
@@ -33,4 +44,4 @@ const selectIsCommitting = () => createSelector(
   eventsState => eventsState.isCommitting
 );
 
-export { selectEventsDomain, selectPaginatedEvents, selectEventsTotal, selectEvent, selectIsLoading, selectIsFormLoading, selectIsCommitting };
+export { selectEventsDomain, selectPaginatedEvents, selectEventsTotal, selectEvent, selectIsLoading, selectIsFormLoading, selectIsCommitting, selectFormEvent };

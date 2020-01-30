@@ -256,10 +256,10 @@ export function EventForm(props) {
     max_attendees: { default: '' },
     location: { default: '' },
     annual_budget_id: { default: '' },
-    budget_item_id: { default: freeEvent },
+    budget_item: { default: freeEvent, customKey: 'budget_item_id' },
     estimated_funding: { default: 0 },
     finished_expenses: { default: false },
-    pillar_id: { default: '' },
+    pillar: { default: '', customKey: 'pillar_id' },
     owner_id: { default: '' },
     owner_group_id: { default: props.currentGroup.id }
   });

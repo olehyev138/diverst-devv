@@ -34,7 +34,7 @@ class Budget < ApplicationRecord
   def available_amount
     return 0 unless is_approved
 
-    @available_amount ||= budget_items.available.sum(:available_amount)
+    @available_amount ||= budget_items.available.to_a.sum(&:available_amount)
   end
 
   def reload

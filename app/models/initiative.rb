@@ -426,7 +426,7 @@ class Initiative < ApplicationRecord
 
     temp = estimated_funding
     update_column(:estimated_funding, 0) unless new_record?
-    estimated_funding = temp
+    self.estimated_funding = temp
 
     if budget_item.present? && estimated_funding > budget_item.available_amount
       errors.add(:budget_item_id, 'sorry, this budget doesn\'t have the sufficient funds')
@@ -435,6 +435,8 @@ class Initiative < ApplicationRecord
       errors.add(:budget_item_id, 'TEMPORARILY UNSUPPORTED')
       false
     end
+
+    update_column(:estimated_funding, temp)
   end
 
   def self.archived_initiatives(enterprise)

@@ -8,6 +8,10 @@ class Api::V1::InitiativesController < DiverstController
     raise BadRequestException.new(e.message)
   end
 
+  def create
+    params[:initiative][:owner_id] = current_user.id
+  end
+
   def payload
     params
       .require(:initiative)
@@ -27,6 +31,7 @@ class Api::V1::InitiativesController < DiverstController
         :from, # For filtering
         :to, # For filtering
         :annual_budget_id,
+        :finished_expenses,
         participating_group_ids: [],
         segment_ids: [],
         fields_attributes: [
