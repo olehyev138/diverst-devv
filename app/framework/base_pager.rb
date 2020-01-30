@@ -17,8 +17,9 @@ module BasePager
       offset = item_page * item_count
       order_by = params[:orderBy].presence || @default_order_by
       order = params[:order].presence || @default_order
+      sum_column = params[:sum]
 
-      [item_page, item_count, offset, order_by, order]
+      [item_page, item_count, offset, order_by, order, sum_column]
     end
 
     def order_string(order_by, order)
@@ -34,21 +35,25 @@ module BasePager
       raise Exception.new if @default_order.blank?
 
       # set the parameters
-      item_page, item_count, offset, order_by, order = get_params(params)
+      item_page, item_count, offset, order_by, order, sum_column = get_params(params)
 
       # get the search method
       search_method_obj = self.method(search_method)
 
       # search
       partial_query = search_method_obj.call(params, diverst_request, base: base)
-      total = partial_query.count
+      if sum_column
+        sum, total = partial_query.sum_and_count(sum_column) if sum_column
+      else
+        total = partial_query.count
+      end
       items = partial_query
                   .order(order_string(order_by, order))
                   .limit(item_count)
                   .offset(offset)
 
       # return the page
-      Page.new(items, total)
+      Page.new(items, total, sum)
     end
 
     def pager_with_query(query, params = {})

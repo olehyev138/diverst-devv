@@ -1,5 +1,5 @@
 class PageSerializer < ApplicationRecordSerializer
-  attributes :total, :type, :items
+  attributes :total, :type, :sum, :items
 
   def items
     object.items.load unless object.items.kind_of?(Array) || object.items.loaded?

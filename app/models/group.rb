@@ -120,6 +120,7 @@ class Group < ApplicationRecord
   has_many :children, class_name: 'Group', foreign_key: :parent_id, dependent: :destroy, inverse_of: :parent
   has_many :annual_budgets, dependent: :destroy
   has_many :budgets, dependent: :destroy, through: :annual_budgets
+  has_many :budget_items, dependent: :destroy, through: :budgets
   has_many :initiative_expenses, through: :annual_budgets
 
   belongs_to :parent, class_name: 'Group', foreign_key: :parent_id, inverse_of: :children

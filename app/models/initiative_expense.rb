@@ -2,6 +2,8 @@ class InitiativeExpense < ApplicationRecord
   belongs_to :initiative
   belongs_to :owner, class_name: 'User'
   has_one :annual_budget, through: :initiative
+  has_one :group, through: :annual_budget
+  has_one :enterprise, through: :group
 
   validates_length_of :description, maximum: 191
   validates :initiative, presence: true

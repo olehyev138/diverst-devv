@@ -56,6 +56,32 @@ class ApplicationRecord < ActiveRecord::Base
     to_return
   end
 
+  def self.summ(column)
+    query = to_query
+    if query.distinct_value
+      query.klass
+          .unscoped
+          .select("SUM(#{column}) as total_sum")
+          .from(query.select("#{table_name}.id, #{table_name}.#{column}"))[0]
+          .total_sum
+    else
+      super(column)
+    end
+  end
+
+  def self.sum_and_count(column)
+    query = to_query
+    if query.distinct_value
+      query = query.klass
+                  .unscoped
+                  .select("SUM(#{column}) as total_sum, COUNT(id) as total_count")
+                  .from(query.select("#{table_name}.id, #{table_name}.#{column}"))[0]
+    else
+      query = query.select("SUM(#{table_name}.#{column}) as total_sum, COUNT(#{table_name}.id) as total_count")[0]
+    end
+    [query.total_sum, query.total_count]
+  end
+
   if Rails.env == 'development' || Rails.env == 'testing'
     def self.preload_test(preload: true, limit: 10, serializer: nil)
       arr = []
