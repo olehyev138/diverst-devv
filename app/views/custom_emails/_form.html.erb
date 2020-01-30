@@ -3,10 +3,9 @@
     <div class="col sm-12">
       <div class="card">
         <div class="card__section">
-          <h3><%= @custom_email.name %></h3>
           <%= simple_form_for @custom_email, url: @submit_url, method: @submit_method  do |f| %>
-            <%= f.input :name %>
-            <%= f.input :description %>
+            <%= f.hidden_field :name, value: 'custom' %>
+            <%= f.hidden_field :description, value: 'custom' %>
             <%= f.input :subject %>
             <%= f.input :content, as: :ckeditor %>
             <%= f.button :submit, 'Save' %>
