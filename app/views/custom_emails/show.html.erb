@@ -1,7 +1,7 @@
 <%= simple_form_for @custom_email, url: deliver_custom_email_path(@custom_email), method: :post do |f| %>
 <div class="content__main">
     <div class="card card--secondary">
-        <%= f.input :receivers, as: :text %>
+        <%= f.input :receivers, as: :text, label: 'To:' %>
         <%= f.button :submit, 'Send' %>
     </div>
     <div class="card card--secondary">
