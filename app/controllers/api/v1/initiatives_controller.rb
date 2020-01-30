@@ -10,6 +10,7 @@ class Api::V1::InitiativesController < DiverstController
 
   def create
     params[:initiative][:owner_id] = current_user.id
+    super
   end
 
   def payload
