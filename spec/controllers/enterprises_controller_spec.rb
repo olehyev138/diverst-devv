@@ -525,11 +525,6 @@ RSpec.describe EnterprisesController, type: :controller do
         expect(assigns[:enterprise].auto_archive).to eq true
       end
 
-      it 'turns auto_archive OFF for enterprise' do
-        enterprise.update auto_archive: true
-        expect(assigns[:enterprise].auto_archive).to eq false
-      end
-
       it 'renders nothing' do
         expect(response).to render_template(nil)
       end
