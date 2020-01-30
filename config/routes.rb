@@ -24,7 +24,7 @@ Diverst::Application.routes.draw do
           post 'decline'
         end
       end
-      resources :budget_items
+      resources :budget_items, only: [:index]
       resources :campaigns
       resources :campaigns_groups
       resources :campaign_invitations
@@ -156,7 +156,7 @@ Diverst::Application.routes.draw do
       resources :news_link_photos
       resources :news_link_segments
       resources :outcomes
-      resources :pillars
+      resources :pillars, only: [:index]
       resources :policy_groups
       resources :policy_group_templates
       resources :polls do

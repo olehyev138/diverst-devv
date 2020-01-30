@@ -11,18 +11,6 @@ class BudgetItemPolicy < GroupBasePolicy
     'groups_budgets_manage'
   end
 
-  def create?
-    false
-  end
-
-  def update?
-    false
-  end
-
-  def destroy?
-    false
-  end
-
   class Scope < Scope
     def group_base
       group.current_budget_items

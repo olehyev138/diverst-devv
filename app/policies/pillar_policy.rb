@@ -11,18 +11,6 @@ class PillarPolicy < GroupBasePolicy
     'initiatives_manage'
   end
 
-  def create?
-    false
-  end
-
-  def update?
-    false
-  end
-
-  def destroy?
-    false
-  end
-
   class Scope < Scope
     def group_base
       group.pillars
