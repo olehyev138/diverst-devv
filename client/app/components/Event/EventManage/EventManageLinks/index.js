@@ -39,6 +39,7 @@ export function EventManageLinks(props) {
       <Typography variant='h4' component='h6' align='center' color='primary'>
         <strong>{props.event.name}</strong>
       </Typography>
+      <Box mb={1} />
       <Paper>
         <ResponsiveTabs
           value={currentTab}
@@ -46,12 +47,6 @@ export function EventManageLinks(props) {
           textColor='primary'
         >
           {/* NOT IMPLEMENTED YET */}
-          <Tab
-            component={WrappedNavLink}
-            to={ROUTES.group.plan.events.manage.metrics.path(groupId, event.id)}
-            label={<DiverstFormattedMessage {...messages.links.metrics} />}
-            value='metrics'
-          />
           <Tab
             component={WrappedNavLink}
             to={ROUTES.group.plan.events.manage.fields.path(groupId, event.id)}
@@ -66,13 +61,7 @@ export function EventManageLinks(props) {
           />
           <Tab
             component={WrappedNavLink}
-            to={ROUTES.group.plan.events.manage.metrics.path(groupId, event.id)}
-            label={<DiverstFormattedMessage {...messages.links.resources} />}
-            value='resources'
-          />
-          <Tab
-            component={WrappedNavLink}
-            to={ROUTES.group.plan.events.manage.metrics.path(groupId, event.id)}
+            to={ROUTES.group.plan.events.manage.updates.index.path(groupId, event.id)}
             label={<DiverstFormattedMessage {...messages.links.expenses} />}
             value='expenses'
           />

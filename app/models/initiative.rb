@@ -435,8 +435,6 @@ class Initiative < ApplicationRecord
       errors.add(:budget_item_id, 'TEMPORARILY UNSUPPORTED')
       false
     end
-
-    update_column(:estimated_funding, temp)
   end
 
   def self.archived_initiatives(enterprise)
