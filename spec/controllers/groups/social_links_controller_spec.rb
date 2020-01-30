@@ -128,7 +128,7 @@ RSpec.describe Groups::SocialLinksController, type: :controller do
 
         it 'redirects to back' do
           post :create, group_id: group.id, social_link: attributes_for(:social_link, url: 'https://example.com/912848')
-          expect(response).to redirect_to 'back'
+          expect(response).to render_template :new
         end
       end
     end
