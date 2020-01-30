@@ -9,14 +9,14 @@
     <% if @custom_emails.any? %>
       <table class="table--has-border" id="custom-emails-table">
         <thead>
-          <th>Name</th>
+          <th>Subject</th>
           <th>Last update</th>
-          <th>Actions</th>
+          <th>Status</th>
         </thead>
         <tbody>
           <% @custom_emails.each do |email| %>
             <tr>
-              <td><%= link_to email.name, edit_custom_email_path(email) %></td>
+              <td><%= link_to email.subject[0..50], edit_custom_email_path(email) %></td>
               <td><%= time_ago_in_words(email.updated_at) %> ago</td>
               <td>
                 <%= link_to('Prepare for sending', custom_email_path(email) ) %>
