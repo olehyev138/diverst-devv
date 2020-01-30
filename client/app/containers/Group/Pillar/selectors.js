@@ -10,7 +10,7 @@ const selectPaginatedPillars = () => createSelector(
 
 const selectPaginatedSelectPillars = () => createSelector(
   selectPillarDomain,
-  usersState => Object.values(usersState.pillarList).map(user => ({ label: user.name, value: user.id }))
+  usersState => Object.values(usersState.pillarList).map(pillar => ({ label: pillar.name, value: pillar.id }))
 );
 
 const selectPillarsTotal = () => createSelector(

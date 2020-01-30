@@ -8,6 +8,11 @@ const selectPaginatedBudgetItems = () => createSelector(
   budgetItemState => budgetItemState.budgetItemList
 );
 
+const selectPaginatedSelectBudgetItems = () => createSelector(
+  selectBudgetItemDomain,
+  usersState => Object.values(usersState.budgetItemList).map(item => ({ label: item.title_with_amount, value: item.id }))
+);
+
 const selectBudgetItemsTotal = () => createSelector(
   selectBudgetItemDomain,
   budgetItemState => budgetItemState.budgetItemListTotal
@@ -41,6 +46,7 @@ const selectHasChanged = () => createSelector(
 export {
   selectBudgetItemDomain,
   selectPaginatedBudgetItems,
+  selectPaginatedSelectBudgetItems,
   selectBudgetItemsTotal,
   selectBudgetItem,
   selectIsFetchingBudgetItems,
