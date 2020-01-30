@@ -24,6 +24,7 @@ import {
 
 import DiverstColorPicker from 'components/Shared/DiverstColorPicker';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
+import DiverstFileInput from 'components/Shared/DiverstFileInput';
 
 const styles = theme => ({
   noBottomPadding: {
@@ -68,7 +69,6 @@ const SETTINGS_OPTIONS = Object.freeze({
 /* eslint-disable object-curly-newline */
 export function GroupSettingsInner({ classes, handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
   const prettify = str => (str.charAt(0).toUpperCase() + str.slice(1)).replace(/_/g, ' ');
-
   return (
     <Card>
       <Form>
@@ -154,6 +154,19 @@ export function GroupSettingsInner({ classes, handleSubmit, handleChange, handle
             </Grid>
             <Grid item xs='auto'>
               <Field
+                component={DiverstFileInput}
+                id='banner'
+                name='banner'
+                margin='normal'
+                fileName={props.group.banner_file_name}
+                fullWidth
+                label='Add Banner'
+                disabled={props.isCommitting}
+                value={values.banner}
+              />
+            </Grid>
+            <Grid item xs='auto'>
+              <Field
                 component={DiverstColorPicker}
                 id='calendar_color'
                 name='calendar_color'
@@ -190,6 +203,7 @@ export function GroupSettings(props) {
     upcoming_events_visibility: { default: '' },
     calendar_color: { default: '' },
     auto_archive: { default: '' },
+    banner: { default: null },
   });
 
   return (
@@ -221,6 +235,7 @@ GroupSettingsInner.propTypes = {
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
   isCommitting: PropTypes.bool,
+  group: PropTypes.object,
 };
 
 export default compose(

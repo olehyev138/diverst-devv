@@ -4,10 +4,9 @@ RSpec.describe BudgetManager, type: :service do
   let(:user) { create(:user) }
   let!(:budget) { create(:budget, is_approved: nil, requester: user, approver: nil) }
   let!(:budget_item) { create(:budget_item, budget: budget, estimated_amount: 100, available_amount: 0) }
-  let(:budget_manager) { BudgetManager.new(budget) }
 
   describe '#approve' do
-    before(:each) { budget_manager.approve(user) }
+    before(:each) { budget.approve(user) }
 
     it 'updates all budget_items as approved' do
       budget_item.reload
@@ -28,14 +27,14 @@ RSpec.describe BudgetManager, type: :service do
       allow(BudgetMailer).to receive(:budget_approved).with(budget) { mailer }
       allow(mailer).to receive(:deliver_later)
 
-      budget_manager.approve(user)
+      budget.approve(user)
 
       expect(mailer).to have_received(:deliver_later).at_least(:once)
     end
   end
 
   describe '#decline' do
-    before(:each) { budget_manager.decline(user) }
+    before(:each) { budget.decline(user) }
 
     it 'updates budget as declined' do
       expect(budget.is_approved).to be_falsy
@@ -51,7 +50,7 @@ RSpec.describe BudgetManager, type: :service do
       allow(BudgetMailer).to receive(:budget_declined).with(budget) { mailer }
       allow(mailer).to receive(:deliver_later)
 
-      budget_manager.decline(user)
+      budget.decline(user)
 
       expect(mailer).to have_received(:deliver_later).at_least(:once)
     end

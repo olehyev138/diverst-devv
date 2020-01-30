@@ -126,7 +126,7 @@ export function FolderPage(props) {
   };
 
   useEffect(() => {
-    const folderId = rs.params('item_id')[0];
+    const folderId = rs.params('item_id');
 
     // get folder specified in path
     props.getFolderBegin({ id: folderId });

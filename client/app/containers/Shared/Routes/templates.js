@@ -22,6 +22,7 @@ import UserGroupListPage from 'containers/Group/UserGroupListPage/Loadable';
 import UserProfilePage from 'containers/User/UserProfilePage/Loadable';
 import UserNewsLinkPage from 'containers/User/UserNewsFeedPage/Loadable';
 import UserEventsPage from 'containers/User/UserEventsPage/Loadable';
+import UserDownloadsPage from 'containers/User/UserDownloadsPage/Loadable';
 
 /* User - Mentorship */
 import MentorshipProfilePage from 'containers/Mentorship/MentorshipProfilePage/Loadable';
@@ -254,5 +255,6 @@ export {
   NewsLinkCreatePage,
   SocialLinkCreatePage,
   SocialLinkEditPage,
-  NewsLinkPage
+  NewsLinkPage,
+  UserDownloadsPage
 };
