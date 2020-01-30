@@ -151,7 +151,11 @@ class Group < ApplicationRecord
 
   def current_annual_budget=(annual_budget)
     annual_budgets.update_all(closed: true)
-    annual_budget.update_attributes(closed: true)
+    annual_budget.update_attributes(closed: true, group_id: id)
+  end
+
+  def current_budget_items
+    current_annual_budget&.budget_items || BudgetItem.none
   end
 
   def reload
