@@ -50,9 +50,13 @@ export function* getExpenses(action) {
 
 export function* createExpense(action) {
   try {
-    const response = { data: 'API CALL' };
+    const { path, ...rest } = action.payload;
+    const payload = { initiative_expense: rest };
 
-    yield put(createExpenseSuccess({}));
+    const response = yield call(api.initiativeExpenses.create.bind(api.initiativeExpenses), payload);
+
+    yield put(createExpenseSuccess(response.data));
+    yield put(push(path));
     yield put(showSnackbar({ message: 'Successfully created expense', options: { variant: 'success' } }));
   } catch (err) {
     yield put(createExpenseError(err));

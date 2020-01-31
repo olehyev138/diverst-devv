@@ -26,6 +26,10 @@ module BaseBuilder
       if item.has_attribute?(:enterprise_id) && item[:enterprise_id].blank?
         item.enterprise_id = diverst_request.user.enterprise_id
       end
+      # add owner id if exists & not set
+      if item.has_attribute?(:owner_id) && item[:owner_id].blank?
+        item.owner_id = diverst_request.user.id
+      end
 
       # save the item
       unless item.save
