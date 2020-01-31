@@ -65,7 +65,7 @@ class ApplicationRecord < ActiveRecord::Base
           .from(query.select("#{table_name}.id, #{table_name}.#{column}"))[0]
           .total_sum
     else
-      super(column)
+      query.sum(column)
     end
   end
 
