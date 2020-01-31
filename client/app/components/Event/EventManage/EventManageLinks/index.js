@@ -61,7 +61,7 @@ export function EventManageLinks(props) {
           />
           <Tab
             component={WrappedNavLink}
-            to={ROUTES.group.plan.events.manage.updates.index.path(groupId, event.id)}
+            to={ROUTES.group.plan.events.manage.expenses.index.path(groupId, event.id)}
             label={<DiverstFormattedMessage {...messages.links.expenses} />}
             value='expenses'
           />

@@ -144,6 +144,20 @@ export default defineMessages({
               id: `${scope}.group.plan.events.manage.updates.new`
             },
           },
+          expenses: {
+            index: {
+              id: `${scope}.group.plan.events.manage.expenses.index`
+            },
+            show: {
+              id: `${scope}.group.plan.events.manage.expenses.show`
+            },
+            edit: {
+              id: `${scope}.group.plan.events.manage.expenses.edit`
+            },
+            new: {
+              id: `${scope}.group.plan.events.manage.expenses.new`
+            },
+          },
         },
       },
       kpi: {

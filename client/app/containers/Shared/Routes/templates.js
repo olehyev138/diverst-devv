@@ -95,6 +95,7 @@ import EventManageUpdatesPage from 'containers/Event/EventManage/UpdatesPage/Loa
 import EventManageUpdatePage from 'containers/Event/EventManage/UpdatePage/Loadable';
 import EventManageUpdateEditPage from 'containers/Event/EventManage/UpdateEditPage/Loadable';
 import EventManageUpdateCreatePage from 'containers/Event/EventManage/UpdateCreatePage/Loadable';
+import EventManageExpensesPage from 'containers/Event/EventManage/Expense/ExpensesPage/Loadable';
 
 /* Group - News Feed */
 import GroupMessagePage from 'containers/News/GroupMessage/GroupMessagePage/Loadable';
@@ -210,6 +211,7 @@ export {
   EventManageUpdatePage,
   EventManageUpdateEditPage,
   EventManageUpdateCreatePage,
+  EventManageExpensesPage,
   NotFoundPage,
   PlaceholderPage,
   GroupDashboardPage,

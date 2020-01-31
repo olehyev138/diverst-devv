@@ -37,7 +37,7 @@ export function* getExpense(action) {
 
 export function* getExpenses(action) {
   try {
-    const response = { data: 'API CALL' };
+    const response = yield call(api.initiativeExpenses.all.bind(api.initiativeExpenses), action.payload);
 
     yield put(getExpensesSuccess(response.data.page));
   } catch (err) {

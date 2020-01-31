@@ -323,6 +323,34 @@ export const ROUTES = {
               data: {
                 titleMessage: messages.groups.plan.events.manage.updates.new,
               }
+            },
+          },
+          expenses: {
+            index: {
+              path: (groupId = ':group_id', eventId = ':event_id') => `/groups/${groupId}/plan/events/${eventId}/manage/expenses`,
+              data: {
+                titleMessage: messages.groups.plan.events.manage.expenses.index,
+              }
+            },
+            show: {
+              path:
+                (groupId = ':group_id', eventId = ':event_id', updateId = ':update_id') => `/groups/${groupId}/plan/events/${eventId}/manage/expenses/${updateId}`,
+              data: {
+                titleMessage: messages.groups.plan.events.manage.expenses.show,
+              }
+            },
+            edit: {
+              path:
+                (groupId = ':group_id', eventId = ':event_id', updateId = ':update_id') => `/groups/${groupId}/plan/events/${eventId}/manage/expenses/${updateId}/edit`,
+              data: {
+                titleMessage: messages.groups.plan.events.manage.expenses.edit,
+              }
+            },
+            new: {
+              path: (groupId = ':group_id', eventId = ':event_id') => `/groups/${groupId}/plan/events/${eventId}/manage/expenses/new`,
+              data: {
+                titleMessage: messages.groups.plan.events.manage.expenses.new,
+              }
             }
           },
         },

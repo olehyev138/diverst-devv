@@ -28,7 +28,7 @@ import {
   selectExpensesTotal,
   selectIsFetchingExpenses,
   selectIsCommitting,
-  selectHasChanged,
+  selectHasChanged, selectExpenseListSum,
 } from '../selectors';
 import {
   getExpensesBegin, createExpenseBegin, updateExpenseBegin,
@@ -51,41 +51,49 @@ export function ExpenseListPage(props) {
       count: 5,
       page: 0,
       order: 'asc',
-      orderBy: 'expenses.id',
-      expenseDefinerId: dig(props, 'currentEvent', 'id')
+      orderBy: 'initiative_expenses.id',
     }
   );
 
+  function getExpenses(params) {
+    props.getExpensesBegin({
+      ...params,
+      initiative_id: props.currentEvent.id,
+      sum: 'amount'
+    });
+  }
+
   useEffect(() => {
-    props.getExpensesBegin(params);
+    getExpenses(params);
 
     return () => {
-      props.expenseUnmount();
+      props.expensesUnmount();
     };
   }, []);
 
   useEffect(() => {
     if (props.hasChanged)
-      props.getExpensesBegin(params);
+      getExpenses(params);
 
     return () => {
-      props.expenseUnmount();
+      props.expensesUnmount();
     };
   }, [props.hasChanged]);
 
   const handlePagination = (payload) => {
     const newParams = { ...params, count: payload.count, page: payload.page };
 
-    props.getExpensesBegin(newParams);
+    getExpenses(newParams);
     setParams(newParams);
   };
 
   return (
     <React.Fragment>
+      <h2> {`SUM: ${props.expenseSumTotal}`} </h2>
       { props.expenses.map(ex => (
         <React.Fragment key={ex.id}>
-          {ex.id}
-          {ex.amount}
+          <h4> {ex.id} </h4>
+          <p> {ex.amount} </p>
         </React.Fragment>
       ))}
     </React.Fragment>
@@ -96,11 +104,12 @@ ExpenseListPage.propTypes = {
   getExpensesBegin: PropTypes.func.isRequired,
   createExpenseBegin: PropTypes.func.isRequired,
   updateExpenseBegin: PropTypes.func.isRequired,
-  expenses: PropTypes.object,
+  expenses: PropTypes.array,
   expenseTotal: PropTypes.number,
+  expenseSumTotal: PropTypes.number,
   isLoading: PropTypes.bool,
   deleteExpenseBegin: PropTypes.func,
-  expenseUnmount: PropTypes.func.isRequired,
+  expensesUnmount: PropTypes.func.isRequired,
   isCommitting: PropTypes.bool,
   commitSuccess: PropTypes.bool,
   hasChanged: PropTypes.bool,
@@ -115,6 +124,7 @@ ExpenseListPage.propTypes = {
 const mapStateToProps = createStructuredSelector({
   expenses: selectPaginatedExpenses(),
   expenseTotal: selectExpensesTotal(),
+  expenseSumTotal: selectExpenseListSum(),
   isLoading: selectIsFetchingExpenses(),
   isCommitting: selectIsCommitting(),
   currentEvent: selectEvent(),
