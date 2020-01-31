@@ -27,6 +27,7 @@ import {
 export const initialState = {
   expenseList: [],
   expenseListTotal: null,
+  expenseListSum: null,
   currentExpense: null,
   isFetchingExpenses: false,
   isFetchingExpense: false,
@@ -44,7 +45,7 @@ function expenseReducer(state = initialState, action) {
         break;
 
       case GET_EXPENSE_SUCCESS:
-        draft.currentExpense = action.payload.expense;
+        draft.currentExpense = action.payload.intiative_expense;
         draft.isFetchingExpense = false;
         break;
 
@@ -60,6 +61,7 @@ function expenseReducer(state = initialState, action) {
       case GET_EXPENSES_SUCCESS:
         draft.expenseList = action.payload.items;
         draft.expenseListTotal = action.payload.total;
+        draft.expenseListSum = action.payload.sum;
         draft.isFetchingExpenses = false;
         break;
 

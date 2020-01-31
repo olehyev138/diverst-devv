@@ -13,6 +13,11 @@ const selectExpensesTotal = () => createSelector(
   expenseState => expenseState.expenseListTotal
 );
 
+const selectExpenseListSum = () => createSelector(
+  selectExpenseDomain,
+  expenseState => expenseState.expenseListSum
+);
+
 const selectExpense = () => createSelector(
   selectExpenseDomain,
   expenseState => expenseState.currentExpense
@@ -42,6 +47,7 @@ export {
   selectExpenseDomain,
   selectPaginatedExpenses,
   selectExpensesTotal,
+  selectExpenseListSum,
   selectExpense,
   selectIsFetchingExpenses,
   selectIsFetchingExpense,
