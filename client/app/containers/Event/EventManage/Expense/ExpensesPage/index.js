@@ -89,11 +89,17 @@ export function ExpenseListPage(props) {
 
   return (
     <React.Fragment>
-      <h2> {`SUM: ${props.expenseSumTotal}`} </h2>
+      <h2>
+        {`SUM: ${props.expenseSumTotal}`}
+      </h2>
       { props.expenses.map(ex => (
         <React.Fragment key={ex.id}>
-          <h4> {ex.id} </h4>
-          <p> {ex.amount} </p>
+          <h4>
+            {ex.id}
+          </h4>
+          <p>
+            {ex.amount}
+          </p>
         </React.Fragment>
       ))}
     </React.Fragment>

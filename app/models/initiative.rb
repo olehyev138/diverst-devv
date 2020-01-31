@@ -74,6 +74,7 @@ class Initiative < ApplicationRecord
 
   # we don't want to run this callback when finish_expenses! is triggered in initiatives_controller.rb, finish_expense action
   validate -> { allocate_budget_funds unless skip_allocate_budget_funds }
+  validate -> { budget_item_is_approved }
 
   # ActiveStorage
   has_one_attached :picture
@@ -419,6 +420,10 @@ class Initiative < ApplicationRecord
         return
       end
     end
+  end
+
+  def budget_item_is_approved
+    errors.add(:budget_item, 'Budget Item is not approved') unless budget.is_approved?
   end
 
   def allocate_budget_funds
