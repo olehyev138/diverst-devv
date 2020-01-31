@@ -27,6 +27,7 @@ import { DateTime, formatDateTimeString } from 'utils/dateTimeHelpers';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/News/messages';
+import DiverstProgress from 'components/Shared/DiverstProgress';
 
 const styles = theme => ({
   expenseListItem: {
@@ -39,23 +40,6 @@ const styles = theme => ({
     color: theme.palette.error.main,
   },
 });
-
-const BorderLinearProgress = withStyles({
-  root: {
-    height: 7,
-    backgroundColor: '#eee',
-    borderRadius: 1000,
-  },
-  bar: {
-    borderRadius: 1000,
-  }
-})(LinearProgress);
-
-const RoundedBox = withStyles({
-  root: {
-    borderRadius: 1000,
-  },
-})(Box);
 
 export function ExpenseList(props, context) {
   const { classes } = props;
@@ -169,12 +153,10 @@ export function ExpenseList(props, context) {
               </Typography>
             </Grid>
             <Grid item xs={10}>
-              <RoundedBox boxShadow={1}>
-                <BorderLinearProgress
-                  variant='determinate'
-                  value={percent(props.expenseSumTotal, props.initiative.estimated_funding)}
-                />
-              </RoundedBox>
+              <DiverstProgress
+                number={props.expenseSumTotal}
+                total={props.initiative.estimated_funding}
+              />
             </Grid>
             <Grid item xs={1}>
               <Typography color='primary' variant='body1' component='h2' align='right'>

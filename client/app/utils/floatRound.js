@@ -2,7 +2,7 @@ export function floatRound(number, rounding) {
   return toNumber(number).toFixed(rounding);
 }
 
-export function percent(num, dem) {
+export function percentMax100(num, dem) {
   const fraction = toNumber(num) / toNumber(dem);
   const percent = Math.round(fraction * 100);
 
@@ -10,7 +10,16 @@ export function percent(num, dem) {
     return 1;
   if (percent === 100 && fraction < 1)
     return 99;
-  return percent;
+  return clamp(percent, 0, 100);
+}
+
+export function percent(num, dem) {
+  const fraction = toNumber(num) / toNumber(dem);
+  return Math.ceil(fraction * 100);
+}
+
+export function clamp(num, min, max) {
+  return Math.min(Math.max(num, toNumber(min)), toNumber(max));
 }
 
 export function toNumber(number) {

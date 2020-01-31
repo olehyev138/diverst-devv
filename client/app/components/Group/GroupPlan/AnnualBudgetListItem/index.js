@@ -18,6 +18,7 @@ import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 
 import { formatDateTimeString, DateTime } from 'utils/dateTimeHelpers';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
+import DiverstProgress from 'components/Shared/DiverstProgress';
 
 const styles = theme => ({
   arrowRight: {
@@ -127,13 +128,11 @@ export function AnnualBudgetListItem(props) {
             </Typography>
           </Grid>
           <Grid item xs={10}>
-            <RoundedBox boxShadow={1}>
-              <BorderLinearProgress
-                variant='buffer'
-                value={percent(expenses, amount)}
-                valueBuffer={percent(available, amount)}
-              />
-            </RoundedBox>
+            <DiverstProgress
+              number={expenses}
+              buffer={available}
+              total={amount}
+            />
           </Grid>
           <Grid item xs={1}>
             <Typography color='primary' variant='body1' component='h2' align='right'>
