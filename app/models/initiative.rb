@@ -423,7 +423,7 @@ class Initiative < ApplicationRecord
   end
 
   def budget_item_is_approved
-    errors.add(:budget_item, 'Budget Item is not approved') unless budget.is_approved?
+    errors.add(:budget_item, 'Budget Item is not approved') unless budget_item.blank? || budget.is_approved?
   end
 
   def allocate_budget_funds
