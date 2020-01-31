@@ -262,7 +262,7 @@ RSpec.describe Initiative, type: :model do
     end
   end
 
-  describe '#approved?' do
+  describe '#approved?', skip: 'Now Validated' do
     it 'returns false' do
       budget = build(:budget, is_approved: true)
       budget_item = create(:budget_item, budget: budget)
