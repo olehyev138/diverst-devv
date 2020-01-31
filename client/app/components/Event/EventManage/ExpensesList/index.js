@@ -10,7 +10,7 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
-import {floatRound, percent} from 'utils/floatRound';
+import { floatRound, percent } from 'utils/floatRound';
 
 import {
   Button, Card, CardContent, CardActions,
