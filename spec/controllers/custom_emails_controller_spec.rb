@@ -187,7 +187,7 @@ RSpec.describe CustomEmailsController, type: :controller do
 
       context 'with custom email' do
         it 'deletes email' do
-          expect{
+          expect {
             delete_destroy(email.id)
           }.to change(Email, :count).by(-1)
         end

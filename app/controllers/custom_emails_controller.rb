@@ -6,7 +6,7 @@ class CustomEmailsController < ApplicationController
   layout 'global_settings'
 
   # TODO implement public activity for custom mails
-  #after_action :visit_page, only: [:index, :edit]
+  # after_action :visit_page, only: [:index, :edit]
 
   def new
     @enterprise = current_user.enterprise
@@ -16,7 +16,7 @@ class CustomEmailsController < ApplicationController
     @submit_method = 'post'
   end
 
-  #show and perepare for sending
+  # show and perepare for sending
   def show
   end
 
@@ -69,7 +69,7 @@ class CustomEmailsController < ApplicationController
   def deliver
     # TODO authenticate
 
-    emails = custom_email_params[:receivers].split(',').map{ |i| i.strip }
+    emails = custom_email_params[:receivers].split(',').map { |i| i.strip }
 
     CustomEmailMailer.custom(@custom_email.id, emails).deliver_later
 
