@@ -12,7 +12,9 @@
  *    - on save - create/update expense
  */
 
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo, useContext, useEffect, useState } from 'react';
+import RouteService from 'utils/routeHelpers';
+import { ROUTES } from 'containers/Shared/Routes/constants';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import dig from 'object-dig';
@@ -38,7 +40,7 @@ import {
 import reducer from '../reducer';
 import saga from '../saga';
 
-// import ExpenseList from 'components/Shared/Expenses/ExpenseList';
+import ExpenseList from 'components/Event/EventManage/ExpensesList';
 import { selectEvent } from 'containers/Event/selectors';
 import { selectGroup } from 'containers/Group/selectors';
 
@@ -54,6 +56,12 @@ export function ExpenseListPage(props) {
       orderBy: 'initiative_expenses.id',
     }
   );
+
+  const rs = new RouteService(useContext);
+  const links = {
+    newExpense: ROUTES.group.plan.events.manage.expenses.new.path(props.currentGroup.id, props.currentEvent.id),
+    initiativeManage: ROUTES.group.plan.events.index.path(props.currentGroup.id, props.currentEvent.id),
+  };
 
   function getExpenses(params) {
     props.getExpensesBegin({
@@ -87,21 +95,26 @@ export function ExpenseListPage(props) {
     setParams(newParams);
   };
 
+  const handleOrdering = (payload) => {
+    const newParams = { ...params, orderBy: payload.orderBy, order: payload.orderDir };
+
+    getExpenses(newParams);
+    setParams(newParams);
+  };
+
   return (
     <React.Fragment>
-      <h2>
-        {`SUM: ${props.expenseSumTotal}`}
-      </h2>
-      { props.expenses.map(ex => (
-        <React.Fragment key={ex.id}>
-          <h4>
-            {ex.id}
-          </h4>
-          <p>
-            {ex.amount}
-          </p>
-        </React.Fragment>
-      ))}
+      <ExpenseList
+        initiative={props.currentEvent}
+        currentGroup={props.currentGroup}
+        expenses={props.expenses}
+        expenseTotal={props.expenseTotal}
+        expenseSumTotal={props.expenseSumTotal}
+        isFetchingExpenses={props.isLoading}
+        handlePagination={handlePagination}
+        handleOrdering={handleOrdering}
+        links={links}
+      />
     </React.Fragment>
   );
 }
