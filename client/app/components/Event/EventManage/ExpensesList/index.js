@@ -150,6 +150,10 @@ export function ExpenseList(props, context) {
       <Box mb={2} />
       <Card>
         <CardContent>
+          <Typography variant='h6' component='h2'>
+            Budget pressure
+          </Typography>
+          <Box mb={2} />
           <Grid
             alignItems='center'
             justify='center'
