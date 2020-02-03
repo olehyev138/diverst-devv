@@ -55,10 +55,16 @@ const selectFormGroupLeader = () => createSelector(
   groupLeadersState => mapForm(groupLeadersState.currentGroupLeader)
 );
 
+const selectIsFormLoading = () => createSelector(
+  selectGroupLeadersDomain,
+  groupLeadersState => groupLeadersState.isFormLoading
+);
+
 function mapForm(leader) {
   if (!leader) return null;
   return produce(leader, (draft) => {
     draft.user = { value: leader.user.id, label: leader.user.name };
+    draft.user_role = { value: leader.user_role.id, label: leader.user_role.role_name };
   });
 }
 
@@ -66,5 +72,5 @@ function mapForm(leader) {
 export {
   selectFormGroupLeaders, selectGroupLeadersDomain, selectPaginatedGroupLeaders, selectGroupLeader,
   selectGroupLeaderTotal, selectIsFetchingGroupLeaders, selectIsCommitting,
-  selectFormGroupLeader, selectPaginatedSelectGroupLeaders,
+  selectFormGroupLeader, selectPaginatedSelectGroupLeaders, selectIsFormLoading
 };

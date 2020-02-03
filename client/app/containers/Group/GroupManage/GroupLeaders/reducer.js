@@ -14,6 +14,7 @@ import {
 
 export const initialState = {
   isCommitting: false,
+  isFormLoading: true,
   groupLeaderList: [],
   groupLeaderTotal: null,
   isFetchingGroupLeaders: true,
