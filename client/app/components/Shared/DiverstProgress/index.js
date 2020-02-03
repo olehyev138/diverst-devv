@@ -8,7 +8,7 @@ import { percent, clamp } from 'utils/floatRound';
 // This component is intended for rendering images from a base64 string,
 // likely image data encoded in base64 received from a serializer.
 export function DiverstProgress(props) {
-  const { classes, ...rest } = props;
+  const { classes, overflow, start, end, buffer, number, total, middle, ...rest } = props;
 
   const basicBarStyle = {
     root: {
@@ -48,13 +48,20 @@ export function DiverstProgress(props) {
     },
   })(Box);
 
-  const value = percent(rest.number, rest.total);
-  const valueBuffer = percent(rest.buffer || 0, rest.total);
+  let value;
+  let valueBuffer;
+  if (total) {
+    value = percent(number, total);
+    valueBuffer = buffer ? percent(buffer, total) : null;
+  } else {
+    value = percent(number - start, end - start);
+    valueBuffer = middle ? percent(middle - start, end - start) : null;
+  }
 
   let BorderLinearProgress;
-  if (value > 100)
+  if (value > 100 && overflow)
     BorderLinearProgress = Error1Progress;
-  else if (valueBuffer > 100)
+  else if (valueBuffer > 100 && overflow)
     BorderLinearProgress = Error2Progress;
   else
     BorderLinearProgress = NoErrorProgress;
@@ -64,7 +71,7 @@ export function DiverstProgress(props) {
     <React.Fragment>
       <RoundedBox boxShadow={1}>
         <BorderLinearProgress
-          variant={rest.buffer ? 'buffer' : 'determinate'}
+          variant={valueBuffer ? 'buffer' : 'determinate'}
           value={clamp(value, 0, 100)}
           valueBuffer={clamp(valueBuffer, 0, 100)}
         />
@@ -75,9 +82,16 @@ export function DiverstProgress(props) {
 
 DiverstProgress.propTypes = {
   classes: PropTypes.object,
-  number: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  number: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+
   buffer: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  total: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  total: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+
+  start: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  middle: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  end: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+
+  overflow: PropTypes.bool,
 };
 
 export default compose(

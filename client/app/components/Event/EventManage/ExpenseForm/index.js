@@ -98,7 +98,7 @@ export function ExpenseForm(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        props.expenseAction({ path: props.links.index, ...values });
+        props.expenseAction({ path: props.links.index, initiative_id: props.initiativeId, ...values });
       }}
     >
       {formikProps => <ExpenseFormInner {...props} formikProps={formikProps} />}

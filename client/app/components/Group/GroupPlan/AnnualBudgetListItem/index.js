@@ -132,6 +132,7 @@ export function AnnualBudgetListItem(props) {
               number={expenses}
               buffer={available}
               total={amount}
+              overflow
             />
           </Grid>
           <Grid item xs={1}>

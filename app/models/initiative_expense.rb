@@ -16,7 +16,7 @@ class InitiativeExpense < ApplicationRecord
   scope :active, -> { joins(:initiative).where(initiatives: { finished_expenses: false }) }
 
   def initiative_is_not_finalized
-    if initiative.blank? || initiative.finish_expenses
+    if initiative.blank? || initiative.finished_expenses?
       errors.add(:initiative, "Can't #{new_record? ? 'add' : 'edit'} an expense for a closed initiative")
     end
   end
