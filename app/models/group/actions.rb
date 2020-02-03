@@ -9,7 +9,7 @@ module Group::Actions
     end
 
     def base_preloads
-      [ :news_feed, :children, :enterprise, enterprise: [ :theme ], children: base_preload_no_recursion ]
+      [ :news_feed, :annual_budgets, :children, :enterprise, enterprise: [ :theme ], children: base_preload_no_recursion ]
     end
 
     def base_preload_no_recursion
@@ -17,7 +17,7 @@ module Group::Actions
     end
 
     def base_attributes_preloads
-      [ :news_feed, enterprise: [ :theme ] ]
+      [ :news_feed, :annual_budgets, enterprise: [ :theme ] ]
     end
   end
 end
