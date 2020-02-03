@@ -24,7 +24,7 @@ import {
 
 export function* getExpense(action) {
   try {
-    const response = { data: 'API CALL' };
+    const response = yield call(api.initiativeExpenses.get.bind(api.initiativeExpenses), action.payload.id);
 
     yield put(getExpenseSuccess(response.data));
   } catch (err) {
@@ -68,9 +68,13 @@ export function* createExpense(action) {
 
 export function* updateExpense(action) {
   try {
-    const response = { data: 'API CALL' };
+    const { path, id, ...rest } = action.payload;
+    const payload = { initiative_expense: rest };
+
+    const response = yield call(api.initiativeExpenses.update.bind(api.initiativeExpenses), id, payload);
 
     yield put(updateExpenseSuccess({}));
+    yield put(push(path));
     yield put(showSnackbar({ message: 'Successfully updated expense', options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateExpenseError(err));

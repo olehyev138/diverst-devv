@@ -77,8 +77,8 @@ export function ExpenseList(props, context) {
     icon: () => <EditIcon />,
     tooltip: 'Details',
     onClick: (_, rowData) => {
-      // eslint-disable-next-line no-alert
-      alert('Not Implemented');
+      console.log('Yo');
+      props.links.editExpense(rowData.id);
     }
   });
 
@@ -191,6 +191,7 @@ ExpenseList.propTypes = {
   links: PropTypes.shape({
     newExpense: PropTypes.string,
     initiativeManage: PropTypes.string,
+    editExpense: PropTypes.func,
   })
 };
 

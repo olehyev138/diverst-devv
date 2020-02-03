@@ -334,14 +334,14 @@ export const ROUTES = {
             },
             show: {
               path:
-                (groupId = ':group_id', eventId = ':event_id', updateId = ':update_id') => `/groups/${groupId}/plan/events/${eventId}/manage/expenses/${updateId}`,
+                (groupId = ':group_id', eventId = ':event_id', expensesId = ':expenses_id') => `/groups/${groupId}/plan/events/${eventId}/manage/expenses/${expensesId}`,
               data: {
                 titleMessage: messages.groups.plan.events.manage.expenses.show,
               }
             },
             edit: {
               path:
-                (groupId = ':group_id', eventId = ':event_id', updateId = ':update_id') => `/groups/${groupId}/plan/events/${eventId}/manage/expenses/${updateId}/edit`,
+                (groupId = ':group_id', eventId = ':event_id', expensesId = ':expenses_id') => `/groups/${groupId}/plan/events/${eventId}/manage/expenses/${expensesId}/edit`,
               data: {
                 titleMessage: messages.groups.plan.events.manage.expenses.edit,
               }

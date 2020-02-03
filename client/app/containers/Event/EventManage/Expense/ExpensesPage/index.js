@@ -17,6 +17,7 @@ import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { push } from 'connected-react-router';
 import dig from 'object-dig';
 
 import { createStructuredSelector } from 'reselect/lib';
@@ -44,6 +45,8 @@ import ExpenseList from 'components/Event/EventManage/ExpensesList';
 import { selectEvent } from 'containers/Event/selectors';
 import { selectGroup } from 'containers/Group/selectors';
 
+const handleVisitEditPage = (groupId, eventId, id) => push(ROUTES.group.plan.events.manage.expenses.edit.path(groupId, eventId, id));
+
 export function ExpenseListPage(props) {
   useInjectReducer({ key: 'expenses', reducer });
   useInjectSaga({ key: 'expenses', saga });
@@ -60,6 +63,7 @@ export function ExpenseListPage(props) {
   const rs = new RouteService(useContext);
   const links = {
     newExpense: ROUTES.group.plan.events.manage.expenses.new.path(props.currentGroup.id, props.currentEvent.id),
+    editExpense: id => props.handleVisitEditPage(props.currentGroup.id, props.currentEvent.id, id),
     initiativeManage: ROUTES.group.plan.events.index.path(props.currentGroup.id, props.currentEvent.id),
   };
 
@@ -113,6 +117,7 @@ export function ExpenseListPage(props) {
         isFetchingExpenses={props.isLoading}
         handlePagination={handlePagination}
         handleOrdering={handleOrdering}
+        handleVisitEditPage={props.handleVisitEditPage}
         links={links}
       />
     </React.Fragment>
@@ -123,6 +128,7 @@ ExpenseListPage.propTypes = {
   getExpensesBegin: PropTypes.func.isRequired,
   createExpenseBegin: PropTypes.func.isRequired,
   updateExpenseBegin: PropTypes.func.isRequired,
+  handleVisitEditPage: PropTypes.func.isRequired,
   expenses: PropTypes.array,
   expenseTotal: PropTypes.number,
   expenseSumTotal: PropTypes.number,
@@ -156,6 +162,7 @@ const mapDispatchToProps = {
   createExpenseBegin,
   updateExpenseBegin,
   deleteExpenseBegin,
+  handleVisitEditPage,
   expensesUnmount,
 };
 

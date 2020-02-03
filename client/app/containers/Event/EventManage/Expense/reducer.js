@@ -45,7 +45,7 @@ function expenseReducer(state = initialState, action) {
         break;
 
       case GET_EXPENSE_SUCCESS:
-        draft.currentExpense = action.payload.intiative_expense;
+        draft.currentExpense = action.payload.initiative_expense;
         draft.isFetchingExpense = false;
         break;
 

@@ -88,6 +88,7 @@ export function ExpenseForm(props) {
   const expense = dig(props, 'expense');
 
   const initialValues = buildValues(expense, {
+    id: { default: '' },
     description: { default: '' },
     amount: { default: 0 },
   });
@@ -97,7 +98,7 @@ export function ExpenseForm(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        props.expenseAction({ path: props.links.index, initiative_id: props.initiativeId, ...values });
+        props.expenseAction({ path: props.links.index, ...values });
       }}
     >
       {formikProps => <ExpenseFormInner {...props} formikProps={formikProps} />}
