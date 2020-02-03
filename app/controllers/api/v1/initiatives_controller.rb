@@ -13,6 +13,21 @@ class Api::V1::InitiativesController < DiverstController
     super
   end
 
+  def finish_expenses
+    params[klass.symbol] = payload
+    item = klass.find(params[:id])
+    base_authorize(item)
+
+    render status: 200, json: item.finalize_expenses(self.diverst_request)
+  rescue => e
+    case e
+    when InvalidInputException
+      raise
+    else
+      raise BadRequestException.new(e.message)
+    end
+  end
+
   def payload
     params
       .require(:initiative)

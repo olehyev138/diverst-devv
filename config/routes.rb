@@ -99,6 +99,8 @@ Diverst::Application.routes.draw do
         member do
           post '/qrcode', to: 'initiatives#generate_qr_code'
 
+          post '/finalize_expenses', to: 'initiatives#finish_expenses'
+
           get  '/fields',       to: 'initiatives#fields'
           post '/create_field', to: 'initiatives#create_field'
 

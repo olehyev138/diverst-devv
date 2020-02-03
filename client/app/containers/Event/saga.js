@@ -130,9 +130,9 @@ export function* deleteEvent(action) {
 
 export function* finalizeExpenses(action) {
   try {
-    const response = { data: 'API CALL' };
+    const response = yield call(api.initiatives.finalizeExpenses.bind(api.initiatives), action.payload.id);
 
-    yield put(finalizeExpensesSuccess({}));
+    yield put(finalizeExpensesSuccess(response.data));
     yield put(showSnackbar({ message: 'Successfully finalized expenses', options: { variant: 'success' } }));
   } catch (err) {
     yield put(finalizeExpensesError(err));
@@ -141,6 +141,7 @@ export function* finalizeExpenses(action) {
     yield put(showSnackbar({ message: 'Failed to finalize expenses', options: { variant: 'warning' } }));
   }
 }
+
 export default function* eventsSaga() {
   yield takeLatest(GET_EVENTS_BEGIN, getEvents);
   yield takeLatest(GET_EVENT_BEGIN, getEvent);

@@ -6,18 +6,19 @@ module Initiative::Actions
     klass.extend ClassMethods
   end
 
+  def finalize_expenses(diverst_request)
+    raise BadRequestException.new "#{self.name.titleize} ID required" if id.blank?
+
+    unless self.finish_expenses!
+      raise InvalidInputException.new({ message: item.errors.full_messages.first, attribute: item.errors.messages.first.first })
+    end
+
+    self
+  end
+
   module ClassMethods
     def valid_scopes
       ['upcoming', 'ongoing', 'past']
-    end
-
-    def build(diverst_request, params)
-      item = super
-      annual_budget = diverst_request.user.enterprise.annual_budgets.find_or_create_by(closed: false, group_id: item.group)
-      item.annual_budget_id = annual_budget.id
-      item.save!
-
-      item
     end
 
     def generate_qr_code(diverst_request, params)
