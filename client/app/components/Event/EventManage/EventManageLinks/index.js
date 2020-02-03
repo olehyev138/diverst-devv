@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
-import { Tab, Paper, Typography, Button, Box } from '@material-ui/core';
+import { Tab, Paper, Typography, Button, Box, Grid } from '@material-ui/core';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
@@ -25,16 +25,18 @@ export function EventManageLinks(props) {
 
   return (
     <React.Fragment>
-      <Button
-        variant='contained'
-        to={ROUTES.group.plan.events.index.path(props.event.owner_group_id)}
-        color='secondary'
-        size='medium'
-        component={WrappedNavLink}
-        startIcon={<BackIcon />}
-      >
-        <DiverstFormattedMessage {...messages.return} />
-      </Button>
+      <Grid container>
+        <Button
+          variant='contained'
+          to={ROUTES.group.plan.events.index.path(props.event.owner_group_id)}
+          color='secondary'
+          size='medium'
+          component={WrappedNavLink}
+          startIcon={<BackIcon />}
+        >
+          <DiverstFormattedMessage {...messages.return} />
+        </Button>
+      </Grid>
       <Box mb={3} />
       <Typography variant='h4' component='h6' align='center' color='primary'>
         <strong>{props.event.name}</strong>
