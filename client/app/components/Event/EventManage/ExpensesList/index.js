@@ -77,7 +77,6 @@ export function ExpenseList(props, context) {
     icon: () => <EditIcon />,
     tooltip: 'Details',
     onClick: (_, rowData) => {
-      console.log('Yo');
       props.links.editExpense(rowData.id);
     }
   });
