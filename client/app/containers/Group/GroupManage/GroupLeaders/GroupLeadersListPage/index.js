@@ -25,7 +25,6 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import GroupLeadersList from 'components/Group/GroupManage/GroupLeaders/GroupLeadersList';
 import { push } from 'connected-react-router';
-import GroupManageLayout from 'containers/Layouts/GroupManageLayout';
 
 export function GroupLeadersListPage(props) {
   useInjectReducer({ key: 'groupLeaders', reducer });
@@ -66,26 +65,19 @@ export function GroupLeadersListPage(props) {
   };
 
   return (
-    <React.Fragment>
-      <GroupManageLayout
-        component={() => (
-          <GroupLeadersList
-            group={props.currentGroup}
-            groupLeaderList={props.groupLeaderList}
-            groupLeaderTotal={props.groupLeaderTotal}
-            isFetchingGroupLeaders={props.isFetchingGroupLeaders}
-            deleteGroupLeaderBegin={props.deleteGroupLeaderBegin}
-            handleVisitGroupLeaderEdit={props.handleVisitGroupLeaderEdit}
-            links={links}
-            setParams={params}
-            params={params}
-            handlePagination={handlePagination}
-            handleOrdering={handleOrdering}
-          />
-        )}
-        {...props}
-      />
-    </React.Fragment>
+    <GroupLeadersList
+      group={props.currentGroup}
+      groupLeaderList={props.groupLeaderList}
+      groupLeaderTotal={props.groupLeaderTotal}
+      isFetchingGroupLeaders={props.isFetchingGroupLeaders}
+      deleteGroupLeaderBegin={props.deleteGroupLeaderBegin}
+      handleVisitGroupLeaderEdit={props.handleVisitGroupLeaderEdit}
+      links={links}
+      setParams={params}
+      params={params}
+      handlePagination={handlePagination}
+      handleOrdering={handleOrdering}
+    />
   );
 }
 

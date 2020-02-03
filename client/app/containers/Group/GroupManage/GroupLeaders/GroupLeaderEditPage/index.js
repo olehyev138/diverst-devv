@@ -11,29 +11,24 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
+
 import reducer from 'containers/Group/GroupManage/GroupLeaders/reducer';
 import saga from 'containers/Group/GroupManage/GroupLeaders/saga';
-import userReducer from 'containers/User/reducer';
-import userSaga from 'containers/User/saga';
+
 import memberReducer from 'containers/Group/GroupMembers/reducer';
 import memberSaga from 'containers/Group/GroupMembers/saga';
-import { selectPaginatedSelectMembersLeaderForm, selectMemberTotal,
-  selectIsFetchingMembers
-} from 'containers/Group/GroupMembers/selectors';
-import {
-  getMembersBegin,
-} from 'containers/Group/GroupMembers/actions';
 
+import { selectPaginatedSelectMembers } from 'containers/Group/GroupMembers/selectors';
+import { getMembersBegin, groupMembersUnmount } from 'containers/Group/GroupMembers/actions';
 
+import { selectIsCommitting, selectFormGroupLeader, selectIsFormLoading } from 'containers/Group/GroupManage/GroupLeaders/selectors';
 import { getGroupLeaderBegin, updateGroupLeaderBegin, groupLeadersUnmount } from 'containers/Group/GroupManage/GroupLeaders/actions';
-import {
-  selectGroupLeaderTotal, selectPaginatedSelectGroupLeaders, selectIsCommitting, selectFormGroupLeaders, selectFormGroupLeader
-} from 'containers/Group/GroupManage/GroupLeaders/selectors';
-
 
 import GroupLeaderForm from 'components/Group/GroupManage/GroupLeaders/GroupLeaderForm';
 
 export function GroupLeaderEditPage(props) {
+  const { members, groupLeader, isCommitting, isFormLoading, ...rest } = props;
+
   useInjectReducer({ key: 'groupLeaders', reducer });
   useInjectSaga({ key: 'groupLeaders', saga });
   useInjectReducer({ key: 'members', reducer: memberReducer });
@@ -42,30 +37,32 @@ export function GroupLeaderEditPage(props) {
   const rs = new RouteService(useContext);
   const groupId = rs.params('group_id');
   const groupLeaderId = rs.params('group_leader_id');
+
   const links = {
-    index: ROUTES.group.manage.leaders.index.path(rs.params('group_id')),
+    index: ROUTES.group.manage.leaders.index.path(groupId),
   };
 
   useEffect(() => {
     props.getGroupLeaderBegin({ group_id: groupId, id: groupLeaderId });
     props.getMembersBegin({ group_id: groupId, count: 500, query_scopes: ['active'] });
-    return () => props.groupLeadersUnmount();
+
+    return () => {
+      props.groupLeadersUnmount();
+      props.groupMembersUnmount();
+    };
   }, []);
+
   return (
     <GroupLeaderForm
       edit
       getGroupLeaderBegin={props.getGroupLeaderBegin}
-      groupLeader={props.groupLeader}
-      groupLeaderId={rs.params('group_leader_id'[0])}
+      groupLeader={groupLeader}
       groupLeaderAction={props.updateGroupLeaderBegin}
       getMembersBegin={props.getMembersBegin}
-      selectMembers={props.members}
-      member={props.member}
-      groupId={groupId[0]}
-      groupMembers={props.members}
-      groupLeaders={props.groupLeaders}
-      isCommitting={props.isCommitting}
-      isFormLoading={props.isFormLoading}
+      selectMembers={members}
+      groupId={groupId}
+      isCommitting={isCommitting}
+      isFormLoading={isFormLoading}
       buttonText='Update'
       links={links}
     />
@@ -77,29 +74,28 @@ GroupLeaderEditPage.propTypes = {
   getGroupMembersBegin: PropTypes.func,
   updateGroupLeaderBegin: PropTypes.func,
   groupLeadersUnmount: PropTypes.func,
+  groupMembersUnmount: PropTypes.func,
   getMembersBegin: PropTypes.func,
   members: PropTypes.array,
-  member: PropTypes.object,
-  groupLeaders: PropTypes.array,
   isCommitting: PropTypes.bool,
-  isFormLoading: PropTypes.func,
+  isFormLoading: PropTypes.bool,
   groupLeader: PropTypes.object,
   groupLeaderId: PropTypes.string,
 };
 
 const mapStateToProps = createStructuredSelector({
-  members: selectPaginatedSelectMembersLeaderForm(),
-  groupLeaders: selectPaginatedSelectGroupLeaders(),
-  isCommitting: selectIsCommitting(),
+  members: selectPaginatedSelectMembers(),
   groupLeader: selectFormGroupLeader(),
-  // groupLeaders: selectFormGroupLeaders()
+  isCommitting: selectIsCommitting(),
+  isFormLoading: selectIsFormLoading(),
 });
 
 const mapDispatchToProps = {
   updateGroupLeaderBegin,
   getGroupLeaderBegin,
-  groupLeadersUnmount,
   getMembersBegin,
+  groupLeadersUnmount,
+  groupMembersUnmount,
 };
 
 const withConnect = connect(

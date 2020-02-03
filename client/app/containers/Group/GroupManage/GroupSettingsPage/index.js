@@ -15,7 +15,6 @@ import {
 
 import { selectGroupIsCommitting } from 'containers/Group/selectors';
 
-import GroupManageLayout from 'containers/Layouts/GroupManageLayout';
 import GroupSettings from 'components/Group/GroupManage/GroupSettings';
 
 export function GroupSettingsPage(props) {
@@ -23,18 +22,11 @@ export function GroupSettingsPage(props) {
   useInjectSaga({ key: 'groups', saga });
 
   return (
-    <React.Fragment>
-      <GroupManageLayout
-        component={() => (
-          <GroupSettings
-            groupAction={props.updateGroupSettingsBegin}
-            group={props.currentGroup}
-            isCommitting={props.isCommitting}
-          />
-        )}
-        {...props}
-      />
-    </React.Fragment>
+    <GroupSettings
+      groupAction={props.updateGroupSettingsBegin}
+      group={props.currentGroup}
+      isCommitting={props.isCommitting}
+    />
   );
 }
 
