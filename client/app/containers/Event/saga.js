@@ -4,21 +4,25 @@ import { push } from 'connected-react-router';
 
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
 
+import { ROUTES } from 'containers/Shared/Routes/constants';
+
 import {
-  GET_EVENTS_BEGIN, GET_EVENT_BEGIN,
-  CREATE_EVENT_BEGIN, UPDATE_EVENT_BEGIN,
+  GET_EVENTS_BEGIN,
+  GET_EVENT_BEGIN,
+  CREATE_EVENT_BEGIN,
+  UPDATE_EVENT_BEGIN,
   DELETE_EVENT_BEGIN,
-} from 'containers/Event/constants';
+  FINALIZE_EXPENSES_BEGIN,
+} from './constants';
 
 import {
   getEventsSuccess, getEventsError,
   getEventSuccess, getEventError,
   createEventSuccess, createEventError,
   updateEventSuccess, updateEventError,
-  deleteEventError, deleteEventSuccess
-} from 'containers/Event/actions';
-
-import { ROUTES } from 'containers/Shared/Routes/constants';
+  deleteEventSuccess, deleteEventError,
+  finalizeExpensesSuccess, finalizeExpensesError,
+} from './actions';
 
 export function* getEvents(action) {
   try {
@@ -31,8 +35,7 @@ export function* getEvents(action) {
     } else
       response = yield call(api.initiatives.all.bind(api.initiatives), action.payload);
 
-
-    yield (put(getEventsSuccess(response.data.page)));
+    yield put(getEventsSuccess(response.data.page));
   } catch (err) {
     yield put(getEventsError(err));
 
@@ -49,6 +52,8 @@ export function* getEvent(action) {
     const response = yield call(api.initiatives.get.bind(api.initiatives), action.payload.id);
     yield put(getEventSuccess(response.data));
   } catch (err) {
+    yield put(getEventError(err));
+
     // TODO: intl message
     yield put(getEventError(err));
     yield put(showSnackbar({
@@ -123,10 +128,24 @@ export function* deleteEvent(action) {
   }
 }
 
+export function* finalizeExpenses(action) {
+  try {
+    const response = { data: 'API CALL' };
+
+    yield put(finalizeExpensesSuccess({}));
+    yield put(showSnackbar({ message: 'Successfully finalized expenses', options: { variant: 'success' } }));
+  } catch (err) {
+    yield put(finalizeExpensesError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to finalize expenses', options: { variant: 'warning' } }));
+  }
+}
 export default function* eventsSaga() {
   yield takeLatest(GET_EVENTS_BEGIN, getEvents);
   yield takeLatest(GET_EVENT_BEGIN, getEvent);
   yield takeLatest(CREATE_EVENT_BEGIN, createEvent);
   yield takeLatest(UPDATE_EVENT_BEGIN, updateEvent);
   yield takeLatest(DELETE_EVENT_BEGIN, deleteEvent);
+  yield takeLatest(FINALIZE_EXPENSES_BEGIN, finalizeExpenses);
 }

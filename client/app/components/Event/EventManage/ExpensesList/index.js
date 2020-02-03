@@ -29,6 +29,9 @@ import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/News/messages';
 import DiverstProgress from 'components/Shared/DiverstProgress';
 
+const beforeNowString = datetime => DateTime.local() > DateTime.fromISO(datetime);
+const beforeNowTime = datetime => DateTime.local() > datetime;
+
 const styles = theme => ({
   expenseListItem: {
     width: '100%',
@@ -42,7 +45,7 @@ const styles = theme => ({
 });
 
 export function ExpenseList(props, context) {
-  const { classes } = props;
+  const { classes, initiative } = props;
 
   const handleOrderChange = (columnId, orderDir) => {
     props.handleOrdering({
@@ -73,21 +76,23 @@ export function ExpenseList(props, context) {
 
   const actions = [];
 
-  actions.push({
-    icon: () => <EditIcon />,
-    tooltip: 'Details',
-    onClick: (_, rowData) => {
-      props.links.editExpense(rowData.id);
-    }
-  });
+  if (initiative && !initiative.finished_expenses) {
+    actions.push({
+      icon: () => <EditIcon />,
+      tooltip: 'Details',
+      onClick: (_, rowData) => {
+        props.links.editExpense(rowData.id);
+      }
+    });
 
-  actions.push({
-    icon: () => <DeleteIcon />,
-    tooltip: 'Delete',
-    onClick: (_, rowData) => {
-      props.deleteExpenseBegin({ id: rowData.id });
-    }
-  });
+    actions.push({
+      icon: () => <DeleteIcon />,
+      tooltip: 'Delete',
+      onClick: (_, rowData) => {
+        props.deleteExpenseBegin({ id: rowData.id });
+      }
+    });
+  }
 
   return (
     <React.Fragment>
@@ -99,16 +104,31 @@ export function ExpenseList(props, context) {
           alignItems='flex-end'
           justify='flex-end'
         >
-          <Grid item xs align='right'>
-            <Button
-              color='primary'
-              variant={props.initiative && !props.initiative.closed ? 'contained' : 'disabled'}
-              to={props.links.newExpense}
-              component={WrappedNavLink}
-            >
-              New Expense
-            </Button>
-          </Grid>
+          { initiative && !initiative.finished_expenses && (
+            <React.Fragment>
+              <Grid item align='right'>
+                <Button
+                  color='primary'
+                  variant='contained'
+                  to={props.links.newExpense}
+                  component={WrappedNavLink}
+                >
+                  New Expense
+                </Button>
+              </Grid>
+              { props.initiative && beforeNowString(props.initiative.end) && (
+                <Grid item align='right'>
+                  <Button
+                    color='secondary'
+                    variant='contained'
+                  >
+                    Finalize Expenses
+                  </Button>
+                </Grid>
+              )}
+            </React.Fragment>
+          )}
+
         </Grid>
       </CardContent>
       <Grid container spacing={3}>

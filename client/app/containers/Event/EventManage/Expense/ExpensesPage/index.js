@@ -37,6 +37,9 @@ import {
   getExpensesBegin, createExpenseBegin, updateExpenseBegin,
   expensesUnmount, deleteExpenseBegin
 } from '../actions';
+import {
+  finalizeExpensesBegin
+} from 'containers/Event/actions';
 
 import reducer from '../reducer';
 import saga from '../saga';
