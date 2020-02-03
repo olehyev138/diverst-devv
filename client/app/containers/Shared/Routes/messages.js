@@ -215,6 +215,9 @@ export default defineMessages({
       },
       resources: {
         id: `${scope}.admin.manage.resources.index`
+      },
+      archived: {
+        id: `${scope}.admin.manage.archived`
       }
     },
     system: {

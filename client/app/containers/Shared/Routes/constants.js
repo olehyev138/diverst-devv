@@ -577,7 +577,15 @@ export const ROUTES = {
             }
           },
         },
-      }
+      },
+      archived: {
+        index: {
+          path: () => '/admin/manage/groups',
+          data: {
+            titleMessage: messages.admin.manage.archived,
+          }
+        }
+      },
     },
     innovate: {
       index: {
