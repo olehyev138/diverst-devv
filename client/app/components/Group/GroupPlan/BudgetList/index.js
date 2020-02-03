@@ -28,6 +28,9 @@ import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/News/messages';
 
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import AddIcon from '@material-ui/icons/Add';
+
 const styles = theme => ({
   budgetListItem: {
     width: '100%',
@@ -122,6 +125,7 @@ export function BudgetList(props, context) {
               variant={props.annualBudget && !props.annualBudget.closed ? 'contained' : 'disabled'}
               to={props.links.annualBudgetOverview}
               component={WrappedNavLink}
+              startIcon={<ArrowBackIcon />}
             >
               Annual Budgets Overview
             </Button>
@@ -132,6 +136,7 @@ export function BudgetList(props, context) {
               variant={props.annualBudget && !props.annualBudget.closed ? 'contained' : 'disabled'}
               to={props.links.newRequest}
               component={WrappedNavLink}
+              startIcon={<AddIcon />}
             >
               New Budget Request
             </Button>

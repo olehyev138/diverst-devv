@@ -29,6 +29,7 @@ import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/News/messages';
 import DiverstProgress from 'components/Shared/DiverstProgress';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
+import AddIcon from '@material-ui/icons/Add';
 
 const beforeNowString = datetime => DateTime.local() > DateTime.fromISO(datetime);
 const beforeNowTime = datetime => DateTime.local() > datetime;
@@ -114,6 +115,7 @@ export function ExpenseList(props, context) {
                     variant='contained'
                     to={props.links.newExpense}
                     component={WrappedNavLink}
+                    startIcon={<AddIcon />}
                   >
                     New Expense
                   </Button>

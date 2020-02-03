@@ -33,6 +33,7 @@ import DiverstTable from 'components/Shared/DiverstTable';
 import { useFormik } from 'formik';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 const styles = theme => ({
   arrowRight: {
@@ -76,6 +77,12 @@ export function Budget(props) {
       field: 'estimated_amount',
       query_field: 'budget_items.estimated_amount',
       render: rowData => rowData.estimated_amount ? `$${floatRound(rowData.estimated_amount, 2)}` : '$0.00',
+    },
+    {
+      title: 'Available Amount',
+      field: 'available_amount',
+      query_field: 'budget_items.available_amount',
+      render: rowData => rowData.available_amount ? `$${floatRound(rowData.available_amount, 2)}` : '$0.00',
     },
     {
       title: 'Date',
@@ -224,6 +231,7 @@ export function Budget(props) {
             <Button
               color='primary'
               variant='contained'
+              startIcon={<ArrowBackIcon />}
               component={WrappedNavLink}
               to={links.back}
             >
