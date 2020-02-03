@@ -86,8 +86,7 @@ export function ExpenseList(props, context) {
     icon: () => <DeleteIcon />,
     tooltip: 'Delete',
     onClick: (_, rowData) => {
-      // eslint-disable-next-line no-alert
-      alert('Not Implemented');
+      props.deleteExpenseBegin({ id: rowData.id });
     }
   });
 

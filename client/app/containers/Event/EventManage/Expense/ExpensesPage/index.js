@@ -118,6 +118,7 @@ export function ExpenseListPage(props) {
         handlePagination={handlePagination}
         handleOrdering={handleOrdering}
         handleVisitEditPage={props.handleVisitEditPage}
+        deleteExpenseBegin={props.deleteExpenseBegin}
         links={links}
       />
     </React.Fragment>

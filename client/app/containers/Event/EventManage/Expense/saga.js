@@ -86,7 +86,7 @@ export function* updateExpense(action) {
 
 export function* deleteExpense(action) {
   try {
-    const response = { data: 'API CALL' };
+    const response = yield call(api.initiativeExpenses.destroy.bind(api.initiativeExpenses), action.payload.id);
 
     yield put(deleteExpenseSuccess({}));
     yield put(showSnackbar({ message: 'Successfully deleted expense', options: { variant: 'success' } }));
