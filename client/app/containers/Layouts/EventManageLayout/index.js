@@ -19,7 +19,7 @@ import { getEventBegin, eventsUnmount } from 'containers/Event/actions';
 
 import EventManageLinks from 'components/Event/EventManage/EventManageLinks';
 import Box from '@material-ui/core/Box';
-import GroupLayout from "../GroupLayout";
+import GroupLayout from '../GroupLayout';
 
 const styles = theme => ({
   content: {

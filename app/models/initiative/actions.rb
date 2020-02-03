@@ -21,6 +21,10 @@ module Initiative::Actions
       ['upcoming', 'ongoing', 'past']
     end
 
+    def base_preloads
+      [:outcome, :pillar, :owner, :expenses, :budget, :picture_attachment]
+    end
+
     def generate_qr_code(diverst_request, params)
       item = show(diverst_request, params)
       hash = {
