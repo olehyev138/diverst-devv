@@ -398,9 +398,15 @@ export const ROUTES = {
         },
         new: {
           path: (groupId = ':group_id') => `/groups/${groupId}/manage/leaders/new`,
+          data: {
+            titleMessage: messages.groups.manage.leaders.new
+          }
         },
         edit: {
           path: (groupId = ':group_id', groupLeaderId = ':group_leader_id') => `/groups/${groupId}/manage/leaders/${groupLeaderId}/edit`,
+          data: {
+            titleMessage: messages.groups.manage.leaders.edit
+          }
         },
       }
     },

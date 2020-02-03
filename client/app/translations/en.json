@@ -81,6 +81,8 @@
   "diverst.containers.Routes.group.manage.index": "Manage",
   "diverst.containers.Routes.group.manage.settings.index": "Settings",
   "diverst.containers.Routes.group.manage.leaders.index": "Leaders",
+  "diverst.containers.Routes.group.manage.leaders.new": "New Leader",
+  "diverst.containers.Routes.group.manage.leaders.edit": "Edit Leader",
   "diverst.containers.Routes.group.resources.index": "Resources",
   "diverst.containers.Routes.group.resources.new": "New Resource",
   "diverst.containers.Routes.group.resources.edit": "Edit Resource",
