@@ -122,6 +122,7 @@ export function ExpenseListPage(props) {
         handleOrdering={handleOrdering}
         handleVisitEditPage={props.handleVisitEditPage}
         deleteExpenseBegin={props.deleteExpenseBegin}
+        finalizeExpensesBegin={props.finalizeExpensesBegin}
         links={links}
       />
     </React.Fragment>
@@ -133,6 +134,7 @@ ExpenseListPage.propTypes = {
   createExpenseBegin: PropTypes.func.isRequired,
   updateExpenseBegin: PropTypes.func.isRequired,
   handleVisitEditPage: PropTypes.func.isRequired,
+  finalizeExpensesBegin: PropTypes.func.isRequired,
   expenses: PropTypes.array,
   expenseTotal: PropTypes.number,
   expenseSumTotal: PropTypes.number,
@@ -168,6 +170,7 @@ const mapDispatchToProps = {
   deleteExpenseBegin,
   handleVisitEditPage,
   expensesUnmount,
+  finalizeExpensesBegin
 };
 
 const withConnect = connect(

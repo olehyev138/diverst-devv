@@ -14,7 +14,6 @@ class Api::V1::InitiativesController < DiverstController
   end
 
   def finish_expenses
-    params[klass.symbol] = payload
     item = klass.find(params[:id])
     base_authorize(item)
 

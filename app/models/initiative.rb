@@ -213,7 +213,6 @@ class Initiative < ApplicationRecord
   def finish_expenses!
     return false if finished_expenses?
 
-    estimated_amount = current_expenses_sum
     self.update(finished_expenses: true)
   end
 

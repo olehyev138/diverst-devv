@@ -28,6 +28,7 @@ import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/News/messages';
 import DiverstProgress from 'components/Shared/DiverstProgress';
+import DiverstSubmit from 'components/Shared/DiverstSubmit';
 
 const beforeNowString = datetime => DateTime.local() > DateTime.fromISO(datetime);
 const beforeNowTime = datetime => DateTime.local() > datetime;
@@ -104,7 +105,7 @@ export function ExpenseList(props, context) {
           alignItems='flex-end'
           justify='flex-end'
         >
-          { initiative && !initiative.finished_expenses && (
+          { initiative && !initiative.finished_expenses ? (
             <React.Fragment>
               <Grid item align='right'>
                 <Button
@@ -118,15 +119,26 @@ export function ExpenseList(props, context) {
               </Grid>
               { props.initiative && beforeNowString(props.initiative.end) && (
                 <Grid item align='right'>
-                  <Button
+                  <DiverstSubmit
                     color='secondary'
                     variant='contained'
+                    onClick={() => {
+                      // eslint-disable-next-line no-restricted-globals,no-alert
+                      if (confirm('Are you sure you want to close the expenses? This can NOT be undone'))
+                        props.finalizeExpensesBegin({ id: props.initiative.id });
+                    }}
                   >
                     Finalize Expenses
-                  </Button>
+                  </DiverstSubmit>
                 </Grid>
               )}
             </React.Fragment>
+          ) : (
+            <Grid item align='right'>
+              <Typography color='secondary' variant='h5' component='h2'>
+                Expenses are closed. You can not add any new expense
+              </Typography>
+            </Grid>
           )}
 
         </Grid>
@@ -164,21 +176,23 @@ export function ExpenseList(props, context) {
           >
             <Grid item xs={1}>
               <Typography color='primary' variant='body1' component='h2'>
-                Total Expenses
+                {initiative.finished_expenses ? 'Final Expenses' : 'Total Expenses'}
               </Typography>
               <Typography color='secondary' variant='body2' component='h2'>
                 {`$${floatRound(props.expenseSumTotal, 2)}`}
               </Typography>
             </Grid>
             <Grid item xs={10}>
-              <DiverstProgress
-                number={props.expenseSumTotal}
-                total={props.initiative.estimated_funding}
-              />
+              {props.expenseSumTotal && (
+                <DiverstProgress
+                  number={props.expenseSumTotal}
+                  total={props.initiative.estimated_funding}
+                />
+              )}
             </Grid>
             <Grid item xs={1}>
               <Typography color='primary' variant='body1' component='h2' align='right'>
-                Estimated Funding
+                Estimated Budget
               </Typography>
               <Typography color='secondary' variant='body2' component='h2' align='right'>
                 {`$${floatRound(props.initiative.estimated_funding, 2)}`}
@@ -206,6 +220,7 @@ ExpenseList.propTypes = {
   handleChangeScope: PropTypes.func,
   expenseType: PropTypes.string,
   handleVisitExpenseShow: PropTypes.func,
+  finalizeExpensesBegin: PropTypes.func,
   links: PropTypes.shape({
     newExpense: PropTypes.string,
     initiativeManage: PropTypes.string,
