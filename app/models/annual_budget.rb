@@ -117,6 +117,7 @@ class AnnualBudget < ApplicationRecord
   def reload
     self.instance_variables.each do |ivar|
       next if ivar == '@attributes'
+
       self.instance_variable_set(ivar, nil)
     end
     super
