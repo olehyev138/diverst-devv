@@ -64,7 +64,8 @@ export function AnnualBudgetsPage(props) {
 
   const links = {
     budgetsIndex: id => ROUTES.group.plan.budget.budgets.index.path(groupId, id),
-    newRequest: id => ROUTES.group.plan.budget.budgets.new.path(groupId, id)
+    newRequest: id => ROUTES.group.plan.budget.budgets.new.path(groupId, id),
+    eventExpenses: id => ROUTES.group.plan.events.manage.expenses.index.path(groupId, id),
   };
 
   const handlePagination = (payload) => {

@@ -8,7 +8,7 @@ import React, { memo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { lighten, makeStyles, withStyles } from '@material-ui/core/styles';
-import { floatRound, percent } from 'utils/floatRound';
+import { floatRound, percent, clamp } from 'utils/floatRound';
 
 import {
   Box, Grid, Typography, Divider, Card, CardContent, LinearProgress, CardHeader, Button, Link, Collapse
@@ -33,29 +33,21 @@ const styles = theme => ({
   },
 });
 
-const BorderLinearProgress = withStyles({
-  root: {
-    height: 7,
-    backgroundColor: '#eee',
-    borderRadius: 1000,
-  },
-  bar: {
-    borderRadius: 1000,
-  }
-})(LinearProgress);
-
-const RoundedBox = withStyles({
-  root: {
-    borderRadius: 1000,
-  },
-})(Box);
-
-function InitiativeList({ initiatives, initiativeCount, handlePagination, handleOrdering, isLoading, ...rest }) {
+function InitiativeList({ initiatives, initiativeCount, handlePagination, handleOrdering, isLoading, links, ...rest }) {
   const columns = [
     {
       title: 'Event',
       field: 'name',
-      query_field: 'initiative.name'
+      query_field: 'initiative.name',
+      render: rowData => (
+        <Typography color='primary' variant='body1'>
+          <Link
+            href={links.eventExpenses(rowData.id)}
+          >
+            {rowData.name}
+          </Link>
+        </Typography>
+      )
     },
     {
       title: 'Estimated funding',
@@ -94,7 +86,8 @@ function InitiativeList({ initiatives, initiativeCount, handlePagination, handle
       handlePagination={handlePagination}
       onOrderChange={handleOrderChange}
       isLoading={isLoading}
-      rowsPerPage={Math.min((initiatives || []).length, 10)}
+      title='Events Budget Info'
+      rowsPerPage={clamp((initiatives || []).length, 1, 5)}
       dataArray={initiatives || []}
       dataTotal={initiativeCount || 0}
       columns={columns}
@@ -103,7 +96,7 @@ function InitiativeList({ initiatives, initiativeCount, handlePagination, handle
 }
 
 export function AnnualBudgetListItem(props) {
-  const { classes, item } = props;
+  const { classes, links, item } = props;
   const { expenses, amount, available, approved, remaining } = item;
 
   const [initList, setInitList] = useState(false);
@@ -111,7 +104,7 @@ export function AnnualBudgetListItem(props) {
   const toggleList = () => {
     setInitList(!initList);
     if (!props.initiatives || props.initiatives.length <= 0)
-      props.handlePagination({ count: 10, page: 0 });
+      props.handlePagination({ count: 5, page: 0 });
   };
 
   return (
@@ -256,6 +249,7 @@ export function AnnualBudgetListItem(props) {
           handlePagination={props.handlePagination}
           handleOrdering={props.handleOrdering}
           closeAction={() => setInitList(false)}
+          links={links}
         />
       </Collapse>
     </Card>
@@ -277,6 +271,7 @@ InitiativeList.propTypes = {
   classes: PropTypes.object,
   initiatives: PropTypes.array,
   initiativeCount: PropTypes.number,
+  links: PropTypes.object,
   handlePagination: PropTypes.func,
   handleOrdering: PropTypes.func,
   isLoading: PropTypes.bool,
