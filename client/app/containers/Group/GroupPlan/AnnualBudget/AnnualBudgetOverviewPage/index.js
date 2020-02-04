@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useContext } from 'react';
+import React, {memo, useEffect, useContext, useState} from 'react';
 import dig from 'object-dig';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
@@ -17,7 +17,7 @@ import {
   selectGroup
 } from 'containers/Group/selectors';
 import {
-  selectPaginatedAnnualBudgets, selectIsFetchingAnnualBudgets
+  selectPaginatedAnnualBudgets, selectIsFetchingAnnualBudgets, selectAnnualBudgetsTotal
 } from '../selectors';
 import {
   getAnnualBudgetsBegin, annualBudgetsUnmount
@@ -25,6 +25,14 @@ import {
 
 import AnnualBudgetListItem from 'components/Group/GroupPlan/AnnualBudgetListItem';
 import { ROUTES } from 'containers/Shared/Routes/constants';
+import AnnualBudgetList from 'components/Group/GroupPlan/AnnualBudgetList';
+
+const defaultParams = Object.freeze({
+  count: 5,
+  page: 0,
+  order: 'desc',
+  orderBy: 'id',
+});
 
 export function AnnualBudgetsPage(props) {
   useInjectReducer({ key: 'annualBudgets', reducer });
@@ -34,8 +42,10 @@ export function AnnualBudgetsPage(props) {
 
   const groupId = dig(props, 'currentGroup', 'id') || rs.params('group_id');
 
+  const [params, setParams] = useState(defaultParams);
+
   useEffect(() => {
-    props.getAnnualBudgetsBegin({ group_id: groupId });
+    props.getAnnualBudgetsBegin({ ...params, group_id: groupId });
 
     return () => props.annualBudgetsUnmount();
   }, []);
@@ -45,16 +55,30 @@ export function AnnualBudgetsPage(props) {
     newRequest: id => ROUTES.group.plan.budget.budgets.new.path(groupId, id)
   };
 
+  const handlePagination = (payload) => {
+    const newParams = {
+      ...params,
+      count: payload.count,
+      page: payload.page
+    };
+
+    props.getAnnualBudgetsBegin({ ...newParams, group_id: groupId });
+    setParams(newParams);
+  };
+
   return (
     <React.Fragment>
-      {props.annualBudgets.map(ab => (
-        <div key={ab.id}>
-          <AnnualBudgetListItem
-            item={ab}
-            links={links}
-          />
-        </div>
-      ))}
+      <AnnualBudgetList
+        annualBudgets={props.annualBudgets}
+        annualBudgetsTotal={props.annualBudgetsTotal}
+        initiatives={{}}
+        initiativesTotals={{}}
+        group={props.currentGroup}
+        links={links}
+        isLoading={props.isFetchingAnnualBudgets}
+        handlePagination={handlePagination}
+        defaultParams={defaultParams}
+      />
     </React.Fragment>
   );
 }
@@ -62,17 +86,18 @@ export function AnnualBudgetsPage(props) {
 AnnualBudgetsPage.propTypes = {
   currentGroup: PropTypes.object,
   annualBudgets: PropTypes.array,
+  annualBudgetsTotal: PropTypes.array,
   getAnnualBudgetsBegin: PropTypes.func,
   annualBudgetsUnmount: PropTypes.func,
   isCommitting: PropTypes.bool,
-  isFetchingAnnualBudget: PropTypes.bool,
+  isFetchingAnnualBudgets: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
   currentGroup: selectGroup(),
   annualBudgets: selectPaginatedAnnualBudgets(),
+  annualBudgetsTotal: selectAnnualBudgetsTotal(),
   isFetchingAnnualBudgets: selectIsFetchingAnnualBudgets(),
-  isCommitting: selectGroupIsCommitting(),
 });
 
 const mapDispatchToProps = {
