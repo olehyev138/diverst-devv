@@ -68,7 +68,7 @@ class Initiative < ApplicationRecord
     .where(initiative_conditions.join(' OR '))
   }
   scope :of_annual_budget, ->(budget_id) {
-    joins(:annual_budget).where('`annual_budgets.id` = ?', budget_id)
+    joins(:annual_budget).where('`annual_budgets`.`id` = ?', budget_id)
   }
   scope :order_recent, -> { order(start: :desc) }
 

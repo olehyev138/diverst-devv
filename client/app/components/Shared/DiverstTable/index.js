@@ -59,7 +59,7 @@ export function DiverstTable(props) {
         tableRef={ref}
         page={page()}
         icons={tableIcons}
-        title={props.title}
+        title={props.title || 'Table'}
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
         onOrderChange={handleOrderChange}

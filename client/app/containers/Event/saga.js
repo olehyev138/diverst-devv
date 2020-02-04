@@ -26,7 +26,7 @@ import {
 
 export function* getEvents(action) {
   try {
-    const { payload } = action;
+    const { annualBudgetId, ...payload } = action.payload;
     let response;
     if (payload.group_id) {
       // eslint-disable-next-line camelcase
@@ -37,7 +37,8 @@ export function* getEvents(action) {
 
     yield put(getEventsSuccess(response.data.page));
   } catch (err) {
-    yield put(getEventsError(err));
+    const { annualBudgetId } = action.payload;
+    yield put(getEventsError({ annualBudgetId }));
 
     // TODO: intl message
     yield put(showSnackbar({

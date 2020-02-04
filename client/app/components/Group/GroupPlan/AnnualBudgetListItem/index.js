@@ -4,22 +4,19 @@
  *
  */
 
-import React, { memo } from 'react';
+import React, { memo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { lighten, makeStyles, withStyles } from '@material-ui/core/styles';
 import { floatRound, percent } from 'utils/floatRound';
 
 import {
-  Box, Grid, Typography, Divider, Card, CardContent, LinearProgress, CardHeader, Button, Link
+  Box, Grid, Typography, Divider, Card, CardContent, LinearProgress, CardHeader, Button, Link, Collapse
 } from '@material-ui/core';
 
-import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
-
-import { formatDateTimeString, DateTime } from 'utils/dateTimeHelpers';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import DiverstProgress from 'components/Shared/DiverstProgress';
-import DiverstTable from "../../../Shared/DiverstTable";
+import DiverstTable from '../../../Shared/DiverstTable';
 
 const styles = theme => ({
   arrowRight: {
@@ -62,18 +59,21 @@ function InitiativeList({ initiatives, initiativeCount, handlePagination, handle
     },
     {
       title: 'Estimated funding',
-      field: 'estimated_amount',
-      query_field: 'estimated_funding'
+      field: 'estimated_funding',
+      query_field: 'estimated_funding',
+      render: rowData => rowData.estimated_funding ? `$${floatRound(rowData.estimated_funding, 2)}` : '$0.00',
     },
     {
       title: 'Spent so far',
       field: 'current_expenses_sum',
       sorting: false,
+      render: rowData => rowData.current_expenses_sum ? `$${floatRound(rowData.current_expenses_sum, 2)}` : '$0.00',
     },
     {
       title: 'Unspent',
-      field: 'available_amount',
+      field: 'leftover',
       sorting: false,
+      render: rowData => rowData.leftover ? `$${floatRound(rowData.leftover, 2)}` : '$0.00',
     },
     {
       title: 'Spending status',
@@ -82,22 +82,37 @@ function InitiativeList({ initiatives, initiativeCount, handlePagination, handle
     },
   ];
 
+  const handleOrderChange = (columnId, orderDir) => {
+    handleOrdering({
+      orderBy: (columnId === -1) ? 'id' : `${columns[columnId].query_field}`,
+      orderDir: (columnId === -1) ? 'asc' : orderDir
+    });
+  };
+
   return (
     <DiverstTable
       handlePagination={handlePagination}
-      handleOrdering={handleOrdering}
+      onOrderChange={handleOrderChange}
       isLoading={isLoading}
-      rowsPerPage={10}
-      dataArray={initiatives}
-      dataTotal={initiativeCount}
+      rowsPerPage={Math.min((initiatives || []).length, 10)}
+      dataArray={initiatives || []}
+      dataTotal={initiativeCount || 0}
       columns={columns}
     />
-  )
+  );
 }
 
 export function AnnualBudgetListItem(props) {
   const { classes, item } = props;
   const { expenses, amount, available, approved, remaining } = item;
+
+  const [initList, setInitList] = useState(false);
+
+  const toggleList = () => {
+    setInitList(!initList);
+    if (!props.initiatives || props.initiatives.length <= 0)
+      props.handlePagination({ count: 10, page: 0 });
+  };
 
   return (
     <Card>
@@ -223,7 +238,26 @@ export function AnnualBudgetListItem(props) {
             </Typography>
           </Grid>
         </Grid>
+        <Box mb={2} />
+        <Button
+          color='primary'
+          onClick={() => {
+            toggleList();
+          }}
+        >
+          Events Budget Info
+        </Button>
       </CardContent>
+      <Collapse in={initList}>
+        <InitiativeList
+          initiatives={props.initiatives}
+          initiativeCount={props.initiativesTotal}
+          isLoading={props.initiativesLoading}
+          handlePagination={props.handlePagination}
+          handleOrdering={props.handleOrdering}
+          closeAction={() => setInitList(false)}
+        />
+      </Collapse>
     </Card>
   );
 }
@@ -232,6 +266,11 @@ AnnualBudgetListItem.propTypes = {
   classes: PropTypes.object,
   item: PropTypes.object,
   links: PropTypes.object,
+  initiatives: PropTypes.array,
+  initiativesTotal: PropTypes.number,
+  initiativesLoading: PropTypes.bool,
+  handlePagination: PropTypes.func.isRequired,
+  handleOrdering: PropTypes.func.isRequired,
 };
 
 InitiativeList.propTypes = {

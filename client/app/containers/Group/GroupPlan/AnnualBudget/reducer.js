@@ -105,7 +105,7 @@ function annualBudgetReducer(state = initialState, action) {
         break;
 
       case GET_EVENTS_SUCCESS:
-        annualBudgetId = action.payload.items ? action.payload.items[0].annual_budget_id : null;
+        annualBudgetId = action.payload.items && action.payload.items.length > 0 ? action.payload.items[0].annual_budget_id : null;
         if (annualBudgetId) {
           draft.annualBudgetInitiativeList = produce(draft.annualBudgetInitiativeList, (draft2) => {
             draft2[annualBudgetId] = action.payload.items;
@@ -113,8 +113,8 @@ function annualBudgetReducer(state = initialState, action) {
           draft.annualBudgetInitiativeListTotal = produce(draft.annualBudgetInitiativeList, (draft2) => {
             draft2[annualBudgetId] = action.payload.total;
           });
-          draft.isFetchingAnnualBudgetInitiatives = produce(draft.annualBudgetInitiativeList, (draft2) => {
-            draft2[action.payload.annualBudgetId] = false;
+          draft.isFetchingAnnualBudgetInitiatives = produce(draft.isFetchingAnnualBudgetInitiatives, (draft2) => {
+            draft2[annualBudgetId] = false;
           });
         }
         break;

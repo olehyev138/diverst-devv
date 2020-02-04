@@ -8,6 +8,7 @@ import { createStructuredSelector } from 'reselect/lib';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import saga from '../saga';
+import eventSaga from 'containers/Event/saga';
 import reducer from '../reducer';
 
 import RouteService from 'utils/routeHelpers';
@@ -46,6 +47,7 @@ const defaultParams = Object.freeze({
 export function AnnualBudgetsPage(props) {
   useInjectReducer({ key: 'annualBudgets', reducer });
   useInjectSaga({ key: 'annualBudgets', saga });
+  useInjectSaga({ key: 'events', saga: eventSaga });
 
   const rs = new RouteService(useContext);
 
@@ -83,7 +85,7 @@ export function AnnualBudgetsPage(props) {
       page: payload.page
     };
 
-    props.getEventsBegin({ ...newParams, query_scopes: [['of_annual_budget', id]] });
+    props.getEventsBegin({ ...newParams, query_scopes: [['of_annual_budget', id]], annualBudgetId: id });
     setParams(produce(initParams, (draft) => {
       draft[id] = newParams;
     }));
@@ -96,7 +98,7 @@ export function AnnualBudgetsPage(props) {
       order: payload.orderDir
     };
 
-    props.getEventsBegin({ ...newParams, query_scopes: [['of_annual_budget', id]] });
+    props.getEventsBegin({ ...newParams, query_scopes: [['of_annual_budget', id]], annualBudgetId: id });
     setParams(produce(initParams, (draft) => {
       draft[id] = newParams;
     }));
@@ -133,7 +135,7 @@ AnnualBudgetsPage.propTypes = {
   annualBudgetsUnmount: PropTypes.func,
   isCommitting: PropTypes.bool,
   isFetchingAnnualBudgets: PropTypes.bool,
-  isFetchingInitiatives: PropTypes.bool,
+  isFetchingInitiatives: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
