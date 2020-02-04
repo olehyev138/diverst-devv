@@ -19,6 +19,7 @@ import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 import { formatDateTimeString, DateTime } from 'utils/dateTimeHelpers';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import DiverstProgress from 'components/Shared/DiverstProgress';
+import DiverstTable from "../../../Shared/DiverstTable";
 
 const styles = theme => ({
   arrowRight: {
@@ -51,6 +52,48 @@ const RoundedBox = withStyles({
     borderRadius: 1000,
   },
 })(Box);
+
+function InitiativeList({ initiatives, initiativeCount, handlePagination, handleOrdering, isLoading, ...rest }) {
+  const columns = [
+    {
+      title: 'Event',
+      field: 'name',
+      query_field: 'initiative.name'
+    },
+    {
+      title: 'Estimated funding',
+      field: 'estimated_amount',
+      query_field: 'estimated_funding'
+    },
+    {
+      title: 'Spent so far',
+      field: 'current_expenses_sum',
+      sorting: false,
+    },
+    {
+      title: 'Unspent',
+      field: 'available_amount',
+      sorting: false,
+    },
+    {
+      title: 'Spending status',
+      field: 'expenses_status',
+      query_field: 'finished_expenses',
+    },
+  ];
+
+  return (
+    <DiverstTable
+      handlePagination={handlePagination}
+      handleOrdering={handleOrdering}
+      isLoading={isLoading}
+      rowsPerPage={10}
+      dataArray={initiatives}
+      dataTotal={initiativeCount}
+      columns={columns}
+    />
+  )
+}
 
 export function AnnualBudgetListItem(props) {
   const { classes, item } = props;
@@ -189,6 +232,15 @@ AnnualBudgetListItem.propTypes = {
   classes: PropTypes.object,
   item: PropTypes.object,
   links: PropTypes.object,
+};
+
+InitiativeList.propTypes = {
+  classes: PropTypes.object,
+  initiatives: PropTypes.array,
+  initiativeCount: PropTypes.number,
+  handlePagination: PropTypes.func,
+  handleOrdering: PropTypes.func,
+  isLoading: PropTypes.bool,
 };
 
 export default compose(
