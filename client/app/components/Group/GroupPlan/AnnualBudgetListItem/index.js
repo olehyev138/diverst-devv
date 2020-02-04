@@ -91,13 +91,16 @@ function InitiativeList({ initiatives, initiativeCount, handlePagination, handle
       dataArray={initiatives || []}
       dataTotal={initiativeCount || 0}
       columns={columns}
+      my_options={{
+        search: false
+      }}
     />
   );
 }
 
 export function AnnualBudgetListItem(props) {
   const { classes, links, item } = props;
-  const { expenses, amount, available, approved, remaining } = item;
+  const { expenses, amount, available, approved, remaining, estimated, unspent } = item;
 
   const [initList, setInitList] = useState(false);
 
@@ -170,7 +173,7 @@ export function AnnualBudgetListItem(props) {
           container
           spacing={1}
         >
-          <Grid item xs={1}>
+          <Grid item xs={false} sm={2} md={1}>
             <Typography color='primary' variant='body1' component='h2'>
               Expenses
             </Typography>
@@ -178,7 +181,7 @@ export function AnnualBudgetListItem(props) {
               {`$${floatRound(expenses, 2)}`}
             </Typography>
           </Grid>
-          <Grid item xs={10}>
+          <Grid item xs={12} sm={8} md={10}>
             <DiverstProgress
               number={expenses}
               buffer={available}
@@ -186,7 +189,7 @@ export function AnnualBudgetListItem(props) {
               overflow
             />
           </Grid>
-          <Grid item xs={1}>
+          <Grid item xs={false} sm={2} md={1}>
             <Typography color='primary' variant='body1' component='h2' align='right'>
               Annual Budget
             </Typography>
@@ -228,6 +231,32 @@ export function AnnualBudgetListItem(props) {
           <Grid item xs={4}>
             <Typography color='secondary' variant='body2' component='h2' align='center'>
               {`$${floatRound(available, 2)}`}
+            </Typography>
+          </Grid>
+        </Grid>
+        <Box mb={3} />
+        <Grid container>
+          <Grid item xs={6}>
+            <Typography color='primary' variant='body1' component='h2' align='center'>
+              Estimated Event Expenses
+            </Typography>
+          </Grid>
+          <Grid item xs={6}>
+            <Typography color='primary' variant='body1' component='h2' align='center'>
+              Total Unspent
+            </Typography>
+          </Grid>
+        </Grid>
+        <Divider />
+        <Grid container>
+          <Grid item xs={6}>
+            <Typography color='secondary' variant='body2' component='h2' align='center'>
+              {`$${floatRound(estimated, 2)}`}
+            </Typography>
+          </Grid>
+          <Grid item xs={6}>
+            <Typography color='secondary' variant='body2' component='h2' align='center'>
+              {`$${floatRound(unspent, 2)}`}
             </Typography>
           </Grid>
         </Grid>

@@ -36,6 +36,10 @@ class AnnualBudget < ApplicationRecord
                    .sum('amount')
   end
 
+  def estimated
+    @estimated ||= initiatives.sum('estimated_funding')
+  end
+
   def finalized_expenditure
     @finalized_expenditure ||= expenses_finalized.sum('amount')
   end
@@ -46,6 +50,10 @@ class AnnualBudget < ApplicationRecord
 
   def remaining
     @remaining ||= (approved - expenses)
+  end
+
+  def unspent
+    @unspent ||= (estimated - expenses)
   end
 
   def leftover
@@ -107,9 +115,10 @@ class AnnualBudget < ApplicationRecord
   end
 
   def reload
-    @expenses = nil
-    @approved = nil
-    @reserved = nil
+    self.instance_variables.each do |ivar|
+      next if ivar == '@attributes'
+      self.instance_variable_set(ivar, nil)
+    end
     super
   end
 end
