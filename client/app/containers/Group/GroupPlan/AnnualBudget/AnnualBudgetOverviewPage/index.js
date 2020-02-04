@@ -17,7 +17,11 @@ import {
   selectGroup
 } from 'containers/Group/selectors';
 import {
-  selectPaginatedAnnualBudgets, selectIsFetchingAnnualBudgets, selectAnnualBudgetsTotal
+  selectPaginatedAnnualBudgets,
+  selectIsFetchingAnnualBudgets,
+  selectAnnualBudgetsTotal,
+  selectPaginatedInitiatives,
+  selectInitiativesTotal
 } from '../selectors';
 import {
   getAnnualBudgetsBegin, annualBudgetsUnmount
@@ -86,7 +90,9 @@ export function AnnualBudgetsPage(props) {
 AnnualBudgetsPage.propTypes = {
   currentGroup: PropTypes.object,
   annualBudgets: PropTypes.array,
-  annualBudgetsTotal: PropTypes.array,
+  annualBudgetsTotal: PropTypes.number,
+  initiatives: PropTypes.object,
+  initiativesTotals: PropTypes.object,
   getAnnualBudgetsBegin: PropTypes.func,
   annualBudgetsUnmount: PropTypes.func,
   isCommitting: PropTypes.bool,
@@ -97,6 +103,8 @@ const mapStateToProps = createStructuredSelector({
   currentGroup: selectGroup(),
   annualBudgets: selectPaginatedAnnualBudgets(),
   annualBudgetsTotal: selectAnnualBudgetsTotal(),
+  initiatives: selectPaginatedInitiatives(),
+  initiativesTotals: selectInitiativesTotal(),
   isFetchingAnnualBudgets: selectIsFetchingAnnualBudgets(),
 });
 

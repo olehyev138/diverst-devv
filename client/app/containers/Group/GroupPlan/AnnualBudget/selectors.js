@@ -13,6 +13,16 @@ const selectAnnualBudgetsTotal = () => createSelector(
   annualBudgetState => annualBudgetState.annualBudgetListTotal
 );
 
+const selectPaginatedInitiatives = () => createSelector(
+  selectAnnualBudgetDomain,
+  annualBudgetState => annualBudgetState.annualBudgetInitiativeList
+);
+
+const selectInitiativesTotal = () => createSelector(
+  selectAnnualBudgetDomain,
+  annualBudgetState => annualBudgetState.annualBudgetInitiativeListTotal
+);
+
 const selectAnnualBudget = () => createSelector(
   selectAnnualBudgetDomain,
   annualBudgetState => annualBudgetState.currentAnnualBudget
@@ -41,6 +51,8 @@ const selectHasChanged = () => createSelector(
 export {
   selectAnnualBudgetDomain,
   selectPaginatedAnnualBudgets,
+  selectPaginatedInitiatives,
+  selectInitiativesTotal,
   selectAnnualBudgetsTotal,
   selectAnnualBudget,
   selectIsFetchingAnnualBudgets,
