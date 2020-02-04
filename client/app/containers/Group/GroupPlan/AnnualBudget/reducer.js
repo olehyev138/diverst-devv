@@ -24,9 +24,15 @@ import {
   ANNUAL_BUDGETS_UNMOUNT,
 } from './constants';
 
+import {
+  GET_EVENTS_SUCCESS
+} from 'containers/Event/constants';
+
 export const initialState = {
   annualBudgetList: [],
   annualBudgetListTotal: null,
+  annualBudgetInitiativeList: {},
+  annualBudgetInitiativeListTotal: {},
   currentAnnualBudget: null,
   isFetchingAnnualBudgets: false,
   isFetchingAnnualBudget: false,
@@ -36,6 +42,7 @@ export const initialState = {
 
 /* eslint-disable-next-line default-case, no-param-reassign */
 function annualBudgetReducer(state = initialState, action) {
+  let annualBudgetId;
   /* eslint-disable consistent-return */
   return produce(state, (draft) => {
     switch (action.type) {
@@ -85,6 +92,18 @@ function annualBudgetReducer(state = initialState, action) {
       case CREATE_ANNUAL_BUDGET_ERROR:
       case UPDATE_ANNUAL_BUDGET_ERROR:
         draft.isCommitting = false;
+        break;
+
+      case GET_EVENTS_SUCCESS:
+        annualBudgetId = action.payload.items ? action.payload.items[0].annual_budget_id : null;
+        if (annualBudgetId) {
+          draft.annualBudgetInitiativeList = produce(draft.annualBudgetInitiativeList, (draft2) => {
+            draft2[annualBudgetId] = action.payload.items;
+          });
+          draft.annualBudgetInitiativeListTotal = produce(draft.annualBudgetInitiativeList, (draft2) => {
+            draft2[annualBudgetId] = action.payload.total;
+          });
+        }
         break;
 
       case ANNUAL_BUDGETS_UNMOUNT:

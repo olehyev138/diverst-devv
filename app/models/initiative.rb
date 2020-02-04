@@ -67,6 +67,9 @@ class Initiative < ApplicationRecord
     joins('LEFT JOIN initiative_segments ON initiative_segments.initiative_id = initiatives.id')
     .where(initiative_conditions.join(' OR '))
   }
+  scope :of_annual_budget, ->(budget_id) {
+    joins(:annual_budget).where('`annual_budgets.id` = ?', budget_id)
+  }
   scope :order_recent, -> { order(start: :desc) }
 
   scope :finalized, -> { where(finished_expenses: false) }
@@ -170,6 +173,10 @@ class Initiative < ApplicationRecord
 
   def enterprise_id
     enterprise.id
+  end
+
+  def annual_budget_id
+    annual_budget.id
   end
 
   # need to trunc several special characters here
