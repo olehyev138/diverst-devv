@@ -89,7 +89,7 @@ GroupLeadersListPage.propTypes = {
   groupLeaderTotal: PropTypes.number,
   isFetchingGroupLeaders: PropTypes.bool,
   handleVisitGroupLeaderEdit: PropTypes.func,
-  group: PropTypes.object,
+  currentGroup: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
