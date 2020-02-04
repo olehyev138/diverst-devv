@@ -101,6 +101,9 @@ function resourcesReducer(state = initialState, action) {
       case UPDATE_RESOURCE_BEGIN:
       case ARCHIVE_RESOURCE_BEGIN:
         draft.isCommitting = true;
+        break;
+      case ARCHIVE_RESOURCE_BEGIN:
+        draft.isCommitting = true;
         draft.hasChanged = false;
         break;
       case CREATE_FOLDER_SUCCESS:
