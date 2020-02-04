@@ -40,6 +40,9 @@ import {
   UPDATE_RESOURCE_SUCCESS,
   UPDATE_RESOURCE_ERROR,
   RESOURCES_UNMOUNT,
+  ARCHIVE_RESOURCE_SUCCESS,
+  ARCHIVE_RESOURCE_ERROR,
+  ARCHIVE_RESOURCE_BEGIN,
 } from './constants';
 
 export function getFoldersBegin(payload) {
@@ -298,5 +301,26 @@ export function deleteResourceError(error) {
 export function resourcesUnmount() {
   return {
     type: RESOURCES_UNMOUNT,
+  };
+}
+
+export function archiveResourceBegin(payload) {
+  return {
+    type: ARCHIVE_RESOURCE_BEGIN,
+    payload,
+  };
+}
+
+export function archiveResourceSuccess(payload) {
+  return {
+    type: ARCHIVE_RESOURCE_SUCCESS,
+    payload,
+  };
+}
+
+export function archiveResourceError(error) {
+  return {
+    type: ARCHIVE_RESOURCE_ERROR,
+    error,
   };
 }

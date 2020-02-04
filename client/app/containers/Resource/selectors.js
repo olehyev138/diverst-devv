@@ -57,6 +57,11 @@ const selectResource = () => createSelector(
   resourcesState => resourcesState.currentResource
 );
 
+const selectHasChanged = () => createSelector(
+  selectResourcesDomain,
+  resourcesState => resourcesState.hasChanged
+);
+
 const selectFormResource = () => createSelector(
   selectResourcesDomain,
   (resourcesState) => {
@@ -91,5 +96,6 @@ export {
   selectPaginatedResources,
   selectResourcesTotal,
   selectResource, selectFormResource,
-  selectIsCommitting, selectIsFormLoading
+  selectIsCommitting, selectIsFormLoading,
+  selectHasChanged
 };
