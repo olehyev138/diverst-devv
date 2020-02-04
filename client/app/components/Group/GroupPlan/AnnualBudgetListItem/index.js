@@ -243,7 +243,7 @@ export function AnnualBudgetListItem(props) {
           </Grid>
           <Grid item xs={6}>
             <Typography color='primary' variant='body1' component='h2' align='center'>
-              Total Unspent
+              Total Unspent Event Budget
             </Typography>
           </Grid>
         </Grid>

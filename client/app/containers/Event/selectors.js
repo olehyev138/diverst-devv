@@ -23,8 +23,10 @@ const selectFormEvent = () => createSelector(
   selectEventsDomain,
   eventsState => produce(eventsState.currentEvent, (draft) => {
     if (draft) {
-      draft.pillar = { label: draft.pillar.name, value: draft.pillar.id };
-      draft.budget_item = { label: draft.budget_item.title_with_amount, value: draft.budget_item.id, available: draft.available };
+      if (draft.pillar)
+        draft.pillar = { label: draft.pillar.name, value: draft.pillar.id };
+      if (draft.budget_item)
+        draft.budget_item = { label: draft.budget_item.title_with_amount, value: draft.budget_item.id, available: draft.available };
     }
   })
 );
