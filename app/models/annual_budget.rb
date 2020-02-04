@@ -27,7 +27,8 @@ class AnnualBudget < ApplicationRecord
   end
 
   def reserved
-    @reserved ||= initiatives.sum('estimated_funding')
+    @reserved ||=
+        expenses_finalized.sum('amount') + initiatives_active.sum('estimated_funding')
   end
 
   def expenses

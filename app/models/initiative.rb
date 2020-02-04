@@ -176,7 +176,7 @@ class Initiative < ApplicationRecord
   end
 
   def annual_budget_id
-    annual_budget.id
+    annual_budget&.id
   end
 
   # need to trunc several special characters here
