@@ -23,6 +23,11 @@ const selectInitiativesTotal = () => createSelector(
   annualBudgetState => annualBudgetState.annualBudgetInitiativeListTotal
 );
 
+const selectIsFetchingInitiatives = () => createSelector(
+  selectAnnualBudgetDomain,
+  annualBudgetState => annualBudgetState.isFetchingAnnualBudgetInitiatives
+);
+
 const selectAnnualBudget = () => createSelector(
   selectAnnualBudgetDomain,
   annualBudgetState => annualBudgetState.currentAnnualBudget
@@ -57,6 +62,7 @@ export {
   selectAnnualBudget,
   selectIsFetchingAnnualBudgets,
   selectIsFetchingAnnualBudget,
+  selectIsFetchingInitiatives,
   selectIsCommitting,
   selectHasChanged,
 };

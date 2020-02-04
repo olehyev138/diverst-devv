@@ -1,4 +1,4 @@
-import React, {memo, useEffect, useContext, useState} from 'react';
+import React, { memo, useEffect, useContext, useState } from 'react';
 import dig from 'object-dig';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
@@ -21,15 +21,20 @@ import {
   selectIsFetchingAnnualBudgets,
   selectAnnualBudgetsTotal,
   selectPaginatedInitiatives,
-  selectInitiativesTotal
+  selectInitiativesTotal,
+  selectIsFetchingInitiatives
 } from '../selectors';
 import {
   getAnnualBudgetsBegin, annualBudgetsUnmount
 } from '../actions';
+import {
+  getEventsBegin
+} from 'containers/Event/actions';
 
 import AnnualBudgetListItem from 'components/Group/GroupPlan/AnnualBudgetListItem';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import AnnualBudgetList from 'components/Group/GroupPlan/AnnualBudgetList';
+import produce from 'immer';
 
 const defaultParams = Object.freeze({
   count: 5,
@@ -47,6 +52,7 @@ export function AnnualBudgetsPage(props) {
   const groupId = dig(props, 'currentGroup', 'id') || rs.params('group_id');
 
   const [params, setParams] = useState(defaultParams);
+  const [initParams, setInitParams] = useState({});
 
   useEffect(() => {
     props.getAnnualBudgetsBegin({ ...params, group_id: groupId });
@@ -70,17 +76,46 @@ export function AnnualBudgetsPage(props) {
     setParams(newParams);
   };
 
+  const handleInitiativePagination = id => (payload) => {
+    const newParams = {
+      ...(initParams[id] || defaultParams),
+      count: payload.count,
+      page: payload.page
+    };
+
+    props.getEventsBegin({ ...newParams, query_scopes: [['of_annual_budget', id]] });
+    setParams(produce(initParams, (draft) => {
+      draft[id] = newParams;
+    }));
+  };
+
+  const handleInitiativeOrdering = id => (payload) => {
+    const newParams = {
+      ...(initParams[id] || defaultParams),
+      orderBy: payload.orderBy,
+      order: payload.orderDir
+    };
+
+    props.getEventsBegin({ ...newParams, query_scopes: [['of_annual_budget', id]] });
+    setParams(produce(initParams, (draft) => {
+      draft[id] = newParams;
+    }));
+  };
+
   return (
     <React.Fragment>
       <AnnualBudgetList
         annualBudgets={props.annualBudgets}
         annualBudgetsTotal={props.annualBudgetsTotal}
-        initiatives={{}}
-        initiativesTotals={{}}
+        initiatives={props.initiatives}
+        initiativesTotals={props.initiativesTotals}
+        initiativesLoading={props.isFetchingInitiatives}
         group={props.currentGroup}
         links={links}
         isLoading={props.isFetchingAnnualBudgets}
         handlePagination={handlePagination}
+        handleInitiativePagination={handleInitiativePagination}
+        handleInitiativeOrdering={handleInitiativeOrdering}
         defaultParams={defaultParams}
       />
     </React.Fragment>
@@ -94,9 +129,11 @@ AnnualBudgetsPage.propTypes = {
   initiatives: PropTypes.object,
   initiativesTotals: PropTypes.object,
   getAnnualBudgetsBegin: PropTypes.func,
+  getEventsBegin: PropTypes.func,
   annualBudgetsUnmount: PropTypes.func,
   isCommitting: PropTypes.bool,
   isFetchingAnnualBudgets: PropTypes.bool,
+  isFetchingInitiatives: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -106,10 +143,12 @@ const mapStateToProps = createStructuredSelector({
   initiatives: selectPaginatedInitiatives(),
   initiativesTotals: selectInitiativesTotal(),
   isFetchingAnnualBudgets: selectIsFetchingAnnualBudgets(),
+  isFetchingInitiatives: selectIsFetchingInitiatives(),
 });
 
 const mapDispatchToProps = {
   getAnnualBudgetsBegin,
+  getEventsBegin,
   annualBudgetsUnmount,
 };
 

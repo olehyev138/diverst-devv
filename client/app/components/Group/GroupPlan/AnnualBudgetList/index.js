@@ -37,6 +37,9 @@ export function AnnualBudgetList(props) {
     links,
     initiatives,
     initiativesTotals,
+    initiativesLoading,
+    handleInitiativePagination,
+    handleInitiativeOrdering,
   } = props;
 
   return (
@@ -49,6 +52,9 @@ export function AnnualBudgetList(props) {
               links={links}
               initiatives={initiatives[annualBudget.id]}
               initiativesTotal={initiativesTotals[annualBudget.id]}
+              initiativesLoading={initiativesLoading[annualBudget.id]}
+              handlePagination={handleInitiativePagination(annualBudget.id)}
+              handleOrdering={handleInitiativeOrdering(annualBudget.id)}
             />
           </React.Fragment>
         ))}
@@ -68,8 +74,11 @@ AnnualBudgetList.propTypes = {
   annualBudgetsTotal: PropTypes.number,
   initiatives: PropTypes.object,
   initiativesTotals: PropTypes.object,
+  initiativesLoading: PropTypes.object,
   group: PropTypes.object,
   handlePagination: PropTypes.func,
+  handleInitiativePagination: PropTypes.func,
+  handleInitiativeOrdering: PropTypes.func,
   defaultParams: PropTypes.object,
   links: PropTypes.object,
   isLoading: PropTypes.bool,

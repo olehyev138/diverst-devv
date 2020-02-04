@@ -25,7 +25,9 @@ import {
 } from './constants';
 
 import {
-  GET_EVENTS_SUCCESS
+  GET_EVENTS_BEGIN,
+  GET_EVENTS_SUCCESS,
+  GET_EVENTS_ERROR,
 } from 'containers/Event/constants';
 
 export const initialState = {
@@ -33,6 +35,7 @@ export const initialState = {
   annualBudgetListTotal: null,
   annualBudgetInitiativeList: {},
   annualBudgetInitiativeListTotal: {},
+  isFetchingAnnualBudgetInitiatives: {},
   currentAnnualBudget: null,
   isFetchingAnnualBudgets: false,
   isFetchingAnnualBudget: false,
@@ -94,6 +97,13 @@ function annualBudgetReducer(state = initialState, action) {
         draft.isCommitting = false;
         break;
 
+      case GET_EVENTS_BEGIN:
+        if (action.payload.annualBudgetId)
+          draft.isFetchingAnnualBudgetInitiatives = produce(draft.annualBudgetInitiativeList, (draft2) => {
+            draft2[action.payload.annualBudgetId] = true;
+          });
+        break;
+
       case GET_EVENTS_SUCCESS:
         annualBudgetId = action.payload.items ? action.payload.items[0].annual_budget_id : null;
         if (annualBudgetId) {
@@ -103,7 +113,17 @@ function annualBudgetReducer(state = initialState, action) {
           draft.annualBudgetInitiativeListTotal = produce(draft.annualBudgetInitiativeList, (draft2) => {
             draft2[annualBudgetId] = action.payload.total;
           });
+          draft.isFetchingAnnualBudgetInitiatives = produce(draft.annualBudgetInitiativeList, (draft2) => {
+            draft2[action.payload.annualBudgetId] = false;
+          });
         }
+        break;
+
+      case GET_EVENTS_ERROR:
+        if (action.payload.annualBudgetId)
+          draft.isFetchingAnnualBudgetInitiatives = produce(draft.annualBudgetInitiativeList, (draft2) => {
+            draft2[action.payload.annualBudgetId] = false;
+          });
         break;
 
       case ANNUAL_BUDGETS_UNMOUNT:
