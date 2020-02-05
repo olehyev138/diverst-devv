@@ -79,8 +79,7 @@ export function AnnualBudgetList(props, context) {
     icon: () => <EditIcon />,
     tooltip: 'Edit Budget',
     onClick: (_, rowData) => {
-      // eslint-disable-next-line no-alert
-      alert('Not Implemented Yet');
+      props.handleVisitEditPage(rowData.id);
     }
   });
 
@@ -138,6 +137,7 @@ AnnualBudgetList.propTypes = {
   handleChangeScope: PropTypes.func,
   carryBudget: PropTypes.func,
   resetBudget: PropTypes.func,
+  handleVisitEditPage: PropTypes.func,
   annualBudgetType: PropTypes.string,
   links: PropTypes.shape({
     annualBudgetNew: PropTypes.string,

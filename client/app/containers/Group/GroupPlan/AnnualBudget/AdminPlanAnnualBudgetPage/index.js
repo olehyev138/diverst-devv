@@ -20,6 +20,10 @@ import reducer from 'containers/Group/reducer';
 import { getAnnualBudgetsBegin, groupListUnmount, carryBudgetBegin, resetBudgetBegin } from 'containers/Group/actions';
 
 import AnnualBudgetList from 'components/Group/GroupPlan/AdminAnnualBudgetList';
+import { push } from 'connected-react-router';
+import { ROUTES } from 'containers/Shared/Routes/constants';
+
+const handleVisitEditPage = groupId => push(ROUTES.group.plan.budget.editAnnualBudget.path(groupId));
 
 export function AdminAnnualBudgetPage(props) {
   useInjectReducer({ key: 'groups', reducer });
@@ -65,6 +69,7 @@ export function AdminAnnualBudgetPage(props) {
       handleOrdering={handleOrdering}
       carryBudget={props.carryBudgetBegin}
       resetBudget={props.resetBudgetBegin}
+      handleVisitEditPage={props.handleVisitEditPage}
     />
   );
 }
@@ -74,6 +79,7 @@ AdminAnnualBudgetPage.propTypes = {
   groupListUnmount: PropTypes.func.isRequired,
   carryBudgetBegin: PropTypes.func.isRequired,
   resetBudgetBegin: PropTypes.func.isRequired,
+  handleVisitEditPage: PropTypes.func.isRequired,
   isLoading: PropTypes.bool,
   hasChanged: PropTypes.bool,
   groups: PropTypes.object,
@@ -93,6 +99,7 @@ const mapDispatchToProps = {
   carryBudgetBegin,
   resetBudgetBegin,
   groupListUnmount,
+  handleVisitEditPage,
 };
 
 const withConnect = connect(
