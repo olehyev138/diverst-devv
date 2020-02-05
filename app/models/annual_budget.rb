@@ -95,7 +95,7 @@ class AnnualBudget < ApplicationRecord
     # has values set to 0
     return false unless update(closed: true)
 
-    budgets.where(is_approved: nil).find_each {|b| b.decline(nil, 'Annual Budget is Closed')}
+    budgets.where(is_approved: nil).find_each { |b| b.decline(nil, 'Annual Budget is Closed') }
 
     group.create_annual_budget
   end
@@ -112,7 +112,7 @@ class AnnualBudget < ApplicationRecord
     new_annual_budget = group.create_annual_budget
     return false unless new_annual_budget.update(amount: leftover)
 
-    budgets.where(is_approved: nil).find_each {|b| b.decline(nil, 'Annual Budget is Closed')}
+    budgets.where(is_approved: nil).find_each { |b| b.decline(nil, 'Annual Budget is Closed') }
 
     new_annual_budget
   end
