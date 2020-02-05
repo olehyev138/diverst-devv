@@ -34,6 +34,8 @@ import { useFormik } from 'formik';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import DeleteIcon from '@material-ui/icons/DeleteOutline';
+import CloseIcon from '@material-ui/icons/Close';
 
 const styles = theme => ({
   arrowRight: {
@@ -85,7 +87,7 @@ export function Budget(props) {
       render: rowData => rowData.available_amount ? `$${floatRound(rowData.available_amount, 2)}` : '$0.00',
     },
     {
-      title: 'Date',
+      title: 'Estimated End Date',
       field: 'estimated_date',
       query_field: 'budget_items.estimated_date',
       render: rowData => rowData.estimated_date ? formatDateTimeString(rowData.estimated_date, DateTime.DATE_MED) : 'Not Set'
@@ -99,7 +101,29 @@ export function Budget(props) {
         true: 'Yes',
       }
     },
+    {
+      title: 'Closed',
+      field: 'is_done',
+      query_field: 'budget_items.is_done',
+      lookup: {
+        false: 'No',
+        true: 'Yes',
+      }
+    },
   ];
+
+  const actions = [];
+
+  actions.push(rowData => ({
+    icon: () => <CloseIcon />,
+    tooltip: 'Close Budget',
+    onClick: (_, rowData) => {
+      // eslint-disable-next-line no-restricted-globals,no-alert
+      if (confirm('Are you sure you want to close this budget?\nThis cannot be undone!'))
+        props.closeBudgetAction({ id: rowData.id });
+    },
+    disabled: rowData.is_done,
+  }));
 
   const [formOpen, setFormOpen] = React.useState(false);
 
@@ -257,6 +281,7 @@ export function Budget(props) {
           dataArray={budgetItems}
           dataTotal={(budgetItems || []).length}
           columns={columns}
+          actions={actions}
           handlePagination={() => null}
           handleOrdering={() => null}
           rowsPerPage={Math.min((budgetItems || []).length, 5)}
@@ -277,8 +302,9 @@ Budget.propTypes = {
 
   isCommitting: PropTypes.bool,
 
-  approveAction: PropTypes.func,
-  declineAction: PropTypes.func,
+  approveAction: PropTypes.func.isRequired,
+  declineAction: PropTypes.func.isRequired,
+  closeBudgetAction: PropTypes.func.isRequired,
 };
 
 export default compose(

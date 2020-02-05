@@ -21,11 +21,26 @@ class BudgetItem < ApplicationRecord
   scope :approved, -> { joins(:budget).where(budgets: { is_approved: true }) }
   scope :not_approved, -> { joins(:budget).where(budgets: { is_approved: false }) }
   scope :pending, -> { joins(:budget).where(budgets: { is_approved: nil }) }
+  scope :private_scope, -> (user_id = nil) { joins(:budget).where('is_private = FALSE OR budgets.requester_id = ?', user_id) }
 
   delegate :finalized, to: :initiatives, prefix: true
   delegate :finalized, to: :initiatives_expenses, prefix: 'expenses'
   delegate :active, to: :initiatives, prefix: true
   delegate :active, to: :initiatives_expenses, prefix: 'expenses'
+
+  def close!
+    if is_done?
+      errors.add(:is_done, 'Budget Item is already closed')
+      return false
+    end
+
+    if initiatives.active.any?
+      errors.add(:initiatives, 'There are still events using this budget item')
+      return false
+    end
+
+    self.update(is_done: true)
+  end
 
   def title_with_amount
     "#{title} ($%.2f)" % available_amount

@@ -9,11 +9,13 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import {
   GET_BUDGET_ITEM_BEGIN,
   GET_BUDGET_ITEMS_BEGIN,
+  CLOSE_BUDGET_ITEM_BEGIN,
 } from './constants';
 
 import {
   getBudgetItemSuccess, getBudgetItemError,
   getBudgetItemsSuccess, getBudgetItemsError,
+  closeBudgetItemsSuccess, closeBudgetItemsError,
 } from './actions';
 
 export function* getBudgetItem(action) {
@@ -42,8 +44,24 @@ export function* getBudgetItems(action) {
   }
 }
 
+export function* closeBudgetItems(action) {
+  try {
+    const response = yield call(api.budgetItems.closeBudget.bind(api.budgetItems), action.payload.id);
+
+    yield put(closeBudgetItemsSuccess({}));
+    yield put(showSnackbar({ message: 'Successfully closed budget item', options: { variant: 'success' } }));
+  } catch (err) {
+    console.log(err);
+    yield put(closeBudgetItemsError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to close budget item', options: { variant: 'warning' } }));
+  }
+}
+
 
 export default function* BudgetItemSaga() {
   yield takeLatest(GET_BUDGET_ITEM_BEGIN, getBudgetItem);
   yield takeLatest(GET_BUDGET_ITEMS_BEGIN, getBudgetItems);
+  yield takeLatest(CLOSE_BUDGET_ITEM_BEGIN, closeBudgetItems);
 }

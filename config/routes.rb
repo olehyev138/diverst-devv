@@ -24,7 +24,11 @@ Diverst::Application.routes.draw do
           post 'decline'
         end
       end
-      resources :budget_items, only: [:index]
+      resources :budget_items, only: [:index] do
+        member do
+          post 'close', to: 'budget_items#close_budget'
+        end
+      end
       resources :campaigns
       resources :campaigns_groups
       resources :campaign_invitations

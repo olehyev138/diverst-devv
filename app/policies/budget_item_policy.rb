@@ -11,6 +11,10 @@ class BudgetItemPolicy < GroupBasePolicy
     'groups_budgets_manage'
   end
 
+  def close_budget?
+    record.budget.requester == user || update?
+  end
+
   class Scope < Scope
     def group_base
       group.current_budget_items

@@ -121,12 +121,12 @@ class Budget < ApplicationRecord
 
   def send_email_notification
     case is_approved
-    when nil # it was just created
-      send_approval_request
     when true # it was accepted
       send_approval_notification
     when false # it was declined
       send_denial_notification
+    else # it was just created
+      send_approval_request
     end
   end
 

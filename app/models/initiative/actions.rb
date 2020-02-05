@@ -10,7 +10,7 @@ module Initiative::Actions
     raise BadRequestException.new "#{self.name.titleize} ID required" if id.blank?
 
     unless self.finish_expenses!
-      raise InvalidInputException.new({ message: item.errors.full_messages.first, attribute: item.errors.messages.first.first })
+      raise InvalidInputException.new({ message: errors.full_messages.first, attribute: errors.messages.first.first })
     end
 
     self

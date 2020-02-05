@@ -12,6 +12,9 @@ import {
   GET_BUDGET_ITEMS_BEGIN,
   GET_BUDGET_ITEMS_SUCCESS,
   GET_BUDGET_ITEMS_ERROR,
+  CLOSE_BUDGET_ITEM_BEGIN,
+  CLOSE_BUDGET_ITEM_SUCCESS,
+  CLOSE_BUDGET_ITEM_ERROR,
   BUDGET_ITEMS_UNMOUNT,
 } from './constants';
 
@@ -56,6 +59,20 @@ function budgetItemReducer(state = initialState, action) {
 
       case GET_BUDGET_ITEMS_ERROR:
         draft.isFetchingBudgetItems = false;
+        break;
+
+      case CLOSE_BUDGET_ITEM_BEGIN:
+        draft.isCommitting = true;
+        draft.hasChanged = false;
+        break;
+
+      case CLOSE_BUDGET_ITEM_SUCCESS:
+        draft.isCommitting = false;
+        draft.hasChanged = true;
+        break;
+
+      case CLOSE_BUDGET_ITEM_ERROR:
+        draft.isCommitting = false;
         break;
 
       case BUDGET_ITEMS_UNMOUNT:
