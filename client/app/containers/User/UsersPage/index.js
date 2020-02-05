@@ -111,7 +111,6 @@ export function UserListPage(props) {
         handleVisitUserEdit={props.handleVisitUserEdit}
         handleChangeScope={handleChangeScope}
         links={links}
-
         userType={type}
         UserTypes={UserTypes}
       />

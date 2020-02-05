@@ -456,5 +456,10 @@
   "diverst.containers.Resource.form.input.url": "URL",
   "diverst.containers.Archive.index.tabs.posts": "Posts",
   "diverst.containers.Archive.index.tabs.resources": "Resources",
-  "diverst.containers.Archive.index.tabs.events": "Events"
+  "diverst.containers.Archive.index.tabs.events": "Events",
+  "diverst.containers.Archive.index.empty_section": "There are no archived items in this section.",
+  "diverst.containers.Archive.column.title": "Title",
+  "diverst.containers.Archive.column.url": "URL",
+  "diverst.containers.Archive.column.creation": "Creation Date",
+  "diverst.containers.Archive.column.options": "Options"
 }

@@ -8,23 +8,29 @@ import produce from 'immer';
 import {
   GET_ARCHIVES_BEGIN,
   GET_ARCHIVES_SUCCESS,
-  GET_ARCHIVES_ERROR
+  GET_ARCHIVES_ERROR,
+  RESTORE_ARCHIVE_BEGIN,
+  RESTORE_ARCHIVE_SUCCESS,
+  RESTORE_ARCHIVE_ERROR
 } from "./constants";
+import eventsReducer from "../Event/reducer";
 
 
 export const initialState = {
   isCommitting: false,
   isLoading: true,
   archives: null,
+  archivesTotal: null,
   hasChanged: false,
 };
 
 /* eslint-disable default-case, no-param-reassign */
-function resourcesReducer(state = initialState, action) {
+function archivesReducer(state = initialState, action) {
   /* eslint-disable consistent-return */
   return produce(state, (draft) => {
     switch (action.type) {
       case GET_ARCHIVES_BEGIN:
+      case RESTORE_ARCHIVE_BEGIN:
         draft.isLoading = true;
         draft.isCommitting = true;
         draft.hasChanged = false;
@@ -32,11 +38,19 @@ function resourcesReducer(state = initialState, action) {
       case GET_ARCHIVES_SUCCESS:
         draft.isCommitting = false;
         draft.hasChanged = true;
+        draft.archives = action.payload.items;
+        draft.archivesTotal = action.payload.total;
+        break;
+      case RESTORE_ARCHIVE_SUCCESS:
+        draft.isCommitting = false;
+        draft.hasChanged = true;
         break;
       case GET_ARCHIVES_ERROR:
+      case RESTORE_ARCHIVE_ERROR:
         draft.isLoading = false;
         draft.isCommitting = false;
         break;
     }
   });
 }
+export default archivesReducer;

@@ -18,4 +18,19 @@ export default defineMessages({
   events: {
     id: `${scope}.index.tabs.events`,
   },
+  title: {
+    id: `${scope}.column.title`,
+  },
+  url: {
+    id: `${scope}.column.url`,
+  },
+  creation: {
+    id: `${scope}.column.creation`
+  },
+  options: {
+    id: `${scope}.column.options`
+  },
+  empty_message: {
+    id: `${scope}.index.empty_section`
+  }
 });

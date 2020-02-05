@@ -9,34 +9,18 @@ import { useInjectReducer } from 'utils/injectReducer';
 
 import reducer from 'containers/Archive/reducer';
 import saga from 'containers/Archive/saga';
-
-import RouteService from 'utils/routeHelpers';
-
-import { selectUser, selectEnterprise } from 'containers/Shared/App/selectors';
-import { selectFolder, selectValid,
-  selectPaginatedFolders, selectPaginatedResources,
-  selectFoldersTotal, selectResourcesTotal, selectIsLoading,
-  selectIsFormLoading, selectHasChanged
-} from 'containers/Resource/selectors';
-
-import {
-  getFolderBegin, getFoldersBegin,
-  deleteFolderBegin, foldersUnmount,
-  validateFolderPasswordBegin,
-  getResourcesBegin,
-  deleteResourceBegin,
-  archiveResourceBegin,
-} from 'containers/Resource/actions';
-
+import { getArchivesBegin } from 'containers/Archive/actions';
 import ArchiveList from 'components/Archive/ArchiveList';
-import dig from "object-dig";
+import dig from 'object-dig';
+import { selectArchives, selectArchivesTotal } from '../selectors';
+import {selectPaginatedAnswers} from "../../Innovate/Campaign/CampaignQuestion/Answer/selectors";
 
 const defaultParams = Object.freeze({
-  count: 5,
+  count: 10, // TODO: Make this a constant and use it also in EventsList
   page: 0,
-  posts: 0,
-  resources: 1,
-  events: 2,
+  order: 'asc',
+  orderBy: 'id',
+  query_scopes: ['archived']
 });
 
 const ArchiveTypes = Object.freeze({
@@ -46,76 +30,78 @@ const ArchiveTypes = Object.freeze({
 });
 
 export function ArchivePage(props) {
-  //useInjectReducer({ key: 'events', reducer });
-  //useInjectSaga({ key: 'events', saga });
+  useInjectReducer({ key: 'archives', reducer });
+  useInjectSaga({ key: 'archives', saga });
 
-  const [tab, setTab] = useState(defaultParams.posts);
+  const [tab, setTab] = useState(ArchiveTypes.posts);
+  const [params, setParams] = useState(defaultParams);
 
-  const getArchives = (scopes, resetParams = false) => {
-
-    /* fetch the archives currently needed
-    const id = dig(props, 'currentGroup', 'id');
-
+  const getArchives = (type, resetParams = false) => {
     if (resetParams)
       setParams(defaultParams);
 
-    if (id) {
-      const newParams = {
-        ...params,
-        group_id: id,
-        query_scopes: scopes
-      };
-      props.getEventsBegin(newParams);
-      setParams(newParams);
-    }
-     */
+    const newParams = {
+      ...params,
+      resource: type
+    };
+    props.getArchivesBegin(newParams);
+    setParams(newParams);
   };
 
   const handleChangeTab = (event, newTab) => {
     setTab(newTab);
     switch (newTab) {
       case ArchiveTypes.posts:
-        getArchives(['posts'], true);
+        getArchives('posts', true);
         break;
       case ArchiveTypes.resources:
-        getArchives(['resources'], true);
+        getArchives('resources', true);
         break;
       case ArchiveTypes.events:
-        getArchives(['events'], true);
-        break;
-      default:
+        getArchives('events', true);
         break;
     }
+  };
+
+  const handleOrdering = (payload) => {
+    console.log("ordering");
+    const newParams = { ...params, orderBy: payload.orderBy, order: payload.orderDir };
+
+    props.getArchivesBegin(newParams);
+    setParams(newParams);
+  };
+
+  const handlePagination = (payload) => {
+    const newParams = { ...params, count: payload.count, page: payload.page };
+
+    props.getArchivesBegin(newParams);
+    setParams(newParams);
   };
 
   return (
     <ArchiveList
       currentTab={tab}
       handleChangeTab={handleChangeTab}
+      handlePagination={handlePagination}
+      handleOrdering={handleOrdering}
+      archives={props.archives}
+      archivesTotal={props.archivesTotal}
     />
   );
 }
 
 ArchivePage.propTypes = {
-
+  archives: PropTypes.array,
+  archivesTotal: PropTypes.number
 };
 
 const mapStateToProps = createStructuredSelector({
-  currentUser: selectUser(),
-  currentFolder: selectFolder(),
-  currentEnterprise: selectEnterprise(),
-  subFolders: selectPaginatedFolders(),
-  foldersTotal: selectFoldersTotal(),
-  resources: selectPaginatedResources(),
-  resourcesTotal: selectResourcesTotal(),
-  isLoading: selectIsLoading(),
-  isFormLoading: selectIsFormLoading(),
-  valid: selectValid(),
-  hasChanged: selectHasChanged(),
+  archives: selectArchives(),
+  archivesTotal: selectArchivesTotal()
 });
 
 const mapDispatchToProps = {
-
+  getArchivesBegin,
 };
 
 const withConnect = connect(
