@@ -171,7 +171,7 @@ resource "aws_elastic_beanstalk_environment" "eb_app_env" {
   setting {
     namespace   = "aws:elasticbeanstalk:application:environment"
     name        = "S3_REGION"
-    value        = "us-east-2"
+    value        = var.region
     resource  = ""
   }
 

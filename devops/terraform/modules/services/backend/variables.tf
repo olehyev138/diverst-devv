@@ -17,3 +17,5 @@ variable "job_store_endpoint" {}
 variable "filestorage_bucket_id" {}
 
 variable "ssh_key_name" {}
+
+variable "region" {}

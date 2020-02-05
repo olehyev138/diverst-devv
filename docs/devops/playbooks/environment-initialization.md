@@ -1,26 +1,46 @@
 # Environment Initialization Playbook
 
-_Run_ this playbook to initialize a new client environment
+Run this playbook to initialize a new environment
 
 ## Cloud Infrastructure
 
 ##### Environment account & IAM resources
 
-_TODO_
+- Log into AWS through SSO & access the _AWSServiceCatalogueEndUserAccess_ role/permission set under the Master account.
+
+- Navigate to AWS Service Catalog, under Products List you will see _AWS Control Tower Account Factory_. Click into it & click _Launch Product_.
+
+- Click through & fill in the fields as follows:
+
+  - _Name_: environment/client name -
+  - _SSOUserEmail_: `aws+<env-name>@diverst.com`
+  - _SSOAccountEmail_: `aws+<env-name>@diverst.com`
+  - _SSOUserFirstName_: `env-name` - lower case
+  - _SSOUserLastName_: `production` or `development`
+  - _OU_: `ProductionEnvironments` or `DevelopmentEnvironments`
+  - _Account Name_: Environment/client name, capital case
+  
+- Never input tag options or notifications, AWS Control Tower handles this for us and setting these can cause Account Factory to fail.
+
+- Review & launch. Monitor the status of the account under _Provisioned Product List_ to ensure that the account has been created & provisioned correctly. Monitor it until the status says _Available_
+
+- Lastly, switch roles/permission sets to an administrator that access SSO. Disable the SSO user created for this new account and assign the group _production_ to the new environment account with full administrative permissions.
 
 ##### Base resources
 
-- Run script `boostrap-backend`: `./devops/scripts/devops/scripts/bootstrap-backend <aws-profile> <client-name>`
+- Login to the SSO console with the special user _iac-bot_, select the new environment account, select command line, copy the environment variable export commands into the terminal.
 
-- Create ssh keypair: `ssh-keygen -qt rsa -N '' -f ~/.ssh/<client-name>`
+- Run script `boostrap-backend`: `./devops/scripts/devops/scripts/bootstrap-backend <env-name>`. Note the name of the bucket printed out.
+
+- Create ssh key pair: `ssh-keygen -qt rsa -N '' -f ~/.ssh/<env-name>`
                       
 ##### Create new environment module
 
-- Copy skeleton: `cp -r docs/devops/skeletons/client-env-skeleton devops/terraform/envs/prod/<client-name>`
+- Copy skeleton: `cp -r docs/devops/skeletons/tf-env-skeleton devops/terraform/envs/prod/<env-name>`
 
-- Rename `tfvars` file: `mv devops/terraform/envs/prod/<client-name>/client.tfvars devops/terraform/envs/prod/<client-name>/<client-name>.tfvars`
+- Rename `tfvars` file: `mv devops/terraform/envs/prod/<env-name>/env.tfvars devops/terraform/envs/prod/<env-name>/<env-name>.tfvars`
 
-- Fill out values in files marked with `<>` inside `main.tf` & `<client>.tfvars`
+- Fill out values in files marked with `<>` inside `main.tf` & `<env>.tfvars`
 
 ##### Run Terraform
 
@@ -28,7 +48,7 @@ _TODO_
 
 - Initialize terraform: `terraform init`
 
-- Run terraform with the `tfvars` file: `terraform apply -var-file='<client-name>.tfvars`
+- Run terraform with the `tfvars` file: `terraform apply -var-file=<env-name>.tfvars`
 
 ## Database
 

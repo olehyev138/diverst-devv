@@ -2,13 +2,7 @@
 # Is copied and filled out when creating a new client environment
 
 provider "aws" {
-  shared_credentials_file = pathexpand("~/.aws/credentials")
   region	              = "us-west-2"
-  profile	              = "<aws-profile>"
-
-  assume_role {
-    role_arn = "<aws-client-account-role>"
-  }
 }
 
 terraform {
@@ -18,9 +12,6 @@ terraform {
     region          = "us-west-2"
     dynamodb_table  = "<client-name>-tf-statelock"
     encrypt         = "true"
-
-    profile         = "staging"
-    role_arn        = "<aws-client-account-role>"
   }
 }
 
@@ -35,8 +26,8 @@ module "prod" {
   source = "../base-prod"
 
   env_name      = var.env_name
+  region        = var.region
   ssh_key_name  = var.ssh_key_name
-  db_name       = var.db_name
   db_username   = var.db_username
   db_password   = var.db_password
 }

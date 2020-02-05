@@ -4,8 +4,7 @@
 # Must be run from app root
 # Usage: ./create-app-version <aws-profile> <frontend-bucket>
 
-PROFILE=$1
-FRONTEND_BUCKET=$2
+FRONTEND_BUCKET=$1
 
 # Exit on error
 set -e
@@ -20,4 +19,4 @@ cd client/
 # Build frontend
 npm run build
 
-aws s3 sync build/ "s3://$FRONTEND_BUCKET" --profile "$PROFILE"
+aws s3 sync build/ "s3://$FRONTEND_BUCKET"

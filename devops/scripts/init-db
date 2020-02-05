@@ -33,3 +33,8 @@ ssh -A -i "$SSH_KEY" -J "$USER@$BASTION_URL" "$USER@$EB_URL" -o ConnectTimeout=1
   rails "set_api_key[$API_KEY]"
   echo "$API_KEY"
 EOF
+
+# upload API key to kms
+# ops account
+# iam role01 - read
+# iam role02 - write

@@ -3,12 +3,10 @@
 # Deploy a given app version for the given environment
 # Usage: ./deploy-app-version <aws-profile> <eb-env-name> <app-version-label>
 
-PROFILE=$1
-EB_ENV_NAME=$2
-EB_VERSION_LABEL=$3
+EB_ENV_NAME=$1
+EB_VERSION_LABEL=$2
 
 # Deploy app version
 aws elasticbeanstalk update-environment \
-  --profile "$PROFILE" \
   --environment-name "$EB_ENV_NAME" \
   --version-label "$EB_VERSION_LABEL"

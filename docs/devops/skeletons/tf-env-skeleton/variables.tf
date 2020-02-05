@@ -1,12 +1,12 @@
 variable "env_name" {
   type    = string
 }
-variable "ssh_key_name" {
+
+variable "region" {
   type    = string
 }
 
-# DB
-variable "db_name" {
+variable "ssh_key_name" {
   type    = string
 }
 

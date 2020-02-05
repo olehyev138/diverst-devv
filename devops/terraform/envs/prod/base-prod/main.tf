@@ -41,6 +41,7 @@ module "backend" {
   source = "../../../modules/services/backend"
 
   env_name  = var.env_name
+  region    = var.region
   vpc_id    = module.vpc.vpc.id
 
   sn_elb  = module.vpc.sn_dmz
