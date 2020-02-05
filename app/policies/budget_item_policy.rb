@@ -22,6 +22,8 @@ class BudgetItemPolicy < GroupBasePolicy
 
     def resolve
       super(policy.base_index_permission)
+          .joins(:budget)
+          .where('budget_items.is_private = FALSE OR budgets.requester_id = ?', user.id)
     end
   end
 end
