@@ -32,5 +32,13 @@ export const DELETE_GROUP_BEGIN = 'app/Group/DELETE_GROUP_BEGIN';
 export const DELETE_GROUP_SUCCESS = 'app/Group/DELETE_GROUP_SUCCESS';
 export const DELETE_GROUP_ERROR = 'app/Group/DELETE_GROUP_ERROR';
 
+export const CARRY_BUDGET_BEGIN = 'app/Group/CARRY_BUDGET_BEGIN';
+export const CARRY_BUDGET_SUCCESS = 'app/Group/CARRY_BUDGET_SUCCESS';
+export const CARRY_BUDGET_ERROR = 'app/Group/CARRY_BUDGET_ERROR';
+
+export const RESET_BUDGET_BEGIN = 'app/Group/RESET_BUDGET_BEGIN';
+export const RESET_BUDGET_SUCCESS = 'app/Group/RESET_BUDGET_SUCCESS';
+export const RESET_BUDGET_ERROR = 'app/Group/RESET_BUDGET_ERROR';
+
 export const GROUP_LIST_UNMOUNT = 'app/Group/GROUP_LIST_UNMOUNT';
 export const GROUP_FORM_UNMOUNT = 'app/Group/GROUP_FORM_UNMOUNT';

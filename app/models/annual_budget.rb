@@ -100,7 +100,7 @@ class AnnualBudget < ApplicationRecord
     group.create_annual_budget
   end
 
-  def carry_over!
+  def carryover!
     return false unless can_be_reset?
 
     # no point in carrying over zero amount in leftover money

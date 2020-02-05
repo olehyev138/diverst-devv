@@ -29,6 +29,13 @@ Object.assign(Groups, {
   },
   createUpdates(id, payload) {
     return axios.post(`${this.url}/${id}/create_update`, payload);
+  },
+
+  carryoverBudget(id, payload) {
+    return axios.post(`${this.url}/${id}/carryover_annual_budget`);
+  },
+  resetBudget(id, payload) {
+    return axios.post(`${this.url}/${id}/reset_annual_budget`);
   }
 });
 

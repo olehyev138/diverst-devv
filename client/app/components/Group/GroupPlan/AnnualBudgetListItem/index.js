@@ -263,6 +263,7 @@ export function AnnualBudgetListItem(props) {
         <Box mb={2} />
         <Button
           color='primary'
+          variant='contained'
           onClick={() => {
             toggleList();
           }}

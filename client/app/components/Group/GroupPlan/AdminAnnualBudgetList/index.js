@@ -88,8 +88,9 @@ export function AnnualBudgetList(props, context) {
     icon: () => <RedoIcon />,
     tooltip: 'Carry Over',
     onClick: (_, rowData) => {
-      // eslint-disable-next-line no-alert
-      alert('Not Implemented Yet');
+      /* eslint-disable-next-line no-alert, no-restricted-globals */
+      if (confirm('Are you sure you want to carryover the budget over.\n This cannot be undone'))
+        props.carryBudget(rowData.id);
     }
   });
 
@@ -97,8 +98,9 @@ export function AnnualBudgetList(props, context) {
     icon: () => <LoopIcon />,
     tooltip: 'Reset Budget',
     onClick: (_, rowData) => {
-      // eslint-disable-next-line no-alert
-      alert('Not Implemented Yet');
+      /* eslint-disable-next-line no-alert, no-restricted-globals */
+      if (confirm('Are you sure you want to rest the budget over.\n This cannot be undone'))
+        props.resetBudget(rowData.id);
     }
   });
 
@@ -134,6 +136,8 @@ AnnualBudgetList.propTypes = {
   handleOrdering: PropTypes.func,
   handleVisitAnnualBudgetEdit: PropTypes.func,
   handleChangeScope: PropTypes.func,
+  carryBudget: PropTypes.func,
+  resetBudget: PropTypes.func,
   annualBudgetType: PropTypes.string,
   links: PropTypes.shape({
     annualBudgetNew: PropTypes.string,

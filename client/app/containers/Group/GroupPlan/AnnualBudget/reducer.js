@@ -105,7 +105,7 @@ function annualBudgetReducer(state = initialState, action) {
         break;
 
       case GET_EVENTS_SUCCESS:
-        annualBudgetId = action.payload.items && action.payload.items.length > 0 ? action.payload.items[0].annual_budget_id : null;
+        annualBudgetId = action.payload.annualBudgetId || null;
         if (annualBudgetId) {
           draft.annualBudgetInitiativeList = produce(draft.annualBudgetInitiativeList, (draft2) => {
             draft2[annualBudgetId] = action.payload.items;

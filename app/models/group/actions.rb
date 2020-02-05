@@ -4,6 +4,28 @@ module Group::Actions
     klass.extend ControllerMethods
   end
 
+  def carryover_annual_budget(diverst_request)
+    raise BadRequestException.new "#{self.name.titleize} ID required" if id.blank?
+
+    cab = self.current_annual_budget
+    unless cab&.carryover!
+      raise InvalidInputException.new({ message: cab&.errors.full_messages.first, attribute: cab&.errors.messages.first&.first })
+    end
+
+    self
+  end
+
+  def reset_annual_budget(diverst_request)
+    raise BadRequestException.new "#{self.name.titleize} ID required" if id.blank?
+
+    cab = self.current_annual_budget
+    unless cab&.reset!
+      raise InvalidInputException.new({ message: cab&.errors.full_messages.first, attribute: cab&.errors.messages.first.first })
+    end
+
+    self
+  end
+
   module ClassMethods
     def valid_scopes
       ['all_children', 'all_parents', 'no_children', 'is_private']

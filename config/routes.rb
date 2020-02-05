@@ -82,6 +82,8 @@ Diverst::Application.routes.draw do
           post '/create_update', to: 'groups#create_update'
 
           get '/annual_budget', to: 'groups#current_annual_budget'
+          post '/carryover_annual_budget', to: 'groups#carryover_annual_budget'
+          post '/reset_annual_budget', to: 'groups#reset_annual_budget'
         end
       end
       resources :group_categories

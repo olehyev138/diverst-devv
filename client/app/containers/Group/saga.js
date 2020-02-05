@@ -4,24 +4,31 @@ import { push } from 'connected-react-router';
 
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
 
+import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import {
-  GET_GROUPS_BEGIN, CREATE_GROUP_BEGIN,
-  GET_GROUP_BEGIN, UPDATE_GROUP_BEGIN,
-  UPDATE_GROUP_SETTINGS_BEGIN, DELETE_GROUP_BEGIN, GET_ANNUAL_BUDGETS_BEGIN
-} from 'containers/Group/constants';
+  GET_GROUPS_BEGIN,
+  GET_ANNUAL_BUDGETS_BEGIN,
+  GET_GROUP_BEGIN,
+  CREATE_GROUP_BEGIN,
+  UPDATE_GROUP_BEGIN,
+  UPDATE_GROUP_SETTINGS_BEGIN,
+  DELETE_GROUP_BEGIN,
+  CARRY_BUDGET_BEGIN,
+  RESET_BUDGET_BEGIN,
+} from './constants';
 
 import {
   getGroupsSuccess, getGroupsError,
-  createGroupSuccess, createGroupError,
+  getAnnualBudgetsSuccess, getAnnualBudgetsError,
   getGroupSuccess, getGroupError,
+  createGroupSuccess, createGroupError,
   updateGroupSuccess, updateGroupError,
   updateGroupSettingsSuccess, updateGroupSettingsError,
-  deleteGroupError,
-  getAnnualBudgetsSuccess, getAnnualBudgetsError
-} from 'containers/Group/actions';
-
-import { ROUTES } from 'containers/Shared/Routes/constants';
+  deleteGroupSuccess, deleteGroupError,
+  carryBudgetSuccess, carryBudgetError,
+  resetBudgetSuccess, resetBudgetError,
+} from './actions';
 
 export function* getGroups(action) {
   try {
@@ -130,6 +137,35 @@ export function* deleteGroup(action) {
   }
 }
 
+export function* carryBudget(action) {
+  try {
+    yield call(api.groups.carryoverBudget.bind(api.groups), action.payload);
+
+    yield put(carryBudgetSuccess({}));
+    yield put(showSnackbar({ message: 'Successfully carried over the budget', options: { variant: 'success' } }));
+  } catch (err) {
+    yield put(carryBudgetError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to carry over the budget', options: { variant: 'warning' } }));
+  }
+}
+
+export function* resetBudget(action) {
+  try {
+    yield call(api.groups.resetBudget.bind(api.groups), action.payload);
+
+    yield put(resetBudgetSuccess({}));
+    yield put(showSnackbar({ message: 'Successfully reset budget', options: { variant: 'success' } }));
+  } catch (err) {
+    yield put(resetBudgetError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to reset budget', options: { variant: 'warning' } }));
+  }
+}
+
+
 export default function* groupsSaga() {
   yield takeLatest(GET_GROUPS_BEGIN, getGroups);
   yield takeLatest(GET_ANNUAL_BUDGETS_BEGIN, getAnnualBudgets);
@@ -138,4 +174,6 @@ export default function* groupsSaga() {
   yield takeLatest(UPDATE_GROUP_BEGIN, updateGroup);
   yield takeLatest(UPDATE_GROUP_SETTINGS_BEGIN, updateGroupSettings);
   yield takeLatest(DELETE_GROUP_BEGIN, deleteGroup);
+  yield takeLatest(CARRY_BUDGET_BEGIN, carryBudget);
+  yield takeLatest(RESET_BUDGET_BEGIN, resetBudget);
 }

@@ -12,12 +12,12 @@ import { compose } from 'redux';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
-import { selectPaginatedGroups, selectGroupTotal, selectGroupIsLoading } from 'containers/Group/selectors';
+import { selectPaginatedGroups, selectGroupTotal, selectGroupIsLoading, selectHasChanged } from 'containers/Group/selectors';
 
 import saga from 'containers/Group/saga';
 import reducer from 'containers/Group/reducer';
 
-import { getAnnualBudgetsBegin, groupListUnmount } from 'containers/Group/actions';
+import { getAnnualBudgetsBegin, groupListUnmount, carryBudgetBegin, resetBudgetBegin } from 'containers/Group/actions';
 
 import AnnualBudgetList from 'components/Group/GroupPlan/AdminAnnualBudgetList';
 
@@ -41,6 +41,13 @@ export function AdminAnnualBudgetPage(props) {
     return () => props.groupListUnmount();
   }, []);
 
+  useEffect(() => {
+    if (props.hasChanged)
+      props.getAnnualBudgetsBegin(params);
+
+    return () => props.groupListUnmount();
+  }, [props.hasChanged]);
+
   const handlePagination = (payload) => {
     const newParams = { ...params, count: payload.count, page: payload.page };
 
@@ -56,6 +63,8 @@ export function AdminAnnualBudgetPage(props) {
       defaultParams={params}
       handlePagination={handlePagination}
       handleOrdering={handleOrdering}
+      carryBudget={props.carryBudgetBegin}
+      resetBudget={props.resetBudgetBegin}
     />
   );
 }
@@ -63,7 +72,10 @@ export function AdminAnnualBudgetPage(props) {
 AdminAnnualBudgetPage.propTypes = {
   getAnnualBudgetsBegin: PropTypes.func.isRequired,
   groupListUnmount: PropTypes.func.isRequired,
+  carryBudgetBegin: PropTypes.func.isRequired,
+  resetBudgetBegin: PropTypes.func.isRequired,
   isLoading: PropTypes.bool,
+  hasChanged: PropTypes.bool,
   groups: PropTypes.object,
   groupTotal: PropTypes.number,
   deleteGroupBegin: PropTypes.func
@@ -73,10 +85,13 @@ const mapStateToProps = createStructuredSelector({
   isLoading: selectGroupIsLoading(),
   groups: selectPaginatedGroups(),
   groupTotal: selectGroupTotal(),
+  hasChanged: selectHasChanged(),
 });
 
 const mapDispatchToProps = {
   getAnnualBudgetsBegin,
+  carryBudgetBegin,
+  resetBudgetBegin,
   groupListUnmount,
 };
 

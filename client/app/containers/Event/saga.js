@@ -35,7 +35,7 @@ export function* getEvents(action) {
     } else
       response = yield call(api.initiatives.all.bind(api.initiatives), action.payload);
 
-    yield put(getEventsSuccess(response.data.page));
+    yield put(getEventsSuccess({ annualBudgetId, ...response.data.page }));
   } catch (err) {
     const { annualBudgetId } = action.payload;
     yield put(getEventsError({ annualBudgetId }));

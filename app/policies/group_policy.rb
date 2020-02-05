@@ -14,6 +14,14 @@ class GroupPolicy < ApplicationPolicy
     update?
   end
 
+  def carryover_annual_budget?
+    update?
+  end
+
+  def reset_annual_budget?
+    update?
+  end
+
   def annual_budgets?
     update?
   end

@@ -171,7 +171,7 @@ class Group < ApplicationRecord
   delegate :available, BUDGET_DELEGATE_OPTIONS
   delegate :finalized_expenditure, BUDGET_DELEGATE_OPTIONS
 
-  delegate :carry_over!, BUDGET_DELEGATE_OPTIONS
+  delegate :carryover!, BUDGET_DELEGATE_OPTIONS
   delegate :reset!, BUDGET_DELEGATE_OPTIONS
 
   def annual_budget

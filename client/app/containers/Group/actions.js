@@ -26,6 +26,12 @@ import {
   DELETE_GROUP_BEGIN,
   DELETE_GROUP_SUCCESS,
   DELETE_GROUP_ERROR,
+  CARRY_BUDGET_BEGIN,
+  CARRY_BUDGET_SUCCESS,
+  CARRY_BUDGET_ERROR,
+  RESET_BUDGET_BEGIN,
+  RESET_BUDGET_SUCCESS,
+  RESET_BUDGET_ERROR,
   GROUP_LIST_UNMOUNT,
   GROUP_FORM_UNMOUNT,
 } from './constants';
@@ -93,8 +99,6 @@ export function getGroupError(error) {
   };
 }
 
-/* Group creating */
-
 export function createGroupBegin(payload) {
   return {
     type: CREATE_GROUP_BEGIN,
@@ -115,8 +119,6 @@ export function createGroupError(error) {
     error,
   };
 }
-
-/* Group updating */
 
 export function updateGroupBegin(payload) {
   return {
@@ -139,8 +141,6 @@ export function updateGroupError(error) {
   };
 }
 
-/* Group settings updating */
-
 export function updateGroupSettingsBegin(payload) {
   return {
     type: UPDATE_GROUP_SETTINGS_BEGIN,
@@ -161,8 +161,6 @@ export function updateGroupSettingsError(error) {
     error,
   };
 }
-
-/* Group settings deleting */
 
 export function deleteGroupBegin(payload) {
   return {
@@ -185,14 +183,58 @@ export function deleteGroupError(error) {
   };
 }
 
-export function groupListUnmount() {
+export function carryBudgetBegin(payload) {
   return {
-    type: GROUP_LIST_UNMOUNT
+    type: CARRY_BUDGET_BEGIN,
+    payload,
   };
 }
 
-export function groupFormUnmount() {
+export function carryBudgetSuccess(payload) {
   return {
-    type: GROUP_FORM_UNMOUNT
+    type: CARRY_BUDGET_SUCCESS,
+    payload,
+  };
+}
+
+export function carryBudgetError(error) {
+  return {
+    type: CARRY_BUDGET_ERROR,
+    error,
+  };
+}
+
+export function resetBudgetBegin(payload) {
+  return {
+    type: RESET_BUDGET_BEGIN,
+    payload,
+  };
+}
+
+export function resetBudgetSuccess(payload) {
+  return {
+    type: RESET_BUDGET_SUCCESS,
+    payload,
+  };
+}
+
+export function resetBudgetError(error) {
+  return {
+    type: RESET_BUDGET_ERROR,
+    error,
+  };
+}
+
+export function groupListUnmount(payload) {
+  return {
+    type: GROUP_LIST_UNMOUNT,
+    payload,
+  };
+}
+
+export function groupFormUnmount(payload) {
+  return {
+    type: GROUP_FORM_UNMOUNT,
+    payload,
   };
 }

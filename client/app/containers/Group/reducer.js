@@ -28,7 +28,7 @@ import {
   DELETE_GROUP_SUCCESS,
   DELETE_GROUP_ERROR,
   GROUP_LIST_UNMOUNT,
-  GROUP_FORM_UNMOUNT,
+  GROUP_FORM_UNMOUNT, CARRY_BUDGET_BEGIN, RESET_BUDGET_BEGIN, CARRY_BUDGET_SUCCESS, RESET_BUDGET_SUCCESS,
 } from './constants';
 
 export const initialState = {
@@ -85,6 +85,8 @@ function groupsReducer(state = initialState, action) {
       case UPDATE_GROUP_BEGIN:
       case UPDATE_GROUP_SETTINGS_BEGIN:
       case DELETE_GROUP_BEGIN:
+      case CARRY_BUDGET_BEGIN:
+      case RESET_BUDGET_BEGIN:
         draft.isCommitting = true;
         draft.hasChanged = false;
         break;
@@ -98,6 +100,8 @@ function groupsReducer(state = initialState, action) {
       case CREATE_GROUP_SUCCESS:
       case UPDATE_GROUP_SUCCESS:
       case DELETE_GROUP_SUCCESS:
+      case CARRY_BUDGET_SUCCESS:
+      case RESET_BUDGET_SUCCESS:
         draft.isCommitting = false;
         draft.hasChanged = true;
         break;

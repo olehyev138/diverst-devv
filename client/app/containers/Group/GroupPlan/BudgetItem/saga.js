@@ -51,7 +51,6 @@ export function* closeBudgetItems(action) {
     yield put(closeBudgetItemsSuccess({}));
     yield put(showSnackbar({ message: 'Successfully closed budget item', options: { variant: 'success' } }));
   } catch (err) {
-    console.log(err);
     yield put(closeBudgetItemsError(err));
 
     // TODO: intl message
