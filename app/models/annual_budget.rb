@@ -64,28 +64,44 @@ class AnnualBudget < ApplicationRecord
   end
 
   def can_be_reset?
-    initiatives_active.empty? && items_approved.where(is_done: false).empty?
+    unless no_active_initiatives?
+      errors.add(:initiatives, 'There cannot be any initiatives with an open expense')
+      return false
+    end
+
+    unless no_open_budgets?
+      errors.add(:budget_items, 'There cannot be any open budgets')
+      return false
+    end
+
+    true
+  end
+
+  def no_active_initiatives?
+    initiatives_active.empty?
+  end
+
+  def no_open_budgets?
+    items_approved.where(is_done: false).empty?
   end
 
   def reset!
-    unless can_be_reset?
-      errors.add(:initiatives, 'There cannot be any initiatives with an open expense')
-      return
-    end
+    return false unless can_be_reset?
 
     # no need to reset annual budget because it is already set to 0
     return if amount == 0
 
     # close annual_budget and create a new one for which new budget-related calculations can be made. New annual budget
     # has values set to 0
-    annual_budget.update(closed: true) && group.create_annual_budget
+    return false unless update(closed: true)
+
+    budgets.where(is_approved: nil).find_each {|b| b.decline(nil, 'Annual Budget is Closed')}
+
+    group.create_annual_budget
   end
 
   def carry_over!
-    unless can_be_reset?
-      errors.add(:initiatives, 'There cannot be any initiatives with an open expense')
-      return
-    end
+    return false unless can_be_reset?
 
     # no point in carrying over zero amount in leftover money
     return if leftover == 0 || leftover.nil?
@@ -95,6 +111,8 @@ class AnnualBudget < ApplicationRecord
     # update new annual budget with leftover money
     new_annual_budget = group.create_annual_budget
     return false unless new_annual_budget.update(amount: leftover)
+
+    budgets.where(is_approved: nil).find_each {|b| b.decline(nil, 'Annual Budget is Closed')}
 
     new_annual_budget
   end

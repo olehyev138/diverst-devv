@@ -20,6 +20,8 @@ module Budget::Actions
     assign_attributes(approver: approver, is_approved: false, decline_reason: reason)
     raise InvalidInputException.new({ message: item.errors.full_messages.first, attribute: item.errors.messages.first.first }) unless save(validate: false)
 
+    budget_items.update_all(is_done: true)
+
     BudgetMailer.budget_declined(self).deliver_later if requester
     self
   end

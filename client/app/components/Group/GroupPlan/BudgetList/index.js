@@ -122,7 +122,7 @@ export function BudgetList(props, context) {
           <Grid item xs>
             <Button
               color='primary'
-              variant={props.annualBudget && !props.annualBudget.closed ? 'contained' : 'disabled'}
+              variant='contained'
               to={props.links.annualBudgetOverview}
               component={WrappedNavLink}
               startIcon={<ArrowBackIcon />}

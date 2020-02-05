@@ -12,8 +12,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 
 import {
-  Button, Card, CardActions, CardContent, Grid, Paper,
-  TextField, InputAdornment, Input, FormControl, InputLabel, Typography,
+  Box
 } from '@material-ui/core';
 
 import { injectIntl, intlShape } from 'react-intl';
@@ -56,6 +55,7 @@ export function AnnualBudgetList(props) {
               handlePagination={handleInitiativePagination(annualBudget.id)}
               handleOrdering={handleInitiativeOrdering(annualBudget.id)}
             />
+            <Box mb={2} />
           </React.Fragment>
         ))}
       </DiverstLoader>
