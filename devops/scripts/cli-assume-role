@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# Assumes a given role & sets AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY & AWS_SESSION_TOKEN
+#  - with these set, we can use iac tools & aws cli without worrying about credentials
+#  - sets a duration of 4 hours/14400 seconds
+# Assumes AWS_ACCESS_KEY_ID & AWS_SECRET_ACCESS_KEY are already set
+
+# Usage
+# ./cli-assume-role <full-role-arn>
+
+ROLE_ARN=$1
+DURATION_SECONDS=14400
+
+# Exit on error
+set -e
+
+# Call sts assume-role, use cut to get access key id, secret acccess key & session token
+creds=$(aws --output text sts assume-role --duration-seconds "$DURATION_SECONDS" --role-arn "$ROLE_ARN" --role-session-name "cli-session" | grep CREDENTIALS | cut -f2,4,5)
+
+# Use cut to get each secret/token & export into appropriate environment variable
+AWS_ACCESS_KEY_ID=$(echo "$creds" | awk '{print $1}')
+AWS_SECRET_ACCESS_KEY=$(echo "$creds" | awk '{print $2}')
+AWS_SESSION_TOKEN=$(echo "$creds" | awk '{print $3}')
+
+echo "$AWS_ACCESS_KEY_ID"
+echo "$AWS_SECRET_ACCESS_KEY"
+echo "$AWS_SESSION_TOKEN"
