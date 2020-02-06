@@ -93,7 +93,7 @@ export function BudgetList(props, context) {
 
   actions.push({
     icon: () => <DetailsIcon />,
-    tooltip: <DiverstFormattedMessage {...messages.actions.details} />,
+    tooltip: intl.formatMessage(messages.actions.details),
     onClick: (_, rowData) => {
       // eslint-disable-next-line no-alert
       props.handleVisitBudgetShow(props.currentGroup.id, props.annualBudget.id, rowData.id);
@@ -102,7 +102,7 @@ export function BudgetList(props, context) {
 
   actions.push({
     icon: () => <DeleteIcon />,
-    tooltip: <DiverstFormattedMessage {...messages.actions.delete} />,
+    tooltip: intl.formatMessage(messages.actions.delete),
     onClick: (_, rowData) => {
       // eslint-disable-next-line no-alert
       props.deleteBudgetBegin({ id: rowData.id });

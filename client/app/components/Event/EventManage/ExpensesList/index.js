@@ -82,7 +82,7 @@ export function ExpenseList(props, context) {
   if (initiative && !initiative.finished_expenses) {
     actions.push({
       icon: () => <EditIcon />,
-      tooltip: <DiverstFormattedMessage {...messages.actions.edit} />,
+      tooltip: intl.formatMessage(messages.actions.edit),
       onClick: (_, rowData) => {
         props.links.editExpense(rowData.id);
       }
@@ -90,7 +90,7 @@ export function ExpenseList(props, context) {
 
     actions.push({
       icon: () => <DeleteIcon />,
-      tooltip: <DiverstFormattedMessage {...messages.actions.delete} />,
+      tooltip: intl.formatMessage(messages.actions.delete),
       onClick: (_, rowData) => {
         props.deleteExpenseBegin({ id: rowData.id });
       }

@@ -112,7 +112,7 @@ export function Budget(props) {
 
   actions.push(rowData => ({
     icon: () => <CloseIcon />,
-    tooltip: <DiverstFormattedMessage {...messages.actions.close} />,
+    tooltip: intl.formatMessage(messages.actions.close),
     onClick: (_, rowData) => {
       // eslint-disable-next-line no-restricted-globals,no-alert
       if (confirm(intl.formatMessage(messages.actions.closeConfirm)))

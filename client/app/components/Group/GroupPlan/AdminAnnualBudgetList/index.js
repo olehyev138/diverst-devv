@@ -80,7 +80,7 @@ export function AnnualBudgetList(props, context) {
 
   actions.push({
     icon: () => <EditIcon />,
-    tooltip: <DiverstFormattedMessage {...listMessages.actions.edit} />,
+    tooltip: intl.formatMessage(listMessages.actions.edit),
     onClick: (_, rowData) => {
       props.handleVisitEditPage(rowData.id);
     }
@@ -88,7 +88,7 @@ export function AnnualBudgetList(props, context) {
 
   actions.push({
     icon: () => <RedoIcon />,
-    tooltip: <DiverstFormattedMessage {...listMessages.actions.carryover} />,
+    tooltip: intl.formatMessage(listMessages.actions.carryover),
     onClick: (_, rowData) => {
       /* eslint-disable-next-line no-alert, no-restricted-globals */
       if (confirm('Are you sure you want to carryover the budget over.\n This cannot be undone'))
@@ -98,7 +98,7 @@ export function AnnualBudgetList(props, context) {
 
   actions.push({
     icon: () => <LoopIcon />,
-    tooltip: <DiverstFormattedMessage {...listMessages.actions.reset} />,
+    tooltip: intl.formatMessage(listMessages.actions.reset),
     onClick: (_, rowData) => {
       /* eslint-disable-next-line no-alert, no-restricted-globals */
       if (confirm('Are you sure you want to rest the budget over.\n This cannot be undone'))
