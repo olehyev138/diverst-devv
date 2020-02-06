@@ -26,10 +26,11 @@ import DiverstDropdownMenu from 'components/Shared/DiverstDropdownMenu';
 import { DateTime, formatDateTimeString } from 'utils/dateTimeHelpers';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
-import messages from 'containers/News/messages';
+import messages from 'containers/Event/EventManage/Expense/messages';
 import DiverstProgress from 'components/Shared/DiverstProgress';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import AddIcon from '@material-ui/icons/Add';
+import { injectIntl, intlShape } from 'react-intl';
 
 const beforeNowString = datetime => DateTime.local() > DateTime.fromISO(datetime);
 const beforeNowTime = datetime => DateTime.local() > datetime;
@@ -47,7 +48,7 @@ const styles = theme => ({
 });
 
 export function ExpenseList(props, context) {
-  const { classes, initiative } = props;
+  const { classes, initiative, intl } = props;
 
   const handleOrderChange = (columnId, orderDir) => {
     props.handleOrdering({
@@ -58,18 +59,18 @@ export function ExpenseList(props, context) {
 
   const columns = [
     {
-      title: 'Description',
+      title: intl.formatMessage(messages.columns.description),
       field: 'description',
       query_field: 'description',
     },
     {
-      title: 'Amount',
+      title: intl.formatMessage(messages.columns.amount),
       field: 'amount',
       query_field: 'amount',
       render: rowData => rowData.amount ? `$${floatRound(rowData.amount, 2)}` : '$0.00',
     },
     {
-      title: 'Date',
+      title: intl.formatMessage(messages.columns.createdAt),
       field: 'created_at',
       query_field: 'created_at',
       render: rowData => formatDateTimeString(rowData.created_at, DateTime.DATE_MED)
@@ -81,7 +82,7 @@ export function ExpenseList(props, context) {
   if (initiative && !initiative.finished_expenses) {
     actions.push({
       icon: () => <EditIcon />,
-      tooltip: 'Details',
+      tooltip: <DiverstFormattedMessage {...messages.actions.edit} />,
       onClick: (_, rowData) => {
         props.links.editExpense(rowData.id);
       }
@@ -89,7 +90,7 @@ export function ExpenseList(props, context) {
 
     actions.push({
       icon: () => <DeleteIcon />,
-      tooltip: 'Delete',
+      tooltip: <DiverstFormattedMessage {...messages.actions.delete} />,
       onClick: (_, rowData) => {
         props.deleteExpenseBegin({ id: rowData.id });
       }
@@ -117,7 +118,7 @@ export function ExpenseList(props, context) {
                     component={WrappedNavLink}
                     startIcon={<AddIcon />}
                   >
-                    New Expense
+                    <DiverstFormattedMessage {...messages.buttons.new} />
                   </Button>
                 </Grid>
                 { props.initiative && beforeNowString(props.initiative.end) && (
@@ -127,11 +128,11 @@ export function ExpenseList(props, context) {
                       variant='contained'
                       onClick={() => {
                         // eslint-disable-next-line no-restricted-globals,no-alert
-                        if (confirm('Are you sure you want to close the expenses? This can NOT be undone'))
+                        if (intl.formatMessage(messages.buttons.closeConfirm))
                           props.finalizeExpensesBegin({ id: props.initiative.id });
                       }}
                     >
-                      Finalize Expenses
+                      <DiverstFormattedMessage {...messages.buttons.close} />
                     </DiverstSubmit>
                   </Grid>
                 )}
@@ -139,7 +140,7 @@ export function ExpenseList(props, context) {
             ) : (
               <Grid item align='right'>
                 <Typography color='secondary' variant='h5' component='h2'>
-                  Expenses are closed. You can not add any new expense
+                  <DiverstFormattedMessage {...messages.close} />
                 </Typography>
               </Grid>
             )}
@@ -149,7 +150,7 @@ export function ExpenseList(props, context) {
         <Grid container spacing={3}>
           <Grid item xs>
             <DiverstTable
-              title='Expenses'
+              title={intl.formatMessage(messages.title)}
               handlePagination={props.handlePagination}
               onOrderChange={handleOrderChange}
               isLoading={props.isFetchingExpenses}
@@ -168,7 +169,7 @@ export function ExpenseList(props, context) {
         <Card>
           <CardContent>
             <Typography variant='h6' component='h2'>
-              Budget pressure
+              <DiverstFormattedMessage {...messages.pressure} />
             </Typography>
             <Box mb={2} />
             <Grid
@@ -179,7 +180,9 @@ export function ExpenseList(props, context) {
             >
               <Grid item xs={1}>
                 <Typography color='primary' variant='body1' component='h2'>
-                  {initiative.finished_expenses ? 'Final Expenses' : 'Total Expenses'}
+                  {initiative.finished_expenses
+                    ? <DiverstFormattedMessage {...messages.final} />
+                    : <DiverstFormattedMessage {...messages.total} />}
                 </Typography>
                 <Typography color='secondary' variant='body2' component='h2'>
                   {`$${floatRound(props.expenseSumTotal, 2)}`}
@@ -196,7 +199,7 @@ export function ExpenseList(props, context) {
               </Grid>
               <Grid item xs={1}>
                 <Typography color='primary' variant='body1' component='h2' align='right'>
-                  Estimated Budget
+                  <DiverstFormattedMessage {...messages.estimated} />
                 </Typography>
                 <Typography color='secondary' variant='body2' component='h2' align='right'>
                   {`$${floatRound(props.initiative.estimated_funding, 2)}`}
@@ -209,7 +212,7 @@ export function ExpenseList(props, context) {
     ) : (
       <Grid item align='center'>
         <Typography color='secondary' variant='h5' component='h2'>
-          {`${initiative.name} is set as a free event. There are no expenses`}
+          <DiverstFormattedMessage {...messages.free} />
         </Typography>
       </Grid>
     )
@@ -217,6 +220,7 @@ export function ExpenseList(props, context) {
 }
 
 ExpenseList.propTypes = {
+  intl: intlShape.isRequired,
   classes: PropTypes.object,
   initiative: PropTypes.object,
   currentGroup: PropTypes.object,
@@ -242,4 +246,5 @@ ExpenseList.propTypes = {
 export default compose(
   memo,
   withStyles(styles),
+  injectIntl,
 )(ExpenseList);
