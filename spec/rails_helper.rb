@@ -163,6 +163,10 @@ RSpec.configure do |config|
     DatabaseCleaner.start
   end
 
+  config.before(:each) do
+    set_leftovers
+  end
+
   config.after(:each) do
     Capybara.reset_sessions!
     DatabaseCleaner.clean
