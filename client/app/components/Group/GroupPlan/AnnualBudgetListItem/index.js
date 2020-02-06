@@ -17,6 +17,11 @@ import {
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import DiverstProgress from 'components/Shared/DiverstProgress';
 import DiverstTable from '../../../Shared/DiverstTable';
+import { injectIntl, intlShape } from 'react-intl';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/Group/GroupPlan/AnnualBudget/messages';
+const { events: eventMessages } = messages;
+const { item: itemMessages } = messages;
 
 const styles = theme => ({
   arrowRight: {
@@ -33,10 +38,10 @@ const styles = theme => ({
   },
 });
 
-function InitiativeList({ initiatives, initiativeCount, handlePagination, handleOrdering, isLoading, links, ...rest }) {
+function InitiativeList({ initiatives, initiativeCount, handlePagination, handleOrdering, isLoading, links, intl, ...rest }) {
   const columns = [
     {
-      title: 'Event',
+      title: intl.formatMessage(eventMessages.columns.name),
       field: 'name',
       query_field: 'initiative.name',
       render: rowData => (
@@ -50,25 +55,25 @@ function InitiativeList({ initiatives, initiativeCount, handlePagination, handle
       )
     },
     {
-      title: 'Estimated funding',
+      title: intl.formatMessage(eventMessages.columns.funding),
       field: 'estimated_funding',
       query_field: 'estimated_funding',
       render: rowData => rowData.estimated_funding ? `$${floatRound(rowData.estimated_funding, 2)}` : '$0.00',
     },
     {
-      title: 'Spent so far',
+      title: intl.formatMessage(eventMessages.columns.spent),
       field: 'current_expenses_sum',
       sorting: false,
       render: rowData => rowData.current_expenses_sum ? `$${floatRound(rowData.current_expenses_sum, 2)}` : '$0.00',
     },
     {
-      title: 'Unspent',
+      title: intl.formatMessage(eventMessages.columns.unspent),
       field: 'leftover',
       sorting: false,
       render: rowData => rowData.leftover ? `$${floatRound(rowData.leftover, 2)}` : '$0.00',
     },
     {
-      title: 'Spending status',
+      title: intl.formatMessage(eventMessages.columns.status),
       field: 'expenses_status',
       query_field: 'finished_expenses',
     },
@@ -86,7 +91,7 @@ function InitiativeList({ initiatives, initiativeCount, handlePagination, handle
       handlePagination={handlePagination}
       onOrderChange={handleOrderChange}
       isLoading={isLoading}
-      title='Events Budget Info'
+      title={intl.formatMessage(eventMessages.title)}
       rowsPerPage={clamp((initiatives || []).length, 1, 5)}
       dataArray={initiatives || []}
       dataTotal={initiativeCount || 0}
@@ -99,7 +104,7 @@ function InitiativeList({ initiatives, initiativeCount, handlePagination, handle
 }
 
 export function AnnualBudgetListItem(props) {
-  const { classes, links, item } = props;
+  const { classes, links, item, intl } = props;
   const { expenses, amount, available, approved, remaining, estimated, unspent } = item;
 
   const [initList, setInitList] = useState(false);
@@ -114,7 +119,9 @@ export function AnnualBudgetListItem(props) {
     <Card>
       <CardContent>
         <Typography variant='h5' align='left' color='primary'>
-          {item.closed ? 'Past Annual Budget' : 'Current Annual Budget'}
+          {item.closed
+            ? <DiverstFormattedMessage {...itemMessages.pastTitle} />
+            : <DiverstFormattedMessage {...itemMessages.currentTitle} />}
         </Typography>
         <Box mb={2} />
         <Grid
@@ -125,7 +132,7 @@ export function AnnualBudgetListItem(props) {
         >
           <Grid item>
             <Typography variant='body1' component='h2'>
-              Budgets
+              <DiverstFormattedMessage {...itemMessages.budget} />
             </Typography>
           </Grid>
           <Grid item>
@@ -141,7 +148,7 @@ export function AnnualBudgetListItem(props) {
               }}
             >
               <Typography color='primary' variant='body1' component='h2'>
-                View Budget Requests
+                <DiverstFormattedMessage {...itemMessages.viewRequests} />
               </Typography>
             </Link>
           </Grid>
@@ -160,7 +167,7 @@ export function AnnualBudgetListItem(props) {
                   }}
                 >
                   <Typography color='primary' variant='body1' component='h2'>
-                    Create Budget Request
+                    <DiverstFormattedMessage {...itemMessages.createRequests} />
                   </Typography>
                 </Link>
               </Grid>
@@ -175,7 +182,7 @@ export function AnnualBudgetListItem(props) {
         >
           <Grid item xs={false} sm={2} md={1}>
             <Typography color='primary' variant='body1' component='h2'>
-              Expenses
+              <DiverstFormattedMessage {...itemMessages.expenses} />
             </Typography>
             <Typography color='secondary' variant='body2' component='h2'>
               {`$${floatRound(expenses, 2)}`}
@@ -191,7 +198,7 @@ export function AnnualBudgetListItem(props) {
           </Grid>
           <Grid item xs={false} sm={2} md={1}>
             <Typography color='primary' variant='body1' component='h2' align='right'>
-              Annual Budget
+              <DiverstFormattedMessage {...itemMessages.annualBudget} />
             </Typography>
             <Typography color='secondary' variant='body2' component='h2' align='right'>
               {`$${floatRound(amount, 2)}`}
@@ -202,17 +209,17 @@ export function AnnualBudgetListItem(props) {
         <Grid container>
           <Grid item xs={4}>
             <Typography color='primary' variant='body1' component='h2' align='center'>
-              Annual Budget
+              <DiverstFormattedMessage {...itemMessages.annualBudget} />
             </Typography>
           </Grid>
           <Grid item xs={4}>
             <Typography color='primary' variant='body1' component='h2' align='center'>
-              Approved budget
+              <DiverstFormattedMessage {...itemMessages.approvedBudget} />
             </Typography>
           </Grid>
           <Grid item xs={4}>
             <Typography color='primary' variant='body1' component='h2' align='center'>
-              Available budget
+              <DiverstFormattedMessage {...itemMessages.availableBudget} />
             </Typography>
           </Grid>
         </Grid>
@@ -238,12 +245,12 @@ export function AnnualBudgetListItem(props) {
         <Grid container>
           <Grid item xs={6}>
             <Typography color='primary' variant='body1' component='h2' align='center'>
-              Estimated Event Expenses
+              <DiverstFormattedMessage {...itemMessages.estimatedExpenses} />
             </Typography>
           </Grid>
           <Grid item xs={6}>
             <Typography color='primary' variant='body1' component='h2' align='center'>
-              Total Unspent Event Budget
+              <DiverstFormattedMessage {...itemMessages.eventUnspent} />
             </Typography>
           </Grid>
         </Grid>
@@ -268,7 +275,7 @@ export function AnnualBudgetListItem(props) {
             toggleList();
           }}
         >
-          Events Budget Info
+          <DiverstFormattedMessage {...eventMessages.title} />
         </Button>
       </CardContent>
       <Collapse in={initList}>
@@ -280,6 +287,7 @@ export function AnnualBudgetListItem(props) {
           handleOrdering={props.handleOrdering}
           closeAction={() => setInitList(false)}
           links={links}
+          intl={intl}
         />
       </Collapse>
     </Card>
@@ -287,6 +295,7 @@ export function AnnualBudgetListItem(props) {
 }
 
 AnnualBudgetListItem.propTypes = {
+  intl: intlShape.isRequired,
   classes: PropTypes.object,
   item: PropTypes.object,
   links: PropTypes.object,
@@ -298,6 +307,7 @@ AnnualBudgetListItem.propTypes = {
 };
 
 InitiativeList.propTypes = {
+  intl: intlShape.isRequired,
   classes: PropTypes.object,
   initiatives: PropTypes.array,
   initiativeCount: PropTypes.number,
@@ -310,4 +320,5 @@ InitiativeList.propTypes = {
 export default compose(
   memo,
   withStyles(styles),
+  injectIntl,
 )(AnnualBudgetListItem);

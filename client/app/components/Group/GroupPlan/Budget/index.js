@@ -270,7 +270,7 @@ export function Budget(props) {
         </Card>
         <Box mb={2} />
         <DiverstTable
-          title={<DiverstFormattedMessage {...messages.tableTitle} />}
+          title={intl.formatMessage(messages.tableTitle)}
           dataArray={budgetItems}
           dataTotal={(budgetItems || []).length}
           columns={columns}

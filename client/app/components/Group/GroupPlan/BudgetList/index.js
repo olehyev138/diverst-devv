@@ -146,7 +146,7 @@ export function BudgetList(props, context) {
       <Grid container spacing={3}>
         <Grid item xs>
           <DiverstTable
-            title={<DiverstFormattedMessage {...messages.tableTitle} />}
+            title={intl.formatMessage(messages.tableTitle)}
             handlePagination={props.handlePagination}
             onOrderChange={handleOrderChange}
             isLoading={props.isFetchingBudgets}
