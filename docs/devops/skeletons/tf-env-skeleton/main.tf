@@ -2,14 +2,12 @@
 # Is copied and filled out when creating a new client environment
 
 provider "aws" {
-  region	              = "us-west-2"
 }
 
 terraform {
   backend "s3" {
     bucket          = "<client-tf-state-bucket>"
     key             = "terraform/terraform.tfstate"
-    region          = "us-west-2"
     dynamodb_table  = "<client-name>-tf-statelock"
     encrypt         = "true"
   }

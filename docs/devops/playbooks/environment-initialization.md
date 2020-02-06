@@ -20,25 +20,59 @@ Run this playbook to initialize a new environment
   - _OU_: `ProductionEnvironments` or `DevelopmentEnvironments`
   - _Account Name_: Environment/client name, capital case
   
-- Never input tag options or notifications, AWS Control Tower handles this for us and setting these can cause Account Factory to fail.
+- _Never_ input tag options or notifications.
 
-- Review & launch. Monitor the status of the account under _Provisioned Product List_ to ensure that the account has been created & provisioned correctly. Monitor it until the status says _Available_
+- Review & launch. Monitor account status until it says _Available_
 
-- Lastly, switch roles/permission sets to an administrator that access SSO. Disable the SSO user created for this new account and assign the group _production_ to the new environment account with full administrative permissions.
+- SSO Configuration
+  
+  - Switch SSO roles to administrator account with SSO & IAM permissions
+  - Disable the SSO user created for this new account
+  - Remove new SSO user from new account
+  - Assign current user/group (TODO) to new account
+  - Write down _account id_ of new and master account for later reference
+  
+- IAM Full Access Role Creation
 
+  - Switch SSO roles to administrative access in new environment account
+  - Navigate to IAM & create new role.
+  - Select _Another AWS Account_ for trusted entity, copy paste master account ID into text box
+  - Select AdministratorAccess for policy
+  - Name the role: `cli-bot-<account-name>-administrator-access`
+  - Click _Create Role_
+  - Increase max role duration to 4 hours
+  - Write down _role arn_
+  
+- IAM Role Policy
+
+  - Switch roles back to master account & navigate into IAM
+  - Select _cli-users_ group & create a new _inline policy_  
+  - Use _policy_ generator
+    - Effect: _Allow_
+    - AWS Service: _AWS Security Token Service_
+    - Actions: _AssumeRole_
+    - ARN: Paste role arn previously written down
+  - Click through & apply new policy
+  
 ##### Authentication & Region
 
-- Set AWS keys & tokens by authenticating with `iac-bot` & copying the environment variable export commands into your terminal.
+- Retrieve AWS_ACCESS_KEY_ID & AWS_SECRET_ACCESS_KEY values for `cli-bot` from password manager & export into terminal
+
+- Retrieve cli access role ARN for new environment account
+
+- Run script `. ./cli-assume-role <role-arn>` - ensure it is done verbatim to allow script to export environment variables
 
 - Ensure that either `AWS_DEFAULT_REGION` is set as an environment variable in `AWS_DEFAULT_REGION` or defined in `~/.aws/config` under `default`. 
 
-##### Base resources
+- Ensure following commands are run in the same terminal to make use of environment variables
 
-- Login to the SSO console with the special user _iac-bot_, select the new environment account, select command line, copy the environment variable export commands into the terminal.
+##### Base resources
 
 - Run script `boostrap-backend`: `./devops/scripts/devops/scripts/bootstrap-backend <env-name>`. Note the name of the bucket printed out.
 
 - Create ssh key pair: `ssh-keygen -qt rsa -N '' -f ~/.ssh/<env-name>`
+
+_TODO_ - store ssh keys somewhere centralized
                       
 ##### Create new environment module
 

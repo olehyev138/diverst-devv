@@ -2,7 +2,15 @@
 
 #### Authentication & Region
 
-- Set AWS keys & tokens by authenticating with `iac-bot` & copying the environment variable export commands into your terminal.
+- Retrieve AWS_ACCESS_KEY_ID & AWS_SECRET_ACCESS_KEY values for `cli-bot` from password manager & export into terminal
+
+- Retrieve cli access role ARN for new environment account
+
+- Run script `. ./cli-assume-role <role-arn>` - ensure it is done verbatim to allow script to export environment variables
+
+- Ensure that either `AWS_DEFAULT_REGION` is set as an environment variable in `AWS_DEFAULT_REGION` or defined in `~/.aws/config` under `default`. 
+
+- Ensure following commands are run in the same terminal to make use of environment variables
 
 - Ensure that either `AWS_DEFAULT_REGION` is set as an environment variable or defined in `~/.aws/config` under `default`. 
 
