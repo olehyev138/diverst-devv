@@ -39,8 +39,10 @@ import { getUsersBegin } from 'containers/User/actions';
 import reducer from 'containers/User/reducer';
 import saga from 'containers/User/saga';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
-
-// import messages from 'containers/Shared/Budget/messages';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/Group/GroupPlan/BudgetItem/messages';
+import AddIcon from '@material-ui/icons/Add';
+const { form: formMessage } = messages;
 
 export function BudgetItemFormInner({ formikProps, arrayHelpers, ...props }) {
   const { handleSubmit, handleChange, handleBlur, values, setFieldValue, setFieldTouched } = formikProps;
@@ -61,12 +63,13 @@ export function BudgetItemFormInner({ formikProps, arrayHelpers, ...props }) {
           >
             <Grid item align='left' xs={6}>
               <Typography color='secondary' variant='body1' component='h2' align='left'>
-                Specify list of events you plan to organize with this budget
+                <DiverstFormattedMessage {...formMessage.listTitle} />
               </Typography>
             </Grid>
             <Grid item align='right' xs={6}>
               <Button
                 color='primary'
+                startIcon={<AddIcon />}
                 onClick={pushObject({
                   title: '',
                   estimated_amount: 0,
@@ -74,7 +77,7 @@ export function BudgetItemFormInner({ formikProps, arrayHelpers, ...props }) {
                   is_private: false,
                 })}
               >
-                + Add Event
+                <DiverstFormattedMessage {...formMessage.addEvent} />
               </Button>
             </Grid>
           </Grid>
@@ -103,7 +106,7 @@ export function BudgetItemFormInner({ formikProps, arrayHelpers, ...props }) {
                     onChange={handleChange}
                     value={values.budget_items[index].title}
                     required
-                    label='Title'
+                    label={<DiverstFormattedMessage {...formMessage.event.title} />}
                   />
                 </Grid>
                 <Grid item md={2} xs={4}>
@@ -116,7 +119,7 @@ export function BudgetItemFormInner({ formikProps, arrayHelpers, ...props }) {
                     type='number'
                     onChange={handleChange}
                     value={values.budget_items[index].estimated_amount}
-                    label='Estimated Amount'
+                    label={<DiverstFormattedMessage {...formMessage.event.amount} />}
                   />
                 </Grid>
                 <Grid item md={2} xs={4}>
@@ -128,7 +131,7 @@ export function BudgetItemFormInner({ formikProps, arrayHelpers, ...props }) {
                     id={`budget_items[${index}].estimated_date`}
                     name={`budget_items[${index}].estimated_date`}
                     margin='normal'
-                    label='Estimated Date'
+                    label={<DiverstFormattedMessage {...formMessage.event.date} />}
                   />
                 </Grid>
                 <Grid item md={1} xs={2}>
@@ -151,7 +154,7 @@ export function BudgetItemFormInner({ formikProps, arrayHelpers, ...props }) {
                           value={values.budget_items[index].private}
                         />
                       )}
-                      label='Private'
+                      label={<DiverstFormattedMessage {...formMessage.event.private} />}
                     />
                   </FormControl>
                 </Grid>
@@ -194,7 +197,7 @@ export function BudgetFormInner({ formikProps, buttonText, ...props }) {
         <Paper>
           <CardContent>
             <Typography color='secondary' variant='body1' component='h2'>
-              Your request will be sent to the group financial manager for approval
+              <DiverstFormattedMessage {...formMessage.descriptionTitle} />
             </Typography>
             <TextField
               autoFocus
@@ -206,7 +209,7 @@ export function BudgetFormInner({ formikProps, buttonText, ...props }) {
               type='text'
               onChange={handleChange}
               value={values.description}
-              label='Description'
+              label={<DiverstFormattedMessage {...formMessage.description} />}
             />
           </CardContent>
         </Paper>
@@ -214,14 +217,14 @@ export function BudgetFormInner({ formikProps, buttonText, ...props }) {
         <Paper>
           <CardContent>
             <Typography color='secondary' variant='body1' component='h2'>
-              You may notify an approval manager for them to review and accept your budget request faster.
+              <DiverstFormattedMessage {...formMessage.approverTitle} />
             </Typography>
             <Field
               component={Select}
               fullWidth
               name='approver_id'
               id='approver_id'
-              label='Approver'
+              label={<DiverstFormattedMessage {...formMessage.approver} />}
               margin='normal'
               disabled={props.isCommitting || !props.currentGroup}
               value={values.approver_id}
@@ -257,7 +260,7 @@ export function BudgetFormInner({ formikProps, buttonText, ...props }) {
               disabled={props.isCommitting}
               variant='contained'
             >
-              Cancel
+              <DiverstFormattedMessage {...formMessage.cancel} />
             </Button>
           </Grid>
         </Grid>

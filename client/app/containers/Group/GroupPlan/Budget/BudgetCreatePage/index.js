@@ -16,6 +16,9 @@ import { selectIsCommitting } from 'containers/Group/GroupPlan/Budget/selectors'
 import RequestForm from 'components/Group/GroupPlan/BudgetRequestForm';
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
+import { injectIntl, intlShape } from 'react-intl';
+import messages from 'containers/Group/GroupPlan/BudgetItem/messages';
+const { form: formMessage } = messages;
 
 export function BudgetCreatePage(props) {
   useInjectReducer({ key: 'budgets', reducer });
@@ -35,7 +38,7 @@ export function BudgetCreatePage(props) {
     <RequestForm
       budgetAction={props.createBudgetRequestBegin}
       isCommitting={props.isCommitting}
-      buttonText='Create'
+      buttonText={props.intl.formatMessage(formMessage.create)}
       annualBudgetId={parseInt(annualBudgetId, 10)}
       currentGroup={props.currentGroup}
       links={links}
@@ -44,6 +47,7 @@ export function BudgetCreatePage(props) {
 }
 
 BudgetCreatePage.propTypes = {
+  intl: intlShape.isRequired,
   createBudgetRequestBegin: PropTypes.func,
   getGroupsBegin: PropTypes.func,
   groupFormUnmount: PropTypes.func,
@@ -68,4 +72,5 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
+  injectIntl,
 )(BudgetCreatePage);

@@ -93,5 +93,45 @@ export default defineMessages({
   },
   tableTitle: {
     id: `${scope}.index.tableTitle`,
-  }
+  },
+  form: {
+    descriptionTitle: {
+      id: `${scope}.form.descriptionTitle`,
+    },
+    description: {
+      id: `${scope}.form.description`,
+    },
+    approverTitle: {
+      id: `${scope}.form.approverTitle`,
+    },
+    approver: {
+      id: `${scope}.form.approver`,
+    },
+    listTitle: {
+      id: `${scope}.form.listTitle`,
+    },
+    addEvent: {
+      id: `${scope}.form.addEvent`,
+    },
+    cancel: {
+      id: `${scope}.form.cancel`,
+    },
+    create: {
+      id: `${scope}.form.create`,
+    },
+    event: {
+      title: {
+        id: `${scope}.form.event.title`,
+      },
+      amount: {
+        id: `${scope}.form.event.amount`,
+      },
+      date: {
+        id: `${scope}.form.event.date`,
+      },
+      private: {
+        id: `${scope}.form.event.private`,
+      },
+    },
+  },
 });
