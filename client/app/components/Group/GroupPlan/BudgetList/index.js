@@ -22,14 +22,14 @@ import DeleteIcon from '@material-ui/icons/DeleteOutline';
 import DetailsIcon from '@material-ui/icons/Details';
 
 import DiverstTable from 'components/Shared/DiverstTable';
-import DiverstDropdownMenu from 'components/Shared/DiverstDropdownMenu';
 import { DateTime, formatDateTimeString } from 'utils/dateTimeHelpers';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
-import messages from 'containers/News/messages';
+import messages from 'containers/Group/GroupPlan/Budget/messages';
 
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import AddIcon from '@material-ui/icons/Add';
+import { injectIntl, intlShape } from 'react-intl';
 
 const styles = theme => ({
   budgetListItem: {
@@ -44,7 +44,7 @@ const styles = theme => ({
 });
 
 export function BudgetList(props, context) {
-  const { classes } = props;
+  const { classes, intl } = props;
 
   const handleOrderChange = (columnId, orderDir) => {
     props.handleOrdering({
@@ -55,35 +55,35 @@ export function BudgetList(props, context) {
 
   const columns = [
     {
-      title: 'Requested Amount',
+      title: intl.formatMessage(messages.columns.requested),
       field: 'requested_amount',
       sorting: false,
       render: rowData => rowData.requested_amount ? `$${floatRound(rowData.requested_amount, 2)}` : '$0.00',
     },
     {
-      title: 'Available Amount',
+      title: intl.formatMessage(messages.columns.available),
       field: 'available_amount',
       sorting: false,
       render: rowData => rowData.available_amount ? `$${floatRound(rowData.available_amount, 2)}` : '$0.00',
     },
     {
-      title: 'Status',
+      title: intl.formatMessage(messages.columns.status),
       field: 'status',
       sorting: false,
     },
     {
-      title: 'Requested At',
+      title: intl.formatMessage(messages.columns.requestedAt),
       field: 'requested_at',
       query_field: 'created_at',
       render: rowData => formatDateTimeString(rowData.requested_at, DateTime.DATETIME_MED)
     },
     {
-      title: '# Of Events',
+      title: intl.formatMessage(messages.columns.number),
       field: 'item_count',
       sorting: false,
     },
     {
-      title: 'Description',
+      title: intl.formatMessage(messages.columns.description),
       field: 'description',
       query_field: 'description',
     },
@@ -93,7 +93,7 @@ export function BudgetList(props, context) {
 
   actions.push({
     icon: () => <DetailsIcon />,
-    tooltip: 'Details',
+    tooltip: <DiverstFormattedMessage {...messages.actions.details} />,
     onClick: (_, rowData) => {
       // eslint-disable-next-line no-alert
       props.handleVisitBudgetShow(props.currentGroup.id, props.annualBudget.id, rowData.id);
@@ -102,7 +102,7 @@ export function BudgetList(props, context) {
 
   actions.push({
     icon: () => <DeleteIcon />,
-    tooltip: 'Delete',
+    tooltip: <DiverstFormattedMessage {...messages.actions.delete} />,
     onClick: (_, rowData) => {
       // eslint-disable-next-line no-alert
       props.deleteBudgetBegin({ id: rowData.id });
@@ -127,7 +127,7 @@ export function BudgetList(props, context) {
               component={WrappedNavLink}
               startIcon={<ArrowBackIcon />}
             >
-              Annual Budgets Overview
+              <DiverstFormattedMessage {...messages.buttons.back} />
             </Button>
           </Grid>
           <Grid item xs align='right'>
@@ -138,7 +138,7 @@ export function BudgetList(props, context) {
               component={WrappedNavLink}
               startIcon={<AddIcon />}
             >
-              New Budget Request
+              <DiverstFormattedMessage {...messages.buttons.new} />
             </Button>
           </Grid>
         </Grid>
@@ -146,7 +146,7 @@ export function BudgetList(props, context) {
       <Grid container spacing={3}>
         <Grid item xs>
           <DiverstTable
-            title='Budgets'
+            title={<DiverstFormattedMessage {...messages.tableTitle} />}
             handlePagination={props.handlePagination}
             onOrderChange={handleOrderChange}
             isLoading={props.isFetchingBudgets}
@@ -166,6 +166,7 @@ export function BudgetList(props, context) {
 }
 
 BudgetList.propTypes = {
+  intl: intlShape.isRequired,
   classes: PropTypes.object,
   annualBudget: PropTypes.object,
   currentGroup: PropTypes.object,
@@ -189,4 +190,5 @@ BudgetList.propTypes = {
 export default compose(
   memo,
   withStyles(styles),
+  injectIntl,
 )(BudgetList);
