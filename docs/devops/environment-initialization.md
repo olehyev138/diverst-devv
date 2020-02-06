@@ -60,7 +60,7 @@ For the region, ensure that either `AWS_DEFAULT_REGION` is set as an environment
 
 Terraform requires a few pieces of infrastructure to already exist in order to function. We create these manually with the script `bootstrap-backend`
 
-Now Run the script `boostrap-backend` as follows.
+Run the script `boostrap-backend` as follows.
 
 `./bootstrap-backend <env-name>`
 
