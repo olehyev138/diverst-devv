@@ -42,7 +42,7 @@ class SocialLink < BaseClass
   end
 
   def re_populate_embed_code(small: false)
-    new_html = SocialMedia::Importer.url_to_embed(url, small)
+    new_html = SocialMedia::Importer.url_to_embed(url, small: small)
 
     update_column(small ? :small_embed_code : :embed_code, new_html)
   rescue => e
