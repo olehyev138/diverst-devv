@@ -51,7 +51,7 @@
             <div class="card__section">
               <% if PollPolicy.new(current_user, @poll).edit? %>
                 <div class="card__action">
-                  <%= link_to "Edit", edit_poll_graph_path(graph, @poll) %> -
+                  <%= link_to "Edit", edit_poll_graph_path(@poll, graph) %> -
                 </div>
               <% end %>
               <h4 class="no-margin"><%= truncate(graph.title, length: 30) %></h4>

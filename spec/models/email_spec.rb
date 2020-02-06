@@ -20,7 +20,7 @@ RSpec.describe Email do
   it { expect(subject).to validate_length_of(:name).is_at_most(191) }
 
   describe 'custom email logic' do
-    let(:custom_email) { build_stubbed :custom_email, mailer_name: nil, mailer_method: nil}
+    let(:custom_email) { build_stubbed :custom_email, mailer_name: nil, mailer_method: nil }
     let(:system_email) { build_stubbed :email }
 
     before do
@@ -38,7 +38,7 @@ RSpec.describe Email do
 
     it 'assigns proper mailer_method before validation' do
       expect(custom_email.mailer_method).to eq Email::CUSTOM_MAILER_METHOD_NAME
-    end 
+    end
 
     it 'does not assign mailer_method or mailer_name for non-custom emails' do
       expect(system_email.mailer_name).to_not eq Email::CUSTOM_MAILER_MAILER_NAME

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191203190104) do
+ActiveRecord::Schema.define(version: 20200106165401) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -276,14 +276,15 @@ ActiveRecord::Schema.define(version: 20191203190104) do
   create_table "emails", force: :cascade do |t|
     t.string   "name",          limit: 191
     t.integer  "enterprise_id", limit: 4
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
+    t.datetime "created_at",                                  null: false
+    t.datetime "updated_at",                                  null: false
     t.string   "subject",       limit: 191
-    t.text     "content",       limit: 65535, null: false
-    t.string   "mailer_name",   limit: 191,   null: false
-    t.string   "mailer_method", limit: 191,   null: false
+    t.text     "content",       limit: 65535,                 null: false
+    t.string   "mailer_name",   limit: 191,                   null: false
+    t.string   "mailer_method", limit: 191,                   null: false
     t.string   "template",      limit: 191
-    t.string   "description",   limit: 191,   null: false
+    t.string   "description",   limit: 191,                   null: false
+    t.boolean  "custom",                      default: false
   end
 
   create_table "enterprise_email_variables", force: :cascade do |t|

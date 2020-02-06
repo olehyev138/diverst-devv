@@ -1,6 +1,6 @@
 class Polls::GraphsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_poll, except: [:data, :show, :edit, :update, :destroy]
+  before_action :set_poll, except: [:data, :show, :destroy]
   before_action :set_graph, except: [:index, :new, :create]
   after_action :visit_page, only: [:new]
 
@@ -8,6 +8,9 @@ class Polls::GraphsController < ApplicationController
 
   def new
     @graph = @poll.graphs.new
+  end
+
+  def edit
   end
 
   def create
@@ -22,10 +25,24 @@ class Polls::GraphsController < ApplicationController
     end
   end
 
+  def update
+    if @graph.update(graph_params)
+      flash[:notice] = 'Your graph was updated'
+      redirect_to @poll
+    else
+      flash[:alert] = 'Your graph was not created. Please fix the errors'
+      render :edit
+    end
+  end
+
   protected
 
   def set_poll
     @poll = current_user.enterprise.polls.find(params[:poll_id])
+  end
+
+  def set_graph
+    @graph = Graph.find(params[:id])
   end
 
   def graph_params

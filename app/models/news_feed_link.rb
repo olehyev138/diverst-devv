@@ -50,17 +50,17 @@ class NewsFeedLink < BaseClass
     else
       if segment_ids.empty?
         left_joins(:shared_news_feed_links, :news_feed_link_segments)
-            .where('shared_news_feed_links.news_feed_id = ?'\
-                 ' OR news_feed_links.news_feed_id = ?'\
-                 ' OR news_feed_link_segments.segment_id IS NULL',
+            .where('(shared_news_feed_links.news_feed_id = ?'\
+                 ' OR news_feed_links.news_feed_id = ?)'\
+                 ' AND news_feed_link_segments.segment_id IS NULL',
                    news_feed_id, news_feed_id
             ).distinct
       else
         left_joins(:shared_news_feed_links, :news_feed_link_segments)
-            .where('shared_news_feed_links.news_feed_id = ?'\
-                 ' OR news_feed_links.news_feed_id = ?'\
-                 ' OR news_feed_link_segments.segment_id IS NULL'\
-                 ' OR news_feed_link_segments.segment_id IN (?)',
+            .where('(shared_news_feed_links.news_feed_id = ?'\
+                 ' OR news_feed_links.news_feed_id = ?)'\
+                 ' AND (news_feed_link_segments.segment_id IS NULL'\
+                 ' OR news_feed_link_segments.segment_id IN (?))',
                    news_feed_id, news_feed_id, segment_ids
             ).distinct
       end
