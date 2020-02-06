@@ -2,7 +2,7 @@
 
 # Build & deploy frontend
 # Must be run from app root
-# Usage: ./create-app-version <aws-profile> <frontend-bucket>
+# Usage: ./create-app-version <frontend-bucket>
 
 FRONTEND_BUCKET=$1
 

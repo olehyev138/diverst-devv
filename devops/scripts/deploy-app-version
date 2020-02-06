@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Deploy a given app version for the given environment
-# Usage: ./deploy-app-version <aws-profile> <eb-env-name> <app-version-label>
+# Usage: ./deploy-app-version <eb-env-name> <app-version-label>
 
 EB_ENV_NAME=$1
 EB_VERSION_LABEL=$2

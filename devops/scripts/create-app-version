@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Bundle API, upload to S3 & create a EB app version
-# Usage: ./create-app-version <aws-profile> <eb-app-name> <app-version-label> <bucket-name>
+# Usage: ./create-app-version <eb-app-name> <app-version-label> <bucket-name>
 
 EB_APP_NAME=$1
 APP_NAME="api-diverst-$VERSION_LABEL.zip"
@@ -17,9 +17,10 @@ if [ ! -d '.git' ]; then
   exit 1
 fi
 
+# Create build directory if it doesnt exist
 mkdir -p build
 
-# Create app bundle
+# Create app bundle with git archive
 git archive --format=zip --output="./build/$APP_NAME" "$RELEASE_BRANCH"
 
 # Copy app bundle to S3 - assumes bucket exists - should be created by bootstrap-backend

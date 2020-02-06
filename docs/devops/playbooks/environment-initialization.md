@@ -26,6 +26,12 @@ Run this playbook to initialize a new environment
 
 - Lastly, switch roles/permission sets to an administrator that access SSO. Disable the SSO user created for this new account and assign the group _production_ to the new environment account with full administrative permissions.
 
+##### Authentication & Region
+
+- Set AWS keys & tokens by authenticating with `iac-bot` & copying the environment variable export commands into your terminal.
+
+- Ensure that either `AWS_DEFAULT_REGION` is set as an environment variable in `AWS_DEFAULT_REGION` or defined in `~/.aws/config` under `default`. 
+
 ##### Base resources
 
 - Login to the SSO console with the special user _iac-bot_, select the new environment account, select command line, copy the environment variable export commands into the terminal.
@@ -41,6 +47,8 @@ Run this playbook to initialize a new environment
 - Rename `tfvars` file: `mv devops/terraform/envs/prod/<env-name>/env.tfvars devops/terraform/envs/prod/<env-name>/<env-name>.tfvars`
 
 - Fill out values in files marked with `<>` inside `main.tf` & `<env>.tfvars`
+
+- Ensure the `region` variable in `<env>.tfvars` is set correctly & matches what is set in `AWS_DEFAULT_REGION`  or defined in `~/.aws/config` under `default`. 
 
 ##### Run Terraform
 

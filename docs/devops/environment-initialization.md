@@ -13,6 +13,7 @@ Setting up a new environment involves two general steps:
 1) Creating the cloud infrastructure
 2) Initializing the database
 
+
 ## 1) Cloud Infrastructure
 
 Our infrastructure is mostly defined as IAC with Terraform. Each environment account is a module, based off of the `base_prod` module. The terraform code that needs to be written for a new environment account is the configuration properties specific to the environment, filling in details for remote state configuration and details for authenticating with AWS.
@@ -47,11 +48,17 @@ This process currently has to be done manually through the AWS web console. Your
 
 - Lastly, switch roles/permission sets to an administrator that access SSO. Disable the SSO user created for this new account and assign the group _production_ to the new environment account with full administrative permissions.
 
-#### B) Bootstrapping backend for Terraform
+### B) Authentication & Region
+
+Before proceeding we must set the AWS keys & session tokens to authenticate with the new environment account, as well as the region to use. 
+
+To set the keys, in your web browser, authenticate with the special user `iac-user` in the SSO portal. Select the appropriate environment account then copy the environment variable export commands to set the AWS keys & tokens.
+
+For the region, ensure that either `AWS_DEFAULT_REGION` is set as an environment variable or defined in `~/.aws/config` under `default`. 
+
+#### C) Bootstrapping backend for Terraform
 
 Terraform requires a few pieces of infrastructure to already exist in order to function. We create these manually with the script `bootstrap-backend`
-
-Access the credentials for the special user `iac-bot`, log in, select the new environment account, select command line access & copy the environment variable exports into your terminal. This is how we authenticate with AWS.
 
 Now Run the script `boostrap-backend` as follows.
 
@@ -69,7 +76,7 @@ Terraform will import this key pair into AWS & use it to allow authentication wi
 
 _TODO: define workflow for adding key to password manager_
 
-#### C) Creating a new Terraform environment module
+#### D) Creating a new Terraform environment module
 
 Create a new environment terraform module, by copying from `docs/devops/skeletons/tf-env-skeleton`
 
@@ -83,11 +90,11 @@ Fill out the properties in `<env-name>.tfvars` & `main.tf` with the values from 
 
 In `<env-name>.tfvars`, fill in the variables. In `main.tf`, fill in the name of the state bucket from the last step. Set the dynamo lock table name & fill in the path of the ssh key created in the last step.
 
-#### D) Run Terraform
+Ensure the `region` variable in `<env>.tfvars` is set correctly & matches what is set in `AWS_DEFAULT_REGION`  or defined in `~/.aws/config` under `default`. 
+
+#### E) Run Terraform
 
 To run terraform, one simply needs to `cd` into the new environment module, initialize and run terraform, passing it the `tfvars` file.
-
-Additionally, as before, the aws keys & tokens will need to be exported into the terminal.
 
 `terraform init` is idempotent and is safe to run anytime.
 
