@@ -91,4 +91,43 @@ export default defineMessages({
       id: `${scope}.form.button.cancel`,
     },
   },
+  adminList: {
+    columns: {
+      group: {
+        id: `${scope}.adminList.columns.group`,
+      },
+      budget: {
+        id: `${scope}.adminList.columns.budget`,
+      },
+      leftover: {
+        id: `${scope}.adminList.columns.leftover`,
+      },
+      approved: {
+        id: `${scope}.adminList.columns.approved`,
+      },
+    },
+    actions: {
+      edit: {
+        id: `${scope}.adminList.actions.edit`,
+      },
+      carryover: {
+        id: `${scope}.adminList.actions.carryover`,
+      },
+      reset: {
+        id: `${scope}.adminList.actions.reset`,
+      },
+      carryoverConfirm: {
+        id: `${scope}.adminList.actions.carryoverConfirm`,
+      },
+      resetConfirm: {
+        id: `${scope}.adminList.actions.resetConfirm`,
+      },
+    },
+    title: {
+      id: `${scope}.adminList.title`,
+    },
+    notSet: {
+      id: `${scope}.adminList.notSet`,
+    },
+  },
 });
