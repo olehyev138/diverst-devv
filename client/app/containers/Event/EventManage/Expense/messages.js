@@ -39,6 +39,26 @@ export default defineMessages({
       id: `${scope}.buttons.closeConfirm`,
     },
   },
+  form: {
+    description: {
+      id: `${scope}.form.description`,
+    },
+    amount: {
+      id: `${scope}.form.amount`,
+    },
+    title: {
+      id: `${scope}.form.title`,
+    },
+    cancel: {
+      id: `${scope}.form.cancel`,
+    },
+    create: {
+      id: `${scope}.form.create`,
+    },
+    update: {
+      id: `${scope}.form.update`,
+    },
+  },
   final: {
     id: `${scope}.final`,
   },

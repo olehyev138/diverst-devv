@@ -19,10 +19,13 @@ import { selectPaginatedSelectUsers } from 'containers/User/selectors';
 import { getUsersBegin } from 'containers/User/actions';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
-// import messages from 'containers/Shared/Expense/messages';
+import { injectIntl, intlShape } from 'react-intl';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/Event/EventManage/Expense/messages';
+const { form: formMessages } = messages;
 
 /* eslint-disable object-curly-newline */
-export function ExpenseFormInner({ formikProps, buttonText, ...props }) {
+export function ExpenseFormInner({ formikProps, buttonText, intl, ...props }) {
   const { handleSubmit, handleChange, handleBlur, values, setFieldValue, setFieldTouched } = formikProps;
 
   return (
@@ -31,7 +34,7 @@ export function ExpenseFormInner({ formikProps, buttonText, ...props }) {
         <Paper>
           <CardContent>
             <Typography color='secondary' variant='body1' component='h2'>
-              Add an expense to this event
+              <DiverstFormattedMessage {...formMessages.title} />
             </Typography>
             <TextField
               autoFocus
@@ -43,7 +46,7 @@ export function ExpenseFormInner({ formikProps, buttonText, ...props }) {
               type='text'
               onChange={handleChange}
               value={values.description}
-              label='Description'
+              label={<DiverstFormattedMessage {...formMessages.description} />}
             />
             <Box mb={2} />
             <Divider />
@@ -57,7 +60,7 @@ export function ExpenseFormInner({ formikProps, buttonText, ...props }) {
               type='number'
               onChange={handleChange}
               value={values.amount}
-              label='Specify the amount'
+              label={<DiverstFormattedMessage {...formMessages.amount} />}
             />
           </CardContent>
         </Paper>
@@ -75,7 +78,7 @@ export function ExpenseFormInner({ formikProps, buttonText, ...props }) {
               disabled={props.isCommitting}
               variant='contained'
             >
-              Cancel
+              <DiverstFormattedMessage {...formMessages.cancel} />
             </Button>
           </Grid>
         </Grid>
@@ -107,6 +110,7 @@ export function ExpenseForm(props) {
 }
 
 ExpenseForm.propTypes = {
+  intl: intlShape.isRequired,
   expenseAction: PropTypes.func.isRequired,
   initiativeId: PropTypes.number,
   isCommitting: PropTypes.bool,
@@ -118,6 +122,7 @@ ExpenseForm.propTypes = {
 };
 
 ExpenseFormInner.propTypes = {
+  intl: intlShape.isRequired,
   expense: PropTypes.object,
   approvers: PropTypes.array,
   currentGroup: PropTypes.object,
@@ -152,4 +157,5 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
+  injectIntl,
 )(ExpenseForm);
