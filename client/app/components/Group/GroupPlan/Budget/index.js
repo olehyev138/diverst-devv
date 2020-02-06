@@ -10,6 +10,9 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { lighten, makeStyles, withStyles } from '@material-ui/core/styles';
 import { floatRound, percent } from 'utils/floatRound';
+import messages from 'containers/Group/GroupPlan/BudgetItem/messages';
+import { injectIntl, intlShape } from 'react-intl';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 
 import {
   Box,
@@ -56,58 +59,51 @@ const styles = theme => ({
 });
 
 export function Budget(props) {
-  const { classes, budget, approveAction, declineAction, isCommitting, links } = props;
+  const { classes, budget, approveAction, declineAction, isCommitting, links, intl } = props;
   const { description, is_approved: isApproved, decline_reason: declineReason, budget_items: budgetItems } = (budget || {});
 
   const columns = [
     {
-      title: 'Status',
+      title: intl.formatMessage(messages.columns.status),
       field: 'is_done',
       query_field: 'budget_items.is_done',
       lookup: {
-        false: 'Available',
-        true: 'Used',
+        false: intl.formatMessage(messages.lookup.isDoneFalse),
+        true: intl.formatMessage(messages.lookup.isDoneTrue),
       }
     },
     {
-      title: 'Title',
+      title: intl.formatMessage(messages.columns.title),
       field: 'title',
       query_field: 'budget_items.title',
     },
     {
-      title: 'Requested Amount',
+      title: intl.formatMessage(messages.columns.requested),
       field: 'estimated_amount',
       query_field: 'budget_items.estimated_amount',
       render: rowData => rowData.estimated_amount ? `$${floatRound(rowData.estimated_amount, 2)}` : '$0.00',
     },
     {
-      title: 'Available Amount',
+      title: intl.formatMessage(messages.columns.available),
       field: 'available_amount',
       query_field: 'budget_items.available_amount',
       render: rowData => rowData.available_amount ? `$${floatRound(rowData.available_amount, 2)}` : '$0.00',
     },
     {
-      title: 'Estimated End Date',
+      title: intl.formatMessage(messages.columns.endDate),
       field: 'estimated_date',
       query_field: 'budget_items.estimated_date',
-      render: rowData => rowData.estimated_date ? formatDateTimeString(rowData.estimated_date, DateTime.DATE_MED) : 'Not Set'
+      render: rowData => rowData.estimated_date
+        ? formatDateTimeString(rowData.estimated_date, DateTime.DATE_MED)
+        : intl.formatMessage(messages.lookup.notSet)
     },
     {
-      title: 'Private',
+      title: intl.formatMessage(messages.columns.private),
       field: 'is_private',
       query_field: 'budget_items.is_private',
       lookup: {
-        false: 'No',
-        true: 'Yes',
-      }
-    },
-    {
-      title: 'Closed',
-      field: 'is_done',
-      query_field: 'budget_items.is_done',
-      lookup: {
-        false: 'No',
-        true: 'Yes',
+        false: intl.formatMessage(messages.lookup.privateTrue),
+        true: intl.formatMessage(messages.lookup.privateFalse),
       }
     },
   ];
@@ -116,10 +112,10 @@ export function Budget(props) {
 
   actions.push(rowData => ({
     icon: () => <CloseIcon />,
-    tooltip: 'Close Budget',
+    tooltip: <DiverstFormattedMessage {...messages.actions.close} />,
     onClick: (_, rowData) => {
       // eslint-disable-next-line no-restricted-globals,no-alert
-      if (confirm('Are you sure you want to close this budget?\nThis cannot be undone!'))
+      if (confirm(intl.formatMessage(messages.actions.closeConfirm)))
         props.closeBudgetAction({ id: rowData.id });
     },
     disabled: rowData.is_done,
@@ -148,12 +144,9 @@ export function Budget(props) {
   const rejectDialog = (
     <Dialog open={formOpen} onClose={handleFormClose} aria-labelledby='form-dialog-title'>
       <form onSubmit={formik.handleSubmit}>
-        <DialogTitle id='form-dialog-title'>
-          Mentorship Request
-        </DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Reason for declining budget request (Optional)
+            <DiverstFormattedMessage {...messages.declineForm.question} />
           </DialogContentText>
 
           <TextField
@@ -172,10 +165,10 @@ export function Budget(props) {
             onClick={() => handleFormClose()}
             color='primary'
           >
-            Cancel
+            <DiverstFormattedMessage {...messages.declineForm.cancel} />
           </Button>
           <DiverstSubmit isCommitting={isCommitting}>
-            Submit
+            <DiverstFormattedMessage {...messages.declineForm.submit} />
           </DiverstSubmit>
         </DialogActions>
       </form>
@@ -196,7 +189,7 @@ export function Budget(props) {
                   onClick={() => approveAction({ id: dig(budget, 'id') })}
                 >
                   <Typography variant='h6' component='h2'>
-                    Approve
+                    <DiverstFormattedMessage {...messages.buttons.approve} />
                   </Typography>
                 </Button>
               </Grid>
@@ -207,7 +200,7 @@ export function Budget(props) {
                   onClick={handleFormClickOpen}
                 >
                   <Typography variant='h6' component='h2'>
-                    Decline
+                    <DiverstFormattedMessage {...messages.buttons.decline} />
                   </Typography>
                 </Button>
               </Grid>
@@ -222,10 +215,10 @@ export function Budget(props) {
             <Card>
               <CardContent>
                 <Typography variant='h6' component='h2'>
-                  Reason why this request was declined
+                  <DiverstFormattedMessage {...messages.declineReason} />
                 </Typography>
                 <Typography variant='body1' component='h2' color='secondary'>
-                  {declineReason || 'Non Given'}
+                  {declineReason || <DiverstFormattedMessage {...messages.defaultReason} />}
                 </Typography>
               </CardContent>
             </Card>
@@ -248,7 +241,7 @@ export function Budget(props) {
         >
           <Grid item xs>
             <Typography variant='h4' component='h2'>
-              Budget Details
+              <DiverstFormattedMessage {...messages.title} />
             </Typography>
           </Grid>
           <Grid item xs align='right'>
@@ -259,7 +252,7 @@ export function Budget(props) {
               component={WrappedNavLink}
               to={links.back}
             >
-              Back to Annual Budget
+              <DiverstFormattedMessage {...messages.buttons.back} />
             </Button>
           </Grid>
         </Grid>
@@ -267,7 +260,7 @@ export function Budget(props) {
         <Card>
           <CardContent>
             <Typography variant='h6' component='h2'>
-              Budget Details
+              <DiverstFormattedMessage {...messages.description} />
             </Typography>
             <Box mb={1} />
             <Typography variant='body1' component='h3' color='secondary'>
@@ -277,7 +270,7 @@ export function Budget(props) {
         </Card>
         <Box mb={2} />
         <DiverstTable
-          title='Events'
+          title={<DiverstFormattedMessage {...messages.tableTitle} />}
           dataArray={budgetItems}
           dataTotal={(budgetItems || []).length}
           columns={columns}
@@ -296,6 +289,7 @@ export function Budget(props) {
 }
 
 Budget.propTypes = {
+  intl: intlShape.isRequired,
   classes: PropTypes.object,
   budget: PropTypes.object,
   links: PropTypes.object,
@@ -310,4 +304,5 @@ Budget.propTypes = {
 export default compose(
   memo,
   withStyles(styles),
+  injectIntl,
 )(Budget);
