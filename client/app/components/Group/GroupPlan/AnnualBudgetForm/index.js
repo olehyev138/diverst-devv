@@ -19,7 +19,7 @@ import { floatRound } from 'utils/floatRound';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
-import messages from 'containers/Group/messages';
+import messages from 'containers/Group/GroupPlan/AnnualBudget/messages';
 import appMessages from 'containers/Shared/App/messages';
 import { buildValues, mapFields } from 'utils/formHelpers';
 
@@ -31,6 +31,8 @@ import {
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 import { injectIntl, intlShape } from 'react-intl';
+
+const { form: formMessages } = messages;
 
 const styles = theme => ({
   noBottomPadding: {
@@ -49,7 +51,7 @@ export function AnnualBudgetFormInner(
           <CardContent>
             <FormControl fullWidth className={classes.margin}>
               <InputLabel htmlFor='standard-adornment-amount'>
-                Enter the amount of money this group can spend annually
+                <DiverstFormattedMessage {...formMessages.amount} />
               </InputLabel>
               <Input
                 required
@@ -80,12 +82,12 @@ export function AnnualBudgetFormInner(
               >
                 <Grid item sm={6}>
                   <Typography color='primary' variant='h6' component='h2'>
-                    Leftover Money
+                    <DiverstFormattedMessage {...formMessages.leftover} />
                   </Typography>
                 </Grid>
                 <Grid item sm={6}>
                   <Typography color='primary' variant='h6' component='h2'>
-                    Approved Budget
+                    <DiverstFormattedMessage {...formMessages.approved} />
                   </Typography>
                 </Grid>
               </Grid>
@@ -111,14 +113,14 @@ export function AnnualBudgetFormInner(
           )}
           <CardActions>
             <DiverstSubmit isCommitting={props.isCommitting}>
-              <DiverstFormattedMessage {...messages.setAnnualBudget} />
+              <DiverstFormattedMessage {...formMessages.setAnnualBudget} />
             </DiverstSubmit>
             <Button
               disabled={props.isCommitting}
               to={ROUTES.admin.manage.groups.index.path()}
               component={WrappedNavLink}
             >
-              <DiverstFormattedMessage {...messages.cancel} />
+              <DiverstFormattedMessage {...formMessages.cancel} />
             </Button>
           </CardActions>
         </Form>

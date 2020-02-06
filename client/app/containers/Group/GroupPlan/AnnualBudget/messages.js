@@ -74,4 +74,21 @@ export default defineMessages({
       id: `${scope}.events.title`,
     },
   },
+  form: {
+    amount: {
+      id: `${scope}.form.amount`,
+    },
+    leftover: {
+      id: `${scope}.form.leftover`,
+    },
+    approved: {
+      id: `${scope}.form.approved`,
+    },
+    setAnnualBudget: {
+      id: `${scope}.form.button.setAnnualBudget`,
+    },
+    cancel: {
+      id: `${scope}.form.button.cancel`,
+    },
+  },
 });
