@@ -72,7 +72,7 @@ def check_for_leftovers
   tables = ActiveRecord::Base.connection.select_values('show tables')
   leftovers = {}
   tables.each do |table|
-    next if %w(schema_migrations vanity_experiments).include? table
+    next if %w(schema_migrations vanity_experiments ar_internal_metadata).include? table
 
     count = ActiveRecord::Base.connection.select_value("select count(*) from #{table}")
     leftovers[table] = count if count > 0
@@ -87,7 +87,7 @@ def set_leftovers
   tables = ActiveRecord::Base.connection.select_values('show tables')
   leftovers = {}
   tables.each do |table|
-    next if %w(schema_migrations vanity_experiments).include? table
+    next if %w(schema_migrations vanity_experiments ar_internal_metadata).include? table
 
     count = ActiveRecord::Base.connection.select_value("select count(*) from #{table}")
     leftovers[table] = count if count > 0

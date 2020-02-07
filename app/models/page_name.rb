@@ -5,6 +5,6 @@ class PageName < ActiveRecord::Base
   before_save :truncate_name
 
   def truncate_name
-    self.page_name = self.page_name.truncate(50)
+    self.page_name = self.page_name&.truncate(50)
   end
 end
