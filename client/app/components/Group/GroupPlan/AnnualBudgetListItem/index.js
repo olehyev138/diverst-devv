@@ -195,7 +195,7 @@ export function AnnualBudgetListItem(props) {
           <Grid item xs={12} sm={8} md={10}>
             <DiverstProgress
               number={expenses}
-              buffer={available}
+              buffer={approved}
               total={amount}
               overflow
             />
