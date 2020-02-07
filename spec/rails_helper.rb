@@ -58,7 +58,7 @@ Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 ActiveRecord::Migration.maintain_test_schema!
 
 def base
-  @base ||= { 'ar_internal_metadata' => 1 }
+  @base ||= {}
 end
 
 # rubocop:disable Style/TrivialAccessors
@@ -159,11 +159,15 @@ RSpec.configure do |config|
     DatabaseCleaner.strategy = :truncation
   end
 
+  config.before(:each, type: :migration) do
+    DatabaseCleaner.strategy = :truncation
+  end
+
   config.before(:each) do
     DatabaseCleaner.start
   end
 
-  config.before(:each) do
+  config.before(:all) do
     set_leftovers
   end
 

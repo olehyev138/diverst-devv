@@ -12,6 +12,7 @@ RSpec.describe UpdateViews, type: :migration do
 
       if !View.columns_hash.include?('view_count')
         migration.migrate(:down)
+        View.reset_column_information
       end
 
       create(:view, view_count: 10)
@@ -31,6 +32,7 @@ RSpec.describe UpdateViews, type: :migration do
 
       if View.columns_hash.include?('view_count')
         migration.migrate(:up)
+        View.reset_column_information
       end
 
       View.reset_column_information
