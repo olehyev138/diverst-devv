@@ -13,3 +13,7 @@ output "frontend_endpoint" {
 output "backend_endpoint" {
   value = module.backend.backend_endpoint
 }
+
+output "frontend_bucket" {
+  value = module.frontend.frontend_bucket
+}
