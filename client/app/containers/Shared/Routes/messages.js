@@ -229,6 +229,9 @@ export default defineMessages({
       },
       users: {
         id: `${scope}.admin.system.users`,
+      },
+      branding: {
+        id: `${scope}.admin.system.branding`,
       }
     }
   },

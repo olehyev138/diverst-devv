@@ -699,6 +699,32 @@ export const ROUTES = {
             path: (eventId = ':event_id') => `/admin/system/settings/emailEvents/${eventId}/edit`
           },
         }
+      },
+      branding: {
+        index: {
+          path: () => '/admin/system/branding/theme',
+          data: {
+            pathPrefix: '/system/branding',
+            titleMessage: messages.admin.system.branding,
+          }
+        },
+        theme: {
+          path: () => '/admin/system/branding/theme'
+        },
+        home: {
+          path: () => '/admin/system/branding/home'
+        },
+        sponsors: {
+          index: {
+            path: () => '/admin/system/branding/sponsors'
+          },
+          new: {
+            path: () => '/admin/system/branding/sponsors/new'
+          },
+          edit: {
+            path: (sponsorId = ':sponsor_id') => `/admin/system/branding/sponsors/${sponsorId}/edit`
+          }
+        }
       }
     }
   },
