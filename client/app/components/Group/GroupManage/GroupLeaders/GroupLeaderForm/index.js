@@ -30,12 +30,6 @@ export function GroupLeaderFormInner({ handleSubmit, handleChange, handleBlur, v
     });
   };
 
-  const roleOptions = [
-    { value: 4, label: 'Group Leader' },
-    { value: 5, label: 'Group Treasurer' },
-    { value: 6, label: 'Group Content Creator' }
-  ];
-
   return (
     <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.groupLeader}>
       <Card>
@@ -68,7 +62,7 @@ export function GroupLeaderFormInner({ handleSubmit, handleChange, handleBlur, v
               margin='normal'
               disabled={props.isCommitting}
               value={values.user_role_id}
-              options={roleOptions}
+              options={props.userRoles}
               onChange={value => setFieldValue('user_role_id', value)}
               onBlur={() => setFieldTouched('user_role_id', true)}
             />
@@ -122,6 +116,8 @@ GroupLeaderForm.propTypes = {
   createGroupLeaderBegin: PropTypes.func,
   updateGroupLeaderBegin: PropTypes.func,
   getMembersBegin: PropTypes.func,
+  selectMembers: PropTypes.array,
+  userRoles: PropTypes.array,
   group: PropTypes.object,
   groupId: PropTypes.string,
   isCommitting: PropTypes.bool,
@@ -143,6 +139,7 @@ GroupLeaderFormInner.propTypes = {
   buttonText: PropTypes.string,
   selectMembers: PropTypes.array,
   getMembersBegin: PropTypes.func,
+  userRoles: PropTypes.array,
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
   touched: PropTypes.object,
