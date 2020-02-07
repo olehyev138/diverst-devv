@@ -184,6 +184,12 @@ export default defineMessages({
       leaders: {
         index: {
           id: `${scope}.group.manage.leaders.index`,
+        },
+        new: {
+          id: `${scope}.group.manage.leaders.new`,
+        },
+        edit: {
+          id: `${scope}.group.manage.leaders.edit`,
         }
       },
     },
@@ -223,6 +229,9 @@ export default defineMessages({
       },
       users: {
         id: `${scope}.admin.system.users`,
+      },
+      branding: {
+        id: `${scope}.admin.system.branding`,
       }
     }
   },

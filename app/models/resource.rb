@@ -1,5 +1,6 @@
 class Resource < ApplicationRecord
   include PublicActivity::Common
+  include Resource::Actions
 
   EXPIRATION_TIME = 6.months.to_i
 
@@ -30,6 +31,7 @@ class Resource < ApplicationRecord
   validates_length_of     :url, maximum: 255
 
   scope :unarchived_resources, ->(folder_ids, initiative_ids) { where('resources.initiative_id IN (?) OR resources.folder_id IN (?)', initiative_ids, folder_ids).where.not(archived_at: nil) }
+  scope :not_archived, -> { where(archived_at: nil) }
 
   before_validation :smart_add_url_protocol
 

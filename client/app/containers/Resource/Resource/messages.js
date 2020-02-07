@@ -33,6 +33,9 @@ export default defineMessages({
   cancel: {
     id: `${scope}.form.button.cancel`,
   },
+  archive: {
+    id: `${scope}.index.button.archive`,
+  },
   form: {
     title: {
       id: `${scope}.form.input.title`,
