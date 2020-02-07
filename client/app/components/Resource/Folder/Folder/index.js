@@ -229,6 +229,7 @@ export function Folder(props) {
                       item={item}
                       isResource
                       deleteAction={props.deleteResourceBegin}
+                      archiveResourceBegin={props.archiveResourceBegin}
                       links={props.links}
                     />
                   </Grid>
@@ -261,6 +262,7 @@ Folder.propTypes = {
   currentUserId: PropTypes.number,
   handleFolderPagination: PropTypes.func,
   handleResourcePagination: PropTypes.func,
+  archiveResourceBegin: PropTypes.func,
   intl: intlShape.isRequired,
   isLoading: PropTypes.bool,
   isFormLoading: PropTypes.bool,
