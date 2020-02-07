@@ -11,6 +11,7 @@ import segments from 'api/segments/segments';
 import initiatives from 'api/initiatives/initiatives';
 import newsFeedLinks from 'api/news_feed_links/news_feed_links';
 import policyGroups from 'api/policy_groups/policy_groups';
+import groupLeaders from 'api/group_leaders/group_leaders';
 import groupMessages from 'api/group_messages/group_messages';
 import groupMessageComments from 'api/group_message_comments/group_message_comments';
 import groupMembers from 'api/group_members/group_members';
@@ -59,6 +60,7 @@ const Api = {
   newsLinks,
   newsLinkComments,
   socialLinks,
+  groupLeaders,
   groupMessages,
   groupMessageComments,
   groupMembers,

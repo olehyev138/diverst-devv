@@ -39,12 +39,12 @@ export function ResourceCreatePage(props) {
   const type = props.path.startsWith('/groups') ? 'group' : 'admin';
 
   const links = {
-    cancelPath: getFolderShowPath(currentFolder) || getFolderIndexPath(type, rs.params('group_id')[0]),
+    cancelPath: getFolderShowPath(currentFolder) || getFolderIndexPath(type, rs.params('group_id')),
   };
 
   useEffect(() => {
-    const groupId = rs.params('group_id')[0];
-    const folderId = rs.params('folder_id')[0];
+    const groupId = rs.params('group_id');
+    const folderId = rs.params('folder_id');
     props.getFolderBegin({ id: folderId });
     if (type === 'group')
       props.getFoldersBegin({ group_id: groupId });

@@ -68,6 +68,8 @@ Diverst::Application.routes.draw do
           get  '/updates', to: 'groups#updates'
           get  '/update_prototype', to: 'groups#update_prototype'
           post '/create_update', to: 'groups#create_update'
+
+          put '/assign_leaders', to: 'groups#assign_leaders'
         end
       end
       resources :group_categories
@@ -156,7 +158,11 @@ Diverst::Application.routes.draw do
       resources :poll_responses
       resources :polls_segments
       resources :questions
-      resources :resources
+      resources :resources do
+        member do
+          post 'archive'
+        end
+      end
       resources :rewards
       resources :reward_actions
       resources :segment_group_scope_rules
@@ -185,6 +191,7 @@ Diverst::Application.routes.draw do
           get '/posts', to: 'user#get_posts'
           get '/joined_events', to: 'user#get_joined_events'
           get '/all_events', to: 'user#get_all_events'
+          get '/downloads', to: 'user#get_downloads'
         end
       end
       resources :users do

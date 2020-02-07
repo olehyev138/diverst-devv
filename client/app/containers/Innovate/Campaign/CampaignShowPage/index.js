@@ -26,7 +26,7 @@ export function CampaignShowPage(props) {
   useInjectSaga({ key: 'campaigns', saga });
 
   const rs = new RouteService(useContext);
-  const campaignId = rs.params('campaign_id')[0];
+  const campaignId = rs.params('campaign_id');
 
   const [params, setParams] = useState({
     count: 10, page: 0, orderBy: '', order: 'asc'

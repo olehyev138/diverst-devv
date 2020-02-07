@@ -16,7 +16,7 @@ import { selectUser, selectEnterprise } from 'containers/Shared/App/selectors';
 import { selectFolder, selectValid,
   selectPaginatedFolders, selectPaginatedResources,
   selectFoldersTotal, selectResourcesTotal, selectIsLoading,
-  selectIsFormLoading
+  selectIsFormLoading, selectHasChanged
 } from 'containers/Resource/selectors';
 
 import {
@@ -25,6 +25,7 @@ import {
   validateFolderPasswordBegin,
   getResourcesBegin,
   deleteResourceBegin,
+  archiveResourceBegin,
 } from 'containers/Resource/actions';
 
 import Folder from 'components/Resource/Folder/Folder';
@@ -99,7 +100,7 @@ export function FolderPage(props) {
     }
   };
 
-  const getResources = (folderId, scopes, resetParams = false) => {
+  const getResources = (folderId, scopes = null, resetParams = false) => {
     const groupId = dig(props, 'currentGroup', 'id');
     const enterpriseId = dig(props, 'currentEnterprise', 'id');
 
@@ -112,7 +113,7 @@ export function FolderPage(props) {
         group_id: groupId,
         folder_id: folderId,
       };
-      props.getResourcesBegin(newParams);
+      props.getResourcesBegin({ ...newParams, query_scopes: ['not_archived'] });
       setParams(newParams);
     } else {
       const newParams = {
@@ -120,13 +121,13 @@ export function FolderPage(props) {
         enterprise_id: enterpriseId,
         folder_id: folderId,
       };
-      props.getResourcesBegin(newParams);
+      props.getResourcesBegin({ ...newParams, query_scopes: ['not_archived'] });
       setParams(newParams);
     }
   };
 
   useEffect(() => {
-    const folderId = rs.params('item_id')[0];
+    const folderId = rs.params('item_id');
 
     // get folder specified in path
     props.getFolderBegin({ id: folderId });
@@ -135,6 +136,18 @@ export function FolderPage(props) {
 
     return () => props.foldersUnmount();
   }, []);
+
+  useEffect(() => {
+    if (props.hasChanged) {
+      const folderId = rs.params('item_id');
+
+      // get folder specified in path
+      props.getFolderBegin({ id: folderId });
+      getFolders(folderId);
+      getResources(folderId);
+    }
+    return () => props.foldersUnmount();
+  }, [props.hasChanged]);
 
   const handleFolderPagination = (payload) => {
     const newParams = { ...params, count: payload.count, page: payload.page };
@@ -146,7 +159,7 @@ export function FolderPage(props) {
   const handleResourcePagination = (payload) => {
     const newParams = { ...params, count: payload.count, page: payload.page };
 
-    props.getResourcesBegin(newParams);
+    props.getResourcesBegin({ ...newParams, query_scopes: ['not_archived'] });
     setParams(newParams);
   };
 
@@ -206,6 +219,7 @@ export function FolderPage(props) {
           resourcesTotal={props.resourcesTotal}
           handleResourcePagination={handleResourcePagination}
           handleFolderPagination={handleFolderPagination}
+          archiveResourceBegin={props.archiveResourceBegin}
           resources={resources}
           isLoading={props.isLoading}
           isFormLoading={props.isFormLoading}
@@ -224,6 +238,7 @@ FolderPage.propTypes = {
   deleteResourceBegin: PropTypes.func,
   validateFolderPasswordBegin: PropTypes.func,
   getResourcesBegin: PropTypes.func,
+  archiveResourceBegin: PropTypes.func,
   foldersUnmount: PropTypes.func,
   currentUser: PropTypes.object,
   currentGroup: PropTypes.object,
@@ -236,6 +251,7 @@ FolderPage.propTypes = {
   isLoading: PropTypes.bool,
   isFormLoading: PropTypes.bool,
   valid: PropTypes.bool,
+  hasChanged: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -249,6 +265,7 @@ const mapStateToProps = createStructuredSelector({
   isLoading: selectIsLoading(),
   isFormLoading: selectIsFormLoading(),
   valid: selectValid(),
+  hasChanged: selectHasChanged(),
 });
 
 const mapDispatchToProps = {
@@ -259,6 +276,7 @@ const mapDispatchToProps = {
   validateFolderPasswordBegin,
   getResourcesBegin,
   deleteResourceBegin,
+  archiveResourceBegin,
 };
 
 const withConnect = connect(

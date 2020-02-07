@@ -23,6 +23,7 @@ import UserGroupListPage from 'containers/Group/UserGroupListPage/Loadable';
 import UserProfilePage from 'containers/User/UserProfilePage/Loadable';
 import UserNewsLinkPage from 'containers/User/UserNewsFeedPage/Loadable';
 import UserEventsPage from 'containers/User/UserEventsPage/Loadable';
+import UserDownloadsPage from 'containers/User/UserDownloadsPage/Loadable';
 
 /* User - Mentorship */
 import MentorshipProfilePage from 'containers/Mentorship/MentorshipProfilePage/Loadable';
@@ -130,6 +131,9 @@ import GroupMemberCreatePage from 'containers/Group/GroupMembers/GroupMemberCrea
 
 /* Group - Manage */
 import GroupSettingsPage from 'containers/Group/GroupManage/GroupSettingsPage/Loadable';
+import GroupLeadersListPage from 'containers/Group/GroupManage/GroupLeaders/GroupLeadersListPage/Loadable';
+import GroupLeaderCreatePage from 'containers/Group/GroupManage/GroupLeaders/GroupLeaderCreatePage/Loadable';
+import GroupLeaderEditPage from 'containers/Group/GroupManage/GroupLeaders/GroupLeaderEditPage/Loadable';
 
 /* Group/Admin - Resource */
 import FoldersPage from 'containers/Resource/Folder/FoldersPage/Loadable';
@@ -213,6 +217,9 @@ export {
   GroupManageLayout,
   GroupPlanLayout,
   GroupKPILayout,
+  GroupLeadersListPage,
+  GroupLeaderCreatePage,
+  GroupLeaderEditPage,
   GroupSettingsPage,
   CustomTextEditPage,
   UserNewsLinkPage,
@@ -262,5 +269,6 @@ export {
   NewsLinkCreatePage,
   SocialLinkCreatePage,
   SocialLinkEditPage,
-  NewsLinkPage
+  NewsLinkPage,
+  UserDownloadsPage
 };

@@ -12,12 +12,15 @@ import {
   GET_USER_EVENTS_SUCCESS, GET_USER_POSTS_BEGIN,
   CREATE_USER_BEGIN, CREATE_USER_SUCCESS, CREATE_USER_ERROR,
   UPDATE_USER_BEGIN, UPDATE_USER_SUCCESS, UPDATE_USER_ERROR,
-  UPDATE_FIELD_DATA_BEGIN, UPDATE_FIELD_DATA_SUCCESS, UPDATE_FIELD_DATA_ERROR, GET_USER_BEGIN, GET_USER_ERROR,
+  UPDATE_FIELD_DATA_BEGIN, UPDATE_FIELD_DATA_SUCCESS, UPDATE_FIELD_DATA_ERROR,
+  GET_USER_BEGIN, GET_USER_ERROR, GET_USER_DOWNLOADS_BEGIN, GET_USER_DOWNLOADS_SUCCESS,
+  GET_USER_DOWNLOADS_ERROR, GET_USER_DOWNLOAD_DATA_BEGIN, GET_USER_DOWNLOAD_DATA_SUCCESS, GET_USER_DOWNLOAD_DATA_ERROR,
 } from 'containers/User/constants';
 
 export const initialState = {
   isLoadingPosts: true,
   isLoadingEvents: true,
+  isLoadingDownloads: true,
   isFormLoading: true,
   isCommitting: false,
   userList: {},
@@ -28,6 +31,13 @@ export const initialState = {
   postsTotal: null,
   events: [],
   eventsTotal: null,
+  downloads: [],
+  downloadsTotal: null,
+  isDownloadingData: false,
+  downloadData: {
+    data: null,
+    contentType: null,
+  },
 };
 
 /* eslint-disable-next-line default-case, no-param-reassign */
@@ -72,6 +82,14 @@ function usersReducer(state = initialState, action) {
         draft.eventsTotal = action.payload.total;
         draft.isLoadingEvents = false;
         break;
+      case GET_USER_DOWNLOADS_BEGIN:
+        draft.isLoadingDownloads = true;
+        break;
+      case GET_USER_DOWNLOADS_SUCCESS:
+        draft.downloads = action.payload.items;
+        draft.downloadsTotal = action.payload.total;
+        draft.isLoadingDownloads = false;
+        break;
       case CREATE_USER_BEGIN:
       case UPDATE_USER_BEGIN:
       case UPDATE_FIELD_DATA_BEGIN:
@@ -84,6 +102,19 @@ function usersReducer(state = initialState, action) {
       case UPDATE_USER_ERROR:
       case UPDATE_FIELD_DATA_ERROR:
         draft.isCommitting = false;
+        break;
+      case GET_USER_DOWNLOAD_DATA_BEGIN:
+        draft.isDownloadingData = true;
+        draft.downloadData.data = null;
+        draft.downloadData.contentType = null;
+        break;
+      case GET_USER_DOWNLOAD_DATA_SUCCESS:
+        draft.isDownloadingData = false;
+        draft.downloadData.data = action.payload.data;
+        draft.downloadData.contentType = action.payload.contentType;
+        break;
+      case GET_USER_DOWNLOAD_DATA_ERROR:
+        draft.isDownloadingData = false;
         break;
       case USER_UNMOUNT:
         return initialState;

@@ -157,7 +157,6 @@ class User < ApplicationRecord
   scope :top_participants, -> (n) { order(total_weekly_points: :desc).limit(n) }
   scope :not_owners, -> { where(owner: false) }
   scope :es_index_for_enterprise, -> (enterprise) { where(enterprise: enterprise) }
-  scope :active, -> { where(active: true) }
   scope :mentors, -> { where(mentor: true) }
   scope :mentees, -> { where(mentee: true) }
   scope :accepting_mentor_requests, -> { where(accepting_mentor_requests: true) }
@@ -172,7 +171,7 @@ class User < ApplicationRecord
   end
 
   def avatar_location(expires_in: 3600, default_style: :medium)
-    return nil if !avatar.attached?
+    return nil unless avatar.attached?
 
     # default_style = :medium if !avatar.styles.keys.include? default_style
     # avatar.expiring_url(expires_in, default_style)

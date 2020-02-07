@@ -10,6 +10,15 @@ const selectPaginatedUserRoles = () => createSelector(
   roleState => roleState.userRoleList
 );
 
+const selectPaginatedSelectUserRoles = () => createSelector(
+  selectUserRoleDomain,
+  roleState => (
+    Object
+      .values(roleState.userRoleList)
+      .map(role => ({ label: role.role_name, value: role.id }))
+  )
+);
+
 const selectUserRoleTotal = () => createSelector(
   selectUserRoleDomain,
   roleState => roleState.userRoleTotal
@@ -53,5 +62,6 @@ const selectIsCommitting = () => createSelector(
 export {
   selectUserRoleDomain, selectPaginatedUserRoles,
   selectUserRoleTotal, selectUserRole, selectIsFetchingUserRoles,
-  selectIsCommitting, selectIsFormLoading, selectFormUserRole
+  selectIsCommitting, selectIsFormLoading, selectFormUserRole,
+  selectPaginatedSelectUserRoles,
 };

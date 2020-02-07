@@ -15,7 +15,18 @@ Object.assign(User, {
 
   getAllEvents(payload) {
     return axios.get(appendQueryArgs(`${this.url}/all_events`, payload));
-  }
+  },
+
+  getDownloads(payload) {
+    return axios.get(appendQueryArgs(`${this.url}/downloads`, payload));
+  },
+
+  getDownloadData(payload) {
+    if (!payload)
+      throw Error('Payload must be a valid ActiveStorage blob path');
+
+    return axios.get(payload, { responseType: 'blob' });
+  },
 });
 
 export default User;

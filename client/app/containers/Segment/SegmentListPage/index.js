@@ -26,6 +26,7 @@ import { getSegmentsBegin, segmentUnmount, deleteSegmentBegin } from 'containers
 import { selectEnterprise } from 'containers/Shared/App/selectors';
 
 import SegmentList from 'components/Segment/SegmentList';
+import { push } from 'connected-react-router';
 
 export function SegmentListPage(props) {
   useInjectReducer({ key: 'segments', reducer });
@@ -54,6 +55,13 @@ export function SegmentListPage(props) {
     setParams(newParams);
   };
 
+  const handleOrdering = (payload) => {
+    const newParams = { ...params, orderBy: payload.orderBy, order: payload.orderDir };
+
+    props.getSegmentsBegin(newParams);
+    setParams(newParams);
+  };
+
   return (
     <React.Fragment>
       <SegmentList
@@ -61,7 +69,9 @@ export function SegmentListPage(props) {
         segmentTotal={props.segmentTotal}
         isLoading={props.isLoading}
         deleteSegmentBegin={props.deleteSegmentBegin}
+        handleSegmentEdit={props.handleSegmentEdit}
         handlePagination={handlePagination}
+        handleOrdering={handleOrdering}
         links={links}
         currentEnterprise={props.currentEnterprise}
       />
@@ -76,6 +86,8 @@ SegmentListPage.propTypes = {
   segmentTotal: PropTypes.number,
   deleteSegmentBegin: PropTypes.func,
   isLoading: PropTypes.bool,
+  handleSegmentEdit: PropTypes.func,
+
   currentEnterprise: PropTypes.shape({
     id: PropTypes.number,
   })
@@ -87,12 +99,19 @@ const mapStateToProps = createStructuredSelector({
   isLoading: selectIsLoading(),
   currentEnterprise: selectEnterprise(),
 });
-
+/*
 const mapDispatchToProps = {
   getSegmentsBegin,
   segmentUnmount,
-  deleteSegmentBegin
+  deleteSegmentBegin,
 };
+*/
+const mapDispatchToProps = dispatch => ({
+  getSegmentsBegin: payload => dispatch(getSegmentsBegin(payload)),
+  deleteSegmentBegin: payload => dispatch(deleteSegmentBegin(payload)),
+  segmentUnmount: () => dispatch(segmentUnmount()),
+  handleSegmentEdit: id => dispatch(push(ROUTES.admin.manage.segments.edit.path(id)))
+});
 
 const withConnect = connect(
   mapStateToProps,
