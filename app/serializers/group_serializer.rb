@@ -2,7 +2,7 @@ class GroupSerializer < ApplicationRecordSerializer
   attributes :id, :name, :short_description, :description, :pending_users, :members_visibility, :messages_visibility,
              :annual_budget, :leftover_money, :active, :parent_id, :latest_news_visibility, :upcoming_events_visibility,
              :private, :home_message, :default_mentor_group, :position, :group_category, :group_category_type, :news_feed,
-             :enterprise_id, :banner_location, :event_attendance_visibility, :calendar_color, :auto_archive,
+             :enterprise_id, :event_attendance_visibility, :calendar_color, :auto_archive,
              :current_user_is_member, :banner, :banner_file_name, :banner_data
 
   has_many :children
