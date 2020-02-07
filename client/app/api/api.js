@@ -12,6 +12,7 @@ import initiatives from 'api/initiatives/initiatives';
 import initiativeExpenses from 'api/initiative_expenses/initiative_expenses';
 import newsFeedLinks from 'api/news_feed_links/news_feed_links';
 import policyGroups from 'api/policy_groups/policy_groups';
+import groupLeaders from 'api/group_leaders/group_leaders';
 import groupMessages from 'api/group_messages/group_messages';
 import groupMessageComments from 'api/group_message_comments/group_message_comments';
 import groupMembers from 'api/group_members/group_members';
@@ -26,6 +27,7 @@ import user from 'api/user/user';
 import folders from 'api/folders/folders';
 import resources from 'api/resources/resources';
 import campaigns from 'api/campaigns/campaigns';
+import sponsors from 'api/sponsors/sponsors';
 import mentorings from 'api/mentorings/mentorings';
 import mentoringRequests from 'api/mentoring_requests/mentoring_requests';
 import questions from 'api/campaign_questions/questions';
@@ -64,6 +66,7 @@ const Api = {
   newsLinks,
   newsLinkComments,
   socialLinks,
+  groupLeaders,
   groupMessages,
   groupMessageComments,
   groupMembers,
@@ -78,6 +81,7 @@ const Api = {
   folders,
   resources,
   campaigns,
+  sponsors,
   questions,
   answers,
   comments,

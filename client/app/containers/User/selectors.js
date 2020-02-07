@@ -5,6 +5,7 @@ import dig from 'object-dig';
 
 import { initialState } from 'containers/User/reducer';
 import { deserializeDatum, deserializeOptionsText } from 'utils/customFieldHelpers';
+import { selectGroupsDomain } from '../Group/selectors';
 
 const selectUsersDomain = state => state.users || initialState;
 
@@ -15,7 +16,11 @@ const selectPaginatedUsers = () => createSelector(
 
 const selectPaginatedSelectUsers = () => createSelector(
   selectUsersDomain,
-  usersState => Object.values(usersState.userList).map(user => ({ label: user.name, value: user.id }))
+  usersState => (
+    Object
+      .values(usersState.userList)
+      .map(user => ({ value: user.id, label: user.name }))
+  )
 );
 
 const selectUserTotal = () => createSelector(

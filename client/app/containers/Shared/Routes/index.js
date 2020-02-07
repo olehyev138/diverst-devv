@@ -66,6 +66,9 @@ import {
   CustomGraphCreatePage,
   CustomGraphEditPage,
   GroupManageLayout,
+  GroupLeadersListPage,
+  GroupLeaderCreatePage,
+  GroupLeaderEditPage,
   AdminAnnualBudgetPage,
   AnnualBudgetEditPage,
   AnnualBudgetsPage,
@@ -104,6 +107,12 @@ import {
   UserRolesListPage,
   UserRoleCreatePage,
   UserRoleEditPage,
+  BrandingLayout,
+  BrandingThemePage,
+  BrandingHomePage,
+  SponsorListPage,
+  SponsorCreatePage,
+  SponsorEditPage,
   CampaignQuestionShowPage,
   SSOSettingsPage,
   EmailsPage,
@@ -220,6 +229,13 @@ export default function Routes(props) {
       <SystemUserLayout exact {...expandRoute(ROUTES.admin.system.users.roles.new)} component={UserRoleCreatePage} />
       <SystemUserLayout exact {...expandRoute(ROUTES.admin.system.users.roles.edit)} component={UserRoleEditPage} />
 
+      { /* Admin - System - Branding */ }
+      <BrandingLayout exact {...expandRoute(ROUTES.admin.system.branding.theme)} component={BrandingThemePage} />
+      <BrandingLayout exact {...expandRoute(ROUTES.admin.system.branding.home)} component={BrandingHomePage} />
+      <BrandingLayout exact {...expandRoute(ROUTES.admin.system.branding.sponsors.new)} component={SponsorCreatePage} />
+      <BrandingLayout exact {...expandRoute(ROUTES.admin.system.branding.sponsors.edit)} component={SponsorEditPage} />
+      <BrandingLayout exact {...expandRoute(ROUTES.admin.system.branding.sponsors.index)} component={SponsorListPage} />
+
       { /* Group */ }
       <GroupLayout exact {...expandRoute(ROUTES.group.home)} component={GroupHomePage} disableBreadcrumbs />
       <GroupLayout exact {...expandRoute(ROUTES.group.members.index)} component={GroupMemberListPage} />
@@ -280,8 +296,10 @@ export default function Routes(props) {
 
       { /* Group Manage */ }
       { /* TODO - redirect /manage -> /manage/settings */ }
-      <GroupLayout {...expandRoute(ROUTES.group.manage.settings.index)} component={GroupSettingsPage} />
-      <GroupLayout {...expandRoute(ROUTES.group.manage.leaders.index)} component={PlaceholderPage} />
+      <GroupManageLayout {...expandRoute(ROUTES.group.manage.settings.index)} component={GroupSettingsPage} />
+      <GroupManageLayout {...expandRoute(ROUTES.group.manage.leaders.new)} component={GroupLeaderCreatePage} />
+      <GroupManageLayout {...expandRoute(ROUTES.group.manage.leaders.edit)} component={GroupLeaderEditPage} />
+      <GroupManageLayout {...expandRoute(ROUTES.group.manage.leaders.index)} component={GroupLeadersListPage} />
 
       { /* Group Resources */ }
       <GroupLayout {...expandRoute(ROUTES.group.resources.new)} component={ResourceCreatePage} />

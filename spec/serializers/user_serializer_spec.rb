@@ -9,7 +9,6 @@ RSpec.describe UserSerializer, type: :serializer do
     expect(serializer.serializable_hash[:email]).to eq user.email
     expect(serializer.serializable_hash[:last_name]).to_not eq nil
     expect(serializer.serializable_hash[:user_role]).to_not eq nil
-    expect(serializer.serializable_hash[:avatar_location]).to_not eq nil
     expect(serializer.serializable_hash[:user_groups].empty?).to_not be true
     expect(serializer.serializable_hash[:password_digest]).to be nil
   end

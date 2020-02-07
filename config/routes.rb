@@ -81,6 +81,8 @@ Diverst::Application.routes.draw do
           get  '/update_prototype', to: 'groups#update_prototype'
           post '/create_update', to: 'groups#create_update'
 
+          put '/assign_leaders', to: 'groups#assign_leaders'
+
           get '/annual_budget', to: 'groups#current_annual_budget'
           post '/carryover_annual_budget', to: 'groups#carryover_annual_budget'
           post '/reset_annual_budget', to: 'groups#reset_annual_budget'

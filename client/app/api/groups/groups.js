@@ -30,7 +30,9 @@ Object.assign(Groups, {
   createUpdates(id, payload) {
     return axios.post(`${this.url}/${id}/create_update`, payload);
   },
-
+  assignLeaders(id, payload) {
+    return axios.put(`${this.url}/${id}/assign_leaders`, payload);
+  },
   carryoverBudget(id, payload) {
     return axios.post(`${this.url}/${id}/carryover_annual_budget`);
   },
