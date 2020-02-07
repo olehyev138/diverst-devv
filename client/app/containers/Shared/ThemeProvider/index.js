@@ -39,8 +39,11 @@ export function ThemeProvider(props) {
         main50: `${brandingColor}80`,
         main75: `${brandingColor}C0`,
       },
+      secondary: {
+        main: '#5a5a5a',
+      },
       tertiary: {
-        main: '#8b8c8d',
+        main: '#9d9e9f',
       },
       graphs: {
         main: graphsColor
