@@ -68,6 +68,13 @@ class GroupPolicy < ApplicationPolicy
     create?
   end
 
+  def assign_leaders?
+    return true if manage_all?
+    return true if basic_group_leader_permission?('group_leader_manage')
+
+    @policy_group.group_leader_manage?
+  end
+
   def manage_all_groups?
     # return true if parent_group_permissions?
     # super admin

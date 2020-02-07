@@ -62,6 +62,9 @@ import {
   CustomGraphCreatePage,
   CustomGraphEditPage,
   GroupManageLayout,
+  GroupLeadersListPage,
+  GroupLeaderCreatePage,
+  GroupLeaderEditPage,
   GroupSettingsPage,
   CustomTextEditPage,
   UserNewsLinkPage,
@@ -257,8 +260,10 @@ export default function Routes(props) {
 
       { /* Group Manage */ }
       { /* TODO - redirect /manage -> /manage/settings */ }
-      <GroupLayout {...expandRoute(ROUTES.group.manage.settings.index)} component={GroupSettingsPage} />
-      <GroupLayout {...expandRoute(ROUTES.group.manage.leaders.index)} component={PlaceholderPage} />
+      <GroupManageLayout {...expandRoute(ROUTES.group.manage.settings.index)} component={GroupSettingsPage} />
+      <GroupManageLayout {...expandRoute(ROUTES.group.manage.leaders.new)} component={GroupLeaderCreatePage} />
+      <GroupManageLayout {...expandRoute(ROUTES.group.manage.leaders.edit)} component={GroupLeaderEditPage} />
+      <GroupManageLayout {...expandRoute(ROUTES.group.manage.leaders.index)} component={GroupLeadersListPage} />
 
       { /* Group Resources */ }
       <GroupLayout {...expandRoute(ROUTES.group.resources.new)} component={ResourceCreatePage} />

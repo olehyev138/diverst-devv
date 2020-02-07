@@ -123,6 +123,9 @@ import GroupMemberCreatePage from 'containers/Group/GroupMembers/GroupMemberCrea
 
 /* Group - Manage */
 import GroupSettingsPage from 'containers/Group/GroupManage/GroupSettingsPage/Loadable';
+import GroupLeadersListPage from 'containers/Group/GroupManage/GroupLeaders/GroupLeadersListPage/Loadable';
+import GroupLeaderCreatePage from 'containers/Group/GroupManage/GroupLeaders/GroupLeaderCreatePage/Loadable';
+import GroupLeaderEditPage from 'containers/Group/GroupManage/GroupLeaders/GroupLeaderEditPage/Loadable';
 
 /* Group/Admin - Resource */
 import FoldersPage from 'containers/Resource/Folder/FoldersPage/Loadable';
@@ -206,6 +209,9 @@ export {
   GroupManageLayout,
   GroupPlanLayout,
   GroupKPILayout,
+  GroupLeadersListPage,
+  GroupLeaderCreatePage,
+  GroupLeaderEditPage,
   GroupSettingsPage,
   CustomTextEditPage,
   UserNewsLinkPage,
