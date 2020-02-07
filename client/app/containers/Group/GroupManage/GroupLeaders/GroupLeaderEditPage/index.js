@@ -18,11 +18,17 @@ import saga from 'containers/Group/GroupManage/GroupLeaders/saga';
 import memberReducer from 'containers/Group/GroupMembers/reducer';
 import memberSaga from 'containers/Group/GroupMembers/saga';
 
+import userRoleReducer from 'containers/User/UserRole/reducer';
+import userRoleSaga from 'containers/User/UserRole/saga';
+
 import { selectPaginatedSelectMembers } from 'containers/Group/GroupMembers/selectors';
 import { getMembersBegin, groupMembersUnmount } from 'containers/Group/GroupMembers/actions';
 
 import { selectIsCommitting, selectFormGroupLeader, selectIsFormLoading } from 'containers/Group/GroupManage/GroupLeaders/selectors';
 import { getGroupLeaderBegin, updateGroupLeaderBegin, groupLeadersUnmount } from 'containers/Group/GroupManage/GroupLeaders/actions';
+
+import { selectPaginatedSelectUserRoles } from 'containers/User/UserRole/selectors';
+import { getUserRolesBegin, userRoleUnmount } from 'containers/User/UserRole/actions';
 
 import GroupLeaderForm from 'components/Group/GroupManage/GroupLeaders/GroupLeaderForm';
 
@@ -33,6 +39,8 @@ export function GroupLeaderEditPage(props) {
   useInjectSaga({ key: 'groupLeaders', saga });
   useInjectReducer({ key: 'members', reducer: memberReducer });
   useInjectSaga({ key: 'members', saga: memberSaga });
+  useInjectReducer({ key: 'roles', reducer: userRoleReducer });
+  useInjectSaga({ key: 'roles', saga: userRoleSaga });
 
   const rs = new RouteService(useContext);
   const groupId = rs.params('group_id');
@@ -44,11 +52,12 @@ export function GroupLeaderEditPage(props) {
 
   useEffect(() => {
     props.getGroupLeaderBegin({ group_id: groupId, id: groupLeaderId });
-    props.getMembersBegin({ group_id: groupId, count: 500, query_scopes: ['active'] });
+    props.getUserRolesBegin({ role_type: 'group' });
 
     return () => {
       props.groupLeadersUnmount();
       props.groupMembersUnmount();
+      props.userRoleUnmount();
     };
   }, []);
 
@@ -60,6 +69,7 @@ export function GroupLeaderEditPage(props) {
       groupLeaderAction={props.updateGroupLeaderBegin}
       getMembersBegin={props.getMembersBegin}
       selectMembers={members}
+      userRoles={props.userRoles}
       groupId={groupId}
       isCommitting={isCommitting}
       isFormLoading={isFormLoading}
@@ -75,8 +85,11 @@ GroupLeaderEditPage.propTypes = {
   updateGroupLeaderBegin: PropTypes.func,
   groupLeadersUnmount: PropTypes.func,
   groupMembersUnmount: PropTypes.func,
+  userRoleUnmount: PropTypes.func,
   getMembersBegin: PropTypes.func,
+  getUserRolesBegin: PropTypes.func,
   members: PropTypes.array,
+  userRoles: PropTypes.array,
   isCommitting: PropTypes.bool,
   isFormLoading: PropTypes.bool,
   groupLeader: PropTypes.object,
@@ -86,6 +99,7 @@ GroupLeaderEditPage.propTypes = {
 const mapStateToProps = createStructuredSelector({
   members: selectPaginatedSelectMembers(),
   groupLeader: selectFormGroupLeader(),
+  userRoles: selectPaginatedSelectUserRoles(),
   isCommitting: selectIsCommitting(),
   isFormLoading: selectIsFormLoading(),
 });
@@ -94,8 +108,10 @@ const mapDispatchToProps = {
   updateGroupLeaderBegin,
   getGroupLeaderBegin,
   getMembersBegin,
+  getUserRolesBegin,
   groupLeadersUnmount,
   groupMembersUnmount,
+  userRoleUnmount,
 };
 
 const withConnect = connect(
