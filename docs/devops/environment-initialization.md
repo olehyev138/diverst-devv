@@ -13,6 +13,11 @@ Setting up a new environment involves two general steps:
 1) Creating the cloud infrastructure
 2) Initializing the database
 
+## Environment account documentation
+
+We make use of our password manager to keep track & store general bits of unique information for each environment account. 
+
+Before starting, create a new _secure note_ inside our password manager under the `aws-environments` collection. Throughout this process, we will mention when to record a piece of information for future usage. When this happens, create a new custom field and copy the value in. Some steps may require information recorded in previous steps, or it will be needed for deployment, or possible maintenance in the future. 
 
 ## 1) Cloud Infrastructure
 
@@ -53,19 +58,19 @@ Now that we have a provisioned environment account, we have to setup a role insi
   - Switch SSO roles to administrator account with SSO & IAM permissions
   - Disable the SSO user created for this new account
   - Remove new SSO user from new account
-  - Assign current user/group (TODO) to new account
-  - Write down _account id_ of new and master account for later reference
+  - Assign current user/group to new account
+  - Record _account id_ of new environment account
   
-- IAM Full Access Role Creation
+- IAM Administrator Access Role Creation
 
   - Switch SSO roles to administrative access in new environment account
   - Navigate to IAM & create new role.
-  - Select _Another AWS Account_ for trusted entity, copy paste master account ID into text box
+  - Select _Another AWS Account_ for trusted entity, copy paste master account ID into text box - consult password manager for id.
   - Select AdministratorAccess for policy
   - Name the role: `cli-bot-<account-name>-administrator-access`
   - Click _Create Role_
   - Increase max role duration to 4 hours
-  - Write down _role arn_
+  - Record _role arn_
   
 - IAM Role Policy
 
@@ -75,18 +80,20 @@ Now that we have a provisioned environment account, we have to setup a role insi
     - Effect: _Allow_
     - AWS Service: _AWS Security Token Service_
     - Actions: _AssumeRole_
-    - ARN: Paste role arn previously written down
+    - ARN: Paste role arn previously recorded
   - Click through & apply new policy
 
 ### B) Authentication & Region
 
-Because we authenticate through role assumption with the IAM user `cli-bot`, we need to retrieve the aws key id, secret access key & temporary session token. With these 3 values set as environment variables our scripts & iac tools (terraform) will be able to authenticate with the environment account
+Because we authenticate through role assumption with the IAM user `cli-bot`, we need to retrieve the aws key id, secret access key & temporary session token. With these 3 values set as environment variables our scripts & iac tools will be able to authenticate with the environment account
 
 First retrieve AWS_ACCESS_KEY_ID & AWS_SECRET_ACCESS_KEY values for `cli-bot` from password manager & export into terminal. These are specifically for the cli-bot & will be reset for the new environment account by our script.
 
-Run script `./cli-assume-role <role-arn>`, passing it the role arn from the password manager. Export the outputted values into the appropriate environment values.
+Run script `./cli-assume-role <role-arn>`, passing it the role arn. Export the outputted values into the appropriate environment values.
 
-Lastly, ensure that either `AWS_DEFAULT_REGION` is set as an environment variable in `AWS_DEFAULT_REGION` or defined in `~/.aws/config` under `default`. 
+Lastly, ensure that either `AWS_DEFAULT_REGION` is set as an environment variable in `AWS_DEFAULT_REGION` or defined in `~/.aws/config` under `default`.
+
+Record the region code (ie `us-east-1`).
 
 Ensure all of the following commands are run in the same terminal to make use of environment variables, otherwise scripts & iac tools will not be able to authenticate. If the terminal is closed or changed, this step must be rerun.
 
@@ -98,7 +105,7 @@ Run the script `boostrap-backend` as follows.
 
 `./bootstrap-backend <env-name>`
 
-Note the name of the state bucket the script outputs.
+Record the name of the state bucket the script outputs. This is our _master bucket_ for the environment account and is where Terraform will store its state and we will store backend app version bundles.
 
 This will create a bucket to store Terraform state & a dynamo table for state locking. The values outputted by the script will be what you will fill in, in the Terraform configuration, defined in the following step.
 
@@ -108,7 +115,7 @@ The other resource that must exist before running Terraform is a SSH key pair. T
 
 Terraform will import this key pair into AWS & use it to allow authentication with the bastion & EB servers.
 
-_TODO: define workflow for adding key to password manager_
+Upload both the public & private key files as attachments to the secure note.
 
 #### D) Creating a new Terraform environment module
 
@@ -122,9 +129,9 @@ Rename the environment variable file to match the environment name
 
 Fill out the properties in `<env-name>.tfvars` & `main.tf` with the values from the previous steps
 
-In `<env-name>.tfvars`, fill in the variables. In `main.tf`, fill in the name of the state bucket from the last step. Set the dynamo lock table name & fill in the path of the ssh key created in the last step.
+In `<env-name>.tfvars`, fill in the variables. In `main.tf`, fill in the name of the state bucket from the last step. Set the dynamo lock table name & fill in the path of the ssh key created in the last step. Make sure you use the public file, ie `testing.pub`.
 
-Ensure the `region` variable in `<env>.tfvars` is set correctly & matches what is set in `AWS_DEFAULT_REGION`  or defined in `~/.aws/config` under `default`. 
+Ensure the `region` variable in `<env>.tfvars` is set correctly & matches what is set in `AWS_DEFAULT_REGION` & the secure note.
 
 #### E) Run Terraform
 
@@ -135,6 +142,8 @@ To run terraform, one simply needs to `cd` into the new environment module, init
 - `terraform init`
 
 - `terraform apply -var-file='<env-name>.tfvars`
+
+Record the ips & endpoints it outputs in the secure note.
 
 ## 2) Database initialization
 
@@ -148,9 +157,9 @@ Once the deployment is run, we can initialize the database, which is done by run
 
 To initialize the the database, run the `init-db` script as follows:
 
-- `bastion-url` - The _public_ IP of the bastion host - outputted by Terraform.
+- `bastion-url` - The _public_ IP of the bastion host.
 
-- `eb-url` - The _private_ IP of one of the ec2 hosts, managed by Elastic Beanstalk - outputted by Terraform.
+- `eb-url` - The _private_ IP of one of the ec2 hosts, managed by Elastic Beanstalk.
 
 - `key-path` - The path for the ssh key to authenticate.
 

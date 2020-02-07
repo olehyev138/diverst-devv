@@ -12,7 +12,7 @@ First retrieve AWS_ACCESS_KEY_ID & AWS_SECRET_ACCESS_KEY values for `cli-bot` fr
 
 Run script `./cli-assume-role <role-arn>`, passing it the role arn from the password manager. Export the outputted values into the appropriate environment values.
 
-Lastly, ensure that either `AWS_DEFAULT_REGION` is set as an environment variable in `AWS_DEFAULT_REGION` or defined in `~/.aws/config` under `default`. 
+Lastly, ensure that either `AWS_DEFAULT_REGION` is set as an environment variable in `AWS_DEFAULT_REGION`. Ensure that it matches the value recorded in the secure note.
 
 Ensure all of the following commands are run in the same terminal to make use of environment variables, otherwise scripts & iac tools will not be able to authenticate. If the terminal is closed or changed, this step must be rerun.
 
@@ -37,13 +37,13 @@ This process is automated through the `create-app-version` script.
 
 To create a new app version, run the `create-app-version` script as follows. It is required that the working directory is the app root.
 
-- `eb-app-name` is the application name, _not_ the elastic beanstalk environment name. This should be the same as the client/environment account name.
+- `eb-app-name` is the application name, _not_ the elastic beanstalk environment name. This should be the same as the client/environment account name, ie `testing` or `kp`.
 
 - `app-version-label` is a label identifying this app version.
 
-- `bucket-name` is the bucket where we store app versions. This is the same bucket where we store Terraform state. This is created in the `environment-initialization` process. 
+- `bucket-name` is the bucket where we store app versions. This is the same bucket where we store Terraform state. This is created in the `environment-initialization` process and stored in the secure note for the environment account.
 
-`./create-app-version <eb-app-name> <app-version-label> <bucket-name>`
+`./create-app-version <eb-app-name> <app-version-label> <master-bucket-name>`
 
 _Todo: Workflow needs to be defined for versioning_
 
@@ -65,9 +65,7 @@ To deploy a given application version, run the `deploy-app-version` script as fo
 
 The Diverst frontend is a React application hosted statically through S3.
 
-Terraform manages & creates a bucket for static web hosting with a name in the form: `<env-name>-frontend-<random-postfix`. The name is outputted by Terraform.
-
-We use a random postfix to avoid name conflicts (as S3 buckets exist in a global namespace).
+Terraform manages & creates a bucket for static web hosting with a name in the form: `<env-name>-frontend-<random-postfix`. The name is recorded in the secure note.
 
 To deploy the frontend, we simply need to build the frontend and then upload it to the S3 bucket. This process is managed & automated with the `deploy-frontend` script.
 

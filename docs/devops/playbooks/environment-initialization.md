@@ -4,6 +4,10 @@ Run this playbook to initialize a new environment
 
 ## Cloud Infrastructure
 
+##### Environment account documentation
+
+Create a new _secure note_ in our password manager, under `aws-environments`, throughout this document various pieces of information will need to be recorded in here.
+
 ##### Environment account & IAM resources
 
 - Log into AWS through SSO & access the _AWSServiceCatalogueEndUserAccess_ role/permission set under the Master account.
@@ -30,7 +34,7 @@ Run this playbook to initialize a new environment
   - Disable the SSO user created for this new account
   - Remove new SSO user from new account
   - Assign current user/group (TODO) to new account
-  - Write down _account id_ of new and master account for later reference
+  - Record the _account id_ of the new environment account.
   
 - IAM Full Access Role Creation
 
@@ -41,7 +45,7 @@ Run this playbook to initialize a new environment
   - Name the role: `cli-bot-<account-name>-administrator-access`
   - Click _Create Role_
   - Increase max role duration to 4 hours
-  - Write down _role arn_
+  - Record the role _arn_
   
 - IAM Role Policy
 
@@ -62,15 +66,17 @@ Run this playbook to initialize a new environment
 
 - Ensure that either `AWS_DEFAULT_REGION` is set as an environment variable in `AWS_DEFAULT_REGION` or defined in `~/.aws/config` under `default`. 
 
+- Record the region code
+
 - Ensure following commands are run in the same terminal to make use of environment variables
 
 ##### Base resources
 
-- Run script `boostrap-backend`: `./devops/scripts/devops/scripts/bootstrap-backend <env-name>`. Note the name of the bucket printed out.
+- Run script `boostrap-backend`: `./devops/scripts/devops/scripts/bootstrap-backend <env-name>`. Record the name as `master_bucket`.
 
 - Create ssh key pair: `ssh-keygen -qt rsa -N '' -f ~/.ssh/<env-name>`
 
-_TODO_ - store ssh keys somewhere centralized
+- Upload public & private key files as attachments in the secure note
                       
 ##### Create new environment module
 
@@ -80,7 +86,7 @@ _TODO_ - store ssh keys somewhere centralized
 
 - Fill out values in files marked with `<>` inside `main.tf` & `<env>.tfvars`
 
-- Ensure the `region` variable in `<env>.tfvars` is set correctly & matches what is set in `AWS_DEFAULT_REGION`  or defined in `~/.aws/config` under `default`. 
+- Ensure the `region` variable in `<env>.tfvars` is set correctly & matches what is set in `AWS_DEFAULT_REGION` & what was recorded in the secure note.
 
 ##### Run Terraform
 
@@ -89,6 +95,8 @@ _TODO_ - store ssh keys somewhere centralized
 - Initialize terraform: `terraform init`
 
 - Run terraform with the `tfvars` file: `terraform apply -var-file=<env-name>.tfvars`
+
+- Record the outputted values
 
 ## Database
 
