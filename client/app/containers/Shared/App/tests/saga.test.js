@@ -18,7 +18,6 @@ import {
   findEnterpriseError
 }
   from 'containers/Shared/App/actions';
-import { changePrimary, changeSecondary } from 'containers/Shared/ThemeProvider/actions';
 import { push } from 'connected-react-router';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import recordSaga from 'utils/recordSaga';
@@ -222,7 +221,7 @@ describe('findEnterprise Saga', () => {
   it('should get sso redirect link from API', async () => {
     const response = { data: { enterprise: { id: 1, theme: { primary_color: '', secondary_color: '' } } } };
     api.users.findEnterprise.mockImplementation(() => Promise.resolve(response));
-    const results = [findEnterpriseSuccess(), setEnterprise(response.data.enterprise), changePrimary(response.data.enterprise.theme.primary_color), changeSecondary(response.data.enterprise.theme.secondary_color)];
+    const results = [findEnterpriseSuccess(), setEnterprise(response.data.enterprise)];
     const initialAction = { payload: { email: 'dev@diverst.com' } };
     const dispatched = await recordSaga(
       findEnterprise,

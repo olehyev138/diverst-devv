@@ -31,8 +31,6 @@ import {
 
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
 
-import { changePrimary, changeSecondary } from 'containers/Shared/ThemeProvider/actions';
-
 import AuthService from 'utils/authService';
 
 const axios = require('axios');
@@ -116,12 +114,6 @@ export function* findEnterprise(action) {
     yield put(findEnterpriseSuccess());
 
     yield put(setEnterprise(enterprise));
-
-    // If enterprise has a theme, dispatch theme provider actions
-    if (enterprise.theme) {
-      yield put(changePrimary(enterprise.theme.primary_color));
-      yield put(changeSecondary(enterprise.theme.secondary_color));
-    }
   } catch (err) {
     yield put(findEnterpriseError(err));
   }
