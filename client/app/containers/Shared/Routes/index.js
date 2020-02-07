@@ -97,6 +97,12 @@ import {
   UserRolesListPage,
   UserRoleCreatePage,
   UserRoleEditPage,
+  BrandingLayout,
+  BrandingThemePage,
+  BrandingHomePage,
+  SponsorListPage,
+  SponsorCreatePage,
+  SponsorEditPage,
   CampaignQuestionShowPage,
   SSOSettingsPage,
   EmailsPage,
@@ -209,6 +215,13 @@ export default function Routes(props) {
       <SystemUserLayout exact {...expandRoute(ROUTES.admin.system.users.roles.index)} component={UserRolesListPage} />
       <SystemUserLayout exact {...expandRoute(ROUTES.admin.system.users.roles.new)} component={UserRoleCreatePage} />
       <SystemUserLayout exact {...expandRoute(ROUTES.admin.system.users.roles.edit)} component={UserRoleEditPage} />
+
+      { /* Admin - System - Branding */ }
+      <BrandingLayout exact {...expandRoute(ROUTES.admin.system.branding.theme)} component={BrandingThemePage} />
+      <BrandingLayout exact {...expandRoute(ROUTES.admin.system.branding.home)} component={BrandingHomePage} />
+      <BrandingLayout exact {...expandRoute(ROUTES.admin.system.branding.sponsors.new)} component={SponsorCreatePage} />
+      <BrandingLayout exact {...expandRoute(ROUTES.admin.system.branding.sponsors.edit)} component={SponsorEditPage} />
+      <BrandingLayout exact {...expandRoute(ROUTES.admin.system.branding.sponsors.index)} component={SponsorListPage} />
 
       { /* Group */ }
       <GroupLayout exact {...expandRoute(ROUTES.group.home)} component={GroupHomePage} disableBreadcrumbs />
