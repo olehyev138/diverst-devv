@@ -25,7 +25,7 @@ export function* getGroupLeaders(action) {
     yield put(getGroupLeadersError(err));
 
     // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to load groupLeaders', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: 'Failed to load Group Leaders', options: { variant: 'warning' } }));
   }
 }
 
@@ -37,38 +37,38 @@ export function* getGroupLeader(action) {
     // TODO: intl message
     yield put(getGroupLeaderError(err));
     yield put(showSnackbar({
-      message: 'Failed to get groupLeader',
+      message: 'Failed to load Group Leader',
       options: { variant: 'warning' }
     }));
   }
 }
 
-export function* createGroupLeaders(action) {
+export function* createGroupLeader(action) {
   try {
     const payload = { group_leader: action.payload };
     const response = yield call(api.groupLeaders.create.bind(api.groupLeaders), payload);
     yield put(createGroupLeaderSuccess());
     yield put(push(ROUTES.group.manage.leaders.index.path(action.payload.group_id)));
-    yield put(showSnackbar({ message: 'GroupLeader created', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: 'Group Leader created', options: { variant: 'success' } }));
   } catch (err) {
     yield put(createGroupLeaderError(err));
 
     // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to create groupLeaders', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: 'Failed to create Group Leader', options: { variant: 'warning' } }));
   }
 }
 
-export function* deleteGroupLeaders(action) {
+export function* deleteGroupLeader(action) {
   try {
     yield call(api.groupLeaders.destroy.bind(api.groupLeaders), action.payload.id);
     yield put(deleteGroupLeaderSuccess());
     yield put(push(ROUTES.group.manage.leaders.index.path(action.payload.group_id)));
-    yield put(showSnackbar({ message: 'Group leader deleted', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: 'Group Leader deleted', options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteGroupLeaderError(err));
 
     // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to remove groupLeaders', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: 'Failed to delete Group Leader', options: { variant: 'warning' } }));
   }
 }
 
@@ -79,7 +79,7 @@ export function* updateGroupLeader(action) {
     yield put(updateGroupLeaderSuccess());
     yield put(push(ROUTES.group.manage.leaders.index.path(action.payload.group_id)));
     yield put(showSnackbar({
-      message: 'GroupLeader updated',
+      message: 'Group Leader updated',
       options: { variant: 'success' }
     }));
   } catch (err) {
@@ -87,7 +87,7 @@ export function* updateGroupLeader(action) {
 
     // TODO: intl message
     yield put(showSnackbar({
-      message: 'Failed to update groupLeader',
+      message: 'Failed to update Group Leader',
       options: { variant: 'warning' }
     }));
   }
@@ -97,6 +97,6 @@ export default function* groupLeadersSaga() {
   yield takeLatest(GET_GROUP_LEADERS_BEGIN, getGroupLeaders);
   yield takeLatest(GET_GROUP_LEADER_BEGIN, getGroupLeader);
   yield takeLatest(UPDATE_GROUP_LEADER_BEGIN, updateGroupLeader);
-  yield takeLatest(CREATE_GROUP_LEADER_BEGIN, createGroupLeaders);
-  yield takeLatest(DELETE_GROUP_LEADER_BEGIN, deleteGroupLeaders);
+  yield takeLatest(CREATE_GROUP_LEADER_BEGIN, createGroupLeader);
+  yield takeLatest(DELETE_GROUP_LEADER_BEGIN, deleteGroupLeader);
 }
