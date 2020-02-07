@@ -6,6 +6,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Fade from '@material-ui/core/Fade';
 
 import GroupManageLinks from 'components/Group/GroupManage/GroupManageLinks';
+import GroupLayout from 'containers/Layouts/GroupLayout';
 
 const styles = theme => ({
   content: {
@@ -19,7 +20,10 @@ const ManagePages = Object.freeze({
 });
 
 const GroupManageLayout = ({ component: Component, classes, ...rest }) => {
-  const { currentGroup, location, ...other } = rest;
+  const { currentGroup, location, computedMatch, ...other } = rest;
+
+  /* Get last element of current path, ie: '/group/:id/manage/settings -> settings */
+  const currentPage = Object.keys(ManagePages).find(page => location.pathname.includes(page));
 
   /* Get last element of current path, ie: '/group/:id/manage/settings -> settings */
   const currentPagePath = location.pathname.split('/').pop();
@@ -27,21 +31,29 @@ const GroupManageLayout = ({ component: Component, classes, ...rest }) => {
   const [tab, setTab] = useState(ManagePages[currentPagePath]);
 
   useEffect(() => {
-    if (tab !== ManagePages[currentPagePath])
-      setTab(ManagePages[currentPagePath]);
-  }, [currentPagePath]);
+    if (tab !== ManagePages[currentPage])
+      setTab(ManagePages[currentPage]);
+  }, [currentPage]);
 
   return (
     <React.Fragment>
-      <GroupManageLinks
-        currentTab={tab}
+      <GroupLayout
         {...rest}
+        component={matchProps => (
+          <React.Fragment>
+            <GroupManageLinks
+              currentTab={tab}
+              {...rest}
+              {...matchProps}
+            />
+            <Fade in appear>
+              <div className={classes.content}>
+                <Component {...rest} {...matchProps} />
+              </div>
+            </Fade>
+          </React.Fragment>
+        )}
       />
-      <Fade in appear>
-        <div className={classes.content}>
-          <Component currentGroup={currentGroup} {...other} />
-        </div>
-      </Fade>
     </React.Fragment>
   );
 };

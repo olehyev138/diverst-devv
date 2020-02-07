@@ -48,6 +48,7 @@ describe('resourcesReducer', () => {
       resourcesTotal: null,
       currentFolder: null,
       currentResource: null,
+      hasChanged: false,
       valid: true,
     };
   });

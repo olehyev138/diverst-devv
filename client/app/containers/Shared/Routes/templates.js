@@ -11,6 +11,7 @@ import GroupKPILayout from 'containers/Layouts/GroupPlanLayout/KPILayout/Loadabl
 import MentorshipLayout from 'containers/Layouts/MentorshipLayout/Loadable';
 import InnovateLayout from 'containers/Layouts/InnovateLayout/Loadable';
 import SystemUserLayout from 'containers/Layouts/SystemUsersLayout/Loadable';
+import BrandingLayout from 'containers/Layouts/BrandingLayout/Loadable';
 import EmailLayout from 'containers/Layouts/GlobalSettingsLayout/EmailLayout/Loadable';
 
 /* Session */
@@ -63,6 +64,13 @@ import EmailsPage from 'containers/GlobalSettings/Email/Email/EmailsPage/Loadabl
 import EmailEditPage from 'containers/GlobalSettings/Email/Email/EmailEditPage/Loadable';
 import EmailEventsPage from 'containers/GlobalSettings/Email/Event/EventsPage/Loadable';
 import EmailEventEditPage from 'containers/GlobalSettings/Email/Event/EventEditPage/Loadable';
+
+/* Admin - System - Branding */
+import BrandingThemePage from 'containers/Branding/BrandingThemePage/Loadable';
+import BrandingHomePage from 'containers/Branding/BrandingHomePage/Loadable';
+import SponsorListPage from 'containers/Branding/Sponsor/SponsorListPage/Loadable';
+import SponsorCreatePage from 'containers/Branding/Sponsor/SponsorCreatePage/Loadable';
+import SponsorEditPage from 'containers/Branding/Sponsor/SponsorEditPage/Loadable';
 
 /* Admin - System - User */
 import UsersPage from 'containers/User/UsersPage/Loadable';
@@ -123,6 +131,9 @@ import GroupMemberCreatePage from 'containers/Group/GroupMembers/GroupMemberCrea
 
 /* Group - Manage */
 import GroupSettingsPage from 'containers/Group/GroupManage/GroupSettingsPage/Loadable';
+import GroupLeadersListPage from 'containers/Group/GroupManage/GroupLeaders/GroupLeadersListPage/Loadable';
+import GroupLeaderCreatePage from 'containers/Group/GroupManage/GroupLeaders/GroupLeaderCreatePage/Loadable';
+import GroupLeaderEditPage from 'containers/Group/GroupManage/GroupLeaders/GroupLeaderEditPage/Loadable';
 
 /* Group/Admin - Resource */
 import FoldersPage from 'containers/Resource/Folder/FoldersPage/Loadable';
@@ -141,10 +152,10 @@ import CampaignQuestionListPage from 'containers/Innovate/Campaign/CampaignQuest
 import CampaignQuestionCreatePage from 'containers/Innovate/Campaign/CampaignQuestion/CampaignQuestionCreatePage/Loadable';
 import CampaignQuestionEditPage from 'containers/Innovate/Campaign/CampaignQuestion/CampaignQuestionEditPage/Loadable';
 import CampaignQuestionShowPage from 'containers/Innovate/Campaign/CampaignQuestion/CampaignQuestionShowPage/Loadable';
+
 /* Global */
 import NotFoundPage from 'containers/Shared/NotFoundPage/Loadable';
 import PlaceholderPage from 'components/Shared/PlaceholderPage/Loadable';
-
 
 export {
   UserLayout,
@@ -206,6 +217,9 @@ export {
   GroupManageLayout,
   GroupPlanLayout,
   GroupKPILayout,
+  GroupLeadersListPage,
+  GroupLeaderCreatePage,
+  GroupLeaderEditPage,
   GroupSettingsPage,
   CustomTextEditPage,
   UserNewsLinkPage,
@@ -239,6 +253,12 @@ export {
   UserRolesListPage,
   UserRoleCreatePage,
   UserRoleEditPage,
+  BrandingLayout,
+  BrandingThemePage,
+  BrandingHomePage,
+  SponsorListPage,
+  SponsorCreatePage,
+  SponsorEditPage,
   SSOSettingsPage,
   EmailsPage,
   EmailEditPage,

@@ -33,6 +33,7 @@ describe('Resource selectors', () => {
         resourcesTotal: null,
         currentFolder: null,
         currentResource: null,
+        hasChanged: false,
         valid: true,
       };
       const selected = selectResourcesDomain(mockedState);
@@ -47,6 +48,7 @@ describe('Resource selectors', () => {
         resourcesTotal: null,
         currentFolder: null,
         currentResource: null,
+        hasChanged: false,
         valid: true, });
     });
   });

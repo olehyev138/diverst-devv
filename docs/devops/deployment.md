@@ -1,6 +1,6 @@
 # Deployment
 
-Describes deployment in general, ie on any machine and not specific to CI processes. 
+Describes deployment in general, ie on any machine and not specific to CI/CD processes. 
 
 Assumes fully initialized & working infrastructure.
 

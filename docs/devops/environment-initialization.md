@@ -87,7 +87,7 @@ Now that we have a provisioned environment account, we have to setup a role insi
 
 Because we authenticate through role assumption with the IAM user `cli-bot`, we need to retrieve the aws key id, secret access key & temporary session token. With these 3 values set as environment variables our scripts & iac tools will be able to authenticate with the environment account
 
-First retrieve AWS_ACCESS_KEY_ID & AWS_SECRET_ACCESS_KEY values for `cli-bot` from password manager & export into terminal. These are specifically for the cli-bot & will be reset for the new environment account by our script.
+First retrieve `AWS_ACCESS_KEY_ID` & `AWS_SECRET_ACCESS_KEY` values for `cli-bot` from the password manager & export into terminal. These are specifically for the `cli-bot` & will be reset for the new environment account by our script.
 
 Run script `./cli-assume-role <role-arn>`, passing it the role arn. Export the outputted values into the appropriate environment values.
 

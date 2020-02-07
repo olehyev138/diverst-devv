@@ -4,7 +4,7 @@
 
 #### Authentication & Region
 
-- Retrieve AWS_ACCESS_KEY_ID & AWS_SECRET_ACCESS_KEY values for `cli-bot` from password manager & export into terminal
+- Retrieve `AWS_ACCESS_KEY_ID` & `AWS_SECRET_ACCESS_KEY` values for `cli-bot` from password manager & export into terminal
 
 - Retrieve cli access role ARN for new environment account
 
