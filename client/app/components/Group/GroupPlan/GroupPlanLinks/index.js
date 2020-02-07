@@ -40,7 +40,7 @@ export function GroupPlanLinks(props) {
           />
           <Tab
             component={WrappedNavLink}
-            to={ROUTES.group.plan.budget.editAnnualBudget.path(props.currentGroup.id)}
+            to={ROUTES.group.plan.budget.overview.path(props.currentGroup.id)}
             label='Budgeting'
             value='budgeting'
           />

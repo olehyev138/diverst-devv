@@ -117,7 +117,7 @@ export function AnnualBudgetFormInner(
             </DiverstSubmit>
             <Button
               disabled={props.isCommitting}
-              to={ROUTES.admin.manage.groups.index.path()}
+              to={ROUTES.admin.plan.budgeting.index.path()}
               component={WrappedNavLink}
             >
               <DiverstFormattedMessage {...formMessages.cancel} />

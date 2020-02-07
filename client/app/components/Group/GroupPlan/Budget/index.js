@@ -102,8 +102,8 @@ export function Budget(props) {
       field: 'is_private',
       query_field: 'budget_items.is_private',
       lookup: {
-        false: intl.formatMessage(messages.lookup.privateTrue),
-        true: intl.formatMessage(messages.lookup.privateFalse),
+        false: intl.formatMessage(messages.lookup.privateFalse),
+        true: intl.formatMessage(messages.lookup.privateTrue),
       }
     },
   ];
@@ -278,6 +278,7 @@ export function Budget(props) {
           handlePagination={() => null}
           handleOrdering={() => null}
           rowsPerPage={Math.min((budgetItems || []).length, 5)}
+          static
           my_options={{
             search: false
           }}

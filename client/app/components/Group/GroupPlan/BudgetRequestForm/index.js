@@ -140,18 +140,18 @@ export function BudgetItemFormInner({ formikProps, arrayHelpers, ...props }) {
                   >
                     <FormControlLabel
                       labelPlacement='top'
-                      checked={values.budget_items[index].private}
+                      checked={values.budget_items[index].is_private}
                       control={(
                         <Field
                           component={Switch}
                           color='primary'
                           onChange={handleChange}
                           disabled={props.isCommitting}
-                          id={`budget_items[${index}].private`}
-                          name={`budget_items[${index}].private`}
+                          id={`budget_items[${index}].is_private`}
+                          name={`budget_items[${index}].is_private`}
                           margin='normal'
-                          checked={values.budget_items[index].private}
-                          value={values.budget_items[index].private}
+                          checked={values.budget_items[index].is_private}
+                          value={values.budget_items[index].is_private}
                         />
                       )}
                       label={<DiverstFormattedMessage {...formMessage.event.private} />}

@@ -76,7 +76,7 @@ export function BudgetsPage(props) {
 
   useEffect(() => {
     if (props.hasChanged)
-      props.getBudgetsBegin({ annual_budget_id: annualId });
+      getBudget(params);
   }, [props.hasChanged]);
 
   const handlePagination = (payload) => {

@@ -87,19 +87,23 @@ function InitiativeList({ initiatives, initiativeCount, handlePagination, handle
   };
 
   return (
-    <DiverstTable
-      handlePagination={handlePagination}
-      onOrderChange={handleOrderChange}
-      isLoading={isLoading}
-      title={intl.formatMessage(eventMessages.title)}
-      rowsPerPage={clamp((initiatives || []).length, 1, 5)}
-      dataArray={initiatives || []}
-      dataTotal={initiativeCount || 0}
-      columns={columns}
-      my_options={{
-        search: false
-      }}
-    />
+    initiatives ? (
+      <DiverstTable
+        handlePagination={handlePagination}
+        onOrderChange={handleOrderChange}
+        isLoading={isLoading}
+        title={intl.formatMessage(eventMessages.title)}
+        rowsPerPage={clamp((initiatives || []).length, 1, 5)}
+        dataArray={initiatives || []}
+        dataTotal={initiativeCount || 0}
+        columns={columns}
+        my_options={{
+          search: false
+        }}
+      />
+    ) : (
+      <React.Fragment />
+    )
   );
 }
 

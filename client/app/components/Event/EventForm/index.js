@@ -65,7 +65,8 @@ export function EventFormInner({
       count: 10, page: 0, order: 'asc',
       search: searchKey,
       group_id: props.currentGroup.id,
-      query_scopes: ['approved']
+      query_scopes: ['approved'],
+      is_done: 'false'
     });
   };
 

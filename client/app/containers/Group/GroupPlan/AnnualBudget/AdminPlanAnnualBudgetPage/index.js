@@ -61,7 +61,7 @@ export function AdminAnnualBudgetPage(props) {
 
   return (
     <AnnualBudgetList
-      isLoading={props.isLoading}
+      isFetchingAnnualBudgets={props.isFetchingAnnualBudgets}
       annualBudgets={props.groups}
       annualBudgetTotal={props.groupTotal}
       defaultParams={params}
@@ -80,7 +80,7 @@ AdminAnnualBudgetPage.propTypes = {
   carryBudgetBegin: PropTypes.func.isRequired,
   resetBudgetBegin: PropTypes.func.isRequired,
   handleVisitEditPage: PropTypes.func.isRequired,
-  isLoading: PropTypes.bool,
+  isFetchingAnnualBudgets: PropTypes.bool,
   hasChanged: PropTypes.bool,
   groups: PropTypes.object,
   groupTotal: PropTypes.number,
@@ -88,7 +88,7 @@ AdminAnnualBudgetPage.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
-  isLoading: selectGroupIsLoading(),
+  isFetchingAnnualBudgets: selectGroupIsLoading(),
   groups: selectPaginatedGroups(),
   groupTotal: selectGroupTotal(),
   hasChanged: selectHasChanged(),

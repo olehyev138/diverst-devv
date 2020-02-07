@@ -99,7 +99,7 @@ function annualBudgetReducer(state = initialState, action) {
 
       case GET_EVENTS_BEGIN:
         if (action.payload.annualBudgetId)
-          draft.isFetchingAnnualBudgetInitiatives = produce(draft.annualBudgetInitiativeList, (draft2) => {
+          draft.isFetchingAnnualBudgetInitiatives = produce(draft.isFetchingAnnualBudgetInitiatives, (draft2) => {
             draft2[action.payload.annualBudgetId] = true;
           });
         break;
@@ -110,7 +110,7 @@ function annualBudgetReducer(state = initialState, action) {
           draft.annualBudgetInitiativeList = produce(draft.annualBudgetInitiativeList, (draft2) => {
             draft2[annualBudgetId] = action.payload.items;
           });
-          draft.annualBudgetInitiativeListTotal = produce(draft.annualBudgetInitiativeList, (draft2) => {
+          draft.annualBudgetInitiativeListTotal = produce(draft.annualBudgetInitiativeListTotal, (draft2) => {
             draft2[annualBudgetId] = action.payload.total;
           });
           draft.isFetchingAnnualBudgetInitiatives = produce(draft.isFetchingAnnualBudgetInitiatives, (draft2) => {
@@ -121,7 +121,7 @@ function annualBudgetReducer(state = initialState, action) {
 
       case GET_EVENTS_ERROR:
         if (action.payload.annualBudgetId)
-          draft.isFetchingAnnualBudgetInitiatives = produce(draft.annualBudgetInitiativeList, (draft2) => {
+          draft.isFetchingAnnualBudgetInitiatives = produce(draft.isFetchingAnnualBudgetInitiatives, (draft2) => {
             draft2[action.payload.annualBudgetId] = false;
           });
         break;

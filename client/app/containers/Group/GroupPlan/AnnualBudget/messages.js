@@ -19,7 +19,7 @@ export default defineMessages({
   },
   item: {
     pastTitle: {
-      id: `${scope}.item.title`,
+      id: `${scope}.item.pastTitle`,
     },
     currentTitle: {
       id: `${scope}.item.currentTitle`,
