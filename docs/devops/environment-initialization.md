@@ -26,7 +26,7 @@ _Note_: As we develop on our devops, the goal will be 1) to automate more, as we
 
 The first step in initializing a new environment is setting up a _environment account_ for the infrastructure to live in. 
 
-This process currently has to be done manually through the AWS web console. Your user requires the _AWSServiceCatalogueEndUserAccess_ permission set.
+This process currently has to be done manually through the AWS web console.
 
 - Log into AWS through SSO & access the _AWSServiceCatalogueEndUserAccess_ role/permission set under the Master account.
 
@@ -46,15 +46,49 @@ This process currently has to be done manually through the AWS web console. Your
 
 - Review & launch. Monitor the status of the account under _Provisioned Product List_ to ensure that the account has been created & provisioned correctly. It will say _Under change_ for a while, it should eventually change to _Available_
 
-- Lastly, switch roles/permission sets to an administrator that access SSO. Disable the SSO user created for this new account and assign the group _production_ to the new environment account with full administrative permissions.
+Now that we have a provisioned environment account, we have to setup a role inside &  a policy in the master account to allow the special user `cli-bot` access. This a very manual process and in the future may be automated through CloudFormation stack sets.
+
+- SSO Configuration
+  
+  - Switch SSO roles to administrator account with SSO & IAM permissions
+  - Disable the SSO user created for this new account
+  - Remove new SSO user from new account
+  - Assign current user/group (TODO) to new account
+  - Write down _account id_ of new and master account for later reference
+  
+- IAM Full Access Role Creation
+
+  - Switch SSO roles to administrative access in new environment account
+  - Navigate to IAM & create new role.
+  - Select _Another AWS Account_ for trusted entity, copy paste master account ID into text box
+  - Select AdministratorAccess for policy
+  - Name the role: `cli-bot-<account-name>-administrator-access`
+  - Click _Create Role_
+  - Increase max role duration to 4 hours
+  - Write down _role arn_
+  
+- IAM Role Policy
+
+  - Switch roles back to master account & navigate into IAM
+  - Select _cli-users_ group & create a new _inline policy_  
+  - Use _policy_ generator
+    - Effect: _Allow_
+    - AWS Service: _AWS Security Token Service_
+    - Actions: _AssumeRole_
+    - ARN: Paste role arn previously written down
+  - Click through & apply new policy
 
 ### B) Authentication & Region
 
-Before proceeding we must set the AWS keys & session tokens to authenticate with the new environment account, as well as the region to use. 
+Because we authenticate through role assumption with the IAM user `cli-bot`, we need to retrieve the aws key id, secret access key & temporary session token. With these 3 values set as environment variables our scripts & iac tools (terraform) will be able to authenticate with the environment account
 
-To set the keys, in your web browser, authenticate with the special user `iac-user` in the SSO portal. Select the appropriate environment account then copy the environment variable export commands to set the AWS keys & tokens.
+First retrieve AWS_ACCESS_KEY_ID & AWS_SECRET_ACCESS_KEY values for `cli-bot` from password manager & export into terminal. These are specifically for the cli-bot & will be reset for the new environment account by our script.
 
-For the region, ensure that either `AWS_DEFAULT_REGION` is set as an environment variable or defined in `~/.aws/config` under `default`. 
+Run script `./cli-assume-role <role-arn>`, passing it the role arn from the password manager. Export the outputted values into the appropriate environment values.
+
+Lastly, ensure that either `AWS_DEFAULT_REGION` is set as an environment variable in `AWS_DEFAULT_REGION` or defined in `~/.aws/config` under `default`. 
+
+Ensure all of the following commands are run in the same terminal to make use of environment variables, otherwise scripts & iac tools will not be able to authenticate. If the terminal is closed or changed, this step must be rerun.
 
 #### C) Bootstrapping backend for Terraform
 

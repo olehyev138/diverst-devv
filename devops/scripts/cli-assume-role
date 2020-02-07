@@ -3,7 +3,7 @@
 # Assumes a given role & sets AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY & AWS_SESSION_TOKEN
 #  - with these set, we can use iac tools & aws cli without worrying about credentials
 #  - sets a duration of 4 hours/14400 seconds
-# Assumes AWS_ACCESS_KEY_ID & AWS_SECRET_ACCESS_KEY are already set
+# Requires AWS_ACCESS_KEY_ID & AWS_SECRET_ACCESS_KEY for cli-bot user to be set
 
 # Usage
 # ./cli-assume-role <full-role-arn>

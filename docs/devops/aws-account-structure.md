@@ -26,7 +26,7 @@ Each environment account is created & provisioned with Account Factory, and thus
 
 We create a special _iac_ user, that has admin access permissions to the environment accounts. This account is meant to only be used by iac tools. 
 
-#### Group Structure
+### Setup 
 
 SSO Groups define roles/jobs in our AWS organization. We then add users to these groups to allow them to perform various functions, such as security auditing, billing or user management and log monitoring.
 
@@ -35,14 +35,35 @@ Control Tower sets us up with a set of preexisting SSO groups & permission sets.
 We define additional groups & users, defined as follows:
 
 - _production_ - A production group is defined with admin level permissions inside our production accounts. 
-- _iac-bot_ - A special shared SSO user inside the production group. This user is shared and is used specifically to authenticate our IAC tool (terraform) and our scripts with the various production environment accounts.
 - _aws root admin_ -  A special shared SSO user who has access to everything. This is essentially the root user for SSO. Should never be logged in or accessed. 
 
-_WIP_
+_WIP - need to limit access, define other users_
 
-## Workflow
+### Cli authentication setup
 
-Our playbooks will define these processes in more depth. 
+Additionally, we define a special group in the master/root account - `cli` & inside a IAM user - `cli-bot` - for allowing scripts & iac tools to authenticate. On each environment account setup, we create a cross account role inside the new environment account. Then we add a policy to `cli` allowing it to assume the role.
+
+We use AWS's STS `assume-role` with environment variables to easily allow us to do command line work.
+
+From the cli, we need 3 environment variables set in order to allow the scripts & iac tools to authenticate: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_SESSION_TOKEN`. `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` are set twice, first to authenticate as `cli-bot` & then reset for role assumption usage.
+
+We define a script `cli-assume-role` to handle getting the temporary session token and setting the variables for us.
+
+General usage is, export the variables `AWS_ACCESS_KEY_ID` & `AWS_SECRET_ACCESS_KEY`, call the script like `./cli-assume-role <role-arn>`, then run the commands it outputs. 
+
+Now all our devops scripts as well as iac tools will be able to authenticate with our environment account.
+
+### Environment Account documentation
+
+Each environment account has multiple pieces of unique info that we need to store securely & in a centralized manner. We make use of our password managers _secure notes_ feature to do this. Each environment account will have an entry storing all of the pieces of unique info. 
+
+Note, this is not a general _secrets management_ solution, its simply meant to store some pieces of info that a developer would need when doing work on an environment account & ensuring all team members have access to.
+
+Explicit instructions for creation & usage of these entries is defined in our playbooks.
+
+## General workflow
+
+Our playbooks will usage of the accounts & such explicitly.
 
 Generally speaking, developers will log into there SSO accounts & access the AWS accounts they need to, to do day to day work. Ie, to see Cloud Trail logs. 
 

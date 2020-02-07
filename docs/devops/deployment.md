@@ -6,11 +6,15 @@ Assumes fully initialized & working infrastructure.
 
 ### Precursors - Authentication & Region
 
-Before running any commands we must set the AWS keys & session tokens to authenticate with the environment account, as well as the region to use.
+Because we authenticate through role assumption with the IAM user `cli-bot`, we need to retrieve the aws key id, secret access key & temporary session token. With these 3 values set as environment variables our scripts & iac tools (terraform) will be able to authenticate with the environment account
 
-To set the keys, in your web browser, authenticate with the special user `iac-user` in the SSO portal. Select the appropriate environment account then copy the environment variable export commands to set the AWS keys & tokens.
+First retrieve AWS_ACCESS_KEY_ID & AWS_SECRET_ACCESS_KEY values for `cli-bot` from password manager & export into terminal. These are specifically for the cli-bot & will be reset for the new environment account by our script.
 
-For the region, ensure that either `AWS_DEFAULT_REGION` is set as an environment variable or in `~/.aws/config` under `default`. 
+Run script `./cli-assume-role <role-arn>`, passing it the role arn from the password manager. Export the outputted values into the appropriate environment values.
+
+Lastly, ensure that either `AWS_DEFAULT_REGION` is set as an environment variable in `AWS_DEFAULT_REGION` or defined in `~/.aws/config` under `default`. 
+
+Ensure all of the following commands are run in the same terminal to make use of environment variables, otherwise scripts & iac tools will not be able to authenticate. If the terminal is closed or changed, this step must be rerun.
 
 ### Backend
 

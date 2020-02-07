@@ -58,9 +58,7 @@ Run this playbook to initialize a new environment
 
 - Retrieve AWS_ACCESS_KEY_ID & AWS_SECRET_ACCESS_KEY values for `cli-bot` from password manager & export into terminal
 
-- Retrieve cli access role ARN for new environment account
-
-- Run script `. ./cli-assume-role <role-arn>` - ensure it is done verbatim to allow script to export environment variables
+- Run script `./cli-assume-role <role-arn>`, passing it the role arn from our password manager. Export the outputted values into the appropriate environment variables.
 
 - Ensure that either `AWS_DEFAULT_REGION` is set as an environment variable in `AWS_DEFAULT_REGION` or defined in `~/.aws/config` under `default`. 
 
