@@ -54,7 +54,7 @@ RSpec.describe ApplicationHelper do
     # NOTE the opposite, where current_user is present also returns user_root_path because user_root_path
     # is returned for a different condition
     it 'returns user_root_path if current_user is absent' do
-      user =  nil
+      user = nil
       expect(helper.logo_destination).to eq user_root_path
     end
 
