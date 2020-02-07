@@ -18,7 +18,6 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 export function* getMembers(action) {
   try {
     const response = yield call(api.userGroups.all.bind(api.userGroups), action.payload);
-
     yield put(getMembersSuccess(response.data.page));
   } catch (err) {
     yield put(getMembersError(err));
