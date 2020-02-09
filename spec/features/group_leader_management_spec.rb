@@ -94,7 +94,7 @@ RSpec.feature 'Group Leader Management' do
         expect(page).to have_link user.name
         expect(page).to have_link other_user.name
         click_on 'Manage leaders'
-        sleep 1
+        expect(page).to have_content('Add Leaders') 
       end
 
       scenario 'remove one group leader from list of group leaders', js: true do
