@@ -52,12 +52,4 @@ class Theme < ApplicationRecord
       "#{ActionController::Base.asset_host}/#{asset_path}"
     end
   end
-
-  def compile
-    enterprise_id = enterprise.id
-    enterprise.theme_id = nil
-    enterprise.save!
-
-    ThemeCompilerJob.perform_later(id, enterprise_id)
-  end
 end
