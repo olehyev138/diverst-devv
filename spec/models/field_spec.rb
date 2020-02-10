@@ -15,17 +15,15 @@ RSpec.describe Field do
     end
 
     describe 'test validation' do
-      before { allow(field).to receive(:container_type_is_enterprise?).and_return(true) }
-
       it { expect(field).to validate_length_of(:field_type).is_at_most(191) }
       it { expect(field).to validate_length_of(:options_text).is_at_most(65535) }
       it { expect(field).to validate_length_of(:saml_attribute).is_at_most(191) }
       it { expect(field).to validate_length_of(:title).is_at_most(191) }
       it { expect(field).to validate_length_of(:type).is_at_most(191) }
       it { expect(field).to validate_presence_of(:title) }
+
       context 'if not group or segment type' do
-        before { allow(subject).to receive(:is_segment_or_group_field?).and_return(false) }
-        it { expect(field).to validate_uniqueness_of(:title).scoped_to(:enterprise_id) }
+        it { byebug; expect(field).to validate_uniqueness_of(:title).scoped_to(:enterprise_id) }
       end
     end
 
