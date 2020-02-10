@@ -100,7 +100,8 @@ class Api::V1::EnterprisesController < DiverstController
       :auto_archive,
       theme_attributes: [
         :primary_color,
-        :secondary_color
+        :secondary_color,
+        :use_secondary_color,
       ]
     )
   end
