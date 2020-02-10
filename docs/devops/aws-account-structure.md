@@ -26,7 +26,7 @@ Each environment account is created & provisioned with Account Factory, and thus
 
 We create a special _iac_ user, that has admin access permissions to the environment accounts. This account is meant to only be used by iac tools. 
 
-### Setup 
+### SSO Setup 
 
 SSO Groups define roles/jobs in our AWS organization. We then add users to these groups to allow them to perform various functions, such as security auditing, billing or user management and log monitoring.
 
@@ -34,14 +34,14 @@ Control Tower sets us up with a set of preexisting SSO groups & permission sets.
 
 We define additional groups & users, defined as follows:
 
-- _production_ - A production group is defined with admin level permissions inside our production accounts. 
+- _EnvironmentAdmins_ - A _EnvironmentAdmins_ SSO group is defined with admin level permissions inside our environment accounts. Users added to this group are given manual access to the environment accounts.
 - _aws root admin_ -  A special shared SSO user who has access to everything. This is essentially the root user for SSO. Should never be logged in or accessed. 
 
 _WIP - need to limit access, define other users_
 
 ### Cli authentication setup
 
-Additionally, we define a special group in the master/root account - `cli` & inside a IAM user - `cli-bot` - for allowing scripts & iac tools to authenticate. On each environment account setup, we create a cross account role inside the new environment account. Then we add a policy to `cli` allowing it to assume the role.
+Additionally, we define a special group in the master/root account - `cli-users` & inside a IAM user - `cli-bot` - for allowing scripts & iac tools to authenticate. On each environment account setup, we create a cross account role inside the new environment account. Then we add a policy to `cli` allowing it to assume the role.
 
 We use AWS's STS `assume-role` with environment variables to easily allow us to do command line work.
 
@@ -67,7 +67,7 @@ Our playbooks will usage of the accounts & such explicitly.
 
 Generally speaking, developers will log into there SSO accounts & access the AWS accounts they need to, to do day to day work. Ie, to see Cloud Trail logs. 
 
-To run an IAC tool, users will log into the _iac_ user & copy/paste the tokens/keys to set environment variables in there terminal. Then run the IAC tool, ie, Terraform, will pick up the environment variables and use it to authenticate with the appropriate environment account & manage infrastructure. 
+To run an IAC tool, users will log into the _cli-bot_ user & copy/paste the tokens/keys to set environment variables in there terminal. Then run the IAC tool, ie, Terraform, will pick up the environment variables and use it to authenticate with the appropriate environment account & manage infrastructure. 
 
 In the future, the process of setting the keys & tokens as environment variables will be done entirely through the command line.
 

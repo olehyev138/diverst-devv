@@ -58,7 +58,7 @@ Now that we have a provisioned environment account, we have to setup a role insi
   - Switch SSO roles to administrator account with SSO & IAM permissions
   - Disable the SSO user created for this new account
   - Remove new SSO user from new account
-  - Assign current user/group to new account
+  - Assign current _EnvironmentAdmins_ group to new account with _AWSAdministratorAccess_ permission set
   - Record _account id_ of new environment account
   
 - IAM Administrator Access Role Creation
@@ -67,7 +67,7 @@ Now that we have a provisioned environment account, we have to setup a role insi
   - Navigate to IAM & create new role.
   - Select _Another AWS Account_ for trusted entity, copy paste master account ID into text box - consult password manager for id.
   - Select AdministratorAccess for policy
-  - Name the role: `cli-bot-<account-name>-administrator-access`
+  - Name the role: `cli-users-<account-name>-administrator-access`
   - Click _Create Role_
   - Increase max role duration to 4 hours
   - Record _role arn_
