@@ -39,13 +39,13 @@ export function restoreArchiveBegin(payload) {
     payload
   };
 }
-export function restoreArchiveSuccess(payload){
+export function restoreArchiveSuccess(payload) {
   return {
     type: RESTORE_ARCHIVE_SUCCESS,
     payload
   };
 }
-export function restoreArchiveError(error){
+export function restoreArchiveError(error) {
   return {
     type: RESTORE_ARCHIVE_ERROR,
     error

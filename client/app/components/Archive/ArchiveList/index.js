@@ -13,6 +13,8 @@ import messages from 'containers/Archive/messages';
 import DiverstTable from 'components/Shared/DiverstTable';
 import { injectIntl, intlShape } from 'react-intl';
 import { DateTime, formatDateTimeString } from 'utils/dateTimeHelpers';
+import EditIcon from "@material-ui/icons/Edit";
+import DeleteIcon from "@material-ui/icons/DeleteOutline";
 
 
 const styles = theme => ({
@@ -49,7 +51,6 @@ const columns = [
 
 export function ArchiveList(props) {
   const { classes } = props;
- console.log(props);
   return (
     <React.Fragment>
       <Paper>
@@ -68,7 +69,7 @@ export function ArchiveList(props) {
       {props.archives == null && (
         <Grid container spacing={3}>
           <Grid item xs>
-            There are no archived {props.currentTab}
+            {intl.formatMessage(messages.empty_message)}
           </Grid>
         </Grid>
       )}
@@ -84,24 +85,14 @@ export function ArchiveList(props) {
               dataArray={Object.values(props.archives)}
               dataTotal={props.archivesTotal}
               columns={columns}
-              /*
               actions={[{
                 icon: () => <EditIcon />,
-                tooltip: 'Edit Member',
+                tooltip: 'Restore',
                 onClick: (_, rowData) => {
-                  props.handleVisitUserEdit(rowData.id);
-                }
-              }, {
-                icon: () => <DeleteIcon />,
-                tooltip: 'Delete Member',
-                onClick: (_, rowData) => {
-                  /* eslint-disable-next-line no-alert, no-restricted-globals */
-              /*
-                  if (confirm('Delete member?'))
-                    props.deleteUserBegin(rowData.id);
+                  //TODO NEED TO PASS current ResourceType
+                  props.handleRestore(rowData.id);
                 }
               }]}
-              */
 
             />
           </Grid>
@@ -113,12 +104,15 @@ export function ArchiveList(props) {
 }
 
 ArchiveList.propTypes = {
+  archives: PropTypes.array,
+  archivesTotal: PropTypes.number,
   classes: PropTypes.object,
   intl: intlShape.isRequired,
   currentTab: PropTypes.number,
   handleChangeTab: PropTypes.func,
   handlePagination: PropTypes.func,
   handleOrdering: PropTypes.func,
+  handleRestore: PropTypes.func,
 };
 
 export default compose(

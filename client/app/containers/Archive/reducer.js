@@ -12,8 +12,8 @@ import {
   RESTORE_ARCHIVE_BEGIN,
   RESTORE_ARCHIVE_SUCCESS,
   RESTORE_ARCHIVE_ERROR
-} from "./constants";
-import eventsReducer from "../Event/reducer";
+} from './constants';
+import eventsReducer from '../Event/reducer';
 
 
 export const initialState = {
@@ -30,14 +30,15 @@ function archivesReducer(state = initialState, action) {
   return produce(state, (draft) => {
     switch (action.type) {
       case GET_ARCHIVES_BEGIN:
-      case RESTORE_ARCHIVE_BEGIN:
         draft.isLoading = true;
+        draft.hasChanged = false;
+        break;
+      case RESTORE_ARCHIVE_BEGIN:
         draft.isCommitting = true;
         draft.hasChanged = false;
         break;
       case GET_ARCHIVES_SUCCESS:
         draft.isCommitting = false;
-        draft.hasChanged = true;
         draft.archives = action.payload.items;
         draft.archivesTotal = action.payload.total;
         break;

@@ -159,6 +159,7 @@ Diverst::Application.routes.draw do
       resources :resources do
         member do
           post 'archive'
+          put 'un_archive'
         end
       end
       resources :rewards

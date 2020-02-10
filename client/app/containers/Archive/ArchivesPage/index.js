@@ -9,11 +9,12 @@ import { useInjectReducer } from 'utils/injectReducer';
 
 import reducer from 'containers/Archive/reducer';
 import saga from 'containers/Archive/saga';
-import { getArchivesBegin } from 'containers/Archive/actions';
+import { getArchivesBegin, restoreArchiveBegin } from 'containers/Archive/actions';
 import ArchiveList from 'components/Archive/ArchiveList';
 import dig from 'object-dig';
-import { selectArchives, selectArchivesTotal } from '../selectors';
-import {selectPaginatedAnswers} from "../../Innovate/Campaign/CampaignQuestion/Answer/selectors";
+import { selectArchives, selectArchivesTotal, selectHasChanged } from '../selectors';
+import { selectPaginatedAnswers } from '../../Innovate/Campaign/CampaignQuestion/Answer/selectors';
+import {push} from "connected-react-router";
 
 const defaultParams = Object.freeze({
   count: 10, // TODO: Make this a constant and use it also in EventsList
@@ -35,6 +36,11 @@ export function ArchivePage(props) {
 
   const [tab, setTab] = useState(ArchiveTypes.posts);
   const [params, setParams] = useState(defaultParams);
+
+  useEffect(() => {
+    if (props.hasChanged)
+      props.getArchivesBegin(params);
+  }, [props.hasChanged]);
 
   const getArchives = (type, resetParams = false) => {
     if (resetParams)
@@ -64,7 +70,6 @@ export function ArchivePage(props) {
   };
 
   const handleOrdering = (payload) => {
-    console.log("ordering");
     const newParams = { ...params, orderBy: payload.orderBy, order: payload.orderDir };
 
     props.getArchivesBegin(newParams);
@@ -78,6 +83,14 @@ export function ArchivePage(props) {
     setParams(newParams);
   };
 
+  const handleRestore = (payload) => {
+    const newParams = {
+      ...params,
+      id: payload
+    };
+    props.restoreArchiveBegin(newParams);
+  };
+
   return (
     <ArchiveList
       currentTab={tab}
@@ -86,22 +99,26 @@ export function ArchivePage(props) {
       handleOrdering={handleOrdering}
       archives={props.archives}
       archivesTotal={props.archivesTotal}
+      handleRestore={handleRestore}
     />
   );
 }
 
 ArchivePage.propTypes = {
   archives: PropTypes.array,
-  archivesTotal: PropTypes.number
+  archivesTotal: PropTypes.number,
+  hasChanged: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
   archives: selectArchives(),
-  archivesTotal: selectArchivesTotal()
+  archivesTotal: selectArchivesTotal(),
+  hasChanged: selectHasChanged()
 });
 
 const mapDispatchToProps = {
   getArchivesBegin,
+  restoreArchiveBegin
 };
 
 const withConnect = connect(
