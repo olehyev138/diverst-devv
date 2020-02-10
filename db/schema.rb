@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_10_153452) do
+ActiveRecord::Schema.define(version: 2020_02_10_145120) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "name", null: false
@@ -55,15 +55,15 @@ ActiveRecord::Schema.define(version: 2020_01_10_153452) do
   create_table "annual_budgets", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.decimal "amount", precision: 10, default: "0"
     t.boolean "closed", default: false
-    t.decimal "available_budget", precision: 10, default: "0"
-    t.decimal "approved_budget", precision: 10, default: "0"
-    t.decimal "expenses", precision: 10, default: "0"
-    t.decimal "leftover_money", precision: 10, default: "0"
+    t.decimal "deprecated_available_budget", precision: 10, default: "0"
+    t.decimal "deprecated_approved_budget", precision: 10, default: "0"
+    t.decimal "deprecated_expenses", precision: 10, default: "0"
+    t.decimal "deprecated_leftover_money", precision: 10, default: "0"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "group_id"
-    t.integer "enterprise_id"
-    t.index ["group_id", "enterprise_id"], name: "index_annual_budgets_on_group_id_and_enterprise_id"
+    t.integer "deprecated_enterprise_id"
+    t.index ["group_id", "deprecated_enterprise_id"], name: "index_annual_budgets_on_group_id_and_deprecated_enterprise_id"
   end
 
   create_table "answer_comments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
@@ -146,7 +146,7 @@ ActiveRecord::Schema.define(version: 2020_01_10_153452) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.decimal "estimated_amount", precision: 8, scale: 2
-    t.decimal "available_amount", precision: 8, scale: 2, default: "0.0"
+    t.decimal "deprecated_available_amount", precision: 8, scale: 2, default: "0.0"
   end
 
   create_table "budgets", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
@@ -156,11 +156,11 @@ ActiveRecord::Schema.define(version: 2020_01_10_153452) do
     t.datetime "updated_at", null: false
     t.integer "approver_id"
     t.bigint "requester_id"
-    t.bigint "group_id"
+    t.bigint "deprecated_group_id"
     t.text "comments"
     t.string "decline_reason"
     t.integer "annual_budget_id"
-    t.index ["group_id"], name: "index_budgets_on_group_id"
+    t.index ["deprecated_group_id"], name: "index_budgets_on_deprecated_group_id"
     t.index ["requester_id"], name: "fk_rails_d21f6fbcce"
   end
 
@@ -646,8 +646,8 @@ ActiveRecord::Schema.define(version: 2020_01_10_153452) do
     t.string "pending_users", collation: "utf8mb4_unicode_ci"
     t.string "members_visibility", collation: "utf8mb4_unicode_ci"
     t.string "messages_visibility", collation: "utf8mb4_unicode_ci"
-    t.decimal "annual_budget", precision: 8, scale: 2
-    t.decimal "leftover_money", precision: 8, scale: 2, default: "0.0"
+    t.decimal "deprecated_annual_budget", precision: 8, scale: 2
+    t.decimal "deprecated_leftover_money", precision: 8, scale: 2, default: "0.0"
     t.string "banner_file_name", collation: "utf8mb4_unicode_ci"
     t.string "banner_content_type", collation: "utf8mb4_unicode_ci"
     t.bigint "banner_file_size"
@@ -713,7 +713,7 @@ ActiveRecord::Schema.define(version: 2020_01_10_153452) do
     t.bigint "initiative_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "annual_budget_id"
+    t.integer "deprecated_annual_budget_id"
     t.index ["initiative_id"], name: "index_initiative_expenses_on_initiative_id"
     t.index ["owner_id"], name: "index_initiative_expenses_on_owner_id"
   end
@@ -775,7 +775,7 @@ ActiveRecord::Schema.define(version: 2020_01_10_153452) do
     t.datetime "start"
     t.datetime "end"
     t.decimal "estimated_funding", precision: 8, scale: 2, default: "0.0", null: false
-    t.integer "actual_funding"
+    t.integer "deprecated_actual_funding"
     t.bigint "owner_id"
     t.bigint "pillar_id"
     t.datetime "created_at", null: false
@@ -791,7 +791,7 @@ ActiveRecord::Schema.define(version: 2020_01_10_153452) do
     t.integer "budget_item_id"
     t.boolean "finished_expenses", default: false
     t.datetime "archived_at"
-    t.integer "annual_budget_id"
+    t.integer "deprecated_annual_budget_id"
     t.string "qr_code_file_name"
     t.string "qr_code_content_type"
     t.integer "qr_code_file_size"
