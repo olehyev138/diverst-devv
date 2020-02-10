@@ -22,6 +22,9 @@ import App from 'containers/Shared/App/Loadable';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import LuxonUtils from '@date-io/luxon';
 
+export const DEFAULT_BRANDING_COLOR = '7B77C9';
+export const DEFAULT_CHARTS_COLOR = '8A8A8A';
+
 export function ThemeProvider(props) {
   const { enterprise } = props;
 
@@ -34,10 +37,10 @@ export function ThemeProvider(props) {
         default: '#f5f5f5',
       },
       primary: {
-        main: brandingColor,
-        main25: `${brandingColor}40`,
-        main50: `${brandingColor}80`,
-        main75: `${brandingColor}C0`,
+        main: `#${brandingColor}`,
+        main25: `#${brandingColor}40`,
+        main50: `#${brandingColor}80`,
+        main75: `#${brandingColor}C0`,
       },
       secondary: {
         main: '#5a5a5a',
@@ -46,7 +49,7 @@ export function ThemeProvider(props) {
         main: '#9d9e9f',
       },
       graphs: {
-        main: graphsColor
+        main: `#${graphsColor}`
       },
       error: {
         main: '#D32F2F',
@@ -55,7 +58,7 @@ export function ThemeProvider(props) {
         main: '#ffa000',
       },
       info: {
-        main: brandingColor,
+        main: `#${brandingColor}`,
       },
       success: {
         main: '#43a047',
@@ -91,8 +94,8 @@ export function ThemeProvider(props) {
   });
 
   // Defaults
-  const [brandingColor, setBrandingColor] = useState('#7B77C9');
-  const [graphsColor, setGraphsColor] = useState('#8A8A8A');
+  const [brandingColor, setBrandingColor] = useState(DEFAULT_BRANDING_COLOR);
+  const [graphsColor, setGraphsColor] = useState(DEFAULT_CHARTS_COLOR);
 
   const [theme, setTheme] = useState(buildTheme(brandingColor, graphsColor));
 
