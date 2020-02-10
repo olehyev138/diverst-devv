@@ -2,7 +2,6 @@ import React, { memo, useState } from 'react';
 
 import { compose } from 'redux/';
 import PropTypes from 'prop-types';
-import dig from 'object-dig';
 import ResponsiveTabs from 'components/Shared/ResponsiveTabs';
 import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
 import {
@@ -14,8 +13,6 @@ import DiverstTable from 'components/Shared/DiverstTable';
 import { injectIntl, intlShape } from 'react-intl';
 import { DateTime, formatDateTimeString } from 'utils/dateTimeHelpers';
 import EditIcon from '@material-ui/icons/Edit';
-import DeleteIcon from '@material-ui/icons/DeleteOutline';
-
 
 const styles = theme => ({
   link: {
@@ -66,15 +63,7 @@ export function ArchiveList(props) {
         </ResponsiveTabs>
       </Paper>
       <br />
-      {props.archives == null && (
-        <Grid container spacing={3}>
-          <Grid item xs>
-            {intl.formatMessage(messages.empty_message)}
-          </Grid>
-        </Grid>
-      )}
       {props.archives != null && (
-
         <Grid container spacing={3}>
           <Grid item xs>
             <DiverstTable
@@ -93,12 +82,10 @@ export function ArchiveList(props) {
                   props.handleRestore(rowData.id);
                 }
               }]}
-
             />
           </Grid>
         </Grid>
       )}
-
     </React.Fragment>
   );
 }

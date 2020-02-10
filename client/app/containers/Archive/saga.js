@@ -31,11 +31,9 @@ export function* getArchives(action) {
         yield (put(getArchivesSuccess(response.data.page)));
         break;
       case 'posts':
-        response.data.page.items[0].title = 'THIS IS A POST NOT A RESOURCE';
         yield (put(getArchivesSuccess(response.data.page)));
         break;
       case 'events':
-        response.data.page.items[0].title = 'THIS IS AN EVENT NOT A RESOURCE';
         yield (put(getArchivesSuccess(response.data.page)));
         break;
       default:
