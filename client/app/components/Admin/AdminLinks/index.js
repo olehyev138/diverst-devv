@@ -94,6 +94,13 @@ class AdminLinks extends React.PureComponent {
           strict: false
         }),
       },
+      plan: {
+        open: !!matchPath(props.location.pathname, {
+          path: ROUTES.admin.plan.index.data.pathPrefix,
+          exact: false,
+          strict: false
+        }),
+      },
       system: {
         open: !!matchPath(props.location.pathname, {
           path: ROUTES.admin.system.index.data.pathPrefix,
@@ -117,6 +124,10 @@ class AdminLinks extends React.PureComponent {
 
   handleManageClick = () => {
     this.setState(state => ({ manage: { open: !state.manage.open } }));
+  };
+
+  handlePlanClick = () => {
+    this.setState(state => ({ plan: { open: !state.plan.open } }));
   };
 
   handleInnovateClick = () => {
@@ -253,12 +264,30 @@ class AdminLinks extends React.PureComponent {
             </List>
           </Collapse>
 
-          <ListItem button>
+          <ListItem button onClick={this.handlePlanClick}>
             <ListItemIcon>
               <AssignmentTurnedInIcon />
             </ListItemIcon>
             <ListItemText primary='Plan' />
+            {this.state.plan.open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
           </ListItem>
+          <Collapse in={this.state.plan.open} timeout='auto' unmountOnExit>
+            <List disablePadding>
+              <MenuItem
+                component={WrappedNavLink}
+                to={ROUTES.admin.plan.budgeting.index.path()}
+                className={classes.nested}
+                activeClassName={classes.navLinkActive}
+              >
+                <ListItemIcon>
+                  <ListIcon />
+                </ListItemIcon>
+                <ListItemText>
+                  Group Budgets
+                </ListItemText>
+              </MenuItem>
+            </List>
+          </Collapse>
 
           <ListItem button onClick={this.handleInnovateClick}>
             <ListItemIcon>
