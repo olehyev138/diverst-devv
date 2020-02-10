@@ -113,9 +113,9 @@ exports[`<ThemeProvider /> should render and match the snapshot 1`] = `
         },
         "secondary": Object {
           "contrastText": "#fff",
-          "dark": "#c51162",
-          "light": "#ff4081",
-          "main": "#f50057",
+          "dark": "rgb(62, 62, 62)",
+          "light": "rgb(123, 123, 123)",
+          "main": "#5a5a5a",
         },
         "success": Object {
           "contrastText": "#fff",
@@ -125,7 +125,7 @@ exports[`<ThemeProvider /> should render and match the snapshot 1`] = `
           "main": "#43a047",
         },
         "tertiary": Object {
-          "main": "#8b8c8d",
+          "main": "#9d9e9f",
         },
         "text": Object {
           "disabled": "rgba(0, 0, 0, 0.38)",
