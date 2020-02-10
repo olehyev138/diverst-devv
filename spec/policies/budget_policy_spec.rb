@@ -3,8 +3,9 @@ require 'rails_helper'
 RSpec.describe BudgetPolicy, type: :policy do
   let(:enterprise) { create(:enterprise) }
   let(:group) { create(:group, enterprise: enterprise) }
+  let(:annual_budget) { create(:annual_budget, group: group) }
+  let(:budget) { create(:budget, annual_budget: annual_budget) }
   let(:no_access) { create(:user) }
-  let(:budget) { create(:budget, group_id: group.id) }
   let!(:user) { no_access }
 
   subject { described_class.new(user, [group, budget]) }

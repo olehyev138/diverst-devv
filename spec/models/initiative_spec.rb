@@ -417,8 +417,8 @@ RSpec.describe Initiative, type: :model do
   describe 'Initiative.to_csv' do
     let!(:enterprise) { create(:enterprise) }
     let!(:group) { create :group, :without_outcomes, enterprise: enterprise, annual_budget: 10000 }
-    let!(:annual_budget) { create(:annual_budget, group: group, amount: group.annual_budget, enterprise_id: enterprise.id) }
-    let!(:budget) { create(:approved, group_id: group.id, annual_budget_id: annual_budget.id) }
+    let!(:annual_budget) { create(:annual_budget, group: group, amount: group.annual_budget) }
+    let!(:budget) { create(:approved, annual_budget_id: annual_budget.id) }
     let!(:outcome) { create :outcome, group_id: group.id }
     let!(:pillar) { create :pillar, outcome_id: outcome.id }
     let!(:initiative) { create(:initiative, pillar: pillar,

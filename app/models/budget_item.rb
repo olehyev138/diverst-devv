@@ -70,6 +70,6 @@ class BudgetItem < ApplicationRecord
   end
 
   def approve!
-    self.update(available_amount: estimated_amount)
+    self.update(deprecated_available_amount: estimated_amount)
   end
 end

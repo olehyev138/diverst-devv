@@ -5,7 +5,7 @@ RSpec.describe BudgetManager, type: :service do
   let(:group) { create(:group) }
   let(:annual_budget) { create(:annual_budget, group: group, amount: 10000) }
   let!(:budget) { create(:budget, is_approved: nil, requester: user, approver: nil, annual_budget: annual_budget) }
-  let!(:budget_item) { create(:budget_item, budget: budget, estimated_amount: 100, available_amount: 0) }
+  let!(:budget_item) { create(:budget_item, budget: budget, estimated_amount: 100) }
 
   describe '#approve' do
     before(:each) { budget.approve(user) }
