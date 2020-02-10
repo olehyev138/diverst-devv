@@ -53,7 +53,6 @@ export function BrandingThemeInner({ classes, handleSubmit, handleChange, handle
             <Grid item xs={12} sm={6}>
               <Field
                 component={DiverstSwitch}
-                required
                 id='use_secondary_color'
                 name='use_secondary_color'
                 label='Use different color for graphs?'
