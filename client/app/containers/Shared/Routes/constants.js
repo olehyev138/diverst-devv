@@ -395,7 +395,19 @@ export const ROUTES = {
           data: {
             titleMessage: messages.groups.manage.leaders.index
           }
-        }
+        },
+        new: {
+          path: (groupId = ':group_id') => `/groups/${groupId}/manage/leaders/new`,
+          data: {
+            titleMessage: messages.groups.manage.leaders.new
+          }
+        },
+        edit: {
+          path: (groupId = ':group_id', groupLeaderId = ':group_leader_id') => `/groups/${groupId}/manage/leaders/${groupLeaderId}/edit`,
+          data: {
+            titleMessage: messages.groups.manage.leaders.edit
+          }
+        },
       }
     },
     resources: {
@@ -694,6 +706,32 @@ export const ROUTES = {
           edit: {
             path: (eventId = ':event_id') => `/admin/system/settings/emailEvents/${eventId}/edit`
           },
+        }
+      },
+      branding: {
+        index: {
+          path: () => '/admin/system/branding/theme',
+          data: {
+            pathPrefix: '/system/branding',
+            titleMessage: messages.admin.system.branding,
+          }
+        },
+        theme: {
+          path: () => '/admin/system/branding/theme'
+        },
+        home: {
+          path: () => '/admin/system/branding/home'
+        },
+        sponsors: {
+          index: {
+            path: () => '/admin/system/branding/sponsors'
+          },
+          new: {
+            path: () => '/admin/system/branding/sponsors/new'
+          },
+          edit: {
+            path: (sponsorId = ':sponsor_id') => `/admin/system/branding/sponsors/${sponsorId}/edit`
+          }
         }
       }
     }
