@@ -23,7 +23,7 @@ RSpec.describe Field do
       it { expect(field).to validate_presence_of(:title) }
 
       context 'if not group or segment type' do
-        it { byebug; expect(field).to validate_uniqueness_of(:title).scoped_to(:enterprise_id) }
+        it { expect(field).to validate_uniqueness_of(:title).scoped_to(:enterprise_id) }
       end
     end
 
