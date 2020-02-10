@@ -4,27 +4,23 @@
  *
  */
 
-import React, {
-  memo, useRef, useState, useEffect
-} from 'react';
-import dig from 'object-dig';
+import React, { memo, useState } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import { Field, Formik, Form } from 'formik';
-import { FormattedMessage } from 'react-intl';
+
 import { withStyles } from '@material-ui/core/styles';
-
-import WrappedNavLink from 'components/Shared/WrappedNavLink';
-import { ROUTES } from 'containers/Shared/Routes/constants';
-
-import messages from 'containers/Branding/messages';
-import { buildValues, mapFields } from 'utils/formHelpers';
-
 import {
-  Button, Card, CardActions, CardContent, Grid, Paper,
-  TextField, Hidden, FormControl, Divider, Switch, FormControlLabel,
+  Button, Card, CardActions, CardContent, Grid,
+  Collapse, Divider,
 } from '@material-ui/core';
-import Select from 'components/Shared/DiverstSelect';
+
+import { buildValues } from 'utils/formHelpers';
+
+import DiverstColorPicker from 'components/Shared/DiverstColorPicker';
+import DiverstSwitch from 'components/Shared/DiverstSwitch';
+
+import { DEFAULT_BRANDING_COLOR, DEFAULT_CHARTS_COLOR } from 'containers/Shared/ThemeProvider';
 
 const styles = theme => ({
   noBottomPadding: {
@@ -38,19 +34,51 @@ export function BrandingThemeInner({ classes, handleSubmit, handleChange, handle
     <Card>
       <Form>
         <CardContent>
-          <Grid container>
-            <Grid item xs={12} className={classes.noBottomPadding}>
+          <Grid container spacing={3} alignItems='center'>
+            <Grid item xs={12} sm={6}>
               <Field
-                component={TextField}
+                component={DiverstColorPicker}
                 required
-                onChange={handleChange}
-                fullWidth
                 id='primary_color'
                 name='primary_color'
-                margin='normal'
-                label='Primary Colour'
+                label='Primary Color'
                 value={values.primary_color}
+                onChange={value => setFieldValue('primary_color', value)}
+                FormControlProps={{
+                  margin: 'normal',
+                  fullWidth: true,
+                }}
               />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Field
+                component={DiverstSwitch}
+                required
+                id='use_secondary_color'
+                name='use_secondary_color'
+                label='Use different color for graphs?'
+                margin='normal'
+                value={values.use_secondary_color}
+                onChange={(_, value) => setFieldValue('use_secondary_color', value)}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Collapse in={values.use_secondary_color}>
+                <Field
+                  component={DiverstColorPicker}
+                  required
+                  fullWidth
+                  id='secondary_color'
+                  name='secondary_color'
+                  label='Graphs Color'
+                  value={values.secondary_color}
+                  onChange={value => setFieldValue('secondary_color', value)}
+                  FormControlProps={{
+                    margin: 'normal',
+                    fullWidth: true,
+                  }}
+                />
+              </Collapse>
             </Grid>
           </Grid>
         </CardContent>
@@ -74,7 +102,9 @@ export function BrandingThemeInner({ classes, handleSubmit, handleChange, handle
 export function BrandingTheme(props) {
   const initialValues = buildValues(props.theme, {
     id: { default: '' },
-    primary_color: { default: '' },
+    primary_color: { default: DEFAULT_CHARTS_COLOR },
+    secondary_color: { default: DEFAULT_BRANDING_COLOR },
+    use_secondary_color: { default: false },
   });
 
   return (
