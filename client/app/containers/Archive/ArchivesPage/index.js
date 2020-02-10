@@ -14,7 +14,7 @@ import ArchiveList from 'components/Archive/ArchiveList';
 import dig from 'object-dig';
 import { selectArchives, selectArchivesTotal, selectHasChanged } from '../selectors';
 import { selectPaginatedAnswers } from '../../Innovate/Campaign/CampaignQuestion/Answer/selectors';
-import {push} from "connected-react-router";
+import { push } from 'connected-react-router';
 
 const defaultParams = Object.freeze({
   count: 10, // TODO: Make this a constant and use it also in EventsList
@@ -66,6 +66,8 @@ export function ArchivePage(props) {
       case ArchiveTypes.events:
         getArchives('events', true);
         break;
+      default:
+        break;
     }
   };
 
@@ -108,6 +110,8 @@ ArchivePage.propTypes = {
   archives: PropTypes.array,
   archivesTotal: PropTypes.number,
   hasChanged: PropTypes.bool,
+  getArchivesBegin: PropTypes.func,
+  restoreArchiveBegin: PropTypes.func
 };
 
 const mapStateToProps = createStructuredSelector({

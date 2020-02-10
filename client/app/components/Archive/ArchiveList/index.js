@@ -13,8 +13,8 @@ import messages from 'containers/Archive/messages';
 import DiverstTable from 'components/Shared/DiverstTable';
 import { injectIntl, intlShape } from 'react-intl';
 import { DateTime, formatDateTimeString } from 'utils/dateTimeHelpers';
-import EditIcon from "@material-ui/icons/Edit";
-import DeleteIcon from "@material-ui/icons/DeleteOutline";
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/DeleteOutline';
 
 
 const styles = theme => ({
@@ -89,7 +89,7 @@ export function ArchiveList(props) {
                 icon: () => <EditIcon />,
                 tooltip: 'Restore',
                 onClick: (_, rowData) => {
-                  //TODO NEED TO PASS current ResourceType
+                  // TODO NEED TO PASS current ResourceType
                   props.handleRestore(rowData.id);
                 }
               }]}

@@ -38,6 +38,8 @@ export function* getArchives(action) {
         response.data.page.items[0].title = 'THIS IS AN EVENT NOT A RESOURCE';
         yield (put(getArchivesSuccess(response.data.page)));
         break;
+      default:
+        break;
     }
   } catch (err) {
     yield put(getArchivesError(err));
@@ -54,7 +56,7 @@ export function* unArchive(action) {
   try {
     const payload = { resource: action.payload };
     const { resource, ...rest } = payload;
-    //TODO rename variable
+    // TODO rename variable
     const response = yield call(api.resources.un_archive.bind(api.resources), payload.resource.id, payload);
 
     switch (resource.resource) {
@@ -67,9 +69,9 @@ export function* unArchive(action) {
       case 'events':
         yield (put(restoreArchiveSuccess()));
         break;
+      default:
+        break;
     }
-
-
   } catch (err) {
     yield put(restoreArchiveError(err));
 
@@ -79,9 +81,6 @@ export function* unArchive(action) {
       options: { variant: 'warning' }
     }));
   }
-
-
-
 }
 
 export default function* archivesSaga() {

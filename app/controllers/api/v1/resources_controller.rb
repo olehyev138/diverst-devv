@@ -37,6 +37,4 @@ class Api::V1::ResourcesController < DiverstController
       raise BadRequestException.new(e.message)
     end
   end
-
-
 end
