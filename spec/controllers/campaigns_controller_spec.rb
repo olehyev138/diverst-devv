@@ -117,9 +117,9 @@ RSpec.describe CampaignsController, type: :controller do
 
         it 'returns campaign question in desc order by created_at' do
           question1 = create :question, campaign: campaign
-          question2 = create :question, campaign: campaign
+          question2 = create :question, campaign: campaign, created_at: 2.minutes.from_now
 
-          expect(assigns[:questions]).to eq [question1, question2]
+          expect(assigns[:questions]).to eq [question2, question1]
         end
 
         it 'returns only 10 questions per page' do

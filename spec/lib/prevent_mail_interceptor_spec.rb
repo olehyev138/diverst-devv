@@ -1,14 +1,14 @@
 require 'rails_helper'
 
 RSpec.describe PreventMailInterceptor, 'delivery interception' do
-  xit 'prevents mailing some recipients' do
+  it 'prevents mailing some recipients', skip: 'Interceptor is disabled' do
     allow(PreventMailInterceptor).to receive(:deliver?).and_return false
     expect {
       deliver_mail
     }.to change { ActionMailer::Base.deliveries.count }.by(0)
   end
 
-  it 'allows mailing other recipients' do
+  it 'allows mailing other recipients', skip: 'Interceptor is disabled' do
     allow(PreventMailInterceptor).to receive(:deliver?).and_return true
     expect {
       deliver_mail

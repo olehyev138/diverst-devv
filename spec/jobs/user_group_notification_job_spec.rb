@@ -9,7 +9,7 @@ RSpec.describe UserGroupNotificationJob, type: :job do
   let!(:second_group) { create(:group, pending_users: 'disabled') }
 
   context '#get_users_to_mail' do
-    before(:all) do
+    before do
       @enterprise = create(:enterprise, enable_social_media: true)
 
       users = create_list(:user, 500, enterprise: @enterprise, groups_notifications_frequency: 'weekly')
@@ -56,7 +56,7 @@ RSpec.describe UserGroupNotificationJob, type: :job do
     end
 
     it 'returns false when last_group_notification_date is set' do
-      user.last_group_notification_date = DateTime.now
+      user.last_group_notification_date = DateTime.now.to_date
       expect(subject.notify_user?(user)).to eq false
     end
   end
