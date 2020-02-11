@@ -81,8 +81,8 @@ Now that we have a provisioned environment account, we have to setup a role insi
     - AWS Service: _AWS Security Token Service_
     - Actions: _AssumeRole_
     - ARN: Paste role arn previously recorded
-  - Click through & apply new policy
-
+  - Click through & apply new policy. Name policy: `cli-users-allow-<account>-administrator-access`
+  
 ### B) Authentication & Region
 
 Because we authenticate through role assumption with the IAM user `cli-bot`, we need to retrieve the aws key id, secret access key & temporary session token. With these 3 values set as environment variables our scripts & iac tools will be able to authenticate with the environment account
@@ -94,6 +94,10 @@ Run script `./cli-assume-role <role-arn>`, passing it the role arn. Export the o
 Lastly, ensure that either `AWS_DEFAULT_REGION` is set as an environment variable in `AWS_DEFAULT_REGION` or defined in `~/.aws/config` under `default`.
 
 Record the region code (ie `us-east-1`).
+
+Test cli authentication has been setup right by running
+
+`aws iam list-roles` - you should see in the output, the role you created in the previous steps.
 
 Ensure all of the following commands are run in the same terminal to make use of environment variables, otherwise scripts & iac tools will not be able to authenticate. If the terminal is closed or changed, this step must be rerun.
 
