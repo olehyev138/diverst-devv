@@ -74,6 +74,7 @@ import SponsorEditPage from 'containers/Branding/Sponsor/SponsorEditPage/Loadabl
 
 /* Admin - System - User */
 import UsersPage from 'containers/User/UsersPage/Loadable';
+import UsersImportPage from 'containers/User/UsersImportPage/Loadable';
 import UserCreatePage from 'containers/User/UserCreatePage/Loadable';
 import UserEditPage from 'containers/User/UserEditPage/Loadable';
 
@@ -174,6 +175,7 @@ export {
   SegmentPage,
   FieldsPage,
   UsersPage,
+  UsersImportPage,
   UserCreatePage,
   UserEditPage,
   GroupHomePage,
