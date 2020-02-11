@@ -97,6 +97,8 @@ Diverst::Application.routes.draw do
           get  '/updates', to: 'initiatives#updates'
           get  '/update_prototype', to: 'initiatives#update_prototype'
           post '/create_update', to: 'initiatives#create_update'
+          post 'archive'
+          put 'un_archive'
         end
       end
       resources :initiative_comments

@@ -24,22 +24,26 @@ export function* getArchives(action) {
   try {
     const { payload } = action;
     const { resource, ...rest } = payload;
-    const response = yield call(api.resources.all.bind(api.resources), rest);
+    var response;
     // TODO : Implement actions in the case of posts & events
     switch (resource) {
       case 'resources':
+        response = yield call(api.resources.all.bind(api.resources), rest);
         yield (put(getArchivesSuccess(response.data.page)));
         break;
       case 'posts':
+        response = yield call(api.resources.all.bind(api.resources), rest);
         yield (put(getArchivesSuccess(response.data.page)));
         break;
       case 'events':
+        response = yield call(api.initiative.all.bind(api.initiative), rest);
         yield (put(getArchivesSuccess(response.data.page)));
         break;
       default:
         break;
     }
   } catch (err) {
+    console.log(err);
     yield put(getArchivesError(err));
 
     // TODO: intl message
