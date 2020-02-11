@@ -34,7 +34,8 @@ const styles = theme => ({
 /* eslint-disable object-curly-newline */
 export function BrandingThemeInner({ classes, handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
   return (
-    <DiverstFormLoader isLoading={props.isLoading} isError={!props.theme}>
+    // The theme can be null if the enterprise has no theme, so the error is if it is undefined
+    <DiverstFormLoader isLoading={props.isLoading} isError={props.theme === undefined}>
       <Card>
         <Form>
           <CardContent>
@@ -135,8 +136,8 @@ export function BrandingThemeInner({ classes, handleSubmit, handleChange, handle
 export function BrandingTheme(props) {
   const initialValues = buildValues(props.theme, {
     id: { default: '' },
-    primary_color: { default: DEFAULT_CHARTS_COLOR },
-    secondary_color: { default: DEFAULT_BRANDING_COLOR },
+    primary_color: { default: DEFAULT_BRANDING_COLOR },
+    secondary_color: { default: DEFAULT_CHARTS_COLOR },
     use_secondary_color: { default: false },
     logo: { default: null },
     logo_redirect_url: { default: '' },
