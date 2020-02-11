@@ -40,6 +40,16 @@ module Diverst
 
     ActionMailer::Base.delivery_method = :smtp
 
+    # Cross Domain Request
+    config.middleware.insert_before ActionDispatch::Static, Rack::Cors do
+      allow do
+        origins '*'
+        resource '*', headers: :any, methods: [:get, :post, :put, :delete, :options]
+        # resource '/assets/*', headers: :any, methods: [:get]
+        resource '/system/*', headers: :any, methods: [:get]
+      end
+    end
+
     config.middleware.insert_before ActionDispatch::Static, Rack::Rewrite do
       rewrite %r{^(?!/sidekiq|\/api|\/system|\/rails).*}, '/', not: %r{(.*\..*)}
     end
@@ -62,17 +72,7 @@ module Diverst
     config.middleware.use ActiveRecord::Migration::CheckPending
     config.middleware.use Rack::Deflater
 
-    # Cross Domain Request
-    config.middleware.insert_before ActionDispatch::Static, Rack::Cors do
-      allow do
-        origins '*'
-        resource '*', headers: :any, methods: [:get, :post, :put, :delete, :options]
-        # resource '/assets/*', headers: :any, methods: [:get]
-        resource '/system/*', headers: :any, methods: [:get]
-      end
-    end
-
-    # access token
+      # access token
     config.access_tokens = {
       # defines how long an aws url is good for
       token_refresh_interval: 2.hours,
