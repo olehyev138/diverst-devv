@@ -40,6 +40,11 @@ export function SystemUsersLinks(props) {
             to='#'
             label='Policy Templates'
           />
+          <Tab
+            component={WrappedNavLink}
+            to={ROUTES.admin.system.users.import.path()}
+            label='Import User'
+          />
         </ResponsiveTabs>
       </Paper>
     </React.Fragment>

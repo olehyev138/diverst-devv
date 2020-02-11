@@ -90,7 +90,7 @@ export function UserListPage(props) {
 UserListPage.propTypes = {
   currentEnterprise: PropTypes.object.isRequired,
   getFieldsBegin: PropTypes.func.isRequired,
-  fields: PropTypes.array,
+  fields: PropTypes.object,
   isFetchingFields: PropTypes.bool,
   fieldUnmount: PropTypes.func.isRequired,
 };

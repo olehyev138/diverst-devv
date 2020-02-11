@@ -110,9 +110,11 @@ export function UserImport(props, context) {
           <Grid className={classes.padding}>
             <DiverstLoader isLoading={isLoading}>
               {fields.map((fieldName, index) => (
-                <Typography component='h2' variant='body1' color='secondary'>
-                  {`${index}. ${fieldName}`}
-                </Typography>
+                <React.Fragment key={fieldName}>
+                  <Typography component='h2' variant='body1' color='secondary'>
+                    {`${index}. ${fieldName}`}
+                  </Typography>
+                </React.Fragment>
               ))}
             </DiverstLoader>
           </Grid>
