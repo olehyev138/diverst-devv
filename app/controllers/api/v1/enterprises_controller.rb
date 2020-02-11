@@ -102,6 +102,8 @@ class Api::V1::EnterprisesController < DiverstController
         :primary_color,
         :secondary_color,
         :use_secondary_color,
+        :logo,
+        :logo_redirect_url,
       ]
     )
   end
