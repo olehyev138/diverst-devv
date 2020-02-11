@@ -42,25 +42,29 @@ class Importers::Users
     user = update_user(row) || initialize_user(row)
     user.field_data.load
     field_data_attributes = []
+    @enterprise.fields.load
     (0..row.length - 1).each do |i|
-      field = @enterprise.fields.find_by('LOWER(title) = ?', row.headers[i])
+      field = @enterprise.fields.find { |f| f.title.downcase == row.headers[i] }
       next if field.blank?
 
       data = user.field_data.find { |fd| fd.field_id == field.id }
-      next if data.blank?
-
-      field_data_attributes.append({
-                                       id: data.id,
-                                       data: data.data
-                                   })
+      field_data_attributes.append(
+          data.present? ? {
+              id: data.id,
+              field: field,
+              data: field.serialize_value(row[row.headers[i]])
+          } : {
+              field: field,
+              data: field.serialize_value(row[row.headers[i]])
+          })
     end
-    user.attributes[field_data_attributes] = field_data_attributes
+    user.field_data_attributes = field_data_attributes
     join_groups(user, row)
     user
   end
 
   def join_groups(user, row)
-    user.enterprise.groups.where(name: row['Group Membership'].split(',').map(&:strip)).find_each do |group|
+    user.enterprise.groups.where(name: row['group membership'].split(',').map(&:strip)).find_each do |group|
       unless user.user_groups.where(group_id: group.id).any?
         user.user_groups.build(group_id: group.id)
       end

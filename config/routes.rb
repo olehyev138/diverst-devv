@@ -28,6 +28,7 @@ Diverst::Application.routes.draw do
       resources :checklists
       resources :checklist_items
       resources :clockwork_database_events, only: [:index, :update, :show]
+      resources :csv_files, only: [:create]
       resources :custom_texts
       resources :devices
       resources :emails, only: [:index, :update, :show]

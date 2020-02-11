@@ -4,6 +4,8 @@ module ContainsFieldData
 
   included do
     before_validation :transfer_info_to_data
+    has_many :field_data, class_name: 'FieldData', as: :field_user, dependent: :destroy
+    accepts_nested_attributes_for :field_data
     after_create :create_missing_field_data
     extend ClassMethods
   end

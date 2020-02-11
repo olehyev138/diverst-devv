@@ -6,7 +6,6 @@ class InitiativeUpdate < ApplicationRecord
   include ContainsFieldData
 
   belongs_to :owner, class_name: 'User'
-  has_many :field_data, class_name: 'FieldData', as: :field_user, dependent: :destroy
   belongs_to :initiative
 
   validates_length_of :comments, maximum: 65535

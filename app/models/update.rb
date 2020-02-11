@@ -12,8 +12,6 @@ class Update < ApplicationRecord
   belongs_to :updatable, polymorphic: true
   belongs_to :previous, class_name: 'Update', inverse_of: :next
   has_one :next, class_name: 'Update', foreign_key: 'previous_id', inverse_of: :previous
-  has_many :field_data, class_name: 'FieldData', as: :field_user, dependent: :destroy
-
   accepts_nested_attributes_for :field_data
   include ContainsFieldData
 

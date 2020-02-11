@@ -60,6 +60,7 @@ class DateField < Field
   def serialize_value(value)
     return nil if value.nil?
 
+    value = DateTime.iso8601(value) if value.class <= String
     value.strftime('%s').to_i
   end
 

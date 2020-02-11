@@ -65,11 +65,11 @@ export function ImportForm({ handleSubmit, handleChange, handleBlur, values, set
               component={DiverstFileInput}
               disabled={isCommitting}
               fullWidth
-              id='csv'
-              name='csv'
+              id='import_file'
+              name='import_file'
               margin='normal'
               label='Import your file'
-              value={values.csv}
+              value={values.import_file}
             />
           </CardContent>
           <Divider />
@@ -85,7 +85,7 @@ export function ImportForm({ handleSubmit, handleChange, handleBlur, values, set
 }
 
 export function UserImport(props, context) {
-  const { classes, fields, isLoading } = props;
+  const { classes, fields, isLoading, importAction } = props;
 
   return (
     <React.Fragment>
@@ -130,12 +130,11 @@ export function UserImport(props, context) {
       <Box mb={3} />
       <Formik
         initialValues={{
-          csv: null
+          import_file: null
         }}
         enableReinitialize
         onSubmit={(values, actions) => {
-          // eslint-disable-next-line no-alert
-          alert(values);
+          importAction(values);
         }}
       >
         {formikProps => <ImportForm {...props} {...formikProps} />}
@@ -148,6 +147,7 @@ UserImport.propTypes = {
   classes: PropTypes.object,
   fields: PropTypes.array,
   isLoading: PropTypes.bool,
+  importAction: PropTypes.func.isRequired,
 };
 
 ImportForm.propTypes = {

@@ -27,9 +27,6 @@ class User < ApplicationRecord
   has_one :policy_group,  dependent: :destroy, inverse_of: :user
   has_one :device,        dependent: :destroy, inverse_of: :user
 
-  has_many :field_data, class_name: 'FieldData', as: :field_user, dependent: :destroy
-  accepts_nested_attributes_for :field_data, reject_if: proc { |attributes| attributes['id'].blank? }
-
   # sessions
   has_many :sessions, dependent: :destroy
 
@@ -127,7 +124,7 @@ class User < ApplicationRecord
   validate :user_role_presence
   validates :points, numericality: { only_integer: true }, presence: true
   validates :credits, numericality: { only_integer: true }, presence: true
-  validate :validate_presence_fields
+  validate :validate_presence_field_data
   validate :group_leader_role
   validate :policy_group
   before_validation :add_linkedin_http, unless: -> { linkedin_profile_url.nil? }

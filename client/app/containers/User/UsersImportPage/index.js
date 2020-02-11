@@ -30,12 +30,18 @@ import {
   selectIsLoading
 } from 'containers/Shared/Field/selectors';
 import { selectEnterprise } from 'containers/Shared/App/selectors';
+import { selectIsCommitting } from 'containers/Shared/CsvFile/selectors';
 import {
   getFieldsBegin, fieldUnmount
 } from 'containers/Shared/Field/actions';
+import {
+  createCsvFileBegin
+} from 'containers/Shared/CsvFile/actions';
 
-import reducer from 'containers/Shared/Field/reducer';
-import saga from 'containers/GlobalSettings/Field/saga';
+import reducer from 'containers/Shared/CsvFile/reducer';
+import saga from 'containers/Shared/CsvFile/saga';
+import fieldReducer from 'containers/Shared/Field/reducer';
+import fieldSaga from 'containers/GlobalSettings/Field/saga';
 
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -44,8 +50,10 @@ import UserList from 'components/User/UserList';
 import UserImport from 'components/User/UserImport';
 
 export function UserListPage(props) {
-  useInjectReducer({ key: 'fields', reducer });
-  useInjectSaga({ key: 'fields', saga });
+  useInjectReducer({ key: 'csv_files', reducer });
+  useInjectSaga({ key: 'csv_files', saga });
+  useInjectReducer({ key: 'fields', reducer: fieldReducer });
+  useInjectSaga({ key: 'fields', saga: fieldSaga });
 
   const [params, setParams] = useState({ count: -1, page: 0, order: 'asc' });
 
@@ -81,6 +89,8 @@ export function UserListPage(props) {
           ...Object.values(props.fields).map(field => `${field.title}${field.required ? '*' : ''}`)
         ]}
         isFetchingFields={props.isFetchingFields}
+        importAction={props.createCsvFileBegin}
+        isCommitting={props.isCommitting}
         links={links}
       />
     </React.Fragment>
@@ -90,20 +100,24 @@ export function UserListPage(props) {
 UserListPage.propTypes = {
   currentEnterprise: PropTypes.object.isRequired,
   getFieldsBegin: PropTypes.func.isRequired,
+  createCsvFileBegin: PropTypes.func.isRequired,
   fields: PropTypes.object,
   isFetchingFields: PropTypes.bool,
   fieldUnmount: PropTypes.func.isRequired,
+  isCommitting: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
   fields: selectPaginatedFields(),
   isFetchingFields: selectIsLoading(),
   currentEnterprise: selectEnterprise(),
+  isCommitting: selectIsCommitting(),
 });
 
 const mapDispatchToProps = {
   getFieldsBegin,
   fieldUnmount,
+  createCsvFileBegin,
 };
 
 const withConnect = connect(
