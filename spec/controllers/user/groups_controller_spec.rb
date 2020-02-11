@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe User::GroupsController, type: :controller do
-
   let!(:user) { create :user }
   let!(:group) { create(:group, enterprise: user.enterprise, owner: user, private: true) }
 
