@@ -27,27 +27,8 @@ const styles = theme => ({
   },
 });
 
-const columns = [
-  {
-    title: intl.formatMessage(messages.title),
-    field: 'title',
-    query_field: 'title'
-  },
-  {
-    title: intl.formatMessage(messages.url),
-    field: 'url',
-    query_field: 'url',
-  },
-  {
-    title: intl.formatMessage(messages.creation),
-    field: 'created_at',
-    query_field: 'created_at',
-    render: rowData => formatDateTimeString(rowData.created_at, DateTime.DATE_SHORT)
-  },
-];
-
 export function ArchiveList(props) {
-  const { classes } = props;
+  console.log(props);
   return (
     <React.Fragment>
       <Paper>
@@ -73,7 +54,7 @@ export function ArchiveList(props) {
               rowsPerPage={10}
               dataArray={Object.values(props.archives)}
               dataTotal={props.archivesTotal}
-              columns={columns}
+              columns={props.columns}
               actions={[{
                 icon: () => <EditIcon />,
                 tooltip: 'Restore',
@@ -100,6 +81,7 @@ ArchiveList.propTypes = {
   handlePagination: PropTypes.func,
   handleOrdering: PropTypes.func,
   handleRestore: PropTypes.func,
+  columns: PropTypes.array
 };
 
 export default compose(

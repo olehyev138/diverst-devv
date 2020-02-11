@@ -30,6 +30,12 @@ export default defineMessages({
   options: {
     id: `${scope}.column.options`
   },
+  event: {
+    id: `${scope}.column.event`
+  },
+  group: {
+    id: `${scope}.column.group`
+  },
   empty_message: {
     id: `${scope}.index.empty_section`
   }

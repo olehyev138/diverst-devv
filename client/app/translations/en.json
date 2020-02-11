@@ -465,5 +465,7 @@
   "diverst.containers.Archive.column.title": "Title",
   "diverst.containers.Archive.column.url": "URL",
   "diverst.containers.Archive.column.creation": "Creation Date",
-  "diverst.containers.Archive.column.options": "Options"
+  "diverst.containers.Archive.column.options": "Options",
+  "diverst.containers.Archive.column.event": "Event",
+  "diverst.containers.Archive.column.group": "Group Name"
 }

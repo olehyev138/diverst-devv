@@ -72,6 +72,9 @@ class Initiative < ApplicationRecord
   scope :finalized, -> { where(finished_expenses: false) }
   scope :active, -> { where(finished_expenses: false) }
 
+  scope :not_archived, -> { where(archived_at: nil) }
+  scope :archived, -> { where.not(archived_at: nil) }
+
   # we don't want to run this callback when finish_expenses! is triggered in initiatives_controller.rb, finish_expense action
   validate -> { allocate_budget_funds unless skip_allocate_budget_funds }
 

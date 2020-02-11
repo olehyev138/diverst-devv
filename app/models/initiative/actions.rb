@@ -8,7 +8,7 @@ module Initiative::Actions
 
   module ClassMethods
     def valid_scopes
-      ['upcoming', 'ongoing', 'past']
+      ['upcoming', 'ongoing', 'past', 'not_archived', 'archived']
     end
 
     def build(diverst_request, params)
