@@ -45,7 +45,6 @@ module Diverst
       allow do
         origins '*'
         resource '*', headers: :any, methods: [:get, :post, :put, :delete, :options]
-        resource '/system/*', headers: :any, methods: [:get]
       end
     end
 
