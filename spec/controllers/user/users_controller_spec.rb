@@ -51,10 +51,7 @@ RSpec.describe User::UsersController, type: :controller do
       login_user_from_let
 
       context 'with correct params' do
-        before do
-          request.env['HTTP_REFERER'] = 'back'
-          patch :update, id: user.id, user: { first_name: 'New name' }
-        end
+        before { patch :update, id: user.id, user: { first_name: 'New name' } }
 
         it 'updates fields of user' do
           user.reload
