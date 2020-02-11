@@ -38,7 +38,7 @@ class CsvFile < ApplicationRecord
   def generate_download_file_name
     return if download_file_name.present?
 
-    download_file_name = download_file.filename.base
+    self.download_file_name = download_file.filename.base
   end
 
   def schedule_users_import

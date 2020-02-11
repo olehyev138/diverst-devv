@@ -40,11 +40,31 @@ class Importers::Users
 
   def parse_from_csv_row(row)
     user = update_user(row) || initialize_user(row)
+    user.field_data.load
+    field_data_attributes = []
     (0..row.length - 1).each do |i|
-      field = @enterprise.fields.where('LOWER(title) = ?', row.headers[i]).first
-      user.info[field] = field.process_field_value row[i] if field && row[i].present?
+      field = @enterprise.fields.find_by('LOWER(title) = ?', row.headers[i])
+      next if field.blank?
+
+      data = user.field_data.find { |fd| fd.field_id == field.id }
+      next if data.blank?
+
+      field_data_attributes.append({
+                                       id: data.id,
+                                       data: data.data
+                                   })
     end
+    user.attributes[field_data_attributes] = field_data_attributes
+    join_groups(user, row)
     user
+  end
+
+  def join_groups(user, row)
+    user.enterprise.groups.where(name: row['Group Membership'].split(',').map(&:strip)).find_each do |group|
+      unless user.user_groups.where(group_id: group.id).any?
+        user.user_groups.build(group_id: group.id)
+      end
+    end
   end
 
   def update_user(row)
