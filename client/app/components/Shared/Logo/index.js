@@ -81,7 +81,7 @@ const withConnect = connect(
 );
 
 export default compose(
+  memo,
   withConnect,
   withStyles(styles),
-  memo,
 )(Logo);
