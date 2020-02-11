@@ -12,7 +12,7 @@ import saga from 'containers/Archive/saga';
 import { getArchivesBegin, restoreArchiveBegin } from 'containers/Archive/actions';
 import ArchiveList from 'components/Archive/ArchiveList';
 import dig from 'object-dig';
-import { selectArchives, selectArchivesTotal, selectHasChanged } from '../selectors';
+import { selectArchives, selectArchivesTotal, selectHasChanged, selectIsLoading } from '../selectors';
 import { injectIntl, intlShape } from 'react-intl';
 import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
 import { DateTime, formatDateTimeString } from 'utils/dateTimeHelpers';
@@ -148,6 +148,7 @@ export function ArchivePage(props) {
       archivesTotal={props.archivesTotal}
       handleRestore={handleRestore}
       columns={columns}
+      isLoading={props.isLoading}
     />
   );
 }
@@ -159,12 +160,14 @@ ArchivePage.propTypes = {
   getArchivesBegin: PropTypes.func,
   restoreArchiveBegin: PropTypes.func,
   columns: PropTypes.array,
+  isLoading: PropTypes.bool
 };
 
 const mapStateToProps = createStructuredSelector({
   archives: selectArchives(),
   archivesTotal: selectArchivesTotal(),
-  hasChanged: selectHasChanged()
+  hasChanged: selectHasChanged(),
+  isLoading: selectIsLoading()
 });
 
 const mapDispatchToProps = {

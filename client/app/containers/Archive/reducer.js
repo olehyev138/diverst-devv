@@ -18,7 +18,7 @@ import eventsReducer from '../Event/reducer';
 
 export const initialState = {
   isCommitting: false,
-  isLoading: true,
+  isLoading: false,
   archives: null,
   archivesTotal: null,
   hasChanged: false,

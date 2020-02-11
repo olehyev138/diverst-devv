@@ -1,12 +1,17 @@
 import { createSelector } from 'reselect';
 import { initialState } from './reducer';
-import { selectResourcesDomain } from '../Resource/selectors';
+
 
 const selectArchivesDomain = state => state.archives || initialState;
 
 const selectArchives = () => createSelector(
   selectArchivesDomain,
   archiveState => archiveState.archives
+);
+
+const selectIsLoading = () => createSelector(
+  selectArchivesDomain,
+  archiveState => archiveState.isLoading
 );
 
 const selectArchivesTotal = () => createSelector(
@@ -23,5 +28,6 @@ export {
   selectArchives,
   selectArchivesTotal,
   selectArchivesDomain,
-  selectHasChanged
+  selectHasChanged,
+  selectIsLoading
 };
