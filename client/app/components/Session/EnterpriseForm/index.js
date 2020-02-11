@@ -36,11 +36,7 @@ export function EnterpriseFormInner({ handleSubmit, handleChange, handleBlur, er
         noValidate
       >
         <CardContent>
-          <Grid container spacing={0} direction='column' alignItems='center' justify='center'>
-            <Grid item xs={12}>
-              <Logo coloredDefault imgClass='large-img' />
-            </Grid>
-          </Grid>
+          <Logo coloredDefault maxHeight='45px' />
           <br />
           <Field
             component={TextField}
