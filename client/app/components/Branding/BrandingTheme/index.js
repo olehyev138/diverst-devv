@@ -11,8 +11,8 @@ import { Field, Formik, Form } from 'formik';
 
 import { withStyles } from '@material-ui/core/styles';
 import {
-  Button, Card, CardActions, CardContent, Grid,
-  Collapse, Divider,
+  Card, CardActions, CardContent, Grid,
+  Collapse, Divider, TextField
 } from '@material-ui/core';
 
 import { buildValues } from 'utils/formHelpers';
@@ -21,6 +21,7 @@ import DiverstColorPicker from 'components/Shared/DiverstColorPicker';
 import DiverstSwitch from 'components/Shared/DiverstSwitch';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
+import DiverstFileInput from 'components/Shared/DiverstFileInput';
 
 import { DEFAULT_BRANDING_COLOR, DEFAULT_CHARTS_COLOR } from 'containers/Shared/ThemeProvider';
 
@@ -41,7 +42,6 @@ export function BrandingThemeInner({ classes, handleSubmit, handleChange, handle
               <Grid item xs={12} sm={6}>
                 <Field
                   component={DiverstColorPicker}
-                  required
                   id='primary_color'
                   name='primary_color'
                   label='Primary Color'
@@ -88,6 +88,39 @@ export function BrandingThemeInner({ classes, handleSubmit, handleChange, handle
             </Grid>
           </CardContent>
           <Divider />
+          <CardContent>
+            <Grid container spacing={4} alignItems='center'>
+              <Grid item>
+                <Field
+                  component={DiverstFileInput}
+                  fileName={props.theme && props.theme.logo_file_name}
+                  disabled={props.isCommitting}
+                  fullWidth
+                  id='logo'
+                  name='logo'
+                  margin='normal'
+                  value={values.logo}
+                  label='Logo'
+                />
+              </Grid>
+              <Grid item md xs={12}>
+                <Field
+                  component={TextField}
+                  onChange={handleChange}
+                  disabled={props.isCommitting}
+                  fullWidth
+                  variant='outlined'
+                  id='logo_redirect_url'
+                  name='logo_redirect_url'
+                  margin='normal'
+                  size='small'
+                  value={values.logo_redirect_url}
+                  label='Logo Redirect URL'
+                />
+              </Grid>
+            </Grid>
+          </CardContent>
+          <Divider />
           <CardActions>
             <DiverstSubmit isCommitting={props.isCommitting}>
               {buttonText}
@@ -105,6 +138,8 @@ export function BrandingTheme(props) {
     primary_color: { default: DEFAULT_CHARTS_COLOR },
     secondary_color: { default: DEFAULT_BRANDING_COLOR },
     use_secondary_color: { default: false },
+    logo: { default: null },
+    logo_redirect_url: { default: '' },
   });
 
   return (
