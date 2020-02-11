@@ -24,7 +24,7 @@ import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 
 import { formatDateTimeString, DateTime } from 'utils/dateTimeHelpers';
 
-import download from 'downloadjs';
+//import download from 'downloadjs';
 
 const styles = theme => ({
   fileName: {
@@ -46,7 +46,7 @@ export function DownloadsList(props, context) {
 
   useEffect(() => {
     if (fileName && props.downloadData.data) {
-      download(props.downloadData.data, fileName, props.downloadData.contentType);
+      //download(props.downloadData.data, fileName, props.downloadData.contentType);
       setFileName(null);
     }
   }, [props.downloadData.data]);

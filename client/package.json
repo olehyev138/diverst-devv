@@ -80,7 +80,6 @@
     "connected-react-router": "6.4.0",
     "containers": "0.0.1",
     "cross-env": "5.2.0",
-    "downloadjs": "^1.4.7",
     "express": "4.16.4",
     "fontfaceobserver": "2.1.0",
     "formik": "^2.0.3",
