@@ -7,7 +7,7 @@ import classNames from 'classnames';
 
 import { withStyles } from '@material-ui/core/styles';
 import {
-  AppBar, Button, Hidden, IconButton, Link, ListItemIcon, Menu, MenuItem, Toolbar, Typography,
+  AppBar, Box, Button, Hidden, IconButton, Link, ListItemIcon, Menu, MenuItem, Toolbar, Typography, CardActionArea
 } from '@material-ui/core';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import PermIdentityIcon from '@material-ui/icons/PermIdentity';
@@ -200,14 +200,7 @@ export class ApplicationHeader extends React.PureComponent {
               )
               : <React.Fragment />
             }
-            <Link
-              component={WrappedNavLink}
-              to={ROUTES.user.root.path()}
-            >
-              <Button>
-                <Logo imgClass='large-img' verticalPadding={20} />
-              </Button>
-            </Link>
+            <Logo height='40px' withLink />
             <div className={classNames(classes.grow, classes.centerText)}>
               <Hidden xsDown>
                 {group ? (
