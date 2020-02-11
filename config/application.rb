@@ -41,7 +41,7 @@ module Diverst
     ActionMailer::Base.delivery_method = :smtp
 
     # Cross Domain Request
-    config.middleware.insert_before 0, Rack::Cors do
+    config.middleware.insert_before 0, Rack::Cors, debug: true do
       allow do
         origins '*'
         resource '*', headers: :any, methods: [:get, :post, :put, :delete, :options]
