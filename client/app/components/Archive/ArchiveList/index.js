@@ -12,7 +12,7 @@ import messages from 'containers/Archive/messages';
 import DiverstTable from 'components/Shared/DiverstTable';
 import { injectIntl, intlShape } from 'react-intl';
 import { DateTime, formatDateTimeString } from 'utils/dateTimeHelpers';
-import EditIcon from '@material-ui/icons/Edit';
+import RestoreIcon from '@material-ui/icons/Restore';
 
 const styles = theme => ({
   link: {
@@ -75,7 +75,7 @@ export function ArchiveList(props) {
               dataTotal={props.archivesTotal}
               columns={columns}
               actions={[{
-                icon: () => <EditIcon />,
+                icon: () => <RestoreIcon />,
                 tooltip: 'Restore',
                 onClick: (_, rowData) => {
                   // TODO NEED TO PASS current ResourceType
