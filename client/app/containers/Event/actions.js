@@ -20,8 +20,12 @@ import {
   UPDATE_EVENT_BEGIN,
   UPDATE_EVENT_SUCCESS,
   UPDATE_EVENT_ERROR,
-  EVENTS_UNMOUNT
+  EVENTS_UNMOUNT,
+  ARCHIVE_RESOURCE_SUCCESS,
+  ARCHIVE_RESOURCE_ERROR,
+  ARCHIVE_RESOURCE_BEGIN, ARCHIVE_EVENT_BEGIN, ARCHIVE_EVENT_SUCCESS, ARCHIVE_EVENT_ERROR,
 } from './constants';
+
 
 export function getEventsBegin(payload) {
   return {
@@ -139,5 +143,26 @@ export function deleteEventError(error) {
 export function eventsUnmount() {
   return {
     type: EVENTS_UNMOUNT,
+  };
+}
+
+export function archiveEventBegin(payload) {
+  return {
+    type: ARCHIVE_EVENT_BEGIN,
+    payload,
+  };
+}
+
+export function archiveEventSuccess(payload) {
+  return {
+    type: ARCHIVE_EVENT_SUCCESS,
+    payload,
+  };
+}
+
+export function archiveEventError(error) {
+  return {
+    type: ARCHIVE_EVENT_ERROR,
+    error,
   };
 }

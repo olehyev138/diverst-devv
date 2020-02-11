@@ -10,6 +10,7 @@ import {
 import { withStyles } from '@material-ui/core/styles';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/DeleteOutline';
+import ArchiveIcon from '@material-ui/icons/Archive';
 
 import classNames from 'classnames';
 
@@ -92,6 +93,20 @@ export function Event(props) {
               >
                 <DiverstFormattedMessage {...messages.edit} />
               </Button>
+              <Button
+                variant='contained'
+                size='large'
+                color='primary'
+                className={classes.buttons}
+                onClick={() => {
+                  props.archiveEventBegin({
+                    id: props.event.id,
+                  });
+                }}
+                startIcon={<ArchiveIcon />}
+              >
+                <DiverstFormattedMessage {...messages.archive} />
+              </Button>
             </Grid>
           </Grid>
           <Paper className={classes.padding}>
@@ -132,6 +147,7 @@ export function Event(props) {
 
 Event.propTypes = {
   deleteEventBegin: PropTypes.func,
+  archiveEventBegin: PropTypes.func,
   classes: PropTypes.object,
   event: PropTypes.object,
   currentUserId: PropTypes.number,

@@ -353,6 +353,7 @@
   "diverst.containers.Event.index.button.new": "New Event",
   "diverst.containers.Event.index.button.edit": "Edit Event",
   "diverst.containers.Event.index.button.delete": "Delete Event",
+  "diverst.containers.Event.index.button.archive": "Archive Event",
   "diverst.containers.Event.index.button.rows": "Rows per page",
   "diverst.containers.Event.index.button.page": "of",
   "diverst.containers.Event.index.tabs.upcoming": "Upcoming",

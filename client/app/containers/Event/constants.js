@@ -24,4 +24,8 @@ export const DELETE_EVENT_BEGIN = 'app/Event/DELETE_EVENT_BEGIN ';
 export const DELETE_EVENT_SUCCESS = 'app/Event/DELETE_EVENT_SUCCESS';
 export const DELETE_EVENT_ERROR = 'app/Event/DELETE_EVENT_ERROR';
 
+export const ARCHIVE_EVENT_BEGIN = 'app/Event/ARCHIVE_EVENT_BEGIN';
+export const ARCHIVE_EVENT_SUCCESS = 'app/Event/ARCHIVE_EVENT_SUCCESS';
+export const ARCHIVE_EVENT_ERROR = 'app/Event/ARCHIVE_EVENT_ERROR';
+
 export const EVENTS_UNMOUNT = 'app/Event/EVENTS_UNMOUNT';

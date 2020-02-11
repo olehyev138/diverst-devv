@@ -65,7 +65,7 @@ export function EventsPage(props) {
   };
 
   useEffect(() => {
-    getEvents(['upcoming']);
+    getEvents(['upcoming', 'not_archived']);
 
     return () => {
       props.eventsUnmount();
@@ -76,13 +76,13 @@ export function EventsPage(props) {
     setTab(newTab);
     switch (newTab) {
       case EventTypes.upcoming:
-        getEvents(['upcoming'], true);
+        getEvents(['upcoming', 'not_archived'], true);
         break;
       case EventTypes.ongoing:
-        getEvents(['ongoing'], true);
+        getEvents(['ongoing', 'not_archived'], true);
         break;
       case EventTypes.past:
-        getEvents(['past'], true);
+        getEvents(['past', 'not_archived'], true);
         break;
       default:
         break;

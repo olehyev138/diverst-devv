@@ -75,15 +75,15 @@ export function EventsPage(props) {
       switch (tab) {
         case 0:
           // eslint-disable-next-line no-param-reassign
-          scopes = ['upcoming'];
+          scopes = ['upcoming', 'not_archived'];
           break;
         case 1:
           // eslint-disable-next-line no-param-reassign
-          scopes = ['ongoing'];
+          scopes = ['ongoing', 'not_archived'];
           break;
         case 2:
           // eslint-disable-next-line no-param-reassign
-          scopes = ['past'];
+          scopes = ['past', 'not_archived'];
           break;
         default:
           break;
@@ -110,13 +110,13 @@ export function EventsPage(props) {
     setTab(newTab);
     switch (newTab) {
       case EventTypes.upcoming:
-        getEvents(['upcoming'], null, true);
+        getEvents(['upcoming', 'not_archived'], null, true);
         break;
       case EventTypes.ongoing:
-        getEvents(['ongoing'], null, true);
+        getEvents(['ongoing', 'not_archived'], null, true);
         break;
       case EventTypes.past:
-        getEvents(['past'], null, true);
+        getEvents(['past', 'not_archived'], null, true);
         break;
       default:
         break;

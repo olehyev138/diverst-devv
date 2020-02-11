@@ -28,7 +28,6 @@ const styles = theme => ({
 });
 
 export function ArchiveList(props) {
-  console.log(props);
   return (
     <React.Fragment>
       <Paper>

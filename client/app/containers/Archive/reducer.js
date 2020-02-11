@@ -39,6 +39,7 @@ function archivesReducer(state = initialState, action) {
         break;
       case GET_ARCHIVES_SUCCESS:
         draft.isCommitting = false;
+        draft.isLoading = false;
         draft.archives = action.payload.items;
         draft.archivesTotal = action.payload.total;
         break;

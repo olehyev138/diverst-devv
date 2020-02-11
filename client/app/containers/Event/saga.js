@@ -19,6 +19,8 @@ import {
 } from 'containers/Event/actions';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
+import {ARCHIVE_EVENT_BEGIN} from "./constants";
+import {archiveEventError, archiveEventSuccess} from "./actions";
 
 export function* getEvents(action) {
   try {
@@ -123,10 +125,31 @@ export function* deleteEvent(action) {
   }
 }
 
+export function* archiveEvent(action) {
+  try {
+    const payload = { resource: action.payload };
+    const response = yield call(api.initiatives.archive.bind(api.initiatives), payload.resource.id, payload);
+    yield put(archiveEventSuccess());
+    yield put(showSnackbar({
+      message: 'Successfully archived event',
+      options: { variant: 'success' }
+    }));
+  } catch (err) {
+    // TODO: intl message
+    console.log(err);
+    yield put(archiveEventError(err));
+    yield put(showSnackbar({
+      message: 'Failed to archive resource',
+      options: { variant: 'warning' }
+    }));
+  }
+}
+
 export default function* eventsSaga() {
   yield takeLatest(GET_EVENTS_BEGIN, getEvents);
   yield takeLatest(GET_EVENT_BEGIN, getEvent);
   yield takeLatest(CREATE_EVENT_BEGIN, createEvent);
   yield takeLatest(UPDATE_EVENT_BEGIN, updateEvent);
   yield takeLatest(DELETE_EVENT_BEGIN, deleteEvent);
+  yield takeLatest(ARCHIVE_EVENT_BEGIN, archiveEvent);
 }
