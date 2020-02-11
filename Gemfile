@@ -37,7 +37,7 @@ gem 'paperclip', '~> 5.1.0' # TODO Remove after Paperclip to ActiveStorage migra
 gem 'public_activity'
 gem 'puma', '~> 3.1' # Better web server than WEBRick
 gem 'pundit', '~> 2.0.0'# Authorization
-gem 'rack-cors', '~> 0.4.0', require: 'rack/cors' # will be used to support mobile
+gem 'rack-cors', '~> 1.1.0'
 gem 'rack-rewrite', '~> 1.5' # A rack middleware for enforcing rewrite rules. In many cases you can get away with rack-rewrite instead of writing Apache mod_rewrite rules.
 gem 'rack-timeout', '~> 0.4.2'
 gem 'rails', '~> 5.2.3'
