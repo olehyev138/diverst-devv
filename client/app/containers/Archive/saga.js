@@ -42,7 +42,6 @@ export function* getArchives(action) {
         break;
     }
   } catch (err) {
-    console.log(err);
     yield put(getArchivesError(err));
 
     // TODO: intl message
@@ -58,16 +57,17 @@ export function* unArchive(action) {
     const payload = { resource: action.payload };
     const { resource, ...rest } = payload;
     // TODO rename variable
-    const response = yield call(api.resources.un_archive.bind(api.resources), payload.resource.id, payload);
 
     switch (resource.resource) {
       case 'resources':
+        yield call(api.resources.un_archive.bind(api.resources), payload.resource.id, payload);
         yield (put(restoreArchiveSuccess()));
         break;
       case 'posts':
         yield (put(restoreArchiveSuccess()));
         break;
       case 'events':
+        yield call(api.initiatives.un_archive.bind(api.initiatives), payload.resource.id, payload);
         yield (put(restoreArchiveSuccess()));
         break;
       default:
