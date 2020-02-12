@@ -48,6 +48,7 @@ export function ArchiveList(props) {
           <Grid item xs>
             <DiverstTable
               title='Archives'
+              isLoading={props.isLoading}
               handlePagination={props.handlePagination}
               handleOrdering={props.handleOrdering}
               rowsPerPage={10}
@@ -80,7 +81,8 @@ ArchiveList.propTypes = {
   handlePagination: PropTypes.func,
   handleOrdering: PropTypes.func,
   handleRestore: PropTypes.func,
-  columns: PropTypes.array
+  columns: PropTypes.array,
+  isLoading: PropTypes.bool
 };
 
 export default compose(
