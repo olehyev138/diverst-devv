@@ -22,7 +22,7 @@ export function* createCsvFile(action) {
 
     yield put(createCsvFileSuccess({}));
     yield put(showSnackbar({ message: 'Successfully uploaded csv file', options: { variant: 'success' } }));
-    yield put(showSnackbar({ message: 'Users will be imported shortly, and we\'ll email you the results', options: { variant: 'success' } }));
+    yield put(showSnackbar({ message: 'Users will be imported shortly, and we\'ll email the results', options: { variant: 'success' } }));
   } catch (err) {
     yield put(createCsvFileError(err));
 
