@@ -60,7 +60,7 @@ const eventColumns = [
   {
     title: intl.formatMessage(messages.group),
     field: 'group_name',
-    //TODO DISABLE THIS COLUMN ORDERING
+    // TODO DISABLE THIS COLUMN ORDERING
     query_field: 'group_name'
   },
   {

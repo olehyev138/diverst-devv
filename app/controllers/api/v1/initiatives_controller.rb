@@ -71,7 +71,7 @@ class Api::V1::InitiativesController < DiverstController
     params.require(klass.symbol).permit(
         :id,
         :archived_at
-    )
+      )
   end
 
   def un_archive

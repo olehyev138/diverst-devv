@@ -8,19 +8,18 @@ import {
   GET_EVENTS_BEGIN, GET_EVENT_BEGIN,
   CREATE_EVENT_BEGIN, UPDATE_EVENT_BEGIN,
   DELETE_EVENT_BEGIN,
-} from 'containers/Event/constants';
+  ARCHIVE_EVENT_BEGIN } from 'containers/Event/constants';
 
 import {
   getEventsSuccess, getEventsError,
   getEventSuccess, getEventError,
   createEventSuccess, createEventError,
   updateEventSuccess, updateEventError,
-  deleteEventError, deleteEventSuccess
-} from 'containers/Event/actions';
+  deleteEventError, deleteEventSuccess,
+  archiveEventError, archiveEventSuccess } from 'containers/Event/actions';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
-import {ARCHIVE_EVENT_BEGIN} from "./constants";
-import {archiveEventError, archiveEventSuccess} from "./actions";
+
 
 export function* getEvents(action) {
   try {
@@ -136,7 +135,6 @@ export function* archiveEvent(action) {
     }));
   } catch (err) {
     // TODO: intl message
-    console.log(err);
     yield put(archiveEventError(err));
     yield put(showSnackbar({
       message: 'Failed to archive resource',

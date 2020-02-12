@@ -4,39 +4,36 @@ import api from 'api/api';
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
 import {
   GET_ARCHIVES_BEGIN,
-  GET_ARCHIVES_SUCCESS,
-  GET_ARCHIVES_ERROR,
   RESTORE_ARCHIVE_BEGIN,
-  RESTORE_ARCHIVE_SUCCESS,
-  RESTORE_ARCHIVE_ERROR
 } from './constants';
 
 import {
-  getArchivesBegin,
   getArchivesSuccess,
   getArchivesError,
-  restoreArchiveBegin,
   restoreArchiveSuccess,
   restoreArchiveError
 } from './actions';
+
+const ArchiveTypes = Object.freeze({
+  posts: 'posts',
+  resources: 'resources',
+  events: 'events',
+});
 
 export function* getArchives(action) {
   try {
     const { payload } = action;
     const { resource, ...rest } = payload;
-    // TODO : Implement actions in the case of posts & events
+    // TODO : Implement actions in the case of posts
     switch (resource) {
-      case 'resources':
-        const resourceResponse = yield call(api.resources.all.bind(api.resources), rest);
-        yield (put(getArchivesSuccess(resourceResponse.data.page)));
+      case ArchiveTypes.resources:
+        yield (put(getArchivesSuccess(yield call(api.resources.all.bind(api.resources), rest).data.page)));
         break;
-      case 'posts':
-        const postResponse = yield call(api.resources.all.bind(api.resources), rest);
-        yield (put(getArchivesSuccess(postResponse.data.page)));
+      case ArchiveTypes.posts:
+        yield (put(getArchivesSuccess(yield call(api.resources.all.bind(api.resources), rest).data.page)));
         break;
-      case 'events':
-        const eventResponse = yield call(api.initiatives.all.bind(api.initiatives), rest);
-        yield (put(getArchivesSuccess(eventResponse.data.page)));
+      case ArchiveTypes.events:
+        yield (put(getArchivesSuccess(yield call(api.initiatives.all.bind(api.initiatives), rest).data.page)));
         break;
       default:
         break;
@@ -59,14 +56,14 @@ export function* unArchive(action) {
     // TODO rename variable
 
     switch (resource.resource) {
-      case 'resources':
+      case ArchiveTypes.resources:
         yield call(api.resources.un_archive.bind(api.resources), payload.resource.id, payload);
         yield (put(restoreArchiveSuccess()));
         break;
-      case 'posts':
+      case ArchiveTypes.posts:
         yield (put(restoreArchiveSuccess()));
         break;
-      case 'events':
+      case ArchiveTypes.events:
         yield call(api.initiatives.un_archive.bind(api.initiatives), payload.resource.id, payload);
         yield (put(restoreArchiveSuccess()));
         break;
