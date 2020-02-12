@@ -10,7 +10,6 @@ class UserTokenService
     payload = {
         id: user.id,
         enterprise: AuthenticatedEnterpriseSerializer.new(user.enterprise).as_json,
-        policy_group: PolicyGroupSerializer.new(user.policy_group).as_json,
         email: user.email,
         user_token: token,
         role: user.user_role.role_name,
