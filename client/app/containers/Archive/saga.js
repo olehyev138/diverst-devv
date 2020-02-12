@@ -27,13 +27,16 @@ export function* getArchives(action) {
     // TODO : Implement actions in the case of posts
     switch (resource) {
       case ArchiveTypes.resources:
-        yield (put(getArchivesSuccess(yield call(api.resources.all.bind(api.resources), rest).data.page)));
+        const resourceResponse = yield call(api.resources.all.bind(api.resources), rest);
+        yield (put(getArchivesSuccess(resourceResponse.data.page)));
         break;
       case ArchiveTypes.posts:
-        yield (put(getArchivesSuccess(yield call(api.resources.all.bind(api.resources), rest).data.page)));
+        const postResponse = yield call(api.resources.all.bind(api.resources), rest);
+        yield (put(getArchivesSuccess(postResponse.data.page)));
         break;
       case ArchiveTypes.events:
-        yield (put(getArchivesSuccess(yield call(api.initiatives.all.bind(api.initiatives), rest).data.page)));
+        const eventResponse = yield call(api.initiatives.all.bind(api.initiatives), rest);
+        yield (put(getArchivesSuccess(eventResponse.data.page)));
         break;
       default:
         break;
