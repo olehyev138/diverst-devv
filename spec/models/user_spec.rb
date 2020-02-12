@@ -190,7 +190,7 @@ RSpec.describe User do
         let!(:enterprise) { create(:enterprise, fields: [mandatory_field]) }
 
         it 'should have an error on user' do
-          user.info[mandatory_field] = ''
+          user.field_data.build({field: mandatory_field, data: ''})
           user.valid?
 
           expect(user.errors.messages).to eq({ test: ["can't be blank"] })
@@ -201,8 +201,7 @@ RSpec.describe User do
         let!(:enterprise) { create(:enterprise, fields: [mandatory_field]) }
 
         it 'should be valid' do
-          user.info[mandatory_field] = Faker::Lorem.paragraph(2)
-
+          user.field_data.build({field: mandatory_field, data: Faker::Lorem.paragraph(2)})
           expect(user).to be_valid
         end
       end
