@@ -85,7 +85,7 @@ export function UserListPage(props) {
     <React.Fragment>
       <UserImport
         fields={[
-          ...['First Name*', 'Last Name*', 'Email*', 'Biography', 'Active'],
+          ...['First Name*', 'Last Name*', 'Email*', 'Biography', 'Active', 'Group Membership (Comma Separated)'],
           ...Object.values(props.fields).map(field => `${field.title}${field.required ? '*' : ''}`)
         ]}
         isFetchingFields={props.isFetchingFields}

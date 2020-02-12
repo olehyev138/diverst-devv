@@ -64,7 +64,7 @@ class Importers::Users
   end
 
   def join_groups(user, row)
-    user.enterprise.groups.where(name: row['group membership'].split(',').map(&:strip)).find_each do |group|
+    user.enterprise.groups.where(name: (row['group membership'] || '').split(',').map(&:strip)).find_each do |group|
       unless user.user_groups.where(group_id: group.id).any?
         user.user_groups.build(group_id: group.id)
       end
