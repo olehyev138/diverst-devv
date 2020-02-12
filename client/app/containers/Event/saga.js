@@ -126,13 +126,10 @@ export function* deleteEvent(action) {
 
 export function* archiveEvent(action) {
   try {
-    const payload = { resource: action.payload };
-    const response = yield call(api.initiatives.archive.bind(api.initiatives), payload.resource.id, payload);
+    const payload = { initiative: action.payload };
+    const response = yield call(api.initiatives.archive.bind(api.initiatives), payload.initiative.id, payload);
     yield put(archiveEventSuccess());
-    yield put(showSnackbar({
-      message: 'Successfully archived event',
-      options: { variant: 'success' }
-    }));
+    yield put(push(ROUTES.group.events.index.path(payload.initiative.group_id)));
   } catch (err) {
     // TODO: intl message
     yield put(archiveEventError(err));
