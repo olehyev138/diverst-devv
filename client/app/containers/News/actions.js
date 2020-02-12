@@ -21,6 +21,7 @@ import {
   DELETE_NEWSLINK_COMMENT_BEGIN, DELETE_NEWSLINK_COMMENT_ERROR, DELETE_NEWSLINK_COMMENT_SUCCESS, DELETE_GROUP_MESSAGE_COMMENT_BEGIN,
   DELETE_GROUP_MESSAGE_COMMENT_ERROR, DELETE_GROUP_MESSAGE_COMMENT_SUCCESS
 } from 'containers/News/constants';
+import {ARCHIVE_NEWS_ITEM_BEGIN, ARCHIVE_NEWS_ITEM_ERROR, ARCHIVE_NEWS_ITEM_SUCCESS} from "./constants";
 
 
 export function getNewsItemsBegin(payload) {
@@ -407,6 +408,27 @@ export function deleteNewsLinkCommentSuccess(payload) {
 export function deleteNewsLinkCommentError(error) {
   return {
     type: DELETE_NEWSLINK_COMMENT_ERROR,
+    error,
+  };
+}
+
+export function archiveNewsItemBegin(payload){
+  return {
+    type: ARCHIVE_NEWS_ITEM_BEGIN,
+    payload,
+  };
+}
+
+export function archiveNewsItemSuccess(payload){
+  return {
+    type: ARCHIVE_NEWS_ITEM_SUCCESS,
+    payload,
+  };
+}
+
+export function archiveNewsItemError(error){
+  return {
+    type: ARCHIVE_NEWS_ITEM_ERROR,
     error,
   };
 }

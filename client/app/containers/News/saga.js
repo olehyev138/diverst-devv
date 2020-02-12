@@ -17,7 +17,8 @@ import {
   CREATE_SOCIALLINK_COMMENT_BEGIN, DELETE_GROUP_MESSAGE_BEGIN, DELETE_GROUP_MESSAGE_SUCCESS,
   DELETE_GROUP_MESSAGE_ERROR, DELETE_SOCIALLINK_BEGIN, DELETE_SOCIALLINK_SUCCESS, DELETE_SOCIALLINK_ERROR,
   DELETE_NEWSLINK_BEGIN, DELETE_NEWSLINK_SUCCESS, DELETE_NEWSLINK_ERROR, DELETE_NEWSLINK_COMMENT_BEGIN,
-  DELETE_GROUP_MESSAGE_COMMENT_SUCCESS, DELETE_GROUP_MESSAGE_COMMENT_ERROR, DELETE_GROUP_MESSAGE_COMMENT_BEGIN
+  DELETE_GROUP_MESSAGE_COMMENT_SUCCESS, DELETE_GROUP_MESSAGE_COMMENT_ERROR, DELETE_GROUP_MESSAGE_COMMENT_BEGIN,
+  ARCHIVE_NEWS_ITEM_BEGIN, ARCHIVE_NEWS_ITEM_SUCCESS, ARCHIVE_NEWS_ITEM_ERROR
 } from 'containers/News/constants';
 
 import {
@@ -34,7 +35,7 @@ import {
   updateSocialLinkSuccess, createSocialLinkCommentSuccess, deleteNewsLinkBegin, deleteNewsLinkError,
   deleteNewsLinkSuccess, deleteSocialLinkBegin, deleteSocialLinkError, deleteSocialLinkSuccess,
   deleteGroupMessageCommentBegin, deleteGroupMessageCommentError, deleteGroupMessageCommentSuccess, deleteNewsLinkCommentBegin,
-  deleteNewsLinkCommentError, deleteNewsLinkCommentSuccess
+  deleteNewsLinkCommentError, deleteNewsLinkCommentSuccess, archiveNewsItemBegin, archiveNewsItemSuccess, archiveNewsItemError
 } from 'containers/News/actions';
 
 
@@ -279,6 +280,20 @@ export function* deleteSocialLink(action) {
   }
 }
 
+export function* archiveNewsItem(action){
+  try {
+    console.log(action);
+    yield put(archiveNewsItemSuccess());
+  } catch (err) {
+    // TODO: intl message
+    yield put(archiveNewsItemSuccess(err));
+    yield put(showSnackbar({
+      message: 'Failed to archive resource',
+      options: { variant: 'warning' }
+    }));
+  }
+}
+
 export default function* newsSaga() {
   yield takeLatest(GET_NEWS_ITEMS_BEGIN, getNewsItems);
   yield takeLatest(GET_NEWS_ITEM_BEGIN, getNewsItem);
@@ -296,4 +311,5 @@ export default function* newsSaga() {
   yield takeLatest(DELETE_NEWSLINK_COMMENT_BEGIN, deleteNewsLinkComment);
   yield takeLatest(DELETE_SOCIALLINK_BEGIN, deleteSocialLink);
   yield takeLatest(DELETE_GROUP_MESSAGE_COMMENT_BEGIN, deleteGroupMessageComment);
+  yield takeLatest(ARCHIVE_NEWS_ITEM_BEGIN, archiveNewsItem);
 }

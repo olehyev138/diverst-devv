@@ -47,8 +47,12 @@ import {
   DELETE_SOCIALLINK_SUCCESS,
   UPDATE_NEWS_ITEM_BEGIN,
   UPDATE_NEWS_ITEM_SUCCESS,
-  UPDATE_NEWS_ITEM_ERROR
+  UPDATE_NEWS_ITEM_ERROR,
+  ARCHIVE_NEWS_ITEM_BEGIN,
+  ARCHIVE_NEWS_ITEM_SUCCESS,
+  ARCHIVE_NEWS_ITEM_ERROR
 } from 'containers/News/constants';
+import {ARCHIVE_EVENT_BEGIN} from "../Event/constants";
 
 export const initialState = {
   isLoading: true,
@@ -56,7 +60,8 @@ export const initialState = {
   isCommitting: false,
   newsItems: [],
   newsItemsTotal: null,
-  currentNewsItem: null
+  currentNewsItem: null,
+  hasChanged: false,
 };
 
 /* eslint-disable default-case, no-param-reassign */
@@ -131,10 +136,19 @@ function newsReducer(state = initialState, action) {
       case CREATE_SOCIALLINK_ERROR:
       case UPDATE_SOCIALLINK_ERROR:
       case CREATE_SOCIALLINK_COMMENT_ERROR:
+      case ARCHIVE_NEWS_ITEM_ERROR:
         draft.isCommitting = false;
         break;
       case NEWS_FEED_UNMOUNT:
         return initialState;
+      case ARCHIVE_NEWS_ITEM_BEGIN:
+        draft.isCommitting = true;
+        draft.hasChanged = false;
+        break;
+      case ARCHIVE_NEWS_ITEM_SUCCESS:
+        draft.hasChanged = true;
+        draft.isCommitting = false;
+        break;
     }
   });
 }

@@ -72,9 +72,18 @@ export function GroupMessageListItem(props) {
                 props.updateNewsItemBegin({ approved: true, id: newsItemId, group_id: groupId });
               }}
             >
-              Approve
+              <DiverstFormattedMessage {...messages.approve} />
             </Button>
           ) : null }
+          <Button
+            size='small'
+            color='primary'
+            onClick={() => {
+              props.archiveNewsItemBegin
+            }}
+          >
+            <DiverstFormattedMessage {...messages.archive} />
+          </Button>
           <Button
             size='small'
             onClick={() => {
@@ -83,7 +92,7 @@ export function GroupMessageListItem(props) {
                 props.deleteGroupMessageBegin(newsItem.group_message);
             }}
           >
-            Delete
+            <DiverstFormattedMessage {...messages.delete} />
           </Button>
         </CardActions>
       )}
@@ -101,6 +110,7 @@ GroupMessageListItem.propTypes = {
   }),
   deleteGroupMessageBegin: PropTypes.func,
   updateNewsItemBegin: PropTypes.func,
+  archiveNewsItemBegin: PropTypes.func,
 };
 
 export default compose(
