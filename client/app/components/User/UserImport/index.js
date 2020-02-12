@@ -112,7 +112,7 @@ export function UserImport(props, context) {
               {fields.map((fieldName, index) => (
                 <React.Fragment key={fieldName}>
                   <Typography component='h2' variant='body1' color='secondary'>
-                    {`${index}. ${fieldName}`}
+                    {`${index+1}. ${fieldName}`}
                   </Typography>
                 </React.Fragment>
               ))}
