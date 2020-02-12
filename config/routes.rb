@@ -196,6 +196,7 @@ Diverst::Application.routes.draw do
       end
       resources :users do
         collection do
+          get 'export_csv'
           post '/email', to: 'users#find_user_enterprise_by_email'
         end
       end

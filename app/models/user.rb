@@ -155,6 +155,7 @@ class User < ApplicationRecord
   scope :for_groups, -> (groups) { joins(:groups).where('groups.id' => groups.map(&:id)).distinct if groups.any? }
   scope :answered_poll, -> (poll) { joins(:poll_responses).where(poll_responses: { poll_id: poll.id }) }
   scope :top_participants, -> (n) { order(total_weekly_points: :desc).limit(n) }
+  scope :of_role, -> (role_id) { where(user_role_id: role_id) }
   scope :not_owners, -> { where(owner: false) }
   scope :es_index_for_enterprise, -> (enterprise) { where(enterprise: enterprise) }
   scope :mentors, -> { where(mentor: true) }
@@ -466,15 +467,15 @@ class User < ApplicationRecord
   end
 
   # Export a CSV with the specified users
-  def self.to_csv(users:, fields:, nb_rows: nil)
+  def self.to_csv_with_fields(users:, fields:, nb_rows: nil)
     CSV.generate do |csv|
       csv << ['First name', 'Last name', 'Email', 'Biography', 'Active', 'Group Membership'].concat(fields.map(&:title))
 
       users.order(created_at: :desc).limit(nb_rows).each do |user|
         user_columns = [user.first_name, user.last_name, user.email, user.biography, user.active, user.groups.map(&:name).join(',')]
-
+        user.field_data.preload(:field).load
         fields.each do |field|
-          user_columns << field.csv_value(user.info[field])
+          user_columns << field.csv_value(user.get_field_data(field).deserialized_data)
         end
 
         csv << user_columns

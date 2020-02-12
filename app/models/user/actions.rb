@@ -223,14 +223,57 @@ module User::Actions
   end
 
   module ClassMethods
+    # Export a CSV with the specified users
+    def to_csv(records:, nb_rows: nil)
+      fields = records.present? ? records.first.fields : Field.none
+      to_csv_with_fields(users: records, fields: fields, nb_rows: nb_rows)
+    end
+
+    def file_name(params)
+      partials = []
+      set_query_scopes(params).each do |scope|
+        partials.append case scope
+                        when String
+                          case scope
+                          when 'all' then 'all'
+                          when 'active' then 'active'
+                          when 'inactive' then 'inactive'
+                          when 'saml' then 'sso authorized'
+                          when 'invitation_sent' then 'pending'
+                          else nil
+                          end
+                        when Symbol
+                          case scope
+                          when :active then 'active'
+                          when :inactive then 'inactive'
+                          when :saml then 'sso authorized'
+                          when :invitation_sent then 'pending'
+                          else nil
+                          end
+                        when Array
+                          raise ::ArgumentError.new('query scopes should either be a string or an array starting with a string') unless scope.first.class <= String
+
+                          case scope.first
+                          when 'of_role' then UserRole.find(scope.second).role_name.downcase
+                          else nil
+                          end
+                        else
+                          raise ::ArgumentError.new('query scopes should either be a string or an array starting with a string')
+        end
+      end
+      partials.append self.model_name.plural
+
+      partials.map { |part| part.split(' ').join('_') }.join('_')
+    end
+
     def base_query
       "#{ self.table_name }.id LIKE :search OR LOWER(#{ self.table_name }.first_name) LIKE :search OR LOWER(#{ self.table_name }.last_name) LIKE :search
       OR LOWER(#{ self.table_name }.email) LIKE :search"
     end
 
     def valid_scopes
-      %w( active enterprise_mentors mentors mentees accepting_mentee_requests
-          accepting_mentor_requests saml inactive invitation_sent)
+      %w( enterprise_mentors mentors mentees accepting_mentee_requests accepting_mentor_requests
+          all active inactive saml invitation_sent of_role)
     end
 
     def preload_attachments

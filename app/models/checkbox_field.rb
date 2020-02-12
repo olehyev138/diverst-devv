@@ -13,6 +13,14 @@ class CheckboxField < Field
     values.join(',')
   end
 
+  def serialize_value(value)
+    value.present? ? value.to_json : nil
+  end
+
+  def deserialize_value(value)
+    JSON.parse(value || '[]')
+  end
+
   def popularity_for_no_option(users)
     nb_users_chose = 0
     users.each do |user|

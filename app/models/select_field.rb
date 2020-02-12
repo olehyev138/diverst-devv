@@ -12,6 +12,14 @@ class SelectField < Field
     ]
   end
 
+  def serialize_value(value)
+    value.present? ? [value].to_json : nil
+  end
+
+  def deserialize_value(value)
+    JSON.parse(value || '[]')
+  end
+
   # -------------------------------------------------------------------------------------------------
   # TODO: Everything below here is most likely deprecated & needs to be removed
   # DEPRECATED

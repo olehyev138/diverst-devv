@@ -8,14 +8,7 @@ class FieldData < ApplicationRecord
   validates_presence_of :field_user
 
   def deserialized_data
-    case field.type
-    when 'SelectField'
-      JSON.parse(data)[0]
-    when 'NumericField'
-      data.to_i
-    else
-      data
-    end
+    field.deserialize_value(data)
   end
 
   private

@@ -7,6 +7,7 @@ class ApplicationRecord < ActiveRecord::Base
   include BaseSearch
   include BaseElasticsearch
   include BaseGraph
+  include BaseCsvExport
 
   def self.inherited(child)
     super

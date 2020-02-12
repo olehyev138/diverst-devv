@@ -54,7 +54,7 @@ class DateField < Field
   def deserialize_value(value)
     return nil if value.nil?
 
-    Time.at(value)
+    Time.at(value.to_i)
   end
 
   def serialize_value(value)
