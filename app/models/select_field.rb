@@ -17,7 +17,7 @@ class SelectField < Field
   end
 
   def deserialize_value(value)
-    JSON.parse(value || '[]')[0]
+    JSON.parse(value || '[]')
   end
 
   # -------------------------------------------------------------------------------------------------
