@@ -229,11 +229,11 @@ module User::Actions
       current_user.field_data.load if current_user.present?
       {
           titles: ['First name',
-                  'Last name',
-                  'Email',
-                  'Biography',
-                  'Active',
-                  'Group Membership'
+                   'Last name',
+                   'Email',
+                   'Biography',
+                   'Active',
+                   'Group Membership'
           ].concat(fields.map(&:title)),
           values: [
               :first_name,
@@ -241,12 +241,12 @@ module User::Actions
               :email,
               :biography,
               :active,
-              -> (user) {user.groups.map(&:name).join(',')},
+              -> (user) { user.groups.map(&:name).join(',') },
           ].concat(
               fields.map do |field|
                 -> (user) { field.csv_value(user.get_field_data(field).deserialized_data) }
               end
-          )
+            )
       }
     end
 

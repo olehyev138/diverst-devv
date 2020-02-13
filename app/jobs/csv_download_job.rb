@@ -22,7 +22,7 @@ class CsvDownloadJob < ApplicationJob
         records: records,
         params: params,
         current_user: user,
-    )
+      )
 
     file = CsvFile.new(user_id: user.id, download_file_name: klass.file_name(params))
 

@@ -14,7 +14,7 @@ module BaseCsvExport
                      when ActiveRecord::Relation then records.order(created_at: :desc).limit(nb_rows).find_each
                      when Enumerable then records.each
                      else raise ::ArgumentError.new('Records should be an Enumerable')
-                     end
+        end
 
         enumerator.each do |record|
           record_columns = attrs[:values].map do |att|
@@ -56,7 +56,7 @@ module BaseCsvExport
       attrs = attribute_names - ['id', 'created_at', 'updated_at', 'enterprise_id']
       attrs.reject { |attr| ['password', 'token', 'sent_at'].any? { |invalid| attr.include?(invalid) } }
       {
-          titles: attrs.map {|att| att.capitalize.split('_').join(' ')},
+          titles: attrs.map { |att| att.capitalize.split('_').join(' ') },
           values: attrs
       }
     end
