@@ -241,11 +241,11 @@ module User::Actions
       set_query_scopes(params).each do |scope|
         partials.append case scope
                         when String, Symbol
-                          scope_map[scope.to_sym] || scope.to_s
+                          scope_map[scope.to_sym] || ''
                         when Array
                           case scope.first
                           when 'of_role' then UserRole.find(scope.second).role_name.downcase
-                          else scope.first
+                          else ''
                           end
                         else
                           raise ::ArgumentError.new('query scopes should be an array of either strings or arrays starting with a string')
