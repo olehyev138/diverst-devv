@@ -50,10 +50,9 @@ export function loginError(error) {
   };
 }
 
-export function logoutBegin(user) {
+export function logoutBegin() {
   return {
     type: LOGOUT_BEGIN,
-    token: user.user_token
   };
 }
 
