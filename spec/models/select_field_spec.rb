@@ -48,19 +48,25 @@ RSpec.describe SelectField, type: :model do
   describe '#popularity_for_value' do
     it 'returns 1' do
       enterprise = create(:enterprise)
-      select_field = SelectField.new(type: 'SelectField', title: 'Gender', options_text: "Male\nFemale", field_definer: enterprise)
-      select_field.save!
-      user = create(:user, data: "{\"#{select_field.id}\":[\"Female\"]}")
+      select_field = create(:select_field, title: 'Gender', options_text: "Male\nFemale")
+      enterprise.fields << select_field
+      user = create(:user, data: "{\"#{select_field.id}\":[\"Female\"]}", enterprise: enterprise)
+      user.get_field_data(select_field).update(data: '["Female"]')
+
       popularity = select_field.popularity_for_value('Female', [user])
       expect(popularity).to eq(1)
     end
 
     it 'returns 0.5' do
       enterprise = create(:enterprise)
-      select_field = SelectField.new(type: 'SelectField', title: 'Gender', options_text: "Male\nFemale", field_definer: enterprise)
-      select_field.save!
-      user_1 = create(:user, data: "{\"#{select_field.id}\":[\"Female\"]}")
-      user_2 = create(:user, data: "{\"#{select_field.id}\":[\"Male\"]}")
+      select_field = create(:select_field, title: 'Gender', options_text: "Male\nFemale")
+      enterprise.fields << select_field
+      user_1 = create(:user, data: "{\"#{select_field.id}\":[\"Female\"]}", enterprise: enterprise)
+      user_2 = create(:user, data: "{\"#{select_field.id}\":[\"Male\"]}", enterprise: enterprise)
+
+      user_1.get_field_data(select_field).update(data: '["Male"]')
+      user_2.get_field_data(select_field).update(data: '["Female"]')
+
       popularity = select_field.popularity_for_value('Female', [user_1, user_2])
       expect(popularity).to eq(0.5)
     end
@@ -69,11 +75,16 @@ RSpec.describe SelectField, type: :model do
   describe '#match_score_between' do
     it 'returns 0.5' do
       enterprise = create(:enterprise)
-      select_field = SelectField.new(type: 'SelectField', title: 'Gender', options_text: "Male\nFemale", field_definer: enterprise)
-      select_field.save!
+      select_field = create(:select_field, title: 'Gender', options_text: "Male\nFemale")
+      enterprise.fields << select_field
+
       user_1 = create(:user, data: "{\"#{select_field.id}\":[\"Female\"]}", enterprise: enterprise)
       user_2 = create(:user, data: "{\"#{select_field.id}\":[\"Male\"]}", enterprise: enterprise)
-      create_list(:user, 8, data: "{\"#{select_field.id}\":[\"Male\"]}", enterprise: enterprise)
+      users = create_list(:user, 8, data: "{\"#{select_field.id}\":[\"Male\"]}", enterprise: enterprise)
+
+      ([user_2] + users).each { |user| user.get_field_data(select_field).update(data: '["Male"]') }
+      user_1.get_field_data(select_field).update(data: '["Female"]')
+
       match_score_between = select_field.match_score_between(user_1, user_2, [user_1, user_2])
       expect(match_score_between).to eq(0.5)
     end
@@ -86,7 +97,8 @@ RSpec.describe SelectField, type: :model do
       poll = create(:poll, enterprise: enterprise, owner: user)
       select_field = poll.fields.find_by(title: 'What is 1 + 1?')
       select_field.save!
-      create(:poll_response, poll: poll, user: user, data: "{\"#{select_field.id}\":[\"4\"]}")
+      poll_response = create(:poll_response, poll: poll, user: user, data: "{\"#{select_field.id}\":[\"4\"]}")
+      poll_response.get_field_data(select_field).update(data: '["4"]')
 
       answer_popularities = select_field.answer_popularities(entries: poll.responses)
       expect(answer_popularities).to eq([{ answer: '1', count: 0 }, { answer: '2', count: 0 }, { answer: '3', count: 0 },

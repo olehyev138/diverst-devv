@@ -56,11 +56,11 @@ class SelectField < Field
   #   - Community size contrast (a small cluster with a large cluster will be worth more than 2 small clusters)
   #   - Community size (small clusters are worth more)
   def match_score_between(e1, e2, users)
-    # Returns nil if we don't have all the user info necessary to get a score
-    return nil unless e1[self] && e2[self]
-
     e1_value = e1[self][0]
     e2_value = e2[self][0]
+
+    # Returns nil if we don't have all the user info necessary to get a score
+    return nil unless e1_value && e2_value
 
     e1_popularity = popularity_for_value(e1_value, users)
     e2_popularity = popularity_for_value(e2_value, users)
