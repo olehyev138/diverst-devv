@@ -58,7 +58,9 @@ RSpec.describe DateField, type: :model do
     it 'returns date' do
       date = DateTime.now
       value = DateField.new.deserialize_value(date)
+      value2 = DateField.new.deserialize_value(date.to_f)
       expect(value).to eq(Time.at(date))
+      expect((value2 - Time.at(date)).abs).to be < 1e-6
     end
   end
 
