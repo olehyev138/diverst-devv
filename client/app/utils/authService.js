@@ -23,28 +23,37 @@ class AuthService {
     UserStorage.clearStorageValue('jwt');
   }
 
-  // *********** Store Accessors ***********
 
-  // Get Policy Group from the store
+  // Get the global data object from the store or from the user storage
+  static getUserData() {
+    const state = store.getState();
+
+    return dig(state, 'global', 'data') || UserStorage.getStorageValue('userData');
+  }
+
+  // Store a global data object in user storage
+  static storeUserData(data) {
+    UserStorage.setStorageValue('userData', data);
+  }
+
+  // Remove the global data object from user storage
+  static discardUserData() {
+    UserStorage.clearStorageValue('userData');
+  }
+
+
+  // Get Policy Group from the global data
   static getPolicyGroup() {
-    const state = store.getState();
-
-    return dig(state, 'global', 'policyGroup');
+    return dig(this.getUserData(), 'policy_group');
   }
 
-  // Get Enterprise from the store
+  // Get Enterprise from the global data
   static getEnterprise() {
-    const state = store.getState();
-
-    return dig(state, 'global', 'enterprise');
+    return dig(this.getUserData(), 'enterprise');
   }
+
 
   // *************** Helpers ***************
-
-  // Returns the parsed user data from the JWT provided (or defaults to retrieving it)
-  static getUser(jwt = AuthService.getJwt()) {
-    return JSON.parse(window.atob(jwt.split('.')[1]));
-  }
 
   // Returns true if the user is authenticated and the data is in the store
   static isUserInStore() {
