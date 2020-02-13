@@ -4,20 +4,18 @@ import {
   ssoLinkFind,
   logout,
   findEnterprise
-}
-  from 'containers/Shared/App/saga';
+} from 'containers/Shared/App/saga';
+
 import {
   loginSuccess,
-  setUser,
-  setUserPolicyGroup,
   loginError,
   logoutSuccess,
   logoutError,
   findEnterpriseSuccess,
-  setEnterprise,
-  findEnterpriseError
-}
-  from 'containers/Shared/App/actions';
+  findEnterpriseError,
+  setUserData
+} from 'containers/Shared/App/actions';
+
 import { changePrimary, changeSecondary } from 'containers/Shared/ThemeProvider/actions';
 import { push } from 'connected-react-router';
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -26,7 +24,7 @@ import * as Notifiers from 'containers/Shared/Notifier/actions';
 import api from 'api/api';
 
 api.sessions.create = jest.fn();
-api.sessions.destroy = jest.fn();
+api.sessions.logout = jest.fn();
 api.users.findEnterprise = jest.fn();
 api.enterprises.getSsoLink = jest.fn();
 api.policyGroups.get = jest.fn();
@@ -56,8 +54,8 @@ beforeEach(() => {
 
 describe('Login Saga', () => {
   it('should get token from API', async () => {
-    api.sessions.create.mockImplementation(() => Promise.resolve({ data: { token } }));
-    const results = [loginSuccess(token), setUser(user), setUserPolicyGroup(user.policy_group), setEnterprise(user.enterprise), push(ROUTES.user.home.path())];
+    api.sessions.create.mockImplementation(() => Promise.resolve({ data: { token, ...user } }));
+    const results = [loginSuccess(token), setUserData(user), push(ROUTES.user.home.path())];
     const initialAction = { payload: { email: 'test@gmail.com', password: 'password' } };
     const dispatched = await recordSaga(
       login,
@@ -85,7 +83,7 @@ describe('Login Saga', () => {
 
 describe('ssoLogin Saga', () => {
   it('should get token from API', async () => {
-    const results = [loginSuccess(token), setUser(user), setUserPolicyGroup(user.policy_group), push(ROUTES.user.home.path())];
+    const results = [loginSuccess(token), push(ROUTES.user.home.path())];
     const initialAction = { payload: { userToken: token, policyGroupId: 1 } };
     const dispatched = await recordSaga(
       ssoLogin,
@@ -160,7 +158,7 @@ describe('ssoLinkFind Saga', () => {
 
 describe('logout Saga', () => {
   it('logs user out and sends user to home page', async () => {
-    api.sessions.destroy.mockImplementation(() => Promise.resolve({ data: {} }));
+    api.sessions.logout.mockImplementation(() => Promise.resolve({ data: {} }));
     const notified = {
       notification: {
         key: 1566515890484,
@@ -170,19 +168,17 @@ describe('logout Saga', () => {
     };
     jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
     const results = [logoutSuccess(), push(ROUTES.session.login.path()), notified];
-    const initialAction = { token: 'WDFs3Y8WVrapFy-1ecXa' };
     const dispatched = await recordSaga(
       logout,
-      initialAction
     );
 
-    expect(api.sessions.destroy).toHaveBeenCalledWith(initialAction.token);
+    expect(api.sessions.logout).toHaveBeenCalled();
     expect(window.location.assign).not.toHaveBeenCalled();
     expect(dispatched).toEqual(results);
   });
 
   it('logs user out and redirects to sso login page', async () => {
-    api.sessions.destroy.mockImplementation(() => Promise.resolve({ data: { logout_link: 'www.diverst.com' } }));
+    api.sessions.logout.mockImplementation(() => Promise.resolve({ data: { logout_link: 'www.diverst.com' } }));
     const notified = {
       notification: {
         key: 1566515890484,
@@ -192,28 +188,24 @@ describe('logout Saga', () => {
     };
     jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
     const results = [logoutSuccess()];
-    const initialAction = { token: 'WDFs3Y8WVrapFy-1ecXa' };
     const dispatched = await recordSaga(
       logout,
-      initialAction
     );
 
-    expect(api.sessions.destroy).toHaveBeenCalledWith(initialAction.token);
+    expect(api.sessions.logout).toHaveBeenCalled();
     expect(window.location.assign).toHaveBeenCalledWith('www.diverst.com');
     expect(dispatched).toEqual(results);
   });
 
   it('should return error from API', async () => {
     const response = { response: { data: 'ERROR!' } };
-    api.sessions.destroy.mockImplementation(() => Promise.reject(response));
+    api.sessions.logout.mockImplementation(() => Promise.reject(response));
     const results = [logoutError(response), push(ROUTES.session.login.path())];
-    const initialAction = { token: 'WDFs3Y8WVrapFy-1ecXa' };
     const dispatched = await recordSaga(
       logout,
-      initialAction
     );
 
-    expect(api.sessions.destroy).toHaveBeenCalledWith(initialAction.token);
+    expect(api.sessions.logout).toHaveBeenCalled();
     expect(dispatched).toEqual(results);
   });
 });
@@ -222,7 +214,7 @@ describe('findEnterprise Saga', () => {
   it('should get sso redirect link from API', async () => {
     const response = { data: { enterprise: { id: 1, theme: { primary_color: '', secondary_color: '' } } } };
     api.users.findEnterprise.mockImplementation(() => Promise.resolve(response));
-    const results = [findEnterpriseSuccess(), setEnterprise(response.data.enterprise), changePrimary(response.data.enterprise.theme.primary_color), changeSecondary(response.data.enterprise.theme.secondary_color)];
+    const results = [findEnterpriseSuccess(), setUserData({ enterprise: response.data.enterprise }, true), changePrimary(response.data.enterprise.theme.primary_color), changeSecondary(response.data.enterprise.theme.secondary_color)];
     const initialAction = { payload: { email: 'dev@diverst.com' } };
     const dispatched = await recordSaga(
       findEnterprise,
