@@ -98,11 +98,11 @@ RSpec.describe UserGroup do
 
   describe '#string_for_field' do
     let!(:group) { create(:group) }
-    let!(:select_field) { create(:select_field, title: 'Gender', options_text: "Male\nFemale", field_definer: group, field_type: 'group_survey' ) }
+    let!(:select_field) { create(:select_field, title: 'Gender', options_text: "Male\nFemale", field_definer: group, field_type: 'group_survey') }
     let!(:user_group) { group.reload ; create(:user_group, group: group) }
 
     it 'returns the string field' do
-      user_group.get_field_data(select_field).update(data: '["Female"]')
+      user_group[select_field] = ['Female']
       expect(user_group.string_for_field(select_field)).to eq('Female')
     end
   end

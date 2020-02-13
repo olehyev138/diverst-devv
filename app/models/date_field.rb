@@ -63,7 +63,10 @@ class DateField < Field
   def serialize_value(value)
     return nil if value.nil?
 
-    value.strftime('%s').to_i
+    case value
+    when Time, Date, DateTime then value.strftime('%s').to_i
+    else value.to_i
+    end
   end
 
   def csv_value(value)

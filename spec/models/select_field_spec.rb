@@ -51,7 +51,7 @@ RSpec.describe SelectField, type: :model do
       select_field = create(:select_field, title: 'Gender', options_text: "Male\nFemale")
       enterprise.fields << select_field
       user = create(:user, data: "{\"#{select_field.id}\":[\"Female\"]}", enterprise: enterprise)
-      user.get_field_data(select_field).update(data: '["Female"]')
+      user[select_field] = ['Female']
 
       popularity = select_field.popularity_for_value('Female', [user])
       expect(popularity).to eq(1)
@@ -64,8 +64,8 @@ RSpec.describe SelectField, type: :model do
       user_1 = create(:user, data: "{\"#{select_field.id}\":[\"Female\"]}", enterprise: enterprise)
       user_2 = create(:user, data: "{\"#{select_field.id}\":[\"Male\"]}", enterprise: enterprise)
 
-      user_1.get_field_data(select_field).update(data: '["Male"]')
-      user_2.get_field_data(select_field).update(data: '["Female"]')
+      user_1[select_field] = ['Male']
+      user_2[select_field] = ['Female']
 
       popularity = select_field.popularity_for_value('Female', [user_1, user_2])
       expect(popularity).to eq(0.5)
@@ -82,8 +82,8 @@ RSpec.describe SelectField, type: :model do
       user_2 = create(:user, data: "{\"#{select_field.id}\":[\"Male\"]}", enterprise: enterprise)
       users = create_list(:user, 8, data: "{\"#{select_field.id}\":[\"Male\"]}", enterprise: enterprise)
 
-      ([user_2] + users).each { |user| user.get_field_data(select_field).update(data: '["Male"]') }
-      user_1.get_field_data(select_field).update(data: '["Female"]')
+      ([user_2] + users).each { |user| user[select_field] = ['Male'] }
+      user_1[select_field] = ['Female']
 
       match_score_between = select_field.match_score_between(user_1, user_2, [user_1, user_2])
       expect(match_score_between).to eq(0.5)
@@ -98,7 +98,7 @@ RSpec.describe SelectField, type: :model do
       select_field = poll.fields.find_by(title: 'What is 1 + 1?')
       select_field.save!
       poll_response = create(:poll_response, poll: poll, user: user, data: "{\"#{select_field.id}\":[\"4\"]}")
-      poll_response.get_field_data(select_field).update(data: '["4"]')
+      poll_response[select_field] = ['4']
 
       answer_popularities = select_field.answer_popularities(entries: poll.responses)
       expect(answer_popularities).to eq([{ answer: '1', count: 0 }, { answer: '2', count: 0 }, { answer: '3', count: 0 },

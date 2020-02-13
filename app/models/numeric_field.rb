@@ -43,6 +43,10 @@ class NumericField < Field
   end
 
   def serialize_value(value)
+    value.to_s
+  end
+
+  def deserialize_value(value)
     value.to_i
   end
 
