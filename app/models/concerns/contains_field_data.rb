@@ -86,12 +86,12 @@ module ContainsFieldData
     # For each FieldData
     field_data.includes(:field).find_each do |fd|
       # Define a getter, that gets the field_data, called that field's title, on self's singleton
-      singleton_class.send(:define_method, fd.field.title.gsub(' ', '_').gsub(/[^0-9a-z_]/i, '').downcase) do
+      singleton_class.send(:define_method, self.class.field_to_method_name(fd.field)) do
         fd.deserialized_data
       end
 
       # Define a setter, that sets the field_data, called that field's title =, on self's singleton
-      singleton_class.send(:define_method, "#{fd.field.title.gsub(' ', '_').gsub(/[^0-9a-z_]/i, '').downcase}=") do |*args|
+      singleton_class.send(:define_method, "#{self.class.field_to_method_name(fd.field)}=") do |*args|
         fd.data = args[0].to_json
         fd.save!
       end
@@ -210,18 +210,22 @@ module ContainsFieldData
         # for each field_data
         u.field_data.each do |fd|
           # Define a getter, that gets the field_data, called that field's title, on that field_user's singleton
-          u.singleton_class.send(:define_method, fd.field.title.gsub(' ', '_').gsub(/[^0-9a-z_]/i, '').downcase) do
+          u.singleton_class.send(:define_method, field_to_method_name(fd.field)) do
             fd.deserialized_data
           end
 
           # Define a setter, that sets the field_data, called that field's title =, on that field_user's singleton
-          u.singleton_class.send(:define_method, "#{fd.field.title.gsub(' ', '_').gsub(/[^0-9a-z_]/i, '').downcase}=") do |*args|
+          u.singleton_class.send(:define_method, "#{field_to_method_name(fd.field)}=") do |*args|
             fd.data = args[0].to_json
             fd.save!
           end
         end
       end
       # rubocop:enable Rails/FindEach
+    end
+
+    def field_to_method_name(field)
+      field.title.gsub(' ', '_').gsub(/[^0-9a-z_]/i, '').downcase
     end
 
     # Creates A Prototype

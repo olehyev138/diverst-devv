@@ -224,12 +224,33 @@ module User::Actions
 
   module ClassMethods
     # Export a CSV with the specified users
-    def to_csv(records:, nb_rows: nil)
-      fields = records.present? ? records.first.fields : Field.none
-      to_csv_with_fields(users: records, fields: fields, nb_rows: nb_rows)
+    def csv_attributes(current_user = nil, params = {})
+      fields = current_user.present? ? current_user.fields : Field.none
+      current_user.field_data.load if current_user.present?
+      {
+          titles: ['First name',
+                  'Last name',
+                  'Email',
+                  'Biography',
+                  'Active',
+                  'Group Membership'
+          ].concat(fields.map(&:title)),
+          values: [
+              :first_name,
+              :last_name,
+              :email,
+              :biography,
+              :active,
+              -> (user) {user.groups.map(&:name).join(',')},
+          ].concat(
+              fields.map do |field|
+                -> (user) { field.csv_value(user.get_field_data(field).deserialized_data) }
+              end
+          )
+      }
     end
 
-    def file_name(params)
+    def parameter_name(scope)
       scope_map = {
           all: 'all',
           active: 'active',
@@ -237,23 +258,18 @@ module User::Actions
           saml: 'sso authorized',
           invitation_sent: 'pending'
       }
-      partials = []
-      set_query_scopes(params).each do |scope|
-        partials.append case scope
-                        when String, Symbol
-                          scope_map[scope.to_sym] || ''
-                        when Array
-                          case scope.first
-                          when 'of_role' then UserRole.find(scope.second).role_name.downcase
-                          else ''
-                          end
-                        else
-                          raise ::ArgumentError.new('query scopes should be an array of either strings or arrays starting with a string')
-        end
-      end
-      partials.append self.model_name.plural
 
-      partials.map { |part| part.split(' ').join('_') }.join('_')
+      case scope
+      when String, Symbol
+        scope_map[scope.to_sym] || scope
+      when Array
+        case scope.first
+        when 'of_role' then UserRole.find(scope.second).role_name.downcase
+        else scope.first
+        end
+      else
+        raise ::ArgumentError.new('query scopes should be an array of either strings or arrays starting with a string')
+      end
     end
 
     def base_query

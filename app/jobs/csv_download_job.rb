@@ -18,7 +18,11 @@ class CsvDownloadJob < ApplicationJob
     return if enterprise.nil?
 
     records = get_records(PseudoRequest.new(user), params, search_method, klass: klass)
-    csv = klass.to_csv(records: records)
+    csv = klass.to_csv(
+        records: records,
+        params: params,
+        current_user: user,
+    )
 
     file = CsvFile.new(user_id: user.id, download_file_name: klass.file_name(params))
 
