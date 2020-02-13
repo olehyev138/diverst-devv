@@ -50,7 +50,7 @@ RSpec.describe CheckboxField, type: :model do
       enterprise = create(:enterprise)
       checkbox_field = create(:checkbox_field, title: 'Spoken languages', options_text: "English\nMandarin\nSpanish\nHindi\nArabic\nRussian\nPortuguese")
       enterprise.fields << checkbox_field
-      user_1 = create(:user)
+      user_1 = create(:user, enterprise: enterprise)
       user_2 = create(:user, data: "{\"#{checkbox_field.id}\":[\"Mandarin\"]}", enterprise: enterprise)
       user_2.get_field_data(checkbox_field).update(data: '["Mandarin"]')
 

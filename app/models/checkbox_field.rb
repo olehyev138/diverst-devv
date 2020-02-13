@@ -25,7 +25,7 @@ class CheckboxField < Field
     nb_users_chose = 0
     users.each do |user|
       user_value = user[self]
-      nb_users_chose += 1 if user_value.nil?
+      nb_users_chose += 1 if user_value.blank?
     end
     nb_users_chose.to_f / users.size
   end
@@ -40,7 +40,7 @@ class CheckboxField < Field
   end
 
   def user_popularity(user, users)
-    values = user.info[self]
+    values = user[self]
 
     # If the user didn't select any option, the popularity will be set to the popularity of choosing no option
     if values.blank?
