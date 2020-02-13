@@ -6,10 +6,11 @@ module Session::Actions
   end
 
   module ClassMethods
-    def destroy(diverst_request, params)
-      session = Session.find_by_token(params[:id])
-      if session.nil?
-        raise BadRequestException.new 'Invalid user Token'
+    def logout(diverst_request, jwt)
+      session = UserTokenService.get_session_from_jwt(jwt)
+
+      if session.nil? || session.user_id != diverst_request.user.id
+        UserTokenService.user_token_error
       else
         session.update(status: 1)
         # if user enterprise has saml enabled then log out process is different
@@ -22,9 +23,9 @@ module Session::Actions
           end
 
           logout_link = logout_request.create(settings, RelayState: ENV['DOMAIN'])
-          { token: params[:id], logout_link: logout_link }
+          { logout_link: logout_link }
         else
-          { token: params[:id] }
+          {}
         end
       end
     end
