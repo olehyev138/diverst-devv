@@ -29,7 +29,7 @@ module Optionnable
     end
 
     entries.each do |entry|
-      values = entry.info[self]
+      values = entry[self]
 
       values.each do |value|
         if answer_counts[value]

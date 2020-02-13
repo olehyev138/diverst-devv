@@ -97,7 +97,7 @@ class Poll < ApplicationRecord
         response_column = [user_id, user_email, user_name]
 
         fields.each do |field|
-          response_column << field.csv_value(response.info[field])
+          response_column << field.csv_value(response[field])
         end
 
         csv << response_column

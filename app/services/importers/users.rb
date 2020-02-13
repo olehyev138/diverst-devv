@@ -42,7 +42,7 @@ class Importers::Users
     user = update_user(row) || initialize_user(row)
     (0..row.length - 1).each do |i|
       field = @enterprise.fields.where('LOWER(title) = ?', row.headers[i]).first
-      user.info[field] = field.process_field_value row[i] if field && row[i].present?
+      user[field] = field.process_field_value row[i] if field && row[i].present?
     end
     user
   end

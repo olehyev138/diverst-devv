@@ -16,8 +16,8 @@ class GroupUpdate < ApplicationRecord
 
   # Returns the delta with another update relative to this other update for a particular field (+23%, -12%, etc.)
   def variance_with(other_update:, field:)
-    value = self.info[field]
-    value_to_compare = other_update.info[field]
+    value = self[field]
+    value_to_compare = other_update[field]
 
     return nil if !value_to_compare
 

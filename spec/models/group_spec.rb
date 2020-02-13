@@ -323,7 +323,7 @@ RSpec.describe Group, type: :model do
 
       csv = CSV.generate do |file|
         file << ['user_id', 'user_email', 'user_first_name', 'user_last_name'].concat(group.survey_fields.map(&:title))
-        file << [user.id, user.email, user.first_name, user.last_name, field.csv_value(user_group.info[field])]
+        file << [user.id, user.email, user.first_name, user.last_name, field.csv_value(user_group[field])]
       end
 
       result = group.survey_answers_csv

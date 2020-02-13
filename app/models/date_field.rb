@@ -22,7 +22,7 @@ class DateField < Field
   # @deprecated
   def validates_rule_for_user?(rule:, user:)
     rule_date = Date.parse(rule.values_array[0])
-    user_date = user.info[rule.field]
+    user_date = user[rule.field]
 
     case rule.operator
     when SegmentFieldRule.operators[:equals]
@@ -70,13 +70,13 @@ class DateField < Field
   end
 
   def match_score_between(e1, e2, users)
-    e1_value = e1.info[self].strftime('%s').to_i
-    e2_value = e2.info[self].strftime('%s').to_i
+    e1_value = e1[self].strftime('%s').to_i
+    e2_value = e2[self].strftime('%s').to_i
 
     return nil unless e1_value && e2_value
 
     values = users.map do |user|
-      user.info[self].to_i
+      user[self].to_i
     end
 
     values.compact!

@@ -18,10 +18,24 @@ module ContainsFieldData
   #   @info.extend(FieldDataDeprecated)
   # end
 
-  alias_method :info, :field_data
+  def [](key)
+    case key
+    when Symbol, String then super(key)
+    when Field then field_data.find_by(field: key).deserialized_data
+    else raise ArgumentError
+    end
+  end
+
+  def []=(key, value)
+    case key
+    when Symbol, String then super(key, value)
+    when Field then field_data.find_by(field: key).update(data: key.serialize_value(value))
+    else raise ArgumentError
+    end
+  end
 
   # LEGACY: POSSIBLY DEPRECATED
-  # Called before validation to presist the (maybe) edited info object in the DB
+  # Called before validation to presist the (maybe) edited info object in the DB./app/models/select_field.rb:46
   def transfer_info_to_data
     self.data = JSON.generate @info unless @info.nil?
   end

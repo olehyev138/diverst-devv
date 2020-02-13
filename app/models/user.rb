@@ -448,7 +448,7 @@ class User < ApplicationRecord
     # Map Yammer fields with Diverst fields as per the mappings defined in the integration configuration
     enterprise.yammer_field_mappings.each do |mapping|
       yammer_value = yammer_user[mapping.yammer_field_name]
-      user.info[mapping.diverst_field] = yammer_value unless yammer_value.nil?
+      user[mapping.diverst_field] = yammer_value unless yammer_value.nil?
     end
 
     user

@@ -5,7 +5,7 @@ class MoveJobTitleFromUsersToFields < ActiveRecord::Migration[5.1]
         job_title = user.job_title
         field = TextField.find_or_create_by(container_id: user.enterprise_id, title: "Job title",
           type: "TextField", container_type: "Enterprise")
-        user.info[field] = field.process_field_value job_title
+        user[field] = field.process_field_value job_title
         user.save!
       end
     end
