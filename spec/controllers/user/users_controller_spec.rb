@@ -51,21 +51,18 @@ RSpec.describe User::UsersController, type: :controller do
       login_user_from_let
 
       context 'with correct params' do
-        before do
-          request.env['HTTP_REFERER'] = 'back'
-          patch :update, id: user.id, user: { first_name: 'New name' }
-        end
+        before { patch :update, id: user.id, user: { first_name: 'New name' } }
 
         it 'updates fields of user' do
           user.reload
           expect(assigns[:user].first_name).to eq 'New name'
         end
 
-        it 'flashes a notice message', skip: 'fails on CircleCI but passes locally' do
+        it 'flashes a notice message' do
           expect(flash[:notice]).to eq 'Your user was updated'
         end
 
-        it 'redirects to the correct page', skip: 'fails on CircleCI but passes locally' do
+        it 'redirects to the correct page' do
           expect(response).to redirect_to user_user_path(user)
         end
       end

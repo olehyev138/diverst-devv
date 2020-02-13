@@ -408,10 +408,10 @@ RSpec.describe Group, type: :model do
     end
 
     context 'Group::is_private' do
-      before { groups.second.update(private: true) }
+      let!(:private_group) { create(:group, private: true) }
 
       it 'returns private group' do
-        expect(Group.is_private).to eq([groups.second])
+        expect(Group.is_private).to eq([private_group])
       end
     end
 

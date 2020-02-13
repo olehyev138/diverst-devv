@@ -156,7 +156,7 @@ RSpec.describe RewardMailer, type: :mailer do
 
   describe '#forfeit_rewards' do
     let!(:enterprise) { create(:enterprise) }
-    let!(:user) { create(:user, enterprise: enterprise) }
+    let!(:user) { create(:user, first_name: "Paul", last_name: "D'Amore", enterprise: enterprise) }
     let!(:reward) { create(:reward, enterprise: enterprise) }
     let!(:responsible) { reward.responsible }
     let!(:user_reward) { create(:user_reward, reward_id: reward.id, user_id: user.id) }
@@ -182,7 +182,7 @@ RSpec.describe RewardMailer, type: :mailer do
 
       it 'shows a message to user' do
         # byebug
-        expect(mail.body.decoded).to include("Sorry, #{user.name}. Your reward (#{reward.label}) has been denied
+        expect(Nokogiri::HTML.parse(mail.body.decoded).text).to include("Sorry, #{user.name.html_safe}. Your reward (#{reward.label}) has been denied
 #{unless user_reward.comment.blank?
  "due to the following reason:\n#{user_reward.comment}" 
 user_reward.comment
