@@ -9,14 +9,16 @@ module ContainsFieldData
   end
 
   # LEGACY: POSSIBLY DEPRECATED
-  def info
-    return @info unless @info.nil?
+  # def info
+  #   return @info unless @info.nil?
+  #
+  #   self.data = '{}' if data.nil?
+  #   json_hash = JSON.parse(data)
+  #   @info = Hash[json_hash.map { |k, v| [k.to_i, v] }] # Convert the hash keys to integers since they're strings after JSON parsing
+  #   @info.extend(FieldDataDeprecated)
+  # end
 
-    self.data = '{}' if data.nil?
-    json_hash = JSON.parse(data)
-    @info = Hash[json_hash.map { |k, v| [k.to_i, v] }] # Convert the hash keys to integers since they're strings after JSON parsing
-    @info.extend(FieldDataDeprecated)
-  end
+  alias_method :info, :field_data
 
   # LEGACY: POSSIBLY DEPRECATED
   # Called before validation to presist the (maybe) edited info object in the DB
@@ -186,6 +188,14 @@ module ContainsFieldData
     field_data.loaded? ?
         field_data.to_a.find { |fd| fd.field == field } :
         field_data.find_by(field: field)
+  end
+
+  def get_field_data_value(field)
+    get_field_data(field).deserialized_data
+  end
+
+  def set_field_data_value(field, data)
+    get_field_data(field).update(data: field.serialize_value(data))
   end
 
   # Class Methods for FieldData Models
