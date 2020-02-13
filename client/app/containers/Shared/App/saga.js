@@ -65,7 +65,7 @@ export function* ssoLogin(action) {
     yield call(AuthService.storeJwt, action.payload.userToken);
 
     // decode token to get user object
-    const user = yield call(AuthService.getUser, action.payload.userToken);
+    // const user = yield call(AuthService.getUser, action.payload.userToken);
 
     // yield put(setUser(user));
     // yield put(setUserPolicyGroup(user.policy_group));
