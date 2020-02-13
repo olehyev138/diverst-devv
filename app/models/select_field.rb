@@ -28,13 +28,13 @@ class SelectField < Field
   def string_value(value)
     return '-' if value.blank?
 
-    value[0]
+    value
   end
 
   def csv_value(value)
     return '' if value.blank?
 
-    value[0]
+    value
   end
 
   # 0 to 1. 1 being everybody in the business has chosen this option, 0 being nobody chose it

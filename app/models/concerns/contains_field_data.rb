@@ -35,7 +35,7 @@ module ContainsFieldData
   end
 
   # LEGACY: POSSIBLY DEPRECATED
-  # Called before validation to presist the (maybe) edited info object in the DB./app/models/select_field.rb:46
+  # Called before validation to presist the (maybe) edited info object in the DB
   def transfer_info_to_data
     self.data = JSON.generate @info unless @info.nil?
   end
