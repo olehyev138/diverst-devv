@@ -18,8 +18,8 @@ class Api::V1::SessionsController < DiverstController
     raise BadRequestException.new(e.message)
   end
 
-  def destroy
-    render status: 200, json: klass.destroy(self.diverst_request, params)
+  def logout
+    render status: 200, json: klass.logout(self.diverst_request, request.headers['Diverst-UserToken'])
   rescue => e
     raise BadRequestException.new(e.message)
   end
