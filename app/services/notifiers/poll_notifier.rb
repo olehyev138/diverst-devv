@@ -6,7 +6,7 @@ class Notifiers::PollNotifier
 
   def notify!
     if should_notify?
-      targeted_users.each do |user|
+      targeted_users.find_each(batch_size: 100) do |user|
         PollMailer.invitation(@poll, user).deliver_later
       end
       @poll.update(email_sent: true)
@@ -28,7 +28,7 @@ class Notifiers::PollNotifier
   def targeted_users
     users = @poll.targeted_users
     users = filter_by_initiative(users) if @initiative
-    users
+    User.where(id: users.map(&:id))
   end
 
   def filter_by_initiative(users)

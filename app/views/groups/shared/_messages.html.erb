@@ -1,7 +1,7 @@
 <div class="card__section card__section--border" id="restored_message_<%= message.id %>">
   <% if EnterprisePolicy.new(current_user, current_user.enterprise).manage_posts? && message.news_feed_link.approved? %>
     <%= link_to archive_group_group_message_path(message.group, message), method: :patch, remote: true do %>
-      Archive
+      <%= inline_svg('icons/archive.svg', class: "icon card__icon", title: 'Archive') %>
     <% end %>
   <% end %>
   <div class="row">
@@ -22,6 +22,15 @@
               <br>
               <i>by <%= message.owner.name_with_status %></i>
             <% end %>
+            <p>
+              <% unless message.news_tags.size == 0 %>
+                <strong>Tags: </strong>
+                <% message.news_tags.limit(5).each do |tag| %>
+                  <%= link_to "##{tag.name}", group_posts_path(message.group, search: tag.name) %>
+                <% end %>
+                <%= '...' if message.news_tags.size > 5 %>
+              <% end %>
+            </p>
             <div class="row">
               <div class="col commentsLink">
                 <%= link_to "Comments(#{message.comments_count})", group_group_message_path(message.group, message) %>

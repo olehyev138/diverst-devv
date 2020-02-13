@@ -1,139 +1,151 @@
 <% content_for :secondary_nav do %>
 <div class="menu menu--mobile">
   <button
-    class="m-hamburger"
-    aria-label="Menu"
-    aria-controls="navigation"
-    data-jq-dropdown="#navigation">
-    <span>Menu</span>
-  </button>
-  <nav id="navigation" class="jq-dropdown jq-dropdown-tip">
-    <ul class="jq-dropdown-menu">
-      <li>
-        <%= active_link_to "Users", users_path if UserPolicy.new(current_user, User).index? %>
-      </li>
-      <li>
-        <%= active_link_to "SSO", edit_auth_enterprise_path(current_user.enterprise) if EnterprisePolicy.new(current_user, current_user.enterprise).sso_manage? %>
-      </li>
-      <li>
-        <%= active_link_to "Configuration", edit_enterprise_path(current_user.enterprise) if EnterprisePolicy.new(current_user, current_user.enterprise).enterprise_manage? %>
-      </li>
-      <li>
-        <%= active_link_to "Email Events", clockwork_database_events_path if EnterprisePolicy.new(current_user, current_user.enterprise).enterprise_manage? %>
-      </li>
-      <li>
-        <%= active_link_to "Permissions", policy_group_templates_path if EnterprisePolicy.new(current_user, current_user.enterprise).manage_permissions? %>
-      </li>
-      <li>
-        <%= active_link_to "Emails", emails_path if EnterprisePolicy.new(current_user, current_user.enterprise).manage_branding? %>
-      </li>
-      <li>
-        <%= active_link_to "Fields", edit_fields_enterprise_path(current_user.enterprise) if EnterprisePolicy.new(current_user, current_user.enterprise).sso_manage? %>
-      </li>
-      <li>
-        <%= active_link_to "Texts", edit_custom_text_path(current_user.enterprise.custom_text) if EnterprisePolicy.new(current_user, current_user.enterprise).manage_branding? %>
-      </li>
-      <li>
-        <%= active_link_to "Branding", edit_branding_enterprise_path(current_user.enterprise) if EnterprisePolicy.new(current_user, current_user.enterprise).manage_branding? %>
-      </li>
-      <li>
-        <%= active_link_to "Integrations", integrations_path, class: "secondary-header__tab" if EnterprisePolicy.new(current_user, current_user.enterprise).sso_manage? %>
-      </li>
-      <li>
-        <%= active_link_to c_t(:dci_abbreviation), rewards_path, class: "secondary-header__tab" if EnterprisePolicy.new(current_user, current_user.enterprise).diversity_manage? %>
-      </li>
-      <li>
-        <%= active_link_to "Logs", logs_path, class: "secondary-header__tab" if LogPolicy.new(current_user, nil).index? %>
-      </li>
-      <% if manage_erg_root_path %>
-        <li>
-          <%= active_link_to "Manage #{c_t(:erg)}", manage_erg_root_path %>
-        </li>
-      <% end %>
-      <% if current_user.enterprise.plan_module_enabled %>
-        <% if GroupBudgetPolicy.new(current_user, []).manage_all_budgets? %>
-          <%= active_link_to "Budgeting", close_budgets_groups_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
-        <% end %>
-      <% end %>
-      <% if CampaignPolicy.new(current_user, Campaign).create? %>
-        <li><%= active_link_to "Innovate", campaigns_path %></li>
-      <% end %>
-      <% if PollPolicy.new(current_user, Poll).create? %>
-        <li><%= active_link_to "Include", polls_path %></li>
-      <% end %>
-    </ul>
-  </nav>
+  class="m-hamburger"
+  aria-label="Menu"
+  aria-controls="navigation"
+  data-jq-dropdown="#navigation">
+  <span>Menu</span>
+</button>
+<nav id="navigation" class="jq-dropdown jq-dropdown-tip">
+  <ul class="jq-dropdown-menu">
+    <li>
+      <%= active_link_to "Users", users_path if UserPolicy.new(current_user, User).index? %>
+    </li>
+    <li>
+      <%= active_link_to "SSO", edit_auth_enterprise_path(current_user.enterprise) if EnterprisePolicy.new(current_user, current_user.enterprise).sso_manage? %>
+    </li>
+    <li>
+      <%= active_link_to "Configuration", edit_enterprise_path(current_user.enterprise) if EnterprisePolicy.new(current_user, current_user.enterprise).enterprise_manage? %>
+    </li>
+    <li>
+      <%= active_link_to "Email Events", clockwork_database_events_path if EnterprisePolicy.new(current_user, current_user.enterprise).enterprise_manage? %>
+    </li>
+    <li>
+      <%= active_link_to "Permissions", policy_group_templates_path if EnterprisePolicy.new(current_user, current_user.enterprise).manage_permissions? %>
+    </li>
+    <li>
+      <%= active_link_to "Emails", emails_path if EnterprisePolicy.new(current_user, current_user.enterprise).manage_branding? %>
+    </li>
+    <li>
+      <%= active_link_to "Fields", edit_fields_enterprise_path(current_user.enterprise) if EnterprisePolicy.new(current_user, current_user.enterprise).sso_manage? %>
+    </li>
+    <li>
+      <%= active_link_to "Texts", edit_custom_text_path(current_user.enterprise.custom_text) if EnterprisePolicy.new(current_user, current_user.enterprise).manage_branding? %>
+    </li>
+    <li>
+      <%= active_link_to "Branding", edit_branding_enterprise_path(current_user.enterprise) if EnterprisePolicy.new(current_user, current_user.enterprise).manage_branding? %>
+    </li>
+    <li>
+      <%= active_link_to "Integrations", integrations_path, class: "secondary-header__tab" if EnterprisePolicy.new(current_user, current_user.enterprise).sso_manage? %>
+    </li>
+    <li>
+      <%= active_link_to c_t(:dci_abbreviation), rewards_path, class: "secondary-header__tab" if EnterprisePolicy.new(current_user, current_user.enterprise).diversity_manage? %>
+    </li>
+    <li>
+      <%= active_link_to 'Point Ranking', users_points_ranking_users_path %>
+    </li>
+    <li>
+      <%= active_link_to 'Pending Reward Requests', users_pending_rewards_users_path %>
+    </li>
+    <li>
+      <%= active_link_to "Logs", logs_path, class: "secondary-header__tab" if LogPolicy.new(current_user, nil).index? %>
+    </li>
+    <% if manage_erg_root_path %>
+    <li>
+      <%= active_link_to "Manage #{c_t(:erg)}", manage_erg_root_path %>
+    </li>
+    <% end %>
+    <% if current_user.enterprise.plan_module_enabled %>
+    <% if GroupBudgetPolicy.new(current_user, []).manage_all_budgets? %>
+    <%= active_link_to "Budgeting", close_budgets_groups_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+    <% end %>
+    <% end %>
+    <% if CampaignPolicy.new(current_user, Campaign).create? %>
+    <li><%= active_link_to "Innovate", campaigns_path %></li>
+    <% end %>
+    <% if PollPolicy.new(current_user, Poll).create? %>
+    <li><%= active_link_to "Include", polls_path %></li>
+    <% end %>
+  </ul>
+</nav>
 </div>
 
 <div class="menu menu--desktop">
   <%= active_link_to "Users", users_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if UserPolicy.new(current_user, User).index? %>
   
   <% if show_settings_link? %>
-    <%= active_link_to 'Settings&nbsp;<span class="caret"></span>'.html_safe, "", "aria-label":"Settings", "aria-control": "navigation", "data-jq-dropdown": "#settings", class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: :exclusive %>
-    
-    <nav id="settings" class="jq-dropdown jq-dropdown-tip">
-      <ul class="jq-dropdown-menu">
-        <% if EnterprisePolicy.new(current_user, current_user.enterprise).enterprise_manage? %>
-          <li>
-            <%= active_link_to "Configuration", edit_enterprise_path(current_user.enterprise) %>
-          </li>
-        <% end %>
-        <% if EnterprisePolicy.new(current_user, current_user.enterprise).enterprise_manage? %>
-          <li>
-            <%= active_link_to "Email Events", clockwork_database_events_path %>
-          </li>
-        <% end %>
-        <% if EnterprisePolicy.new(current_user, current_user.enterprise).sso_manage? %>
-          <li>
-            <%= active_link_to "SSO", edit_auth_enterprise_path(current_user.enterprise) %>
-          </li>
-        <% end %>
-        <% if EnterprisePolicy.new(current_user, current_user.enterprise).manage_permissions? %>
-          <li>
-            <%= active_link_to "Permissions", policy_group_templates_path %>
-          </li>
-        <% end %>
-        <% if EnterprisePolicy.new(current_user, current_user.enterprise).manage_branding? %>
-          <li>
-            <%= active_link_to "Emails", emails_path %>
-          </li>
-        <% end %>
-        <% if EnterprisePolicy.new(current_user, current_user.enterprise).manage_branding? %>
-          <li>
-            <%= active_link_to "Branding", edit_branding_enterprise_path(current_user.enterprise) %>
-          </li>
-        <% end %>
-        <% if EnterprisePolicy.new(current_user, current_user.enterprise).sso_manage? %>
-          <li>
-            <%= active_link_to "Integrations", integrations_path %>
-          </li>
-        <% end %>
-        <% if EnterprisePolicy.new(current_user, current_user.enterprise).manage_branding? %>
-          <li>
-            <%= active_link_to "Texts", edit_custom_text_path(current_user.enterprise.custom_text) %>
-          </li>
-        <% end %>
-        <% if EnterprisePolicy.new(current_user, current_user.enterprise).sso_manage? %>
-          <li>
-            <%= active_link_to "Fields", edit_fields_enterprise_path(current_user.enterprise) %>
-          </li>
-        <% end %>
-      </ul>
-    </nav>
-    
+  <%= active_link_to 'Settings&nbsp;<span class="caret"></span>'.html_safe, "", "aria-label":"Settings", "aria-control": "navigation", "data-jq-dropdown": "#settings", class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: :exclusive %>
+  
+  <nav id="settings" class="jq-dropdown jq-dropdown-tip">
+    <ul class="jq-dropdown-menu">
+      <% if EnterprisePolicy.new(current_user, current_user.enterprise).enterprise_manage? %>
+      <li>
+        <%= active_link_to "Configuration", edit_enterprise_path(current_user.enterprise) %>
+      </li>
+      <% end %>
+      <% if EnterprisePolicy.new(current_user, current_user.enterprise).enterprise_manage? %>
+      <li>
+        <%= active_link_to "Email Events", clockwork_database_events_path %>
+      </li>
+      <% end %>
+      <% if EnterprisePolicy.new(current_user, current_user.enterprise).sso_manage? %>
+      <li>
+        <%= active_link_to "SSO", edit_auth_enterprise_path(current_user.enterprise) %>
+      </li>
+      <% end %>
+      <% if EnterprisePolicy.new(current_user, current_user.enterprise).manage_permissions? %>
+      <li>
+        <%= active_link_to "Permissions", policy_group_templates_path %>
+      </li>
+      <% end %>
+      <% if EnterprisePolicy.new(current_user, current_user.enterprise).manage_branding? %>
+      <li>
+        <%= active_link_to "Emails", emails_path %>
+      </li>
+      <% end %>
+      <% if EnterprisePolicy.new(current_user, current_user.enterprise).manage_branding? %>
+      <li>
+        <%= active_link_to "Branding", edit_branding_enterprise_path(current_user.enterprise) %>
+      </li>
+      <% end %>
+      <% if EnterprisePolicy.new(current_user, current_user.enterprise).sso_manage? %>
+      <li>
+        <%= active_link_to "Integrations", integrations_path %>
+      </li>
+      <% end %>
+      <% if EnterprisePolicy.new(current_user, current_user.enterprise).manage_branding? %>
+      <li>
+        <%= active_link_to "Texts", edit_custom_text_path(current_user.enterprise.custom_text) %>
+      </li>
+      <% end %>
+      <% if EnterprisePolicy.new(current_user, current_user.enterprise).sso_manage? %>
+      <li>
+        <%= active_link_to "Fields", edit_fields_enterprise_path(current_user.enterprise) %>
+      </li>
+      <% end %>
+    </ul>
+  </nav>
+  
   <% end %>
   
   
   <%= active_link_to "Logs", logs_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if LogPolicy.new(current_user, nil).index? %>
   
   <% if show_diversity_link? %>
-    <%= active_link_to 'Diversity&nbsp;<span class="caret"></span>'.html_safe, "", "aria-label":"Diversity", "aria-control": "navigation", "data-jq-dropdown": "#diversity", class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: :exclusive %>
-    <nav id="diversity" class="jq-dropdown jq-dropdown-tip">
+  <%= active_link_to 'Diversity&nbsp;<span class="caret"></span>'.html_safe, "", "aria-label":"Diversity", "aria-control": "navigation", "data-jq-dropdown": "#diversity", class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: :exclusive %>
+  <nav id="diversity" class="jq-dropdown jq-dropdown-tip">
     <ul class="jq-dropdown-menu">
       <% if EnterprisePolicy.new(current_user, current_user.enterprise).diversity_manage? %>
-        <li>
-          <%= active_link_to c_t(:dci_abbreviation), rewards_path %>
-        </li>
+      <li>
+        <%= active_link_to c_t(:dci_abbreviation), rewards_path %>
+      </li>
+      <li>
+        <%= active_link_to 'Point Ranking', users_points_ranking_users_path %>
+      </li>
+      <li>
+        <%= active_link_to 'Pending Reward Requests', users_pending_rewards_users_path %>
+      </li>
       <% end %>
     </ul>
   </nav>

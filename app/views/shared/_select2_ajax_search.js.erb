@@ -13,7 +13,7 @@
           type: "GET",
           dataType: "json",
           minimumInputLength: 3,
-          multiple:true,
+          multiple: true,
           delay: 1000,
           data: function (params) {
             var query = {
@@ -37,7 +37,7 @@
       });
     };
 
-
+    init_select2(".select2-field-tags", "<%= tags_path(format: :json, )  %>")
     init_select2(".select2-field-campaigns", "<%= campaigns_path(format: :json) %>");
     init_select2(".select2-field-segments", "<%= enterprise_segments_segments_path(:limit => 10, format: :json) %>");
     init_select2(".select2-field-groups", "<%= groups_path(:limit => 10, format: :json) %>");

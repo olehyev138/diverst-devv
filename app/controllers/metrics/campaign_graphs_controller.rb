@@ -7,7 +7,6 @@ class Metrics::CampaignGraphsController < ApplicationController
 
   def index
     authorize MetricsDashboard
-    visit_page('Campaign Metrics')
   end
 
   def contributions_per_erg

@@ -1,8 +1,9 @@
 class AggregateUrlStatsDatatable < AjaxDatatablesRails::Base
   def_delegator :@view, :link_to
 
-  def initialize(view_context)
+  def initialize(view_context, enterprise_id)
     super(view_context)
+    @enterprise = Enterprise.find(enterprise_id)
   end
 
   def sortable_columns
@@ -42,8 +43,8 @@ class AggregateUrlStatsDatatable < AjaxDatatablesRails::Base
   end
 
   def get_raw_records
-    Rails.cache.fetch('total_page_visitations', expires_in: 15.minutes) do
-      TotalPageVisitation.all
+    Rails.cache.fetch("total_page_visitations:#{@enterprise.id}", expires_in: 15.minutes) do
+      @enterprise.total_page_visitations
     end
   end
 

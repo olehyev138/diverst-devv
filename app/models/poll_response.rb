@@ -7,7 +7,8 @@ class PollResponse < BaseClass
   has_many :user_reward_actions, dependent: :destroy
 
   validates_length_of :data, maximum: 65535
+
   def group
-    poll.try(:initiative).try(:group)
+    poll&.initiative&.group
   end
 end

@@ -119,6 +119,9 @@ class GroupsController < ApplicationController
 
     not_found! if enterprise.nil?
 
+    # this is a hack to return all initiatives as it happens when you filter with no inputs
+    params[:q] = { initiative_participating_groups_group_id_in: '', initiative_segments_segment_id_in: '' } if params[:q].nil?
+
     @events = enterprise.initiatives.includes(:initiative_participating_groups).where(groups: { parent_id: nil })
         .ransack(
           initiative_participating_groups_group_id_in: params[:q]&.dig(:initiative_participating_groups_group_id_in),
@@ -225,17 +228,7 @@ class GroupsController < ApplicationController
       track_activity(@group, :update)
       flash[:notice] = "Your #{c_t(:erg)} was updated"
 
-      if request.referer == settings_group_url(@group)
-        redirect_to @group
-      elsif request.referer == group_outcomes_url(@group)
-        redirect_to group_outcomes_url(@group)
-      elsif request.referer == group_questions_url(@group)
-        redirect_to group_questions_url(@group)
-      elsif request.referer == layouts_group_url(@group)
-        redirect_to layouts_group_url(@group)
-      else
-        redirect_to [:edit, @group]
-      end
+      redirect_to :back
     else
       flash.now[:alert] = "Your #{c_t(:erg)} was not updated. Please fix the errors"
 
@@ -376,6 +369,39 @@ class GroupsController < ApplicationController
     render nothing: true
   end
 
+  def slack_button_redirect
+    authorize @group, :settings?
+    client = Slack::Web::Client.new
+
+    if params[:code].blank?
+      flash[:alert] = 'You did not grant permission. Diverst was not added to slack'
+    else
+      # Request a token using the temporary code
+      rc = client.oauth_access(
+        client_id: ENV['SLACK_CLIENT_ID'],
+        client_secret: ENV['SLACK_CLIENT_SECRET'],
+        redirect_uri: slack_button_redirect_group_url(@group),
+        code: params[:code]
+      )
+
+      # Pluck the token from the response
+      @group.slack_webhook = RsaEncryption.encode(rc['incoming_webhook']['url'])
+      @group.slack_auth_data = RsaEncryption.encode(rc.to_json)
+      if @group.save
+        flash[:notice] = 'Congratulations. We will send a slack notification when an event or post is created'
+      else
+        flash[:alert] = 'There was an error. Diverst was not added to slack'
+      end
+    end
+    redirect_to @group
+  end
+
+  def slack_uninstall
+    authorize @group, :settings?
+    @group.uninstall_slack
+    redirect_to :back
+  end
+
   protected
 
   def should_show_event?(group)
@@ -398,22 +424,23 @@ class GroupsController < ApplicationController
   end
 
   def without_segments
-    NewsFeed.all_links_without_segments(@group.news_feed.id, @group.enterprise)
-                        .includes(:news_link, :group_message, :social_link)
-                        .order(is_pinned: :desc, created_at: :desc)
-                        .limit(5)
+    @group.news_feed.all_links_without_segments
+        .approved
+        .active
+        .include_posts(social_enabled: @group.enterprise.enable_social_media?)
+        .order(is_pinned: :desc, created_at: :desc)
+        .limit(5)
   end
 
   def with_segments
     if GroupPostsPolicy.new(current_user, [@group]).view_latest_news?
-      segment_ids = current_user.segments.ids
-      if not segment_ids.empty?
-        NewsFeed.all_links(@group.news_feed.id, segment_ids, @group.enterprise)
-            .order(is_pinned: :desc, created_at: :desc)
-            .limit(5)
-      else
-        return without_segments
-      end
+      segment_ids = current_user.segment_ids
+      @group.news_feed.all_links(segment_ids)
+          .approved
+          .active
+          .include_posts(social_enabled: @group.enterprise.enable_social_media?)
+          .order(is_pinned: :desc, created_at: :desc)
+          .limit(5)
     else
       []
     end

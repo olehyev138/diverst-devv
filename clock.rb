@@ -31,7 +31,7 @@ module Clockwork
 
   every(1.day, 'Update the Daily Page Visits Count', at: '23:50') { ResetDailyPageCountJob.perform_later }
 
-  every(60.minutes, 'Recalculate Cached Usage Stats') { UpdateUsageStatsDataJob.perform_later }
+  every(10.hours, 'Recalculate Cached Usage Stats') { UpdateUsageStatsDataJob.perform_later }
 
   every(1.hour, 'Update cached segment members') { Segment.update_all_members }
 

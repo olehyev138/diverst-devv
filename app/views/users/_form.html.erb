@@ -1,11 +1,15 @@
 <%= f.input :avatar,
       as: :attachment_preview,
       label: 'Profile Picture',
-      input_html: { autofocus: true } %>
-<% if @is_admin_view %>
+      input_html: { autofocus: true } %>    
+
+<%# only users(essentially Admins) with access to this view can edit emails of other users
+admin view comes from users_controller %>
+<% if params[:controller] == "users" %>
   <%= f.input :email %>
 <% end %>
 
+<%= f.input :notifications_email %>
 <%= f.input :first_name %>
 <%= f.input :last_name %>
 <%= f.input :biography %>

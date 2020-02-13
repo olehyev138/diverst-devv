@@ -10,7 +10,9 @@ class ResetCounterCachesJob < ActiveJob::Base
                           :own_news_links,
                           :answer_comments,
                           :message_comments,
-                          :news_link_comments
+                          :news_link_comments,
+                          :mentors,
+                          :mentees
                          )
     end
 

@@ -21,7 +21,10 @@ RSpec.describe Field do
       it { expect(field).to validate_length_of(:title).is_at_most(191) }
       it { expect(field).to validate_length_of(:type).is_at_most(191) }
       it { expect(field).to validate_presence_of(:title) }
-      it { expect(field).to validate_uniqueness_of(:title).scoped_to(:enterprise_id) }
+
+      context 'if not group or segment type' do
+        it { expect(field).to validate_uniqueness_of(:title).scoped_to(:enterprise_id) }
+      end
     end
 
     describe '#container_type_is_enterprise?' do

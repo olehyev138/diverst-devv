@@ -58,11 +58,11 @@ RSpec.describe User::UsersController, type: :controller do
           expect(assigns[:user].first_name).to eq 'New name'
         end
 
-        it 'flashes a notice message', skip: 'fails on CircleCI but passes locally' do
+        it 'flashes a notice message' do
           expect(flash[:notice]).to eq 'Your user was updated'
         end
 
-        it 'redirects to the correct page', skip: 'fails on CircleCI but passes locally' do
+        it 'redirects to the correct page' do
           expect(response).to redirect_to user_user_path(user)
         end
       end

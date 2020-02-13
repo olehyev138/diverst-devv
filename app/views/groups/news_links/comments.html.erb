@@ -25,7 +25,21 @@
             </div>
           </div>
         </div>
+            <div class="col">
+              <%= render partial: "groups/shared/like_feature", locals: {news_feed_link: @news_link.news_feed_link} %>
+            </div>
       </div>
+      <% if @tags.present? %>
+        <row>
+          <div class="col">
+            <p>
+              <% @tags.each do |tag| %>
+                <%= link_to "##{tag.name}", group_posts_path(@group, search: tag.name) %>
+              <% end %>
+            </p>
+          </div>
+        </row>
+      <% end %>
     </div>
   </div>
 </div>

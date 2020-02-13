@@ -533,4 +533,71 @@ RSpec.describe UsersController, type: :controller do
       end
     end
   end
+
+  describe 'GET#users_points_ranking' do
+    context 'when user is logged in' do
+      let!(:inactive_user) { create(:user, enterprise: enterprise, active: false) }
+      login_user_from_let
+      before { get :users_points_ranking }
+
+      it 'renders users_points_ranking template' do
+        expect(response).to render_template :users_points_ranking
+      end
+
+      it 'returns active users' do
+        expect(assigns[:users]).to eq([user])
+      end
+    end
+  end
+
+  describe 'GET#users_points_csv' do
+    context 'when user is logged in' do
+      login_user_from_let
+      before {
+        allow(UsersPointsDownloadJob).to receive(:perform_later)
+        request.env['HTTP_REFERER'] = 'back'
+        get :users_points_csv
+      }
+
+      it 'redirects to user' do
+        expect(response).to redirect_to 'back'
+      end
+
+      it 'flashes' do
+        expect(flash[:notice]).to eq 'Please check your Secure Downloads section in a couple of minutes'
+      end
+
+      it 'calls job' do
+        expect(UsersPointsDownloadJob).to have_received(:perform_later)
+      end
+    end
+
+    context 'when user is not logged in' do
+      before { get :users_points_csv }
+      it_behaves_like 'redirect user to users/sign_in path'
+    end
+  end
+
+  describe 'GET#users_pending_rewards' do
+    context 'when user is logged in' do
+      let!(:reward) { create(:reward, enterprise: user.enterprise, points: 10) }
+      let!(:pending_rewards) { create_list(:user_reward, 2, reward_id: reward.id, points: 10, user_id: user.id, status: 0) }
+      login_user_from_let
+
+      before { get :users_pending_rewards }
+
+      it 'renders users_pending_rewards template' do
+        expect(response).to render_template :users_pending_rewards
+      end
+
+      it 'returns pending_rewards' do
+        expect(assigns[:pending_rewards]).to eq(pending_rewards)
+      end
+    end
+
+    context 'when user is not logged in' do
+      before { get :users_pending_rewards }
+      it_behaves_like 'redirect user to users/sign_in path'
+    end
+  end
 end

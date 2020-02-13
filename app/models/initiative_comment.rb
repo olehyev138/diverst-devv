@@ -9,6 +9,8 @@ class InitiativeComment < BaseClass
   validates :initiative, presence: true
   validates :content, presence: true
 
+  before_create :approve_comment
+
   def group
     initiative.group
   end
@@ -19,5 +21,11 @@ class InitiativeComment < BaseClass
 
   def self.approved
     where(approved: true)
+  end
+
+  private
+
+  def approve_comment
+    self.approved = true
   end
 end

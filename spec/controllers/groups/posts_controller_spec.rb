@@ -95,7 +95,7 @@ RSpec.describe Groups::PostsController, type: :controller do
       login_user_from_let
 
       let!(:news_link4) { create(:news_link, group: group) }
-      let!(:unapproved_news_feed_link) { create(:news_feed_link, news_link: news_link4, news_feed: news_feed, approved: true, created_at: Time.now - 4.hours) }
+      let!(:unapproved_news_feed_link) { create(:news_feed_link, news_link: news_link4, news_feed: news_feed, approved: false, created_at: Time.now - 4.hours) }
 
       before do
         unapproved_news_feed_link.update(approved: false)
@@ -108,7 +108,7 @@ RSpec.describe Groups::PostsController, type: :controller do
       end
 
       it 'return unapproved posts' do
-        expect(assigns[:posts]).to eq [unapproved_news_feed_link]
+        expect(assigns[:pending_posts]).to eq [unapproved_news_feed_link]
       end
     end
 

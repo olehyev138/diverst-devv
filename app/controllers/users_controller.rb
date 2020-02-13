@@ -29,7 +29,8 @@ class UsersController < ApplicationController
     end
 
     if extra_params[:can_metrics_dashboard_create]
-      user_ids_with_perms = @users.select { |u| MetricsDashboardPolicy.new(u, nil).create? }.map(&:id)
+      user_ids_with_perms = current_user.enterprise.users.active
+                            .joins(:policy_group).where('policy_groups.metrics_dashboards_create = true OR policy_groups.manage_all = true').map(&:id)
       @users = @users.where(id: user_ids_with_perms)
     end
 
@@ -81,10 +82,8 @@ class UsersController < ApplicationController
     end
   end
 
-  # For admins. Dedicated to editing any user's info
   def edit
     authorize @user
-    @is_admin_view = true
   end
 
   def update
@@ -191,32 +190,79 @@ class UsersController < ApplicationController
     authorize @user, :show?
     respond_to do |format|
       format.json { render json: UserUsageDatatable.new(view_context, @user) }
+      format.csv {
+        PageVisitsCsvJob.perform_later(current_user.id, page_user_id: @user.id)
+        render json: { notice: 'Please check your Secure Downloads section in a couple of minutes' }
+      }
     end
+  end
+
+  def users_points_ranking
+    authorize User
+
+    @users = current_user.enterprise.users.active.order(points: :desc).limit(params[:limit] || 25)
+
+    respond_to do |format|
+      format.html
+      format.json { render json: UsersByPointsDatatable.new(view_context, @users) }
+    end
+  end
+
+  def users_points_csv
+    authorize User
+
+    UsersPointsDownloadJob.perform_later(current_user.id)
+    flash[:notice] = 'Please check your Secure Downloads section in a couple of minutes'
+    redirect_to :back
+  end
+
+  def users_pending_rewards
+    authorize User
+
+    @user_rewards_responsible = UserReward.joins(:reward).where(rewards: { responsible_id: current_user.id }).where(status: 0)
+    @pending_rewards = UserReward.where(user_id: current_user.enterprise.users.joins(:user_rewards).uniq, status: 0)
   end
 
   protected
 
-  def aggregate_sign_ins
-    Rails.cache.fetch('aggregate_login_count', expires_in: 2.hours) do
-      User.all.map(&:sign_in_count)
-    end
-  end
-
   def get_user_usage_metrics
+    enterprise_id = current_user.enterprise.id
+
     logins = @user.sign_in_count
-    logins_p = calculate_percentile(logins, aggregate_sign_ins.sort)
+    logins_p = DataAnalyst.calculate_percentile(
+      logins,
+      User.aggregate_sign_ins(
+        enterprise_id: enterprise_id
+      ).map { |usr_count| usr_count[1] }.sort
+    )
     logins_n = 'Times Logged In'
 
     posts = @user.number_of(:social_links, :own_messages, :own_news_links)
-    posts_p = percentile_from_field(User, posts, :social_links, :own_messages, :own_news_links)
+    posts_p = DataAnalyst.percentile_from_field(
+      User,
+      posts,
+      :social_links, :own_messages, :own_news_links,
+      enterprise_id: enterprise_id
+    )
     posts_n = 'Posts Made'
 
     comments = @user.number_of(:answer_comments, :message_comments, :news_link_comments)
-    comments_p = percentile_from_field(User, comments, :answer_comments, :message_comments, :news_link_comments)
+    comments_p = DataAnalyst.percentile_from_field(
+      User,
+      comments,
+      :answer_comments, :message_comments, :news_link_comments,
+      enterprise_id: enterprise_id
+    )
     comments_n = 'Comments Made'
 
-    events = @user.number_of(:initiatives, where: ['initiatives.start < ? OR initiatives.id IS NULL', Time.now])
-    events_p = percentile_from_field(User, events, :initiatives, where: ['initiatives.start < ? OR initiatives.id IS NULL', Time.now])
+    events = @user.number_of(:initiatives, where: ['initiatives.start < NOW() OR initiatives.id IS NULL'])
+    events_p = DataAnalyst.percentile_from_field(
+      User,
+      events,
+      :initiatives,
+      where: ['initiatives.start < NOW() OR initiatives.id IS NULL'],
+      enterprise_id: enterprise_id
+    )
     events_n = 'Events Attended'
 
     @fields = %w(logins posts comments events)
@@ -259,6 +305,7 @@ class UsersController < ApplicationController
     params.require(:user).permit(
       :avatar,
       :email,
+      :notifications_email,
       :first_name,
       :last_name,
       :biography,

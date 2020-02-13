@@ -35,6 +35,10 @@ gem 'active_link_to', '~> 1.0', '>= 1.0.3' # Automatically add an active class t
 gem 'paperclip', '~> 4.3'# Handle attachments for models and forms
 gem 'aws-sdk', '< 2.0'# The official AWS SDK
 gem 'kaminari', '~> 0.16.3' # Pagination
+# Updates exists for datatables with cool functions, however causes problem with current implementation.
+# Would like to discuss possibly updating
+# gem 'jquery-datatables-rails', '~> 3.4.0' # Datatables
+# gem 'ajax-datatables-rails', '~> 0.4.3' # Trying to update to most recent version to fix bug
 gem 'jquery-datatables-rails', '~> 3.3' # Datatables
 gem 'ajax-datatables-rails', '~> 0.3.1' # Adds AJAX routes for datatables queries
 gem 'elasticsearch-model', '~> 6.0.0'
@@ -66,6 +70,8 @@ gem 'jbuilder', '~> 2.6'
 gem 'public_activity', '~> 1.5'
 gem 'rollbar', '~> 2.14.1'
 gem 'ruby-oembed', '~> 0.12', git: 'https://github.com/TeamDiverst/ruby-oembed.git'
+gem 'embedly', '~> 1.9.1'
+gem 'querystring'
 gem 'julia_builder', '~> 0.2.0'
 gem 'date_validator', '~> 0.9.0'
 gem 'thor', '0.20.0'# Expected string default value for '--decorator'; got true (boolean) - setting version removes this message
@@ -75,10 +81,10 @@ gem 'jquery-ui-rails', '~> 6.0.1'
 gem 'twitter' # twitter implementation
 gem 'http'
 gem 'active_record_union'
+gem 'slack-ruby-client'
 gem 'json_on_rails', '~> 0.2.0'
 gem 'scenic'
 gem 'scenic-mysql_adapter'
-
 gem 'factory_bot_rails', '~> 4.8.0' # Create mock objects for testing
 gem 'tty-spinner'
 

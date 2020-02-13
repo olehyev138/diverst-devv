@@ -20,27 +20,27 @@
       <% end %>
     </div>
     <div class="content__main">
-      
+
       <% if ENV["DOMAIN"] === "dm.diverst.com" %>
         <div class="card">
           <div class="card__section">
             <div class="row">
-              
+
               <div class="col-xs-12 text-center visible">
                 <%= video_tag(resource.enterprise.onboarding_sponsor_media.expiring_url(36000), controls: true, size: "400x400") %>
-              </div>   
-              
+              </div>
+
               <div class="col-xs-6 invisible" style="display:none;">
                 <%= image_tag resource.enterprise.cdo_picture.expiring_url(3600), class: "block", style: "width: 100%; background-size: cover; background-position: bottom center;" %>
               </div>
-              
+
               <div class="col-xs-6 invisible" style="display:none;">
-                <h3>            
+                <h3>
                   <% if resource.enterprise.sponsors.any? %>
                     <%= resource.enterprise.sponsors.first.sponsor_name %>, <%= resource.enterprise.sponsors.first.sponsor_title %>
                   <% end %>
                 </h3>
-  
+
                 <% if resource.enterprise.cdo_message.present? %>
                   <p> <%= simple_format resource.enterprise.cdo_message %> </p>
                 <% else %>
@@ -56,13 +56,13 @@
 
           <div class="row">
             <div class="col-sm-6 col-xs-12">
-              
+
               <% if resource.enterprise.sponsors.any? %>
                 <% if resource.enterprise.sponsors.first.sponsor_media.present? %>
                   <% show_sponsor_media?(resource.enterprise.sponsors.first, "sponsor_media_content_type") do %>
                     <%= image_tag(resource.enterprise.sponsors.first.sponsor_media.expiring_url(3600), class: "block img-responsive center-block", style: "max-height: 300px;") %>
                   <% end %>
-                  
+
                   <% show_sponsor_video?(resource.enterprise.sponsors.first, "sponsor_media_content_type") do %>
                       <%= video_tag(resource.enterprise.sponsors.first.sponsor_media.expiring_url(3600), controls: true, size: "200x200") %>
                   <% end %>
@@ -72,7 +72,7 @@
               <% else %>
                 <%= image_tag resource.enterprise.cdo_picture.expiring_url(3600), class: "block img-responsive center-block", style: "max-width: 300px; max-height: 300px;" %>
               <% end %>
-              
+
             </div>
             <div class="col-sm-6 col-xs-12" style="max-height: 300px; overflow: scroll;">
               <% if resource.enterprise.sponsors.any? %>
@@ -118,7 +118,7 @@
             <%= devise_error_messages! %>
             <%= f.hidden_field :invitation_token %>
             <%= f.hidden_field :seen_onboarding, value: 1%>
-            
+
             <%= f.input :first_name, required: true %>
             <%= f.input :last_name, required: true %>
 
@@ -130,7 +130,7 @@
                 <%= render "shared/fields/display/custom_field", cf: cf, f: f, resource: resource %>
               <% end %>
             <% end %>
-            
+
             <h2><%= resource.enterprise.custom_text.erg %> Events Calendar</h2>
             <a
               class="toggle_calendar btn btn--primary"
@@ -138,7 +138,7 @@
               style="cursor: pointer; margin-bottom: 20px;"
             >Show/Hide Calendar</a>
             <div id="calendar" data-calendar-data-url="<%= onboarding_calendar_data_user_events_path(invitation_token: params[:invitation_token]) %>"></div>
-              
+
 
             <h2>Explore your <%= resource.enterprise.custom_text.erg %></h2>
 
@@ -331,10 +331,10 @@
         var invisible = $(".invisible");
         visible.hide();
         invisible.show();
-        
+
         visible.addClass("invisible")
         visible.removeClass("visible");
-        
+
         invisible.addClass("visible")
         invisible.removeClass("invisible");
       }); //endof click

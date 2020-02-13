@@ -1,0 +1,23 @@
+<div class="content__header">
+  <h1>Users</h1>
+</div>
+
+<div class="content__main">
+  <% @graphs.each do |metric| %>
+    <div class="card">
+      <div class="card__section">
+        <div class="card">
+          <div class="card__section">
+            <h4><%= "#{metric.capitalize} per User" %></h4>
+            <div
+              id="<%= "#{metric}_graph" %>"
+              class="graph"
+              data-url="<%= users_usage_graph_metrics_users_path(metric: metric) %>">
+              <svg></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

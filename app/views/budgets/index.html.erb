@@ -41,7 +41,7 @@
                 <td><%= budget.budget_items.size %></td>
                 <td><%= budget.description %></td>
                 <th><%= link_to 'Details', group_budget_path(@group, budget, annual_budget_id: params[:annual_budget_id]) %></th>
-                <th><%= link_to "Delete", group_budget_path(@group, budget, annual_budget_id: params[:annual_budget_id]), method: :delete, class: 'error', data: { confirm: "Are you sure?" } if GroupBudgetPolicy.new(current_user, [@group]).destroy? %></th>
+                <th><%= link_to "Delete", group_budget_path(@group, budget, annual_budget_id: params[:annual_budget_id]), method: :delete, class: 'error', data: { confirm: "Are you sure?" } if GroupBudgetPolicy.new(current_user, [@group, budget]).destroy? %></th>
               </tr>
             <% end %>
           </tbody>

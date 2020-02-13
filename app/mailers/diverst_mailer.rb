@@ -20,7 +20,7 @@ class DiverstMailer < Devise::Mailer
   def headers_for(action, opts)
     headers = {
       subject: @subject || subject_for(action),
-      to: @email || resource.email,
+      to: @email || resource.email_for_notification,
       from: @from_address || mailer_sender(devise_mapping),
       reply_to: @from_address || mailer_reply_to(devise_mapping),
       template_path: template_paths,

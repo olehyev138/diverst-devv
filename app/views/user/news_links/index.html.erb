@@ -15,7 +15,7 @@
         <% elsif news.group_message && UserMessagePolicy.new(current_user, nil).index? %>
           <%= render partial: "groups/shared/messages", locals: {message: GroupMessage.includes(:owner, :group).find(news.link.id) } unless news.link.segments.count > 0 && news.link.segments.joins(:members).where(:users => {id: current_user.id}).count > 0 %>
         <% elsif news.social_link && SocialLinkPolicy.new(current_user, nil).index? %>
-          <%= render partial: "groups/shared/social_links", locals: {social_link: SocialLink.includes(:group).find(news.link.id) } unless news.link.segments.count > 0 && news.link.segments.joins(:members).where(:users => {id: current_user.id}).count > 0 %>
+          <%= render partial: "groups/shared/social_links", locals: {small: false, social_link: SocialLink.includes(:group).find(news.link.id) } unless news.link.segments.count > 0 && news.link.segments.joins(:members).where(:users => {id: current_user.id}).count > 0 %>
         <% end %>
       <% end %>
     <% end %>

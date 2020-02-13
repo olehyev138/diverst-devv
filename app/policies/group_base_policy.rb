@@ -1,19 +1,23 @@
 class GroupBasePolicy < Struct.new(:user, :context)
-  attr_accessor :user, :group, :record, :group_leader_role_ids
+  attr_accessor :user, :group, :record, :group_leader_role_id
 
   def initialize(user, context)
     self.user = user
     self.group = context.first
     self.record = context.second
-    self.group_leader_role_ids = user.group_leaders.pluck(:user_role_id)
+    self.group_leader_role_id = GroupLeader.find_by(user_id: user&.id, group_id: group&.id)&.user_role_id
+  end
+
+  def admin?
+    user.policy_group.enterprise_manage? || user.policy_group.manage_all?
   end
 
   def is_a_member?
-    UserGroup.where(user_id: user.id, group_id: group.id).exists?
+    UserGroup.where(user_id: user.id, group_id: group&.id).exists?
   end
 
   def is_a_accepted_member?
-    UserGroup.where(user_id: user.id, group_id: group.id, accepted_member: true).exists?
+    UserGroup.where(user_id: user.id, group_id: group&.id, accepted_member: true).exists?
   end
 
   def is_a_manager?(permission)
@@ -32,11 +36,11 @@ class GroupBasePolicy < Struct.new(:user, :context)
   end
 
   def is_a_leader?
-    GroupLeader.where(user_id: user.id, group_id: group.id).exists?
+    GroupLeader.where(user_id: user.id, group_id: group&.id).exists?
   end
 
   def is_active_member?
-    UserGroup.where(accepted_member: true, user_id: user.id, group_id: @record.id).exists?
+    UserGroup.where(accepted_member: true, user_id: user.id, group_id: group&.id).exists?
   end
 
   def is_a_guest?
@@ -44,11 +48,11 @@ class GroupBasePolicy < Struct.new(:user, :context)
   end
 
   def is_a_pending_member?
-    UserGroup.where(accepted_member: false, user_id: user.id, group_id: @record.id).exists?
+    UserGroup.where(accepted_member: false, user_id: user.id, group_id: group&.id).exists?
   end
 
   def basic_group_leader_permission?(permission)
-    PolicyGroupTemplate.where(user_role_id: group_leader_role_ids, enterprise_id: user.enterprise_id).where("#{permission} = true").exists?
+    PolicyGroupTemplate.where(user_role_id: group_leader_role_id, enterprise_id: user.enterprise_id).where("#{permission} = true").exists?
   end
 
   def has_group_leader_permissions?(permission)
@@ -115,8 +119,21 @@ class GroupBasePolicy < Struct.new(:user, :context)
     manage_group_resource(base_manage_permission)
   end
 
+  def export_group_members_list_csv?
+    user.is_group_leader_of?(group) || update?
+  end
+
   def destroy?
     update?
+  end
+
+  def manage_comments?
+    return true if user.policy_group.manage_all?
+    return true if user.policy_group.manage_posts?
+    return true if GroupLeader.where(user_id: user.id, group_id: group&.id).exists?
+
+
+    return true if record.user == user
   end
 
   def base_index_permission

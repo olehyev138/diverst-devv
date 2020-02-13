@@ -10,110 +10,112 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
-  rescue_from Pundit::NotAuthorizedError do |e|
-    Rollbar.error(e)
-    user_not_authorized
-  end
+  unless Rails.env.development?
+    rescue_from Pundit::NotAuthorizedError do |e|
+      Rollbar.error(e)
+      user_not_authorized
+    end
 
-  rescue_from ActionController::UnknownFormat do |e|
-    Rails.logger.warn('UnknownFormat: ' + e.message)
-    Rollbar.error(e)
-    render status: 400, json: { error: e.message }
-  end
+    rescue_from ActionController::UnknownFormat do |e|
+      Rails.logger.warn('UnknownFormat: ' + e.message)
+      Rollbar.error(e)
+      render status: 400, json: { error: e.message }
+    end
 
-  rescue_from ActionView::MissingTemplate do |e|
-    flash[:alert] = 'Sorry, the resource you are looking for does not exist.' if Rails.env.production?
-    flash[:alert] = e.message if Rails.env.development? || Rails.env.test?
-    Rails.logger.warn('MissingTemplate: ' + e.message)
-    Rollbar.error(e)
-    redirect_on_error
-  end
+    rescue_from ActionView::MissingTemplate do |e|
+      flash[:alert] = 'Sorry, the resource you are looking for does not exist.' if Rails.env.production?
+      flash[:alert] = e.message if Rails.env.development? || Rails.env.test?
+      Rails.logger.warn('MissingTemplate: ' + e.message)
+      Rollbar.error(e)
+      redirect_on_error
+    end
 
-  rescue_from ActionView::Template::Error do |e|
-    flash[:alert] = 'Sorry, the resource you are looking for does not exist.' if Rails.env.production?
-    flash[:alert] = e.message if Rails.env.development? || Rails.env.test?
-    Rollbar.error(e)
-    redirect_on_error
-  end
+    rescue_from ActionView::Template::Error do |e|
+      flash[:alert] = 'Sorry, the resource you are looking for does not exist.' if Rails.env.production?
+      flash[:alert] = e.message if Rails.env.development? || Rails.env.test?
+      Rollbar.error(e)
+      redirect_on_error
+    end
 
-  rescue_from Pundit::AuthorizationNotPerformedError do |e|
-    flash[:alert] = 'Sorry, the resource you are looking for does not exist.' if Rails.env.production?
-    flash[:alert] = e.message if Rails.env.development? || Rails.env.test?
-    Rails.logger.warn('Template::Error: ' + e.message)
-    Rollbar.error(e)
-    redirect_on_error
-  end
+    rescue_from Pundit::AuthorizationNotPerformedError do |e|
+      flash[:alert] = 'Sorry, the resource you are looking for does not exist.' if Rails.env.production?
+      flash[:alert] = e.message if Rails.env.development? || Rails.env.test?
+      Rails.logger.warn('Template::Error: ' + e.message)
+      Rollbar.error(e)
+      redirect_on_error
+    end
 
-  rescue_from ActionController::BadRequest do |e|
-    flash[:alert] = 'Sorry, the resource you are looking for does not exist.' if Rails.env.production?
-    flash[:alert] = e.message if Rails.env.development? || Rails.env.test?
-    Rails.logger.warn('BadRequest: ' + e.message)
-    Rollbar.error(e)
-    redirect_on_error
-  end
+    rescue_from ActionController::BadRequest do |e|
+      flash[:alert] = 'Sorry, the resource you are looking for does not exist.' if Rails.env.production?
+      flash[:alert] = e.message if Rails.env.development? || Rails.env.test?
+      Rails.logger.warn('BadRequest: ' + e.message)
+      Rollbar.error(e)
+      redirect_on_error
+    end
 
-  rescue_from ActiveRecord::RecordInvalid do |e|
-    flash[:alert] = 'Sorry, the resource you are looking for does not exist.' if Rails.env.production?
-    flash[:alert] = e.message if Rails.env.development? || Rails.env.test?
-    Rails.logger.warn('RecordInvalid: ' + e.message)
-    Rollbar.error(e)
-    redirect_on_error
-  end
+    rescue_from ActiveRecord::RecordInvalid do |e|
+      flash[:alert] = 'Sorry, the resource you are looking for does not exist.' if Rails.env.production?
+      flash[:alert] = e.message if Rails.env.development? || Rails.env.test?
+      Rails.logger.warn('RecordInvalid: ' + e.message)
+      Rollbar.error(e)
+      redirect_on_error
+    end
 
-  rescue_from BadRequestException do |e|
-    flash[:alert] = 'Sorry, the resource you are looking for does not exist.' if Rails.env.production?
-    flash[:alert] = e.message if Rails.env.development? || Rails.env.test?
-    Rails.logger.warn('BadRequestException: ' + e.message)
-    Rollbar.error(e)
-    redirect_on_error
-  end
+    rescue_from BadRequestException do |e|
+      flash[:alert] = 'Sorry, the resource you are looking for does not exist.' if Rails.env.production?
+      flash[:alert] = e.message if Rails.env.development? || Rails.env.test?
+      Rails.logger.warn('BadRequestException: ' + e.message)
+      Rollbar.error(e)
+      redirect_on_error
+    end
 
-  rescue_from Pundit::NotDefinedError do |e|
-    flash[:alert] = 'Sorry, the resource you are looking for does not exist.' if Rails.env.production?
-    flash[:alert] = e.message if Rails.env.development? || Rails.env.test?
-    Rollbar.error(e)
-    redirect_on_error
-  end
+    rescue_from Pundit::NotDefinedError do |e|
+      flash[:alert] = 'Sorry, the resource you are looking for does not exist.' if Rails.env.production?
+      flash[:alert] = e.message if Rails.env.development? || Rails.env.test?
+      Rollbar.error(e)
+      redirect_on_error
+    end
 
-  rescue_from ActionController::RoutingError do |e|
-    flash[:alert] = e.message
-    Rails.logger.warn('RoutingError: ' + e.message)
-    Rollbar.error(e)
-    redirect_on_error
-  end
+    rescue_from ActionController::RoutingError do |e|
+      flash[:alert] = e.message
+      Rails.logger.warn('RoutingError: ' + e.message)
+      Rollbar.error(e)
+      redirect_on_error
+    end
 
-  rescue_from ActiveRecord::RecordNotFound do |e|
-    flash[:alert] = 'Sorry, the resource you are looking for does not exist.' if Rails.env.production?
-    flash[:alert] = e.message if Rails.env.development? || Rails.env.test?
-    Rails.logger.warn('RecordNotFound: ' + e.message)
-    Rollbar.error(e)
-    redirect_on_error
-  end
+    rescue_from ActiveRecord::RecordNotFound do |e|
+      flash[:alert] = 'Sorry, the resource you are looking for does not exist.' if Rails.env.production?
+      flash[:alert] = e.message if Rails.env.development? || Rails.env.test?
+      Rails.logger.warn('RecordNotFound: ' + e.message)
+      Rollbar.error(e)
+      redirect_on_error
+    end
 
-  rescue_from ActiveRecord::StatementInvalid do |e|
-    flash[:alert] = e.message
-    Rails.logger.warn('StatementInvalid: ' + e.message)
-    Rollbar.error(e)
-    redirect_on_error
-  end
+    rescue_from ActiveRecord::StatementInvalid do |e|
+      flash[:alert] = e.message
+      Rails.logger.warn('StatementInvalid: ' + e.message)
+      Rollbar.error(e)
+      redirect_on_error
+    end
 
-  rescue_from ActionController::ParameterMissing do |e|
-    flash[:alert] = e.message
-    Rails.logger.warn('ParameterMissing: ' + e.message)
-    Rollbar.error(e)
-    redirect_on_error
-  end
+    rescue_from ActionController::ParameterMissing do |e|
+      flash[:alert] = e.message
+      Rails.logger.warn('ParameterMissing: ' + e.message)
+      Rollbar.error(e)
+      redirect_on_error
+    end
 
-  rescue_from ActionController::InvalidAuthenticityToken do |e|
-    flash[:alert] = e.message
-    Rollbar.warn(e)
-    redirect_on_error
-  end
+    rescue_from ActionController::InvalidAuthenticityToken do |e|
+      flash[:alert] = e.message
+      Rollbar.warn(e)
+      redirect_on_error
+    end
 
-  rescue_from NoMethodError do |e|
-    flash[:alert] = e.message
-    Rollbar.warn(e)
-    redirect_on_error
+    rescue_from NoMethodError do |e|
+      flash[:alert] = e.message
+      Rollbar.warn(e)
+      redirect_on_error
+    end
   end
 
   around_action :user_time_zone, if: :current_user
@@ -157,6 +159,10 @@ class ApplicationController < ActionController::Base
     IncrementViewCountJob.perform_later(user_id, page, name, controller, action)
   end
 
+  def root
+    redirect_to default_path
+  end
+
   protected
 
   def set_persist_login_param
@@ -182,7 +188,7 @@ class ApplicationController < ActionController::Base
 
     # This ensures unauthorized users are not accessing main page, which is admin only
     # This also ensures we don't get stuck with invitation as our previous url. Otherwise it redirects to non-existent page
-    if !current_user.seen_onboarding
+    if (!current_user.seen_onboarding rescue false)
       onboarding_index_path
     elsif prev_url && (prev_url != root_url) && (!prev_url.include? 'invitation')
       prev_url
@@ -215,35 +221,6 @@ class ApplicationController < ActionController::Base
 
   def user_time_zone(&block)
     Time.use_zone(current_user.default_time_zone, &block)
-  end
-
-  def calculate_aggregate_data(sample)
-    Rails.cache.fetch("calculate_aggregate_data/#{sample}") do
-      max = sample.max
-      n = sample.count
-      sum = sample.sum
-      mean = sum.to_f / n
-      sd = Math.sqrt(sample.reduce(0) { |partial, element| partial + (element - mean)**2 / n })
-      return sum, max, mean.round(2), sd.round(2)
-    end
-  end
-
-  def calculate_percentile(number, sample)
-    Rails.cache.fetch("calculate_percentile/#{number}, #{sample}") do
-      n = sample.count
-      i = sample.each_index.select { |r| sample[r] <= number }.last
-      101 - (100 * (i - 0.5) / n).round
-    end
-  end
-
-  def aggregate_data_from_field(model, *fields, where: [nil])
-    list_of_values = model.cached_count_list(*fields, where: where)
-    calculate_aggregate_data(list_of_values)
-  end
-
-  def percentile_from_field(model, number, *fields, where: [nil])
-    list_of_values = model.cached_count_list(*fields, where: where)
-    calculate_percentile(number, list_of_values)
   end
 
   private

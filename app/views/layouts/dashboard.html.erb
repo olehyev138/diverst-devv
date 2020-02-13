@@ -2,7 +2,10 @@
 <html>
 <head>
   <title>Diverst</title>
-  <%= stylesheet_link_tag (current_user.enterprise.theme.nil? ? "application" : current_user.enterprise.theme.asset_url), media: 'all', 'data-turbolinks-track' => true %>
+  <%= stylesheet_link_tag( (current_user.enterprise.theme.nil? ? "application" : current_user.enterprise.theme.asset_url), media: 'all', 'data-turbolinks-track' => true) %>
+  <%= javascript_include_tag 'https://platform.twitter.com/widgets.js', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'http://www.instagram.com/embed.js', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag '//cdn.embedly.com/widgets/platform.js', 'data-turbolinks-track' => true, 'charset' => 'UTF-8' %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
   <link rel="icon" type="image/png" href="/favicon.png">
@@ -20,23 +23,23 @@
         <% end %>
       </div>
       <div class="flex-row__cell">
-        <%= link_to 'Personal Stats', show_usage_user_path(current_user), class: 'title_bar' %>
-        &nbsp;|&nbsp;
-        <%= link_to "Employee dashboard", user_root_path, class: "title_bar" %>
-        &nbsp;|&nbsp;
-        <%= link_to current_user.name, user_user_path(current_user), class: 'title_bar' %>
+        <%= link_to 'Personal Stats', show_usage_user_path(current_user), class: 'title_bar' %>&nbsp;|&nbsp;
+        <%= link_to "Employee dashboard", user_root_path, class: "title_bar" %> &nbsp;|&nbsp;
+        <%= link_to current_user.name, user_user_path(current_user), class: "title_bar" %>
       </div>
     </div>
   </header>
 
   <nav class="nav">
     <ul class="nav__list nav__list--primary">
-      <li class="nav__item">
-        <%= active_link_to metrics_overview_index_path, class: "nav__link", class_active: "nav__link--is-selected", active: [['metrics/' + controller_name], []] do %>
-          <%= inline_svg('icons/baseline-bar_chart-24px.svg', class: "icon nav__icon") %>
-          <span class="nav__text">Analyze</span>
-        <% end %>
-      </li>
+      <% if MetricsDashboardPolicy.new(current_user, MetricsDashboard).index? %>
+        <li class="nav__item">
+          <%= active_link_to metrics_overview_index_path, class: "nav__link", class_active: "nav__link--is-selected", active: [['metrics/' + controller_name], []] do %>
+            <%= inline_svg('icons/baseline-bar_chart-24px.svg', class: "icon nav__icon") %>
+            <span class="nav__text">Analyze</span>
+          <% end %>
+        </li>
+      <% end %>
       <% if manage_erg_root_path %>
         <li class="nav__item">
           <%= active_link_to manage_erg_root_path, class: "nav__link", class_active: "nav__link--is-selected", active: active_manage_erg_link? do %>

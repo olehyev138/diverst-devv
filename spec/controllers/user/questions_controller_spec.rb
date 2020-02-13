@@ -1,10 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'User::QuestionsController', type: :controller do
-  def setup
-    @controller = User::QuestionsController.new
-  end
-
+RSpec.describe User::QuestionsController, type: :controller do
   let!(:user) { create :user }
   let!(:campaign) { create(:campaign, enterprise: user.enterprise, owner: user) }
   let!(:question1) { create(:question, campaign: campaign, created_at: Time.current, updated_at: Time.current) }
@@ -12,11 +8,9 @@ RSpec.describe 'User::QuestionsController', type: :controller do
   let!(:answer1) { create(:answer, question: question1, author: user, upvote_count: 4) }
   let!(:answer2) { create(:answer, question: question1, author: user, upvote_count: 8) }
   let!(:other_answer) { create(:answer, question: question2, author: user) }
-  let!(:sponsor1) { create(:sponsor, sponsorable: campaign) }
-  let!(:sponsor2) { create(:sponsor, sponsorable: campaign) }
-  let!(:sponsor3) { create(:sponsor, sponsorable: user.enterprise) }
-
-  before { setup }
+  let!(:sponsor1) { create(:sponsor, campaign_id: campaign.id) }
+  let!(:sponsor2) { create(:sponsor, campaign_id: campaign.id) }
+  let!(:sponsor3) { create(:sponsor, enterprise_id: user.enterprise.id) }
 
   describe 'GET #index' do
     describe 'when user is logged in' do

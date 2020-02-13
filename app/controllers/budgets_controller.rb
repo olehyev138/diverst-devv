@@ -21,6 +21,10 @@ class BudgetsController < ApplicationController
   def new
     authorize [@group], :create?, policy_class: GroupBudgetPolicy
 
+    if @group.annual_budgets.find(params[:annual_budget_id])&.amount == 0
+      redirect_to(:back, alert: 'Annual Budget is not set for this group. Please check back later.')
+    end
+
     @annual_budget_id = params[:annual_budget_id]
     @budget = Budget.new
   end
@@ -80,7 +84,7 @@ class BudgetsController < ApplicationController
   end
 
   def destroy
-    authorize [@group], :destroy?, policy_class: GroupBudgetPolicy
+    authorize [@group, @budget], :destroy?, policy_class: GroupBudgetPolicy
     track_activity(@budget, :destroy)
     if @budget.destroy
       flash[:notice] = 'Your budget was deleted'

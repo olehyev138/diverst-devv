@@ -28,8 +28,8 @@
         <div class="col sm-6">
           <div class="card__section card__section--border">
             <%= f.input :budget_item_id,
-                  collection: Budget.pre_approved_events_for_select(@group, current_user),
-                  include_blank: 'Create new free event ($0)',
+                  collection: Budget.pre_approved_events_for_select(@group, current_user, @initiative),
+                  include_blank: 'Create new free event ($0)', 
                   label: "Attach a <strong>budget</strong> to the event.".html_safe,
 
                   # disable field if there are no budget_items for approved budgets

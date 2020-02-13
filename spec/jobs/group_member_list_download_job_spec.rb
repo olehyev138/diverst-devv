@@ -56,6 +56,18 @@ RSpec.describe GroupMemberListDownloadJob, type: :job do
       end
     end
 
+    context 'for all group_parent_members' do
+      it 'creates a downloadable csv file' do
+        expect { subject.perform(user.id, group.id, 'group_parent_members') }
+          .to change(CsvFile, :count).by(1)
+      end
+
+      it 'suffix of download file name is (group_parent_members)' do
+        subject.perform(user.id, group.id, 'group_parent_members')
+        expect(CsvFile.last.download_file_name).to eq "#{group.file_safe_name}_membership_list(group_parent_members)"
+      end
+    end
+
     context 'with fields to add' do
       # Paperclip.io_adapters.for(attachment.file).read
       let!(:number_y) { create(:numeric_field, enterprise: enterprise, add_to_member_list: true) }

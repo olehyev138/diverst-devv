@@ -5,6 +5,7 @@ class NewsLink < BaseClass
   belongs_to :author, class_name: 'User', counter_cache: :own_news_links_count
 
   has_one :news_feed_link
+  has_many :news_tags, through: :news_feed_link
 
   has_many :news_link_segments, dependent: :destroy
   has_many :segments, through: :news_link_segments, before_remove: :remove_segment_association
@@ -36,6 +37,7 @@ class NewsLink < BaseClass
   validates_attachment_content_type :picture, content_type: %r{\Aimage\/.*\Z}
 
   after_create :build_default_link
+  after_create :post_new_news_link_to_slack, unless: Proc.new { Rails.env.test? }
   after_destroy :remove_news_feed_link
 
   scope :of_segments, ->(segment_ids) {
@@ -62,7 +64,111 @@ class NewsLink < BaseClass
     end
   end
 
+  def text_description
+    HtmlHelper.to_pain_text(description)
+  end
+
+  def mrkdwn_description
+    HtmlHelper.to_mrkdwn(description)
+  end
+
+  def to_slack_block(modifier: '')
+    [
+      slack_block_title(modifier: modifier),
+      slack_block_author,
+      slack_block_content,
+      # .merge(slack_block_image),
+      slack_block_buttons,
+    ]
+  end
+
   protected
+
+  def slack_block_title(modifier: '')
+    {
+      type: 'section',
+      text: {
+        type: 'mrkdwn',
+        text: "*#{modifier} News Link Shared from <#{group_url(group)}|#{group.name}>*:\n\t*<#{comments_group_news_link_url(group.id, id)}|#{title}>*\n\t*Link:* #{url}"
+      }
+    }
+  end
+
+  def slack_block_content
+    {
+      type: 'section',
+      text: {
+        type: 'mrkdwn',
+        text: "#{mrkdwn_description}"
+      }
+    }
+  end
+
+  def slack_block_author
+    {
+      type: 'context',
+      elements: [
+        {
+          type: 'mrkdwn',
+          text: "*Poster:* #{author.name}"
+        }
+      ]
+    }
+  end
+
+  def slack_block_image
+    if picture_file_name.present?
+      {
+        accessory: {
+          type: 'image',
+          image_url: picture.url,
+          alt_text: 'Event Picture'
+        }
+      }
+    else
+      {}
+    end
+  end
+
+  def slack_block_buttons
+    {
+      type: 'actions',
+      elements: [
+        {
+          type: 'button',
+          text: {
+            type: 'plain_text',
+            emoji: true,
+            text: 'View Comments'
+          },
+          url: comments_group_news_link_url(group.id, id),
+          style: 'primary'
+        },
+        {
+          type: 'button',
+          text: {
+            type: 'plain_text',
+            emoji: true,
+            text: 'Open News Link'
+          },
+          url: url,
+          style: 'primary'
+        }
+      ]
+    }
+  end
+
+  def slack_last_updated
+    {
+      type: 'context',
+      elements: [
+        {
+          type: 'mrkdwn',
+          text: "Last updated: #{updated_at.strftime('%F %T')}"
+        }
+      ]
+    }
+  end
 
   def smart_add_url_protocol
     return nil if url.blank?
@@ -82,5 +188,22 @@ class NewsLink < BaseClass
 
   def remove_news_feed_link
     news_feed_link.destroy if news_feed_link.present?
+  end
+
+  def post_new_news_link_to_slack
+    pk, _ = group.enterprise.get_colours
+    message = {
+      attachments: [
+        {
+          fallback: "New News Link from #{group.name}",
+          color: pk,
+          blocks: to_slack_block(modifier: 'New')
+        }
+      ]
+    }
+    group.send_slack_webhook_message message
+    news_feed_link.shared_news_feeds.each do |nf|
+      nf.group.send_slack_webhook_message message
+    end
   end
 end

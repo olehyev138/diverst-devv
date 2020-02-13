@@ -70,6 +70,7 @@ class User < BaseClass
   has_many :leading_groups, through: :group_leaders, source: :group
   has_many :user_reward_actions, dependent: :destroy
   has_many :reward_actions, through: :user_reward_actions
+  has_many :user_rewards
   has_many :rewards, foreign_key: :responsible_id, dependent: :destroy
   has_many :likes, dependent: :destroy
   has_many :csv_files
@@ -102,11 +103,14 @@ class User < BaseClass
   validates_length_of :reset_password_token, maximum: 191
   validates_length_of :encrypted_password, maximum: 191
   validates_length_of :email, maximum: 191
+  validates_length_of :notifications_email, maximum: 191
   validates_length_of :auth_source, maximum: 191
   validates_length_of :data, maximum: 65535
   validates_length_of :last_name, maximum: 191
   validates_length_of :first_name, maximum: 191
   validates_attachment_content_type :avatar, content_type: /\Aimage\/.*\Z/
+
+  validates :notifications_email, uniqueness: true, allow_blank: true, format: { with: Devise.email_regexp }
 
   validates :first_name, presence: true
   validates :last_name, presence: true
@@ -142,6 +146,18 @@ class User < BaseClass
   scope :mentees, -> { where(mentee: true) }
 
   accepts_nested_attributes_for :availabilities, allow_destroy: true
+
+  def pending_rewards
+    user_rewards.where(status: 0)
+  end
+
+  def redeemed_rewards
+    user_rewards.where(status: 1)
+  end
+
+  def email_for_notification
+    notifications_email.presence || email
+  end
 
   def last_notified_date
     last_group_notification_date&.to_date
@@ -417,6 +433,14 @@ class User < BaseClass
         user_columns = [user.first_name, user.last_name, user.email]
 
         csv << user_columns
+      end
+    end
+  end
+
+  def self.aggregate_sign_ins(enterprise_id:)
+    Rails.cache.fetch("aggregate_login_count:#{enterprise_id}") do
+      where(enterprise: enterprise_id).all.map do |usr|
+        [usr.id, usr.sign_in_count]
       end
     end
   end

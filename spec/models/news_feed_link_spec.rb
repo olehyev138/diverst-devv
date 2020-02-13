@@ -37,27 +37,45 @@ RSpec.describe NewsFeedLink, type: :model do
     describe '.not_approved' do
       let!(:enterprise) { create(:enterprise) }
       let!(:group) { create(:group, enterprise_id: enterprise.id) }
+      let!(:group2) { create(:group, enterprise_id: enterprise.id) }
       before do
         group_messages = create_list(:group_message, 3, group_id: group.id)
+        group_messages2 = create_list(:group_message, 3, group_id: group2.id)
         NewsFeedLink.where(group_message_id: group_messages.map(&:id)).update_all(approved: false)
+        NewsFeedLink.where(group_message_id: group_messages2.map(&:id)).update_all(approved: false)
       end
 
       it 'returns not_approved news_feed_links' do
-        expect(NewsFeedLink.not_approved.count).to eq(3)
+        expect(NewsFeedLink.not_approved.count).to eq(6)
+      end
+
+      it 'returns not_approved for particular feed news_feed_links' do
+        expect(NewsFeedLink.not_approved(group.news_feed.id).count).to eq(3)
       end
     end
 
     describe '.combined_news_links' do
-      let(:group) { create(:group) }
+      let!(:enterprise) { create(:enterprise) }
+      let!(:group) { create(:group, enterprise_id: enterprise.id) }
       before do
         create(:group_message, group_id: group.id)
         create(:news_link, group_id: group.id)
         create(:social_link, group_id: group.id)
       end
 
+      describe 'when social media is enabled' do
+        before {
+          enterprise.update_column(:enable_social_media, true)
+          group.reload
+        }
+
+        it 'returns combined news links of a particular news feed' do
+          expect(NewsFeedLink.combined_news_links(group.news_feed.id, group.enterprise).count).to eq(3)
+        end
+      end
+
       it 'returns combined news links of a particular news feed' do
-        # byebug
-        expect(NewsFeedLink.combined_news_links(group.news_feed.id).count).to eq(3)
+        expect(NewsFeedLink.combined_news_links(group.news_feed.id, group.enterprise).count).to eq(2)
       end
     end
   end

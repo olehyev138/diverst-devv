@@ -1,17 +1,11 @@
 require 'rails_helper'
 require 'spec_helper'
 
-RSpec.describe 'User::UserAnswersController', type: :controller do
+RSpec.describe User::UserAnswersController, type: :controller do
   include ActiveJob::TestHelper
 
   let(:enterprise) { create(:enterprise, enable_rewards: true) }
   let(:user) { create :user, enterprise: enterprise }
-
-  def setup
-    @controller = User::UserAnswersController.new
-  end
-
-  before { setup }
 
   describe 'PUT#vote' do
     let!(:answer) { create(:answer, question: create(:question, campaign: create(:campaign, users: [user]))) }

@@ -1,4 +1,7 @@
 module ApplicationHelper
+  class MissingKeyError < StandardError
+  end
+
   def linkedin_logo_for_connected_users(user)
     inline_svg('icons/linkedin', size: '17px*17px') if user.linkedin_profile_url.present?
   end
@@ -106,10 +109,23 @@ module ApplicationHelper
   end
 
   def group_initiative_expenses_link(text, group, initiative)
-    return link_to text, group_initiative_expenses_path(group, initiative) if initiative.estimated_funding != 0
+    link_to text, group_initiative_expenses_path(group, initiative)
+  end
 
-    return link_to text, group_initiative_expenses_path(group, initiative),
-                   data: { confirm: 'you are not allowed to make a negative expense' } if initiative.estimated_funding == 0
+  def percentage_expenditure(total_expenses, budget)
+    expenses_percent = (total_expenses / budget) * 100
+    return 0 if total_expenses == 0.0
+    return 100 if expenses_percent.nan? || expenses_percent.infinite?
+
+    expenses_percent
+  end
+
+  def negative_budget_pressure(options)
+    initiative = options[:initiative]
+    annual_budget = options[:annual_budget]
+
+    return initiative.expenses.sum(:amount) > initiative.estimated_funding if options[:initiative]
+    return annual_budget.expenses > annual_budget.amount if options[:annual_budget]
   end
 
   def default_path
@@ -137,9 +153,7 @@ module ApplicationHelper
   def show_sponsor?(object)
     m = 'sponsor_name'
     if object.respond_to? m.to_sym
-      if object.public_send(m.to_sym).present?
-        yield
-      end
+      object.public_send(m.to_sym).present?
     end
   end
 

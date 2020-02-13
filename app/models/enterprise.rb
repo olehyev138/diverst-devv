@@ -34,8 +34,14 @@ class Enterprise < BaseClass
   has_many :answer_upvotes, through: :answers, source: :votes
   has_many :resources, dependent: :destroy
   has_many :yammer_field_mappings, dependent: :destroy
-  has_many :emails, dependent: :destroy
+
+  has_many :emails, -> { where custom: false }, dependent: :destroy
+  has_many :custom_emails, -> { where custom: true }, class_name: 'Email', dependent: :destroy
+
   has_many :email_variables, class_name: 'EnterpriseEmailVariable', dependent: :destroy
+  has_many :total_page_visitations
+  has_many :total_page_visitation_by_name
+
   belongs_to :theme
 
   has_many :expenses, dependent: :destroy
@@ -47,7 +53,7 @@ class Enterprise < BaseClass
   has_many :mentoring_requests, dependent: :destroy
   has_many :mentoring_sessions, dependent: :destroy
   has_many :mentoring_types, dependent: :destroy
-  has_many :sponsors, as: :sponsorable, dependent: :destroy
+  has_many :sponsors, dependent: :destroy
 
   has_many :policy_group_templates, dependent: :destroy
   has_many :rewards, dependent: :destroy
@@ -78,7 +84,7 @@ class Enterprise < BaseClass
   validates_length_of :onboarding_sponsor_media_file_name, maximum: 191
   validates_length_of :company_video_url, maximum: 191
   validates_length_of :time_zone, maximum: 191
-
+  validates_length_of :iframe_calendar_token, maximum: 191
   validates_length_of :xml_sso_config_content_type, maximum: 191
   validates_length_of :xml_sso_config_file_name, maximum: 191
   validates_length_of :privacy_statement, maximum: 65535
@@ -140,7 +146,7 @@ class Enterprise < BaseClass
     user_roles.find_by(default: true).id
   end
 
-  def iframe_calendar_token
+  def get_iframe_calendar_token
     unless self[:iframe_calendar_token]
       self.update(iframe_calendar_token: SecureRandom.urlsafe_base64)
     end
@@ -204,6 +210,16 @@ class Enterprise < BaseClass
     end
 
     User.to_csv(users: [], fields: fields, nb_rows: nb_rows)
+  end
+
+  def users_points_report_csv(users)
+    CSV.generate do |csv|
+      csv << ['Name', 'Email', 'Points']
+
+      users.order(points: :desc).each do |user|
+        csv << [user.name, user.email, user.points]
+      end
+    end
   end
 
   def close_budgets_csv
@@ -736,6 +752,16 @@ class Enterprise < BaseClass
   def logs_csv
     logs = PublicActivity::Activity.includes(:owner, :trackable).where(recipient: self).order(created_at: :desc)
     LogCsv.build(logs)
+  end
+
+  def get_colours
+    if theme.nil?
+      %w(#7B77C9 #7B77C9)
+    else
+      p_color = theme.primary_color || '#7B77C9'
+      s_color = theme.secondary_color || p_color
+      [p_color, s_color]
+    end
   end
 
   protected

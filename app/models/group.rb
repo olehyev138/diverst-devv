@@ -106,7 +106,7 @@ class Group < BaseClass
 
   has_many :group_leaders, -> { order(position: :asc) }, dependent: :destroy
   has_many :leaders, through: :group_leaders, source: :user
-  has_many :sponsors, as: :sponsorable, dependent: :destroy
+  has_many :sponsors, dependent: :destroy
 
   has_many :children, class_name: 'Group', foreign_key: :parent_id, dependent: :destroy
   has_many :annual_budgets, dependent: :destroy
@@ -292,10 +292,6 @@ class Group < BaseClass
     pending_users.enabled?
   end
 
-  def file_safe_name
-    name.gsub(/[^0-9A-Za-z.\-]/, '_')
-  end
-
   def logo_expiring_thumb
     return nil if logo.blank?
 
@@ -426,7 +422,11 @@ class Group < BaseClass
   end
 
   def title_with_leftover_amount
-    "Create event from #{name} leftover ($#{leftover_money == 0 ? 0.0 : available_budget})"
+    if annual_budget == leftover_money
+      "Create event from #{name} ($#{available_budget})"
+    else
+      "Create event from #{name} leftover ($#{leftover_money == 0 ? 0.0 : available_budget})"
+    end
   end
 
   def pending_comments_count
@@ -443,6 +443,70 @@ class Group < BaseClass
 
   def has_survey?
     survey_fields.count > 0
+  end
+
+  def filtered_member_list(params)
+    segments = (params['users_segments_segment_id_in'] || []).map do |seg_id|
+      Segment.find(seg_id.to_i) if seg_id.present?
+    end
+    segments.select! { |seg| seg.present? }
+
+    from = params['user_groups_created_at_gteq']
+    to = params['user_groups_created_at_lteq']
+
+    users = User.joins(:user_groups)
+    users = users.joins(:users_segments) if segments.present?
+
+    users = users
+              .where('`user_groups`.`group_id` = ?', id)
+              .where('`user_groups`.`accepted_member` = 1')
+              .where('`users`.`active` = 1')
+
+    users = users.where('`users_segments`.`segment_id` IN (?)', segments) if segments.present?
+    users = users.where('`user_groups`.`created_at` >= ?', from) if from.present?
+    users = users.where('`user_groups`.`created_at` <= ?', to) if to.present?
+    users.distinct
+  end
+
+  def upcoming_events_slack_block
+    upcoming_events = initiatives.upcoming.limit(5) + participating_initiatives.upcoming.limit(3)
+    init_block = [
+      {
+        type: 'section',
+        text: {
+          type: 'mrkdwn',
+          text: "*#{name}*"
+        }
+      },
+      {
+        type: 'divider'
+      }
+    ]
+    blocks = upcoming_events.reduce(init_block) { |sum, event| sum + event.to_slack_block + [{ type: 'divider' }] }
+    pk, _ = enterprise.get_colours
+    {
+      attachments: [
+        {
+          fallback: "Events for #{name}",
+          color: pk,
+          blocks: blocks
+        }
+      ]
+    }
+  end
+
+  def send_slack_webhook_message(message)
+    if slack_webhook.present?
+      SlackClient.post_web_hook_message(slack_webhook, message)
+    end
+  end
+
+  def uninstall_slack
+    SlackClient.uninstall(slack_auth_data)
+    self.update(
+          slack_auth_data: nil,
+          slack_webhook: nil
+        )
   end
 
   protected

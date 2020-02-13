@@ -20,7 +20,7 @@
                   include_blank: true,
                   selected: @poll.initiative.try(:id) || params[:initiative_id],
                   input_html: { class: "select2" },
-                  label: "Choose the <strong>event</strong> you want to target within these #{ c_t(:erg).pluralize }".html_safe,
+                  label: "Event Targeted".html_safe,
                   disabled: disabled_input?
             %>
             <%= f.input :initiative_id,

@@ -16,37 +16,23 @@
   <% end %>
 <% end %>
 
-<% if !GroupPolicy.new(current_user, @group).is_a_member? %>
-  <% if @group.active? %>
+<% if !GroupPolicy.new(current_user, @group).is_a_member? && @group.active? %>
     <% if @group.is_parent_group? %>
       <%= simple_form_for :user, url: group_group_members_path(@group), method: :post, remote: true do |f| %>
         <%= f.input :user_id, as: :hidden, input_html: { value: current_user.id } %>
         <%= f.submit "Join this #{ c_t(:parent) }", class: "btn btn--primary", style: 'margin-bottom: 20px;' %>
       <% end %>
     <% elsif @group.is_sub_group? %>
-      <% if !GroupPolicy.new(current_user, @group).is_a_member? %>
-        <%= simple_form_for :user, url: group_group_members_path(@group), method: :post, remote: true do |f| %>
-          <%= f.input :user_id, as: :hidden, input_html: { value: current_user.id } %>
-          <%= f.submit "Join this #{ c_t(:sub_erg) }", class: "btn btn--primary", style: 'margin-bottom: 20px;' %>
-        <% end %>
-      <% elsif !GroupPolicy.new(current_user, @group).is_a_member? %>
-        <%= simple_form_for :user, url: group_group_members_path(@group), method: :post do |f| %>
-          <%= f.input :user_id, as: :hidden, input_html: { value: current_user.id } %>
-          <%= f.submit "Join this #{ c_t(:sub_erg) }", class: "btn btn--primary", style: 'margin-bottom: 20px;' %>
-        <% end %>
+      <%= simple_form_for :user, url: group_group_members_path(@group), method: :post, remote: true do |f| %>
+        <%= f.input :user_id, as: :hidden, input_html: { value: current_user.id } %>
+        <%= f.submit "Join this #{ c_t(:sub_erg) }", class: "btn btn--primary", style: 'margin-bottom: 20px;' %>
       <% end %>
-    <% elsif @group.is_sub_group? && GroupPolicy.new(current_user, @group).is_a_member? %>
-      <%= simple_form_for :user, url: group_group_members_path(@group), method: :post do |f| %>
-          <%= f.input :user_id, as: :hidden, input_html: { value: current_user.id } %>
-          <%= f.submit "Join this #{ c_t(:sub_erg) }", class: "btn btn--primary", style: 'margin-bottom: 20px;' %>
-        <% end %>
     <% elsif @group.is_standard_group? %>
-        <%= simple_form_for :user, url: group_group_members_path(@group), method: :post do |f| %>
-          <%= f.input :user_id, as: :hidden, input_html: { value: current_user.id } %>
-          <%= f.submit "Join this #{ c_t(:erg) }", class: "btn btn--primary", style: 'margin-bottom: 20px;' %>
-        <% end %>
+      <%= simple_form_for :user, url: group_group_members_path(@group), method: :post do |f| %>
+        <%= f.input :user_id, as: :hidden, input_html: { value: current_user.id } %>
+        <%= f.submit "Join this #{ c_t(:erg) }", class: "btn btn--primary", style: 'margin-bottom: 20px;' %>
+      <% end %>
     <% end %>
-  <% end %>
 <% end %>
 
 <%= render 'groups/group_members/modal' %>

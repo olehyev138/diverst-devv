@@ -5,11 +5,12 @@ class Groups::PostsController < ApplicationController
   before_action :set_twitter_accounts
   before_action :set_page,    only: [:index, :pending]
   before_action :set_link,    only: [:approve, :pin, :unpin]
+  after_action :visit_page, only: [:index, :pending]
 
   layout 'erg'
 
   def index
-    visit_page("#{@group.name}'s News Feed")
+    @search = params[:search]
     @tweets = recent_tweets
     if GroupPolicy.new(current_user, @group).manage?
       without_segments
@@ -17,18 +18,29 @@ class Groups::PostsController < ApplicationController
       with_segments
     else
       @count = 0
-      @posts = []
+      @posts = NewsFeedLink.none
     end
-    filter_posts(@posts)
+
+    @posts = @posts.include_posts(social_enabled: @group.enterprise.enable_social_media?)
+    @pending_posts_count = @posts.not_approved(@group.news_feed.id).count
+    @posts = @posts.approved
+    prune_posts
   end
 
   def pending
-    visit_page("#{@group.name}'s Pending Posts")
-    if @group.enterprise.enable_social_media?
-      @posts = @group.news_feed_links.includes(:news_link, :group_message, :social_link).not_approved.where(archived_at: nil).order(created_at: :desc)
+    if GroupPolicy.new(current_user, @group).manage?
+      without_segments
+    elsif GroupPostsPolicy.new(current_user, [@group]).view_latest_news?
+      with_segments
     else
-      @posts = @group.news_feed_links.includes(:news_link, :group_message).not_approved.where(archived_at: nil).order(created_at: :desc)
+      @count = 0
+      @posts = NewsFeedLink.none
     end
+
+    @posts = @posts.include_posts(social_enabled: @group.enterprise.enable_social_media?)
+    @posts_count = @posts.approved.count
+    @pending_posts = @posts.not_approved(@group.news_feed.id)
+    prune_posts
   end
 
   def approve
@@ -51,7 +63,7 @@ class Groups::PostsController < ApplicationController
 
   def unpin
     @link.is_pinned = false
-    if !@link.save
+    unless @link.save
       flash[:alert] = 'Link was not unpinned'
     end
     redirect_to :back
@@ -59,39 +71,46 @@ class Groups::PostsController < ApplicationController
 
   protected
 
+  def split_search_terms
+    (@search || '').split(' ')
+  end
+
   def recent_tweets(nb = 5)
-    all_tweets = []
-    @accounts.find_each do |account|
-      all_tweets += TwitterClient.get_tweets(account.account).first(nb)
+    if params['search'].blank?
+      all_tweets = []
+      @accounts.find_each do |account|
+        all_tweets += TwitterClient.get_tweets(account.account).first(nb)
+      end
+
+      all_tweets.sort_by!(&:created_at)
+
+      all_tweets.first(nb)
+    else
+      []
     end
-
-    all_tweets.sort_by!(&:created_at)
-
-    all_tweets.first(nb)
   end
 
   def without_segments
-    @posts = NewsFeed.all_links_without_segments(@group.news_feed.id, @group.enterprise)
-    @count = @posts.size
-    @posts = @posts.order(is_pinned: :desc, created_at: :desc)
-               .limit(@limit)
+    @posts = @group.news_feed.all_links_without_segments
   end
 
   def with_segments
     segment_ids = current_user.segment_ids
+    @posts = @group.news_feed.all_links(segment_ids)
+  end
 
-    return without_segments if segment_ids.empty?
-
-    @posts = NewsFeed.all_links(@group.news_feed.id, segment_ids, @group.enterprise)
-    @count = @posts.size
+  def prune_posts
+    search_terms = split_search_terms
+    if search_terms.present?
+      @posts = @posts.search(search_terms)
+    end
+    @count = @posts.count
     @posts = @posts.order(is_pinned: :desc, created_at: :desc)
                .limit(@limit)
   end
 
-  def filter_posts(posts)
-    @posts = posts.select { |news|
-      news.news_link || news.group_message || news.social_link
-    }
+  def include_posts
+    @posts = @posts.include_posts(social_enabled: @group.enterprise.enable_social_media?)
   end
 
   def set_group
@@ -114,5 +133,22 @@ class Groups::PostsController < ApplicationController
 
   def set_link
     @link = @group.news_feed_links.find(params[:link_id])
+  end
+
+  def visit_page
+    super(page_name)
+  end
+
+  def page_name
+    case action_name
+    when 'index'
+      "#{@group.name}'s News Feed"
+    when 'pending'
+      "#{@group.name}'s Pending Posts"
+    else
+      "#{controller_path}##{action_name}"
+    end
+  rescue
+    "#{controller_path}##{action_name}"
   end
 end

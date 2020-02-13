@@ -15,11 +15,13 @@ class Groups::SocialLinksController < ApplicationController
 
   def new
     @social_link = @group.social_links.new
+    @links = SocialMedia::Importer.oembed_link_short
   end
 
   def create
     @social_link = @group.social_links.new(social_link_params)
     @social_link.author = current_user
+    @links = SocialMedia::Importer.oembed_link_short
 
     if @social_link.save
       track_activity(@social_link, :create)
@@ -28,7 +30,7 @@ class Groups::SocialLinksController < ApplicationController
       redirect_to group_posts_path(@group)
     else
       flash[:alert] = 'Your social link was not created. Please fix the errors'
-      redirect_to :back
+      render :new
     end
   end
 

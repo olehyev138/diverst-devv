@@ -4,6 +4,7 @@ class BaseClass < ActiveRecord::Base
   include ::BaseSearch
   include ::BaseElasticsearch
   include ::BaseGraph
+  include Rails.application.routes.url_helpers
 
   def self.inherited(child)
     super
@@ -15,22 +16,28 @@ class BaseClass < ActiveRecord::Base
     end
   end
 
-  def self.count_list(*fields, from: nil, where: [nil])
+  def self.count_list(*fields, from: nil, where: [nil], enterprise_id: nil)
+    if enterprise_id.present?
+      records = self.where(enterprise: enterprise_id)
+    else
+      records = self
+    end
+
     if where == [nil] && from.nil?
       # WITHOUT ANY EXTRA CONDITION, CAN USE COUNTING CACHE
       results = []
-      self.find_in_batches do |records|
-        records.map do |record|
+      records.find_in_batches do |records_subset|
+        records_subset.map do |record|
           sum = fields.sum do |field|
             record.send(field).size
           end
-          results.append sum
+          results.append [record.id, sum]
         end
       end
     else
       # IF THERE IS A CONDITION, LEFT JOIN ALL THE FIELDS,
       # APPLY THE CONDITION, GROUP BY USER ID, AND COUNT DISTINCT
-      active_record = self.left_joins(*fields).where(*where).group(:id)
+      active_record = records.left_joins(*fields).where(*where).group(:id)
       count_hash = fields.reduce(nil) do |sum, n|
         hash = active_record.distinct.count("#{get_association_table_name(n)}.id")
         if sum.present?
@@ -39,14 +46,15 @@ class BaseClass < ActiveRecord::Base
           hash
         end
       end
-      results = count_hash.values
+      results = count_hash.to_a
     end
     results.sort
   end
 
-  def self.cached_count_list(*fields, from: nil, where: [nil])
-    Rails.cache.fetch("count_list/#{self.model_name.name}:#{fields}:#{where}", expires_in: 2.hours) do
-      count_list(*fields, from: from, where: where)
+  def self.cached_count_list(*fields, from: nil, where: [nil], enterprise_id: nil)
+    key = "count_list/#{self.model_name.name}:#{fields}:#{where}:#{enterprise_id}"
+    Rails.cache.fetch(key) do
+      count_list(*fields, from: from, where: where, enterprise_id: enterprise_id)
     end
   end
 
@@ -81,6 +89,10 @@ class BaseClass < ActiveRecord::Base
     end
   end
 
+  def file_safe_name
+    to_label.gsub(/[^0-9A-Za-z.\-]/, '_')
+  end
+
   after_commit on: [:create] { update_elasticsearch_index('index') }
   after_commit on: [:update] { update_elasticsearch_index('update') }
   after_commit on: [:destroy] { update_elasticsearch_index('delete') }
@@ -94,17 +106,16 @@ class BaseClass < ActiveRecord::Base
       raise "#{field} is not a field of #{self.class}" if reflection.blank?
 
       chain = reflection.chain.reverse
-      table_name = self.table_name
-      full_join + chain.reduce(['', table_name]) do |sum, n|
+      full_join + chain.reduce(['', self]) do |sum, n|
         if joined.include?([n.klass, n.foreign_key])
           sum
         else
           joined.append([n.klass, n.foreign_key])
           [
             n.source_macro == :belongs_to ?
-              sum[0] + " LEFT JOIN `#{n.klass.table_name}` ON `#{n.klass.table_name}`.`id` = `#{sum[1]}`.`#{n.foreign_key}`" :
-              sum[0] + " LEFT JOIN `#{n.klass.table_name}` ON `#{sum[1]}`.`id` = `#{n.klass.table_name}`.`#{n.foreign_key}`",
-            n.klass.table_name
+              sum[0] + " LEFT JOIN `#{n.klass.table_name}` ON `#{n.klass.table_name}`.`#{n.klass.primary_key}` = `#{sum[1].table_name}`.`#{n.foreign_key}`" :
+              sum[0] + " LEFT JOIN `#{n.klass.table_name}` ON `#{sum[1].table_name}`.`#{sum[1].primary_key}` = `#{n.klass.table_name}`.`#{n.foreign_key}`",
+            n.klass
           ]
         end
       end[0]

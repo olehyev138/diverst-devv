@@ -394,6 +394,30 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
         post :add_members, group_id: group.id, group: { member_ids: [add.id] }
         expect(add.user_groups.last.accepted_member).to eq true
       end
+
+      context 'public activity' do
+        enable_public_activity
+
+        it 'creates public activity record' do
+          perform_enqueued_jobs do
+            expect { post :add_members, group_id: group.id, group: { member_ids: [add.id] }
+            }.to change(PublicActivity::Activity, :count).by(1)
+          end
+        end
+
+        describe 'activity record' do
+          let(:model) { group }
+          let(:owner) { user }
+          let(:key) { 'group.add_members_to_group' }
+
+          before {
+            perform_enqueued_jobs do
+              post :add_members, group_id: group.id, group: { member_ids: [add.id] }
+            end
+          }
+          include_examples 'correct public activity'
+        end
+      end
     end
 
     context 'when user is not logged in' do
@@ -406,21 +430,45 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
     context 'when user is logged in' do
       let!(:group_leader) { create(:group_leader, user_id: user.id, group_id: group.id, user_role_id: group_role.id) }
       login_user_from_let
-      before {
-        user_group.save
-        delete :remove_member, group_id: group.id, id: user.id
-      }
+      before { user_group.save }
 
       it 'redirects to index action' do
+        delete :remove_member, group_id: group.id, id: user.id
         expect(response).to redirect_to action: 'index'
       end
 
       it 'removes the user' do
+        delete :remove_member, group_id: group.id, id: user.id
         expect(UserGroup.where(user_id: user.id, group_id: group.id).count).to eq(0)
       end
 
       it 'deletes the leader' do
+        delete :remove_member, group_id: group.id, id: user.id
         expect { GroupLeader.find(group_leader.id) }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+
+      context 'public activity' do
+        enable_public_activity
+
+        it 'creates public activity record' do
+          perform_enqueued_jobs do
+            expect { delete :remove_member, group_id: group.id, id: user.id
+            }.to change(PublicActivity::Activity, :count).by(1)
+          end
+        end
+
+        describe 'activity record' do
+          let(:model) { group }
+          let(:owner) { user }
+          let(:key) { 'group.remove_member_from_group' }
+
+          before {
+            perform_enqueued_jobs do
+              delete :remove_member, group_id: group.id, id: user.id
+            end
+          }
+          include_examples 'correct public activity'
+        end
       end
     end
 
@@ -511,6 +559,56 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
     end
   end
 
+  describe 'POST#export_sub_groups_members_list_csv' do
+    context 'when user is logged in' do
+      let!(:sub_group) { create(:group, parent: group, enterprise: user.enterprise) }
+      let!(:member) { create(:user_group, user_id: create(:user).id, group_id: sub_group.id) }
+      login_user_from_let
+
+      before do
+        allow(GroupMemberListDownloadJob).to receive(:perform_later)
+        request.env['HTTP_REFERER'] = 'back'
+        post :export_sub_groups_members_list_csv, group_id: group.id, groups: { sub_group.name => sub_group.id }
+      end
+
+      it 'redirects to user' do
+        expect(response).to redirect_to 'back'
+      end
+
+      it 'flashes' do
+        expect(flash[:notice]).to eq 'Please check your Secure Downloads section in a couple of minutes'
+      end
+
+      it 'calls job' do
+        expect(GroupMemberListDownloadJob).to have_received(:perform_later)
+      end
+
+      describe 'public activity' do
+        enable_public_activity
+
+        it 'creates public activity record' do
+          perform_enqueued_jobs do
+            expect { post :export_sub_groups_members_list_csv, group_id: group.id, groups: { sub_group.name => sub_group.id } }.to change(PublicActivity::Activity, :count).by(1)
+          end
+        end
+
+        describe 'activity record' do
+          let(:model) { group }
+          let(:owner) { user }
+          let(:key) { 'group.export_sub_groups_members_list' }
+
+          before {
+            perform_enqueued_jobs do
+              post :export_sub_groups_members_list_csv, group_id: group.id, groups: { sub_group.name => sub_group.id }
+            end
+          }
+
+          include_examples 'correct public activity'
+        end
+      end
+    end
+  end
+
   describe 'GET#export_group_members_list_csv' do
     context 'when user is logged in' do
       let!(:active_members) { create_list(:user, 5, enterprise_id: user.enterprise.id, user_role_id: user.user_role_id, active: true) }
@@ -521,6 +619,7 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
         allow(GroupMemberListDownloadJob).to receive(:perform_later)
         request.env['HTTP_REFERER'] = 'back'
         group.members << active_members
+        create(:group_leader, user: user, group: group)
         get :export_group_members_list_csv, group_id: group.id
       end
 

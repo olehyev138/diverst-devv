@@ -87,7 +87,7 @@ RSpec.describe EmailsController, type: :controller do
           expect(flash[:alert]).to eq 'Your email was not updated. Please fix the errors'
         end
 
-        it 'renders edit template' do
+        it 'renders edit template for system email' do
           expect(response).to render_template :edit
         end
       end

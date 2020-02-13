@@ -18,7 +18,7 @@ class Poll < BaseClass
 
   after_create :create_default_graphs
 
-  after_save :schedule_users_notification
+  after_commit :schedule_users_notification, on: [:create, :update]
 
   before_destroy :remove_associated_fields, prepend: true
 

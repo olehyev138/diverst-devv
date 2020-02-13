@@ -1,0 +1,46 @@
+<div class="content__main">
+    <div class="content__header">
+      <h1>Rewards to be redeemed</h1>
+    </div>
+    <div class="card">
+      <div class="card__section">
+        <% if @user_rewards_responsible.empty? %>
+          <p>You have no reward redemption requests to approve.</p>
+        <% else %>
+          <table class="table--has-border">
+            <thead>
+              <th>Pending Rewards</th>
+              <th>Points</th>
+              <th>Users</th>
+              <th>Status</th>
+              <th>Options</th>
+            </thead>
+            <tbody>
+              <% @pending_rewards.each do |pending_reward| %>
+                <% if RewardPolicy.new(current_user, pending_reward.reward).user_responsible? %>
+                  <tr>
+                    <td>
+                       <a href="<%= pending_reward.reward.picture.expiring_url(3600) %>" class="icon icon--bg icon--large" style="background-image: url(<%= pending_reward.reward.picture.expiring_url(3600) %>)"></a>
+                       <%= pending_reward.reward.label %>
+                     </td>
+                    <td><%= pending_reward.points %></td>
+                    <td class="icon-column">
+                      <%= pending_reward.user.name %>  
+                    </td>
+                     <td>
+                       <%= pending_reward.status %>
+                     </td>
+                    <td>
+                      <%= link_to 'Approve', approve_reward_user_reward_user_reward_path(reward_id: pending_reward.reward_id, id: pending_reward.id), method: :patch, data: { confirm: 'Are you sure?' } %> - 
+                      <%= link_to 'Decline', reward_to_be_forfeited_user_reward_user_reward_path(reward_id: pending_reward.reward_id, id: pending_reward.id), remote: true, data: { toggle: 'modal', target: "commentModal_#{pending_reward.id}" } %>
+                      <%= render 'user/user_rewards/comment_modal' %>
+                    </td>
+                  </tr>
+                <% end %>  
+              <% end %>
+            </tbody>
+          </table>
+        <% end %>
+      </div>
+    </div>
+  </div>

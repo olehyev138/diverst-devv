@@ -3,245 +3,267 @@
 <head>
   <title>Diverst</title>
   <%= stylesheet_link_tag (current_user.enterprise.theme.nil? ? "application" : current_user.enterprise.theme.asset_url), media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'https://platform.twitter.com/widgets.js', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'http://www.instagram.com/embed.js', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag '//cdn.embedly.com/widgets/platform.js', 'data-turbolinks-track' => true, 'charset' => 'UTF-8' %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <style>
+    iframe {
+      margin-left: auto;   /* Automatic margin from left */
+      margin-right: auto; /* Automatic margin from right */
+    }
+  </style>
   <%= csrf_meta_tags %>
   <link rel="icon" type="image/png" href="/favicon.png">
 </head>
 <body class="erg">
-  <%= render 'partials/js_branding_color_variables' %>
+<%= render 'partials/js_branding_color_variables' %>
 
-  <header class="primary-header">
-    <%= link_to user_root_path, class: "primary-header__back" do %>
-      <span>Back <span class="hidden-sm hidden-xs"> to your dashboard</span></span>
-    <% end %>
-    <h2 class="primary-header__title"><%= @group.name %></h2>
-  </header>
+<header class="primary-header">
+  <%= link_to user_root_path, class: "primary-header__back" do %>
+    <span>Back <span class="hidden-sm hidden-xs"> to your dashboard</span></span>
+  <% end %>
+  <h2 class="primary-header__title"><%= @group.name %></h2>
+</header>
 
-  <header class="secondary-header">
-    <div class="menu menu--mobile">
-      <button
-        class="m-hamburger"
-        aria-label="Menu"
-        aria-controls="navigation"
-        data-jq-dropdown="#navigation">
-        <span>Menu</span>
-      </button>
-      <nav id="navigation" class="jq-dropdown jq-dropdown-tip">
-        <ul class="jq-dropdown-menu">
+<header class="secondary-header">
+  <div class="menu menu--mobile">
+    <button
+      class="m-hamburger"
+      aria-label="Menu"
+      aria-controls="navigation"
+      data-jq-dropdown="#navigation">
+      <span>Menu</span>
+    </button>
+    <nav id="navigation" class="jq-dropdown jq-dropdown-tip">
+      <ul class="jq-dropdown-menu">
+        <li>
+          <%= active_link_to "Home", group_path(@group), active: :exclusive %>
+        </li>
+        <% if GroupMemberPolicy.new(current_user, [@group]).view_members? %>
           <li>
-            <%= active_link_to "Home", group_path(@group), active: :exclusive %>
+            <%= active_link_to "Members", group_group_members_path(@group), active: :exact %>
           </li>
-          <% if GroupMemberPolicy.new(current_user, [@group]).view_members? %>
+        <% end %>
+        <% if @group.pending_users.enabled? && GroupMemberPolicy.new(current_user, [@group]).update? %>
+          <li>
+            <%= active_link_to "Pending Members (#{@group.pending_members.count})", pending_group_group_members_path(@group) %>
+          </li>
+        <% end %>
+        <% if GroupEventsPolicy.new(current_user, [@group]).view_upcoming_events? %>
+          <li>
+            <%= active_link_to "Events", group_events_path(@group) %>
+          </li>
+        <% end %>
+        <% if GroupPostsPolicy.new(current_user, [@group]).view_latest_news? %>
+          <% if GroupPolicy.new(current_user, @group).manage? || current_user.segment_ids.empty? %>
             <li>
-              <%= active_link_to "Members", group_group_members_path(@group), active: :exact %>
+              <%= active_link_to "News Feed (#{@group.news_feed.all_links_without_segments.active.count})", group_posts_path(@group) %>
+            </li>
+          <% else %>
+            <li>
+              <%= active_link_to "News Feed (#{@group.news_feed.all_links(current_user.segment_ids).active.count})", group_posts_path(@group) %>
             </li>
           <% end %>
-          <% if @group.pending_users.enabled? && GroupMemberPolicy.new(current_user, [@group]).update? %>
-            <li>
-              <%= active_link_to "Pending Members (#{@group.pending_members.count})", pending_group_group_members_path(@group) %>
-            </li>
-          <% end %>
-          <% if GroupEventsPolicy.new(current_user, [@group]).view_upcoming_events? %>
-            <li>
-              <%= active_link_to "Events", group_events_path(@group) %>
-            </li>
-          <% end %>
-          <% if GroupPostsPolicy.new(current_user, [@group]).view_latest_news? %>
-            <% if GroupPolicy.new(current_user, @group).manage? || current_user.segment_ids.empty? %>
+        <% end %>
+
+        <% if GroupFolderPolicy.new(current_user, [@group]).index? %>
+          <li>
+            <%= active_link_to "Resources", group_folders_path(@group) %>
+          </li>
+        <% end %>
+
+        <% if GroupLeaderPolicy.new(current_user, [@group]).index? %>
+          <li>
+            <%= active_link_to "Leaders", group_leaders_path(@group) %>
+          </li>
+        <% end %>
+
+        <% if GroupPolicy.new(current_user, @group).insights? %>
+          <li>
+            <%= active_link_to "Insights", group_questions_path(@group) %>
+          </li>
+        <% end %>
+
+        <% if GroupPolicy.new(current_user, @group).layouts? %>
+          <li>
+            <%= active_link_to "Layouts", layouts_group_path(@group) %>
+          </li>
+        <% end %>
+
+        <% if GroupPolicy.new(current_user, @group).settings? %>
+          <li>
+            <%= active_link_to "Settings", settings_group_path(@group) %>
+          </li>
+        <% end %>
+
+        <% if GroupBudgetPolicy.new(current_user, [@group]).index? %>
+          <li>
+            <%= active_link_to "Overview", plan_overview_group_path(@group) %>
+          </li>
+        <% end %>
+
+        <% if GroupEventsPolicy.new(current_user, [@group]).update? %>
+          <li>
+            <%= active_link_to "Evvent Management", group_initiatives_path(@group) %>
+          </li>
+        <% end %>
+
+        <% if GroupPolicy.new(current_user, @group).manage? %>
+          <li>
+            <%= active_link_to "KPI", metrics_group_path(@group) %>
+          </li>
+        <% end %>
+
+        <% if GroupPolicy.new(current_user, @group).manage? %>
+          <li>
+            <%= active_link_to c_t(:structure), group_outcomes_path(@group) %>
+          </li>
+        <% end %>
+
+        <% if GroupPolicy.new(current_user, @group).manage? %>
+          <li>
+            <%= active_link_to "Updates", group_updates_path(@group) %>
+          </li>
+        <% end %>
+
+        <% if GroupBudgetPolicy.new(current_user, [@group]).update? %>
+          <li>
+            <%= active_link_to "Edit Annual Budget", edit_annual_budget_group_budgets_path(@group) %>
+          </li>
+        <% end %>
+
+      </ul>
+    </nav>
+  </div>
+  <div class="menu menu--desktop">
+    <%= active_link_to "Home", group_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: :exclusive %>
+
+    <% if show_members_link?(@group) %>
+      <%= active_link_to 'Members&nbsp;<span class="caret"></span>'.html_safe, "", "aria-label": "Members", "aria-control": "navigation", "data-jq-dropdown": "#members", class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: :exclusive %>
+    <% end %>
+
+    <nav id="members" class="jq-dropdown jq-dropdown-tip">
+      <ul class="jq-dropdown-menu">
+        <% if GroupMemberPolicy.new(current_user, [@group]).view_members? %>
+          <li>
+            <%= active_link_to "Active Members", group_group_members_path(@group) %>
+          </li>
+        <% end %>
+
+        <% if @group.pending_users.enabled? && GroupMemberPolicy.new(current_user, [@group]).update? %>
+          <li>
+            <%= active_link_to "Pending Members (#{@group.pending_members.count})", pending_group_group_members_path(@group) %>
+          </li>
+        <% end %>
+      </ul>
+    </nav>
+
+    <%= active_link_to "Events", group_events_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if GroupEventsPolicy.new(current_user, [@group]).view_upcoming_events? %>
+    <%= active_link_to "Resources", group_folders_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if GroupFolderPolicy.new(current_user, [@group]).index? %>
+    <%= active_link_to "News Feed", group_posts_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if GroupPostsPolicy.new(current_user, [@group]).view_latest_news? %>
+
+    <% if show_manage_link?(@group) %>
+      <%= active_link_to 'Manage&nbsp;<span class="caret"></span>'.html_safe, "", "aria-label": "Manage", "aria-control": "navigation", "data-jq-dropdown": "#manage", class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: :exclusive %>
+    <% end %>
+
+    <nav id="manage" class="jq-dropdown jq-dropdown-tip">
+      <ul class="jq-dropdown-menu">
+        <% if GroupLeaderPolicy.new(current_user, [@group]).index? %>
+          <li>
+            <%= active_link_to "Leaders", group_leaders_path(@group) %>
+          </li>
+        <% end %>
+
+        <% if GroupPolicy.new(current_user, @group).insights? %>
+          <li>
+            <%= active_link_to "Insights", group_questions_path(@group) %>
+          </li>
+        <% end %>
+
+        <% if GroupPolicy.new(current_user, @group).layouts? %>
+          <li>
+            <%= active_link_to "Layouts", layouts_group_path(@group) %>
+          </li>
+        <% end %>
+
+        <% if GroupPolicy.new(current_user, @group).settings? %>
+          <li>
+            <%= active_link_to "Settings", settings_group_path(@group) %>
+          </li>
+          <% if @group.enterprise.slack_enabled? %>
+            <% if @group.slack_auth_data.present? %>
               <li>
-                <%= active_link_to "News Feed (#{NewsFeed.all_links_without_segments(@group.news_feed.id, @group.enterprise).count})", group_posts_path(@group) %>
+                <%= active_link_to "Uninstall Slack", slack_uninstall_group_url(@group) %>
               </li>
-            <% else %>
+            <% elsif ENV['SLACK_CLIENT_ID'].present? %>
               <li>
-                <%= active_link_to "News Feed (#{NewsFeed.all_links(@group.news_feed.id, current_user.segment_ids, @group.enterprise).count})", group_posts_path(@group) %>
+                <a href=<%= slack_button_url(@group) %>>
+                  <%= raw(slack_button_image) %>
+                </a>
               </li>
             <% end %>
           <% end %>
-          
-          <% if GroupFolderPolicy.new(current_user, [@group]).index? %>
-            <li>
-              <%= active_link_to "Resources", group_folders_path(@group) %>
-            </li>
-          <% end %>
-          
-          <% if GroupLeaderPolicy.new(current_user, [@group]).index? %>
-            <li>
-            <%= active_link_to "Leaders", group_leaders_path(@group) %>
-          </li>
-          <% end %>
-          
-          <% if GroupPolicy.new(current_user, @group).insights? %>
-            <li>
-            <%= active_link_to "Insights", group_questions_path(@group) %>
-          </li>
-          <% end %>
-          
-          <% if GroupPolicy.new(current_user, @group).layouts? %>
-            <li>
-            <%= active_link_to "Layouts", layouts_group_path(@group) %>
-          </li>
-          <% end %>
-          
-          <% if GroupPolicy.new(current_user, @group).settings? %>
-            <li>
-            <%= active_link_to "Settings", settings_group_path(@group) %>
-          </li>
-          <% end %>
-          
+        <% end %>
+      </ul>
+    </nav>
+
+    <% if current_user.enterprise.plan_module_enabled && show_plan_link?(@group) %>
+      <%= active_link_to 'Plan&nbsp;<span class="caret"></span>'.html_safe, "", "aria-label": "Plan", "aria-control": "navigation", "data-jq-dropdown": "#plan", class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: :exclusive %>
+
+      <nav id="plan" class="jq-dropdown jq-dropdown-tip">
+        <ul class="jq-dropdown-menu">
+
           <% if GroupBudgetPolicy.new(current_user, [@group]).index? %>
             <li>
               <%= active_link_to "Overview", plan_overview_group_path(@group) %>
             </li>
           <% end %>
-          
+
           <% if GroupEventsPolicy.new(current_user, [@group]).update? %>
             <li>
-              <%= active_link_to "Evvent Management", group_initiatives_path(@group)  %>
+              <%= active_link_to "Event Management", group_initiatives_path(@group) %>
             </li>
           <% end %>
-          
+
           <% if GroupPolicy.new(current_user, @group).manage? %>
             <li>
               <%= active_link_to "KPI", metrics_group_path(@group) %>
             </li>
           <% end %>
-          
+
           <% if GroupPolicy.new(current_user, @group).manage? %>
             <li>
               <%= active_link_to c_t(:structure), group_outcomes_path(@group) %>
             </li>
           <% end %>
-          
+
           <% if GroupPolicy.new(current_user, @group).manage? %>
             <li>
               <%= active_link_to "Updates", group_updates_path(@group) %>
             </li>
           <% end %>
-          
+
           <% if GroupBudgetPolicy.new(current_user, [@group]).update? %>
-              <li>
-                <%= active_link_to "Edit Annual Budget", edit_annual_budget_group_budgets_path(@group) %>
-              </li>
-          <% end %>
-            
-        </ul>
-      </nav>
-    </div>
-    <div class="menu menu--desktop">
-      <%= active_link_to "Home", group_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: :exclusive %>
-      
-      <% if show_members_link?(@group) %>
-        <%= active_link_to 'Members&nbsp;<span class="caret"></span>'.html_safe, "", "aria-label":"Members", "aria-control": "navigation", "data-jq-dropdown": "#members", class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: :exclusive %>
-      <% end %>
-      
-      <nav id="members" class="jq-dropdown jq-dropdown-tip">
-        <ul class="jq-dropdown-menu">
-          <% if GroupMemberPolicy.new(current_user, [@group]).view_members? %>
             <li>
-              <%= active_link_to "Active Members", group_group_members_path(@group) %>
+              <%= active_link_to "Edit Annual Budget", edit_annual_budget_group_budgets_path(@group) %>
             </li>
           <% end %>
-      
-          <% if @group.pending_users.enabled? && GroupMemberPolicy.new(current_user, [@group]).update? %>
-            <li>
-              <%= active_link_to "Pending Members (#{@group.pending_members.count})", pending_group_group_members_path(@group) %>
-            </li>
-          <% end %>
+
         </ul>
       </nav>
-      
-      <%= active_link_to "Events", group_events_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if GroupEventsPolicy.new(current_user, [@group]).view_upcoming_events? %>
-      <%= active_link_to "Resources", group_folders_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if GroupFolderPolicy.new(current_user, [@group]).index? %>
-      <%= active_link_to "News Feed", group_posts_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if GroupPostsPolicy.new(current_user, [@group]).view_latest_news? %>
-      
-      <% if show_manage_link?(@group) %>
-        <%= active_link_to 'Manage&nbsp;<span class="caret"></span>'.html_safe, "", "aria-label":"Manage", "aria-control": "navigation", "data-jq-dropdown": "#manage", class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: :exclusive %>
-      <% end %>
-      
-      <nav id="manage" class="jq-dropdown jq-dropdown-tip">
-          <ul class="jq-dropdown-menu">
-          <% if GroupLeaderPolicy.new(current_user, [@group]).index? %>
-            <li>
-            <%= active_link_to "Leaders", group_leaders_path(@group) %>
-          </li>
-          <% end %>
-          
-          <% if GroupPolicy.new(current_user, @group).insights? %>
-            <li>
-            <%= active_link_to "Insights", group_questions_path(@group) %>
-          </li>
-          <% end %>
-          
-          <% if GroupPolicy.new(current_user, @group).layouts? %>
-            <li>
-            <%= active_link_to "Layouts", layouts_group_path(@group) %>
-          </li>
-          <% end %>
-          
-          <% if GroupPolicy.new(current_user, @group).settings? %>
-            <li>
-            <%= active_link_to "Settings", settings_group_path(@group) %>
-          </li>
-          <% end %>
-        </ul>
-        </nav>
-      
-      <% if current_user.enterprise.plan_module_enabled && show_plan_link?(@group) %>
-        <%= active_link_to 'Plan&nbsp;<span class="caret"></span>'.html_safe, "", "aria-label":"Plan", "aria-control": "navigation", "data-jq-dropdown": "#plan", class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: :exclusive %>
-        
-        <nav id="plan" class="jq-dropdown jq-dropdown-tip">
-          <ul class="jq-dropdown-menu">
-            
-            <% if GroupBudgetPolicy.new(current_user, [@group]).index? %>
-              <li>
-                <%= active_link_to "Overview", plan_overview_group_path(@group) %>
-              </li>
-            <% end %>
-            
-            <% if GroupEventsPolicy.new(current_user, [@group]).update? %>
-              <li>
-                <%= active_link_to "Event Management", group_initiatives_path(@group)  %>
-              </li>
-            <% end %>
-            
-            <% if GroupPolicy.new(current_user, @group).manage? %>
-              <li>
-                <%= active_link_to "KPI", metrics_group_path(@group) %>
-              </li>
-            <% end %>
-            
-            <% if GroupPolicy.new(current_user, @group).manage? %>
-              <li>
-                <%= active_link_to c_t(:structure), group_outcomes_path(@group) %>
-              </li>
-            <% end %>
-            
-            <% if GroupPolicy.new(current_user, @group).manage? %>
-              <li>
-                <%= active_link_to "Updates", group_updates_path(@group) %>
-              </li>
-            <% end %>
-            
-            <% if GroupBudgetPolicy.new(current_user, [@group]).update? %>
-                <li>
-                  <%= active_link_to "Edit Annual Budget", edit_annual_budget_group_budgets_path(@group) %>
-                </li>
-            <% end %>
-            
-          </ul>
-        </nav>
-      <% end %>
-    
-    </div>
-  </header>
+    <% end %>
 
-  <div class="content">
-    <div class="content__inner">
-      <%= render 'partials/flash_messages' %>
-
-      <%= yield %>
-    </div>
-    <%= render 'partials/footer' %>
   </div>
+</header>
+
+<div class="content">
+  <div class="content__inner">
+    <%= render 'partials/flash_messages' %>
+
+    <%= yield %>
+  </div>
+  <%= render 'partials/footer' %>
+</div>
 </body>
 </html>

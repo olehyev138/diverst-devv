@@ -12,7 +12,7 @@ class Groups::GroupMembersController < ApplicationController
     authorize [@group], :view_members?, policy_class: GroupMemberPolicy
     @q = User.ransack(params[:q])
     @total_members = @group.active_members.count
-    @members = @group.active_members.ransack(params[:q]).result.uniq
+    @members = @group.filtered_member_list(params[:q] || {})
     @segments = @group.enterprise.segments
     respond_to do |format|
       format.html
@@ -53,7 +53,9 @@ class Groups::GroupMembersController < ApplicationController
     @group_member.accepted_member = @group.pending_users.disabled?
 
     if @group_member.save
+      WelcomeNotificationJob.perform_later(@group.id, current_user.id)
       flash[:notice] = 'You are now a member'
+
 
       if @group.default_mentor_group?
         redirect_to edit_user_mentorship_url(id: current_user.id)
@@ -115,6 +117,7 @@ class Groups::GroupMembersController < ApplicationController
       UserGroup.create(group_id: @group.id, user_id: user.id, accepted_member: @group.pending_users.disabled?)
     end
 
+    track_activity(@group, :add_members_to_group)
     redirect_to action: 'index'
   end
 
@@ -122,6 +125,7 @@ class Groups::GroupMembersController < ApplicationController
     authorize [@group, @member], :destroy?, policy_class: GroupMemberPolicy
 
     @group.members.destroy(@member)
+    track_activity(@group, :remove_member_from_group)
     redirect_to action: :index
   end
 
@@ -144,7 +148,7 @@ class Groups::GroupMembersController < ApplicationController
   end
 
   def view_sub_groups
-    authorize [@group], :index?, policy_class: GroupMemberPolicy
+    authorize [@group, current_user], :create?, policy_class: GroupMemberPolicy
     @sub_groups = @group.children
 
     respond_to do |format|
@@ -165,6 +169,7 @@ class Groups::GroupMembersController < ApplicationController
       @group_member.accepted_member = @group.pending_users.disabled?
 
       if @group_member.save
+        WelcomeNotificationJob.perform_later(@group.id, current_user.id)
         respond_to do |format|
           format.html { redirect_to :back }
           format.js
@@ -179,7 +184,7 @@ class Groups::GroupMembersController < ApplicationController
   end
 
   def leave_sub_group
-    authorize [@group], :destroy?, policy_class: GroupMemberPolicy
+    authorize [@group, current_user], :destroy?, policy_class: GroupMemberPolicy
     @group.user_groups.find_by(user_id: current_user.id).destroy
     respond_to do |format|
       format.html { redirect_to :back }
@@ -188,12 +193,37 @@ class Groups::GroupMembersController < ApplicationController
   end
 
   def export_group_members_list_csv
-    authorize [@group], :update?, policy_class: GroupMemberPolicy
+    authorize [@group], :export_group_members_list_csv?, policy_class: GroupMemberPolicy
     export_csv_params = params[:export_csv_params]
     GroupMemberListDownloadJob.perform_later(current_user.id, @group.id, export_csv_params)
     track_activity(@group, :export_member_list)
     flash[:notice] = 'Please check your Secure Downloads section in a couple of minutes'
     redirect_to :back
+  end
+
+  def view_list_of_sub_groups_for_export
+    authorize [@group], :index?, policy_class: GroupMemberPolicy
+    @sub_groups = @group.children
+
+    respond_to do |format|
+      format.html { redirect_to :back }
+      format.js
+    end
+  end
+
+  def export_sub_groups_members_list_csv
+    authorize [@group], :update?, policy_class: GroupMemberPolicy
+
+    if params['groups'].nil?
+      flash[:notice] = 'no group was selected for download'
+      redirect_to :back
+    else
+      groups = Group.where(id: params['groups'].values, enterprise_id: current_user.enterprise_id)
+      groups.each { |group| GroupMemberListDownloadJob.perform_later(current_user.id, group.id, '') }
+      track_activity(@group, :export_sub_groups_members_list)
+      flash[:notice] = 'Please check your Secure Downloads section in a couple of minutes'
+      redirect_to :back
+    end
   end
 
   protected

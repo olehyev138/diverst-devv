@@ -25,4 +25,8 @@ class RewardPolicy < ApplicationPolicy
   def destroy?
     manage?
   end
+
+  def user_responsible?
+    return true if @record.responsible_id == @user.id
+  end
 end

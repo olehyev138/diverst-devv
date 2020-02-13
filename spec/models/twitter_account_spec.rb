@@ -2,19 +2,18 @@ require 'rails_helper'
 
 RSpec.describe TwitterAccount, type: :model do
   # let(:twitter_account) { create(:twitter_account) }
-
   describe 'validations' do
-    let(:twitter_account) { create(:twitter_account) }
-    it { expect(twitter_account).to validate_presence_of(:name) }
-    it { expect(twitter_account).to validate_uniqueness_of(:name).scoped_to(:group_id).case_insensitive }
-    it { expect(twitter_account).to validate_presence_of(:account) }
-    it { expect(twitter_account).to validate_uniqueness_of(:account).scoped_to(:group_id).case_insensitive }
-    it 'should validate that :account is a valid Twitter Account' do
-      account = described_class.new(name: 'Alex Oxorn', account: 'QWERTYUnaljkKdsnfvjkahnkjKLJABHLKJ', group_id: 1)
-      expect(account).to_not be_valid
-      account.account = 'AOxorn'
-      expect(account).to be_valid
-    end
+    # let(:twitter_account) { create(:twitter_account) }
+    # it { expect(twitter_account).to validate_presence_of(:name) }
+    # it { expect(twitter_account).to validate_uniqueness_of(:name).scoped_to(:group_id).case_insensitive }
+    # it { expect(twitter_account).to validate_presence_of(:account) }
+    # it { expect(twitter_account).to validate_uniqueness_of(:account).scoped_to(:group_id).case_insensitive }
+    # it 'should validate that :account is a valid Twitter Account' do
+    #   account = described_class.new(name: 'Alex Oxorn', account: 'QWERTYUnaljkKdsnfvjkahnkjKLJABHLKJ', group_id: 1)
+    #   expect(account).to_not be_valid
+    #   account.account = 'AOxorn'
+    #   expect(account).to be_valid
+    # end
 
     # describe 'name' do
     #   it { should validate_presence_of(:name) }

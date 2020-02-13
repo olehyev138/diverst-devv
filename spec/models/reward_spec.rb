@@ -9,6 +9,12 @@ RSpec.describe Reward do
     it { expect(reward).to validate_presence_of(:points) }
     it { expect(reward).to validate_presence_of(:label) }
     it { expect(reward).to validate_presence_of(:responsible) }
+
+    it { expect(reward).to validate_length_of(:description).is_at_most(65535) }
+    it { expect(reward).to validate_length_of(:picture_content_type).is_at_most(191) }
+    it { expect(reward).to validate_length_of(:picture_file_name).is_at_most(191) }
+    it { expect(reward).to validate_length_of(:label).is_at_most(191) }
+
     it { expect(reward).to have_attached_file(:picture) }
     it {
       expect(reward).to validate_attachment_content_type(:picture)

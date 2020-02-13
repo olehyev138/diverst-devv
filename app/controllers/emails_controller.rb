@@ -1,6 +1,10 @@
 class EmailsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_email, only: [:edit, :update, :show]
+
+  before_action :set_email, only: [:edit, :show]
+  before_action :set_custom_email, only: [:edit_custom, :prepare_for_sending, :send]
+  before_action :set_email_from_system_or_custom, only: [:update]
+
   after_action :visit_page, only: [:index, :edit]
 
   layout 'global_settings'
@@ -8,6 +12,7 @@ class EmailsController < ApplicationController
   def index
     @enterprise = current_user.enterprise
     @emails = @enterprise.emails
+    @custom_emails = @enterprise.custom_emails
   end
 
   def edit
@@ -24,10 +29,34 @@ class EmailsController < ApplicationController
     end
   end
 
+  def edit_custom
+  end
+
+  def prepare_for_sending
+  end
+
+  def send_custom
+    emails = custom_email_params[:receivers].split(',').map { |i| i.strip }
+
+    CustomEmailMailer.custom(@custom_email, emails).deliver_later
+
+    flash[:notice] = "Your email has been sent to #{emails.count} user(s)."
+    redirect_to action: :index
+  end
+
   protected
 
   def set_email
     @email = current_user.enterprise.emails.find(params[:id])
+  end
+
+  def set_custom_email
+    @custom_email = current_user.enterprise.custom_emails.find(params[:id])
+  end
+
+  def set_email_from_system_or_custom
+    @email = current_user.enterprise.emails.find_by_id(params[:id]) ||
+             current_user.enterprise.custom_emails.find(params[:id])
   end
 
   def email_params

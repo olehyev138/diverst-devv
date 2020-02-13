@@ -15,6 +15,8 @@ class GroupMemberListDownloadJob < ActiveJob::Base
                       group.members.inactive
                     when 'pending_members'
                       group.pending_members
+                    when 'parent_group_members'
+                      group.parent.members
                     else
                       group.members
     end

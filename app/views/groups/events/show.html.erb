@@ -16,10 +16,12 @@
           <%= link_to "Export attendees", export_attendees_csv_group_initiative_path(@group, @event), class: "btn btn--primary hidden-xs" if InitiativePolicy.new(current_user, @event).edit? %>
         </div>
       <% end %>
-      <% if !@event.full? || current_user.initiatives.where(:id => @event.id).exists? %>
-        <div class="flex-row__cell">
-          <a href="#" class="btn btn--primary js-join-event" data-joined="<%= current_user.initiatives.where(:id => @event.id).exists? %>"><%= current_user.initiatives.where(:id => @event.id).exists? ? "Leave event" : "Join event" %></a>
-        </div>
+      <% if GroupEventsPolicy.new(current_user, [@group]).able_to_join_events? %>
+        <% if !@event.full? || current_user.initiatives.where(:id => @event.id).exists? %>
+          <div class="flex-row__cell">
+            <a href="#" class="btn btn--primary js-join-event" data-joined="<%= current_user.initiatives.where(:id => @event.id).exists? %>"><%= current_user.initiatives.where(:id => @event.id).exists? ? "Leave event" : "Join event" %></a>
+          </div>
+        <% end %>
       <% end %>
     </div>
     <div class="container-fluid visible-xs">
@@ -28,8 +30,10 @@
           <div class="btn-group">
             <%= link_to "Delete", group_initiative_path(@group, @event), method: :delete, class: "btn btn-sm btn-secondary", data: {confirm: "Are you sure?"} if InitiativePolicy.new(current_user, @event).destroy? %>
             <%= link_to "Edit", edit_group_initiative_path(@group, @event), class: "btn btn-sm btn-primary" if InitiativePolicy.new(current_user, @event).edit? %>
-            <a href="#" class="btn btn-sm btn-primary js-join-event" data-joined="<%= current_user.initiatives.where(:id => @event.id).exists? %>"><%= current_user.initiatives.where(:id => @event.id).exists? ? "Leave" : "Join" %></a>
-          </div>
+            <% if GroupEventsPolicy.new(current_user, [@group]).able_to_join_events? %>
+              <a href="#" class="btn btn-sm btn-primary js-join-event" data-joined="<%= current_user.initiatives.where(:id => @event.id).exists? %>"><%= current_user.initiatives.where(:id => @event.id).exists? ? "Leave" : "Join" %></a>
+          <% end %>
+            </div>
         </div>
       </div>
     </div>
@@ -44,7 +48,9 @@
           <% if @event.video.exists? %>
             <%= video_tag(@event.video.expiring_url(36000), controls: true, size: "400x400") %>
           <% elsif @event.picture.exists? %>
-            <div style="background-image: url(<%= @event.picture.expiring_url(3600) %>);" class="card__section--image-preview"></div>
+            <div class="card__section--image-preview">
+              <%= link_to image_tag(@event.picture.expiring_url(3600, :medium)), @event.picture.expiring_url(3600, :original) %>
+            </div>
           <% end %>
 
           <h4>Date &amp; time</h4>
@@ -89,9 +95,27 @@
   </div>
 </div>
 
+<% if current_user.is_group_leader_of?(@group) %>
 <div class="content__header" style="margin-top: 30px;">
-  <h1>Comments</h1>
+  <h1><%= pluralize(@all_comments.count, "Comment") %></h1>
 </div>
+
+  <% if @all_comments.any? %>
+    <% @all_comments.each do |comment| %>
+      <%= render 'event_comment', comment: comment, group: @group %>
+    <% end %>
+  <% end %>
+<% else %>
+<div class="content__header" style="margin-top: 30px;">
+  <h1><%= pluralize(@approved_comments.count, "Comment") %></h1>
+</div>
+
+  <% if @approved_comments.any? %>
+    <% @approved_comments.each do |comment| %>
+      <%= render 'event_comment', comment: comment, group: @group %>
+    <% end %>
+  <% end %>
+<% end %>
 
 <% if @comment.persisted? %>
   <div class="content__section">
