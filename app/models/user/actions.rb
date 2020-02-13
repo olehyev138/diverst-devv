@@ -230,35 +230,25 @@ module User::Actions
     end
 
     def file_name(params)
+      scope_map = {
+          all: 'all',
+          active: 'active',
+          inactive: 'inactive',
+          saml: 'sso authorized',
+          invitation_sent: 'pending'
+      }
       partials = []
       set_query_scopes(params).each do |scope|
         partials.append case scope
-                        when String
-                          case scope
-                          when 'all' then 'all'
-                          when 'active' then 'active'
-                          when 'inactive' then 'inactive'
-                          when 'saml' then 'sso authorized'
-                          when 'invitation_sent' then 'pending'
-                          else nil
-                          end
-                        when Symbol
-                          case scope
-                          when :active then 'active'
-                          when :inactive then 'inactive'
-                          when :saml then 'sso authorized'
-                          when :invitation_sent then 'pending'
-                          else nil
-                          end
+                        when String, Symbol
+                          scope_map[scope.to_sym] || scope.to_s
                         when Array
-                          raise ::ArgumentError.new('query scopes should either be a string or an array starting with a string') unless scope.first.class <= String
-
                           case scope.first
                           when 'of_role' then UserRole.find(scope.second).role_name.downcase
-                          else nil
+                          else scope.first
                           end
                         else
-                          raise ::ArgumentError.new('query scopes should either be a string or an array starting with a string')
+                          raise ::ArgumentError.new('query scopes should be an array of either strings or arrays starting with a string')
         end
       end
       partials.append self.model_name.plural
