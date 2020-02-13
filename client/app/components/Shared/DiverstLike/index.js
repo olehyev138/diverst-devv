@@ -47,38 +47,43 @@ const Count = styled.label`
   align-content: center
 `;
 export function DiverstLike(props) {
+  const { isLiked } = props.isLiked;
   return (
     <React.Fragment>
-      <div>
-        <Label>
-          <Input checked={props.isLiked}
-            type='checkbox'
-            onClick={() => {
-              if (props.newsFeedLinkId != null)
-                props.likeAction(props.newsFeedLinkId);
-              else
-                props.likeAction(props.answerId);
-            }}
-          />
-          <Span />
-        </Label>
-        <Count>{props.totalLikes}</Count>
-      </div>
+      <Label>
+        <Input checked={isLiked}
+          type='checkbox'
+          onChange={() => {
+            if (isLiked)
+              props.likeNewsItemBegin(props);
+            else
+              props.unlikeNewsItemBegin(props);
+          }}
+        />
+        <Span />
+      </Label>
+      <Count>{props.totalLikes}</Count>
     </React.Fragment>
   );
+
+/*  return (
+    <React.Fragment>
+      <Label/>
+    </React.Fragment>
+  );
+*/
 }
 
 DiverstLike.propTypes = {
-  likes: PropTypes.object,
+//  likes: PropTypes.object,
   totalLikes: PropTypes.number,
   isLiked: PropTypes.bool,
   newsFeedLinkId: PropTypes.number,
   answerId: PropTypes.number,
-  likeAction: PropTypes.func.isRequired,
-  unlike: PropTypes.func.isRequired,
+  likeNewsItemBegin: PropTypes.func,
+  unlikeNewsItemBegin: PropTypes.func,
 };
 
 export default compose(
   withTheme,
-  withStyles(styles),
 )(DiverstLike);

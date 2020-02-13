@@ -20,6 +20,8 @@ import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/News/messages';
+import DiverstLike from "../../../Shared/DiverstLike";
+
 
 const styles = theme => ({
 });
@@ -91,6 +93,14 @@ export function NewsLinkListItem(props) {
           >
             Delete
           </Button>
+          <DiverstLike
+            isLiked={false}
+            newsFeedLinkId={newsItem.news_feed_link_id}
+            totalLikes={3}
+            likeNewsItemBegin={props.likeNewsItemBegin}
+            unlikeNewsItemBegin={props.unlikeNewsItemBegin}
+          />
+
         </CardActions>
       )}
     </Card>
@@ -105,6 +115,9 @@ NewsLinkListItem.propTypes = {
   links: PropTypes.object,
   deleteNewsLinkBegin: PropTypes.func,
   updateNewsItemBegin: PropTypes.func,
+  likeNewsItemBegin: PropTypes.func,
+  unlikeNewsItemBegin: PropTypes.func,
+
 };
 
 export default compose(

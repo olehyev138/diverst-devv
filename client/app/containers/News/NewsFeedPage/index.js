@@ -13,7 +13,7 @@ import saga from 'containers/News/saga';
 
 import { selectPaginatedNewsItems, selectNewsItemsTotal, selectIsLoading } from 'containers/News/selectors';
 import { deleteSocialLinkBegin, getNewsItemsBegin, newsFeedUnmount, deleteNewsLinkBegin, deleteGroupMessageBegin,
-  updateNewsItemBegin } from 'containers/News/actions';
+  updateNewsItemBegin, likeNewsItemBegin, unlikeNewsItemBegin } from 'containers/News/actions';
 
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -112,6 +112,8 @@ export function NewsFeedPage(props, context) {
         deleteNewsLinkBegin={props.deleteNewsLinkBegin}
         deleteSocialLinkBegin={props.deleteSocialLinkBegin}
         updateNewsItemBegin={props.updateNewsItemBegin}
+        likeNewsItemBegin={props.likeNewsItemBegin}
+        unlikeNewsItemBegin={props.unlikeNewsItemBegin}
       />
     </React.Fragment>
   );
@@ -126,6 +128,8 @@ NewsFeedPage.propTypes = {
   deleteNewsLinkBegin: PropTypes.func,
   deleteSocialLinkBegin: PropTypes.func,
   updateNewsItemBegin: PropTypes.func,
+  likeNewsItemBegin: PropTypes.func,
+  unlikeNewsItemBegin: PropTypes.func,
   isLoading: PropTypes.bool,
   currentGroup: PropTypes.shape({
     news_feed: PropTypes.shape({
@@ -147,6 +151,8 @@ const mapDispatchToProps = dispatch => ({
   deleteSocialLinkBegin: payload => dispatch(deleteSocialLinkBegin(payload)),
   updateNewsItemBegin: payload => dispatch(updateNewsItemBegin(payload)),
   newsFeedUnmount: () => dispatch(newsFeedUnmount()),
+  likeNewsItemBegin: payload => dispatch(likeNewsItemBegin(payload)),
+  unlikeNewsItemBegin: payload => dispatch(unlikeNewsItemBegin(payload)),
 });
 
 const withConnect = connect(

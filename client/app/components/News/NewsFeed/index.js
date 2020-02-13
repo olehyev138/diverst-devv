@@ -25,6 +25,7 @@ import NewsLinkListItem from 'components/News/NewsLink/NewsLinkListItem';
 import SocialLinkListItem from 'components/News/SocialLink/SocialLinkListItem';
 import DiverstPagination from 'components/Shared/DiverstPagination';
 import DiverstLoader from 'components/Shared/DiverstLoader';
+import DiverstLike from "../../Shared/DiverstLike";
 
 const styles = theme => ({
   newsItem: {
@@ -88,15 +89,20 @@ export function NewsFeed(props) {
       );
     else if (item.news_link) // eslint-disable-line no-else-return
       return (
-        <NewsLinkListItem
-          links={props.links}
-          newsLink={item.news_link}
-          newsItem={item}
-          groupId={item.news_feed.group_id}
-          readonly={props.readonly}
-          deleteNewsLinkBegin={props.deleteNewsLinkBegin}
-          updateNewsItemBegin={props.updateNewsItemBegin}
-        />
+        <div>
+          <NewsLinkListItem
+            links={props.links}
+            newsLink={item.news_link}
+            newsItem={item}
+            groupId={item.news_feed.group_id}
+            readonly={props.readonly}
+            deleteNewsLinkBegin={props.deleteNewsLinkBegin}
+            updateNewsItemBegin={props.updateNewsItemBegin}
+            likeNewsItemBegin={props.likeNewsItemBegin}
+            unlikeNewsItemBegin={props.unlikeNewsItemBegin}
+
+          />
+        </div>
       );
     else if (item.social_link)
       return (
@@ -198,6 +204,9 @@ NewsFeed.propTypes = {
   deleteNewsLinkBegin: PropTypes.func,
   deleteSocialLinkBegin: PropTypes.func,
   updateNewsItemBegin: PropTypes.func,
+  likeNewsItemBegin: PropTypes.func,
+  unlikeNewsItemBegin: PropTypes.func,
+
 };
 
 export default compose(
