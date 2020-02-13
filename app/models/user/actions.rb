@@ -244,7 +244,7 @@ module User::Actions
               -> (user) { user.groups.map(&:name).join(',') },
           ].concat(
               fields.map do |field|
-                -> (user) { field.csv_value(user.get_field_data(field).deserialized_data) }
+                -> (user) { field.csv_value(user[field]) }
               end
             )
       }

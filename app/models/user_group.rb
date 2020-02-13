@@ -100,7 +100,7 @@ class UserGroup < ApplicationRecord
   end
 
   def string_for_field(field)
-    field.string_value info[field]
+    field.string_value self[field]
   end
 
   def update_mentor_fields(boolean)

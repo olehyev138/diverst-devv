@@ -28,11 +28,11 @@ module UserGroup::Actions
               'user.active',
           ].concat(
               survey_fields.map do |field|
-                -> (membership) { field.csv_value(membership.get_field_data(field).deserialized_data) }
+                -> (membership) { field.csv_value(membership[field]) }
               end
             ).concat(
               user_fields.map do |field|
-                -> (membership) { field.csv_value(membership.user.get_field_data(field).deserialized_data) }
+                -> (membership) { field.csv_value(membership.user[field]) }
               end
             )
       }

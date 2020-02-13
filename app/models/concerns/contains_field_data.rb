@@ -9,14 +9,14 @@ module ContainsFieldData
   end
 
   # LEGACY: POSSIBLY DEPRECATED
-  # def info
-  #   return @info unless @info.nil?
-  #
-  #   self.data = '{}' if data.nil?
-  #   json_hash = JSON.parse(data)
-  #   @info = Hash[json_hash.map { |k, v| [k.to_i, v] }] # Convert the hash keys to integers since they're strings after JSON parsing
-  #   @info.extend(FieldDataDeprecated)
-  # end
+  def info
+    return @info unless @info.nil?
+
+    self.data = '{}' if data.nil?
+    json_hash = JSON.parse(data)
+    @info = Hash[json_hash.map { |k, v| [k.to_i, v] }] # Convert the hash keys to integers since they're strings after JSON parsing
+    @info.extend(FieldDataDeprecated)
+  end
 
   def [](key)
     case key

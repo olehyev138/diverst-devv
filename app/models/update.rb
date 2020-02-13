@@ -29,8 +29,8 @@ class Update < ApplicationRecord
 
   # Returns the delta with another update relative to this other update for a particular field (+23%, -12%, etc.)
   def variance_with(other_update:, field:)
-    value = get_field_data(field).deserialized_data
-    value_to_compare = other_update.get_field_data(field).deserialized_data
+    value = self[field]
+    value_to_compare = other_update[field]
 
     return nil unless value_to_compare
     return nil unless value_to_compare != 0

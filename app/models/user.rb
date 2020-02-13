@@ -352,7 +352,7 @@ class User < ApplicationRecord
   end
 
   def string_for_field(field)
-    field.string_value info[field]
+    field.string_value self[field]
   end
 
   # Get the match score between the user and `other_user`
@@ -475,7 +475,7 @@ class User < ApplicationRecord
         user_columns = [user.first_name, user.last_name, user.email, user.biography, user.active, user.groups.map(&:name).join(',')]
         user.field_data.preload(:field).load
         fields.each do |field|
-          user_columns << field.csv_value(user.get_field_data(field).deserialized_data)
+          user_columns << field.csv_value(user[field])
         end
 
         csv << user_columns
@@ -666,7 +666,7 @@ class User < ApplicationRecord
 
   def validate_presence_fields
     enterprise.try(:fields).to_a.each do |field|
-      if field.required && info[field].blank?
+      if field.required && self[field].blank?
         key = field.title.parameterize.underscore.to_sym
         errors.add(key, "can't be blank")
       end
