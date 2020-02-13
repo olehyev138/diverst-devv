@@ -124,7 +124,6 @@ class User < ApplicationRecord
   validate :user_role_presence
   validates :points, numericality: { only_integer: true }, presence: true
   validates :credits, numericality: { only_integer: true }, presence: true
-  validate :validate_presence_field_data
   validate :group_leader_role
   validate :policy_group
   before_validation :add_linkedin_http, unless: -> { linkedin_profile_url.nil? }
@@ -664,16 +663,6 @@ class User < ApplicationRecord
   def validate_presence_fields
     enterprise.try(:fields).to_a.each do |field|
       if field.required && info[field].blank?
-        key = field.title.parameterize.underscore.to_sym
-        errors.add(key, "can't be blank")
-      end
-    end
-  end
-
-  def validate_presence_field_data
-    field_data.load
-    field_definer.try(field_association_name).to_a.each do |field|
-      if field.required && (field_data.find { |fd| fd.field_id == field.id })&.data.blank?
         key = field.title.parameterize.underscore.to_sym
         errors.add(key, "can't be blank")
       end
