@@ -13,7 +13,11 @@ class SelectField < Field
   end
 
   def serialize_value(value)
-    value.present? ? [value].to_json : nil
+    case value
+    when String then [value].to_json
+    when Array then value.to_json
+    else nil
+    end
   end
 
   def deserialize_value(value)
@@ -28,13 +32,13 @@ class SelectField < Field
   def string_value(value)
     return '-' if value.blank?
 
-    value
+    value[0]
   end
 
   def csv_value(value)
     return '' if value.blank?
 
-    value
+    value[0]
   end
 
   # 0 to 1. 1 being everybody in the business has chosen this option, 0 being nobody chose it
