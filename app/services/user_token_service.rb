@@ -34,22 +34,36 @@ class UserTokenService
   end
 
   def self.verify_jwt_token(token)
-    begin
-      jwt = JWT.decode(token, JWT_SECRET)
-    rescue JWT::DecodeError
-      raise BadRequestException.new 'Invalid User Token'
-    end
-    token = jwt[0]['user_token']
-    user = User.joins(:sessions).where(sessions: { token: token, status: 0 }).first
+    session = get_session_from_jwt(token)
 
-    if not user
-      raise BadRequestException.new 'Invalid User Token'
-    else
-      user
-    end
+    user_token_error if session.blank?
+
+    session.user
+  end
+
+  def self.get_session_from_jwt(token)
+    token = get_user_token(token)
+
+    Session.find_by(token: token, status: 0)
+  end
+
+  def self.user_token_error
+    raise BadRequestException.new 'Invalid User Token'
   end
 
   private
+
+  def self.decode_jwt(token)
+    JWT.decode(token, JWT_SECRET)
+  rescue JWT::DecodeError
+    user_token_error
+  end
+
+  def self.get_user_token(token)
+    payload = decode_jwt(token)
+
+    payload[0]['user_token']
+  end
 
   JWT_SECRET = 'd1v3rS1tY1Sg0oD'.freeze
 end
