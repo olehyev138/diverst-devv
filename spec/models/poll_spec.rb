@@ -243,7 +243,7 @@ RSpec.describe Poll, type: :model do
       select_field = poll.fields.last
 
       pr1 = create(:poll_response, poll: poll, user: user_1, data: "{\"#{select_field.id}\":[\"4\"]}")
-      pr2 = create(:poll_response, poll: poll, user: user_2, data: "{\"#{select_field.id}\":[\"4\"]}")
+      pr2 = create(:poll_response, poll: poll, user: user_2, data: "{\"#{select_field.id}\":[\"4\"]}", created_at: 10.minutes.from_now)
 
       pr1.get_field_data(select_field).update(data: '["4"]')
       pr2.get_field_data(select_field).update(data: '["4"]')
