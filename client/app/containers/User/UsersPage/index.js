@@ -64,6 +64,10 @@ export function UserListPage(props) {
     setParams(newParams);
   };
 
+  const exportUsers = () => {
+    props.exportUsersBegin(params);
+  };
+
   useEffect(() => {
     getUsers('all');
 
@@ -110,7 +114,7 @@ export function UserListPage(props) {
         handleOrdering={handleOrdering}
         handleVisitUserEdit={props.handleVisitUserEdit}
         handleChangeScope={handleChangeScope}
-        exportUsers={() => props.exportUsersBegin(params)}
+        exportUsers={exportUsers}
         links={links}
 
         userType={type}
