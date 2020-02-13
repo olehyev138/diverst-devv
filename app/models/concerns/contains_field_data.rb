@@ -198,7 +198,7 @@ module ContainsFieldData
   def validate_presence_field_data
     field_data.load
     fields.find_each do |field|
-      if field.required && get_field_data(field)&.data.blank?
+      if field.required && (field_data.find { |fd| fd.field_id == field.id })&.data.blank?
         key = field.title.parameterize.underscore.to_sym
         errors.add(key, "can't be blank")
       end
