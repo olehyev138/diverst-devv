@@ -42,11 +42,11 @@ module BaseCsvExport
     end
 
     def parameter_name(scope)
-      case scope.class
+      case scope
       when String, Symbol
         scope.to_s
       when Array
-        [scope.first] + scope[1..-1].map(&:to_s).join('_')
+        scope.first + scope[1..-1].map(&:to_s).join('_')
       else
         raise ::ArgumentError.new('query scopes should either be a string or an array starting with a string')
       end
