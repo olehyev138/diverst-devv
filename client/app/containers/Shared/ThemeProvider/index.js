@@ -22,8 +22,8 @@ import App from 'containers/Shared/App/Loadable';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import LuxonUtils from '@date-io/luxon';
 
-export const DEFAULT_BRANDING_COLOR = '7B77C9';
-export const DEFAULT_CHARTS_COLOR = '8A8A8A';
+export const DEFAULT_BRANDING_COLOR = '7b77c9';
+export const DEFAULT_CHARTS_COLOR = '8a8a8a';
 
 export function ThemeProvider(props) {
   const { enterprise } = props;
