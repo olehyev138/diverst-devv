@@ -99,6 +99,8 @@ export function ThemeProvider(props) {
   useEffect(() => {
     if (enterprise && enterprise.theme)
       setTheme(buildTheme(enterprise.theme.branding_color, enterprise.theme.charts_color));
+    else
+      setTheme(buildTheme(DEFAULT_BRANDING_COLOR, DEFAULT_CHARTS_COLOR));
   }, [enterprise]);
 
   return (
