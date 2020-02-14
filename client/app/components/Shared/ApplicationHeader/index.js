@@ -200,7 +200,7 @@ export class ApplicationHeader extends React.PureComponent {
               )
               : <React.Fragment />
             }
-            <Logo maxHeight='55px' withLink />
+            <Logo height='55px' withLink />
             <div className={classNames(classes.grow, classes.centerText)}>
               <Hidden xsDown>
                 {group ? (
