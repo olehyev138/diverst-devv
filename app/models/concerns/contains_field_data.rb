@@ -4,7 +4,14 @@ module ContainsFieldData
 
   included do
     before_validation :transfer_info_to_data
+    validate :validate_presence_field_data
+
+    has_many :field_data, class_name: 'FieldData', as: :field_user, dependent: :destroy
+
+    accepts_nested_attributes_for :field_data
+
     after_create :create_missing_field_data
+
     extend ClassMethods
   end
 
@@ -202,6 +209,16 @@ module ContainsFieldData
     field_data.loaded? ?
         field_data.to_a.find { |fd| fd.field == field } :
         field_data.find_by(field: field)
+  end
+
+  def validate_presence_field_data
+    field_data.load
+    fields.find_each do |field|
+      if field.required && (field_data.find { |fd| fd.field_id == field.id })&.data.blank?
+        key = field.title.parameterize.underscore.to_sym
+        errors.add(key, "can't be blank")
+      end
+    end
   end
 
   def get_field_data_value(field)

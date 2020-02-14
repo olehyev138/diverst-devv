@@ -65,6 +65,7 @@ class DateField < Field
 
     case value
     when Time, Date, DateTime then value.strftime('%s').to_i
+    when String then value.to_time.to_i
     else value.to_i
     end
   end
