@@ -19,7 +19,8 @@ const styles = theme => ({
   button: {
     display: 'block',
   },
-  logoBottomPadding: {
+  logoPadding: {
+    paddingTop: 5,
     paddingBottom: 5,
   },
 });
@@ -45,7 +46,7 @@ export function Logo(props) {
   const imageComponent = (
     <DiverstImg
       // If it's default add some bottom padding as the SVGs have no padding
-      className={isDefault && classes.logoBottomPadding}
+      className={isDefault ? classes.logoPadding : undefined}
       data={logo}
       alt={alt}
       naturalSrc={!logoData}
