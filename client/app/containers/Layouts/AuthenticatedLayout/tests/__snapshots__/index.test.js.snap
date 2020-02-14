@@ -1,7 +1,3 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<AuthenticatedLayout /> Should render and match the snapshot 1`] = `
-<Redirect
-  to="/login"
-/>
-`;
+exports[`<AuthenticatedLayout /> Should render and match the snapshot 1`] = `<NotAuthenticated />`;

@@ -21,7 +21,7 @@ import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import Logo from 'components/Shared/Logo/index';
 import { logoutBegin } from 'containers/Shared/App/actions';
 
-import { selectEnterprise, selectToken, selectUser } from 'containers/Shared/App/selectors';
+import { selectEnterprise, selectUser } from 'containers/Shared/App/selectors';
 
 import { selectGroup } from 'containers/Group/selectors';
 
@@ -100,7 +100,7 @@ export class ApplicationHeader extends React.PureComponent {
   }
 
   logoutBegin() {
-    this.props.logoutBegin(this.props.user);
+    this.props.logoutBegin();
   }
 
   handleProfileMenuOpen = (event) => {
@@ -284,14 +284,13 @@ ApplicationHeader.defaultProps = {
 
 export function mapDispatchToProps(dispatch, ownProps) {
   return {
-    logoutBegin(user) {
-      dispatch(logoutBegin(user));
+    logoutBegin() {
+      dispatch(logoutBegin());
     },
   };
 }
 
 const mapStateToProps = createStructuredSelector({
-  token: selectToken(),
   user: selectUser(),
   enterprise: selectEnterprise(),
   group: selectGroup(),

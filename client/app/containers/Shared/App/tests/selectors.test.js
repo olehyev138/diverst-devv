@@ -33,7 +33,7 @@ describe('App selectors', () => {
 
   describe('selectEnterprise', () => {
     it('should select the enterprise', () => {
-      const mockedState = { global: { enterprise: 'enterprise' } };
+      const mockedState = { global: { data: { enterprise: 'enterprise' } } };
       const selected = selectEnterprise().resultFunc(mockedState.global);
 
       expect(selected).toEqual('enterprise');
@@ -51,7 +51,7 @@ describe('App selectors', () => {
 
   describe('selectUser', () => {
     it('should select the user', () => {
-      const mockedState = { global: { user: 'user' } };
+      const mockedState = { global: { data: 'user' } };
       const selected = selectUser().resultFunc(mockedState.global);
 
       expect(selected).toEqual('user');
