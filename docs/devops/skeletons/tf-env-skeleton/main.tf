@@ -26,6 +26,19 @@ module "prod" {
   env_name      = var.env_name
   region        = var.region
   ssh_key_name  = var.ssh_key_name
+
+  backend_asg_min   = var.backend_asg_min
+  backend_asg_max   = var.backend_asg_max
+  backend_ec2_type  = var.backend_ec2_type
+
+  db_class                    = var.db_class
+  db_allocated_storage        = var.db_allocated_storage
+  db_backup_retention         = var.db_backup_retention
+  db_backup_window            = var.db_backup_window
+  db_deletion_protection      = var.db_deletion_protection
+  db_apply_immediately        = var.db_apply_immediately
+  db_maintenance_window       = var.db_maintenance_window
+
   db_username   = var.db_username
   db_password   = var.db_password
 }

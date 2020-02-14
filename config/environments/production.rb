@@ -13,8 +13,7 @@ Diverst::Application.configure do
   # Full error reports are disabled and caching is turned on.
   config.consider_all_requests_local       = false
 
-  # DEBUG - TEST
-  config.action_controller.perform_caching = false
+  config.action_controller.perform_caching = true
 
   # Enable Rack::Cache to put a simple HTTP cache in front of your application
   # Add `rack-cache` to your Gemfile before enabling this.
@@ -22,8 +21,7 @@ Diverst::Application.configure do
   # NGINX, varnish or squid.
   # config.action_dispatch.rack_cache = true
 
-  # Disable serving static files from the `/public` folder by default since
-  # Apache or NGINX already handles this.
+  # Disable static file serving for API mode
   config.serve_static_files = false
 
   # Compress JavaScripts and CSS.

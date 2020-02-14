@@ -21,9 +21,18 @@ module "bastion" {
 module "db" {
   source = "../../../modules/data/db"
 
+  env_name      = var.env_name
   db_name       = "diverst_production"
   db_username   = var.db_username
   db_password   = var.db_password
+
+  db_class                = var.db_class
+  allocated_storage       = var.db_allocated_storage
+  backup_retention        = var.db_backup_retention
+  backup_window           = var.db_backup_window
+  deletion_protection     = var.db_deletion_protection
+  apply_immediately       = var.db_apply_immediately
+  maintenance_window      = var.db_maintenance_window
 
   sn_db         = module.vpc.sn_db
   sg_db         = module.sec.sg_db
@@ -43,6 +52,10 @@ module "backend" {
   env_name  = var.env_name
   region    = var.region
   vpc_id    = module.vpc.vpc.id
+
+  asg_min   = var.backend_asg_min
+  asg_max   = var.backend_asg_max
+  ec2_type  = var.backend_ec2_type
 
   sn_elb  = module.vpc.sn_dmz
   sg_elb  = module.sec.sg_dmz

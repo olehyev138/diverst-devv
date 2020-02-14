@@ -48,6 +48,33 @@ resource "aws_elastic_beanstalk_environment" "eb_app_env" {
     resource  = ""
   }
 
+  # Auto Scaling settings
+
+  # Minimum instances
+  setting {
+    namespace = "aws:autoscaling:asg"
+    name      = "MinSize"
+    value     = var.asg_min
+    resource  = ""
+  }
+
+  # Maximum instances
+  setting {
+    namespace = "aws:autoscaling:asg"
+    name = "MaxSize"
+    value = var.asg_max
+    resource = ""
+  }
+
+  # EC2 Type
+  setting {
+    namespace = "aws:ec2:instances"
+    name = "InstanceTypes"
+    value = var.ec2_type
+    resource = ""
+  }
+
+  # Load Balancer type
   setting {
     namespace = "aws:elasticbeanstalk:environment"
     name      = "LoadBalancerType"
