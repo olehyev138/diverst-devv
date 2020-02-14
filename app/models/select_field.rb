@@ -12,6 +12,17 @@ class SelectField < Field
     ]
   end
 
+  def evaluate(v1, v2, operator)
+    case operator
+    when OPERATORS[:equals_any_of]
+      v2.is_a?(Array) && (v2.include? v1[0])
+    when OPERATORS[:not_equals_any_of]
+      v2.is_a?(Array) && (v2.exclude? v1[0])
+    else
+      super(v1, v2, operators)
+    end
+  end
+
   def serialize_value(value)
     case value
     when String then [value].to_json

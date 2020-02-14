@@ -28,15 +28,32 @@ module ContainsFieldData
   def [](key)
     case key
     when Symbol, String then super(key)
-    when Field then field_data.find_by(field: key).deserialized_data
+    when Field
+      raise FieldNotFound unless fields.ids.include? key.id
+
+      fd = get_field_data(key) || (new_record? ? field_data.new(data: nil, field_id: key.id) : field_data.create(data: nil, field_id: key.id))
+      fd.deserialized_data
     else raise ArgumentError
     end
+  rescue
+    nil
   end
 
   def []=(key, value)
+    serialized_value = key.serialize_value(value)
     case key
     when Symbol, String then super(key, value)
-    when Field then field_data.find_by(field: key).update(data: key.serialize_value(value))
+    when Field
+      raise FieldNotFound unless fields.ids.include? key.id
+
+      if new_record?
+        field_data.new(data: serialized_value, field_id: key.id)
+      else
+        fd = get_field_data(key)
+        fd.present? ?
+            fd.update(data: serialized_value) :
+            field_data.create(field_id: key.id, data: serialized_value)
+      end
     else raise ArgumentError
     end
   end
@@ -206,15 +223,12 @@ module ContainsFieldData
   #
   #   u.get_field_data(f) => <#FieldData>
   def get_field_data(field)
-    field_data.loaded? ?
-        field_data.to_a.find { |fd| fd.field == field } :
-        field_data.find_by(field: field)
+    field_data.find { |fd| fd.field_id == field.id }
   end
 
   def validate_presence_field_data
-    field_data.load
     fields.find_each do |field|
-      if field.required && (field_data.find { |fd| fd.field_id == field.id })&.data.blank?
+      if field.required && self[field].blank?
         key = field.title.parameterize.underscore.to_sym
         errors.add(key, "can't be blank")
       end

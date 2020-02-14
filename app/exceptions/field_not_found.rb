@@ -1,0 +1,2 @@
+class FieldNotFound < StandardError
+end

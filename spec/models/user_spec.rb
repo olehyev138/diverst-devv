@@ -183,12 +183,11 @@ RSpec.describe User do
     end
 
     context 'presence of fields' do
-      let(:user) { build(:user, enterprise: enterprise) }
       let!(:mandatory_field) { build(:field, title: 'Test', required: true) }
+      let!(:enterprise) { create(:enterprise, fields: [mandatory_field]) }
+      let(:user) { build(:user, enterprise: enterprise) }
 
       context 'with mandatory fields not filled' do
-        let!(:enterprise) { create(:enterprise, fields: [mandatory_field]) }
-
         it 'should have an error on user' do
           user[mandatory_field] = ''
           user.valid?
@@ -198,8 +197,6 @@ RSpec.describe User do
       end
 
       context 'with mandatory fields filled' do
-        let!(:enterprise) { create(:enterprise, fields: [mandatory_field]) }
-
         it 'should be valid' do
           user[mandatory_field] = Faker::Lorem.paragraph(2)
 
