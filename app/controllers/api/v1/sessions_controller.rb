@@ -19,7 +19,7 @@ class Api::V1::SessionsController < DiverstController
   end
 
   def logout
-    render status: 200, json: klass.logout(self.diverst_request, request.headers['Diverst-UserToken'])
+    render status: 200, json: klass.logout(request.headers['Diverst-UserToken'])
   rescue => e
     raise BadRequestException.new(e.message)
   end
