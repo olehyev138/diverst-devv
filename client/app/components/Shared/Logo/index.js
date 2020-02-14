@@ -19,6 +19,9 @@ const styles = theme => ({
   button: {
     display: 'block',
   },
+  logoBottomPadding: {
+    paddingBottom: 5,
+  },
 });
 
 export function Logo(props) {
@@ -27,6 +30,7 @@ export function Logo(props) {
   const className = props.imgClass;
   const alt = props.alt || 'Logo';
 
+  let isDefault = true;
   let logo = props.coloredDefault ? defaultLogoPrimary : defaultLogo;
   let logoRedirectUrl = `${window.location.protocol}//${window.location.host}`; // Defaults to current URL without path
 
@@ -35,10 +39,13 @@ export function Logo(props) {
   if (logoData) {
     logo = logoData;
     logoRedirectUrl = dig(props.enterprise, 'theme', 'logo_redirect_url');
+    isDefault = false;
   }
 
   const imageComponent = (
     <DiverstImg
+      // If it's default add some bottom padding as the SVGs have no padding
+      className={isDefault && classes.logoBottomPadding}
       data={logo}
       alt={alt}
       naturalSrc={!logoData}
