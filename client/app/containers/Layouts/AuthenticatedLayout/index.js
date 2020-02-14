@@ -12,7 +12,7 @@ import ApplicationLayout from 'containers/Layouts/ApplicationLayout';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import AuthService from 'utils/authService';
-import { loginSuccess, setUser, setEnterprise, setUserPolicyGroup } from 'containers/Shared/App/actions';
+import { loginSuccess, logoutSuccess, setUserData } from 'containers/Shared/App/actions';
 
 import { Settings } from 'luxon'; // Timezone and locale
 
@@ -29,25 +29,32 @@ const AuthenticatedLayout = ({
     classes, data, ...other
   } = rest;
 
+  const NotAuthenticated = () => <Redirect to={ROUTES.session.login.path()} />;
+  const NotAuthorized = () => <React.Fragment />; // TODO: Make a 'not authorized' page of some sort
+
   /* Use AuthService to keep AuthenticatedLayout unconnected from store.
    *   - Probably better to keep layouts unconnected too
    *   - Causes problems when state updates, causing children to remount
    */
   const userJwt = AuthService.getJwt();
-  const enterprise = AuthService.getEnterprise();
+  const userData = AuthService.getUserData();
 
   if (userJwt) {
+    // Log the user out if they have a JWT but no data
+    if (!userData) {
+      AuthService.discardJwt();
+      other.logoutSuccess();
+      return <NotAuthenticated />;
+    }
+
     // Authenticated
-    const user = AuthService.getUser(userJwt);
     if (!AuthService.isUserInStore()) {
       axios.defaults.headers.common['Diverst-UserToken'] = userJwt;
       other.loginSuccess(userJwt);
-      other.setUser(user);
-      other.setEnterprise(user.enterprise);
-      other.setUserPolicyGroup(user.policy_group);
+      other.setUserData(userData);
     }
     // Set user time zone from their profile settings
-    Settings.defaultZoneName = user.time_zone;
+    Settings.defaultZoneName = userData.time_zone;
     // TODO: Set user locale
     // Settings.defaultLocale = 'en';
 
@@ -79,31 +86,24 @@ const AuthenticatedLayout = ({
         />
       );
 
-    // Not Authorized - TODO: Make a "not authorized" page of some sort
-    return (
-      <React.Fragment />
-    );
+    // Not Authorized
+    return <NotAuthorized />;
   }
 
   // Not Authenticated
-
-  return (
-    <Redirect to={ROUTES.session.login.path()} />
-  );
+  return <NotAuthenticated />;
 };
 
 const mapDispatchToProps = {
   loginSuccess,
-  setUser,
-  setEnterprise,
-  setUserPolicyGroup,
+  logoutSuccess,
+  setUserData,
 };
 
 AuthenticatedLayout.propTypes = {
   loginSuccess: PropTypes.func,
-  setUser: PropTypes.func,
-  setEnterprise: PropTypes.func,
-  setUserPolicyGroup: PropTypes.func,
+  logoutSuccess: PropTypes.func,
+  setUserData: PropTypes.func,
   renderAppBar: PropTypes.bool,
   drawerOpen: PropTypes.bool,
   drawerToggleCallback: PropTypes.func,

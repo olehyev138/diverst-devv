@@ -11,8 +11,10 @@ const selectLocation = () => createSelector(
   routerState => routerState.location,
 );
 
-const selectEnterprise = () => createSelector(selectGlobal,
-  globalState => globalState.enterprise);
+const selectEnterprise = () => createSelector(
+  selectGlobal,
+  globalState => dig(globalState.data, 'enterprise')
+);
 
 const selectToken = () => createSelector(
   selectGlobal,
@@ -21,23 +23,23 @@ const selectToken = () => createSelector(
 
 const selectUserPolicyGroup = () => createSelector(
   selectGlobal,
-  globalState => globalState.policyGroup
+  globalState => dig(globalState.data, 'policy_group')
 );
 
 const selectUser = () => createSelector(
   selectGlobal,
-  globalState => globalState.user
+  globalState => globalState.data
 );
 
 const selectCustomText = () => createSelector(
   selectGlobal,
-  globalState => dig(globalState, 'enterprise', 'custom_text')
+  globalState => dig(globalState, 'data', 'enterprise', 'custom_text')
 );
 
 const selectMentoringInterests = () => createSelector(
   selectGlobal,
   (globalState) => {
-    const mInterests = dig(globalState, 'enterprise', 'mentoring_interests');
+    const mInterests = dig(globalState, 'data', 'enterprise', 'mentoring_interests');
     if (mInterests)
       return mInterests.map(i => ({ label: i.name, value: i.id }));
     return [];
@@ -47,7 +49,7 @@ const selectMentoringInterests = () => createSelector(
 const selectMentoringTypes = () => createSelector(
   selectGlobal,
   (globalState) => {
-    const mTypes = dig(globalState, 'enterprise', 'mentoring_types');
+    const mTypes = dig(globalState, 'data', 'enterprise', 'mentoring_types');
     if (mTypes)
       return mTypes.map(i => ({ label: i.name, value: i.id }));
     return [];
