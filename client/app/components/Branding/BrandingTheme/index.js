@@ -135,7 +135,6 @@ export function BrandingThemeInner({ classes, handleSubmit, handleChange, handle
 
 export function BrandingTheme(props) {
   const initialValues = buildValues(props.theme, {
-    id: { default: '' },
     primary_color: { default: DEFAULT_BRANDING_COLOR },
     secondary_color: { default: DEFAULT_CHARTS_COLOR },
     use_secondary_color: { default: false },
