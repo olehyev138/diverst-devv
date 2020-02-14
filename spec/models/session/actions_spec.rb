@@ -1,9 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe Session::Actions, type: :model do
-  describe '#destroy' do
+  describe '#logout' do
     it 'raises a BadRequestException' do
-      expect { Session.destroy({}, { id: -1 }) }.to raise_error(BadRequestException)
+      expect { Session.logout({}, nil) }.to raise_error(BadRequestException)
     end
 
     it 'returns the logout link' do
@@ -15,7 +15,7 @@ RSpec.describe Session::Actions, type: :model do
       allow(OneLogin::RubySaml::Logoutrequest).to receive(:new).and_return(logout_request)
       allow(logout_request).to receive(:create).and_return('link')
 
-      payload = Session.destroy({}, { id: session.token })
+      payload = Session.logout(Request.create_request(user), UserTokenService.create_jwt_token({ user_token: session.token }))
       expect(payload[:logout_link]).to_not be nil
     end
   end
