@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 
 import { FormattedMessage } from 'react-intl';
 import {
-  Button, Card, CardActions, CardContent, Grid, TextField, Hidden
+  Button, Card, CardActions, CardContent, Grid, TextField, Hidden, Box
 } from '@material-ui/core';
 import Search from '@material-ui/icons/Search';
 import { Formik, Form, Field } from 'formik';
@@ -23,6 +23,9 @@ const styles = theme => ({
   card: {
     width: '100%',
   },
+  cardContent: {
+    textAlign: 'center',
+  },
   submitButtonLabel: {
     minWidth: 'max-content',
   },
@@ -32,12 +35,10 @@ const styles = theme => ({
 export function EnterpriseFormInner({ handleSubmit, handleChange, handleBlur, errors, touched, values, classes }) {
   return (
     <Card raised className={classes.card}>
-      <Form
-        noValidate
-      >
-        <CardContent>
-          <Logo coloredDefault maxHeight='45px' />
-          <br />
+      <Form noValidate>
+        <CardContent className={classes.cardContent}>
+          <Logo coloredDefault maxHeight='55px' />
+          <Box pb={2} />
           <Field
             component={TextField}
             onChange={handleChange}
