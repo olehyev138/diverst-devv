@@ -10,4 +10,10 @@ resource "random_string" "bucket-postfix" {
 resource "aws_s3_bucket" "bucket-filestorage" {
   bucket        = "${var.env_name}-filestorage-${random_string.bucket-postfix.result}"
   force_destroy = true
+
+  cors_rule {
+    allowed_headers = ["*"]
+    allowed_methods = ["GET", "PUT", "POST"]
+    allowed_origins = ["http://${var.env_name}.diverst.com"]
+  }
 }
