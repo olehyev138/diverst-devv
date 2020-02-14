@@ -7,15 +7,9 @@ class UserTokenService
 
   def self.create_jwt(user, params = {})
     token = user.generate_authentication_token
+
     payload = {
-        id: user.id,
-        enterprise: AuthenticatedEnterpriseSerializer.new(user.enterprise).as_json,
-        policy_group: PolicyGroupSerializer.new(user.policy_group).as_json,
-        email: user.email,
         user_token: token,
-        role: user.user_role.role_name,
-        time_zone: ActiveSupport::TimeZone.find_tzinfo(user.time_zone).name,
-        created_at: user.created_at.as_json,
         time: (Time.now.to_f * 1000).to_i + 5000
     }
 
@@ -34,22 +28,36 @@ class UserTokenService
   end
 
   def self.verify_jwt_token(token)
-    begin
-      jwt = JWT.decode(token, JWT_SECRET)
-    rescue JWT::DecodeError
-      raise BadRequestException.new 'Invalid User Token'
-    end
-    token = jwt[0]['user_token']
-    user = User.joins(:sessions).where(sessions: { token: token, status: 0 }).first
+    session = get_session_from_jwt(token)
 
-    if not user
-      raise BadRequestException.new 'Invalid User Token'
-    else
-      user
-    end
+    user_token_error if session.blank?
+
+    session.user
+  end
+
+  def self.get_session_from_jwt(token)
+    token = get_user_token(token)
+
+    Session.find_by(token: token, status: 0)
+  end
+
+  def self.user_token_error
+    raise BadRequestException.new 'Invalid User Token'
   end
 
   private
+
+  def self.decode_jwt(token)
+    JWT.decode(token, JWT_SECRET)
+  rescue JWT::DecodeError
+    user_token_error
+  end
+
+  def self.get_user_token(token)
+    payload = decode_jwt(token)
+
+    payload[0]['user_token']
+  end
 
   JWT_SECRET = 'd1v3rS1tY1Sg0oD'.freeze
 end
