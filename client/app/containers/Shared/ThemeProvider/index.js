@@ -94,10 +94,7 @@ export function ThemeProvider(props) {
   });
 
   // Defaults
-  const [brandingColor, setBrandingColor] = useState(DEFAULT_BRANDING_COLOR);
-  const [graphsColor, setGraphsColor] = useState(DEFAULT_CHARTS_COLOR);
-
-  const [theme, setTheme] = useState(buildTheme(brandingColor, graphsColor));
+  const [theme, setTheme] = useState(buildTheme(DEFAULT_BRANDING_COLOR, DEFAULT_CHARTS_COLOR));
 
   useEffect(() => {
     if (enterprise && enterprise.theme)
