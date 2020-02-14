@@ -10,9 +10,7 @@ export const FIND_ENTERPRISE_BEGIN = 'app/App/FIND_ENTERPRISE_BEGIN';
 export const FIND_ENTERPRISE_SUCCESS = 'app/App/FIND_ENTERPRISE_SUCCESS';
 export const FIND_ENTERPRISE_ERROR = 'app/App/FIND_ENTERPRISE_ERROR';
 
-export const SET_USER = 'app/App/SET_USER';
-export const SET_USER_POLICY_GROUP = 'app/App/SET_USER_POLICY_GROUP';
-export const SET_ENTERPRISE = 'app/App/SET_ENTERPRISE';
+export const SET_USER_DATA = 'app/App/SET_USER_DATA';
 
 export const SSO_LOGIN_BEGIN = 'app/App/SSO_LOGIN_BEGIN';
 export const SSO_LINK_BEGIN = 'app/App/SSO_LINK_BEGIN';

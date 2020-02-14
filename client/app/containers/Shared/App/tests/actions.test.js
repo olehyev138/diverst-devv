@@ -6,12 +6,11 @@ import {
   LOGOUT_SUCCESS,
   LOGOUT_ERROR,
   FIND_ENTERPRISE_BEGIN,
-  SET_ENTERPRISE,
   FIND_ENTERPRISE_ERROR,
-  SET_USER,
   SSO_LINK_BEGIN,
   SSO_LOGIN_BEGIN,
-  FIND_ENTERPRISE_SUCCESS
+  FIND_ENTERPRISE_SUCCESS,
+  SET_USER_DATA,
 }
   from 'containers/Shared/App/constants';
 
@@ -23,12 +22,11 @@ import {
   logoutSuccess,
   logoutError,
   findEnterpriseBegin,
-  setEnterprise,
   findEnterpriseError,
-  setUser,
   ssoLinkBegin,
   ssoLoginBegin,
-  findEnterpriseSuccess
+  findEnterpriseSuccess,
+  setUserData,
 }
   from 'containers/Shared/App/actions';
 
@@ -100,13 +98,12 @@ describe('App actions', () => {
   });
 
   describe('logoutBegin', () => {
-    it('it has a type of LOGOUT_BEGIN and sets a given user token', () => {
+    it('it has a type of LOGOUT_BEGIN', () => {
       const expected = {
         type: LOGOUT_BEGIN,
-        token: 'token'
       };
 
-      expect(logoutBegin({ user_token: 'token' })).toEqual(expected);
+      expect(logoutBegin()).toEqual(expected);
     });
   });
 
@@ -152,17 +149,6 @@ describe('App actions', () => {
     });
   });
 
-  describe('setEnterprise', () => {
-    it('it has a type of SET_ENTERPRISE and sets a given enterprise', () => {
-      const expected = {
-        type: SET_ENTERPRISE,
-        enterprise: 'enterprise'
-      };
-
-      expect(setEnterprise('enterprise')).toEqual(expected);
-    });
-  });
-
   describe('findEnterpriseError', () => {
     it('it has a type of FIND_ENTERPRISE_ERROR and sets a given error', () => {
       const expected = {
@@ -174,14 +160,25 @@ describe('App actions', () => {
     });
   });
 
-  describe('setUser', () => {
-    it('it has a type of SET_USER and sets a given user', () => {
+  describe('setUserData', () => {
+    it('it has a type of SET_USER_DATA and sets the data', () => {
       const expected = {
-        type: SET_USER,
-        user: 'user'
+        type: SET_USER_DATA,
+        payload: { foo: 'bar' },
+        append: false,
       };
 
-      expect(setUser('user')).toEqual(expected);
+      expect(setUserData({ foo: 'bar' })).toEqual(expected);
+    });
+
+    it('it has a type of SET_USER_DATA and sets the data with append', () => {
+      const expected = {
+        type: SET_USER_DATA,
+        payload: { foo: 'bar' },
+        append: true,
+      };
+
+      expect(setUserData({ foo: 'bar' }, true)).toEqual(expected);
     });
   });
 });
