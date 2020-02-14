@@ -25,6 +25,8 @@ import DiverstFileInput from 'components/Shared/DiverstFileInput';
 
 import { DEFAULT_BRANDING_COLOR, DEFAULT_CHARTS_COLOR } from 'containers/Shared/ThemeProvider';
 
+import { omit } from 'lodash';
+
 const styles = theme => ({
   noBottomPadding: {
     paddingBottom: '0 !important',
@@ -147,8 +149,14 @@ export function BrandingTheme(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
+        let payload;
+        if (values.use_secondary_color === false) // Don't send secondary color unless they choose to enable it
+          payload = omit(values, 'secondary_color');
+        else
+          payload = values;
+
         // Update theme through the enterprise controller
-        props.enterpriseAction({ theme_attributes: values });
+        props.enterpriseAction({ theme_attributes: payload });
       }}
 
       render={formikProps => <BrandingThemeInner {...props} {...formikProps} />}
