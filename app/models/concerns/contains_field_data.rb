@@ -44,6 +44,7 @@ module ContainsFieldData
     when Symbol, String then super(key, value)
     when Field
       raise FieldNotFound unless fields.ids.include? key.id
+
       serialized_value = key.serialize_value(value)
 
       if new_record?
