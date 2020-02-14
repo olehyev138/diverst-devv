@@ -10,9 +10,11 @@ exports[`<EnterpriseForm /> <EnterpriseFormInner /> Should render and match the 
     <WithStyles(ForwardRef(CardContent))>
       <Memo(Connect(WithStyles(Logo)))
         coloredDefault={true}
-        maxHeight="45px"
+        maxHeight="55px"
       />
-      <br />
+      <Styled(MuiBox)
+        pb={2}
+      />
       <Field
         autoFocus={true}
         component={
