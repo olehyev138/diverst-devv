@@ -42,7 +42,7 @@ module Diverst
     ActionMailer::Base.delivery_method = :smtp
 
     config.middleware.insert_before ActionDispatch::Static, Rack::Rewrite do
-      rewrite %r{^(?!/sidekiq|\/api|\/system|\/rails).*}, '/', not: %r{(.*\..*)}
+      rewrite %r{^(?!/sidekiq|\/api|\/system|\/rails|\/health).*}, '/', not: %r{(.*\..*)}
     end
 
     # rails api
