@@ -62,7 +62,6 @@ module Diverst
 
     config.middleware.use ActiveRecord::Migration::CheckPending
     config.middleware.use Rack::Deflater
-    config.middleware.use HealthCheck
 
     # Cross Domain Request
     config.middleware.insert_before 0, Rack::Cors do
