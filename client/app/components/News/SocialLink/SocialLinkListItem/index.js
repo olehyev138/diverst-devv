@@ -70,6 +70,16 @@ export function SocialLinkListItem(props) {
         ) : null }
         <Button
           size='small'
+          color='primary'
+          onClick={() => {
+            console.log(props);
+            props.archiveNewsItemBegin({ id: newsItemId });
+          }}
+        >
+          <DiverstFormattedMessage {...messages.archive} />
+        </Button>
+        <Button
+          size='small'
           onClick={() => {
             /* eslint-disable-next-line no-alert, no-restricted-globals */
             if (confirm('Delete social link?'))
@@ -91,6 +101,7 @@ SocialLinkListItem.propTypes = {
   newsItem: PropTypes.object,
   deleteSocialLinkBegin: PropTypes.func,
   updateNewsItemBegin: PropTypes.func,
+  archiveNewsItemBegin: PropTypes.func
 };
 
 export default compose(
