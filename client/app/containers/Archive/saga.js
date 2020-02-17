@@ -24,19 +24,19 @@ export function* getArchives(action) {
   try {
     const { payload } = action;
     const { resource, ...rest } = payload;
-    // TODO : Implement actions in the case of posts
+    let response = null;
     switch (resource) {
       case ArchiveTypes.resources:
-        const resourceResponse = yield call(api.resources.all.bind(api.resources), rest);
-        yield (put(getArchivesSuccess(resourceResponse.data.page)));
+        response = yield call(api.resources.all.bind(api.resources), rest);
+        yield (put(getArchivesSuccess(response.data.page)));
         break;
       case ArchiveTypes.posts:
-        const postResponse = yield call(api.resources.all.bind(api.resources), rest);
-        yield (put(getArchivesSuccess(postResponse.data.page)));
+        response = yield call(api.newsFeedLinks.all.bind(api.newsFeedLinks), rest);
+        yield (put(getArchivesSuccess(response.data.page)));
         break;
       case ArchiveTypes.events:
-        const eventResponse = yield call(api.initiatives.all.bind(api.initiatives), rest);
-        yield (put(getArchivesSuccess(eventResponse.data.page)));
+        response = yield call(api.initiatives.all.bind(api.initiatives), rest);
+        yield (put(getArchivesSuccess(response.data.page)));
         break;
       default:
         break;
@@ -56,14 +56,15 @@ export function* unArchive(action) {
   try {
     const payload = { resource: action.payload };
     const { resource, ...rest } = payload;
-    // TODO rename variable
+    const resourceType = resource.resource;
 
-    switch (resource.resource) {
+    switch (resourceType) {
       case ArchiveTypes.resources:
         yield call(api.resources.un_archive.bind(api.resources), payload.resource.id, payload);
         yield (put(restoreArchiveSuccess()));
         break;
       case ArchiveTypes.posts:
+        yield call(api.newsFeedLinks.un_archive.bind(api.newsFeedLinks), payload.resource.id, payload);
         yield (put(restoreArchiveSuccess()));
         break;
       case ArchiveTypes.events:

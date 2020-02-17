@@ -13,7 +13,7 @@ import DiverstTable from 'components/Shared/DiverstTable';
 import { injectIntl, intlShape } from 'react-intl';
 import { DateTime, formatDateTimeString } from 'utils/dateTimeHelpers';
 import RestoreIcon from '@material-ui/icons/Restore';
-
+import EventsTable from 'components/Archive/EventsTable'
 const styles = theme => ({
   link: {
     textDecoration: 'none !important',
@@ -46,14 +46,15 @@ export function ArchiveList(props) {
       {props.archives != null && (
         <Grid container spacing={3}>
           <Grid item xs>
-            <DiverstTable
+            <EventsTable
               title='Archives'
+              archives={props.archives}
+              archivesTotal={props.archivesTotal}
               isLoading={props.isLoading}
               handlePagination={props.handlePagination}
               handleOrdering={props.handleOrdering}
+              handleRestore={props.handleRestore}
               rowsPerPage={10}
-              dataArray={Object.values(props.archives)}
-              dataTotal={props.archivesTotal}
               columns={props.columns}
               actions={[{
                 icon: () => <RestoreIcon />,

@@ -71,7 +71,6 @@ const eventColumns = [
   },
 ];
 
-
 export function ArchivePage(props) {
   useInjectReducer({ key: 'archives', reducer });
   useInjectSaga({ key: 'archives', saga });
