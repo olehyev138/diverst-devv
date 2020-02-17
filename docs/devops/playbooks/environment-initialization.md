@@ -62,7 +62,7 @@ Create a new _secure note_ in our password manager, under `aws-environments`, th
 
 - Retrieve AWS_ACCESS_KEY_ID & AWS_SECRET_ACCESS_KEY values for `cli-bot` from password manager & export into terminal
 
-- Run script `./cli-assume-role <role-arn>`, passing it the role arn from our password manager. Export the outputted values into the appropriate environment variables.
+- Run script `eval $(./cli-assume-role <role-arn>)`, passing it the role arn from our password manager. 
 
 - Ensure that either `AWS_DEFAULT_REGION` is set as an environment variable in `AWS_DEFAULT_REGION` or defined in `~/.aws/config` under `default`. 
 

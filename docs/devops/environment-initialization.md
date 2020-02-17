@@ -90,7 +90,7 @@ Because we authenticate through role assumption with the IAM user `cli-bot`, we 
 
 First retrieve `AWS_ACCESS_KEY_ID` & `AWS_SECRET_ACCESS_KEY` values for `cli-bot` from the password manager & export into terminal. These are specifically for the `cli-bot` & will be reset for the new environment account by our script.
 
-Run script `./cli-assume-role <role-arn>`, passing it the role arn. Export the outputted values into the appropriate environment values.
+Run script `eval $(./cli-assume-role <role-arn>)`, passing it the role arn. Its done this way so that we can export the variables in the current shell & not a subshell
 
 Lastly, ensure that either `AWS_DEFAULT_REGION` is set as an environment variable in `AWS_DEFAULT_REGION` or defined in `~/.aws/config` under `default`.
 

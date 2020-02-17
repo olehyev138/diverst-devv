@@ -8,7 +8,7 @@
 
 - Retrieve cli access role ARN for new environment account
 
-- Run script `. ./cli-assume-role <role-arn>` - ensure it is done verbatim to allow script to export environment variables
+- Run script `eval $(./cli-assume-role <role-arn>)`
 
 - Ensure that either `AWS_DEFAULT_REGION` is set as an environment variable in `AWS_DEFAULT_REGION` and that it matches the value recorded in the secure note.
 
