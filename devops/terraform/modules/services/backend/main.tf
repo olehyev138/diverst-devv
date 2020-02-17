@@ -48,6 +48,13 @@ resource "aws_elastic_beanstalk_environment" "eb_app_env" {
     resource  = ""
   }
 
+  # Health
+  setting {
+    namespace = "aws:elasticbeanstalk:application"
+    name = "ApplicationHealthCheckURL"
+    value = "/health"
+  }
+
   # Auto Scaling settings
 
   # Minimum instances
