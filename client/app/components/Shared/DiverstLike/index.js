@@ -3,8 +3,6 @@ import { compose } from 'redux';
 import { withStyles, withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import PaletteIcon from '@material-ui/icons/Palette';
-import { IconButton } from '@material-ui/core';
 
 const Label = styled.label`
   position: relative;
@@ -62,15 +60,6 @@ export function DiverstLike(props) {
     setLiked(false);
     setCount(defaultLiked ? defaultCount - 1 : defaultCount);
   }
-
-  const example = (
-    <IconButton
-      aria-label='Choose color'
-      onClick={() => {}}
-    >
-      {<PaletteIcon />}
-    </IconButton>
-  )
 
   return (
     <React.Fragment>
