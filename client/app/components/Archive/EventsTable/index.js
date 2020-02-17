@@ -1,22 +1,11 @@
 import React, { memo, useEffect, useContext, useState } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
-
-import { useInjectSaga } from 'utils/injectSaga';
-import { useInjectReducer } from 'utils/injectReducer';
 import DiverstTable from 'components/Shared/DiverstTable';
-import reducer from 'containers/Archive/reducer';
-import saga from 'containers/Archive/saga';
-import { getArchivesBegin, restoreArchiveBegin } from 'containers/Archive/actions';
-import ArchiveList from 'components/Archive/ArchiveList';
-import dig from 'object-dig';
 import { injectIntl, intlShape } from 'react-intl';
 import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
 import { DateTime, formatDateTimeString } from 'utils/dateTimeHelpers';
 import messages from 'containers/Archive/messages';
-import { Grid } from '@material-ui/core';
 import RestoreIcon from '@material-ui/icons/Restore';
 import { withStyles } from '@material-ui/core/styles';
 
