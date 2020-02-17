@@ -9,7 +9,7 @@ import { useInjectReducer } from 'utils/injectReducer';
 
 import reducer from 'containers/GlobalSettings/EnterpriseConfiguration/reducer';
 import saga from 'containers/GlobalSettings/EnterpriseConfiguration/saga';
-import { selectEnterpriseTheme } from 'containers/GlobalSettings/EnterpriseConfiguration/selectors';
+import { selectEnterpriseTheme, selectEnterpriseIsCommitting, selectEnterpriseIsLoading } from 'containers/GlobalSettings/EnterpriseConfiguration/selectors';
 import {
   getEnterpriseBegin,
   updateEnterpriseBegin,
@@ -36,6 +36,8 @@ export function BrandingThemePage(props) {
       <BrandingTheme
         enterpriseAction={props.updateEnterpriseBegin}
         theme={props.theme}
+        isLoading={props.isLoading}
+        isCommitting={props.isCommitting}
         buttonText='Update'
       />
     </React.Fragment>
@@ -46,11 +48,15 @@ BrandingThemePage.propTypes = {
   theme: PropTypes.object,
   getEnterpriseBegin: PropTypes.func,
   updateEnterpriseBegin: PropTypes.func,
-  configurationUnmount: PropTypes.func
+  configurationUnmount: PropTypes.func,
+  isLoading: PropTypes.bool,
+  isCommitting: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
-  theme: selectEnterpriseTheme()
+  theme: selectEnterpriseTheme(),
+  isLoading: selectEnterpriseIsLoading(),
+  isCommitting: selectEnterpriseIsCommitting(),
 });
 
 const mapDispatchToProps = {

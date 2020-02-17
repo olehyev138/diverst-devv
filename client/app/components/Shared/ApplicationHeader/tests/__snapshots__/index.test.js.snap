@@ -14,22 +14,10 @@ exports[`<ApplicationHeader /> should render and match the snapshot 1`] = `
       >
         <MenuIcon />
       </WithStyles(ForwardRef(IconButton))>
-      <WithStyles(ForwardRef(Link))
-        component={
-          Object {
-            "$$typeof": Symbol(react.forward_ref),
-            "render": [Function],
-          }
-        }
-        to="/"
-      >
-        <WithStyles(ForwardRef(Button))>
-          <Connect(WithStyles(Logo))
-            imgClass="large-img"
-            verticalPadding={20}
-          />
-        </WithStyles(ForwardRef(Button))>
-      </WithStyles(ForwardRef(Link))>
+      <Memo(Connect(WithStyles(Logo)))
+        height="55px"
+        withLink={true}
+      />
       <div
         className=""
       >
