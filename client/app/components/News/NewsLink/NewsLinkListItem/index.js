@@ -93,7 +93,7 @@ export function NewsLinkListItem(props) {
           >
             Delete
           </Button>
-          {newsItem.current_user_likes}
+
           <DiverstLike
             isLiked={newsItem.current_user_likes}
             newsFeedLinkId={newsItem.id}

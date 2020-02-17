@@ -10,10 +10,12 @@ import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/News/reducer';
 import saga from 'containers/News/saga';
+import likeSaga from 'containers/Shared/Like/saga';
 
 import { selectPaginatedNewsItems, selectNewsItemsTotal, selectIsLoading } from 'containers/News/selectors';
 import { deleteSocialLinkBegin, getNewsItemsBegin, newsFeedUnmount, deleteNewsLinkBegin, deleteGroupMessageBegin,
-  updateNewsItemBegin, likeNewsItemBegin, unlikeNewsItemBegin } from 'containers/News/actions';
+  updateNewsItemBegin } from 'containers/News/actions';
+import { likeNewsItemBegin, unlikeNewsItemBegin } from 'containers/Shared/Like/actions';
 
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -34,6 +36,7 @@ const defaultParams = Object.freeze({
 export function NewsFeedPage(props, context) {
   useInjectReducer({ key: 'news', reducer });
   useInjectSaga({ key: 'news', saga });
+  useInjectSaga({ key: 'likes', saga: likeSaga });
   const rs = new RouteService(useContext);
 
   const links = {

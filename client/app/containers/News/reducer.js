@@ -64,7 +64,7 @@ export const initialState = {
   newsItems: [],
   newsItemsTotal: null,
   currentNewsItem: null,
-  likeRequestSuccess: false
+  //  likeRequestSuccess: false
 };
 
 /* eslint-disable default-case, no-param-reassign */
@@ -72,6 +72,7 @@ function newsReducer(state = initialState, action) {
   /* eslint-disable consistent-return */
   return produce(state, (draft) => {
     switch (action.type) {
+      /*
       case LIKE_NEWS_ITEM_BEGIN:
         draft.likeRequestSuccess = false;
         break;
@@ -90,7 +91,7 @@ function newsReducer(state = initialState, action) {
       case UNLIKE_NEWS_ITEM_ERROR:
         draft.likeRequestSuccess = true;
         break;
-
+      */
       case GET_NEWS_ITEMS_BEGIN:
         draft.isLoading = true;
         break;
