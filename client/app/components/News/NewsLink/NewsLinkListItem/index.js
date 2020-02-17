@@ -86,7 +86,6 @@ export function NewsLinkListItem(props) {
             size='small'
             color='primary'
             onClick={() => {
-              console.log(props);
               props.archiveNewsItemBegin({ id: newsItemId });
             }}
           >

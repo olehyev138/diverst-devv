@@ -102,4 +102,3 @@ export default compose(
   injectIntl,
   withStyles(styles)
 )(PostsTable);
-

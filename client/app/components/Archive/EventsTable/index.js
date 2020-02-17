@@ -43,7 +43,6 @@ const styles = theme => ({
 });
 
 export function EventsTable(props) {
-  console.log(props);
   return (
     <DiverstTable
       title='Archives'

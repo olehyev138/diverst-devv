@@ -145,7 +145,6 @@ function newsReducer(state = initialState, action) {
         draft.hasChanged = false;
         break;
       case ARCHIVE_NEWS_ITEM_SUCCESS:
-        console.log('Hi');
         draft.isCommitting = false;
         draft.hasChanged = true;
         break;

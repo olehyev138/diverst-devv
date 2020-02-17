@@ -280,7 +280,7 @@ export function* deleteSocialLink(action) {
   }
 }
 
-export function* archiveNewsItem(action){
+export function* archiveNewsItem(action) {
   try {
     const payload = { news_feed_link: action.payload };
     const response = yield call(api.newsFeedLinks.archive.bind(api.newsFeedLinks), payload.news_feed_link.id, payload);

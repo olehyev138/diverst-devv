@@ -13,9 +13,9 @@ import DiverstTable from 'components/Shared/DiverstTable';
 import { injectIntl, intlShape } from 'react-intl';
 import { DateTime, formatDateTimeString } from 'utils/dateTimeHelpers';
 import RestoreIcon from '@material-ui/icons/Restore';
-import EventsTable from 'components/Archive/EventsTable'
-import ResourcesTable from "../ResourcesTable";
-import PostsTable from "../PostsTable";
+import EventsTable from 'components/Archive/EventsTable';
+import ResourcesTable from '../ResourcesTable';
+import PostsTable from '../PostsTable';
 
 const styles = theme => ({
   link: {

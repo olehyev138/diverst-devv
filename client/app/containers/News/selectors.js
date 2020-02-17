@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect/lib/index';
 import { initialState } from 'containers/News/reducer';
-import {selectResourcesDomain} from "../Resource/selectors";
+import { selectResourcesDomain } from '../Resource/selectors';
 
 const selectNewsDomain = state => state.news || initialState;
 

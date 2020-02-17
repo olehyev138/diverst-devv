@@ -43,7 +43,6 @@ const resourceColumns = [
 ];
 
 export function ResourcesTable(props) {
-  console.log(props);
   return (
     <DiverstTable
       title='Archives'
