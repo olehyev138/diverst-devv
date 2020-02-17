@@ -13,11 +13,11 @@ class Api::V1::LikesController < DiverstController
     params[klass.symbol] = payload
 
     if params[klass.symbol][:news_feed_link_id].present? && params[klass.symbol][:answer_id].present?
-      raise InvalidInputException.new({ message: 'Can\'t like Answer and News Item', attribute: item.errors.messages.first.first})
+      raise BadRequestException.new('Can\'t like Answer and News Item')
     end
 
     if @isliked.present?
-      raise InvalidInputException.new({ message: 'Answer and News Item is already liked', attribute: item.errors.messages.first.first})
+      raise BadRequestException.new('Answer and News Item is already liked')
     else
       begin
         base_authorize(klass)

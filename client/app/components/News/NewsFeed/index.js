@@ -25,7 +25,6 @@ import NewsLinkListItem from 'components/News/NewsLink/NewsLinkListItem';
 import SocialLinkListItem from 'components/News/SocialLink/SocialLinkListItem';
 import DiverstPagination from 'components/Shared/DiverstPagination';
 import DiverstLoader from 'components/Shared/DiverstLoader';
-import DiverstLike from "../../Shared/DiverstLike";
 
 const styles = theme => ({
   newsItem: {

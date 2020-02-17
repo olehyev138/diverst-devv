@@ -20,7 +20,7 @@ import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/News/messages';
-import DiverstLike from "../../../Shared/DiverstLike";
+import DiverstLike from '../../../Shared/DiverstLike';
 
 
 const styles = theme => ({

@@ -1683,7 +1683,6 @@ ActiveRecord::Schema.define(version: 2020_01_10_153452) do
     t.index ["enterprise_id"], name: "index_yammer_field_mappings_on_enterprise_id"
   end
 
-  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "badges", "enterprises"
   add_foreign_key "budgets", "users", column: "requester_id"
   add_foreign_key "custom_texts", "enterprises"

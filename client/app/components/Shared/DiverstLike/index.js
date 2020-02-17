@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { compose } from 'redux';
 import { withStyles, withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
@@ -64,7 +64,8 @@ export function DiverstLike(props) {
   return (
     <React.Fragment>
       <Label>
-        <Input checked={liked}
+        <Input
+          checked={liked}
           type='checkbox'
           onChange={() => {
             if (liked)
