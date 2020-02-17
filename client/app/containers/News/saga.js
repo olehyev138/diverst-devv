@@ -43,22 +43,31 @@ import {
 
 export function* likeNewsItem(action) {
   try {
-    const response = yield call(api.likes.create.bind(api.likes), action.payload);
+    const { callback, ...rest } = action.payload;
+    const payload = { like: rest };
+
+    const response = yield call(api.likes.create.bind(api.likes), payload);
     yield put(likeNewsItemSuccess(response.data));
+    callback();
   } catch (err) {
     // TODO: intl message
     yield put(likeNewsItemError(err));
-    yield put(showSnackbar({ message: 'Failed to load news item', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: 'Failed to like news item', options: { variant: 'warning' } }));
   }
 }
+
 export function* unlikeNewsItem(action) {
   try {
-    const response = yield call(api.likes.unlike.bind(api.likes), action.payload);
+    const { callback, ...rest } = action.payload;
+    const payload = { like: rest };
+
+    const response = yield call(api.likes.unlike.bind(api.likes), payload);
     yield put(unlikeNewsItemSuccess(response.data));
+    callback();
   } catch (err) {
     // TODO: intl message
     yield put(unlikeNewsItemError(err));
-    yield put(showSnackbar({ message: 'Failed to load news item', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: 'Failed to unlike news item', options: { variant: 'warning' } }));
   }
 }
 

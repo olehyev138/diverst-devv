@@ -3,9 +3,9 @@ class Api::V1::LikesController < DiverstController
 
   def is_liked
     if payload[:news_feed_link_id].present?
-      @isliked = Like.find_by(user: self.diverst_request.user, news_feed_link_id: payload[:news_feed_link_id])
+      @isliked = Like.find_by(user: current_user, news_feed_link_id: payload[:news_feed_link_id])
     else
-      @isliked = Like.find_by(user: self.diverst_request.user, answer_id: payload[:answer_id])
+      @isliked = Like.find_by(user: current_user, answer_id: payload[:answer_id])
     end
   end
 
@@ -21,6 +21,7 @@ class Api::V1::LikesController < DiverstController
     else
       begin
         base_authorize(klass)
+        params[:like][:user_id] = current_user.id
         render status: 201, json: klass.build(self.diverst_request, params)
       rescue => e
         case e
@@ -49,11 +50,10 @@ class Api::V1::LikesController < DiverstController
 
   def payload
     params
-        .require(:initiative)
+        .require(:like)
         .permit(
             :news_feed_link_id,
             :answer_id,
           )
-
   end
 end

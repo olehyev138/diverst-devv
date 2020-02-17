@@ -95,7 +95,7 @@ export function NewsFeedPage(props, context) {
     props.getNewsItemsBegin(newParams);
     setParams(newParams);
   };
-
+  console.log(props.unlikeNewsItemBegin);
   return (
     <React.Fragment>
       <NewsFeed

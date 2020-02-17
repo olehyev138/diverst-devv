@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { compose } from 'redux';
 import { withStyles, withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
@@ -47,35 +47,40 @@ const Count = styled.label`
   align-content: center
 `;
 export function DiverstLike(props) {
-  const { isLiked } = props.isLiked;
+  const { isLiked: defaultLiked, totalLikes: defaultCount } = props;
+
+  const [liked, setLiked] = useState(defaultLiked);
+  const [count, setCount] = useState(defaultCount);
+
+  function like() {
+    setLiked(true);
+    setCount(defaultLiked ? defaultCount : defaultCount + 1);
+  }
+  function unlike() {
+    setLiked(false);
+    setCount(defaultLiked ? defaultCount - 1 : defaultCount);
+  }
+
   return (
     <React.Fragment>
       <Label>
-        <Input checked={isLiked}
+        <Input checked={liked}
           type='checkbox'
           onChange={() => {
-            if (isLiked)
-              props.likeNewsItemBegin(props);
+            if (liked)
+              props.unlikeNewsItemBegin({ news_feed_link_id: props.newsFeedLinkId, callback: unlike });
             else
-              props.unlikeNewsItemBegin(props);
+              props.likeNewsItemBegin({ news_feed_link_id: props.newsFeedLinkId, callback: like });
           }}
         />
         <Span />
       </Label>
-      <Count>{props.totalLikes}</Count>
+      <Count>{count}</Count>
     </React.Fragment>
   );
-
-/*  return (
-    <React.Fragment>
-      <Label/>
-    </React.Fragment>
-  );
-*/
 }
 
 DiverstLike.propTypes = {
-//  likes: PropTypes.object,
   totalLikes: PropTypes.number,
   isLiked: PropTypes.bool,
   newsFeedLinkId: PropTypes.number,
