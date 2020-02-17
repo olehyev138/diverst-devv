@@ -31,6 +31,9 @@ module "prod" {
   backend_asg_max   = var.backend_asg_max
   backend_ec2_type  = var.backend_ec2_type
 
+  sidekiq_username = var.sidekiq_username
+  sidekiq_password = var.sidekiq_password
+
   db_class                    = var.db_class
   db_allocated_storage        = var.db_allocated_storage
   db_backup_retention         = var.db_backup_retention

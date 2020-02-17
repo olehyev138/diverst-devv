@@ -48,7 +48,7 @@ resource "aws_elastic_beanstalk_environment" "eb_app_env" {
     resource  = ""
   }
 
-  # Health
+  # Healthcheck
   setting {
     namespace = "aws:elasticbeanstalk:environment:process:default"
     name = "HealthCheckPath"
@@ -176,7 +176,7 @@ resource "aws_elastic_beanstalk_environment" "eb_app_env" {
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
     name = "SIDEKIQ_DASHBOARD_USERNAME"
-    value = "admin"
+    value = var.db_username
     resource  = ""
   }
 
@@ -184,7 +184,7 @@ resource "aws_elastic_beanstalk_environment" "eb_app_env" {
   setting {
     namespace = "aws:elasticbeanstalk:application:environment"
     name = "SIDEKIQ_DASHBOARD_PASSWORD"
-    value = "admin"
+    value = var.db_password
     resource  = ""
   }
 

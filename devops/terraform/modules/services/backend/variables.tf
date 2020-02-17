@@ -11,6 +11,9 @@ variable "sg_elb" {}
 variable "sn_app" {}
 variable "sg_app" {}
 
+variable "sidekiq_username" {}
+variable "sidekiq_password" {}
+
 variable "db_address"   {}
 variable "db_username"  {}
 variable "db_password"  {}

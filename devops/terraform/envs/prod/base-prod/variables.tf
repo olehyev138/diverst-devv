@@ -23,6 +23,14 @@ variable "backend_ec2_type" {
   type    = string
 }
 
+variable "sidekiq_username" {
+  type    = string
+}
+
+variable "sidekiq_password" {
+  type    = string
+}
+
 # Database
 variable "db_class" {
   type    = string

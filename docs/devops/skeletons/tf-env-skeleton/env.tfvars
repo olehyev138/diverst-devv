@@ -9,6 +9,9 @@ backend_asg_min   = 1
 backend_asg_max   = 4
 backend_ec2_type  = "t2.small"
 
+sidekiq_username = "admin"
+sidekiq_password = "<password>"
+
 db_class                    = "db.t2.small"
 db_allocated_storage        = 20
 db_backup_retention         = 31

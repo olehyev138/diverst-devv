@@ -62,6 +62,9 @@ module "backend" {
   sn_app  = module.vpc.sn_app
   sg_app  = module.sec.sg_app
 
+  sidekiq_username = var.sidekiq_username
+  sidekiq_password = var.sidekiq_password
+
   db_address  = module.db.db_address
   db_port     = module.db.db_port
   db_username = var.db_username
