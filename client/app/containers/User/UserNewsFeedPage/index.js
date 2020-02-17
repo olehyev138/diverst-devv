@@ -10,6 +10,8 @@ import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/User/reducer';
 import saga from 'containers/User/saga';
+import likeSaga from 'containers/Shared/Like/saga';
+import { likeNewsItemBegin, unlikeNewsItemBegin } from 'containers/Shared/Like/actions';
 
 import { selectPaginatedPosts, selectPostsTotal, selectIsLoadingPosts } from 'containers/User/selectors';
 import { selectUser } from 'containers/Shared/App/selectors';
@@ -23,6 +25,7 @@ import NewsFeed from 'components/News/NewsFeed';
 export function NewsFeedPage(props, context) {
   useInjectReducer({ key: 'users', reducer });
   useInjectSaga({ key: 'users', saga });
+  useInjectSaga({ key: 'likes', saga: likeSaga });
 
   const [params, setParams] = useState({
     count: 5, page: 0, order: 'desc', order_by: 'created_at',
@@ -62,6 +65,8 @@ export function NewsFeedPage(props, context) {
         links={links}
         isLoading={props.isLoading}
         readonly
+        likeNewsItemBegin={props.likeNewsItemBegin}
+        unlikeNewsItemBegin={props.unlikeNewsItemBegin}
       />
     </React.Fragment>
   );
@@ -73,6 +78,8 @@ NewsFeedPage.propTypes = {
   userUnmount: PropTypes.func.isRequired,
   newsItems: PropTypes.array,
   newsItemsTotal: PropTypes.number,
+  likeNewsItemBegin: PropTypes.func,
+  unlikeNewsItemBegin: PropTypes.func,
   isLoading: PropTypes.bool,
   currentGroup: PropTypes.shape({
     news_feed: PropTypes.shape({
@@ -91,6 +98,8 @@ const mapStateToProps = createStructuredSelector({
 const mapDispatchToProps = {
   getUserPostsBegin,
   userUnmount,
+  likeNewsItemBegin,
+  unlikeNewsItemBegin
 };
 
 const withConnect = connect(

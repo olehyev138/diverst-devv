@@ -20,6 +20,7 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/News/messages';
 import WrappedNavLink from '../../../Shared/WrappedNavLink';
+import DiverstLike from '../../../Shared/DiverstLike';
 
 const styles = theme => ({
 });
@@ -78,6 +79,14 @@ export function SocialLinkListItem(props) {
         >
           Delete
         </Button>
+        <DiverstLike
+          isLiked={newsItem.current_user_likes}
+          newsFeedLinkId={newsItem.id}
+          totalLikes={newsItem.total_likes}
+          likeNewsItemBegin={props.likeNewsItemBegin}
+          unlikeNewsItemBegin={props.unlikeNewsItemBegin}
+        />
+
       </CardActions>
     </Card>
   );
@@ -91,6 +100,9 @@ SocialLinkListItem.propTypes = {
   newsItem: PropTypes.object,
   deleteSocialLinkBegin: PropTypes.func,
   updateNewsItemBegin: PropTypes.func,
+  likeNewsItemBegin: PropTypes.func,
+  unlikeNewsItemBegin: PropTypes.func,
+
 };
 
 export default compose(

@@ -17,6 +17,7 @@ import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/News/messages';
 import DeleteIcon from '@material-ui/icons/DeleteOutline';
 import { formatDateTimeString } from 'utils/dateTimeHelpers';
+import DiverstLike from "../../../Shared/DiverstLike";
 
 const styles = theme => ({
 });
@@ -47,46 +48,56 @@ export function GroupMessageListItem(props) {
           {`Submitted by ${groupMessage.owner.first_name} ${groupMessage.owner.last_name}`}
         </Typography>
       </CardContent>
-      { props.links && !props.readonly && (
-        <CardActions>
-          <Button
-            size='small'
-            color='primary'
-            to={props.links.groupMessageEdit(newsItem.id)}
-            component={WrappedNavLink}
-          >
-            <DiverstFormattedMessage {...messages.edit} />
-          </Button>
-          <Button
-            size='small'
-            to={props.links.groupMessageShow(props.groupId, newsItem.id)}
-            component={WrappedNavLink}
-          >
-            Comments
-          </Button>
-          {props.newsItem.approved !== true ? (
+      <CardActions>
+        { props.links && !props.readonly && (
+          <React.Fragment>
+            <Button
+              size='small'
+              color='primary'
+              to={props.links.groupMessageEdit(newsItem.id)}
+              component={WrappedNavLink}
+            >
+              <DiverstFormattedMessage {...messages.edit} />
+            </Button>
+            <Button
+              size='small'
+              to={props.links.groupMessageShow(props.groupId, newsItem.id)}
+              component={WrappedNavLink}
+            >
+              Comments
+            </Button>
+            {props.newsItem.approved !== true ? (
+              <Button
+                size='small'
+                onClick={() => {
+                  /* eslint-disable-next-line no-alert, no-restricted-globals */
+                  props.updateNewsItemBegin({ approved: true, id: newsItemId, group_id: groupId });
+                }}
+              >
+                Approve
+              </Button>
+            ) : null }
             <Button
               size='small'
               onClick={() => {
                 /* eslint-disable-next-line no-alert, no-restricted-globals */
-                props.updateNewsItemBegin({ approved: true, id: newsItemId, group_id: groupId });
+                if (confirm('Delete group message?'))
+                  props.deleteGroupMessageBegin(newsItem.group_message);
               }}
             >
-              Approve
+              Delete
             </Button>
-          ) : null }
-          <Button
-            size='small'
-            onClick={() => {
-              /* eslint-disable-next-line no-alert, no-restricted-globals */
-              if (confirm('Delete group message?'))
-                props.deleteGroupMessageBegin(newsItem.group_message);
-            }}
-          >
-            Delete
-          </Button>
-        </CardActions>
-      )}
+
+          </React.Fragment>
+        )}
+        <DiverstLike
+          isLiked={newsItem.current_user_likes}
+          newsFeedLinkId={newsItem.id}
+          totalLikes={newsItem.total_likes}
+          likeNewsItemBegin={props.likeNewsItemBegin}
+          unlikeNewsItemBegin={props.unlikeNewsItemBegin}
+        />
+      </CardActions>
     </Card>
   );
 }
@@ -101,6 +112,9 @@ GroupMessageListItem.propTypes = {
   }),
   deleteGroupMessageBegin: PropTypes.func,
   updateNewsItemBegin: PropTypes.func,
+  likeNewsItemBegin: PropTypes.func,
+  unlikeNewsItemBegin: PropTypes.func,
+
 };
 
 export default compose(

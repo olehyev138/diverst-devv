@@ -74,13 +74,7 @@ module User::Actions
     total = nfls.size
     paged = nfls.limit(count).offset(page * count)
 
-    serialized = paged.map { |nfl| NewsFeedLinkSerializer.new(nfl).to_h }
-
-    { page: {
-      items: serialized,
-      total: total,
-      type: 'news_feed_link'
-    } }
+    Page.new(paged, total)
   end
 
   def joined_events(params)
@@ -102,13 +96,7 @@ module User::Actions
     total = ordered.size
     paged = ordered.limit(count).offset(page * count)
 
-    serialized = paged.map { |nfl| InitiativeSerializer.new(nfl).to_h }
-
-    { page: {
-      items: serialized,
-      total: total,
-      type: 'initiative'
-    } }
+    Page.new(paged, total)
   end
 
   def all_events(params)
@@ -153,13 +141,7 @@ module User::Actions
     total = ordered.size
     paged = ordered.limit(count).offset(page * count)
 
-    serialized = paged.map { |nfl| InitiativeSerializer.new(nfl).to_h }
-
-    { page: {
-      items: serialized,
-      total: total,
-      type: 'initiative'
-    } }
+    Page.new(paged, total)
   end
 
   def downloads(params)
@@ -179,13 +161,7 @@ module User::Actions
     total = ordered.size
     paged = ordered.limit(count).offset(page * count)
 
-    serialized = paged.map { |nfl| CsvFileSerializer.new(nfl).to_h }
-
-    { page: {
-        items: serialized,
-        total: total,
-        type: 'csv_file'
-    } }
+    Page.new(paged, total)
   end
 
   def index_except_self(params, serializer: UserSerializer)
@@ -213,13 +189,7 @@ module User::Actions
     total = ordered.size
     paged = ordered.limit(count).offset(page * count)
 
-    serialized = paged.map { |nfl| serializer.new(nfl).to_h }
-
-    { page: {
-      items: serialized,
-      total: total,
-      type: 'initiative'
-    } }
+    Page.new(paged, total)
   end
 
   module ClassMethods

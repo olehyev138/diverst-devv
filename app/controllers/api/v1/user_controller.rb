@@ -1,6 +1,6 @@
 class Api::V1::UserController < DiverstController
   def get_posts
-    render json: diverst_request.user.posts(params)
+    render json: current_user.posts(params)
   rescue => e
     raise BadRequestException.new(e.message)
   end

@@ -84,6 +84,8 @@ export function NewsFeed(props) {
           groupId={item.news_feed.group_id}
           deleteGroupMessageBegin={props.deleteGroupMessageBegin}
           updateNewsItemBegin={props.updateNewsItemBegin}
+          likeNewsItemBegin={props.likeNewsItemBegin}
+          unlikeNewsItemBegin={props.unlikeNewsItemBegin}
         />
       );
     else if (item.news_link) // eslint-disable-line no-else-return
@@ -113,6 +115,8 @@ export function NewsFeed(props) {
           readonly={props.readonly}
           deleteSocialLinkBegin={props.deleteSocialLinkBegin}
           updateNewsItemBegin={props.updateNewsItemBegin}
+          likeNewsItemBegin={props.likeNewsItemBegin}
+          unlikeNewsItemBegin={props.unlikeNewsItemBegin}
         />
       );
 
