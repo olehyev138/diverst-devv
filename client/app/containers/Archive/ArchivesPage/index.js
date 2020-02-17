@@ -32,44 +32,6 @@ const ArchiveTypes = Object.freeze({
   events: 2,
 });
 
-const resourceColumns = [
-  {
-    title: intl.formatMessage(messages.title),
-    field: 'title',
-    query_field: 'title'
-  },
-  {
-    title: intl.formatMessage(messages.url),
-    field: 'url',
-    query_field: 'url',
-  },
-  {
-    title: intl.formatMessage(messages.creation),
-    field: 'created_at',
-    query_field: 'created_at',
-    render: rowData => formatDateTimeString(rowData.created_at, DateTime.DATE_SHORT)
-  },
-];
-
-const eventColumns = [
-  {
-    title: intl.formatMessage(messages.event),
-    field: 'name',
-    query_field: 'name'
-  },
-  {
-    title: intl.formatMessage(messages.group),
-    field: 'group_name',
-    // TODO DISABLE THIS COLUMN ORDERING
-    query_field: 'group_name'
-  },
-  {
-    title: intl.formatMessage(messages.creation),
-    field: 'created_at',
-    query_field: 'created_at',
-    render: rowData => formatDateTimeString(rowData.created_at, DateTime.DATE_SHORT)
-  },
-];
 
 export function ArchivePage(props) {
   useInjectReducer({ key: 'archives', reducer });
@@ -77,7 +39,6 @@ export function ArchivePage(props) {
 
   const [tab, setTab] = useState(ArchiveTypes.posts);
   const [params, setParams] = useState(defaultParams);
-  const [columns, setColumns] = useState(resourceColumns);
 
   useEffect(() => {
     if (props.hasChanged)
@@ -104,11 +65,9 @@ export function ArchivePage(props) {
         break;
       case ArchiveTypes.resources:
         getArchives('resources', true);
-        setColumns(resourceColumns);
         break;
       case ArchiveTypes.events:
         getArchives('events', true);
-        setColumns(eventColumns);
         break;
       default:
         break;
@@ -146,7 +105,6 @@ export function ArchivePage(props) {
       archives={props.archives}
       archivesTotal={props.archivesTotal}
       handleRestore={handleRestore}
-      columns={columns}
       isLoading={props.isLoading}
     />
   );
