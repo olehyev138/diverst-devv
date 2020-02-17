@@ -81,6 +81,17 @@ export function NewsLinkListItem(props) {
               Approve
             </Button>
           ) : null }
+
+          <Button
+            size='small'
+            color='primary'
+            onClick={() => {
+              console.log(props);
+              props.archiveNewsItemBegin({ id: newsItemId });
+            }}
+          >
+            <DiverstFormattedMessage {...messages.archive} />
+          </Button>
           <Button
             size='small'
             onClick={() => {
