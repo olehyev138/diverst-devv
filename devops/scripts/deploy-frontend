@@ -2,10 +2,9 @@
 
 # Build & deploy frontend
 # Must be run from app root
-# Usage: ./create-app-version <aws-profile> <frontend-bucket>
+# Usage: ./create-app-version <frontend-bucket>
 
-PROFILE=$1
-FRONTEND_BUCKET=$2
+FRONTEND_BUCKET=$1
 
 # Exit on error
 set -e
@@ -20,4 +19,5 @@ cd client/
 # Build frontend
 npm run build
 
-aws s3 sync build/ "s3://$FRONTEND_BUCKET" --profile "$PROFILE"
+aws s3 sync --cache-control 'max-age=604800' --exclude index.html build/ "s3://$FRONTEND_BUCKET"
+aws s3 sync --cache-control 'no-cache' build/ "s3://$FRONTEND_BUCKET"

@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# Check a given apps health status
+# Usage: ./eb-app-status <eb-app-name>
+
+EB_APP_NAME=$1
+
+aws elasticbeanstalk describe-environments \
+  --application-name "$EB_APP_NAME" \
+  --environment-name "$EB_APP_NAME-env" \
+  --query 'Environments[*].{Status: Status,Health: Health}' \
+  --output json
+
