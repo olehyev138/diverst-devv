@@ -115,6 +115,7 @@ NewsLinkListItem.propTypes = {
   links: PropTypes.object,
   deleteNewsLinkBegin: PropTypes.func,
   updateNewsItemBegin: PropTypes.func,
+  archiveNewsItemBegin: PropTypes.func,
 };
 
 export default compose(
