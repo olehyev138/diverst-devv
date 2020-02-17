@@ -15,6 +15,7 @@ import { DateTime, formatDateTimeString } from 'utils/dateTimeHelpers';
 import RestoreIcon from '@material-ui/icons/Restore';
 import EventsTable from 'components/Archive/EventsTable'
 import ResourcesTable from "../ResourcesTable";
+import PostsTable from "../PostsTable";
 
 const styles = theme => ({
   link: {
@@ -77,6 +78,27 @@ export function ArchiveList(props) {
 
             {props.currentTab === ArchiveTypes.resources && (
               <ResourcesTable
+                title='Archives'
+                archives={props.archives}
+                archivesTotal={props.archivesTotal}
+                isLoading={props.isLoading}
+                handlePagination={props.handlePagination}
+                handleOrdering={props.handleOrdering}
+                handleRestore={props.handleRestore}
+                rowsPerPage={10}
+                columns={props.columns}
+                actions={[{
+                  icon: () => <RestoreIcon />,
+                  tooltip: 'Restore',
+                  onClick: (_, rowData) => {
+                    props.handleRestore(rowData.id);
+                  }
+                }]}
+              />
+            )}
+
+            {props.currentTab === ArchiveTypes.posts && (
+              <PostsTable
                 title='Archives'
                 archives={props.archives}
                 archivesTotal={props.archivesTotal}

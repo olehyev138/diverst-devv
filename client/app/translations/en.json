@@ -470,5 +470,9 @@
   "diverst.containers.Archive.column.creation": "Creation Date",
   "diverst.containers.Archive.column.options": "Options",
   "diverst.containers.Archive.column.event": "Event",
-  "diverst.containers.Archive.column.group": "Group Name"
+  "diverst.containers.Archive.column.group": "Group Name",
+  "diverst.containers.Archive.field.type.news_link" : "News Link",
+  "diverst.containers.Archive.field.type.group_message": "Group Message",
+  "diverst.containers.Archive.field.type.social_link": "Social Link",
+  "diverst.containers.Archive.field.type.error": "Error"
 }

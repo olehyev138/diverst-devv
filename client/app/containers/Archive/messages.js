@@ -38,5 +38,17 @@ export default defineMessages({
   },
   empty_message: {
     id: `${scope}.index.empty_section`
+  },
+  news_link: {
+    id: `${scope}.field.type.news_link`
+  },
+  social_link: {
+    id: `${scope}.field.type.social_link`
+  },
+  group_message: {
+    id: `${scope}.field.type.group_message`
+  },
+  error: {
+    id: `${scope}.field.type.error`
   }
 });
