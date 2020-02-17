@@ -7,7 +7,7 @@ import classNames from 'classnames';
 
 import { withStyles } from '@material-ui/core/styles';
 import {
-  AppBar, Button, Hidden, IconButton, Link, ListItemIcon, Menu, MenuItem, Toolbar, Typography,
+  AppBar, Box, Button, Hidden, IconButton, Link, ListItemIcon, Menu, MenuItem, Toolbar, Typography, CardActionArea
 } from '@material-ui/core';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import PermIdentityIcon from '@material-ui/icons/PermIdentity';
@@ -21,7 +21,7 @@ import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import Logo from 'components/Shared/Logo/index';
 import { logoutBegin } from 'containers/Shared/App/actions';
 
-import { selectEnterprise, selectToken, selectUser } from 'containers/Shared/App/selectors';
+import { selectEnterprise, selectUser } from 'containers/Shared/App/selectors';
 
 import { selectGroup } from 'containers/Group/selectors';
 
@@ -100,7 +100,7 @@ export class ApplicationHeader extends React.PureComponent {
   }
 
   logoutBegin() {
-    this.props.logoutBegin(this.props.user);
+    this.props.logoutBegin();
   }
 
   handleProfileMenuOpen = (event) => {
@@ -200,14 +200,7 @@ export class ApplicationHeader extends React.PureComponent {
               )
               : <React.Fragment />
             }
-            <Link
-              component={WrappedNavLink}
-              to={ROUTES.user.root.path()}
-            >
-              <Button>
-                <Logo imgClass='large-img' verticalPadding={20} />
-              </Button>
-            </Link>
+            <Logo height='55px' withLink />
             <div className={classNames(classes.grow, classes.centerText)}>
               <Hidden xsDown>
                 {group ? (
@@ -291,14 +284,13 @@ ApplicationHeader.defaultProps = {
 
 export function mapDispatchToProps(dispatch, ownProps) {
   return {
-    logoutBegin(user) {
-      dispatch(logoutBegin(user));
+    logoutBegin() {
+      dispatch(logoutBegin());
     },
   };
 }
 
 const mapStateToProps = createStructuredSelector({
-  token: selectToken(),
   user: selectUser(),
   enterprise: selectEnterprise(),
   group: selectGroup(),

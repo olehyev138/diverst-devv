@@ -1,9 +1,16 @@
 class ThemeSerializer < ApplicationRecordSerializer
-  attributes :id, :logo, :primary_color, :secondary_color, :logo_location
+  attributes :branding_color, :charts_color, :use_secondary_color, :primary_color,
+             :secondary_color, :logo_redirect_url, :logo, :logo_file_name, :logo_data
 
-  def logo_location
-    return nil if !object.logo?
+  def logo
+    AttachmentHelper.attachment_signed_id(object.logo)
+  end
 
-    ENV['DOMAIN'] + object.logo.expiring_url(24.hours)
+  def logo_file_name
+    AttachmentHelper.attachment_file_name(object.logo)
+  end
+
+  def logo_data
+    AttachmentHelper.attachment_data_string(object.logo)
   end
 end

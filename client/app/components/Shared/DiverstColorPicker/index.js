@@ -1,4 +1,4 @@
-import React, { memo, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
 
@@ -31,6 +31,10 @@ export function DiverstColorPicker(props) {
   const [displayColorPicker, setDisplayColorPicker] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [color, setColor] = useState(props.value);
+
+  useEffect(() => {
+    setColor(props.value);
+  }, [props.value]);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);

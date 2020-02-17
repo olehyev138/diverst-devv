@@ -8,9 +8,7 @@ import {
   FIND_ENTERPRISE_BEGIN,
   FIND_ENTERPRISE_SUCCESS,
   FIND_ENTERPRISE_ERROR,
-  SET_ENTERPRISE,
-  SET_USER_POLICY_GROUP,
-  SET_USER,
+  SET_USER_DATA,
   SSO_LOGIN_BEGIN,
   SSO_LINK_BEGIN
 }
@@ -52,10 +50,9 @@ export function loginError(error) {
   };
 }
 
-export function logoutBegin(user) {
+export function logoutBegin() {
   return {
     type: LOGOUT_BEGIN,
-    token: user.user_token
   };
 }
 
@@ -93,23 +90,10 @@ export function findEnterpriseError(error) {
 }
 
 
-export function setEnterprise(enterprise) {
+export function setUserData(payload, append = false) {
   return {
-    type: SET_ENTERPRISE,
-    enterprise,
-  };
-}
-
-export function setUserPolicyGroup(policyGroup) {
-  return {
-    type: SET_USER_POLICY_GROUP,
-    policyGroup,
-  };
-}
-
-export function setUser(user) {
-  return {
-    type: SET_USER,
-    user,
+    type: SET_USER_DATA,
+    payload,
+    append,
   };
 }

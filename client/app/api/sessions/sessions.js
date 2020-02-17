@@ -1,8 +1,12 @@
 import API from '../base/base';
-// var axios = require("axios");
+const axios = require('axios');
 
 const Sessions = new API({ controller: 'sessions' });
 
-Object.assign(Sessions, {});
+Object.assign(Sessions, {
+  logout() {
+    return axios.delete(`${this.url}/logout`);
+  }
+});
 
 export default Sessions;
