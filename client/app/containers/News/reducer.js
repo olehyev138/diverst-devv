@@ -52,7 +52,6 @@ import {
   ARCHIVE_NEWS_ITEM_SUCCESS,
   ARCHIVE_NEWS_ITEM_ERROR
 } from 'containers/News/constants';
-import {ARCHIVE_EVENT_BEGIN} from "../Event/constants";
 
 export const initialState = {
   isLoading: true,
@@ -146,8 +145,9 @@ function newsReducer(state = initialState, action) {
         draft.hasChanged = false;
         break;
       case ARCHIVE_NEWS_ITEM_SUCCESS:
-        draft.hasChanged = true;
+        console.log('Hi');
         draft.isCommitting = false;
+        draft.hasChanged = true;
         break;
     }
   });

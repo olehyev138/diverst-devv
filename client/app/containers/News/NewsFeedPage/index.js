@@ -11,7 +11,7 @@ import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/News/reducer';
 import saga from 'containers/News/saga';
 
-import { selectPaginatedNewsItems, selectNewsItemsTotal, selectIsLoading } from 'containers/News/selectors';
+import { selectPaginatedNewsItems, selectNewsItemsTotal, selectIsLoading, selectHasChanged } from 'containers/News/selectors';
 import { deleteSocialLinkBegin, getNewsItemsBegin, newsFeedUnmount, deleteNewsLinkBegin, deleteGroupMessageBegin,
   updateNewsItemBegin, archiveNewsItemBegin } from 'containers/News/actions';
 
@@ -69,21 +69,21 @@ export function NewsFeedPage(props, context) {
   };
 
   useEffect(() => {
-    getNewsFeedItems(['approved']);
+    getNewsFeedItems(['approved', 'not_archived']);
 
     return () => {
       props.newsFeedUnmount();
     };
-  }, [props.currentGroup]);
+  }, [props.currentGroup, props.hasChanged]);
 
   const handleChangeTab = (event, newTab) => {
     setTab(newTab);
     switch (newTab) {
       case NewsFeedTypes.approved:
-        getNewsFeedItems(['approved'], true);
+        getNewsFeedItems(['approved', 'not_archived'], true);
         break;
       case NewsFeedTypes.pending:
-        getNewsFeedItems(['pending'], true);
+        getNewsFeedItems(['pending', 'not_archived'], true);
         break;
       default:
         break;
@@ -128,6 +128,7 @@ NewsFeedPage.propTypes = {
   deleteSocialLinkBegin: PropTypes.func,
   updateNewsItemBegin: PropTypes.func,
   isLoading: PropTypes.bool,
+  hasChanged: PropTypes.bool,
   archiveNewsItemBegin: PropTypes.func,
   currentGroup: PropTypes.shape({
     news_feed: PropTypes.shape({
@@ -140,6 +141,7 @@ const mapStateToProps = createStructuredSelector({
   newsItems: selectPaginatedNewsItems(),
   newsItemsTotal: selectNewsItemsTotal(),
   isLoading: selectIsLoading(),
+  hasChanged: selectHasChanged()
 });
 
 const mapDispatchToProps = dispatch => ({

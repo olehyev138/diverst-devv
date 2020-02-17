@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect/lib/index';
 import { initialState } from 'containers/News/reducer';
+import {selectResourcesDomain} from "../Resource/selectors";
 
 const selectNewsDomain = state => state.news || initialState;
 
@@ -33,7 +34,12 @@ const selectIsCommitting = () => createSelector(
   newsState => newsState.isCommitting
 );
 
+const selectHasChanged = () => createSelector(
+  selectNewsDomain,
+  newsState => newsState.hasChanged
+);
+
 export {
   selectNewsDomain, selectPaginatedNewsItems, selectIsFormLoading,
-  selectNewsItem, selectNewsItemsTotal, selectIsLoading, selectIsCommitting
+  selectNewsItem, selectNewsItemsTotal, selectIsLoading, selectIsCommitting, selectHasChanged
 };

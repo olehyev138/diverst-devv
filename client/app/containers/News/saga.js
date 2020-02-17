@@ -288,6 +288,7 @@ export function* archiveNewsItem(action){
     const response = yield call(api.newsFeedLinks.archive.bind(api.newsFeedLinks), payload.news_feed_link.id, payload);
     yield put(archiveNewsItemSuccess());
   } catch (err) {
+    console.log(err);
     // TODO: intl message
     yield put(archiveNewsItemSuccess(err));
     yield put(showSnackbar({
