@@ -17,7 +17,7 @@ import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/News/messages';
 import DeleteIcon from '@material-ui/icons/DeleteOutline';
 import { formatDateTimeString } from 'utils/dateTimeHelpers';
-import DiverstLike from "../../../Shared/DiverstLike";
+import DiverstLike from '../../../Shared/DiverstLike';
 
 const styles = theme => ({
 });
