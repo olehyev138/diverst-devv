@@ -37,13 +37,13 @@ This process is automated through the `create-app-version` script.
 
 To create a new app version, run the `create-app-version` script as follows. It is required that the working directory is the app root.
 
-- `eb-app-name` is the application name, _not_ the elastic beanstalk environment name. This should be the same as the client/environment account name, ie `testing` or `kp`.
+- `env-name` - the environment account name, ie `testing` or `kp`.
 
 - `app-version-label` is a label identifying this app version.
 
 - `bucket-name` is the bucket where we store app versions. This is the same bucket where we store Terraform state. This is created in the `environment-initialization` process and stored in the secure note for the environment account.
 
-`./create-app-version <eb-app-name> <app-version-label> <master-bucket-name>`
+`./create-app-version <env-name> <app-version-label> <master-bucket-name>`
 
 _Todo: Workflow needs to be defined for versioning_
 
@@ -54,12 +54,12 @@ Deploying an application version simply consists of making an API call to Elasti
 This process is automated through the `deploy-app-version` script
 
 To deploy a given application version, run the `deploy-app-version` script as follows:
-
-- `eb-app-name` is the Elastic Beanstalk environment name (_not_ the application name). This should be in the form `<env-name>-env`, ie, if our environment is staging, `staging-env`
+ 
+- `env-name` - the environment account name, ie `testing` or `kp`.
 
 - `app-version-label` is the label of the app version that we want to deploy.
 
-`./deploy-app-version <eb-env-name> <app-version-label>`
+`./deploy-app-version <env-name> <app-version-label>`
 
 ### Frontend
 

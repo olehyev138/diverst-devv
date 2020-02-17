@@ -8,10 +8,11 @@ Because Diverst is a _single tenant_ application, initialization of new environm
 
 The goal of this document is _not_ to outline, explain the existing infrastructure setup. But how to make use of it to initialize a new environment account.
 
-Setting up a new environment involves two general steps:
+Setting up a new environment involves two general steps, as well as DNS setup:
 
 1) Creating the cloud infrastructure
 2) Initializing the database
+3) DNS setup
 
 ## Environment account documentation
 
@@ -170,3 +171,16 @@ To initialize the the database, run the `init-db` script as follows:
 `./init-db <bastion-url> <eb-url> <key-path>`
 
 The application should now be fully functioning.
+
+## 3) DNS Setup
+
+Finally, we need to create two CNAME records in Cloudflare for our backend & frontend applications.
+
+Each should point to the backend & frontend endpoints respectively. 
+
+For DNS information in general, consult our DNS documentation.
+
+Create the CNAME DNS records with the following naming standards:
+
+- Backend: api-<env_name>-diverst.com
+- Frontend: <env_name>-diverst.com

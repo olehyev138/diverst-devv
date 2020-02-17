@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # Bundle API, upload to S3 & create a EB app version
-# Usage: ./create-app-version <eb-app-name> <app-version-label> <bucket-name>
+# Usage: ./create-app-version <env-name> <app-version-label> <bucket-name>
 
-EB_APP_NAME=$1
+ENV_NAME=$1
 APP_NAME="api-diverst-$VERSION_LABEL.zip"
 VERSION_LABEL=$2
 BUNDLE_BUCKET_NAME=$3
@@ -28,6 +28,6 @@ aws s3 cp "./build/$APP_NAME" "s3://$BUNDLE_BUCKET_NAME" --profile "$PROFILE"
 
 # Create app version
 aws elasticbeanstalk create-application-version \
-  --application-name "$EB_APP_NAME" \
+  --application-name "$ENV_NAME" \
   --version-label "$VERSION_LABEL" \
   --source-bundle S3Bucket="$BUNDLE_BUCKET_NAME",S3Key="$APP_NAME"

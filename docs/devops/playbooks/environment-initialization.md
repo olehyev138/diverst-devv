@@ -103,3 +103,12 @@ Create a new _secure note_ in our password manager, under `aws-environments`, th
 - Run the `deployment` playbook
 
 - Run script `init-db`: `./devops/scripts/init-db <bastion-url> <eb-url> <key-path>`
+
+## DNS
+
+- Create two CNAME records pointing to the backend & frontend endpoints respectively.
+
+- Name them with the following naming standards:
+
+- Backend: api-<env_name>-diverst.com
+- Frontend: <env_name>-diverst.com

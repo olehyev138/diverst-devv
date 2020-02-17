@@ -18,11 +18,11 @@
 
 ##### Create application version
 
-- Run `create-app-version`: `./devops/scripts/create-app-version <eb-app-name> <app-version-label> <master-bucket-name>`
+- Run `create-app-version`: `./devops/scripts/create-app-version <env-name> <app-version-label> <master-bucket-name>`
 
 ##### Deploy application version
 
-- Run `deploy-app-version`: `./devops/scripts/deploy-app-version <eb-env-name> <app-version-label>`
+- Run `deploy-app-version`: `./devops/scripts/deploy-app-version <env-name> <app-version-label>`
 
 ## Frontend
 
