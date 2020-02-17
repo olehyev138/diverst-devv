@@ -1,5 +1,4 @@
 class Api::V1::NewsLinksController < DiverstController
-  include Api::V1::Concerns::Archivable
   def payload
     params
       .require(:news_link)

@@ -84,6 +84,7 @@ export function NewsFeed(props) {
           groupId={item.news_feed.group_id}
           deleteGroupMessageBegin={props.deleteGroupMessageBegin}
           updateNewsItemBegin={props.updateNewsItemBegin}
+          archiveNewsItemBegin={props.archiveNewsItemBegin}
         />
       );
     else if (item.news_link) // eslint-disable-line no-else-return
@@ -198,6 +199,7 @@ NewsFeed.propTypes = {
   deleteNewsLinkBegin: PropTypes.func,
   deleteSocialLinkBegin: PropTypes.func,
   updateNewsItemBegin: PropTypes.func,
+  archiveNewsItemBegin: PropTypes.func
 };
 
 export default compose(

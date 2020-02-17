@@ -79,7 +79,8 @@ export function GroupMessageListItem(props) {
             size='small'
             color='primary'
             onClick={() => {
-              props.archiveNewsItemBegin
+              console.log(props);
+              props.archiveNewsItemBegin({ id: newsItemId });
             }}
           >
             <DiverstFormattedMessage {...messages.archive} />
@@ -89,7 +90,7 @@ export function GroupMessageListItem(props) {
             onClick={() => {
               /* eslint-disable-next-line no-alert, no-restricted-globals */
               if (confirm('Delete group message?'))
-                props.deleteGroupMessageBegin(newsItem.group_message);
+                props.deleteGroupMessageBegin();
             }}
           >
             <DiverstFormattedMessage {...messages.delete} />

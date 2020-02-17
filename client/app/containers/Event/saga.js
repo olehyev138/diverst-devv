@@ -127,6 +127,7 @@ export function* deleteEvent(action) {
 export function* archiveEvent(action) {
   try {
     const payload = { initiative: action.payload };
+
     const response = yield call(api.initiatives.archive.bind(api.initiatives), payload.initiative.id, payload);
     yield put(archiveEventSuccess());
     yield put(push(ROUTES.group.events.index.path(payload.initiative.group_id)));
