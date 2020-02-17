@@ -1461,7 +1461,7 @@ ActiveRecord::Schema.define(version: 2020_02_10_145120) do
     t.string "logo_content_type", collation: "utf8mb4_unicode_ci"
     t.bigint "logo_file_size"
     t.datetime "logo_updated_at"
-    t.string "primary_color", collation: "utf8mb4_unicode_ci"
+    t.string "primary_color", null: false
     t.string "digest", collation: "utf8mb4_unicode_ci"
     t.boolean "default", default: false
     t.string "secondary_color", collation: "utf8mb4_unicode_ci"

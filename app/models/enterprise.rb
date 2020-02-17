@@ -76,7 +76,7 @@ class Enterprise < ApplicationRecord
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :mobile_fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :yammer_field_mappings, reject_if: :all_blank, allow_destroy: true
-  accepts_nested_attributes_for :theme, reject_if: :all_blank, allow_destroy: true
+  accepts_nested_attributes_for :theme, reject_if: :all_blank, allow_destroy: true, update_only: true
   accepts_nested_attributes_for :reward_actions, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :sponsors, reject_if: :all_blank, allow_destroy: true
 

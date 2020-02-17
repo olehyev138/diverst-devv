@@ -2,7 +2,7 @@
 
 exports[`<NotFoundPage /> should render and match the snapshot 1`] = `
 <div>
-  <Connect(WithStyles(Logo))
+  <Memo(Connect(WithStyles(Logo)))
     coloredDefault={true}
     imgClass="extra-large-img"
   />

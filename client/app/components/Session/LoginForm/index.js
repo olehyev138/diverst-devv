@@ -15,7 +15,7 @@ import * as Yup from 'yup';
 import { withStyles } from '@material-ui/core/styles';
 import withWidth from '@material-ui/core/withWidth';
 import {
-  Button, Card, CardActions, CardContent, Grid, TextField, Hidden
+  Button, Card, CardActions, CardContent, Grid, TextField, Hidden, Box
 } from '@material-ui/core';
 import LockOpen from '@material-ui/icons/LockOpen';
 
@@ -28,6 +28,9 @@ import Logo from 'components/Shared/Logo';
 const styles = theme => ({
   card: {
     width: '100%',
+  },
+  cardContent: {
+    textAlign: 'center',
   },
   cardActions: {
     paddingTop: 4,
@@ -47,16 +50,10 @@ export function LoginFormInner({
                                }) {
   return (
     <Card raised className={classes.card}>
-      <Form
-        noValidate
-      >
-        <CardContent>
-          <Grid container spacing={0} direction='column' alignItems='center' justify='center'>
-            <Grid item xs={12}>
-              <Logo coloredDefault imgClass='large-img' />
-            </Grid>
-          </Grid>
-          <br />
+      <Form noValidate>
+        <CardContent className={classes.cardContent}>
+          <Logo coloredDefault maxHeight='60px' />
+          <Box pb={2} />
           <Field
             component={TextField}
             onChange={handleChange}
