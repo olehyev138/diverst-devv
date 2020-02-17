@@ -87,6 +87,8 @@ gem 'scenic'
 gem 'scenic-mysql_adapter'
 gem 'factory_bot_rails', '~> 4.8.0' # Create mock objects for testing
 gem 'tty-spinner'
+gem 'oauth2'
+gem 'activerecord-session_store'
 
 group :development, :test do
   gem 'spring', '~> 1.6.2' # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring

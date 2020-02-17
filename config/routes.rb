@@ -54,6 +54,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :outlook, only: [:index]
+
   resources :user_roles
   resources :users do
     member do
