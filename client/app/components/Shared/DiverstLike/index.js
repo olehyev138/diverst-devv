@@ -3,51 +3,29 @@ import { compose } from 'redux';
 import { withStyles, withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import PaletteIcon from '@material-ui/icons/Palette';
+import { IconButton } from '@material-ui/core';
+import ThumbUpOutlinedIcon from '@material-ui/icons/ThumbUpOutlined';
+import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 
-const Label = styled.label`
-  position: relative;
-  display: inline-block;
-  width: 60px;
-  height: 34px;
-`;
+const styles = theme => ({
+  liked: {
+    color: theme.palette.primary.main,
+  },
+  unliked: {
+    color: theme.palette.secondary.main,
+  },
+  itemRemoveButton: {
+    color: theme.palette.error.main,
+    position: 'absolute',
+    right: 3,
+    top: 3,
+    zIndex: 1,
+  },
+});
 
-const Span = styled.span`
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: grey;
-  border-radius: 34px;
-  &:before{
-    position: absolute;
-    content: '';
-    height: 26px;
-    width: 26px;
-    left: 4px;
-    bottom: 4px;
-    background: white;
-    border-radius: 50%;
-  }
-`;
-
-const Input = styled.input`
-  &:checked + ${Span} {
-    background: blue;
-  }
-
-  &:checked + ${Span}:before {
-    -webkit-transform: translateX(26px);
-    -ms-transform: translateX(26px);
-    transform: translateX(26px);  }
-`;
-
-const Count = styled.label`
-  align-content: center
-`;
 export function DiverstLike(props) {
-  const { isLiked: defaultLiked, totalLikes: defaultCount } = props;
+  const { isLiked: defaultLiked, totalLikes: defaultCount, classes } = props;
 
   const [liked, setLiked] = useState(defaultLiked);
   const [count, setCount] = useState(defaultCount);
@@ -63,25 +41,26 @@ export function DiverstLike(props) {
 
   return (
     <React.Fragment>
-      <Label>
-        <Input
-          checked={liked}
-          type='checkbox'
-          onChange={() => {
-            if (liked)
-              props.unlikeNewsItemBegin({ news_feed_link_id: props.newsFeedLinkId, callback: unlike });
-            else
-              props.likeNewsItemBegin({ news_feed_link_id: props.newsFeedLinkId, callback: like });
-          }}
-        />
-        <Span />
-      </Label>
-      <Count>{count}</Count>
+      <IconButton
+        aria-label='Choose color'
+        onClick={() => {
+          if (liked)
+            props.unlikeNewsItemBegin({ news_feed_link_id: props.newsFeedLinkId, callback: unlike });
+          else
+            props.likeNewsItemBegin({ news_feed_link_id: props.newsFeedLinkId, callback: like });
+        }}
+      >
+        {liked
+          ? <ThumbUpIcon className={classes.liked} />
+          : <ThumbUpOutlinedIcon className={classes.unliked} />}
+        {count}
+      </IconButton>
     </React.Fragment>
   );
 }
 
 DiverstLike.propTypes = {
+  classes: PropTypes.object,
   totalLikes: PropTypes.number,
   isLiked: PropTypes.bool,
   newsFeedLinkId: PropTypes.number,
@@ -91,5 +70,5 @@ DiverstLike.propTypes = {
 };
 
 export default compose(
-  withTheme,
+  withStyles(styles),
 )(DiverstLike);
