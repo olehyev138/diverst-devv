@@ -50,9 +50,10 @@ resource "aws_elastic_beanstalk_environment" "eb_app_env" {
 
   # Health
   setting {
-    namespace = "aws:elasticbeanstalk:application"
-    name = "ApplicationHealthCheckURL"
+    namespace = "aws:elasticbeanstalk:environment:process:default"
+    name = "HealthCheckPath"
     value = "/health"
+    resource = ""
   }
 
   # Auto Scaling settings
