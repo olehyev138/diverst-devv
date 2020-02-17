@@ -11,12 +11,7 @@ import reducer from 'containers/Archive/reducer';
 import saga from 'containers/Archive/saga';
 import { getArchivesBegin, restoreArchiveBegin } from 'containers/Archive/actions';
 import ArchiveList from 'components/Archive/ArchiveList';
-import dig from 'object-dig';
 import { selectArchives, selectArchivesTotal, selectHasChanged, selectIsLoading } from '../selectors';
-import { injectIntl, intlShape } from 'react-intl';
-import { intl } from 'containers/Shared/LanguageProvider/GlobalLanguageProvider';
-import { DateTime, formatDateTimeString } from 'utils/dateTimeHelpers';
-import messages from 'containers/Archive/messages';
 
 const defaultParams = Object.freeze({
   count: 10, // TODO: Make this a constant and use it also in EventsList
@@ -45,6 +40,10 @@ export function ArchivePage(props) {
       props.getArchivesBegin(params);
   }, [props.hasChanged]);
 
+  useEffect(() => {
+    getArchives('posts', true);
+  }, []);
+
   const getArchives = (type, resetParams = false) => {
     if (resetParams)
       setParams(defaultParams);
@@ -56,6 +55,7 @@ export function ArchivePage(props) {
     props.getArchivesBegin(newParams);
     setParams(newParams);
   };
+
 
   const handleChangeTab = (event, newTab) => {
     setTab(newTab);
