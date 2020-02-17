@@ -182,7 +182,11 @@ Diverst::Application.routes.draw do
           get 'status'
         end
       end
-      resources :sessions, only: [:create, :destroy]
+      resources :sessions, only: [:create] do
+        collection do
+          delete 'logout'
+        end
+      end
       resources :shared_metrics_dashboards
       resources :shared_news_feed_links
       resources :social_links

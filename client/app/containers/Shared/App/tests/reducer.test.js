@@ -5,9 +5,7 @@ import {
   loginSuccess,
   loginError,
   logoutSuccess,
-  setEnterprise,
-  setUser,
-  setUserPolicyGroup
+  setUserData,
 }
   from 'containers/Shared/App/actions';
 
@@ -17,10 +15,8 @@ describe('appReducer', () => {
 
   beforeEach(() => {
     state = {
-      user: null,
-      policyGroup: null,
-      enterprise: null,
       token: null,
+      data: null,
     };
   });
 
@@ -36,7 +32,7 @@ describe('appReducer', () => {
 
     expect(appReducer(state, loginSuccess('token'))).toEqual(expected);
   });
-  
+
   it('handles the loginError action correctly', () => {
     const expected = produce(state, (draft) => {
       draft.error = 'error!';
@@ -53,27 +49,21 @@ describe('appReducer', () => {
     expect(appReducer(tokenState, logoutSuccess()).token).toBeNull();
   });
 
-  it('handles the setEnterprise action correctly', () => {
+  it('handles the setUserData action correctly', () => {
     const expected = produce(state, (draft) => {
-      draft.enterprise = 'enterprise';
+      draft.data = { foo: 'bar' };
     });
 
-    expect(appReducer(state, setEnterprise('enterprise'))).toEqual(expected);
+    expect(appReducer(state, setUserData({ foo: 'bar' }))).toEqual(expected);
   });
 
-  it('handles the setUser action correctly', () => {
+  it('handles the setUserData action correctly with the append option', () => {
+    state = appReducer(state, setUserData({ foo: 'bar' })); // Set the initial data to append to
+
     const expected = produce(state, (draft) => {
-      draft.user = { id: 1, email: 'tech@diverst.com' };
+      draft.data = { foo: 'bar', x: 'y' };
     });
 
-    expect(appReducer(state, setUser({ id: 1, email: 'tech@diverst.com', policy_group: { permission: true } }))).toEqual(expected);
-  });
-
-  it('handles the setUserPolicyGroup action correctly', () => {
-    const expected = produce(state, (draft) => {
-      draft.policyGroup = { groups_index: false };
-    });
-
-    expect(appReducer(state, setUserPolicyGroup({ groups_index: false }))).toEqual(expected);
+    expect(appReducer(state, setUserData({ x: 'y' }, true))).toEqual(expected);
   });
 });

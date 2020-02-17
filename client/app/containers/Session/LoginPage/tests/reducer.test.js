@@ -1,7 +1,7 @@
 import produce from 'immer/dist/immer';
 
 import loginPageReducer from 'containers/Session/LoginPage/reducer';
-import { setEnterprise, findEnterpriseError, loginError } from 'containers/Shared/App/actions';
+import { findEnterpriseError, loginError } from 'containers/Shared/App/actions';
 
 /* eslint-disable default-case, no-param-reassign */
 describe('loginPageReducer', () => {
@@ -19,14 +19,6 @@ describe('loginPageReducer', () => {
   it('returns the initial state', () => {
     const expected = state;
     expect(loginPageReducer(undefined, {})).toEqual(expected);
-  });
-
-  it('handles the setEnterprise action', () => {
-    const errorState = produce(state, (draft) => {
-      draft.formErrors.email = 'error';
-    });
-
-    expect(loginPageReducer(state, setEnterprise).formErrors.email).toBeNull();
   });
 
   it('handles the findEnterpriseError action', () => {

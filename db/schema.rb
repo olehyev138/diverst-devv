@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_10_153452) do
+ActiveRecord::Schema.define(version: 2020_02_10_104107) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "name", null: false
@@ -1461,7 +1461,7 @@ ActiveRecord::Schema.define(version: 2020_01_10_153452) do
     t.string "logo_content_type", collation: "utf8mb4_unicode_ci"
     t.bigint "logo_file_size"
     t.datetime "logo_updated_at"
-    t.string "primary_color", collation: "utf8mb4_unicode_ci"
+    t.string "primary_color", null: false
     t.string "digest", collation: "utf8mb4_unicode_ci"
     t.boolean "default", default: false
     t.string "secondary_color", collation: "utf8mb4_unicode_ci"
