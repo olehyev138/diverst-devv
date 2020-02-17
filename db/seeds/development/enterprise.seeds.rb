@@ -31,7 +31,6 @@ spinner.run do |spinner|
   A5bYGY36o0HQqna1jAGDM8l3t7uwbpsMwf5O/CVPgcXBqUxJSX2J0g==
   -----END CERTIFICATE-----\n",
     has_enabled_saml: false,
-    theme_id: 1,
     disable_emails: true,
     created_at: 2.years.ago,
     time_zone: ActiveSupport::TimeZone.find_tzinfo('UTC').name
@@ -68,7 +67,6 @@ spinner.run do |spinner|
   A5bYGY36o0HQqna1jAGDM8l3t7uwbpsMwf5O/CVPgcXBqUxJSX2J0g==
   -----END CERTIFICATE-----\n",
     has_enabled_saml: true,
-    theme_id: 1,
     disable_emails: true,
     created_at: 2.years.ago,
     time_zone: ActiveSupport::TimeZone.find_tzinfo('UTC').name
