@@ -99,7 +99,7 @@ export function EventsPage(props) {
   };
 
   useEffect(() => {
-    getEvents(['upcoming']);
+    getEvents(['upcoming', 'not_archived']);
 
     return () => {
       props.userUnmount();
