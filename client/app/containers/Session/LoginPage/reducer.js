@@ -20,7 +20,6 @@ export const initialState = {
 
 function loginPageReducer(state = initialState, action) {
   return produce(state, (draft) => {
-    // TODO: what do these do?
     switch (action.type) {
       case FIND_ENTERPRISE_BEGIN:
         draft.formErrors = initialState.formErrors;
