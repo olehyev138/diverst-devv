@@ -95,6 +95,7 @@ module BaseSearcher
       preloads = get_preloads(params)
       attachment_preloads = get_attachments(params)
       joins = get_joins
+      left_joins = get_left_joins
       query = get_base_query
 
       add_custom_args(where, where_not, params, includes, joins)
@@ -130,6 +131,7 @@ module BaseSearcher
       if searchValue.present?
         @items
             .joins(joins)
+            .left_joins(left_joins)
             .send_chain(attachment_preloads)
             .includes(includes)
             .preload(preloads)
@@ -142,6 +144,7 @@ module BaseSearcher
       else
         @items
             .joins(joins)
+            .left_joins(left_joins)
             .send_chain(attachment_preloads)
             .includes(includes)
             .preload(preloads)
@@ -190,6 +193,12 @@ module BaseSearcher
       return [] unless self.respond_to? :base_joins
 
       self.base_joins
+    end
+
+    def get_left_joins
+      return [] unless self.respond_to? :base_left_joins
+
+      self.base_left_joins
     end
 
     def query_arguments
