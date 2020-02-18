@@ -19,7 +19,7 @@ jobs:
             - v1-dep-staging-
             - v1-dep-
       - run: gem update --system
-      - run: gem install bundler
+      - run: gem install bundler --version '1.17.3'
       - run: 'bundle check --path=vendor/bundle || bundle install --path=vendor/bundle
           --jobs=4 --retry=3'
       - save_cache:
@@ -200,7 +200,7 @@ jobs:
       - run:
           name: Deploy to AWS if tests pass and branch is Development
           command: eval "$(ssh-agent -s)" && ssh-add ~/.ssh/id_rsa* && cap testing deploy
-          
+
   #  build and test jobs go here
   deploy-staging:
     working_directory: ~/TeamDiverst/diverst-development
