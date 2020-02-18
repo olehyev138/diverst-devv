@@ -14,7 +14,8 @@ describe('newsReducer', () => {
       isFormLoading: true,
       newsItems: [],
       currentNewsItem: null,
-      newsItemsTotal: null
+      newsItemsTotal: null,
+      hasChanged: false
     };
   });
 
