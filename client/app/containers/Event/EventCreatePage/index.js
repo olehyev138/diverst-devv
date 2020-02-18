@@ -20,6 +20,9 @@ import { createEventBegin, eventsUnmount } from 'containers/Event/actions';
 import EventForm from 'components/Event/EventForm';
 import { selectIsCommitting } from 'containers/Event/selectors';
 
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/Event/messages';
+
 export function EventCreatePage(props) {
   useInjectReducer({ key: 'events', reducer });
   useInjectSaga({ key: 'events', saga });
@@ -36,7 +39,7 @@ export function EventCreatePage(props) {
     <EventForm
       eventAction={props.createEventBegin}
       isCommitting={props.isCommitting}
-      buttonText='Create'
+      buttonText={<DiverstFormattedMessage {...messages.create} />}
       currentUser={currentUser}
       currentGroup={currentGroup}
       links={links}

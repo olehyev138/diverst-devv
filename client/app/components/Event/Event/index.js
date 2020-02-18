@@ -119,7 +119,7 @@ export function Event(props) {
               <Grid item>
                 <DiverstImg
                   data={event.picture_data}
-                  alt='Event Image'
+                  alt=<DiverstFormattedMessage {...messages.inputs.image} />
                 />
               </Grid>
             </Grid>

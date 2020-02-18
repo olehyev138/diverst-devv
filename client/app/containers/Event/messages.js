@@ -18,6 +18,9 @@ export default defineMessages({
   delete: {
     id: `${scope}.index.button.delete`,
   },
+  createupdate: {
+    id: `${scope}.form.button.createupdate`,
+  },
   create: {
     id: `${scope}.form.button.create`,
   },
@@ -62,7 +65,10 @@ export default defineMessages({
     },
     picture: {
       id: `${scope}.form.input.picture`
-    }
+    },
+    image: {
+      id: `${scope}.form.input.image`
+    },
   },
   show: {
     dateAndTime: {

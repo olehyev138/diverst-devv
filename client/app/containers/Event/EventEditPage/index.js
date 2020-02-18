@@ -25,6 +25,8 @@ import {
 } from 'containers/Event/actions';
 
 import EventForm from 'components/Event/EventForm';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/Event/messages';
 
 export function EventEditPage(props) {
   useInjectReducer({ key: 'events', reducer });
@@ -51,7 +53,7 @@ export function EventEditPage(props) {
       eventAction={props.updateEventBegin}
       isCommitting={props.isCommitting}
       isFormLoading={props.isFormLoading}
-      buttonText='Update'
+      buttonText={<DiverstFormattedMessage {...messages.update} />}
       currentUser={currentUser}
       currentGroup={currentGroup}
       event={currentEvent}

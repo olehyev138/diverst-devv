@@ -17,7 +17,7 @@ import {
 import AddIcon from '@material-ui/icons/Add';
 
 import { injectIntl } from 'react-intl';
-import messages from 'containers/Event/messages';
+
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
@@ -26,6 +26,7 @@ import DiverstPagination from 'components/Shared/DiverstPagination';
 
 import DiverstLoader from 'components/Shared/DiverstLoader';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/Event/messages';
 import { customTexts } from 'utils/customTextHelpers';
 
 import EventListItem from 'components/Event/EventListItem';
