@@ -1,8 +1,20 @@
 class OmniAuthController < ApplicationController
+  include OutlookAuthHelper
+
   before_action :authenticate_user!
 
   def callback
     linkedin if params[:provider] == 'linkedin'
+    outlook if params[:provider] == 'outlook'
+  end
+
+  def outlook
+    pp 'Hello1'
+    token = get_token_from_code params[:code]
+    pp 'Hello2'
+    session[:azure_token] = token.to_hash
+    pp 'Hello3'
+    render text: "Access token saved in session cookie."
   end
 
   def linkedin
