@@ -69,8 +69,10 @@ class SocialLink < BaseClass
   end
 
   def hack_temp_solution
-    sleep(1)
-    save
+    if small_embed_code.include? "<a href=https://www.linkedin.com/signup/cold-join>Sign Up | LinkedIn</a>"
+      sleep(1)
+      save
+    end
   end
 
   private
