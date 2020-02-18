@@ -8,7 +8,7 @@ import messages from 'containers/Archive/messages';
 import RestoreIcon from '@material-ui/icons/Restore';
 import { withStyles } from '@material-ui/core/styles';
 
-const postColumns = [
+const columns = [
   {
     title: 'Title',
     render: (rowData) => {
@@ -21,9 +21,9 @@ const postColumns = [
       return 'None Found';
     },
     query_field: '(CASE '
-      + 'WHEN group_message_id IS NOT NULL THEN group_messages.subject '
-      + 'WHEN news_link_id IS NOT NULL THEN news_links.title '
-      + 'WHEN social_link_id IS NOT NULL THEN social_links.url '
+      + 'WHEN group_message_id IS NOT NULL THEN LOWER(group_messages.subject) '
+      + 'WHEN news_link_id IS NOT NULL THEN LOWER(news_links.title) '
+      + 'WHEN social_link_id IS NOT NULL THEN LOWER(social_network_posts.url) '
       + 'ELSE null '
       + 'END)',
   },
@@ -62,16 +62,23 @@ const styles = theme => ({
 });
 
 export function PostsTable(props) {
+  const handleOrderChange = (columnId, orderDir) => {
+    props.handleOrdering({
+      orderBy: (columnId === -1) ? 'news_feed_links.id' : `${columns[columnId].query_field}`,
+      orderDir: (columnId === -1) ? 'asc' : orderDir
+    });
+  };
+
   return (
     <DiverstTable
       title='Archives'
       isLoading={props.isLoading}
       handlePagination={props.handlePagination}
-      handleOrdering={props.handleOrdering}
+      onOrderChange={handleOrderChange}
       rowsPerPage={10}
       dataArray={Object.values(props.archives)}
       dataTotal={props.archivesTotal}
-      columns={postColumns}
+      columns={columns}
       actions={[{
         icon: () => <RestoreIcon />,
         tooltip: 'Restore',

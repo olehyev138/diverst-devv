@@ -23,7 +23,7 @@ const styles = theme => ({
   },
 });
 
-const resourceColumns = [
+const columns = [
   {
     title: intl.formatMessage(messages.title),
     field: 'title',
@@ -43,16 +43,23 @@ const resourceColumns = [
 ];
 
 export function ResourcesTable(props) {
+  const handleOrderChange = (columnId, orderDir) => {
+    props.handleOrdering({
+      orderBy: (columnId === -1) ? 'resources.id' : `${columns[columnId].query_field}`,
+      orderDir: (columnId === -1) ? 'asc' : orderDir
+    });
+  };
+
   return (
     <DiverstTable
       title='Archives'
       isLoading={props.isLoading}
       handlePagination={props.handlePagination}
-      handleOrdering={props.handleOrdering}
+      onOrderChange={handleOrderChange}
       rowsPerPage={10}
       dataArray={Object.values(props.archives)}
       dataTotal={props.archivesTotal}
-      columns={resourceColumns}
+      columns={columns}
       actions={[{
         icon: () => <RestoreIcon />,
         tooltip: 'Restore',

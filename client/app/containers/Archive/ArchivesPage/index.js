@@ -45,13 +45,9 @@ export function ArchivePage(props) {
   }, []);
 
   const getArchives = (type, resetParams = false) => {
-    if (resetParams)
-      setParams(defaultParams);
-
-    const newParams = {
-      ...params,
-      resource: type
-    };
+    const newParams = resetParams
+      ? { ...defaultParams, resource: type }
+      : { ...params, resource: type };
     props.getArchivesBegin(newParams);
     setParams(newParams);
   };

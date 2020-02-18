@@ -9,7 +9,7 @@ import messages from 'containers/Archive/messages';
 import RestoreIcon from '@material-ui/icons/Restore';
 import { withStyles } from '@material-ui/core/styles';
 
-const eventColumns = [
+const columns = [
   {
     title: intl.formatMessage(messages.event),
     field: 'name',
@@ -18,8 +18,7 @@ const eventColumns = [
   {
     title: intl.formatMessage(messages.group),
     field: 'group_name',
-    query_field: 'group_name'
-    // TODO : DISABLE ORDERING
+    query_field: 'groups.name'
   },
   {
     title: intl.formatMessage(messages.creation),
@@ -43,16 +42,23 @@ const styles = theme => ({
 });
 
 export function EventsTable(props) {
+  const handleOrderChange = (columnId, orderDir) => {
+    props.handleOrdering({
+      orderBy: (columnId === -1) ? 'initiatives.id' : `${columns[columnId].query_field}`,
+      orderDir: (columnId === -1) ? 'asc' : orderDir
+    });
+  };
+
   return (
     <DiverstTable
       title='Archives'
       isLoading={props.isLoading}
       handlePagination={props.handlePagination}
-      handleOrdering={props.handleOrdering}
+      onOrderChange={handleOrderChange}
       rowsPerPage={10}
       dataArray={Object.values(props.archives)}
       dataTotal={props.archivesTotal}
-      columns={eventColumns}
+      columns={columns}
       actions={[{
         icon: () => <RestoreIcon />,
         tooltip: 'Restore',
