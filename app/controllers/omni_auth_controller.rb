@@ -9,12 +9,9 @@ class OmniAuthController < ApplicationController
   end
 
   def outlook
-    pp 'Hello1'
     token = get_token_from_code params[:code]
-    pp 'Hello2'
     session[:azure_token] = token.to_hash
-    pp 'Hello3'
-    render text: "Access token saved in session cookie."
+    redirect_to mail_outlook_index_url
   end
 
   def linkedin

@@ -54,7 +54,13 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :outlook, only: [:index]
+  resources :outlook, only: [:index] do
+    collection do
+      get 'mail', to: 'outlook#mail'
+      get 'calendar', to: 'outlook#calendar'
+      get 'contacts', to: 'outlook#contacts'
+    end
+  end
 
   resources :user_roles
   resources :users do
