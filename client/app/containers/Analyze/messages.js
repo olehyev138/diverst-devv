@@ -54,4 +54,8 @@ export default defineMessages({
   parent: {
     id: `${scope}.form.input.parent`,
   },
+  groupselect: {
+    id: `${scope}.form.title`,
+
+  }
 });

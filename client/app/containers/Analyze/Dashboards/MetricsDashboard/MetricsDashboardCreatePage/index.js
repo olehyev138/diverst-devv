@@ -30,6 +30,10 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import MetricsDashboardForm from 'components/Analyze/Dashboards/MetricsDashboard/MetricsDashboardForm';
 
+// messages
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/Analyze/messages';
+
 export function MetricsDashboardCreatePage(props) {
   useInjectReducer({ key: 'customMetrics', reducer });
   useInjectReducer({ key: 'groups', reducer: groupReducer });
@@ -52,7 +56,7 @@ export function MetricsDashboardCreatePage(props) {
       getSegmentsBegin={props.getSegmentsBegin}
       groups={props.groups}
       segments={props.segments}
-      buttonText='Create'
+      buttonText={<DiverstFormattedMessage {...messages.create} />}
       links={links}
       isCommitting={props.isCommitting}
     />

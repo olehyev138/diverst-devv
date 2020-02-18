@@ -26,7 +26,9 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import CustomGraphForm from 'components/Analyze/Dashboards/MetricsDashboard/CustomGraph/CustomGraphForm';
 import { selectEnterprise } from 'containers/Shared/App/selectors';
-
+// messages
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/Analyze/Dashboards/MetricsDashboard/CustomGraph/messages';
 export function CustomGraphCreatePage(props) {
   useInjectReducer({ key: 'customMetrics', reducer });
   useInjectReducer({ key: 'fields', reducer: fieldReducer });
@@ -47,7 +49,7 @@ export function CustomGraphCreatePage(props) {
       getFieldsBegin={props.getFieldsBegin}
       fields={props.fields}
       metricsDashboardId={metricsDashboardId[0]}
-      buttonText='Create'
+      buttonText={<DiverstFormattedMessage {...messages.create} />}
       links={links}
       isCommitting={props.isCommitting}
     />

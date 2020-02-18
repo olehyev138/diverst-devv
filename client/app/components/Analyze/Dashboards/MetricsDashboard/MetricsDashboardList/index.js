@@ -83,7 +83,7 @@ export function MetricsDashboardsList(props, context) {
       <Grid container spacing={3}>
         <Grid item xs>
           <DiverstTable
-            title='Custom Dashboards'
+            title={<DiverstFormattedMessage {...messages.table.title} />}
             handlePagination={props.handlePagination}
             handleRowClick={(_, rowData) => props.handleVisitDashboardPage(rowData.id)}
             dataArray={Object.values(props.metricsDashboards)}
@@ -91,13 +91,13 @@ export function MetricsDashboardsList(props, context) {
             columns={columns}
             actions={[{
               icon: () => <EditIcon />,
-              tooltip: 'Edit Member',
+              tooltip: <DiverstFormattedMessage {...messages.table.edit} />,
               onClick: (_, rowData) => {
                 props.handleVisitDashboardEdit(rowData.id);
               }
             }, {
               icon: () => <DeleteIcon />,
-              tooltip: 'Delete Member',
+              tooltip: <DiverstFormattedMessage {...messages.table.delete} />,
               onClick: (_, rowData) => {
                 /* eslint-disable-next-line no-alert, no-restricted-globals */
                 if (confirm('Delete member?'))

@@ -29,6 +29,10 @@ import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import CustomGraphForm from 'components/Analyze/Dashboards/MetricsDashboard/CustomGraph/CustomGraphForm';
 
+// messages
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/Analyze/Dashboards/MetricsDashboard/CustomGraph/messages';
+
 export function CustomGraphEditPage(props) {
   useInjectReducer({ key: 'customMetrics', reducer });
   useInjectReducer({ key: 'fields', reducer: fieldReducer });
@@ -54,7 +58,7 @@ export function CustomGraphEditPage(props) {
       customGraphAction={props.updateCustomGraphBegin}
       getFieldsBegin={props.getFieldsBegin}
       fields={props.fields}
-      buttonText='Update'
+      buttonText={<DiverstFormattedMessage {...messages.update} />}
       customGraph={props.currentCustomGraph}
       metricsDashboardId={metricsDashboardId[0]}
       links={links}

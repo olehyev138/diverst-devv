@@ -27,10 +27,44 @@ export default defineMessages({
   cancel: {
     id: `${scope}.form.button.cancel`,
   },
-  form: {
+  tabs: {
+    overview: {
+      id: `${scope}.tab.overview`,
+    },
+    social: {
+      id: `${scope}.tab.social`,
+    },
+    resources: {
+      id: `${scope}.tab.resources`,
+    },
+  },
+  fields: {
+    field: {
+      id: `${scope}.fields.field`,
+    },
+    aggregation: {
+      id: `${scope}.fields.aggregation`,
+    },
+    groups: {
+      id: `${scope}.fields.groups`,
+    },
+    segments: {
+      id: `${scope}.fields.segments`,
+    },
     name: {
-      id: `${scope}.form.input.name`,
+      id: `${scope}.fields.name`,
     }
+  },
+  table: {
+    title: {
+      id: `${scope}.table.title`,
+    },
+    edit: {
+      id: `${scope}.table.tooltip.edit`,
+    },
+    delete: {
+      id: `${scope}.table.tooltip.delete`,
+    },
   },
   show: {
   },
