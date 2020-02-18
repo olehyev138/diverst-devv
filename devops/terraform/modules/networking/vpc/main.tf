@@ -21,7 +21,7 @@ resource "aws_vpc" "vpc" {
   enable_dns_support      = "true"
 }
 
-# Two DMZ/public subnets
+# DMZ/public subnets
 resource "aws_subnet" "sn-dmz" {
   count                   = local.az_count
   vpc_id                  = aws_vpc.vpc.id

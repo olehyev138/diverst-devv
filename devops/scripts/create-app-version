@@ -1,14 +1,13 @@
 #!/bin/bash
 
 # Bundle API, upload to S3 & create a EB app version
-# Usage: ./create-app-version <aws-profile> <eb-app-name> <app-version-label> <bucket-name>
+# Usage: ./create-app-version <env-name> <app-version-label> <bucket-name>
 
-# TODO: define workflow, process for labeling the app version
-
-PROFILE=$1
-EB_APP_NAME=$2
-EB_VERSION_LABEL=$3
-BUNDLE_BUCKET_NAME=$4
+ENV_NAME=$1
+APP_NAME="api-diverst-$VERSION_LABEL.zip"
+VERSION_LABEL=$2
+BUNDLE_BUCKET_NAME=$3
+RELEASE_BRANCH='HEAD' # TEMP - for development purposes
 
 # Exit on error
 set -e
@@ -18,16 +17,17 @@ if [ ! -d '.git' ]; then
   exit 1
 fi
 
-# Create app bundle
-# TODO: switch to `git archive`
-zip ../diverst-development.zip -r ./* .[^.]* -x client/**\* -x devops/**\* -x tmp/**\* -x .git/**\* spec/**\*
+# Create build directory if it doesnt exist
+mkdir -p build
+
+# Create app bundle with git archive
+git archive --format=zip --output="./build/$APP_NAME" "$RELEASE_BRANCH"
 
 # Copy app bundle to S3 - assumes bucket exists - should be created by bootstrap-backend
-aws s3 cp ../diverst-development.zip "s3://$BUNDLE_BUCKET_NAME" --profile "$PROFILE"
+aws s3 cp "./build/$APP_NAME" "s3://$BUNDLE_BUCKET_NAME" --profile "$PROFILE"
 
 # Create app version
 aws elasticbeanstalk create-application-version \
-  --profile "$PROFILE" \
-  --application-name "$EB_APP_NAME" \
-  --version-label "$EB_VERSION_LABEL" \
-  --source-bundle S3Bucket="$BUNDLE_BUCKET_NAME",S3Key='diverst-development.zip'
+  --application-name "$ENV_NAME" \
+  --version-label "$VERSION_LABEL" \
+  --source-bundle S3Bucket="$BUNDLE_BUCKET_NAME",S3Key="$APP_NAME"
