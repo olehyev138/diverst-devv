@@ -2,47 +2,38 @@ version: 2.1
 executors:
   primary-image:
     docker:
-      - image: circleci/build-image:ubuntu-14.04-XXL-upstart-1189-5614f37
+      - image: circleci/ruby:2.6.5-stretch
 jobs:
   lint:
     working_directory: ~/TeamDiverst/diverst-development
     shell: /bin/bash --login
-    environment:
-      CIRCLE_ARTIFACTS: /tmp/circleci-artifacts
-      CIRCLE_TEST_REPORTS: /tmp/circleci-test-results
     executor: primary-image
     steps:
       - checkout
-      - restore_cache:
-          keys:
-            - v1-dep-{{ .Branch }}-
-            - v1-dep-staging-
-            - v1-dep-
-      - run: gem install bundler
-      - run: 'bundle install --path=vendor/bundle --jobs=4 --retry=3'
-      - run: nvm install 10.16.0 && nvm alias default 10.16.0
-      - run: cd client/ && npm install
-      - save_cache:
-          key: v1-dep-{{ .Branch }}-{{ epoch }}
-          paths:
-            - vendor/bundle
-            - ~/virtualenvs
-            - ~/.m2
-            - ~/.ivy2
-            - ~/.bundle
-            - ~/.go_workspace
-            - ~/.gradle
-            - ~/.cache/bower
-            - public/assets
-            - ./client/node_modules
       - run:
+          name: Install gems
+          command: |
+            gem install bundler
+            sudo apt-get update && sudo apt-get install cmake
+            bundle install --path=vendor/bundle --jobs=4 --retry=3
+      - run:
+          name: Install Node
+          command: |
+            set +e
+            wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.1/install.sh | bash && sudo /home/circleci/.nvm/nvm.sh
+            export NVM_DIR="/home/circleci/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+            nvm install v13
+            echo $(node -v)
+
+      - run:
+          #git fetch origin react_update:refs/remotes/origin/react_update
+          name: Run linter
           command: |
             export PRONTO_GITHUB_ACCESS_TOKEN=60fc301a32c3a0450eeec2985a1c1a09cefba857
             export PRONTO_PULL_REQUEST_ID=$(git ls-remote -q origin pull\*\head | grep $CIRCLE_SHA1 | sed 's/.*refs\/pull\/\([0-9]*\)\/head/\1/g')
-            git fetch origin react_update:refs/remotes/origin/react_update
             bundle exec pronto run -f github_status github_pr -c origin/react_update
-      - store_artifacts:
-          path: /tmp/circleci-artifacts
   backend-test:
     working_directory: ~/TeamDiverst/diverst-development
     parallelism: 2
@@ -56,32 +47,22 @@ jobs:
       - run: mkdir -p $CIRCLE_ARTIFACTS $CIRCLE_TEST_REPORTS
       - run:
           working_directory: ~/TeamDiverst/diverst-development
-          command: 'echo ''America/New_York'' | sudo tee -a /etc/timezone; sudo dpkg-reconfigure
-          -f noninteractive tzdata; sudo service mysql restart; sudo service postgresql
-          restart; '
-      - restore_cache:
-          keys:
-            # This branch if available
-            - v1-dep-{{ .Branch }}-
-            # Default branch if not
-            - v1-dep-staging-
-            # Any branch if there are none on the default branch - this should be unnecessary if you have your default branch configured correctly
-            - v1-dep-
+          command: 'echo ''America/New_York'' | sudo tee -a /etc/timezone; sudo dpkg-reconfigure -f noninteractive tzdata; sudo service mysql restart; sudo service postgresql'
       - run: echo -e "export RAILS_ENV=test\nexport RACK_ENV=test" >> $BASH_ENV
       - run: sudo rm -rf /etc/apt/sources.list.d/circleci_trusty.list && sudo rm -rf /etc/apt/sources.list.d/github_git-lfs.list  && sudo rm -rf /etc/apt/sources.list.d/neo4j.list && sudo rm -rf /etc/apt/sources.list.d/mysql.list && sudo rm -rf /etc/apt/sources.list.d/basho_riak.list
-      - run: gem install bundler
-      - run: 'bundle check --path=vendor/bundle || bundle install --path=vendor/bundle
-        --jobs=4 --retry=3 '
-      - save_cache:
-          key: v1-dep-{{ .Branch }}-{{ epoch }}
-          paths:
-            - vendor/bundle
-            - ~/virtualenvs
-            - ~/.m2
-            - ~/.ivy2
-            - ~/.bundle
-            - public/assets
-            - ./client/node_modules
+      - run:
+          name: Install bundler
+          command: gem install bundler
+      - run:
+          name: Install libgit2
+          command: sudo apt-get update && sudo apt-get install -y libgit2
+      - run: bundle config build.rugged --use-system-libraries
+      - run:
+          name: Configure bundler to use system libraries
+          command: bundle config build.rugged --use-system-libraries
+      - run:
+          name: Install gems
+          command: bundle check --path=vendor/bundle || bundle install --path=vendor/bundle --jobs=4 --retry=3
       - run: |-
           mkdir -p config && echo 'test:
             database: circle_ruby_test
@@ -101,7 +82,6 @@ jobs:
             RACK_ENV: test
       - run: bundle exec rake db:migrate
       - run: mkdir -p $CIRCLE_TEST_REPORTS/rspec
-      # Run frontend tests
       - run:
           command: bundle exec rspec --color --require spec_helper --format RspecJunitFormatter --out $CIRCLE_TEST_REPORTS/rspec/rspec.xml --format progress -- $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=filesize)
           environment:
@@ -125,19 +105,6 @@ jobs:
     steps:
       - checkout
       - run: mkdir -p $CIRCLE_ARTIFACTS $CIRCLE_TEST_REPORTS
-      - run:
-          working_directory: ~/TeamDiverst/diverst-development/
-          command: 'echo ''America/New_York'' | sudo tee -a /etc/timezone; sudo dpkg-reconfigure
-          -f noninteractive tzdata; sudo service mysql restart; sudo service postgresql
-          restart; '
-      - restore_cache:
-          keys:
-            # This branch if available
-            - v1-dep-{{ .Branch }}-
-            # Default branch if not
-            - v1-dep-staging-
-            # Any branch if there are none on the default branch - this should be unnecessary if you have your default branch configured correctly
-            - v1-dep-
       # Install nvm & frontend libraries
       - run: nvm install 10.16.0 && nvm alias default 10.16.0
       - run: cd client/ && npm install
@@ -156,38 +123,8 @@ jobs:
       - store_artifacts:
           path: /tmp/circleci-test-results
 
-  deploy-react:
-    working_directory: ~/TeamDiverst/diverst-development
-    shell: /bin/bash --login
-    executor: primary-image
-    steps:
-      - add_ssh_keys:
-          fingerprints:
-            - "7a:55:cb:5c:8e:f2:a4:cc:a8:d0:23:6b:ec:96:dd:70"
-      - checkout
-      # Log the current branch
-      - run:
-          name: Show current branch
-          command: echo ${CIRCLE_BRANCH}
-      # Restore cache from the build job which contains the
-      # dist folder that needs to be deployed
-      # Restore the dependency cache
-      - restore_cache:
-          keys:
-            # This branch if available
-            - v1-dep-{{ .Branch }}-
-            # Default branch if not
-            - v1-dep-development-
-            # Any branch if there are none on the default branch - this should be unnecessary if you have your default branch configured correctly
-            - v1-dep-
-      - run: gem install bundler
-      - run: bundle install
-      - run:
-          name: Deploy to AWS if tests pass
-          command: eval "$(ssh-agent -s)" && ssh-add ~/.ssh/id_rsa* && cap react deploy
-
 workflows:
-  version: 2
+  version: 2.1
   lint-test-deploy:
     jobs:
       - lint
@@ -197,10 +134,10 @@ workflows:
       - frontend-test:
           requires:
             - lint
-      - deploy-react:
-          requires:
-            - backend-test
-            - frontend-test
-          filters:
-            branches:
-              only: react_update
+#      - deploy-react:
+#          requires:
+#            - backend-test
+#            - frontend-test
+#          filters:
+#            branches:
+#              only: react_update
