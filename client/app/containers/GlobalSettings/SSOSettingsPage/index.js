@@ -18,7 +18,8 @@ import {
 
 import RouteService from 'utils/routeHelpers';
 import SSOSettings from 'components/GlobalSettings/SSOSettings';
-
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/GlobalSettings/EnterpriseConfiguration/messages';
 export function SSOSettingsPage(props) {
   useInjectReducer({ key: 'configuration', reducer });
   useInjectSaga({ key: 'configuration', saga });
@@ -35,7 +36,7 @@ export function SSOSettingsPage(props) {
       <SSOSettings
         enterpriseAction={props.updateEnterpriseBegin}
         enterprise={props.enterprise}
-        buttonText='Update'
+        buttonText={<DiverstFormattedMessage {...messages.update} />}
       />
     </React.Fragment>
   );

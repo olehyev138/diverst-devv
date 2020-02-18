@@ -18,6 +18,8 @@ import {
 
 import RouteService from 'utils/routeHelpers';
 import EnterpriseConfiguration from 'components/GlobalSettings/EnterpriseConfiguration';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/GlobalSettings/EnterpriseConfiguration/messages';
 
 export function EnterpriseConfigurationPage(props) {
   useInjectReducer({ key: 'configuration', reducer });
@@ -35,7 +37,7 @@ export function EnterpriseConfigurationPage(props) {
       <EnterpriseConfiguration
         enterpriseAction={props.updateEnterpriseBegin}
         enterprise={props.enterprise}
-        buttonText='Update'
+        buttonText={<DiverstFormattedMessage {...messages.update} />}
       />
     </React.Fragment>
   );
