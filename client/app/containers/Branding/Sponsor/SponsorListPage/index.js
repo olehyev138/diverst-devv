@@ -27,6 +27,9 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import SponsorList from 'components/Branding/Sponsor/SponsorList';
 import { push } from 'connected-react-router';
 
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/Branding/messages';
+
 export function SponsorListPage(props) {
   useInjectReducer({ key: 'sponsors', reducer });
   useInjectSaga({ key: 'sponsors', saga });

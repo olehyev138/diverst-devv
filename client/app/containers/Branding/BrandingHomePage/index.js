@@ -19,6 +19,9 @@ import {
 import RouteService from 'utils/routeHelpers';
 import BrandingHome from 'components/Branding/BrandingHome';
 
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/Branding/messages';
+
 export function BrandingHomePage(props) {
   useInjectReducer({ key: 'configuration', reducer });
   useInjectSaga({ key: 'configuration', saga });
@@ -36,7 +39,7 @@ export function BrandingHomePage(props) {
       <BrandingHome
         enterpriseAction={props.updateEnterpriseBegin}
         enterprise={props.enterprise}
-        buttonText='Update'
+        buttonText={<DiverstFormattedMessage {...messages.update} />}
       />
     </React.Fragment>
   );

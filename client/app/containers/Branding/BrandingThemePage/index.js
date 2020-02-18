@@ -18,6 +18,8 @@ import {
 
 import RouteService from 'utils/routeHelpers';
 import BrandingTheme from 'components/Branding/BrandingTheme';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/Branding/messages';
 
 export function BrandingThemePage(props) {
   useInjectReducer({ key: 'configuration', reducer });
@@ -38,7 +40,7 @@ export function BrandingThemePage(props) {
         theme={props.theme}
         isLoading={props.isLoading}
         isCommitting={props.isCommitting}
-        buttonText='Update'
+        buttonText={<DiverstFormattedMessage {...messages.update} />}
       />
     </React.Fragment>
   );

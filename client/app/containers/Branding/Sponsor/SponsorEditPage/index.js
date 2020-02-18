@@ -20,6 +20,9 @@ import RouteService from 'utils/routeHelpers';
 import SponsorForm from 'components/Branding/Sponsor/SponsorForm';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/Branding/messages';
+
 export function SponsorCreatePage(props) {
   useInjectReducer({ key: 'sponsors', reducer });
   useInjectSaga({ key: 'sponsors', saga });
@@ -44,7 +47,7 @@ export function SponsorCreatePage(props) {
         sponsor={props.sponsor}
         sponsorAction={props.updateSponsorBegin}
         links={links}
-        buttonText='Create'
+        buttonText={<DiverstFormattedMessage {...messages.create} />}
       />
     </React.Fragment>
   );

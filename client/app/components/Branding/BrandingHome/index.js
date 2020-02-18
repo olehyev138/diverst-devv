@@ -17,7 +17,6 @@ import { withStyles } from '@material-ui/core/styles';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
-import messages from 'containers/Branding/messages';
 import { buildValues, mapFields } from 'utils/formHelpers';
 
 import {
@@ -25,6 +24,9 @@ import {
   TextField, Hidden, FormControl, Divider, Switch, FormControlLabel,
 } from '@material-ui/core';
 import Select from 'components/Shared/DiverstSelect';
+
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/Branding/messages';
 
 const styles = theme => ({
   noBottomPadding: {
@@ -49,7 +51,7 @@ export function BrandingHomeInner({ classes, handleSubmit, handleChange, handleB
                 id='home_message'
                 name='home_message'
                 margin='normal'
-                label='Home Message'
+                label={<DiverstFormattedMessage {...messages.Home.message} />}
                 value={values.home_message}
               />
             </Grid>

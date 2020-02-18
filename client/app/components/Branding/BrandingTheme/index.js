@@ -26,6 +26,8 @@ import DiverstFileInput from 'components/Shared/DiverstFileInput';
 import { DEFAULT_BRANDING_COLOR, DEFAULT_CHARTS_COLOR } from 'containers/Shared/ThemeProvider';
 
 import { omit } from 'lodash';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/Branding/messages';
 
 const styles = theme => ({
   noBottomPadding: {
@@ -47,7 +49,7 @@ export function BrandingThemeInner({ classes, handleSubmit, handleChange, handle
                   component={DiverstColorPicker}
                   id='primary_color'
                   name='primary_color'
-                  label='Primary Color'
+                  label={<DiverstFormattedMessage {...messages.Theme.primarycolor} />}
                   disabled={props.isCommitting}
                   value={values.primary_color}
                   onChange={value => setFieldValue('primary_color', value)}
@@ -62,7 +64,7 @@ export function BrandingThemeInner({ classes, handleSubmit, handleChange, handle
                   component={DiverstSwitch}
                   id='use_secondary_color'
                   name='use_secondary_color'
-                  label='Use different color for graphs?'
+                  label={<DiverstFormattedMessage {...messages.Theme.colorswitch} />}
                   margin='normal'
                   disabled={props.isCommitting}
                   value={values.use_secondary_color}
@@ -77,7 +79,7 @@ export function BrandingThemeInner({ classes, handleSubmit, handleChange, handle
                     fullWidth
                     id='secondary_color'
                     name='secondary_color'
-                    label='Graphs Color'
+                    label={<DiverstFormattedMessage {...messages.Theme.graphcolor} />}
                     disabled={props.isCommitting}
                     value={values.secondary_color}
                     onChange={value => setFieldValue('secondary_color', value)}
@@ -103,7 +105,7 @@ export function BrandingThemeInner({ classes, handleSubmit, handleChange, handle
                   name='logo'
                   margin='normal'
                   value={values.logo}
-                  label='Logo'
+                  label={<DiverstFormattedMessage {...messages.Theme.logo} />}
                 />
               </Grid>
               <Grid item md xs={12}>
@@ -118,7 +120,7 @@ export function BrandingThemeInner({ classes, handleSubmit, handleChange, handle
                   margin='normal'
                   size='small'
                   value={values.logo_redirect_url}
-                  label='Logo Redirect URL'
+                  label={<DiverstFormattedMessage {...messages.Theme.url} />}
                 />
               </Grid>
             </Grid>
