@@ -52,6 +52,7 @@ export function* login(action) {
     yield put(push(ROUTES.user.home.path()));
   } catch (err) {
     yield put(loginError(err));
+    yield put(showSnackbar({ message: err.response.data, options: { variant: 'error' } }));
   }
 }
 
