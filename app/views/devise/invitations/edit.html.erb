@@ -191,11 +191,12 @@
 
             <%#= f.button :submit, "Create my account", class: "btn--secondary btn--large btn--full" %>
           <% end %>
+          <br>
+          <button class="btn--secondary btn--large btn--full" 
+          data-toggle="modal" data-target="consentModal" id="consentModalPop">
+            <p>CREATE MY ACCOUNT</p>
+          </button>
         </div>
-        <button class="btn--secondary btn--large btn--full" 
-        data-toggle="modal" data-target="consentModal" id="consentModalPop">
-          CREATE MY ACCOUNT
-        </button>
       </div>
     </div>
 
@@ -207,11 +208,15 @@
           // Animation complete.
         });
       }
-      // function consentModalPop() {
-      //   $("#consentModal").modal("show");
-      // }
-      $("#consentModalPop").click(function(){
-        $("#consentModal").modal("show");
+ 
+      $("#consentModalPop").click(function(e){
+        let form = document.getElementById('edit_user');
+        $form = $(form)
+        if( !is_valid($form) ) {
+          e.preventDefault();
+        } else {
+          $("#consentModal").modal("show");
+        }
       });
 
       $(document).ready(function(){
