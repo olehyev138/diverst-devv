@@ -23,6 +23,9 @@ import { selectIsCommitting } from 'containers/Innovate/Campaign/CampaignQuestio
 
 import AnswerForm from 'components/Innovate/Campaign/CampaignQuestion/CampaignQuestionForm';
 
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/Innovate/Campaign/CampaignQuestion/Answer/messages';
+
 export function AnswerCreatePage(props) {
   useInjectReducer({ key: 'answers', reducer });
   useInjectSaga({ key: 'answers', saga });
@@ -45,7 +48,7 @@ export function AnswerCreatePage(props) {
       answerAction={props.createAnswerBegin}
       campaignId={campaignId[0]}
       questionId={questionId[0]}
-      buttonText='CREATE ANSWER'
+      buttonText={<DiverstFormattedMessage {...messages.create} />}
       isCommitting={props.isCommitting}
       // links={links}
     />

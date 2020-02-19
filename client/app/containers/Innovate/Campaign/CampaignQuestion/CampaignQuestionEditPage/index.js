@@ -23,7 +23,8 @@ import {
 import CampaignQuestionForm from 'components/Innovate/Campaign/CampaignQuestion/CampaignQuestionForm';
 
 import { updateQuestionBegin, getQuestionBegin, campaignQuestionsUnmount } from 'containers/Innovate/Campaign/CampaignQuestion/actions';
-
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/Innovate/Campaign/CampaignQuestion/messages';
 
 export function CampaignQuestionEditPage(props) {
   useInjectReducer({ key: 'questions', reducer });
@@ -53,7 +54,7 @@ export function CampaignQuestionEditPage(props) {
       questionId={props.questionId}
       isCommitting={props.isCommitting}
       isFormLoading={props.isFormLoading}
-      buttonText='Update'
+      buttonText={<DiverstFormattedMessage {...messages.update} />}
       question={props.question}
       links={links}
     />

@@ -20,6 +20,8 @@ import { createQuestionBegin, campaignQuestionsUnmount } from 'containers/Innova
 import { selectIsCommitting } from 'containers/Innovate/Campaign/CampaignQuestion/selectors';
 
 import CampaignQuestionForm from 'components/Innovate/Campaign/CampaignQuestion/CampaignQuestionForm';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/Innovate/Campaign/CampaignQuestion/messages';
 
 export function CampaignQuestionCreatePage(props) {
   useInjectReducer({ key: 'questions', reducer });
@@ -39,7 +41,7 @@ export function CampaignQuestionCreatePage(props) {
     <CampaignQuestionForm
       questionAction={props.createQuestionBegin}
       campaignId={campaignId[0]}
-      buttonText='CREATE QUESTION'
+      buttonText={<DiverstFormattedMessage {...messages.create} />}
       isCommitting={props.isCommitting}
       links={links}
     />

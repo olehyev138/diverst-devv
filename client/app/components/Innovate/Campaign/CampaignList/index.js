@@ -16,7 +16,7 @@ import { withStyles } from '@material-ui/core/styles';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
-import messages from 'containers/Group/GroupMembers/messages';
+import messages from 'containers/Innovate/Campaign/messages';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/DeleteOutline';
@@ -53,8 +53,8 @@ export function CampaignList(props) {
   };
 
   const columns = [
-    { title: 'Title', field: 'title' },
-    { title: 'Description', field: 'description' }
+    { title: <DiverstFormattedMessage {...messages.Campaign.title} />, field: 'title' },
+    { title: <DiverstFormattedMessage {...messages.Campaign.description} />, field: 'description' }
   ];
 
   return (
@@ -75,7 +75,7 @@ export function CampaignList(props) {
         </Box>
         <Box className={classes.floatSpacer} />
         <DiverstTable
-          title='Campaigns'
+          title={<DiverstFormattedMessage {...messages.Campaign.campaigns} />}
           handlePagination={props.handlePagination}
           isLoading={props.isFetchingCampaigns}
           onOrderChange={handleOrderChange}
@@ -87,14 +87,14 @@ export function CampaignList(props) {
           actions={[
             {
               icon: () => <EditIcon />,
-              tooltip: 'Edit Member',
+              tooltip: <DiverstFormattedMessage {...messages.Campaign.edit} />,
               onClick: (_, rowData) => {
                 props.handleVisitCampaignEdit(rowData.id);
               }
             },
             {
               icon: () => <DeleteIcon />,
-              tooltip: 'Delete Campaign',
+              tooltip: <DiverstFormattedMessage {...messages.Campaign.delete} />,
               onClick: (_, rowData) => {
                 /* eslint-disable-next-line no-alert, no-restricted-globals */
                 if (confirm('Delete campaign?'))

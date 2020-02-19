@@ -15,14 +15,15 @@ import { withStyles } from '@material-ui/core/styles';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
-import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
-
 import DeleteIcon from '@material-ui/icons/DeleteOutline';
 import AddIcon from '@material-ui/icons/Add';
 import ExportIcon from '@material-ui/icons/SaveAlt';
 
 import DiverstTable from 'components/Shared/DiverstTable';
 import EditIcon from '@material-ui/icons/Edit';
+
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/Innovate/Campaign/CampaignQuestion/messages';
 
 const styles = theme => ({
   errorButton: {
@@ -51,8 +52,8 @@ export function CampaignQuestionsList(props) {
   };
 
   const columns = [
-    { title: 'Title', field: 'title' },
-    { title: 'Description', field: 'description' }
+    { title: <DiverstFormattedMessage {...messages.question.list.title} />, field: 'title' },
+    { title: <DiverstFormattedMessage {...messages.question.list.description} />, field: 'description' }
   ];
 
   return (
@@ -72,7 +73,7 @@ export function CampaignQuestionsList(props) {
       </Box>
       <Box className={classes.floatSpacer} />
       <DiverstTable
-        title='Questions'
+        title={<DiverstFormattedMessage {...messages.question.list.questions} />}
         handlePagination={props.handlePagination}
         isLoading={props.isFetchingQuestions}
         onOrderChange={handleOrderChange}
@@ -83,13 +84,13 @@ export function CampaignQuestionsList(props) {
         rowsPerPage={props.params.count}
         actions={[{
           icon: () => <EditIcon />,
-          tooltip: 'Edit Question',
+          tooltip: <DiverstFormattedMessage {...messages.question.edit} />,
           onClick: (_, rowData) => {
             props.handleVisitQuestionEdit(props.campaignId, rowData.id);
           }
         }, {
           icon: () => <DeleteIcon />,
-          tooltip: 'Delete Question',
+          tooltip: <DiverstFormattedMessage {...messages.question.delete} />,
           onClick: (_, rowData) => {
             /* eslint-disable-next-line no-alert, no-restricted-globals */
             if (confirm('Delete question?'))
