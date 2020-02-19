@@ -63,25 +63,16 @@ jobs:
     executor: primary-image
     steps:
       - checkout
-      - run: mkdir -p $CIRCLE_ARTIFACTS $CIRCLE_TEST_REPORTS
       - run:
+          name: Create artifact directories
+          command: mkdir -p $CIRCLE_ARTIFACTS $CIRCLE_TEST_REPORTS
+      - run:
+          name: Set Timezone
           working_directory: ~/TeamDiverst/diverst-development
-          command: 'echo ''America/New_York'' | sudo tee -a /etc/timezone; sudo dpkg-reconfigure -f noninteractive tzdata; sudo service mysql restart; sudo service postgresql'
-      - run: echo -e "export RAILS_ENV=test\nexport RACK_ENV=test" >> $BASH_ENV
-      - run: sudo rm -rf /etc/apt/sources.list.d/circleci_trusty.list && sudo rm -rf /etc/apt/sources.list.d/github_git-lfs.list  && sudo rm -rf /etc/apt/sources.list.d/neo4j.list && sudo rm -rf /etc/apt/sources.list.d/mysql.list && sudo rm -rf /etc/apt/sources.list.d/basho_riak.list
-      - run:
-          name: Install bundler
-          command: gem install bundler
-      - run:
-          name: Install libgit2
-          command: sudo apt-get update && sudo apt-get install -y libgit2
-      - run: bundle config build.rugged --use-system-libraries
-      - run:
-          name: Configure bundler to use system libraries
-          command: bundle config build.rugged --use-system-libraries
+          command: echo ''America/New_York'' | tee -a /etc/timezone
       - run:
           name: Install gems
-          command: bundle check --path=vendor/bundle || bundle install --path=vendor/bundle --jobs=4 --retry=3
+          command: bundle install --path=vendor/bundle --jobs=4 --retry=3 && bundle clean
       - run: |-
           mkdir -p config && echo 'test:
             database: circle_ruby_test
@@ -90,7 +81,7 @@ jobs:
             pool: <%= ENV["DB_POOL"] || ENV["MAX_THREADS"] || 20 %>
             encoding: utf8mb4
             collation: utf8mb4_bin
-            username: ubuntu
+            username: root
             host: localhost
             socket: /var/run/mysqld/mysqld.sock
           ' > config/database.yml
@@ -127,7 +118,6 @@ jobs:
       # Install nvm & frontend libraries
       - run: nvm install 10.16.0 && nvm alias default 10.16.0
       - run: cd client/ && npm install
-      - run: sudo rm -rf /etc/apt/sources.list.d/circleci_trusty.list && sudo rm -rf /etc/apt/sources.list.d/github_git-lfs.list  && sudo rm -rf /etc/apt/sources.list.d/neo4j.list && sudo rm -rf /etc/apt/sources.list.d/mysql.list && sudo rm -rf /etc/apt/sources.list.d/basho_riak.list
       - save_cache:
           key: v1-dep-{{ .Branch }}-{{ epoch }}
           paths:
