@@ -184,8 +184,8 @@ class ApplicationController < ActionController::Base
   end
 
   def after_sign_in_path_for(resource)
-    if session[:previous_url] == "http://localhost:3000/favicon.ico"
-      prev_url = session[:previous_url] = user_root_path 
+    if session[:previous_url] == 'http://localhost:3000/favicon.ico'
+      prev_url = session[:previous_url] = user_root_path
     end
 
     # This ensures unauthorized users are not accessing main page, which is admin only
