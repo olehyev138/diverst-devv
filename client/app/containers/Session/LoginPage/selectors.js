@@ -1,24 +1,18 @@
 import { createSelector } from 'reselect';
 import { initialState } from './reducer';
-import dig from 'object-dig';
 
 const selectLoginPageDomain = state => state.loginPage || initialState;
 
-const selectFormErrors = () => createSelector(
+const selectIsLoggingIn = () => createSelector(
   selectLoginPageDomain,
-  loginPageState => loginPageState.formErrors,
+  loginPageState => loginPageState.isLoggingIn
 );
 
-const selectEmailError = () => createSelector(
+const selectLoginSuccess = () => createSelector(
   selectLoginPageDomain,
-  loginPageState => dig(loginPageState, 'formErrors', 'email'),
-);
-
-const selectPasswordError = () => createSelector(
-  selectLoginPageDomain,
-  loginPageState => dig(loginPageState, 'formErrors', 'password')
+  loginPageState => loginPageState.loginSuccess
 );
 
 export {
-  selectLoginPageDomain, selectFormErrors, selectEmailError, selectPasswordError
+  selectIsLoggingIn, selectLoginSuccess
 };
