@@ -11,8 +11,9 @@ import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import { push } from 'connected-react-router';
 
-import reducer from './reducer';
 import { useInjectReducer } from 'utils/injectReducer';
+
+import reducer from './reducer';
 
 import { CircularProgress, Backdrop } from '@material-ui/core';
 
@@ -20,7 +21,7 @@ import { showSnackbar } from 'containers/Shared/Notifier/actions';
 import { loginBegin, findEnterpriseBegin, ssoLoginBegin, ssoLinkBegin } from 'containers/Shared/App/actions';
 
 import { selectEnterprise } from 'containers/Shared/App/selectors';
-import { selectFormErrors } from './selectors';
+import { selectIsLoggingIn, selectLoginSuccess } from './selectors';
 
 import LoginForm from 'components/Session/LoginForm';
 import EnterpriseForm from 'components/Session/EnterpriseForm';
@@ -52,13 +53,12 @@ export function LoginPage(props) {
       props.ssoLoginBegin({ policyGroupId, userToken });
   }, []);
 
-  const AuthForm = () => {
+  const authForm = () => {
     if (props.enterprise) {
       if (props.enterprise.has_enabled_saml) {
         props.ssoLinkBegin({ enterpriseId: props.enterprise.id });
         return (
           <EnterpriseForm
-            formErrors={props.formErrors}
             findEnterpriseBegin={(values, actions) => {
               props.ssoLinkBegin({ enterpriseId: props.enterprise.id });
               setEmail(values.email);
@@ -70,13 +70,14 @@ export function LoginPage(props) {
       return (
         <LoginForm
           email={email}
-          formErrors={props.formErrors}
           loginBegin={values => props.loginBegin(values)}
+          isLoggingIn={props.isLoggingIn}
+          loginSuccess={props.loginSuccess}
         />
       );
     }
 
-    return <React.Fragment />;
+    return null;
   };
 
   return (
@@ -88,17 +89,13 @@ export function LoginPage(props) {
           thickness={1}
         />
       </Backdrop>
-      <AuthForm />
+      {authForm()}
     </React.Fragment>
   );
 }
 
 LoginPage.propTypes = {
   enterprise: PropTypes.object,
-  formErrors: PropTypes.shape({
-    email: PropTypes.string,
-    password: PropTypes.string,
-  }),
   location: PropTypes.shape({
     search: PropTypes.string
   }),
@@ -107,12 +104,15 @@ LoginPage.propTypes = {
   loginBegin: PropTypes.func,
   ssoLoginBegin: PropTypes.func,
   ssoLinkBegin: PropTypes.func,
-  findEnterpriseBegin: PropTypes.func
+  findEnterpriseBegin: PropTypes.func,
+  isLoggingIn: PropTypes.bool,
+  loginSuccess: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
   enterprise: selectEnterprise(),
-  formErrors: selectFormErrors(),
+  isLoggingIn: selectIsLoggingIn(),
+  loginSuccess: selectLoginSuccess(),
 });
 
 function mapDispatchToProps(dispatch) {
