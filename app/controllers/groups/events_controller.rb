@@ -1,5 +1,6 @@
 class Groups::EventsController < ApplicationController
   include HtmlSanitizingHelper
+  include OutlookAuthHelper
 
   before_action :authenticate_user!
   before_action :set_group
@@ -52,6 +53,8 @@ class Groups::EventsController < ApplicationController
   def show
     authorize @event
 
+    @participation = current_user.initiative_users.find_by(:initiative_id => @event.id)
+    @has_outlook = has_outlook
     @all_comments = @event.comments
     @approved_comments = @event.comments.approved
     @comment = InitiativeComment.new(initiative: @event)
