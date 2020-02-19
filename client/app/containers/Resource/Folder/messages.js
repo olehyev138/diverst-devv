@@ -66,4 +66,18 @@ export default defineMessages({
       id: `${scope}.show.empty`
     }
   },
+  authenticate: {
+    label1: {
+      id: `${scope}.authenticate.label1`,
+    },
+    label2: {
+      id: `${scope}.authenticate.label2`,
+    },
+    password: {
+      id: `${scope}.authenticate.password`,
+    },
+    button: {
+      id: `${scope}.authenticate.button`,
+    },
+  }
 });

@@ -20,7 +20,7 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { createGroupMessageBegin, newsFeedUnmount } from 'containers/News/actions';
 import GroupMessageForm from 'components/News/GroupMessage/GroupMessageForm';
-import {Button} from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/News/messages';
 
