@@ -2,7 +2,7 @@ version: 2.1
 executors:
   primary-image:
     docker:
-      - image: circleci/ruby:2.6.5-stretch
+      - image: awsdiverst/cci-primary:0.0.1
 jobs:
   lint:
     working_directory: ~/TeamDiverst/diverst-development
