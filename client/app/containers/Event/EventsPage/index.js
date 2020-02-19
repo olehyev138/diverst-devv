@@ -105,7 +105,7 @@ export function EventsPage(props) {
       handleChangeTab={handleChangeTab}
       handlePagination={handlePagination}
       links={links}
-      readonly={false}
+      readonly={props.readonly}
     />
   );
 }
@@ -119,6 +119,7 @@ EventsPage.propTypes = {
   currentGroup: PropTypes.shape({
     id: PropTypes.number,
   }),
+  readonly: PropTypes.bool
 };
 
 const mapStateToProps = createStructuredSelector({
