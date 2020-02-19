@@ -4,23 +4,21 @@ workflows:
   version: 2.1
   lint-test-deploy:
     jobs:
+      - lint
+      - backend-test:
+          requires:
+            - lint
+      - frontend-test:
+          requires:
+            - lint
       - deploy:
           context: aws-context
-#    jobs:
-#      - lint
-#      - backend-test:
-#          requires:
-#            - lint
-#      - frontend-test:
-#          requires:
-#            - lint
-#      - deploy-react:
-#          requires:
-#            - backend-test
-#            - frontend-test
-#          filters:
-#            branches:
-#              only: react_update
+          requires:
+            - backend-test
+            - frontend-test
+          filters:
+            branches:
+              only: react_update
 
 jobs:
   lint:
