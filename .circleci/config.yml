@@ -1,11 +1,4 @@
 version: 2.1
-#executors:
-#  primary-image:
-#    docker:
-#      - image: awsdiverst/cci-primary:0.0.1
-#        environment:
-#          RAILS_ENV: test
-#          RACK_ENV: test
 jobs:
   lint:
     working_directory: ~/TeamDiverst/diverst-development
@@ -76,7 +69,7 @@ jobs:
           name: Create artifact directories
           command: mkdir -p $CIRCLE_ARTIFACTS $CIRCLE_TEST_REPORTS/rspec
       - run:
-          name: Set Timezone
+          name: Set timezone
           working_directory: ~/TeamDiverst/diverst-development
           command: echo ''America/New_York'' | tee -a /etc/timezone
       #
@@ -119,19 +112,24 @@ jobs:
       - run:
           name: Migrate database
           command: bundle exec rake db:migrate
+      #
+      ## Run backend tests
+      #
       - run:
           name: Run backend tests
           command: bundle exec rspec --color --require spec_helper --format RspecJunitFormatter --out $CIRCLE_TEST_REPORTS/rspec/rspec.xml --format progress -- $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=filesize)
           environment:
             RAILS_ENV: test
             RACK_ENV: test
+      #
+      ## Store artifacts
+      #
       - store_test_results:
           path: /tmp/circleci-test-results
       - store_artifacts:
           path: /tmp/circleci-artifacts
       - store_artifacts:
           path: /tmp/circleci-test-results
-
   frontend-test:
     working_directory: ~/TeamDiverst/diverst-development/
     docker:
@@ -145,19 +143,36 @@ jobs:
       CIRCLE_TEST_REPORTS: /tmp/circleci-test-results
     steps:
       - checkout
-      - run: mkdir -p $CIRCLE_ARTIFACTS $CIRCLE_TEST_REPORTS
-      # Install nvm & frontend libraries
-      - run: nvm install 10.16.0 && nvm alias default 10.16.0
-      - run: cd client/ && npm install
+      - run:
+          name: Create artifact directories
+          command: mkdir -p $CIRCLE_ARTIFACTS $CIRCLE_TEST_REPORTS
+      #
+      ## Install node modules
+      #
+      - restore_cache:
+          keys:
+            # when lock file changes, use increasingly general patterns to restore cache
+            - node-{{ .Branch }}-{{ checksum "./client/package-lock.json" }}
+            - node-{{ .Branch }}-
+            - node-
+      - run:
+          name: Install node modules
+          command: cd client && npm install
       - save_cache:
-          key: v1-dep-{{ .Branch }}-{{ epoch }}
           paths:
             - ./client/node_modules
-      # Run frontend tests
-      - run: cd client/ && npm test -- -i
+          key: node-{{ .Branch }}-{{ checksum "./client/package-lock.json" }}
+      #
+      ## Run frontend tests
+      #
+      - run:
+          name: Run frontend tests
+          command: cd client/ && npm test -- -i
+      #
+      ## Store artifacts
+      #
       - store_test_results:
           path: /tmp/circleci-test-results
-      # Save artifacts
       - store_artifacts:
           path: /tmp/circleci-artifacts
       - store_artifacts:
