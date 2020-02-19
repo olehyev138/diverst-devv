@@ -21,6 +21,9 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import { createNewsLinkBegin, newsFeedUnmount } from 'containers/News/actions';
 import NewsLinkForm from 'components/News/NewsLink/NewsLinkForm';
 
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/News/messages';
+
 export function NewsLinkCreatePage(props) {
   useInjectReducer({ key: 'news', reducer });
   useInjectSaga({ key: 'news', saga });
@@ -39,7 +42,7 @@ export function NewsLinkCreatePage(props) {
     <NewsLinkForm
       get
       newsLinkAction={props.createNewsLinkBegin}
-      buttonText='Create'
+      buttonText={<DiverstFormattedMessage {...messages.create} />}
       currentUser={currentUser}
       currentGroup={currentGroup}
       links={links}

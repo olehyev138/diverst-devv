@@ -20,6 +20,9 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { createGroupMessageBegin, newsFeedUnmount } from 'containers/News/actions';
 import GroupMessageForm from 'components/News/GroupMessage/GroupMessageForm';
+import {Button} from "@material-ui/core";
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/News/messages';
 
 export function GroupMessageCreatePage(props) {
   useInjectReducer({ key: 'news', reducer });
@@ -36,7 +39,7 @@ export function GroupMessageCreatePage(props) {
   return (
     <GroupMessageForm
       groupMessageAction={props.createGroupMessageBegin}
-      buttonText='Create'
+      buttonText={<DiverstFormattedMessage {...messages.create} />}
       currentUser={currentUser}
       currentGroup={currentGroup}
       links={links}

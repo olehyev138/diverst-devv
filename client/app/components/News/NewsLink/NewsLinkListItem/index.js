@@ -68,7 +68,7 @@ export function NewsLinkListItem(props) {
             to={links.newsLinkShow(props.groupId, newsItem.id)}
             component={WrappedNavLink}
           >
-            Comments
+            {<DiverstFormattedMessage {...messages.comments} />}
           </Button>
           {props.newsItem.approved !== true ? (
             <Button
@@ -78,7 +78,7 @@ export function NewsLinkListItem(props) {
                 props.updateNewsItemBegin({ approved: true, id: newsItemId, group_id: groupId });
               }}
             >
-              Approve
+              {<DiverstFormattedMessage {...messages.approve} />}
             </Button>
           ) : null }
           <Button
@@ -89,7 +89,7 @@ export function NewsLinkListItem(props) {
                 props.deleteNewsLinkBegin(newsItem.news_link);
             }}
           >
-            Delete
+            {<DiverstFormattedMessage {...messages.delete} />}
           </Button>
         </CardActions>
       )}

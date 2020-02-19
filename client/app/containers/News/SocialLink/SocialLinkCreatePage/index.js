@@ -18,6 +18,8 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { createSocialLinkBegin, newsFeedUnmount } from 'containers/News/actions';
 import SocialLinkForm from 'components/News/SocialLink/SocialLinkForm';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/News/messages';
 
 export function SocialLinkCreatePage(props) {
   useInjectReducer({ key: 'news', reducer });
@@ -34,7 +36,7 @@ export function SocialLinkCreatePage(props) {
     <SocialLinkForm
       get
       socialLinkAction={props.createSocialLinkBegin}
-      buttonText='Create'
+      buttonText={<DiverstFormattedMessage {...messages.create} />}
       currentUser={currentUser}
       currentGroup={currentGroup}
       links={links}

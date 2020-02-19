@@ -26,6 +26,9 @@ import {
 
 import GroupMessageForm from 'components/News/GroupMessage/GroupMessageForm';
 
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/News/messages';
+
 export function GroupMessageEditPage(props) {
   useInjectReducer({ key: 'news', reducer });
   useInjectSaga({ key: 'news', saga });
@@ -48,7 +51,7 @@ export function GroupMessageEditPage(props) {
     <GroupMessageForm
       edit
       groupMessageAction={props.updateGroupMessageBegin}
-      buttonText='Update'
+      buttonText={<DiverstFormattedMessage {...messages.update} />}
       currentUser={currentUser}
       currentGroup={currentGroup}
       newsItem={currentNewsItem}

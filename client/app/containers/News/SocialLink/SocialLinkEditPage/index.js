@@ -25,6 +25,8 @@ import {
 } from 'containers/News/actions';
 
 import SocialLinkForm from 'components/News/SocialLink/SocialLinkForm';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/News/messages';
 
 export function SocialLinkEditPage(props) {
   useInjectReducer({ key: 'news', reducer });
@@ -47,7 +49,7 @@ export function SocialLinkEditPage(props) {
     <SocialLinkForm
       edit
       socialLinkAction={props.updateSocialLinkBegin}
-      buttonText='Update'
+      buttonText={<DiverstFormattedMessage {...messages.update} />}
       currentUser={currentUser}
       currentGroup={currentGroup}
       newsItem={currentNewsItem}

@@ -65,7 +65,7 @@ export function SocialLinkListItem(props) {
               props.updateNewsItemBegin({ approved: true, id: newsItemId, group_id: groupId });
             }}
           >
-            Approve
+            {<DiverstFormattedMessage {...messages.approve} />}
           </Button>
         ) : null }
         <Button
@@ -76,7 +76,7 @@ export function SocialLinkListItem(props) {
               props.deleteSocialLinkBegin(newsItem.social_link);
           }}
         >
-          Delete
+          {<DiverstFormattedMessage {...messages.delete} />}
         </Button>
       </CardActions>
     </Card>
