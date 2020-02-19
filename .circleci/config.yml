@@ -3,6 +3,9 @@ executors:
   primary-image:
     docker:
       - image: awsdiverst/cci-primary:0.0.1
+        environment:
+          RAILS_ENV: test
+          RACK_ENV: test
 jobs:
   lint:
     working_directory: ~/TeamDiverst/diverst-development
@@ -10,14 +13,40 @@ jobs:
     executor: primary-image
     steps:
       - checkout
+      #
+      ## Install gems
+      #
+      - restore_cache:
+          keys:
+            - v1-gem-cache-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+            - v1-gem-cache-{{ arch }}-{{ .Branch }}-
+            - v1-gem-cache-{{ arch }}-
       - run:
           name: Install gems
-          command: bundle install --path=vendor/bundle --jobs=4 --retry=3 --with test
+          command: bundle install --path=vendor/bundle --jobs=4 --retry=3 && bundle clean
+      - save_cache:
+          key: v1-gem-cache-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+          paths:
+            - ./vendor/bundle
+      #
+      ## Install node modules
+      #
+      - restore_cache:
+          keys:
+            # when lock file changes, use increasingly general patterns to restore cache
+            - node-{{ .Branch }}-{{ checksum "./client/package-lock.json" }}
+            - node-{{ .Branch }}-
+            - node-
       - run:
           name: Install node modules
-          command: |
-            cd client
-            npm install
+          command: cd client && npm install
+      - save_cache:
+          paths:
+            - ./client/node_modules
+          key: node-{{ .Branch }}-{{ checksum "./client/package-lock.json" }}
+      #
+      ## Run linter
+      #
       - run:
           name: Run linter
           command: |
@@ -26,7 +55,7 @@ jobs:
             bundle exec pronto run -f github_status github_pr -c origin/react_update
   backend-test:
     working_directory: ~/TeamDiverst/diverst-development
-    parallelism: 2
+    parallelism: 1
     shell: /bin/bash --login
     environment:
       CIRCLE_ARTIFACTS: /tmp/circleci-artifacts
