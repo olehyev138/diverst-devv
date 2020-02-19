@@ -57,6 +57,9 @@ import RouteService from 'utils/routeHelpers';
 import UpdateForm from 'components/Shared/Updates/UpdateForm';
 import { selectGroup } from 'containers/Group/selectors';
 
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/Group/GroupPlan/KPI/messages';
+
 export function UpdateEditPage(props) {
   useInjectReducer({ key: 'updates', reducer });
   useInjectSaga({ key: 'updates', saga });
@@ -92,7 +95,7 @@ export function UpdateEditPage(props) {
       isCommitting={props.isCommitting || props.isCommittingFieldData}
       isFetching={props.isFetching}
       links={links}
-      buttonText='Update'
+      buttonText={<DiverstFormattedMessage {...messages.update} />}
       updateAction={props.updateUpdateBegin}
       updateFieldDataBegin={props.updateFieldDataBegin}
 

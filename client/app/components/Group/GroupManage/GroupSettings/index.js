@@ -10,21 +10,19 @@ import React, {
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import { Field, Formik, Form } from 'formik';
-import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { withStyles } from '@material-ui/core/styles';
-
-import messages from 'containers/Group/messages';
 import { buildValues, mapFields } from 'utils/formHelpers';
-
 import Select from 'components/Shared/DiverstSelect';
 import {
   Button, Card, CardActions, CardContent, Grid, Checkbox,
   TextField, FormControl, Divider, Switch, FormControlLabel,
 } from '@material-ui/core';
-
 import DiverstColorPicker from 'components/Shared/DiverstColorPicker';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import DiverstFileInput from 'components/Shared/DiverstFileInput';
+
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/Group/GroupManage/messages';
 
 const styles = theme => ({
   noBottomPadding: {
@@ -80,7 +78,7 @@ export function GroupSettingsInner({ classes, handleSubmit, handleChange, handle
                 id='pending_users'
                 name='pending_users'
                 margin='normal'
-                label='Pending Users'
+                label={<DiverstFormattedMessage {...messages.settings.pending_users} />}
                 disabled={props.isCommitting}
                 options={SETTINGS_OPTIONS.pendingUsers}
                 value={{ value: values.pending_users, label: prettify(values.pending_users) }}
@@ -93,7 +91,7 @@ export function GroupSettingsInner({ classes, handleSubmit, handleChange, handle
                 id='members_visibility'
                 name='members_visibility'
                 margin='normal'
-                label='Members Visibility'
+                label={<DiverstFormattedMessage {...messages.settings.members_visibility} />}
                 disabled={props.isCommitting}
                 options={SETTINGS_OPTIONS.membersVisibility}
                 value={{ value: values.members_visibility, label: prettify(values.members_visibility) }}
@@ -106,7 +104,7 @@ export function GroupSettingsInner({ classes, handleSubmit, handleChange, handle
                 id='event_attendance_visibility'
                 name='event_attendance_visibility'
                 margin='normal'
-                label='Event Attendance Visibility'
+                label={<DiverstFormattedMessage {...messages.settings.event_attendance_visibility} />}
                 disabled={props.isCommitting}
                 options={SETTINGS_OPTIONS.eventAttendanceVisibility}
                 value={{ value: values.event_attendance_visibility, label: prettify(values.event_attendance_visibility) }}
@@ -119,7 +117,7 @@ export function GroupSettingsInner({ classes, handleSubmit, handleChange, handle
                 id='messages_visibility'
                 name='messages_visibility'
                 margin='normal'
-                label='Messages Visibility'
+                label={<DiverstFormattedMessage {...messages.settings.messages_visibility} />}
                 disabled={props.isCommitting}
                 options={SETTINGS_OPTIONS.messagesVisibility}
                 value={{ value: values.messages_visibility, label: prettify(values.messages_visibility) }}
@@ -132,7 +130,7 @@ export function GroupSettingsInner({ classes, handleSubmit, handleChange, handle
                 id='latest_news_visibility'
                 name='latest_news_visibility'
                 margin='normal'
-                label='Latest News Visibility'
+                label={<DiverstFormattedMessage {...messages.settings.latest_news_visibility} />}
                 disabled={props.isCommitting}
                 options={SETTINGS_OPTIONS.latestNewsVisibility}
                 value={{ value: values.latest_news_visibility, label: prettify(values.latest_news_visibility) }}
@@ -145,7 +143,7 @@ export function GroupSettingsInner({ classes, handleSubmit, handleChange, handle
                 id='upcoming_events_visibility'
                 name='upcoming_events_visibility'
                 margin='normal'
-                label='Upcoming Events Visibility'
+                label={<DiverstFormattedMessage {...messages.settings.upcoming_events_visibility} />}
                 disabled={props.isCommitting}
                 options={SETTINGS_OPTIONS.upcomingEventsVisibility}
                 value={{ value: values.upcoming_events_visibility, label: prettify(values.upcoming_events_visibility) }}
@@ -160,7 +158,7 @@ export function GroupSettingsInner({ classes, handleSubmit, handleChange, handle
                 margin='normal'
                 fileName={props.group.banner_file_name}
                 fullWidth
-                label='Add Banner'
+                label={<DiverstFormattedMessage {...messages.settings.banner} />}
                 disabled={props.isCommitting}
                 value={values.banner}
               />
@@ -170,7 +168,7 @@ export function GroupSettingsInner({ classes, handleSubmit, handleChange, handle
                 component={DiverstColorPicker}
                 id='calendar_color'
                 name='calendar_color'
-                label='Calendar Colour'
+                label={<DiverstFormattedMessage {...messages.settings.calendar_color} />}
                 disabled={props.isCommitting}
                 value={values.calendar_color}
                 onChange={value => setFieldValue('calendar_color', value)}
@@ -184,7 +182,7 @@ export function GroupSettingsInner({ classes, handleSubmit, handleChange, handle
         <Divider />
         <CardActions>
           <DiverstSubmit isCommitting={props.isCommitting}>
-            <DiverstFormattedMessage {...messages.settings_save} />
+            <DiverstFormattedMessage {...messages.settings.save} />
           </DiverstSubmit>
         </CardActions>
       </Form>

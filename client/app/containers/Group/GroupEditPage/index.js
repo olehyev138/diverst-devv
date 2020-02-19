@@ -18,7 +18,8 @@ import {
 } from 'containers/Group/actions';
 
 import GroupForm from 'components/Group/GroupForm';
-
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/Group/messages';
 export function GroupEditPage(props) {
   useInjectReducer({ key: 'groups', reducer });
   useInjectSaga({ key: 'groups', saga });
@@ -41,7 +42,7 @@ export function GroupEditPage(props) {
         getGroupsBegin={props.getGroupsBegin}
         selectGroups={props.groups}
         group={props.group}
-        buttonText='Update'
+        buttonText={<DiverstFormattedMessage {...messages.update} />}
         isCommitting={props.isCommitting}
         isFormLoading={props.isFormLoading}
       />

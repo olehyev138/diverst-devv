@@ -32,6 +32,9 @@ import { getUserRolesBegin, userRoleUnmount } from 'containers/User/UserRole/act
 
 import GroupLeaderForm from 'components/Group/GroupManage/GroupLeaders/GroupLeaderForm';
 
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/Group/GroupManage/messages';
+
 export function GroupLeaderCreatePage(props) {
   useInjectReducer({ key: 'groupLeaders', reducer });
   useInjectSaga({ key: 'groupLeaders', saga });
@@ -62,7 +65,7 @@ export function GroupLeaderCreatePage(props) {
   return (
     <GroupLeaderForm
       groupLeaderAction={props.createGroupLeaderBegin}
-      buttonText='Create'
+      buttonText={<DiverstFormattedMessage {...messages.create} />}
       groupId={groupId[0]}
       getMembersBegin={props.getMembersBegin}
       selectMembers={members}

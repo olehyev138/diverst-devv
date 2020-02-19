@@ -13,7 +13,8 @@ import { createGroupBegin, getGroupsBegin, groupFormUnmount } from 'containers/G
 import { selectPaginatedSelectGroups, selectGroupTotal, selectGroupIsCommitting } from 'containers/Group/selectors';
 
 import GroupForm from 'components/Group/GroupForm';
-
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/Group/messages';
 export function GroupCreatePage(props) {
   useInjectReducer({ key: 'groups', reducer });
   useInjectSaga({ key: 'groups', saga });
@@ -23,7 +24,7 @@ export function GroupCreatePage(props) {
   return (
     <GroupForm
       groupAction={props.createGroupBegin}
-      buttonText='Create'
+      buttonText={<DiverstFormattedMessage {...messages.create} />}
       getGroupsBegin={props.getGroupsBegin}
       selectGroups={props.groups}
       isCommitting={props.isCommitting}

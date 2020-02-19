@@ -26,6 +26,10 @@ import {
 
 import OutcomeForm from 'components/Group/Outcome/OutcomeForm';
 
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/Group/Outcome/messages';
+
+
 export function OutcomeEditPage(props) {
   useInjectReducer({ key: 'outcomes', reducer });
   useInjectSaga({ key: 'outcomes', saga });
@@ -48,7 +52,7 @@ export function OutcomeEditPage(props) {
     <OutcomeForm
       edit
       outcomeAction={props.updateOutcomeBegin}
-      buttonText='Update'
+      buttonText={<DiverstFormattedMessage {...messages.update} />}
       currentUser={currentUser}
       currentGroup={currentGroup}
       outcome={currentOutcome}

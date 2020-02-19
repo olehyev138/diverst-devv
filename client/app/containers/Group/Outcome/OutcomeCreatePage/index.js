@@ -20,6 +20,9 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import { createOutcomeBegin, outcomesUnmount } from 'containers/Group/Outcome/actions';
 import OutcomeForm from 'components/Group/Outcome/OutcomeForm';
 
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/Group/Outcome/messages';
+
 export function OutcomeCreatePage(props) {
   useInjectReducer({ key: 'outcomes', reducer });
   useInjectSaga({ key: 'outcomes', saga });
@@ -35,7 +38,7 @@ export function OutcomeCreatePage(props) {
   return (
     <OutcomeForm
       outcomeAction={props.createOutcomeBegin}
-      buttonText='Create'
+      buttonText={<DiverstFormattedMessage {...messages.create} />}
       currentUser={currentUser}
       currentGroup={currentGroup}
       links={links}

@@ -19,5 +19,21 @@ export default defineMessages({
     updates: {
       id: `${scope}.tabs.updates`,
     },
-  }
+    event: {
+      id: `${scope}.tabs.event`,
+    },
+    KPI: {
+      id: `${scope}.tabs.KPI`,
+    },
+    budgeting: {
+      id: `${scope}.tabs.budgeting`,
+    },
+  },
+  createupdate: {
+    id: `${scope}.form.button.createupdate`,
+  },
+  update: {
+    id: `${scope}.form.button.update`,
+  },
+
 });

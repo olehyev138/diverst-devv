@@ -32,6 +32,9 @@ import { getUserRolesBegin, userRoleUnmount } from 'containers/User/UserRole/act
 
 import GroupLeaderForm from 'components/Group/GroupManage/GroupLeaders/GroupLeaderForm';
 
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/Group/GroupManage/messages';
+
 export function GroupLeaderEditPage(props) {
   const { members, groupLeader, isCommitting, isFormLoading, ...rest } = props;
 
@@ -73,7 +76,7 @@ export function GroupLeaderEditPage(props) {
       groupId={groupId}
       isCommitting={isCommitting}
       isFormLoading={isFormLoading}
-      buttonText='Update'
+      buttonText={<DiverstFormattedMessage {...messages.update} />}
       links={links}
     />
   );

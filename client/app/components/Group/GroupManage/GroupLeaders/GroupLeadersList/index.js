@@ -14,7 +14,7 @@ import { withStyles } from '@material-ui/core/styles';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
-import messages from 'containers/Group/GroupManage/GroupLeaders/messages';
+import messages from 'containers/Group/GroupManage/messages';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/DeleteOutline';
 import AddIcon from '@material-ui/icons/Add';
@@ -47,7 +47,7 @@ export function GroupLeadersList(props) {
             component={WrappedNavLink}
             startIcon={<AddIcon />}
           >
-            NEW GROUP LEADER
+            {<DiverstFormattedMessage {...messages.leader.new} />}
           </Button>
         </Grid>
       </Grid>
@@ -55,7 +55,7 @@ export function GroupLeadersList(props) {
       <Grid container spacing={3}>
         <Grid item xs>
           <DiverstTable
-            title='Group Leaders'
+            title={<DiverstFormattedMessage {...messages.leader.title} />}
             handlePagination={props.handlePagination}
             isLoading={props.isFetchingGroupLeaders}
             dataArray={props.groupLeaderList}
@@ -65,14 +65,14 @@ export function GroupLeadersList(props) {
             actions={[
               {
                 icon: () => <EditIcon />,
-                tooltip: 'Edit Group Leader',
+                tooltip: <DiverstFormattedMessage {...messages.leader.edit} />,
                 onClick: (_, rowData) => {
                   props.handleVisitGroupLeaderEdit(rowData.group_id, rowData.id);
                 }
               },
               {
                 icon: () => <DeleteIcon />,
-                tooltip: 'Delete Group Leader',
+                tooltip: <DiverstFormattedMessage {...messages.leader.delete} />,
                 onClick: (_, rowData) => {
                   /* eslint-disable-next-line no-alert, no-restricted-globals */
                   if (confirm('Are you sure you want to delete this group leader?'))

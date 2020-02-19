@@ -10,6 +10,7 @@ import { compose } from 'redux';
 import dig from 'object-dig';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/Group/Outcome/messages';
 import { Field, Formik, Form, FieldArray } from 'formik';
 import {
   withStyles, Button, Card, CardActions, CardContent, TextField, Divider, Typography, Paper, Box, Grid, IconButton, Collapse
@@ -19,7 +20,7 @@ import DeleteIcon from '@material-ui/icons/DeleteForever';
 import AddIcon from '@material-ui/icons/AddCircle';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
-import messages from 'containers/Group/Outcome/messages';
+
 import { buildValues, isAttributesArrayEmpty } from 'utils/formHelpers';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
