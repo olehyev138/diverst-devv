@@ -424,6 +424,8 @@
   "diverst.containers.MentorshipSession.form.input.topics": "Session Topics",
   "diverst.containers.MentorshipSession.form.input.start": "Start Date",
   "diverst.containers.MentorshipSession.form.input.end": "End Date",
+  "diverst.containers.MentorshipSession.form.input.start_message": "Start date cannot be after end date",
+  "diverst.containers.MentorshipSession.form.input.end_message": "End date cannot be before start date",
   "diverst.containers.MentorshipSession.form.input.link": "Conference URL",
   "diverst.containers.MentorshipSession.show.date_and_time": "Date & Time",
   "diverst.containers.MentorshipSession.show.leadedBy": "Lead By",
