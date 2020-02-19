@@ -6,10 +6,12 @@ module OutlookAuthHelper
   # Scopes required by the app
   SCOPES = [
       'openid',
+      'email',
       'profile',
       'offline_access',
-      'User.ReadWrite',
-      'Mail.ReadWrite',
+      'User.Read',
+      'Mail.Read',
+      'Mail.Send',
       'Calendars.ReadWrite'
   ]
 
