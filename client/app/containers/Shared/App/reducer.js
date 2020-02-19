@@ -5,10 +5,7 @@
 // App state is stored as { global: {} } in redux store (see app/reducers.js)
 
 import produce from 'immer/dist/immer';
-import {
-  LOGIN_SUCCESS, LOGOUT_SUCCESS, LOGOUT_ERROR,
-  SET_USER_DATA, LOGIN_ERROR
-} from 'containers/Shared/App/constants';
+import { LOGIN_SUCCESS, LOGOUT_SUCCESS, SET_USER_DATA } from 'containers/Shared/App/constants';
 
 // The initial state of the App
 export const initialState = {
@@ -25,10 +22,6 @@ function appReducer(state = initialState, action) {
       case LOGOUT_SUCCESS:
         draft.token = initialState.token;
         draft.data = initialState.data;
-        break;
-      case LOGIN_ERROR:
-      case LOGOUT_ERROR:
-        draft.error = action.error;
         break;
       case SET_USER_DATA:
         if (action.append === true)
