@@ -15,7 +15,7 @@ import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 
 // TODO : Change EventsPage
 import EventsPage from '../../User/UserEventsPage';
-import NewsPage from '../GroupNewsFeedPage';
+import NewsPage from 'containers/News/NewsFeedPage';
 
 export function GroupHomePage(props) {
   useInjectReducer({ key: 'groups', reducer });
@@ -39,6 +39,7 @@ export function GroupHomePage(props) {
         <Grid item xs>
           <NewsPage
             currentGroup={props.currentGroup}
+            readonly
           />
         </Grid>
       </Grid>

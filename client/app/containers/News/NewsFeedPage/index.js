@@ -107,7 +107,7 @@ export function NewsFeedPage(props, context) {
         handleChangeTab={handleChangeTab}
         handlePagination={handlePagination}
         links={links}
-        readonly={false}
+        readonly={props.readonly}
         deleteGroupMessageBegin={props.deleteGroupMessageBegin}
         deleteNewsLinkBegin={props.deleteNewsLinkBegin}
         deleteSocialLinkBegin={props.deleteSocialLinkBegin}
@@ -135,6 +135,7 @@ NewsFeedPage.propTypes = {
       id: PropTypes.number
     })
   }),
+  readonly: PropTypes.bool
 };
 
 const mapStateToProps = createStructuredSelector({
