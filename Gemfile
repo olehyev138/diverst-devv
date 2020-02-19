@@ -11,8 +11,6 @@ gem 'active_record_union'
 gem 'activerecord', '~> 5.2.3'
 gem 'activerecord-import', '~> 0.14.0' # Adds a faster way to INSERT multiple rows in the DB
 gem 'autoprefixer-rails', '~> 6.3', '>= 6.3.3.1' # Automatically adds vendor prefixes to CSS declarations
-gem 'aws-sdk'
-gem 'aws-sdk-s3', require: false
 gem 'bcrypt'
 gem 'bootsnap', require: false
 gem 'clockwork', '~> 1.2' # Schedule recurring jobs
@@ -107,6 +105,8 @@ group :development do
 end
 
 group :staging, :production do
+  gem 'aws-sdk'
+  gem 'aws-sdk-s3', require: false
   gem 'lograge', '~> 0.3'
   gem 'syslogger', '~> 1.6.0' # Log to syslog, which is then sent to Loggly
 end

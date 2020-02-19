@@ -12,10 +12,13 @@ jobs:
       - checkout
       - run:
           name: Install gems
-          command: |
-            bundle install --path=vendor/bundle --jobs=4 --retry=3
+          command: bundle install --path=vendor/bundle --jobs=4 --retry=3 --with test
       - run:
-          #git fetch origin react_update:refs/remotes/origin/react_update
+          name: Install node modules
+          command: |
+            cd client
+            npm install
+      - run:
           name: Run linter
           command: |
             export PRONTO_GITHUB_ACCESS_TOKEN=60fc301a32c3a0450eeec2985a1c1a09cefba857
