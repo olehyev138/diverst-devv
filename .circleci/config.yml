@@ -1,16 +1,20 @@
 version: 2.1
-executors:
-  primary-image:
+#executors:
+#  primary-image:
+#    docker:
+#      - image: awsdiverst/cci-primary:0.0.1
+#        environment:
+#          RAILS_ENV: test
+#          RACK_ENV: test
+jobs:
+  lint:
+    working_directory: ~/TeamDiverst/diverst-development
     docker:
       - image: awsdiverst/cci-primary:0.0.1
         environment:
           RAILS_ENV: test
           RACK_ENV: test
-jobs:
-  lint:
-    working_directory: ~/TeamDiverst/diverst-development
     shell: /bin/bash --login
-    executor: primary-image
     steps:
       - checkout
       #
@@ -55,51 +59,74 @@ jobs:
             bundle exec pronto run -f github_status github_pr -c origin/react_update
   backend-test:
     working_directory: ~/TeamDiverst/diverst-development
-    parallelism: 1
+    parallelism: 2
     shell: /bin/bash --login
     environment:
       CIRCLE_ARTIFACTS: /tmp/circleci-artifacts
       CIRCLE_TEST_REPORTS: /tmp/circleci-test-results
-    executor: primary-image
+    docker:
+      - image: awsdiverst/cci-primary:0.0.1
+        environment:
+          RAILS_ENV: test
+          RACK_ENV: test
+      - image: circleci/mariadb:10.4.12
     steps:
       - checkout
       - run:
           name: Create artifact directories
-          command: mkdir -p $CIRCLE_ARTIFACTS $CIRCLE_TEST_REPORTS
+          command: mkdir -p $CIRCLE_ARTIFACTS $CIRCLE_TEST_REPORTS/rspec
       - run:
           name: Set Timezone
           working_directory: ~/TeamDiverst/diverst-development
           command: echo ''America/New_York'' | tee -a /etc/timezone
+      #
+      ## Install gems
+      #
+      - restore_cache:
+          keys:
+            - v1-gem-cache-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+            - v1-gem-cache-{{ arch }}-{{ .Branch }}-
+            - v1-gem-cache-{{ arch }}-
       - run:
           name: Install gems
           command: bundle install --path=vendor/bundle --jobs=4 --retry=3 && bundle clean
-      - run: |-
-          mkdir -p config && echo 'test:
-            database: circle_ruby_test
-            adapter: mysql2
-            url: <%= ENV["DATABASE_URL"] %>
-            pool: <%= ENV["DB_POOL"] || ENV["MAX_THREADS"] || 20 %>
-            encoding: utf8mb4
-            collation: utf8mb4_bin
-            username: root
-            host: localhost
-            socket: /var/run/mysqld/mysqld.sock
-          ' > config/database.yml
+      - save_cache:
+          key: v1-gem-cache-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+          paths:
+            - ./vendor/bundle
+      #
+      ## Setup database config
+      #
       - run:
+          name: Configure database
+          command: |
+            mkdir -p config && echo 'test:
+              database: circle_test
+              adapter: mysql2
+              url: <%= ENV["DATABASE_URL"] %>
+              pool: <%= ENV["DB_POOL"] || ENV["MAX_THREADS"] || 20 %>
+              encoding: utf8mb4
+              collation: utf8mb4_bin
+              username: root
+              host: 127.0.0.1
+            ' > config/database.yml
+      - run:
+          name: Setup database
           command: bundle exec rake db:create db:schema:load --trace
           environment:
             RAILS_ENV: test
             RACK_ENV: test
-      - run: bundle exec rake db:migrate
-      - run: mkdir -p $CIRCLE_TEST_REPORTS/rspec
       - run:
+          name: Migrate database
+          command: bundle exec rake db:migrate
+      - run:
+          name: Run backend tests
           command: bundle exec rspec --color --require spec_helper --format RspecJunitFormatter --out $CIRCLE_TEST_REPORTS/rspec/rspec.xml --format progress -- $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=filesize)
           environment:
             RAILS_ENV: test
             RACK_ENV: test
       - store_test_results:
           path: /tmp/circleci-test-results
-      # Save artifacts
       - store_artifacts:
           path: /tmp/circleci-artifacts
       - store_artifacts:
@@ -107,11 +134,15 @@ jobs:
 
   frontend-test:
     working_directory: ~/TeamDiverst/diverst-development/
+    docker:
+      - image: awsdiverst/cci-primary:0.0.1
+        environment:
+          RAILS_ENV: test
+          RACK_ENV: test
     shell: /bin/bash --login
     environment:
       CIRCLE_ARTIFACTS: /tmp/circleci-artifacts
       CIRCLE_TEST_REPORTS: /tmp/circleci-test-results
-    executor: primary-image
     steps:
       - checkout
       - run: mkdir -p $CIRCLE_ARTIFACTS $CIRCLE_TEST_REPORTS
