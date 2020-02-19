@@ -13,20 +13,7 @@ jobs:
       - run:
           name: Install gems
           command: |
-            gem install bundler
-            sudo apt-get update && sudo apt-get install cmake
             bundle install --path=vendor/bundle --jobs=4 --retry=3
-      - run:
-          name: Install Node
-          command: |
-            set +e
-            wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.1/install.sh | bash && sudo /home/circleci/.nvm/nvm.sh
-            export NVM_DIR="/home/circleci/.nvm"
-            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-
-            nvm install v13
-            echo $(node -v)
-
       - run:
           #git fetch origin react_update:refs/remotes/origin/react_update
           name: Run linter
