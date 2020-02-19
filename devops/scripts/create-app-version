@@ -4,9 +4,9 @@
 # Usage: ./create-app-version <env-name> <app-version-label> <bucket-name>
 
 ENV_NAME=$1
-APP_NAME="api-diverst-$VERSION_LABEL.zip"
 VERSION_LABEL=$2
 BUNDLE_BUCKET_NAME=$3
+APP_NAME="api-diverst-$VERSION_LABEL.zip"
 RELEASE_BRANCH='HEAD' # TEMP - for development purposes
 
 # Exit on error

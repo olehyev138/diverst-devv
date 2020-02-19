@@ -1,4 +1,27 @@
 version: 2.1
+
+workflows:
+  version: 2.1
+  lint-test-deploy:
+    jobs:
+      - deploy:
+          context: aws-context
+#    jobs:
+#      - lint
+#      - backend-test:
+#          requires:
+#            - lint
+#      - frontend-test:
+#          requires:
+#            - lint
+#      - deploy-react:
+#          requires:
+#            - backend-test
+#            - frontend-test
+#          filters:
+#            branches:
+#              only: react_update
+
 jobs:
   lint:
     working_directory: ~/TeamDiverst/diverst-development
@@ -178,21 +201,45 @@ jobs:
       - store_artifacts:
           path: /tmp/circleci-test-results
 
-workflows:
-  version: 2.1
-  lint-test-deploy:
-    jobs:
-      - lint
-      - backend-test:
-          requires:
-            - lint
-      - frontend-test:
-          requires:
-            - lint
-#      - deploy-react:
-#          requires:
-#            - backend-test
-#            - frontend-test
-#          filters:
-#            branches:
-#              only: react_update
+  deploy:
+    working_directory: ~/TeamDiverst/diverst-development/
+    docker:
+      - image: awsdiverst/cci-primary:0.0.1
+        environment:
+          RAILS_ENV: test
+          RACK_ENV: test
+    shell: /bin/bash --login
+    environment:
+    steps:
+      - checkout
+      - run:
+          name: Authenticate with AWS
+          command: echo $(./devops/scripts/cli-assume-role "$AWS_CLI_ROLE_ARN") > $BASH_ENV
+      - run:
+          name: Deploy backend
+          command: |
+            VERSION_LABEL="v${CIRCLE_SHA1:0:8}"
+            ./devops/scripts/create-app-version "$AWS_TEST_ENV" "$VERSION_LABEL" "$AWS_MASTER_BUCKET"
+            ./devops/scripts/deploy-app-version "$AWS_TEST_ENV" "$VERSION_LABEL"
+      #
+      ## Install node modules for frontend building
+      #
+      - restore_cache:
+          keys:
+            # when lock file changes, use increasingly general patterns to restore cache
+            - node-{{ .Branch }}-{{ checksum "./client/package-lock.json" }}
+            - node-{{ .Branch }}-
+            - node-
+      - run:
+          name: Install node modules
+          command: cd client && npm install
+      - save_cache:
+          paths:
+            - ./client/node_modules
+          key: node-{{ .Branch }}-{{ checksum "./client/package-lock.json" }}
+      #
+      ## Build & deploy frontend
+      #
+      - run:
+          name: Build & deploy frontend
+          command: ./devops/scripts/deploy-frontend "$AWS_FRONTEND_BUCKET"
