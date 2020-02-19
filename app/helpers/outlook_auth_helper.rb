@@ -4,13 +4,14 @@ module OutlookAuthHelper
   CLIENT_SECRET = ENV['OULOOK_SEC_ID']
 
   # Scopes required by the app
-  SCOPES = [ 'openid',
-             'profile',
-             'offline_access',
-             'User.Read',
-             'Mail.Read',
-             'Calendars.Read',
-             'Contacts.Read' ]
+  SCOPES = [
+      'openid',
+      'profile',
+      'offline_access',
+      'User.ReadWrite',
+      'Mail.ReadWrite',
+      'Calendars.ReadWrite'
+  ]
 
   # Generates the login URL for the app.
   def get_login_url
