@@ -10,6 +10,7 @@ import reducer from 'containers/Group/reducer';
 import saga from 'containers/Group/saga';
 
 import GroupHome from 'components/Group/GroupHome';
+import DiverstImg from 'components/Shared/DiverstImg';
 import { Divider, Grid } from '@material-ui/core';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 
@@ -24,6 +25,14 @@ export function GroupHomePage(props) {
   return (
     <React.Fragment>
       <Grid container spacing={3}>
+        {props.currentGroup.banner_data && (
+          <DiverstImg
+            data={props.currentGroup.banner_data}
+            alt=''
+            maxWidth='100%'
+            minWidth='100%'
+          />
+        )}
         <Grid item xs>
           <EventsPage
             loaderProps={{
