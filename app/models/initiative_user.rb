@@ -9,10 +9,6 @@ class InitiativeUser < BaseClass
     if err.message.include?('404 ErrorItemNotFound') || err.message.include?('Nil OutlookId')
       update(outlook_id: create_outlook_event(graph)&.id)
     else
-      pp '-----------------------------------------------------------'
-      pp err.class
-      pp err.message
-      pp '-----------------------------------------------------------'
       false
     end
   end
