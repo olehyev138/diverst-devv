@@ -118,10 +118,12 @@ export function LoginFormInner({
                   size='large'
                   disabled={!values.email || !values.password || rest.isLoggingIn}
                   variant='contained'
+                  startIcon={(
+                    <Hidden xsDown>
+                      <LockOpen />
+                    </Hidden>
+                  )}
                 >
-                  <Hidden xsDown>
-                    <LockOpen />
-                  </Hidden>
                   {<FormattedMessage {...messages.login} />}
                 </Button>
               </Grid>
