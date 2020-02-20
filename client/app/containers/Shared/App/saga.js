@@ -98,7 +98,7 @@ export function* logout() {
     if (response.data.logout_link)
       window.location.assign(response.data.logout_link);
     else
-      yield put(showSnackbar({ message: 'You have been logged out' }));
+      yield put(showSnackbar({ message: 'You have been logged out', options: { variant: 'info' } }));
   } catch (err) {
     yield put(logoutError(err));
 
@@ -107,7 +107,7 @@ export function* logout() {
     yield call(AuthService.discardUserData);
     yield put(logoutSuccess());
 
-    yield put(showSnackbar({ message: 'You have been logged out' }));
+    yield put(showSnackbar({ message: 'You have been logged out', options: { variant: 'info' } }));
   }
 }
 
