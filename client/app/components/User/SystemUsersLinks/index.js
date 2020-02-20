@@ -43,7 +43,7 @@ export function SystemUsersLinks(props) {
           <Tab
             component={WrappedNavLink}
             to={ROUTES.admin.system.users.import.path()}
-            label='Import User'
+            label='Import Users'
           />
         </ResponsiveTabs>
       </Paper>
