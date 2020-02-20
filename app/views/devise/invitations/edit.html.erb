@@ -188,14 +188,17 @@
                <% end %>
 
             <% end %>
-
-            <%#= f.button :submit, "Create my account", class: "btn--secondary btn--large btn--full" %>
-          <% end %>
+            <% unless resource.enterprise.onboarding_consent_enabled? %>   
+              <%= f.button :submit, "Create my account", class: "btn--secondary btn--large btn--full" %>
+            <% end %>    
+            <% end %>
           <br>
-          <button class="btn--secondary btn--large btn--full" 
-          data-toggle="modal" data-target="consentModal" id="consentModalPop">
-            <p>CREATE MY ACCOUNT</p>
-          </button>
+          <% if resource.enterprise.onboarding_consent_enabled? %>
+            <button class="btn--secondary btn--large btn--full" 
+            data-toggle="modal" data-target="consentModal" id="consentModalPop">
+              <p>CREATE MY ACCOUNT</p>
+            </button>
+          <% end %>  
         </div>
       </div>
     </div>

@@ -132,6 +132,14 @@ class Enterprise < BaseClass
     end
   end
 
+  def consent_toggle
+    if onboarding_consent_enabled? 
+      update(onboarding_consent_enabled: false)
+    else
+      update(onboarding_consent_enabled: true)
+    end
+  end
+
   def custom_text
     super || create_custom_text
   end

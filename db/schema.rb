@@ -351,32 +351,14 @@ ActiveRecord::Schema.define(version: 20200227151322) do
     t.integer  "expiry_age_for_resources",              limit: 4,     default: 0
     t.string   "unit_of_expiry_age",                    limit: 191
     t.boolean  "auto_archive",                                        default: false
-    t.string   "sp_mode",                               limit: 191
-    t.string   "sp_host",                               limit: 191
-    t.string   "sp_site",                               limit: 191
-    t.string   "sp_username",                           limit: 191
-    t.string   "sp_password",                           limit: 191
-    t.integer  "share_point_files_id",                  limit: 4
-    t.integer  "share_point_pages_id",                  limit: 4
-    t.integer  "share_point_lists_id",                  limit: 4
-    t.string   "sp_import_lists",                       limit: 191,   default: "No"
-    t.string   "sp_import_files",                       limit: 191,   default: "No"
-    t.string   "sp_import_news",                        limit: 191,   default: "No"
-    t.boolean  "sp_group_integration",                                default: false
-    t.boolean  "sp_group_settings_same",                              default: true
-    t.string   "sp_import_pages",                       limit: 191,   default: "No"
-    t.boolean  "share_point_active",                                  default: false
     t.integer  "groups_count",                          limit: 4
     t.integer  "segments_count",                        limit: 4
     t.integer  "polls_count",                           limit: 4
     t.integer  "users_count",                           limit: 4
     t.boolean  "slack_enabled",                                       default: false
     t.boolean  "enable_outlook",                                      default: false
+    t.boolean  "onboarding_consent_enabled",                          default: false
   end
-
-  add_index "enterprises", ["share_point_files_id"], name: "fk_rails_6315f961bd", using: :btree
-  add_index "enterprises", ["share_point_lists_id"], name: "fk_rails_9079d32818", using: :btree
-  add_index "enterprises", ["share_point_pages_id"], name: "fk_rails_a7e31215f7", using: :btree
 
   create_table "expense_categories", force: :cascade do |t|
     t.integer  "enterprise_id",     limit: 4
@@ -616,26 +598,10 @@ ActiveRecord::Schema.define(version: 20200227151322) do
     t.string   "unit_of_expiry_age",          limit: 191
     t.boolean  "auto_archive",                                                      default: false
     t.string   "event_attendance_visibility", limit: 191
-    t.string   "sp_mode",                     limit: 191
-    t.string   "sp_host",                     limit: 191
-    t.string   "sp_site",                     limit: 191
-    t.string   "sp_username",                 limit: 191
-    t.string   "sp_password",                 limit: 191
-    t.integer  "share_point_files_id",        limit: 4
-    t.integer  "share_point_pages_id",        limit: 4
-    t.integer  "share_point_lists_id",        limit: 4
-    t.string   "sp_import_lists",             limit: 191,                           default: "No"
-    t.string   "sp_import_files",             limit: 191,                           default: "No"
-    t.string   "sp_import_news",              limit: 191,                           default: "No"
-    t.string   "sp_import_pages",             limit: 191,                           default: "No"
     t.integer  "views_count",                 limit: 4
     t.string   "slack_webhook",               limit: 191
     t.text     "slack_auth_data",             limit: 65535
   end
-
-  add_index "groups", ["share_point_files_id"], name: "index_groups_on_share_point_files_id", using: :btree
-  add_index "groups", ["share_point_lists_id"], name: "index_groups_on_share_point_lists_id", using: :btree
-  add_index "groups", ["share_point_pages_id"], name: "index_groups_on_share_point_pages_id", using: :btree
 
   create_table "groups_metrics_dashboards", force: :cascade do |t|
     t.integer "group_id",             limit: 4
@@ -1330,13 +1296,6 @@ ActiveRecord::Schema.define(version: 20200227151322) do
     t.datetime "updated_at"
   end
 
-  create_table "sharepoint_data", force: :cascade do |t|
-    t.string   "data_type",  limit: 191
-    t.text     "data",       limit: 4294967295
-    t.datetime "created_at",                    null: false
-    t.datetime "updated_at",                    null: false
-  end
-
   create_table "social_link_segments", force: :cascade do |t|
     t.integer  "social_link_id", limit: 4
     t.integer  "segment_id",     limit: 4
@@ -1416,8 +1375,8 @@ ActiveRecord::Schema.define(version: 20200227151322) do
 
   create_table "twitter_accounts", force: :cascade do |t|
     t.integer  "group_id",   limit: 4
-    t.string   "name",       limit: 191
-    t.string   "account",    limit: 191
+    t.string   "name",       limit: 191, null: false
+    t.string   "account",    limit: 191, null: false
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
   end
@@ -1592,12 +1551,6 @@ ActiveRecord::Schema.define(version: 20200227151322) do
   add_foreign_key "budgets", "users", column: "approver_id"
   add_foreign_key "budgets", "users", column: "requester_id"
   add_foreign_key "custom_texts", "enterprises"
-  add_foreign_key "enterprises", "sharepoint_data", column: "share_point_files_id"
-  add_foreign_key "enterprises", "sharepoint_data", column: "share_point_lists_id"
-  add_foreign_key "enterprises", "sharepoint_data", column: "share_point_pages_id"
-  add_foreign_key "groups", "sharepoint_data", column: "share_point_files_id"
-  add_foreign_key "groups", "sharepoint_data", column: "share_point_lists_id"
-  add_foreign_key "groups", "sharepoint_data", column: "share_point_pages_id"
   add_foreign_key "likes", "answers"
   add_foreign_key "likes", "enterprises"
   add_foreign_key "likes", "news_feed_links"
