@@ -629,85 +629,111 @@ RSpec.describe Enterprise, type: :model do
 
       expect(enterprise.errors.full_messages.count).to eq(0)
     end
+  end
+
+  describe '#users_csv' do
+    let!(:enterprise) { create(:enterprise) }
+    let!(:group_leader_role) { enterprise.user_roles.find_by(role_name: 'group_leader', role_type: 'group') }
+    let!(:group_treasurer_role) { enterprise.user_roles.find_or_create_by(role_name: 'group_treasurer', role_type: 'group', priority: 2) }
+    let!(:group_content_creator_role) { enterprise.user_roles.find_or_create_by(role_name: 'group_content_creator', role_type: 'group', priority: 3) }
+    let!(:user_role) { enterprise.user_roles.find_by(role_name: 'user', role_type: 'user') }
+    let!(:national_manager_role) { enterprise.user_roles.find_or_create_by(role_name: 'national_manager', role_type: 'user', priority: 4) }
+    let!(:diversity_manager_role) { enterprise.user_roles.find_or_create_by(role_name: 'diversity_manager', role_type: 'user', priority: 5) }
+
+    context 'return csv for group roles' do
+      it 'return csv for group leader role' do
+        user = create(:user, enterprise: enterprise)
+        user.update(user_role: group_leader_role)
+        create(:group_leader, user: user, user_role: group_leader_role)
+
+        expect(enterprise.users_csv(2, 'group_leader'))
+        .to include "#{user.first_name},#{user.last_name},#{user.email},#{user.biography},#{user.active},#{user.groups.map(&:name).join(',')}"
+      end
+
+      it 'return csv group treaurer role' do
+        user = create(:user, enterprise: enterprise)
+        user.update(user_role: group_treasurer_role)
+        create(:group_leader, user: user, user_role: group_treasurer_role)
+
+        expect(enterprise.users_csv(2, 'group_treasurer'))
+        .to include "#{user.first_name},#{user.last_name},#{user.email},#{user.biography},#{user.active},#{user.groups.map(&:name).join(',')}"
+      end
+
+      it 'return csv group content creator role' do
+        user = create(:user, enterprise: enterprise)
+        user.update(user_role: group_content_creator_role)
+        create(:group_leader, user: user, user_role: group_content_creator_role)
+
+        expect(enterprise.users_csv(2, 'group_content_creator'))
+        .to include "#{user.first_name},#{user.last_name},#{user.email},#{user.biography},#{user.active},#{user.groups.map(&:name).join(',')}"
+      end
+    end
+
+    context 'return csv for non group roles' do
+      it 'return csv for user role' do
+        user = create(:user, enterprise: enterprise)
+        user.update(user_role: user_role)
+
+        expect(enterprise.users_csv(2, 'user'))
+          .to include "#{user.first_name},#{user.last_name},#{user.email},#{user.biography},#{user.active},#{user.groups.map(&:name).join(',')}"
+      end
+
+      it 'return csv for national manager role' do
+        user = create(:user, enterprise: enterprise)
+        user.update(user_role: national_manager_role)
+
+        expect(enterprise.users_csv(2, 'national_manager'))
+          .to include "#{user.first_name},#{user.last_name},#{user.email},#{user.biography},#{user.active},#{user.groups.map(&:name).join(',')}"
+      end
+
+      it 'return csv for diversity manager role' do
+        user = create(:user, enterprise: enterprise)
+        user.update(user_role: diversity_manager_role)
+
+        expect(enterprise.users_csv(2, 'diversity_manager'))
+          .to include "#{user.first_name},#{user.last_name},#{user.email},#{user.biography},#{user.active},#{user.groups.map(&:name).join(',')}"
+      end
+    end
 
     describe '#archive_switch' do
-      let!(:enterprise) { create(:enterprise, expiry_age_for_resources: 1) }
+      context 'when auto archive is disabled' do 
+        let!(:enterprise) { create(:enterprise, expiry_age_for_resources: 1) }
 
-      it 'turn ON auto archive switch' do
-        enterprise.archive_switch
-        expect(enterprise.auto_archive).to eq true
-      end
-
-      it 'turn OFF auto archive switch' do
-        enterprise.update auto_archive: true
-        enterprise.archive_switch
-        expect(enterprise.auto_archive).to eq false
-      end
-    end
-
-    describe '#users_csv' do
-      let!(:enterprise) { create(:enterprise) }
-      let!(:group_leader_role) { enterprise.user_roles.find_by(role_name: 'group_leader', role_type: 'group') }
-      let!(:group_treasurer_role) { enterprise.user_roles.find_or_create_by(role_name: 'group_treasurer', role_type: 'group', priority: 2) }
-      let!(:group_content_creator_role) { enterprise.user_roles.find_or_create_by(role_name: 'group_content_creator', role_type: 'group', priority: 3) }
-      let!(:user_role) { enterprise.user_roles.find_by(role_name: 'user', role_type: 'user') }
-      let!(:national_manager_role) { enterprise.user_roles.find_or_create_by(role_name: 'national_manager', role_type: 'user', priority: 4) }
-      let!(:diversity_manager_role) { enterprise.user_roles.find_or_create_by(role_name: 'diversity_manager', role_type: 'user', priority: 5) }
-
-      context 'return csv for group roles' do
-        it 'return csv for group leader role' do
-          user = create(:user, enterprise: enterprise)
-          user.update(user_role: group_leader_role)
-          create(:group_leader, user: user, user_role: group_leader_role)
-
-          expect(enterprise.users_csv(2, 'group_leader'))
-          .to include "#{user.first_name},#{user.last_name},#{user.email},#{user.biography},#{user.active},#{user.groups.map(&:name).join(',')}"
-        end
-
-        it 'return csv group treaurer role' do
-          user = create(:user, enterprise: enterprise)
-          user.update(user_role: group_treasurer_role)
-          create(:group_leader, user: user, user_role: group_treasurer_role)
-
-          expect(enterprise.users_csv(2, 'group_treasurer'))
-          .to include "#{user.first_name},#{user.last_name},#{user.email},#{user.biography},#{user.active},#{user.groups.map(&:name).join(',')}"
-        end
-
-        it 'return csv group content creator role' do
-          user = create(:user, enterprise: enterprise)
-          user.update(user_role: group_content_creator_role)
-          create(:group_leader, user: user, user_role: group_content_creator_role)
-
-          expect(enterprise.users_csv(2, 'group_content_creator'))
-          .to include "#{user.first_name},#{user.last_name},#{user.email},#{user.biography},#{user.active},#{user.groups.map(&:name).join(',')}"
+        it 'turn ON auto archive switch' do
+          enterprise.archive_switch
+          expect(enterprise.auto_archive).to eq true
         end
       end
-
-      context 'return csv for non group roles' do
-        it 'return csv for user role' do
-          user = create(:user, enterprise: enterprise)
-          user.update(user_role: user_role)
-
-          expect(enterprise.users_csv(2, 'user'))
-            .to include "#{user.first_name},#{user.last_name},#{user.email},#{user.biography},#{user.active},#{user.groups.map(&:name).join(',')}"
-        end
-
-        it 'return csv for national manager role' do
-          user = create(:user, enterprise: enterprise)
-          user.update(user_role: national_manager_role)
-
-          expect(enterprise.users_csv(2, 'national_manager'))
-            .to include "#{user.first_name},#{user.last_name},#{user.email},#{user.biography},#{user.active},#{user.groups.map(&:name).join(',')}"
-        end
-
-        it 'return csv for diversity manager role' do
-          user = create(:user, enterprise: enterprise)
-          user.update(user_role: diversity_manager_role)
-
-          expect(enterprise.users_csv(2, 'diversity_manager'))
-            .to include "#{user.first_name},#{user.last_name},#{user.email},#{user.biography},#{user.active},#{user.groups.map(&:name).join(',')}"
+      
+      context 'when auto archive is enabled' do 
+        before { enterprise.update auto_archive: true }
+        
+        it 'turn OFF auto archive switch' do
+          enterprise.archive_switch
+          expect(enterprise.auto_archive).to eq false
         end
       end
     end
+
+    describe '#consent_toggle' do
+      context 'when onboarding consent is disabled' do 
+        let!(:enterprise) { create(:enterprise) }
+
+        it 'turn ON consent toggle' do 
+          enterprise.consent_toggle
+          expect(enterprise.onboarding_consent_enabled).to eq(true)
+        end
+      end
+
+      context 'when onboarding consent is enabled' do 
+        before { enterprise.update onboarding_consent_enabled: true } 
+
+        it 'turn OFF consent toggle' do 
+          enterprise.consent_toggle
+          expect(enterprise.onboarding_consent_enabled).to eq(false)
+        end
+      end
+    end
+
   end
 end
