@@ -15,7 +15,4 @@ export default defineMessages({
   login: {
     id: `${scope}.links.login`,
   },
-  forgotPassword: {
-    id: `${scope}.text.forgotPassword`,
-  },
 });

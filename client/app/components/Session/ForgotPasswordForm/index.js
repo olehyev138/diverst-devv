@@ -4,7 +4,7 @@
  *
  */
 
-import React, { memo, useEffect, useRef } from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { FormattedMessage } from 'react-intl';
@@ -17,7 +17,8 @@ import withWidth from '@material-ui/core/withWidth';
 
 import { Button, Card, CardActions, CardContent, Grid, TextField, Hidden, Box } from '@material-ui/core';
 
-import messages from 'containers/Session/LoginPage/messages';
+import messages from 'containers/Session/ForgotPasswordPage/messages';
+import loginMessages from 'containers/Session/LoginPage/messages';
 
 import Logo from 'components/Shared/Logo';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
@@ -44,10 +45,9 @@ const styles = theme => ({
 });
 
 /* eslint-disable indent, object-curly-newline */
-export function ForgotPasswordFormInner({
- handleSubmit, handleChange, handleBlur, errors,
- touched, values, classes, width, ...rest
-}) {
+export function ForgotPasswordFormInner(props) {
+  const { classes, width, values, errors, touched } = props;
+
   return (
     <Box boxShadow={4} borderRadius={4} width='80%'>
       <Card raised className={classes.card} variant='outlined'>
@@ -57,17 +57,14 @@ export function ForgotPasswordFormInner({
             <Box pb={2} />
             <Field
               component={TextField}
-              onChange={handleChange}
-              onBlur={handleBlur}
               value={values.email}
-              autoFocus={!values.email}
+              autoFocus
               fullWidth
-              disabled={rest.isLoggingIn}
               variant='outlined'
               id='email'
               name='email'
               type='email'
-              label={<FormattedMessage {...messages.email} />}
+              label={<FormattedMessage {...loginMessages.email} />}
               margin='none'
               autoComplete='off'
               error={errors.email && touched.email}
@@ -85,10 +82,10 @@ export function ForgotPasswordFormInner({
                   type='submit'
                   color='primary'
                   size='large'
-                  disabled={!values.email || !values.password || rest.isLoggingIn}
+                  disabled={!values.email}
                   variant='contained'
                 >
-                  Reset Password
+                  {<FormattedMessage {...messages.resetPassword} />}
                 </Button>
               </Grid>
               <Grid item align={width === 'xs' ? 'center' : 'right'} xs={12} sm={3}>
@@ -98,7 +95,6 @@ export function ForgotPasswordFormInner({
                   color='primary'
                   size='small'
                   variant='text'
-                  disabled={rest.isLoggingIn}
                 >
                   {<FormattedMessage {...messages.login} />}
                 </Button>
@@ -112,13 +108,12 @@ export function ForgotPasswordFormInner({
 }
 
 function ForgotPasswordForm(props, context) {
-  const { classes, width } = props;
   const { intl } = context;
 
   const ForgotPasswordFormSchema = Yup.object().shape({
     email: Yup
       .string()
-      .email(intl.formatMessage(messages.invalidEmail)),
+      .email(intl.formatMessage(loginMessages.invalidEmail)),
   });
 
   return (
@@ -130,10 +125,10 @@ function ForgotPasswordForm(props, context) {
       validateOnChange={false}
       validationSchema={ForgotPasswordFormSchema}
       onSubmit={(values, actions) => {
-        props.loginBegin(values);
+        props.forgotPasswordBegin(values);
       }}
     >
-      {formikProps => <ForgotPasswordFormInner {...props} {...formikProps} classes={classes} width={width} />}
+      {formikProps => <ForgotPasswordFormInner {...props} {...formikProps} />}
     </Formik>
   );
 }
@@ -141,35 +136,19 @@ function ForgotPasswordForm(props, context) {
 ForgotPasswordFormInner.propTypes = {
   classes: PropTypes.object,
   width: PropTypes.string,
-  handleSubmit: PropTypes.func,
-  handleChange: PropTypes.func,
-  handleBlur: PropTypes.func,
-  setFieldValue: PropTypes.func,
+  values: PropTypes.object,
   errors: PropTypes.object,
   touched: PropTypes.object,
-  values: PropTypes.object,
-  isLoggingIn: PropTypes.bool,
-  loginSuccess: PropTypes.bool,
 };
 
 ForgotPasswordForm.propTypes = {
-  classes: PropTypes.object,
-  width: PropTypes.string,
-  loginBegin: PropTypes.func,
   email: PropTypes.string,
-  isLoggingIn: PropTypes.bool,
-  loginSuccess: PropTypes.bool,
+  forgotPasswordBegin: PropTypes.func,
 };
 
 ForgotPasswordForm.contextTypes = {
   intl: PropTypes.object.isRequired,
 };
-
-// without memo
-export const StyledForgotPasswordForm = compose(
-  withWidth(),
-  withStyles(styles),
-)(ForgotPasswordForm);
 
 export default compose(
   memo,
