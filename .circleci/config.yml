@@ -16,10 +16,10 @@ workflows:
           requires:
             - backend-test
             - frontend-test
-#          filters:
-#            branches:
-#              only: react_update
-#
+          filters:
+            branches:
+              only: react_update
+
 jobs:
   lint:
     working_directory: ~/TeamDiverst/diverst-development
@@ -148,8 +148,6 @@ jobs:
       - store_test_results:
           path: /tmp/circleci-test-results
       - store_artifacts:
-          path: /tmp/circleci-artifacts
-      - store_artifacts:
           path: /tmp/circleci-test-results
   frontend-test:
     working_directory: ~/TeamDiverst/diverst-development/
@@ -194,11 +192,6 @@ jobs:
       #
       - store_test_results:
           path: /tmp/circleci-test-results
-      - store_artifacts:
-          path: /tmp/circleci-artifacts
-      - store_artifacts:
-          path: /tmp/circleci-test-results
-
   deploy:
     working_directory: ~/TeamDiverst/diverst-development/
     docker:
