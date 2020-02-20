@@ -784,14 +784,16 @@ exports[`<LoginForm /> <LoginFormInner /> Should render and match the snapshot 1
               color="primary"
               disabled={true}
               size="large"
+              startIcon={
+                <Hidden
+                  xsDown={true}
+                >
+                  <Memo />
+                </Hidden>
+              }
               type="submit"
               variant="contained"
             >
-              <Hidden
-                xsDown={true}
-              >
-                <LockOpenIcon />
-              </Hidden>
               <FormattedMessage
                 id="diverst.containers.Login.button.login"
                 values={Object {}}
@@ -813,7 +815,14 @@ exports[`<LoginForm /> <LoginFormInner /> Should render and match the snapshot 1
                 }
               }
               size="small"
-              to="/forgot"
+              to={
+                Object {
+                  "pathname": "/forgot",
+                  "state": Object {
+                    "email": "",
+                  },
+                }
+              }
               variant="text"
             >
               <FormattedMessage
