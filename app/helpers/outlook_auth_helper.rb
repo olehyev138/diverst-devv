@@ -61,4 +61,10 @@ module OutlookAuthHelper
       access_token = token.token
     end
   end
+
+  def has_outlook
+    get_access_token.present?
+  rescue
+    false
+  end
 end

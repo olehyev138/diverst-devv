@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200218170536) do
+ActiveRecord::Schema.define(version: 20200219180558) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -703,8 +703,9 @@ ActiveRecord::Schema.define(version: 20200218170536) do
   create_table "initiative_users", force: :cascade do |t|
     t.integer  "initiative_id", limit: 4
     t.integer  "user_id",       limit: 4
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.string   "outlook_id",    limit: 191
   end
 
   create_table "initiatives", force: :cascade do |t|
