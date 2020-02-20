@@ -46,7 +46,7 @@ export function LoginPage(props) {
       props.ssoLoginBegin({ policyGroupId, userToken });
   }, []);
 
-  if (props.enterprise.has_enabled_saml) {
+  if (props.enterprise && props.enterprise.has_enabled_saml) {
     props.ssoLinkBegin({ enterpriseId: props.enterprise.id });
     return (
       <EnterpriseForm
