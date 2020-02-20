@@ -14,5 +14,5 @@ const selectLoginSuccess = () => createSelector(
 );
 
 export {
-  selectIsLoggingIn, selectLoginSuccess
+  selectLoginPageDomain, selectIsLoggingIn, selectLoginSuccess
 };
