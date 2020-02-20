@@ -8,24 +8,13 @@ exports[`<LoginForm /> <LoginFormInner /> Should render and match the snapshot 1
     noValidate={true}
   >
     <WithStyles(ForwardRef(CardContent))>
-      <WithStyles(ForwardRef(Grid))
-        alignItems="center"
-        container={true}
-        direction="column"
-        justify="center"
-        spacing={0}
-      >
-        <WithStyles(ForwardRef(Grid))
-          item={true}
-          xs={12}
-        >
-          <Connect(WithStyles(Logo))
-            coloredDefault={true}
-            imgClass="large-img"
-          />
-        </WithStyles(ForwardRef(Grid))>
-      </WithStyles(ForwardRef(Grid))>
-      <br />
+      <Memo(Connect(WithStyles(Logo)))
+        coloredDefault={true}
+        maxHeight="60px"
+      />
+      <Styled(MuiBox)
+        pb={2}
+      />
       <Field
         autoComplete="off"
         autoFocus={true}

@@ -35,6 +35,15 @@ import { store, history } from './configureStore';
 
 import { LastLocationProvider } from 'react-router-last-location';
 
+/* eslint-disable-next-line no-restricted-globals */
+history.listen((location) => {
+  const path = (/#!(\/.*)$/.exec(location.hash) || [])[1];
+  if (path) {
+    history.replace(path);
+    document.location.href = path;
+  }
+});
+
 configureAxios();
 
 const MOUNT_NODE = document.getElementById('app');
