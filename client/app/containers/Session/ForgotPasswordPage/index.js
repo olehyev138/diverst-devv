@@ -15,10 +15,6 @@ import { useInjectReducer } from 'utils/injectReducer';
 
 import reducer from './reducer';
 
-import { loginBegin, ssoLoginBegin, ssoLinkBegin } from 'containers/Shared/App/actions';
-
-import { selectIsLoggingIn, selectLoginSuccess } from './selectors';
-
 import ForgotPasswordForm from 'components/Session/ForgotPasswordForm';
 
 export function ForgotPasswordPage(props) {
