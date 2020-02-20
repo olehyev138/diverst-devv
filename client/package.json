@@ -13,9 +13,6 @@
   "author": "Max Stoiber",
   "license": "MIT",
   "scripts": {
-    "deploy:start": "npm run build && cp -a build/. ../public",
-    "deploy:clean": "rm -rf ../public && mkdir ../public",
-    "deploy": "npm run deploy:clean && npm run deploy:start",
     "analyze:clean": "rimraf stats.json",
     "preanalyze": "npm run analyze:clean",
     "analyze": "node ./internals/scripts/analyze.js",
