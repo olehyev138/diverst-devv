@@ -56,6 +56,7 @@ export function* login(action) {
   }
 }
 
+// TODO: Make this work
 export function* ssoLogin(action) {
   try {
     axios.defaults.headers.common['Diverst-UserToken'] = action.payload.userToken;
