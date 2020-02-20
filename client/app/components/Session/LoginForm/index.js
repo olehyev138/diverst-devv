@@ -53,7 +53,7 @@ export function LoginFormInner({
   const passwordRef = useRef();
 
   useEffect(() => {
-    if (rest.loginSuccess === false) {
+    if (rest.loginSuccess === false && !!values.email) {
       setFieldValue('password', '');
       if (passwordRef.current)
         passwordRef.current.focus();
