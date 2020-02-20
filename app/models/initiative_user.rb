@@ -49,21 +49,11 @@ class InitiativeUser < BaseClass
 
     event = graph.me.events.find(outlook_id)
 
-    pp event.end.methods - Object.instance_methods
-
     event.start.date_time = initiative.start.iso8601
-    byebug
-    event.start = event.start
-
     event.end.date_time = initiative.end.iso8601
-    event.end = event.end
-
     event.subject = initiative.name
     event.body.content = initiative.description
-    event.body = event.body
-
     event.location.display_name = initiative.location
-    event.location = event.location
 
     event.save!
   end
