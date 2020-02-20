@@ -130,7 +130,10 @@ export function LoginFormInner({
               <Grid item align='right' xs={8} sm={4}>
                 <Button
                   component={WrappedNavLink}
-                  to={ROUTES.session.forgotPassword.path()}
+                  to={{
+                    pathname: ROUTES.session.forgotPassword.path(),
+                    state: { email: values.email }
+                  }}
                   color='primary'
                   size='small'
                   variant='text'

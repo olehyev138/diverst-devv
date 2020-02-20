@@ -9,6 +9,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
+import dig from 'object-dig';
 
 import { useInjectReducer } from 'utils/injectReducer';
 
@@ -23,7 +24,7 @@ import ForgotPasswordForm from 'components/Session/ForgotPasswordForm';
 export function ForgotPasswordPage(props) {
   useInjectReducer({ key: 'forgotPasswordPage', reducer });
 
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState(dig(props.location, 'state', 'email') || '');
 
   return (
     <ForgotPasswordForm
@@ -33,6 +34,7 @@ export function ForgotPasswordPage(props) {
 }
 
 ForgotPasswordPage.propTypes = {
+  location: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
