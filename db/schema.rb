@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200106165401) do
+ActiveRecord::Schema.define(version: 20200218170536) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -739,6 +739,16 @@ ActiveRecord::Schema.define(version: 20200106165401) do
     t.integer "segment_id", limit: 4
     t.integer "group_id",   limit: 4
   end
+
+  create_table "legacy_sessions", force: :cascade do |t|
+    t.string   "session_id", limit: 191,   null: false
+    t.text     "data",       limit: 65535
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "legacy_sessions", ["session_id"], name: "index_legacy_sessions_on_session_id", unique: true, using: :btree
+  add_index "legacy_sessions", ["updated_at"], name: "index_legacy_sessions_on_updated_at", using: :btree
 
   create_table "likes", force: :cascade do |t|
     t.integer  "news_feed_link_id", limit: 4
