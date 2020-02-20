@@ -16,12 +16,12 @@ class InitiativesController < ApplicationController
   end
 
   def new
-    authorize Initiative
+    authorize [@group], :new?, policy_class: GroupEventsPolicy
     @initiative = Initiative.new
   end
 
   def create
-    authorize Initiative
+    authorize [@group], :create?, policy_class: GroupEventsPolicy
     @initiative = Initiative.new(initiative_params)
     @initiative.owner = current_user
     @initiative.owner_group = @group
