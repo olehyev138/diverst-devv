@@ -21,7 +21,10 @@ import LockOpen from '@material-ui/icons/LockOpen';
 
 import messages from 'containers/Session/LoginPage/messages';
 
+import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import Logo from 'components/Shared/Logo';
+
+import { ROUTES } from 'containers/Shared/Routes/constants';
 
 const styles = theme => ({
   card: {
@@ -58,7 +61,7 @@ export function LoginFormInner({
   }, [rest.loginSuccess]);
 
   return (
-    <Box boxShadow={4} borderRadius={4}>
+    <Box boxShadow={4} borderRadius={4} width='100%'>
       <Card raised className={classes.card} variant='outlined'>
         <Form noValidate>
           <CardContent className={classes.cardContent}>
@@ -124,6 +127,8 @@ export function LoginFormInner({
               </Grid>
               <Grid item align='right' xs={8} sm={4}>
                 <Button
+                  component={WrappedNavLink}
+                  to={ROUTES.session.forgotPassword.path()}
                   color='primary'
                   size='small'
                   variant='text'
