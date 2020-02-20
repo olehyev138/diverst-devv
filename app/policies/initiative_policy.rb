@@ -11,10 +11,10 @@ class InitiativePolicy < ApplicationPolicy
   end
 
   def create?
-    return true if manage?
+    # return true if manage?
     return true if basic_group_leader_permission?('initiatives_create')
 
-    @policy_group.initiatives_create?
+    # @policy_group.initiatives_create?
   end
 
   def manage?

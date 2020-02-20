@@ -81,7 +81,7 @@ class EnterprisesController < ApplicationController
   end
 
   def enable_onboarding_consent
-    authorize @enterprise, :enable_onboarding_consent?
+    authorize @enterprise, :manage_onboarding_consent?
     @enterprise.consent_toggle
     render nothing: true
   end
