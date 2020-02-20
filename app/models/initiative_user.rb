@@ -19,7 +19,7 @@ class InitiativeUser < BaseClass
     {
         subject: initiative.name,
         body: {
-            contentType: "HTML",
+            contentType: 'HTML',
             content: initiative.description
         },
         start: {
@@ -41,7 +41,7 @@ class InitiativeUser < BaseClass
   end
 
   def patch_outlook_event(graph)
-    raise StandardError.new('Nil OutlookId') unless outlook_id.present?
+    raise StandardError.new('Nil OutlookId') if outlook_id.blank?
 
     event = graph.me.events.find(outlook_id)
 
@@ -55,6 +55,5 @@ class InitiativeUser < BaseClass
   end
 
   def delete_outlook_event(graph, id)
-
   end
 end

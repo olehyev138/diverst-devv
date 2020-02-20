@@ -53,7 +53,7 @@ class Groups::EventsController < ApplicationController
   def show
     authorize @event
 
-    @participation = current_user.initiative_users.find_by(:initiative_id => @event.id)
+    @participation = current_user.initiative_users.find_by(initiative_id: @event.id)
     @has_outlook = has_outlook
     @all_comments = @event.comments
     @approved_comments = @event.comments.approved
