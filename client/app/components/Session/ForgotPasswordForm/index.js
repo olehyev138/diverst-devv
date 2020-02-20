@@ -65,7 +65,7 @@ export function ForgotPasswordFormInner(props) {
               name='email'
               type='email'
               label={<FormattedMessage {...loginMessages.email} />}
-              margin='none'
+              margin='normal'
               autoComplete='off'
               error={errors.email && touched.email}
               helperText={errors.email && touched.email ? errors.email : null}
