@@ -35,6 +35,7 @@ Diverst::Application.routes.draw do
       resources :emails, only: [:index, :update, :show]
       resources :enterprises do
         collection do
+          get 'get_auth_enterprise', to: 'enterprises#get_auth_enterprise'
           get 'get_enterprise', to: 'enterprises#get_enterprise'
           post 'update_enterprise', to: 'enterprises#update_enterprise'
         end

@@ -1,5 +1,0 @@
-/*
- *
- * LoginPage actions
- *
- */
