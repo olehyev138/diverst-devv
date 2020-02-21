@@ -20,6 +20,12 @@
     <%# else %>
       <%#= link_to 'Connect with LinkedIn', @linkedin_url, class: "btn btn--secondary" unless @user.linkedin_profile_url %>
     <%# end %>
+    <% if @user.outlook_datum.blank? %>
+    <%=  link_to 'Connect with Outlook', @outlook_url, class: "btn btn--secondary" %>
+    <% else %>
+      <%= link_to 'Outlook Settings' %>
+      <%=  link_to 'Delete Outlook information', linkedin_user_user_path(@user), method: :delete, data: {confirm: 'Are you sure'}, class: "btn btn-sm btn-danger"  %>
+    <%  end %>
   </div>
   <% if @user.enterprise.enable_rewards? %>
     <div class="flex-row__cell--grow">

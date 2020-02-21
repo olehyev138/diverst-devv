@@ -11,9 +11,9 @@ class OmniAuthController < ApplicationController
   def outlook
     if params[:code].present?
       token = get_token_from_code params[:code]
-      session[:azure_token] = token.to_hash
+      current_user.set_outlook_token token.to_hash
       flash[:notice] = 'Outlook has been integrated'
-      redirect_to mail_outlook_index_url
+      redirect_to user_user_url(current_user.id)
     else
       flash[:alert] = 'Outlook has not been integrated'
       redirect_to outlook_index_url
