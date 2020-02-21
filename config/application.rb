@@ -40,7 +40,7 @@ module Diverst
 
     config.active_job.queue_adapter = :sidekiq
 
-    Rails.application.routes.default_url_options[:host] = ENV['DOMAIN'] || 'localhost:3000'
+    Rails.application.routes.default_url_options[:host] = ENV['DOMAIN'] || "localhost:#{Rails::Server.new.options[:Port] || 3000}"
 
     config.action_dispatch.rescue_responses['Pundit::NotAuthorizedError'] = :forbidden
 

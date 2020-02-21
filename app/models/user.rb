@@ -25,6 +25,9 @@ class User < BaseClass
   delegate :outlook_token_hash, to: :outlook_datum, allow_nil: true
   delegate :outlook_token, to: :outlook_datum, allow_nil: true
   delegate :outlook_graph, to: :outlook_datum, allow_nil: true
+  def delete_outlook_datum
+    outlook_datum.destroy
+  end
 
   # mentorship
   has_many :mentorships, class_name: 'Mentoring', foreign_key: 'mentor_id'
