@@ -96,6 +96,8 @@ GEM
     ansi (1.5.0)
     arel (6.0.4)
     ast (2.4.0)
+    attr_encrypted (3.1.0)
+      encryptor (~> 3.0.0)
     autoprefixer-rails (6.7.7.2)
       execjs
     awesome_print (1.8.0)
@@ -259,6 +261,7 @@ GEM
       json
       oauth
       querystring
+    encryptor (3.0.0)
     enumerize (2.3.1)
       activesupport (>= 3.2)
     equalizer (0.0.11)
@@ -916,6 +919,7 @@ DEPENDENCIES
   activerecord-import (~> 0.12.0)
   activerecord-session_store
   ajax-datatables-rails (~> 0.3.1)
+  attr_encrypted (~> 3.1.0)
   autoprefixer-rails (~> 6.3, >= 6.3.3.1)
   awesome_print (~> 1.6, >= 1.6.1)
   aws-sdk (< 2.0)
