@@ -1,7 +1,5 @@
 class User::UsersController < ApplicationController
-  include OutlookAuthHelper
-
-  before_action :authenticate_user!
+before_action :authenticate_user!
   before_action :set_user, only: [:show, :edit, :update, :update_linkedin, :edit_linkedin, :delete_linkedin]
   after_action :visit_page, only: [:show, :edit]
 
@@ -11,7 +9,7 @@ class User::UsersController < ApplicationController
     unless @user.linkedin_profile_url
       @linkedin_url = LinkedInClient.get_url
     end
-    @outlook_url = get_login_url
+    @outlook_url = OutlookAuthenticator.get_login_url
 
     authorize @user
   end

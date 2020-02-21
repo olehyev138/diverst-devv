@@ -1,7 +1,5 @@
 class OmniAuthController < ApplicationController
-  include OutlookAuthHelper
-
-  before_action :authenticate_user!
+before_action :authenticate_user!
 
   def callback
     linkedin if params[:provider] == 'linkedin'
@@ -10,7 +8,7 @@ class OmniAuthController < ApplicationController
 
   def outlook
     if params[:code].present?
-      token = get_token_from_code params[:code]
+      token = OutlookAuthenticator.get_token_from_code params[:code]
       current_user.set_outlook_token token.to_hash
       flash[:notice] = 'Outlook has been integrated'
       redirect_to user_user_url(current_user.id)

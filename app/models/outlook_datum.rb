@@ -8,7 +8,15 @@ class OutlookDatum < ActiveRecord::Base
     token_hash.blank?
   end
 
-  def get_token_hash
+  def outlook_token_hash
     JSON.parse token_hash
+  end
+
+  def outlook_token
+    OutlookAuthenticator.get_access_token(user)
+  end
+
+  def outlook_graph
+    OutlookAuthenticator.get_graph(outlook_token)
   end
 end

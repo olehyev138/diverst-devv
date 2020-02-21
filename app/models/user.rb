@@ -22,6 +22,9 @@ class User < BaseClass
   belongs_to  :user_role
   has_one :policy_group, dependent: :destroy, inverse_of: :user
   has_one :outlook_datum, dependent: :destroy, inverse_of: :user
+  delegate :outlook_token_hash, to: :outlook_datum, allow_nil: true
+  delegate :outlook_token, to: :outlook_datum, allow_nil: true
+  delegate :outlook_graph, to: :outlook_datum, allow_nil: true
 
   # mentorship
   has_many :mentorships, class_name: 'Mentoring', foreign_key: 'mentor_id'

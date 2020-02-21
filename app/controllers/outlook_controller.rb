@@ -1,11 +1,10 @@
 class OutlookController < ApplicationController
-  include OutlookAuthHelper
-  layout 'outlook'
+layout 'outlook'
 
   before_action :get_token, except: [:index]
 
   def index
-    @login_url = get_login_url
+    @login_url = OutlookAuthenticator.get_login_url
   end
 
   def mail
@@ -34,21 +33,8 @@ class OutlookController < ApplicationController
   protected
 
   def get_token
-    @token = get_access_token
-
-    if @token
-      # If a token is present in the session, get contacts
-      callback = Proc.new do |r|
-        r.headers['Authorization'] = "Bearer #{@token}"
-      end
-
-      @graph = MicrosoftGraph.new(base_url: 'https://graph.microsoft.com/v1.0',
-                                  cached_metadata_file: File.join(MicrosoftGraph::CACHED_METADATA_DIRECTORY, 'metadata_v1.0.xml'),
-                                  &callback)
-    else
-      raise RuntimeError
-    end
-  rescue
+    @graph = current_user.outlook_graph
+  rescue => e
     flash[:alert] = 'You are not connected to an Outlook account'
     redirect_to outlook_index_url
   end
