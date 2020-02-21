@@ -5,6 +5,9 @@ const axios = require('axios');
 const Enterprises = new API({ controller: 'enterprises' });
 
 Object.assign(Enterprises, {
+  getAuthEnterprise(payload) {
+    return axios.get(appendQueryArgs(`${this.url}/get_auth_enterprise`, payload));
+  },
   getEnterprise() {
     return axios.get(`${this.url}/get_enterprise`);
   },
