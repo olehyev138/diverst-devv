@@ -86,13 +86,13 @@
           <% end %>
           <% unless @event.archived? %>
             <% if @participation.present? %>
-              <%= link_to "Add to Outlook Calendar", add_event_outlook_index_path(initiative_id: @event.id), method: :post, class: "hidden-xs member", id: 'calendar_link2' %>
+              <%= link_to "Add to Outlook Calendar", add_to_outlook_group_event_path(@group, @event), method: :post, class: "hidden-xs member", id: 'calendar_link2' if current_user.outlook_datum.present? %>
               <br>
               <%= link_to "Add to Google Calendar", GoogleCalendar.build_link(@event), target: :_blank, class: "hidden-xs member", id: 'calendar_link1' %>
               <br>
               <%= link_to "Add to calendar", export_ics_group_event_path(@group, @event), class: "hidden-xs member", id: 'calendar_link2' %>
             <% else %>
-              <%= link_to "Add to Outlook Calendar", '#', data: {confirm: "Please join this event before adding it to you calendar."}, class: "hidden-xs non_member", id: 'calendar_link1' %>
+              <%= link_to "Add to Outlook Calendar", '#', data: {confirm: "Please join this event before adding it to you calendar."}, class: "hidden-xs non_member", id: 'calendar_link1' if current_user.outlook_datum.present? %>
               <br>
               <%= link_to "Add to Google Calendar", '#', data: {confirm: "Please join this event before adding it to you calendar."}, class: "hidden-xs non_member", id: 'calendar_link1' %>
               <br>

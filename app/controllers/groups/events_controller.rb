@@ -2,7 +2,7 @@ class Groups::EventsController < ApplicationController
   include HtmlSanitizingHelper
 before_action :authenticate_user!
   before_action :set_group
-  before_action :set_event, only: [:edit, :update, :destroy, :show, :export_ics]
+  before_action :set_event, only: [:edit, :update, :destroy, :show, :export_ics, :add_to_outlook]
   after_action :visit_page, only: [:index, :show]
 
   layout 'erg'
@@ -52,10 +52,20 @@ before_action :authenticate_user!
     authorize @event
 
     @participation = current_user.initiative_users.find_by(initiative_id: @event.id)
-    @has_outlook = has_outlook
+    @has_outlook = OutlookAuthenticator.has_outlook
     @all_comments = @event.comments
     @approved_comments = @event.comments.approved
     @comment = InitiativeComment.new(initiative: @event)
+  end
+
+  def add_to_outlook
+    @participation = @event.initiative_users.find_by(user: current_user)
+    if @participation.update_outlook
+      flash[:notice] = 'Successfully added event to your calendar'
+    else
+      flash[:alert] = 'Failed to Add Event'
+    end
+    redirect_to :back
   end
 
   def destroy

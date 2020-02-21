@@ -271,6 +271,7 @@ Rails.application.routes.draw do
 
         member do
           get 'export_ics'
+          post 'add_to_outlook'
         end
       end
 

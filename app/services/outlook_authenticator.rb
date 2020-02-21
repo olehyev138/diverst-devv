@@ -85,7 +85,7 @@ class OutlookAuthenticator
     end
   end
 
-  def has_outlook
+  def self.has_outlook
     get_access_token.present?
   rescue
     false
