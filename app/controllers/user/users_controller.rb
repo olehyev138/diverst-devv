@@ -1,5 +1,5 @@
 class User::UsersController < ApplicationController
-before_action :authenticate_user!
+  before_action :authenticate_user!
   before_action :set_user, only: [
     :show, :edit, :update,
     :update_linkedin, :edit_linkedin, :delete_linkedin,

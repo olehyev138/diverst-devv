@@ -36,18 +36,17 @@ class OutlookAuthenticator
                                 token_url: '/common/oauth2/v2.0/token')
 
     client.auth_code.get_token(auth_code,
-                                       redirect_uri: CALLBACK,
-                                       scope: SCOPES.join(' '))
+                               redirect_uri: CALLBACK,
+                               scope: SCOPES.join(' '))
   end
 
   # Gets the current access token
-  def self.get_access_token(user_arg=nil)
-
+  def self.get_access_token(user_arg = nil)
     user = case user_arg
-                 when Integer then User.find(user_arg)
-                 when User then user_arg
-                 else current_user
-           end
+           when Integer then User.find(user_arg)
+           when User then user_arg
+           else current_user
+    end
 
     token_hash = user.outlook_token_hash
 

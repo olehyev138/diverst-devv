@@ -1,5 +1,5 @@
 class OmniAuthController < ApplicationController
-before_action :authenticate_user!
+  before_action :authenticate_user!
 
   def callback
     linkedin if params[:provider] == 'linkedin'

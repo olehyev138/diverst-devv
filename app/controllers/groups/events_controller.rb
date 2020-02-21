@@ -1,6 +1,6 @@
 class Groups::EventsController < ApplicationController
   include HtmlSanitizingHelper
-before_action :authenticate_user!
+  before_action :authenticate_user!
   before_action :set_group
   before_action :set_event, only: [:edit, :update, :destroy, :show, :export_ics, :add_to_outlook]
   after_action :visit_page, only: [:index, :show]
