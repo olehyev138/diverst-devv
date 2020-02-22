@@ -168,37 +168,37 @@ RSpec.describe EnterprisePolicy, type: :policy do
       end
     end
 
-    context '#auto_archive_settings_manage?' do 
-      context 'when manage_all is true' do 
+    context '#auto_archive_settings_manage?' do
+      context 'when manage_all is true' do
         before { user.policy_group.update manage_all: true }
 
-        it 'returns true' do 
+        it 'returns true' do
           expect(subject.auto_archive_settings_manage?).to be(true)
         end
       end
 
-      context 'when auto_archive_manage is true' do 
+      context 'when auto_archive_manage is true' do
         before { user.policy_group.update auto_archive_manage: true }
 
-        it 'returns true' do 
+        it 'returns true' do
           expect(subject.auto_archive_settings_manage?).to be(true)
         end
       end
     end
 
-    context '#onboarding_consent_manage?' do 
-      context 'when manage_all is true' do 
+    context '#onboarding_consent_manage?' do
+      context 'when manage_all is true' do
         before { user.policy_group.update manage_all: true }
 
-        it 'returns true' do 
+        it 'returns true' do
           expect(subject.manage_onboarding_consent?).to be(true)
         end
       end
 
-      context 'when onboarding_consent_enabled is true' do 
+      context 'when onboarding_consent_enabled is true' do
         before { user.policy_group.update onboarding_consent_manage: true }
 
-        it 'returns true' do 
+        it 'returns true' do
           expect(subject.manage_onboarding_consent?).to be(true)
         end
       end

@@ -531,17 +531,17 @@ RSpec.describe EnterprisesController, type: :controller do
     end
   end
 
-  describe 'PATCH#enable_onboarding_consent' do 
-    context 'when user is logged in' do 
-      login_user_from_let 
+  describe 'PATCH#enable_onboarding_consent' do
+    context 'when user is logged in' do
+      login_user_from_let
 
       before { xhr :patch, :enable_onboarding_consent, id: enterprise.id, format: :js }
-      
-      it 'enable onboarding consent' do 
+
+      it 'enable onboarding consent' do
         expect(assigns[:enterprise].onboarding_consent_enabled).to eq(true)
       end
 
-      it 'renders nothing' do 
+      it 'renders nothing' do
         expect(response).to render_template(nil)
       end
     end

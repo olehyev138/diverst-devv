@@ -696,7 +696,7 @@ RSpec.describe Enterprise, type: :model do
     end
 
     describe '#archive_switch' do
-      context 'when auto archive is disabled' do 
+      context 'when auto archive is disabled' do
         let!(:enterprise) { create(:enterprise, expiry_age_for_resources: 1) }
 
         it 'turn ON auto archive switch' do
@@ -704,10 +704,10 @@ RSpec.describe Enterprise, type: :model do
           expect(enterprise.auto_archive).to eq true
         end
       end
-      
-      context 'when auto archive is enabled' do 
+
+      context 'when auto archive is enabled' do
         before { enterprise.update auto_archive: true }
-        
+
         it 'turn OFF auto archive switch' do
           enterprise.archive_switch
           expect(enterprise.auto_archive).to eq false
@@ -716,24 +716,23 @@ RSpec.describe Enterprise, type: :model do
     end
 
     describe '#consent_toggle' do
-      context 'when onboarding consent is disabled' do 
+      context 'when onboarding consent is disabled' do
         let!(:enterprise) { create(:enterprise) }
 
-        it 'turn ON consent toggle' do 
+        it 'turn ON consent toggle' do
           enterprise.consent_toggle
           expect(enterprise.onboarding_consent_enabled).to eq(true)
         end
       end
 
-      context 'when onboarding consent is enabled' do 
-        before { enterprise.update onboarding_consent_enabled: true } 
+      context 'when onboarding consent is enabled' do
+        before { enterprise.update onboarding_consent_enabled: true }
 
-        it 'turn OFF consent toggle' do 
+        it 'turn OFF consent toggle' do
           enterprise.consent_toggle
           expect(enterprise.onboarding_consent_enabled).to eq(false)
         end
       end
     end
-
   end
 end
