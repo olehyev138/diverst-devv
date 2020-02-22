@@ -171,7 +171,7 @@ class GroupsController < ApplicationController
         base_show
         @posts = with_segments
       else
-        @upcoming_events = all_upcoming_events_for_group(@group.id).uniq
+        @upcoming_events = Initiative.all_upcoming_events_for_group(@group.id).uniq
         @user_groups = []
         @messages = []
         @user_group = []
