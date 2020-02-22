@@ -34,7 +34,10 @@ RSpec.describe Users::InvitationsController, type: :controller do
       invited = create(:user, enterprise: user.enterprise)
       invited.invite!
 
-      xhr :patch, :update, { user: { 'password' => 'password', 'password_confirmation' => 'password', 'invitation_token' => invited.raw_invitation_token, 'first_name' => 'Another', 'last_name' => 'Test' } }
+      xhr :patch, :update, { user:
+        { 'password' => 'password', 'password_confirmation' => 'password',
+          'invitation_token' => invited.raw_invitation_token,
+          'first_name' => 'Another', 'last_name' => 'Test' } }
       expect(response).to redirect_to user_root_path
     end
   end
