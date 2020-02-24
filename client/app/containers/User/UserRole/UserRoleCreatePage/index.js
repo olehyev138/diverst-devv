@@ -21,6 +21,8 @@ import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import UserRoleForm from 'components/User/UserRole/UserRoleForm';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/User/UserRole/messages';
 
 export function UserRoleCreatePage(props) {
   useInjectReducer({ key: 'roles', reducer });
@@ -37,7 +39,7 @@ export function UserRoleCreatePage(props) {
     <UserRoleForm
       admin
       userRoleAction={props.createUserRoleBegin}
-      buttonText='Create'
+      buttonText={<DiverstFormattedMessage {...messages.create} />}
       getUserRolesBegin={props.getUserRolesBegin}
       selectUserRoles={props.userRoles}
       links={links}

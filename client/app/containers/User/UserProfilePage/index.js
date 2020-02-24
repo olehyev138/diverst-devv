@@ -20,6 +20,8 @@ import { selectUser, selectFieldData, selectIsFormLoading } from 'containers/Use
 
 import saga from 'containers/User/saga';
 import Profile from 'components/User/Profile';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/User/messages';
 
 export function UserProfilePage(props) {
   useInjectReducer({ key: 'users', reducer });
@@ -44,7 +46,7 @@ export function UserProfilePage(props) {
         links={links}
         user={props.user}
         fieldData={props.fieldData}
-        buttonText='Update'
+        buttonText={<DiverstFormattedMessage {...messages.update} />}
         isFormLoading={props.isFormLoading}
       />
     </React.Fragment>

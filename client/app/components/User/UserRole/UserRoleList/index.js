@@ -43,9 +43,9 @@ export function UserRoleList(props, context) {
   const { classes, links } = props;
 
   const columns = [
-    { title: 'Role Name', field: 'role_name' },
-    { title: 'Role Type', field: 'role_type' },
-    { title: 'Role Priority', field: 'priority' },
+    { title: <DiverstFormattedMessage {...messages.role_name} />, field: 'role_name' },
+    { title: <DiverstFormattedMessage {...messages.role_type} />, field: 'role_type' },
+    { title: <DiverstFormattedMessage {...messages.priority} />, field: 'priority' },
   ];
 
   return (
@@ -68,7 +68,7 @@ export function UserRoleList(props, context) {
       <Grid container spacing={3}>
         <Grid item xs>
           <DiverstTable
-            title='User Roles'
+            title=<DiverstFormattedMessage {...messages.title} />
             handlePagination={props.handlePagination}
             handleOrdering={props.handleOrdering}
             isLoading={props.isFetchingUserRoles}
@@ -78,13 +78,13 @@ export function UserRoleList(props, context) {
             columns={columns}
             actions={[{
               icon: () => <EditIcon />,
-              tooltip: 'Edit User Role',
+              tooltip: <DiverstFormattedMessage {...messages.edit} />,
               onClick: (_, rowData) => {
                 props.handleVisitUserRoleEdit(rowData.id);
               }
             }, {
               icon: () => <DeleteIcon />,
-              tooltip: 'Delete User Role',
+              tooltip: <DiverstFormattedMessage {...messages.delete} />,
               onClick: (_, rowData) => {
                 /* eslint-disable-next-line no-alert, no-restricted-globals */
                 if (confirm('Delete user role?'))

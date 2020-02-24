@@ -23,6 +23,9 @@ import UserForm from 'components/User/UserForm';
 import fieldDataReducer from 'containers/Shared/FieldData/reducer';
 import fieldDataSaga from 'containers/Shared/FieldData/saga';
 
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/User/messages';
+
 export function UserEditPage(props) {
   useInjectReducer({ key: 'users', reducer });
   useInjectSaga({ key: 'users', saga });
@@ -52,7 +55,7 @@ export function UserEditPage(props) {
         links={links}
         user={props.user}
         fieldData={props.fieldData}
-        buttonText='Update'
+        buttonText={<DiverstFormattedMessage {...messages.update} />}
         admin={props.path.startsWith('/admin')}
         isCommitting={props.isCommitting}
         isFormLoading={props.isFormLoading}

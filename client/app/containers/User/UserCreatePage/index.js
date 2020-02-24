@@ -22,6 +22,9 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import UserForm from 'components/User/UserForm';
 
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/User/messages';
+
 export function UserCreatePage(props) {
   useInjectReducer({ key: 'users', reducer });
   useInjectSaga({ key: 'users', saga });
@@ -38,7 +41,7 @@ export function UserCreatePage(props) {
       admin
       userAction={props.createUserBegin}
       updateFieldDataBegin={props.updateFieldDataBegin}
-      buttonText='Create'
+      buttonText={<DiverstFormattedMessage {...messages.create} />}
       getUsersBegin={props.getUsersBegin}
       selectUsers={props.users}
       links={links}

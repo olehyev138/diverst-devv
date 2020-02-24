@@ -67,17 +67,17 @@ export function UserList(props, context) {
 
   const columns = [
     {
-      title: 'First Name',
+      title: <DiverstFormattedMessage {...messages.first_name} />,
       field: 'first_name',
       query_field: 'first_name'
     },
     {
-      title: 'Last Name',
+      title: <DiverstFormattedMessage {...messages.last_name} />,
       field: 'last_name',
       query_field: 'last_name'
     },
     {
-      title: 'Email',
+      title: <DiverstFormattedMessage {...messages.email} />,
       field: 'email',
       query_field: 'email'
     },
@@ -118,7 +118,7 @@ export function UserList(props, context) {
       <Grid container spacing={3}>
         <Grid item xs>
           <DiverstTable
-            title='Members'
+            title={<DiverstFormattedMessage {...messages.members} />}
             handlePagination={props.handlePagination}
             handleOrdering={props.handleOrdering}
             isLoading={props.isFetchingUsers}
@@ -128,13 +128,13 @@ export function UserList(props, context) {
             columns={columns}
             actions={[{
               icon: () => <EditIcon />,
-              tooltip: 'Edit Member',
+              tooltip: <DiverstFormattedMessage {...messages.tooltip.edit} />,
               onClick: (_, rowData) => {
                 props.handleVisitUserEdit(rowData.id);
               }
             }, {
               icon: () => <DeleteIcon />,
-              tooltip: 'Delete Member',
+              tooltip: <DiverstFormattedMessage {...messages.tooltip.delete} />,
               onClick: (_, rowData) => {
                 /* eslint-disable-next-line no-alert, no-restricted-globals */
                 if (confirm('Delete member?'))

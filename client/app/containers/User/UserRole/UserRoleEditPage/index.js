@@ -22,6 +22,8 @@ import {
 } from '../selectors';
 
 import UserRoleForm from 'components/User/UserRole/UserRoleForm';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/User/UserRole/messages';
 
 export function UserRoleEditPage(props) {
   useInjectReducer({ key: 'roles', reducer });
@@ -47,7 +49,7 @@ export function UserRoleEditPage(props) {
         userRoleAction={props.updateUserRoleBegin}
         links={links}
         userRole={props.userRole}
-        buttonText='Update'
+        buttonText={<DiverstFormattedMessage {...messages.update} />}
         isCommitting={props.isCommitting}
         isFormLoading={props.isFormLoading}
       />
