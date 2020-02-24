@@ -17,9 +17,15 @@
         </div>
       <% end %>
       <% if GroupEventsPolicy.new(current_user, [@group]).able_to_join_events? %>
-        <% if !@event.full? || current_user.initiatives.where(:id => @event.id).exists? %>
+        <% if !@event.full? || @participation.present? %>
           <div class="flex-row__cell">
-            <a href="#" class="btn btn--primary js-join-event" data-joined="<%= current_user.initiatives.where(:id => @event.id).exists? %>"><%= current_user.initiatives.where(:id => @event.id).exists? ? "Leave event" : "Join event" %></a>
+            <a
+              href="#"
+              class="btn btn--primary js-join-event"
+              data-joined="<%= @participation.present? %>"
+            >
+              <%= @participation.present? ? "Leave event" : "Join event" %>
+            </a>
           </div>
         <% end %>
       <% end %>
@@ -31,7 +37,7 @@
             <%= link_to "Delete", group_initiative_path(@group, @event), method: :delete, class: "btn btn-sm btn-secondary", data: {confirm: "Are you sure?"} if InitiativePolicy.new(current_user, @event).destroy? %>
             <%= link_to "Edit", edit_group_initiative_path(@group, @event), class: "btn btn-sm btn-primary" if InitiativePolicy.new(current_user, @event).edit? %>
             <% if GroupEventsPolicy.new(current_user, [@group]).able_to_join_events? %>
-              <a href="#" class="btn btn-sm btn-primary js-join-event" data-joined="<%= current_user.initiatives.where(:id => @event.id).exists? %>"><%= current_user.initiatives.where(:id => @event.id).exists? ? "Leave" : "Join" %></a>
+              <a href="#" class="btn btn-sm btn-primary js-join-event" data-joined="<%= @participation.present? %>"><%= @participation.present? ? "Leave" : "Join" %></a>
           <% end %>
             </div>
         </div>
@@ -79,11 +85,15 @@
             </p>
           <% end %>
           <% unless @event.archived? %>
-            <% if current_user.initiatives.where(:id => @event.id).exists? %>
+            <% if @participation.present? %>
+              <%= link_to "Add to Outlook Calendar", add_to_outlook_group_event_path(@group, @event), method: :post, class: "hidden-xs member", id: 'calendar_link2' if current_user.outlook_datum.present? %>
+              <br>
               <%= link_to "Add to Google Calendar", GoogleCalendar.build_link(@event), target: :_blank, class: "hidden-xs member", id: 'calendar_link1' %>
               <br>
               <%= link_to "Add to calendar", export_ics_group_event_path(@group, @event), class: "hidden-xs member", id: 'calendar_link2' %>
             <% else %>
+              <%= link_to "Add to Outlook Calendar", '#', data: {confirm: "Please join this event before adding it to you calendar."}, class: "hidden-xs non_member", id: 'calendar_link1' if current_user.outlook_datum.present? %>
+              <br>
               <%= link_to "Add to Google Calendar", '#', data: {confirm: "Please join this event before adding it to you calendar."}, class: "hidden-xs non_member", id: 'calendar_link1' %>
               <br>
               <%= link_to "Add to calendar", '#', data: {confirm: "Please join this event before adding it to you calendar."}, class: "hidden-xs non_member", id: 'calendar_link2' %>

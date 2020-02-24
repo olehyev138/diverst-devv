@@ -19,7 +19,7 @@ jobs:
             - v1-dep-staging-
             - v1-dep-
       - run: gem update --system
-      - run: gem install bundler
+      - run: gem install bundler --version '1.17.3'
       - run: 'bundle check --path=vendor/bundle || bundle install --path=vendor/bundle
           --jobs=4 --retry=3'
       - save_cache:
@@ -98,7 +98,7 @@ jobs:
     - run: echo -e "export RAILS_ENV=test\nexport RACK_ENV=test" >> $BASH_ENV
     - run: sudo rm -rf /etc/apt/sources.list.d/circleci_trusty.list && sudo rm -rf /etc/apt/sources.list.d/github_git-lfs.list  && sudo rm -rf /etc/apt/sources.list.d/neo4j.list && sudo rm -rf /etc/apt/sources.list.d/mysql.list && sudo rm -rf /etc/apt/sources.list.d/basho_riak.list
     - run: gem update --system
-    - run: gem install bundler
+    - run: gem install bundler --version '1.17.3'
     - run: 'bundle check --path=vendor/bundle || bundle install --path=vendor/bundle
         --jobs=4 --retry=3 '
     # Save dependency cache
@@ -132,7 +132,7 @@ jobs:
           socket: /var/run/mysqld/mysqld.sock
         ' > config/database.yml
     - run:
-        command: bundle exec rake db:create db:schema:load --trace
+        command: bundle exec rake db:create db:schema:load
         environment:
           RAILS_ENV: test
           RACK_ENV: test
@@ -148,7 +148,7 @@ jobs:
     - run: mkdir -p $CIRCLE_TEST_REPORTS/rspec
     - run: export TEST_RETRY="true" # Enable Rspec retry
     - run:
-        command: bundle exec rspec --color --require spec_helper --format RspecJunitFormatter --out $CIRCLE_TEST_REPORTS/rspec/rspec.xml --format progress -- $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=filesize)
+        command: bundle exec rspec --require spec_helper --format RspecJunitFormatter --out $CIRCLE_TEST_REPORTS/rspec/rspec.xml --format progress -- $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=filesize)
         environment:
           RAILS_ENV: test
           RACK_ENV: test
@@ -195,12 +195,12 @@ jobs:
           - v1-dep-
       # This is based on your 1.0 configuration file or project settings
       - run: gem update --system
-      - run: gem install bundler
+      - run: gem install bundler --version '1.17.3'
       - run: bundle install
       - run:
           name: Deploy to AWS if tests pass and branch is Development
           command: eval "$(ssh-agent -s)" && ssh-add ~/.ssh/id_rsa* && cap testing deploy
-          
+
   #  build and test jobs go here
   deploy-staging:
     working_directory: ~/TeamDiverst/diverst-development
@@ -228,7 +228,7 @@ jobs:
           - v1-dep-
       # This is based on your 1.0 configuration file or project settings
       - run: gem update --system
-      - run: gem install bundler
+      - run: gem install bundler --version '1.17.3'
       - run: bundle install
       - run:
           name: Deploy to AWS if tests pass and branch is Staging
