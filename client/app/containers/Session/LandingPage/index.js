@@ -31,7 +31,7 @@ import {
 import logo from 'images/favicon.png';
 
 import 'containers/Session/LandingPage/index.css';
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage } from 'react-intl';
 
 export function LandingPage() {
   useInjectReducer({ key: 'landingPage', reducer });

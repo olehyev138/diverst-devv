@@ -76,7 +76,7 @@ export function SegmentPage(props) {
           selectFields: props.selectFields,
           fields: props.fields
         }}
-        buttonText={segmentId ? <DiverstFormattedMessage {...messages.update} /> :  <DiverstFormattedMessage {...messages.create} />}
+        buttonText={segmentId ? <DiverstFormattedMessage {...messages.update} /> : <DiverstFormattedMessage {...messages.create} />}
         isCommitting={props.isCommitting}
         isFormLoading={props.edit ? props.isFormLoading : undefined}
         currentEnterprise={props.currentEnterprise}
