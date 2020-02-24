@@ -18,7 +18,7 @@
     <% unless @initiative.expenses.empty? %>
       <% if @initiative.ended? %>
         <div class="flex-row__cell">
-          <%= link_to "Finish Expenses", finish_expenses_group_initiative_path(@group, @initiative), method: :post, class: "btn btn--secondary" if InitiativePolicy.new(current_user, @initiative).update? %>
+          <%= link_to "Finish Expenses", finish_expenses_group_initiative_path(@group, @initiative), method: :post, class: "btn btn--secondary" if GroupEventsPolicy.new(current_user, [@initiative, @initiative.owner_group]).update? %>
         </div>
       <% end %>  
     <% end %>  
