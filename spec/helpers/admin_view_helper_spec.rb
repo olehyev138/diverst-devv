@@ -62,36 +62,42 @@ RSpec.describe AdminViewHelper do
     end
 
     describe '#show_settings_link?' do
-      let!(:current_user) { create(:user) }
+      let!(:user) { create(:user) }
+      before do
+        allow(helper).to receive(:current_user).and_return(user)
+      end
 
       context 'returns true' do
         it 'when .sso_manage?, .manage_permissions? or .manage_branding? for EnteprisePolicy is true' do
-          expect(show_settings_link?).to eq true
+          expect(helper.show_settings_link?).to eq true
         end
       end
 
       it 'returns false' do
-        current_user.policy_group = create(:policy_group, :no_permissions)
-        expect(show_settings_link?).to eq false
+        user.policy_group = create(:policy_group, :no_permissions)
+        expect(helper.show_settings_link?).to eq false
       end
     end
 
     describe '#show_diversity_link?' do
-      let!(:current_user) { create(:user) }
+      let!(:user) { create(:user) }
+      before do
+        allow(helper).to receive(:current_user).and_return(user)
+      end
 
       context 'returns true' do
         it 'when .diversity_manage? for  EnteprisePolicy is true' do
-          expect(show_diversity_link?).to eq true
+          expect(helper.show_diversity_link?).to eq true
         end
 
         it 'when .manage_all_groups? for GroupPolicy and EnteprisePolicy is true' do
-          expect(show_diversity_link?).to eq true
+          expect(helper.show_diversity_link?).to eq true
         end
       end
 
       it 'returns false' do
-        current_user.policy_group = create(:policy_group, :no_permissions)
-        expect(show_diversity_link?).to eq false
+        user.policy_group = create(:policy_group, :no_permissions)
+        expect(helper.show_diversity_link?).to eq false
       end
     end
   end

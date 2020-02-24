@@ -5,7 +5,7 @@ class CustomEmailMailer < ApplicationMailer
 
     set_defaults(@custom_email.enterprise, 'custom')
 
-    #TODO check emails are unique
+    # TODO check emails are unique
     mail(from: @from_address, to: emails, subject: @custom_email.subject)
   end
 

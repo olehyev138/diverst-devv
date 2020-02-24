@@ -17,10 +17,10 @@ class SegmentsController < ApplicationController
   end
 
   def get_paginated_segments
-    authorize Segment, :index? 
+    authorize Segment, :index?
 
     respond_to do |format|
-      format.json { 
+      format.json {
         segments = current_user.enterprise.segments.all_parents
                      .order(:id)
                      .joins('LEFT JOIN groups as children ON segments.id = children.parent_id')
@@ -40,7 +40,7 @@ class SegmentsController < ApplicationController
         )
 
         render json: {
-          total_pages: segments.total_pages, 
+          total_pages: segments.total_pages,
           segment_text: c_t(:segment),
           segment_text_pluralized: c_t(:segment).pluralize,
           segments: segments_hash

@@ -16,6 +16,7 @@ class SocialLink < BaseClass
   validates :author_id, presence: true
 
   before_create :build_default_link, :add_trailing_slash
+  after_create :hack_temp_solution
 
   belongs_to :author, class_name: 'User', required: true, counter_cache: true
   belongs_to :group
@@ -42,7 +43,7 @@ class SocialLink < BaseClass
   end
 
   def re_populate_embed_code(small: false)
-    new_html = SocialMedia::Importer.url_to_embed(url, small)
+    new_html = SocialMedia::Importer.url_to_embed(url, small: small)
 
     update_column(small ? :small_embed_code : :embed_code, new_html)
   rescue => e
@@ -65,6 +66,13 @@ class SocialLink < BaseClass
 
   def add_trailing_slash
     self.url = File.join(self.url, '')
+  end
+
+  def hack_temp_solution
+    if small_embed_code.include? '<a href=https://www.linkedin.com/signup/cold-join>Sign Up | LinkedIn</a>'
+      sleep(1)
+      save
+    end
   end
 
   private
