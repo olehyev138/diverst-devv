@@ -24,7 +24,7 @@ import {
 
 export function* getPolicy(action) {
   try {
-    const response = { data: 'API CALL' };
+    const response = yield call(api.policyGroups.get.bind(api.policyGroups), action.payload.id);
 
     yield put(getPolicySuccess(response.data));
   } catch (err) {
@@ -37,20 +37,21 @@ export function* getPolicy(action) {
 
 export function* getPolicies(action) {
   try {
-    const response = { data: 'API CALL' };
+    const response = yield call(api.policyGroups.all.bind(api.policyGroups), action.payload);
 
     yield put(getPoliciesSuccess(response.data.page));
   } catch (err) {
     yield put(getPoliciesError(err));
 
     // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to get policies', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: 'Failed to get policyGroups', options: { variant: 'warning' } }));
   }
 }
 
 export function* createPolicy(action) {
   try {
-    const response = { data: 'API CALL' };
+    const payload = { policy_group: action.payload };
+    const response = yield call(api.policyGroups.create.bind(api.policyGroups), payload);
 
     yield put(createPolicySuccess({}));
     yield put(showSnackbar({ message: 'Successfully created policy', options: { variant: 'success' } }));
@@ -64,7 +65,8 @@ export function* createPolicy(action) {
 
 export function* updatePolicy(action) {
   try {
-    const response = { data: 'API CALL' };
+    const payload = { policy_group: action.payload };
+    const response = yield call(api.policyGroups.update.bind(api.policyGroups), payload.initiative.id, payload);
 
     yield put(updatePolicySuccess({}));
     yield put(showSnackbar({ message: 'Successfully updated policy', options: { variant: 'success' } }));
@@ -78,7 +80,7 @@ export function* updatePolicy(action) {
 
 export function* deletePolicy(action) {
   try {
-    const response = { data: 'API CALL' };
+    yield call(api.policyGroups.destroy.bind(api.policyGroups), action.payload.id);
 
     yield put(deletePolicySuccess({}));
     yield put(showSnackbar({ message: 'Successfully deleted policy', options: { variant: 'success' } }));
