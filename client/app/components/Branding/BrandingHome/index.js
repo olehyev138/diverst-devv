@@ -63,10 +63,10 @@ export function BrandingHomeInner({ classes, handleSubmit, handleChange, handleB
             color='primary'
             type='submit'
           >
-            Save
+            <DiverstFormattedMessage {...messages.save} />
           </Button>
           <Button>
-            Cancel
+            <DiverstFormattedMessage {...messages.cancel} />
           </Button>
         </CardActions>
       </Form>

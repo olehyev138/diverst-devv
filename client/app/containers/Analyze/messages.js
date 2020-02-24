@@ -34,7 +34,7 @@ export default defineMessages({
     id: `${scope}.form.button.create`,
   },
   update: {
-    id: `${scope}.form.button.edit`,
+    id: `${scope}.form.button.update`,
   },
   cancel: {
     id: `${scope}.form.button.cancel`,
@@ -56,6 +56,8 @@ export default defineMessages({
   },
   groupselect: {
     id: `${scope}.form.title`,
-
+  },
+  delete_confirm: {
+    id: `${scope}.customgraph.delete_confirm`,
   }
 });

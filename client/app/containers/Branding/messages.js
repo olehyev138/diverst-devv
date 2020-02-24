@@ -76,6 +76,9 @@ export default defineMessages({
     delete: {
       id: `${scope}.Sponsors.tooltip.delete`,
     },
+    delete_confirm: {
+      id: `${scope}.Sponsors.tooltip.delete_confirm`,
+    },
     new: {
       id: `${scope}.Sponsors.new`,
     },

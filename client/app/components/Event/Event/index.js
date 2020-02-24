@@ -22,6 +22,7 @@ import DiverstShowLoader from 'components/Shared/DiverstShowLoader';
 import { formatDateTimeString, DateTime } from 'utils/dateTimeHelpers';
 
 import DiverstImg from 'components/Shared/DiverstImg';
+import { injectIntl, intlShape } from 'react-intl';
 
 const styles = theme => ({
   padding: {
@@ -50,7 +51,7 @@ const styles = theme => ({
 });
 
 export function Event(props) {
-  const { classes } = props;
+  const { classes, intl } = props;
   const event = dig(props, 'event');
 
   return (
@@ -72,7 +73,7 @@ export function Event(props) {
                 startIcon={<DeleteIcon />}
                 onClick={() => {
                   /* eslint-disable-next-line no-alert, no-restricted-globals */
-                  if (confirm('Delete event?'))
+                  if (confirm(intl.formatMessage(messages.delete_confirm)))
                     props.deleteEventBegin({
                       id: event.id,
                       group_id: event.owner_group_id
@@ -131,6 +132,7 @@ export function Event(props) {
 }
 
 Event.propTypes = {
+  intl: intlShape,
   deleteEventBegin: PropTypes.func,
   classes: PropTypes.object,
   event: PropTypes.object,
@@ -143,5 +145,6 @@ Event.propTypes = {
 
 export default compose(
   memo,
+  injectIntl,
   withStyles(styles)
 )(Event);

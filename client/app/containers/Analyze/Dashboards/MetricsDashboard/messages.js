@@ -65,6 +65,9 @@ export default defineMessages({
     delete: {
       id: `${scope}.table.tooltip.delete`,
     },
+    delete_confirm: {
+      id: `${scope}.table.tooltip.delete_confirm`,
+    },
   },
   show: {
   },

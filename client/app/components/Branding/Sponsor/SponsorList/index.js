@@ -25,6 +25,7 @@ import DiverstTable from 'components/Shared/DiverstTable';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Branding/messages';
+import { injectIntl, intlShape } from 'react-intl';
 
 const styles = theme => ({
   errorButton: {
@@ -48,6 +49,7 @@ const styles = theme => ({
 export function SponsorList(props) {
   const { classes } = props;
   const { links } = props;
+  const { intl } = props;
 
   const handleOrderChange = (columnId, orderDir) => {
   };
@@ -96,7 +98,7 @@ export function SponsorList(props) {
               tooltip: <DiverstFormattedMessage {...messages.Sponsors.delete} />,
               onClick: (_, rowData) => {
                 /* eslint-disable-next-line no-alert, no-restricted-globals */
-                if (confirm('Delete sponsor?'))
+                if (confirm(intl.formatMessage(messages.Sponsors.delete_confirm)))
                   props.deleteSponsorBegin({ id: rowData.id });
               }
             }]}
@@ -108,6 +110,7 @@ export function SponsorList(props) {
 
 SponsorList.propTypes = {
   classes: PropTypes.object,
+  intl: intlShape,
   deleteSponsorBegin: PropTypes.func,
   links: PropTypes.shape({
     sponsorNew: PropTypes.string,
@@ -126,5 +129,6 @@ SponsorList.propTypes = {
 
 export default compose(
   memo,
+  injectIntl,
   withStyles(styles)
 )(SponsorList);

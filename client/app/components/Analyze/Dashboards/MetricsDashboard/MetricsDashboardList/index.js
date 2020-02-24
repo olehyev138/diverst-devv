@@ -60,7 +60,7 @@ export function MetricsDashboardsList(props, context) {
   const routeContext = useContext(RouteContext);
 
   const columns = [
-    { title: 'Name', field: 'name' }
+    { title: <DiverstFormattedMessage {...messages.fields.name} />, field: 'name' }
   ];
 
   return (
@@ -100,7 +100,7 @@ export function MetricsDashboardsList(props, context) {
               tooltip: <DiverstFormattedMessage {...messages.table.delete} />,
               onClick: (_, rowData) => {
                 /* eslint-disable-next-line no-alert, no-restricted-globals */
-                if (confirm('Delete member?'))
+                if (confirm(intl.formatMessage(messages.table.delete_confirm)))
                   props.deleteMetricsDashboardBegin(rowData.id);
               }
             }]}

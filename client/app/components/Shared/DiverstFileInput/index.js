@@ -188,7 +188,9 @@ export function DiverstFileInput(props) {
                           case 'uploading':
                             return (
                               <Typography variant='h6' className={classes.fileInfo} color='textSecondary' key={upload.id}>
-                                <span><DiverstFormattedMessage {...messages.uploading} /> </span>
+                                <span>
+                                  <DiverstFormattedMessage {...messages.uploading} />
+                                </span>
                                 <span className={classes.fileName}>{upload.file.name}</span>
                                 <CircularProgress
                                   variant='determinate'
