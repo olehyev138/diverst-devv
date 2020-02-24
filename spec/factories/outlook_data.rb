@@ -1,8 +1,8 @@
 FactoryBot.define do
   factory :outlook_datum do
-    user ''
-    token_hash 'MyText'
-    auto_add_event_to_calendar ''
-    auto_update_calendar_event false
+    user { build :user }
+    token_hash '{token: \'HELLO\'}'
+    auto_add_event_to_calendar true
+    auto_update_calendar_event true
   end
 end
