@@ -50,7 +50,7 @@ export function* getPolicies(action) {
 
 export function* createPolicy(action) {
   try {
-    const payload = { policy_group: action.payload };
+    const payload = { policy_group_template: action.payload };
     const response = yield call(api.policyTemplates.create.bind(api.policyTemplates), payload);
 
     yield put(createPolicySuccess({}));
@@ -65,7 +65,7 @@ export function* createPolicy(action) {
 
 export function* updatePolicy(action) {
   try {
-    const payload = { policy_group: action.payload };
+    const payload = { policy_group_template: action.payload };
     const response = yield call(api.policyTemplates.update.bind(api.policyTemplates), payload.initiative.id, payload);
 
     yield put(updatePolicySuccess({}));

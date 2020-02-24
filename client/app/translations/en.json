@@ -418,6 +418,8 @@
   "diverst.containers.GlobalSettings.EmailEvents.form.update" : "Update Email Event",
   "diverst.containers.GlobalSettings.EmailEvents.form.cancel" : "Cancel",
   "diverst.containers.GlobalSettings.EmailEvents.index.empty" : "There are no Email Events",
+  "diverst.containers.GlobalSettings.Policies.form.update" : "Update Policy Group Template",
+  "diverst.containers.GlobalSettings.Policies.form.cancel" : "Cancel",
   "diverst.containers.Group.Outcome.index.button.new": "New {outcome}",
   "diverst.containers.Group.Outcome.index.return": "Back to Event Management",
   "diverst.containers.Group.Outcome.form.button.cancel": "Cancel",

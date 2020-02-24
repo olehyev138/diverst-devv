@@ -112,6 +112,7 @@ import {
   EmailEventEditPage,
   EmailLayout,
   PolicyTemplatesPage,
+  PolicyTemplateEditPage,
   NewsLinkCreatePage,
   NewsLinkEditPage,
   NewsLinkPage,
@@ -209,6 +210,7 @@ export default function Routes(props) {
       <EmailLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.mailEvents.index)} component={EmailEventsPage} />
       <EmailLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.mailEvents.edit)} component={EmailEventEditPage} />
       <GlobalSettingsLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.policy_templates.index)} component={PolicyTemplatesPage} />
+      <GlobalSettingsLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.policy_templates.edit)} component={PolicyTemplateEditPage} />
 
       { /* Admin - System - Users */ }
       <SystemUserLayout exact {...expandRoute(ROUTES.admin.system.users.index)} component={UsersPage} />

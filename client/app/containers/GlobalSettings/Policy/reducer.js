@@ -44,7 +44,7 @@ function policyReducer(state = initialState, action) {
         break;
 
       case GET_POLICY_SUCCESS:
-        draft.currentPolicy = action.payload.policy_group;
+        draft.currentPolicy = action.payload.policy_group_template;
         draft.isFetchingPolicy = false;
         break;
 
