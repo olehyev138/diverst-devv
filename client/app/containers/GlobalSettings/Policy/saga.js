@@ -66,7 +66,7 @@ export function* createPolicy(action) {
 export function* updatePolicy(action) {
   try {
     const payload = { policy_group_template: action.payload };
-    const response = yield call(api.policyTemplates.update.bind(api.policyTemplates), payload.initiative.id, payload);
+    const response = yield call(api.policyTemplates.update.bind(api.policyTemplates), payload.policy_group_template.id, payload);
 
     yield put(updatePolicySuccess({}));
     yield put(showSnackbar({ message: 'Successfully updated policy', options: { variant: 'success' } }));

@@ -30,7 +30,7 @@ import {
 
 import PolicyTemplatesList from 'components/GlobalSettings/PolicyTemplate/PolicyTemplatesList';
 
-const handlePolicyEdit = id => push(ROUTES.admin.system.settings.policy_group.edit.path(id));
+const handlePolicyEdit = id => push(ROUTES.admin.system.globalSettings.policy_templates.edit.path(id));
 
 const defaultParams = Object.freeze({
   count: 10, // TODO: Make this a constant and use it also in EventsList
@@ -42,13 +42,6 @@ const defaultParams = Object.freeze({
 export function PolicyTemplatesPage(props) {
   useInjectReducer({ key: 'policies', reducer });
   useInjectSaga({ key: 'policies', saga });
-
-  const rs = new RouteService(useContext);
-  const links = {
-    emailEdit: id => ROUTES.admin.system.globalSettings.policies.edit.path(id),
-  };
-
-  const { currentUser, policies, isFetching } = props;
 
   const [params, setParams] = useState(defaultParams);
 
