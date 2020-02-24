@@ -262,7 +262,6 @@ Rails.application.routes.draw do
 
         member do
           get 'export_ics'
-          post 'add_to_outlook'
         end
       end
 
@@ -562,9 +561,6 @@ Rails.application.routes.draw do
           get :edit_linkedin
           patch :linkedin, action: :update_linkedin
           delete :linkedin, action: :delete_linkedin
-          get :edit_outlook
-          patch :outlook, action: :update_outlook
-          delete :outlook, action: :delete_outlook
         end
       end
     end

@@ -3,19 +3,6 @@ class OmniAuthController < ApplicationController
 
   def callback
     linkedin if params[:provider] == 'linkedin'
-    outlook if params[:provider] == 'outlook'
-  end
-
-  def outlook
-    if params[:code].present?
-      token = OutlookAuthenticator.get_token_from_code params[:code]
-      current_user.set_outlook_token token.to_hash
-      flash[:notice] = 'Outlook has been integrated'
-      redirect_to edit_outlook_user_user_url(current_user.id)
-    else
-      flash[:alert] = 'Outlook has not been integrated'
-      redirect_to outlook_index_url
-    end
   end
 
   def linkedin

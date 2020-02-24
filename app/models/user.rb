@@ -21,13 +21,6 @@ class User < BaseClass
   belongs_to  :enterprise, counter_cache: true
   belongs_to  :user_role
   has_one :policy_group, dependent: :destroy, inverse_of: :user
-  has_one :outlook_datum, dependent: :destroy, inverse_of: :user
-  delegate :outlook_token_hash, to: :outlook_datum, allow_nil: true
-  delegate :outlook_token, to: :outlook_datum, allow_nil: true
-  delegate :outlook_graph, to: :outlook_datum, allow_nil: true
-  def delete_outlook_datum
-    outlook_datum.destroy
-  end
 
   # mentorship
   has_many :mentorships, class_name: 'Mentoring', foreign_key: 'mentor_id'
@@ -218,12 +211,6 @@ class User < BaseClass
 
   def badges
     Badge.where('points <= ?', points).order(points: :asc)
-  end
-
-  def set_outlook_token(token_hash)
-    outlook = self.outlook_datum ||= build_outlook_datum
-    outlook.token_hash = token_hash.to_json
-    outlook.save
   end
 
   def set_default_policy_group

@@ -66,9 +66,8 @@ class Initiative < BaseClass
   # we don't want to run this callback when finish_expenses! is triggered in initiatives_controller.rb, finish_expense action
   before_save { allocate_budget_funds unless skip_allocate_budget_funds }
 
-  # Integration Call Backs
+  # Slack Call Back
   after_create :post_new_event_to_slack, unless: Proc.new { Rails.env.test? }
-  after_update :update_outlook
 
   after_destroy :update_annual_budget
 
@@ -561,10 +560,6 @@ class Initiative < BaseClass
     participating_groups.each do |gr|
       gr.send_slack_webhook_message message
     end
-  end
-
-  def update_outlook
-    OutlookEventUpdateJob.perform_later(id)
   end
 
   def update_annual_budget
