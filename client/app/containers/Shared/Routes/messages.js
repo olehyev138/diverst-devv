@@ -207,6 +207,9 @@ export default defineMessages({
       },
       groups: {
         id: `${scope}.admin.analyze.groups`,
+      },
+      custom: {
+        id: `${scope}.admin.analyze.custom`,
       }
     },
     manage: {
@@ -232,8 +235,43 @@ export default defineMessages({
       },
       branding: {
         id: `${scope}.admin.system.branding`,
+      },
+      globalSettings: {
+        id: `${scope}.admin.system.globalSettings`,
+      },
+      logs: {
+        id: `${scope}.admin.system.logs`,
+      },
+      diversity: {
+        id: `${scope}.admin.system.diversity`,
+      },
+    },
+    innovate: {
+      index: {
+        id: `${scope}.admin.innovate.index`,
+      },
+      campaigns: {
+        id: `${scope}.admin.innovate.campaigns`,
+      },
+      financials: {
+        id: `${scope}.admin.innovate.financials`,
       }
-    }
+    },
+    plan: {
+      index: {
+        id: `${scope}.admin.plan.index`,
+      },
+    },
+    include: {
+      index: {
+        id: `${scope}.admin.include.index`,
+      },
+    },
+    mentorship: {
+      index: {
+        id: `${scope}.admin.mentorship.index`,
+      },
+    },
   },
 
 });
