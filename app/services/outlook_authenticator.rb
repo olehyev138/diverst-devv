@@ -7,11 +7,7 @@ class OutlookAuthenticator
   SCOPES = [
     'openid',
     'email',
-    'profile',
     'offline_access',
-    'User.Read',
-    'Mail.Read',
-    'Mail.Send',
     'Calendars.ReadWrite'
   ]
 
