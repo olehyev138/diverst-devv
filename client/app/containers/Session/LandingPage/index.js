@@ -31,6 +31,7 @@ import {
 import logo from 'images/favicon.png';
 
 import 'containers/Session/LandingPage/index.css';
+import { FormattedMessage } from "react-intl";
 
 export function LandingPage() {
   useInjectReducer({ key: 'landingPage', reducer });
@@ -53,7 +54,7 @@ export function LandingPage() {
           <Grid item>
             <React.Fragment>
               <Button color='primary'>
-                <Link to={ROUTES.session.login.path()}>Login</Link>
+                <Link to={ROUTES.session.login.path()}>{<FormattedMessage {...messages.login} />}</Link>
               </Button>
             </React.Fragment>
           </Grid>
