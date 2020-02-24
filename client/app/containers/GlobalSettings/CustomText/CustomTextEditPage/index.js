@@ -23,6 +23,8 @@ import {
 } from 'containers/GlobalSettings/CustomText/actions';
 
 import CustomTextForm from 'components/GlobalSettings/CustomText/CustomTextForm';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/GlobalSettings/CustomText/messages';
 
 export function CustomTextEditPage(props) {
   useInjectReducer({ key: 'custom_text', reducer });
@@ -39,7 +41,7 @@ export function CustomTextEditPage(props) {
   return (
     <CustomTextForm
       customTextAction={props.updateCustomTextBegin}
-      buttonText='Update'
+      buttonText={<DiverstFormattedMessage {...messages.update} />}
       currentUser={currentUser}
       links={links}
       customText={customText}
