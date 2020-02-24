@@ -65,6 +65,7 @@ import EmailsPage from 'containers/GlobalSettings/Email/Email/EmailsPage/Loadabl
 import EmailEditPage from 'containers/GlobalSettings/Email/Email/EmailEditPage/Loadable';
 import EmailEventsPage from 'containers/GlobalSettings/Email/Event/EventsPage/Loadable';
 import EmailEventEditPage from 'containers/GlobalSettings/Email/Event/EventEditPage/Loadable';
+import PolicyTemplatesPage from 'containers/GlobalSettings/Policy/PolicyTemplatesPage/Loadable';
 
 /* Admin - System - Branding */
 import BrandingThemePage from 'containers/Branding/BrandingThemePage/Loadable';
@@ -267,6 +268,7 @@ export {
   EmailEventsPage,
   EmailEventEditPage,
   EmailLayout,
+  PolicyTemplatesPage,
   NewsLinkEditPage,
   NewsLinkCreatePage,
   SocialLinkCreatePage,

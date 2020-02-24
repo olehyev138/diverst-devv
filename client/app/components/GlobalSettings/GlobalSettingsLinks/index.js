@@ -32,26 +32,37 @@ export function GlobalSettingsLinks(props) {
             component={WrappedNavLink}
             to={ROUTES.admin.system.globalSettings.fields.index.path()}
             label={<DiverstFormattedMessage {...messages.fields} />}
+            value='fields'
           />
           <Tab
             component={WrappedNavLink}
             to={ROUTES.admin.system.globalSettings.customText.edit.path()}
             label={<DiverstFormattedMessage {...messages.customTexts} />}
+            value='custom_texts'
           />
           <Tab
             component={WrappedNavLink}
             to={ROUTES.admin.system.globalSettings.enterpriseConfiguration.index.path()}
             label={<DiverstFormattedMessage {...messages.configuration} />}
+            value='configuration'
           />
           <Tab
             component={WrappedNavLink}
             to={ROUTES.admin.system.globalSettings.ssoSettings.edit.path()}
             label={<DiverstFormattedMessage {...messages.sso} />}
+            value='sso'
           />
           <Tab
             component={WrappedNavLink}
             to={ROUTES.admin.system.globalSettings.emails.index.path()}
             label={<DiverstFormattedMessage {...messages.emails} />}
+            value='email'
+          />
+          <Tab
+            component={WrappedNavLink}
+            to={ROUTES.admin.system.globalSettings.policy_templates.index.path()}
+            label={<DiverstFormattedMessage {...messages.policy_templates} />}
+            value='policy_templates'
           />
         </ResponsiveTabs>
       </Paper>
@@ -61,7 +72,7 @@ export function GlobalSettingsLinks(props) {
 
 GlobalSettingsLinks.propTypes = {
   classes: PropTypes.object,
-  currentTab: PropTypes.number,
+  currentTab: PropTypes.string,
   currentGroup: PropTypes.object
 };
 

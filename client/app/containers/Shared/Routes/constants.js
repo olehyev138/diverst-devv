@@ -701,6 +701,14 @@ export const ROUTES = {
           edit: {
             path: (eventId = ':event_id') => `/admin/system/settings/emailEvents/${eventId}/edit`
           },
+        },
+        policy_templates: {
+          index: {
+            path: () => '/admin/system/settings/policy_templates'
+          },
+          edit: {
+            path: (policyId = ':policy_id') => `/admin/system/settings/policy_templates/${policyId}/edit`
+          },
         }
       },
       branding: {

@@ -381,6 +381,7 @@
   "diverst.containers.GlobalSettings.Links.configuration" : "Configurations",
   "diverst.containers.GlobalSettings.Links.sso" : "SSO",
   "diverst.containers.GlobalSettings.Links.emails" : "Emails",
+  "diverst.containers.GlobalSettings.Links.policy_templates" : "Permissions",
   "diverst.containers.GlobalSettings.CustomText.form.button.update": "Update Custom Text",
   "diverst.containers.GlobalSettings.CustomText.form.button.cancel": "Cancel",
   "diverst.containers.GlobalSettings.CustomText.form.custom_text.erg": "ERG",
