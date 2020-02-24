@@ -240,6 +240,7 @@ workflows:
     jobs:
       - lint
       - test:
+          context: backend-test
           requires:
             - lint
       - deploy-testing:
