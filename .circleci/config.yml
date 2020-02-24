@@ -132,7 +132,7 @@ jobs:
           socket: /var/run/mysqld/mysqld.sock
         ' > config/database.yml
     - run:
-        command: bundle exec rake db:create db:schema:load
+        command: bundle exec rake db:create db:schema:load --trace
         environment:
           RAILS_ENV: test
           RACK_ENV: test
