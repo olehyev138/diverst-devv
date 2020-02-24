@@ -12,9 +12,6 @@ module Diverst
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
 
-    # Setting Table name for ActiveRecord Session Store
-    ActiveRecord::SessionStore::Session.table_name = 'legacy_sessions'
-
     # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
     # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
     config.time_zone = 'Eastern Time (US & Canada)'
@@ -40,7 +37,7 @@ module Diverst
 
     config.active_job.queue_adapter = :sidekiq
 
-    Rails.application.routes.default_url_options[:host] = ENV['DOMAIN'] || "localhost:#{Rails::Server.new.options[:Port] || 3000}"
+    Rails.application.routes.default_url_options[:host] = ENV['DOMAIN'] || 'localhost:3000'
 
     config.action_dispatch.rescue_responses['Pundit::NotAuthorizedError'] = :forbidden
 
