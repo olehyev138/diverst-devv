@@ -50,7 +50,7 @@ export function PolicyTemplatesPage(props) {
 
   const [params, setParams] = useState(defaultParams);
 
-  const getPolicies = (newParams = params) => {
+  const getPolicies = (newParams = {}) => {
     const updatedParams = {
       ...params,
       ...newParams,
