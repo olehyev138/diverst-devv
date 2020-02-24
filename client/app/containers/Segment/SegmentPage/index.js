@@ -35,6 +35,9 @@ import SegmentForm from 'components/Segment/SegmentForm';
 import SegmentMemberListPage from 'containers/Segment/SegmentMemberListPage';
 import { selectEnterprise } from 'containers/Shared/App/selectors';
 
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/Segment/messages';
+
 export function SegmentPage(props) {
   useInjectReducer({ key: 'segments', reducer });
   useInjectReducer({ key: 'groups', reducer: groupReducer });
@@ -73,7 +76,7 @@ export function SegmentPage(props) {
           selectFields: props.selectFields,
           fields: props.fields
         }}
-        buttonText={segmentId ? 'Update' : 'Create'}
+        buttonText={segmentId ? <DiverstFormattedMessage {...messages.update} /> :  <DiverstFormattedMessage {...messages.create} />}
         isCommitting={props.isCommitting}
         isFormLoading={props.edit ? props.isFormLoading : undefined}
         currentEnterprise={props.currentEnterprise}

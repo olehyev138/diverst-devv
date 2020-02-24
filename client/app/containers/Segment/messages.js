@@ -52,5 +52,79 @@ export default defineMessages({
     scope_rule: {
       id: `${scope}.form.label.scope_rule`,
     },
+  },
+  list: {
+    name: {
+      id: `${scope}.list.column.name`,
+    },
+    title: {
+      id: `${scope}.list.title`,
+    },
+    edit: {
+      id: `${scope}.list.tooltip.edit`,
+    },
+    delete: {
+      id: `${scope}.list.tooltip.delete`,
+    },
+  },
+  member: {
+    firstname: {
+      id: `${scope}.member.column.firstname`,
+    },
+    lastname: {
+      id: `${scope}.member.column.lastname`,
+    },
+    title: {
+      id: `${scope}.member.title`,
+    },
+    export: {
+      id: `${scope}.member.export`,
+    },
+  },
+  rule: {
+    tab: {
+      field: {
+        id: `${scope}.rule.tab.field`,
+      },
+      order: {
+        id: `${scope}.rule.tab.order`,
+      },
+      group: {
+        id: `${scope}.rule.tab.group`,
+      },
+    },
+    button: {
+      field: {
+        id: `${scope}.rule.button.field`,
+      },
+      order: {
+        id: `${scope}.rule.button.order`,
+      },
+      group: {
+        id: `${scope}.rule.button.group`,
+      },
+    },
+    field: {
+      id: `${scope}.rule.field`,
+    },
+    operator: {
+      id: `${scope}.rule.operator`,
+    },
+    order: {
+      field: {
+        id: `${scope}.rule.order.field`,
+      },
+      operator: {
+        id: `${scope}.rule.order.operator`,
+      },
+    },
+    group: {
+      field: {
+        id: `${scope}.rule.group.field`,
+      },
+      operator: {
+        id: `${scope}.rule.group.operator`,
+      },
+    }
   }
 });

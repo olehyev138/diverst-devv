@@ -20,6 +20,9 @@ import DeleteIcon from '@material-ui/icons/DeleteOutline';
 
 import SegmentRule from 'components/Segment/SegmentRules/SegmentRule';
 
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/Segment/messages';
+
 const styles = theme => ({
   ruleInput: {
     width: '100%',
@@ -48,9 +51,9 @@ export function SegmentRules({ values, classes, ...props }) {
    */
   const [tab, setTab] = useState(RuleTypes.field);
   const ruleData = [
-    { name: 'field_rules_attributes', label: 'Field Rule' },
-    { name: 'order_rules_attributes', label: 'Order Rule' },
-    { name: 'group_rules_attributes', label: 'Group Rule' }
+    { name: 'field_rules_attributes', label: <DiverstFormattedMessage {...messages.rule.button.field} /> },
+    { name: 'order_rules_attributes', label: <DiverstFormattedMessage {...messages.rule.button.order} /> },
+    { name: 'group_rules_attributes', label: <DiverstFormattedMessage {...messages.rule.button.group} /> }
   ];
 
   const initialRules = [
@@ -73,9 +76,9 @@ export function SegmentRules({ values, classes, ...props }) {
           textColor='primary'
           centered
         >
-          <Tab label='Field Rules' />
-          <Tab label='Order Rules' />
-          <Tab label='Group Rules' />
+          <Tab label={<DiverstFormattedMessage {...messages.rule.tab.field} />} />
+          <Tab label={<DiverstFormattedMessage {...messages.rule.tab.order} />} />
+          <Tab label={<DiverstFormattedMessage {...messages.rule.tab.group} />} />
         </Tabs>
       </Paper>
       <Box mb={1} />
