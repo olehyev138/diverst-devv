@@ -637,5 +637,14 @@
   "diverst.containers.Resource.form.input.title": "Title",
   "diverst.containers.Resource.form.input.folder": "Move to a Folder",
   "diverst.containers.Resource.form.input.upload": "Upload the file",
-  "diverst.containers.Resource.form.input.url": "URL"
+  "diverst.containers.Resource.form.input.url": "URL",
+  "diverst.components.PlaceholderPage.example": "Example Content",
+  "diverst.components.DiverstFileInput.replace": "Replace File",
+  "diverst.components.DiverstFileInput.choose": "Choose File",
+  "diverst.components.DiverstFileInput.waiting": "Waiting to upload",
+  "diverst.components.DiverstFileInput.uploading": "Uploading",
+  "diverst.components.DiverstFileInput.error": "Error uploading",
+  "diverst.components.DiverstFileInput.finished": "Finished uploading",
+  "diverst.components.DiverstFileInput.nofile": "No file selected",
+  "diverst.components.DiverstTable.title": "Table"
 }

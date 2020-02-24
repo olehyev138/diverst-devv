@@ -6,6 +6,10 @@
 
 import { defineMessages } from 'react-intl';
 
-export const scope = 'app.containers.PlaceholderPage';
+export const scope = 'diverst.components.PlaceholderPage';
 
-export default defineMessages({});
+export default defineMessages({
+  example: {
+    id: `${scope}.example`,
+  },
+});
