@@ -23,8 +23,9 @@ import {
 import { getGroupsBegin } from 'containers/Group/actions';
 import { selectPaginatedSelectGroups } from 'containers/Group/selectors';
 
-
 import CampaignForm from 'components/Innovate/Campaign/CampaignForm';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/Innovate/Campaign/messages';
 
 export function CampaignCreatePage(props) {
   useInjectReducer({ key: 'campaigns', reducer });
@@ -41,7 +42,7 @@ export function CampaignCreatePage(props) {
   return (
     <CampaignForm
       campaignAction={props.createCampaignBegin}
-      buttonText='Create'
+      buttonText={<DiverstFormattedMessage {...messages.create} />}
       getGroupsBegin={props.getGroupsBegin}
       selectGroups={props.groups}
       isCommitting={props.isCommitting}

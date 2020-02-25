@@ -23,6 +23,8 @@ import CampaignForm from 'components/Innovate/Campaign/CampaignForm';
 
 import { getGroupsBegin } from 'containers/Group/actions';
 import { selectPaginatedSelectGroups, selectFormGroup } from 'containers/Group/selectors';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/Innovate/Campaign/messages';
 
 export function CampaignEditPage(props) {
   useInjectReducer({ key: 'campaigns', reducer });
@@ -51,7 +53,7 @@ export function CampaignEditPage(props) {
       campaignAction={props.updateCampaignBegin}
       isCommitting={props.isCommitting}
       isFormLoading={props.isFormLoading}
-      buttonText='Update'
+      buttonText={<DiverstFormattedMessage {...messages.update} />}
       campaign={props.campaign}
       links={links}
     />

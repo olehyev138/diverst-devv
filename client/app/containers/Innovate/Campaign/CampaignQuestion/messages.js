@@ -31,8 +31,17 @@ export default defineMessages({
     placeholder: {
       id: `${scope}.question.placeholder`,
     },
+    mark_close: {
+      id: `${scope}.question.text.mark_close`,
+    },
+    mark_close_description: {
+      id: `${scope}.question.text.mark_close_description`,
+    },
     close: {
       id: `${scope}.question.button.close`,
+    },
+    closed: {
+      id: `${scope}.question.button.closed`,
     },
     back: {
       id: `${scope}.question.button.back`,

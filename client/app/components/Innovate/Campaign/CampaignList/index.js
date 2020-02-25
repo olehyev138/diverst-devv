@@ -25,6 +25,7 @@ import ExportIcon from '@material-ui/icons/SaveAlt';
 
 import DiverstTable from 'components/Shared/DiverstTable';
 import CampaignQuestionsList from '../CampaignQuestion/CampaignQuestionsList';
+import { injectIntl, intlShape } from 'react-intl';
 
 const styles = theme => ({
   errorButton: {
@@ -47,7 +48,7 @@ const styles = theme => ({
 
 export function CampaignList(props) {
   const { classes } = props;
-  const { links } = props;
+  const { links, intl } = props;
 
   const handleOrderChange = (columnId, orderDir) => {
   };
@@ -70,7 +71,7 @@ export function CampaignList(props) {
             component={WrappedNavLink}
             startIcon={<AddIcon />}
           >
-            NEW CAMPAIGN
+            <DiverstFormattedMessage {...messages.new} />
           </Button>
         </Box>
         <Box className={classes.floatSpacer} />
@@ -97,7 +98,7 @@ export function CampaignList(props) {
               tooltip: <DiverstFormattedMessage {...messages.Campaign.delete} />,
               onClick: (_, rowData) => {
                 /* eslint-disable-next-line no-alert, no-restricted-globals */
-                if (confirm('Delete campaign?'))
+                if (confirm(intl.formatMessage(messages.Campaign.delete_confirm)))
                   props.deleteCampaignBegin({ id: rowData.id });
               }
             }]}
@@ -109,6 +110,7 @@ export function CampaignList(props) {
 
 CampaignList.propTypes = {
   classes: PropTypes.object,
+  intl: intlShape,
   deleteCampaignBegin: PropTypes.func,
   links: PropTypes.shape({
     campaignNew: PropTypes.string,
@@ -128,5 +130,6 @@ CampaignList.propTypes = {
 
 export default compose(
   memo,
+  injectIntl,
   withStyles(styles)
 )(CampaignList);

@@ -35,8 +35,8 @@ export function CampaignQuestionCloseInner({ handleSubmit, handleChange, handleB
       <Card>
         <Form>
           <CardContent>
-            <h2>Mark this question as solved</h2>
-            <h4>Mark this question as solved by explaining what the outcome of the discussion has been. This will block further communication on this question.</h4>
+            <h2>{props.intl.formatMessage(messages.question.mark_close)}</h2>
+            <h4>{props.intl.formatMessage(messages.question.mark_close_description)}</h4>
             <Card>
               <CardContent>
                 <Field

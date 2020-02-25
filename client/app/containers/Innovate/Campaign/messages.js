@@ -66,5 +66,8 @@ export default defineMessages({
     delete: {
       id: `${scope}.Campaign.tooltip.delete`,
     },
+    delete_confirm: {
+      id: `${scope}.Campaign.tooltip.delete_confirm`,
+    },
   },
 });
