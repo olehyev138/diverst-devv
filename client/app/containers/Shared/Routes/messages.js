@@ -38,6 +38,9 @@ export default defineMessages({
     },
   },
   groups: {
+    back: {
+      id: `${scope}.group.back`
+    },
     home: {
       id: `${scope}.group.home`
     },

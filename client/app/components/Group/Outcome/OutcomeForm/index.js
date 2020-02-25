@@ -87,7 +87,7 @@ export function OutcomeFormInner({ handleSubmit, handleChange, handleBlur, value
                       <Typography
                         variant='h6'
                       >
-                        Pillars
+                        <DiverstFormattedMessage {...messages.pillars.title} />
                       </Typography>
                     </Grid>
                     <Grid item>

@@ -48,11 +48,17 @@ export default defineMessages({
     id: `${scope}.index.return`
   },
   pillars: {
+    title: {
+      id: `${scope}.Pillar.title`,
+    },
     text: {
       id: `${scope}.Pillar.text`,
     },
     delete: {
       id: `${scope}.Pillar.form.button.delete`,
+    },
+    delete_confirm: {
+      id: `${scope}.Pillar.form.button.delete_confirm`,
     },
     empty: {
       id: `${scope}.Pillar.empty`,

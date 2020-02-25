@@ -144,6 +144,11 @@ export const ROUTES = {
 
   group: {
     pathPrefix: '/groups',
+    back: {
+      data: {
+        titleMessage: messages.groups.back,
+      }
+    },
     home: {
       path: (groupId = ':group_id') => `/groups/${groupId}`,
       data: {

@@ -40,6 +40,12 @@ export default defineMessages({
     title: {
       id: `${scope}.leader.list.title`,
     },
+    column_name: {
+      id: `${scope}.leader.list.column`,
+    },
+    column_position: {
+      id: `${scope}.leader.list.position`,
+    },
   },
   links: {
     settings: {
