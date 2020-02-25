@@ -9,6 +9,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
+import dig from 'object-dig';
 
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
@@ -96,12 +97,13 @@ export function ThemeProvider(props) {
   // Defaults
   const [theme, setTheme] = useState(buildTheme(DEFAULT_BRANDING_COLOR, DEFAULT_CHARTS_COLOR));
 
+  // Only rebuild theme if theme relevant values change
   useEffect(() => {
     if (enterprise && enterprise.theme)
       setTheme(buildTheme(enterprise.theme.branding_color, enterprise.theme.charts_color));
     else
       setTheme(buildTheme(DEFAULT_BRANDING_COLOR, DEFAULT_CHARTS_COLOR));
-  }, [enterprise]);
+  }, [dig(enterprise, 'theme', 'branding_color'), dig(enterprise, 'theme', 'charts_color')]);
 
   return (
     <MuiThemeProvider theme={theme}>
