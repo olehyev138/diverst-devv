@@ -27,7 +27,7 @@ import EditIcon from '@material-ui/icons/Edit';
 
 import DiverstTable from 'components/Shared/DiverstTable';
 import DiverstDropdownMenu from 'components/Shared/DiverstDropdownMenu';
-
+import { injectIntl, intlShape } from 'react-intl';
 
 const styles = theme => ({
   userListItem: {
@@ -42,7 +42,7 @@ const styles = theme => ({
 });
 
 export function UserList(props, context) {
-  const { classes } = props;
+  const { classes, intl } = props;
   const [expandedUsers, setExpandedUsers] = useState({});
 
   const [userForm, setUserForm] = useState(undefined);
@@ -137,7 +137,7 @@ export function UserList(props, context) {
               tooltip: <DiverstFormattedMessage {...messages.tooltip.delete} />,
               onClick: (_, rowData) => {
                 /* eslint-disable-next-line no-alert, no-restricted-globals */
-                if (confirm('Delete member?'))
+                if (confirm(intl.formatMessage(messages.delete_confirm)))
                   props.deleteUserBegin(rowData.id);
               }
             }]}
@@ -178,6 +178,7 @@ export function UserList(props, context) {
 }
 
 UserList.propTypes = {
+  intl: intlShape,
   classes: PropTypes.object,
   users: PropTypes.object,
   userTotal: PropTypes.number,
@@ -195,6 +196,7 @@ UserList.propTypes = {
 };
 
 export default compose(
+  injectIntl,
   memo,
   withStyles(styles),
 )(UserList);

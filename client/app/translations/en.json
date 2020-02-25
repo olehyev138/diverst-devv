@@ -376,6 +376,7 @@
   "diverst.containers.User.index.button.new":"Add new user",
   "diverst.containers.User.index.button.edit": "Edit",
   "diverst.containers.User.index.button.delete": "Delete",
+  "diverst.containers.User.index.text.delete_confirm": "Delete member?",
   "diverst.containers.User.index.button.rows": "Rows per page",
   "diverst.containers.User.index.button.page": "of",
   "diverst.containers.User.form.button.create": "Create",
