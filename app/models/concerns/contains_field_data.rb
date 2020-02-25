@@ -6,7 +6,14 @@ module ContainsFieldData
     before_validation :transfer_info_to_data
     validate :validate_presence_field_data
 
-    has_many self::FIELD_ASSOCIATION_NAME, class_name: 'Field', through: self::FIELD_DEFINER_NAME
+    if self.get_association(self::FIELD_DEFINER_NAME).polymorphic?
+      define_method self::FIELD_ASSOCIATION_NAME do
+        field_definer.send(self.class::FIELD_ASSOCIATION_NAME).load
+      end
+    else
+      has_many self::FIELD_ASSOCIATION_NAME, class_name: 'Field', through: self::FIELD_DEFINER_NAME
+    end
+
     has_many :field_data, class_name: 'FieldData', as: :field_user, dependent: :destroy
     accepts_nested_attributes_for :field_data
 

@@ -21,6 +21,10 @@ class ApplicationRecord < ActiveRecord::Base
     end
   end
 
+  def self.get_association(name)
+    reflect_on_all_associations.find { |ass| ass.name == name.to_sym }
+  end
+
   after_commit on: [:create] do update_elasticsearch_index('index') end
   after_commit on: [:update] do update_elasticsearch_index('update') end
   after_commit on: [:destroy] do update_elasticsearch_index('delete') end
