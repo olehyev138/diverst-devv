@@ -39,6 +39,7 @@
   "diverst.containers.Login.links.forgotPassword": "Forgot Password",
   "diverst.containers.Login.links.findEnterprise": "Find my Community",
   "diverst.containers.NotFoundPage.headers.header": "This page does not exist",
+  "diverst.containers.NotFoundPage.button.return": "Return To Home",
   "diverst.containers.LocaleToggle.en": "en",
   "diverst.containers.LocaleToggle.fr": "fr",
   "diverst.containers.LocaleToggle.es": "es",
@@ -347,6 +348,7 @@
   "diverst.containers.Field.index.button.selectField.new":"New Select Field",
   "diverst.containers.Field.index.button.edit": "Edit",
   "diverst.containers.Field.index.button.delete": "Delete",
+  "diverst.containers.Field.index.text.delete_confirm": "Delete field?",
   "diverst.containers.Field.index.button.rows": "Rows per page",
   "diverst.containers.Field.index.button.page": "of",
   "diverst.containers.Field.form.button.create": "Create",
@@ -675,5 +677,7 @@
   "diverst.components.DiverstFileInput.error": "Error uploading",
   "diverst.components.DiverstFileInput.finished": "Finished uploading",
   "diverst.components.DiverstFileInput.nofile": "No file selected",
-  "diverst.components.DiverstTable.title": "Table"
+  "diverst.components.DiverstTable.title": "Table",
+  "diverst.components.ErrorBoundary.home": "Home",
+  "diverst.components.ErrorBoundary.message": "Oops! Something went wrong here. We're working on it and we'll get it fixed as soon as possible. You can go back or use our Help Center."
 }

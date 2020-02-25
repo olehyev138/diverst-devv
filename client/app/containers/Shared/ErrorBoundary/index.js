@@ -2,6 +2,8 @@ import React from 'react';
 import { Grid, Button } from '@material-ui/core';
 import robot from 'images/robot.svg';
 import PropTypes from 'prop-types';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/Shared/ErrorBoundary/messages';
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -37,8 +39,8 @@ class ErrorBoundary extends React.Component {
               <img src={robot} alt='Oops!' height='150' width='150' />
 
               { /* TODO: translation strings */ }
-              <h4>Oops! Something went wrong here. We&apos;re working on it and we&apos;ll get it fixed as soon as possible. You can go back or use our Help Center.</h4>
-              <Button>Home</Button>
+              <h4>{<DiverstFormattedMessage {...messages.message} />}</h4>
+              <Button>{<DiverstFormattedMessage {...messages.home} />}</Button>
             </Grid>
           </Grid>
         </React.Fragment>
