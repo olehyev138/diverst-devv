@@ -121,7 +121,7 @@ export function MentorsPage(props) {
     <React.Fragment>
       <RequestList
         user={props.user}
-        globalUser={props.globalUser}
+        userSession={props.userSession}
         userParams={params}
 
         requests={requests}
@@ -145,7 +145,7 @@ export function MentorsPage(props) {
 MentorsPage.propTypes = {
   type: PropTypes.string,
   user: PropTypes.object,
-  globalUser: PropTypes.shape({
+  userSession: PropTypes.shape({
     id: PropTypes.number
   }).isRequired,
 

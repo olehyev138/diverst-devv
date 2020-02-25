@@ -118,7 +118,7 @@ export function UserList(props, context) {
       <Grid container spacing={3}>
         <Grid item xs>
           <DiverstTable
-            title={<DiverstFormattedMessage {...messages.members} />}
+            title={intl.formatMessage(messages.members)}
             handlePagination={props.handlePagination}
             handleOrdering={props.handleOrdering}
             isLoading={props.isFetchingUsers}
@@ -128,13 +128,13 @@ export function UserList(props, context) {
             columns={columns}
             actions={[{
               icon: () => <EditIcon />,
-              tooltip: <DiverstFormattedMessage {...messages.tooltip.edit} />,
+              tooltip: intl.formatMessage(messages.tooltip.edit),
               onClick: (_, rowData) => {
                 props.handleVisitUserEdit(rowData.id);
               }
             }, {
               icon: () => <DeleteIcon />,
-              tooltip: <DiverstFormattedMessage {...messages.tooltip.delete} />,
+              tooltip: intl.formatMessage(messages.tooltip.edit),
               onClick: (_, rowData) => {
                 /* eslint-disable-next-line no-alert, no-restricted-globals */
                 if (confirm(intl.formatMessage(messages.delete_confirm)))

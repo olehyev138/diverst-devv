@@ -39,8 +39,8 @@ class ErrorBoundary extends React.Component {
               <img src={robot} alt='Oops!' height='150' width='150' />
 
               { /* TODO: translation strings */ }
-              <h4>{<DiverstFormattedMessage {...messages.message} />}</h4>
-              <Button>{<DiverstFormattedMessage {...messages.home} />}</Button>
+              <h4><DiverstFormattedMessage {...messages.message} /></h4>
+              <Button><DiverstFormattedMessage {...messages.home} /></Button>
             </Grid>
           </Grid>
         </React.Fragment>

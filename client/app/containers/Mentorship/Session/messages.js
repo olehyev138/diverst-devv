@@ -79,6 +79,12 @@ export default defineMessages({
     leadedBy: {
       id: `${scope}.show.leadedBy`,
     },
+    from: {
+      id: `${scope}.show.from`,
+    },
+    to: {
+      id: `${scope}.show.to`,
+    },
     accept: {
       id: `${scope}.show.accept`,
     },
