@@ -82,7 +82,7 @@ export function GroupMessageForm(props) {
     id: { default: '' },
     subject: { default: '' },
     content: { default: '' },
-    owner_id: { default: dig(props, 'currentUser', 'id') || '' },
+    owner_id: { default: dig(props, 'currentUser', 'user_id') || '' },
     group_id: { default: dig(props, 'currentGroup', 'id') || '' }
   });
 
