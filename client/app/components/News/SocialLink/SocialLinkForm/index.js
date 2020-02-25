@@ -60,7 +60,7 @@ export function SocialLinkForm(props) {
   const initialValues = buildValues(socialLink, {
     id: { default: '' },
     url: { default: '' },
-    author_id: { default: dig(props, 'currentUser', 'id') || '' },
+    author_id: { default: dig(props, 'currentUser', 'user_id') || '' },
     group_id: { default: dig(props, 'currentGroup', 'id') || '' }
   });
 
