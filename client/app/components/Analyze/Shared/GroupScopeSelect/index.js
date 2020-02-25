@@ -58,7 +58,7 @@ export function GroupScopeSelectInner({ handleSubmit, handleChange, handleBlur, 
             color='primary'
             type='submit'
           >
-            Refresh
+            <DiverstFormattedMessage {...messages.refresh} />
           </Button>
         </CardActions>
       </Form>
