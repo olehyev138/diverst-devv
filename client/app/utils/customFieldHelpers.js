@@ -66,13 +66,13 @@ function deserializeDatum(fieldDatum) {
 
   switch (type) {
     case 'CheckboxField':
-      return JSON.parse(datum).map(i => ({ label: i, value: i }));
+      return datum ? JSON.parse(datum).map(i => ({ label: i, value: i })) : [];
     case 'SelectField':
       /* Certain fields have there data json serialized as a single item array  */
-      return { label: JSON.parse(datum)[0], value: JSON.parse(datum)[0] };
+      return datum ? { label: JSON.parse(datum)[0], value: JSON.parse(datum)[0] } : {};
     case 'DateField':
       /* TODO: change this to use Moment.js */
-      return new Date(JSON.parse(datum)).toISOString().split('T')[0];
+      return datum ? new Date(JSON.parse(datum)).toISOString().split('T')[0] : null;
     default:
       return datum;
   }
