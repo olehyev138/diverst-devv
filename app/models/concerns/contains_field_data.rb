@@ -8,7 +8,7 @@ module ContainsFieldData
 
     if self.get_association(self::FIELD_DEFINER_NAME).polymorphic?
       define_method self::FIELD_ASSOCIATION_NAME do
-        field_definer.send(self.class::FIELD_ASSOCIATION_NAME).load
+        field_definer&.send(self.class::FIELD_ASSOCIATION_NAME)&.load || Field.none
       end
     else
       has_many self::FIELD_ASSOCIATION_NAME, class_name: 'Field', through: self::FIELD_DEFINER_NAME
