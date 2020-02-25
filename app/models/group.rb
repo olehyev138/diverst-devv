@@ -308,7 +308,7 @@ class Group < ApplicationRecord
   end
 
   def total_views
-    views.count
+    views.size
   end
 
   def is_standard_group?

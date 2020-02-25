@@ -1,7 +1,6 @@
 class AnswerSerializer < ApplicationRecordSerializer
-  attributes :question, :content, :total_likes
+  attributes :question, :content, :total_likes, :author
 
-  belongs_to :author
   has_many :comments
 
   def serialize_all_fields

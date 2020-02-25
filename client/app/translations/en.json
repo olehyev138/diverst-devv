@@ -37,6 +37,8 @@
   "diverst.containers.Login.input.password.invalid": "Invalid password",
   "diverst.containers.Login.links.forgotPassword": "Forgot Password",
   "diverst.containers.Login.links.findEnterprise": "Find my Community",
+  "diverst.containers.ForgotPassword.button.resetPassword": "Reset Password",
+  "diverst.containers.ForgotPassword.links.login": "Login",
   "diverst.containers.NotFoundPage.headers.header": "This page does not exist",
   "diverst.containers.LocaleToggle.en": "en",
   "diverst.containers.LocaleToggle.fr": "fr",

@@ -22,7 +22,7 @@ module Initiative::Actions
     end
 
     def base_preloads
-      [:outcome, :pillar, :owner, :expenses, :budget, :picture_attachment]
+      [:pillar, :owner, :budget, :outcome, :expenses, :picture_attachment, :qr_code_attachment]
     end
 
     def generate_qr_code(diverst_request, params)

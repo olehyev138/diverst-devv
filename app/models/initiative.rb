@@ -228,7 +228,11 @@ class Initiative < ApplicationRecord
   end
 
   def current_expenses_sum
-    expenses.sum(:amount) || 0
+    if association(:expenses).loaded?
+      expenses.to_a.sum(&:amount)
+    else
+      expenses.sum(:amount) || 0
+    end
   end
 
   def has_no_estimated_funding?
