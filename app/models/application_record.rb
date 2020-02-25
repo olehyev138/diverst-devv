@@ -57,7 +57,7 @@ class ApplicationRecord < ActiveRecord::Base
     end
     [query.total_sum, query.total_count]
   end
-  
+
   if Rails.env.development?
     def self.preload_test(preload: true, limit: 10, serializer: nil)
       arr = []
