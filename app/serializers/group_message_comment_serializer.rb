@@ -1,5 +1,5 @@
 class GroupMessageCommentSerializer < ApplicationRecordSerializer
-  belongs_to :author
+  attributes :author
 
   def serialize_all_fields
     true

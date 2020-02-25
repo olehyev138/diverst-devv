@@ -1,5 +1,6 @@
 class NewsLink < ApplicationRecord
   include PublicActivity::Common
+  include NewsLink::Actions
 
   belongs_to :group
   belongs_to :author, class_name: 'User'
@@ -66,9 +67,9 @@ class NewsLink < ApplicationRecord
 
   def comments_count
     if group.enterprise.enable_pending_comments?
-      comments.approved.count
+      comments.approved.size
     else
-      comments.count
+      comments.size
     end
   end
 
