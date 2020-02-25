@@ -6,11 +6,27 @@ module ContainsFieldData
     before_validation :transfer_info_to_data
     validate :validate_presence_field_data
 
+    has_many self::FIELD_ASSOCIATION_NAME, class_name: 'Field', through: self::FIELD_DEFINER_NAME
     has_many :field_data, class_name: 'FieldData', as: :field_user, dependent: :destroy
-
     accepts_nested_attributes_for :field_data
 
     after_create :create_missing_field_data
+
+    # Returns the fields a field_user can use
+    #
+    # @author Alex Oxorn
+    #
+    # @return [Field::ActiveRecord_Associations_CollectionProxy] List of Fields
+    # @return [Field::ActiveRecord_Relation] Field.none if +field_definer+ doesn't exist
+    #
+    # @example
+    #    u = User.first
+    #    u.fields #=> [< Gender Field >, < D.O.B. Field > ...]
+    if instance_methods.exclude? :fields
+      def fields
+        send(self.class::FIELD_ASSOCIATION_NAME)
+      end
+    end
 
     extend ClassMethods
   end
@@ -29,7 +45,7 @@ module ContainsFieldData
     case key
     when Symbol, String then super(key)
     when Field
-      raise FieldNotFound unless fields.ids.include? key.id
+      raise FieldNotFound unless fields.load.ids.include? key.id
 
       fd = get_field_data(key) || (new_record? ? field_data.new(data: nil, field_id: key.id) : field_data.create(data: nil, field_id: key.id))
       fd.deserialized_data
@@ -65,20 +81,6 @@ module ContainsFieldData
     self.data = JSON.generate @info unless @info.nil?
   end
 
-  # Returns the fields a field_user can use
-  #
-  # @author Alex Oxorn
-  #
-  # @return [Field::ActiveRecord_Associations_CollectionProxy] List of Fields
-  # @return [Field::ActiveRecord_Relation] Field.none if +field_definer+ doesn't exist
-  #
-  # @example
-  #    u = User.first
-  #    u.fields #=> [< Gender Field >, < D.O.B. Field > ...]
-  def fields
-    field_definer ? field_definer.send(self.class.field_association_name) : Field.none
-  end
-
   # Returns the object which defines the fields a field_user can use
   #
   # @author Alex Oxorn
@@ -90,7 +92,7 @@ module ContainsFieldData
   #    u = User.first  #=> < #User enterprise_id: 1>
   #    u.field_definer #=> < #Enterprise id: 1 >
   def field_definer
-    send(self.class.field_definer_name)
+    send(self.class::FIELD_DEFINER_NAME)
   end
 
   # Returns the id of the field_definer which defines the fields a field_user can use
@@ -104,7 +106,7 @@ module ContainsFieldData
   #    u = User.first #=> < #User enterprise_id: 1>
   #    u.field_definer #=> 1
   def field_definer_id
-    send("#{self.class.field_definer_name}_id")
+    send("#{self.class::FIELD_DEFINER_NAME}_id")
   end
 
   # Creates getter and setter methods on a singleton of a +field_user+ for its +field_data+
@@ -300,7 +302,7 @@ module ContainsFieldData
     #   u.first_name = ""
     #   u.field_data.first.data = ""
     def create_prototype(field_definer)
-      new = self.new(field_definer_name.to_sym => field_definer)
+      new = self.new(FIELD_DEFINER_NAME.to_sym => field_definer)
       new.field_data = new.prototype_fields
       new
     end

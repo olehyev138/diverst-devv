@@ -1,7 +1,6 @@
 class GroupUpdate < ApplicationRecord
-  @@field_definer_name = 'group'
-  @@field_association_name = 'fields'
-  mattr_reader :field_association_name, :field_definer_name
+  FIELD_DEFINER_NAME = :group
+  FIELD_ASSOCIATION_NAME = :fields
 
   include PublicActivity::Common
   include ContainsFieldData

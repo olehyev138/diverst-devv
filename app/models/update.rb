@@ -1,18 +1,17 @@
 class Update < ApplicationRecord
-  @@field_definer_name = 'updatable'
-  @@field_association_name = 'fields'
-  mattr_reader :field_association_name, :field_definer_name
+  FIELD_DEFINER_NAME = :updatable
+  FIELD_ASSOCIATION_NAME = :fields
+  belongs_to :updatable, polymorphic: true
 
   include Update::Actions
+  include ContainsFieldData
 
   after_save -> { UpdateNextAndPreviousUpdateJob.perform_now(id) }
   after_destroy -> { UpdateNextAndPreviousUpdateJob.perform_now(self.next.id) if self.next.present? }
 
   belongs_to :owner, class_name: 'User'
-  belongs_to :updatable, polymorphic: true
   belongs_to :previous, class_name: 'Update', inverse_of: :next
   has_one :next, class_name: 'Update', foreign_key: 'previous_id', inverse_of: :previous
-  include ContainsFieldData
   accepts_nested_attributes_for :field_data
 
   validates_length_of :comments, maximum: 65535

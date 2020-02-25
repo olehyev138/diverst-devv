@@ -1,14 +1,13 @@
 class UserGroup < ApplicationRecord
-  @@field_definer_name = 'group'
-  @@field_association_name = 'survey_fields'
-  mattr_reader :field_association_name, :field_definer_name
+  FIELD_DEFINER_NAME = :group
+  FIELD_ASSOCIATION_NAME = :survey_fields
 
+  belongs_to :group
   include ContainsFieldData
   include UserGroup::Actions
 
   # associations
   belongs_to :user
-  belongs_to :group
 
   # validations
   validates_length_of :data, maximum: 65535

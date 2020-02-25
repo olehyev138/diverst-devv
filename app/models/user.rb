@@ -1,7 +1,7 @@
 class User < ApplicationRecord
-  @@field_definer_name = 'enterprise'
-  @@field_association_name = 'fields'
-  mattr_reader :field_association_name, :field_definer_name
+  FIELD_DEFINER_NAME = :enterprise
+  FIELD_ASSOCIATION_NAME = :fields
+  belongs_to :enterprise
 
   has_secure_password
   include PublicActivity::Common
@@ -21,8 +21,7 @@ class User < ApplicationRecord
   scope :invitation_sent,         -> { where.not(invitation_token: nil).distinct }
   scope :saml,                    -> { where(auth_source: 'saml').distinct }
 
-  belongs_to  :enterprise
-  belongs_to  :user_role
+  belongs_to :user_role
 
   has_one :policy_group,  dependent: :destroy, inverse_of: :user
   has_one :device,        dependent: :destroy, inverse_of: :user
