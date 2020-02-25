@@ -1,5 +1,6 @@
 class Campaign < ApplicationRecord
   include PublicActivity::Common
+  include Campaign::Actions
 
   enum status: [:published, :draft]
 

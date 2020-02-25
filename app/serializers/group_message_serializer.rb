@@ -1,5 +1,5 @@
 class GroupMessageSerializer < ApplicationRecordSerializer
-  attributes :group, :owner, :comments_count
+  attributes :owner, :comments_count
 
   has_many :comments
 
