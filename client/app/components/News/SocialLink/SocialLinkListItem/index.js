@@ -20,14 +20,14 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/News/messages';
 import WrappedNavLink from '../../../Shared/WrappedNavLink';
-
+import { injectIntl, intlShape } from 'react-intl';
 const styles = theme => ({
 });
 
 export function SocialLinkListItem(props) {
   const { socialLink } = props;
   const { newsItem } = props;
-  const { links } = props;
+  const { links, intl } = props;
   const newsItemId = newsItem.id;
   const groupId = socialLink.group_id;
   return (
@@ -72,7 +72,7 @@ export function SocialLinkListItem(props) {
           size='small'
           onClick={() => {
             /* eslint-disable-next-line no-alert, no-restricted-globals */
-            if (confirm('Delete social link?'))
+            if (confirm(intl.formatMessage(messages.social_delete_confirm)))
               props.deleteSocialLinkBegin(newsItem.social_link);
           }}
         >
@@ -84,6 +84,7 @@ export function SocialLinkListItem(props) {
 }
 
 SocialLinkListItem.propTypes = {
+  intl: intlShape,
   socialLink: PropTypes.object,
   links: PropTypes.shape({
     socialLinkEdit: PropTypes.func,
@@ -94,6 +95,7 @@ SocialLinkListItem.propTypes = {
 };
 
 export default compose(
+  injectIntl,
   memo,
   withStyles(styles)
 )(SocialLinkListItem);

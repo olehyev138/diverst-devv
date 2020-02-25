@@ -26,7 +26,7 @@ import DiverstTable from 'components/Shared/DiverstTable';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Segment/messages';
-
+import { injectIntl, intlShape } from 'react-intl';
 
 const styles = theme => ({
   segmentListItem: {
@@ -42,7 +42,7 @@ const styles = theme => ({
 
 export function SegmentList(props, context) {
   const { classes } = props;
-  const { links } = props;
+  const { links, intl } = props;
   const [expandedSegments, setExpandedSegments] = useState({});
 
   /* Store a expandedSegmentsHash for each segment, that tracks whether or not its children are expanded */
@@ -109,7 +109,7 @@ export function SegmentList(props, context) {
               tooltip: <DiverstFormattedMessage {...messages.list.delete} />,
               onClick: (_, rowData) => {
                 /* eslint-disable-next-line no-alert, no-restricted-globals */
-                if (confirm('Delete segment?'))
+                if (confirm(intl.formatMessage(messages.delete_confirm)))
                   props.deleteSegmentBegin(rowData.id);
               }
             }]}
@@ -121,6 +121,7 @@ export function SegmentList(props, context) {
   );
 }
 SegmentList.propTypes = {
+  intl: intlShape,
   classes: PropTypes.object,
   segments: PropTypes.object,
   segmentTotal: PropTypes.number,
@@ -136,6 +137,7 @@ SegmentList.propTypes = {
   })
 };
 export default compose(
+  injectIntl,
   memo,
   withStyles(styles),
 )(SegmentList);

@@ -24,6 +24,15 @@ export default defineMessages({
   delete: {
     id: `${scope}.index.button.delete`,
   },
+  group_delete_confirm: {
+    id: `${scope}.index.button.group.delete_confirm`,
+  },
+  news_delete_confirm: {
+    id: `${scope}.index.button.news.delete_confirm`,
+  },
+  social_delete_confirm: {
+    id: `${scope}.index.button.social.delete_confirm`,
+  },
   create: {
     id: `${scope}.form.button.create`,
   },
@@ -35,6 +44,9 @@ export default defineMessages({
   },
   subject: {
     id: `${scope}.form.group_message.input.subject`,
+  },
+  comment: {
+    id: `${scope}.form.group_message.label.comment`,
   },
   content: {
     id: `${scope}.form.group_message.input.content`,
