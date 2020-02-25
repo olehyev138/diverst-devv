@@ -55,7 +55,7 @@ export function UserEditPage(props) {
         links={links}
         user={props.user}
         fieldData={props.fieldData}
-        buttonText='update'
+        buttonText={<DiverstFormattedMessage {...messages.update} />}
         admin={props.path.startsWith('/admin')}
         isCommitting={props.isCommitting}
         isFormLoading={props.isFormLoading}
