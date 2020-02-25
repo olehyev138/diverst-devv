@@ -10,6 +10,7 @@ import {
   ErrorLayout,
   GlobalSettingsLayout,
   LoginPage,
+  ForgotPasswordPage,
   HomePage,
   UserGroupListPage,
   AdminGroupListPage,
@@ -128,6 +129,7 @@ export default function Routes(props) {
     <Switch>
       { /* Session */ }
       <SessionLayout {...expandRoute(ROUTES.session.login)} component={LoginPage} />
+      <SessionLayout {...expandRoute(ROUTES.session.forgotPassword)} component={ForgotPasswordPage} />
 
       { /* User */}
       <UserLayout exact {...expandRoute(ROUTES.user.home)} component={HomePage} />

@@ -7,6 +7,9 @@ export const ROUTES = {
     login: {
       path: () => '/login',
     },
+    forgotPassword: {
+      path: () => '/forgot',
+    },
   },
 
   // User
