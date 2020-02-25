@@ -19,7 +19,7 @@ class SelectField < Field
     when OPERATORS[:not_equals_any_of]
       v2.is_a?(Array) && (v2.exclude? v1[0])
     else
-      super(v1, v2, operators)
+      super(v1, v2, operator)
     end
   end
 
