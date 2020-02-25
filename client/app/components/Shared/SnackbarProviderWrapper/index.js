@@ -30,6 +30,8 @@ const styles = theme => ({
   }
 });
 
+const SlideTransition = props => <Slide {...props} direction='up' />;
+
 function SnackbarProviderWrapper(props) {
   /* eslint-disable-next-line no-shadow */
   const SlideTransition = props => <Slide {...props} direction='up' />;
