@@ -2,11 +2,11 @@ class GroupUpdate < ApplicationRecord
   FIELD_DEFINER_NAME = :group
   FIELD_ASSOCIATION_NAME = :fields
 
+  belongs_to :group
   include PublicActivity::Common
   include ContainsFieldData
 
   belongs_to :owner, class_name: 'User'
-  belongs_to :group
 
   validates_length_of :comments, maximum: 65535
   validates_length_of :data, maximum: 65535
