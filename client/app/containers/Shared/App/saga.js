@@ -52,7 +52,7 @@ export function* login(action) {
     yield put(push(ROUTES.user.home.path()));
   } catch (err) {
     yield put(loginError(err));
-    yield put(showSnackbar({ message: err.response.data, options: { variant: 'error' } }));
+    yield put(showSnackbar({ message: err.response.data, options: { variant: 'error', autoHideDuration: 2500 } }));
   }
 }
 
@@ -98,7 +98,7 @@ export function* logout() {
     if (response.data.logout_link)
       window.location.assign(response.data.logout_link);
     else
-      yield put(showSnackbar({ message: 'You have been logged out', options: { variant: 'info' } }));
+      yield put(showSnackbar({ message: 'You have been logged out', options: { variant: 'info', autoHideDuration: 2500 } }));
   } catch (err) {
     yield put(logoutError(err));
 
@@ -107,7 +107,7 @@ export function* logout() {
     yield call(AuthService.discardUserData);
     yield put(logoutSuccess());
 
-    yield put(showSnackbar({ message: 'You have been logged out', options: { variant: 'info' } }));
+    yield put(showSnackbar({ message: 'You have been logged out', options: { variant: 'info', autoHideDuration: 2500 } }));
   }
 }
 
