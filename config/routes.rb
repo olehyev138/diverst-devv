@@ -1,6 +1,8 @@
 Diverst::Application.routes.draw do
   require 'sidekiq/web'
 
+  Healthcheck.routes(self)
+
   Sidekiq::Web.use Rack::Auth::Basic do |username, password|
     username == ENV['SIDEKIQ_DASHBOARD_USERNAME'] && password == ENV['SIDEKIQ_DASHBOARD_PASSWORD']
   end if Rails.env.production?
@@ -33,6 +35,7 @@ Diverst::Application.routes.draw do
       resources :emails, only: [:index, :update, :show]
       resources :enterprises do
         collection do
+          get 'get_auth_enterprise', to: 'enterprises#get_auth_enterprise'
           get 'get_enterprise', to: 'enterprises#get_enterprise'
           post 'update_enterprise', to: 'enterprises#update_enterprise'
         end
@@ -282,6 +285,8 @@ Diverst::Application.routes.draw do
     end
   end
 
-  # Note the contraints that do not provide a routing error if we're looking for `rails/` because of ActiveStorage URLs
+  # Note the constraints that do not provide a routing error if we're looking for `rails/` because of ActiveStorage URLs
   match '*a', to: 'diverst#routing_error', via: :all, constraints: lambda { |request| !request.path_parameters[:a].start_with?('rails/') }
+
+  root to: proc { [404, {}, ['Not found.']] }
 end

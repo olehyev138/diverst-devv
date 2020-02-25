@@ -14,7 +14,9 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import AuthService from 'utils/authService';
 import { loginSuccess, logoutSuccess, setUserData } from 'containers/Shared/App/actions';
 
-import { Settings } from 'luxon'; // Timezone and locale
+import { Settings } from 'luxon';
+import { createStructuredSelector } from 'reselect';
+import { selectToken } from 'containers/Shared/App/selectors'; // Timezone and locale
 
 const styles = theme => ({
   toolbar: theme.mixins.toolbar,
@@ -94,6 +96,10 @@ const AuthenticatedLayout = ({
   return <NotAuthenticated />;
 };
 
+const mapStateToProps = createStructuredSelector({
+  token: selectToken(),
+});
+
 const mapDispatchToProps = {
   loginSuccess,
   logoutSuccess,
@@ -109,6 +115,7 @@ AuthenticatedLayout.propTypes = {
   drawerToggleCallback: PropTypes.func,
   position: PropTypes.string,
   isAdmin: PropTypes.bool,
+  token: PropTypes.string,
   component: PropTypes.elementType,
 };
 
@@ -119,7 +126,7 @@ AuthenticatedLayout.defaultProps = {
 export const StyledAuthenticatedLayout = withStyles(styles)(AuthenticatedLayout);
 
 export default compose(
-  connect(undefined, mapDispatchToProps), // Only connect for dispatching actions
+  connect(mapStateToProps, mapDispatchToProps), // Only connect for dispatching actions
   memo,
   withStyles(styles),
 )(AuthenticatedLayout);

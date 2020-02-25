@@ -16,6 +16,7 @@ import EmailLayout from 'containers/Layouts/GlobalSettingsLayout/EmailLayout/Loa
 
 /* Session */
 import LoginPage from 'containers/Session/LoginPage/Loadable';
+import ForgotPasswordPage from 'containers/Session/ForgotPasswordPage/Loadable';
 
 /* User */
 import HomePage from 'containers/User/HomePage/Loadable';
@@ -165,6 +166,7 @@ export {
   ErrorLayout,
   GlobalSettingsLayout,
   LoginPage,
+  ForgotPasswordPage,
   HomePage,
   UserGroupListPage,
   AdminGroupListPage,

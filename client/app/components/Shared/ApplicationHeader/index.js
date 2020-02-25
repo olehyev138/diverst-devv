@@ -166,7 +166,7 @@ export class ApplicationHeader extends React.PureComponent {
         </MenuItem>
         <MenuItem
           component={WrappedNavLink}
-          to={ROUTES.user.show.path(user.id)}
+          to={ROUTES.user.show.path(user.user_id)}
           activeClassName={classes.navLinkActive}
         >
           <ListItemIcon>

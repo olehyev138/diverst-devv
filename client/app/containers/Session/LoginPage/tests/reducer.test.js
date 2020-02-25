@@ -1,18 +1,15 @@
 import produce from 'immer/dist/immer';
 
 import loginPageReducer from 'containers/Session/LoginPage/reducer';
-import { findEnterpriseError, loginError } from 'containers/Shared/App/actions';
+import { loginBegin, loginSuccess, loginError } from 'containers/Shared/App/actions';
 
 /* eslint-disable default-case, no-param-reassign */
 describe('loginPageReducer', () => {
   let state;
   beforeEach(() => {
     state = {
-      globalError: null,
-      formErrors: {
-        email: null,
-        password: null,
-      },
+      isLoggingIn: false,
+      loginSuccess: null,
     };
   });
 
@@ -21,31 +18,31 @@ describe('loginPageReducer', () => {
     expect(loginPageReducer(undefined, {})).toEqual(expected);
   });
 
+  it('handles the loginBegin action', () => {
+    const expected = produce(state, (draft) => {
+      draft.isLoggingIn = true;
+      draft.loginSuccess = null;
+    });
+
+    expect(loginPageReducer(state, loginBegin())).toEqual(expected);
+  });
+
   it('handles the findEnterpriseError action', () => {
     const expected = produce(state, (draft) => {
-      draft.formErrors.email = 'error';
+      draft.isLoggingIn = false;
+      draft.loginSuccess = true;
     });
 
-    expect(loginPageReducer(state, findEnterpriseError({ response: { data: 'error' } })))
-      .toEqual(expected);
+    expect(loginPageReducer(state, loginSuccess())).toEqual(expected);
   });
 
-  // TODO
-  xit('handles the loginBegin action', () => {
-    const expected = produce(state, (draft) => {
-      draft.formErrors.email = 'error';
-    });
-
-    expect(loginPageReducer(state, findEnterpriseError({ response: { data: 'error' } })))
-      .toEqual(expected);
-  });
 
   it('handles the loginError action', () => {
     const expected = produce(state, (draft) => {
-      draft.formErrors.password = 'error';
+      draft.isLoggingIn = false;
+      draft.loginSuccess = false;
     });
 
-    expect(loginPageReducer(state, loginError({ response: { data: 'error' } })))
-      .toEqual(expected);
+    expect(loginPageReducer(state, loginError())).toEqual(expected);
   });
 });

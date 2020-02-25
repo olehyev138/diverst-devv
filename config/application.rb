@@ -41,7 +41,7 @@ module Diverst
     ActionMailer::Base.delivery_method = :smtp
 
     config.middleware.insert_before ActionDispatch::Static, Rack::Rewrite do
-      rewrite %r{^(?!/sidekiq|\/api|\/system|\/rails).*}, '/', not: %r{(.*\..*)}
+      rewrite %r{^(?!/sidekiq|\/api|\/system|\/rails|\/health).*}, '/', not: %r{(.*\..*)}
     end
 
     # rails api
@@ -63,12 +63,10 @@ module Diverst
     config.middleware.use Rack::Deflater
 
     # Cross Domain Request
-    config.middleware.insert_before ActionDispatch::Static, Rack::Cors do
+    config.middleware.insert_before 0, Rack::Cors do
       allow do
         origins '*'
         resource '*', headers: :any, methods: [:get, :post, :put, :delete, :options]
-        # resource '/assets/*', headers: :any, methods: [:get]
-        resource '/system/*', headers: :any, methods: [:get]
       end
     end
 
