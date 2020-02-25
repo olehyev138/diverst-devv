@@ -70,8 +70,6 @@ export function PolicyFormInner({
 }) {
   const { intl } = props;
 
-  console.log(props.isFormLoading);
-
   return (
     <React.Fragment>
       <DiverstFormLoader isLoading={props.isFormLoading} isError={!props.policy}>
