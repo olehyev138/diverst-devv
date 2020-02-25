@@ -24,27 +24,28 @@ class ApplicationRecord < ActiveRecord::Base
   after_commit on: [:update] do update_elasticsearch_index('update') end
   after_commit on: [:destroy] do update_elasticsearch_index('delete') end
 
-  if Rails.env == 'development' || Rails.env == 'testing'
+  if Rails.env.development?
     def self.preload_test(preload: true, limit: 10, serializer: nil)
       arr = []
       if self.respond_to?(:base_preloads) && preload
-        items = self.preload(self.base_preloads)
-        if self.respond_to?(:preload_attachments)
-          items = items.send_chain(self.preload_attachments.map { |field| "with_attached_#{field}" })
-        end
+        items = self.preload_all
         items = items.limit(limit)
         items.load
         p 'Preloaded'
       else
         items = self.limit(limit)
       end
-      items.each do |user|
-        p "Serializing object with id = #{user.id}"
-        arr << (serializer || ActiveModel::Serializer.serializer_for(user)).new(user).as_json
+      items.each do |item|
+        p "Serializing object with id = #{item.id}"
+        arr << (serializer || ActiveModel::Serializer.serializer_for(item)).new(item).as_json
       end
       Clipboard.copy arr.to_json
       nil
     end
+  end
+
+  def self.preload_all
+    preload(base_preloads || [])
   end
 
   protected

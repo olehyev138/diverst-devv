@@ -91,7 +91,7 @@ class Resource < ApplicationRecord
   end
 
   def total_views
-    views.count
+    views.size
   end
 
   def self.archive_expired_resources(group)
