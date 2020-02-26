@@ -1,4 +1,12 @@
 class GroupPolicy < ApplicationPolicy
+  def initialize(user, record, params = nil)
+    super(user, record, params)
+    if Group === record
+      @user_group = record.user_groups.find {|ug| ug.user_id == user.id}
+      @group_leader = record.group_leaders.find {|gl| gl.user_id == user.id}
+    end
+  end
+
   def index?
     return true if create?
     return true if basic_group_leader_permission?('groups_index')
@@ -123,19 +131,19 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def is_a_pending_member?
-    UserGroup.where(accepted_member: false, user_id: user.id, group_id: @record.id).exists?
+    @user_group.accepted_member == false
   end
 
   def is_an_accepted_member?
-    UserGroup.where(accepted_member: true, user_id: user.id, group_id: @record.id).exists?
+    @user_group.accepted_member == true
   end
 
   def is_a_member?
-    UserGroup.where(user_id: user.id, group_id: @record.id).exists?
+    @user_group.present?
   end
 
   def is_a_leader?
-    GroupLeader.where(user_id: user.id, group_id: @record.id).exists?
+    @group_leader.present?
   end
 
   def update?

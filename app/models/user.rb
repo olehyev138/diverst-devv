@@ -202,6 +202,8 @@ class User < ApplicationRecord
   end
 
   def is_member_of?(group)
+    group.user_groups.loaded? ?
+    group.user_groups.any? {|ug| ug.user_id == self.id} :
     group.user_groups.where(user_id: self.id).any?
   end
 

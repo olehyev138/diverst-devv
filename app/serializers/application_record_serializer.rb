@@ -46,7 +46,7 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
 
   def policy
     @policy ||= (
-        @instance_options[:policy] ||
+    @instance_options[:policy] ||
             Pundit::PolicyFinder.new(object).policy&.new(scope&.dig(:current_user), object, @instance_options[:params])
     )
   end
