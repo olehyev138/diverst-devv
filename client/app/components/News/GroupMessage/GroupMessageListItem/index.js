@@ -22,6 +22,9 @@ import IconButton from '@material-ui/core/IconButton';
 import { formatDateTimeString } from 'utils/dateTimeHelpers';
 
 const styles = theme => ({
+  root: {
+    flexGrow: 1,
+  },
   cardContent: {
     paddingBottom: 0,
   },
@@ -55,36 +58,43 @@ export function GroupMessageListItem(props) {
           {groupMessage.content}
         </Typography>
         <Grid container>
-          <Grid item xs={9}>
+          <Grid item lg={3} xs={5}>
             <Typography variant='body2' color='textSecondary' className={classes.centerVertically}>
               {`Submitted by ${groupMessage.owner.first_name} ${groupMessage.owner.last_name}`}
             </Typography>
           </Grid>
-          <Grid item xs={3}>
-            <Box display="flex" justifyContent="flex-end">
-              { props.links && (
-                <IconButton
-                  //TODO : Change to actual post like action
-                  size='small'
-                  to={props.links.groupMessageShow(props.groupId, newsItem.id)}
-                  component={WrappedNavLink}
-                >
-                  <ThumbUpIcon/>
-                </IconButton>
-              )}
-              { props.links && (
-                <IconButton
-                  size='small'
-                  to={props.links.groupMessageShow(props.groupId, newsItem.id)}
-                  component={WrappedNavLink}
-                >
-                  <CommentIcon />
-                </IconButton>
-              )}
-              <Typography variant='body2' color='textSecondary' className={classes.centerVertically} >
-                {formatDateTimeString(groupMessage.created_at)}
-              </Typography>
-            </Box>
+          <Grid item lg={9} display="flex" xs={7}>
+            <Grid container>
+              <Grid item xs={3} lg={9}>
+              </Grid>
+              <Grid item xs={3} lg={1}>
+                { props.links && (
+                  <IconButton
+                    //TODO : Change to actual post like action
+                    size='small'
+                    to={props.links.groupMessageShow(props.groupId, newsItem.id)}
+                    component={WrappedNavLink}
+                  >
+                    <ThumbUpIcon/>
+                  </IconButton>
+                )}
+                { props.links && (
+                  <IconButton
+                    size='small'
+                    to={props.links.groupMessageShow(props.groupId, newsItem.id)}
+                    component={WrappedNavLink}
+                  >
+                    <CommentIcon />
+                  </IconButton>
+                )}
+              </Grid>
+              <Grid item xs={6} lg={2}>
+                <Typography variant='body2' color='textSecondary' className={classes.centerVertically} >
+                  {formatDateTimeString(groupMessage.created_at)}
+                </Typography>
+              </Grid>
+
+            </Grid>
           </Grid>
         </Grid>
       </CardContent>
