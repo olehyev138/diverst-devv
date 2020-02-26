@@ -43,4 +43,19 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
   def serialize_all_fields
     false
   end
+
+  def policy
+    @policy ||= (
+        @instance_options[:policy] ||
+            Pundit::PolicyFinder.new(object).policy&.new(scope&.dig(:current_user), object, @instance_options[:params])
+    )
+  end
+
+  def policies
+    policy&.public_methods(false).select {|m| m.to_s.include? '?' } || []
+  end
+
+  def permissions
+    policies.reduce({}) {|sum, m| sum[m] = (policy.send(m) rescue nil); sum}
+  end
 end
