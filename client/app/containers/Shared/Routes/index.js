@@ -250,7 +250,7 @@ export default function Routes(props) {
       <GroupLayout exact {...expandRoute(ROUTES.group.home)} component={GroupHomePage} disableBreadcrumbs />
       <GroupLayout exact {...expandRoute(ROUTES.group.members.index)} component={GroupMemberListPage} />
       <GroupLayout exact {...expandRoute(ROUTES.group.events.index)} component={EventsPage} />
-      <GroupLayout exact {...expandRoute(ROUTES.group.news.index)} component={NewsFeedPage} />
+      <GroupLayout exact {...expandRoute(ROUTES.group.news.index)} component={NewsFeedPage} permissions={['manage_posts']} />
 
       { /* Group Events */ }
       <GroupLayout {...expandRoute(ROUTES.group.events.new)} component={EventCreatePage} />

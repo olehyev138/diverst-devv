@@ -3,6 +3,7 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import WithPermission from 'components/Compositions/WithPermission';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
 import dig from 'object-dig';
@@ -163,4 +164,4 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(NewsFeedPage);
+)(WithPermission(NewsFeedPage));
