@@ -14,7 +14,7 @@ class GroupBasePolicy < ApplicationPolicy
       self.group = ::Group.find(params[:group_id] || params.dig(context.model_name.param_key.to_sym, :group_id)) rescue nil
     elsif context.present?
       self.group = context.group
-      self.record = context else # Record
+      self.record = context
     end
   end
 
@@ -73,6 +73,10 @@ class GroupBasePolicy < ApplicationPolicy
 
   def destroy?
     update?
+  end
+
+  def manage?
+    manage_group_resource(base_manage_permission)
   end
 
   def base_index_permission
@@ -239,25 +243,33 @@ class GroupBasePolicy < ApplicationPolicy
       group.send(scope.all.klass.model_name.collection)
     end
 
+    def joined_with_group
+      scope.left_joins(group: [:enterprise, :group_leaders, :user_groups])
+    end
+
+    def non_group_base(permission)
+      if scope <= Group
+        scoped = scope.left_joins(:enterprise, :group_leaders, :user_groups)
+      elsif scope.instance_methods.include?(:group)
+        scoped = joined_with_group
+      else
+        scoped = scope.none
+      end
+      scoped
+          .joins("JOIN policy_groups ON policy_groups.user_id = #{quote_string(user.id)}")
+          .where('enterprises.id = ?', user.enterprise_id)
+          .where([manage_all, group_manage(permission), is_leader(permission), is_member(permission), is_not_a_member(permission)].join(' OR '))
+    end
+
     def resolve(permission)
       if group
         if index?
-          group_base.merge(scope.all)
+          group_base.merge(scope)
         else
           scope.none
         end
       else
-        if scope <= Group
-          scoped = scope.left_joins(:enterprise, :group_leaders, :user_groups)
-        elsif scope.instance_methods.include?(:group)
-          scoped = scope.left_joins(group: [:enterprise, :group_leaders, :user_groups])
-        else
-          scoped = scope.none
-        end
-        scoped
-            .joins("JOIN policy_groups ON policy_groups.user_id = #{quote_string(user.id)}")
-            .where('enterprises.id = ?', user.enterprise_id)
-            .where([manage_all, group_manage(permission), is_member(permission), is_leader(permission)].join(' OR '))
+        non_group_base(permission)
       end
     end
   end
