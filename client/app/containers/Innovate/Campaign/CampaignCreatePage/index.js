@@ -24,7 +24,7 @@ import { getGroupsBegin } from 'containers/Group/actions';
 import { selectPaginatedSelectGroups } from 'containers/Group/selectors';
 
 import CampaignForm from 'components/Innovate/Campaign/CampaignForm';
-import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Innovate/Campaign/messages';
 
 export function CampaignCreatePage(props) {
@@ -32,7 +32,7 @@ export function CampaignCreatePage(props) {
   useInjectSaga({ key: 'campaigns', saga });
   useInjectReducer({ key: 'groups', reducer: groupReducer });
   useInjectSaga({ key: 'groups', saga: groupSaga });
-
+  const { intl } = props;
   const links = {
     CampaignsIndex: ROUTES.admin.innovate.campaigns.index.path(),
   };
@@ -42,7 +42,7 @@ export function CampaignCreatePage(props) {
   return (
     <CampaignForm
       campaignAction={props.createCampaignBegin}
-      buttonText={<DiverstFormattedMessage {...messages.create} />}
+      buttonText={intl.formatMessage(messages.create)}
       getGroupsBegin={props.getGroupsBegin}
       selectGroups={props.groups}
       isCommitting={props.isCommitting}
@@ -52,6 +52,7 @@ export function CampaignCreatePage(props) {
 }
 
 CampaignCreatePage.propTypes = {
+  intl: intlShape,
   createCampaignBegin: PropTypes.func,
   campaignsUnmount: PropTypes.func,
   getGroupsBegin: PropTypes.func,
@@ -77,6 +78,7 @@ const withConnect = connect(
 );
 
 export default compose(
+  injectIntl,
   withConnect,
   memo,
 )(CampaignCreatePage);

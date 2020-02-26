@@ -18,12 +18,12 @@ import {
 } from 'containers/Group/actions';
 
 import GroupForm from 'components/Group/GroupForm';
-import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Group/messages';
 export function GroupEditPage(props) {
   useInjectReducer({ key: 'groups', reducer });
   useInjectSaga({ key: 'groups', saga });
-
+  const { intl } = props;
   const rs = new RouteService(useContext);
 
   useEffect(() => {
@@ -42,7 +42,7 @@ export function GroupEditPage(props) {
         getGroupsBegin={props.getGroupsBegin}
         selectGroups={props.groups}
         group={props.group}
-        buttonText={<DiverstFormattedMessage {...messages.update} />}
+        buttonText={intl.formatMessage(messages.update)}
         isCommitting={props.isCommitting}
         isFormLoading={props.isFormLoading}
       />
@@ -51,6 +51,7 @@ export function GroupEditPage(props) {
 }
 
 GroupEditPage.propTypes = {
+  intl: intlShape,
   group: PropTypes.object,
   groups: PropTypes.array,
   getGroupBegin: PropTypes.func,
@@ -81,6 +82,7 @@ const withConnect = connect(
 );
 
 export default compose(
+  injectIntl,
   withConnect,
   memo,
 )(GroupEditPage);

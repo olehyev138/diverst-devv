@@ -21,7 +21,7 @@ import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/DeleteOutline';
 
-import { injectIntl } from 'react-intl';
+import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Analyze/Dashboards/MetricsDashboard/messages';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
@@ -60,7 +60,7 @@ export function MetricsDashboardsList(props, context) {
   const routeContext = useContext(RouteContext);
 
   const columns = [
-    { title: <DiverstFormattedMessage {...messages.fields.name} />, field: 'name' }
+    { title: intl.formatMessage(messages.fields.name), field: 'name' }
   ];
 
   return (
@@ -91,13 +91,13 @@ export function MetricsDashboardsList(props, context) {
             columns={columns}
             actions={[{
               icon: () => <EditIcon />,
-              tooltip: <DiverstFormattedMessage {...messages.table.edit} />,
+              tooltip: intl.formatMessage(messages.table.edit),
               onClick: (_, rowData) => {
                 props.handleVisitDashboardEdit(rowData.id);
               }
             }, {
               icon: () => <DeleteIcon />,
-              tooltip: <DiverstFormattedMessage {...messages.table.delete} />,
+              tooltip: intl.formatMessage(messages.table.delete),
               onClick: (_, rowData) => {
                 /* eslint-disable-next-line no-alert, no-restricted-globals */
                 if (confirm(intl.formatMessage(messages.table.delete_confirm)))
@@ -112,7 +112,7 @@ export function MetricsDashboardsList(props, context) {
 }
 
 MetricsDashboardsList.propTypes = {
-  intl: PropTypes.object,
+  intl: intlShape,
   classes: PropTypes.object,
   metricsDashboards: PropTypes.array,
   metricsDashboardsTotal: PropTypes.number,

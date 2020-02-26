@@ -18,13 +18,13 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { createSocialLinkBegin, newsFeedUnmount } from 'containers/News/actions';
 import SocialLinkForm from 'components/News/SocialLink/SocialLinkForm';
-import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/News/messages';
 
 export function SocialLinkCreatePage(props) {
   useInjectReducer({ key: 'news', reducer });
   useInjectSaga({ key: 'news', saga });
-
+  const { intl } = props;
   const rs = new RouteService(useContext);
   const links = {
     newsFeedIndex: ROUTES.group.news.index.path(rs.params('group_id')),
@@ -36,7 +36,7 @@ export function SocialLinkCreatePage(props) {
     <SocialLinkForm
       get
       socialLinkAction={props.createSocialLinkBegin}
-      buttonText={<DiverstFormattedMessage {...messages.create} />}
+      buttonText={intl.formatMessage(messages.create)}
       currentUser={currentUser}
       currentGroup={currentGroup}
       links={links}
@@ -46,6 +46,7 @@ export function SocialLinkCreatePage(props) {
 }
 
 SocialLinkCreatePage.propTypes = {
+  intl: intlShape,
   createSocialLinkBegin: PropTypes.func,
   newsFeedUnmount: PropTypes.func,
   currentUser: PropTypes.object,
@@ -70,6 +71,7 @@ const withConnect = connect(
 );
 
 export default compose(
+  injectIntl,
   withConnect,
   memo,
 )(SocialLinkCreatePage);

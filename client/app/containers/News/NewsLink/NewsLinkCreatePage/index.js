@@ -21,13 +21,13 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import { createNewsLinkBegin, newsFeedUnmount } from 'containers/News/actions';
 import NewsLinkForm from 'components/News/NewsLink/NewsLinkForm';
 
-import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/News/messages';
 
 export function NewsLinkCreatePage(props) {
   useInjectReducer({ key: 'news', reducer });
   useInjectSaga({ key: 'news', saga });
-
+  const { intl } = props;
   const rs = new RouteService(useContext);
   const links = {
     newsFeedIndex: ROUTES.group.news.index.path(rs.params('group_id')),
@@ -42,7 +42,7 @@ export function NewsLinkCreatePage(props) {
     <NewsLinkForm
       get
       newsLinkAction={props.createNewsLinkBegin}
-      buttonText={<DiverstFormattedMessage {...messages.create} />}
+      buttonText={intl.formatMessage(messages.create)}
       currentUser={currentUser}
       currentGroup={currentGroup}
       links={links}
@@ -52,6 +52,7 @@ export function NewsLinkCreatePage(props) {
 }
 
 NewsLinkCreatePage.propTypes = {
+  intl: intlShape,
   createNewsLinkBegin: PropTypes.func,
   newsFeedUnmount: PropTypes.func,
   currentUser: PropTypes.object,
@@ -76,6 +77,7 @@ const withConnect = connect(
 );
 
 export default compose(
+  injectIntl,
   withConnect,
   memo,
 )(NewsLinkCreatePage);

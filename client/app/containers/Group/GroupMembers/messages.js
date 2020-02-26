@@ -78,7 +78,10 @@ export default defineMessages({
   tooltip: {
     delete: {
       id: `${scope}.tooltip.delete`,
-    }
+    },
+    delete_confirm: {
+      id: `${scope}.tooltip.delete_confirm`,
+    },
   },
   columns: {
     givenName: {

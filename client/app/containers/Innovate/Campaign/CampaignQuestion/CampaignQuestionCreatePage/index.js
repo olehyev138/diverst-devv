@@ -20,7 +20,7 @@ import { createQuestionBegin, campaignQuestionsUnmount } from 'containers/Innova
 import { selectIsCommitting } from 'containers/Innovate/Campaign/CampaignQuestion/selectors';
 
 import CampaignQuestionForm from 'components/Innovate/Campaign/CampaignQuestion/CampaignQuestionForm';
-import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Innovate/Campaign/CampaignQuestion/messages';
 
 export function CampaignQuestionCreatePage(props) {
@@ -28,7 +28,7 @@ export function CampaignQuestionCreatePage(props) {
   useInjectSaga({ key: 'questions', saga });
   useInjectReducer({ key: 'campaigns', reducer: campaignReducer });
   useInjectSaga({ key: 'campaigns', saga: campaignSaga });
-
+  const { intl } = props;
   const rs = new RouteService(useContext);
   const campaignId = rs.params('campaign_id');
   const links = {
@@ -41,7 +41,7 @@ export function CampaignQuestionCreatePage(props) {
     <CampaignQuestionForm
       questionAction={props.createQuestionBegin}
       campaignId={campaignId[0]}
-      buttonText={<DiverstFormattedMessage {...messages.create} />}
+      buttonText={intl.formatMessage(messages.create)}
       isCommitting={props.isCommitting}
       links={links}
     />
@@ -49,6 +49,7 @@ export function CampaignQuestionCreatePage(props) {
 }
 
 CampaignQuestionCreatePage.propTypes = {
+  intl: intlShape,
   createQuestionBegin: PropTypes.func,
   campaignQuestionsUnmount: PropTypes.func,
   getCampaignBegin: PropTypes.func,
@@ -71,6 +72,7 @@ const withConnect = connect(
 );
 
 export default compose(
+  injectIntl,
   withConnect,
   memo,
 )(CampaignQuestionCreatePage);

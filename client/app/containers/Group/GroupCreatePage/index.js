@@ -13,18 +13,18 @@ import { createGroupBegin, getGroupsBegin, groupFormUnmount } from 'containers/G
 import { selectPaginatedSelectGroups, selectGroupTotal, selectGroupIsCommitting } from 'containers/Group/selectors';
 
 import GroupForm from 'components/Group/GroupForm';
-import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Group/messages';
 export function GroupCreatePage(props) {
   useInjectReducer({ key: 'groups', reducer });
   useInjectSaga({ key: 'groups', saga });
-
+  const { intl } = props;
   useEffect(() => () => props.groupFormUnmount(), []);
 
   return (
     <GroupForm
       groupAction={props.createGroupBegin}
-      buttonText={<DiverstFormattedMessage {...messages.create} />}
+      buttonText={intl.formatMessage(messages.create)}
       getGroupsBegin={props.getGroupsBegin}
       selectGroups={props.groups}
       isCommitting={props.isCommitting}
@@ -33,6 +33,7 @@ export function GroupCreatePage(props) {
 }
 
 GroupCreatePage.propTypes = {
+  intl: intlShape,
   createGroupBegin: PropTypes.func,
   getGroupsBegin: PropTypes.func,
   groupFormUnmount: PropTypes.func,
@@ -57,6 +58,7 @@ const withConnect = connect(
 );
 
 export default compose(
+  injectIntl,
   withConnect,
   memo,
 )(GroupCreatePage);

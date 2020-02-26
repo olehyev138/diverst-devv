@@ -21,13 +21,13 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import { createGroupMessageBegin, newsFeedUnmount } from 'containers/News/actions';
 import GroupMessageForm from 'components/News/GroupMessage/GroupMessageForm';
 import { Button } from '@material-ui/core';
-import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/News/messages';
 
 export function GroupMessageCreatePage(props) {
   useInjectReducer({ key: 'news', reducer });
   useInjectSaga({ key: 'news', saga });
-
+  const { intl } = props;
   const { currentUser, currentGroup } = props;
   const rs = new RouteService(useContext);
   const links = {
@@ -39,7 +39,7 @@ export function GroupMessageCreatePage(props) {
   return (
     <GroupMessageForm
       groupMessageAction={props.createGroupMessageBegin}
-      buttonText={<DiverstFormattedMessage {...messages.create} />}
+      buttonText={intl.formatMessage(messages.create)}
       currentUser={currentUser}
       currentGroup={currentGroup}
       links={links}
@@ -49,6 +49,7 @@ export function GroupMessageCreatePage(props) {
 }
 
 GroupMessageCreatePage.propTypes = {
+  intl: intlShape,
   createGroupMessageBegin: PropTypes.func,
   newsFeedUnmount: PropTypes.func,
   currentUser: PropTypes.object,
@@ -73,6 +74,7 @@ const withConnect = connect(
 );
 
 export default compose(
+  injectIntl,
   withConnect,
   memo,
 )(GroupMessageCreatePage);

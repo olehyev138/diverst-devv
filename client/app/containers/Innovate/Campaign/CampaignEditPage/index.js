@@ -23,7 +23,8 @@ import CampaignForm from 'components/Innovate/Campaign/CampaignForm';
 
 import { getGroupsBegin } from 'containers/Group/actions';
 import { selectPaginatedSelectGroups, selectFormGroup } from 'containers/Group/selectors';
-import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+
+import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Innovate/Campaign/messages';
 
 export function CampaignEditPage(props) {
@@ -36,7 +37,7 @@ export function CampaignEditPage(props) {
   const links = {
     CampaignsIndex: ROUTES.admin.innovate.campaigns.index.path(),
   };
-
+  const { intl } = props;
   useEffect(() => {
     const campaignId = rs.params('campaign_id');
     props.getCampaignBegin({ id: rs.params('campaign_id') });
@@ -53,7 +54,7 @@ export function CampaignEditPage(props) {
       campaignAction={props.updateCampaignBegin}
       isCommitting={props.isCommitting}
       isFormLoading={props.isFormLoading}
-      buttonText={<DiverstFormattedMessage {...messages.update} />}
+      buttonText={intl.formatMessage(messages.update)}
       campaign={props.campaign}
       links={links}
     />
@@ -61,6 +62,7 @@ export function CampaignEditPage(props) {
 }
 
 CampaignEditPage.propTypes = {
+  intl: intlShape,
   getCampaignBegin: PropTypes.func,
   getGroupsBegin: PropTypes.func,
   updateCampaignBegin: PropTypes.func,
@@ -93,6 +95,7 @@ const withConnect = connect(
 );
 
 export default compose(
+  injectIntl,
   withConnect,
   memo,
 )(CampaignEditPage);

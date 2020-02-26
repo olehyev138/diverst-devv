@@ -20,6 +20,7 @@ import { withStyles } from '@material-ui/core/styles';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/User/UserRole/messages';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
+import { injectIntl, intlShape } from 'react-intl';
 
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/DeleteOutline';
@@ -40,7 +41,7 @@ const styles = theme => ({
 });
 
 export function UserRoleList(props, context) {
-  const { classes, links } = props;
+  const { classes, links, intl } = props;
 
   const columns = [
     { title: <DiverstFormattedMessage {...messages.role_name} />, field: 'role_name' },
@@ -68,7 +69,7 @@ export function UserRoleList(props, context) {
       <Grid container spacing={3}>
         <Grid item xs>
           <DiverstTable
-            title=<DiverstFormattedMessage {...messages.title} />
+            title={intl.formatMessage(messages.title)}
             handlePagination={props.handlePagination}
             handleOrdering={props.handleOrdering}
             isLoading={props.isFetchingUserRoles}
@@ -78,16 +79,16 @@ export function UserRoleList(props, context) {
             columns={columns}
             actions={[{
               icon: () => <EditIcon />,
-              tooltip: <DiverstFormattedMessage {...messages.edit} />,
+              tooltip: intl.formatMessage(messages.edit),
               onClick: (_, rowData) => {
                 props.handleVisitUserRoleEdit(rowData.id);
               }
             }, {
               icon: () => <DeleteIcon />,
-              tooltip: <DiverstFormattedMessage {...messages.delete} />,
+              tooltip: intl.formatMessage(messages.delete),
               onClick: (_, rowData) => {
                 /* eslint-disable-next-line no-alert, no-restricted-globals */
-                if (confirm('Delete user role?'))
+                if (confirm(intl.formatMessage(messages.delete_confirm)))
                   props.deleteUserRoleBegin(rowData.id);
               }
             }]}
@@ -99,6 +100,7 @@ export function UserRoleList(props, context) {
 }
 
 UserRoleList.propTypes = {
+  intl: intlShape,
   classes: PropTypes.object,
   userRoles: PropTypes.object,
   userRoleTotal: PropTypes.number,
@@ -114,6 +116,7 @@ UserRoleList.propTypes = {
 };
 
 export default compose(
+  injectIntl,
   memo,
   withStyles(styles),
 )(UserRoleList);

@@ -31,8 +31,8 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import MetricsDashboardForm from 'components/Analyze/Dashboards/MetricsDashboard/MetricsDashboardForm';
 
 // messages
-import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Analyze/messages';
+import { injectIntl, intlShape } from 'react-intl';
 
 export function MetricsDashboardCreatePage(props) {
   useInjectReducer({ key: 'customMetrics', reducer });
@@ -46,6 +46,7 @@ export function MetricsDashboardCreatePage(props) {
   const links = {
     metricsDashboardsIndex: ROUTES.admin.analyze.custom.index.path(),
   };
+  const { intl } = props;
 
   useEffect(() => () => props.metricsDashboardsUnmount(), []);
 
@@ -56,7 +57,7 @@ export function MetricsDashboardCreatePage(props) {
       getSegmentsBegin={props.getSegmentsBegin}
       groups={props.groups}
       segments={props.segments}
-      buttonText={<DiverstFormattedMessage {...messages.create} />}
+      buttonText={intl.formatMessage(messages.create)}
       links={links}
       isCommitting={props.isCommitting}
     />
@@ -64,6 +65,7 @@ export function MetricsDashboardCreatePage(props) {
 }
 
 MetricsDashboardCreatePage.propTypes = {
+  intl: intlShape,
   createMetricsDashboardBegin: PropTypes.func,
   getGroupsBegin: PropTypes.func,
   getSegmentsBegin: PropTypes.func,
@@ -92,6 +94,7 @@ const withConnect = connect(
 );
 
 export default compose(
+  injectIntl,
   withConnect,
   memo,
 )(MetricsDashboardCreatePage);

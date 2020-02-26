@@ -18,13 +18,13 @@ import {
 
 import RouteService from 'utils/routeHelpers';
 import EnterpriseConfiguration from 'components/GlobalSettings/EnterpriseConfiguration';
-import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/GlobalSettings/EnterpriseConfiguration/messages';
 
 export function EnterpriseConfigurationPage(props) {
   useInjectReducer({ key: 'configuration', reducer });
   useInjectSaga({ key: 'configuration', saga });
-
+  const { intl } = props;
   useEffect(() => {
     props.getEnterpriseBegin();
     return () => {
@@ -37,13 +37,14 @@ export function EnterpriseConfigurationPage(props) {
       <EnterpriseConfiguration
         enterpriseAction={props.updateEnterpriseBegin}
         enterprise={props.enterprise}
-        buttonText={<DiverstFormattedMessage {...messages.update} />}
+        buttonText={intl.formatMessage(messages.update)}
       />
     </React.Fragment>
   );
 }
 
 EnterpriseConfigurationPage.propTypes = {
+  intl: intlShape,
   enterprise: PropTypes.object,
   getEnterpriseBegin: PropTypes.func,
   updateEnterpriseBegin: PropTypes.func,
@@ -66,6 +67,7 @@ const withConnect = connect(
 );
 
 export default compose(
+  injectIntl,
   withConnect,
   memo,
 )(EnterpriseConfigurationPage);

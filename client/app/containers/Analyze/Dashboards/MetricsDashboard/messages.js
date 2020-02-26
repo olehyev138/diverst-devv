@@ -21,6 +21,9 @@ export default defineMessages({
   create: {
     id: `${scope}.form.button.create`,
   },
+  creategraph: {
+    id: `${scope}.index.button.creategraph`,
+  },
   update: {
     id: `${scope}.form.button.update`,
   },

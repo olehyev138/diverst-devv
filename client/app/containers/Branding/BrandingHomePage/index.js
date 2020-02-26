@@ -19,12 +19,13 @@ import {
 import RouteService from 'utils/routeHelpers';
 import BrandingHome from 'components/Branding/BrandingHome';
 
-import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Branding/messages';
+import { injectIntl, intlShape } from 'react-intl';
 
 export function BrandingHomePage(props) {
   useInjectReducer({ key: 'configuration', reducer });
   useInjectSaga({ key: 'configuration', saga });
+  const { intl } = props;
 
   useEffect(() => {
     props.getEnterpriseBegin();
@@ -39,13 +40,14 @@ export function BrandingHomePage(props) {
       <BrandingHome
         enterpriseAction={props.updateEnterpriseBegin}
         enterprise={props.enterprise}
-        buttonText={<DiverstFormattedMessage {...messages.update} />}
+        buttonText={intl.formatMessage(messages.update)}
       />
     </React.Fragment>
   );
 }
 
 BrandingHomePage.propTypes = {
+  intl: intlShape,
   enterprise: PropTypes.object,
   getEnterpriseBegin: PropTypes.func,
   updateEnterpriseBegin: PropTypes.func,
@@ -68,6 +70,7 @@ const withConnect = connect(
 );
 
 export default compose(
+  injectIntl,
   withConnect,
   memo,
 )(BrandingHomePage);

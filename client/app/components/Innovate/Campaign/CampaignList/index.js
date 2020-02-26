@@ -76,7 +76,7 @@ export function CampaignList(props) {
         </Box>
         <Box className={classes.floatSpacer} />
         <DiverstTable
-          title={<DiverstFormattedMessage {...messages.Campaign.campaigns} />}
+          title={intl.formatMessage(messages.Campaign.campaigns)}
           handlePagination={props.handlePagination}
           isLoading={props.isFetchingCampaigns}
           onOrderChange={handleOrderChange}
@@ -88,14 +88,14 @@ export function CampaignList(props) {
           actions={[
             {
               icon: () => <EditIcon />,
-              tooltip: <DiverstFormattedMessage {...messages.Campaign.edit} />,
+              tooltip: intl.formatMessage(messages.Campaign.edit),
               onClick: (_, rowData) => {
                 props.handleVisitCampaignEdit(rowData.id);
               }
             },
             {
               icon: () => <DeleteIcon />,
-              tooltip: <DiverstFormattedMessage {...messages.Campaign.delete} />,
+              tooltip: intl.formatMessage(messages.Campaign.delete),
               onClick: (_, rowData) => {
                 /* eslint-disable-next-line no-alert, no-restricted-globals */
                 if (confirm(intl.formatMessage(messages.Campaign.delete_confirm)))

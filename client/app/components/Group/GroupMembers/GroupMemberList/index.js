@@ -251,7 +251,7 @@ export function GroupMemberList(props) {
       <Box className={classes.floatSpacer} />
 
       <DiverstTable
-        title={<DiverstFormattedMessage {...messages.members} />}
+        title={intl.formatMessage(messages.members)}
         handlePagination={props.handlePagination}
         isLoading={props.isFetchingMembers}
         onOrderChange={handleOrderChange}
@@ -261,10 +261,10 @@ export function GroupMemberList(props) {
         rowsPerPage={props.params.count}
         actions={[{
           icon: () => <DeleteIcon />,
-          tooltip: <DiverstFormattedMessage {...messages.tooltip.delete} />,
+          tooltip: intl.formatMessage(messages.tooltip.delete),
           onClick: (_, rowData) => {
             /* eslint-disable-next-line no-alert, no-restricted-globals */
-            if (confirm('Delete member?'))
+            if (confirm(intl.formatMessage(messages.tooltip.delete_confirm)))
               props.deleteMemberBegin({
                 userId: rowData.id,
                 groupId: props.groupId

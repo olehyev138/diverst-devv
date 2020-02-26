@@ -26,14 +26,14 @@ import {
 
 import OutcomeForm from 'components/Group/Outcome/OutcomeForm';
 
-import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Group/Outcome/messages';
 
 
 export function OutcomeEditPage(props) {
   useInjectReducer({ key: 'outcomes', reducer });
   useInjectSaga({ key: 'outcomes', saga });
-
+  const { intl } = props;
   const rs = new RouteService(useContext);
   const links = {
     outcomesIndex: ROUTES.group.plan.outcomes.index.path(rs.params('group_id')),
@@ -52,7 +52,7 @@ export function OutcomeEditPage(props) {
     <OutcomeForm
       edit
       outcomeAction={props.updateOutcomeBegin}
-      buttonText={<DiverstFormattedMessage {...messages.update} />}
+      buttonText={intl.formatMessage(messages.update)}
       currentUser={currentUser}
       currentGroup={currentGroup}
       outcome={currentOutcome}
@@ -64,6 +64,7 @@ export function OutcomeEditPage(props) {
 }
 
 OutcomeEditPage.propTypes = {
+  intl: intlShape,
   getOutcomeBegin: PropTypes.func,
   updateOutcomeBegin: PropTypes.func,
   outcomesUnmount: PropTypes.func,
@@ -94,6 +95,7 @@ const withConnect = connect(
 );
 
 export default compose(
+  injectIntl,
   withConnect,
   memo,
 )(OutcomeEditPage);

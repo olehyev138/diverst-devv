@@ -18,12 +18,12 @@ import {
 
 import RouteService from 'utils/routeHelpers';
 import SSOSettings from 'components/GlobalSettings/SSOSettings';
-import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/GlobalSettings/EnterpriseConfiguration/messages';
 export function SSOSettingsPage(props) {
   useInjectReducer({ key: 'configuration', reducer });
   useInjectSaga({ key: 'configuration', saga });
-
+  const { intl } = props;
   useEffect(() => {
     props.getEnterpriseBegin();
     return () => {
@@ -36,13 +36,14 @@ export function SSOSettingsPage(props) {
       <SSOSettings
         enterpriseAction={props.updateEnterpriseBegin}
         enterprise={props.enterprise}
-        buttonText={<DiverstFormattedMessage {...messages.update} />}
+        buttonText={intl.formatMessage(messages.update)}
       />
     </React.Fragment>
   );
 }
 
 SSOSettingsPage.propTypes = {
+  intl: intlShape,
   enterprise: PropTypes.object,
   getEnterpriseBegin: PropTypes.func,
   updateEnterpriseBegin: PropTypes.func,
@@ -65,6 +66,7 @@ const withConnect = connect(
 );
 
 export default compose(
+  injectIntl,
   withConnect,
   memo,
 )(SSOSettingsPage);

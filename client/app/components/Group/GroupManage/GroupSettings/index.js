@@ -23,7 +23,7 @@ import DiverstFileInput from 'components/Shared/DiverstFileInput';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Group/GroupManage/messages';
-
+import { injectIntl, intlShape } from 'react-intl';
 const styles = theme => ({
   noBottomPadding: {
     paddingBottom: '0 !important',
@@ -67,6 +67,7 @@ const SETTINGS_OPTIONS = Object.freeze({
 /* eslint-disable object-curly-newline */
 export function GroupSettingsInner({ classes, handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
   const prettify = str => (str.charAt(0).toUpperCase() + str.slice(1)).replace(/_/g, ' ');
+  const { intl } = props;
   return (
     <Card>
       <Form>
@@ -168,7 +169,7 @@ export function GroupSettingsInner({ classes, handleSubmit, handleChange, handle
                 component={DiverstColorPicker}
                 id='calendar_color'
                 name='calendar_color'
-                label={<DiverstFormattedMessage {...messages.settings.calendar_color} />}
+                label={intl.formatMessage(messages.settings.calendar_color)}
                 disabled={props.isCommitting}
                 value={values.calendar_color}
                 onChange={value => setFieldValue('calendar_color', value)}
@@ -224,6 +225,7 @@ GroupSettings.propTypes = {
 };
 
 GroupSettingsInner.propTypes = {
+  intl: intlShape,
   classes: PropTypes.object,
   handleSubmit: PropTypes.func,
   handleChange: PropTypes.func,
@@ -237,6 +239,7 @@ GroupSettingsInner.propTypes = {
 };
 
 export default compose(
+  injectIntl,
   memo,
   withStyles(styles)
 )(GroupSettings);

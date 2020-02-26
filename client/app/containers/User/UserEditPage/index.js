@@ -23,7 +23,7 @@ import UserForm from 'components/User/UserForm';
 import fieldDataReducer from 'containers/Shared/FieldData/reducer';
 import fieldDataSaga from 'containers/Shared/FieldData/saga';
 
-import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/User/messages';
 
 export function UserEditPage(props) {
@@ -31,7 +31,7 @@ export function UserEditPage(props) {
   useInjectSaga({ key: 'users', saga });
   useInjectReducer({ key: 'field_data', reducer: fieldDataReducer });
   useInjectSaga({ key: 'field_data', saga: fieldDataSaga });
-
+  const { intl } = props;
   const rs = new RouteService(useContext);
   const links = {
     usersIndex: ROUTES.admin.system.users.index.path(),
@@ -55,7 +55,7 @@ export function UserEditPage(props) {
         links={links}
         user={props.user}
         fieldData={props.fieldData}
-        buttonText={<DiverstFormattedMessage {...messages.update} />}
+        buttonText={intl.formatMessage(messages.update)}
         admin={props.path.startsWith('/admin')}
         isCommitting={props.isCommitting}
         isFormLoading={props.isFormLoading}
@@ -65,6 +65,7 @@ export function UserEditPage(props) {
 }
 
 UserEditPage.propTypes = {
+  intl: intlShape,
   path: PropTypes.string,
   user: PropTypes.object,
   fieldData: PropTypes.array,
@@ -96,6 +97,7 @@ const withConnect = connect(
 );
 
 export default compose(
+  injectIntl,
   withConnect,
   memo,
 )(UserEditPage);

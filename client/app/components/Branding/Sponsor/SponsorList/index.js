@@ -55,8 +55,8 @@ export function SponsorList(props) {
   };
 
   const columns = [
-    { title: <DiverstFormattedMessage {...messages.Sponsors.name} />, field: 'sponsor_name' },
-    { title: <DiverstFormattedMessage {...messages.Sponsors.title} />, field: 'sponsor_title' }
+    { title: intl.formatMessage(messages.Sponsors.name), field: 'sponsor_name' },
+    { title: intl.formatMessage(messages.Sponsors.title), field: 'sponsor_title' }
   ];
 
   return (
@@ -77,7 +77,7 @@ export function SponsorList(props) {
         </Box>
         <Box className={classes.floatSpacer} />
         <DiverstTable
-          title={<DiverstFormattedMessage {...messages.Sponsors.tabletitle} />}
+          title={intl.formatMessage(messages.Sponsors.tabletitle)}
           handlePagination={props.handlePagination}
           isLoading={props.isFetchingSponsors}
           onOrderChange={handleOrderChange}
@@ -88,14 +88,14 @@ export function SponsorList(props) {
           actions={[
             {
               icon: () => <EditIcon />,
-              tooltip: <DiverstFormattedMessage {...messages.Sponsors.edit} />,
+              tooltip: intl.formatMessage(messages.Sponsors.edit),
               onClick: (_, rowData) => {
                 props.handleVisitSponsorEdit(rowData.id);
               }
             },
             {
               icon: () => <DeleteIcon />,
-              tooltip: <DiverstFormattedMessage {...messages.Sponsors.delete} />,
+              tooltip: intl.formatMessage(messages.Sponsors.delete),
               onClick: (_, rowData) => {
                 /* eslint-disable-next-line no-alert, no-restricted-globals */
                 if (confirm(intl.formatMessage(messages.Sponsors.delete_confirm)))

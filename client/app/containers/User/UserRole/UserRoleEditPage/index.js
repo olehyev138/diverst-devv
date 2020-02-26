@@ -22,7 +22,7 @@ import {
 } from '../selectors';
 
 import UserRoleForm from 'components/User/UserRole/UserRoleForm';
-import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/User/UserRole/messages';
 
 export function UserRoleEditPage(props) {
@@ -33,7 +33,7 @@ export function UserRoleEditPage(props) {
   const links = {
     userRolesIndex: ROUTES.admin.system.users.roles.index.path(),
   };
-
+  const { intl } = props;
   useEffect(() => {
     props.getUserRoleBegin({ id: rs.params('role_id') });
 
@@ -49,7 +49,7 @@ export function UserRoleEditPage(props) {
         userRoleAction={props.updateUserRoleBegin}
         links={links}
         userRole={props.userRole}
-        buttonText={<DiverstFormattedMessage {...messages.update} />}
+        buttonText={intl.formatMessage(messages.update)}
         isCommitting={props.isCommitting}
         isFormLoading={props.isFormLoading}
       />
@@ -58,6 +58,7 @@ export function UserRoleEditPage(props) {
 }
 
 UserRoleEditPage.propTypes = {
+  intl: intlShape,
   path: PropTypes.string,
   userRole: PropTypes.object,
   getUserRoleBegin: PropTypes.func,
@@ -85,6 +86,7 @@ const withConnect = connect(
 );
 
 export default compose(
+  injectIntl,
   withConnect,
   memo,
 )(UserRoleEditPage);

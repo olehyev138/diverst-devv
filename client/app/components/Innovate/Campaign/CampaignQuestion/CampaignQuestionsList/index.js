@@ -24,7 +24,7 @@ import EditIcon from '@material-ui/icons/Edit';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Innovate/Campaign/CampaignQuestion/messages';
-
+import { injectIntl, intlShape } from 'react-intl';
 const styles = theme => ({
   errorButton: {
     color: theme.palette.error.main,
@@ -46,7 +46,7 @@ const styles = theme => ({
 
 export function CampaignQuestionsList(props) {
   const { classes } = props;
-  const { links } = props;
+  const { links, intl } = props;
 
   const handleOrderChange = (columnId, orderDir) => {
   };
@@ -73,7 +73,7 @@ export function CampaignQuestionsList(props) {
       </Box>
       <Box className={classes.floatSpacer} />
       <DiverstTable
-        title={<DiverstFormattedMessage {...messages.question.list.questions} />}
+        title={intl.formatMessage(messages.question.list.questions)}
         handlePagination={props.handlePagination}
         isLoading={props.isFetchingQuestions}
         onOrderChange={handleOrderChange}
@@ -84,13 +84,13 @@ export function CampaignQuestionsList(props) {
         rowsPerPage={props.params.count}
         actions={[{
           icon: () => <EditIcon />,
-          tooltip: <DiverstFormattedMessage {...messages.question.edit} />,
+          tooltip: intl.formatMessage(messages.question.edit),
           onClick: (_, rowData) => {
             props.handleVisitQuestionEdit(props.campaignId, rowData.id);
           }
         }, {
           icon: () => <DeleteIcon />,
-          tooltip: <DiverstFormattedMessage {...messages.question.delete} />,
+          tooltip: intl.formatMessage(messages.question.delete),
           onClick: (_, rowData) => {
             /* eslint-disable-next-line no-alert, no-restricted-globals */
             if (confirm('Delete question?'))
@@ -103,6 +103,7 @@ export function CampaignQuestionsList(props) {
 }
 
 CampaignQuestionsList.propTypes = {
+  intl: intlShape,
   classes: PropTypes.object,
   deleteQuestionBegin: PropTypes.func,
   links: PropTypes.shape({
@@ -120,6 +121,7 @@ CampaignQuestionsList.propTypes = {
 };
 
 export default compose(
+  injectIntl,
   memo,
   withStyles(styles)
 )(CampaignQuestionsList);

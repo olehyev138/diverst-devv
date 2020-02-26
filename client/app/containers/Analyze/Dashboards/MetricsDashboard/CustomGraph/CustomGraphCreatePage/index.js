@@ -27,8 +27,9 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import CustomGraphForm from 'components/Analyze/Dashboards/MetricsDashboard/CustomGraph/CustomGraphForm';
 import { selectEnterprise } from 'containers/Shared/App/selectors';
 // messages
-import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Analyze/Dashboards/MetricsDashboard/CustomGraph/messages';
+import { injectIntl, intlShape } from 'react-intl';
+
 export function CustomGraphCreatePage(props) {
   useInjectReducer({ key: 'customMetrics', reducer });
   useInjectReducer({ key: 'fields', reducer: fieldReducer });
@@ -40,7 +41,7 @@ export function CustomGraphCreatePage(props) {
   const links = {
     metricsDashboardShow: ROUTES.admin.analyze.custom.show.path(metricsDashboardId),
   };
-
+  const { intl } = props;
   useEffect(() => () => props.customGraphUnmount(), []);
 
   return (
@@ -49,7 +50,7 @@ export function CustomGraphCreatePage(props) {
       getFieldsBegin={props.getFieldsBegin}
       fields={props.fields}
       metricsDashboardId={metricsDashboardId[0]}
-      buttonText={<DiverstFormattedMessage {...messages.create} />}
+      buttonText={intl.formatMessage(messages.create)}
       links={links}
       isCommitting={props.isCommitting}
     />
@@ -57,6 +58,7 @@ export function CustomGraphCreatePage(props) {
 }
 
 CustomGraphCreatePage.propTypes = {
+  intl: intlShape,
   createCustomGraphBegin: PropTypes.func,
   getFieldsBegin: PropTypes.func,
   getSegmentsBegin: PropTypes.func,
@@ -85,6 +87,7 @@ const withConnect = connect(
 );
 
 export default compose(
+  injectIntl,
   withConnect,
   memo,
 )(CustomGraphCreatePage);

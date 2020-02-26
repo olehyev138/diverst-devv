@@ -20,6 +20,7 @@ import DeleteIcon from '@material-ui/icons/DeleteOutline';
 import AddIcon from '@material-ui/icons/Add';
 
 import DiverstTable from 'components/Shared/DiverstTable';
+import { injectIntl, intlShape } from 'react-intl';
 
 const styles = theme => ({
   errorButton: {
@@ -28,7 +29,7 @@ const styles = theme => ({
 });
 
 export function GroupLeadersList(props) {
-  const { classes, links } = props;
+  const { classes, links, intl } = props;
 
   const columns = [
     { title: <DiverstFormattedMessage {...messages.leader.column_name} />, field: 'user.name' },
@@ -55,7 +56,7 @@ export function GroupLeadersList(props) {
       <Grid container spacing={3}>
         <Grid item xs>
           <DiverstTable
-            title={<DiverstFormattedMessage {...messages.leader.title} />}
+            title={intl.formatMessage(messages.leader.title)}
             handlePagination={props.handlePagination}
             isLoading={props.isFetchingGroupLeaders}
             dataArray={props.groupLeaderList}
@@ -65,14 +66,14 @@ export function GroupLeadersList(props) {
             actions={[
               {
                 icon: () => <EditIcon />,
-                tooltip: <DiverstFormattedMessage {...messages.leader.edit} />,
+                tooltip: intl.formatMessage(messages.leader.edit),
                 onClick: (_, rowData) => {
                   props.handleVisitGroupLeaderEdit(rowData.group_id, rowData.id);
                 }
               },
               {
                 icon: () => <DeleteIcon />,
-                tooltip: <DiverstFormattedMessage {...messages.leader.delete} />,
+                tooltip: intl.formatMessage(messages.leader.delete),
                 onClick: (_, rowData) => {
                   /* eslint-disable-next-line no-alert, no-restricted-globals */
                   if (confirm('Are you sure you want to delete this group leader?'))
@@ -87,6 +88,7 @@ export function GroupLeadersList(props) {
 }
 
 GroupLeadersList.propTypes = {
+  intl: intlShape,
   classes: PropTypes.object,
   deleteGroupLeaderBegin: PropTypes.func,
   links: PropTypes.shape({
@@ -105,6 +107,7 @@ GroupLeadersList.propTypes = {
 };
 
 export default compose(
+  injectIntl,
   memo,
   withStyles(styles)
 )(GroupLeadersList);

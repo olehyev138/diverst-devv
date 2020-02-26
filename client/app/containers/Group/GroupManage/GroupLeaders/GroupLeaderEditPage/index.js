@@ -32,7 +32,7 @@ import { getUserRolesBegin, userRoleUnmount } from 'containers/User/UserRole/act
 
 import GroupLeaderForm from 'components/Group/GroupManage/GroupLeaders/GroupLeaderForm';
 
-import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Group/GroupManage/messages';
 
 export function GroupLeaderEditPage(props) {
@@ -44,7 +44,7 @@ export function GroupLeaderEditPage(props) {
   useInjectSaga({ key: 'members', saga: memberSaga });
   useInjectReducer({ key: 'roles', reducer: userRoleReducer });
   useInjectSaga({ key: 'roles', saga: userRoleSaga });
-
+  const { intl } = props;
   const rs = new RouteService(useContext);
   const groupId = rs.params('group_id');
   const groupLeaderId = rs.params('group_leader_id');
@@ -76,13 +76,14 @@ export function GroupLeaderEditPage(props) {
       groupId={groupId}
       isCommitting={isCommitting}
       isFormLoading={isFormLoading}
-      buttonText={<DiverstFormattedMessage {...messages.update} />}
+      buttonText={intl.formatMessage(messages.update)}
       links={links}
     />
   );
 }
 
 GroupLeaderEditPage.propTypes = {
+  intl: intlShape,
   getGroupLeaderBegin: PropTypes.func,
   getGroupMembersBegin: PropTypes.func,
   updateGroupLeaderBegin: PropTypes.func,
@@ -123,6 +124,7 @@ const withConnect = connect(
 );
 
 export default compose(
+  injectIntl,
   withConnect,
   memo,
 )(GroupLeaderEditPage);

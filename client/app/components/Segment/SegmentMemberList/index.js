@@ -24,6 +24,7 @@ import DiverstTable from 'components/Shared/DiverstTable';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Segment/messages';
+import { injectIntl, intlShape } from 'react-intl';
 
 const styles = theme => ({
   errorButton: {
@@ -32,7 +33,7 @@ const styles = theme => ({
 });
 
 export function SegmentMemberList(props) {
-  const { classes } = props;
+  const { classes, intl } = props;
 
   const handleOrderChange = (columnId, orderDir) => {
     props.handleOrdering({
@@ -64,7 +65,7 @@ export function SegmentMemberList(props) {
       </Grid>
       <Box mb={2} />
       <DiverstTable
-        title={<DiverstFormattedMessage {...messages.member.title} />}
+        title={intl.formatMessage(messages.member.title)}
         handlePagination={props.handlePagination}
         isLoading={props.isFetchingMembers}
         onOrderChange={handleOrderChange}
@@ -78,6 +79,7 @@ export function SegmentMemberList(props) {
 }
 
 SegmentMemberList.propTypes = {
+  intl: intlShape,
   classes: PropTypes.object,
   links: PropTypes.shape({
     segmentMembersNew: PropTypes.string,
@@ -91,6 +93,7 @@ SegmentMemberList.propTypes = {
 };
 
 export default compose(
+  injectIntl,
   memo,
   withStyles(styles)
 )(SegmentMemberList);

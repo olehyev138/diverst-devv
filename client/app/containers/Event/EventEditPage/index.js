@@ -25,8 +25,9 @@ import {
 } from 'containers/Event/actions';
 
 import EventForm from 'components/Event/EventForm';
-import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+
 import messages from 'containers/Event/messages';
+import { injectIntl, intlShape } from 'react-intl';
 
 export function EventEditPage(props) {
   useInjectReducer({ key: 'events', reducer });
@@ -37,7 +38,7 @@ export function EventEditPage(props) {
     eventsIndex: ROUTES.group.events.index.path(rs.params('group_id')),
     eventShow: ROUTES.group.events.show.path(rs.params('group_id'), rs.params('event_id')),
   };
-
+  const { intl } = props;
   useEffect(() => {
     const eventId = rs.params('event_id');
     props.getEventBegin({ id: eventId });
@@ -53,7 +54,7 @@ export function EventEditPage(props) {
       eventAction={props.updateEventBegin}
       isCommitting={props.isCommitting}
       isFormLoading={props.isFormLoading}
-      buttonText={<DiverstFormattedMessage {...messages.update} />}
+      buttonText={intl.formatMessage(messages.update)}
       currentUser={currentUser}
       currentGroup={currentGroup}
       event={currentEvent}
@@ -63,6 +64,7 @@ export function EventEditPage(props) {
 }
 
 EventEditPage.propTypes = {
+  intl: intlShape,
   getEventBegin: PropTypes.func,
   updateEventBegin: PropTypes.func,
   eventsUnmount: PropTypes.func,
@@ -93,6 +95,7 @@ const withConnect = connect(
 );
 
 export default compose(
+  injectIntl,
   withConnect,
   memo,
 )(EventEditPage);

@@ -90,7 +90,7 @@ export function SegmentList(props, context) {
       <Grid container spacing={3}>
         <Grid item xs>
           <DiverstTable
-            title=<DiverstFormattedMessage {...messages.list.title} />
+            title={intl.formatMessage(messages.list.title)}
             handlePagination={props.handlePagination}
             onOrderChange={handleOrderChange}
             isLoading={props.isFetchingSegments}
@@ -100,13 +100,13 @@ export function SegmentList(props, context) {
             columns={columns}
             actions={[{
               icon: () => <EditIcon />,
-              tooltip: <DiverstFormattedMessage {...messages.list.edit} />,
+              tooltip: intl.formatMessage(messages.list.edit),
               onClick: (_, rowData) => {
                 props.handleSegmentEdit(rowData.id);
               }
             }, {
               icon: () => <DeleteIcon />,
-              tooltip: <DiverstFormattedMessage {...messages.list.delete} />,
+              tooltip: intl.formatMessage(messages.list.delete),
               onClick: (_, rowData) => {
                 /* eslint-disable-next-line no-alert, no-restricted-globals */
                 if (confirm(intl.formatMessage(messages.delete_confirm)))
