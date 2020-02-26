@@ -171,7 +171,7 @@ class GroupsController < ApplicationController
         base_show
         @posts = with_segments
       else
-        @upcoming_events = Initiative.all_upcoming_events_for_group(@group.id).uniq
+        @upcoming_events = Initiative.all_upcoming_events_for_group(@group.id)
         @user_groups = []
         @messages = []
         @user_group = []
@@ -412,7 +412,7 @@ class GroupsController < ApplicationController
   end
 
   def base_show
-    @upcoming_events = Initiative.all_upcoming_events_for_group(@group.id).uniq
+    @upcoming_events = Initiative.all_upcoming_events_for_group(@group.id)
     @messages = @group.messages.includes(:owner).limit(3)
     @user_group = @group.user_groups.find_by(user: current_user)
     @leaders = @group.group_leaders.includes(:user).visible
