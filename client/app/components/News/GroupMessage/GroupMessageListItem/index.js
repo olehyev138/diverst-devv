@@ -33,6 +33,9 @@ const styles = theme => ({
   },
   cardActions: {
     padding: 3,
+  },
+  cardHeader: {
+    paddingBottom: 0,
   }
 });
 
@@ -44,6 +47,7 @@ export function GroupMessageListItem(props) {
   return (
     <Card>
       <CardHeader
+        className={classes.cardHeader}
         avatar={(
           <Avatar>
             {/* Replace this with the user icon */}
@@ -57,25 +61,23 @@ export function GroupMessageListItem(props) {
         <Typography gutterBottom>
           {groupMessage.content}
         </Typography>
-        <Grid container>
-          <Grid item lg={3} xs={5}>
+        <Grid container justify='space-between'>
+          <Grid item>
             <Typography variant='body2' color='textSecondary' className={classes.centerVertically}>
               {`Submitted by ${groupMessage.owner.first_name} ${groupMessage.owner.last_name}`}
             </Typography>
           </Grid>
-          <Grid item lg={9} display="flex" xs={7}>
+          <Grid item>
             <Grid container>
-              <Grid item xs={3} lg={9}>
-              </Grid>
-              <Grid item xs={3} lg={1}>
+              <Grid item>
                 { props.links && (
                   <IconButton
-                    //TODO : Change to actual post like action
+                    // TODO : Change to actual post like action
                     size='small'
                     to={props.links.groupMessageShow(props.groupId, newsItem.id)}
                     component={WrappedNavLink}
                   >
-                    <ThumbUpIcon/>
+                    <ThumbUpIcon />
                   </IconButton>
                 )}
                 { props.links && (
@@ -88,12 +90,11 @@ export function GroupMessageListItem(props) {
                   </IconButton>
                 )}
               </Grid>
-              <Grid item xs={6} lg={2}>
-                <Typography variant='body2' color='textSecondary' className={classes.centerVertically} >
+              <Grid item>
+                <Typography variant='body2' color='textSecondary' className={classes.centerVertically} align='right'>
                   {formatDateTimeString(groupMessage.created_at)}
                 </Typography>
               </Grid>
-
             </Grid>
           </Grid>
         </Grid>
