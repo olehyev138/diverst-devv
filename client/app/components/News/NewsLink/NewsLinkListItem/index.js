@@ -11,7 +11,7 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux/';
 
 import {
-  Button, Card, CardActions, CardContent, Grid,
+  Button, Card, CardActions, CardHeader, CardContent, Grid,
   TextField, Hidden, FormControl, Typography, Link, Box,
 } from '@material-ui/core/index';
 import { withStyles } from '@material-ui/core/styles';
@@ -20,41 +20,89 @@ import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/News/messages';
+import IconButton from '@material-ui/core/IconButton';
+import ThumbUpIcon from '@material-ui/icons/ThumbUp';
+import CommentIcon from '@material-ui/icons/Comment';
+import { formatDateTimeString } from 'utils/dateTimeHelpers';
 
 const styles = theme => ({
+  cardHeader: {
+    paddingBottom: 0,
+  },
+  centerVertically: {
+    padding: 3,
+  },
+  cardActions: {
+    padding: 3,
+  },
+  cardContent: {
+    paddingBottom: 0,
+  },
 });
 
 export function NewsLinkListItem(props) {
-  const { newsItem } = props;
+  const { classes, newsItem } = props;
   const newsItemId = newsItem.id;
   const newsLink = newsItem.news_link;
   const groupId = newsLink.group_id;
   const { links } = props;
   return (
     <Card>
-      <CardContent>
-        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-        <Link href={newsLink.url} target='_blank'>
-          <Typography>
-            {newsLink.title}
-          </Typography>
-        </Link>
-        <Box mb={2} />
-        <Typography variant='body2' color='textSecondary'>
+      <CardHeader
+        className={classes.cardHeader}
+        title={<Link href={newsLink.url} target='_blank'>{newsLink.title}</Link>}
+        titleTypographyProps={{ color: 'primary' }}
+      >
+      </CardHeader>
+      <CardContent className={classes.cardContent}>
+        <Typography gutterBottom>
           {newsLink.description}
         </Typography>
-        {newsLink.author ? (
-          <React.Fragment>
-            <Box mb={2} />
-            <Typography variant='body2' color='textSecondary'>
-              {`Submitted by ${newsLink.author.first_name} ${newsLink.author.last_name}`}
-            </Typography>
-          </React.Fragment>
-        ) : <React.Fragment />
-        }
+        <Grid container justify='space-between'>
+          <Grid item>
+            {newsLink.author ? (
+              <React.Fragment>
+                <Typography variant='body2' color='textSecondary' className={classes.centerVertically}>
+                  {`Submitted by ${newsLink.author.first_name} ${newsLink.author.last_name}`}
+                </Typography>
+              </React.Fragment>
+            ) : <React.Fragment />
+            }
+          </Grid>
+          <Grid item>
+            <Grid container>
+              <Grid item>
+                { props.links && (
+                  <IconButton
+                    // TODO : Change to actual post like action
+                    size='small'
+                    to={props.links.newsLinkShow(props.groupId, newsItem.id)}
+                    component={WrappedNavLink}
+                  >
+                    <ThumbUpIcon />
+                  </IconButton>
+                )}
+                { props.links && (
+                  <IconButton
+                    size='small'
+                    to={props.links.newsLinkShow(props.groupId, newsItem.id)}
+                    component={WrappedNavLink}
+                  >
+                    <CommentIcon />
+                  </IconButton>
+                )}
+              </Grid>
+              <Grid item>
+                <Typography variant='body2' color='textSecondary' className={classes.centerVertically} align='right'>
+                  {formatDateTimeString(newsLink.created_at)}
+                </Typography>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
       </CardContent>
       {props.links && props.newsItem && (
-        <CardActions>
+        <CardActions className={classes.cardActions}>
           {!props.readonly && (
             <Button
               size='small'
@@ -65,13 +113,6 @@ export function NewsLinkListItem(props) {
               <DiverstFormattedMessage {...messages.edit} />
             </Button>
           )}
-          <Button
-            size='small'
-            to={links.newsLinkShow(props.groupId, newsItem.id)}
-            component={WrappedNavLink}
-          >
-            Comments
-          </Button>
           {!props.readonly && props.newsItem.approved !== true && (
             <Button
               size='small'
@@ -102,6 +143,7 @@ export function NewsLinkListItem(props) {
 }
 
 NewsLinkListItem.propTypes = {
+  classes: PropTypes.object,
   newsLink: PropTypes.object,
   readonly: PropTypes.bool,
   groupId: PropTypes.number,
