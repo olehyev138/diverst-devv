@@ -83,7 +83,7 @@ export function MetricsDashboardsList(props, context) {
       <Grid container spacing={3}>
         <Grid item xs>
           <DiverstTable
-            title={<DiverstFormattedMessage {...messages.table.title} />}
+            title={intl.formatMessage(messages.table.title)}
             handlePagination={props.handlePagination}
             handleRowClick={(_, rowData) => props.handleVisitDashboardPage(rowData.id)}
             dataArray={Object.values(props.metricsDashboards)}
