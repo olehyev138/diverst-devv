@@ -8,25 +8,36 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux/';
 
 import {
-  Button, Card, CardActions, CardContent, Typography, CardHeader, Avatar, Box
+  Button, Card, CardActions, CardContent, Typography, CardHeader, Avatar, Grid, Box
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
+import ThumbUpIcon from '@material-ui/icons/ThumbUp';
+
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/News/messages';
-import DeleteIcon from '@material-ui/icons/DeleteOutline';
+import CommentIcon from '@material-ui/icons/Comment';
+import IconButton from '@material-ui/core/IconButton';
 import { formatDateTimeString } from 'utils/dateTimeHelpers';
 
 const styles = theme => ({
+  cardContent: {
+    paddingBottom: 0,
+  },
+  centerVertically: {
+    padding: 3,
+  },
+  cardActions: {
+    padding: 3,
+  }
 });
 
 export function GroupMessageListItem(props) {
-  const { newsItem } = props;
+  const { classes, newsItem } = props;
   const newsItemId = newsItem.id;
   const groupMessage = newsItem.group_message;
   const groupId = groupMessage.group_id;
-
   return (
     <Card>
       <CardHeader
@@ -37,18 +48,48 @@ export function GroupMessageListItem(props) {
           </Avatar>
         )}
         title={groupMessage.subject}
-        subheader={formatDateTimeString(groupMessage.created_at)}
+        titleTypographyProps={{ variant: 'h5', display: 'inline' }}
       />
-      <CardContent>
+      <CardContent className={classes.cardContent}>
         <Typography gutterBottom>
           {groupMessage.content}
         </Typography>
-        <Typography variant='body2' color='textSecondary'>
-          {`Submitted by ${groupMessage.owner.first_name} ${groupMessage.owner.last_name}`}
-        </Typography>
+        <Grid container>
+          <Grid item xs={9}>
+            <Typography variant='body2' color='textSecondary' className={classes.centerVertically}>
+              {`Submitted by ${groupMessage.owner.first_name} ${groupMessage.owner.last_name}`}
+            </Typography>
+          </Grid>
+          <Grid item xs={3}>
+            <Box display="flex" justifyContent="flex-end">
+              { props.links && (
+                <IconButton
+                  //TODO : Change to actual post like action
+                  size='small'
+                  to={props.links.groupMessageShow(props.groupId, newsItem.id)}
+                  component={WrappedNavLink}
+                >
+                  <ThumbUpIcon/>
+                </IconButton>
+              )}
+              { props.links && (
+                <IconButton
+                  size='small'
+                  to={props.links.groupMessageShow(props.groupId, newsItem.id)}
+                  component={WrappedNavLink}
+                >
+                  <CommentIcon />
+                </IconButton>
+              )}
+              <Typography variant='body2' color='textSecondary' className={classes.centerVertically} >
+                {formatDateTimeString(groupMessage.created_at)}
+              </Typography>
+            </Box>
+          </Grid>
+        </Grid>
       </CardContent>
       { props.links && (
-        <CardActions>
+        <CardActions className={classes.cardActions}>
           {!props.readonly && (
             <Button
               size='small'
@@ -59,13 +100,7 @@ export function GroupMessageListItem(props) {
               <DiverstFormattedMessage {...messages.edit} />
             </Button>
           )}
-          <Button
-            size='small'
-            to={props.links.groupMessageShow(props.groupId, newsItem.id)}
-            component={WrappedNavLink}
-          >
-            Comments
-          </Button>
+
           {!props.readonly && props.newsItem.approved !== true && (
             <Button
               size='small'
