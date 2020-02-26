@@ -138,12 +138,6 @@ class GroupPolicy < ApplicationPolicy
     GroupLeader.where(user_id: user.id, group_id: @record.id).exists?
   end
 
-  def has_group_leader_permissions?(permission)
-    return false unless is_a_leader?
-
-    @record.group_leaders.where(user_id: @user.id).where("#{permission} = true").exists?
-  end
-
   def update?
     return true if manage?
 
@@ -204,6 +198,14 @@ class GroupPolicy < ApplicationPolicy
 
     # group member
     is_a_member? && @policy_group.group_settings_manage?
+  end
+
+  protected
+
+  def has_group_leader_permissions?(permission)
+    return false unless is_a_leader?
+
+    @record.group_leaders.where(user_id: @user.id).where("#{permission} = true").exists?
   end
 
   class Scope < Scope

@@ -26,6 +26,66 @@ class GroupBasePolicy < ApplicationPolicy
     UserGroup.where(user_id: user.id, group_id: group.id, accepted_member: true).exists?
   end
 
+  def is_a_leader?
+    GroupLeader.where(user_id: user.id, group_id: group.id).exists?
+  end
+
+  def is_active_member?
+    UserGroup.where(accepted_member: true, user_id: user.id, group_id: @record.id).exists?
+  end
+
+  def is_a_guest?
+    !is_a_member?
+  end
+
+  def is_a_pending_member?
+    UserGroup.where(accepted_member: false, user_id: user.id, group_id: @record.id).exists?
+  end
+
+  def index?
+    return true if view_group_resource(base_manage_permission)
+    return true if view_group_resource(base_create_permission)
+
+    view_group_resource(base_index_permission)
+  end
+
+  def show?
+    index?
+  end
+
+  def new?
+    create?
+  end
+
+  def create?
+    return true if manage_group_resource(base_manage_permission)
+
+    manage_group_resource(base_create_permission)
+  end
+
+  def edit?
+    update?
+  end
+
+  def update?
+    manage_group_resource(base_manage_permission)
+  end
+
+  def destroy?
+    update?
+  end
+
+  def base_index_permission
+  end
+
+  def base_create_permission
+  end
+
+  def base_manage_permission
+  end
+
+  protected
+
   def is_a_manager?(permission)
     return true if is_admin_manager?(permission)
 
@@ -39,22 +99,6 @@ class GroupBasePolicy < ApplicationPolicy
 
     # groups manager
     policy_group.groups_manage? && policy_group[permission]
-  end
-
-  def is_a_leader?
-    GroupLeader.where(user_id: user.id, group_id: group.id).exists?
-  end
-
-  def is_active_member?
-    UserGroup.where(accepted_member: true, user_id: user.id, group_id: @record.id).exists?
-  end
-
-  def is_a_guest?
-    !is_a_member? || is_a_pending_member?
-  end
-
-  def is_a_pending_member?
-    UserGroup.where(accepted_member: false, user_id: user.id, group_id: @record.id).exists?
   end
 
   def basic_group_leader_permission?(permission)
