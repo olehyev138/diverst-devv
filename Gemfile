@@ -72,7 +72,7 @@ gem 'rollbar', '~> 2.14.1'
 gem 'ruby-oembed', '~> 0.12', git: 'https://github.com/TeamDiverst/ruby-oembed.git'
 gem 'embedly', '~> 1.9.1'
 gem 'querystring'
-gem 'julia_builder', '~> 0.2.0'
+gem 'julia_builder', '~> 0.2.0', '= 0.2.0'
 gem 'date_validator', '~> 0.9.0'
 gem 'thor', '0.20.0'# Expected string default value for '--decorator'; got true (boolean) - setting version removes this message
 gem 'sanitize_email', '~> 1.2.2'
@@ -87,6 +87,10 @@ gem 'scenic'
 gem 'scenic-mysql_adapter'
 gem 'factory_bot_rails', '~> 4.8.0' # Create mock objects for testing
 gem 'tty-spinner'
+gem 'oauth2'
+gem 'activerecord-session_store'
+gem 'microsoft_graph', git: 'https://github.com/TeamDiverst/msgraph-sdk-ruby.git', branch: 'propagate_setting_dirty_flags_upwards'
+gem 'attr_encrypted', '~> 3.1.0'
 
 group :development, :test do
   gem 'spring', '~> 1.6.2' # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring

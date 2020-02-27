@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200106165401) do
+ActiveRecord::Schema.define(version: 20200221164055) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -371,6 +371,7 @@ ActiveRecord::Schema.define(version: 20200106165401) do
     t.integer  "polls_count",                           limit: 4
     t.integer  "users_count",                           limit: 4
     t.boolean  "slack_enabled",                                       default: false
+    t.boolean  "enable_outlook",                                      default: false
   end
 
   add_index "enterprises", ["share_point_files_id"], name: "fk_rails_6315f961bd", using: :btree
@@ -703,8 +704,9 @@ ActiveRecord::Schema.define(version: 20200106165401) do
   create_table "initiative_users", force: :cascade do |t|
     t.integer  "initiative_id", limit: 4
     t.integer  "user_id",       limit: 4
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.string   "outlook_id",    limit: 191
   end
 
   create_table "initiatives", force: :cascade do |t|
@@ -739,6 +741,16 @@ ActiveRecord::Schema.define(version: 20200106165401) do
     t.integer "segment_id", limit: 4
     t.integer "group_id",   limit: 4
   end
+
+  create_table "legacy_sessions", force: :cascade do |t|
+    t.string   "session_id", limit: 191,   null: false
+    t.text     "data",       limit: 65535
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "legacy_sessions", ["session_id"], name: "index_legacy_sessions_on_session_id", unique: true, using: :btree
+  add_index "legacy_sessions", ["updated_at"], name: "index_legacy_sessions_on_updated_at", using: :btree
 
   create_table "likes", force: :cascade do |t|
     t.integer  "news_feed_link_id", limit: 4
@@ -984,6 +996,16 @@ ActiveRecord::Schema.define(version: 20200106165401) do
     t.integer  "group_id",   limit: 4
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
+  end
+
+  create_table "outlook_data", force: :cascade do |t|
+    t.integer  "user_id",                    limit: 4
+    t.text     "encrypted_token_hash",       limit: 65535
+    t.text     "encrypted_token_hash_iv",    limit: 65535
+    t.boolean  "auto_add_event_to_calendar",               default: true
+    t.boolean  "auto_update_calendar_event",               default: true
+    t.datetime "created_at",                                              null: false
+    t.datetime "updated_at",                                              null: false
   end
 
   create_table "page_names", id: false, force: :cascade do |t|
