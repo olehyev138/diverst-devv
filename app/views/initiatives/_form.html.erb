@@ -66,7 +66,7 @@
 
       <div class="card__section card__section--border">
         <%= f.association :participating_groups,
-          label: "You may also specify <strong>participating groups</strong>".html_safe,
+          label: "You may also invite other groups".html_safe,
           collection: @group.possible_participating_groups,
           input_html: {class: 'select2-field-groups', multiple: true} %>
       </div>
