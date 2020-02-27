@@ -5,6 +5,7 @@ class OutlookAuthenticator
 
   # Scopes required by the app
   SCOPES = [
+    'openid',
     'email',
     'profile',
     'User.Read',
