@@ -10,7 +10,7 @@ class InitiativeUser < BaseClass
       update_outlook
     end
   rescue OData::ClientError
-# ignored
+    # ignored
   end
 
   def update_outlook

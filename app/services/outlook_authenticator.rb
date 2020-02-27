@@ -12,7 +12,7 @@ class OutlookAuthenticator
     'Calendars.ReadWrite'
   ]
 
-  HOST =  Rails.application.routes.default_url_options[:host]
+  HOST = Rails.application.routes.default_url_options[:host]
   PROTOCOL = HOST.start_with?('localhost') ? 'http' : 'https'
   CALLBACK = Rails.application.routes.url_helpers.omniauth_callback_url('outlook', protocol: PROTOCOL)
 
