@@ -9,6 +9,8 @@ class InitiativeUser < BaseClass
     if user.outlook_datum.present? && user.outlook_datum.auto_add_event_to_calendar?
       update_outlook
     end
+  rescue OData::ClientError
+# ignored
   end
 
   def update_outlook
