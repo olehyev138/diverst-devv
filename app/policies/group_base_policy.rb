@@ -88,6 +88,24 @@ class GroupBasePolicy < ApplicationPolicy
   def base_manage_permission
   end
 
+  def group_visibility_setting
+  end
+
+  def publicly_visible
+    group_visibility_setting.present? ?
+        ['public', 'global', 'non-members'].include?(group[group_visibility_setting]) : true
+  end
+
+  def member_visible
+    group_visibility_setting.present? ?
+        ['public', 'global', 'non-members', 'group'].include?(group[group_visibility_setting]) : true
+  end
+
+  def leader_visible
+    group_visibility_setting.present? ?
+        ['public', 'global', 'non-members', 'group', 'managers_only', 'leaders_only'].include?(group[group_visibility_setting]) : true
+  end
+
   protected
 
   def is_a_manager?(permission)
@@ -133,11 +151,11 @@ class GroupBasePolicy < ApplicationPolicy
     # groups manager
     return true if policy_group.groups_manage? && policy_group[permission]
     # group leader
-    return true if is_a_leader? &&  policy_group[permission]
+    return true if is_a_leader? && leader_visible && policy_group[permission]
     # group member
-    return true if is_a_member? &&  policy_group[permission]
+    return true if is_a_member? && member_visible && policy_group[permission]
 
-    false
+    publicly_visible && policy_group[permission]
   end
 
   def manage?
@@ -150,7 +168,7 @@ class GroupBasePolicy < ApplicationPolicy
     # groups manager
     return true if policy_group.groups_manage? && policy_group[permission]
     # group leader
-    return true if has_group_leader_permissions?(permission)
+    return true if is_a_leader? && has_group_leader_permissions?(permission)
     # group member
     return true if is_a_member? && policy_group[permission]
 

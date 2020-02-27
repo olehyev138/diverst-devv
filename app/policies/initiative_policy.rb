@@ -15,23 +15,12 @@ class InitiativePolicy < GroupBasePolicy
     update?
   end
 
-  def update?
-    record.owner == user || super
+  def group_visibility_setting
+    'upcoming_events_visibility'
   end
 
-  def view_group_resource(permission)
-    return true if manage_group_resource(permission)
-
-    # super admin
-    return true if policy_group.manage_all?
-    # groups manager
-    return true if policy_group.groups_manage? && policy_group[permission]
-    # group leader
-    return true if is_a_leader? &&  policy_group[permission]
-    # group member
-    return true if is_a_member? && ['group', 'public', 'non_member'].include?(group.upcoming_events_visibility) &&  policy_group[permission]
-
-    ['public', 'non_member'].include?(group.upcoming_events_visibility) &&  policy_group[permission]
+  def update?
+    record.owner == user || super
   end
 
   def fields?
