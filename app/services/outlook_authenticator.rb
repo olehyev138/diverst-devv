@@ -11,7 +11,9 @@ class OutlookAuthenticator
     'Calendars.ReadWrite'
   ]
 
-  CALLBACK = Rails.application.routes.url_helpers.omniauth_callback_url('outlook')
+  HOST =  Rails.application.routes.default_url_options[:host]
+  PROTOCOL = HOST.start_with?('localhost') ? 'http' : 'https'
+  CALLBACK = Rails.application.routes.url_helpers.omniauth_callback_url('outlook', protocol: PROTOCOL)
 
   # Generates the login URL for the app.
   def self.get_login_url
