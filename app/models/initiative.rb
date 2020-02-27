@@ -73,7 +73,7 @@ class Initiative < BaseClass
 
   # Integration Call Backs
   after_create :post_new_event_to_slack, unless: Proc.new { Rails.env.test? }
-  after_save :update_commit, on: :update
+  after_commit :update_outlook, on: :update
 
   after_destroy :update_annual_budget
 
