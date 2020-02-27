@@ -160,7 +160,6 @@ end
 group :staging, :production do
   gem 'syslogger', '~> 1.6.0' # Log to syslog, which is then sent to Loggly
   gem 'lograge', '~> 0.3'
-  gem 'newrelic_rpm', '~> 4.5.0'
   gem 'influxdb-rails', git: 'https://github.com/Kukunin/influxdb-rails.git',
                         branch: 'tags_middleware' # Rails metrics to InfluxDB
   gem 'sidekiq-influxdb', '~> 1.1.0' # Sidekiq metrics to InfluxDB
