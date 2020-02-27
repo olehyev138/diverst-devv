@@ -5,13 +5,14 @@ class OutlookAuthenticator
 
   # Scopes required by the app
   SCOPES = [
-    'openid',
     'email',
+    'profile',
+    'User.Read',
     'offline_access',
     'Calendars.ReadWrite'
   ]
 
-  HOST =  Rails.application.routes.default_url_options[:host]
+  HOST = Rails.application.routes.default_url_options[:host]
   PROTOCOL = HOST.start_with?('localhost') ? 'http' : 'https'
   CALLBACK = Rails.application.routes.url_helpers.omniauth_callback_url('outlook', protocol: PROTOCOL)
 
