@@ -1,4 +1,5 @@
 require 'rails_helper'
+require_dependency "#{::Rails.root}/app/controllers/user/questions_controller"
 
 RSpec.describe User::QuestionsController, type: :controller do
   let!(:user) { create :user }
