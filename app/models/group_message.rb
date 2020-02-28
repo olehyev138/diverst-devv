@@ -6,11 +6,15 @@ class GroupMessage < ApplicationRecord
   has_many :comments, class_name: 'GroupMessageComment', foreign_key: :message_id, dependent: :destroy
   has_many :user_reward_actions
 
-  belongs_to :owner, class_name: 'User'
+  belongs_to :owner, class_name: 'User', counter_cache: :own_messages_count
   belongs_to :group
 
   has_one :news_feed_link
+  has_many :news_tags, through: :news_feed_link
+
   after_create :approve_link
+  after_create :build_default_link
+  after_create :post_new_message_to_slack, unless: Proc.new { Rails.env.test? }
 
   accepts_nested_attributes_for :news_feed_link, allow_destroy: true
 
@@ -27,7 +31,7 @@ class GroupMessage < ApplicationRecord
 
   alias_attribute :author, :owner
 
-  after_create :build_default_link
+  after_destroy :remove_news_feed_link
 
   after_destroy :remove_news_feed_link
 

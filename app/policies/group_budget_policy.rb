@@ -27,4 +27,12 @@ class GroupBudgetPolicy < GroupBasePolicy
 
     user.policy_group.groups_budgets_manage? && user.policy_group.groups_manage?
   end
+
+  def destroy?
+    if @record.is_approved?
+      admin? ? true : false
+    else
+      @record.requester == @user ? true : false
+    end
+  end
 end

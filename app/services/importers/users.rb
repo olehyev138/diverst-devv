@@ -66,6 +66,7 @@ class Importers::Users
       first_name: row['first name'],
       last_name: row['last name'],
       email: row['email'],
+      notifications_email: (row['notifications email'].present?) ? row['notifications email'] : user&.notifications_email,
       biography: (row['biography'].present?) ? row['biography'] : user&.biography,
       active: process_active_column(row['active']),
       user_role_id: id,

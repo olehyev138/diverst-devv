@@ -18,13 +18,13 @@ class Poll < ApplicationRecord
   has_many :groups_polls, dependent: :destroy
   has_many :groups, inverse_of: :polls, through: :groups_polls
 
-  belongs_to :enterprise, inverse_of: :polls
+  belongs_to :enterprise, inverse_of: :polls, counter_cache: true
   belongs_to :owner, class_name: 'User'
   belongs_to :initiative
 
   after_create :create_default_graphs
 
-  after_save :schedule_users_notification
+  after_commit :schedule_users_notification, on: [:create, :update]
 
   before_destroy :remove_associated_fields, prepend: true
 

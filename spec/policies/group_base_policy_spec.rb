@@ -242,6 +242,15 @@ RSpec.describe GroupBasePolicy, type: :policy do
       it 'returns true' do
         expect(subject.basic_group_leader_permission?('groups_manage')).to eq true
       end
+
+      context 'group leader permissions are group specific' do
+        let!(:another_group) { create(:group, enterprise: user.enterprise) }
+        let!(:policy) { described_class.new(user, [another_group, another_group]) }
+
+        it 'returns false' do
+          expect(policy.basic_group_leader_permission?('groups_manage')).to eq false
+        end
+      end
     end
 
     describe '#view_group_resource' do

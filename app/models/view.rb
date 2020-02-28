@@ -1,12 +1,12 @@
 class View < ApplicationRecord
   include PublicActivity::Common
 
-  belongs_to :news_feed_link
-  belongs_to :group
+  belongs_to :news_feed_link, counter_cache: true
+  belongs_to :group, counter_cache: true
   belongs_to :user
   belongs_to :enterprise
-  belongs_to :resource
-  belongs_to :folder
+  belongs_to :resource, counter_cache: true
+  belongs_to :folder, counter_cache: true
 
   settings do
     mappings dynamic: false do

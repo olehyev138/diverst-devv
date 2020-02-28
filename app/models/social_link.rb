@@ -12,14 +12,14 @@ class SocialLink < ApplicationRecord
   accepts_nested_attributes_for :news_feed_link, allow_destroy: true
 
   validate :correct_url?
+  validates :author_id, presence: true
 
-  before_create :populate_embed_code, :build_default_link, :add_trailing_slash
+  before_create :build_default_link, :add_trailing_slash
+  after_create :hack_temp_solution
 
-  belongs_to :author, class_name: 'User'
+  belongs_to :author, class_name: 'User', required: true, counter_cache: true
   belongs_to :group
 
-  validates :author_id, presence: true
-  validates :author, presence: true
   after_destroy :remove_news_feed_link
 
   scope :of_segments, ->(segment_ids) {
@@ -45,20 +45,37 @@ class SocialLink < ApplicationRecord
     social_link_segment.news_feed_link_segment.destroy
   end
 
+  def re_populate_embed_code(small: false)
+    new_html = SocialMedia::Importer.url_to_embed(url, small: small)
+
+    update_column(small ? :small_embed_code : :embed_code, new_html)
+  rescue => e
+    errors.add(:url, e.message)
+  end
+
+  def re_populate_both_embed_code
+    re_populate_embed_code small: false
+    re_populate_embed_code small: true
+  end
+
   protected
 
   def correct_url?
-    unless SocialMedia::Importer.valid_url? url
-      errors.add(:url, 'is not a valid url for supported services')
-    end
+    self.embed_code = SocialMedia::Importer.url_to_embed url
+    self.small_embed_code = SocialMedia::Importer.url_to_embed(url, small: true)
+  rescue => e
+    errors.add(:url, e.message)
   end
 
   def add_trailing_slash
     self.url = File.join(self.url, '')
   end
 
-  def populate_embed_code
-    self.embed_code = SocialMedia::Importer.url_to_embed url
+  def hack_temp_solution
+    if small_embed_code.include? '<a href=https://www.linkedin.com/signup/cold-join>Sign Up | LinkedIn</a>'
+      sleep(1)
+      save
+    end
   end
 
   private

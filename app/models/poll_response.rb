@@ -12,11 +12,9 @@ class PollResponse < ApplicationRecord
 
   has_many :user_reward_actions, dependent: :destroy
 
-  validates_presence_of :poll
-  validates_presence_of :user
-  validates_length_of   :data, maximum: 65535
+  validates_length_of :data, maximum: 65535
 
   def group
-    poll.try(:initiative).try(:group)
+    poll&.initiative&.group
   end
 end

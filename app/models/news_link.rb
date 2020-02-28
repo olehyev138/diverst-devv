@@ -2,9 +2,10 @@ class NewsLink < ApplicationRecord
   include PublicActivity::Common
 
   belongs_to :group
-  belongs_to :author, class_name: 'User'
+  belongs_to :author, class_name: 'User', counter_cache: :own_news_links_count
 
   has_one :news_feed_link
+  has_many :news_tags, through: :news_feed_link
 
   has_many :news_link_segments, dependent: :destroy
   has_many :segments, through: :news_link_segments, before_remove: :remove_segment_association
@@ -71,8 +72,6 @@ class NewsLink < ApplicationRecord
       comments.count
     end
   end
-
-  protected
 
   def smart_add_url_protocol
     return nil if url.blank?

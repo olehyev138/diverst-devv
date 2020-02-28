@@ -1,6 +1,6 @@
 class BudgetItem < ApplicationRecord
   LEFTOVER_BUDGET_ITEM_ID = -1
-  belongs_to :budget
+  belongs_to :budget, counter_cache: true
   has_one :annual_budget, through: :budget
   has_one :group, through: :annual_budget
 

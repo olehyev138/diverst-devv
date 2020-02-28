@@ -6,40 +6,48 @@ RSpec.describe Enterprise, type: :model do
   describe 'when validating' do
     let(:enterprise) { build(:enterprise) }
 
-    it { expect(enterprise).to have_many(:users).inverse_of(:enterprise) }
-    it { expect(enterprise).to have_many(:graph_fields).class_name('Field') }
-    it { expect(enterprise).to have_many(:fields) }
-    it { expect(enterprise).to have_many(:topics).inverse_of(:enterprise) }
-    it { expect(enterprise).to have_many(:segments).inverse_of(:enterprise) }
-    it { expect(enterprise).to have_many(:groups).inverse_of(:enterprise) }
+    it { expect(enterprise).to have_many(:users).inverse_of(:enterprise).dependent(:destroy) }
+    it { expect(enterprise).to have_many(:graph_fields).class_name('Field').dependent(:destroy) }
+    it { expect(enterprise).to have_many(:fields).dependent(:destroy) }
+    it { expect(enterprise).to have_many(:topics).inverse_of(:enterprise).dependent(:destroy) }
+    it { expect(enterprise).to have_many(:segments).inverse_of(:enterprise).dependent(:destroy) }
+    it { expect(enterprise).to have_many(:groups).inverse_of(:enterprise).dependent(:destroy) }
     it { expect(enterprise).to have_many(:initiatives).through(:groups) }
-    it { expect(enterprise).to have_many(:folders) }
-    it { expect(enterprise).to have_many(:folder_shares) }
+    it { expect(enterprise).to have_many(:folders).dependent(:destroy) }
+    it { expect(enterprise).to have_many(:folder_shares).dependent(:destroy) }
     it { expect(enterprise).to have_many(:shared_folders).through(:folder_shares).source('folder') }
-    it { expect(enterprise).to have_many(:polls).inverse_of(:enterprise) }
-    it { expect(enterprise).to have_many(:mobile_fields).inverse_of(:enterprise) }
-    it { expect(enterprise).to have_many(:metrics_dashboards).inverse_of(:enterprise) }
+    it { expect(enterprise).to have_many(:polls).inverse_of(:enterprise).dependent(:destroy) }
+    it { expect(enterprise).to have_many(:mobile_fields).inverse_of(:enterprise).dependent(:destroy) }
+    it { expect(enterprise).to have_many(:metrics_dashboards).inverse_of(:enterprise).dependent(:destroy) }
+    it { expect(enterprise).to have_many(:user_roles).inverse_of(:enterprise).dependent(:delete_all) }
     it { expect(enterprise).to have_many(:graphs).through(:metrics_dashboards) }
     it { expect(enterprise).to have_many(:poll_graphs).through(:polls).source(:graphs) }
-    it { expect(enterprise).to have_many(:campaigns) }
+    it { expect(enterprise).to have_many(:campaigns).dependent(:destroy) }
     it { expect(enterprise).to have_many(:questions).through(:campaigns) }
     it { expect(enterprise).to have_many(:answers).through(:questions) }
     it { expect(enterprise).to have_many(:answer_comments).through(:answers).source(:comments) }
     it { expect(enterprise).to have_many(:answer_upvotes).through(:answers).source(:votes) }
-    it { expect(enterprise).to have_many(:resources) }
-    it { expect(enterprise).to have_many(:yammer_field_mappings) }
-    it { expect(enterprise).to have_many(:emails) }
+    it { expect(enterprise).to have_many(:resources).dependent(:destroy) }
+    it { expect(enterprise).to have_many(:yammer_field_mappings).dependent(:destroy) }
+    it { expect(enterprise).to have_many(:emails).dependent(:destroy) }
     it { expect(enterprise).to belong_to(:theme) }
-    it { expect(enterprise).to have_many(:expenses) }
-    it { expect(enterprise).to have_many(:expense_categories) }
-    it { expect(enterprise).to have_many(:rewards) }
-    it { expect(enterprise).to have_many(:reward_actions) }
-    it { expect(enterprise).to have_many(:badges) }
-    it { expect(enterprise).to have_many(:group_categories) }
-    it { expect(enterprise).to have_many(:group_category_types) }
-    it { expect(enterprise).to have_many(:sponsors) }
+    it { expect(enterprise).to have_many(:expenses).dependent(:destroy) }
+    it { expect(enterprise).to have_many(:expense_categories).dependent(:destroy) }
+    it { expect(enterprise).to have_many(:rewards).dependent(:destroy) }
+    it { expect(enterprise).to have_many(:reward_actions).dependent(:destroy) }
+    it { expect(enterprise).to have_many(:badges).dependent(:destroy) }
+    it { expect(enterprise).to have_many(:group_categories).dependent(:destroy) }
+    it { expect(enterprise).to have_many(:group_category_types).dependent(:destroy) }
+    it { expect(enterprise).to have_many(:sponsors).dependent(:destroy) }
+    it { expect(enterprise).to have_many(:clockwork_database_events).dependent(:destroy) }
+    it { expect(enterprise).to have_many(:mentoring_interests).dependent(:destroy) }
+    it { expect(enterprise).to have_many(:mentoring_requests).dependent(:destroy) }
+    it { expect(enterprise).to have_many(:mentoring_sessions).dependent(:destroy) }
+    it { expect(enterprise).to have_many(:mentoring_types).dependent(:destroy) }
+    it { expect(enterprise).to have_many(:policy_group_templates).dependent(:destroy) }
+    it { expect(enterprise).to have_many(:annual_budgets).dependent(:destroy) }
 
-    it { expect(enterprise).to have_one(:custom_text) }
+    it { expect(enterprise).to have_one(:custom_text).dependent(:destroy) }
 
     [:fields, :mobile_fields, :yammer_field_mappings, :theme, :reward_actions, :sponsors].each do |attribute|
       it { expect(enterprise).to accept_nested_attributes_for(attribute).allow_destroy(true) }
@@ -53,6 +61,66 @@ RSpec.describe Enterprise, type: :model do
     it { expect(enterprise).to validate_attachment_content_type(:cdo_picture, AttachmentHelper.common_image_types) }
     it { expect(enterprise).to validate_attachment_content_type(:banner, AttachmentHelper.common_image_types) }
     it { expect(enterprise).to validate_attachment_content_type(:xml_sso_config, [AttachmentHelper::COMMON_CONTENT_TYPES[:XML]]) }
+
+    it { expect(enterprise).to validate_length_of(:unit_of_expiry_age).is_at_most(191) }
+    it { expect(enterprise).to validate_length_of(:redirect_email_contact).is_at_most(191) }
+    it { expect(enterprise).to validate_length_of(:default_from_email_display_name).is_at_most(191) }
+    it { expect(enterprise).to validate_length_of(:default_from_email_address).is_at_most(191) }
+    it { expect(enterprise).to validate_length_of(:onboarding_sponsor_media_content_type).is_at_most(191) }
+    it { expect(enterprise).to validate_length_of(:onboarding_sponsor_media_file_name).is_at_most(191) }
+    it { expect(enterprise).to validate_length_of(:time_zone).is_at_most(191) }
+    it { expect(enterprise).to validate_length_of(:xml_sso_config_content_type).is_at_most(191) }
+    it { expect(enterprise).to validate_length_of(:xml_sso_config_file_name).is_at_most(191) }
+    it { expect(enterprise).to validate_length_of(:privacy_statement).is_at_most(65535) }
+    it { expect(enterprise).to validate_length_of(:home_message).is_at_most(65535) }
+    it { expect(enterprise).to validate_length_of(:banner_content_type).is_at_most(191) }
+    it { expect(enterprise).to validate_length_of(:banner_file_name).is_at_most(191) }
+    it { expect(enterprise).to validate_length_of(:cdo_message).is_at_most(65535) }
+    it { expect(enterprise).to validate_length_of(:cdo_picture_content_type).is_at_most(191) }
+    it { expect(enterprise).to validate_length_of(:cdo_picture_file_name).is_at_most(191) }
+    it { expect(enterprise).to validate_length_of(:yammer_token).is_at_most(191) }
+    it { expect(enterprise).to validate_length_of(:saml_last_name_mapping).is_at_most(191) }
+    it { expect(enterprise).to validate_length_of(:saml_first_name_mapping).is_at_most(191) }
+    it { expect(enterprise).to validate_length_of(:idp_cert).is_at_most(65535) }
+    it { expect(enterprise).to validate_length_of(:idp_slo_target_url).is_at_most(191) }
+    it { expect(enterprise).to validate_length_of(:idp_sso_target_url).is_at_most(191) }
+    it { expect(enterprise).to validate_length_of(:sp_entity_id).is_at_most(191) }
+    it { expect(enterprise).to validate_length_of(:name).is_at_most(191) }
+    it { expect(enterprise).to validate_length_of(:banner_file_name).is_at_most(191) }
+
+    it { expect(enterprise).to allow_value('valid@email.com').for(:redirect_email_contact) }
+    it { expect(enterprise).not_to allow_value('bademail.com').for(:redirect_email_contact) }
+  end
+
+  describe 'Enterprise emails' do
+    let(:enterprise) { create :enterprise }
+    let!(:system_email) { create :email, enterprise: enterprise }
+    let!(:custom_email) { create :custom_email, enterprise: enterprise }
+
+    context 'system emails' do
+      it 'are only fetched in #emails relation' do
+        expect(enterprise.emails).to include(system_email)
+      end
+      it 'does not include custom emails' do
+        expect(enterprise.emails).to_not include(custom_email)
+      end
+    end
+
+    context 'custom emails' do
+      it 'is only fethed in #custom_emails relation' do
+        expect(enterprise.custom_emails).to include(custom_email)
+      end
+
+      it 'does not include system emails' do
+        expect(enterprise.custom_emails).to_not include(system_email)
+      end
+    end
+  end
+
+  describe 'Enterprise::Enumerize' do
+    let!(:enterprise) { create(:enterprise) }
+
+    it { expect(enterprise).to enumerize(:unit_of_expiry_age).in(:weeks, :months, :years).with_default(:months) }
   end
 
   describe 'testing callbacks' do
@@ -61,6 +129,20 @@ RSpec.describe Enterprise, type: :model do
     it 'triggers #create_elasticsearch_only_fields on before_create' do
       expect(new_enterprise).to receive(:create_elasticsearch_only_fields)
       new_enterprise.save
+    end
+
+    context '#resolve_auto_archive_state callback' do
+      let!(:enterprise) { create(:enterprise, auto_archive: true) }
+
+      it 'calls resolve_auto_archive_state callback after update' do
+        enterprise.archive_switch
+        expect(enterprise.auto_archive).to eq false
+      end
+
+      it 'calls resolve_auto_archive_state as after_update callback' do
+        expect(enterprise).to receive(:resolve_auto_archive_state)
+        enterprise.run_callbacks(:update)
+      end
     end
   end
 
@@ -102,6 +184,311 @@ RSpec.describe Enterprise, type: :model do
       expect(enterprise.default_time_zone).to eq 'America/New_York'
     end
   end
+
+  describe '#default_user_role' do
+    it 'return default_user_role_id' do
+      enterprise = build(:enterprise)
+      default_user_role_id = create(:user_role, default: true, enterprise: enterprise).id
+      expect(enterprise.default_user_role).to eq default_user_role_id
+    end
+  end
+
+  describe '#iframe_calendar_token' do
+    it 'returns base64 string' do
+      enterprise = create(:enterprise)
+      expect(enterprise.iframe_calendar_token).not_to be_empty
+    end
+  end
+
+  describe '#saml_settings' do
+    it 'returns OneLogin::RubySaml::Settings object when xml config file is absent' do
+      enterprise = create(:enterprise)
+
+      expect(enterprise.xml_sso_config?).to eq(false)
+      expect(enterprise.saml_settings).to be_a(OneLogin::RubySaml::Settings)
+    end
+  end
+
+  describe '#match_fields' do
+    let(:enterprise) { create(:enterprise) }
+    let(:select_field) { create(:select_field, enterprise: enterprise, match_exclude: false) }
+    let(:matchable_fields) { enterprise.fields.where(type: %w{ NumericField SelectField CheckboxField }, match_exclude: false) }
+
+    it 'return matchable_fields' do
+      expect(enterprise.match_fields(include_disabled: false)).to eq matchable_fields
+    end
+  end
+
+  describe '#close_budgets_csv' do
+    it 'returns csv' do
+      enterprise = create(:enterprise)
+      expect(enterprise.close_budgets_csv).to include('Group name,Annual budget,Leftover money,Approved budget')
+    end
+  end
+
+  describe '#resources_count' do
+    it 'returns count of resources' do
+      enterprise = create(:enterprise)
+      create_list(:resource, 4, enterprise: enterprise, folder_id: create(:folder, enterprise: enterprise).id)
+
+      expect(enterprise.resources_count).to eq(4)
+    end
+  end
+
+  describe '#generic_graphs_group_population_csv' do
+    let!(:enterprise) { create(:enterprise) }
+    let!(:groups) { create_list(:group, 3, enterprise: enterprise) }
+
+    it 'returns csv' do
+      expect(enterprise.generic_graphs_group_population_csv(nil, nil, nil, nil)).to include('Number of users')
+    end
+
+    it 'returns data on groups' do
+      # we count the number of times :name occurs in csv as it uniquely represents name of group
+      expect(enterprise.generic_graphs_group_population_csv(nil, nil, nil, nil).lines.count).to eq(4)
+    end
+  end
+
+  describe '#generic_graphs_group_growth_csv' do
+    let!(:enterprise) { create(:enterprise) }
+    let!(:groups) { create_list(:group, 3, enterprise: enterprise) }
+
+    it 'returns csv' do
+      expect(enterprise.generic_graphs_group_growth_csv(nil, nil, nil)).to include('Group,From: All,To: All,Difference,% Change')
+    end
+
+    it 'returns data on groups' do
+      # we count the number of times :name occurs in csv as it uniquely represents name of group
+      expect(enterprise.generic_graphs_group_growth_csv(nil, nil, nil).lines.count).to eq(4)
+    end
+  end
+
+  describe '#generic_graphs_segment_population_csv' do
+    let!(:enterprise) { create(:enterprise) }
+    let!(:segments) { create_list(:segment, 2, enterprise: enterprise) }
+
+    it 'returns csv' do
+      expect(enterprise.generic_graphs_segment_population_csv(enterprise.custom_text.segment)).to include('Number of users by Segment')
+    end
+
+    it 'returns data based on segments' do
+      expect(enterprise.generic_graphs_segment_population_csv(enterprise.custom_text.segment).lines.count).to eq(3)
+    end
+  end
+
+
+  describe '#generic_graphs_mentorship_csv' do
+    let!(:enterprise) { create(:enterprise) }
+    let!(:groups) { create_list(:group, 3, enterprise: enterprise) }
+
+    it 'returns csv' do
+      expect(enterprise.generic_graphs_mentorship_csv(nil)).to include('Number of mentors/mentees')
+    end
+
+    it 'returns data based on mentorship' do
+      expect(enterprise.generic_graphs_mentorship_csv(nil).lines.count).to eq(4)
+    end
+  end
+
+  describe '#generic_graphs_mentoring_sessions_csv' do
+    let!(:enterprise) { create(:enterprise) }
+    let!(:groups) { create_list(:group, 3, enterprise: enterprise) }
+
+    it 'returns csv' do
+      expect(enterprise.generic_graphs_mentoring_sessions_csv(nil, nil, nil)).to include('Number of mentoring sessions')
+    end
+
+    it 'returns data based on mentorship' do
+      expect(enterprise.generic_graphs_mentoring_sessions_csv(nil, nil, nil).lines.count).to eq(4)
+    end
+  end
+
+  describe '#generic_graphs_mentoring_interests_csv' do
+    let!(:enterprise) { create(:enterprise) }
+    let!(:mentoring_interests) { create_list(:mentoring_interest, 3, enterprise_id: enterprise.id) }
+
+    it 'returns csv' do
+      expect(enterprise.generic_graphs_mentoring_interests_csv).to include('Mentoring Interests')
+    end
+
+    it 'returns data based on mentoring interests' do
+      expect(enterprise.generic_graphs_mentoring_interests_csv.lines.count).to eq(4)
+    end
+  end
+
+  describe '#generic_graphs_non_demo_events_created_csv' do
+    let!(:enterprise) { create(:enterprise) }
+    let!(:groups) { create_list(:group, 3, enterprise: enterprise) }
+
+    it 'returns csv' do
+      expect(enterprise.generic_graphs_non_demo_events_created_csv(nil, nil, nil, nil)).to include('Number of events created')
+    end
+
+    it 'returns data based on non demo events created' do
+      expect(enterprise.generic_graphs_non_demo_events_created_csv(nil, nil, nil, nil).lines.count).to eq(4)
+    end
+  end
+
+  describe '#generic_graphs_non_demo_messages_sent_csv' do
+    let!(:enterprise) { create(:enterprise) }
+    let!(:groups) { create_list(:group, 3, enterprise: enterprise) }
+
+    it 'returns csv' do
+      expect(enterprise.generic_graphs_non_demo_messages_sent_csv(nil, nil, nil, nil)).to include('Number of messages sent')
+    end
+
+    it 'returns data based on non demo messages sent' do
+      expect(enterprise.generic_graphs_non_demo_messages_sent_csv(nil, nil, nil, nil).lines.count).to eq(4)
+    end
+  end
+
+  describe '#generic_graphs_non_demo_top_groups_by_views_csv' do
+    let!(:enterprise) { create(:enterprise) }
+    let!(:groups) { create_list(:group, 3, enterprise: enterprise) }
+
+    it 'returns csv' do
+      expect(enterprise.generic_graphs_non_demo_top_groups_by_views_csv('Group', nil, nil, nil)).to include('Number of view per Group')
+    end
+
+    it 'returns data based on non demo top groups viewed' do
+      expect(enterprise.generic_graphs_non_demo_top_groups_by_views_csv(nil, nil, nil, nil).lines.count).to eq(4)
+    end
+  end
+
+  describe '#generic_graphs_non_demo_top_folders_by_views_csv' do
+    let!(:enterprise) { create(:enterprise) }
+    let!(:folders) { create_list(:folder, 3, enterprise: enterprise) }
+
+    it 'returns csv' do
+      expect(enterprise.generic_graphs_non_demo_top_folders_by_views_csv(nil, nil, nil)).to include('Number of view per folder')
+    end
+
+    it 'returns data based on non demo top folders viewed' do
+      expect(enterprise.generic_graphs_non_demo_top_folders_by_views_csv(nil, nil, nil).lines.count).to eq(4)
+    end
+  end
+
+  describe '#generic_graphs_non_demo_top_resources_by_views_csv' do
+    let!(:enterprise) { create(:enterprise) }
+    let!(:group) { create(:group, enterprise: enterprise) }
+    let!(:folder) { create(:folder, enterprise: enterprise, group: create(:group)) }
+    let!(:resource) { create(:resource, enterprise: enterprise, folder: folder) }
+
+    it 'returns csv' do
+      expect(enterprise.generic_graphs_non_demo_top_resources_by_views_csv(nil, nil, nil)).to include('Number of view per resource')
+    end
+
+    it 'returns data based on non demo top resources by views' do
+      expect(enterprise.generic_graphs_non_demo_top_resources_by_views_csv(nil, nil, nil).lines.count).to eq(1)
+    end
+  end
+
+  describe '#generic_graphs_non_demo_top_news_by_views_csv' do
+    let!(:enterprise) { create(:enterprise) }
+    let!(:group) { create(:group, enterprise: enterprise) }
+    let!(:news_link) { create(:news_link, group: group) }
+
+    it 'returns csv' do
+      expect(enterprise.generic_graphs_non_demo_top_news_by_views_csv(nil, nil, nil)).to include('Number of view per news link')
+    end
+
+    it 'returns data based on demo top news by views' do
+      expect(enterprise.generic_graphs_non_demo_top_news_by_views_csv(nil, nil, nil).lines.count).to eq(1)
+    end
+  end
+
+  describe '#generic_graphs_demo_events_created_csv' do
+    let!(:enterprise) { create(:enterprise) }
+    let!(:group) { create(:group, enterprise: enterprise) }
+    let!(:initiative) { create(:initiative, owner_group: group) }
+
+    it 'returns csv' do
+      expect(enterprise.generic_graphs_demo_events_created_csv).to include('Number of events created ERG')
+    end
+
+    it 'returns data based on demo events created' do
+      expect(enterprise.generic_graphs_demo_events_created_csv.lines.count).to eq(2)
+    end
+  end
+
+  describe '#generic_graphs_demo_messages_sent_csv' do
+    let!(:enterprise) { create(:enterprise) }
+    let!(:group) { create(:group, enterprise: enterprise) }
+    let!(:message) { create(:group_message, group: group) }
+
+    it 'returns csv' do
+      expect(enterprise.generic_graphs_demo_messages_sent_csv).to include('Number of messages sent ERG')
+    end
+
+    it 'returns data based on demo messages sent' do
+      expect(enterprise.generic_graphs_demo_messages_sent_csv.lines.count).to eq(2)
+    end
+  end
+
+  describe '#generic_graphs_demo_top_groups_by_views_csv' do
+    let!(:enterprise) { create(:enterprise) }
+    let!(:group) { create(:group, enterprise: enterprise) }
+
+    it 'returns csv' do
+      expect(enterprise.generic_graphs_demo_top_groups_by_views_csv('Group')).to include('Number of view per Group')
+    end
+
+    it 'returns data based on top groups by views' do
+      expect(enterprise.generic_graphs_demo_top_groups_by_views_csv(nil).lines.count).to eq(2)
+    end
+  end
+
+  describe '#generic_graphs_demo_top_folders_by_views_csv' do
+    let!(:enterprise) { create(:enterprise) }
+    let!(:group) { create(:group, enterprise: enterprise) }
+    let!(:folders) { create_list(:folder, 3, group: group, enterprise: enterprise) }
+
+    it 'returns csv' do
+      expect(enterprise.generic_graphs_demo_top_folders_by_views_csv).to include('Number of view per folder')
+    end
+
+    it 'returns data based on non demo top folders viewed' do
+      expect(enterprise.generic_graphs_demo_top_folders_by_views_csv.lines.count).to eq(4)
+    end
+  end
+
+  describe '#generic_graphs_demo_top_resources_by_views_csv' do
+    let!(:enterprise) { create(:enterprise) }
+    let!(:group) { create(:group, enterprise: enterprise) }
+    let!(:folder) { create(:folder, enterprise: enterprise, group: create(:group)) }
+    let!(:resource) { create(:resource, enterprise: enterprise, folder: folder) }
+
+    it 'returns csv' do
+      expect(enterprise.generic_graphs_demo_top_resources_by_views_csv).to include('Number of view per resource')
+    end
+
+    it 'returns data based on non demo top resources by views' do
+      expect(enterprise.generic_graphs_demo_top_resources_by_views_csv.lines.count).to eq(1)
+    end
+  end
+
+  describe '#generic_graphs_demo_top_news_by_views_csv' do
+    let!(:enterprise) { create(:enterprise) }
+    let!(:group) { create(:group, enterprise: enterprise) }
+    let!(:news_link) { create(:news_link, group: group) }
+
+    it 'returns csv' do
+      expect(enterprise.generic_graphs_demo_top_news_by_views_csv).to include('Number of view per news link')
+    end
+
+    it 'returns data based on demo top news by views' do
+      expect(enterprise.generic_graphs_demo_top_news_by_views_csv.lines.count).to eq(2)
+    end
+  end
+
+  describe '#logs_csv' do
+    let!(:enterprise) { create(:enterprise) }
+
+    it 'returns csv' do
+      expect(enterprise.logs_csv).to include('user_id,first_name,last_name,trackable_id,trackable_type,action,enterprise_id,created_at')
+    end
+  end
+
 
   # re-write this for sponsor message
   xdescribe '.cdo_message_email_html' do
@@ -262,17 +649,68 @@ RSpec.describe Enterprise, type: :model do
       end
     end
 
-    describe '#resolve_auto_archive_state callback' do
-      let!(:enterprise) { create(:enterprise, auto_archive: true) }
+    describe '#users_csv' do
+      let!(:enterprise) { create(:enterprise) }
+      let!(:group_leader_role) { enterprise.user_roles.find_by(role_name: 'group_leader', role_type: 'group') }
+      let!(:group_treasurer_role) { enterprise.user_roles.find_or_create_by(role_name: 'group_treasurer', role_type: 'group', priority: 2) }
+      let!(:group_content_creator_role) { enterprise.user_roles.find_or_create_by(role_name: 'group_content_creator', role_type: 'group', priority: 3) }
+      let!(:user_role) { enterprise.user_roles.find_by(role_name: 'user', role_type: 'user') }
+      let!(:national_manager_role) { enterprise.user_roles.find_or_create_by(role_name: 'national_manager', role_type: 'user', priority: 4) }
+      let!(:diversity_manager_role) { enterprise.user_roles.find_or_create_by(role_name: 'diversity_manager', role_type: 'user', priority: 5) }
 
-      it 'calls resolve_auto_archive_state callback after update' do
-        enterprise.archive_switch
-        expect(enterprise.auto_archive).to eq false
+      context 'return csv for group roles' do
+        it 'return csv for group leader role' do
+          user = create(:user, enterprise: enterprise)
+          user.update(user_role: group_leader_role)
+          create(:group_leader, user: user, user_role: group_leader_role)
+
+          expect(enterprise.users_csv(2, 'group_leader'))
+          .to include "#{user.first_name},#{user.last_name},#{user.email},#{user.biography},#{user.active},#{user.groups.map(&:name).join(',')}"
+        end
+
+        it 'return csv group treaurer role' do
+          user = create(:user, enterprise: enterprise)
+          user.update(user_role: group_treasurer_role)
+          create(:group_leader, user: user, user_role: group_treasurer_role)
+
+          expect(enterprise.users_csv(2, 'group_treasurer'))
+          .to include "#{user.first_name},#{user.last_name},#{user.email},#{user.biography},#{user.active},#{user.groups.map(&:name).join(',')}"
+        end
+
+        it 'return csv group content creator role' do
+          user = create(:user, enterprise: enterprise)
+          user.update(user_role: group_content_creator_role)
+          create(:group_leader, user: user, user_role: group_content_creator_role)
+
+          expect(enterprise.users_csv(2, 'group_content_creator'))
+          .to include "#{user.first_name},#{user.last_name},#{user.email},#{user.biography},#{user.active},#{user.groups.map(&:name).join(',')}"
+        end
       end
 
-      it 'calls resolve_auto_archive_state as after_update callback' do
-        expect(enterprise).to receive(:resolve_auto_archive_state)
-        enterprise.run_callbacks(:update)
+      context 'return csv for non group roles' do
+        it 'return csv for user role' do
+          user = create(:user, enterprise: enterprise)
+          user.update(user_role: user_role)
+
+          expect(enterprise.users_csv(2, 'user'))
+            .to include "#{user.first_name},#{user.last_name},#{user.email},#{user.biography},#{user.active},#{user.groups.map(&:name).join(',')}"
+        end
+
+        it 'return csv for national manager role' do
+          user = create(:user, enterprise: enterprise)
+          user.update(user_role: national_manager_role)
+
+          expect(enterprise.users_csv(2, 'national_manager'))
+            .to include "#{user.first_name},#{user.last_name},#{user.email},#{user.biography},#{user.active},#{user.groups.map(&:name).join(',')}"
+        end
+
+        it 'return csv for diversity manager role' do
+          user = create(:user, enterprise: enterprise)
+          user.update(user_role: diversity_manager_role)
+
+          expect(enterprise.users_csv(2, 'diversity_manager'))
+            .to include "#{user.first_name},#{user.last_name},#{user.email},#{user.biography},#{user.active},#{user.groups.map(&:name).join(',')}"
+        end
       end
     end
 

@@ -41,6 +41,7 @@ class SegmentGroupScopeRule < ApplicationRecord
   end
 
   def user_groups_intersection(group_ids, users)
+    users = User.where(id: users.map(&:id))
     # returns an array
 
     # get list of member ids for each group

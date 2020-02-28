@@ -31,32 +31,8 @@ RSpec.describe UserPolicy, type: :policy do
         it { is_expected.to permit_actions([:index, :show]) }
       end
 
-      context 'user has basic group leader permission and users_index is true' do
-        before do
-          user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
-          user_role.policy_group_template.update users_index: true
-          group = create(:group, enterprise: enterprise)
-          create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-                                user_role_id: user_role.id)
-        end
-
-        it { is_expected.to permit_actions([:index, :show]) }
-      end
-
       context 'when users_index is false but users_manage is true' do
         before { user.policy_group.update(users_manage: true) }
-
-        it { is_expected.to permit_actions([:index, :create, :show, :update, :destroy, :resend_invitation]) }
-      end
-
-      context 'user has basic group leader permission and users_manage is true' do
-        before do
-          user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
-          user_role.policy_group_template.update users_manage: true
-          group = create(:group, enterprise: enterprise)
-          create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-                                user_role_id: user_role.id)
-        end
 
         it { is_expected.to permit_actions([:index, :create, :show, :update, :destroy, :resend_invitation]) }
       end
@@ -121,20 +97,6 @@ RSpec.describe UserPolicy, type: :policy do
         end
       end
 
-      context 'user has basic group leader permission' do
-        before do
-          user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
-          user_role.policy_group_template.update users_manage: true
-          group = create(:group, enterprise: enterprise)
-          create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-                                user_role_id: user_role.id)
-        end
-
-        it 'returns true' do
-          expect(subject.access_hidden_info?).to eq true
-        end
-      end
-
       context 'users_manage is true' do
         before { user.policy_group.update users_manage: true }
 
@@ -185,6 +147,60 @@ RSpec.describe UserPolicy, type: :policy do
 
         it 'returns false' do
           expect(subject.user_not_current_user?).to eq false
+        end
+      end
+    end
+
+    describe '#users_points_ranking?' do
+      context 'when manage_all is true' do
+        before { user.policy_group.update manage_all: true }
+
+        it 'returns true' do
+          expect(subject.users_points_ranking?).to eq true
+        end
+      end
+
+      context 'when users_manage is true' do
+        before { user.policy_group.update users_manage: true }
+
+        it 'returns true' do
+          expect(subject.users_points_ranking?).to eq true
+        end
+      end
+    end
+
+    describe '#users_points_csv?' do
+      context 'when manage_all is true' do
+        before { user.policy_group.update manage_all: true }
+
+        it 'returns true' do
+          expect(subject.users_points_csv?).to eq true
+        end
+      end
+
+      context 'when users_manage is true' do
+        before { user.policy_group.update users_manage: true }
+
+        it 'returns true' do
+          expect(subject.users_points_csv?).to eq true
+        end
+      end
+    end
+
+    describe '#users_pending_rewards?' do
+      context 'when manage_all is true' do
+        before { user.policy_group.update manage_all: true }
+
+        it 'returns true' do
+          expect(subject.users_pending_rewards?).to eq true
+        end
+      end
+
+      context 'when users_manage is true' do
+        before { user.policy_group.update users_manage: true }
+
+        it 'returns true' do
+          expect(subject.users_pending_rewards?).to eq true
         end
       end
     end
