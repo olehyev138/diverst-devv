@@ -48,16 +48,6 @@ class Api::V1::GroupsController < DiverstController
     raise BadRequestException.new(e.message)
   end
 
-  def initiatives
-    item = klass.find(params[:id])
-    base_authorize(item)
-
-    render status: 200, json: Initiative.index(
-        self.diverst_request,
-        params.except(:id).permit!,
-        base: item.initiatives.union(item.participating_initiatives))
-  end
-
   private
 
   def load_sums(result)

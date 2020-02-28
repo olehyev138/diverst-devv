@@ -11,9 +11,6 @@ Object.assign(Groups, {
   currentAnnualBudget(id, payload) {
     return axios.get(appendQueryArgs(`${this.url}/${id}/annual_budget`, payload));
   },
-  initiatives(id, payload) {
-    return axios.get(appendQueryArgs(`${this.url}/${id}/initiatives`, payload));
-  },
   fields(id, payload) {
     return axios.get(appendQueryArgs(`${this.url}/${id}/fields`, payload));
   },
