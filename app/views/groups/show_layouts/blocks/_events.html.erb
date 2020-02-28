@@ -1,7 +1,7 @@
 <% if GroupEventsPolicy.new(current_user, [@group]).view_upcoming_events? %>
   <%= link_to "View all", group_events_path(@group), class: "card__action" %>
   <% if @show_events  %>
-    <% if !@upcoming_events.empty? %>
+    <% if !@upcoming_and_ongoing_events.empty? %>
       <div class="mtlarge text-center">
         <% @upcoming_events.each do |event| %>
           <%= render "shared/flippable/event", event: event %>
