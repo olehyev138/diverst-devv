@@ -50,6 +50,7 @@ module User::Actions
 
     # get the news_feed_links
     base_nfls = NewsFeedLink
+                  .preload(NewsFeedLink.base_preloads)
                   .joins(:news_feed)
                   .left_joins(:news_feed_link_segments, :shared_news_feed_links)
                   .includes(:group_message, :news_link, :social_link)
@@ -94,6 +95,7 @@ module User::Actions
     # get the events
     # order the event
     ordered = initiatives
+                .preload(Initiative.base_preloads)
                 .send_chain(query_scopes)
                 .order(order_by => order)
                 .distinct
@@ -143,6 +145,7 @@ module User::Actions
     valid_ors << User.sql_where("(#{ group_ors.join(' OR ')}) AND (#{ segment_ors.join(' OR ')})")
 
     ordered = Initiative
+                .preload(Initiative.base_preloads)
                 .left_joins(:initiative_segments, :initiative_participating_groups, :initiative_invitees)
                 .send_chain(query_scopes)
                 .where(valid_ors.join(' OR '))
@@ -244,18 +247,15 @@ module User::Actions
           :user_groups,
           :user_role,
           :news_links,
-          {
-              field_data: [
+          :avatar_attachment,
+          field_data: [
                   :field,
                   { field: Field.base_preloads }
-              ]
-          },
-          {
-              enterprise: [
+              ],
+          enterprise: [
                   :theme,
                   :mobile_fields
               ]
-          }
       ]
     end
 
@@ -264,6 +264,7 @@ module User::Actions
           :user_role,
           :enterprise,
           :news_links,
+          :avatar_attachment,
           {
               enterprise: [
                   :theme,

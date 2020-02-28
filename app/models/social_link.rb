@@ -1,5 +1,6 @@
 class SocialLink < ApplicationRecord
   include PublicActivity::Common
+  include SocialLink::Actions
 
   self.table_name = 'social_network_posts'
 
