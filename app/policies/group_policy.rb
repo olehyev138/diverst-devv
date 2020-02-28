@@ -83,6 +83,12 @@ class GroupPolicy < ApplicationPolicy
     index?
   end
 
+  # PARTS PERMISSIONS
+
+  def events_view?
+    InitiativePolicy.new(user, [record, Initiative]).index?
+  end
+
   # move these to separate policies
   def view_all?
     create?

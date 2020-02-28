@@ -3,9 +3,13 @@ class GroupSerializer < ApplicationRecordSerializer
              :annual_budget, :annual_budget_leftover, :active, :parent_id, :latest_news_visibility, :upcoming_events_visibility,
              :private, :home_message, :default_mentor_group, :position, :group_category, :group_category_type, :news_feed,
              :enterprise_id, :event_attendance_visibility, :calendar_color, :auto_archive,
-             :current_user_is_member, :banner, :banner_file_name, :banner_data
+             :current_user_is_member, :banner, :banner_file_name, :banner_data, :permissions
 
   has_many :children
+
+  def policies
+    [:show?, :events_view?, :is_a_member?, :is_a_pending_member?, :is_an_accepted_member?, :is_a_leader?]
+  end
 
   def logo_location
     object.logo_location(default_style: instance_options.dig(:scope, :image_size)&.to_sym)
