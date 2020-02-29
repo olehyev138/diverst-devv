@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_10_104107) do
+ActiveRecord::Schema.define(version: 2020_02_29_061301) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "name", null: false
@@ -110,6 +110,7 @@ ActiveRecord::Schema.define(version: 2020_02_10_104107) do
     t.bigint "supporting_document_file_size"
     t.datetime "supporting_document_updated_at"
     t.integer "contributing_group_id"
+    t.integer "likes_count"
     t.index ["author_id"], name: "index_answers_on_author_id"
     t.index ["contributing_group_id"], name: "index_answers_on_contributing_group_id"
     t.index ["question_id"], name: "index_answers_on_question_id"
@@ -160,6 +161,7 @@ ActiveRecord::Schema.define(version: 2020_02_10_104107) do
     t.text "comments"
     t.string "decline_reason"
     t.integer "annual_budget_id"
+    t.integer "budget_items_count"
     t.index ["group_id"], name: "index_budgets_on_group_id"
     t.index ["requester_id"], name: "fk_rails_d21f6fbcce"
   end
@@ -194,6 +196,7 @@ ActiveRecord::Schema.define(version: 2020_02_10_104107) do
     t.datetime "banner_updated_at"
     t.bigint "owner_id"
     t.integer "status", default: 0
+    t.integer "questions_count"
     t.index ["enterprise_id"], name: "index_campaigns_on_enterprise_id"
     t.index ["owner_id"], name: "index_campaigns_on_owner_id"
   end
@@ -337,6 +340,7 @@ ActiveRecord::Schema.define(version: 2020_02_10_104107) do
     t.string "mailer_method", null: false
     t.string "template"
     t.string "description", null: false
+    t.boolean "custom", default: false
     t.index ["enterprise_id"], name: "index_emails_on_enterprise_id"
   end
 
@@ -405,6 +409,11 @@ ActiveRecord::Schema.define(version: 2020_02_10_104107) do
     t.integer "expiry_age_for_resources", default: 0
     t.string "unit_of_expiry_age"
     t.boolean "auto_archive", default: false
+    t.integer "groups_count"
+    t.integer "segments_count"
+    t.integer "polls_count"
+    t.integer "users_count"
+    t.boolean "slack_enabled", default: false
     t.index ["theme_id"], name: "index_enterprises_on_theme_id"
   end
 
@@ -462,6 +471,7 @@ ActiveRecord::Schema.define(version: 2020_02_10_104107) do
     t.boolean "elasticsearch_only", default: false
     t.boolean "required", default: false
     t.string "field_type", collation: "utf8mb4_unicode_ci"
+    t.boolean "add_to_member_list", default: false
     t.index ["field_definer_id", "field_definer_type"], name: "index_fields_on_field_definer_id_and_field_definer_type"
   end
 
@@ -485,6 +495,7 @@ ActiveRecord::Schema.define(version: 2020_02_10_104107) do
     t.integer "parent_id"
     t.bigint "enterprise_id"
     t.bigint "group_id"
+    t.integer "views_count"
     t.index ["enterprise_id"], name: "index_folders_on_enterprise_id"
     t.index ["group_id"], name: "index_folders_on_group_id"
   end
@@ -677,6 +688,9 @@ ActiveRecord::Schema.define(version: 2020_02_10_104107) do
     t.string "unit_of_expiry_age"
     t.boolean "auto_archive", default: false
     t.string "event_attendance_visibility"
+    t.integer "views_count"
+    t.string "slack_webhook"
+    t.text "slack_auth_data"
     t.index ["enterprise_id"], name: "index_groups_on_enterprise_id"
     t.index ["lead_manager_id"], name: "index_groups_on_lead_manager_id"
     t.index ["manager_id"], name: "index_groups_on_manager_id"
@@ -708,7 +722,7 @@ ActiveRecord::Schema.define(version: 2020_02_10_104107) do
 
   create_table "initiative_expenses", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "description", collation: "utf8mb4_unicode_ci"
-    t.integer "amount"
+    t.decimal "amount", precision: 8, scale: 2, default: "0.0"
     t.bigint "owner_id"
     t.bigint "initiative_id"
     t.datetime "created_at", null: false
@@ -796,6 +810,10 @@ ActiveRecord::Schema.define(version: 2020_02_10_104107) do
     t.string "qr_code_content_type"
     t.integer "qr_code_file_size"
     t.datetime "qr_code_updated_at"
+    t.string "video_file_name"
+    t.string "video_content_type"
+    t.integer "video_file_size"
+    t.datetime "video_updated_at"
     t.index ["owner_id"], name: "index_initiatives_on_owner_id"
     t.index ["pillar_id"], name: "index_initiatives_on_pillar_id"
   end
@@ -1001,6 +1019,13 @@ ActiveRecord::Schema.define(version: 2020_02_10_104107) do
     t.index ["social_link_segment_id"], name: "index_news_feed_link_segments_on_social_link_segment_id"
   end
 
+  create_table "news_feed_link_tags", id: false, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+    t.integer "news_feed_link_id"
+    t.string "news_tag_name"
+    t.index ["news_feed_link_id", "news_tag_name"], name: "index_news_feed_link_tags_on_news_feed_link_id_and_news_tag_name"
+    t.index ["news_tag_name", "news_feed_link_id"], name: "index_news_feed_link_tags_on_news_tag_name_and_news_feed_link_id"
+  end
+
   create_table "news_feed_links", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.bigint "news_feed_id"
     t.boolean "approved", default: false
@@ -1011,6 +1036,8 @@ ActiveRecord::Schema.define(version: 2020_02_10_104107) do
     t.bigint "social_link_id"
     t.boolean "is_pinned", default: false
     t.datetime "archived_at"
+    t.integer "views_count"
+    t.integer "likes_count"
     t.index ["group_message_id"], name: "index_news_feed_links_on_group_message_id"
     t.index ["news_feed_id"], name: "index_news_feed_links_on_news_feed_id"
     t.index ["news_link_id"], name: "index_news_feed_links_on_news_link_id"
@@ -1070,12 +1097,41 @@ ActiveRecord::Schema.define(version: 2020_02_10_104107) do
     t.index ["group_id"], name: "index_news_links_on_group_id"
   end
 
+  create_table "news_tags", primary_key: "name", id: :string, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "outcomes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "name", collation: "utf8mb4_unicode_ci"
     t.bigint "group_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["group_id"], name: "index_outcomes_on_group_id"
+  end
+
+  create_table "page_names", id: false, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+    t.string "page_url"
+    t.string "page_name"
+    t.index ["page_name", "page_url"], name: "index_page_names_on_page_name_and_page_url"
+    t.index ["page_url", "page_name"], name: "index_page_names_on_page_url_and_page_name"
+  end
+
+  create_table "page_visitation_data", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+    t.bigint "user_id"
+    t.string "page_url"
+    t.string "controller"
+    t.string "action"
+    t.integer "visits_day", default: 0
+    t.integer "visits_week", default: 0
+    t.integer "visits_month", default: 0
+    t.integer "visits_year", default: 0
+    t.integer "visits_all", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["page_url", "user_id"], name: "index_page_visitation_data_on_page_url_and_user_id"
+    t.index ["user_id", "page_url"], name: "index_page_visitation_data_on_user_id_and_page_url"
+    t.index ["user_id"], name: "index_page_visitation_data_on_user_id"
   end
 
   create_table "pillars", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
@@ -1263,6 +1319,7 @@ ActiveRecord::Schema.define(version: 2020_02_10_104107) do
     t.datetime "updated_at", null: false
     t.datetime "solved_at"
     t.text "conclusion", collation: "utf8mb4_unicode_ci"
+    t.integer "answers_count"
     t.index ["campaign_id"], name: "index_questions_on_campaign_id"
   end
 
@@ -1283,6 +1340,7 @@ ActiveRecord::Schema.define(version: 2020_02_10_104107) do
     t.bigint "group_id"
     t.bigint "initiative_id"
     t.datetime "archived_at"
+    t.integer "views_count"
     t.index ["enterprise_id"], name: "index_resources_on_enterprise_id"
     t.index ["folder_id"], name: "index_resources_on_folder_id"
     t.index ["group_id"], name: "index_resources_on_group_id"
@@ -1421,8 +1479,9 @@ ActiveRecord::Schema.define(version: 2020_02_10_104107) do
     t.text "embed_code", collation: "utf8mb4_unicode_ci"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "url", collation: "utf8mb4_unicode_ci"
+    t.text "url"
     t.integer "group_id"
+    t.text "small_embed_code"
   end
 
   create_table "sponsors", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
@@ -1430,15 +1489,15 @@ ActiveRecord::Schema.define(version: 2020_02_10_104107) do
     t.string "sponsor_title"
     t.text "sponsor_message"
     t.boolean "disable_sponsor_message"
-    t.string "sponsorable_type"
-    t.bigint "sponsorable_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "sponsor_media_file_name"
     t.string "sponsor_media_content_type"
     t.bigint "sponsor_media_file_size"
     t.datetime "sponsor_media_updated_at"
-    t.index ["sponsorable_type", "sponsorable_id"], name: "index_sponsors_on_sponsorable_type_and_sponsorable_id"
+    t.integer "enterprise_id"
+    t.integer "group_id"
+    t.integer "campaign_id"
   end
 
   create_table "survey_managers", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
@@ -1570,6 +1629,8 @@ ActiveRecord::Schema.define(version: 2020_02_10_104107) do
     t.integer "points", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "status"
+    t.text "comment"
     t.index ["reward_id"], name: "index_user_rewards_on_reward_id"
     t.index ["user_id"], name: "index_user_rewards_on_user_id"
   end
@@ -1594,6 +1655,7 @@ ActiveRecord::Schema.define(version: 2020_02_10_104107) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "email", collation: "utf8mb4_unicode_ci"
+    t.string "notifications_email"
     t.string "encrypted_password", collation: "utf8mb4_unicode_ci"
     t.string "reset_password_token", collation: "utf8mb4_unicode_ci"
     t.datetime "reset_password_sent_at"
@@ -1643,6 +1705,16 @@ ActiveRecord::Schema.define(version: 2020_02_10_104107) do
     t.boolean "accepting_mentee_requests", default: true
     t.datetime "last_group_notification_date"
     t.string "password_digest"
+    t.boolean "seen_onboarding", default: false
+    t.integer "initiatives_count"
+    t.integer "social_links_count"
+    t.integer "own_messages_count"
+    t.integer "own_news_links_count"
+    t.integer "answer_comments_count"
+    t.integer "message_comments_count"
+    t.integer "news_link_comments_count"
+    t.integer "mentors_count"
+    t.integer "mentees_count"
     t.index ["active"], name: "index_users_on_active"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["enterprise_id"], name: "index_users_on_enterprise_id"
@@ -1705,4 +1777,23 @@ ActiveRecord::Schema.define(version: 2020_02_10_104107) do
   add_foreign_key "user_rewards", "rewards"
   add_foreign_key "user_rewards", "users"
   add_foreign_key "user_roles", "enterprises"
+
+  create_view "duplicate_page_names", sql_definition: <<-SQL
+      select `page_names`.`page_url` AS `page_url`,`page_names`.`page_name` AS `page_name` from `page_names` where `page_names`.`page_name` in (select `page_names`.`page_name` from `page_names` group by `page_names`.`page_name` having count(0) > 1)
+  SQL
+  create_view "unique_page_names", sql_definition: <<-SQL
+      select `page_names`.`page_url` AS `page_url`,`page_names`.`page_name` AS `page_name` from `page_names` where `page_names`.`page_name` in (select `page_names`.`page_name` from `page_names` group by `page_names`.`page_name` having count(0) = 1)
+  SQL
+  create_view "page_visitation_by_names", sql_definition: <<-SQL
+      (select `a`.`user_id` AS `user_id`,`b`.`page_name` AS `page_name`,NULL AS `page_url`,sum(`a`.`visits_day`) AS `visits_day`,sum(`a`.`visits_week`) AS `visits_week`,sum(`a`.`visits_month`) AS `visits_month`,sum(`a`.`visits_year`) AS `visits_year`,sum(`a`.`visits_all`) AS `visits_all` from (`page_visitation_data` `a` join `duplicate_page_names` `b` on(`a`.`page_url` = `b`.`page_url`)) group by `a`.`user_id`,`b`.`page_name`) union all (select `a`.`user_id` AS `user_id`,`b`.`page_name` AS `page_name`,`a`.`page_url` AS `page_url`,sum(`a`.`visits_day`) AS `visits_day`,sum(`a`.`visits_week`) AS `visits_week`,sum(`a`.`visits_month`) AS `visits_month`,sum(`a`.`visits_year`) AS `visits_year`,sum(`a`.`visits_all`) AS `visits_all` from (`page_visitation_data` `a` join `unique_page_names` `b` on(`a`.`page_url` = `b`.`page_url`)) group by `a`.`user_id`,`b`.`page_url`,`b`.`page_name`)
+  SQL
+  create_view "page_visitations", sql_definition: <<-SQL
+      select `a`.`id` AS `id`,`a`.`user_id` AS `user_id`,`a`.`page_url` AS `page_url`,`a`.`controller` AS `controller`,`a`.`action` AS `action`,`a`.`visits_day` AS `visits_day`,`a`.`visits_week` AS `visits_week`,`a`.`visits_month` AS `visits_month`,`a`.`visits_year` AS `visits_year`,`a`.`visits_all` AS `visits_all`,`a`.`created_at` AS `created_at`,`a`.`updated_at` AS `updated_at`,`b`.`page_name` AS `page_name` from (`page_visitation_data` `a` join `page_names` `b` on(`a`.`page_url` = `b`.`page_url`))
+  SQL
+  create_view "total_page_visitation_by_names", sql_definition: <<-SQL
+      (select `b`.`page_name` AS `page_name`,NULL AS `page_url`,sum(`a`.`visits_day`) AS `visits_day`,sum(`a`.`visits_week`) AS `visits_week`,sum(`a`.`visits_month`) AS `visits_month`,sum(`a`.`visits_year`) AS `visits_year`,sum(`a`.`visits_all`) AS `visits_all` from ((`page_visitation_data` `a` join `duplicate_page_names` `b` on(`a`.`page_url` = `b`.`page_url`)) join `users` `c` on(`c`.`id` = `a`.`user_id`)) group by `b`.`page_name`,`c`.`enterprise_id`) union all (select `b`.`page_name` AS `page_name`,`a`.`page_url` AS `page_url`,sum(`a`.`visits_day`) AS `visits_day`,sum(`a`.`visits_week`) AS `visits_week`,sum(`a`.`visits_month`) AS `visits_month`,sum(`a`.`visits_year`) AS `visits_year`,sum(`a`.`visits_all`) AS `visits_all` from ((`page_visitation_data` `a` join `unique_page_names` `b` on(`a`.`page_url` = `b`.`page_url`)) join `users` `c` on(`c`.`id` = `a`.`user_id`)) group by `b`.`page_url`,`b`.`page_name`,`c`.`enterprise_id`)
+  SQL
+  create_view "total_page_visitations", sql_definition: <<-SQL
+      select `a`.`page_url` AS `page_url`,`b`.`page_name` AS `page_name`,`c`.`enterprise_id` AS `enterprise_id`,sum(`a`.`visits_day`) AS `visits_day`,sum(`a`.`visits_week`) AS `visits_week`,sum(`a`.`visits_month`) AS `visits_month`,sum(`a`.`visits_year`) AS `visits_year`,sum(`a`.`visits_all`) AS `visits_all` from ((`page_visitation_data` `a` join `page_names` `b` on(`a`.`page_url` = `b`.`page_url`)) join `users` `c` on(`c`.`id` = `a`.`user_id`)) group by `a`.`page_url`,`b`.`page_name`,`c`.`enterprise_id`
+  SQL
 end
