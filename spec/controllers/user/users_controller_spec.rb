@@ -1,4 +1,5 @@
 require 'rails_helper'
+require_dependency "#{::Rails.root}/app/controllers/user/users_controller"
 
 RSpec.describe User::UsersController, type: :controller do
   let(:user) { create :user }
