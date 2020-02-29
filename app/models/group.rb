@@ -58,7 +58,7 @@ class Group < ApplicationRecord
     :years
   ]
 
-  belongs_to :enterprise
+  belongs_to :enterprise, counter_cache: true
   belongs_to :lead_manager, class_name: 'User'
   belongs_to :owner, class_name: 'User'
 
