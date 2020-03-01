@@ -1,4 +1,5 @@
 require 'rails_helper'
+require_dependency "#{::Rails.root}/app/controllers/user/groups_controller"
 
 RSpec.describe User::GroupsController, type: :controller do
   let!(:user) { create :user }
