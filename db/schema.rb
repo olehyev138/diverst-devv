@@ -356,6 +356,7 @@ ActiveRecord::Schema.define(version: 20200227151322) do
     t.integer  "polls_count",                           limit: 4
     t.integer  "users_count",                           limit: 4
     t.boolean  "slack_enabled",                                       default: false
+    t.boolean  "onboarding_consent_enabled",                          default: false
     t.boolean  "enable_outlook",                                      default: false
   end
 
@@ -1535,7 +1536,6 @@ ActiveRecord::Schema.define(version: 20200227151322) do
     t.integer  "group_id",          limit: 4
     t.integer  "folder_id",         limit: 4
     t.integer  "resource_id",       limit: 4
-    t.integer  "view_count",        limit: 4
   end
 
   create_table "yammer_field_mappings", force: :cascade do |t|
