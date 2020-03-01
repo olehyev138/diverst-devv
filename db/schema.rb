@@ -357,7 +357,6 @@ ActiveRecord::Schema.define(version: 20200227151322) do
     t.integer  "users_count",                           limit: 4
     t.boolean  "slack_enabled",                                       default: false
     t.boolean  "enable_outlook",                                      default: false
-    t.boolean  "onboarding_consent_enabled",                          default: false
   end
 
   create_table "expense_categories", force: :cascade do |t|
@@ -1061,6 +1060,7 @@ ActiveRecord::Schema.define(version: 20200227151322) do
     t.boolean  "group_posts_index",                       default: false
     t.boolean  "mentorship_manage",                       default: false
     t.boolean  "auto_archive_manage",                     default: false
+    t.boolean  "onboarding_consent_manage",               default: false
   end
 
   create_table "policy_groups", force: :cascade do |t|
@@ -1124,6 +1124,7 @@ ActiveRecord::Schema.define(version: 20200227151322) do
     t.boolean  "group_posts_index",                     default: false
     t.boolean  "mentorship_manage",                     default: false
     t.boolean  "auto_archive_manage",                   default: false
+    t.boolean  "onboarding_consent_manage",             default: false
   end
 
   add_index "policy_groups", ["user_id"], name: "index_policy_groups_on_user_id", using: :btree
