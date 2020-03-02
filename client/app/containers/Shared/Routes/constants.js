@@ -652,6 +652,9 @@ export const ROUTES = {
         edit: {
           path: (userId = ':user_id') => `/admin/system/users/${userId}/edit`,
         },
+        import: {
+          path: () => '/admin/system/users/import',
+        },
         roles: {
           index: {
             path: () => '/admin/system/users/roles',

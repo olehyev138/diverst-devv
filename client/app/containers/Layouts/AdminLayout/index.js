@@ -13,7 +13,8 @@ import Scrollbar from 'components/Shared/Scrollbar';
 const styles = theme => ({
   flex: {
     display: 'flex',
-    height: '100%'
+    height: '100%',
+    minHeight: 0,
   },
   toolbar: theme.mixins.toolbar,
   container: {
@@ -32,6 +33,7 @@ const styles = theme => ({
     width: '100%',
     height: '100%',
     overflow: 'hidden',
+    minHeight: 0,
   },
 });
 

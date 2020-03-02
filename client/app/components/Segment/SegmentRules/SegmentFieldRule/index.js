@@ -72,7 +72,7 @@ const SegmentFieldRule = (props) => {
   // callback to fetch fields from backend
   const fieldSelectAction = (searchKey = '') => {
     props.getFieldsBegin({
-      enterpriseId: props.currentEnterprise.id,
+      fieldDefinerId: props.currentEnterprise.id,
       count: 10, page: 0, order: 'asc',
       orderBy: 'fields.id',
       search: searchKey,

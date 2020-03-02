@@ -6,12 +6,13 @@ import { showSnackbar } from 'containers/Shared/Notifier/actions';
 
 import {
   GET_MEMBERS_BEGIN, CREATE_MEMBERS_BEGIN,
-  DELETE_MEMBER_BEGIN
+  DELETE_MEMBER_BEGIN, EXPORT_MEMBERS_BEGIN
 } from 'containers/Group/GroupMembers/constants';
 
 import {
   getMembersSuccess, getMembersError, deleteMemberSuccess,
-  createMembersError, deleteMemberError, createMembersSuccess
+  createMembersError, deleteMemberError, createMembersSuccess,
+  exportMembersError, exportMembersSuccess
 } from 'containers/Group/GroupMembers/actions';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -67,8 +68,23 @@ export function* deleteMembers(action) {
   }
 }
 
+export function* exportMembers(action) {
+  try {
+    const response = yield call(api.userGroups.csvExport.bind(api.userGroups), action.payload);
+
+    yield put(exportMembersSuccess({}));
+    yield put(showSnackbar({ message: 'Successfully exported members', options: { variant: 'success' } }));
+  } catch (err) {
+    yield put(exportMembersError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to export members', options: { variant: 'warning' } }));
+  }
+}
+
 export default function* membersSaga() {
   yield takeLatest(GET_MEMBERS_BEGIN, getMembers);
   yield takeLatest(CREATE_MEMBERS_BEGIN, createMembers);
   yield takeLatest(DELETE_MEMBER_BEGIN, deleteMembers);
+  yield takeLatest(EXPORT_MEMBERS_BEGIN, exportMembers);
 }

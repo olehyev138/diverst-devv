@@ -4,7 +4,7 @@
  *
  */
 
-import React, { memo } from 'react';
+import React, { memo, useState } from 'react';
 import { compose } from 'redux';
 import { SnackbarProvider } from 'notistack';
 
@@ -30,11 +30,10 @@ const styles = theme => ({
   }
 });
 
-function SnackbarProviderWrapper(props) {
-  /* eslint-disable-next-line no-shadow */
-  const SlideTransition = props => <Slide {...props} direction='up' />;
+const SlideTransition = props => <Slide {...props} direction='up' />;
 
-  const notistackRef = React.createRef();
+function SnackbarProviderWrapper(props) {
+  const [notistackRef] = useState(React.createRef());
 
   return (
     <SnackbarProvider
