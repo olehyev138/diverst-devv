@@ -184,7 +184,7 @@ class ApplicationController < ActionController::Base
   end
 
   def after_sign_in_path_for(resource)
-    if session[:previous_url] == 'http://localhost:3000/favicon.ico'
+    if session[:previous_url] =~ /\bfavicon.ico\b/
       prev_url = session[:previous_url] = user_root_path
     end
 
