@@ -1,14 +1,12 @@
 class GroupUpdate < ApplicationRecord
-  @@field_definer_name = 'group'
-  @@field_association_name = 'fields'
-  mattr_reader :field_association_name, :field_definer_name
+  FIELD_DEFINER_NAME = :group
+  FIELD_ASSOCIATION_NAME = :fields
 
+  belongs_to :group
   include PublicActivity::Common
   include ContainsFieldData
 
   belongs_to :owner, class_name: 'User'
-  has_many :field_data, class_name: 'FieldData', as: :field_user, dependent: :destroy
-  belongs_to :group
 
   validates_length_of :comments, maximum: 65535
   validates_length_of :data, maximum: 65535
@@ -16,8 +14,8 @@ class GroupUpdate < ApplicationRecord
 
   # Returns the delta with another update relative to this other update for a particular field (+23%, -12%, etc.)
   def variance_with(other_update:, field:)
-    value = self.info[field]
-    value_to_compare = other_update.info[field]
+    value = self[field]
+    value_to_compare = other_update[field]
 
     return nil if !value_to_compare
 

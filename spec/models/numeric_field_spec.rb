@@ -41,9 +41,9 @@ RSpec.describe NumericField, type: :model do
     end
   end
 
-  describe '#serialize_value' do
+  describe '#deserialize_value' do
     it 'returns int' do
-      value = NumericField.new.serialize_value('1')
+      value = NumericField.new.deserialize_value('1')
       expect(value).to eq(1)
     end
   end
@@ -53,9 +53,14 @@ RSpec.describe NumericField, type: :model do
       enterprise = create(:enterprise)
       numeric_field = NumericField.new(type: 'NumericField', title: 'Seniority (in years)', min: 0, max: 40, field_definer: enterprise)
       numeric_field.save!
+      enterprise.reload
       user_1 = create(:user, data: "{\"#{numeric_field.id}\":2}", enterprise: enterprise)
       user_2 = create(:user, data: "{\"#{numeric_field.id}\":2}", enterprise: enterprise)
-      create_list(:user, 8, data: "{\"#{numeric_field.id}\":1}", enterprise: enterprise)
+      users = create_list(:user, 8, data: "{\"#{numeric_field.id}\":1}", enterprise: enterprise)
+
+      [user_2, user_1].map { |user| user[numeric_field] = 2 }
+      users.map { |user| user[numeric_field] = 1 }
+
       match_score_between = numeric_field.match_score_between(user_1, user_2, enterprise.users)
       expect(match_score_between).to eq(0.0)
     end
