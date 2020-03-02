@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_29_061301) do
+ActiveRecord::Schema.define(version: 2020_03_01_223102) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "name", null: false
@@ -412,8 +412,8 @@ ActiveRecord::Schema.define(version: 2020_02_29_061301) do
     t.integer "groups_count"
     t.integer "segments_count"
     t.integer "polls_count"
-    t.integer "users_count"
     t.boolean "slack_enabled", default: false
+    t.integer "users_count"
     t.index ["theme_id"], name: "index_enterprises_on_theme_id"
   end
 
