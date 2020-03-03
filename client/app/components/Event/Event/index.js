@@ -146,6 +146,7 @@ export function Event(props) {
                 comment={comment}
                 deleteEventCommentBegin={props.deleteEventCommentBegin}
                 event={props.event}
+                currentUserId={props.currentUserId}
               />
             );
           })}

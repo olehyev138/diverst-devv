@@ -11,6 +11,7 @@ import { compose } from 'redux/';
 import { Button, Card, CardActions, CardContent, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { formatDateTimeString, DateTime } from 'utils/dateTimeHelpers';
+import classNames from "classnames";
 
 const styles = theme => ({
   margin: {
@@ -22,16 +23,17 @@ const styles = theme => ({
 export function EventComment(props) {
   const { classes, comment } = props;
   const today = new Date();
+
   return (
     <Card className={classes.margin}>
       <CardContent>
-        <Typography variant='h6'>
-          {comment.user_name}
+        <Typography variant='overline'>
+          {(comment.user_id === props.currentUserId) ? 'You' : comment.user_name}
           &ensp;said:
         </Typography>
-        <Typography variant='body1'>{comment.content}</Typography>
+        <Typography variant='body1' color='textSecondary'>{comment.content}</Typography>
         <br />
-        <Typography variant='body1'>
+        <Typography variant='overline'>
           at&ensp;
           {formatDateTimeString(comment.created_at, DateTime.DATETIME_FULL)}
         </Typography>
@@ -41,7 +43,7 @@ export function EventComment(props) {
           size='small'
           onClick={() => {
             /* eslint-disable-next-line no-alert, no-restricted-globals */
-            if (confirm('Delete group message?'))
+            if (confirm('Delete comment?'))
               props.deleteEventCommentBegin({ initiative_id: comment.initiative_id, id: comment.id });
           }}
         >
@@ -57,6 +59,7 @@ EventComment.propTypes = {
   comment: PropTypes.object,
   deleteEventCommentBegin: PropTypes.func,
   event: PropTypes.object,
+  currentUserId: PropTypes.number,
 };
 
 export default compose(
