@@ -56,33 +56,35 @@ export function NewsLinkListItem(props) {
       {props.links && props.newsItem && (
         <CardActions>
           {!props.readonly && (
-            <Button
-              size='small'
-              color='primary'
-              to={props.links.newsLinkEdit(newsItem.id)}
-              component={WrappedNavLink}
-            >
-              <DiverstFormattedMessage {...messages.edit} />
-            </Button>
-            <Button
-              size='small'
-              color='primary'
-              onClick={() => {
-                props.archiveNewsItemBegin({ id: newsItemId });
-              }}
-            >
-              <DiverstFormattedMessage {...messages.archive} />
-            </Button>
-            <Button
-              size='small'
-              onClick={() => {
-                /* eslint-disable-next-line no-alert, no-restricted-globals */
-                if (confirm('Delete news link?'))
-                  props.deleteNewsLinkBegin(newsItem.news_link);
-              }}
-            >
-              Delete
-            </Button>
+            <React.Fragment>
+              <Button
+                size='small'
+                color='primary'
+                to={props.links.newsLinkEdit(newsItem.id)}
+                component={WrappedNavLink}
+              >
+                <DiverstFormattedMessage {...messages.edit} />
+              </Button>
+              <Button
+                size='small'
+                color='primary'
+                onClick={() => {
+                  props.archiveNewsItemBegin({ id: newsItemId });
+                }}
+              >
+                <DiverstFormattedMessage {...messages.archive} />
+              </Button>
+              <Button
+                size='small'
+                onClick={() => {
+                  /* eslint-disable-next-line no-alert, no-restricted-globals */
+                  if (confirm('Delete news link?'))
+                    props.deleteNewsLinkBegin(newsItem.news_link);
+                }}
+              >
+                Delete
+              </Button>
+            </React.Fragment>
           )}
           <Button
             size='small'
@@ -101,6 +103,7 @@ export function NewsLinkListItem(props) {
             >
               Approve
             </Button>
+          )}
         </CardActions>
       )}
     </Card>

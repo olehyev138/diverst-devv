@@ -47,44 +47,39 @@ export function GroupMessageListItem(props) {
           {`Submitted by ${groupMessage.owner.first_name} ${groupMessage.owner.last_name}`}
         </Typography>
       </CardContent>
-      { props.links && (
+      {props.links && (
         <CardActions>
           {!props.readonly && (
-            <Button
-              size='small'
-              color='primary'
-              to={props.links.groupMessageEdit(newsItem.id)}
-              component={WrappedNavLink}
-            >
-              <DiverstFormattedMessage {...messages.edit} />
-            </Button>
-            <Button
-              size='small'
-              color='primary'
-              onClick={() => {
-                props.archiveNewsItemBegin({ id: newsItemId });
-              }}
-            >
-              <DiverstFormattedMessage {...messages.archive} />
-            </Button>
-            <Button
-              size='small'
-              onClick={() => {
-                /* eslint-disable-next-line no-alert, no-restricted-globals */
-                if (confirm('Delete group message?'))
-                  props.deleteGroupMessageBegin();
-              }}
-            >
-              <DiverstFormattedMessage {...messages.delete} />
-            </Button>
+            <React.Fragment>
+              <Button
+                size='small'
+                color='primary'
+                to={props.links.groupMessageEdit(newsItem.id)}
+                component={WrappedNavLink}
+              >
+                <DiverstFormattedMessage {...messages.edit} />
+              </Button>
+              <Button
+                size='small'
+                color='primary'
+                onClick={() => {
+                  props.archiveNewsItemBegin({ id: newsItemId });
+                }}
+              >
+                <DiverstFormattedMessage {...messages.archive} />
+              </Button>
+              <Button
+                size='small'
+                onClick={() => {
+                  /* eslint-disable-next-line no-alert, no-restricted-globals */
+                  if (confirm('Delete group message?'))
+                    props.deleteGroupMessageBegin();
+                }}
+              >
+                <DiverstFormattedMessage {...messages.delete} />
+              </Button>
+            </React.Fragment>
           )}
-          <Button
-            size='small'
-            to={props.links.groupMessageShow(props.groupId, newsItem.id)}
-            component={WrappedNavLink}
-          >
-            Comments
-          </Button>
           {!props.readonly && props.newsItem.approved !== true && (
             <Button
               size='small'
@@ -95,6 +90,7 @@ export function GroupMessageListItem(props) {
             >
               <DiverstFormattedMessage {...messages.approve} />
             </Button>
+          )}
         </CardActions>
       )}
     </Card>

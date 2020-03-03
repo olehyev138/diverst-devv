@@ -127,7 +127,6 @@ module BaseSearcher
         @items
             .joins(joins)
             .left_joins(left_joins)
-            .send_chain(attachment_preloads)
             .includes(includes)
             .preload(preloads)
             .send_chain(query_scopes)
@@ -140,7 +139,6 @@ module BaseSearcher
         @items
             .joins(joins)
             .left_joins(left_joins)
-            .send_chain(attachment_preloads)
             .includes(includes)
             .preload(preloads)
             .send_chain(query_scopes)
