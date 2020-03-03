@@ -46,7 +46,7 @@ export function EventCommentFormInner({ classes, handleSubmit, handleChange, han
             name='content'
             variant='outlined'
             value={values.content}
-            label='Content'
+            label='Comment'
           />
         </CardContent>
         <Divider />
@@ -101,9 +101,6 @@ EventCommentFormInner.propTypes = {
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
   isCommitting: PropTypes.bool,
-  links: PropTypes.shape({
-    newsFeedIndex: PropTypes.string
-  })
 };
 
 export default compose(

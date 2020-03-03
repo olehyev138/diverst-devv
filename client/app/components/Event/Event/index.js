@@ -135,7 +135,8 @@ export function Event(props) {
           />
           <Box mb={4} />
           <Typography variant='h6'>
-            {event.total_comments} Comment(s)
+            {event.total_comments}
+            &ensp;Comment(s)
           </Typography>
           { /* eslint-disable-next-line arrow-body-style */}
           {dig(event, 'comments') && event.comments.map((comment, i) => {
