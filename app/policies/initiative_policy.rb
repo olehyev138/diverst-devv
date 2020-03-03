@@ -103,7 +103,7 @@ class InitiativePolicy < GroupBasePolicy
     end
 
     def group_base
-      group.initiatives.union(group.participating_initiatives)
+      group.initiatives.custom_or(group.participating_initiatives)
     end
 
     def joined_with_group

@@ -59,7 +59,7 @@ const GroupLayout = ({ component: Component, classes, ...rest }) => {
       {...other}
       component={() => (
         <React.Fragment>
-          <GroupLinks {...other} />
+          <GroupLinks currentGroup={currentGroup} {...other} />
           <Scrollbar>
             <Fade in appear>
               <Container>

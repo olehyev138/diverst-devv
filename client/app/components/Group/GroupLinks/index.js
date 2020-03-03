@@ -1,6 +1,8 @@
 import React, { useContext, memo } from 'react';
 import { compose } from 'redux';
 import { withStyles } from '@material-ui/core/styles';
+import dig from 'object-dig';
+import WithPermission from 'components/Compositions/WithPermission';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import classNames from 'classnames';
 import { matchPath } from 'react-router';
@@ -111,7 +113,7 @@ const styles = theme => ({
 });
 
 export function GroupLinks(props) {
-  const { classes } = props;
+  const { classes, currentGroup } = props;
   const rs = new RouteService(useContext);
 
   const lastLocation = useLastLocation();
@@ -123,6 +125,22 @@ export function GroupLinks(props) {
       exact: false,
       strict: false,
     });
+
+  const permission = name => dig(currentGroup, 'permissions', name);
+
+  const EventButton = WithPermission(() => (
+    <Button
+      component={WrappedNavLink}
+      to={ROUTES.group.events.index.path(rs.params('group_id'))}
+      className={classes.navLink}
+      activeClassName={classes.navLinkActive}
+    >
+      <Hidden smDown>
+        <EventIcon className={classes.navIcon} />
+      </Hidden>
+      <DiverstFormattedMessage {...ROUTES.group.events.index.data.titleMessage} />
+    </Button>
+  ));
 
   const NavLinks = () => (
     <div>
@@ -174,17 +192,9 @@ export function GroupLinks(props) {
             <DiverstFormattedMessage {...ROUTES.group.members.index.data.titleMessage} />
           </Button>
 
-          <Button
-            component={WrappedNavLink}
-            to={ROUTES.group.events.index.path(rs.params('group_id'))}
-            className={classes.navLink}
-            activeClassName={classes.navLinkActive}
-          >
-            <Hidden smDown>
-              <EventIcon className={classes.navIcon} />
-            </Hidden>
-            <DiverstFormattedMessage {...ROUTES.group.events.index.data.titleMessage} />
-          </Button>
+          <EventButton
+            show={permission('events_view?')}
+          />
 
           <Button
             component={WrappedNavLink}
@@ -258,6 +268,9 @@ export function GroupLinks(props) {
 
 GroupLinks.propTypes = {
   classes: PropTypes.object,
+  currentGroup: PropTypes.shape({
+    permissions: PropTypes.object
+  }),
   computedMatch: PropTypes.shape({
     params: PropTypes.shape({
       id: PropTypes.string
