@@ -45,18 +45,44 @@ class ApplicationRecord < ActiveRecord::Base
   after_commit on: [:update] do update_elasticsearch_index('update') end
   after_commit on: [:destroy] do update_elasticsearch_index('delete') end
 
-  def self.custom_or(right_raw)
+  def self.custom_or(right_raw, joins_to_left: true)
     left = all
     right = right_raw.all
 
     raise ::ArgumentError unless left.klass == right.klass
+    merged = left.merge(right)
 
     l_where_clause = left.where_clause
     r_where_clause = right.where_clause
-
-    merged = left.merge(right)
     or_clause = l_where_clause.or(r_where_clause)
     merged.where_clause = or_clause
+
+    if joins_to_left
+      l_joins = left.joins_values
+      r_joins = right.joins_values
+
+      def self.inner_to_left(joins, query)
+        left_joins = []
+        inner_joins = []
+        joins.each do |j|
+          case j
+          when Arel::Nodes::Join
+            if query.respond_to?(:proxy_association)
+              inner_joins.append Arel::Nodes::OuterJoin.new(j.left, j.right)
+            end
+          else left_joins.append j
+          end
+        end
+        return left_joins, inner_joins
+      end
+
+      l_new_left, l_new_inner = inner_to_left(l_joins, left)
+      r_new_left, r_new_inner = inner_to_left(r_joins, right)
+
+      merged.left_outer_joins_values |= l_new_left | r_new_left
+      merged.joins_values = l_new_inner | r_new_inner
+    end
+
     merged
   end
 
