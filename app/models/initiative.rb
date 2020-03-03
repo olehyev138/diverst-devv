@@ -175,6 +175,10 @@ class Initiative < ApplicationRecord
     enterprise.id
   end
 
+  def total_comments
+    comments.size
+  end
+
   # need to trunc several special characters here
   def description
     return '' if self[:description].nil?

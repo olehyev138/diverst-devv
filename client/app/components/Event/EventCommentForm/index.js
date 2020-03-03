@@ -76,7 +76,6 @@ export function EventCommentForm(props) {
           initiative_id: dig(props, 'event', 'id') || undefined,
           attributes: values
         });
-        console.log(props);
         actions.resetForm();
       }}
     >

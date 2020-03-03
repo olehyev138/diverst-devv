@@ -9,6 +9,8 @@ class InitiativeComment < ApplicationRecord
   validates :initiative, presence: true
   validates :content, presence: true
 
+  delegate :name, to: :user, prefix: true
+
   def group
     initiative.group
   end

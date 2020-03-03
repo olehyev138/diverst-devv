@@ -137,7 +137,8 @@ export function* deleteEventComment(action) {
   try {
     yield call(api.initiativeComments.destroy.bind(api.initiativeComments), action.payload.id);
     yield put(deleteEventCommentSuccess());
-    // yield put(push(ROUTES.group.news.index.path(action.payload.group_id)));
+    console.log(action.payload);
+    yield put(getEventBegin({ id: action.payload.initiative_id }));
     yield put(showSnackbar({ message: 'event comment deleted', options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteEventCommentError(err));
