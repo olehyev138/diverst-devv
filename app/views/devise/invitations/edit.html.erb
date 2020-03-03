@@ -188,12 +188,22 @@
                <% end %>
 
             <% end %>
-
-            <%= f.button :submit, "Create my account", class: "btn--secondary btn--large btn--full" %>
-          <% end %>
+            <% unless resource.enterprise.onboarding_consent_enabled? %>   
+              <%= f.button :submit, "Create my account", class: "btn--secondary btn--large btn--full" %>
+            <% end %>    
+            <% end %>
+          <br>
+          <% if resource.enterprise.onboarding_consent_enabled? %>
+            <button class="btn--secondary btn--large btn--full" 
+            data-toggle="modal" data-target="consentModal" id="consentModalPop">
+              <p>CREATE MY ACCOUNT</p>
+            </button>
+          <% end %>  
         </div>
       </div>
     </div>
+
+    <%= render 'devise/invitations/consent_modal' %>
 
     <script>
       function toggle_calendar() {
@@ -201,6 +211,16 @@
           // Animation complete.
         });
       }
+ 
+      $("#consentModalPop").click(function(e){
+        let form = document.getElementById('edit_user');
+        $form = $(form)
+        if( !is_valid($form) ) {
+          e.preventDefault();
+        } else {
+          $("#consentModal").modal("show");
+        }
+      });
 
       $(document).ready(function(){
         applyFullCalendar();

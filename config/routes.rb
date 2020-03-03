@@ -130,6 +130,7 @@ Rails.application.routes.draw do
       patch 'delete_attachment'
       get 'calendar'
       patch 'auto_archive_switch'
+      patch 'enable_onboarding_consent'
     end
 
     scope module: :enterprises do
