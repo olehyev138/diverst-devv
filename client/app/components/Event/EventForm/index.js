@@ -148,7 +148,7 @@ export function EventForm(props) {
     annual_budget_id: { default: '' },
     budget_item_id: { default: '' },
     pillar_id: { default: '1' },
-    owner_id: { default: '1' },
+    owner_id: { default: '' },
     owner_group_id: { default: '1' }
   });
 

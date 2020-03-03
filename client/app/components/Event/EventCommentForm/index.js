@@ -9,15 +9,15 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import dig from 'object-dig';
 
-import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { Field, Formik, Form } from 'formik';
 import {
   Button, Card, CardActions, CardContent, CardHeader, TextField, Typography, Divider,
 } from '@material-ui/core';
 import withStyles from '@material-ui/core/styles/withStyles';
-
-import messages from 'containers/News/messages';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
+
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/News/messages';
 
 const styles = theme => ({
   formTitle: {
@@ -71,7 +71,7 @@ export function EventCommentForm(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        // pass initiative_id to saga to refetch news_feed_link with new comment
+        // pass initiative_id to saga to refetch event with new comment
         props.commentAction({
           initiative_id: dig(props, 'event', 'id') || undefined,
           attributes: values

@@ -11,7 +11,6 @@ import { compose } from 'redux/';
 import { Button, Card, CardActions, CardContent, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { formatDateTimeString, DateTime } from 'utils/dateTimeHelpers';
-import classNames from "classnames";
 
 const styles = theme => ({
   margin: {
