@@ -19,6 +19,12 @@ class ApplicationRecord < ActiveRecord::Base
     self.reset_column_information
   end
 
+  ActiveRecord::Associations::Association.class_eval do
+    def target_scope
+      ActiveRecord::AssociationRelation.create(klass, self).merge!(klass.scope_for_association)
+    end
+  end
+
   def self.inherited(child)
     super
 
