@@ -4070,13 +4070,10 @@ OdceAgAAAFvnSRwAAAAE/AH1UCutIdffCgAAAABJRU5ErkJggg==
         <Grid container justify='space-between'>
           <Grid item>
             {newsLink.author ? (
-              <React.Fragment>
-                <Typography variant='body2' color='textSecondary' className={classes.centerVertically}>
-                  {`Submitted by ${newsLink.author.first_name} ${newsLink.author.last_name}`}
-                </Typography>
-              </React.Fragment>
-            ) : <React.Fragment />
-            }
+              <Typography variant='body2' color='textSecondary' className={classes.centerVertically}>
+                {`Submitted by ${newsLink.author.first_name} ${newsLink.author.last_name}`}
+              </Typography>
+            ) : null }
           </Grid>
           <Grid item>
             <Grid container>
