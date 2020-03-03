@@ -107,7 +107,7 @@ class InitiativePolicy < GroupBasePolicy
     end
 
     def joined_with_group
-      scope.left_joins(owner_group: [:enterprise, :group_leaders, :user_groups])
+      scope.left_joins(group: [:enterprise, :group_leaders, :user_groups])
     end
 
     def resolve
