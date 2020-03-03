@@ -52,6 +52,39 @@ RSpec.describe Initiative, type: :model do
     it { expect(initiative).to have_many(:segments).through(:initiative_segments) }
     it { expect(initiative).to have_one(:outcome).through(:pillar) }
 
+    context '.all_upcoming_events_for_group' do
+      let!(:group) { create(:group) }
+      let!(:outcome) { create :outcome, group_id: group.id }
+      let!(:pillar) { create :pillar, outcome_id: outcome.id }
+      let!(:upcoming_event) { create(:initiative, pillar_id: pillar.id, owner_group_id: group.id, start: DateTime.now >> 1, end: DateTime.now >> 2) }
+
+      it 'return upcoming events including ongoing events' do
+        expect(Initiative.all_upcoming_events_for_group(group.id)).to eq([upcoming_event])
+      end
+    end
+
+    context '.all_ongoing_events_for_group' do
+      let!(:group) { create(:group) }
+      let!(:outcome) { create :outcome, group_id: group.id }
+      let!(:pillar) { create :pillar, outcome_id: outcome.id }
+      let!(:ongoing_event) { create(:initiative, pillar_id: pillar.id, owner_group_id: group.id, start: DateTime.now << 1, end: DateTime.now >> 2) }
+
+      it 'return ongoing events' do
+        expect(Initiative.all_ongoing_events_for_group(group.id)).to eq([ongoing_event])
+      end
+    end
+
+    context '.all_past_events_for_group' do
+      let!(:group) { create(:group) }
+      let!(:outcome) { create :outcome, group_id: group.id }
+      let!(:pillar) { create :pillar, outcome_id: outcome.id }
+      let!(:past_event) { create(:initiative, pillar_id: pillar.id, owner_group_id: group.id, start: DateTime.now << 2, end: DateTime.now << 1) }
+
+      it 'return past events' do
+        expect(Initiative.all_past_events_for_group(group.id)).to eq([past_event])
+      end
+    end
+
     context 'segment_enterprise' do
       let!(:user) { create(:user) }
 

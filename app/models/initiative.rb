@@ -68,6 +68,18 @@ class Initiative < BaseClass
     upcoming_events.uniq
   }
 
+  scope :all_ongoing_events_for_group, ->(group_id) {
+    group = Group.find(group_id)
+    ongoing_events = group.initiatives.ongoing + group.participating_initiatives.ongoing
+    ongoing_events.uniq
+  }
+
+  scope :all_past_events_for_group, ->(group_id) {
+    group = Group.find(group_id)
+    past_events = group.initiatives.past + group.participating_initiatives.past
+    past_events.uniq
+  }
+
   # we don't want to run this callback when finish_expenses! is triggered in initiatives_controller.rb, finish_expense action
   before_save { allocate_budget_funds unless skip_allocate_budget_funds }
 
