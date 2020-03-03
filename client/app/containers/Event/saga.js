@@ -8,6 +8,12 @@ import {
   GET_EVENTS_BEGIN, GET_EVENT_BEGIN,
   CREATE_EVENT_BEGIN, UPDATE_EVENT_BEGIN,
   DELETE_EVENT_BEGIN,
+  CREATE_EVENT_COMMENT_BEGIN,
+  CREATE_EVENT_COMMENT_SUCCESS,
+  CREATE_EVENT_COMMENT_ERROR,
+  DELETE_EVENT_COMMENT_BEGIN,
+  DELETE_EVENT_COMMENT_ERROR,
+  DELETE_EVENT_COMMENT_SUCCESS
 } from 'containers/Event/constants';
 
 import {
@@ -15,10 +21,13 @@ import {
   getEventSuccess, getEventError,
   createEventSuccess, createEventError,
   updateEventSuccess, updateEventError,
-  deleteEventError, deleteEventSuccess
+  deleteEventError, deleteEventSuccess,
+  deleteEventCommentBegin, deleteEventCommentError, deleteEventCommentSuccess,
+  createEventCommentBegin, createEventCommentError, createEventCommentSuccess
 } from 'containers/Event/actions';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
+
 
 export function* getEvents(action) {
   try {
@@ -123,10 +132,46 @@ export function* deleteEvent(action) {
   }
 }
 
+/* event comment */
+export function* deleteEventComment(action) {
+  try {
+    yield call(api.initiativeComments.destroy.bind(api.groupMessageComments), action.payload.id);
+    yield put(deleteEventCommentSuccess());
+    // yield put(push(ROUTES.group.news.index.path(action.payload.group_id)));
+    yield put(showSnackbar({ message: 'event comment deleted', options: { variant: 'success' } }));
+  } catch (err) {
+    yield put(deleteEventCommentError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to remove event comment', options: { variant: 'warning' } }));
+  }
+}
+
+export function* createEventComment(action) {
+  // create comment & re-fetch news feed link from server
+
+  try {
+    const payload = { event_comment: action.payload.attributes };
+    const response = yield call(api.initiativeComments.create.bind(api.groupMessageComments), payload);
+
+    yield put(createEventCommentSuccess());
+    // yield put(getNewsItemBegin({ id: action.payload.news_feed_link_id }));
+    yield put(showSnackbar({ message: 'Event comment created', options: { variant: 'success' } }));
+  } catch (err) {
+    yield put(createEventCommentError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to create event comment', options: { variant: 'warning' } }));
+  }
+}
+
+
 export default function* eventsSaga() {
   yield takeLatest(GET_EVENTS_BEGIN, getEvents);
   yield takeLatest(GET_EVENT_BEGIN, getEvent);
   yield takeLatest(CREATE_EVENT_BEGIN, createEvent);
   yield takeLatest(UPDATE_EVENT_BEGIN, updateEvent);
   yield takeLatest(DELETE_EVENT_BEGIN, deleteEvent);
+  yield takeLatest(CREATE_EVENT_COMMENT_BEGIN, createEventComment);
+  yield takeLatest(DELETE_EVENT_COMMENT_BEGIN, deleteEventComment);
 }

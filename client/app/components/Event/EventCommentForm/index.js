@@ -46,13 +46,13 @@ export function EventCommentFormInner({ classes, handleSubmit, handleChange, han
             name='content'
             variant='outlined'
             value={values.content}
-            label={<DiverstFormattedMessage {...messages.content} />}
+            label='Content'
           />
         </CardContent>
         <Divider />
         <CardActions>
           <DiverstSubmit isCommitting={props.isCommitting}>
-            <DiverstFormattedMessage {...messages.comment_submit} />
+            Submit
           </DiverstSubmit>
         </CardActions>
       </Form>
@@ -64,11 +64,10 @@ export function EventCommentForm(props) {
   // No comment editing
 
   const initialValues = {
-    author_id: dig(props, 'currentUserId') || undefined,
-    message_id: dig(props, 'newsItem', 'group_message', 'id') || undefined,
-    content: '',
+    user_id: dig(props, 'currentUserId') || undefined,
+    initiative_id: dig(props, 'event', 'id') || undefined,
+    content: 'test',
   };
-
   return (
     <Formik
       initialValues={initialValues}
@@ -76,10 +75,10 @@ export function EventCommentForm(props) {
       onSubmit={(values, actions) => {
         // pass news_feed_link_id to saga to refetch news_feed_link with new comment
         props.commentAction({
-          news_feed_link_id: dig(props, 'newsItem', 'id') || undefined,
+          initiative_id: dig(props, 'event', 'id') || undefined,
           attributes: values
         });
-
+        console.log(props);
         actions.resetForm();
       }}
     >
@@ -91,7 +90,7 @@ export function EventCommentForm(props) {
 EventCommentForm.propTypes = {
   classes: PropTypes.object,
   commentAction: PropTypes.func,
-  newsItem: PropTypes.object,
+  event: PropTypes.object,
   currentUserId: PropTypes.number,
   isCommitting: PropTypes.bool,
 };

@@ -20,7 +20,13 @@ import {
   UPDATE_EVENT_BEGIN,
   UPDATE_EVENT_SUCCESS,
   UPDATE_EVENT_ERROR,
-  EVENTS_UNMOUNT
+  EVENTS_UNMOUNT,
+  CREATE_EVENT_COMMENT_BEGIN,
+  CREATE_EVENT_COMMENT_SUCCESS,
+  CREATE_EVENT_COMMENT_ERROR,
+  DELETE_EVENT_COMMENT_BEGIN,
+  DELETE_EVENT_COMMENT_ERROR,
+  DELETE_EVENT_COMMENT_SUCCESS
 } from './constants';
 
 export function getEventsBegin(payload) {
@@ -139,5 +145,49 @@ export function deleteEventError(error) {
 export function eventsUnmount() {
   return {
     type: EVENTS_UNMOUNT,
+  };
+}
+
+/* Event comments */
+
+export function createEventCommentBegin(payload) {
+  return {
+    type: CREATE_EVENT_COMMENT_BEGIN,
+    payload,
+  };
+}
+
+export function createEventCommentSuccess(payload) {
+  return {
+    type: CREATE_EVENT_COMMENT_SUCCESS,
+    payload,
+  };
+}
+
+export function createEventCommentError(error) {
+  return {
+    type: CREATE_EVENT_COMMENT_ERROR,
+    error,
+  };
+}
+
+export function deleteEventCommentBegin(payload) {
+  return {
+    type: DELETE_EVENT_COMMENT_BEGIN,
+    payload,
+  };
+}
+
+export function deleteEventCommentSuccess(payload) {
+  return {
+    type: DELETE_EVENT_COMMENT_SUCCESS,
+    payload,
+  };
+}
+
+export function deleteEventCommentError(error) {
+  return {
+    type: DELETE_EVENT_COMMENT_ERROR,
+    error,
   };
 }
