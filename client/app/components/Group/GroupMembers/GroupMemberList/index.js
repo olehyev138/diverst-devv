@@ -271,6 +271,12 @@ export function GroupMemberList(props) {
               });
           }
         }]}
+        my_options={{
+          exportButton: true,
+          exportCsv: (columns, data) => {
+            props.exportMembersBegin();
+          }
+        }}
       />
       <DiverstDropdownMenu
         anchor={anchor}
@@ -309,6 +315,7 @@ GroupMemberList.propTypes = {
   intl: intlShape.isRequired,
   classes: PropTypes.object,
   deleteMemberBegin: PropTypes.func,
+  exportMembersBegin: PropTypes.func,
   links: PropTypes.shape({
     groupMembersNew: PropTypes.string,
   }),

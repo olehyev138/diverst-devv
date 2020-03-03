@@ -226,14 +226,63 @@ module User::Actions
   end
 
   module ClassMethods
+    # Export a CSV with the specified users
+    def csv_attributes(current_user = nil, params = {})
+      fields = current_user.present? ? current_user.fields : Field.none
+      current_user.field_data.load if current_user.present?
+      {
+          titles: ['First name',
+                   'Last name',
+                   'Email',
+                   'Biography',
+                   'Active',
+                   'Group Membership'
+          ].concat(fields.map(&:title)),
+          values: [
+              :first_name,
+              :last_name,
+              :email,
+              :biography,
+              :active,
+              -> (user) { user.groups.map(&:name).join(',') },
+          ].concat(
+              fields.map do |field|
+                -> (user) { field.csv_value(user[field]) }
+              end
+            )
+      }
+    end
+
+    def parameter_name(scope)
+      scope_map = {
+          all: 'all',
+          active: 'active',
+          inactive: 'inactive',
+          saml: 'sso authorized',
+          invitation_sent: 'pending'
+      }
+
+      case scope
+      when String, Symbol
+        scope_map[scope.to_sym] || scope
+      when Array
+        case scope.first
+        when 'of_role' then UserRole.find(scope.second).role_name.downcase
+        else scope.first
+        end
+      else
+        raise ::ArgumentError.new('query scopes should be an array of either strings or arrays starting with a string')
+      end
+    end
+
     def base_query
       "#{ self.table_name }.id LIKE :search OR LOWER(#{ self.table_name }.first_name) LIKE :search OR LOWER(#{ self.table_name }.last_name) LIKE :search
       OR LOWER(#{ self.table_name }.email) LIKE :search"
     end
 
     def valid_scopes
-      %w( active enterprise_mentors mentors mentees accepting_mentee_requests
-          accepting_mentor_requests saml inactive invitation_sent)
+      %w( enterprise_mentors mentors mentees accepting_mentee_requests accepting_mentor_requests
+          all active inactive saml invitation_sent of_role)
     end
 
     def preload_attachments

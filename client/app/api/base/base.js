@@ -19,6 +19,10 @@ class API {
     return axios.get(appendQueryArgs(this.url, opts));
   }
 
+  csvExport(opts) {
+    return axios.get(appendQueryArgs(`${this.url}/export_csv`, opts));
+  }
+
   get(id, payload = undefined) {
     return axios.get(appendQueryArgs(`${this.url}/${id}`, payload));
   }

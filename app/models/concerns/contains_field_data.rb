@@ -4,7 +4,37 @@ module ContainsFieldData
 
   included do
     before_validation :transfer_info_to_data
+    validate :validate_presence_field_data
+
+    if self.get_association(self::FIELD_DEFINER_NAME).polymorphic?
+      define_method self::FIELD_ASSOCIATION_NAME do
+        field_definer&.send(self.class::FIELD_ASSOCIATION_NAME)&.load || Field.none
+      end
+    else
+      has_many self::FIELD_ASSOCIATION_NAME, class_name: 'Field', through: self::FIELD_DEFINER_NAME
+    end
+
+    has_many :field_data, class_name: 'FieldData', as: :field_user, dependent: :destroy
+    accepts_nested_attributes_for :field_data
+
     after_create :create_missing_field_data
+
+    # Returns the fields a field_user can use
+    #
+    # @author Alex Oxorn
+    #
+    # @return [Field::ActiveRecord_Associations_CollectionProxy] List of Fields
+    # @return [Field::ActiveRecord_Relation] Field.none if +field_definer+ doesn't exist
+    #
+    # @example
+    #    u = User.first
+    #    u.fields #=> [< Gender Field >, < D.O.B. Field > ...]
+    if instance_methods.exclude? :fields
+      def fields
+        send(self.class::FIELD_ASSOCIATION_NAME)
+      end
+    end
+
     extend ClassMethods
   end
 
@@ -18,24 +48,44 @@ module ContainsFieldData
     @info.extend(FieldDataDeprecated)
   end
 
+  def [](key)
+    case key
+    when Symbol, String then super(key)
+    when Field
+      raise FieldNotFound unless fields.load.ids.include? key.id
+
+      fd = get_field_data(key) || (new_record? ? field_data.new(data: nil, field_id: key.id) : field_data.create(data: nil, field_id: key.id))
+      fd.deserialized_data
+    else raise ArgumentError
+    end
+  rescue
+    nil
+  end
+
+  def []=(key, value)
+    case key
+    when Symbol, String then super(key, value)
+    when Field
+      raise FieldNotFound unless fields.ids.include? key.id
+
+      serialized_value = key.serialize_value(value)
+
+      if new_record?
+        field_data.new(data: serialized_value, field_id: key.id)
+      else
+        fd = get_field_data(key)
+        fd.present? ?
+            fd.update(data: serialized_value) :
+            field_data.create(field_id: key.id, data: serialized_value)
+      end
+    else raise ArgumentError
+    end
+  end
+
   # LEGACY: POSSIBLY DEPRECATED
   # Called before validation to presist the (maybe) edited info object in the DB
   def transfer_info_to_data
     self.data = JSON.generate @info unless @info.nil?
-  end
-
-  # Returns the fields a field_user can use
-  #
-  # @author Alex Oxorn
-  #
-  # @return [Field::ActiveRecord_Associations_CollectionProxy] List of Fields
-  # @return [Field::ActiveRecord_Relation] Field.none if +field_definer+ doesn't exist
-  #
-  # @example
-  #    u = User.first
-  #    u.fields #=> [< Gender Field >, < D.O.B. Field > ...]
-  def fields
-    field_definer ? field_definer.send(self.class.field_association_name) : Field.none
   end
 
   # Returns the object which defines the fields a field_user can use
@@ -49,7 +99,7 @@ module ContainsFieldData
   #    u = User.first  #=> < #User enterprise_id: 1>
   #    u.field_definer #=> < #Enterprise id: 1 >
   def field_definer
-    send(self.class.field_definer_name)
+    send(self.class::FIELD_DEFINER_NAME)
   end
 
   # Returns the id of the field_definer which defines the fields a field_user can use
@@ -63,7 +113,7 @@ module ContainsFieldData
   #    u = User.first #=> < #User enterprise_id: 1>
   #    u.field_definer #=> 1
   def field_definer_id
-    send("#{self.class.field_definer_name}_id")
+    send("#{self.class::FIELD_DEFINER_NAME}_id")
   end
 
   # Creates getter and setter methods on a singleton of a +field_user+ for its +field_data+
@@ -86,12 +136,12 @@ module ContainsFieldData
     # For each FieldData
     field_data.includes(:field).find_each do |fd|
       # Define a getter, that gets the field_data, called that field's title, on self's singleton
-      singleton_class.send(:define_method, fd.field.title.gsub(' ', '_').gsub(/[^0-9a-z_]/i, '').downcase) do
+      singleton_class.send(:define_method, self.class.field_to_method_name(fd.field)) do
         fd.deserialized_data
       end
 
       # Define a setter, that sets the field_data, called that field's title =, on self's singleton
-      singleton_class.send(:define_method, "#{fd.field.title.gsub(' ', '_').gsub(/[^0-9a-z_]/i, '').downcase}=") do |*args|
+      singleton_class.send(:define_method, "#{self.class.field_to_method_name(fd.field)}=") do |*args|
         fd.data = args[0].to_json
         fd.save!
       end
@@ -183,9 +233,24 @@ module ContainsFieldData
   #
   #   u.get_field_data(f) => <#FieldData>
   def get_field_data(field)
-    field_data.loaded? ?
-        field_data.to_a.find { |fd| fd.field == field } :
-        field_data.find_by(field: field)
+    field_data.find { |fd| fd.field_id == field.id }
+  end
+
+  def validate_presence_field_data
+    fields.find_each do |field|
+      if field.required && self[field].blank?
+        key = field.title.parameterize.underscore.to_sym
+        errors.add(key, "can't be blank")
+      end
+    end
+  end
+
+  def get_field_data_value(field)
+    get_field_data(field).deserialized_data
+  end
+
+  def set_field_data_value(field, data)
+    get_field_data(field).update(data: field.serialize_value(data))
   end
 
   # Class Methods for FieldData Models
@@ -210,18 +275,22 @@ module ContainsFieldData
         # for each field_data
         u.field_data.each do |fd|
           # Define a getter, that gets the field_data, called that field's title, on that field_user's singleton
-          u.singleton_class.send(:define_method, fd.field.title.gsub(' ', '_').gsub(/[^0-9a-z_]/i, '').downcase) do
+          u.singleton_class.send(:define_method, field_to_method_name(fd.field)) do
             fd.deserialized_data
           end
 
           # Define a setter, that sets the field_data, called that field's title =, on that field_user's singleton
-          u.singleton_class.send(:define_method, "#{fd.field.title.gsub(' ', '_').gsub(/[^0-9a-z_]/i, '').downcase}=") do |*args|
+          u.singleton_class.send(:define_method, "#{field_to_method_name(fd.field)}=") do |*args|
             fd.data = args[0].to_json
             fd.save!
           end
         end
       end
       # rubocop:enable Rails/FindEach
+    end
+
+    def field_to_method_name(field)
+      field.title.gsub(' ', '_').gsub(/[^0-9a-z_]/i, '').downcase
     end
 
     # Creates A Prototype
@@ -240,7 +309,7 @@ module ContainsFieldData
     #   u.first_name = ""
     #   u.field_data.first.data = ""
     def create_prototype(field_definer)
-      new = self.new(field_definer_name.to_sym => field_definer)
+      new = self.new(FIELD_DEFINER_NAME.to_sym => field_definer)
       new.field_data = new.prototype_fields
       new
     end
