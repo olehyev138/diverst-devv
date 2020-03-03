@@ -56,14 +56,16 @@ export function NewsLinkListItem(props) {
       </CardContent>
       {props.links && props.newsItem && (
         <CardActions>
-          <Button
-            size='small'
-            color='primary'
-            to={props.links.newsLinkEdit(newsItem.id)}
-            component={WrappedNavLink}
-          >
-            <DiverstFormattedMessage {...messages.edit} />
-          </Button>
+          {!props.readonly && (
+            <Button
+              size='small'
+              color='primary'
+              to={props.links.newsLinkEdit(newsItem.id)}
+              component={WrappedNavLink}
+            >
+              <DiverstFormattedMessage {...messages.edit} />
+            </Button>
+          )}
           <Button
             size='small'
             to={links.newsLinkShow(props.groupId, newsItem.id)}
@@ -71,7 +73,7 @@ export function NewsLinkListItem(props) {
           >
             {<DiverstFormattedMessage {...messages.comments} />}
           </Button>
-          {props.newsItem.approved !== true ? (
+          {!props.readonly && props.newsItem.approved !== true && (
             <Button
               size='small'
               onClick={() => {
@@ -81,17 +83,19 @@ export function NewsLinkListItem(props) {
             >
               {<DiverstFormattedMessage {...messages.approve} />}
             </Button>
-          ) : null }
-          <Button
-            size='small'
-            onClick={() => {
-              /* eslint-disable-next-line no-alert, no-restricted-globals */
-              if (confirm(intl.formatMessage(messages.news_delete_confirm)))
-                props.deleteNewsLinkBegin(newsItem.news_link);
-            }}
-          >
-            {<DiverstFormattedMessage {...messages.delete} />}
-          </Button>
+          )}
+          {!props.readonly && (
+            <Button
+              size='small'
+              onClick={() => {
+                /* eslint-disable-next-line no-alert, no-restricted-globals */
+                if (confirm(intl.formatMessage(messages.news_delete_confirm)))
+                  props.deleteNewsLinkBegin(newsItem.news_link);
+              }}
+            >
+              {<DiverstFormattedMessage {...messages.delete} />}
+            </Button>
+          )}
         </CardActions>
       )}
     </Card>

@@ -5,24 +5,32 @@ import { push } from 'connected-react-router';
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
 
 import {
-  GET_USERS_BEGIN, CREATE_USER_BEGIN,
-  GET_USER_BEGIN, UPDATE_USER_BEGIN, DELETE_USER_BEGIN,
-  UPDATE_FIELD_DATA_BEGIN, GET_USER_POSTS_BEGIN,
-  GET_USER_EVENTS_BEGIN, GET_USER_DOWNLOADS_BEGIN, GET_USER_DOWNLOAD_DATA_BEGIN,
-} from 'containers/User/constants';
+  GET_USERS_BEGIN,
+  GET_USER_BEGIN,
+  GET_USER_POSTS_BEGIN,
+  GET_USER_EVENTS_BEGIN,
+  GET_USER_DOWNLOADS_BEGIN,
+  CREATE_USER_BEGIN,
+  UPDATE_USER_BEGIN,
+  DELETE_USER_BEGIN,
+  UPDATE_FIELD_DATA_BEGIN,
+  EXPORT_USERS_BEGIN,
+  GET_USER_DOWNLOAD_DATA_BEGIN,
+} from './constants';
 
 import {
   getUsersSuccess, getUsersError,
-  createUserSuccess, createUserError,
   getUserSuccess, getUserError,
-  updateUserSuccess, updateUserError,
-  deleteUserSuccess, deleteUserError,
   getUserPostsSuccess, getUserPostsError,
   getUserEventsSuccess, getUserEventsError,
-  updateFieldDataSuccess, getUserDownloadsSuccess,
-  getUserDownloadsError, getUserDownloadDataError,
-  getUserDownloadDataSuccess,
-} from 'containers/User/actions';
+  getUserDownloadsSuccess, getUserDownloadsError,
+  createUserSuccess, createUserError,
+  updateUserSuccess, updateUserError,
+  deleteUserSuccess, deleteUserError,
+  updateFieldDataSuccess, updateFieldDataError,
+  exportUsersSuccess, exportUsersError,
+  getUserDownloadDataSuccess, getUserDownloadDataError,
+} from './actions';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
@@ -152,6 +160,21 @@ export function* updateFieldData(action) {
   }
 }
 
+
+export function* exportUsers(action) {
+  try {
+    const response = yield call(api.users.csvExport.bind(api.users), action.payload);
+
+    yield put(exportUsersSuccess({}));
+    yield put(showSnackbar({ message: 'Successfully exported users', options: { variant: 'success' } }));
+  } catch (err) {
+    yield put(exportUsersError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to export users', options: { variant: 'warning' } }));
+  }
+}
+
 export function* getUserDownloadData(action) {
   try {
     const response = yield call(api.user.getDownloadData.bind(api.user), action.payload);
@@ -169,12 +192,13 @@ export function* getUserDownloadData(action) {
 export default function* usersSaga() {
   yield takeLatest(GET_USERS_BEGIN, getUsers);
   yield takeLatest(GET_USER_BEGIN, getUser);
-  yield takeLatest(CREATE_USER_BEGIN, createUser);
-  yield takeLatest(UPDATE_USER_BEGIN, updateUser);
-  yield takeLatest(DELETE_USER_BEGIN, deleteUser);
   yield takeLatest(GET_USER_POSTS_BEGIN, getUserPosts);
   yield takeLatest(GET_USER_EVENTS_BEGIN, getUserEvents);
   yield takeLatest(GET_USER_DOWNLOADS_BEGIN, getUserDownloads);
+  yield takeLatest(CREATE_USER_BEGIN, createUser);
+  yield takeLatest(UPDATE_USER_BEGIN, updateUser);
+  yield takeLatest(DELETE_USER_BEGIN, deleteUser);
   yield takeLatest(UPDATE_FIELD_DATA_BEGIN, updateFieldData);
+  yield takeLatest(EXPORT_USERS_BEGIN, exportUsers);
   yield takeLatest(GET_USER_DOWNLOAD_DATA_BEGIN, getUserDownloadData);
 }

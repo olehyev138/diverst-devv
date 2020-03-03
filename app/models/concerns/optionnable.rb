@@ -29,13 +29,13 @@ module Optionnable
     end
 
     entries.each do |entry|
-      values = entry.info[self]
+      values = entry[self] rescue []
 
       values.each do |value|
         if answer_counts[value]
           answer_counts[value] += 1
         else
-          answer_counts[value] = 0
+          answer_counts[value] = 1
         end
       end
     end

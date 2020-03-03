@@ -49,15 +49,17 @@ export function SocialLinkListItem(props) {
         ) : <React.Fragment />}
       </CardContent>
       <CardActions>
-        <Button
-          size='small'
-          color='primary'
-          to={links.socialLinkEdit(newsItem.id)}
-          component={WrappedNavLink}
-        >
-          <DiverstFormattedMessage {...messages.edit} />
-        </Button>
-        {props.newsItem.approved !== true ? (
+        {!props.readonly && (
+          <Button
+            size='small'
+            color='primary'
+            to={links.socialLinkEdit(newsItem.id)}
+            component={WrappedNavLink}
+          >
+            <DiverstFormattedMessage {...messages.edit} />
+          </Button>
+        )}
+        {!props.readonly && props.newsItem.approved !== true && (
           <Button
             size='small'
             onClick={() => {
@@ -67,17 +69,19 @@ export function SocialLinkListItem(props) {
           >
             {<DiverstFormattedMessage {...messages.approve} />}
           </Button>
-        ) : null }
-        <Button
-          size='small'
-          onClick={() => {
-            /* eslint-disable-next-line no-alert, no-restricted-globals */
-            if (confirm(intl.formatMessage(messages.social_delete_confirm)))
-              props.deleteSocialLinkBegin(newsItem.social_link);
-          }}
-        >
-          {<DiverstFormattedMessage {...messages.delete} />}
-        </Button>
+        )}
+        {!props.readonly && (
+          <Button
+            size='small'
+            onClick={() => {
+              /* eslint-disable-next-line no-alert, no-restricted-globals */
+              if (confirm(intl.formatMessage(messages.social_delete_confirm)))
+                props.deleteSocialLinkBegin(newsItem.social_link);
+            }}
+          >
+            {<DiverstFormattedMessage {...messages.delete} />}
+          </Button>
+        )}
       </CardActions>
     </Card>
   );
@@ -90,6 +94,7 @@ SocialLinkListItem.propTypes = {
     socialLinkEdit: PropTypes.func,
   }),
   newsItem: PropTypes.object,
+  readonly: PropTypes.bool,
   deleteSocialLinkBegin: PropTypes.func,
   updateNewsItemBegin: PropTypes.func,
 };

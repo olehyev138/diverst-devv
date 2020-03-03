@@ -17,7 +17,7 @@ class SegmentMembersDownloadJob < ActiveJob::Base
       members = enterprise.users.joins(:segments, :groups).where(segments: { id: segment.id }, groups: { id: group_id }).distinct
     end
 
-    csv = User.to_csv users: members, fields: segment.enterprise.fields
+    csv = User.to_csv_with_fields users: members, fields: segment.enterprise.fields
     file = CsvFile.new(user_id: user.id, download_file_name: "#{segment.name}")
 
     file.download_file.attach(io: StringIO.new(csv), filename: "#{file.download_file_name}.csv", content_type: 'text/csv')

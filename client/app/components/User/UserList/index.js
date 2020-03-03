@@ -141,6 +141,12 @@ export function UserList(props, context) {
                   props.deleteUserBegin(rowData.id);
               }
             }]}
+            my_options={{
+              exportButton: true,
+              exportCsv: (columns, data) => {
+                props.exportUsers();
+              }
+            }}
           />
         </Grid>
       </Grid>
@@ -184,6 +190,7 @@ UserList.propTypes = {
   userTotal: PropTypes.number,
   isFetchingUsers: PropTypes.bool,
   deleteUserBegin: PropTypes.func,
+  exportUsers: PropTypes.func,
   handlePagination: PropTypes.func,
   handleOrdering: PropTypes.func,
   handleVisitUserEdit: PropTypes.func,

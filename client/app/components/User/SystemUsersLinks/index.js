@@ -43,6 +43,11 @@ export function SystemUsersLinks(props) {
             to='#'
             label={<DiverstFormattedMessage {...messages.tab.policy} />}
           />
+          <Tab
+            component={WrappedNavLink}
+            to={ROUTES.admin.system.users.import.path()}
+            label='Import Users'
+          />
         </ResponsiveTabs>
       </Paper>
     </React.Fragment>

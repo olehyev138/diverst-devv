@@ -47,16 +47,18 @@ export function GroupMessageListItem(props) {
           {`Submitted by ${groupMessage.owner.first_name} ${groupMessage.owner.last_name}`}
         </Typography>
       </CardContent>
-      { props.links && !props.readonly && (
+      { props.links && (
         <CardActions>
-          <Button
-            size='small'
-            color='primary'
-            to={props.links.groupMessageEdit(newsItem.id)}
-            component={WrappedNavLink}
-          >
-            <DiverstFormattedMessage {...messages.edit} />
-          </Button>
+          {!props.readonly && (
+            <Button
+              size='small'
+              color='primary'
+              to={props.links.groupMessageEdit(newsItem.id)}
+              component={WrappedNavLink}
+            >
+              <DiverstFormattedMessage {...messages.edit} />
+            </Button>
+          )}
           <Button
             size='small'
             to={props.links.groupMessageShow(props.groupId, newsItem.id)}
@@ -64,7 +66,7 @@ export function GroupMessageListItem(props) {
           >
             <DiverstFormattedMessage {...messages.comments} />
           </Button>
-          {props.newsItem.approved !== true ? (
+          {!props.readonly && props.newsItem.approved !== true && (
             <Button
               size='small'
               onClick={() => {
@@ -74,17 +76,19 @@ export function GroupMessageListItem(props) {
             >
               <DiverstFormattedMessage {...messages.approve} />
             </Button>
-          ) : null }
-          <Button
-            size='small'
-            onClick={() => {
-              /* eslint-disable-next-line no-alert, no-restricted-globals */
-              if (confirm(intl.formatMessage(messages.group_delete_confirm)))
-                props.deleteGroupMessageBegin(newsItem.group_message);
-            }}
-          >
-            <DiverstFormattedMessage {...messages.delete} />
-          </Button>
+          )}
+          {!props.readonly && (
+            <Button
+              size='small'
+              onClick={() => {
+                /* eslint-disable-next-line no-alert, no-restricted-globals */
+                if (confirm(intl.formatMessage(messages.group_delete_confirm)))
+                  props.deleteGroupMessageBegin(newsItem.group_message);
+              }}
+            >
+              <DiverstFormattedMessage {...messages.delete} />
+            </Button>
+          )}
         </CardActions>
       )}
     </Card>
