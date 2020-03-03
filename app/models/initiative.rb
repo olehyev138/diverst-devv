@@ -70,6 +70,44 @@ class Initiative < ApplicationRecord
   scope :of_annual_budget, ->(budget_id) {
     joins(:annual_budget).where('`annual_budgets`.`id` = ?', budget_id)
   }
+  scope :joined_events_for_user, ->(user_id) {
+    user = User.find user_id
+
+    merge(user.initiatives.custom_or(user.invited_initiatives))
+  }
+  scope :available_events_for_user, ->(user_id) {
+    # SCOPE AND
+    # ( INVITED OR (
+    #   (IN GROUP OR IN PARTICIPATING GROUP) AND
+    #   (NO SEGMENT OR IN SEGMENT)
+    # ))
+
+    user = User.find user_id
+    group_ids = user.group_ids
+    segment_ids = user.segment_ids
+
+    group_ors = []
+    group_ors << Initiative.sql_where(groups: { id: group_ids })
+    group_ors << Initiative.sql_where(
+        initiative_participating_groups: { group_id: group_ids }
+      )
+
+    segment_ors = []
+    segment_ors << Initiative.sql_where(initiative_segments: { segment_id: nil })
+    segment_ors << Initiative.sql_where(
+        initiative_segments: { segment_id: segment_ids }
+      )
+
+    valid_ors = []
+    valid_ors << Initiative.sql_where(
+        initiative_invitees: { user_id: user_id }
+      )
+    valid_ors << User.sql_where("(#{ group_ors.join(' OR ')}) AND (#{ segment_ors.join(' OR ')})")
+
+    left_joins(:group, :initiative_segments, :initiative_participating_groups, :initiative_invitees)
+        .where(valid_ors.join(' OR '))
+  }
+
   scope :order_recent, -> { order(start: :desc) }
 
   scope :finalized, -> { where(finished_expenses: false) }

@@ -2,8 +2,8 @@ class GroupPolicy < ApplicationPolicy
   def initialize(user, record, params = nil)
     super(user, record, params)
     if Group === record
-      @user_group = record.user_groups.find {|ug| ug.user_id == user.id}
-      @group_leader = record.group_leaders.find {|gl| gl.user_id == user.id}
+      @user_group = record.user_groups.find { |ug| ug.user_id == user.id }
+      @group_leader = record.group_leaders.find { |gl| gl.user_id == user.id }
     end
   end
 

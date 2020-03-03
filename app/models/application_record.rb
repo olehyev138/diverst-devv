@@ -39,16 +39,23 @@ class ApplicationRecord < ActiveRecord::Base
   after_commit on: [:update] do update_elasticsearch_index('update') end
   after_commit on: [:destroy] do update_elasticsearch_index('delete') end
 
-  def self.to_query(*args)
-    if args.present?
-      args.map { |arg| arg.all }
-    else
-      self.all
-    end
+  def self.custom_or(right_raw)
+    left = all
+    right = right_raw.all
+
+    raise ::ArgumentError unless left.klass == right.klass
+
+    l_where_clause = left.where_clause
+    r_where_clause = right.where_clause
+
+    merged = left.merge(right)
+    or_clause = l_where_clause.or(r_where_clause)
+    merged.where_clause = or_clause
+    merged
   end
 
   def self.summ(column)
-    query = to_query
+    query = all
     if query.distinct_value
       query.klass
           .unscoped
@@ -61,7 +68,7 @@ class ApplicationRecord < ActiveRecord::Base
   end
 
   def self.sum_and_count(column)
-    query = to_query
+    query = all
     if query.distinct_value
       query = query.klass
                   .unscoped
