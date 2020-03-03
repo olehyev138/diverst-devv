@@ -44,7 +44,7 @@ export function EventPage(props) {
 
   return (
     <Event
-      currentUserId={currentUser.id}
+      currentUserId={currentUser.user_id}
       createEventCommentBegin={props.createEventCommentBegin}
       deleteEventCommentBegin={props.deleteEventCommentBegin}
       deleteEventBegin={props.deleteEventBegin}

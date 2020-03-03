@@ -17,7 +17,7 @@ import {
 } from 'containers/Event/constants';
 
 import {
-  getEventsSuccess, getEventsError,
+  getEventBegin, getEventsSuccess, getEventsError,
   getEventSuccess, getEventError,
   createEventSuccess, createEventError,
   updateEventSuccess, updateEventError,
@@ -135,7 +135,7 @@ export function* deleteEvent(action) {
 /* event comment */
 export function* deleteEventComment(action) {
   try {
-    yield call(api.initiativeComments.destroy.bind(api.groupMessageComments), action.payload.id);
+    yield call(api.initiativeComments.destroy.bind(api.initiativeComments), action.payload.id);
     yield put(deleteEventCommentSuccess());
     // yield put(push(ROUTES.group.news.index.path(action.payload.group_id)));
     yield put(showSnackbar({ message: 'event comment deleted', options: { variant: 'success' } }));
@@ -148,14 +148,14 @@ export function* deleteEventComment(action) {
 }
 
 export function* createEventComment(action) {
-  // create comment & re-fetch news feed link from server
+  // create comment & re-fetch event from server
 
   try {
-    const payload = { event_comment: action.payload.attributes };
-    const response = yield call(api.initiativeComments.create.bind(api.groupMessageComments), payload);
+    const payload = { initiative_comment: action.payload.attributes };
+    const response = yield call(api.initiativeComments.create.bind(api.initiativeComments), payload);
 
     yield put(createEventCommentSuccess());
-    // yield put(getNewsItemBegin({ id: action.payload.news_feed_link_id }));
+    yield put(getEventBegin({ id: payload.initiative_comment.initiative_id }));
     yield put(showSnackbar({ message: 'Event comment created', options: { variant: 'success' } }));
   } catch (err) {
     yield put(createEventCommentError(err));

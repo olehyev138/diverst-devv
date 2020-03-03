@@ -35,7 +35,7 @@ export function EventCommentFormInner({ classes, handleSubmit, handleChange, han
           <Typography
             paragraph
           >
-            Leave a Comment
+            Tell us about what you learned during this event, what you liked / disliked, etc.
           </Typography>
           <Field
             component={TextField}
@@ -61,19 +61,17 @@ export function EventCommentFormInner({ classes, handleSubmit, handleChange, han
 }
 
 export function EventCommentForm(props) {
-  // No comment editing
-
   const initialValues = {
     user_id: dig(props, 'currentUserId') || undefined,
     initiative_id: dig(props, 'event', 'id') || undefined,
-    content: 'test',
+    content: '',
   };
   return (
     <Formik
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        // pass news_feed_link_id to saga to refetch news_feed_link with new comment
+        // pass initiative_id to saga to refetch news_feed_link with new comment
         props.commentAction({
           initiative_id: dig(props, 'event', 'id') || undefined,
           attributes: values
