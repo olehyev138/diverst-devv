@@ -50,6 +50,7 @@ class ApplicationRecord < ActiveRecord::Base
     right = right_raw.all
 
     raise ::ArgumentError unless left.klass == right.klass
+
     merged = left.merge(right)
 
     l_where_clause = left.where_clause
