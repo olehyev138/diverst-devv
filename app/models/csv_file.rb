@@ -7,8 +7,8 @@ class CsvFile < ApplicationRecord
   # ActiveStorage
   has_one_attached :import_file
   has_one_attached :download_file
-  validates :import_file, attached: true, if: Proc.new { |c| !c.download_file.attached? }
-  validates :download_file, attached: true, if: Proc.new { |c| !c.import_file.attached? }
+  validates :import_file, attached: true, content_type: 'text/csv', if: Proc.new { |c| !c.download_file.attached? }
+  validates :download_file, attached: true, content_type: 'text/csv', if: Proc.new { |c| !c.import_file.attached? }
 
   # TODO Remove after Paperclip to ActiveStorage migration
   has_attached_file :import_file_paperclip, s3_permissions: 'private'
@@ -38,7 +38,7 @@ class CsvFile < ApplicationRecord
   def generate_download_file_name
     return if download_file_name.present?
 
-    download_file_name = download_file.filename.base
+    self.download_file_name = download_file.filename.base
   end
 
   def schedule_users_import

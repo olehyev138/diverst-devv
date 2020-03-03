@@ -11,6 +11,10 @@ module Initiative::Actions
       ['upcoming', 'ongoing', 'past', 'not_archived', 'archived']
     end
 
+    def base_preloads
+      [:pillar, :owner, :budget, :outcome, :expenses, :picture_attachment, :qr_code_attachment]
+    end
+
     def build(diverst_request, params)
       item = super
       annual_budget = diverst_request.user.enterprise.annual_budgets.find_or_create_by(closed: false, group_id: item.group)

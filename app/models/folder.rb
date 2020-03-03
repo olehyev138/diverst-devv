@@ -42,7 +42,7 @@ class Folder < ApplicationRecord
   end
 
   def total_views
-    views.count
+    views.size
   end
 
   private

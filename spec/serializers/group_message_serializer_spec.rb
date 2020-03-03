@@ -6,7 +6,8 @@ RSpec.describe GroupMessageSerializer, type: :serializer do
     create(:group_message_comment, message: group_message)
     serializer = GroupMessageSerializer.new(group_message)
 
-    expect(serializer.serializable_hash[:group]).to_not be_nil
+    expect(serializer.serializable_hash[:group]).to be_nil
+    expect(serializer.serializable_hash[:group_id]).to_not be_nil
     expect(serializer.serializable_hash[:owner]).to_not be_nil
     expect(serializer.serializable_hash[:comments_count]).to eq 1
   end

@@ -1,37 +1,37 @@
 def self.set_fields(primary_fields, other_fields, user, gender: rand(2) == 0 ? "Male" : "Female")
   user.policy_group.update_all_permissions(true) if user.user_role.role_name == "Admin"
 
-  user.info[primary_fields[:gender]] = gender
+  user[primary_fields[:gender]] = gender
 
-  user.info[primary_fields[:title]] = Faker::Job.title
-  user.info[primary_fields[:birth]] = Faker::Date.between(60.years.ago, 18.years.ago)
+  user[primary_fields[:title]] = Faker::Job.title
+  user[primary_fields[:birth]] = Faker::Date.between(60.years.ago, 18.years.ago)
 
   # Have a low chance to have a disability
   if rand(100) < 3
-    user.info[primary_fields[:disabilities]] = primary_fields[:disabilities].options[0]
+    user[primary_fields[:disabilities]] = primary_fields[:disabilities].options[0]
   else
-    user.info[primary_fields[:disabilities]] = primary_fields[:disabilities].options[1]
+    user[primary_fields[:disabilities]] = primary_fields[:disabilities].options[1]
   end
 
   # Pick random stuff for the rest of the fields
   other_fields.each do |field|
     if field.is_a? NumericField
-      user.info[field] = rand(field.min..field.max)
+      user[field] = rand(field.min..field.max)
     elsif field.is_a? SelectField
       index = rand(field.options.count)
-      user.info[field] = field.options[index]
+      user[field] = field.options[index]
     elsif field.is_a? CheckboxField
       if rand(100) < 50
         index = rand(field.options.count)
-        user.info[field] = [field.options[index]]
+        user[field] = [field.options[index]]
 
         # Have a chance to choose check a random 2nd field
         if rand(100) < 30
           second_index = rand(field.options.count)
-          user.info[field] = [field.options[index], field.options[second_index]] if second_index != index
+          user[field] = [field.options[index], field.options[second_index]] if second_index != index
         end
       else
-        user.info[field] = []
+        user[field] = []
       end
     end
   end

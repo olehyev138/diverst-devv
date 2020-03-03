@@ -21,10 +21,15 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import recordSaga from 'utils/recordSaga';
 import * as Notifiers from 'containers/Shared/Notifier/actions';
 import api from 'api/api';
+import AuthService from 'utils/authService';
 
+AuthService.storeJwt = jest.fn();
+AuthService.storeUserData = jest.fn();
+AuthService.discardJwt = jest.fn();
+AuthService.discardUserData = jest.fn();
 api.sessions.create = jest.fn();
 api.sessions.logout = jest.fn();
-api.users.findEnterprise = jest.fn();
+api.enterprises.getAuthEnterprise = jest.fn();
 api.enterprises.getSsoLink = jest.fn();
 api.policyGroups.get = jest.fn();
 window.location.assign = jest.fn();
@@ -61,14 +66,24 @@ describe('Login Saga', () => {
       initialAction
     );
 
+    expect(AuthService.storeJwt).toHaveBeenCalledWith(token);
+    expect(AuthService.storeUserData).toHaveBeenCalledWith(user);
     expect(api.sessions.create).toHaveBeenCalledWith(initialAction.payload);
     expect(dispatched).toEqual(results);
   });
 
   it('should return error from API', async () => {
-    const response = { data: { message: 'ERROR!' } };
+    const response = { response: { data: 'ERROR!' } };
     api.sessions.create.mockImplementation(() => Promise.reject(response));
-    const results = [loginError(response)];
+    const notified = {
+      notification: {
+        key: 1566515890484,
+        message: response.response.data,
+      },
+      type: 'app/Notifier/ENQUEUE_SNACKBAR'
+    };
+    jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
+    const results = [loginError(response), notified];
     const initialAction = { payload: { email: 'test@gmail.com', password: 'password' } };
     const dispatched = await recordSaga(
       login,
@@ -156,7 +171,7 @@ describe('ssoLinkFind Saga', () => {
 });
 
 describe('logout Saga', () => {
-  it('logs user out and sends user to home page', async () => {
+  it('logs user out', async () => {
     api.sessions.logout.mockImplementation(() => Promise.resolve({ data: {} }));
     const notified = {
       notification: {
@@ -166,13 +181,14 @@ describe('logout Saga', () => {
       type: 'app/Notifier/ENQUEUE_SNACKBAR'
     };
     jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
-    const results = [logoutSuccess(), push(ROUTES.session.login.path()), notified];
+    const results = [logoutSuccess(), notified];
     const dispatched = await recordSaga(
       logout,
     );
 
+    expect(AuthService.discardJwt).toHaveBeenCalled();
+    expect(AuthService.discardUserData).toHaveBeenCalled();
     expect(api.sessions.logout).toHaveBeenCalled();
-    expect(window.location.assign).not.toHaveBeenCalled();
     expect(dispatched).toEqual(results);
   });
 
@@ -191,6 +207,8 @@ describe('logout Saga', () => {
       logout,
     );
 
+    expect(AuthService.discardJwt).toHaveBeenCalled();
+    expect(AuthService.discardUserData).toHaveBeenCalled();
     expect(api.sessions.logout).toHaveBeenCalled();
     expect(window.location.assign).toHaveBeenCalledWith('www.diverst.com');
     expect(dispatched).toEqual(results);
@@ -199,11 +217,21 @@ describe('logout Saga', () => {
   it('should return error from API', async () => {
     const response = { response: { data: 'ERROR!' } };
     api.sessions.logout.mockImplementation(() => Promise.reject(response));
-    const results = [logoutError(response), push(ROUTES.session.login.path())];
+    const notified = {
+      notification: {
+        key: 1566515890484,
+        message: 'You have been logged out',
+      },
+      type: 'app/Notifier/ENQUEUE_SNACKBAR'
+    };
+    jest.spyOn(Notifiers, 'showSnackbar').mockReturnValue(notified);
+    const results = [logoutError(response), logoutSuccess(), notified];
     const dispatched = await recordSaga(
       logout,
     );
 
+    expect(AuthService.discardJwt).toHaveBeenCalled();
+    expect(AuthService.discardUserData).toHaveBeenCalled();
     expect(api.sessions.logout).toHaveBeenCalled();
     expect(dispatched).toEqual(results);
   });
@@ -212,29 +240,29 @@ describe('logout Saga', () => {
 describe('findEnterprise Saga', () => {
   it('should get sso redirect link from API', async () => {
     const response = { data: { enterprise: { id: 1, theme: { primary_color: '', secondary_color: '' } } } };
-    api.users.findEnterprise.mockImplementation(() => Promise.resolve(response));
+    api.enterprises.getAuthEnterprise.mockImplementation(() => Promise.resolve(response));
     const results = [findEnterpriseSuccess(), setUserData({ enterprise: response.data.enterprise }, true)];
-    const initialAction = { payload: { email: 'dev@diverst.com' } };
+    const initialAction = { payload: undefined };
     const dispatched = await recordSaga(
       findEnterprise,
       initialAction
     );
 
-    expect(api.users.findEnterprise).toHaveBeenCalledWith(initialAction.payload);
+    expect(api.enterprises.getAuthEnterprise).toHaveBeenCalledWith(initialAction.payload);
     expect(dispatched).toEqual(results);
   });
 
   it('should return error from API', async () => {
     const response = { response: { data: 'ERROR!' } };
-    api.users.findEnterprise.mockImplementation(() => Promise.reject(response));
+    api.enterprises.getAuthEnterprise.mockImplementation(() => Promise.reject(response));
     const results = [findEnterpriseError(response)];
-    const initialAction = { payload: { email: 'dev@diverst.com' } };
+    const initialAction = { payload: undefined };
     const dispatched = await recordSaga(
       findEnterprise,
       initialAction
     );
 
-    expect(api.users.findEnterprise).toHaveBeenCalledWith(initialAction.payload);
+    expect(api.enterprises.getAuthEnterprise).toHaveBeenCalledWith(initialAction.payload);
     expect(dispatched).toEqual(results);
   });
 });

@@ -33,14 +33,6 @@ describe('appReducer', () => {
     expect(appReducer(state, loginSuccess('token'))).toEqual(expected);
   });
 
-  it('handles the loginError action correctly', () => {
-    const expected = produce(state, (draft) => {
-      draft.error = 'error!';
-    });
-
-    expect(appReducer(state, loginError('error!'))).toEqual(expected);
-  });
-
   it('handles the logoutSuccess action correctly', () => {
     const tokenState = produce(state, (draft) => {
       draft.token = 'token';

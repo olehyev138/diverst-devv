@@ -10,6 +10,7 @@ import {
   ErrorLayout,
   GlobalSettingsLayout,
   LoginPage,
+  ForgotPasswordPage,
   HomePage,
   UserGroupListPage,
   AdminGroupListPage,
@@ -19,6 +20,7 @@ import {
   SegmentPage,
   FieldsPage,
   UsersPage,
+  UsersImportPage,
   UserCreatePage,
   UserEditPage,
   GroupHomePage,
@@ -129,6 +131,7 @@ export default function Routes(props) {
     <Switch>
       { /* Session */ }
       <SessionLayout {...expandRoute(ROUTES.session.login)} component={LoginPage} />
+      <SessionLayout {...expandRoute(ROUTES.session.forgotPassword)} component={ForgotPasswordPage} />
 
       { /* User */}
       <UserLayout exact {...expandRoute(ROUTES.user.home)} component={HomePage} />
@@ -210,6 +213,7 @@ export default function Routes(props) {
 
       { /* Admin - System - Users */ }
       <SystemUserLayout exact {...expandRoute(ROUTES.admin.system.users.index)} component={UsersPage} />
+      <SystemUserLayout exact {...expandRoute(ROUTES.admin.system.users.import)} component={UsersImportPage} />
       <SystemUserLayout exact {...expandRoute(ROUTES.admin.system.users.new)} component={UserCreatePage} />
       <SystemUserLayout exact {...expandRoute(ROUTES.admin.system.users.edit)} component={UserEditPage} />
 
