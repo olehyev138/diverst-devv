@@ -48,6 +48,7 @@ export function EventCommentFormInner({ classes, handleSubmit, handleChange, han
             value={values.content}
             label={intl.formatMessage(messages.comment.input)}
             multiline
+            required
           />
         </CardContent>
         <Divider />
