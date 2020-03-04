@@ -147,11 +147,11 @@ export function EventForm(props) {
     location: { default: '' },
     annual_budget_id: { default: '' },
     budget_item_id: { default: '' },
-    pillar_id: { default: '1' },
+    pillar_id: { default: '' },
     owner_id: { default: '' },
-    owner_group_id: { default: '1' }
+    owner_group_id: { default: '' }
   });
-
+  console.log(props);
   return (
     <Formik
       initialValues={initialValues}
