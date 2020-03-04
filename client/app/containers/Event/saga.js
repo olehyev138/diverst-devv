@@ -96,7 +96,7 @@ export function* updateEvent(action) {
     const response = yield call(api.initiatives.update.bind(api.initiatives), payload.initiative.id, payload);
 
     yield put(updateEventSuccess());
-    yield put(push(ROUTES.group.events.index.path(payload.initiative.owner_group_id)));
+    yield put(push(ROUTES.group.events.show.path(payload.initiative.owner_group_id, payload.initiative.id)));
     yield put(showSnackbar({
       message: 'Event updated',
       options: { variant: 'success' }
