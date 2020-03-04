@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
+import Conditional from 'components/Compositions/Conditional';
 import dig from 'object-dig';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
@@ -141,4 +142,4 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(EventsPage);
+)(Conditional(EventsPage, ['currentGroup.permissions.events_view?']));

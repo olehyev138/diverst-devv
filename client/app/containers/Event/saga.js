@@ -44,7 +44,7 @@ export function* getEvents(action) {
 
     // TODO: intl message
     yield put(showSnackbar({
-      message: 'Failed to load events',
+      message: err.response.status === 401 ? 'You do not have permission to view these events' : 'Failed to load events',
       options: { variant: 'warning' }
     }));
   }
