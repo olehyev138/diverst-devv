@@ -1,9 +1,8 @@
 class GroupBasePolicy < ApplicationPolicy
-  attr_accessor :user, :group, :record, :group_leader_role_ids
+  attr_accessor :user, :group, :record, :group_leader_role_ids, :group_leader, :user_group
 
   def initialize(user, context, params = {})
     super(user, context, params)
-
     # Check if it's a collection, a record, or a class
     if context.is_a?(Enumerable) # Collection/Enumerable
       self.group = context.first
@@ -16,18 +15,23 @@ class GroupBasePolicy < ApplicationPolicy
       self.group = context.group
       self.record = context
     end
+
+    if group
+      @group_leader = GroupLeader.where(user_id: user.id, group_id: group.id)
+      @user_group = GroupLeader.where(user_id: user.id, group_id: group.id)
+    end
   end
 
   def is_a_member?
-    UserGroup.where(user_id: user.id, group_id: group.id).exists?
+    user_group.present?
   end
 
   def is_a_accepted_member?
-    UserGroup.where(user_id: user.id, group_id: group.id, accepted_member: true).exists?
+    is_a_member? && user_group.accepted_member?
   end
 
   def is_a_leader?
-    GroupLeader.where(user_id: user.id, group_id: group.id).exists?
+    group_leader.present?
   end
 
   def is_active_member?
@@ -39,7 +43,7 @@ class GroupBasePolicy < ApplicationPolicy
   end
 
   def is_a_pending_member?
-    UserGroup.where(accepted_member: false, user_id: user.id, group_id: @record.id).exists?
+    is_a_member? && !user_group.accepted_member?
   end
 
   def index?
