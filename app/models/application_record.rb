@@ -7,6 +7,11 @@ class ApplicationRecord < ActiveRecord::Base
   include BaseSearch
   include BaseElasticsearch
   include BaseGraph
+  include ActionView::Helpers::DateHelper
+
+  def time_since_creation
+    time_ago_in_words created_at
+  end
 
   def self.inherited(child)
     super

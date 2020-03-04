@@ -47,6 +47,7 @@ export function EventCommentFormInner({ classes, handleSubmit, handleChange, han
             variant='outlined'
             value={values.content}
             label='Comment'
+            multiline
           />
         </CardContent>
         <Divider />

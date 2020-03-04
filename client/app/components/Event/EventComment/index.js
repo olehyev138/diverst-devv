@@ -8,9 +8,9 @@ import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux/';
 
-import { Button, Card, CardActions, CardContent, Typography } from '@material-ui/core';
+import { Button, Card, CardActions, CardContent, Typography, TextField } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import { formatDateTimeString, DateTime } from 'utils/dateTimeHelpers';
+import dig from "object-dig";
 
 const styles = theme => ({
   margin: {
@@ -30,11 +30,11 @@ export function EventComment(props) {
           {(comment.user_id === props.currentUserId) ? 'You' : comment.user_name}
           &ensp;said:
         </Typography>
-        <Typography variant='body1' color='textSecondary'>{comment.content}</Typography>
+        {comment.content.split('\n').map((c, i) => <Typography variant='body1' color='textSecondary'>{c}</Typography>)}
         <br />
-        <Typography variant='overline'>
-          at&ensp;
-          {formatDateTimeString(comment.created_at, DateTime.DATETIME_FULL)}
+        <Typography variant='body1'>
+          {comment.time_since_creation}
+          &ensp;ago
         </Typography>
       </CardContent>
       <CardActions>

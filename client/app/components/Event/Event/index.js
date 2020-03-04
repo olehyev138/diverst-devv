@@ -139,7 +139,7 @@ export function Event(props) {
             &ensp;Comment(s)
           </Typography>
           { /* eslint-disable-next-line arrow-body-style */}
-          {dig(event, 'comments') && event.comments.map((comment, i) => {
+          {dig(event, 'comments').sort((a, b) => a.created_at < b.created_at) && event.comments.map((comment, i) => {
             return (
               <EventComment
                 key={comment.id}
