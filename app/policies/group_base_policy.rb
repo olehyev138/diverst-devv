@@ -17,8 +17,8 @@ class GroupBasePolicy < ApplicationPolicy
     end
 
     if group
-      @group_leader = GroupLeader.where(user_id: user.id, group_id: group.id)
-      @user_group = GroupLeader.where(user_id: user.id, group_id: group.id)
+      @group_leader = GroupLeader.find_by(user_id: user.id, group_id: group.id)
+      @user_group = UserGroup.find_by(user_id: user.id, group_id: group.id)
     end
   end
 
