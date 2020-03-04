@@ -309,7 +309,7 @@ module ContainsFieldData
     #   u.first_name = ""
     #   u.field_data.first.data = ""
     def create_prototype(field_definer)
-      new = self.new(FIELD_DEFINER_NAME.to_sym => field_definer)
+      new = self.new(self::FIELD_DEFINER_NAME.to_sym => field_definer)
       new.field_data = new.prototype_fields
       new
     end
