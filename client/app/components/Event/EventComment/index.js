@@ -10,7 +10,8 @@ import { compose } from 'redux/';
 
 import { Button, Card, CardActions, CardContent, Typography, TextField } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import dig from "object-dig";
+import { injectIntl, intlShape } from 'react-intl';
+import messages from 'containers/Event/messages';
 
 const styles = theme => ({
   margin: {
@@ -20,21 +21,24 @@ const styles = theme => ({
 });
 
 export function EventComment(props) {
-  const { classes, comment } = props;
+  const { classes, comment, intl } = props;
   const today = new Date();
 
   return (
     <Card className={classes.margin}>
       <CardContent>
         <Typography variant='overline'>
-          {(comment.user_id === props.currentUserId) ? 'You' : comment.user_name}
-          &ensp;said:
+          {(comment.user_id === props.currentUserId) ? intl.formatMessage(messages.comment.you) : comment.user_name}
+          &ensp;
+          {intl.formatMessage(messages.comment.said)}
         </Typography>
-        {comment.content.split('\n').map((c, i) => <Typography variant='body1' color='textSecondary'>{c}</Typography>)}
+        {/* eslint-disable-next-line react/no-array-index-key */}
+        {comment.content.split('\n').map((c, i) => <Typography variant='body1' color='textSecondary' key={i}>{c}</Typography>)}
         <br />
         <Typography variant='body1'>
           {comment.time_since_creation}
-          &ensp;ago
+          &ensp;
+          {intl.formatMessage(messages.comment.ago)}
         </Typography>
       </CardContent>
       <CardActions>
@@ -42,11 +46,11 @@ export function EventComment(props) {
           size='small'
           onClick={() => {
             /* eslint-disable-next-line no-alert, no-restricted-globals */
-            if (confirm('Delete comment?'))
+            if (confirm(intl.formatMessage(messages.comment.deleteconfirm)))
               props.deleteEventCommentBegin({ initiative_id: comment.initiative_id, id: comment.id });
           }}
         >
-          Delete
+          {intl.formatMessage(messages.comment.delete)}
         </Button>
       </CardActions>
     </Card>
@@ -54,6 +58,7 @@ export function EventComment(props) {
 }
 
 EventComment.propTypes = {
+  intl: intlShape,
   classes: PropTypes.object,
   comment: PropTypes.object,
   deleteEventCommentBegin: PropTypes.func,
@@ -62,6 +67,7 @@ EventComment.propTypes = {
 };
 
 export default compose(
+  injectIntl,
   memo,
   withStyles(styles)
 )(EventComment);
