@@ -7,7 +7,7 @@ RSpec.describe UserRolePolicy, type: :policy do
   let(:group) { create(:group, enterprise: enterprise) }
   let(:user_role) { create(:user_role) }
 
-  subject { UserRolePolicy.new(user, user_role) }
+  subject { UserRolePolicy.new(user.reload, user_role) }
 
   before {
     user.policy_group.manage_all = false

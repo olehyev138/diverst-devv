@@ -8,7 +8,7 @@ RSpec.describe MetricsDashboardPolicy, type: :policy do
   let(:metrics_dashboards) { create_list(:metrics_dashboards, 10, enterprise: enterprise2) }
   let(:policy_scope) { MetricsDashboardPolicy::Scope.new(user, MetricsDashboard).resolve }
 
-  subject { MetricsDashboardPolicy.new(user, metrics_dashboard) }
+  subject { MetricsDashboardPolicy.new(user.reload, metrics_dashboard) }
 
   before {
     no_access.policy_group.manage_all = false

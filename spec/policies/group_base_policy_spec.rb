@@ -5,7 +5,7 @@ RSpec.describe GroupBasePolicy, type: :policy do
   let(:user) { no_access }
   let(:group) { create(:group, owner: user, enterprise_id: user.enterprise_id) }
 
-  subject { described_class.new(user, [group, group]) }
+  subject { described_class.new(user.reload, [group, group]) }
 
   before do
     no_access.policy_group.manage_all = false

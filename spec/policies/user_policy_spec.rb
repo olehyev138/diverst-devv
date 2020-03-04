@@ -6,7 +6,7 @@ RSpec.describe UserPolicy, type: :policy do
   let(:other_user) { create(:user, enterprise: enterprise) }
   let(:policy_scope) { UserPolicy::Scope.new(user, User).resolve }
 
-  subject { UserPolicy.new(user, other_user) }
+  subject { UserPolicy.new(user.reload, other_user) }
 
   before {
     user.policy_group.manage_all = false

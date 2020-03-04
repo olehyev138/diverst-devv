@@ -7,7 +7,7 @@ RSpec.describe GroupNewsLinkPolicy, type: :policy do
   let(:group) { create :group, enterprise: enterprise }
   let(:news_link) { create(:news_link, group: group, author: user) }
 
-  subject { GroupNewsLinkPolicy.new(user, [group, news_link]) }
+  subject { GroupNewsLinkPolicy.new(user.reload, [group, news_link]) }
 
   before {
     no_access.policy_group.manage_all = false
