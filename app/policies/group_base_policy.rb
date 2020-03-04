@@ -106,8 +106,6 @@ class GroupBasePolicy < ApplicationPolicy
         ['public', 'global', 'non-members', 'group', 'managers_only', 'leaders_only'].include?(group[group_visibility_setting]) : true
   end
 
-  protected
-
   def is_a_manager?(permission)
     return true if is_admin_manager?(permission)
 

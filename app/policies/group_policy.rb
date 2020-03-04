@@ -137,11 +137,11 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def is_a_pending_member?
-    @user_group.accepted_member == false
+    is_a_member? && @user_group.accepted_member == false
   end
 
   def is_an_accepted_member?
-    @user_group.accepted_member == true
+    is_a_member? && @user_group.accepted_member == true
   end
 
   def is_a_member?
@@ -213,8 +213,6 @@ class GroupPolicy < ApplicationPolicy
     # group member
     is_a_member? && @policy_group.group_settings_manage?
   end
-
-  protected
 
   def has_group_leader_permissions?(permission)
     return false unless is_a_leader?
