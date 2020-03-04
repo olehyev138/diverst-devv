@@ -13,7 +13,7 @@ import saga from 'containers/Group/GroupMembers/saga';
 
 import {
   getMembersBegin, deleteMemberBegin,
-  groupMembersUnmount
+  groupMembersUnmount, exportMembersBegin
 } from 'containers/Group/GroupMembers/actions';
 import {
   selectPaginatedMembers, selectMemberTotal,
@@ -95,6 +95,17 @@ export function GroupMemberListPage(props) {
     }
   };
 
+  const exportMembers = () => {
+    if (groupId) {
+      const newParams = {
+        ...params,
+        group_id: groupId,
+        query_scopes: getScopes({})
+      };
+      props.exportMembersBegin(newParams);
+    }
+  };
+
   const handleChangeTab = (type) => {
     setType(type);
     if (MemberTypes.includes(type))
@@ -157,6 +168,7 @@ export function GroupMemberListPage(props) {
         isFetchingMembers={props.isFetchingMembers}
         groupId={groupId}
         deleteMemberBegin={props.deleteMemberBegin}
+        exportMembersBegin={exportMembers}
         links={links}
         setParams={params}
         params={params}
@@ -180,6 +192,7 @@ GroupMemberListPage.propTypes = {
   getMembersBegin: PropTypes.func,
   deleteMemberBegin: PropTypes.func,
   groupMembersUnmount: PropTypes.func,
+  exportMembersBegin: PropTypes.func,
   memberList: PropTypes.array,
   memberTotal: PropTypes.number,
   isFetchingMembers: PropTypes.bool
@@ -194,6 +207,7 @@ const mapStateToProps = createStructuredSelector({
 const mapDispatchToProps = {
   getMembersBegin,
   deleteMemberBegin,
+  exportMembersBegin,
   groupMembersUnmount
 };
 

@@ -4,7 +4,7 @@
  *
  */
 
-import React, { memo, useRef, useEffect } from 'react';
+import React, { memo, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { FormattedMessage } from 'react-intl';
@@ -14,20 +14,22 @@ import * as Yup from 'yup';
 
 import { withStyles } from '@material-ui/core/styles';
 import withWidth from '@material-ui/core/withWidth';
-import {
-  Button, Card, CardActions, CardContent, Grid, TextField, Hidden, Box
-} from '@material-ui/core';
-import LockOpen from '@material-ui/icons/LockOpen';
 
-/* TODO: input labels, validation with yup, disabled logic, logo, locale toggle  */
+import { Button, Card, CardActions, CardContent, Grid, TextField, Hidden, Box } from '@material-ui/core';
+
+import LockOpen from '@material-ui/icons/LockOpen';
 
 import messages from 'containers/Session/LoginPage/messages';
 
+import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import Logo from 'components/Shared/Logo';
+
+import { ROUTES } from 'containers/Shared/Routes/constants';
 
 const styles = theme => ({
   card: {
     width: '100%',
+    borderColor: theme.palette.primary.main,
   },
   cardContent: {
     textAlign: 'center',
@@ -45,85 +47,106 @@ const styles = theme => ({
 
 /* eslint-disable indent, object-curly-newline */
 export function LoginFormInner({
-                                 handleSubmit, handleChange, handleBlur, errors,
-                                 touched, values, classes, width
-                               }) {
+ handleSubmit, handleChange, handleBlur, errors,
+ touched, values, classes, width, setFieldValue, ...rest
+}) {
+  const passwordRef = useRef();
+
+  useEffect(() => {
+    if (rest.loginSuccess === false && !!values.email) {
+      setFieldValue('password', '');
+      if (passwordRef.current)
+        passwordRef.current.focus();
+    }
+  }, [rest.loginSuccess]);
+
   return (
-    <Card raised className={classes.card}>
-      <Form noValidate>
-        <CardContent className={classes.cardContent}>
-          <Logo coloredDefault maxHeight='60px' />
-          <Box pb={2} />
-          <Field
-            component={TextField}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            value={values.email}
-            autoFocus={!values.email}
-            fullWidth
-            disabled={false}
-            variant='outlined'
-            id='email'
-            name='email'
-            type='email'
-            label={<FormattedMessage {...messages.email} />}
-            margin='normal'
-            autoComplete='off'
-            error={errors.email && touched.email}
-            helperText={errors.email && touched.email ? errors.email : null}
-          />
-          <Field
-            component={TextField}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            value={values.password}
-            autoFocus={!!values.email}
-            fullWidth
-            disabled={false}
-            variant='outlined'
-            id='password'
-            name='password'
-            type='password'
-            label={<FormattedMessage {...messages.password} />}
-            margin='normal'
-            autoComplete='off'
-            error={errors.password && touched.password}
-            helperText={errors.password && touched.password ? errors.password : null}
-          />
-        </CardContent>
-        <CardActions className={classes.cardActions}>
-          <Grid container alignItems='center'>
-            <Grid item xs={false} sm={4} />
-            <Grid item align={width === 'xs' ? 'left' : 'center'} xs={4} sm={4}>
-              <Button
-                classes={{
-                  label: classes.submitButtonLabel
-                }}
-                type='submit'
-                color='primary'
-                size='large'
-                disabled={!values.email || !values.password}
-                variant='contained'
-              >
-                <Hidden xsDown>
-                  <LockOpen />
-                </Hidden>
-                {<FormattedMessage {...messages.login} />}
-              </Button>
+    <Box boxShadow={4} borderRadius={4} width='100%'>
+      <Card raised className={classes.card} variant='outlined'>
+        <Form noValidate>
+          <CardContent className={classes.cardContent}>
+            <Logo coloredDefault maxHeight='60px' />
+            <Box pb={2} />
+            <Field
+              component={TextField}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              value={values.email}
+              autoFocus={!values.email}
+              fullWidth
+              disabled={rest.isLoggingIn}
+              variant='outlined'
+              id='email'
+              name='email'
+              type='email'
+              label={<FormattedMessage {...messages.email} />}
+              margin='normal'
+              autoComplete='off'
+              error={errors.email && touched.email}
+              helperText={errors.email && touched.email ? errors.email : null}
+            />
+            <Field
+              component={TextField}
+              inputRef={passwordRef}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              value={values.password}
+              autoFocus={!!values.email}
+              fullWidth
+              disabled={rest.isLoggingIn}
+              variant='outlined'
+              id='password'
+              name='password'
+              type='password'
+              label={<FormattedMessage {...messages.password} />}
+              margin='normal'
+              autoComplete='off'
+              error={errors.password && touched.password}
+              helperText={errors.password && touched.password ? errors.password : null}
+            />
+          </CardContent>
+          <CardActions className={classes.cardActions}>
+            <Grid container alignItems='center'>
+              <Grid item xs={false} sm={4} />
+              <Grid item align={width === 'xs' ? 'left' : 'center'} xs={4} sm={4}>
+                <Button
+                  classes={{
+                    label: classes.submitButtonLabel
+                  }}
+                  type='submit'
+                  color='primary'
+                  size='large'
+                  disabled={!values.email || !values.password || rest.isLoggingIn}
+                  variant='contained'
+                  startIcon={(
+                    <Hidden xsDown>
+                      <LockOpen />
+                    </Hidden>
+                  )}
+                >
+                  {<FormattedMessage {...messages.login} />}
+                </Button>
+              </Grid>
+              <Grid item align='right' xs={8} sm={4}>
+                <Button
+                  component={WrappedNavLink}
+                  to={{
+                    pathname: ROUTES.session.forgotPassword.path(),
+                    state: { email: values.email }
+                  }}
+                  color='primary'
+                  size='small'
+                  variant='text'
+                  disabled={rest.isLoggingIn}
+                >
+                  {<FormattedMessage {...messages.forgotPassword} />}
+                </Button>
+              </Grid>
             </Grid>
-            <Grid item align='right' xs={8} sm={4}>
-              <Button
-                color='primary'
-                size='small'
-                variant='text'
-              >
-                {<FormattedMessage {...messages.forgotPassword} />}
-              </Button>
-            </Grid>
-          </Grid>
-        </CardActions>
-      </Form>
-    </Card>
+          </CardActions>
+        </Form>
+      </Card>
+    </Box>
   );
 }
 
@@ -140,31 +163,8 @@ function LoginForm(props, context) {
       .required(intl.formatMessage(messages.invalidPassword))
   });
 
-  const form = useRef();
-
-  // Use React hook (as this is a functional component) to merge local validation errors with API validation errors
-  useEffect(() => {
-    if (form.current)
-      form.current.setErrors({ ...form.current.state.errors, ...props.formErrors });
-  });
-
-  const Form = React.forwardRef((props, ref) => {
-    const clone = Object.assign({}, props);
-    delete clone.children;
-
-    return (
-      <Formik
-        {...clone}
-      >
-        {/* eslint-disable-next-line react/prop-types */}
-        {props.children}
-      </Formik>
-    );
-  });
-
   return (
-    <Form
-      ref={form}
+    <Formik
       initialValues={{
         email: props.email,
         password: ''
@@ -176,8 +176,8 @@ function LoginForm(props, context) {
         props.loginBegin(values);
       }}
     >
-      {props => <LoginFormInner {...props} classes={classes} width={width} />}
-    </Form>
+      {formikProps => <LoginFormInner {...props} {...formikProps} classes={classes} width={width} />}
+    </Formik>
   );
 }
 
@@ -187,9 +187,12 @@ LoginFormInner.propTypes = {
   handleSubmit: PropTypes.func,
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
+  setFieldValue: PropTypes.func,
   errors: PropTypes.object,
   touched: PropTypes.object,
-  values: PropTypes.object
+  values: PropTypes.object,
+  isLoggingIn: PropTypes.bool,
+  loginSuccess: PropTypes.bool,
 };
 
 LoginForm.propTypes = {
@@ -197,10 +200,8 @@ LoginForm.propTypes = {
   width: PropTypes.string,
   loginBegin: PropTypes.func,
   email: PropTypes.string,
-  formErrors: PropTypes.shape({
-    email: PropTypes.string,
-    password: PropTypes.string,
-  }),
+  isLoggingIn: PropTypes.bool,
+  loginSuccess: PropTypes.bool,
 };
 
 LoginForm.contextTypes = {

@@ -7,6 +7,9 @@ export const ROUTES = {
     login: {
       path: () => '/login',
     },
+    forgotPassword: {
+      path: () => '/forgot',
+    },
   },
 
   // User
@@ -648,6 +651,9 @@ export const ROUTES = {
         },
         edit: {
           path: (userId = ':user_id') => `/admin/system/users/${userId}/edit`,
+        },
+        import: {
+          path: () => '/admin/system/users/import',
         },
         roles: {
           index: {

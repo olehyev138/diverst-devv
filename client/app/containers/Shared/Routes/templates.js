@@ -16,6 +16,7 @@ import EmailLayout from 'containers/Layouts/GlobalSettingsLayout/EmailLayout/Loa
 
 /* Session */
 import LoginPage from 'containers/Session/LoginPage/Loadable';
+import ForgotPasswordPage from 'containers/Session/ForgotPasswordPage/Loadable';
 
 /* User */
 import HomePage from 'containers/User/HomePage/Loadable';
@@ -74,6 +75,7 @@ import SponsorEditPage from 'containers/Branding/Sponsor/SponsorEditPage/Loadabl
 
 /* Admin - System - User */
 import UsersPage from 'containers/User/UsersPage/Loadable';
+import UsersImportPage from 'containers/User/UsersImportPage/Loadable';
 import UserCreatePage from 'containers/User/UserCreatePage/Loadable';
 import UserEditPage from 'containers/User/UserEditPage/Loadable';
 
@@ -165,6 +167,7 @@ export {
   ErrorLayout,
   GlobalSettingsLayout,
   LoginPage,
+  ForgotPasswordPage,
   HomePage,
   UserGroupListPage,
   AdminGroupListPage,
@@ -174,6 +177,7 @@ export {
   SegmentPage,
   FieldsPage,
   UsersPage,
+  UsersImportPage,
   UserCreatePage,
   UserEditPage,
   GroupHomePage,

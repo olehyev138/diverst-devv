@@ -55,14 +55,16 @@ export function NewsLinkListItem(props) {
       </CardContent>
       {props.links && props.newsItem && (
         <CardActions>
-          <Button
-            size='small'
-            color='primary'
-            to={props.links.newsLinkEdit(newsItem.id)}
-            component={WrappedNavLink}
-          >
-            <DiverstFormattedMessage {...messages.edit} />
-          </Button>
+          {!props.readonly && (
+            <Button
+              size='small'
+              color='primary'
+              to={props.links.newsLinkEdit(newsItem.id)}
+              component={WrappedNavLink}
+            >
+              <DiverstFormattedMessage {...messages.edit} />
+            </Button>
+          )}
           <Button
             size='small'
             to={links.newsLinkShow(props.groupId, newsItem.id)}
@@ -70,7 +72,7 @@ export function NewsLinkListItem(props) {
           >
             Comments
           </Button>
-          {props.newsItem.approved !== true ? (
+          {!props.readonly && props.newsItem.approved !== true && (
             <Button
               size='small'
               onClick={() => {
@@ -80,17 +82,19 @@ export function NewsLinkListItem(props) {
             >
               Approve
             </Button>
-          ) : null }
-          <Button
-            size='small'
-            onClick={() => {
-              /* eslint-disable-next-line no-alert, no-restricted-globals */
-              if (confirm('Delete news link?'))
-                props.deleteNewsLinkBegin(newsItem.news_link);
-            }}
-          >
-            Delete
-          </Button>
+          )}
+          {!props.readonly && (
+            <Button
+              size='small'
+              onClick={() => {
+                /* eslint-disable-next-line no-alert, no-restricted-globals */
+                if (confirm('Delete news link?'))
+                  props.deleteNewsLinkBegin(newsItem.news_link);
+              }}
+            >
+              Delete
+            </Button>
+          )}
         </CardActions>
       )}
     </Card>

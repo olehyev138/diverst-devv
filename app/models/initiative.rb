@@ -229,7 +229,11 @@ class Initiative < ApplicationRecord
   end
 
   def current_expenses_sum
-    expenses.sum(:amount) || 0
+    if association(:expenses).loaded?
+      expenses.to_a.sum(&:amount)
+    else
+      expenses.sum(:amount) || 0
+    end
   end
 
   def has_no_estimated_funding?
@@ -300,7 +304,7 @@ class Initiative < ApplicationRecord
     .map do |update|
       [
         update.reported_for_date.to_i * 1000, # We multiply by 1000 to get milliseconds for highcharts
-        update.info[field]
+        update[field]
       ]
     end
   end
@@ -311,7 +315,7 @@ class Initiative < ApplicationRecord
       values = self.updates.where('report_date >= ?', from).where('report_date <= ?', to).order(created_at: :asc).map do |update|
         {
           x: update.reported_for_date.to_i * 1000, # We multiply by 1000 to get milliseconds for highcharts
-          y: update.info[field],
+          y: update[field],
           children: {}
         }
       end

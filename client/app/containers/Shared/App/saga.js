@@ -52,9 +52,11 @@ export function* login(action) {
     yield put(push(ROUTES.user.home.path()));
   } catch (err) {
     yield put(loginError(err));
+    yield put(showSnackbar({ message: err.response.data, options: { variant: 'error', autoHideDuration: 2500 } }));
   }
 }
 
+// TODO: Make this work
 export function* ssoLogin(action) {
   try {
     axios.defaults.headers.common['Diverst-UserToken'] = action.payload.userToken;
@@ -95,20 +97,24 @@ export function* logout() {
 
     if (response.data.logout_link)
       window.location.assign(response.data.logout_link);
-    else {
-      yield put(push(ROUTES.session.login.path()));
-      yield put(showSnackbar({ message: 'You have been logged out' }));
-    }
+    else
+      yield put(showSnackbar({ message: 'You have been logged out', options: { variant: 'info', autoHideDuration: 2500 } }));
   } catch (err) {
     yield put(logoutError(err));
-    yield put(push(ROUTES.session.login.path()));
+
+    // Even if logout fails clear the local data
+    yield call(AuthService.discardJwt);
+    yield call(AuthService.discardUserData);
+    yield put(logoutSuccess());
+
+    yield put(showSnackbar({ message: 'You have been logged out', options: { variant: 'info', autoHideDuration: 2500 } }));
   }
 }
 
 export function* findEnterprise(action) {
   try {
     // Find enterprise and dispatch setEnterprise action
-    const response = yield call(api.users.findEnterprise.bind(api.users), action.payload);
+    const response = yield call(api.enterprises.getAuthEnterprise.bind(api.enterprises), action.payload);
     const { enterprise } = response.data;
     yield put(findEnterpriseSuccess());
 

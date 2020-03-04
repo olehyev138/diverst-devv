@@ -39,7 +39,7 @@ class UserSerializer < ApplicationRecordSerializer
     fields.each do |field|
       fields_hash << {
         title: field.title,
-        value: field.string_value(object.info[field])
+        value: field.string_value(object[field])
       }
     end
 
