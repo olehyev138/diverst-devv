@@ -8,7 +8,7 @@ import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux/';
 
-import { Button, Card, CardActions, CardContent, Typography, TextField } from '@material-ui/core';
+import { Button, Card, CardActions, CardContent, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Event/messages';
@@ -22,7 +22,6 @@ const styles = theme => ({
 
 export function EventComment(props) {
   const { classes, comment, intl } = props;
-  const today = new Date();
 
   return (
     <Card className={classes.margin}>

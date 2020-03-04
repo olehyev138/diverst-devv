@@ -136,7 +136,8 @@ export function Event(props) {
           <Box mb={4} />
           <Typography variant='h6'>
             {event.total_comments}
-            &ensp;Comment(s)
+            &ensp;
+            <DiverstFormattedMessage {...messages.comment.total_comments} />
           </Typography>
           { /* eslint-disable-next-line arrow-body-style */}
           {dig(event, 'comments').sort((a, b) => a.created_at < b.created_at) && event.comments.map((comment, i) => {

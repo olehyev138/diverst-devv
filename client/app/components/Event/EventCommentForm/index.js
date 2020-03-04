@@ -72,7 +72,7 @@ export function EventCommentForm(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        // pass initiative_id to saga to refetch event with new comment
+        // pass initiative_id to saga to refresh event with new comment
         props.commentAction({
           initiative_id: dig(props, 'event', 'id') || undefined,
           attributes: values

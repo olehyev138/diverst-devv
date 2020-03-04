@@ -25,8 +25,8 @@ export default defineMessages({
     label: {
       id: `${scope}.comment.form.label`,
     },
-    total_commments: {
-      id: `${scope}.comment.total_commments`,
+    total_comments: {
+      id: `${scope}.comment.total_comments`,
     },
     said: {
       id: `${scope}.comment.said`,
