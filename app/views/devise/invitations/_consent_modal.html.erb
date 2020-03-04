@@ -2,27 +2,31 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-body">
-          <h3>
-            By submitting this form I understand that I have opted to receive 
-            regular updates from the Employee Resource Group(s).
-          </h3>
-          <p>
-            Anyone, regardless of age, gender, ethnicity, sexual orientation, is 
-            welcome to join any Employee Resource Group at <%= resource.enterprise.name %>.
-            Personal data submitted with this form is for internal use only and will be treated
-            as confidential information.
-          </p>
+          <% if resource.enterprise.onboarding_pop_up_content.present? %>
+            <%= raw resource.enterprise.onboarding_pop_up_content %>
+          <% else %>
+            <h3>
+              By submitting this form I understand that I have opted to receive 
+              regular updates from the Employee Resource Group(s).
+            </h3>
+            <p>
+              Anyone, regardless of age, gender, ethnicity, sexual orientation, is 
+              welcome to join any Employee Resource Group at <%= resource.enterprise.name %>.
+              Personal data submitted with this form is for internal use only and will be treated
+              as confidential information.
+            </p>
 
-          <p>
-            Employee Resource Networking Groups are available to any interested employee.
-            Participation must not be exclusionary. Members must support the objectives of the 
-            group and participate within <%= resource.enterprise.name %>'s guidelines. 
-            <%= resource.enterprise.name %> encourages employees that do not belong to a specific 
-            group(e.g., women, people of color) to become members of those groups and help the 
-            group by participating in events and/or meetings.
-             Participants are trusted to manage their time of involvement with the Employee Resource 
-             Groups and not adversely impact their job performance or responsibilites. 
-          </p>
+            <p>
+              Employee Resource Networking Groups are available to any interested employee.
+              Participation must not be exclusionary. Members must support the objectives of the 
+              group and participate within <%= resource.enterprise.name %>'s guidelines. 
+              <%= resource.enterprise.name %> encourages employees that do not belong to a specific 
+              group(e.g., women, people of color) to become members of those groups and help the 
+              group by participating in events and/or meetings.
+              Participants are trusted to manage their time of involvement with the Employee Resource 
+              Groups and not adversely impact their job performance or responsibilites. 
+            </p>
+          <% end %>  
         </div>
         <div class="modal-footer">
             <label class="control">

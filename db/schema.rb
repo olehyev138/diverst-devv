@@ -356,8 +356,9 @@ ActiveRecord::Schema.define(version: 20200304152851) do
     t.integer  "polls_count",                           limit: 4
     t.integer  "users_count",                           limit: 4
     t.boolean  "slack_enabled",                                       default: false
+    t.boolean  "onboarding_consent_enabled",                          default: false
     t.boolean  "enable_outlook",                                      default: false
-    t.text     "onboarding_pop_content",                limit: 65535
+    t.text     "onboarding_pop_up_content",             limit: 65535
   end
 
   create_table "expense_categories", force: :cascade do |t|

@@ -88,8 +88,8 @@
 
       <%= f.input :cdo_message, label: "Onboarding sponsor message" %>
       <%= f.input :onboarding_sponsor_media, label: "Upload onboarding video" %>
-
-        <%= f.input :privacy_statement, as: :ckeditor, label: "#{c_t(:privacy_statement)}" %>
+      <%= f.input :onboarding_pop_up_content, as: :ckeditor, label: "Onboarding Pop Up" %>
+      <%= f.input :privacy_statement, as: :ckeditor, label: "#{c_t(:privacy_statement)}" %>
 
         <%= f.button :submit, "Save sponsor info" %>
       <% end %>
