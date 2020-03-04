@@ -47,19 +47,19 @@ class ConvertToActiveStorage < ActiveRecord::Migration[5.2]
             updated_at = instance.try(:updated_at).to_datetime || DateTime.current
 
             active_storage_blob_statement.execute(
-              key(instance, attachment),
-              instance.send("#{attachment}_file_name"),
-              instance.send("#{attachment}_content_type"),
-              instance.send("#{attachment}_file_size"),
-              checksum(instance.send("#{attachment}_paperclip")),
-              updated_at
+                key(instance, attachment),
+                instance.send("#{attachment}_file_name"),
+                instance.send("#{attachment}_content_type"),
+                instance.send("#{attachment}_file_size"),
+                checksum(instance.send("#{attachment}_paperclip")),
+                updated_at
             )
 
             active_storage_attachment_statement.execute(
-              attachment,
-              model.name,
-              instance.id,
-              updated_at
+                attachment,
+                model.name,
+                instance.id,
+                updated_at
             )
           end
         end
@@ -90,4 +90,7 @@ class ConvertToActiveStorage < ActiveRecord::Migration[5.2]
       Digest::MD5.base64digest(File.read(url))
     end
   end
+
 end
+
+

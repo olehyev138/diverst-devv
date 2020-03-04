@@ -1,4 +1,4 @@
-class UpdateUserAndEnterpriseTimeZones < ActiveRecord::Migration[5.1]
+class UpdateUserAndEnterpriseTimeZones < ActiveRecord::Migration[5.2]
   def up
     User.find_each do |user|
       fix_time_zone(user)
