@@ -128,19 +128,7 @@ export function GroupLinks(props) {
 
   const permission = name => dig(currentGroup, 'permissions', name);
 
-  const EventButton = WithPermission(() => (
-    <Button
-      component={WrappedNavLink}
-      to={ROUTES.group.events.index.path(rs.params('group_id'))}
-      className={classes.navLink}
-      activeClassName={classes.navLinkActive}
-    >
-      <Hidden smDown>
-        <EventIcon className={classes.navIcon} />
-      </Hidden>
-      <DiverstFormattedMessage {...ROUTES.group.events.index.data.titleMessage} />
-    </Button>
-  ));
+  const PermissionButtons = WithPermission(Button);
 
   const NavLinks = () => (
     <div>
@@ -192,9 +180,18 @@ export function GroupLinks(props) {
             <DiverstFormattedMessage {...ROUTES.group.members.index.data.titleMessage} />
           </Button>
 
-          <EventButton
+          <PermissionButtons
+            component={WrappedNavLink}
+            to={ROUTES.group.events.index.path(rs.params('group_id'))}
+            className={classes.navLink}
+            activeClassName={classes.navLinkActive}
             show={permission('events_view?')}
-          />
+          >
+            <Hidden smDown>
+              <EventIcon className={classes.navIcon} />
+            </Hidden>
+            <DiverstFormattedMessage {...ROUTES.group.events.index.data.titleMessage} />
+          </PermissionButtons>
 
           <Button
             component={WrappedNavLink}
