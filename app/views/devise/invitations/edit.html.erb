@@ -140,7 +140,7 @@
             <div id="calendar" data-calendar-data-url="<%= onboarding_calendar_data_user_events_path(invitation_token: params[:invitation_token]) %>"></div>
 
 
-            <h2>Explore your <%= resource.enterprise.custom_text.erg %></h2>
+            <h2>Explore your <%= resource.enterprise.custom_text.erg.pluralize %></h2>
 
             <% resource.enterprise.groups.all_parents.each do |group| %>
               <div class="media-object" data-group-id="<%= group.id %>">
@@ -156,12 +156,12 @@
                         <a
                           class="btn btn-sm btn--primary nested_show"
                           style="cursor: pointer; margin-bottom: 20px;"
-                        id="<%= group.id %>">Show Sub-<%= c_t(:erg).pluralize %></a>
+                        id="<%= group.id %>">Show <%= resource.enterprise.custom_text.sub_erg.pluralize %></a>
 
                         <a
                           class="btn btn-sm btn--primary nested_hide"
                           style="cursor: pointer; margin-bottom: 20px; display:none;"
-                        id="<%= group.id %>">Hide Sub-<%= c_t(:erg).pluralize %></a>
+                        id="<%= group.id %>">Hide <%= resource.enterprise.custom_text.sub_erg.pluralize %></a>
 
                       <% end %>
 
