@@ -3,7 +3,6 @@ class GroupCategory < ApplicationRecord
   has_many :groups, dependent: :nullify
   belongs_to :group_category_type
   belongs_to :enterprise
-
   validates :name, presence: true
 
   def to_s
