@@ -151,7 +151,6 @@ export function EventForm(props) {
     owner_id: { default: '' },
     owner_group_id: { default: '' }
   });
-  console.log(props);
   return (
     <Formik
       initialValues={initialValues}
