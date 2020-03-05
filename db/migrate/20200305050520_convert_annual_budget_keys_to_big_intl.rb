@@ -10,7 +10,7 @@ class ConvertAnnualBudgetKeysToBigIntl < ActiveRecord::Migration[5.2]
     remove_foreign_key "initiatives", "annual_budgets" if foreign_key_exists?("initiatives", "annual_budgets")
 
     # Primary Key
-    change_column :annual_budgets, :id, :bigint
+    change_column :annual_budgets, :id, :bigint, auto_increment: true
 
     # Foreign Key
     change_column :annual_budgets, :group_id, :bigint

@@ -62,122 +62,122 @@ class ConvertKeysToBigInt < ActiveRecord::Migration[5.2]
      remove_foreign_key "views", "resources" if foreign_key_exists?("views", "resources")
 
      ### Primary keys
-     change_column :activities, :id, :bigint
-     change_column :answer_comments, :id, :bigint
-     change_column :answer_expenses, :id, :bigint
-     change_column :answer_upvotes, :id, :bigint
-     change_column :answers, :id, :bigint
-     change_column :api_keys, :id, :bigint
-     change_column :badges, :id, :bigint
-     change_column :budget_items, :id, :bigint
-     change_column :budgets, :id, :bigint
-     change_column :campaign_invitations, :id, :bigint
-     change_column :campaigns, :id, :bigint
-     change_column :campaigns_groups, :id, :bigint
-     change_column :campaigns_managers, :id, :bigint
-     change_column :campaigns_segments, :id, :bigint
-     change_column :checklist_items, :id, :bigint
-     change_column :checklists, :id, :bigint
-     change_column :ckeditor_assets, :id, :bigint
-     change_column :clockwork_database_events, :id, :bigint
-     change_column :csvfiles, :id, :bigint
-     change_column :custom_texts, :id, :bigint
-     change_column :devices, :id, :bigint
-     change_column :email_variables, :id, :bigint
-     change_column :emails, :id, :bigint
-     change_column :enterprise_email_variables, :id, :bigint
-     change_column :enterprises, :id, :bigint
-     change_column :expense_categories, :id, :bigint
-     change_column :expenses, :id, :bigint
-     change_column :field_data, :id, :bigint
-     change_column :fields, :id, :bigint
-     change_column :folder_shares, :id, :bigint
-     change_column :folders, :id, :bigint
-     change_column :frequency_periods, :id, :bigint
-     change_column :graphs, :id, :bigint
-     change_column :group_categories, :id, :bigint
-     change_column :group_category_types, :id, :bigint
-     change_column :group_fields, :id, :bigint
-     change_column :group_leaders, :id, :bigint
-     change_column :group_message_comments, :id, :bigint
-     change_column :group_messages, :id, :bigint
-     change_column :group_messages_segments, :id, :bigint
-     change_column :group_updates, :id, :bigint
-     change_column :groups, :id, :bigint
-     change_column :groups_metrics_dashboards, :id, :bigint
-     change_column :groups_polls, :id, :bigint
-     change_column :initiative_comments, :id, :bigint
-     change_column :initiative_expenses, :id, :bigint
-     change_column :initiative_fields, :id, :bigint
-     change_column :initiative_groups, :id, :bigint
-     change_column :initiative_invitees, :id, :bigint
-     change_column :initiative_participating_groups, :id, :bigint
-     change_column :initiative_segments, :id, :bigint
-     change_column :initiative_updates, :id, :bigint
-     change_column :initiative_users, :id, :bigint
-     change_column :initiatives, :id, :bigint
-     change_column :invitation_segments_groups, :id, :bigint
-     change_column :likes, :id, :bigint
-     change_column :mentoring_interests, :id, :bigint
-     change_column :mentoring_request_interests, :id, :bigint
-     change_column :mentoring_requests, :id, :bigint
-     change_column :mentoring_session_comments, :id, :bigint
-     change_column :mentoring_session_topics, :id, :bigint
-     change_column :mentoring_sessions, :id, :bigint
-     change_column :mentoring_types, :id, :bigint
-     change_column :mentorings, :id, :bigint
-     change_column :mentorship_availabilities, :id, :bigint
-     change_column :mentorship_interests, :id, :bigint
-     change_column :mentorship_ratings, :id, :bigint
-     change_column :mentorship_sessions, :id, :bigint
-     change_column :mentorship_types, :id, :bigint
-     change_column :metrics_dashboards, :id, :bigint
-     change_column :metrics_dashboards_segments, :id, :bigint
-     change_column :mobile_fields, :id, :bigint
-     change_column :news_feed_link_segments, :id, :bigint
-     change_column :news_feed_links, :id, :bigint
-     change_column :news_feeds, :id, :bigint
-     change_column :news_link_comments, :id, :bigint
-     change_column :news_link_photos, :id, :bigint
-     change_column :news_link_segments, :id, :bigint
-     change_column :news_links, :id, :bigint
-     change_column :outcomes, :id, :bigint
-     change_column :pillars, :id, :bigint
-     change_column :policy_group_templates, :id, :bigint
-     change_column :policy_groups, :id, :bigint
-     change_column :poll_responses, :id, :bigint
-     change_column :polls, :id, :bigint
-     change_column :polls_segments, :id, :bigint
-     change_column :questions, :id, :bigint
-     change_column :resources, :id, :bigint
-     change_column :reward_actions, :id, :bigint
-     change_column :rewards, :id, :bigint
-     change_column :samples, :id, :bigint
-     change_column :segment_field_rules, :id, :bigint
-     change_column :segment_group_scope_rule_groups, :id, :bigint
-     change_column :segment_group_scope_rules, :id, :bigint
-     change_column :segment_order_rules, :id, :bigint
-     change_column :segments, :id, :bigint
-     change_column :sessions, :id, :bigint
-     change_column :shared_metrics_dashboards, :id, :bigint
-     change_column :shared_news_feed_links, :id, :bigint
-     change_column :social_link_segments, :id, :bigint
-     change_column :social_network_posts, :id, :bigint
-     change_column :sponsors, :id, :bigint
-     change_column :survey_managers, :id, :bigint
-     change_column :tags, :id, :bigint
-     change_column :themes, :id, :bigint
-     change_column :topic_feedbacks, :id, :bigint
-     change_column :topics, :id, :bigint
-     change_column :twitter_accounts, :id, :bigint
-     change_column :user_groups, :id, :bigint
-     change_column :user_reward_actions, :id, :bigint
-     change_column :user_rewards, :id, :bigint
-     change_column :user_roles, :id, :bigint
-     change_column :users, :id, :bigint
-     change_column :users_segments, :id, :bigint
-     change_column :views, :id, :bigint
-     change_column :yammer_field_mappings, :id, :bigint
+     change_column :activities, :id, :bigint, auto_increment: true
+     change_column :answer_comments, :id, :bigint, auto_increment: true
+     change_column :answer_expenses, :id, :bigint, auto_increment: true
+     change_column :answer_upvotes, :id, :bigint, auto_increment: true
+     change_column :answers, :id, :bigint, auto_increment: true
+     change_column :api_keys, :id, :bigint, auto_increment: true
+     change_column :badges, :id, :bigint, auto_increment: true
+     change_column :budget_items, :id, :bigint, auto_increment: true
+     change_column :budgets, :id, :bigint, auto_increment: true
+     change_column :campaign_invitations, :id, :bigint, auto_increment: true
+     change_column :campaigns, :id, :bigint, auto_increment: true
+     change_column :campaigns_groups, :id, :bigint, auto_increment: true
+     change_column :campaigns_managers, :id, :bigint, auto_increment: true
+     change_column :campaigns_segments, :id, :bigint, auto_increment: true
+     change_column :checklist_items, :id, :bigint, auto_increment: true
+     change_column :checklists, :id, :bigint, auto_increment: true
+     change_column :ckeditor_assets, :id, :bigint, auto_increment: true
+     change_column :clockwork_database_events, :id, :bigint, auto_increment: true
+     change_column :csvfiles, :id, :bigint, auto_increment: true
+     change_column :custom_texts, :id, :bigint, auto_increment: true
+     change_column :devices, :id, :bigint, auto_increment: true
+     change_column :email_variables, :id, :bigint, auto_increment: true
+     change_column :emails, :id, :bigint, auto_increment: true
+     change_column :enterprise_email_variables, :id, :bigint, auto_increment: true
+     change_column :enterprises, :id, :bigint, auto_increment: true
+     change_column :expense_categories, :id, :bigint, auto_increment: true
+     change_column :expenses, :id, :bigint, auto_increment: true
+     change_column :field_data, :id, :bigint, auto_increment: true
+     change_column :fields, :id, :bigint, auto_increment: true
+     change_column :folder_shares, :id, :bigint, auto_increment: true
+     change_column :folders, :id, :bigint, auto_increment: true
+     change_column :frequency_periods, :id, :bigint, auto_increment: true
+     change_column :graphs, :id, :bigint, auto_increment: true
+     change_column :group_categories, :id, :bigint, auto_increment: true
+     change_column :group_category_types, :id, :bigint, auto_increment: true
+     change_column :group_fields, :id, :bigint, auto_increment: true
+     change_column :group_leaders, :id, :bigint, auto_increment: true
+     change_column :group_message_comments, :id, :bigint, auto_increment: true
+     change_column :group_messages, :id, :bigint, auto_increment: true
+     change_column :group_messages_segments, :id, :bigint, auto_increment: true
+     change_column :group_updates, :id, :bigint, auto_increment: true
+     change_column :groups, :id, :bigint, auto_increment: true
+     change_column :groups_metrics_dashboards, :id, :bigint, auto_increment: true
+     change_column :groups_polls, :id, :bigint, auto_increment: true
+     change_column :initiative_comments, :id, :bigint, auto_increment: true
+     change_column :initiative_expenses, :id, :bigint, auto_increment: true
+     change_column :initiative_fields, :id, :bigint, auto_increment: true
+     change_column :initiative_groups, :id, :bigint, auto_increment: true
+     change_column :initiative_invitees, :id, :bigint, auto_increment: true
+     change_column :initiative_participating_groups, :id, :bigint, auto_increment: true
+     change_column :initiative_segments, :id, :bigint, auto_increment: true
+     change_column :initiative_updates, :id, :bigint, auto_increment: true
+     change_column :initiative_users, :id, :bigint, auto_increment: true
+     change_column :initiatives, :id, :bigint, auto_increment: true
+     change_column :invitation_segments_groups, :id, :bigint, auto_increment: true
+     change_column :likes, :id, :bigint, auto_increment: true
+     change_column :mentoring_interests, :id, :bigint, auto_increment: true
+     change_column :mentoring_request_interests, :id, :bigint, auto_increment: true
+     change_column :mentoring_requests, :id, :bigint, auto_increment: true
+     change_column :mentoring_session_comments, :id, :bigint, auto_increment: true
+     change_column :mentoring_session_topics, :id, :bigint, auto_increment: true
+     change_column :mentoring_sessions, :id, :bigint, auto_increment: true
+     change_column :mentoring_types, :id, :bigint, auto_increment: true
+     change_column :mentorings, :id, :bigint, auto_increment: true
+     change_column :mentorship_availabilities, :id, :bigint, auto_increment: true
+     change_column :mentorship_interests, :id, :bigint, auto_increment: true
+     change_column :mentorship_ratings, :id, :bigint, auto_increment: true
+     change_column :mentorship_sessions, :id, :bigint, auto_increment: true
+     change_column :mentorship_types, :id, :bigint, auto_increment: true
+     change_column :metrics_dashboards, :id, :bigint, auto_increment: true
+     change_column :metrics_dashboards_segments, :id, :bigint, auto_increment: true
+     change_column :mobile_fields, :id, :bigint, auto_increment: true
+     change_column :news_feed_link_segments, :id, :bigint, auto_increment: true
+     change_column :news_feed_links, :id, :bigint, auto_increment: true
+     change_column :news_feeds, :id, :bigint, auto_increment: true
+     change_column :news_link_comments, :id, :bigint, auto_increment: true
+     change_column :news_link_photos, :id, :bigint, auto_increment: true
+     change_column :news_link_segments, :id, :bigint, auto_increment: true
+     change_column :news_links, :id, :bigint, auto_increment: true
+     change_column :outcomes, :id, :bigint, auto_increment: true
+     change_column :pillars, :id, :bigint, auto_increment: true
+     change_column :policy_group_templates, :id, :bigint, auto_increment: true
+     change_column :policy_groups, :id, :bigint, auto_increment: true
+     change_column :poll_responses, :id, :bigint, auto_increment: true
+     change_column :polls, :id, :bigint, auto_increment: true
+     change_column :polls_segments, :id, :bigint, auto_increment: true
+     change_column :questions, :id, :bigint, auto_increment: true
+     change_column :resources, :id, :bigint, auto_increment: true
+     change_column :reward_actions, :id, :bigint, auto_increment: true
+     change_column :rewards, :id, :bigint, auto_increment: true
+     change_column :samples, :id, :bigint, auto_increment: true
+     change_column :segment_field_rules, :id, :bigint, auto_increment: true
+     change_column :segment_group_scope_rule_groups, :id, :bigint, auto_increment: true
+     change_column :segment_group_scope_rules, :id, :bigint, auto_increment: true
+     change_column :segment_order_rules, :id, :bigint, auto_increment: true
+     change_column :segments, :id, :bigint, auto_increment: true
+     change_column :sessions, :id, :bigint, auto_increment: true
+     change_column :shared_metrics_dashboards, :id, :bigint, auto_increment: true
+     change_column :shared_news_feed_links, :id, :bigint, auto_increment: true
+     change_column :social_link_segments, :id, :bigint, auto_increment: true
+     change_column :social_network_posts, :id, :bigint, auto_increment: true
+     change_column :sponsors, :id, :bigint, auto_increment: true
+     change_column :survey_managers, :id, :bigint, auto_increment: true
+     change_column :tags, :id, :bigint, auto_increment: true
+     change_column :themes, :id, :bigint, auto_increment: true
+     change_column :topic_feedbacks, :id, :bigint, auto_increment: true
+     change_column :topics, :id, :bigint, auto_increment: true
+     change_column :twitter_accounts, :id, :bigint, auto_increment: true
+     change_column :user_groups, :id, :bigint, auto_increment: true
+     change_column :user_reward_actions, :id, :bigint, auto_increment: true
+     change_column :user_rewards, :id, :bigint, auto_increment: true
+     change_column :user_roles, :id, :bigint, auto_increment: true
+     change_column :users, :id, :bigint, auto_increment: true
+     change_column :users_segments, :id, :bigint, auto_increment: true
+     change_column :views, :id, :bigint, auto_increment: true
+     change_column :yammer_field_mappings, :id, :bigint, auto_increment: true
 
 
      ### Foreign Keys
