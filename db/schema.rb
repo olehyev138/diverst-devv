@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_03_222458) do
+ActiveRecord::Schema.define(version: 2020_03_05_062757) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "name", null: false
@@ -33,7 +33,7 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
-  create_table "activities", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "activities", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.integer "trackable_id"
     t.string "trackable_type"
     t.integer "owner_id"
@@ -49,7 +49,9 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.index ["trackable_id", "trackable_type"], name: "index_activities_on_trackable_id_and_trackable_type"
   end
 
-  create_table "annual_budgets", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "annual_budgets", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+    t.bigint "group_id"
+    t.bigint "enterprise_id"
     t.decimal "amount", precision: 10, default: "0"
     t.boolean "closed", default: false
     t.decimal "available_budget", precision: 10, default: "0"
@@ -58,12 +60,11 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.decimal "leftover_money", precision: 10, default: "0"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "group_id"
-    t.integer "enterprise_id"
-    t.index ["group_id", "enterprise_id"], name: "index_annual_budgets_on_group_id_and_enterprise_id"
+    t.index ["enterprise_id"], name: "index_annual_budgets_on_enterprise_id"
+    t.index ["group_id"], name: "index_annual_budgets_on_group_id"
   end
 
-  create_table "answer_comments", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "answer_comments", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.text "content"
     t.integer "author_id"
     t.integer "answer_id"
@@ -72,20 +73,20 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.boolean "approved", default: false
   end
 
-  create_table "answer_expenses", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "answer_expenses", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.integer "answer_id"
     t.integer "expense_id"
     t.integer "quantity"
   end
 
-  create_table "answer_upvotes", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "answer_upvotes", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.integer "author_id"
     t.integer "answer_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "answers", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "answers", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.integer "question_id"
     t.integer "author_id"
     t.text "content"
@@ -100,11 +101,12 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.string "supporting_document_content_type"
     t.integer "supporting_document_file_size"
     t.datetime "supporting_document_updated_at"
-    t.integer "contributing_group_id"
+    t.bigint "contributing_group_id"
+    t.integer "likes_count"
     t.index ["contributing_group_id"], name: "index_answers_on_contributing_group_id"
   end
 
-  create_table "api_keys", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "api_keys", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "application_name"
     t.string "key"
     t.bigint "enterprise_id"
@@ -113,8 +115,8 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.index ["enterprise_id"], name: "index_api_keys_on_enterprise_id"
   end
 
-  create_table "badges", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
-    t.integer "enterprise_id", null: false
+  create_table "badges", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+    t.bigint "enterprise_id", null: false
     t.integer "points", null: false
     t.string "label"
     t.string "image_file_name"
@@ -126,8 +128,8 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.index ["enterprise_id"], name: "index_badges_on_enterprise_id"
   end
 
-  create_table "budget_items", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
-    t.integer "budget_id"
+  create_table "budget_items", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+    t.bigint "budget_id"
     t.string "title"
     t.date "estimated_date"
     t.boolean "is_private", default: false
@@ -136,24 +138,27 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.datetime "updated_at", null: false
     t.decimal "estimated_amount", precision: 8, scale: 2
     t.decimal "available_amount", precision: 8, scale: 2, default: "0.0"
+    t.index ["budget_id"], name: "fk_rails_6135db3849"
   end
 
-  create_table "budgets", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "budgets", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.text "description"
     t.boolean "is_approved"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "approver_id"
-    t.integer "requester_id"
+    t.bigint "approver_id"
+    t.bigint "requester_id"
     t.integer "group_id"
     t.text "comments"
     t.string "decline_reason"
-    t.integer "annual_budget_id"
+    t.integer "budget_items_count"
+    t.bigint "annual_budget_id"
+    t.index ["annual_budget_id"], name: "fk_rails_81cba7294a"
     t.index ["approver_id"], name: "fk_rails_a057b1443a"
     t.index ["requester_id"], name: "fk_rails_d21f6fbcce"
   end
 
-  create_table "campaign_invitations", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "campaign_invitations", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.integer "campaign_id"
     t.integer "user_id"
     t.integer "response", default: 0
@@ -162,7 +167,7 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.boolean "email_sent", default: false
   end
 
-  create_table "campaigns", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "campaigns", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "title"
     t.text "description"
     t.datetime "start"
@@ -181,24 +186,25 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.datetime "banner_updated_at"
     t.integer "owner_id"
     t.integer "status", default: 0
+    t.integer "questions_count"
   end
 
-  create_table "campaigns_groups", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "campaigns_groups", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.integer "campaign_id"
     t.integer "group_id"
   end
 
-  create_table "campaigns_managers", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "campaigns_managers", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.integer "campaign_id"
     t.integer "user_id"
   end
 
-  create_table "campaigns_segments", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "campaigns_segments", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.integer "campaign_id"
     t.integer "segment_id"
   end
 
-  create_table "checklist_items", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "checklist_items", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "title"
     t.boolean "is_done", default: false
     t.datetime "created_at", null: false
@@ -207,16 +213,17 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.integer "checklist_id"
   end
 
-  create_table "checklists", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "checklists", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "title"
-    t.integer "author_id"
+    t.bigint "author_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "budget_id"
     t.integer "initiative_id"
+    t.index ["author_id"], name: "fk_rails_a1eb3049b7"
   end
 
-  create_table "ckeditor_assets", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "ckeditor_assets", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "data_file_name"
     t.string "data_content_type"
     t.integer "data_file_size"
@@ -229,7 +236,7 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.index ["type"], name: "index_ckeditor_assets_on_type"
   end
 
-  create_table "clockwork_database_events", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "clockwork_database_events", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "name", null: false
     t.integer "frequency_quantity", default: 1, null: false
     t.integer "frequency_period_id", null: false
@@ -246,25 +253,27 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.index ["frequency_period_id"], name: "index_clockwork_database_events_on_frequency_period_id"
   end
 
-  create_table "csvfiles", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "csvfiles", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "import_file_file_name"
     t.string "import_file_content_type"
     t.integer "import_file_file_size"
     t.datetime "import_file_updated_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "user_id", null: false
-    t.integer "group_id"
+    t.bigint "user_id", null: false
+    t.bigint "group_id"
     t.string "download_file_file_name"
     t.string "download_file_content_type"
     t.integer "download_file_file_size"
     t.datetime "download_file_updated_at"
     t.string "download_file_name"
+    t.index ["group_id"], name: "fk_rails_fcef90a8fb"
+    t.index ["user_id"], name: "fk_rails_804e5679f6"
   end
 
-  create_table "custom_texts", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "custom_texts", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "erg", default: "Group"
-    t.integer "enterprise_id"
+    t.bigint "enterprise_id"
     t.string "program", default: "Goal"
     t.string "structure", default: "Structure"
     t.string "outcome", default: "Focus Areas"
@@ -279,7 +288,7 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.index ["enterprise_id"], name: "index_custom_texts_on_enterprise_id"
   end
 
-  create_table "devices", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "devices", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "token"
     t.bigint "user_id"
     t.datetime "created_at", null: false
@@ -287,7 +296,7 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.index ["user_id"], name: "index_devices_on_user_id"
   end
 
-  create_table "email_variables", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "email_variables", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.integer "email_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -298,7 +307,7 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.boolean "pluralize", default: false
   end
 
-  create_table "emails", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "emails", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "name"
     t.integer "enterprise_id"
     t.datetime "created_at", null: false
@@ -309,9 +318,10 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.string "mailer_method", null: false
     t.string "template"
     t.string "description", null: false
+    t.boolean "custom", default: false
   end
 
-  create_table "enterprise_email_variables", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "enterprise_email_variables", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.integer "enterprise_id"
     t.string "key"
     t.string "description"
@@ -320,7 +330,7 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.text "example"
   end
 
-  create_table "enterprises", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "enterprises", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "name"
     t.string "sp_entity_id"
     t.string "idp_entity_id"
@@ -375,9 +385,14 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.integer "expiry_age_for_resources", default: 0
     t.string "unit_of_expiry_age"
     t.boolean "auto_archive", default: false
+    t.integer "groups_count"
+    t.integer "segments_count"
+    t.integer "polls_count"
+    t.boolean "slack_enabled", default: false
+    t.integer "users_count"
   end
 
-  create_table "expense_categories", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "expense_categories", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.integer "enterprise_id"
     t.string "name"
     t.string "icon_file_name"
@@ -388,7 +403,7 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.datetime "updated_at"
   end
 
-  create_table "expenses", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "expenses", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.integer "enterprise_id"
     t.string "name"
     t.integer "price"
@@ -396,7 +411,7 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.integer "category_id"
   end
 
-  create_table "field_data", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "field_data", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.bigint "field_user_id"
     t.string "field_user_type"
     t.bigint "field_id"
@@ -407,7 +422,7 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.index ["field_user_id", "field_user_type"], name: "index_field_data_on_field_user_id_and_field_user_type"
   end
 
-  create_table "fields", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "fields", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.bigint "field_definer_id"
     t.string "field_definer_type"
     t.string "type"
@@ -428,10 +443,11 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.boolean "elasticsearch_only", default: false
     t.boolean "required", default: false
     t.string "field_type"
+    t.boolean "add_to_member_list", default: false
     t.index ["field_definer_id", "field_definer_type"], name: "index_fields_on_field_definer_id_and_field_definer_type"
   end
 
-  create_table "folder_shares", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "folder_shares", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.integer "folder_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -439,24 +455,26 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.integer "group_id"
   end
 
-  create_table "folders", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "folders", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "password_protected", default: false
     t.string "password_digest"
-    t.integer "parent_id"
+    t.bigint "parent_id"
     t.integer "enterprise_id"
     t.integer "group_id"
+    t.integer "views_count"
+    t.index ["parent_id"], name: "fk_rails_58e285f76e"
   end
 
-  create_table "frequency_periods", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "frequency_periods", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "name", default: "daily", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "graphs", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "graphs", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.integer "field_id"
     t.integer "aggregation_id"
     t.datetime "created_at", null: false
@@ -470,31 +488,34 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.integer "poll_id"
   end
 
-  create_table "group_categories", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "group_categories", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "group_category_type_id"
-    t.integer "enterprise_id"
+    t.bigint "group_category_type_id"
+    t.bigint "enterprise_id"
+    t.index ["enterprise_id"], name: "fk_rails_2c1658a1d5"
+    t.index ["group_category_type_id"], name: "fk_rails_b859169abe"
   end
 
-  create_table "group_category_types", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "group_category_types", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "enterprise_id"
+    t.bigint "enterprise_id"
+    t.index ["enterprise_id"], name: "fk_rails_ac66104f0a"
   end
 
-  create_table "group_fields", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "group_fields", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.integer "group_id"
     t.integer "field_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "group_leaders", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
-    t.integer "group_id"
-    t.integer "user_id"
+  create_table "group_leaders", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+    t.bigint "group_id"
+    t.bigint "user_id"
     t.string "position_name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -534,9 +555,11 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.boolean "manage_posts", default: false
     t.boolean "initiatives_index", default: false
     t.integer "position"
+    t.index ["group_id"], name: "fk_rails_582d7a722f"
+    t.index ["user_id"], name: "fk_rails_9d1f0af75f"
   end
 
-  create_table "group_message_comments", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "group_message_comments", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.text "content"
     t.integer "author_id"
     t.integer "message_id"
@@ -545,7 +568,7 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.boolean "approved", default: false
   end
 
-  create_table "group_messages", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "group_messages", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.integer "group_id"
     t.string "subject"
     t.text "content"
@@ -554,12 +577,12 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.integer "owner_id"
   end
 
-  create_table "group_messages_segments", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "group_messages_segments", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.integer "group_message_id"
     t.integer "segment_id"
   end
 
-  create_table "group_updates", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "group_updates", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.text "data"
     t.text "comments"
     t.integer "owner_id"
@@ -568,7 +591,7 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "groups", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "groups", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.integer "enterprise_id"
     t.string "name"
     t.text "description"
@@ -601,7 +624,7 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.string "calendar_color"
     t.integer "total_weekly_points", default: 0
     t.boolean "active", default: true
-    t.integer "parent_id"
+    t.bigint "parent_id"
     t.string "sponsor_media_file_name"
     t.string "sponsor_media_content_type"
     t.integer "sponsor_media_file_size"
@@ -609,8 +632,8 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.string "company_video_url"
     t.string "latest_news_visibility"
     t.string "upcoming_events_visibility"
-    t.integer "group_category_id"
-    t.integer "group_category_type_id"
+    t.bigint "group_category_id"
+    t.bigint "group_category_type_id"
     t.boolean "private", default: false
     t.text "short_description"
     t.string "layout"
@@ -623,63 +646,78 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.string "unit_of_expiry_age"
     t.boolean "auto_archive", default: false
     t.string "event_attendance_visibility"
+    t.integer "views_count"
+    t.string "slack_webhook"
+    t.text "slack_auth_data"
+    t.index ["group_category_id"], name: "fk_rails_d2e3c28a2f"
+    t.index ["group_category_type_id"], name: "fk_rails_3d4b617e77"
+    t.index ["parent_id"], name: "fk_rails_be49f097d1"
   end
 
-  create_table "groups_metrics_dashboards", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "groups_metrics_dashboards", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.integer "group_id"
     t.integer "metrics_dashboard_id"
   end
 
-  create_table "groups_polls", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "groups_polls", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.integer "group_id"
     t.integer "poll_id"
   end
 
-  create_table "initiative_comments", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
-    t.integer "initiative_id"
-    t.integer "user_id"
+  create_table "initiative_comments", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+    t.bigint "initiative_id"
+    t.bigint "user_id"
     t.text "content"
     t.boolean "approved", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["initiative_id"], name: "fk_rails_d071073be8"
+    t.index ["user_id"], name: "fk_rails_684f39daad"
   end
 
-  create_table "initiative_expenses", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "initiative_expenses", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "description"
-    t.integer "amount"
+    t.decimal "amount", precision: 8, scale: 2, default: "0.0"
     t.integer "owner_id"
     t.integer "initiative_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "annual_budget_id"
+    t.bigint "annual_budget_id"
+    t.index ["annual_budget_id"], name: "fk_rails_a6322afeec"
   end
 
-  create_table "initiative_fields", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "initiative_fields", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.integer "initiative_id"
     t.integer "field_id"
   end
 
-  create_table "initiative_groups", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "initiative_groups", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.integer "initiative_id"
     t.integer "group_id"
   end
 
-  create_table "initiative_invitees", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
-    t.integer "initiative_id"
-    t.integer "user_id"
+  create_table "initiative_invitees", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+    t.bigint "initiative_id"
+    t.bigint "user_id"
+    t.index ["initiative_id"], name: "fk_rails_86454253ff"
+    t.index ["user_id"], name: "fk_rails_496a10cbcd"
   end
 
-  create_table "initiative_participating_groups", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
-    t.integer "initiative_id"
-    t.integer "group_id"
+  create_table "initiative_participating_groups", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+    t.bigint "initiative_id"
+    t.bigint "group_id"
+    t.index ["group_id"], name: "fk_rails_3f8a4d9b61"
+    t.index ["initiative_id"], name: "fk_rails_8ad878940e"
   end
 
-  create_table "initiative_segments", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
-    t.integer "initiative_id"
-    t.integer "segment_id"
+  create_table "initiative_segments", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+    t.bigint "initiative_id"
+    t.bigint "segment_id"
+    t.index ["initiative_id"], name: "fk_rails_6a5e2fdf6e"
+    t.index ["segment_id"], name: "fk_rails_2ec91d032b"
   end
 
-  create_table "initiative_updates", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "initiative_updates", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.text "data"
     t.text "comments"
     t.integer "owner_id"
@@ -689,7 +727,7 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.datetime "report_date"
   end
 
-  create_table "initiative_users", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "initiative_users", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.integer "initiative_id"
     t.integer "user_id"
     t.datetime "created_at", null: false
@@ -698,7 +736,7 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.datetime "check_in_time"
   end
 
-  create_table "initiatives", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "initiatives", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "name"
     t.datetime "start"
     t.datetime "end"
@@ -714,26 +752,33 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.string "picture_content_type"
     t.integer "picture_file_size"
     t.datetime "picture_updated_at"
-    t.integer "owner_group_id"
+    t.bigint "owner_group_id"
     t.string "location"
-    t.integer "budget_item_id"
+    t.bigint "budget_item_id"
     t.boolean "finished_expenses", default: false
     t.datetime "archived_at"
-    t.integer "annual_budget_id"
+    t.string "video_file_name"
+    t.string "video_content_type"
+    t.integer "video_file_size"
+    t.datetime "video_updated_at"
+    t.bigint "annual_budget_id"
+    t.index ["annual_budget_id"], name: "fk_rails_ee836e6837"
+    t.index ["budget_item_id"], name: "fk_rails_d338eb6e75"
+    t.index ["owner_group_id"], name: "fk_rails_7fe369d121"
   end
 
-  create_table "invitation_segments_groups", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "invitation_segments_groups", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.integer "segment_id"
     t.integer "group_id"
   end
 
-  create_table "likes", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
-    t.integer "news_feed_link_id"
-    t.integer "user_id"
+  create_table "likes", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+    t.bigint "news_feed_link_id"
+    t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "enterprise_id"
-    t.integer "answer_id"
+    t.bigint "enterprise_id"
+    t.bigint "answer_id"
     t.index ["answer_id"], name: "index_likes_on_answer_id"
     t.index ["enterprise_id"], name: "index_likes_on_enterprise_id"
     t.index ["news_feed_link_id"], name: "index_likes_on_news_feed_link_id"
@@ -742,21 +787,21 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.index ["user_id"], name: "index_likes_on_user_id"
   end
 
-  create_table "mentoring_interests", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "mentoring_interests", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.integer "enterprise_id"
     t.string "name", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "mentoring_request_interests", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "mentoring_request_interests", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.integer "mentoring_request_id", null: false
     t.integer "mentoring_interest_id", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "mentoring_requests", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "mentoring_requests", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.integer "enterprise_id"
     t.string "status", default: "pending", null: false
     t.text "notes"
@@ -767,24 +812,24 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.string "mentoring_type", default: "mentor", null: false
   end
 
-  create_table "mentoring_session_comments", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "mentoring_session_comments", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.text "content"
-    t.integer "user_id"
-    t.integer "mentoring_session_id"
+    t.bigint "user_id"
+    t.bigint "mentoring_session_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["mentoring_session_id"], name: "index_mentoring_session_comments_on_mentoring_session_id"
     t.index ["user_id"], name: "index_mentoring_session_comments_on_user_id"
   end
 
-  create_table "mentoring_session_topics", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "mentoring_session_topics", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.integer "mentoring_interest_id", null: false
     t.integer "mentoring_session_id", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "mentoring_sessions", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "mentoring_sessions", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.integer "enterprise_id"
     t.integer "creator_id", null: false
     t.datetime "start", null: false
@@ -799,22 +844,22 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.datetime "updated_at"
   end
 
-  create_table "mentoring_types", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "mentoring_types", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.integer "enterprise_id"
     t.string "name", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "mentorings", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "mentorings", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.integer "mentor_id"
     t.integer "mentee_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "mentorship_availabilities", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
-    t.integer "user_id", null: false
+  create_table "mentorship_availabilities", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+    t.bigint "user_id", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer "day", default: 1, null: false
@@ -823,14 +868,14 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.index ["user_id"], name: "index_mentorship_availabilities_on_user_id"
   end
 
-  create_table "mentorship_interests", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "mentorship_interests", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "mentoring_interest_id", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "mentorship_ratings", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "mentorship_ratings", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.integer "rating", null: false
     t.integer "user_id", null: false
     t.integer "mentoring_session_id", null: false
@@ -841,7 +886,7 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.datetime "updated_at"
   end
 
-  create_table "mentorship_sessions", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "mentorship_sessions", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.integer "user_id", null: false
     t.string "role", null: false
     t.integer "mentoring_session_id", null: false
@@ -850,14 +895,14 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.string "status", default: "pending", null: false
   end
 
-  create_table "mentorship_types", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "mentorship_types", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "mentoring_type_id", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "metrics_dashboards", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "metrics_dashboards", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.integer "enterprise_id"
     t.string "name"
     t.datetime "created_at", null: false
@@ -866,12 +911,12 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.string "shareable_token"
   end
 
-  create_table "metrics_dashboards_segments", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "metrics_dashboards_segments", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.integer "metrics_dashboard_id"
     t.integer "segment_id"
   end
 
-  create_table "mobile_fields", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "mobile_fields", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.integer "enterprise_id"
     t.integer "field_id"
     t.integer "index"
@@ -879,7 +924,7 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "news_feed_link_segments", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "news_feed_link_segments", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.integer "news_feed_link_id"
     t.integer "segment_id"
     t.datetime "created_at", null: false
@@ -889,7 +934,14 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.integer "social_link_segment_id"
   end
 
-  create_table "news_feed_links", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "news_feed_link_tags", id: false, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+    t.integer "news_feed_link_id"
+    t.string "news_tag_name"
+    t.index ["news_feed_link_id", "news_tag_name"], name: "index_news_feed_link_tags_on_news_feed_link_id_and_news_tag_name"
+    t.index ["news_tag_name", "news_feed_link_id"], name: "index_news_feed_link_tags_on_news_tag_name_and_news_feed_link_id"
+  end
+
+  create_table "news_feed_links", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.integer "news_feed_id"
     t.boolean "approved", default: false
     t.datetime "created_at", null: false
@@ -899,15 +951,17 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.integer "social_link_id"
     t.boolean "is_pinned", default: false
     t.datetime "archived_at"
+    t.integer "views_count"
+    t.integer "likes_count"
   end
 
-  create_table "news_feeds", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "news_feeds", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.integer "group_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "news_link_comments", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "news_link_comments", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.text "content"
     t.integer "author_id"
     t.integer "news_link_id"
@@ -916,7 +970,7 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.boolean "approved", default: false
   end
 
-  create_table "news_link_photos", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "news_link_photos", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "file_file_name"
     t.string "file_content_type"
     t.integer "file_file_size"
@@ -926,14 +980,14 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "news_link_segments", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "news_link_segments", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.integer "news_link_id"
     t.integer "segment_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "news_links", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "news_links", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "title"
     t.text "description"
     t.string "url"
@@ -944,17 +998,47 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.string "picture_content_type"
     t.integer "picture_file_size"
     t.datetime "picture_updated_at"
-    t.integer "author_id"
+    t.bigint "author_id"
+    t.index ["author_id"], name: "fk_rails_168eb8a2f7"
   end
 
-  create_table "outcomes", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "news_tags", primary_key: "name", id: :string, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "outcomes", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "name"
     t.integer "group_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "pillars", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "page_names", id: false, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+    t.string "page_url"
+    t.string "page_name"
+    t.index ["page_name", "page_url"], name: "index_page_names_on_page_name_and_page_url"
+    t.index ["page_url", "page_name"], name: "index_page_names_on_page_url_and_page_name"
+  end
+
+  create_table "page_visitation_data", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+    t.bigint "user_id"
+    t.string "page_url"
+    t.string "controller"
+    t.string "action"
+    t.integer "visits_day", default: 0
+    t.integer "visits_week", default: 0
+    t.integer "visits_month", default: 0
+    t.integer "visits_year", default: 0
+    t.integer "visits_all", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["page_url", "user_id"], name: "index_page_visitation_data_on_page_url_and_user_id"
+    t.index ["user_id", "page_url"], name: "index_page_visitation_data_on_user_id_and_page_url"
+    t.index ["user_id"], name: "index_page_visitation_data_on_user_id"
+  end
+
+  create_table "pillars", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "name"
     t.string "value_proposition"
     t.integer "outcome_id"
@@ -962,7 +1046,7 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "policy_group_templates", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "policy_group_templates", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "name", null: false
     t.boolean "default", default: false
     t.integer "user_role_id"
@@ -1028,7 +1112,7 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.boolean "auto_archive_manage", default: false
   end
 
-  create_table "policy_groups", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "policy_groups", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.boolean "campaigns_index", default: false
     t.boolean "campaigns_create", default: false
     t.boolean "campaigns_manage", default: false
@@ -1072,7 +1156,7 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.boolean "group_leader_manage", default: false
     t.boolean "global_calendar", default: false
     t.boolean "branding_manage", default: false
-    t.integer "user_id"
+    t.bigint "user_id"
     t.boolean "manage_all", default: false
     t.boolean "enterprise_manage", default: false
     t.boolean "groups_budgets_manage", default: false
@@ -1092,7 +1176,7 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.index ["user_id"], name: "index_policy_groups_on_user_id"
   end
 
-  create_table "poll_responses", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "poll_responses", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.integer "poll_id"
     t.integer "user_id"
     t.text "data"
@@ -1102,7 +1186,7 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.index ["user_id"], name: "index_poll_responses_on_user_id"
   end
 
-  create_table "polls", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "polls", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "title"
     t.text "description"
     t.time "start"
@@ -1114,16 +1198,16 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.integer "owner_id"
     t.integer "status", default: 0, null: false
     t.boolean "email_sent", default: false, null: false
-    t.integer "initiative_id"
+    t.bigint "initiative_id"
     t.index ["initiative_id"], name: "index_polls_on_initiative_id"
   end
 
-  create_table "polls_segments", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "polls_segments", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.integer "poll_id"
     t.integer "segment_id"
   end
 
-  create_table "questions", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "questions", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "title"
     t.text "description"
     t.integer "campaign_id"
@@ -1131,9 +1215,10 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.datetime "updated_at", null: false
     t.datetime "solved_at"
     t.text "conclusion"
+    t.integer "answers_count"
   end
 
-  create_table "resources", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "resources", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "title"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -1150,20 +1235,21 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.integer "group_id"
     t.integer "initiative_id"
     t.datetime "archived_at"
+    t.integer "views_count"
   end
 
-  create_table "reward_actions", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "reward_actions", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "label"
     t.integer "points"
     t.string "key"
-    t.integer "enterprise_id"
+    t.bigint "enterprise_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.index ["enterprise_id"], name: "index_reward_actions_on_enterprise_id"
   end
 
-  create_table "rewards", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
-    t.integer "enterprise_id", null: false
+  create_table "rewards", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+    t.bigint "enterprise_id", null: false
     t.integer "points", null: false
     t.string "label"
     t.string "picture_file_name"
@@ -1171,14 +1257,14 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.integer "picture_file_size"
     t.datetime "picture_updated_at"
     t.text "description"
-    t.integer "responsible_id", null: false
+    t.bigint "responsible_id", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.index ["enterprise_id"], name: "index_rewards_on_enterprise_id"
     t.index ["responsible_id"], name: "index_rewards_on_responsible_id"
   end
 
-  create_table "samples", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "samples", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.integer "user_id"
     t.text "data"
     t.datetime "created_at", null: false
@@ -1186,7 +1272,7 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.index ["user_id"], name: "index_samples_on_user_id"
   end
 
-  create_table "segment_field_rules", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "segment_field_rules", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.integer "segment_id"
     t.integer "field_id"
     t.integer "operator"
@@ -1195,7 +1281,7 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "segment_group_scope_rule_groups", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "segment_group_scope_rule_groups", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.integer "segment_group_scope_rule_id"
     t.integer "group_id"
     t.datetime "created_at", null: false
@@ -1204,7 +1290,7 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.index ["segment_group_scope_rule_id"], name: "segment_group_rule_group_index"
   end
 
-  create_table "segment_group_scope_rules", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "segment_group_scope_rules", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.integer "segment_id"
     t.integer "operator", null: false
     t.datetime "created_at", null: false
@@ -1212,7 +1298,7 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.index ["segment_id"], name: "index_segment_group_scope_rules_on_segment_id"
   end
 
-  create_table "segment_order_rules", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "segment_order_rules", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.integer "segment_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -1221,7 +1307,7 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.index ["segment_id"], name: "index_segment_order_rules_on_segment_id"
   end
 
-  create_table "segments", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "segments", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.integer "enterprise_id"
     t.string "name"
     t.datetime "created_at", null: false
@@ -1234,7 +1320,7 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.index ["parent_id"], name: "index_segments_on_parent_id"
   end
 
-  create_table "sessions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "sessions", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "token"
     t.datetime "expires_at"
     t.string "device_type"
@@ -1248,65 +1334,68 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.index ["user_id"], name: "index_sessions_on_user_id"
   end
 
-  create_table "shared_metrics_dashboards", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
-    t.integer "user_id"
-    t.integer "metrics_dashboard_id"
+  create_table "shared_metrics_dashboards", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "metrics_dashboard_id"
     t.index ["metrics_dashboard_id"], name: "index_shared_metrics_dashboards_on_metrics_dashboard_id"
     t.index ["user_id"], name: "index_shared_metrics_dashboards_on_user_id"
   end
 
-  create_table "shared_news_feed_links", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "shared_news_feed_links", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.integer "news_feed_link_id", null: false
     t.integer "news_feed_id", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "social_link_segments", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "social_link_segments", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.integer "social_link_id"
     t.integer "segment_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "social_network_posts", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
-    t.integer "author_id"
+  create_table "social_network_posts", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+    t.bigint "author_id"
     t.text "embed_code"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "url"
-    t.integer "group_id"
+    t.text "url"
+    t.bigint "group_id"
+    t.text "small_embed_code"
+    t.index ["author_id"], name: "fk_rails_2a28b05c53"
+    t.index ["group_id"], name: "fk_rails_079d303cb9"
   end
 
-  create_table "sponsors", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "sponsors", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "sponsor_name"
     t.string "sponsor_title"
     t.text "sponsor_message"
     t.boolean "disable_sponsor_message"
-    t.integer "sponsorable_id"
-    t.string "sponsorable_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "sponsor_media_file_name"
     t.string "sponsor_media_content_type"
     t.integer "sponsor_media_file_size"
     t.datetime "sponsor_media_updated_at"
+    t.string "sponsorable_type"
+    t.bigint "sponsorable_id"
     t.index ["sponsorable_type", "sponsorable_id"], name: "index_sponsors_on_sponsorable_type_and_sponsorable_id"
   end
 
-  create_table "survey_managers", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "survey_managers", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.integer "survey_id"
     t.integer "user_id"
   end
 
-  create_table "tags", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "tags", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "resource_id"
   end
 
-  create_table "themes", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "themes", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "logo_file_name"
     t.string "logo_content_type"
     t.integer "logo_file_size"
@@ -1319,7 +1408,7 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.string "logo_redirect_url"
   end
 
-  create_table "topic_feedbacks", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "topic_feedbacks", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.integer "topic_id"
     t.text "content"
     t.integer "user_id"
@@ -1328,7 +1417,7 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.boolean "featured", default: false
   end
 
-  create_table "topics", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "topics", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.text "statement"
     t.date "expiration"
     t.integer "user_id"
@@ -1338,7 +1427,7 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "twitter_accounts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "twitter_accounts", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.bigint "group_id"
     t.string "name", null: false
     t.string "account", null: false
@@ -1363,7 +1452,7 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.index ["updatable_type", "updatable_id"], name: "index_updates_on_updatable_type_and_updatable_id"
   end
 
-  create_table "user_groups", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "user_groups", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.integer "user_id"
     t.integer "group_id"
     t.datetime "created_at"
@@ -1373,9 +1462,9 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.text "data"
   end
 
-  create_table "user_reward_actions", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
-    t.integer "user_id", null: false
-    t.integer "reward_action_id", null: false
+  create_table "user_reward_actions", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "reward_action_id", null: false
     t.integer "operation", null: false
     t.integer "points", null: false
     t.datetime "created_at"
@@ -1396,18 +1485,20 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.index ["user_id"], name: "index_user_reward_actions_on_user_id"
   end
 
-  create_table "user_rewards", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
-    t.integer "user_id", null: false
-    t.integer "reward_id", null: false
+  create_table "user_rewards", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "reward_id", null: false
     t.integer "points", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer "status"
+    t.text "comment"
     t.index ["reward_id"], name: "index_user_rewards_on_reward_id"
     t.index ["user_id"], name: "index_user_rewards_on_user_id"
   end
 
-  create_table "user_roles", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
-    t.integer "enterprise_id"
+  create_table "user_roles", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+    t.bigint "enterprise_id"
     t.boolean "default", default: false
     t.string "role_name"
     t.string "role_type", default: "non_admin"
@@ -1417,7 +1508,7 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.index ["enterprise_id"], name: "index_user_roles_on_enterprise_id"
   end
 
-  create_table "users", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "users", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "first_name"
     t.string "last_name"
     t.text "data"
@@ -1426,6 +1517,7 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "email"
+    t.string "notifications_email"
     t.string "encrypted_password"
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
@@ -1475,6 +1567,16 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.boolean "accepting_mentee_requests", default: true
     t.datetime "last_group_notification_date"
     t.string "password_digest"
+    t.boolean "seen_onboarding", default: false
+    t.integer "initiatives_count"
+    t.integer "social_links_count"
+    t.integer "own_messages_count"
+    t.integer "own_news_links_count"
+    t.integer "answer_comments_count"
+    t.integer "message_comments_count"
+    t.integer "news_link_comments_count"
+    t.integer "mentors_count"
+    t.integer "mentees_count"
     t.index ["active"], name: "index_users_on_active"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["invitation_token"], name: "index_users_on_invitation_token", unique: true
@@ -1484,24 +1586,30 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
   end
 
-  create_table "users_segments", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "users_segments", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.integer "user_id"
     t.integer "segment_id"
     t.index ["user_id"], name: "index_users_segments_on_user_id"
   end
 
-  create_table "views", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
-    t.integer "user_id", null: false
-    t.integer "news_feed_link_id"
-    t.integer "enterprise_id"
+  create_table "views", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "news_feed_link_id"
+    t.bigint "enterprise_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "group_id"
-    t.integer "folder_id"
-    t.integer "resource_id"
+    t.bigint "group_id"
+    t.bigint "folder_id"
+    t.bigint "resource_id"
+    t.index ["enterprise_id"], name: "fk_rails_6131053e2d"
+    t.index ["folder_id"], name: "fk_rails_672407c5df"
+    t.index ["group_id"], name: "fk_rails_8cda74771d"
+    t.index ["news_feed_link_id"], name: "fk_rails_174e66d5dc"
+    t.index ["resource_id"], name: "fk_rails_2a8cacd4f8"
+    t.index ["user_id"], name: "fk_rails_6a13b72c28"
   end
 
-  create_table "yammer_field_mappings", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
+  create_table "yammer_field_mappings", id: :bigint, default: nil, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.integer "enterprise_id"
     t.string "yammer_field_name"
     t.integer "diverst_field_id"
@@ -1510,10 +1618,39 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "annual_budgets", "enterprises"
+  add_foreign_key "annual_budgets", "groups"
+  add_foreign_key "answers", "groups", column: "contributing_group_id"
   add_foreign_key "badges", "enterprises"
+  add_foreign_key "budget_items", "budgets"
+  add_foreign_key "budgets", "annual_budgets"
   add_foreign_key "budgets", "users", column: "approver_id"
   add_foreign_key "budgets", "users", column: "requester_id"
+  add_foreign_key "checklists", "users", column: "author_id"
+  add_foreign_key "csvfiles", "groups"
+  add_foreign_key "csvfiles", "users"
   add_foreign_key "custom_texts", "enterprises"
+  add_foreign_key "folders", "folders", column: "parent_id"
+  add_foreign_key "group_categories", "enterprises"
+  add_foreign_key "group_categories", "group_category_types"
+  add_foreign_key "group_category_types", "enterprises"
+  add_foreign_key "group_leaders", "groups"
+  add_foreign_key "group_leaders", "users"
+  add_foreign_key "groups", "group_categories"
+  add_foreign_key "groups", "group_category_types"
+  add_foreign_key "groups", "groups", column: "parent_id"
+  add_foreign_key "initiative_comments", "initiatives"
+  add_foreign_key "initiative_comments", "users"
+  add_foreign_key "initiative_expenses", "annual_budgets"
+  add_foreign_key "initiative_invitees", "initiatives"
+  add_foreign_key "initiative_invitees", "users"
+  add_foreign_key "initiative_participating_groups", "groups"
+  add_foreign_key "initiative_participating_groups", "initiatives"
+  add_foreign_key "initiative_segments", "initiatives"
+  add_foreign_key "initiative_segments", "segments"
+  add_foreign_key "initiatives", "annual_budgets"
+  add_foreign_key "initiatives", "budget_items"
+  add_foreign_key "initiatives", "groups", column: "owner_group_id"
   add_foreign_key "likes", "answers"
   add_foreign_key "likes", "enterprises"
   add_foreign_key "likes", "news_feed_links"
@@ -1521,15 +1658,44 @@ ActiveRecord::Schema.define(version: 2020_03_03_222458) do
   add_foreign_key "mentoring_session_comments", "mentoring_sessions"
   add_foreign_key "mentoring_session_comments", "users"
   add_foreign_key "mentorship_availabilities", "users"
+  add_foreign_key "news_links", "users", column: "author_id"
+  add_foreign_key "policy_groups", "users"
   add_foreign_key "polls", "initiatives"
   add_foreign_key "reward_actions", "enterprises"
   add_foreign_key "rewards", "enterprises"
   add_foreign_key "rewards", "users", column: "responsible_id"
   add_foreign_key "shared_metrics_dashboards", "metrics_dashboards"
   add_foreign_key "shared_metrics_dashboards", "users"
+  add_foreign_key "social_network_posts", "groups"
+  add_foreign_key "social_network_posts", "users", column: "author_id"
   add_foreign_key "user_reward_actions", "reward_actions"
   add_foreign_key "user_reward_actions", "users"
   add_foreign_key "user_rewards", "rewards"
   add_foreign_key "user_rewards", "users"
   add_foreign_key "user_roles", "enterprises"
+  add_foreign_key "views", "enterprises"
+  add_foreign_key "views", "folders"
+  add_foreign_key "views", "groups"
+  add_foreign_key "views", "news_feed_links"
+  add_foreign_key "views", "resources"
+  add_foreign_key "views", "users"
+
+  create_view "duplicate_page_names", sql_definition: <<-SQL
+      select `page_names`.`page_url` AS `page_url`,`page_names`.`page_name` AS `page_name` from `page_names` where `page_names`.`page_name` in (select `page_names`.`page_name` from `page_names` group by `page_names`.`page_name` having count(0) > 1)
+  SQL
+  create_view "unique_page_names", sql_definition: <<-SQL
+      select `page_names`.`page_url` AS `page_url`,`page_names`.`page_name` AS `page_name` from `page_names` where `page_names`.`page_name` in (select `page_names`.`page_name` from `page_names` group by `page_names`.`page_name` having count(0) = 1)
+  SQL
+  create_view "page_visitation_by_names", sql_definition: <<-SQL
+      (select `a`.`user_id` AS `user_id`,`b`.`page_name` AS `page_name`,NULL AS `page_url`,sum(`a`.`visits_day`) AS `visits_day`,sum(`a`.`visits_week`) AS `visits_week`,sum(`a`.`visits_month`) AS `visits_month`,sum(`a`.`visits_year`) AS `visits_year`,sum(`a`.`visits_all`) AS `visits_all` from (`page_visitation_data` `a` join `duplicate_page_names` `b` on(`a`.`page_url` = `b`.`page_url`)) group by `a`.`user_id`,`b`.`page_name`) union all (select `a`.`user_id` AS `user_id`,`b`.`page_name` AS `page_name`,`a`.`page_url` AS `page_url`,sum(`a`.`visits_day`) AS `visits_day`,sum(`a`.`visits_week`) AS `visits_week`,sum(`a`.`visits_month`) AS `visits_month`,sum(`a`.`visits_year`) AS `visits_year`,sum(`a`.`visits_all`) AS `visits_all` from (`page_visitation_data` `a` join `unique_page_names` `b` on(`a`.`page_url` = `b`.`page_url`)) group by `a`.`user_id`,`b`.`page_url`,`b`.`page_name`)
+  SQL
+  create_view "page_visitations", sql_definition: <<-SQL
+      select `a`.`id` AS `id`,`a`.`user_id` AS `user_id`,`a`.`page_url` AS `page_url`,`a`.`controller` AS `controller`,`a`.`action` AS `action`,`a`.`visits_day` AS `visits_day`,`a`.`visits_week` AS `visits_week`,`a`.`visits_month` AS `visits_month`,`a`.`visits_year` AS `visits_year`,`a`.`visits_all` AS `visits_all`,`a`.`created_at` AS `created_at`,`a`.`updated_at` AS `updated_at`,`b`.`page_name` AS `page_name` from (`page_visitation_data` `a` join `page_names` `b` on(`a`.`page_url` = `b`.`page_url`))
+  SQL
+  create_view "total_page_visitation_by_names", sql_definition: <<-SQL
+      (select `b`.`page_name` AS `page_name`,NULL AS `page_url`,sum(`a`.`visits_day`) AS `visits_day`,sum(`a`.`visits_week`) AS `visits_week`,sum(`a`.`visits_month`) AS `visits_month`,sum(`a`.`visits_year`) AS `visits_year`,sum(`a`.`visits_all`) AS `visits_all` from ((`page_visitation_data` `a` join `duplicate_page_names` `b` on(`a`.`page_url` = `b`.`page_url`)) join `users` `c` on(`c`.`id` = `a`.`user_id`)) group by `b`.`page_name`,`c`.`enterprise_id`) union all (select `b`.`page_name` AS `page_name`,`a`.`page_url` AS `page_url`,sum(`a`.`visits_day`) AS `visits_day`,sum(`a`.`visits_week`) AS `visits_week`,sum(`a`.`visits_month`) AS `visits_month`,sum(`a`.`visits_year`) AS `visits_year`,sum(`a`.`visits_all`) AS `visits_all` from ((`page_visitation_data` `a` join `unique_page_names` `b` on(`a`.`page_url` = `b`.`page_url`)) join `users` `c` on(`c`.`id` = `a`.`user_id`)) group by `b`.`page_url`,`b`.`page_name`,`c`.`enterprise_id`)
+  SQL
+  create_view "total_page_visitations", sql_definition: <<-SQL
+      select `a`.`page_url` AS `page_url`,`b`.`page_name` AS `page_name`,`c`.`enterprise_id` AS `enterprise_id`,sum(`a`.`visits_day`) AS `visits_day`,sum(`a`.`visits_week`) AS `visits_week`,sum(`a`.`visits_month`) AS `visits_month`,sum(`a`.`visits_year`) AS `visits_year`,sum(`a`.`visits_all`) AS `visits_all` from ((`page_visitation_data` `a` join `page_names` `b` on(`a`.`page_url` = `b`.`page_url`)) join `users` `c` on(`c`.`id` = `a`.`user_id`)) group by `a`.`page_url`,`b`.`page_name`,`c`.`enterprise_id`
+  SQL
 end

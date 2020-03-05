@@ -90,7 +90,6 @@ class ConvertToActiveStorage < ActiveRecord::Migration[5.2]
       Digest::MD5.base64digest(File.read(url))
     end
   end
-
 end
 
 

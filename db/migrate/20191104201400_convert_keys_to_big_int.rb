@@ -4,14 +4,11 @@ class ConvertKeysToBigInt < ActiveRecord::Migration[5.2]
      execute 'SET FOREIGN_KEY_CHECKS = 0'
 
      # Remove foreign keys temporarily
-     remove_foreign_key "annual_budgets", "groups" if foreign_key_exists?("annual_budgets", "groups")
-     remove_foreign_key "annual_budgets", "enterprises" if foreign_key_exists?("annual_budgets", "enterprises")
      remove_foreign_key "answers", column: "contributing_group_id" if foreign_key_exists?("answers", column: "contributing_group_id")
      remove_foreign_key "badges", "enterprises" if foreign_key_exists?("badges", "enterprises")
      remove_foreign_key "budget_items", "budgets" if foreign_key_exists?("budget_items", "budgets")
      remove_foreign_key "budgets", column: "requester_id" if foreign_key_exists?("budgets", column: "requester_id")
      remove_foreign_key "budgets", column: "approver_id" if foreign_key_exists?("budgets", column: "approver_id")
-     remove_foreign_key "budgets", "annual_budgets" if foreign_key_exists?("budgets", "annual_budgets")
      remove_foreign_key "checklists", column: "author_id" if foreign_key_exists?("checklists", column: "author_id")
      remove_foreign_key "csvfiles", "users" if foreign_key_exists?("csvfiles", "users")
      remove_foreign_key "csvfiles", "groups" if foreign_key_exists?("csvfiles", "groups")
@@ -26,7 +23,6 @@ class ConvertKeysToBigInt < ActiveRecord::Migration[5.2]
      remove_foreign_key "groups", "group_category_types" if foreign_key_exists?("groups", "group_category_types")
      remove_foreign_key "initiative_comments", "initiatives" if foreign_key_exists?("initiative_comments", "initiatives")
      remove_foreign_key "initiative_comments", "users" if foreign_key_exists?("initiative_comments", "users")
-     remove_foreign_key "initiative_expenses", "annual_budgets" if foreign_key_exists?("initiative_expenses", "annual_budgets")
      remove_foreign_key "initiative_invitees", "initiatives" if foreign_key_exists?("initiative_invitees", "initiatives")
      remove_foreign_key "initiative_invitees", "users" if foreign_key_exists?("initiative_invitees", "users")
      remove_foreign_key "initiative_participating_groups", "initiatives" if foreign_key_exists?("initiative_participating_groups", "initiatives")
@@ -35,7 +31,6 @@ class ConvertKeysToBigInt < ActiveRecord::Migration[5.2]
      remove_foreign_key "initiative_segments", "segments" if foreign_key_exists?("initiative_segments", "segments")
      remove_foreign_key "initiatives", column: "owner_group_id" if foreign_key_exists?("initiatives", column: "owner_group_id")
      remove_foreign_key "initiatives", "budget_items" if foreign_key_exists?("initiatives", "budget_items")
-     remove_foreign_key "initiatives", "annual_budgets" if foreign_key_exists?("initiatives", "annual_budgets")
      remove_foreign_key "custom_texts", "enterprises" if foreign_key_exists?("custom_texts", "enterprises")
      remove_foreign_key "likes", "answers" if foreign_key_exists?("likes", "answers")
      remove_foreign_key "likes", "enterprises" if foreign_key_exists?("likes", "enterprises")
@@ -68,7 +63,6 @@ class ConvertKeysToBigInt < ActiveRecord::Migration[5.2]
 
      ### Primary keys
      change_column :activities, :id, :bigint
-     change_column :annual_budgets, :id, :bigint
      change_column :answer_comments, :id, :bigint
      change_column :answer_expenses, :id, :bigint
      change_column :answer_upvotes, :id, :bigint
@@ -188,10 +182,6 @@ class ConvertKeysToBigInt < ActiveRecord::Migration[5.2]
 
      ### Foreign Keys
 
-     # Annual Budgets
-     change_column :annual_budgets, :group_id, :bigint
-     change_column :annual_budgets, :enterprise_id, :bigint
-
      # Answers
      change_column :answers, :contributing_group_id, :bigint
 
@@ -200,7 +190,6 @@ class ConvertKeysToBigInt < ActiveRecord::Migration[5.2]
 
      # Budgets
      change_column :budgets, :approver_id, :bigint
-     change_column :budgets, :annual_budget_id, :bigint
 
      # Checklists
      change_column :checklists, :author_id, :bigint
@@ -232,9 +221,6 @@ class ConvertKeysToBigInt < ActiveRecord::Migration[5.2]
      change_column :initiative_comments, :initiative_id, :bigint
      change_column :initiative_comments, :user_id, :bigint
 
-     # Initiative Expenses
-     change_column :initiative_expenses, :annual_budget_id, :bigint
-
      # Initiative Invitees
      change_column :initiative_invitees, :initiative_id, :bigint
      change_column :initiative_invitees, :user_id, :bigint
@@ -250,7 +236,6 @@ class ConvertKeysToBigInt < ActiveRecord::Migration[5.2]
      # Initiatives
      change_column :initiatives, :owner_group_id, :bigint
      change_column :initiatives, :budget_item_id, :bigint
-     change_column :initiatives, :annual_budget_id, :bigint
 
      # News Links
      change_column :news_links, :author_id, :bigint
@@ -271,14 +256,11 @@ class ConvertKeysToBigInt < ActiveRecord::Migration[5.2]
      change_column :views, :resource_id, :bigint
 
 
-     change_column :annual_budgets, :group_id, :bigint
-     change_column :annual_budgets, :enterprise_id, :bigint
      change_column :answers, :contributing_group_id, :bigint
      change_column :badges, :enterprise_id, :bigint
      change_column :budget_items, :budget_id, :bigint
      change_column :budgets, :requester_id, :bigint
      change_column :budgets, :approver_id, :bigint
-     change_column :budgets, :annual_budget_id, :bigint
      change_column :checklists, :author_id, :bigint
      change_column :csvfiles, :user_id, :bigint
      change_column :csvfiles, :group_id, :bigint
@@ -293,7 +275,6 @@ class ConvertKeysToBigInt < ActiveRecord::Migration[5.2]
      change_column :groups, :group_category_type_id, :bigint
      change_column :initiative_comments, :initiative_id, :bigint
      change_column :initiative_comments, :user_id, :bigint
-     change_column :initiative_expenses, :annual_budget_id, :bigint
      change_column :initiative_invitees, :initiative_id, :bigint
      change_column :initiative_invitees, :user_id, :bigint
      change_column :initiative_participating_groups, :initiative_id, :bigint
@@ -302,7 +283,6 @@ class ConvertKeysToBigInt < ActiveRecord::Migration[5.2]
      change_column :initiative_segments, :segment_id, :bigint
      change_column :initiatives, :owner_group_id, :bigint
      change_column :initiatives, :budget_item_id, :bigint
-     change_column :initiatives, :annual_budget_id, :bigint
      change_column :custom_texts, :enterprise_id, :bigint
      change_column :likes, :answer_id, :bigint
      change_column :likes, :enterprise_id, :bigint
@@ -334,15 +314,11 @@ class ConvertKeysToBigInt < ActiveRecord::Migration[5.2]
      change_column :views, :resource_id, :bigint
 
 
-     # Add back foreign keys
-     add_foreign_key "annual_budgets", "groups"
-     add_foreign_key "annual_budgets", "enterprises"
      add_foreign_key "answers", "groups", column: "contributing_group_id"
      add_foreign_key "badges", "enterprises"
      add_foreign_key "budget_items", "budgets"
      add_foreign_key "budgets", "users", column: "requester_id"
      add_foreign_key "budgets", "users", column: "approver_id"
-     add_foreign_key "budgets", "annual_budgets"
      add_foreign_key "checklists", "users", column: "author_id"
      add_foreign_key "csvfiles", "users"
      add_foreign_key "csvfiles", "groups"
@@ -357,7 +333,6 @@ class ConvertKeysToBigInt < ActiveRecord::Migration[5.2]
      add_foreign_key "groups", "group_category_types"
      add_foreign_key "initiative_comments", "initiatives"
      add_foreign_key "initiative_comments", "users"
-     add_foreign_key "initiative_expenses", "annual_budgets"
      add_foreign_key "initiative_invitees", "initiatives"
      add_foreign_key "initiative_invitees", "users"
      add_foreign_key "initiative_participating_groups", "initiatives"
@@ -366,7 +341,6 @@ class ConvertKeysToBigInt < ActiveRecord::Migration[5.2]
      add_foreign_key "initiative_segments", "segments"
      add_foreign_key "initiatives", "groups", column: "owner_group_id"
      add_foreign_key "initiatives", "budget_items"
-     add_foreign_key "initiatives", "annual_budgets"
      add_foreign_key "custom_texts", "enterprises"
      add_foreign_key "likes", "answers"
      add_foreign_key "likes", "enterprises"

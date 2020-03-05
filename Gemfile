@@ -43,6 +43,7 @@ gem 'railties', '~> 5.2.3'
 gem 'rollbar', '~> 2.14.1'
 gem 'rqrcode', '~> 0.10.1', require: false
 gem 'ruby-oembed', '~> 0.12'
+gem 'embedly', '~> 1.9.1'
 gem 'ruby-saml', '>= 1.7.0'
 gem 'sanitize_email', '~> 1.2.2'
 gem 'sidekiq', '~> 6.0.4' # Background jobs
