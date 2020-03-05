@@ -194,14 +194,6 @@ RSpec.describe EnterprisePolicy, type: :policy do
           expect(subject.manage_onboarding_consent?).to be(true)
         end
       end
-
-      context 'when onboarding_consent_enabled is true' do
-        before { user.policy_group.update onboarding_consent_manage: true }
-
-        it 'returns true' do
-          expect(subject.manage_onboarding_consent?).to be(true)
-        end
-      end
     end
   end
 end
