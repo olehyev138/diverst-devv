@@ -64,10 +64,7 @@ class EnterprisePolicy < ApplicationPolicy
   end
 
   def manage_onboarding_consent?
-    return true if manage_all?
-    return true if basic_group_leader_permission?('onboarding_consent_manage')
-
-    @policy_group.onboarding_consent_manage?
+    enterprise_manage?
   end
 
   def diversity_manage?

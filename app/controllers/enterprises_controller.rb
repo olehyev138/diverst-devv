@@ -218,6 +218,7 @@ class EnterprisesController < ApplicationController
         :expiry_age_for_resources,
         :unit_of_expiry_age,
         :onboarding_consent_enabled,
+        :onboarding_pop_up_content,
         theme: [
           :id,
           :primary_color,

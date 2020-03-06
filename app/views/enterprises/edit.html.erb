@@ -67,7 +67,7 @@
                 </div>
             <% end %>  
             <br>
-            <% if EnterprisePolicy.new(current_user, current_user.enterprise).manage_onboarding_consent? %>
+            <% if EnterprisePolicy.new(current_user, current_user.enterprise).enterprise_manage? %>
               <div id="onboarding_consent" >
                 <%= f.hidden_field :onboarding_consent_enabled, value: 0 %>
                 <%= f.input :onboarding_consent_enabled, label: 'Enable onboarding consent' %>
