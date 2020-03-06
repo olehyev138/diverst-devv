@@ -175,6 +175,7 @@ class Group < ApplicationRecord
   has_attached_file :logo_paperclip, s3_permissions: 'private'
   has_attached_file :banner_paperclip
   has_attached_file :sponsor_media_paperclip, s3_permissions: 'private'
+  has_attached_file :sponsor_image_paperclip, s3_permissions: 'private'
 
   validates_length_of :event_attendance_visibility, maximum: 191
   validates_length_of :unit_of_expiry_age, maximum: 191
