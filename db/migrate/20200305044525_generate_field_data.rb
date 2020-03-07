@@ -3,7 +3,10 @@ class GenerateFieldData < ActiveRecord::Migration[5.2]
     def up
       # Generate a set of field data objects for each users `data/info` hash
 
+      say 'Converting user info to field_data objects...'
+
       User.all.each do |user|
+        say 'test'
         # For each field id in users data hash
         info = user.info
         info.keys.each do |field_id|
