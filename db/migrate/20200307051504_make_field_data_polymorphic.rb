@@ -5,7 +5,6 @@ class MakeFieldDataPolymorphic < ActiveRecord::Migration[5.2]
       add_column :field_data, :field_user_type, :string, after: :field_user_id
       add_index :field_data, [:field_user_id, :field_user_type]
 
-      FieldData.connection
       FieldData.connection.schema_cache.clear!
       FieldData.reset_column_information
 #      FieldData.find_each do |fd|
@@ -24,7 +23,7 @@ class MakeFieldDataPolymorphic < ActiveRecord::Migration[5.2]
       GroupUpdate.reset_column_information
       UserGroup.reset_column_information
       PollResponse.reset_column_information
-      User.connection.reset_column_information
+      User.reset_column_information
 
       [InitiativeUpdate, GroupUpdate, UserGroup, PollResponse, User].each do |model|
         model.find_each do |item|
