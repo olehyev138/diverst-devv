@@ -16,11 +16,11 @@ class GenerateFieldData < ActiveRecord::Migration[5.2]
         field_data = FieldData.new(
             user_id: user.id,
             field_id: field_id,
-            data: data_str,
+            data: data_str
+        )
 
-            )
-
-        field_data.save(validation: false)
+        #field_data.save(validation: false)
+        field_data.save!
       end
     end
 
