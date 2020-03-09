@@ -435,6 +435,8 @@
   "diverst.containers.UserRole.form.input.role_type": "Role type",
   "diverst.containers.UserRole.form.input.priority": "Role Priority",
   "diverst.containers.UserRole.list.title": "User Roles",
+  "diverst.containers.Policies.form.update" : "Update",
+  "diverst.containers.Policies.form.cancel" : "Cancel",
   "diverst.containers.Mentorship.mentee_m": "Mentee",
   "diverst.containers.Mentorship.mentee_f": "Mentee",
   "diverst.containers.Mentorship.mentee": "Mentee",
