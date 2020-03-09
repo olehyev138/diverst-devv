@@ -147,6 +147,11 @@ export const ROUTES = {
 
   group: {
     pathPrefix: '/groups',
+    back: {
+      data: {
+        titleMessage: messages.groups.back,
+      }
+    },
     home: {
       path: (groupId = ':group_id') => `/groups/${groupId}`,
       data: {
@@ -613,15 +618,40 @@ export const ROUTES = {
         },
       }
     },
+    plan: {
+      index: {
+        data: {
+          titleMessage: messages.admin.plan.index
+        }
+      }
+    },
+    include: {
+      index: {
+        data: {
+          titleMessage: messages.admin.include.index
+        }
+      }
+    },
+    mentorship: {
+      index: {
+        data: {
+          titleMessage: messages.admin.mentorship.index
+        }
+      }
+    },
     innovate: {
       index: {
         data: {
           pathPrefix: '/admin/innovate',
+          titleMessage: messages.admin.innovate.index
         }
       },
       campaigns: {
         index: {
-          path: () => '/admin/innovate/campaigns'
+          path: () => '/admin/innovate/campaigns',
+          data: {
+            titleMessage: messages.admin.innovate.campaigns
+          }
         },
         new: {
           path: () => '/admin/innovate/campaigns/new'
@@ -646,7 +676,10 @@ export const ROUTES = {
       },
       financials: {
         index: {
-          path: () => '/admin/innovate/financials'
+          path: () => '/admin/innovate/financials',
+          data: {
+            titleMessage: messages.admin.innovate.financials
+          }
         }
       },
     },
@@ -690,7 +723,8 @@ export const ROUTES = {
         pathPrefix: '/admin/system/settings',
         fields: {
           index: {
-            path: () => '/admin/system/settings/fields'
+            path: () => '/admin/system/settings/fields',
+            titleMessage: messages.admin.system.globalSettings,
           }
         },
         customText: {
@@ -750,7 +784,21 @@ export const ROUTES = {
             path: (sponsorId = ':sponsor_id') => `/admin/system/branding/sponsors/${sponsorId}/edit`
           }
         }
-      }
+      },
+      logs: {
+        index: {
+          data: {
+            titleMessage: messages.admin.system.logs,
+          }
+        },
+      },
+      diversity: {
+        index: {
+          data: {
+            titleMessage: messages.admin.system.diversity,
+          }
+        },
+      },
     }
   },
 };

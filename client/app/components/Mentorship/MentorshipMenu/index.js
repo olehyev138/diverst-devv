@@ -43,7 +43,7 @@ const styles = theme => ({
 
 export function MentorshipMenu(props) {
   const user = dig(props, 'user');
-  const globalUser = dig(props, 'globalUser');
+  const userSession = dig(props, 'userSession');
   const { classes } = props;
 
   return (
@@ -61,7 +61,7 @@ export function MentorshipMenu(props) {
                 <DiverstFormattedMessage {...messages.menu.profile} />
               </Button>
             </CardContent>
-            { user.id === globalUser.id && (
+            { user.id === userSession.user_id && (
               <CardContent>
                 <Button
                   to={ROUTES.user.mentorship.edit.path(user.id)}
@@ -97,7 +97,7 @@ export function MentorshipMenu(props) {
                 </Button>
               </CardContent>
             )}
-            { user.id === globalUser.id && (
+            { user.id === userSession.user_id && (
               <CardContent>
                 <Button
                   to={ROUTES.user.mentorship.proposals.path(user.id)}
@@ -109,7 +109,7 @@ export function MentorshipMenu(props) {
                 </Button>
               </CardContent>
             )}
-            { user.id === globalUser.id && (user.accepting_mentor_requests || user.accepting_mentee_requests) && (
+            { user.id === userSession.user_id && (user.accepting_mentor_requests || user.accepting_mentee_requests) && (
               <CardContent>
                 <Button
                   to={ROUTES.user.mentorship.requests.path(user.id)}
@@ -172,7 +172,7 @@ export function MentorshipMenu(props) {
 
 MentorshipMenu.propTypes = {
   user: PropTypes.object,
-  globalUser: PropTypes.shape({
+  userSession: PropTypes.shape({
     id: PropTypes.number
   }).isRequired,
   classes: PropTypes.object,

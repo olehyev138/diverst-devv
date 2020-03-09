@@ -18,10 +18,13 @@ import RouteService from 'utils/routeHelpers';
 import SponsorForm from 'components/Branding/Sponsor/SponsorForm';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
+import messages from 'containers/Branding/messages';
+import { injectIntl, intlShape } from 'react-intl';
+
 export function SponsorCreatePage(props) {
   useInjectReducer({ key: 'sponsors', reducer });
   useInjectSaga({ key: 'sponsors', saga });
-
+  const { intl } = props;
   const links = {
     sponsorIndex: ROUTES.admin.system.branding.sponsors.index.path(),
   };
@@ -33,13 +36,14 @@ export function SponsorCreatePage(props) {
       <SponsorForm
         sponsorAction={props.createSponsorBegin}
         links={links}
-        buttonText='Create'
+        buttonText={intl.formatMessage(messages.create)}
       />
     </React.Fragment>
   );
 }
 
 SponsorCreatePage.propTypes = {
+  intl: intlShape,
   createSponsorBegin: PropTypes.func,
   sponsorsUnmount: PropTypes.func
 };
@@ -58,6 +62,7 @@ const withConnect = connect(
 );
 
 export default compose(
+  injectIntl,
   withConnect,
   memo,
 )(SponsorCreatePage);

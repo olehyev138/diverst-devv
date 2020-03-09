@@ -17,6 +17,7 @@ import { withStyles } from '@material-ui/core/styles';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/GlobalSettings/EnterpriseConfiguration/messages';
 import { buildValues, mapFields } from 'utils/formHelpers';
 
@@ -48,7 +49,7 @@ export function EnterpriseConfigurationInner({ classes, handleSubmit, handleChan
                 id='name'
                 name='name'
                 margin='normal'
-                label='Name'
+                label={<DiverstFormattedMessage {...messages.name} />}
                 value={values.name}
               />
             </Grid>
@@ -59,7 +60,7 @@ export function EnterpriseConfigurationInner({ classes, handleSubmit, handleChan
                 id='time_zone'
                 name='time_zone'
                 margin='normal'
-                label='Time Zone'
+                label={<DiverstFormattedMessage {...messages.timezone} />}
                 value={values.time_zone}
                 options={dig(props, 'enterprise', 'timezones') || []}
                 onChange={value => setFieldValue('time_zone', value)}
@@ -74,7 +75,7 @@ export function EnterpriseConfigurationInner({ classes, handleSubmit, handleChan
                 id='default_from_email_address'
                 name='default_from_email_address'
                 margin='normal'
-                label='Default from email'
+                label={<DiverstFormattedMessage {...messages.from_email} />}
                 value={values.default_from_email_address}
               />
             </Grid>
@@ -86,7 +87,7 @@ export function EnterpriseConfigurationInner({ classes, handleSubmit, handleChan
                 id='default_from_email_display_name'
                 name='default_from_email_display_name'
                 margin='normal'
-                label='Default from email display name'
+                label={<DiverstFormattedMessage {...messages.from_display_name} />}
                 value={values.default_from_email_display_name}
               />
             </Grid>
@@ -98,7 +99,7 @@ export function EnterpriseConfigurationInner({ classes, handleSubmit, handleChan
                 id='redirect_email_contact'
                 name='redirect_email_contact'
                 margin='normal'
-                label='Redirect email contact'
+                label={<DiverstFormattedMessage {...messages.redirect_email_contact} />}
                 value={values.redirect_email_contact}
               />
             </Grid>
@@ -106,7 +107,7 @@ export function EnterpriseConfigurationInner({ classes, handleSubmit, handleChan
               <FormControl>
                 <FormControlLabel
                   labelPlacement='bottom'
-                  label='Mentorship Module Enabled'
+                  label={<DiverstFormattedMessage {...messages.mentorship_module} />}
                   control={(
                     <Field
                       component={Switch}
@@ -115,7 +116,6 @@ export function EnterpriseConfigurationInner({ classes, handleSubmit, handleChan
                       id='mentorship_module_enabled'
                       name='mentorship_module_enabled'
                       margin='normal'
-                      label='Mentorship Module Enabled'
                       checked={values.mentorship_module_enabled}
                       value={values.mentorship_module_enabled}
                     />
@@ -127,7 +127,7 @@ export function EnterpriseConfigurationInner({ classes, handleSubmit, handleChan
               <FormControl>
                 <FormControlLabel
                   labelPlacement='bottom'
-                  label='Disable Likes'
+                  label={<DiverstFormattedMessage {...messages.likes} />}
                   control={(
                     <Field
                       component={Switch}
@@ -147,7 +147,7 @@ export function EnterpriseConfigurationInner({ classes, handleSubmit, handleChan
               <FormControl>
                 <FormControlLabel
                   labelPlacement='bottom'
-                  label='Enable Pending Comments'
+                  label={<DiverstFormattedMessage {...messages.pending_comments} />}
                   control={(
                     <Field
                       component={Switch}
@@ -167,7 +167,7 @@ export function EnterpriseConfigurationInner({ classes, handleSubmit, handleChan
               <FormControl>
                 <FormControlLabel
                   labelPlacement='bottom'
-                  label='Collaborate module enabled'
+                  label={<DiverstFormattedMessage {...messages.collaborate_module} />}
                   control={(
                     <Field
                       component={Switch}
@@ -187,7 +187,7 @@ export function EnterpriseConfigurationInner({ classes, handleSubmit, handleChan
               <FormControl>
                 <FormControlLabel
                   labelPlacement='bottom'
-                  label='Scope module enabled'
+                  label={<DiverstFormattedMessage {...messages.scope_module} />}
                   control={(
                     <Field
                       component={Switch}
@@ -207,7 +207,7 @@ export function EnterpriseConfigurationInner({ classes, handleSubmit, handleChan
               <FormControl>
                 <FormControlLabel
                   labelPlacement='bottom'
-                  label='Enable onboarding emails?'
+                  label={<DiverstFormattedMessage {...messages.onboarding_emails} />}
                   control={(
                     <Field
                       component={Switch}
@@ -227,7 +227,7 @@ export function EnterpriseConfigurationInner({ classes, handleSubmit, handleChan
               <FormControl>
                 <FormControlLabel
                   labelPlacement='bottom'
-                  label='Disable all emails?'
+                  label={<DiverstFormattedMessage {...messages.all_emails} />}
                   control={(
                     <Field
                       component={Switch}
@@ -247,7 +247,7 @@ export function EnterpriseConfigurationInner({ classes, handleSubmit, handleChan
               <FormControl>
                 <FormControlLabel
                   labelPlacement='bottom'
-                  label='Enable rewards?'
+                  label={<DiverstFormattedMessage {...messages.rewards} />}
                   control={(
                     <Field
                       component={Switch}
@@ -267,7 +267,7 @@ export function EnterpriseConfigurationInner({ classes, handleSubmit, handleChan
               <FormControl>
                 <FormControlLabel
                   labelPlacement='bottom'
-                  label='Enable social media?'
+                  label={<DiverstFormattedMessage {...messages.social_media} />}
                   control={(
                     <Field
                       component={Switch}
@@ -287,7 +287,7 @@ export function EnterpriseConfigurationInner({ classes, handleSubmit, handleChan
               <FormControl>
                 <FormControlLabel
                   labelPlacement='bottom'
-                  label='Plan module enabled?'
+                  label={<DiverstFormattedMessage {...messages.plan_module} />}
                   control={(
                     <Field
                       component={Switch}
@@ -311,10 +311,10 @@ export function EnterpriseConfigurationInner({ classes, handleSubmit, handleChan
             color='primary'
             type='submit'
           >
-            Save
+            <DiverstFormattedMessage {...messages.save} />
           </Button>
           <Button>
-            Cancel
+            <DiverstFormattedMessage {...messages.cancel} />
           </Button>
         </CardActions>
       </Form>

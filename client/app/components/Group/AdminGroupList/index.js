@@ -10,6 +10,7 @@ import { compose } from 'redux';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Group/messages';
+import { injectIntl, intlShape } from 'react-intl';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -56,7 +57,7 @@ const styles = theme => ({
 });
 
 export function AdminGroupList(props, context) {
-  const { classes, defaultParams } = props;
+  const { classes, defaultParams, intl } = props;
   const [expandedGroups, setExpandedGroups] = useState({});
 
   /* Store a expandedGroupsHash for each group, that tracks whether or not its children are expanded */
@@ -131,7 +132,7 @@ export function AdminGroupList(props, context) {
                       className={classes.errorButton}
                       onClick={() => {
                         /* eslint-disable-next-line no-alert, no-restricted-globals */
-                        if (confirm('Delete group?'))
+                        if (confirm(intl.formatMessage(messages.delete_confirm)))
                           props.deleteGroupBegin(group.id);
                       }}
                     >
@@ -233,6 +234,7 @@ export function AdminGroupList(props, context) {
 }
 
 AdminGroupList.propTypes = {
+  intl: intlShape,
   defaultParams: PropTypes.object,
   classes: PropTypes.object,
   isLoading: PropTypes.bool,
@@ -244,5 +246,6 @@ AdminGroupList.propTypes = {
 
 export default compose(
   memo,
+  injectIntl,
   withStyles(styles),
 )(AdminGroupList);

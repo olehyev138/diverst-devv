@@ -87,6 +87,12 @@ export default defineMessages({
     },
     types: {
       id: `${scope}.long.types`
+    },
+    your_time_zone: {
+      id: `${scope}.long.your_time_zone`
+    },
+    their_time_zone: {
+      id: `${scope}.long.their_time_zone`
     }
   },
   form: {

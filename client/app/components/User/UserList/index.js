@@ -27,7 +27,7 @@ import EditIcon from '@material-ui/icons/Edit';
 
 import DiverstTable from 'components/Shared/DiverstTable';
 import DiverstDropdownMenu from 'components/Shared/DiverstDropdownMenu';
-
+import { injectIntl, intlShape } from 'react-intl';
 
 const styles = theme => ({
   userListItem: {
@@ -42,7 +42,7 @@ const styles = theme => ({
 });
 
 export function UserList(props, context) {
-  const { classes } = props;
+  const { classes, intl } = props;
   const [expandedUsers, setExpandedUsers] = useState({});
 
   const [userForm, setUserForm] = useState(undefined);
@@ -67,17 +67,17 @@ export function UserList(props, context) {
 
   const columns = [
     {
-      title: 'First Name',
+      title: <DiverstFormattedMessage {...messages.first_name} />,
       field: 'first_name',
       query_field: 'first_name'
     },
     {
-      title: 'Last Name',
+      title: <DiverstFormattedMessage {...messages.last_name} />,
       field: 'last_name',
       query_field: 'last_name'
     },
     {
-      title: 'Email',
+      title: <DiverstFormattedMessage {...messages.email} />,
       field: 'email',
       query_field: 'email'
     },
@@ -118,7 +118,7 @@ export function UserList(props, context) {
       <Grid container spacing={3}>
         <Grid item xs>
           <DiverstTable
-            title='Members'
+            title={intl.formatMessage(messages.members)}
             handlePagination={props.handlePagination}
             handleOrdering={props.handleOrdering}
             isLoading={props.isFetchingUsers}
@@ -128,16 +128,16 @@ export function UserList(props, context) {
             columns={columns}
             actions={[{
               icon: () => <EditIcon />,
-              tooltip: 'Edit Member',
+              tooltip: intl.formatMessage(messages.tooltip.edit),
               onClick: (_, rowData) => {
                 props.handleVisitUserEdit(rowData.id);
               }
             }, {
               icon: () => <DeleteIcon />,
-              tooltip: 'Delete Member',
+              tooltip: intl.formatMessage(messages.tooltip.edit),
               onClick: (_, rowData) => {
                 /* eslint-disable-next-line no-alert, no-restricted-globals */
-                if (confirm('Delete member?'))
+                if (confirm(intl.formatMessage(messages.delete_confirm)))
                   props.deleteUserBegin(rowData.id);
               }
             }]}
@@ -184,6 +184,7 @@ export function UserList(props, context) {
 }
 
 UserList.propTypes = {
+  intl: intlShape,
   classes: PropTypes.object,
   users: PropTypes.object,
   userTotal: PropTypes.number,
@@ -202,6 +203,7 @@ UserList.propTypes = {
 };
 
 export default compose(
+  injectIntl,
   memo,
   withStyles(styles),
 )(UserList);
