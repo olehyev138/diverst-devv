@@ -698,6 +698,14 @@ export const ROUTES = {
           edit: {
             path: (roleId = ':role_id') => `/admin/system/users/roles/${roleId}/edit`,
           },
+        },
+        policy_templates: {
+          index: {
+            path: () => '/admin/system/users/policy_templates'
+          },
+          edit: {
+            path: (policyId = ':policy_id') => `/admin/system/users/policy_templates/${policyId}/edit`
+          },
         }
       },
       globalSettings: {
@@ -738,7 +746,7 @@ export const ROUTES = {
           edit: {
             path: (eventId = ':event_id') => `/admin/system/settings/emailEvents/${eventId}/edit`
           },
-        }
+        },
       },
       branding: {
         index: {

@@ -11,24 +11,25 @@ import GlobalSettingsLinks from 'components/GlobalSettings/GlobalSettingsLinks';
 
 const styles = theme => ({});
 
-const GlobalSettingsPages = Object.freeze({
-  fields: 0,
-  custom_texts: 1,
-  configuration: 2,
-  sso: 3,
-  email: 4,
-});
+const GlobalSettingsPages = Object.freeze([
+  'fields',
+  'custom_texts',
+  'configuration',
+  'sso',
+  'email',
+  'policy_templates',
+]);
 
 const GlobalSettingsLayout = ({ component: Component, ...rest }) => {
   const { classes, data, location, ...other } = rest;
 
   /* Get get first key that is in the path, ie: '/admin/system/settings/emails/1/edit/ -> emails */
-  const currentPage = Object.keys(GlobalSettingsPages).find(page => location.pathname.includes(page));
-  const [tab, setTab] = useState(GlobalSettingsPages[currentPage]);
+  const currentPage = GlobalSettingsPages.find(page => location.pathname.includes(page));
+  const [tab, setTab] = useState(currentPage);
 
   useEffect(() => {
-    if (tab !== GlobalSettingsPages[currentPage])
-      setTab(GlobalSettingsPages[currentPage]);
+    if (tab !== currentPage)
+      setTab(currentPage);
   }, [currentPage]);
 
   return (
