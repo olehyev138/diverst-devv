@@ -210,8 +210,6 @@ export default function Routes(props) {
       <EmailLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.emails.edit)} component={EmailEditPage} />
       <EmailLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.mailEvents.index)} component={EmailEventsPage} />
       <EmailLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.mailEvents.edit)} component={EmailEventEditPage} />
-      <GlobalSettingsLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.policy_templates.index)} component={PolicyTemplatesPage} />
-      <GlobalSettingsLayout exact {...expandRoute(ROUTES.admin.system.globalSettings.policy_templates.edit)} component={PolicyTemplateEditPage} />
 
       { /* Admin - System - Users */ }
       <SystemUserLayout exact {...expandRoute(ROUTES.admin.system.users.index)} component={UsersPage} />
@@ -223,6 +221,8 @@ export default function Routes(props) {
       <SystemUserLayout exact {...expandRoute(ROUTES.admin.system.users.roles.index)} component={UserRolesListPage} />
       <SystemUserLayout exact {...expandRoute(ROUTES.admin.system.users.roles.new)} component={UserRoleCreatePage} />
       <SystemUserLayout exact {...expandRoute(ROUTES.admin.system.users.roles.edit)} component={UserRoleEditPage} />
+      <SystemUserLayout exact {...expandRoute(ROUTES.admin.system.users.policy_templates.index)} component={PolicyTemplatesPage} />
+      <SystemUserLayout exact {...expandRoute(ROUTES.admin.system.users.policy_templates.edit)} component={PolicyTemplateEditPage} />
 
       { /* Admin - System - Branding */ }
       <BrandingLayout exact {...expandRoute(ROUTES.admin.system.branding.theme)} component={BrandingThemePage} />

@@ -9,20 +9,20 @@ import { compose } from 'redux';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 
-import reducer from 'containers/GlobalSettings/Policy/reducer';
-import saga from 'containers/GlobalSettings/Policy/saga';
+import reducer from 'containers/User/Policy/reducer';
+import saga from 'containers/User/Policy/saga';
 
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { selectGroup } from 'containers/Group/selectors';
 import { selectUser } from 'containers/Shared/App/selectors';
-import { selectPolicy, selectIsCommitting, selectIsFetchingPolicy } from 'containers/GlobalSettings/Policy/selectors';
+import { selectPolicy, selectIsCommitting, selectIsFetchingPolicy } from 'containers/User/Policy/selectors';
 
 import {
   getPolicyBegin, updatePolicyBegin,
   policiesUnmount
-} from 'containers/GlobalSettings/Policy/actions';
+} from 'containers/User/Policy/actions';
 
 import PolicyForm from 'components/GlobalSettings/PolicyTemplate/PolicyForm';
 
@@ -32,7 +32,7 @@ export function PolicyEditPage(props) {
 
   const rs = new RouteService(useContext);
   const links = {
-    policiesIndex: ROUTES.admin.system.globalSettings.policy_templates.index.path(),
+    policiesIndex: ROUTES.admin.system.users.policy_templates.index.path(),
   };
 
   useEffect(() => {

@@ -58,12 +58,6 @@ export function GlobalSettingsLinks(props) {
             label={<DiverstFormattedMessage {...messages.emails} />}
             value='email'
           />
-          <Tab
-            component={WrappedNavLink}
-            to={ROUTES.admin.system.globalSettings.policy_templates.index.path()}
-            label={<DiverstFormattedMessage {...messages.policy_templates} />}
-            value='policy_templates'
-          />
         </ResponsiveTabs>
       </Paper>
     </React.Fragment>

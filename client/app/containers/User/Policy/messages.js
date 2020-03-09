@@ -6,7 +6,7 @@
 
 import { defineMessages } from 'react-intl';
 
-export const scope = 'diverst.containers.GlobalSettings.Policies';
+export const scope = 'diverst.containers.Policies';
 
 export default defineMessages({
   form: {

@@ -11,8 +11,8 @@ import { push } from 'connected-react-router';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 
-import saga from 'containers/GlobalSettings/Policy/saga';
-import reducer from 'containers/GlobalSettings/Policy/reducer';
+import saga from 'containers/User/Policy/saga';
+import reducer from 'containers/User/Policy/reducer';
 
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -21,16 +21,16 @@ import {
   selectPaginatedPolicies,
   selectIsFetchingPolicies,
   selectPoliciesTotal
-} from 'containers/GlobalSettings/Policy/selectors';
+} from 'containers/User/Policy/selectors';
 import { selectUser } from 'containers/Shared/App/selectors';
 
 import {
   policiesUnmount, getPoliciesBegin,
-} from 'containers/GlobalSettings/Policy/actions';
+} from 'containers/User/Policy/actions';
 
 import PolicyTemplatesList from 'components/GlobalSettings/PolicyTemplate/PolicyTemplatesList';
 
-const handlePolicyEdit = id => push(ROUTES.admin.system.globalSettings.policy_templates.edit.path(id));
+const handlePolicyEdit = id => push(ROUTES.admin.system.users.policy_templates.edit.path(id));
 
 const defaultParams = Object.freeze({
   count: 10, // TODO: Make this a constant and use it also in EventsList
