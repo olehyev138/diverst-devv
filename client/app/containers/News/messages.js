@@ -12,9 +12,6 @@ export default defineMessages({
   new: {
     id: `${scope}.index.button.group_message.new`,
   },
-  approve: {
-    id: `${scope}.index.button.approve`,
-  },
   comments: {
     id: `${scope}.index.button.comments`,
   },
