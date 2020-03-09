@@ -20,11 +20,13 @@ import { selectUser, selectFieldData, selectIsFormLoading } from 'containers/Use
 
 import saga from 'containers/User/saga';
 import Profile from 'components/User/Profile';
+import { injectIntl, intlShape } from 'react-intl';
+import messages from 'containers/User/messages';
 
 export function UserProfilePage(props) {
   useInjectReducer({ key: 'users', reducer });
   useInjectSaga({ key: 'users', saga });
-
+  const { intl } = props;
   const rs = new RouteService(useContext);
   const links = {
     userEdit: id => ROUTES.user.edit.path(id),
@@ -44,7 +46,7 @@ export function UserProfilePage(props) {
         links={links}
         user={props.user}
         fieldData={props.fieldData}
-        buttonText='Update'
+        buttonText={intl.formatMessage(messages.update)}
         isFormLoading={props.isFormLoading}
       />
     </React.Fragment>
@@ -52,6 +54,7 @@ export function UserProfilePage(props) {
 }
 
 UserProfilePage.propTypes = {
+  intl: intlShape,
   path: PropTypes.string,
   user: PropTypes.object,
   fieldData: PropTypes.array,
@@ -77,6 +80,7 @@ const withConnect = connect(
 );
 
 export default compose(
+  injectIntl,
   withConnect,
   memo,
 )(UserProfilePage);

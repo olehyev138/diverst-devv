@@ -25,6 +25,9 @@ import NewsLinkListItem from 'components/News/NewsLink/NewsLinkListItem';
 import SocialLinkListItem from 'components/News/SocialLink/SocialLinkListItem';
 import DiverstPagination from 'components/Shared/DiverstPagination';
 import DiverstLoader from 'components/Shared/DiverstLoader';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/News/messages';
+import { injectIntl, intlShape } from 'react-intl';
 
 const styles = theme => ({
   newsItem: {
@@ -52,17 +55,17 @@ export function NewsFeed(props) {
   const actions = [
     {
       icon: <MessageIcon />,
-      name: 'Group Message',
+      name: <DiverstFormattedMessage {...messages.group_message} />,
       linkPath: props.links.groupMessageNew,
     },
     {
       icon: <NewsIcon />,
-      name: 'News Link',
+      name: <DiverstFormattedMessage {...messages.news_link} />,
       linkPath: props.links.newsLinkNew,
     },
     {
       icon: <SocialIcon />,
-      name: 'Social Link',
+      name: <DiverstFormattedMessage {...messages.social_link} />,
       linkPath: props.links.socialLinkNew,
     },
   ];
@@ -123,7 +126,7 @@ export function NewsFeed(props) {
         <React.Fragment>
           <Backdrop open={speedDialOpen} className={classes.backdrop} />
           <SpeedDial
-            ariaLabel='Add Item'
+            ariaLabel={props.intl.formatMessage(messages.add)}
             className={classes.speedDial}
             icon={<SpeedDialIcon />}
             onClose={handleSpeedDialClose}
@@ -156,8 +159,8 @@ export function NewsFeed(props) {
               indicatorColor='primary'
               textColor='primary'
             >
-              <Tab label='APPROVED' />
-              <Tab label='PENDING APPROVAL' />
+              <Tab label={<DiverstFormattedMessage {...messages.approved} />} />
+              <Tab label={<DiverstFormattedMessage {...messages.pending} />} />
             </ResponsiveTabs>
           </Paper>
         </React.Fragment>
@@ -187,6 +190,7 @@ export function NewsFeed(props) {
 }
 
 NewsFeed.propTypes = {
+  intl: intlShape,
   defaultParams: PropTypes.object,
   currentTab: PropTypes.number,
   handleChangeTab: PropTypes.func,
@@ -206,5 +210,6 @@ NewsFeed.propTypes = {
 
 export default compose(
   memo,
+  injectIntl,
   withStyles(styles)
 )(NewsFeed);

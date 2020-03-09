@@ -23,6 +23,9 @@ import { selectIsCommitting } from 'containers/Innovate/Campaign/CampaignQuestio
 
 import AnswerForm from 'components/Innovate/Campaign/CampaignQuestion/CampaignQuestionForm';
 
+import { injectIntl, intlShape } from 'react-intl';
+import messages from 'containers/Innovate/Campaign/CampaignQuestion/Answer/messages';
+
 export function AnswerCreatePage(props) {
   useInjectReducer({ key: 'answers', reducer });
   useInjectSaga({ key: 'answers', saga });
@@ -30,7 +33,7 @@ export function AnswerCreatePage(props) {
   useInjectSaga({ key: 'questions', saga });
   useInjectReducer({ key: 'campaigns', reducer: campaignReducer });
   useInjectSaga({ key: 'campaigns', saga: campaignSaga });
-
+  const { intl } = props;
   const rs = new RouteService(useContext);
   const questionId = rs.params('question_id');
   const campaignId = rs.params('campaign_id');
@@ -45,7 +48,7 @@ export function AnswerCreatePage(props) {
       answerAction={props.createAnswerBegin}
       campaignId={campaignId[0]}
       questionId={questionId[0]}
-      buttonText='CREATE ANSWER'
+      buttonText={intl.formatMessage(messages.create)}
       isCommitting={props.isCommitting}
       // links={links}
     />
@@ -53,6 +56,7 @@ export function AnswerCreatePage(props) {
 }
 
 AnswerCreatePage.propTypes = {
+  intl: intlShape,
   createAnswerBegin: PropTypes.func,
   questionAnswersUnmount: PropTypes.func,
   getAnswerBegin: PropTypes.func,
@@ -75,6 +79,7 @@ const withConnect = connect(
 );
 
 export default compose(
+  injectIntl,
   withConnect,
   memo,
 )(AnswerCreatePage);

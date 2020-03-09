@@ -42,6 +42,9 @@ import {
   getResourceEditPath,
 } from 'utils/resourceHelpers';
 
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/Resource/Folder/messages';
+
 const defaultParams = Object.freeze({
   count: 5, // TODO: Make this a constant and use it also in Folder
   page: 0,
@@ -182,16 +185,16 @@ export function FolderPage(props) {
             <Form onSubmit={handleSubmit}>
               <Card>
                 <CardContent>
-                  This folder is password protected.
+                  <DiverstFormattedMessage {...messages.authenticate.label1} />
                   <br />
-                  Please enter the password to access the resources.
+                  <DiverstFormattedMessage {...messages.authenticate.label2} />
                   <Field
                     component={TextField}
                     autoFocus
                     margin='dense'
                     id='password'
                     name='password'
-                    label='Password'
+                    label={<DiverstFormattedMessage {...messages.authenticate.password} />}
                     type='password'
                     value={values.password}
                     onChange={handleChange}
@@ -200,7 +203,7 @@ export function FolderPage(props) {
                 </CardContent>
                 <Card>
                   <Button color='primary' type='submit'>
-                    AUTHENTICATE
+                    <DiverstFormattedMessage {...messages.authenticate.button} />
                   </Button>
                 </Card>
               </Card>

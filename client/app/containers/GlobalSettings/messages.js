@@ -10,18 +10,18 @@ export const scope = 'diverst.containers.GlobalSettings.Links';
 
 export default defineMessages({
   fields: {
-    id: `${scope}.fields`
+    id: `${scope}.tab.fields`
   },
   customTexts: {
-    id: `${scope}.customTexts`
+    id: `${scope}.tab.customTexts`
   },
   configuration: {
-    id: `${scope}.configuration`
+    id: `${scope}.tab.configuration`
   },
   sso: {
-    id: `${scope}.sso`
+    id: `${scope}.tab.sso`
   },
   emails: {
-    id: `${scope}.emails`
+    id: `${scope}.tab.emails`
   },
 });

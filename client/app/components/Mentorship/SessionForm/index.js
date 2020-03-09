@@ -54,7 +54,7 @@ export function SessionFormInner({ handleSubmit, handleChange, handleBlur, value
               keyboardMode
               /* eslint-disable-next-line dot-notation */
               maxDate={values['end'] || undefined}
-              maxDateMessage='Start date cannot be after end date'
+              maxDateMessage={props.intl.formatMessage(messages.form.start_message)}
               fullWidth
               id='start'
               name='start'
@@ -68,7 +68,7 @@ export function SessionFormInner({ handleSubmit, handleChange, handleBlur, value
               keyboardMode
               /* eslint-disable-next-line dot-notation */
               minDate={values['start']}
-              minDateMessage='End date cannot be before start date'
+              minDateMessage={props.intl.formatMessage(messages.form.end_message)}
               fullWidth
               id='end'
               name='end'

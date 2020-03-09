@@ -78,7 +78,7 @@ export function GroupFormInner({ classes, handleSubmit, handleChange, handleBlur
                         value={values.private}
                       />
                     )}
-                    label='Private?'
+                    label={<DiverstFormattedMessage {...messages.private} />}
                   />
                 </FormControl>
               </Grid>

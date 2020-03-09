@@ -17,12 +17,12 @@ import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/News/messages';
 import DeleteIcon from '@material-ui/icons/DeleteOutline';
 import { formatDateTimeString } from 'utils/dateTimeHelpers';
-
+import { injectIntl, intlShape } from 'react-intl';
 const styles = theme => ({
 });
 
 export function GroupMessageListItem(props) {
-  const { newsItem } = props;
+  const { newsItem, intl } = props;
   const newsItemId = newsItem.id;
   const groupMessage = newsItem.group_message;
   const groupId = groupMessage.group_id;
@@ -80,6 +80,13 @@ export function GroupMessageListItem(props) {
               </Button>
             </React.Fragment>
           )}
+          <Button
+            size='small'
+            to={props.links.groupMessageShow(props.groupId, newsItem.id)}
+            component={WrappedNavLink}
+          >
+            <DiverstFormattedMessage {...messages.comments} />
+          </Button>
           {!props.readonly && props.newsItem.approved !== true && (
             <Button
               size='small'
@@ -91,6 +98,18 @@ export function GroupMessageListItem(props) {
               <DiverstFormattedMessage {...messages.approve} />
             </Button>
           )}
+          {!props.readonly && (
+            <Button
+              size='small'
+              onClick={() => {
+                /* eslint-disable-next-line no-alert, no-restricted-globals */
+                if (confirm(intl.formatMessage(messages.group_delete_confirm)))
+                  props.deleteGroupMessageBegin(newsItem.group_message);
+              }}
+            >
+              <DiverstFormattedMessage {...messages.delete} />
+            </Button>
+          )}
         </CardActions>
       )}
     </Card>
@@ -98,6 +117,7 @@ export function GroupMessageListItem(props) {
 }
 
 GroupMessageListItem.propTypes = {
+  intl: intlShape,
   newsItem: PropTypes.object,
   readonly: PropTypes.bool,
   groupId: PropTypes.number,
@@ -112,5 +132,6 @@ GroupMessageListItem.propTypes = {
 
 export default compose(
   memo,
+  injectIntl,
   withStyles(styles)
 )(GroupMessageListItem);
