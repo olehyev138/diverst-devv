@@ -99,7 +99,7 @@ export function FolderFormInner({ handleSubmit, handleChange, handleBlur, values
                         value={values.password_protected}
                       />
                     )}
-                    label='Password?'
+                    label={<DiverstFormattedMessage {...messages.form.password_question} />}
                   />
                 </FormControl>
               </Grid>

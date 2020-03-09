@@ -52,7 +52,7 @@ export class NotFoundPage extends React.PureComponent {
           <Hidden xsDown>
             <HomeIcon />
           </Hidden>
-          Return To Home
+          <FormattedMessage {...messages.return} />
         </Button>
       </div>
     );

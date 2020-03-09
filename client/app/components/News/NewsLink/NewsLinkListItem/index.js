@@ -20,6 +20,7 @@ import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/News/messages';
+import { injectIntl, intlShape } from 'react-intl';
 
 const styles = theme => ({
 });
@@ -29,7 +30,7 @@ export function NewsLinkListItem(props) {
   const newsItemId = newsItem.id;
   const newsLink = newsItem.news_link;
   const groupId = newsLink.group_id;
-  const { links } = props;
+  const { links, intl } = props;
   return (
     <Card>
       <CardContent>
@@ -55,22 +56,24 @@ export function NewsLinkListItem(props) {
       </CardContent>
       {props.links && props.newsItem && (
         <CardActions>
-          <Button
-            size='small'
-            color='primary'
-            to={props.links.newsLinkEdit(newsItem.id)}
-            component={WrappedNavLink}
-          >
-            <DiverstFormattedMessage {...messages.edit} />
-          </Button>
+          {!props.readonly && (
+            <Button
+              size='small'
+              color='primary'
+              to={props.links.newsLinkEdit(newsItem.id)}
+              component={WrappedNavLink}
+            >
+              <DiverstFormattedMessage {...messages.edit} />
+            </Button>
+          )}
           <Button
             size='small'
             to={links.newsLinkShow(props.groupId, newsItem.id)}
             component={WrappedNavLink}
           >
-            Comments
+            {<DiverstFormattedMessage {...messages.comments} />}
           </Button>
-          {props.newsItem.approved !== true ? (
+          {!props.readonly && props.newsItem.approved !== true && (
             <Button
               size='small'
               onClick={() => {
@@ -78,19 +81,21 @@ export function NewsLinkListItem(props) {
                 props.updateNewsItemBegin({ approved: true, id: newsItemId, group_id: groupId });
               }}
             >
-              Approve
+              {<DiverstFormattedMessage {...messages.approve} />}
             </Button>
-          ) : null }
-          <Button
-            size='small'
-            onClick={() => {
-              /* eslint-disable-next-line no-alert, no-restricted-globals */
-              if (confirm('Delete news link?'))
-                props.deleteNewsLinkBegin(newsItem.news_link);
-            }}
-          >
-            Delete
-          </Button>
+          )}
+          {!props.readonly && (
+            <Button
+              size='small'
+              onClick={() => {
+                /* eslint-disable-next-line no-alert, no-restricted-globals */
+                if (confirm(intl.formatMessage(messages.news_delete_confirm)))
+                  props.deleteNewsLinkBegin(newsItem.news_link);
+              }}
+            >
+              {<DiverstFormattedMessage {...messages.delete} />}
+            </Button>
+          )}
         </CardActions>
       )}
     </Card>
@@ -98,6 +103,7 @@ export function NewsLinkListItem(props) {
 }
 
 NewsLinkListItem.propTypes = {
+  intl: intlShape,
   newsLink: PropTypes.object,
   readonly: PropTypes.bool,
   groupId: PropTypes.number,
@@ -108,6 +114,7 @@ NewsLinkListItem.propTypes = {
 };
 
 export default compose(
+  injectIntl,
   memo,
   withStyles(styles)
 )(NewsLinkListItem);

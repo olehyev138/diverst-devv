@@ -30,8 +30,7 @@ export function SegmentMemberListPage(props) {
   useInjectSaga({ key: 'segments', saga });
 
   const rs = new RouteService(useContext);
-  const segmentIds = rs.params('segment_id');
-  const segmentId = segmentIds ? segmentIds[0] : null;
+  const segmentId = rs.params('segment_id');
 
   const [params, setParams] = useState({
     segment_id: segmentId, count: 5, page: 0, order: 'asc'

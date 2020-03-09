@@ -338,14 +338,15 @@ RSpec.describe Group, type: :model do
 
   describe '#survey_answers_csv' do
     it 'returns a csv file' do
-      group = create(:group)
-      field = create(:field, field_type: 'group_survey', field_definer: group)
+      field = build(:field, field_type: 'group_survey')
+      group = create(:group, survey_fields: [field])
       user = create(:user)
       user_group = create(:user_group, user: user, group: group, data: '{"13":"test"}')
+      user_group[field] = 'test'
 
       csv = CSV.generate do |file|
         file << ['user_id', 'user_email', 'user_first_name', 'user_last_name'].concat(group.survey_fields.map(&:title))
-        file << [user.id, user.email, user.first_name, user.last_name, field.csv_value(user_group.info[field])]
+        file << [user.id, user.email, user.first_name, user.last_name, field.csv_value(user_group[field])]
       end
 
       result = group.survey_answers_csv

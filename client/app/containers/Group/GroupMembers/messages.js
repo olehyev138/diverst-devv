@@ -69,6 +69,20 @@ export default defineMessages({
       id: `${scope}.filter.submit`,
     }
   },
+  newmembers: {
+    id: `${scope}.form.newmembers`,
+  },
+  members: {
+    id: `${scope}.form.members`,
+  },
+  tooltip: {
+    delete: {
+      id: `${scope}.tooltip.delete`,
+    },
+    delete_confirm: {
+      id: `${scope}.tooltip.delete_confirm`,
+    },
+  },
   columns: {
     givenName: {
       id: `${scope}.columns.givenName`,

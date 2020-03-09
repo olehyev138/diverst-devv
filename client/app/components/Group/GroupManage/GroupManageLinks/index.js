@@ -10,7 +10,8 @@ import { withStyles } from '@material-ui/core/styles';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import ResponsiveTabs from 'components/Shared/ResponsiveTabs';
-
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/Group/GroupManage/messages';
 const styles = theme => ({});
 
 /* eslint-disable react/no-multi-comp */
@@ -29,12 +30,12 @@ export function GroupManageLinks(props) {
           <Tab
             component={WrappedNavLink}
             to={ROUTES.group.manage.settings.index.path(props.currentGroup.id)}
-            label='Settings'
+            label={<DiverstFormattedMessage {...messages.links.settings} />}
           />
           <Tab
             component={WrappedNavLink}
             to={ROUTES.group.manage.leaders.index.path(props.currentGroup.id)}
-            label='Leaders'
+            label={<DiverstFormattedMessage {...messages.links.leaders} />}
           />
         </ResponsiveTabs>
       </Paper>

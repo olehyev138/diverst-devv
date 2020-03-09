@@ -20,14 +20,14 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/News/messages';
 import WrappedNavLink from '../../../Shared/WrappedNavLink';
-
+import { injectIntl, intlShape } from 'react-intl';
 const styles = theme => ({
 });
 
 export function SocialLinkListItem(props) {
   const { socialLink } = props;
   const { newsItem } = props;
-  const { links } = props;
+  const { links, intl } = props;
   const newsItemId = newsItem.id;
   const groupId = socialLink.group_id;
   return (
@@ -49,15 +49,17 @@ export function SocialLinkListItem(props) {
         ) : <React.Fragment />}
       </CardContent>
       <CardActions>
-        <Button
-          size='small'
-          color='primary'
-          to={links.socialLinkEdit(newsItem.id)}
-          component={WrappedNavLink}
-        >
-          <DiverstFormattedMessage {...messages.edit} />
-        </Button>
-        {props.newsItem.approved !== true ? (
+        {!props.readonly && (
+          <Button
+            size='small'
+            color='primary'
+            to={links.socialLinkEdit(newsItem.id)}
+            component={WrappedNavLink}
+          >
+            <DiverstFormattedMessage {...messages.edit} />
+          </Button>
+        )}
+        {!props.readonly && props.newsItem.approved !== true && (
           <Button
             size='small'
             onClick={() => {
@@ -65,35 +67,40 @@ export function SocialLinkListItem(props) {
               props.updateNewsItemBegin({ approved: true, id: newsItemId, group_id: groupId });
             }}
           >
-            Approve
+            {<DiverstFormattedMessage {...messages.approve} />}
           </Button>
-        ) : null }
-        <Button
-          size='small'
-          onClick={() => {
-            /* eslint-disable-next-line no-alert, no-restricted-globals */
-            if (confirm('Delete social link?'))
-              props.deleteSocialLinkBegin(newsItem.social_link);
-          }}
-        >
-          Delete
-        </Button>
+        )}
+        {!props.readonly && (
+          <Button
+            size='small'
+            onClick={() => {
+              /* eslint-disable-next-line no-alert, no-restricted-globals */
+              if (confirm(intl.formatMessage(messages.social_delete_confirm)))
+                props.deleteSocialLinkBegin(newsItem.social_link);
+            }}
+          >
+            {<DiverstFormattedMessage {...messages.delete} />}
+          </Button>
+        )}
       </CardActions>
     </Card>
   );
 }
 
 SocialLinkListItem.propTypes = {
+  intl: intlShape,
   socialLink: PropTypes.object,
   links: PropTypes.shape({
     socialLinkEdit: PropTypes.func,
   }),
   newsItem: PropTypes.object,
+  readonly: PropTypes.bool,
   deleteSocialLinkBegin: PropTypes.func,
   updateNewsItemBegin: PropTypes.func,
 };
 
 export default compose(
+  injectIntl,
   memo,
   withStyles(styles)
 )(SocialLinkListItem);

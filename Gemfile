@@ -89,6 +89,7 @@ group :test do
 end
 
 group :development do
+  gem 'letter_opener', '~> 1.7'
   gem 'bcrypt_pbkdf', '~> 1.0.1'
   gem 'bullet'
   gem 'capistrano', '~> 3.9.1', require: false
