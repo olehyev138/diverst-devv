@@ -32,6 +32,9 @@ import { getUserRolesBegin, userRoleUnmount } from 'containers/User/UserRole/act
 
 import GroupLeaderForm from 'components/Group/GroupManage/GroupLeaders/GroupLeaderForm';
 
+import { injectIntl, intlShape } from 'react-intl';
+import messages from 'containers/Group/GroupManage/messages';
+
 export function GroupLeaderCreatePage(props) {
   useInjectReducer({ key: 'groupLeaders', reducer });
   useInjectSaga({ key: 'groupLeaders', saga });
@@ -39,7 +42,7 @@ export function GroupLeaderCreatePage(props) {
   useInjectSaga({ key: 'members', saga: memberSaga });
   useInjectReducer({ key: 'roles', reducer: userRoleReducer });
   useInjectSaga({ key: 'roles', saga: userRoleSaga });
-
+  const { intl } = props;
   const { isCommitting, members, ...rest } = props;
 
   const rs = new RouteService(useContext);
@@ -62,7 +65,7 @@ export function GroupLeaderCreatePage(props) {
   return (
     <GroupLeaderForm
       groupLeaderAction={props.createGroupLeaderBegin}
-      buttonText='Create'
+      buttonText={intl.formatMessage(messages.create)}
       groupId={groupId[0]}
       getMembersBegin={props.getMembersBegin}
       selectMembers={members}
@@ -74,6 +77,7 @@ export function GroupLeaderCreatePage(props) {
 }
 
 GroupLeaderCreatePage.propTypes = {
+  intl: intlShape,
   createGroupLeaderBegin: PropTypes.func,
   groupLeadersUnmount: PropTypes.func,
   getMembersBegin: PropTypes.func,
@@ -107,6 +111,7 @@ const withConnect = connect(
 );
 
 export default compose(
+  injectIntl,
   withConnect,
   memo,
 )(GroupLeaderCreatePage);

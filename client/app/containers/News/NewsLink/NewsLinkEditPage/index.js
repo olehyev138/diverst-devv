@@ -25,11 +25,13 @@ import {
 } from 'containers/News/actions';
 
 import NewsLinkForm from 'components/News/NewsLink/NewsLinkForm';
+import { injectIntl, intlShape } from 'react-intl';
+import messages from 'containers/News/messages';
 
 export function NewsLinkEditPage(props) {
   useInjectReducer({ key: 'news', reducer });
   useInjectSaga({ key: 'news', saga });
-
+  const { intl } = props;
   const rs = new RouteService(useContext);
   const links = {
     newsFeedIndex: ROUTES.group.news.index.path(rs.params('group_id')),
@@ -47,7 +49,7 @@ export function NewsLinkEditPage(props) {
     <NewsLinkForm
       edit
       newsLinkAction={props.updateNewsLinkBegin}
-      buttonText='Update'
+      buttonText={intl.formatMessage(messages.update)}
       currentUser={currentUser}
       currentGroup={currentGroup}
       newsItem={currentNewsItem}
@@ -59,6 +61,7 @@ export function NewsLinkEditPage(props) {
 }
 
 NewsLinkEditPage.propTypes = {
+  intl: intlShape,
   getNewsItemBegin: PropTypes.func,
   updateNewsLinkBegin: PropTypes.func,
   newsFeedUnmount: PropTypes.func,
@@ -89,6 +92,7 @@ const withConnect = connect(
 );
 
 export default compose(
+  injectIntl,
   withConnect,
   memo,
 )(NewsLinkEditPage);

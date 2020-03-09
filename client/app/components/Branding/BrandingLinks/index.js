@@ -10,6 +10,9 @@ import { withStyles } from '@material-ui/core/styles';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import ResponsiveTabs from 'components/Shared/ResponsiveTabs';
 
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/Branding/messages';
+
 const styles = theme => ({});
 
 /* eslint-disable react/no-multi-comp */
@@ -28,17 +31,17 @@ export function BrandingLinks(props) {
           <Tab
             component={WrappedNavLink}
             to={ROUTES.admin.system.branding.theme.path()}
-            label='Theme'
+            label={<DiverstFormattedMessage {...messages.tabs.theme} />}
           />
           <Tab
             component={WrappedNavLink}
             to={ROUTES.admin.system.branding.home.path()}
-            label='Home'
+            label={<DiverstFormattedMessage {...messages.tabs.home} />}
           />
           <Tab
             component={WrappedNavLink}
             to={ROUTES.admin.system.branding.sponsors.index.path()}
-            label='Sponsors'
+            label={<DiverstFormattedMessage {...messages.tabs.sponsors} />}
           />
         </ResponsiveTabs>
       </Paper>

@@ -11,7 +11,6 @@ import { withStyles } from '@material-ui/core/styles';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
-import messages from 'containers/GlobalSettings/EnterpriseConfiguration/messages';
 import { buildValues, mapFields } from 'utils/formHelpers';
 
 import {
@@ -19,6 +18,8 @@ import {
   TextField, Hidden, FormControl, Divider, Switch, FormControlLabel,
 } from '@material-ui/core';
 import Select from 'components/Shared/DiverstSelect';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/GlobalSettings/EnterpriseConfiguration/messages';
 
 const styles = theme => ({
   noBottomPadding: {
@@ -42,7 +43,7 @@ export function SSOSettingsInner({ classes, handleSubmit, handleChange, handleBl
                 id='name'
                 name='name'
                 margin='normal'
-                label='IdP Metadata URL'
+                label={<DiverstFormattedMessage {...messages.idp_url} />}
                 value={values.name}
               />
             </Grid>
@@ -56,7 +57,7 @@ export function SSOSettingsInner({ classes, handleSubmit, handleChange, handleBl
                   id='idp_sso_target_url'
                   name='idp_sso_target_url'
                   margin='normal'
-                  label='Login URL'
+                  label={<DiverstFormattedMessage {...messages.login_url} />}
                   value={values.idp_sso_target_url}
                 />
               </Grid>
@@ -68,7 +69,7 @@ export function SSOSettingsInner({ classes, handleSubmit, handleChange, handleBl
                   id='idp_slo_target_url'
                   name='idp_slo_target_url'
                   margin='normal'
-                  label='Logout URL'
+                  label={<DiverstFormattedMessage {...messages.logout_url} />}
                   value={values.idp_slo_target_url}
                 />
               </Grid>
@@ -80,7 +81,7 @@ export function SSOSettingsInner({ classes, handleSubmit, handleChange, handleBl
                   id='idp_cert'
                   name='idp_cert'
                   margin='normal'
-                  label='Certificate'
+                  label={<DiverstFormattedMessage {...messages.certificate} />}
                   value={values.idp_cert}
                 />
               </Grid>
@@ -93,10 +94,10 @@ export function SSOSettingsInner({ classes, handleSubmit, handleChange, handleBl
             color='primary'
             type='submit'
           >
-            Save
+            {<DiverstFormattedMessage {...messages.save} />}
           </Button>
           <Button>
-            Cancel
+            {<DiverstFormattedMessage {...messages.cancel} />}
           </Button>
         </CardActions>
       </Form>

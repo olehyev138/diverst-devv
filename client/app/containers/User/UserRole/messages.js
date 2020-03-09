@@ -18,6 +18,9 @@ export default defineMessages({
   delete: {
     id: `${scope}.index.button.delete`,
   },
+  delete_confirm: {
+    id: `${scope}.index.button.delete_confirm`,
+  },
   delete_message: {
     id: `${scope}.index.text.delete_message`,
   },
@@ -34,7 +37,7 @@ export default defineMessages({
     id: `${scope}.form.button.create`,
   },
   update: {
-    id: `${scope}.form.button.edit`,
+    id: `${scope}.form.button.update`,
   },
   cancel: {
     id: `${scope}.form.button.cancel`,
@@ -47,5 +50,20 @@ export default defineMessages({
   },
   priority: {
     id: `${scope}.form.input.priority`,
+  },
+  title: {
+    id: `${scope}.list.title`,
+  },
+  role: {
+    admin: {
+      id: `${scope}.role.admin`
+    },
+    group: {
+      id: `${scope}.role.group`
+    },
+    user: {
+      id: `${scope}.role.user`
+    },
   }
+
 });

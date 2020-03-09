@@ -23,14 +23,15 @@ import {
 import CampaignQuestionForm from 'components/Innovate/Campaign/CampaignQuestion/CampaignQuestionForm';
 
 import { updateQuestionBegin, getQuestionBegin, campaignQuestionsUnmount } from 'containers/Innovate/Campaign/CampaignQuestion/actions';
-
+import { injectIntl, intlShape } from 'react-intl';
+import messages from 'containers/Innovate/Campaign/CampaignQuestion/messages';
 
 export function CampaignQuestionEditPage(props) {
   useInjectReducer({ key: 'questions', reducer });
   useInjectSaga({ key: 'questions', saga });
   useInjectReducer({ key: 'campaigns', reducer: campaignReducer });
   useInjectSaga({ key: 'campaigns', saga: campaignSaga });
-
+  const { intl } = props;
   const rs = new RouteService(useContext);
   const links = {
     questionsIndex: ROUTES.admin.innovate.campaigns.show.path(rs.params('campaign_id')),
@@ -53,7 +54,7 @@ export function CampaignQuestionEditPage(props) {
       questionId={props.questionId}
       isCommitting={props.isCommitting}
       isFormLoading={props.isFormLoading}
-      buttonText='Update'
+      buttonText={intl.formatMessage(messages.update)}
       question={props.question}
       links={links}
     />
@@ -61,6 +62,7 @@ export function CampaignQuestionEditPage(props) {
 }
 
 CampaignQuestionEditPage.propTypes = {
+  intl: intlShape,
   getQuestionBegin: PropTypes.func,
   updateQuestionBegin: PropTypes.func,
   campaignQuestionsUnmount: PropTypes.func,
@@ -90,6 +92,7 @@ const withConnect = connect(
 );
 
 export default compose(
+  injectIntl,
   withConnect,
   memo,
 )(CampaignQuestionEditPage);

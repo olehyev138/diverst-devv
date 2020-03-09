@@ -13,6 +13,8 @@ import {
 } from '@material-ui/core';
 import RefreshIcon from '@material-ui/icons/Cached';
 import { withStyles } from '@material-ui/core/styles';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/Analyze/messages';
 
 const styles = theme => ({
   dateInput: {
@@ -61,7 +63,6 @@ export function RangeSelector({ updateRange, classes }) {
     updateRange(currentCustomRange);
   };
 
-
   return (
     <Grid container spacing={2}>
       <Grid item>
@@ -76,7 +77,7 @@ export function RangeSelector({ updateRange, classes }) {
             disabled={currentRange.from_date === '1m'}
             onClick={() => handleRangeButtonClick('1m')}
           >
-            1M
+            {<DiverstFormattedMessage {...messages.selector.one_month} />}
           </Button>
           <Button
             id='name'
@@ -84,7 +85,7 @@ export function RangeSelector({ updateRange, classes }) {
             disabled={currentRange.from_date === '3m'}
             onClick={() => handleRangeButtonClick('3m')}
           >
-            3M
+            {<DiverstFormattedMessage {...messages.selector.three_month} />}
           </Button>
           <Button
             id='name'
@@ -92,7 +93,7 @@ export function RangeSelector({ updateRange, classes }) {
             disabled={currentRange.from_date === '6m'}
             onClick={() => handleRangeButtonClick('6m')}
           >
-            6M
+            {<DiverstFormattedMessage {...messages.selector.six_month} />}
           </Button>
           <Button
             id='name'
@@ -100,7 +101,7 @@ export function RangeSelector({ updateRange, classes }) {
             disabled={currentRange.from_date === 'ytd'}
             onClick={() => handleRangeButtonClick('ytd')}
           >
-            YTD
+            {<DiverstFormattedMessage {...messages.selector.YTD} />}
           </Button>
           <Button
             id='name'
@@ -108,7 +109,7 @@ export function RangeSelector({ updateRange, classes }) {
             disabled={currentRange.from_date === '1y'}
             onClick={() => handleRangeButtonClick('1y')}
           >
-            1Y
+            {<DiverstFormattedMessage {...messages.selector.one_year} />}
           </Button>
         </ButtonGroup>
       </Grid>
@@ -119,7 +120,7 @@ export function RangeSelector({ updateRange, classes }) {
           variant='outlined'
           id='name'
           name='name'
-          helperText='From'
+          helperText={<DiverstFormattedMessage {...messages.selector.from} />}
           onChange={e => setCurrentCustomRange({ ...currentCustomRange, from_date: e.target.value })}
           value={currentCustomRange.from_date}
           inputProps={{
@@ -134,7 +135,7 @@ export function RangeSelector({ updateRange, classes }) {
           variant='outlined'
           id='name'
           name='name'
-          helperText='To'
+          helperText={<DiverstFormattedMessage {...messages.selector.to} />}
           onChange={e => setCurrentCustomRange({ ...currentCustomRange, to_date: e.target.value })}
           value={currentCustomRange.to_date}
           inputProps={{
