@@ -32,21 +32,25 @@ export function SystemUsersLinks(props) {
             component={WrappedNavLink}
             to={ROUTES.admin.system.users.index.path()}
             label={<DiverstFormattedMessage {...messages.tab.users} />}
+            value='users'
           />
           <Tab
             component={WrappedNavLink}
             to={ROUTES.admin.system.users.roles.index.path()}
             label={<DiverstFormattedMessage {...messages.tab.roles} />}
+            value='roles'
           />
           <Tab
             component={WrappedNavLink}
-            to='#'
+            to={ROUTES.admin.system.users.policy_templates.index.path()}
             label={<DiverstFormattedMessage {...messages.tab.policy} />}
+            value='templates'
           />
           <Tab
             component={WrappedNavLink}
             to={ROUTES.admin.system.users.import.path()}
             label='Import Users'
+            value='import'
           />
         </ResponsiveTabs>
       </Paper>
