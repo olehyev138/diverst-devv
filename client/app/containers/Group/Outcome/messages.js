@@ -28,7 +28,7 @@ export default defineMessages({
     id: `${scope}.form.button.create`,
   },
   update: {
-    id: `${scope}.form.button.edit`,
+    id: `${scope}.form.button.update`,
   },
   cancel: {
     id: `${scope}.form.button.cancel`,
@@ -48,11 +48,17 @@ export default defineMessages({
     id: `${scope}.index.return`
   },
   pillars: {
+    title: {
+      id: `${scope}.Pillar.title`,
+    },
     text: {
       id: `${scope}.Pillar.text`,
     },
     delete: {
       id: `${scope}.Pillar.form.button.delete`,
+    },
+    delete_confirm: {
+      id: `${scope}.Pillar.form.button.delete_confirm`,
     },
     empty: {
       id: `${scope}.Pillar.empty`,

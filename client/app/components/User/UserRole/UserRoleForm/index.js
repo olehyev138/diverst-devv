@@ -28,9 +28,9 @@ import Select from 'components/Shared/DiverstSelect';
 export function UserRoleFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
   /* This should always match the roles defined in the backend model */
   const ROLE_TYPES = [
-    { label: 'Admin', value: 'admin' },
-    { label: 'Group', value: 'group' },
-    { label: 'User', value: 'user' }
+    { label: <DiverstFormattedMessage {...messages.role.admin} />, value: 'admin' },
+    { label: <DiverstFormattedMessage {...messages.role.group} />, value: 'group' },
+    { label: <DiverstFormattedMessage {...messages.role.user} />, value: 'user' }
   ];
 
   return (

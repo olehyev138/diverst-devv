@@ -8,7 +8,7 @@ class GroupMemberDownloadJob < ActiveJob::Base
     group = Group.find_by_id(group_id)
     return if group.nil?
 
-    csv = User.to_csv users: group.members, fields: group.enterprise.fields
+    csv = User.to_csv_with_fields users: group.members, fields: group.enterprise.fields
     file = CsvFile.new(user_id: user.id, download_file_name: "#{group.file_safe_name}_users")
 
     file.download_file.attach(io: StringIO.new(csv), filename: "#{file.download_file_name}.csv", content_type: 'text/csv')

@@ -177,7 +177,7 @@ export function EventFormInner({
                   keyboardMode
                   /* eslint-disable-next-line dot-notation */
                   maxDate={touched['end'] ? values['end'] : undefined}
-                  maxDateMessage='Start date cannot be after end date'
+                  maxDateMessage={<DiverstFormattedMessage {...messages.inputs.starterror} />}
                   fullWidth
                   id='start'
                   name='start'
@@ -193,7 +193,7 @@ export function EventFormInner({
                   keyboardMode
                   /* eslint-disable-next-line dot-notation */
                   minDate={values['start']}
-                  minDateMessage='End date cannot be before start date'
+                  minDateMessage={<DiverstFormattedMessage {...messages.inputs.enderror} />}
                   fullWidth
                   id='end'
                   name='end'

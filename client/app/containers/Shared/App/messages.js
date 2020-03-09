@@ -99,5 +99,19 @@ export default defineMessages({
     email: {
       id: `${scope}.person.email`
     }
+  },
+  header: {
+    dashboard: {
+      id: `${scope}.header.dashboard`
+    },
+    admin: {
+      id: `${scope}.header.admin`
+    },
+    profile: {
+      id: `${scope}.header.profile`
+    },
+    logout: {
+      id: `${scope}.header.logout`
+    },
   }
 });

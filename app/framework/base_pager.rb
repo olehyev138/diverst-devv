@@ -49,8 +49,10 @@ module BasePager
       end
       items = partial_query
                   .order(order_string(order_by, order))
-                  .limit(item_count)
-                  .offset(offset)
+
+      if item_count >= 0
+        items = items.limit(item_count).offset!(offset)
+      end
 
       # return the page
       Page.new(items, total, sum)

@@ -8,6 +8,8 @@ import MaterialTable, { MTableHeader } from 'material-table';
 import tableIcons from 'utils/tableIcons';
 
 import buildDataFunction from 'utils/dataTableHelper';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'components/Shared/DiverstTable/messages';
 
 const styles = theme => ({
   materialTableContainer: {
@@ -63,7 +65,7 @@ export function DiverstTable(props) {
         tableRef={ref}
         page={page()}
         icons={tableIcons}
-        title={props.title || 'Table'}
+        title={props.title || <DiverstFormattedMessage {...messages.title} />}
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
         onOrderChange={handleOrderChange}

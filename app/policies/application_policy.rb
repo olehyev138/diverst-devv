@@ -16,6 +16,10 @@ class ApplicationPolicy
     true
   end
 
+  def export_csv?
+    index?
+  end
+
   def show?
     scope.where(id: record.id).exists?
   end

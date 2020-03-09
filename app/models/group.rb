@@ -417,7 +417,7 @@ class Group < ApplicationRecord
       .map do |update|
       [
         update.created_at.to_i * 1000, # We multiply by 1000 to get milliseconds for highcharts
-        update.info[field]
+        update[field]
       ]
     end
   end
@@ -444,7 +444,7 @@ class Group < ApplicationRecord
         ]
 
         survey_fields.each do |field|
-          user_group_row << field.csv_value(user_group.info[field])
+          user_group_row << field.csv_value(user_group[field])
         end
 
         csv << user_group_row

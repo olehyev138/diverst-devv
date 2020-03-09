@@ -37,6 +37,9 @@ export default defineMessages({
     emptySection: {
       id: `${scope}.index.empty`
     },
+    loading: {
+      id: `${scope}.index.loading`
+    },
   },
   form: {
     name: {
@@ -50,6 +53,9 @@ export default defineMessages({
     },
     password: {
       id: `${scope}.form.input.password`,
+    },
+    password_question: {
+      id: `${scope}.form.input.password_question`,
     },
   },
   show: {
@@ -66,4 +72,18 @@ export default defineMessages({
       id: `${scope}.show.empty`
     }
   },
+  authenticate: {
+    label1: {
+      id: `${scope}.authenticate.label1`,
+    },
+    label2: {
+      id: `${scope}.authenticate.label2`,
+    },
+    password: {
+      id: `${scope}.authenticate.password`,
+    },
+    button: {
+      id: `${scope}.authenticate.button`,
+    },
+  }
 });

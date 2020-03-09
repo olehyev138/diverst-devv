@@ -111,7 +111,6 @@ export function UpdateList(props, context) {
 
 UpdateList.propTypes = {
   intl: intlShape.isRequired,
-
   classes: PropTypes.object,
   update: PropTypes.object,
   isLoading: PropTypes.bool,

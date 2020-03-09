@@ -17,7 +17,6 @@ import { withStyles } from '@material-ui/core/styles';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
-import messages from 'containers/Branding/messages';
 import { buildValues, mapFields } from 'utils/formHelpers';
 
 import {
@@ -25,6 +24,8 @@ import {
   TextField, Hidden, FormControl, Divider, Switch, FormControlLabel,
 } from '@material-ui/core';
 import Select from 'components/Shared/DiverstSelect';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/Branding/messages';
 
 const styles = theme => ({
   noBottomPadding: {
@@ -48,7 +49,7 @@ export function SponsorFormInner({ classes, handleSubmit, handleChange, handleBl
                 id='sponsor_name'
                 name='sponsor_name'
                 margin='normal'
-                label='Sponsor Name'
+                label={<DiverstFormattedMessage {...messages.Sponsors.sname} />}
                 value={values.sponsor_name}
               />
             </Grid>
@@ -61,7 +62,7 @@ export function SponsorFormInner({ classes, handleSubmit, handleChange, handleBl
                 id='sponsor_title'
                 name='sponsor_title'
                 margin='normal'
-                label='Sponsor title'
+                label={<DiverstFormattedMessage {...messages.Sponsors.stitle} />}
                 value={values.sponsor_title}
               />
             </Grid>
@@ -73,13 +74,13 @@ export function SponsorFormInner({ classes, handleSubmit, handleChange, handleBl
             color='primary'
             type='submit'
           >
-            Save
+            {<DiverstFormattedMessage {...messages.save} />}
           </Button>
           <Button
             component={WrappedNavLink}
             to={props.links.sponsorIndex}
           >
-            Cancel
+            {<DiverstFormattedMessage {...messages.cancel} />}
           </Button>
         </CardActions>
       </Form>

@@ -13,10 +13,19 @@ class CheckboxField < Field
     values.join(',')
   end
 
+  def serialize_value(value)
+    value.present? ? value.to_json : nil
+  end
+
+  def deserialize_value(value)
+    JSON.parse(value || '[]')
+  end
+
   def popularity_for_no_option(users)
     nb_users_chose = 0
     users.each do |user|
-      nb_users_chose += 1 if user.info[self].nil?
+      user_value = user[self]
+      nb_users_chose += 1 if user_value.blank?
     end
     nb_users_chose.to_f / users.size
   end
@@ -24,13 +33,14 @@ class CheckboxField < Field
   def popularity_for_value(value, users)
     nb_users_chose = 0
     users.each do |user|
-      nb_users_chose += 1 if user.info[self] && user.info[self].include?(value)
+      user_value = user[self] rescue nil
+      nb_users_chose += 1 if user_value && user_value.include?(value)
     end
     nb_users_chose.to_f / users.size
   end
 
   def user_popularity(user, users)
-    values = user.info[self]
+    values = user[self]
 
     # If the user didn't select any option, the popularity will be set to the popularity of choosing no option
     if values.blank?
@@ -60,15 +70,15 @@ class CheckboxField < Field
   end
 
   def validates_rule_for_user?(rule:, user:)
-    return false if user.info[rule.field].nil?
+    return false if user[rule.field].nil?
 
     case rule.operator
     when SegmentFieldRule.operators[:contains_any_of]
-      (user.info[rule.field] & rule.values_array).size > 0
+      (user[rule.field] & rule.values_array).size > 0
     when SegmentFieldRule.operators[:contains_all_of]
-      (user.info[rule.field] & rule.values_array).size == rule.values_array.size
+      (user[rule.field] & rule.values_array).size == rule.values_array.size
     when SegmentFieldRule.operators[:does_not_contain]
-      (user.info[rule.field] & rule.values_array).size == 0
+      (user[rule.field] & rule.values_array).size == 0
     end
   end
 end

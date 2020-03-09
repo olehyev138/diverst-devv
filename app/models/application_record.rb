@@ -7,6 +7,7 @@ class ApplicationRecord < ActiveRecord::Base
   include BaseSearch
   include BaseElasticsearch
   include BaseGraph
+  include BaseCsvExport
 
   def self.inherited(child)
     super
@@ -18,6 +19,10 @@ class ApplicationRecord < ActiveRecord::Base
       index_name "#{table_name}"
       document_type "#{table_name.singularize}"
     end
+  end
+
+  def self.get_association(name)
+    reflect_on_all_associations.find { |ass| ass.name == name.to_sym }
   end
 
   after_commit on: [:create] do update_elasticsearch_index('index') end

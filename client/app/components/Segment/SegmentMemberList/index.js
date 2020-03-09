@@ -22,6 +22,10 @@ import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
 import DiverstTable from 'components/Shared/DiverstTable';
 
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/Segment/messages';
+import { injectIntl, intlShape } from 'react-intl';
+
 const styles = theme => ({
   errorButton: {
     color: theme.palette.error.main,
@@ -29,7 +33,7 @@ const styles = theme => ({
 });
 
 export function SegmentMemberList(props) {
-  const { classes } = props;
+  const { classes, intl } = props;
 
   const handleOrderChange = (columnId, orderDir) => {
     props.handleOrdering({
@@ -39,8 +43,8 @@ export function SegmentMemberList(props) {
   };
 
   const columns = [
-    { title: 'First Name', field: 'first_name' },
-    { title: 'Last Name', field: 'last_name' }
+    { title: <DiverstFormattedMessage {...messages.member.firstname} />, field: 'first_name' },
+    { title: <DiverstFormattedMessage {...messages.member.lastname} />, field: 'last_name' }
   ];
 
   return (
@@ -55,13 +59,13 @@ export function SegmentMemberList(props) {
             component={WrappedNavLink}
             startIcon={<ExportIcon />}
           >
-            Export Members
+            <DiverstFormattedMessage {...messages.member.export} />
           </Button>
         </Grid>
       </Grid>
       <Box mb={2} />
       <DiverstTable
-        title='Members'
+        title={intl.formatMessage(messages.member.title)}
         handlePagination={props.handlePagination}
         isLoading={props.isFetchingMembers}
         onOrderChange={handleOrderChange}
@@ -75,6 +79,7 @@ export function SegmentMemberList(props) {
 }
 
 SegmentMemberList.propTypes = {
+  intl: intlShape,
   classes: PropTypes.object,
   links: PropTypes.shape({
     segmentMembersNew: PropTypes.string,
@@ -88,6 +93,7 @@ SegmentMemberList.propTypes = {
 };
 
 export default compose(
+  injectIntl,
   memo,
   withStyles(styles)
 )(SegmentMemberList);

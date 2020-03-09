@@ -11,6 +11,9 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import ResponsiveTabs from 'components/Shared/ResponsiveTabs';
 
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/Group/GroupPlan/KPI/messages';
+
 const styles = theme => ({});
 
 /* eslint-disable react/no-multi-comp */
@@ -29,19 +32,19 @@ export function GroupPlanLinks(props) {
           <Tab
             component={WrappedNavLink}
             to={ROUTES.group.plan.events.index.path(props.currentGroup.id)}
-            label='Event Management'
+            label={<DiverstFormattedMessage {...messages.links.event} />}
             value='events'
           />
           <Tab
             component={WrappedNavLink}
             to={ROUTES.group.plan.kpi.updates.index.path(props.currentGroup.id)}
-            label='KPI'
+            label={<DiverstFormattedMessage {...messages.links.KPI} />}
             value='kpi'
           />
           <Tab
             component={WrappedNavLink}
-            to={ROUTES.group.plan.budget.overview.path(props.currentGroup.id)}
-            label='Budgeting'
+            to={ROUTES.group.plan.events.index.path(props.currentGroup.id)}
+            label={<DiverstFormattedMessage {...messages.links.budgeting} />}
             value='budgeting'
           />
         </ResponsiveTabs>

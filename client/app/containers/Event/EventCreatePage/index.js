@@ -22,6 +22,9 @@ import { createEventBegin, eventsUnmount } from 'containers/Event/actions';
 import EventForm from 'components/Event/EventForm';
 import { selectIsCommitting } from 'containers/Event/selectors';
 
+import messages from 'containers/Event/messages';
+import { injectIntl, intlShape } from 'react-intl';
+
 export function EventCreatePage(props) {
   useInjectReducer({ key: 'events', reducer });
   useInjectSaga({ key: 'events', saga });
@@ -33,13 +36,14 @@ export function EventCreatePage(props) {
   const links = {
     eventsIndex: ROUTES.group.events.index.path(rs.params('group_id')),
   };
+  const { intl } = props;
 
   return (
     <React.Fragment>
       <EventForm
         eventAction={props.createEventBegin}
         isCommitting={props.isCommitting}
-        buttonText='Create'
+        buttonText={intl.formatMessage(messages.create)}
         currentUser={currentUser}
         currentGroup={currentGroup}
         links={links}
@@ -49,6 +53,7 @@ export function EventCreatePage(props) {
 }
 
 EventCreatePage.propTypes = {
+  intl: intlShape,
   createEventBegin: PropTypes.func,
   eventsUnmount: PropTypes.func,
   currentUser: PropTypes.object,
@@ -73,6 +78,7 @@ const withConnect = connect(
 );
 
 export default compose(
+  injectIntl,
   withConnect,
   memo,
 )(EventCreatePage);
