@@ -7,12 +7,7 @@ class MakeFieldDataPolymorphic < ActiveRecord::Migration[5.2]
 
       FieldData.connection.schema_cache.clear!
       FieldData.reset_column_information
-#      FieldData.find_each do |fd|
-#        fd.field_user_id = fd.user_id
-#        fd.field_user_type = 'User'
-#        fd.save!(validate: false)
-#      end
-#
+
       InitiativeUpdate.connection.schema_cache.clear!
       GroupUpdate.connection.schema_cache.clear!
       UserGroup.connection.schema_cache.clear!
