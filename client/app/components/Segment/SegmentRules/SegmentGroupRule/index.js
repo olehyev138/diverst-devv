@@ -11,6 +11,8 @@ import { connect, Field, getIn } from 'formik';
 import Select from 'components/Shared/DiverstSelect';
 import { Grid } from '@material-ui/core';
 
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/Segment/messages';
 /*
  * Define UI strings for each Group operator
  *  - Could define UI strings in backend as well
@@ -42,7 +44,7 @@ const SegmentGroupRule = ({ rule, ...props }) => {
           <Select
             name={`${ruleLocation}.group_ids`}
             id={`${ruleLocation}.group_ids`}
-            label='Groups'
+            label={<DiverstFormattedMessage {...messages.rule.group.field} />}
             isMulti
             options={props.groups}
             value={groups}
@@ -56,7 +58,7 @@ const SegmentGroupRule = ({ rule, ...props }) => {
           <Select
             name={`${ruleLocation}.operator`}
             id={`${ruleLocation}.operator`}
-            label='Group Operator'
+            label={<DiverstFormattedMessage {...messages.rule.group.operator} />}
             options={operators}
             value={{ value: operatorValue, label: operators[operatorValue].label }}
             onChange={v => props.formik.setFieldValue(`${ruleLocation}.operator`, v.value)}

@@ -112,7 +112,7 @@ export function FoldersList(props, context) {
               <Grid item sm>
                 <Box mt={3} />
                 <Typography variant='h6' align='center' color='textSecondary'>
-                  Loading...
+                  <DiverstFormattedMessage {...messages.index.loading} />
                 </Typography>
               </Grid>
             </React.Fragment>

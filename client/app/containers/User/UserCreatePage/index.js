@@ -22,12 +22,15 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import UserForm from 'components/User/UserForm';
 
+import { injectIntl, intlShape } from 'react-intl';
+import messages from 'containers/User/messages';
+
 export function UserCreatePage(props) {
   useInjectReducer({ key: 'users', reducer });
   useInjectSaga({ key: 'users', saga });
 
   useEffect(() => () => props.userUnmount(), []);
-
+  const { intl } = props;
   const rs = new RouteService(useContext);
   const links = {
     usersIndex: ROUTES.admin.system.users.index.path(),
@@ -38,7 +41,7 @@ export function UserCreatePage(props) {
       admin
       userAction={props.createUserBegin}
       updateFieldDataBegin={props.updateFieldDataBegin}
-      buttonText='Create'
+      buttonText={intl.formatMessage(messages.create)}
       getUsersBegin={props.getUsersBegin}
       selectUsers={props.users}
       links={links}
@@ -48,6 +51,7 @@ export function UserCreatePage(props) {
 }
 
 UserCreatePage.propTypes = {
+  intl: intlShape,
   createUserBegin: PropTypes.func,
   updateFieldDataBegin: PropTypes.func,
   getUsersBegin: PropTypes.func,
@@ -73,6 +77,7 @@ const withConnect = connect(
 );
 
 export default compose(
+  injectIntl,
   withConnect,
   memo,
 )(UserCreatePage);

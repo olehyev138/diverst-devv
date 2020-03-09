@@ -145,7 +145,7 @@ export function GroupLinks(props) {
               <Hidden smDown>
                 <BackIcon className={classes.navIcon} />
               </Hidden>
-              Back to Dashboard
+              <DiverstFormattedMessage {...ROUTES.group.back.data.titleMessage} />
             </Button>
           </div>
 

@@ -35,7 +35,7 @@ export function GroupMessageCommentFormInner({ classes, handleSubmit, handleChan
           <Typography
             paragraph
           >
-            Leave a Comment
+            <DiverstFormattedMessage {...messages.comment} />
           </Typography>
           <Field
             component={TextField}

@@ -18,7 +18,7 @@ import dig from 'object-dig';
 
 import { getUserBegin, userUnmount } from 'containers/Mentorship/actions';
 
-import { selectMentoringInterests, selectUser as selectGlobalUser } from 'containers/Shared/App/selectors';
+import { selectMentoringInterests, selectUser as selectUserSession } from 'containers/Shared/App/selectors';
 import { selectFormUser, selectUser } from 'containers/Mentorship/selectors';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
@@ -50,7 +50,7 @@ const MentorshipLayout = ({ component: Component, ...rest }) => {
   useEffect(() => {
     const userId1A = rs.params('user_id');
     const userId1 = userId1A ? userId1A[0] : null;
-    const userId2 = dig(rest, 'globalUser', 'id');
+    const userId2 = dig(rest, 'userSession', 'id');
 
     // const userId = userId1;
     const userId = userId1 || userId2;
@@ -61,7 +61,7 @@ const MentorshipLayout = ({ component: Component, ...rest }) => {
     return () => {
       other.userUnmount();
     };
-  }, [dig(rest, 'globalUser', 'id')]);
+  }, [dig(rest, 'userSession', 'id')]);
 
   return (
     <UserLayout
@@ -78,7 +78,7 @@ const MentorshipLayout = ({ component: Component, ...rest }) => {
                   {user && (
                     <MentorshipMenu
                       user={user}
-                      globalUser={dig(rest, 'globalUser')}
+                      userSession={dig(rest, 'userSession')}
                     />
                   )}
                 </CardContent>
@@ -99,7 +99,7 @@ const MentorshipLayout = ({ component: Component, ...rest }) => {
 };
 
 MentorshipLayout.propTypes = {
-  globalUser: PropTypes.object,
+  userSession: PropTypes.object,
   user: PropTypes.object,
   formUser: PropTypes.object,
   classes: PropTypes.object,
@@ -108,7 +108,7 @@ MentorshipLayout.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
-  globalUser: selectGlobalUser(),
+  userSession: selectUserSession(),
   user: selectUser(),
   formUser: selectFormUser(),
 });

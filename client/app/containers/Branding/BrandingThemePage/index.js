@@ -18,11 +18,13 @@ import {
 
 import RouteService from 'utils/routeHelpers';
 import BrandingTheme from 'components/Branding/BrandingTheme';
-
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/Branding/messages';
+import { injectIntl, intlShape } from 'react-intl';
 export function BrandingThemePage(props) {
   useInjectReducer({ key: 'configuration', reducer });
   useInjectSaga({ key: 'configuration', saga });
-
+  const { intl } = props;
   useEffect(() => {
     props.getEnterpriseBegin();
 
@@ -38,13 +40,14 @@ export function BrandingThemePage(props) {
         theme={props.theme}
         isLoading={props.isLoading}
         isCommitting={props.isCommitting}
-        buttonText='Update'
+        buttonText={intl.formatMessage(messages.update)}
       />
     </React.Fragment>
   );
 }
 
 BrandingThemePage.propTypes = {
+  intl: intlShape,
   theme: PropTypes.object,
   getEnterpriseBegin: PropTypes.func,
   updateEnterpriseBegin: PropTypes.func,
@@ -71,6 +74,7 @@ const withConnect = connect(
 );
 
 export default compose(
+  injectIntl,
   withConnect,
   memo,
 )(BrandingThemePage);

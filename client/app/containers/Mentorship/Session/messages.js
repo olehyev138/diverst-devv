@@ -56,6 +56,12 @@ export default defineMessages({
     end: {
       id: `${scope}.form.input.end`,
     },
+    start_message: {
+      id: `${scope}.form.input.start_message`,
+    },
+    end_message: {
+      id: `${scope}.form.input.end_message`,
+    },
     link: {
       id: `${scope}.form.input.link`,
     },
@@ -72,6 +78,12 @@ export default defineMessages({
     },
     leadedBy: {
       id: `${scope}.show.leadedBy`,
+    },
+    from: {
+      id: `${scope}.show.from`,
+    },
+    to: {
+      id: `${scope}.show.to`,
     },
     accept: {
       id: `${scope}.show.accept`,

@@ -95,7 +95,7 @@ export function MentorRequestList(props, context) {
   ];
 
   const actions = [];
-  if (type === 'incoming' && dig(props, 'user', 'id') === props.globalUser.id) {
+  if (type === 'incoming' && dig(props, 'user', 'id') === props.userSession.id) {
     actions.push({
       icon: () => (<CheckIcon />),
       tooltip: intl.formatMessage(messages.actions.approve),
@@ -119,7 +119,7 @@ export function MentorRequestList(props, context) {
         }
       }
     });
-  } else if (dig(props, 'user', 'id') === props.globalUser.id)
+  } else if (dig(props, 'user', 'id') === props.userSession.id)
     actions.push({
       icon: () => (<DeleteIcon />),
       tooltip: intl.formatMessage(messages.actions.remove),
@@ -210,7 +210,7 @@ MentorRequestList.propTypes = {
   type: PropTypes.string,
   classes: PropTypes.object,
   user: PropTypes.object,
-  globalUser: PropTypes.shape({
+  userSession: PropTypes.shape({
     id: PropTypes.number
   }).isRequired,
   requests: PropTypes.array,

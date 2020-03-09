@@ -11,6 +11,9 @@ import { DirectUploadProvider } from 'react-activestorage-provider';
 import config from 'app.config';
 import AuthService from 'utils/authService';
 
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'components/Shared/DiverstFileInput/messages';
+
 const styles = theme => ({
   fileInput: {
     display: 'none',
@@ -163,7 +166,7 @@ export function DiverstFileInput(props) {
                     disabled={disabled || !ready}
                     startIcon={<UploadIcon />}
                   >
-                    {value ? 'Replace File' : 'Choose File'}
+                    {value ? <DiverstFormattedMessage {...messages.replace} /> : <DiverstFormattedMessage {...messages.choose} />}
                   </Button>
                 </Grid>
                 <Grid item>
@@ -174,7 +177,7 @@ export function DiverstFileInput(props) {
                           case 'waiting':
                             return (
                               <Typography variant='h6' className={classes.fileInfo} color='textSecondary' key={upload.id}>
-                                <span>Waiting to upload </span>
+                                <span><DiverstFormattedMessage {...messages.waiting} /></span>
                                 <span className={classes.fileName}>{upload.file.name}</span>
                                 <CircularProgress
                                   className={classes.uploadProgress}
@@ -185,7 +188,9 @@ export function DiverstFileInput(props) {
                           case 'uploading':
                             return (
                               <Typography variant='h6' className={classes.fileInfo} color='textSecondary' key={upload.id}>
-                                <span>Uploading </span>
+                                <span>
+                                  <DiverstFormattedMessage {...messages.uploading} />
+                                </span>
                                 <span className={classes.fileName}>{upload.file.name}</span>
                                 <CircularProgress
                                   variant='determinate'
@@ -202,7 +207,7 @@ export function DiverstFileInput(props) {
                           case 'error':
                             return (
                               <Typography variant='h6' className={classes.fileInfo} color='error' key={upload.id}>
-                                <span>Error uploading </span>
+                                <span><DiverstFormattedMessage {...messages.error} /></span>
                                 {upload.file.name}
                               </Typography>
                             );
@@ -210,7 +215,7 @@ export function DiverstFileInput(props) {
                             setUploadedFile(upload.file.name);
                             return (
                               <Typography variant='h6' className={classes.fileInfo} color='textSecondary' key={upload.id}>
-                                <span>Finished uploading </span>
+                                <span><DiverstFormattedMessage {...messages.finished} /></span>
                                 <span className={classes.fileName}>{upload.file.name}</span>
                                 <CircularProgress
                                   variant='determinate'
@@ -233,7 +238,7 @@ export function DiverstFileInput(props) {
 
                       {!value && ready && (
                         <Typography variant='h6' className={classes.fileInfo} color='textSecondary'>
-                          No file selected
+                          <DiverstFormattedMessage {...messages.nofile} />
                         </Typography>
                       )}
                     </Box>

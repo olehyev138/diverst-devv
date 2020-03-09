@@ -11,6 +11,9 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import ResponsiveTabs from 'components/Shared/ResponsiveTabs';
 
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/Innovate/Campaign/messages';
+
 const styles = theme => ({});
 
 /* eslint-disable react/no-multi-comp */
@@ -29,12 +32,12 @@ export function InnovateLinks(props) {
           <Tab
             component={WrappedNavLink}
             to='#'
-            label='Campaigns'
+            label={<DiverstFormattedMessage {...messages.links.campaigns} />}
           />
           <Tab
             component={WrappedNavLink}
             to='#'
-            label='Financials'
+            label={<DiverstFormattedMessage {...messages.links.financial} />}
           />
         </ResponsiveTabs>
       </Paper>

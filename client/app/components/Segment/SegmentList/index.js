@@ -8,9 +8,6 @@ import React, { memo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
-import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
-import messages from 'containers/Segment/messages';
-
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
 import {
@@ -27,6 +24,9 @@ import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/DeleteOutline';
 import DiverstTable from 'components/Shared/DiverstTable';
 
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/Segment/messages';
+import { injectIntl, intlShape } from 'react-intl';
 
 const styles = theme => ({
   segmentListItem: {
@@ -42,7 +42,7 @@ const styles = theme => ({
 
 export function SegmentList(props, context) {
   const { classes } = props;
-  const { links } = props;
+  const { links, intl } = props;
   const [expandedSegments, setExpandedSegments] = useState({});
 
   /* Store a expandedSegmentsHash for each segment, that tracks whether or not its children are expanded */
@@ -57,7 +57,7 @@ export function SegmentList(props, context) {
 
   const columns = [
     {
-      title: 'Segment',
+      title: <DiverstFormattedMessage {...messages.list.name} />,
       field: 'name',
       query_field: 'name'
     },
@@ -90,7 +90,7 @@ export function SegmentList(props, context) {
       <Grid container spacing={3}>
         <Grid item xs>
           <DiverstTable
-            title='Segments'
+            title={intl.formatMessage(messages.list.title)}
             handlePagination={props.handlePagination}
             onOrderChange={handleOrderChange}
             isLoading={props.isFetchingSegments}
@@ -100,16 +100,16 @@ export function SegmentList(props, context) {
             columns={columns}
             actions={[{
               icon: () => <EditIcon />,
-              tooltip: 'Edit Segment',
+              tooltip: intl.formatMessage(messages.list.edit),
               onClick: (_, rowData) => {
                 props.handleSegmentEdit(rowData.id);
               }
             }, {
               icon: () => <DeleteIcon />,
-              tooltip: 'Delete Segment',
+              tooltip: intl.formatMessage(messages.list.delete),
               onClick: (_, rowData) => {
                 /* eslint-disable-next-line no-alert, no-restricted-globals */
-                if (confirm('Delete segment?'))
+                if (confirm(intl.formatMessage(messages.delete_confirm)))
                   props.deleteSegmentBegin(rowData.id);
               }
             }]}
@@ -121,6 +121,7 @@ export function SegmentList(props, context) {
   );
 }
 SegmentList.propTypes = {
+  intl: intlShape,
   classes: PropTypes.object,
   segments: PropTypes.object,
   segmentTotal: PropTypes.number,
@@ -136,6 +137,7 @@ SegmentList.propTypes = {
   })
 };
 export default compose(
+  injectIntl,
   memo,
   withStyles(styles),
 )(SegmentList);

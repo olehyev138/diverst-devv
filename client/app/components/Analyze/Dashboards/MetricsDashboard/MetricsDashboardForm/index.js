@@ -54,7 +54,7 @@ export function MetricsDashboardFormInner({ handleSubmit, handleChange, handleBl
               name='name'
               margin='normal'
               disabled={props.isCommitting}
-              label={<DiverstFormattedMessage {...messages.form.name} />}
+              label={<DiverstFormattedMessage {...messages.fields.name} />}
               value={values.name}
             />
             <Field
@@ -62,7 +62,7 @@ export function MetricsDashboardFormInner({ handleSubmit, handleChange, handleBl
               fullWidth
               name='group_ids'
               id='group_ids'
-              label='Groups'
+              label={<DiverstFormattedMessage {...messages.fields.groups} />}
               isMulti
               margin='normal'
               disabled={props.isCommitting}
@@ -78,7 +78,7 @@ export function MetricsDashboardFormInner({ handleSubmit, handleChange, handleBl
               fullWidth
               name='segment_ids'
               id='segment_ids'
-              label='Segments'
+              label={<DiverstFormattedMessage {...messages.fields.segments} />}
               isMulti
               margin='normal'
               disabled={props.isCommitting}
