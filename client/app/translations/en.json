@@ -705,7 +705,7 @@
   "diverst.containers.Archive.field.type.news_link" : "News Link",
   "diverst.containers.Archive.field.type.group_message": "Group Message",
   "diverst.containers.Archive.field.type.social_link": "Social Link",
-  "diverst.containers.Archive.field.type.error": "Error"
+  "diverst.containers.Archive.field.type.error": "Error",
   "diverst.components.PlaceholderPage.example": "Example Content",
   "diverst.components.DiverstFileInput.replace": "Replace File",
   "diverst.components.DiverstFileInput.choose": "Choose File",
