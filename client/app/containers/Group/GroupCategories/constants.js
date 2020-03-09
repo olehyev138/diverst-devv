@@ -28,3 +28,5 @@ export const DELETE_GROUP_CATEGORIES_ERROR = 'app/Group/GroupCategories/DELETE_G
 export const UPDATE_GROUP_CATEGORY_TYPE_BEGIN = 'app/Group/GroupCategories/UPDATE_GROUP_CATEGORY_TYPE_BEGIN';
 export const UPDATE_GROUP_CATEGORY_TYPE_SUCCESS = 'app/Group/GroupCategories/UPDATE_GROUP_CATEGORY_TYPE_SUCCESS';
 export const UPDATE_GROUP_CATEGORY_TYPE_ERROR = 'app/Group/GroupCategories/UPDATE_GROUP_CATEGORY_TYPE_ERROR';
+
+export const CATEGORIES_UNMOUNT = 'app/Group/GroupCategories/CATEGORIES_UNMOUNT';

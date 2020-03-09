@@ -55,20 +55,10 @@ const styles = theme => ({
   },
 });
 
-export function GroupCategories(props, context) {
+export function GroupCategoriesList(props, context) {
   const { classes, defaultParams } = props;
-  const [expandedGroups, setExpandedGroups] = useState({});
-
-  /* Store a expandedGroupsHash for each group, that tracks whether or not its children are expanded */
-  if (props.groups && Object.keys(props.groups).length !== 0 && Object.keys(expandedGroups).length <= 0) {
-    const initialExpandedGroups = {};
-
-    /* Setup initial hash, with each group set to false - do it like this because of how React works with state */
-    /* eslint-disable-next-line no-return-assign */
-    Object.keys(props.groups).map((id, i) => initialExpandedGroups[id] = false);
-    setExpandedGroups(initialExpandedGroups);
-  }
-
+  console.log('component');
+  console.log(props);
   return (
     <React.Fragment>
       <Grid container spacing={3} justify='flex-end'>
@@ -89,38 +79,23 @@ export function GroupCategories(props, context) {
       <DiverstLoader isLoading={props.isLoading}>
         <Grid container spacing={3}>
           { /* eslint-disable-next-line arrow-body-style */ }
-          {props.groups && Object.values(props.groups).map((group, i) => {
+          {props.categoryTypes && Object.values(props.categoryTypes).map((categoryType, i) => {
             return (
-              <Grid item key={group.id} xs={12}>
+              <Grid item key={categoryType.id} xs={12}>
                 <Card className={classes.groupCard}>
                   <CardContent>
                     {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                    <Button
-                      className={classes.groupLink}
-                      color='primary'
-                      component={WrappedNavLink}
-                      to={{
-                        pathname: ROUTES.group.home.path(group.id),
-                        state: { id: group.id }
-                      }}
-                    >
-                      <Typography variant='h5' component='h2' display='inline'>
-                        {group.name}
-                      </Typography>
-                    </Button>
-                    {group.description && (
-                      <Typography color='textSecondary' className={classes.groupListItemDescription}>
-                        {group.description}
-                      </Typography>
-                    )}
+                    <Typography variant='h5' component='h2' display='inline'>
+                      {categoryType.name}
+                    </Typography>
                   </CardContent>
                   <CardActions>
                     <Button
                       size='small'
                       color='primary'
                       to={{
-                        pathname: `${ROUTES.admin.manage.groups.pathPrefix}/${group.id}/edit`,
-                        state: { id: group.id }
+                        pathname: `${ROUTES.admin.manage.groups.pathPrefix}/${categoryType.id}/edit`,
+                        state: { id: categoryType.id }
                       }}
                       component={WrappedNavLink}
                     >
@@ -132,69 +107,50 @@ export function GroupCategories(props, context) {
                       onClick={() => {
                         /* eslint-disable-next-line no-alert, no-restricted-globals */
                         if (confirm('Delete group?'))
-                          props.deleteGroupBegin(group.id);
+                          props.deleteGroupCategoryBegin(categoryType.id);
                       }}
                     >
                       <DiverstFormattedMessage {...messages.delete} />
                     </Button>
                     <Button
                       size='small'
-                      onClick={() => {
-                        setExpandedGroups({ ...expandedGroups, [group.id]: !expandedGroups[group.id] });
-                      }}
-                    >
-                      {expandedGroups[group.id] ? (
-                        <DiverstFormattedMessage {...messages.children_collapse} />
-                      ) : (
-                        <DiverstFormattedMessage {...messages.children_expand} />
-                      )}
-                    </Button>
-                    <Button
-                      size='small'
                       color='primary'
                       to={{
-                        pathname: `${ROUTES.admin.manage.groups.pathPrefix}/${group.id}/edit`,
-                        state: { id: group.id }
+                        pathname: `${ROUTES.admin.manage.groups.pathPrefix}/${categoryType.id}/edit`,
+                        state: { id: categoryType.id }
                       }}
                       component={WrappedNavLink}
                     >
                       Categorize Subgroups
                     </Button>
                   </CardActions>
-                </Card>
-                <Collapse in={expandedGroups[`${group.id}`]}>
                   <Box mt={1} />
                   <Grid container spacing={2} justify='flex-end'>
-                    {group.children && group.children.map((childGroup, i) => (
+                    {categoryType.group_categories && categoryType.group_categories.map((category, i) => (
                       /* eslint-disable-next-line react/jsx-wrap-multilines */
-                      <Grid item key={childGroup.id} xs={12}>
+                      <Grid item key={category.id} xs={12}>
                         <Card className={classes.childGroupCard}>
                           <CardContent>
                             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                             <Link
                               component={WrappedNavLink}
                               to={{
-                                pathname: ROUTES.group.home.path(childGroup.id),
-                                state: { id: childGroup.id }
+                                pathname: ROUTES.group.home.path(category.id),
+                                state: { id: category.id }
                               }}
                             >
                               <Typography variant='h5' component='h2' display='inline'>
-                                {childGroup.name}
+                                {category.name}
                               </Typography>
                             </Link>
-                            {childGroup.description && (
-                              <Typography color='textSecondary' className={classes.groupListItemDescription}>
-                                {childGroup.description}
-                              </Typography>
-                            )}
                           </CardContent>
                           <CardActions>
                             <Button
                               size='small'
                               color='primary'
                               to={{
-                                pathname: `${ROUTES.admin.manage.groups.pathPrefix}/${childGroup.id}/edit`,
-                                state: { id: childGroup.id }
+                                pathname: `${ROUTES.admin.manage.groups.pathPrefix}/${category.id}/edit`,
+                                state: { id: category.id }
                               }}
                               component={WrappedNavLink}
                             >
@@ -206,7 +162,7 @@ export function GroupCategories(props, context) {
                               onClick={() => {
                                 /* eslint-disable-next-line no-alert, no-restricted-globals */
                                 if (confirm('Delete group?'))
-                                  props.deleteGroupBegin(childGroup.id);
+                                  props.deleteGroupCategoryBegin(category.id);
                               }}
                             >
                               <DiverstFormattedMessage {...messages.delete} />
@@ -216,33 +172,26 @@ export function GroupCategories(props, context) {
                       </Grid>
                     ))}
                   </Grid>
-                </Collapse>
+                </Card>
               </Grid>
             );
           })}
         </Grid>
       </DiverstLoader>
-      <DiverstPagination
-        isLoading={props.isLoading}
-        handlePagination={props.handlePagination}
-        rowsPerPage={defaultParams.count}
-        count={props.groupTotal}
-      />
     </React.Fragment>
   );
 }
 
-GroupCategories.propTypes = {
+GroupCategoriesList.propTypes = {
   defaultParams: PropTypes.object,
   classes: PropTypes.object,
   isLoading: PropTypes.bool,
-  groups: PropTypes.object,
-  groupTotal: PropTypes.number,
-  deleteGroupBegin: PropTypes.func,
+  categoryTypes: PropTypes.object,
+  deleteGroupCategoryBegin: PropTypes.func,
   handlePagination: PropTypes.func
 };
 
 export default compose(
   memo,
   withStyles(styles),
-)(GroupCategories);
+)(GroupCategoriesList);

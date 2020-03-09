@@ -12,8 +12,9 @@ import {
   DELETE_GROUP_CATEGORIES_BEGIN, DELETE_GROUP_CATEGORIES_SUCCESS, DELETE_GROUP_CATEGORIES_ERROR,
   UPDATE_GROUP_CATEGORY_TYPE_BEGIN, UPDATE_GROUP_CATEGORY_TYPE_SUCCESS, UPDATE_GROUP_CATEGORY_TYPE_ERROR,
 } from 'containers/Group/GroupCategories/constants';
+import {CATEGORIES_UNMOUNT} from "./constants";
 
-/* Group listing */
+/* Group categories listing */
 
 export function getGroupCategoriesBegin(payload) {
   return {
@@ -137,5 +138,11 @@ export function updateGroupCategoryTypeError(error) {
   return {
     type: UPDATE_GROUP_CATEGORY_TYPE_ERROR,
     error,
+  };
+}
+
+export function categoriesUnmount() {
+  return {
+    type: CATEGORIES_UNMOUNT,
   };
 }
