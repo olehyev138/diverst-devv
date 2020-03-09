@@ -16,13 +16,15 @@ import DiverstDateTimePicker from 'components/Shared/Pickers/DiverstDateTimePick
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { Field, Formik, Form } from 'formik';
 
-import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
-import messages from 'containers/Group/GroupMembers/messages';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 
 import { buildValues, mapFields } from 'utils/formHelpers';
 import { DateTime } from 'luxon';
+
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/Innovate/Campaign/CampaignQuestion/messages';
+import { injectIntl, intlShape } from 'react-intl';
 
 /* eslint-disable object-curly-newline */
 export function CampaignQuestionCloseInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, touched, ...props }) {
@@ -33,8 +35,8 @@ export function CampaignQuestionCloseInner({ handleSubmit, handleChange, handleB
       <Card>
         <Form>
           <CardContent>
-            <h2>Mark this question as solved</h2>
-            <h4>Mark this question as solved by explaining what the outcome of the discussion has been. This will block further communication on this question.</h4>
+            <h2>{props.intl.formatMessage(messages.question.mark_close)}</h2>
+            <h4>{props.intl.formatMessage(messages.question.mark_close_description)}</h4>
             <Card>
               <CardContent>
                 <Field
@@ -45,7 +47,7 @@ export function CampaignQuestionCloseInner({ handleSubmit, handleChange, handleB
                   name='conclusion'
                   margin='normal'
                   disabled={props.isCommitting}
-                  placeholder='We have decided to do...'
+                  placeholder={props.intl.formatMessage(messages.question.placeholder)}
                   value={values.conclusion}
                 />
               </CardContent>
@@ -56,14 +58,14 @@ export function CampaignQuestionCloseInner({ handleSubmit, handleChange, handleB
           <Divider />
           <CardActions>
             <DiverstSubmit isCommitting={props.isCommitting}>
-              CLOSE QUESTION
+              <DiverstFormattedMessage {...messages.question.close} />
             </DiverstSubmit>
             <Button
               disabled={props.isCommitting}
               to={links.questionsIndex}
               component={WrappedNavLink}
             >
-              Back to Question List
+              <DiverstFormattedMessage {...messages.question.back} />
             </Button>
           </CardActions>
         </Form>
@@ -111,6 +113,7 @@ CampaignQuestionClose.propTypes = {
 };
 
 CampaignQuestionCloseInner.propTypes = {
+  intl: intlShape,
   edit: PropTypes.bool,
   question: PropTypes.object,
   handleSubmit: PropTypes.func,
@@ -133,4 +136,5 @@ CampaignQuestionCloseInner.propTypes = {
 
 export default compose(
   memo,
+  injectIntl,
 )(CampaignQuestionClose);

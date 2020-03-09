@@ -11,7 +11,6 @@ import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import { Field, Formik, Form } from 'formik';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
-
 import messages from 'containers/Segment/messages';
 import { buildValues, mapFields } from 'utils/formHelpers';
 

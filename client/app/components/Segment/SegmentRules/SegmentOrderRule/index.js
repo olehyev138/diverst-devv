@@ -11,7 +11,8 @@ import { connect, getIn } from 'formik';
 import Select from 'components/Shared/DiverstSelect';
 
 import { Grid } from '@material-ui/core';
-
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/Segment/messages';
 /*
  * Define UI strings for each order field
  *  - Could define UI strings in backend as well
@@ -45,7 +46,7 @@ const SegmentOrderRule = ({ rule, ...props }) => {
           <Select
             name={`${ruleLocation}.field`}
             id={`${ruleLocation}.field`}
-            label='Order Field'
+            label={<DiverstFormattedMessage {...messages.rule.order.field} />}
             options={fields}
             value={{ value: fieldValue, label: fields[fieldValue].label }}
             onChange={v => props.formik.setFieldValue(`${ruleLocation}.field`, v.value)}
@@ -55,7 +56,7 @@ const SegmentOrderRule = ({ rule, ...props }) => {
           <Select
             name={`${ruleLocation}.operator`}
             id={`${ruleLocation}.operator`}
-            label='Order Operator'
+            label={<DiverstFormattedMessage {...messages.rule.order.operator} />}
             options={operators}
             value={{ value: operatorValue, label: operators[operatorValue].label }}
             onChange={v => props.formik.setFieldValue(`${ruleLocation}.operator`, v.value)}

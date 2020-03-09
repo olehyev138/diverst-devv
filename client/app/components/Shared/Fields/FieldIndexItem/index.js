@@ -22,7 +22,7 @@ import messages from 'containers/Shared/Field/messages';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
 import FieldForm from 'components/Shared/Fields/FieldForms/FieldForm';
-
+import { injectIntl, intlShape } from 'react-intl';
 import DiverstPagination from 'components/Shared/DiverstPagination';
 import DiverstLoader from 'components/Shared/DiverstLoader';
 
@@ -51,7 +51,7 @@ const styles = theme => ({
 export function FieldList(props, context) {
   const { classes, ...rest } = props;
 
-  const { field } = props;
+  const { field, intl } = props;
 
   const [form, setForm] = useState(false);
 
@@ -78,7 +78,7 @@ export function FieldList(props, context) {
             className={classes.errorButton}
             onClick={() => {
               /* eslint-disable-next-line no-alert, no-restricted-globals */
-              if (confirm('Delete field?'))
+              if (confirm(intl.formatMessage(messages.delete_confirm)))
                 props.deleteFieldBegin(field.id);
             }}
           >
@@ -101,6 +101,7 @@ export function FieldList(props, context) {
 }
 
 FieldList.propTypes = {
+  intl: intlShape,
   classes: PropTypes.object,
   field: PropTypes.object,
   isLoading: PropTypes.bool,
@@ -112,6 +113,7 @@ FieldList.propTypes = {
 };
 
 export default compose(
+  injectIntl,
   memo,
   withStyles(styles),
 )(FieldList);

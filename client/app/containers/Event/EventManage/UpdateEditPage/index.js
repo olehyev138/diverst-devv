@@ -58,6 +58,9 @@ import UpdateForm from 'components/Shared/Updates/UpdateForm';
 import { selectEvent } from 'containers/Event/selectors';
 import { selectGroup } from 'containers/Group/selectors';
 
+import { injectIntl, intlShape } from 'react-intl';
+import messages from 'containers/Event/messages';
+
 export function UpdateEditPage(props) {
   useInjectReducer({ key: 'updates', reducer });
   useInjectSaga({ key: 'updates', saga });
@@ -66,7 +69,7 @@ export function UpdateEditPage(props) {
 
   const rs = new RouteService(useContext);
   const { location } = rs;
-
+  const { intl } = props;
   const partialLink = ROUTES.group.plan.events.manage.updates;
   const links = {
     index: partialLink.index.path(dig(props, 'currentGroup', 'id'), dig(props, 'currentEvent', 'id')),
@@ -93,7 +96,7 @@ export function UpdateEditPage(props) {
       isCommitting={props.isCommitting || props.isCommittingFieldData}
       isFetching={props.isFetching}
       links={links}
-      buttonText='Update'
+      buttonText={intl.formatMessage(messages.update)}
       updateAction={props.updateUpdateBegin}
       updateFieldDataBegin={props.updateFieldDataBegin}
 
@@ -103,6 +106,7 @@ export function UpdateEditPage(props) {
 }
 
 UpdateEditPage.propTypes = {
+  intl: intlShape,
   getUpdateBegin: PropTypes.func.isRequired,
   getUpdateSuccess: PropTypes.func.isRequired,
   deleteUpdateBegin: PropTypes.func.isRequired,
@@ -147,6 +151,7 @@ const withConnect = connect(
 );
 
 export default compose(
+  injectIntl,
   withConnect,
   memo,
 )(UpdateEditPage);

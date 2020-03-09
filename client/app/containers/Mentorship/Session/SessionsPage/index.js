@@ -132,7 +132,7 @@ export function SessionsPage(props) {
   return (
     <SessionsList
       user={props.user}
-      globalUser={props.globalUser}
+      userSession={props.userSession}
       type={type}
       sessions={props.sessions}
       sessionsTotal={props.sessionsTotal}
@@ -149,7 +149,7 @@ export function SessionsPage(props) {
 
 SessionsPage.propTypes = {
   user: PropTypes.object.isRequired,
-  globalUser: PropTypes.shape({
+  userSession: PropTypes.shape({
     id: PropTypes.number
   }).isRequired,
   getHostingSessionsBegin: PropTypes.func.isRequired,

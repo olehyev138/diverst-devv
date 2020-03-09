@@ -22,7 +22,8 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import RangeSelector from 'components/Analyze/Shared/RangeSelector';
-
+import { injectIntl, intlShape } from 'react-intl';
+import messages from 'containers/Analyze/messages';
 const FlexibleWidthDiscreteColorLegend = makeWidthFlexible(DiscreteColorLegend);
 
 const styles = theme => ({
@@ -32,7 +33,7 @@ const styles = theme => ({
 });
 
 export function CustomGraph(props) {
-  const { classes } = props;
+  const { classes, intl } = props;
   const [value, setValue] = useState(undefined);
   const [legendData, setLegendData] = useState({});
 
@@ -65,7 +66,7 @@ export function CustomGraph(props) {
             <Button
               onClick={() => {
                 /* eslint-disable-next-line no-alert, no-restricted-globals */
-                if (confirm('Delete metricsDashboard?'))
+                if (confirm(intl.formatMessage(messages.delete_confirm)))
                   props.deleteCustomGraphBegin({
                     dashboardId: props.customGraph.metrics_dashboard_id,
                     graphId: props.customGraph.id
@@ -131,6 +132,7 @@ export function CustomGraph(props) {
 
 CustomGraph.propTypes = {
   classes: PropTypes.object,
+  intl: intlShape,
   data: PropTypes.array,
   customGraph: PropTypes.object,
   links: PropTypes.object,
@@ -141,5 +143,6 @@ CustomGraph.propTypes = {
 
 export default compose(
   memo,
+  injectIntl,
   withStyles(styles),
 )(CustomGraph);

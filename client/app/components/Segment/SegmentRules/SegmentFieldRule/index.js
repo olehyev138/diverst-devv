@@ -103,7 +103,7 @@ const SegmentFieldRule = (props) => {
           <Select
             name={`${ruleLocation}.field`}
             id={`${ruleLocation}.field`}
-            label='Fields'
+            label={<DiverstFormattedMessage {...messages.rule.field} />}
             options={props.selectFields}
             value={(currentField) ? { value: currentField.id, label: currentField.title } : {}}
             onMenuOpen={fieldSelectAction}
@@ -115,7 +115,7 @@ const SegmentFieldRule = (props) => {
           <Select
             name={`${ruleLocation}.operator`}
             id={`${ruleLocation}.operator`}
-            label='Operator'
+            label={<DiverstFormattedMessage {...messages.rule.operator} />}
             options={currentFieldOperators}
             value={{ value: currentOperator, label: operators[currentOperator] }}
             onChange={v => props.formik.setFieldValue(`${ruleLocation}.operator`, v.value)}

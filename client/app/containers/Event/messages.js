@@ -18,6 +18,12 @@ export default defineMessages({
   delete: {
     id: `${scope}.index.button.delete`,
   },
+  delete_confirm: {
+    id: `${scope}.index.button.delete_confirm`,
+  },
+  createupdate: {
+    id: `${scope}.form.button.createupdate`,
+  },
   create: {
     id: `${scope}.form.button.create`,
   },
@@ -60,9 +66,18 @@ export default defineMessages({
     end: {
       id: `${scope}.form.input.end`,
     },
+    starterror: {
+      id: `${scope}.form.input.starterror`,
+    },
+    enderror: {
+      id: `${scope}.form.input.enderror`,
+    },
     picture: {
       id: `${scope}.form.input.picture`
-    }
+    },
+    image: {
+      id: `${scope}.form.input.image`
+    },
   },
   show: {
     dateAndTime: {

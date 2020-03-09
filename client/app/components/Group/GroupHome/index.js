@@ -23,7 +23,7 @@ export function GroupHome(props) {
           <Grid container alignItems='stretch' direction='column' justify='flex-start'>
             <Grid item>
               <Typography variant='h4' align='center' color='primary'>
-                <span>Welcome to the </span>
+                <span>{<DiverstFormattedMessage {...messages.welcome} />}</span>
                 <strong>{props.group.name}</strong>
                 !
               </Typography>

@@ -12,9 +12,9 @@ import {
 import Select from 'components/Shared/DiverstSelect';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { Field, Formik, Form } from 'formik';
-import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
-import messages from 'containers/Group/GroupMembers/messages';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/Group/GroupManage/messages';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import { buildValues, mapFields } from 'utils/formHelpers';
 
@@ -40,7 +40,7 @@ export function GroupLeaderFormInner({ handleSubmit, handleChange, handleBlur, v
               fullWidth
               id='user_id'
               name='user_id'
-              label='Select Member'
+              label={<DiverstFormattedMessage {...messages.leader.select} />}
               margin='normal'
               disabled={props.isCommitting}
               value={values.user_id}
@@ -58,7 +58,7 @@ export function GroupLeaderFormInner({ handleSubmit, handleChange, handleBlur, v
               fullWidth
               id='user_role_id'
               name='user_role_id'
-              label='Group Role'
+              label={<DiverstFormattedMessage {...messages.leader.role} />}
               margin='normal'
               disabled={props.isCommitting}
               value={values.user_role_id}
@@ -90,7 +90,7 @@ export function GroupLeaderForm(props) {
     id: { default: '' },
     user: { default: '', customKey: 'user_id' },
     group_id: { default: props.groupId },
-    position_name: { default: 'Group Leader' },
+    position_name: { default: <DiverstFormattedMessage {...messages.leader.position} /> },
     user_role: { default: '', customKey: 'user_role_id' },
     visible: { default: true },
     pending_member_notifications_enabled: { default: false },

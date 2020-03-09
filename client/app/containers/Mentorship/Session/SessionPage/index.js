@@ -15,7 +15,7 @@ import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { selectUser } from 'containers/Mentorship/selectors';
-import { selectUser as selectGlobalUser } from 'containers/Shared/App/selectors';
+import { selectUser as selectUserSession } from 'containers/Shared/App/selectors';
 import {
   selectSession,
   selectPaginatedUsers,
@@ -154,7 +154,7 @@ const mapStateToProps = createStructuredSelector({
   user: selectUser(),
   session: selectSession(),
   users: selectPaginatedUsers(),
-  loggedUser: selectGlobalUser(),
+  loggedUser: selectUserSession(),
 
   isFetchingSession: selectIsFetchingSession(),
   isFetchingSessions: selectIsFetchingSessions(),

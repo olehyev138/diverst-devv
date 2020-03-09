@@ -35,6 +35,9 @@ import SegmentForm from 'components/Segment/SegmentForm';
 import SegmentMemberListPage from 'containers/Segment/SegmentMemberListPage';
 import { selectEnterprise } from 'containers/Shared/App/selectors';
 
+import { injectIntl, intlShape } from 'react-intl';
+import messages from 'containers/Segment/messages';
+
 export function SegmentPage(props) {
   useInjectReducer({ key: 'segments', reducer });
   useInjectReducer({ key: 'groups', reducer: groupReducer });
@@ -42,7 +45,7 @@ export function SegmentPage(props) {
   useInjectSaga({ key: 'segments', saga });
   useInjectSaga({ key: 'groups', saga: groupSaga });
   useInjectSaga({ key: 'fields', saga: fieldsSaga });
-
+  const { intl } = props;
   const rs = new RouteService(useContext);
   const segmentIds = rs.params('segment_id');
   const segmentId = segmentIds ? segmentIds[0] : null;
@@ -73,7 +76,7 @@ export function SegmentPage(props) {
           selectFields: props.selectFields,
           fields: props.fields
         }}
-        buttonText={segmentId ? 'Update' : 'Create'}
+        buttonText={segmentId ? intl.formatMessage(messages.update) : intl.formatMessage(messages.create)}
         isCommitting={props.isCommitting}
         isFormLoading={props.edit ? props.isFormLoading : undefined}
         currentEnterprise={props.currentEnterprise}
@@ -87,6 +90,7 @@ export function SegmentPage(props) {
 }
 
 SegmentPage.propTypes = {
+  intl: intlShape,
   edit: PropTypes.bool,
   segment: PropTypes.object,
   rules: PropTypes.object,
@@ -132,6 +136,7 @@ const withConnect = connect(
 );
 
 export default compose(
+  injectIntl,
   withConnect,
   memo,
 )(SegmentPage);

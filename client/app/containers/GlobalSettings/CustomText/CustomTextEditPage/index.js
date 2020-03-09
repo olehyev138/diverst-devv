@@ -23,6 +23,8 @@ import {
 } from 'containers/GlobalSettings/CustomText/actions';
 
 import CustomTextForm from 'components/GlobalSettings/CustomText/CustomTextForm';
+import { injectIntl, intlShape } from 'react-intl';
+import messages from 'containers/GlobalSettings/CustomText/messages';
 
 export function CustomTextEditPage(props) {
   useInjectReducer({ key: 'custom_text', reducer });
@@ -32,14 +34,14 @@ export function CustomTextEditPage(props) {
   const links = {
     customTextEdit: ROUTES.admin.system.globalSettings.customText.edit.path()
   };
-
+  const { intl } = props;
   const { currentUser } = props;
   const { customText } = props;
 
   return (
     <CustomTextForm
       customTextAction={props.updateCustomTextBegin}
-      buttonText='Update'
+      buttonText={intl.formatMessage(messages.update)}
       currentUser={currentUser}
       links={links}
       customText={customText}
@@ -49,6 +51,7 @@ export function CustomTextEditPage(props) {
 }
 
 CustomTextEditPage.propTypes = {
+  intl: intlShape,
   getCustomTextBegin: PropTypes.func,
   updateCustomTextBegin: PropTypes.func,
   currentUser: PropTypes.object,
@@ -72,6 +75,7 @@ const withConnect = connect(
 );
 
 export default compose(
+  injectIntl,
   withConnect,
   memo,
 )(CustomTextEditPage);
