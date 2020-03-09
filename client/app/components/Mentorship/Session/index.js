@@ -243,9 +243,9 @@ export function Session(props) {
             <Typography className={classes.dataHeaders}>
               <DiverstFormattedMessage {...messages.show.dateAndTime} />
             </Typography>
-            <Typography variant='overline'>From</Typography>
+            <Typography variant='overline'><DiverstFormattedMessage {...messages.show.from} /></Typography>
             <Typography color='textSecondary'>{formatDateTimeString(session.start, DateTime.DATETIME_FULL)}</Typography>
-            <Typography variant='overline'>To</Typography>
+            <Typography variant='overline'><DiverstFormattedMessage {...messages.show.to} /></Typography>
             <Typography color='textSecondary' className={classes.data}>{formatDateTimeString(session.end, DateTime.DATETIME_FULL)}</Typography>
 
             { /* Misc Fields */ }

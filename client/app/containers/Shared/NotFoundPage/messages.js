@@ -11,4 +11,7 @@ export default defineMessages({
   header: {
     id: `${scope}.headers.header`,
   },
+  return: {
+    id: `${scope}.button.return`,
+  },
 });

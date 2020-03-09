@@ -19,7 +19,8 @@ const styles = theme => ({
 
 const SystemUsersPages = Object.freeze({
   users: 0,
-  roles: 1
+  roles: 1,
+  import: 3,
 });
 
 const SystemUsersLayout = ({ component: Component, classes, ...rest }) => {
@@ -28,6 +29,8 @@ const SystemUsersLayout = ({ component: Component, classes, ...rest }) => {
   let currentPage;
   if (matchPath(location.pathname, { path: ROUTES.admin.system.users.roles.index.path() }))
     currentPage = 'roles';
+  else if (matchPath(location.pathname, { path: ROUTES.admin.system.users.import.path() }))
+    currentPage = 'import';
   else if (matchPath(location.pathname, { path: ROUTES.admin.system.users.index.path() }))
     currentPage = 'users';
 

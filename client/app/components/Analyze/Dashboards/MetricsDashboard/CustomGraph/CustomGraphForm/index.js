@@ -45,7 +45,7 @@ export function CustomGraphFormInner({ handleSubmit, handleChange, handleBlur, v
               required
               name='field_id'
               id='field_id'
-              label='Fields'
+              label={<DiverstFormattedMessage {...messages.fields.field} />}
               margin='normal'
               disabled={props.isCommitting}
               value={values.field_id}
@@ -60,7 +60,7 @@ export function CustomGraphFormInner({ handleSubmit, handleChange, handleBlur, v
               fullWidth
               name='aggregation_id'
               id='aggregation_id'
-              label='Aggregations'
+              label={<DiverstFormattedMessage {...messages.fields.aggregation} />}
               margin='normal'
               disabled={props.isCommitting}
               value={values.aggregation_id}

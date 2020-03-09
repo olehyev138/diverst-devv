@@ -70,9 +70,9 @@ At present, there are 5 relevant Definer/User Pairs:
 
 #### Requirements
 Each model which would contain FieldData, needs these 5 thing in order to function
-- a class variable `@@field_definer_name`, which holds the name of the `belongs_to` association witch points to the
+- a class variable `FIELD_DEFINER_NAME`, which holds the name of the `belongs_to` association witch points to the
 field definer
-- another class variable `@@field_association_name`, which holds the name of the `has_many` association between the
+- another class variable `FIELD_ASSOCIATION_NAME`, which holds the name of the `has_many` association between the
 field definer and its fields
 - a model attribute readers for said variables `mattr_reader :field_association_name, :field_definer_name`
 - include the `ContainsFieldData` module
@@ -83,8 +83,8 @@ field definer and its fields
 for example, here is a snippet from `UserGroup`:
 ```
 class UserGroup < ApplicationRecord
-  @@field_definer_name = 'group'
-  @@field_association_name = 'survey_fields'
+  FIELD_DEFINER_NAME = 'group'
+  FIELD_ASSOCIATION_NAME = 'survey_fields'
   mattr_reader :field_association_name, :field_definer_name
 
   include ContainsFieldData

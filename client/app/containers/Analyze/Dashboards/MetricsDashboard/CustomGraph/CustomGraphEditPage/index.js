@@ -29,6 +29,10 @@ import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import CustomGraphForm from 'components/Analyze/Dashboards/MetricsDashboard/CustomGraph/CustomGraphForm';
 
+// messages
+import messages from 'containers/Analyze/Dashboards/MetricsDashboard/CustomGraph/messages';
+import { injectIntl, intlShape } from 'react-intl';
+
 export function CustomGraphEditPage(props) {
   useInjectReducer({ key: 'customMetrics', reducer });
   useInjectReducer({ key: 'fields', reducer: fieldReducer });
@@ -40,6 +44,7 @@ export function CustomGraphEditPage(props) {
   const links = {
     metricsDashboardShow: ROUTES.admin.analyze.custom.show.path(metricsDashboardId),
   };
+  const { intl } = props;
 
   useEffect(() => {
     const customGraphId = rs.params('graph_id');
@@ -54,7 +59,7 @@ export function CustomGraphEditPage(props) {
       customGraphAction={props.updateCustomGraphBegin}
       getFieldsBegin={props.getFieldsBegin}
       fields={props.fields}
-      buttonText='Update'
+      buttonText={intl.formatMessage(messages.update)}
       customGraph={props.currentCustomGraph}
       metricsDashboardId={metricsDashboardId[0]}
       links={links}
@@ -65,6 +70,7 @@ export function CustomGraphEditPage(props) {
 }
 
 CustomGraphEditPage.propTypes = {
+  intl: intlShape,
   getCustomGraphBegin: PropTypes.func,
   updateCustomGraphBegin: PropTypes.func,
   currentCustomGraph: PropTypes.object,
@@ -95,6 +101,7 @@ const withConnect = connect(
 );
 
 export default compose(
+  injectIntl,
   withConnect,
   memo,
 )(CustomGraphEditPage);

@@ -92,7 +92,7 @@ export function MetricsDashboard(props) {
                 className={classNames(classes.buttons)}
                 to={props.links.customGraphNew}
               >
-                Create Graph
+                <DiverstFormattedMessage {...messages.creategraph} />
               </Button>
             </Grid>
           </Grid>

@@ -22,14 +22,14 @@ RSpec.describe CacheSegmentMembersJob, type: :job do
   it 'adds the segment members' do
     enterprise = create(:enterprise)
 
-    select_field = SelectField.new(type: 'SelectField', title: 'Gender', options_text: "Male\nFemale", field_definer: enterprise)
+    select_field = enterprise.fields.new(type: 'SelectField', title: 'Gender', options_text: "Male\nFemale", field_definer: enterprise)
     select_field.save!
 
     segment = create(:segment, enterprise: enterprise)
     create(:segment_field_rule, segment: segment, field: select_field, operator: Field::OPERATORS[:equals_any_of], data: ['Female'].to_json)
 
     user = create(:user, enterprise: enterprise, active: true)
-    create(:field_data, field_user: user, field_id: select_field.id, data: ['Female'].to_json)
+    user[select_field] = ['Female']
 
     expect(segment.members.count).to eq(0)
 

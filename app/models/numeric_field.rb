@@ -22,17 +22,17 @@ class NumericField < Field
 
   # @deprecated
   def validates_rule_for_user?(rule:, user:)
-    return false if user.info[rule.field].nil?
+    return false if user[rule.field].nil?
 
     case rule.operator
     when SegmentFieldRule.operators[:equals]
-      user.info[rule.field] == rule.values_array[0].to_i
+      user[rule.field] == rule.values_array[0].to_i
     when SegmentFieldRule.operators[:greater_than]
-      user.info[rule.field] > rule.values_array[0].to_i
+      user[rule.field] > rule.values_array[0].to_i
     when SegmentFieldRule.operators[:lesser_than]
-      user.info[rule.field] < rule.values_array[0].to_i
+      user[rule.field] < rule.values_array[0].to_i
     when SegmentFieldRule.operators[:is_not]
-      user.info[rule.field] != rule.values_array[0].to_i
+      user[rule.field] != rule.values_array[0].to_i
     end
   end
 
@@ -43,17 +43,21 @@ class NumericField < Field
   end
 
   def serialize_value(value)
+    value.to_s
+  end
+
+  def deserialize_value(value)
     value.to_i
   end
 
   def match_score_between(e1, e2, users)
-    e1_value = e1.info[self]
-    e2_value = e2.info[self]
+    e1_value = e1[self]
+    e2_value = e2[self]
 
     return nil unless e1_value && e2_value
 
     values = users.map do |user|
-      user.info[self]
+      user[self]
     end
 
     values.compact!
@@ -70,7 +74,7 @@ class NumericField < Field
 
   def stats_in(entries)
     values = entries.map do |entry|
-      entry.info[self]
+      entry[self]
     end
 
     values.compact!

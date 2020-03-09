@@ -20,7 +20,7 @@ import messages from 'containers/News/messages';
 import CommentIcon from '@material-ui/icons/Comment';
 import IconButton from '@material-ui/core/IconButton';
 import { formatDateTimeString } from 'utils/dateTimeHelpers';
-
+import { injectIntl, intlShape } from 'react-intl';
 const styles = theme => ({
   root: {
     flexGrow: 1,
@@ -40,10 +40,11 @@ const styles = theme => ({
 });
 
 export function GroupMessageListItem(props) {
-  const { classes, newsItem } = props;
+  const { classes, newsItem, intl } = props;
   const newsItemId = newsItem.id;
   const groupMessage = newsItem.group_message;
   const groupId = groupMessage.group_id;
+
   return (
     <Card>
       <CardHeader
@@ -120,7 +121,7 @@ export function GroupMessageListItem(props) {
                 props.updateNewsItemBegin({ approved: true, id: newsItemId, group_id: groupId });
               }}
             >
-              Approve
+              <DiverstFormattedMessage {...messages.approve} />
             </Button>
           )}
           {!props.readonly && (
@@ -128,11 +129,11 @@ export function GroupMessageListItem(props) {
               size='small'
               onClick={() => {
                 /* eslint-disable-next-line no-alert, no-restricted-globals */
-                if (confirm('Delete group message?'))
+                if (confirm(intl.formatMessage(messages.group_delete_confirm)))
                   props.deleteGroupMessageBegin(newsItem.group_message);
               }}
             >
-              Delete
+              <DiverstFormattedMessage {...messages.delete} />
             </Button>
           )}
         </CardActions>
@@ -143,6 +144,7 @@ export function GroupMessageListItem(props) {
 
 GroupMessageListItem.propTypes = {
   classes: PropTypes.object,
+  intl: intlShape,
   newsItem: PropTypes.object,
   readonly: PropTypes.bool,
   groupId: PropTypes.number,
@@ -156,5 +158,6 @@ GroupMessageListItem.propTypes = {
 
 export default compose(
   memo,
+  injectIntl,
   withStyles(styles)
 )(GroupMessageListItem);

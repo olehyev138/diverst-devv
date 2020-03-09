@@ -21,6 +21,9 @@ export default defineMessages({
   delete_message: {
     id: `${scope}.index.text.delete_message`,
   },
+  delete_confirm: {
+    id: `${scope}.index.text.delete_confirm`,
+  },
   children_collapse: {
     id: `${scope}.index.button.children_collapse`,
   },
@@ -34,7 +37,7 @@ export default defineMessages({
     id: `${scope}.form.button.create`,
   },
   update: {
-    id: `${scope}.form.button.edit`,
+    id: `${scope}.form.button.update`,
   },
   cancel: {
     id: `${scope}.form.button.cancel`,
@@ -44,6 +47,9 @@ export default defineMessages({
   },
   last_name: {
     id: `${scope}.form.input.last_name`,
+  },
+  email: {
+    id: `${scope}.form.input.email`,
   },
   biography: {
     id: `${scope}.form.input.biography`,
@@ -86,6 +92,28 @@ export default defineMessages({
     },
     downloadButton: {
       id: `${scope}.downloads.downloadButton`
+    },
+  },
+  tab: {
+    users: {
+      id: `${scope}.tab.users`
+    },
+    roles: {
+      id: `${scope}.tab.roles`
+    },
+    policy: {
+      id: `${scope}.tab.policy`
+    }
+  },
+  members: {
+    id: `${scope}.list.members`
+  },
+  tooltip: {
+    edit: {
+      id: `${scope}.tooltip.edit`
+    },
+    delete: {
+      id: `${scope}.tooltip.delete`
     },
   },
 });

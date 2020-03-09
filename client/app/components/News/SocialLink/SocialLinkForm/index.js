@@ -31,7 +31,7 @@ export function SocialLinkFormInner({ handleSubmit, handleChange, handleBlur, va
               id='url'
               name='url'
               margin='normal'
-              label='Social Link URL'
+              label={<DiverstFormattedMessage {...messages.social_url} />}
               value={values.url}
             />
           </CardContent>

@@ -30,6 +30,7 @@ Diverst::Application.routes.draw do
       resources :checklists
       resources :checklist_items
       resources :clockwork_database_events, only: [:index, :update, :show]
+      resources :csv_files, only: [:create]
       resources :custom_texts
       resources :devices
       resources :emails, only: [:index, :update, :show]
@@ -203,10 +204,15 @@ Diverst::Application.routes.draw do
       end
       resources :users do
         collection do
+          get 'export_csv'
           post '/email', to: 'users#find_user_enterprise_by_email'
         end
       end
-      resources :user_groups
+      resources :user_groups do
+        collection do
+          get 'export_csv'
+        end
+      end
       resources :user_roles
       resources :users_segments
       resources :views

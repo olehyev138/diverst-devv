@@ -27,6 +27,7 @@ import ImageIcon from '@material-ui/icons/Image';
 import { formatDateTimeString } from 'utils/dateTimeHelpers';
 import DiverstImg from 'components/Shared/DiverstImg';
 import Carousel from 'react-material-ui-carousel';
+import { injectIntl, intlShape } from 'react-intl';
 
 const styles = theme => ({
   cardHeader: {
@@ -52,7 +53,7 @@ export function NewsLinkListItem(props) {
   const newsItemId = newsItem.id;
   const newsLink = newsItem.news_link;
   const groupId = newsLink.group_id;
-  const { links } = props;
+  const { links, intl } = props;
   // TODO : Change the newslink.description condition to render on image presence
   return (
     <Card>
@@ -138,6 +139,13 @@ export function NewsLinkListItem(props) {
               <DiverstFormattedMessage {...messages.edit} />
             </Button>
           )}
+          <Button
+            size='small'
+            to={links.newsLinkShow(props.groupId, newsItem.id)}
+            component={WrappedNavLink}
+          >
+            {<DiverstFormattedMessage {...messages.comments} />}
+          </Button>
           {!props.readonly && props.newsItem.approved !== true && (
             <Button
               size='small'
@@ -146,7 +154,7 @@ export function NewsLinkListItem(props) {
                 props.updateNewsItemBegin({ approved: true, id: newsItemId, group_id: groupId });
               }}
             >
-              Approve
+              {<DiverstFormattedMessage {...messages.approve} />}
             </Button>
           )}
           {!props.readonly && (
@@ -154,11 +162,11 @@ export function NewsLinkListItem(props) {
               size='small'
               onClick={() => {
                 /* eslint-disable-next-line no-alert, no-restricted-globals */
-                if (confirm('Delete news link?'))
+                if (confirm(intl.formatMessage(messages.news_delete_confirm)))
                   props.deleteNewsLinkBegin(newsItem.news_link);
               }}
             >
-              Delete
+              {<DiverstFormattedMessage {...messages.delete} />}
             </Button>
           )}
         </CardActions>
@@ -169,6 +177,7 @@ export function NewsLinkListItem(props) {
 
 NewsLinkListItem.propTypes = {
   classes: PropTypes.object,
+  intl: intlShape,
   newsLink: PropTypes.object,
   readonly: PropTypes.bool,
   groupId: PropTypes.number,
@@ -179,6 +188,7 @@ NewsLinkListItem.propTypes = {
 };
 
 export default compose(
+  injectIntl,
   memo,
   withStyles(styles)
 )(NewsLinkListItem);

@@ -97,17 +97,17 @@ export function GroupMemberList(props) {
 
   const columns = [
     {
-      title: 'First Name',
+      title: <DiverstFormattedMessage {...messages.columns.givenName} />,
       field: 'user.first_name',
       query_field: 'users.first_name'
     },
     {
-      title: 'Last Name',
+      title: <DiverstFormattedMessage {...messages.columns.familyName} />,
       field: 'user.last_name',
       query_field: 'users.last_name'
     },
     {
-      title: 'Membership Status',
+      title: <DiverstFormattedMessage {...messages.columns.status} />,
       field: 'status',
       query_field: '(CASE WHEN users.active = false THEN 3 WHEN groups.pending_users AND NOT accepted_member THEN 2 ELSE 1 END)',
       sorting: true,
@@ -251,7 +251,7 @@ export function GroupMemberList(props) {
       <Box className={classes.floatSpacer} />
 
       <DiverstTable
-        title='Members'
+        title={intl.formatMessage(messages.members)}
         handlePagination={props.handlePagination}
         isLoading={props.isFetchingMembers}
         onOrderChange={handleOrderChange}
@@ -261,16 +261,22 @@ export function GroupMemberList(props) {
         rowsPerPage={props.params.count}
         actions={[{
           icon: () => <DeleteIcon />,
-          tooltip: 'Delete Member',
+          tooltip: intl.formatMessage(messages.tooltip.delete),
           onClick: (_, rowData) => {
             /* eslint-disable-next-line no-alert, no-restricted-globals */
-            if (confirm('Delete member?'))
+            if (confirm(intl.formatMessage(messages.tooltip.delete_confirm)))
               props.deleteMemberBegin({
                 userId: rowData.id,
                 groupId: props.groupId
               });
           }
         }]}
+        my_options={{
+          exportButton: true,
+          exportCsv: (columns, data) => {
+            props.exportMembersBegin();
+          }
+        }}
       />
       <DiverstDropdownMenu
         anchor={anchor}
@@ -309,6 +315,7 @@ GroupMemberList.propTypes = {
   intl: intlShape.isRequired,
   classes: PropTypes.object,
   deleteMemberBegin: PropTypes.func,
+  exportMembersBegin: PropTypes.func,
   links: PropTypes.shape({
     groupMembersNew: PropTypes.string,
   }),

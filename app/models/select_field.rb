@@ -12,6 +12,29 @@ class SelectField < Field
     ]
   end
 
+  def evaluate(v1, v2, operator)
+    case operator
+    when OPERATORS[:equals_any_of]
+      v2.is_a?(Array) && (v2.include? v1[0])
+    when OPERATORS[:not_equals_any_of]
+      v2.is_a?(Array) && (v2.exclude? v1[0])
+    else
+      super(v1, v2, operator)
+    end
+  end
+
+  def serialize_value(value)
+    case value
+    when String then [value].to_json
+    when Array then value.to_json
+    else nil
+    end
+  end
+
+  def deserialize_value(value)
+    JSON.parse(value || '[]')
+  end
+
   # -------------------------------------------------------------------------------------------------
   # TODO: Everything below here is most likely deprecated & needs to be removed
   # DEPRECATED
@@ -35,9 +58,9 @@ class SelectField < Field
     nb_users_answered = 0
 
     users.each do |user|
-      if user.info[self] && user.info[self][0]
+      if user[self] && user[self][0]
         nb_users_answered += 1
-        nb_users_chose += 1 if user.info[self][0] === value
+        nb_users_chose += 1 if user[self][0] === value
       end
     end
 
@@ -48,11 +71,11 @@ class SelectField < Field
   #   - Community size contrast (a small cluster with a large cluster will be worth more than 2 small clusters)
   #   - Community size (small clusters are worth more)
   def match_score_between(e1, e2, users)
-    # Returns nil if we don't have all the user info necessary to get a score
-    return nil unless e1.info[self] && e2.info[self]
+    e1_value = e1[self][0]
+    e2_value = e2[self][0]
 
-    e1_value = e1.info[self][0]
-    e2_value = e2.info[self][0]
+    # Returns nil if we don't have all the user info necessary to get a score
+    return nil unless e1_value && e2_value
 
     e1_popularity = popularity_for_value(e1_value, users)
     e2_popularity = popularity_for_value(e2_value, users)
@@ -78,9 +101,9 @@ class SelectField < Field
   end
 
   def validates_rule_for_user?(rule:, user:)
-    return false if user.info[rule.field].nil?
+    return false if user[rule.field].nil?
 
-    field_value = user.info[rule.field][0]
+    field_value = user[rule.field][0]
 
     case rule.operator
     when SegmentFieldRule.operators[:contains_any_of]
