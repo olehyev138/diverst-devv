@@ -9,20 +9,20 @@ import { compose } from 'redux';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 
-import reducer from 'containers/User/Policy/reducer';
-import saga from 'containers/User/Policy/saga';
+import reducer from 'containers/User/UserPolicy/reducer';
+import saga from 'containers/User/UserPolicy/saga';
 
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { selectGroup } from 'containers/Group/selectors';
 import { selectUser } from 'containers/Shared/App/selectors';
-import { selectPolicy, selectIsCommitting, selectIsFetchingPolicy } from 'containers/User/Policy/selectors';
+import { selectPolicy, selectIsCommitting, selectIsFetchingPolicy } from 'containers/User/UserPolicy/selectors';
 
 import {
   getPolicyBegin, updatePolicyBegin,
   policiesUnmount
-} from 'containers/User/Policy/actions';
+} from 'containers/User/UserPolicy/actions';
 
 import PolicyForm from 'components/GlobalSettings/PolicyTemplate/PolicyForm';
 

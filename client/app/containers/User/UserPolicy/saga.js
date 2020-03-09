@@ -70,6 +70,7 @@ export function* updatePolicy(action) {
 
     yield put(updatePolicySuccess({}));
     yield put(showSnackbar({ message: 'Successfully updated policy', options: { variant: 'success' } }));
+    yield put(push(ROUTES.admin.system.users.policy_templates.index.path()));
   } catch (err) {
     yield put(updatePolicyError(err));
 

@@ -11,8 +11,8 @@ import { push } from 'connected-react-router';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 
-import saga from 'containers/User/Policy/saga';
-import reducer from 'containers/User/Policy/reducer';
+import saga from 'containers/User/UserPolicy/saga';
+import reducer from 'containers/User/UserPolicy/reducer';
 
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -21,12 +21,12 @@ import {
   selectPaginatedPolicies,
   selectIsFetchingPolicies,
   selectPoliciesTotal
-} from 'containers/User/Policy/selectors';
+} from 'containers/User/UserPolicy/selectors';
 import { selectUser } from 'containers/Shared/App/selectors';
 
 import {
   policiesUnmount, getPoliciesBegin,
-} from 'containers/User/Policy/actions';
+} from 'containers/User/UserPolicy/actions';
 
 import PolicyTemplatesList from 'components/GlobalSettings/PolicyTemplate/PolicyTemplatesList';
 

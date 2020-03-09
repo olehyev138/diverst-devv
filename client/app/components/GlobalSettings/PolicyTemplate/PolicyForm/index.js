@@ -31,7 +31,7 @@ import {
 } from '@material-ui/core';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
-import messages from 'containers/User/Policy/messages';
+import messages from 'containers/User/UserPolicy/messages';
 import { buildValues } from 'utils/formHelpers';
 
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
@@ -1086,10 +1086,7 @@ export function PolicyFormInner({
               <Button
                 component={WrappedNavLink}
                 to={props.links.policiesIndex}
-                variant='contained'
-                size='large'
-                color='primary'
-                className={classes.buttons}
+                disabled={props.isCommitting}
               >
                 <DiverstFormattedMessage {...messages.form.cancel} />
               </Button>
