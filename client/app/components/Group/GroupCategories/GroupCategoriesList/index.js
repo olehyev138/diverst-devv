@@ -106,7 +106,7 @@ export function GroupCategoriesList(props, context) {
                       className={classes.errorButton}
                       onClick={() => {
                         /* eslint-disable-next-line no-alert, no-restricted-globals */
-                        if (confirm('Delete group?'))
+                        if (confirm('Delete category?'))
                           props.deleteGroupCategoryBegin(categoryType.id);
                       }}
                     >
@@ -124,27 +124,16 @@ export function GroupCategoriesList(props, context) {
                       Categorize Subgroups
                     </Button>
                   </CardActions>
-                  <Box mt={1} />
-                  <Grid container spacing={2} justify='flex-end'>
+                  <Grid container spacing={1} justify='flex-end'>
                     {categoryType.group_categories && categoryType.group_categories.map((category, i) => (
                       /* eslint-disable-next-line react/jsx-wrap-multilines */
                       <Grid item key={category.id} xs={12}>
                         <Card className={classes.childGroupCard}>
                           <CardContent>
                             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                            <Link
-                              component={WrappedNavLink}
-                              to={{
-                                pathname: ROUTES.group.home.path(category.id),
-                                state: { id: category.id }
-                              }}
-                            >
-                              <Typography variant='h5' component='h2' display='inline'>
-                                {category.name}
-                              </Typography>
-                            </Link>
-                          </CardContent>
-                          <CardActions>
+                            <Typography variant='h5' component='h2' display='inline'>
+                              {category.name}
+                            </Typography>
                             <Button
                               size='small'
                               color='primary'
@@ -161,13 +150,13 @@ export function GroupCategoriesList(props, context) {
                               className={classes.errorButton}
                               onClick={() => {
                                 /* eslint-disable-next-line no-alert, no-restricted-globals */
-                                if (confirm('Delete group?'))
+                                if (confirm('Delete category?'))
                                   props.deleteGroupCategoryBegin(category.id);
                               }}
                             >
                               <DiverstFormattedMessage {...messages.delete} />
                             </Button>
-                          </CardActions>
+                          </CardContent>
                         </Card>
                       </Grid>
                     ))}

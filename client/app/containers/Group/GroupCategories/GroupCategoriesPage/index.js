@@ -38,8 +38,6 @@ export function GroupCategoriesPage(props) {
     setParams(newParams);
   };
 
-  console.log('container');
-  console.log(props);
   return (
     <React.Fragment>
       <GroupCategoriesList
