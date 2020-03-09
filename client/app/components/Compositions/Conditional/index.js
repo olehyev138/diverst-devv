@@ -18,8 +18,6 @@ function valid(props, conditions, reducer) {
   return reducer(conditionsMapper(props, conditions));
 }
 
-// This component is intended for rendering images from a base64 string,
-// likely image data encoded in base64 received from a serializer.
 export default function Conditional(Component, conditions, reducer = a => a.reduce((sum, v) => sum || v, false)) {
   const WrappedComponent = props => valid(props, conditions, reducer)
     ? <Component {...props} />
