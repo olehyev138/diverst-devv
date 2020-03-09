@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# Assumes a given role & sets AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY & AWS_SESSION_TOKEN
+#  - with these set, we can use iac tools & aws cli without worrying about credentials
+#  - sets a duration of 4 hours/14400 seconds
+# Requires AWS_ACCESS_KEY_ID & AWS_SECRET_ACCESS_KEY for cli-bot user to be set
+
+# Usage
+# ./cli-assume-role <full-role-arn>
+
+ROLE_ARN=$1
+DURATION_SECONDS=14400
+
+# Exit on error
+set -e
+
+# Call sts assume-role, use cut to get access key id, secret acccess key & session token
+creds=$(aws --output text sts assume-role --duration-seconds "$DURATION_SECONDS" --role-arn "$ROLE_ARN" --role-session-name "cli-session" | grep CREDENTIALS | cut -f2,4,5)
+
+# Use cut to get each secret/token & export into appropriate environment variable
+AWS_ACCESS_KEY_ID=$(echo "$creds" | awk '{print $1}')
+AWS_SECRET_ACCESS_KEY=$(echo "$creds" | awk '{print $2}')
+AWS_SESSION_TOKEN=$(echo "$creds" | awk '{print $3}')
+
+# Echo commands, user will run script in eval - do this so that env variables are set in current shell
+echo "export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID"
+echo "export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY"
+echo "export AWS_SESSION_TOKEN=$AWS_SESSION_TOKEN"

@@ -20,7 +20,8 @@ import {
 import { withStyles } from '@material-ui/core/styles';
 
 import DiverstSelect from 'components/Shared/DiverstSelect';
-
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/Analyze/messages';
 const styles = theme => ({
 });
 
@@ -41,7 +42,7 @@ export function GroupScopeSelectInner({ handleSubmit, handleChange, handleBlur, 
             name='group_select'
             fullWidth
             id='group_select'
-            label='Groups'
+            label={<DiverstFormattedMessage {...messages.groupselect} />}
             isMulti
             options={props.groups}
             value={values.groups}
@@ -57,7 +58,7 @@ export function GroupScopeSelectInner({ handleSubmit, handleChange, handleBlur, 
             color='primary'
             type='submit'
           >
-            Refresh
+            <DiverstFormattedMessage {...messages.refresh} />
           </Button>
         </CardActions>
       </Form>

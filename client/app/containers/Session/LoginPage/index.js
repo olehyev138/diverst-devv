@@ -4,107 +4,72 @@
  *
  */
 
-import React, { memo } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-import { withStyles } from '@material-ui/core/styles';
-import { showSnackbar } from 'containers/Shared/Notifier/actions';
-import { selectEnterprise } from 'containers/Shared/App/selectors';
-import { selectFormErrors } from './selectors';
 import { push } from 'connected-react-router';
 
+import { useInjectReducer } from 'utils/injectReducer';
+
 import reducer from './reducer';
-import injectReducer from 'utils/injectReducer';
+
+import { showSnackbar } from 'containers/Shared/Notifier/actions';
+import { loginBegin, ssoLoginBegin, ssoLinkBegin } from 'containers/Shared/App/actions';
+
+import { selectIsLoggingIn, selectLoginSuccess } from './selectors';
 
 import LoginForm from 'components/Session/LoginForm';
 import EnterpriseForm from 'components/Session/EnterpriseForm';
 
-import {
-  loginBegin,
-  findEnterpriseBegin,
-  ssoLoginBegin,
-  ssoLinkBegin
-}
-  from 'containers/Shared/App/actions';
+export function LoginPage(props) {
+  useInjectReducer({ key: 'loginPage', reducer });
 
-const styles = theme => ({});
+  const [email, setEmail] = useState('');
 
-export class LoginPage extends React.PureComponent {
-  // TODO: - locale toggle
+  useEffect(() => {
+    /* global URLSearchParams */
+    const query = new URLSearchParams(props.location.search);
 
-  constructor(props) {
-    super(props);
-    this.state = { email: '' };
-  }
+    // SSO
+    const userToken = query.get('userToken');
+    const policyGroupId = query.get('policyGroupId');
+    const errorMessage = query.get('errorMessage');
 
-  componentDidMount() {
-    if (this.props.location) {
-      /* global URLSearchParams */
-      const query = new URLSearchParams(this.props.location.search);
-      const userToken = query.get('userToken');
-      const policyGroupId = query.get('policyGroupId');
-      const errorMessage = query.get('errorMessage');
-
-      if (errorMessage) {
-        this.props.showSnackbar(errorMessage);
-        this.props.refresh('login');
-      }
-
-      if (userToken && policyGroupId)
-        this.props.ssoLoginBegin({ policyGroupId, userToken });
-    }
-  }
-
-  authForm() {
-    if (this.props.enterprise && !this.props.enterprise.has_enabled_saml)
-      return (
-        <LoginForm
-          email={this.state.email}
-          formErrors={this.props.formErrors}
-          loginBegin={(values, actions) => this.props.loginBegin(values)}
-        />
-      );
-
-
-    if (this.props.enterprise && this.props.enterprise.has_enabled_saml) {
-      this.props.ssoLinkBegin({ enterpriseId: this.props.enterprise.id });
-      return (
-        <EnterpriseForm
-          formErrors={this.props.formErrors}
-          findEnterpriseBegin={(values, actions) => {
-            this.props.ssoLinkBegin({ enterpriseId: this.props.enterprise.id });
-            this.setState({ email: values.email });
-          }}
-        />
-      );
+    if (errorMessage) {
+      props.showSnackbar(errorMessage);
+      props.refresh('login');
     }
 
+    if (userToken && policyGroupId)
+      props.ssoLoginBegin({ policyGroupId, userToken });
+  }, []);
+
+  if (props.enterprise && props.enterprise.has_enabled_saml) {
+    props.ssoLinkBegin({ enterpriseId: props.enterprise.id });
     return (
       <EnterpriseForm
-        formErrors={this.props.formErrors}
         findEnterpriseBegin={(values, actions) => {
-          this.props.findEnterpriseBegin(values);
-          this.setState({ email: values.email });
+          props.ssoLinkBegin({ enterpriseId: props.enterprise.id });
+          setEmail(values.email);
         }}
       />
     );
   }
 
-  render() {
-    return (
-      this.authForm()
-    );
-  }
+  return (
+    <LoginForm
+      email={email}
+      loginBegin={values => props.loginBegin(values)}
+      isLoggingIn={props.isLoggingIn}
+      loginSuccess={props.loginSuccess}
+    />
+  );
 }
 
 LoginPage.propTypes = {
   enterprise: PropTypes.object,
-  formErrors: PropTypes.shape({
-    email: PropTypes.string,
-    password: PropTypes.string,
-  }),
   location: PropTypes.shape({
     search: PropTypes.string
   }),
@@ -113,12 +78,13 @@ LoginPage.propTypes = {
   loginBegin: PropTypes.func,
   ssoLoginBegin: PropTypes.func,
   ssoLinkBegin: PropTypes.func,
-  findEnterpriseBegin: PropTypes.func
+  isLoggingIn: PropTypes.bool,
+  loginSuccess: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
-  enterprise: selectEnterprise(),
-  formErrors: selectFormErrors(),
+  isLoggingIn: selectIsLoggingIn(),
+  loginSuccess: selectLoginSuccess(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -128,7 +94,6 @@ function mapDispatchToProps(dispatch) {
     loginBegin: payload => dispatch(loginBegin(payload)),
     ssoLoginBegin: payload => dispatch(ssoLoginBegin(payload)),
     ssoLinkBegin: payload => dispatch(ssoLinkBegin(payload)),
-    findEnterpriseBegin: payload => dispatch(findEnterpriseBegin(payload)),
   };
 }
 
@@ -137,11 +102,7 @@ const withConnect = connect(
   mapDispatchToProps,
 );
 
-const withReducer = injectReducer({ key: 'loginPage', reducer });
-
 export default compose(
-  withReducer,
   withConnect,
   memo,
-  withStyles(styles),
 )(LoginPage);

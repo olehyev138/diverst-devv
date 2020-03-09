@@ -35,7 +35,7 @@ class Answer < ApplicationRecord
   end
 
   def total_likes
-    likes.count
+    likes.size
   end
 
   # Base value + total of income items - total of expense items

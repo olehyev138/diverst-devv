@@ -8,24 +8,13 @@ exports[`<EnterpriseForm /> <EnterpriseFormInner /> Should render and match the 
     noValidate={true}
   >
     <WithStyles(ForwardRef(CardContent))>
-      <WithStyles(ForwardRef(Grid))
-        alignItems="center"
-        container={true}
-        direction="column"
-        justify="center"
-        spacing={0}
-      >
-        <WithStyles(ForwardRef(Grid))
-          item={true}
-          xs={12}
-        >
-          <Connect(WithStyles(Logo))
-            coloredDefault={true}
-            imgClass="large-img"
-          />
-        </WithStyles(ForwardRef(Grid))>
-      </WithStyles(ForwardRef(Grid))>
-      <br />
+      <Memo(Connect(WithStyles(Logo)))
+        coloredDefault={true}
+        maxHeight="55px"
+      />
+      <Styled(MuiBox)
+        pb={2}
+      />
       <Field
         autoFocus={true}
         component={
@@ -113,12 +102,17 @@ exports[`<EnterpriseForm /> <EnterpriseFormInner /> Should render and match the 
                 "overrides": Object {},
                 "palette": Object {
                   "action": Object {
+                    "activatedOpaciy": 0.12,
                     "active": "rgba(0, 0, 0, 0.54)",
                     "disabled": "rgba(0, 0, 0, 0.26)",
                     "disabledBackground": "rgba(0, 0, 0, 0.12)",
-                    "hover": "rgba(0, 0, 0, 0.08)",
-                    "hoverOpacity": 0.08,
-                    "selected": "rgba(0, 0, 0, 0.14)",
+                    "disabledOpacity": 0.38,
+                    "focus": "rgba(0, 0, 0, 0.12)",
+                    "focusOpacity": 0.12,
+                    "hover": "rgba(0, 0, 0, 0.04)",
+                    "hoverOpacity": 0.04,
+                    "selected": "rgba(0, 0, 0, 0.08)",
+                    "selectedOpacity": 0.08,
                   },
                   "augmentColor": [Function],
                   "background": Object {
@@ -188,9 +182,9 @@ exports[`<EnterpriseForm /> <EnterpriseFormInner /> Should render and match the 
                   "type": "light",
                   "warning": Object {
                     "contrastText": "rgba(0, 0, 0, 0.87)",
-                    "dark": "#ffa000",
-                    "light": "#ffd54f",
-                    "main": "#ffc107",
+                    "dark": "#f57c00",
+                    "light": "#ffb74d",
+                    "main": "#ff9800",
                   },
                 },
                 "props": Object {},

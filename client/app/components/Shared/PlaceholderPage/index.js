@@ -7,7 +7,6 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
-
 import messages from 'components/Shared/PlaceholderPage/messages';
 
 import {
@@ -40,7 +39,7 @@ function PlaceholderPage(props, context) {
           <Card>
             <CardContent>
               <Typography variant='h5'>
-                Example Content
+                <DiverstFormattedMessage {...messages.example} />
               </Typography>
             </CardContent>
           </Card>
@@ -49,7 +48,7 @@ function PlaceholderPage(props, context) {
           <Card>
             <CardContent>
               <Typography variant='h5'>
-                Example Content
+                <DiverstFormattedMessage {...messages.example} />
               </Typography>
             </CardContent>
           </Card>
@@ -58,7 +57,7 @@ function PlaceholderPage(props, context) {
           <Card>
             <CardContent>
               <Typography variant='h5'>
-                Example Content
+                <DiverstFormattedMessage {...messages.example} />
               </Typography>
             </CardContent>
           </Card>
@@ -72,7 +71,7 @@ function PlaceholderPage(props, context) {
           <Card>
             <CardContent>
               <Typography variant='h5'>
-                Example Content
+                <DiverstFormattedMessage {...messages.example} />
               </Typography>
             </CardContent>
           </Card>
@@ -81,7 +80,7 @@ function PlaceholderPage(props, context) {
           <Card>
             <CardContent>
               <Typography variant='h5'>
-                Example Content
+                <DiverstFormattedMessage {...messages.example} />
               </Typography>
             </CardContent>
           </Card>
@@ -90,7 +89,7 @@ function PlaceholderPage(props, context) {
           <Card>
             <CardContent>
               <Typography variant='h5'>
-                Example Content
+                <DiverstFormattedMessage {...messages.example} />
               </Typography>
             </CardContent>
           </Card>

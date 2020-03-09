@@ -24,6 +24,8 @@ import { selectQuestion, selectIsCommitting } from 'containers/Innovate/Campaign
 import QuestionSummary from 'components/Innovate/Campaign/CampaignQuestion/QuestionSummary';
 import AnswerListPage from 'containers/Innovate/Campaign/CampaignQuestion/Answer/AnswerListPage';
 import CampaignQuestionClose from 'components/Innovate/Campaign/CampaignQuestion/CampaignQuestionClose';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/Innovate/Campaign/CampaignQuestion/messages';
 
 export function CampaignQuestionShowPage(props) {
   useInjectReducer({ key: 'questions', reducer });
@@ -62,7 +64,7 @@ export function CampaignQuestionShowPage(props) {
           question={props.question}
           links={links}
         />
-        {props.question.solved_at !== null ? (<h2>This question has been solved and is now closed.</h2>) : null}
+        {props.question.solved_at !== null ? (<h2>{<DiverstFormattedMessage {...messages.question.closed} />}</h2>) : null}
       </React.Fragment>
     )
   );

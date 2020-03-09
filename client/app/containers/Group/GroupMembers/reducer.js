@@ -9,6 +9,7 @@ import {
   GET_MEMBERS_BEGIN, GET_MEMBERS_ERROR,
   GET_MEMBERS_SUCCESS, GROUP_MEMBERS_UNMOUNT,
   CREATE_MEMBERS_BEGIN, CREATE_MEMBERS_SUCCESS, CREATE_MEMBERS_ERROR,
+  EXPORT_MEMBERS_BEGIN, EXPORT_MEMBERS_ERROR, EXPORT_MEMBERS_SUCCESS
 } from 'containers/Group/GroupMembers/constants';
 
 export const initialState = {
@@ -34,10 +35,13 @@ function membersReducer(state = initialState, action) {
         draft.isFetchingMembers = false;
         break;
       case CREATE_MEMBERS_BEGIN:
+      case EXPORT_MEMBERS_BEGIN:
         draft.isCommitting = true;
         break;
       case CREATE_MEMBERS_SUCCESS:
       case CREATE_MEMBERS_ERROR:
+      case EXPORT_MEMBERS_SUCCESS:
+      case EXPORT_MEMBERS_ERROR:
         draft.isCommitting = false;
         break;
       case GROUP_MEMBERS_UNMOUNT:

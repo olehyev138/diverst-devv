@@ -5,34 +5,27 @@
  */
 import produce from 'immer';
 
-import {
-  FIND_ENTERPRISE_BEGIN, FIND_ENTERPRISE_SUCCESS, FIND_ENTERPRISE_ERROR, LOGIN_BEGIN, LOGIN_SUCCESS, LOGIN_ERROR
-} from 'containers/Shared/App/constants';
+import { LOGIN_BEGIN, LOGIN_SUCCESS, LOGIN_ERROR } from 'containers/Shared/App/constants';
 
 export const initialState = {
-  globalError: null,
-  formErrors: {
-    email: null,
-    password: null,
-  },
+  isLoggingIn: false,
+  loginSuccess: null,
 };
 
 function loginPageReducer(state = initialState, action) {
   return produce(state, (draft) => {
-    // TODO: what do these do?
     switch (action.type) {
-      case FIND_ENTERPRISE_BEGIN:
-        draft.formErrors = initialState.formErrors;
-        break;
-      case FIND_ENTERPRISE_ERROR:
-        draft.formErrors.email = action.error.response.data;
-        break;
       case LOGIN_BEGIN:
-        draft.formErrors = initialState.formErrors;
-        draft.loggingIn = action.loggingIn;
+        draft.isLoggingIn = true;
+        draft.loginSuccess = null;
+        break;
+      case LOGIN_SUCCESS:
+        draft.isLoggingIn = false;
+        draft.loginSuccess = true;
         break;
       case LOGIN_ERROR:
-        draft.formErrors.password = action.error.response.data;
+        draft.isLoggingIn = false;
+        draft.loginSuccess = false;
         break;
     }
   });

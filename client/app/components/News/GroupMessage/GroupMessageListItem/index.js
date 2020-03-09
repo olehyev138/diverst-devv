@@ -19,11 +19,12 @@ import DeleteIcon from '@material-ui/icons/DeleteOutline';
 import { formatDateTimeString } from 'utils/dateTimeHelpers';
 import DiverstLike from '../../../Shared/DiverstLike';
 
+import { injectIntl, intlShape } from 'react-intl';
 const styles = theme => ({
 });
 
 export function GroupMessageListItem(props) {
-  const { newsItem } = props;
+  const { newsItem, intl } = props;
   const newsItemId = newsItem.id;
   const groupMessage = newsItem.group_message;
   const groupId = groupMessage.group_id;
@@ -48,9 +49,9 @@ export function GroupMessageListItem(props) {
           {`Submitted by ${groupMessage.owner.first_name} ${groupMessage.owner.last_name}`}
         </Typography>
       </CardContent>
-      <CardActions>
-        { props.links && !props.readonly && (
-          <React.Fragment>
+      { props.links && (
+        <CardActions>
+          {!props.readonly && (
             <Button
               size='small'
               color='primary'
@@ -59,50 +60,52 @@ export function GroupMessageListItem(props) {
             >
               <DiverstFormattedMessage {...messages.edit} />
             </Button>
-            <Button
-              size='small'
-              to={props.links.groupMessageShow(props.groupId, newsItem.id)}
-              component={WrappedNavLink}
-            >
-              Comments
-            </Button>
-            {props.newsItem.approved !== true ? (
-              <Button
-                size='small'
-                onClick={() => {
-                  /* eslint-disable-next-line no-alert, no-restricted-globals */
-                  props.updateNewsItemBegin({ approved: true, id: newsItemId, group_id: groupId });
-                }}
-              >
-                Approve
-              </Button>
-            ) : null }
+          )}
+          <Button
+            size='small'
+            to={props.links.groupMessageShow(props.groupId, newsItem.id)}
+            component={WrappedNavLink}
+          >
+            <DiverstFormattedMessage {...messages.comments} />
+          </Button>
+          {!props.readonly && props.newsItem.approved !== true && (
             <Button
               size='small'
               onClick={() => {
                 /* eslint-disable-next-line no-alert, no-restricted-globals */
-                if (confirm('Delete group message?'))
+                props.updateNewsItemBegin({ approved: true, id: newsItemId, group_id: groupId });
+              }}
+            >
+              <DiverstFormattedMessage {...messages.approve} />
+            </Button>
+          )}
+          {!props.readonly && (
+            <Button
+              size='small'
+              onClick={() => {
+                /* eslint-disable-next-line no-alert, no-restricted-globals */
+                if (confirm(intl.formatMessage(messages.group_delete_confirm)))
                   props.deleteGroupMessageBegin(newsItem.group_message);
               }}
             >
-              Delete
+              <DiverstFormattedMessage {...messages.delete} />
             </Button>
-
-          </React.Fragment>
-        )}
-        <DiverstLike
-          isLiked={newsItem.current_user_likes}
-          newsFeedLinkId={newsItem.id}
-          totalLikes={newsItem.total_likes}
-          likeNewsItemBegin={props.likeNewsItemBegin}
-          unlikeNewsItemBegin={props.unlikeNewsItemBegin}
-        />
-      </CardActions>
+          )}
+        </CardActions>
+      )}
+      <DiverstLike
+        isLiked={newsItem.current_user_likes}
+        newsFeedLinkId={newsItem.id}
+        totalLikes={newsItem.total_likes}
+        likeNewsItemBegin={props.likeNewsItemBegin}
+        unlikeNewsItemBegin={props.unlikeNewsItemBegin}
+      />
     </Card>
   );
 }
 
 GroupMessageListItem.propTypes = {
+  intl: intlShape,
   newsItem: PropTypes.object,
   readonly: PropTypes.bool,
   groupId: PropTypes.number,
@@ -119,5 +122,6 @@ GroupMessageListItem.propTypes = {
 
 export default compose(
   memo,
+  injectIntl,
   withStyles(styles)
 )(GroupMessageListItem);

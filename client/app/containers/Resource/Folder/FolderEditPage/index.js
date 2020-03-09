@@ -39,6 +39,7 @@ import {
   Card, CardContent, CardActions, Button, TextField, Divider, Typography,
 } from '@material-ui/core';
 import { Field, Formik, Form } from 'formik';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Resource/Folder/messages';
 
 export function FolderEditPage(props) {
@@ -88,10 +89,10 @@ export function FolderEditPage(props) {
               <Card>
                 <CardContent>
                   <Typography>
-                    This folder is password protected.
+                    <DiverstFormattedMessage {...messages.authenticate.label1} />
                   </Typography>
                   <Typography>
-                    Please enter the password to access the resources.
+                    <DiverstFormattedMessage {...messages.authenticate.label2} />
                   </Typography>
                   <Field
                     component={TextField}
@@ -99,7 +100,7 @@ export function FolderEditPage(props) {
                     margin='dense'
                     id='password'
                     name='password'
-                    label='Password'
+                    label={<DiverstFormattedMessage {...messages.authenticate.password} />}
                     type='password'
                     value={values.password}
                     onChange={handleChange}
@@ -109,7 +110,7 @@ export function FolderEditPage(props) {
                 <Divider />
                 <CardActions>
                   <Button color='primary' type='submit'>
-                    AUTHENTICATE
+                    <DiverstFormattedMessage {...messages.authenticate.button} />
                   </Button>
                 </CardActions>
               </Card>

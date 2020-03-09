@@ -36,11 +36,13 @@ module BasePager
       search_method_obj = self.method(search_method)
 
       # search
-      total = search_method_obj.call(params, diverst_request, base: base).count
       items = search_method_obj.call(params, diverst_request, base: base)
-                        .order("#{order_by} #{order}")
-                        .limit(item_count)
-                        .offset(offset)
+      total = items.count
+      items = items.order("#{order_by} #{order}")
+
+      if item_count >= 0
+        items = items.limit(item_count).offset!(offset)
+      end
 
       # return the page
       Page.new(items, total)

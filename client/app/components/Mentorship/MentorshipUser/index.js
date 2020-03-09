@@ -71,7 +71,7 @@ export function Profile(props) {
           <Paper elevation={3}>
             <CardContent>
               <Typography color='primary' variant='h6' component='h2' className={classes.dataHeaders}>
-                E-mail
+                {<DiverstFormattedMessage {...messages.email} />}
               </Typography>
               <Typography color='secondary' component='h2' className={classes.data}>
                 {user.email}
@@ -80,7 +80,7 @@ export function Profile(props) {
             <Divider />
             <CardContent>
               <Typography color='primary' variant='h6' component='h2' className={classes.dataHeaders}>
-                Biography
+                {<DiverstFormattedMessage {...messages.biography} />}
               </Typography>
               {(user.biography || 'None').split('\n').map((text, i) => (
                 // eslint-disable-next-line react/no-array-index-key
@@ -92,7 +92,7 @@ export function Profile(props) {
             <Divider />
             <CardContent>
               <Typography color='primary' variant='h6' component='h2' className={classes.dataHeaders}>
-                Time Zone
+                {<DiverstFormattedMessage {...messages.time_zone} />}
               </Typography>
               <Typography color='secondary' component='h2' className={classes.data}>
                 {user.time_zone || 'UTC'}
@@ -231,10 +231,10 @@ export function Profile(props) {
                   <Typography color='secondary' component='h2' className={classes.data}>
                     <Grid container>
                       <Grid item xs>
-                        In your time zone
+                        <DiverstFormattedMessage {...mentorMessages.long.your_time_zone} />
                       </Grid>
                       <Grid item xs>
-                        In their time zone
+                        <DiverstFormattedMessage {...mentorMessages.long.their_time_zone} />
                       </Grid>
                     </Grid>
                     {user.availabilities && user.availabilities.length > 0 && (

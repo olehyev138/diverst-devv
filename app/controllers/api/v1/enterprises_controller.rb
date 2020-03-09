@@ -1,6 +1,6 @@
 class Api::V1::EnterprisesController < DiverstController
   skip_before_action :verify_api_key, only: [:sso_login, :sso_link]
-  skip_before_action :verify_jwt_token, only: [:sso_login, :sso_link]
+  skip_before_action :verify_jwt_token, only: [:sso_login, :sso_link, :get_auth_enterprise]
   include Api::V1::Concerns::DefinesFields
 
   def sso_login
@@ -15,11 +15,23 @@ class Api::V1::EnterprisesController < DiverstController
     raise BadRequestException.new(e.message)
   end
 
+  def get_auth_enterprise
+    if params[:enterprise_id].blank?
+      enterprise = Enterprise.first
+    else
+      enterprise = Enterprise.find(params[:enterprise_id])
+    end
+
+    render json: enterprise
+  rescue => e
+    raise BadRequestException.new(e.message)
+  end
+
   def get_enterprise
     enterprise = self.diverst_request.user.enterprise
     base_authorize(enterprise)
 
-    render status: 200, json: enterprise
+    render status: 200, json: enterprise, serializer: AuthenticatedEnterpriseSerializer
   rescue => e
     raise BadRequestException.new(e.message)
   end
@@ -38,5 +50,73 @@ class Api::V1::EnterprisesController < DiverstController
     else
       raise BadRequestException.new(e.message)
     end
+  end
+
+  def payload
+    params
+    .require(klass.symbol)
+    .permit(
+      :name,
+      :sp_entity_id,
+      :idp_entity_id,
+      :idp_sso_target_url,
+      :idp_slo_target_url,
+      :idp_cert,
+      :saml_first_name_mapping,
+      :saml_last_name_mapping,
+      :has_enabled_saml,
+      :created_at,
+      :updated_at,
+      :yammer_token,
+      :yammer_import,
+      :yammer_group_sync,
+      :theme_id,
+      :cdo_picture_file_name,
+      :cdo_picture_content_type,
+      :cdo_picture_file_size,
+      :cdo_picture_updated_at,
+      :cdo_message,
+      :collaborate_module_enabled,
+      :scope_module_enabled,
+      :plan_module_enabled,
+      :banner_file_name,
+      :banner_content_type,
+      :banner_file_size,
+      :banner_updated_at,
+      :home_message,
+      :privacy_statement,
+      :has_enabled_onboarding_email,
+      :xml_sso_config_file_name,
+      :xml_sso_config_content_type,
+      :xml_sso_config_file_size,
+      :xml_sso_config_updated_at,
+      :iframe_calendar_token,
+      :time_zone,
+      :enable_rewards,
+      :company_video_url,
+      :onboarding_sponsor_media_file_name,
+      :onboarding_sponsor_media_content_type,
+      :onboarding_sponsor_media_file_size,
+      :onboarding_sponsor_media_updated_at,
+      :enable_pending_comments,
+      :mentorship_module_enabled,
+      :disable_likes,
+      :default_from_email_address,
+      :default_from_email_display_name,
+      :enable_social_media,
+      :redirect_all_emails,
+      :redirect_email_contact,
+      :disable_emails,
+      :expiry_age_for_resources,
+      :unit_of_expiry_age,
+      :auto_archive,
+      theme_attributes: [
+        :primary_color,
+        :secondary_color,
+        :use_secondary_color,
+        :logo,
+        :logo_redirect_url,
+      ]
+    )
   end
 end

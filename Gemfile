@@ -11,7 +11,6 @@ gem 'active_record_union'
 gem 'activerecord', '~> 5.2.3'
 gem 'activerecord-import', '~> 0.14.0' # Adds a faster way to INSERT multiple rows in the DB
 gem 'autoprefixer-rails', '~> 6.3', '>= 6.3.3.1' # Automatically adds vendor prefixes to CSS declarations
-gem 'aws-sdk', '~> 2.0.34' # The official AWS SDK
 gem 'bcrypt'
 gem 'bootsnap', require: false
 gem 'clockwork', '~> 1.2' # Schedule recurring jobs
@@ -36,23 +35,25 @@ gem 'paperclip', '~> 5.1.0' # TODO Remove after Paperclip to ActiveStorage migra
 gem 'public_activity'
 gem 'puma', '~> 3.1' # Better web server than WEBRick
 gem 'pundit', '~> 2.0.0'# Authorization
-gem 'rack-cors', '~> 0.4.0', require: 'rack/cors' # will be used to support mobile
+gem 'rack-cors', '~> 1.1.0'
 gem 'rack-rewrite', '~> 1.5' # A rack middleware for enforcing rewrite rules. In many cases you can get away with rack-rewrite instead of writing Apache mod_rewrite rules.
 gem 'rack-timeout', '~> 0.4.2'
 gem 'rails', '~> 5.2.3'
 gem 'railties', '~> 5.2.3'
 gem 'rollbar', '~> 2.14.1'
 gem 'rqrcode', '~> 0.10.1', require: false
-gem 'ruby-oembed', '~> 0.12', git: 'https://github.com/TeamDiverst/ruby-oembed.git'
+gem 'ruby-oembed', '~> 0.12'
 gem 'ruby-saml', '>= 1.7.0'
 gem 'sanitize_email', '~> 1.2.2'
-gem 'sidekiq', '~> 5.0.5' # Background jobs
+gem 'sidekiq', '~> 6.0.4' # Background jobs
 gem 'thor', '0.20.0' # Expected string default value for '--decorator'; got true (boolean) - setting version removes this message
 gem 'tty-spinner'
 gem 'twilio-ruby', '~> 5.10.0'
 gem 'twitter', '~> 6.2.0' # twitter implementation
 gem 'validate_url', '~> 1.0', '>= 1.0.2' # Active Model validation for URLs
 gem 'yam', '~> 2.5' # Yammer ruby SDK
+gem 'seedbank', '~> 0.3.0' # Support for multiple seed files and their ordering
+gem 'rails-healthcheck'
 
 # gem 'omniauth-linkedin-oauth2', '~> 0.1.5' # OAuth for LinkedIn
 # gem 'omniauth-oauth2', '1.3.1' # Temporary fix to address: https://github.com/decioferreira/omniauth-linkedin-oauth2/issues/28
@@ -85,6 +86,7 @@ group :test do
 end
 
 group :development do
+  gem 'letter_opener', '~> 1.7'
   gem 'bcrypt_pbkdf', '~> 1.0.1'
   gem 'bullet'
   gem 'capistrano', '~> 3.9.1', require: false
@@ -101,12 +103,11 @@ group :development do
   gem 'capistrano3-puma', '~> 3.1.1'
   gem 'ed25519', '~> 1.2.4'
   gem 'rufo', '~> 0.1.0'
-  gem 'seedbank', '~> 0.3.0' # Support for multiple seed files and their ordering
 end
 
 group :staging, :production do
-  gem 'influxdb-rails', git: 'https://github.com/Kukunin/influxdb-rails.git', branch: 'tags_middleware' # Rails metrics to InfluxDB
+  gem 'aws-sdk'
+  gem 'aws-sdk-s3', require: false
   gem 'lograge', '~> 0.3'
-  gem 'sidekiq-influxdb', '~> 1.1.0' # Sidekiq metrics to InfluxDB
   gem 'syslogger', '~> 1.6.0' # Log to syslog, which is then sent to Loggly
 end

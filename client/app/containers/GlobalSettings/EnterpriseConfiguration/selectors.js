@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect/lib/index';
 import { initialState } from './reducer';
 import produce from 'immer';
+import dig from 'object-dig';
 
 const selectConfigurationDomain = state => state.configuration || initialState;
 
@@ -29,6 +30,12 @@ const selectFormEnterprise = () => createSelector(
   }
 );
 
+/* Selects the enterprise theme, used by Branding components */
+const selectEnterpriseTheme = () => createSelector(
+  selectConfigurationDomain,
+  configurationState => dig(configurationState.currentEnterprise, 'theme')
+);
+
 const selectEnterpriseIsLoading = () => createSelector(
   selectConfigurationDomain,
   configurationState => configurationState.isLoading
@@ -41,5 +48,5 @@ const selectEnterpriseIsCommitting = () => createSelector(
 
 export {
   selectConfigurationDomain, selectEnterprise, selectEnterpriseIsLoading,
-  selectEnterpriseIsCommitting, selectFormEnterprise
+  selectEnterpriseIsCommitting, selectFormEnterprise, selectEnterpriseTheme
 };

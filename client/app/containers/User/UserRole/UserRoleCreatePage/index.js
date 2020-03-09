@@ -21,13 +21,15 @@ import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import UserRoleForm from 'components/User/UserRole/UserRoleForm';
+import { injectIntl, intlShape } from 'react-intl';
+import messages from 'containers/User/UserRole/messages';
 
 export function UserRoleCreatePage(props) {
   useInjectReducer({ key: 'roles', reducer });
   useInjectSaga({ key: 'roles', saga });
 
   useEffect(() => () => props.userRoleUnmount(), []);
-
+  const { intl } = props;
   const rs = new RouteService(useContext);
   const links = {
     userRolesIndex: ROUTES.admin.system.users.roles.index.path(),
@@ -37,7 +39,7 @@ export function UserRoleCreatePage(props) {
     <UserRoleForm
       admin
       userRoleAction={props.createUserRoleBegin}
-      buttonText='Create'
+      buttonText={intl.formatMessage(messages.create)}
       getUserRolesBegin={props.getUserRolesBegin}
       selectUserRoles={props.userRoles}
       links={links}
@@ -47,6 +49,7 @@ export function UserRoleCreatePage(props) {
 }
 
 UserRoleCreatePage.propTypes = {
+  intl: intlShape,
   createUserRoleBegin: PropTypes.func,
   getUserRolesBegin: PropTypes.func,
   userRoleUnmount: PropTypes.func,
@@ -70,6 +73,7 @@ const withConnect = connect(
 );
 
 export default compose(
+  injectIntl,
   withConnect,
   memo,
 )(UserRoleCreatePage);

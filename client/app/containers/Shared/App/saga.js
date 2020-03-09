@@ -23,15 +23,11 @@ import {
   logoutError,
   findEnterpriseSuccess,
   findEnterpriseError,
-  setEnterprise,
-  setUserPolicyGroup,
-  setUser,
+  setUserData,
 }
   from './actions';
 
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
-
-import { changePrimary, changeSecondary } from 'containers/Shared/ThemeProvider/actions';
 
 import AuthService from 'utils/authService';
 
@@ -42,24 +38,25 @@ export function* login(action) {
     // Create a new session given credentials & dispatch a loggedIn action
     // payload is user credentials
     const response = yield call(api.sessions.create.bind(api.sessions), action.payload);
-    yield put(loginSuccess(response.data.token));
 
-    axios.defaults.headers.common['Diverst-UserToken'] = response.data.token;
-    yield call(AuthService.storeJwt, response.data.token);
+    // eslint-disable-next-line camelcase
+    const { token, ...payload } = response.data;
 
-    // decode token to get user object
-    const user = yield call(AuthService.getUser, response.data.token);
+    yield put(loginSuccess(token));
+    yield put(setUserData(payload));
+    axios.defaults.headers.common['Diverst-UserToken'] = token;
 
-    yield put(setUser(user));
-    yield put(setUserPolicyGroup(user.policy_group));
-    // Important as the client only gets a simplified version of the enterprise before being fully authenticated
-    yield put(setEnterprise(user.enterprise));
+    yield call(AuthService.storeJwt, token);
+    yield call(AuthService.storeUserData, payload);
+
     yield put(push(ROUTES.user.home.path()));
   } catch (err) {
     yield put(loginError(err));
+    yield put(showSnackbar({ message: err.response.data, options: { variant: 'error', autoHideDuration: 2500 } }));
   }
 }
 
+// TODO: Make this work
 export function* ssoLogin(action) {
   try {
     axios.defaults.headers.common['Diverst-UserToken'] = action.payload.userToken;
@@ -68,10 +65,10 @@ export function* ssoLogin(action) {
     yield call(AuthService.storeJwt, action.payload.userToken);
 
     // decode token to get user object
-    const user = yield call(AuthService.getUser, action.payload.userToken);
+    // const user = yield call(AuthService.getUser, action.payload.userToken);
 
-    yield put(setUser(user));
-    yield put(setUserPolicyGroup(user.policy_group));
+    // yield put(setUser(user));
+    // yield put(setUserPolicyGroup(user.policy_group));
     yield put(push(ROUTES.user.home.path()));
   } catch (err) {
     yield put(loginError(err));
@@ -89,39 +86,40 @@ export function* ssoLinkFind(action) {
   }
 }
 
-export function* logout(action) {
+export function* logout() {
   try {
     // Destroy session and redirect to login
-    const response = yield call(api.sessions.destroy.bind(api.sessions), action.token);
+    const response = yield call(api.sessions.logout.bind(api.sessions));
+
     yield call(AuthService.discardJwt);
+    yield call(AuthService.discardUserData);
     yield put(logoutSuccess());
 
     if (response.data.logout_link)
       window.location.assign(response.data.logout_link);
-    else {
-      yield put(push(ROUTES.session.login.path()));
-      yield put(showSnackbar({ message: 'You have been logged out' }));
-    }
+    else
+      yield put(showSnackbar({ message: 'You have been logged out', options: { variant: 'info', autoHideDuration: 2500 } }));
   } catch (err) {
     yield put(logoutError(err));
-    yield put(push(ROUTES.session.login.path()));
+
+    // Even if logout fails clear the local data
+    yield call(AuthService.discardJwt);
+    yield call(AuthService.discardUserData);
+    yield put(logoutSuccess());
+
+    yield put(showSnackbar({ message: 'You have been logged out', options: { variant: 'info', autoHideDuration: 2500 } }));
   }
 }
 
 export function* findEnterprise(action) {
   try {
     // Find enterprise and dispatch setEnterprise action
-    const response = yield call(api.users.findEnterprise.bind(api.users), action.payload);
+    const response = yield call(api.enterprises.getAuthEnterprise.bind(api.enterprises), action.payload);
     const { enterprise } = response.data;
     yield put(findEnterpriseSuccess());
 
-    yield put(setEnterprise(enterprise));
-
-    // If enterprise has a theme, dispatch theme provider actions
-    if (enterprise.theme) {
-      yield put(changePrimary(enterprise.theme.primary_color));
-      yield put(changeSecondary(enterprise.theme.secondary_color));
-    }
+    // Set enterprise
+    yield put(setUserData({ enterprise }, true));
   } catch (err) {
     yield put(findEnterpriseError(err));
   }

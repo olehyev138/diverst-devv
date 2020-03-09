@@ -14,22 +14,10 @@ exports[`<ApplicationHeader /> should render and match the snapshot 1`] = `
       >
         <MenuIcon />
       </WithStyles(ForwardRef(IconButton))>
-      <WithStyles(ForwardRef(Link))
-        component={
-          Object {
-            "$$typeof": Symbol(react.forward_ref),
-            "render": [Function],
-          }
-        }
-        to="/"
-      >
-        <WithStyles(ForwardRef(Button))>
-          <Connect(WithStyles(Logo))
-            imgClass="large-img"
-            verticalPadding={20}
-          />
-        </WithStyles(ForwardRef(Button))>
-      </WithStyles(ForwardRef(Link))>
+      <Memo(Connect(WithStyles(Logo)))
+        height="55px"
+        withLink={true}
+      />
       <div
         className=""
       >
@@ -56,7 +44,9 @@ exports[`<ApplicationHeader /> should render and match the snapshot 1`] = `
               >
                 <span>
                   <DvrIcon />
-                  Dashboard
+                  <Memo(DiverstFormattedMessage)
+                    id="diverst.containers.App.header.dashboard"
+                  />
                 </span>
               </WithStyles(ForwardRef(Button))>
             </WithStyles(ForwardRef(Link))>
@@ -111,7 +101,9 @@ exports[`<ApplicationHeader /> should render and match the snapshot 1`] = `
       <WithStyles(ForwardRef(ListItemIcon))>
         <DvrIcon />
       </WithStyles(ForwardRef(ListItemIcon))>
-      Dashboard
+      <Memo(DiverstFormattedMessage)
+        id="diverst.containers.App.header.dashboard"
+      />
     </WithStyles(ForwardRef(MenuItem))>
     <WithStyles(ForwardRef(MenuItem))
       component={
@@ -125,7 +117,9 @@ exports[`<ApplicationHeader /> should render and match the snapshot 1`] = `
       <WithStyles(ForwardRef(ListItemIcon))>
         <PermIdentityIcon />
       </WithStyles(ForwardRef(ListItemIcon))>
-      Profile
+      <Memo(DiverstFormattedMessage)
+        id="diverst.containers.App.header.profile"
+      />
     </WithStyles(ForwardRef(MenuItem))>
     <WithStyles(ForwardRef(MenuItem))
       onClick={[Function]}
@@ -133,7 +127,9 @@ exports[`<ApplicationHeader /> should render and match the snapshot 1`] = `
       <WithStyles(ForwardRef(ListItemIcon))>
         <ExitToAppIcon />
       </WithStyles(ForwardRef(ListItemIcon))>
-      Log Out
+      <Memo(DiverstFormattedMessage)
+        id="diverst.containers.App.header.logout"
+      />
     </WithStyles(ForwardRef(MenuItem))>
   </WithStyles(ForwardRef(Menu))>
 </Fragment>

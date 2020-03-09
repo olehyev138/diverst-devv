@@ -1,6 +1,8 @@
 Diverst::Application.routes.draw do
   require 'sidekiq/web'
 
+  Healthcheck.routes(self)
+
   Sidekiq::Web.use Rack::Auth::Basic do |username, password|
     username == ENV['SIDEKIQ_DASHBOARD_USERNAME'] && password == ENV['SIDEKIQ_DASHBOARD_PASSWORD']
   end if Rails.env.production?
@@ -28,11 +30,13 @@ Diverst::Application.routes.draw do
       resources :checklists
       resources :checklist_items
       resources :clockwork_database_events, only: [:index, :update, :show]
+      resources :csv_files, only: [:create]
       resources :custom_texts
       resources :devices
       resources :emails, only: [:index, :update, :show]
       resources :enterprises do
         collection do
+          get 'get_auth_enterprise', to: 'enterprises#get_auth_enterprise'
           get 'get_enterprise', to: 'enterprises#get_enterprise'
           post 'update_enterprise', to: 'enterprises#update_enterprise'
         end
@@ -68,6 +72,8 @@ Diverst::Application.routes.draw do
           get  '/updates', to: 'groups#updates'
           get  '/update_prototype', to: 'groups#update_prototype'
           post '/create_update', to: 'groups#create_update'
+
+          put '/assign_leaders', to: 'groups#assign_leaders'
         end
       end
       resources :group_categories
@@ -160,7 +166,11 @@ Diverst::Application.routes.draw do
       resources :poll_responses
       resources :polls_segments
       resources :questions
-      resources :resources
+      resources :resources do
+        member do
+          post 'archive'
+        end
+      end
       resources :rewards
       resources :reward_actions
       resources :segment_group_scope_rules
@@ -171,7 +181,11 @@ Diverst::Application.routes.draw do
           get 'status'
         end
       end
-      resources :sessions, only: [:create, :destroy]
+      resources :sessions, only: [:create] do
+        collection do
+          delete 'logout'
+        end
+      end
       resources :shared_metrics_dashboards
       resources :shared_news_feed_links
       resources :social_links
@@ -194,10 +208,15 @@ Diverst::Application.routes.draw do
       end
       resources :users do
         collection do
+          get 'export_csv'
           post '/email', to: 'users#find_user_enterprise_by_email'
         end
       end
-      resources :user_groups
+      resources :user_groups do
+        collection do
+          get 'export_csv'
+        end
+      end
       resources :user_roles
       resources :users_segments
       resources :views
@@ -276,6 +295,8 @@ Diverst::Application.routes.draw do
     end
   end
 
-  # Note the contraints that do not provide a routing error if we're looking for `rails/` because of ActiveStorage URLs
+  # Note the constraints that do not provide a routing error if we're looking for `rails/` because of ActiveStorage URLs
   match '*a', to: 'diverst#routing_error', via: :all, constraints: lambda { |request| !request.path_parameters[:a].start_with?('rails/') }
+
+  root to: proc { [404, {}, ['Not found.']] }
 end

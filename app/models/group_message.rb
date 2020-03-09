@@ -1,5 +1,6 @@
 class GroupMessage < ApplicationRecord
   include PublicActivity::Common
+  include GroupMessage::Actions
   has_many :group_messages_segments, dependent: :destroy
 
   has_many :segments, through: :group_messages_segments, before_remove: :remove_segment_association
@@ -76,9 +77,9 @@ class GroupMessage < ApplicationRecord
 
   def comments_count
     if group.enterprise.enable_pending_comments?
-      comments.approved.count
+      comments.approved.size
     else
-      comments.count
+      comments.size
     end
   end
 

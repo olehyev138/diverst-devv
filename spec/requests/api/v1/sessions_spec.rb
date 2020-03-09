@@ -35,9 +35,9 @@ RSpec.describe "#{model.pluralize}", type: :request do
     end
   end
 
-  describe '#destroy' do
-    it 'destroy' do
-      user = create(:user, email: 'signin@diverst.com', password: 'password', password_confirmation: 'password')
+  describe '#logout' do
+    it 'logout' do
+      create(:user, email: 'signin@diverst.com', password: 'password', password_confirmation: 'password')
 
       signin = {
         email: 'signin@diverst.com',
@@ -48,16 +48,16 @@ RSpec.describe "#{model.pluralize}", type: :request do
       test_response = JSON.parse(response.body)
 
       headers['Diverst-UserToken'] = test_response['token']
-      user = User.find(user.id)
 
-      delete "/api/v1/sessions/#{user.sessions.last.token}", params: nil, headers: headers
+      delete '/api/v1/sessions/logout', params: nil, headers: headers
 
       expect(response).to have_http_status(:ok)
     end
 
-    it 'captures the error' do
-      allow(model.constantize).to receive(:destroy).and_raise(BadRequestException)
-      user = create(:user, email: 'signin@diverst.com', password: 'password', password_confirmation: 'password')
+    it 'captures the error if the jwt is invalid' do
+      # allow(model.constantize).to receive(:logout).and_raise(BadRequestException)
+      # Not needed as the request returns unauthorized during initial JWT verification if the JWT is invalid
+      create(:user, email: 'signin@diverst.com', password: 'password', password_confirmation: 'password')
 
       signin = {
         email: 'signin@diverst.com',
@@ -65,13 +65,11 @@ RSpec.describe "#{model.pluralize}", type: :request do
       }
       post '/api/v1/sessions', params: signin, headers: headers
       expect(response).to have_http_status(:ok)
-      test_response = JSON.parse(response.body)
 
-      headers['Diverst-UserToken'] = test_response['token']
-      user = User.find(user.id)
+      headers['Diverst-UserToken'] = 'iamnotavalidtoken'
 
-      delete "/api/v1/sessions/#{user.sessions.last.token}", params: nil, headers: headers
-      expect(response).to have_http_status(:bad_request)
+      delete '/api/v1/sessions/logout', params: nil, headers: headers
+      expect(response).to have_http_status(:unauthorized)
     end
   end
 end

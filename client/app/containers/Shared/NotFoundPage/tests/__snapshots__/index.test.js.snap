@@ -2,7 +2,7 @@
 
 exports[`<NotFoundPage /> should render and match the snapshot 1`] = `
 <div>
-  <Connect(WithStyles(Logo))
+  <Memo(Connect(WithStyles(Logo)))
     coloredDefault={true}
     imgClass="extra-large-img"
   />
@@ -31,7 +31,10 @@ exports[`<NotFoundPage /> should render and match the snapshot 1`] = `
     >
       <HomeIcon />
     </Hidden>
-    Return To Home
+    <FormattedMessage
+      id="diverst.containers.NotFoundPage.button.return"
+      values={Object {}}
+    />
   </WithStyles(ForwardRef(Button))>
 </div>
 `;

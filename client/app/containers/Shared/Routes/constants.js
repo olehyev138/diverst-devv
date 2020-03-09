@@ -7,6 +7,9 @@ export const ROUTES = {
     login: {
       path: () => '/login',
     },
+    forgotPassword: {
+      path: () => '/forgot',
+    },
   },
 
   // User
@@ -144,6 +147,11 @@ export const ROUTES = {
 
   group: {
     pathPrefix: '/groups',
+    back: {
+      data: {
+        titleMessage: messages.groups.back,
+      }
+    },
     home: {
       path: (groupId = ':group_id') => `/groups/${groupId}`,
       data: {
@@ -395,7 +403,19 @@ export const ROUTES = {
           data: {
             titleMessage: messages.groups.manage.leaders.index
           }
-        }
+        },
+        new: {
+          path: (groupId = ':group_id') => `/groups/${groupId}/manage/leaders/new`,
+          data: {
+            titleMessage: messages.groups.manage.leaders.new
+          }
+        },
+        edit: {
+          path: (groupId = ':group_id', groupLeaderId = ':group_leader_id') => `/groups/${groupId}/manage/leaders/${groupLeaderId}/edit`,
+          data: {
+            titleMessage: messages.groups.manage.leaders.edit
+          }
+        },
       }
     },
     resources: {
@@ -534,6 +554,9 @@ export const ROUTES = {
         show: {
           path: (segmentId = ':segment_id') => `/admin/manage/segments/${segmentId}`,
         },
+        edit: {
+          path: (segmentId = ':segment_id') => `/admin/manage/segments/${segmentId}/edit`,
+        },
       },
       resources: {
         index: {
@@ -576,15 +599,40 @@ export const ROUTES = {
         },
       }
     },
+    plan: {
+      index: {
+        data: {
+          titleMessage: messages.admin.plan.index
+        }
+      }
+    },
+    include: {
+      index: {
+        data: {
+          titleMessage: messages.admin.include.index
+        }
+      }
+    },
+    mentorship: {
+      index: {
+        data: {
+          titleMessage: messages.admin.mentorship.index
+        }
+      }
+    },
     innovate: {
       index: {
         data: {
           pathPrefix: '/admin/innovate',
+          titleMessage: messages.admin.innovate.index
         }
       },
       campaigns: {
         index: {
-          path: () => '/admin/innovate/campaigns'
+          path: () => '/admin/innovate/campaigns',
+          data: {
+            titleMessage: messages.admin.innovate.campaigns
+          }
         },
         new: {
           path: () => '/admin/innovate/campaigns/new'
@@ -609,7 +657,10 @@ export const ROUTES = {
       },
       financials: {
         index: {
-          path: () => '/admin/innovate/financials'
+          path: () => '/admin/innovate/financials',
+          data: {
+            titleMessage: messages.admin.innovate.financials
+          }
         }
       },
     },
@@ -634,6 +685,9 @@ export const ROUTES = {
         edit: {
           path: (userId = ':user_id') => `/admin/system/users/${userId}/edit`,
         },
+        import: {
+          path: () => '/admin/system/users/import',
+        },
         roles: {
           index: {
             path: () => '/admin/system/users/roles',
@@ -650,7 +704,8 @@ export const ROUTES = {
         pathPrefix: '/admin/system/settings',
         fields: {
           index: {
-            path: () => '/admin/system/settings/fields'
+            path: () => '/admin/system/settings/fields',
+            titleMessage: messages.admin.system.globalSettings,
           }
         },
         customText: {
@@ -684,7 +739,47 @@ export const ROUTES = {
             path: (eventId = ':event_id') => `/admin/system/settings/emailEvents/${eventId}/edit`
           },
         }
-      }
+      },
+      branding: {
+        index: {
+          path: () => '/admin/system/branding/theme',
+          data: {
+            pathPrefix: '/system/branding',
+            titleMessage: messages.admin.system.branding,
+          }
+        },
+        theme: {
+          path: () => '/admin/system/branding/theme'
+        },
+        home: {
+          path: () => '/admin/system/branding/home'
+        },
+        sponsors: {
+          index: {
+            path: () => '/admin/system/branding/sponsors'
+          },
+          new: {
+            path: () => '/admin/system/branding/sponsors/new'
+          },
+          edit: {
+            path: (sponsorId = ':sponsor_id') => `/admin/system/branding/sponsors/${sponsorId}/edit`
+          }
+        }
+      },
+      logs: {
+        index: {
+          data: {
+            titleMessage: messages.admin.system.logs,
+          }
+        },
+      },
+      diversity: {
+        index: {
+          data: {
+            titleMessage: messages.admin.system.diversity,
+          }
+        },
+      },
     }
   },
 };

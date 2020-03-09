@@ -7,7 +7,7 @@ import classNames from 'classnames';
 
 import { withStyles } from '@material-ui/core/styles';
 import {
-  AppBar, Button, Hidden, IconButton, Link, ListItemIcon, Menu, MenuItem, Toolbar, Typography,
+  AppBar, Box, Button, Hidden, IconButton, Link, ListItemIcon, Menu, MenuItem, Toolbar, Typography, CardActionArea
 } from '@material-ui/core';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import PermIdentityIcon from '@material-ui/icons/PermIdentity';
@@ -21,11 +21,15 @@ import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import Logo from 'components/Shared/Logo/index';
 import { logoutBegin } from 'containers/Shared/App/actions';
 
-import { selectEnterprise, selectToken, selectUser } from 'containers/Shared/App/selectors';
+import { selectEnterprise, selectUser } from 'containers/Shared/App/selectors';
 
 import { selectGroup } from 'containers/Group/selectors';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
+
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/Shared/App/messages';
+
 
 const styles = theme => ({
   grow: {
@@ -100,7 +104,7 @@ export class ApplicationHeader extends React.PureComponent {
   }
 
   logoutBegin() {
-    this.props.logoutBegin(this.props.user);
+    this.props.logoutBegin();
   }
 
   handleProfileMenuOpen = (event) => {
@@ -151,7 +155,7 @@ export class ApplicationHeader extends React.PureComponent {
                 <ListItemIcon>
                   <DvrIcon />
                 </ListItemIcon>
-              Dashboard
+                {<DiverstFormattedMessage {...messages.header.dashboard} />}
               </React.Fragment>
             )
             : (
@@ -159,26 +163,26 @@ export class ApplicationHeader extends React.PureComponent {
                 <ListItemIcon>
                   <BuildIcon />
                 </ListItemIcon>
-              Admin
+                {<DiverstFormattedMessage {...messages.header.admin} />}
               </React.Fragment>
             )
           }
         </MenuItem>
         <MenuItem
           component={WrappedNavLink}
-          to={ROUTES.user.show.path(user.id)}
+          to={ROUTES.user.show.path(user.user_id)}
           activeClassName={classes.navLinkActive}
         >
           <ListItemIcon>
             <PermIdentityIcon />
           </ListItemIcon>
-          Profile
+          {<DiverstFormattedMessage {...messages.header.profile} />}
         </MenuItem>
         <MenuItem onClick={this.logoutBegin}>
           <ListItemIcon>
             <ExitToAppIcon />
           </ListItemIcon>
-          Log Out
+          {<DiverstFormattedMessage {...messages.header.logout} />}
         </MenuItem>
       </Menu>
     );
@@ -200,14 +204,7 @@ export class ApplicationHeader extends React.PureComponent {
               )
               : <React.Fragment />
             }
-            <Link
-              component={WrappedNavLink}
-              to={ROUTES.user.root.path()}
-            >
-              <Button>
-                <Logo imgClass='large-img' verticalPadding={20} />
-              </Button>
-            </Link>
+            <Logo height='55px' withLink />
             <div className={classNames(classes.grow, classes.centerText)}>
               <Hidden xsDown>
                 {group ? (
@@ -234,13 +231,13 @@ export class ApplicationHeader extends React.PureComponent {
                         ? (
                           <span>
                             <DvrIcon className={classes.dashboardIcon} />
-                            Dashboard
+                            {<DiverstFormattedMessage {...messages.header.dashboard} />}
                           </span>
                         )
                         : (
                           <span>
                             <BuildIcon className={classes.adminIcon} />
-                            Admin
+                            {<DiverstFormattedMessage {...messages.header.admin} />}
                           </span>
                         )
                       }
@@ -291,14 +288,13 @@ ApplicationHeader.defaultProps = {
 
 export function mapDispatchToProps(dispatch, ownProps) {
   return {
-    logoutBegin(user) {
-      dispatch(logoutBegin(user));
+    logoutBegin() {
+      dispatch(logoutBegin());
     },
   };
 }
 
 const mapStateToProps = createStructuredSelector({
-  token: selectToken(),
   user: selectUser(),
   enterprise: selectEnterprise(),
   group: selectGroup(),

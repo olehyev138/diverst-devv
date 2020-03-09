@@ -1,5 +1,5 @@
 class UserSerializer < ApplicationRecordSerializer
-  attributes :enterprise, :last_name, :user_groups, :user_role, :avatar_location, :fields, :news_link_ids, :name,
+  attributes :enterprise, :last_name, :user_groups, :user_role, :fields, :news_link_ids, :name,
              :last_initial, :timezones, :time_zone
 
   has_many :field_data
@@ -39,7 +39,7 @@ class UserSerializer < ApplicationRecordSerializer
     fields.each do |field|
       fields_hash << {
         title: field.title,
-        value: field.string_value(object.info[field])
+        value: field.string_value(object[field])
       }
     end
 

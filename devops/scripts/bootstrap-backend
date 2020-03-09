@@ -3,12 +3,10 @@
 # Bootstrap script for client, creates resources needed for terraform & deployment
 # - create s3 bucket with versioning & at-rest encryption - used for terraform state & eb deployment bundles
 # - create dynamodb table for state locking
-# Usage: ./bootstrap-backend <aws-profile> <env-name>
+# Usage: ./bootstrap-backend <env-name>
 
-REGION="us-west-2"
 BUCKET_POSTFIX="$(head /dev/urandom | tr -dc a-z | head -c 8)"
-PROFILE="$1"
-CLIENT_NAME="$2"
+CLIENT_NAME="$1"
 BUCKET_NAME="$CLIENT_NAME-$BUCKET_POSTFIX"
 
 # Exit on error
@@ -16,24 +14,19 @@ set -e
 
 # Create S3 bucket with encryption & versioning
 aws s3api create-bucket \
-  --profile "$PROFILE" \
   --bucket "$BUCKET_NAME" \
-  --create-bucket-configuration LocationConstraint="$REGION" >/dev/null
 
 aws s3api put-bucket-encryption \
-  --profile "$PROFILE" \
   --bucket "$BUCKET_NAME" \
   --server-side-encryption-configuration '{"Rules": [{"ApplyServerSideEncryptionByDefault": {"SSEAlgorithm": "AES256"}}]}'
 
 aws s3api put-bucket-versioning \
-  --profile "$PROFILE" \
   --bucket "$BUCKET_NAME" \
   --versioning-configuration Status=Enabled
 
 # Create dynamodb table for state locking
 #  - creates primary key LockID - mandatory to work with terraform
 aws dynamodb create-table \
-  --profile "$PROFILE" \
   --table-name "$CLIENT_NAME-tf-statelock" \
   --attribute-definitions AttributeName=LockID,AttributeType=S \
   --key-schema AttributeName=LockID,KeyType=HASH \

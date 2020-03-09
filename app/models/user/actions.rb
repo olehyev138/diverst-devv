@@ -50,6 +50,7 @@ module User::Actions
 
     # get the news_feed_links
     base_nfls = NewsFeedLink
+                  .preload(NewsFeedLink.base_preloads)
                   .joins(:news_feed)
                   .left_joins(:news_feed_link_segments, :shared_news_feed_links)
                   .includes(:group_message, :news_link, :social_link)
@@ -88,6 +89,7 @@ module User::Actions
     # get the events
     # order the event
     ordered = initiatives
+                .preload(Initiative.base_preloads)
                 .send_chain(query_scopes)
                 .order(order_by => order)
                 .distinct
@@ -131,6 +133,7 @@ module User::Actions
     valid_ors << User.sql_where("(#{ group_ors.join(' OR ')}) AND (#{ segment_ors.join(' OR ')})")
 
     ordered = Initiative
+                .preload(Initiative.base_preloads)
                 .left_joins(:initiative_segments, :initiative_participating_groups, :initiative_invitees)
                 .send_chain(query_scopes)
                 .where(valid_ors.join(' OR '))
@@ -193,14 +196,63 @@ module User::Actions
   end
 
   module ClassMethods
+    # Export a CSV with the specified users
+    def csv_attributes(current_user = nil, params = {})
+      fields = current_user.present? ? current_user.fields : Field.none
+      current_user.field_data.load if current_user.present?
+      {
+          titles: ['First name',
+                   'Last name',
+                   'Email',
+                   'Biography',
+                   'Active',
+                   'Group Membership'
+          ].concat(fields.map(&:title)),
+          values: [
+              :first_name,
+              :last_name,
+              :email,
+              :biography,
+              :active,
+              -> (user) { user.groups.map(&:name).join(',') },
+          ].concat(
+              fields.map do |field|
+                -> (user) { field.csv_value(user[field]) }
+              end
+            )
+      }
+    end
+
+    def parameter_name(scope)
+      scope_map = {
+          all: 'all',
+          active: 'active',
+          inactive: 'inactive',
+          saml: 'sso authorized',
+          invitation_sent: 'pending'
+      }
+
+      case scope
+      when String, Symbol
+        scope_map[scope.to_sym] || scope
+      when Array
+        case scope.first
+        when 'of_role' then UserRole.find(scope.second).role_name.downcase
+        else scope.first
+        end
+      else
+        raise ::ArgumentError.new('query scopes should be an array of either strings or arrays starting with a string')
+      end
+    end
+
     def base_query
       "#{ self.table_name }.id LIKE :search OR LOWER(#{ self.table_name }.first_name) LIKE :search OR LOWER(#{ self.table_name }.last_name) LIKE :search
       OR LOWER(#{ self.table_name }.email) LIKE :search"
     end
 
     def valid_scopes
-      %w( active enterprise_mentors mentors mentees accepting_mentee_requests
-          accepting_mentor_requests saml inactive invitation_sent)
+      %w( enterprise_mentors mentors mentees accepting_mentee_requests accepting_mentor_requests
+          all active inactive saml invitation_sent of_role)
     end
 
     def preload_attachments
@@ -214,18 +266,15 @@ module User::Actions
           :user_groups,
           :user_role,
           :news_links,
-          {
-              field_data: [
+          :avatar_attachment,
+          field_data: [
                   :field,
                   { field: Field.base_preloads }
-              ]
-          },
-          {
-              enterprise: [
+              ],
+          enterprise: [
                   :theme,
                   :mobile_fields
               ]
-          }
       ]
     end
 
@@ -234,6 +283,7 @@ module User::Actions
           :user_role,
           :enterprise,
           :news_links,
+          :avatar_attachment,
           {
               enterprise: [
                   :theme,

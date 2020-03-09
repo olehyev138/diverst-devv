@@ -21,7 +21,7 @@ import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/DeleteOutline';
 
-import { injectIntl } from 'react-intl';
+import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Analyze/Dashboards/MetricsDashboard/messages';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
@@ -60,7 +60,7 @@ export function MetricsDashboardsList(props, context) {
   const routeContext = useContext(RouteContext);
 
   const columns = [
-    { title: 'Name', field: 'name' }
+    { title: intl.formatMessage(messages.fields.name), field: 'name' }
   ];
 
   return (
@@ -83,7 +83,7 @@ export function MetricsDashboardsList(props, context) {
       <Grid container spacing={3}>
         <Grid item xs>
           <DiverstTable
-            title='Custom Dashboards'
+            title={intl.formatMessage(messages.table.title)}
             handlePagination={props.handlePagination}
             handleRowClick={(_, rowData) => props.handleVisitDashboardPage(rowData.id)}
             dataArray={Object.values(props.metricsDashboards)}
@@ -91,16 +91,16 @@ export function MetricsDashboardsList(props, context) {
             columns={columns}
             actions={[{
               icon: () => <EditIcon />,
-              tooltip: 'Edit Member',
+              tooltip: intl.formatMessage(messages.table.edit),
               onClick: (_, rowData) => {
                 props.handleVisitDashboardEdit(rowData.id);
               }
             }, {
               icon: () => <DeleteIcon />,
-              tooltip: 'Delete Member',
+              tooltip: intl.formatMessage(messages.table.delete),
               onClick: (_, rowData) => {
                 /* eslint-disable-next-line no-alert, no-restricted-globals */
-                if (confirm('Delete member?'))
+                if (confirm(intl.formatMessage(messages.table.delete_confirm)))
                   props.deleteMetricsDashboardBegin(rowData.id);
               }
             }]}
@@ -112,7 +112,7 @@ export function MetricsDashboardsList(props, context) {
 }
 
 MetricsDashboardsList.propTypes = {
-  intl: PropTypes.object,
+  intl: intlShape,
   classes: PropTypes.object,
   metricsDashboards: PropTypes.array,
   metricsDashboardsTotal: PropTypes.number,

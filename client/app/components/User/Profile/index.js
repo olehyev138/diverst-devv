@@ -18,6 +18,7 @@ import CustomFieldShow from 'components/Shared/Fields/FieldDisplays/Field/index'
 
 import DiverstShowLoader from 'components/Shared/DiverstShowLoader';
 
+
 const styles = theme => ({
   padding: {
     padding: theme.spacing(3, 2),
@@ -75,7 +76,7 @@ export function Profile(props) {
             <CardContent>
               <Grid item>
                 <Typography color='primary' variant='h6' component='h2' className={classes.dataHeaders}>
-                  E-mail
+                  {<DiverstFormattedMessage {...messages.email} />}
                 </Typography>
                 <Typography color='secondary' component='h2' className={classes.data}>
                   {user.email}
@@ -86,7 +87,7 @@ export function Profile(props) {
             <CardContent>
               <Grid item>
                 <Typography color='primary' variant='h6' component='h2' className={classes.dataHeaders}>
-                  Biography
+                  {<DiverstFormattedMessage {...messages.biography} />}
                 </Typography>
                 {(user.biography || 'None').split('\n').map((text, i) => (
                   // eslint-disable-next-line react/no-array-index-key
@@ -100,7 +101,7 @@ export function Profile(props) {
             <CardContent>
               <Grid item>
                 <Typography color='primary' variant='h6' component='h2' className={classes.dataHeaders}>
-                  Time Zone
+                  {<DiverstFormattedMessage {...messages.time_zone} />}
                 </Typography>
                 <Typography color='secondary' component='h2' className={classes.data}>
                   {user.time_zone || 'UTC'}

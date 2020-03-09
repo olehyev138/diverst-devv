@@ -194,7 +194,7 @@ class AdminLinks extends React.PureComponent {
                   <ListIcon />
                 </ListItemIcon>
                 <ListItemText>
-                  Custom
+                  <DiverstFormattedMessage {...ROUTES.admin.analyze.custom.index.data.titleMessage} />
                 </ListItemText>
               </MenuItem>
             </List>
@@ -257,14 +257,14 @@ class AdminLinks extends React.PureComponent {
             <ListItemIcon>
               <AssignmentTurnedInIcon />
             </ListItemIcon>
-            <ListItemText primary='Plan' />
+            <ListItemText primary={<DiverstFormattedMessage {...ROUTES.admin.plan.index.data.titleMessage} />} />
           </ListItem>
 
           <ListItem button onClick={this.handleInnovateClick}>
             <ListItemIcon>
               <LightbulbIcon className={classes.lightbulbIcon} />
             </ListItemIcon>
-            <ListItemText primary='Innovate' />
+            <ListItemText primary={<DiverstFormattedMessage {...ROUTES.admin.innovate.index.data.titleMessage} />} />
             {this.state.innovate.open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
           </ListItem>
           <Collapse in={this.state.innovate.open} timeout='auto' unmountOnExit>
@@ -279,7 +279,7 @@ class AdminLinks extends React.PureComponent {
                   <ListIcon />
                 </ListItemIcon>
                 <ListItemText>
-                  Campaigns
+                  <DiverstFormattedMessage {...ROUTES.admin.innovate.campaigns.index.data.titleMessage} />
                 </ListItemText>
               </MenuItem>
               <MenuItem
@@ -292,7 +292,7 @@ class AdminLinks extends React.PureComponent {
                   <ListIcon />
                 </ListItemIcon>
                 <ListItemText>
-                  Financials
+                  <DiverstFormattedMessage {...ROUTES.admin.innovate.financials.index.data.titleMessage} />
                 </ListItemText>
               </MenuItem>
             </List>
@@ -302,14 +302,14 @@ class AdminLinks extends React.PureComponent {
             <ListItemIcon>
               <HowToVoteIcon />
             </ListItemIcon>
-            <ListItemText primary='Include' />
+            <ListItemText primary={<DiverstFormattedMessage {...ROUTES.admin.include.index.data.titleMessage} />} />
           </ListItem>
 
           <ListItem button>
             <ListItemIcon>
               <UsersCircleIcon />
             </ListItemIcon>
-            <ListItemText primary='Mentorship' />
+            <ListItemText primary={<DiverstFormattedMessage {...ROUTES.admin.mentorship.index.data.titleMessage} />} />
           </ListItem>
 
           <Divider />
@@ -340,7 +340,7 @@ class AdminLinks extends React.PureComponent {
                   <ListIcon />
                 </ListItemIcon>
                 <ListItemText>
-                  Global Settings
+                  <DiverstFormattedMessage {...ROUTES.admin.system.globalSettings.fields.index.titleMessage} />
                 </ListItemText>
               </MenuItem>
               <MenuItem
@@ -358,7 +358,7 @@ class AdminLinks extends React.PureComponent {
               </MenuItem>
               <MenuItem
                 component={WrappedNavLink}
-                to='#'
+                to={ROUTES.admin.system.branding.index.path()}
                 className={classes.nested}
                 activeClassName={classes.navLinkActive}
               >
@@ -366,7 +366,7 @@ class AdminLinks extends React.PureComponent {
                   <ListIcon />
                 </ListItemIcon>
                 <ListItemText>
-                  Logs
+                  <DiverstFormattedMessage {...ROUTES.admin.system.branding.index.data.titleMessage} />
                 </ListItemText>
               </MenuItem>
               <MenuItem
@@ -379,7 +379,20 @@ class AdminLinks extends React.PureComponent {
                   <ListIcon />
                 </ListItemIcon>
                 <ListItemText>
-                  Diversity
+                  <DiverstFormattedMessage {...ROUTES.admin.system.logs.index.data.titleMessage} />
+                </ListItemText>
+              </MenuItem>
+              <MenuItem
+                component={WrappedNavLink}
+                to='#'
+                className={classes.nested}
+                activeClassName={classes.navLinkActive}
+              >
+                <ListItemIcon>
+                  <ListIcon />
+                </ListItemIcon>
+                <ListItemText>
+                  <DiverstFormattedMessage {...ROUTES.admin.system.diversity.index.data.titleMessage} />
                 </ListItemText>
               </MenuItem>
             </List>

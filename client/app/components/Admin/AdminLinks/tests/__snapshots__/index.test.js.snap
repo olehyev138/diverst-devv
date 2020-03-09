@@ -113,7 +113,9 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
               <WithStyles(ForwardRef(ListItemText))>
-                Custom
+                <Memo(DiverstFormattedMessage)
+                  id="diverst.containers.Routes.admin.analyze.custom"
+                />
               </WithStyles(ForwardRef(ListItemText))>
             </WithStyles(ForwardRef(MenuItem))>
           </WithStyles(ForwardRef(List))>
@@ -203,7 +205,11 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
             <AssignmentTurnedInIcon />
           </WithStyles(ForwardRef(ListItemIcon))>
           <WithStyles(ForwardRef(ListItemText))
-            primary="Plan"
+            primary={
+              <Memo(DiverstFormattedMessage)
+                id="diverst.containers.Routes.admin.plan.index"
+              />
+            }
           />
         </WithStyles(ForwardRef(ListItem))>
         <WithStyles(ForwardRef(ListItem))
@@ -214,7 +220,11 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
             <WbIncandescentIcon />
           </WithStyles(ForwardRef(ListItemIcon))>
           <WithStyles(ForwardRef(ListItemText))
-            primary="Innovate"
+            primary={
+              <Memo(DiverstFormattedMessage)
+                id="diverst.containers.Routes.admin.innovate.index"
+              />
+            }
           />
           <ExpandMoreIcon />
         </WithStyles(ForwardRef(ListItem))>
@@ -239,7 +249,9 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
               <WithStyles(ForwardRef(ListItemText))>
-                Campaigns
+                <Memo(DiverstFormattedMessage)
+                  id="diverst.containers.Routes.admin.innovate.campaigns"
+                />
               </WithStyles(ForwardRef(ListItemText))>
             </WithStyles(ForwardRef(MenuItem))>
             <WithStyles(ForwardRef(MenuItem))
@@ -255,7 +267,9 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
               <WithStyles(ForwardRef(ListItemText))>
-                Financials
+                <Memo(DiverstFormattedMessage)
+                  id="diverst.containers.Routes.admin.innovate.financials"
+                />
               </WithStyles(ForwardRef(ListItemText))>
             </WithStyles(ForwardRef(MenuItem))>
           </WithStyles(ForwardRef(List))>
@@ -267,7 +281,11 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
             <HowToVoteIcon />
           </WithStyles(ForwardRef(ListItemIcon))>
           <WithStyles(ForwardRef(ListItemText))
-            primary="Include"
+            primary={
+              <Memo(DiverstFormattedMessage)
+                id="diverst.containers.Routes.admin.include.index"
+              />
+            }
           />
         </WithStyles(ForwardRef(ListItem))>
         <WithStyles(ForwardRef(ListItem))
@@ -277,7 +295,11 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
             <GroupWorkIcon />
           </WithStyles(ForwardRef(ListItemIcon))>
           <WithStyles(ForwardRef(ListItemText))
-            primary="Mentorship"
+            primary={
+              <Memo(DiverstFormattedMessage)
+                id="diverst.containers.Routes.admin.mentorship.index"
+              />
+            }
           />
         </WithStyles(ForwardRef(ListItem))>
         <WithStyles(ForwardRef(Divider)) />
@@ -317,7 +339,9 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
               <WithStyles(ForwardRef(ListItemText))>
-                Global Settings
+                <Memo(DiverstFormattedMessage)
+                  id="diverst.containers.Routes.admin.system.globalSettings"
+                />
               </WithStyles(ForwardRef(ListItemText))>
             </WithStyles(ForwardRef(MenuItem))>
             <WithStyles(ForwardRef(MenuItem))
@@ -345,13 +369,15 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   "render": [Function],
                 }
               }
-              to="#"
+              to="/admin/system/branding/theme"
             >
               <WithStyles(ForwardRef(ListItemIcon))>
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
               <WithStyles(ForwardRef(ListItemText))>
-                Logs
+                <Memo(DiverstFormattedMessage)
+                  id="diverst.containers.Routes.admin.system.branding"
+                />
               </WithStyles(ForwardRef(ListItemText))>
             </WithStyles(ForwardRef(MenuItem))>
             <WithStyles(ForwardRef(MenuItem))
@@ -367,7 +393,27 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
               <WithStyles(ForwardRef(ListItemText))>
-                Diversity
+                <Memo(DiverstFormattedMessage)
+                  id="diverst.containers.Routes.admin.system.logs"
+                />
+              </WithStyles(ForwardRef(ListItemText))>
+            </WithStyles(ForwardRef(MenuItem))>
+            <WithStyles(ForwardRef(MenuItem))
+              component={
+                Object {
+                  "$$typeof": Symbol(react.forward_ref),
+                  "render": [Function],
+                }
+              }
+              to="#"
+            >
+              <WithStyles(ForwardRef(ListItemIcon))>
+                <ListIcon />
+              </WithStyles(ForwardRef(ListItemIcon))>
+              <WithStyles(ForwardRef(ListItemText))>
+                <Memo(DiverstFormattedMessage)
+                  id="diverst.containers.Routes.admin.system.diversity"
+                />
               </WithStyles(ForwardRef(ListItemText))>
             </WithStyles(ForwardRef(MenuItem))>
           </WithStyles(ForwardRef(List))>
@@ -481,7 +527,9 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
               <WithStyles(ForwardRef(ListItemText))>
-                Custom
+                <Memo(DiverstFormattedMessage)
+                  id="diverst.containers.Routes.admin.analyze.custom"
+                />
               </WithStyles(ForwardRef(ListItemText))>
             </WithStyles(ForwardRef(MenuItem))>
           </WithStyles(ForwardRef(List))>
@@ -571,7 +619,11 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
             <AssignmentTurnedInIcon />
           </WithStyles(ForwardRef(ListItemIcon))>
           <WithStyles(ForwardRef(ListItemText))
-            primary="Plan"
+            primary={
+              <Memo(DiverstFormattedMessage)
+                id="diverst.containers.Routes.admin.plan.index"
+              />
+            }
           />
         </WithStyles(ForwardRef(ListItem))>
         <WithStyles(ForwardRef(ListItem))
@@ -582,7 +634,11 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
             <WbIncandescentIcon />
           </WithStyles(ForwardRef(ListItemIcon))>
           <WithStyles(ForwardRef(ListItemText))
-            primary="Innovate"
+            primary={
+              <Memo(DiverstFormattedMessage)
+                id="diverst.containers.Routes.admin.innovate.index"
+              />
+            }
           />
           <ExpandMoreIcon />
         </WithStyles(ForwardRef(ListItem))>
@@ -607,7 +663,9 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
               <WithStyles(ForwardRef(ListItemText))>
-                Campaigns
+                <Memo(DiverstFormattedMessage)
+                  id="diverst.containers.Routes.admin.innovate.campaigns"
+                />
               </WithStyles(ForwardRef(ListItemText))>
             </WithStyles(ForwardRef(MenuItem))>
             <WithStyles(ForwardRef(MenuItem))
@@ -623,7 +681,9 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
               <WithStyles(ForwardRef(ListItemText))>
-                Financials
+                <Memo(DiverstFormattedMessage)
+                  id="diverst.containers.Routes.admin.innovate.financials"
+                />
               </WithStyles(ForwardRef(ListItemText))>
             </WithStyles(ForwardRef(MenuItem))>
           </WithStyles(ForwardRef(List))>
@@ -635,7 +695,11 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
             <HowToVoteIcon />
           </WithStyles(ForwardRef(ListItemIcon))>
           <WithStyles(ForwardRef(ListItemText))
-            primary="Include"
+            primary={
+              <Memo(DiverstFormattedMessage)
+                id="diverst.containers.Routes.admin.include.index"
+              />
+            }
           />
         </WithStyles(ForwardRef(ListItem))>
         <WithStyles(ForwardRef(ListItem))
@@ -645,7 +709,11 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
             <GroupWorkIcon />
           </WithStyles(ForwardRef(ListItemIcon))>
           <WithStyles(ForwardRef(ListItemText))
-            primary="Mentorship"
+            primary={
+              <Memo(DiverstFormattedMessage)
+                id="diverst.containers.Routes.admin.mentorship.index"
+              />
+            }
           />
         </WithStyles(ForwardRef(ListItem))>
         <WithStyles(ForwardRef(Divider)) />
@@ -685,7 +753,9 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
               <WithStyles(ForwardRef(ListItemText))>
-                Global Settings
+                <Memo(DiverstFormattedMessage)
+                  id="diverst.containers.Routes.admin.system.globalSettings"
+                />
               </WithStyles(ForwardRef(ListItemText))>
             </WithStyles(ForwardRef(MenuItem))>
             <WithStyles(ForwardRef(MenuItem))
@@ -713,13 +783,15 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                   "render": [Function],
                 }
               }
-              to="#"
+              to="/admin/system/branding/theme"
             >
               <WithStyles(ForwardRef(ListItemIcon))>
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
               <WithStyles(ForwardRef(ListItemText))>
-                Logs
+                <Memo(DiverstFormattedMessage)
+                  id="diverst.containers.Routes.admin.system.branding"
+                />
               </WithStyles(ForwardRef(ListItemText))>
             </WithStyles(ForwardRef(MenuItem))>
             <WithStyles(ForwardRef(MenuItem))
@@ -735,7 +807,27 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
                 <ListIcon />
               </WithStyles(ForwardRef(ListItemIcon))>
               <WithStyles(ForwardRef(ListItemText))>
-                Diversity
+                <Memo(DiverstFormattedMessage)
+                  id="diverst.containers.Routes.admin.system.logs"
+                />
+              </WithStyles(ForwardRef(ListItemText))>
+            </WithStyles(ForwardRef(MenuItem))>
+            <WithStyles(ForwardRef(MenuItem))
+              component={
+                Object {
+                  "$$typeof": Symbol(react.forward_ref),
+                  "render": [Function],
+                }
+              }
+              to="#"
+            >
+              <WithStyles(ForwardRef(ListItemIcon))>
+                <ListIcon />
+              </WithStyles(ForwardRef(ListItemIcon))>
+              <WithStyles(ForwardRef(ListItemText))>
+                <Memo(DiverstFormattedMessage)
+                  id="diverst.containers.Routes.admin.system.diversity"
+                />
               </WithStyles(ForwardRef(ListItemText))>
             </WithStyles(ForwardRef(MenuItem))>
           </WithStyles(ForwardRef(List))>

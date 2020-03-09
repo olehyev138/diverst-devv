@@ -31,7 +31,7 @@ export function MentorshipUserFormInner({ handleSubmit, handleChange, handleBlur
   const days = [...Array(7).keys()].map(day => ({ label: props.intl.formatMessage(appMessages.days_of_week[day]), value: day }));
   return (
     <React.Fragment>
-      { props.user && props.globalUser.id === props.user.id && (
+      { props.user && props.userSession.id === props.user.id && (
         <Card>
           <Form>
             <CardContent>
@@ -249,7 +249,7 @@ MentorshipUserForm.propTypes = {
 MentorshipUserFormInner.propTypes = {
   intl: intlShape.isRequired,
   user: PropTypes.object,
-  globalUser: PropTypes.shape({
+  userSession: PropTypes.shape({
     id: PropTypes.number
   }).isRequired,
   fieldData: PropTypes.array,
