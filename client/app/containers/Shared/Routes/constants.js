@@ -533,6 +533,25 @@ export const ROUTES = {
         edit: {
           path: (groupId = ':group_id') => `/admin/manage/groups/${groupId}/edit`,
         },
+        categories: {
+          index: {
+            path: () => '/admin/manage/groups/categories',
+          },
+          new: {
+            path: () => '/admin/manage/groups/categories/new',
+          },
+          add: {
+            path: () => '/admin/manage/groups/categories/add',
+          },
+          edit: {
+            path: () => '/admin/manage/groups/categories/edit',
+          },
+        },
+        category_types: {
+          edit: {
+            path: () => '/admin/manage/groups/category_types/edit',
+          },
+        },
       },
       segments: {
         pathPrefix: '/admin/manage/segments',

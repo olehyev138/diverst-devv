@@ -51,6 +51,7 @@ import CustomGraphEditPage from 'containers/Analyze/Dashboards/MetricsDashboard/
 import AdminGroupListPage from 'containers/Group/AdminGroupListPage/Loadable';
 import GroupCreatePage from 'containers/Group/GroupCreatePage/Loadable';
 import GroupEditPage from 'containers/Group/GroupEditPage/Loadable';
+import GroupCategoriesPage from 'containers/Group/GroupCategories/GroupCategoriesPage/Loadable';
 
 /* Admin - Manage - Segment */
 import SegmentListPage from 'containers/Segment/SegmentListPage/Loadable';
@@ -173,6 +174,7 @@ export {
   AdminGroupListPage,
   GroupCreatePage,
   GroupEditPage,
+  GroupCategoriesPage,
   SegmentListPage,
   SegmentPage,
   FieldsPage,
