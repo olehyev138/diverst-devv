@@ -2,6 +2,7 @@ class GenerateFieldData < ActiveRecord::Migration[5.1]
   def up
     # Generate a set of field data objects for each users `data/info` hash
 
+    User.column_reload!
     User.all.each do |user|
       # For each field id in users data hash
       info = user.info
@@ -24,6 +25,7 @@ class GenerateFieldData < ActiveRecord::Migration[5.1]
   end
 
   def down
+    FieldData.column_reload!
     FieldData.destroy_all
   end
 end
