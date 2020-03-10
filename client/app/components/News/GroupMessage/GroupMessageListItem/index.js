@@ -103,14 +103,25 @@ export function GroupMessageListItem(props) {
       { props.links && (
         <CardActions className={classes.cardActions}>
           {!props.readonly && (
-            <Button
-              size='small'
-              color='primary'
-              to={props.links.groupMessageEdit(newsItem.id)}
-              component={WrappedNavLink}
-            >
-              <DiverstFormattedMessage {...messages.edit} />
-            </Button>
+            <React.Fragment>
+              <Button
+                size='small'
+                color='primary'
+                to={props.links.groupMessageEdit(newsItem.id)}
+                component={WrappedNavLink}
+              >
+                <DiverstFormattedMessage {...messages.edit} />
+              </Button>
+              <Button
+                size='small'
+                color='primary'
+                onClick={() => {
+                  props.archiveNewsItemBegin({ id: newsItemId });
+                }}
+              >
+                <DiverstFormattedMessage {...messages.archive} />
+              </Button>
+            </React.Fragment>
           )}
 
           {!props.readonly && props.newsItem.approved !== true && (
