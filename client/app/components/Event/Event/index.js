@@ -11,6 +11,7 @@ import { withStyles } from '@material-ui/core/styles';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/DeleteOutline';
 import ArchiveIcon from '@material-ui/icons/Archive';
+import AddIcon from '@material-ui/icons/Add';
 
 import classNames from 'classnames';
 
@@ -109,6 +110,21 @@ export function Event(props) {
               >
                 <DiverstFormattedMessage {...messages.archive} />
               </Button>
+              <Button
+                variant='contained'
+                size='large'
+                color='primary'
+                className={classes.buttons}
+                onClick={() => {
+                  props.archiveEventBegin({
+                    id: props.event.id,
+                    group_id: event.owner_group_id
+                  });
+                }}
+                startIcon={<AddIcon />}
+              >
+                <DiverstFormattedMessage {...messages.join} />
+              </Button>
             </Grid>
           </Grid>
           <Paper className={classes.padding}>
@@ -136,7 +152,6 @@ export function Event(props) {
               <Grid item>
                 <DiverstImg
                   data={event.picture_data}
-                  alt=<DiverstFormattedMessage {...messages.inputs.image} />
                 />
               </Grid>
             </Grid>

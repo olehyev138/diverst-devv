@@ -24,6 +24,9 @@ export default defineMessages({
   delete_confirm: {
     id: `${scope}.index.button.delete_confirm`,
   },
+  join: {
+    id: `${scope}.index.button.join`,
+  },
   createupdate: {
     id: `${scope}.form.button.createupdate`,
   },
