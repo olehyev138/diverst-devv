@@ -17,6 +17,7 @@ import {
   GroupCreatePage,
   GroupEditPage,
   GroupCategoriesPage,
+  GroupCategoriesCreatePage,
   SegmentListPage,
   SegmentPage,
   FieldsPage,
@@ -176,7 +177,8 @@ export default function Routes(props) {
       <AdminLayout {...expandRoute(ROUTES.admin.manage.groups.new)} component={GroupCreatePage} />
       <AdminLayout {...expandRoute(ROUTES.admin.manage.groups.edit)} component={GroupEditPage} />
       <AdminLayout exact {...expandRoute(ROUTES.admin.manage.groups.index)} component={AdminGroupListPage} />
-      <AdminLayout {...expandRoute(ROUTES.admin.manage.groups.categories.index)} component={GroupCategoriesPage} />
+      <AdminLayout exact {...expandRoute(ROUTES.admin.manage.groups.categories.index)} component={GroupCategoriesPage} />
+      <AdminLayout {...expandRoute(ROUTES.admin.manage.groups.categories.new)} component={GroupCategoriesCreatePage} />
 
       { /* Admin - Manage - Segments */ }
       <AdminLayout {...expandRoute(ROUTES.admin.manage.segments.new)} component={SegmentPage} />
