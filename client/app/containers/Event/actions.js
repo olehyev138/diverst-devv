@@ -8,39 +8,42 @@ import {
   GET_EVENTS_BEGIN,
   GET_EVENTS_SUCCESS,
   GET_EVENTS_ERROR,
-  CREATE_EVENT_BEGIN,
-  CREATE_EVENT_SUCCESS,
-  CREATE_EVENT_ERROR,
-  DELETE_EVENT_BEGIN,
-  DELETE_EVENT_SUCCESS,
-  DELETE_EVENT_ERROR,
   GET_EVENT_BEGIN,
   GET_EVENT_SUCCESS,
   GET_EVENT_ERROR,
+  CREATE_EVENT_BEGIN,
+  CREATE_EVENT_SUCCESS,
+  CREATE_EVENT_ERROR,
   UPDATE_EVENT_BEGIN,
   UPDATE_EVENT_SUCCESS,
   UPDATE_EVENT_ERROR,
-  EVENTS_UNMOUNT
+  DELETE_EVENT_BEGIN,
+  DELETE_EVENT_SUCCESS,
+  DELETE_EVENT_ERROR,
+  FINALIZE_EXPENSES_BEGIN,
+  FINALIZE_EXPENSES_SUCCESS,
+  FINALIZE_EXPENSES_ERROR,
+  EVENTS_UNMOUNT,
 } from './constants';
 
 export function getEventsBegin(payload) {
   return {
     type: GET_EVENTS_BEGIN,
-    payload
+    payload,
   };
 }
 
 export function getEventsSuccess(payload) {
   return {
     type: GET_EVENTS_SUCCESS,
-    payload
+    payload,
   };
 }
 
 export function getEventsError(error) {
   return {
     type: GET_EVENTS_ERROR,
-    error
+    error,
   };
 }
 
@@ -49,14 +52,14 @@ export function getEventsError(error) {
 export function getEventBegin(payload) {
   return {
     type: GET_EVENT_BEGIN,
-    payload
+    payload,
   };
 }
 
 export function getEventSuccess(payload) {
   return {
     type: GET_EVENT_SUCCESS,
-    payload
+    payload,
   };
 }
 
@@ -136,8 +139,30 @@ export function deleteEventError(error) {
   };
 }
 
-export function eventsUnmount() {
+export function finalizeExpensesBegin(payload) {
+  return {
+    type: FINALIZE_EXPENSES_BEGIN,
+    payload,
+  };
+}
+
+export function finalizeExpensesSuccess(payload) {
+  return {
+    type: FINALIZE_EXPENSES_SUCCESS,
+    payload,
+  };
+}
+
+export function finalizeExpensesError(error) {
+  return {
+    type: FINALIZE_EXPENSES_ERROR,
+    error,
+  };
+}
+
+export function eventsUnmount(payload) {
   return {
     type: EVENTS_UNMOUNT,
+    payload,
   };
 }

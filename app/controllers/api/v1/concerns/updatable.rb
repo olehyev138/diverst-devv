@@ -22,8 +22,8 @@ module Api::V1::Concerns::Updatable
 
   def create_update
     params[:update] = update_payload
-    base_authorize(klass)
     item = klass.find(params[:id])
+    base_authorize(item)
 
     render status: 201, json: Update.build(self.diverst_request, params, base: item.updates)
   rescue => e

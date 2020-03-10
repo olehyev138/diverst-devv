@@ -200,6 +200,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
         </WithStyles(ForwardRef(Collapse))>
         <WithStyles(ForwardRef(ListItem))
           button={true}
+          onClick={[Function]}
         >
           <WithStyles(ForwardRef(ListItemIcon))>
             <AssignmentTurnedInIcon />
@@ -211,7 +212,34 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
               />
             }
           />
+          <ExpandMoreIcon />
         </WithStyles(ForwardRef(ListItem))>
+        <WithStyles(ForwardRef(Collapse))
+          in={false}
+          timeout="auto"
+          unmountOnExit={true}
+        >
+          <WithStyles(ForwardRef(List))
+            disablePadding={true}
+          >
+            <WithStyles(ForwardRef(MenuItem))
+              component={
+                Object {
+                  "$$typeof": Symbol(react.forward_ref),
+                  "render": [Function],
+                }
+              }
+              to="/admin/plan/budgeting"
+            >
+              <WithStyles(ForwardRef(ListItemIcon))>
+                <ListIcon />
+              </WithStyles(ForwardRef(ListItemIcon))>
+              <WithStyles(ForwardRef(ListItemText))>
+                Group Budgets
+              </WithStyles(ForwardRef(ListItemText))>
+            </WithStyles(ForwardRef(MenuItem))>
+          </WithStyles(ForwardRef(List))>
+        </WithStyles(ForwardRef(Collapse))>
         <WithStyles(ForwardRef(ListItem))
           button={true}
           onClick={[Function]}
@@ -614,6 +642,7 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
         </WithStyles(ForwardRef(Collapse))>
         <WithStyles(ForwardRef(ListItem))
           button={true}
+          onClick={[Function]}
         >
           <WithStyles(ForwardRef(ListItemIcon))>
             <AssignmentTurnedInIcon />
@@ -625,7 +654,34 @@ exports[`<AdminLinks /> should render and match the snapshot 1`] = `
               />
             }
           />
+          <ExpandMoreIcon />
         </WithStyles(ForwardRef(ListItem))>
+        <WithStyles(ForwardRef(Collapse))
+          in={false}
+          timeout="auto"
+          unmountOnExit={true}
+        >
+          <WithStyles(ForwardRef(List))
+            disablePadding={true}
+          >
+            <WithStyles(ForwardRef(MenuItem))
+              component={
+                Object {
+                  "$$typeof": Symbol(react.forward_ref),
+                  "render": [Function],
+                }
+              }
+              to="/admin/plan/budgeting"
+            >
+              <WithStyles(ForwardRef(ListItemIcon))>
+                <ListIcon />
+              </WithStyles(ForwardRef(ListItemIcon))>
+              <WithStyles(ForwardRef(ListItemText))>
+                Group Budgets
+              </WithStyles(ForwardRef(ListItemText))>
+            </WithStyles(ForwardRef(MenuItem))>
+          </WithStyles(ForwardRef(List))>
+        </WithStyles(ForwardRef(Collapse))>
         <WithStyles(ForwardRef(ListItem))
           button={true}
           onClick={[Function]}

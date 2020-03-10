@@ -143,8 +143,9 @@ RSpec.describe Budget, type: :model do
   end
 
   describe '#destroy_callbacks' do
-    let!(:group) { create(:group, annual_budget: 10000) }
-    let!(:budget) { create(:budget, group: group) }
+    let!(:group) { create(:group) }
+    let!(:annual_budget) { create(:annual_budget, group: group, amount: 10000) }
+    let!(:budget) { create(:budget, annual_budget: annual_budget) }
     let!(:checklist) { create(:checklist, budget: budget) }
     let!(:budget_item) { create(:budget_item, budget: budget) }
 
@@ -157,15 +158,16 @@ RSpec.describe Budget, type: :model do
     end
 
     it 'deducts approved budget from annual budget when budget is destroyed' do
-      annual_budget = create(:annual_budget, group: group, amount: group.annual_budget)
       budget.update(is_approved: true, annual_budget: annual_budget)
 
       expect(annual_budget.approved).to eq group.annual_budget_approved
 
       budget.destroy
+      group.reload
+      annual_budget.reload
 
       expect(group.annual_budget_approved).to eq 0
-      expect(annual_budget.reload.approved).to eq 0
+      expect(annual_budget.approved).to eq 0
     end
   end
 end

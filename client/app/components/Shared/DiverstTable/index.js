@@ -51,9 +51,13 @@ export function DiverstTable(props) {
   /* Store reference to table & use to refresh table when data changes */
   const ref = useRef();
   useEffect(() => {
-    if (ref.current)
+    if (ref.current && !props.static)
       ref.current.onQueryChange({ page: page(), pageSize: rowsPerPage() });
   }, [props.dataArray]);
+
+  const dataResolver = () => props.static
+    ? props.dataArray
+    : buildDataFunction(props.dataArray, page() || 0, props.dataTotal || 0);
 
   return (
     <div className={classes.materialTableContainer}>
@@ -66,7 +70,7 @@ export function DiverstTable(props) {
         onChangeRowsPerPage={handleChangeRowsPerPage}
         onOrderChange={handleOrderChange}
         onRowClick={props.handleRowClick}
-        data={buildDataFunction(props.dataArray, page() || 0, props.dataTotal || 0)}
+        data={dataResolver()}
         columns={props.columns}
         actions={props.actions}
         options={{
@@ -93,6 +97,7 @@ DiverstTable.propTypes = {
   page: PropTypes.number,
   rowsPerPage: PropTypes.number,
   params: PropTypes.object,
+  static: PropTypes.bool,
   my_options: PropTypes.object,
 };
 

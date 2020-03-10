@@ -1,7 +1,4 @@
 class AnnualBudgetSerializer < ApplicationRecordSerializer
-  attributes :enterprise, :group
-
-  def serialize_all_fields
-    true
-  end
+  attributes :id, :closed, :group_id, :amount, :approved, :expenses, :available, :remaining, :leftover,
+             :free, :reserved, :estimated, :unspent
 end
