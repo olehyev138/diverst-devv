@@ -19,8 +19,8 @@ import {
   UPDATE_SOCIALLINK_SUCCESS, UPDATE_SOCIALLINK_ERROR, CREATE_SOCIALLINK_COMMENT_BEGIN, CREATE_SOCIALLINK_COMMENT_SUCCESS,
   CREATE_SOCIALLINK_COMMENT_ERROR, DELETE_SOCIALLINK_ERROR, DELETE_SOCIALLINK_BEGIN, DELETE_SOCIALLINK_SUCCESS,
   DELETE_NEWSLINK_COMMENT_BEGIN, DELETE_NEWSLINK_COMMENT_ERROR, DELETE_NEWSLINK_COMMENT_SUCCESS, DELETE_GROUP_MESSAGE_COMMENT_BEGIN,
-  DELETE_GROUP_MESSAGE_COMMENT_ERROR, DELETE_GROUP_MESSAGE_COMMENT_SUCCESS
-} from 'containers/News/constants';
+  DELETE_GROUP_MESSAGE_COMMENT_ERROR, DELETE_GROUP_MESSAGE_COMMENT_SUCCESS,
+  ARCHIVE_NEWS_ITEM_BEGIN, ARCHIVE_NEWS_ITEM_ERROR, ARCHIVE_NEWS_ITEM_SUCCESS } from 'containers/News/constants';
 
 
 export function getNewsItemsBegin(payload) {
@@ -407,6 +407,27 @@ export function deleteNewsLinkCommentSuccess(payload) {
 export function deleteNewsLinkCommentError(error) {
   return {
     type: DELETE_NEWSLINK_COMMENT_ERROR,
+    error,
+  };
+}
+
+export function archiveNewsItemBegin(payload) {
+  return {
+    type: ARCHIVE_NEWS_ITEM_BEGIN,
+    payload,
+  };
+}
+
+export function archiveNewsItemSuccess(payload) {
+  return {
+    type: ARCHIVE_NEWS_ITEM_SUCCESS,
+    payload,
+  };
+}
+
+export function archiveNewsItemError(error) {
+  return {
+    type: ARCHIVE_NEWS_ITEM_ERROR,
     error,
   };
 }

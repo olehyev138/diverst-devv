@@ -43,6 +43,14 @@ class InitiativePolicy < GroupBasePolicy
     update?
   end
 
+  def archive?
+    update?
+  end
+
+  def un_archive?
+    update?
+  end
+
   # todo: fix and test
   def show_calendar?
     return true if @record.segments.empty?

@@ -13,6 +13,7 @@ import {
   UPDATE_EVENT_BEGIN,
   DELETE_EVENT_BEGIN,
   FINALIZE_EXPENSES_BEGIN,
+  ARCHIVE_EVENT_BEGIN
 } from './constants';
 
 import {
@@ -22,7 +23,9 @@ import {
   updateEventSuccess, updateEventError,
   deleteEventSuccess, deleteEventError,
   finalizeExpensesSuccess, finalizeExpensesError,
+  archiveEventError, archiveEventSuccess
 } from './actions';
+
 
 export function* getEvents(action) {
   try {
@@ -129,6 +132,23 @@ export function* deleteEvent(action) {
   }
 }
 
+export function* archiveEvent(action) {
+  try {
+    const payload = { initiative: action.payload };
+
+    const response = yield call(api.initiatives.archive.bind(api.initiatives), payload.initiative.id, payload);
+    yield put(archiveEventSuccess());
+    yield put(push(ROUTES.group.events.index.path(payload.initiative.group_id)));
+  } catch (err) {
+    // TODO: intl message
+    yield put(archiveEventError(err));
+    yield put(showSnackbar({
+      message: 'Failed to archive resource',
+      options: { variant: 'warning' }
+    }));
+  }
+}
+
 export function* finalizeExpenses(action) {
   try {
     const response = yield call(api.initiatives.finalizeExpenses.bind(api.initiatives), action.payload.id);
@@ -149,5 +169,6 @@ export default function* eventsSaga() {
   yield takeLatest(CREATE_EVENT_BEGIN, createEvent);
   yield takeLatest(UPDATE_EVENT_BEGIN, updateEvent);
   yield takeLatest(DELETE_EVENT_BEGIN, deleteEvent);
+  yield takeLatest(ARCHIVE_EVENT_BEGIN, archiveEvent);
   yield takeLatest(FINALIZE_EXPENSES_BEGIN, finalizeExpenses);
 }

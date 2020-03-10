@@ -17,6 +17,9 @@ import {
   UPDATE_EVENT_BEGIN,
   UPDATE_EVENT_SUCCESS,
   UPDATE_EVENT_ERROR,
+  ARCHIVE_EVENT_BEGIN,
+  ARCHIVE_EVENT_SUCCESS,
+  ARCHIVE_EVENT_ERROR,
   DELETE_EVENT_BEGIN,
   DELETE_EVENT_SUCCESS,
   DELETE_EVENT_ERROR,
@@ -25,6 +28,7 @@ import {
   FINALIZE_EXPENSES_ERROR,
   EVENTS_UNMOUNT,
 } from './constants';
+
 
 export function getEventsBegin(payload) {
   return {
@@ -164,5 +168,26 @@ export function eventsUnmount(payload) {
   return {
     type: EVENTS_UNMOUNT,
     payload,
+  };
+}
+
+export function archiveEventBegin(payload) {
+  return {
+    type: ARCHIVE_EVENT_BEGIN,
+    payload,
+  };
+}
+
+export function archiveEventSuccess(payload) {
+  return {
+    type: ARCHIVE_EVENT_SUCCESS,
+    payload,
+  };
+}
+
+export function archiveEventError(error) {
+  return {
+    type: ARCHIVE_EVENT_ERROR,
+    error,
   };
 }

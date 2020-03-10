@@ -23,6 +23,12 @@ Object.assign(Initiatives, {
   },
   createUpdates(id, payload) {
     return axios.post(`${this.url}/${id}/create_update`, payload);
+  },
+  archive(id, payload) {
+    return axios.post(`${this.url}/${id}/archive`, payload);
+  },
+  un_archive(id, payload) {
+    return axios.put(`${this.url}/${id}/un_archive`, payload);
   }
 });
 

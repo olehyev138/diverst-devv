@@ -18,6 +18,9 @@ import {
   CREATE_EVENT_ERROR,
   UPDATE_EVENT_ERROR,
   GET_EVENT_BEGIN,
+  ARCHIVE_EVENT_BEGIN,
+  ARCHIVE_EVENT_SUCCESS,
+  ARCHIVE_EVENT_ERROR,
   FINALIZE_EXPENSES_BEGIN,
   FINALIZE_EXPENSES_SUCCESS,
   FINALIZE_EXPENSES_ERROR,
@@ -30,6 +33,7 @@ export const initialState = {
   events: [],
   eventsTotal: null,
   currentEvent: null,
+  hasChanged: false,
 };
 
 /* eslint-disable default-case, no-param-reassign */
@@ -80,11 +84,20 @@ function eventsReducer(state = initialState, action) {
       case UPDATE_EVENT_SUCCESS:
       case UPDATE_EVENT_ERROR:
       case FINALIZE_EXPENSES_ERROR:
+      case ARCHIVE_EVENT_ERROR:
         draft.isCommitting = false;
         break;
 
       case EVENTS_UNMOUNT:
         return initialState;
+      case ARCHIVE_EVENT_BEGIN:
+        draft.isCommitting = true;
+        draft.hasChanged = false;
+        break;
+      case ARCHIVE_EVENT_SUCCESS:
+        draft.hasChanged = true;
+        draft.isCommitting = false;
+        break;
     }
   });
 }

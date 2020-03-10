@@ -1,6 +1,7 @@
 class Api::V1::InitiativesController < DiverstController
   include Api::V1::Concerns::DefinesFields
   include Api::V1::Concerns::Updatable
+  include Api::V1::Concerns::Archivable
 
   def generate_qr_code
     render status: 200, json: klass.generate_qr_code(diverst_request, params)

@@ -60,6 +60,9 @@ import GroupEditPage from 'containers/Group/GroupEditPage/Loadable';
 import SegmentListPage from 'containers/Segment/SegmentListPage/Loadable';
 import SegmentPage from 'containers/Segment/SegmentPage/Loadable';
 
+/* Admin - Manage - Archive */
+import ArchivesPage from 'containers/Archive/ArchivesPage/Loadable';
+
 /* Admin - System - Global Settings */
 import FieldsPage from 'containers/GlobalSettings/Field/FieldsPage/Loadable';
 import CustomTextEditPage from 'containers/GlobalSettings/CustomText/CustomTextEditPage/Loadable';
@@ -302,5 +305,6 @@ export {
   SocialLinkCreatePage,
   SocialLinkEditPage,
   NewsLinkPage,
-  UserDownloadsPage
+  UserDownloadsPage,
+  ArchivesPage
 };
