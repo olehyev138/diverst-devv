@@ -13,7 +13,7 @@ import {
   UPDATE_EVENT_BEGIN,
   DELETE_EVENT_BEGIN,
   FINALIZE_EXPENSES_BEGIN,
-  ARCHIVE_EVENT_BEGIN
+  ARCHIVE_EVENT_BEGIN, JOIN_EVENT_BEGIN
 } from './constants';
 
 import {
@@ -23,7 +23,8 @@ import {
   updateEventSuccess, updateEventError,
   deleteEventSuccess, deleteEventError,
   finalizeExpensesSuccess, finalizeExpensesError,
-  archiveEventError, archiveEventSuccess
+  archiveEventError, archiveEventSuccess,
+  joinEventError, joinEventSuccess
 } from './actions';
 
 
@@ -163,6 +164,18 @@ export function* finalizeExpenses(action) {
   }
 }
 
+export function* joinEvent(action) {
+  try {
+    const response = yield call(api.initiatives.finalizeExpenses.bind(api.initiatives), action.payload.id);
+    //TODO : Complete the actual action
+  } catch (err) {
+    yield put(joinEventError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to join event', options: { variant: 'warning' } }));
+  }
+}
+
 export default function* eventsSaga() {
   yield takeLatest(GET_EVENTS_BEGIN, getEvents);
   yield takeLatest(GET_EVENT_BEGIN, getEvent);
@@ -171,4 +184,5 @@ export default function* eventsSaga() {
   yield takeLatest(DELETE_EVENT_BEGIN, deleteEvent);
   yield takeLatest(ARCHIVE_EVENT_BEGIN, archiveEvent);
   yield takeLatest(FINALIZE_EXPENSES_BEGIN, finalizeExpenses);
+  yield takeLatest(JOIN_EVENT_BEGIN, joinEvent);
 }
