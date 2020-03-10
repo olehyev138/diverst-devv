@@ -17,7 +17,7 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { selectGroup } from 'containers/Group/selectors';
 import { selectUser } from 'containers/Shared/App/selectors';
-import { selectEvent, selectIsCommitting, selectIsFormLoading } from 'containers/Event/selectors';
+import { selectFormEvent, selectIsCommitting, selectIsFormLoading } from 'containers/Event/selectors';
 
 import {
   getEventBegin, updateEventBegin,
@@ -78,7 +78,7 @@ EventEditPage.propTypes = {
 const mapStateToProps = createStructuredSelector({
   currentGroup: selectGroup(),
   currentUser: selectUser(),
-  currentEvent: selectEvent(),
+  currentEvent: selectFormEvent(),
   isCommitting: selectIsCommitting(),
   isFormLoading: selectIsFormLoading(),
 });

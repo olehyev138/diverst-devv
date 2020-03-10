@@ -68,7 +68,7 @@ module BaseController
 
   def payload
     params.require(klass.symbol).permit(
-      klass.attribute_names - ['id', 'created_at', 'updated_at', 'enterprise_id']
+      klass.attribute_names - ['id', 'created_at', 'updated_at', 'enterprise_id', 'owner_id']
     )
   end
 

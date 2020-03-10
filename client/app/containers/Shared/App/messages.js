@@ -78,6 +78,17 @@ export default defineMessages({
       id: `${scope}.confirmation.no`
     }
   },
+  currency: {
+    placement: {
+      id: `${scope}.currency.placement`
+    },
+    symbol: {
+      id: `${scope}.currency.symbol`
+    },
+    defaultSymbol: {
+      id: `${scope}.currency.defaultSymbol`
+    }
+  },
   person: {
     givenName: {
       id: `${scope}.person.givenName`

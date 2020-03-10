@@ -331,6 +331,27 @@ export const ROUTES = {
               data: {
                 titleMessage: messages.groups.plan.events.manage.updates.new,
               }
+            },
+          },
+          expenses: {
+            index: {
+              path: (groupId = ':group_id', eventId = ':event_id') => `/groups/${groupId}/plan/events/${eventId}/manage/expenses`,
+              data: {
+                titleMessage: messages.groups.plan.events.manage.expenses.index,
+              }
+            },
+            edit: {
+              path:
+                (groupId = ':group_id', eventId = ':event_id', expensesId = ':expenses_id') => `/groups/${groupId}/plan/events/${eventId}/manage/expenses/${expensesId}/edit`,
+              data: {
+                titleMessage: messages.groups.plan.events.manage.expenses.edit,
+              }
+            },
+            new: {
+              path: (groupId = ':group_id', eventId = ':event_id') => `/groups/${groupId}/plan/events/${eventId}/manage/expenses/new`,
+              data: {
+                titleMessage: messages.groups.plan.events.manage.expenses.new,
+              }
             }
           },
         },
@@ -379,6 +400,46 @@ export const ROUTES = {
               titleMessage: messages.groups.plan.kpi.updates.new,
             }
           }
+        },
+      },
+      budget: {
+        index: {
+          data: {
+            pathPrefix: (groupId = ':group_id') => `/groups/${groupId}/plan/budgeting`,
+            titleMessage: messages.groups.plan.budget.index
+          },
+        },
+        editAnnualBudget: {
+          path: (groupId = ':group_id') => `/groups/${groupId}/plan/budgeting/edit_annual_budget`,
+          data: {
+            titleMessage: messages.groups.plan.budget.editAnnualBudget,
+          }
+        },
+        overview: {
+          path: (groupId = ':group_id') => `/groups/${groupId}/plan/budgeting/overview`,
+          data: {
+            titleMessage: messages.groups.plan.budget.overview,
+          }
+        },
+        budgets: {
+          index: {
+            path: (groupId = ':group_id', annualBudgetId = ':annual_budget_id') => `/groups/${groupId}/plan/budgeting/${annualBudgetId}/budgets`,
+            data: {
+              titleMessage: messages.groups.plan.budget.budgets.index,
+            }
+          },
+          new: {
+            path: (groupId = ':group_id', annualBudgetId = ':annual_budget_id') => `/groups/${groupId}/plan/budgeting/${annualBudgetId}/budgets/new`,
+            data: {
+              titleMessage: messages.groups.plan.budget.budgets.new,
+            }
+          },
+          show: {
+            path: (groupId = ':group_id', annualBudgetId = ':annual_budget_id', budgetId = ':budget_id') => `/groups/${groupId}/plan/budgeting/${annualBudgetId}/budgets/${budgetId}`,
+            data: {
+              titleMessage: messages.groups.plan.budget.budgets.show,
+            }
+          },
         },
       },
     },
@@ -597,14 +658,33 @@ export const ROUTES = {
             }
           },
         },
-      }
+      },
+      archived: {
+        index: {
+          path: () => '/admin/manage/archived',
+          data: {
+            titleMessage: messages.admin.manage.archived,
+          }
+        }
+      },
     },
     plan: {
       index: {
         data: {
+          pathPrefix: '/admin/plan',
           titleMessage: messages.admin.plan.index
         }
-      }
+      },
+      budgeting: {
+        pathPrefix: '/admin/plan/budgeting',
+        index: {
+          path: () => '/admin/plan/budgeting',
+          data: {
+            permission: 'groups_index',
+            titleMessage: messages.admin.manage.groups,
+          }
+        },
+      },
     },
     include: {
       index: {
@@ -698,6 +778,14 @@ export const ROUTES = {
           edit: {
             path: (roleId = ':role_id') => `/admin/system/users/roles/${roleId}/edit`,
           },
+        },
+        policy_templates: {
+          index: {
+            path: () => '/admin/system/users/policy_templates'
+          },
+          edit: {
+            path: (policyId = ':policy_id') => `/admin/system/users/policy_templates/${policyId}/edit`
+          },
         }
       },
       globalSettings: {
@@ -738,7 +826,7 @@ export const ROUTES = {
           edit: {
             path: (eventId = ':event_id') => `/admin/system/settings/emailEvents/${eventId}/edit`
           },
-        }
+        },
       },
       branding: {
         index: {

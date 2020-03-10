@@ -9,7 +9,7 @@ after 'development:groups' do
 
           if requester
             budget = Budget.create(requester_id: requester.id,
-                                   group_id: group.id,
+                                   deprecated_group_id: group.id,
                                    is_approved: true,
                                    description: "Budget for #{group.name}'s events",
                                    annual_budget_id: annual_budget_id)
@@ -20,7 +20,7 @@ after 'development:groups' do
                                 title: "Event for #{group.name}",
                                 is_private: false,
                                 estimated_amount: amount,
-                                available_amount: amount)
+                                deprecated_available_amount: amount)
             end
           end
         end

@@ -8,7 +8,6 @@ class Initiative < ApplicationRecord
 
   attr_accessor :associated_budget_id, :skip_allocate_budget_funds, :from, :to
 
-  belongs_to :pillar
   belongs_to :owner, class_name: 'User'
   has_many :updates, as: :updatable, dependent: :destroy
   has_many :fields,
@@ -40,8 +39,6 @@ class Initiative < ApplicationRecord
   has_many :checklist_items, dependent: :destroy
   accepts_nested_attributes_for :checklist_items, reject_if: :all_blank, allow_destroy: true
 
-  belongs_to :owner_group, class_name: 'Group'
-
   has_many :initiative_segments, dependent: :destroy
   has_many :segments, through: :initiative_segments
   has_many :initiative_participating_groups, dependent: :destroy
@@ -54,7 +51,10 @@ class Initiative < ApplicationRecord
   has_many :initiative_users, dependent: :destroy
   has_many :attendees, through: :initiative_users, source: :user
 
+  belongs_to :owner_group, class_name: 'Group'
+  belongs_to :pillar
   has_one :outcome, through: :pillar
+  has_one :group, through: :outcome
 
   scope :starts_between, ->(from, to) { where('start >= ? AND start <= ?', from, to) }
   scope :past, -> { where('end < ?', Time.current).order(start: :desc) }
@@ -67,13 +67,20 @@ class Initiative < ApplicationRecord
     joins('LEFT JOIN initiative_segments ON initiative_segments.initiative_id = initiatives.id')
     .where(initiative_conditions.join(' OR '))
   }
+  scope :of_annual_budget, ->(budget_id) {
+    joins(:annual_budget).where('`annual_budgets`.`id` = ?', budget_id)
+  }
   scope :order_recent, -> { order(start: :desc) }
 
   scope :finalized, -> { where(finished_expenses: false) }
   scope :active, -> { where(finished_expenses: false) }
 
+  scope :not_archived, -> { where(archived_at: nil) }
+  scope :archived, -> { where.not(archived_at: nil) }
+
   # we don't want to run this callback when finish_expenses! is triggered in initiatives_controller.rb, finish_expense action
   validate -> { allocate_budget_funds unless skip_allocate_budget_funds }
+  validate -> { budget_item_is_approved }
 
   # ActiveStorage
   has_one_attached :picture
@@ -159,10 +166,6 @@ class Initiative < ApplicationRecord
     self.send(date_type).blank? ? '' : self.send(date_type).to_s(:reversed_slashes)
   end
 
-  def group
-    owner_group || pillar.outcome.group
-  end
-
   def enterprise
     group.enterprise
   end
@@ -173,6 +176,10 @@ class Initiative < ApplicationRecord
 
   def enterprise_id
     enterprise.id
+  end
+
+  def annual_budget_id
+    annual_budget&.id
   end
 
   # need to trunc several special characters here
@@ -216,7 +223,6 @@ class Initiative < ApplicationRecord
   def finish_expenses!
     return false if finished_expenses?
 
-    estimated_amount = current_expenses_sum
     self.update(finished_expenses: true)
   end
 
@@ -429,12 +435,16 @@ class Initiative < ApplicationRecord
     end
   end
 
+  def budget_item_is_approved
+    errors.add(:budget_item, 'Budget Item is not approved') unless budget_item.blank? || budget.is_approved?
+  end
+
   def allocate_budget_funds
     self.estimated_funding = 0.0 if self.estimated_funding.nil?
 
     temp = estimated_funding
     update_column(:estimated_funding, 0) unless new_record?
-    estimated_funding = temp
+    self.estimated_funding = temp
 
     if budget_item.present? && estimated_funding > budget_item.available_amount
       errors.add(:budget_item_id, 'sorry, this budget doesn\'t have the sufficient funds')

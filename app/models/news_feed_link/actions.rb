@@ -4,8 +4,12 @@ module NewsFeedLink::Actions
   end
 
   module ClassMethods
+    def base_left_joins
+      [:group_message, :news_link, :social_link]
+    end
+
     def valid_scopes
-      ['approved', 'pending', 'combined_news_links']
+      ['approved', 'pending', 'combined_news_links', 'not_archived', 'archived']
     end
 
     def base_preloads

@@ -18,7 +18,7 @@ RSpec.describe InitiativeComment, type: :model do
   describe 'test instance and class methods' do
     context '#group' do
       let!(:group) { create(:group) }
-      let!(:initiative) { create(:initiative, owner_group_id: group.id) }
+      let!(:initiative) { create(:initiative, owner_group: group) }
       let!(:initiative_comment) { create(:initiative_comment, initiative_id: initiative.id) }
 
       it 'returns group belonging to initiative' do

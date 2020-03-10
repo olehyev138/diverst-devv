@@ -76,6 +76,8 @@ class NewsFeedLink < ApplicationRecord
       includes(:news_link, :group_message)
     end
   }
+  scope :not_archived, -> { where(archived_at: nil) }
+  scope :archived, -> { where.not(archived_at: nil) }
 
   scope :filter_posts, -> (social_enabled: false) {
     if social_enabled

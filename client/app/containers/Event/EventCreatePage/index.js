@@ -1,8 +1,10 @@
-import React, { memo, useEffect, useContext } from 'react';
+import React, { memo, useEffect, useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
+
+import { Button } from '@material-ui/core';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
@@ -27,6 +29,8 @@ export function EventCreatePage(props) {
   useInjectReducer({ key: 'events', reducer });
   useInjectSaga({ key: 'events', saga });
 
+  useEffect(() => () => {}, []);
+
   const { currentUser, currentGroup } = props;
   const rs = new RouteService(useContext);
   const links = {
@@ -34,17 +38,17 @@ export function EventCreatePage(props) {
   };
   const { intl } = props;
 
-  useEffect(() => () => props.eventsUnmount(), []);
-
   return (
-    <EventForm
-      eventAction={props.createEventBegin}
-      isCommitting={props.isCommitting}
-      buttonText={intl.formatMessage(messages.create)}
-      currentUser={currentUser}
-      currentGroup={currentGroup}
-      links={links}
-    />
+    <React.Fragment>
+      <EventForm
+        eventAction={props.createEventBegin}
+        isCommitting={props.isCommitting}
+        buttonText={intl.formatMessage(messages.create)}
+        currentUser={currentUser}
+        currentGroup={currentGroup}
+        links={links}
+      />
+    </React.Fragment>
   );
 }
 

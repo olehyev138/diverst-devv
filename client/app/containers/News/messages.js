@@ -12,9 +12,6 @@ export default defineMessages({
   new: {
     id: `${scope}.index.button.group_message.new`,
   },
-  approve: {
-    id: `${scope}.index.button.approve`,
-  },
   comments: {
     id: `${scope}.index.button.comments`,
   },
@@ -23,6 +20,12 @@ export default defineMessages({
   },
   delete: {
     id: `${scope}.index.button.delete`,
+  },
+  archive: {
+    id: `${scope}.index.button.archive`,
+  },
+  approve: {
+    id: `${scope}.index.button.approve`,
   },
   group_delete_confirm: {
     id: `${scope}.index.button.group.delete_confirm`,

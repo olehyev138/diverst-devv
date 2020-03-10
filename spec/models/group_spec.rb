@@ -567,11 +567,16 @@ RSpec.describe Group, type: :model do
   end
 
   describe '#approved' do
-    it 'returns 0' do
+    it 'returns 0 with annual budget' do
       group = build(:group)
+      group.create_annual_budget
       expect(group.annual_budget_approved).to eq(0)
     end
 
+    it 'returns nil without annual budget' do
+      group = build(:group)
+      expect(group.annual_budget_approved).to eq(nil)
+    end
     it 'returns approved budget' do
       group = create(:group, annual_budget: 2000)
       annual_budget = create(:annual_budget, group: group, closed: false, amount: 2000)
@@ -583,9 +588,15 @@ RSpec.describe Group, type: :model do
   end
 
   describe '#available' do
-    it 'returns 0' do
+    it 'returns 0 with annual budget' do
       group = build(:group)
+      group.create_annual_budget
       expect(group.annual_budget_available).to eq(0)
+    end
+
+    it 'returns nil without annual budget' do
+      group = build(:group)
+      expect(group.annual_budget_available).to eq(nil)
     end
 
     it 'returns available budget' do
@@ -599,15 +610,21 @@ RSpec.describe Group, type: :model do
 
 
   describe '#expenses' do
-    it 'returns 0' do
+    it 'returns 0 with annual expenses' do
       group = build(:group)
+      group.create_annual_budget
       expect(group.annual_budget_expenses).to eq(0)
     end
 
+    it 'returns nil without annual budget' do
+      group = build(:group)
+      expect(group.annual_budget_expenses).to eq(nil)
+    end
+
     it 'returns expenses budget' do
-      group = create(:group, annual_budget: 10000)
-      annual_budget = create(:annual_budget, group: group, closed: false, amount: group.annual_budget)
-      budget = create(:approved, group_id: group.id, annual_budget_id: annual_budget.id)
+      group = create(:group)
+      annual_budget = create(:annual_budget, group: group, closed: false, amount: 10000)
+      budget = create(:approved, annual_budget_id: annual_budget.id)
       initiative = create(:initiative, owner_group: group,
                                        estimated_funding: budget.budget_items.first.available_amount,
                                        budget_item_id: budget.budget_items.first.id)
