@@ -55,7 +55,6 @@ const styles = theme => ({
 export function Event(props) {
   const { classes, intl } = props;
   const event = dig(props, 'event');
-
   return (
     <DiverstShowLoader isLoading={props.isFormLoading} isError={!props.isFormLoading && !event}>
       {event && (
@@ -116,7 +115,7 @@ export function Event(props) {
                 color='primary'
                 className={classes.buttons}
                 onClick={() => {
-                  props.archiveEventBegin({
+                  props.joinEventBegin({
                     id: props.event.id,
                     group_id: event.owner_group_id
                   });
@@ -166,6 +165,7 @@ Event.propTypes = {
   intl: intlShape,
   deleteEventBegin: PropTypes.func,
   archiveEventBegin: PropTypes.func,
+  joinEventBegin: PropTypes.func,
   classes: PropTypes.object,
   event: PropTypes.object,
   currentUserId: PropTypes.number,

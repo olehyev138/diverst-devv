@@ -24,10 +24,8 @@ import {
   deleteEventSuccess, deleteEventError,
   finalizeExpensesSuccess, finalizeExpensesError,
   archiveEventError, archiveEventSuccess,
-  joinEventError, joinEventSuccess
+  joinEventError, joinEventSuccess,
 } from './actions';
-import {act} from "react-testing-library";
-
 
 export function* getEvents(action) {
   try {

@@ -26,7 +26,7 @@ import {
   FINALIZE_EXPENSES_BEGIN,
   FINALIZE_EXPENSES_SUCCESS,
   FINALIZE_EXPENSES_ERROR,
-  EVENTS_UNMOUNT, JOIN_EVENT_ERROR, JOIN_EVENT_SUCCESS,
+  EVENTS_UNMOUNT, JOIN_EVENT_ERROR, JOIN_EVENT_SUCCESS, JOIN_EVENT_BEGIN,
 } from './constants';
 
 
@@ -194,7 +194,7 @@ export function archiveEventError(error) {
 
 export function joinEventBegin(payload) {
   return {
-    type: JOIN_EVENT_ERROR,
+    type: JOIN_EVENT_BEGIN,
     payload,
   };
 }
