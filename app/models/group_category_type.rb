@@ -7,7 +7,7 @@ class GroupCategoryType < ApplicationRecord
   validates_length_of :name, maximum: 191
   validates :name, presence: true
   validates :name, uniqueness: true
-  accepts_nested_attributes_for :group_categories
+  accepts_nested_attributes_for :group_categories, allow_destroy: true
 
   after_save :create_association_with_enterprise, on: [:create, :update]
 

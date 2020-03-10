@@ -31,16 +31,22 @@ export function* getGroupCategories(action) {
 }
 export function* createGroupCategories(action) {
   try {
-    const payload = { group: action.payload };
+    console.log('saga');
+    console.log(action);
+
+    const payload = { group_category_type: action.payload };
 
     // TODO: use bind here or no?
     const response = yield call(api.groupCategoryTypes.create.bind(api.groupCategoryTypes), payload);
-    const response2 = yield call(api.groupCategories.create.bind(api.groupCategories), payload);
+    // const response2 = yield call(api.groupCategories.create.bind(api.groupCategories), payload);
 
-    yield put(createGroupCategoriesSuccess());
-    yield put(push(ROUTES.admin.manage.groups.categories.index.path()));
-    yield put(showSnackbar({ message: 'Group categories created', options: { variant: 'success' } }));
+    // yield put(createGroupCategoriesSuccess());
+    // yield put(push(ROUTES.admin.manage.groups.categories.index.path()));
+    // yield put(showSnackbar({ message: 'Group categories created', options: { variant: 'success' } }));
+
   } catch (err) {
+    console.log(err);
+    console.log(err.response);
     yield put(createGroupCategoriesError(err));
 
     // TODO: intl message

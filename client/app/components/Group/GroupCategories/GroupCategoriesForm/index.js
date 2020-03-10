@@ -37,101 +37,93 @@ const styles = theme => ({
 });
 
 /* eslint-disable object-curly-newline */
-export function GroupCategoriesFormInner({ classes, handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
+export function GroupCategoriesFormInner({ classes, values, handleChange, buttonText, setFieldValue, setFieldTouched, ...props }) {
   return (
-    <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.group}>
+    <DiverstFormLoader isLoading={props.isFormLoading}>
       <Card>
-        <Formik
-          initialValues={{ catgory_labels: [] }}
-          onSubmit={values => setTimeout(() => {
-            alert(JSON.stringify(values, null, 2));
-          }, 500)
-          }
-          render={({ values }) => (
-            <Form>
-              <CardContent>
-                <Field
-                  component={TextField}
-                  onChange={handleChange}
-                  fullWidth
-                  disabled={props.isCommitting}
-                  id='name'
-                  name='name'
-                  margin='normal'
-                  label='Category Name'
-                  value={values.name}
-                />
-                <Typography>Category Labels </Typography>
-                <br />
-                <FieldArray
-                  name='catgory_labels'
-                  render={arrayHelpers => (
-                    <div>
-                      {values.catgory_labels && values.catgory_labels.length > 0 ? (
-                        values.catgory_labels.map((friend, index) => (
-                          // eslint-disable-next-line react/no-array-index-key
-                          <div key={index}>
-                            <Field name={`catgory_labels.${index}`} />
-                            <button
-                              type='button'
-                              onClick={() => arrayHelpers.remove(index)} // remove a friend from the list
-                            >
-                              -
-                            </button>
-                            <button
-                              type='button'
-                              onClick={() => arrayHelpers.insert(index, '')} // insert an empty string at a position
-                            >
-                              +
-                            </button>
-                          </div>
-                        ))
-                      ) : (
-                        <button type='button' onClick={() => arrayHelpers.push('')}>
-                          {/* show this when user has removed all friends from the list */}
-                          Add a Category
+        <Form>
+          <CardContent>
+            <Field
+              component={TextField}
+              onChange={handleChange}
+              fullWidth
+              disabled={props.isCommitting}
+              id='name'
+              name='name'
+              margin='normal'
+              label='Category Name'
+              value={values.name}
+            />
+            <Typography>Category Labels </Typography>
+            <br />
+            <FieldArray
+
+              name='group_categories_attributes'
+              render={arrayHelpers => (
+                <div>
+                  {values.group_categories_attributes && values.group_categories_attributes.length > 0 ? (
+                    values.group_categories_attributes.map((category, index) => (
+                      // eslint-disable-next-line react/no-array-index-key
+                      <div key={index}>
+                        <Field name={`group_categories_attributes.${index}.name`} />
+                        <button
+                          type='button'
+                          onClick={() => arrayHelpers.remove(index)} // remove a friend from the list
+                        >
+                          -
                         </button>
-                      )}
-                    </div>
+                        <button
+                          type='button'
+                          onClick={() => arrayHelpers.insert(index, { name: '', id: '', _destroy: false })} // insert an empty string at a position
+                        >
+                          +
+                        </button>
+                      </div>
+                    ))
+                  ) : (
+                    <button type='button' onClick={() => arrayHelpers.push({ name: '', id: '', _destroy: false })}>
+                      {/* show this when user has removed all friends from the list */}
+                      Add a Category
+                    </button>
                   )}
-                />
-              </CardContent>
-              <Divider />
-              <CardActions>
-                <DiverstSubmit isCommitting={props.isCommitting}>
-                  {buttonText}
-                </DiverstSubmit>
-                <Button
-                  disabled={props.isCommitting}
-                  // to={props.links.cancelLink}
-                  component={dig(props, 'links', 'cancelLink') ? WrappedNavLink : 'button'}
-                >
-                  <DiverstFormattedMessage {...messages.cancel} />
-                </Button>
-              </CardActions>
-            </Form>
-          )}
-        />
+                </div>
+              )}
+            />
+          </CardContent>
+          <Divider />
+          <CardActions>
+            <DiverstSubmit isCommitting={props.isCommitting}>
+              {buttonText}
+            </DiverstSubmit>
+            <Button
+              disabled={props.isCommitting}
+              // to={props.links.cancelLink}
+              component={dig(props, 'links', 'cancelLink') ? WrappedNavLink : 'button'}
+            >
+              <DiverstFormattedMessage {...messages.cancel} />
+            </Button>
+          </CardActions>
+        </Form>
       </Card>
     </DiverstFormLoader>
   );
 }
 
 export function GroupCategoriesForm(props) {
-  const initialValues = buildValues(props.group, {
+  const initialValues = buildValues(props.groupCategories, {
+    id: { default: '' },
     name: { default: '' },
-    short_description: { default: '' },
-    description: { default: '' },
-    parent: { default: '', customKey: 'parent_id' },
-    children: { default: [], customKey: 'child_ids' }
+    group_categories_attributes: { default: [] }
   });
+  console.log('component');
+  console.log(props);
 
   return (
     <Formik
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        props.groupAction(mapFields(values, ['child_ids', 'parent_id']));
+        props.groupCategoriesAction(mapFields(values, ['id']));
       }}
     >
       {formikProps => <GroupCategoriesFormInner {...props} {...formikProps} />}
@@ -140,24 +132,25 @@ export function GroupCategoriesForm(props) {
 }
 
 GroupCategoriesForm.propTypes = {
-  edit: PropTypes.bool,
-  groupAction: PropTypes.func,
-  group: PropTypes.object,
+  groupCategoriesAction: PropTypes.func,
+  groupCategories: PropTypes.object,
   isCommitting: PropTypes.bool,
   isFormLoading: PropTypes.bool,
+  categories: PropTypes.array,
+  currentUser: PropTypes.object,
+  currentEnterprise: PropTypes.object,
 };
 
 GroupCategoriesFormInner.propTypes = {
-  edit: PropTypes.bool,
-  group: PropTypes.object,
-  classes: PropTypes.object,
-  handleSubmit: PropTypes.func,
+  groupCategories: PropTypes.object,
   handleChange: PropTypes.func,
-  handleBlur: PropTypes.func,
+  classes: PropTypes.object,
   values: PropTypes.object,
   buttonText: PropTypes.string,
-  selectGroups: PropTypes.array,
-  getGroupsBegin: PropTypes.func,
+  categories: PropTypes.array,
+  getGroupCategoriesBegin: PropTypes.func,
+  formikProps: PropTypes.object,
+  arrayHelpers: PropTypes.object,
   setFieldValue: PropTypes.func,
   setFieldTouched: PropTypes.func,
   isCommitting: PropTypes.bool,

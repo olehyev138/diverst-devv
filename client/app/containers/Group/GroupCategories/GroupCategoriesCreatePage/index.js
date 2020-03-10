@@ -9,8 +9,9 @@ import { useInjectReducer } from 'utils/injectReducer';
 import saga from 'containers/Group/GroupCategories/saga';
 import reducer from 'containers/Group/GroupCategories/reducer';
 
-import { getGroupCategoriesBegin, categoriesUnmount } from 'containers/Group/GroupCategories/actions';
-import { selectPaginatedGroupCategories, selectGroupCategoriesTotal, selectGroupCategoriesIsLoading } from 'containers/Group/GroupCategories/selectors';
+import { createGroupCategoriesBegin, getGroupCategoriesBegin, categoriesUnmount } from 'containers/Group/GroupCategories/actions';
+import { selectPaginatedGroupCategories, selectGroupCategoriesIsCommitting } from 'containers/Group/GroupCategories/selectors';
+import { selectUser, selectEnterprise } from 'containers/Shared/App/selectors';
 import GroupCategoriesForm from 'components/Group/GroupCategories/GroupCategoriesForm';
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Group/messages';
@@ -20,13 +21,15 @@ export function GroupCategoriesCreatePage(props) {
   useInjectSaga({ key: 'groups', saga });
   const { intl } = props;
   useEffect(() => () => props.categoriesUnmount(), []);
+  console.log('container');
+  console.log(props);
 
   return (
     <GroupCategoriesForm
-      // groupAction={props.createGroupBegin}
+      groupCategoriesAction={props.createGroupCategoriesBegin}
       buttonText='Create'
-      getGroupsBegin={props.getGroupCategoriesBegin}
-      selectGroups={props.groups}
+      getGroupCategoriesBegin={props.getGroupCategoriesBegin}
+      categories={props.categories}
       isCommitting={props.isCommitting}
     />
   );
@@ -34,20 +37,22 @@ export function GroupCategoriesCreatePage(props) {
 
 GroupCategoriesCreatePage.propTypes = {
   intl: intlShape,
-  createGroupBegin: PropTypes.func,
+  createGroupCategoriesBegin: PropTypes.func,
   getGroupCategoriesBegin: PropTypes.func,
   categoriesUnmount: PropTypes.func,
-  groups: PropTypes.array,
+  categories: PropTypes.array,
   isCommitting: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
-  // groups: selectPaginatedSelectGroups(),
-  // isCommitting: selectGroupIsCommitting(),
+  currentUser: selectUser(),
+  groupCategories: selectPaginatedGroupCategories(),
+  currentEnterprise: selectEnterprise(),
+  isCommitting: selectGroupCategoriesIsCommitting(),
 });
 
 const mapDispatchToProps = {
-  // createGroupBegin,
+  createGroupCategoriesBegin,
   getGroupCategoriesBegin,
   categoriesUnmount
 };
