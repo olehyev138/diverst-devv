@@ -10,13 +10,13 @@ class GroupsField < Field
   def format_value_name(value)
     Group.find(value).name
   rescue
-    'Deleted ERG'
+    "Deleted #{self.enterprise.custom_text.erg.pluralize}"
   end
 
   private
 
   def init
-    self.title = 'ERGs'
+    self.title = "#{self.enterprise.custom_text.erg.pluralize}"
     self.elasticsearch_only = true
   end
 end

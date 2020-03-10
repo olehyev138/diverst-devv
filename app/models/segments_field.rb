@@ -14,7 +14,7 @@ class SegmentsField < Field
   private
 
   def init
-    self.title = 'Segments'
+    self.title = "#{self.enterprise.custom_text.segment.pluralize}"
     self.elasticsearch_only = true
   end
 end
