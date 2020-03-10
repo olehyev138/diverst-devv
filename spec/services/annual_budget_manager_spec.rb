@@ -104,12 +104,12 @@ RSpec.describe AnnualBudgetManager, type: :service, skip: 'DEPRECATED' do
     end
   end
 
-  describe '#carry_over!' do
+  describe '#carryover!' do
     context 'when group.annual_budget is either 0 or nil' do
       let!(:group1) { create(:group, enterprise: enterprise) }
 
       it 'returns nil on reset' do
-        expect(AnnualBudgetManager.new(group1).carry_over!).to eq nil
+        expect(AnnualBudgetManager.new(group1).carryover!).to eq nil
       end
     end
 
@@ -128,7 +128,7 @@ RSpec.describe AnnualBudgetManager, type: :service, skip: 'DEPRECATED' do
         expect(group.annual_budgets.count).to eq 1
         expect(annual_budget.leftover_money).to eq group.annual_budget_remaining
 
-        AnnualBudgetManager.new(group).carry_over!
+        AnnualBudgetManager.new(group).carryover!
 
         annual_budget.reload
         expect(group.annual_budgets.count).to eq 2
@@ -146,11 +146,11 @@ RSpec.describe AnnualBudgetManager, type: :service, skip: 'DEPRECATED' do
 
     before do
       initiative.finish_expenses!
-      AnnualBudgetManager.new(group).carry_over!
+      AnnualBudgetManager.new(group).carryover!
     end
 
     context 'when initiative annual_budget is not equal to annual_budget of selected budget_item' do
-      # the second annual_budget is gotten from calling carry_over on AnnualBudgetManager
+      # the second annual_budget is gotten from calling carryover on AnnualBudgetManager
       let!(:annual_budget1) { group.annual_budgets.find_by(closed: false) }
       let!(:budget1) { create(:approved, group_id: group.id, annual_budget_id: annual_budget1.id) }
       let!(:initiative1) { create(:initiative, owner_group: group, estimated_funding: budget1.budget_items.first.available_amount,

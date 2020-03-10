@@ -154,6 +154,7 @@ GroupMessageListItem.propTypes = {
   }),
   deleteGroupMessageBegin: PropTypes.func,
   updateNewsItemBegin: PropTypes.func,
+  archiveNewsItemBegin: PropTypes.func,
 };
 
 export default compose(

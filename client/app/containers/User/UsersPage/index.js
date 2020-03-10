@@ -116,7 +116,6 @@ export function UserListPage(props) {
         handleChangeScope={handleChangeScope}
         exportUsers={exportUsers}
         links={links}
-
         userType={type}
         UserTypes={UserTypes}
       />
@@ -132,7 +131,7 @@ UserListPage.propTypes = {
   deleteUserBegin: PropTypes.func,
   exportUsersBegin: PropTypes.func,
   userUnmount: PropTypes.func.isRequired,
-  handleVisitUserEdit: PropTypes.func,
+  handleVisitUserEdit: PropTypes.func
 };
 
 const mapStateToProps = createStructuredSelector({

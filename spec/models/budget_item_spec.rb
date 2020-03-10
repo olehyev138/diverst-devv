@@ -26,7 +26,7 @@ RSpec.describe BudgetItem, type: :model do
       expect(budget_item.errors.full_messages.first).to eq('Estimated amount number of digits must not exceed 6')
     end
 
-    it 'requires available_amount to be less_than_or_equal_to estimated_amount' do
+    it 'requires available_amount to be less_than_or_equal_to estimated_amount', skip: 'Available Amount Deprecated' do
       budget_item.estimated_amount = 1
       budget_item.available_amount = 2
       expect(budget_item).to_not be_valid
@@ -48,7 +48,7 @@ RSpec.describe BudgetItem, type: :model do
         budget_item.available_amount = 1000
       end
 
-      it 'is invalid when greater than estimated_amount' do
+      it 'is invalid when greater than estimated_amount', skip: 'Available Amount Deprecated' do
         expect(budget_item).to_not be_valid
       end
     end

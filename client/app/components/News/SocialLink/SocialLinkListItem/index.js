@@ -63,14 +63,35 @@ export function SocialLinkListItem(props) {
       </CardContent>
       <CardActions>
         {!props.readonly && (
-          <Button
-            size='small'
-            color='primary'
-            to={links.socialLinkEdit(newsItem.id)}
-            component={WrappedNavLink}
-          >
-            <DiverstFormattedMessage {...messages.edit} />
-          </Button>
+          <React.Fragment>
+            <Button
+              size='small'
+              color='primary'
+              to={links.socialLinkEdit(newsItem.id)}
+              component={WrappedNavLink}
+            >
+              <DiverstFormattedMessage {...messages.edit} />
+            </Button>
+            <Button
+              size='small'
+              color='primary'
+              onClick={() => {
+                props.archiveNewsItemBegin({ id: newsItemId });
+              }}
+            >
+              <DiverstFormattedMessage {...messages.archive} />
+            </Button>
+            <Button
+              size='small'
+              onClick={() => {
+                /* eslint-disable-next-line no-alert, no-restricted-globals */
+                if (confirm('Delete social link?'))
+                  props.deleteSocialLinkBegin(newsItem.social_link);
+              }}
+            >
+    Delete
+            </Button>
+          </React.Fragment>
         )}
         {!props.readonly && props.newsItem.approved !== true && (
           <Button
@@ -111,6 +132,7 @@ SocialLinkListItem.propTypes = {
   readonly: PropTypes.bool,
   deleteSocialLinkBegin: PropTypes.func,
   updateNewsItemBegin: PropTypes.func,
+  archiveNewsItemBegin: PropTypes.func
 };
 
 export default compose(

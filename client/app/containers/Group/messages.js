@@ -15,6 +15,9 @@ export default defineMessages({
   edit: {
     id: `${scope}.index.button.edit`,
   },
+  setAnnualBudget: {
+    id: `${scope}.index.button.setAnnualBudget`,
+  },
   delete: {
     id: `${scope}.index.button.delete`,
   },

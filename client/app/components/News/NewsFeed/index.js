@@ -92,6 +92,7 @@ export function NewsFeed(props) {
           groupId={item.news_feed.group_id}
           deleteGroupMessageBegin={props.deleteGroupMessageBegin}
           updateNewsItemBegin={props.updateNewsItemBegin}
+          archiveNewsItemBegin={props.archiveNewsItemBegin}
         />
       );
     else if (item.news_link) // eslint-disable-line no-else-return
@@ -104,6 +105,7 @@ export function NewsFeed(props) {
           readonly={props.readonly}
           deleteNewsLinkBegin={props.deleteNewsLinkBegin}
           updateNewsItemBegin={props.updateNewsItemBegin}
+          archiveNewsItemBegin={props.archiveNewsItemBegin}
         />
       );
     else if (item.social_link)
@@ -116,6 +118,7 @@ export function NewsFeed(props) {
           readonly={props.readonly}
           deleteSocialLinkBegin={props.deleteSocialLinkBegin}
           updateNewsItemBegin={props.updateNewsItemBegin}
+          archiveNewsItemBegin={props.archiveNewsItemBegin}
         />
       );
 
@@ -208,6 +211,7 @@ NewsFeed.propTypes = {
   deleteNewsLinkBegin: PropTypes.func,
   deleteSocialLinkBegin: PropTypes.func,
   updateNewsItemBegin: PropTypes.func,
+  archiveNewsItemBegin: PropTypes.func
 };
 
 export default compose(
