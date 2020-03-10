@@ -160,13 +160,6 @@ export function NewsLinkListItem(props) {
               </Button>
             </React.Fragment>
           )}
-          <Button
-            size='small'
-            to={links.newsLinkShow(props.groupId, newsItem.id)}
-            component={WrappedNavLink}
-          >
-            {<DiverstFormattedMessage {...messages.comments} />}
-          </Button>
           {!props.readonly && props.newsItem.approved !== true && (
             <Button
               size='small'
