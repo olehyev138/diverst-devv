@@ -4,26 +4,32 @@ import { push } from 'connected-react-router';
 
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
 
+import { ROUTES } from 'containers/Shared/Routes/constants';
+
 import {
-  GET_EVENTS_BEGIN, GET_EVENT_BEGIN,
-  CREATE_EVENT_BEGIN, UPDATE_EVENT_BEGIN,
+  GET_EVENTS_BEGIN,
+  GET_EVENT_BEGIN,
+  CREATE_EVENT_BEGIN,
+  UPDATE_EVENT_BEGIN,
   DELETE_EVENT_BEGIN,
-  ARCHIVE_EVENT_BEGIN } from 'containers/Event/constants';
+  FINALIZE_EXPENSES_BEGIN,
+  ARCHIVE_EVENT_BEGIN
+} from './constants';
 
 import {
   getEventsSuccess, getEventsError,
   getEventSuccess, getEventError,
   createEventSuccess, createEventError,
   updateEventSuccess, updateEventError,
-  deleteEventError, deleteEventSuccess,
-  archiveEventError, archiveEventSuccess } from 'containers/Event/actions';
-
-import { ROUTES } from 'containers/Shared/Routes/constants';
+  deleteEventSuccess, deleteEventError,
+  finalizeExpensesSuccess, finalizeExpensesError,
+  archiveEventError, archiveEventSuccess
+} from './actions';
 
 
 export function* getEvents(action) {
   try {
-    const { payload } = action;
+    const { annualBudgetId, ...payload } = action.payload;
     let response;
     if (payload.group_id) {
       // eslint-disable-next-line camelcase
@@ -32,10 +38,10 @@ export function* getEvents(action) {
     } else
       response = yield call(api.initiatives.all.bind(api.initiatives), action.payload);
 
-
-    yield (put(getEventsSuccess(response.data.page)));
+    yield put(getEventsSuccess({ annualBudgetId, ...response.data.page }));
   } catch (err) {
-    yield put(getEventsError(err));
+    const { annualBudgetId } = action.payload;
+    yield put(getEventsError({ annualBudgetId }));
 
     // TODO: intl message
     yield put(showSnackbar({
@@ -50,6 +56,8 @@ export function* getEvent(action) {
     const response = yield call(api.initiatives.get.bind(api.initiatives), action.payload.id);
     yield put(getEventSuccess(response.data));
   } catch (err) {
+    yield put(getEventError(err));
+
     // TODO: intl message
     yield put(getEventError(err));
     yield put(showSnackbar({
@@ -66,7 +74,7 @@ export function* createEvent(action) {
     const response = yield call(api.initiatives.create.bind(api.initiatives), payload);
 
     yield put(createEventSuccess());
-    yield put(push(ROUTES.group.events.index.path(payload.initiative.group_id)));
+    yield put(push(ROUTES.group.events.index.path(payload.initiative.owner_group_id)));
     yield put(showSnackbar({
       message: 'Event created',
       options: { variant: 'success' }
@@ -141,6 +149,20 @@ export function* archiveEvent(action) {
   }
 }
 
+export function* finalizeExpenses(action) {
+  try {
+    const response = yield call(api.initiatives.finalizeExpenses.bind(api.initiatives), action.payload.id);
+
+    yield put(finalizeExpensesSuccess(response.data));
+    yield put(showSnackbar({ message: 'Successfully finalized expenses', options: { variant: 'success' } }));
+  } catch (err) {
+    yield put(finalizeExpensesError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to finalize expenses', options: { variant: 'warning' } }));
+  }
+}
+
 export default function* eventsSaga() {
   yield takeLatest(GET_EVENTS_BEGIN, getEvents);
   yield takeLatest(GET_EVENT_BEGIN, getEvent);
@@ -148,4 +170,5 @@ export default function* eventsSaga() {
   yield takeLatest(UPDATE_EVENT_BEGIN, updateEvent);
   yield takeLatest(DELETE_EVENT_BEGIN, deleteEvent);
   yield takeLatest(ARCHIVE_EVENT_BEGIN, archiveEvent);
+  yield takeLatest(FINALIZE_EXPENSES_BEGIN, finalizeExpenses);
 }

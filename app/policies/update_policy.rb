@@ -1,7 +1,7 @@
 class UpdatePolicy < ApplicationPolicy
   def parent_member_policy?(action)
     policy = "#{record.updatable_type}Policy".constantize rescue nil
-    policy ? policy.new(user, record.updatable_type).send(action) : false
+    policy ? policy.new(user, record.updatable_type.constantize).send(action) : false
   end
 
   def parent_collection_policy?(action)

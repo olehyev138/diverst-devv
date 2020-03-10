@@ -14,9 +14,6 @@ const selectPaginatedUsers = () => createSelector(
   usersState => usersState.userList
 );
 
-/* Select user list & format it for a select
- *  looks like: [ { value: <>, label: <> } ... ]
- */
 const selectPaginatedSelectUsers = () => createSelector(
   selectUsersDomain,
   usersState => (
@@ -146,7 +143,8 @@ const selectFieldData = () => createSelector(
 );
 
 export {
-  selectUsersDomain, selectPaginatedUsers, selectPaginatedSelectUsers,
+  selectUsersDomain, selectPaginatedUsers,
+  selectPaginatedSelectUsers,
   selectUserTotal, selectUser, selectFieldData,
   selectIsFetchingUsers, selectIsLoadingPosts,
   selectIsLoadingEvents, selectFormUser,

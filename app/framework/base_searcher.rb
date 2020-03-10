@@ -106,7 +106,7 @@ module BaseSearcher
         raise NameError if policy_scope.parent != policy_name.constantize
 
         # Apply the associated policy scope for the model to filter based on authorization
-        @items = policy_scope.new(current_user, base).resolve
+        @items = policy_scope.new(current_user, base, params: params).resolve
       rescue NameError
         # TODO: Uncomment this when we have more policies defined. Commenting now to pass tests early.
         # raise PolicyScopeNotFoundException
@@ -167,7 +167,9 @@ module BaseSearcher
     end
 
     def get_preloads(params)
-      if self.respond_to? :base_preloads
+      if params[:preload].present? && (self.respond_to? "base_preloads_#{params[:preload]}")
+        self.send("base_preloads_#{params[:preload]}")
+      elsif self.respond_to? :base_preloads
         self.base_preloads
       else
         []

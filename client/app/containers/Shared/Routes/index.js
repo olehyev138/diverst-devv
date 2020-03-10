@@ -40,6 +40,7 @@ import {
   OutcomeEditPage,
   GroupPlanLayout,
   GroupKPILayout,
+  GroupBudgetLayout,
   GroupPlanKpiPage,
   GroupPlanFieldsPage,
   GroupPlanUpdatesPage,
@@ -50,6 +51,9 @@ import {
   EventManageUpdatePage,
   EventManageUpdateEditPage,
   EventManageUpdateCreatePage,
+  EventManageExpensesPage,
+  EventManageExpenseCreatePage,
+  EventManageExpenseEditPage,
   GroupPlanUpdateEditPage,
   GroupMemberListPage,
   GroupMemberCreatePage,
@@ -67,6 +71,12 @@ import {
   GroupLeadersListPage,
   GroupLeaderCreatePage,
   GroupLeaderEditPage,
+  AdminAnnualBudgetPage,
+  AnnualBudgetEditPage,
+  AnnualBudgetsPage,
+  BudgetsPage,
+  BudgetPage,
+  BudgetRequestPage,
   GroupSettingsPage,
   CustomTextEditPage,
   UserNewsLinkPage,
@@ -193,6 +203,9 @@ export default function Routes(props) {
       <AdminLayout {...expandRoute(ROUTES.admin.manage.resources.index)} component={FoldersPage} />
       <AdminLayout {...expandRoute(ROUTES.admin.manage.archived.index)} component={ArchivesPage} />
 
+      { /* Admin - Plan - Budget */ }
+      <AdminLayout {...expandRoute(ROUTES.admin.plan.budgeting.index)} component={AdminAnnualBudgetPage} />
+
       { /* Admin - Innovate */ }
       <AdminLayout {...expandRoute(ROUTES.admin.innovate.campaigns.new)} component={CampaignCreatePage} />
       <AdminLayout {...expandRoute(ROUTES.admin.innovate.campaigns.edit)} component={CampaignEditPage} />
@@ -272,6 +285,9 @@ export default function Routes(props) {
       <EventManageLayout exact {...expandRoute(ROUTES.group.plan.events.manage.updates.new)} component={EventManageUpdateCreatePage} />
       <EventManageLayout exact {...expandRoute(ROUTES.group.plan.events.manage.updates.show)} component={EventManageUpdatePage} />
       <EventManageLayout exact {...expandRoute(ROUTES.group.plan.events.manage.updates.index)} component={EventManageUpdatesPage} />
+      <EventManageLayout exact {...expandRoute(ROUTES.group.plan.events.manage.expenses.new)} component={EventManageExpenseCreatePage} />
+      <EventManageLayout exact {...expandRoute(ROUTES.group.plan.events.manage.expenses.edit)} component={EventManageExpenseEditPage} />
+      <EventManageLayout exact {...expandRoute(ROUTES.group.plan.events.manage.expenses.index)} component={EventManageExpensesPage} />
 
       { /* Group Plan - KPI */ }
       <GroupKPILayout exact {...expandRoute(ROUTES.group.plan.kpi.metrics)} component={GroupPlanKpiPage} />
@@ -280,6 +296,13 @@ export default function Routes(props) {
       <GroupKPILayout exact {...expandRoute(ROUTES.group.plan.kpi.updates.new)} component={GroupPlanUpdateCreatePage} />
       <GroupKPILayout exact {...expandRoute(ROUTES.group.plan.kpi.updates.show)} component={GroupPlanUpdatePage} />
       <GroupKPILayout exact {...expandRoute(ROUTES.group.plan.kpi.updates.index)} component={GroupPlanUpdatesPage} />
+
+      { /* Group Plan - Budget */ }
+      <GroupBudgetLayout exact {...expandRoute(ROUTES.group.plan.budget.editAnnualBudget)} component={AnnualBudgetEditPage} />
+      <GroupBudgetLayout exact {...expandRoute(ROUTES.group.plan.budget.overview)} component={AnnualBudgetsPage} />
+      <GroupPlanLayout exact {...expandRoute(ROUTES.group.plan.budget.budgets.new)} component={BudgetRequestPage} />
+      <GroupPlanLayout exact {...expandRoute(ROUTES.group.plan.budget.budgets.show)} component={BudgetPage} />
+      <GroupPlanLayout exact {...expandRoute(ROUTES.group.plan.budget.budgets.index)} component={BudgetsPage} />
 
       { /* Group Manage */ }
       { /* TODO - redirect /manage -> /manage/settings */ }

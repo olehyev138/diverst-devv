@@ -1,6 +1,6 @@
 class Budget < ApplicationRecord
   include PublicActivity::Common
-  # include Budget::Actions
+  include Budget::Actions
 
   belongs_to :annual_budget
   belongs_to :approver, class_name: 'User', foreign_key: 'approver_id'
@@ -23,14 +23,24 @@ class Budget < ApplicationRecord
   validates_length_of :comments, maximum: 65535
   validates_length_of :description, maximum: 65535
 
+  def group_id
+    group.id
+  end
+
   def requested_amount
-    budget_items.sum(:estimated_amount)
+    @requested_amount ||= budget_items.sum(:estimated_amount)
   end
 
   def available_amount
     return 0 unless is_approved
 
-    budget_items.available.sum(:available_amount)
+    @available_amount ||= budget_items.available.to_a.sum(&:available_amount)
+  end
+
+  def reload
+    @requested_amount = nil
+    @available_amount = nil
+    super
   end
 
   def status_title
@@ -41,6 +51,14 @@ class Budget < ApplicationRecord
     else
       'Declined'
     end
+  end
+
+  def item_count
+    budget_items.size
+  end
+
+  def requested_at
+    created_at
   end
 
   def self.pre_approved_events(group, user = nil)
@@ -80,29 +98,35 @@ class Budget < ApplicationRecord
     select_items << [ group.title_with_leftover_amount, BudgetItem::LEFTOVER_BUDGET_ITEM_ID ]
   end
 
-  def approve(approver)
-    budget_items.each do |bi|
-      bi.approve!
+  def annual_budget_set?
+    unless (annual_budget&.amount || 0) > 0
+      'Please set an annual budget for this group'
     end
-    update(approver: approver, is_approved: true)
-    BudgetMailer.budget_approved(self).deliver_later if requester
   end
 
-  def decline(approver)
-    update(approver: approver, is_approved: false)
-    BudgetMailer.budget_declined(self).deliver_later if requester
+  def annual_budget_open?
+    unless annual_budget.present? && !annual_budget.closed
+      'Annual Budget is Closed'
+    end
+  end
+
+  def request_surplus?
+    unless requested_amount.present? && requested_amount < annual_budget&.amount
+
+      'This budget exceeds the annual budget'
+    end
   end
 
   private
 
   def send_email_notification
     case is_approved
-    when nil # it was just created
-      send_approval_request
     when true # it was accepted
       send_approval_notification
     when false # it was declined
       send_denial_notification
+    else # it was just created
+      send_approval_request
     end
   end
 

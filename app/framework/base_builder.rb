@@ -26,6 +26,10 @@ module BaseBuilder
       if item.has_attribute?(:enterprise_id) && item[:enterprise_id].blank?
         item.enterprise_id = diverst_request.user.enterprise_id
       end
+      # add owner id if exists & not set
+      if item.has_attribute?(:owner_id) && item[:owner_id].blank?
+        item.owner_id = diverst_request.user.id
+      end
 
       # save the item
       unless item.save
@@ -39,11 +43,9 @@ module BaseBuilder
       raise BadRequestException.new "#{self.name.titleize} ID required" if params[:id].nil?
 
       # get the item
-      if respond_to? 'base_preloads'
-        item = preload(base_preloads).find(params[:id])
-      else
-        item = find(params[:id])
-      end
+      item = self
+      item = item.preload(base_preloads) if respond_to? 'base_preloads'
+      item = item.find(params[:id])
 
       # check if the user can read it
 

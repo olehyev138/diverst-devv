@@ -1,4 +1,4 @@
-class GroupBudgetPolicy < GroupBasePolicy
+class BudgetPolicy < GroupBasePolicy
   def base_index_permission
     'groups_budgets_index'
   end
@@ -13,7 +13,7 @@ class GroupBudgetPolicy < GroupBasePolicy
 
   def approve?
     return true if update?
-    return true if basic_group_leader_permission?('budget_approval')
+    return true if has_group_leader_permissions?('budget_approval')
 
     user.policy_group.budget_approval?
   end
@@ -26,5 +26,15 @@ class GroupBudgetPolicy < GroupBasePolicy
     return true if user.policy_group.manage_all?
 
     user.policy_group.groups_budgets_manage? && user.policy_group.groups_manage?
+  end
+
+  class Scope < Scope
+    def group_base
+      group.budgets
+    end
+
+    def resolve
+      super(policy.base_index_permission)
+    end
   end
 end
