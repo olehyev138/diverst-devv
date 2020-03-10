@@ -116,8 +116,7 @@ export function Event(props) {
                 className={classes.buttons}
                 onClick={() => {
                   props.joinEventBegin({
-                    id: props.event.id,
-                    group_id: event.owner_group_id
+                    initiative_id: props.event.id,
                   });
                 }}
                 startIcon={<AddIcon />}

@@ -164,8 +164,9 @@ export function* finalizeExpenses(action) {
 }
 
 export function* joinEvent(action) {
+  const payload = { initiative_user: action.payload };
   try {
-    const response = yield call(api.initiativeUsers, action.payload.id);
+    const response = yield call(api.initiativeUsers.create.bind(api.initiativeUsers), payload);
     yield put(joinEventSuccess());
 
   } catch (err) {
