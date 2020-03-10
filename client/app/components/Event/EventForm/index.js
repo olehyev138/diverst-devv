@@ -256,7 +256,6 @@ export function EventForm(props) {
     picture: { default: null },
     max_attendees: { default: '' },
     location: { default: '' },
-    annual_budget_id: { default: '' },
     budget_item: { default: freeEvent, customKey: 'budget_item_id' },
     estimated_funding: { default: 0 },
     finished_expenses: { default: false },

@@ -45,7 +45,6 @@ class Api::V1::InitiativesController < DiverstController
         :archived_at,
         :from, # For filtering
         :to, # For filtering
-        :annual_budget_id,
         :finished_expenses,
         participating_group_ids: [],
         segment_ids: [],
