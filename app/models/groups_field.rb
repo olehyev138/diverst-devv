@@ -16,7 +16,7 @@ class GroupsField < Field
   private
 
   def init
-    self.title = "#{self.enterprise.custom_text.erg.pluralize}"
+    self.title = self.enterprise ? self.enterprise.custom_text.erg.pluralize : 'ERGs'
     self.elasticsearch_only = true
   end
 end
