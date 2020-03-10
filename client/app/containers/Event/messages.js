@@ -78,6 +78,18 @@ export default defineMessages({
     image: {
       id: `${scope}.form.input.image`
     },
+    goal: {
+      id: `${scope}.form.input.goal`
+    },
+    budgetName: {
+      id: `${scope}.form.input.budgetName`
+    },
+    budgetAmount: {
+      id: `${scope}.form.input.budgetAmount`
+    },
+    freeEvent: {
+      id: `${scope}.form.input.freeEvent`
+    },
   },
   show: {
     dateAndTime: {
