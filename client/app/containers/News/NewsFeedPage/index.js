@@ -25,7 +25,7 @@ const NewsFeedTypes = Object.freeze({
 });
 
 const defaultParams = Object.freeze({
-  count: 10, // TODO: Make this a constant and use it also in EventsList
+  count: 5, // TODO: Make this a constant and use it also in EventsList
   page: 0,
   order: 'desc',
   news_feed_id: -1,
@@ -107,7 +107,7 @@ export function NewsFeedPage(props, context) {
         handleChangeTab={handleChangeTab}
         handlePagination={handlePagination}
         links={links}
-        readonly={false}
+        readonly={props.readonly}
         deleteGroupMessageBegin={props.deleteGroupMessageBegin}
         deleteNewsLinkBegin={props.deleteNewsLinkBegin}
         deleteSocialLinkBegin={props.deleteSocialLinkBegin}
@@ -135,6 +135,7 @@ NewsFeedPage.propTypes = {
       id: PropTypes.number
     })
   }),
+  readonly: PropTypes.bool
 };
 
 const mapStateToProps = createStructuredSelector({
