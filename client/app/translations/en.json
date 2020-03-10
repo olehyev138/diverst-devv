@@ -122,8 +122,7 @@
   "diverst.containers.Routes.admin.system.index": "System",
   "diverst.containers.Routes.admin.system.users": "Users",
   "diverst.containers.Routes.admin.system.branding": "Branding",
-
-  "diverst.containers.Routes.admin.system.global_settings": "Global Settings",
+  "diverst.containers.Routes.admin.system.globalSettings": "Global Settings",
   "diverst.containers.Routes.admin.manage.archived": "Archive",
   "diverst.containers.Routes.admin.system.logs": "Logs",
   "diverst.containers.Routes.admin.system.diversity": "Diversity",
@@ -413,7 +412,6 @@
   "diverst.containers.News.index.button.comments": "Comments",
   "diverst.containers.News.index.button.edit": "Edit",
   "diverst.containers.News.index.button.archive": "Archive",
-  "diverst.containers.News.index.button.approve": "Approve",
   "diverst.containers.News.index.button.delete": "Delete",
   "diverst.containers.News.index.button.group.delete_confirm": "Delete group message?",
   "diverst.containers.News.index.button.news.delete_confirm": "Delete news link?",
