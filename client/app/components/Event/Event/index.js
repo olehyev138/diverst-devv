@@ -102,6 +102,7 @@ export function Event(props) {
                 onClick={() => {
                   props.archiveEventBegin({
                     id: props.event.id,
+                    group_id: event.owner_group_id
                   });
                 }}
                 startIcon={<ArchiveIcon />}
