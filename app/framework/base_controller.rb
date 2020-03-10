@@ -10,6 +10,15 @@ module BaseController
     raise BadRequestException.new(e.message)
   end
 
+  def export_csv
+    base_authorize(klass)
+
+    CsvDownloadJob.perform_later(current_user.id, params.permit!.to_json, klass_name: klass.name)
+    head :no_content
+  rescue => e
+    raise BadRequestException.new(e.message)
+  end
+
   def create
     params[klass.symbol] = payload
     base_authorize(klass)
@@ -59,7 +68,7 @@ module BaseController
 
   def payload
     params.require(klass.symbol).permit(
-      klass.attribute_names - ['id', 'created_at', 'updated_at', 'enterprise_id']
+      klass.attribute_names - ['id', 'created_at', 'updated_at', 'enterprise_id', 'owner_id']
     )
   end
 

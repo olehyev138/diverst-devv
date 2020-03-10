@@ -10,6 +10,9 @@ import { compose } from 'redux/';
 
 import { Button, Card, CardActions, CardContent, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+import { injectIntl, intlShape } from 'react-intl';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/News/messages';
 
 const styles = theme => ({
   margin: {
@@ -19,7 +22,7 @@ const styles = theme => ({
 });
 
 export function GroupMessageComment(props) {
-  const { classes, comment, newsItem } = props;
+  const { classes, comment, newsItem, intl } = props;
 
   return (
     <Card className={classes.margin}>
@@ -32,11 +35,11 @@ export function GroupMessageComment(props) {
           size='small'
           onClick={() => {
             /* eslint-disable-next-line no-alert, no-restricted-globals */
-            if (confirm('Delete group message?'))
+            if (confirm(intl.formatMessage(messages.group_delete_confirm)))
               props.deleteGroupMessageCommentBegin({ group_id: newsItem.group_message.group_id, id: comment.id });
           }}
         >
-          Delete
+          {<DiverstFormattedMessage {...messages.delete} />}
         </Button>
       </CardActions>
     </Card>
@@ -44,6 +47,7 @@ export function GroupMessageComment(props) {
 }
 
 GroupMessageComment.propTypes = {
+  intl: intlShape,
   classes: PropTypes.object,
   comment: PropTypes.object,
   deleteGroupMessageCommentBegin: PropTypes.func,
@@ -51,6 +55,7 @@ GroupMessageComment.propTypes = {
 };
 
 export default compose(
+  injectIntl,
   memo,
   withStyles(styles)
 )(GroupMessageComment);

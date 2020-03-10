@@ -6,6 +6,9 @@ const axios = require('axios');
 const Initiatives = new API({ controller: 'initiatives' });
 
 Object.assign(Initiatives, {
+  finalizeExpenses(id) {
+    return axios.post(appendQueryArgs(`${this.url}/${id}/finalize_expenses`));
+  },
   fields(id, payload) {
     return axios.get(appendQueryArgs(`${this.url}/${id}/fields`, payload));
   },

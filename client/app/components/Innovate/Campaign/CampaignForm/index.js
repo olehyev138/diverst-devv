@@ -16,13 +16,14 @@ import DiverstDateTimePicker from 'components/Shared/Pickers/DiverstDateTimePick
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { Field, Formik, Form } from 'formik';
 
-import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
-import messages from 'containers/Group/GroupMembers/messages';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 
 import { buildValues, mapFields } from 'utils/formHelpers';
 import { DateTime } from 'luxon';
+
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/Innovate/Campaign/messages';
 
 /* eslint-disable object-curly-newline */
 export function CampaignFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, touched, ...props }) {
@@ -54,7 +55,7 @@ export function CampaignFormInner({ handleSubmit, handleChange, handleBlur, valu
               name='title'
               margin='normal'
               disabled={props.isCommitting}
-              label='Campaign Title'
+              label={<DiverstFormattedMessage {...messages.Campaign.title} />}
               value={values.title}
             />
             <Field
@@ -68,7 +69,7 @@ export function CampaignFormInner({ handleSubmit, handleChange, handleBlur, valu
               variant='outlined'
               margin='normal'
               disabled={props.isCommitting}
-              label='Description'
+              label={<DiverstFormattedMessage {...messages.Campaign.description} />}
               value={values.description}
             />
           </CardContent>
@@ -83,12 +84,12 @@ export function CampaignFormInner({ handleSubmit, handleChange, handleBlur, valu
                   keyboardMode
                   /* eslint-disable-next-line dot-notation */
                   maxDate={touched['end'] ? values['end'] : undefined}
-                  maxDateMessage='Start date cannot be after end date'
+                  maxDateMessage={<DiverstFormattedMessage {...messages.Campaign.starttimemessage} />}
                   fullWidth
                   id='start'
                   name='start'
                   margin='normal'
-                  label='Pick start date and time'
+                  label={<DiverstFormattedMessage {...messages.Campaign.starttime} />}
                 />
               </Grid>
               <Grid item xs md={5}>
@@ -99,12 +100,12 @@ export function CampaignFormInner({ handleSubmit, handleChange, handleBlur, valu
                   keyboardMode
                   /* eslint-disable-next-line dot-notation */
                   minDate={values['start']}
-                  minDateMessage='End date cannot be before start date'
+                  minDateMessage={<DiverstFormattedMessage {...messages.Campaign.endtimemessage} />}
                   fullWidth
                   id='end'
                   name='end'
                   margin='normal'
-                  label='Pick end date and time'
+                  label={<DiverstFormattedMessage {...messages.Campaign.endtime} />}
                 />
               </Grid>
             </Grid>
@@ -117,7 +118,7 @@ export function CampaignFormInner({ handleSubmit, handleChange, handleBlur, valu
               fullWidth
               id='group_ids'
               name='group_ids'
-              label='Select Group'
+              label={<DiverstFormattedMessage {...messages.Campaign.groups} />}
               isMulti
               margin='normal'
               disabled={props.isCommitting}

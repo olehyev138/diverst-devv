@@ -7,6 +7,9 @@ export const ROUTES = {
     login: {
       path: () => '/login',
     },
+    forgotPassword: {
+      path: () => '/forgot',
+    },
   },
 
   // User
@@ -144,6 +147,11 @@ export const ROUTES = {
 
   group: {
     pathPrefix: '/groups',
+    back: {
+      data: {
+        titleMessage: messages.groups.back,
+      }
+    },
     home: {
       path: (groupId = ':group_id') => `/groups/${groupId}`,
       data: {
@@ -323,6 +331,27 @@ export const ROUTES = {
               data: {
                 titleMessage: messages.groups.plan.events.manage.updates.new,
               }
+            },
+          },
+          expenses: {
+            index: {
+              path: (groupId = ':group_id', eventId = ':event_id') => `/groups/${groupId}/plan/events/${eventId}/manage/expenses`,
+              data: {
+                titleMessage: messages.groups.plan.events.manage.expenses.index,
+              }
+            },
+            edit: {
+              path:
+                (groupId = ':group_id', eventId = ':event_id', expensesId = ':expenses_id') => `/groups/${groupId}/plan/events/${eventId}/manage/expenses/${expensesId}/edit`,
+              data: {
+                titleMessage: messages.groups.plan.events.manage.expenses.edit,
+              }
+            },
+            new: {
+              path: (groupId = ':group_id', eventId = ':event_id') => `/groups/${groupId}/plan/events/${eventId}/manage/expenses/new`,
+              data: {
+                titleMessage: messages.groups.plan.events.manage.expenses.new,
+              }
             }
           },
         },
@@ -371,6 +400,46 @@ export const ROUTES = {
               titleMessage: messages.groups.plan.kpi.updates.new,
             }
           }
+        },
+      },
+      budget: {
+        index: {
+          data: {
+            pathPrefix: (groupId = ':group_id') => `/groups/${groupId}/plan/budgeting`,
+            titleMessage: messages.groups.plan.budget.index
+          },
+        },
+        editAnnualBudget: {
+          path: (groupId = ':group_id') => `/groups/${groupId}/plan/budgeting/edit_annual_budget`,
+          data: {
+            titleMessage: messages.groups.plan.budget.editAnnualBudget,
+          }
+        },
+        overview: {
+          path: (groupId = ':group_id') => `/groups/${groupId}/plan/budgeting/overview`,
+          data: {
+            titleMessage: messages.groups.plan.budget.overview,
+          }
+        },
+        budgets: {
+          index: {
+            path: (groupId = ':group_id', annualBudgetId = ':annual_budget_id') => `/groups/${groupId}/plan/budgeting/${annualBudgetId}/budgets`,
+            data: {
+              titleMessage: messages.groups.plan.budget.budgets.index,
+            }
+          },
+          new: {
+            path: (groupId = ':group_id', annualBudgetId = ':annual_budget_id') => `/groups/${groupId}/plan/budgeting/${annualBudgetId}/budgets/new`,
+            data: {
+              titleMessage: messages.groups.plan.budget.budgets.new,
+            }
+          },
+          show: {
+            path: (groupId = ':group_id', annualBudgetId = ':annual_budget_id', budgetId = ':budget_id') => `/groups/${groupId}/plan/budgeting/${annualBudgetId}/budgets/${budgetId}`,
+            data: {
+              titleMessage: messages.groups.plan.budget.budgets.show,
+            }
+          },
         },
       },
     },
@@ -599,15 +668,51 @@ export const ROUTES = {
         }
       },
     },
+    plan: {
+      index: {
+        data: {
+          pathPrefix: '/admin/plan',
+          titleMessage: messages.admin.plan.index
+        }
+      },
+      budgeting: {
+        pathPrefix: '/admin/plan/budgeting',
+        index: {
+          path: () => '/admin/plan/budgeting',
+          data: {
+            permission: 'groups_index',
+            titleMessage: messages.admin.manage.groups,
+          }
+        },
+      },
+    },
+    include: {
+      index: {
+        data: {
+          titleMessage: messages.admin.include.index
+        }
+      }
+    },
+    mentorship: {
+      index: {
+        data: {
+          titleMessage: messages.admin.mentorship.index
+        }
+      }
+    },
     innovate: {
       index: {
         data: {
           pathPrefix: '/admin/innovate',
+          titleMessage: messages.admin.innovate.index
         }
       },
       campaigns: {
         index: {
-          path: () => '/admin/innovate/campaigns'
+          path: () => '/admin/innovate/campaigns',
+          data: {
+            titleMessage: messages.admin.innovate.campaigns
+          }
         },
         new: {
           path: () => '/admin/innovate/campaigns/new'
@@ -632,7 +737,10 @@ export const ROUTES = {
       },
       financials: {
         index: {
-          path: () => '/admin/innovate/financials'
+          path: () => '/admin/innovate/financials',
+          data: {
+            titleMessage: messages.admin.innovate.financials
+          }
         }
       },
     },
@@ -657,6 +765,9 @@ export const ROUTES = {
         edit: {
           path: (userId = ':user_id') => `/admin/system/users/${userId}/edit`,
         },
+        import: {
+          path: () => '/admin/system/users/import',
+        },
         roles: {
           index: {
             path: () => '/admin/system/users/roles',
@@ -667,13 +778,22 @@ export const ROUTES = {
           edit: {
             path: (roleId = ':role_id') => `/admin/system/users/roles/${roleId}/edit`,
           },
+        },
+        policy_templates: {
+          index: {
+            path: () => '/admin/system/users/policy_templates'
+          },
+          edit: {
+            path: (policyId = ':policy_id') => `/admin/system/users/policy_templates/${policyId}/edit`
+          },
         }
       },
       globalSettings: {
         pathPrefix: '/admin/system/settings',
         fields: {
           index: {
-            path: () => '/admin/system/settings/fields'
+            path: () => '/admin/system/settings/fields',
+            titleMessage: messages.admin.system.globalSettings,
           }
         },
         customText: {
@@ -706,7 +826,7 @@ export const ROUTES = {
           edit: {
             path: (eventId = ':event_id') => `/admin/system/settings/emailEvents/${eventId}/edit`
           },
-        }
+        },
       },
       branding: {
         index: {
@@ -733,7 +853,21 @@ export const ROUTES = {
             path: (sponsorId = ':sponsor_id') => `/admin/system/branding/sponsors/${sponsorId}/edit`
           }
         }
-      }
+      },
+      logs: {
+        index: {
+          data: {
+            titleMessage: messages.admin.system.logs,
+          }
+        },
+      },
+      diversity: {
+        index: {
+          data: {
+            titleMessage: messages.admin.system.diversity,
+          }
+        },
+      },
     }
   },
 };

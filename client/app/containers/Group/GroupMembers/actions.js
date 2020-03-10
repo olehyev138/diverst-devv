@@ -9,6 +9,7 @@ import {
   CREATE_MEMBERS_BEGIN, CREATE_MEMBERS_SUCCESS, CREATE_MEMBERS_ERROR,
   UPDATE_MEMBER_BEGIN, UPDATE_MEMBER_SUCCESS, UPDATE_MEMBER_ERROR,
   DELETE_MEMBER_BEGIN, DELETE_MEMBER_SUCCESS, DELETE_MEMBER_ERROR,
+  EXPORT_MEMBERS_BEGIN, EXPORT_MEMBERS_ERROR, EXPORT_MEMBERS_SUCCESS,
   GROUP_MEMBERS_UNMOUNT
 } from 'containers/Group/GroupMembers/constants';
 
@@ -100,6 +101,27 @@ export function deleteMemberSuccess(payload) {
 export function deleteMemberError(error) {
   return {
     type: DELETE_MEMBER_ERROR,
+    error,
+  };
+}
+
+export function exportMembersBegin(payload) {
+  return {
+    type: EXPORT_MEMBERS_BEGIN,
+    payload,
+  };
+}
+
+export function exportMembersSuccess(payload) {
+  return {
+    type: EXPORT_MEMBERS_SUCCESS,
+    payload,
+  };
+}
+
+export function exportMembersError(error) {
+  return {
+    type: EXPORT_MEMBERS_ERROR,
     error,
   };
 }

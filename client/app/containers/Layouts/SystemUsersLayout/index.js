@@ -17,10 +17,12 @@ const styles = theme => ({
   },
 });
 
-const SystemUsersPages = Object.freeze({
-  users: 0,
-  roles: 1
-});
+const SystemUsersPages = Object.freeze([
+  'users',
+  'roles',
+  'import',
+  'templates',
+]);
 
 const SystemUsersLayout = ({ component: Component, classes, ...rest }) => {
   const { currentGroup, location, ...other } = rest;
@@ -28,14 +30,18 @@ const SystemUsersLayout = ({ component: Component, classes, ...rest }) => {
   let currentPage;
   if (matchPath(location.pathname, { path: ROUTES.admin.system.users.roles.index.path() }))
     currentPage = 'roles';
+  else if (matchPath(location.pathname, { path: ROUTES.admin.system.users.import.path() }))
+    currentPage = 'import';
+  else if (matchPath(location.pathname, { path: ROUTES.admin.system.users.policy_templates.index.path() }))
+    currentPage = 'templates';
   else if (matchPath(location.pathname, { path: ROUTES.admin.system.users.index.path() }))
     currentPage = 'users';
 
   const [tab, setTab] = useState(SystemUsersPages[currentPage]);
 
   useEffect(() => {
-    if (tab !== SystemUsersPages[currentPage])
-      setTab(SystemUsersPages[currentPage]);
+    if (tab !== currentPage)
+      setTab(currentPage);
   }, [currentPage]);
 
   return (

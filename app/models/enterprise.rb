@@ -69,7 +69,7 @@ class Enterprise < ApplicationRecord
   has_many :badges, dependent: :destroy
   has_many :group_categories, dependent: :destroy
   has_many :group_category_types, dependent: :destroy
-  has_many :annual_budgets, dependent: :destroy
+  has_many :annual_budgets, dependent: :destroy, through: :groups
 
   has_one :custom_text, dependent: :destroy
 
@@ -212,18 +212,18 @@ class Enterprise < ApplicationRecord
     group_roles = enterprise.user_roles.where(role_type: 'group').pluck(:role_name)
     non_group_roles = enterprise.user_roles.where.not(role_type: 'group').pluck(:role_name)
 
-    return User.to_csv(users: users, fields: fields, nb_rows: nb_rows) if export_csv_params == 'all_users' || export_csv_params.nil?
-    return User.to_csv(users: users.active, fields: fields, nb_rows: nb_rows) if export_csv_params == 'active_users'
-    return User.to_csv(users: users.inactive, fields: fields, nb_rows: nb_rows) if export_csv_params == 'inactive_users'
+    return User.to_csv_with_fields(users: users, fields: fields, nb_rows: nb_rows) if export_csv_params == 'all_users' || export_csv_params.nil?
+    return User.to_csv_with_fields(users: users.active, fields: fields, nb_rows: nb_rows) if export_csv_params == 'active_users'
+    return User.to_csv_with_fields(users: users.inactive, fields: fields, nb_rows: nb_rows) if export_csv_params == 'inactive_users'
 
 
     if group_roles.include?(export_csv_params)
-      return User.to_csv(users: users.joins(group_leaders: :user_role).where(user_roles: { role_name: export_csv_params }).distinct, fields: fields, nb_rows: nb_rows)
+      return User.to_csv_with_fields(users: users.joins(group_leaders: :user_role).where(user_roles: { role_name: export_csv_params }).distinct, fields: fields, nb_rows: nb_rows)
     elsif non_group_roles.include?(export_csv_params)
-      return User.to_csv(users: users.joins(:user_role).where(user_roles: { role_name: export_csv_params }).distinct, fields: fields, nb_rows: nb_rows)
+      return User.to_csv_with_fields(users: users.joins(:user_role).where(user_roles: { role_name: export_csv_params }).distinct, fields: fields, nb_rows: nb_rows)
     end
 
-    User.to_csv(users: [], fields: fields, nb_rows: nb_rows)
+    User.to_csv_with_fields(users: [], fields: fields, nb_rows: nb_rows)
   end
 
   def close_budgets_csv

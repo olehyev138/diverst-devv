@@ -41,7 +41,7 @@ export function GroupMemberFormInner({ handleSubmit, handleChange, handleBlur, v
             fullWidth
             id='member_ids'
             name='member_ids'
-            label='New Members'
+            label={<DiverstFormattedMessage {...messages.newmembers} />}
             disabled={props.isCommitting}
             isMulti
             margin='normal'

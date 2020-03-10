@@ -1,7 +1,7 @@
 class User < ApplicationRecord
-  @@field_definer_name = 'enterprise'
-  @@field_association_name = 'fields'
-  mattr_reader :field_association_name, :field_definer_name
+  FIELD_DEFINER_NAME = :enterprise
+  FIELD_ASSOCIATION_NAME = :fields
+  belongs_to :enterprise
 
   has_secure_password
   include PublicActivity::Common
@@ -21,13 +21,10 @@ class User < ApplicationRecord
   scope :invitation_sent,         -> { where.not(invitation_token: nil).distinct }
   scope :saml,                    -> { where(auth_source: 'saml').distinct }
 
-  belongs_to  :enterprise
-  belongs_to  :user_role
+  belongs_to :user_role
 
   has_one :policy_group,  dependent: :destroy, inverse_of: :user
   has_one :device,        dependent: :destroy, inverse_of: :user
-
-  has_many :field_data, class_name: 'FieldData', as: :field_user, dependent: :destroy
 
   # sessions
   has_many :sessions, dependent: :destroy
@@ -126,7 +123,6 @@ class User < ApplicationRecord
   validate :user_role_presence
   validates :points, numericality: { only_integer: true }, presence: true
   validates :credits, numericality: { only_integer: true }, presence: true
-  validate :validate_presence_fields
   validate :group_leader_role
   validate :policy_group
   before_validation :add_linkedin_http, unless: -> { linkedin_profile_url.nil? }
@@ -155,6 +151,7 @@ class User < ApplicationRecord
   scope :for_groups, -> (groups) { joins(:groups).where('groups.id' => groups.map(&:id)).distinct if groups.any? }
   scope :answered_poll, -> (poll) { joins(:poll_responses).where(poll_responses: { poll_id: poll.id }) }
   scope :top_participants, -> (n) { order(total_weekly_points: :desc).limit(n) }
+  scope :of_role, -> (role_id) { where(user_role_id: role_id) }
   scope :not_owners, -> { where(owner: false) }
   scope :es_index_for_enterprise, -> (enterprise) { where(enterprise: enterprise) }
   scope :mentors, -> { where(mentor: true) }
@@ -267,6 +264,7 @@ class User < ApplicationRecord
   def set_default_policy_group
     template = enterprise.policy_group_templates.joins(:user_role).find_by(user_roles: { id: user_role_id })
     attributes = template.create_new_policy
+    attributes.delete(:manage_all)
     if policy_group.nil?
       create_policy_group(attributes)
     else
@@ -351,7 +349,7 @@ class User < ApplicationRecord
   end
 
   def string_for_field(field)
-    field.string_value info[field]
+    field.string_value self[field]
   end
 
   # Get the match score between the user and `other_user`
@@ -447,7 +445,7 @@ class User < ApplicationRecord
     # Map Yammer fields with Diverst fields as per the mappings defined in the integration configuration
     enterprise.yammer_field_mappings.each do |mapping|
       yammer_value = yammer_user[mapping.yammer_field_name]
-      user.info[mapping.diverst_field] = yammer_value unless yammer_value.nil?
+      user[mapping.diverst_field] = yammer_value unless yammer_value.nil?
     end
 
     user
@@ -466,15 +464,15 @@ class User < ApplicationRecord
   end
 
   # Export a CSV with the specified users
-  def self.to_csv(users:, fields:, nb_rows: nil)
+  def self.to_csv_with_fields(users:, fields:, nb_rows: nil)
     CSV.generate do |csv|
       csv << ['First name', 'Last name', 'Email', 'Biography', 'Active', 'Group Membership'].concat(fields.map(&:title))
 
       users.order(created_at: :desc).limit(nb_rows).each do |user|
         user_columns = [user.first_name, user.last_name, user.email, user.biography, user.active, user.groups.map(&:name).join(',')]
-
+        user.field_data.preload(:field).load
         fields.each do |field|
-          user_columns << field.csv_value(user.info[field])
+          user_columns << field.csv_value(user[field])
         end
 
         csv << user_columns
@@ -665,7 +663,7 @@ class User < ApplicationRecord
 
   def validate_presence_fields
     enterprise.try(:fields).to_a.each do |field|
-      if field.required && info[field].blank?
+      if field.required && self[field].blank?
         key = field.title.parameterize.underscore.to_sym
         errors.add(key, "can't be blank")
       end

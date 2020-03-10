@@ -23,6 +23,7 @@ import BackIcon from '@material-ui/icons/KeyboardBackspaceOutlined';
 import DiverstPagination from 'components/Shared/DiverstPagination';
 import DiverstLoader from 'components/Shared/DiverstLoader';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import { injectIntl, intlShape } from 'react-intl';
 
 const styles = theme => ({
   floatRight: {
@@ -109,17 +110,17 @@ export function OutcomesList(props, context) {
                     color='primary'
                     to={props.links.outcomeEdit(outcome.id)}
                   >
-                    Edit
+                    <DiverstFormattedMessage {...messages.edit} />
                   </Button>
                   <Button
                     className={classes.errorButton}
                     onClick={() => {
                       /* eslint-disable-next-line no-alert, no-restricted-globals */
-                      if (confirm('Delete outcome?'))
+                      if (confirm(intl.formatMessage(messages.pillars.delete_confirm)))
                         props.deleteOutcomeBegin(outcome);
                     }}
                   >
-                    Delete
+                    <DiverstFormattedMessage {...messages.delete} />
                   </Button>
                 </CardActions>
               </Card>
@@ -149,7 +150,7 @@ export function OutcomesList(props, context) {
 }
 
 OutcomesList.propTypes = {
-  intl: PropTypes.object,
+  intl: intlShape,
   classes: PropTypes.object,
   outcomes: PropTypes.array,
   outcomesTotal: PropTypes.number,
@@ -162,5 +163,6 @@ OutcomesList.propTypes = {
 
 export default compose(
   memo,
+  injectIntl,
   withStyles(styles)
 )(OutcomesList);

@@ -26,10 +26,13 @@ import {
 
 import GroupMessageForm from 'components/News/GroupMessage/GroupMessageForm';
 
+import { injectIntl, intlShape } from 'react-intl';
+import messages from 'containers/News/messages';
+
 export function GroupMessageEditPage(props) {
   useInjectReducer({ key: 'news', reducer });
   useInjectSaga({ key: 'news', saga });
-
+  const { intl } = props;
   const rs = new RouteService(useContext);
   const links = {
     newsFeedIndex: ROUTES.group.news.index.path(rs.params('group_id')),
@@ -48,7 +51,7 @@ export function GroupMessageEditPage(props) {
     <GroupMessageForm
       edit
       groupMessageAction={props.updateGroupMessageBegin}
-      buttonText='Update'
+      buttonText={intl.formatMessage(messages.update)}
       currentUser={currentUser}
       currentGroup={currentGroup}
       newsItem={currentNewsItem}
@@ -60,6 +63,7 @@ export function GroupMessageEditPage(props) {
 }
 
 GroupMessageEditPage.propTypes = {
+  intl: intlShape,
   getNewsItemBegin: PropTypes.func,
   updateGroupMessageBegin: PropTypes.func,
   newsFeedUnmount: PropTypes.func,
@@ -90,6 +94,7 @@ const withConnect = connect(
 );
 
 export default compose(
+  injectIntl,
   withConnect,
   memo,
 )(GroupMessageEditPage);

@@ -1,193 +1,7 @@
 version: 2.1
-executors:
-  primary-image:
-    docker:
-      - image: circleci/build-image:ubuntu-14.04-XXL-upstart-1189-5614f37
-jobs:
-  lint:
-    working_directory: ~/TeamDiverst/diverst-development
-    shell: /bin/bash --login
-    environment:
-      CIRCLE_ARTIFACTS: /tmp/circleci-artifacts
-      CIRCLE_TEST_REPORTS: /tmp/circleci-test-results
-    executor: primary-image
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - v1-dep-{{ .Branch }}-
-            - v1-dep-staging-
-            - v1-dep-
-      - run: gem install bundler
-      - run: 'bundle install --path=vendor/bundle --jobs=4 --retry=3'
-      - run: nvm install 10.16.0 && nvm alias default 10.16.0
-      - run: cd client/ && npm install
-      - save_cache:
-          key: v1-dep-{{ .Branch }}-{{ epoch }}
-          paths:
-            - vendor/bundle
-            - ~/virtualenvs
-            - ~/.m2
-            - ~/.ivy2
-            - ~/.bundle
-            - ~/.go_workspace
-            - ~/.gradle
-            - ~/.cache/bower
-            - public/assets
-            - ./client/node_modules
-      - run:
-          command: |
-            export PRONTO_GITHUB_ACCESS_TOKEN=60fc301a32c3a0450eeec2985a1c1a09cefba857
-            export PRONTO_PULL_REQUEST_ID=$(git ls-remote -q origin pull\*\head | grep $CIRCLE_SHA1 | sed 's/.*refs\/pull\/\([0-9]*\)\/head/\1/g')
-            git fetch origin react_update:refs/remotes/origin/react_update
-            bundle exec pronto run -f github_status github_pr -c origin/react_update
-      - store_artifacts:
-          path: /tmp/circleci-artifacts
-  backend-test:
-    working_directory: ~/TeamDiverst/diverst-development
-    parallelism: 2
-    shell: /bin/bash --login
-    environment:
-      CIRCLE_ARTIFACTS: /tmp/circleci-artifacts
-      CIRCLE_TEST_REPORTS: /tmp/circleci-test-results
-    executor: primary-image
-    steps:
-      - checkout
-      - run: mkdir -p $CIRCLE_ARTIFACTS $CIRCLE_TEST_REPORTS
-      - run:
-          working_directory: ~/TeamDiverst/diverst-development
-          command: 'echo ''America/New_York'' | sudo tee -a /etc/timezone; sudo dpkg-reconfigure
-          -f noninteractive tzdata; sudo service mysql restart; sudo service postgresql
-          restart; '
-      - restore_cache:
-          keys:
-            # This branch if available
-            - v1-dep-{{ .Branch }}-
-            # Default branch if not
-            - v1-dep-staging-
-            # Any branch if there are none on the default branch - this should be unnecessary if you have your default branch configured correctly
-            - v1-dep-
-      - run: echo -e "export RAILS_ENV=test\nexport RACK_ENV=test" >> $BASH_ENV
-      - run: sudo rm -rf /etc/apt/sources.list.d/circleci_trusty.list && sudo rm -rf /etc/apt/sources.list.d/github_git-lfs.list  && sudo rm -rf /etc/apt/sources.list.d/neo4j.list && sudo rm -rf /etc/apt/sources.list.d/mysql.list && sudo rm -rf /etc/apt/sources.list.d/basho_riak.list
-      - run: gem install bundler
-      - run: 'bundle check --path=vendor/bundle || bundle install --path=vendor/bundle
-        --jobs=4 --retry=3 '
-      - save_cache:
-          key: v1-dep-{{ .Branch }}-{{ epoch }}
-          paths:
-            - vendor/bundle
-            - ~/virtualenvs
-            - ~/.m2
-            - ~/.ivy2
-            - ~/.bundle
-            - public/assets
-            - ./client/node_modules
-      - run: |-
-          mkdir -p config && echo 'test:
-            database: circle_ruby_test
-            adapter: mysql2
-            url: <%= ENV["DATABASE_URL"] %>
-            pool: <%= ENV["DB_POOL"] || ENV["MAX_THREADS"] || 20 %>
-            encoding: utf8mb4
-            collation: utf8mb4_bin
-            username: ubuntu
-            host: localhost
-            socket: /var/run/mysqld/mysqld.sock
-          ' > config/database.yml
-      - run:
-          command: bundle exec rake db:create db:schema:load --trace
-          environment:
-            RAILS_ENV: test
-            RACK_ENV: test
-      - run: bundle exec rake db:migrate
-      - run: mkdir -p $CIRCLE_TEST_REPORTS/rspec
-      # Run frontend tests
-      - run:
-          command: bundle exec rspec --color --require spec_helper --format RspecJunitFormatter --out $CIRCLE_TEST_REPORTS/rspec/rspec.xml --format progress -- $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=filesize)
-          environment:
-            RAILS_ENV: test
-            RACK_ENV: test
-      - store_test_results:
-          path: /tmp/circleci-test-results
-      # Save artifacts
-      - store_artifacts:
-          path: /tmp/circleci-artifacts
-      - store_artifacts:
-          path: /tmp/circleci-test-results
-
-  frontend-test:
-    working_directory: ~/TeamDiverst/diverst-development/
-    shell: /bin/bash --login
-    environment:
-      CIRCLE_ARTIFACTS: /tmp/circleci-artifacts
-      CIRCLE_TEST_REPORTS: /tmp/circleci-test-results
-    executor: primary-image
-    steps:
-      - checkout
-      - run: mkdir -p $CIRCLE_ARTIFACTS $CIRCLE_TEST_REPORTS
-      - run:
-          working_directory: ~/TeamDiverst/diverst-development/
-          command: 'echo ''America/New_York'' | sudo tee -a /etc/timezone; sudo dpkg-reconfigure
-          -f noninteractive tzdata; sudo service mysql restart; sudo service postgresql
-          restart; '
-      - restore_cache:
-          keys:
-            # This branch if available
-            - v1-dep-{{ .Branch }}-
-            # Default branch if not
-            - v1-dep-staging-
-            # Any branch if there are none on the default branch - this should be unnecessary if you have your default branch configured correctly
-            - v1-dep-
-      # Install nvm & frontend libraries
-      - run: nvm install 10.16.0 && nvm alias default 10.16.0
-      - run: cd client/ && npm install
-      - run: sudo rm -rf /etc/apt/sources.list.d/circleci_trusty.list && sudo rm -rf /etc/apt/sources.list.d/github_git-lfs.list  && sudo rm -rf /etc/apt/sources.list.d/neo4j.list && sudo rm -rf /etc/apt/sources.list.d/mysql.list && sudo rm -rf /etc/apt/sources.list.d/basho_riak.list
-      - save_cache:
-          key: v1-dep-{{ .Branch }}-{{ epoch }}
-          paths:
-            - ./client/node_modules
-      # Run frontend tests
-      - run: cd client/ && npm test -- -i
-      - store_test_results:
-          path: /tmp/circleci-test-results
-      # Save artifacts
-      - store_artifacts:
-          path: /tmp/circleci-artifacts
-      - store_artifacts:
-          path: /tmp/circleci-test-results
-
-  deploy-react:
-    working_directory: ~/TeamDiverst/diverst-development
-    shell: /bin/bash --login
-    executor: primary-image
-    steps:
-      - add_ssh_keys:
-          fingerprints:
-            - "7a:55:cb:5c:8e:f2:a4:cc:a8:d0:23:6b:ec:96:dd:70"
-      - checkout
-      # Log the current branch
-      - run:
-          name: Show current branch
-          command: echo ${CIRCLE_BRANCH}
-      # Restore cache from the build job which contains the
-      # dist folder that needs to be deployed
-      # Restore the dependency cache
-      - restore_cache:
-          keys:
-            # This branch if available
-            - v1-dep-{{ .Branch }}-
-            # Default branch if not
-            - v1-dep-development-
-            # Any branch if there are none on the default branch - this should be unnecessary if you have your default branch configured correctly
-            - v1-dep-
-      - run: gem install bundler
-      - run: bundle install
-      - run:
-          name: Deploy to AWS if tests pass
-          command: eval "$(ssh-agent -s)" && ssh-add ~/.ssh/id_rsa* && cap react deploy
 
 workflows:
-  version: 2
+  version: 2.1
   lint-test-deploy:
     jobs:
       - lint
@@ -197,10 +11,226 @@ workflows:
       - frontend-test:
           requires:
             - lint
-      - deploy-react:
+      - deploy:
+          context: aws-context
           requires:
             - backend-test
             - frontend-test
           filters:
             branches:
               only: react_update
+
+jobs:
+  lint:
+    working_directory: ~/TeamDiverst/diverst-development
+    docker:
+      - image: awsdiverst/cci-primary:0.0.1
+        environment:
+          RAILS_ENV: test
+          RACK_ENV: test
+    shell: /bin/bash --login
+    steps:
+      - checkout
+      #
+      ## Install gems
+      #
+      - restore_cache:
+          keys:
+            - v1-gem-cache-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+            - v1-gem-cache-{{ arch }}-{{ .Branch }}-
+            - v1-gem-cache-{{ arch }}-
+      - run:
+          name: Install gems
+          command: bundle install --path=vendor/bundle --jobs=4 --retry=3 && bundle clean
+      - save_cache:
+          key: v1-gem-cache-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+          paths:
+            - ./vendor/bundle
+      #
+      ## Install node modules
+      #
+      - restore_cache:
+          keys:
+            # when lock file changes, use increasingly general patterns to restore cache
+            - node-{{ .Branch }}-{{ checksum "./client/package-lock.json" }}
+            - node-{{ .Branch }}-
+            - node-
+      - run:
+          name: Install node modules
+          command: cd client && npm install
+      - save_cache:
+          paths:
+            - ./client/node_modules
+          key: node-{{ .Branch }}-{{ checksum "./client/package-lock.json" }}
+      #
+      ## Run linter
+      #
+      - run:
+          name: Run linter
+          command: |
+            export PRONTO_GITHUB_ACCESS_TOKEN=60fc301a32c3a0450eeec2985a1c1a09cefba857
+            export PRONTO_PULL_REQUEST_ID=$(git ls-remote -q origin pull\*\head | grep $CIRCLE_SHA1 | sed 's/.*refs\/pull\/\([0-9]*\)\/head/\1/g')
+            bundle exec pronto run -f github_status github_pr -c origin/react_update
+  backend-test:
+    working_directory: ~/TeamDiverst/diverst-development
+    parallelism: 2
+    shell: /bin/bash --login
+    environment:
+      CIRCLE_ARTIFACTS: /tmp/circleci-artifacts
+      CIRCLE_TEST_REPORTS: /tmp/circleci-test-results
+    docker:
+      - image: awsdiverst/cci-primary:0.0.1
+        environment:
+          RAILS_ENV: test
+          RACK_ENV: test
+      - image: circleci/mariadb:10.4.12
+    steps:
+      - checkout
+      - run:
+          name: Create artifact directories
+          command: mkdir -p $CIRCLE_ARTIFACTS $CIRCLE_TEST_REPORTS/rspec
+      - run:
+          name: Set timezone
+          working_directory: ~/TeamDiverst/diverst-development
+          command: echo ''America/New_York'' | tee -a /etc/timezone
+      #
+      ## Install gems
+      #
+      - restore_cache:
+          keys:
+            - v1-gem-cache-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+            - v1-gem-cache-{{ arch }}-{{ .Branch }}-
+            - v1-gem-cache-{{ arch }}-
+      - run:
+          name: Install gems
+          command: bundle install --path=vendor/bundle --jobs=4 --retry=3 && bundle clean
+      - save_cache:
+          key: v1-gem-cache-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+          paths:
+            - ./vendor/bundle
+      #
+      ## Setup database config
+      #
+      - run:
+          name: Configure database
+          command: |
+            mkdir -p config && echo 'test:
+              database: circle_test
+              adapter: mysql2
+              url: <%= ENV["DATABASE_URL"] %>
+              pool: <%= ENV["DB_POOL"] || ENV["MAX_THREADS"] || 20 %>
+              encoding: utf8mb4
+              collation: utf8mb4_bin
+              username: root
+              host: 127.0.0.1
+            ' > config/database.yml
+      - run:
+          name: Setup database
+          command: bundle exec rake db:create db:schema:load --trace
+          environment:
+            RAILS_ENV: test
+            RACK_ENV: test
+      - run:
+          name: Migrate database
+          command: bundle exec rake db:migrate
+      #
+      ## Run backend tests
+      #
+      - run:
+          name: Run backend tests
+          command: bundle exec rspec --color --require spec_helper --format RspecJunitFormatter --out $CIRCLE_TEST_REPORTS/rspec/rspec.xml --format progress -- $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=filesize)
+          environment:
+            RAILS_ENV: test
+            RACK_ENV: test
+      #
+      ## Store artifacts
+      #
+      - store_test_results:
+          path: /tmp/circleci-test-results
+      - store_artifacts:
+          path: /tmp/circleci-test-results
+  frontend-test:
+    working_directory: ~/TeamDiverst/diverst-development/
+    docker:
+      - image: awsdiverst/cci-primary:0.0.1
+        environment:
+          RAILS_ENV: test
+          RACK_ENV: test
+    shell: /bin/bash --login
+    environment:
+      CIRCLE_ARTIFACTS: /tmp/circleci-artifacts
+      CIRCLE_TEST_REPORTS: /tmp/circleci-test-results
+    steps:
+      - checkout
+      - run:
+          name: Create artifact directories
+          command: mkdir -p $CIRCLE_ARTIFACTS $CIRCLE_TEST_REPORTS
+      #
+      ## Install node modules
+      #
+      - restore_cache:
+          keys:
+            # when lock file changes, use increasingly general patterns to restore cache
+            - node-{{ .Branch }}-{{ checksum "./client/package-lock.json" }}
+            - node-{{ .Branch }}-
+            - node-
+      - run:
+          name: Install node modules
+          command: cd client && npm install
+      - save_cache:
+          paths:
+            - ./client/node_modules
+          key: node-{{ .Branch }}-{{ checksum "./client/package-lock.json" }}
+      #
+      ## Run frontend tests
+      #
+      - run:
+          name: Run frontend tests
+          command: cd client/ && npm test -- -i
+      #
+      ## Store artifacts
+      #
+      - store_test_results:
+          path: /tmp/circleci-test-results
+  deploy:
+    working_directory: ~/TeamDiverst/diverst-development/
+    docker:
+      - image: awsdiverst/cci-primary:0.0.1
+        environment:
+          RAILS_ENV: test
+          RACK_ENV: test
+    shell: /bin/bash --login
+    environment:
+    steps:
+      - checkout
+      - run:
+          name: Authenticate with AWS
+          command: echo $(./devops/scripts/cli-assume-role "$AWS_CLI_ROLE_ARN") > $BASH_ENV
+      - run:
+          name: Deploy backend
+          command: |
+            VERSION_LABEL="v${CIRCLE_SHA1:0:8}"
+            ./devops/scripts/create-app-version "$AWS_TEST_ENV" "$VERSION_LABEL" "$AWS_MASTER_BUCKET"
+            ./devops/scripts/deploy-app-version "$AWS_TEST_ENV" "$VERSION_LABEL"
+      #
+      ## Install node modules for frontend building
+      #
+      - restore_cache:
+          keys:
+            # when lock file changes, use increasingly general patterns to restore cache
+            - node-{{ .Branch }}-{{ checksum "./client/package-lock.json" }}
+            - node-{{ .Branch }}-
+            - node-
+      - run:
+          name: Install node modules
+          command: cd client && npm install
+      - save_cache:
+          paths:
+            - ./client/node_modules
+          key: node-{{ .Branch }}-{{ checksum "./client/package-lock.json" }}
+      #
+      ## Build & deploy frontend
+      #
+      - run:
+          name: Build & deploy frontend
+          command: ./devops/scripts/deploy-frontend "$AWS_FRONTEND_BUCKET"

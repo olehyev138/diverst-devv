@@ -15,8 +15,6 @@ import { withStyles } from '@material-ui/core/styles';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
-import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
-import messages from 'containers/Group/GroupMembers/messages';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/DeleteOutline';
@@ -24,6 +22,10 @@ import AddIcon from '@material-ui/icons/Add';
 import ExportIcon from '@material-ui/icons/SaveAlt';
 
 import DiverstTable from 'components/Shared/DiverstTable';
+
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/Branding/messages';
+import { injectIntl, intlShape } from 'react-intl';
 
 const styles = theme => ({
   errorButton: {
@@ -47,13 +49,14 @@ const styles = theme => ({
 export function SponsorList(props) {
   const { classes } = props;
   const { links } = props;
+  const { intl } = props;
 
   const handleOrderChange = (columnId, orderDir) => {
   };
 
   const columns = [
-    { title: 'Name', field: 'sponsor_name' },
-    { title: 'Title', field: 'sponsor_title' }
+    { title: intl.formatMessage(messages.Sponsors.name), field: 'sponsor_name' },
+    { title: intl.formatMessage(messages.Sponsors.title), field: 'sponsor_title' }
   ];
 
   return (
@@ -69,12 +72,12 @@ export function SponsorList(props) {
             component={WrappedNavLink}
             startIcon={<AddIcon />}
           >
-            NEW SPONSOR
+            <DiverstFormattedMessage {...messages.Sponsors.new} />
           </Button>
         </Box>
         <Box className={classes.floatSpacer} />
         <DiverstTable
-          title='Sponsors'
+          title={intl.formatMessage(messages.Sponsors.tabletitle)}
           handlePagination={props.handlePagination}
           isLoading={props.isFetchingSponsors}
           onOrderChange={handleOrderChange}
@@ -85,17 +88,17 @@ export function SponsorList(props) {
           actions={[
             {
               icon: () => <EditIcon />,
-              tooltip: 'Edit Member',
+              tooltip: intl.formatMessage(messages.Sponsors.edit),
               onClick: (_, rowData) => {
                 props.handleVisitSponsorEdit(rowData.id);
               }
             },
             {
               icon: () => <DeleteIcon />,
-              tooltip: 'Delete Sponsor',
+              tooltip: intl.formatMessage(messages.Sponsors.delete),
               onClick: (_, rowData) => {
                 /* eslint-disable-next-line no-alert, no-restricted-globals */
-                if (confirm('Delete sponsor?'))
+                if (confirm(intl.formatMessage(messages.Sponsors.delete_confirm)))
                   props.deleteSponsorBegin({ id: rowData.id });
               }
             }]}
@@ -107,6 +110,7 @@ export function SponsorList(props) {
 
 SponsorList.propTypes = {
   classes: PropTypes.object,
+  intl: intlShape,
   deleteSponsorBegin: PropTypes.func,
   links: PropTypes.shape({
     sponsorNew: PropTypes.string,
@@ -125,5 +129,6 @@ SponsorList.propTypes = {
 
 export default compose(
   memo,
+  injectIntl,
   withStyles(styles)
 )(SponsorList);

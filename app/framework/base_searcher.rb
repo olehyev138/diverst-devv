@@ -24,10 +24,6 @@ module BaseSearcher
       []
     end
 
-    def preload_attachments
-      []
-    end
-
     def set_query_scopes(params)
       if params[:query_scopes].presence
         case params[:query_scopes].class.name
@@ -93,7 +89,6 @@ module BaseSearcher
       # get the base includes/joins and base query
       includes = get_includes(params)
       preloads = get_preloads(params)
-      attachment_preloads = get_attachments(params)
       joins = get_joins
       left_joins = get_left_joins
       query = get_base_query
@@ -111,7 +106,7 @@ module BaseSearcher
         raise NameError if policy_scope.parent != policy_name.constantize
 
         # Apply the associated policy scope for the model to filter based on authorization
-        @items = policy_scope.new(current_user, base).resolve
+        @items = policy_scope.new(current_user, base, params: params).resolve
       rescue NameError
         # TODO: Uncomment this when we have more policies defined. Commenting now to pass tests early.
         # raise PolicyScopeNotFoundException
@@ -132,7 +127,6 @@ module BaseSearcher
         @items
             .joins(joins)
             .left_joins(left_joins)
-            .send_chain(attachment_preloads)
             .includes(includes)
             .preload(preloads)
             .send_chain(query_scopes)
@@ -145,7 +139,6 @@ module BaseSearcher
         @items
             .joins(joins)
             .left_joins(left_joins)
-            .send_chain(attachment_preloads)
             .includes(includes)
             .preload(preloads)
             .send_chain(query_scopes)
@@ -174,16 +167,10 @@ module BaseSearcher
     end
 
     def get_preloads(params)
-      if self.respond_to? :base_preloads
+      if params[:preload].present? && (self.respond_to? "base_preloads_#{params[:preload]}")
+        self.send("base_preloads_#{params[:preload]}")
+      elsif self.respond_to? :base_preloads
         self.base_preloads
-      else
-        []
-      end
-    end
-
-    def get_attachments(params)
-      if self.respond_to? :preload_attachments
-        self.preload_attachments.map { |field| "with_attached_#{field}" }
       else
         []
       end

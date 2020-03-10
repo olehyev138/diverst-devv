@@ -16,7 +16,7 @@ import { withStyles } from '@material-ui/core/styles';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
-import messages from 'containers/Group/GroupMembers/messages';
+import messages from 'containers/Innovate/Campaign/messages';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/DeleteOutline';
@@ -25,6 +25,7 @@ import ExportIcon from '@material-ui/icons/SaveAlt';
 
 import DiverstTable from 'components/Shared/DiverstTable';
 import CampaignQuestionsList from '../CampaignQuestion/CampaignQuestionsList';
+import { injectIntl, intlShape } from 'react-intl';
 
 const styles = theme => ({
   errorButton: {
@@ -47,14 +48,14 @@ const styles = theme => ({
 
 export function CampaignList(props) {
   const { classes } = props;
-  const { links } = props;
+  const { links, intl } = props;
 
   const handleOrderChange = (columnId, orderDir) => {
   };
 
   const columns = [
-    { title: 'Title', field: 'title' },
-    { title: 'Description', field: 'description' }
+    { title: <DiverstFormattedMessage {...messages.Campaign.title} />, field: 'title' },
+    { title: <DiverstFormattedMessage {...messages.Campaign.description} />, field: 'description' }
   ];
 
   return (
@@ -70,12 +71,12 @@ export function CampaignList(props) {
             component={WrappedNavLink}
             startIcon={<AddIcon />}
           >
-            NEW CAMPAIGN
+            <DiverstFormattedMessage {...messages.new} />
           </Button>
         </Box>
         <Box className={classes.floatSpacer} />
         <DiverstTable
-          title='Campaigns'
+          title={intl.formatMessage(messages.Campaign.campaigns)}
           handlePagination={props.handlePagination}
           isLoading={props.isFetchingCampaigns}
           onOrderChange={handleOrderChange}
@@ -87,17 +88,17 @@ export function CampaignList(props) {
           actions={[
             {
               icon: () => <EditIcon />,
-              tooltip: 'Edit Member',
+              tooltip: intl.formatMessage(messages.Campaign.edit),
               onClick: (_, rowData) => {
                 props.handleVisitCampaignEdit(rowData.id);
               }
             },
             {
               icon: () => <DeleteIcon />,
-              tooltip: 'Delete Campaign',
+              tooltip: intl.formatMessage(messages.Campaign.delete),
               onClick: (_, rowData) => {
                 /* eslint-disable-next-line no-alert, no-restricted-globals */
-                if (confirm('Delete campaign?'))
+                if (confirm(intl.formatMessage(messages.Campaign.delete_confirm)))
                   props.deleteCampaignBegin({ id: rowData.id });
               }
             }]}
@@ -109,6 +110,7 @@ export function CampaignList(props) {
 
 CampaignList.propTypes = {
   classes: PropTypes.object,
+  intl: intlShape,
   deleteCampaignBegin: PropTypes.func,
   links: PropTypes.shape({
     campaignNew: PropTypes.string,
@@ -128,5 +130,6 @@ CampaignList.propTypes = {
 
 export default compose(
   memo,
+  injectIntl,
   withStyles(styles)
 )(CampaignList);

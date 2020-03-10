@@ -38,6 +38,9 @@ export default defineMessages({
     },
   },
   groups: {
+    back: {
+      id: `${scope}.group.back`
+    },
     home: {
       id: `${scope}.group.home`
     },
@@ -144,6 +147,20 @@ export default defineMessages({
               id: `${scope}.group.plan.events.manage.updates.new`
             },
           },
+          expenses: {
+            index: {
+              id: `${scope}.group.plan.events.manage.expenses.index`
+            },
+            show: {
+              id: `${scope}.group.plan.events.manage.expenses.show`
+            },
+            edit: {
+              id: `${scope}.group.plan.events.manage.expenses.edit`
+            },
+            new: {
+              id: `${scope}.group.plan.events.manage.expenses.new`
+            },
+          },
         },
       },
       kpi: {
@@ -168,6 +185,28 @@ export default defineMessages({
           },
           new: {
             id: `${scope}.group.plan.kpi.updates.new`
+          },
+        },
+      },
+      budget: {
+        index: {
+          id: `${scope}.group.plan.budget.index`
+        },
+        editAnnualBudget: {
+          id: `${scope}.group.plan.budget.editAnnualBudget`
+        },
+        overview: {
+          id: `${scope}.group.plan.budget.overview`
+        },
+        budgets: {
+          index: {
+            id: `${scope}.group.plan.budget.budget.index`
+          },
+          show: {
+            id: `${scope}.group.plan.budget.budget.show`
+          },
+          new: {
+            id: `${scope}.group.plan.budget.budget.new`
           },
         },
       },
@@ -207,6 +246,9 @@ export default defineMessages({
       },
       groups: {
         id: `${scope}.admin.analyze.groups`,
+      },
+      custom: {
+        id: `${scope}.admin.analyze.custom`,
       }
     },
     manage: {
@@ -235,8 +277,43 @@ export default defineMessages({
       },
       branding: {
         id: `${scope}.admin.system.branding`,
+      },
+      globalSettings: {
+        id: `${scope}.admin.system.globalSettings`,
+      },
+      logs: {
+        id: `${scope}.admin.system.logs`,
+      },
+      diversity: {
+        id: `${scope}.admin.system.diversity`,
+      },
+    },
+    innovate: {
+      index: {
+        id: `${scope}.admin.innovate.index`,
+      },
+      campaigns: {
+        id: `${scope}.admin.innovate.campaigns`,
+      },
+      financials: {
+        id: `${scope}.admin.innovate.financials`,
       }
-    }
+    },
+    plan: {
+      index: {
+        id: `${scope}.admin.plan.index`,
+      },
+    },
+    include: {
+      index: {
+        id: `${scope}.admin.include.index`,
+      },
+    },
+    mentorship: {
+      index: {
+        id: `${scope}.admin.mentorship.index`,
+      },
+    },
   },
 
 });

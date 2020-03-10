@@ -1,8 +1,10 @@
-import React, { memo, useEffect, useContext } from 'react';
+import React, { memo, useEffect, useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
+
+import { Button } from '@material-ui/core';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
@@ -20,31 +22,38 @@ import { createEventBegin, eventsUnmount } from 'containers/Event/actions';
 import EventForm from 'components/Event/EventForm';
 import { selectIsCommitting } from 'containers/Event/selectors';
 
+import messages from 'containers/Event/messages';
+import { injectIntl, intlShape } from 'react-intl';
+
 export function EventCreatePage(props) {
   useInjectReducer({ key: 'events', reducer });
   useInjectSaga({ key: 'events', saga });
+
+  useEffect(() => () => {}, []);
 
   const { currentUser, currentGroup } = props;
   const rs = new RouteService(useContext);
   const links = {
     eventsIndex: ROUTES.group.events.index.path(rs.params('group_id')),
   };
-
-  useEffect(() => () => props.eventsUnmount(), []);
+  const { intl } = props;
 
   return (
-    <EventForm
-      eventAction={props.createEventBegin}
-      isCommitting={props.isCommitting}
-      buttonText='Create'
-      currentUser={currentUser}
-      currentGroup={currentGroup}
-      links={links}
-    />
+    <React.Fragment>
+      <EventForm
+        eventAction={props.createEventBegin}
+        isCommitting={props.isCommitting}
+        buttonText={intl.formatMessage(messages.create)}
+        currentUser={currentUser}
+        currentGroup={currentGroup}
+        links={links}
+      />
+    </React.Fragment>
   );
 }
 
 EventCreatePage.propTypes = {
+  intl: intlShape,
   createEventBegin: PropTypes.func,
   eventsUnmount: PropTypes.func,
   currentUser: PropTypes.object,
@@ -69,6 +78,7 @@ const withConnect = connect(
 );
 
 export default compose(
+  injectIntl,
   withConnect,
   memo,
 )(EventCreatePage);

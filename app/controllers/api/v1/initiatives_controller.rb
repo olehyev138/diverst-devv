@@ -9,6 +9,25 @@ class Api::V1::InitiativesController < DiverstController
     raise BadRequestException.new(e.message)
   end
 
+  def create
+    params[:initiative][:owner_id] = current_user.id
+    super
+  end
+
+  def finish_expenses
+    item = klass.find(params[:id])
+    base_authorize(item)
+
+    render status: 200, json: item.finalize_expenses(self.diverst_request)
+  rescue => e
+    case e
+    when InvalidInputException
+      raise
+    else
+      raise BadRequestException.new(e.message)
+    end
+  end
+
   def payload
     params
       .require(:initiative)
@@ -28,6 +47,7 @@ class Api::V1::InitiativesController < DiverstController
         :from, # For filtering
         :to, # For filtering
         :annual_budget_id,
+        :finished_expenses,
         participating_group_ids: [],
         segment_ids: [],
         fields_attributes: [

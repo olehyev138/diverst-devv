@@ -20,8 +20,17 @@ Diverst::Application.routes.draw do
       resources :answer_expenses
       resources :answer_upvotes
       resources :badges
-      resources :budgets
-      resources :budget_items
+      resources :budgets, except: [:update] do
+        member do
+          post 'approve'
+          post 'decline'
+        end
+      end
+      resources :budget_items, only: [:index] do
+        member do
+          post 'close', to: 'budget_items#close_budget'
+        end
+      end
       resources :campaigns
       resources :campaigns_groups
       resources :campaign_invitations
@@ -30,11 +39,13 @@ Diverst::Application.routes.draw do
       resources :checklists
       resources :checklist_items
       resources :clockwork_database_events, only: [:index, :update, :show]
+      resources :csv_files, only: [:create]
       resources :custom_texts
       resources :devices
       resources :emails, only: [:index, :update, :show]
       resources :enterprises do
         collection do
+          get 'get_auth_enterprise', to: 'enterprises#get_auth_enterprise'
           get 'get_enterprise', to: 'enterprises#get_enterprise'
           post 'update_enterprise', to: 'enterprises#update_enterprise'
         end
@@ -62,8 +73,11 @@ Diverst::Application.routes.draw do
       resources :frequency_periods
       resources :graphs
       resources :groups do
+        collection do
+          get '/annual_budgets', to: 'groups#current_annual_budgets'
+        end
         member do
-          get  '/fields',       to: 'groups#fields'
+          get  '/fields', to: 'groups#fields'
           post '/create_field', to: 'groups#create_field'
 
           get  '/initiatives', to: 'groups#initiatives'
@@ -72,6 +86,10 @@ Diverst::Application.routes.draw do
           post '/create_update', to: 'groups#create_update'
 
           put '/assign_leaders', to: 'groups#assign_leaders'
+
+          get '/annual_budget', to: 'groups#current_annual_budget'
+          post '/carryover_annual_budget', to: 'groups#carryover_annual_budget'
+          post '/reset_annual_budget', to: 'groups#reset_annual_budget'
         end
       end
       resources :group_categories
@@ -92,6 +110,8 @@ Diverst::Application.routes.draw do
       resources :initiatives do
         member do
           post '/qrcode', to: 'initiatives#generate_qr_code'
+
+          post '/finalize_expenses', to: 'initiatives#finish_expenses'
 
           get  '/fields',       to: 'initiatives#fields'
           post '/create_field', to: 'initiatives#create_field'
@@ -158,7 +178,7 @@ Diverst::Application.routes.draw do
       resources :news_link_photos
       resources :news_link_segments
       resources :outcomes
-      resources :pillars
+      resources :pillars, only: [:index]
       resources :policy_groups
       resources :policy_group_templates
       resources :polls do
@@ -211,10 +231,15 @@ Diverst::Application.routes.draw do
       end
       resources :users do
         collection do
+          get 'export_csv'
           post '/email', to: 'users#find_user_enterprise_by_email'
         end
       end
-      resources :user_groups
+      resources :user_groups do
+        collection do
+          get 'export_csv'
+        end
+      end
       resources :user_roles
       resources :users_segments
       resources :views

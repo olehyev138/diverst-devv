@@ -30,7 +30,7 @@ import {
   selectIsFetchingUsers
 } from 'containers/User/selectors';
 import {
-  getUsersBegin, userUnmount, deleteUserBegin
+  getUsersBegin, userUnmount, deleteUserBegin, exportUsersBegin
 } from 'containers/User/actions';
 
 import reducer from 'containers/User/reducer';
@@ -62,6 +62,10 @@ export function UserListPage(props) {
     };
     props.getUsersBegin(newParams);
     setParams(newParams);
+  };
+
+  const exportUsers = () => {
+    props.exportUsersBegin(params);
   };
 
   useEffect(() => {
@@ -110,6 +114,7 @@ export function UserListPage(props) {
         handleOrdering={handleOrdering}
         handleVisitUserEdit={props.handleVisitUserEdit}
         handleChangeScope={handleChangeScope}
+        exportUsers={exportUsers}
         links={links}
         userType={type}
         UserTypes={UserTypes}
@@ -124,6 +129,7 @@ UserListPage.propTypes = {
   userTotal: PropTypes.number,
   isFetchingUsers: PropTypes.bool,
   deleteUserBegin: PropTypes.func,
+  exportUsersBegin: PropTypes.func,
   userUnmount: PropTypes.func.isRequired,
   handleVisitUserEdit: PropTypes.func
 };
@@ -136,6 +142,7 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = dispatch => ({
   getUsersBegin: payload => dispatch(getUsersBegin(payload)),
+  exportUsersBegin: payload => dispatch(exportUsersBegin(payload)),
   deleteUserBegin: payload => dispatch(deleteUserBegin(payload)),
   userUnmount: () => dispatch(userUnmount()),
   handleVisitUserEdit: id => dispatch(push(ROUTES.admin.system.users.edit.path(id)))
