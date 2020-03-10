@@ -133,8 +133,8 @@ Diverst::Application.routes.draw do
       resources :initiative_segments
       resources :initiative_updates
       resources :initiative_users do
-        member do
-          post 'create'
+        collection do
+          post 'remove'
         end
       end
       resources :invitation_segments_groups

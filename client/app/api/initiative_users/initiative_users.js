@@ -6,6 +6,9 @@ const axios = require('axios');
 const InitiativeUsers = new API({ controller: 'initiative_users' });
 
 Object.assign(InitiativeUsers, {
+  remove(payload) {
+    return axios.post(`${this.url}/remove`, payload);
+  }
 });
 
 export default InitiativeUsers;

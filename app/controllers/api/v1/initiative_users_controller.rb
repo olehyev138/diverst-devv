@@ -10,4 +10,13 @@ class Api::V1::InitiativeUsersController < DiverstController
     :initiative_id,
   )
   end
+
+  def remove
+    params[klass.symbol][:user_id] = current_user.id
+    item = klass.find_by(payload)
+
+    return if item.nil?
+
+    item.remove
+  end
 end
