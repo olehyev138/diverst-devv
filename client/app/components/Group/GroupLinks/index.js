@@ -24,6 +24,7 @@ import PlanIcon from '@material-ui/icons/AssignmentTurnedInOutlined';
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import PerfectScrollbar from 'react-perfect-scrollbar';
+import Permission from 'components/Shared/DiverstPermission';
 
 const styles = theme => ({
   toolbar: {
@@ -128,8 +129,6 @@ export function GroupLinks(props) {
 
   const permission = name => dig(currentGroup, 'permissions', name);
 
-  const PermissionButtons = WithPermission(Button);
-
   const NavLinks = () => (
     <div>
       <PerfectScrollbar
@@ -180,18 +179,19 @@ export function GroupLinks(props) {
             <DiverstFormattedMessage {...ROUTES.group.members.index.data.titleMessage} />
           </Button>
 
-          <PermissionButtons
-            component={WrappedNavLink}
-            to={ROUTES.group.events.index.path(rs.params('group_id'))}
-            className={classes.navLink}
-            activeClassName={classes.navLinkActive}
-            show={permission('events_view?')}
-          >
-            <Hidden smDown>
-              <EventIcon className={classes.navIcon} />
-            </Hidden>
-            <DiverstFormattedMessage {...ROUTES.group.events.index.data.titleMessage} />
-          </PermissionButtons>
+          <Permission show={permission('events_view?')}>
+            <Button
+              component={WrappedNavLink}
+              to={ROUTES.group.events.index.path(rs.params('group_id'))}
+              className={classes.navLink}
+              activeClassName={classes.navLinkActive}
+            >
+              <Hidden smDown>
+                <EventIcon className={classes.navIcon} />
+              </Hidden>
+              <DiverstFormattedMessage {...ROUTES.group.events.index.data.titleMessage} />
+            </Button>
+          </Permission>
 
           <Button
             component={WrappedNavLink}
