@@ -198,10 +198,7 @@ class GroupBasePolicy < ApplicationPolicy
     def resolve(permission)
       if group
         if index?
-          to_return = group_base
-          to_return.merge_clauses(scope)
-          to_return.merge_values(scope)
-          to_return
+          group_base.merge(scope.all)
         else
           scope.none
         end
