@@ -36,8 +36,6 @@ export function* getGroupCategories(action) {
 export function* createGroupCategories(action) {
   try {
     const payload = { group_category_type: action.payload };
-    console.log('saga');
-    console.log(action);
 
     // TODO: use bind here or no?
     const response = yield call(api.groupCategoryTypes.create.bind(api.groupCategoryTypes), payload);
@@ -67,11 +65,14 @@ export function* deleteGroupCategories(action) {
 export function* updateGroupCategories(action) {
   try {
     const payload = { group_category_type: action.payload };
-    const response = yield call(api.groupCategoryTypes.update.bind(api.groupCategoryTypes), payload.groupCategoryTypes.id, payload);
+    console.log('saga');
+    console.log(action);
 
-    yield put(updateGroupCategoriesSuccess());
-    yield put(push(ROUTES.admin.manage.groups.categories.index.path()));
-    yield put(showSnackbar({ message: 'Group updated', options: { variant: 'success' } }));
+    const response = yield call(api.groupCategoryTypes.update.bind(api.groupCategoryTypes), payload.id, payload);
+    //
+    // yield put(updateGroupCategoriesSuccess());
+    // yield put(push(ROUTES.admin.manage.groups.categories.index.path()));
+    // yield put(showSnackbar({ message: 'Group updated', options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateGroupCategoriesError(err));
 

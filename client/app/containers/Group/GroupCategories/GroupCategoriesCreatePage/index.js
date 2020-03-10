@@ -14,7 +14,7 @@ import { selectPaginatedGroupCategories, selectGroupCategoriesIsCommitting } fro
 import { selectUser, selectEnterprise } from 'containers/Shared/App/selectors';
 import GroupCategoriesForm from 'components/Group/GroupCategories/GroupCategoriesForm';
 import { injectIntl, intlShape } from 'react-intl';
-import messages from 'containers/Group/messages';
+
 
 export function GroupCategoriesCreatePage(props) {
   useInjectReducer({ key: 'groupCategories', reducer });

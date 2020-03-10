@@ -550,7 +550,7 @@ export const ROUTES = {
             path: () => '/admin/manage/groups/categories/add',
           },
           edit: {
-            path: (groupCategoryTypeId = ':group_Category_Type_Id') => `/admin/manage/groups/categories/${groupCategoryTypeId}/edit`,
+            path: (groupCategoryTypeId = ':group_category_type_id') => `/admin/manage/groups/categories/${groupCategoryTypeId}/edit`,
           },
         },
         category_types: {

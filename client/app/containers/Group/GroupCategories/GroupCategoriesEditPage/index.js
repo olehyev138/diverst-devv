@@ -26,20 +26,20 @@ export function GroupCategoriesEditPage(props) {
   const rs = new RouteService(useContext);
 
   useEffect(() => {
-    props.getGroupCategoriesBegin({ id: rs.params('group_id') });
+    props.getGroupCategoriesBegin({ id: rs.params('group_category_type_id') });
 
     return () => {
       props.categoriesUnmount();
     };
   }, []);
-  console.log('container');
+  console.log('containerEdit');
   console.log(props);
 
   return (
     <React.Fragment>
       <GroupCategoriesForm
         edit
-        groupAction={props.updateGroupCategoriesBegin}
+        groupCategoriesAction={props.updateGroupCategoriesBegin}
         groupCategory={props.groupCategory}
         buttonText={intl.formatMessage(messages.update)}
         isCommitting={props.isCommitting}
