@@ -1,4 +1,4 @@
-#class SlackClient
+# class SlackClient
 #  require 'slack-ruby-client'
 #  delegate :url_helpers, to: 'Rails.application.routes'
 #
@@ -16,4 +16,4 @@
 #      }
 #    )
 #  end
-#end
+# end

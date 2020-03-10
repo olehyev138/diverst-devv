@@ -158,13 +158,13 @@ module ApplicationHelper
   end
 
   def show_sponsor_media?(object, m)
-    if %r{\Aimage\/.*\Z}.match(object.public_send(m.to_sym))
+    if %r{\Aimage\/.*\Z}.match?(object.public_send(m.to_sym))
       yield
     end
   end
 
   def show_sponsor_video?(object, m)
-    if %r{\Avideo\/.*\Z}.match(object.public_send(m.to_sym))
+    if %r{\Avideo\/.*\Z}.match?(object.public_send(m.to_sym))
       yield
     end
   end

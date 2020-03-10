@@ -1,4 +1,4 @@
-#class DiverstMailer < Devise::Mailer
+# class DiverstMailer < Devise::Mailer
 #  include MailHelper
 #
 #  def invitation_instructions(record, token, opts = {})
@@ -39,4 +39,4 @@
 #      click_here: "<a saml_for_enterprise=\"#{@record.enterprise_id}\" href=\"#{accept_user_invitation_url(@record, invitation_token: @token)}\" target=\"_blank\">Click here</a>",
 #    }
 #  end
-#end
+# end
