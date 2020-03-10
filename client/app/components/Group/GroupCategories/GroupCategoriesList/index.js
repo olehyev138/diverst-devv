@@ -56,8 +56,6 @@ const styles = theme => ({
 
 export function GroupCategoriesList(props, context) {
   const { classes, defaultParams } = props;
-  console.log('component');
-  console.log(props);
   return (
     <React.Fragment>
       <Grid container spacing={3} justify='flex-end'>
@@ -91,7 +89,7 @@ export function GroupCategoriesList(props, context) {
                       size='small'
                       color='primary'
                       to={{
-                        pathname: `${ROUTES.admin.manage.groups.pathPrefix}/${categoryType.id}/edit`,
+                        pathname: `${ROUTES.admin.manage.groups.categories.pathPrefix}/${categoryType.id}/edit`,
                         state: { id: categoryType.id }
                       }}
                       component={WrappedNavLink}

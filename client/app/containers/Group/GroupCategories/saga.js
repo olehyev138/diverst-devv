@@ -8,13 +8,15 @@ import { showSnackbar } from 'containers/Shared/Notifier/actions';
 import {
   GET_GROUP_CATEGORIES_BEGIN,
   CREATE_GROUP_CATEGORIES_BEGIN,
-  DELETE_GROUP_CATEGORIES_BEGIN
+  DELETE_GROUP_CATEGORIES_BEGIN,
+  UPDATE_GROUP_CATEGORIES_BEGIN
 } from 'containers/Group/GroupCategories/constants';
 
 import {
   getGroupCategoriesBegin, getGroupCategoriesSuccess, getGroupCategoriesError,
   createGroupCategoriesBegin, createGroupCategoriesSuccess, createGroupCategoriesError,
   deleteGroupCategoriesBegin, deleteGroupCategoriesSuccess, deleteGroupCategoriesError,
+  updateGroupCategoriesBegin, updateGroupCategoriesSuccess, updateGroupCategoriesError,
 } from 'containers/Group/GroupCategories/actions';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -62,9 +64,26 @@ export function* deleteGroupCategories(action) {
   }
 }
 
+export function* updateGroupCategories(action) {
+  try {
+    const payload = { group_category_type: action.payload };
+    const response = yield call(api.groupCategoryTypes.update.bind(api.groupCategoryTypes), payload.groupCategoryTypes.id, payload);
+
+    yield put(updateGroupCategoriesSuccess());
+    yield put(push(ROUTES.admin.manage.groups.categories.index.path()));
+    yield put(showSnackbar({ message: 'Group updated', options: { variant: 'success' } }));
+  } catch (err) {
+    yield put(updateGroupCategoriesError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to update group', options: { variant: 'warning' } }));
+  }
+}
+
 
 export default function* groupsSaga() {
   yield takeLatest(GET_GROUP_CATEGORIES_BEGIN, getGroupCategories);
   yield takeLatest(CREATE_GROUP_CATEGORIES_BEGIN, createGroupCategories);
   yield takeLatest(DELETE_GROUP_CATEGORIES_BEGIN, deleteGroupCategories);
+  yield takeLatest(UPDATE_GROUP_CATEGORIES_BEGIN, updateGroupCategories);
 }

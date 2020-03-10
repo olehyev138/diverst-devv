@@ -3,7 +3,7 @@ class Api::V1::GroupCategoryTypesController < DiverstController
     params
         .require(klass.symbol)
         .permit(
-    :id,
+            :id,
             :name,
             group_categories_attributes: [
                 :id,

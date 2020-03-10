@@ -1,45 +1,64 @@
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
+import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
-import { compose } from 'redux';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import saga from 'containers/Group/GroupCategories/saga';
 import reducer from 'containers/Group/GroupCategories/reducer';
 
-import { createGroupCategoriesBegin, getGroupCategoriesBegin, categoriesUnmount } from 'containers/Group/GroupCategories/actions';
+import { getGroupCategoriesBegin, updateGroupCategoriesBegin, categoriesUnmount } from 'containers/Group/GroupCategories/actions';
 import { selectPaginatedGroupCategories, selectGroupCategoriesIsCommitting } from 'containers/Group/GroupCategories/selectors';
 import { selectUser, selectEnterprise } from 'containers/Shared/App/selectors';
 import GroupCategoriesForm from 'components/Group/GroupCategories/GroupCategoriesForm';
+
+import RouteService from 'utils/routeHelpers';
+
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Group/messages';
 
-export function GroupCategoriesCreatePage(props) {
+export function GroupCategoriesEditPage(props) {
   useInjectReducer({ key: 'groupCategories', reducer });
   useInjectSaga({ key: 'groupCategories', saga });
   const { intl } = props;
-  useEffect(() => () => props.categoriesUnmount(), []);
+  const rs = new RouteService(useContext);
+
+  useEffect(() => {
+    props.getGroupCategoriesBegin({ id: rs.params('group_id') });
+
+    return () => {
+      props.categoriesUnmount();
+    };
+  }, []);
+  console.log('container');
+  console.log(props);
 
   return (
-    <GroupCategoriesForm
-      groupCategoriesAction={props.createGroupCategoriesBegin}
-      buttonText='Create'
-      getGroupCategoriesBegin={props.getGroupCategoriesBegin}
-      categories={props.categories}
-      isCommitting={props.isCommitting}
-    />
+    <React.Fragment>
+      <GroupCategoriesForm
+        edit
+        groupAction={props.updateGroupCategoriesBegin}
+        groupCategory={props.groupCategory}
+        buttonText={intl.formatMessage(messages.update)}
+        isCommitting={props.isCommitting}
+        isFormLoading={props.isFormLoading}
+      />
+    </React.Fragment>
   );
 }
 
-GroupCategoriesCreatePage.propTypes = {
+GroupCategoriesEditPage.propTypes = {
+  groupCategory: PropTypes.object,
+  isFormLoading: PropTypes.bool,
   intl: intlShape,
-  createGroupCategoriesBegin: PropTypes.func,
+  updateGroupCategoriesBegin: PropTypes.func,
   getGroupCategoriesBegin: PropTypes.func,
   categoriesUnmount: PropTypes.func,
   categories: PropTypes.array,
   isCommitting: PropTypes.bool,
+
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -50,7 +69,7 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = {
-  createGroupCategoriesBegin,
+  updateGroupCategoriesBegin,
   getGroupCategoriesBegin,
   categoriesUnmount
 };
@@ -64,4 +83,4 @@ export default compose(
   injectIntl,
   withConnect,
   memo,
-)(GroupCategoriesCreatePage);
+)(GroupCategoriesEditPage);

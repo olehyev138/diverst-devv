@@ -53,6 +53,7 @@ import GroupCreatePage from 'containers/Group/GroupCreatePage/Loadable';
 import GroupEditPage from 'containers/Group/GroupEditPage/Loadable';
 import GroupCategoriesPage from 'containers/Group/GroupCategories/GroupCategoriesPage/Loadable';
 import GroupCategoriesCreatePage from 'containers/Group/GroupCategories/GroupCategoriesCreatePage/Loadable';
+import GroupCategoriesEditPage from 'containers/Group/GroupCategories/GroupCategoriesEditPage/Loadable';
 
 /* Admin - Manage - Segment */
 import SegmentListPage from 'containers/Segment/SegmentListPage/Loadable';
@@ -177,6 +178,7 @@ export {
   GroupEditPage,
   GroupCategoriesPage,
   GroupCategoriesCreatePage,
+  GroupCategoriesEditPage,
   SegmentListPage,
   SegmentPage,
   FieldsPage,
