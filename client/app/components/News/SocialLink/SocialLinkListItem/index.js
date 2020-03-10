@@ -104,18 +104,6 @@ export function SocialLinkListItem(props) {
             {<DiverstFormattedMessage {...messages.approve} />}
           </Button>
         )}
-        {!props.readonly && (
-          <Button
-            size='small'
-            onClick={() => {
-              /* eslint-disable-next-line no-alert, no-restricted-globals */
-              if (confirm(intl.formatMessage(messages.social_delete_confirm)))
-                props.deleteSocialLinkBegin(newsItem.social_link);
-            }}
-          >
-            {<DiverstFormattedMessage {...messages.delete} />}
-          </Button>
-        )}
       </CardActions>
     </Card>
   );

@@ -171,18 +171,6 @@ export function NewsLinkListItem(props) {
               {<DiverstFormattedMessage {...messages.approve} />}
             </Button>
           )}
-          {!props.readonly && (
-            <Button
-              size='small'
-              onClick={() => {
-                /* eslint-disable-next-line no-alert, no-restricted-globals */
-                if (confirm(intl.formatMessage(messages.news_delete_confirm)))
-                  props.deleteNewsLinkBegin(newsItem.news_link);
-              }}
-            >
-              {<DiverstFormattedMessage {...messages.delete} />}
-            </Button>
-          )}
         </CardActions>
       )}
     </Card>
