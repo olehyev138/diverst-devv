@@ -4,7 +4,7 @@
  *
  */
 
-import React, { memo, useEffect } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import dig from 'object-dig';
@@ -236,16 +236,11 @@ export function EventFormInner({
   );
 }
 
-let start = null;
-let end = null;
-
 export function EventForm(props) {
   const event = dig(props, 'event');
 
-  useEffect(() => {
-    start = DateTime.local().plus({ hour: 1 });
-    end = DateTime.local().plus({ hour: 2 });
-  }, []);
+  const [start, setStart] = useState(DateTime.local().plus({ hour: 1 }));
+  const [end, setEnd] = useState(DateTime.local().plus({ hour: 2 }));
 
   const initialValues = buildValues(event, {
     id: { default: '' },
