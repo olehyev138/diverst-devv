@@ -52,7 +52,7 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
   end
 
   def policies
-    policy&.public_methods(false).select { |m| m.to_s.include? '?' } || []
+    [:show?, :update?, :delete?]
   end
 
   def permissions
