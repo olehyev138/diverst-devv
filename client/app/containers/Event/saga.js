@@ -26,6 +26,7 @@ import {
   archiveEventError, archiveEventSuccess,
   joinEventError, joinEventSuccess
 } from './actions';
+import {act} from "react-testing-library";
 
 
 export function* getEvents(action) {
@@ -166,8 +167,9 @@ export function* finalizeExpenses(action) {
 
 export function* joinEvent(action) {
   try {
-    const response = yield call(api.initiatives.finalizeExpenses.bind(api.initiatives), action.payload.id);
-    //TODO : Complete the actual action
+    const response = yield call(api.initiativeUsers, action.payload.id);
+    yield put(joinEventSuccess());
+
   } catch (err) {
     yield put(joinEventError(err));
 
