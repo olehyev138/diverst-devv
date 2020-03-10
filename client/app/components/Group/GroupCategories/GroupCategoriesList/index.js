@@ -48,7 +48,6 @@ const styles = theme => ({
   childGroupCard: {
     marginLeft: 24,
     borderLeftWidth: 2,
-    borderLeftStyle: 'solid',
     borderLeftColor: theme.palette.secondary.main,
     borderTopLeftRadius: 4,
     borderBottomLeftRadius: 4,
@@ -88,8 +87,6 @@ export function GroupCategoriesList(props, context) {
                     <Typography variant='h5' component='h2' display='inline'>
                       {categoryType.name}
                     </Typography>
-                  </CardContent>
-                  <CardActions>
                     <Button
                       size='small'
                       color='primary'
@@ -107,66 +104,41 @@ export function GroupCategoriesList(props, context) {
                       onClick={() => {
                         /* eslint-disable-next-line no-alert, no-restricted-globals */
                         if (confirm('Delete category?'))
-                          props.deleteGroupCategoryBegin(categoryType.id);
+                          props.deleteGroupCategoriesBegin(categoryType.id);
                       }}
                     >
                       <DiverstFormattedMessage {...messages.delete} />
                     </Button>
-                    <Button
-                      size='small'
-                      color='primary'
-                      to={{
-                        pathname: `${ROUTES.admin.manage.groups.pathPrefix}/${categoryType.id}/edit`,
-                        state: { id: categoryType.id }
-                      }}
-                      component={WrappedNavLink}
-                    >
-                      Categorize Subgroups
-                    </Button>
-                  </CardActions>
-                  <Grid container spacing={1} justify='flex-end'>
-                    {categoryType.group_categories && categoryType.group_categories.map((category, i) => (
-                      /* eslint-disable-next-line react/jsx-wrap-multilines */
-                      <Grid item key={category.id} xs={12}>
-                        <Card className={classes.childGroupCard}>
-                          <CardContent>
-                            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                            <Typography variant='h5' component='h2' display='inline'>
-                              {category.name}
-                            </Typography>
-                            <Button
-                              size='small'
-                              color='primary'
-                              to={{
-                                pathname: `${ROUTES.admin.manage.groups.pathPrefix}/${category.id}/edit`,
-                                state: { id: category.id }
-                              }}
-                              component={WrappedNavLink}
-                            >
-                              <DiverstFormattedMessage {...messages.edit} />
-                            </Button>
-                            <Button
-                              size='small'
-                              className={classes.errorButton}
-                              onClick={() => {
-                                /* eslint-disable-next-line no-alert, no-restricted-globals */
-                                if (confirm('Delete category?'))
-                                  props.deleteGroupCategoryBegin(category.id);
-                              }}
-                            >
-                              <DiverstFormattedMessage {...messages.delete} />
-                            </Button>
-                          </CardContent>
-                        </Card>
-                      </Grid>
-                    ))}
-                  </Grid>
+                  </CardContent>
+                  <CardContent>
+                    <Grid container spacing={1} justify='flex-end'>
+                      {categoryType.group_categories && categoryType.group_categories.map((category, i) => (
+                        /* eslint-disable-next-line react/jsx-wrap-multilines */
+                        <Grid item key={category.id} xs={12}>
+                          <Card className={classes.childGroupCard}>
+                            <CardContent>
+                              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                              <Typography variant='body1' component='h2' display='inline'>
+                                {category.name}
+                              </Typography>
+                            </CardContent>
+                          </Card>
+                        </Grid>
+                      ))}
+                    </Grid>
+                  </CardContent>
                 </Card>
               </Grid>
             );
           })}
         </Grid>
       </DiverstLoader>
+      <DiverstPagination
+        isLoading={props.isLoading}
+        handlePagination={props.handlePagination}
+        rowsPerPage={defaultParams.count}
+        count={props.groupCategoriesTotal}
+      />
     </React.Fragment>
   );
 }
@@ -176,6 +148,8 @@ GroupCategoriesList.propTypes = {
   classes: PropTypes.object,
   isLoading: PropTypes.bool,
   categoryTypes: PropTypes.object,
+  groupCategoriesTotal: PropTypes.number,
+  deleteGroupCategoriesBegin: PropTypes.func,
   deleteGroupCategoryBegin: PropTypes.func,
   handlePagination: PropTypes.func
 };

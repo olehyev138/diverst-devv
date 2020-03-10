@@ -14,7 +14,7 @@ import { useInjectReducer } from 'utils/injectReducer';
 import saga from 'containers/Group/GroupCategories/saga';
 import reducer from 'containers/Group/GroupCategories/reducer';
 
-import { getGroupCategoriesBegin, categoriesUnmount } from 'containers/Group/GroupCategories/actions';
+import { getGroupCategoriesBegin, categoriesUnmount, deleteGroupCategoriesBegin } from 'containers/Group/GroupCategories/actions';
 import { selectPaginatedGroupCategories, selectGroupCategoriesTotal, selectGroupCategoriesIsLoading } from 'containers/Group/GroupCategories/selectors';
 import GroupCategoriesList from 'components/Group/GroupCategories/GroupCategoriesList';
 
@@ -45,16 +45,20 @@ export function GroupCategoriesPage(props) {
         categoryTypes={props.groupCategories}
         defaultParams={params}
         handlePagination={handlePagination}
+        deleteGroupCategoriesBegin={props.deleteGroupCategoriesBegin}
+        groupCategoriesTotal={props.groupCategoriesTotal}
       />
     </React.Fragment>
   );
 }
 
 GroupCategoriesPage.propTypes = {
+  deleteGroupCategoriesBegin: PropTypes.func.isRequired,
   getGroupCategoriesBegin: PropTypes.func.isRequired,
   categoriesUnmount: PropTypes.func.isRequired,
   isLoading: PropTypes.bool,
   groupCategories: PropTypes.object,
+  groupCategoriesTotal: PropTypes.number,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -64,7 +68,8 @@ const mapStateToProps = createStructuredSelector({
 });
 const mapDispatchToProps = {
   getGroupCategoriesBegin,
-  categoriesUnmount
+  categoriesUnmount,
+  deleteGroupCategoriesBegin
 };
 
 const withConnect = connect(

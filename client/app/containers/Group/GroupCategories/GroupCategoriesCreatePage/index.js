@@ -17,8 +17,8 @@ import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Group/messages';
 
 export function GroupCategoriesCreatePage(props) {
-  useInjectReducer({ key: 'groups', reducer });
-  useInjectSaga({ key: 'groups', saga });
+  useInjectReducer({ key: 'groupCategories', reducer });
+  useInjectSaga({ key: 'groupCategories', saga });
   const { intl } = props;
   useEffect(() => () => props.categoriesUnmount(), []);
   console.log('container');

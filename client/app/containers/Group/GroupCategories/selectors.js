@@ -22,7 +22,7 @@ const selectPaginatedSelectGroupCategories = () => createSelector(
 
 const selectGroupCategoriesTotal = () => createSelector(
   selectGroupCategoriesDomain,
-  groupCategoriesState => groupCategoriesState.groupTotal
+  groupCategoriesState => groupCategoriesState.groupCategoriesTotal
 );
 
 const selectGroupCategories = () => createSelector(
