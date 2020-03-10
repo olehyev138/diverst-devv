@@ -658,7 +658,15 @@ export const ROUTES = {
             }
           },
         },
-      }
+      },
+      archived: {
+        index: {
+          path: () => '/admin/manage/archived',
+          data: {
+            titleMessage: messages.admin.manage.archived,
+          }
+        }
+      },
     },
     plan: {
       index: {

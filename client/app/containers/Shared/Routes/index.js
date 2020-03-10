@@ -129,7 +129,8 @@ import {
   NewsLinkPage,
   SocialLinkCreatePage,
   SocialLinkEditPage,
-  UserDownloadsPage
+  UserDownloadsPage,
+  ArchivesPage
 } from './templates';
 
 // Paths
@@ -200,6 +201,7 @@ export default function Routes(props) {
       <AdminLayout {...expandRoute(ROUTES.admin.manage.resources.folders.new)} component={FolderCreatePage} />
       <AdminLayout {...expandRoute(ROUTES.admin.manage.resources.folders.show)} component={FolderPage} />
       <AdminLayout {...expandRoute(ROUTES.admin.manage.resources.index)} component={FoldersPage} />
+      <AdminLayout {...expandRoute(ROUTES.admin.manage.archived.index)} component={ArchivesPage} />
 
       { /* Admin - Plan - Budget */ }
       <AdminLayout {...expandRoute(ROUTES.admin.plan.budgeting.index)} component={AdminAnnualBudgetPage} />

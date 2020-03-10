@@ -90,6 +90,7 @@ module BaseSearcher
       includes = get_includes(params)
       preloads = get_preloads(params)
       joins = get_joins
+      left_joins = get_left_joins
       query = get_base_query
 
       add_custom_args(where, where_not, params, includes, joins)
@@ -125,6 +126,7 @@ module BaseSearcher
       if searchValue.present?
         @items
             .joins(joins)
+            .left_joins(left_joins)
             .includes(includes)
             .preload(preloads)
             .send_chain(query_scopes)
@@ -136,6 +138,7 @@ module BaseSearcher
       else
         @items
             .joins(joins)
+            .left_joins(left_joins)
             .includes(includes)
             .preload(preloads)
             .send_chain(query_scopes)
@@ -177,6 +180,12 @@ module BaseSearcher
       return [] unless self.respond_to? :base_joins
 
       self.base_joins
+    end
+
+    def get_left_joins
+      return [] unless self.respond_to? :base_left_joins
+
+      self.base_left_joins
     end
 
     def query_arguments

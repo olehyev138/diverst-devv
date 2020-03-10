@@ -27,13 +27,12 @@ import {
   updateResourceSuccess, updateResourceError,
   deleteResourceError,
   validateFolderPasswordSuccess, validateFolderPasswordError, deleteFolderSuccess, deleteResourceSuccess,
-  archiveResourceError, archiveResourceSuccess
+  archiveResourceError, archiveResourceSuccess,
 } from 'containers/Resource/actions';
 
 import {
   getParentPage,
   getFolderShowPath,
-  getFolderIndexPath,
 } from 'utils/resourceHelpers';
 
 export function* getFolders(action) {

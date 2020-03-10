@@ -18,7 +18,7 @@ module Initiative::Actions
 
   module ClassMethods
     def valid_scopes
-      ['upcoming', 'ongoing', 'past', 'of_annual_budget']
+      ['upcoming', 'ongoing', 'past', 'not_archived', 'archived', 'of_annual_budget']
     end
 
     def base_preloads

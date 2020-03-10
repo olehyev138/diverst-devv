@@ -119,6 +119,9 @@ Diverst::Application.routes.draw do
           get  '/updates', to: 'initiatives#updates'
           get  '/update_prototype', to: 'initiatives#update_prototype'
           post '/create_update', to: 'initiatives#create_update'
+
+          post 'archive'
+          put 'un_archive'
         end
       end
       resources :initiative_comments
@@ -163,7 +166,12 @@ Diverst::Application.routes.draw do
       resources :metrics_dashboards_segments
       resources :mobile_fields
       resources :news_feeds
-      resources :news_feed_links
+      resources :news_feed_links do
+        member do
+          post 'archive'
+          put 'un_archive'
+        end
+      end
       resources :news_feed_link_segments
       resources :news_links
       resources :news_link_comments
@@ -183,6 +191,7 @@ Diverst::Application.routes.draw do
       resources :resources do
         member do
           post 'archive'
+          put 'un_archive'
         end
       end
       resources :rewards

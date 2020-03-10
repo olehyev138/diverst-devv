@@ -11,12 +11,12 @@ import saga from 'containers/Group/saga';
 
 import GroupHome from 'components/Group/GroupHome';
 
+
 export function GroupHomePage(props) {
   useInjectReducer({ key: 'groups', reducer });
   useInjectSaga({ key: 'groups', saga });
-
   return (
-    <GroupHome group={props.currentGroup} />
+    <GroupHome currentGroup={props.currentGroup} />
   );
 }
 
@@ -24,18 +24,6 @@ GroupHomePage.propTypes = {
   currentGroup: PropTypes.object,
 };
 
-const mapStateToProps = createStructuredSelector({
-});
-
-const mapDispatchToProps = {
-};
-
-const withConnect = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
-
 export default compose(
-  withConnect,
   memo,
 )(GroupHomePage);
