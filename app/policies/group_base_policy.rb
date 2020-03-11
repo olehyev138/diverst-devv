@@ -184,6 +184,10 @@ class GroupBasePolicy < ApplicationPolicy
       "(user_groups.user_id = #{quote_string(user.id)} AND #{policy_group(permission)})"
     end
 
+    def is_not_a_member(permission)
+      nil
+    end
+
     def leader_policy(permission)
       "group_leaders.#{quote_string(permission)} = true"
     end
@@ -222,7 +226,7 @@ class GroupBasePolicy < ApplicationPolicy
       scoped
           .joins("JOIN policy_groups ON policy_groups.user_id = #{quote_string(user.id)}")
           .where('enterprises.id = ?', user.enterprise_id)
-          .where([manage_all, group_manage(permission), is_leader(permission), is_member(permission), is_not_a_member(permission)].join(' OR '))
+          .where([manage_all, group_manage(permission), is_leader(permission), is_member(permission), is_not_a_member(permission)].compact.join(' OR '))
     end
 
     def resolve(permission)

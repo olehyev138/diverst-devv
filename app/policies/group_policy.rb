@@ -1,4 +1,6 @@
 class GroupPolicy < ApplicationPolicy
+  attr_reader :user_group, :group_leader
+
   def initialize(user, record, params = nil)
     super(user, record, params)
     if Group === record
