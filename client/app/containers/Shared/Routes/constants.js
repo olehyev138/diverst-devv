@@ -538,6 +538,9 @@ export const ROUTES = {
         edit: {
           path: (groupId = ':group_id') => `/admin/manage/groups/${groupId}/edit`,
         },
+        categorize: {
+          path: (groupId = ':group_id') => `/admin/manage/groups/${groupId}/categorize`,
+        },
         categories: {
           pathPrefix: '/admin/manage/groups/categories',
           index: {
@@ -545,9 +548,6 @@ export const ROUTES = {
           },
           new: {
             path: () => '/admin/manage/groups/categories/new',
-          },
-          add: {
-            path: () => '/admin/manage/groups/categories/add',
           },
           edit: {
             path: (groupCategoryTypeId = ':group_category_type_id') => `/admin/manage/groups/categories/${groupCategoryTypeId}/edit`,

@@ -14,6 +14,7 @@ import {
   UPDATE_GROUP_BEGIN, UPDATE_GROUP_SUCCESS,
   UPDATE_GROUP_ERROR, UPDATE_GROUP_SETTINGS_BEGIN,
   UPDATE_GROUP_SETTINGS_SUCCESS, UPDATE_GROUP_SETTINGS_ERROR, GET_GROUP_BEGIN,
+  GROUP_CATEGORIZE_UNMOUNT,
 } from 'containers/Group/constants';
 
 export const initialState = {
@@ -70,6 +71,8 @@ function groupsReducer(state = initialState, action) {
       case GROUP_LIST_UNMOUNT:
         return initialState;
       case GROUP_FORM_UNMOUNT:
+        return initialState;
+      case GROUP_CATEGORIZE_UNMOUNT:
         return initialState;
     }
   });

@@ -8,15 +8,12 @@ const selectPaginatedGroupCategories = () => createSelector(
   groupCategoriesState => groupCategoriesState.groupCategoriesList
 );
 
-/* Select group list & format it for a select
- *  looks like: [ { value: <>, label: <> } ... ]
- */
 const selectPaginatedSelectGroupCategories = () => createSelector(
   selectGroupCategoriesDomain,
   groupCategoriesState => (
     Object
       .values(groupCategoriesState.groupCategoriesList)
-      .map(groupCategory => ({ value: groupCategory.id, label: groupCategory.name }))
+      .flatMap(groupCategory => groupCategory.group_categories.map (gc => ({ value: gc.id, label: gc.name })))
   )
 );
 

@@ -154,7 +154,7 @@ export function AdminGroupList(props, context) {
                       size='small'
                       color='primary'
                       to={{
-                        pathname: `${ROUTES.admin.manage.groups.pathPrefix}/${group.id}/edit`,
+                        pathname: `${ROUTES.admin.manage.groups.pathPrefix}/${group.id}/categorize`,
                         state: { id: group.id }
                       }}
                       component={WrappedNavLink}

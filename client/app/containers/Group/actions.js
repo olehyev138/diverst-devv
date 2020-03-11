@@ -11,7 +11,7 @@ import {
   UPDATE_GROUP_BEGIN, UPDATE_GROUP_SUCCESS, UPDATE_GROUP_ERROR,
   UPDATE_GROUP_SETTINGS_BEGIN, UPDATE_GROUP_SETTINGS_SUCCESS, UPDATE_GROUP_SETTINGS_ERROR,
   DELETE_GROUP_BEGIN, DELETE_GROUP_SUCCESS, DELETE_GROUP_ERROR,
-  GROUP_LIST_UNMOUNT, GROUP_FORM_UNMOUNT
+  GROUP_LIST_UNMOUNT, GROUP_FORM_UNMOUNT, GROUP_CATEGORIZE_UNMOUNT,
 } from 'containers/Group/constants';
 
 /* Group listing */
@@ -161,5 +161,11 @@ export function groupListUnmount() {
 export function groupFormUnmount() {
   return {
     type: GROUP_FORM_UNMOUNT
+  };
+}
+
+export function groupCategorizeUnmount() {
+  return {
+    type: GROUP_CATEGORIZE_UNMOUNT
   };
 }

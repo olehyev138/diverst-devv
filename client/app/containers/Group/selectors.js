@@ -30,6 +30,31 @@ const selectGroup = () => createSelector(
   groupsState => groupsState.currentGroup
 );
 
+const selectCategorizeGroup = () => createSelector(
+  selectGroupsDomain,
+  (groupsState) => {
+    const { currentGroup } = groupsState;
+    if (!currentGroup) return null;
+
+    // clone group before making mutations on it
+    const selectGroup = {
+      ...groupsState.currentGroup, ...{
+        name: {
+          label: groupsState.currentGroup.name,
+          value: groupsState.currentGroup.id
+        }
+      }
+    };
+
+    selectGroup.children = selectGroup.children.map(child => ({
+      value: child.id,
+      label: child.name
+    }));
+
+    return selectGroup;
+  }
+);
+
 const selectGroupIsLoading = () => createSelector(
   selectGroupsDomain,
   groupsState => groupsState.isLoading
@@ -66,5 +91,5 @@ const selectFormGroup = () => createSelector(
 export {
   selectGroupsDomain, selectPaginatedGroups, selectPaginatedSelectGroups,
   selectGroupTotal, selectGroup, selectFormGroup, selectGroupIsLoading,
-  selectGroupIsCommitting, selectGroupIsFormLoading
+  selectGroupIsCommitting, selectGroupIsFormLoading, selectCategorizeGroup
 };
