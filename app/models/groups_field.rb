@@ -10,7 +10,7 @@ class GroupsField < Field
   def format_value_name(value)
     Group.find(value).name
   rescue
-    "Deleted #{self.enterprise.custom_text.erg.pluralize}"
+    "Deleted #{self.enterprise ? self.enterprise.custom_text.erg : 'ERG'}"
   end
 
   private
