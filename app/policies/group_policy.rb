@@ -9,7 +9,7 @@ class GroupPolicy < ApplicationPolicy
 
   def index?
     return true if create?
-    return true if basic_group_leader_permission?('groups_index')
+    return true if has_group_leader_permissions?('groups_index')
 
     @policy_group.groups_index?
   end
@@ -49,8 +49,8 @@ class GroupPolicy < ApplicationPolicy
   def create?
     return true if manage_all?
     return true if @policy_group.groups_manage?
-    return true if basic_group_leader_permission?('groups_manage')
-    return true if basic_group_leader_permission?('groups_create')
+    return true if has_group_leader_permissions?('groups_manage')
+    return true if has_group_leader_permissions?('groups_create')
 
     @policy_group.groups_create?
   end
@@ -104,7 +104,7 @@ class GroupPolicy < ApplicationPolicy
 
   def assign_leaders?
     return true if manage_all?
-    return true if basic_group_leader_permission?('group_leader_manage')
+    return true if has_group_leader_permissions?('group_leader_manage')
 
     @policy_group.group_leader_manage?
   end
@@ -113,7 +113,7 @@ class GroupPolicy < ApplicationPolicy
     # return true if parent_group_permissions?
     # super admin
     return true if manage_all?
-    return true if basic_group_leader_permission?('groups_manage') && basic_group_leader_permission?('group_settings_manage')
+    return true if has_group_leader_permissions?('groups_manage') && has_group_leader_permissions?('group_settings_manage')
 
     # groups manager
     @policy_group.groups_manage? && @policy_group.group_settings_manage?
@@ -123,7 +123,7 @@ class GroupPolicy < ApplicationPolicy
     # return true if parent_group_permissions?
     # super admin
     return true if manage_all?
-    return true if basic_group_leader_permission?('groups_manage') && basic_group_leader_permission?('groups_budgets_manage')
+    return true if has_group_leader_permissions?('groups_manage') && has_group_leader_permissions?('groups_budgets_manage')
 
     # groups manager
     @policy_group.groups_manage? && @policy_group.groups_budgets_manage?
@@ -131,7 +131,7 @@ class GroupPolicy < ApplicationPolicy
 
   def manage?
     return true if manage_all?
-    return true if basic_group_leader_permission?('groups_manage')
+    return true if has_group_leader_permissions?('groups_manage')
 
     @policy_group.groups_manage?
   end
@@ -170,7 +170,7 @@ class GroupPolicy < ApplicationPolicy
 
   def calendar?
     return true if manage_all?
-    return true if basic_group_leader_permission?('global_calendar')
+    return true if has_group_leader_permissions?('global_calendar')
 
     @policy_group.global_calendar?
   end
@@ -217,7 +217,7 @@ class GroupPolicy < ApplicationPolicy
   def has_group_leader_permissions?(permission)
     return false unless is_a_leader?
 
-    @record.group_leaders.where(user_id: @user.id).where("#{permission} = true").exists?
+    group_leader[permission] || false
   end
 
   class Scope < Scope

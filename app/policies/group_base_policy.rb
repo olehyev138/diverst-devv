@@ -46,52 +46,6 @@ class GroupBasePolicy < ApplicationPolicy
     is_a_member? && !user_group.accepted_member?
   end
 
-  def index?
-    return true if view_group_resource(base_manage_permission)
-    return true if view_group_resource(base_create_permission)
-
-    view_group_resource(base_index_permission)
-  end
-
-  def show?
-    index?
-  end
-
-  def new?
-    create?
-  end
-
-  def create?
-    return true if manage_group_resource(base_manage_permission)
-
-    manage_group_resource(base_create_permission)
-  end
-
-  def edit?
-    update?
-  end
-
-  def update?
-    manage_group_resource(base_manage_permission)
-  end
-
-  def destroy?
-    update?
-  end
-
-  def manage?
-    manage_group_resource(base_manage_permission)
-  end
-
-  def base_index_permission
-  end
-
-  def base_create_permission
-  end
-
-  def base_manage_permission
-  end
-
   def group_visibility_setting
   end
 
@@ -132,17 +86,7 @@ class GroupBasePolicy < ApplicationPolicy
   def has_group_leader_permissions?(permission)
     return false unless is_a_leader?
 
-    gl_permission = GroupLeader.attribute_names.include?(permission)
-    pgt_permission = PolicyGroupTemplate.attribute_names.include?(permission)
-
-    leaders = group.group_leaders.where(user_id: user.id)
-    leaders = leaders.joins(:policy_group_template) if pgt_permission
-
-    conditions = []
-    conditions.append "(group_leaders.#{permission} = true)" if gl_permission
-    conditions.append "(policy_group_templates.#{permission} = true)" if pgt_permission
-
-    leaders.where(conditions.join(' OR ') || '(TRUE)').exists?
+    group_leader[permission] || false
   end
 
   def view_group_resource(permission)
