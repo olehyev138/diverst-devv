@@ -210,6 +210,7 @@ Event.propTypes = {
   deleteEventBegin: PropTypes.func,
   archiveEventBegin: PropTypes.func,
   joinEventBegin: PropTypes.func,
+  leaveEventBegin: PropTypes.func,
   classes: PropTypes.object,
   event: PropTypes.object,
   currentUserId: PropTypes.number,
