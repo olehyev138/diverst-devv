@@ -31,9 +31,16 @@ export function EventComment(props) {
           &ensp;
           {intl.formatMessage(messages.comment.said)}
         </Typography>
-        {/* eslint-disable-next-line react/no-array-index-key */}
-        {comment.content.split('\n').map((c, i) => <Typography variant='body1' color='textSecondary' key={i}>{c}</Typography>)}
-        <br />
+        <Typography
+          variant='body1'
+          color='textSecondary'
+          gutterBottom
+          style={{
+            whiteSpace: 'pre-line'
+          }}
+        >
+          {comment.content}
+        </Typography>
         <Typography variant='body1'>
           {comment.time_since_creation}
           &ensp;
