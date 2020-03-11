@@ -19,7 +19,7 @@ SimpleCov.start do
 end
 
 def serializer_scopes(user)
-  {current_user: user}
+  { current_user: user }
 end
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
