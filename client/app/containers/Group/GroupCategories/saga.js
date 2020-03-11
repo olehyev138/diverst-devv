@@ -27,6 +27,7 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 export function* getGroupCategories(action) {
   try {
     const response = yield call(api.groupCategoryTypes.all.bind(api.groupCategoryTypes), action.payload);
+
     yield put(getGroupCategoriesSuccess(response.data.page));
   } catch (err) {
     yield put(getGroupCategoriesError(err));
@@ -39,7 +40,7 @@ export function* getGroupCategories(action) {
 export function* getGroupCategory(action) {
   try {
     const response = yield call(api.groupCategoryTypes.get.bind(api.groupCategoryTypes), action.payload.id);
-    console.log(response);
+
     yield put(getGroupCategorySuccess(response.data));
   } catch (err) {
     // TODO: intl message
@@ -51,9 +52,8 @@ export function* getGroupCategory(action) {
 export function* createGroupCategories(action) {
   try {
     const payload = { group_category_type: action.payload };
-
-    // TODO: use bind here or no?
     const response = yield call(api.groupCategoryTypes.create.bind(api.groupCategoryTypes), payload);
+
     yield put(createGroupCategoriesSuccess());
     yield put(push(ROUTES.admin.manage.groups.categories.index.path()));
     yield put(showSnackbar({ message: 'Group categories created', options: { variant: 'success' } }));
@@ -71,7 +71,6 @@ export function* deleteGroupCategories(action) {
     yield put(showSnackbar({ message: 'Group categories deleted', options: { variant: 'success' } }));
   } catch (err) {
     yield put(deleteGroupCategoriesError(err));
-
     // TODO: intl message
     yield put(showSnackbar({ message: 'Failed to delete group categories', options: { variant: 'warning' } }));
   }
@@ -80,19 +79,16 @@ export function* deleteGroupCategories(action) {
 export function* updateGroupCategories(action) {
   try {
     const payload = { group_category_type: action.payload };
-    console.log('saga-update');
-    console.log(payload);
-
     const response = yield call(api.groupCategoryTypes.update.bind(api.groupCategoryTypes), payload.group_category_type.id, payload);
-    //
+
     yield put(updateGroupCategoriesSuccess());
-    // yield put(push(ROUTES.admin.manage.groups.categories.index.path()));
-    // yield put(showSnackbar({ message: 'Group updated', options: { variant: 'success' } }));
+    yield put(push(ROUTES.admin.manage.groups.categories.index.path()));
+    yield put(showSnackbar({ message: 'Group categories updated', options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateGroupCategoriesError(err));
 
     // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to update group', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: 'Failed to update group categories', options: { variant: 'warning' } }));
   }
 }
 

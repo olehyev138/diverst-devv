@@ -58,38 +58,44 @@ export function GroupCategoriesFormInner({ classes, values, handleChange, button
             <Typography>Category Labels </Typography>
             <br />
             <FieldArray
-
               name='group_categories_attributes'
               render={arrayHelpers => (
                 <div>
-                  {values.group_categories_attributes && values.group_categories_attributes.length > 0 ? (
-                    values.group_categories_attributes.map((category, index) => (
-                      // eslint-disable-next-line react/no-array-index-key
-                      <div key={index}>
-                        <Field name={`group_categories_attributes.${index}.name`} />
-                        <button
-                          type='button'
-                          onClick={() => (arrayHelpers.remove(index))} // remove a friend from the list
-                        >
-                          -
-                        </button>
-                        <button
-                          type='button'
-                          onClick={() => arrayHelpers.insert(index, { name: '', id: '', _destroy: false })} // insert an empty string at a position
-                        >
-                          +
-                        </button>
-                      </div>
-                    ))
-                  ) : (
-                    <button type='button' onClick={() => arrayHelpers.push({ name: '', id: '', _destroy: false })}>
-                      {/* show this when user has removed all friends from the list */}
-                      Add a Category
-                    </button>
-                  )}
+                  {values.group_categories_attributes && values.group_categories_attributes.length > 0 ? values.group_categories_attributes.map((category, index) => (
+                    // eslint-disable-next-line react/no-array-index-key
+                    <div key={index}>
+                      {/* eslint-disable-next-line no-underscore-dangle */}
+                      {!values.group_categories_attributes[index]._destroy && (
+                        <React.Fragment>
+                          <Field name={`group_categories_attributes.${index}.name`}/>
+
+                          <button
+                            type='button'
+                            onClick={() => {props.edit ? setFieldValue(`group_categories_attributes[${index}]['_destroy']`, true) : arrayHelpers.remove(index); }} // remove a friend from the list
+                          >
+                            -
+                          </button>
+                          <button
+                            type='button'
+                            onClick={() => arrayHelpers.insert(index, {
+                              name: '',
+                              id: '',
+                              _destroy: false
+                            })} // insert an empty string at a position
+                          >
+                            +
+                          </button>
+                        </React.Fragment>
+                      )}
+                    </div>
+                  )) : <button type='button' onClick={() => arrayHelpers.push({ name: '', id: '', _destroy: false })}>
+                    {/* show this when user has removed all friends from the list */}
+                    Add a Category
+                  </button>}
                 </div>
               )}
-            />
+            >
+            </FieldArray>
           </CardContent>
           <Divider />
           <CardActions>
@@ -98,8 +104,8 @@ export function GroupCategoriesFormInner({ classes, values, handleChange, button
             </DiverstSubmit>
             <Button
               disabled={props.isCommitting}
-              // to={props.links.cancelLink}
-              component={dig(props, 'links', 'cancelLink') ? WrappedNavLink : 'button'}
+              to={ROUTES.admin.manage.groups.categories.index.path()}
+              component={WrappedNavLink}
             >
               <DiverstFormattedMessage {...messages.cancel} />
             </Button>
