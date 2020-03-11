@@ -5,7 +5,7 @@ RSpec.describe NewsFeedLinkSerializer, type: :serializer do
     news_feed_link = create(:news_feed_link, group_message: nil, social_link: nil)
     create(:news_feed_link)
 
-    serializer = NewsFeedLinkSerializer.new(news_feed_link)
+    serializer = NewsFeedLinkSerializer.new(news_feed_link, scope: serializer_scopes(create(:user)), scope_name: :scope)
 
     expect(serializer.serializable_hash[:news_feed]).to_not be_nil
     expect(serializer.serializable_hash[:news_link]).to_not be_nil
@@ -21,7 +21,7 @@ RSpec.describe NewsFeedLinkSerializer, type: :serializer do
     create_list(:like, 5, news_feed_link_id: news_feed_link.id)
     create_list(:view, 5, news_feed_link_id: news_feed_link.id)
 
-    serializer = NewsFeedLinkSerializer.new(news_feed_link)
+    serializer = NewsFeedLinkSerializer.new(news_feed_link, scope: serializer_scopes(create(:user)), scope_name: :scope)
 
     expect(serializer.serializable_hash[:news_feed]).to_not be_nil
     expect(serializer.serializable_hash[:news_link]).to be_nil
@@ -37,7 +37,7 @@ RSpec.describe NewsFeedLinkSerializer, type: :serializer do
     create_list(:like, 10, news_feed_link_id: news_feed_link.id)
     create_list(:view, 10, news_feed_link_id: news_feed_link.id)
 
-    serializer = NewsFeedLinkSerializer.new(news_feed_link)
+    serializer = NewsFeedLinkSerializer.new(news_feed_link, scope: serializer_scopes(create(:user)), scope_name: :scope)
 
     expect(serializer.serializable_hash[:news_feed]).to_not be_nil
     expect(serializer.serializable_hash[:news_link]).to be_nil
