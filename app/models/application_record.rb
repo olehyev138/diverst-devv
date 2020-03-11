@@ -9,6 +9,11 @@ class ApplicationRecord < ActiveRecord::Base
   include BaseGraph
   include BaseCsvExport
 
+  def self.column_reload!
+    self.connection.schema_cache.clear!
+    self.reset_column_information
+  end
+
   def self.inherited(child)
     super
 
