@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import dig from 'object-dig';
 
 import {
-  Paper, Typography, Grid, Button
+  Paper, Typography, Grid, Button, Box
 } from '@material-ui/core/index';
 import { withStyles } from '@material-ui/core/styles';
 import EditIcon from '@material-ui/icons/Edit';
@@ -24,6 +24,9 @@ import { formatDateTimeString, DateTime } from 'utils/dateTimeHelpers';
 
 import DiverstImg from 'components/Shared/DiverstImg';
 import { injectIntl, intlShape } from 'react-intl';
+
+import EventComment from 'components/Event/EventComment';
+import EventCommentForm from 'components/Event/EventCommentForm';
 
 const styles = theme => ({
   padding: {
@@ -141,6 +144,30 @@ export function Event(props) {
               </Grid>
             </Grid>
           </Paper>
+          <Box mb={4} />
+          <EventCommentForm
+            currentUserId={props.currentUserId}
+            event={props.event}
+            commentAction={props.createEventCommentBegin}
+          />
+          <Box mb={4} />
+          <Typography variant='h6'>
+            {event.total_comments}
+            &ensp;
+            <DiverstFormattedMessage {...messages.comment.total_comments} />
+          </Typography>
+          { /* eslint-disable-next-line arrow-body-style */}
+          {dig(event, 'comments').sort((a, b) => a.created_at < b.created_at) && event.comments.map((comment, i) => {
+            return (
+              <EventComment
+                key={comment.id}
+                comment={comment}
+                deleteEventCommentBegin={props.deleteEventCommentBegin}
+                event={props.event}
+                currentUserId={props.currentUserId}
+              />
+            );
+          })}
         </React.Fragment>
       )}
     </DiverstShowLoader>
@@ -157,7 +184,9 @@ Event.propTypes = {
   isFormLoading: PropTypes.bool,
   links: PropTypes.shape({
     eventEdit: PropTypes.string,
-  })
+  }),
+  createEventCommentBegin: PropTypes.func,
+  deleteEventCommentBegin: PropTypes.func,
 };
 
 export default compose(

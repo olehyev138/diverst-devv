@@ -9,6 +9,35 @@ import { defineMessages } from 'react-intl';
 export const scope = 'diverst.containers.Event';
 
 export default defineMessages({
+  comment: {
+    submit: {
+      id: `${scope}.comment.button.submit`,
+    },
+    delete: {
+      id: `${scope}.comment.button.delete`,
+    },
+    deleteconfirm: {
+      id: `${scope}.comment.button.deleteconfirm`,
+    },
+    input: {
+      id: `${scope}.comment.form.input`,
+    },
+    label: {
+      id: `${scope}.comment.form.label`,
+    },
+    total_comments: {
+      id: `${scope}.comment.total_comments`,
+    },
+    said: {
+      id: `${scope}.comment.said`,
+    },
+    ago: {
+      id: `${scope}.comment.ago`,
+    },
+    you: {
+      id: `${scope}.comment.you`,
+    },
+  },
   new: {
     id: `${scope}.index.button.new`,
   },

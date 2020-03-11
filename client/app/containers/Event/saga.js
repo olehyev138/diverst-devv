@@ -12,19 +12,24 @@ import {
   CREATE_EVENT_BEGIN,
   UPDATE_EVENT_BEGIN,
   DELETE_EVENT_BEGIN,
+  CREATE_EVENT_COMMENT_BEGIN,
+  DELETE_EVENT_COMMENT_BEGIN,
   FINALIZE_EXPENSES_BEGIN,
-  ARCHIVE_EVENT_BEGIN
-} from './constants';
+  ARCHIVE_EVENT_BEGIN,
+} from 'containers/Event/constants';
 
 import {
+  getEventBegin,
   getEventsSuccess, getEventsError,
   getEventSuccess, getEventError,
   createEventSuccess, createEventError,
   updateEventSuccess, updateEventError,
   deleteEventSuccess, deleteEventError,
+  deleteEventCommentError, deleteEventCommentSuccess,
+  createEventCommentError, createEventCommentSuccess,
   finalizeExpensesSuccess, finalizeExpensesError,
   archiveEventError, archiveEventSuccess
-} from './actions';
+} from 'containers/Event/actions';
 
 
 export function* getEvents(action) {
@@ -96,7 +101,7 @@ export function* updateEvent(action) {
     const response = yield call(api.initiatives.update.bind(api.initiatives), payload.initiative.id, payload);
 
     yield put(updateEventSuccess());
-    yield put(push(ROUTES.group.events.index.path(payload.initiative.owner_group_id)));
+    yield put(push(ROUTES.group.events.show.path(payload.initiative.owner_group_id, payload.initiative.id)));
     yield put(showSnackbar({
       message: 'Event updated',
       options: { variant: 'success' }
@@ -131,6 +136,40 @@ export function* deleteEvent(action) {
     }));
   }
 }
+
+/* event comment */
+export function* deleteEventComment(action) {
+  try {
+    yield call(api.initiativeComments.destroy.bind(api.initiativeComments), action.payload.id);
+    yield put(deleteEventCommentSuccess());
+    yield put(getEventBegin({ id: action.payload.initiative_id }));
+    yield put(showSnackbar({ message: 'event comment deleted', options: { variant: 'success' } }));
+  } catch (err) {
+    yield put(deleteEventCommentError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to remove event comment', options: { variant: 'warning' } }));
+  }
+}
+
+export function* createEventComment(action) {
+  // create comment & re-fetch event from server
+
+  try {
+    const payload = { initiative_comment: action.payload.attributes };
+    const response = yield call(api.initiativeComments.create.bind(api.initiativeComments), payload);
+
+    yield put(createEventCommentSuccess());
+    yield put(getEventBegin({ id: payload.initiative_comment.initiative_id }));
+    yield put(showSnackbar({ message: 'Event comment created', options: { variant: 'success' } }));
+  } catch (err) {
+    yield put(createEventCommentError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to create event comment', options: { variant: 'warning' } }));
+  }
+}
+
 
 export function* archiveEvent(action) {
   try {
@@ -169,6 +208,8 @@ export default function* eventsSaga() {
   yield takeLatest(CREATE_EVENT_BEGIN, createEvent);
   yield takeLatest(UPDATE_EVENT_BEGIN, updateEvent);
   yield takeLatest(DELETE_EVENT_BEGIN, deleteEvent);
+  yield takeLatest(CREATE_EVENT_COMMENT_BEGIN, createEventComment);
+  yield takeLatest(DELETE_EVENT_COMMENT_BEGIN, deleteEventComment);
   yield takeLatest(ARCHIVE_EVENT_BEGIN, archiveEvent);
   yield takeLatest(FINALIZE_EXPENSES_BEGIN, finalizeExpenses);
 }

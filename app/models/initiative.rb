@@ -178,6 +178,10 @@ class Initiative < ApplicationRecord
     enterprise.id
   end
 
+  def total_comments
+    comments.size
+  end
+
   def annual_budget_id
     annual_budget&.id
   end

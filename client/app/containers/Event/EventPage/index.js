@@ -17,7 +17,7 @@ import { selectGroup } from 'containers/Group/selectors';
 import { selectUser } from 'containers/Shared/App/selectors';
 import { selectEvent, selectIsFormLoading } from 'containers/Event/selectors';
 
-import { getEventBegin, deleteEventBegin, eventsUnmount, archiveEventBegin } from 'containers/Event/actions';
+import { getEventBegin, deleteEventBegin, createEventCommentBegin, deleteEventCommentBegin, archiveEventBegin, eventsUnmount } from 'containers/Event/actions';
 
 import Event from 'components/Event/Event';
 
@@ -44,7 +44,9 @@ export function EventPage(props) {
 
   return (
     <Event
-      currentUserId={currentUser.id}
+      currentUserId={currentUser.user_id}
+      createEventCommentBegin={props.createEventCommentBegin}
+      deleteEventCommentBegin={props.deleteEventCommentBegin}
       deleteEventBegin={props.deleteEventBegin}
       event={currentEvent}
       links={links}
@@ -63,6 +65,9 @@ EventPage.propTypes = {
   currentGroup: PropTypes.object,
   currentEvent: PropTypes.object,
   isFormLoading: PropTypes.bool,
+  createEventCommentBegin: PropTypes.func,
+  deleteEventCommentBegin: PropTypes.func,
+
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -75,6 +80,8 @@ const mapStateToProps = createStructuredSelector({
 const mapDispatchToProps = {
   getEventBegin,
   deleteEventBegin,
+  createEventCommentBegin,
+  deleteEventCommentBegin,
   archiveEventBegin,
   eventsUnmount
 };
