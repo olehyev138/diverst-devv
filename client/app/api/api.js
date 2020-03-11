@@ -9,6 +9,7 @@ import fieldData from 'api/field_data/field_data';
 import groups from 'api/groups/groups';
 import segments from 'api/segments/segments';
 import initiatives from 'api/initiatives/initiatives';
+import initiativeComments from 'api/initiative_comments/initiative_comments';
 import initiativeExpenses from 'api/initiative_expenses/initiative_expenses';
 import initiativeUsers from 'api/initiative_users/initiative_users';
 import newsFeedLinks from 'api/news_feed_links/news_feed_links';
@@ -64,6 +65,7 @@ const Api = {
   groups,
   segments,
   initiatives,
+  initiativeComments,
   initiativeExpenses,
   initiativeUsers,
   newsFeedLinks,

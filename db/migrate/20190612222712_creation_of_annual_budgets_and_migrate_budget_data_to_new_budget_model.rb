@@ -25,6 +25,8 @@ class CreationOfAnnualBudgetsAndMigrateBudgetDataToNewBudgetModel < ActiveRecord
     say 'Begin data migration into new AnnualBudget model...'
 
     # NOTE: this script does not need to be reversed in the down method since no data is being permanently moved
+    Enterprise.column_reload!
+    AnnualBudget.column_reload!
     Enterprise.all.each do |enterprise|
       enterprise.groups.each do |group|
         next if group.annual_budget.nil? || group.annual_budget == 0

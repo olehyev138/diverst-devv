@@ -49,6 +49,11 @@ const styles = theme => ({
   speedDialButton: {
     zIndex: 2,
   },
+  floatSpacer: {
+    display: 'flex',
+    width: '100%',
+    marginBottom: 20,
+  },
 });
 
 export function NewsFeed(props) {
@@ -152,6 +157,7 @@ export function NewsFeed(props) {
               />
             ))}
           </SpeedDial>
+          <Box className={classes.floatSpacer} />
           <Paper>
             <ResponsiveTabs
               value={props.currentTab}

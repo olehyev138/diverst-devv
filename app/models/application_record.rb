@@ -8,6 +8,16 @@ class ApplicationRecord < ActiveRecord::Base
   include BaseElasticsearch
   include BaseGraph
   include BaseCsvExport
+  include ActionView::Helpers::DateHelper
+
+  def time_since_creation
+    time_ago_in_words created_at
+  end
+
+  def self.column_reload!
+    self.connection.schema_cache.clear!
+    self.reset_column_information
+  end
 
   def self.inherited(child)
     super

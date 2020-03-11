@@ -5,22 +5,17 @@ class MakeFieldDataPolymorphic < ActiveRecord::Migration[5.2]
       add_column :field_data, :field_user_type, :string, after: :field_user_id
       add_index :field_data, [:field_user_id, :field_user_type]
 
-      FieldData.connection.schema_cache.clear!
-      FieldData.reset_column_information
+      FieldData.column_reload!
       FieldData.find_each do |fd|
         fd.field_user_id = fd.user_id
         fd.field_user_type = 'User'
         fd.save!(validate: false)
       end
 
-      InitiativeUpdate.connection.schema_cache.clear!
-      GroupUpdate.connection.schema_cache.clear!
-      UserGroup.connection.schema_cache.clear!
-      PollResponse.connection.schema_cache.clear!
-      InitiativeUpdate.reset_column_information
-      GroupUpdate.reset_column_information
-      UserGroup.reset_column_information
-      PollResponse.reset_column_information
+      InitiativeUpdate.column_reload!
+      GroupUpdate.column_reload!
+      UserGroup.column_reload!
+      PollResponse.column_reload!
       [InitiativeUpdate, GroupUpdate, UserGroup, PollResponse].each do |model|
         model.find_each do |item|
           info = item.info
@@ -54,13 +49,11 @@ class MakeFieldDataPolymorphic < ActiveRecord::Migration[5.2]
       add_column :field_data, :user_id, :bigint, first: true
       add_index :field_data, :user_id
 
-      FieldData.connection.schema_cache.clear!
-      FieldData.reset_column_information
+      FieldData.column_reload!
       FieldData.destroy_all
       ActiveRecord::Base.connection.execute("TRUNCATE field_data")
 
-      User.connection.schema_cache.clear!
-      User.reset_column_information
+      User.column_reload!
       User.all.each do |user|
         # For each field id in users data hash
         info = user.info

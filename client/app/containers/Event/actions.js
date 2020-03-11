@@ -23,6 +23,12 @@ import {
   DELETE_EVENT_BEGIN,
   DELETE_EVENT_SUCCESS,
   DELETE_EVENT_ERROR,
+  CREATE_EVENT_COMMENT_BEGIN,
+  CREATE_EVENT_COMMENT_SUCCESS,
+  CREATE_EVENT_COMMENT_ERROR,
+  DELETE_EVENT_COMMENT_BEGIN,
+  DELETE_EVENT_COMMENT_ERROR,
+  DELETE_EVENT_COMMENT_SUCCESS,
   FINALIZE_EXPENSES_BEGIN,
   FINALIZE_EXPENSES_SUCCESS,
   FINALIZE_EXPENSES_ERROR,
@@ -192,12 +198,43 @@ export function archiveEventError(error) {
   };
 }
 
+
 export function joinEventBegin(payload) {
   return {
     type: JOIN_EVENT_BEGIN,
     payload,
   };
 }
+/* Event comments */
+
+export function createEventCommentBegin(payload) {
+  return {
+    type: CREATE_EVENT_COMMENT_BEGIN,
+    payload,
+  };
+}
+
+export function createEventCommentSuccess(payload) {
+  return {
+    type: CREATE_EVENT_COMMENT_SUCCESS,
+    payload,
+  };
+}
+
+export function createEventCommentError(error) {
+  return {
+    type: CREATE_EVENT_COMMENT_ERROR,
+    error,
+  };
+}
+
+export function deleteEventCommentBegin(payload) {
+  return {
+    type: DELETE_EVENT_COMMENT_BEGIN,
+    payload,
+  };
+}
+
 
 export function joinEventSuccess(payload) {
   return {
@@ -206,9 +243,24 @@ export function joinEventSuccess(payload) {
   };
 }
 
+export function deleteEventCommentSuccess(payload) {
+  return {
+    type: DELETE_EVENT_COMMENT_SUCCESS,
+    payload,
+  };
+}
+
+
 export function joinEventError(error) {
   return {
     type: JOIN_EVENT_ERROR,
+    error,
+  };
+}
+
+export function deleteEventCommentError(error) {
+  return {
+    type: DELETE_EVENT_COMMENT_ERROR,
     error,
   };
 }

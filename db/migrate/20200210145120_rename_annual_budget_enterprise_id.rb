@@ -5,8 +5,9 @@ class RenameAnnualBudgetEnterpriseId < ActiveRecord::Migration[5.2]
     rename_column :initiatives, :annual_budget_id, :deprecated_annual_budget_id
     rename_column :initiative_expenses, :annual_budget_id, :deprecated_annual_budget_id
 
-    rename_column :annual_budgets, :available, :deprecated_available_budget
-    rename_column :annual_budgets, :approved, :deprecated_approved_budget
+    rename_column :annual_budgets, (column_exists?(:annual_budgets, :available) ? :available : :available_budget), :deprecated_available_budget
+    rename_column :annual_budgets, (column_exists?(:annual_budgets, :approved) ? :approved : :approved_budget), :deprecated_approved_budget
+
     rename_column :annual_budgets, :leftover_money, :deprecated_leftover_money
     rename_column :annual_budgets, :expenses, :deprecated_expenses
 
