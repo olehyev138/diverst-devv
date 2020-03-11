@@ -61,7 +61,6 @@ const styles = theme => ({
 export function Event(props) {
   const { classes, intl } = props;
   const event = dig(props, 'event');
-  console.log(event);
   return (
     <DiverstShowLoader isLoading={props.isFormLoading} isError={!props.isFormLoading && !event}>
       {event && (
