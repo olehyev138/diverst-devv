@@ -122,10 +122,14 @@ class GroupBasePolicy < ApplicationPolicy
   end
 
   def index?
-    return true if view_group_resource(base_manage_permission)
-    return true if view_group_resource(base_create_permission)
+    if group
+      return true if view_group_resource(base_manage_permission)
+      return true if view_group_resource(base_create_permission)
 
-    view_group_resource(base_index_permission)
+      view_group_resource(base_index_permission)
+    else
+      true
+    end
   end
 
   def show?
