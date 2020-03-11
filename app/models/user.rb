@@ -205,6 +205,10 @@ class User < ApplicationRecord
     group.user_groups.where(user_id: self.id).any?
   end
 
+  def is_attending?(event)
+    event.initiative_users.where(user_id: id).any?
+  end
+
   def is_participating_in?(session)
     session.mentorship_sessions.pluck(:user_id).include? id
   end
