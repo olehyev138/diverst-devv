@@ -688,6 +688,7 @@
   "diverst.containers.Event.form.button.cancel": "Cancel",
   "diverst.containers.Event.form.input.name": "Name",
   "diverst.containers.Event.form.input.description": "Description",
+  "diverst.containers.Event.form.input.location": "Location",
   "diverst.containers.Event.form.input.start": "Start Date",
   "diverst.containers.Event.form.input.end": "End Date",
   "diverst.containers.Event.form.input.starterror": "Start date cannot be after end date",

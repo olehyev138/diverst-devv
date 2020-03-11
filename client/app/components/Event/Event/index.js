@@ -48,7 +48,9 @@ const styles = theme => ({
     },
   },
   buttons: {
-    marginLeft: 20,
+    marginLeft: 10,
+    marginRight: 10,
+    marginBottom: 20,
     float: 'right',
   },
   deleteButton: {
@@ -59,6 +61,7 @@ const styles = theme => ({
 export function Event(props) {
   const { classes, intl } = props;
   const event = dig(props, 'event');
+  console.log(event);
   return (
     <DiverstShowLoader isLoading={props.isFormLoading} isError={!props.isFormLoading && !event}>
       {event && (
@@ -157,6 +160,16 @@ export function Event(props) {
                 <Typography variant='overline'>To</Typography>
                 <Typography color='textSecondary' className={classes.data}>{formatDateTimeString(event.end, DateTime.DATETIME_FULL)}</Typography>
 
+                {event.location && (
+                  <React.Fragment>
+                    <Typography className={classes.dataHeaders}>
+                      <DiverstFormattedMessage {...messages.inputs.location} />
+                    </Typography>
+                    <Typography color='textSecondary' className={classes.data}>
+                      {event.location}
+                    </Typography>
+                  </React.Fragment>
+                )}
                 {event.description && (
                   <React.Fragment>
                     <Typography className={classes.dataHeaders}>
@@ -168,9 +181,11 @@ export function Event(props) {
                   </React.Fragment>
                 )}
               </Grid>
-              <Grid item>
+              <Grid item xs={6}>
                 <DiverstImg
                   data={event.picture_data}
+                  maxWidth='100%'
+                  minWidth='100%'
                 />
               </Grid>
             </Grid>

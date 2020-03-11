@@ -98,6 +98,9 @@ export default defineMessages({
     description: {
       id: `${scope}.form.input.description`,
     },
+    location: {
+      id: `${scope}.form.input.location`,
+    },
     start: {
       id: `${scope}.form.input.start`,
     },
