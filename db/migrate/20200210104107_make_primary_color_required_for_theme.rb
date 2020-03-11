@@ -1,5 +1,6 @@
 class MakePrimaryColorRequiredForTheme < ActiveRecord::Migration[5.2]
   def up
+    Theme.column_reload!
     Theme.find_each do |theme|
       theme.primary_color = '7B77C9' unless theme.primary_color.present? # Set to default if it doesn't exist
     end
