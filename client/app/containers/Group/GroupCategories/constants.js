@@ -4,6 +4,10 @@
  *
  */
 
+export const GET_GROUP_CATEGORY_BEGIN = 'app/Group/GroupCategories/GET_GROUP_CATEGORY_BEGIN';
+export const GET_GROUP_CATEGORY_SUCCESS = 'app/Group/GroupCategories/GET_GROUP_CATEGORY_SUCCESS';
+export const GET_GROUP_CATEGORY_ERROR = 'app/Group/GroupCategories/GET_GROUP_CATEGORY_ERROR';
+
 
 export const GET_GROUP_CATEGORIES_BEGIN = 'app/Group/GroupCategories/GET_GROUP_CATEGORIES_BEGIN';
 export const GET_GROUP_CATEGORIES_SUCCESS = 'app/Group/GroupCategories/GET_GROUP_CATEGORIES_SUCCESS';

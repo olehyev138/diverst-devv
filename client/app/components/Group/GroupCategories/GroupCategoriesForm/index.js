@@ -39,7 +39,8 @@ const styles = theme => ({
 /* eslint-disable object-curly-newline */
 export function GroupCategoriesFormInner({ classes, values, handleChange, buttonText, setFieldValue, setFieldTouched, ...props }) {
   return (
-    <DiverstFormLoader isLoading={props.isFormLoading}>
+    // eslint-disable-next-line react/prop-types
+    <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.groupCategory}>
       <Card>
         <Form>
           <CardContent>
@@ -68,7 +69,7 @@ export function GroupCategoriesFormInner({ classes, values, handleChange, button
                         <Field name={`group_categories_attributes.${index}.name`} />
                         <button
                           type='button'
-                          onClick={() => arrayHelpers.remove(index)} // remove a friend from the list
+                          onClick={() => (arrayHelpers.remove(index))} // remove a friend from the list
                         >
                           -
                         </button>
@@ -110,10 +111,10 @@ export function GroupCategoriesFormInner({ classes, values, handleChange, button
 }
 
 export function GroupCategoriesForm(props) {
-  const initialValues = buildValues(props.groupCategories, {
+  const initialValues = buildValues(props.groupCategory, {
     id: { default: '' },
     name: { default: '' },
-    group_categories_attributes: { default: [] }
+    group_categories: { default: [], customKey: 'group_categories_attributes' }
   });
   console.log('component');
   console.log(props);
@@ -123,7 +124,7 @@ export function GroupCategoriesForm(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        props.groupCategoriesAction(mapFields(values, ['id']));
+        props.groupCategoriesAction(values);
       }}
     >
       {formikProps => <GroupCategoriesFormInner {...props} {...formikProps} />}
@@ -133,7 +134,8 @@ export function GroupCategoriesForm(props) {
 
 GroupCategoriesForm.propTypes = {
   groupCategoriesAction: PropTypes.func,
-  groupCategories: PropTypes.object,
+  groupCategories: PropTypes.array,
+  groupCategory: PropTypes.object,
   isCommitting: PropTypes.bool,
   isFormLoading: PropTypes.bool,
   categories: PropTypes.array,
@@ -142,13 +144,13 @@ GroupCategoriesForm.propTypes = {
 };
 
 GroupCategoriesFormInner.propTypes = {
-  groupCategories: PropTypes.object,
+  groupCategories: PropTypes.array,
+  groupCategory: PropTypes.object,
   handleChange: PropTypes.func,
   classes: PropTypes.object,
   values: PropTypes.object,
   buttonText: PropTypes.string,
   categories: PropTypes.array,
-  getGroupCategoriesBegin: PropTypes.func,
   formikProps: PropTypes.object,
   arrayHelpers: PropTypes.object,
   setFieldValue: PropTypes.func,

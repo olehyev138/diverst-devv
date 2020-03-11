@@ -16,7 +16,7 @@ const selectPaginatedSelectGroupCategories = () => createSelector(
   groupCategoriesState => (
     Object
       .values(groupCategoriesState.groupCategoriesList)
-      .map(group => ({ value: group.id, label: group.name }))
+      .map(groupCategory => ({ value: groupCategory.id, label: groupCategory.name }))
   )
 );
 
@@ -48,18 +48,15 @@ const selectGroupCategoriesIsCommitting = () => createSelector(
 const selectFormGroupCategories = () => createSelector(
   selectGroupCategoriesDomain,
   (groupCategoriesState) => {
-    const { currentGroup } = groupCategoriesState;
-    if (!currentGroup) return null;
+    const { currentGroupCategory } = groupCategoriesState;
+    if (!currentGroupCategory) return null;
 
     // clone group before making mutations on it
-    const selectGroup = Object.assign({}, currentGroup);
+    const selectGroupCategory = Object.assign({}, currentGroupCategory);
 
-    selectGroup.children = selectGroup.children.map(child => ({
-      value: child.id,
-      label: child.name
-    }));
+    selectGroupCategory.group_categories = selectGroupCategory.group_categories.map(child => ({ name: child.name, id: child.id, _destroy: false }));
 
-    return selectGroup;
+    return selectGroupCategory;
   }
 );
 

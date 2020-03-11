@@ -26,7 +26,6 @@ export function GroupCategoriesCreatePage(props) {
     <GroupCategoriesForm
       groupCategoriesAction={props.createGroupCategoriesBegin}
       buttonText='Create'
-      getGroupCategoriesBegin={props.getGroupCategoriesBegin}
       categories={props.categories}
       isCommitting={props.isCommitting}
     />
@@ -36,7 +35,6 @@ export function GroupCategoriesCreatePage(props) {
 GroupCategoriesCreatePage.propTypes = {
   intl: intlShape,
   createGroupCategoriesBegin: PropTypes.func,
-  getGroupCategoriesBegin: PropTypes.func,
   categoriesUnmount: PropTypes.func,
   categories: PropTypes.array,
   isCommitting: PropTypes.bool,
@@ -51,7 +49,6 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = {
   createGroupCategoriesBegin,
-  getGroupCategoriesBegin,
   categoriesUnmount
 };
 

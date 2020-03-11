@@ -7,6 +7,7 @@ import { showSnackbar } from 'containers/Shared/Notifier/actions';
 
 import {
   GET_GROUP_CATEGORIES_BEGIN,
+  GET_GROUP_CATEGORY_BEGIN,
   CREATE_GROUP_CATEGORIES_BEGIN,
   DELETE_GROUP_CATEGORIES_BEGIN,
   UPDATE_GROUP_CATEGORIES_BEGIN
@@ -14,6 +15,7 @@ import {
 
 import {
   getGroupCategoriesBegin, getGroupCategoriesSuccess, getGroupCategoriesError,
+  getGroupCategoryBegin, getGroupCategorySuccess, getGroupCategoryError,
   createGroupCategoriesBegin, createGroupCategoriesSuccess, createGroupCategoriesError,
   deleteGroupCategoriesBegin, deleteGroupCategoriesSuccess, deleteGroupCategoriesError,
   updateGroupCategoriesBegin, updateGroupCategoriesSuccess, updateGroupCategoriesError,
@@ -33,6 +35,19 @@ export function* getGroupCategories(action) {
     yield put(showSnackbar({ message: 'Failed to load groups categories', options: { variant: 'warning' } }));
   }
 }
+
+export function* getGroupCategory(action) {
+  try {
+    const response = yield call(api.groupCategoryTypes.get.bind(api.groupCategoryTypes), action.payload.id);
+    console.log(response);
+    yield put(getGroupCategorySuccess(response.data));
+  } catch (err) {
+    // TODO: intl message
+    yield put(getGroupCategoryError(err));
+    yield put(showSnackbar({ message: 'Failed to get group category', options: { variant: 'warning' } }));
+  }
+}
+
 export function* createGroupCategories(action) {
   try {
     const payload = { group_category_type: action.payload };
@@ -65,12 +80,12 @@ export function* deleteGroupCategories(action) {
 export function* updateGroupCategories(action) {
   try {
     const payload = { group_category_type: action.payload };
-    console.log('saga');
-    console.log(action);
+    console.log('saga-update');
+    console.log(payload);
 
-    const response = yield call(api.groupCategoryTypes.update.bind(api.groupCategoryTypes), payload.id, payload);
+    const response = yield call(api.groupCategoryTypes.update.bind(api.groupCategoryTypes), payload.group_category_type.id, payload);
     //
-    // yield put(updateGroupCategoriesSuccess());
+    yield put(updateGroupCategoriesSuccess());
     // yield put(push(ROUTES.admin.manage.groups.categories.index.path()));
     // yield put(showSnackbar({ message: 'Group updated', options: { variant: 'success' } }));
   } catch (err) {
@@ -84,6 +99,7 @@ export function* updateGroupCategories(action) {
 
 export default function* groupsSaga() {
   yield takeLatest(GET_GROUP_CATEGORIES_BEGIN, getGroupCategories);
+  yield takeLatest(GET_GROUP_CATEGORY_BEGIN, getGroupCategory);
   yield takeLatest(CREATE_GROUP_CATEGORIES_BEGIN, createGroupCategories);
   yield takeLatest(DELETE_GROUP_CATEGORIES_BEGIN, deleteGroupCategories);
   yield takeLatest(UPDATE_GROUP_CATEGORIES_BEGIN, updateGroupCategories);

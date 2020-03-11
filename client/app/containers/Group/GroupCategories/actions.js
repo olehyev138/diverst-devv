@@ -6,6 +6,7 @@
 
 import {
   GET_GROUP_CATEGORIES_BEGIN, GET_GROUP_CATEGORIES_SUCCESS, GET_GROUP_CATEGORIES_ERROR,
+  GET_GROUP_CATEGORY_BEGIN, GET_GROUP_CATEGORY_SUCCESS, GET_GROUP_CATEGORY_ERROR,
   CREATE_GROUP_CATEGORIES_BEGIN, CREATE_GROUP_CATEGORIES_SUCCESS, CREATE_GROUP_CATEGORIES_ERROR,
   UPDATE_GROUP_CATEGORIES_BEGIN, UPDATE_GROUP_CATEGORIES_SUCCESS, UPDATE_GROUP_CATEGORIES_ERROR,
   ADD_GROUP_CATEGORIES_BEGIN, ADD_GROUP_CATEGORIES_SUCCESS, ADD_GROUP_CATEGORIES_ERROR,
@@ -34,6 +35,27 @@ export function getGroupCategoriesSuccess(payload) {
 export function getGroupCategoriesError(error) {
   return {
     type: GET_GROUP_CATEGORIES_ERROR,
+    error,
+  };
+}
+
+export function getGroupCategoryBegin(payload) {
+  return {
+    type: GET_GROUP_CATEGORY_BEGIN,
+    payload
+  };
+}
+
+export function getGroupCategorySuccess(payload) {
+  return {
+    type: GET_GROUP_CATEGORY_SUCCESS,
+    payload
+  };
+}
+
+export function getGroupCategoryError(error) {
+  return {
+    type: GET_GROUP_CATEGORY_ERROR,
     error,
   };
 }

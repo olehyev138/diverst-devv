@@ -9,8 +9,8 @@ import { useInjectReducer } from 'utils/injectReducer';
 import saga from 'containers/Group/GroupCategories/saga';
 import reducer from 'containers/Group/GroupCategories/reducer';
 
-import { getGroupCategoriesBegin, updateGroupCategoriesBegin, categoriesUnmount } from 'containers/Group/GroupCategories/actions';
-import { selectPaginatedGroupCategories, selectGroupCategoriesIsCommitting } from 'containers/Group/GroupCategories/selectors';
+import { updateGroupCategoriesBegin, categoriesUnmount, getGroupCategoryBegin } from 'containers/Group/GroupCategories/actions';
+import { selectPaginatedSelectGroupCategories, selectFormGroupCategories, selectGroupCategoriesIsCommitting } from 'containers/Group/GroupCategories/selectors';
 import { selectUser, selectEnterprise } from 'containers/Shared/App/selectors';
 import GroupCategoriesForm from 'components/Group/GroupCategories/GroupCategoriesForm';
 
@@ -24,22 +24,23 @@ export function GroupCategoriesEditPage(props) {
   useInjectSaga({ key: 'groupCategories', saga });
   const { intl } = props;
   const rs = new RouteService(useContext);
+  console.log('containerEdit');
+  console.log(rs.params('group_category_type_id'));
 
   useEffect(() => {
-    props.getGroupCategoriesBegin({ id: rs.params('group_category_type_id') });
-
+    props.getGroupCategoryBegin({ id: rs.params('group_category_type_id') });
+    console.log(props);
     return () => {
       props.categoriesUnmount();
     };
   }, []);
-  console.log('containerEdit');
   console.log(props);
-
   return (
     <React.Fragment>
       <GroupCategoriesForm
         edit
         groupCategoriesAction={props.updateGroupCategoriesBegin}
+        groupCategories={props.groupCategories}
         groupCategory={props.groupCategory}
         buttonText={intl.formatMessage(messages.update)}
         isCommitting={props.isCommitting}
@@ -51,10 +52,11 @@ export function GroupCategoriesEditPage(props) {
 
 GroupCategoriesEditPage.propTypes = {
   groupCategory: PropTypes.object,
+  groupCategories: PropTypes.array,
   isFormLoading: PropTypes.bool,
   intl: intlShape,
   updateGroupCategoriesBegin: PropTypes.func,
-  getGroupCategoriesBegin: PropTypes.func,
+  getGroupCategoryBegin: PropTypes.func,
   categoriesUnmount: PropTypes.func,
   categories: PropTypes.array,
   isCommitting: PropTypes.bool,
@@ -63,14 +65,15 @@ GroupCategoriesEditPage.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
   currentUser: selectUser(),
-  groupCategories: selectPaginatedGroupCategories(),
+  groupCategory: selectFormGroupCategories(),
+  groupCategories: selectPaginatedSelectGroupCategories(),
   currentEnterprise: selectEnterprise(),
   isCommitting: selectGroupCategoriesIsCommitting(),
 });
 
 const mapDispatchToProps = {
   updateGroupCategoriesBegin,
-  getGroupCategoriesBegin,
+  getGroupCategoryBegin,
   categoriesUnmount
 };
 
