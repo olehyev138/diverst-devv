@@ -32,7 +32,6 @@ import {
 } from 'containers/Event/actions';
 
 
-
 export function* getEvents(action) {
   try {
     const { annualBudgetId, ...payload } = action.payload;
