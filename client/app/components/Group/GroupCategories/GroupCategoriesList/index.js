@@ -9,14 +9,13 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
-import messages from 'containers/Group/messages';
+import messages from 'containers/Group/GroupCategories/messages';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import {
-  Button, Card, CardContent, CardActions,
-  Typography, Grid, Link, Collapse, Box, CircularProgress,
+  Button, Card, CardContent, Typography, Grid, Box,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 

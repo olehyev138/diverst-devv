@@ -17,24 +17,20 @@ import GroupCategoriesForm from 'components/Group/GroupCategories/GroupCategorie
 import RouteService from 'utils/routeHelpers';
 
 import { injectIntl, intlShape } from 'react-intl';
-import messages from 'containers/Group/messages';
+import messages from 'containers/Group/GroupCategories/messages';
 
 export function GroupCategoriesEditPage(props) {
   useInjectReducer({ key: 'groupCategories', reducer });
   useInjectSaga({ key: 'groupCategories', saga });
   const { intl } = props;
   const rs = new RouteService(useContext);
-  console.log('containerEdit');
-  console.log(rs.params('group_category_type_id'));
 
   useEffect(() => {
     props.getGroupCategoryBegin({ id: rs.params('group_category_type_id') });
-    console.log(props);
     return () => {
       props.categoriesUnmount();
     };
   }, []);
-  console.log(props);
   return (
     <React.Fragment>
       <GroupCategoriesForm

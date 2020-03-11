@@ -4,31 +4,26 @@
  *
  */
 
-import React, {
-  memo, useRef, useState, useEffect
-} from 'react';
+import React, { memo } from 'react';
 import { Formik, Form, Field, FieldArray } from 'formik';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
-import Select from 'components/Shared/DiverstSelect';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import { withStyles } from '@material-ui/core/styles';
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { ROUTES } from 'containers/Shared/Routes/constants';
-
-import messages from 'containers/Group/messages';
-import { buildValues, mapFields } from 'utils/formHelpers';
+import { injectIntl, intlShape } from 'react-intl';
+import messages from 'containers/Group/GroupCategories/messages';
+import { buildValues } from 'utils/formHelpers';
 
 import {
-  Button, Card, CardActions, CardContent, Grid, Paper, Typography,
-  TextField, Hidden, FormControl, Divider, Switch, FormControlLabel,
+  Button, Card, CardActions, CardContent, Typography, TextField, Divider,
 } from '@material-ui/core';
 
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
-import dig from "object-dig";
 
 const styles = theme => ({
   noBottomPadding: {
@@ -38,6 +33,7 @@ const styles = theme => ({
 
 /* eslint-disable object-curly-newline */
 export function GroupCategoriesFormInner({ classes, values, handleChange, buttonText, setFieldValue, setFieldTouched, ...props }) {
+  const { intl } = props;
   return (
     // eslint-disable-next-line react/prop-types
     <DiverstFormLoader isLoading={props.isFormLoading} isError={props.edit && !props.groupCategory}>
@@ -52,10 +48,11 @@ export function GroupCategoriesFormInner({ classes, values, handleChange, button
               id='name'
               name='name'
               margin='normal'
-              label='Category Name'
+              label={intl.formatMessage(messages.name)}
               value={values.name}
+              required
             />
-            <Typography>Category Labels </Typography>
+            <Typography><DiverstFormattedMessage {...messages.labels} /></Typography>
             <br />
             <FieldArray
               name='group_categories_attributes'
@@ -67,13 +64,14 @@ export function GroupCategoriesFormInner({ classes, values, handleChange, button
                       {/* eslint-disable-next-line no-underscore-dangle */}
                       {!values.group_categories_attributes[index]._destroy && (
                         <React.Fragment>
-                          <Field name={`group_categories_attributes.${index}.name`}/>
+                          <Field name={`group_categories_attributes.${index}.name`} required/>
 
                           <button
                             type='button'
-                            onClick={() => {props.edit ? setFieldValue(`group_categories_attributes[${index}]['_destroy']`, true) : arrayHelpers.remove(index); }} // remove a friend from the list
+                            /* eslint-disable-next-line no-unused-expressions */
+                            onClick={() => { props.edit ? setFieldValue(`group_categories_attributes[${index}]['_destroy']`, true) : arrayHelpers.remove(index); }} // remove a friend from the list
                           >
-                            -
+                            <DiverstFormattedMessage {...messages.remove} />
                           </button>
                           <button
                             type='button'
@@ -83,15 +81,16 @@ export function GroupCategoriesFormInner({ classes, values, handleChange, button
                               _destroy: false
                             })} // insert an empty string at a position
                           >
-                            +
+                            <DiverstFormattedMessage {...messages.add} />
                           </button>
                         </React.Fragment>
                       )}
                     </div>
-                  )) : <button type='button' onClick={() => arrayHelpers.push({ name: '', id: '', _destroy: false })}>
-                    {/* show this when user has removed all friends from the list */}
-                    Add a Category
-                  </button>}
+                  )) : (
+                    <button type='button' onClick={() => arrayHelpers.push({ name: '', id: '', _destroy: false })}>
+                      <DiverstFormattedMessage {...messages.add_button} />
+                    </button>
+                  )}
                 </div>
               )}
             >
@@ -122,8 +121,6 @@ export function GroupCategoriesForm(props) {
     name: { default: '' },
     group_categories: { default: [], customKey: 'group_categories_attributes' }
   });
-  console.log('component');
-  console.log(props);
 
   return (
     <Formik
@@ -150,6 +147,7 @@ GroupCategoriesForm.propTypes = {
 };
 
 GroupCategoriesFormInner.propTypes = {
+  intl: intlShape,
   groupCategories: PropTypes.array,
   groupCategory: PropTypes.object,
   handleChange: PropTypes.func,
@@ -166,6 +164,7 @@ GroupCategoriesFormInner.propTypes = {
 };
 
 export default compose(
+  injectIntl,
   memo,
   withStyles(styles)
 )(GroupCategoriesForm);

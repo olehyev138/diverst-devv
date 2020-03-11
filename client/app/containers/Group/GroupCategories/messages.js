@@ -34,10 +34,10 @@ export default defineMessages({
     id: `${scope}.form.input.name`,
   },
   labels: {
-    id: `${scope}.form.input.lables`,
+    id: `${scope}.form.input.labels`,
   },
   add_button: {
-    id: `${scope}.form.button.button`,
+    id: `${scope}.form.button.add_button`,
   },
   add: {
     id: `${scope}.form.button.add`,
