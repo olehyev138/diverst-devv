@@ -21,6 +21,6 @@ class Api::V1::InitiativeUsersController < DiverstController
         :initiative_id,
         :attended,
         :check_in_time
-    )
+      )
   end
 end
