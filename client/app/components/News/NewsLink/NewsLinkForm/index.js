@@ -31,7 +31,7 @@ export function NewsLinkFormInner({ handleSubmit, handleChange, handleBlur, valu
               id='url'
               name='url'
               margin='normal'
-              label='Link URL'
+              label={<DiverstFormattedMessage {...messages.link_url} />}
               value={values.url}
             />
             <Field
@@ -43,7 +43,7 @@ export function NewsLinkFormInner({ handleSubmit, handleChange, handleBlur, valu
               id='title'
               name='title'
               margin='normal'
-              label='Title'
+              label={<DiverstFormattedMessage {...messages.title} />}
               value={values.title}
             />
             <Field
@@ -59,7 +59,7 @@ export function NewsLinkFormInner({ handleSubmit, handleChange, handleBlur, valu
               name='description'
               margin='normal'
               value={values.description}
-              label='Description'
+              label={<DiverstFormattedMessage {...messages.description} />}
             />
           </CardContent>
           <Divider />
@@ -89,7 +89,7 @@ export function NewsLinkForm(props) {
     title: { default: '' },
     description: { default: '' },
     url: { default: '' },
-    author_id: { default: dig(props, 'currentUser', 'id') || '' },
+    author_id: { default: dig(props, 'currentUser', 'user_id') || '' },
     group_id: { default: dig(props, 'currentGroup', 'id') || '' }
   });
 

@@ -27,6 +27,10 @@ import { selectGroup } from 'containers/Group/selectors';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/Shared/App/messages';
+
+
 const styles = theme => ({
   grow: {
     flexGrow: 1,
@@ -151,7 +155,7 @@ export class ApplicationHeader extends React.PureComponent {
                 <ListItemIcon>
                   <DvrIcon />
                 </ListItemIcon>
-              Dashboard
+                {<DiverstFormattedMessage {...messages.header.dashboard} />}
               </React.Fragment>
             )
             : (
@@ -159,7 +163,7 @@ export class ApplicationHeader extends React.PureComponent {
                 <ListItemIcon>
                   <BuildIcon />
                 </ListItemIcon>
-              Admin
+                {<DiverstFormattedMessage {...messages.header.admin} />}
               </React.Fragment>
             )
           }
@@ -172,13 +176,13 @@ export class ApplicationHeader extends React.PureComponent {
           <ListItemIcon>
             <PermIdentityIcon />
           </ListItemIcon>
-          Profile
+          {<DiverstFormattedMessage {...messages.header.profile} />}
         </MenuItem>
         <MenuItem onClick={this.logoutBegin}>
           <ListItemIcon>
             <ExitToAppIcon />
           </ListItemIcon>
-          Log Out
+          {<DiverstFormattedMessage {...messages.header.logout} />}
         </MenuItem>
       </Menu>
     );
@@ -227,13 +231,13 @@ export class ApplicationHeader extends React.PureComponent {
                         ? (
                           <span>
                             <DvrIcon className={classes.dashboardIcon} />
-                            Dashboard
+                            {<DiverstFormattedMessage {...messages.header.dashboard} />}
                           </span>
                         )
                         : (
                           <span>
                             <BuildIcon className={classes.adminIcon} />
-                            Admin
+                            {<DiverstFormattedMessage {...messages.header.admin} />}
                           </span>
                         )
                       }

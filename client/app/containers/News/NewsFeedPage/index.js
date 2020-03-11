@@ -11,9 +11,9 @@ import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/News/reducer';
 import saga from 'containers/News/saga';
 
-import { selectPaginatedNewsItems, selectNewsItemsTotal, selectIsLoading } from 'containers/News/selectors';
+import { selectPaginatedNewsItems, selectNewsItemsTotal, selectIsLoading, selectHasChanged } from 'containers/News/selectors';
 import { deleteSocialLinkBegin, getNewsItemsBegin, newsFeedUnmount, deleteNewsLinkBegin, deleteGroupMessageBegin,
-  updateNewsItemBegin } from 'containers/News/actions';
+  updateNewsItemBegin, archiveNewsItemBegin } from 'containers/News/actions';
 
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -25,7 +25,7 @@ const NewsFeedTypes = Object.freeze({
 });
 
 const defaultParams = Object.freeze({
-  count: 10, // TODO: Make this a constant and use it also in EventsList
+  count: 5, // TODO: Make this a constant and use it also in EventsList
   page: 0,
   order: 'desc',
   news_feed_id: -1,
@@ -69,21 +69,21 @@ export function NewsFeedPage(props, context) {
   };
 
   useEffect(() => {
-    getNewsFeedItems(['approved']);
+    getNewsFeedItems(['approved', 'not_archived']);
 
     return () => {
       props.newsFeedUnmount();
     };
-  }, [props.currentGroup]);
+  }, [props.currentGroup, props.hasChanged]);
 
   const handleChangeTab = (event, newTab) => {
     setTab(newTab);
     switch (newTab) {
       case NewsFeedTypes.approved:
-        getNewsFeedItems(['approved'], true);
+        getNewsFeedItems(['approved', 'not_archived'], true);
         break;
       case NewsFeedTypes.pending:
-        getNewsFeedItems(['pending'], true);
+        getNewsFeedItems(['pending', 'not_archived'], true);
         break;
       default:
         break;
@@ -107,11 +107,12 @@ export function NewsFeedPage(props, context) {
         handleChangeTab={handleChangeTab}
         handlePagination={handlePagination}
         links={links}
-        readonly={false}
+        readonly={props.readonly}
         deleteGroupMessageBegin={props.deleteGroupMessageBegin}
         deleteNewsLinkBegin={props.deleteNewsLinkBegin}
         deleteSocialLinkBegin={props.deleteSocialLinkBegin}
         updateNewsItemBegin={props.updateNewsItemBegin}
+        archiveNewsItemBegin={props.archiveNewsItemBegin}
       />
     </React.Fragment>
   );
@@ -127,17 +128,21 @@ NewsFeedPage.propTypes = {
   deleteSocialLinkBegin: PropTypes.func,
   updateNewsItemBegin: PropTypes.func,
   isLoading: PropTypes.bool,
+  hasChanged: PropTypes.bool,
+  archiveNewsItemBegin: PropTypes.func,
   currentGroup: PropTypes.shape({
     news_feed: PropTypes.shape({
       id: PropTypes.number
     })
   }),
+  readonly: PropTypes.bool
 };
 
 const mapStateToProps = createStructuredSelector({
   newsItems: selectPaginatedNewsItems(),
   newsItemsTotal: selectNewsItemsTotal(),
   isLoading: selectIsLoading(),
+  hasChanged: selectHasChanged()
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -147,6 +152,7 @@ const mapDispatchToProps = dispatch => ({
   deleteSocialLinkBegin: payload => dispatch(deleteSocialLinkBegin(payload)),
   updateNewsItemBegin: payload => dispatch(updateNewsItemBegin(payload)),
   newsFeedUnmount: () => dispatch(newsFeedUnmount()),
+  archiveNewsItemBegin: payload => dispatch(archiveNewsItemBegin(payload)),
 });
 
 const withConnect = connect(

@@ -15,11 +15,14 @@ export default defineMessages({
   edit: {
     id: `${scope}.index.button.edit`,
   },
+  setAnnualBudget: {
+    id: `${scope}.index.button.setAnnualBudget`,
+  },
   delete: {
     id: `${scope}.index.button.delete`,
   },
-  delete_message: {
-    id: `${scope}.index.text.delete_message`,
+  delete_confirm: {
+    id: `${scope}.index.button.delete_confirm`,
   },
   children_collapse: {
     id: `${scope}.index.button.children_collapse`,
@@ -37,13 +40,16 @@ export default defineMessages({
     id: `${scope}.form.button.create`,
   },
   update: {
-    id: `${scope}.form.button.edit`,
+    id: `${scope}.form.button.update`,
   },
   cancel: {
     id: `${scope}.form.button.cancel`,
   },
   name: {
     id: `${scope}.form.input.name`,
+  },
+  private: {
+    id: `${scope}.form.input.private`,
   },
   short_description: {
     id: `${scope}.form.input.short_description`,
@@ -59,5 +65,8 @@ export default defineMessages({
   },
   settings_save: {
     id: `${scope}.settings.form.button.save`
+  },
+  welcome: {
+    id: `${scope}.home.span.welcome`,
   },
 });

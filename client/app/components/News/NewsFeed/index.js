@@ -25,6 +25,9 @@ import NewsLinkListItem from 'components/News/NewsLink/NewsLinkListItem';
 import SocialLinkListItem from 'components/News/SocialLink/SocialLinkListItem';
 import DiverstPagination from 'components/Shared/DiverstPagination';
 import DiverstLoader from 'components/Shared/DiverstLoader';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/News/messages';
+import { injectIntl, intlShape } from 'react-intl';
 
 const styles = theme => ({
   newsItem: {
@@ -46,23 +49,28 @@ const styles = theme => ({
   speedDialButton: {
     zIndex: 2,
   },
+  floatSpacer: {
+    display: 'flex',
+    width: '100%',
+    marginBottom: 20,
+  },
 });
 
 export function NewsFeed(props) {
   const actions = [
     {
       icon: <MessageIcon />,
-      name: 'Group Message',
+      name: <DiverstFormattedMessage {...messages.group_message} />,
       linkPath: props.links.groupMessageNew,
     },
     {
       icon: <NewsIcon />,
-      name: 'News Link',
+      name: <DiverstFormattedMessage {...messages.news_link} />,
       linkPath: props.links.newsLinkNew,
     },
     {
       icon: <SocialIcon />,
-      name: 'Social Link',
+      name: <DiverstFormattedMessage {...messages.social_link} />,
       linkPath: props.links.socialLinkNew,
     },
   ];
@@ -84,6 +92,7 @@ export function NewsFeed(props) {
           groupId={item.news_feed.group_id}
           deleteGroupMessageBegin={props.deleteGroupMessageBegin}
           updateNewsItemBegin={props.updateNewsItemBegin}
+          archiveNewsItemBegin={props.archiveNewsItemBegin}
         />
       );
     else if (item.news_link) // eslint-disable-line no-else-return
@@ -96,6 +105,7 @@ export function NewsFeed(props) {
           readonly={props.readonly}
           deleteNewsLinkBegin={props.deleteNewsLinkBegin}
           updateNewsItemBegin={props.updateNewsItemBegin}
+          archiveNewsItemBegin={props.archiveNewsItemBegin}
         />
       );
     else if (item.social_link)
@@ -108,6 +118,7 @@ export function NewsFeed(props) {
           readonly={props.readonly}
           deleteSocialLinkBegin={props.deleteSocialLinkBegin}
           updateNewsItemBegin={props.updateNewsItemBegin}
+          archiveNewsItemBegin={props.archiveNewsItemBegin}
         />
       );
 
@@ -120,7 +131,7 @@ export function NewsFeed(props) {
         <React.Fragment>
           <Backdrop open={speedDialOpen} className={classes.backdrop} />
           <SpeedDial
-            ariaLabel='Add Item'
+            ariaLabel={props.intl.formatMessage(messages.add)}
             className={classes.speedDial}
             icon={<SpeedDialIcon />}
             onClose={handleSpeedDialClose}
@@ -146,6 +157,7 @@ export function NewsFeed(props) {
               />
             ))}
           </SpeedDial>
+          <Box className={classes.floatSpacer} />
           <Paper>
             <ResponsiveTabs
               value={props.currentTab}
@@ -153,8 +165,8 @@ export function NewsFeed(props) {
               indicatorColor='primary'
               textColor='primary'
             >
-              <Tab label='APPROVED' />
-              <Tab label='PENDING APPROVAL' />
+              <Tab label={<DiverstFormattedMessage {...messages.approved} />} />
+              <Tab label={<DiverstFormattedMessage {...messages.pending} />} />
             </ResponsiveTabs>
           </Paper>
         </React.Fragment>
@@ -184,6 +196,7 @@ export function NewsFeed(props) {
 }
 
 NewsFeed.propTypes = {
+  intl: intlShape,
   defaultParams: PropTypes.object,
   currentTab: PropTypes.number,
   handleChangeTab: PropTypes.func,
@@ -198,9 +211,11 @@ NewsFeed.propTypes = {
   deleteNewsLinkBegin: PropTypes.func,
   deleteSocialLinkBegin: PropTypes.func,
   updateNewsItemBegin: PropTypes.func,
+  archiveNewsItemBegin: PropTypes.func
 };
 
 export default compose(
   memo,
+  injectIntl,
   withStyles(styles)
 )(NewsFeed);

@@ -18,6 +18,12 @@ import {
   CREATE_EVENT_ERROR,
   UPDATE_EVENT_ERROR,
   GET_EVENT_BEGIN,
+  ARCHIVE_EVENT_BEGIN,
+  ARCHIVE_EVENT_SUCCESS,
+  ARCHIVE_EVENT_ERROR,
+  FINALIZE_EXPENSES_BEGIN,
+  FINALIZE_EXPENSES_SUCCESS,
+  FINALIZE_EXPENSES_ERROR,
 } from './constants';
 
 export const initialState = {
@@ -27,6 +33,7 @@ export const initialState = {
   events: [],
   eventsTotal: null,
   currentEvent: null,
+  hasChanged: false,
 };
 
 /* eslint-disable default-case, no-param-reassign */
@@ -37,36 +44,60 @@ function eventsReducer(state = initialState, action) {
       case GET_EVENTS_BEGIN:
         draft.isLoading = true;
         break;
+
       case GET_EVENTS_SUCCESS:
         draft.events = action.payload.items;
         draft.eventsTotal = action.payload.total;
         draft.isLoading = false;
         break;
+
       case GET_EVENTS_ERROR:
         draft.isLoading = false;
         break;
+
       case GET_EVENT_BEGIN:
         draft.isFormLoading = true;
         break;
+
       case GET_EVENT_SUCCESS:
         draft.currentEvent = action.payload.initiative;
         draft.isFormLoading = false;
         break;
+
       case GET_EVENT_ERROR:
         draft.isFormLoading = false;
         break;
+
       case CREATE_EVENT_BEGIN:
       case UPDATE_EVENT_BEGIN:
+      case FINALIZE_EXPENSES_BEGIN:
         draft.isCommitting = true;
         break;
+
+      case FINALIZE_EXPENSES_SUCCESS:
+        draft.currentEvent = action.payload.initiative;
+        draft.isCommitting = false;
+        break;
+
       case CREATE_EVENT_SUCCESS:
       case CREATE_EVENT_ERROR:
       case UPDATE_EVENT_SUCCESS:
       case UPDATE_EVENT_ERROR:
+      case FINALIZE_EXPENSES_ERROR:
+      case ARCHIVE_EVENT_ERROR:
         draft.isCommitting = false;
         break;
+
       case EVENTS_UNMOUNT:
         return initialState;
+      case ARCHIVE_EVENT_BEGIN:
+        draft.isCommitting = true;
+        draft.hasChanged = false;
+        break;
+      case ARCHIVE_EVENT_SUCCESS:
+        draft.hasChanged = true;
+        draft.isCommitting = false;
+        break;
     }
   });
 }

@@ -6,6 +6,7 @@ class RedoAvailibilityTable1 < ActiveRecord::Migration[5.1]
   end
 
   def down
+    MentorshipAvailability.column_reload!
     map = MentorshipAvailability.all.map {|a| {id: a.id, day: a.day, start: a.start, end: a.end}}
 
     MentorshipAvailability.all.each do |ma|

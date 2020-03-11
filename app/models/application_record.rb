@@ -14,6 +14,11 @@ class ApplicationRecord < ActiveRecord::Base
     time_ago_in_words created_at
   end
 
+  def self.column_reload!
+    self.connection.schema_cache.clear!
+    self.reset_column_information
+  end
+
   def self.inherited(child)
     super
 
@@ -33,6 +38,40 @@ class ApplicationRecord < ActiveRecord::Base
   after_commit on: [:create] do update_elasticsearch_index('index') end
   after_commit on: [:update] do update_elasticsearch_index('update') end
   after_commit on: [:destroy] do update_elasticsearch_index('delete') end
+
+  def self.to_query(*args)
+    if args.present?
+      args.map { |arg| arg.all }
+    else
+      self.all
+    end
+  end
+
+  def self.summ(column)
+    query = to_query
+    if query.distinct_value
+      query.klass
+          .unscoped
+          .select("SUM(#{column}) as total_sum")
+          .from(query.select("#{table_name}.id, #{table_name}.#{column}"))[0]
+          .total_sum
+    else
+      query.sum(column)
+    end
+  end
+
+  def self.sum_and_count(column)
+    query = to_query
+    if query.distinct_value
+      query = query.klass
+                  .unscoped
+                  .select("SUM(#{column}) as total_sum, COUNT(id) as total_count")
+                  .from(query.select("#{table_name}.id, #{table_name}.#{column}"))[0]
+    else
+      query = query.select("SUM(#{table_name}.#{column}) as total_sum, COUNT(#{table_name}.id) as total_count")[0]
+    end
+    [query.total_sum, query.total_count]
+  end
 
   if Rails.env.development?
     def self.preload_test(preload: true, limit: 10, serializer: nil)

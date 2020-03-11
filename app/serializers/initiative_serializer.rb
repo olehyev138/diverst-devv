@@ -1,11 +1,12 @@
 class InitiativeSerializer < ApplicationRecordSerializer
   attributes :pillar, :owner, :budget, :outcome, :budget_status,
              :expenses_status, :current_expenses_sum, :leftover, :full?,
-             :picture, :picture_file_name, :picture_data,
-             :qr_code, :qr_code_file_name, :qr_code_data,
+             :picture, :picture_file_name, :picture_data, :qr_code, :qr_code_file_name, :qr_code_data,
              :total_comments
 
   has_many :comments
+
+  belongs_to :budget_item
 
   def serialize_all_fields
     true
@@ -45,5 +46,9 @@ class InitiativeSerializer < ApplicationRecordSerializer
 
   def qr_code_location
     object.qr_code_location(default_style: instance_options.dig(:scope, :image_size)&.to_sym)
+  end
+
+  def group_name
+    object.group.name
   end
 end

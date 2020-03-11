@@ -1,5 +1,5 @@
 class ApplicationPolicy
-  attr_reader :user, :record, :group_leader_role_ids
+  attr_reader :user, :policy_group, :record, :group_leader_role_ids
 
   def initialize(user, record, params = nil)
     raise Pundit::NotAuthorizedError, 'must be logged in' unless user
@@ -55,17 +55,20 @@ class ApplicationPolicy
   end
 
   def scope
-    Pundit.policy_scope(user, record.class)
+    Pundit.policy_scope(user, record.class.all)
   end
 
   class Scope
-    attr_reader :user, :scope, :permission
+    attr_reader :user, :scope, :permission, :policy
 
-    def initialize(user, scope, permission = nil)
+    def initialize(user, scope, permission = nil, params: {})
       @user = user
       @scope = scope
       @permission = permission
       @policy_group = @user.policy_group
+
+      policy_class = self.class.parent
+      @policy = policy_class.new(user, scope.all.klass, params)
     end
 
     def resolve

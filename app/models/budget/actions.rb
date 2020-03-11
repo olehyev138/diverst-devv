@@ -3,14 +3,32 @@ module Budget::Actions
     klass.extend ClassMethods
   end
 
-  module ClassMethods
-    def build(diverst_request, params)
-      item = super
-      annual_budget = diverst_request.user.enterprise.annual_budgets.find_or_create_by(closed: false, group_id: item.group_id)
-      item.annual_budget_id = annual_budget.id
-      item.save!
+  def approve(approver)
+    blocker = approval_blocker
+    raise InvalidInputException.new({ message: blocker, attribute: :annual_budget }) if blocker
+    raise InvalidInputException.new({ message: item.errors.full_messages.first, attribute: item.errors.messages.first.first }) unless update(approver: approver, is_approved: true)
 
-      item
+    BudgetMailer.budget_approved(self).deliver_later if requester
+    self
+  end
+
+  def decline(approver, reason = nil)
+    assign_attributes(approver: approver, is_approved: false, decline_reason: reason)
+    raise InvalidInputException.new({ message: item.errors.full_messages.first, attribute: item.errors.messages.first.first }) unless save(validate: false)
+
+    budget_items.update_all(is_done: true)
+
+    BudgetMailer.budget_declined(self).deliver_later if requester
+    self
+  end
+
+  def approval_blocker
+    annual_budget_set? || annual_budget_open? || request_surplus?
+  end
+
+  module ClassMethods
+    def base_includes
+      [ :budget_items ]
     end
   end
 end

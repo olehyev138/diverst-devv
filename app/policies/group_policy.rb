@@ -6,6 +6,26 @@ class GroupPolicy < ApplicationPolicy
     @policy_group.groups_index?
   end
 
+  def current_annual_budgets?
+    index?
+  end
+
+  def current_annual_budget?
+    update?
+  end
+
+  def carryover_annual_budget?
+    update?
+  end
+
+  def reset_annual_budget?
+    update?
+  end
+
+  def annual_budgets?
+    update?
+  end
+
   def new?
     create?
   end

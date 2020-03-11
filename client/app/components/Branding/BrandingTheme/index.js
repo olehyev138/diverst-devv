@@ -26,6 +26,9 @@ import DiverstFileInput from 'components/Shared/DiverstFileInput';
 import { DEFAULT_BRANDING_COLOR, DEFAULT_CHARTS_COLOR } from 'containers/Shared/ThemeProvider';
 
 import { omit } from 'lodash';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/Branding/messages';
+import { injectIntl, intlShape } from 'react-intl';
 
 const styles = theme => ({
   noBottomPadding: {
@@ -35,6 +38,7 @@ const styles = theme => ({
 
 /* eslint-disable object-curly-newline */
 export function BrandingThemeInner({ classes, handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
+  const { intl } = props;
   return (
     // The theme can be null if the enterprise has no theme, so the error is if it is undefined
     <DiverstFormLoader isLoading={props.isLoading} isError={props.theme === undefined}>
@@ -47,7 +51,7 @@ export function BrandingThemeInner({ classes, handleSubmit, handleChange, handle
                   component={DiverstColorPicker}
                   id='primary_color'
                   name='primary_color'
-                  label='Primary Color'
+                  label={intl.formatMessage(messages.Theme.primarycolor)}
                   disabled={props.isCommitting}
                   value={values.primary_color}
                   onChange={value => setFieldValue('primary_color', value)}
@@ -62,7 +66,7 @@ export function BrandingThemeInner({ classes, handleSubmit, handleChange, handle
                   component={DiverstSwitch}
                   id='use_secondary_color'
                   name='use_secondary_color'
-                  label='Use different color for graphs?'
+                  label={intl.formatMessage(messages.Theme.colorswitch)}
                   margin='normal'
                   disabled={props.isCommitting}
                   value={values.use_secondary_color}
@@ -77,7 +81,7 @@ export function BrandingThemeInner({ classes, handleSubmit, handleChange, handle
                     fullWidth
                     id='secondary_color'
                     name='secondary_color'
-                    label='Graphs Color'
+                    label={intl.formatMessage(messages.Theme.graphcolor)}
                     disabled={props.isCommitting}
                     value={values.secondary_color}
                     onChange={value => setFieldValue('secondary_color', value)}
@@ -103,7 +107,7 @@ export function BrandingThemeInner({ classes, handleSubmit, handleChange, handle
                   name='logo'
                   margin='normal'
                   value={values.logo}
-                  label='Logo'
+                  label={<DiverstFormattedMessage {...messages.Theme.logo} />}
                 />
               </Grid>
               <Grid item md xs={12}>
@@ -118,7 +122,7 @@ export function BrandingThemeInner({ classes, handleSubmit, handleChange, handle
                   margin='normal'
                   size='small'
                   value={values.logo_redirect_url}
-                  label='Logo Redirect URL'
+                  label={<DiverstFormattedMessage {...messages.Theme.url} />}
                 />
               </Grid>
             </Grid>
@@ -170,6 +174,7 @@ BrandingTheme.propTypes = {
 };
 
 BrandingThemeInner.propTypes = {
+  intl: intlShape,
   classes: PropTypes.object,
   theme: PropTypes.object,
   handleSubmit: PropTypes.func,
@@ -185,5 +190,6 @@ BrandingThemeInner.propTypes = {
 
 export default compose(
   memo,
+  injectIntl,
   withStyles(styles)
 )(BrandingTheme);

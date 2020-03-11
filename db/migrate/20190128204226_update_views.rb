@@ -1,5 +1,6 @@
 class UpdateViews < ActiveRecord::Migration[5.1]
   def up
+    View.column_reload!
     View.find_each do |view|
       view_count = view.view_count - 1
       

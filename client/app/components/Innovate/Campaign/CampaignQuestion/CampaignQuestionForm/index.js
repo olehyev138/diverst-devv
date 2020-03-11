@@ -16,13 +16,15 @@ import DiverstDateTimePicker from 'components/Shared/Pickers/DiverstDateTimePick
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { Field, Formik, Form } from 'formik';
 
-import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
-import messages from 'containers/Group/GroupMembers/messages';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 
 import { buildValues, mapFields } from 'utils/formHelpers';
 import { DateTime } from 'luxon';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import messages from 'containers/Innovate/Campaign/CampaignQuestion/messages';
+
+import { injectIntl, intlShape } from 'react-intl';
 
 /* eslint-disable object-curly-newline */
 export function CampaignQuestionFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, touched, ...props }) {
@@ -42,9 +44,9 @@ export function CampaignQuestionFormInner({ handleSubmit, handleChange, handleBl
               name='title'
               margin='normal'
               disabled={props.isCommitting}
-              label='* Start by giving a title to your question'
-              placeholder='What do you think of our new strategy for...?'
               value={values.title}
+              label={<DiverstFormattedMessage {...messages.question.title} />}
+              placeholder={props.intl.formatMessage(messages.question.title_placeholder)}
             />
             <Field
               component={TextField}
@@ -57,9 +59,9 @@ export function CampaignQuestionFormInner({ handleSubmit, handleChange, handleBl
               variant='outlined'
               margin='normal'
               disabled={props.isCommitting}
-              label='* Optionally define a description to further explain what you need resolution for'
-              placeholder='We have been hammering at this problem for a very long time, and we need your input on how to...'
               value={values.description}
+              label={<DiverstFormattedMessage {...messages.question.description} />}
+              placeholder={props.intl.formatMessage(messages.question.description_placeholder)}
             />
           </CardContent>
           <Divider />
@@ -74,7 +76,7 @@ export function CampaignQuestionFormInner({ handleSubmit, handleChange, handleBl
               to={links.questionsIndex}
               component={WrappedNavLink}
             >
-              <DiverstFormattedMessage {...messages.cancel} />
+              <DiverstFormattedMessage {...messages.question.cancel} />
             </Button>
           </CardActions>
         </Form>
@@ -117,6 +119,7 @@ CampaignQuestionForm.propTypes = {
 };
 
 CampaignQuestionFormInner.propTypes = {
+  intl: intlShape,
   edit: PropTypes.bool,
   question: PropTypes.object,
   createQuestionBegin: PropTypes.func,
@@ -140,4 +143,5 @@ CampaignQuestionFormInner.propTypes = {
 
 export default compose(
   memo,
+  injectIntl,
 )(CampaignQuestionForm);

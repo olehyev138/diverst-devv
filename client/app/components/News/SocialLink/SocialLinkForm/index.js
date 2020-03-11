@@ -31,7 +31,7 @@ export function SocialLinkFormInner({ handleSubmit, handleChange, handleBlur, va
               id='url'
               name='url'
               margin='normal'
-              label='Social Link URL'
+              label={<DiverstFormattedMessage {...messages.social_url} />}
               value={values.url}
             />
           </CardContent>
@@ -60,7 +60,7 @@ export function SocialLinkForm(props) {
   const initialValues = buildValues(socialLink, {
     id: { default: '' },
     url: { default: '' },
-    author_id: { default: dig(props, 'currentUser', 'id') || '' },
+    author_id: { default: dig(props, 'currentUser', 'user_id') || '' },
     group_id: { default: dig(props, 'currentGroup', 'id') || '' }
   });
 

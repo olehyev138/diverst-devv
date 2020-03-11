@@ -24,6 +24,8 @@ class NewsFeedLink < ApplicationRecord
     joins('LEFT OUTER JOIN shared_news_feed_links ON shared_news_feed_links.news_feed_link_id = news_feed_links.id')
       .where("shared_news_feed_links.news_feed_id = #{news_feed_id} OR news_feed_links.news_feed_id = #{news_feed_id} AND news_feed_links.approved = 1").distinct
   }
+  scope :not_archived, -> { where(archived_at: nil) }
+  scope :archived, -> { where.not(archived_at: nil) }
 
   scope :combined_news_links_with_segments, -> (news_feed_id, segment_ids) {
     includes(:social_link, :news_link, :group_message)

@@ -15,7 +15,8 @@ describe('groupsReducer', () => {
       isCommitting: false,
       groupList: {},
       groupTotal: null,
-      currentGroup: null
+      currentGroup: null,
+      hasChanged: false,
     };
   });
 

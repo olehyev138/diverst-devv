@@ -264,6 +264,7 @@ class User < ApplicationRecord
   def set_default_policy_group
     template = enterprise.policy_group_templates.joins(:user_role).find_by(user_roles: { id: user_role_id })
     attributes = template.create_new_policy
+    attributes.delete(:manage_all)
     if policy_group.nil?
       create_policy_group(attributes)
     else

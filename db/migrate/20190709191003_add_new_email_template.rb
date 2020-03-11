@@ -23,6 +23,7 @@ class AddNewEmailTemplate < ActiveRecord::Migration[5.1]
       template: ''
     }
 
+    Enterprise.column_reload!
     Enterprise.find_each do |enterprise|
       email = enterprise.emails.create(attributes)
 
@@ -33,6 +34,7 @@ class AddNewEmailTemplate < ActiveRecord::Migration[5.1]
   end
 
   def down
+    Email.column_reload!
     Email.where(name: 'User Onboarding Mailer').destroy_all
   end
 end

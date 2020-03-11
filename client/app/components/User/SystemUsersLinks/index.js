@@ -10,6 +10,9 @@ import { withStyles } from '@material-ui/core/styles';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import ResponsiveTabs from 'components/Shared/ResponsiveTabs';
 
+import messages from 'containers/User/messages';
+import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+
 const styles = theme => ({});
 
 /* eslint-disable react/no-multi-comp */
@@ -28,22 +31,26 @@ export function SystemUsersLinks(props) {
           <Tab
             component={WrappedNavLink}
             to={ROUTES.admin.system.users.index.path()}
-            label='Users'
+            label={<DiverstFormattedMessage {...messages.tab.users} />}
+            value='users'
           />
           <Tab
             component={WrappedNavLink}
             to={ROUTES.admin.system.users.roles.index.path()}
-            label='User Roles'
+            label={<DiverstFormattedMessage {...messages.tab.roles} />}
+            value='roles'
           />
           <Tab
             component={WrappedNavLink}
-            to='#'
-            label='Policy Templates'
+            to={ROUTES.admin.system.users.policy_templates.index.path()}
+            label={<DiverstFormattedMessage {...messages.tab.policy} />}
+            value='templates'
           />
           <Tab
             component={WrappedNavLink}
             to={ROUTES.admin.system.users.import.path()}
             label='Import Users'
+            value='import'
           />
         </ResponsiveTabs>
       </Paper>

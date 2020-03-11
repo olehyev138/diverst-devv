@@ -19,7 +19,7 @@ import { getEventBegin, eventsUnmount } from 'containers/Event/actions';
 
 import EventManageLinks from 'components/Event/EventManage/EventManageLinks';
 import Box from '@material-ui/core/Box';
-import GroupPlanLayout from '../GroupPlanLayout';
+import GroupLayout from '../GroupLayout';
 
 const styles = theme => ({
   content: {
@@ -62,7 +62,7 @@ const EventManageLayout = ({ component: Component, ...rest }) => {
   }, []);
 
   return (
-    <GroupPlanLayout
+    <GroupLayout
       {...rest}
       component={matchProps => (
         other.event && (

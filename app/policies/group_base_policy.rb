@@ -1,9 +1,8 @@
-class GroupBasePolicy < Struct.new(:user, :context)
+class GroupBasePolicy < ApplicationPolicy
   attr_accessor :user, :group, :record, :group_leader_role_ids
 
-  def initialize(user, context, params = nil)
-    self.user = user
-    self.group_leader_role_ids = user.group_leaders.pluck(:user_role_id)
+  def initialize(user, context, params = {})
+    super(user, context, params)
 
     # Check if it's a collection, a record, or a class
     if context.is_a?(Enumerable) # Collection/Enumerable
@@ -12,10 +11,10 @@ class GroupBasePolicy < Struct.new(:user, :context)
     elsif context.is_a?(Class) # Class
       # Set group using params if context is a class as this will be for
       # nested model actions such as index and create, which require a group
-      self.group = ::Group.find(params[:group_id] || params.dig(context.model_name.param_key.to_sym, :group_id))
-    else # Record
+      self.group = ::Group.find(params[:group_id] || params.dig(context.model_name.param_key.to_sym, :group_id)) rescue nil
+    elsif context.present?
       self.group = context.group
-      self.record = context
+      self.record = context else # Record
     end
   end
 
@@ -30,16 +29,16 @@ class GroupBasePolicy < Struct.new(:user, :context)
   def is_a_manager?(permission)
     return true if is_admin_manager?(permission)
 
-    # return true if is_a_leader? &&  user.policy_group[permission]
+    # return true if is_a_leader? &&  policy_group[permission]
     has_group_leader_permissions?(permission)
   end
 
   def is_admin_manager?(permission)
     # super admin
-    return true if user.policy_group.manage_all?
+    return true if manage_all?
 
     # groups manager
-    user.policy_group.groups_manage? && user.policy_group[permission]
+    policy_group.groups_manage? && policy_group[permission]
   end
 
   def is_a_leader?
@@ -51,7 +50,7 @@ class GroupBasePolicy < Struct.new(:user, :context)
   end
 
   def is_a_guest?
-    !is_a_member?
+    !is_a_member? || is_a_pending_member?
   end
 
   def is_a_pending_member?
@@ -63,36 +62,49 @@ class GroupBasePolicy < Struct.new(:user, :context)
   end
 
   def has_group_leader_permissions?(permission)
-    return false if !is_a_leader?
-    return false if !GroupLeader.attribute_names.include?(permission)
+    return false unless is_a_leader?
 
-    group.group_leaders.where(user_id: user.id).where("#{permission} = true").exists?
+    gl_permission = GroupLeader.attribute_names.include?(permission)
+    pgt_permission = PolicyGroupTemplate.attribute_names.include?(permission)
+
+    leaders = group.group_leaders.where(user_id: user.id)
+    leaders = leaders.joins(:policy_group_template) if pgt_permission
+
+    conditions = []
+    conditions.append "(group_leaders.#{permission} = true)" if gl_permission
+    conditions.append "(policy_group_templates.#{permission} = true)" if pgt_permission
+
+    leaders.where(conditions.join(' OR ') || '(TRUE)').exists?
   end
 
   def view_group_resource(permission)
     return true if manage_group_resource(permission)
 
     # super admin
-    return true if user.policy_group.manage_all?
+    return true if manage_all?
     # groups manager
-    return true if user.policy_group.groups_manage? && user.policy_group[permission]
+    return true if policy_group.groups_manage? && policy_group[permission]
     # group leader
-    return true if is_a_leader? &&  user.policy_group[permission]
+    return true if is_a_leader? &&  policy_group[permission]
     # group member
-    return true if is_a_member? &&  user.policy_group[permission]
+    return true if is_a_member? &&  policy_group[permission]
 
     false
   end
 
+  def manage?
+    manage_group_resource(base_manage_permission)
+  end
+
   def manage_group_resource(permission)
     # super admin
-    return true if user.policy_group.manage_all?
+    return true if manage_all?
     # groups manager
-    return true if user.policy_group.groups_manage? && user.policy_group[permission]
+    return true if policy_group.groups_manage? && policy_group[permission]
     # group leader
     return true if has_group_leader_permissions?(permission)
     # group member
-    return true if is_a_member? && user.policy_group[permission]
+    return true if is_a_member? && policy_group[permission]
 
     false
   end
@@ -137,5 +149,72 @@ class GroupBasePolicy < Struct.new(:user, :context)
   end
 
   def base_manage_permission
+  end
+
+  class Scope < Scope
+    def quote_string(v)
+      v.to_s.gsub(/\\/, '\&\&').gsub(/'/, "''")
+    end
+
+    def manage_all
+      '(policy_groups.manage_all = true)'
+    end
+
+    def policy_group(permission)
+      "policy_groups.#{quote_string(permission)} = true"
+    end
+
+    def group_manage(permission)
+      "(policy_groups.groups_manage = true AND #{policy_group(permission)})"
+    end
+
+    def is_member(permission)
+      "(user_groups.user_id = #{quote_string(user.id)} AND #{policy_group(permission)})"
+    end
+
+    def leader_policy(permission)
+      "group_leaders.#{quote_string(permission)} = true"
+    end
+
+    def is_leader(permission)
+      if group_has_permission(permission)
+        "(group_leaders.user_id = #{quote_string(user.id)} AND #{leader_policy(permission)})"
+      else
+        'false'
+      end
+    end
+
+    def group_has_permission(permission)
+      GroupLeader.attribute_names.include?(permission)
+    end
+
+    delegate :index?, to: :policy
+    delegate :group, to: :policy
+
+    def group_base
+      group.send(scope.all.klass.model_name.collection)
+    end
+
+    def resolve(permission)
+      if group
+        if index?
+          group_base.merge(scope.all)
+        else
+          scope.none
+        end
+      else
+        if scope <= Group
+          scoped = scope.left_joins(:enterprise, :group_leaders, :user_groups)
+        elsif scope.instance_methods.include?(:group)
+          scoped = scope.left_joins(group: [:enterprise, :group_leaders, :user_groups])
+        else
+          scoped = scope.none
+        end
+        scoped
+            .joins("JOIN policy_groups ON policy_groups.user_id = #{quote_string(user.id)}")
+            .where('enterprises.id = ?', user.enterprise_id)
+            .where([manage_all, group_manage(permission), is_member(permission), is_leader(permission)].join(' OR '))
+      end
+    end
   end
 end

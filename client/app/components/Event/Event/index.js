@@ -10,6 +10,7 @@ import {
 import { withStyles } from '@material-ui/core/styles';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/DeleteOutline';
+import ArchiveIcon from '@material-ui/icons/Archive';
 
 import classNames from 'classnames';
 
@@ -22,6 +23,7 @@ import DiverstShowLoader from 'components/Shared/DiverstShowLoader';
 import { formatDateTimeString, DateTime } from 'utils/dateTimeHelpers';
 
 import DiverstImg from 'components/Shared/DiverstImg';
+import { injectIntl, intlShape } from 'react-intl';
 
 import EventComment from 'components/Event/EventComment';
 import EventCommentForm from 'components/Event/EventCommentForm';
@@ -53,7 +55,7 @@ const styles = theme => ({
 });
 
 export function Event(props) {
-  const { classes } = props;
+  const { classes, intl } = props;
   const event = dig(props, 'event');
 
   return (
@@ -75,7 +77,7 @@ export function Event(props) {
                 startIcon={<DeleteIcon />}
                 onClick={() => {
                   /* eslint-disable-next-line no-alert, no-restricted-globals */
-                  if (confirm('Delete event?'))
+                  if (confirm(intl.formatMessage(messages.delete_confirm)))
                     props.deleteEventBegin({
                       id: event.id,
                       group_id: event.owner_group_id
@@ -94,6 +96,21 @@ export function Event(props) {
                 startIcon={<EditIcon />}
               >
                 <DiverstFormattedMessage {...messages.edit} />
+              </Button>
+              <Button
+                variant='contained'
+                size='large'
+                color='primary'
+                className={classes.buttons}
+                onClick={() => {
+                  props.archiveEventBegin({
+                    id: props.event.id,
+                    group_id: event.owner_group_id
+                  });
+                }}
+                startIcon={<ArchiveIcon />}
+              >
+                <DiverstFormattedMessage {...messages.archive} />
               </Button>
             </Grid>
           </Grid>
@@ -122,7 +139,7 @@ export function Event(props) {
               <Grid item>
                 <DiverstImg
                   data={event.picture_data}
-                  alt='Event Image'
+                  alt=<DiverstFormattedMessage {...messages.inputs.image} />
                 />
               </Grid>
             </Grid>
@@ -158,7 +175,9 @@ export function Event(props) {
 }
 
 Event.propTypes = {
+  intl: intlShape,
   deleteEventBegin: PropTypes.func,
+  archiveEventBegin: PropTypes.func,
   classes: PropTypes.object,
   event: PropTypes.object,
   currentUserId: PropTypes.number,
@@ -172,5 +191,6 @@ Event.propTypes = {
 
 export default compose(
   memo,
+  injectIntl,
   withStyles(styles)
 )(Event);
