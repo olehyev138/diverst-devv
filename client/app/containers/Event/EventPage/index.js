@@ -15,7 +15,7 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { selectGroup } from 'containers/Group/selectors';
 import { selectUser } from 'containers/Shared/App/selectors';
-import { selectEvent, selectIsFormLoading } from 'containers/Event/selectors';
+import { selectEvent, selectIsFormLoading, selectHasChanged } from 'containers/Event/selectors';
 
 
 import { getEventBegin, deleteEventBegin, createEventCommentBegin, deleteEventCommentBegin, archiveEventBegin, eventsUnmount, joinEventBegin, leaveEventBegin } from 'containers/Event/actions';
@@ -40,7 +40,7 @@ export function EventPage(props) {
     props.getEventBegin({ id: eventId });
 
     return () => props.eventsUnmount();
-  }, []);
+  }, [props.hasChanged]);
 
   const { currentUser, currentEvent } = props;
   return (
@@ -55,6 +55,7 @@ export function EventPage(props) {
       archiveEventBegin={props.archiveEventBegin}
       joinEventBegin={props.joinEventBegin}
       leaveEventBegin={props.leaveEventBegin}
+      hasChanged={props.hasChanged}
     />
   );
 }
@@ -72,7 +73,7 @@ EventPage.propTypes = {
   isFormLoading: PropTypes.bool,
   createEventCommentBegin: PropTypes.func,
   deleteEventCommentBegin: PropTypes.func,
-
+  hasChanged: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -80,6 +81,7 @@ const mapStateToProps = createStructuredSelector({
   currentUser: selectUser(),
   currentEvent: selectEvent(),
   isFormLoading: selectIsFormLoading(),
+  hasChanged: selectHasChanged(),
 });
 
 const mapDispatchToProps = {
