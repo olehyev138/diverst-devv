@@ -32,7 +32,13 @@ import {
   FINALIZE_EXPENSES_BEGIN,
   FINALIZE_EXPENSES_SUCCESS,
   FINALIZE_EXPENSES_ERROR,
-  EVENTS_UNMOUNT, JOIN_EVENT_ERROR, JOIN_EVENT_SUCCESS, JOIN_EVENT_BEGIN,
+  EVENTS_UNMOUNT,
+  JOIN_EVENT_ERROR,
+  JOIN_EVENT_SUCCESS,
+  JOIN_EVENT_BEGIN,
+  LEAVE_EVENT_BEGIN,
+  LEAVE_EVENT_ERROR,
+  LEAVE_EVENT_SUCCESS
 } from './constants';
 
 
@@ -198,13 +204,6 @@ export function archiveEventError(error) {
   };
 }
 
-
-export function joinEventBegin(payload) {
-  return {
-    type: JOIN_EVENT_BEGIN,
-    payload,
-  };
-}
 /* Event comments */
 
 export function createEventCommentBegin(payload) {
@@ -221,6 +220,7 @@ export function createEventCommentSuccess(payload) {
   };
 }
 
+
 export function createEventCommentError(error) {
   return {
     type: CREATE_EVENT_COMMENT_ERROR,
@@ -228,18 +228,46 @@ export function createEventCommentError(error) {
   };
 }
 
-export function deleteEventCommentBegin(payload) {
+/* Join Event & Leave Event */
+export function joinEventBegin(payload) {
   return {
-    type: DELETE_EVENT_COMMENT_BEGIN,
+    type: JOIN_EVENT_BEGIN,
     payload,
   };
 }
-
 
 export function joinEventSuccess(payload) {
   return {
     type: JOIN_EVENT_SUCCESS,
     payload,
+  };
+}
+
+export function joinEventError(error) {
+  return {
+    type: JOIN_EVENT_ERROR,
+    error,
+  };
+}
+
+export function leaveEventBegin(payload) {
+  return {
+    type: LEAVE_EVENT_BEGIN,
+    payload,
+  };
+}
+
+export function leaveEventSuccess(payload) {
+  return {
+    type: LEAVE_EVENT_SUCCESS,
+    payload,
+  };
+}
+
+export function leaveEventError(error) {
+  return {
+    type: LEAVE_EVENT_ERROR,
+    error,
   };
 }
 
@@ -250,17 +278,16 @@ export function deleteEventCommentSuccess(payload) {
   };
 }
 
-
-export function joinEventError(error) {
-  return {
-    type: JOIN_EVENT_ERROR,
-    error,
-  };
-}
-
 export function deleteEventCommentError(error) {
   return {
     type: DELETE_EVENT_COMMENT_ERROR,
     error,
+  };
+}
+
+export function deleteEventCommentBegin(payload) {
+  return {
+    type: DELETE_EVENT_COMMENT_BEGIN,
+    payload,
   };
 }

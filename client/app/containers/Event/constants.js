@@ -36,6 +36,10 @@ export const JOIN_EVENT_BEGIN = 'app/Event/JOIN_EVENT_BEGIN';
 export const JOIN_EVENT_SUCCESS = 'app/Event/JOIN_EVENT_SUCCESS';
 export const JOIN_EVENT_ERROR = 'app/Event/JOIN_EVENT_ERROR';
 
+export const LEAVE_EVENT_BEGIN = 'app/Event/LEAVE_EVENT_BEGIN';
+export const LEAVE_EVENT_SUCCESS = 'app/Event/LEAVE_EVENT_SUCCESS';
+export const LEAVE_EVENT_ERROR = 'app/Event/LEAVE_EVENT_ERROR';
+
 export const EVENTS_UNMOUNT = 'app/Event/EVENTS_UNMOUNT';
 
 export const CREATE_EVENT_COMMENT_BEGIN = 'app/Event/CREATE_EVENT_COMMENT_BEGIN ';

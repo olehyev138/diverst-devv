@@ -15,7 +15,9 @@ import {
   CREATE_EVENT_COMMENT_BEGIN,
   DELETE_EVENT_COMMENT_BEGIN,
   FINALIZE_EXPENSES_BEGIN,
-  ARCHIVE_EVENT_BEGIN, JOIN_EVENT_BEGIN
+  ARCHIVE_EVENT_BEGIN,
+  JOIN_EVENT_BEGIN,
+  LEAVE_EVENT_BEGIN
 } from './constants';
 
 
@@ -31,6 +33,7 @@ import {
   finalizeExpensesSuccess, finalizeExpensesError,
   archiveEventError, archiveEventSuccess,
   joinEventError, joinEventSuccess,
+  leaveEventError, leaveEventSuccess
 } from './actions';
 
 
@@ -209,12 +212,24 @@ export function* joinEvent(action) {
   try {
     const response = yield call(api.initiativeUsers.create.bind(api.initiativeUsers), payload);
     yield put(joinEventSuccess());
-
   } catch (err) {
     yield put(joinEventError(err));
 
     // TODO: intl message
     yield put(showSnackbar({ message: 'Failed to join event', options: { variant: 'warning' } }));
+  }
+}
+
+export function* leaveEvent(action) {
+  const payload = { initiative_user: action.payload };
+  try {
+    const response = yield call(api.initiativeUsers.remove.bind(api.initiativeUsers), payload);
+    yield put(joinEventSuccess());
+  } catch (err) {
+    yield put(joinEventError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to leave event', options: { variant: 'warning' } }));
   }
 }
 
@@ -229,4 +244,5 @@ export default function* eventsSaga() {
   yield takeLatest(ARCHIVE_EVENT_BEGIN, archiveEvent);
   yield takeLatest(FINALIZE_EXPENSES_BEGIN, finalizeExpenses);
   yield takeLatest(JOIN_EVENT_BEGIN, joinEvent);
+  yield takeLatest(LEAVE_EVENT_BEGIN, leaveEvent);
 }

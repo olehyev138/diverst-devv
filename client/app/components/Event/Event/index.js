@@ -121,7 +121,7 @@ export function Event(props) {
                   color='primary'
                   className={classes.buttons}
                   onClick={() => {
-                    props.joinEventBegin({
+                    props.leaveEventBegin({
                       initiative_id: props.event.id,
                     });
                   }}

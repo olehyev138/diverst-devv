@@ -18,7 +18,7 @@ import { selectUser } from 'containers/Shared/App/selectors';
 import { selectEvent, selectIsFormLoading } from 'containers/Event/selectors';
 
 
-import { getEventBegin, deleteEventBegin, createEventCommentBegin, deleteEventCommentBegin, archiveEventBegin, eventsUnmount , joinEventBegin } from 'containers/Event/actions';
+import { getEventBegin, deleteEventBegin, createEventCommentBegin, deleteEventCommentBegin, archiveEventBegin, eventsUnmount, joinEventBegin, leaveEventBegin } from 'containers/Event/actions';
 
 
 import Event from 'components/Event/Event';
@@ -54,6 +54,7 @@ export function EventPage(props) {
       isFormLoading={props.isFormLoading}
       archiveEventBegin={props.archiveEventBegin}
       joinEventBegin={props.joinEventBegin}
+      leaveEventBegin={props.leaveEventBegin}
     />
   );
 }
@@ -63,6 +64,7 @@ EventPage.propTypes = {
   deleteEventBegin: PropTypes.func,
   archiveEventBegin: PropTypes.func,
   joinEventBegin: PropTypes.func,
+  leaveEventBegin: PropTypes.func,
   eventsUnmount: PropTypes.func,
   currentUser: PropTypes.object,
   currentGroup: PropTypes.object,
@@ -87,7 +89,8 @@ const mapDispatchToProps = {
   deleteEventCommentBegin,
   archiveEventBegin,
   eventsUnmount,
-  joinEventBegin
+  joinEventBegin,
+  leaveEventBegin
 };
 
 const withConnect = connect(
