@@ -56,6 +56,9 @@ export default defineMessages({
   join: {
     id: `${scope}.index.button.join`,
   },
+  leave: {
+    id: `${scope}.index.button.leave`,
+  },
   createupdate: {
     id: `${scope}.form.button.createupdate`,
   },

@@ -672,6 +672,7 @@
   "diverst.containers.Event.index.button.delete": "Delete Event",
   "diverst.containers.Event.index.button.archive": "Archive Event",
   "diverst.containers.Event.index.button.join": "Join Event",
+  "diverst.containers.Event.index.button.leave": "Leave Event",
   "diverst.containers.Event.index.button.delete_confirm": "Delete event?",
   "diverst.containers.Event.index.button.rows": "Rows per page",
   "diverst.containers.Event.index.button.page": "of",

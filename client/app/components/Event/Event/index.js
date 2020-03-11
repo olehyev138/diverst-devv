@@ -12,6 +12,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/DeleteOutline';
 import ArchiveIcon from '@material-ui/icons/Archive';
 import AddIcon from '@material-ui/icons/Add';
+import RemoveIcon from '@material-ui/icons/Remove';
 
 import classNames from 'classnames';
 
@@ -58,6 +59,7 @@ const styles = theme => ({
 export function Event(props) {
   const { classes, intl } = props;
   const event = dig(props, 'event');
+  console.log(props);
   return (
     <DiverstShowLoader isLoading={props.isFormLoading} isError={!props.isFormLoading && !event}>
       {event && (
@@ -112,20 +114,37 @@ export function Event(props) {
               >
                 <DiverstFormattedMessage {...messages.archive} />
               </Button>
-              <Button
-                variant='contained'
-                size='large'
-                color='primary'
-                className={classes.buttons}
-                onClick={() => {
-                  props.joinEventBegin({
-                    initiative_id: props.event.id,
-                  });
-                }}
-                startIcon={<AddIcon />}
-              >
-                <DiverstFormattedMessage {...messages.join} />
-              </Button>
+              {event.is_attending ? (
+                <Button
+                  variant='contained'
+                  size='large'
+                  color='primary'
+                  className={classes.buttons}
+                  onClick={() => {
+                    props.joinEventBegin({
+                      initiative_id: props.event.id,
+                    });
+                  }}
+                  startIcon={<RemoveIcon />}
+                >
+                  <DiverstFormattedMessage {...messages.leave} />
+                </Button>
+              ) : (
+                <Button
+                  variant='contained'
+                  size='large'
+                  color='primary'
+                  className={classes.buttons}
+                  onClick={() => {
+                    props.joinEventBegin({
+                      initiative_id: props.event.id,
+                    });
+                  }}
+                  startIcon={<AddIcon />}
+                >
+                  <DiverstFormattedMessage {...messages.join} />
+                </Button>
+              )}
             </Grid>
           </Grid>
           <Paper className={classes.padding}>
