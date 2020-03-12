@@ -7,6 +7,7 @@ import Fade from '@material-ui/core/Fade';
 
 import GroupManageLinks from 'components/Group/GroupManage/GroupManageLinks';
 import GroupLayout from 'containers/Layouts/GroupLayout';
+import Permission from 'components/Shared/DiverstPermission';
 
 const styles = theme => ({
   content: {
@@ -46,11 +47,13 @@ const GroupManageLayout = ({ component: Component, classes, ...rest }) => {
               {...rest}
               {...matchProps}
             />
-            <Fade in appear>
-              <div className={classes.content}>
-                <Component {...rest} {...matchProps} />
-              </div>
-            </Fade>
+            <Permission show={matchProps.currentGroup.permissions['update?']}>
+              <Fade in appear>
+                <div className={classes.content}>
+                  <Component {...rest} {...matchProps} />
+                </div>
+              </Fade>
+            </Permission>
           </React.Fragment>
         )}
       />

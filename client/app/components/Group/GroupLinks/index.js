@@ -238,22 +238,24 @@ export function GroupLinks(props) {
             <DiverstFormattedMessage {...ROUTES.group.plan.index.data.titleMessage} />
           </Button>
 
-          <Button
-            component={WrappedNavLink}
-            className={classes.navLink}
-            activeClassName={classes.navLinkActive}
-            to={ROUTES.group.manage.settings.index.path(rs.params('group_id'))}
-            isActive={(match, location) => !!matchPath(location.pathname, {
-              path: ROUTES.group.manage.index.data.pathPrefix(rs.params('group_id')),
-              exact: false,
-              strict: false,
-            })}
-          >
-            <Hidden smDown>
-              <ManageIcon className={classes.navIcon} />
-            </Hidden>
-            <DiverstFormattedMessage {...ROUTES.group.manage.index.data.titleMessage} />
-          </Button>
+          <Permission show={permission('update?')}>
+            <Button
+              component={WrappedNavLink}
+              className={classes.navLink}
+              activeClassName={classes.navLinkActive}
+              to={ROUTES.group.manage.settings.index.path(rs.params('group_id'))}
+              isActive={(match, location) => !!matchPath(location.pathname, {
+                path: ROUTES.group.manage.index.data.pathPrefix(rs.params('group_id')),
+                exact: false,
+                strict: false,
+              })}
+            >
+              <Hidden smDown>
+                <ManageIcon className={classes.navIcon} />
+              </Hidden>
+              <DiverstFormattedMessage {...ROUTES.group.manage.index.data.titleMessage} />
+            </Button>
+          </Permission>
         </Toolbar>
       </PerfectScrollbar>
     </div>

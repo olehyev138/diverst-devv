@@ -12,6 +12,7 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import ResponsiveTabs from 'components/Shared/ResponsiveTabs';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Group/GroupManage/messages';
+import Conditional from 'components/Compositions/Conditional';
 const styles = theme => ({});
 
 /* eslint-disable react/no-multi-comp */
@@ -54,4 +55,4 @@ export const StyledGroupManageLinks = withStyles(styles)(GroupManageLinks);
 export default compose(
   withStyles(styles),
   memo,
-)(GroupManageLinks);
+)(Conditional(GroupManageLinks, ['currentGroup.permissions.update?']));
