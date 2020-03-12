@@ -88,9 +88,6 @@ class Initiative < ApplicationRecord
 
     group_ors = []
     group_ors << Initiative.sql_where(groups: { id: group_ids })
-    group_ors << Initiative.sql_where(
-        initiative_participating_groups: { group_id: group_ids }
-      )
 
     segment_ors = []
     segment_ors << Initiative.sql_where(initiative_segments: { segment_id: nil })
@@ -104,8 +101,27 @@ class Initiative < ApplicationRecord
       )
     valid_ors << User.sql_where("(#{ group_ors.join(' OR ')}) AND (#{ segment_ors.join(' OR ')})")
 
-    left_joins(:group, :initiative_segments, :initiative_participating_groups, :initiative_invitees)
-        .where(valid_ors.join(' OR '))
+    unscope(:left_joins).joins(
+        'LEFT OUTER JOIN `initiative_participating_groups` '\
+          'ON `initiative_participating_groups`.`initiative_id` = `initiatives`.`id` '\
+        'LEFT OUTER JOIN `pillars` ' \
+          'ON `pillars`.`id` = `initiatives`.`pillar_id` ' \
+        'LEFT OUTER JOIN `outcomes` ' \
+          'ON `outcomes`.`id` = `pillars`.`outcome_id` '\
+        'LEFT OUTER JOIN `groups` '\
+          'ON 	`groups`.`id` = `outcomes`.`group_id` ' \
+            'OR `groups`.`id` = `initiative_participating_groups`.`group_id`'\
+        'LEFT OUTER JOIN `initiative_segments` '\
+          'ON `initiative_segments`.`initiative_id` = `initiatives`.`id` '\
+        'LEFT OUTER JOIN `initiative_invitees` '\
+          'ON `initiative_invitees`.`initiative_id` = `initiatives`.`id` '\
+        'LEFT OUTER JOIN `enterprises` '\
+          'ON `enterprises`.`id` = `groups`.`enterprise_id` '\
+		    'LEFT OUTER JOIN `group_leaders` '\
+          'ON `group_leaders`.`group_id` = `groups`.`id` '\
+		    'LEFT OUTER JOIN `user_groups` '\
+          'ON `user_groups`.`group_id` = `groups`.`id` '
+    ).where(valid_ors.join(' OR '))
   }
 
   scope :order_recent, -> { order(start: :desc) }
