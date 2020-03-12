@@ -71,7 +71,6 @@ export function* getUserPosts(action) {
 
 export function* getUserEvents(action) {
   try {
-    // if (action.payload.participation === 'all')
     const { participation, userId, ...rest } = action.payload;
     const payload = {
       ...rest,

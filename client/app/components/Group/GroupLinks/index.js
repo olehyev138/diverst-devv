@@ -2,7 +2,6 @@ import React, { useContext, memo } from 'react';
 import { compose } from 'redux';
 import { withStyles } from '@material-ui/core/styles';
 import dig from 'object-dig';
-import WithPermission from 'components/Compositions/WithPermission';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import classNames from 'classnames';
 import { matchPath } from 'react-router';

@@ -51,7 +51,7 @@ const GroupLayout = ({ component: Component, classes, ...rest }) => {
       other.getGroupBegin({ id: groupId });
 
     return () => other.groupFormUnmount();
-  }, []);
+  }, [rs.params('group_id')]);
 
   return (
     <AuthenticatedLayout

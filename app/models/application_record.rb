@@ -49,7 +49,7 @@ class ApplicationRecord < ActiveRecord::Base
     left = all
     right = right_raw.all
 
-    raise ::ArgumentError unless left.klass == right.klass
+    raise ::ArgumentError.new('Can only `or` between two queries of the same Klass') unless left.klass == right.klass
 
     merged = left.merge(right)
 
@@ -68,9 +68,8 @@ class ApplicationRecord < ActiveRecord::Base
         joins.each do |j|
           case j
           when Arel::Nodes::Join
-            if query.respond_to?(:proxy_association)
-              inner_joins.append Arel::Nodes::OuterJoin.new(j.left, j.right)
-            end
+            inner_joins.append Arel::Nodes::OuterJoin.new(j.left, j.right)
+          when String then raise ::ArgumentError.new("Can't `or` when joins are defined by strings")
           else left_joins.append j
           end
         end
