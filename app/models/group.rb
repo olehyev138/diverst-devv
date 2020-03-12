@@ -472,6 +472,30 @@ class Group < ApplicationRecord
     end
   end
 
+  def membership_list_csv(group_members)
+    total_nb_of_members = group_members.count
+    mentorship_module_enabled = enterprise.mentorship_module_enabled?
+
+    CSV.generate do |csv|
+      first_row = %w(first_name last_name email_address)
+      first_row += %w(mentor mentee) if mentorship_module_enabled
+
+      csv << first_row
+
+      group_members.each do |member|
+        membership_list_row = []
+        membership_list_row += [ member.first_name, member.last_name, member.email ]
+        membership_list_row += [ member.mentor, member.mentee ] if mentorship_module_enabled
+
+        member_info = member.info
+
+        csv << membership_list_row
+      end
+
+      csv << ['total', nil, "#{total_nb_of_members}"]
+    end
+  end
+
   def budgets_csv
     CSV.generate do |csv|
       csv << ['Requested amount', 'Available amount', 'Status', 'Requested at', '# of events', 'Description']

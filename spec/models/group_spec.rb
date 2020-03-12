@@ -180,8 +180,9 @@ RSpec.describe Group, type: :model do
     describe '#ensure_not_own_child' do
       let(:group) { create(:group) }
 
-      it 'returns false' do
-        expect(group.children << group).to eq(false)
+      it 'adds error' do
+        group.children << group
+        expect(group.errors.messages[:parent_id]).to include('Group cant be its own parent')
       end
     end
   end
@@ -431,13 +432,12 @@ RSpec.describe Group, type: :model do
   end
 
   describe 'test scopes' do
-    let(:enterprise) { create(:enterprise) }
-    let(:groups) { create_list(:group, 3, enterprise: enterprise) }
-
+    let!(:enterprise) { create(:enterprise) }
+    let!(:groups) { create_list(:group, 3, enterprise: enterprise) }
 
     context 'Group::by_enterprise' do
       it 'returns groups belonging to the enterprise' do
-        expect(Group.by_enterprise(enterprise)).to eq(groups)
+        expect(Group.by_enterprise(enterprise).ids.sort).to eq(groups.pluck(:id).sort)
       end
     end
 
@@ -462,13 +462,13 @@ RSpec.describe Group, type: :model do
 
     context 'Group::non_private' do
       it 'returns non_private groups' do
-        expect(Group.non_private).to eq(groups)
+        expect(Group.non_private.ids.sort).to eq(groups.pluck(:id).sort)
       end
     end
 
     context 'Group::all_parents' do
       it 'returns all parent groups' do
-        expect(Group.all_parents).to eq(groups)
+        expect(Group.all_parents.ids.sort).to eq(groups.pluck(:id).sort)
       end
     end
 
