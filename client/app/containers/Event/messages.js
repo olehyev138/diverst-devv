@@ -53,6 +53,12 @@ export default defineMessages({
   delete_confirm: {
     id: `${scope}.index.button.delete_confirm`,
   },
+  join: {
+    id: `${scope}.index.button.join`,
+  },
+  leave: {
+    id: `${scope}.index.button.leave`,
+  },
   createupdate: {
     id: `${scope}.form.button.createupdate`,
   },
@@ -91,6 +97,9 @@ export default defineMessages({
     },
     description: {
       id: `${scope}.form.input.description`,
+    },
+    location: {
+      id: `${scope}.form.input.location`,
     },
     start: {
       id: `${scope}.form.input.start`,

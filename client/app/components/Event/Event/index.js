@@ -11,6 +11,8 @@ import { withStyles } from '@material-ui/core/styles';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/DeleteOutline';
 import ArchiveIcon from '@material-ui/icons/Archive';
+import AddIcon from '@material-ui/icons/Add';
+import RemoveIcon from '@material-ui/icons/Remove';
 
 import classNames from 'classnames';
 
@@ -46,7 +48,9 @@ const styles = theme => ({
     },
   },
   buttons: {
-    marginLeft: 20,
+    marginLeft: 10,
+    marginRight: 10,
+    marginBottom: 20,
     float: 'right',
   },
   deleteButton: {
@@ -57,7 +61,6 @@ const styles = theme => ({
 export function Event(props) {
   const { classes, intl } = props;
   const event = dig(props, 'event');
-
   return (
     <DiverstShowLoader isLoading={props.isFormLoading} isError={!props.isFormLoading && !event}>
       {event && (
@@ -112,36 +115,115 @@ export function Event(props) {
               >
                 <DiverstFormattedMessage {...messages.archive} />
               </Button>
+              {event.is_attending ? (
+                <Button
+                  variant='contained'
+                  size='large'
+                  color='primary'
+                  className={classes.buttons}
+                  onClick={() => {
+                    props.leaveEventBegin({
+                      initiative_id: props.event.id,
+                    });
+                  }}
+                  startIcon={<RemoveIcon />}
+                >
+                  <DiverstFormattedMessage {...messages.leave} />
+                </Button>
+              ) : (
+                <Button
+                  variant='contained'
+                  size='large'
+                  color='primary'
+                  className={classes.buttons}
+                  onClick={() => {
+                    props.joinEventBegin({
+                      initiative_id: props.event.id,
+                    });
+                  }}
+                  startIcon={<AddIcon />}
+                >
+                  <DiverstFormattedMessage {...messages.join} />
+                </Button>
+              )}
             </Grid>
           </Grid>
           <Paper className={classes.padding}>
             <Grid container spacing={2}>
-              <Grid item xs>
-                <Typography className={classes.dataHeaders}>
-                  <DiverstFormattedMessage {...messages.show.dateAndTime} />
-                </Typography>
-                <Typography variant='overline'>From</Typography>
-                <Typography color='textSecondary'>{formatDateTimeString(event.start, DateTime.DATETIME_FULL)}</Typography>
-                <Typography variant='overline'>To</Typography>
-                <Typography color='textSecondary' className={classes.data}>{formatDateTimeString(event.end, DateTime.DATETIME_FULL)}</Typography>
-
-                {event.description && (
-                  <React.Fragment>
+              {event.picture_data ? (
+                <React.Fragment>
+                  <Grid item xs>
                     <Typography className={classes.dataHeaders}>
-                      <DiverstFormattedMessage {...messages.inputs.description} />
+                      <DiverstFormattedMessage {...messages.show.dateAndTime} />
                     </Typography>
-                    <Typography color='textSecondary' className={classes.data}>
-                      {event.description}
-                    </Typography>
-                  </React.Fragment>
-                )}
-              </Grid>
-              <Grid item>
-                <DiverstImg
-                  data={event.picture_data}
-                  alt=<DiverstFormattedMessage {...messages.inputs.image} />
-                />
-              </Grid>
+                    <Typography variant='overline'>From</Typography>
+                    <Typography color='textSecondary'>{formatDateTimeString(event.start, DateTime.DATETIME_FULL)}</Typography>
+                    <Typography variant='overline'>To</Typography>
+                    <Typography color='textSecondary' className={classes.data}>{formatDateTimeString(event.end, DateTime.DATETIME_FULL)}</Typography>
+
+                    {event.location && (
+                      <React.Fragment>
+                        <Typography className={classes.dataHeaders}>
+                          <DiverstFormattedMessage {...messages.inputs.location} />
+                        </Typography>
+                        <Typography color='textSecondary' className={classes.data}>
+                          {event.location}
+                        </Typography>
+                      </React.Fragment>
+                    )}
+                  </Grid>
+                  <Grid item xs={6}>
+                    <DiverstImg
+                      data={event.picture_data}
+                      maxWidth='100%'
+                      minWidth='100%'
+                    />
+                  </Grid>
+                  <Grid xs={12}>
+                    {event.description && (
+                      <React.Fragment>
+                        <Typography className={classes.dataHeaders}>
+                          <DiverstFormattedMessage {...messages.inputs.description} />
+                        </Typography>
+                        <Typography color='textSecondary' className={classes.data}>
+                          {event.description}
+                        </Typography>
+                      </React.Fragment>
+                    )}
+                  </Grid>
+                </React.Fragment>
+              ) : (
+                <Grid item xs>
+                  <Typography className={classes.dataHeaders}>
+                    <DiverstFormattedMessage {...messages.show.dateAndTime} />
+                  </Typography>
+                  <Typography variant='overline'>From</Typography>
+                  <Typography color='textSecondary'>{formatDateTimeString(event.start, DateTime.DATETIME_FULL)}</Typography>
+                  <Typography variant='overline'>To</Typography>
+                  <Typography color='textSecondary' className={classes.data}>{formatDateTimeString(event.end, DateTime.DATETIME_FULL)}</Typography>
+
+                  {event.location && (
+                    <React.Fragment>
+                      <Typography className={classes.dataHeaders}>
+                        <DiverstFormattedMessage {...messages.inputs.location} />
+                      </Typography>
+                      <Typography color='textSecondary' className={classes.data}>
+                        {event.location}
+                      </Typography>
+                    </React.Fragment>
+                  )}
+                  {event.description && (
+                    <React.Fragment>
+                      <Typography className={classes.dataHeaders}>
+                        <DiverstFormattedMessage {...messages.inputs.description} />
+                      </Typography>
+                      <Typography color='textSecondary' className={classes.data}>
+                        {event.description}
+                      </Typography>
+                    </React.Fragment>
+                  )}
+                </Grid>
+              )}
             </Grid>
           </Paper>
           <Box mb={4} />
@@ -178,6 +260,8 @@ Event.propTypes = {
   intl: intlShape,
   deleteEventBegin: PropTypes.func,
   archiveEventBegin: PropTypes.func,
+  joinEventBegin: PropTypes.func,
+  leaveEventBegin: PropTypes.func,
   classes: PropTypes.object,
   event: PropTypes.object,
   currentUserId: PropTypes.number,

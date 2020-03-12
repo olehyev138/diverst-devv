@@ -24,6 +24,9 @@ import {
   FINALIZE_EXPENSES_BEGIN,
   FINALIZE_EXPENSES_SUCCESS,
   FINALIZE_EXPENSES_ERROR,
+  JOIN_EVENT_BEGIN,
+  JOIN_EVENT_ERROR,
+  JOIN_EVENT_SUCCESS, LEAVE_EVENT_ERROR, LEAVE_EVENT_BEGIN, LEAVE_EVENT_SUCCESS
 } from './constants';
 
 export const initialState = {
@@ -85,16 +88,22 @@ function eventsReducer(state = initialState, action) {
       case UPDATE_EVENT_ERROR:
       case FINALIZE_EXPENSES_ERROR:
       case ARCHIVE_EVENT_ERROR:
+      case JOIN_EVENT_ERROR:
+      case LEAVE_EVENT_ERROR:
         draft.isCommitting = false;
         break;
 
       case EVENTS_UNMOUNT:
         return initialState;
       case ARCHIVE_EVENT_BEGIN:
+      case JOIN_EVENT_BEGIN:
+      case LEAVE_EVENT_BEGIN:
         draft.isCommitting = true;
         draft.hasChanged = false;
         break;
       case ARCHIVE_EVENT_SUCCESS:
+      case JOIN_EVENT_SUCCESS:
+      case LEAVE_EVENT_SUCCESS:
         draft.hasChanged = true;
         draft.isCommitting = false;
         break;

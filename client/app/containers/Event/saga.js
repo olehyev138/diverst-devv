@@ -16,7 +16,10 @@ import {
   DELETE_EVENT_COMMENT_BEGIN,
   FINALIZE_EXPENSES_BEGIN,
   ARCHIVE_EVENT_BEGIN,
-} from 'containers/Event/constants';
+  JOIN_EVENT_BEGIN,
+  LEAVE_EVENT_BEGIN
+} from './constants';
+
 
 import {
   getEventBegin,
@@ -28,8 +31,10 @@ import {
   deleteEventCommentError, deleteEventCommentSuccess,
   createEventCommentError, createEventCommentSuccess,
   finalizeExpensesSuccess, finalizeExpensesError,
-  archiveEventError, archiveEventSuccess
-} from 'containers/Event/actions';
+  archiveEventError, archiveEventSuccess,
+  joinEventError, joinEventSuccess,
+  leaveEventError, leaveEventSuccess
+} from './actions';
 
 
 export function* getEvents(action) {
@@ -202,6 +207,32 @@ export function* finalizeExpenses(action) {
   }
 }
 
+export function* joinEvent(action) {
+  const payload = { initiative_user: action.payload };
+  try {
+    const response = yield call(api.initiativeUsers.create.bind(api.initiativeUsers), payload);
+    yield put(joinEventSuccess());
+  } catch (err) {
+    yield put(joinEventError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to join event', options: { variant: 'warning' } }));
+  }
+}
+
+export function* leaveEvent(action) {
+  const payload = { initiative_user: action.payload };
+  try {
+    const response = yield call(api.initiativeUsers.remove.bind(api.initiativeUsers), payload);
+    yield put(joinEventSuccess());
+  } catch (err) {
+    yield put(joinEventError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to leave event', options: { variant: 'warning' } }));
+  }
+}
+
 export default function* eventsSaga() {
   yield takeLatest(GET_EVENTS_BEGIN, getEvents);
   yield takeLatest(GET_EVENT_BEGIN, getEvent);
@@ -212,4 +243,6 @@ export default function* eventsSaga() {
   yield takeLatest(DELETE_EVENT_COMMENT_BEGIN, deleteEventComment);
   yield takeLatest(ARCHIVE_EVENT_BEGIN, archiveEvent);
   yield takeLatest(FINALIZE_EXPENSES_BEGIN, finalizeExpenses);
+  yield takeLatest(JOIN_EVENT_BEGIN, joinEvent);
+  yield takeLatest(LEAVE_EVENT_BEGIN, leaveEvent);
 }
