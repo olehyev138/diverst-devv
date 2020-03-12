@@ -1,38 +1,47 @@
-class UserGroupPolicy < ApplicationPolicy
-  def index?
-    return true if manage_all?
-    return true if basic_group_leader_permission?('groups_members_index')
-
-    @policy_group.groups_members_index?
+class UserGroupPolicy < GroupBasePolicy
+  def base_index_permission
+    'groups_members_index'
   end
 
-  def show?
-    index?
+  def base_create_permission
+    'groups_members_manage'
+  end
+
+  def base_manage_permission
+    'groups_members_manage'
+  end
+
+  def group_visibility_setting
+    'members_visibility'
   end
 
   def create?
-    false
+    true
   end
 
   def update?
-    false
+    record.user == user || super
   end
 
-  def destroy?
-    false
-  end
+  alias_method :view_members?, :index?
+  alias_method :join?, :create?
+  alias_method :leave?, :destroy?
 
   class Scope < Scope
-    def index?
-      UserGroupPolicy.new(user, nil).index?
+    def is_member(permission)
+      "(groups.members_visibility IN ('public', 'non_member', 'group') AND user_groups.user_id = #{quote_string(user.id)} AND #{policy_group(permission)})"
+    end
+
+    def is_not_a_member(permission)
+      "(groups.members_visibility IN ('public', 'non_member') AND #{policy_group(permission)})"
+    end
+
+    def group_base
+      group.members
     end
 
     def resolve
-      if index?
-        scope.where(groups: { enterprise_id: user.enterprise_id }).all
-      else
-        scope.none
-      end
+      super(policy.base_index_permission)
     end
   end
 end

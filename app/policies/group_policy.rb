@@ -91,6 +91,18 @@ class GroupPolicy < ApplicationPolicy
     InitiativePolicy.new(user, [record, Initiative]).index?
   end
 
+  def members_view?
+    UserGroupPolicy.new(user, [record, UserGroup]).index?
+  end
+
+  def news_view?
+    NewsFeedLinkPolicy.new(user, [record, NewsFeedLink]).index?
+  end
+
+  # def resource_view?
+  #   GroupResourcePolicy.new(user, [record, Resource]).index?
+  # end
+
   # move these to separate policies
   def view_all?
     create?

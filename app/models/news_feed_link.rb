@@ -3,6 +3,8 @@ class NewsFeedLink < ApplicationRecord
   include NewsFeedLink::Actions
 
   belongs_to :news_feed
+  has_one :group, through: :news_feed
+
   belongs_to :group_message, dependent: :delete
   belongs_to :news_link, dependent: :delete
   belongs_to :social_link, dependent: :delete
@@ -40,6 +42,16 @@ class NewsFeedLink < ApplicationRecord
   validates :news_feed_id, presence: true
 
   after_create :approve_link
+
+  def author
+    if group_message
+      group_message.owner
+    elsif news_link
+      news_link.author
+    elsif social_link
+      social_link.author
+    end
+  end
 
   # checks if link can automatically be approved
   # links are automatically approved if author is a
