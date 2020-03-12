@@ -121,7 +121,7 @@ class Initiative < ApplicationRecord
           'ON `group_leaders`.`group_id` = `groups`.`id` '\
 		    'LEFT OUTER JOIN `user_groups` '\
           'ON `user_groups`.`group_id` = `groups`.`id` '
-    ).where(valid_ors.join(' OR '))
+      ).where(valid_ors.join(' OR '))
   }
 
   scope :order_recent, -> { order(start: :desc) }
