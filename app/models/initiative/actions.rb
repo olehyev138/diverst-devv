@@ -31,7 +31,18 @@ module Initiative::Actions
     end
 
     def base_preloads
-      [:pillar, :owner, :budget, :outcome, :group, :expenses, :picture_attachment, :qr_code_attachment]
+      [
+          :pillar,
+          :owner,
+          :budget,
+          :outcome,
+          :group,
+          :expenses,
+          :picture_attachment,
+          :qr_code_attachment,
+          :initiative_users,
+          :comments
+      ]
     end
 
     def generate_qr_code(diverst_request, params)

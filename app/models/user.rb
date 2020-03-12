@@ -214,7 +214,9 @@ class User < ApplicationRecord
   end
 
   def is_attending?(event)
-    event.initiative_users.where(user_id: id).any?
+    event.initiative_users.loaded? ?
+        event.initiative_users.any? { |iu| iu.user_id == self.id } :
+        event.initiative_users.where(user_id: self.id).any?
   end
 
   def is_participating_in?(session)
