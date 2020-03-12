@@ -5,7 +5,6 @@ class GroupBasePolicy < ApplicationPolicy
     super(user, context, params)
 
     self.user = user
-    self.group_leader_role_id = GroupLeader.find_by(user_id: user&.id, group_id: group&.id)&.user_role_id
 
     # Check if it's a collection, a record, or a class
     if context.is_a?(Enumerable) # Collection/Enumerable
@@ -19,6 +18,8 @@ class GroupBasePolicy < ApplicationPolicy
       self.group = context.group
       self.record = context else # Record
     end
+
+    self.group_leader_role_id = GroupLeader.find_by(user_id: user&.id, group_id: group&.id)&.user_role_id
   end
 
   def admin?
@@ -93,9 +94,9 @@ class GroupBasePolicy < ApplicationPolicy
     # groups manager
     return true if policy_group.groups_manage? && policy_group[permission]
     # group leader
-    return true if is_a_leader? &&  policy_group[permission]
+    return true if is_a_leader? && policy_group[permission]
     # group member
-    return true if is_a_member? &&  policy_group[permission]
+    return true if is_a_member? && policy_group[permission]
 
     false
   end
