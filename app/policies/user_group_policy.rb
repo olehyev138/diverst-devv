@@ -37,7 +37,7 @@ class UserGroupPolicy < GroupBasePolicy
     end
 
     def group_base
-      group.members
+      group.user_groups
     end
 
     def resolve

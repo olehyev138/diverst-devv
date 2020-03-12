@@ -24,6 +24,7 @@ import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import GroupMemberList from 'components/Group/GroupMembers/GroupMemberList';
+import Conditional from 'components/Compositions/Conditional';
 
 const MemberTypes = Object.freeze([
   'active',
@@ -219,4 +220,4 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(GroupMemberListPage);
+)(Conditional(GroupMemberListPage, ['currentGroup.permissions.members_view?']));

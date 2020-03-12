@@ -166,17 +166,19 @@ export function GroupLinks(props) {
             <DiverstFormattedMessage {...ROUTES.group.home.data.titleMessage} />
           </Button>
 
-          <Button
-            component={WrappedNavLink}
-            to={ROUTES.group.members.index.path(rs.params('group_id'))}
-            className={classes.navLink}
-            activeClassName={classes.navLinkActive}
-          >
-            <Hidden smDown>
-              <MembersIcon className={classes.navIcon} />
-            </Hidden>
-            <DiverstFormattedMessage {...ROUTES.group.members.index.data.titleMessage} />
-          </Button>
+          <Permission show={permission('members_view?')}>
+            <Button
+              component={WrappedNavLink}
+              to={ROUTES.group.members.index.path(rs.params('group_id'))}
+              className={classes.navLink}
+              activeClassName={classes.navLinkActive}
+            >
+              <Hidden smDown>
+                <MembersIcon className={classes.navIcon} />
+              </Hidden>
+              <DiverstFormattedMessage {...ROUTES.group.members.index.data.titleMessage} />
+            </Button>
+          </Permission>
 
           <Permission show={permission('events_view?')}>
             <Button
@@ -205,17 +207,19 @@ export function GroupLinks(props) {
             <DiverstFormattedMessage {...ROUTES.group.resources.index.data.titleMessage} />
           </Button>
 
-          <Button
-            component={WrappedNavLink}
-            to={ROUTES.group.news.index.path(rs.params('group_id'))}
-            className={classes.navLink}
-            activeClassName={classes.navLinkActive}
-          >
-            <Hidden smDown>
-              <NewsIcon className={classes.navIcon} />
-            </Hidden>
-            <DiverstFormattedMessage {...ROUTES.group.news.index.data.titleMessage} />
-          </Button>
+          <Permission show={permission('news_view?')}>
+            <Button
+              component={WrappedNavLink}
+              to={ROUTES.group.news.index.path(rs.params('group_id'))}
+              className={classes.navLink}
+              activeClassName={classes.navLinkActive}
+            >
+              <Hidden smDown>
+                <NewsIcon className={classes.navIcon} />
+              </Hidden>
+              <DiverstFormattedMessage {...ROUTES.group.news.index.data.titleMessage} />
+            </Button>
+          </Permission>
 
           <Button
             component={WrappedNavLink}

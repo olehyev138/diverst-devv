@@ -18,6 +18,7 @@ import { deleteSocialLinkBegin, getNewsItemsBegin, newsFeedUnmount, deleteNewsLi
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import NewsFeed from 'components/News/NewsFeed';
+import Conditional from 'components/Compositions/Conditional';
 
 const NewsFeedTypes = Object.freeze({
   approved: 0,
@@ -163,4 +164,4 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(NewsFeedPage);
+)(Conditional(NewsFeedPage, ['currentGroup.permissions.news_view?']));
