@@ -131,7 +131,11 @@ Diverst::Application.routes.draw do
       resources :initiative_participating_groups
       resources :initiative_segments
       resources :initiative_updates
-      resources :initiative_users
+      resources :initiative_users do
+        collection do
+          post 'remove'
+        end
+      end
       resources :invitation_segments_groups
       resources :likes
       resources :mentorings do

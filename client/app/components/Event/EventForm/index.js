@@ -101,6 +101,17 @@ export function EventFormInner({
               label={<DiverstFormattedMessage {...messages.inputs.description} />}
               value={values.description}
             />
+            <Field
+              component={TextField}
+              onChange={handleChange}
+              disabled={props.isCommitting}
+              fullWidth
+              id='location'
+              name='location'
+              margin='normal'
+              label={<DiverstFormattedMessage {...messages.inputs.location} />}
+              value={values.location}
+            />
           </CardContent>
           <Divider />
           <CardContent>
