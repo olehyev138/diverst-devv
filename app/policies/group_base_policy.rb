@@ -1,7 +1,9 @@
-class GroupBasePolicy < Struct.new(:user, :context)
+class GroupBasePolicy < ApplicationPolicy
   attr_accessor :user, :group, :record, :group_leader_role_id
 
-  def initialize(user, context, params = nil)
+  def initialize(user, context, params = {})
+    super(user, context, params)
+
     self.user = user
     self.group_leader_role_id = GroupLeader.find_by(user_id: user&.id, group_id: group&.id)&.user_role_id
 
