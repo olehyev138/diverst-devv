@@ -4,6 +4,9 @@ class SocialLink < ApplicationRecord
 
   self.table_name = 'social_network_posts'
 
+  belongs_to :author, class_name: 'User', counter_cache: true
+  belongs_to :group
+
   has_one :news_feed_link
 
   has_many :social_link_segments, dependent: :destroy
@@ -12,14 +15,12 @@ class SocialLink < ApplicationRecord
 
   accepts_nested_attributes_for :news_feed_link, allow_destroy: true
 
-  validate :correct_url?
   validates :author_id, presence: true
+  validates :author, presence: true
+  validate :correct_url?
 
   before_create :build_default_link, :add_trailing_slash
   after_create :hack_temp_solution
-
-  belongs_to :author, class_name: 'User', required: true, counter_cache: true
-  belongs_to :group
 
   after_destroy :remove_news_feed_link
 
