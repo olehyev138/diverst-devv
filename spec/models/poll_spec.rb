@@ -4,7 +4,7 @@ RSpec.describe Poll, type: :model do
   it_behaves_like 'it Defines Fields'
 
   describe 'when validating' do
-    let(:poll) { build_stubbed(:poll) }
+    let(:poll) { build(:poll) }
 
     context 'test associations' do
       it { expect(poll).to belong_to(:enterprise).inverse_of(:polls).counter_cache(true) }
