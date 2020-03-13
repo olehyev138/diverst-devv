@@ -7,7 +7,7 @@ RSpec.describe MentoringSession, type: :model do
     it { expect(mentoring_session).to validate_presence_of(:start) }
     it { expect(mentoring_session).to validate_presence_of(:end) }
     it { expect(mentoring_session).to validate_presence_of(:status) }
-    it { expect(mentoring_session).to validate_presence_of(:format) }
+    it { expect(mentoring_session).to validate_presence_of(:medium) }
 
     it { expect(mentoring_session).to have_many(:resources).dependent(:destroy) }
     it { expect(mentoring_session).to have_many(:mentoring_session_topics).dependent(:destroy) }
@@ -26,7 +26,7 @@ RSpec.describe MentoringSession, type: :model do
     it { expect(mentoring_session).to validate_length_of(:video_room_name).is_at_most(191) }
     it { expect(mentoring_session).to validate_length_of(:access_token).is_at_most(65535) }
     it { expect(mentoring_session).to validate_length_of(:link).is_at_most(191) }
-    it { expect(mentoring_session).to validate_length_of(:format).is_at_most(191) }
+    it { expect(mentoring_session).to validate_length_of(:medium).is_at_most(191) }
   end
 
   describe 'elasticsearch methods' do
