@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe NewsLinkComment, type: :model do
   describe 'test associations and validations' do
-    let(:news_link_comment) { build_stubbed(:news_link_comment) }
+    let(:news_link_comment) { build(:news_link_comment) }
 
     it { expect(news_link_comment).to belong_to(:author).class_name('User') }
     it { expect(news_link_comment).to belong_to(:news_link) }
