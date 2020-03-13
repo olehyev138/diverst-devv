@@ -46,7 +46,7 @@ RSpec.feature 'Initiative management' do
 
     scenario 'creating initiative with budget' do
       visit new_group_initiative_path(group)
-      
+
       allow_any_instance_of(Initiative).to receive(:estimated_funding).and_return(10000)
 
       fill_form(initiative_params)
