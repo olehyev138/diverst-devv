@@ -15,8 +15,6 @@ RSpec.describe Resource, type: :model do
     it { expect(resource).to accept_nested_attributes_for(:tags) }
 
     it { expect(resource).to validate_length_of(:resource_type).is_at_most(191) }
-    it { expect(resource).to validate_length_of(:file_content_type).is_at_most(191) }
-    it { expect(resource).to validate_length_of(:file_file_name).is_at_most(191) }
     it { expect(resource).to validate_length_of(:title).is_at_most(191) }
 
     # ActiveStorage
