@@ -24,8 +24,8 @@ RSpec.describe MetricsDashboard, type: :model do
 
   describe '.with_shared_dashboards' do
     context 'with metrics_dashboard' do
-      let(:user) { create(:user) }
-      let(:metrics_dashboard) { create(:metrics_dashboard, enterprise_id: user.enterprise.id, owner_id: user.id) }
+      let!(:user) { create(:user) }
+      let!(:metrics_dashboard) { create(:metrics_dashboard, enterprise_id: user.enterprise.id, owner_id: user.id) }
 
       it 'returns metrics_dashboard' do
         expect(MetricsDashboard.with_shared_dashboards(user.id)).to eq([metrics_dashboard])
