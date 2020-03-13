@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Question, type: :model do
   describe 'validations' do
-    let(:question) { build_stubbed(:question) }
+    let(:question) { build(:question) }
 
     it { expect(question).to belong_to(:campaign).counter_cache(true) }
     it { expect(question).to have_many(:answer_comments).through(:answers).source(:comments) }
