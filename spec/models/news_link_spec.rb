@@ -3,7 +3,7 @@ include ActionDispatch::TestProcess
 
 RSpec.describe NewsLink, type: :model do
   describe 'test associations and validations' do
-    let(:news_link) { build_stubbed(:news_link) }
+    let(:news_link) { build(:news_link) }
 
     it { expect(news_link).to validate_presence_of(:group_id) }
     it { expect(news_link).to validate_presence_of(:title) }
@@ -37,8 +37,6 @@ RSpec.describe NewsLink, type: :model do
       expect(build(:news_link, url: 'badurl' * 300)).to_not be_valid
     end
 
-    it { expect(news_link).to validate_length_of(:picture_content_type).is_at_most(191) }
-    it { expect(news_link).to validate_length_of(:picture_file_name).is_at_most(191) }
     it { expect(news_link).to validate_length_of(:description).is_at_most(65535) }
     it { expect(news_link).to validate_length_of(:title).is_at_most(191) }
   end
