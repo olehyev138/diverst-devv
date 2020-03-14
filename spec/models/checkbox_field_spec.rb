@@ -127,8 +127,8 @@ RSpec.describe CheckboxField, type: :model do
           type: 'CheckboxField',
           title: 'Spoken languages',
           options_text: "English\nMandarin\nSpanish\nHindi\nArabic\nRussian\nPortuguese",
-          field_definer: user.enterprise
-      )
+          field_definer: user.enterprise)
+
       checkbox_field.save!
       rule = create(:segment_field_rule)
 
@@ -144,8 +144,7 @@ RSpec.describe CheckboxField, type: :model do
           type: 'CheckboxField',
           title: 'Spoken languages',
           options_text: "English\nMandarin\nSpanish\nHindi\nArabic\nRussian\nPortuguese",
-          field_definer: enterprise
-      )
+          field_definer: enterprise)
 
       checkbox_field.save!
       user = create(:user, data: "{\"#{checkbox_field.id}\":[\"English\"]}", enterprise: enterprise)

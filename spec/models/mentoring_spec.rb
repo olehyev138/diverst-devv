@@ -29,9 +29,10 @@ RSpec.describe Mentoring, type: :model do
             'enterprise_id' => enterprise.id,
             'id' => mentee.id },
           'mentor' => {
-          'active' => true,
-          'enterprise_id' => enterprise.id,
-          'id' => mentor.id } }
+              'active' => true,
+              'enterprise_id' => enterprise.id,
+              'id' => mentor.id
+          } }
       )
     end
   end

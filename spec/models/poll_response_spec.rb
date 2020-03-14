@@ -10,7 +10,7 @@ RSpec.describe PollResponse do
     it { expect(poll_response).to belong_to(:user) }
 
     # Skip until polls implementation
-    #it { expect(poll_response).to validate_presence_of(:poll) }
+    # it { expect(poll_response).to validate_presence_of(:poll) }
     # it { expect(poll_response).to validate_presence_of(:user) }
 
     it { expect(poll_response).to have_many(:user_reward_actions).dependent(:destroy) }

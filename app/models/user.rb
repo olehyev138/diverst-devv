@@ -21,7 +21,7 @@ class User < ApplicationRecord
   scope :invitation_sent,         -> { where.not(invitation_token: nil).distinct }
   scope :saml,                    -> { where(auth_source: 'saml').distinct }
 
-  belongs_to  :user_role
+  belongs_to :user_role
 
   has_one :policy_group,  dependent: :destroy, inverse_of: :user
   has_one :device,        dependent: :destroy, inverse_of: :user
