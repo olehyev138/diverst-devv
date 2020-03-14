@@ -6,7 +6,7 @@ RSpec.describe ExpensePolicy, type: :policy do
   let(:user) { no_access }
   let(:expense) { create(:expense, enterprise: enterprise) }
 
-  subject { ExpensePolicy.new(user, expense) }
+  subject { ExpensePolicy.new(user.reload, expense) }
 
   before {
     no_access.policy_group.manage_all = false

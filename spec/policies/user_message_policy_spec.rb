@@ -7,7 +7,7 @@ RSpec.describe UserMessagePolicy, type: :policy do
   let(:group) { create(:group, enterprise: enterprise) }
   let(:group_message) { create(:group_message, group: group, author: user) }
 
-  subject { UserMessagePolicy.new(user, group_message) }
+  subject { UserMessagePolicy.new(user.reload, group_message) }
 
   before {
     no_access.policy_group.manage_all = false

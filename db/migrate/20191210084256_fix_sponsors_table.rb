@@ -7,6 +7,7 @@ class FixSponsorsTable < ActiveRecord::Migration[5.2]
 
     add_reference :sponsors, :sponsorable, polymorphic: true, index: true unless column_exists? :sponsors, :sponsorable_id
 
+    Sponsor.column_reload!
     Sponsor.find_each do |sponsor|
       if enterprise_id_exists && sponsor.enterprise_id
         sponsor.sponsorable = Enterprise.find(sponsor.enterprise_id)

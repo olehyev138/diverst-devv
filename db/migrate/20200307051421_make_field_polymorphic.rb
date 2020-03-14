@@ -39,8 +39,7 @@ class MakeFieldPolymorphic < ActiveRecord::Migration[5.2]
     transaction do
       add_poly
 
-      Field.connection.schema_cache.clear!
-      Field.reset_column_information
+      Field.column_reload!
       Field.find_each do |field|
         field_definer_id = field.group_id || field.poll_id || field.initiative_id || field.enterprise_id
         unless field_definer_id.present?
@@ -81,8 +80,7 @@ class MakeFieldPolymorphic < ActiveRecord::Migration[5.2]
     transaction do
       add_individual
 
-      Field.connection.schema_cache.clear!
-      Field.reset_column_information
+      Field.column_reload!
       Field.find_each do |field|
         case field.field_definer_type
         when 'Enterprise'

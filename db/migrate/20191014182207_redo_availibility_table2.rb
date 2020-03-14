@@ -1,5 +1,6 @@
 class RedoAvailibilityTable2 < ActiveRecord::Migration[5.1]
   def up
+    MentorshipAvailability.column_reload!
     map = MentorshipAvailability.all.map {|a| {id: a.id, day: a.day, start: a.start, end: a.end}}
     MentorshipAvailability.all.each do |ma|
       old = map.find {|m| m[:id] == ma.id}

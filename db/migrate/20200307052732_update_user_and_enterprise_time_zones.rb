@@ -1,13 +1,16 @@
 class UpdateUserAndEnterpriseTimeZones < ActiveRecord::Migration[5.2]
   def up
+    User.column_reload!
     User.find_each do |user|
       fix_time_zone(user)
     end
 
+    Enterprise.column_reload!
     Enterprise.all.each do |enterprise|
       fix_time_zone(enterprise)
     end
 
+    ClockworkDatabaseEvent.column_reload!
     ClockworkDatabaseEvent.all.each do |event|
       fix_time_zone(event, :tz)
     end

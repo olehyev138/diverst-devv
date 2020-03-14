@@ -10,6 +10,7 @@ class InitiativeComment < ApplicationRecord
   validates :content, presence: true
 
   before_create :approve_comment
+  delegate :name, to: :user, prefix: true
 
   def group
     initiative.group

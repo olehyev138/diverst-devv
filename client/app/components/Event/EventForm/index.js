@@ -4,7 +4,7 @@
  *
  */
 
-import React, { memo, useEffect } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import dig from 'object-dig';
@@ -101,6 +101,17 @@ export function EventFormInner({
               label={<DiverstFormattedMessage {...messages.inputs.description} />}
               value={values.description}
             />
+            <Field
+              component={TextField}
+              onChange={handleChange}
+              disabled={props.isCommitting}
+              fullWidth
+              id='location'
+              name='location'
+              margin='normal'
+              label={<DiverstFormattedMessage {...messages.inputs.location} />}
+              value={values.location}
+            />
           </CardContent>
           <Divider />
           <CardContent>
@@ -110,7 +121,7 @@ export function EventFormInner({
               required
               id='pillar_id'
               name='pillar_id'
-              label='Choosing which #Goal# this event will participate in'
+              label={<DiverstFormattedMessage {...messages.inputs.goal} />}
               margin='normal'
               disabled={props.isCommitting}
               value={values.pillar_id}
@@ -136,7 +147,7 @@ export function EventFormInner({
                   required
                   id='budget_item_id'
                   name='budget_item_id'
-                  label='Attach a budget to the event.'
+                  label={<DiverstFormattedMessage {...messages.inputs.budgetName} />}
                   margin='normal'
                   disabled={props.isCommitting || values.finished_expenses}
                   value={values.budget_item_id}
@@ -160,7 +171,7 @@ export function EventFormInner({
                   type='number'
                   onChange={handleChange}
                   value={values.estimated_funding}
-                  label='Specify amount to deduct from budget'
+                  label={<DiverstFormattedMessage {...messages.inputs.budgetAmount} />}
                   inputProps={{ min: 0, max: values.budget_item_id.available, step: 1 }}
                 />
               </Grid>
@@ -236,16 +247,11 @@ export function EventFormInner({
   );
 }
 
-let start = null;
-let end = null;
-
 export function EventForm(props) {
   const event = dig(props, 'event');
 
-  useEffect(() => {
-    start = DateTime.local().plus({ hour: 1 });
-    end = DateTime.local().plus({ hour: 2 });
-  }, []);
+  const [start, setStart] = useState(DateTime.local().plus({ hour: 1 }));
+  const [end, setEnd] = useState(DateTime.local().plus({ hour: 2 }));
 
   const initialValues = buildValues(event, {
     id: { default: '' },
@@ -256,7 +262,6 @@ export function EventForm(props) {
     picture: { default: null },
     max_attendees: { default: '' },
     location: { default: '' },
-    annual_budget_id: { default: '' },
     budget_item: { default: freeEvent, customKey: 'budget_item_id' },
     estimated_funding: { default: 0 },
     finished_expenses: { default: false },
@@ -264,7 +269,6 @@ export function EventForm(props) {
     owner_id: { default: '' },
     owner_group_id: { default: props.currentGroup.id }
   });
-
   return (
     <Formik
       initialValues={initialValues}

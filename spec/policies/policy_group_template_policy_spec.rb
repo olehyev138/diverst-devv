@@ -6,7 +6,7 @@ RSpec.describe PolicyGroupTemplatePolicy, type: :policy do
   let(:user) { no_access }
   let(:policy_group_template) { create(:policy_group_template, enterprise: enterprise) }
 
-  subject { PolicyGroupTemplatePolicy.new(user, policy_group_template) }
+  subject { PolicyGroupTemplatePolicy.new(user.reload, policy_group_template) }
 
   before {
     no_access.policy_group.manage_all = false

@@ -80,7 +80,6 @@ Diverst::Application.routes.draw do
           get  '/fields', to: 'groups#fields'
           post '/create_field', to: 'groups#create_field'
 
-          get  '/initiatives', to: 'groups#initiatives'
           get  '/updates', to: 'groups#updates'
           get  '/update_prototype', to: 'groups#update_prototype'
           post '/create_update', to: 'groups#create_update'
@@ -132,7 +131,11 @@ Diverst::Application.routes.draw do
       resources :initiative_participating_groups
       resources :initiative_segments
       resources :initiative_updates
-      resources :initiative_users
+      resources :initiative_users do
+        collection do
+          post 'remove'
+        end
+      end
       resources :invitation_segments_groups
       resources :likes
       resources :mentorings do

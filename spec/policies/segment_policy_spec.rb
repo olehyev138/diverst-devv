@@ -9,7 +9,7 @@ RSpec.describe SegmentPolicy, type: :policy do
   let(:segments) { create_list(:segment, 10, enterprise: enterprise2) }
   let(:policy_scope) { SegmentPolicy::Scope.new(user, Segment).resolve }
 
-  subject { SegmentPolicy.new(user, segment) }
+  subject { SegmentPolicy.new(user.reload, segment) }
 
   before {
     no_access.policy_group.manage_all = false

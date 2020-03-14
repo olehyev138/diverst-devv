@@ -6,7 +6,7 @@ RSpec.describe EnterpriseFolderPolicy, type: :policy do
   let(:user) { no_access }
   let(:folder) { create(:folder, enterprise: enterprise) }
 
-  subject { EnterpriseFolderPolicy.new(user, folder) }
+  subject { EnterpriseFolderPolicy.new(user.reload, folder) }
 
   before {
     no_access.policy_group.manage_all = false

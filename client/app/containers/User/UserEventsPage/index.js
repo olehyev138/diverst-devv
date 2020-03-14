@@ -12,6 +12,7 @@ import reducer from 'containers/User/reducer';
 import saga from 'containers/User/saga';
 
 import { selectPaginatedEvents, selectEventsTotal, selectIsLoadingEvents } from 'containers/User/selectors';
+import { selectUser } from 'containers/Shared/App/selectors';
 import { getUserEventsBegin, userUnmount } from 'containers/User/actions';
 
 import RouteService from 'utils/routeHelpers';
@@ -91,6 +92,7 @@ export function EventsPage(props) {
 
     const newParams = {
       ...params,
+      userId: props.currentSession.user_id,
       query_scopes: scopes,
       participation
     };
@@ -168,6 +170,9 @@ EventsPage.propTypes = {
   eventsTotal: PropTypes.number,
   isLoading: PropTypes.bool,
   loaderProps: PropTypes.object,
+  currentSession: PropTypes.shape({
+    user_id: PropTypes.number,
+  }),
   currentGroup: PropTypes.shape({
     id: PropTypes.number,
   }),
@@ -177,6 +182,7 @@ const mapStateToProps = createStructuredSelector({
   events: selectPaginatedEvents(),
   eventsTotal: selectEventsTotal(),
   isLoading: selectIsLoadingEvents(),
+  currentSession: selectUser()
 });
 
 const mapDispatchToProps = {

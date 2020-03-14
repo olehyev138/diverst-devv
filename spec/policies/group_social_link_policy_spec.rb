@@ -7,7 +7,7 @@ RSpec.describe GroupSocialLinkPolicy, type: :policy do
   let(:user) { no_access }
   let(:social_link) { create(:social_link, group: group, author: user) }
 
-  subject { described_class.new(user, [group, social_link]) }
+  subject { described_class.new(user.reload, [group, social_link]) }
 
   before {
     no_access.policy_group.manage_all = false

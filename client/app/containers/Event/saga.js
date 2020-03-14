@@ -12,31 +12,35 @@ import {
   CREATE_EVENT_BEGIN,
   UPDATE_EVENT_BEGIN,
   DELETE_EVENT_BEGIN,
+  CREATE_EVENT_COMMENT_BEGIN,
+  DELETE_EVENT_COMMENT_BEGIN,
   FINALIZE_EXPENSES_BEGIN,
-  ARCHIVE_EVENT_BEGIN
+  ARCHIVE_EVENT_BEGIN,
+  JOIN_EVENT_BEGIN,
+  LEAVE_EVENT_BEGIN
 } from './constants';
 
+
 import {
+  getEventBegin,
   getEventsSuccess, getEventsError,
   getEventSuccess, getEventError,
   createEventSuccess, createEventError,
   updateEventSuccess, updateEventError,
   deleteEventSuccess, deleteEventError,
+  deleteEventCommentError, deleteEventCommentSuccess,
+  createEventCommentError, createEventCommentSuccess,
   finalizeExpensesSuccess, finalizeExpensesError,
-  archiveEventError, archiveEventSuccess
+  archiveEventError, archiveEventSuccess,
+  joinEventError, joinEventSuccess,
+  leaveEventError, leaveEventSuccess
 } from './actions';
 
 
 export function* getEvents(action) {
   try {
     const { annualBudgetId, ...payload } = action.payload;
-    let response;
-    if (payload.group_id) {
-      // eslint-disable-next-line camelcase
-      const { group_id, ...rest } = payload;
-      response = yield call(api.groups.initiatives.bind(api.groups), group_id, action.payload);
-    } else
-      response = yield call(api.initiatives.all.bind(api.initiatives), action.payload);
+    const response = yield call(api.initiatives.all.bind(api.initiatives), payload);
 
     yield put(getEventsSuccess({ annualBudgetId, ...response.data.page }));
   } catch (err) {
@@ -45,7 +49,7 @@ export function* getEvents(action) {
 
     // TODO: intl message
     yield put(showSnackbar({
-      message: 'Failed to load events',
+      message: err.response.status === 401 ? 'You do not have permission to view these events' : 'Failed to load events',
       options: { variant: 'warning' }
     }));
   }
@@ -96,7 +100,7 @@ export function* updateEvent(action) {
     const response = yield call(api.initiatives.update.bind(api.initiatives), payload.initiative.id, payload);
 
     yield put(updateEventSuccess());
-    yield put(push(ROUTES.group.events.index.path(payload.initiative.owner_group_id)));
+    yield put(push(ROUTES.group.events.show.path(payload.initiative.owner_group_id, payload.initiative.id)));
     yield put(showSnackbar({
       message: 'Event updated',
       options: { variant: 'success' }
@@ -132,6 +136,40 @@ export function* deleteEvent(action) {
   }
 }
 
+/* event comment */
+export function* deleteEventComment(action) {
+  try {
+    yield call(api.initiativeComments.destroy.bind(api.initiativeComments), action.payload.id);
+    yield put(deleteEventCommentSuccess());
+    yield put(getEventBegin({ id: action.payload.initiative_id }));
+    yield put(showSnackbar({ message: 'event comment deleted', options: { variant: 'success' } }));
+  } catch (err) {
+    yield put(deleteEventCommentError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to remove event comment', options: { variant: 'warning' } }));
+  }
+}
+
+export function* createEventComment(action) {
+  // create comment & re-fetch event from server
+
+  try {
+    const payload = { initiative_comment: action.payload.attributes };
+    const response = yield call(api.initiativeComments.create.bind(api.initiativeComments), payload);
+
+    yield put(createEventCommentSuccess());
+    yield put(getEventBegin({ id: payload.initiative_comment.initiative_id }));
+    yield put(showSnackbar({ message: 'Event comment created', options: { variant: 'success' } }));
+  } catch (err) {
+    yield put(createEventCommentError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to create event comment', options: { variant: 'warning' } }));
+  }
+}
+
+
 export function* archiveEvent(action) {
   try {
     const payload = { initiative: action.payload };
@@ -163,12 +201,42 @@ export function* finalizeExpenses(action) {
   }
 }
 
+export function* joinEvent(action) {
+  const payload = { initiative_user: action.payload };
+  try {
+    const response = yield call(api.initiativeUsers.create.bind(api.initiativeUsers), payload);
+    yield put(joinEventSuccess());
+  } catch (err) {
+    yield put(joinEventError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to join event', options: { variant: 'warning' } }));
+  }
+}
+
+export function* leaveEvent(action) {
+  const payload = { initiative_user: action.payload };
+  try {
+    const response = yield call(api.initiativeUsers.remove.bind(api.initiativeUsers), payload);
+    yield put(joinEventSuccess());
+  } catch (err) {
+    yield put(joinEventError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to leave event', options: { variant: 'warning' } }));
+  }
+}
+
 export default function* eventsSaga() {
   yield takeLatest(GET_EVENTS_BEGIN, getEvents);
   yield takeLatest(GET_EVENT_BEGIN, getEvent);
   yield takeLatest(CREATE_EVENT_BEGIN, createEvent);
   yield takeLatest(UPDATE_EVENT_BEGIN, updateEvent);
   yield takeLatest(DELETE_EVENT_BEGIN, deleteEvent);
+  yield takeLatest(CREATE_EVENT_COMMENT_BEGIN, createEventComment);
+  yield takeLatest(DELETE_EVENT_COMMENT_BEGIN, deleteEventComment);
   yield takeLatest(ARCHIVE_EVENT_BEGIN, archiveEvent);
   yield takeLatest(FINALIZE_EXPENSES_BEGIN, finalizeExpenses);
+  yield takeLatest(JOIN_EVENT_BEGIN, joinEvent);
+  yield takeLatest(LEAVE_EVENT_BEGIN, leaveEvent);
 }

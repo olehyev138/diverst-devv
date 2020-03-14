@@ -9,7 +9,7 @@ RSpec.describe SocialLinkPolicy, type: :policy do
   let(:noshow_social_link) { create(:social_link, author: create(:user)) }
   let(:policy_scope) { SocialLinkPolicy::Scope.new(user, SocialLink).resolve }
 
-  subject { SocialLinkPolicy.new(user, social_link) }
+  subject { SocialLinkPolicy.new(user.reload, social_link) }
 
   before {
     no_access.policy_group.manage_all = false

@@ -31,6 +31,7 @@ FactoryBot.define do
         end
 
         initiative.owner_group = initiative.budget_item.group
+        initiative.pillar = initiative.budget_item.group.pillars.first
       end
     end
   end

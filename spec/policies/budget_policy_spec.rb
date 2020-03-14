@@ -8,7 +8,7 @@ RSpec.describe BudgetPolicy, type: :policy do
   let(:no_access) { create(:user) }
   let!(:user) { no_access }
 
-  subject { described_class.new(user, [group, budget]) }
+  subject { described_class.new(user.reload, [group, budget]) }
 
   before {
     no_access.policy_group.manage_all = false

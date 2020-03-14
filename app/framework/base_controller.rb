@@ -7,7 +7,10 @@ module BaseController
 
     render status: 200, json: klass.index(self.diverst_request, params.permit!)
   rescue => e
-    raise BadRequestException.new(e.message)
+    case e
+    when Pundit::NotAuthorizedError then raise
+    else raise BadRequestException.new(e.message)
+    end
   end
 
   def export_csv
@@ -16,7 +19,10 @@ module BaseController
     CsvDownloadJob.perform_later(current_user.id, params.permit!.to_json, klass_name: klass.name)
     head :no_content
   rescue => e
-    raise BadRequestException.new(e.message)
+    case e
+    when Pundit::NotAuthorizedError then raise
+    else raise BadRequestException.new(e.message)
+    end
   end
 
   def create
@@ -26,10 +32,8 @@ module BaseController
     render status: 201, json: klass.build(self.diverst_request, params)
   rescue => e
     case e
-    when InvalidInputException
-      raise
-    else
-      raise BadRequestException.new(e.message)
+    when InvalidInputException, Pundit::NotAuthorizedError then raise
+    else raise BadRequestException.new(e.message)
     end
   end
 
@@ -39,7 +43,10 @@ module BaseController
 
     render status: 200, json: klass.show(self.diverst_request, params)
   rescue => e
-    raise BadRequestException.new(e.message)
+    case e
+    when Pundit::NotAuthorizedError then raise
+    else raise BadRequestException.new(e.message)
+    end
   end
 
   def update
@@ -50,10 +57,8 @@ module BaseController
     render status: 200, json: klass.update(self.diverst_request, params)
   rescue => e
     case e
-    when InvalidInputException
-      raise
-    else
-      raise BadRequestException.new(e.message)
+    when InvalidInputException, Pundit::NotAuthorizedError then raise
+    else raise BadRequestException.new(e.message)
     end
   end
 
@@ -63,7 +68,10 @@ module BaseController
     klass.destroy(self.diverst_request, params[:id])
     head :no_content
   rescue => e
-    raise BadRequestException.new(e.message)
+    case e
+    when Pundit::NotAuthorizedError then raise
+    else raise BadRequestException.new(e.message)
+    end
   end
 
   def payload
@@ -87,7 +95,7 @@ module BaseController
   # If there is no policy it doesn't raise any errors - TODO: Done temporarily to allow models without policies to work during development
   def base_authorize(item)
     policy = Pundit::PolicyFinder.new(item).policy
-    unless policy.nil? || policy.new(current_user, item, params).send(action_name + '?')
+    unless policy.nil? || (@policy ||= policy.new(current_user, item, params)).send(action_name + '?')
       raise Pundit::NotAuthorizedError, query: action_name, record: item, policy: policy
     end
   end

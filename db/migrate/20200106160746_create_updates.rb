@@ -11,10 +11,8 @@ class CreateUpdates < ActiveRecord::Migration[5.2]
       t.timestamps
     end
 
-    GroupUpdate.connection.schema_cache.clear!
-    InitiativeUpdate.connection.schema_cache.clear!
-    GroupUpdate.reset_column_information
-    InitiativeUpdate.reset_column_information
+    GroupUpdate.column_reload!
+    InitiativeUpdate.column_reload!
     [GroupUpdate, InitiativeUpdate].each do |klass|
       klass.find_each do |old_u|
         Update.create do |new_u|
@@ -39,8 +37,7 @@ class CreateUpdates < ActiveRecord::Migration[5.2]
   end
 
   def down
-    Update.connection.schema_cache.clear!
-    Update.reset_column_information
+    Update.column_reload!
     Update.find_each do |u|
       u.field_data.find_each do |fd|
         if u.updatable_type == 'Initiative'
