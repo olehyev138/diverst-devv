@@ -1,9 +1,8 @@
 class GroupBasePolicy < ApplicationPolicy
-  attr_accessor :user, :group, :record, :group_leader_role_ids
+  attr_accessor :user, :group, :record, :group_leader_role_ids, :group_leader, :user_group
 
   def initialize(user, context, params = {})
     super(user, context, params)
-
     # Check if it's a collection, a record, or a class
     if context.is_a?(Enumerable) # Collection/Enumerable
       self.group = context.first
@@ -14,16 +13,55 @@ class GroupBasePolicy < ApplicationPolicy
       self.group = ::Group.find(params[:group_id] || params.dig(context.model_name.param_key.to_sym, :group_id)) rescue nil
     elsif context.present?
       self.group = context.group
-      self.record = context else # Record
+      self.record = context
+    end
+
+    if group
+      @group_leader = GroupLeader.find_by(user_id: user.id, group_id: group.id)
+      @user_group = UserGroup.find_by(user_id: user.id, group_id: group.id)
     end
   end
 
   def is_a_member?
-    UserGroup.where(user_id: user.id, group_id: group.id).exists?
+    user_group.present?
   end
 
   def is_a_accepted_member?
-    UserGroup.where(user_id: user.id, group_id: group.id, accepted_member: true).exists?
+    is_a_member? && user_group.accepted_member?
+  end
+
+  def is_a_leader?
+    group_leader.present?
+  end
+
+  def is_active_member?
+    UserGroup.where(accepted_member: true, user_id: user.id, group_id: @record.id).exists?
+  end
+
+  def is_a_guest?
+    !is_a_member?
+  end
+
+  def is_a_pending_member?
+    is_a_member? && !user_group.accepted_member?
+  end
+
+  def group_visibility_setting
+  end
+
+  def publicly_visible
+    group_visibility_setting.present? ?
+        ['public', 'global', 'non-members'].include?(group[group_visibility_setting]) : true
+  end
+
+  def member_visible
+    group_visibility_setting.present? ?
+        ['public', 'global', 'non-members', 'group'].include?(group[group_visibility_setting]) : true
+  end
+
+  def leader_visible
+    group_visibility_setting.present? ?
+        ['public', 'global', 'non-members', 'group', 'managers_only', 'leaders_only'].include?(group[group_visibility_setting]) : true
   end
 
   def is_a_manager?(permission)
@@ -41,22 +79,6 @@ class GroupBasePolicy < ApplicationPolicy
     policy_group.groups_manage? && policy_group[permission]
   end
 
-  def is_a_leader?
-    GroupLeader.where(user_id: user.id, group_id: group.id).exists?
-  end
-
-  def is_active_member?
-    UserGroup.where(accepted_member: true, user_id: user.id, group_id: @record.id).exists?
-  end
-
-  def is_a_guest?
-    !is_a_member? || is_a_pending_member?
-  end
-
-  def is_a_pending_member?
-    UserGroup.where(accepted_member: false, user_id: user.id, group_id: @record.id).exists?
-  end
-
   def basic_group_leader_permission?(permission)
     PolicyGroupTemplate.where(user_role_id: group_leader_role_ids, enterprise_id: user.enterprise_id).where("#{permission} = true").exists?
   end
@@ -64,17 +86,7 @@ class GroupBasePolicy < ApplicationPolicy
   def has_group_leader_permissions?(permission)
     return false unless is_a_leader?
 
-    gl_permission = GroupLeader.attribute_names.include?(permission)
-    pgt_permission = PolicyGroupTemplate.attribute_names.include?(permission)
-
-    leaders = group.group_leaders.where(user_id: user.id)
-    leaders = leaders.joins(:policy_group_template) if pgt_permission
-
-    conditions = []
-    conditions.append "(group_leaders.#{permission} = true)" if gl_permission
-    conditions.append "(policy_group_templates.#{permission} = true)" if pgt_permission
-
-    leaders.where(conditions.join(' OR ') || '(TRUE)').exists?
+    group_leader[permission] || false
   end
 
   def view_group_resource(permission)
@@ -85,11 +97,11 @@ class GroupBasePolicy < ApplicationPolicy
     # groups manager
     return true if policy_group.groups_manage? && policy_group[permission]
     # group leader
-    return true if is_a_leader? &&  policy_group[permission]
+    return true if is_a_leader? && leader_visible && policy_group[permission]
     # group member
-    return true if is_a_member? &&  policy_group[permission]
+    return true if is_a_member? && member_visible && policy_group[permission]
 
-    false
+    publicly_visible && policy_group[permission]
   end
 
   def manage?
@@ -102,18 +114,24 @@ class GroupBasePolicy < ApplicationPolicy
     # groups manager
     return true if policy_group.groups_manage? && policy_group[permission]
     # group leader
-    return true if has_group_leader_permissions?(permission)
+    return true if is_a_leader? && leader_visible && has_group_leader_permissions?(permission)
     # group member
-    return true if is_a_member? && policy_group[permission]
+    return true if is_a_member? && member_visible && policy_group[permission]
 
     false
   end
 
   def index?
-    return true if view_group_resource(base_manage_permission)
-    return true if view_group_resource(base_create_permission)
+    if group
+      return true if view_group_resource(base_manage_permission)
+      return true if view_group_resource(base_create_permission)
 
-    view_group_resource(base_index_permission)
+      view_group_resource(base_index_permission)
+    else
+      policy_group[base_manage_permission] ||
+          policy_group[base_create_permission] ||
+          policy_group[base_index_permission]
+    end
   end
 
   def show?
@@ -172,6 +190,10 @@ class GroupBasePolicy < ApplicationPolicy
       "(user_groups.user_id = #{quote_string(user.id)} AND #{policy_group(permission)})"
     end
 
+    def is_not_a_member(permission)
+      nil
+    end
+
     def leader_policy(permission)
       "group_leaders.#{quote_string(permission)} = true"
     end
@@ -195,6 +217,24 @@ class GroupBasePolicy < ApplicationPolicy
       group.send(scope.all.klass.model_name.collection)
     end
 
+    def joined_with_group
+      scope.left_joins(group: [:enterprise, :group_leaders, :user_groups])
+    end
+
+    def non_group_base(permission)
+      if scope <= Group
+        scoped = scope.left_joins(:enterprise, :group_leaders, :user_groups)
+      elsif scope.instance_methods.include?(:group)
+        scoped = joined_with_group
+      else
+        scoped = scope.none
+      end
+      scoped
+          .joins("JOIN policy_groups ON policy_groups.user_id = #{quote_string(user.id)}")
+          .where('enterprises.id = ?', user.enterprise_id)
+          .where([manage_all, group_manage(permission), is_leader(permission), is_member(permission), is_not_a_member(permission)].compact.join(' OR '))
+    end
+
     def resolve(permission)
       if group
         if index?
@@ -203,17 +243,7 @@ class GroupBasePolicy < ApplicationPolicy
           scope.none
         end
       else
-        if scope <= Group
-          scoped = scope.left_joins(:enterprise, :group_leaders, :user_groups)
-        elsif scope.instance_methods.include?(:group)
-          scoped = scope.left_joins(group: [:enterprise, :group_leaders, :user_groups])
-        else
-          scoped = scope.none
-        end
-        scoped
-            .joins("JOIN policy_groups ON policy_groups.user_id = #{quote_string(user.id)}")
-            .where('enterprises.id = ?', user.enterprise_id)
-            .where([manage_all, group_manage(permission), is_member(permission), is_leader(permission)].join(' OR '))
+        non_group_base(permission)
       end
     end
   end

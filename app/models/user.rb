@@ -55,6 +55,7 @@ class User < ApplicationRecord
   has_many :segments, through: :users_segments
   has_many :user_groups, dependent: :destroy
   has_many :groups, through: :user_groups
+
   has_many :topic_feedbacks, dependent: :destroy
   has_many :poll_responses
   has_many :answers, inverse_of: :author, foreign_key: :author_id, dependent: :destroy
@@ -62,21 +63,26 @@ class User < ApplicationRecord
   has_many :answer_comments, foreign_key: :author_id, dependent: :destroy
   has_many :invitations, class_name: 'CampaignInvitation', dependent: :destroy
   has_many :campaigns, through: :invitations
+
   has_many :news_links, through: :groups
   has_many :own_news_links, class_name: 'NewsLink', foreign_key: :author_id, dependent: :destroy
   has_many :messages, through: :groups
   has_many :message_comments, class_name: 'GroupMessageComment', foreign_key: :author_id, dependent: :destroy
   has_many :social_links, foreign_key: :author_id, dependent: :destroy
+
   has_many :initiative_users, dependent: :destroy
   has_many :initiatives, through: :initiative_users, source: :initiative
   has_many :initiative_invitees, dependent: :destroy
   has_many :invited_initiatives, through: :initiative_invitees, source: :initiative
+
   has_many :managed_groups, foreign_key: :manager_id, class_name: 'Group'
   has_many :group_leaders, dependent: :destroy
   has_many :leading_groups, through: :group_leaders, source: :group
+
   has_many :user_reward_actions, dependent: :destroy
   has_many :reward_actions, through: :user_reward_actions
   has_many :rewards, foreign_key: :responsible_id, dependent: :destroy
+
   has_many :likes, dependent: :destroy
   has_many :csv_files
   has_many :metrics_dashboards, foreign_key: :owner_id
@@ -202,11 +208,15 @@ class User < ApplicationRecord
   end
 
   def is_member_of?(group)
+    group.user_groups.loaded? ?
+    group.user_groups.any? { |ug| ug.user_id == self.id } :
     group.user_groups.where(user_id: self.id).any?
   end
 
   def is_attending?(event)
-    event.initiative_users.where(user_id: id).any?
+    event.initiative_users.loaded? ?
+        event.initiative_users.any? { |iu| iu.user_id == self.id } :
+        event.initiative_users.where(user_id: self.id).any?
   end
 
   def is_participating_in?(session)

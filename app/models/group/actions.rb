@@ -32,7 +32,7 @@ module Group::Actions
     end
 
     def base_preloads
-      [ :news_feed, :annual_budgets, :children, :enterprise, :logo_attachment, :banner_attachment, enterprise: [ :theme ], children: base_preload_no_recursion ]
+      [ :user_groups, :group_leaders, :news_feed, :annual_budgets, :children, :enterprise, :logo_attachment, :banner_attachment, enterprise: [ :theme ], children: base_preload_no_recursion ]
     end
 
     def base_preloads_budget
@@ -40,7 +40,7 @@ module Group::Actions
     end
 
     def base_preload_no_recursion
-      [ :news_feed, :children, :enterprise, :logo_attachment, :banner_attachment, enterprise: [ :theme ] ]
+      [ :user_groups, :group_leaders, :news_feed, :children, :enterprise, :logo_attachment, :banner_attachment, enterprise: [ :theme ] ]
     end
 
     def base_attributes_preloads

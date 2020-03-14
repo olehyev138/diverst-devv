@@ -5,7 +5,7 @@ RSpec.describe EnterpriseResourcePolicy, type: :policy do
   let(:no_access) { create(:user, enterprise: enterprise) }
   let(:user) { no_access }
 
-  subject { EnterpriseResourcePolicy.new(user, nil) }
+  subject { EnterpriseResourcePolicy.new(user.reload, nil) }
 
   before {
     no_access.policy_group.manage_all = false

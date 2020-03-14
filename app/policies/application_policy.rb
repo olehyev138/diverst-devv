@@ -6,7 +6,7 @@ class ApplicationPolicy
 
     @user = user
     @record = record
-    @group_leader_role_ids = @user.group_leaders.pluck(:user_role_id)
+    @group_leader_role_ids = @user.group_leaders.load.pluck(:user_role_id)
     @policy_group = @user.policy_group
   end
 

@@ -6,7 +6,7 @@ RSpec.describe MentoringInterestPolicy, type: :policy do
   let(:user) { no_access }
   let(:mentoring_interest) { create(:mentoring_interest, enterprise_id: enterprise.id) }
 
-  subject { MentoringInterestPolicy.new(user, mentoring_interest) }
+  subject { MentoringInterestPolicy.new(user.reload, mentoring_interest) }
 
   before {
     no_access.policy_group.manage_all = false

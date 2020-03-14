@@ -18,11 +18,31 @@ module Initiative::Actions
 
   module ClassMethods
     def valid_scopes
-      ['upcoming', 'ongoing', 'past', 'not_archived', 'archived', 'of_annual_budget']
+      [
+          'upcoming',
+          'ongoing',
+          'past',
+          'not_archived',
+          'archived',
+          'of_annual_budget',
+          'joined_events_for_user',
+          'available_events_for_user'
+      ]
     end
 
     def base_preloads
-      [:pillar, :owner, :budget, :outcome, :expenses, :picture_attachment, :qr_code_attachment]
+      [
+          :pillar,
+          :owner,
+          :budget,
+          :outcome,
+          :group,
+          :expenses,
+          :picture_attachment,
+          :qr_code_attachment,
+          :initiative_users,
+          :comments
+      ]
     end
 
     def generate_qr_code(diverst_request, params)

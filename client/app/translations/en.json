@@ -45,6 +45,7 @@
   "diverst.containers.ForgotPassword.links.login": "Login",
   "diverst.containers.NotFoundPage.headers.header": "This page does not exist",
   "diverst.containers.NotFoundPage.button.return": "Return To Home",
+  "diverst.containers.NotAuthorizedPage.headers.header": "You don't have permission to view this page",
   "diverst.containers.LocaleToggle.en": "en",
   "diverst.containers.LocaleToggle.fr": "fr",
   "diverst.containers.LocaleToggle.es": "es",

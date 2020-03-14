@@ -40,13 +40,7 @@ import {
 export function* getEvents(action) {
   try {
     const { annualBudgetId, ...payload } = action.payload;
-    let response;
-    if (payload.group_id) {
-      // eslint-disable-next-line camelcase
-      const { group_id, ...rest } = payload;
-      response = yield call(api.groups.initiatives.bind(api.groups), group_id, action.payload);
-    } else
-      response = yield call(api.initiatives.all.bind(api.initiatives), action.payload);
+    const response = yield call(api.initiatives.all.bind(api.initiatives), payload);
 
     yield put(getEventsSuccess({ annualBudgetId, ...response.data.page }));
   } catch (err) {
@@ -55,7 +49,7 @@ export function* getEvents(action) {
 
     // TODO: intl message
     yield put(showSnackbar({
-      message: 'Failed to load events',
+      message: err.response.status === 401 ? 'You do not have permission to view these events' : 'Failed to load events',
       options: { variant: 'warning' }
     }));
   }

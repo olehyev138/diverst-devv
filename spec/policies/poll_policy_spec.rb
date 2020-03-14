@@ -9,7 +9,7 @@ RSpec.describe PollPolicy, type: :policy do
   let(:polls) { create_list(:poll, 10, status: 0, enterprise: enterprise_2, groups: []) }
   let(:policy_scope) { PollPolicy::Scope.new(user, Poll).resolve }
 
-  subject { PollPolicy.new(user, poll) }
+  subject { PollPolicy.new(user.reload, poll) }
 
   before {
     no_access.policy_group.manage_all = false

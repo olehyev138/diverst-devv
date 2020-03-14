@@ -6,7 +6,7 @@ RSpec.describe NewsLinkPolicy, type: :policy do
   let(:user) { no_access }
   let(:news_link) { create(:news_link, author: user) }
 
-  subject { NewsLinkPolicy.new(user, news_link) }
+  subject { NewsLinkPolicy.new(user.reload, news_link) }
 
   before {
     no_access.policy_group.manage_all = false

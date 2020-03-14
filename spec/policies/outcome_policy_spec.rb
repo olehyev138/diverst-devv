@@ -6,7 +6,7 @@ RSpec.describe OutcomePolicy, type: :policy do
   let(:user) { no_access }
   let(:outcome) { create(:outcome) }
 
-  subject { OutcomePolicy.new(user, outcome) }
+  subject { OutcomePolicy.new(user.reload, outcome) }
 
   before {
     outcome.group = create(:group, owner: user, enterprise_id: user.enterprise_id)

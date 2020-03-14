@@ -6,7 +6,7 @@ RSpec.describe UserGroupSerializer, type: :serializer do
     user = create(:user, enterprise: enterprise)
     group = create(:group, enterprise: enterprise)
     user_group = create(:user_group, user: user, group: group)
-    serializer = UserGroupSerializer.new(user_group)
+    serializer = UserGroupSerializer.new(user_group, scope: serializer_scopes(user), scope_name: :scope)
 
     expect(serializer.serializable_hash[:id]).to_not be nil
     expect(serializer.serializable_hash[:user_id]).to_not be nil

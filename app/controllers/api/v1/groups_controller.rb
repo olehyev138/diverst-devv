@@ -7,6 +7,11 @@ class Api::V1::GroupsController < DiverstController
     super
   end
 
+  def create_field
+    params[:field][:field_type] = 'regular'
+    super
+  end
+
   def current_annual_budgets
     base_authorize(klass)
     params[:parent_id] = nil
@@ -41,21 +46,6 @@ class Api::V1::GroupsController < DiverstController
     render status: 200, json: item.current_annual_budget!
   rescue => e
     raise BadRequestException.new(e.message)
-  end
-
-  def initiatives
-    item = klass.find(params[:id])
-    base_authorize(item)
-
-    render status: 200, json: Initiative.index(
-        self.diverst_request,
-        params.except(:id).permit!,
-        base: item.initiatives.union(item.participating_initiatives))
-  end
-
-  def create_field
-    params[:field][:field_type] = 'regular'
-    super
   end
 
   private

@@ -7,7 +7,7 @@ RSpec.describe GroupPostsPolicy, type: :policy do
   let(:user) { no_access }
   let(:message) { create(:group_message, owner: user, group: group) }
 
-  subject { described_class.new(user, [group, message]) }
+  subject { described_class.new(user.reload, [group, message]) }
 
   before {
     no_access.policy_group.manage_all = false

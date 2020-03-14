@@ -70,6 +70,60 @@ class Initiative < ApplicationRecord
   scope :of_annual_budget, ->(budget_id) {
     joins(:annual_budget).where('`annual_budgets`.`id` = ?', budget_id)
   }
+  scope :joined_events_for_user, ->(user_id) {
+    user = User.find user_id
+
+    merge(user.initiatives.custom_or(user.invited_initiatives))
+  }
+  scope :available_events_for_user, ->(user_id) {
+    # SCOPE AND
+    # ( INVITED OR (
+    #   (IN GROUP OR IN PARTICIPATING GROUP) AND
+    #   (NO SEGMENT OR IN SEGMENT)
+    # ))
+
+    user = User.find user_id
+    group_ids = user.group_ids
+    segment_ids = user.segment_ids
+
+    group_ors = []
+    group_ors << Initiative.sql_where(groups: { id: group_ids })
+
+    segment_ors = []
+    segment_ors << Initiative.sql_where(initiative_segments: { segment_id: nil })
+    segment_ors << Initiative.sql_where(
+        initiative_segments: { segment_id: segment_ids }
+      )
+
+    valid_ors = []
+    valid_ors << Initiative.sql_where(
+        initiative_invitees: { user_id: user_id }
+      )
+    valid_ors << User.sql_where("(#{ group_ors.join(' OR ')}) AND (#{ segment_ors.join(' OR ')})")
+
+    unscope(:left_joins).joins(
+        'LEFT OUTER JOIN `initiative_participating_groups` '\
+          'ON `initiative_participating_groups`.`initiative_id` = `initiatives`.`id` '\
+        'LEFT OUTER JOIN `pillars` ' \
+          'ON `pillars`.`id` = `initiatives`.`pillar_id` ' \
+        'LEFT OUTER JOIN `outcomes` ' \
+          'ON `outcomes`.`id` = `pillars`.`outcome_id` '\
+        'LEFT OUTER JOIN `groups` '\
+          'ON 	`groups`.`id` = `outcomes`.`group_id` ' \
+            'OR `groups`.`id` = `initiative_participating_groups`.`group_id`'\
+        'LEFT OUTER JOIN `initiative_segments` '\
+          'ON `initiative_segments`.`initiative_id` = `initiatives`.`id` '\
+        'LEFT OUTER JOIN `initiative_invitees` '\
+          'ON `initiative_invitees`.`initiative_id` = `initiatives`.`id` '\
+        'LEFT OUTER JOIN `enterprises` '\
+          'ON `enterprises`.`id` = `groups`.`enterprise_id` '\
+		    'LEFT OUTER JOIN `group_leaders` '\
+          'ON `group_leaders`.`group_id` = `groups`.`id` '\
+		    'LEFT OUTER JOIN `user_groups` '\
+          'ON `user_groups`.`group_id` = `groups`.`id` '
+      ).where(valid_ors.join(' OR '))
+  }
+
   scope :order_recent, -> { order(start: :desc) }
 
   scope :finalized, -> { where(finished_expenses: false) }

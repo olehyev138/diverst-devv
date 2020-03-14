@@ -6,7 +6,7 @@ RSpec.describe RewardPolicy, type: :policy do
   let(:user) { no_access }
   let(:reward) { create(:reward) }
 
-  subject { RewardPolicy.new(user, reward) }
+  subject { RewardPolicy.new(user.reload, reward) }
 
   before {
     no_access.policy_group.manage_all = false
