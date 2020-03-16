@@ -5,8 +5,8 @@ class Resource < ApplicationRecord
   EXPIRATION_TIME = 6.months.to_i
 
   # associations
-  belongs_to :enterprise
   belongs_to :folder
+  belongs_to :enterprise
   belongs_to :initiative
   belongs_to :group
   belongs_to :owner, class_name: 'User'
@@ -50,6 +50,16 @@ class Resource < ApplicationRecord
           indexes :enterprise_id, type: :integer
         end
       end
+    end
+  end
+
+  def policy_class
+    if group_id
+      GroupFolderPolicy
+    elsif enterprise_id
+      EnterpriseFolderPolicy
+    else
+      raise StandardError.new('Folder is without parent')
     end
   end
 

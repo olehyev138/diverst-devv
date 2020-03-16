@@ -237,7 +237,7 @@ class GroupBasePolicy < ApplicationPolicy
 
     def resolve(permission)
       if group
-        if index?
+        if index? && group.enterprise_id == user.enterprise_id
           group_base.merge(scope.all)
         else
           scope.none

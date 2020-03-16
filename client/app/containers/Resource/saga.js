@@ -162,7 +162,7 @@ export function* getResource(action) {
 
 export function* createResource(action) {
   try {
-    const payload = { resource: action.payload };
+    const payload = { resource: action.payload, group_id: action.payload.group_id };
     const response = yield call(api.resources.create.bind(api.resources), payload);
 
     yield put(createResourceSuccess());
