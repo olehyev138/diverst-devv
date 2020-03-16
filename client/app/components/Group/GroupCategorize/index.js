@@ -130,7 +130,7 @@ export function GroupCategorizeForm(props) {
         console.log(values.children);
         // values.children.forEach(subgroup => subgroup.category ? categoriesUpdate.push({ group_id: subgroup.id, category_id: subgroup.category.value }) : null);
         // console.log(categoriesUpdate);
-        props.groupAction(values.children);
+        props.groupAction(values);
       }}
     >
       {formikProps => <GroupCategorizeFormInner {...props} {...formikProps} />}

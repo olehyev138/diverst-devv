@@ -24,13 +24,20 @@ module Group::Actions
       raise BadRequestException.new "#{self.name.titleize} ID required" if params[:id].nil?
       raise BadRequestException.new "#{self.name.titleize} required" if params[symbol].nil?
 
-      category_types = params[:category_types] # {group_id: num, category_id: num}
-      # get the item being updated
-      item = find(params[:id])
-
-      # check if the user can update the item
-
-
+      subgroups = params[:children] # {id: num, group_category_id: num}
+      parent_id = params[:id]
+      category_type_id = params[:category_type_id]
+      # update subgroup category id and category type id
+      subgroups.each do |subgroup|
+      item = find(subgroup.id)
+      item.group_category_id = subgroup.group_category_id
+      item.group_category_type_id = category_type_id
+      item.save!
+      end
+      # update parent group category type id
+      item = find(parent_id)
+      item.group_category_type_id = category_type_id
+      item.save!
     end
   end
 end
