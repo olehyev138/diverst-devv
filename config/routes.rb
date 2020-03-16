@@ -173,6 +173,8 @@ Diverst::Application.routes.draw do
         member do
           post 'archive'
           put 'un_archive'
+          post 'pin'
+          put 'un_pin'
         end
       end
       resources :news_feed_link_segments
