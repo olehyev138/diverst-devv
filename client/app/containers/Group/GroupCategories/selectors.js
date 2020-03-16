@@ -13,7 +13,7 @@ const selectPaginatedSelectGroupCategories = () => createSelector(
   groupCategoriesState => (
     Object
       .values(groupCategoriesState.groupCategoriesList)
-      .flatMap(groupCategory => groupCategory.group_categories.map (gc => ({ value: gc.id, label: gc.name })))
+      .flatMap(groupCategory => groupCategory.group_categories.map(gc => ({ value: gc.id, label: gc.name })))
   )
 );
 

@@ -23,10 +23,8 @@ import { buildValues, mapFields } from 'utils/formHelpers';
 import {
   Button, Card, CardActions, CardContent, Grid, Divider, Box,
 } from '@material-ui/core';
-
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
-import { push } from 'connected-react-router';
 
 const styles = theme => ({
   noBottomPadding: {
@@ -84,9 +82,13 @@ export function GroupCategorizeFormInner({ classes, handleSubmit, handleChange, 
                     name='name'
                     margin='normal'
                     label={subgroup.name}
-                    value={values.children[i].categroy}
+                    value={values.children[i].category}
                     options={props.categories}
-                    onChange={value => setFieldValue(`children[${i}]['categroy']`, value)}
+                    onChange={(value) => {
+                      setFieldValue(`children[${i}].group_category_id`, value.value);
+                      setFieldValue(`children[${i}].category`, value);
+                    }
+                    }
                     // onBlur={() => setFieldTouched('name', true)}
                   />
                 </Grid>
@@ -117,14 +119,18 @@ export function GroupCategorizeForm(props) {
     id: { default: '' },
     name: { default: '' },
     children: { default: [] }
-
   });
+
   return (
     <Formik
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        props.groupAction(mapFields(values, ['child_ids', 'parent_id']));
+        // let categoriesUpdate =[];
+        // console.log(values.children);
+        // values.children.forEach(subgroup => subgroup.category ? categoriesUpdate.push({ group_id: subgroup.id, category_id: subgroup.category.value }) : null);
+        // console.log(categoriesUpdate);
+        props.groupAction(values.children);
       }}
     >
       {formikProps => <GroupCategorizeFormInner {...props} {...formikProps} />}

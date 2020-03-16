@@ -20,5 +20,17 @@ module Group::Actions
       [ :news_feed, :annual_budgets, :logo_attachment, :banner_attachment, enterprise: [ :theme ] ]
     end
 
+    def update_child_categories(diverst_request, params)
+      raise BadRequestException.new "#{self.name.titleize} ID required" if params[:id].nil?
+      raise BadRequestException.new "#{self.name.titleize} required" if params[symbol].nil?
+
+      category_types = params[:category_types] # {group_id: num, category_id: num}
+      # get the item being updated
+      item = find(params[:id])
+
+      # check if the user can update the item
+
+
+    end
   end
 end
