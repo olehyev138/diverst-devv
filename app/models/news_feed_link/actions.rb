@@ -9,7 +9,7 @@ module NewsFeedLink::Actions
     end
 
     def valid_scopes
-      ['approved', 'pending', 'combined_news_links', 'not_archived', 'archived']
+      ['approved', 'pending', 'combined_news_links', 'not_archived', 'archived', 'pinned']
     end
 
     def base_preloads
