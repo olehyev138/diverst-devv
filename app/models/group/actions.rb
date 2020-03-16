@@ -19,5 +19,6 @@ module Group::Actions
     def base_attributes_preloads
       [ :news_feed, :annual_budgets, :logo_attachment, :banner_attachment, enterprise: [ :theme ] ]
     end
+
   end
 end

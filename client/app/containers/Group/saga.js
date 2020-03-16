@@ -67,12 +67,14 @@ export function* createGroup(action) {
 
 export function* updateGroup(action) {
   try {
-    const payload = { group: action.payload };
-    const response = yield call(api.groups.update.bind(api.groups), payload.group.id, payload);
-
-    yield put(updateGroupSuccess());
-    yield put(push(ROUTES.admin.manage.groups.index.path()));
-    yield put(showSnackbar({ message: 'Group updated', options: { variant: 'success' } }));
+    console.log('sage-updategroup');
+    console.log(action);
+    // const payload = { group: action.payload };
+    // const response = yield call(api.groups.update.bind(api.groups), payload.group.id, payload);
+    //
+    // yield put(updateGroupSuccess());
+    // yield put(push(ROUTES.admin.manage.groups.index.path()));
+    // yield put(showSnackbar({ message: 'Group updated', options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateGroupError(err));
 

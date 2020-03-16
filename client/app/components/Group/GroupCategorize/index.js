@@ -21,8 +21,7 @@ import messages from 'containers/Group/messages';
 import { buildValues, mapFields } from 'utils/formHelpers';
 
 import {
-  Button, Card, CardActions, CardContent, Grid, Paper,
-  TextField, Hidden, FormControl, Divider, Switch, FormControlLabel, Box,
+  Button, Card, CardActions, CardContent, Grid, Divider, Box,
 } from '@material-ui/core';
 
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
@@ -37,8 +36,6 @@ const styles = theme => ({
 
 /* eslint-disable object-curly-newline */
 export function GroupCategorizeFormInner({ classes, handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
-  console.log('values');
-  console.log(props);
   return (
     <React.Fragment>
       <Grid container spacing={3} justify='flex-end'>
@@ -77,7 +74,7 @@ export function GroupCategorizeFormInner({ classes, handleSubmit, handleChange, 
         <Card>
           <Form>
             <CardContent>
-              {props.group && props.group.children.map((subgroup, i) => (
+              {values.children && values.children.map((subgroup, i) => (
                 <Grid item key={subgroup.id} xs={12}>
                   <Field
                     component={Select}
@@ -86,11 +83,11 @@ export function GroupCategorizeFormInner({ classes, handleSubmit, handleChange, 
                     id='name'
                     name='name'
                     margin='normal'
-                    label={subgroup.label}
-                    value={''}
+                    label={subgroup.name}
+                    value={values.children[i].categroy}
                     options={props.categories}
-                    // onChange={value => setFieldValue('name', value)}
-                    onBlur={() => setFieldTouched('name', true)}
+                    onChange={value => setFieldValue(`children[${i}]['categroy']`, value)}
+                    // onBlur={() => setFieldTouched('name', true)}
                   />
                 </Grid>
               ))}
@@ -120,8 +117,8 @@ export function GroupCategorizeForm(props) {
     id: { default: '' },
     name: { default: '' },
     children: { default: [] }
+
   });
-  console.log(initialValues);
   return (
     <Formik
       initialValues={initialValues}

@@ -11,7 +11,7 @@ import reducer from 'containers/Group/GroupCategories/reducer';
 import groupSaga from 'containers/Group/saga';
 import groupReducer from 'containers/Group/reducer';
 
-import { createGroupCategoriesBegin, getGroupCategoriesBegin, categoriesUnmount } from 'containers/Group/GroupCategories/actions';
+import { getGroupCategoriesBegin } from 'containers/Group/GroupCategories/actions';
 import { getGroupsBegin, groupCategorizeUnmount, updateGroupBegin, getGroupBegin } from 'containers/Group/actions';
 import { selectPaginatedSelectGroups, selectFormGroup, selectCategorizeGroup } from 'containers/Group/selectors';
 import { selectPaginatedSelectGroupCategories, selectGroupCategoriesIsCommitting } from 'containers/Group/GroupCategories/selectors';
@@ -42,11 +42,12 @@ export function GroupCategorizePage(props) {
       props.groupCategorizeUnmount();
     };
   }, []);
+
   return (
     <GroupCategorizeForm
       group={props.group}
       selectGroups={props.groups}
-      groupCategoriesAction={props.updateGroupBegin}
+      groupAction={props.updateGroupBegin}
       buttonText='Save'
       categories={props.categories}
       isCommitting={props.isCommitting}

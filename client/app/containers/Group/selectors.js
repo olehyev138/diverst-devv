@@ -47,8 +47,9 @@ const selectCategorizeGroup = () => createSelector(
     };
 
     selectGroup.children = selectGroup.children.map(child => ({
-      value: child.id,
-      label: child.name
+      id: child.id,
+      name: child.name,
+      categroy: child.group_category
     }));
 
     return selectGroup;
