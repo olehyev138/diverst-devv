@@ -18,7 +18,8 @@ import {
   DELETE_GROUP_MESSAGE_ERROR, DELETE_SOCIALLINK_BEGIN, DELETE_SOCIALLINK_SUCCESS, DELETE_SOCIALLINK_ERROR,
   DELETE_NEWSLINK_BEGIN, DELETE_NEWSLINK_SUCCESS, DELETE_NEWSLINK_ERROR, DELETE_NEWSLINK_COMMENT_BEGIN,
   DELETE_GROUP_MESSAGE_COMMENT_SUCCESS, DELETE_GROUP_MESSAGE_COMMENT_ERROR, DELETE_GROUP_MESSAGE_COMMENT_BEGIN,
-  ARCHIVE_NEWS_ITEM_BEGIN, ARCHIVE_NEWS_ITEM_SUCCESS, ARCHIVE_NEWS_ITEM_ERROR
+  ARCHIVE_NEWS_ITEM_BEGIN, ARCHIVE_NEWS_ITEM_SUCCESS, ARCHIVE_NEWS_ITEM_ERROR,
+  PIN_NEWS_ITEM_BEGIN, PIN_NEWS_ITEM_SUCCESS, PIN_NEWS_ITEM_ERROR,
 } from 'containers/News/constants';
 
 import {
@@ -35,9 +36,8 @@ import {
   updateSocialLinkSuccess, createSocialLinkCommentSuccess, deleteNewsLinkBegin, deleteNewsLinkError,
   deleteNewsLinkSuccess, deleteSocialLinkBegin, deleteSocialLinkError, deleteSocialLinkSuccess,
   deleteGroupMessageCommentBegin, deleteGroupMessageCommentError, deleteGroupMessageCommentSuccess, deleteNewsLinkCommentBegin,
-  deleteNewsLinkCommentError, deleteNewsLinkCommentSuccess, archiveNewsItemBegin, archiveNewsItemSuccess, archiveNewsItemError
+  deleteNewsLinkCommentError, deleteNewsLinkCommentSuccess, archiveNewsItemBegin, archiveNewsItemSuccess, archiveNewsItemError, pinNewsItemBegin, pinNewsItemSuccess, pinNewsItemError,
 } from 'containers/News/actions';
-
 
 export function* getNewsItems(action) {
   try {
@@ -295,6 +295,20 @@ export function* archiveNewsItem(action) {
   }
 }
 
+export function* pinNewsItem(action){
+  try {
+    const payload = { news_feed_link: action.payload };
+    const response = yield call(api.newsFeedLinks.pin.bind(api.newsFeedLinks), payload.news_feed_link.id, payload);
+    yield put(pinNewsItemSuccess());
+  } catch (err) {
+    yield put(pinNewsItemError(err));
+    yield put(showSnackbar({
+      message: 'Failed to pin news item',
+      options: { variant: 'warning' }
+    }));
+  }
+}
+
 export default function* newsSaga() {
   yield takeLatest(GET_NEWS_ITEMS_BEGIN, getNewsItems);
   yield takeLatest(GET_NEWS_ITEM_BEGIN, getNewsItem);
@@ -313,4 +327,5 @@ export default function* newsSaga() {
   yield takeLatest(DELETE_SOCIALLINK_BEGIN, deleteSocialLink);
   yield takeLatest(DELETE_GROUP_MESSAGE_COMMENT_BEGIN, deleteGroupMessageComment);
   yield takeLatest(ARCHIVE_NEWS_ITEM_BEGIN, archiveNewsItem);
+  yield takeLatest(PIN_NEWS_ITEM_BEGIN, pinNewsItem);
 }
