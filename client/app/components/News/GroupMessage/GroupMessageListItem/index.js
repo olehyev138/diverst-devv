@@ -13,8 +13,7 @@ import {
 import { withStyles } from '@material-ui/core/styles';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
-
-
+import LocationOnIcon from '@material-ui/icons/LocationOn';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/News/messages';
 import CommentIcon from '@material-ui/icons/Comment';
@@ -71,6 +70,16 @@ export function GroupMessageListItem(props) {
           <Grid item>
             <Grid container>
               <Grid item>
+                <IconButton
+                  // TODO : Change to actual post like action
+                  size='small'
+                  component={WrappedNavLink}
+                  onClick={() => {
+                    props.pinNewsItemBegin({ id: newsItemId });
+                  }}
+                >
+                  <LocationOnIcon />
+                </IconButton>
                 { props.links && (
                   <IconButton
                     // TODO : Change to actual post like action
@@ -166,6 +175,7 @@ GroupMessageListItem.propTypes = {
   deleteGroupMessageBegin: PropTypes.func,
   updateNewsItemBegin: PropTypes.func,
   archiveNewsItemBegin: PropTypes.func,
+  pinNewsItemBegin: PropTypes.func,
 };
 
 export default compose(

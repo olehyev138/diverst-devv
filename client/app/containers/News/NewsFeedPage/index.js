@@ -13,7 +13,7 @@ import saga from 'containers/News/saga';
 
 import { selectPaginatedNewsItems, selectNewsItemsTotal, selectIsLoading, selectHasChanged } from 'containers/News/selectors';
 import { deleteSocialLinkBegin, getNewsItemsBegin, newsFeedUnmount, deleteNewsLinkBegin, deleteGroupMessageBegin,
-  updateNewsItemBegin, archiveNewsItemBegin } from 'containers/News/actions';
+  updateNewsItemBegin, archiveNewsItemBegin, pinNewsItemBegin } from 'containers/News/actions';
 
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -69,7 +69,7 @@ export function NewsFeedPage(props, context) {
   };
 
   useEffect(() => {
-    getNewsFeedItems(['approved', 'not_archived']);
+    getNewsFeedItems(['approved', 'not_archived', 'not_pinned']);
 
     return () => {
       props.newsFeedUnmount();
@@ -80,10 +80,10 @@ export function NewsFeedPage(props, context) {
     setTab(newTab);
     switch (newTab) {
       case NewsFeedTypes.approved:
-        getNewsFeedItems(['approved', 'not_archived'], true);
+        getNewsFeedItems(['approved', 'not_archived', 'not_pinned'], true);
         break;
       case NewsFeedTypes.pending:
-        getNewsFeedItems(['pending', 'not_archived'], true);
+        getNewsFeedItems(['pending', 'not_archived', 'not_pinned'], true);
         break;
       default:
         break;
@@ -113,6 +113,7 @@ export function NewsFeedPage(props, context) {
         deleteSocialLinkBegin={props.deleteSocialLinkBegin}
         updateNewsItemBegin={props.updateNewsItemBegin}
         archiveNewsItemBegin={props.archiveNewsItemBegin}
+        pinNewsItemBegin={props.pinNewsItemBegin}
       />
     </React.Fragment>
   );
@@ -130,6 +131,7 @@ NewsFeedPage.propTypes = {
   isLoading: PropTypes.bool,
   hasChanged: PropTypes.bool,
   archiveNewsItemBegin: PropTypes.func,
+  pinNewsItemBegin: PropTypes.func,
   currentGroup: PropTypes.shape({
     news_feed: PropTypes.shape({
       id: PropTypes.number
@@ -153,6 +155,7 @@ const mapDispatchToProps = dispatch => ({
   updateNewsItemBegin: payload => dispatch(updateNewsItemBegin(payload)),
   newsFeedUnmount: () => dispatch(newsFeedUnmount()),
   archiveNewsItemBegin: payload => dispatch(archiveNewsItemBegin(payload)),
+  pinNewsItemBegin: payload => dispatch(pinNewsItemBegin(payload)),
 });
 
 const withConnect = connect(
