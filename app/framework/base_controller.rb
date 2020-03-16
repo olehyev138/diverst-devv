@@ -5,7 +5,7 @@ module BaseController
     # TODO: This is temporary to allow API calls to work properly without a policy during development.
     base_authorize(klass)
 
-    render status: 200, json: klass.index(self.diverst_request, params.permit!)
+    render status: 200, json: klass.index(self.diverst_request, params.permit!, policy: @policy)
   rescue => e
     case e
     when Pundit::NotAuthorizedError then raise
@@ -94,8 +94,8 @@ module BaseController
   # If there is a policy it checks authorization for the current action
   # If there is no policy it doesn't raise any errors - TODO: Done temporarily to allow models without policies to work during development
   def base_authorize(item)
-    policy = Pundit::PolicyFinder.new(item).policy
-    unless policy.nil? || (@policy ||= policy.new(current_user, item, params)).send(action_name + '?')
+    policy = @policy ||= Pundit::PolicyFinder.new(item).policy
+    unless policy.nil? || (policy.new(current_user, item, params)).send(action_name + '?')
       raise Pundit::NotAuthorizedError, query: action_name, record: item, policy: policy
     end
   end

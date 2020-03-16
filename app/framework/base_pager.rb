@@ -26,7 +26,7 @@ module BasePager
       "#{order_by} #{order}"
     end
 
-    def pager(diverst_request, params = {}, search_method = :lookup, base: self)
+    def pager(diverst_request, params = {}, search_method = :lookup, base: self, policy: nil)
       return elasticsearch(diverst_request, params) if params[:elasticsearch]
 
       set_defaults
@@ -41,7 +41,7 @@ module BasePager
       search_method_obj = self.method(search_method)
 
       # search
-      partial_query = search_method_obj.call(params, diverst_request, base: base)
+      partial_query = search_method_obj.call(params, diverst_request, base: base, policy: policy)
       if sum_column
         sum, total = partial_query.sum_and_count(sum_column) if sum_column
       else

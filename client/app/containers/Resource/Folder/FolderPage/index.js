@@ -121,7 +121,6 @@ export function FolderPage(props) {
     } else {
       const newParams = {
         ...params,
-        enterprise_id: enterpriseId,
         folder_id: folderId,
       };
       props.getResourcesBegin({ ...newParams, query_scopes: ['not_archived'] });

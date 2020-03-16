@@ -65,7 +65,6 @@ export function FoldersPage(props) {
     } else {
       const newParams = {
         ...params,
-        enterprise_id: enterpriseId,
         parent_id: null,
       };
       props.getFoldersBegin(newParams);

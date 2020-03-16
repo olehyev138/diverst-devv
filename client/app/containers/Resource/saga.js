@@ -67,7 +67,7 @@ export function* getFolder(action) {
 
 export function* createFolder(action) {
   try {
-    const payload = { folder: action.payload };
+    const payload = { folder: action.payload, group_id: action.payload.group_id };
     const response = yield call(api.folders.create.bind(api.folders), payload);
 
     yield put(createFolderSuccess());
