@@ -101,7 +101,7 @@ module User::Actions
     total = ordered.size
     paged = ordered.limit(count).offset(page * count)
 
-    new Page(paged, total)
+    Page.new(paged, total)
   end
 
   def index_except_self(params, serializer: UserSerializer)
@@ -129,7 +129,7 @@ module User::Actions
     total = ordered.size
     paged = ordered.limit(count).offset(page * count)
 
-    new Page(paged, total)
+    Page.new(paged, total)
   end
 
   module ClassMethods
