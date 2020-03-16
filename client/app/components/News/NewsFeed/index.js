@@ -146,7 +146,7 @@ export function NewsFeed(props) {
               <SpeedDialAction
                 component={WrappedNavLink}
                 to={action.linkPath}
-                key={action.name}
+                key={action.linkPath}
                 icon={action.icon}
                 tooltipTitle={<Typography>{action.name}</Typography>}
                 tooltipPlacement='bottom'
