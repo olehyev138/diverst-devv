@@ -46,8 +46,6 @@ class Budget < BaseClass
     related_budgets = self.where(group_id: group.id)
                           .approved
                           .includes(:budget_items)
-                          .includes(:annual_budget)
-                          .where(annual_budgets: { closed: false })
 
     budget_items = related_budgets.map { |b| b.budget_items }
 
