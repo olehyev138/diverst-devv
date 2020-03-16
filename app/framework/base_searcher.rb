@@ -120,7 +120,7 @@ module BaseSearcher
       end
 
       # Attempt to ensure that we can only retrieve items from the current user's enterprise
-      @items = @items.where(enterprise_id: current_user.enterprise.id) if @items.has_attribute?(:enterprise_id)
+      @items = @items.where(enterprise_id: current_user.enterprise.id) if @items.has_attribute?(:enterprise_id) unless [Resource, Folder].include? @items.all.klass
 
       # search the system
       if searchValue.present?
