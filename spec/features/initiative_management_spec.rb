@@ -40,7 +40,7 @@ RSpec.feature 'Initiative management' do
   end
 
   context 'with budget item' do
-    let!(:budget) { create :approved_budget, group: group }
+    let!(:budget) { create :approved_budget, group: group, annual_budget: create(:annual_budget, group_id: group.id) }
     let!(:budget_item) { budget.budget_items.first }
 
 
@@ -69,7 +69,7 @@ RSpec.feature 'Initiative management' do
 
     scenario 'updating initiative with budget' do
       initiative = create(:initiative, owner_group: group)
-      budget = create(:approved_budget, group: group)
+      budget = create(:approved_budget, group: group, annual_budget: create(:annual_budget, group_id: group.id))
       budget_item1 = budget.budget_items.first
       budget_item1.update(estimated_amount: 15000, available_amount: 15000)
 
