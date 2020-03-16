@@ -58,6 +58,21 @@ class Api::V1::GroupsController < DiverstController
           )
   end
 
+  def update_categories
+    params[klass.symbol] = payload
+    params[:children].each do | category |
+      category.group_category_type_id = GroupCategory.find(category.group_category_id).group_category_type_id
+    end
+    render json: klass.update_child_categories(self.diverst_request, params)
+  rescue => e
+    case e
+    when InvalidInputException
+      raise
+    else
+      raise BadRequestException.new(e.message)
+    end
+  end
+
   def payload
     params
     .require(klass.symbol)

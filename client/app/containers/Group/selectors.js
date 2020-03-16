@@ -36,7 +36,6 @@ const selectCategorizeGroup = () => createSelector(
     const { currentGroup } = groupsState;
     if (!currentGroup) return null;
 
-    // clone group before making mutations on it
     const selectGroup = {
       ...groupsState.currentGroup, ...{
         name: {
@@ -49,7 +48,8 @@ const selectCategorizeGroup = () => createSelector(
     selectGroup.children = selectGroup.children.map(child => ({
       id: child.id,
       name: child.name,
-      group_category_id: child.group_category
+      group_category_id: child.group_category,
+      group_category_type_id: child.group_category_type
     }));
 
     return selectGroup;
