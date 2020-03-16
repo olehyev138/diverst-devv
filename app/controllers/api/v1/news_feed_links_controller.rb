@@ -37,7 +37,6 @@ class Api::V1::NewsFeedLinksController < DiverstController
     params.require(klass.symbol).permit(
         :id,
         :is_pinned
-    )
+      )
   end
-
 end

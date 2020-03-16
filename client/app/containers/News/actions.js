@@ -433,21 +433,21 @@ export function archiveNewsItemError(error) {
   };
 }
 
-export function pinNewsItemBegin(payload){
+export function pinNewsItemBegin(payload) {
   return {
     type: PIN_NEWS_ITEM_BEGIN,
     payload,
   };
 }
 
-export function pinNewsItemSuccess(payload){
+export function pinNewsItemSuccess(payload) {
   return {
     type: PIN_NEWS_ITEM_SUCCESS,
     payload,
   };
 }
 
-export function pinNewsItemError(error){
+export function pinNewsItemError(error) {
   return {
     type: PIN_NEWS_ITEM_ERROR,
     error,
