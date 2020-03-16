@@ -127,7 +127,7 @@ export function GroupCategorizeForm(props) {
       enableReinitialize
       onSubmit={(values, actions) => {
         // let categoriesUpdate =[];
-        // console.log(values.children);
+        console.log(values.children);
         // values.children.forEach(subgroup => subgroup.category ? categoriesUpdate.push({ group_id: subgroup.id, category_id: subgroup.category.value }) : null);
         // console.log(categoriesUpdate);
         props.groupAction(values.children);

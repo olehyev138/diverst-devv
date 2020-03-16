@@ -8,7 +8,8 @@ import { showSnackbar } from 'containers/Shared/Notifier/actions';
 import {
   GET_GROUPS_BEGIN, CREATE_GROUP_BEGIN,
   GET_GROUP_BEGIN, UPDATE_GROUP_BEGIN,
-  UPDATE_GROUP_SETTINGS_BEGIN, DELETE_GROUP_BEGIN
+  UPDATE_GROUP_SETTINGS_BEGIN, DELETE_GROUP_BEGIN,
+  GROUP_CATEGORIZE_BEGIN
 } from 'containers/Group/constants';
 
 import {
@@ -17,7 +18,7 @@ import {
   getGroupSuccess, getGroupError,
   updateGroupSuccess, updateGroupError,
   updateGroupSettingsSuccess, updateGroupSettingsError,
-  deleteGroupError
+  deleteGroupError, groupCategorizeSuccess, groupCategorizeError
 } from 'containers/Group/actions';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -65,16 +66,32 @@ export function* createGroup(action) {
   }
 }
 
-export function* updateGroup(action) {
+export function* categorizeGroup(action) {
   try {
-    console.log('sage-updategroup');
+    console.log('sage-categorize');
     console.log(action);
     // const payload = { group: action.payload };
     // const response = yield call(api.groups.update.bind(api.groups), payload.group.id, payload);
     //
-    // yield put(updateGroupSuccess());
+    // yield put(groupCategorizeSuccess());
     // yield put(push(ROUTES.admin.manage.groups.index.path()));
-    // yield put(showSnackbar({ message: 'Group updated', options: { variant: 'success' } }));
+    // yield put(showSnackbar({ message: 'Group categorized', options: { variant: 'success' } }));
+  } catch (err) {
+    yield put(groupCategorizeError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to categorize group', options: { variant: 'warning' } }));
+  }
+}
+
+export function* updateGroup(action) {
+  try {
+    const payload = { group: action.payload };
+    const response = yield call(api.groups.update.bind(api.groups), payload.group.id, payload);
+
+    yield put(updateGroupSuccess());
+    yield put(push(ROUTES.admin.manage.groups.index.path()));
+    yield put(showSnackbar({ message: 'Group updated', options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateGroupError(err));
 
@@ -125,4 +142,5 @@ export default function* groupsSaga() {
   yield takeLatest(UPDATE_GROUP_BEGIN, updateGroup);
   yield takeLatest(UPDATE_GROUP_SETTINGS_BEGIN, updateGroupSettings);
   yield takeLatest(DELETE_GROUP_BEGIN, deleteGroup);
+  yield takeLatest(GROUP_CATEGORIZE_BEGIN, categorizeGroup);
 }
