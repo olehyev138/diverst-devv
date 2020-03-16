@@ -28,6 +28,7 @@ class NewsFeedLink < ApplicationRecord
   scope :archived, -> { where.not(archived_at: nil) }
 
   scope :pinned, -> { where(is_pinned: true) }
+  scope :not_pinned, -> { where(is_pinned: false) }
 
   scope :combined_news_links_with_segments, -> (news_feed_id, segment_ids) {
     includes(:social_link, :news_link, :group_message)
