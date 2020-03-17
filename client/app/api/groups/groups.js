@@ -27,8 +27,8 @@ Object.assign(Groups, {
   assignLeaders(id, payload) {
     return axios.put(`${this.url}/${id}/assign_leaders`, payload);
   },
-  updateCategories(payload) {
-    return axios.post(`${this.url}/update_categories`, payload);
+  updateCategories(id, payload) {
+    return axios.post(`${this.url}/${id}/update_categories`, payload);
   },
 });
 
