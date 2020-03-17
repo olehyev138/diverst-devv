@@ -14,7 +14,7 @@ class GroupLeader < ApplicationRecord
   scope :visible,   -> { where(visible: true) }
   scope :role_ids,  -> { distinct.pluck(:user_role_id) }
 
-  before_save  :set_admin_permissions
+  before_save :set_admin_permissions
   validate :validate_group_membership_of_group_leader
 
 
