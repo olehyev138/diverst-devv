@@ -47,13 +47,11 @@ const GroupManageLayout = ({ component: Component, classes, ...rest }) => {
               {...rest}
               {...matchProps}
             />
-            <Permission show={matchProps.currentGroup.permissions['update?']}>
-              <Fade in appear>
-                <div className={classes.content}>
-                  <Component {...rest} {...matchProps} />
-                </div>
-              </Fade>
-            </Permission>
+            <Fade in appear>
+              <div className={classes.content}>
+                <Component {...rest} {...matchProps} />
+              </div>
+            </Fade>
           </React.Fragment>
         )}
       />

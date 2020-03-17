@@ -23,8 +23,8 @@ import {
   getFolderNewPath,
   getFolderShowPath
 } from 'utils/resourceHelpers';
-import Conditional from "../../../../components/Compositions/Conditional";
-import {FolderPage} from "../FolderPage";
+import Conditional from '../../../../components/Compositions/Conditional';
+import { FolderPage } from '../FolderPage';
 
 const defaultParams = Object.freeze({
   count: 10, // TODO: Make this a constant and use it also in FoldersList

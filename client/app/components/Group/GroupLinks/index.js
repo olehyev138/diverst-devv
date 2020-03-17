@@ -223,7 +223,7 @@ export function GroupLinks(props) {
             </Button>
           </Permission>
 
-          <Permission show={permission('update?') || permission('events_manage?') || permission('budget_index?')}>
+          <Permission show={permission('kpi_manage?') || permission('events_manage?') || permission('budgets_view?')}>
             <Button
               component={WrappedNavLink}
               className={classes.navLink}

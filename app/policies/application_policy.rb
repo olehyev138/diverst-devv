@@ -1,11 +1,12 @@
 class ApplicationPolicy
-  attr_reader :user, :policy_group, :record, :group_leader_role_ids
+  attr_reader :user, :policy_group, :params, :record, :group_leader_role_ids
 
   def initialize(user, record, params = nil)
     raise Pundit::NotAuthorizedError, 'must be logged in' unless user
 
     @user = user
     @record = record
+    @params = params
     @group_leader_role_ids = @user.group_leaders.load.pluck(:user_role_id)
     @policy_group = @user.policy_group
   end
@@ -59,12 +60,13 @@ class ApplicationPolicy
   end
 
   class Scope
-    attr_reader :user, :scope, :permission, :policy
+    attr_reader :user, :scope, :permission, :policy, :params
 
     def initialize(user, scope, permission = nil, params: {})
       @user = user
       @scope = scope
       @permission = permission
+      @params = params
       @policy_group = @user.policy_group
 
       policy_class = self.class.parent

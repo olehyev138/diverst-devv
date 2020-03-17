@@ -44,8 +44,8 @@ import {
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Resource/Folder/messages';
-import Conditional from "../../../../components/Compositions/Conditional";
-import {NewsFeedPage} from "../../../News/NewsFeedPage";
+import Conditional from '../../../../components/Compositions/Conditional';
+import { NewsFeedPage } from '../../../News/NewsFeedPage';
 
 const defaultParams = Object.freeze({
   count: 5, // TODO: Make this a constant and use it also in Folder

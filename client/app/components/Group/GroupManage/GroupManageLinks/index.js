@@ -13,12 +13,15 @@ import ResponsiveTabs from 'components/Shared/ResponsiveTabs';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Group/GroupManage/messages';
 import Conditional from 'components/Compositions/Conditional';
+import Permission from 'components/Shared/DiverstPermission';
+import dig from 'object-dig';
 const styles = theme => ({});
 
 /* eslint-disable react/no-multi-comp */
 export function GroupManageLinks(props) {
-  const { classes } = props;
-  const { currentTab } = props;
+  const { classes, currentGroup, currentTab } = props;
+
+  const permission = name => dig(currentGroup, 'permissions', name);
 
   return (
     <React.Fragment>
@@ -28,16 +31,20 @@ export function GroupManageLinks(props) {
           indicatorColor='primary'
           textColor='primary'
         >
-          <Tab
-            component={WrappedNavLink}
-            to={ROUTES.group.manage.settings.index.path(props.currentGroup.id)}
-            label={<DiverstFormattedMessage {...messages.links.settings} />}
-          />
-          <Tab
-            component={WrappedNavLink}
-            to={ROUTES.group.manage.leaders.index.path(props.currentGroup.id)}
-            label={<DiverstFormattedMessage {...messages.links.leaders} />}
-          />
+          <Permission show={permission('update?')}>
+            <Tab
+              component={WrappedNavLink}
+              to={ROUTES.group.manage.settings.index.path(props.currentGroup.id)}
+              label={<DiverstFormattedMessage {...messages.links.settings} />}
+            />
+          </Permission>
+          <Permission show={permission('leaders_view?')}>
+            <Tab
+              component={WrappedNavLink}
+              to={ROUTES.group.manage.leaders.index.path(props.currentGroup.id)}
+              label={<DiverstFormattedMessage {...messages.links.leaders} />}
+            />
+          </Permission>
         </ResponsiveTabs>
       </Paper>
     </React.Fragment>
@@ -55,4 +62,4 @@ export const StyledGroupManageLinks = withStyles(styles)(GroupManageLinks);
 export default compose(
   withStyles(styles),
   memo,
-)(Conditional(GroupManageLinks, ['currentGroup.permissions.update?']));
+)(GroupManageLinks);

@@ -114,9 +114,9 @@ class GroupBasePolicy < ApplicationPolicy
     # groups manager
     return true if policy_group.groups_manage? && policy_group[permission]
     # group leader
-    return true if is_a_leader? && leader_visible && has_group_leader_permissions?(permission)
+    return true if is_a_leader? && has_group_leader_permissions?(permission)
     # group member
-    return true if is_a_member? && member_visible && policy_group[permission]
+    return true if is_a_member? && policy_group[permission]
 
     false
   end

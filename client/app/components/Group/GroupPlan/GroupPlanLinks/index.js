@@ -13,13 +13,16 @@ import ResponsiveTabs from 'components/Shared/ResponsiveTabs';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Group/GroupPlan/KPI/messages';
+import Permission from 'components/Shared/DiverstPermission';
+import dig from 'object-dig';
 
 const styles = theme => ({});
 
 /* eslint-disable react/no-multi-comp */
 export function GroupPlanLinks(props) {
-  const { classes } = props;
-  const { currentTab } = props;
+  const { classes, currentGroup, currentTab } = props;
+
+  const permission = name => dig(currentGroup, 'permissions', name);
 
   return (
     <React.Fragment>
@@ -29,24 +32,27 @@ export function GroupPlanLinks(props) {
           indicatorColor='primary'
           textColor='primary'
         >
-          <Tab
-            component={WrappedNavLink}
-            to={ROUTES.group.plan.events.index.path(props.currentGroup.id)}
-            label={<DiverstFormattedMessage {...messages.links.event} />}
-            value='events'
-          />
-          <Tab
-            component={WrappedNavLink}
-            to={ROUTES.group.plan.kpi.updates.index.path(props.currentGroup.id)}
-            label={<DiverstFormattedMessage {...messages.links.KPI} />}
-            value='kpi'
-          />
-          <Tab
-            component={WrappedNavLink}
-            to={ROUTES.group.plan.budget.overview.path(props.currentGroup.id)}
-            label={<DiverstFormattedMessage {...messages.links.budgeting} />}
-            value='budgeting'
-          />
+          <Permission show={permission('events_manage?')} value='events'>
+            <Tab
+              component={WrappedNavLink}
+              to={ROUTES.group.plan.events.index.path(props.currentGroup.id)}
+              label={<DiverstFormattedMessage {...messages.links.event} />}
+            />
+          </Permission>
+          <Permission show={permission('kpi_manage?')} value='kpi'>
+            <Tab
+              component={WrappedNavLink}
+              to={ROUTES.group.plan.kpi.updates.index.path(props.currentGroup.id)}
+              label={<DiverstFormattedMessage {...messages.links.KPI} />}
+            />
+          </Permission>
+          <Permission show={permission('budgets_view?')} value='budgeting'>
+            <Tab
+              component={WrappedNavLink}
+              to={ROUTES.group.plan.budget.overview.path(props.currentGroup.id)}
+              label={<DiverstFormattedMessage {...messages.links.budgeting} />}
+            />
+          </Permission>
         </ResponsiveTabs>
       </Paper>
     </React.Fragment>

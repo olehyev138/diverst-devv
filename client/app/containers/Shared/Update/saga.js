@@ -64,10 +64,12 @@ export function* deleteUpdate(action) {
   }
 }
 
-export function* getUpdates(action, updatableApi) {
+export function* getUpdates(action, updatableKey) {
   try {
     const { updatableId, ...payload } = action.payload;
-    const response = yield call(updatableApi.updates.bind(updatableApi), updatableId, payload);
+    payload[updatableKey] = updatableId;
+
+    const response = yield call(api.updates.all.bind(api.updates), payload);
 
     yield put(getUpdatesSuccess(response.data.page));
   } catch (err) {
@@ -78,10 +80,12 @@ export function* getUpdates(action, updatableApi) {
   }
 }
 
-export function* getUpdatePrototype(action, updatableApi) {
+export function* getUpdatePrototype(action, updatableKey) {
   try {
     const { updatableId, ...payload } = action.payload;
-    const response = yield call(updatableApi.updatePrototype.bind(updatableApi), updatableId, payload);
+    payload[updatableKey] = updatableId;
+
+    const response = yield call(api.updates.updatePrototype.bind(api.updates), updatableId, payload);
 
     yield put(getUpdatePrototypeSuccess(response.data));
   } catch (err) {
@@ -92,11 +96,13 @@ export function* getUpdatePrototype(action, updatableApi) {
   }
 }
 
-export function* createUpdate(action, updatableApi) {
+export function* createUpdate(action, updatableKey) {
   try {
     const { updatableId, redirectPath, ...rest } = action.payload;
+    rest[updatableKey] = updatableId;
+
     const payload = { update: rest };
-    const response = yield call(updatableApi.createUpdates.bind(updatableApi), updatableId, payload);
+    const response = yield call(api.updates.createUpdates.bind(api.updates), updatableId, payload);
 
     yield put(createUpdateSuccess({}));
     yield put(push(redirectPath));

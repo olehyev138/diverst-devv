@@ -111,6 +111,18 @@ class GroupPolicy < ApplicationPolicy
     AnnualBudgetPolicy.new(user, [record, AnnualBudget]).index?
   end
 
+  def leaders_view?
+    GroupLeaderPolicy.new(user, [record, GroupLeader]).index?
+  end
+
+  def leaders_manage?
+    GroupLeaderPolicy.new(user, [record, GroupLeader]).manage?
+  end
+
+  def kpi_manage?
+    GroupUpdatePolicy.new(user, [record, Update]).manage?
+  end
+
   # move these to separate policies
   def view_all?
     create?
@@ -176,6 +188,7 @@ class GroupPolicy < ApplicationPolicy
 
   def update?
     return true if manage?
+    return true if has_group_leader_permissions?('group_settings_manage')
 
     @record.owner == @user
   end
