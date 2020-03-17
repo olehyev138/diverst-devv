@@ -48,10 +48,10 @@ const selectCategorizeGroup = () => createSelector(
     selectGroup.children = selectGroup.children.map(child => ({
       id: child.id,
       name: child.name,
-      group_category_id: child.group_category,
-      group_category_type_id: child.group_category_type
+      group_category_id: child.group_category ? child.group_category.id : null,
+      group_category_type_id: child.group_category_type ? child.group_category_type.id : null,
+      category: child.group_category ? { value: child.group_category.id, label: child.group_category.name } : null
     }));
-
     return selectGroup;
   }
 );

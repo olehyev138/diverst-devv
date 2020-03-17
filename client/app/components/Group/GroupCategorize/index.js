@@ -120,6 +120,7 @@ export function GroupCategorizeForm(props) {
     name: { default: '' },
     children: { default: [] }
   });
+
   return (
     <Formik
       initialValues={initialValues}

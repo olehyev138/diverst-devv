@@ -68,16 +68,12 @@ export function* createGroup(action) {
 
 export function* categorizeGroup(action) {
   try {
-    console.log('sage-categorize');
-    console.log(action.payload);
-
     const response = yield call(api.groups.updateCategories.bind(api.groups), action.payload.id, action.payload);
 
     yield put(groupCategorizeSuccess());
-    // yield put(push(ROUTES.admin.manage.groups.index.path()));
-    // yield put(showSnackbar({ message: 'Group categorized', options: { variant: 'success' } }));
+    yield put(push(ROUTES.admin.manage.groups.index.path()));
+    yield put(showSnackbar({ message: 'Group categorized', options: { variant: 'success' } }));
   } catch (err) {
-    console.log(err.response);
     yield put(groupCategorizeError(err));
 
     // TODO: intl message
