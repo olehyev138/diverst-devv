@@ -28,7 +28,7 @@ import { formatDateTimeString } from 'utils/dateTimeHelpers';
 import DiverstImg from 'components/Shared/DiverstImg';
 import Carousel from 'react-material-ui-carousel';
 import { injectIntl, intlShape } from 'react-intl';
-import LocationOnIcon from "@material-ui/icons/LocationOn";
+import LocationOnIcon from '@material-ui/icons/LocationOn';
 
 const styles = theme => ({
   cardHeader: {

@@ -13,7 +13,7 @@ import saga from 'containers/News/saga';
 
 import { selectPaginatedNewsItems, selectNewsItemsTotal, selectIsLoading, selectHasChanged } from 'containers/News/selectors';
 import { deleteSocialLinkBegin, getNewsItemsBegin, newsFeedUnmount, deleteNewsLinkBegin, deleteGroupMessageBegin,
-  updateNewsItemBegin, archiveNewsItemBegin, pinNewsItemBegin } from 'containers/News/actions';
+  updateNewsItemBegin, archiveNewsItemBegin, pinNewsItemBegin, unpinNewsItemBegin } from 'containers/News/actions';
 
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -28,6 +28,7 @@ const defaultParams = Object.freeze({
   count: 5, // TODO: Make this a constant and use it also in EventsList
   page: 0,
   order: 'desc',
+  orderBy: 'news_feed_links.created_at',
   news_feed_id: -1,
 });
 
@@ -114,6 +115,7 @@ export function NewsFeedPage(props, context) {
         updateNewsItemBegin={props.updateNewsItemBegin}
         archiveNewsItemBegin={props.archiveNewsItemBegin}
         pinNewsItemBegin={props.pinNewsItemBegin}
+        unpinNewsItemBegin={props.unpinNewsItemBegin}
       />
     </React.Fragment>
   );
@@ -132,6 +134,7 @@ NewsFeedPage.propTypes = {
   hasChanged: PropTypes.bool,
   archiveNewsItemBegin: PropTypes.func,
   pinNewsItemBegin: PropTypes.func,
+  unpinNewsItemBegin: PropTypes.func,
   currentGroup: PropTypes.shape({
     news_feed: PropTypes.shape({
       id: PropTypes.number
@@ -156,6 +159,7 @@ const mapDispatchToProps = dispatch => ({
   newsFeedUnmount: () => dispatch(newsFeedUnmount()),
   archiveNewsItemBegin: payload => dispatch(archiveNewsItemBegin(payload)),
   pinNewsItemBegin: payload => dispatch(pinNewsItemBegin(payload)),
+  unpinNewsItemBegin: payload => dispatch(unpinNewsItemBegin(payload)),
 });
 
 const withConnect = connect(

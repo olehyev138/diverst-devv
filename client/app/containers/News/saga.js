@@ -20,6 +20,7 @@ import {
   DELETE_GROUP_MESSAGE_COMMENT_SUCCESS, DELETE_GROUP_MESSAGE_COMMENT_ERROR, DELETE_GROUP_MESSAGE_COMMENT_BEGIN,
   ARCHIVE_NEWS_ITEM_BEGIN, ARCHIVE_NEWS_ITEM_SUCCESS, ARCHIVE_NEWS_ITEM_ERROR,
   PIN_NEWS_ITEM_BEGIN, PIN_NEWS_ITEM_SUCCESS, PIN_NEWS_ITEM_ERROR,
+  UNPIN_NEWS_ITEM_BEGIN, UNPIN_NEWS_ITEM_SUCCESS, UNPIN_NEWS_ITEM_ERROR,
 } from 'containers/News/constants';
 
 import {
@@ -37,6 +38,7 @@ import {
   deleteNewsLinkSuccess, deleteSocialLinkBegin, deleteSocialLinkError, deleteSocialLinkSuccess,
   deleteGroupMessageCommentBegin, deleteGroupMessageCommentError, deleteGroupMessageCommentSuccess, deleteNewsLinkCommentBegin,
   deleteNewsLinkCommentError, deleteNewsLinkCommentSuccess, archiveNewsItemBegin, archiveNewsItemSuccess, archiveNewsItemError, pinNewsItemBegin, pinNewsItemSuccess, pinNewsItemError,
+  unpinNewsItemBegin, unpinNewsItemSuccess, unpinNewsItemError
 } from 'containers/News/actions';
 
 export function* getNewsItems(action) {
@@ -295,15 +297,33 @@ export function* archiveNewsItem(action) {
   }
 }
 
-export function* pinNewsItem(action){
+export function* pinNewsItem(action) {
   try {
     const payload = { news_feed_link: action.payload };
-    const response = yield call(api.newsFeedLinks.pin.bind(api.newsFeedLinks), payload.news_feed_link.id, payload);
+    const { callback, ...rest } = action.payload;
+    const response = yield call(api.newsFeedLinks.pin.bind(api.newsFeedLinks), payload.news_feed_link.id, rest);
     yield put(pinNewsItemSuccess());
+    callback();
   } catch (err) {
     yield put(pinNewsItemError(err));
     yield put(showSnackbar({
       message: 'Failed to pin news item',
+      options: { variant: 'warning' }
+    }));
+  }
+}
+
+export function* unpinNewsItem(action) {
+  try {
+    const payload = { news_feed_link: action.payload };
+    const { callback, ...rest } = action.payload;
+    const response = yield call(api.newsFeedLinks.un_pin.bind(api.newsFeedLinks), payload.news_feed_link.id, rest);
+    yield put(unpinNewsItemSuccess());
+    callback();
+  } catch (err) {
+    yield put(unpinNewsItemError(err));
+    yield put(showSnackbar({
+      message: 'Failed to unpin news item',
       options: { variant: 'warning' }
     }));
   }
@@ -328,4 +348,5 @@ export default function* newsSaga() {
   yield takeLatest(DELETE_GROUP_MESSAGE_COMMENT_BEGIN, deleteGroupMessageComment);
   yield takeLatest(ARCHIVE_NEWS_ITEM_BEGIN, archiveNewsItem);
   yield takeLatest(PIN_NEWS_ITEM_BEGIN, pinNewsItem);
+  yield takeLatest(UNPIN_NEWS_ITEM_BEGIN, unpinNewsItem);
 }
