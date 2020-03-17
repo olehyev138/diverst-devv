@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200304152851) do
+ActiveRecord::Schema.define(version: 20200314230356) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -41,6 +41,8 @@ ActiveRecord::Schema.define(version: 20200304152851) do
     t.decimal  "leftover_money",             precision: 10, default: 0
     t.datetime "created_at",                                                null: false
     t.datetime "updated_at",                                                null: false
+    t.datetime "start_date"
+    t.datetime "end_date"
   end
 
   add_index "annual_budgets", ["enterprise_id"], name: "index_annual_budgets_on_enterprise_id", using: :btree
@@ -1535,6 +1537,7 @@ ActiveRecord::Schema.define(version: 20200304152851) do
     t.integer  "group_id",          limit: 4
     t.integer  "folder_id",         limit: 4
     t.integer  "resource_id",       limit: 4
+    t.integer  "view_count",        limit: 4
   end
 
   create_table "yammer_field_mappings", force: :cascade do |t|

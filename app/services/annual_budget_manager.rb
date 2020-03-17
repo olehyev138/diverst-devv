@@ -34,6 +34,8 @@ class AnnualBudgetManager
 
     group.update(annual_budget_params) unless annual_budget_params.empty?
     find_or_create_annual_budget_and_update
+    group.annual_budgets.last.update(start_date: annual_budget_params['start_date'],
+                                     end_date: annual_budget_params['end_date'])
   end
 
   def approve
