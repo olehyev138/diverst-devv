@@ -23,6 +23,8 @@ class GroupSerializer < ApplicationRecordSerializer
         :members_view?,
         :news_view?,
         :resource_view?,
+        :events_manage?,
+        :budgets_view?,
         :is_a_member?,
         :is_a_pending_member?,
         :is_an_accepted_member?,

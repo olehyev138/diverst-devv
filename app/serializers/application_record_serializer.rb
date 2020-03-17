@@ -98,6 +98,6 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
   end
 
   def permissions
-    policies.reduce({}) { |sum, m| sum[m] = (policy.send(m) rescue nil); sum }
+    policies.reduce({}) { |sum, m| sum[m] = (policy.send(m)); sum }
   end
 end

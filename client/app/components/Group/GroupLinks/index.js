@@ -223,22 +223,24 @@ export function GroupLinks(props) {
             </Button>
           </Permission>
 
-          <Button
-            component={WrappedNavLink}
-            className={classes.navLink}
-            activeClassName={classes.navLinkActive}
-            to={ROUTES.group.plan.events.index.path(rs.params('group_id'))}
-            isActive={(match, location) => !!matchPath(location.pathname, {
-              path: ROUTES.group.plan.index.data.pathPrefix(rs.params('group_id')),
-              exact: false,
-              strict: false,
-            })}
-          >
-            <Hidden smDown>
-              <PlanIcon className={classes.navIcon} />
-            </Hidden>
-            <DiverstFormattedMessage {...ROUTES.group.plan.index.data.titleMessage} />
-          </Button>
+          <Permission show={permission('update?') || permission('events_manage?') || permission('budget_index?')}>
+            <Button
+              component={WrappedNavLink}
+              className={classes.navLink}
+              activeClassName={classes.navLinkActive}
+              to={ROUTES.group.plan.events.index.path(rs.params('group_id'))}
+              isActive={(match, location) => !!matchPath(location.pathname, {
+                path: ROUTES.group.plan.index.data.pathPrefix(rs.params('group_id')),
+                exact: false,
+                strict: false,
+              })}
+            >
+              <Hidden smDown>
+                <PlanIcon className={classes.navIcon} />
+              </Hidden>
+              <DiverstFormattedMessage {...ROUTES.group.plan.index.data.titleMessage} />
+            </Button>
+          </Permission>
 
           <Permission show={permission('update?')}>
             <Button

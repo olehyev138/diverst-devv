@@ -103,6 +103,14 @@ class GroupPolicy < ApplicationPolicy
     GroupResourcePolicy.new(user, [record, Resource]).index?
   end
 
+  def events_manage?
+    InitiativePolicy.new(user, [record, Initiative]).manage?
+  end
+
+  def budgets_view?
+    AnnualBudgetPolicy.new(user, [record, AnnualBudget]).index?
+  end
+
   # move these to separate policies
   def view_all?
     create?

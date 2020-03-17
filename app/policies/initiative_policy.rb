@@ -20,7 +20,9 @@ class InitiativePolicy < GroupBasePolicy
   end
 
   def update?
-    record.owner == user || super
+    Group === record ?
+        record.owner == user || super :
+        super
   end
 
   def fields?
@@ -66,11 +68,6 @@ class InitiativePolicy < GroupBasePolicy
   def user_is_guest_and_event_is_upcoming?
     @upcoming_events = @record.group.initiatives.upcoming
     is_a_guest? && (@upcoming_events.include? @record)
-  end
-
-  def user_is_guest_and_event_is_ongoing?
-    @ongoing_events = @record.group.initiatives.ongoing
-    is_a_guest? && (@ongoing_events.include? @record)
   end
 
   # todo: fix this logic, write a test for it
