@@ -26,7 +26,10 @@ Object.assign(Groups, {
   },
   assignLeaders(id, payload) {
     return axios.put(`${this.url}/${id}/assign_leaders`, payload);
-  }
+  },
+  updateCategories(payload) {
+    return axios.post(`${this.url}/update_categories`, payload);
+  },
 });
 
 export default Groups;

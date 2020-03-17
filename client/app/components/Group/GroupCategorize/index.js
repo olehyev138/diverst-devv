@@ -120,17 +120,11 @@ export function GroupCategorizeForm(props) {
     name: { default: '' },
     children: { default: [] }
   });
-  console.log('props');
-  console.log(props);
   return (
     <Formik
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        // let categoriesUpdate =[];
-        console.log(values.children);
-        // values.children.forEach(subgroup => subgroup.category ? categoriesUpdate.push({ group_id: subgroup.id, category_id: subgroup.category.value }) : null);
-        // console.log(categoriesUpdate);
         props.groupAction(values);
       }}
     >

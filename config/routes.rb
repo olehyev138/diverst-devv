@@ -74,6 +74,7 @@ Diverst::Application.routes.draw do
           post '/create_update', to: 'groups#create_update'
 
           put '/assign_leaders', to: 'groups#assign_leaders'
+          post '/update_categories', to: 'groups#update_categories'
         end
       end
       resources :group_categories
