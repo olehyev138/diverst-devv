@@ -25,19 +25,20 @@ module Group::Actions
       raise BadRequestException.new "#{self.name.titleize} required" if params[symbol].nil?
 
       subgroups = params[:children] # {id: num, group_category_id: num}
-      parent_id = params[:id]
-      category_type_id = params[:category_type_id]
+      puts '******************************update parent group category type id*****************************************'
+      # update parent group category type id
+      item = find(params[:id])
+      item[:group_category_type_id] = params[:group_category_type_id]
+      item.save!
+      puts '******************************update parent subgroup category type id*****************************************'
       # update subgroup category id and category type id
       subgroups.each do |subgroup|
-      item = find(subgroup.id)
-      item.group_category_id = subgroup.group_category_id
-      item.group_category_type_id = category_type_id
-      item.save!
+        item = Group.find(subgroup[:id])
+        item[:group_category_id] = subgroup[:group_category_id]
+        item[:group_category_type_id] = subgroup[:group_category_type_id]
+        item.save!
+        puts 'actions-update-done'
       end
-      # update parent group category type id
-      item = find(parent_id)
-      item.group_category_type_id = category_type_id
-      item.save!
     end
   end
 end
