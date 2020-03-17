@@ -15,7 +15,7 @@ import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import {
-  Button, Card, CardContent, Typography, Grid, Box,
+  Button, Card, CardContent, Typography, Grid, Box, CardActions, Collapse, Link,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -55,6 +55,7 @@ const styles = theme => ({
 
 export function GroupCategoriesList(props, context) {
   const { classes, defaultParams } = props;
+  console.log(props);
   return (
     <React.Fragment>
       <Grid container spacing={3} justify='flex-end'>
@@ -116,8 +117,19 @@ export function GroupCategoriesList(props, context) {
                             <CardContent>
                               {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                               <Typography variant='body1' component='h2' display='inline'>
-                                {category.name}
+                                <Button
+                                  size='medium'
+                                  onClick={() => { }}
+                                >
+                                  {category.name}
+                                  (
+                                  {category.total_groups}
+                                  )
+                                </Button>
                               </Typography>
+                              {category.groups && category.groups.map((group, i) => (
+                                <Typography variant='body2' margin='30' key={group.id}>{group.name}</Typography>
+                              ))}
                             </CardContent>
                           </Card>
                         </Grid>

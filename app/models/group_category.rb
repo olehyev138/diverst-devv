@@ -5,6 +5,10 @@ class GroupCategory < ApplicationRecord
   belongs_to :enterprise
   validates :name, presence: true
 
+  def total_groups
+    groups.size
+  end
+
   def to_s
     name
   end
