@@ -48,9 +48,6 @@ module BasePager
         total = partial_query.count
       end
 
-      pp order_by
-      pp order
-
       items = partial_query
                   .order(order_string(order_by, order))
 
