@@ -28,6 +28,8 @@ import {
   deleteGroupSuccess, deleteGroupError,
   carryBudgetSuccess, carryBudgetError,
   resetBudgetSuccess, resetBudgetError,
+  leaveGroupSuccess, leaveGroupError,
+  joinGroupSuccess, joinGroupError
 } from './actions';
 
 export function* getGroups(action) {
@@ -162,6 +164,32 @@ export function* resetBudget(action) {
 
     // TODO: intl message
     yield put(showSnackbar({ message: 'Failed to reset budget', options: { variant: 'warning' } }));
+  }
+}
+
+export function* joinGroup(action) {
+  const payload = { user: action.payload };
+  try {
+    const response = yield call(api.userGroups.create.bind(api.userGroups), payload);
+    yield put(joinGroupSuccess());
+  } catch (err) {
+    yield put(joinGroupError());
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to join group', options: { variant: 'warning' } }));
+  }
+}
+
+export function* leaveGroup(action) {
+  const payload = { user: action.payload };
+  try {
+    const response = yield call(api.userGroups.remove.bind(api.userGroups), payload);
+    yield put(leaveGroupSuccess());
+  } catch (err) {
+    yield put(leaveGroupError());
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to leave group', options: { variant: 'warning' } }));
   }
 }
 

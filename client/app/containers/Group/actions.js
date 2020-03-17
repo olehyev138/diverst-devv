@@ -34,6 +34,12 @@ import {
   RESET_BUDGET_ERROR,
   GROUP_LIST_UNMOUNT,
   GROUP_FORM_UNMOUNT,
+  JOIN_GROUP_BEGIN,
+  JOIN_GROUP_SUCCESS,
+  JOIN_GROUP_ERROR,
+  LEAVE_GROUP_BEGIN,
+  LEAVE_GROUP_SUCCESS,
+  LEAVE_GROUP_ERROR
 } from './constants';
 
 export function getGroupsBegin(payload) {
@@ -236,5 +242,47 @@ export function groupFormUnmount(payload) {
   return {
     type: GROUP_FORM_UNMOUNT,
     payload,
+  };
+}
+
+export function joinGroupBegin(payload) {
+  return {
+    type: JOIN_GROUP_BEGIN,
+    payload,
+  };
+}
+
+export function joinGroupSuccess(payload) {
+  return {
+    type: JOIN_GROUP_SUCCESS,
+    payload,
+  };
+}
+
+export function joinGroupError(error) {
+  return {
+    type: JOIN_GROUP_ERROR,
+    error,
+  };
+}
+
+export function leaveGroupBegin(payload) {
+  return {
+    type: LEAVE_GROUP_BEGIN,
+    payload,
+  };
+}
+
+export function leaveGroupSuccess(payload) {
+  return {
+    type: LEAVE_GROUP_SUCCESS,
+    payload,
+  };
+}
+
+export function leaveGroupError(error) {
+  return {
+    type: LEAVE_GROUP_ERROR,
+    error,
   };
 }

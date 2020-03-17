@@ -8,10 +8,12 @@ import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
-import { Divider, Grid, Typography } from '@material-ui/core';
+import {Button, Divider, Grid, Typography} from '@material-ui/core';
 import DiverstImg from 'components/Shared/DiverstImg';
 import EventsPage from 'containers/Event/EventsPage';
 import NewsPage from 'containers/News/NewsFeedPage';
+import AddIcon from '@material-ui/icons/Add';
+import RemoveIcon from '@material-ui/icons/Remove';
 
 export function GroupHome(props) {
   return (
@@ -40,6 +42,16 @@ export function GroupHome(props) {
           <Divider orientation='vertical' />
         </Grid>
         <Grid item xs>
+          <Button
+            variant='contained'
+            size='large'
+            color='primary'
+            onClick={() => {
+            }}
+            startIcon={<RemoveIcon />}
+          >
+            leave
+          </Button>
           <NewsPage
             currentGroup={props.currentGroup}
             readonly
