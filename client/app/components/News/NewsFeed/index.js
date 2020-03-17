@@ -107,6 +107,7 @@ export function NewsFeed(props) {
           deleteNewsLinkBegin={props.deleteNewsLinkBegin}
           updateNewsItemBegin={props.updateNewsItemBegin}
           archiveNewsItemBegin={props.archiveNewsItemBegin}
+          pinNewsItemBegin={props.pinNewsItemBegin}
         />
       );
     else if (item.social_link)

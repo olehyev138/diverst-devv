@@ -25,5 +25,9 @@ module NewsFeedLink::Actions
           social_link: SocialLink.base_preloads
       ]
     end
+
+    def order_string(order_by, order)
+      "news_feed_links.is_pinned desc, #{order_by} #{order}"
+    end
   end
 end

@@ -70,16 +70,17 @@ export function GroupMessageListItem(props) {
           <Grid item>
             <Grid container>
               <Grid item>
-                <IconButton
-                  // TODO : Change to actual post like action
-                  size='small'
-                  component={WrappedNavLink}
-                  onClick={() => {
-                    props.pinNewsItemBegin({ id: newsItemId });
-                  }}
-                >
-                  <LocationOnIcon />
-                </IconButton>
+                {props.pinNewsItemBegin && (
+                  <IconButton
+                    size='small'
+                    component={WrappedNavLink}
+                    onClick={() => {
+                      props.pinNewsItemBegin({ id: newsItemId });
+                    }}
+                  >
+                    <LocationOnIcon />
+                  </IconButton>
+                )}
                 { props.links && (
                   <IconButton
                     // TODO : Change to actual post like action

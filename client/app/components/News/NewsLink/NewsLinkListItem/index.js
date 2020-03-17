@@ -28,6 +28,7 @@ import { formatDateTimeString } from 'utils/dateTimeHelpers';
 import DiverstImg from 'components/Shared/DiverstImg';
 import Carousel from 'react-material-ui-carousel';
 import { injectIntl, intlShape } from 'react-intl';
+import LocationOnIcon from "@material-ui/icons/LocationOn";
 
 const styles = theme => ({
   cardHeader: {
@@ -98,6 +99,17 @@ export function NewsLinkListItem(props) {
           <Grid item>
             <Grid container>
               <Grid item>
+                {props.pinNewsItemBegin && (
+                  <IconButton
+                    size='small'
+                    component={WrappedNavLink}
+                    onClick={() => {
+                      props.pinNewsItemBegin({ id: newsItemId });
+                    }}
+                  >
+                    <LocationOnIcon />
+                  </IconButton>
+                )}
                 { props.links && (
                   <IconButton
                     // TODO : Change to actual post like action
@@ -188,6 +200,7 @@ NewsLinkListItem.propTypes = {
   deleteNewsLinkBegin: PropTypes.func,
   updateNewsItemBegin: PropTypes.func,
   archiveNewsItemBegin: PropTypes.func,
+  pinNewsItemBegin: PropTypes.func,
 };
 
 export default compose(

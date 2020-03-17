@@ -69,7 +69,7 @@ export function NewsFeedPage(props, context) {
   };
 
   useEffect(() => {
-    getNewsFeedItems(['approved', 'not_archived', 'not_pinned']);
+    getNewsFeedItems(['approved', 'not_archived']);
 
     return () => {
       props.newsFeedUnmount();
@@ -80,10 +80,10 @@ export function NewsFeedPage(props, context) {
     setTab(newTab);
     switch (newTab) {
       case NewsFeedTypes.approved:
-        getNewsFeedItems(['approved', 'not_archived', 'not_pinned'], true);
+        getNewsFeedItems(['approved', 'not_archived'], true);
         break;
       case NewsFeedTypes.pending:
-        getNewsFeedItems(['pending', 'not_archived', 'not_pinned'], true);
+        getNewsFeedItems(['pending', 'not_archived'], true);
         break;
       default:
         break;
