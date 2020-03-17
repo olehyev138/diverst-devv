@@ -11,7 +11,6 @@ RSpec.describe ClockworkDatabaseEvent, type: :model do
     it { expect(clockwork_database_event).to validate_presence_of(:job_name) }
     it { expect(clockwork_database_event).to validate_presence_of(:method_name) }
 
-    it { expect(clockwork_database_event).to validate_length_of(:tz).is_at_most(191) }
     it { expect(clockwork_database_event).to validate_length_of(:method_args).is_at_most(191) }
     it { expect(clockwork_database_event).to validate_length_of(:method_name).is_at_most(191) }
     it { expect(clockwork_database_event).to validate_length_of(:job_name).is_at_most(191) }
@@ -19,7 +18,6 @@ RSpec.describe ClockworkDatabaseEvent, type: :model do
     it { expect(clockwork_database_event).to validate_length_of(:day).is_at_most(191) }
     it { expect(clockwork_database_event).to validate_length_of(:name).is_at_most(191) }
 
-    it { expect(clockwork_database_event).to validate_inclusion_of(:tz).in_array(ActiveSupport::TimeZone.all.map(&:name)) }
     it { expect(clockwork_database_event).to validate_inclusion_of(:day).in_array(Date::DAYNAMES.map(&:downcase)) }
 
     it "adds an error when job class doesn't exist" do
