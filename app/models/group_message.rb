@@ -34,8 +34,6 @@ class GroupMessage < ApplicationRecord
 
   after_destroy :remove_news_feed_link
 
-  after_destroy :remove_news_feed_link
-
   scope :of_segments, ->(segment_ids) {
     gm_condtions = ['group_messages_segments.segment_id IS NULL']
     gm_condtions << "group_messages_segments.segment_id IN (#{ segment_ids.join(",") })" unless segment_ids.empty?
