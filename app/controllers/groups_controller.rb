@@ -266,6 +266,7 @@ class GroupsController < ApplicationController
 
   def plan_overview
     authorize [@group], :index?, policy_class: GroupBudgetPolicy
+    @annual_budgets = @group.annual_budgets.order(created_at: :desc)
   end
 
   def destroy
