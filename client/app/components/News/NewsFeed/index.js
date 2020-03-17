@@ -123,6 +123,8 @@ export function NewsFeed(props) {
           deleteSocialLinkBegin={props.deleteSocialLinkBegin}
           updateNewsItemBegin={props.updateNewsItemBegin}
           archiveNewsItemBegin={props.archiveNewsItemBegin}
+          pinNewsItemBegin={props.pinNewsItemBegin}
+          unpinNewsItemBegin={props.unpinNewsItemBegin}
         />
       );
 
