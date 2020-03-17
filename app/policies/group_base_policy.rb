@@ -51,7 +51,7 @@ class GroupBasePolicy < ApplicationPolicy
 
   def publicly_visible
     group_visibility_setting.present? ?
-        ['public', 'global', 'non-members'].include?(group[group_visibility_setting]) : true
+        ['public', 'global', 'non-members'].include?(group[group_visibility_setting]) : is_a_accepted_member?
   end
 
   def member_visible

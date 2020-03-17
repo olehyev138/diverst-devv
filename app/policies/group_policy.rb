@@ -99,9 +99,9 @@ class GroupPolicy < ApplicationPolicy
     NewsFeedLinkPolicy.new(user, [record, NewsFeedLink]).index?
   end
 
-  # def resource_view?
-  #   GroupResourcePolicy.new(user, [record, Resource]).index?
-  # end
+  def resource_view?
+    GroupResourcePolicy.new(user, [record, Resource]).index?
+  end
 
   # move these to separate policies
   def view_all?

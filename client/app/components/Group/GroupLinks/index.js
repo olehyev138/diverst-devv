@@ -194,18 +194,20 @@ export function GroupLinks(props) {
             </Button>
           </Permission>
 
-          <Button
-            component={WrappedNavLink}
-            exact
-            to={ROUTES.group.resources.index.path(rs.params('group_id'))}
-            className={classes.navLink}
-            activeClassName={classes.navLinkActive}
-          >
-            <Hidden smDown>
-              <ResourcesIcon className={classes.navIcon} />
-            </Hidden>
-            <DiverstFormattedMessage {...ROUTES.group.resources.index.data.titleMessage} />
-          </Button>
+          <Permission show={permission('resource_view?')}>
+            <Button
+              component={WrappedNavLink}
+              exact
+              to={ROUTES.group.resources.index.path(rs.params('group_id'))}
+              className={classes.navLink}
+              activeClassName={classes.navLinkActive}
+            >
+              <Hidden smDown>
+                <ResourcesIcon className={classes.navIcon} />
+              </Hidden>
+              <DiverstFormattedMessage {...ROUTES.group.resources.index.data.titleMessage} />
+            </Button>
+          </Permission>
 
           <Permission show={permission('news_view?')}>
             <Button
