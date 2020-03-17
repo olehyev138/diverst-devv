@@ -22,5 +22,9 @@ module Folder::Actions
 
       folder
     end
+
+    def base_preload
+      [:parent]
+    end
   end
 end
