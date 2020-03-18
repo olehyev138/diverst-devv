@@ -92,7 +92,8 @@ class NewsFeedLink < ApplicationRecord
 
   scope :combined_news_links_with_segments, -> (news_feed_id, segment_ids) {
     includes(:social_link, :news_link, :group_message)
-      .joins("LEFT OUTER JOIN news_feed_link_segments ON news_feed_link_segments.news_feed_link_id = news_feed_links.id
+  }
+                                                .joins("LEFT OUTER JOIN news_feed_link_segments ON news_feed_link_segments.news_feed_link_id = news_feed_links.id
               LEFT OUTER JOIN shared_news_feed_links ON shared_news_feed_links.news_feed_link_id = news_feed_links.id
               WHERE shared_news_feed_links.news_feed_id = #{news_feed_id}
                 OR news_feed_links.news_feed_id = #{news_feed_id} AND approved = 1
@@ -176,18 +177,18 @@ class NewsFeedLink < ApplicationRecord
   def self.search(search)
     if search
       left_joins(:group_message, :news_link, :news_tags)
-      .where(
-        [
-          (
-            [
-              'news_tags.name LIKE ? OR ' +
-                'LOWER( group_messages.subject ) LIKE ? OR ' +
-                'LOWER( group_messages.content ) LIKE ? OR ' +
-                'LOWER( news_links.title ) LIKE ? OR ' +
-                'LOWER( news_links.description ) LIKE ?'
-            ] * search.length
-          ).join(' OR ')
-        ] + search.reduce([]) { |sum, term| sum + ["#{term.downcase}"] + (["%#{term.downcase}%"] * 4) })
+          .where(
+              [
+                  (
+                  [
+                      'news_tags.name LIKE ? OR ' +
+                          'LOWER( group_messages.subject ) LIKE ? OR ' +
+                          'LOWER( group_messages.content ) LIKE ? OR ' +
+                          'LOWER( news_links.title ) LIKE ? OR ' +
+                          'LOWER( news_links.description ) LIKE ?'
+                  ] * search.length
+                  ).join(' OR ')
+              ] + search.reduce([]) { |sum, term| sum + ["#{term.downcase}"] + (["%#{term.downcase}%"] * 4) })
     else
       all
     end
