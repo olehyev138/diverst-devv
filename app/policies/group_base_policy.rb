@@ -80,7 +80,7 @@ class GroupBasePolicy < ApplicationPolicy
   end
 
   def basic_group_leader_permission?(permission)
-    PolicyGroupTemplate.where(user_role_id: group_leader_role_ids, enterprise_id: user.enterprise_id).where("#{permission} = true").exists?
+    PolicyGroupTemplate.where(user_role_id: group_leader_role_id, enterprise_id: user.enterprise_id).where("#{permission} = true").exists?
   end
 
   def has_group_leader_permissions?(permission)
@@ -114,7 +114,7 @@ class GroupBasePolicy < ApplicationPolicy
     # groups manager
     return true if policy_group.groups_manage? && policy_group[permission]
     # group leader
-    return true if is_a_leader? && has_group_leader_permissions?(permission)
+    return true if has_group_leader_permissions?(permission)
     # group member
     return true if is_a_member? && policy_group[permission]
 
@@ -156,8 +156,20 @@ class GroupBasePolicy < ApplicationPolicy
     manage_group_resource(base_manage_permission)
   end
 
+  def export_group_members_list_csv?
+    user.is_group_leader_of?(group) || update?
+  end
+
   def destroy?
     update?
+  end
+
+  def manage_comments?
+    return true if user.policy_group.manage_all?
+    return true if user.policy_group.manage_posts?
+    return true if is_a_leader?
+
+    record.user == user
   end
 
   def base_index_permission

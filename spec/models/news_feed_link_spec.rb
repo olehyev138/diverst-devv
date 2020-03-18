@@ -3,20 +3,78 @@ require 'rails_helper'
 RSpec.describe NewsFeedLink, type: :model do
   include ActiveJob::TestHelper
 
-  describe 'validations' do
+  describe 'tests associations and validations' do
     let(:news_feed_link) { build_stubbed(:news_feed_link) }
-
-    it { expect(news_feed_link).to validate_presence_of(:news_feed_id) }
 
     it { expect(news_feed_link).to belong_to(:news_feed) }
     it { expect(news_feed_link).to belong_to(:news_link).dependent(:delete) }
     it { expect(news_feed_link).to belong_to(:group_message).dependent(:delete) }
     it { expect(news_feed_link).to belong_to(:social_link).dependent(:delete) }
-
-    it { expect(news_feed_link).to have_many(:news_feed_link_segments) }
+    it { expect(news_feed_link).to have_many(:news_feed_link_segments).dependent(:destroy) }
+    it { expect(news_feed_link).to have_many(:segments).through(:news_feed_link_segments) }
+    it { expect(news_feed_link).to have_many(:shared_news_feed_links).class_name('SharedNewsFeedLink').dependent(:destroy) }
+    it { expect(news_feed_link).to have_many(:shared_news_feeds).through(:shared_news_feed_links) }
+    it { expect(news_feed_link).to have_many(:views).dependent(:destroy) }
+    it { expect(news_feed_link).to have_many(:likes).dependent(:destroy) }
     it { expect(news_feed_link).to delegate_method(:group).to(:news_feed) }
+    it { expect(news_feed_link).to validate_presence_of(:news_feed_id) }
+  end
 
-    it { expect(news_feed_link).to have_many(:views) }
+  describe 'test scopes' do
+    describe '.approved' do
+      let!(:enterprise) { create(:enterprise) }
+      let!(:group) { create(:group, enterprise_id: enterprise.id) }
+      before { create_list(:group_message, 2, group_id: group.id) }
+
+      it 'returns approved news_feed_links' do
+        expect(NewsFeedLink.approved.count).to eq(2)
+      end
+    end
+
+    describe '.not_approved' do
+      let!(:enterprise) { create(:enterprise) }
+      let!(:group) { create(:group, enterprise_id: enterprise.id) }
+      let!(:group2) { create(:group, enterprise_id: enterprise.id) }
+      before do
+        group_messages = create_list(:group_message, 3, group_id: group.id)
+        group_messages2 = create_list(:group_message, 3, group_id: group2.id)
+        NewsFeedLink.where(group_message_id: group_messages.map(&:id)).update_all(approved: false)
+        NewsFeedLink.where(group_message_id: group_messages2.map(&:id)).update_all(approved: false)
+      end
+
+      it 'returns not_approved news_feed_links' do
+        expect(NewsFeedLink.not_approved.count).to eq(6)
+      end
+
+      it 'returns not_approved for particular feed news_feed_links' do
+        expect(NewsFeedLink.not_approved(group.news_feed.id).count).to eq(3)
+      end
+    end
+
+    describe '.combined_news_links' do
+      let!(:enterprise) { create(:enterprise) }
+      let!(:group) { create(:group, enterprise_id: enterprise.id) }
+      before do
+        create(:group_message, group_id: group.id)
+        create(:news_link, group_id: group.id)
+        create(:social_link, group_id: group.id)
+      end
+
+      describe 'when social media is enabled' do
+        before {
+          enterprise.update_column(:enable_social_media, true)
+          group.reload
+        }
+
+        it 'returns combined news links of a particular news feed' do
+          expect(NewsFeedLink.combined_news_links(group.news_feed.id, group.enterprise).count).to eq(3)
+        end
+      end
+
+      it 'returns combined news links of a particular news feed' do
+        expect(NewsFeedLink.combined_news_links(group.news_feed.id, group.enterprise).count).to eq(2)
+      end
+    end
   end
 
   describe 'test callback' do
@@ -57,6 +115,40 @@ RSpec.describe NewsFeedLink, type: :model do
       news_feed_link.increment_view(user)
 
       expect(news_feed_link.views.last.id).to eq(view.id)
+    end
+
+    it 'returns total views' do
+      news_feed_link.increment_view(user)
+      expect(news_feed_link.total_views).to eq(1)
+    end
+
+    it 'returns unquie views' do
+      news_feed_link.increment_view(user)
+      expect(news_feed_link.unique_views).to eq(1)
+    end
+
+    it '#create_view_if_none' do
+      expect { news_feed_link.create_view_if_none(user) }.to change(View, :count).by(1)
+    end
+  end
+
+  describe '#link' do
+    it 'returns group_message' do
+      group_message = create(:group_message)
+      news_feed_link = group_message.news_feed_link
+      expect(news_feed_link.link).to eq(group_message)
+    end
+
+    it 'returns news_link' do
+      news_link = create(:news_link)
+      news_feed_link = news_link.news_feed_link
+      expect(news_feed_link.link).to eq(news_link)
+    end
+
+    it 'returns social link' do
+      social_link = create(:social_link)
+      news_feed_link = social_link.news_feed_link
+      expect(news_feed_link.link).to eq(social_link)
     end
   end
 

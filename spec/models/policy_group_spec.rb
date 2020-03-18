@@ -3,10 +3,17 @@ require 'rails_helper'
 RSpec.describe PolicyGroup, type: :model do
   describe 'test associations' do
     let(:policy_group) { build(:policy_group) }
-    it { expect(policy_group).to belong_to(:user) }
+
+    it { expect(policy_group).to belong_to(:user).inverse_of(:policy_group) }
+
+    xit {
+      # TODO: fix issue with unique user
+      pending 'mysql error - breaks fk constraint'
+      expect(policy_group).to validate_uniqueness_of(:user_id)
+    }
   end
 
-  describe 'update_all_permissions' do
+  describe '.update_all_permissions' do
     it 'sets all permissions to false' do
       policy_group = create(:policy_group)
       policy_group.update_all_permissions
@@ -23,6 +30,21 @@ RSpec.describe PolicyGroup, type: :model do
       PolicyGroup.all_permission_fields.each do |field|
         expect(policy_group[field]).to eq(true)
       end
+    end
+  end
+
+  describe '.users_that_able_to_accept_budgets' do
+    let!(:user) { create(:user) }
+
+    it 'returns users with budget approval permissions' do
+      user.policy_group.update(budget_approval: true)
+      expect(described_class.users_that_able_to_accept_budgets(user.enterprise)).to eq [user]
+    end
+  end
+
+  describe '.all_permission_fields' do
+    it 'returns all permissions fields' do
+      expect(described_class.all_permission_fields).not_to be_empty
     end
   end
 end

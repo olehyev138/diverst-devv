@@ -6,7 +6,7 @@ class CampaignMailer < ApplicationMailer
     @enterprise = @user.enterprise
     return if @enterprise.disable_emails?
 
-    @email = @user.email
+    @email = @user.email_for_notification
 
     @group_names = 'us'
     if inv.campaign.groups.any?
@@ -28,5 +28,9 @@ class CampaignMailer < ApplicationMailer
       campaign: @campaign,
       group_names: @group_names
     }
+  end
+
+  def url
+    campaign_url(@campaign)
   end
 end

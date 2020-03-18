@@ -8,22 +8,12 @@ class NewsFeed < ApplicationRecord
 
   validates :group_id, presence: true
 
-  def self.all_links(news_feed_id, segments, enterprise)
-    links = all_links_without_segments(news_feed_id, enterprise)
-    if segments.present?
-      return links.joins('LEFT OUTER JOIN news_feed_link_segments ON news_feed_link_segments.news_feed_link_id = news_feed_links.id')
-               .where("news_feed_link_segments.segment_id IS NULL OR news_feed_link_segments.segment_id IN (#{ segments.join(",") })")
-    else
-      return links.includes(:news_feed_link_segments).where(news_feed_link_segments: { id: nil })
-    end
+  def all_links(segment_ids)
+    NewsFeedLink.combined_news_links(id, group.enterprise, segment_ids: segment_ids).active
   end
 
-  def self.all_links_without_segments(news_feed_id, enterprise)
-    if enterprise.enable_social_media?
-      NewsFeedLink.combined_news_links(news_feed_id).where(archived_at: nil)
-    else
-      NewsFeedLink.combined_news_links(news_feed_id).where('news_feed_links.social_link_id IS NULL').where(archived_at: nil)
-    end
+  def all_links_without_segments
+    NewsFeedLink.combined_news_links(id, group.enterprise, without_segments: true).active
   end
 
   def self.archived_posts(enterprise)

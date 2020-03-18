@@ -9,6 +9,7 @@ RSpec.describe GroupMessagesSegment, type: :model do
 
     it { expect(group_messages_segment).to belong_to(:group_message) }
     it { expect(group_messages_segment).to belong_to(:segment) }
+    it { expect(group_messages_segment).to have_one(:news_feed_link_segment).dependent(:destroy) }
   end
 
   describe '#news_feed_link_segment' do

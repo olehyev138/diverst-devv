@@ -39,32 +39,9 @@ RSpec.describe MetricsDashboardPolicy, type: :policy do
           it { is_expected.to permit_action(:index) }
         end
 
-        context 'user has basic group leader permission for metrics_dashboards_index' do
-          before do
-            user_role = create(:user_role, enterprise: enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
-            user_role.policy_group_template.update metrics_dashboards_index: true
-            group = create(:group, enterprise: enterprise)
-            create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-                                  user_role_id: user_role.id)
-          end
-
-          it { is_expected.to permit_action(:index) }
-        end
 
         context 'when metrics_dashboards_index is true' do
           before { user.policy_group.update metrics_dashboards_create: true }
-          it { is_expected.to permit_actions([:index, :new, :create]) }
-        end
-
-        context 'user has basic group leader permission for metrics_dashboards_create' do
-          before do
-            user_role = create(:user_role, enterprise: enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
-            user_role.policy_group_template.update metrics_dashboards_create: true
-            group = create(:group, enterprise: enterprise)
-            create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-                                  user_role_id: user_role.id)
-          end
-
           it { is_expected.to permit_actions([:index, :new, :create]) }
         end
       end
