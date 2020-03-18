@@ -33,7 +33,8 @@ RSpec.describe BudgetPolicy, type: :policy do
 
     context 'when budget is not approved' do
       context 'when current user is requester' do
-        let(:budget1) { create(:budget, group_id: group.id, requester: user) }
+        let(:annual_budget) { create(:annual_budget, group_id: group.id) }
+        let(:budget1) { create(:budget, annual_budget_id: annual_budget.id, requester: user) }
         subject { described_class.new(user, [group, budget1]) }
 
         before { allow(subject).to receive(:admin?).and_return(false) }
@@ -111,7 +112,8 @@ RSpec.describe BudgetPolicy, type: :policy do
 
     context 'when budget is not approved' do
       context 'when current user is not requester' do
-        let(:budget1) { create(:budget, group_id: group.id, requester: create(:user)) }
+        let(:annual_budget) { create(:annual_budget, group_id: group.id) }
+        let(:budget1) { create(:budget, annual_budget_id: annual_budget.id, requester: create(:user)) }
         subject { described_class.new(user, [group, budget1]) }
 
         before { allow(subject).to receive(:admin?).and_return(false) }

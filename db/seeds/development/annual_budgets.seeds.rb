@@ -4,7 +4,7 @@ after 'development:groups' do
     Enterprise.all.each do |enterprise|
       enterprise.groups.each do |group|
       	AnnualBudget.create(group_id: group.id,
-      						enterprise_id: enterprise.id)
+                            deprecated_enterprise_id: enterprise.id)
       end
     end
     spinner.success("[DONE]")
