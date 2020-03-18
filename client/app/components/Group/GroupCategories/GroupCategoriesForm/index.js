@@ -29,6 +29,9 @@ const styles = theme => ({
   noBottomPadding: {
     paddingBottom: '0 !important',
   },
+  errorButton: {
+    color: theme.palette.error.main,
+  },
 });
 
 /* eslint-disable object-curly-newline */
@@ -66,15 +69,17 @@ export function GroupCategoriesFormInner({ classes, values, handleChange, button
                         <React.Fragment>
                           <Field name={`group_categories_attributes.${index}.name`} required/>
 
-                          <button
-                            type='button'
+                          <Button
+                            size='small'
+                            className={classes.errorButton}
                             /* eslint-disable-next-line no-unused-expressions */
                             onClick={() => { props.edit ? setFieldValue(`group_categories_attributes[${index}]['_destroy']`, true) : arrayHelpers.remove(index); }} // remove a friend from the list
                           >
                             <DiverstFormattedMessage {...messages.remove} />
-                          </button>
-                          <button
-                            type='button'
+                          </Button>
+                          <Button
+                            size='small'
+                            color='primary'
                             onClick={() => arrayHelpers.insert(index, {
                               name: '',
                               id: '',
@@ -82,14 +87,14 @@ export function GroupCategoriesFormInner({ classes, values, handleChange, button
                             })} // insert an empty string at a position
                           >
                             <DiverstFormattedMessage {...messages.add} />
-                          </button>
+                          </Button>
                         </React.Fragment>
                       )}
                     </div>
                   )) : (
-                    <button type='button' onClick={() => arrayHelpers.push({ name: '', id: '', _destroy: false })}>
+                    <Button color='primary' onClick={() => arrayHelpers.push({ name: '', id: '', _destroy: false })}>
                       <DiverstFormattedMessage {...messages.add_button} />
-                    </button>
+                    </Button>
                   )}
                 </div>
               )}
