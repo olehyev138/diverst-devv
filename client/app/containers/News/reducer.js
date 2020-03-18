@@ -137,14 +137,10 @@ function newsReducer(state = initialState, action) {
       case CREATE_SOCIALLINK_BEGIN:
       case UPDATE_SOCIALLINK_BEGIN:
       case CREATE_SOCIALLINK_COMMENT_BEGIN:
-      case PIN_NEWS_ITEM_BEGIN:
-      case UNPIN_NEWS_ITEM_BEGIN:
         draft.isCommitting = true;
         break;
       case CREATE_SOCIALLINK_SUCCESS:
       case UPDATE_SOCIALLINK_SUCCESS:
-      case PIN_NEWS_ITEM_SUCCESS:
-      case UNPIN_NEWS_ITEM_SUCCESS:
       case CREATE_SOCIALLINK_COMMENT_SUCCESS:
       case CREATE_SOCIALLINK_ERROR:
       case UPDATE_SOCIALLINK_ERROR:
@@ -157,10 +153,14 @@ function newsReducer(state = initialState, action) {
       case NEWS_FEED_UNMOUNT:
         return initialState;
       case ARCHIVE_NEWS_ITEM_BEGIN:
+      case PIN_NEWS_ITEM_BEGIN:
+      case UNPIN_NEWS_ITEM_BEGIN:
         draft.isCommitting = true;
         draft.hasChanged = false;
         break;
       case ARCHIVE_NEWS_ITEM_SUCCESS:
+      case PIN_NEWS_ITEM_SUCCESS:
+      case UNPIN_NEWS_ITEM_SUCCESS:
         draft.isCommitting = false;
         draft.hasChanged = true;
         break;

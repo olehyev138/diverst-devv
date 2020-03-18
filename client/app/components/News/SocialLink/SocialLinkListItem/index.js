@@ -77,9 +77,9 @@ export function SocialLinkListItem(props) {
                     size='small'
                     onClick={() => {
                       if (pinned)
-                        props.unpinNewsItemBegin({ id: newsItemId, callback: unpin });
+                        props.unpinNewsItemBegin({ id: newsItemId });
                       else
-                        props.pinNewsItemBegin({ id: newsItemId, callback: pin });
+                        props.pinNewsItemBegin({ id: newsItemId });
                     }}
                   >
                     { pinned ? <LocationOnIcon /> : <LocationOnOutlinedIcon />}

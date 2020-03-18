@@ -29,6 +29,7 @@ import DiverstImg from 'components/Shared/DiverstImg';
 import Carousel from 'react-material-ui-carousel';
 import { injectIntl, intlShape } from 'react-intl';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
+import LocationOnOutlinedIcon from "@material-ui/icons/LocationOnOutlined";
 
 const styles = theme => ({
   cardHeader: {
@@ -56,6 +57,18 @@ export function NewsLinkListItem(props) {
   const groupId = newsLink.group_id;
   const { links, intl } = props;
   // TODO : Change the newslink.description condition to render on image presence
+
+  const { is_pinned: defaultPinned } = newsItem;
+  const [pinned, setPinned] = useState(defaultPinned);
+
+  function pin() {
+    setPinned(true);
+  }
+
+  function unpin() {
+    setPinned(false);
+  }
+
   return (
     <Card>
       <CardHeader
@@ -102,12 +115,14 @@ export function NewsLinkListItem(props) {
                 {props.pinNewsItemBegin && (
                   <IconButton
                     size='small'
-                    component={WrappedNavLink}
                     onClick={() => {
-                      props.pinNewsItemBegin({ id: newsItemId });
+                      if (pinned)
+                        props.unpinNewsItemBegin({ id: newsItemId });
+                      else
+                        props.pinNewsItemBegin({ id: newsItemId });
                     }}
                   >
-                    <LocationOnIcon />
+                    { pinned ? <LocationOnIcon /> : <LocationOnOutlinedIcon />}
                   </IconButton>
                 )}
                 { props.links && (
@@ -200,6 +215,7 @@ NewsLinkListItem.propTypes = {
   deleteNewsLinkBegin: PropTypes.func,
   updateNewsItemBegin: PropTypes.func,
   archiveNewsItemBegin: PropTypes.func,
+  unpinNewsItemBegin: PropTypes.func,
   pinNewsItemBegin: PropTypes.func,
 };
 

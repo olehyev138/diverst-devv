@@ -303,7 +303,6 @@ export function* pinNewsItem(action) {
     const { callback, ...rest } = action.payload;
     const response = yield call(api.newsFeedLinks.pin.bind(api.newsFeedLinks), payload.news_feed_link.id, rest);
     yield put(pinNewsItemSuccess());
-    callback();
   } catch (err) {
     yield put(pinNewsItemError(err));
     yield put(showSnackbar({
@@ -319,7 +318,6 @@ export function* unpinNewsItem(action) {
     const { callback, ...rest } = action.payload;
     const response = yield call(api.newsFeedLinks.un_pin.bind(api.newsFeedLinks), payload.news_feed_link.id, rest);
     yield put(unpinNewsItemSuccess());
-    callback();
   } catch (err) {
     yield put(unpinNewsItemError(err));
     yield put(showSnackbar({
