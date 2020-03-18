@@ -194,7 +194,7 @@ RSpec.describe Enterprise, type: :model do
     it 'returns OneLogin::RubySaml::Settings object when xml config file is absent' do
       enterprise = create(:enterprise)
 
-      expect(enterprise.xml_sso_config?).to eq(false)
+      expect(enterprise.xml_sso_config.attached?).to eq(false)
       expect(enterprise.saml_settings).to be_a(OneLogin::RubySaml::Settings)
     end
   end
