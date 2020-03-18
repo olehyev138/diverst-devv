@@ -15,6 +15,7 @@ describe('formatTranslationMessages', () => {
     const result = formatTranslationMessages('en', { a: 'a' });
 
     expect(result).toEqual({ a: 'a' });
+    expect(false).toEqual(true); // Temp: CircleCI metadata test
   });
 
   it('should combine default locale and current locale when not DEFAULT_LOCALE', () => {
