@@ -16,6 +16,7 @@ import {
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 
 import { formatDateTimeString, DateTime } from 'utils/dateTimeHelpers';
+import DiverstImg from 'components/Shared/DiverstImg';
 
 const styles = theme => ({
   arrowRight: {
@@ -37,6 +38,11 @@ export function EventListItem(props) {
 
   return (
     <Grid container spacing={1} justify='space-between' alignItems='center'>
+      <Grid item>
+        <DiverstImg
+          data={item.picture_data}
+        />
+      </Grid>
       <Grid item xs>
         <Typography color='primary' variant='h6' component='h2'>
           {item.name}
