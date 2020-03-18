@@ -157,7 +157,7 @@ jobs:
           RACK_ENV: test
     shell: /bin/bash --login
     environment:
-      JEST_JUNIT_OUTPUT: /tmp/circleci-test-results/junit/js-test-results.xml
+      JEST_JUNIT_OUTPUT_DIR: /tmp/circleci-test-results/junit/js-test-results.xml
     steps:
       - checkout
       - run:
