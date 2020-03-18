@@ -15,7 +15,7 @@ import {
   UPDATE_GROUP_SETTINGS_BEGIN,
   DELETE_GROUP_BEGIN,
   CARRY_BUDGET_BEGIN,
-  RESET_BUDGET_BEGIN,
+  RESET_BUDGET_BEGIN, JOIN_GROUP_BEGIN, LEAVE_GROUP_BEGIN,
 } from './constants';
 
 import {
@@ -168,7 +168,7 @@ export function* resetBudget(action) {
 }
 
 export function* joinGroup(action) {
-  const payload = { user: action.payload };
+  const payload = { user_group: action.payload };
   try {
     const response = yield call(api.userGroups.create.bind(api.userGroups), payload);
     yield put(joinGroupSuccess());
@@ -204,4 +204,6 @@ export default function* groupsSaga() {
   yield takeLatest(DELETE_GROUP_BEGIN, deleteGroup);
   yield takeLatest(CARRY_BUDGET_BEGIN, carryBudget);
   yield takeLatest(RESET_BUDGET_BEGIN, resetBudget);
+  yield takeLatest(JOIN_GROUP_BEGIN, joinGroup);
+  yield takeLatest(LEAVE_GROUP_BEGIN, leaveGroup);
 }

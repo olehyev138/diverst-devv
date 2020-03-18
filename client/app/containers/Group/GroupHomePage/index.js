@@ -11,19 +11,40 @@ import saga from 'containers/Group/saga';
 
 import GroupHome from 'components/Group/GroupHome';
 
-
+import {
+  joinGroupBegin
+} from 'containers/Group/actions';
+import { selectGroup } from 'containers/Group/selectors';
 export function GroupHomePage(props) {
   useInjectReducer({ key: 'groups', reducer });
   useInjectSaga({ key: 'groups', saga });
   return (
-    <GroupHome currentGroup={props.currentGroup} />
+    <GroupHome
+      currentGroup={props.currentGroup}
+      joinGroup={props.joinGroupBegin}
+    />
   );
 }
 
 GroupHomePage.propTypes = {
   currentGroup: PropTypes.object,
+  joinGroupBegin: PropTypes.func,
 };
+
+const mapStateToProps = createStructuredSelector({
+  group: selectGroup(),
+});
+
+const mapDispatchToProps = {
+  joinGroupBegin
+};
+
+const withConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 
 export default compose(
   memo,
+  withConnect,
 )(GroupHomePage);

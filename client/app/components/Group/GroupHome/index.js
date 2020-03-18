@@ -47,6 +47,9 @@ export function GroupHome(props) {
             size='large'
             color='primary'
             onClick={() => {
+              props.joinGroup({
+                group_id: props.currentGroup.id
+              });
             }}
             startIcon={<RemoveIcon />}
           >
@@ -64,6 +67,7 @@ export function GroupHome(props) {
 
 GroupHome.propTypes = {
   currentGroup: PropTypes.object,
+  joinGroup: PropTypes.func,
 };
 
 export default compose(
