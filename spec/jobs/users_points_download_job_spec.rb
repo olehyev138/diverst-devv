@@ -13,9 +13,9 @@ RSpec.describe UsersPointsDownloadJob, type: :job do
           .to change(CsvFile, :count).by(1)
       end
 
-      it 'file name is all_users.csv' do
+      it 'file name' do
         subject.perform(user.id)
-        expect(CsvFile.last.download_file_file_name).to eq 'users_points_report.csv'
+        expect(CsvFile.last.download_file_name).to eq 'users_points_report'
       end
     end
   end
