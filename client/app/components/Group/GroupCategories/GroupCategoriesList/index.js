@@ -23,6 +23,7 @@ import AddIcon from '@material-ui/icons/Add';
 
 import DiverstPagination from 'components/Shared/DiverstPagination';
 import DiverstLoader from 'components/Shared/DiverstLoader';
+import { injectIntl, intlShape } from 'react-intl';
 
 const styles = theme => ({
   progress: {
@@ -54,8 +55,9 @@ const styles = theme => ({
 });
 
 export function GroupCategoriesList(props, context) {
-  const { classes, defaultParams } = props;
-  console.log(props);
+  const { classes, defaultParams, intl } = props;
+  const [expandedSubgroups, setExpandedSubgroups] = useState({});
+
   return (
     <React.Fragment>
       <Grid container spacing={3} justify='flex-end'>
@@ -101,7 +103,7 @@ export function GroupCategoriesList(props, context) {
                       className={classes.errorButton}
                       onClick={() => {
                         /* eslint-disable-next-line no-alert, no-restricted-globals */
-                        if (confirm('Delete category?'))
+                        if (confirm(intl.formatMessage(messages.delete_confirm)))
                           props.deleteGroupCategoriesBegin(categoryType.id);
                       }}
                     >
@@ -116,20 +118,26 @@ export function GroupCategoriesList(props, context) {
                           <Card className={classes.childGroupCard}>
                             <CardContent>
                               {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                              <Typography variant='body1' component='h2' display='inline'>
-                                <Button
-                                  size='medium'
-                                  onClick={() => { }}
-                                >
-                                  {category.name}
-                                  (
-                                  {category.total_groups}
-                                  )
-                                </Button>
-                              </Typography>
-                              {category.groups && category.groups.map((group, i) => (
-                                <Typography variant='body2' margin='30' key={group.id}>{group.name}</Typography>
-                              ))}
+                              <Button
+                                size='medium'
+                                color='primary'
+                                onClick={() => {
+                                  setExpandedSubgroups({ ...expandedSubgroups, [category.id]: !expandedSubgroups[category.id] });
+                                }}
+                              >
+                                {category.name}
+                                (
+                                {category.total_groups}
+                                )
+                              </Button>
+                              <Collapse in={expandedSubgroups[`${category.id}`]}>
+                                {category.groups && category.groups.map((group, i) => (
+                                  <Typography color='primary' variant='body2' margin='30' key={group.id} >
+                                    &ensp;&ensp;&ensp;&ensp;
+                                    {group.name}
+                                  </Typography>
+                                ))}
+                              </Collapse>
                             </CardContent>
                           </Card>
                         </Grid>
@@ -153,6 +161,7 @@ export function GroupCategoriesList(props, context) {
 }
 
 GroupCategoriesList.propTypes = {
+  intl: intlShape,
   defaultParams: PropTypes.object,
   classes: PropTypes.object,
   isLoading: PropTypes.bool,
@@ -165,5 +174,6 @@ GroupCategoriesList.propTypes = {
 
 export default compose(
   memo,
+  injectIntl,
   withStyles(styles),
 )(GroupCategoriesList);

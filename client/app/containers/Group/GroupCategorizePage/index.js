@@ -17,7 +17,6 @@ import { selectPaginatedSelectGroups, selectFormGroup, selectCategorizeGroup } f
 import { selectPaginatedSelectGroupCategories, selectGroupCategoriesIsCommitting } from 'containers/Group/GroupCategories/selectors';
 import { selectUser, selectEnterprise } from 'containers/Shared/App/selectors';
 import GroupCategorizeForm from 'components/Group/GroupCategorize';
-import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Group/messages';
 import RouteService from 'utils/routeHelpers';
 import { push } from 'connected-react-router';
@@ -31,7 +30,6 @@ export function GroupCategorizePage(props) {
   useInjectReducer({ key: 'groups', reducer: groupReducer });
   useInjectSaga({ key: 'groups', saga: groupSaga });
 
-  const { intl } = props;
   const rs = new RouteService(useContext);
 
   useEffect(() => {
@@ -48,7 +46,6 @@ export function GroupCategorizePage(props) {
       group={props.group}
       selectGroups={props.groups}
       groupAction={props.groupCategorizeBegin}
-      buttonText='Save'
       categories={props.categories}
       isCommitting={props.isCommitting}
       changePage={props.changePage}
@@ -57,7 +54,6 @@ export function GroupCategorizePage(props) {
 }
 
 GroupCategorizePage.propTypes = {
-  intl: intlShape,
   getGroupBegin: PropTypes.func,
   getGroupsBegin: PropTypes.func,
   groupCategorizeBegin: PropTypes.func,
@@ -94,7 +90,6 @@ const withConnect = connect(
 );
 
 export default compose(
-  injectIntl,
   withConnect,
   memo,
 )(GroupCategorizePage);

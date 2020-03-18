@@ -4,9 +4,7 @@
  *
  */
 
-import React, {
-  memo, useRef, useState, useEffect
-} from 'react';
+import React, { memo } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import Select from 'components/Shared/DiverstSelect';
@@ -18,7 +16,7 @@ import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import messages from 'containers/Group/messages';
-import { buildValues, mapFields } from 'utils/formHelpers';
+import { buildValues } from 'utils/formHelpers';
 
 import {
   Button, Card, CardActions, CardContent, Grid, Divider, Box,
@@ -45,7 +43,7 @@ export function GroupCategorizeFormInner({ classes, handleSubmit, handleChange, 
             size='large'
             component={WrappedNavLink}
           >
-            All categories
+            <DiverstFormattedMessage {...messages.allcategories} />
           </Button>
         </Grid>
       </Grid>
@@ -59,7 +57,7 @@ export function GroupCategorizeFormInner({ classes, handleSubmit, handleChange, 
             id='name'
             name='name'
             margin='normal'
-            label='Categorize Group'
+            label={<DiverstFormattedMessage {...messages.categorize} />}
             value={values.name}
             options={props.selectGroups}
             onChange={value => props.changePage(value.value)}
@@ -89,7 +87,6 @@ export function GroupCategorizeFormInner({ classes, handleSubmit, handleChange, 
                       setFieldValue(`children[${i}].category`, value);
                     }
                     }
-                    // onBlur={() => setFieldTouched('name', true)}
                   />
                 </Grid>
               ))}
@@ -97,7 +94,7 @@ export function GroupCategorizeFormInner({ classes, handleSubmit, handleChange, 
             <Divider />
             <CardActions>
               <DiverstSubmit isCommitting={props.isCommitting}>
-                {buttonText}
+                <DiverstFormattedMessage {...messages.save} />
               </DiverstSubmit>
               <Button
                 disabled={props.isCommitting}
@@ -150,7 +147,6 @@ GroupCategorizeFormInner.propTypes = {
   handleChange: PropTypes.func,
   handleBlur: PropTypes.func,
   values: PropTypes.object,
-  buttonText: PropTypes.string,
   selectGroups: PropTypes.array,
   categories: PropTypes.array,
   setFieldValue: PropTypes.func,
