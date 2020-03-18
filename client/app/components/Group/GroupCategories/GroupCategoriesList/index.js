@@ -132,7 +132,7 @@ export function GroupCategoriesList(props, context) {
                               </Button>
                               <Collapse in={expandedSubgroups[`${category.id}`]}>
                                 {category.groups && category.groups.map((group, i) => (
-                                  <Typography color='primary' variant='body2' margin='30' key={group.id} >
+                                  <Typography color='primary' variant='body2' margin='30' key={group.id}>
                                     &ensp;&ensp;&ensp;&ensp;
                                     {group.name}
                                   </Typography>

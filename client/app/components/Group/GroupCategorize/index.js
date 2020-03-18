@@ -31,7 +31,7 @@ const styles = theme => ({
 });
 
 /* eslint-disable object-curly-newline */
-export function GroupCategorizeFormInner({ classes, handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {
+export function GroupCategorizeFormInner({ classes, handleSubmit, handleChange, handleBlur, values, setFieldValue, setFieldTouched, ...props }) {
   return (
     <React.Fragment>
       <Grid container spacing={3} justify='flex-end'>
