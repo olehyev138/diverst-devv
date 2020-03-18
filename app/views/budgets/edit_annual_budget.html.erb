@@ -3,6 +3,17 @@
   <%= simple_form_for @group, url: update_annual_budget_group_budgets_path(@group), method: 'post' do |f| %>
     
     <div class="card">
+      <div class='card__section'>
+        <div class="row">
+          <label class="field__label">Define a <strong>start</strong> and <strong>end</strong> date for annual budget</label>
+          <div class="col sm-6">
+            <%= f.input :start_date, as: :date_time_picker, label: 'Start Date' %>
+          </div>
+          <div class="col sm-6">
+            <%= f.input :end_date, as: :date_time_picker, label: 'End Date' %>
+          </div>
+        </div>
+      </div>
       
       <div class="card__section">
         <%= f.input :annual_budget,

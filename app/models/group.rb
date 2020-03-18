@@ -184,6 +184,16 @@ class Group < BaseClass
   accepts_nested_attributes_for :group_leaders, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :sponsors, reject_if: :all_blank, allow_destroy: true
 
+  attr_accessor :start_date, :end_date
+
+  def start_date
+    self.annual_budgets.last.start_date if self.annual_budgets.last
+  end
+
+  def end_date
+    self.annual_budgets.last.end_date if self.annual_budgets.last
+  end
+
   def archive_switch
     if auto_archive?
       update(auto_archive: false)
