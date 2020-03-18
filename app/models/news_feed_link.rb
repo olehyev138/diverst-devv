@@ -92,13 +92,13 @@ class NewsFeedLink < ApplicationRecord
 
   scope :combined_news_links_with_segments, -> (news_feed_id, segment_ids) {
     includes(:social_link, :news_link, :group_message)
-  }
-                                                .joins("LEFT OUTER JOIN news_feed_link_segments ON news_feed_link_segments.news_feed_link_id = news_feed_links.id
+        .joins("LEFT OUTER JOIN news_feed_link_segments ON news_feed_link_segments.news_feed_link_id = news_feed_links.id
               LEFT OUTER JOIN shared_news_feed_links ON shared_news_feed_links.news_feed_link_id = news_feed_links.id
               WHERE shared_news_feed_links.news_feed_id = #{news_feed_id}
-                OR news_feed_links.news_feed_id = #{news_feed_id} AND approved = 1
-                OR news_feed_link_segments.segment_id IS NULL
-                OR news_feed_link_segments.segment_id IN (#{ segment_ids.join(",") })").distinct
+              OR news_feed_links.news_feed_id = #{news_feed_id} AND approved = 1
+              OR news_feed_link_segments.segment_id IS NULL
+              OR news_feed_link_segments.segment_id IN (#{ segment_ids.join(",") })").distinct
+  }
 
   scope :filter_posts, -> (social_enabled: false) {
     if social_enabled
