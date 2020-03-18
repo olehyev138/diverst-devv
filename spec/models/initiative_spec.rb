@@ -360,7 +360,8 @@ RSpec.describe Initiative, type: :model do
       enterprise = create(:enterprise)
       group = create(:group, enterprise: enterprise, annual_budget: 10000)
       annual_budget = create(:annual_budget, group: group, enterprise: enterprise, amount: group.annual_budget)
-      initiative1 = create(:initiative, owner_group: group, annual_budget_id: annual_budget.id)
+      budget = create(:approved, annual_budget: annual_budget)
+      initiative1 = create(:initiative, owner_group: group, budget_item_id: budget.budget_item_ids.first)
 
       expect(initiative1.finish_expenses!).to eq(true)
     end
@@ -368,7 +369,9 @@ RSpec.describe Initiative, type: :model do
 
   describe '#current_expenses_sum' do
     it 'return 0' do
-      initiative = create(:initiative, annual_budget_id: create(:annual_budget).id)
+      annual_budget = create(:annual_budget)
+      budget = create(:approved, annual_budget: annual_budget)
+      initiative = create(:initiative, budget_item_id: budget.budget_item_ids.first)
       expect(initiative.current_expenses_sum).to eq(0)
     end
   end
