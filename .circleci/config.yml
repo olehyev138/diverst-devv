@@ -162,7 +162,7 @@ jobs:
       - checkout
       - run:
           name: Create artifact directories
-          command: mkdir -p $JEST_JUNIT_OUTPUT
+          command: mkdir -p /tmp/circleci-test-results/junit
       #
       ## Install node modules
       #
