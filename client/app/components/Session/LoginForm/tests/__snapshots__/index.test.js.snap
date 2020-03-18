@@ -788,7 +788,7 @@ exports[`<LoginForm /> <LoginFormInner /> Should render and match the snapshot 1
                 <Hidden
                   xsDown={true}
                 >
-                  <Memo />
+                  <Memo(LockOpenIcon) />
                 </Hidden>
               }
               type="submit"
