@@ -10,11 +10,11 @@ class FixSponsorsTable < ActiveRecord::Migration[5.2]
     Sponsor.column_reload!
     Sponsor.find_each do |sponsor|
       if enterprise_id_exists && sponsor.enterprise_id
-        sponsor.sponsorable = Enterprise.find(enterprise_id)
+        sponsor.sponsorable = Enterprise.find(sponsor.enterprise_id)
       elsif group_id_exists && sponsor.group_id
-        sponsor.sponsorable = Group.find(group_id)
+        sponsor.sponsorable = Group.find(sponsor.group_id)
       elsif campaign_id_exists && sponsor.campaign_id
-        sponsor.sponsorable = Campaign.find(campaign_id)
+        sponsor.sponsorable = Campaign.find(sponsor.campaign_id)
       end
 
       sponsor.save!

@@ -6,5 +6,5 @@ LinkedIn.configure do |config|
   config.client_id = LINKEDIN_ID || ENV['LINKEDIN_ID']
   config.client_secret = LINKEDIN_SECRET || ENV['LINKEDIN_SECRET']
   config.scope = 'r_liteprofile'
-  config.redirect_uri = "http://#{ENV['DOMAIN'] || 'localhost:3001'}/omniauth/linkedin/callback"
+  config.redirect_uri = "http#{'s' if ENV['DOMAIN'].present?}://#{ENV['DOMAIN'] || 'localhost:3001'}/omniauth/linkedin/callback"
 end

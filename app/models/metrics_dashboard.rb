@@ -44,10 +44,10 @@ class MetricsDashboard < ApplicationRecord
   end
 
   def percentage_of_total
-    return 0 if enterprise.users.count == 0
-    return 100 if target.count > enterprise.users.count
+    return 0 if enterprise.users.size == 0
+    return 100 if target.count > enterprise.users.size
 
-    (target.count.to_f / enterprise.users.count * 100).round
+    (target.count.to_f / enterprise.users.size * 100).round
   end
 
   # Defines which fields will be usable when creating graphs

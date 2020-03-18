@@ -28,6 +28,14 @@ class BudgetPolicy < GroupBasePolicy
     user.policy_group.groups_budgets_manage? && user.policy_group.groups_manage?
   end
 
+  def destroy?
+    if @record.is_approved?
+      admin?
+    else
+      @record.requester == @user
+    end
+  end
+
   class Scope < Scope
     def group_base
       group.budgets

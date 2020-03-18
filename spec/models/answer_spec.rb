@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Answer, type: :model do
   describe 'when validating' do
-    let(:answer) { build_stubbed(:answer) }
+    let(:answer) { build(:answer) }
 
     describe 'test associations and validations' do
       it { expect(answer).to belong_to(:question).inverse_of(:answers) }

@@ -26,7 +26,7 @@ class RewardPolicy < ApplicationPolicy
     manage?
   end
 
-  def show?
-    index?
+  def user_responsible?
+    @record.responsible_id == @user.id
   end
 end

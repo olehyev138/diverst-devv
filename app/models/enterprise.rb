@@ -48,8 +48,11 @@ class Enterprise < ApplicationRecord
   has_many :answer_upvotes, through: :answers, source: :votes
   has_many :resources, dependent: :destroy
   has_many :yammer_field_mappings, dependent: :destroy
-  has_many :emails, dependent: :destroy
+
+  has_many :emails, -> { where custom: false }, dependent: :destroy
+  has_many :custom_emails, -> { where custom: true }, class_name: 'Email', dependent: :destroy
   has_many :email_variables, class_name: 'EnterpriseEmailVariable', dependent: :destroy
+
   belongs_to :theme
 
   has_many :expenses, dependent: :destroy
@@ -224,6 +227,16 @@ class Enterprise < ApplicationRecord
     end
 
     User.to_csv_with_fields(users: [], fields: fields, nb_rows: nb_rows)
+  end
+
+  def users_points_report_csv(users)
+    CSV.generate do |csv|
+      csv << ['Name', 'Email', 'Points']
+
+      users.order(points: :desc).each do |user|
+        csv << [user.name, user.email, user.points]
+      end
+    end
   end
 
   def close_budgets_csv

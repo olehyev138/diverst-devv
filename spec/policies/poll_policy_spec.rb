@@ -39,30 +39,6 @@ RSpec.describe PollPolicy, type: :policy do
           it { is_expected.to permit_action(:index) }
         end
 
-        context 'user has basic group leader permission for polls_index, current user IS NOT owner' do
-          before do
-            user_role = create(:user_role, enterprise: enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
-            user_role.policy_group_template.update polls_index: true
-            group = create(:group, enterprise: enterprise)
-            create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-                                  user_role_id: user_role.id)
-          end
-
-          it { is_expected.to permit_action(:index) }
-        end
-
-        context 'user has basic group leader permission for polls_create, current user IS NOT owner' do
-          before do
-            user_role = create(:user_role, enterprise: enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
-            user_role.policy_group_template.update polls_create: true
-            group = create(:group, enterprise: enterprise)
-            create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-                                  user_role_id: user_role.id)
-          end
-
-          it { is_expected.to permit_actions([:index, :create]) }
-        end
-
         context 'when polls_create is true' do
           before { user.policy_group.update polls_create: true }
           it { is_expected.to permit_actions([:index, :create]) }
@@ -70,18 +46,6 @@ RSpec.describe PollPolicy, type: :policy do
 
         context 'when polls_manage is true' do
           before { user.policy_group.update polls_manage: true }
-          it { is_expected.to permit_actions([:index, :create, :update, :destroy]) }
-        end
-
-        context 'user has basic group leader permission for polls_manage, current user IS NOT owner' do
-          before do
-            user_role = create(:user_role, enterprise: enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
-            user_role.policy_group_template.update polls_manage: true
-            group = create(:group, enterprise: enterprise)
-            create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-                                  user_role_id: user_role.id)
-          end
-
           it { is_expected.to permit_actions([:index, :create, :update, :destroy]) }
         end
       end
@@ -115,20 +79,6 @@ RSpec.describe PollPolicy, type: :policy do
   describe '#manage?' do
     context 'when manage_all is true' do
       before { user.policy_group.update manage_all: true }
-
-      it 'returns true' do
-        expect(subject.manage?).to be(true)
-      end
-    end
-
-    context 'user has basic group leader permission for polls_manage' do
-      before do
-        user_role = create(:user_role, enterprise: enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
-        user_role.policy_group_template.update polls_manage: true
-        group = create(:group, enterprise: enterprise)
-        create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-                              user_role_id: user_role.id)
-      end
 
       it 'returns true' do
         expect(subject.manage?).to be(true)
