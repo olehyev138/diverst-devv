@@ -29,7 +29,7 @@ import DiverstImg from 'components/Shared/DiverstImg';
 import Carousel from 'react-material-ui-carousel';
 import { injectIntl, intlShape } from 'react-intl';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
-import LocationOnOutlinedIcon from "@material-ui/icons/LocationOnOutlined";
+import LocationOnOutlinedIcon from '@material-ui/icons/LocationOnOutlined';
 
 const styles = theme => ({
   cardHeader: {
