@@ -68,7 +68,6 @@ export function GroupCategoriesFormInner({ classes, values, handleChange, button
                       {!values.group_categories_attributes[index]._destroy && (
                         <React.Fragment>
                           <Field name={`group_categories_attributes.${index}.name`} required/>
-
                           <Button
                             size='small'
                             className={classes.errorButton}
