@@ -20,14 +20,14 @@ class NewsFeedLink < ApplicationRecord
 
   delegate :group,    to: :news_feed
   delegate :segment,  to: :news_feed_link_segment, allow_nil: true
-  
+
   scope :approved, -> { where(approved: true) }
   scope :pending, -> { where(approved: false) }
   scope :combined_news_links, -> (news_feed_id) {
     joins('LEFT OUTER JOIN shared_news_feed_links ON shared_news_feed_links.news_feed_link_id = news_feed_links.id')
       .where("shared_news_feed_links.news_feed_id = #{news_feed_id} OR news_feed_links.news_feed_id = #{news_feed_id} AND news_feed_links.approved = 1").distinct
   }
-  
+
   scope :approved,        -> { where(approved: true).order(created_at: :desc) }
   scope :not_approved,    -> (news_feed_id = nil) {
     if news_feed_id.present?
@@ -83,7 +83,7 @@ class NewsFeedLink < ApplicationRecord
       includes(:news_link, :group_message)
     end
   }
-    
+
   scope :not_archived, -> { where(archived_at: nil) }
   scope :archived, -> { where.not(archived_at: nil) }
 
@@ -187,7 +187,7 @@ class NewsFeedLink < ApplicationRecord
                           'LOWER( news_links.title ) LIKE ? OR ' +
                           'LOWER( news_links.description ) LIKE ?'
                   ] * search.length
-                  ).join(' OR ')
+                ).join(' OR ')
               ] + search.reduce([]) { |sum, term| sum + ["#{term.downcase}"] + (["%#{term.downcase}%"] * 4) })
     else
       all
