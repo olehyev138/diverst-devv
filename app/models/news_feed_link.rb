@@ -28,12 +28,11 @@ class NewsFeedLink < ApplicationRecord
       .where("shared_news_feed_links.news_feed_id = #{news_feed_id} OR news_feed_links.news_feed_id = #{news_feed_id} AND news_feed_links.approved = 1").distinct
   }
 
-  scope :approved,        -> { where(approved: true).order(created_at: :desc) }
   scope :not_approved,    -> (news_feed_id = nil) {
     if news_feed_id.present?
-      where(approved: false).where('`news_feed_links`.`news_feed_id` = ?', news_feed_id).order(created_at: :desc)
+      where(approved: false).where('`news_feed_links`.`news_feed_id` = ?', news_feed_id)
     else
-      where(approved: false).order(created_at: :desc)
+      where(approved: false)
     end
   }
 
