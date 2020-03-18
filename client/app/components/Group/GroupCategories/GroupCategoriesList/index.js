@@ -15,7 +15,7 @@ import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import {
-  Button, Card, CardContent, Typography, Grid, Box, CardActions, Collapse, Link,
+  Button, Card, CardContent, Typography, Grid, Box, Collapse,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
