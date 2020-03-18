@@ -8,7 +8,7 @@ import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
-import {Button, Divider, Grid, Typography} from '@material-ui/core';
+import { Button, Divider, Grid, Typography } from '@material-ui/core';
 import DiverstImg from 'components/Shared/DiverstImg';
 import EventsPage from 'containers/Event/EventsPage';
 import NewsPage from 'containers/News/NewsFeedPage';
