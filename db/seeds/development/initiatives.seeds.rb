@@ -58,8 +58,8 @@ after 'development:groups' do
       enterprise.groups.each do |group|
         budget_item_id =
             AnnualBudget.find_by(group_id: group.id, closed: false)
-                &.budgets&.order('RANDOM()')&.first
-                &.budget_items&.order('RANDOM()')&.first&.id
+                &.budgets&.order('RAND()')&.first
+                &.budget_items&.order('RAND()')&.first&.id
         no_outcomes = rand(outcomes_range)
         no_pillars = rand(pillars_range)
         no_past_initiatives = rand(past_initiatives_range)
