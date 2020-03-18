@@ -62,5 +62,8 @@ terraform.tfstate*
 # Ignore master key for decrypting credentials and more.
 /config/master.key
 
+# Ignore jest reporter output file
+/client/junit.xml
+
 /build
 /client/build

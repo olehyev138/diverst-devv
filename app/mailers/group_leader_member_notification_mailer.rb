@@ -6,7 +6,7 @@ class GroupLeaderMemberNotificationMailer < ApplicationMailer
     @enterprise = leader.enterprise
     return if @enterprise.disable_emails?
 
-    @email = @leader.email
+    @email = @leader.email_for_notification
     @custom_text = @enterprise.custom_text rescue CustomText.new
 
     set_defaults(@enterprise, method_name)

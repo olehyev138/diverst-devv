@@ -2,7 +2,7 @@ class PolicyGroup < ApplicationRecord
   # associations
   belongs_to :user, inverse_of: :policy_group
 
-  validates_uniqueness_of :user
+  validates_uniqueness_of :user_id
 
   def self.users_that_able_to_accept_budgets(enterprise)
     enterprise.users.select { |u| u.policy_group.budget_approval }

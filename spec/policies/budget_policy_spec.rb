@@ -21,6 +21,27 @@ RSpec.describe BudgetPolicy, type: :policy do
   }
 
   describe 'for users with access' do
+    context 'when budget is approved' do
+      before { budget.is_approved = true }
+
+      context 'when admin?' do
+        before { allow(subject).to receive(:admin?).and_return(true) }
+
+        it { is_expected.to permit_action(:destroy) }
+      end
+    end
+
+    context 'when budget is not approved' do
+      context 'when current user is requester' do
+        let(:budget1) { create(:budget, group_id: group.id, requester: user) }
+        subject { described_class.new(user, [group, budget1]) }
+
+        before { allow(subject).to receive(:admin?).and_return(false) }
+
+        it { is_expected.to permit_action(:destroy) }
+      end
+    end
+
     context 'when manage_all is false' do
       context 'when groups_manage and groups_budgets_manage are true' do
         before { user.policy_group.update groups_manage: true, groups_budgets_manage: true }
@@ -81,6 +102,23 @@ RSpec.describe BudgetPolicy, type: :policy do
 
   describe 'for users with no access' do
     it { is_expected.to forbid_actions([:approve, :decline]) }
+
+    context 'when not admin?' do
+      before { allow(subject).to receive(:admin?).and_return(false) }
+
+      it { is_expected.to forbid_action(:destroy) }
+    end
+
+    context 'when budget is not approved' do
+      context 'when current user is not requester' do
+        let(:budget1) { create(:budget, group_id: group.id, requester: create(:user)) }
+        subject { described_class.new(user, [group, budget1]) }
+
+        before { allow(subject).to receive(:admin?).and_return(false) }
+
+        it { is_expected.to forbid_action(:destroy) }
+      end
+    end
   end
 
   describe '#manage_all_budgets' do

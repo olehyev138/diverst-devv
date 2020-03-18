@@ -1,12 +1,32 @@
 require 'rails_helper'
 
 RSpec.describe MentoringSession, type: :model do
-  describe 'validations' do
+  describe 'test associations and validations' do
     let(:mentoring_session) { build_stubbed(:mentoring_session) }
 
     it { expect(mentoring_session).to validate_presence_of(:start) }
     it { expect(mentoring_session).to validate_presence_of(:end) }
     it { expect(mentoring_session).to validate_presence_of(:status) }
+    it { expect(mentoring_session).to validate_presence_of(:medium) }
+
+    it { expect(mentoring_session).to have_many(:resources).dependent(:destroy) }
+    it { expect(mentoring_session).to have_many(:mentoring_session_topics).dependent(:destroy) }
+    it { expect(mentoring_session).to have_many(:mentoring_interests).through(:mentoring_session_topics) }
+    it { expect(mentoring_session).to have_many(:mentorship_sessions) }
+    it { expect(mentoring_session).to have_many(:users).through(:mentorship_sessions) }
+    it { expect(mentoring_session).to have_many(:mentorship_ratings).dependent(:destroy) }
+    it { expect(mentoring_session).to have_many(:mentoring_session_comments).dependent(:destroy) }
+
+
+    it { expect(mentoring_session).to accept_nested_attributes_for(:mentorship_sessions).allow_destroy(true) }
+    it { expect(mentoring_session).to accept_nested_attributes_for(:resources).allow_destroy(true) }
+
+    it { expect(mentoring_session).to validate_length_of(:notes).is_at_most(65535) }
+    it { expect(mentoring_session).to validate_length_of(:status).is_at_most(191) }
+    it { expect(mentoring_session).to validate_length_of(:video_room_name).is_at_most(191) }
+    it { expect(mentoring_session).to validate_length_of(:access_token).is_at_most(65535) }
+    it { expect(mentoring_session).to validate_length_of(:link).is_at_most(191) }
+    it { expect(mentoring_session).to validate_length_of(:medium).is_at_most(191) }
   end
 
   describe 'elasticsearch methods' do
@@ -25,6 +45,28 @@ RSpec.describe MentoringSession, type: :model do
         }
         expect(object.as_indexed_json).to eq(hash)
       end
+    end
+  end
+
+  describe '#old_session?' do
+    it 'returns false' do
+      mentoring_session = create(:mentoring_session, start: Date.current >> 1, end: Date.current >> 2)
+      expect(mentoring_session.old_session?).to eq(false)
+    end
+  end
+
+  describe '#set_room_name' do
+    it 'returns video_room_name' do
+      mentoring_session = create(:mentoring_session)
+      room_name = mentoring_session.set_room_name
+      expect(mentoring_session.video_room_name).to eq(room_name)
+    end
+  end
+
+  describe '#can_start' do
+    it 'returns false' do
+      mentoring_session = create(:mentoring_session, access_token: 'some access token')
+      expect(mentoring_session.can_start(mentoring_session.creator)).to eq(false)
     end
   end
 

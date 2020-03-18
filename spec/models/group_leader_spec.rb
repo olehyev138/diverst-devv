@@ -1,17 +1,32 @@
 require 'rails_helper'
 
 RSpec.describe GroupLeader, type: :model do
-  describe 'when validating' do
-    let!(:enterprise) { create(:enterprise) }
+  describe 'test validations and associations' do
     let(:group_leader) { build(:group_leader) }
 
     it { expect(group_leader).to validate_presence_of(:position_name) }
     it { expect(group_leader).to validate_presence_of(:group) }
     it { expect(group_leader).to validate_presence_of(:user) }
+    it { expect(group_leader).to validate_presence_of(:user_role) }
     it { expect(group_leader).to validate_uniqueness_of(:user_id).with_message('already exists as a group leader').scoped_to(:group_id) }
+    it { expect(group_leader).to validate_length_of(:position_name).is_at_most(191) }
     it { expect(group_leader).to belong_to(:user) }
     it { expect(group_leader).to belong_to(:group) }
+    it { expect(group_leader).to belong_to(:user_role) }
   end
+
+  describe 'test scopes' do
+    let!(:group_leaders) { create_list(:group_leader, 3) }
+
+    it 'GroupLeader::visible' do
+      expect(GroupLeader.visible.count).to eq 3
+    end
+
+    it 'GroupLeader::role_ids' do
+      expect(GroupLeader.role_ids.count).to eq 3
+    end
+  end
+
 
   describe '#user_id' do
     it 'validates user cannot be added as group leader to group twice' do

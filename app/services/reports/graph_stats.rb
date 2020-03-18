@@ -43,7 +43,7 @@ class Reports::GraphStats
         row = []
         child_elements = get_elements(parent_element)
 
-        next if child_elements.count == 0
+        next if child_elements.size == 0
 
         row << @parser.parse(parent_element)[:label]
         child_elements.each do |child_element|

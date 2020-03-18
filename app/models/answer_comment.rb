@@ -1,7 +1,7 @@
 class AnswerComment < ApplicationRecord
   include PublicActivity::Common
 
-  belongs_to :author, class_name: 'User', inverse_of: :answers
+  belongs_to :author, class_name: 'User', inverse_of: :answers, counter_cache: :answer_comments_count
   belongs_to :answer, inverse_of: :comments
 
   has_many :user_reward_actions

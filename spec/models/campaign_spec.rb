@@ -8,25 +8,25 @@ RSpec.describe Campaign, type: :model do
     it { expect(campaign).to belong_to(:enterprise) }
     it { expect(campaign).to belong_to(:owner).class_name('User') }
     it { expect(campaign).to have_many(:questions) }
-    it { expect(campaign).to have_many(:campaigns_groups) }
+    it { expect(campaign).to have_many(:campaigns_groups).dependent(:destroy) }
     it { expect(campaign).to have_many(:groups).through(:campaigns_groups) }
-    it { expect(campaign).to have_many(:campaigns_segments) }
+    it { expect(campaign).to have_many(:campaigns_segments).dependent(:destroy) }
     it { expect(campaign).to have_many(:segments).through(:campaigns_segments) }
-    it { expect(campaign).to have_many(:invitations).class_name('CampaignInvitation') }
+    it { expect(campaign).to have_many(:invitations).class_name('CampaignInvitation').dependent(:destroy) }
     it { expect(campaign).to have_many(:users).through(:invitations) }
     it { expect(campaign).to have_many(:answers).through(:questions) }
     it { expect(campaign).to have_many(:answer_comments).through(:questions) }
-    it { expect(campaign).to have_many(:campaigns_managers) }
+    it { expect(campaign).to have_many(:campaigns_managers).dependent(:destroy) }
     it { expect(campaign).to have_many(:managers).through(:campaigns_managers).source(:user) }
-    it { expect(campaign).to have_many(:sponsors) }
+    it { expect(campaign).to have_many(:sponsors).dependent(:destroy) }
 
     it { expect(campaign).to accept_nested_attributes_for(:questions).allow_destroy(true) }
     it { expect(campaign).to accept_nested_attributes_for(:sponsors).allow_destroy(true) }
 
     it { expect(campaign).to validate_presence_of(:title) }
     it { expect(campaign).to validate_presence_of(:description) }
-    it { expect(campaign).to validate_presence_of(:start) }
-    it { expect(campaign).to validate_presence_of(:end) }
+    it { expect(campaign).to validate_presence_of(:start).with_message('must be after today') }
+    it { expect(campaign).to validate_presence_of(:end).with_message('must be after start') }
     it { expect(campaign).to validate_presence_of(:groups).with_message('Please select at least 1 group') }
 
     # ActiveStorage
@@ -167,6 +167,21 @@ RSpec.describe Campaign, type: :model do
       expect { CampaignInvitation.find(campaign_invitation.id) }.to raise_error(ActiveRecord::RecordNotFound)
       expect { CampaignsSegment.find(campaigns_segment.id) }.to raise_error(ActiveRecord::RecordNotFound)
       expect { CampaignsManager.find(campaigns_manager.id) }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+  end
+
+  describe '#contributions_per_erg_csv' do
+    it 'return csv report' do
+      campaign = create(:campaign)
+      expect(campaign.contributions_per_erg_csv('group')).to include "Contributions per #{campaign.enterprise.custom_text.erg.downcase}"
+    end
+  end
+
+  describe '#top_performers_csv' do
+    it 'returns csv report' do
+      campaign = create(:campaign)
+
+      expect(campaign.top_performers_csv).to include 'Top performers'
     end
   end
 end
