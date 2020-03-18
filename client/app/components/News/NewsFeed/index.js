@@ -93,6 +93,8 @@ export function NewsFeed(props) {
           deleteGroupMessageBegin={props.deleteGroupMessageBegin}
           updateNewsItemBegin={props.updateNewsItemBegin}
           archiveNewsItemBegin={props.archiveNewsItemBegin}
+          pinNewsItemBegin={props.pinNewsItemBegin}
+          unpinNewsItemBegin={props.unpinNewsItemBegin}
         />
       );
     else if (item.news_link) // eslint-disable-line no-else-return
@@ -106,6 +108,8 @@ export function NewsFeed(props) {
           deleteNewsLinkBegin={props.deleteNewsLinkBegin}
           updateNewsItemBegin={props.updateNewsItemBegin}
           archiveNewsItemBegin={props.archiveNewsItemBegin}
+          pinNewsItemBegin={props.pinNewsItemBegin}
+          unpinNewsItemBegin={props.unpinNewsItemBegin}
         />
       );
     else if (item.social_link)
@@ -119,6 +123,8 @@ export function NewsFeed(props) {
           deleteSocialLinkBegin={props.deleteSocialLinkBegin}
           updateNewsItemBegin={props.updateNewsItemBegin}
           archiveNewsItemBegin={props.archiveNewsItemBegin}
+          pinNewsItemBegin={props.pinNewsItemBegin}
+          unpinNewsItemBegin={props.unpinNewsItemBegin}
         />
       );
 
@@ -146,7 +152,7 @@ export function NewsFeed(props) {
               <SpeedDialAction
                 component={WrappedNavLink}
                 to={action.linkPath}
-                key={action.name}
+                key={action.linkPath}
                 icon={action.icon}
                 tooltipTitle={<Typography>{action.name}</Typography>}
                 tooltipPlacement='bottom'
@@ -211,7 +217,9 @@ NewsFeed.propTypes = {
   deleteNewsLinkBegin: PropTypes.func,
   deleteSocialLinkBegin: PropTypes.func,
   updateNewsItemBegin: PropTypes.func,
-  archiveNewsItemBegin: PropTypes.func
+  archiveNewsItemBegin: PropTypes.func,
+  pinNewsItemBegin: PropTypes.func,
+  unpinNewsItemBegin: PropTypes.func,
 };
 
 export default compose(

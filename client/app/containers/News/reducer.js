@@ -45,12 +45,22 @@ import {
   DELETE_SOCIALLINK_ERROR,
   DELETE_SOCIALLINK_BEGIN,
   DELETE_SOCIALLINK_SUCCESS,
+
   UPDATE_NEWS_ITEM_BEGIN,
   UPDATE_NEWS_ITEM_SUCCESS,
   UPDATE_NEWS_ITEM_ERROR,
+
   ARCHIVE_NEWS_ITEM_BEGIN,
   ARCHIVE_NEWS_ITEM_SUCCESS,
-  ARCHIVE_NEWS_ITEM_ERROR
+  ARCHIVE_NEWS_ITEM_ERROR,
+
+  PIN_NEWS_ITEM_BEGIN,
+  PIN_NEWS_ITEM_SUCCESS,
+  PIN_NEWS_ITEM_ERROR,
+
+  UNPIN_NEWS_ITEM_BEGIN,
+  UNPIN_NEWS_ITEM_SUCCESS,
+  UNPIN_NEWS_ITEM_ERROR,
 } from 'containers/News/constants';
 
 export const initialState = {
@@ -136,15 +146,21 @@ function newsReducer(state = initialState, action) {
       case UPDATE_SOCIALLINK_ERROR:
       case CREATE_SOCIALLINK_COMMENT_ERROR:
       case ARCHIVE_NEWS_ITEM_ERROR:
+      case PIN_NEWS_ITEM_ERROR:
+      case UNPIN_NEWS_ITEM_ERROR:
         draft.isCommitting = false;
         break;
       case NEWS_FEED_UNMOUNT:
         return initialState;
       case ARCHIVE_NEWS_ITEM_BEGIN:
+      case PIN_NEWS_ITEM_BEGIN:
+      case UNPIN_NEWS_ITEM_BEGIN:
         draft.isCommitting = true;
         draft.hasChanged = false;
         break;
       case ARCHIVE_NEWS_ITEM_SUCCESS:
+      case PIN_NEWS_ITEM_SUCCESS:
+      case UNPIN_NEWS_ITEM_SUCCESS:
         draft.isCommitting = false;
         draft.hasChanged = true;
         break;
