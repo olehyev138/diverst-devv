@@ -66,18 +66,9 @@ RSpec.describe Enterprise, type: :model do
     it { expect(enterprise).to validate_length_of(:redirect_email_contact).is_at_most(191) }
     it { expect(enterprise).to validate_length_of(:default_from_email_display_name).is_at_most(191) }
     it { expect(enterprise).to validate_length_of(:default_from_email_address).is_at_most(191) }
-    it { expect(enterprise).to validate_length_of(:onboarding_sponsor_media_content_type).is_at_most(191) }
-    it { expect(enterprise).to validate_length_of(:onboarding_sponsor_media_file_name).is_at_most(191) }
-    it { expect(enterprise).to validate_length_of(:time_zone).is_at_most(191) }
-    it { expect(enterprise).to validate_length_of(:xml_sso_config_content_type).is_at_most(191) }
-    it { expect(enterprise).to validate_length_of(:xml_sso_config_file_name).is_at_most(191) }
     it { expect(enterprise).to validate_length_of(:privacy_statement).is_at_most(65535) }
     it { expect(enterprise).to validate_length_of(:home_message).is_at_most(65535) }
-    it { expect(enterprise).to validate_length_of(:banner_content_type).is_at_most(191) }
-    it { expect(enterprise).to validate_length_of(:banner_file_name).is_at_most(191) }
     it { expect(enterprise).to validate_length_of(:cdo_message).is_at_most(65535) }
-    it { expect(enterprise).to validate_length_of(:cdo_picture_content_type).is_at_most(191) }
-    it { expect(enterprise).to validate_length_of(:cdo_picture_file_name).is_at_most(191) }
     it { expect(enterprise).to validate_length_of(:yammer_token).is_at_most(191) }
     it { expect(enterprise).to validate_length_of(:saml_last_name_mapping).is_at_most(191) }
     it { expect(enterprise).to validate_length_of(:saml_first_name_mapping).is_at_most(191) }
@@ -86,7 +77,6 @@ RSpec.describe Enterprise, type: :model do
     it { expect(enterprise).to validate_length_of(:idp_sso_target_url).is_at_most(191) }
     it { expect(enterprise).to validate_length_of(:sp_entity_id).is_at_most(191) }
     it { expect(enterprise).to validate_length_of(:name).is_at_most(191) }
-    it { expect(enterprise).to validate_length_of(:banner_file_name).is_at_most(191) }
 
     it { expect(enterprise).to allow_value('valid@email.com').for(:redirect_email_contact) }
     it { expect(enterprise).not_to allow_value('bademail.com').for(:redirect_email_contact) }
