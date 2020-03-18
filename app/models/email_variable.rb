@@ -7,6 +7,8 @@ class EmailVariable < ApplicationRecord
   validates :email, :enterprise_email_variable, presence: true
 
   def format(value)
+    return '' unless value.is_a? String
+
     value = value.pluralize if pluralize
     value = value.downcase if downcase
     value = value.titleize if titleize

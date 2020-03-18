@@ -58,7 +58,7 @@ class Group < ApplicationRecord
     :years
   ]
 
-  belongs_to :enterprise
+  belongs_to :enterprise, counter_cache: true
   belongs_to :lead_manager, class_name: 'User'
   belongs_to :owner, class_name: 'User'
 
@@ -202,6 +202,7 @@ class Group < ApplicationRecord
   has_attached_file :logo_paperclip, s3_permissions: 'private'
   has_attached_file :banner_paperclip
   has_attached_file :sponsor_media_paperclip, s3_permissions: 'private'
+  has_attached_file :sponsor_image_paperclip, s3_permissions: 'private'
 
   validates_length_of :event_attendance_visibility, maximum: 191
   validates_length_of :unit_of_expiry_age, maximum: 191
@@ -464,6 +465,30 @@ class Group < ApplicationRecord
                                 member.mentor,
                                 member.mentee
                               ]
+        csv << membership_list_row
+      end
+
+      csv << ['total', nil, "#{total_nb_of_members}"]
+    end
+  end
+
+  def membership_list_csv(group_members)
+    total_nb_of_members = group_members.count
+    mentorship_module_enabled = enterprise.mentorship_module_enabled?
+
+    CSV.generate do |csv|
+      first_row = %w(first_name last_name email_address)
+      first_row += %w(mentor mentee) if mentorship_module_enabled
+
+      csv << first_row
+
+      group_members.each do |member|
+        membership_list_row = []
+        membership_list_row += [ member.first_name, member.last_name, member.email ]
+        membership_list_row += [ member.mentor, member.mentee ] if mentorship_module_enabled
+
+        member_info = member.info
+
         csv << membership_list_row
       end
 

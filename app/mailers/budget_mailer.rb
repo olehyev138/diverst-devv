@@ -7,7 +7,7 @@ class BudgetMailer < ApplicationMailer
     return if @enterprise.disable_emails?
 
     @custom_text = @enterprise.custom_text rescue CustomText.new
-    @email = @user.email
+    @email = @user.email_for_notification
 
     set_defaults(@enterprise, method_name)
 
@@ -22,7 +22,7 @@ class BudgetMailer < ApplicationMailer
     return if @enterprise.disable_emails?
 
     @custom_text = @enterprise.custom_text rescue CustomText.new
-    @email = @user.email
+    @email = @user.email_for_notification
 
     set_defaults(@enterprise, method_name)
 
@@ -37,7 +37,7 @@ class BudgetMailer < ApplicationMailer
     return if @enterprise.disable_emails?
 
     @custom_text = @enterprise.custom_text rescue CustomText.new
-    @email = @user.email
+    @email = @user.email_for_notification
 
     set_defaults(@enterprise, method_name)
 
