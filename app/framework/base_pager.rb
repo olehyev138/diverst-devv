@@ -47,6 +47,7 @@ module BasePager
       else
         total = partial_query.count
       end
+
       items = partial_query
                   .order(order_string(order_by, order))
 
@@ -66,7 +67,6 @@ module BasePager
 
       # set the parameters
       item_page, item_count, offset, order_by, order = get_params(params)
-
       # search
       total = query.count
       items = query

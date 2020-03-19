@@ -23,12 +23,18 @@ class NewsFeedLink < ApplicationRecord
   delegate :group,    to: :news_feed
   delegate :segment,  to: :news_feed_link_segment, allow_nil: true
 
-  scope :approved,        -> { where(approved: true).order(created_at: :desc) }
+  scope :approved, -> { where(approved: true) }
+  scope :pending, -> { where(approved: false) }
+  scope :combined_news_links, -> (news_feed_id) {
+    joins('LEFT OUTER JOIN shared_news_feed_links ON shared_news_feed_links.news_feed_link_id = news_feed_links.id')
+      .where("shared_news_feed_links.news_feed_id = #{news_feed_id} OR news_feed_links.news_feed_id = #{news_feed_id} AND news_feed_links.approved = 1").distinct
+  }
+
   scope :not_approved,    -> (news_feed_id = nil) {
     if news_feed_id.present?
-      where(approved: false).where('`news_feed_links`.`news_feed_id` = ?', news_feed_id).order(created_at: :desc)
+      where(approved: false).where('`news_feed_links`.`news_feed_id` = ?', news_feed_id)
     else
-      where(approved: false).order(created_at: :desc)
+      where(approved: false)
     end
   }
 
@@ -78,8 +84,22 @@ class NewsFeedLink < ApplicationRecord
       includes(:news_link, :group_message)
     end
   }
+
   scope :not_archived, -> { where(archived_at: nil) }
   scope :archived, -> { where.not(archived_at: nil) }
+
+  scope :pinned, -> { where(is_pinned: true) }
+  scope :not_pinned, -> { where(is_pinned: false) }
+
+  scope :combined_news_links_with_segments, -> (news_feed_id, segment_ids) {
+    includes(:social_link, :news_link, :group_message)
+        .joins("LEFT OUTER JOIN news_feed_link_segments ON news_feed_link_segments.news_feed_link_id = news_feed_links.id
+              LEFT OUTER JOIN shared_news_feed_links ON shared_news_feed_links.news_feed_link_id = news_feed_links.id
+              WHERE shared_news_feed_links.news_feed_id = #{news_feed_id}
+              OR news_feed_links.news_feed_id = #{news_feed_id} AND approved = 1
+              OR news_feed_link_segments.segment_id IS NULL
+              OR news_feed_link_segments.segment_id IN (#{ segment_ids.join(",") })").distinct
+  }
 
   scope :filter_posts, -> (social_enabled: false) {
     if social_enabled
@@ -168,18 +188,18 @@ class NewsFeedLink < ApplicationRecord
   def self.search(search)
     if search
       left_joins(:group_message, :news_link, :news_tags)
-      .where(
-        [
-          (
-            [
-              'news_tags.name LIKE ? OR ' +
-                'LOWER( group_messages.subject ) LIKE ? OR ' +
-                'LOWER( group_messages.content ) LIKE ? OR ' +
-                'LOWER( news_links.title ) LIKE ? OR ' +
-                'LOWER( news_links.description ) LIKE ?'
-            ] * search.length
-          ).join(' OR ')
-        ] + search.reduce([]) { |sum, term| sum + ["#{term.downcase}"] + (["%#{term.downcase}%"] * 4) })
+          .where(
+              [
+                  (
+                  [
+                      'news_tags.name LIKE ? OR ' +
+                          'LOWER( group_messages.subject ) LIKE ? OR ' +
+                          'LOWER( group_messages.content ) LIKE ? OR ' +
+                          'LOWER( news_links.title ) LIKE ? OR ' +
+                          'LOWER( news_links.description ) LIKE ?'
+                  ] * search.length
+                ).join(' OR ')
+              ] + search.reduce([]) { |sum, term| sum + ["#{term.downcase}"] + (["%#{term.downcase}%"] * 4) })
     else
       all
     end
