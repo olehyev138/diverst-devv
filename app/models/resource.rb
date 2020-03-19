@@ -62,7 +62,7 @@ class Resource < ApplicationRecord
       case folder.policy_class.name
       when 'GroupFolderPolicy' then GroupResourcePolicy
       when 'EnterpriseFolderPolicy' then EnterpriseResourcePolicy
-      else  raise StandardError.new('Folder is without parent')
+      else raise StandardError.new('Folder is without parent')
       end
     end
   end
