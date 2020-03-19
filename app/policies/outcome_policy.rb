@@ -4,10 +4,14 @@ class OutcomePolicy < GroupBasePolicy
   end
 
   def base_create_permission
-    'initiatives_manage'
+    'initiatives_create'
   end
 
   def base_manage_permission
     'initiatives_manage'
+  end
+
+  def update?
+    group.owner == user || super
   end
 end
