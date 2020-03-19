@@ -119,6 +119,7 @@ class InitiativesController < ApplicationController
   def archive
     authorize [@group, @initiative], :update?, policy_class: GroupEventsPolicy
 
+    @initiative.skip_allocate_budget_funds = true
     @initiatives = @group.initiatives.where(archived_at: nil).all
     @initiative.update(archived_at: DateTime.now)
     track_activity(@initiative, :archive)
