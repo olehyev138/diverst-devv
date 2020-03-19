@@ -70,6 +70,11 @@ class InitiativePolicy < GroupBasePolicy
     is_a_guest? && (@upcoming_events.include? @record)
   end
 
+  def user_is_guest_and_event_is_ongoing?
+    @ongoing_events = @record.group.initiatives.ongoing
+    is_a_guest? && (@ongoing_events.include? @record)
+  end
+
   # todo: fix this logic, write a test for it
   def join_leave_button_visibility?
     @past_events = @record.group.initiatives.past

@@ -80,7 +80,7 @@ class GroupBasePolicy < ApplicationPolicy
   end
 
   def basic_group_leader_permission?(permission)
-    PolicyGroupTemplate.where(user_role_id: group_leader_role_id, enterprise_id: user.enterprise_id).where("#{permission} = true").exists?
+    PolicyGroupTemplate.where(user_role_id: group_leader_role_ids, enterprise_id: user.enterprise_id).where("#{permission} = true").exists?
   end
 
   def has_group_leader_permissions?(permission)
