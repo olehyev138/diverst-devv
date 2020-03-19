@@ -55,11 +55,15 @@ class Resource < ApplicationRecord
 
   def policy_class
     if group_id
-      GroupFolderPolicy
+      GroupResourcePolicy
     elsif enterprise_id
-      EnterpriseFolderPolicy
+      EnterpriseResourcePolicy
     else
-      raise StandardError.new('Folder is without parent')
+      case folder.policy_class.name
+      when 'GroupFolderPolicy' then GroupResourcePolicy
+      when 'EnterpriseFolderPolicy' then EnterpriseResourcePolicy
+      else  raise StandardError.new('Folder is without parent')
+      end
     end
   end
 

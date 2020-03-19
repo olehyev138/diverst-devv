@@ -12,6 +12,6 @@ class OutcomePolicy < GroupBasePolicy
   end
 
   def update?
-    group.owner == user || super
+    group&.owner == user || super
   end
 end
