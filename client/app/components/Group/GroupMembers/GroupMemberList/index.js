@@ -120,10 +120,28 @@ export function GroupMemberList(props) {
     },
   ];
 
+  const actions = [];
+
+  if (props.permission('members_destroy?'))
+    actions.push(
+      {
+        icon: () => <DeleteIcon />,
+        tooltip: intl.formatMessage(messages.tooltip.delete),
+        onClick: (_, rowData) => {
+          /* eslint-disable-next-line no-alert, no-restricted-globals */
+          if (confirm(intl.formatMessage(messages.tooltip.delete_confirm)))
+            props.deleteMemberBegin({
+              userId: rowData.id,
+              groupId: props.groupId
+            });
+        }
+      }
+    );
+
   return (
     <React.Fragment>
       <Box className={classes.floatRight}>
-        <Permission show={true}>
+        <Permission show={props.permission('member_create?')}>
           <Button
             className={classes.actionButton}
             variant='contained'
@@ -139,11 +157,10 @@ export function GroupMemberList(props) {
         <Button
           className={classes.actionButton}
           variant='contained'
-          to='#'
           color='secondary'
           size='large'
-          component={WrappedNavLink}
           startIcon={<ExportIcon />}
+          onClick={() => props.exportMembersBegin()}
         >
           <DiverstFormattedMessage {...messages.export} />
         </Button>
@@ -262,18 +279,7 @@ export function GroupMemberList(props) {
         dataTotal={props.memberTotal}
         columns={columns}
         rowsPerPage={props.params.count}
-        actions={[{
-          icon: () => <DeleteIcon />,
-          tooltip: intl.formatMessage(messages.tooltip.delete),
-          onClick: (_, rowData) => {
-            /* eslint-disable-next-line no-alert, no-restricted-globals */
-            if (confirm(intl.formatMessage(messages.tooltip.delete_confirm)))
-              props.deleteMemberBegin({
-                userId: rowData.id,
-                groupId: props.groupId
-              });
-          }
-        }]}
+        actions={actions}
         my_options={{
           exportButton: true,
           exportCsv: (columns, data) => {
@@ -338,6 +344,7 @@ GroupMemberList.propTypes = {
   memberTo: PropTypes.instanceOf(DateTime),
   segmentLabels: PropTypes.array,
   handleFilterChange: PropTypes.func.isRequired,
+  permission: PropTypes.func,
 };
 
 export default compose(

@@ -139,6 +139,10 @@ class GroupPolicy < ApplicationPolicy
 
   # MANAGE PERMISSIONS
 
+  def members_destroy?
+    UserGroupPolicy.new(self, UserGroup).destroy?
+  end
+
   def leaders_manage?
     GroupLeaderPolicy.new(self, GroupLeader).manage?
   end

@@ -34,6 +34,7 @@ class GroupSerializer < ApplicationRecordSerializer
         :events_manage?,
         :kpi_manage?,
         :leaders_manage?,
+        :members_destroy?,
         :is_a_member?,
         :is_a_pending_member?,
         :is_an_accepted_member?,

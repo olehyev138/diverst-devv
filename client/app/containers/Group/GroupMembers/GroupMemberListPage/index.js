@@ -184,6 +184,7 @@ export function GroupMemberListPage(props) {
         memberTo={to ? to[1] : null}
         segmentLabels={segmentLabels || []}
         handleFilterChange={handleFilterChange}
+        permission={props.permission}
       />
     </React.Fragment>
   );
@@ -196,7 +197,8 @@ GroupMemberListPage.propTypes = {
   exportMembersBegin: PropTypes.func,
   memberList: PropTypes.array,
   memberTotal: PropTypes.number,
-  isFetchingMembers: PropTypes.bool
+  isFetchingMembers: PropTypes.bool,
+  permission: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({

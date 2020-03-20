@@ -20,7 +20,7 @@ class UserGroupPolicy < GroupBasePolicy
   end
 
   def update?
-    record.user == user || super
+    (record.user == user if UserGroup === record) || super
   end
 
   alias_method :view_members?, :index?
