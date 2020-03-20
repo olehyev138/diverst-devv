@@ -2,23 +2,35 @@ class GroupBasePolicy < ApplicationPolicy
   attr_accessor :user, :group, :record, :group_leader_role_ids, :group_leader, :user_group
 
   def initialize(user, context, params = {})
-    super(user, context, params)
-    # Check if it's a collection, a record, or a class
-    if context.is_a?(Enumerable) # Collection/Enumerable
-      self.group = context.first
-      self.record = context.second
-    elsif context.is_a?(Class) # Class
-      # Set group using params if context is a class as this will be for
-      # nested model actions such as index and create, which require a group
-      self.group = ::Group.find(params[:group_id] || params.dig(context.model_name.param_key.to_sym, :group_id)) rescue nil
-    elsif context.present?
-      self.group = context.group
-      self.record = context
-    end
+    case user
+    when GroupPolicy
+      @user = user.user
+      @group = user.record
+      @record = context
+      @params = user.params
+      @group_leader_role_ids = user.group_leader_role_ids
+      @policy_group = user.policy_group
+      @group_leader = user.group_leader
+      @user_group = user.user_group
+    else
+      super(user, context, params)
+      # Check if it's a collection, a record, or a class
+      if context.is_a?(Enumerable) # Collection/Enumerable
+        self.group = context.first
+        self.record = context.second
+      elsif context.is_a?(Class) # Class
+        # Set group using params if context is a class as this will be for
+        # nested model actions such as index and create, which require a group
+        self.group = ::Group.find(params[:group_id] || params.dig(context.model_name.param_key.to_sym, :group_id)) rescue nil
+      elsif context.present?
+        self.group = context.group
+        self.record = context
+      end
 
-    if group
-      @group_leader = GroupLeader.find_by(user_id: user.id, group_id: group.id)
-      @user_group = UserGroup.find_by(user_id: user.id, group_id: group.id)
+      if group
+        @group_leader = GroupLeader.find_by(user_id: user.id, group_id: group.id)
+        @user_group = UserGroup.find_by(user_id: user.id, group_id: group.id)
+      end
     end
   end
 

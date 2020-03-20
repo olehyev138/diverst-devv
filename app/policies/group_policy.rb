@@ -88,39 +88,39 @@ class GroupPolicy < ApplicationPolicy
   # PARTS PERMISSIONS
 
   def events_view?
-    InitiativePolicy.new(user, [record, Initiative]).index?
+    InitiativePolicy.new(self, Initiative).index?
   end
 
   def members_view?
-    UserGroupPolicy.new(user, [record, UserGroup]).index?
+    UserGroupPolicy.new(self, UserGroup).index?
   end
 
   def news_view?
-    NewsFeedLinkPolicy.new(user, [record, NewsFeedLink]).index?
+    NewsFeedLinkPolicy.new(self, NewsFeedLink).index?
   end
 
   def resource_view?
-    GroupResourcePolicy.new(user, [record, Resource]).index?
+    GroupResourcePolicy.new(self, Resource).index?
   end
 
   def events_manage?
-    InitiativePolicy.new(user, [record, Initiative]).manage?
+    InitiativePolicy.new(self, Initiative).manage?
   end
 
   def budgets_view?
-    AnnualBudgetPolicy.new(user, [record, AnnualBudget]).index?
+    AnnualBudgetPolicy.new(self, AnnualBudget).index?
   end
 
   def leaders_view?
-    GroupLeaderPolicy.new(user, [record, GroupLeader]).index?
+    GroupLeaderPolicy.new(self, GroupLeader).index?
   end
 
   def leaders_manage?
-    GroupLeaderPolicy.new(user, [record, GroupLeader]).manage?
+    GroupLeaderPolicy.new(self, GroupLeader).manage?
   end
 
   def kpi_manage?
-    GroupUpdatePolicy.new(user, [record, Update]).manage?
+    GroupUpdatePolicy.new(self, Update).manage?
   end
 
   # move these to separate policies
