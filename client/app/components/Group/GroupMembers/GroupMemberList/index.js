@@ -31,6 +31,7 @@ import ExportIcon from '@material-ui/icons/SaveAlt';
 import DiverstTable from 'components/Shared/DiverstTable';
 import DiverstDropdownMenu from 'components/Shared/DiverstDropdownMenu';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
+import Permission from 'components/Shared/DiverstPermission';
 
 const styles = theme => ({
   errorButton: {
@@ -122,17 +123,19 @@ export function GroupMemberList(props) {
   return (
     <React.Fragment>
       <Box className={classes.floatRight}>
-        <Button
-          className={classes.actionButton}
-          variant='contained'
-          to={props.links.groupMembersNew}
-          color='primary'
-          size='large'
-          component={WrappedNavLink}
-          startIcon={<AddIcon />}
-        >
-          <DiverstFormattedMessage {...messages.new} />
-        </Button>
+        <Permission show={true}>
+          <Button
+            className={classes.actionButton}
+            variant='contained'
+            to={props.links.groupMembersNew}
+            color='primary'
+            size='large'
+            component={WrappedNavLink}
+            startIcon={<AddIcon />}
+          >
+            <DiverstFormattedMessage {...messages.new} />
+          </Button>
+        </Permission>
         <Button
           className={classes.actionButton}
           variant='contained'

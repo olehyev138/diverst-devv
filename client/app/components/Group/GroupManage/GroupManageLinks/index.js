@@ -21,8 +21,6 @@ const styles = theme => ({});
 export function GroupManageLinks(props) {
   const { classes, currentGroup, currentTab } = props;
 
-  const permission = name => dig(currentGroup, 'permissions', name);
-
   return (
     <React.Fragment>
       <Paper>
@@ -31,14 +29,14 @@ export function GroupManageLinks(props) {
           indicatorColor='primary'
           textColor='primary'
         >
-          <Permission show={permission('update?')}>
+          <Permission show={props.permission('update?')}>
             <Tab
               component={WrappedNavLink}
               to={ROUTES.group.manage.settings.index.path(props.currentGroup.id)}
               label={<DiverstFormattedMessage {...messages.links.settings} />}
             />
           </Permission>
-          <Permission show={permission('leaders_view?')}>
+          <Permission show={props.permission('leaders_view?')}>
             <Tab
               component={WrappedNavLink}
               to={ROUTES.group.manage.leaders.index.path(props.currentGroup.id)}
@@ -54,7 +52,8 @@ export function GroupManageLinks(props) {
 GroupManageLinks.propTypes = {
   classes: PropTypes.object,
   currentTab: PropTypes.number,
-  currentGroup: PropTypes.object
+  currentGroup: PropTypes.object,
+  permission: PropTypes.func,
 };
 
 export const StyledGroupManageLinks = withStyles(styles)(GroupManageLinks);

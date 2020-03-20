@@ -22,8 +22,6 @@ const styles = theme => ({});
 export function GroupPlanLinks(props) {
   const { classes, currentGroup, currentTab } = props;
 
-  const permission = name => dig(currentGroup, 'permissions', name);
-
   return (
     <React.Fragment>
       <Paper>
@@ -32,21 +30,21 @@ export function GroupPlanLinks(props) {
           indicatorColor='primary'
           textColor='primary'
         >
-          <Permission show={permission('events_manage?')} value='events'>
+          <Permission show={props.permission('events_manage?')} value='events'>
             <Tab
               component={WrappedNavLink}
               to={ROUTES.group.plan.events.index.path(props.currentGroup.id)}
               label={<DiverstFormattedMessage {...messages.links.event} />}
             />
           </Permission>
-          <Permission show={permission('kpi_manage?')} value='kpi'>
+          <Permission show={props.permission('kpi_manage?')} value='kpi'>
             <Tab
               component={WrappedNavLink}
               to={ROUTES.group.plan.kpi.updates.index.path(props.currentGroup.id)}
               label={<DiverstFormattedMessage {...messages.links.KPI} />}
             />
           </Permission>
-          <Permission show={permission('budgets_view?')} value='budgeting'>
+          <Permission show={props.permission('budgets_view?')} value='budgeting'>
             <Tab
               component={WrappedNavLink}
               to={ROUTES.group.plan.budget.overview.path(props.currentGroup.id)}

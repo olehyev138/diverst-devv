@@ -126,8 +126,6 @@ export function GroupLinks(props) {
       strict: false,
     });
 
-  const permission = name => dig(currentGroup, 'permissions', name);
-
   const NavLinks = () => (
     <div>
       <PerfectScrollbar
@@ -166,7 +164,7 @@ export function GroupLinks(props) {
             <DiverstFormattedMessage {...ROUTES.group.home.data.titleMessage} />
           </Button>
 
-          <Permission show={permission('members_view?')}>
+          <Permission show={props.permission('members_view?')}>
             <Button
               component={WrappedNavLink}
               to={ROUTES.group.members.index.path(rs.params('group_id'))}
@@ -180,7 +178,7 @@ export function GroupLinks(props) {
             </Button>
           </Permission>
 
-          <Permission show={permission('events_view?')}>
+          <Permission show={props.permission('events_view?')}>
             <Button
               component={WrappedNavLink}
               to={ROUTES.group.events.index.path(rs.params('group_id'))}
@@ -194,7 +192,7 @@ export function GroupLinks(props) {
             </Button>
           </Permission>
 
-          <Permission show={permission('resource_view?')}>
+          <Permission show={props.permission('resource_view?')}>
             <Button
               component={WrappedNavLink}
               exact
@@ -209,7 +207,7 @@ export function GroupLinks(props) {
             </Button>
           </Permission>
 
-          <Permission show={permission('news_view?')}>
+          <Permission show={props.permission('news_view?')}>
             <Button
               component={WrappedNavLink}
               to={ROUTES.group.news.index.path(rs.params('group_id'))}
@@ -223,7 +221,7 @@ export function GroupLinks(props) {
             </Button>
           </Permission>
 
-          <Permission show={permission('kpi_manage?') || permission('events_manage?') || permission('budgets_view?')}>
+          <Permission show={props.permission('kpi_manage?') || props.permission('events_manage?') || props.permission('budgets_view?')}>
             <Button
               component={WrappedNavLink}
               className={classes.navLink}
@@ -242,7 +240,7 @@ export function GroupLinks(props) {
             </Button>
           </Permission>
 
-          <Permission show={permission('update?')}>
+          <Permission show={props.permission('update?')}>
             <Button
               component={WrappedNavLink}
               className={classes.navLink}
@@ -274,6 +272,7 @@ export function GroupLinks(props) {
 
 GroupLinks.propTypes = {
   classes: PropTypes.object,
+  permission: PropTypes.func,
   currentGroup: PropTypes.shape({
     permissions: PropTypes.object
   }),
