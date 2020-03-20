@@ -30,7 +30,8 @@ import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import DiverstLoader from 'components/Shared/DiverstLoader';
 
 import FolderListItem from 'components/Resource/Shared/FolderListItem';
-import Permission from "../../../Shared/DiverstPermission";
+import Permission from 'components/Shared/DiverstPermission';
+import { permission } from 'utils/permissionsHelpers';
 
 const styles = theme => ({
   folderListItem: {
@@ -71,7 +72,7 @@ export function FoldersList(props, context) {
 
   return (
     <React.Fragment>
-      <Permission show={props.permission('resources_create?')} className={classes.floatRight}>
+      <Permission show={permission(props.currentGroup, 'resources_create?')} className={classes.floatRight}>
         <Button
           className={classes.floatRight}
           variant='contained'
@@ -144,8 +145,7 @@ FoldersList.propTypes = {
   isLoading: PropTypes.bool,
   links: PropTypes.object,
   deleteFolderBegin: PropTypes.func,
-  permission: PropTypes.func,
-};
+  };
 
 export default compose(
   injectIntl,

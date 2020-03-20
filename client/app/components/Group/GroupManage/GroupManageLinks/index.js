@@ -14,6 +14,7 @@ import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Group/GroupManage/messages';
 import Conditional from 'components/Compositions/Conditional';
 import Permission from 'components/Shared/DiverstPermission';
+import { permission } from 'utils/permissionsHelpers';
 import dig from 'object-dig';
 const styles = theme => ({});
 
@@ -29,14 +30,14 @@ export function GroupManageLinks(props) {
           indicatorColor='primary'
           textColor='primary'
         >
-          <Permission show={props.permission('update?')}>
+          <Permission show={permission(props.currentGroup, 'update?')}>
             <Tab
               component={WrappedNavLink}
               to={ROUTES.group.manage.settings.index.path(props.currentGroup.id)}
               label={<DiverstFormattedMessage {...messages.links.settings} />}
             />
           </Permission>
-          <Permission show={props.permission('leaders_view?')}>
+          <Permission show={permission(props.currentGroup, 'leaders_view?')}>
             <Tab
               component={WrappedNavLink}
               to={ROUTES.group.manage.leaders.index.path(props.currentGroup.id)}
@@ -53,8 +54,7 @@ GroupManageLinks.propTypes = {
   classes: PropTypes.object,
   currentTab: PropTypes.number,
   currentGroup: PropTypes.object,
-  permission: PropTypes.func,
-};
+  };
 
 export const StyledGroupManageLinks = withStyles(styles)(GroupManageLinks);
 

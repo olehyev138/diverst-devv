@@ -24,6 +24,7 @@ import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import Permission from 'components/Shared/DiverstPermission';
+import { permission } from 'utils/permissionsHelpers';
 
 const styles = theme => ({
   toolbar: {
@@ -164,7 +165,7 @@ export function GroupLinks(props) {
             <DiverstFormattedMessage {...ROUTES.group.home.data.titleMessage} />
           </Button>
 
-          <Permission show={props.permission('members_view?')}>
+          <Permission show={permission(props.currentGroup, 'members_view?')}>
             <Button
               component={WrappedNavLink}
               to={ROUTES.group.members.index.path(rs.params('group_id'))}
@@ -178,7 +179,7 @@ export function GroupLinks(props) {
             </Button>
           </Permission>
 
-          <Permission show={props.permission('events_view?')}>
+          <Permission show={permission(props.currentGroup, 'events_view?')}>
             <Button
               component={WrappedNavLink}
               to={ROUTES.group.events.index.path(rs.params('group_id'))}
@@ -192,7 +193,7 @@ export function GroupLinks(props) {
             </Button>
           </Permission>
 
-          <Permission show={props.permission('resource_view?')}>
+          <Permission show={permission(props.currentGroup, 'resource_view?')}>
             <Button
               component={WrappedNavLink}
               exact
@@ -207,7 +208,7 @@ export function GroupLinks(props) {
             </Button>
           </Permission>
 
-          <Permission show={props.permission('news_view?')}>
+          <Permission show={permission(props.currentGroup, 'news_view?')}>
             <Button
               component={WrappedNavLink}
               to={ROUTES.group.news.index.path(rs.params('group_id'))}
@@ -221,7 +222,7 @@ export function GroupLinks(props) {
             </Button>
           </Permission>
 
-          <Permission show={props.permission('kpi_manage?') || props.permission('events_manage?') || props.permission('budgets_view?')}>
+          <Permission show={permission(props.currentGroup, 'kpi_manage?') || permission(props.currentGroup, 'events_manage?') || permission(props.currentGroup, 'budgets_view?')}>
             <Button
               component={WrappedNavLink}
               className={classes.navLink}
@@ -240,7 +241,7 @@ export function GroupLinks(props) {
             </Button>
           </Permission>
 
-          <Permission show={props.permission('update?')}>
+          <Permission show={permission(props.currentGroup, 'update?')}>
             <Button
               component={WrappedNavLink}
               className={classes.navLink}
@@ -272,7 +273,6 @@ export function GroupLinks(props) {
 
 GroupLinks.propTypes = {
   classes: PropTypes.object,
-  permission: PropTypes.func,
   currentGroup: PropTypes.shape({
     permissions: PropTypes.object
   }),

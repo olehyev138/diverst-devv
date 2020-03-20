@@ -107,8 +107,7 @@ export function EventsPage(props) {
       handlePagination={handlePagination}
       links={links}
       readonly={props.readonly}
-      permission={props.permission}
-    />
+/>
   );
 }
 
@@ -122,8 +121,7 @@ EventsPage.propTypes = {
     id: PropTypes.number,
   }),
   readonly: PropTypes.bool,
-  permission: PropTypes.func,
-};
+  };
 
 const mapStateToProps = createStructuredSelector({
   events: selectPaginatedEvents(),

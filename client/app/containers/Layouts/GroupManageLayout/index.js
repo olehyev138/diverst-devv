@@ -8,7 +8,7 @@ import Fade from '@material-ui/core/Fade';
 import GroupManageLinks from 'components/Group/GroupManage/GroupManageLinks';
 import GroupLayout from 'containers/Layouts/GroupLayout';
 import Permission from 'components/Shared/DiverstPermission';
-
+import { permission } from 'utils/permissionsHelpers';
 const styles = theme => ({
   content: {
     padding: theme.spacing(3),

@@ -228,8 +228,7 @@ export function FolderPage(props) {
           isLoading={props.isLoading}
           isFormLoading={props.isFormLoading}
           links={links}
-          permission={props.permission}
-        />
+    />
       )}
     </div>
   );
@@ -245,7 +244,6 @@ FolderPage.propTypes = {
   getResourcesBegin: PropTypes.func,
   archiveResourceBegin: PropTypes.func,
   foldersUnmount: PropTypes.func,
-  permission: PropTypes.func,
   currentUser: PropTypes.object,
   currentGroup: PropTypes.object,
   currentFolder: PropTypes.object,

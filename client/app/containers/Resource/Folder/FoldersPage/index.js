@@ -97,8 +97,7 @@ export function FoldersPage(props) {
       handlePagination={handlePagination}
       isLoading={props.isLoading}
       links={links}
-      permission={props.permission}
-    />
+/>
   );
 }
 
@@ -106,7 +105,6 @@ FoldersPage.propTypes = {
   path: PropTypes.string,
   getFoldersBegin: PropTypes.func.isRequired,
   deleteFolderBegin: PropTypes.func,
-  permission: PropTypes.func,
   foldersUnmount: PropTypes.func.isRequired,
   folders: PropTypes.array,
   foldersTotal: PropTypes.number,

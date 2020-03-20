@@ -14,6 +14,7 @@ import ResponsiveTabs from 'components/Shared/ResponsiveTabs';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Group/GroupPlan/KPI/messages';
 import Permission from 'components/Shared/DiverstPermission';
+import { permission } from 'utils/permissionsHelpers';
 import dig from 'object-dig';
 
 const styles = theme => ({});
@@ -30,21 +31,21 @@ export function GroupPlanLinks(props) {
           indicatorColor='primary'
           textColor='primary'
         >
-          <Permission show={props.permission('events_manage?')} value='events'>
+          <Permission show={permission(props.currentGroup, 'events_manage?')} value='events'>
             <Tab
               component={WrappedNavLink}
               to={ROUTES.group.plan.events.index.path(props.currentGroup.id)}
               label={<DiverstFormattedMessage {...messages.links.event} />}
             />
           </Permission>
-          <Permission show={props.permission('kpi_manage?')} value='kpi'>
+          <Permission show={permission(props.currentGroup, 'kpi_manage?')} value='kpi'>
             <Tab
               component={WrappedNavLink}
               to={ROUTES.group.plan.kpi.updates.index.path(props.currentGroup.id)}
               label={<DiverstFormattedMessage {...messages.links.KPI} />}
             />
           </Permission>
-          <Permission show={props.permission('budgets_view?')} value='budgeting'>
+          <Permission show={permission(props.currentGroup, 'budgets_view?')} value='budgeting'>
             <Tab
               component={WrappedNavLink}
               to={ROUTES.group.plan.budget.overview.path(props.currentGroup.id)}
@@ -61,8 +62,7 @@ GroupPlanLinks.propTypes = {
   classes: PropTypes.object,
   currentTab: PropTypes.string,
   currentGroup: PropTypes.object,
-  permission: PropTypes.func,
-};
+  };
 
 export const StyledGroupPlanLinks = withStyles(styles)(GroupPlanLinks);
 

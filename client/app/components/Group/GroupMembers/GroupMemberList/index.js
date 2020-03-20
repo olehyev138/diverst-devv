@@ -32,7 +32,7 @@ import DiverstTable from 'components/Shared/DiverstTable';
 import DiverstDropdownMenu from 'components/Shared/DiverstDropdownMenu';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import Permission from 'components/Shared/DiverstPermission';
-
+import { permission } from 'utils/permissionsHelpers';
 const styles = theme => ({
   errorButton: {
     color: theme.palette.error.main,
@@ -122,7 +122,7 @@ export function GroupMemberList(props) {
 
   const actions = [];
 
-  if (props.permission('members_destroy?'))
+  if (permission(props.currentGroup, 'members_destroy?'))
     actions.push(
       {
         icon: () => <DeleteIcon />,
@@ -141,7 +141,7 @@ export function GroupMemberList(props) {
   return (
     <React.Fragment>
       <Box className={classes.floatRight}>
-        <Permission show={props.permission('member_create?')}>
+        <Permission show={permission(props.currentGroup, 'member_create?')}>
           <Button
             className={classes.actionButton}
             variant='contained'
@@ -344,8 +344,7 @@ GroupMemberList.propTypes = {
   memberTo: PropTypes.instanceOf(DateTime),
   segmentLabels: PropTypes.array,
   handleFilterChange: PropTypes.func.isRequired,
-  permission: PropTypes.func,
-};
+  };
 
 export default compose(
   memo,

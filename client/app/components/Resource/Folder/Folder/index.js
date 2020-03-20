@@ -34,7 +34,8 @@ import DiverstLoader from 'components/Shared/DiverstLoader';
 
 import FolderListItem from 'components/Resource/Shared/FolderListItem';
 import DiverstShowLoader from 'components/Shared/DiverstShowLoader';
-import Permission from "../../../Shared/DiverstPermission";
+import Permission from 'components/Shared/DiverstPermission';
+import { permission } from 'utils/permissionsHelpers';
 
 const styles = theme => ({
   folderListItem: {
@@ -87,7 +88,7 @@ export function Folder(props) {
             </Grid>
 
             <Grid item>
-              <Permission show={props.permission('resources_create?')}>
+              <Permission show={permission(props.currentGroup, 'resources_create?')}>
                 <Button
                   variant='contained'
                   to={props.links.resourceNew}
@@ -103,7 +104,7 @@ export function Folder(props) {
             </Grid>
 
             <Grid item>
-              <Permission show={props.permission('resources_create?')}>
+              <Permission show={permission(props.currentGroup, 'resources_create?')}>
                 <Button
                   variant='contained'
                   to={props.links.folderNew}
@@ -268,7 +269,6 @@ Folder.propTypes = {
   handleFolderPagination: PropTypes.func,
   handleResourcePagination: PropTypes.func,
   archiveResourceBegin: PropTypes.func,
-  permission: PropTypes.func,
   intl: intlShape.isRequired,
   isLoading: PropTypes.bool,
   isFormLoading: PropTypes.bool,
