@@ -70,12 +70,16 @@ export function NewsFeed(props) {
       name: <DiverstFormattedMessage {...messages.news_link} />,
       linkPath: props.links.newsLinkNew,
     },
-    {
-      icon: <SocialIcon />,
-      name: <DiverstFormattedMessage {...messages.social_link} />,
-      linkPath: props.links.socialLinkNew,
-    },
   ];
+
+  if (permission(props.currentGroup, 'social_link_create?'))
+    actions.push(
+      {
+        icon: <SocialIcon />,
+        name: <DiverstFormattedMessage {...messages.social_link} />,
+        linkPath: props.links.socialLinkNew,
+      },
+    );
 
   const { classes } = props;
   const [speedDialOpen, setSpeedDialOpen] = React.useState(false);
@@ -138,36 +142,38 @@ export function NewsFeed(props) {
       {!props.readonly && (
         <React.Fragment>
           <Backdrop open={speedDialOpen} className={classes.backdrop} />
-          <SpeedDial
-            ariaLabel={props.intl.formatMessage(messages.add)}
-            className={classes.speedDial}
-            icon={<SpeedDialIcon />}
-            onClose={handleSpeedDialClose}
-            onOpen={handleSpeedDialOpen}
-            open={speedDialOpen}
-            direction='left'
-            FabProps={{
-              className: classes.speedDialButton
-            }}
-          >
-            {actions.map(action => (
-              <SpeedDialAction
-                component={WrappedNavLink}
-                to={action.linkPath}
-                key={action.linkPath}
-                icon={action.icon}
-                tooltipTitle={<Typography>{action.name}</Typography>}
-                tooltipPlacement='bottom'
-                onClick={handleSpeedDialClose}
-                PopperProps={{
-                  disablePortal: true,
-                }}
-              />
-            ))}
-          </SpeedDial>
-          <Box className={classes.floatSpacer} />
-          <Paper>
-            <Permission show={permission(props.currentGroup, 'news_manage?')}>
+          <Permission show={permission(props.currentGroup, 'news_create?')}>
+            <SpeedDial
+              ariaLabel={props.intl.formatMessage(messages.add)}
+              className={classes.speedDial}
+              icon={<SpeedDialIcon />}
+              onClose={handleSpeedDialClose}
+              onOpen={handleSpeedDialOpen}
+              open={speedDialOpen}
+              direction='left'
+              FabProps={{
+                className: classes.speedDialButton
+              }}
+            >
+              {actions.map(action => (
+                <SpeedDialAction
+                  component={WrappedNavLink}
+                  to={action.linkPath}
+                  key={action.linkPath}
+                  icon={action.icon}
+                  tooltipTitle={<Typography>{action.name}</Typography>}
+                  tooltipPlacement='bottom'
+                  onClick={handleSpeedDialClose}
+                  PopperProps={{
+                    disablePortal: true,
+                  }}
+                />
+              ))}
+            </SpeedDial>
+            <Box className={classes.floatSpacer} />
+          </Permission>
+          <Permission show={permission(props.currentGroup, 'news_manage?')}>
+            <Paper>
               <ResponsiveTabs
                 value={props.currentTab}
                 onChange={props.handleChangeTab}
@@ -177,8 +183,8 @@ export function NewsFeed(props) {
                 <Tab label={<DiverstFormattedMessage {...messages.approved} />} />
                 <Tab label={<DiverstFormattedMessage {...messages.pending} />} />
               </ResponsiveTabs>
-            </Permission>
-          </Paper>
+            </Paper>
+          </Permission>
         </React.Fragment>
       )}
       <br />

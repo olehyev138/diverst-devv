@@ -125,6 +125,10 @@ class GroupPolicy < ApplicationPolicy
     NewsFeedLinkPolicy.new(self, NewsFeedLink).create?
   end
 
+  def social_link_create?
+    user.enterprise.enable_social_media
+  end
+
   def resource_create?
     GroupResourcePolicy.new(self, Resource).create?
   end
