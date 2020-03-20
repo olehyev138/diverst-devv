@@ -30,7 +30,7 @@ class DiverstController < ApplicationController
   end
 
   rescue_from Pundit::AuthorizationNotPerformedError do |e|
-    render status: :bad_request, json: { message: e.message }
+    render status: :unauthorized, json: { message: e.message }
   end
 
   rescue_from ActionController::BadRequest do |e|
