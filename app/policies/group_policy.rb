@@ -85,7 +85,7 @@ class GroupPolicy < ApplicationPolicy
     index?
   end
 
-  # PARTS PERMISSIONS
+  # VIEW PERMISSIONS
 
   def events_view?
     InitiativePolicy.new(self, Initiative).index?
@@ -103,10 +103,6 @@ class GroupPolicy < ApplicationPolicy
     GroupResourcePolicy.new(self, Resource).index?
   end
 
-  def events_manage?
-    InitiativePolicy.new(self, Initiative).manage?
-  end
-
   def budgets_view?
     AnnualBudgetPolicy.new(self, AnnualBudget).index?
   end
@@ -115,6 +111,34 @@ class GroupPolicy < ApplicationPolicy
     GroupLeaderPolicy.new(self, GroupLeader).index?
   end
 
+  # CREATE PERMISSIONS
+
+  def events_create?
+    InitiativePolicy.new(self, Initiative).create?
+  end
+
+  def members_create?
+    UserGroupPolicy.new(self, UserGroup).create?
+  end
+
+  def news_create?
+    NewsFeedLinkPolicy.new(self, NewsFeedLink).create?
+  end
+
+  def resource_create?
+    GroupResourcePolicy.new(self, Resource).create?
+  end
+
+  def budgets_create?
+    AnnualBudgetPolicy.new(self, AnnualBudget).create?
+  end
+
+  def leaders_create?
+    GroupLeaderPolicy.new(self, GroupLeader).create?
+  end
+
+  # MANAGE PERMISSIONS
+
   def leaders_manage?
     GroupLeaderPolicy.new(self, GroupLeader).manage?
   end
@@ -122,6 +146,14 @@ class GroupPolicy < ApplicationPolicy
   def kpi_manage?
     GroupUpdatePolicy.new(self, Update).manage?
   end
+
+  def events_manage?
+    InitiativePolicy.new(self, Initiative).manage?
+  end
+
+  # ========================================
+  # MAYBE DEPRECATED
+  # ========================================
 
   # move these to separate policies
   def view_all?
