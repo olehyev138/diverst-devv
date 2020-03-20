@@ -107,7 +107,7 @@ export function EventsPage(props) {
       handlePagination={handlePagination}
       links={links}
       readonly={props.readonly}
-/>
+    />
   );
 }
 
@@ -121,7 +121,7 @@ EventsPage.propTypes = {
     id: PropTypes.number,
   }),
   readonly: PropTypes.bool,
-  };
+};
 
 const mapStateToProps = createStructuredSelector({
   events: selectPaginatedEvents(),

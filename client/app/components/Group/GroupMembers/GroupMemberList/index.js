@@ -344,7 +344,8 @@ GroupMemberList.propTypes = {
   memberTo: PropTypes.instanceOf(DateTime),
   segmentLabels: PropTypes.array,
   handleFilterChange: PropTypes.func.isRequired,
-  };
+  currentGroup: PropTypes.object,
+};
 
 export default compose(
   memo,

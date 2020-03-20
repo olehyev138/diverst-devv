@@ -97,7 +97,7 @@ export function FoldersPage(props) {
       handlePagination={handlePagination}
       isLoading={props.isLoading}
       links={links}
-/>
+    />
   );
 }
 

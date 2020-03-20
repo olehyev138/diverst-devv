@@ -49,7 +49,7 @@ BudgetLinks.propTypes = {
   classes: PropTypes.object,
   currentTab: PropTypes.string,
   currentGroup: PropTypes.object,
-  };
+};
 
 export const StyledGroupManageLinks = withStyles(styles)(BudgetLinks);
 

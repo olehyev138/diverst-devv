@@ -184,7 +184,7 @@ export function GroupMemberListPage(props) {
         memberTo={to ? to[1] : null}
         segmentLabels={segmentLabels || []}
         handleFilterChange={handleFilterChange}
-  />
+      />
     </React.Fragment>
   );
 }
@@ -197,7 +197,7 @@ GroupMemberListPage.propTypes = {
   memberList: PropTypes.array,
   memberTotal: PropTypes.number,
   isFetchingMembers: PropTypes.bool,
-  };
+};
 
 const mapStateToProps = createStructuredSelector({
   memberList: selectPaginatedMembers(),

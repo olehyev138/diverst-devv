@@ -62,7 +62,7 @@ GroupPlanLinks.propTypes = {
   classes: PropTypes.object,
   currentTab: PropTypes.string,
   currentGroup: PropTypes.object,
-  };
+};
 
 export const StyledGroupPlanLinks = withStyles(styles)(GroupPlanLinks);
 

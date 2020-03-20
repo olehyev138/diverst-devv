@@ -174,7 +174,8 @@ EventsList.propTypes = {
   links: PropTypes.object,
   readonly: PropTypes.bool,
   loaderProps: PropTypes.object,
-  };
+  currentGroup: PropTypes.object,
+};
 
 export default compose(
   injectIntl,

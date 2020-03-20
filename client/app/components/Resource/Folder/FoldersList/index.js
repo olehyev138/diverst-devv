@@ -145,7 +145,8 @@ FoldersList.propTypes = {
   isLoading: PropTypes.bool,
   links: PropTypes.object,
   deleteFolderBegin: PropTypes.func,
-  };
+  currentGroup: PropTypes.object,
+};
 
 export default compose(
   injectIntl,

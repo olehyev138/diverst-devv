@@ -54,7 +54,7 @@ GroupManageLinks.propTypes = {
   classes: PropTypes.object,
   currentTab: PropTypes.number,
   currentGroup: PropTypes.object,
-  };
+};
 
 export const StyledGroupManageLinks = withStyles(styles)(GroupManageLinks);
 

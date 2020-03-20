@@ -280,7 +280,8 @@ Folder.propTypes = {
     folderEdit: PropTypes.func,
     resourceEdit: PropTypes.func,
     resourceNew: PropTypes.string,
-  })
+  }),
+  currentGroup: PropTypes.object,
 };
 
 export default compose(
