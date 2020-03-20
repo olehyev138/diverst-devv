@@ -46,6 +46,7 @@ import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Resource/Folder/messages';
 import Conditional from '../../../../components/Compositions/Conditional';
 import { NewsFeedPage } from '../../../News/NewsFeedPage';
+import FoldersList from "../../../../components/Resource/Folder/FoldersList";
 
 const defaultParams = Object.freeze({
   count: 5, // TODO: Make this a constant and use it also in Folder
@@ -227,6 +228,7 @@ export function FolderPage(props) {
           isLoading={props.isLoading}
           isFormLoading={props.isFormLoading}
           links={links}
+          permission={props.permission}
         />
       )}
     </div>
@@ -243,6 +245,7 @@ FolderPage.propTypes = {
   getResourcesBegin: PropTypes.func,
   archiveResourceBegin: PropTypes.func,
   foldersUnmount: PropTypes.func,
+  permission: PropTypes.func,
   currentUser: PropTypes.object,
   currentGroup: PropTypes.object,
   currentFolder: PropTypes.object,

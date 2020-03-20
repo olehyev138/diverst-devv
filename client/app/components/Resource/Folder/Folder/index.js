@@ -34,6 +34,7 @@ import DiverstLoader from 'components/Shared/DiverstLoader';
 
 import FolderListItem from 'components/Resource/Shared/FolderListItem';
 import DiverstShowLoader from 'components/Shared/DiverstShowLoader';
+import Permission from "../../../Shared/DiverstPermission";
 
 const styles = theme => ({
   folderListItem: {
@@ -86,31 +87,35 @@ export function Folder(props) {
             </Grid>
 
             <Grid item>
-              <Button
-                variant='contained'
-                to={props.links.resourceNew}
-                color='primary'
-                size='large'
-                component={WrappedNavLink}
-                className={classes.buttons}
-                startIcon={<AddIcon />}
-              >
-                <DiverstFormattedMessage {...messages.show.addResource} />
-              </Button>
+              <Permission show={props.permission('resources_create?')}>
+                <Button
+                  variant='contained'
+                  to={props.links.resourceNew}
+                  color='primary'
+                  size='large'
+                  component={WrappedNavLink}
+                  className={classes.buttons}
+                  startIcon={<AddIcon />}
+                >
+                  <DiverstFormattedMessage {...messages.show.addResource} />
+                </Button>
+              </Permission>
             </Grid>
 
             <Grid item>
-              <Button
-                variant='contained'
-                to={props.links.folderNew}
-                color='primary'
-                size='large'
-                component={WrappedNavLink}
-                className={classes.buttons}
-                startIcon={<AddIcon />}
-              >
-                <DiverstFormattedMessage {...messages.show.addFolder} />
-              </Button>
+              <Permission show={props.permission('resources_create?')}>
+                <Button
+                  variant='contained'
+                  to={props.links.folderNew}
+                  color='primary'
+                  size='large'
+                  component={WrappedNavLink}
+                  className={classes.buttons}
+                  startIcon={<AddIcon />}
+                >
+                  <DiverstFormattedMessage {...messages.show.addFolder} />
+                </Button>
+              </Permission>
             </Grid>
 
             <Grid item>
@@ -263,6 +268,7 @@ Folder.propTypes = {
   handleFolderPagination: PropTypes.func,
   handleResourcePagination: PropTypes.func,
   archiveResourceBegin: PropTypes.func,
+  permission: PropTypes.func,
   intl: intlShape.isRequired,
   isLoading: PropTypes.bool,
   isFormLoading: PropTypes.bool,

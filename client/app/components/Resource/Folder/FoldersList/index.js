@@ -30,6 +30,7 @@ import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import DiverstLoader from 'components/Shared/DiverstLoader';
 
 import FolderListItem from 'components/Resource/Shared/FolderListItem';
+import Permission from "../../../Shared/DiverstPermission";
 
 const styles = theme => ({
   folderListItem: {
@@ -70,17 +71,19 @@ export function FoldersList(props, context) {
 
   return (
     <React.Fragment>
-      <Button
-        className={classes.floatRight}
-        variant='contained'
-        to={props.links.folderNew}
-        color='primary'
-        size='large'
-        component={WrappedNavLink}
-        startIcon={<AddIcon />}
-      >
-        <DiverstFormattedMessage {...messages.new} />
-      </Button>
+      <Permission show={props.permission('resources_create?')} className={classes.floatRight}>
+        <Button
+          className={classes.floatRight}
+          variant='contained'
+          to={props.links.folderNew}
+          color='primary'
+          size='large'
+          component={WrappedNavLink}
+          startIcon={<AddIcon />}
+        >
+          <DiverstFormattedMessage {...messages.new} />
+        </Button>
+      </Permission>
       <Box className={classes.floatSpacer} />
 
       <DiverstLoader isLoading={props.isLoading}>
@@ -141,6 +144,7 @@ FoldersList.propTypes = {
   isLoading: PropTypes.bool,
   links: PropTypes.object,
   deleteFolderBegin: PropTypes.func,
+  permission: PropTypes.func,
 };
 
 export default compose(
