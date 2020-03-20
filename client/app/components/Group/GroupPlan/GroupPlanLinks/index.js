@@ -60,7 +60,8 @@ export function GroupPlanLinks(props) {
 GroupPlanLinks.propTypes = {
   classes: PropTypes.object,
   currentTab: PropTypes.string,
-  currentGroup: PropTypes.object
+  currentGroup: PropTypes.object,
+  permission: PropTypes.func,
 };
 
 export const StyledGroupPlanLinks = withStyles(styles)(GroupPlanLinks);

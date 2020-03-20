@@ -30,6 +30,7 @@ import messages from 'containers/Event/messages';
 import { customTexts } from 'utils/customTextHelpers';
 
 import EventListItem from 'components/Event/EventListItem';
+import Permission from "components/Shared/DiverstPermission";
 
 const styles = theme => ({
   eventListItem: {
@@ -69,17 +70,19 @@ export function EventsList(props, context) {
     <React.Fragment>
       {!props.readonly && (
         <React.Fragment>
-          <Button
-            className={classes.floatRight}
-            variant='contained'
-            to={props.links.eventNew}
-            color='primary'
-            size='large'
-            component={WrappedNavLink}
-            startIcon={<AddIcon />}
-          >
-            <DiverstFormattedMessage {...messages.new} />
-          </Button>
+          <Permission show={props.permission('events_create?')} className={classes.floatRight}>
+            <Button
+              className={classes.floatRight}
+              variant='contained'
+              to={props.links.eventNew}
+              color='primary'
+              size='large'
+              component={WrappedNavLink}
+              startIcon={<AddIcon />}
+            >
+              <DiverstFormattedMessage {...messages.new} />
+            </Button>
+          </Permission>
           <Box className={classes.floatSpacer} />
         </React.Fragment>
       )}
@@ -170,6 +173,7 @@ EventsList.propTypes = {
   links: PropTypes.object,
   readonly: PropTypes.bool,
   loaderProps: PropTypes.object,
+  permission: PropTypes.func,
 };
 
 export default compose(
