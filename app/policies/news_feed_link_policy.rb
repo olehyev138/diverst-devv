@@ -16,7 +16,7 @@ class NewsFeedLinkPolicy < GroupBasePolicy
   end
 
   def update?
-    record.author == user || super
+    (record.author == user if NewsFeedLink === record) || super
   end
 
   class Scope < Scope

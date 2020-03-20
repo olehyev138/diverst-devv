@@ -155,6 +155,10 @@ class GroupPolicy < ApplicationPolicy
     InitiativePolicy.new(self, Initiative).manage?
   end
 
+  def news_manage?
+    NewsFeedLinkPolicy.new(self, NewsFeedLink).manage?
+  end
+
   # ========================================
   # MAYBE DEPRECATED
   # ========================================

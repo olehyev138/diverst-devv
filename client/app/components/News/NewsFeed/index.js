@@ -28,6 +28,8 @@ import DiverstLoader from 'components/Shared/DiverstLoader';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/News/messages';
 import { injectIntl, intlShape } from 'react-intl';
+import Permission from "../../Shared/DiverstPermission";
+import {permission} from "../../../utils/permissionsHelpers";
 
 const styles = theme => ({
   newsItem: {
@@ -165,15 +167,17 @@ export function NewsFeed(props) {
           </SpeedDial>
           <Box className={classes.floatSpacer} />
           <Paper>
-            <ResponsiveTabs
-              value={props.currentTab}
-              onChange={props.handleChangeTab}
-              indicatorColor='primary'
-              textColor='primary'
-            >
-              <Tab label={<DiverstFormattedMessage {...messages.approved} />} />
-              <Tab label={<DiverstFormattedMessage {...messages.pending} />} />
-            </ResponsiveTabs>
+            <Permission show={permission(props.currentGroup, 'news_manage?')}>
+              <ResponsiveTabs
+                value={props.currentTab}
+                onChange={props.handleChangeTab}
+                indicatorColor='primary'
+                textColor='primary'
+              >
+                <Tab label={<DiverstFormattedMessage {...messages.approved} />} />
+                <Tab label={<DiverstFormattedMessage {...messages.pending} />} />
+              </ResponsiveTabs>
+            </Permission>
           </Paper>
         </React.Fragment>
       )}
