@@ -42,6 +42,7 @@ module "prod" {
   db_apply_immediately        = var.db_apply_immediately
   db_maintenance_window       = var.db_maintenance_window
 
+  db_name       = var.db_name
   db_username   = var.db_username
   db_password   = var.db_password
 }

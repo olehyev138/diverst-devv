@@ -22,7 +22,7 @@ module "db" {
   source = "../../../modules/data/db"
 
   env_name      = var.env_name
-  db_name       = "diverst_production"
+  db_name       = var.db_name
   db_username   = var.db_username
   db_password   = var.db_password
 
