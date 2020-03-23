@@ -1,18 +1,33 @@
 require 'rails_helper'
 
 RSpec.describe Folder, type: :model do
-  describe 'when validating' do
-    let(:group) { create(:group) }
-    let(:folder) { create(:folder, name: 'test', group: group) }
+  let(:group) { create(:group) }
+  let(:folder) { create(:folder, name: 'test', group: group) }
 
-    it { expect(folder).to have_many(:resources) }
-    it { expect(folder).to have_many(:folder_shares) }
-    it { expect(folder).to have_many(:groups) }
+  describe 'test associations' do
+    it { expect(folder).to have_many(:resources).dependent(:destroy) }
+    it { expect(folder).to have_many(:folder_shares).dependent(:destroy) }
+    it { expect(folder).to have_many(:groups).through(:folder_shares).source(:group) }
+    it { expect(folder).to have_many(:views).dependent(:destroy) }
+    it { expect(folder).to have_many(:children).class_name('Folder').with_foreign_key(:parent_id).dependent(:destroy) }
+    it { expect(folder).to have_many(:views).dependent(:destroy) }
 
     it { expect(folder).to belong_to(:group) }
+    it { expect(folder).to belong_to(:enterprise) }
+    it { expect(folder).to belong_to(:parent).class_name('Folder').with_foreign_key(:parent_id) }
 
     it { expect(folder).to validate_presence_of(:name) }
-    # it { expect(folder).to validate_uniqueness_of(:name) } # <- revisit
+  end
+
+  describe 'test validations' do
+    it { expect(folder).to validate_length_of(:password_digest).is_at_most(191) }
+    it { expect(folder).to validate_length_of(:name).is_at_most(191) }
+    it { expect(folder).to validate_presence_of(:name) }
+
+    before { folder.update(password_protected: true) }
+
+    it { expect(folder).to validate_presence_of(:password) }
+    it { expect(folder).to validate_length_of(:password).is_at_least(6) }
   end
 
   describe 'test that' do
@@ -102,19 +117,21 @@ RSpec.describe Folder, type: :model do
     end
   end
 
-  describe '#destroy_callbacks' do
-    it 'removes the child objects' do
-      folder = create(:folder)
-      resource = create(:resource, folder: folder)
-      folder_share = create(:folder_share, folder: folder)
-      folder_child = create(:folder, parent: folder)
+  describe 'test callbacks' do
+    context '#destroy_callbacks' do
+      it 'removes the child objects' do
+        folder = create(:folder)
+        resource = create(:resource, folder: folder)
+        folder_share = create(:folder_share, folder: folder)
+        folder_child = create(:folder, parent: folder)
 
-      folder.destroy!
+        folder.destroy!
 
-      expect { Folder.find(folder.id) }.to raise_error(ActiveRecord::RecordNotFound)
-      expect { Resource.find(resource.id) }.to raise_error(ActiveRecord::RecordNotFound)
-      expect { FolderShare.find(folder_share.id) }.to raise_error(ActiveRecord::RecordNotFound)
-      expect { Folder.find(folder_child.id) }.to raise_error(ActiveRecord::RecordNotFound)
+        expect { Folder.find(folder.id) }.to raise_error(ActiveRecord::RecordNotFound)
+        expect { Resource.find(resource.id) }.to raise_error(ActiveRecord::RecordNotFound)
+        expect { FolderShare.find(folder_share.id) }.to raise_error(ActiveRecord::RecordNotFound)
+        expect { Folder.find(folder_child.id) }.to raise_error(ActiveRecord::RecordNotFound)
+      end
     end
   end
 

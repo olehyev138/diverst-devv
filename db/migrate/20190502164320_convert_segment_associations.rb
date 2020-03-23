@@ -3,7 +3,7 @@ class ConvertSegmentAssociations < ActiveRecord::Migration[5.1]
     # Add parent_id column
     add_reference :segments, :parent, index: true
 
-    Segment.reset_column_information
+    Segment.column_reload!
 
     # Restructure sub segments
     # Query the db raw as the Segmentation model will not exist
@@ -22,6 +22,7 @@ class ConvertSegmentAssociations < ActiveRecord::Migration[5.1]
 
   def down
     say 'Creating segmentations'
+    Segment.column_reload!
     Segment.where('parent_id IS NOT NULL').each do |record|
       sql = "INSERT INTO segmentations (parent_id, child_id, created_at, updated_at)
                VALUES (#{record.parent_id}, #{record.id}, '#{Time.now.to_s(:db)}', '#{Time.now.to_s(:db)}')"

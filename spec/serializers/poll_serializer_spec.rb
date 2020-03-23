@@ -7,7 +7,7 @@ RSpec.describe PollSerializer, type: :serializer do
     segment = create(:segment, enterprise: enterprise)
     poll = create(:poll, enterprise: enterprise, group_ids: [group.id], segment_ids: [segment.id])
 
-    serializer = PollSerializer.new(poll)
+    serializer = PollSerializer.new(poll, scope: serializer_scopes(create(:user)), scope_name: :scope)
 
     expect(serializer.serializable_hash[:id]).to eq(poll.id)
     expect(serializer.serializable_hash[:groups].empty?).to be false

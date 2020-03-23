@@ -1,5 +1,5 @@
-import { createSelector } from 'reselect/lib/index';
-import { initialState } from 'containers/Group/reducer';
+import { createSelector } from 'reselect/lib';
+import { initialState } from './reducer';
 
 const selectGroupsDomain = state => state.groups || initialState;
 
@@ -88,9 +88,21 @@ const selectFormGroup = () => createSelector(
     return selectGroup;
   }
 );
+const selectHasChanged = () => createSelector(
+  selectGroupsDomain,
+  groupsState => groupsState.hasChanged
+);
 
 export {
-  selectGroupsDomain, selectPaginatedGroups, selectPaginatedSelectGroups,
-  selectGroupTotal, selectGroup, selectFormGroup, selectGroupIsLoading,
-  selectGroupIsCommitting, selectGroupIsFormLoading, selectCategorizeGroup
+  selectGroupsDomain,
+  selectPaginatedSelectGroups,
+  selectPaginatedGroups,
+  selectGroupTotal,
+  selectGroup,
+  selectFormGroup,
+  selectGroupIsLoading,
+  selectGroupIsFormLoading,
+  selectGroupIsCommitting,
+  selectHasChanged,
+  selectCategorizeGroup,
 };

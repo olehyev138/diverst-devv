@@ -24,4 +24,7 @@ export default defineMessages({
   emails: {
     id: `${scope}.tab.emails`
   },
+  policy_templates: {
+    id: `${scope}.policy_templates`
+  },
 });

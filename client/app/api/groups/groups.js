@@ -5,6 +5,12 @@ const axios = require('axios');
 const Groups = new API({ controller: 'groups' });
 
 Object.assign(Groups, {
+  annualBudgets(payload) {
+    return axios.get(appendQueryArgs(`${this.url}/annual_budgets`, payload));
+  },
+  currentAnnualBudget(id, payload) {
+    return axios.get(appendQueryArgs(`${this.url}/${id}/annual_budget`, payload));
+  },
   initiatives(id, payload) {
     return axios.get(appendQueryArgs(`${this.url}/${id}/initiatives`, payload));
   },
@@ -26,6 +32,12 @@ Object.assign(Groups, {
   },
   assignLeaders(id, payload) {
     return axios.put(`${this.url}/${id}/assign_leaders`, payload);
+  },
+  carryoverBudget(id, payload) {
+    return axios.post(`${this.url}/${id}/carryover_annual_budget`);
+  },
+  resetBudget(id, payload) {
+    return axios.post(`${this.url}/${id}/reset_annual_budget`);
   },
   updateCategories(id, payload) {
     return axios.post(`${this.url}/${id}/update_categories`, payload);

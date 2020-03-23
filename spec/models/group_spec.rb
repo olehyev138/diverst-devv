@@ -9,7 +9,7 @@ RSpec.describe Group, type: :model do
   include ActiveJob::TestHelper
   it_behaves_like 'it Defines Fields'
 
-  describe 'validations' do
+  describe 'test associations and validations' do
     let(:group) { build(:group) }
 
     it { expect(group).to validate_presence_of(:name) }
@@ -21,50 +21,55 @@ RSpec.describe Group, type: :model do
     it { expect(group).to have_one(:news_feed).dependent(:destroy) }
 
     it { expect(group).to delegate_method(:news_feed_links).to(:news_feed) }
+    it { expect(group).to delegate_method(:shared_news_feed_links).to(:news_feed) }
 
     it { expect(group).to have_many(:user_groups).dependent(:destroy) }
     it { expect(group).to have_many(:members).through(:user_groups).class_name('User').source(:user) }
-    it { expect(group).to have_many(:groups_polls) }
+    it { expect(group).to have_many(:groups_polls).dependent(:destroy) }
     it { expect(group).to have_many(:polls).through(:groups_polls) }
-    it { expect(group).to have_many(:leaders).through(:group_leaders) }
+    it { expect(group).to have_many(:leaders).through(:group_leaders).source(:user) }
     it { expect(group).to have_many(:poll_responses).through(:polls).source(:responses) }
 
-    it { expect(group).to have_many(:own_initiatives).class_name('Initiative').with_foreign_key('owner_group_id') }
+    it { expect(group).to have_many(:own_initiatives).class_name('Initiative').with_foreign_key('owner_group_id').dependent(:destroy) }
     it { expect(group).to have_many(:initiative_participating_groups) }
     it { expect(group).to have_many(:participating_initiatives).through(:initiative_participating_groups).source(:initiative) }
-    it { expect(group).to have_many(:budgets) }
-    it { expect(group).to have_many(:messages).class_name('GroupMessage') }
+    it { expect(group).to have_many(:budgets).dependent(:destroy) }
+    it { expect(group).to have_many(:messages).class_name('GroupMessage').dependent(:destroy) }
     it { expect(group).to have_many(:message_comments).through(:messages).class_name('GroupMessageComment').source(:comments) }
     it { expect(group).to have_many(:news_links).dependent(:destroy) }
     it { expect(group).to have_many(:news_link_comments).through(:news_links).class_name('NewsLinkComment').source(:comments) }
     it { expect(group).to have_many(:social_links).dependent(:destroy) }
-    it { expect(group).to have_many(:invitation_segments_groups) }
+    it { expect(group).to have_many(:invitation_segments_groups).dependent(:destroy) }
     it { expect(group).to have_many(:invitation_segments).class_name('Segment').through(:invitation_segments_groups) }
-    it { expect(group).to have_many(:resources) }
-    it { expect(group).to have_many(:folders) }
-    it { expect(group).to have_many(:folder_shares) }
+    it { expect(group).to have_many(:resources).dependent(:destroy) }
+    it { expect(group).to have_many(:folders).dependent(:destroy) }
+    it { expect(group).to have_many(:folder_shares).dependent(:destroy) }
     it { expect(group).to have_many(:shared_folders).through(:folder_shares).source('folder') }
-    it { expect(group).to have_many(:campaigns_groups) }
+    it { expect(group).to have_many(:campaigns_groups).dependent(:destroy) }
     it { expect(group).to have_many(:campaigns).through(:campaigns_groups) }
     it { expect(group).to have_many(:questions).through(:campaigns) }
     it { expect(group).to have_many(:answers).through(:questions) }
     it { expect(group).to have_many(:answer_upvotes).through(:answers).source(:votes) }
     it { expect(group).to have_many(:answer_comments).through(:answers).class_name('AnswerComment').source(:comments) }
-    it { expect(group).to have_many(:outcomes) }
+    it { expect(group).to have_many(:outcomes).dependent(:destroy) }
     it { expect(group).to have_many(:pillars).through(:outcomes) }
     it { expect(group).to have_many(:initiatives).through(:pillars) }
     it { expect(group).to have_many(:updates).class_name('Update').dependent(:destroy) }
     it { expect(group).to have_many(:fields) }
     it { expect(group).to have_many(:survey_fields).class_name('Field').dependent(:destroy) }
-    it { expect(group).to have_many(:group_leaders) }
+    it { expect(group).to have_many(:group_leaders).dependent(:destroy) }
     it { expect(group).to have_many(:leaders).through(:group_leaders).source(:user) }
-    it { expect(group).to have_many(:sponsors) }
-    it { expect(group).to have_many(:children).class_name('Group').with_foreign_key(:parent_id) }
+    it { expect(group).to have_many(:views).dependent(:destroy) }
+    it { expect(group).to have_many(:twitter_accounts).class_name('TwitterAccount').dependent(:destroy) }
+    it { expect(group).to have_many(:sponsors).dependent(:destroy) }
+    it { expect(group).to have_many(:children).class_name('Group').with_foreign_key(:parent_id).dependent(:destroy) }
     it { expect(group).to belong_to(:parent).class_name('Group').with_foreign_key(:parent_id) }
-
+    it { expect(group).to have_many(:annual_budgets).dependent(:destroy) }
 
     it { expect(group).to belong_to(:group_category) }
     it { expect(group).to belong_to(:group_category_type) }
+
+    it { expect(group).to validate_uniqueness_of(:name).scoped_to(:enterprise_id) }
 
     # ActiveStorage
     [:logo, :banner].each do |attribute|
@@ -160,6 +165,24 @@ RSpec.describe Group, type: :model do
 
           expect(group.errors.messages[:parent_id]).to include "Group can't have both parent and children"
         end
+      end
+    end
+
+    describe '#ensure_not_own_parent' do
+      let(:group) { build(:group) }
+
+      it 'adds error' do
+        group.update(parent: group)
+        expect(group.errors.messages[:parent_id]).to include('Group cant be its own parent')
+      end
+    end
+
+    describe '#ensure_not_own_child' do
+      let(:group) { create(:group) }
+
+      it 'adds error' do
+        group.children << group
+        expect(group.errors.messages[:parent_id]).to include('Group cant be its own parent')
       end
     end
   end
@@ -395,6 +418,115 @@ RSpec.describe Group, type: :model do
     end
   end
 
+  describe '#Enumerize' do
+    let(:group) { build(:group) }
+
+    it { expect(group).to enumerize(:layout).in(:layout_0, :layout_1, :layout_2).with_default(:layout_0) }
+    it { expect(group).to enumerize(:pending_users).in(:enabled, :disabled).with_default(:disabled) }
+    it { expect(group).to enumerize(:members_visibility).in(:global, :group, :managers_only).with_default(:managers_only) }
+    it { expect(group).to enumerize(:event_attendance_visibility).in(:global, :group, :managers_only).with_default(:managers_only) }
+    it { expect(group).to enumerize(:messages_visibility).in(:global, :group, :managers_only).with_default(:managers_only) }
+    it { expect(group).to enumerize(:latest_news_visibility).in(:public, :group, :leaders_only).with_default(:leaders_only) }
+    it { expect(group).to enumerize(:upcoming_events_visibility).in(:public, :group, :leaders_only, :non_member).with_default(:leaders_only) }
+    it { expect(group).to enumerize(:unit_of_expiry_age).in(:weeks, :months, :years).with_default(:months) }
+  end
+
+  describe 'test scopes' do
+    let!(:enterprise) { create(:enterprise) }
+    let!(:groups) { create_list(:group, 3, enterprise: enterprise) }
+
+    context 'Group::by_enterprise' do
+      it 'returns groups belonging to the enterprise' do
+        expect(Group.by_enterprise(enterprise).ids.sort).to eq(groups.pluck(:id).sort)
+      end
+    end
+
+    context 'Group::top_participants' do
+      before do
+        groups.first.update(total_weekly_points: 10)
+        groups.second.update(total_weekly_points: 8)
+      end
+
+      it 'returns groups ordered in descending order of total_weekly_points' do
+        expect(Group.top_participants(2)).to eq([groups.first, groups.second])
+      end
+    end
+
+    context 'Group::is_private' do
+      let!(:private_group) { create(:group, private: true) }
+
+      it 'returns private group' do
+        expect(Group.is_private).to eq([private_group])
+      end
+    end
+
+    context 'Group::non_private' do
+      it 'returns non_private groups' do
+        expect(Group.non_private.ids.sort).to eq(groups.pluck(:id).sort)
+      end
+    end
+
+    context 'Group::all_parents' do
+      it 'returns all parent groups' do
+        expect(Group.all_parents.ids.sort).to eq(groups.pluck(:id).sort)
+      end
+    end
+
+    context 'Group::all_children' do
+      before { groups.second.update(parent_id: groups.first.id) }
+
+      it 'returns all child groups' do
+        expect(Group.all_children).to eq([groups.second])
+      end
+    end
+  end
+
+  describe '#is_parent_group?' do
+    let(:group) { create(:group) }
+
+    it 'returns false if either parent is absent or no children exists' do
+      expect(group.is_parent_group?).to eq(false)
+    end
+
+    it 'returns true if both parent is present and children exists' do
+      create(:group, parent_id: group.id)
+      expect(group.is_parent_group?).to eq(true)
+    end
+  end
+
+  describe '#is_sub_group?' do
+    let(:group) { create(:group) }
+
+    it 'returns false if parent is absent' do
+      expect(group.is_sub_group?).to eq(false)
+    end
+
+    it 'returns true if parent is present' do
+      group1 = create(:group, parent_id: group.id)
+      expect(group1.is_sub_group?).to eq(true)
+    end
+  end
+
+  describe '#is_standard_group?' do
+    let(:group) { create(:group) }
+
+    it 'returns false if either parent is absent and no children exists' do
+      expect(group.is_standard_group?).to eq(true)
+    end
+
+    it 'returns true if both parent is present or no children exists' do
+      create(:group, parent_id: group.id)
+      expect(group.is_standard_group?).to eq(false)
+    end
+  end
+
+  describe '#capitalize_name' do
+    it 'returns capitalize group name' do
+      group = create(:group, name: 'new group')
+      expect(group.capitalize_name).to eq('New Group')
+    end
+  end
+
   describe '#managers' do
     it 'returns an array with nil' do
       group = build(:group)
@@ -435,11 +567,16 @@ RSpec.describe Group, type: :model do
   end
 
   describe '#approved' do
-    it 'returns 0' do
+    it 'returns 0 with annual budget' do
       group = build(:group)
+      group.create_annual_budget
       expect(group.annual_budget_approved).to eq(0)
     end
 
+    it 'returns nil without annual budget' do
+      group = build(:group)
+      expect(group.annual_budget_approved).to eq(nil)
+    end
     it 'returns approved budget' do
       group = create(:group, annual_budget: 2000)
       annual_budget = create(:annual_budget, group: group, closed: false, amount: 2000)
@@ -451,9 +588,15 @@ RSpec.describe Group, type: :model do
   end
 
   describe '#available' do
-    it 'returns 0' do
+    it 'returns 0 with annual budget' do
       group = build(:group)
+      group.create_annual_budget
       expect(group.annual_budget_available).to eq(0)
+    end
+
+    it 'returns nil without annual budget' do
+      group = build(:group)
+      expect(group.annual_budget_available).to eq(nil)
     end
 
     it 'returns available budget' do
@@ -467,15 +610,21 @@ RSpec.describe Group, type: :model do
 
 
   describe '#expenses' do
-    it 'returns 0' do
+    it 'returns 0 with annual expenses' do
       group = build(:group)
+      group.create_annual_budget
       expect(group.annual_budget_expenses).to eq(0)
     end
 
+    it 'returns nil without annual budget' do
+      group = build(:group)
+      expect(group.annual_budget_expenses).to eq(nil)
+    end
+
     it 'returns expenses budget' do
-      group = create(:group, annual_budget: 10000)
-      annual_budget = create(:annual_budget, group: group, closed: false, amount: group.annual_budget)
-      budget = create(:approved, group_id: group.id, annual_budget_id: annual_budget.id)
+      group = create(:group)
+      annual_budget = create(:annual_budget, group: group, closed: false, amount: 10000)
+      budget = create(:approved, annual_budget_id: annual_budget.id)
       initiative = create(:initiative, owner_group: group,
                                        estimated_funding: budget.budget_items.first.available_amount,
                                        budget_item_id: budget.budget_items.first.id)
@@ -588,6 +737,14 @@ RSpec.describe Group, type: :model do
     end
   end
 
+  describe '#logo_expiring_thumb' do
+    let(:group) { build(:group) }
+
+    it 'returns nil when logo is blank' do
+      expect(group.logo_expiring_thumb).to eq(nil)
+    end
+  end
+
   describe '#possible_participating_groups' do
     it 'returns possible_participating_groups' do
       enterprise = create(:enterprise)
@@ -681,6 +838,19 @@ RSpec.describe Group, type: :model do
     end
   end
 
+  describe '#pending_posts_count' do
+    let!(:group) { create(:group) }
+    let!(:news_links) { create_list(:news_link, 2, group_id: group.id) }
+    let!(:messages) { create_list(:group_message, 2, group_id: group.id) }
+    let!(:social_links) { create_list(:social_link, 2, group_id: group.id) }
+
+    before { NewsFeedLink.update_all(approved: false) }
+
+    it 'returns pending_posts_count' do
+      expect(group.pending_posts_count).to eq(6)
+    end
+  end
+
   describe '#valid_yammer_group_link?' do
     it 'has a valid link' do
       group = build(:group, yammer_group_link: 'https://www.yammer.com/test.com/#/threads/inGroup?type=in_group&feedId=1234567')
@@ -716,6 +886,27 @@ RSpec.describe Group, type: :model do
       expect(group.yammer_group_created).to be(true)
       expect(group.yammer_id).to eq(1)
       expect(SyncYammerGroupJob).to have_received(:perform_later)
+    end
+  end
+
+  describe '#membership_list_csv' do
+    let(:group) { create(:group) }
+
+    it 'returns csv' do
+      expect(group.membership_list_csv([])).to include('first_name,last_name,email_address')
+    end
+
+    it 'returns number of members in csv' do
+      create_list(:user_group, 3, group_id: group.id)
+      expect(group.membership_list_csv(group.members)).to include("total,,#{group.members.count}\n")
+    end
+  end
+
+  describe '#budgets_csv' do
+    let(:group) { create(:group) }
+
+    it 'returns csv' do
+      expect(group.budgets_csv).to include('Requested amount,Available amount,Status,Requested at,# of events,Description')
     end
   end
 
@@ -756,18 +947,6 @@ RSpec.describe Group, type: :model do
       create(:group_leader, group: group, user: user, default_group_contact: false)
 
       expect(group.contact_email).to eq nil
-    end
-  end
-
-  describe '#private scopes' do
-    it 'should return correct group counts' do
-      enterprise = build(:enterprise)
-      create_list(:group, 5, private: true, enterprise: enterprise)
-      create_list(:group, 3, private: false, enterprise: enterprise)
-
-      expect(enterprise.groups.count).to eq(8)
-      expect(enterprise.groups.is_private.count).to eq(5)
-      expect(enterprise.groups.non_private.count).to eq(3)
     end
   end
 
@@ -911,6 +1090,22 @@ RSpec.describe Group, type: :model do
     it 'calls resolve_auto_archive_state as after_update callback' do
       expect(group).to receive(:resolve_auto_archive_state)
       group.run_callbacks(:update)
+    end
+  end
+
+  describe '#membership_list_csv' do
+    it 'returns correct headers when mentorship_module_enabled is false' do
+      enterprise = create(:enterprise, mentorship_module_enabled: false)
+      group = create(:group, enterprise: enterprise)
+      csv = group.membership_list_csv(group.members)
+      expect(csv).to eq("first_name,last_name,email_address\ntotal,,0\n")
+    end
+
+    it 'returns correct headers when mentorship_module_enabled is true' do
+      enterprise = create(:enterprise, mentorship_module_enabled: true)
+      group = create(:group, enterprise: enterprise)
+      csv = group.membership_list_csv(group.members)
+      expect(csv).to eq("first_name,last_name,email_address,mentor,mentee\ntotal,,0\n")
     end
   end
 end

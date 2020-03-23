@@ -49,6 +49,11 @@ const styles = theme => ({
   speedDialButton: {
     zIndex: 2,
   },
+  floatSpacer: {
+    display: 'flex',
+    width: '100%',
+    marginBottom: 20,
+  },
 });
 
 export function NewsFeed(props) {
@@ -87,6 +92,9 @@ export function NewsFeed(props) {
           groupId={item.news_feed.group_id}
           deleteGroupMessageBegin={props.deleteGroupMessageBegin}
           updateNewsItemBegin={props.updateNewsItemBegin}
+          archiveNewsItemBegin={props.archiveNewsItemBegin}
+          pinNewsItemBegin={props.pinNewsItemBegin}
+          unpinNewsItemBegin={props.unpinNewsItemBegin}
         />
       );
     else if (item.news_link) // eslint-disable-line no-else-return
@@ -99,6 +107,9 @@ export function NewsFeed(props) {
           readonly={props.readonly}
           deleteNewsLinkBegin={props.deleteNewsLinkBegin}
           updateNewsItemBegin={props.updateNewsItemBegin}
+          archiveNewsItemBegin={props.archiveNewsItemBegin}
+          pinNewsItemBegin={props.pinNewsItemBegin}
+          unpinNewsItemBegin={props.unpinNewsItemBegin}
         />
       );
     else if (item.social_link)
@@ -111,6 +122,9 @@ export function NewsFeed(props) {
           readonly={props.readonly}
           deleteSocialLinkBegin={props.deleteSocialLinkBegin}
           updateNewsItemBegin={props.updateNewsItemBegin}
+          archiveNewsItemBegin={props.archiveNewsItemBegin}
+          pinNewsItemBegin={props.pinNewsItemBegin}
+          unpinNewsItemBegin={props.unpinNewsItemBegin}
         />
       );
 
@@ -138,7 +152,7 @@ export function NewsFeed(props) {
               <SpeedDialAction
                 component={WrappedNavLink}
                 to={action.linkPath}
-                key={action.name}
+                key={action.linkPath}
                 icon={action.icon}
                 tooltipTitle={<Typography>{action.name}</Typography>}
                 tooltipPlacement='bottom'
@@ -149,6 +163,7 @@ export function NewsFeed(props) {
               />
             ))}
           </SpeedDial>
+          <Box className={classes.floatSpacer} />
           <Paper>
             <ResponsiveTabs
               value={props.currentTab}
@@ -202,6 +217,9 @@ NewsFeed.propTypes = {
   deleteNewsLinkBegin: PropTypes.func,
   deleteSocialLinkBegin: PropTypes.func,
   updateNewsItemBegin: PropTypes.func,
+  archiveNewsItemBegin: PropTypes.func,
+  pinNewsItemBegin: PropTypes.func,
+  unpinNewsItemBegin: PropTypes.func,
 };
 
 export default compose(

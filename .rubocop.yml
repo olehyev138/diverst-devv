@@ -16,6 +16,7 @@ AllCops:
     - 'db/**/*'
     - 'db/*'
     - 'spec/mailers/*'
+    - 'client/node_modules/**/*'
 
 Performance:
   Exclude:

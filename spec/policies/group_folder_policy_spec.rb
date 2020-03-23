@@ -7,7 +7,7 @@ RSpec.describe GroupFolderPolicy, type: :policy do
   let(:user) { no_access }
   let(:folder) { create(:folder, enterprise: enterprise) }
 
-  subject { GroupFolderPolicy.new(user, [group]) }
+  subject { GroupFolderPolicy.new(user.reload, [group]) }
 
   before {
     no_access.policy_group.manage_all = false

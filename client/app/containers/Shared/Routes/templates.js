@@ -8,6 +8,7 @@ import GlobalSettingsLayout from 'containers/Layouts/GlobalSettingsLayout/Loadab
 import GroupManageLayout from 'containers/Layouts/GroupManageLayout/Loadable';
 import GroupPlanLayout from 'containers/Layouts/GroupPlanLayout/Loadable';
 import GroupKPILayout from 'containers/Layouts/GroupPlanLayout/KPILayout/Loadable';
+import GroupBudgetLayout from 'containers/Layouts/GroupPlanLayout/BudgetingLayout/Loadable';
 import MentorshipLayout from 'containers/Layouts/MentorshipLayout/Loadable';
 import InnovateLayout from 'containers/Layouts/InnovateLayout/Loadable';
 import SystemUserLayout from 'containers/Layouts/SystemUsersLayout/Loadable';
@@ -39,6 +40,9 @@ import SessionsEditPage from 'containers/Mentorship/Session/SessionEditPage/Load
 import GroupDashboardPage from 'containers/Analyze/Dashboards/GroupDashboardPage/Loadable';
 import UserDashboardPage from 'containers/Analyze/Dashboards/UserDashboardPage/Loadable';
 
+/* Admin - Plan */
+import AdminAnnualBudgetPage from 'containers/Group/GroupPlan/AnnualBudget/AdminPlanAnnualBudgetPage/Loadable';
+
 /* Admin - Analyze - Custom */
 import MetricsDashboardListPage from 'containers/Analyze/Dashboards/MetricsDashboard/MetricsDashboardListPage/Loadable';
 import MetricsDashboardCreatePage from 'containers/Analyze/Dashboards/MetricsDashboard/MetricsDashboardCreatePage/Loadable';
@@ -60,6 +64,9 @@ import GroupCategorizePage from 'containers/Group/GroupCategorizePage/Loadable';
 import SegmentListPage from 'containers/Segment/SegmentListPage/Loadable';
 import SegmentPage from 'containers/Segment/SegmentPage/Loadable';
 
+/* Admin - Manage - Archive */
+import ArchivesPage from 'containers/Archive/ArchivesPage/Loadable';
+
 /* Admin - System - Global Settings */
 import FieldsPage from 'containers/GlobalSettings/Field/FieldsPage/Loadable';
 import CustomTextEditPage from 'containers/GlobalSettings/CustomText/CustomTextEditPage/Loadable';
@@ -69,6 +76,8 @@ import EmailsPage from 'containers/GlobalSettings/Email/Email/EmailsPage/Loadabl
 import EmailEditPage from 'containers/GlobalSettings/Email/Email/EmailEditPage/Loadable';
 import EmailEventsPage from 'containers/GlobalSettings/Email/Event/EventsPage/Loadable';
 import EmailEventEditPage from 'containers/GlobalSettings/Email/Event/EventEditPage/Loadable';
+import PolicyTemplatesPage from 'containers/User/UserPolicy/PolicyTemplatesPage/Loadable';
+import PolicyTemplateEditPage from 'containers/User/UserPolicy/PolicyTemplateEditPage/Loadable';
 
 /* Admin - System - Branding */
 import BrandingThemePage from 'containers/Branding/BrandingThemePage/Loadable';
@@ -105,6 +114,9 @@ import EventManageUpdatesPage from 'containers/Event/EventManage/UpdatesPage/Loa
 import EventManageUpdatePage from 'containers/Event/EventManage/UpdatePage/Loadable';
 import EventManageUpdateEditPage from 'containers/Event/EventManage/UpdateEditPage/Loadable';
 import EventManageUpdateCreatePage from 'containers/Event/EventManage/UpdateCreatePage/Loadable';
+import EventManageExpensesPage from 'containers/Event/EventManage/Expense/ExpensesPage/Loadable';
+import EventManageExpenseCreatePage from 'containers/Event/EventManage/Expense/ExpenseCreatePage/Loadable';
+import EventManageExpenseEditPage from 'containers/Event/EventManage/Expense/ExpenseEditPage/Loadable';
 
 /* Group - News Feed */
 import GroupMessagePage from 'containers/News/GroupMessage/GroupMessagePage/Loadable';
@@ -130,6 +142,13 @@ import GroupPlanUpdatesPage from 'containers/Group/GroupPlan/KPI/UpdatesPage/Loa
 import GroupPlanUpdatePage from 'containers/Group/GroupPlan/KPI/UpdatePage/Loadable';
 import GroupPlanUpdateEditPage from 'containers/Group/GroupPlan/KPI/UpdateEditPage/Loadable';
 import GroupPlanUpdateCreatePage from 'containers/Group/GroupPlan/KPI/UpdateCreatePage/Loadable';
+
+/* Group - Plan - Budget */
+import AnnualBudgetEditPage from 'containers/Group/GroupPlan/AnnualBudget/AnnualBudgetEditPage/Loadable';
+import AnnualBudgetsPage from 'containers/Group/GroupPlan/AnnualBudget/AnnualBudgetOverviewPage/Loadable';
+import BudgetsPage from 'containers/Group/GroupPlan/Budget/BudgetsPage/Loadable';
+import BudgetPage from 'containers/Group/GroupPlan/Budget/BudgetPage/Loadable';
+import BudgetRequestPage from 'containers/Group/GroupPlan/Budget/BudgetCreatePage/Loadable';
 
 /* Group - Members */
 import GroupMemberListPage from 'containers/Group/GroupMembers/GroupMemberListPage/Loadable';
@@ -210,12 +229,21 @@ export {
   GroupPlanUpdateCreatePage,
   GroupMemberListPage,
   GroupMemberCreatePage,
+  AdminAnnualBudgetPage,
+  AnnualBudgetEditPage,
+  AnnualBudgetsPage,
+  BudgetsPage,
+  BudgetPage,
+  BudgetRequestPage,
   EventManageLayout,
   EventManageFieldsPage,
   EventManageUpdatesPage,
   EventManageUpdatePage,
   EventManageUpdateEditPage,
   EventManageUpdateCreatePage,
+  EventManageExpensesPage,
+  EventManageExpenseCreatePage,
+  EventManageExpenseEditPage,
   NotFoundPage,
   PlaceholderPage,
   GroupDashboardPage,
@@ -229,6 +257,7 @@ export {
   GroupManageLayout,
   GroupPlanLayout,
   GroupKPILayout,
+  GroupBudgetLayout,
   GroupLeadersListPage,
   GroupLeaderCreatePage,
   GroupLeaderEditPage,
@@ -277,10 +306,13 @@ export {
   EmailEventsPage,
   EmailEventEditPage,
   EmailLayout,
+  PolicyTemplatesPage,
+  PolicyTemplateEditPage,
   NewsLinkEditPage,
   NewsLinkCreatePage,
   SocialLinkCreatePage,
   SocialLinkEditPage,
   NewsLinkPage,
-  UserDownloadsPage
+  UserDownloadsPage,
+  ArchivesPage
 };

@@ -64,8 +64,11 @@ Diverst::Application.routes.draw do
       resources :frequency_periods
       resources :graphs
       resources :groups do
+        collection do
+          get '/annual_budgets', to: 'groups#current_annual_budgets'
+        end
         member do
-          get  '/fields',       to: 'groups#fields'
+          get  '/fields', to: 'groups#fields'
           post '/create_field', to: 'groups#create_field'
 
           get  '/initiatives', to: 'groups#initiatives'
@@ -74,6 +77,10 @@ Diverst::Application.routes.draw do
           post '/create_update', to: 'groups#create_update'
 
           put '/assign_leaders', to: 'groups#assign_leaders'
+
+          get '/annual_budget', to: 'groups#current_annual_budget'
+          post '/carryover_annual_budget', to: 'groups#carryover_annual_budget'
+          post '/reset_annual_budget', to: 'groups#reset_annual_budget'
           post '/update_categories', to: 'groups#update_categories'
         end
       end
@@ -96,12 +103,17 @@ Diverst::Application.routes.draw do
         member do
           post '/qrcode', to: 'initiatives#generate_qr_code'
 
+          post '/finalize_expenses', to: 'initiatives#finish_expenses'
+
           get  '/fields',       to: 'initiatives#fields'
           post '/create_field', to: 'initiatives#create_field'
 
           get  '/updates', to: 'initiatives#updates'
           get  '/update_prototype', to: 'initiatives#update_prototype'
           post '/create_update', to: 'initiatives#create_update'
+
+          post 'archive'
+          put 'un_archive'
         end
       end
       resources :initiative_comments
@@ -112,7 +124,11 @@ Diverst::Application.routes.draw do
       resources :initiative_participating_groups
       resources :initiative_segments
       resources :initiative_updates
-      resources :initiative_users
+      resources :initiative_users do
+        collection do
+          post 'remove'
+        end
+      end
       resources :invitation_segments_groups
       resources :likes
       resources :mentorings do
@@ -146,14 +162,21 @@ Diverst::Application.routes.draw do
       resources :metrics_dashboards_segments
       resources :mobile_fields
       resources :news_feeds
-      resources :news_feed_links
+      resources :news_feed_links do
+        member do
+          post 'archive'
+          put 'un_archive'
+          post 'pin'
+          put 'un_pin'
+        end
+      end
       resources :news_feed_link_segments
       resources :news_links
       resources :news_link_comments
       resources :news_link_photos
       resources :news_link_segments
       resources :outcomes
-      resources :pillars
+      resources :pillars, only: [:index]
       resources :policy_groups
       resources :policy_group_templates
       resources :polls do
@@ -166,6 +189,7 @@ Diverst::Application.routes.draw do
       resources :resources do
         member do
           post 'archive'
+          put 'un_archive'
         end
       end
       resources :rewards

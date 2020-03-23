@@ -90,6 +90,7 @@ module BaseSearcher
       includes = get_includes(params)
       preloads = get_preloads(params)
       joins = get_joins
+      left_joins = get_left_joins
       query = get_base_query
 
       add_custom_args(where, where_not, params, includes, joins)
@@ -105,8 +106,8 @@ module BaseSearcher
         raise NameError if policy_scope.parent != policy_name.constantize
 
         # Apply the associated policy scope for the model to filter based on authorization
-        @items = policy_scope.new(current_user, base).resolve
-      rescue NameError
+        @items = policy_scope.new(current_user, base, params: params).resolve
+      rescue NameError => e
         # TODO: Uncomment this when we have more policies defined. Commenting now to pass tests early.
         # raise PolicyScopeNotFoundException
         warn(
@@ -125,6 +126,7 @@ module BaseSearcher
       if searchValue.present?
         @items
             .joins(joins)
+            .left_joins(left_joins)
             .includes(includes)
             .preload(preloads)
             .send_chain(query_scopes)
@@ -136,6 +138,7 @@ module BaseSearcher
       else
         @items
             .joins(joins)
+            .left_joins(left_joins)
             .includes(includes)
             .preload(preloads)
             .send_chain(query_scopes)
@@ -164,7 +167,9 @@ module BaseSearcher
     end
 
     def get_preloads(params)
-      if self.respond_to? :base_preloads
+      if params[:preload].present? && (self.respond_to? "base_preloads_#{params[:preload]}")
+        self.send("base_preloads_#{params[:preload]}")
+      elsif self.respond_to? :base_preloads
         self.base_preloads
       else
         []
@@ -175,6 +180,12 @@ module BaseSearcher
       return [] unless self.respond_to? :base_joins
 
       self.base_joins
+    end
+
+    def get_left_joins
+      return [] unless self.respond_to? :base_left_joins
+
+      self.base_left_joins
     end
 
     def query_arguments

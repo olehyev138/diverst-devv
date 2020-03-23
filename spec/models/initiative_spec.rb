@@ -15,27 +15,31 @@ RSpec.describe Initiative, type: :model do
 
     it { expect(initiative).to accept_nested_attributes_for(:fields).allow_destroy(true) }
 
+    it { expect(initiative).to validate_length_of(:location).is_at_most(191) }
+    it { expect(initiative).to validate_length_of(:description).is_at_most(65535) }
+    it { expect(initiative).to validate_length_of(:name).is_at_most(191) }
+
     it { expect(initiative).to belong_to(:budget_item) }
     it { expect(initiative).to have_one(:budget).through(:budget_item) }
 
-    it { expect(initiative).to have_many(:checklists) }
+    it { expect(initiative).to have_many(:checklists).dependent(:destroy) }
     it { expect(initiative).to have_many(:resources) }
 
-    it { expect(initiative).to have_many(:checklist_items) }
+    it { expect(initiative).to have_many(:checklist_items).dependent(:destroy) }
     it { expect(initiative).to accept_nested_attributes_for(:checklist_items).allow_destroy(true) }
 
     it { expect(initiative).to belong_to(:owner_group).class_name('Group') }
 
-    it { expect(initiative).to have_many(:initiative_segments) }
+    it { expect(initiative).to have_many(:initiative_segments).dependent(:destroy) }
     it { expect(initiative).to have_many(:segments).through(:initiative_segments) }
-    it { expect(initiative).to have_many(:initiative_participating_groups) }
+    it { expect(initiative).to have_many(:initiative_participating_groups).dependent(:destroy) }
     it { expect(initiative).to have_many(:participating_groups).through(:initiative_participating_groups).source(:group).class_name('Group') }
 
-    it { expect(initiative).to have_many(:initiative_invitees) }
+    it { expect(initiative).to have_many(:initiative_invitees).dependent(:destroy) }
     it { expect(initiative).to have_many(:invitees).through(:initiative_invitees).source(:user) }
-    it { expect(initiative).to have_many(:comments).class_name('InitiativeComment') }
+    it { expect(initiative).to have_many(:comments).class_name('InitiativeComment').dependent(:destroy) }
 
-    it { expect(initiative).to have_many(:initiative_users) }
+    it { expect(initiative).to have_many(:initiative_users).dependent(:destroy) }
     it { expect(initiative).to have_many(:attendees).through(:initiative_users).source(:user) }
 
     # ActiveStorage
@@ -46,7 +50,7 @@ RSpec.describe Initiative, type: :model do
     it { expect(initiative).to validate_presence_of(:end) }
     it { expect(initiative).to validate_presence_of(:pillar) }
     it { expect(initiative).to validate_numericality_of(:max_attendees).is_greater_than(0).allow_nil }
-    it { expect(initiative).to have_many(:resources) }
+    it { expect(initiative).to have_many(:resources).dependent(:destroy) }
     it { expect(initiative).to have_many(:segments).through(:initiative_segments) }
     it { expect(initiative).to have_one(:outcome).through(:pillar) }
 
@@ -102,6 +106,66 @@ RSpec.describe Initiative, type: :model do
       initiative = create(:initiative, qr_code: { io: File.open('spec/fixtures/files/verizon_logo.png'), filename: 'file.png' })
 
       expect(initiative.qr_code_location).to_not be nil
+    end
+  end
+
+  describe '#archived?' do
+    let!(:initiative) { create(:initiative) }
+
+    it 'returns false' do
+      expect(initiative.archived?).to eq(false)
+    end
+
+    it 'returns true' do
+      initiative.update(archived_at: DateTime.now)
+      expect(initiative.archived?).to eq(true)
+    end
+  end
+
+  describe '#group' do
+    let!(:group) { create(:group) }
+    let!(:initiative) { create(:initiative, owner_group: group) }
+
+    it 'returns group' do
+      expect(initiative.group).to eq(group)
+    end
+
+    it 'returns group_id' do
+      expect(initiative.group_id).to eq(group.id)
+    end
+  end
+
+  describe '#enterprise' do
+    let!(:group) { create(:group) }
+    let!(:initiative) { create(:initiative, owner_group: group) }
+
+    it 'returns enterprise' do
+      expect(initiative.enterprise).to eq(group.enterprise)
+    end
+
+    it 'returns enterprise_id' do
+      expect(initiative.enterprise_id).to eq(group.enterprise_id)
+    end
+  end
+
+  describe '#description' do
+    let(:initiative) { build(:initiative, description: nil) }
+
+    it "returns '' when description is nil" do
+      expect(initiative.description).to eq('')
+    end
+
+    it 'returns description' do
+      initiative.description = 'brief description'
+      expect(initiative.description).to eq('brief description')
+    end
+  end
+
+  describe '#budget_status' do
+    let(:initiative) { build(:initiative) }
+
+    it 'returns Not attached' do
+      expect(initiative.budget_status).to eq('Not attached')
     end
   end
 
@@ -262,7 +326,7 @@ RSpec.describe Initiative, type: :model do
     end
   end
 
-  describe '#approved?' do
+  describe '#approved?', skip: 'Now Validated' do
     it 'returns false' do
       budget = build(:budget, is_approved: true)
       budget_item = create(:budget_item, budget: budget)
@@ -285,6 +349,41 @@ RSpec.describe Initiative, type: :model do
     end
   end
 
+  describe '#finish_expenses!' do
+    let!(:initiative) { create(:initiative, finished_expenses: true) }
+
+    it 'returns false' do
+      expect(initiative.finish_expenses!).to eq(false)
+    end
+
+    it 'returns true' do
+      enterprise = create(:enterprise)
+      group = create(:group, enterprise: enterprise, annual_budget: 10000)
+      annual_budget = create(:annual_budget, group: group, enterprise: enterprise, amount: group.annual_budget)
+      budget = create(:approved, annual_budget: annual_budget)
+      initiative1 = create(:initiative, owner_group: group, budget_item_id: budget.budget_item_ids.first)
+
+      expect(initiative1.finish_expenses!).to eq(true)
+    end
+  end
+
+  describe '#current_expenses_sum' do
+    it 'return 0' do
+      annual_budget = create(:annual_budget)
+      budget = create(:approved, annual_budget: annual_budget)
+      initiative = create(:initiative, budget_item_id: budget.budget_item_ids.first)
+      expect(initiative.current_expenses_sum).to eq(0)
+    end
+  end
+
+  describe '#has_no_estimated_funding?' do
+    let(:initiative) { build(:initiative) }
+
+    it 'returns true' do
+      expect(initiative.has_no_estimated_funding?).to eq(true)
+    end
+  end
+
   describe '#leftover' do
     it 'returns 0' do
       initiative = build(:initiative, :with_budget_item)
@@ -292,29 +391,25 @@ RSpec.describe Initiative, type: :model do
     end
   end
 
-  describe '#highcharts_history' do
-    it 'returns data', skip: 'test fails' do
-      initiative = build(:initiative, start: Date.today, end: Date.today + 1.hour)
-      field = build(:field)
-      create(:initiative_field, initiative: initiative, field: field)
-      create(:update, updatable: initiative)
-
-      data = initiative.highcharts_history(field: field)
-      expect(data.empty?).to be(false) # this example says "returns data" and yet we expect data to be empty???
+  describe '#title' do
+    it 'returns name of initiative' do
+      initiative = build(:initiative)
+      expect(initiative.title).to eq(initiative.name)
     end
   end
 
-  describe '#expenses_highcharts_history' do
-    it 'returns data' do
-      group = create(:group, annual_budget: 10000)
-      annual_budget = create(:annual_budget, amount: group.annual_budget)
-      budget = create(:approved, annual_budget: annual_budget)
-      initiative = create(:initiative, :with_budget_item, owner_group: group, budget_item: budget.budget_items.first,
-                                                          start: Date.today, end: Date.today + 1.hour)
-      create_list(:initiative_expense, 5, initiative: initiative)
+  describe '#time_string' do
+    # TODO: timestring doesnt exist
+    xit 'returns day and start/end time' do
+      initiative = build(:initiative, start: Date.today, end: Date.today + 1.hour)
+      expect(initiative.time_string).to eq("#{initiative.start.to_s :dateonly} from #{initiative.start.to_s :ampmtime} to #{initiative.end.to_s :ampmtime}")
+    end
+  end
 
-      data = initiative.expenses_highcharts_history
-      expect(data.empty?).to be(false)
+  describe '#funded_by_leftover?' do
+    it '#returns false' do
+      initiative = build(:initiative)
+      expect(initiative.funded_by_leftover?).to eq(false)
     end
   end
 
@@ -339,6 +434,36 @@ RSpec.describe Initiative, type: :model do
         }
         expect(object.as_indexed_json).to eq(hash)
       end
+    end
+  end
+
+  describe '#group_ids' do
+    let(:initiative) { create(:initiative, owner_group: create(:group)) }
+
+    it 'returns group ids' do
+      expect(initiative.group_ids).to eq([initiative.owner_group.id])
+    end
+  end
+
+  describe '#full?' do
+    let(:initiative) { create(:initiative) }
+    before { create_list(:initiative_user, 3, initiative: initiative) }
+
+    it 'return true' do
+      initiative.max_attendees = 2
+      expect(initiative.full?).to eq(true)
+    end
+
+    it 'return false' do
+      expect(initiative.full?).to eq(false)
+    end
+  end
+
+  describe '#expenses_time_series_csv' do
+    let(:initiative) { build(:initiative) }
+
+    it 'returns csv' do
+      expect(initiative.expenses_time_series_csv).to include('Expenses over time')
     end
   end
 
@@ -417,8 +542,8 @@ RSpec.describe Initiative, type: :model do
   describe 'Initiative.to_csv' do
     let!(:enterprise) { create(:enterprise) }
     let!(:group) { create :group, :without_outcomes, enterprise: enterprise, annual_budget: 10000 }
-    let!(:annual_budget) { create(:annual_budget, group: group, amount: group.annual_budget, enterprise_id: enterprise.id) }
-    let!(:budget) { create(:approved, group_id: group.id, annual_budget_id: annual_budget.id) }
+    let!(:annual_budget) { create(:annual_budget, group: group, amount: group.annual_budget) }
+    let!(:budget) { create(:approved, annual_budget_id: annual_budget.id) }
     let!(:outcome) { create :outcome, group_id: group.id }
     let!(:pillar) { create :pillar, outcome_id: outcome.id }
     let!(:initiative) { create(:initiative, pillar: pillar,
@@ -430,7 +555,6 @@ RSpec.describe Initiative, type: :model do
 
     let!(:field) { create(:field, field_definer: initiative, title: 'Attendance') }
     let!(:update) { create(:update, updatable: initiative, data: "{\"#{field.id}\":105}") }
-
 
     it 'returns csv for initiative export' do
       expect(described_class.to_csv(initiatives: group.initiatives, enterprise: enterprise))

@@ -7,7 +7,7 @@ RSpec.describe GroupPostsPolicy, type: :policy do
   let(:user) { no_access }
   let(:message) { create(:group_message, owner: user, group: group) }
 
-  subject { described_class.new(user, [group, message]) }
+  subject { described_class.new(user.reload, [group, message]) }
 
   before {
     no_access.policy_group.manage_all = false
@@ -33,7 +33,6 @@ RSpec.describe GroupPostsPolicy, type: :policy do
           before do
             user_role = create(:user_role, enterprise: enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
             user_role.policy_group_template.update manage_posts: true
-            group = create(:group, enterprise: enterprise)
             create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
                                   user_role_id: user_role.id)
           end
@@ -47,7 +46,6 @@ RSpec.describe GroupPostsPolicy, type: :policy do
           before do
             user_role = create(:user_role, enterprise: enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
             user_role.policy_group_template.update group_posts_index: true
-            group = create(:group, enterprise: enterprise)
             create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
                                   user_role_id: user_role.id)
           end

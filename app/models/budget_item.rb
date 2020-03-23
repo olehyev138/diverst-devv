@@ -1,6 +1,8 @@
 class BudgetItem < ApplicationRecord
+  include BudgetItem::Actions
   LEFTOVER_BUDGET_ITEM_ID = -1
-  belongs_to :budget
+
+  belongs_to :budget, counter_cache: true
   has_one :annual_budget, through: :budget
   has_one :group, through: :annual_budget
 
@@ -19,14 +21,29 @@ class BudgetItem < ApplicationRecord
   scope :approved, -> { joins(:budget).where(budgets: { is_approved: true }) }
   scope :not_approved, -> { joins(:budget).where(budgets: { is_approved: false }) }
   scope :pending, -> { joins(:budget).where(budgets: { is_approved: nil }) }
+  scope :private_scope, -> (user_id = nil) { joins(:budget).where('is_private = FALSE OR budgets.requester_id = ?', user_id) }
 
   delegate :finalized, to: :initiatives, prefix: true
   delegate :finalized, to: :initiatives_expenses, prefix: 'expenses'
   delegate :active, to: :initiatives, prefix: true
   delegate :active, to: :initiatives_expenses, prefix: 'expenses'
 
+  def close!
+    if is_done?
+      errors.add(:is_done, 'Budget Item is already closed')
+      return false
+    end
+
+    if initiatives.active.any?
+      errors.add(:initiatives, 'There are still events using this budget item')
+      return false
+    end
+
+    self.update(is_done: true)
+  end
+
   def title_with_amount
-    "#{title} ($#{available_amount})"
+    "#{title} ($%.2f)" % available_amount
   end
 
   def expenses
@@ -53,6 +70,6 @@ class BudgetItem < ApplicationRecord
   end
 
   def approve!
-    self.update(available_amount: estimated_amount)
+    self.update(deprecated_available_amount: estimated_amount)
   end
 end

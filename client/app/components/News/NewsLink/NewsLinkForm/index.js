@@ -89,7 +89,7 @@ export function NewsLinkForm(props) {
     title: { default: '' },
     description: { default: '' },
     url: { default: '' },
-    author_id: { default: dig(props, 'currentUser', 'id') || '' },
+    author_id: { default: dig(props, 'currentUser', 'user_id') || '' },
     group_id: { default: dig(props, 'currentGroup', 'id') || '' }
   });
 

@@ -6,7 +6,18 @@ RSpec.describe PolicyGroupTemplate, type: :model do
   describe 'test associations' do
     let(:user_role) { create(:user_role) }
     let(:policy_group_template) { user_role.policy_group_template }
-    it { expect(policy_group_template).to belong_to(:user_role) }
+
+    it { expect(policy_group_template).to belong_to(:user_role).inverse_of(:policy_group_template).dependent(:destroy) }
+    it { expect(policy_group_template).to belong_to(:enterprise) }
+
+    it { expect(policy_group_template).to validate_length_of(:name).is_at_most(191) }
+
+    it { expect(policy_group_template).to validate_presence_of(:name) }
+    it { expect(policy_group_template).to validate_presence_of(:user_role) }
+    it { expect(policy_group_template).to validate_presence_of(:enterprise) }
+
+    it { expect(policy_group_template).to validate_uniqueness_of(:name).scoped_to(:enterprise_id) }
+    it { expect(policy_group_template).to validate_uniqueness_of(:user_role).scoped_to(:enterprise_id) }
   end
 
   describe '#update_user_roles' do

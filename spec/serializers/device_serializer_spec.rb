@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe DeviceSerializer, type: :serializer do
   it 'returns fields' do
     device = create(:device)
-    serializer = DeviceSerializer.new(device)
+    serializer = DeviceSerializer.new(device, scope: serializer_scopes(create(:user)), scope_name: :scope)
 
     expect(serializer.serializable_hash[:id]).to eq device.id
     expect(serializer.serializable_hash[:token]).to_not be nil

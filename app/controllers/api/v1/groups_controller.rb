@@ -3,36 +3,56 @@ class Api::V1::GroupsController < DiverstController
   include Api::V1::Concerns::Updatable
 
   def index
-    authorize klass, :index?
-
     params.permit![:parent_id] = nil
     super
   end
 
-  def initiatives
+  def create_field
+    params[:field][:field_type] = 'regular'
+    super
+  end
+
+  def current_annual_budgets
+    base_authorize(klass)
+    params[:parent_id] = nil
+    params[:preload] = 'budget'
+    render status: 200, json: klass.budget_index(self.diverst_request, params.permit!), use_serializer: GroupWithBudgetSerializer
+  rescue => e
+    raise BadRequestException.new(e.message)
+  end
+
+  def carryover_annual_budget
     item = klass.find(params[:id])
     base_authorize(item)
 
-    render status: 200, json: Initiative.index(
-        self.diverst_request,
-        params.except(:id).permit!,
-        base: item.initiatives.union(item.participating_initiatives))
+    render status: 200, json: item.carryover_annual_budget(self.diverst_request), use_serializer: GroupWithBudgetSerializer
+  rescue => e
+    raise BadRequestException.new(e.message)
   end
 
-  def create_field
-    params[:field] = field_payload
-    params[:field][:field_type] = 'regular'
-    base_authorize(klass)
+  def reset_annual_budget
     item = klass.find(params[:id])
+    base_authorize(item)
 
-    render status: 201, json: Field.build(self.diverst_request, params, base: item.fields)
+    render status: 200, json: item.reset_annual_budget(self.diverst_request), use_serializer: GroupWithBudgetSerializer
   rescue => e
-    case e
-    when InvalidInputException
-      raise
-    else
-      raise BadRequestException.new(e.message)
-    end
+    raise BadRequestException.new(e.message)
+  end
+
+  def current_annual_budget
+    item = klass.find(params[:id])
+    base_authorize(item)
+
+    render status: 200, json: item.current_annual_budget!
+  rescue => e
+    raise BadRequestException.new(e.message)
+  end
+
+  private
+
+  def load_sums(result)
+    result.items = result.items.load_sums
+    result
   end
 
   def assign_leaders

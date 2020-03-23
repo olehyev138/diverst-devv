@@ -6,22 +6,43 @@ module Initiative::Actions
     klass.extend ClassMethods
   end
 
+  def finalize_expenses(diverst_request)
+    raise BadRequestException.new "#{self.name.titleize} ID required" if id.blank?
+
+    unless self.finish_expenses!
+      raise InvalidInputException.new({ message: errors.full_messages.first, attribute: errors.messages.first.first })
+    end
+
+    self
+  end
+
   module ClassMethods
     def valid_scopes
-      ['upcoming', 'ongoing', 'past']
+      [
+          'upcoming',
+          'ongoing',
+          'past',
+          'not_archived',
+          'archived',
+          'of_annual_budget',
+          'joined_events_for_user',
+          'available_events_for_user'
+      ]
     end
 
     def base_preloads
-      [:pillar, :owner, :budget, :outcome, :expenses, :picture_attachment, :qr_code_attachment]
-    end
-
-    def build(diverst_request, params)
-      item = super
-      annual_budget = diverst_request.user.enterprise.annual_budgets.find_or_create_by(closed: false, group_id: item.group)
-      item.annual_budget_id = annual_budget.id
-      item.save!
-
-      item
+      [
+          :pillar,
+          :owner,
+          :budget,
+          :outcome,
+          :group,
+          :expenses,
+          :picture_attachment,
+          :qr_code_attachment,
+          :initiative_users,
+          :comments
+      ]
     end
 
     def generate_qr_code(diverst_request, params)

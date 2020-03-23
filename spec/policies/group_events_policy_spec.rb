@@ -13,7 +13,7 @@ RSpec.describe GroupEventsPolicy, type: :policy do
   }
   let!(:event) { upcoming_event }
 
-  subject { described_class.new(user, [group, event]) }
+  subject { described_class.new(user.reload, [group, event]) }
 
   before {
     no_access.policy_group.manage_all = false

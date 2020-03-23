@@ -1,5 +1,6 @@
 class RemoveHashSymbolFromThemeColorsHexStrings < ActiveRecord::Migration[5.2]
   def up
+    Theme.column_reload!
     Theme.find_each do |theme|
       next if theme.primary_color.blank?
 
@@ -12,6 +13,7 @@ class RemoveHashSymbolFromThemeColorsHexStrings < ActiveRecord::Migration[5.2]
   end
 
   def down
+    Theme.column_reload!
     Theme.find_each do |theme|
       next if theme.primary_color.blank?
 

@@ -71,11 +71,15 @@ export function* getUserPosts(action) {
 
 export function* getUserEvents(action) {
   try {
-    let response;
-    if (action.payload.participation === 'all')
-      response = yield call(api.user.getAllEvents.bind(api.user), action.payload);
-    else
-      response = yield call(api.user.getJoinedEvents.bind(api.user), action.payload);
+    const { participation, userId, ...rest } = action.payload;
+    const payload = {
+      ...rest,
+      query_scopes: [
+        ...rest.query_scopes,
+        participation === 'all' ? ['available_events_for_user', userId] : ['joined_events_for_user', userId]
+      ]
+    };
+    const response = yield call(api.initiatives.all.bind(api.initiatives), payload);
     yield put(getUserEventsSuccess(response.data.page));
   } catch (err) {
     yield put(getUserEventsError(err));

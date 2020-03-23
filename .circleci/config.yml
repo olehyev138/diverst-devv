@@ -76,8 +76,7 @@ jobs:
     parallelism: 2
     shell: /bin/bash --login
     environment:
-      CIRCLE_ARTIFACTS: /tmp/circleci-artifacts
-      CIRCLE_TEST_REPORTS: /tmp/circleci-test-results
+      CIRCLE_TEST_REPORTS: /tmp/circleci-test-results/rspec
     docker:
       - image: awsdiverst/cci-primary:0.0.1
         environment:
@@ -88,7 +87,7 @@ jobs:
       - checkout
       - run:
           name: Create artifact directories
-          command: mkdir -p $CIRCLE_ARTIFACTS $CIRCLE_TEST_REPORTS/rspec
+          command: mkdir -p $CIRCLE_TEST_REPORTS
       - run:
           name: Set timezone
           working_directory: ~/TeamDiverst/diverst-development
@@ -138,7 +137,7 @@ jobs:
       #
       - run:
           name: Run backend tests
-          command: bundle exec rspec --color --require spec_helper --format RspecJunitFormatter --out $CIRCLE_TEST_REPORTS/rspec/rspec.xml --format progress -- $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=filesize)
+          command: bundle exec rspec --no-color --require spec_helper --format RspecJunitFormatter --out $CIRCLE_TEST_REPORTS/rspec.xml --format progress -- $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=filesize)
           environment:
             RAILS_ENV: test
             RACK_ENV: test
@@ -146,9 +145,9 @@ jobs:
       ## Store artifacts
       #
       - store_test_results:
-          path: /tmp/circleci-test-results
+          path: /tmp/circleci-test-results/rspec
       - store_artifacts:
-          path: /tmp/circleci-test-results
+          path: /tmp/circleci-test-results/rspec
   frontend-test:
     working_directory: ~/TeamDiverst/diverst-development/
     docker:
@@ -158,13 +157,12 @@ jobs:
           RACK_ENV: test
     shell: /bin/bash --login
     environment:
-      CIRCLE_ARTIFACTS: /tmp/circleci-artifacts
-      CIRCLE_TEST_REPORTS: /tmp/circleci-test-results
+      JEST_JUNIT_OUTPUT_DIR: /tmp/circleci-test-results/junit/js-test-results.xml
     steps:
       - checkout
       - run:
           name: Create artifact directories
-          command: mkdir -p $CIRCLE_ARTIFACTS $CIRCLE_TEST_REPORTS
+          command: mkdir -p /tmp/circleci-test-results/junit
       #
       ## Install node modules
       #
@@ -186,12 +184,14 @@ jobs:
       #
       - run:
           name: Run frontend tests
-          command: cd client/ && npm test -- -i
+          command: cd client/ && npm test -- --ci --runInBand --reporters=default --reporters=jest-junit
       #
       ## Store artifacts
       #
+      - store_artifacts:
+          path: /tmp/circleci-test-results/junit
       - store_test_results:
-          path: /tmp/circleci-test-results
+          path: /tmp/circleci-test-results/junit
   deploy:
     working_directory: ~/TeamDiverst/diverst-development/
     docker:

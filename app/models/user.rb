@@ -1,7 +1,7 @@
 class User < ApplicationRecord
   FIELD_DEFINER_NAME = :enterprise
   FIELD_ASSOCIATION_NAME = :fields
-  belongs_to :enterprise
+  belongs_to :enterprise, counter_cache: true
 
   has_secure_password
   include PublicActivity::Common
@@ -55,6 +55,7 @@ class User < ApplicationRecord
   has_many :segments, through: :users_segments
   has_many :user_groups, dependent: :destroy
   has_many :groups, through: :user_groups
+
   has_many :topic_feedbacks, dependent: :destroy
   has_many :poll_responses
   has_many :answers, inverse_of: :author, foreign_key: :author_id, dependent: :destroy
@@ -62,25 +63,38 @@ class User < ApplicationRecord
   has_many :answer_comments, foreign_key: :author_id, dependent: :destroy
   has_many :invitations, class_name: 'CampaignInvitation', dependent: :destroy
   has_many :campaigns, through: :invitations
+
   has_many :news_links, through: :groups
   has_many :own_news_links, class_name: 'NewsLink', foreign_key: :author_id, dependent: :destroy
   has_many :messages, through: :groups
+  has_many :own_messages, class_name: 'GroupMessage', foreign_key: :owner_id
   has_many :message_comments, class_name: 'GroupMessageComment', foreign_key: :author_id, dependent: :destroy
   has_many :social_links, foreign_key: :author_id, dependent: :destroy
+
   has_many :initiative_users, dependent: :destroy
   has_many :initiatives, through: :initiative_users, source: :initiative
   has_many :initiative_invitees, dependent: :destroy
   has_many :invited_initiatives, through: :initiative_invitees, source: :initiative
+
   has_many :managed_groups, foreign_key: :manager_id, class_name: 'Group'
   has_many :group_leaders, dependent: :destroy
   has_many :leading_groups, through: :group_leaders, source: :group
+
   has_many :user_reward_actions, dependent: :destroy
   has_many :reward_actions, through: :user_reward_actions
+  has_many :user_rewards
   has_many :rewards, foreign_key: :responsible_id, dependent: :destroy
+
   has_many :likes, dependent: :destroy
   has_many :csv_files
   has_many :metrics_dashboards, foreign_key: :owner_id
   has_many :shared_metrics_dashboards
+  has_many :urls_visited, dependent: :destroy, class_name: 'PageVisitationData'
+  has_many :pages_visited, dependent: :destroy, class_name: 'PageVisitation'
+  has_many :page_names_visited, dependent: :destroy, class_name: 'PageVisitationByName'
+  has_many :visits, class_name: 'Ahoy::Visit'
+  has_many :answer_comments, foreign_key: :author_id, dependent: :destroy
+  has_many :news_link_comments, foreign_key: :author_id, dependent: :destroy
 
   # ActiveStorage
   has_one_attached :avatar
@@ -105,10 +119,15 @@ class User < ApplicationRecord
   validates_length_of :current_sign_in_ip, maximum: 191
   validates_length_of :reset_password_token, maximum: 191
   validates_length_of :email, maximum: 191
+  validates_length_of :encrypted_password, maximum: 191
+  validates_length_of :notifications_email, maximum: 191
   validates_length_of :auth_source, maximum: 191
   validates_length_of :data, maximum: 65535
   validates_length_of :last_name, maximum: 191
   validates_length_of :first_name, maximum: 191
+
+  # TODO: Devise has been removed
+  # validates :notifications_email, uniqueness: true, allow_blank: true, format: { with: Devise.email_regexp }
 
   validates :first_name, presence: true
   validates :last_name, presence: true
@@ -187,6 +206,18 @@ class User < ApplicationRecord
     authenticate(password) == self
   end
 
+  def pending_rewards
+    user_rewards.where(status: 0)
+  end
+
+  def redeemed_rewards
+    user_rewards.where(status: 1)
+  end
+
+  def email_for_notification
+    notifications_email.presence || email
+  end
+
   def last_notified_date
     last_group_notification_date&.to_date
   end
@@ -202,7 +233,15 @@ class User < ApplicationRecord
   end
 
   def is_member_of?(group)
+    group.user_groups.loaded? ?
+    group.user_groups.any? { |ug| ug.user_id == self.id } :
     group.user_groups.where(user_id: self.id).any?
+  end
+
+  def is_attending?(event)
+    event.initiative_users.loaded? ?
+        event.initiative_users.any? { |iu| iu.user_id == self.id } :
+        event.initiative_users.where(user_id: self.id).any?
   end
 
   def is_participating_in?(session)
@@ -264,6 +303,7 @@ class User < ApplicationRecord
   def set_default_policy_group
     template = enterprise.policy_group_templates.joins(:user_role).find_by(user_roles: { id: user_role_id })
     attributes = template.create_new_policy
+    attributes.delete(:manage_all)
     if policy_group.nil?
       create_policy_group(attributes)
     else
@@ -424,13 +464,6 @@ class User < ApplicationRecord
   #    save
   #  end
 
-  # Updates this user's match scores with all other enterprise users
-  def update_match_scores
-    enterprise.users.where.not(id: id).find_each do |other_user|
-      CalculateMatchScoreJob.perform_later(self, other_user, skip_existing: false)
-    end
-  end
-
   # Initializes a user from a yammer user
   def self.from_yammer(yammer_user, enterprise:)
     user = User.new(
@@ -488,6 +521,14 @@ class User < ApplicationRecord
         user_columns = [user.first_name, user.last_name, user.email]
 
         csv << user_columns
+      end
+    end
+  end
+
+  def self.aggregate_sign_ins(enterprise_id:)
+    Rails.cache.fetch("aggregate_login_count:#{enterprise_id}") do
+      where(enterprise: enterprise_id).all.map do |usr|
+        [usr.id, usr.sign_in_count]
       end
     end
   end
@@ -648,6 +689,24 @@ class User < ApplicationRecord
       linkedin_profile_url: nil,
     )
     avatar.purge_later
+  end
+
+  def get_login_count
+    self.sign_in_count
+  end
+
+  def most_viewed_pages(limit: nil)
+    page_visitation_data.select(:page, :times_visited).order(times_visited: :desc).limit(limit).to_a
+  end
+
+  def most_viewed_pages_json(limit: nil)
+    data = most_viewed_pages(limit: limit)
+    {
+      'draw' => 0,
+      'recordsTotal' => data.count,
+      'recordsFiltered' => data.count,
+      'data' => data.map { |pg| [pg.page, pg.times_visited] }
+    }
   end
 
   private
