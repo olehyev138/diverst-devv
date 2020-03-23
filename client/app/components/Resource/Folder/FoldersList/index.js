@@ -95,6 +95,7 @@ export function FoldersList(props, context) {
               <Grid item key={item.id} className={classes.folderListItem}>
                 <FolderListItem
                   item={item}
+                  currentGroup={props.currentGroup}
                   deleteAction={props.deleteFolderBegin}
                   links={props.links}
                 />

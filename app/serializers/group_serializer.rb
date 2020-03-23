@@ -33,6 +33,7 @@ class GroupSerializer < ApplicationRecordSerializer
         :budgets_create?,
         :leaders_create?,
         :events_manage?,
+        :resources_manage?,
         :kpi_manage?,
         :leaders_manage?,
         :news_manage?,

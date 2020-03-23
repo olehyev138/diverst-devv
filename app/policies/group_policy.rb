@@ -167,6 +167,10 @@ class GroupPolicy < ApplicationPolicy
     AnnualBudgetPolicy.new(self, AnnualBudget).manage?
   end
 
+  def resources_manage?
+    GroupResourcePolicy.new(self, Resource).manage?
+  end
+
 
   # ========================================
   # MAYBE DEPRECATED
