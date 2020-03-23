@@ -17,7 +17,7 @@ import { loginSuccess, logoutSuccess, setUserData } from 'containers/Shared/App/
 
 import { Settings } from 'luxon';
 import { createStructuredSelector } from 'reselect';
-import { selectToken } from 'containers/Shared/App/selectors'; // Timezone and locale
+import { selectToken } from 'containers/Shared/App/selectors';
 
 const styles = theme => ({
   toolbar: theme.mixins.toolbar,
@@ -79,7 +79,7 @@ const AuthenticatedLayout = ({
             <Fade in appear>
               <Component {...matchProps} />
             </Fade>
-            <ApplicationFooter></ApplicationFooter>
+            <ApplicationFooter />
           </React.Fragment>
         )}
       />
