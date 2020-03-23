@@ -73,13 +73,11 @@ export function NewsFeed(props) {
   ];
 
   if (permission(props.currentGroup, 'social_link_create?'))
-    actions.push(
-      {
-        icon: <SocialIcon />,
-        name: <DiverstFormattedMessage {...messages.social_link} />,
-        linkPath: props.links.socialLinkNew,
-      },
-    );
+    actions.push({
+      icon: <SocialIcon />,
+      name: <DiverstFormattedMessage {...messages.social_link} />,
+      linkPath: props.links.socialLinkNew,
+    });
 
   const { classes } = props;
   const [speedDialOpen, setSpeedDialOpen] = React.useState(false);
