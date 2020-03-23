@@ -45,7 +45,13 @@ export function GroupPlanLinks(props) {
               label={<DiverstFormattedMessage {...messages.links.KPI} />}
             />
           </Permission>
-          <Permission show={permission(props.currentGroup, 'budgets_view?')} value='budgeting'>
+          <Permission
+            show={
+              permission(props.currentGroup, 'annual_budgets_view?')
+              || permission(props.currentGroup, 'budgets_create?')
+              || permission(props.currentGroup, 'annual_budgets_index?')}
+            value='budgeting'
+          >
             <Tab
               component={WrappedNavLink}
               to={ROUTES.group.plan.budget.overview.path(props.currentGroup.id)}

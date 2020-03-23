@@ -103,7 +103,7 @@ class GroupPolicy < ApplicationPolicy
     GroupResourcePolicy.new(self, Resource).index?
   end
 
-  def budgets_view?
+  def annual_budgets_view?
     AnnualBudgetPolicy.new(self, AnnualBudget).index?
   end
 
@@ -134,7 +134,7 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def budgets_create?
-    AnnualBudgetPolicy.new(self, AnnualBudget).create?
+    BudgetPolicy.new(self, AnnualBudget).create?
   end
 
   def leaders_create?
@@ -162,6 +162,11 @@ class GroupPolicy < ApplicationPolicy
   def news_manage?
     NewsFeedLinkPolicy.new(self, NewsFeedLink).manage?
   end
+
+  def annual_budgets_manage?
+    AnnualBudgetPolicy.new(self, AnnualBudget).manage?
+  end
+
 
   # ========================================
   # MAYBE DEPRECATED

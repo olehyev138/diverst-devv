@@ -1,12 +1,12 @@
 class Api::V1::UpdatesController < DiverstController
   def prototype
     item = if params[:group_id].present?
-             Group.find(params[:group_id])
-           elsif params[:initiative_id].present?
-              Initiative.find(params[:initiative_id])
-           else
-             raise BadRequestException.new('Need either a group_id or an initiative_id')
-           end
+      Group.find(params[:group_id])
+    elsif params[:initiative_id].present?
+      Initiative.find(params[:initiative_id])
+    else
+      raise BadRequestException.new('Need either a group_id or an initiative_id')
+    end
 
     base_authorize(klass)
 
@@ -20,7 +20,7 @@ class Api::V1::UpdatesController < DiverstController
         if params[:group_id].present?
           ['Group', params[:group_id]]
         elsif params[:initiative_id].present?
-          ['Initiative' , params[:initiative_id]]
+          ['Initiative', params[:initiative_id]]
         else
           raise BadRequestException.new('Need either a group_id or an initiative_id')
         end

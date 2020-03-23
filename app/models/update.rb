@@ -3,8 +3,8 @@ class Update < ApplicationRecord
   FIELD_ASSOCIATION_NAME = :fields
 
   belongs_to :updatable, polymorphic: true
-  belongs_to :initiative, -> { where( updates: { updatable_type: 'Initiative' } ).includes( :updates ) }, foreign_key: :updatable_id
-  belongs_to :group, -> { where( updates: { updatable_type: 'Group' } ).includes( :updates ) }, foreign_key: :updatable_id
+  belongs_to :initiative, -> { where(updates: { updatable_type: 'Initiative' }).includes(:updates) }, foreign_key: :updatable_id
+  belongs_to :group, -> { where(updates: { updatable_type: 'Group' }).includes(:updates) }, foreign_key: :updatable_id
 
   include Update::Actions
   include ContainsFieldData

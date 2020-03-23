@@ -1,6 +1,6 @@
 class BudgetPolicy < GroupBasePolicy
   def base_index_permission
-    'groups_budgets_index'
+    'groups_budgets_request'
   end
 
   def base_create_permission
