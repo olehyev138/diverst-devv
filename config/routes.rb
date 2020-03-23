@@ -20,8 +20,17 @@ Diverst::Application.routes.draw do
       resources :answer_expenses
       resources :answer_upvotes
       resources :badges
-      resources :budgets
-      resources :budget_items
+      resources :budgets, except: [:update] do
+        member do
+          post 'approve'
+          post 'decline'
+        end
+      end
+      resources :budget_items, only: [:index] do
+        member do
+          post 'close', to: 'budget_items#close_budget'
+        end
+      end
       resources :campaigns
       resources :campaigns_groups
       resources :campaign_invitations
