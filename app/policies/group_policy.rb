@@ -129,7 +129,7 @@ class GroupPolicy < ApplicationPolicy
     user.enterprise.enable_social_media
   end
 
-  def resource_create?
+  def resources_create?
     GroupResourcePolicy.new(self, Resource).create?
   end
 

@@ -213,6 +213,7 @@ export function FolderPage(props) {
       { valid === true && (
         <Folder
           currentUserId={currentUser.id}
+          currentGroup={props.currentGroup}
           deleteFolderBegin={props.deleteFolderBegin}
           deleteResourceBegin={props.deleteResourceBegin}
           folder={currentFolder}

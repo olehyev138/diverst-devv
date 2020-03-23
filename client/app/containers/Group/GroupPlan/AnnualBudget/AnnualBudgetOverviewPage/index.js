@@ -120,6 +120,7 @@ export function AnnualBudgetsPage(props) {
         handleInitiativePagination={handleInitiativePagination}
         handleInitiativeOrdering={handleInitiativeOrdering}
         defaultParams={defaultParams}
+        currentGroup={props.currentGroup}
       />
     </React.Fragment>
   );

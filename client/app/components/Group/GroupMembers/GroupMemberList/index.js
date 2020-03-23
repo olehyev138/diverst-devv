@@ -141,7 +141,7 @@ export function GroupMemberList(props) {
   return (
     <React.Fragment>
       <Box className={classes.floatRight}>
-        <Permission show={permission(props.currentGroup, 'member_create?')}>
+        <Permission show={permission(props.currentGroup, 'members_create?')}>
           <Button
             className={classes.actionButton}
             variant='contained'

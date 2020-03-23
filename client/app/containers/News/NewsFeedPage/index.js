@@ -108,6 +108,7 @@ export function NewsFeedPage(props, context) {
         currentTab={tab}
         handleChangeTab={handleChangeTab}
         handlePagination={handlePagination}
+        currentGroup={props.currentGroup}
         links={links}
         readonly={props.readonly}
         deleteGroupMessageBegin={props.deleteGroupMessageBegin}

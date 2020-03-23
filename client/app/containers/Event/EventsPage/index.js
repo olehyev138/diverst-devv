@@ -105,6 +105,7 @@ export function EventsPage(props) {
       currentTab={tab}
       handleChangeTab={handleChangeTab}
       handlePagination={handlePagination}
+      currentGroup={props.currentGroup}
       links={links}
       readonly={props.readonly}
     />

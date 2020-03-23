@@ -168,6 +168,7 @@ export function GroupMemberListPage(props) {
         memberTotal={props.memberTotal}
         isFetchingMembers={props.isFetchingMembers}
         groupId={groupId}
+        currentGroup={props.currentGroup}
         deleteMemberBegin={props.deleteMemberBegin}
         exportMembersBegin={exportMembers}
         links={links}
@@ -197,6 +198,7 @@ GroupMemberListPage.propTypes = {
   memberList: PropTypes.array,
   memberTotal: PropTypes.number,
   isFetchingMembers: PropTypes.bool,
+  currentGroup: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({

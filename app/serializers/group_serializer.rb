@@ -29,7 +29,7 @@ class GroupSerializer < ApplicationRecordSerializer
         :members_create?,
         :news_create?,
         :social_link_create?,
-        :resource_create?,
+        :resources_create?,
         :budgets_create?,
         :leaders_create?,
         :events_manage?,
