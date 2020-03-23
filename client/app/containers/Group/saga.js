@@ -4,8 +4,6 @@ import { push } from 'connected-react-router';
 
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
 
-import { ROUTES } from 'containers/Shared/Routes/constants';
-
 import {
   GET_GROUPS_BEGIN,
   GET_ANNUAL_BUDGETS_BEGIN,
