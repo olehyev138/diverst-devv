@@ -85,7 +85,7 @@ export function* getUpdatePrototype(action, updatableKey) {
     const { updatableId, ...payload } = action.payload;
     payload[updatableKey] = updatableId;
 
-    const response = yield call(api.updates.updatePrototype.bind(api.updates), updatableId, payload);
+    const response = yield call(api.updates.prototype.bind(api.updates), payload);
 
     yield put(getUpdatePrototypeSuccess(response.data));
   } catch (err) {
@@ -99,10 +99,10 @@ export function* getUpdatePrototype(action, updatableKey) {
 export function* createUpdate(action, updatableKey) {
   try {
     const { updatableId, redirectPath, ...rest } = action.payload;
-    rest[updatableKey] = updatableId;
 
     const payload = { update: rest };
-    const response = yield call(api.updates.createUpdates.bind(api.updates), updatableId, payload);
+    payload[updatableKey] = updatableId;
+    const response = yield call(api.updates.create.bind(api.updates), payload);
 
     yield put(createUpdateSuccess({}));
     yield put(push(redirectPath));

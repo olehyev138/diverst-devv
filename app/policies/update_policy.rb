@@ -27,6 +27,10 @@ class UpdatePolicy < ApplicationPolicy
 
   delegate :index?, :update?, :destroy?, :show?, :create?, to: :parent_policy
 
+  def prototype?
+    create?
+  end
+
   class Scope < Scope
     def self.parent_scope(params)
       if params[:group_id]
