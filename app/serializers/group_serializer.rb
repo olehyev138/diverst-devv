@@ -39,6 +39,7 @@ class GroupSerializer < ApplicationRecordSerializer
         :news_manage?,
         :annual_budgets_manage?,
         :members_destroy?,
+        :join_event?,
         :is_a_member?,
         :is_a_pending_member?,
         :is_an_accepted_member?,

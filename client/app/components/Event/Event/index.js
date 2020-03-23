@@ -29,6 +29,8 @@ import { injectIntl, intlShape } from 'react-intl';
 
 import EventComment from 'components/Event/EventComment';
 import EventCommentForm from 'components/Event/EventCommentForm';
+import Permission from '../../Shared/DiverstPermission';
+import { permission } from '../../../utils/permissionsHelpers';
 
 const styles = theme => ({
   padding: {
@@ -131,20 +133,22 @@ export function Event(props) {
                   <DiverstFormattedMessage {...messages.leave} />
                 </Button>
               ) : (
-                <Button
-                  variant='contained'
-                  size='large'
-                  color='primary'
-                  className={classes.buttons}
-                  onClick={() => {
-                    props.joinEventBegin({
-                      initiative_id: props.event.id,
-                    });
-                  }}
-                  startIcon={<AddIcon />}
-                >
-                  <DiverstFormattedMessage {...messages.join} />
-                </Button>
+                <Permission show={permission(props.currentGroup, 'join_event?')}>
+                  <Button
+                    variant='contained'
+                    size='large'
+                    color='primary'
+                    className={classes.buttons}
+                    onClick={() => {
+                      props.joinEventBegin({
+                        initiative_id: props.event.id,
+                      });
+                    }}
+                    startIcon={<AddIcon />}
+                  >
+                    <DiverstFormattedMessage {...messages.join} />
+                  </Button>
+                </Permission>
               )}
             </Grid>
           </Grid>
@@ -264,6 +268,7 @@ Event.propTypes = {
   leaveEventBegin: PropTypes.func,
   classes: PropTypes.object,
   event: PropTypes.object,
+  currentGroup: PropTypes.object,
   currentUserId: PropTypes.number,
   isFormLoading: PropTypes.bool,
   links: PropTypes.shape({

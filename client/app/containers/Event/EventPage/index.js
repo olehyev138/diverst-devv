@@ -56,6 +56,7 @@ export function EventPage(props) {
       joinEventBegin={props.joinEventBegin}
       leaveEventBegin={props.leaveEventBegin}
       hasChanged={props.hasChanged}
+      currentGroup={props.currentGroup}
     />
   );
 }

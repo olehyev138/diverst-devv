@@ -1,7 +1,7 @@
 class Api::V1::UserGroupsController < DiverstController
-  def create
+  def join
     params[klass.symbol][:user_id] = current_user.id
-    super
+    create
   end
 
   def leave
@@ -12,6 +12,4 @@ class Api::V1::UserGroupsController < DiverstController
 
     item.remove
   end
-
-  alias_method :join, :create
 end

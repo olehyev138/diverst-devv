@@ -23,6 +23,14 @@ class UserGroupPolicy < GroupBasePolicy
     (record.user == user if UserGroup === record) || super
   end
 
+  def join?
+    group.active?
+  end
+
+  def leave?
+    true
+  end
+
   alias_method :view_members?, :index?
   alias_method :join?, :create?
   alias_method :leave?, :destroy?

@@ -207,11 +207,15 @@ class User < ApplicationRecord
   end
 
   def policy_user_group(group_id)
-    user_groups.find { |gl| gl.group_id == group_id }
+    user_groups.find { |gu| gu.group_id == group_id }
   end
 
   def policy_group_leader(group_id)
     group_leaders.find { |gl| gl.group_id == group_id }
+  end
+
+  def policy_initiative_user(event_id)
+    initiative_users.find { |iu| iu.initiative_id == event_id }
   end
 
   def pending_rewards
