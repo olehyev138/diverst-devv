@@ -8,10 +8,10 @@ class SocialLink < BaseClass
   has_many :social_link_segments, dependent: :destroy
   has_many :segments, through: :social_link_segments, before_remove: :remove_segment_association
   has_many :user_reward_actions, dependent: :destroy
- 
+
   belongs_to :author, class_name: 'User', required: true, counter_cache: true
   belongs_to :group
- 
+
   accepts_nested_attributes_for :news_feed_link, allow_destroy: true
 
   validate :correct_url?
@@ -83,7 +83,7 @@ class SocialLink < BaseClass
 
     create_news_feed_link(news_feed_id: group.news_feed.id)
   end
-  
+
   def remove_news_feed_link
     news_feed_link.destroy if news_feed_link.present?
   end
