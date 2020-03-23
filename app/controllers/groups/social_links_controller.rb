@@ -15,6 +15,7 @@ class Groups::SocialLinksController < ApplicationController
 
   def new
     @social_link = @group.social_links.new
+    @social_link.build_news_feed_link(news_feed_id: @group.news_feed.id)
     @links = SocialMedia::Importer.oembed_link_short
   end
 
