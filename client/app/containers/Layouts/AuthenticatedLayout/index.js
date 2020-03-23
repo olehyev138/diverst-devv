@@ -9,6 +9,7 @@ import Fade from '@material-ui/core/Fade';
 
 import ApplicationHeader from 'components/Shared/ApplicationHeader';
 import ApplicationLayout from 'containers/Layouts/ApplicationLayout';
+import ApplicationFooter from 'components/Shared/ApplicationFooter';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import AuthService from 'utils/authService';
@@ -78,6 +79,7 @@ const AuthenticatedLayout = ({
             <Fade in appear>
               <Component {...matchProps} />
             </Fade>
+            <ApplicationFooter></ApplicationFooter>
           </React.Fragment>
         )}
       />
