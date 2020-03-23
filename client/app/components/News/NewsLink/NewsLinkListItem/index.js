@@ -30,6 +30,8 @@ import Carousel from 'react-material-ui-carousel';
 import { injectIntl, intlShape } from 'react-intl';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import LocationOnOutlinedIcon from '@material-ui/icons/LocationOnOutlined';
+import Permission from '../../../Shared/DiverstPermission';
+import { permission } from '../../../../utils/permissionsHelpers';
 
 const styles = theme => ({
   cardHeader: {
@@ -112,7 +114,7 @@ export function NewsLinkListItem(props) {
           <Grid item>
             <Grid container>
               <Grid item>
-                {props.pinNewsItemBegin && (
+                <Permission show={props.pinNewsItemBegin && permission(props.currentGroup, 'events_manage?')}>
                   <IconButton
                     size='small'
                     onClick={() => {
@@ -124,7 +126,7 @@ export function NewsLinkListItem(props) {
                   >
                     { pinned ? <LocationOnIcon /> : <LocationOnOutlinedIcon />}
                   </IconButton>
-                )}
+                </Permission>
                 { props.links && (
                   <IconButton
                     // TODO : Change to actual post like action
@@ -135,7 +137,7 @@ export function NewsLinkListItem(props) {
                     <ThumbUpIcon />
                   </IconButton>
                 )}
-                { props.links && (
+                <Permission show={props.pinNewsItemBegin && permission(newsItem, 'show?')}>
                   <IconButton
                     size='small'
                     to={props.links.newsLinkShow(props.groupId, newsItem.id)}
@@ -143,7 +145,7 @@ export function NewsLinkListItem(props) {
                   >
                     <CommentIcon />
                   </IconButton>
-                )}
+                </Permission>
               </Grid>
               <Grid item>
                 <Typography variant='body2' color='textSecondary' className={classes.centerVertically} align='right'>
@@ -154,7 +156,7 @@ export function NewsLinkListItem(props) {
           </Grid>
         </Grid>
       </CardContent>
-      {props.links && props.newsItem && (
+      <Permission show={props.links && props.newsItem && permission(newsItem, 'update?')}>
         <CardActions className={classes.cardActions}>
           {!props.readonly && (
             <React.Fragment>
@@ -166,28 +168,32 @@ export function NewsLinkListItem(props) {
               >
                 <DiverstFormattedMessage {...messages.edit} />
               </Button>
-              <Button
-                size='small'
-                color='primary'
-                onClick={() => {
-                  props.archiveNewsItemBegin({ id: newsItemId });
-                }}
-              >
-                <DiverstFormattedMessage {...messages.archive} />
-              </Button>
-              <Button
-                size='small'
-                onClick={() => {
-                  /* eslint-disable-next-line no-alert, no-restricted-globals */
-                  if (confirm('Delete news link?'))
-                    props.deleteNewsLinkBegin(newsItem.news_link);
-                }}
-              >
-                Delete
-              </Button>
+              <Permission show={permission(props.currentGroup, 'events_manage?')}>
+                <Button
+                  size='small'
+                  color='primary'
+                  onClick={() => {
+                    props.archiveNewsItemBegin({ id: newsItemId });
+                  }}
+                >
+                  <DiverstFormattedMessage {...messages.archive} />
+                </Button>
+              </Permission>
+              <Permission show={permission(newsItem, 'destroy?')}>
+                <Button
+                  size='small'
+                  onClick={() => {
+                    /* eslint-disable-next-line no-alert, no-restricted-globals */
+                    if (confirm('Delete news link?'))
+                      props.deleteNewsLinkBegin(newsItem.news_link);
+                  }}
+                >
+                  Delete
+                </Button>
+              </Permission>
             </React.Fragment>
           )}
-          {!props.readonly && props.newsItem.approved !== true && (
+          <Permission show={!props.readonly && !props.newsItem.approved && permission(props.currentGroup, 'events_manage?')}>
             <Button
               size='small'
               onClick={() => {
@@ -197,9 +203,9 @@ export function NewsLinkListItem(props) {
             >
               {<DiverstFormattedMessage {...messages.approve} />}
             </Button>
-          )}
+          </Permission>
         </CardActions>
-      )}
+      </Permission>
     </Card>
   );
 }
@@ -208,6 +214,7 @@ NewsLinkListItem.propTypes = {
   classes: PropTypes.object,
   intl: intlShape,
   newsLink: PropTypes.object,
+  currentGroup: PropTypes.object,
   readonly: PropTypes.bool,
   groupId: PropTypes.number,
   newsItem: PropTypes.object,

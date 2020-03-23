@@ -206,6 +206,14 @@ class User < ApplicationRecord
     authenticate(password) == self
   end
 
+  def policy_user_group(group_id)
+    user_groups.find { |gl| gl.group_id == group_id }
+  end
+
+  def policy_group_leader(group_id)
+    group_leaders.find { |gl| gl.group_id == group_id }
+  end
+
   def pending_rewards
     user_rewards.where(status: 0)
   end

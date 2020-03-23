@@ -94,6 +94,7 @@ export function NewsFeed(props) {
           newsItem={item}
           readonly={props.readonly}
           groupId={item.news_feed.group_id}
+          currentGroup={props.currentGroup}
           deleteGroupMessageBegin={props.deleteGroupMessageBegin}
           updateNewsItemBegin={props.updateNewsItemBegin}
           archiveNewsItemBegin={props.archiveNewsItemBegin}
@@ -108,6 +109,7 @@ export function NewsFeed(props) {
           newsLink={item.news_link}
           newsItem={item}
           groupId={item.news_feed.group_id}
+          currentGroup={props.currentGroup}
           readonly={props.readonly}
           deleteNewsLinkBegin={props.deleteNewsLinkBegin}
           updateNewsItemBegin={props.updateNewsItemBegin}
@@ -123,6 +125,7 @@ export function NewsFeed(props) {
           links={props.links}
           newsItem={item}
           groupId={item.news_feed.group_id}
+          currentGroup={props.currentGroup}
           readonly={props.readonly}
           deleteSocialLinkBegin={props.deleteSocialLinkBegin}
           updateNewsItemBegin={props.updateNewsItemBegin}

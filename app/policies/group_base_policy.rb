@@ -28,8 +28,8 @@ class GroupBasePolicy < ApplicationPolicy
       end
 
       if group
-        @group_leader = GroupLeader.find_by(user_id: user.id, group_id: group.id)
-        @user_group = UserGroup.find_by(user_id: user.id, group_id: group.id)
+        @group_leader = user.policy_group_leader(group.id)
+        @user_group = user.policy_user_group(group.id)
       end
     end
   end

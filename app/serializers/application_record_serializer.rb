@@ -89,12 +89,16 @@ class ApplicationRecordSerializer < ActiveModel::Serializer
   def policy
     @policy ||= (
     @instance_options[:policy] ||
-            Pundit::PolicyFinder.new(object).policy&.new(scope&.dig(:current_user), object, @instance_options[:params])
+            Pundit::PolicyFinder.new(object).policy&.new(
+                scope&.dig(:current_user) || (Rails.env.development? && @@test_user ||= User.first),
+                object,
+                @instance_options[:params]
+              )
   )
   end
 
   def policies
-    [:show?, :update?, :delete?]
+    [:show?, :update?, :destroy?]
   end
 
   def permissions
