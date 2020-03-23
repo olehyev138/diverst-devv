@@ -17,7 +17,7 @@ export function ApplicationFooter(props) {
   const { classes } = props;
   return (
     <AppBar className={classes.appBar}>
-      <div align='center' >© 2015-2020 Diverst. All right reserved. </div>
+      <div align='center'>© 2015-2020 Diverst. All right reserved. </div>
     </AppBar>
   );
 }
