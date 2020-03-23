@@ -4,6 +4,8 @@ class ConvertKeysToBigInt < ActiveRecord::Migration[5.2]
     execute 'SET FOREIGN_KEY_CHECKS = 0'
 
     # Remove foreign keys temporarily
+    remove_foreign_key "annual_budgets", column: "deprecated_enterprise_id" if foreign_key_exists?("annual_budgets", column: "deprecated_enterprise_id")
+    remove_foreign_key "annual_budgets", column: "group_id" if foreign_key_exists?("annual_budgets", column: "group_id")
     remove_foreign_key "answers", column: "contributing_group_id" if foreign_key_exists?("answers", column: "contributing_group_id")
     remove_foreign_key "badges", "enterprises" if foreign_key_exists?("badges", "enterprises")
     remove_foreign_key "budget_items", "budgets" if foreign_key_exists?("budget_items", "budgets")
