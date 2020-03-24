@@ -1,6 +1,9 @@
 class GroupMessageCommentPolicy < GroupBasePolicy
   def index?
-    NewsFeedLinkPolicy.new(user, record.news_feed_link).show?
+    case record
+    when GroupMessageComment then NewsFeedLinkPolicy.new(user, record.news_feed_link, params).show?
+    else NewsFeedLinkPolicy.new(user, NewsFeedLink, params).show?
+    end
   end
 
   def update?

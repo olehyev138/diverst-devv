@@ -62,7 +62,8 @@ class ApplicationPolicy
   end
 
   def scope
-    Pundit.policy_scope(user, record.class.all)
+    policy = Pundit::PolicyFinder.new(record).policy
+    policy::Scope.new(user, record.class).resolve
   end
 
   class Scope

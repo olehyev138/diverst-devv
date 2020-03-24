@@ -53,10 +53,11 @@ class Resource < ApplicationRecord
     end
   end
 
+  # TEMP: Need to create InitiativeResourcePolicy, and MentorSessionResourcePolicy
   def policy_class
-    if group_id
+    if group_id || initiative_id
       GroupResourcePolicy
-    elsif enterprise_id
+    elsif enterprise_id || mentoring_session_id
       EnterpriseResourcePolicy
     else
       case folder.policy_class.name

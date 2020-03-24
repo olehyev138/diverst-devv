@@ -14,7 +14,11 @@ class InitiativeBasePolicy < GroupBasePolicy
       @group_leader = user.group_leader
       @user_group = user.user_group
     else
-      super(user, context, params)
+      @user = user
+      @record = record
+      @params = params
+      @policy_group = @user.policy_group
+
       # Check if it's a collection, a record, or a class
       if context.is_a?(Enumerable) # Collection/Enumerable
         self.initiative = context.first
