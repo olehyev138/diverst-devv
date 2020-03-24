@@ -146,7 +146,7 @@
   "diverst.containers.Group.Categories.form.button.add": "Add",
   "diverst.containers.Group.Categories.form.button.remove": "Remove",
   "diverst.containers.Group.categorize.button.allcategories": "All Categories",
-  "diverst.containers.Group.categorize.button.categorize": "Categorize subgroup",
+  "diverst.containers.Group.categorize.button.categorize": "Categorize subgroup of",
   "diverst.containers.Group.categorize.button.save": "Save",
   "diverst.containers.Group.index.button.new": "New {erg}",
   "diverst.containers.Group.index.button.edit": "Edit",
