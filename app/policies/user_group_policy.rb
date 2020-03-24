@@ -15,10 +15,6 @@ class UserGroupPolicy < GroupBasePolicy
     'members_visibility'
   end
 
-  def create?
-    true
-  end
-
   def update?
     (record.user == user if UserGroup === record) || super
   end

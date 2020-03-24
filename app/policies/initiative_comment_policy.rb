@@ -1,6 +1,6 @@
 class InitiativeCommentPolicy < GroupBasePolicy
   def index?
-    InitiativePolicy.new(user, record).show?
+    InitiativePolicy.new(user, record.initiative).show?
   end
 
   def update?
