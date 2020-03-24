@@ -24,6 +24,7 @@ import {
 
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import DiverstFormLoader from 'components/Shared/DiverstFormLoader';
+import AddIcon from '@material-ui/icons/Add';
 
 const styles = theme => ({
   noBottomPadding: {
@@ -55,19 +56,25 @@ export function GroupCategoriesFormInner({ classes, values, handleChange, button
               value={values.name}
               required
             />
-            <Typography><DiverstFormattedMessage {...messages.labels} /></Typography>
-            <br />
             <FieldArray
               name='group_categories_attributes'
               render={arrayHelpers => (
                 <div>
+                  <Typography color='primary' variant='body1' component='h2' className={classes.title}>
+                    {intl.formatMessage(messages.labels)}
+                  </Typography>
+                  <br />
+
                   {values.group_categories_attributes && values.group_categories_attributes.length > 0 ? values.group_categories_attributes.map((category, index) => (
                     // eslint-disable-next-line react/no-array-index-key
                     <div key={index}>
                       {/* eslint-disable-next-line no-underscore-dangle */}
                       {!values.group_categories_attributes[index]._destroy && (
                         <React.Fragment>
-                          <Field name={`group_categories_attributes.${index}.name`} required />
+                          <Field
+                            name={`group_categories_attributes.${index}.name`}
+                            required
+                          />
                           <Button
                             size='small'
                             className={classes.errorButton}
@@ -76,25 +83,22 @@ export function GroupCategoriesFormInner({ classes, values, handleChange, button
                           >
                             <DiverstFormattedMessage {...messages.remove} />
                           </Button>
-                          <Button
-                            size='small'
-                            color='primary'
-                            onClick={() => arrayHelpers.insert(index, {
-                              name: '',
-                              id: '',
-                              _destroy: false
-                            })} // insert an empty string at a position
-                          >
-                            <DiverstFormattedMessage {...messages.add} />
-                          </Button>
                         </React.Fragment>
                       )}
                     </div>
                   )) : (
-                    <Button color='primary' onClick={() => arrayHelpers.push({ name: '', id: '', _destroy: false })}>
-                      <DiverstFormattedMessage {...messages.add_button} />
-                    </Button>
+                    <Typography></Typography>
                   )}
+                  <br />
+                  <Button
+                    size='small'
+                    color='primary'
+                    onClick={() => arrayHelpers.push({ name: '', id: '', _destroy: false })}
+                    startIcon={<AddIcon />}
+                  >
+                    <DiverstFormattedMessage {...messages.add_button} />
+                  </Button>
+
                 </div>
               )}
             >

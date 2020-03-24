@@ -141,7 +141,7 @@
   "diverst.containers.Group.Categories.form.button.update": "Update",
   "diverst.containers.Group.Categories.form.button.cancel": "Cancel",
   "diverst.containers.Group.Categories.form.input.name": "Category Name",
-  "diverst.containers.Group.Categories.form.input.labels": "Category Labels",
+  "diverst.containers.Group.Categories.form.input.labels": "Category Labels:",
   "diverst.containers.Group.Categories.form.button.add_button": "Add a category label",
   "diverst.containers.Group.Categories.form.button.add": "Add",
   "diverst.containers.Group.Categories.form.button.remove": "Remove",
