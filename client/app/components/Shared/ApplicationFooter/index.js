@@ -1,7 +1,6 @@
 import React, { memo } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
-
 import { withStyles } from '@material-ui/core/styles';
 import { AppBar } from '@material-ui/core';
 import { DateTime } from 'luxon';
