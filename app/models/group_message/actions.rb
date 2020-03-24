@@ -5,7 +5,7 @@ module GroupMessage::Actions
 
   module ClassMethods
     def base_preloads
-      [ :author, :group, :comments, comments: GroupMessageComment.base_preloads ]
+      [ :owner, :group, :comments, owner: User.base_preloads, group: [:enterprise], comments: GroupMessageComment.base_preloads ]
     end
   end
 end

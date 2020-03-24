@@ -4,9 +4,10 @@ class SocialLink < ApplicationRecord
 
   self.table_name = 'social_network_posts'
 
+  belongs_to :author, class_name: 'User', counter_cache: true
+  belongs_to :group
+
   has_one :news_feed_link
-  has_one :group, through: :news_feed_link
-  has_one :author, through: :news_feed_link
 
   has_many :social_link_segments, dependent: :destroy
   has_many :segments, through: :social_link_segments, before_remove: :remove_segment_association

@@ -5,7 +5,7 @@ module SocialLink::Actions
 
   module ClassMethods
     def base_preloads
-      [ :author ]
+      [ :author, author: User.base_preloads ]
     end
   end
 end
