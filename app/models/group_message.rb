@@ -7,10 +7,11 @@ class GroupMessage < ApplicationRecord
   has_many :comments, class_name: 'GroupMessageComment', foreign_key: :message_id, dependent: :destroy
   has_many :user_reward_actions
 
-  belongs_to :owner, class_name: 'User', counter_cache: :own_messages_count
-  belongs_to :group
-
   has_one :news_feed_link
+  has_one :group, through: :news_feed_link
+  has_one :author, through: :news_feed_link
+  belongs_to :owner, class_name: 'User', counter_cache: :own_messages_count
+
   has_many :news_tags, through: :news_feed_link
 
   after_create :approve_link

@@ -2,10 +2,10 @@ class NewsLink < ApplicationRecord
   include PublicActivity::Common
   include NewsLink::Actions
 
-  belongs_to :group
-  belongs_to :author, class_name: 'User', counter_cache: :own_news_links_count
-
   has_one :news_feed_link
+  has_one :group, through: :news_feed_link
+  has_one :author, through: :news_feed_link
+
   has_many :news_tags, through: :news_feed_link
 
   has_many :news_link_segments, dependent: :destroy
@@ -53,7 +53,7 @@ class NewsLink < ApplicationRecord
   scope :approved, -> { joins(:news_feed_link).where(news_feed_links: { approved: true }) }
 
   def picture_location(expires_in: 3600, default_style: :medium)
-    return nil if !picture.attached?
+    return nil unless picture.attached?
 
     # default_style = :medium if !picture.styles.keys.include? default_style
     # picture.expiring_url(expires_in, default_style)

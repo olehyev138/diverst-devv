@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_07_053713) do
+ActiveRecord::Schema.define(version: 2020_03_24_155447) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
     t.string "name", null: false
@@ -953,6 +953,12 @@ ActiveRecord::Schema.define(version: 2020_03_07_053713) do
     t.datetime "archived_at"
     t.integer "views_count"
     t.integer "likes_count"
+    t.bigint "author_id_id"
+    t.bigint "author_id"
+    t.bigint "user_id"
+    t.index ["author_id"], name: "index_news_feed_links_on_author_id"
+    t.index ["author_id_id"], name: "index_news_feed_links_on_author_id_id"
+    t.index ["user_id"], name: "index_news_feed_links_on_user_id"
   end
 
   create_table "news_feeds", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin", force: :cascade do |t|
@@ -1658,6 +1664,7 @@ ActiveRecord::Schema.define(version: 2020_03_07_053713) do
   add_foreign_key "mentoring_session_comments", "mentoring_sessions"
   add_foreign_key "mentoring_session_comments", "users"
   add_foreign_key "mentorship_availabilities", "users"
+  add_foreign_key "news_feed_links", "users"
   add_foreign_key "news_links", "users", column: "author_id"
   add_foreign_key "policy_groups", "users"
   add_foreign_key "polls", "initiatives"

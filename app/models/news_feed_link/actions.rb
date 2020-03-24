@@ -18,11 +18,14 @@ module NewsFeedLink::Actions
           :news_link,
           :social_link,
           :news_feed,
-          :views,
-          :likes,
+          :author,
+          :group,
+          :shared_news_feeds,
           group_message: GroupMessage.base_preloads,
           news_link: NewsLink.base_preloads,
-          social_link: SocialLink.base_preloads
+          social_link: SocialLink.base_preloads,
+          author: User.base_preloads,
+          group: Group.base_preloads,
       ]
     end
 
