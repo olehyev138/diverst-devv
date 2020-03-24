@@ -45,4 +45,7 @@ export default defineMessages({
   remove: {
     id: `${scope}.form.button.remove`,
   },
+  nocategories: {
+    id: `${scope}.list.nocategories`,
+  },
 });

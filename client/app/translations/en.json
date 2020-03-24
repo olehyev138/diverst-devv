@@ -145,6 +145,7 @@
   "diverst.containers.Group.Categories.form.button.add_button": "Add a category label",
   "diverst.containers.Group.Categories.form.button.add": "Add",
   "diverst.containers.Group.Categories.form.button.remove": "Remove",
+  "diverst.containers.Group.Categories.list.nocategories": "There is no categories!",
   "diverst.containers.Group.categorize.button.allcategories": "All Categories",
   "diverst.containers.Group.categorize.button.categorize": "Categorize subgroup of",
   "diverst.containers.Group.categorize.button.save": "Save",

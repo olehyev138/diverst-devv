@@ -71,8 +71,14 @@ export function GroupCategoriesFormInner({ classes, values, handleChange, button
                       {/* eslint-disable-next-line no-underscore-dangle */}
                       {!values.group_categories_attributes[index]._destroy && (
                         <React.Fragment>
-                          <Field
+                          <TextField
+                            margin='dense'
+                            disabled={props.isCommitting}
+                            id={`group_categories_attributes[${index}].name`}
+                            type='text'
+                            onChange={handleChange}
                             name={`group_categories_attributes.${index}.name`}
+                            value={values.group_categories_attributes[index].name}
                             required
                           />
                           <Button

@@ -78,76 +78,80 @@ export function GroupCategoriesList(props, context) {
       <DiverstLoader isLoading={props.isLoading}>
         <Grid container spacing={3}>
           { /* eslint-disable-next-line arrow-body-style */ }
-          {props.categoryTypes && Object.values(props.categoryTypes).map((categoryType, i) => {
-            return (
-              <Grid item key={categoryType.id} xs={12}>
-                <Card className={classes.groupCard}>
-                  <CardContent>
-                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                    <Typography variant='h5' component='h2' display='inline'>
-                      {categoryType.name}
-                    </Typography>
-                    <Button
-                      size='small'
-                      color='primary'
-                      to={{
-                        pathname: `${ROUTES.admin.manage.groups.categories.pathPrefix}/${categoryType.id}/edit`,
-                        state: { id: categoryType.id }
-                      }}
-                      component={WrappedNavLink}
-                    >
-                      <DiverstFormattedMessage {...messages.edit} />
-                    </Button>
-                    <Button
-                      size='small'
-                      className={classes.errorButton}
-                      onClick={() => {
-                        /* eslint-disable-next-line no-alert, no-restricted-globals */
-                        if (confirm(intl.formatMessage(messages.delete_confirm)))
-                          props.deleteGroupCategoriesBegin(categoryType.id);
-                      }}
-                    >
-                      <DiverstFormattedMessage {...messages.delete} />
-                    </Button>
-                  </CardContent>
-                  <CardContent>
-                    <Grid container spacing={1} justify='flex-end'>
-                      {categoryType.group_categories && categoryType.group_categories.map((category, i) => (
-                        /* eslint-disable-next-line react/jsx-wrap-multilines */
-                        <Grid item key={category.id} xs={12}>
-                          <Card className={classes.childGroupCard}>
-                            <CardContent>
-                              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                              <Button
-                                size='medium'
-                                color='primary'
-                                onClick={() => {
-                                  setExpandedSubgroups({ ...expandedSubgroups, [category.id]: !expandedSubgroups[category.id] });
-                                }}
-                              >
-                                {category.name}
-                                (
-                                {category.total_groups}
-                                )
-                              </Button>
-                              <Collapse in={expandedSubgroups[`${category.id}`]}>
-                                {category.groups && category.groups.map((group, i) => (
-                                  <Typography color='primary' variant='body2' margin='30' key={group.id}>
-                                    &ensp;&ensp;&ensp;&ensp;
-                                    {group.name}
-                                  </Typography>
-                                ))}
-                              </Collapse>
-                            </CardContent>
-                          </Card>
-                        </Grid>
-                      ))}
-                    </Grid>
-                  </CardContent>
-                </Card>
-              </Grid>
-            );
-          })}
+          {props.categoryTypes && Object.values(props.categoryTypes).length > 0 ? Object.values(props.categoryTypes).map((categoryType, i) => (
+            <Grid item key={categoryType.id} xs={12}>
+              <Card className={classes.groupCard}>
+                <CardContent>
+                  {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                  <Typography variant='h5' component='h2' display='inline'>
+                    {categoryType.name}
+                  </Typography>
+                  <Button
+                    size='small'
+                    color='primary'
+                    to={{
+                      pathname: `${ROUTES.admin.manage.groups.categories.pathPrefix}/${categoryType.id}/edit`,
+                      state: { id: categoryType.id }
+                    }}
+                    component={WrappedNavLink}
+                  >
+                    <DiverstFormattedMessage {...messages.edit} />
+                  </Button>
+                  <Button
+                    size='small'
+                    className={classes.errorButton}
+                    onClick={() => {
+                      /* eslint-disable-next-line no-alert, no-restricted-globals */
+                      if (confirm(intl.formatMessage(messages.delete_confirm)))
+                        props.deleteGroupCategoriesBegin(categoryType.id);
+                    }}
+                  >
+                    <DiverstFormattedMessage {...messages.delete} />
+                  </Button>
+                </CardContent>
+                <CardContent>
+                  <Grid container spacing={1} justify='flex-end'>
+                    {categoryType.group_categories && categoryType.group_categories.map((category, i) => (
+                      /* eslint-disable-next-line react/jsx-wrap-multilines */
+                      <Grid item key={category.id} xs={12}>
+                        <Card className={classes.childGroupCard}>
+                          <CardContent>
+                            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                            <Button
+                              size='medium'
+                              color='primary'
+                              onClick={() => {
+                                setExpandedSubgroups({ ...expandedSubgroups, [category.id]: !expandedSubgroups[category.id] });
+                              }}
+                            >
+                              {category.name}
+                              (
+                              {category.total_groups}
+                              )
+                            </Button>
+                            <Collapse in={expandedSubgroups[`${category.id}`]}>
+                              {category.groups && category.groups.map((group, i) => (
+                                <Typography color='primary' variant='body2' margin='30' key={group.id}>
+                                  &ensp;&ensp;&ensp;&ensp;
+                                  {group.name}
+                                </Typography>
+                              ))}
+                            </Collapse>
+                          </CardContent>
+                        </Card>
+                      </Grid>
+                    ))}
+                  </Grid>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))
+            : (
+              <Typography variant='h6' align='center' color='textSecondary'>
+                <DiverstFormattedMessage {...messages.nocategories} />
+              </Typography>
+            )
+          }
         </Grid>
       </DiverstLoader>
       <DiverstPagination
