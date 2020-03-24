@@ -222,4 +222,9 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(Conditional(GroupMemberListPage, ['currentGroup.permissions.members_view?']));
+)(Conditional(
+  GroupMemberListPage,
+  ['currentGroup.permissions.members_view?'],
+  (props, rs) => ROUTES.group.home.path(rs.params('group_id')),
+  'You don\'t have permission to view group members'
+));
