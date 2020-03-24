@@ -1,4 +1,4 @@
-class GroupMessagePolicy < GroupBasePolicy
+class GroupMessageCommentPolicy < GroupBasePolicy
   def index?
     NewsFeedLinkPolicy.new(user, record.news_feed_link).show?
   end
