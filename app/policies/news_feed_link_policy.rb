@@ -19,6 +19,10 @@ class NewsFeedLinkPolicy < GroupBasePolicy
     (record.author == user if NewsFeedLink === record) || super
   end
 
+  def is_a_member?
+    super || (user.group_ids && shared_news_feeds.map { |snf| snf.group_id }).present?
+  end
+
   class Scope < Scope
     def is_member(permission)
       "(groups.latest_news_visibility IN ('public', 'non_member', 'group') AND user_groups.user_id = #{quote_string(user.id)} AND #{policy_group(permission)})"

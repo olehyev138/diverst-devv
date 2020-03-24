@@ -171,12 +171,6 @@ class GroupPolicy < ApplicationPolicy
     GroupResourcePolicy.new(self, Resource).manage?
   end
 
-  # Miscellaneous
-
-  def join_event?
-    InitiativeUserPolicy.new(self, InitiativeUser).join?
-  end
-
   # ========================================
   # MAYBE DEPRECATED
   # ========================================

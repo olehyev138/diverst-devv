@@ -133,7 +133,7 @@ export function Event(props) {
                   <DiverstFormattedMessage {...messages.leave} />
                 </Button>
               ) : (
-                <Permission show={permission(props.currentGroup, 'join_event?')}>
+                <Permission show={permission(props.event, 'join_event?')}>
                   <Button
                     variant='contained'
                     size='large'

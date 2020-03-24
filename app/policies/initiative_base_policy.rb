@@ -48,6 +48,10 @@ class InitiativeBasePolicy < GroupBasePolicy
     initiative_user.present?
   end
 
+  def is_a_member?
+    super || (user.group_ids && participating_group_ids).present?
+  end
+
   class Scope < Scope
     def group_has_permission(permission)
       GroupLeader.attribute_names.include?(permission)

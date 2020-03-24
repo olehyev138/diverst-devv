@@ -55,6 +55,12 @@ class InitiativePolicy < GroupBasePolicy
     update?
   end
 
+  # Miscellaneous
+
+  def join_event?
+    InitiativeUserPolicy.new(self, InitiativeUser).join?
+  end
+
   # todo: fix and test
   def show_calendar?
     return true if @record.segments.empty?

@@ -12,7 +12,7 @@ class InitiativeSerializer < ApplicationRecordSerializer
   end
 
   def policies
-    [:index?, :create?, :update?, :destroy?, :show?]
+    super + [:join_event?]
   end
 
   # Picture

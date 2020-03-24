@@ -20,9 +20,10 @@ class InitiativeUserPolicy < InitiativeBasePolicy
   end
 
   def join?
-    manage_all? ||
-        (is_a_member? && ['managers_only', 'leaders_only'].exclude?(group[:upcoming_events_visibility])) ||
-        group[:upcoming_events_visibility] == 'public'
+    return true if manage_all?
+    return true if group[:upcoming_events_visibility] == 'public'
+
+    is_a_member? && ['managers_only', 'leaders_only'].exclude?(group[:upcoming_events_visibility])
   end
 
   def leave?
