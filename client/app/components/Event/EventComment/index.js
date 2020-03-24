@@ -12,6 +12,8 @@ import { Button, Card, CardActions, CardContent, Typography } from '@material-ui
 import { withStyles } from '@material-ui/core/styles';
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Event/messages';
+import Permission from "../../Shared/DiverstPermission";
+import {permission} from "../../../utils/permissionsHelpers";
 
 const styles = theme => ({
   margin: {
@@ -47,18 +49,21 @@ export function EventComment(props) {
           {intl.formatMessage(messages.comment.ago)}
         </Typography>
       </CardContent>
-      <CardActions>
-        <Button
-          size='small'
-          onClick={() => {
-            /* eslint-disable-next-line no-alert, no-restricted-globals */
-            if (confirm(intl.formatMessage(messages.comment.deleteconfirm)))
-              props.deleteEventCommentBegin({ initiative_id: comment.initiative_id, id: comment.id });
-          }}
-        >
-          {intl.formatMessage(messages.comment.delete)}
-        </Button>
-      </CardActions>
+      <Permission show={permission(comment, 'destroy?')}>
+        <CardActions>
+          <Button
+            size='small'
+            onClick={() => {
+              /* eslint-disable-next-line no-alert, no-restricted-globals */
+              if (confirm(intl.formatMessage(messages.comment.deleteconfirm)))
+                props.deleteEventCommentBegin({ initiative_id: comment.initiative_id, id: comment.id });
+            }}
+          >
+            {intl.formatMessage(messages.comment.delete)}
+          </Button>
+        </CardActions>
+      </Permission>
+
     </Card>
   );
 }

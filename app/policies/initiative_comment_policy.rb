@@ -4,14 +4,14 @@ class InitiativeCommentPolicy < GroupBasePolicy
   end
 
   def update?
-    record.user == user
+    record.user == user || manage_comments?
   end
 
   def create?
-    manage_comments?
+    index?
   end
 
   def destroy?
-    create?
+    update?
   end
 end

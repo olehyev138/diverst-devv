@@ -74,19 +74,21 @@ export function SocialLinkListItem(props) {
           <Grid item>
             <Grid container>
               <Grid item>
-                <Permission show={props.pinNewsItemBegin && permission(props.currentGroup, 'events_manage?')}>
-                  <IconButton
-                    size='small'
-                    onClick={() => {
-                      if (pinned)
-                        props.unpinNewsItemBegin({ id: newsItemId });
-                      else
-                        props.pinNewsItemBegin({ id: newsItemId });
-                    }}
-                  >
-                    { pinned ? <LocationOnIcon /> : <LocationOnOutlinedIcon />}
-                  </IconButton>
-                </Permission>
+                { props.pinNewsItemBegin && (
+                  <Permission show={permission(props.currentGroup, 'events_manage?')}>
+                    <IconButton
+                      size='small'
+                      onClick={() => {
+                        if (pinned)
+                          props.unpinNewsItemBegin({ id: newsItemId });
+                        else
+                          props.pinNewsItemBegin({ id: newsItemId });
+                      }}
+                    >
+                      { pinned ? <LocationOnIcon /> : <LocationOnOutlinedIcon />}
+                    </IconButton>
+                  </Permission>
+                )}
               </Grid>
               <Grid item>
                 <Typography variant='body2' color='textSecondary' className={classes.centerVertically} align='right'>
@@ -97,56 +99,60 @@ export function SocialLinkListItem(props) {
           </Grid>
         </Grid>
       </CardContent>
-      <Permission show={props.links && permission(newsItem, 'update?')}>
-        <CardActions>
-          {!props.readonly && (
-            <React.Fragment>
-              <Button
-                size='small'
-                color='primary'
-                to={links.socialLinkEdit(newsItem.id)}
-                component={WrappedNavLink}
-              >
-                <DiverstFormattedMessage {...messages.edit} />
-              </Button>
-              <Permission show={props.links && permission(props.currentGroup, 'events_manage?')}>
+      {props.links && (
+        <Permission show={permission(newsItem, 'update?')}>
+          <CardActions>
+            {!props.readonly && (
+              <React.Fragment>
                 <Button
                   size='small'
                   color='primary'
-                  onClick={() => {
-                    props.archiveNewsItemBegin({ id: newsItemId });
-                  }}
+                  to={links.socialLinkEdit(newsItem.id)}
+                  component={WrappedNavLink}
                 >
-                  <DiverstFormattedMessage {...messages.archive} />
+                  <DiverstFormattedMessage {...messages.edit} />
                 </Button>
-              </Permission>
-              <Permission show={permission(newsItem, 'destroy?')}>
-                <Button
-                  size='small'
-                  onClick={() => {
-                    /* eslint-disable-next-line no-alert, no-restricted-globals */
-                    if (confirm('Delete social link?'))
-                      props.deleteSocialLinkBegin(newsItem.social_link);
-                  }}
-                >
-                  Delete
-                </Button>
-              </Permission>
-            </React.Fragment>
-          )}
-          <Permission show={!props.readonly && !props.newsItem.approved && permission(props.currentGroup, 'events_manage?')}>
-            <Button
-              size='small'
-              onClick={() => {
-                /* eslint-disable-next-line no-alert, no-restricted-globals */
-                props.updateNewsItemBegin({ approved: true, id: newsItemId, group_id: groupId });
-              }}
-            >
-              {<DiverstFormattedMessage {...messages.approve} />}
-            </Button>
-          </Permission>
-        </CardActions>
-      </Permission>
+                {props.links && (
+                  <Permission show={permission(props.currentGroup, 'events_manage?')}>
+                    <Button
+                      size='small'
+                      color='primary'
+                      onClick={() => {
+                        props.archiveNewsItemBegin({ id: newsItemId });
+                      }}
+                    >
+                      <DiverstFormattedMessage {...messages.archive} />
+                    </Button>
+                  </Permission>
+                )}
+                <Permission show={permission(newsItem, 'destroy?')}>
+                  <Button
+                    size='small'
+                    onClick={() => {
+                      /* eslint-disable-next-line no-alert, no-restricted-globals */
+                      if (confirm('Delete social link?'))
+                        props.deleteSocialLinkBegin(newsItem.social_link);
+                    }}
+                  >
+                    Delete
+                  </Button>
+                </Permission>
+              </React.Fragment>
+            )}
+            <Permission show={!props.readonly && !props.newsItem.approved && permission(props.currentGroup, 'events_manage?')}>
+              <Button
+                size='small'
+                onClick={() => {
+                  /* eslint-disable-next-line no-alert, no-restricted-globals */
+                  props.updateNewsItemBegin({ approved: true, id: newsItemId, group_id: groupId });
+                }}
+              >
+                {<DiverstFormattedMessage {...messages.approve} />}
+              </Button>
+            </Permission>
+          </CardActions>
+        </Permission>
+      )}
     </Card>
   );
 }

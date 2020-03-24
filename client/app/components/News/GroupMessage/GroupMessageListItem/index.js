@@ -84,19 +84,21 @@ export function GroupMessageListItem(props) {
           <Grid item>
             <Grid container>
               <Grid item>
-                <Permission show={props.pinNewsItemBegin && permission(props.currentGroup, 'news_manage?')}>
-                  <IconButton
-                    size='small'
-                    onClick={() => {
-                      if (pinned)
-                        props.unpinNewsItemBegin({ id: newsItemId });
-                      else
-                        props.pinNewsItemBegin({ id: newsItemId });
-                    }}
-                  >
-                    { pinned ? <LocationOnIcon /> : <LocationOnOutlinedIcon />}
-                  </IconButton>
-                </Permission>
+                {props.pinNewsItemBegin && (
+                  <Permission show={permission(props.currentGroup, 'news_manage?')}>
+                    <IconButton
+                      size='small'
+                      onClick={() => {
+                        if (pinned)
+                          props.unpinNewsItemBegin({ id: newsItemId });
+                        else
+                          props.pinNewsItemBegin({ id: newsItemId });
+                      }}
+                    >
+                      { pinned ? <LocationOnIcon /> : <LocationOnOutlinedIcon />}
+                    </IconButton>
+                  </Permission>
+                )}
                 { props.links && (
                   <IconButton
                     // TODO : Change to actual post like action
@@ -107,15 +109,17 @@ export function GroupMessageListItem(props) {
                     <ThumbUpIcon />
                   </IconButton>
                 )}
-                <Permission show={props.links && permission(newsItem, 'show?')}>
-                  <IconButton
-                    size='small'
-                    to={props.links.groupMessageShow(props.groupId, newsItem.id)}
-                    component={WrappedNavLink}
-                  >
-                    <CommentIcon />
-                  </IconButton>
-                </Permission>
+                { props.links && (
+                  <Permission show={permission(newsItem, 'show?')}>
+                    <IconButton
+                      size='small'
+                      to={props.links.groupMessageShow(props.groupId, newsItem.id)}
+                      component={WrappedNavLink}
+                    >
+                      <CommentIcon />
+                    </IconButton>
+                  </Permission>
+                )}
               </Grid>
               <Grid item>
                 <Typography variant='body2' color='textSecondary' className={classes.centerVertically} align='right'>
@@ -126,56 +130,58 @@ export function GroupMessageListItem(props) {
           </Grid>
         </Grid>
       </CardContent>
-      <Permission show={props.links && permission(newsItem, 'update?')}>
-        <CardActions className={classes.cardActions}>
-          {!props.readonly && (
-            <React.Fragment>
-              <Button
-                size='small'
-                color='primary'
-                to={props.links.groupMessageEdit(newsItem.id)}
-                component={WrappedNavLink}
-              >
-                <DiverstFormattedMessage {...messages.edit} />
-              </Button>
-              <Permission show={permission(props.currentGroup, 'events_manage?')}>
+      {props.links && (
+        <Permission show={permission(newsItem, 'update?')}>
+          <CardActions className={classes.cardActions}>
+            {!props.readonly && (
+              <React.Fragment>
                 <Button
                   size='small'
                   color='primary'
-                  onClick={() => {
-                    props.archiveNewsItemBegin({ id: newsItemId });
-                  }}
+                  to={props.links.groupMessageEdit(newsItem.id)}
+                  component={WrappedNavLink}
                 >
-                  <DiverstFormattedMessage {...messages.archive} />
+                  <DiverstFormattedMessage {...messages.edit} />
                 </Button>
-              </Permission>
-            </React.Fragment>
-          )}
-          <Permission show={!props.readonly && permission(newsItem, 'destroy?')}>
-            <Button
-              size='small'
-              onClick={() => {
-                /* eslint-disable-next-line no-alert, no-restricted-globals */
-                if (confirm(intl.formatMessage(messages.group_delete_confirm)))
-                  props.deleteGroupMessageBegin(newsItem.group_message);
-              }}
-            >
-              <DiverstFormattedMessage {...messages.delete} />
-            </Button>
-          </Permission>
-          <Permission show={!props.readonly && !props.newsItem.approved && permission(props.currentGroup, 'events_manage?')}>
-            <Button
-              size='small'
-              onClick={() => {
-                /* eslint-disable-next-line no-alert, no-restricted-globals */
-                props.updateNewsItemBegin({ approved: true, id: newsItemId, group_id: groupId });
-              }}
-            >
-              <DiverstFormattedMessage {...messages.approve} />
-            </Button>
-          </Permission>
-        </CardActions>
-      </Permission>
+                <Permission show={permission(props.currentGroup, 'events_manage?')}>
+                  <Button
+                    size='small'
+                    color='primary'
+                    onClick={() => {
+                      props.archiveNewsItemBegin({ id: newsItemId });
+                    }}
+                  >
+                    <DiverstFormattedMessage {...messages.archive} />
+                  </Button>
+                </Permission>
+              </React.Fragment>
+            )}
+            <Permission show={!props.readonly && permission(newsItem, 'destroy?')}>
+              <Button
+                size='small'
+                onClick={() => {
+                  /* eslint-disable-next-line no-alert, no-restricted-globals */
+                  if (confirm(intl.formatMessage(messages.group_delete_confirm)))
+                    props.deleteGroupMessageBegin(newsItem.group_message);
+                }}
+              >
+                <DiverstFormattedMessage {...messages.delete} />
+              </Button>
+            </Permission>
+            <Permission show={!props.readonly && !props.newsItem.approved && permission(props.currentGroup, 'events_manage?')}>
+              <Button
+                size='small'
+                onClick={() => {
+                  /* eslint-disable-next-line no-alert, no-restricted-globals */
+                  props.updateNewsItemBegin({ approved: true, id: newsItemId, group_id: groupId });
+                }}
+              >
+                <DiverstFormattedMessage {...messages.approve} />
+              </Button>
+            </Permission>
+          </CardActions>
+        </Permission>
+      )}
     </Card>
   );
 }
