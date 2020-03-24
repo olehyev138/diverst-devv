@@ -20,7 +20,7 @@ class NewsFeedLinkPolicy < GroupBasePolicy
   end
 
   def is_a_member?
-    super || (user.group_ids && record.shared_news_feeds.map { |snf| snf.group_id }).present?
+    super || (NewsFeedLink === record && (user.group_ids && record.shared_news_feeds.map { |snf| snf.group_id }).present?)
   end
 
   class Scope < Scope

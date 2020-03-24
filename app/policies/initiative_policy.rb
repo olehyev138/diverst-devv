@@ -20,7 +20,7 @@ class InitiativePolicy < GroupBasePolicy
   end
 
   def update?
-    Initiative === record ? record.owner == user || super : super
+    (record.owner == user if Initiative === record) || super
   end
 
   def fields?
