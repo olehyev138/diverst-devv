@@ -1,6 +1,4 @@
-import React, {
-  memo, useContext, useEffect, useState
-} from 'react';
+import React, { memo, useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -12,8 +10,8 @@ import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/Event/reducer';
 import saga from 'containers/Event/saga';
 
-import { selectPaginatedEvents, selectEventsTotal, selectIsLoading } from 'containers/Event/selectors';
-import { getEventsBegin, eventsUnmount } from 'containers/Event/actions';
+import { selectEventsTotal, selectIsLoading, selectPaginatedEvents } from 'containers/Event/selectors';
+import { eventsUnmount, getEventsBegin } from 'containers/Event/actions';
 
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -143,4 +141,9 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(Conditional(EventsPage, ['currentGroup.permissions.events_view?']));
+)(Conditional(
+  EventsPage,
+  ['currentGroup.permissions.events_view?'],
+  (props, rs) => ROUTES.group.home.path(rs.params('group_id')),
+  'You don\'t have permission view this groups events'
+));

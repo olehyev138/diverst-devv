@@ -1,5 +1,4 @@
-import React, {useContext} from 'react';
-import { compose } from 'redux';
+import React, { useContext } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import dig from 'object-dig';
@@ -33,7 +32,9 @@ export default function Conditional(
     if (valid(props, conditions, reducer))
       return <Component {...props} />;
     if (redirect) {
-      const rs = new RouteService(useContext);
+      const rs = props.computedMatch
+        ? new RouteService({ computedMatch: props.computedMatch, location: props.location })
+        : new RouteService(useContext);
       props.dispatch(showSnackbar({ message, options: { variant: 'warning' } }));
       props.dispatch(push(redirect(props, rs)));
       return <React.Fragment />;
@@ -46,6 +47,8 @@ export default function Conditional(
     show: PropTypes.bool,
     valid: PropTypes.func,
     dispatch: PropTypes.func,
+    computedMatch: PropTypes.object,
+    location: PropTypes.object,
   };
 
   return connect()(WrappedComponent);

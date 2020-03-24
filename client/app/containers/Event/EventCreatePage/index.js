@@ -1,10 +1,8 @@
-import React, { memo, useEffect, useContext, useState } from 'react';
+import React, { memo, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
-
-import { Button } from '@material-ui/core';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
@@ -24,6 +22,7 @@ import { selectIsCommitting } from 'containers/Event/selectors';
 
 import messages from 'containers/Event/messages';
 import { injectIntl, intlShape } from 'react-intl';
+import Conditional from '../../../components/Compositions/Conditional';
 
 export function EventCreatePage(props) {
   useInjectReducer({ key: 'events', reducer });
@@ -81,4 +80,9 @@ export default compose(
   injectIntl,
   withConnect,
   memo,
-)(EventCreatePage);
+)(Conditional(
+  EventCreatePage,
+  ['currentGroup.permissions.events_create?'],
+  (props, rs) => ROUTES.group.events.index.path(rs.params('group_id')),
+  'You don\'t have permission to create events'
+));
