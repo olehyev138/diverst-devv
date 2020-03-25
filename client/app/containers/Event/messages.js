@@ -113,6 +113,12 @@ export default defineMessages({
     enderror: {
       id: `${scope}.form.input.enderror`,
     },
+    attendee: {
+      id: `${scope}.form.input.attendee`
+    },
+    participating_groups: {
+      id: `${scope}.form.input.participating_groups`
+    },
     picture: {
       id: `${scope}.form.input.picture`
     },

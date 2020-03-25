@@ -236,6 +236,10 @@ class Initiative < ApplicationRecord
     comments.size
   end
 
+  def total_attendees
+    attendees.size
+  end
+
   def annual_budget_id
     annual_budget&.id
   end

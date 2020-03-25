@@ -29,6 +29,7 @@ import { injectIntl, intlShape } from 'react-intl';
 
 import EventComment from 'components/Event/EventComment';
 import EventCommentForm from 'components/Event/EventCommentForm';
+import {Card, CardActionArea, CardContent, Link} from "@material-ui/core";
 
 const styles = theme => ({
   padding: {
@@ -153,8 +154,8 @@ export function Event(props) {
               data={event.picture_data}
               maxWidth='100%'
               minWidth='100%'
-              maxHeight={120}
-              minHeight={120}
+              maxHeight='120px'
+              minHeight='120px'
             />
           )}
 
@@ -190,6 +191,24 @@ export function Event(props) {
                 <Typography color='textSecondary' className={classes.data}>
                   {event.location}
                 </Typography>
+              </React.Fragment>
+            )}
+            <Typography className={classes.dataHeaders}>
+              <DiverstFormattedMessage {...messages.inputs.attendee} />
+            </Typography>
+            <Typography color='textSecondary' className={classes.data}>
+              {event.total_attendees}
+            </Typography>
+            {event.participating_groups.length > 0 && (
+              <React.Fragment>
+                <Typography className={classes.dataHeaders}>
+                  <DiverstFormattedMessage {...messages.inputs.participating_groups} />
+                </Typography>
+                {event.participating_groups.map((group, i) => (
+                  <Typography color='textSecondary' key={group.id}>
+                    {group.name}
+                  </Typography>
+                ))}
               </React.Fragment>
             )}
           </Paper>
