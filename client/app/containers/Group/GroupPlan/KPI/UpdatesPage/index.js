@@ -42,6 +42,7 @@ import { selectGroup } from 'containers/Group/selectors';
 import UpdateList from 'components/Shared/Updates/UpdateList';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
+import Conditional from "components/Compositions/Conditional";
 
 export function UpdateListPage(props) {
   useInjectReducer({ key: 'updates', reducer });
@@ -138,4 +139,9 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(UpdateListPage);
+)(Conditional(
+  UpdateListPage,
+  ['currentGroup.permissions.kpi_manage?'],
+  (props, rs) => ROUTES.group.plan.index.path(rs.params('group_id')),
+  'You don\'t have permission to manage group KPI'
+));

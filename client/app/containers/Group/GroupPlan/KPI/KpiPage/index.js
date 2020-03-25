@@ -37,6 +37,8 @@ import saga from '../updatesSaga';
 import { selectGroup } from 'containers/Group/selectors';
 
 import NotFoundPage from 'containers/Shared/NotFoundPage';
+import Conditional from "components/Compositions/Conditional";
+import {ROUTES} from "containers/Shared/Routes/constants";
 
 export function KPIPage(props) {
   useInjectReducer({ key: 'updates', reducer });
@@ -81,4 +83,9 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(KPIPage);
+)(Conditional(
+  KPIPage,
+  ['currentGroup.permissions.kpi_manage?'],
+  (props, rs) => ROUTES.group.plan.index.path(rs.params('group_id')),
+  'You don\'t have permission to manage group KPI'
+));

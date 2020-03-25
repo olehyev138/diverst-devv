@@ -41,6 +41,8 @@ import saga from '../fieldsSaga';
 
 import FieldList from 'components/Shared/Fields/FieldList';
 import { selectGroup } from 'containers/Group/selectors';
+import Conditional from "components/Compositions/Conditional";
+import {ROUTES} from "containers/Shared/Routes/constants";
 
 export function FieldListPage(props) {
   useInjectReducer({ key: 'fields', reducer });
@@ -146,4 +148,9 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(FieldListPage);
+)(Conditional(
+  FieldListPage,
+  ['currentGroup.permissions.kpi_manage?'],
+  (props, rs) => ROUTES.group.plan.index.path(rs.params('group_id')),
+  'You don\'t have permission to manage group KPI'
+));

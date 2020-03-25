@@ -56,8 +56,9 @@ import RouteService from 'utils/routeHelpers';
 
 import Update from 'components/Shared/Updates/Update';
 import { selectGroup } from 'containers/Group/selectors';
+import Conditional from "components/Compositions/Conditional";
 
-export function UpdateEditPage(props) {
+export function UpdatePage(props) {
   useInjectReducer({ key: 'updates', reducer });
   useInjectSaga({ key: 'updates', saga });
   useInjectReducer({ key: 'field_data', reducer: fieldDataReducer });
@@ -97,7 +98,7 @@ export function UpdateEditPage(props) {
   );
 }
 
-UpdateEditPage.propTypes = {
+UpdatePage.propTypes = {
   getUpdateBegin: PropTypes.func.isRequired,
   getUpdateSuccess: PropTypes.func.isRequired,
   deleteUpdateBegin: PropTypes.func.isRequired,
@@ -140,4 +141,9 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(UpdateEditPage);
+)(Conditional(
+  UpdatePage,
+  ['currentGroup.permissions.kpi_manage?'],
+  (props, rs) => ROUTES.group.plan.index.path(rs.params('group_id')),
+  'You don\'t have permission to manage group KPI'
+));
