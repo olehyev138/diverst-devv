@@ -38,17 +38,21 @@ export function EventListItem(props) {
 
   return (
     <Grid container spacing={2} justify='space-between' alignItems='center'>
-      <Hidden xsDown>
-        <Grid item xs='auto'>
-          <DiverstImg
-            data={item.picture_data}
-            maxWidth={90}
-            maxHeight={90}
-            minWidth={90}
-            minHeight={90}
-          />
-        </Grid>
-      </Hidden>
+      {item.picture_data && (
+        <React.Fragment>
+          <Hidden xsDown>
+            <Grid item xs='auto'>
+              <DiverstImg
+                data={item.picture_data}
+                maxWidth='90px'
+                maxHeight='90px'
+                minWidth='90px'
+                minHeight='90px'
+              />
+            </Grid>
+          </Hidden>
+        </React.Fragment>
+      )}
       <Grid item xs>
         <Typography color='primary' variant='h6' component='h2'>
           {item.name}
