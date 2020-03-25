@@ -692,7 +692,7 @@
   "diverst.containers.Event.form.input.location": "Location",
   "diverst.containers.Event.form.input.start": "Start Date",
   "diverst.containers.Event.form.input.end": "End Date",
-  "diverst.containers.Event.form.input.attendee": "Total Attendees",
+  "diverst.containers.Event.form.input.attendee": "Attendees",
   "diverst.containers.Event.form.input.participating_groups": "Participating Groups",
   "diverst.containers.Event.form.input.starterror": "Start date cannot be after end date",
   "diverst.containers.Event.form.input.enderror": "End date cannot be before start date",

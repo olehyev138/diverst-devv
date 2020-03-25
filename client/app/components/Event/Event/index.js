@@ -29,7 +29,6 @@ import { injectIntl, intlShape } from 'react-intl';
 
 import EventComment from 'components/Event/EventComment';
 import EventCommentForm from 'components/Event/EventCommentForm';
-import {Card, CardActionArea, CardContent, Link} from "@material-ui/core";
 
 const styles = theme => ({
   padding: {
@@ -154,11 +153,9 @@ export function Event(props) {
               data={event.picture_data}
               maxWidth='100%'
               minWidth='100%'
-              maxHeight='120px'
-              minHeight='120px'
+              maxHeight='180px'
             />
           )}
-
           <Paper className={classes.padding}>
             {event.description && (
               <React.Fragment>
@@ -179,10 +176,11 @@ export function Event(props) {
             <Typography className={classes.dataHeaders}>
               <DiverstFormattedMessage {...messages.show.dateAndTime} />
             </Typography>
-            <Typography variant='overline'>From</Typography>
-            <Typography color='textSecondary'>{formatDateTimeString(event.start, DateTime.DATETIME_FULL)}</Typography>
-            <Typography variant='overline'>To</Typography>
-            <Typography color='textSecondary' className={classes.data}>{formatDateTimeString(event.end, DateTime.DATETIME_FULL)}</Typography>
+            <Typography color='textSecondary' className={classes.data}>
+              {formatDateTimeString(event.start, DateTime.DATETIME_FULL)}
+              &ensp;~&ensp;
+              {formatDateTimeString(event.end, DateTime.DATETIME_FULL)}
+            </Typography>
             {event.location && (
               <React.Fragment>
                 <Typography className={classes.dataHeaders}>
