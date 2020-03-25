@@ -144,6 +144,6 @@ export default compose(
 )(Conditional(
   EventsPage,
   ['currentGroup.permissions.events_view?'],
-  (props, rs) => ROUTES.group.home.path(rs.params('group_id')),
-  'You don\'t have permission view this groups events'
+  (props, rs) => props.readonly ? null : ROUTES.group.home.path(rs.params('group_id')),
+  'You don\'t have permission view this group\'s events'
 ));

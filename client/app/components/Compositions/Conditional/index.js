@@ -23,7 +23,7 @@ function valid(props, conditions, reducer) {
   return reducer(conditionsMapper(props, conditions));
 }
 
-const redirectAction = (redirect, props, rs) => push(redirect(props, rs));
+const redirectAction = url => push(url);
 
 export default function Conditional(
   Component,
@@ -34,13 +34,15 @@ export default function Conditional(
 ) {
   const WrappedComponent = (props) => {
     const show = valid(props, conditions, reducer);
+    const rs = props.computedMatch
+      ? new RouteService({ computedMatch: props.computedMatch, location: props.location })
+      : new RouteService(useContext);
+
+    const path = redirect && redirect(props, rs);
 
     useEffect(() => {
-      if (!show && redirect) {
-        const rs = props.computedMatch
-          ? new RouteService({ computedMatch: props.computedMatch, location: props.location })
-          : new RouteService(useContext);
-        props.redirectAction(redirect, props, rs);
+      if (!show && path) {
+        props.redirectAction(path);
 
         if (message)
           props.showSnackbar({ message, options: { variant: 'warning' } });
@@ -51,7 +53,7 @@ export default function Conditional(
 
     if (show)
       return <Component {...props} />;
-    if (redirect)
+    if (path)
       return <React.Fragment />;
 
     return <NotAuthorizedPage />;

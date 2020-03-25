@@ -172,4 +172,9 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(Conditional(NewsFeedPage, ['currentGroup.permissions.news_view?']));
+)(Conditional(
+  NewsFeedPage,
+  ['currentGroup.permissions.news_view?'],
+  (props, rs) => props.readonly ? null : ROUTES.group.home.path(rs.params('group_id')),
+  'You don\'t have permission view this group\'s news'
+));
