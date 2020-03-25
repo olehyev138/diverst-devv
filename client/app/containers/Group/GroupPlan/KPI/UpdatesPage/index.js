@@ -42,7 +42,7 @@ import { selectGroup } from 'containers/Group/selectors';
 import UpdateList from 'components/Shared/Updates/UpdateList';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
-import Conditional from "components/Compositions/Conditional";
+import Conditional from 'components/Compositions/Conditional';
 
 export function UpdateListPage(props) {
   useInjectReducer({ key: 'updates', reducer });

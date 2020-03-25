@@ -56,7 +56,7 @@ import RouteService from 'utils/routeHelpers';
 
 import Update from 'components/Shared/Updates/Update';
 import { selectGroup } from 'containers/Group/selectors';
-import Conditional from "components/Compositions/Conditional";
+import Conditional from 'components/Compositions/Conditional';
 
 export function UpdatePage(props) {
   useInjectReducer({ key: 'updates', reducer });

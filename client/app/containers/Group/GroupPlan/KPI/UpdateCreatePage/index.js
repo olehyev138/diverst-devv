@@ -57,7 +57,7 @@ import { selectGroup } from 'containers/Group/selectors';
 
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Group/GroupPlan/KPI/messages';
-import Conditional from "components/Compositions/Conditional";
+import Conditional from 'components/Compositions/Conditional';
 
 export function UpdateEditPage(props) {
   useInjectReducer({ key: 'updates', reducer });

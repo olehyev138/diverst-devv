@@ -37,8 +37,8 @@ import saga from '../updatesSaga';
 import { selectGroup } from 'containers/Group/selectors';
 
 import NotFoundPage from 'containers/Shared/NotFoundPage';
-import Conditional from "components/Compositions/Conditional";
-import {ROUTES} from "containers/Shared/Routes/constants";
+import Conditional from 'components/Compositions/Conditional';
+import { ROUTES } from 'containers/Shared/Routes/constants';
 
 export function KPIPage(props) {
   useInjectReducer({ key: 'updates', reducer });
