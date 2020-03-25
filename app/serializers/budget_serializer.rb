@@ -6,6 +6,10 @@ class BudgetSerializer < ApplicationRecordSerializer
     object.approver.present? ? "#{object.status_title} by #{object.approver.name}" : object.status_title
   end
 
+  def policies
+    super + [:approve?]
+  end
+
   def serialize_all_fields
     true
   end

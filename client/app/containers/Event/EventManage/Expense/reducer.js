@@ -29,8 +29,8 @@ export const initialState = {
   expenseListTotal: null,
   expenseListSum: null,
   currentExpense: null,
-  isFetchingExpenses: false,
-  isFetchingExpense: false,
+  isFetchingExpenses: true,
+  isFetchingExpense: true,
   isCommitting: false,
   hasChanged: false,
 };

@@ -28,8 +28,8 @@ export const initialState = {
   policyList: [],
   policyListTotal: null,
   currentPolicy: null,
-  isFetchingPolicies: false,
-  isFetchingPolicy: false,
+  isFetchingPolicies: true,
+  isFetchingPolicy: true,
   isCommitting: false,
   hasChanged: false,
 };

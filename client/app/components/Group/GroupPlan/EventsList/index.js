@@ -21,6 +21,9 @@ import DiverstPagination from 'components/Shared/DiverstPagination';
 import EventListItem from 'components/Group/GroupPlan/EventListItem';
 import Permission from 'components/Shared/DiverstPermission';
 import { permission } from 'utils/permissionsHelpers';
+import Conditional from 'components/Compositions/Conditional';
+import { ROUTES } from 'containers/Shared/Routes/constants';
+import { OutcomesPage } from 'containers/Group/Outcome/OutcomesPage';
 
 const styles = theme => ({
   title: {
@@ -187,4 +190,9 @@ EventsList.propTypes = {
 export default compose(
   memo,
   withStyles(styles),
-)(EventsList);
+)(Conditional(
+  EventsList,
+  ['currentGroup.permissions.events_manage?'],
+  (props, rs) => ROUTES.group.plan.index.path(rs.params('group_id')),
+  'You don\'t have permission to manage group outcomes'
+));

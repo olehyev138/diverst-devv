@@ -56,6 +56,7 @@ export function BudgetsPage(props) {
     props.getBudgetsBegin({
       ...params,
       annual_budget_id: annualId,
+      group_id: groupId
     });
   };
 

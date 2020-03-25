@@ -37,7 +37,7 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import Budget from 'components/Group/GroupPlan/Budget';
 import Conditional from 'components/Compositions/Conditional';
 
-export function BudgetCreatePage(props) {
+export function BudgetPage(props) {
   useInjectReducer({ key: 'budgets', reducer });
   useInjectSaga({ key: 'budgets', saga });
   useInjectReducer({ key: 'budgetItems', reducer: itemReducer });
@@ -84,7 +84,7 @@ export function BudgetCreatePage(props) {
   );
 }
 
-BudgetCreatePage.propTypes = {
+BudgetPage.propTypes = {
   getBudgetBegin: PropTypes.func,
   getBudgetSuccess: PropTypes.func,
   budgetsUnmount: PropTypes.func,
@@ -126,8 +126,8 @@ export default compose(
   withConnect,
   memo,
 )(Conditional(
-  BudgetCreatePage,
-  ['budget.permissions.show?', 'isLoading?'],
+  BudgetPage,
+  ['budget.permissions.show?', 'isLoading'],
   (props, rs) => ROUTES.group.plan.budget.index.path(rs.params('group_id')),
   'You don\'t have permission to view this budget requests'
 ));
