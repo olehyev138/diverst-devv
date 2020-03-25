@@ -80,8 +80,14 @@ class ConvertToActiveStorage < ActiveRecord::Migration[5.2]
   end
 
   def checksum(attachment)
-    # local files stored on disk:
-    url = attachment.path
-    Digest::MD5.base64digest(File.read(url))
+    if Rails.env.production? || Rails.env.staging?
+      # remote files stored on another person's computer:
+      url = attachment.url
+      Digest::MD5.base64digest(Net::HTTP.get(URI(url)))
+    else
+      # local files stored on disk:
+      url = attachment.path
+      Digest::MD5.base64digest(File.read(url))
+    end
   end
 end
