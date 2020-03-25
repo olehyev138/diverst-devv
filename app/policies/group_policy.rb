@@ -99,6 +99,10 @@ class GroupPolicy < ApplicationPolicy
     NewsFeedLinkPolicy.new(self, NewsFeedLink).index?
   end
 
+  def budgets_view?
+    BudgetPolicy.new(self, AnnualBudget).index?
+  end
+
   def resources_view?
     GroupResourcePolicy.new(self, Resource).index?
   end

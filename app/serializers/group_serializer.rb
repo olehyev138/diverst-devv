@@ -24,6 +24,7 @@ class GroupSerializer < ApplicationRecordSerializer
         :news_view?,
         :resources_view?,
         :annual_budgets_view?,
+        :budgets_view?,
         :leaders_view?,
         :events_create?,
         :members_create?,

@@ -34,6 +34,8 @@ import BudgetList from 'components/Group/GroupPlan/BudgetList';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import { selectGroup } from 'containers/Group/selectors';
 import { push } from 'connected-react-router';
+import Conditional from 'components/Compositions/Conditional';
+import { BudgetCreatePage } from 'containers/Group/GroupPlan/Budget/BudgetCreatePage';
 
 export function BudgetsPage(props) {
   useInjectReducer({ key: 'budgets', reducer });
@@ -152,4 +154,9 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(BudgetsPage);
+)(Conditional(
+  BudgetsPage,
+  ['currentGroup.permissions.budgets_view?'],
+  (props, rs) => ROUTES.group.plan.budget.index.path(rs.params('group_id')),
+  'You don\'t have permission to view budget requests'
+));

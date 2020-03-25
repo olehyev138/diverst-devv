@@ -36,6 +36,7 @@ import AnnualBudgetListItem from 'components/Group/GroupPlan/AnnualBudgetListIte
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import AnnualBudgetList from 'components/Group/GroupPlan/AnnualBudgetList';
 import produce from 'immer';
+import Conditional from 'components/Compositions/Conditional';
 
 const defaultParams = Object.freeze({
   count: 5,
@@ -164,4 +165,9 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(AnnualBudgetsPage);
+)(Conditional(
+  AnnualBudgetsPage,
+  ['currentGroup.permissions.annual_budgets_view?'],
+  (props, rs) => ROUTES.group.home.path(rs.params('group_id')),
+  'You don\'t have permission to view group members'
+));

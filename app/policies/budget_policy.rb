@@ -11,6 +11,10 @@ class BudgetPolicy < GroupBasePolicy
     'groups_budgets_manage'
   end
 
+  def update?
+    false
+  end
+
   def approve?
     return true if update?
     return true if has_group_leader_permissions?('budget_approval')
