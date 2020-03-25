@@ -38,9 +38,9 @@ RSpec.describe "#{model.pluralize}", type: :request do
   end
 
   describe '#create' do
-    it 'tries to create an item (permission denied)' do
+    it 'tries to create an item' do
       post "/api/v1/#{route}", params: { "#{route.singularize}" => build(route.singularize.to_sym).attributes }, headers: headers
-      expect(response).to have_http_status(:bad_request)
+      expect(response).to have_http_status(:ok)
     end
 
     it 'captures the error when BadRequestException' do
@@ -51,9 +51,9 @@ RSpec.describe "#{model.pluralize}", type: :request do
   end
 
   describe '#update' do
-    it 'tries to update an item (permission denied)' do
+    it 'tries to update an item' do
       patch "/api/v1/#{route}/#{item.id}", params: { "#{route.singularize}" => item.attributes }, headers: headers
-      expect(response).to have_http_status(:bad_request)
+      expect(response).to have_http_status(:ok)
     end
 
     it 'captures the error when BadRequestException' do
@@ -64,9 +64,9 @@ RSpec.describe "#{model.pluralize}", type: :request do
   end
 
   describe '#destroy' do
-    it 'tries to delete an item (permission denied)' do
+    it 'tries to delete an item' do
       delete "/api/v1/#{route}/#{item.id}", headers: headers
-      expect(response).to have_http_status(:bad_request)
+      expect(response).to have_http_status(:ok)
     end
 
     it 'captures the error' do
