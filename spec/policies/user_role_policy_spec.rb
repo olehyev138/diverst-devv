@@ -25,28 +25,6 @@ RSpec.describe UserRolePolicy, type: :policy do
         before { user.policy_group.update users_index: true, users_manage: true }
         it { is_expected.to permit_actions([:index, :new, :create, :update, :destroy]) }
       end
-
-      context 'has basic group leader permission and users_manage is true' do
-        before do
-          user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
-          user_role.policy_group_template.update users_manage: true
-          create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-                                user_role_id: user_role.id)
-        end
-
-        it { is_expected.to permit_actions([:index, :new, :create, :update, :destroy]) }
-      end
-
-      context 'has basic group leader permission and users_index is true' do
-        before do
-          user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
-          user_role.policy_group_template.update users_index: true
-          create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-                                user_role_id: user_role.id)
-        end
-
-        it { is_expected.to permit_action(:index) }
-      end
     end
 
     context 'when manage_all is true' do

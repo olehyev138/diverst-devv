@@ -22,6 +22,9 @@ import messages from 'containers/News/messages';
 import { formatDateTimeString } from 'utils/dateTimeHelpers';
 import WrappedNavLink from '../../../Shared/WrappedNavLink';
 import { injectIntl, intlShape } from 'react-intl';
+import IconButton from '@material-ui/core/IconButton';
+import LocationOnIcon from '@material-ui/icons/LocationOn';
+import LocationOnOutlinedIcon from '@material-ui/icons/LocationOnOutlined';
 const styles = theme => ({
   centerVertically: {
     padding: 3,
@@ -37,6 +40,18 @@ export function SocialLinkListItem(props) {
   const { links, intl } = props;
   const newsItemId = newsItem.id;
   const groupId = socialLink.group_id;
+
+  const { is_pinned: defaultPinned } = newsItem;
+  const [pinned, setPinned] = useState(defaultPinned);
+
+  function pin() {
+    setPinned(true);
+  }
+
+  function unpin() {
+    setPinned(false);
+  }
+
   return (
     <Card>
       <CardContent className={classes.cardContent}>
@@ -55,9 +70,28 @@ export function SocialLinkListItem(props) {
             ) : null }
           </Grid>
           <Grid item>
-            <Typography variant='body2' color='textSecondary' className={classes.centerVertically} align='right'>
-              {formatDateTimeString(socialLink.created_at)}
-            </Typography>
+            <Grid container>
+              <Grid item>
+                {props.pinNewsItemBegin && (
+                  <IconButton
+                    size='small'
+                    onClick={() => {
+                      if (pinned)
+                        props.unpinNewsItemBegin({ id: newsItemId });
+                      else
+                        props.pinNewsItemBegin({ id: newsItemId });
+                    }}
+                  >
+                    { pinned ? <LocationOnIcon /> : <LocationOnOutlinedIcon />}
+                  </IconButton>
+                )}
+              </Grid>
+              <Grid item>
+                <Typography variant='body2' color='textSecondary' className={classes.centerVertically} align='right'>
+                  {formatDateTimeString(socialLink.created_at)}
+                </Typography>
+              </Grid>
+            </Grid>
           </Grid>
         </Grid>
       </CardContent>
@@ -120,7 +154,9 @@ SocialLinkListItem.propTypes = {
   readonly: PropTypes.bool,
   deleteSocialLinkBegin: PropTypes.func,
   updateNewsItemBegin: PropTypes.func,
-  archiveNewsItemBegin: PropTypes.func
+  archiveNewsItemBegin: PropTypes.func,
+  pinNewsItemBegin: PropTypes.func,
+  unpinNewsItemBegin: PropTypes.func,
 };
 
 export default compose(

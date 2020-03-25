@@ -20,7 +20,9 @@ import {
   CREATE_SOCIALLINK_COMMENT_ERROR, DELETE_SOCIALLINK_ERROR, DELETE_SOCIALLINK_BEGIN, DELETE_SOCIALLINK_SUCCESS,
   DELETE_NEWSLINK_COMMENT_BEGIN, DELETE_NEWSLINK_COMMENT_ERROR, DELETE_NEWSLINK_COMMENT_SUCCESS, DELETE_GROUP_MESSAGE_COMMENT_BEGIN,
   DELETE_GROUP_MESSAGE_COMMENT_ERROR, DELETE_GROUP_MESSAGE_COMMENT_SUCCESS,
-  ARCHIVE_NEWS_ITEM_BEGIN, ARCHIVE_NEWS_ITEM_ERROR, ARCHIVE_NEWS_ITEM_SUCCESS } from 'containers/News/constants';
+  ARCHIVE_NEWS_ITEM_BEGIN, ARCHIVE_NEWS_ITEM_ERROR, ARCHIVE_NEWS_ITEM_SUCCESS,
+  PIN_NEWS_ITEM_BEGIN, PIN_NEWS_ITEM_SUCCESS, PIN_NEWS_ITEM_ERROR,
+  UNPIN_NEWS_ITEM_BEGIN, UNPIN_NEWS_ITEM_SUCCESS, UNPIN_NEWS_ITEM_ERROR, } from 'containers/News/constants';
 
 
 export function getNewsItemsBegin(payload) {
@@ -428,6 +430,48 @@ export function archiveNewsItemSuccess(payload) {
 export function archiveNewsItemError(error) {
   return {
     type: ARCHIVE_NEWS_ITEM_ERROR,
+    error,
+  };
+}
+
+export function pinNewsItemBegin(payload) {
+  return {
+    type: PIN_NEWS_ITEM_BEGIN,
+    payload,
+  };
+}
+
+export function pinNewsItemSuccess(payload) {
+  return {
+    type: PIN_NEWS_ITEM_SUCCESS,
+    payload,
+  };
+}
+
+export function pinNewsItemError(error) {
+  return {
+    type: PIN_NEWS_ITEM_ERROR,
+    error,
+  };
+}
+
+export function unpinNewsItemBegin(payload) {
+  return {
+    type: UNPIN_NEWS_ITEM_BEGIN,
+    payload,
+  };
+}
+
+export function unpinNewsItemSuccess(payload) {
+  return {
+    type: UNPIN_NEWS_ITEM_SUCCESS,
+    payload,
+  };
+}
+
+export function unpinNewsItemError(error) {
+  return {
+    type: UNPIN_NEWS_ITEM_ERROR,
     error,
   };
 }

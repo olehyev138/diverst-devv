@@ -3,7 +3,7 @@
  * Group Message List Item Component
  *
  */
-import React, { memo } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux/';
 
@@ -13,8 +13,8 @@ import {
 import { withStyles } from '@material-ui/core/styles';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
-
-
+import LocationOnIcon from '@material-ui/icons/LocationOn';
+import LocationOnOutlinedIcon from '@material-ui/icons/LocationOnOutlined';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/News/messages';
 import CommentIcon from '@material-ui/icons/Comment';
@@ -45,6 +45,17 @@ export function GroupMessageListItem(props) {
   const groupMessage = newsItem.group_message;
   const groupId = groupMessage.group_id;
 
+  const { is_pinned: defaultPinned } = newsItem;
+  const [pinned, setPinned] = useState(defaultPinned);
+
+  function pin() {
+    setPinned(true);
+  }
+
+  function unpin() {
+    setPinned(false);
+  }
+
   return (
     <Card>
       <CardHeader
@@ -71,6 +82,19 @@ export function GroupMessageListItem(props) {
           <Grid item>
             <Grid container>
               <Grid item>
+                {props.pinNewsItemBegin && (
+                  <IconButton
+                    size='small'
+                    onClick={() => {
+                      if (pinned)
+                        props.unpinNewsItemBegin({ id: newsItemId });
+                      else
+                        props.pinNewsItemBegin({ id: newsItemId });
+                    }}
+                  >
+                    { pinned ? <LocationOnIcon /> : <LocationOnOutlinedIcon />}
+                  </IconButton>
+                )}
                 { props.links && (
                   <IconButton
                     // TODO : Change to actual post like action
@@ -166,10 +190,12 @@ GroupMessageListItem.propTypes = {
   deleteGroupMessageBegin: PropTypes.func,
   updateNewsItemBegin: PropTypes.func,
   archiveNewsItemBegin: PropTypes.func,
+  pinNewsItemBegin: PropTypes.func,
+  unpinNewsItemBegin: PropTypes.func,
+  isPinned: PropTypes.bool,
 };
 
 export default compose(
-  memo,
   injectIntl,
   withStyles(styles)
 )(GroupMessageListItem);

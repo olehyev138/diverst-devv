@@ -11,8 +11,14 @@ FactoryBot.define do
     provider 'email'
     time_zone ActiveSupport::TimeZone.find_tzinfo('UTC').name
     user_role { enterprise.user_roles.where(role_type: 'admin').first }
+
     after(:create) do |user|
       user.policy_group = create(:policy_group)
+    end
+    seen_onboarding true
+
+    trait :with_notifications_email do
+      notifications_email { Faker::Internet.email }
     end
   end
 end

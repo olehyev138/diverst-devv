@@ -10,7 +10,6 @@ class Folder < ApplicationRecord
   belongs_to  :parent, class_name: 'Folder', foreign_key: :parent_id
 
   has_many    :views, dependent: :destroy
-  has_many    :children, class_name: 'Folder', foreign_key: :parent_id
   has_many    :resources, dependent: :destroy
   has_many    :folder_shares, dependent: :destroy
   has_many    :groups, through: :folder_shares, source: 'group'
