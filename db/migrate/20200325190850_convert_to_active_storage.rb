@@ -40,7 +40,7 @@ class ConvertToActiveStorage < ActiveRecord::Migration[5.2]
 
         model.find_each.each do |instance|
           attachments.each do |attachment|
-            if instance.send("#{attachment}_paperclip").path.blank?
+            if instance.send("#{attachment}_paperclip").path.blank? || instance.send(attachment).try(:attached?)
               next
             end
 
