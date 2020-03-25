@@ -148,75 +148,49 @@ export function Event(props) {
               )}
             </Grid>
           </Grid>
-          <Paper className={classes.padding}>
-            {event.picture_data ? (
-              <React.Fragment>
-                <DiverstImg
-                  data={event.picture_data}
-                  maxWidth='100%'
-                  minWidth='100%'
-                  maxHeight={120}
-                  minHeight={120}
-                />
-                {event.description && (
-                  <React.Fragment>
-                    <Typography className={classes.dataHeaders}>
-                      <DiverstFormattedMessage {...messages.inputs.description} />
-                    </Typography>
-                    <Typography color='textSecondary' className={classes.data}>
-                      {event.description}
-                    </Typography>
-                  </React.Fragment>
-                )}
-                <Typography className={classes.dataHeaders}>
-                  <DiverstFormattedMessage {...messages.show.dateAndTime} />
-                </Typography>
-                <Typography variant='overline'>From</Typography>
-                <Typography color='textSecondary'>{formatDateTimeString(event.start, DateTime.DATETIME_FULL)}</Typography>
-                <Typography variant='overline'>To</Typography>
-                <Typography color='textSecondary' className={classes.data}>{formatDateTimeString(event.end, DateTime.DATETIME_FULL)}</Typography>
-                {event.location && (
-                  <React.Fragment>
-                    <Typography className={classes.dataHeaders}>
-                      <DiverstFormattedMessage {...messages.inputs.location} />
-                    </Typography>
-                    <Typography color='textSecondary' className={classes.data}>
-                      {event.location}
-                    </Typography>
-                  </React.Fragment>
-                )}
-              </React.Fragment>
-            ) : (
-              <Grid item xs>
-                <Typography className={classes.dataHeaders}>
-                  <DiverstFormattedMessage {...messages.show.dateAndTime} />
-                </Typography>
-                <Typography variant='overline'>From</Typography>
-                <Typography color='textSecondary'>{formatDateTimeString(event.start, DateTime.DATETIME_FULL)}</Typography>
-                <Typography variant='overline'>To</Typography>
-                <Typography color='textSecondary' className={classes.data}>{formatDateTimeString(event.end, DateTime.DATETIME_FULL)}</Typography>
+          {event.picture_data && (
+            <DiverstImg
+              data={event.picture_data}
+              maxWidth='100%'
+              minWidth='100%'
+              maxHeight={120}
+              minHeight={120}
+            />
+          )}
 
-                {event.location && (
-                  <React.Fragment>
-                    <Typography className={classes.dataHeaders}>
-                      <DiverstFormattedMessage {...messages.inputs.location} />
-                    </Typography>
-                    <Typography color='textSecondary' className={classes.data}>
-                      {event.location}
-                    </Typography>
-                  </React.Fragment>
-                )}
-                {event.description && (
-                  <React.Fragment>
-                    <Typography className={classes.dataHeaders}>
-                      <DiverstFormattedMessage {...messages.inputs.description} />
-                    </Typography>
-                    <Typography color='textSecondary' className={classes.data}>
-                      {event.description}
-                    </Typography>
-                  </React.Fragment>
-                )}
-              </Grid>
+          <Paper className={classes.padding}>
+            {event.description && (
+              <React.Fragment>
+                <Typography className={classes.dataHeaders}>
+                  <DiverstFormattedMessage {...messages.inputs.description} />
+                </Typography>
+                <Typography
+                  style={{
+                    whiteSpace: 'pre-line'
+                  }}
+                  color='textSecondary'
+                  className={classes.data}
+                >
+                  {event.description}
+                </Typography>
+              </React.Fragment>
+            )}
+            <Typography className={classes.dataHeaders}>
+              <DiverstFormattedMessage {...messages.show.dateAndTime} />
+            </Typography>
+            <Typography variant='overline'>From</Typography>
+            <Typography color='textSecondary'>{formatDateTimeString(event.start, DateTime.DATETIME_FULL)}</Typography>
+            <Typography variant='overline'>To</Typography>
+            <Typography color='textSecondary' className={classes.data}>{formatDateTimeString(event.end, DateTime.DATETIME_FULL)}</Typography>
+            {event.location && (
+              <React.Fragment>
+                <Typography className={classes.dataHeaders}>
+                  <DiverstFormattedMessage {...messages.inputs.location} />
+                </Typography>
+                <Typography color='textSecondary' className={classes.data}>
+                  {event.location}
+                </Typography>
+              </React.Fragment>
             )}
           </Paper>
           <Box mb={4} />
