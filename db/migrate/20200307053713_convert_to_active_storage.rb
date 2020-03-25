@@ -29,7 +29,7 @@ class ConvertToActiveStorage < ActiveRecord::Migration[5.2]
     transaction do
       models.each do |model|
         attachments = model.column_names.map do |c|
-          if c =~ /(.+)_file_name$/
+          if c =~ /(.+)_content_type$/
             $1
           end
         end.compact
