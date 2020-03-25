@@ -30,14 +30,14 @@ export function GroupManageLinks(props) {
           indicatorColor='primary'
           textColor='primary'
         >
-          <Permission show={permission(props.currentGroup, 'update?')}>
+          <Permission show={permission(props.currentGroup, 'update?')} value='settings'>
             <Tab
               component={WrappedNavLink}
               to={ROUTES.group.manage.settings.index.path(props.currentGroup.id)}
               label={<DiverstFormattedMessage {...messages.links.settings} />}
             />
           </Permission>
-          <Permission show={permission(props.currentGroup, 'leaders_view?')}>
+          <Permission show={permission(props.currentGroup, 'leaders_view?')} value='leaders'>
             <Tab
               component={WrappedNavLink}
               to={ROUTES.group.manage.leaders.index.path(props.currentGroup.id)}
@@ -52,7 +52,7 @@ export function GroupManageLinks(props) {
 
 GroupManageLinks.propTypes = {
   classes: PropTypes.object,
-  currentTab: PropTypes.number,
+  currentTab: PropTypes.string,
   currentGroup: PropTypes.object,
 };
 

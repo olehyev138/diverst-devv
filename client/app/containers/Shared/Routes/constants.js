@@ -445,6 +445,7 @@ export const ROUTES = {
     },
     manage: {
       index: {
+        path: (groupId = ':group_id') => `/groups/${groupId}/manage`,
         data: {
           pathPrefix: (groupId = ':group_id') => `/groups/${groupId}/manage`,
           titleMessage: messages.groups.manage.index

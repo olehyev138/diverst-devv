@@ -7,33 +7,51 @@ import Fade from '@material-ui/core/Fade';
 
 import GroupManageLinks from 'components/Group/GroupManage/GroupManageLinks';
 import GroupLayout from 'containers/Layouts/GroupLayout';
-import Permission from 'components/Shared/DiverstPermission';
 import { permission } from 'utils/permissionsHelpers';
+import { push } from 'connected-react-router';
+import RouteService from 'utils/routeHelpers';
+import { showSnackbar } from 'containers/Shared/Notifier/actions';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+import { ROUTES } from 'containers/Shared/Routes/constants';
+
 const styles = theme => ({
   content: {
     padding: theme.spacing(3),
   },
 });
 
-const ManagePages = Object.freeze({
-  settings: 0,
-  leaders: 1
-});
+const ManagePages = Object.freeze([
+  'settings',
+  'leaders'
+]);
 
-const GroupManageLayout = ({ component: Component, classes, ...rest }) => {
-  const { currentGroup, location, computedMatch, ...other } = rest;
+const redirectAction = path => push(path);
+
+const GroupManageLayout = ({ component: Component, classes, defaultPage, ...rest }) => {
+  const { currentGroup, location, computedMatch, redirectAction, showSnackbar, ...other } = rest;
 
   /* Get last element of current path, ie: '/group/:id/manage/settings -> settings */
-  const currentPage = Object.keys(ManagePages).find(page => location.pathname.includes(page));
+  const currentPage = ManagePages.find(page => location.pathname.includes(page));
 
-  /* Get last element of current path, ie: '/group/:id/manage/settings -> settings */
-  const currentPagePath = location.pathname.split('/').pop();
-
-  const [tab, setTab] = useState(ManagePages[currentPagePath]);
+  const [tab, setTab] = useState(currentPage);
 
   useEffect(() => {
-    if (tab !== ManagePages[currentPage])
-      setTab(ManagePages[currentPage]);
+    if (defaultPage) {
+      const rs = new RouteService({ computedMatch, location });
+
+      if (permission(rest.currentGroup, 'update?'))
+        redirectAction(ROUTES.group.manage.settings.index.path(rs.params('group_id')));
+      else if (permission(rest.currentGroup, 'leaders_view?'))
+        redirectAction(ROUTES.group.manage.leaders.index.path(rs.params('group_id')));
+      else {
+        showSnackbar({ message: 'You do not have permission to manage this group', options: { variant: 'warning' } });
+        redirectAction(ROUTES.group.home.path(rs.params('group_id')));
+      }
+    }
+
+    if (tab !== currentPage)
+      setTab(currentPage);
   }, [currentPage]);
 
   return (
@@ -49,7 +67,7 @@ const GroupManageLayout = ({ component: Component, classes, ...rest }) => {
             />
             <Fade in appear>
               <div className={classes.content}>
-                <Component {...rest} {...matchProps} />
+                {Component ? <Component {...rest} {...matchProps} /> : <React.Fragment />}
               </div>
             </Fade>
           </React.Fragment>
@@ -63,9 +81,22 @@ GroupManageLayout.propTypes = {
   classes: PropTypes.object,
   component: PropTypes.elementType,
   pageTitle: PropTypes.object,
+  defaultPage: PropTypes.bool,
+  currentGroup: PropTypes.object,
 };
 
+const mapDispatchToProps = {
+  redirectAction,
+  showSnackbar,
+};
+
+const withConnect = connect(
+  createStructuredSelector({}),
+  mapDispatchToProps,
+);
+
 export default compose(
+  withConnect,
   memo,
   withStyles(styles),
 )(GroupManageLayout);

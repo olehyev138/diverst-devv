@@ -29,7 +29,7 @@ export default function Conditional(
   Component,
   conditions,
   redirect = null,
-  message = 'You don\'t have permission to view this page',
+  message = null,
   reducer = a => a.reduce((sum, v) => sum || v, false)
 ) {
   const WrappedComponent = (props) => {
@@ -41,7 +41,9 @@ export default function Conditional(
           ? new RouteService({ computedMatch: props.computedMatch, location: props.location })
           : new RouteService(useContext);
         props.redirectAction(redirect, props, rs);
-        props.showSnackbar({ message, options: { variant: 'warning' } });
+
+        if (message)
+          props.showSnackbar({ message, options: { variant: 'warning' } });
       }
 
       return () => null;

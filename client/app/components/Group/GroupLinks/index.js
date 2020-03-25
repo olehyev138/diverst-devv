@@ -241,12 +241,12 @@ export function GroupLinks(props) {
             </Button>
           </Permission>
 
-          <Permission show={permission(props.currentGroup, 'update?')}>
+          <Permission show={permission(props.currentGroup, 'update?') || permission(props.currentGroup, 'leaders_view?')}>
             <Button
               component={WrappedNavLink}
               className={classes.navLink}
               activeClassName={classes.navLinkActive}
-              to={ROUTES.group.manage.settings.index.path(rs.params('group_id'))}
+              to={ROUTES.group.manage.index.path(rs.params('group_id'))}
               isActive={(match, location) => !!matchPath(location.pathname, {
                 path: ROUTES.group.manage.index.data.pathPrefix(rs.params('group_id')),
                 exact: false,
