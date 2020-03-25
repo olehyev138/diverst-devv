@@ -252,6 +252,7 @@ export const ROUTES = {
     },
     plan: {
       index: {
+        path: (groupId = ':group_id') => `/groups/${groupId}/plan`,
         data: {
           pathPrefix: (groupId = ':group_id') => `/groups/${groupId}/plan`,
           titleMessage: messages.groups.plan.index
@@ -404,6 +405,7 @@ export const ROUTES = {
       },
       budget: {
         index: {
+          path: (groupId = ':group_id') => `/groups/${groupId}/plan/budgeting`,
           data: {
             pathPrefix: (groupId = ':group_id') => `/groups/${groupId}/plan/budgeting`,
             titleMessage: messages.groups.plan.budget.index

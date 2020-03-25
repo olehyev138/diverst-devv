@@ -54,7 +54,7 @@ export function GroupPlanLinks(props) {
           >
             <Tab
               component={WrappedNavLink}
-              to={ROUTES.group.plan.budget.overview.path(props.currentGroup.id)}
+              to={ROUTES.group.plan.budget.index.path(props.currentGroup.id)}
               label={<DiverstFormattedMessage {...messages.links.budgeting} />}
             />
           </Permission>

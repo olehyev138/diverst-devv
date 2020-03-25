@@ -227,7 +227,7 @@ export function GroupLinks(props) {
               component={WrappedNavLink}
               className={classes.navLink}
               activeClassName={classes.navLinkActive}
-              to={ROUTES.group.plan.events.index.path(rs.params('group_id'))}
+              to={ROUTES.group.plan.index.path(rs.params('group_id'))}
               isActive={(match, location) => !!matchPath(location.pathname, {
                 path: ROUTES.group.plan.index.data.pathPrefix(rs.params('group_id')),
                 exact: false,
