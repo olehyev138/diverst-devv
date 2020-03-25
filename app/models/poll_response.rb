@@ -1,10 +1,10 @@
 class PollResponse < ApplicationRecord
-  include PollResponse::Actions
-  include ContainsFieldData
   FIELD_DEFINER_NAME = :poll
   FIELD_ASSOCIATION_NAME = :fields
   belongs_to :poll
 
+  include PollResponse::Actions
+  include ContainsFieldData
 
   belongs_to :user
   has_many :user_reward_actions, dependent: :destroy

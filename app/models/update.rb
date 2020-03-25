@@ -1,10 +1,10 @@
 class Update < ApplicationRecord
-  include Update::Actions
-  include ContainsFieldData
   FIELD_DEFINER_NAME = :updatable
   FIELD_ASSOCIATION_NAME = :fields
   belongs_to :updatable, polymorphic: true
 
+  include Update::Actions
+  include ContainsFieldData
 
   after_save -> { UpdateNextAndPreviousUpdateJob.perform_now(id) }
   after_destroy -> { UpdateNextAndPreviousUpdateJob.perform_now(self.next.id) if self.next.present? }

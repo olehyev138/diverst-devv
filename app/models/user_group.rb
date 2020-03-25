@@ -1,10 +1,10 @@
 class UserGroup < ApplicationRecord
-  include ContainsFieldData
-  include UserGroup::Actions
   FIELD_DEFINER_NAME = :group
   FIELD_ASSOCIATION_NAME = :survey_fields
 
   belongs_to :group
+  include ContainsFieldData
+  include UserGroup::Actions
 
   # associations
   belongs_to :user
