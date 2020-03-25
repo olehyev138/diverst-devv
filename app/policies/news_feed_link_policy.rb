@@ -19,9 +19,16 @@ class NewsFeedLinkPolicy < GroupBasePolicy
     (record.author == user if NewsFeedLink === record) || super
   end
 
+  def group_update?
+    NewsFeedLinkPolicy.new(user, [group, NewsFeedLink], params).update?
+  end
+
   def is_a_member?
     super || (NewsFeedLink === record && (user.group_ids && record.shared_news_feeds.map { |snf| snf.group_id }).present?)
   end
+
+  alias_method :pin?, :group_update?
+  alias_method :archive?, :group_update?
 
   class Scope < Scope
     def is_member(permission)
