@@ -99,7 +99,7 @@ class GroupPolicy < ApplicationPolicy
     NewsFeedLinkPolicy.new(self, NewsFeedLink).index?
   end
 
-  def resource_view?
+  def resources_view?
     GroupResourcePolicy.new(self, Resource).index?
   end
 

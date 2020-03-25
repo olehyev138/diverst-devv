@@ -193,7 +193,7 @@ export function GroupLinks(props) {
             </Button>
           </Permission>
 
-          <Permission show={permission(props.currentGroup, 'resource_view?')}>
+          <Permission show={permission(props.currentGroup, 'resources_view?')}>
             <Button
               component={WrappedNavLink}
               exact

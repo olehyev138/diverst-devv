@@ -34,8 +34,9 @@ import {
   getFolderShowPath,
   getFolderIndexPath,
 } from 'utils/resourceHelpers';
+import Conditional from '../../../../components/Compositions/Conditional';
 
-export function FolderEditPage(props) {
+export function ResourceEditPage(props) {
   useInjectReducer({ key: 'resource', reducer });
   useInjectSaga({ key: 'resource', saga });
 
@@ -83,7 +84,7 @@ export function FolderEditPage(props) {
   );
 }
 
-FolderEditPage.propTypes = {
+ResourceEditPage.propTypes = {
   intl: intlShape.isRequired,
   path: PropTypes.string,
   getFoldersBegin: PropTypes.func,
@@ -131,4 +132,9 @@ export default compose(
   withConnect,
   memo,
   injectIntl,
-)(FolderEditPage);
+)(Conditional(
+  ResourceEditPage,
+  ['currentResource.permissions.update?', 'isFormLoading'],
+  (props, rs) => getFolderIndexPath(props.path.startsWith('/groups') ? 'group' : 'admin', rs.params('group_id')),
+  'You don\'t have permission to edit this resource'
+));

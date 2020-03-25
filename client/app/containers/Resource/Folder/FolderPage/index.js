@@ -39,12 +39,13 @@ import {
   getFolderEditPath,
   getFolderShowPath,
   getResourceNewPath,
-  getResourceEditPath,
+  getResourceEditPath, getFolderIndexPath,
 } from 'utils/resourceHelpers';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Resource/Folder/messages';
 import Conditional from 'components/Compositions/Conditional';
+import { ROUTES } from '../../../Shared/Routes/constants';
 
 const defaultParams = Object.freeze({
   count: 5, // TODO: Make this a constant and use it also in Folder
@@ -290,4 +291,9 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(Conditional(FolderPage, ['currentGroup.permissions.resource_view?']));
+)(Conditional(
+  FolderPage,
+  ['currentFolder.permissions.show?', 'isFormLoading'],
+  (props, rs) => ROUTES.group.resources.index.path(rs.params('group_id')),
+  'You don\'t have permission view this folders'
+));

@@ -28,6 +28,7 @@ import {
   getFolderShowPath,
   getFolderIndexPath
 } from 'utils/resourceHelpers';
+import Conditional from '../../../../components/Compositions/Conditional';
 
 export function ResourceCreatePage(props) {
   useInjectReducer({ key: 'resource', reducer });
@@ -111,4 +112,9 @@ export default compose(
   withConnect,
   memo,
   injectIntl
-)(ResourceCreatePage);
+)(Conditional(
+  ResourceCreatePage,
+  ['currentGroup.permissions.resources_create?'],
+  (props, rs) => getFolderIndexPath(props.path.startsWith('/groups') ? 'group' : 'admin', rs.params('group_id')),
+  'You don\'t have permission to create resources'
+));

@@ -1,6 +1,8 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
+import { compose } from 'redux';
+import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
+import { push, goBack } from 'connected-react-router';
 import dig from 'object-dig';
 import NotAuthorizedPage from 'containers/Shared/NotAuthorizedPage';
 
@@ -21,6 +23,8 @@ function valid(props, conditions, reducer) {
   return reducer(conditionsMapper(props, conditions));
 }
 
+const redirectAction = (redirect, props, rs) => push(redirect(props, rs));
+
 export default function Conditional(
   Component,
   conditions,
@@ -29,27 +33,46 @@ export default function Conditional(
   reducer = a => a.reduce((sum, v) => sum || v, false)
 ) {
   const WrappedComponent = (props) => {
-    if (valid(props, conditions, reducer))
+    const show = valid(props, conditions, reducer);
+
+    useEffect(() => {
+      if (!show && redirect) {
+        const rs = props.computedMatch
+          ? new RouteService({ computedMatch: props.computedMatch, location: props.location })
+          : new RouteService(useContext);
+        props.redirectAction(redirect, props, rs);
+        props.showSnackbar({ message, options: { variant: 'warning' } });
+      }
+
+      return () => null;
+    });
+
+    if (show)
       return <Component {...props} />;
-    if (redirect) {
-      const rs = props.computedMatch
-        ? new RouteService({ computedMatch: props.computedMatch, location: props.location })
-        : new RouteService(useContext);
-      props.dispatch(showSnackbar({ message, options: { variant: 'warning' } }));
-      props.dispatch(push(redirect(props, rs)));
+    if (redirect)
       return <React.Fragment />;
-    }
 
     return <NotAuthorizedPage />;
   };
 
   WrappedComponent.propTypes = {
-    show: PropTypes.bool,
-    valid: PropTypes.func,
-    dispatch: PropTypes.func,
+    showSnackbar: PropTypes.func,
+    redirectAction: PropTypes.func,
     computedMatch: PropTypes.object,
     location: PropTypes.object,
   };
 
-  return connect()(WrappedComponent);
+  const mapDispatchToProps = {
+    redirectAction,
+    showSnackbar,
+  };
+
+  const withConnect = connect(
+    createStructuredSelector({}),
+    mapDispatchToProps,
+  );
+
+  return compose(
+    withConnect
+  )(WrappedComponent);
 }

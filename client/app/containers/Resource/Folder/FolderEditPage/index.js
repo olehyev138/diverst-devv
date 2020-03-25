@@ -25,6 +25,8 @@ import {
 
 import {
   getParentPage,
+  getFolderShowPath,
+  getFolderIndexPath
 } from 'utils/resourceHelpers';
 
 import {
@@ -41,6 +43,7 @@ import {
 import { Field, Formik, Form } from 'formik';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Resource/Folder/messages';
+import Conditional from '../../../../components/Compositions/Conditional';
 
 export function FolderEditPage(props) {
   useInjectReducer({ key: 'resource', reducer });
@@ -187,4 +190,11 @@ export default compose(
   withConnect,
   memo,
   injectIntl
-)(FolderEditPage);
+)(Conditional(
+  FolderEditPage,
+  ['currentFolder.permissions.update?', 'isFormLoading'],
+  (props, rs) => rs.location.fromFolder
+    ? getFolderShowPath(rs.location.fromFolder.folder)
+    : getFolderIndexPath(props.path.startsWith('/groups') ? 'group' : 'admin', rs.params('group_id')),
+  'You don\'t have permission to edit this folder'
+));
