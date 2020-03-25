@@ -23,7 +23,7 @@ import EventForm from 'components/Event/EventForm';
 
 import messages from 'containers/Event/messages';
 import { injectIntl, intlShape } from 'react-intl';
-import Conditional from '../../../components/Compositions/Conditional';
+import Conditional from 'components/Compositions/Conditional';
 
 export function EventEditPage(props) {
   useInjectReducer({ key: 'events', reducer });

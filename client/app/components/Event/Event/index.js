@@ -29,8 +29,8 @@ import { injectIntl, intlShape } from 'react-intl';
 
 import EventComment from 'components/Event/EventComment';
 import EventCommentForm from 'components/Event/EventCommentForm';
-import Permission from '../../Shared/DiverstPermission';
-import { permission } from '../../../utils/permissionsHelpers';
+import Permission from 'components/Shared/DiverstPermission';
+import { permission } from 'utils/permissionsHelpers';
 
 const styles = theme => ({
   padding: {

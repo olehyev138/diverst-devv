@@ -24,8 +24,8 @@ import resourceMessages from 'containers/Resource/Resource/messages';
 import { injectIntl, intlShape } from 'react-intl';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
-import Permission from '../../../Shared/DiverstPermission';
-import { permission } from '../../../../utils/permissionsHelpers';
+import Permission from 'components/Shared/DiverstPermission';
+import { permission } from 'utils/permissionsHelpers';
 
 const styles = theme => ({
   link: {

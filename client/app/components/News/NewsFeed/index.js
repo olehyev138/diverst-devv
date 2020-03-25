@@ -28,8 +28,8 @@ import DiverstLoader from 'components/Shared/DiverstLoader';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/News/messages';
 import { injectIntl, intlShape } from 'react-intl';
-import Permission from '../../Shared/DiverstPermission';
-import { permission } from '../../../utils/permissionsHelpers';
+import Permission from 'components/Shared/DiverstPermission';
+import { permission } from 'utils/permissionsHelpers';
 
 const styles = theme => ({
   newsItem: {

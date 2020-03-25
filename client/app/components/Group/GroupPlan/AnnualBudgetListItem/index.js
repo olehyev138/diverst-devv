@@ -16,7 +16,7 @@ import {
 
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import DiverstProgress from 'components/Shared/DiverstProgress';
-import DiverstTable from '../../../Shared/DiverstTable';
+import DiverstTable from 'components/Shared/DiverstTable';
 import { injectIntl, intlShape } from 'react-intl';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Group/GroupPlan/AnnualBudget/messages';

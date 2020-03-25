@@ -20,13 +20,13 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/News/messages';
 import { formatDateTimeString } from 'utils/dateTimeHelpers';
-import WrappedNavLink from '../../../Shared/WrappedNavLink';
+import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { injectIntl, intlShape } from 'react-intl';
 import IconButton from '@material-ui/core/IconButton';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import LocationOnOutlinedIcon from '@material-ui/icons/LocationOnOutlined';
-import Permission from '../../../Shared/DiverstPermission';
-import { permission } from '../../../../utils/permissionsHelpers';
+import Permission from 'components/Shared/DiverstPermission';
+import { permission } from 'utils/permissionsHelpers';
 const styles = theme => ({
   centerVertically: {
     padding: 3,

@@ -34,7 +34,7 @@ import {
   getFolderShowPath,
   getFolderIndexPath,
 } from 'utils/resourceHelpers';
-import Conditional from '../../../../components/Compositions/Conditional';
+import Conditional from 'components/Compositions/Conditional';
 
 export function ResourceEditPage(props) {
   useInjectReducer({ key: 'resource', reducer });

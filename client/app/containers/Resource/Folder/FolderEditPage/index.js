@@ -43,7 +43,7 @@ import {
 import { Field, Formik, Form } from 'formik';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Resource/Folder/messages';
-import Conditional from '../../../../components/Compositions/Conditional';
+import Conditional from 'components/Compositions/Conditional';
 
 export function FolderEditPage(props) {
   useInjectReducer({ key: 'resource', reducer });

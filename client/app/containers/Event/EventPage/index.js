@@ -31,7 +31,7 @@ import {
 
 
 import Event from 'components/Event/Event';
-import Conditional from '../../../components/Compositions/Conditional';
+import Conditional from 'components/Compositions/Conditional';
 
 export function EventPage(props) {
   useInjectReducer({ key: 'events', reducer });

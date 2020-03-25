@@ -21,8 +21,8 @@ import CommentIcon from '@material-ui/icons/Comment';
 import IconButton from '@material-ui/core/IconButton';
 import { formatDateTimeString } from 'utils/dateTimeHelpers';
 import { injectIntl, intlShape } from 'react-intl';
-import Permission from '../../../Shared/DiverstPermission';
-import { permission } from '../../../../utils/permissionsHelpers';
+import Permission from 'components/Shared/DiverstPermission';
+import { permission } from 'utils/permissionsHelpers';
 const styles = theme => ({
   root: {
     flexGrow: 1,

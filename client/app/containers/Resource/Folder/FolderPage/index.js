@@ -45,7 +45,7 @@ import {
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Resource/Folder/messages';
 import Conditional from 'components/Compositions/Conditional';
-import { ROUTES } from '../../../Shared/Routes/constants';
+import { ROUTES } from 'containers/Shared/Routes/constants';
 
 const defaultParams = Object.freeze({
   count: 5, // TODO: Make this a constant and use it also in Folder

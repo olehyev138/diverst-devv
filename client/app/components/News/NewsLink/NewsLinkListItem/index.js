@@ -30,8 +30,8 @@ import Carousel from 'react-material-ui-carousel';
 import { injectIntl, intlShape } from 'react-intl';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import LocationOnOutlinedIcon from '@material-ui/icons/LocationOnOutlined';
-import Permission from '../../../Shared/DiverstPermission';
-import { permission } from '../../../../utils/permissionsHelpers';
+import Permission from 'components/Shared/DiverstPermission';
+import { permission } from 'utils/permissionsHelpers';
 
 const styles = theme => ({
   cardHeader: {

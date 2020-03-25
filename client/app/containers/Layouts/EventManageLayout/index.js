@@ -20,8 +20,8 @@ import { eventsUnmount, getEventBegin } from 'containers/Event/actions';
 import EventManageLinks from 'components/Event/EventManage/EventManageLinks';
 import Box from '@material-ui/core/Box';
 import GroupLayout from '../GroupLayout';
-import Conditional from '../../../components/Compositions/Conditional';
-import { ROUTES } from '../../Shared/Routes/constants';
+import Conditional from 'components/Compositions/Conditional';
+import { ROUTES } from 'containers/Shared/Routes/constants';
 
 const styles = theme => ({
   content: {

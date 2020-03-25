@@ -22,7 +22,7 @@ import { selectIsCommitting } from 'containers/Event/selectors';
 
 import messages from 'containers/Event/messages';
 import { injectIntl, intlShape } from 'react-intl';
-import Conditional from '../../../components/Compositions/Conditional';
+import Conditional from 'components/Compositions/Conditional';
 
 export function EventCreatePage(props) {
   useInjectReducer({ key: 'events', reducer });

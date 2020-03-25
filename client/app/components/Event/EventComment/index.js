@@ -12,8 +12,8 @@ import { Button, Card, CardActions, CardContent, Typography } from '@material-ui
 import { withStyles } from '@material-ui/core/styles';
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Event/messages';
-import Permission from '../../Shared/DiverstPermission';
-import { permission } from '../../../utils/permissionsHelpers';
+import Permission from 'components/Shared/DiverstPermission';
+import { permission } from 'utils/permissionsHelpers';
 
 const styles = theme => ({
   margin: {
