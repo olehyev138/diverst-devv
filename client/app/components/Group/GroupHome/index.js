@@ -12,10 +12,12 @@ import { Button, Divider, Grid, Typography } from '@material-ui/core';
 import DiverstImg from 'components/Shared/DiverstImg';
 import EventsPage from 'containers/Event/EventsPage';
 import NewsPage from 'containers/News/NewsFeedPage';
+
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
 
 export function GroupHome(props) {
+  console.log(props.currentGroup.current_user_is_member);
   return (
     <React.Fragment>
       <Grid container spacing={3}>
@@ -42,19 +44,38 @@ export function GroupHome(props) {
           <Divider orientation='vertical' />
         </Grid>
         <Grid item xs>
-          <Button
-            variant='contained'
-            size='large'
-            color='primary'
-            onClick={() => {
-              props.joinGroup({
-                group_id: props.currentGroup.id
-              });
-            }}
-            startIcon={<RemoveIcon />}
-          >
-            leave
-          </Button>
+          {props.currentGroup.current_user_is_member
+            ? (
+              <Button
+                variant='contained'
+                size='large'
+                color='primary'
+                onClick={() => {
+                  props.leaveGroup({
+                    group_id: props.currentGroup.id
+                  });
+                }}
+                startIcon={<RemoveIcon />}
+              >
+                Leave
+              </Button>
+            )
+            : (
+              <Button
+                variant='contained'
+                size='large'
+                color='primary'
+                onClick={() => {
+                  props.joinGroup({
+                    group_id: props.currentGroup.id
+                  });
+                }}
+                startIcon={<AddIcon />}
+              >
+                Join
+              </Button>
+
+            )}
           <NewsPage
             currentGroup={props.currentGroup}
             readonly
@@ -68,6 +89,7 @@ export function GroupHome(props) {
 GroupHome.propTypes = {
   currentGroup: PropTypes.object,
   joinGroup: PropTypes.func,
+  leaveGroup: PropTypes.func,
 };
 
 export default compose(

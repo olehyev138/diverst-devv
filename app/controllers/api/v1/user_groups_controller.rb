@@ -8,8 +8,6 @@ class Api::V1::UserGroupsController < DiverstController
     params[klass.symbol][:user_id] = current_user.id
     item = klass.find_by(payload)
 
-    return if item.nil?
-
     item.remove
   end
 

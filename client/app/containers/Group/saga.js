@@ -181,9 +181,10 @@ export function* joinGroup(action) {
 }
 
 export function* leaveGroup(action) {
-  const payload = { user: action.payload };
+  const payload = { user_group: action.payload };
   try {
     const response = yield call(api.userGroups.remove.bind(api.userGroups), payload);
+
     yield put(leaveGroupSuccess());
   } catch (err) {
     yield put(leaveGroupError());

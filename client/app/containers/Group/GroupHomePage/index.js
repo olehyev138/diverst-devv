@@ -12,9 +12,11 @@ import saga from 'containers/Group/saga';
 import GroupHome from 'components/Group/GroupHome';
 
 import {
-  joinGroupBegin
+  joinGroupBegin,
+  leaveGroupBegin
 } from 'containers/Group/actions';
 import { selectGroup } from 'containers/Group/selectors';
+
 export function GroupHomePage(props) {
   useInjectReducer({ key: 'groups', reducer });
   useInjectSaga({ key: 'groups', saga });
@@ -22,6 +24,7 @@ export function GroupHomePage(props) {
     <GroupHome
       currentGroup={props.currentGroup}
       joinGroup={props.joinGroupBegin}
+      leaveGroup={props.leaveGroupBegin}
     />
   );
 }
@@ -29,6 +32,7 @@ export function GroupHomePage(props) {
 GroupHomePage.propTypes = {
   currentGroup: PropTypes.object,
   joinGroupBegin: PropTypes.func,
+  leaveGroupBegin: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -36,7 +40,8 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = {
-  joinGroupBegin
+  joinGroupBegin,
+  leaveGroupBegin
 };
 
 const withConnect = connect(
