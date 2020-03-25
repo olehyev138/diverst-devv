@@ -7,3 +7,7 @@ Paperclip::Attachment.class_eval do
     old_initialize(name.to_s.chomp('_paperclip'), instance, options)
   end
 end
+
+Paperclip::Attachment.default_options[:url] = ':s3_domain_url'
+Paperclip::Attachment.default_options[:s3_host_name] = 's3-us-east-1.amazonaws.com'
+
