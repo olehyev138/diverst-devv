@@ -44,7 +44,7 @@ class ConvertToActiveStorage < ActiveRecord::Migration[5.2]
               next
             end
 
-            updated_at = instance.try(:updated_at).to_datetime || DateTime.current
+            updated_at = instance.try(:updated_at).try(:to_datetime) || DateTime.current
 
             active_storage_blob_statement.execute(
                 key(instance, attachment),
