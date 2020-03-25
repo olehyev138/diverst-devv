@@ -1,6 +1,6 @@
 <%= simple_form_for @segment do |f| %>
   <div class="content__header">
-    <div class="grow"><%= f.input :name, label: false, placeholder: 'Segment Name', input_html: { style: "font-size: 18px; width: auto;" }%></div>
+    <div class="grow"><%= f.input :name, label: false, placeholder: "#{c_t(:segment)} Name", input_html: { style: "font-size: 18px; width: auto;" }%></div>
     <div class="flex-row flex-row--middle">
       <% unless @segment.new_record? %>
         <div class="flex-row__cell">
@@ -8,7 +8,7 @@
         </div>
       <% end %>
       <div class="flex-row__cell">
-        <%= f.button :submit, id: 'submit-button' %>
+        <%= f.button :submit, "create #{c_t(:segment)}", id: 'submit-button' %>
       </div>
     </div>
   </div>
@@ -104,7 +104,7 @@
   <% unless @segment.new_record? %>
     <br>
     <div class="flex-row__cell">
-      <h3>Segment Users <span id="member-count-wrapper" style="display: none;">(<b><span id="member-count"></span></b>)</span></h3>
+      <h3><%= c_t(:segment) %> Users <span id="member-count-wrapper" style="display: none;">(<b><span id="member-count"></span></b>)</span></h3>
     </div>
     <br>
 
