@@ -1,10 +1,10 @@
 class GroupUpdate < ApplicationRecord
+  include PublicActivity::Common
+  include ContainsFieldData
   FIELD_DEFINER_NAME = :group
   FIELD_ASSOCIATION_NAME = :fields
 
   belongs_to :group
-  include PublicActivity::Common
-  include ContainsFieldData
 
   belongs_to :owner, class_name: 'User'
 

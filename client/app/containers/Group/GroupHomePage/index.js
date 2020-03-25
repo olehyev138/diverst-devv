@@ -15,11 +15,12 @@ import {
   joinGroupBegin,
   leaveGroupBegin
 } from 'containers/Group/actions';
-import { selectGroup } from 'containers/Group/selectors';
+import { selectGroup, selectHasChanged } from 'containers/Group/selectors';
 
 export function GroupHomePage(props) {
   useInjectReducer({ key: 'groups', reducer });
   useInjectSaga({ key: 'groups', saga });
+
   return (
     <GroupHome
       currentGroup={props.currentGroup}

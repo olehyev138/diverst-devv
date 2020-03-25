@@ -1,13 +1,13 @@
 class User < ApplicationRecord
+  include PublicActivity::Common
+  include User::Actions
+  include ContainsFieldData
+  include TimeZoneValidation
   FIELD_DEFINER_NAME = :enterprise
   FIELD_ASSOCIATION_NAME = :fields
   belongs_to :enterprise, counter_cache: true
 
   has_secure_password
-  include PublicActivity::Common
-  include User::Actions
-  include ContainsFieldData
-  include TimeZoneValidation
 
   enum groups_notifications_frequency: [:hourly, :daily, :weekly, :disabled]
   enum groups_notifications_date: [:sunday, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday]

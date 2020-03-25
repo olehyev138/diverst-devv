@@ -17,7 +17,6 @@ import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
 
 export function GroupHome(props) {
-  console.log(props.currentGroup.current_user_is_member);
   return (
     <React.Fragment>
       <Grid container spacing={3}>

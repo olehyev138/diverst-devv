@@ -1,9 +1,9 @@
 class InitiativeUpdate < ApplicationRecord
+  include ContainsFieldData
   FIELD_DEFINER_NAME = :initiative
   FIELD_ASSOCIATION_NAME = :fields
 
   belongs_to :initiative
-  include ContainsFieldData
 
   belongs_to :owner, class_name: 'User'
 
