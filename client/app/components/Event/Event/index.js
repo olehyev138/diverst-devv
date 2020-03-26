@@ -122,7 +122,7 @@ export function Event(props) {
                 color='primary'
                 className={classes.buttons}
                 startIcon={<ExportIcon />}
-                onClick={() => props.export()}
+                onClick={() => props.export({ initiative_id: props.event.id })}
               >
                 <DiverstFormattedMessage {...messages.export} />
               </Button>
