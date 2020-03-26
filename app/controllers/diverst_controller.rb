@@ -22,7 +22,7 @@ class DiverstController < ApplicationController
   end
 
   rescue_from Pundit::NotAuthorizedError do |e|
-    render status: :bad_request, json: { message: e.message }
+    render status: :unauthorized, json: { message: e.message, backtrace: e.backtrace, cause: e.cause&.backtrace }
   end
 
   rescue_from ActionController::UnknownFormat do |e|
