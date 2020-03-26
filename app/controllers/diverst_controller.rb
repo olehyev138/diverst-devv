@@ -14,11 +14,11 @@ class DiverstController < ApplicationController
   skip_before_action :verify_jwt_token, only: [:routing_error]
 
   def error_json(e)
-    if Rails.env.development? || Rails.env.test?
-      { message: e.message, attribute: e&.attribute, backtrace: e.backtrace, cause: e.cause&.backtrace }
-    else
-      { message: e.message, attribute: e&.attribute }
-    end
+    json = { message: e.message }
+    json.merge({ attribute: e.attribute }) if e.respond_to?(:attribute)
+    json.merge({ backtrace: e.backtrace, cause: e.cause&.backtrace }) if Rails.env.development? || Rails.env.test?
+
+    json
   end
 
   rescue_from UnprocessableException do |e|
