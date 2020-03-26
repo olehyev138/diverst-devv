@@ -71,7 +71,7 @@ export function EventsList(props, context) {
     <React.Fragment>
       {!props.readonly && (
         <React.Fragment>
-          <Permission show={permission(props.currentGroup, 'events_create?')} className={classes.floatRight}>
+          <Permission show={permission(props.currentGroup, 'events_create?')}>
             <Button
               className={classes.floatRight}
               variant='contained'

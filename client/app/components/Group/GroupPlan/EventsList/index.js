@@ -59,7 +59,7 @@ export function EventsList(props) {
 
   return (
     <React.Fragment>
-      <Permission show={permission(props.currentGroup, 'update?')} className={classes.floatRight}>
+      <Permission show={permission(props.currentGroup, 'update?')}>
         <Button
           className={classes.floatRight}
           variant='contained'

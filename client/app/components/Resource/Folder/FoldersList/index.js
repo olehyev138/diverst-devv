@@ -72,7 +72,7 @@ export function FoldersList(props, context) {
 
   return (
     <React.Fragment>
-      <Permission show={permission(props.currentGroup, 'resources_create?')} className={classes.floatRight}>
+      <Permission show={permission(props.currentGroup, 'resources_create?')}>
         <Button
           className={classes.floatRight}
           variant='contained'
