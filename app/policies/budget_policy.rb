@@ -16,10 +16,9 @@ class BudgetPolicy < GroupBasePolicy
   end
 
   def approve?
-    return true if update?
-    return true if has_group_leader_permissions?('budget_approval')
-
-    user.policy_group.budget_approval?
+    policy_group.budget_approval ||
+    manage_group_resource(base_manage_permission) ||
+    manage_group_resource('budget_approval')
   end
 
   def decline?
