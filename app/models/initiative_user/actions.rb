@@ -35,4 +35,3 @@ module InitiativeUser::Actions
     end
   end
 end
-

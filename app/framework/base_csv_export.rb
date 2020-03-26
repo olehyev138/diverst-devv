@@ -23,7 +23,7 @@ module BaseCsvExport
                     when String then record.send_chain(att.split('.'))
                     when Symbol then record.send(att)
                     else raise ::ArgumentError.new('Values should either be a name of a field, or a Method to get the value')
-                    end
+            end
 
             case value
             when TrueClass, FalseClass then value ? 'Yes' : 'No'
