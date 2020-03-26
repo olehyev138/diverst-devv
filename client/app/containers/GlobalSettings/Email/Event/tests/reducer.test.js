@@ -14,8 +14,8 @@ describe('eventReducer', () => {
       eventList: [],
       eventListTotal: null,
       currentEvent: null,
-      isFetchingEvents: false,
-      isFetchingEvent: false,
+      isFetchingEvents: true,
+      isFetchingEvent: true,
       isCommitting: false,
       hasChanged: false,
     };
@@ -152,8 +152,8 @@ describe('eventReducer', () => {
       eventList: [],
       eventListTotal: null,
       currentEvent: null,
-      isFetchingEvents: false,
-      isFetchingEvent: false,
+      isFetchingEvents: true,
+      isFetchingEvent: true,
       isCommitting: false,
       hasChanged: false,
     };
