@@ -13,44 +13,52 @@ class DiverstController < ApplicationController
   # skip filter for routing errors
   skip_before_action :verify_jwt_token, only: [:routing_error]
 
+  def error_json(e)
+    if Rails.env.development? || Rails.end.test?
+      { message: e.message, attribute: e&.attribute, backtrace: e.backtrace, cause: e.cause&.backtrace }
+    else
+      { message: e.message, attribute: e&.attribute }
+    end
+  end
+
   rescue_from UnprocessableException do |e|
     render status: :unprocessable_entity, json: [e.resource.errors.full_messages.first]
   end
 
   rescue_from InvalidInputException do |e|
-    render status: :unprocessable_entity, json: { message: e.message, attribute: e.attribute }
+    render status: :unprocessable_entity, json: error_json(e)
   end
 
   rescue_from Pundit::NotAuthorizedError do |e|
-    render status: :unauthorized, json: { message: e.message, backtrace: e.backtrace, cause: e.cause&.backtrace }
+    render status: :unauthorized, json: error_json(e)
   end
 
   rescue_from ActionController::UnknownFormat do |e|
-    render status: :forbidden, json: { message: e.message }
+    render status: :forbidden, json: error_json(e)
   end
 
   rescue_from Pundit::AuthorizationNotPerformedError do |e|
-    render status: :unauthorized, json: { message: e.message }
+    render status: :unauthorized, json: error_json(e)
   end
 
   rescue_from ActionController::BadRequest do |e|
-    render status: :bad_request, json: { message: e.message }
+    render status: :bad_request, json: error_json(e)
   end
 
   rescue_from ActiveRecord::RecordInvalid do |e|
-    render status: :bad_request, json: { message: e.message }
+    render status: :bad_request, json: error_json(e)
   end
 
   rescue_from BadRequestException do |e|
-    render status: :bad_request, json: { message: e.message }
+    render status: :bad_request, json: error_json(e)
   end
 
   rescue_from Pundit::NotDefinedError do |e|
-    render status: :forbidden, json: { message: e.message }
+    render status: :forbidden, json: error_json(e)
   end
 
   rescue_from ActionController::RoutingError do |e|
-    render status: :forbidden, json: { message: e.message }
+    render status: :forbidden, json: error_json(e)
   end
 
   rescue_from ActiveRecord::RecordNotFound do |e|
@@ -59,23 +67,23 @@ class DiverstController < ApplicationController
 
   rescue_from ActiveRecord::StatementInvalid do |e|
     Rollbar.error(e)
-    render status: :bad_request, json: { message: e.message }
+    render status: :bad_request, json: error_json(e)
   end
 
   rescue_from ActionController::ParameterMissing do |e|
-    render status: :bad_request, json: { message: e.message }
+    render status: :bad_request, json: error_json(e)
   end
 
   rescue_from ActionController::UnpermittedParameters do |e|
-    render status: :bad_request, json: { message: e.message }
+    render status: :bad_request, json: error_json(e)
   end
 
   rescue_from ArgumentError do |e|
-    render status: :bad_request, json: { message: e.message }
+    render status: :bad_request, json: error_json(e)
   end
 
   rescue_from NoMethodError do |e|
-    render status: :bad_request, json: { message: e.message }
+    render status: :bad_request, json: error_json(e)
   end
 
   rescue_from Rack::Timeout::RequestTimeoutException do |e|
