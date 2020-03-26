@@ -1,5 +1,5 @@
 class ApplicationPolicy
-  attr_reader :user, :policy_group, :params, :record
+  attr_reader :user, :policy_group, :params, :record, :group_leader_role_id
 
   def initialize(user, record, params = nil)
     raise Pundit::NotAuthorizedError, 'must be logged in' unless user
@@ -48,6 +48,18 @@ class ApplicationPolicy
 
   def manage_all?
     @policy_group.manage_all?
+  end
+
+  def basic_group_leader_permission?(permission)
+    @group_leader_role_id = user.policy_group_leader(
+        if record&.is_a?(Group)
+          record.id
+        elsif record&.respond_to?(:group_id)
+          record.group_id
+        end
+      )&.user_role_id
+
+    PolicyGroupTemplate.where(user_role_id: @group_leader_role_id).where("#{permission} = true").exists?
   end
 
   def scope

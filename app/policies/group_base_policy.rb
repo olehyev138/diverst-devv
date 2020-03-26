@@ -139,7 +139,8 @@ class GroupBasePolicy < ApplicationPolicy
 
       view_group_resource(base_index_permission)
     else
-      policy_group[base_manage_permission] ||
+      policy_group['manage_all'] ||
+          policy_group[base_manage_permission] ||
           policy_group[base_create_permission] ||
           policy_group[base_index_permission]
     end
