@@ -175,8 +175,8 @@ class Group < BaseClass
   scope :is_private,        -> { where(private: true) }
   scope :non_private,       -> { where(private: false) }
   # parents/children
-  scope :all_parents,     -> { where(parent_id: nil) }
-  scope :all_children,    -> { where.not(parent_id: nil) }
+  scope :all_parents,     -> { where(parent_id: nil, private: false) }
+  scope :all_children,    -> { where.not(parent_id: nil, private: true) }
 
   accepts_nested_attributes_for :outcomes, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
