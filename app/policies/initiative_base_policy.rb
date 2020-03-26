@@ -9,7 +9,7 @@ class InitiativeBasePolicy < GroupBasePolicy
       @group = @initiative.group
       @record = context
       @params = user.params
-      @group_leader_role_ids = user.group_leader_role_ids
+      @group_leader_role_id = user.group_leader_role_id
       @policy_group = user.policy_group
       @group_leader = user.group_leader
       @user_group = user.user_group

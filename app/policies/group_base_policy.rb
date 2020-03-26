@@ -1,5 +1,5 @@
 class GroupBasePolicy < ApplicationPolicy
-  attr_accessor :user, :group, :record, :group_leader_role_ids, :group_leader, :user_group
+  attr_accessor :user, :group, :record, :group_leader_role_id, :group_leader, :user_group
 
   def initialize(user, context, params = {})
     case user
@@ -8,7 +8,7 @@ class GroupBasePolicy < ApplicationPolicy
       @group = user.record
       @record = context
       @params = user.params
-      @group_leader_role_ids = user.group_leader_role_ids
+      @group_leader_role_id = user.group_leader_role_id
       @policy_group = user.policy_group
       @group_leader = user.group_leader
       @user_group = user.user_group
@@ -30,6 +30,7 @@ class GroupBasePolicy < ApplicationPolicy
       if group
         @group_leader = user.policy_group_leader(group.id)
         @user_group = user.policy_user_group(group.id)
+        @group_leader_role_id = group_leader&.user_role_id
       end
     end
   end
@@ -38,7 +39,7 @@ class GroupBasePolicy < ApplicationPolicy
     user_group.present?
   end
 
-  def is_a_accepted_member?
+  def is_an_accepted_member?
     is_a_member? && user_group.accepted_member?
   end
 
@@ -46,9 +47,7 @@ class GroupBasePolicy < ApplicationPolicy
     group_leader.present?
   end
 
-  def is_active_member?
-    UserGroup.where(accepted_member: true, user_id: user.id, group_id: @record.id).exists?
-  end
+  alias_method :is_active_member?, :is_an_accepted_member?
 
   def is_a_guest?
     !is_a_member?
@@ -63,7 +62,7 @@ class GroupBasePolicy < ApplicationPolicy
 
   def publicly_visible
     group_visibility_setting.present? ?
-        ['public', 'global', 'non-members'].include?(group[group_visibility_setting]) : is_a_accepted_member?
+        ['public', 'global', 'non-members'].include?(group[group_visibility_setting]) : is_an_accepted_member?
   end
 
   def member_visible
@@ -92,7 +91,7 @@ class GroupBasePolicy < ApplicationPolicy
   end
 
   def basic_group_leader_permission?(permission)
-    PolicyGroupTemplate.where(user_role_id: group_leader_role_ids, enterprise_id: user.enterprise_id).where("#{permission} = true").exists?
+    PolicyGroupTemplate.where(user_role_id: group_leader_role_id, enterprise_id: user.enterprise_id).where("#{permission} = true").exists?
   end
 
   def has_group_leader_permissions?(permission)
@@ -128,7 +127,7 @@ class GroupBasePolicy < ApplicationPolicy
     # group leader
     return true if has_group_leader_permissions?(permission)
     # group member
-    return true if is_a_member? && policy_group[permission]
+    return true if is_an_accepted_member? && policy_group[permission]
 
     false
   end
@@ -260,14 +259,14 @@ class GroupBasePolicy < ApplicationPolicy
     end
 
     def resolve(permission)
-      if group
-        if index? && group.enterprise_id == user.enterprise_id
+      if index?
+        if group && group.enterprise_id == user.enterprise_id
           group_base.merge(scope.all)
         else
-          scope.none
+          non_group_base(permission)
         end
       else
-        non_group_base(permission)
+        scope.none
       end
     end
   end

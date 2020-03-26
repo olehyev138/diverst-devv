@@ -1,10 +1,9 @@
 class EnterpriseFolderPolicy < ApplicationPolicy
-  attr_accessor :user, :folder, :group_leader_role_ids
+  attr_accessor :user, :folder
 
   def initialize(user, folder = nil, params = nil)
     self.user = user
     self.folder = folder
-    self.group_leader_role_ids = user.group_leaders.pluck(:user_role_id)
   end
 
   def index?
@@ -42,10 +41,6 @@ class EnterpriseFolderPolicy < ApplicationPolicy
 
   def destroy?
     update?
-  end
-
-  def basic_group_leader_permission?(permission)
-    PolicyGroupTemplate.where(user_role_id: group_leader_role_ids).where("#{permission} = true").exists?
   end
 
   class Scope < Scope
