@@ -74,9 +74,7 @@ class ConvertToActiveStorage < ActiveRecord::Migration[5.2]
   private
 
   def key(instance, attachment)
-    SecureRandom.uuid
-    # Alternatively:
-    # instance.send("#{attachment}_file_name")
+    instance.send("#{attachment}_paperclip").path
   end
 
   def checksum(attachment)
