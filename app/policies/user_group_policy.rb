@@ -11,15 +11,23 @@ class UserGroupPolicy < ApplicationPolicy
   end
 
   def create?
-    true
+    false
   end
 
   def update?
+    false
+  end
+
+  def join?
+    true
+  end
+
+  def leave?
     true
   end
 
   def destroy?
-    true
+    false
   end
 
   class Scope < Scope

@@ -243,7 +243,8 @@ Diverst::Application.routes.draw do
       resources :user_groups do
         collection do
           get 'export_csv'
-          post 'remove'
+          post 'leave'
+          post 'join'
         end
       end
       resources :user_roles

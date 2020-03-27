@@ -170,7 +170,7 @@ export function* resetBudget(action) {
 export function* joinGroup(action) {
   const payload = { user_group: action.payload };
   try {
-    const response = yield call(api.userGroups.create.bind(api.userGroups), payload);
+    const response = yield call(api.userGroups.join.bind(api.userGroups), payload);
     yield put(joinGroupSuccess());
   } catch (err) {
     yield put(joinGroupError());
@@ -183,7 +183,7 @@ export function* joinGroup(action) {
 export function* leaveGroup(action) {
   const payload = { user_group: action.payload };
   try {
-    const response = yield call(api.userGroups.remove.bind(api.userGroups), payload);
+    const response = yield call(api.userGroups.leave.bind(api.userGroups), payload);
 
     yield put(leaveGroupSuccess());
   } catch (err) {
