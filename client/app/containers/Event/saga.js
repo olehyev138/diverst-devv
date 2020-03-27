@@ -204,7 +204,7 @@ export function* finalizeExpenses(action) {
 export function* joinEvent(action) {
   const payload = { initiative_user: action.payload };
   try {
-    const response = yield call(api.initiativeUsers.create.bind(api.initiativeUsers), payload);
+    const response = yield call(api.initiativeUsers.join.bind(api.initiativeUsers), payload);
     yield put(joinEventSuccess());
   } catch (err) {
     yield put(joinEventError(err));
@@ -217,7 +217,7 @@ export function* joinEvent(action) {
 export function* leaveEvent(action) {
   const payload = { initiative_user: action.payload };
   try {
-    const response = yield call(api.initiativeUsers.remove.bind(api.initiativeUsers), payload);
+    const response = yield call(api.initiativeUsers.leave.bind(api.initiativeUsers), payload);
     yield put(joinEventSuccess());
   } catch (err) {
     yield put(joinEventError(err));
