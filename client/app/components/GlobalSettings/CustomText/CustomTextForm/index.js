@@ -18,6 +18,8 @@ import {
 import messages from 'containers/GlobalSettings/CustomText/messages';
 import { buildValues } from 'utils/formHelpers';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
+import DiverstPopup from 'components/Shared/DiverstPopup';
+
 
 /* eslint-disable object-curly-newline */
 export function CustomTextFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, ...props }) {

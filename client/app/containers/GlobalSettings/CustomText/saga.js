@@ -17,7 +17,6 @@ export function* updateCustomText(action) {
     const response = yield call(api.customText.update.bind(api.customText), payload.custom_text.id, payload);
 
     yield put(updateCustomTextSuccess());
-    yield put(showSnackbar({ message: 'Changes will only be applied next time you login', options: { variant: 'info' } }));
     yield put(showSnackbar({ message: 'Custom text updated', options: { variant: 'success' } }));
   } catch (err) {
     yield put(updateCustomTextError(err));
