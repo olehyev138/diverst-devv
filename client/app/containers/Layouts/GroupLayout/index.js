@@ -51,7 +51,7 @@ const GroupLayout = ({ component: Component, classes, ...rest }) => {
       other.getGroupBegin({ id: groupId });
 
     return () => other.groupFormUnmount();
-  }, [rs.params('group_id'), rest.hasChanged]);
+  }, [rs.params('group_id'), rest.groupHasChanged]);
 
   return (
     <AuthenticatedLayout
@@ -89,12 +89,12 @@ GroupLayout.propTypes = {
   classes: PropTypes.object,
   currentGroup: PropTypes.object,
   disableBreadcrumbs: PropTypes.bool,
-  hasChanged: PropTypes.bool,
+  grouphasChanged: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
   currentGroup: selectGroup(),
-  hasChanged: selectHasChanged(),
+  groupHasChanged: selectHasChanged(),
 });
 
 const mapDispatchToProps = {
