@@ -74,7 +74,8 @@ class ConvertToActiveStorage < ActiveRecord::Migration[5.2]
   private
 
   def key(instance, attachment)
-    instance.send("#{attachment}_paperclip").path
+    # Use paperclip path as key so ActiveStorage can find them within S3
+    instance.send("#{attachment}_paperclip").path.delete_prefix('/')
   end
 
   def checksum(attachment)
