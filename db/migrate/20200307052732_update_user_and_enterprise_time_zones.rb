@@ -29,7 +29,7 @@ class UpdateUserAndEnterpriseTimeZones < ActiveRecord::Migration[5.2]
       object.save!
     rescue => err
       say "Couldn't convert '#{object.send(timezone_attribute.to_s)}' into a valid IANA timezone string, defaulting to UTC"
-      object.send("#{timezone_attribute.to_s}=", ActiveSupport::TimeZone.find_tzinfo('UTC').name)
+      object.send("#{timezone_attribute.to_s}=", ActiveSupport::TimeZone.find_tzinfo('Etc/UTC').name)
       object.save
     end
   end
