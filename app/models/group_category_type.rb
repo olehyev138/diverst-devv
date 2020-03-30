@@ -7,16 +7,9 @@ class GroupCategoryType < ApplicationRecord
   validates_length_of :name, maximum: 191
   validates :name, presence: true
   validates :name, uniqueness: true
-  attr_accessor :category_names
+  accepts_nested_attributes_for :group_categories, allow_destroy: true
 
   after_save :create_association_with_enterprise, on: [:create, :update]
-
-  def category_names=(names)
-    @category_names = names
-    names.split(', ').each do |name|
-      self.group_categories << GroupCategory.find_or_create_by(name: name)
-    end
-  end
 
   def to_s
     name

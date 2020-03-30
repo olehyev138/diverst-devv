@@ -34,7 +34,13 @@ import {
   RESET_BUDGET_ERROR,
   GROUP_LIST_UNMOUNT,
   GROUP_FORM_UNMOUNT,
-} from './constants';
+  GROUP_CATEGORIZE_UNMOUNT,
+  GROUP_CATEGORIZE_BEGIN,
+  GROUP_CATEGORIZE_SUCCESS,
+  GROUP_CATEGORIZE_ERROR
+} from 'containers/Group/constants';
+
+/* Group listing */
 
 export function getGroupsBegin(payload) {
   return {
@@ -236,5 +242,30 @@ export function groupFormUnmount(payload) {
   return {
     type: GROUP_FORM_UNMOUNT,
     payload,
+  };
+}
+
+export function groupCategorizeUnmount() {
+  return {
+    type: GROUP_CATEGORIZE_UNMOUNT
+  };
+}
+
+export function groupCategorizeBegin(payload) {
+  return {
+    type: GROUP_CATEGORIZE_BEGIN,
+    payload,
+  };
+}
+export function groupCategorizeSuccess(payload) {
+  return {
+    type: GROUP_CATEGORIZE_SUCCESS,
+    payload,
+  };
+}
+export function groupCategorizeError(error) {
+  return {
+    type: GROUP_CATEGORIZE_ERROR,
+    error,
   };
 }
