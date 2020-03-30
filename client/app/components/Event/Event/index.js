@@ -13,6 +13,7 @@ import DeleteIcon from '@material-ui/icons/DeleteOutline';
 import ArchiveIcon from '@material-ui/icons/Archive';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
+import ExportIcon from '@material-ui/icons/SaveAlt';
 
 import classNames from 'classnames';
 
@@ -121,6 +122,18 @@ export function Event(props) {
                   startIcon={<ArchiveIcon />}
                 >
                   <DiverstFormattedMessage {...messages.archive} />
+                </Button>
+              </Permission>
+              <Permission show={permission(props.event, 'show?')}>
+                <Button
+                  variant='contained'
+                  size='large'
+                  color='primary'
+                  className={classes.buttons}
+                  startIcon={<ExportIcon />}
+                  onClick={() => props.export({ initiative_id: props.event.id })}
+                >
+                  <DiverstFormattedMessage {...messages.export} />
                 </Button>
               </Permission>
               {event.is_attending ? (
@@ -282,6 +295,7 @@ Event.propTypes = {
   }),
   createEventCommentBegin: PropTypes.func,
   deleteEventCommentBegin: PropTypes.func,
+  export: PropTypes.func,
 };
 
 export default compose(

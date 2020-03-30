@@ -27,6 +27,8 @@ import {
   getEventBegin,
   joinEventBegin,
   leaveEventBegin
+,
+  exportAttendeesBegin
 } from 'containers/Event/actions';
 
 
@@ -67,6 +69,7 @@ export function EventPage(props) {
       leaveEventBegin={props.leaveEventBegin}
       hasChanged={props.hasChanged}
       currentGroup={props.currentGroup}
+      export={props.exportAttendeesBegin}
     />
   );
 }
@@ -84,6 +87,7 @@ EventPage.propTypes = {
   isFormLoading: PropTypes.bool,
   createEventCommentBegin: PropTypes.func,
   deleteEventCommentBegin: PropTypes.func,
+  exportAttendeesBegin: PropTypes.func,
   hasChanged: PropTypes.bool,
 };
 
@@ -103,7 +107,8 @@ const mapDispatchToProps = {
   archiveEventBegin,
   eventsUnmount,
   joinEventBegin,
-  leaveEventBegin
+  leaveEventBegin,
+  exportAttendeesBegin,
 };
 
 const withConnect = connect(
