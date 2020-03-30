@@ -17,7 +17,8 @@ import {
   FINALIZE_EXPENSES_BEGIN,
   ARCHIVE_EVENT_BEGIN,
   JOIN_EVENT_BEGIN,
-  LEAVE_EVENT_BEGIN
+  LEAVE_EVENT_BEGIN,
+  EXPORT_ATTENDEES_BEGIN
 } from './constants';
 
 
@@ -33,7 +34,7 @@ import {
   finalizeExpensesSuccess, finalizeExpensesError,
   archiveEventError, archiveEventSuccess,
   joinEventError, joinEventSuccess,
-  leaveEventError, leaveEventSuccess
+  exportAttendeesSuccess, exportAttendeesError
 } from './actions';
 
 
@@ -227,6 +228,20 @@ export function* leaveEvent(action) {
   }
 }
 
+export function* exportAttendees(action) {
+  try {
+    const response = yield call(api.initiativeUsers.csvExport.bind(api.initiativeUsers), action.payload);
+
+    yield put(exportAttendeesSuccess({}));
+    yield put(showSnackbar({ message: 'Successfully exported attendees', options: { variant: 'success' } }));
+  } catch (err) {
+    yield put(exportAttendeesError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to export attendees', options: { variant: 'warning' } }));
+  }
+}
+
 export default function* eventsSaga() {
   yield takeLatest(GET_EVENTS_BEGIN, getEvents);
   yield takeLatest(GET_EVENT_BEGIN, getEvent);
@@ -239,4 +254,5 @@ export default function* eventsSaga() {
   yield takeLatest(FINALIZE_EXPENSES_BEGIN, finalizeExpenses);
   yield takeLatest(JOIN_EVENT_BEGIN, joinEvent);
   yield takeLatest(LEAVE_EVENT_BEGIN, leaveEvent);
+  yield takeLatest(EXPORT_ATTENDEES_BEGIN, exportAttendees);
 }

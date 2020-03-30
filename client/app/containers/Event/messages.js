@@ -50,6 +50,9 @@ export default defineMessages({
   archive: {
     id: `${scope}.index.button.archive`,
   },
+  export: {
+    id: `${scope}.index.button.export`,
+  },
   delete_confirm: {
     id: `${scope}.index.button.delete_confirm`,
   },
