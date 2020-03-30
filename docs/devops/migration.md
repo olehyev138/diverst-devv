@@ -35,8 +35,6 @@ We need this new database to be completely managed by Terraform & comply to Terr
 
 3) Migrate the database schema
 
-Upon deployment, migration should be done automatically and no manual action should be required.
-
 TODO: user auth migration
 
 #### File Storage Migration
