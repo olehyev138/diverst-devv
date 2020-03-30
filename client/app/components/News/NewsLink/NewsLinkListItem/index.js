@@ -20,16 +20,18 @@ import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/News/messages';
+
 import IconButton from '@material-ui/core/IconButton';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import CommentIcon from '@material-ui/icons/Comment';
 import ImageIcon from '@material-ui/icons/Image';
+import LocationOnIcon from '@material-ui/icons/LocationOn';
+import LocationOnOutlinedIcon from '@material-ui/icons/LocationOnOutlined';
+
 import { formatDateTimeString } from 'utils/dateTimeHelpers';
 import DiverstImg from 'components/Shared/DiverstImg';
 import Carousel from 'react-material-ui-carousel';
 import { injectIntl, intlShape } from 'react-intl';
-import LocationOnIcon from '@material-ui/icons/LocationOn';
-import LocationOnOutlinedIcon from '@material-ui/icons/LocationOnOutlined';
 
 const styles = theme => ({
   cardHeader: {
