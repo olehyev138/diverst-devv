@@ -852,5 +852,8 @@
   "diverst.components.DiverstFileInput.nofile": "No file selected",
   "diverst.components.DiverstTable.title": "Table",
   "diverst.components.ErrorBoundary.home": "Home",
-  "diverst.components.ErrorBoundary.message": "Oops! Something went wrong here. We're working on it and we'll get it fixed as soon as possible. You can go back or use our Help Center."
+  "diverst.components.ErrorBoundary.message": "Oops! Something went wrong here. We're working on it and we'll get it fixed as soon as possible. You can go back or use our Help Center.",
+  "diverst.components.DiverstLogoutDialog.later": "Later",
+  "diverst.components.DiverstLogoutDialog.logout": "Log out"
+
 }

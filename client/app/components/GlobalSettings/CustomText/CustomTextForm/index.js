@@ -18,7 +18,7 @@ import {
 import messages from 'containers/GlobalSettings/CustomText/messages';
 import { buildValues } from 'utils/formHelpers';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
-import DiverstPopup from 'components/Shared/DiverstPopup';
+import DiverstLogoutDialog from 'components/Shared/DiverstLogoutDialog';
 
 
 /* eslint-disable object-curly-newline */
@@ -226,7 +226,11 @@ export function CustomTextForm(props) {
       >
         {formikProps => <CustomTextFormInner {...props} {...formikProps} />}
       </Formik>
-      <DiverstPopup open={open} handleClose={handleClose} />
+      <DiverstLogoutDialog
+        open={open}
+        handleClose={handleClose}
+        title={ 'Please logout to view any changes that have been applied' }
+      />
     </React.Fragment>
   );
 }
