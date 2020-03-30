@@ -39,9 +39,14 @@ import {
   JOIN_GROUP_ERROR,
   LEAVE_GROUP_BEGIN,
   LEAVE_GROUP_SUCCESS,
-  LEAVE_GROUP_ERROR
-} from './constants';
+  LEAVE_GROUP_ERROR,
+  GROUP_CATEGORIZE_UNMOUNT,
+  GROUP_CATEGORIZE_BEGIN,
+  GROUP_CATEGORIZE_SUCCESS,
+  GROUP_CATEGORIZE_ERROR
+} from 'containers/Group/constants';
 
+/* Group listing */
 export function getGroupsBegin(payload) {
   return {
     type: GET_GROUPS_BEGIN,
@@ -283,6 +288,31 @@ export function leaveGroupSuccess(payload) {
 export function leaveGroupError(error) {
   return {
     type: LEAVE_GROUP_ERROR,
+    error,
+  };
+}
+
+export function groupCategorizeUnmount() {
+  return {
+    type: GROUP_CATEGORIZE_UNMOUNT
+  };
+}
+
+export function groupCategorizeBegin(payload) {
+  return {
+    type: GROUP_CATEGORIZE_BEGIN,
+    payload,
+  };
+}
+export function groupCategorizeSuccess(payload) {
+  return {
+    type: GROUP_CATEGORIZE_SUCCESS,
+    payload,
+  };
+}
+export function groupCategorizeError(error) {
+  return {
+    type: GROUP_CATEGORIZE_ERROR,
     error,
   };
 }
