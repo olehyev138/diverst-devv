@@ -229,7 +229,6 @@ export function CustomTextForm(props) {
       <DiverstLogoutDialog
         open={open}
         handleClose={handleClose}
-        title={ 'Please logout to view any changes that have been applied' }
       />
     </React.Fragment>
   );

@@ -18,13 +18,18 @@ import { createStructuredSelector } from 'reselect';
 
 // This component is intended for creating a custom popup with a message and logout option
 
-export function DiverstLogoutDialog(props){
+export function DiverstLogoutDialog(props) {
   const { title, message, open, handleClose } = props;
 
   return (
     <React.Fragment>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>{ title }</DialogTitle>
+        <DialogTitle>{ title || <DiverstFormattedMessage {...messages.logoutmessage} /> }</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            { message }
+          </DialogContentText>
+        </DialogContent>
         <DialogActions>
           <Button color='primary' onClick={handleClose}><DiverstFormattedMessage {...messages.later} /></Button>
           <Button color='primary' onClick={props.logoutBegin}><DiverstFormattedMessage {...messages.logout} /></Button>
