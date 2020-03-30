@@ -113,32 +113,36 @@ export function UserGroupList(props, context) {
                     >
                       <CardActionArea>
                         <CardContent className={classes.groupCardContent}>
-                          {group.banner_data && (
-                            <React.Fragment>
-                              <Hidden xsDown>
-                                <Grid item xs='auto' justify='center'>
-                                  <DiverstImg
-                                    data={group.banner_data}
-                                    maxWidth='70px'
-                                    maxHeight='70px'
-                                    minWidth='70px'
-                                    minHeight='70px'
-                                  />
-                                </Grid>
-                              </Hidden>
-                            </React.Fragment>
-                          )}
-                          {group.current_user_is_member === true && (
-                            <JoinedGroupIcon className={classes.groupCardIcon} />
-                          )}
-                          <Typography variant='h5' component='h2' display='inline' className={classes.groupCardTitle}>
-                            {group.name}
-                          </Typography>
-                          {group.description && (
-                            <Typography color='textSecondary' className={classes.groupCardDescription}>
-                              {group.description}
-                            </Typography>
-                          )}
+                          <Grid container spacing={3}>
+                            {group.banner_data && (
+                              <React.Fragment>
+                                <Hidden xsDown>
+                                  <Grid item xs='auto' justify='center'>
+                                    <DiverstImg
+                                      data={group.banner_data}
+                                      maxWidth='60px'
+                                      maxHeight='60px'
+                                      minWidth='60px'
+                                      minHeight='60px'
+                                    />
+                                  </Grid>
+                                </Hidden>
+                              </React.Fragment>
+                            )}
+                            <Grid item xs>
+                              {group.current_user_is_member === true && (
+                                <JoinedGroupIcon className={classes.groupCardIcon} />
+                              )}
+                              <Typography variant='h5' component='h2' display='inline' className={classes.groupCardTitle}>
+                                {group.name}
+                              </Typography>
+                              {group.description && (
+                                <Typography color='textSecondary' className={classes.groupCardDescription}>
+                                  {group.description}
+                                </Typography>
+                              )}
+                            </Grid>
+                          </Grid>
                         </CardContent>
                       </CardActionArea>
                     </Link>
