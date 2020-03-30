@@ -42,6 +42,15 @@ export const RESET_BUDGET_ERROR = 'app/Group/RESET_BUDGET_ERROR';
 
 export const GROUP_LIST_UNMOUNT = 'app/Group/GROUP_LIST_UNMOUNT';
 export const GROUP_FORM_UNMOUNT = 'app/Group/GROUP_FORM_UNMOUNT';
+
+export const JOIN_GROUP_BEGIN = 'app/Group/JOIN_GROUP_BEGIN';
+export const JOIN_GROUP_SUCCESS = 'app/Group/JOIN_GROUP_SUCCESS';
+export const JOIN_GROUP_ERROR = 'app/Group/JOIN_GROUP_ERROR';
+
+export const LEAVE_GROUP_BEGIN = 'app/Group/LEAVE_GROUP_BEGIN';
+export const LEAVE_GROUP_SUCCESS = 'app/Group/LEAVE_GROUP_SUCCESS';
+export const LEAVE_GROUP_ERROR = 'app/Group/LEAVE_GROUP_ERROR';
+
 export const GROUP_CATEGORIZE_UNMOUNT = 'app/Group/GROUP_CATEGORIZE_UNMOUNT';
 
 export const GROUP_CATEGORIZE_BEGIN = 'app/Group/GROUP_CATEGORIZE_BEGIN';
