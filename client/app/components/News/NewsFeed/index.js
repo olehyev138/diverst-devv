@@ -57,32 +57,48 @@ const styles = theme => ({
 });
 
 export function NewsFeed(props) {
+  function addScript(url, argumentOptions = {}) {
+    if (!Array.from(document.getElementsByTagName('script')).find(script => script.src === url)) {
+      const script = document.createElement('script');
+      const defaultOptions = {
+        async: true,
+      };
 
-  const attachedScripts = [];
+      const options = {
+        ...defaultOptions,
+        ...argumentOptions
+      };
 
-  function addScript(document, url, async = true) {
-    const script = document.createElement('script');
+      script.src = url;
 
-    script.src = url;
-    script.async = async;
+      for (const [key, value] of Object.entries(options))
+        script[key] = value;
 
-    document.body.appendChild(script);
-    attachedScripts.push(script);
+      document.body.appendChild(script);
+    }
   }
 
   useEffect(() => {
-    addScript(document, 'https://platform.twitter.com/widgets.js');
-    addScript(document, 'http://www.instagram.com/embed.js');
-    addScript(document, '//cdn.embedly.com/widgets/platform.js');
+    addScript('https://platform.twitter.com/widgets.js');
+    addScript('http://www.instagram.com/embed.js');
+    addScript('http://cdn.embedly.com/widgets/platform.js');
+    addScript(
+      'https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v6.0',
+      { async: 1, defer: 1, crossorigin: 'anonymous' }
+    );
 
-    return () => {
-      let script = attachedScripts.pop();
-      while (script) {
-        document.body.removeChild(script);
-        script = attachedScripts.pop();
-      }
-    };
+    return () => {};
+  }, []);
+
+  useEffect(() => {
+    if (window.instgrm)
+      window.instgrm.Embeds.process();
+    if (window.FB)
+      window.FB.XFBML.parse();
+
+    return () => {};
   });
+
 
   const actions = [
     {
