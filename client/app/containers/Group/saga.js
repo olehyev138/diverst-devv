@@ -4,8 +4,6 @@ import { push } from 'connected-react-router';
 
 import { showSnackbar } from 'containers/Shared/Notifier/actions';
 
-import { ROUTES } from 'containers/Shared/Routes/constants';
-
 import {
   GET_GROUPS_BEGIN,
   GET_ANNUAL_BUDGETS_BEGIN,
@@ -16,6 +14,7 @@ import {
   DELETE_GROUP_BEGIN,
   CARRY_BUDGET_BEGIN,
   RESET_BUDGET_BEGIN,
+  GROUP_CATEGORIZE_BEGIN
 } from './constants';
 
 import {
@@ -28,7 +27,10 @@ import {
   deleteGroupSuccess, deleteGroupError,
   carryBudgetSuccess, carryBudgetError,
   resetBudgetSuccess, resetBudgetError,
-} from './actions';
+  groupCategorizeSuccess, groupCategorizeError
+} from 'containers/Group/actions';
+
+import { ROUTES } from 'containers/Shared/Routes/constants';
 
 export function* getGroups(action) {
   try {
@@ -83,6 +85,21 @@ export function* createGroup(action) {
 
     // TODO: intl message
     yield put(showSnackbar({ message: 'Failed to create group', options: { variant: 'warning' } }));
+  }
+}
+
+export function* categorizeGroup(action) {
+  try {
+    const response = yield call(api.groups.updateCategories.bind(api.groups), action.payload.id, action.payload);
+
+    yield put(groupCategorizeSuccess());
+    yield put(push(ROUTES.admin.manage.groups.index.path()));
+    yield put(showSnackbar({ message: 'Group categorized', options: { variant: 'success' } }));
+  } catch (err) {
+    yield put(groupCategorizeError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to categorize group', options: { variant: 'warning' } }));
   }
 }
 
@@ -176,4 +193,5 @@ export default function* groupsSaga() {
   yield takeLatest(DELETE_GROUP_BEGIN, deleteGroup);
   yield takeLatest(CARRY_BUDGET_BEGIN, carryBudget);
   yield takeLatest(RESET_BUDGET_BEGIN, resetBudget);
+  yield takeLatest(GROUP_CATEGORIZE_BEGIN, categorizeGroup);
 }
