@@ -147,9 +147,14 @@ export function GroupCategoriesList(props, context) {
             </Grid>
           ))
             : (
-              <Typography variant='h6' align='center' color='textSecondary'>
-                <DiverstFormattedMessage {...messages.nocategories} />
-              </Typography>
+              <React.Fragment>
+                <Grid item sm>
+                  <Box mt={3} />
+                  <Typography variant='h6' align='center' color='textSecondary'>
+                    <DiverstFormattedMessage {...messages.nocategories} />
+                  </Typography>
+                </Grid>
+              </React.Fragment>
             )
           }
         </Grid>
