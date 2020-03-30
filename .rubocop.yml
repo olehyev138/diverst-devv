@@ -103,7 +103,7 @@ Layout/BlockEndNewline:
   Enabled: true
 
 Layout/ClassStructure:
-  Enabled: true
+  Enabled: false
 
 Layout/IndentationConsistency:
   Enabled: true
