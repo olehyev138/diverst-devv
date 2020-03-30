@@ -28,6 +28,7 @@ import DiverstLoader from 'components/Shared/DiverstLoader';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/News/messages';
 import { injectIntl, intlShape } from 'react-intl';
+import { addScript } from 'utils/domHelper';
 
 const styles = theme => ({
   newsItem: {
@@ -57,27 +58,6 @@ const styles = theme => ({
 });
 
 export function NewsFeed(props) {
-  function addScript(url, argumentOptions = {}) {
-    if (!Array.from(document.getElementsByTagName('script')).find(script => script.src === url)) {
-      const script = document.createElement('script');
-      const defaultOptions = {
-        async: true,
-      };
-
-      const options = {
-        ...defaultOptions,
-        ...argumentOptions
-      };
-
-      script.src = url;
-
-      for (const [key, value] of Object.entries(options))
-        script[key] = value;
-
-      document.body.appendChild(script);
-    }
-  }
-
   useEffect(() => {
     addScript('https://platform.twitter.com/widgets.js');
     addScript('http://www.instagram.com/embed.js');
