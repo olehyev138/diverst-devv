@@ -18,7 +18,17 @@ import { selectUser } from 'containers/Shared/App/selectors';
 import { selectEvent, selectIsFormLoading, selectHasChanged } from 'containers/Event/selectors';
 
 
-import { getEventBegin, deleteEventBegin, createEventCommentBegin, deleteEventCommentBegin, archiveEventBegin, eventsUnmount, joinEventBegin, leaveEventBegin } from 'containers/Event/actions';
+import {
+  getEventBegin,
+  deleteEventBegin,
+  createEventCommentBegin,
+  deleteEventCommentBegin,
+  archiveEventBegin,
+  eventsUnmount,
+  joinEventBegin,
+  leaveEventBegin,
+  exportAttendeesBegin
+} from 'containers/Event/actions';
 
 
 import Event from 'components/Event/Event';
@@ -56,6 +66,7 @@ export function EventPage(props) {
       joinEventBegin={props.joinEventBegin}
       leaveEventBegin={props.leaveEventBegin}
       hasChanged={props.hasChanged}
+      export={props.exportAttendeesBegin}
     />
   );
 }
@@ -73,6 +84,7 @@ EventPage.propTypes = {
   isFormLoading: PropTypes.bool,
   createEventCommentBegin: PropTypes.func,
   deleteEventCommentBegin: PropTypes.func,
+  exportAttendeesBegin: PropTypes.func,
   hasChanged: PropTypes.bool,
 };
 
@@ -92,7 +104,8 @@ const mapDispatchToProps = {
   archiveEventBegin,
   eventsUnmount,
   joinEventBegin,
-  leaveEventBegin
+  leaveEventBegin,
+  exportAttendeesBegin,
 };
 
 const withConnect = connect(
