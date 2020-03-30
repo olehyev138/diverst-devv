@@ -56,15 +56,16 @@ export function GroupCategoriesFormInner({ classes, values, handleChange, button
               value={values.name}
               required
             />
+          </CardContent>
+          <Divider />
+          <CardContent>
             <FieldArray
               name='group_categories_attributes'
               render={arrayHelpers => (
-                <div>
-                  <Typography color='primary' variant='body1' component='h2' className={classes.title}>
+                <React.Fragment>
+                  <Typography variant='h6' className={classes.title}>
                     {intl.formatMessage(messages.labels)}
                   </Typography>
-                  <br />
-
                   {values.group_categories_attributes && values.group_categories_attributes.length > 0 ? values.group_categories_attributes.map((category, index) => (
                     // eslint-disable-next-line react/no-array-index-key
                     <div key={index}>
@@ -76,6 +77,7 @@ export function GroupCategoriesFormInner({ classes, values, handleChange, button
                             disabled={props.isCommitting}
                             id={`group_categories_attributes[${index}].name`}
                             type='text'
+                            variant='outlined'
                             onChange={handleChange}
                             name={`group_categories_attributes.${index}.name`}
                             value={values.group_categories_attributes[index].name}
@@ -93,7 +95,7 @@ export function GroupCategoriesFormInner({ classes, values, handleChange, button
                       )}
                     </div>
                   )) : (
-                    <Typography></Typography>
+                    <React.Fragment />
                   )}
                   <br />
                   <Button
@@ -105,7 +107,7 @@ export function GroupCategoriesFormInner({ classes, values, handleChange, button
                     <DiverstFormattedMessage {...messages.add_button} />
                   </Button>
 
-                </div>
+                </React.Fragment>
               )}
             >
             </FieldArray>
