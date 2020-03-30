@@ -1,25 +1,34 @@
 ## Diverst Migration
 
-Describe steps for migrating from a legacy environment to beta
+Here we will describe the steps for migrating from a legacy environment to beta
 
-Migrating an environment from legacy to beta involves migrating two main aspects of the Diverst infrastructure: 
+This document is intended to be followed in conjunction with the environment initialization document.
 
- - Diverst Database - RDS
- - Diverst file storage - S3 bucket
+We will outline the steps for initializing & migrating the environment & delegate to the environment initialization document when applicable.
 
-#### Database
+Migrating an environment from legacy to beta involves supplementing & changing a few steps in the normal environment initialization process:
+
+- The environment database will be migrated from the legacy account & imported into Terraform
+- The S3 file storage bucket will be synced with the new bucket
+
+#### Preliminary initialization
+
+Follow the environment initialization document up to & stopping before step 'E - Run Terraform'
+
+#### Database Migration
+
+Before running Terraform & creating infrastructure, we need to migrate the database & import it.
 
 Migrating a legacy database involves:
 
  - Moving the database to the new AWS account
  - Import database into IAC control (Terraform)
- - Migrating the database schema to Diverst beta
 
-1) Moving database
+1) Moving database to new AWS account
 
 - Inside the RDS console in the legacy account, select the legacy database & create a snapshot: `beta-migration-<db-name>-snapshot`
 
-- Share the snapshot, adding the account id of the new AWS _environment account_, created it in the environment initialization playbook
+- Share the snapshot, adding the account id of the new AWS _environment account_, created in the previous step
 
 - Inside the RDS console of the new AWS environment account, navigate to shared snapshots & restore the database. Ensure to set the database identifier in accordance with Terraform configuration: `<env-name>-db`. Specifically, `<env-name>` must match the value in <env>.tfvars under the same name. If the database is set differently, Terraform will _replace_ the database instead of updating it.
 
@@ -31,13 +40,96 @@ We need this new database to be completely managed by Terraform & comply to Terr
 
 `terraform import -var-file=<env>.tfvars module.prod.module.db.aws_db_instance.db <db-identifier>`
 
-- Return to steps in environment playbook. However when running `terraform apply <env>.tfvars` - inspect generated plan closely & ensure that the database is being updated and _not_ replaced.
+#### Infrastructure initialization
 
-3) Migrate the database schema
+Return to the environment initialization document & continue to the next step, running the _Run Terraform_ step.
 
-TODO: user auth migration
+Inspect the generated plan closely & ensure that Terraform is updating the database & not replacing it. 
+
+Do not run the database initialization step & continue to _File Storage Migration_
 
 #### File Storage Migration
 
-As part of the migration we have migrated from the Paperclip gem to ActiveStorage. On top of the migration because we are migrating our infrastructure we need to migrate an environments files to a new S3 bucket in a new account.
+Because we are migrating to a new AWS account & migrating from paperclip to active storage, we need to move the environments files to a new S3 bucket.
 
+1) Add bucket policy to legacy/source bucket
+
+```
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "DelegateS3Access",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::<destination-account-id>:root"
+            },
+            "Action": [
+                "s3:ListBucket",
+                "s3:GetObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::<source-bucket>/*",
+                "arn:aws:s3:::<source-bucket>"
+            ]
+        }
+    ]
+ }
+```
+
+2) In the new AWS account, create an IAM user `s3-migration-user`. Create this user with cli access only and no permissions, download the CSV file. Attach an inline policy to this user: 
+
+````
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:ListBucket",
+                "s3:GetObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::<source-bucket>",
+                "arn:aws:s3:::<source-bucket>/*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:ListBucket",
+                "s3:PutObject",
+                "s3:PutObjectAcl"
+            ],
+            "Resource": [
+                "arn:aws:s3:::<destination-bucket>",
+                "arn:aws:s3:::<destination-bucket>/*"
+            ]
+        }
+    ]
+}
+````
+
+3) In a new terminal, authenticate with the new IAM user by exporting the keys in the CSV file previously exported. Run the following command to sync the legacy S3 bucket with the new S3 bucket
+
+```
+aws s3 sync s3://<source-bucket> s3://<destination-bucket>
+```
+
+4) Now clean up and delete the bucket policy in the legacy bucket and the s3 migration IAM user. 
+
+#### Deploy
+
+As directed in the environment initialization document, follow the deployment playbook to completion.
+
+#### Migrate the database
+
+SSH into a ec2 instance in the new environment, change directories into the app directory and run 
+
+```
+rails db:migrate
+```
+
+#### DNS
+
+Finally, run the DNS step in the environment initialization document to complete the process.
