@@ -103,6 +103,7 @@ class Enterprise < BaseClass
   validates_length_of :idp_entity_id, maximum: 191
   validates_length_of :sp_entity_id, maximum: 191
   validates_length_of :name, maximum: 191
+  validates_length_of :onboarding_pop_up_content, maximum: 65535
   validates :idp_sso_target_url, url: { allow_blank: true }
 
   has_attached_file :cdo_picture, styles: { medium: '1000x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: :private
@@ -129,6 +130,14 @@ class Enterprise < BaseClass
       update(auto_archive: false)
     else
       update(auto_archive: true)
+    end
+  end
+
+  def consent_toggle
+    if onboarding_consent_enabled?
+      update(onboarding_consent_enabled: false)
+    else
+      update(onboarding_consent_enabled: true)
     end
   end
 

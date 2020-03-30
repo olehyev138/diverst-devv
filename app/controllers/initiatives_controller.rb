@@ -9,19 +9,19 @@ class InitiativesController < ApplicationController
   layout 'erg'
 
   def index
-    authorize Initiative
+    authorize [@group], :index?, policy_class: GroupEventsPolicy
     @outcomes = @group.outcomes.includes(:pillars)
 
     set_filter
   end
 
   def new
-    authorize Initiative
+    authorize [@group], :new?, policy_class: GroupEventsPolicy
     @initiative = Initiative.new
   end
 
   def create
-    authorize Initiative
+    authorize [@group], :create?, policy_class: GroupEventsPolicy
     @initiative = Initiative.new(initiative_params)
     @initiative.owner = current_user
     @initiative.owner_group = @group
@@ -41,16 +41,16 @@ class InitiativesController < ApplicationController
   end
 
   def show
-    authorize @initiative
+    authorize [@group, @initiative], :show?, policy_class: GroupEventsPolicy
     @updates = @initiative.updates.order(created_at: :desc).limit(3).reverse # Shows the last 3 updates in chronological order
   end
 
   def edit
-    authorize @initiative
+    authorize [@group, @initiative], :edit?, policy_class: GroupEventsPolicy
   end
 
   def update
-    authorize @initiative
+    authorize [@group, @initiative], :update?, policy_class: GroupEventsPolicy
 
     AnnualBudgetManager.new(@group).re_assign_annual_budget(initiative_params['budget_item_id'], @initiative.id)
 
@@ -65,7 +65,7 @@ class InitiativesController < ApplicationController
   end
 
   def finish_expenses
-    authorize @initiative, :update?
+    authorize [@group, @initiative], :update?, policy_class: GroupEventsPolicy
 
     # skip before_save :allocate_budget_funds because
     # finish_expenses primary responsibility is to close off
@@ -76,7 +76,7 @@ class InitiativesController < ApplicationController
   end
 
   def destroy
-    authorize @initiative
+    authorize [@group, @initiative], :destroy?, policy_class: GroupEventsPolicy
 
     track_activity(@initiative, :destroy)
     if @initiative.destroy
@@ -89,11 +89,11 @@ class InitiativesController < ApplicationController
   end
 
   def todo
-    authorize @initiative, :update?
+    authorize [@group, @initiative], :update?, policy_class: GroupEventsPolicy
   end
 
   def export_attendees_csv
-    authorize @initiative, :update?
+    authorize [@group, @initiative], :update?, policy_class: GroupEventsPolicy
 
     EventAttendeeDownloadJob.perform_later(current_user.id, @initiative)
     track_activity(@initiative, :export_attendees)
@@ -102,8 +102,7 @@ class InitiativesController < ApplicationController
   end
 
   def export_csv
-    authorize Initiative, :index?
-
+    authorize [@group], :index?, policy_class: GroupEventsPolicy
     @outcomes = @group.outcomes.includes(pillars: { initiatives: :fields })
 
     set_filter
@@ -118,8 +117,9 @@ class InitiativesController < ApplicationController
   end
 
   def archive
-    authorize @initiative, :update?
+    authorize [@group, @initiative], :update?, policy_class: GroupEventsPolicy
 
+    @initiative.skip_allocate_budget_funds = true
     @initiatives = @group.initiatives.where(archived_at: nil).all
     @initiative.update(archived_at: DateTime.now)
     track_activity(@initiative, :archive)

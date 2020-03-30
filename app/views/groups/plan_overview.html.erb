@@ -1,12 +1,15 @@
 <div class="content__header">
   <h1>Overview</h1>
 </div>
-  <% if @group.annual_budgets.any? %>
-    <% @group.annual_budgets.each do |annual_budget| %>
+  <% if @annual_budgets.any? %>
+    <% @annual_budgets.each do |annual_budget| %>
     <div class="card">
       <div class="card__section">
         <h2>
           <b><%= @group.name %></b>
+          <div class='pull-right'>
+            <%= annual_budget.start_date ? (annual_budget.start_date.strftime("%m/%d/%Y") + '-' + annual_budget.end_date.strftime("%m/%d/%Y")) : annual_budget.created_at.strftime("%m/%d/%Y") %>
+          </div>
         </h2>
         <h3 style="margin-left: 10px; margin-botton: -10px;">
           <%= c_t(:erg) %> Budget |

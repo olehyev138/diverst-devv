@@ -8,6 +8,10 @@ Bundler.require(*Rails.groups)
 
 module Diverst
   class Application < Rails::Application
+    def port
+      Rails.env.test? ? 3000 : Rails::Server.new.options[:Port] || 3000
+    end
+
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
@@ -37,7 +41,7 @@ module Diverst
 
     config.active_job.queue_adapter = :sidekiq
 
-    Rails.application.routes.default_url_options[:host] = ENV['DOMAIN'] || 'localhost:3000'
+    Rails.application.routes.default_url_options[:host] = ENV['DOMAIN'] || "localhost:#{port}"
 
     config.action_dispatch.rescue_responses['Pundit::NotAuthorizedError'] = :forbidden
 

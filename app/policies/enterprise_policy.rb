@@ -63,6 +63,10 @@ class EnterprisePolicy < ApplicationPolicy
     @policy_group.auto_archive_manage?
   end
 
+  def manage_onboarding_consent?
+    enterprise_manage?
+  end
+
   def diversity_manage?
     return true if manage_all?
     return true if basic_group_leader_permission?('diversity_manage')

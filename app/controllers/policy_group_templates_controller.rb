@@ -97,7 +97,8 @@ class PolicyGroupTemplatesController < ApplicationController
         :group_settings_manage,
         :group_posts_index,
         :mentorship_manage,
-        :auto_archive_manage
+        :auto_archive_manage,
+        :onboarding_consent_manage
       )
   end
 

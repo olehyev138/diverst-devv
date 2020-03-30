@@ -80,6 +80,12 @@ class EnterprisesController < ApplicationController
     render nothing: true
   end
 
+  def enable_onboarding_consent
+    authorize @enterprise, :manage_onboarding_consent?
+    @enterprise.consent_toggle
+    render nothing: true
+  end
+
   def update_auth
     authorize @enterprise, :edit_auth?
     update_enterprise
@@ -211,6 +217,8 @@ class EnterprisesController < ApplicationController
         :auto_archive,
         :expiry_age_for_resources,
         :unit_of_expiry_age,
+        :onboarding_consent_enabled,
+        :onboarding_pop_up_content,
         theme: [
           :id,
           :primary_color,

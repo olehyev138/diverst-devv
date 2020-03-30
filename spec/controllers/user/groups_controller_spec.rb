@@ -1,4 +1,5 @@
 require 'rails_helper'
+require_dependency "#{::Rails.root}/app/controllers/user/groups_controller"
 
 RSpec.describe User::GroupsController, type: :controller do
   let!(:user) { create :user }
@@ -20,7 +21,7 @@ RSpec.describe User::GroupsController, type: :controller do
         end
 
         it "return 1 of the current user's enterprise groups" do
-          expect(assigns[:groups]).to eq [group]
+          expect(assigns[:groups]).to eq []
         end
       end
     end

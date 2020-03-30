@@ -87,7 +87,7 @@
     <div class="card__section">
       <%= simple_form_for @social_link, url: group_social_links_path do |f| %>
         <%= f.input :url, label: "URL", input_html: { autofocus: true } %>
-        <%= f.association :segments, label: "#{c_t(:segment).pluralize}", collection: @group.enterprise.segments, input_html: { class: "select2-field-segments" } %>
+        <%#= f.association :segments, label: "#{c_t(:segment).pluralize}", collection: @group.enterprise.segments, input_html: { class: "select2-field-segments" } %>
 
         <%= f.simple_fields_for :news_feed_link, @social_link.news_feed_link do |nfl| %>
           <%= nfl.hidden_field :id, :value => nfl.object.id %>

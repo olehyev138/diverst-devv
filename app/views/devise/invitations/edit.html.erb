@@ -140,7 +140,7 @@
             <div id="calendar" data-calendar-data-url="<%= onboarding_calendar_data_user_events_path(invitation_token: params[:invitation_token]) %>"></div>
 
 
-            <h2>Explore your <%= resource.enterprise.custom_text.erg %></h2>
+            <h2>Explore your <%= resource.enterprise.custom_text.erg.pluralize %></h2>
 
             <% resource.enterprise.groups.all_parents.each do |group| %>
               <div class="media-object" data-group-id="<%= group.id %>">
@@ -156,12 +156,12 @@
                         <a
                           class="btn btn-sm btn--primary nested_show"
                           style="cursor: pointer; margin-bottom: 20px;"
-                        id="<%= group.id %>">Show Sub-<%= c_t(:erg).pluralize %></a>
+                        id="<%= group.id %>">Show <%= resource.enterprise.custom_text.sub_erg.pluralize %></a>
 
                         <a
                           class="btn btn-sm btn--primary nested_hide"
                           style="cursor: pointer; margin-bottom: 20px; display:none;"
-                        id="<%= group.id %>">Hide Sub-<%= c_t(:erg).pluralize %></a>
+                        id="<%= group.id %>">Hide <%= resource.enterprise.custom_text.sub_erg.pluralize %></a>
 
                       <% end %>
 
@@ -179,7 +179,7 @@
                         <%= image_tag child.logo.expiring_url(3600, :thumb) %>
                       </div>
                       <div class="flex-row__cell flex-row__cell--grow">
-                        <h4><%= child.name %> - Sub-<%= c_t(:erg) %> for <%= group.name %></h4>
+                        <h4><%= child.name %></h4>
                         <p><%= child.description %></p>
                       </div>
                     </div>
@@ -188,12 +188,22 @@
                <% end %>
 
             <% end %>
-
-            <%= f.button :submit, "Create my account", class: "btn--secondary btn--large btn--full" %>
-          <% end %>
+            <% unless resource.enterprise.onboarding_consent_enabled? %>   
+              <%= f.button :submit, "Create my account", class: "btn--secondary btn--large btn--full" %>
+            <% end %>    
+            <% end %>
+          <br>
+          <% if resource.enterprise.onboarding_consent_enabled? %>
+            <button class="btn--secondary btn--large btn--full" 
+            data-toggle="modal" data-target="consentModal" id="consentModalPop">
+              <p>CREATE MY ACCOUNT</p>
+            </button>
+          <% end %>  
         </div>
       </div>
     </div>
+
+    <%= render 'devise/invitations/consent_modal' %>
 
     <script>
       function toggle_calendar() {
@@ -201,6 +211,16 @@
           // Animation complete.
         });
       }
+ 
+      $("#consentModalPop").click(function(e){
+        let form = document.getElementById('edit_user');
+        $form = $(form)
+        if( !is_valid($form) ) {
+          e.preventDefault();
+        } else {
+          $("#consentModal").modal("show");
+        }
+      });
 
       $(document).ready(function(){
         applyFullCalendar();

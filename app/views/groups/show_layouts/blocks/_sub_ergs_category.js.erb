@@ -1,24 +1,11 @@
 <script>
-$('a.sub_ergs').click(function(e){
-    var id = $(this).attr('id');
-    $('div.remaining_children_' + id).show();
-    $(this).siblings('a.hide_sub_ergs').show();
-    $(this).hide();
-  }); //endof click
-
-  $('a.hide_sub_ergs').click(function(e){
-    var id = $(this).attr('id');
-    $('div.remaining_children_' + id).hide();
-    $(this).siblings('a.sub_ergs').show();
-    $(this).hide();
-  }); //endof click
-
 $('a.nested_show').click(function(e){
     var id = $(this).attr('id');
     $('div.children_' + id).show();
     $(this).siblings('a.nested_hide').show();
     $(this).hide();
   }); //endof click
+  
   $('a.nested_hide').click(function(e){
     var id = $(this).attr('id');
     $('div.children_' + id).hide();

@@ -171,7 +171,7 @@ class GroupsController < ApplicationController
         base_show
         @posts = with_segments
       else
-        @upcoming_events = @group.initiatives.upcoming.limit(3) + @group.participating_initiatives.upcoming.limit(3)
+        @upcoming_and_ongoing_events = Initiative.all_upcoming_events_for_group(@group.id) + Initiative.all_ongoing_events_for_group(@group.id)
         @user_groups = []
         @messages = []
         @user_group = []
@@ -266,6 +266,7 @@ class GroupsController < ApplicationController
 
   def plan_overview
     authorize [@group], :index?, policy_class: GroupBudgetPolicy
+    @annual_budgets = @group.annual_budgets.order(created_at: :desc)
   end
 
   def destroy
@@ -412,7 +413,7 @@ class GroupsController < ApplicationController
   end
 
   def base_show
-    @upcoming_events = @group.initiatives.upcoming.limit(3) + @group.participating_initiatives.upcoming.limit(3)
+    @upcoming_and_ongoing_events = Initiative.all_upcoming_events_for_group(@group.id) + Initiative.all_ongoing_events_for_group(@group.id)
     @messages = @group.messages.includes(:owner).limit(3)
     @user_group = @group.user_groups.find_by(user: current_user)
     @leaders = @group.group_leaders.includes(:user).visible

@@ -68,6 +68,22 @@
 </div>
 
 <div class="content__header">
+  <h1>Onboarding Pop Up Message</h1>
+</div>
+
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      <%= simple_form_for @enterprise, :url => update_branding_info_enterprise_path(@enterprise, source: 'edit_branding') do |f| %>
+        <%= f.input :onboarding_pop_up_content, as: :ckeditor, label: "Onboarding Pop Up" %>
+
+        <%= f.button :submit, "Save Onboarding Pop Content" %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<div class="content__header">
   <h1>Edit Program Sponsor details</h1>
 </div>
 
@@ -88,8 +104,7 @@
 
       <%= f.input :cdo_message, label: "Onboarding sponsor message" %>
       <%= f.input :onboarding_sponsor_media, label: "Upload onboarding video" %>
-
-        <%= f.input :privacy_statement, as: :ckeditor, label: "#{c_t(:privacy_statement)}" %>
+      <%= f.input :privacy_statement, as: :ckeditor, label: "#{c_t(:privacy_statement)}" %>
 
         <%= f.button :submit, "Save sponsor info" %>
       <% end %>

@@ -135,7 +135,6 @@ class BudgetsController < ApplicationController
 
   def update_annual_budget
     authorize [@group], :update?, policy_class: GroupBudgetPolicy
-
     if AnnualBudgetManager.new(@group).edit(annual_budget_params)
       track_activity(@group, :annual_budget_update)
       flash[:notice] = 'Your budget was updated'
@@ -181,7 +180,9 @@ class BudgetsController < ApplicationController
       .require(:group)
       .permit(
         :annual_budget,
-        :leftover_money
+        :leftover_money,
+        :start_date,
+        :end_date
       )
   end
 

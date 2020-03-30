@@ -9,6 +9,9 @@ class SocialLink < BaseClass
   has_many :segments, through: :social_link_segments, before_remove: :remove_segment_association
   has_many :user_reward_actions, dependent: :destroy
 
+  belongs_to :author, class_name: 'User', required: true, counter_cache: true
+  belongs_to :group
+
   accepts_nested_attributes_for :news_feed_link, allow_destroy: true
 
   validate :correct_url?
@@ -16,9 +19,8 @@ class SocialLink < BaseClass
   validates :author_id, presence: true
 
   before_create :build_default_link, :add_trailing_slash
+  after_create :hack_temp_solution
 
-  belongs_to :author, class_name: 'User', required: true, counter_cache: true
-  belongs_to :group
 
   after_destroy :remove_news_feed_link
 
@@ -67,13 +69,19 @@ class SocialLink < BaseClass
     self.url = File.join(self.url, '')
   end
 
+  def hack_temp_solution
+    if small_embed_code.include? '<a href=https://www.linkedin.com/signup/cold-join>Sign Up | LinkedIn</a>'
+      sleep(1)
+      save
+    end
+  end
+
   private
 
   def build_default_link
-    return if group_id.nil?
+    return if news_feed_link.present?
 
-    build_news_feed_link(news_feed_id: group.news_feed.id)
-    true
+    create_news_feed_link(news_feed_id: group.news_feed.id)
   end
 
   def remove_news_feed_link

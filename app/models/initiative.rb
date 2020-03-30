@@ -62,12 +62,30 @@ class Initiative < BaseClass
     .where(initiative_conditions.join(' OR '))
   }
   scope :order_recent, -> { order(start: :desc) }
+  scope :all_upcoming_events_for_group, ->(group_id) {
+    group = Group.find(group_id)
+    upcoming_events = group.initiatives.upcoming.limit(3) + group.participating_initiatives.upcoming.limit(3)
+    upcoming_events.uniq
+  }
+
+  scope :all_ongoing_events_for_group, ->(group_id) {
+    group = Group.find(group_id)
+    ongoing_events = group.initiatives.ongoing + group.participating_initiatives.ongoing
+    ongoing_events.uniq
+  }
+
+  scope :all_past_events_for_group, ->(group_id) {
+    group = Group.find(group_id)
+    past_events = group.initiatives.past + group.participating_initiatives.past
+    past_events.uniq
+  }
 
   # we don't want to run this callback when finish_expenses! is triggered in initiatives_controller.rb, finish_expense action
   before_save { allocate_budget_funds unless skip_allocate_budget_funds }
 
-  # Slack Call Back
+  # Integration Call Backs
   after_create :post_new_event_to_slack, unless: Proc.new { Rails.env.test? }
+  after_commit :update_outlook, on: :update
 
   after_destroy :update_annual_budget
 
@@ -560,6 +578,10 @@ class Initiative < BaseClass
     participating_groups.each do |gr|
       gr.send_slack_webhook_message message
     end
+  end
+
+  def update_outlook
+    OutlookEventUpdateJob.perform_later(id)
   end
 
   def update_annual_budget

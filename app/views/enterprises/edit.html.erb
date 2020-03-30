@@ -57,7 +57,7 @@
             <% if EnterprisePolicy.new(current_user, current_user.enterprise).auto_archive_settings_manage? %>
                 <div id="auto_archive_switch">
                     <%= f.hidden_field :auto_archive, value: 0 %>
-                    <%= f.input :auto_archive, label: 'Auto Archive Switch' %>
+                    <%= f.input :auto_archive, label: 'Auto archive switch' %>
                 </div>
 
                 <div id="auto_archive_settings" style='<%= @enterprise.auto_archive? ? "display: block" : "display: none" %>'>
@@ -65,7 +65,14 @@
                     <%= f.input :unit_of_expiry_age %>
                     <%= f.input :expiry_age_for_resources %>
                 </div>
-            <% end %>    
+            <% end %>  
+            <br>
+            <% if EnterprisePolicy.new(current_user, current_user.enterprise).enterprise_manage? %>
+              <div id="onboarding_consent" >
+                <%= f.hidden_field :onboarding_consent_enabled, value: 0 %>
+                <%= f.input :onboarding_consent_enabled, label: 'Enable onboarding consent' %>
+              </div>
+            <% end %>  
             <br>
             
             <%= f.button :submit %>
@@ -81,6 +88,10 @@
     $("#auto_archive_switch").on("change", function(e){
       $("#auto_archive_settings").toggle();
       $.ajax({url: '<%= auto_archive_switch_enterprise_path(@enterprise) %>', type: 'PATCH'});
+    });
+
+    $("#onboarding_consent").on('change', function(e){
+      $.ajax({url: '<%= enable_onboarding_consent_enterprise_path(@enterprise) %>', type: 'PATCH'});
     });
   });
 </script>

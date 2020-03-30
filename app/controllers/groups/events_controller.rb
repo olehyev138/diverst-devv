@@ -1,9 +1,8 @@
 class Groups::EventsController < ApplicationController
   include HtmlSanitizingHelper
-
   before_action :authenticate_user!
   before_action :set_group
-  before_action :set_event, only: [:edit, :update, :destroy, :show, :export_ics]
+  before_action :set_event, only: [:edit, :update, :destroy, :show, :export_ics, :add_to_outlook]
   after_action :visit_page, only: [:index, :show]
 
   layout 'erg'
@@ -11,13 +10,13 @@ class Groups::EventsController < ApplicationController
   def index
     if GroupPolicy.new(current_user, @group).is_an_accepted_member? || GroupPolicy.new(current_user, @group).manage?
       # TODO Those events are never used!
-      @upcoming_events = @group.initiatives.upcoming + @group.participating_initiatives.upcoming
-      @past_events = @group.initiatives.past + @group.participating_initiatives.past
-      @ongoing_events = @group.initiatives.ongoing + @group.participating_initiatives.ongoing
+      @upcoming_events = Initiative.all_upcoming_events_for_group(@group.id)
+      @past_events = Initiative.all_past_events_for_group(@group.id)
+      @ongoing_events = Initiative.all_ongoing_events_for_group(@group.id)
     else
-      @upcoming_events = @group.initiatives.upcoming + @group.participating_initiatives.upcoming
-      @past_events = @group.initiatives.past + @group.participating_initiatives.past
-      @ongoing_events = @group.initiatives.ongoing + @group.participating_initiatives.ongoing
+      @upcoming_events = Initiative.all_upcoming_events_for_group(@group.id)
+      @past_events = Initiative.all_past_events_for_group(@group.id)
+      @ongoing_events = Initiative.all_ongoing_events_for_group(@group.id)
     end
   end
 
@@ -52,9 +51,21 @@ class Groups::EventsController < ApplicationController
   def show
     authorize @event
 
+    @participation = current_user.initiative_users.find_by(initiative_id: @event.id)
+    @has_outlook = OutlookAuthenticator.has_outlook
     @all_comments = @event.comments
     @approved_comments = @event.comments.approved
     @comment = InitiativeComment.new(initiative: @event)
+  end
+
+  def add_to_outlook
+    @participation = @event.initiative_users.find_by(user: current_user)
+    if @participation.update_outlook
+      flash[:notice] = 'Successfully added event to your calendar'
+    else
+      flash[:alert] = 'Failed to Add Event'
+    end
+    redirect_to :back
   end
 
   def destroy
