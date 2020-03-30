@@ -50,7 +50,7 @@ gem 'yam', '~> 2.5' # Yammer ruby SDK
 gem 'httparty', '~> 0.13' # HTTP request library
 gem 'liquid', '~> 3.0', '>= 3.0.6' # Templating engine used for email templates
 gem 'autoprefixer-rails', '~> 6.3', '>= 6.3.3.1' # Automatically adds vendor prefixes to CSS declarations
-gem 'fog', '~> 1.37' # AWS SDK
+gem 'fog', '~> 1.40' # AWS SDK
 gem 'validate_url', '~> 1.0', '>= 1.0.2' # Active Model validation for URLs
 gem 'linkedin-oauth2', '~> 1.0' # OAuth for LinkedIn
 # gem 'omniauth-oauth2', '1.3.1' # Temporary fix to address: https://github.com/decioferreira/omniauth-linkedin-oauth2/issues/28
