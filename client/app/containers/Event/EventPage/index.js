@@ -26,8 +26,7 @@ import {
   eventsUnmount,
   getEventBegin,
   joinEventBegin,
-  leaveEventBegin
-,
+  leaveEventBegin,
   exportAttendeesBegin
 } from 'containers/Event/actions';
 
