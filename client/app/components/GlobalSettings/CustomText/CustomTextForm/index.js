@@ -186,6 +186,16 @@ export function CustomTextFormInner({ handleSubmit, handleChange, handleBlur, va
 }
 
 export function CustomTextForm(props) {
+  const [open, setOpen] = React.useState(false);
+
+  function handleClickOpen() {
+    setOpen(true);
+  }
+
+  function handleClose() {
+    setOpen(false);
+  }
+
   const customText = dig(props, 'customText');
 
   const initialValues = buildValues(customText, {
@@ -203,17 +213,21 @@ export function CustomTextForm(props) {
     sub_erg: { default: 'Sub-Group TEST' },
     privacy_statement: { default: 'Privacy Statement TEST' }
   });
-
   return (
-    <Formik
-      initialValues={initialValues}
-      enableReinitialize
-      onSubmit={(values, actions) => {
-        props.customTextAction(values);
-      }}
-    >
-      {formikProps => <CustomTextFormInner {...props} {...formikProps} />}
-    </Formik>
+    <React.Fragment>
+      <Formik
+        initialValues={initialValues}
+        enableReinitialize
+        onSubmit={(values, actions) => {
+          props.customTextAction(values);
+          handleClickOpen();
+        }
+        }
+      >
+        {formikProps => <CustomTextFormInner {...props} {...formikProps} />}
+      </Formik>
+      <DiverstPopup open={open} handleClose={handleClose} />
+    </React.Fragment>
   );
 }
 

@@ -11,18 +11,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 // This component is intended for creating a custom popup with a message and logout option
 
 export function DiverstPopup(props) {
-  const { title, message } = props;
-
-  const [open, setOpen] = React.useState(false);
-
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
+  const { title, message, open, handleClose } = props;
 
   return (
     <React.Fragment>
@@ -36,6 +25,8 @@ export function DiverstPopup(props) {
 DiverstPopup.propTypes = {
   title: PropTypes.string,
   message: PropTypes.string,
+  open: PropTypes.bool,
+  handleClose: PropTypes.func,
 };
 
 export default compose(
