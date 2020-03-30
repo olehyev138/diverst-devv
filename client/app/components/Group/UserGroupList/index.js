@@ -12,7 +12,7 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import {
   Card, CardContent, CardActionArea,
-  Typography, Grid, Link, Collapse, Box,
+  Typography, Grid, Link, Collapse, Box, Hidden,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -25,6 +25,7 @@ import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import DiverstPagination from 'components/Shared/DiverstPagination';
 
 import DiverstLoader from 'components/Shared/DiverstLoader';
+import DiverstImg from 'components/Shared/DiverstImg';
 
 const styles = theme => ({
   errorButton: {
@@ -112,6 +113,21 @@ export function UserGroupList(props, context) {
                     >
                       <CardActionArea>
                         <CardContent className={classes.groupCardContent}>
+                          {group.banner_data && (
+                            <React.Fragment>
+                              <Hidden xsDown>
+                                <Grid item xs='auto' justify='center'>
+                                  <DiverstImg
+                                    data={group.banner_data}
+                                    maxWidth='70px'
+                                    maxHeight='70px'
+                                    minWidth='70px'
+                                    minHeight='70px'
+                                  />
+                                </Grid>
+                              </Hidden>
+                            </React.Fragment>
+                          )}
                           {group.current_user_is_member === true && (
                             <JoinedGroupIcon className={classes.groupCardIcon} />
                           )}
