@@ -688,6 +688,7 @@
   "diverst.containers.Event.index.button.edit": "Edit Event",
   "diverst.containers.Event.index.button.delete": "Delete Event",
   "diverst.containers.Event.index.button.archive": "Archive Event",
+  "diverst.containers.Event.index.button.export": "Export Attendees",
   "diverst.containers.Event.index.button.join": "Join Event",
   "diverst.containers.Event.index.button.leave": "Leave Event",
   "diverst.containers.Event.index.button.delete_confirm": "Delete event?",

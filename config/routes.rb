@@ -136,6 +136,7 @@ Diverst::Application.routes.draw do
       resources :initiative_users do
         collection do
           post 'remove'
+          get 'export_csv'
         end
       end
       resources :invitation_segments_groups
