@@ -25,6 +25,8 @@ import { injectIntl, intlShape } from 'react-intl';
 import IconButton from '@material-ui/core/IconButton';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import LocationOnOutlinedIcon from '@material-ui/icons/LocationOnOutlined';
+import Interweave from 'interweave';
+
 const styles = theme => ({
   centerVertically: {
     padding: 3,
@@ -52,93 +54,129 @@ export function SocialLinkListItem(props) {
     setPinned(false);
   }
 
-  return (
-    <Card>
-      <CardContent className={classes.cardContent}>
-        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-        <Link href={socialLink.url} target='_blank'>
-          <Typography variant='h6'>
-            {socialLink.url}
-          </Typography>
-        </Link>
-        <Grid container justify='space-between'>
-          <Grid item>
-            {socialLink.author ? (
-              <Typography variant='body2' color='textSecondary' className={classes.centerVertically}>
-                {`Submitted by ${socialLink.author.first_name} ${socialLink.author.last_name}`}
-              </Typography>
-            ) : null }
-          </Grid>
-          <Grid item>
-            <Grid container>
-              <Grid item>
-                {props.pinNewsItemBegin && (
-                  <IconButton
-                    size='small'
-                    onClick={() => {
-                      if (pinned)
-                        props.unpinNewsItemBegin({ id: newsItemId });
-                      else
-                        props.pinNewsItemBegin({ id: newsItemId });
-                    }}
-                  >
-                    { pinned ? <LocationOnIcon /> : <LocationOnOutlinedIcon />}
-                  </IconButton>
-                )}
-              </Grid>
-              <Grid item>
-                <Typography variant='body2' color='textSecondary' className={classes.centerVertically} align='right'>
-                  {formatDateTimeString(socialLink.created_at)}
-                </Typography>
-              </Grid>
-            </Grid>
-          </Grid>
-        </Grid>
-      </CardContent>
-      <CardActions>
-        {!props.readonly && (
-          <React.Fragment>
-            <Button
-              size='small'
-              color='primary'
-              to={links.socialLinkEdit(newsItem.id)}
-              component={WrappedNavLink}
-            >
-              <DiverstFormattedMessage {...messages.edit} />
-            </Button>
-            <Button
-              size='small'
-              color='primary'
-              onClick={() => {
-                props.archiveNewsItemBegin({ id: newsItemId });
-              }}
-            >
-              <DiverstFormattedMessage {...messages.archive} />
-            </Button>
-            <Button
-              size='small'
-              onClick={() => {
-                /* eslint-disable-next-line no-alert, no-restricted-globals */
-                if (confirm('Delete social link?'))
-                  props.deleteSocialLinkBegin(newsItem.social_link);
-              }}
-            >
-    Delete
-            </Button>
-          </React.Fragment>
-        )}
-        {!props.readonly && props.newsItem.approved !== true && (
+  const embeddedCode = (
+    <Grid
+      container
+      spacing={0}
+      direction='column'
+      alignItems='center'
+      justify='center'
+    >
+      <Grid item>
+        <Interweave
+          content={socialLink.embed_code}
+          allowList={['iframe', 'div', 'blockquote', 'h4', 'a', 'p']}
+        />
+      </Grid>
+    </Grid>
+  );
+
+  const rawLink = (
+    <Link href={socialLink.url} target='_blank'>
+      <Typography variant='h6'>
+        {socialLink.url}
+      </Typography>
+    </Link>
+  );
+
+  const author = (
+    socialLink.author ? (
+      <Grid item>
+        <Typography variant='body2' color='textSecondary' className={classes.centerVertically}>
+          {`Submitted by ${socialLink.author.first_name} ${socialLink.author.last_name}`}
+        </Typography>
+      </Grid>
+    ) : null
+  );
+
+  const pinButtons = (
+    <Grid item>
+      {props.pinNewsItemBegin && (
+        <IconButton
+          size='small'
+          onClick={() => {
+            if (pinned)
+              props.unpinNewsItemBegin({ id: newsItemId });
+            else
+              props.pinNewsItemBegin({ id: newsItemId });
+          }}
+        >
+          { pinned ? <LocationOnIcon /> : <LocationOnOutlinedIcon />}
+        </IconButton>
+      )}
+    </Grid>
+  );
+
+  const date = (
+    <Grid item>
+      <Typography variant='body2' color='textSecondary' className={classes.centerVertically} align='right'>
+        {formatDateTimeString(socialLink.created_at)}
+      </Typography>
+    </Grid>
+  );
+
+  const actions = (
+    <CardActions>
+      {!props.readonly && (
+        <React.Fragment>
+          <Button
+            size='small'
+            color='primary'
+            to={links.socialLinkEdit(newsItem.id)}
+            component={WrappedNavLink}
+          >
+            <DiverstFormattedMessage {...messages.edit} />
+          </Button>
+          <Button
+            size='small'
+            color='primary'
+            onClick={() => {
+              props.archiveNewsItemBegin({ id: newsItemId });
+            }}
+          >
+            <DiverstFormattedMessage {...messages.archive} />
+          </Button>
           <Button
             size='small'
             onClick={() => {
               /* eslint-disable-next-line no-alert, no-restricted-globals */
-              props.updateNewsItemBegin({ approved: true, id: newsItemId, group_id: groupId });
+              if (confirm('Delete social link?'))
+                props.deleteSocialLinkBegin(newsItem.social_link);
             }}
           >
-            {<DiverstFormattedMessage {...messages.approve} />}
+            Delete
           </Button>
-        )}
-      </CardActions>
+        </React.Fragment>
+      )}
+      {!props.readonly && props.newsItem.approved !== true && (
+        <Button
+          size='small'
+          onClick={() => {
+            /* eslint-disable-next-line no-alert, no-restricted-globals */
+            props.updateNewsItemBegin({ approved: true, id: newsItemId, group_id: groupId });
+          }}
+        >
+          {<DiverstFormattedMessage {...messages.approve} />}
+        </Button>
+      )}
+    </CardActions>
+  );
+
+  return (
+    <Card>
+      <CardContent className={classes.cardContent}>
+        { socialLink.embed_code ? embeddedCode : rawLink }
+        <Grid container justify='space-between'>
+          { author }
+          <Grid item>
+            <Grid container>
+              {pinButtons}
+              {date}
+            </Grid>
+          </Grid>
+        </Grid>
+      </CardContent>
+      { actions }
     </Card>
   );
 }

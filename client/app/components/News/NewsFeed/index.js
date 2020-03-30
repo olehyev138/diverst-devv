@@ -57,6 +57,33 @@ const styles = theme => ({
 });
 
 export function NewsFeed(props) {
+
+  const attachedScripts = [];
+
+  function addScript(document, url, async = true) {
+    const script = document.createElement('script');
+
+    script.src = url;
+    script.async = async;
+
+    document.body.appendChild(script);
+    attachedScripts.push(script);
+  }
+
+  useEffect(() => {
+    addScript(document, 'https://platform.twitter.com/widgets.js');
+    addScript(document, 'http://www.instagram.com/embed.js');
+    addScript(document, '//cdn.embedly.com/widgets/platform.js');
+
+    return () => {
+      let script = attachedScripts.pop();
+      while (script) {
+        document.body.removeChild(script);
+        script = attachedScripts.pop();
+      }
+    };
+  });
+
   const actions = [
     {
       icon: <MessageIcon />,
