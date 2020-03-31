@@ -6,10 +6,10 @@ class SocialMedia::Importer
   include ApplicationHelper
 
   MEDIA_MAX_WIDTH = 380
-
   SMALL_MEDIA_OPTIONS = {
-    maxwidth: MEDIA_MAX_WIDTH
+      maxwidth: MEDIA_MAX_WIDTH
   }
+  DEFAULT_OPTIONS = {}
 
   OEmbed::Providers.register_all
   OEmbed::Providers.register_fallback(
@@ -20,10 +20,9 @@ class SocialMedia::Importer
     e = ApplicationHelper::MissingKeyError.new 'EMBEDLY_KEY'
     Rollbar.warn(e)
   end
-  @@embedly_api = Embedly::API.new  key: ENV['EMBEDLY_KEY']
 
   def self.url_to_embed(url, small: false)
-    options = small ? SMALL_MEDIA_OPTIONS : {}
+    options = small ? SMALL_MEDIA_OPTIONS : DEFAULT_OPTIONS
 
     if matches_url? url
       resource = fetch_oembed_resource(url, options)
@@ -44,11 +43,13 @@ class SocialMedia::Importer
     else
       case resource.type
       when 'rich', 'video'
-        resource.html
+        small ?
+            resource.html.gsub(/ width="[0-9]*?"/, ' width="100%"').gsub(/ height="[0-9]*?"/, ' height="100%"') :
+            resource.html
       when 'photo'
         "<img src=\"#{resource.url}\">"
       else
-        resource&.html || url
+        resource.html || url
       end
     end
   end
@@ -142,7 +143,8 @@ class SocialMedia::Importer
     url = url[0...-1] if url[-1] == '/'
     begin
       options[:url] = url
-      obj = (@@embedly_api.extract options)[0]
+      embedly_api = Embedly::API.new  key: ENV['EMBEDLY_KEY']
+      obj = (embedly_api.extract options)[0]
 
       if obj.dig(:error_message).present?
         nil

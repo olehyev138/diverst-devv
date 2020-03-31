@@ -55,7 +55,7 @@ export function SocialLinkListItem(props) {
 
   const embeddedCode = (
     <DiverstHTMLEmbedder
-      html={socialLink.embed_code}
+      html={props.small ? socialLink.small_embed_code : socialLink.embed_code}
       gridProps={{
         spacing: 0,
         direction: 'column',
@@ -187,6 +187,7 @@ SocialLinkListItem.propTypes = {
   }),
   newsItem: PropTypes.object,
   readonly: PropTypes.bool,
+  small: PropTypes.bool,
   deleteSocialLinkBegin: PropTypes.func,
   updateNewsItemBegin: PropTypes.func,
   archiveNewsItemBegin: PropTypes.func,

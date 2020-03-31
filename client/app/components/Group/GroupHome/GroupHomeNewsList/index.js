@@ -116,6 +116,7 @@ export function NewsFeed(props) {
           socialLink={item.social_link}
           links={props.links}
           newsItem={item}
+          small
           groupId={item.news_feed.group_id}
           readonly={props.readonly}
           deleteSocialLinkBegin={props.deleteSocialLinkBegin}

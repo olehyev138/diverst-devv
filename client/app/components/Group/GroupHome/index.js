@@ -29,6 +29,9 @@ const styles = theme => ({
   dataHeaders: {
     paddingBottom: theme.spacing(1),
   },
+  iframe: {
+    width: 'null !important'
+  },
 });
 
 export function GroupHome({ classes, ...props }) {
