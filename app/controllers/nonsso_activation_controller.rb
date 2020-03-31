@@ -5,8 +5,9 @@ class NonssoActivationController < ApplicationController
   end
 
   def activate
-    if user = User.find_by(
-                           email: params[:user][:email])
+    if user = User.find_by(employee_id: params[:user][:employee_id],
+                           email: params[:user][:email],
+                           dob: params[:user][:dob])
 
       user&.update notifications_email: params[:email]
       flash[:notice] = 'You will receive an email shortly with a link to activate your account.'
