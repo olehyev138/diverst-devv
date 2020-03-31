@@ -10,10 +10,12 @@ import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/News/reducer';
 import saga from 'containers/News/saga';
+import likeSaga from 'containers/Shared/Like/saga';
 
 import { selectPaginatedNewsItems, selectNewsItemsTotal, selectIsLoading, selectHasChanged } from 'containers/News/selectors';
 import { deleteSocialLinkBegin, getNewsItemsBegin, newsFeedUnmount, deleteNewsLinkBegin, deleteGroupMessageBegin,
   updateNewsItemBegin, archiveNewsItemBegin, pinNewsItemBegin, unpinNewsItemBegin } from 'containers/News/actions';
+import { likeNewsItemBegin, unlikeNewsItemBegin } from 'containers/Shared/Like/actions';
 
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
@@ -35,6 +37,7 @@ const defaultParams = Object.freeze({
 export function NewsFeedPage(props, context) {
   useInjectReducer({ key: 'news', reducer });
   useInjectSaga({ key: 'news', saga });
+  useInjectSaga({ key: 'likes', saga: likeSaga });
   const rs = new RouteService(useContext);
 
   const links = {
@@ -116,6 +119,8 @@ export function NewsFeedPage(props, context) {
         archiveNewsItemBegin={props.archiveNewsItemBegin}
         pinNewsItemBegin={props.pinNewsItemBegin}
         unpinNewsItemBegin={props.unpinNewsItemBegin}
+        likeNewsItemBegin={props.likeNewsItemBegin}
+        unlikeNewsItemBegin={props.unlikeNewsItemBegin}
       />
     </React.Fragment>
   );
@@ -130,6 +135,8 @@ NewsFeedPage.propTypes = {
   deleteNewsLinkBegin: PropTypes.func,
   deleteSocialLinkBegin: PropTypes.func,
   updateNewsItemBegin: PropTypes.func,
+  likeNewsItemBegin: PropTypes.func,
+  unlikeNewsItemBegin: PropTypes.func,
   isLoading: PropTypes.bool,
   hasChanged: PropTypes.bool,
   archiveNewsItemBegin: PropTypes.func,
@@ -160,6 +167,8 @@ const mapDispatchToProps = dispatch => ({
   archiveNewsItemBegin: payload => dispatch(archiveNewsItemBegin(payload)),
   pinNewsItemBegin: payload => dispatch(pinNewsItemBegin(payload)),
   unpinNewsItemBegin: payload => dispatch(unpinNewsItemBegin(payload)),
+  likeNewsItemBegin: payload => dispatch(likeNewsItemBegin(payload)),
+  unlikeNewsItemBegin: payload => dispatch(unlikeNewsItemBegin(payload)),
 });
 
 const withConnect = connect(
