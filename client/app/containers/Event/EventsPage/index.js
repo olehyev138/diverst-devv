@@ -97,7 +97,7 @@ export function EventsPage(props) {
     setParams(newParams);
   };
 
-  const List = props.listComponent || EventsList
+  const List = props.listComponent || EventsList;
 
   return (
     <List
@@ -125,7 +125,7 @@ EventsPage.propTypes = {
   }),
   readonly: PropTypes.bool,
   onlyUpcoming: PropTypes.bool,
-  listComponent: PropTypes.any,
+  listComponent: PropTypes.elementType,
 };
 
 const mapStateToProps = createStructuredSelector({

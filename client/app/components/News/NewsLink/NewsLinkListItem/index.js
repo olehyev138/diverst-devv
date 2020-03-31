@@ -76,7 +76,7 @@ export function NewsLinkListItem(props) {
       <CardHeader
         className={classes.cardHeader}
         title={<Link href={newsLink.url} target='_blank'>{newsLink.title}</Link>}
-        titleTypographyProps={{ color: 'primary' }}
+        titleTypographyProps={{ variant: 'body1', color: 'primary' }}
       >
       </CardHeader>
       <CardContent className={classes.cardContent}>

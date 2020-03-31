@@ -18,6 +18,7 @@ import RemoveIcon from '@material-ui/icons/Remove';
 import { DiverstCSSGrid, DiverstCSSCell } from 'components/Shared/DiverstCSSGrid';
 import { withStyles } from '@material-ui/core/styles';
 import EventsList from 'components/Group/GroupHome/GroupHomeEventsList';
+import NewsFeed from 'components/Group/GroupHome/GroupHomeNewsList';
 
 const styles = theme => ({
   title: {
@@ -67,6 +68,7 @@ export function GroupHome({ classes, ...props }) {
         </Typography>
         <NewsPage
           currentGroup={props.currentGroup}
+          listComponent={NewsFeed}
           readonly
         />
       </CardContent>

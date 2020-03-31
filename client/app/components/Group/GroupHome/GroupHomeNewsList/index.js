@@ -5,25 +5,21 @@
  */
 
 import React, {
-  memo, useRef, useState, useEffect, useContext
+  memo, useEffect,
 } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import {
-  Box, Backdrop, Paper,
-  Grid, Tab, Typography,
+  Box, Divider,
+  Grid,
 } from '@material-ui/core';
-import { SpeedDial, SpeedDialAction, SpeedDialIcon } from '@material-ui/lab';
 import { withStyles } from '@material-ui/core/styles';
 import MessageIcon from '@material-ui/icons/Message';
 import NewsIcon from '@material-ui/icons/Description';
 import SocialIcon from '@material-ui/icons/Share';
-import ResponsiveTabs from 'components/Shared/ResponsiveTabs';
-import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import GroupMessageListItem from 'components/News/GroupMessage/GroupMessageListItem';
 import NewsLinkListItem from 'components/News/NewsLink/NewsLinkListItem';
 import SocialLinkListItem from 'components/News/SocialLink/SocialLinkListItem';
-import DiverstPagination from 'components/Shared/DiverstPagination';
 import DiverstLoader from 'components/Shared/DiverstLoader';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/News/messages';
@@ -81,30 +77,7 @@ export function NewsFeed(props) {
     return () => {};
   }, [props.newsItems]);
 
-
-  const actions = [
-    {
-      icon: <MessageIcon />,
-      name: <DiverstFormattedMessage {...messages.group_message} />,
-      linkPath: props.links.groupMessageNew,
-    },
-    {
-      icon: <NewsIcon />,
-      name: <DiverstFormattedMessage {...messages.news_link} />,
-      linkPath: props.links.newsLinkNew,
-    },
-    {
-      icon: <SocialIcon />,
-      name: <DiverstFormattedMessage {...messages.social_link} />,
-      linkPath: props.links.socialLinkNew,
-    },
-  ];
-
   const { classes } = props;
-  const [speedDialOpen, setSpeedDialOpen] = React.useState(false);
-
-  const handleSpeedDialOpen = () => setSpeedDialOpen(true);
-  const handleSpeedDialClose = () => setSpeedDialOpen(false);
 
   /* Check news_feed_link type & render appropriate list item component */
   const renderNewsItem = (item) => {
@@ -164,8 +137,10 @@ export function NewsFeed(props) {
           {props.newsItems && Object.values(props.newsItems).map((item, i) => {
             return (
               <Grid item key={item.id} className={classes.newsItem}>
+                <Box mb={1} />
+                <Divider />
+                <Box mb={1} />
                 {renderNewsItem(item)}
-                <Box mb={3} />
               </Grid>
             );
           })}

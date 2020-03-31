@@ -36,6 +36,9 @@ const styles = theme => ({
   },
   cardHeader: {
     paddingBottom: 0,
+  },
+  embedTwitter: {
+    width: '75%'
   }
 });
 
@@ -67,7 +70,7 @@ export function GroupMessageListItem(props) {
           </Avatar>
         )}
         title={groupMessage.subject}
-        titleTypographyProps={{ variant: 'h5', display: 'inline' }}
+        titleTypographyProps={{ variant: 'body1', display: 'inline' }}
       />
       <CardContent className={classes.cardContent}>
         <Typography gutterBottom>
