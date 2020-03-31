@@ -136,9 +136,9 @@ export function UserGroupList(props, context) {
                               <Typography variant='h5' component='h2' display='inline' className={classes.groupCardTitle}>
                                 {group.name}
                               </Typography>
-                              {group.description && (
+                              {group.short_description && (
                                 <Typography color='textSecondary' className={classes.groupCardDescription}>
-                                  {group.description}
+                                  {group.short_description}
                                 </Typography>
                               )}
                             </Grid>
@@ -206,9 +206,9 @@ export function UserGroupList(props, context) {
                                   <Typography variant='h5' component='h2' display='inline'>
                                     {childGroup.name}
                                   </Typography>
-                                  {childGroup.description && (
+                                  {childGroup.short_description && (
                                     <Typography color='textSecondary' className={classes.groupCardDescription}>
-                                      {childGroup.description}
+                                      {childGroup.short_description}
                                     </Typography>
                                   )}
                                 </Grid>

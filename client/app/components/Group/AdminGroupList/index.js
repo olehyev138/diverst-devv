@@ -125,10 +125,10 @@ export function AdminGroupList(props, context) {
                             {group.name}
                           </Typography>
                         </Button>
-                        {group.description && (
+                        {group.short_description && (
                           <Typography color='textSecondary' className={classes.groupListItemDescription}>
                             &ensp;
-                            {group.description}
+                            {group.short_description}
                           </Typography>
                         )}
                       </Grid>
@@ -218,9 +218,9 @@ export function AdminGroupList(props, context) {
                                     {childGroup.name}
                                   </Typography>
                                 </Link>
-                                {childGroup.description && (
+                                {childGroup.short_description && (
                                   <Typography color='textSecondary' className={classes.groupListItemDescription}>
-                                    {childGroup.description}
+                                    {childGroup.short_description}
                                   </Typography>
                                 )}
                               </Grid>
