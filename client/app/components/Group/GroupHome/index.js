@@ -8,10 +8,13 @@ import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
-import { Divider, Grid, Typography } from '@material-ui/core';
+import { Button, Divider, Grid, Typography } from '@material-ui/core';
 import DiverstImg from 'components/Shared/DiverstImg';
 import EventsPage from 'containers/Event/EventsPage';
 import NewsPage from 'containers/News/NewsFeedPage';
+
+import AddIcon from '@material-ui/icons/Add';
+import RemoveIcon from '@material-ui/icons/Remove';
 
 export function GroupHome(props) {
   return (
@@ -40,6 +43,38 @@ export function GroupHome(props) {
           <Divider orientation='vertical' />
         </Grid>
         <Grid item xs>
+          {props.currentGroup.current_user_is_member
+            ? (
+              <Button
+                variant='contained'
+                size='large'
+                color='primary'
+                onClick={() => {
+                  props.leaveGroup({
+                    group_id: props.currentGroup.id
+                  });
+                }}
+                startIcon={<RemoveIcon />}
+              >
+                Leave
+              </Button>
+            )
+            : (
+              <Button
+                variant='contained'
+                size='large'
+                color='primary'
+                onClick={() => {
+                  props.joinGroup({
+                    group_id: props.currentGroup.id
+                  });
+                }}
+                startIcon={<AddIcon />}
+              >
+                Join
+              </Button>
+
+            )}
           <NewsPage
             currentGroup={props.currentGroup}
             readonly
@@ -52,6 +87,8 @@ export function GroupHome(props) {
 
 GroupHome.propTypes = {
   currentGroup: PropTypes.object,
+  joinGroup: PropTypes.func,
+  leaveGroup: PropTypes.func,
 };
 
 export default compose(

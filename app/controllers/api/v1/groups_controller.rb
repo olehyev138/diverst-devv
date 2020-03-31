@@ -48,6 +48,32 @@ class Api::V1::GroupsController < DiverstController
     raise BadRequestException.new(e.message)
   end
 
+  def update_categories
+    params[klass.symbol] = payload
+    params[:children].each do | category |
+      unless category[:group_category_id].nil?
+        # get group_category_type_id
+        category[:group_category_type_id] = GroupCategory.find(category[:group_category_id]).group_category_type_id
+        if @tempCat.nil?
+          @tempCat = category[:group_category_type_id]
+        end
+        # if all subgroups' group_category_type_id not consistent, raise exception
+        if @tempCat != category[:group_category_type_id]
+          raise InvalidInputException
+        end
+      end
+    end
+    params[:group_category_type_id] = @tempCat
+    render status: 200, json: klass.update_child_categories(self.diverst_request, params)
+  rescue => e
+    case e
+    when InvalidInputException
+      raise
+    else
+      raise BadRequestException.new(e.message)
+    end
+  end
+
   private
 
   def load_sums(result)
