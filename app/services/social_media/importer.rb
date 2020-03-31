@@ -20,7 +20,6 @@ class SocialMedia::Importer
     e = ApplicationHelper::MissingKeyError.new 'EMBEDLY_KEY'
     Rollbar.warn(e)
   end
-  @@embedly_api = Embedly::API.new  key: ENV['EMBEDLY_KEY']
 
   def self.url_to_embed(url, small: false)
     options = small ? SMALL_MEDIA_OPTIONS : {}
@@ -48,7 +47,7 @@ class SocialMedia::Importer
       when 'photo'
         "<img src=\"#{resource.url}\">"
       else
-        resource&.html || url
+        resource.html || url
       end
     end
   end
@@ -142,7 +141,8 @@ class SocialMedia::Importer
     url = url[0...-1] if url[-1] == '/'
     begin
       options[:url] = url
-      obj = (@@embedly_api.extract options)[0]
+      embedly_api = Embedly::API.new  key: ENV['EMBEDLY_KEY']
+      obj = (embedly_api.extract options)[0]
 
       if obj.dig(:error_message).present?
         nil
