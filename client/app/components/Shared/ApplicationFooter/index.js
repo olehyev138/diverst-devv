@@ -2,27 +2,24 @@ import React, { memo } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import { AppBar } from '@material-ui/core';
 import { DateTime } from 'luxon';
 
 const styles = theme => ({
-  appBar: {
-    top: 'auto',
-    bottom: 0,
+  footer: {
     zIndex: theme.zIndex.drawer + 1,
+    backgroundColor: theme.palette.primary.main,
+    color: 'white',
   },
 });
 
 export function ApplicationFooter(props) {
   const { classes } = props;
   return (
-    <AppBar className={classes.appBar}>
-      <div align='center'>
-        © 2015-
-        {DateTime.local().year}
-        &ensp;Diverst. All right reserved.
-      </div>
-    </AppBar>
+    <div align='center' className={classes.footer}>
+      © 2015-
+      {DateTime.local().year}
+      <span> Diverst. All rights reserved.</span>
+    </div>
   );
 }
 
