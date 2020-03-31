@@ -42,7 +42,7 @@ export function GroupHome({ classes, ...props }) {
   const events = (
     <React.Fragment>
       <Typography variant='h5' className={classes.title}>
-        Group Events
+        Upcoming Events
       </Typography>
       <EventsPage
         currentGroup={props.currentGroup}
@@ -61,7 +61,7 @@ export function GroupHome({ classes, ...props }) {
   const news = (
     <React.Fragment>
       <Typography variant='h5' className={classes.title}>
-        Group News
+        Latest News
       </Typography>
       <NewsPage
         currentGroup={props.currentGroup}
@@ -108,10 +108,13 @@ export function GroupHome({ classes, ...props }) {
 
   return (
     <DiverstCSSGrid
+      columns={10}
       areas={[
-        'header header  header  header  header  header  header  header  header  header  header  header',
-        'news   news    news    news    news    events  events  events  events  events  join    join',
+        'header header  header  header  header  header  header  header  header  header',
+        'news   news    news    news    events  events  events  events  join    join',
       ]}
+      rowGap='16px'
+      columnGap='24px'
     >
       <DiverstCSSCell area='header'>{groupImage}</DiverstCSSCell>
       <DiverstCSSCell area='news'>{news}</DiverstCSSCell>
