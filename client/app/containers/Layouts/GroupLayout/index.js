@@ -62,7 +62,7 @@ const GroupLayout = ({ component: Component, classes, ...rest }) => {
           <GroupLinks currentGroup={currentGroup} {...other} />
           <Scrollbar>
             <Fade in appear>
-              <Container maxWidth='xl'>
+              <Container maxWidth='lg'>
                 <div className={classes.content}>
                   {currentGroup && (
                     <React.Fragment>

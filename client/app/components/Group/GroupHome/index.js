@@ -8,7 +8,7 @@ import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
-import { Button, Divider, Typography, Box } from '@material-ui/core';
+import { Button, Divider, Typography, Box, Paper, CardContent } from '@material-ui/core';
 import DiverstImg from 'components/Shared/DiverstImg';
 import EventsPage from 'containers/Event/EventsPage';
 import NewsPage from 'containers/News/NewsFeedPage';
@@ -40,34 +40,38 @@ export function GroupHome({ classes, ...props }) {
   );
 
   const events = (
-    <React.Fragment>
-      <Typography variant='h5' className={classes.title}>
-        Upcoming Events
-      </Typography>
-      <EventsPage
-        currentGroup={props.currentGroup}
-        readonly
-        onlyUpcoming
-        loaderProps={{
-          transitionProps: {
-            direction: 'right',
-          },
-        }}
-      />
-    </React.Fragment>
-
+    <Paper>
+      <CardContent>
+        <Typography variant='h5' className={classes.title}>
+          Upcoming Events
+        </Typography>
+        <EventsPage
+          currentGroup={props.currentGroup}
+          readonly
+          onlyUpcoming
+          withoutCard
+          loaderProps={{
+            transitionProps: {
+              direction: 'right',
+            },
+          }}
+        />
+      </CardContent>
+    </Paper>
   );
 
   const news = (
-    <React.Fragment>
-      <Typography variant='h5' className={classes.title}>
-        Latest News
-      </Typography>
-      <NewsPage
-        currentGroup={props.currentGroup}
-        readonly
-      />
-    </React.Fragment>
+    <Paper>
+      <CardContent>
+        <Typography variant='h5' className={classes.title}>
+          Latest News
+        </Typography>
+        <NewsPage
+          currentGroup={props.currentGroup}
+          readonly
+        />
+      </CardContent>
+    </Paper>
   );
 
   const joinBtn = (
