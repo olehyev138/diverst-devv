@@ -117,13 +117,13 @@ export function UserGroupList(props, context) {
                             {group.banner_data && (
                               <React.Fragment>
                                 <Hidden xsDown>
-                                  <Grid item xs='auto' justify='center'>
+                                  <Grid item xs='auto'>
                                     <DiverstImg
                                       data={group.banner_data}
-                                      maxWidth='60px'
-                                      maxHeight='60px'
-                                      minWidth='60px'
-                                      minHeight='60px'
+                                      maxWidth='70px'
+                                      maxHeight='70px'
+                                      minWidth='70px'
+                                      minHeight='70px'
                                     />
                                   </Grid>
                                 </Hidden>
@@ -190,7 +190,7 @@ export function UserGroupList(props, context) {
                                 {childGroup.banner_data && (
                                   <React.Fragment>
                                     <Hidden xsDown>
-                                      <Grid item xs='auto' justify='center'>
+                                      <Grid item xs='auto'>
                                         <DiverstImg
                                           data={childGroup.banner_data}
                                           maxWidth='50px'
