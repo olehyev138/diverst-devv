@@ -97,8 +97,10 @@ export function EventsPage(props) {
     setParams(newParams);
   };
 
+  const List = props.listComponent || EventsList
+
   return (
-    <EventsList
+    <List
       events={props.events}
       eventsTotal={props.eventsTotal}
       isLoading={props.isLoading}
@@ -123,6 +125,7 @@ EventsPage.propTypes = {
   }),
   readonly: PropTypes.bool,
   onlyUpcoming: PropTypes.bool,
+  listComponent: PropTypes.any,
 };
 
 const mapStateToProps = createStructuredSelector({

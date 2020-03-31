@@ -11,7 +11,7 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import {
   Box, Backdrop, Paper,
-  Grid, Tab, Typography, Card
+  Grid, Tab, Typography,
 } from '@material-ui/core';
 import { SpeedDial, SpeedDialAction, SpeedDialIcon } from '@material-ui/lab';
 import { withStyles } from '@material-ui/core/styles';
@@ -158,72 +158,19 @@ export function NewsFeed(props) {
 
   return (
     <React.Fragment>
-      {!props.readonly && (
-        <React.Fragment>
-          <Backdrop open={speedDialOpen} className={classes.backdrop} />
-          <SpeedDial
-            ariaLabel={props.intl.formatMessage(messages.add)}
-            className={classes.speedDial}
-            icon={<SpeedDialIcon />}
-            onClose={handleSpeedDialClose}
-            onOpen={handleSpeedDialOpen}
-            open={speedDialOpen}
-            direction='left'
-            FabProps={{
-              className: classes.speedDialButton
-            }}
-          >
-            {actions.map(action => (
-              <SpeedDialAction
-                component={WrappedNavLink}
-                to={action.linkPath}
-                key={action.linkPath}
-                icon={action.icon}
-                tooltipTitle={<Typography>{action.name}</Typography>}
-                tooltipPlacement='bottom'
-                onClick={handleSpeedDialClose}
-                PopperProps={{
-                  disablePortal: true,
-                }}
-              />
-            ))}
-          </SpeedDial>
-          <Box className={classes.floatSpacer} />
-          <Paper>
-            <ResponsiveTabs
-              value={props.currentTab}
-              onChange={props.handleChangeTab}
-              indicatorColor='primary'
-              textColor='primary'
-            >
-              <Tab label={<DiverstFormattedMessage {...messages.approved} />} />
-              <Tab label={<DiverstFormattedMessage {...messages.pending} />} />
-            </ResponsiveTabs>
-          </Paper>
-        </React.Fragment>
-      )}
-      <br />
       <DiverstLoader isLoading={props.isLoading}>
         <Grid container>
           { /* eslint-disable-next-line arrow-body-style */ }
           {props.newsItems && Object.values(props.newsItems).map((item, i) => {
             return (
               <Grid item key={item.id} className={classes.newsItem}>
-                <Card>
-                  {renderNewsItem(item)}
-                </Card>
+                {renderNewsItem(item)}
                 <Box mb={3} />
               </Grid>
             );
           })}
         </Grid>
       </DiverstLoader>
-      <DiverstPagination
-        isLoading={props.isLoading}
-        rowsPerPage={props.defaultParams.count}
-        count={props.newsItemsTotal}
-        handlePagination={props.handlePagination}
-      />
     </React.Fragment>
   );
 }

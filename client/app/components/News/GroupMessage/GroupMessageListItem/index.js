@@ -57,7 +57,7 @@ export function GroupMessageListItem(props) {
   }
 
   return (
-    <Card>
+    <React.Fragment>
       <CardHeader
         className={classes.cardHeader}
         avatar={(
@@ -173,7 +173,7 @@ export function GroupMessageListItem(props) {
           )}
         </CardActions>
       )}
-    </Card>
+    </React.Fragment>
   );
 }
 

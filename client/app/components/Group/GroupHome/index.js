@@ -17,6 +17,7 @@ import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
 import { DiverstCSSGrid, DiverstCSSCell } from 'components/Shared/DiverstCSSGrid';
 import { withStyles } from '@material-ui/core/styles';
+import EventsList from 'components/Group/GroupHome/GroupHomeEventsList';
 
 const styles = theme => ({
   title: {
@@ -47,9 +48,7 @@ export function GroupHome({ classes, ...props }) {
         </Typography>
         <EventsPage
           currentGroup={props.currentGroup}
-          readonly
-          onlyUpcoming
-          withoutCard
+          listComponent={EventsList}
           loaderProps={{
             transitionProps: {
               direction: 'right',

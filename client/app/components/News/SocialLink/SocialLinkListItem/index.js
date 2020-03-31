@@ -160,7 +160,7 @@ export function SocialLinkListItem(props) {
   );
 
   return (
-    <Card>
+    <React.Fragment>
       <CardContent className={classes.cardContent}>
         { socialLink.embed_code ? embeddedCode : rawLink }
         <Grid container justify='space-between'>
@@ -174,7 +174,7 @@ export function SocialLinkListItem(props) {
         </Grid>
       </CardContent>
       { actions }
-    </Card>
+    </React.Fragment>
   );
 }
 
