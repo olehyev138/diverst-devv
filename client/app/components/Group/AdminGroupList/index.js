@@ -17,7 +17,7 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import {
   Button, Card, CardContent, CardActions,
-  Typography, Grid, Link, Collapse, Box, CircularProgress,
+  Typography, Grid, Link, Collapse, Box, CircularProgress, Hidden,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -25,6 +25,7 @@ import AddIcon from '@material-ui/icons/Add';
 
 import DiverstPagination from 'components/Shared/DiverstPagination';
 import DiverstLoader from 'components/Shared/DiverstLoader';
+import DiverstImg from 'components/Shared/DiverstImg';
 
 const styles = theme => ({
   progress: {
@@ -69,7 +70,6 @@ export function AdminGroupList(props, context) {
     Object.keys(props.groups).map((id, i) => initialExpandedGroups[id] = false);
     setExpandedGroups(initialExpandedGroups);
   }
-
   return (
     <React.Fragment>
       <Grid container spacing={3} justify='flex-end'>
@@ -95,25 +95,44 @@ export function AdminGroupList(props, context) {
               <Grid item key={group.id} xs={12}>
                 <Card className={classes.groupCard}>
                   <CardContent>
-                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                    <Button
-                      className={classes.groupLink}
-                      color='primary'
-                      component={WrappedNavLink}
-                      to={{
-                        pathname: ROUTES.group.home.path(group.id),
-                        state: { id: group.id }
-                      }}
-                    >
-                      <Typography variant='h5' component='h2' display='inline'>
-                        {group.name}
-                      </Typography>
-                    </Button>
-                    {group.description && (
-                      <Typography color='textSecondary' className={classes.groupListItemDescription}>
-                        {group.description}
-                      </Typography>
-                    )}
+                    <Grid container spacing={2}>
+                      {group.banner_data && (
+                        <React.Fragment>
+                          <Hidden xsDown>
+                            <Grid item xs='auto'>
+                              <DiverstImg
+                                data={group.banner_data}
+                                maxWidth='70px'
+                                maxHeight='70px'
+                                minWidth='70px'
+                                minHeight='70px'
+                              />
+                            </Grid>
+                          </Hidden>
+                        </React.Fragment>
+                      )}
+                      <Grid item xs>
+                        <Button
+                          className={classes.groupLink}
+                          color='primary'
+                          component={WrappedNavLink}
+                          to={{
+                            pathname: ROUTES.group.home.path(group.id),
+                            state: { id: group.id }
+                          }}
+                        >
+                          <Typography variant='h5' component='h2' display='inline'>
+                            {group.name}
+                          </Typography>
+                        </Button>
+                        {group.description && (
+                          <Typography color='textSecondary' className={classes.groupListItemDescription}>
+                            &ensp;
+                            {group.description}
+                          </Typography>
+                        )}
+                      </Grid>
+                    </Grid>
                   </CardContent>
                   <CardActions>
                     <Button
@@ -171,23 +190,41 @@ export function AdminGroupList(props, context) {
                       <Grid item key={childGroup.id} xs={12}>
                         <Card className={classes.childGroupCard}>
                           <CardContent>
-                            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                            <Link
-                              component={WrappedNavLink}
-                              to={{
-                                pathname: ROUTES.group.home.path(childGroup.id),
-                                state: { id: childGroup.id }
-                              }}
-                            >
-                              <Typography variant='h5' component='h2' display='inline'>
-                                {childGroup.name}
-                              </Typography>
-                            </Link>
-                            {childGroup.description && (
-                              <Typography color='textSecondary' className={classes.groupListItemDescription}>
-                                {childGroup.description}
-                              </Typography>
-                            )}
+                            <Grid container spacing={2}>
+                              {childGroup.banner_data && (
+                                <React.Fragment>
+                                  <Hidden xsDown>
+                                    <Grid item xs='auto'>
+                                      <DiverstImg
+                                        data={childGroup.banner_data}
+                                        maxWidth='50px'
+                                        maxHeight='50px'
+                                        minWidth='50px'
+                                        minHeight='50px'
+                                      />
+                                    </Grid>
+                                  </Hidden>
+                                </React.Fragment>
+                              )}
+                              <Grid item xs>
+                                <Link
+                                  component={WrappedNavLink}
+                                  to={{
+                                    pathname: ROUTES.group.home.path(childGroup.id),
+                                    state: { id: childGroup.id }
+                                  }}
+                                >
+                                  <Typography variant='h5' component='h2' display='inline'>
+                                    {childGroup.name}
+                                  </Typography>
+                                </Link>
+                                {childGroup.description && (
+                                  <Typography color='textSecondary' className={classes.groupListItemDescription}>
+                                    {childGroup.description}
+                                  </Typography>
+                                )}
+                              </Grid>
+                            </Grid>
                           </CardContent>
                           <CardActions>
                             <Button
