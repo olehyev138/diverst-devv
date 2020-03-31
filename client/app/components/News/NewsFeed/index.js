@@ -10,8 +10,8 @@ import React, {
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import {
-  Box, Backdrop, Paper, Link,
-  Button, Card, CardActions, CardContent, Grid, Tab, Typography,
+  Box, Backdrop, Paper,
+  Grid, Tab, Typography,
 } from '@material-ui/core';
 import { SpeedDial, SpeedDialAction, SpeedDialIcon } from '@material-ui/lab';
 import { withStyles } from '@material-ui/core/styles';
@@ -30,6 +30,7 @@ import messages from 'containers/News/messages';
 import { injectIntl, intlShape } from 'react-intl';
 import Permission from 'components/Shared/DiverstPermission';
 import { permission } from 'utils/permissionsHelpers';
+import { addScript } from 'utils/domHelper';
 
 const styles = theme => ({
   newsItem: {
@@ -59,6 +60,30 @@ const styles = theme => ({
 });
 
 export function NewsFeed(props) {
+  useEffect(() => {
+    addScript('https://platform.twitter.com/widgets.js');
+    addScript('http://www.instagram.com/embed.js');
+    addScript('http://cdn.embedly.com/widgets/platform.js');
+    addScript(
+      'https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v6.0',
+      { async: 1, defer: 1, crossorigin: 'anonymous' }
+    );
+
+    return () => {};
+  }, []);
+
+  useEffect(() => {
+    if (window.instgrm)
+      window.instgrm.Embeds.process();
+    if (window.FB)
+      window.FB.XFBML.parse();
+    if (window.twttr && window.twttr.ready())
+      window.twttr.widgets.load();
+
+    return () => {};
+  }, [props.newsItems]);
+
+
   const actions = [
     {
       icon: <MessageIcon />,

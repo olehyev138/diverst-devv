@@ -602,6 +602,26 @@ export const ROUTES = {
         edit: {
           path: (groupId = ':group_id') => `/admin/manage/groups/${groupId}/edit`,
         },
+        categorize: {
+          path: (groupId = ':group_id') => `/admin/manage/groups/${groupId}/categorize`,
+        },
+        categories: {
+          pathPrefix: '/admin/manage/groups/categories',
+          index: {
+            path: () => '/admin/manage/groups/categories',
+          },
+          new: {
+            path: () => '/admin/manage/groups/categories/new',
+          },
+          edit: {
+            path: (groupCategoryTypeId = ':group_category_type_id') => `/admin/manage/groups/categories/${groupCategoryTypeId}/edit`,
+          },
+        },
+        category_types: {
+          edit: {
+            path: () => '/admin/manage/groups/category_types/edit',
+          },
+        },
       },
       segments: {
         pathPrefix: '/admin/manage/segments',

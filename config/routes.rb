@@ -80,6 +80,7 @@ Diverst::Application.routes.draw do
           get  '/fields', to: 'groups#fields'
           post '/create_field', to: 'groups#create_field'
 
+          get  '/initiatives', to: 'groups#initiatives'
           get  '/updates', to: 'groups#updates'
           get  '/update_prototype', to: 'groups#update_prototype'
           post '/create_update', to: 'groups#create_update'
@@ -89,6 +90,7 @@ Diverst::Application.routes.draw do
           get '/annual_budget', to: 'groups#current_annual_budget'
           post '/carryover_annual_budget', to: 'groups#carryover_annual_budget'
           post '/reset_annual_budget', to: 'groups#reset_annual_budget'
+          post '/update_categories', to: 'groups#update_categories'
         end
       end
       resources :group_categories
@@ -251,6 +253,8 @@ Diverst::Application.routes.draw do
           post 'join'
           post 'leave'
           get 'export_csv'
+          post 'leave'
+          post 'join'
         end
       end
       resources :user_roles
