@@ -15,9 +15,21 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { selectGroup } from 'containers/Group/selectors';
 import { selectUser } from 'containers/Shared/App/selectors';
-import { selectEvent, selectIsFormLoading } from 'containers/Event/selectors';
+import { selectEvent, selectIsFormLoading, selectHasChanged } from 'containers/Event/selectors';
 
-import { getEventBegin, deleteEventBegin, eventsUnmount } from 'containers/Event/actions';
+
+import {
+  getEventBegin,
+  deleteEventBegin,
+  createEventCommentBegin,
+  deleteEventCommentBegin,
+  archiveEventBegin,
+  eventsUnmount,
+  joinEventBegin,
+  leaveEventBegin,
+  exportAttendeesBegin
+} from 'containers/Event/actions';
+
 
 import Event from 'components/Event/Event';
 
@@ -38,17 +50,23 @@ export function EventPage(props) {
     props.getEventBegin({ id: eventId });
 
     return () => props.eventsUnmount();
-  }, []);
+  }, [props.hasChanged]);
 
   const { currentUser, currentEvent } = props;
-
   return (
     <Event
-      currentUserId={currentUser.id}
+      currentUserId={currentUser.user_id}
+      createEventCommentBegin={props.createEventCommentBegin}
+      deleteEventCommentBegin={props.deleteEventCommentBegin}
       deleteEventBegin={props.deleteEventBegin}
       event={currentEvent}
       links={links}
       isFormLoading={props.isFormLoading}
+      archiveEventBegin={props.archiveEventBegin}
+      joinEventBegin={props.joinEventBegin}
+      leaveEventBegin={props.leaveEventBegin}
+      hasChanged={props.hasChanged}
+      export={props.exportAttendeesBegin}
     />
   );
 }
@@ -56,11 +74,18 @@ export function EventPage(props) {
 EventPage.propTypes = {
   getEventBegin: PropTypes.func,
   deleteEventBegin: PropTypes.func,
+  archiveEventBegin: PropTypes.func,
+  joinEventBegin: PropTypes.func,
+  leaveEventBegin: PropTypes.func,
   eventsUnmount: PropTypes.func,
   currentUser: PropTypes.object,
   currentGroup: PropTypes.object,
   currentEvent: PropTypes.object,
   isFormLoading: PropTypes.bool,
+  createEventCommentBegin: PropTypes.func,
+  deleteEventCommentBegin: PropTypes.func,
+  exportAttendeesBegin: PropTypes.func,
+  hasChanged: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -68,12 +93,19 @@ const mapStateToProps = createStructuredSelector({
   currentUser: selectUser(),
   currentEvent: selectEvent(),
   isFormLoading: selectIsFormLoading(),
+  hasChanged: selectHasChanged(),
 });
 
 const mapDispatchToProps = {
   getEventBegin,
   deleteEventBegin,
-  eventsUnmount
+  createEventCommentBegin,
+  deleteEventCommentBegin,
+  archiveEventBegin,
+  eventsUnmount,
+  joinEventBegin,
+  leaveEventBegin,
+  exportAttendeesBegin,
 };
 
 const withConnect = connect(

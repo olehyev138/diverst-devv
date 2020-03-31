@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
+import Conditional from 'components/Compositions/Conditional';
 import dig from 'object-dig';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
@@ -65,7 +66,7 @@ export function EventsPage(props) {
   };
 
   useEffect(() => {
-    getEvents(['upcoming']);
+    getEvents(['upcoming', 'not_archived']);
 
     return () => {
       props.eventsUnmount();
@@ -76,13 +77,13 @@ export function EventsPage(props) {
     setTab(newTab);
     switch (newTab) {
       case EventTypes.upcoming:
-        getEvents(['upcoming'], true);
+        getEvents(['upcoming', 'not_archived'], true);
         break;
       case EventTypes.ongoing:
-        getEvents(['ongoing'], true);
+        getEvents(['ongoing', 'not_archived'], true);
         break;
       case EventTypes.past:
-        getEvents(['past'], true);
+        getEvents(['past', 'not_archived'], true);
         break;
       default:
         break;
@@ -105,7 +106,7 @@ export function EventsPage(props) {
       handleChangeTab={handleChangeTab}
       handlePagination={handlePagination}
       links={links}
-      readonly={false}
+      readonly={props.readonly}
     />
   );
 }
@@ -119,6 +120,7 @@ EventsPage.propTypes = {
   currentGroup: PropTypes.shape({
     id: PropTypes.number,
   }),
+  readonly: PropTypes.bool
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -140,4 +142,4 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(EventsPage);
+)(Conditional(EventsPage, ['currentGroup.permissions.events_view?']));

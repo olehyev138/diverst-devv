@@ -12,7 +12,7 @@ RSpec.describe GroupSerializer, type: :serializer do
     create(:group, enterprise: group.enterprise, parent_id: group.id)
     create(:group, enterprise: group.enterprise, parent_id: group.id)
 
-    serializer = GroupSerializer.new(group)
+    serializer = GroupSerializer.new(group, scope: serializer_scopes(create(:user)), scope_name: :scope)
 
     expect(serializer.serializable_hash[:enterprise_id]).to eq(enterprise.id)
     expect(serializer.serializable_hash[:group_category]).to_not be nil

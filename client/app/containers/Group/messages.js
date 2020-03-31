@@ -15,6 +15,9 @@ export default defineMessages({
   edit: {
     id: `${scope}.index.button.edit`,
   },
+  setAnnualBudget: {
+    id: `${scope}.index.button.setAnnualBudget`,
+  },
   delete: {
     id: `${scope}.index.button.delete`,
   },
@@ -65,5 +68,14 @@ export default defineMessages({
   },
   welcome: {
     id: `${scope}.home.span.welcome`,
+  },
+  allcategories: {
+    id: `${scope}.categorize.button.allcategories`,
+  },
+  categorize: {
+    id: `${scope}.categorize.button.categorize`,
+  },
+  save: {
+    id: `${scope}.categorize.button.save`,
   },
 });

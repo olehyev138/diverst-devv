@@ -9,6 +9,7 @@ import Fade from '@material-ui/core/Fade';
 
 import ApplicationHeader from 'components/Shared/ApplicationHeader';
 import ApplicationLayout from 'containers/Layouts/ApplicationLayout';
+import ApplicationFooter from 'components/Shared/ApplicationFooter';
 
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import AuthService from 'utils/authService';
@@ -32,7 +33,6 @@ const AuthenticatedLayout = ({
   } = rest;
 
   const NotAuthenticated = () => <Redirect to={ROUTES.session.login.path()} />;
-  const NotAuthorized = () => <React.Fragment />; // TODO: Make a 'not authorized' page of some sort
 
   /* Use AuthService to keep AuthenticatedLayout unconnected from store.
    *   - Probably better to keep layouts unconnected too
@@ -60,36 +60,30 @@ const AuthenticatedLayout = ({
     // TODO: Set user locale
     // Settings.defaultLocale = 'en';
 
-    // TODO: Handle if policy group isn't set. Perhaps clear token (sign out) if the policy group is not found
-    if (AuthService.hasPermission(data))
-      // Authorized - note: if no `permission` is defined on the route object it renders the
-      // page as normal (for situations where the page doesn't have a permission associated)
-      return (
-        <ApplicationLayout
-          {...other}
-          component={matchProps => (
-            <React.Fragment>
-              { !!renderAppBar && (
-                <React.Fragment>
-                  <ApplicationHeader
-                    drawerToggleCallback={drawerToggleCallback}
-                    drawerOpen={drawerOpen}
-                    position={position}
-                    isAdmin={isAdmin}
-                    {...matchProps}
-                  />
-                </React.Fragment>
-              )}
-              <Fade in appear>
-                <Component {...matchProps} />
-              </Fade>
-            </React.Fragment>
-          )}
-        />
-      );
-
-    // Not Authorized
-    return <NotAuthorized />;
+    return (
+      <ApplicationLayout
+        {...other}
+        component={matchProps => (
+          <React.Fragment>
+            { !!renderAppBar && (
+              <React.Fragment>
+                <ApplicationHeader
+                  drawerToggleCallback={drawerToggleCallback}
+                  drawerOpen={drawerOpen}
+                  position={position}
+                  isAdmin={isAdmin}
+                  {...matchProps}
+                />
+              </React.Fragment>
+            )}
+            <Fade in appear>
+              <Component {...matchProps} />
+            </Fade>
+            <ApplicationFooter />
+          </React.Fragment>
+        )}
+      />
+    );
   }
 
   // Not Authenticated

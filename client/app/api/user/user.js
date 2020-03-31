@@ -9,14 +9,6 @@ Object.assign(User, {
     return axios.get(appendQueryArgs(`${this.url}/posts`, payload));
   },
 
-  getJoinedEvents(payload) {
-    return axios.get(appendQueryArgs(`${this.url}/joined_events`, payload));
-  },
-
-  getAllEvents(payload) {
-    return axios.get(appendQueryArgs(`${this.url}/all_events`, payload));
-  },
-
   getDownloads(payload) {
     return axios.get(appendQueryArgs(`${this.url}/downloads`, payload));
   },

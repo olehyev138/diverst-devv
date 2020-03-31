@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe BasePager, type: :model do
   let(:enterprise) { create(:enterprise) }
-  let(:user) { create(:user, enterprise: enterprise) }
+  let(:user) { create(:user, enterprise: enterprise, first_name: 'notjack', last_name: 'notjack') }
 
   describe '#pager' do
     it 'returns the users as items and the total' do
@@ -14,7 +14,6 @@ RSpec.describe BasePager, type: :model do
 
     it 'returns the correct by name for the current users enterprise' do
       enterprise_2 = create(:enterprise)
-      create_list(:user, 10, enterprise: enterprise)
       user = create(:user, first_name: 'jack', enterprise: enterprise)
       create(:user, first_name: 'jack', enterprise: enterprise_2)
 

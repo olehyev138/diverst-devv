@@ -9,6 +9,35 @@ import { defineMessages } from 'react-intl';
 export const scope = 'diverst.containers.Event';
 
 export default defineMessages({
+  comment: {
+    submit: {
+      id: `${scope}.comment.button.submit`,
+    },
+    delete: {
+      id: `${scope}.comment.button.delete`,
+    },
+    deleteconfirm: {
+      id: `${scope}.comment.button.deleteconfirm`,
+    },
+    input: {
+      id: `${scope}.comment.form.input`,
+    },
+    label: {
+      id: `${scope}.comment.form.label`,
+    },
+    total_comments: {
+      id: `${scope}.comment.total_comments`,
+    },
+    said: {
+      id: `${scope}.comment.said`,
+    },
+    ago: {
+      id: `${scope}.comment.ago`,
+    },
+    you: {
+      id: `${scope}.comment.you`,
+    },
+  },
   new: {
     id: `${scope}.index.button.new`,
   },
@@ -18,8 +47,20 @@ export default defineMessages({
   delete: {
     id: `${scope}.index.button.delete`,
   },
+  archive: {
+    id: `${scope}.index.button.archive`,
+  },
+  export: {
+    id: `${scope}.index.button.export`,
+  },
   delete_confirm: {
     id: `${scope}.index.button.delete_confirm`,
+  },
+  join: {
+    id: `${scope}.index.button.join`,
+  },
+  leave: {
+    id: `${scope}.index.button.leave`,
   },
   createupdate: {
     id: `${scope}.form.button.createupdate`,
@@ -60,6 +101,9 @@ export default defineMessages({
     description: {
       id: `${scope}.form.input.description`,
     },
+    location: {
+      id: `${scope}.form.input.location`,
+    },
     start: {
       id: `${scope}.form.input.start`,
     },
@@ -77,6 +121,18 @@ export default defineMessages({
     },
     image: {
       id: `${scope}.form.input.image`
+    },
+    goal: {
+      id: `${scope}.form.input.goal`
+    },
+    budgetName: {
+      id: `${scope}.form.input.budgetName`
+    },
+    budgetAmount: {
+      id: `${scope}.form.input.budgetAmount`
+    },
+    freeEvent: {
+      id: `${scope}.form.input.freeEvent`
     },
   },
   show: {

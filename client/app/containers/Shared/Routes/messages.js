@@ -147,6 +147,20 @@ export default defineMessages({
               id: `${scope}.group.plan.events.manage.updates.new`
             },
           },
+          expenses: {
+            index: {
+              id: `${scope}.group.plan.events.manage.expenses.index`
+            },
+            show: {
+              id: `${scope}.group.plan.events.manage.expenses.show`
+            },
+            edit: {
+              id: `${scope}.group.plan.events.manage.expenses.edit`
+            },
+            new: {
+              id: `${scope}.group.plan.events.manage.expenses.new`
+            },
+          },
         },
       },
       kpi: {
@@ -171,6 +185,28 @@ export default defineMessages({
           },
           new: {
             id: `${scope}.group.plan.kpi.updates.new`
+          },
+        },
+      },
+      budget: {
+        index: {
+          id: `${scope}.group.plan.budget.index`
+        },
+        editAnnualBudget: {
+          id: `${scope}.group.plan.budget.editAnnualBudget`
+        },
+        overview: {
+          id: `${scope}.group.plan.budget.overview`
+        },
+        budgets: {
+          index: {
+            id: `${scope}.group.plan.budget.budget.index`
+          },
+          show: {
+            id: `${scope}.group.plan.budget.budget.show`
+          },
+          new: {
+            id: `${scope}.group.plan.budget.budget.new`
           },
         },
       },
@@ -227,6 +263,9 @@ export default defineMessages({
       },
       resources: {
         id: `${scope}.admin.manage.resources.index`
+      },
+      archived: {
+        id: `${scope}.admin.manage.archived`
       }
     },
     system: {

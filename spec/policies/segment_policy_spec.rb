@@ -9,7 +9,7 @@ RSpec.describe SegmentPolicy, type: :policy do
   let(:segments) { create_list(:segment, 10, enterprise: enterprise2) }
   let(:policy_scope) { SegmentPolicy::Scope.new(user, Segment).resolve }
 
-  subject { SegmentPolicy.new(user, segment) }
+  subject { SegmentPolicy.new(user.reload, segment) }
 
   before {
     no_access.policy_group.manage_all = false
@@ -37,30 +37,6 @@ RSpec.describe SegmentPolicy, type: :policy do
         it { is_expected.to permit_actions([:index, :enterprise_segments]) }
       end
 
-      context 'user has basic group leader permission for segments_index' do
-        before do
-          user_role = create(:user_role, enterprise: enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
-          user_role.policy_group_template.update segments_index: true
-          group = create(:group, enterprise: enterprise)
-          create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-                                user_role_id: user_role.id)
-        end
-
-        it { is_expected.to permit_actions([:index, :enterprise_segments]) }
-      end
-
-      context 'user has basic group leader permission for segments_manage' do
-        before do
-          user_role = create(:user_role, enterprise: enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
-          user_role.policy_group_template.update segments_manage: true
-          group = create(:group, enterprise: enterprise)
-          create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-                                user_role_id: user_role.id)
-        end
-
-        it { is_expected.to permit_actions([:index, :create, :update, :destroy, :enterprise_segments]) }
-      end
-
       context 'when segments_manage is true' do
         before { user.policy_group.update segments_manage: true }
         it { is_expected.to permit_actions([:index, :create, :update, :destroy, :enterprise_segments]) }
@@ -68,18 +44,6 @@ RSpec.describe SegmentPolicy, type: :policy do
 
       context 'when segments_create is true' do
         before { user.policy_group.update segments_create: true }
-        it { is_expected.to permit_actions([:index, :create, :enterprise_segments]) }
-      end
-
-      context 'user has basic group leader permission for segments_create' do
-        before do
-          user_role = create(:user_role, enterprise: enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
-          user_role.policy_group_template.update segments_create: true
-          group = create(:group, enterprise: enterprise)
-          create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-                                user_role_id: user_role.id)
-        end
-
         it { is_expected.to permit_actions([:index, :create, :enterprise_segments]) }
       end
     end
@@ -98,20 +62,6 @@ RSpec.describe SegmentPolicy, type: :policy do
   describe '#manage?' do
     context 'when manage_all is true' do
       before { user.policy_group.update manage_all: true }
-
-      it 'returns true' do
-        expect(subject.manage?).to be(true)
-      end
-    end
-
-    context 'user has basic group leader permission for segments_manage' do
-      before do
-        user_role = create(:user_role, enterprise: enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
-        user_role.policy_group_template.update segments_manage: true
-        group = create(:group, enterprise: enterprise)
-        create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-                              user_role_id: user_role.id)
-      end
 
       it 'returns true' do
         expect(subject.manage?).to be(true)

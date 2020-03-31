@@ -10,8 +10,8 @@ import React, {
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import {
-  Box, Backdrop, Paper, Link,
-  Button, Card, CardActions, CardContent, Grid, Tab, Typography,
+  Box, Backdrop, Paper,
+  Grid, Tab, Typography,
 } from '@material-ui/core';
 import { SpeedDial, SpeedDialAction, SpeedDialIcon } from '@material-ui/lab';
 import { withStyles } from '@material-ui/core/styles';
@@ -28,6 +28,7 @@ import DiverstLoader from 'components/Shared/DiverstLoader';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/News/messages';
 import { injectIntl, intlShape } from 'react-intl';
+import { addScript } from 'utils/domHelper';
 
 const styles = theme => ({
   newsItem: {
@@ -49,9 +50,38 @@ const styles = theme => ({
   speedDialButton: {
     zIndex: 2,
   },
+  floatSpacer: {
+    display: 'flex',
+    width: '100%',
+    marginBottom: 20,
+  },
 });
 
 export function NewsFeed(props) {
+  useEffect(() => {
+    addScript('https://platform.twitter.com/widgets.js');
+    addScript('http://www.instagram.com/embed.js');
+    addScript('http://cdn.embedly.com/widgets/platform.js');
+    addScript(
+      'https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v6.0',
+      { async: 1, defer: 1, crossorigin: 'anonymous' }
+    );
+
+    return () => {};
+  }, []);
+
+  useEffect(() => {
+    if (window.instgrm)
+      window.instgrm.Embeds.process();
+    if (window.FB)
+      window.FB.XFBML.parse();
+    if (window.twttr && window.twttr.ready())
+      window.twttr.widgets.load();
+
+    return () => {};
+  }, [props.newsItems]);
+
+
   const actions = [
     {
       icon: <MessageIcon />,
@@ -87,26 +117,29 @@ export function NewsFeed(props) {
           groupId={item.news_feed.group_id}
           deleteGroupMessageBegin={props.deleteGroupMessageBegin}
           updateNewsItemBegin={props.updateNewsItemBegin}
+          archiveNewsItemBegin={props.archiveNewsItemBegin}
+          pinNewsItemBegin={props.pinNewsItemBegin}
+          unpinNewsItemBegin={props.unpinNewsItemBegin}
           likeNewsItemBegin={props.likeNewsItemBegin}
           unlikeNewsItemBegin={props.unlikeNewsItemBegin}
         />
       );
     else if (item.news_link) // eslint-disable-line no-else-return
       return (
-        <div>
-          <NewsLinkListItem
-            links={props.links}
-            newsLink={item.news_link}
-            newsItem={item}
-            groupId={item.news_feed.group_id}
-            readonly={props.readonly}
-            deleteNewsLinkBegin={props.deleteNewsLinkBegin}
-            updateNewsItemBegin={props.updateNewsItemBegin}
-            likeNewsItemBegin={props.likeNewsItemBegin}
-            unlikeNewsItemBegin={props.unlikeNewsItemBegin}
-
-          />
-        </div>
+        <NewsLinkListItem
+          links={props.links}
+          newsLink={item.news_link}
+          newsItem={item}
+          groupId={item.news_feed.group_id}
+          readonly={props.readonly}
+          deleteNewsLinkBegin={props.deleteNewsLinkBegin}
+          updateNewsItemBegin={props.updateNewsItemBegin}
+          archiveNewsItemBegin={props.archiveNewsItemBegin}
+          pinNewsItemBegin={props.pinNewsItemBegin}
+          unpinNewsItemBegin={props.unpinNewsItemBegin}
+          likeNewsItemBegin={props.likeNewsItemBegin}
+          unlikeNewsItemBegin={props.unlikeNewsItemBegin}
+        />
       );
     else if (item.social_link)
       return (
@@ -118,6 +151,9 @@ export function NewsFeed(props) {
           readonly={props.readonly}
           deleteSocialLinkBegin={props.deleteSocialLinkBegin}
           updateNewsItemBegin={props.updateNewsItemBegin}
+          archiveNewsItemBegin={props.archiveNewsItemBegin}
+          pinNewsItemBegin={props.pinNewsItemBegin}
+          unpinNewsItemBegin={props.unpinNewsItemBegin}
           likeNewsItemBegin={props.likeNewsItemBegin}
           unlikeNewsItemBegin={props.unlikeNewsItemBegin}
         />
@@ -147,7 +183,7 @@ export function NewsFeed(props) {
               <SpeedDialAction
                 component={WrappedNavLink}
                 to={action.linkPath}
-                key={action.name}
+                key={action.linkPath}
                 icon={action.icon}
                 tooltipTitle={<Typography>{action.name}</Typography>}
                 tooltipPlacement='bottom'
@@ -158,6 +194,7 @@ export function NewsFeed(props) {
               />
             ))}
           </SpeedDial>
+          <Box className={classes.floatSpacer} />
           <Paper>
             <ResponsiveTabs
               value={props.currentTab}
@@ -211,9 +248,11 @@ NewsFeed.propTypes = {
   deleteNewsLinkBegin: PropTypes.func,
   deleteSocialLinkBegin: PropTypes.func,
   updateNewsItemBegin: PropTypes.func,
+  archiveNewsItemBegin: PropTypes.func,
+  pinNewsItemBegin: PropTypes.func,
+  unpinNewsItemBegin: PropTypes.func,
   likeNewsItemBegin: PropTypes.func,
   unlikeNewsItemBegin: PropTypes.func,
-
 };
 
 export default compose(

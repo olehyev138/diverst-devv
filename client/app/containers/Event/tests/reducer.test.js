@@ -13,6 +13,7 @@ describe('eventsReducer', () => {
       isFormLoading: true,
       events: [],
       eventsTotal: null,
+      hasChanged: false,
       currentEvent: null,
     };
   });

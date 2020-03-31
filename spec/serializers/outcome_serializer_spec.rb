@@ -5,7 +5,7 @@ RSpec.describe OutcomeSerializer, type: :serializer do
     group = create(:group)
     outcome = create(:outcome, group: group)
 
-    serializer = OutcomeSerializer.new(outcome)
+    serializer = OutcomeSerializer.new(outcome, scope: serializer_scopes(create(:user)), scope_name: :scope)
 
     expect(serializer.serializable_hash[:id]).to eq(outcome.id)
     expect(serializer.serializable_hash[:group]).to_not be nil

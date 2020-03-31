@@ -15,7 +15,7 @@ import { useInjectSaga } from 'utils/injectSaga';
 import saga from 'containers/Group/saga';
 
 import { getGroupBegin, groupFormUnmount } from 'containers/Group/actions';
-import { selectGroup } from 'containers/Group/selectors';
+import { selectGroup, selectHasChanged } from 'containers/Group/selectors';
 import dig from 'object-dig';
 import RouteService from 'utils/routeHelpers';
 import { createStructuredSelector } from 'reselect';
@@ -51,7 +51,7 @@ const GroupLayout = ({ component: Component, classes, ...rest }) => {
       other.getGroupBegin({ id: groupId });
 
     return () => other.groupFormUnmount();
-  }, []);
+  }, [rs.params('group_id'), rest.groupHasChanged]);
 
   return (
     <AuthenticatedLayout
@@ -59,7 +59,7 @@ const GroupLayout = ({ component: Component, classes, ...rest }) => {
       {...other}
       component={() => (
         <React.Fragment>
-          <GroupLinks {...other} />
+          <GroupLinks currentGroup={currentGroup} {...other} />
           <Scrollbar>
             <Fade in appear>
               <Container>
@@ -89,10 +89,12 @@ GroupLayout.propTypes = {
   classes: PropTypes.object,
   currentGroup: PropTypes.object,
   disableBreadcrumbs: PropTypes.bool,
+  grouphasChanged: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
   currentGroup: selectGroup(),
+  groupHasChanged: selectHasChanged(),
 });
 
 const mapDispatchToProps = {

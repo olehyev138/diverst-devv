@@ -7,7 +7,7 @@ RSpec.describe GroupMemberPolicy, type: :policy do
   let(:member) { create(:user, enterprise: enterprise) }
   let(:user) { no_access }
 
-  subject { described_class.new(user, [group, member]) }
+  subject { described_class.new(user.reload, [group, member]) }
 
   before {
     no_access.policy_group.manage_all = false

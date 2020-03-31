@@ -12,9 +12,9 @@ import reducer from 'containers/News/reducer';
 import saga from 'containers/News/saga';
 import likeSaga from 'containers/Shared/Like/saga';
 
-import { selectPaginatedNewsItems, selectNewsItemsTotal, selectIsLoading } from 'containers/News/selectors';
+import { selectPaginatedNewsItems, selectNewsItemsTotal, selectIsLoading, selectHasChanged } from 'containers/News/selectors';
 import { deleteSocialLinkBegin, getNewsItemsBegin, newsFeedUnmount, deleteNewsLinkBegin, deleteGroupMessageBegin,
-  updateNewsItemBegin } from 'containers/News/actions';
+  updateNewsItemBegin, archiveNewsItemBegin, pinNewsItemBegin, unpinNewsItemBegin  } from 'containers/News/actions';
 import { likeNewsItemBegin, unlikeNewsItemBegin } from 'containers/Shared/Like/actions';
 
 import RouteService from 'utils/routeHelpers';
@@ -27,9 +27,10 @@ const NewsFeedTypes = Object.freeze({
 });
 
 const defaultParams = Object.freeze({
-  count: 10, // TODO: Make this a constant and use it also in EventsList
+  count: 5, // TODO: Make this a constant and use it also in EventsList
   page: 0,
   order: 'desc',
+  orderBy: 'news_feed_links.created_at',
   news_feed_id: -1,
 });
 
@@ -72,21 +73,21 @@ export function NewsFeedPage(props, context) {
   };
 
   useEffect(() => {
-    getNewsFeedItems(['approved']);
+    getNewsFeedItems(['approved', 'not_archived']);
 
     return () => {
       props.newsFeedUnmount();
     };
-  }, [props.currentGroup]);
+  }, [props.currentGroup, props.hasChanged]);
 
   const handleChangeTab = (event, newTab) => {
     setTab(newTab);
     switch (newTab) {
       case NewsFeedTypes.approved:
-        getNewsFeedItems(['approved'], true);
+        getNewsFeedItems(['approved', 'not_archived'], true);
         break;
       case NewsFeedTypes.pending:
-        getNewsFeedItems(['pending'], true);
+        getNewsFeedItems(['pending', 'not_archived'], true);
         break;
       default:
         break;
@@ -98,6 +99,7 @@ export function NewsFeedPage(props, context) {
     props.getNewsItemsBegin(newParams);
     setParams(newParams);
   };
+
   return (
     <React.Fragment>
       <NewsFeed
@@ -109,11 +111,14 @@ export function NewsFeedPage(props, context) {
         handleChangeTab={handleChangeTab}
         handlePagination={handlePagination}
         links={links}
-        readonly={false}
+        readonly={props.readonly}
         deleteGroupMessageBegin={props.deleteGroupMessageBegin}
         deleteNewsLinkBegin={props.deleteNewsLinkBegin}
         deleteSocialLinkBegin={props.deleteSocialLinkBegin}
         updateNewsItemBegin={props.updateNewsItemBegin}
+        archiveNewsItemBegin={props.archiveNewsItemBegin}
+        pinNewsItemBegin={props.pinNewsItemBegin}
+        unpinNewsItemBegin={props.unpinNewsItemBegin}
         likeNewsItemBegin={props.likeNewsItemBegin}
         unlikeNewsItemBegin={props.unlikeNewsItemBegin}
       />
@@ -133,17 +138,23 @@ NewsFeedPage.propTypes = {
   likeNewsItemBegin: PropTypes.func,
   unlikeNewsItemBegin: PropTypes.func,
   isLoading: PropTypes.bool,
+  hasChanged: PropTypes.bool,
+  archiveNewsItemBegin: PropTypes.func,
+  pinNewsItemBegin: PropTypes.func,
+  unpinNewsItemBegin: PropTypes.func,
   currentGroup: PropTypes.shape({
     news_feed: PropTypes.shape({
       id: PropTypes.number
     })
   }),
+  readonly: PropTypes.bool
 };
 
 const mapStateToProps = createStructuredSelector({
   newsItems: selectPaginatedNewsItems(),
   newsItemsTotal: selectNewsItemsTotal(),
   isLoading: selectIsLoading(),
+  hasChanged: selectHasChanged()
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -153,6 +164,9 @@ const mapDispatchToProps = dispatch => ({
   deleteSocialLinkBegin: payload => dispatch(deleteSocialLinkBegin(payload)),
   updateNewsItemBegin: payload => dispatch(updateNewsItemBegin(payload)),
   newsFeedUnmount: () => dispatch(newsFeedUnmount()),
+  archiveNewsItemBegin: payload => dispatch(archiveNewsItemBegin(payload)),
+  pinNewsItemBegin: payload => dispatch(pinNewsItemBegin(payload)),
+  unpinNewsItemBegin: payload => dispatch(unpinNewsItemBegin(payload)),
   likeNewsItemBegin: payload => dispatch(likeNewsItemBegin(payload)),
   unlikeNewsItemBegin: payload => dispatch(unlikeNewsItemBegin(payload)),
 });

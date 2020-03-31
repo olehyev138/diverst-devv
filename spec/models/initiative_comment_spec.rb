@@ -6,15 +6,19 @@ RSpec.describe InitiativeComment, type: :model do
 
     it { expect(initiative_comment).to belong_to(:user) }
     it { expect(initiative_comment).to belong_to(:initiative) }
+
+    it { expect(initiative_comment).to have_many(:user_reward_actions) }
+
     it { expect(initiative_comment).to validate_presence_of(:user) }
     it { expect(initiative_comment).to validate_presence_of(:initiative) }
     it { expect(initiative_comment).to validate_presence_of(:content) }
+    it { expect(initiative_comment).to validate_length_of(:content).is_at_most(65535) }
   end
 
   describe 'test instance and class methods' do
     context '#group' do
       let!(:group) { create(:group) }
-      let!(:initiative) { create(:initiative, owner_group_id: group.id) }
+      let!(:initiative) { create(:initiative, pillar: group.pillars.first) }
       let!(:initiative_comment) { create(:initiative_comment, initiative_id: initiative.id) }
 
       it 'returns group belonging to initiative' do

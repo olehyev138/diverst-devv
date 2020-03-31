@@ -56,7 +56,7 @@ RSpec.describe UserGroupNotificationJob, type: :job do
     end
 
     it 'returns false when last_group_notification_date is set' do
-      user.last_group_notification_date = DateTime.now
+      user.last_group_notification_date = DateTime.now.to_date
       expect(subject.notify_user?(user)).to eq false
     end
   end

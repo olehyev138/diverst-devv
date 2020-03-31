@@ -56,6 +56,10 @@ after 'development:groups' do
   spinner.run do |spinner|
     Enterprise.all.each do |enterprise|
       enterprise.groups.each do |group|
+        budget_item_id =
+            AnnualBudget.find_by(group_id: group.id, closed: false)
+                &.budgets&.order('RAND()')&.first
+                &.budget_items&.order('RAND()')&.first&.id
         no_outcomes = rand(outcomes_range)
         no_pillars = rand(pillars_range)
         no_past_initiatives = rand(past_initiatives_range)
@@ -90,7 +94,8 @@ after 'development:groups' do
                                  created_at: start_date,
                                  start: start_date,
                                  end: end_date,
-                                 name: initiative_title)
+                                 name: initiative_title, 
+                                 budget_item_id: budget_item_id)
             }
 
             # current initiatives
@@ -107,7 +112,8 @@ after 'development:groups' do
                                  created_at: start_date,
                                  start: start_date,
                                  end: end_date,
-                                 name: initiative_title)
+                                 name: initiative_title,
+                                 budget_item_id: budget_item_id)
             }
 
             # future initiatives
@@ -124,7 +130,8 @@ after 'development:groups' do
                                  created_at: start_date,
                                  start: start_date,
                                  end: end_date,
-                                 name: initiative_title)
+                                 name: initiative_title,
+                                 budget_item_id: budget_item_id)
             }
           }
         }

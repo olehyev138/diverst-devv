@@ -1,14 +1,24 @@
 require 'rails_helper'
 
 RSpec.describe ClockworkDatabaseEvent, type: :model do
+  let(:clockwork_database_event) { build_stubbed(:clockwork_database_event) }
+
   describe 'validations' do
-    let(:clockwork_database_event) { build_stubbed(:clockwork_database_event) }
     it { expect(clockwork_database_event).to validate_presence_of(:name) }
     it { expect(clockwork_database_event).to validate_presence_of(:frequency_quantity) }
     it { expect(clockwork_database_event).to validate_presence_of(:frequency_period) }
     it { expect(clockwork_database_event).to validate_presence_of(:enterprise) }
     it { expect(clockwork_database_event).to validate_presence_of(:job_name) }
     it { expect(clockwork_database_event).to validate_presence_of(:method_name) }
+
+    it { expect(clockwork_database_event).to validate_length_of(:method_args).is_at_most(191) }
+    it { expect(clockwork_database_event).to validate_length_of(:method_name).is_at_most(191) }
+    it { expect(clockwork_database_event).to validate_length_of(:job_name).is_at_most(191) }
+    it { expect(clockwork_database_event).to validate_length_of(:at).is_at_most(191) }
+    it { expect(clockwork_database_event).to validate_length_of(:day).is_at_most(191) }
+    it { expect(clockwork_database_event).to validate_length_of(:name).is_at_most(191) }
+
+    it { expect(clockwork_database_event).to validate_inclusion_of(:day).in_array(Date::DAYNAMES.map(&:downcase)) }
 
     it "adds an error when job class doesn't exist" do
       clockwork_database_event = build(:clockwork_database_event, job_name: 'TestClass')
@@ -75,6 +85,26 @@ RSpec.describe ClockworkDatabaseEvent, type: :model do
       clockwork_database_event.run
 
       expect(UserGroupNotificationJob).to have_received(:perform_later)
+    end
+  end
+
+  describe '#frequency' do
+    it 'returns frequency' do
+      expect(clockwork_database_event.frequency).to eq(1.day)
+    end
+  end
+
+  describe '#formatted_arguments' do
+    it 'return nil if methods_args is absent' do
+      clockwork_database_event.method_args = nil
+      expect(clockwork_database_event.formatted_arguments).to eq(nil)
+    end
+
+    it 'returns formated arguments' do
+      expect(clockwork_database_event.formatted_arguments).to eq({
+        enterprise_id: clockwork_database_event.enterprise_id,
+        notifications_frequency: 'weekly'
+      })
     end
   end
 end

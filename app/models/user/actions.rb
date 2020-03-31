@@ -75,76 +75,13 @@ module User::Actions
     total = nfls.size
     paged = nfls.limit(count).offset(page * count)
 
-    Page.new(paged, total)
-  end
+    serialized = paged.map { |nfl| NewsFeedLinkSerializer.new(nfl).to_h }
 
-  def joined_events(params)
-    count = (params[:count] || 5).to_i
-    page = (params[:page] || 0).to_i
-    order = params[:order].to_sym rescue :asc
-    order_by = params[:order_by].to_sym rescue :start
-
-    query_scopes = Initiative.set_query_scopes(params)
-
-    # get the events
-    # order the event
-    ordered = initiatives
-                .preload(Initiative.base_preloads)
-                .send_chain(query_scopes)
-                .order(order_by => order)
-                .distinct
-
-    # truncate and serialize the events
-    total = ordered.size
-    paged = ordered.limit(count).offset(page * count)
-
-    Page.new(paged, total)
-  end
-
-  def all_events(params)
-    count = (params[:count] || 5).to_i
-    page = (params[:page] || 0).to_i
-    order = params[:order].to_sym rescue :desc
-    order_by = params[:order_by].to_sym rescue :created_at
-
-    query_scopes = Initiative.set_query_scopes(params)
-
-    # SCOPE AND
-    # ( INVITED OR (
-    #   (IN GROUP OR IN PARTICIPATING GROUP) AND
-    #   (NO SEGMENT OR IN SEGMENT)
-    # ))
-    group_ors = []
-    group_ors << Initiative.sql_where(owner_group_id: group_ids)
-    group_ors << Initiative.sql_where(
-      initiative_participating_groups: { group_id: group_ids }
-    )
-
-    segment_ors = []
-    segment_ors << Initiative.sql_where(initiative_segments: { segment_id: nil })
-    segment_ors << Initiative.sql_where(
-      initiative_segments: { segment_id: segment_ids }
-    )
-
-    valid_ors = []
-    valid_ors << Initiative.sql_where(
-      initiative_invitees: { user_id: id }
-    )
-    valid_ors << User.sql_where("(#{ group_ors.join(' OR ')}) AND (#{ segment_ors.join(' OR ')})")
-
-    ordered = Initiative
-                .preload(Initiative.base_preloads)
-                .left_joins(:initiative_segments, :initiative_participating_groups, :initiative_invitees)
-                .send_chain(query_scopes)
-                .where(valid_ors.join(' OR '))
-                .order(order_by => order)
-                .distinct
-
-
-    total = ordered.size
-    paged = ordered.limit(count).offset(page * count)
-
-    Page.new(paged, total)
+    { page: {
+      items: serialized,
+      total: total,
+      type: 'news_feed_link'
+    } }
   end
 
   def downloads(params)

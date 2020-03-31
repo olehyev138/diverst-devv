@@ -12,8 +12,8 @@ module Api::V1::Concerns::DefinesFields
 
   def create_field
     params[:field] = field_payload
-    base_authorize(klass)
     item = klass.find(params[:id])
+    base_authorize(item)
 
     render status: 201, json: Field.build(self.diverst_request, params, base: item.fields)
   rescue => e

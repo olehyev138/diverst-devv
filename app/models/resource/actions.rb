@@ -4,7 +4,7 @@ module Resource::Actions
   end
   module ClassMethods
     def valid_scopes
-      ['not_archived']
+      ['not_archived', 'archived']
     end
   end
 end

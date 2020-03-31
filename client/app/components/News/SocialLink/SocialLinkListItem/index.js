@@ -16,42 +16,108 @@ import {
 } from '@material-ui/core/index';
 import { withStyles } from '@material-ui/core/styles';
 
-import { ROUTES } from 'containers/Shared/Routes/constants';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/News/messages';
+import { formatDateTimeString } from 'utils/dateTimeHelpers';
 import WrappedNavLink from '../../../Shared/WrappedNavLink';
 import DiverstLike from '../../../Shared/DiverstLike';
 
 import { injectIntl, intlShape } from 'react-intl';
+import IconButton from '@material-ui/core/IconButton';
+import LocationOnIcon from '@material-ui/icons/LocationOn';
+import LocationOnOutlinedIcon from '@material-ui/icons/LocationOnOutlined';
+import DiverstHTMLEmbedder from 'components/Shared/DiverstHTMLEmbedder';
+
 const styles = theme => ({
+  centerVertically: {
+    padding: 3,
+  },
+  cardContent: {
+    paddingBottom: 0,
+  },
 });
 
 export function SocialLinkListItem(props) {
-  const { socialLink } = props;
+  const { socialLink, classes } = props;
   const { newsItem } = props;
   const { links, intl } = props;
   const newsItemId = newsItem.id;
   const groupId = socialLink.group_id;
-  return (
-    <Card>
-      <CardContent>
-        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-        <Link href={socialLink.url} target='_blank'>
-          <Typography variant='h6'>
-            {socialLink.url}
-          </Typography>
-        </Link>
-        {socialLink.author ? (
-          <React.Fragment>
-            <Box mb={2} />
-            <Typography variant='body2' color='textSecondary'>
-              {`Submitted by ${socialLink.author.first_name} ${socialLink.author.last_name}`}
-            </Typography>
-          </React.Fragment>
-        ) : <React.Fragment />}
-      </CardContent>
-      <CardActions>
-        {!props.readonly && (
+
+  const { is_pinned: defaultPinned } = newsItem;
+  const [pinned, setPinned] = useState(defaultPinned);
+
+  function pin() {
+    setPinned(true);
+  }
+
+  function unpin() {
+    setPinned(false);
+  }
+
+  const embeddedCode = (
+    <DiverstHTMLEmbedder
+      html={socialLink.embed_code}
+      gridProps={{
+        spacing: 0,
+        direction: 'column',
+        alignItems: 'center',
+        justify: 'center',
+      }}
+      interweaveProps={{
+        allowList: ['iframe', 'div', 'blockquote', 'h4', 'a', 'p']
+      }}
+    />
+  );
+
+  const rawLink = (
+    <Link href={socialLink.url} target='_blank'>
+      <Typography variant='h6'>
+        {socialLink.url}
+      </Typography>
+    </Link>
+  );
+
+  const author = (
+    socialLink.author ? (
+      <Grid item>
+        <Typography variant='body2' color='textSecondary' className={classes.centerVertically}>
+          {`Submitted by ${socialLink.author.first_name} ${socialLink.author.last_name}`}
+        </Typography>
+      </Grid>
+    ) : null
+  );
+
+  const pinButtons = (
+    <Grid item>
+      {props.pinNewsItemBegin && (
+        <IconButton
+          size='small'
+          onClick={() => {
+            if (pinned)
+              props.unpinNewsItemBegin({ id: newsItemId });
+            else
+              props.pinNewsItemBegin({ id: newsItemId });
+          }}
+        >
+          { pinned ? <LocationOnIcon /> : <LocationOnOutlinedIcon />}
+        </IconButton>
+      )}
+    </Grid>
+  );
+
+  const date = (
+    <Grid item>
+      <Typography variant='body2' color='textSecondary' className={classes.centerVertically} align='right'>
+        {formatDateTimeString(socialLink.created_at)}
+      </Typography>
+    </Grid>
+  );
+
+  const actions = (
+    <CardActions>
+      {!props.readonly && (
+        <React.Fragment>
           <Button
             size='small'
             color='primary'
@@ -60,44 +126,69 @@ export function SocialLinkListItem(props) {
           >
             <DiverstFormattedMessage {...messages.edit} />
           </Button>
-        )}
-        {!props.readonly && props.newsItem.approved !== true && (
           <Button
             size='small'
+            color='primary'
             onClick={() => {
-              /* eslint-disable-next-line no-alert, no-restricted-globals */
-              props.updateNewsItemBegin({ approved: true, id: newsItemId, group_id: groupId });
+              props.archiveNewsItemBegin({ id: newsItemId });
             }}
           >
-            {<DiverstFormattedMessage {...messages.approve} />}
+            <DiverstFormattedMessage {...messages.archive} />
           </Button>
-        )}
-        {!props.readonly && (
           <Button
             size='small'
             onClick={() => {
               /* eslint-disable-next-line no-alert, no-restricted-globals */
-              if (confirm(intl.formatMessage(messages.social_delete_confirm)))
+              if (confirm('Delete social link?'))
                 props.deleteSocialLinkBegin(newsItem.social_link);
             }}
           >
-            {<DiverstFormattedMessage {...messages.delete} />}
+            Delete
           </Button>
-        )}
+        </React.Fragment>
+      )}
+      {!props.readonly && props.newsItem.approved !== true && (
+        <Button
+          size='small'
+          onClick={() => {
+            /* eslint-disable-next-line no-alert, no-restricted-globals */
+            props.updateNewsItemBegin({ approved: true, id: newsItemId, group_id: groupId });
+          }}
+        >
+          {<DiverstFormattedMessage {...messages.approve} />}
+        </Button>
+      )}
+      <DiverstLike
+        isLiked={newsItem.current_user_likes}
+        newsFeedLinkId={newsItem.id}
+        totalLikes={newsItem.total_likes}
+        likeNewsItemBegin={props.likeNewsItemBegin}
+        unlikeNewsItemBegin={props.unlikeNewsItemBegin}
+      />
+    </CardActions>
+  );
 
-        <DiverstLike
-          isLiked={newsItem.current_user_likes}
-          newsFeedLinkId={newsItem.id}
-          totalLikes={newsItem.total_likes}
-          likeNewsItemBegin={props.likeNewsItemBegin}
-          unlikeNewsItemBegin={props.unlikeNewsItemBegin}
-        />
-      </CardActions>
+  return (
+    <Card>
+      <CardContent className={classes.cardContent}>
+        { socialLink.embed_code ? embeddedCode : rawLink }
+        <Grid container justify='space-between'>
+          { author }
+          <Grid item>
+            <Grid container>
+              {pinButtons}
+              {date}
+            </Grid>
+          </Grid>
+        </Grid>
+      </CardContent>
+      { actions }
     </Card>
   );
 }
 
 SocialLinkListItem.propTypes = {
+  classes: PropTypes.object,
   intl: intlShape,
   socialLink: PropTypes.object,
   links: PropTypes.shape({
@@ -107,9 +198,11 @@ SocialLinkListItem.propTypes = {
   readonly: PropTypes.bool,
   deleteSocialLinkBegin: PropTypes.func,
   updateNewsItemBegin: PropTypes.func,
+  archiveNewsItemBegin: PropTypes.func,
+  pinNewsItemBegin: PropTypes.func,
+  unpinNewsItemBegin: PropTypes.func,
   likeNewsItemBegin: PropTypes.func,
   unlikeNewsItemBegin: PropTypes.func,
-
 };
 
 export default compose(

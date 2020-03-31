@@ -1,12 +1,11 @@
 class ApplicationPolicy
-  attr_reader :user, :record, :group_leader_role_ids
+  attr_reader :user, :policy_group, :group_leader_role_id, :record, :group
 
   def initialize(user, record, params = nil)
     raise Pundit::NotAuthorizedError, 'must be logged in' unless user
 
     @user = user
     @record = record
-    @group_leader_role_ids = @user.group_leaders.pluck(:user_role_id)
     @policy_group = @user.policy_group
   end
 
@@ -21,7 +20,7 @@ class ApplicationPolicy
   end
 
   def show?
-    scope.where(id: record.id).exists?
+    scope.where(id: record&.id).exists?
   end
 
   def create?
@@ -35,7 +34,7 @@ class ApplicationPolicy
   end
 
   def update?
-    scope.where(id: record.id).exists?
+    scope.where(id: record&.id).exists?
   end
 
   def edit?
@@ -43,7 +42,7 @@ class ApplicationPolicy
   end
 
   def destroy?
-    scope.where(id: record.id).exists?
+    scope.where(id: record&.id).exists?
   end
 
   def manage_all?
@@ -51,21 +50,30 @@ class ApplicationPolicy
   end
 
   def basic_group_leader_permission?(permission)
-    PolicyGroupTemplate.where(user_role_id: @group_leader_role_ids).where(permission.to_sym => true).exists?
+    if record&.is_a?(Group)
+      @group_leader_role_id = GroupLeader.find_by(user_id: user&.id, group_id: record.id)&.user_role_id
+    elsif record&.respond_to?(:group_id) # find the group of the record, eg. social link and check if user is group leader of group
+      @group_leader_role_id = GroupLeader.find_by(user_id: user&.id, group_id: record.group_id)&.user_role_id
+    end
+
+    PolicyGroupTemplate.where(user_role_id: @group_leader_role_id).where("#{permission} = true").exists?
   end
 
   def scope
-    Pundit.policy_scope(user, record.class)
+    Pundit.policy_scope(user, record.class.all)
   end
 
   class Scope
-    attr_reader :user, :scope, :permission
+    attr_reader :user, :scope, :permission, :policy
 
-    def initialize(user, scope, permission = nil)
+    def initialize(user, scope, permission = nil, params: {})
       @user = user
       @scope = scope
       @permission = permission
       @policy_group = @user.policy_group
+
+      policy_class = self.class.parent
+      @policy = policy_class.new(user, scope.all.klass, params)
     end
 
     def resolve

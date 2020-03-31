@@ -58,7 +58,7 @@ class Group < ApplicationRecord
     :years
   ]
 
-  belongs_to :enterprise
+  belongs_to :enterprise, counter_cache: true
   belongs_to :lead_manager, class_name: 'User'
   belongs_to :owner, class_name: 'User'
 
@@ -117,11 +117,13 @@ class Group < ApplicationRecord
   has_many :leaders, through: :group_leaders, source: :user
   has_many :sponsors, as: :sponsorable, dependent: :destroy
 
-  has_many :children, class_name: 'Group', foreign_key: :parent_id, dependent: :destroy
+  has_many :children, class_name: 'Group', foreign_key: :parent_id, dependent: :destroy, inverse_of: :parent
   has_many :annual_budgets, dependent: :destroy
   has_many :budgets, dependent: :destroy, through: :annual_budgets
+  has_many :budget_items, dependent: :destroy, through: :budgets
+  has_many :initiative_expenses, through: :annual_budgets
 
-  belongs_to :parent, class_name: 'Group', foreign_key: :parent_id
+  belongs_to :parent, class_name: 'Group', foreign_key: :parent_id, inverse_of: :children
   belongs_to :group_category
   belongs_to :group_category_type
 
@@ -137,7 +139,11 @@ class Group < ApplicationRecord
   end
 
   def current_annual_budget
-    annual_budgets.where(closed: false).last || create_annual_budget
+    if annual_budgets.loaded?
+      @current_annual_budget ||= annual_budgets.find { |ab| ab.closed == false }
+    else
+      @current_annual_budget ||= annual_budgets.where(closed: false).last
+    end
   end
 
   def current_annual_budget!
@@ -146,11 +152,18 @@ class Group < ApplicationRecord
 
   def current_annual_budget=(annual_budget)
     annual_budgets.update_all(closed: true)
-    annual_budget.update_attributes(closed: true)
+    annual_budget.update_attributes(closed: true, group_id: id)
   end
 
+  def current_budget_items
+    current_annual_budget&.budget_items || BudgetItem.none
+  end
 
-  delegate :unspent, BUDGET_DELEGATE_OPTIONS
+  def reload
+    @current_annual_budget = nil
+    super
+  end
+
   delegate :leftover, BUDGET_DELEGATE_OPTIONS
   delegate :remaining, BUDGET_DELEGATE_OPTIONS
   delegate :approved, BUDGET_DELEGATE_OPTIONS
@@ -158,7 +171,7 @@ class Group < ApplicationRecord
   delegate :available, BUDGET_DELEGATE_OPTIONS
   delegate :finalized_expenditure, BUDGET_DELEGATE_OPTIONS
 
-  delegate :carry_over!, BUDGET_DELEGATE_OPTIONS
+  delegate :carryover!, BUDGET_DELEGATE_OPTIONS
   delegate :reset!, BUDGET_DELEGATE_OPTIONS
 
   def annual_budget
@@ -171,10 +184,25 @@ class Group < ApplicationRecord
     ab&.save
   end
 
+  def self.load_sums
+    select(
+        '`groups`.`*`,'\
+        ' Sum(coalesce(`initiative_expenses`.`amount`, 0)) as `expenses_sum`,'\
+        ' Sum(CASE WHEN `budgets`.`is_approved` = TRUE THEN coalesce(`budget_items`.`estimated_amount`, 0) ELSE 0 END) as `approved_sum`,'\
+        ' Sum(coalesce(`initiatives`.`estimated_funding`, 0)) as `reserved_sum`')
+        .left_joins(:initiative_expenses)
+        .group(Group.column_names).each do |g|
+      g.current_annual_budget.instance_variable_set(:@expenses, g.expenses_sum)
+      g.current_annual_budget.instance_variable_set(:@approved, g.approved_sum)
+      g.current_annual_budget.instance_variable_set(:@reserved, g.reserved_sum)
+    end
+  end
+
   # TODO Remove after Paperclip to ActiveStorage migration
   has_attached_file :logo_paperclip, s3_permissions: 'private'
   has_attached_file :banner_paperclip
   has_attached_file :sponsor_media_paperclip, s3_permissions: 'private'
+  has_attached_file :sponsor_image_paperclip, s3_permissions: 'private'
 
   validates_length_of :event_attendance_visibility, maximum: 191
   validates_length_of :unit_of_expiry_age, maximum: 191
@@ -437,6 +465,30 @@ class Group < ApplicationRecord
                                 member.mentor,
                                 member.mentee
                               ]
+        csv << membership_list_row
+      end
+
+      csv << ['total', nil, "#{total_nb_of_members}"]
+    end
+  end
+
+  def membership_list_csv(group_members)
+    total_nb_of_members = group_members.count
+    mentorship_module_enabled = enterprise.mentorship_module_enabled?
+
+    CSV.generate do |csv|
+      first_row = %w(first_name last_name email_address)
+      first_row += %w(mentor mentee) if mentorship_module_enabled
+
+      csv << first_row
+
+      group_members.each do |member|
+        membership_list_row = []
+        membership_list_row += [ member.first_name, member.last_name, member.email ]
+        membership_list_row += [ member.mentor, member.mentee ] if mentorship_module_enabled
+
+        member_info = member.info
+
         csv << membership_list_row
       end
 

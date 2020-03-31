@@ -29,9 +29,15 @@ module Clockwork
 
   # every(30.minutes, 'Sync Yammer members') { Group.all.each { |group| SyncYammerGroupJob.perform_later(group.id) } }
 
+  every(1.day, 'Update the Daily Page Visits Count', at: '23:50') { ResetDailyPageCountJob.perform_later }
+
+  every(10.hours, 'Recalculate Cached Usage Stats') { UpdateUsageStatsDataJob.perform_later }
+
   every(1.hour, 'Update cached segment members') { Segment.update_all_members }
 
   every(3.hours, 'Send notifications of a poll when an initiative is finished') { SendPollNotificationJob.perform_later }
+
+  every(1.week, 'Recalculate Counter Caches', at: 'Sunday 00:00') { ResetCounterCachesJob.perform_later }
 
   every(1.day, 'Reset weekly rewards', at: '00:00') { ResetWeeklyRewardsJob.perform_later if Date.today.sunday? }
   every(1.day, 'Send daily notifications of pending users to group leaders', at: '00:00') {

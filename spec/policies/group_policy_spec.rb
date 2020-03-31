@@ -211,7 +211,7 @@ RSpec.describe GroupPolicy, type: :policy do
         before { group.parent = create(:group, enterprise: user.enterprise) }
 
         it 'returns true' do
-          expect(subject.parent_group_permissions?).to eq ::GroupPolicy.new(user, group.parent).manage?
+          expect(subject.parent_group_permissions?).to eq ::GroupPolicy.new(user.reload, group.parent).manage?
         end
       end
     end

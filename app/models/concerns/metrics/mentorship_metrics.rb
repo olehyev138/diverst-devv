@@ -11,7 +11,7 @@ module Metrics
       graph = Mentoring.get_graph_builder
       graph.set_enterprise_filter(field: "#{type}.enterprise_id", value: enterprise_id)
       graph.formatter.type = 'bar'
-      graph.formatter.title = "Users with most number of #{partner}s"
+      graph.formatter.title = "Number of #{partner}s"
 
       graph.query = graph.query.terms_agg(field: "#{type}.id", size: size)
       graph.query.add_filter_clause(field: "#{type}.active", value: true, bool_op: :must)
@@ -28,7 +28,7 @@ module Metrics
       graph = UserGroup.get_graph_builder
       graph.set_enterprise_filter(field: 'group.enterprise_id', value: enterprise_id)
       graph.formatter.type = 'bar'
-      graph.formatter.title = 'Mentors and Mentees per Group'
+      graph.formatter.title = 'Mentors per Group'
 
       graph.query = graph.query.bool_filter_agg { |qq| qq.terms_agg(field: 'group.name') }
 

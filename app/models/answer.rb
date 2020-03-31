@@ -1,7 +1,7 @@
 class Answer < ApplicationRecord
   include PublicActivity::Common
 
-  belongs_to :question, inverse_of: :answers
+  belongs_to :question, inverse_of: :answers, counter_cache: true
   belongs_to :author, class_name: 'User', inverse_of: :answers
 
   has_many :votes, class_name: 'AnswerUpvote', dependent: :destroy
