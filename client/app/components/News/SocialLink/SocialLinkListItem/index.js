@@ -20,6 +20,8 @@ import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/News/messages';
 import { formatDateTimeString } from 'utils/dateTimeHelpers';
 import WrappedNavLink from '../../../Shared/WrappedNavLink';
+import DiverstLike from '../../../Shared/DiverstLike';
+
 import { injectIntl, intlShape } from 'react-intl';
 import IconButton from '@material-ui/core/IconButton';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
@@ -88,6 +90,13 @@ export function SocialLinkListItem(props) {
 
   const pinButtons = (
     <Grid item>
+      <DiverstLike
+        isLiked={newsItem.current_user_likes}
+        newsFeedLinkId={newsItem.id}
+        totalLikes={newsItem.total_likes}
+        likeNewsItemBegin={props.likeNewsItemBegin}
+        unlikeNewsItemBegin={props.unlikeNewsItemBegin}
+      />
       {props.pinNewsItemBegin && (
         <IconButton
           size='small'
@@ -166,7 +175,7 @@ export function SocialLinkListItem(props) {
         <Grid container justify='space-between'>
           { author }
           <Grid item>
-            <Grid container>
+            <Grid container alignItems='center'>
               {pinButtons}
               {date}
             </Grid>
@@ -192,6 +201,8 @@ SocialLinkListItem.propTypes = {
   archiveNewsItemBegin: PropTypes.func,
   pinNewsItemBegin: PropTypes.func,
   unpinNewsItemBegin: PropTypes.func,
+  likeNewsItemBegin: PropTypes.func,
+  unlikeNewsItemBegin: PropTypes.func,
 };
 
 export default compose(

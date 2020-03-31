@@ -24,7 +24,6 @@ import {
   PIN_NEWS_ITEM_BEGIN, PIN_NEWS_ITEM_SUCCESS, PIN_NEWS_ITEM_ERROR,
   UNPIN_NEWS_ITEM_BEGIN, UNPIN_NEWS_ITEM_SUCCESS, UNPIN_NEWS_ITEM_ERROR, } from 'containers/News/constants';
 
-
 export function getNewsItemsBegin(payload) {
   return {
     type: GET_NEWS_ITEMS_BEGIN,
