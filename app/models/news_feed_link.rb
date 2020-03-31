@@ -145,6 +145,10 @@ class NewsFeedLink < ApplicationRecord
     likes.size
   end
 
+  def user_like(user_id)
+    likes.where(user_id: user_id).any?
+  end
+
   def create_view_if_none(user)
     unless views.find_by(user_id: user.id)
       view = views.create(user_id: user.id, enterprise_id: user.enterprise_id)
