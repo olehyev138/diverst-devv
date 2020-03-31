@@ -31,6 +31,8 @@ import LocationOnOutlinedIcon from '@material-ui/icons/LocationOnOutlined';
 import { formatDateTimeString } from 'utils/dateTimeHelpers';
 import DiverstImg from 'components/Shared/DiverstImg';
 import Carousel from 'react-material-ui-carousel';
+import DiverstLike from '../../../Shared/DiverstLike';
+
 import { injectIntl, intlShape } from 'react-intl';
 import Permission from 'components/Shared/DiverstPermission';
 import { permission } from 'utils/permissionsHelpers';
@@ -116,6 +118,13 @@ export function NewsLinkListItem(props) {
           <Grid item>
             <Grid container>
               <Grid item>
+                <DiverstLike
+                  isLiked={newsItem.current_user_likes}
+                  newsFeedLinkId={newsItem.id}
+                  totalLikes={newsItem.total_likes}
+                  likeNewsItemBegin={props.likeNewsItemBegin}
+                  unlikeNewsItemBegin={props.unlikeNewsItemBegin}
+                />
                 { props.pinNewsItemBegin && (
                   <Permission show={permission(props.currentGroup, 'events_manage?')}>
                     <IconButton
@@ -130,16 +139,6 @@ export function NewsLinkListItem(props) {
                       { pinned ? <LocationOnIcon /> : <LocationOnOutlinedIcon />}
                     </IconButton>
                   </Permission>
-                )}
-                { props.links && (
-                  <IconButton
-                    // TODO : Change to actual post like action
-                    size='small'
-                    to={props.links.newsLinkShow(props.groupId, newsItem.id)}
-                    component={WrappedNavLink}
-                  >
-                    <ThumbUpIcon />
-                  </IconButton>
                 )}
                 { props.pinNewsItemBegin && (
                   <Permission show={permission(newsItem, 'show?')}>
@@ -232,6 +231,8 @@ NewsLinkListItem.propTypes = {
   archiveNewsItemBegin: PropTypes.func,
   unpinNewsItemBegin: PropTypes.func,
   pinNewsItemBegin: PropTypes.func,
+  likeNewsItemBegin: PropTypes.func,
+  unlikeNewsItemBegin: PropTypes.func,
 };
 
 export default compose(

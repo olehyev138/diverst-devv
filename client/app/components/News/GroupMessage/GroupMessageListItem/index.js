@@ -20,6 +20,8 @@ import messages from 'containers/News/messages';
 import CommentIcon from '@material-ui/icons/Comment';
 import IconButton from '@material-ui/core/IconButton';
 import { formatDateTimeString } from 'utils/dateTimeHelpers';
+import DiverstLike from '../../../Shared/DiverstLike';
+
 import { injectIntl, intlShape } from 'react-intl';
 import Permission from 'components/Shared/DiverstPermission';
 import { permission } from 'utils/permissionsHelpers';
@@ -84,6 +86,13 @@ export function GroupMessageListItem(props) {
           <Grid item>
             <Grid container>
               <Grid item>
+                <DiverstLike
+                  isLiked={newsItem.current_user_likes}
+                  newsFeedLinkId={newsItem.id}
+                  totalLikes={newsItem.total_likes}
+                  likeNewsItemBegin={props.likeNewsItemBegin}
+                  unlikeNewsItemBegin={props.unlikeNewsItemBegin}
+                />
                 {props.pinNewsItemBegin && (
                   <Permission show={permission(props.currentGroup, 'news_manage?')}>
                     <IconButton
@@ -98,16 +107,6 @@ export function GroupMessageListItem(props) {
                       { pinned ? <LocationOnIcon /> : <LocationOnOutlinedIcon />}
                     </IconButton>
                   </Permission>
-                )}
-                { props.links && (
-                  <IconButton
-                    // TODO : Change to actual post like action
-                    size='small'
-                    to={props.links.groupMessageShow(props.groupId, newsItem.id)}
-                    component={WrappedNavLink}
-                  >
-                    <ThumbUpIcon />
-                  </IconButton>
                 )}
                 { props.links && (
                   <Permission show={permission(newsItem, 'show?')}>
@@ -203,6 +202,8 @@ GroupMessageListItem.propTypes = {
   pinNewsItemBegin: PropTypes.func,
   unpinNewsItemBegin: PropTypes.func,
   isPinned: PropTypes.bool,
+  likeNewsItemBegin: PropTypes.func,
+  unlikeNewsItemBegin: PropTypes.func,
 };
 
 export default compose(
