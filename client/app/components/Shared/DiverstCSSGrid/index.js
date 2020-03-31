@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { lighten, withStyles } from '@material-ui/core/styles';
-import { Grid, Cell } from 'styled-css-grid'
+import { Grid, Cell } from 'styled-css-grid';
 
 const DiverstCSSGrid = withStyles(theme => ({
   flex: 1

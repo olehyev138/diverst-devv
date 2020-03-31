@@ -143,7 +143,7 @@ class SocialMedia::Importer
     url = url[0...-1] if url[-1] == '/'
     begin
       options[:url] = url
-      embedly_api = Embedly::API.new  key: ENV['EMBEDLY_KEY']
+      embedly_api = Embedly::API.new key: ENV['EMBEDLY_KEY']
       obj = (embedly_api.extract options)[0]
 
       if obj.dig(:error_message).present?
