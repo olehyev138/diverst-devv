@@ -10,8 +10,8 @@ import React, {
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import {
-  Box, Backdrop, Paper, Link,
-  Button, Card, CardActions, CardContent, Grid, Tab, Typography,
+  Box, Backdrop, Paper,
+  Grid, Tab, Typography,
 } from '@material-ui/core';
 import { SpeedDial, SpeedDialAction, SpeedDialIcon } from '@material-ui/lab';
 import { withStyles } from '@material-ui/core/styles';
@@ -75,9 +75,11 @@ export function NewsFeed(props) {
       window.instgrm.Embeds.process();
     if (window.FB)
       window.FB.XFBML.parse();
+    if (window.twttr && window.twttr.ready())
+      window.twttr.widgets.load();
 
     return () => {};
-  });
+  }, [props.newsItems]);
 
 
   const actions = [
