@@ -22,6 +22,9 @@ Rails.application.routes.draw do
   get 'tags', to: 'news_tags#tags_search'
 
   resources :onboarding, only: [:index]
+  
+  get 'nonsso_activation/new', to: 'nonsso_activation#new'
+  post 'nonsso_activation/activate', to: 'nonsso_activation#activate'
 
   namespace :api, defaults: { format: :json } do
     namespace :v1 do

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200314230356) do
+ActiveRecord::Schema.define(version: 20200331150308) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -361,6 +361,7 @@ ActiveRecord::Schema.define(version: 20200314230356) do
     t.boolean  "onboarding_consent_enabled",                          default: false
     t.boolean  "enable_outlook",                                      default: false
     t.text     "onboarding_pop_up_content",             limit: 65535
+    t.boolean  "nonsso_activation_switch",                            default: false
   end
 
   create_table "expense_categories", force: :cascade do |t|
@@ -1511,6 +1512,8 @@ ActiveRecord::Schema.define(version: 20200314230356) do
     t.integer  "news_link_comments_count",       limit: 4
     t.integer  "mentors_count",                  limit: 4
     t.integer  "mentees_count",                  limit: 4
+    t.string   "employee_id",                    limit: 191
+    t.string   "dob",                            limit: 191
   end
 
   add_index "users", ["active"], name: "index_users_on_active", using: :btree
@@ -1537,7 +1540,6 @@ ActiveRecord::Schema.define(version: 20200314230356) do
     t.integer  "group_id",          limit: 4
     t.integer  "folder_id",         limit: 4
     t.integer  "resource_id",       limit: 4
-    t.integer  "view_count",        limit: 4
   end
 
   create_table "yammer_field_mappings", force: :cascade do |t|

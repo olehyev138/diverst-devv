@@ -1,30 +1,38 @@
 <h2><%= t('login.title') %></h2>
 <%= simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-  <%= f.input :email, label: t('login.email'), autofocus: true %>
-  <%= f.input :password, label: t('login.password'), autocomplete: "off" %>
+<%= f.input :email, label: t('login.email'), autofocus: true %>
+<%= f.input :password, label: t('login.password'), autocomplete: "off" %>
 
-  <% if devise_mapping.rememberable? -%>
-    <%= f.input :remember_me, label: t('login.remember_me'), as: :boolean, wrapper: :boolean_checkbox %>
-  <% end -%>
+<% if devise_mapping.rememberable? -%>
+<%= f.input :remember_me, label: t('login.remember_me'), as: :boolean, wrapper: :boolean_checkbox %>
+<% end -%>
 
-  <%= f.button :submit, value: t('login.title') %>
+<%= f.button :submit, value: t('login.title') %>
 <% end %>
 
 <% content_for :links do %>
-  <div class="text-center">
-    <%= render "devise/shared/links" %>
-    <br>
-    <%= link_to "Activate account",
-          new_password_path(resource_name, setup: '1'),
+<div class="text-center">
+  <%= render "devise/shared/links" %>
+  <br>
+  <% if Enterprise.find_by_name(ENV['ENTERPISE_NAME'])&.nonsso_activation_switch? || true %>
+  <%= link_to 'Activate Account', 
+          nonsso_activation_new_path, 
+          class: 'btn btn--tertiary',
+          style: 'margin-top: 5px;' %>
+
+  <% else %>
+  <%= link_to "Activate account",
+        new_password_path(resource_name, setup: '1'),
           class: "btn btn--tertiary",
           style: 'margin-top: 5px;' %>
-  </div>
+  <% end %>
+</div>
 <% end %>
 
 <script>
-  $(document).ready(function(){
+  $(document).ready(function () {
     var primary_color = $('body').data('primary-color');
-    if( primary_color ) {
+    if (primary_color) {
       $('body').css('background', primary_color);
     }
   });
