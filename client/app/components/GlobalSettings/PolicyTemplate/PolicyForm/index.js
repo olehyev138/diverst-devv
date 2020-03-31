@@ -11,6 +11,7 @@ import dig from 'object-dig';
 import Interweave from 'interweave';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
+import DiverstLogoutDialog from "components/Shared/DiverstLogoutDialog";
 import { injectIntl, intlShape } from 'react-intl';
 import { Field, Formik, Form } from 'formik';
 import {
@@ -1160,16 +1161,32 @@ export function PolicyForm(props) {
     auto_archive_manage: { default: false },
   });
 
+  const [open, setOpen] = React.useState(false);
+
+  function handleClickOpen() {
+    setOpen(true);
+  }
+
+  function handleClose() {
+    setOpen(false);
+  }
+
   return (
-    <Formik
-      initialValues={initialValues}
-      enableReinitialize
-      onSubmit={(values, actions) => {
-        props.policyAction(values);
-      }}
-    >
-      {formikProps => <PolicyFormInner {...props} {...formikProps} />}
-    </Formik>
+    <React.Fragment>
+      <Formik
+        initialValues={initialValues}
+        enableReinitialize
+        onSubmit={(values, actions) => {
+          props.policyAction(values);
+        }}
+      >
+        {formikProps => <PolicyFormInner {...props} {...formikProps} />}
+      </Formik>
+      <DiverstLogoutDialog
+        open={open}
+        handleClose={handleClose}
+      />
+    </React.Fragment>
   );
 }
 
