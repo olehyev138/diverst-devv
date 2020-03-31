@@ -17,7 +17,8 @@ import {
   FINALIZE_EXPENSES_BEGIN,
   ARCHIVE_EVENT_BEGIN,
   JOIN_EVENT_BEGIN,
-  LEAVE_EVENT_BEGIN
+  LEAVE_EVENT_BEGIN,
+  EXPORT_ATTENDEES_BEGIN
 } from './constants';
 
 
@@ -33,7 +34,7 @@ import {
   finalizeExpensesSuccess, finalizeExpensesError,
   archiveEventError, archiveEventSuccess,
   joinEventError, joinEventSuccess,
-  leaveEventError, leaveEventSuccess
+  exportAttendeesSuccess, exportAttendeesError
 } from './actions';
 
 
@@ -204,7 +205,7 @@ export function* finalizeExpenses(action) {
 export function* joinEvent(action) {
   const payload = { initiative_user: action.payload };
   try {
-    const response = yield call(api.initiativeUsers.create.bind(api.initiativeUsers), payload);
+    const response = yield call(api.initiativeUsers.join.bind(api.initiativeUsers), payload);
     yield put(joinEventSuccess());
   } catch (err) {
     yield put(joinEventError(err));
@@ -217,13 +218,27 @@ export function* joinEvent(action) {
 export function* leaveEvent(action) {
   const payload = { initiative_user: action.payload };
   try {
-    const response = yield call(api.initiativeUsers.remove.bind(api.initiativeUsers), payload);
+    const response = yield call(api.initiativeUsers.leave.bind(api.initiativeUsers), payload);
     yield put(joinEventSuccess());
   } catch (err) {
     yield put(joinEventError(err));
 
     // TODO: intl message
     yield put(showSnackbar({ message: 'Failed to leave event', options: { variant: 'warning' } }));
+  }
+}
+
+export function* exportAttendees(action) {
+  try {
+    const response = yield call(api.initiativeUsers.csvExport.bind(api.initiativeUsers), action.payload);
+
+    yield put(exportAttendeesSuccess({}));
+    yield put(showSnackbar({ message: 'Successfully exported attendees', options: { variant: 'success' } }));
+  } catch (err) {
+    yield put(exportAttendeesError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to export attendees', options: { variant: 'warning' } }));
   }
 }
 
@@ -239,4 +254,5 @@ export default function* eventsSaga() {
   yield takeLatest(FINALIZE_EXPENSES_BEGIN, finalizeExpenses);
   yield takeLatest(JOIN_EVENT_BEGIN, joinEvent);
   yield takeLatest(LEAVE_EVENT_BEGIN, leaveEvent);
+  yield takeLatest(EXPORT_ATTENDEES_BEGIN, exportAttendees);
 }

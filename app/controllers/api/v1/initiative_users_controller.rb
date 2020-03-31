@@ -1,14 +1,12 @@
 class Api::V1::InitiativeUsersController < DiverstController
-  def create
+  def join
     params[klass.symbol][:user_id] = current_user.id
-    super
+    create
   end
 
-  def remove
+  def leave
     params[klass.symbol][:user_id] = current_user.id
     item = klass.find_by(payload)
-
-    return if item.nil?
 
     item.remove
   end

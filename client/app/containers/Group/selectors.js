@@ -30,6 +30,32 @@ const selectGroup = () => createSelector(
   groupsState => groupsState.currentGroup
 );
 
+const selectCategorizeGroup = () => createSelector(
+  selectGroupsDomain,
+  (groupsState) => {
+    const { currentGroup } = groupsState;
+    if (!currentGroup) return null;
+
+    const selectGroup = {
+      ...groupsState.currentGroup, ...{
+        name: {
+          label: groupsState.currentGroup.name,
+          value: groupsState.currentGroup.id
+        }
+      }
+    };
+
+    selectGroup.children = selectGroup.children.map(child => ({
+      id: child.id,
+      name: child.name,
+      group_category_id: child.group_category ? child.group_category.id : null,
+      group_category_type_id: child.group_category_type ? child.group_category_type.id : null,
+      category: child.group_category ? { value: child.group_category.id, label: child.group_category.name } : null
+    }));
+    return selectGroup;
+  }
+);
+
 const selectGroupIsLoading = () => createSelector(
   selectGroupsDomain,
   groupsState => groupsState.isLoading
@@ -78,4 +104,5 @@ export {
   selectGroupIsFormLoading,
   selectGroupIsCommitting,
   selectHasChanged,
+  selectCategorizeGroup,
 };

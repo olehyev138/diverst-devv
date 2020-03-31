@@ -207,7 +207,7 @@ export class ApplicationHeader extends React.PureComponent {
             <Logo height='55px' withLink />
             <div className={classNames(classes.grow, classes.centerText)}>
               <Hidden xsDown>
-                {group ? (
+                {!isAdmin && group ? (
                   <Typography variant='h5'>
                     {group.name}
                   </Typography>
