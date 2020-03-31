@@ -16,7 +16,6 @@ import {
 } from '@material-ui/core/index';
 import { withStyles } from '@material-ui/core/styles';
 
-import { ROUTES } from 'containers/Shared/Routes/constants';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/News/messages';
 import { formatDateTimeString } from 'utils/dateTimeHelpers';
@@ -25,7 +24,7 @@ import { injectIntl, intlShape } from 'react-intl';
 import IconButton from '@material-ui/core/IconButton';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import LocationOnOutlinedIcon from '@material-ui/icons/LocationOnOutlined';
-import Interweave from 'interweave';
+import DiverstHTMLEmbedder from 'components/Shared/DiverstHTMLEmbedder';
 
 const styles = theme => ({
   centerVertically: {
@@ -55,20 +54,18 @@ export function SocialLinkListItem(props) {
   }
 
   const embeddedCode = (
-    <Grid
-      container
-      spacing={0}
-      direction='column'
-      alignItems='center'
-      justify='center'
-    >
-      <Grid item>
-        <Interweave
-          content={socialLink.embed_code}
-          allowList={['iframe', 'div', 'blockquote', 'h4', 'a', 'p']}
-        />
-      </Grid>
-    </Grid>
+    <DiverstHTMLEmbedder
+      html={socialLink.embed_code}
+      gridProps={{
+        spacing: 0,
+        direction: 'column',
+        alignItems: 'center',
+        justify: 'center',
+      }}
+      interweaveProps={{
+        allowList: ['iframe', 'div', 'blockquote', 'h4', 'a', 'p']
+      }}
+    />
   );
 
   const rawLink = (
