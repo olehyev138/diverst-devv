@@ -129,7 +129,7 @@ export function SocialLinkListItem(props) {
             >
               <DiverstFormattedMessage {...messages.edit} />
             </Button>
-            <Permission show={permission(props.currentGroup, 'messages_manage?')}>
+            <Permission show={permission(props.currentGroup, 'news_manage?')}>
               <Button
                 size='small'
                 color='primary'
@@ -155,7 +155,7 @@ export function SocialLinkListItem(props) {
           </React.Fragment>
         )}
         {!props.readonly && props.newsItem.approved !== true && (
-          <Permission show={permission(props.currentGroup, 'messages_manage?')}>
+          <Permission show={permission(props.currentGroup, 'news_manage?')}>
             <Button
               size='small'
               onClick={() => {

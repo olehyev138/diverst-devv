@@ -19,6 +19,6 @@ class Api::V1::UserGroupsController < DiverstController
     params.require(klass.symbol).permit(
         :user_id,
         :group_id,
-        )
+      )
   end
 end
