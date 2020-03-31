@@ -108,6 +108,14 @@ export function SSOSettingsInner({ classes, handleSubmit, handleChange, handleBl
 }
 
 export function SSOSettings(props) {
+  const initialValues = buildValues(props.enterprise, {
+    id: { default: '' },
+    name: { default: '' },
+    idp_sso_target_url: { default: '' },
+    idp_slo_target_url: { default: '' },
+    idp_cert: { default: '' },
+  });
+
   const [open, setOpen] = React.useState(false);
 
   function handleClickOpen() {
@@ -117,14 +125,6 @@ export function SSOSettings(props) {
   function handleClose() {
     setOpen(false);
   }
-
-  const initialValues = buildValues(props.enterprise, {
-    id: { default: '' },
-    name: { default: '' },
-    idp_sso_target_url: { default: '' },
-    idp_slo_target_url: { default: '' },
-    idp_cert: { default: '' },
-  });
 
   return (
     <React.Fragment>
