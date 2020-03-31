@@ -25,7 +25,7 @@ RSpec.describe BudgetPolicy, type: :policy do
       before { budget.is_approved = true }
 
       context 'when admin?' do
-        before { allow(subject).to receive(:admin?).and_return(true) }
+        before { allow(subject).to receive(:manage_all?).and_return(true) }
 
         it { is_expected.to permit_action(:destroy) }
       end
@@ -37,7 +37,7 @@ RSpec.describe BudgetPolicy, type: :policy do
         let(:budget1) { create(:budget, annual_budget_id: annual_budget.id, requester: user) }
         subject { described_class.new(user, [group, budget1]) }
 
-        before { allow(subject).to receive(:admin?).and_return(false) }
+        before { allow(subject).to receive(:manage_all?).and_return(false) }
 
         it { is_expected.to permit_action(:destroy) }
       end
@@ -105,7 +105,7 @@ RSpec.describe BudgetPolicy, type: :policy do
     it { is_expected.to forbid_actions([:approve, :decline]) }
 
     context 'when not admin?' do
-      before { allow(subject).to receive(:admin?).and_return(false) }
+      before { allow(subject).to receive(:manage_all?).and_return(false) }
 
       it { is_expected.to forbid_action(:destroy) }
     end
@@ -116,7 +116,7 @@ RSpec.describe BudgetPolicy, type: :policy do
         let(:budget1) { create(:budget, annual_budget_id: annual_budget.id, requester: create(:user)) }
         subject { described_class.new(user, [group, budget1]) }
 
-        before { allow(subject).to receive(:admin?).and_return(false) }
+        before { allow(subject).to receive(:manage_all?).and_return(false) }
 
         it { is_expected.to forbid_action(:destroy) }
       end

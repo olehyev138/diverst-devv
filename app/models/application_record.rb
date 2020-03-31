@@ -10,6 +10,8 @@ class ApplicationRecord < ActiveRecord::Base
   include BaseCsvExport
   include ActionView::Helpers::DateHelper
 
+  ActiveRecordQueryTrace.enabled = false
+
   def time_since_creation
     time_ago_in_words created_at
   end
@@ -127,7 +129,6 @@ class ApplicationRecord < ActiveRecord::Base
         p "Serializing object with id = #{item.id}"
         arr << (serializer || ActiveModel::Serializer.serializer_for(item)).new(item).as_json
       end
-      Clipboard.copy arr.to_json
       nil
     end
   end

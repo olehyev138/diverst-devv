@@ -34,6 +34,8 @@ import DiverstLoader from 'components/Shared/DiverstLoader';
 
 import FolderListItem from 'components/Resource/Shared/FolderListItem';
 import DiverstShowLoader from 'components/Shared/DiverstShowLoader';
+import Permission from 'components/Shared/DiverstPermission';
+import { permission } from 'utils/permissionsHelpers';
 
 const styles = theme => ({
   folderListItem: {
@@ -84,74 +86,78 @@ export function Folder(props) {
                 {folder.name}
               </Typography>
             </Grid>
-
-            <Grid item>
-              <Button
-                variant='contained'
-                to={props.links.resourceNew}
-                color='primary'
-                size='large'
-                component={WrappedNavLink}
-                className={classes.buttons}
-                startIcon={<AddIcon />}
-              >
-                <DiverstFormattedMessage {...messages.show.addResource} />
-              </Button>
-            </Grid>
-
-            <Grid item>
-              <Button
-                variant='contained'
-                to={props.links.folderNew}
-                color='primary'
-                size='large'
-                component={WrappedNavLink}
-                className={classes.buttons}
-                startIcon={<AddIcon />}
-              >
-                <DiverstFormattedMessage {...messages.show.addFolder} />
-              </Button>
-            </Grid>
-
-            <Grid item>
-              <Button
-                variant='contained'
-                to={{
-                  pathname: props.links.folderEdit(folder),
-                  fromFolder: {
-                    folder,
-                    action: 'edit'
-                  },
-                }}
-                color='primary'
-                size='large'
-                component={WrappedNavLink}
-                className={classes.buttons}
-                startIcon={<EditIcon />}
-              >
-                <DiverstFormattedMessage {...messages.edit} />
-              </Button>
-            </Grid>
-
-            <Grid item>
-              <Button
-                variant='contained'
-                color='primary'
-                size='large'
-                className={classNames(classes.buttons, classes.deleteButton)}
-                startIcon={<DeleteIcon />}
-                onClick={() => {
-                  // eslint-disable-next-line no-restricted-globals,no-alert
-                  if (confirm(props.intl.formatMessage(messages.confirm_delete)))
-                    props.deleteFolderBegin({
-                      id: folder.id,
+            <Permission show={permission(props.currentGroup, 'resources_create?')}>
+              <Grid item>
+                <Button
+                  variant='contained'
+                  to={props.links.resourceNew}
+                  color='primary'
+                  size='large'
+                  component={WrappedNavLink}
+                  className={classes.buttons}
+                  startIcon={<AddIcon />}
+                >
+                  <DiverstFormattedMessage {...messages.show.addResource} />
+                </Button>
+              </Grid>
+            </Permission>
+            <Permission show={permission(props.currentGroup, 'resources_create?')}>
+              <Grid item>
+                <Button
+                  variant='contained'
+                  to={props.links.folderNew}
+                  color='primary'
+                  size='large'
+                  component={WrappedNavLink}
+                  className={classes.buttons}
+                  startIcon={<AddIcon />}
+                >
+                  <DiverstFormattedMessage {...messages.show.addFolder} />
+                </Button>
+              </Grid>
+            </Permission>
+            <Permission show={permission(folder, 'destroy?')}>
+              <Grid item>
+                <Button
+                  variant='contained'
+                  to={{
+                    pathname: props.links.folderEdit(folder),
+                    fromFolder: {
                       folder,
-                    });
-                }}
-              >
-                <DiverstFormattedMessage {...messages.delete} />
-              </Button>
-            </Grid>
+                      action: 'edit'
+                    },
+                  }}
+                  color='primary'
+                  size='large'
+                  component={WrappedNavLink}
+                  className={classes.buttons}
+                  startIcon={<EditIcon />}
+                >
+                  <DiverstFormattedMessage {...messages.edit} />
+                </Button>
+              </Grid>
+            </Permission>
+            <Permission show={permission(folder, 'destroy?')}>
+              <Grid item>
+                <Button
+                  variant='contained'
+                  color='primary'
+                  size='large'
+                  className={classNames(classes.buttons, classes.deleteButton)}
+                  startIcon={<DeleteIcon />}
+                  onClick={() => {
+                    // eslint-disable-next-line no-restricted-globals,no-alert
+                    if (confirm(props.intl.formatMessage(messages.confirm_delete)))
+                      props.deleteFolderBegin({
+                        id: folder.id,
+                        folder,
+                      });
+                  }}
+                >
+                  <DiverstFormattedMessage {...messages.delete} />
+                </Button>
+              </Grid>
+            </Permission>
           </Grid>
           <Box mb={2} />
           <Divider />
@@ -181,6 +187,7 @@ export function Folder(props) {
                   <Grid item key={item.id} className={classes.folderListItem}>
                     <FolderListItem
                       item={item}
+                      currentGroup={props.currentGroup}
                       deleteAction={props.deleteFolderBegin}
                       links={props.links}
                     />
@@ -227,6 +234,7 @@ export function Folder(props) {
                   <Grid item key={item.id} className={classes.folderListItem}>
                     <FolderListItem
                       item={item}
+                      currentGroup={props.currentGroup}
                       isResource
                       deleteAction={props.deleteResourceBegin}
                       archiveResourceBegin={props.archiveResourceBegin}
@@ -274,7 +282,8 @@ Folder.propTypes = {
     folderEdit: PropTypes.func,
     resourceEdit: PropTypes.func,
     resourceNew: PropTypes.string,
-  })
+  }),
+  currentGroup: PropTypes.object,
 };
 
 export default compose(

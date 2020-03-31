@@ -1,13 +1,8 @@
 class InitiativeUserSerializer < ApplicationRecordSerializer
   attributes :user, :initiative
 
-  def user
-    UserSerializer.new(object.user).attributes
-  end
-
-  def initiative
-    InitiativeSerializer.new(object.initiative).attributes
-  end
+  belongs_to :user
+  belongs_to :initiative
 
   def serialize_all_fields
     true

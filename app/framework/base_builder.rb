@@ -11,8 +11,8 @@ module BaseBuilder
 
   module ClassMethods
     # @param base [ActiveRecord], partial query
-    def index(diverst_request, params, search_method = :lookup, base: self)
-      pager(diverst_request, params, search_method, base: base)
+    def index(diverst_request, params, search_method = :lookup, base: self, policy: nil)
+      pager(diverst_request, params, search_method, base: base, policy: policy)
     end
 
     # @param base [ActiveRecord::Association], association to create a new object from

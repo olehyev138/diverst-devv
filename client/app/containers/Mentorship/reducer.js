@@ -18,7 +18,7 @@ export const initialState = {
 
   currentUser: null,
 
-  isFetchingUsers: false,
+  isFetchingUsers: true,
 };
 
 /* eslint-disable-next-line default-case, no-param-reassign */

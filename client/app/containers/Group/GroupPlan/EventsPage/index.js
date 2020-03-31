@@ -63,6 +63,7 @@ export function EventsPage(props) {
     <EventsList
       outcomes={outcomes}
       outcomesTotal={outcomesTotal}
+      currentGroup={props.currentGroup}
       links={links}
       isLoading={isLoading}
       handlePagination={handlePagination}
@@ -78,6 +79,7 @@ EventsPage.propTypes = {
   outcomes: PropTypes.array,
   outcomesTotal: PropTypes.number,
   isLoading: PropTypes.bool,
+  currentGroup: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({

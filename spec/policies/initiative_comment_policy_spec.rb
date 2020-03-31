@@ -7,7 +7,7 @@ RSpec.describe InitiativeCommentPolicy, type: :policy do
   let(:initiative_comment) { create(:initiative_comment) }
   let!(:group) { initiative_comment.initiative.owner_group }
 
-  subject { described_class.new(user, [group, initiative_comment]) }
+  subject { described_class.new(user, initiative_comment) }
 
   before {
     no_access.policy_group.manage_all = false

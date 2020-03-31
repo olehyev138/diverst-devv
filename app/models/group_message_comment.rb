@@ -3,6 +3,7 @@ class GroupMessageComment < ApplicationRecord
 
   belongs_to :author, class_name: 'User'
   belongs_to :message, class_name: 'GroupMessage'
+  has_one :news_feed_link, through: :message
 
   has_many :user_reward_actions
 

@@ -22,6 +22,7 @@ import OutcomeForm from 'components/Group/Outcome/OutcomeForm';
 
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Group/Outcome/messages';
+import Conditional from 'components/Compositions/Conditional';
 
 export function OutcomeCreatePage(props) {
   useInjectReducer({ key: 'outcomes', reducer });
@@ -76,4 +77,9 @@ export default compose(
   injectIntl,
   withConnect,
   memo,
-)(OutcomeCreatePage);
+)(Conditional(
+  OutcomeCreatePage,
+  ['currentGroup.permissions.update?'],
+  (props, rs) => ROUTES.group.plan.index.path(rs.params('group_id')),
+  'You don\'t have permission to create group outcomes'
+));
