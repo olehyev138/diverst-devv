@@ -159,67 +159,77 @@ export function Event(props) {
               )}
             </Grid>
           </Grid>
-          {event.picture_data && (
-            <DiverstImg
-              data={event.picture_data}
-              maxWidth='100%'
-              minWidth='100%'
-              maxHeight='180px'
-            />
-          )}
           <Paper className={classes.padding}>
-            {event.description && (
-              <React.Fragment>
+            <Grid container spacing={2}>
+              <Grid item xs>
+                {event.picture_data && (
+                  <DiverstImg
+                    data={event.picture_data}
+                    maxWidth='100%'
+                    maxHeight='240px'
+                  />
+                )}
+                <Box mb={3} />
+                {event.description && (
+                  <React.Fragment>
+                    <Typography className={classes.dataHeaders}>
+                      <DiverstFormattedMessage {...messages.inputs.description} />
+                    </Typography>
+                    <Typography
+                      style={{
+                        whiteSpace: 'pre-line'
+                      }}
+                      color='textSecondary'
+                      className={classes.data}
+                    >
+                      {event.description}
+                    </Typography>
+                  </React.Fragment>
+                )}
                 <Typography className={classes.dataHeaders}>
-                  <DiverstFormattedMessage {...messages.inputs.description} />
+                  <DiverstFormattedMessage {...messages.show.dateAndTime} />
                 </Typography>
-                <Typography
-                  style={{
-                    whiteSpace: 'pre-line'
-                  }}
-                  color='textSecondary'
-                  className={classes.data}
-                >
-                  {event.description}
+                <Typography color='primary' className={classes.data}>
+                  {formatDateTimeString(event.start, DateTime.DATETIME_FULL)}
+                  <Typography display='inline' color='textSecondary'>
+                    &nbsp;
+                    <DiverstFormattedMessage {...messages.show.until} />
+                    &nbsp;
+                  </Typography>
+                  {formatDateTimeString(event.end, DateTime.DATETIME_FULL)}
                 </Typography>
-              </React.Fragment>
-            )}
-            <Typography className={classes.dataHeaders}>
-              <DiverstFormattedMessage {...messages.show.dateAndTime} />
-            </Typography>
-            <Typography color='textSecondary' className={classes.data}>
-              {formatDateTimeString(event.start, DateTime.DATETIME_FULL)}
-              &ensp;~&ensp;
-              {formatDateTimeString(event.end, DateTime.DATETIME_FULL)}
-            </Typography>
-            {event.location && (
-              <React.Fragment>
+                {event.participating_groups.length > 0 && (
+                  <React.Fragment>
+                    <Typography className={classes.dataHeaders}>
+                      <DiverstFormattedMessage {...messages.inputs.participating_groups} />
+                    </Typography>
+                    {event.participating_groups.map((group, i) => (
+                      <Typography color='textSecondary' key={group.id}>
+                        {group.name}
+                      </Typography>
+                    ))}
+                  </React.Fragment>
+                )}
+              </Grid>
+              <Grid item xs={3}>
+                {event.location && (
+                  <React.Fragment>
+                    <Typography className={classes.dataHeaders}>
+                      <DiverstFormattedMessage {...messages.inputs.location} />
+                    </Typography>
+                    <Typography color='textSecondary' className={classes.data}>
+                      {event.location}
+                    </Typography>
+                  </React.Fragment>
+                )}
                 <Typography className={classes.dataHeaders}>
-                  <DiverstFormattedMessage {...messages.inputs.location} />
+                  <DiverstFormattedMessage {...messages.inputs.attendee} />
                 </Typography>
                 <Typography color='textSecondary' className={classes.data}>
-                  {event.location}
+                  {event.total_attendees}
                 </Typography>
-              </React.Fragment>
-            )}
-            <Typography className={classes.dataHeaders}>
-              <DiverstFormattedMessage {...messages.inputs.attendee} />
-            </Typography>
-            <Typography color='textSecondary' className={classes.data}>
-              {event.total_attendees}
-            </Typography>
-            {event.participating_groups.length > 0 && (
-              <React.Fragment>
-                <Typography className={classes.dataHeaders}>
-                  <DiverstFormattedMessage {...messages.inputs.participating_groups} />
-                </Typography>
-                {event.participating_groups.map((group, i) => (
-                  <Typography color='textSecondary' key={group.id}>
-                    {group.name}
-                  </Typography>
-                ))}
-              </React.Fragment>
-            )}
+              </Grid>
+            </Grid>
           </Paper>
           <Box mb={4} />
           <EventCommentForm

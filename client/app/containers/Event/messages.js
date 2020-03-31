@@ -145,5 +145,8 @@ export default defineMessages({
     dateAndTime: {
       id: `${scope}.show.date_and_time`,
     },
+    until: {
+      id: `${scope}.show.until`
+    },
   },
 });

@@ -720,6 +720,7 @@
   "diverst.containers.Event.form.input.budgetAmount": "Specify amount to deduct from budget",
   "diverst.containers.Event.form.input.freeEvent": "Create new free event ($0.00)",
   "diverst.containers.Event.show.date_and_time": "Date & Time",
+  "diverst.containers.Event.show.until": "until",
   "diverst.containers.Event.comment.button.submit": "Submit",
   "diverst.containers.Event.comment.button.delete": "Delete",
   "diverst.containers.Event.comment.button.deleteconfirm": "Delete comment?",
