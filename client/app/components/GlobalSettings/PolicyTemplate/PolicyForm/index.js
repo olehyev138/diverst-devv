@@ -11,7 +11,7 @@ import dig from 'object-dig';
 import Interweave from 'interweave';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
-import DiverstLogoutDialog from "components/Shared/DiverstLogoutDialog";
+import DiverstLogoutDialog from 'components/Shared/DiverstLogoutDialog';
 import { injectIntl, intlShape } from 'react-intl';
 import { Field, Formik, Form } from 'formik';
 import {
