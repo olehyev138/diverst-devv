@@ -84,6 +84,13 @@ export function GroupMessageListItem(props) {
           <Grid item>
             <Grid container>
               <Grid item>
+                <DiverstLike
+                  isLiked={newsItem.current_user_likes}
+                  newsFeedLinkId={newsItem.id}
+                  totalLikes={newsItem.total_likes}
+                  likeNewsItemBegin={props.likeNewsItemBegin}
+                  unlikeNewsItemBegin={props.unlikeNewsItemBegin}
+                />
                 {props.pinNewsItemBegin && (
                   <IconButton
                     size='small'
@@ -95,16 +102,6 @@ export function GroupMessageListItem(props) {
                     }}
                   >
                     { pinned ? <LocationOnIcon /> : <LocationOnOutlinedIcon />}
-                  </IconButton>
-                )}
-                { props.links && (
-                  <IconButton
-                    // TODO : Change to actual post like action
-                    size='small'
-                    to={props.links.groupMessageShow(props.groupId, newsItem.id)}
-                    component={WrappedNavLink}
-                  >
-                    <ThumbUpIcon />
                   </IconButton>
                 )}
                 { props.links && (
@@ -175,13 +172,6 @@ export function GroupMessageListItem(props) {
           )}
         </CardActions>
       )}
-      <DiverstLike
-        isLiked={newsItem.current_user_likes}
-        newsFeedLinkId={newsItem.id}
-        totalLikes={newsItem.total_likes}
-        likeNewsItemBegin={props.likeNewsItemBegin}
-        unlikeNewsItemBegin={props.unlikeNewsItemBegin}
-      />
     </Card>
   );
 }

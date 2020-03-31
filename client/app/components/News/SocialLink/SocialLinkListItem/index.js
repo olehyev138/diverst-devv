@@ -90,6 +90,13 @@ export function SocialLinkListItem(props) {
 
   const pinButtons = (
     <Grid item>
+      <DiverstLike
+        isLiked={newsItem.current_user_likes}
+        newsFeedLinkId={newsItem.id}
+        totalLikes={newsItem.total_likes}
+        likeNewsItemBegin={props.likeNewsItemBegin}
+        unlikeNewsItemBegin={props.unlikeNewsItemBegin}
+      />
       {props.pinNewsItemBegin && (
         <IconButton
           size='small'
@@ -158,13 +165,6 @@ export function SocialLinkListItem(props) {
           {<DiverstFormattedMessage {...messages.approve} />}
         </Button>
       )}
-      <DiverstLike
-        isLiked={newsItem.current_user_likes}
-        newsFeedLinkId={newsItem.id}
-        totalLikes={newsItem.total_likes}
-        likeNewsItemBegin={props.likeNewsItemBegin}
-        unlikeNewsItemBegin={props.unlikeNewsItemBegin}
-      />
     </CardActions>
   );
 
@@ -175,7 +175,7 @@ export function SocialLinkListItem(props) {
         <Grid container justify='space-between'>
           { author }
           <Grid item>
-            <Grid container>
+            <Grid container alignItems='center'>
               {pinButtons}
               {date}
             </Grid>
