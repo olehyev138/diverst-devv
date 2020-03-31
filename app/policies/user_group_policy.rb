@@ -18,6 +18,14 @@ class UserGroupPolicy < ApplicationPolicy
     false
   end
 
+  def join?
+    true
+  end
+
+  def leave?
+    true
+  end
+
   def destroy?
     false
   end

@@ -135,7 +135,8 @@ Diverst::Application.routes.draw do
       resources :initiative_updates
       resources :initiative_users do
         collection do
-          post 'remove'
+          post 'leave'
+          post 'join'
           get 'export_csv'
         end
       end
@@ -246,6 +247,8 @@ Diverst::Application.routes.draw do
       resources :user_groups do
         collection do
           get 'export_csv'
+          post 'leave'
+          post 'join'
         end
       end
       resources :user_roles
