@@ -113,7 +113,7 @@ export function UserGroupList(props, context) {
                     >
                       <CardActionArea>
                         <CardContent className={classes.groupCardContent}>
-                          <Grid container spacing={3}>
+                          <Grid container spacing={2}>
                             {group.banner_data && (
                               <React.Fragment>
                                 <Hidden xsDown>
@@ -186,14 +186,33 @@ export function UserGroupList(props, context) {
                         >
                           <CardActionArea>
                             <CardContent className={classes.groupCardContent}>
-                              <Typography variant='h5' component='h2' display='inline'>
-                                {childGroup.name}
-                              </Typography>
-                              {childGroup.description && (
-                                <Typography color='textSecondary' className={classes.groupCardDescription}>
-                                  {childGroup.description}
-                                </Typography>
-                              )}
+                              <Grid container spacing={2}>
+                                {childGroup.banner_data && (
+                                  <React.Fragment>
+                                    <Hidden xsDown>
+                                      <Grid item xs='auto' justify='center'>
+                                        <DiverstImg
+                                          data={childGroup.banner_data}
+                                          maxWidth='50px'
+                                          maxHeight='50px'
+                                          minWidth='50px'
+                                          minHeight='50px'
+                                        />
+                                      </Grid>
+                                    </Hidden>
+                                  </React.Fragment>
+                                )}
+                                <Grid item xs>
+                                  <Typography variant='h5' component='h2' display='inline'>
+                                    {childGroup.name}
+                                  </Typography>
+                                  {childGroup.description && (
+                                    <Typography color='textSecondary' className={classes.groupCardDescription}>
+                                      {childGroup.description}
+                                    </Typography>
+                                  )}
+                                </Grid>
+                              </Grid>
                             </CardContent>
                           </CardActionArea>
                         </Link>
