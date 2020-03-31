@@ -134,7 +134,8 @@ import {
   SocialLinkCreatePage,
   SocialLinkEditPage,
   UserDownloadsPage,
-  ArchivesPage
+  ArchivesPage,
+  GroupSponsorsListPage
 } from './templates';
 
 // Paths
@@ -315,6 +316,7 @@ export default function Routes(props) {
       { /* Group Manage */ }
       { /* TODO - redirect /manage -> /manage/settings */ }
       <GroupManageLayout {...expandRoute(ROUTES.group.manage.settings.index)} component={GroupSettingsPage} />
+      <GroupManageLayout {...expandRoute(ROUTES.group.manage.sponsors.index)} component={GroupSponsorsListPage} />
       <GroupManageLayout {...expandRoute(ROUTES.group.manage.leaders.new)} component={GroupLeaderCreatePage} />
       <GroupManageLayout {...expandRoute(ROUTES.group.manage.leaders.edit)} component={GroupLeaderEditPage} />
       <GroupManageLayout {...expandRoute(ROUTES.group.manage.leaders.index)} component={GroupLeadersListPage} />

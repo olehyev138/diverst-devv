@@ -458,6 +458,14 @@ export const ROUTES = {
           }
         }
       },
+      sponsors: {
+        index: {
+          path: (groupId = ':group_id') => `/groups/${groupId}/manage/sponsors`,
+          data: {
+            titleMessage: messages.groups.manage.sponsors.index
+          }
+        }
+      },
       leaders: {
         index: {
           path: (groupId = ':group_id') => `/groups/${groupId}/manage/leaders`,

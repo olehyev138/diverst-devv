@@ -37,6 +37,12 @@ export function GroupManageLinks(props) {
             to={ROUTES.group.manage.leaders.index.path(props.currentGroup.id)}
             label={<DiverstFormattedMessage {...messages.links.leaders} />}
           />
+
+          <Tab
+            component={WrappedNavLink}
+            to={ROUTES.group.manage.sponsors.index.path(props.currentGroup.id)}
+            label={<DiverstFormattedMessage {...messages.links.sponsors} />}
+          />
         </ResponsiveTabs>
       </Paper>
     </React.Fragment>

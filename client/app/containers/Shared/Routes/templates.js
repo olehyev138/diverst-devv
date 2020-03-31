@@ -159,6 +159,8 @@ import GroupSettingsPage from 'containers/Group/GroupManage/GroupSettingsPage/Lo
 import GroupLeadersListPage from 'containers/Group/GroupManage/GroupLeaders/GroupLeadersListPage/Loadable';
 import GroupLeaderCreatePage from 'containers/Group/GroupManage/GroupLeaders/GroupLeaderCreatePage/Loadable';
 import GroupLeaderEditPage from 'containers/Group/GroupManage/GroupLeaders/GroupLeaderEditPage/Loadable';
+import GroupSponsorsListPage from 'containers/Group/GroupManage/GroupSponsors/GroupSponsorsListPage/Loadable';
+
 
 /* Group/Admin - Resource */
 import FoldersPage from 'containers/Resource/Folder/FoldersPage/Loadable';
@@ -262,6 +264,7 @@ export {
   GroupLeaderCreatePage,
   GroupLeaderEditPage,
   GroupSettingsPage,
+  GroupSponsorsListPage,
   CustomTextEditPage,
   UserNewsLinkPage,
   UserEventsPage,
