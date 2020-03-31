@@ -113,7 +113,7 @@ export function UserGroupList(props, context) {
                     >
                       <CardActionArea>
                         <CardContent className={classes.groupCardContent}>
-                          <Grid container spacing={2} alignItems="center">
+                          <Grid container spacing={2} alignItems='center'>
                             {group.banner_data && (
                               <React.Fragment>
                                 <Hidden xsDown>
@@ -186,7 +186,7 @@ export function UserGroupList(props, context) {
                         >
                           <CardActionArea>
                             <CardContent className={classes.groupCardContent}>
-                              <Grid container spacing={2} alignItems="center">
+                              <Grid container spacing={2} alignItems='center'>
                                 {childGroup.banner_data && (
                                   <React.Fragment>
                                     <Hidden xsDown>

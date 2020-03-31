@@ -95,7 +95,7 @@ export function AdminGroupList(props, context) {
               <Grid item key={group.id} xs={12}>
                 <Card className={classes.groupCard}>
                   <CardContent>
-                    <Grid container spacing={2} alignItems="center">
+                    <Grid container spacing={2} alignItems='center'>
                       {group.banner_data && (
                         <React.Fragment>
                           <Hidden xsDown>
@@ -190,7 +190,7 @@ export function AdminGroupList(props, context) {
                       <Grid item key={childGroup.id} xs={12}>
                         <Card className={classes.childGroupCard}>
                           <CardContent>
-                            <Grid container spacing={2} alignItems="center">
+                            <Grid container spacing={2} alignItems='center'>
                               {childGroup.banner_data && (
                                 <React.Fragment>
                                   <Hidden xsDown>
