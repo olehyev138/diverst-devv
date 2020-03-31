@@ -12,15 +12,16 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import ResponsiveTabs from 'components/Shared/ResponsiveTabs';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Group/GroupManage/messages';
-import Conditional from 'components/Compositions/Conditional';
-import Permission from 'components/Shared/DiverstPermission';
+
 import { permission } from 'utils/permissionsHelpers';
-import dig from 'object-dig';
+import WithPermission from 'components/Compositions/WithPermission';
 const styles = theme => ({});
 
 /* eslint-disable react/no-multi-comp */
 export function GroupManageLinks(props) {
   const { classes, currentGroup, currentTab } = props;
+
+  const PermissionTabs = WithPermission(Tab);
 
   return (
     <React.Fragment>
@@ -30,20 +31,20 @@ export function GroupManageLinks(props) {
           indicatorColor='primary'
           textColor='primary'
         >
-          <Permission show={permission(props.currentGroup, 'update?')} value='settings'>
-            <Tab
-              component={WrappedNavLink}
-              to={ROUTES.group.manage.settings.index.path(props.currentGroup.id)}
-              label={<DiverstFormattedMessage {...messages.links.settings} />}
-            />
-          </Permission>
-          <Permission show={permission(props.currentGroup, 'leaders_view?')} value='leaders'>
-            <Tab
-              component={WrappedNavLink}
-              to={ROUTES.group.manage.leaders.index.path(props.currentGroup.id)}
-              label={<DiverstFormattedMessage {...messages.links.leaders} />}
-            />
-          </Permission>
+          <PermissionTabs
+            component={WrappedNavLink}
+            to={ROUTES.group.manage.settings.index.path(props.currentGroup.id)}
+            label={<DiverstFormattedMessage {...messages.links.settings} />}
+            show={permission(props.currentGroup, 'update?')}
+            value='settings'
+          />
+          <PermissionTabs
+            component={WrappedNavLink}
+            to={ROUTES.group.manage.leaders.index.path(props.currentGroup.id)}
+            label={<DiverstFormattedMessage {...messages.links.leaders} />}
+            show={permission(props.currentGroup, 'leaders_view?')}
+            value='leaders'
+          />
         </ResponsiveTabs>
       </Paper>
     </React.Fragment>
