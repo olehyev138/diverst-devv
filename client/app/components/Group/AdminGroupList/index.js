@@ -150,6 +150,17 @@ export function AdminGroupList(props, context) {
                         <DiverstFormattedMessage {...messages.children_expand} />
                       )}
                     </Button>
+                    <Button
+                      size='small'
+                      color='primary'
+                      to={{
+                        pathname: `${ROUTES.admin.manage.groups.pathPrefix}/${group.id}/categorize`,
+                        state: { id: group.id }
+                      }}
+                      component={WrappedNavLink}
+                    >
+                      Categorize Subgroups
+                    </Button>
                   </CardActions>
                 </Card>
                 <Collapse in={expandedGroups[`${group.id}`]}>
