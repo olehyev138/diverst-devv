@@ -173,6 +173,7 @@ export function BrandingTheme(props) {
 
           // Update theme through the enterprise controller
           props.enterpriseAction({ theme_attributes: payload });
+          handleClickOpen();
         }}
 
         render={formikProps => <BrandingThemeInner {...props} {...formikProps} />}
