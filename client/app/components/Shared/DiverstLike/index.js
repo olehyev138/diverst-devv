@@ -11,9 +11,11 @@ import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 const styles = theme => ({
   liked: {
     color: theme.palette.primary.main,
+    paddingRight: 3,
   },
   unliked: {
     color: theme.palette.secondary.main,
+    paddingRight: 3,
   },
   itemRemoveButton: {
     color: theme.palette.error.main,
@@ -43,6 +45,7 @@ export function DiverstLike(props) {
     <React.Fragment>
       <IconButton
         aria-label='Choose color'
+        size='small'
         onClick={() => {
           if (liked)
             props.unlikeNewsItemBegin({ news_feed_link_id: props.newsFeedLinkId, callback: unlike });
