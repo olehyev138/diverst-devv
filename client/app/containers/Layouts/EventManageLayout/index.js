@@ -14,7 +14,7 @@ import saga from 'containers/Event/saga';
 import RouteService from 'utils/routeHelpers';
 import { createStructuredSelector } from 'reselect';
 
-import { selectEvent } from 'containers/Event/selectors';
+import { selectEvent, selectIsFormLoading } from 'containers/Event/selectors';
 import { eventsUnmount, getEventBegin } from 'containers/Event/actions';
 
 import EventManageLinks from 'components/Event/EventManage/EventManageLinks';
@@ -93,12 +93,14 @@ EventManageLayout.propTypes = {
   event: PropTypes.object,
   getEventBegin: PropTypes.func,
   eventsUnmount: PropTypes.func,
+  isLoading: PropTypes.bool,
   computedMatch: PropTypes.object,
   location: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
   event: selectEvent(),
+  isLoading: selectIsFormLoading(),
 });
 
 const mapDispatchToProps = {
@@ -117,7 +119,7 @@ export default compose(
   withStyles(styles),
 )(Conditional(
   EventManageLayout,
-  ['event.permissions.update?'],
+  ['event.permissions.update?', 'isLoading'],
   (props, rs) => ROUTES.group.events.show.path(rs.params('group_id'), rs.params('event_id')),
   'You don\'t have permission manage this event'
 ));

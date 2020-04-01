@@ -169,7 +169,7 @@ export function* carryBudget(action) {
     yield put(carryBudgetError(err));
 
     // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to carry over the budget', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: err.response.data, options: { variant: 'warning' } }));
   }
 }
 
@@ -183,7 +183,7 @@ export function* resetBudget(action) {
     yield put(resetBudgetError(err));
 
     // TODO: intl message
-    yield put(showSnackbar({ message: 'Failed to reset budget', options: { variant: 'warning' } }));
+    yield put(showSnackbar({ message: err.response.data, options: { variant: 'warning' } }));
   }
 }
 
