@@ -14,6 +14,7 @@ Diverst::Application.routes.draw do
       # match 'enterprises/update_enterprise' => 'enterprises#update_enterprise', via: :post
 
       resources :api_keys
+      resources :activities
       resources :annual_budgets
       resources :answers
       resources :answer_comments
