@@ -7,7 +7,8 @@ class GroupSerializer < ApplicationRecordSerializer
                             :annual_budget, :annual_budget_leftover, :active,
                             :private, :home_message, :default_mentor_group, :position, :group_category, :group_category_type, :news_feed,
                             :enterprise_id, :event_attendance_visibility, :calendar_color, :auto_archive,
-                            :current_user_is_member, :banner, :banner_file_name, :banner_data, :permissions
+                            :current_user_is_member, :banner, :banner_file_name, :banner_data, :permissions,
+                            :logo, :logo_file_name, :logo_data
 
       has_many :children
     else
@@ -61,6 +62,18 @@ class GroupSerializer < ApplicationRecordSerializer
 
   def banner_data
     AttachmentHelper.attachment_data_string(object.banner)
+  end
+
+  def logo
+    AttachmentHelper.attachment_signed_id(object.logo)
+  end
+
+  def logo_file_name
+    AttachmentHelper.attachment_file_name(object.logo)
+  end
+
+  def logo_data
+    AttachmentHelper.attachment_data_string(object.logo)
   end
 
   def current_user_is_member
