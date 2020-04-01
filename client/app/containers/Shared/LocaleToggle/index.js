@@ -9,25 +9,21 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import Toggle from 'components/Shared/Toggle/index';
-import Wrapper from 'containers/Shared/LocaleToggle/Wrapper';
-import messages from 'containers/Shared/LocaleToggle/messages';
 import { appLocales } from 'i18n';
 import { changeLocale } from 'containers/Shared/LanguageProvider/actions';
 import { selectLocale } from 'containers/Shared/LanguageProvider/selectors';
+
+import DiverstLanguageSelect from 'components/Shared/DiverstLanguageSelect';
 
 export class LocaleToggle extends React.PureComponent {
   // eslint-disable-line react/prefer-stateless-function
   render() {
     return (
-      <Wrapper>
-        <Toggle
-          value={this.props.locale}
-          values={appLocales}
-          messages={messages}
-          onToggle={this.props.onLocaleToggle}
-        />
-      </Wrapper>
+      <DiverstLanguageSelect
+        value={this.props.locale}
+        values={appLocales}
+        onToggle={this.props.onLocaleToggle}
+      />
     );
   }
 }
