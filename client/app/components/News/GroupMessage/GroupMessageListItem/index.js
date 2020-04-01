@@ -25,7 +25,7 @@ import DiverstLike from '../../../Shared/DiverstLike';
 import { injectIntl, intlShape } from 'react-intl';
 import Permission from 'components/Shared/DiverstPermission';
 import { permission } from 'utils/permissionsHelpers';
-import DiverstImg from "components/Shared/DiverstImg";
+import DiverstImg from 'components/Shared/DiverstImg';
 const styles = theme => ({
   root: {
     flexGrow: 1,
