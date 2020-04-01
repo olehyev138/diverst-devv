@@ -100,6 +100,8 @@ export function SponsorForm(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
+        //TODO : CHANGE DUMMY VALUE FROM 1 to ENTERPRISE_ID
+        values.sponsorableId = 1;
         props.sponsorAction(values);
       }}
 
