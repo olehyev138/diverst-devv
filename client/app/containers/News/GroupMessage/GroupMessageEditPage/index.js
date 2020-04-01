@@ -28,6 +28,7 @@ import GroupMessageForm from 'components/News/GroupMessage/GroupMessageForm';
 
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/News/messages';
+import Conditional from 'components/Compositions/Conditional';
 
 export function GroupMessageEditPage(props) {
   useInjectReducer({ key: 'news', reducer });
@@ -97,4 +98,9 @@ export default compose(
   injectIntl,
   withConnect,
   memo,
-)(GroupMessageEditPage);
+)(Conditional(
+  GroupMessageEditPage,
+  ['currentNewsItem.permissions.update?', 'isFormLoading'],
+  (props, rs) => ROUTES.group.news.messages.show.path(rs.params('group_id'), rs.params('item_id')),
+  'You don\'t have permission to edit this group message'
+));

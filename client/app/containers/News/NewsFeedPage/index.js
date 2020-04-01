@@ -20,6 +20,7 @@ import { likeNewsItemBegin, unlikeNewsItemBegin } from 'containers/Shared/Like/a
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import NewsFeed from 'components/News/NewsFeed';
+import Conditional from 'components/Compositions/Conditional';
 
 const NewsFeedTypes = Object.freeze({
   approved: 0,
@@ -110,6 +111,7 @@ export function NewsFeedPage(props, context) {
         currentTab={tab}
         handleChangeTab={handleChangeTab}
         handlePagination={handlePagination}
+        currentGroup={props.currentGroup}
         links={links}
         readonly={props.readonly}
         deleteGroupMessageBegin={props.deleteGroupMessageBegin}
@@ -179,4 +181,9 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(NewsFeedPage);
+)(Conditional(
+  NewsFeedPage,
+  ['currentGroup.permissions.news_view?'],
+  (props, rs) => props.readonly ? null : ROUTES.group.home.path(rs.params('group_id')),
+  'You don\'t have permission view this group\'s news'
+));

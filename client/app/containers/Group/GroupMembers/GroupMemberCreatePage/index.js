@@ -18,6 +18,7 @@ import { createMembersBegin, getMembersBegin, groupMembersUnmount } from 'contai
 import { selectPaginatedSelectMembers, selectMemberTotal, selectIsCommitting } from 'containers/Group/GroupMembers/selectors';
 
 import GroupMemberForm from 'components/Group/GroupMembers/GroupMemberForm';
+import Conditional from 'components/Compositions/Conditional';
 
 export function GroupMemberCreatePage(props) {
   useInjectReducer({ key: 'members', reducer });
@@ -71,4 +72,9 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(GroupMemberCreatePage);
+)(Conditional(
+  GroupMemberCreatePage,
+  ['currentGroup.permissions.members_create?'],
+  (props, rs) => ROUTES.group.members.index.path(rs.params('group_id')),
+  'You don\'t have permission to add members'
+));

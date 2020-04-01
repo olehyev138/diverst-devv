@@ -25,7 +25,7 @@ import {
   getFolderIndexPath
 } from 'utils/resourceHelpers';
 import messages from 'containers/Resource/Folder/messages';
-
+import Conditional from 'components/Compositions/Conditional';
 
 export function FolderCreatePage(props) {
   useInjectReducer({ key: 'resource', reducer });
@@ -104,5 +104,12 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-  injectIntl
-)(FolderCreatePage);
+  injectIntl,
+)(Conditional(
+  FolderCreatePage,
+  ['currentGroup.permissions.resources_create?'],
+  (props, rs) => rs.location.fromFolder
+    ? getFolderShowPath(rs.location.fromFolder.folder)
+    : getFolderIndexPath(props.path.startsWith('/groups') ? 'group' : 'admin', rs.params('group_id')),
+  'You don\'t have permission to create folders'
+));

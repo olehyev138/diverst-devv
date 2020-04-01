@@ -18,6 +18,7 @@ import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Group/GroupPlan/BudgetItem/messages';
+import Conditional from 'components/Compositions/Conditional';
 const { form: formMessage } = messages;
 
 export function BudgetCreatePage(props) {
@@ -73,4 +74,9 @@ export default compose(
   withConnect,
   memo,
   injectIntl,
-)(BudgetCreatePage);
+)(Conditional(
+  BudgetCreatePage,
+  ['currentGroup.permissions.budgets_create?'],
+  (props, rs) => ROUTES.group.plan.budget.index.path(rs.params('group_id')),
+  'You don\'t have permission to make budget requests'
+));

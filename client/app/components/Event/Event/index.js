@@ -30,6 +30,8 @@ import { injectIntl, intlShape } from 'react-intl';
 
 import EventComment from 'components/Event/EventComment';
 import EventCommentForm from 'components/Event/EventCommentForm';
+import Permission from 'components/Shared/DiverstPermission';
+import { permission } from 'utils/permissionsHelpers';
 
 const styles = theme => ({
   padding: {
@@ -73,59 +75,67 @@ export function Event(props) {
               </Typography>
             </Grid>
             <Grid item sm>
-              <Button
-                variant='contained'
-                size='large'
-                color='primary'
-                className={classNames(classes.buttons, classes.deleteButton)}
-                startIcon={<DeleteIcon />}
-                onClick={() => {
-                  /* eslint-disable-next-line no-alert, no-restricted-globals */
-                  if (confirm(intl.formatMessage(messages.delete_confirm)))
-                    props.deleteEventBegin({
-                      id: event.id,
+              <Permission show={permission(props.event, 'destroy?')}>
+                <Button
+                  variant='contained'
+                  size='large'
+                  color='primary'
+                  className={classNames(classes.buttons, classes.deleteButton)}
+                  startIcon={<DeleteIcon />}
+                  onClick={() => {
+                    /* eslint-disable-next-line no-alert, no-restricted-globals */
+                    if (confirm(intl.formatMessage(messages.delete_confirm)))
+                      props.deleteEventBegin({
+                        id: event.id,
+                        group_id: event.owner_group_id
+                      });
+                  }}
+                >
+                  <DiverstFormattedMessage {...messages.delete} />
+                </Button>
+              </Permission>
+              <Permission show={permission(props.event, 'update?')}>
+                <Button
+                  component={WrappedNavLink}
+                  to={props.links.eventEdit}
+                  variant='contained'
+                  size='large'
+                  color='primary'
+                  className={classes.buttons}
+                  startIcon={<EditIcon />}
+                >
+                  <DiverstFormattedMessage {...messages.edit} />
+                </Button>
+              </Permission>
+              <Permission show={permission(props.currentGroup, 'events_manage?')}>
+                <Button
+                  variant='contained'
+                  size='large'
+                  color='primary'
+                  className={classes.buttons}
+                  onClick={() => {
+                    props.archiveEventBegin({
+                      id: props.event.id,
                       group_id: event.owner_group_id
                     });
-                }}
-              >
-                <DiverstFormattedMessage {...messages.delete} />
-              </Button>
-              <Button
-                component={WrappedNavLink}
-                to={props.links.eventEdit}
-                variant='contained'
-                size='large'
-                color='primary'
-                className={classes.buttons}
-                startIcon={<EditIcon />}
-              >
-                <DiverstFormattedMessage {...messages.edit} />
-              </Button>
-              <Button
-                variant='contained'
-                size='large'
-                color='primary'
-                className={classes.buttons}
-                onClick={() => {
-                  props.archiveEventBegin({
-                    id: props.event.id,
-                    group_id: event.owner_group_id
-                  });
-                }}
-                startIcon={<ArchiveIcon />}
-              >
-                <DiverstFormattedMessage {...messages.archive} />
-              </Button>
-              <Button
-                variant='contained'
-                size='large'
-                color='primary'
-                className={classes.buttons}
-                startIcon={<ExportIcon />}
-                onClick={() => props.export({ initiative_id: props.event.id })}
-              >
-                <DiverstFormattedMessage {...messages.export} />
-              </Button>
+                  }}
+                  startIcon={<ArchiveIcon />}
+                >
+                  <DiverstFormattedMessage {...messages.archive} />
+                </Button>
+              </Permission>
+              <Permission show={permission(props.event, 'show?')}>
+                <Button
+                  variant='contained'
+                  size='large'
+                  color='primary'
+                  className={classes.buttons}
+                  startIcon={<ExportIcon />}
+                  onClick={() => props.export({ initiative_id: props.event.id })}
+                >
+                  <DiverstFormattedMessage {...messages.export} />
+                </Button>
+              </Permission>
               {event.is_attending ? (
                 <Button
                   variant='contained'
@@ -142,20 +152,22 @@ export function Event(props) {
                   <DiverstFormattedMessage {...messages.leave} />
                 </Button>
               ) : (
-                <Button
-                  variant='contained'
-                  size='large'
-                  color='primary'
-                  className={classes.buttons}
-                  onClick={() => {
-                    props.joinEventBegin({
-                      initiative_id: props.event.id,
-                    });
-                  }}
-                  startIcon={<AddIcon />}
-                >
-                  <DiverstFormattedMessage {...messages.join} />
-                </Button>
+                <Permission show={permission(props.event, 'join_event?')}>
+                  <Button
+                    variant='contained'
+                    size='large'
+                    color='primary'
+                    className={classes.buttons}
+                    onClick={() => {
+                      props.joinEventBegin({
+                        initiative_id: props.event.id,
+                      });
+                    }}
+                    startIcon={<AddIcon />}
+                  >
+                    <DiverstFormattedMessage {...messages.join} />
+                  </Button>
+                </Permission>
               )}
             </Grid>
           </Grid>
@@ -269,6 +281,7 @@ Event.propTypes = {
   leaveEventBegin: PropTypes.func,
   classes: PropTypes.object,
   event: PropTypes.object,
+  currentGroup: PropTypes.object,
   currentUserId: PropTypes.number,
   isFormLoading: PropTypes.bool,
   links: PropTypes.shape({

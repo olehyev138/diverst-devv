@@ -16,6 +16,8 @@ import {
 import { selectGroupIsCommitting } from 'containers/Group/selectors';
 
 import GroupSettings from 'components/Group/GroupManage/GroupSettings';
+import Conditional from 'components/Compositions/Conditional';
+import { ROUTES } from 'containers/Shared/Routes/constants';
 
 export function GroupSettingsPage(props) {
   useInjectReducer({ key: 'groups', reducer });
@@ -52,4 +54,9 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(GroupSettingsPage);
+)(Conditional(
+  GroupSettingsPage,
+  ['currentGroup.permissions.update?'],
+  (props, rs) => ROUTES.group.manage.index.path(rs.params('group_id')),
+  'You don\'t have permission change group settings'
+));

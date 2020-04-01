@@ -28,6 +28,8 @@ import DiverstLoader from 'components/Shared/DiverstLoader';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/News/messages';
 import { injectIntl, intlShape } from 'react-intl';
+import Permission from 'components/Shared/DiverstPermission';
+import { permission } from 'utils/permissionsHelpers';
 import { addScript } from 'utils/domHelper';
 
 const styles = theme => ({
@@ -93,12 +95,14 @@ export function NewsFeed(props) {
       name: <DiverstFormattedMessage {...messages.news_link} />,
       linkPath: props.links.newsLinkNew,
     },
-    {
+  ];
+
+  if (permission(props.currentGroup, 'social_link_create?'))
+    actions.push({
       icon: <SocialIcon />,
       name: <DiverstFormattedMessage {...messages.social_link} />,
       linkPath: props.links.socialLinkNew,
-    },
-  ];
+    });
 
   const { classes } = props;
   const [speedDialOpen, setSpeedDialOpen] = React.useState(false);
@@ -115,6 +119,7 @@ export function NewsFeed(props) {
           newsItem={item}
           readonly={props.readonly}
           groupId={item.news_feed.group_id}
+          currentGroup={props.currentGroup}
           deleteGroupMessageBegin={props.deleteGroupMessageBegin}
           updateNewsItemBegin={props.updateNewsItemBegin}
           archiveNewsItemBegin={props.archiveNewsItemBegin}
@@ -131,6 +136,7 @@ export function NewsFeed(props) {
           newsLink={item.news_link}
           newsItem={item}
           groupId={item.news_feed.group_id}
+          currentGroup={props.currentGroup}
           readonly={props.readonly}
           deleteNewsLinkBegin={props.deleteNewsLinkBegin}
           updateNewsItemBegin={props.updateNewsItemBegin}
@@ -148,6 +154,7 @@ export function NewsFeed(props) {
           links={props.links}
           newsItem={item}
           groupId={item.news_feed.group_id}
+          currentGroup={props.currentGroup}
           readonly={props.readonly}
           deleteSocialLinkBegin={props.deleteSocialLinkBegin}
           updateNewsItemBegin={props.updateNewsItemBegin}
@@ -167,45 +174,49 @@ export function NewsFeed(props) {
       {!props.readonly && (
         <React.Fragment>
           <Backdrop open={speedDialOpen} className={classes.backdrop} />
-          <SpeedDial
-            ariaLabel={props.intl.formatMessage(messages.add)}
-            className={classes.speedDial}
-            icon={<SpeedDialIcon />}
-            onClose={handleSpeedDialClose}
-            onOpen={handleSpeedDialOpen}
-            open={speedDialOpen}
-            direction='left'
-            FabProps={{
-              className: classes.speedDialButton
-            }}
-          >
-            {actions.map(action => (
-              <SpeedDialAction
-                component={WrappedNavLink}
-                to={action.linkPath}
-                key={action.linkPath}
-                icon={action.icon}
-                tooltipTitle={<Typography>{action.name}</Typography>}
-                tooltipPlacement='bottom'
-                onClick={handleSpeedDialClose}
-                PopperProps={{
-                  disablePortal: true,
-                }}
-              />
-            ))}
-          </SpeedDial>
-          <Box className={classes.floatSpacer} />
-          <Paper>
-            <ResponsiveTabs
-              value={props.currentTab}
-              onChange={props.handleChangeTab}
-              indicatorColor='primary'
-              textColor='primary'
+          <Permission show={permission(props.currentGroup, 'news_create?')}>
+            <SpeedDial
+              ariaLabel={props.intl.formatMessage(messages.add)}
+              className={classes.speedDial}
+              icon={<SpeedDialIcon />}
+              onClose={handleSpeedDialClose}
+              onOpen={handleSpeedDialOpen}
+              open={speedDialOpen}
+              direction='left'
+              FabProps={{
+                className: classes.speedDialButton
+              }}
             >
-              <Tab label={<DiverstFormattedMessage {...messages.approved} />} />
-              <Tab label={<DiverstFormattedMessage {...messages.pending} />} />
-            </ResponsiveTabs>
-          </Paper>
+              {actions.map(action => (
+                <SpeedDialAction
+                  component={WrappedNavLink}
+                  to={action.linkPath}
+                  key={action.linkPath}
+                  icon={action.icon}
+                  tooltipTitle={<Typography>{action.name}</Typography>}
+                  tooltipPlacement='bottom'
+                  onClick={handleSpeedDialClose}
+                  PopperProps={{
+                    disablePortal: true,
+                  }}
+                />
+              ))}
+            </SpeedDial>
+            <Box className={classes.floatSpacer} />
+          </Permission>
+          <Permission show={permission(props.currentGroup, 'news_manage?')}>
+            <Paper>
+              <ResponsiveTabs
+                value={props.currentTab}
+                onChange={props.handleChangeTab}
+                indicatorColor='primary'
+                textColor='primary'
+              >
+                <Tab label={<DiverstFormattedMessage {...messages.approved} />} />
+                <Tab label={<DiverstFormattedMessage {...messages.pending} />} />
+              </ResponsiveTabs>
+            </Paper>
+          </Permission>
         </React.Fragment>
       )}
       <br />
@@ -253,6 +264,7 @@ NewsFeed.propTypes = {
   unpinNewsItemBegin: PropTypes.func,
   likeNewsItemBegin: PropTypes.func,
   unlikeNewsItemBegin: PropTypes.func,
+  currentGroup: PropTypes.object,
 };
 
 export default compose(

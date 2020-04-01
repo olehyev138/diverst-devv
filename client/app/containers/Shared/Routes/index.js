@@ -281,6 +281,7 @@ export default function Routes(props) {
 
       { /* Group Plan */ }
       { /* Group Plan - Structure/Outcomes */ }
+      <GroupLayout exact {...expandRoute(ROUTES.group.plan.index)} component={GroupPlanLayout} defaultPage />
       <GroupPlanLayout exact {...expandRoute(ROUTES.group.plan.outcomes.index)} component={OutcomesPage} />
       <GroupPlanLayout {...expandRoute(ROUTES.group.plan.outcomes.new)} component={OutcomeCreatePage} />
       <GroupPlanLayout {...expandRoute(ROUTES.group.plan.outcomes.edit)} component={OutcomeEditPage} />
@@ -306,6 +307,7 @@ export default function Routes(props) {
       <GroupKPILayout exact {...expandRoute(ROUTES.group.plan.kpi.updates.index)} component={GroupPlanUpdatesPage} />
 
       { /* Group Plan - Budget */ }
+      <GroupPlanLayout exact {...expandRoute(ROUTES.group.plan.budget.index)} component={GroupBudgetLayout} defaultPage />
       <GroupBudgetLayout exact {...expandRoute(ROUTES.group.plan.budget.editAnnualBudget)} component={AnnualBudgetEditPage} />
       <GroupBudgetLayout exact {...expandRoute(ROUTES.group.plan.budget.overview)} component={AnnualBudgetsPage} />
       <GroupPlanLayout exact {...expandRoute(ROUTES.group.plan.budget.budgets.new)} component={BudgetRequestPage} />
@@ -313,7 +315,7 @@ export default function Routes(props) {
       <GroupPlanLayout exact {...expandRoute(ROUTES.group.plan.budget.budgets.index)} component={BudgetsPage} />
 
       { /* Group Manage */ }
-      { /* TODO - redirect /manage -> /manage/settings */ }
+      <GroupLayout exact {...expandRoute(ROUTES.group.manage.index)} component={GroupManageLayout} defaultPage />
       <GroupManageLayout {...expandRoute(ROUTES.group.manage.settings.index)} component={GroupSettingsPage} />
       <GroupManageLayout {...expandRoute(ROUTES.group.manage.leaders.new)} component={GroupLeaderCreatePage} />
       <GroupManageLayout {...expandRoute(ROUTES.group.manage.leaders.edit)} component={GroupLeaderEditPage} />

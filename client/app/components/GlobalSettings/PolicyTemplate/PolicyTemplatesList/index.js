@@ -16,7 +16,7 @@ import {
 import messages from 'containers/GlobalSettings/Email/Email/messages';
 
 import EditIcon from '@material-ui/icons/Edit';
-import DiverstTable from '../../../Shared/DiverstTable';
+import DiverstTable from 'components/Shared/DiverstTable';
 
 const styles = theme => ({
   emailListItem: {

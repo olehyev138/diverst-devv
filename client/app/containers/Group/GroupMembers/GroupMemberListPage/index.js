@@ -24,6 +24,7 @@ import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import GroupMemberList from 'components/Group/GroupMembers/GroupMemberList';
+import Conditional from 'components/Compositions/Conditional';
 
 const MemberTypes = Object.freeze([
   'active',
@@ -167,6 +168,7 @@ export function GroupMemberListPage(props) {
         memberTotal={props.memberTotal}
         isFetchingMembers={props.isFetchingMembers}
         groupId={groupId}
+        currentGroup={props.currentGroup}
         deleteMemberBegin={props.deleteMemberBegin}
         exportMembersBegin={exportMembers}
         links={links}
@@ -195,7 +197,8 @@ GroupMemberListPage.propTypes = {
   exportMembersBegin: PropTypes.func,
   memberList: PropTypes.array,
   memberTotal: PropTypes.number,
-  isFetchingMembers: PropTypes.bool
+  isFetchingMembers: PropTypes.bool,
+  currentGroup: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -219,4 +222,9 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(GroupMemberListPage);
+)(Conditional(
+  GroupMemberListPage,
+  ['currentGroup.permissions.members_view?'],
+  (props, rs) => ROUTES.group.home.path(rs.params('group_id')),
+  'You don\'t have permission to view group members'
+));
