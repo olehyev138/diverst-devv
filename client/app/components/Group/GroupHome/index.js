@@ -20,6 +20,7 @@ import { withStyles } from '@material-ui/core/styles';
 import EventsList from 'components/Group/GroupHome/GroupHomeEventsList';
 import NewsFeed from 'components/Group/GroupHome/GroupHomeNewsList';
 import { ROUTES } from 'containers/Shared/Routes/constants';
+import { GroupHomeFamily } from 'components/Group/GroupHome/GroupHomeFamily';
 
 const styles = theme => ({
   title: {
@@ -113,57 +114,9 @@ export function GroupHome({ classes, ...props }) {
   );
 
   const family = (
-    (props.currentGroup.parent || props.currentGroup.children.length > 0) && (
-      <Card>
-        <CardContent>
-          { props.currentGroup.parent && (
-            <React.Fragment>
-              <Typography variant='h6'>
-              Parent-Group
-              </Typography>
-              <Link
-                href={ROUTES.group.home.path(props.currentGroup.parent.id)}
-                rel='noopener'
-              >
-                <Typography>
-                  {`${props.currentGroup.parent.name}`}
-                </Typography>
-              </Link>
-              <Typography>
-                {`${props.currentGroup.parent.current_user_is_member
-                  ? '(are a member)' : '(are not a member)'}`}
-              </Typography>
-            </React.Fragment>
-          )}
-          { props.currentGroup.children.length > 0 && (
-            <React.Fragment>
-              <Typography variant='h6'>
-              Sub-Groups
-              </Typography>
-              {props.currentGroup.children.map(child => (
-                <React.Fragment key={`child:${child.id}`}>
-                  <Box mb={1} />
-                  <Divider />
-                  <Box mb={1} />
-                  <Link
-                    href={ROUTES.group.home.path(child.id)}
-                    rel='noopener'
-                  >
-                    <Typography>
-                      {`${child.name}`}
-                    </Typography>
-                  </Link>
-                  <Typography>
-                    {`${child.current_user_is_member
-                      ? '(are a member)' : '(are not a member)'}`}
-                  </Typography>
-                </React.Fragment>
-              ))}
-            </React.Fragment>
-          )}
-        </CardContent>
-      </Card>
-    )
+    <GroupHomeFamily
+      {...props}
+    />
   );
 
   return (
