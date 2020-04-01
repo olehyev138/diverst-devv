@@ -4,6 +4,8 @@ class PolicyGroup < ApplicationRecord
 
   validates_uniqueness_of :user_id
 
+  after_update :logout_user
+
   def self.users_that_able_to_accept_budgets(enterprise)
     enterprise.users.select { |u| u.policy_group.budget_approval }
   end
@@ -17,5 +19,9 @@ class PolicyGroup < ApplicationRecord
 
   def self.all_permission_fields
     PolicyGroup.columns_hash.select { |k, v| v.type.to_s === 'boolean' }.map { |field| field.first }
+  end
+
+  def logout_user
+    user.sessions.destroy_all
   end
 end
