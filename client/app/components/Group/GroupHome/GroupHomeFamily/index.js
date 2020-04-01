@@ -4,15 +4,16 @@
  *
  */
 
-import React, { memo } from 'react';
+import React, { memo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
-import { Grid, Divider, Typography, Card, Paper, CardContent, Link, Box } from '@material-ui/core';
+import { Grid, Divider, Typography, Card, Button, CardContent, Link, Box } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import GroupIcon from '@material-ui/icons/Group';
 import GroupOutlinedIcon from '@material-ui/icons/GroupOutlined';
+import Collapse from '@material-ui/core/Collapse';
 
 const styles = theme => ({
   title: {
@@ -45,30 +46,53 @@ export function GroupHomeFamily({ classes, ...props }) {
     </Grid>
   );
 
+  const [expand, setExpand] = useState(false);
+
+  const needExpand = ((props.currentGroup.parent ? 2 : 0)
+    + (props.currentGroup.children.length > 0 ? props.currentGroup.children.length + 2 : 0)) > 4;
+
+  const CollapseConditional = needExpand ? Collapse: React.Fragment;
+
   return (props.currentGroup.parent || props.currentGroup.children.length > 0) && (
     <Card>
       <CardContent>
-        { props.currentGroup.parent && (
+        <CollapseConditional in={expand} collapsedHeight={125}>
+          { props.currentGroup.parent && (
+            <React.Fragment>
+              <Typography variant='h6'>
+                Parent-Group
+              </Typography>
+              <Box mb={1} />
+              <Divider />
+              <Box mb={1} />
+              { renderGroup(props.currentGroup.parent) }
+            </React.Fragment>
+          )}
+          { props.currentGroup.children.length > 0 && (
+            <React.Fragment>
+              <Typography variant='h6'>
+                Sub-Groups
+              </Typography>
+              {props.currentGroup.children.map(child => (
+                <React.Fragment key={`child:${child.id}`}>
+                  <Box mb={1} />
+                  <Divider />
+                  <Box mb={1} />
+                  { renderGroup(child) }
+                </React.Fragment>
+              ))}
+            </React.Fragment>
+          )}
+        </CollapseConditional>
+        { needExpand && (
           <React.Fragment>
-            <Typography variant='h6'>
-              Parent-Group
-            </Typography>
-            { renderGroup(props.currentGroup.parent) }
-          </React.Fragment>
-        )}
-        { props.currentGroup.children.length > 0 && (
-          <React.Fragment>
-            <Typography variant='h6'>
-              Sub-Groups
-            </Typography>
-            {props.currentGroup.children.map(child => (
-              <React.Fragment key={`child:${child.id}`}>
-                <Box mb={1} />
-                <Divider />
-                <Box mb={1} />
-                { renderGroup(child) }
-              </React.Fragment>
-            ))}
+            <Box mb={1} />
+            <Button
+              size='small'
+              onClick={() => setExpand(!expand)}
+            >
+              {expand ? 'show less' : 'show more'}
+            </Button>
           </React.Fragment>
         )}
       </CardContent>
