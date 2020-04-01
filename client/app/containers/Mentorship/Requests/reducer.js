@@ -28,7 +28,7 @@ export const initialState = {
   requestList: [],
   requestListTotal: null,
   currentRequest: null,
-  isFetchingRequests: false,
+  isFetchingRequests: true,
   successfulChange: false,
 };
 

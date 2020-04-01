@@ -248,7 +248,7 @@ RSpec.describe GroupBasePolicy, type: :policy do
         let!(:policy) { described_class.new(user, [another_group, another_group]) }
 
         it 'returns false' do
-          expect(policy.basic_group_leader_permission?('groups_manage')).to eq false
+          expect(policy.has_group_leader_permissions?('groups_manage')).to eq false
         end
       end
     end

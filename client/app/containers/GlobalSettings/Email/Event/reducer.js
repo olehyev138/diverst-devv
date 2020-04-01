@@ -22,8 +22,8 @@ export const initialState = {
   eventList: [],
   eventListTotal: null,
   currentEvent: null,
-  isFetchingEvents: false,
-  isFetchingEvent: false,
+  isFetchingEvents: true,
+  isFetchingEvent: true,
   isCommitting: false,
   hasChanged: false,
 };

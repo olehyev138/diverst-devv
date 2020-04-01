@@ -1,5 +1,5 @@
 class FolderSerializer < ApplicationRecordSerializer
-  attributes :id, :name, :password_protected, :enterprise_id, :group_id, :parent_id
+  attributes :id, :name, :password_protected, :enterprise_id, :group_id, :parent_id, :permissions
 
   belongs_to :parent
 

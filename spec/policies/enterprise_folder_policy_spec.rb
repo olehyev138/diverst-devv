@@ -32,7 +32,7 @@ RSpec.describe EnterpriseFolderPolicy, type: :policy do
                                 user_role_id: user_role.id)
         end
 
-        it { is_expected.to permit_actions([:index, :show]) }
+        it { is_expected.to forbid_actions([:index, :show, :new, :create]) }
       end
 
       context 'when enterprise_resources_create is true' do
@@ -49,7 +49,7 @@ RSpec.describe EnterpriseFolderPolicy, type: :policy do
                                 user_role_id: user_role.id)
         end
 
-        it { is_expected.to permit_actions([:index, :show, :new, :create]) }
+        it { is_expected.to forbid_actions([:index, :show, :new, :create]) }
       end
 
       context 'when enterprise_resources_manage is true' do
@@ -66,7 +66,7 @@ RSpec.describe EnterpriseFolderPolicy, type: :policy do
                                 user_role_id: user_role.id)
         end
 
-        it { is_expected.to permit_actions([:index, :show, :new, :update, :destroy]) }
+        it { is_expected.to forbid_actions([:index, :show, :new, :update, :destroy]) }
       end
     end
 
@@ -78,19 +78,5 @@ RSpec.describe EnterpriseFolderPolicy, type: :policy do
 
   describe 'for users with no access' do
     it { is_expected.to forbid_actions([:index, :show, :new, :update, :destroy]) }
-  end
-
-  context '#basic_group_leader_permission?' do
-    before do
-      user_role = create(:user_role, enterprise: enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
-      user_role.policy_group_template.update enterprise_resources_create: true
-      group = create(:group, enterprise: enterprise)
-      create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-                            user_role_id: user_role.id)
-    end
-
-    it 'returns true' do
-      expect(subject.basic_group_leader_permission?('enterprise_resources_create')).to be(true)
-    end
   end
 end

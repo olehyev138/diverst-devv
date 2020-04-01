@@ -34,6 +34,7 @@ import GroupLeaderForm from 'components/Group/GroupManage/GroupLeaders/GroupLead
 
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Group/GroupManage/messages';
+import Conditional from 'components/Compositions/Conditional';
 
 export function GroupLeaderCreatePage(props) {
   useInjectReducer({ key: 'groupLeaders', reducer });
@@ -114,4 +115,9 @@ export default compose(
   injectIntl,
   withConnect,
   memo,
-)(GroupLeaderCreatePage);
+)(Conditional(
+  GroupLeaderCreatePage,
+  ['currentGroup.permissions.leaders_create?'],
+  (props, rs) => ROUTES.group.manage.index.path(rs.params('group_id')),
+  'You don\'t have permission create group leaders'
+));

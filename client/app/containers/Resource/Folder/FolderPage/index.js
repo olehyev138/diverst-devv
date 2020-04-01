@@ -39,11 +39,13 @@ import {
   getFolderEditPath,
   getFolderShowPath,
   getResourceNewPath,
-  getResourceEditPath,
+  getResourceEditPath, getFolderIndexPath,
 } from 'utils/resourceHelpers';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Resource/Folder/messages';
+import Conditional from 'components/Compositions/Conditional';
+import { ROUTES } from 'containers/Shared/Routes/constants';
 
 const defaultParams = Object.freeze({
   count: 5, // TODO: Make this a constant and use it also in Folder
@@ -95,7 +97,6 @@ export function FolderPage(props) {
     } else {
       const newParams = {
         ...params,
-        enterprise_id: enterpriseId,
         parent_id: parentId,
       };
       props.getFoldersBegin(newParams);
@@ -121,7 +122,6 @@ export function FolderPage(props) {
     } else {
       const newParams = {
         ...params,
-        enterprise_id: enterpriseId,
         folder_id: folderId,
       };
       props.getResourcesBegin({ ...newParams, query_scopes: ['not_archived'] });
@@ -214,6 +214,7 @@ export function FolderPage(props) {
       { valid === true && (
         <Folder
           currentUserId={currentUser.id}
+          currentGroup={props.currentGroup}
           deleteFolderBegin={props.deleteFolderBegin}
           deleteResourceBegin={props.deleteResourceBegin}
           folder={currentFolder}
@@ -290,4 +291,9 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(FolderPage);
+)(Conditional(
+  FolderPage,
+  ['currentFolder.permissions.show?', 'isFormLoading'],
+  (props, rs) => ROUTES.group.resources.index.path(rs.params('group_id')),
+  'You don\'t have permission view this folders'
+));

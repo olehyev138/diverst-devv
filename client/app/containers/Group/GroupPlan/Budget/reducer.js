@@ -31,8 +31,8 @@ export const initialState = {
   budgetList: [],
   budgetListTotal: null,
   currentBudget: null,
-  isFetchingBudgets: false,
-  isFetchingBudget: false,
+  isFetchingBudgets: true,
+  isFetchingBudget: true,
   isCommitting: false,
   hasChanged: false,
 };

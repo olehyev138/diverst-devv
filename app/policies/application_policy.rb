@@ -1,11 +1,12 @@
 class ApplicationPolicy
-  attr_reader :user, :policy_group, :group_leader_role_id, :record, :group
+  attr_reader :user, :policy_group, :params, :record, :group_leader_role_id
 
   def initialize(user, record, params = nil)
     raise Pundit::NotAuthorizedError, 'must be logged in' unless user
 
     @user = user
     @record = record
+    @params = params
     @policy_group = @user.policy_group
   end
 
@@ -50,26 +51,30 @@ class ApplicationPolicy
   end
 
   def basic_group_leader_permission?(permission)
-    if record&.is_a?(Group)
-      @group_leader_role_id = GroupLeader.find_by(user_id: user&.id, group_id: record.id)&.user_role_id
-    elsif record&.respond_to?(:group_id) # find the group of the record, eg. social link and check if user is group leader of group
-      @group_leader_role_id = GroupLeader.find_by(user_id: user&.id, group_id: record.group_id)&.user_role_id
-    end
+    @group_leader_role_id = user.policy_group_leader(
+        if record&.is_a?(Group)
+          record.id
+        elsif record&.respond_to?(:group_id)
+          record.group_id
+        end
+      )&.user_role_id
 
     PolicyGroupTemplate.where(user_role_id: @group_leader_role_id).where("#{permission} = true").exists?
   end
 
   def scope
-    Pundit.policy_scope(user, record.class.all)
+    policy = Pundit::PolicyFinder.new(record).policy
+    policy::Scope.new(user, record.class).resolve
   end
 
   class Scope
-    attr_reader :user, :scope, :permission, :policy
+    attr_reader :user, :scope, :permission, :policy, :params
 
     def initialize(user, scope, permission = nil, params: {})
       @user = user
       @scope = scope
       @permission = permission
+      @params = params
       @policy_group = @user.policy_group
 
       policy_class = self.class.parent

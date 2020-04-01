@@ -13,13 +13,16 @@ import ResponsiveTabs from 'components/Shared/ResponsiveTabs';
 
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Group/GroupPlan/KPI/messages';
+import { permission } from 'utils/permissionsHelpers';
+import WithPermission from 'components/Compositions/WithPermission';
 
 const styles = theme => ({});
 
 /* eslint-disable react/no-multi-comp */
 export function GroupPlanLinks(props) {
-  const { classes } = props;
-  const { currentTab } = props;
+  const { classes, currentGroup, currentTab } = props;
+
+  const PermissionTabs = WithPermission(Tab);
 
   return (
     <React.Fragment>
@@ -29,23 +32,29 @@ export function GroupPlanLinks(props) {
           indicatorColor='primary'
           textColor='primary'
         >
-          <Tab
+          <PermissionTabs
             component={WrappedNavLink}
             to={ROUTES.group.plan.events.index.path(props.currentGroup.id)}
             label={<DiverstFormattedMessage {...messages.links.event} />}
             value='events'
+            show={permission(props.currentGroup, 'events_manage?')}
           />
-          <Tab
+          <PermissionTabs
             component={WrappedNavLink}
             to={ROUTES.group.plan.kpi.updates.index.path(props.currentGroup.id)}
             label={<DiverstFormattedMessage {...messages.links.KPI} />}
             value='kpi'
+            show={permission(props.currentGroup, 'kpi_manage?')}
           />
-          <Tab
+          <PermissionTabs
             component={WrappedNavLink}
-            to={ROUTES.group.plan.budget.overview.path(props.currentGroup.id)}
+            to={ROUTES.group.plan.budget.index.path(props.currentGroup.id)}
             label={<DiverstFormattedMessage {...messages.links.budgeting} />}
             value='budgeting'
+            show={
+              permission(props.currentGroup, 'annual_budgets_view?')
+                || permission(props.currentGroup, 'budgets_create?')
+                || permission(props.currentGroup, 'annual_budgets_index?')}
           />
         </ResponsiveTabs>
       </Paper>
@@ -56,7 +65,7 @@ export function GroupPlanLinks(props) {
 GroupPlanLinks.propTypes = {
   classes: PropTypes.object,
   currentTab: PropTypes.string,
-  currentGroup: PropTypes.object
+  currentGroup: PropTypes.object,
 };
 
 export const StyledGroupPlanLinks = withStyles(styles)(GroupPlanLinks);

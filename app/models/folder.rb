@@ -32,6 +32,16 @@ class Folder < ApplicationRecord
   before_save :set_password
   before_save :unset_enterprise
 
+  def policy_class
+    if group_id
+      GroupFolderPolicy
+    elsif enterprise_id
+      EnterpriseFolderPolicy
+    else
+      raise StandardError.new('Folder is without parent')
+    end
+  end
+
   def set_password
     self.password = nil unless password_protected?
   end

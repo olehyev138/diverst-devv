@@ -28,6 +28,7 @@ import OutcomeForm from 'components/Group/Outcome/OutcomeForm';
 
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Group/Outcome/messages';
+import Conditional from 'components/Compositions/Conditional';
 
 
 export function OutcomeEditPage(props) {
@@ -98,4 +99,9 @@ export default compose(
   injectIntl,
   withConnect,
   memo,
-)(OutcomeEditPage);
+)(Conditional(
+  OutcomeEditPage,
+  ['currentOutcome.permissions.update?', 'isFormLoading'],
+  (props, rs) => ROUTES.group.plan.index.path(rs.params('group_id')),
+  'You don\'t have permission to edit this pillar'
+));

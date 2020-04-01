@@ -26,6 +26,7 @@ import {
 } from 'containers/News/actions';
 
 import GroupMessage from 'components/News/GroupMessage/GroupMessage';
+import Conditional from 'components/Compositions/Conditional';
 
 export function GroupMessagePage(props) {
   useInjectReducer({ key: 'news', reducer });
@@ -96,4 +97,9 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(GroupMessagePage);
+)(Conditional(
+  GroupMessagePage,
+  ['currentNewsItem.permissions.show?', 'isFormLoading'],
+  (props, rs) => ROUTES.group.news.index.path(rs.params('group_id')),
+  'You don\'t have permission to view this group message'
+));
