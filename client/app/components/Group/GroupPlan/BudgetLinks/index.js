@@ -12,12 +12,16 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import ResponsiveTabs from 'components/Shared/ResponsiveTabs';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Group/GroupPlan/AnnualBudget/messages';
+import { permission } from 'utils/permissionsHelpers';
+import WithPermission from 'components/Compositions/WithPermission';
 
 const styles = theme => ({});
 
 /* eslint-disable react/no-multi-comp */
 export function BudgetLinks(props) {
   const { currentTab } = props;
+
+  const PermissionTabs = WithPermission(Tab);
 
   return (
     <React.Fragment>
@@ -27,16 +31,18 @@ export function BudgetLinks(props) {
           indicatorColor='primary'
           textColor='primary'
         >
-          <Tab
+          <PermissionTabs
             component={WrappedNavLink}
             to={ROUTES.group.plan.budget.overview.path(props.currentGroup.id)}
             label={<DiverstFormattedMessage {...messages.links.overview} />}
+            show={permission(props.currentGroup, 'annual_budgets_view?')}
             value='overview'
           />
-          <Tab
+          <PermissionTabs
             component={WrappedNavLink}
             to={ROUTES.group.plan.budget.editAnnualBudget.path(props.currentGroup.id)}
             label={<DiverstFormattedMessage {...messages.links.editAnnualBudget} />}
+            show={permission(props.currentGroup, 'annual_budgets_manage?')}
             value='annual_budget'
           />
         </ResponsiveTabs>

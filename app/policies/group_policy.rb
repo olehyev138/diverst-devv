@@ -85,11 +85,99 @@ class GroupPolicy < ApplicationPolicy
     index?
   end
 
-  # PARTS PERMISSIONS
+  # VIEW PERMISSIONS
 
   def events_view?
-    InitiativePolicy.new(user, [record, Initiative]).index?
+    InitiativePolicy.new(self, Initiative).index?
   end
+
+  def members_view?
+    UserGroupPolicy.new(self, UserGroup).index?
+  end
+
+  def news_view?
+    NewsFeedLinkPolicy.new(self, NewsFeedLink).index?
+  end
+
+  def budgets_view?
+    BudgetPolicy.new(self, AnnualBudget).index?
+  end
+
+  def resources_view?
+    GroupResourcePolicy.new(self, Resource).index?
+  end
+
+  def annual_budgets_view?
+    AnnualBudgetPolicy.new(self, AnnualBudget).index?
+  end
+
+  def leaders_view?
+    GroupLeaderPolicy.new(self, GroupLeader).index?
+  end
+
+  # CREATE PERMISSIONS
+
+  def events_create?
+    InitiativePolicy.new(self, Initiative).create?
+  end
+
+  def members_create?
+    UserGroupPolicy.new(self, UserGroup).create?
+  end
+
+  def news_create?
+    NewsFeedLinkPolicy.new(self, NewsFeedLink).create?
+  end
+
+  def social_link_create?
+    user.enterprise.enable_social_media
+  end
+
+  def resources_create?
+    GroupResourcePolicy.new(self, Resource).create?
+  end
+
+  def budgets_create?
+    BudgetPolicy.new(self, AnnualBudget).create?
+  end
+
+  def leaders_create?
+    GroupLeaderPolicy.new(self, GroupLeader).create?
+  end
+
+  # MANAGE PERMISSIONS
+
+  def members_destroy?
+    UserGroupPolicy.new(self, UserGroup).destroy?
+  end
+
+  def leaders_manage?
+    GroupLeaderPolicy.new(self, GroupLeader).manage?
+  end
+
+  def kpi_manage?
+    GroupUpdatePolicy.new(self, Update).manage?
+  end
+
+  def events_manage?
+    InitiativePolicy.new(self, Initiative).manage?
+  end
+
+  def news_manage?
+    NewsFeedLinkPolicy.new(self, NewsFeedLink).manage?
+  end
+
+  def annual_budgets_manage?
+    AnnualBudgetPolicy.new(self, AnnualBudget).manage?
+  end
+
+  def resources_manage?
+    GroupResourcePolicy.new(self, Resource).manage?
+  end
+
+  # ========================================
+  # MAYBE DEPRECATED
+  # ========================================
 
   # move these to separate policies
   def view_all?
@@ -156,6 +244,7 @@ class GroupPolicy < ApplicationPolicy
 
   def update?
     return true if manage?
+    return true if has_group_leader_permissions?('group_settings_manage')
 
     @record.owner == @user
   end

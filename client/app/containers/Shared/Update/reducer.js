@@ -31,8 +31,8 @@ export const initialState = {
   updateList: [],
   updateListTotal: null,
   currentUpdate: null,
-  isFetchingUpdates: false,
-  isFetchingUpdate: false,
+  isFetchingUpdates: true,
+  isFetchingUpdate: true,
   isCommitting: false,
   hasChanged: false,
 };

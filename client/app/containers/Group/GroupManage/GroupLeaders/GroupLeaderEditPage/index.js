@@ -34,6 +34,7 @@ import GroupLeaderForm from 'components/Group/GroupManage/GroupLeaders/GroupLead
 
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Group/GroupManage/messages';
+import Conditional from 'components/Compositions/Conditional';
 
 export function GroupLeaderEditPage(props) {
   const { members, groupLeader, isCommitting, isFormLoading, ...rest } = props;
@@ -127,4 +128,9 @@ export default compose(
   injectIntl,
   withConnect,
   memo,
-)(GroupLeaderEditPage);
+)(Conditional(
+  GroupLeaderEditPage,
+  ['currentGroup.permissions.leaders_manage?'],
+  (props, rs) => ROUTES.group.manage.index.path(rs.params('group_id')),
+  'You don\'t have permission edit group leaders'
+));

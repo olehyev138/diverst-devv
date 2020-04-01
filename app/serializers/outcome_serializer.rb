@@ -1,5 +1,5 @@
 class OutcomeSerializer < ApplicationRecordSerializer
-  attributes :group
+  attributes :group, :permissions
 
   has_many :pillars
 

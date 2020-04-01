@@ -39,6 +39,8 @@ import WrappedNavLink from 'components/Shared/WrappedNavLink';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import DeleteIcon from '@material-ui/icons/DeleteOutline';
 import CloseIcon from '@material-ui/icons/Close';
+import Permission from 'components/Shared/DiverstPermission';
+import { permission } from 'utils/permissionsHelpers';
 
 const styles = theme => ({
   arrowRight: {
@@ -179,7 +181,7 @@ export function Budget(props) {
     switch (isApproved) {
       case null:
         return (
-          <React.Fragment>
+          <Permission show={permission(budget, 'approve?')}>
             <Box mb={2} />
             <Grid container spacing={3}>
               <Grid item>
@@ -206,7 +208,7 @@ export function Budget(props) {
               </Grid>
             </Grid>
             { rejectDialog }
-          </React.Fragment>
+          </Permission>
         );
       case false:
         return (

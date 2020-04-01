@@ -19,6 +19,11 @@ import DiverstLoader from 'components/Shared/DiverstLoader';
 import DiverstPagination from 'components/Shared/DiverstPagination';
 
 import EventListItem from 'components/Group/GroupPlan/EventListItem';
+import Permission from 'components/Shared/DiverstPermission';
+import { permission } from 'utils/permissionsHelpers';
+import Conditional from 'components/Compositions/Conditional';
+import { ROUTES } from 'containers/Shared/Routes/constants';
+import { OutcomesPage } from 'containers/Group/Outcome/OutcomesPage';
 
 const styles = theme => ({
   title: {
@@ -54,7 +59,7 @@ export function EventsList(props) {
 
   return (
     <React.Fragment>
-      <React.Fragment>
+      <Permission show={permission(props.currentGroup, 'update?')}>
         <Button
           className={classes.floatRight}
           variant='contained'
@@ -67,7 +72,7 @@ export function EventsList(props) {
           <DiverstFormattedMessage {...messages.editStructure} />
         </Button>
         <Box className={classes.floatSpacer} />
-      </React.Fragment>
+      </Permission>
       <DiverstLoader isLoading={props.isLoading}>
         {outcomes && outcomes.length > 0 && outcomes.map(outcome => (
           <React.Fragment key={outcome.id}>
@@ -84,16 +89,18 @@ export function EventsList(props) {
                       </Typography>
                     </Grid>
                     <Grid item>
-                      <Button
-                        variant='contained'
-                        to={props.links.eventNew}
-                        color='default'
-                        size='medium'
-                        component={WrappedNavLink}
-                        startIcon={<AddIcon />}
-                      >
-                        <DiverstFormattedMessage {...messages.pillars.events.new} />
-                      </Button>
+                      <Permission show={permission(props.currentGroup, 'events_create?')}>
+                        <Button
+                          variant='contained'
+                          to={props.links.eventNew}
+                          color='default'
+                          size='medium'
+                          component={WrappedNavLink}
+                          startIcon={<AddIcon />}
+                        >
+                          <DiverstFormattedMessage {...messages.pillars.events.new} />
+                        </Button>
+                      </Permission>
                     </Grid>
                   </Grid>
                 </CardContent>
@@ -166,6 +173,7 @@ export function EventsList(props) {
 
 EventsList.propTypes = {
   classes: PropTypes.object,
+  currentGroup: PropTypes.object,
   outcomes: PropTypes.array,
   outcomesTotal: PropTypes.number,
   isLoading: PropTypes.bool,
@@ -182,4 +190,9 @@ EventsList.propTypes = {
 export default compose(
   memo,
   withStyles(styles),
-)(EventsList);
+)(Conditional(
+  EventsList,
+  ['currentGroup.permissions.events_manage?'],
+  (props, rs) => ROUTES.group.plan.index.path(rs.params('group_id')),
+  'You don\'t have permission to manage group outcomes'
+));

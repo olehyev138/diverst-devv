@@ -23,6 +23,8 @@ import {
 import {
   updateAnnualBudgetBegin, getCurrentAnnualBudgetBegin, annualBudgetsUnmount
 } from '../actions';
+import { ROUTES } from 'containers/Shared/Routes/constants';
+import Conditional from 'components/Compositions/Conditional';
 
 export function AnnualBudgetEditPage(props) {
   useInjectReducer({ key: 'annualBudgets', reducer });
@@ -79,4 +81,9 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(AnnualBudgetEditPage);
+)(Conditional(
+  AnnualBudgetEditPage,
+  ['currentGroup.permissions.annual_budgets_manage?'],
+  (props, rs) => ROUTES.group.plan.budget.index.path(rs.params('group_id')),
+  'You don\'t have permission to view edit the group annual budget'
+));
