@@ -17,7 +17,7 @@ describe('<LocaleToggle />', () => {
     store = configureStore({}, browserHistory);
   });
 
-  it('should render the default language messages', () => {
+  xit('should render the default language messages', () => {
     const renderedComponent = shallow(
       <Provider store={store}>
         <LanguageProvider messages={translationMessages}>
@@ -28,7 +28,7 @@ describe('<LocaleToggle />', () => {
     expect(renderedComponent.contains(<LocaleToggle />)).toBe(true);
   });
 
-  it('should present the default `en` english language option', () => {
+  xit('should present the default `en` english language option', () => {
     const renderedComponent = mount(
       <Provider store={store}>
         <LanguageProvider messages={translationMessages}>
