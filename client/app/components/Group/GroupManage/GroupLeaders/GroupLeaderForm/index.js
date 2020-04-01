@@ -17,6 +17,7 @@ import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Group/GroupManage/messages';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
 import { buildValues, mapFields } from 'utils/formHelpers';
+import { injectIntl, intlShape } from 'react-intl';
 
 export function GroupLeaderFormInner({ handleSubmit, handleChange, handleBlur, values, buttonText, setFieldValue, setFieldTouched, touched, ...props }) {
   const { links } = props;
@@ -86,11 +87,13 @@ export function GroupLeaderFormInner({ handleSubmit, handleChange, handleBlur, v
   );
 }
 export function GroupLeaderForm(props) {
+  const { intl } = props;
+
   const initialValues = buildValues(props.groupLeader, {
     id: { default: '' },
     user: { default: '', customKey: 'user_id' },
     group_id: { default: props.groupId },
-    position_name: { default: <DiverstFormattedMessage {...messages.leader.position} /> },
+    position_name: { default: intl.formatMessage(messages.leader.position) },
     user_role: { default: '', customKey: 'user_role_id' },
     visible: { default: true },
     pending_member_notifications_enabled: { default: false },
@@ -98,7 +101,6 @@ export function GroupLeaderForm(props) {
     pending_posts_notifications_enabled: { default: false },
     default_group_contact: { default: false },
   });
-
   return (
     <Formik
       initialValues={initialValues}
@@ -111,6 +113,7 @@ export function GroupLeaderForm(props) {
   );
 }
 GroupLeaderForm.propTypes = {
+  intl: intlShape,
   edit: PropTypes.bool,
   getGroupLeaderBegin: PropTypes.func,
   createGroupLeaderBegin: PropTypes.func,
@@ -150,5 +153,6 @@ GroupLeaderFormInner.propTypes = {
   }),
 };
 export default compose(
+  injectIntl,
   memo,
 )(GroupLeaderForm);

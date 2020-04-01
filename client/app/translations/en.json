@@ -300,7 +300,7 @@
   "diverst.containers.AnnualBudget.adminList.actions.carryover": "Carryover",
   "diverst.containers.AnnualBudget.adminList.actions.reset": "Reset",
   "diverst.containers.AnnualBudget.adminList.actions.carryoverConfirm": "Are you sure you want to carryover the budget over.\n This cannot be undone",
-  "diverst.containers.AnnualBudget.adminList.actions.resetConfirm": "Are you sure you want to rest the budget over.\n This cannot be undone",
+  "diverst.containers.AnnualBudget.adminList.actions.resetConfirm": "Are you sure you want to reset the budget over.\n This cannot be undone",
   "diverst.containers.Budget.index.buttons.new": "New Budget Request",
   "diverst.containers.Budget.index.buttons.back": "Annual Budget Overview",
   "diverst.containers.Budget.index.columns.requested": "Requested",
