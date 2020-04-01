@@ -18,7 +18,6 @@ import DiverstTable from 'components/Shared/DiverstTable';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Segment/messages';
 import { injectIntl, intlShape } from 'react-intl';
-import ExportIcon from "@material-ui/icons/SaveAlt";
 import { Field, Form, Formik } from 'formik';
 import { DiverstDatePicker } from 'components/Shared/Pickers/DiverstDatePicker';
 
@@ -56,21 +55,6 @@ export function LogList(props, context) {
 
   return (
     <React.Fragment>
-      <Grid container spacing={3} justify='flex-end'>
-        <Grid item>
-          <Button
-            className={classes.actionButton}
-            variant='contained'
-            color='secondary'
-            size='large'
-            startIcon={<ExportIcon />}
-            onClick={() => props.exportLogsBegin()}
-          >
-            Export Logs
-          </Button>
-        </Grid>
-      </Grid>
-      <Box mb={1} />
       <Card>
         <Formik
           initialValues={{
