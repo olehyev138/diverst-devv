@@ -19,6 +19,7 @@ export default function renderNewsItem(item, props, small = false) {
         likeNewsItemBegin={props.likeNewsItemBegin}
         unlikeNewsItemBegin={props.unlikeNewsItemBegin}
         small={small}
+        currentGroup={props.currentGroup}
       />
     );
   else if (item.news_link) // eslint-disable-line no-else-return
@@ -37,6 +38,7 @@ export default function renderNewsItem(item, props, small = false) {
         likeNewsItemBegin={props.likeNewsItemBegin}
         unlikeNewsItemBegin={props.unlikeNewsItemBegin}
         small={small}
+        currentGroup={props.currentGroup}
       />
     );
   else if (item.social_link)
@@ -55,6 +57,7 @@ export default function renderNewsItem(item, props, small = false) {
         likeNewsItemBegin={props.likeNewsItemBegin}
         unlikeNewsItemBegin={props.unlikeNewsItemBegin}
         small={small}
+        currentGroup={props.currentGroup}
       />
     );
 

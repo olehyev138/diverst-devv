@@ -31,7 +31,8 @@ import ExportIcon from '@material-ui/icons/SaveAlt';
 import DiverstTable from 'components/Shared/DiverstTable';
 import DiverstDropdownMenu from 'components/Shared/DiverstDropdownMenu';
 import DiverstSubmit from 'components/Shared/DiverstSubmit';
-
+import Permission from 'components/Shared/DiverstPermission';
+import { permission } from 'utils/permissionsHelpers';
 const styles = theme => ({
   errorButton: {
     color: theme.palette.error.main,
@@ -119,28 +120,47 @@ export function GroupMemberList(props) {
     },
   ];
 
+  const actions = [];
+
+  if (permission(props.currentGroup, 'members_destroy?'))
+    actions.push(
+      {
+        icon: () => <DeleteIcon />,
+        tooltip: intl.formatMessage(messages.tooltip.delete),
+        onClick: (_, rowData) => {
+          /* eslint-disable-next-line no-alert, no-restricted-globals */
+          if (confirm(intl.formatMessage(messages.tooltip.delete_confirm)))
+            props.deleteMemberBegin({
+              userId: rowData.id,
+              groupId: props.groupId
+            });
+        }
+      }
+    );
+
   return (
     <React.Fragment>
       <Box className={classes.floatRight}>
+        <Permission show={permission(props.currentGroup, 'members_create?')}>
+          <Button
+            className={classes.actionButton}
+            variant='contained'
+            to={props.links.groupMembersNew}
+            color='primary'
+            size='large'
+            component={WrappedNavLink}
+            startIcon={<AddIcon />}
+          >
+            <DiverstFormattedMessage {...messages.new} />
+          </Button>
+        </Permission>
         <Button
           className={classes.actionButton}
           variant='contained'
-          to={props.links.groupMembersNew}
-          color='primary'
-          size='large'
-          component={WrappedNavLink}
-          startIcon={<AddIcon />}
-        >
-          <DiverstFormattedMessage {...messages.new} />
-        </Button>
-        <Button
-          className={classes.actionButton}
-          variant='contained'
-          to='#'
           color='secondary'
           size='large'
-          component={WrappedNavLink}
           startIcon={<ExportIcon />}
+          onClick={() => props.exportMembersBegin()}
         >
           <DiverstFormattedMessage {...messages.export} />
         </Button>
@@ -259,18 +279,7 @@ export function GroupMemberList(props) {
         dataTotal={props.memberTotal}
         columns={columns}
         rowsPerPage={props.params.count}
-        actions={[{
-          icon: () => <DeleteIcon />,
-          tooltip: intl.formatMessage(messages.tooltip.delete),
-          onClick: (_, rowData) => {
-            /* eslint-disable-next-line no-alert, no-restricted-globals */
-            if (confirm(intl.formatMessage(messages.tooltip.delete_confirm)))
-              props.deleteMemberBegin({
-                userId: rowData.id,
-                groupId: props.groupId
-              });
-          }
-        }]}
+        actions={actions}
         my_options={{
           exportButton: true,
           exportCsv: (columns, data) => {
@@ -335,6 +344,7 @@ GroupMemberList.propTypes = {
   memberTo: PropTypes.instanceOf(DateTime),
   segmentLabels: PropTypes.array,
   handleFilterChange: PropTypes.func.isRequired,
+  currentGroup: PropTypes.object,
 };
 
 export default compose(

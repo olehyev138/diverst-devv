@@ -6,10 +6,6 @@ class UserGroupSerializer < ApplicationRecordSerializer
     UserSerializer.new(object.user, scope: scope, scope_name: :scope).attributes
   end
 
-  def group
-    GroupSerializer.new(object.group, scope: scope, scope_name: :scope).attributes
-  end
-
   def status
     unless object.user.active
       return 'inactive'

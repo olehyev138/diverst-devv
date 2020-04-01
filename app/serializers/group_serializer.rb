@@ -25,7 +25,35 @@ class GroupSerializer < ApplicationRecordSerializer
   end
 
   def policies
-    [:show?, :events_view?, :is_a_member?, :is_a_pending_member?, :is_an_accepted_member?, :is_a_leader?]
+    [
+        :show?,
+        :update?,
+        :events_view?,
+        :members_view?,
+        :news_view?,
+        :resources_view?,
+        :annual_budgets_view?,
+        :budgets_view?,
+        :leaders_view?,
+        :events_create?,
+        :members_create?,
+        :news_create?,
+        :social_link_create?,
+        :resources_create?,
+        :budgets_create?,
+        :leaders_create?,
+        :events_manage?,
+        :resources_manage?,
+        :kpi_manage?,
+        :leaders_manage?,
+        :news_manage?,
+        :annual_budgets_manage?,
+        :members_destroy?,
+        :is_a_member?,
+        :is_a_pending_member?,
+        :is_an_accepted_member?,
+        :is_a_leader?
+    ]
   end
 
   def logo_location

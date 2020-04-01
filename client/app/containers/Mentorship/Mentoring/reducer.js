@@ -25,12 +25,12 @@ export const initialState = {
   userList: [],
   userTotal: null,
   currentUser: null,
-  isFetchingUsers: false,
+  isFetchingUsers: true,
 
   mentorshipList: [],
   mentorshipListTotal: null,
   currentMentorship: null,
-  isFetchingMentorships: false,
+  isFetchingMentorships: true,
 };
 
 /* eslint-disable-next-line default-case, no-param-reassign */

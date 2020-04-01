@@ -1,38 +1,23 @@
-class GroupUpdatePolicy < ApplicationPolicy
-  def index?
-    manage?
+class GroupUpdatePolicy < GroupBasePolicy
+  def base_index_permission
+    'groups_insights_manage'
   end
 
-  def show?
-    manage?
+  def base_create_permission
+    'groups_insights_manage'
   end
 
-  def create?
-    manage?
-  end
-
-  def manage?
-    return true if manage_all?
-    return true if basic_group_leader_permission?('manage')
-
-    @policy_group.manage?
-  end
-
-  def update?
-    manage?
-  end
-
-  def destroy?
-    manage?
+  def base_manage_permission
+    'groups_insights_manage'
   end
 
   class Scope < Scope
+    def group_base
+      group.updates
+    end
+
     def resolve
-      scope.joins(:group).where(
-        groups: {
-          enterprise_id: @user.enterprise.id
-        }
-      )
+      super(policy.base_index_permission)
     end
   end
 end
