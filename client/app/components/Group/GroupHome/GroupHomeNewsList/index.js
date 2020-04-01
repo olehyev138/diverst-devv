@@ -14,17 +14,10 @@ import {
   Grid,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import MessageIcon from '@material-ui/icons/Message';
-import NewsIcon from '@material-ui/icons/Description';
-import SocialIcon from '@material-ui/icons/Share';
-import GroupMessageListItem from 'components/News/GroupMessage/GroupMessageListItem';
-import NewsLinkListItem from 'components/News/NewsLink/NewsLinkListItem';
-import SocialLinkListItem from 'components/News/SocialLink/SocialLinkListItem';
 import DiverstLoader from 'components/Shared/DiverstLoader';
-import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
-import messages from 'containers/News/messages';
 import { injectIntl, intlShape } from 'react-intl';
 import { addScript } from 'utils/domHelper';
+import renderNewsItem from 'utils/newsItemRender';
 
 const styles = theme => ({
   newsItem: {
@@ -79,57 +72,6 @@ export function NewsFeed(props) {
 
   const { classes } = props;
 
-  /* Check news_feed_link type & render appropriate list item component */
-  const renderNewsItem = (item) => {
-    if (item.group_message)
-      return (
-        <GroupMessageListItem
-          links={props.links}
-          newsItem={item}
-          readonly={props.readonly}
-          groupId={item.news_feed.group_id}
-          deleteGroupMessageBegin={props.deleteGroupMessageBegin}
-          updateNewsItemBegin={props.updateNewsItemBegin}
-          archiveNewsItemBegin={props.archiveNewsItemBegin}
-          pinNewsItemBegin={props.pinNewsItemBegin}
-          unpinNewsItemBegin={props.unpinNewsItemBegin}
-        />
-      );
-    else if (item.news_link) // eslint-disable-line no-else-return
-      return (
-        <NewsLinkListItem
-          links={props.links}
-          newsLink={item.news_link}
-          newsItem={item}
-          groupId={item.news_feed.group_id}
-          readonly={props.readonly}
-          deleteNewsLinkBegin={props.deleteNewsLinkBegin}
-          updateNewsItemBegin={props.updateNewsItemBegin}
-          archiveNewsItemBegin={props.archiveNewsItemBegin}
-          pinNewsItemBegin={props.pinNewsItemBegin}
-          unpinNewsItemBegin={props.unpinNewsItemBegin}
-        />
-      );
-    else if (item.social_link)
-      return (
-        <SocialLinkListItem
-          socialLink={item.social_link}
-          links={props.links}
-          newsItem={item}
-          small
-          groupId={item.news_feed.group_id}
-          readonly={props.readonly}
-          deleteSocialLinkBegin={props.deleteSocialLinkBegin}
-          updateNewsItemBegin={props.updateNewsItemBegin}
-          archiveNewsItemBegin={props.archiveNewsItemBegin}
-          pinNewsItemBegin={props.pinNewsItemBegin}
-          unpinNewsItemBegin={props.unpinNewsItemBegin}
-        />
-      );
-
-    return undefined;
-  };
-
   return (
     <React.Fragment>
       <DiverstLoader isLoading={props.isLoading}>
@@ -141,7 +83,7 @@ export function NewsFeed(props) {
                 <Box mb={1} />
                 <Divider />
                 <Box mb={1} />
-                {renderNewsItem(item)}
+                {renderNewsItem(item, props, true)}
               </Grid>
             );
           })}
@@ -170,6 +112,8 @@ NewsFeed.propTypes = {
   archiveNewsItemBegin: PropTypes.func,
   pinNewsItemBegin: PropTypes.func,
   unpinNewsItemBegin: PropTypes.func,
+  unlikeNewsItemBegin: PropTypes.func,
+  likeNewsItemBegin: PropTypes.func,
 };
 
 export default compose(

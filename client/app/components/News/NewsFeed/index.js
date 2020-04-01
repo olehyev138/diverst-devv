@@ -20,15 +20,13 @@ import NewsIcon from '@material-ui/icons/Description';
 import SocialIcon from '@material-ui/icons/Share';
 import ResponsiveTabs from 'components/Shared/ResponsiveTabs';
 import WrappedNavLink from 'components/Shared/WrappedNavLink';
-import GroupMessageListItem from 'components/News/GroupMessage/GroupMessageListItem';
-import NewsLinkListItem from 'components/News/NewsLink/NewsLinkListItem';
-import SocialLinkListItem from 'components/News/SocialLink/SocialLinkListItem';
 import DiverstPagination from 'components/Shared/DiverstPagination';
 import DiverstLoader from 'components/Shared/DiverstLoader';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/News/messages';
 import { injectIntl, intlShape } from 'react-intl';
 import { addScript } from 'utils/domHelper';
+import renderNewsItem from 'utils/newsItemRender';
 
 const styles = theme => ({
   newsItem: {
@@ -106,62 +104,6 @@ export function NewsFeed(props) {
   const handleSpeedDialOpen = () => setSpeedDialOpen(true);
   const handleSpeedDialClose = () => setSpeedDialOpen(false);
 
-  /* Check news_feed_link type & render appropriate list item component */
-  const renderNewsItem = (item) => {
-    if (item.group_message)
-      return (
-        <GroupMessageListItem
-          links={props.links}
-          newsItem={item}
-          readonly={props.readonly}
-          groupId={item.news_feed.group_id}
-          deleteGroupMessageBegin={props.deleteGroupMessageBegin}
-          updateNewsItemBegin={props.updateNewsItemBegin}
-          archiveNewsItemBegin={props.archiveNewsItemBegin}
-          pinNewsItemBegin={props.pinNewsItemBegin}
-          unpinNewsItemBegin={props.unpinNewsItemBegin}
-          likeNewsItemBegin={props.likeNewsItemBegin}
-          unlikeNewsItemBegin={props.unlikeNewsItemBegin}
-        />
-      );
-    else if (item.news_link) // eslint-disable-line no-else-return
-      return (
-        <NewsLinkListItem
-          links={props.links}
-          newsLink={item.news_link}
-          newsItem={item}
-          groupId={item.news_feed.group_id}
-          readonly={props.readonly}
-          deleteNewsLinkBegin={props.deleteNewsLinkBegin}
-          updateNewsItemBegin={props.updateNewsItemBegin}
-          archiveNewsItemBegin={props.archiveNewsItemBegin}
-          pinNewsItemBegin={props.pinNewsItemBegin}
-          unpinNewsItemBegin={props.unpinNewsItemBegin}
-          likeNewsItemBegin={props.likeNewsItemBegin}
-          unlikeNewsItemBegin={props.unlikeNewsItemBegin}
-        />
-      );
-    else if (item.social_link)
-      return (
-        <SocialLinkListItem
-          socialLink={item.social_link}
-          links={props.links}
-          newsItem={item}
-          groupId={item.news_feed.group_id}
-          readonly={props.readonly}
-          deleteSocialLinkBegin={props.deleteSocialLinkBegin}
-          updateNewsItemBegin={props.updateNewsItemBegin}
-          archiveNewsItemBegin={props.archiveNewsItemBegin}
-          pinNewsItemBegin={props.pinNewsItemBegin}
-          unpinNewsItemBegin={props.unpinNewsItemBegin}
-          likeNewsItemBegin={props.likeNewsItemBegin}
-          unlikeNewsItemBegin={props.unlikeNewsItemBegin}
-        />
-      );
-
-    return undefined;
-  };
-
   return (
     <React.Fragment>
       {!props.readonly && (
@@ -216,7 +158,7 @@ export function NewsFeed(props) {
             return (
               <Grid item key={item.id} className={classes.newsItem}>
                 <Card>
-                  {renderNewsItem(item)}
+                  {renderNewsItem(item, props)}
                 </Card>
                 <Box mb={3} />
               </Grid>
