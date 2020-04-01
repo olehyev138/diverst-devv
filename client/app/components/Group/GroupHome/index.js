@@ -8,7 +8,7 @@ import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
-import { Button, Divider, Typography, Card, Paper, CardContent, Link } from '@material-ui/core';
+import { Button, Divider, Typography, Card, Paper, CardContent, Link, Box } from '@material-ui/core';
 import DiverstImg from 'components/Shared/DiverstImg';
 import EventsPage from 'containers/Event/EventsPage';
 import NewsPage from 'containers/News/NewsFeedPage';
@@ -113,29 +113,57 @@ export function GroupHome({ classes, ...props }) {
   );
 
   const family = (
-    <Card>
-      <CardContent>
-        { props.currentGroup.parent && (
-          <React.Fragment>
-            <Typography variant='h6'>
+    (props.currentGroup.parent || props.currentGroup.children.length > 0) && (
+      <Card>
+        <CardContent>
+          { props.currentGroup.parent && (
+            <React.Fragment>
+              <Typography variant='h6'>
               Parent-Group
-            </Typography>
-            <Link
-              href={ROUTES.group.home.path(props.currentGroup.parent.id)}
-              rel='noopener'
-            >
-              <Typography>
-                {`${props.currentGroup.parent.name}`}
               </Typography>
-            </Link>
-            <Typography>
-              {`${props.currentGroup.parent.current_user_is_member
-                ? '(are a member)' : '(are not a member)'}`}
-            </Typography>
-          </React.Fragment>
-        )}
-      </CardContent>
-    </Card>
+              <Link
+                href={ROUTES.group.home.path(props.currentGroup.parent.id)}
+                rel='noopener'
+              >
+                <Typography>
+                  {`${props.currentGroup.parent.name}`}
+                </Typography>
+              </Link>
+              <Typography>
+                {`${props.currentGroup.parent.current_user_is_member
+                  ? '(are a member)' : '(are not a member)'}`}
+              </Typography>
+            </React.Fragment>
+          )}
+          { props.currentGroup.children.length > 0 && (
+            <React.Fragment>
+              <Typography variant='h6'>
+              Sub-Groups
+              </Typography>
+              {props.currentGroup.children.map(child => (
+                <React.Fragment>
+                  <Box mb={1} />
+                  <Divider />
+                  <Box mb={1} />
+                  <Link
+                    href={ROUTES.group.home.path(child.id)}
+                    rel='noopener'
+                  >
+                    <Typography>
+                      {`${child.name}`}
+                    </Typography>
+                  </Link>
+                  <Typography>
+                    {`${child.current_user_is_member
+                      ? '(are a member)' : '(are not a member)'}`}
+                  </Typography>
+                </React.Fragment>
+              ))}
+            </React.Fragment>
+          )}
+        </CardContent>
+      </Card>
+    )
   );
 
   return (
