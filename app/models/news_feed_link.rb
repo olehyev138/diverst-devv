@@ -158,7 +158,11 @@ class NewsFeedLink < ApplicationRecord
   end
 
   def user_like(user_id)
-    likes.where(user_id: user_id).any?
+    if likes.loaded?
+      likes.any? { |likes| likes.user_id == user_id }
+    else
+      likes.where(user_id: user_id).any?
+    end
   end
 
   def create_view_if_none(user)
