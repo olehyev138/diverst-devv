@@ -7,7 +7,6 @@
 import React, {
   memo, useRef, useState, useEffect
 } from 'react';
-import dig from 'object-dig';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import { Field, Formik, Form } from 'formik';
@@ -89,10 +88,12 @@ export function SponsorFormInner({ classes, handleSubmit, handleChange, handleBl
 }
 
 export function SponsorForm(props) {
+  console.log(props);
   const initialValues = buildValues(props.sponsor, {
     id: { default: '' },
     sponsor_name: { default: '' },
     sponsor_title: { default: '' },
+    sponsorableId: 1,
   });
 
   return (
@@ -100,8 +101,7 @@ export function SponsorForm(props) {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={(values, actions) => {
-        //TODO : CHANGE DUMMY VALUE FROM 1 to ENTERPRISE_ID
-        values.sponsorableId = 1;
+        values.sponsorableId = props.sponsorableId;
         props.sponsorAction(values);
       }}
 
@@ -113,6 +113,7 @@ export function SponsorForm(props) {
 SponsorForm.propTypes = {
   sponsorAction: PropTypes.func,
   sponsor: PropTypes.object,
+  sponsorableId: PropTypes.number,
 };
 
 SponsorFormInner.propTypes = {

@@ -7,14 +7,13 @@ import { createStructuredSelector } from 'reselect/lib';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 
-import reducer from '../reducer';
-import saga from '../saga';
+import reducer from 'containers/Branding/Sponsor/reducer';
+import saga from 'containers/Branding/Sponsor/saga';
 import {
-  createSponsorBegin,
+  createGroupSponsorBegin,
   sponsorsUnmount
-} from '../actions';
+} from 'containers/Branding/Sponsor/actions';
 
-import RouteService from 'utils/routeHelpers';
 import SponsorForm from 'components/Branding/Sponsor/SponsorForm';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
@@ -26,19 +25,18 @@ export function SponsorCreatePage(props) {
   useInjectSaga({ key: 'sponsors', saga });
   const { intl } = props;
   const links = {
-    sponsorIndex: ROUTES.admin.system.branding.sponsors.index.path(),
+    sponsorIndex: ROUTES.group.manage.sponsors.index.path(props.currentGroup.id),
   };
 
   useEffect(() => () => props.sponsorsUnmount(), []);
 
-  //TODO : CHANGE HARDCODED 123 IN SPONSORABLEID TO ENTERPRISE_ID
   return (
     <React.Fragment>
       <SponsorForm
-        sponsorAction={props.createSponsorBegin}
+        sponsorAction={props.createGroupSponsorBegin}
         links={links}
         buttonText={intl.formatMessage(messages.create)}
-        sponsorableId={123}
+        sponsorableId={props.currentGroup.id}
       />
     </React.Fragment>
   );
@@ -46,15 +44,16 @@ export function SponsorCreatePage(props) {
 
 SponsorCreatePage.propTypes = {
   intl: intlShape,
-  createSponsorBegin: PropTypes.func,
-  sponsorsUnmount: PropTypes.func
+  createGroupSponsorBegin: PropTypes.func,
+  sponsorsUnmount: PropTypes.func,
+  currentGroup: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = {
-  createSponsorBegin,
+  createGroupSponsorBegin,
   sponsorsUnmount
 };
 
