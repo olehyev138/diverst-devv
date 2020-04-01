@@ -1,5 +1,5 @@
 class Api::V1::SessionsController < DiverstController
-  skip_before_action :verify_jwt_token, only: [:create]
+  skip_before_action :verify_jwt_token, only: [:create, :logout]
 
   def create
     user = User.signin(params[:email], params[:password])

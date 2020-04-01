@@ -17,8 +17,7 @@ import 'sanitize.css/sanitize.css';
 
 // Import Language Provider
 import LanguageProvider from 'containers/Shared/LanguageProvider';
-import ThemeProvider from 'containers/Shared/ThemeProvider/Loadable';
-
+import InvalidSessionDetector from 'containers/Shared/InvalidSessionDetector';
 
 // Load the favicon and the .htaccess file
 /* eslint-disable import/no-unresolved, import/extensions */
@@ -54,7 +53,7 @@ const render = (messages) => {
       <LanguageProvider messages={messages}>
         <ConnectedRouter history={history}>
           <LastLocationProvider>
-            <ThemeProvider />
+            <InvalidSessionDetector />
           </LastLocationProvider>
         </ConnectedRouter>
       </LanguageProvider>
