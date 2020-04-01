@@ -141,7 +141,7 @@ export function GroupHome({ classes, ...props }) {
               Sub-Groups
               </Typography>
               {props.currentGroup.children.map(child => (
-                <React.Fragment>
+                <React.Fragment key={`child:${child.id}`}>
                   <Box mb={1} />
                   <Divider />
                   <Box mb={1} />
