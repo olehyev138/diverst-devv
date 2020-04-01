@@ -88,7 +88,6 @@ export function SponsorFormInner({ classes, handleSubmit, handleChange, handleBl
 }
 
 export function SponsorForm(props) {
-  console.log(props);
   const initialValues = buildValues(props.sponsor, {
     id: { default: '' },
     sponsor_name: { default: '' },
