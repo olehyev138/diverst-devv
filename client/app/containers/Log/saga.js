@@ -6,24 +6,20 @@ import { showSnackbar } from 'containers/Shared/Notifier/actions';
 
 
 import {
-  GET_LOGS_BEGIN
+  GET_LOGS_BEGIN, EXPORT_LOGS_BEGIN
 } from 'containers/Log/constants';
 
 import {
   getLogsSuccess, getLogsError,
+  exportLogsError, exportLogsSuccess
 } from 'containers/Log/actions';
-
-import { ROUTES } from 'containers/Shared/Routes/constants';
 
 export function* getLogs(action) {
   try {
-    console.log('saga');
     const response = yield call(api.activities.all.bind(api.activities), action.payload);
-    console.log(response);
+
     yield put(getLogsSuccess(response.data.page));
   } catch (err) {
-    // console.log(err);
-    // console.log(err.response);
     yield put(getLogsError(err));
 
     // TODO: intl message
@@ -31,6 +27,21 @@ export function* getLogs(action) {
   }
 }
 
+export function* exportLogs(action) {
+  try {
+    const response = yield call(api.userGroups.csvExport.bind(api.userGroups), action.payload);
+
+    yield put(exportLogsSuccess({}));
+    yield put(showSnackbar({ message: 'Successfully exported logs', options: { variant: 'success' } }));
+  } catch (err) {
+    yield put(exportLogsError(err));
+
+    // TODO: intl message
+    yield put(showSnackbar({ message: 'Failed to export logs', options: { variant: 'warning' } }));
+  }
+}
+
 export default function* segmentsSaga() {
   yield takeLatest(GET_LOGS_BEGIN, getLogs);
+  yield takeLatest(EXPORT_LOGS_BEGIN, exportLogs);
 }
