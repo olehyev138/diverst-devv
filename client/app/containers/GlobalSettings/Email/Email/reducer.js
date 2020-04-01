@@ -22,8 +22,8 @@ export const initialState = {
   emailList: [],
   emailListTotal: null,
   currentEmail: null,
-  isFetchingEmails: false,
-  isFetchingEmail: false,
+  isFetchingEmails: true,
+  isFetchingEmail: true,
   isCommitting: false,
   hasChanged: false,
 };

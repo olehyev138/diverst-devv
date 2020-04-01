@@ -28,8 +28,8 @@ export const initialState = {
   pillarList: [],
   pillarListTotal: null,
   currentPillar: null,
-  isFetchingPillars: false,
-  isFetchingPillar: false,
+  isFetchingPillars: true,
+  isFetchingPillar: true,
   isCommitting: false,
   hasChanged: false,
 };

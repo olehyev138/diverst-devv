@@ -53,13 +53,15 @@ const GroupLayout = ({ component: Component, classes, ...rest }) => {
     return () => other.groupFormUnmount();
   }, [rs.params('group_id'), rest.groupHasChanged]);
 
+  const permission = name => dig(currentGroup, 'permissions', name);
+
   return (
     <AuthenticatedLayout
       position='relative'
       {...other}
       component={() => (
         <React.Fragment>
-          <GroupLinks currentGroup={currentGroup} {...other} />
+          { currentGroup && <GroupLinks currentGroup={currentGroup} permission={permission} {...other} /> }
           <Scrollbar>
             <Fade in appear>
               <Container>
@@ -71,7 +73,7 @@ const GroupLayout = ({ component: Component, classes, ...rest }) => {
                       ) : (
                         <React.Fragment />
                       )}
-                      <Component currentGroup={currentGroup} {...rest} />
+                      <Component currentGroup={currentGroup} permission={permission} {...rest} />
                     </React.Fragment>
                   )}
                 </div>

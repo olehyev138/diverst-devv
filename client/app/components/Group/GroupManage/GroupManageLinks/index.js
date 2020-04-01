@@ -12,12 +12,16 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import ResponsiveTabs from 'components/Shared/ResponsiveTabs';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Group/GroupManage/messages';
+
+import { permission } from 'utils/permissionsHelpers';
+import WithPermission from 'components/Compositions/WithPermission';
 const styles = theme => ({});
 
 /* eslint-disable react/no-multi-comp */
 export function GroupManageLinks(props) {
-  const { classes } = props;
-  const { currentTab } = props;
+  const { classes, currentGroup, currentTab } = props;
+
+  const PermissionTabs = WithPermission(Tab);
 
   return (
     <React.Fragment>
@@ -27,15 +31,19 @@ export function GroupManageLinks(props) {
           indicatorColor='primary'
           textColor='primary'
         >
-          <Tab
+          <PermissionTabs
             component={WrappedNavLink}
             to={ROUTES.group.manage.settings.index.path(props.currentGroup.id)}
             label={<DiverstFormattedMessage {...messages.links.settings} />}
+            show={permission(props.currentGroup, 'update?')}
+            value='settings'
           />
-          <Tab
+          <PermissionTabs
             component={WrappedNavLink}
             to={ROUTES.group.manage.leaders.index.path(props.currentGroup.id)}
             label={<DiverstFormattedMessage {...messages.links.leaders} />}
+            show={permission(props.currentGroup, 'leaders_view?')}
+            value='leaders'
           />
 
           <Tab
@@ -51,8 +59,8 @@ export function GroupManageLinks(props) {
 
 GroupManageLinks.propTypes = {
   classes: PropTypes.object,
-  currentTab: PropTypes.number,
-  currentGroup: PropTypes.object
+  currentTab: PropTypes.string,
+  currentGroup: PropTypes.object,
 };
 
 export const StyledGroupManageLinks = withStyles(styles)(GroupManageLinks);

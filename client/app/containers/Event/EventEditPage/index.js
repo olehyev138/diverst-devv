@@ -1,6 +1,4 @@
-import React, {
-  memo, useEffect, useState, useContext
-} from 'react';
+import React, { memo, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
@@ -19,15 +17,13 @@ import { selectGroup } from 'containers/Group/selectors';
 import { selectUser } from 'containers/Shared/App/selectors';
 import { selectFormEvent, selectIsCommitting, selectIsFormLoading } from 'containers/Event/selectors';
 
-import {
-  getEventBegin, updateEventBegin,
-  eventsUnmount
-} from 'containers/Event/actions';
+import { eventsUnmount, getEventBegin, updateEventBegin } from 'containers/Event/actions';
 
 import EventForm from 'components/Event/EventForm';
 
 import messages from 'containers/Event/messages';
 import { injectIntl, intlShape } from 'react-intl';
+import Conditional from 'components/Compositions/Conditional';
 
 export function EventEditPage(props) {
   useInjectReducer({ key: 'events', reducer });
@@ -98,4 +94,9 @@ export default compose(
   injectIntl,
   withConnect,
   memo,
-)(EventEditPage);
+)(Conditional(
+  EventEditPage,
+  ['currentEvent.permissions.update?', 'isFormLoading'],
+  (props, rs) => ROUTES.group.events.show.path(rs.params('group_id'), rs.params('event_id')),
+  'You don\'t have permission to edit this event'
+));

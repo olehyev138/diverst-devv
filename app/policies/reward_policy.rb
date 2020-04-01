@@ -3,6 +3,10 @@ class RewardPolicy < ApplicationPolicy
     manage?
   end
 
+  def show?
+    manage?
+  end
+
   def new?
     manage?
   end

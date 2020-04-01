@@ -1,54 +1,49 @@
 class UpdatePolicy < ApplicationPolicy
-  def parent_member_policy?(action)
-    policy = "#{record.updatable_type}Policy".constantize rescue nil
-    policy ? policy.new(user, record.updatable_type.constantize).send(action) : false
-  end
-
-  def parent_collection_policy?(action)
-    parent = record.scope.instance_variable_get('@association').owner.class rescue nil
-    if parent.present?
-      policy = "#{parent}UpdatePolicy".constantize rescue nil
-      policy ? policy.new(user, nil).send(action) : false
+  def parent_policy
+    case record
+    when Update then record_parent_policy
+    when Class, NilClass then params_parent_policy
+    else nil
     end
   end
 
-  def index?
-    parent_collection_policy?(:index?)
+  def record_parent_policy
+    case record.updatable_type
+    when 'Group' then GroupUpdatePolicy.new(user, [record.updatable, record])
+    when 'Initiative' then InitiativeUpdatePolicy.new(user, record)
+    else nil
+    end
   end
 
-  def update?
-    parent_member_policy?(:update?)
+  def params_parent_policy
+    if params[:group_id]
+      GroupUpdatePolicy.new(user, record, params)
+    elsif params[:initiative_id]
+      InitiativeUpdatePolicy.new(user, record, params)
+    else
+      nil
+    end
   end
 
-  def destroy?
-    parent_member_policy?(:update?)
-  end
+  delegate :index?, :update?, :destroy?, :show?, :create?, to: :parent_policy
 
-  def show?
-    parent_member_policy?(:update?)
+  def prototype?
+    create?
   end
 
   class Scope < Scope
-    def index?
-      UpdatePolicy.new(user, scope).index?
+    def self.parent_scope(params)
+      if params[:group_id]
+        GroupUpdatePolicy::Scope
+      elsif params[:initiative_id]
+        InitiativeUpdatePolicy::Scope
+      else
+        nil
+      end
     end
 
-    def resolve
-      if index?
-        scope.joins(
-            'LEFT JOIN groups ON groups.id = updatable_id AND updatable_type = \'Group\' '\
-            'LEFT JOIN initiatives ON initiatives.id = updatable_id AND updatable_type = \'Initiative\' '\
-            'LEFT JOIN groups init_groups ON initiatives.owner_group_id = init_groups.id '\
-          ).where(
-            'CASE '\
-            'WHEN updatable_type = \'Group\' THEN groups.enterprise_id '\
-            'WHEN updatable_type = \'Initiative\' THEN init_groups.enterprise_id '\
-            'ELSE -1 '\
-            'END '\
-            '= ?', user.enterprise_id)
-      else
-        scope.none
-      end
+    def self.new(user, scope, permission = nil, params: {})
+      parent_scope(params)&.new(user, scope, permission, params: params) || super
     end
   end
 end

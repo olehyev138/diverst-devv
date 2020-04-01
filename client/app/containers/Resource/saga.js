@@ -67,7 +67,7 @@ export function* getFolder(action) {
 
 export function* createFolder(action) {
   try {
-    const payload = { folder: action.payload };
+    const payload = { folder: action.payload, group_id: action.payload.group_id };
     const response = yield call(api.folders.create.bind(api.folders), payload);
 
     yield put(createFolderSuccess());
@@ -162,7 +162,7 @@ export function* getResource(action) {
 
 export function* createResource(action) {
   try {
-    const payload = { resource: action.payload };
+    const payload = { resource: action.payload, group_id: action.payload.group_id };
     const response = yield call(api.resources.create.bind(api.resources), payload);
 
     yield put(createResourceSuccess());

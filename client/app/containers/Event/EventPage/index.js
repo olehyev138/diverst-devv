@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useContext } from 'react';
+import React, { memo, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
@@ -15,16 +15,16 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { selectGroup } from 'containers/Group/selectors';
 import { selectUser } from 'containers/Shared/App/selectors';
-import { selectEvent, selectIsFormLoading, selectHasChanged } from 'containers/Event/selectors';
+import { selectEvent, selectHasChanged, selectIsFormLoading } from 'containers/Event/selectors';
 
 
 import {
-  getEventBegin,
-  deleteEventBegin,
-  createEventCommentBegin,
-  deleteEventCommentBegin,
   archiveEventBegin,
+  createEventCommentBegin,
+  deleteEventBegin,
+  deleteEventCommentBegin,
   eventsUnmount,
+  getEventBegin,
   joinEventBegin,
   leaveEventBegin,
   exportAttendeesBegin
@@ -32,6 +32,7 @@ import {
 
 
 import Event from 'components/Event/Event';
+import Conditional from 'components/Compositions/Conditional';
 
 export function EventPage(props) {
   useInjectReducer({ key: 'events', reducer });
@@ -66,6 +67,7 @@ export function EventPage(props) {
       joinEventBegin={props.joinEventBegin}
       leaveEventBegin={props.leaveEventBegin}
       hasChanged={props.hasChanged}
+      currentGroup={props.currentGroup}
       export={props.exportAttendeesBegin}
     />
   );
@@ -116,4 +118,9 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(EventPage);
+)(Conditional(
+  EventPage,
+  ['currentEvent.permissions.show?', 'isFormLoading'],
+  (props, rs) => ROUTES.group.events.index.path(rs.params('group_id')),
+  'You don\'t have permission to view this event'
+));

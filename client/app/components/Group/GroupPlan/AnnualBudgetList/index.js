@@ -54,6 +54,7 @@ export function AnnualBudgetList(props) {
               initiativesLoading={initiativesLoading[annualBudget.id]}
               handlePagination={handleInitiativePagination(annualBudget.id)}
               handleOrdering={handleInitiativeOrdering(annualBudget.id)}
+              currentGroup={props.currentGroup}
             />
             <Box mb={2} />
           </React.Fragment>
@@ -81,6 +82,7 @@ AnnualBudgetList.propTypes = {
   handleInitiativeOrdering: PropTypes.func,
   defaultParams: PropTypes.object,
   links: PropTypes.object,
+  currentGroup: PropTypes.object,
   isLoading: PropTypes.bool,
 };
 

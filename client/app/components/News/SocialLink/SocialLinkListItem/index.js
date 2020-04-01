@@ -19,11 +19,14 @@ import { withStyles } from '@material-ui/core/styles';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/News/messages';
 import { formatDateTimeString } from 'utils/dateTimeHelpers';
-import WrappedNavLink from '../../../Shared/WrappedNavLink';
+import WrappedNavLink from 'components/Shared/WrappedNavLink';
+import DiverstLike from 'components/Shared/DiverstLike';
 import { injectIntl, intlShape } from 'react-intl';
 import IconButton from '@material-ui/core/IconButton';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import LocationOnOutlinedIcon from '@material-ui/icons/LocationOnOutlined';
+import Permission from 'components/Shared/DiverstPermission';
+import { permission } from 'utils/permissionsHelpers';
 import DiverstHTMLEmbedder from 'components/Shared/DiverstHTMLEmbedder';
 
 const styles = theme => ({
@@ -88,18 +91,27 @@ export function SocialLinkListItem(props) {
 
   const pinButtons = (
     <Grid item>
+      <DiverstLike
+        isLiked={newsItem.current_user_likes}
+        newsFeedLinkId={newsItem.id}
+        totalLikes={newsItem.total_likes}
+        likeNewsItemBegin={props.likeNewsItemBegin}
+        unlikeNewsItemBegin={props.unlikeNewsItemBegin}
+      />
       {props.pinNewsItemBegin && (
-        <IconButton
-          size='small'
-          onClick={() => {
-            if (pinned)
-              props.unpinNewsItemBegin({ id: newsItemId });
-            else
-              props.pinNewsItemBegin({ id: newsItemId });
-          }}
-        >
-          { pinned ? <LocationOnIcon /> : <LocationOnOutlinedIcon />}
-        </IconButton>
+        <Permission show={permission(props.currentGroup, 'events_manage?')}>
+          <IconButton
+            size='small'
+            onClick={() => {
+              if (pinned)
+                props.unpinNewsItemBegin({ id: newsItemId });
+              else
+                props.pinNewsItemBegin({ id: newsItemId });
+            }}
+          >
+            { pinned ? <LocationOnIcon /> : <LocationOnOutlinedIcon />}
+          </IconButton>
+        </Permission>
       )}
     </Grid>
   );
@@ -113,50 +125,58 @@ export function SocialLinkListItem(props) {
   );
 
   const actions = (
-    <CardActions>
-      {!props.readonly && (
-        <React.Fragment>
-          <Button
-            size='small'
-            color='primary'
-            to={links.socialLinkEdit(newsItem.id)}
-            component={WrappedNavLink}
-          >
-            <DiverstFormattedMessage {...messages.edit} />
-          </Button>
-          <Button
-            size='small'
-            color='primary'
-            onClick={() => {
-              props.archiveNewsItemBegin({ id: newsItemId });
-            }}
-          >
-            <DiverstFormattedMessage {...messages.archive} />
-          </Button>
-          <Button
-            size='small'
-            onClick={() => {
-              /* eslint-disable-next-line no-alert, no-restricted-globals */
-              if (confirm('Delete social link?'))
-                props.deleteSocialLinkBegin(newsItem.social_link);
-            }}
-          >
-            Delete
-          </Button>
-        </React.Fragment>
-      )}
-      {!props.readonly && props.newsItem.approved !== true && (
-        <Button
-          size='small'
-          onClick={() => {
-            /* eslint-disable-next-line no-alert, no-restricted-globals */
-            props.updateNewsItemBegin({ approved: true, id: newsItemId, group_id: groupId });
-          }}
-        >
-          {<DiverstFormattedMessage {...messages.approve} />}
-        </Button>
-      )}
-    </CardActions>
+    <Permission show={permission(newsItem, 'update?')}>
+      <CardActions>
+        {!props.readonly && (
+          <React.Fragment>
+            <Button
+              size='small'
+              color='primary'
+              to={links.socialLinkEdit(newsItem.id)}
+              component={WrappedNavLink}
+            >
+              <DiverstFormattedMessage {...messages.edit} />
+            </Button>
+            <Permission show={permission(props.currentGroup, 'news_manage?')}>
+              <Button
+                size='small'
+                color='primary'
+                onClick={() => {
+                  props.archiveNewsItemBegin({ id: newsItemId });
+                }}
+              >
+                <DiverstFormattedMessage {...messages.archive} />
+              </Button>
+            </Permission>
+            <Permission show={permission(newsItem, 'destroy?')}>
+              <Button
+                size='small'
+                onClick={() => {
+                  /* eslint-disable-next-line no-alert, no-restricted-globals */
+                  if (confirm('Delete social link?'))
+                    props.deleteSocialLinkBegin(newsItem.social_link);
+                }}
+              >
+                Delete
+              </Button>
+            </Permission>
+          </React.Fragment>
+        )}
+        {!props.readonly && props.newsItem.approved !== true && (
+          <Permission show={permission(props.currentGroup, 'news_manage?')}>
+            <Button
+              size='small'
+              onClick={() => {
+                /* eslint-disable-next-line no-alert, no-restricted-globals */
+                props.updateNewsItemBegin({ approved: true, id: newsItemId, group_id: groupId });
+              }}
+            >
+              {<DiverstFormattedMessage {...messages.approve} />}
+            </Button>
+          </Permission>
+        )}
+      </CardActions>
+    </Permission>
   );
 
   return (
@@ -166,7 +186,7 @@ export function SocialLinkListItem(props) {
         <Grid container justify='space-between'>
           { author }
           <Grid item>
-            <Grid container>
+            <Grid container alignItems='center'>
               {pinButtons}
               {date}
             </Grid>
@@ -182,6 +202,7 @@ SocialLinkListItem.propTypes = {
   classes: PropTypes.object,
   intl: intlShape,
   socialLink: PropTypes.object,
+  currentGroup: PropTypes.object,
   links: PropTypes.shape({
     socialLinkEdit: PropTypes.func,
   }),
@@ -192,6 +213,8 @@ SocialLinkListItem.propTypes = {
   archiveNewsItemBegin: PropTypes.func,
   pinNewsItemBegin: PropTypes.func,
   unpinNewsItemBegin: PropTypes.func,
+  likeNewsItemBegin: PropTypes.func,
+  unlikeNewsItemBegin: PropTypes.func,
 };
 
 export default compose(
