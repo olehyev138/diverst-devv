@@ -22,7 +22,7 @@ import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { selectPaginatedLogs, selectLogTotal, selectIsLoading } from 'containers/Log/selectors';
-import { getLogsBegin, logUnmount } from 'containers/Log/actions';
+import { getLogsBegin, logUnmount, exportLogsBegin } from 'containers/Log/actions';
 import { selectEnterprise } from 'containers/Shared/App/selectors';
 
 import LogList from 'components/Log/LogList';
@@ -33,9 +33,12 @@ export function LogListPage(props) {
 
   const [params, setParams] = useState({ count: 5, page: 0, order: 'asc' });
 
-  const rs = new RouteService(useContext);
-  const links = {
-    segmentPage: id => ROUTES.admin.system.logs.show.path(id)
+  const exportMembers = () => {
+    const newParams = {
+      ...params,
+      // query_scopes: getScopes({})
+    };
+    props.exportLogsBegin(newParams);
   };
 
   useEffect(() => {
@@ -45,6 +48,30 @@ export function LogListPage(props) {
       props.logUnmount();
     };
   }, []);
+
+  const handleFilterChange = (values) => {
+    // let from = null;
+    // let to = null;
+    // let segmentIds = null;
+    // if (values.from) {
+    //   from = ['joined_from', values.from];
+    //   setFrom(from);
+    // }
+    // if (values.to) {
+    //   to = ['joined_to', values.to];
+    //   setTo(to);
+    // }
+    // if (values.segmentIds) {
+    //   segmentIds = ['for_segment_ids', values.segmentIds];
+    //   setSegmentIds(segmentIds);
+    // }
+    // if (values.segmentLabels) {
+    //   segmentIds = ['for_segment_ids', values.segmentIds];
+    //   setSegmentIds(segmentIds);
+    //   setSegmentLabels(values.segmentLabels);
+    // }
+    // getLogss(getScopes({ from, to, segmentIds }, defaultParams));
+  };
 
   const handlePagination = (payload) => {
     const newParams = { ...params, count: payload.count, page: payload.page };
@@ -68,8 +95,9 @@ export function LogListPage(props) {
         isLoading={props.isLoading}
         handlePagination={handlePagination}
         handleOrdering={handleOrdering}
-        links={links}
+        exportLogsBegin={exportMembers}
         currentEnterprise={props.currentEnterprise}
+        handleFilterChange={handleFilterChange}
       />
     </React.Fragment>
   );
@@ -81,6 +109,7 @@ LogListPage.propTypes = {
   logs: PropTypes.object,
   logTotal: PropTypes.number,
   isLoading: PropTypes.bool,
+  exportLogsBegin: PropTypes.func,
   currentEnterprise: PropTypes.shape({
     id: PropTypes.number,
   })
@@ -93,10 +122,11 @@ const mapStateToProps = createStructuredSelector({
   currentEnterprise: selectEnterprise(),
 });
 
-const mapDispatchToProps = dispatch => ({
-  getLogsBegin: payload => dispatch(getLogsBegin(payload)),
-  logUnmount: () => dispatch(logUnmount()),
-});
+const mapDispatchToProps = {
+  getLogsBegin,
+  exportLogsBegin,
+  logUnmount
+};
 
 const withConnect = connect(
   mapStateToProps,

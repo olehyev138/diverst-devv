@@ -8,10 +8,8 @@ import React, { memo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
-import WrappedNavLink from 'components/Shared/WrappedNavLink';
-
 import {
-  Button, Grid, Box, Typography,
+  Button, Grid, Box, Typography, Card, CardContent, Select
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -20,6 +18,10 @@ import DiverstTable from 'components/Shared/DiverstTable';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Segment/messages';
 import { injectIntl, intlShape } from 'react-intl';
+import ExportIcon from "@material-ui/icons/SaveAlt";
+import { Field, Form, Formik } from 'formik';
+import { DiverstDatePicker } from 'components/Shared/Pickers/DiverstDatePicker';
+
 
 const styles = theme => ({
   logListItem: {
@@ -36,21 +38,10 @@ const styles = theme => ({
 export function LogList(props, context) {
   const { classes } = props;
   const { intl } = props;
-  const [expandedSegments, setExpandedSegments] = useState({});
-
-  /* Store a expandedSegmentsHash for each segment, that tracks whether or not its children are expanded */
-  if (props.logs && Object.keys(props.logs).length !== 0 && Object.keys(expandedSegments).length <= 0) {
-    const initialExpandedSegments = {};
-
-    /* Setup initial hash, with each segment set to false - do it like this because of how React works with state */
-    /* eslint-disable-next-line no-return-assign */
-    Object.keys(props.logs).map((id, i) => initialExpandedSegments[id] = false); // eslint-disable
-    setExpandedSegments(initialExpandedSegments);
-  }
 
   const columns = [
     {
-      title: <DiverstFormattedMessage {...messages.list.name} />,
+      title: '',
       field: 'name',
       query_field: 'name'
     },
@@ -67,17 +58,106 @@ export function LogList(props, context) {
     <React.Fragment>
       <Grid container spacing={3} justify='flex-end'>
         <Grid item>
-          <Typography variant='h5' component='h2' display='inline'>
-            placerholder for filters
-          </Typography>
-
+          <Button
+            className={classes.actionButton}
+            variant='contained'
+            color='secondary'
+            size='large'
+            startIcon={<ExportIcon />}
+            onClick={() => props.exportLogsBegin()}
+          >
+            Export Logs
+          </Button>
         </Grid>
       </Grid>
+      <Box mb={1} />
+      <Card>
+        <Formik
+          initialValues={{
+            from: '',
+            to: '',
+            group: '',
+          }}
+          enableReinitialize
+          onSubmit={(values) => {
+            // values.segmentIds = (values.segmentLabels || []).map(i => i.value);
+            props.handleFilterChange(values);
+          }}
+        >
+          {formikProps => (
+            <Form>
+              <CardContent>
+                <Grid container spacing={3} alignItems='flex-end' justify='space-between'>
+                  <Grid item xs={4}>
+                    <Typography>Filter by group</Typography>
+                  </Grid>
+                  <Grid item xs={3}>
+                    <Typography>From</Typography>
+                  </Grid>
+                  <Grid item xs={3}>
+                    <Typography>To</Typography>
+                  </Grid>
+                  <Grid item xs={2}>
+                  </Grid>
+                </Grid>
+                <Grid container spacing={3} alignItems='flex-start' justify='space-between'>
+                  <Grid item xs={4}>
+                    <Field
+                      component={Select}
+                      fullWidth
+                      disabled={props.isCommitting}
+                      id='name'
+                      name='name'
+                      margin='dense'
+                      label='Filter by group'
+                      value=''
+                      // options={props.selectGroups}
+                      // onChange={value => props.changePage(value.value)}
+                    />
+                  </Grid>
+                  <Grid item xs={3}>
+                    <Field
+                      component={DiverstDatePicker}
+                      disabled={props.isCommitting}
+                      keyboardMode
+                      fullWidth
+                      id='from'
+                      name='from'
+                      margin='dense'
+                    />
+                  </Grid>
+                  <Grid item xs={3}>
+                    <Field
+                      component={DiverstDatePicker}
+                      disabled={props.isCommitting}
+                      keyboardMode
+                      fullWidth
+                      id='to'
+                      name='to'
+                      margin='dense'
+                    />
+                  </Grid>
+                  <Grid item xs={2}>
+                    <Button
+                      color='primary'
+                      type='submit'
+                      variant='contained'
+                      className={classes.submitButton}
+                    >
+                      Filter
+                    </Button>
+                  </Grid>
+                </Grid>
+              </CardContent>
+            </Form>
+          )}
+        </Formik>
+      </Card>
       <Box mb={1} />
       <Grid container spacing={3}>
         <Grid item xs>
           <DiverstTable
-            title={intl.formatMessage(messages.list.title)}
+            title='Logs'
             handlePagination={props.handlePagination}
             onOrderChange={handleOrderChange}
             isLoading={props.isFetchingLogs}
@@ -85,6 +165,13 @@ export function LogList(props, context) {
             dataArray={Object.values(props.logs)}
             dataTotal={props.logTotal}
             columns={columns}
+            my_options={{
+              exportButton: true,
+              exportCsv: (columns, data) => {
+                props.exportLogsBegin();
+              }
+            }}
+
           />
         </Grid>
       </Grid>
@@ -98,9 +185,12 @@ LogList.propTypes = {
   logs: PropTypes.object,
   logTotal: PropTypes.number,
   isFetchingLogs: PropTypes.bool,
+  isCommitting: PropTypes.bool,
   handlePagination: PropTypes.func,
   handleOrdering: PropTypes.func,
   handleChangeScope: PropTypes.func,
+  exportLogsBegin: PropTypes.func,
+  handleFilterChange: PropTypes.func.isRequired,
 };
 export default compose(
   injectIntl,
