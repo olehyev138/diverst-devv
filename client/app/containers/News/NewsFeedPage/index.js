@@ -101,9 +101,11 @@ export function NewsFeedPage(props, context) {
     setParams(newParams);
   };
 
+  const List = props.listComponent || NewsFeed;
+
   return (
     <React.Fragment>
-      <NewsFeed
+      <List
         newsItems={props.newsItems}
         newsItemsTotal={props.newsItemsTotal}
         isLoading={props.isLoading}
@@ -149,7 +151,8 @@ NewsFeedPage.propTypes = {
       id: PropTypes.number
     })
   }),
-  readonly: PropTypes.bool
+  readonly: PropTypes.bool,
+  listComponent: PropTypes.elementType
 };
 
 const mapStateToProps = createStructuredSelector({
