@@ -35,16 +35,16 @@ const styles = theme => ({
 
 export function LogList(props, context) {
   const { classes } = props;
-  const { links, intl } = props;
+  const { intl } = props;
   const [expandedSegments, setExpandedSegments] = useState({});
 
   /* Store a expandedSegmentsHash for each segment, that tracks whether or not its children are expanded */
-  if (props.segments && Object.keys(props.segments).length !== 0 && Object.keys(expandedSegments).length <= 0) {
+  if (props.logs && Object.keys(props.logs).length !== 0 && Object.keys(expandedSegments).length <= 0) {
     const initialExpandedSegments = {};
 
     /* Setup initial hash, with each segment set to false - do it like this because of how React works with state */
     /* eslint-disable-next-line no-return-assign */
-    Object.keys(props.segments).map((id, i) => initialExpandedSegments[id] = false); // eslint-disable
+    Object.keys(props.logs).map((id, i) => initialExpandedSegments[id] = false); // eslint-disable
     setExpandedSegments(initialExpandedSegments);
   }
 
