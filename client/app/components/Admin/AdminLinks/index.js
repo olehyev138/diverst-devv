@@ -413,7 +413,7 @@ class AdminLinks extends React.PureComponent {
               </MenuItem>
               <MenuItem
                 component={WrappedNavLink}
-                to='#'
+                to={ROUTES.admin.system.logs.index.path()}
                 className={classes.nested}
                 activeClassName={classes.navLinkActive}
               >

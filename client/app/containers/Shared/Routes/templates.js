@@ -97,6 +97,9 @@ import UserRolesListPage from 'containers/User/UserRole/UserRoleListPage/Loadabl
 import UserRoleCreatePage from 'containers/User/UserRole/UserRoleCreatePage/Loadable';
 import UserRoleEditPage from 'containers/User/UserRole/UserRoleEditPage/Loadable';
 
+/* Admin - System - Logs */
+import LogListPage from 'containers/Log/LogListPage/Loadable';
+
 /* Group */
 import GroupHomePage from 'containers/Group/GroupHomePage/Loadable';
 import EventsPage from 'containers/Event/EventsPage/Loadable';
@@ -314,5 +317,6 @@ export {
   SocialLinkEditPage,
   NewsLinkPage,
   UserDownloadsPage,
-  ArchivesPage
+  ArchivesPage,
+  LogListPage
 };

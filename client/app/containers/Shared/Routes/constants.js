@@ -878,7 +878,9 @@ export const ROUTES = {
         }
       },
       logs: {
+        pathPrefix: '/admin/system/logs',
         index: {
+          path: () => '/admin/system/logs',
           data: {
             titleMessage: messages.admin.system.logs,
           }
