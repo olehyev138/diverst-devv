@@ -44,9 +44,11 @@ export function* getSponsor(action) {
   }
 }
 
-export function* createSponsors(action) {
+export function* createSponsors(action, sponsorableKey) {
   try {
     const payload = { sponsor: action.payload };
+    payload[sponsorableKey] = payload.sponsor.sponsorableId;
+
     const response = yield call(api.sponsors.create.bind(api.sponsors), payload);
 
     yield put(createSponsorSuccess());
@@ -101,6 +103,6 @@ export default function* sponsorsSaga() {
   yield takeLatest(GET_SPONSORS_BEGIN, getSponsors);
   yield takeLatest(GET_SPONSOR_BEGIN, getSponsor);
   yield takeLatest(UPDATE_SPONSOR_BEGIN, updateSponsor);
-  yield takeLatest(CREATE_SPONSOR_BEGIN, createSponsors);
+  yield takeLatest(CREATE_SPONSOR_BEGIN, action => createSponsors(action, 'enterprise_id'));
   yield takeLatest(DELETE_SPONSOR_BEGIN, deleteSponsors);
 }
