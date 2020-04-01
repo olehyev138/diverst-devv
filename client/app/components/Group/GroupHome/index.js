@@ -8,7 +8,7 @@ import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
-import { Button, Divider, Typography, Box, Paper, CardContent } from '@material-ui/core';
+import { Button, Divider, Typography, Card, Paper, CardContent, Link } from '@material-ui/core';
 import DiverstImg from 'components/Shared/DiverstImg';
 import EventsPage from 'containers/Event/EventsPage';
 import NewsPage from 'containers/News/NewsFeedPage';
@@ -19,6 +19,7 @@ import { DiverstCSSGrid, DiverstCSSCell } from 'components/Shared/DiverstCSSGrid
 import { withStyles } from '@material-ui/core/styles';
 import EventsList from 'components/Group/GroupHome/GroupHomeEventsList';
 import NewsFeed from 'components/Group/GroupHome/GroupHomeNewsList';
+import { ROUTES } from 'containers/Shared/Routes/constants';
 
 const styles = theme => ({
   title: {
@@ -28,9 +29,6 @@ const styles = theme => ({
   },
   dataHeaders: {
     paddingBottom: theme.spacing(1),
-  },
-  iframe: {
-    width: 'null !important'
   },
 });
 
@@ -114,12 +112,41 @@ export function GroupHome({ classes, ...props }) {
       )
   );
 
+  const family = (
+    <Card>
+      <CardContent>
+        { props.currentGroup.parent && (
+          <React.Fragment>
+            <Typography variant='h6'>
+              Parent-Group
+            </Typography>
+            <Link
+              href={ROUTES.group.home.path(props.currentGroup.parent.id)}
+              rel='noopener'
+            >
+              <Typography>
+                {`${props.currentGroup.parent.name}`}
+              </Typography>
+            </Link>
+            <Typography>
+              {`${props.currentGroup.parent.current_user_is_member
+                ? '(are a member)' : '(are not a member)'}`}
+            </Typography>
+          </React.Fragment>
+        )}
+      </CardContent>
+    </Card>
+  );
+
   return (
     <DiverstCSSGrid
       columns={10}
+      rows='auto 50px 50px 1fr'
       areas={[
         'header header  header  header  header  header  header  header  header  header',
         'news   news    news    news    events  events  events  events  join    join',
+        'news   news    news    news    events  events  events  events  family  family',
+        'news   news    news    news    events  events  events  events  null    null',
       ]}
       rowGap='16px'
       columnGap='24px'
@@ -127,7 +154,9 @@ export function GroupHome({ classes, ...props }) {
       <DiverstCSSCell area='header'>{groupImage}</DiverstCSSCell>
       <DiverstCSSCell area='news'>{news}</DiverstCSSCell>
       <DiverstCSSCell area='events'>{events}</DiverstCSSCell>
+      <DiverstCSSCell area='family'>{family}</DiverstCSSCell>
       <DiverstCSSCell area='join'>{joinBtn}</DiverstCSSCell>
+      <DiverstCSSCell area='null'><React.Fragment /></DiverstCSSCell>
     </DiverstCSSGrid>
   );
 }
