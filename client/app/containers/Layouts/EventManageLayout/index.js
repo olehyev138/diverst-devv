@@ -14,7 +14,7 @@ import saga from 'containers/Event/saga';
 import RouteService from 'utils/routeHelpers';
 import { createStructuredSelector } from 'reselect';
 
-import {selectEvent, selectIsFormLoading} from 'containers/Event/selectors';
+import { selectEvent, selectIsFormLoading } from 'containers/Event/selectors';
 import { eventsUnmount, getEventBegin } from 'containers/Event/actions';
 
 import EventManageLinks from 'components/Event/EventManage/EventManageLinks';
