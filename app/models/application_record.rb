@@ -10,8 +10,6 @@ class ApplicationRecord < ActiveRecord::Base
   include BaseCsvExport
   include ActionView::Helpers::DateHelper
 
-  ActiveRecordQueryTrace.enabled = false
-
   def time_since_creation
     time_ago_in_words created_at
   end
