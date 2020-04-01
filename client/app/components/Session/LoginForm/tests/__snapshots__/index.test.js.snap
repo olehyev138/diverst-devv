@@ -68,7 +68,6 @@ exports[`<LoginForm /> <LoginFormInner /> Should render and match the snapshot 1
                 },
                 "render": [Function],
               },
-              "defaultProps": undefined,
               "displayName": "WithStyles(ForwardRef(TextField))",
               "options": Object {
                 "defaultTheme": Object {
@@ -762,17 +761,46 @@ exports[`<LoginForm /> <LoginFormInner /> Should render and match the snapshot 1
         <WithStyles(ForwardRef(Grid))
           alignItems="center"
           container={true}
+          direction="row-reverse"
+          justify="space-between"
+          spacing={1}
         >
-          <WithStyles(ForwardRef(Grid))
-            item={true}
-            sm={4}
-            xs={false}
-          />
           <WithStyles(ForwardRef(Grid))
             align="center"
             item={true}
-            sm={4}
+            sm={true}
             xs={4}
+          >
+            <WithStyles(ForwardRef(Button))
+              color="primary"
+              component={
+                Object {
+                  "$$typeof": Symbol(react.forward_ref),
+                  "render": [Function],
+                }
+              }
+              size="small"
+              to={
+                Object {
+                  "pathname": "/forgot",
+                  "state": Object {
+                    "email": "",
+                  },
+                }
+              }
+              variant="text"
+            >
+              <FormattedMessage
+                id="diverst.containers.Login.links.forgotPassword"
+                values={Object {}}
+              />
+            </WithStyles(ForwardRef(Button))>
+          </WithStyles(ForwardRef(Grid))>
+          <WithStyles(ForwardRef(Grid))
+            align="center"
+            item={true}
+            sm={6}
+            xs={8}
           >
             <WithStyles(ForwardRef(Button))
               classes={
@@ -800,35 +828,13 @@ exports[`<LoginForm /> <LoginFormInner /> Should render and match the snapshot 1
             </WithStyles(ForwardRef(Button))>
           </WithStyles(ForwardRef(Grid))>
           <WithStyles(ForwardRef(Grid))
-            align="right"
             item={true}
-            sm={4}
-            xs={8}
+            sm={true}
+            xs={12}
           >
-            <WithStyles(ForwardRef(Button))
-              color="primary"
-              component={
-                Object {
-                  "$$typeof": Symbol(react.forward_ref),
-                  "render": [Function],
-                }
-              }
-              size="small"
-              to={
-                Object {
-                  "pathname": "/forgot",
-                  "state": Object {
-                    "email": "",
-                  },
-                }
-              }
-              variant="text"
-            >
-              <FormattedMessage
-                id="diverst.containers.Login.links.forgotPassword"
-                values={Object {}}
-              />
-            </WithStyles(ForwardRef(Button))>
+            <div>
+              <Connect(LocaleToggle) />
+            </div>
           </WithStyles(ForwardRef(Grid))>
         </WithStyles(ForwardRef(Grid))>
       </WithStyles(ForwardRef(CardActions))>
