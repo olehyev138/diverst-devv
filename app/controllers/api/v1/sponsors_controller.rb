@@ -1,6 +1,5 @@
 class Api::V1::SponsorsController < DiverstController
   def create
-
     type, id =
         if params[:group_id].present?
           ['Group', params[:group_id]]

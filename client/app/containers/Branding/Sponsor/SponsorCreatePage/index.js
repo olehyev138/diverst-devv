@@ -31,7 +31,7 @@ export function SponsorCreatePage(props) {
 
   useEffect(() => () => props.sponsorsUnmount(), []);
 
-  //TODO : CHANGE HARDCODED 123 IN SPONSORABLEID TO ENTERPRISE_ID
+  // TODO : CHANGE HARDCODED 123 IN SPONSORABLEID TO ENTERPRISE_ID
   return (
     <React.Fragment>
       <SponsorForm
