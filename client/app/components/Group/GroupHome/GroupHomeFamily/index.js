@@ -28,7 +28,7 @@ const styles = theme => ({
 
 export function GroupHomeFamily({ classes, ...props }) {
   const renderGroup = group => (
-    <Grid container spacing={3}>
+    <Grid container spacing={3} justify='space-between'>
       <Grid item xs='auto'>
         <Link
           href={ROUTES.group.home.path(group.id)}
@@ -51,7 +51,7 @@ export function GroupHomeFamily({ classes, ...props }) {
   const needExpand = ((props.currentGroup.parent ? 2 : 0)
     + (props.currentGroup.children.length > 0 ? props.currentGroup.children.length + 2 : 0)) > 4;
 
-  const CollapseConditional = needExpand ? Collapse: React.Fragment;
+  const CollapseConditional = needExpand ? Collapse : React.Fragment;
 
   return (props.currentGroup.parent || props.currentGroup.children.length > 0) && (
     <Card>
