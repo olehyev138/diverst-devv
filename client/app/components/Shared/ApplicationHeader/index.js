@@ -30,7 +30,7 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Shared/App/messages';
 import { resolveRootManagePath } from 'utils/adminLinkHelpers';
-import Permission from "components/Shared/DiverstPermission";
+import Permission from 'components/Shared/DiverstPermission';
 
 const styles = theme => ({
   grow: {
