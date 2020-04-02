@@ -33,10 +33,13 @@ import RouteService from 'utils/routeHelpers';
 
 import SegmentForm from 'components/Segment/SegmentForm';
 import SegmentMemberListPage from 'containers/Segment/SegmentMemberListPage';
-import { selectEnterprise } from 'containers/Shared/App/selectors';
+import {selectEnterprise, selectPermissions} from 'containers/Shared/App/selectors';
 
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Segment/messages';
+import Conditional from "components/Compositions/Conditional";
+import {ROUTES} from "containers/Shared/Routes/constants";
+import {SegmentListPage} from "containers/Segment/SegmentListPage";
 
 export function SegmentPage(props) {
   useInjectReducer({ key: 'segments', reducer });
@@ -118,6 +121,7 @@ const mapStateToProps = createStructuredSelector({
   isCommitting: selectIsCommitting(),
   isFormLoading: selectIsFormLoading(),
   currentEnterprise: selectEnterprise(),
+  permissions: selectPermissions(),
 });
 
 const mapDispatchToProps = {
@@ -139,4 +143,14 @@ export default compose(
   injectIntl,
   withConnect,
   memo,
-)(SegmentPage);
+)(Conditional(
+  SegmentPage,
+  ['permissions.segments_create', '!edit', 'segment.permissions.update?', 'edit', 'isFormLoading', 'isFormLoading'],
+  (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
+  'You don\'t have permission to manage segments',
+  a => a.reduce((sum, v, i) => {
+    if (i % 2 === 0)
+      return [sum, v];
+    return sum[0] || (sum[1] && v);
+  }, false)
+));

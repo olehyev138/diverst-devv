@@ -23,10 +23,12 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { selectPaginatedSegments, selectSegmentTotal, selectIsLoading } from 'containers/Segment/selectors';
 import { getSegmentsBegin, segmentUnmount, deleteSegmentBegin } from 'containers/Segment/actions';
-import { selectEnterprise } from 'containers/Shared/App/selectors';
+import {selectEnterprise, selectPermissions} from 'containers/Shared/App/selectors';
 
 import SegmentList from 'components/Segment/SegmentList';
 import { push } from 'connected-react-router';
+import Conditional from "components/Compositions/Conditional";
+import {AdminGroupListPage} from "containers/Group/AdminGroupListPage";
 
 export function SegmentListPage(props) {
   useInjectReducer({ key: 'segments', reducer });
@@ -98,6 +100,7 @@ const mapStateToProps = createStructuredSelector({
   segmentTotal: selectSegmentTotal(),
   isLoading: selectIsLoading(),
   currentEnterprise: selectEnterprise(),
+  permissions: selectPermissions(),
 });
 /*
 const mapDispatchToProps = {
@@ -121,4 +124,9 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(SegmentListPage);
+)(Conditional(
+  SegmentListPage,
+  ['permissions.segments_create'],
+  (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
+  'You don\'t have permission to manage segments'
+));

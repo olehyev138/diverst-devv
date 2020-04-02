@@ -11,8 +11,14 @@ import { showSnackbar } from 'containers/Shared/Notifier/actions';
 import RouteService from 'utils/routeHelpers';
 
 function conditionalCheck(props, condition) {
-  const parts = condition.split('.');
-  return dig(...[props, ...parts]);
+  let parts;
+  const neg = condition[0] === '!';
+  if (condition[0] === '!')
+    parts = condition.substr(1).split('.');
+  else
+    parts = condition.split('.');
+  const evaluated = dig(...[props, ...parts]);
+  return neg ? !evaluated : evaluated;
 }
 
 function conditionsMapper(props, conditions) {
