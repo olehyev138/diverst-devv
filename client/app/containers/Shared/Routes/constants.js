@@ -703,7 +703,6 @@ export const ROUTES = {
         index: {
           path: () => '/admin/plan/budgeting',
           data: {
-            permission: 'groups_index',
             titleMessage: messages.admin.manage.groups,
           }
         },
