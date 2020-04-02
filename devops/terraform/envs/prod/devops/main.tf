@@ -1,14 +1,11 @@
-# Skeleton main.tf
-# Is copied and filled out when creating a new client environment
-
 provider "aws" {
 }
 
 terraform {
   backend "s3" {
-    bucket          = "<client-tf-state-bucket>"
+    bucket          = "devops-inmvlike"
     key             = "terraform/terraform.tfstate"
-    dynamodb_table  = "<client-name>-tf-statelock"
+    dynamodb_table  = "devops-tf-statelock"
     encrypt         = "true"
   }
 }
@@ -17,7 +14,7 @@ terraform {
 # SSH key files are generated before terraform is run
 resource "aws_key_pair" "aws-tf-key" {
   key_name    = var.ssh_key_name
-  public_key  = file("<key-directory-path>")
+  public_key  = file("~/.ssh/devops.pub")
 }
 
 module "prod" {

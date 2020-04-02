@@ -1,17 +1,14 @@
-# Skeleton <client-name>.tfvars
-# Is copied and filled out when creating a new client environment
-
-env_name      = "<client-name>"
-region        = "<region>"
-ssh_key_name  = "key_<client-name"
+env_name      = "devops"
+region        = "us-east-1"
+ssh_key_name  = "key_devops"
 
 backend_solution_stack  = "64bit Amazon Linux 2018.03 v2.11.4 running Ruby 2.6 (Puma)"
 backend_asg_min         = 1
-backend_asg_max         = 4
-backend_ec2_type        = "t2.small"
+backend_asg_max         = 2
+backend_ec2_type        = "t2.micro"
 
 sidekiq_username = "admin"
-sidekiq_password = "<password>"
+sidekiq_password = "password123"
 
 db_class                    = "db.t2.small"
 db_allocated_storage        = 20
@@ -21,6 +18,6 @@ db_deletion_protection      = true
 db_apply_immediately        = true
 db_maintenance_window       = null
 
-db_name       = "diverst_production"
-db_username   = "admin"
-db_password   = "<password>"
+db_name       = "diverst"
+db_username   = "mainuser"
+db_password   = "password123"

@@ -91,6 +91,17 @@ Diverst::Application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
+  # Save paperclip attachments to S3
+  # Legacy paperclip configuration for migration
+  config.paperclip_defaults = {
+      storage: :s3,
+      s3_protocol: :https,
+      s3_credentials: {
+          bucket: ENV['S3_BUCKET_NAME'],
+          s3_region: ENV['S3_REGION']
+      }
+  }
+
   # Save ActiveStorage attachments to S3
   config.active_storage.service = :production
 

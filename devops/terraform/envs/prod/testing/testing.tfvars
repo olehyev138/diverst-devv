@@ -16,5 +16,7 @@ db_backup_window            = null
 db_deletion_protection      = false
 db_apply_immediately        = true
 db_maintenance_window       = null
+
+db_name                     = "diverst_production"
 db_username                 = "admin"
 db_password                 = "h2^9W5fEmN*^XzRp"
