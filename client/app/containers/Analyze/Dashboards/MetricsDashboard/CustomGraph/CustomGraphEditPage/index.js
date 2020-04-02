@@ -33,7 +33,6 @@ import CustomGraphForm from 'components/Analyze/Dashboards/MetricsDashboard/Cust
 import messages from 'containers/Analyze/Dashboards/MetricsDashboard/CustomGraph/messages';
 import { injectIntl, intlShape } from 'react-intl';
 import Conditional from 'components/Compositions/Conditional';
-import { resolveRootManagePath } from 'utils/adminLinkHelpers';
 import { CustomGraphCreatePage } from 'containers/Analyze/Dashboards/MetricsDashboard/CustomGraph/CustomGraphCreatePage';
 
 export function CustomGraphEditPage(props) {

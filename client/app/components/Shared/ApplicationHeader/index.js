@@ -130,7 +130,7 @@ export class ApplicationHeader extends React.PureComponent {
     } = this.props;
     const isMenuOpen = Boolean(menuAnchor);
 
-    const adminPath = resolveRootManagePath(permissions);
+    const adminPath = permissions.adminPath;
 
     const renderMenu = (
       <Menu
