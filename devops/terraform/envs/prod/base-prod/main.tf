@@ -22,7 +22,7 @@ module "db" {
   source = "../../../modules/data/db"
 
   env_name      = var.env_name
-  db_name       = "diverst_production"
+  db_name       = var.db_name
   db_username   = var.db_username
   db_password   = var.db_password
 
@@ -53,9 +53,10 @@ module "backend" {
   region    = var.region
   vpc_id    = module.vpc.vpc.id
 
-  asg_min   = var.backend_asg_min
-  asg_max   = var.backend_asg_max
-  ec2_type  = var.backend_ec2_type
+  solution_stack  = var.backend_solution_stack
+  asg_min         = var.backend_asg_min
+  asg_max         = var.backend_asg_max
+  ec2_type        = var.backend_ec2_type
 
   sn_elb  = module.vpc.sn_dmz
   sg_elb  = module.sec.sg_dmz
