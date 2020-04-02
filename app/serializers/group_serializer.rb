@@ -2,7 +2,7 @@ class GroupSerializer < ApplicationRecordSerializer
   def initialize(object, options = {})
     super
     if instance_options[:family]
-      serializer_attributes :id, :name, :private, :current_user_is_member, :permissions
+      serializer_attributes :id, :name, :private, :current_user_is_member, :permissions, :logo, :logo_file_name, :logo_data
     elsif policy&.show?
       serializer_attributes :id, :name, :short_description, :description, :pending_users, :members_visibility, :messages_visibility,
                             :active, :parent_id, :latest_news_visibility, :upcoming_events_visibility,
