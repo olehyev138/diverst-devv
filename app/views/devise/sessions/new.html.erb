@@ -14,7 +14,7 @@
 <div class="text-center">
   <%= render "devise/shared/links" %>
   <br>
-  <% if ENV["ALTERNATIVE_ACCOUNT_ACTIVATION"] %>
+  <% if ENV["ALTERNATIVE_ACCOUNT_ACTIVATION"] || true %>
   <%= link_to 'Activate Account', 
           nonsso_activation_new_path, 
           class: 'btn btn--tertiary',

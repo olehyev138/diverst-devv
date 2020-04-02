@@ -156,6 +156,11 @@ class User < BaseClass
 
   attr_accessor :dob
 
+  def birthday 
+    field = enterprise.fields.find_by(title: 'Birthday')
+    info[field]
+  end
+
   def pending_rewards
     user_rewards.where(status: 0)
   end
