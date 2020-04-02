@@ -27,7 +27,7 @@ import DiverstTable from 'components/Shared/DiverstTable';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Segment/messages';
 import { injectIntl, intlShape } from 'react-intl';
-import {permission} from "utils/permissionsHelpers";
+import { permission } from 'utils/permissionsHelpers';
 
 const styles = theme => ({
   segmentListItem: {

@@ -33,13 +33,12 @@ import RouteService from 'utils/routeHelpers';
 
 import SegmentForm from 'components/Segment/SegmentForm';
 import SegmentMemberListPage from 'containers/Segment/SegmentMemberListPage';
-import {selectEnterprise, selectPermissions} from 'containers/Shared/App/selectors';
+import { selectEnterprise, selectPermissions } from 'containers/Shared/App/selectors';
 
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Segment/messages';
-import Conditional from "components/Compositions/Conditional";
-import {ROUTES} from "containers/Shared/Routes/constants";
-import {SegmentListPage} from "containers/Segment/SegmentListPage";
+import Conditional from 'components/Compositions/Conditional';
+import { ROUTES } from 'containers/Shared/Routes/constants';
 
 export function SegmentPage(props) {
   useInjectReducer({ key: 'segments', reducer });

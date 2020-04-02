@@ -23,12 +23,11 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { selectPaginatedSegments, selectSegmentTotal, selectIsLoading } from 'containers/Segment/selectors';
 import { getSegmentsBegin, segmentUnmount, deleteSegmentBegin } from 'containers/Segment/actions';
-import {selectEnterprise, selectPermissions} from 'containers/Shared/App/selectors';
+import { selectEnterprise, selectPermissions } from 'containers/Shared/App/selectors';
 
 import SegmentList from 'components/Segment/SegmentList';
 import { push } from 'connected-react-router';
-import Conditional from "components/Compositions/Conditional";
-import {AdminGroupListPage} from "containers/Group/AdminGroupListPage";
+import Conditional from 'components/Compositions/Conditional';
 
 export function SegmentListPage(props) {
   useInjectReducer({ key: 'segments', reducer });
