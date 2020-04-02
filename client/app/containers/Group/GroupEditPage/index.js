@@ -20,6 +20,10 @@ import {
 import GroupForm from 'components/Group/GroupForm';
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Group/messages';
+import Conditional from 'components/Compositions/Conditional';
+import { ROUTES } from 'containers/Shared/Routes/constants';
+import { GroupCreatePage } from 'containers/Group/GroupCreatePage';
+
 export function GroupEditPage(props) {
   useInjectReducer({ key: 'groups', reducer });
   useInjectSaga({ key: 'groups', saga });
@@ -85,4 +89,9 @@ export default compose(
   injectIntl,
   withConnect,
   memo,
-)(GroupEditPage);
+)(Conditional(
+  GroupCreatePage,
+  ['group.permissions.update?', 'isFormLoading'],
+  (props, rs) => ROUTES.admin.manage.groups.index.path(),
+  'You don\'t have permission to edit this group'
+));

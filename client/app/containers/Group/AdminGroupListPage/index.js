@@ -20,6 +20,10 @@ import reducer from 'containers/Group/reducer';
 import { getGroupsBegin, groupListUnmount, deleteGroupBegin } from 'containers/Group/actions';
 
 import GroupList from 'components/Group/AdminGroupList';
+import Conditional from 'components/Compositions/Conditional';
+import { ROUTES } from 'containers/Shared/Routes/constants';
+import { MetricsDashboardCreatePage } from 'containers/Analyze/Dashboards/MetricsDashboard/MetricsDashboardCreatePage';
+import { selectPermissions } from 'containers/Shared/App/selectors';
 
 export function AdminGroupListPage(props) {
   useInjectReducer({ key: 'groups', reducer });
@@ -67,6 +71,7 @@ const mapStateToProps = createStructuredSelector({
   isLoading: selectGroupIsLoading(),
   groups: selectPaginatedGroups(),
   groupTotal: selectGroupTotal(),
+  permissions: selectPermissions(),
 });
 
 const mapDispatchToProps = {
@@ -83,4 +88,9 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(AdminGroupListPage);
+)(Conditional(
+  AdminGroupListPage,
+  ['permissions.groups_create'],
+  (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
+  'You don\'t have permission to create groups'
+));
