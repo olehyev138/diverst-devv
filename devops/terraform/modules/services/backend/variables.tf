@@ -1,5 +1,6 @@
-variable "env_name" {}
-variable "vpc_id"   {}
+variable "env_name"       {}
+variable "vpc_id"         {}
+variable "solution_stack" {}
 
 variable "asg_min"    {}
 variable "asg_max"    {}
