@@ -48,6 +48,7 @@ class Api::V1::SessionsController < DiverstController
           policy_templates_manage: PolicyGroupTemplatePolicy.new(user, PolicyGroupTemplate).update?,
 
           metrics_overview: MetricsDashboardPolicy.new(user, MetricsDashboard).index?,
+          metrics_create: MetricsDashboardPolicy.new(user, MetricsDashboard).create?,
 
           sso_authentication: EnterprisePolicy.new(user, user.enterprise).sso_manage?,
           fields_manage: EnterprisePolicy.new(user, user.enterprise).edit_fields?,

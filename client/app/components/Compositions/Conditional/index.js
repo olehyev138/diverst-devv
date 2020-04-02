@@ -33,6 +33,7 @@ export default function Conditional(
   reducer = a => a.reduce((sum, v) => sum || v, false)
 ) {
   const WrappedComponent = (props) => {
+    debugger
     const show = valid(props, conditions, reducer);
     const rs = props.computedMatch
       ? new RouteService({ computedMatch: props.computedMatch, location: props.location })
