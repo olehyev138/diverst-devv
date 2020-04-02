@@ -36,7 +36,6 @@ import { selectEnterprise, selectPermissions } from 'containers/Shared/App/selec
 // messages
 import messages from 'containers/Analyze/Dashboards/MetricsDashboard/CustomGraph/messages';
 import { injectIntl, intlShape } from 'react-intl';
-import { resolveRootManagePath } from 'utils/adminLinkHelpers';
 
 export function CustomGraphCreatePage(props) {
   useInjectReducer({ key: 'customMetrics', reducer });
@@ -120,6 +119,6 @@ export default compose(
 )(Conditional(
   CustomGraphCreatePage,
   ['currentDashboard.permissions.update?', 'isLoading'],
-  (props, rs) => resolveRootManagePath(props.permissions).path() || ROUTES.user.home.path(),
+  (props, rs) => ROUTES.admin.analyze.custom.show.path(rs.params('metrics_dashboard_id')),
   'You don\'t have permission to create a graph for this dashboard'
 ));

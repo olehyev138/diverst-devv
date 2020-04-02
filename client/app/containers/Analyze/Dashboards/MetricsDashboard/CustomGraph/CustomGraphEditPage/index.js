@@ -108,8 +108,8 @@ export default compose(
   withConnect,
   memo,
 )(Conditional(
-  CustomGraphCreatePage,
+  CustomGraphEditPage,
   ['currentCustomGraph.permissions.update?', 'isFormLoading'],
-  (props, rs) => resolveRootManagePath(props.permissions).path() || ROUTES.user.home.path(),
+  (props, rs) => ROUTES.admin.analyze.custom.show.path(rs.params('metrics_dashboard_id')),
   'You don\'t have permission to update graph for this dashboard'
 ));

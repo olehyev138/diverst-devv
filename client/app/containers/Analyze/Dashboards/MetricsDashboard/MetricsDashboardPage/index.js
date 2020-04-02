@@ -21,6 +21,7 @@ import {
 import { selectMetricsDashboard, selectIsFormLoading } from 'containers/Analyze/Dashboards/MetricsDashboard/selectors';
 
 import MetricsDashboard from 'components/Analyze/Dashboards/MetricsDashboard/MetricsDashboard';
+import Conditional from 'components/Compositions/Conditional';
 
 export function MetricsDashboardPage(props) {
   useInjectReducer({ key: 'customMetrics', reducer });
@@ -78,4 +79,9 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(MetricsDashboardPage);
+)(Conditional(
+  MetricsDashboardPage,
+  ['currentMetricsDashboard.permissions.show?', 'isFormLoading'],
+  (props, rs) => ROUTES.admin.analyze.custom.index.path(),
+  'You don\'t have permission to create view this dashboard'
+));

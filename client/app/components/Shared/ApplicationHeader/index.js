@@ -225,7 +225,7 @@ export class ApplicationHeader extends React.PureComponent {
                   <Hidden xsDown>
                     <Link
                       component={WrappedNavLink}
-                      to={isAdmin ? ROUTES.user.root.path() : adminPath && adminPath.path()}
+                      to={isAdmin ? ROUTES.user.root.path() : adminPath && adminPath}
                     >
                       <Button
                         className={classes.dashboardSwitchButton}

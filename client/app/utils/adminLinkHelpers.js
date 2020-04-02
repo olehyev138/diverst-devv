@@ -60,5 +60,5 @@ const RootManagePaths = Object.freeze([
 
 export function resolveRootManagePath(permission) {
   const page = permission && RootManagePaths.find(page => permission[page] && NameToPathMap[page]);
-  return page ? NameToPathMap[page] : null;
+  return page ? NameToPathMap[page].path() : null;
 }
