@@ -5,7 +5,7 @@ class UpdateNextAndPreviousUpdateJob < ActiveJob::Base
 
   def perform(*update_ids)
     Update.transaction do
-      if update_ids.present?
+      if update_ids.present? && Update.column_names.include?('previous_id')
         Update.where(id: update_ids).lock('FOR UPDATE').each do |u|
           set_locals(u)
           assert_proper_order
