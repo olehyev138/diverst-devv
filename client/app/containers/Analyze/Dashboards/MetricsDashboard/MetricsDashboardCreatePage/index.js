@@ -33,10 +33,10 @@ import MetricsDashboardForm from 'components/Analyze/Dashboards/MetricsDashboard
 // messages
 import messages from 'containers/Analyze/messages';
 import { injectIntl, intlShape } from 'react-intl';
-import {selectPermissions} from "containers/Shared/App/selectors";
-import Conditional from "components/Compositions/Conditional";
-import {MetricsDashboardPage} from "containers/Analyze/Dashboards/MetricsDashboard/MetricsDashboardPage";
-import {resolveRootManagePath} from "utils/adminLinkHelpers";
+import { selectPermissions } from 'containers/Shared/App/selectors';
+import Conditional from 'components/Compositions/Conditional';
+import { MetricsDashboardPage } from 'containers/Analyze/Dashboards/MetricsDashboard/MetricsDashboardPage';
+import { resolveRootManagePath } from 'utils/adminLinkHelpers';
 
 export function MetricsDashboardCreatePage(props) {
   useInjectReducer({ key: 'customMetrics', reducer });

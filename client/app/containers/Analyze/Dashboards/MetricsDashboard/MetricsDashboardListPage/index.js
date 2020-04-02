@@ -27,10 +27,10 @@ import {
 } from 'containers/Analyze/Dashboards/MetricsDashboard/selectors';
 
 import MetricsDashboardsList from 'components/Analyze/Dashboards/MetricsDashboard/MetricsDashboardList';
-import Conditional from "components/Compositions/Conditional";
-import {MetricsDashboardPage} from "containers/Analyze/Dashboards/MetricsDashboard/MetricsDashboardPage";
-import {resolveRootManagePath} from "utils/adminLinkHelpers";
-import {selectPermissions} from "containers/Shared/App/selectors";
+import Conditional from 'components/Compositions/Conditional';
+import { MetricsDashboardPage } from 'containers/Analyze/Dashboards/MetricsDashboard/MetricsDashboardPage';
+import { resolveRootManagePath } from 'utils/adminLinkHelpers';
+import { selectPermissions } from 'containers/Shared/App/selectors';
 
 const defaultParams = Object.freeze({
   count: 10,
