@@ -5,15 +5,17 @@ class NonssoActivationController < ApplicationController
   end
 
   def activate
-    if user = User.find_by(employee_id: params[:user][:employee_id],
-                           email: params[:user][:email],
-                           dob: params[:user][:dob])
+    dob = params[:user][:dob] # use this to find user...
+    notifications_email = params[:user][:notifications_email]
+    user = User.find_by(email: params[:user][:email])
 
-      user&.update notifications_email: params[:email]
+    if user
+      user&.update notifications_email: params[:notifications_email]
       flash[:notice] = 'You will receive an email shortly with a link to activate your account.'
       user.invite!
       render :new
     else
+      flash[:alert] = 'Your account does not exists'
       render :new
     end
   end

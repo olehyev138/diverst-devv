@@ -1,9 +1,9 @@
 <h2>Get the activation link for your profile</h2>
 
 <%= simple_form_for(:user, url: nonsso_activation_activate_path, html: { method: :post }) do |f| %>
-<%= f.input :email, autofocus: true %>
-<%= f.input :employee_id %>
-  <%= f.input :dob %>
+  <%= f.input :notifications_email, label: 'Email', autofocus: true %>
+  <%= f.input :email, label: 'Employee ID' %>
+  <%= f.input :dob, label: 'Date of Birth' %>
   <%= f.button :submit, value: "Send activation link" %>
 <% end %>
 
