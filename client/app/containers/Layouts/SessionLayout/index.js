@@ -6,11 +6,12 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
 import { withStyles } from '@material-ui/core/styles';
-import { Backdrop, CircularProgress, Container, Fade } from '@material-ui/core';
+import { Backdrop, CircularProgress, Container, Fade, Card, CardContent, Typography } from '@material-ui/core';
+import ConnectionFailedIcon from '@material-ui/icons/CloudOff';
 
 import { findEnterpriseBegin } from 'containers/Shared/App/actions';
 
-import { selectEnterprise } from 'containers/Shared/App/selectors';
+import { selectEnterprise, selectFindEnterpriseError } from 'containers/Shared/App/selectors';
 
 import ApplicationLayout from '../ApplicationLayout';
 
@@ -26,6 +27,14 @@ const styles = theme => ({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  connectFailedCardContent: {
+    textAlign: 'center',
+    padding: 20,
+    paddingBottom: 24,
+  },
+  connectFailedIcon: {
+    fontSize: 64,
   },
 });
 
@@ -52,11 +61,27 @@ const SessionLayout = ({ component: Component, ...props }) => {
       component={matchProps => (
         <React.Fragment>
           <Backdrop open={!props.enterprise}>
-            <CircularProgress
-              color='secondary'
-              size={60}
-              thickness={1}
-            />
+            {!props.findEnterpriseError && (
+              <CircularProgress
+                color='secondary'
+                size={60}
+                thickness={1}
+              />
+            )}
+            {props.findEnterpriseError && (
+              <Fade in appear>
+                <Card elevation={24}>
+                  <CardContent className={classes.connectFailedCardContent}>
+                    <ConnectionFailedIcon color='primary' className={classes.connectFailedIcon} />
+                    <br />
+                    <br />
+                    <Typography variant='h6' color='primary'>
+                      Unable to connect to server
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Fade>
+            )}
           </Backdrop>
           {props.enterprise && (
             <Container maxWidth='sm' className={classes.container}>
@@ -79,10 +104,12 @@ SessionLayout.propTypes = {
   enterprise: PropTypes.object,
   findEnterpriseBegin: PropTypes.func,
   location: PropTypes.object,
+  findEnterpriseError: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
   enterprise: selectEnterprise(),
+  findEnterpriseError: selectFindEnterpriseError(),
 });
 
 const mapDispatchToProps = {
