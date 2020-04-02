@@ -24,6 +24,10 @@ import GroupScopeSelect from 'components/Analyze/Shared/GroupScopeSelect';
 import OverviewDashboard from 'components/Analyze/Dashboards/GroupDashboard/OverviewDashboard';
 import SocialMediaDashboard from 'components/Analyze/Dashboards/GroupDashboard/SocialMediaDashboard';
 import ResourcesDashboard from 'components/Analyze/Dashboards/GroupDashboard/ResourcesDashboard';
+import Conditional from 'components/Compositions/Conditional';
+import { ROUTES } from 'containers/Shared/Routes/constants';
+import { UserDashboardPage } from 'containers/Analyze/Dashboards/UserDashboardPage';
+import { selectPermissions } from 'containers/Shared/App/selectors';
 
 const Dashboards = Object.freeze({
   overview: 0,
@@ -82,11 +86,13 @@ export function GroupDashboardPage(props) {
 GroupDashboardPage.propTypes = {
   groups: PropTypes.array,
   getGroupsBegin: PropTypes.func,
-  metricsUnmount: PropTypes.func
+  metricsUnmount: PropTypes.func,
+  permissions: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
-  groups: selectPaginatedSelectGroups()
+  groups: selectPaginatedSelectGroups(),
+  permissions: selectPermissions(),
 });
 
 const mapDispatchToProps = {
@@ -102,4 +108,9 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(GroupDashboardPage);
+)(Conditional(
+  UserDashboardPage,
+  ['permissions.metrics_overview'],
+  (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
+  'You don\'t have permission to view group metrics'
+));
