@@ -156,7 +156,7 @@ class User < BaseClass
 
   attr_accessor :dob
 
-  def birthday 
+  def birthday
     field = enterprise.fields.find_by(title: 'Birthday')
     info[field]
   end

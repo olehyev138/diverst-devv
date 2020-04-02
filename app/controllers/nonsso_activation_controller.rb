@@ -9,8 +9,8 @@ class NonssoActivationController < ApplicationController
     notifications_email = params[:user][:notifications_email]
     user = User.find_by(email: params[:user][:email])
 
-    if user 
-       user_dob = user.birthday
+    if user
+      user_dob = user.birthday
 
       if user_dob == dob
         user&.update notifications_email: params[:notifications_email]
@@ -22,7 +22,7 @@ class NonssoActivationController < ApplicationController
         render :new
       end
     else
-      flash[:alert] = "Your account does not exists"
+      flash[:alert] = 'Your account does not exists'
       render :new
     end
   end
