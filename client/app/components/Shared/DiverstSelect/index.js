@@ -58,6 +58,8 @@ export function DiverstSelect(props) {
         className={classes.select}
         // Done to prevent the select menu from being hidden behind other elements
         menuPortalTarget={document.body}
+        menuPlacement='auto'
+        captureMenuScroll={false}
         aria-describedby={`${props.id}-helper-text`}
         theme={selectTheme => ({
           ...selectTheme,
