@@ -30,6 +30,8 @@ import messages from 'containers/Event/messages';
 import { customTexts } from 'utils/customTextHelpers';
 
 import EventListItem from 'components/Event/EventListItem';
+import Permission from 'components/Shared/DiverstPermission';
+import { permission } from 'utils/permissionsHelpers';
 
 const styles = theme => ({
   eventListItem: {
@@ -69,17 +71,19 @@ export function EventsList(props, context) {
     <React.Fragment>
       {!props.readonly && (
         <React.Fragment>
-          <Button
-            className={classes.floatRight}
-            variant='contained'
-            to={props.links.eventNew}
-            color='primary'
-            size='large'
-            component={WrappedNavLink}
-            startIcon={<AddIcon />}
-          >
-            <DiverstFormattedMessage {...messages.new} />
-          </Button>
+          <Permission show={permission(props.currentGroup, 'events_create?')}>
+            <Button
+              className={classes.floatRight}
+              variant='contained'
+              to={props.links.eventNew}
+              color='primary'
+              size='large'
+              component={WrappedNavLink}
+              startIcon={<AddIcon />}
+            >
+              <DiverstFormattedMessage {...messages.new} />
+            </Button>
+          </Permission>
           <Box className={classes.floatSpacer} />
         </React.Fragment>
       )}
@@ -95,16 +99,18 @@ export function EventsList(props, context) {
             <Tab label={intl.formatMessage(messages.index.all)} />
           </ResponsiveTabs>
         )}
-        <ResponsiveTabs
-          value={props.currentTab}
-          onChange={props.handleChangeTab}
-          indicatorColor='primary'
-          textColor='primary'
-        >
-          <Tab label={intl.formatMessage(messages.index.upcoming, customTexts())} />
-          <Tab label={intl.formatMessage(messages.index.ongoing, customTexts())} />
-          <Tab label={intl.formatMessage(messages.index.past, customTexts())} />
-        </ResponsiveTabs>
+        {props.onlyUpcoming || (
+          <ResponsiveTabs
+            value={props.currentTab}
+            onChange={props.handleChangeTab}
+            indicatorColor='primary'
+            textColor='primary'
+          >
+            <Tab label={intl.formatMessage(messages.index.upcoming, customTexts())} />
+            <Tab label={intl.formatMessage(messages.index.ongoing, customTexts())} />
+            <Tab label={intl.formatMessage(messages.index.past, customTexts())} />
+          </ResponsiveTabs>
+        )}
       </Paper>
       <br />
       <DiverstLoader isLoading={props.isLoading} {...props.loaderProps}>
@@ -169,7 +175,9 @@ EventsList.propTypes = {
   handlePagination: PropTypes.func,
   links: PropTypes.object,
   readonly: PropTypes.bool,
+  onlyUpcoming: PropTypes.bool,
   loaderProps: PropTypes.object,
+  currentGroup: PropTypes.object,
 };
 
 export default compose(

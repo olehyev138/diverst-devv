@@ -1,6 +1,6 @@
 class BudgetPolicy < GroupBasePolicy
   def base_index_permission
-    'groups_budgets_index'
+    'groups_budgets_request'
   end
 
   def base_create_permission
@@ -11,11 +11,14 @@ class BudgetPolicy < GroupBasePolicy
     'groups_budgets_manage'
   end
 
-  def approve?
-    return true if update?
-    return true if has_group_leader_permissions?('budget_approval')
+  def update?
+    false
+  end
 
-    user.policy_group.budget_approval?
+  def approve?
+    policy_group.budget_approval ||
+    manage_group_resource(base_manage_permission) ||
+    manage_group_resource('budget_approval')
   end
 
   def decline?
@@ -30,7 +33,7 @@ class BudgetPolicy < GroupBasePolicy
 
   def destroy?
     if @record.is_approved?
-      admin?
+      manage_all? || policy_group.enterprise_manage?
     else
       @record.requester == @user
     end

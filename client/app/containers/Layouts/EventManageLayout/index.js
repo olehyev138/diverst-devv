@@ -1,4 +1,4 @@
-import React, { memo, useContext, useEffect, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -14,12 +14,14 @@ import saga from 'containers/Event/saga';
 import RouteService from 'utils/routeHelpers';
 import { createStructuredSelector } from 'reselect';
 
-import { selectEvent } from 'containers/Event/selectors';
-import { getEventBegin, eventsUnmount } from 'containers/Event/actions';
+import { selectEvent, selectIsFormLoading } from 'containers/Event/selectors';
+import { eventsUnmount, getEventBegin } from 'containers/Event/actions';
 
 import EventManageLinks from 'components/Event/EventManage/EventManageLinks';
 import Box from '@material-ui/core/Box';
 import GroupLayout from '../GroupLayout';
+import Conditional from 'components/Compositions/Conditional';
+import { ROUTES } from 'containers/Shared/Routes/constants';
 
 const styles = theme => ({
   content: {
@@ -91,12 +93,14 @@ EventManageLayout.propTypes = {
   event: PropTypes.object,
   getEventBegin: PropTypes.func,
   eventsUnmount: PropTypes.func,
+  isLoading: PropTypes.bool,
   computedMatch: PropTypes.object,
   location: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
   event: selectEvent(),
+  isLoading: selectIsFormLoading(),
 });
 
 const mapDispatchToProps = {
@@ -113,4 +117,9 @@ export default compose(
   withConnect,
   memo,
   withStyles(styles),
-)(EventManageLayout);
+)(Conditional(
+  EventManageLayout,
+  ['event.permissions.update?', 'isLoading'],
+  (props, rs) => ROUTES.group.events.show.path(rs.params('group_id'), rs.params('event_id')),
+  'You don\'t have permission manage this event'
+));

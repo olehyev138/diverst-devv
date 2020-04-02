@@ -18,7 +18,7 @@ class MetricsDashboard < ApplicationRecord
 
   scope :with_shared_dashboards, -> (user_id) {
     joins('LEFT JOIN shared_metrics_dashboards ON metrics_dashboards.id = shared_metrics_dashboards.metrics_dashboard_id')
-    .where('shared_metrics_dashboards.user_id = ? OR metrics_dashboards.owner_id = ?', user_id, user_id).uniq
+    .where('shared_metrics_dashboards.user_id = ? OR metrics_dashboards.owner_id = ?', user_id, user_id).distinct
   }
 
   def is_user_shared?(user)

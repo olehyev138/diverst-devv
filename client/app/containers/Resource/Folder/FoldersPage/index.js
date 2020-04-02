@@ -19,10 +19,12 @@ import RouteService from 'utils/routeHelpers';
 
 import FoldersList from 'components/Resource/Folder/FoldersList';
 import {
-  getFolderEditPath,
+  getFolderEditPath, getFolderIndexPath,
   getFolderNewPath,
   getFolderShowPath
 } from 'utils/resourceHelpers';
+import Conditional from 'components/Compositions/Conditional';
+import { ROUTES } from 'containers/Shared/Routes/constants';
 
 const defaultParams = Object.freeze({
   count: 10, // TODO: Make this a constant and use it also in FoldersList
@@ -65,7 +67,6 @@ export function FoldersPage(props) {
     } else {
       const newParams = {
         ...params,
-        enterprise_id: enterpriseId,
         parent_id: null,
       };
       props.getFoldersBegin(newParams);
@@ -96,6 +97,7 @@ export function FoldersPage(props) {
       handlePagination={handlePagination}
       isLoading={props.isLoading}
       links={links}
+      currentGroup={props.currentGroup}
     />
   );
 }
@@ -137,4 +139,9 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(FoldersPage);
+)(Conditional(
+  FoldersPage,
+  ['currentGroup.permissions.resources_view?'],
+  (props, rs) => ROUTES.group.home.path(rs.params('group_id')),
+  'You don\'t have permission to view this group\'s resources'
+));

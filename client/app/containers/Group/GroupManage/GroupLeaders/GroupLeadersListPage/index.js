@@ -25,6 +25,8 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import GroupLeadersList from 'components/Group/GroupManage/GroupLeaders/GroupLeadersList';
 import { push } from 'connected-react-router';
+import Conditional from 'components/Compositions/Conditional';
+import { GroupSettingsPage } from 'containers/Group/GroupManage/GroupSettingsPage';
 
 export function GroupLeadersListPage(props) {
   useInjectReducer({ key: 'groupLeaders', reducer });
@@ -113,4 +115,9 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(GroupLeadersListPage);
+)(Conditional(
+  GroupLeadersListPage,
+  ['currentGroup.permissions.leaders_view?'],
+  (props, rs) => ROUTES.group.manage.index.path(rs.params('group_id')),
+  'You don\'t have permission view group leaders'
+));

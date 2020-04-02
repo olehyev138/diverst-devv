@@ -135,13 +135,17 @@ Diverst::Application.routes.draw do
       resources :initiative_updates
       resources :initiative_users do
         collection do
-          post 'leave'
           post 'join'
+          post 'leave'
           get 'export_csv'
         end
       end
       resources :invitation_segments_groups
-      resources :likes
+      resources :likes, only: [:create] do
+        collection do
+          post '/unlike', to: 'likes#unlike'
+        end
+      end
       resources :mentorings do
         collection do
           post 'delete_mentorship'
@@ -227,7 +231,11 @@ Diverst::Application.routes.draw do
       resources :topics
       resources :topic_feedbacks
       resources :twitter_accounts
-      resources :updates, only: [:show, :update, :destroy]
+      resources :updates do
+        collection do
+          get 'prototype'
+        end
+      end
       resources :user_rewards
       resources :user_reward_actions
       resources :user, only: [] do
@@ -246,6 +254,8 @@ Diverst::Application.routes.draw do
       end
       resources :user_groups do
         collection do
+          post 'join'
+          post 'leave'
           get 'export_csv'
           post 'leave'
           post 'join'

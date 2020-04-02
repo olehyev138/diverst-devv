@@ -284,7 +284,7 @@ export function BudgetForm(props) {
       enableReinitialize
       onSubmit={(values, actions) => {
         const payload = mapFields(values, ['approver_id']);
-        props.budgetAction({ path: props.links.index, annual_budget_id: props.annualBudgetId, ...payload });
+        props.budgetAction({ groupId: props.currentGroup.id, path: props.links.index, annual_budget_id: props.annualBudgetId, ...payload });
       }}
     >
       {formikProps => <BudgetFormInner {...props} formikProps={formikProps} />}
@@ -295,6 +295,7 @@ export function BudgetForm(props) {
 BudgetForm.propTypes = {
   budgetAction: PropTypes.func.isRequired,
   annualBudgetId: PropTypes.number,
+  currentGroup: PropTypes.number,
   isCommitting: PropTypes.bool,
   isFetching: PropTypes.bool,
   edit: PropTypes.bool,

@@ -10,14 +10,17 @@ import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/News/reducer';
 import saga from 'containers/News/saga';
+import likeSaga from 'containers/Shared/Like/saga';
 
 import { selectPaginatedNewsItems, selectNewsItemsTotal, selectIsLoading, selectHasChanged } from 'containers/News/selectors';
 import { deleteSocialLinkBegin, getNewsItemsBegin, newsFeedUnmount, deleteNewsLinkBegin, deleteGroupMessageBegin,
   updateNewsItemBegin, archiveNewsItemBegin, pinNewsItemBegin, unpinNewsItemBegin } from 'containers/News/actions';
+import { likeNewsItemBegin, unlikeNewsItemBegin } from 'containers/Shared/Like/actions';
 
 import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import NewsFeed from 'components/News/NewsFeed';
+import Conditional from 'components/Compositions/Conditional';
 
 const NewsFeedTypes = Object.freeze({
   approved: 0,
@@ -35,6 +38,7 @@ const defaultParams = Object.freeze({
 export function NewsFeedPage(props, context) {
   useInjectReducer({ key: 'news', reducer });
   useInjectSaga({ key: 'news', saga });
+  useInjectSaga({ key: 'likes', saga: likeSaga });
   const rs = new RouteService(useContext);
 
   const links = {
@@ -97,9 +101,11 @@ export function NewsFeedPage(props, context) {
     setParams(newParams);
   };
 
+  const List = props.listComponent || NewsFeed;
+
   return (
     <React.Fragment>
-      <NewsFeed
+      <List
         newsItems={props.newsItems}
         newsItemsTotal={props.newsItemsTotal}
         isLoading={props.isLoading}
@@ -107,6 +113,7 @@ export function NewsFeedPage(props, context) {
         currentTab={tab}
         handleChangeTab={handleChangeTab}
         handlePagination={handlePagination}
+        currentGroup={props.currentGroup}
         links={links}
         readonly={props.readonly}
         deleteGroupMessageBegin={props.deleteGroupMessageBegin}
@@ -116,6 +123,8 @@ export function NewsFeedPage(props, context) {
         archiveNewsItemBegin={props.archiveNewsItemBegin}
         pinNewsItemBegin={props.pinNewsItemBegin}
         unpinNewsItemBegin={props.unpinNewsItemBegin}
+        likeNewsItemBegin={props.likeNewsItemBegin}
+        unlikeNewsItemBegin={props.unlikeNewsItemBegin}
       />
     </React.Fragment>
   );
@@ -130,6 +139,8 @@ NewsFeedPage.propTypes = {
   deleteNewsLinkBegin: PropTypes.func,
   deleteSocialLinkBegin: PropTypes.func,
   updateNewsItemBegin: PropTypes.func,
+  likeNewsItemBegin: PropTypes.func,
+  unlikeNewsItemBegin: PropTypes.func,
   isLoading: PropTypes.bool,
   hasChanged: PropTypes.bool,
   archiveNewsItemBegin: PropTypes.func,
@@ -140,7 +151,8 @@ NewsFeedPage.propTypes = {
       id: PropTypes.number
     })
   }),
-  readonly: PropTypes.bool
+  readonly: PropTypes.bool,
+  listComponent: PropTypes.elementType
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -160,6 +172,8 @@ const mapDispatchToProps = dispatch => ({
   archiveNewsItemBegin: payload => dispatch(archiveNewsItemBegin(payload)),
   pinNewsItemBegin: payload => dispatch(pinNewsItemBegin(payload)),
   unpinNewsItemBegin: payload => dispatch(unpinNewsItemBegin(payload)),
+  likeNewsItemBegin: payload => dispatch(likeNewsItemBegin(payload)),
+  unlikeNewsItemBegin: payload => dispatch(unlikeNewsItemBegin(payload)),
 });
 
 const withConnect = connect(
@@ -170,4 +184,9 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(NewsFeedPage);
+)(Conditional(
+  NewsFeedPage,
+  ['currentGroup.permissions.news_view?'],
+  (props, rs) => props.readonly ? null : ROUTES.group.home.path(rs.params('group_id')),
+  'You don\'t have permission view this group\'s news'
+));

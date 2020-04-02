@@ -24,6 +24,7 @@ import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import Permission from 'components/Shared/DiverstPermission';
+import { permission } from 'utils/permissionsHelpers';
 
 const styles = theme => ({
   toolbar: {
@@ -126,8 +127,6 @@ export function GroupLinks(props) {
       strict: false,
     });
 
-  const permission = name => dig(currentGroup, 'permissions', name);
-
   const NavLinks = () => (
     <div>
       <PerfectScrollbar
@@ -166,19 +165,21 @@ export function GroupLinks(props) {
             <DiverstFormattedMessage {...ROUTES.group.home.data.titleMessage} />
           </Button>
 
-          <Button
-            component={WrappedNavLink}
-            to={ROUTES.group.members.index.path(rs.params('group_id'))}
-            className={classes.navLink}
-            activeClassName={classes.navLinkActive}
-          >
-            <Hidden smDown>
-              <MembersIcon className={classes.navIcon} />
-            </Hidden>
-            <DiverstFormattedMessage {...ROUTES.group.members.index.data.titleMessage} />
-          </Button>
+          <Permission show={permission(props.currentGroup, 'members_view?')}>
+            <Button
+              component={WrappedNavLink}
+              to={ROUTES.group.members.index.path(rs.params('group_id'))}
+              className={classes.navLink}
+              activeClassName={classes.navLinkActive}
+            >
+              <Hidden smDown>
+                <MembersIcon className={classes.navIcon} />
+              </Hidden>
+              <DiverstFormattedMessage {...ROUTES.group.members.index.data.titleMessage} />
+            </Button>
+          </Permission>
 
-          <Permission show={permission('events_view?')}>
+          <Permission show={permission(props.currentGroup, 'events_view?')}>
             <Button
               component={WrappedNavLink}
               to={ROUTES.group.events.index.path(rs.params('group_id'))}
@@ -192,64 +193,79 @@ export function GroupLinks(props) {
             </Button>
           </Permission>
 
-          <Button
-            component={WrappedNavLink}
-            exact
-            to={ROUTES.group.resources.index.path(rs.params('group_id'))}
-            className={classes.navLink}
-            activeClassName={classes.navLinkActive}
-          >
-            <Hidden smDown>
-              <ResourcesIcon className={classes.navIcon} />
-            </Hidden>
-            <DiverstFormattedMessage {...ROUTES.group.resources.index.data.titleMessage} />
-          </Button>
+          <Permission show={permission(props.currentGroup, 'resources_view?')}>
+            <Button
+              component={WrappedNavLink}
+              exact
+              to={ROUTES.group.resources.index.path(rs.params('group_id'))}
+              className={classes.navLink}
+              activeClassName={classes.navLinkActive}
+            >
+              <Hidden smDown>
+                <ResourcesIcon className={classes.navIcon} />
+              </Hidden>
+              <DiverstFormattedMessage {...ROUTES.group.resources.index.data.titleMessage} />
+            </Button>
+          </Permission>
 
-          <Button
-            component={WrappedNavLink}
-            to={ROUTES.group.news.index.path(rs.params('group_id'))}
-            className={classes.navLink}
-            activeClassName={classes.navLinkActive}
-          >
-            <Hidden smDown>
-              <NewsIcon className={classes.navIcon} />
-            </Hidden>
-            <DiverstFormattedMessage {...ROUTES.group.news.index.data.titleMessage} />
-          </Button>
+          <Permission show={permission(props.currentGroup, 'news_view?')}>
+            <Button
+              component={WrappedNavLink}
+              to={ROUTES.group.news.index.path(rs.params('group_id'))}
+              className={classes.navLink}
+              activeClassName={classes.navLinkActive}
+            >
+              <Hidden smDown>
+                <NewsIcon className={classes.navIcon} />
+              </Hidden>
+              <DiverstFormattedMessage {...ROUTES.group.news.index.data.titleMessage} />
+            </Button>
+          </Permission>
 
-          <Button
-            component={WrappedNavLink}
-            className={classes.navLink}
-            activeClassName={classes.navLinkActive}
-            to={ROUTES.group.plan.events.index.path(rs.params('group_id'))}
-            isActive={(match, location) => !!matchPath(location.pathname, {
-              path: ROUTES.group.plan.index.data.pathPrefix(rs.params('group_id')),
-              exact: false,
-              strict: false,
-            })}
+          <Permission
+            show={
+              permission(props.currentGroup, 'kpi_manage?')
+            || permission(props.currentGroup, 'events_manage?')
+            || permission(props.currentGroup, 'annual_budgets_view?')
+            || permission(props.currentGroup, 'budgets_create?')
+            || permission(props.currentGroup, 'annual_budgets_index?')}
           >
-            <Hidden smDown>
-              <PlanIcon className={classes.navIcon} />
-            </Hidden>
-            <DiverstFormattedMessage {...ROUTES.group.plan.index.data.titleMessage} />
-          </Button>
+            <Button
+              component={WrappedNavLink}
+              className={classes.navLink}
+              activeClassName={classes.navLinkActive}
+              to={ROUTES.group.plan.index.path(rs.params('group_id'))}
+              isActive={(match, location) => !!matchPath(location.pathname, {
+                path: ROUTES.group.plan.index.data.pathPrefix(rs.params('group_id')),
+                exact: false,
+                strict: false,
+              })}
+            >
+              <Hidden smDown>
+                <PlanIcon className={classes.navIcon} />
+              </Hidden>
+              <DiverstFormattedMessage {...ROUTES.group.plan.index.data.titleMessage} />
+            </Button>
+          </Permission>
 
-          <Button
-            component={WrappedNavLink}
-            className={classes.navLink}
-            activeClassName={classes.navLinkActive}
-            to={ROUTES.group.manage.settings.index.path(rs.params('group_id'))}
-            isActive={(match, location) => !!matchPath(location.pathname, {
-              path: ROUTES.group.manage.index.data.pathPrefix(rs.params('group_id')),
-              exact: false,
-              strict: false,
-            })}
-          >
-            <Hidden smDown>
-              <ManageIcon className={classes.navIcon} />
-            </Hidden>
-            <DiverstFormattedMessage {...ROUTES.group.manage.index.data.titleMessage} />
-          </Button>
+          <Permission show={permission(props.currentGroup, 'update?') || permission(props.currentGroup, 'leaders_view?')}>
+            <Button
+              component={WrappedNavLink}
+              className={classes.navLink}
+              activeClassName={classes.navLinkActive}
+              to={ROUTES.group.manage.index.path(rs.params('group_id'))}
+              isActive={(match, location) => !!matchPath(location.pathname, {
+                path: ROUTES.group.manage.index.data.pathPrefix(rs.params('group_id')),
+                exact: false,
+                strict: false,
+              })}
+            >
+              <Hidden smDown>
+                <ManageIcon className={classes.navIcon} />
+              </Hidden>
+              <DiverstFormattedMessage {...ROUTES.group.manage.index.data.titleMessage} />
+            </Button>
+          </Permission>
         </Toolbar>
       </PerfectScrollbar>
     </div>

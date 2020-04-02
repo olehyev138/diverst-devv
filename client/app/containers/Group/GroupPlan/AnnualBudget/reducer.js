@@ -37,8 +37,8 @@ export const initialState = {
   annualBudgetInitiativeListTotal: {},
   isFetchingAnnualBudgetInitiatives: {},
   currentAnnualBudget: null,
-  isFetchingAnnualBudgets: false,
-  isFetchingAnnualBudget: false,
+  isFetchingAnnualBudgets: true,
+  isFetchingAnnualBudget: true,
   isCommitting: false,
   hasChanged: false,
 };

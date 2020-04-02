@@ -13,6 +13,8 @@ import { withStyles } from '@material-ui/core/styles';
 import { injectIntl, intlShape } from 'react-intl';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/News/messages';
+import Permission from 'components/Shared/DiverstPermission';
+import { permission } from 'utils/permissionsHelpers';
 
 const styles = theme => ({
   margin: {
@@ -30,18 +32,20 @@ export function GroupMessageComment(props) {
         <Typography variant='body1'>{comment.content}</Typography>
         <Typography variant='body2'>{comment.author.first_name}</Typography>
       </CardContent>
-      <CardActions>
-        <Button
-          size='small'
-          onClick={() => {
-            /* eslint-disable-next-line no-alert, no-restricted-globals */
-            if (confirm(intl.formatMessage(messages.group_delete_confirm)))
-              props.deleteGroupMessageCommentBegin({ group_id: newsItem.group_message.group_id, id: comment.id });
-          }}
-        >
-          {<DiverstFormattedMessage {...messages.delete} />}
-        </Button>
-      </CardActions>
+      <Permission show={permission(props.comment)}>
+        <CardActions>
+          <Button
+            size='small'
+            onClick={() => {
+              /* eslint-disable-next-line no-alert, no-restricted-globals */
+              if (confirm(intl.formatMessage(messages.group_delete_confirm)))
+                props.deleteGroupMessageCommentBegin({ group_id: newsItem.group_message.group_id, id: comment.id });
+            }}
+          >
+            {<DiverstFormattedMessage {...messages.delete} />}
+          </Button>
+        </CardActions>
+      </Permission>
     </Card>
   );
 }

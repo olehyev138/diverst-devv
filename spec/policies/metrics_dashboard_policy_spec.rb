@@ -19,8 +19,6 @@ RSpec.describe MetricsDashboardPolicy, type: :policy do
 
   permissions '.scope' do
     context 'when manage_all is true' do
-      before { pending }
-
       before { user.policy_group.update manage_all: true }
 
       it 'shows only metrics_dashboards belonging to enterprise' do
