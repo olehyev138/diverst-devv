@@ -76,11 +76,11 @@ export function NewsLinkListItem(props) {
   }
 
   return (
-    <Card>
+    <React.Fragment>
       <CardHeader
         className={classes.cardHeader}
         title={<Link href={newsLink.url} target='_blank'>{newsLink.title}</Link>}
-        titleTypographyProps={{ color: 'primary' }}
+        titleTypographyProps={{ variant: 'body1', color: 'primary' }}
       >
       </CardHeader>
       <CardContent className={classes.cardContent}>
@@ -213,7 +213,7 @@ export function NewsLinkListItem(props) {
           </CardActions>
         </Permission>
       )}
-    </Card>
+    </React.Fragment>
   );
 }
 

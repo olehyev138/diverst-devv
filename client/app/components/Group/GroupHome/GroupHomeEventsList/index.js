@@ -11,7 +11,7 @@ import { RouteContext } from 'containers/Layouts/ApplicationLayout';
 import withStyles from '@material-ui/core/styles/withStyles';
 
 import {
-  Box, Tab, Paper, Card, CardContent, Grid, Link, Typography, Button, CardActionArea
+  Box, CardContent, Grid, Link, Typography, Divider, CardActionArea
 } from '@material-ui/core';
 
 import AddIcon from '@material-ui/icons/Add';
@@ -30,8 +30,6 @@ import messages from 'containers/Event/messages';
 import { customTexts } from 'utils/customTextHelpers';
 
 import EventListItem from 'components/Event/EventListItem';
-import Permission from 'components/Shared/DiverstPermission';
-import { permission } from 'utils/permissionsHelpers';
 
 const styles = theme => ({
   eventListItem: {
@@ -69,73 +67,30 @@ export function EventsList(props, context) {
 
   return (
     <React.Fragment>
-      {!props.readonly && (
-        <React.Fragment>
-          <Permission show={permission(props.currentGroup, 'events_create?')}>
-            <Button
-              className={classes.floatRight}
-              variant='contained'
-              to={props.links.eventNew}
-              color='primary'
-              size='large'
-              component={WrappedNavLink}
-              startIcon={<AddIcon />}
-            >
-              <DiverstFormattedMessage {...messages.new} />
-            </Button>
-          </Permission>
-          <Box className={classes.floatSpacer} />
-        </React.Fragment>
-      )}
-      <Paper>
-        {props.currentPTab != null && (
-          <ResponsiveTabs
-            value={props.currentPTab}
-            onChange={props.handleChangePTab}
-            indicatorColor='primary'
-            textColor='primary'
-          >
-            <Tab label={intl.formatMessage(messages.index.participating)} />
-            <Tab label={intl.formatMessage(messages.index.all)} />
-          </ResponsiveTabs>
-        )}
-        {props.onlyUpcoming || (
-          <ResponsiveTabs
-            value={props.currentTab}
-            onChange={props.handleChangeTab}
-            indicatorColor='primary'
-            textColor='primary'
-          >
-            <Tab label={intl.formatMessage(messages.index.upcoming, customTexts())} />
-            <Tab label={intl.formatMessage(messages.index.ongoing, customTexts())} />
-            <Tab label={intl.formatMessage(messages.index.past, customTexts())} />
-          </ResponsiveTabs>
-        )}
-      </Paper>
-      <br />
       <DiverstLoader isLoading={props.isLoading} {...props.loaderProps}>
         <Grid container spacing={3}>
           { /* eslint-disable-next-line arrow-body-style */}
           {props.events && Object.values(props.events).map((item, i) => {
             return (
               <Grid item key={item.id} className={classes.eventListItem}>
-                <Card>
-                  {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                  <Link
-                    className={classes.eventLink}
-                    component={WrappedNavLink}
-                    to={{
-                      pathname: ROUTES.group.events.show.path(item.owner_group_id, item.id),
-                      state: { id: item.id }
-                    }}
-                  >
-                    <CardActionArea>
-                      <CardContent>
-                        <EventListItem item={item} />
-                      </CardContent>
-                    </CardActionArea>
-                  </Link>
-                </Card>
+                <Box mb={1} />
+                <Divider />
+                <Box mb={1} />
+                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                <Link
+                  className={classes.eventLink}
+                  component={WrappedNavLink}
+                  to={{
+                    pathname: ROUTES.group.events.show.path(item.owner_group_id, item.id),
+                    state: { id: item.id }
+                  }}
+                >
+                  <CardActionArea>
+                    <CardContent>
+                      <EventListItem item={item} />
+                    </CardContent>
+                  </CardActionArea>
+                </Link>
               </Grid>
             );
           })}
@@ -151,13 +106,6 @@ export function EventsList(props, context) {
           )}
         </Grid>
       </DiverstLoader>
-      {props.events && props.events.length > 0 && (
-        <DiverstPagination
-          isLoading={props.isLoading}
-          count={props.eventsTotal}
-          handlePagination={props.handlePagination}
-        />
-      )}
     </React.Fragment>
   );
 }
@@ -177,7 +125,6 @@ EventsList.propTypes = {
   readonly: PropTypes.bool,
   onlyUpcoming: PropTypes.bool,
   loaderProps: PropTypes.object,
-  currentGroup: PropTypes.object,
 };
 
 export default compose(

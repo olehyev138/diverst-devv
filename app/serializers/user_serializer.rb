@@ -1,6 +1,6 @@
 class UserSerializer < ApplicationRecordSerializer
   attributes :enterprise, :last_name, :user_groups, :user_role, :fields, :news_link_ids, :name,
-             :last_initial, :timezones, :time_zone
+             :last_initial, :timezones, :time_zone, :avatar, :avatar_file_name, :avatar_data
 
   has_many :field_data
 
@@ -11,6 +11,18 @@ class UserSerializer < ApplicationRecordSerializer
 
   def avatar_location
     object.avatar_location(default_style: instance_options.dig(:scope, :image_size)&.to_sym)
+  end
+
+  def avatar
+    AttachmentHelper.attachment_signed_id(object.avatar)
+  end
+
+  def avatar_file_name
+    AttachmentHelper.attachment_file_name(object.avatar)
+  end
+
+  def avatar_data
+    AttachmentHelper.attachment_data_string(object.avatar)
   end
 
   def excluded_keys
