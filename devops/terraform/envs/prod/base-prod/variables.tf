@@ -11,6 +11,10 @@ variable "ssh_key_name" {
 }
 
 # Backend
+variable "backend_solution_stack" {
+  type    = string
+}
+
 variable "backend_asg_min" {
   type    = number
 }
