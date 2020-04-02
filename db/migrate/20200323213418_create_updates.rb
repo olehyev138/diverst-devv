@@ -1,35 +1,39 @@
 class CreateUpdates < ActiveRecord::Migration[5.2]
+  # Reordered migration
+
   def up
-    create_table :updates do |t|
-      t.text :data
-      t.text :comments
-      t.date :report_date, index: true
+    unless table_exists? :updates
+      create_table :updates do |t|
+        t.text :data
+        t.text :comments
+        t.date :report_date, index: true
 
-      t.references :owner
-      t.references :updatable, polymorphic: true
+        t.references :owner
+        t.references :updatable, polymorphic: true
 
-      t.timestamps
-    end
+        t.timestamps
+      end
 
-    GroupUpdate.column_reload!
-    InitiativeUpdate.column_reload!
-    [GroupUpdate, InitiativeUpdate].each do |klass|
-      klass.find_each do |old_u|
-        Update.create do |new_u|
-          new_u.data = old_u.data
-          new_u.comments = old_u.comments
-          new_u.owner = old_u.owner
-          new_u.created_at = old_u.created_at
-          if klass == GroupUpdate
-            new_u.updatable = old_u.group
-            new_u.report_date = old_u.created_at
-          elsif klass == InitiativeUpdate
-            new_u.updatable = old_u.initiative
-            new_u.report_date = old_u.reported_for_date
-          end
-          old_u.field_data.find_each do |fd|
-            fd.field_user = new_u
-            fd.save
+      GroupUpdate.column_reload!
+      InitiativeUpdate.column_reload!
+      [GroupUpdate, InitiativeUpdate].each do |klass|
+        klass.find_each do |old_u|
+          Update.create do |new_u|
+            new_u.data = old_u.data
+            new_u.comments = old_u.comments
+            new_u.owner = old_u.owner
+            new_u.created_at = old_u.created_at
+            if klass == GroupUpdate
+              new_u.updatable = old_u.group
+              new_u.report_date = old_u.created_at
+            elsif klass == InitiativeUpdate
+              new_u.updatable = old_u.initiative
+              new_u.report_date = old_u.reported_for_date
+            end
+            old_u.field_data.find_each do |fd|
+              fd.field_user = new_u
+              fd.save
+            end
           end
         end
       end
@@ -69,6 +73,7 @@ class CreateUpdates < ActiveRecord::Migration[5.2]
         fd.save
       end
     end
+
     drop_table :updates
   end
 end

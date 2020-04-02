@@ -38,6 +38,7 @@ module "prod" {
   env_name      = var.env_name
   region        = var.region
   ssh_key_name  = var.ssh_key_name
+  db_name       = var.db_name
   db_username   = var.db_username
   db_password   = var.db_password
 }
