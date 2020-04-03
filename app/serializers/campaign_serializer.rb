@@ -1,6 +1,6 @@
 class CampaignSerializer < ApplicationRecordSerializer
   attributes :image_location, :banner_location, :groups, :questions, :title,
-             :description, :start, :end, :status, :nb_invites
+             :description, :start, :end, :status, :nb_invites, :permissions
 
   has_many :groups
 
