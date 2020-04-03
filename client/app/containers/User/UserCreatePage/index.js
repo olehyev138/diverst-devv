@@ -24,6 +24,9 @@ import UserForm from 'components/User/UserForm';
 
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/User/messages';
+import Conditional from 'components/Compositions/Conditional';
+import { PolicyTemplatesPage } from 'containers/User/UserPolicy/PolicyTemplatesPage';
+import { selectPermissions } from 'containers/Shared/App/selectors';
 
 export function UserCreatePage(props) {
   useInjectReducer({ key: 'users', reducer });
@@ -62,6 +65,7 @@ UserCreatePage.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
   isCommitting: selectIsCommitting(),
+  permissions: selectPermissions(),
 });
 
 const mapDispatchToProps = {
@@ -80,4 +84,9 @@ export default compose(
   injectIntl,
   withConnect,
   memo,
-)(UserCreatePage);
+)(Conditional(
+  UserCreatePage,
+  ['permissions.users_create'],
+  (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
+  'You don\'t have permission to manage policy templates'
+));

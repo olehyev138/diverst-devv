@@ -40,6 +40,9 @@ import RouteService from 'utils/routeHelpers';
 import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import UserList from 'components/User/UserList';
+import Conditional from 'components/Compositions/Conditional';
+import { UserEditPage } from 'containers/User/UserEditPage';
+import { selectPermissions } from 'containers/Shared/App/selectors';
 
 const UserTypes = Object.freeze([
   'all',
@@ -137,7 +140,8 @@ UserListPage.propTypes = {
 const mapStateToProps = createStructuredSelector({
   users: selectPaginatedUsers(),
   userTotal: selectUserTotal(),
-  isFetchingUsers: selectIsFetchingUsers()
+  isFetchingUsers: selectIsFetchingUsers(),
+  permissions: selectPermissions(),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -156,4 +160,9 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(UserListPage);
+)(Conditional(
+  UserListPage,
+  ['permissions.users_create'],
+  (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
+  'You don\'t have permission manage users'
+));
