@@ -17,6 +17,8 @@ import {
   Button, Card, CardActions, CardContent, Grid, Paper,
   TextField, Hidden, FormControl, Divider, Switch, FormControlLabel,
 } from '@material-ui/core';
+
+import DiverstLogoutDialog from 'components/Shared/DiverstLogoutDialog';
 import Select from 'components/Shared/DiverstSelect';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/GlobalSettings/EnterpriseConfiguration/messages';
@@ -114,16 +116,32 @@ export function SSOSettings(props) {
     idp_cert: { default: '' },
   });
 
-  return (
-    <Formik
-      initialValues={initialValues}
-      enableReinitialize
-      onSubmit={(values, actions) => {
-        props.enterpriseAction(mapFields(values, ['time_zone']));
-      }}
+  const [open, setOpen] = React.useState(false);
 
-      render={formikProps => <SSOSettingsInner {...props} {...formikProps} />}
-    />
+  function handleClickOpen() {
+    setOpen(true);
+  }
+
+  function handleClose() {
+    setOpen(false);
+  }
+
+  return (
+    <React.Fragment>
+      <Formik
+        initialValues={initialValues}
+        enableReinitialize
+        onSubmit={(values, actions) => {
+          props.enterpriseAction(mapFields(values, ['time_zone']));
+          handleClickOpen();
+        }}
+        render={formikProps => <SSOSettingsInner {...props} {...formikProps} />}
+      />
+      <DiverstLogoutDialog
+        open={open}
+        handleClose={handleClose}
+      />
+    </React.Fragment>
   );
 }
 
