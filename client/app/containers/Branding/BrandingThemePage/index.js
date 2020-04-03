@@ -21,6 +21,9 @@ import BrandingTheme from 'components/Branding/BrandingTheme';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Branding/messages';
 import { injectIntl, intlShape } from 'react-intl';
+import Conditional from 'components/Compositions/Conditional';
+import { ROUTES } from 'containers/Shared/Routes/constants';
+import { selectPermissions } from 'containers/Shared/App/selectors';
 export function BrandingThemePage(props) {
   useInjectReducer({ key: 'configuration', reducer });
   useInjectSaga({ key: 'configuration', saga });
@@ -60,6 +63,7 @@ const mapStateToProps = createStructuredSelector({
   theme: selectEnterpriseTheme(),
   isLoading: selectEnterpriseIsLoading(),
   isCommitting: selectEnterpriseIsCommitting(),
+  permissions: selectPermissions(),
 });
 
 const mapDispatchToProps = {
@@ -77,4 +81,9 @@ export default compose(
   injectIntl,
   withConnect,
   memo,
-)(BrandingThemePage);
+)(Conditional(
+  BrandingThemePage,
+  ['permissions.branding_manage'],
+  (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
+  'You don\'t have permission manage branding'
+));

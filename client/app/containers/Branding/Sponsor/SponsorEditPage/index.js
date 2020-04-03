@@ -22,8 +22,10 @@ import { ROUTES } from 'containers/Shared/Routes/constants';
 
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Branding/messages';
+import Conditional from 'components/Compositions/Conditional';
+import { selectPermissions } from 'containers/Shared/App/selectors';
 
-export function SponsorCreatePage(props) {
+export function SponsorEditPage(props) {
   useInjectReducer({ key: 'sponsors', reducer });
   useInjectSaga({ key: 'sponsors', saga });
 
@@ -53,7 +55,7 @@ export function SponsorCreatePage(props) {
   );
 }
 
-SponsorCreatePage.propTypes = {
+SponsorEditPage.propTypes = {
   intl: intlShape,
   sponsor: PropTypes.object,
   getSponsorBegin: PropTypes.func,
@@ -62,7 +64,8 @@ SponsorCreatePage.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
-  sponsor: selectSponsor()
+  sponsor: selectSponsor(),
+  permissions: selectPermissions(),
 });
 
 const mapDispatchToProps = {
@@ -80,4 +83,9 @@ export default compose(
   injectIntl,
   withConnect,
   memo,
-)(SponsorCreatePage);
+)(Conditional(
+  SponsorEditPage,
+  ['permissions.branding_manage'],
+  (props, rs) => props.permissions.adminPath || ROUTES.user.home.path(),
+  'You don\'t have permission manage branding'
+));
