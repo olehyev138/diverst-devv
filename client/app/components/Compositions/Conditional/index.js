@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
@@ -36,10 +36,12 @@ export default function Conditional(
   conditions,
   redirect = null,
   message = null,
+  wait = false,
   reducer = a => a.reduce((sum, v) => sum || v, false)
 ) {
   const WrappedComponent = (props) => {
-    const show = valid(props, conditions, reducer);
+    const [first, setFirst] = useState(true);
+    const show = valid(props, conditions, reducer) || (first && wait);
     const rs = props.computedMatch
       ? new RouteService({ computedMatch: props.computedMatch, location: props.location })
       : new RouteService(useContext);
@@ -49,7 +51,8 @@ export default function Conditional(
     useEffect(() => {
       if (!show && path) {
         props.redirectAction(path);
-
+        if (wait)
+          setFirst(false);
         if (message)
           props.showSnackbar({ message, options: { variant: 'warning' } });
       }

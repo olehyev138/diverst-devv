@@ -1,10 +1,10 @@
-import React, { memo, useEffect, useContext } from 'react';
+import React, {
+  memo, useEffect, useState, useContext
+} from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect/lib';
 import { compose } from 'redux';
-
-import { injectIntl, intlShape } from 'react-intl';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
@@ -12,95 +12,115 @@ import { useInjectReducer } from 'utils/injectReducer';
 import reducer from 'containers/Resource/reducer';
 import saga from 'containers/Resource/saga';
 
-import { selectPaginatedSelectFolders, selectFolder, selectIsCommitting } from 'containers/Resource/selectors';
-import { selectUser, selectEnterprise } from 'containers/Shared/App/selectors';
+import { injectIntl, intlShape } from 'react-intl';
 
 import RouteService from 'utils/routeHelpers';
 
+import { selectUser, selectEnterprise } from 'containers/Shared/App/selectors';
 import {
-  getFolderBegin, createResourceBegin,
-  resourcesUnmount, getFoldersBegin,
-} from 'containers/Resource/actions';
-import ResourceForm from 'components/Resource/Resource/ResourceForm';
+  selectFormFolder, selectPaginatedSelectFolders, selectValid,
+  selectFormResource, selectIsCommitting, selectIsFormLoading
+} from 'containers/Resource/selectors';
 
-import messages from '../messages';
+import {
+  getFolderBegin, updateResourceBegin,
+  resourcesUnmount, getFoldersBegin,
+  getResourceBegin,
+} from 'containers/Resource/actions';
+
+import ResourceForm from 'components/Resource/Resource/ResourceForm';
+import messages from 'containers/Resource/Resource/messages';
 import {
   getFolderShowPath,
-  getFolderIndexPath
+  getFolderIndexPath,
 } from 'utils/resourceHelpers';
 import Conditional from 'components/Compositions/Conditional';
 
-export function ResourceCreatePage(props) {
+export function ResourceEditPage(props) {
   useInjectReducer({ key: 'resource', reducer });
   useInjectSaga({ key: 'resource', saga });
 
-  const { currentUser, currentGroup, currentEnterprise, currentFolder } = props;
   const rs = new RouteService(useContext);
+  const { location } = rs;
 
   const type = props.path.startsWith('/groups') ? 'group' : 'admin';
+
+  const { currentUser, currentGroup, currentFolder, currentEnterprise, currentResource } = props;
 
   const links = {
     cancelPath: getFolderShowPath(currentFolder) || getFolderIndexPath(type, rs.params('group_id')),
   };
 
   useEffect(() => {
-    const groupId = rs.params('group_id');
+    const resourceId = rs.params('item_id');
     const folderId = rs.params('folder_id');
+    const groupId = rs.params('group_id');
     props.getFolderBegin({ id: folderId });
+    props.getResourceBegin({ id: resourceId });
     if (type === 'group')
-      props.getFoldersBegin({ group_id: groupId });
+      props.getFoldersBegin({ group_id: groupId[0] });
     else if (type === 'admin')
       props.getFoldersBegin({ enterprise_id: currentEnterprise.id });
+
     return () => props.resourcesUnmount();
   }, []);
 
   return (
     <ResourceForm
+      edit
       getFoldersBegin={props.getFoldersBegin}
-      selectFolders={props.searchFolders}
-      resourceAction={props.createResourceBegin}
-      buttonText={props.intl.formatMessage(messages.create)}
+      selectFolders={props.folders}
+      resourceAction={props.updateResourceBegin}
+      buttonText={props.intl.formatMessage(messages.update)}
       currentUser={currentUser}
       currentGroup={currentGroup}
+      resource={currentResource}
       currentFolder={currentFolder}
       links={links}
       type={type}
+      isCommitting={props.isCommitting}
+      isFormLoading={props.isFormLoading}
     />
   );
 }
 
-ResourceCreatePage.propTypes = {
+ResourceEditPage.propTypes = {
   intl: intlShape.isRequired,
   path: PropTypes.string,
-  getFolderBegin: PropTypes.func,
   getFoldersBegin: PropTypes.func,
-  createResourceBegin: PropTypes.func,
+  selectFolders: PropTypes.array,
+  getFolderBegin: PropTypes.func,
+  updateResourceBegin: PropTypes.func,
   resourcesUnmount: PropTypes.func,
+  getResourceBegin: PropTypes.func,
   currentUser: PropTypes.object,
   currentGroup: PropTypes.object,
-  currentEnterprise: PropTypes.object,
   currentFolder: PropTypes.object,
-  searchFolders: PropTypes.array,
+  currentEnterprise: PropTypes.object,
+  currentResource: PropTypes.object,
   folders: PropTypes.array,
+  valid: PropTypes.bool,
   isCommitting: PropTypes.bool,
-  location: PropTypes.shape({
-    state: PropTypes.object,
-  })
+  isFormLoading: PropTypes.bool,
 };
 
 const mapStateToProps = createStructuredSelector({
   currentUser: selectUser(),
-  searchFolders: selectPaginatedSelectFolders(),
-  currentFolder: selectFolder(),
+  currentFolder: selectFormFolder(),
+  folders: selectPaginatedSelectFolders(),
+  currentResource: selectFormResource(),
   currentEnterprise: selectEnterprise(),
+  valid: selectValid(),
   isCommitting: selectIsCommitting(),
+  isFormLoading: selectIsFormLoading(),
 });
 
 const mapDispatchToProps = {
-  createResourceBegin,
-  getFoldersBegin,
   getFolderBegin,
-  resourcesUnmount
+  updateResourceBegin,
+  getFoldersBegin,
+  resourcesUnmount,
+  getResourceBegin,
 };
 
 const withConnect = connect(
@@ -111,10 +131,11 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-  injectIntl
+  injectIntl,
 )(Conditional(
-  ResourceCreatePage,
-  ['currentGroup.permissions.resources_create?'],
+  ResourceEditPage,
+  ['currentResource.permissions.update?', 'isFormLoading'],
   (props, rs) => getFolderIndexPath(props.path.startsWith('/groups') ? 'group' : 'admin', rs.params('group_id')),
-  'You don\'t have permission to create resources'
+  'You don\'t have permission to edit this resource',
+  true
 ));

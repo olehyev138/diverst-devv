@@ -35,6 +35,9 @@ class Api::V1::SessionsController < DiverstController
           polls_create: PollPolicy.new(user, Poll).create?,
           polls_manage: PollPolicy.new(user, Poll).manage?,
 
+          enterprise_folders_view: EnterpriseFolderPolicy.new(user, Folder).index?,
+          enterprise_folders_create: EnterpriseFolderPolicy.new(user, Folder).create?,
+
           mentoring_interests_view: MentoringInterestPolicy.new(user, MentoringInterest).index?,
           mentoring_interests_create: MentoringInterestPolicy.new(user, MentoringInterest).create?,
           mentoring_interests_manage: MentoringInterestPolicy.new(user, MentoringInterest).update?,

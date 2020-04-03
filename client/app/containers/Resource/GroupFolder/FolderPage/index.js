@@ -224,6 +224,7 @@ export function FolderPage(props) {
           handleResourcePagination={handleResourcePagination}
           handleFolderPagination={handleFolderPagination}
           archiveResourceBegin={props.archiveResourceBegin}
+          type='group'
           resources={resources}
           isLoading={props.isLoading}
           isFormLoading={props.isFormLoading}
