@@ -17,7 +17,7 @@ import campaignReducer from 'containers/Innovate/Campaign/reducer';
 import campaignSaga from 'containers/Innovate/Campaign/saga';
 
 import {
-  selectQuestionTotal, selectIsCommitting, selectQuestion
+  selectQuestionTotal, selectIsCommitting, selectQuestion, selectIsFormLoading
 } from 'containers/Innovate/Campaign/CampaignQuestion/selectors';
 
 import CampaignQuestionForm from 'components/Innovate/Campaign/CampaignQuestion/CampaignQuestionForm';
@@ -25,6 +25,7 @@ import CampaignQuestionForm from 'components/Innovate/Campaign/CampaignQuestion/
 import { updateQuestionBegin, getQuestionBegin, campaignQuestionsUnmount } from 'containers/Innovate/Campaign/CampaignQuestion/actions';
 import { injectIntl, intlShape } from 'react-intl';
 import messages from 'containers/Innovate/Campaign/CampaignQuestion/messages';
+import Conditional from 'components/Compositions/Conditional';
 
 export function CampaignQuestionEditPage(props) {
   useInjectReducer({ key: 'questions', reducer });
@@ -78,6 +79,7 @@ CampaignQuestionEditPage.propTypes = {
 const mapStateToProps = createStructuredSelector({
   isCommitting: selectIsCommitting(),
   question: selectQuestion(),
+  isFormLoading: selectIsFormLoading(),
 });
 
 const mapDispatchToProps = {
@@ -95,4 +97,9 @@ export default compose(
   injectIntl,
   withConnect,
   memo,
-)(CampaignQuestionEditPage);
+)(Conditional(
+  CampaignQuestionEditPage,
+  ['question.permissions.update?', 'isFormLoading'],
+  (props, rs) => ROUTES.admin.innovate.campaigns.index.path(),
+  'You don\'t have permission edit this question'
+));

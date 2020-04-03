@@ -19,13 +19,19 @@ import {
   getQuestionBegin, updateQuestionBegin,
   campaignQuestionsUnmount,
 } from 'containers/Innovate/Campaign/CampaignQuestion/actions';
-import { selectQuestion, selectIsCommitting } from 'containers/Innovate/Campaign/CampaignQuestion/selectors';
+import {
+  selectQuestion,
+  selectIsCommitting,
+  selectIsFormLoading,
+} from 'containers/Innovate/Campaign/CampaignQuestion/selectors';
 
 import QuestionSummary from 'components/Innovate/Campaign/CampaignQuestion/QuestionSummary';
 import AnswerListPage from 'containers/Innovate/Campaign/CampaignQuestion/Answer/AnswerListPage';
 import CampaignQuestionClose from 'components/Innovate/Campaign/CampaignQuestion/CampaignQuestionClose';
 import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Innovate/Campaign/CampaignQuestion/messages';
+import Conditional from 'components/Compositions/Conditional';
+import { getFolderIndexPath } from 'utils/resourceHelpers';
 
 export function CampaignQuestionShowPage(props) {
   useInjectReducer({ key: 'questions', reducer });
@@ -86,6 +92,7 @@ CampaignQuestionShowPage.propTypes = {
 const mapStateToProps = createStructuredSelector({
   isCommitting: selectIsCommitting(),
   question: selectQuestion(),
+  isFormLoading: selectIsFormLoading()
 });
 
 const mapDispatchToProps = {
@@ -101,4 +108,9 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(CampaignQuestionShowPage);
+)(Conditional(
+  CampaignQuestionShowPage,
+  ['question.permissions.show?', 'isFormLoading'],
+  (props, rs) => ROUTES.admin.innovate.campaigns.index.path(),
+  'You don\'t have permission to view this question'
+));

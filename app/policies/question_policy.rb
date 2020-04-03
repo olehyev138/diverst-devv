@@ -29,7 +29,15 @@ class QuestionPolicy < ApplicationPolicy
     campaign_policy&.update?
   end
 
-  delegate :manage?, :update?, :destroy? , :show?, to: :campaign_policy, allow_nil: true
+  def show?
+    update?
+  end
+
+  def destroy?
+    update?
+  end
+
+  delegate :manage?, :update?, to: :campaign_policy, allow_nil: true
 
   class Scope < Scope
     def index?
