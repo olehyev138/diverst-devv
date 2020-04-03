@@ -25,7 +25,7 @@ import {
 } from 'utils/resourceHelpers';
 import Conditional from 'components/Compositions/Conditional';
 import { ROUTES } from 'containers/Shared/Routes/constants';
-import Folder from "components/Resource/Folder/Folder";
+import Folder from 'components/Resource/Folder/Folder';
 
 const defaultParams = Object.freeze({
   count: 10, // TODO: Make this a constant and use it also in FoldersList

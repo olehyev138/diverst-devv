@@ -13,7 +13,7 @@ import reducer from 'containers/Resource/reducer';
 import saga from 'containers/Resource/saga';
 
 import { selectPaginatedSelectFolders, selectIsCommitting } from 'containers/Resource/selectors';
-import {selectUser, selectEnterprise, selectPermissions} from 'containers/Shared/App/selectors';
+import { selectUser, selectEnterprise, selectPermissions } from 'containers/Shared/App/selectors';
 
 import RouteService from 'utils/routeHelpers';
 
@@ -36,7 +36,7 @@ export function FolderCreatePage(props) {
   const { location } = rs;
 
   const links = {
-    cancelLink: location.fromFolder ? getFolderShowPath(location.fromFolder.folder) : getFolderIndexPath(type, rs.params('group_id'))
+    cancelLink: location.fromFolder ? getFolderShowPath(location.fromFolder.folder) : getFolderIndexPath('admin', rs.params('group_id'))
   };
 
   useEffect(() => {

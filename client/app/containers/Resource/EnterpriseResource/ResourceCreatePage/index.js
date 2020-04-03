@@ -13,7 +13,7 @@ import reducer from 'containers/Resource/reducer';
 import saga from 'containers/Resource/saga';
 
 import { selectPaginatedSelectFolders, selectFolder, selectIsCommitting } from 'containers/Resource/selectors';
-import {selectUser, selectEnterprise, selectPermissions} from 'containers/Shared/App/selectors';
+import { selectUser, selectEnterprise, selectPermissions } from 'containers/Shared/App/selectors';
 
 import RouteService from 'utils/routeHelpers';
 

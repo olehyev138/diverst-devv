@@ -16,7 +16,7 @@ import saga from 'containers/Resource/saga';
 
 import RouteService from 'utils/routeHelpers';
 
-import {selectUser, selectEnterprise, selectPermissions} from 'containers/Shared/App/selectors';
+import { selectUser, selectEnterprise, selectPermissions } from 'containers/Shared/App/selectors';
 import {
   selectFormFolder, selectFolder,
   selectPaginatedSelectFolders, selectValid,

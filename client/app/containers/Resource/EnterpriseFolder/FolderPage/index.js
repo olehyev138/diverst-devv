@@ -12,7 +12,7 @@ import saga from 'containers/Resource/saga';
 
 import RouteService from 'utils/routeHelpers';
 
-import {selectUser, selectEnterprise, selectPermissions} from 'containers/Shared/App/selectors';
+import { selectUser, selectEnterprise, selectPermissions } from 'containers/Shared/App/selectors';
 import { selectFolder, selectValid,
   selectPaginatedFolders, selectPaginatedResources,
   selectFoldersTotal, selectResourcesTotal, selectIsLoading,
@@ -46,7 +46,7 @@ import DiverstFormattedMessage from 'components/Shared/DiverstFormattedMessage';
 import messages from 'containers/Resource/Folder/messages';
 import Conditional from 'components/Compositions/Conditional';
 import { ROUTES } from 'containers/Shared/Routes/constants';
-import FolderForm from "components/Resource/Folder/FolderForm";
+import FolderForm from 'components/Resource/Folder/FolderForm';
 
 const defaultParams = Object.freeze({
   count: 5, // TODO: Make this a constant and use it also in Folder

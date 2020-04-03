@@ -16,7 +16,7 @@ import { injectIntl, intlShape } from 'react-intl';
 
 import RouteService from 'utils/routeHelpers';
 
-import {selectUser, selectEnterprise, selectPermissions} from 'containers/Shared/App/selectors';
+import { selectUser, selectEnterprise, selectPermissions } from 'containers/Shared/App/selectors';
 import {
   selectFormFolder, selectPaginatedSelectFolders, selectValid,
   selectFormResource, selectIsCommitting, selectIsFormLoading
@@ -46,7 +46,7 @@ export function ResourceEditPage(props) {
   const { currentUser, currentGroup, currentFolder, currentEnterprise, currentResource } = props;
 
   const links = {
-    cancelPath: getFolderShowPath(currentFolder) || getFolderIndexPath(type, rs.params('group_id')),
+    cancelPath: getFolderShowPath(currentFolder) || getFolderIndexPath('admin', rs.params('group_id')),
   };
 
   useEffect(() => {
