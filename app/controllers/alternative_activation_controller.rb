@@ -9,7 +9,7 @@ class AlternativeActivationController < ApplicationController
     notifications_email = params[:user][:notifications_email]
     user = User.find_by(email: params[:user][:email])
 
-    if user
+    if user.present?
       user_dob = user.birthday
 
       if user_dob == dob
